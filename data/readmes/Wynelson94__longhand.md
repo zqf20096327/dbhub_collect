@@ -1,0 +1,565 @@
+<!-- mcp-name: io.github.Wynelson94/longhand -->
+
+# Longhand
+
+**Using Codex too?** [Share one memory archive between Claude Code and Codex](docs/codex.md).
+
+[![Longhand MCP server](https://glama.ai/mcp/servers/Wynelson94/longhand/badges/score.svg)](https://glama.ai/mcp/servers/Wynelson94/longhand)
+[![PyPI version](https://img.shields.io/pypi/v/longhand?label=PyPI&color=blue)](https://pypi.org/project/longhand/)
+![Python](https://img.shields.io/badge/python-3.10+-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Tests](https://img.shields.io/badge/tests-594%20passing-brightgreen)
+![Local](https://img.shields.io/badge/100%25-local-informational)
+[![SafeSkill 93/100](https://img.shields.io/badge/SafeSkill-93%2F100_Verified%20Safe-brightgreen)](https://safeskill.dev/scan/wynelson94-longhand)
+
+**Persistent local memory for Claude Code.** Every tool call, every file edit, every thinking block from every Claude Code session — stored verbatim on your machine. Searchable, replayable, and recallable by fuzzy natural-language questions. Zero API calls. Zero summaries. Zero decisions made by an AI about what's worth remembering.
+
+> **Claude Code quietly rotates your session files after a few weeks.** Longhand captures them into SQLite before they're gone. Once ingested, your history stays forever — even after the source JSONL files are deleted. Install early; the past you don't capture is unrecoverable.
+
+> **If you have 20+ Claude Code sessions in `~/.claude/projects/`, Longhand can search across every fix, decision, and conversation you've had in ~56ms — without a single API call.**
+
+> **Does it use a lot of tokens? No — every tool is capped by design.** A full `recall` across 100+ sessions returns ~4K tokens. Reading one raw session JSONL costs 10–50× more. See [Token budget](#token-budget).
+
+```bash
+pip install longhand
+longhand setup        # ingest history + install hooks + configure MCP
+longhand recall "that stripe webhook bug from last week"
+```
+
+**Want to kick the tires first?** Run `longhand demo` for a 60-second walkthrough on a fake 3-session sample corpus — your real `~/.claude` and `~/.longhand` are not touched. The demo seeds a sandboxed store with a Stripe-webhook bug + Supabase auth migration + downstream 401 fix, then runs cross-session recall and project-status so you can see what the output looks like before committing.
+
+```bash
+pip install longhand
+longhand demo         # sandboxed; cleans up afterwards (pass --keep to explore)
+```
+
+**Upgrading to 1.0.0?** This is the release that closes the deprecation window 0.13 opened. Everything removed here has been warning since 0.13.0:
+
+- Four CLI aliases are gone: `patterns` → `recall "<topic>"`, `recap` → `status --days N`, `continue` → `status --session <prefix>`, `reanalyze` → `analyze --all`.
+- **The `reconcile` MCP tool now defaults to a dry run.** If you have an agent loop that relied on the implicit heal, pass `fix=true` explicitly. Dry runs tell you so in the payload.
+- Six retired MCP tools left the listing (19 → 13) but **still answer forever** with a migration note — retired names live in users' own `CLAUDE.md` files and must never hard-fail.
+- New: [COMPATIBILITY.md](COMPATIBILITY.md) states what 1.x guarantees and what it doesn't.
+
+Your database needs nothing. Migrations are automatic and a 0.11+ store opens on any later 1.x — that's Promise 2, and there's a real 0.11-schema fixture in the test suite proving it.
+
+**Upgrading to 0.13.0?** Nothing breaks — that release opened the v1.0 deprecation window, so every old name kept working while pointing at its replacement:
+
+- `status` is now the single resume command: bare `status` = recent digest (was `recap`), `status <project>` unchanged, `status --session <prefix>` = session tail (was `continue`). The old commands still run and print a pointer; they're removed at v1.0.
+- Six MCP tools folded into six survivors with identical parameters (`search_in_context` → `search` + `context_events`, `get_episode` → `find_episodes` + `episode_id`, etc. — full table in the CHANGELOG). The retired names still answer, prefixed with a migration note.
+- Hooks can no longer exit nonzero — failures become breadcrumbs in `~/.longhand/logs/` and two new `doctor` rows (`Hook errors`, `Transcript format`) keep them visible.
+- "Today"/"yesterday" recall windows now follow your local calendar day instead of UTC's; rankings may shift once if you're not in UTC.
+- Windows users: this release fixes a serious bug where the ingest-lock liveness check could terminate other longhand processes.
+- New: `LONGHAND_DATA_DIR` relocates the store for the CLI, hooks, and MCP server in one move; `status --json` / `doctor --json` for scripting.
+
+**Upgrading to 0.9.0?** Live ingestion captures sessions in flight, plan history is preserved as first-class data, and an optional reconciler job keeps the index honest in the background:
+
+- New `longhand ingest-live` command runs from Claude Code's `Stop` hook to tail the active transcript between assistant turns. Sessions show up in `recall` while you're still working, not after they end.
+- New `longhand plans list` command and `list_plans` MCP tool surface every Write/Edit to `~/.claude/plans/*.md` across your entire history. Plans are now extracted as their own entity alongside episodes.
+- New `longhand schedule install-reconciler` installs an optional launchd job that runs `reconcile --fix` periodically — catches anything the live and post-session hooks missed without you ever thinking about it.
+- The Stop hook coexists with the existing SessionEnd hook: live tails the transcript as it grows; SessionEnd does the full analysis pass when the session closes.
+
+**Upgrading to 0.8.1?** Staleness signals now propagate everywhere they belong, and `reconcile` is an MCP tool — Claude can self-heal the index from inside a session:
+
+- `search` and `list_sessions` now wrap the response with `stale: true` + `stale_reason` when the project they're scoped to has on-disk transcripts not yet ingested. Pre-v0.8.1 these returned clean-looking empty results (same silent-failure shape `recall_project_status` was built to catch — just one layer up).
+- New `reconcile` MCP tool wraps `longhand reconcile --fix`. After a staleness banner fires, Claude calls `reconcile` directly instead of asking the user to run a CLI command.
+- `list_sessions` default `limit` raised from 20 to 50 — active days routinely cross 5+ projects across 5+ sessions; the old default truncated reviews silently.
+
+**Upgrading from 0.7.x or earlier?** Cleaner recall narratives, plus a real bug-finding test layer underneath (from 0.8.0):
+
+- Pre-v0.8 `_compose_fix_summary` prepended a literal `"Intent:"` label to half of all extracted episodes (49% of the reference corpus). The label leaked into every recall narrative for those episodes. **Migration v4 strips it from existing rows on first store open** — no command needed.
+- Diff content in `fix_summary` now truncates at whitespace boundaries with a visible `…`, instead of landing mid-token (`phoneNum'`, `family?:'`, `strin'`). Forward-only.
+- Narrative footer "Other matches" lines now include the session id so you can drill in.
+- New canary harness (`tests/fixtures/corpus/`) anchors regression tests to real shipped bugs. New recall validator (`scripts/recall_diff.py`) snapshots and diffs ranking results against your live corpus — catches regressions pytest can't see.
+
+```bash
+pip install --upgrade longhand
+longhand recall "..."   # migration runs transparently on first open
+```
+
+If you're also coming from 0.5.x, run `longhand reconcile --fix` once to re-attribute multi-project sessions per the v0.6 inference improvements (`cd`-into-project sessions now attribute to the project where most work happened, not the first-event cwd). If you're on 0.5.8 or earlier, chain them: `longhand reconcile --fix && longhand analyze --all`. Both are idempotent.
+
+**Large history? (>1 GB of `~/.claude/projects`)** Expect the first-time backfill to take 10–30 minutes on an M-class Mac — most of that wall time is the embedding model running on all your cores (which is why you'll see triple-digit CPU%; that's ONNX doing its job, not a hang). To get a working store faster, use the fast-path:
+
+```bash
+longhand setup --skip-analysis   # SQLite only; works in ~1 min for multi-GB corpora
+longhand analyze --all           # fill in episodes + vectors whenever, safe to background
+```
+
+Exact-text search, timelines, file history, and commit lookup all work after `--skip-analysis`. Semantic `recall` needs the `analyze --all` pass to complete. Typical throughput on an M-class Mac is ~1–2 sessions/sec for full analysis.
+
+> *Status: v1.2.1 — stable, daily-driver tested, security-audited (zero critical findings), on PyPI, available as a Claude Code plugin. Validated against 433 real Claude Code sessions across 37 inferred projects (measured 2026-08-12). 594 unit tests passing.*
+
+**Full docs:** [Longhand Wiki](https://github.com/Wynelson94/longhand/wiki) — getting started, CLI reference, MCP tools reference, architecture, and troubleshooting.
+
+![Longhand demo](demo/longhand-demo.gif)
+
+---
+
+## The Inversion
+
+Everyone is solving AI memory by making the context window bigger. 1M tokens. 2M tokens. Context-infinite. The whole industry is racing in the same direction: make the model carry more state.
+
+Longhand goes the other direction. **The model doesn't need to carry the memory. The disk does.**
+
+|                      | Bigger context windows                       | Longhand                          |
+|----------------------|----------------------------------------------|-----------------------------------|
+| **Where it lives**   | Rented from a model provider                 | A SQLite file + ChromaDB on your laptop |
+| **Cost per query**   | Tokens × dollars                             | Zero                              |
+| **Privacy**          | Goes through someone else's servers          | Never leaves your machine         |
+| **Speed**            | Seconds to minutes for large contexts        | ~56ms search · ~1.4s full recall  |
+| **Loss**             | Attention degrades in the middle of long contexts | Every event from the source file, nothing dropped |
+| **Persistence**      | Dies when the window closes                  | Lives until you delete the file   |
+| **Across model versions** | Doesn't transfer                        | Same data, any model              |
+| **Offline**          | No                                            | Yes                               |
+| **Scales with**      | Provider's pricing                           | Your hard drive                   |
+
+The "memory crisis" in AI was an artificial constraint. Storage is solved. SQLite is from 2000. ChromaDB is two years old. Both run on a laptop. Longhand bypasses the crisis by ignoring it — your past sessions are already on disk, written by Claude Code itself, in JSONL files that contain every single event verbatim. Longhand reads those files, indexes them locally, and gives you semantic recall over your entire history without ever sending a token through someone else's API.
+
+**Local. Complete. Yours.**
+
+> **Storage footprint:** ~5GB for a heavy power user (430+ sessions, 195k+ events, months of daily Opus usage across 37 inferred projects). Typical users: 200–400MB. Once Claude Code rotates the source files off disk, Longhand isn't a duplicate — it's the only copy.
+
+---
+
+## Platform support
+
+**Python 3.10 – 3.14 are all fully supported and gated in CI** — every release must pass the full suite on all five before it can merge.
+
+Longhand pins `chromadb<1.0` for **every** Python version, not just 3.14. The pin originated with chromadb's newer Rust bindings segfaulting on 3.14 ([#4](https://github.com/Wynelson94/longhand/issues/4), now closed), and it stays until a 1.x chromadb is verified across the whole matrix.
+
+**Windows: CI-tested, best-effort.** A `windows-latest × py3.12` leg runs on every PR and has gone green on every run since v0.13.0, but it is non-blocking and covers one Python version on GitHub's runners. That is honest evidence, not a support tier — Linux and macOS are the tested platforms. Windows bugs are welcome as issues; they just aren't release-blocking.
+
+**Codex Desktop and Codex CLI** threads are captured into the same archive from 1.1.0 — see [Works with Codex](#works-with-codex).
+
+---
+
+## Compatibility
+
+Longhand 1.0 makes five promises, each backed by an enforcement artifact in the repo. The full text is in **[COMPATIBILITY.md](COMPATIBILITY.md)**; the short version:
+
+1. **Stable surface** — CLI and MCP frozen through 1.x. Removals only at a major version, and only after warning for one full minor.
+2. **Forward data compat** — a database written by 0.11+ opens on any later 1.x. Migrations are automatic, one-time, never renumbered. Older code refuses a newer database loudly rather than operating blind.
+3. **Hook guarantees** — hooks never raise, never touch the network, never block your prompt.
+4. **Upstream drift is never silent** — unknown transcript entries are preserved, surfaced in `doctor`, and regression-gated.
+5. **Honest metrics** — counts reflect real signals, and `doctor` never recommends a remedy that cannot work.
+
+**Deprecation policy:** anything slated for removal warns for at least one full minor release first, and the warning names its replacement. Retired MCP tool names are the one thing that never goes away — they leave the tool listing but keep answering forever with a migration note, because those names live in users' own `CLAUDE.md` files.
+
+---
+
+## Longhand vs claude-mem
+
+[`thedotmack/claude-mem`](https://github.com/thedotmack/claude-mem) is the most popular Claude Code memory tool on GitHub (55k+ stars). It's a good tool. It is also solving the memory problem in the opposite direction from Longhand, and the difference is worth understanding before you pick one.
+
+|                            | claude-mem                                   | Longhand                                     |
+|----------------------------|----------------------------------------------|----------------------------------------------|
+| **What's stored**          | AI-generated summaries / "observations"      | Verbatim events from the raw JSONL           |
+| **Who decides what's kept**| An LLM, at write time                        | Nobody — everything is kept                  |
+| **Compression**            | Semantic (lossy, by design)                  | None (lossless)                              |
+| **API calls per session**  | One or more (calls Claude to summarize)      | Zero                                         |
+| **Thinking blocks**        | Typically folded into summaries              | First-class, stored verbatim                 |
+| **Deterministic replay**   | No — summaries can't reconstruct file state  | Yes — every diff kept and replayable         |
+| **Model portability**      | Tied to the summarizer's output              | Same data works across any model, forever   |
+| **Runtime**                | TypeScript, Bun, HTTP worker on :37777       | Python, no server                            |
+| **License**                | AGPL-3.0                                     | MIT                                          |
+
+The philosophical split: **claude-mem asks an AI what was important and keeps that. Longhand keeps the actual bytes and lets you decide later.** If you trust a model's judgment about its own past, claude-mem's approach is cheaper at query time (pre-summarized) and easier on storage. If you've ever been burned by a summary that dropped the thing that turned out to matter, Longhand is the tool that never throws anything away.
+
+Both can coexist on the same machine — they operate on the same JSONL files without interfering.
+
+---
+
+## The Principles
+
+Longhand is built on a handful of principles. If you disagree with them, you probably want a different tool.
+
+### 1. Information doesn't disappear — it moves.
+
+When data goes "missing" it's almost never actually gone. It got compressed, summarized, filed somewhere else, or renamed. Find the raw source and the truth is still there waiting. Claude Code already writes every session to disk as JSONL. That file is the raw source. Longhand just reads it.
+
+### 2. Summarization is a lossy decision disguised as a convenience.
+
+Most AI memory systems read a conversation and ask the AI to write down "what mattered." The AI is now the gatekeeper of its own memory, and the AI has incentives — brevity, confidence, coherence — that aren't the same as truth. You end up with a story about what happened instead of what happened.
+
+Longhand never summarizes. It stores the complete record and lets you query it.
+
+### 3. The raw record is cheap. Acting like it isn't wastes it.
+
+A full Claude Code JSONL file is kilobytes to low megabytes. A year of daily sessions is hundreds of megabytes. That is nothing on modern hardware. There is no engineering reason to throw the data away. Summary-based memory isn't saving space — it's giving away information that was free.
+
+### 4. The thinking is the most valuable part.
+
+When Claude produces a `thinking` block, that's the reasoning behind the decision — usually invisible to the user, almost always more useful than the final answer. Summary-based memory throws thinking blocks away because they're "internal." Longhand treats them as first-class events. "What was I thinking when I chose to use a conditional update?" pulls the verbatim thinking block that contains the answer.
+
+### 5. A fix you can't reproduce is a fix you didn't keep.
+
+If you fixed a bug in March, the state of that file when the bug was fixed is a fact. Longhand reconstructs it deterministically by applying every edit in sequence from the session JSONL. No guessing, no AI inference, just literal application of the diffs. You can see the exact state of any file at any point in any past session.
+
+### 6. Memory should be proactive, not just searchable.
+
+A searchable archive is useful but passive. Real memory answers fuzzy questions. "A couple months ago I was building a game that kept breaking, then you fixed it — bring that fix forward." Longhand parses the time phrase, matches the project, finds the problem→fix episode, and returns the diff. You don't have to know the session ID. You just have to remember that it happened.
+
+### 7. Deterministic beats clever.
+
+Everything in Longhand's analysis is rules-based. Regex error detection. Hash-based project IDs. Forward-walking episode extraction. No LLMs in the core pipeline. That means fast (< 200ms recall queries), reproducible (same input → same output), and fully local (no API keys, no cloud). An LLM layer could go on top later, but the foundation runs on laws, not on a model's opinion.
+
+### 8. Local or nothing.
+
+Your Claude Code history is yours. It goes into a SQLite file and a ChromaDB directory in `~/.longhand/`. No telemetry. No sync. No account. If your laptop is offline, Longhand works. If Anthropic goes down, Longhand works. If you delete the directory, it's gone.
+
+One boring exception, disclosed in full: the interactive CLI checks pypi.org for a newer Longhand version at most once a day. That request carries nothing but itself — no telemetry, no identifiers, nothing about your corpus — and a newer version just shows up as a dim one-line hint and a `doctor` row. It never runs from hooks or the MCP server, never blocks a command, and `LONGHAND_NO_UPDATE_CHECK=1` turns it off entirely. "Zero API calls" means what it always meant: no LLM or cloud service ever touches your data.
+
+---
+
+## What It Actually Does
+
+When you use Claude Code, every session writes a JSONL file to `~/.claude/projects/<project>/<session-id>.jsonl`. That file contains every message, every tool call, every thinking block, every file edit with full before/after content, and a millisecond-precise timestamp for each event.
+
+Longhand reads those files. Then it gives you:
+
+- **Semantic search** across every event you've ever generated
+- **Filterable search** — by tool, file, session, project, time range, event type — all filters combinable
+- **Tool call archaeology** — "show me every Bash command I ran in March that touched Supabase"
+- **File history across sessions** — every edit to a specific file, chronologically, across all your sessions
+- **Session replay** — reconstruct any file's state at any point in any past session
+- **Reasoning retrieval** — query Claude's verbatim thinking blocks
+- **Timeline view** — chronological playback with pagination (offset, tail, summary-only scan mode)
+- **Fuzzy recall** — natural-language questions about past work ("that race condition fix from last week")
+- **Project inference** — automatic detection of which projects you've worked on, with categories and aliases
+- **Episode extraction** — automatic detection of problem→fix sequences in your sessions
+- **Conversation segments** — topic-level clustering (stories, design discussions, debugging, planning) so recall finds the *why*, not just the *what*
+- **Git-aware project recall** — ask "where did we leave off on X" and get recent commits, unresolved issues, last session outcome in one call
+- **Git commit extraction** — structured extraction of every git commit, push, merge, checkout from sessions, linked to episodes
+- **MCP server** — 13 tools that let Claude query Longhand directly during live conversations
+- **Auto-ingest hook** — drops into Claude Code's `SessionEnd` hook so new sessions are indexed automatically
+- **Live ingestion** — optional `Stop` hook tails the active transcript between turns so in-flight sessions show up in `recall` immediately
+- **Plan history** — every Write/Edit to `~/.claude/plans/*.md` is captured as a first-class entity, queryable via `longhand plans list` and the `list_plans` MCP tool
+- **Secret redaction (opt-in)** — `longhand config --set redact.enabled=true` masks secret-shaped strings (API keys, tokens, JWTs, DB passwords) at ingest before they reach the index; `longhand redact --apply` retroactively masks data ingested earlier
+- **Background reconciler** — optional launchd job (`longhand schedule install-reconciler`) keeps the index honest without manual `reconcile --fix` runs
+- **Context injection** — `UserPromptSubmit` hook auto-injects relevant past context before Claude sees your message (configurable threshold and size cap)
+- **Configurable** — `longhand config` to tune injection relevance, token budget, and behavior without editing code
+
+---
+
+## Install
+
+```bash
+pip install longhand
+longhand setup
+```
+
+That's it. `longhand setup` backfills your existing Claude Code history, installs the hooks that keep it updated automatically, registers Longhand as an MCP server for Claude Code, and verifies everything works. About two minutes the first time, zero maintenance after that.
+
+To upgrade later: `pip install -U longhand`.
+
+### Developer install (from source)
+
+```bash
+git clone https://github.com/Wynelson94/longhand.git
+cd longhand
+pip install -e .
+longhand setup
+```
+
+<details>
+<summary>Or run the individual commands yourself</summary>
+
+```bash
+longhand ingest                       # ingest all your existing Claude Code history
+longhand analyze --all                # run analysis (projects, outcomes, episodes, segments)
+longhand hook install                 # wires both SessionEnd and Stop hooks
+longhand ingest-live                  # live-tail the active transcript (Stop hook calls this)
+longhand prompt-hook install          # (optional) auto-inject past context into new prompts
+longhand mcp install                  # let Claude Code call Longhand as MCP tools
+longhand schedule install-reconciler  # (optional) launchd job to run reconcile --fix periodically
+longhand config                       # view/tune hook behavior (relevance threshold, injection size)
+longhand doctor                       # verify everything is wired up
+```
+</details>
+
+---
+
+## Quick Start
+
+```bash
+# What's in the archive?
+longhand stats
+longhand sessions
+longhand projects
+
+# Daily-use commands — status is the single resume command (git-status shape)
+longhand status                             # what have I been up to (recent digest)
+longhand status --days 30 -p bsoi           # filtered digest
+longhand status <project-name>              # where did we leave off on a project (git-aware)
+longhand status --session <session-id>      # pick up where a session left off
+longhand history src/app/route.ts           # every edit ever to a file
+# (recap / continue / patterns / reanalyze were deprecated aliases through
+#  0.13 and were removed at 1.0 — use status, recall, and analyze --all)
+
+# Semantic search
+longhand search "race condition"
+longhand search "stripe webhook" --tool Edit
+longhand search "why did we" --type assistant_thinking
+
+# Proactive recall (the fun one)
+longhand recall "that clerk type error I fixed a couple weeks ago"
+longhand recall "the python missing module bug last month"
+
+# Session inspection
+longhand timeline <session-id-prefix>
+longhand replay <session-id> /path/to/file.ts
+longhand diff <event-id>
+
+# Git history
+longhand git-log                            # recent git operations across all sessions
+longhand git-log <session-id>               # git ops in a specific session
+longhand git-log --type commit              # only commits
+longhand git-log --query "fix parser"       # search commit messages
+
+# Export
+longhand export latest-fix                  # most recent resolved episode
+longhand export ep_<id> --out fix.md        # specific episode to file
+longhand export <session-id-prefix>         # full session timeline
+
+# Configuration
+longhand config                             # show current hook settings
+longhand config --set hook.min_relevance=3.0  # tune injection threshold
+longhand config --set hook.max_inject_chars=1000  # cap token usage
+
+# Plans + background maintenance
+longhand plans list                         # every plan-mode plan you've written
+longhand plans list --limit 100             # raise the row cap (default 50)
+longhand schedule install-reconciler        # background launchd job; runs reconcile --fix
+```
+
+Session IDs accept prefix matches — `longhand timeline cf86` is enough if only one session starts with that.
+
+---
+
+## Recall Example
+
+```
+$ longhand recall "that stripe webhook I was fixing"
+
+╭─ Project matches ───────────────────────────────────────╮
+│ new-product (nextjs web app) · alias: 'stripe' · 1.52   │
+╰─────────────────────────────────────────────────────────╯
+
+Found it: new-product · 2 weeks ago · session a4ba29d1
+
+### What went wrong
+Type error: Property 'current_period_end' does not exist on type 'Subscription'.
+
+### How it was diagnosed
+```
+In Stripe's type definitions, current_period_end moved off the Subscription
+interface. It's still on the actual API payload but the types don't expose it.
+We need to cast through Record<string, unknown> to access it.
+```
+
+### The fix
+Edit on route.ts: 'const periodEnd = sub.current_period_end' → 'const periodEnd
+= (sub as Stripe.Subscription & Record<string, any>).current_period_end as number'
+
+Diff:
+- const periodEnd = sub.current_period_end
++ const periodEnd = (sub as Stripe.Subscription & Record<string, any>).current_period_end as number
+
+✓ Verified — a test passed after the fix.
+
+Other candidates (4)
+• 2 weeks ago: Type error: Module '"@/lib/utils"' has no exported member 'getInitials'.
+• 2 weeks ago: Type error: Property 'role' does not exist on type 'User'.
+```
+
+That's one local command. No API call. The fix came from a session file Claude Code wrote to your disk weeks ago and Longhand had been waiting with the answer the whole time.
+
+---
+
+## MCP Integration (Claude Desktop)
+
+Run `longhand mcp install` to wire Longhand into Claude Desktop's config. After you restart Claude Desktop, it has thirteen tools:
+
+**Core (searchable archive):**
+- `search` — semantic search with session, project, tool, file, and event_type filters (all combinable); pass `context_events` with a `session_id` to get each match wrapped in its surrounding conversation
+- `list_sessions` — recent sessions with project/time filters; pass `project_id` (plus optional `since`/`until`) for a project's outcome-enriched session timeline
+- `get_session_timeline` — chronological view with offset/tail pagination and summary-only scan mode (`tail: N` covers "the latest events / how did it end")
+- `replay_file` — reconstruct file state at a point in time
+- `get_file_history` — every edit to a file across all sessions
+- `get_stats` — storage statistics
+
+**Proactive memory:**
+- `recall` — fuzzy natural-language recall (use this first): a narrative built from conversation segments and session timelines, with high-precision problem→fix episodes when the work left clean evidence
+- `recall_project_status` — "where did we leave off on X?" — git-aware project summary with commits, issues, last outcome
+- `find_episodes` — structured search for problem→fix pairs; pass `episode_id` for full detail on one episode (referenced events, diff, post-fix file state)
+- `list_projects` — browse inferred projects; pass `match` for fuzzy candidates with scored reasons
+- `list_plans` — every Write/Edit to `~/.claude/plans/*.md` across your entire history
+
+**Git history:**
+- `find_commits` — search across all sessions by commit message, hash prefix, or branch name; or pass a `session_id` without a query for one session's chronological git story
+
+**Self-healing:**
+- `reconcile` — wraps `longhand reconcile` so Claude can re-attribute and re-ingest from inside a session after a staleness banner; pass `fix` explicitly (the implicit default flips to dry-run at v1.0)
+
+**Deprecated (still answer through 0.x, with a migration preamble; leave the listing at v1.0):** `search_in_context` → `search(context_events)` · `get_latest_events` → `get_session_timeline(tail)` · `get_project_timeline` → `list_sessions(project_id)` · `get_session_commits` → `find_commits(session_id)` · `get_episode` → `find_episodes(episode_id)` · `match_project` → `list_projects(match)`
+
+All tools support `max_chars` output capping with pagination hints. No more 96k dumps crashing your context.
+
+Once installed, you can ask Claude things like *"what did we decide about the auth middleware in last week's session?"* and it will actually search its own past work.
+
+---
+
+## Auto-Ingest
+
+`longhand hook install` adds two hooks to `~/.claude/settings.json` — `Stop` for live tailing between turns, `SessionEnd` for the full analysis pass at session close:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {"command": "longhand ingest-live"}
+    ],
+    "SessionEnd": [
+      {"command": "longhand ingest-session"}
+    ]
+  }
+}
+```
+
+Both commands read `transcript_path` from the hook's stdin JSON, so no flags are needed in the hook entry itself.
+
+- **Stop hook (`ingest-live`)** runs after every assistant turn. Tails the transcript file and ingests new events incrementally so an in-flight session is queryable in `recall` while you're still working in it.
+- **SessionEnd hook (`ingest-session`)** runs once when a session closes. Does the full analysis pass: project inference, outcomes, episodes, segments, embeddings.
+
+Both are non-blocking and run in one to two seconds. You don't have to think about either of them again.
+
+**Optional background reconciler:** `longhand schedule install-reconciler` adds a launchd plist that runs `reconcile --fix` on a schedule. Catches any sessions the hooks missed (e.g., when a hook silently failed) without you ever needing to remember it exists.
+
+---
+
+## Works with Codex
+
+Use Codex Desktop or the Codex CLI too? Longhand captures those threads into the same archive, so a question asked in Claude Code can be answered from work done in Codex, and the other way round.
+
+```sh
+pip install -U longhand
+longhand codex-sync                                                  # capture every Codex thread on this machine
+claude mcp add --scope user longhand-shared -- longhand shared-mcp   # keyword search across both clients, from Claude
+codex mcp add longhand -- longhand shared-mcp                        # the same server from Codex (Desktop: config.toml, see the docs)
+```
+
+From then on `reconcile --fix` captures new Codex threads too, so the scheduled reconciler keeps both clients current. A thread is stored exact-record-only while it is being written — verbatim and searchable, no model loaded — and gets the full pipeline 30 minutes after it goes quiet, so `recall` sees it with no manual step (`codex-sync --semantic` does it immediately). Threads Codex spawns for itself are skipped, UI mirrors are never stored twice, and unknown record shapes surface in `doctor` like any other drift. Setup, bounds, and the macOS launchd template: **[docs/codex.md](docs/codex.md)**.
+
+---
+
+## Architecture
+
+```
+longhand/
+├── parser.py              — JSONL → typed Events, nothing lost
+├── replay.py              — deterministic file state reconstruction
+├── types.py               — Pydantic models
+├── storage/
+│   ├── migrations.py      — version-aware schema evolution
+│   ├── sqlite_store.py    — structured data + full raw JSON preserved
+│   ├── vector_store.py    — ChromaDB (events + sessions + projects collections)
+│   └── store.py           — unified ingest pipeline
+├── extractors/            — per-event (errors, file refs, topics, git ops)
+├── analysis/              — per-session (project, outcomes, episodes, embeddings)
+├── recall/                — per-query (time parsing, project match, narrative)
+├── cli.py                 — Typer CLI with Rich output
+├── mcp_server.py          — Model Context Protocol server (13 tools)
+└── setup_commands.py      — hook install, mcp install, config, doctor
+```
+
+**Source of truth:** SQLite. Every event's raw JSON is preserved as a blob. ChromaDB is the search index — it only holds what's needed for semantic retrieval.
+
+**Analysis layer:** Runs at ingest time, not query time. Pre-computes projects, session outcomes, and episodes so recall queries are fast. Fully deterministic, no LLM.
+
+**Recall pipeline:** `query → time parse → project match → episode search → rank → load artifacts → narrative`. A single vector search is ~56ms; full recall runs ~7 of them (events, projects, episodes, segments, plus relaxation retries) and then loads artifacts and composes the narrative — landing around ~1.4s on a warm 246-session corpus.
+
+---
+
+## Comparison
+
+|                          | Longhand                   | Summary-based (Mem0, MemPalace, LangMem) |
+|--------------------------|----------------------------|------------------------------------------|
+| Source                   | Raw Claude Code JSONL      | AI-generated summaries                   |
+| Tool calls captured      | Every one, verbatim        | Whatever the summarizer kept             |
+| File edits               | Full before/after diffs    | Usually not captured                     |
+| Thinking blocks          | First-class events         | Usually discarded                        |
+| File state replay        | Deterministic              | Not possible                             |
+| Problem→fix extraction   | Rules-based, at ingest     | Depends on summarizer                    |
+| Fuzzy recall             | Yes, with artifacts        | Text search over summaries               |
+| What gets "decided"      | Nothing — store everything | The AI decides what matters              |
+| Local-first              | Yes                        | Most                                     |
+| Completeness             | Every event from the session file | Whatever the summarizer kept             |
+| LLM calls to function    | Zero                       | Varies                                   |
+
+Summary memory and Longhand solve different problems. Summary memory is good for long-term personal assistants that need compressed context across many conversations. Longhand is good for developers who need forensic access to their past Claude Code work — the kind of access where you need the exact diff, not a paraphrase.
+
+---
+
+## Stats
+
+Corpus measured 2026-08-12 against the author's live store on v0.13.0:
+- 433 unique sessions
+- 197,978 events
+- 64,364 tool calls
+- 15,202 file edits
+- 224 thinking blocks
+- 37 projects inferred automatically
+- 1,119 problem→fix episodes extracted — 618 are low-confidence (fixless) and excluded from the rate, leaving 423 of 501 resolved (84%)
+- 4,286 conversation segments (design, story, debugging, discussion, planning)
+- 2,661 git operations extracted (107 commits linked)
+- 142,897 vectors indexed
+- Storage footprint: 5.0 GB total (3.9 GB SQLite + 1.0 GB ChromaDB) across 433 sessions — ~12 MB per session
+
+Latency, benchmarked on the earlier 246-session corpus (M-class Mac) and not re-measured since:
+- Vector search: ~56ms median (p90 ~62ms)
+- SQL queries (`get_events`): ~2ms median (p90 ~13ms)
+- Full recall pipeline: ~1.4s median, warm (~7 vector queries + artifact load + narrative)
+
+---
+
+## Token budget
+
+The single most common question: *does Longhand consume a lot of tokens when Claude uses it?*
+
+**No.** Every MCP tool has a hard output cap enforced in `longhand/mcp_server.py`. The response truncates and appends a pagination hint before Claude ever sees it, so the token cost per tool call is bounded — not by your history size, but by the cap itself.
+
+| Tool | Default output cap | Rough token equivalent |
+|---|---:|---:|
+| `search` | 12,000 chars | ~3,000 tokens |
+| `recall`, `get_session_timeline`, `find_commits` | 12,000–16,000 chars | ~3,000–4,000 tokens |
+| `search` in context mode (`context_events`) | 20,000 chars | ~5,000 tokens |
+| Absolute ceiling (`MAX_OUTPUT_CHARS`) | 200,000 chars | ~50,000 tokens |
+
+**Why this matters — the comparison:**
+
+- **Reading one raw session JSONL directly:** 50K–200K tokens per session (Claude Code sessions are typically 1–5MB each).
+- **Bigger-context-window approaches:** every prompt pays the full history, every time.
+- **Summarizer-based memory tools:** cheap per-query but they already threw away the thinking blocks.
+
+Longhand is flat-cost: the cap is per-call, not per-corpus. Recalling across 10 sessions and recalling across 1,000 sessions both come back in the same token envelope. And **Longhand itself makes zero API calls** — the only tokens consumed are the MCP payload Claude reads back. No model sits between you and your data.
+
+**Tuning:** every tool accepts a `max_chars` parameter that can be lowered per-call. `summary_only: true` on timeline tools drops the `content` field and shrinks payloads ~10×.
+
+---
+
+594 unit tests passing. All 13 MCP tools stress-tested. Full security audit: zero critical findings, zero high findings. `~/.longhand/` created with 0700 permissions, all SQL parameterized, all inputs bounded. Dependencies: chromadb, typer, rich, pydantic, mcp.
+
+---
+
+## Author
+
+Nate Nelson. Idaho Falls. No computer science degree. Fourteen industries of building software by describing what I see and letting the translation happen.
+
+
+GitHub: [Wynelson94](https://github.com/Wynelson94)
+
+---
+
+## License
+
+MIT. Do whatever you want with it.

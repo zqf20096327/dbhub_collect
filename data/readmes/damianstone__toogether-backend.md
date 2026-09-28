@@ -1,0 +1,298 @@
+
+<p float="left" align="left">
+  <img src="https://user-images.githubusercontent.com/63305840/150650911-a3aba1cc-c2dd-4ced-9d60-0bd5ea1cfc8e.png" width="300" />
+</p>
+
+## What's Toogether app?
+An app where users can create a group with their friends, match with other groups and hang out
+<br>
+<br>
+**This is just the backend of the app, if you're looking for the frontend: https://github.com/damianstone/toogether-mobile**
+
+
+## Technologies
+- 🐍 Django REST framework
+- 🔥 Websockets (channels)
+- 📍 Geolocation with Gdal, Geos and Postgis
+- 🐘 PostgreSQL
+- 🏓 Redis
+- 🐬 Daphne
+- 🖼️ Amazon S3
+- 🧹 Frake8 and black
+- 🔒 Token authentication (JWT)
+- 👥 Faker
+- 📸 Pillow
+- ☁️ Heroku
+
+<img src="https://github.com/damianstone/toogether-backend/assets/63305840/6c31f272-addc-47e2-bd72-a26a71a46094" width="3000" />
+
+# Featues
+### 👀 Basic
+- Login and registration with auth token
+- Create profile
+- Report profiles
+- Block profiles
+- Password recovery with email verification
+
+### 👤 Your profile
+- Update your personal information
+- Add photos
+
+### 💃 Swipe single and group profiles
+- Support single and group profiles
+- Like
+- Unlike
+- Undo
+
+### 🕺🏼 Create a group profile with your friends
+- Create a groups
+- Invite friends using unique link
+- If admin (creator of the group): remove and add members
+- If not admin, join to group using the link and leave 
+
+### 💬 Group chat
+- Group chat generated autmatically when joining our creating a group
+- For now the chat just support text messages
+
+### 💬 Matches and chats
+- Chat with your matches
+- Delete matches
+- Report and block profiles
+
+### 🔗 Matchmaking algorithm
+List based on
+- Your location
+- Age
+- Gender
+- Preferences
+- Group sizes
+- More below in this documentation!
+
+### 🕵️‍♂️ Internal endpoints
+- Create fake data for the whole app using Faker
+- Admin restricted endpoints for the models
+
+mailto: damianstonedev@gmail.com
+
+# Initialization
+
+### Create a virtual environment
+
+For IOS / Linux
+``` python
+python3 -m venv venv-people
+source venv-people/bin/activate 
+```
+
+For Windows
+``` python
+python -m venv venv-people
+venv-people\Scripts\activate.bat
+```
+
+### Install requirements.txt
+
+```python
+pip install -r requirements.txt
+```
+
+### Create .env for local PostgreSQL database
+
+```
+LOCAL_DB_NAME=name-of-the-database
+LOCAL_DB_USER=db-user-name
+LOCAL_DB_PASSWORD=db-password
+LOCAL_DB_HOST=host-you-want-to-use
+LOCAL_DB_PORT=post-you-want-to-use
+```
+
+### Migrations folder
+Inside `api` create a new folder called `migrations` and inside add the following file:
+
+```
+__init__.py
+```
+
+### Installing Geospatial libraries
+Depending on your operating systems the installation can be quite different
+therefore we recommend you to follow the official documentation for this:
+
+https://docs.djangoproject.com/en/4.1/ref/contrib/gis/install/geolibs/
+
+### Migrate models
+
+```python
+python manage.py makemigrations
+python manage.py migrate
+```
+
+### Create a super user account
+Creating a superuser will give you administrative privileges, and most important, access to our local internal endpoints
+for development purposes
+
+When running the command, choose a memorable email and password
+
+To create a superuser account, use the following command:
+
+```python
+python manage.py createsuperuser
+```
+
+### Run 
+
+```python
+python manage.py runserver
+```
+
+### Install Redis for WebSockets connectios
+In the following link you can see the different installations for different operating systems
+`https://redis.io/docs/getting-started/installation/`
+
+### Run Redis
+```bash
+redis-server
+```
+
+### Stop Redis
+```bash
+killall redis-server
+```
+
+# Deployment with Heroku
+
+### Buildpakcs information
+
+Geolocation: GDAL, Geos and PROJ: https://github.com/heroku/heroku-geo-buildpack
+
+
+### Install Heroku CLI
+
+Using the following link: https://devcenter.heroku.com/articles/heroku-cli
+
+Login and check the apps
+```bash
+heroku login
+heroku apps
+```
+
+### Before deploy
+
+From the heroku branch run the following
+```bash
+python mangage.py makemigrations
+python manage.py migrate
+python manage.py collectstatic
+```
+
+In order to use the last builpacks of GDAL and Geos, make sure you do not have set BUILD_WITH_GEO_LIBRARIES
+
+If you do, run the following command
+```bash
+heroku config:unset BUILD_WITH_GEO_LIBRARIES --app toogether-api
+```
+
+Besides, as we are collecting then static files manually, we need to disable the auto coollect static 
+```bash
+heroku config:set DISABLE_COLLECTSTATIC=1 --app toogether-api
+```
+
+### Push the latest changes 
+
+```bash
+git push heroku
+```
+
+### Manual deploy in Heroku 
+
+Heroku website panel -> Deploy -> Manual branch deploy 
+
+
+### After deployment
+
+Delete all the folders and files inside the `static`, this is because when the code is deployed, 
+the static files are automatically collected, but, in order to keep the repository clean, 
+those files must be deleted once the deployment is successful.
+
+### Troubleshooting
+
+To check the logs 
+```bash
+heroku logs --tail --app toogether-api
+```
+
+# Style Standards
+To format the code in the project, simply run the following command in the root directory of the project:
+
+```bash
+black .
+```
+This command will automatically format all .py files in the project according to the black style guide, which adheres to the PEP 8 style guide
+
+**Make sure you run this command before any pull request**
+
+# Pull Requests
+
+Before any merge to develop or rocket, it will be necessary to make a Pull Request and a code review.
+
+Basic PR structure:
+
+`your-branch` -> `feature-branch` -> `develop` -> `rocket`
+
+### Steps for a Pull Request
+1. Push your branch to the remote repository: git push
+2.  Navigate to the GitHub website
+3.  Create the pull request (PR) manually by selecting the correct `feature-branch` you are working on and clicking on the "New pull request" button
+4.  Notify the team about your PR through our communication channel: Discord
+
+# Project structure
+
+### Profile views
+
+In Together, there is a single data model for users known as the profile model. The distinction between a user and a profile is that a user may log into the app but has not yet created a profile.
+
+`User views`
+These views manage the basic functionality of the user model, such as creating and deleting a user.
+
+`Profile Modelview`
+This set of views manages all the actions that a user can perform on their profile, such as adding photos, updating information, and blocking other users.
+
+### Grup Views
+
+These endpoints manage all the actions related to groups, such as creating a group with friends and removing members.
+
+### Swipe Views
+
+The swipe views manage the "liking" functionality between users, as well as the `matchmaking algorithm`. This includes all the processes and calculations involved in determining the profiles that a user is matched with. These views are an integral part of the application as they enable the core user interaction and facilitate the potential formation of relationships.
+
+# Matchmaking Algorithm
+
+The matchmaking algorithm in Together is responsible for determining the matches between profiles and groups. This process is initiated when a user "likes" another profile or group.
+
+The algorithm is implemented in the like function and uses several checks to determine the nature of the like being given. There are four possible scenarios for a like:
+
+1. One profile to one profile
+2. One profile to a group
+3. A group to one profile
+4. A group to another group
+
+Each scenario is handled by a different function that performs the necessary operations to determine the match.
+
+### Inputs
+- `request`: a Django request object
+- `current_profile` or `current_group`: the profile or group making the like
+- `liked_profile` or `liked_group` : the profile or group being liked
+
+### Outputs
+A Django response object containing:
+- `details`: a string indicating the status of the like, either `LIKE`, `ALREADY_MATCHED`, `NEW_MATCH` or `SAME_MATCH`
+- `group_match`: a string indicating whether the match was between groups: `NEITHER`, `BOTH`, `LIKED` or `CURRENT`
+- `match_data`: the match serialization in case a new match was created, otherwise this field will not be present.
+
+# Summary of limitations
+- The Toogether name and brand are registered; you cannot use the name, designs, or colors.
+- You can use the app for any learning purpose as long as it runs in your local environment. In other words, you cannot deploy our code.
+- You can use the code for learning purposes and references. For example, if you are creating a similar app, you can use our code to learn how to build features like a swipe function and get inspiration from our implementation.
+- You cannot sell this code in any form.
+- You cannot conduct business with this code in any form
+
+More information can be found in the LICENSE file in the root of the project. If you know of someone who is not respecting these limitations, please contact the owner at damianstonedev@gmail.com. The open-source world thrives on our respectful behavior ❤️

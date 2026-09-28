@@ -1,0 +1,45 @@
+[![CI](https://github.com/howyi/conv/actions/workflows/ci.yml/badge.svg)](https://github.com/howyi/conv/actions/workflows/ci.yml)
+[![Total Downloads](https://poser.pugx.org/howyi/conv/downloads)](https://packagist.org/packages/howyi/conv)
+# conv
+Core package for [howyi/conv-laravel](https://github.com/howyi/conv-laravel)  
+
+Generate MySQL migration queries from actual DB and DDL  
+
+```
+composer require howyi/conv --dev
+```
+
+#### Query sample
+tbl_user.sql
+```sql
+CREATE TABLE `tbl_user` (
+  `user_id` int(11) NOT NULL COMMENT 'User ID',
+  `age` tinyint(3) UNSIGNED COMMENT 'User age',
+  PRIMARY KEY (`user_id`),
+  KEY `id_age` (`user_id`, `age`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='User management table';
+```
+#### Generated migration  
+UP
+```sql
+CREATE TABLE `tbl_user` (
+  `user_id` int(11) NOT NULL COMMENT 'User ID',
+  `age` tinyint(3) UNSIGNED COMMENT 'User age',
+  PRIMARY KEY (`user_id`),
+  KEY `id_age` (`user_id`, `age`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='User management table';
+```
+DOWN
+```sql
+DROP TABLE `tbl_user`;
+```
+
+## CONTRIBUTING
+### install
+```bash
+$ composer install
+```
+### check (before pull-request)
+```bash
+$ composer check-fix
+```

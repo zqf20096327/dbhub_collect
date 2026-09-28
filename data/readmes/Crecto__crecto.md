@@ -1,0 +1,152 @@
+# Crecto
+
+![crecto](crecto.png)
+
+[https://www.crecto.dev/](https://www.crecto.dev/)
+
+[![Build Status](https://travis-ci.org/Crecto/crecto.svg?branch=master)](https://travis-ci.org/Crecto/crecto) [![Join the chat at https://gitter.im/crecto/Lobby](https://badges.gitter.im/crecto/Lobby.svg)](https://gitter.im/crecto/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+Robust database wrapper for Crystal. Inspired by [Ecto](https://github.com/elixir-ecto/ecto) for Elixir language.
+
+With built in query composer, associations, transactions, validations, constraints, and more.
+
+Website with guides and examples - [https://www.crecto.dev/](https://www.crecto.dev/)
+
+<!-- See api docs - <http://docs.crecto.dev> -->
+
+## Example
+
+```crystal
+user = User.new
+user.name = "Shakira"
+
+changeset = User.changeset(user)
+changeset = Repo.insert(changeset)
+changeset.errors.any?
+
+inserted_user = changeset.instance
+inserted_user.name = "Keanu"
+
+changeset = User.changeset(inserted_user)
+changeset = Repo.update(changeset)
+changeset.errors.any?
+
+updated_user = changeset.instance
+
+changeset = User.changeset(updated_user)
+changeset = Repo.delete(changeset)
+```
+
+## Usage and Guides
+
+New website and API docs coming soon!
+
+<!-- Visit [www.crecto.dev](https://www.crecto.dev) -->
+
+### Benchmarks
+
+- [VS raw crystal-pg](https://github.com/Crecto/crecto/wiki/Benchmarks)
+
+## Development
+
+### Testing
+
+Specs are located in the `spec` directory. Since this is an ORM, running specs requires a database connection.
+
+#### Quick Start (SQLite)
+
+The project comes pre-configured with SQLite support. Simply run:
+
+```bash
+crystal spec
+```
+
+This will create a local SQLite database (`./crecto_test.db`) and run all 400+ tests.
+
+#### Testing with Other Databases
+
+To test with PostgreSQL or MySQL:
+
+1. Copy the example configuration:
+   ```bash
+   cp spec/repo.example.cr spec/repo.cr
+   ```
+
+2. Edit `spec/repo.cr` to uncomment and configure your preferred database:
+   ```crystal
+   # For PostgreSQL:
+   config do |conf|
+     conf.adapter = Crecto::Adapters::Postgres
+     conf.uri = "postgres://localhost/crecto_test"
+   end
+
+   # For MySQL:
+   config do |conf|
+     conf.adapter = Crecto::Adapters::Mysql
+     conf.uri = "mysql://localhost/crecto_test"
+   end
+   ```
+
+3. Run the tests:
+   ```bash
+   crystal spec
+   ```
+
+#### Testing with Docker
+
+To test all three supported database types using Docker:
+
+```bash
+docker-compose up
+```
+
+This will start PostgreSQL and MySQL containers and run the test suite against all database adapters.
+
+#### Performance Testing
+
+The test suite includes comprehensive performance and load tests that can be resource-intensive. By default, these tests are skipped to keep regular test runs fast. To run performance tests:
+
+```bash
+RUN_PERFORMANCE_TESTS=true crystal spec
+```
+
+Performance tests include:
+- CRUD operations under high load
+- Association performance testing
+- Database benchmarking
+- Stress testing with concurrent operations
+
+**Note:** Performance tests may take several minutes to complete and require significant system resources.
+
+#### Database Setup
+
+The database must exist prior to testing. Migrations for each database type are available in `spec/migrations/`.
+
+When contributing, please test against all supported databases before submitting a pull request.
+
+## Contributing
+
+1. Fork it ( [https://github.com/Crecto/crecto/fork](https://github.com/Crecto/crecto/fork) )
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create a new Pull Request
+
+### Development Notes
+
+When developing against crecto, the database must exist prior to
+testing. There are migrations for each database type in `spec/migrations`,
+and references on how to migrate then in the `.travis.yml` file.
+
+Create a new file `spec/repo.cr` and create a module name `Repo` to use for testing.
+There are example repos for each database type in the spec folder: `travis_pg_repo.cr`,
+`travis_mysql_repo.cr`, and `travis_sqlite_repo.cr`
+
+When submitting a pull request, please test against all 3 databases.
+
+## Thanks / Inspiration
+
+- [Ecto](https://github.com/elixir-ecto/ecto)
+- [AciveRecord](https://github.com/rails/rails/tree/master/activerecord)
+- [active_record.cr](https://github.com/waterlink/active_record.cr)
+- [crystal-api-backend](https://github.com/dantebronto/crystal-api-backend)

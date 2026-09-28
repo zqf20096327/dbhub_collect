@@ -1,0 +1,665 @@
+<p align="center">
+  <h1 align="center">Pad</h1>
+  <p align="center"><strong>Project Management for the agent era.</strong></p>
+  <p align="center">
+    <a href="https://github.com/PerpetualSoftware/pad/actions/workflows/ci.yml"><img src="https://github.com/PerpetualSoftware/pad/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+    <a href="https://github.com/PerpetualSoftware/pad/releases"><img src="https://img.shields.io/github/v/release/PerpetualSoftware/pad" alt="Release"></a>
+    <a href="https://goreportcard.com/report/github.com/PerpetualSoftware/pad"><img src="https://goreportcard.com/badge/github.com/PerpetualSoftware/pad" alt="Go Report Card"></a>
+    <a href="https://github.com/PerpetualSoftware/pad/pkgs/container/pad"><img src="https://img.shields.io/badge/ghcr.io-perpetualsoftware%2Fpad-blue?logo=docker&logoColor=white" alt="Container image on GHCR"></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue" alt="License"></a>
+    <a href="https://github.com/sponsors/xarmian"><img src="https://img.shields.io/github/sponsors/xarmian?label=sponsors&logo=github" alt="GitHub Sponsors"></a>
+  </p>
+  <p align="center">
+    <a href="https://getpad.dev">Website</a>
+    &nbsp;·&nbsp;
+    <a href="https://getpad.dev/docs">Docs</a>
+    &nbsp;·&nbsp;
+    <a href="https://getpad.dev/blog">Blog</a>
+    &nbsp;·&nbsp;
+    <a href="https://getpad.dev/changelog">Changelog</a>
+    &nbsp;·&nbsp;
+    <a href="https://www.reddit.com/r/getpad/">Reddit</a>
+    &nbsp;·&nbsp;
+    <a href="https://x.com/getpaddev">X</a>
+    &nbsp;·&nbsp;
+    <a href="https://bsky.app/profile/getpaddev.bsky.social">Bluesky</a>
+  </p>
+</p>
+
+---
+
+> One binary. Local-first. No accounts required. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to [Pad Cloud](https://app.getpad.dev).
+
+<p align="center">
+  <img src="docs/screenshots/dashboard.png" width="900" alt="Pad dashboard showing collection summaries, active work, an active plan with progress, and a recent activity feed" />
+</p>
+
+## Quick Start
+
+```bash
+brew install PerpetualSoftware/tap/pad
+cd your-project
+pad init                    # configure, auth, workspace, AI skill — all in one
+pad server open             # opens the web UI at localhost:7777
+```
+
+`pad init` is the smart entry point — it auto-detects what's needed, walks you through each step, and is safe to re-run anytime (it skips finished steps and prints a status summary).
+
+Then, in a fresh agent session in your project, say:
+
+```
+/pad onboard
+```
+
+Your new workspace ships with the canonical `onboard` playbook auto-activated. The agent walks an interview, inspects your codebase if it has shell access, and adapts your workspace's collections, conventions, roles, and playbooks to match the project. It's the fastest way to go from empty workspace to "okay, this is mine."
+
+## Why Pad?
+
+Tools like Linear, Jira, and Notion are built for teams on the cloud. Pad is built for **developers on their machine** — and for the AI agents working alongside them. When you do want your projects on every device or a teammate on the board, [Pad Cloud](https://app.getpad.dev) hosts the same product with sync, workspace invites, and role-based access.
+
+| | Pad | Linear / Jira | Notion |
+|---|---|---|---|
+| **Setup** | `pad init` | Create account, invite team, configure | Create account, pick template |
+| **AI agents** | Native `/pad` skill for 7+ tools | Third-party integrations | Third-party integrations |
+| **Data** | Local SQLite you own — or opt-in Pad Cloud | Their cloud | Their cloud |
+| **Offline** | Full functionality | Read-only cache at best | Limited |
+| **CLI** | First-class | Afterthought | None |
+| **Price** | Free, open source | Per-seat pricing | Per-seat pricing |
+
+## Features
+
+### For Developers
+
+**CLI that doesn't get in your way.** Create tasks, search items, check status — without leaving the terminal.
+
+```bash
+pad item create task "Fix OAuth redirect" --priority high
+pad item create idea "Real-time collaboration" --category infrastructure
+pad item list tasks --status in-progress
+pad item search "authentication"
+pad project dashboard                   # Project dashboard
+pad project next                        # What should I work on?
+pad server info                         # How this client is connected to Pad
+```
+
+**Web UI that stays out of your way.** A clean, dark-themed interface at `localhost:7777` with:
+
+- **Board, list, and table views** — drag-and-drop between status columns
+- **Keyboard navigation** — `j`/`k` to move, `Enter` to open, `Esc` to go back, `Cmd+K` to search
+- **Rich text editor** — Tiptap-based with markdown, formatting toolbar, and auto-save
+- **Wiki-links** — type `[[Title]]` to link between items
+- **Real-time updates** — agent creates a task in the terminal, it appears in the browser instantly (via SSE)
+- **Dashboard** — collection overview, active work, plan tracking, activity feed
+
+<p align="center">
+  <img src="docs/screenshots/board.png" width="900" alt="Pad tasks board view: kanban columns for Open, In-Progress, Done, Cancelled with task cards in each" />
+</p>
+
+### For AI Agents
+
+**Your agent becomes a project partner.** Install the `/pad` skill once, and your AI coding tool can read, create, and update project items through natural language. Cursor, Codex, Windsurf, and OpenCode receive a compact dispatcher, reuse bootstrapped context within a conversation, and load detailed guidance by topic with `pad agent guide`, keeping routine turns small.
+
+```bash
+pad agent install        # Auto-detects your tools and installs the skill
+```
+
+Works with **Claude Code**, **Cursor**, **Windsurf**, **Codex**, **OpenCode**, **GitHub Copilot**, **Amazon Q**, and **JetBrains Junie**.
+
+Then just talk to your project:
+
+```
+> /pad what should I work on next?
+> /pad I finished the OAuth fix
+> /pad create a task to add rate limiting
+> /pad let's brainstorm about the API redesign
+```
+
+**Conventions and playbooks** teach agents how your project works:
+
+- **Conventions** — trigger-based rules like "run tests before marking a task done" or "use conventional commits"
+- **Playbooks** — multi-step workflows like "when implementing a feature: read the spec, create a branch, write tests first, then implement". Playbooks can declare a kebab-case `invocation_slug` so users can invoke them directly: `/pad ship PLAN-42`, `/pad release 0.5.0`. Fresh `startup` workspaces ship a generic `ship` playbook out of the box.
+
+```bash
+pad item create convention "Run tests before completing tasks" \
+  --field trigger=on-task-complete \
+  --field scope=all \
+  --field priority=must
+```
+
+Agents load relevant conventions automatically, and every agent action is attributed in the activity feed — so you can see what the AI changed rather than finding it later in a diff.
+
+**Name your agents:**
+
+An agent that identifies itself gets its name shown on its writes — in the activity feed's Live and Audit views, on the dashboard's recent activity, on item timeline *activity* entries, and in the admin console's audit log and per-user activity views. With more than one agent working a project, that is the difference between "something automated touched this" and knowing which one.
+
+Pad takes the first of these it finds:
+
+```bash
+# 1. Per-workspace, committed with the project — the deliberate choice.
+#    In .pad.toml:
+#      agent_name = "reviewer"
+
+# 2. Per-process, runtime-agnostic. Any harness can set it.
+export PAD_AGENT=reviewer
+
+# 3. Otherwise Pad detects the runtimes it knows — Claude Code reports
+#    "claude-code" — and that detected id is used as the name.
+
+# 0. Per-session, and ahead of all three: the name this session REGISTERED
+#    as. `pad session register --agent rook` re-attributes every later write
+#    from that session to "rook", whatever .pad.toml or $PAD_AGENT say — the
+#    registry row and the write stamp are one value, not two.
+pad session register --agent rook
+```
+
+**If none of these produce a name, the write is not marked as an agent's at all** — it is recorded as the person whose credentials it used, which is the case the caveat below is about. The generic `agent` label you may see on older entries is a write that identified itself before Pad stored names, or an event type that records the actor without the name (workspace membership changes, sign-ins).
+
+The name is rendered exactly as sent — Pad keeps no list of approved names, and does not re-case or rewrite what you choose.
+
+**Sessions carry the name too, locally.** A session with the Claude Code plugin records itself in `~/.pad/sessions` on start (best effort — the plugin monitor is silent by contract, so a registration that fails, e.g. on a malformed pid variable, is only visible by running `pad session register` by hand) — the harness session's pid, the agent name above, and its working directory — and `pad session list` reads that back with a liveness verdict per row (`alive`, `dead`, or `unknown` where the platform cannot probe). It is a local, deterministic answer to "which of my sessions on this machine are running, and as which agent" — no server round-trip, no guessing from process names. What a row says about *who* is self-declared, like the name itself; on Linux the pid claim is additionally checked against the registering process's ancestry and reported as `session_pid_verified`. Any other harness gets the same by calling `pad session register` from its session-start hook with `PAD_SESSION_PID` (the session process) and `PAD_AGENT` exported. Records of sessions the register can see are dead are pruned on every register; `pad session prune --older-than 72h` also clears ones whose liveness cannot be determined. The record never leaves the machine.
+
+Reading the output as a decision — "is this name in use here right now?" — takes a rule, and `pad session list --help` spells it out: count only rows that are `alive`, not `legacy`/`malformed`, and `session_pid_verified`; treat `unknown`, legacy, or malformed rows in the same directory as indeterminate rather than free (so list without `--agent` and filter yourself); read an empty result as "no registered row", not "nobody" — a harness that never registers is invisible; and never pick between two alive rows by `registered_at`, which is each session's own clock. The registry is per OS user.
+
+Not every entry can show it. Activity entries store it, and comments (replies included) read it through the activity each one links to — so a comment written by an agent that sent a name shows that name in its chip, next to the person whose credentials it used. Version snapshots and implementation-note/decision entries record only *that* an agent acted, because nothing links them to a named row — they still read `Agent`.
+
+**What this does not claim.** The name is supplied by the client and self-declared, so it records honesty, not identity. From `ResolveAgentName`'s own contract in `internal/cli/agent_identity.go`:
+
+> - an agent that omits it is indistinguishable from the human whose credentials it is using;
+> - a human running `! pad ...` inside an agent's terminal inherits that terminal's environment and will be attributed to the agent.
+
+So it is not a basis for machine-verifiable provenance: treat it as a label an actor chose, useful for reading a trail, not as evidence about who acted. Because the credentials belong to a person either way, surfaces that exist for provenance show both — the admin audit log renders `reviewer (via Dana)` rather than picking one.
+
+Since the name is chosen by whoever is writing, it is displayed as an isolated unit: it is shown as sent, but it cannot re-order or restyle the text around it, and the account half of `name (via account)` is rendered separately so a chosen name cannot forge it.
+
+**Onboard agents to a new codebase:**
+
+Open an agent session in the workspace directory and run `/pad onboard`. The agent walks an interview, detects your build/test/CI tooling, and adapts your workspace's collections, conventions, roles, and playbooks to match the project. Works for any agent that speaks Pad — Claude Code, MCP-only agents, etc.
+
+### Collections & Custom Fields
+
+Pad organizes work into **collections** — typed containers with structured fields.
+
+**Built-in collections:**
+
+| Collection | Purpose |
+|---|---|
+| **Tasks** | Work items with status, priority, assignee, effort, due date |
+| **Ideas** | Feature ideas with impact and category |
+| **Plans** | Project milestones with progress tracking |
+| **Docs** | Documentation, decisions, reference material |
+| **Conventions** | Project rules that guide agent behavior |
+| **Playbooks** | Multi-step workflows for agents to follow |
+
+**Create your own** with typed fields — select, text, date, number, url, relation, checkbox:
+
+```bash
+pad collection create "Bug Reports" \
+  --fields "severity:select:low,medium,high,critical; browser:text; reproducible:checkbox"
+```
+
+Items get reference numbers automatically (`TASK-5`, `BUG-12`) and can be moved between collections with field migration.
+
+## Installation
+
+### Homebrew (macOS and Linux)
+
+```bash
+brew install PerpetualSoftware/tap/pad
+```
+
+### Build from Source
+
+```bash
+git clone https://github.com/PerpetualSoftware/pad
+cd pad
+make build
+cp pad ~/.local/bin/   # or /usr/local/bin/
+```
+
+Requires Go 1.26+ and Node.js 22+. Alternatively, `nix develop` provides a shell with the exact Go and Node versions pinned — see the [Nix](#nix) section below.
+
+The `go install github.com/PerpetualSoftware/pad/cmd/pad@latest` path is not supported for the full Pad binary, because the web UI must be built and embedded during the source build.
+
+### Docker
+
+```bash
+docker run -p 127.0.0.1:7777:7777 -v pad-data:/data ghcr.io/perpetualsoftware/pad
+```
+
+This publishes Pad to `localhost:7777` on the host machine, which is the recommended default for local use.
+
+**First run — create the first admin.** Open `http://localhost:7777` and you'll hit a setup page asking for a bootstrap token. On first start with no users, Pad logs a one-time setup URL to stderr (captured by `docker logs`) — grep it and open the printed link:
+
+```bash
+docker logs <container> 2>&1 | grep -A6 'Pad first-run setup'
+# → http://<your-host>:7777/setup#token=<one-time-token>
+```
+
+Open that URL, create your admin account, and the token is consumed (the banner stops appearing). If you'd rather stay on the CLI, `docker exec -it <container> pad auth setup` works too — running inside the container counts as loopback, which the bootstrap gate allows. On a network you already trust, set `PAD_BYPASS_SETUP_TOKEN=true` to skip the token and create the admin straight from `http://<your-host>:7777/setup` (only safe when the port isn't reachable from the open internet).
+
+**Single user, more than one device?** Publish to all interfaces so you can reach Pad from your phone, tablet, or another machine on the same LAN, Tailscale network, or home VPN:
+
+```bash
+docker run -p 7777:7777 -v pad-data:/data ghcr.io/perpetualsoftware/pad
+```
+
+For multi-instance deployments, Pad supports Postgres + Redis via `docker-compose.yml` — see [docs/deployment.md](docs/deployment.md) for the full setup.
+
+### Nix
+
+Run without installing:
+
+```bash
+nix run github:PerpetualSoftware/pad
+```
+
+Or install into your profile:
+
+```bash
+nix profile install github:PerpetualSoftware/pad
+```
+
+A flake devShell (Go, Node, and friends, pinned to the same versions CI uses) is also available for contributors:
+
+```bash
+nix develop
+```
+
+> A `nixpkgs` package (`nix-shell -p pad` / `environment.systemPackages`) is planned but not yet merged upstream. Until then, use the `github:PerpetualSoftware/pad` flake reference above.
+
+### Binary Download
+
+Pre-built binaries for macOS, Linux, and Windows are available on the [releases page](https://github.com/PerpetualSoftware/pad/releases).
+
+### Pad Cloud (hosted)
+
+Don't want to run anything? [Pad Cloud](https://app.getpad.dev/register) is the managed option — same product, same CLI, same `/pad` skill, free during beta. Sign up on the web, then connect a project directory:
+
+```bash
+pad init --url https://app.getpad.dev --workspace my-workspace
+```
+
+Self-hosting stays first-class: the binary is unchanged and no features are Cloud-only.
+
+### Upgrading Pad
+
+Pad ships a new binary on a roughly weekly cadence. Upgrades are designed to be boring: install the new binary and restart. Database migrations run automatically at startup, only the ones your database is missing are applied, and each migration commits atomically (a failed migration rolls back cleanly and is retried next boot).
+
+**The one rule: only ever move forward.** Newer binaries know how to migrate an older database; older binaries do **not** understand a newer schema. Since Pad added its schema-ahead guard, a downgraded binary that finds a database newer than itself refuses to start rather than silently running old code against a newer schema (which can corrupt data):
+
+```
+database schema is newer than this pad binary: ... This almost always means the
+binary was DOWNGRADED (e.g. brew/docker rollback) ... Upgrade pad back to a build
+that includes those migrations, or re-run with `pad start --force`.
+```
+
+To recover, reinstall the newer binary (`brew upgrade pad`, pull the newer Docker tag, etc.). If you have *intentionally* downgraded and accept the risk, start with `pad start --force` (or set `PAD_ALLOW_SCHEMA_AHEAD=1`) to override the guard.
+
+**Automatic pre-migration snapshot (SQLite).** Whenever a SQLite-backed instance has pending migrations to apply, Pad first copies the database file to `pad.db.pre-<version>` next to it. If an upgrade ever goes wrong, stop the server and copy that snapshot back over `pad.db`. This is a convenience net, not a backup strategy — keep your own backups (see [docs/backup.md](docs/backup.md)). PostgreSQL instances are skipped here; use `pg_dump` or a provider snapshot before upgrading.
+
+Recommended upgrade flow:
+
+```bash
+# 1. Back up first (SQLite shown; see docs/backup.md for Postgres)
+pad db backup -o pad-backup-$(date +%Y%m%d).db
+
+# 2. Stop the server, install the new binary, restart
+#    (migrations + the pre-migration snapshot run automatically on start)
+brew upgrade pad        # or: docker pull, binary download, make install
+
+# 3. Confirm it's healthy
+pad --version
+curl -s localhost:7777/api/v1/health
+```
+
+## Getting Started
+
+### 1. Set up Pad
+
+```bash
+cd ~/projects/myapp
+pad init "My App"
+```
+
+`pad init` is the smart entry point that handles everything in one command:
+
+- Configures this client's connection (local server, remote, or Docker)
+- Auto-starts the local server
+- Creates the first admin account on a fresh local install (Docker / remote hosts run `pad auth setup` on the server instead)
+- Logs you in if needed
+- Creates or links a workspace for the current directory (writes `.pad.toml`)
+- Installs the `/pad` skill for any AI tools detected in the project
+
+Run from your project root. Safe to re-run anytime — it skips finished steps and prints a status summary if nothing's needed.
+
+**Choose a template** with `--template`, or omit it for an interactive picker grouped by category (Software / People / …):
+
+```bash
+pad workspace init --list-templates                   # See the full catalog grouped by category
+pad init "My App" --template scrum                    # Scrum-style with sprints
+pad init "My App" --template product                  # Product management focused
+pad init "My Hiring" --template hiring                # Company-side: requisitions, candidates, interview loops, feedback
+pad init "Job Search" --template interviewing         # Candidate-side: applications, interviews, companies, contacts
+pad init "My App" --template blank                    # Custom: system collections only — let /pad onboard build the rest
+```
+
+Pad ships templates for software (startup / scrum / product), people workflows (hiring, interviewing), and a custom `blank` template — system collections (Conventions, Playbooks) only, with the `/pad onboard` playbook as its sole seeded content. `blank` is the entry point for the agent-driven `/pad onboard` flow: it walks you through shaping collections, conventions, and roles to match your actual project. Reserved categories for research, content, operations, and personal use await their first templates, so the same project-management primitives fit well beyond code projects. There's also a hidden `demo` template — the `startup` layout pre-loaded with realistic sample data — that's kept out of the picker but can be built explicitly with `--template demo`.
+
+### 2. Start working
+
+```bash
+# From the CLI
+pad item create task "Set up CI pipeline" --priority high
+pad item create idea "Add WebSocket support" --category infrastructure
+pad project dashboard
+
+# From the web UI
+pad server open              # Opens localhost:7777 in your browser
+
+# From your AI agent
+# Just use /pad in Claude Code, Cursor, etc.
+```
+
+### 3. Teach your agents the rules
+
+In an agent session inside the workspace:
+
+```
+/pad onboard
+```
+
+The agent walks an interview, detects your tooling, and adapts the workspace's collections, conventions, roles, and playbooks. To browse the library directly:
+
+```bash
+pad library list --type conventions  # Pre-built conventions you can adopt
+pad library list --type playbooks    # Pre-built multi-step workflows
+```
+
+### 4. Optional — connect a desktop AI app via MCP
+
+Pad ships an MCP (Model Context Protocol) server so Claude Desktop, Cursor,
+Windsurf, Claude Code, or Codex can manage items, plans, ideas, and dependencies
+as native tools, read workspace state by URL, and load multi-step workflows as
+prompts.
+
+```bash
+pad mcp install claude-desktop   # or: cursor, windsurf, claude-code, codex, --all
+# Restart the client; pad shows up as the "pad" MCP server.
+```
+
+Cursor and Codex installations can opt into compact tool results:
+
+```bash
+pad mcp install cursor --compact-results
+pad mcp install codex --compact-results
+```
+
+Pad keeps the result channel each client currently exposes to its model: JSON
+text for Cursor and `structuredContent` for Codex. It removes the duplicate
+channel only from successful structured results; errors and one-channel results
+remain unchanged. Leave the flag off for other clients or compatibility testing.
+
+`pad mcp install` writes each client's native config: JSON `mcpServers` for
+Claude Desktop / Cursor / Windsurf, a **project-local `.mcp.json`** in the current
+directory for `claude-code`, and an `[mcp_servers.pad]` table in
+`~/.codex/config.toml` (TOML) for `codex`. Because Claude Code's config is
+project-scoped, it's install-on-request only — `--all` and `pad mcp status` cover
+the per-user clients (including Codex) and skip it.
+
+**Tool catalog (v0.53)** — ten resource × action tools plus `pad_set_workspace` (eleven total), no flat verb explosion. Undeclared input keys are rejected with a structured error rather than silently dropped. `pad_item` create/update accept field values as a `fields` object (the same shape reads return) as an equivalent to the dedicated params / `field: ["key=value"]`, and its values keep their JSON types where the transport can carry them. Field values are typed against the collection schema server-side, so a declared number or json field is writable from the remote transport (which sends every value as a string). Keys the schema does not declare are stored and NAMED back in `warnings.undeclared_fields`. One key supplied through two doors is adjudicated once: differing values are refused, equal ones collapse, and two names for the same target — `parent`/`plan`, `assign`/`assigned_user_id`, `role`/`agent_role_id` — are refused even when the values match. `pad_item.get` accepts `agent: true` for the full body and work-relevant metadata without internal UUID plumbing; `pad_item.list` accepts `unparented: true` (mutually exclusive with `parent`) to select items with no parent or implements relationship, and is summary-shaped by default on both transports (`full: true` opts into complete content bodies):
+
+| Tool | Actions |
+|---|---|
+| `pad_item` | `create`, `update`, `delete`, `get`, `list`, `move`, `restore`, `link`, `unlink`, `deps`, `star`, `unstar`, `starred`, `comment`, `list-comments`, `backlinks`, `bulk-update`, `note`, `decide`, `export`, `import`, `history`, `remind`, `ack-reminder`, `claim`, `release` |
+| `pad_workspace` | `list`, `members`, `invite`, `storage`, `audit-log`, `create`, `claim`, `deleted`, `restore` |
+| `pad_collection` | `list`, `create`, `update`, `delete` |
+| `pad_project` | `dashboard`, `next`, `ready`, `stale`, `standup`, `changelog`, `report`, `activity` |
+| `pad_role` | `list`, `create`, `update`, `delete` |
+| `pad_search` | `query` |
+| `pad_playbook` | `list`, `get`, `run`, `match` |
+| `pad_library` | `list`, `get`, `activate` |
+| `pad_attachment` | `list`, `show` |
+| `pad_meta` | `server-info`, `version`, `tool-surface`, `bootstrap` |
+| `pad_set_workspace` | session-default workspace pinning (response embeds the bootstrap blob) |
+
+Plus resources at `pad://workspaces`, `pad://workspace/{ws}/dashboard`,
+`pad://workspace/{ws}/items`, `pad://workspace/{ws}/items/{ref}`,
+`pad://workspace/{ws}/collections`,
+`pad://workspace/{ws}/attachments/{id}` (bounded image bytes),
+`pad://workspace/{ws}/bootstrap`,
+and `pad://_meta/version`.
+
+**Stability contract** — two version constants, both advertised in the
+initialize handshake under `capabilities.experimental.padCmdhelp` and
+`capabilities.experimental.padToolSurface` (and queryable at
+`pad://_meta/version`):
+
+- `cmdhelp_version: "0.1"` — CLI help-tree contract (used at dispatch time)
+- `tool_surface_version: "0.53"` — MCP tool catalog contract (v0.5 added `pad_library`; v0.6 `pad_item.backlinks`; v0.7 `pad_item` `export`/`import`; v0.8 `pad_workspace` `deleted`/`restore`; v0.9 made `pad_item.list` summary-shaped by default with a default+max result cap; v0.10 enforced the draft-playbook gate server-side on `pad_playbook.run` with an `allow_draft` escape hatch; v0.11 added the read-only `pad_attachment` tool (`list`/`show`); v0.12 added `pad_project.activity` (agent-accessible non-streaming activity feed); v0.13 added `pad_project` `ready`/`stale` (agent-oriented backlog + attention queries); v0.14 added `pad_item` `history` + optimistic concurrency (TASK-2022); v0.15 added the `pad_item.list` `unparented` parameter (TASK-2096); v0.16 made an empty-string `assigned_user_id` / `agent_role_id` CLEAR the assignment instead of being silently dropped, so an agent can finally unassign an item (TASK-2571); v0.17 carried that to the LOCAL STDIO transport by teaching the CLI to lift those keys onto their columns instead of into the fields blob (BUG-2583); v0.18 added `clear_assigned_user` / `clear_agent_role` booleans — the canonical, schema-discoverable way to unassign, backed by new `--clear-assigned-user` / `--clear-agent-role` flags on `pad item update` (IDEA-2584); v0.19 added a `clear_parent` boolean — the canonical, schema-discoverable way to detach an item from its parent, backed by a new `--clear-parent` flag on `pad item update` (BUG-2078); v0.20 gave every tool an explicit annotation block derived from the catalog’s read-only knowledge — fully-read-only tools advertise `readOnlyHint: true` / `destructiveHint: false`, all-additive-write tools (`pad_workspace`, `pad_library`) drop `destructiveHint`, overwrite/delete-capable tools stay conservatively destructive, `openWorldHint: false` everywhere — replacing mcp-go’s defaults that marked every tool destructive (BUG-2302), and made `pad_item.list` summary-shaped on the remote HTTP transport too, with a declared `full` boolean as the opt-in for complete bodies on both transports (BUG-2305); v0.21 bounded `pad_item.history`, which was unbounded on every surface — `limit` now covers it (default 50, max 300, the NEWEST N; no `offset`, because reverse-patch storage makes only a newest-end window cheap), applied in the catalog action so it lands on both transports, and summary mode now asks the server to skip patch resolution rather than resolving bodies the dispatcher discards (BUG-2608); v0.22 stopped `pad_item.move` destroying an item’s system metadata — implementation notes, decision log, linked PR and convention data now survive a move, any field the destination schema has no home for is REPORTED in the move’s activity entry rather than vanishing, and a `field` setter naming one of those reserved keys is refused with `malformed_override` instead of writing it (BUG-2674); v0.23 closed the same door on the ordinary update — a `field` setter naming `implementation_notes`, `decision_log` or `convention` is now refused on every transport at once (`validation_error` on HTTP, surfaced to MCP clients as `validation_failed`); the one gate covers the CLI, remote MCP and stdio MCP at once because all three lower a `field` setter into the same `fields_patch`; `github_pr` was exempt on update until v0.47 refused it too, because that door stored the PR as an unreadable string (BUG-2696), and `pad github link` / `unlink` now write it through a typed, validated update member; item CREATE stayed open until v0.48 refused the keys there too (BUG-3163), once library activation, the one system writer using that door, moved to a typed `convention` create member. v0.23 also added the retry-hostile `stored_state_unreadable` error code so an agent told its target item’s stored data is unreadable stops instead of retrying a permanent failure (BUG-2627 / BUG-2675); v0.24 made the `pad_item` `fields` object a real write form on create/update — reads return `fields` as a native object, and writing that shape back was a silent no-op (accepted, never mapped, dropped while the PATCH still bumped `updated_at`) — merging it into the same path as `field`/the dedicated params with conflicting duplicate keys refused, and made input validation strict across all catalog tools: undeclared top-level keys now fail with a structured error instead of being silently dropped (#1066); v0.25 made `pad_library.activate` resolve its DESTINATION collection from the target’s declared artifact kind (SPEC-5 collection traits) rather than the literal `conventions` / `playbooks` slugs, so activating into a workspace that renamed either collection lands correctly instead of failing not-found with the collection sitting right there (BUG-2702); a lookup ERROR is now surfaced rather than silently falling back to the canonical slug, because falling back on an error means writing to a slug nothing was confirmed about (TASK-2657); v0.26 made `pad_workspace.create` REFUSE with a 403 when the calling OAuth connection's grant has `may_create_workspaces=false` — that checkbox previously gated only the post-creation auto-add, so a connection whose user declined it could still create workspaces — and on a connection with an explicit workspace allow-list, could not then see them (a wildcard `all_current_workspaces` connection could, which is why the consent mismatch rather than the invisibility is the defect); the same gate covers `POST /workspaces/import`, which mints a workspace through a second door. There is deliberately no escape-hatch parameter: the gate expresses the USER's consent decision, so only the user can lift it — by re-authorizing, or by enabling the flag on the existing connection at `/console/connected-apps` (IDEA-2756); v0.27 typed field values server-side so a declared number/json field is writable from the remote transport at all, carried the `fields` object with its JSON types intact, named undeclared keys back in `warnings.undeclared_fields` (accepted rather than refused — a census of 1012 items found 14 such keys across 168 live values, so refusing would have broken read-modify-write on items nobody had edited wrongly), and replaced the accreted per-site conflict guards with ONE check over a canonical view of every source; that check refuses several ambiguities v0.26 resolved silently, chiefly two names for one target in a single call (`parent`/`plan`, `assign`/`assigned_user_id`, `role`/`agent_role_id`), refused even when the values match because the names address one thing through incomparable vocabularies and the two doors resolved them differently (BUG-2850); v0.28 added two ADDITIVE `pad_item` actions — `remind`, which arms a one-shot reminder at an RFC3339 instant (`remind_at`), and `ack-reminder`, which acknowledges a fired one by id (`reminder_id`); a bare `YYYY-MM-DD` is refused rather than read as midnight, since a date names a 24-hour span and picking an hour inside it would be the server choosing a time nobody did (IDEA-2641); v0.29 made a `relation` field value have to NAME A LIVE ITEM in the collection that field declares — `internal/items` only ever checked the SHAPE of a relation ("must be a string"), because deciding whether a string names an item is a database question and that package is DB-free, so any string at all was accepted and stored and no client could render it honestly; every write door now refuses a value that names nothing, names an item in the WRONG collection, sits in a field whose schema declares no target collection, or is a SLUG (a deliberate divergence from `ResolveItem`: a slug is neither an ID nor stable, and free text like "red" resolving to whatever is slugged `red` today is exactly the corruption this closes). A CARRIED value — one already on the item, asserted by nobody — is never refused, because refusing would make every legacy item un-updatable, un-movable and un-copyable: within a workspace it resolves and survives, across a workspace boundary it is dropped without a lookup and reported in `warnings.dropped_fields`, so `pad_item.action=copy` now names a drop where v0.28 silently landed a dangling reference (PLAN-2857 / TASK-2878); v0.30 made one `--field key=value` entry mean ONE thing at every door — six sites parsed it independently (`item create`, `item list`, `item update`, `item move`, `item copy`, and the remote door’s own ingest) in four spellings, so `field:[" effort=l"]` stored an undeclared field literally named " effort" through the CLI and wrote `effort` through /mcp, the same call storing two different keys depending only on the transport. All six now share one parse, with two deliberately asymmetric rules: a padded KEY is REFUSED everywhere rather than trimmed anywhere (trimming silently retargets the write to a field the caller did not type), and a VALUE is carried VERBATIM everywhere (trimming reinterprets a caller’s bytes, and on a text field the padding is content) — a padded value against a typed field is refused one layer down by validation, naming the field, which is the same answer at both doors since v0.27 types declared fields server-side. Both doors refuse something they used to accept, and they were accepting it differently — /mcp trimmed the padded key and wrote the declared field, the CLI stored a ghost field beside it; what is /mcp-only is the value half, which it used to trim and type and now passes through to the same validation the CLI has always applied. A caller writing canonical entries sees no difference at either door (BUG-2870); v0.31 let a `relation` field value be an EXACT TITLE, scoped to the collection that field declares, alongside the UUID and ref v0.29 accepted — a THIRD accepted spelling, so nothing a v0.30 caller sends stops working — added a `relation_targets` member to reads hydrating each stored id to `{id, ref, title}` so a client can render a relation without a request per value, and made the `fields` DSL take the target collection slug as a relation's third part. The bump is owed by that last part: `fields="owner:relation"` used to be ACCEPTED and is now REFUSED, because the old parser put the third part into Options for every type and so built a relation with no target — a field every subsequent write then refused with `target_missing`, which is to say a field that could never accept a value. Title resolution is COLLECTION-SCOPED on purpose: a title unique only workspace-wide refuses and names the collection searched, and two matches inside the declared collection get their own `ambiguous` reason rather than `not_found`, which would state the opposite of what happened. The ladder is UUID, then ref, then title, so an item literally TITLED "COLO-3" is unreachable by title while the ref resolves. An id-only `relation_targets` entry means the target is gone OR the caller may not see it, and consumers must not render it as either — the two are made indistinguishable deliberately (PLAN-2857 / TASK-2996); v0.33 added a `multi_relation` field type — an ORDERED LIST of references, each element resolving through the same UUID → ref → exact-title ladder a scalar relation uses, declared through the DSL as `owners:multi_relation:people` with the target collection as its third part (a bare `owners:multi_relation` is refused at parse time rather than minting a field no write can satisfy, exactly as v0.31 did for `relation`). The type itself is additive — every rule it introduces is reachable only through a field whose schema says `multi_relation`, which no existing schema can contain — but the READ shape is why this is a bump: `relation_targets[key]` now carries EITHER the scalar object v0.31 emitted OR a JSON ARRAY of those objects, in stored order and one per stored element, when the key names a `multi_relation`. A scalar entry is byte-identical to v0.31's, so a consumer with no such fields sees nothing new; one that acquires such a field must handle the array, and a strictly-typed client will fail to decode it. Value rules, all NEW rather than inherited because scalar `relation` had nothing coherent to inherit (BUG-3028): exactly ONE stored form for "none", the key being ABSENT, with `[]` normalising to it; an empty or whitespace-only ELEMENT refused rather than skipped; `required` meaning at least one RESOLVED element; order part of the value; and duplicates refused with a new `duplicate_referent` reason, detected AFTER resolution because two elements naming one item are usually different strings — a UUID and a ref, a ref and a title. Any failing element refuses the WHOLE write, and a cross-workspace copy drops the value whole and reports it once, so an import can never change an element count (PLAN-2857 / TASK-2999); v0.34 added an `expected_seq` param to `pad_item.action=update` — the STRONG optimistic-concurrency token, preferred over `expected_updated_at`, which is stored at one-second resolution and therefore cannot tell two writes inside one second apart: both match it, neither conflicts, and the loser silently overwrites the winner. `seq` is bumped on every mutation of the row under the write lock, and is now serialised on every item AND every item summary (without `omitempty`) so the shape a caller reads always carries the token it must send back. Raising `updated_at`'s resolution instead was measured and rejected: the column is TEXT on both dialects and compared lexically in SQL, and Go's RFC3339Nano omits trailing zeros, so a sub-second value sorts BEFORE a whole-second value of the same second and the since-cursor read would start skipping rows (BUG-3037); ; v0.35 made an injected schema DEFAULT take the same `validateFieldType` check a caller-supplied value takes. It used to be assigned and skipped past that check, so the SAME BYTES were refused through one door and stored through the other, decided only by who put them there: on a `status` retyped to `multi_select` whose scalar default survived the retype, `{"status":"open"}` answered 400 and `{}` answered 201 storing `{"status":"open"}` — a scalar sitting in a list field, which is the corruption BUG-3016, BUG-3057, BUG-3067, BUG-3068 and BUG-3074 have each been defending one surface at a time against. A failing default is now DISCARDED and named in `warnings.dropped_fields` rather than stored, which widens that key from the single relation case v0.29 introduced to a field of any type. Dropped rather than refused because nobody in the request typed the value and refusing would make every write into that collection fail on a schema defect its author must fix elsewhere; the one exception is a REQUIRED field, where dropping leaves it absent and the write is refused as required, with a message naming the default as the cause rather than a bare "field is required" that points at a request which never mentioned it (BUG-3079); v0.36 stopped a REF-SHAPED `relation` value falling back to matching by item NUMBER when its prefix names a collection that is LIVE in the workspace. Item numbers are workspace-unique and sequential ACROSS collections, so `CONVE-1` and `SECRE-1` are never both real — and the fallback dropped the prefix, matched on the number alone, and found an item that was usually inside the field’s declared collection, so the wrong-collection check above it passed and nothing was raised: a caller wrote `CONVE-1`, the item stored a different item’s UUID, and the write answered 201 with the substitution visible only in `relation_targets`. That is the corruption v0.29 closed for free text, left open for the spelling the docs tell callers to prefer. The predicate is about the PREFIX rather than the item because a collection RENAME changes its prefix and a relation already written as the old ref has to keep resolving (BUG-2873): that ref’s prefix names nothing afterwards, so the fallback still fires for it, while a prefix that IS live and simply has no item at that number is the caller naming a real collection that does not contain what they said, and is refused. Residual, stated rather than implied: a ref pasted from ANOTHER workspace whose prefix also names no collection here still resolves by number, because nothing in the value distinguishes it from a rename’s leftover. `GetItemByRef`, the navigational read path, is unchanged (BUG-3082); v0.37 added the opt-in `agent` projection to `pad_item.get`; v0.38 added two ADDITIVE `pad_item` actions from PR #1238 (b4rk13) — `claim`, an atomic lease on an item (`holder`, `ttl` as a Go duration; 409 `lease_held` carrying the holder and expiry when another live holder has it, a re-claim by the live holder extends the expiry), and `release`, which drops it idempotently; a `ttl` under one second is refused at the mapper because whole seconds cross the wire and a positive sub-second value truncated to the `ttl_seconds: 0` the server reads as absent (IDEA-2815); v0.39 refuses a `pad_item.update` that sets content WITH a version token (`expected_seq` / `expected_updated_at`) while a browser tab holds edits not yet saved back, with 409 `content_pending_flush` — the token guards the stored row and those edits are not in it, so the write used to replace them and, with no tab open, delete them outright. Re-reading does not clear it; the new `overwrite_pending_edits` boolean does, and a write without a token is unchanged apart from `warnings.pruned_pending_edits` naming how many such edits it deleted (BUG-3133); v0.40 gives a scalar `relation` field one stored form for "no target", the key absent: a blank a write SETS is normalised to absent before validation, so a REQUIRED relation can no longer be satisfied by `""`, while a legacy blank a write only carries is normalised without refusing it, and an empty list filter on a relation (`owner=`) matches every spelling of none (BUG-3028); v0.41 adds a `match` action to `pad_playbook` — given free `text`, a Choice question over the workspace's ACTIVE playbooks (ref/title/summary/trigger/invocation_slug) plus a reserved `"none"` option returns the best match's ref (or `"none"`), confidence, per-option probabilities and the model; no provider configured answers 404 `decision_provider_unavailable`, a provider error or an out-of-set answer answers 502 `decision_provider_error`; pure ADDITIVE bump, read-only and side-effect-free (PLAN-3114 / TASK-3120); v0.42 changes the error code a LOCAL STDIO caller receives: an argv refusal is `validation_failed` with its message, a 429 is `rate_limited` with `details.retry_after_seconds`, and free text starting with `-` is no longer parsed as a flag, since positionals now follow `--` (BUG-3142 / BUG-3147); v0.43 makes `pad_item.action=move` refuse a field override the destination schema does not declare, with 400 `malformed_override`, as the copy does (BUG-2379); v0.44 makes `pad_item.action=bulk-update` over WebMCP refuse, per item into `failed`, a status or priority change on an item whose collection does not declare that field, while stdio and remote, which issue a per-item PATCH, still accepted it with `warnings.undeclared_fields` (BUG-3154) until v0.46 made them refuse it too, per item, via the update door's new `refuse_undeclared_fields` member (BUG-3156); v0.45 reports an HTTP 413 as `too_large` on both transports, with the server's own code in `details.reason`, where it used to be `server_error` (BUG-2829); v0.48 makes `pad_item.action=create` refuse a `field` naming any reserved metadata key, as update already did (BUG-3163); v0.49 makes `pad_project.action=report` with no `collections` param leave out system collections (Conventions, Playbooks), keyed on `is_system`, while naming one still includes it (BUG-2410); v0.50 adds an additive `stored_as_text: true` to a `relation_targets` entry whose stored value is not UUID-shaped (an imported title, legacy text), so it renders as the text it is rather than as an unavailable target, while a UUID-shaped entry is byte-identical to v0.49 (BUG-3014); v0.51 stops a move or copy carrying a value into a COMPUTED field or a value that collides on a destination unique field — a carried collision is dropped and named in `warnings.not_unique`, a supplied or default one is refused 409 (BUG-2367); v0.52 refuses a move or copy that would change an item between open, done and abandoned unless the destination done field is named (`state_change_requires_value`; a `state_change` needs_value row on the preflight) (BUG-2367); see `internal/mcp/version.go` for the full changelog)
+
+v0.40 refuses a blank value on a REQUIRED relation field and stores an empty
+relation as an absent key; see `internal/mcp/version.go` for the full
+compatibility note.
+
+External agents pin against these so a future rename doesn't break them
+silently. Errors come back as structured envelopes (`{error: {code,
+message, hint, available_workspaces, ...}}`) with a closed code
+taxonomy — 17 codes as of v0.23, enumerated in
+`internal/mcp/errors.go`. Branch on `code`, not on message text; a code
+you don't recognize is possible, and `stored_state_unreadable` in
+particular means STOP rather than retry.
+
+Full guide at [getpad.dev/mcp/local](https://getpad.dev/mcp/local) — install
+paths, action enums per tool, error taxonomy, troubleshooting.
+
+**On Pad Cloud?** Skip the install: add `https://mcp.getpad.dev` as a remote
+MCP server in Claude Desktop, Claude.ai, Cursor, or Windsurf and sign in with
+OAuth — same tool surface, no local binary. Setup guide at
+[getpad.dev/mcp/remote](https://getpad.dev/mcp/remote).
+
+## CLI Reference
+
+```
+pad auth configure                    Configure how this client connects to Pad
+pad auth setup                        Initialize the first admin account
+pad auth login                        Sign in
+pad auth whoami                       Show current user
+
+pad server start                      Start the Pad API server
+pad server stop                       Stop the Pad server
+pad server info                       Show client, connection, and local server status
+pad server open                       Open web UI in browser
+
+pad workspace init [name]             Initialize workspace in current directory
+pad workspace link <workspace>        Link current directory to an existing workspace
+pad workspace list                    List all workspaces
+pad workspace switch <workspace>      Switch active workspace
+pad workspace context                 Show structured workspace context
+pad workspace context set --file X    Update structured workspace context from JSON
+# Workspace onboarding: run `/pad onboard` from an agent session inside the workspace
+pad workspace members                 List workspace members
+pad workspace invite <email>          Invite a workspace member
+pad workspace join <code>             Accept an invitation
+pad workspace export                  Export workspace data
+pad workspace import <file>           Import workspace data
+
+pad project dashboard                 Project dashboard
+pad project next                      Recommended next task
+pad project ready                     Query actionable next items
+pad project stale                     Query stalled or attention-worthy items
+pad project standup [--days N]        Daily standup report
+pad project changelog [--days N]      Release notes from completed items
+pad project watch                     Real-time activity stream
+pad project reconcile                 Reconcile item and PR state
+
+pad item create <coll> "title"        Create item (task, idea, plan, doc, ...)
+pad item list [collection]            List items (filters: --status, --priority, --all)
+pad item show <ref>                   Show item detail
+pad item open <ref>                   Open item in web UI
+pad item update <ref>                 Update item fields
+pad item delete <ref>                 Delete item
+pad item move <ref> <collection>      Move item between collections
+pad item edit <ref> [--force]         Open item in $EDITOR (guarded save; see --help)
+pad item search "query"               Full-text search across all items
+pad item comment <ref> "text"         Add comment to an item
+pad item comments <ref>               View item comments
+pad item note <ref> "summary"         Append an implementation note to an item
+pad item decide <ref> "decision"      Append a decision log entry to an item
+pad item block <src> <target>         Create dependency
+pad item blocked-by <item> <blk>      Mark item as blocked
+pad item deps <ref>                   Show dependencies
+pad item unblock <src> <target>       Remove dependency
+pad item related <ref>                Show direct relationships for an item
+pad item implemented-by <ref>         Show incoming implementers for an item
+pad item claim <ref>                  Atomically claim an item for execution (--holder, --ttl; 409 names the live holder)
+pad item release <ref>                Release your execution lease (idempotent)
+pad item bulk-update --status X       Batch update multiple items
+
+pad collection list                   List collections with item counts
+pad collection create <name>          Create a custom collection
+
+pad library list                      Browse convention and playbook library
+pad library activate <title>          Activate a convention or playbook
+
+pad agent install [tool]              Install /pad skill for AI coding tools
+pad agent guide [topic]               Print one section of the canonical agent guide
+pad agent status                      Show supported tools and installation status
+pad agent update                      Update installed tool integrations
+
+pad github link [item-ref]            Link current branch's PR to item
+pad github status [item-ref]          Show PR status for linked items
+pad github unlink <item-ref>          Remove PR link from item
+
+pad webhook list             List workspace webhooks
+pad webhook create <url>     Create webhook
+
+pad session register         Record this session (harness pid + agent name) locally
+pad session list             Registered sessions on this machine, with liveness
+pad session prune            Remove records of sessions that are dead
+```
+
+All commands accept `--format json` for machine-readable output and `--workspace` to target a specific workspace.
+
+### Shell completion
+
+`pad` ships completion scripts for bash, zsh, fish, and PowerShell:
+
+```bash
+# Bash — current session only
+source <(pad completion bash)
+# Bash — persistent
+pad completion bash > /etc/bash_completion.d/pad                   # Linux
+pad completion bash > $(brew --prefix)/etc/bash_completion.d/pad   # macOS (Homebrew)
+
+# Zsh (make sure compinit runs in your ~/.zshrc)
+pad completion zsh > "${fpath[1]}/_pad"
+
+# Fish
+pad completion fish > ~/.config/fish/completions/pad.fish
+
+# PowerShell (append the output to your $PROFILE)
+pad completion powershell | Out-String | Invoke-Expression
+```
+
+Beyond command and flag names, completion is context-aware: collection arguments (e.g. `pad item list <TAB>`) complete against your workspace's collections, `--workspace` completes configured workspace names, and `--status` / `--priority` complete their valid values.
+
+### Authentication
+
+Pad runs without authentication by default for frictionless local use. For local installs, `pad init` creates the first admin account inline. The lower-level commands are useful when you're hosting a Pad server (Docker / remote) and need to set up auth on the server host directly:
+
+```bash
+pad auth setup         # Initialize the first admin account (server host, non-local mode)
+pad auth login         # Sign in
+pad auth whoami        # Show current user
+pad auth logout        # Sign out
+```
+
+Once a user exists, all API requests and web UI access require authentication. Credentials are stored in `~/.pad/credentials.json`. Multiple users can be invited to workspaces with role-based access control (`owner`, `editor`, `viewer`).
+
+#### Authenticating with an environment token
+
+Set `PAD_TOKEN` to a Pad API token (minted with `pad token create`, or under **Settings → API tokens** in the web UI) to authenticate without `pad auth login`:
+
+```bash
+PAD_TOKEN=pad_xxxxxxxx pad item list
+```
+
+`PAD_TOKEN` authenticates every command except one: minting a token needs a session, so `pad token create` is refused when the override carries a `pad_` API token — see [Managing API tokens from the CLI](#managing-api-tokens-from-the-cli) below. `PAD_TOKEN` takes precedence over credentials saved by `pad auth login` — the same convention as `gh`'s `GH_TOKEN`. This is useful for CI, scripts, and machines where several AI agents share one CLI install but should act as different Pad users: give each agent its own token in its process environment, and the credential store is never touched. `pad auth whoami` reports the token's identity (with an `Auth: PAD_TOKEN environment override` line), and `pad auth login`/`logout` warn when the override is active — they manage the stored credentials, which the override bypasses. Deliberately, `pad auth logout` never invalidates the `PAD_TOKEN` session itself: it signs out the *stored* session only, and the env token's lifecycle belongs to wherever it was minted (revoke it with `pad token revoke` or under **Settings → API tokens**).
+
+#### Managing API tokens from the CLI
+
+```bash
+pad token create --name ci-agent              # Mint a token (secret shown once)
+pad token create --name cursor --expires-in 30
+pad token list                                # Metadata only — never secrets
+pad token rotate <token-id>                   # New secret; the old one dies with the same write
+pad token revoke <token-id>                   # Immediate; the id must be exact
+```
+
+Tokens are user-scoped and act as the user who minted them. `create` prints the secret exactly once — the server stores only a hash and cannot show it again — so pair each mint with wherever the token will live (CI secret store, an agent's `PAD_TOKEN`). `revoke` takes the exact id from `pad token list`; revocation is immediate, and anything still authenticating with that token fails on its next call. `rotate` keeps a token's metadata (name, scopes) and replaces its secret in place: the old secret stops working immediately — there is no grace window — so update whatever holds it before its next call, and use `--expires-in <days>` to set a new expiry (otherwise the original is preserved).
+
+**`create` and `rotate` need a login session; `list` and `revoke` do not.** Minting a token from a session authenticated by a token is refused with HTTP 403 and the code `session_required` — *"Creating or rotating API tokens requires an interactive session, not an API token"*. So `pad token create` fails whenever the request is authenticated by an **API token** — including a `pad_` token in `PAD_TOKEN`, which takes precedence over a stored login — and works from a session. `PAD_TOKEN` also accepts a `padsess_` session token, and that one IS a session, so it mints normally; a browser cookie and a saved CLI session likewise. On a headless machine, `pad auth login -i` prompts for email and password instead of opening a browser (plain `pad auth login` is browser-based). The reason for the gate is that the tokens a token mints outlive the revocation of the token that minted them: each has its own name and expiry, and nothing in `pad token list` records which token minted which — so revoking a leaked credential would not end the access established with it. `list` and `revoke` stay reachable by a token deliberately, because revocation is the response to a compromised credential and should not need a fresh login.
+
+```bash
+pad workspace members               # List workspace members
+pad workspace invite user@example.com
+pad workspace join <code>
+```
+
+## Architecture
+
+```
+┌──────────────────────────────────────────────┐
+│              pad (single binary)              │
+│                                               │
+│  ┌──────────┐  ┌──────────┐  ┌────────────┐  │
+│  │   CLI    │  │  REST    │  │  Embedded  │  │
+│  │ (Cobra)  │  │  API     │  │  Web UI    │  │
+│  └────┬─────┘  └────┬─────┘  │ (SvelteKit)│  │
+│       │    HTTP      │        └────────────┘  │
+│       └──────────────┤                        │
+│                ┌─────▼─────┐                  │
+│                │  SQLite   │                  │
+│                │  + FTS5   │                  │
+│                └───────────┘                  │
+└───────────────────────────────────────────────┘
+```
+
+- **Go backend** — chi router, SQLite via [modernc.org/sqlite](https://pkg.go.dev/modernc.org/sqlite) (pure Go, no CGO), FTS5 full-text search, SSE for real-time updates
+- **SvelteKit frontend** — Svelte 5, Tiptap editor, drag-and-drop, adapter-static, embedded via `go:embed`
+- **Single binary** — serves the API and web UI, runs on macOS, Linux, and Windows
+- **Workspace-per-project** — each project gets its own workspace linked by a `.pad.toml` file
+
+Self-hosted, all data lives in `~/.pad/pad.db`. Your data. Your machine. No telemetry, no accounts required — cloud only if you opt in.
+
+## Community
+
+- **[r/getpad](https://www.reddit.com/r/getpad/)** — how-tos, roadmap discussion, and notes from the agents that run Pad's own workspaces
+- **[GitHub Issues](https://github.com/PerpetualSoftware/pad/issues)** — bugs and feature requests
+- **[X](https://x.com/getpaddev)** / **[Bluesky](https://bsky.app/profile/getpaddev.bsky.social)** — release announcements
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the development guide.
+
+```bash
+make build      # Build web UI + Go binary
+make test       # Run Go tests
+make dev-web    # SvelteKit dev server with hot reload
+make install    # Build, install to ~/.local/bin, restart server
+```
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for reporting vulnerabilities.
+
+**Pushes into agent sessions are consent-gated.** `pad push` (and the web push composer) puts an item — and a message — in front of a running Claude Code session as direction from its own user. That is deliberate terminal instruction injection, so since v0.15.0 (PLAN-2613) receiving it is opt-in per session, not a side effect of installing the plugin:
+
+- **No consent, no stream.** Nothing streams and nothing listens — watches and pushes alike — until the session consents (the plugin's always-on wrapper only registers presence and exits). `/pad:connect` arms the session locally and starts the monitor, which announces the armed state when its stream connects; `/pad:disconnect` withdraws; `/pad:status` reports the state. A repo can opt its sessions in at start with `push.auto_arm = true` in `.pad.toml` — an explicit file edit, never a machine-global default, and vetoable per user in `~/.pad/config.toml`.
+- **Self-addressed only.** The server forces every push's target to the caller's own sessions; nobody can push into a session that isn't theirs. Delivery is filtered to armed sessions, and the surfaces are honest about it: the web composer shows the split ("2 connected, 0 accepting pushes") and withholds a send it knows nobody would accept; a CLI broadcast still publishes and reports `delivered_sessions` (in JSON output), and a targeted push to a session that is not accepting skips the publish rather than pretending.
+- **No grandfathering.** Updating the plugin replaces the v0.14 always-on monitor with the gated one for everyone. Sessions that used to receive pushes receive none until they connect; the web composer's counts make that visible rather than silent.
+- **The accepted caveat.** An agent can run the arm command from inside its own session. That is visible in the transcript, within the operator's sight: the gate protects sessions from the outside and does not police the inside. A push can inject text; it cannot click a permission prompt.
+
+## License
+
+[Apache License 2.0](LICENSE)

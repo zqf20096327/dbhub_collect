@@ -1,0 +1,165 @@
+# Leoric
+
+[![Package Quality](https://packagequality.com/shield/leoric.svg)](https://packagequality.com/#?package=leoric)
+[![NPM Downloads](https://img.shields.io/npm/dm/leoric.svg?style=flat)](https://www.npmjs.com/package/leoric)
+[![NPM Version](http://img.shields.io/npm/v/leoric.svg?style=flat)](https://www.npmjs.com/package/leoric)
+[![Build Status](https://github.com/cyjake/leoric/actions/workflows/nodejs.yml/badge.svg)](https://github.com/cyjake/leoric/actions/workflows/nodejs.yml)
+[![codecov](https://codecov.io/gh/cyjake/leoric/branch/master/graph/badge.svg?token=OZZWTZTDS1)](https://codecov.io/gh/cyjake/leoric)
+
+Leoric is an object-relational mapping library for Node.js, which is heavily influenced by Active Record of Ruby on Rails. See the [documentation](https://leoric.js.org) for detail.
+
+## Usage
+
+Assume the tables of posts, users, and comments were setup already. We may declare the models as classes by extending from the base class `Bone` of Leoric. After the models are connected to the database, the columns of the tables are mapped as attributes, the associations are setup, feel free to start querying.
+
+```js
+import Realm, { Bone } from 'leoric'
+
+const realm = new Realm({ host: 'example.com' })
+const Post = realm.define(class Post extends Bone {
+  static initialize() {
+    this.belongsTo('author', { Model: 'User' })
+    this.hasMany('comments')
+  }
+})
+
+async function main() {
+  // connect models to database
+  await realm.connect()
+
+  // CRUD
+  await Post.create({ title: 'New Post' })
+  const post = await Post.findOne({ title: 'New Post' })
+  post.title = 'Untitled'
+  await post.save()
+
+  // or UPDATE directly
+  await Post.update({ title: 'Untitled' }, { title: 'New Post' })
+
+  // find with associations
+  const post = await Post.findOne({ title: 'New Post' }).with('comments')
+  console.log(post.comments) // => [ Comment { id, content }, ... ]
+}
+```
+
+If table structures were intended to be maintained in the models, Leoric can be used as a table migration tool as well. We can just define attributes in the models, and call `realm.sync()` whenever we are ready.
+
+```js
+import Realm, { Bone, DataTypes } from 'leoric';
+const { BIGINT, STRING } = DataTypes;
+const realm = new Realm();
+const Post = realm.define(class Post extends Bone {
+  static attributes = {
+    id: { type: BIGINT, primaryKey: true },
+    email: { type: STRING, allowNull: false },
+    nickname: { type: STRING, allowNull: false },
+  }
+});
+
+await realm.sync();
+```
+
+## Syntax Table
+
+| JavaScript                              | SQL                                                |
+|-----------------------------------------|----------------------------------------------------|
+| `Post.create({ title: 'New Post' })`    | `INSERT INTO posts (title) VALUES ('New Post')`    |
+| `Post.all`                              | `SELECT * FROM posts`                              |
+| `Post.find({ title: 'New Post' })`      | `SELECT * FROM posts WHERE title = 'New Post'`     |
+| `Post.find(42)`                         | `SELECT * FROM posts WHERE id = 42`                |
+| `Post.order('title')`                   | `SELECT * FROM posts ORDER BY title`               |
+| `Post.order('title', 'desc')`           | `SELECT * FROM posts ORDER BY title DESC`          |
+| `Post.limit(20)`                        | `SELECT * FROM posts LIMIT 0, 20`                  |
+| `Post.update({ id: 42 }, { title: 'Skeleton King' })` | `UPDATE posts SET title = 'Skeleton King' WHERE id = 42` |
+| `Post.remove({ id: 42 })`               | `DELETE FROM posts WHERE id = 42`                  |
+
+A more detailed syntax table may be found at the [documentation](https://leoric.js.org/#syntax-table) site.
+
+## TypeScript charged
+
+```ts
+import { Bone, BelongsTo, Column, DataTypes: { TEXT } } from 'leoric';
+import User from './user';
+
+export default class Post extends Bone {
+  @Column({ autoIncrement: true })
+  declare id: bigint;
+
+  @Column(TEXT)
+  declare content: string;
+
+  @Column()
+  declare description: string;
+
+  @Column()
+  declare userId: bigint;
+
+  @BelongsTo()
+  declare user: User;
+}
+```
+
+More about TypeScript integration examples can be found at [the TypeScript support documentation](https://leoric.js.org/types)
+
+## AI-Friendly Resources
+
+Leoric is designed to work well with AI coding assistants, both for end users and for contributors:
+
+- [AI Cookbook](https://leoric.js.org/ai-cookbook) (中文：[AI 代码手册](https://leoric.js.org/zh/ai-cookbook)) — copy-pasteable, verified patterns for models, queries, transactions, and troubleshooting
+- [llms.txt](https://leoric.js.org/llms.txt) — machine-readable index of the documentation
+- [llms-full.txt](https://leoric.js.org/llms-full.txt) / [llms-full-zh.txt](https://leoric.js.org/llms-full-zh.txt) — all guides concatenated for single-shot context injection
+- These files are also shipped inside the npm package (`node_modules/leoric/llms-full.txt` etc.), so AI assistants in offline or private-registry environments can still read the full documentation
+- [AGENTS.md](./AGENTS.md) (中文版：[AGENTS.zh-CN.md](./AGENTS.zh-CN.md)) — repository guide for AI agents and contributors
+- Public API types ship with JSDoc, so IDE autocompletion and AI code generation see documented signatures out of the box
+
+## Contributing
+
+There are many ways in which you can participate in the project, for example:
+
+- [Submit bugs and feature requests](https://github.com/cyjake/leoric/issues), and help us verify as they are checked in
+- [Review source code changes](https://github.com/cyjake/leoric/pulls)
+- Review the [documentation](https://leoric.js.org) and make pull requests for anything from typo to new content
+
+If you are interested in fixing issues and contributing directly to the code base, please see the document [How to Contribute](https://leoric.js.org/contributing/guides), which covers the following:
+
+- The development workflow, including debugging and running tests
+- Coding guidelines
+- Submitting pull requests
+- Contributing to translations
+
+## egg-orm
+
+If developing web applications with [egg framework](https://eggjs.org/), it's highly recommended using the [egg-orm](https://github.com/eggjs/egg-orm) plugin. More detailed examples about setting up egg-orm with egg framework in either JavaScript or TypeScript can be found at <https://github.com/eggjs/egg-orm/tree/master/examples>
+
+## mysql nuances
+
+macOS binds localhost to ipv6 `::1`, yet both mysql and mysql2 connect database with localhost by default, which means both will try connecting to mysql with `::1`. However, the mysql distribution installed with HomeBrew sets `bind_address = 127.0.0.1`, hence causes following error:
+
+```js
+Error: connect ECONNREFUSED ::1:3306
+  at __node_internal_captureLargerStackTrace (node:internal/errors:490:5)
+  at __node_internal_exceptionWithHostPort (node:internal/errors:668:12)
+  at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1494:16)
+```
+
+Please change the configuration as below:
+
+```diff
+diff --git a/usr/local/etc/my.cnf b/usr/local/etc/my.cnf
+index 7218354..d31859c 100644
+--- a/usr/local/etc/my.cnf
++++ b/usr/local/etc/my.cnf
+@@ -1,5 +1,5 @@
+ # Default Homebrew MySQL server config
+ [mysqld]
+ # Only allow connections from localhost
+-bind-address = 127.0.0.1
++bind-address = 127.0.0.1,::1
+ mysqlx-bind-address = 127.0.0.1
+ ```
+
+ and restart the mysql service:
+
+ ```bash
+ brew services mysql restart
+ ```

@@ -1,0 +1,66 @@
+awesome-sql
+===========
+
+List of tools and techniques for working with relational databases inspired by other awesome lists.
+
+- [Oracle](#oracle) - Software and packages specifically for Oracle and PL/SQL.
+- [SQL Server](#sqlserver) - Software and packages specifically for SQL Server and T-SQL.
+- [MySQL](https://github.com/shlomi-noach/awesome-mysql) - There is already a whole awesome list just for MySQL.
+- [PostgreSQL](https://github.com/dhamaniasad/awesome-postgres) - There is alread a whole awesome list just for PostgreSQL.
+- Cross Platform Stuff
+  - [Formatters](#formatter) - Tools and sites that will format your ugly SQL code.
+  - [Tools](#tools) - Other cool tools and sites.
+
+### <a name="oracle"></a>Oracle
+- [SQL Developer](https://www.oracle.com/database/technologies/appdev/sqldeveloper-landing.html) - Oracle's Free IDE for PL/SQL development and administration of Oracle databases
+- [SQLcl](https://www.oracle.com/database/technologies/appdev/sqlcl.html) - Free command line interface for Oracle Database.
+- [SQL Tools for Oracle](http://sourceforge.net/projects/sqlt/) - Lightweight frontend for Oracle DB development.
+- [Oracle Database Express Edition](https://www.oracle.com/database/technologies/appdev/xe.html) - Free entry level database to develop and deploy applications
+- [Alexandria PL/SQL Utility Library](https://github.com/mortenbra/alexandria-plsql-utils) - Collection of utility packages for PL/SQL
+- [PLSQL-JSON](https://github.com/doberkofler/PLSQL-JSON) - PL/SQL library to encode/decode JSON
+- [utPLSQL](http://utplsql.org/) - Unit testing framework for PL/SQL
+
+### <a name="sqlserver"></a>SQL Server
+- [SQL Server Express Edition](http://www.microsoft.com/en-us/server-cloud/products/sql-server-editions/sql-server-express.aspx) - Free SQL Server Database to develop and deploy applications
+- [SQL Server Data Tools](http://msdn.microsoft.com/en-us/data/tools.aspx) - Integrated environment for developers to design and build database and other business intelligence solutions for MS SQL Server stack.
+- [tSQLt](http://tsqlt.org/) - Unit testing framework for SQL Server
+- [MSSqlCLI](https://github.com/dbcli/mssql-cli) - A command-line client for SQL Server with auto-completion and syntax highlighting
+
+## <a name="formatter"></a>Formatters
+
+- [SQL Format](http://www.dpriver.com/pp/sqlformat.htm) - Instant SQL Formatter
+- [Poor SQL](http://poorsql.com/) - Instant Free and Open-Source T-SQL Formatting (look here for the plugins and whatnot: https://github.com/TaoK/PoorMansTSqlFormatter )
+- [ExtendsClass](https://extendsclass.com/sql-formatter.html) - Online SQL formatter
+- [CodeNeat SQL Formatter](https://codeneat.dev/sql-formatter) - Privacy-first online SQL formatter supporting 7 dialects.
+
+## <a name="tools"></a>Tools
+
+- [sqruff](https://github.com/quarylabs/sqruff) - A SQL linter and formatter written in Rust that supports various SQL dialects and integrates with VSCode through a plugin.
+- [sqlaxe](https://github.com/djberube/sqlaxe) - CLI tool for searching, filtering, formatting, and splitting SQL files. Supports 40+ dialects of SQL.
+- [sql-splitter](https://github.com/HelgeSverre/sql-splitter) - CLI for splitting, merging, converting, and analyzing SQL dump files across MySQL, PostgreSQL, SQLite, and MSSQL.
+- [SQLPage](https://github.com/lovasoa/SQLpage) - Open-source SQL-only website builder
+- [PixQL](https://github.com/Phildo/pixQL) - Command-line image processing tool in SQL by @Phildo
+- [SQL Fiddle](http://sqlfiddle.com/) - Easly test and share database problems and their solutions. Supports multiple different backend DBMS's.
+- [SqlPad](http://rickbergfalk.github.io/sqlpad/) - A web app for running SQL queries and visualizing the results
+- [ERAlchemy](https://github.com/Alexis-benoist/eralchemy) - ERAlchemy generates Entity Relation (ER) diagram from databases
+- [BigBash](https://github.com/zalando/bigbash) - Open-source converter that generates a bash one-liner from an SQL Select query, no database necessary
+- [Flyway](https://flywaydb.org/) - Database migration tool
+- [Liquibase](http://www.liquibase.org/) - Source Control for your database
+- [Schema Guard RDBM](https://www.dbinvent.com/rdbm/) - Postgres database migration tool, plain-SQL, and declarative definition supported
+- [PgCLI](https://github.com/dbcli/pgcli) - Postgres CLI with autocompletion and syntax highlighting
+- [LINQPad](https://www.linqpad.net/) - LINQPad is not just for LINQ queries, but any C#/F#/VB expression, statement block or program.
+- [SchemaSpy](https://github.com/schemaspy/schemaspy) - we will do the best to simplify documentation process of your database
+- [MissionKontrol](https://github.com/Mission-Kontrol/MissionKontrol) - Self-hosted admin panel to manage one or more MySQL/PostGRES databases.
+- [DBeaver](https://dbeaver.io) - Free multi-platform database tool for developers, database administrators, analysts and all people who need to work with databases. Supports all popular databases.
+- [EverSQL](https://www.eversql.com/) - SQL query optimization and database observability, powered by AI.
+- [WhoDB](https://github.com/clidey/whodb) - SQL/NoSQL/Graph/Cache/Object data explorer with AI-powered chat + other useful features
+- [ThalamusDB](https://github.com/itrummer/thalamusdb) - SQL with AI operators on text, images, and sound files.
+- [SlowQL](https://github.com/makroumi/slowql) - SQL static analyzer with extensive rules for security, performance, and quality. Zero dependencies, completely offline.
+
+## <a name="resources"></a>Resources
+
+- [Curated SQL Learning Resources on Hackr.io](https://hackr.io/tutorials/learn-sql) - Programming Community Curated Resources for learning SQL
+- [Basic and advanced concepts of SQL with examples on Scaler](https://www.scaler.com/topics/sql/) - A curated interactive space for aspiring programmers to learn and master their SQL skills.
+- [Mostly Asked SQL Interview Questions and Answers for Freshers](https://boldcoder.blogspot.com/2024/08/fresher-sql-interview-questions.html) - Online coding tutorials and Interview questions.
+- [SQL tips and tricks](https://github.com/ben-nour/SQL-tips-and-tricks) - SQL tips that cover everything from readability to common pitfalls.
+- [SQL Syntax Cheat Sheet](https://github.com/mergisi/sql-syntax-cheat-sheet) - Comprehensive SQL reference including: DDL, DML, JOINs, window functions, CTEs, performance tips, and common mistakes.

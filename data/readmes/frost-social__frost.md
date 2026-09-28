@@ -1,0 +1,28 @@
+<br />
+<p align="center">
+<img alt="Frost" width="256" src="https://raw.githubusercontent.com/frost-social/frost/46c9d413c17ae8eb70fb91553fff6e1876fd75f5/assets/frost-logo-text-512.png" />
+</p>
+<p align="center">
+A software of social media.
+</p>
+
+> [!IMPORTANT]
+> Development of this project has been suspended indefinitely.
+
+## Development Community
+### Discord (Archived)
+Everyone is welcome to join! We also hold Frost development meetings here, where you can see the development status.\
+(!) This discord server is currently not in use.\
+https://discord.gg/9EkhqcTcHj
+
+## Documents
+[Contribution Guides](./docs/)
+
+## Contributors
+- @ikasoba - [Details](https://github.com/frost-social/frost/commits/develop/?author=ikasoba)
+- @marihachi - [Details](https://github.com/frost-social/frost/commits/develop/?author=marihachi)
+- @Simirall - [Details](https://github.com/frost-social/frost/commits/develop/?author=Simirall)
+- @ThinaticSystem - [Details](https://github.com/frost-social/frost/commits/develop/?author=ThinaticSystem)
+
+## License
+MIT

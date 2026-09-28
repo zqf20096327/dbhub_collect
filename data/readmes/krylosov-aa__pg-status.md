@@ -1,0 +1,620 @@
+# pg-status
+
+An extremely lightweight and fast sidecar service that reports the status of
+your PostgreSQL hosts: whether they are alive, which host is the master, which
+hosts are replicas, and how far each replica is lagging behind the master.
+
+pg-status is designed to run alongside your main application. It is
+resource-efficient and fast enough to query on every request without
+noticeable overhead. However, it can also be deployed as a standalone service,
+allowing multiple instances of your main application to share a single
+pg-status instance.
+
+It polls database hosts in the background at a configurable interval and
+exposes an HTTP API for retrieving hosts that meet specific conditions.
+
+All responses are served directly from memory.
+
+To learn why this project exists and what problem it solves, read
+[Three PostgreSQL Master/Replica Discovery Problems](docs/why.md).
+
+## Usage
+
+Run pg-status alongside your main service or on any host that can reach the
+PostgreSQL servers. The HTTP server starts immediately, without waiting for
+PostgreSQL checks. `/live` and `/version` are available immediately. `/ready`
+and all host-information endpoints return HTTP 503 until the initial status
+check of every configured host has completed, successfully or with an error
+or timeout. After that, they serve the current monitoring state.
+
+### API
+
+The service provides several HTTP endpoints for retrieving host information.
+
+While the monitor is not ready, `/ready` and all host-information endpoints
+return HTTP 503 Service Unavailable with
+`{"error_text": "pg_monitor is not ready"}`, regardless of the `Accept` header.
+Readiness is checked before endpoint query-parameter validation.
+
+Host-selection endpoints support two response formats: plain text and JSON.
+These endpoints are `/master`, `/replica`, `/sync_by_*`, and
+`/most_sync_by_bytes`.
+
+Include the `Accept: application/json` header to receive JSON, for example:
+`{"host": "localhost", ...}`.
+
+Without this header, the response is plain text: `localhost`.
+
+The `/hosts` and `/status` endpoints always return JSON, while `/version`
+always returns plain text.
+
+If a host-selection endpoint cannot find a matching host, it returns HTTP 404.
+The response body is empty in plain-text mode and `{"host": null, ...}` in JSON
+mode.
+
+#### Lag query parameters
+
+The `/replica` and `/sync_by_*` endpoints accept optional `lag_ms` and
+`lag_bytes` query parameters that override the lag thresholds for a single
+request. `/most_sync_by_bytes` accepts the same parameters but considers only
+`lag_bytes`; `lag_ms` has no effect. Values must be non-negative integers;
+otherwise, the endpoint responds with HTTP 400 and a body such as
+`{"error_text": "Invalid lag_ms"}`.
+
+The meaning of an omitted parameter depends on the route:
+
+- `/replica` — a missing parameter means **no constraint on that
+  dimension**. The global `pg_status__sync_max_lag_*` defaults are not
+  applied here.
+- `/sync_by_*` — a missing parameter falls back to the corresponding global
+  `pg_status__sync_max_lag_ms` or `pg_status__sync_max_lag_bytes` value.
+- `/most_sync_by_bytes` — a missing `lag_bytes` falls back to
+  `pg_status__sync_max_lag_bytes`; `lag_ms` is always ignored.
+
+A `/sync_by_time` request considers only the time threshold, while
+`/sync_by_bytes` and `/most_sync_by_bytes` requests consider only the byte
+threshold. Passing the other parameter to these endpoints has no effect.
+
+#### LSN query parameter (read-your-writes)
+
+The `/replica`, `/sync_by_*`, and `/most_sync_by_bytes` endpoints also accept
+an optional `min_lsn` query parameter: a strict freshness filter that
+guarantees the chosen replica has replayed through a given WAL position. This
+is the basis for read-your-writes consistency. Instead of
+relying on `lag_ms` and `lag_bytes` heuristics, the caller supplies an exact
+LSN, and pg-status returns only a replica that has caught up to it.
+
+The value must be a PostgreSQL LSN in canonical `HEX/HEX` form (for
+example, `0/3000060`). An invalid format produces HTTP 400 with
+`{"error_text": "Invalid min_lsn"}`. An omitted parameter means there is no
+LSN constraint. When provided, it is combined with the lag parameters
+described above.
+
+If no replica has replayed to `min_lsn`, the master is returned as a
+fallback.
+
+**Read-your-writes pattern.** After writing to the master, capture
+`pg_current_wal_lsn()` and pass it to the next read request:
+
+```text
+INSERT INTO ...;
+SELECT pg_current_wal_lsn();   -- returns e.g. "0/3000060"
+
+# The following read is guaranteed to see the write:
+GET /replica?min_lsn=0/3000060
+```
+
+Either a replica whose replay LSN is at or beyond `0/3000060` is returned, or
+the master is returned.
+
+#### Locality-aware replica selection
+
+When complete locality metadata is available, `/replica` and the `/sync_by_*`
+endpoints prefer eligible replicas in the following order:
+
+1. Replicas whose `dc` matches the current `dc`.
+2. If there is no matching-DC replica, replicas whose `geo` matches the
+   current `geo`.
+3. If neither locality rule can be applied, all eligible replicas participate
+   in the existing round-robin selection.
+
+DC and geo are independent. Locality is a preference after the endpoint's
+health, lag, and `min_lsn` eligibility filters; it does not make an otherwise
+unsuitable replica eligible.
+
+`/most_sync_by_bytes` deliberately ignores locality. It always prioritizes the
+smallest byte lag, with ties resolved by host order.
+
+#### `GET /master`
+
+Returns the current master's host name. If no master is available, the endpoint
+returns HTTP 404 as described above.
+
+#### `GET /replica`
+
+Returns the host name of a replica, selected using DC preference, then geo
+preference, then round-robin as described above.
+Optional `lag_ms`, `lag_bytes`, and `min_lsn` query parameters constrain
+the result:
+
+- No parameters — any live replica.
+- `?lag_ms=X` — live replicas with `lag_ms ≤ X`.
+- `?lag_bytes=Y` — live replicas with `lag_bytes ≤ Y`.
+- `?lag_ms=X&lag_bytes=Y` — live replicas with both `lag_ms ≤ X` and
+  `lag_bytes ≤ Y`.
+- `?min_lsn=X/Y` — live replicas whose replay LSN is at or beyond the given
+  value (see "LSN query parameter" above). This constraint can be combined
+  with the lag filters.
+
+If no replica matches, the master's host name is returned instead.
+
+#### `GET /sync_by_time`
+
+Returns the host name of a replica, selected using locality preference and
+round-robin, whose time lag is less than or equal to the threshold. The
+threshold is taken from the `lag_ms` query parameter when provided; otherwise,
+`pg_status__sync_max_lag_ms` is used. If no replica meets this condition, the
+master's host name is returned.
+
+#### `GET /sync_by_bytes`
+
+Returns the host name of a replica, selected using locality preference and
+round-robin, whose WAL lag in bytes is less than or equal to the threshold. The
+threshold is taken from the `lag_bytes` query parameter when provided;
+otherwise,
+`pg_status__sync_max_lag_bytes` is used. If no replica meets this condition,
+the master's host name is returned.
+
+#### `GET /sync_by_time_or_bytes`
+
+Returns the host name of a replica, selected using locality preference and
+round-robin, that is synchronous either by time or by bytes. The `lag_ms` and
+`lag_bytes` query parameters override the corresponding global thresholds for
+the current request. If no such replica exists, the master's host name is
+returned.
+
+#### `GET /sync_by_time_and_bytes`
+
+Returns the host name of a replica, selected using locality preference and
+round-robin, that is synchronous by both time and bytes. The `lag_ms` and
+`lag_bytes` query parameters override the corresponding global thresholds for
+the current request. If no such replica exists, the master's host name is
+returned.
+
+#### `GET /most_sync_by_bytes`
+
+Returns the host name of the replica with the smallest `lag_bytes` among those
+that satisfy the byte threshold and the optional `min_lsn` constraint. Unlike
+the `/sync_by_*` endpoints, this endpoint does not use locality preference or
+round-robin: selection is deterministic, and ties are resolved by host order.
+
+The `lag_bytes` query parameter overrides `pg_status__sync_max_lag_bytes` for
+the current request. Neither `lag_ms` nor `pg_status__sync_max_lag_ms` is
+considered.
+
+If no replica satisfies the byte and LSN constraints, the master's host name
+is returned.
+
+#### `GET /hosts`
+
+Returns a JSON list containing status information for every configured host.
+The `dc` and `geo` fields contain the host's configured locality metadata and
+are `null` when the corresponding metadata is not configured.
+The `sync_by_time` and `sync_by_bytes` flags indicate whether the current lag
+is within the global `pg_status__sync_max_lag_*` thresholds. For a dead host
+(`alive: false`), the lag fields and `lsn` are `null`, and the sync flags are
+`false`.
+
+The `lsn` field is the host's latest known WAL position as of the last
+successful poll: `pg_current_wal_lsn()` on the master,
+`pg_last_wal_replay_lsn()` on a replica. It is `null` for dead hosts.
+
+Example:
+
+```json
+[
+  {
+    "host": "host-1",
+    "dc": "frankfurt",
+    "geo": "europe",
+    "master": true,
+    "alive": true,
+    "lag_ms": 0,
+    "sync_by_time": true,
+    "lag_bytes": 0,
+    "sync_by_bytes": true,
+    "lsn": "0/3000060"
+  },
+  {
+    "host": "host-2",
+    "dc": "amsterdam",
+    "geo": "europe",
+    "master": false,
+    "alive": true,
+    "lag_ms": 6193,
+    "sync_by_time": false,
+    "lag_bytes": 456,
+    "sync_by_bytes": true,
+    "lsn": "0/2FFFE98"
+  },
+  {
+    "host": "host-3",
+    "dc": null,
+    "geo": null,
+    "master": false,
+    "alive": false,
+    "lag_ms": null,
+    "sync_by_time": false,
+    "lag_bytes": null,
+    "sync_by_bytes": false,
+    "lsn": null
+  }
+]
+```
+
+#### `GET /status`
+
+Returns the status of the host specified by the `host` query parameter.
+If the `host` parameter is missing, the endpoint responds with HTTP 400 and
+`{"error_text": "Get parameter 'host' wasn't passed"}`. If the host is not in
+the monitored list, the endpoint returns HTTP 404.
+
+You can also use this endpoint to check whether a configured host is currently
+alive.
+
+Example: `http://127.0.0.1:8000/status?host=host-1`
+
+```json
+{
+  "dc": "amsterdam",
+  "geo": "europe",
+  "master": false,
+  "alive": true,
+  "lag_ms": 0,
+  "sync_by_time": true,
+  "lag_bytes": 0,
+  "sync_by_bytes": true,
+  "lsn": "0/3000060"
+}
+```
+
+#### `GET /version`
+
+Returns the pg-status semantic version as plain text, including during startup.
+
+#### `GET /live`
+
+Returns HTTP 200 with the plain-text body `OK` as soon as the HTTP server is
+running. This endpoint reports that pg-status has started and does not depend
+on monitor readiness or PostgreSQL availability.
+
+#### `GET /ready`
+
+Returns HTTP 503 while the monitor is warming up, and HTTP 200 with the
+plain-text body `OK` once every configured host has completed its first check.
+The rest of the monitoring API becomes available at the same time.
+
+Readiness does not require a live master or any live PostgreSQL host. Failed
+checks and timeouts count as completed checks; subsequent PostgreSQL outages
+are reported through the regular host status and selection endpoints without
+making pg-status unready.
+
+### Parameters
+
+Configure pg-status using the following environment variables:
+
+- `pg_status__hosts` — Comma-separated list of PostgreSQL hosts. Required.
+- `pg_status__pg_user` — PostgreSQL user. Default: `postgres`.
+- `pg_status__pg_password` — PostgreSQL password. Default: `postgres`.
+- `pg_status__pg_database` — PostgreSQL database name. Default: `postgres`.
+- `pg_status__pg_port` — PostgreSQL port. To use a different port for each
+  host, provide a comma-separated list in the same order as
+  `pg_status__hosts`. A single value applies to every host. Default: `5432`.
+- `pg_status__hosts_dc` — Optional comma-separated DC for each host, in the
+  same positional order as `pg_status__hosts`.
+- `pg_status__current_dc` — Optional DC of the pg-status instance. When set,
+  it takes precedence over `pg_status__current_dc_env`.
+- `pg_status__current_dc_env` — Optional name of another environment variable
+  whose value is the current DC.
+- `pg_status__hosts_geo` — Optional comma-separated geo for each host, in the
+  same positional order as `pg_status__hosts`.
+- `pg_status__current_geo` — Optional geo of the pg-status instance. When set,
+  it takes precedence over `pg_status__current_geo_env`.
+- `pg_status__current_geo_env` — Optional name of another environment variable
+  whose value is the current geo.
+- `pg_status__max_fails` — Number of consecutive failed checks before a host
+  is considered dead. Default: `3`.
+- `pg_status__sleep_ms` — Target period, in milliseconds, between the starts
+  of consecutive checks of each host. Default: `1000`. Checks never overlap;
+  if a check takes longer than the period, the next starts immediately after
+  it finishes. Must be greater than `0`.
+- `pg_status__query_timeout_ms` — Hard deadline, in milliseconds, for one poll
+  iteration (connect, send, and read). When an iteration times out, its
+  connection is closed and the host's failure counter is incremented.
+  Default: `1000`. Must be greater than `0`; may exceed `sleep_ms`.
+- `pg_status__conn_max_age_ms` — Maximum age, in milliseconds, of a reused
+  PostgreSQL connection. Older connections are closed after the current
+  iteration and reopened for the next one. Default: `300000` (5 minutes).
+- `pg_status__sync_max_lag_ms` — Maximum time lag, in milliseconds, for a
+  replica to be considered time-synchronous. Default: `1000`.
+- `pg_status__sync_max_lag_bytes` — Maximum WAL lag, in bytes, for a replica
+  to be considered byte-synchronous. Default: `1000000` (1 MB).
+- `pg_status__http_listen_address` — IP address on which the HTTP server
+  listens. Accepts an IPv4 address, an IPv6 address, or `*` for best-effort
+  IPv4/IPv6 wildcard listeners. Default: `0.0.0.0`.
+- `pg_status__http_port` — HTTP server port. Default: `8000`.
+- `pg_status__log_level` — Minimum logging level. Accepts `debug`, `info`,
+  `warning` (or `warn`), `error`, or `fatal`. Default: `info`.
+- `pg_status__log_format` — Log format: `text` (default) or `json`.
+
+All locality variables are optional. A dimension is used for replica selection
+only when both its current value and one non-empty positional value for every
+entry in `pg_status__hosts` are available. If only part of a DC or geo
+configuration is supplied, pg-status logs a startup warning and disables that
+dimension. It continues to use the other complete dimension, or round-robin
+when neither dimension is complete.
+
+Direct current-locality values take precedence over indirect values. For
+example, if both `pg_status__current_dc` and `pg_status__current_dc_env` are
+set, `pg_status__current_dc` is used. Otherwise the value of the environment
+variable named by `pg_status__current_dc_env` is used. Geo follows the same
+rule. Indirect variable names must match `[A-Za-z_][A-Za-z0-9_]*`; lookup is
+performed once and is not recursive. In a container deployment, the referenced
+environment variable must also be passed into the container. The bundled
+Compose example forwards `PLATFORM_DC` and `PLATFORM_GEO`; add an equivalent
+entry when using another variable name.
+
+Example using a direct DC and an indirectly supplied geo:
+
+```sh
+pg_status__hosts="db-frankfurt.example,db-amsterdam.example"
+pg_status__hosts_dc="frankfurt,amsterdam"
+pg_status__hosts_geo="europe,europe"
+pg_status__current_dc="frankfurt"
+pg_status__current_geo_env="PLATFORM_GEO"
+PLATFORM_GEO="europe"
+```
+
+### PostgreSQL TLS
+
+TLS is configured by libpq's standard environment variables. pg-status does
+not add its own certificate store or TLS configuration format:
+
+- `PGSSLMODE` — libpq TLS mode, such as `disable`, `require`, or
+  `verify-full`.
+- `PGSSLROOTCERT` — path to the trusted CA certificate bundle.
+- `PGSSLCRL` — path to a certificate revocation list.
+- `PGSSLCERT` — path to the client certificate when the server requires mTLS.
+- `PGSSLKEY` — path to the corresponding client private key. Its filesystem
+  permissions must satisfy libpq's requirements.
+
+## Installation
+
+Available installation options:
+
+- [Debian package](https://github.com/krylosov-aa/pg-status/releases/download/2.3.0/pg-status_2.3.0_amd64.deb)
+- [Docker Hub image](https://hub.docker.com/r/krylosovaa/pg-status)
+- [Docker build configurations](docker)
+- [Statically linked binary](https://github.com/krylosov-aa/pg-status/releases/download/2.3.0/pg-status_2.3.0_linux_amd64_static.tar.gz)
+- [Dynamically linked binary](https://github.com/krylosov-aa/pg-status/releases/download/2.3.0/pg-status_2.3.0_linux_amd64_shared.tar.gz)
+
+For more information, see the [installation guide](docs/installation.md).
+
+## Quick demo
+
+The demo requires Docker with Docker Compose.
+
+To build pg-status and start a ready-to-use PostgreSQL topology, run:
+
+```sh
+make build_up_test
+```
+
+This starts pg-status, one PostgreSQL primary, two physical streaming
+replicas, and proxy services used to simulate role changes. After the
+containers become healthy and the initial host checks complete, query the API
+at `http://127.0.0.1:8000`:
+
+```sh
+curl http://127.0.0.1:8000/master
+curl http://127.0.0.1:8000/replica
+curl http://127.0.0.1:8000/hosts
+```
+
+Switch the simulated master and query pg-status again after the next polling
+cycle:
+
+```sh
+make 2-master
+curl http://127.0.0.1:8000/master
+```
+
+Restore the original topology or stop the demo with:
+
+```sh
+make 1-master
+make down_test
+```
+
+See [test/README.md](test/README.md) for details about the topology and project
+testing.
+
+## Performance
+
+Measured on an Ubuntu 24.04 VM with 4 Ice Lake vCPUs and 4 GB RAM. pg-status
+was pinned to **one vCPU**;  requests used localhost HTTP with keep-alive.
+
+| Workload                           | Confirmed RPS | Worst p99 |
+|------------------------------------|--------------:|----------:|
+| `/master`                          |    **52,500** |   4.17 ms |
+| `/master` + `/most_sync_by_bytes`  |    **55,000** |   4.51 ms |
+| `/master` + `/replica`, fresh RYOW |    **52,500** |   4.50 ms |
+
+At these rates, pg-status used approximately **90–94% of one vCPU** and
+**10 MiB RSS**. With a **0.1-vCPU quota**, a mixed workload confirmed
+**3,000 RPS** at p99 ≤5 ms.
+
+See the [full results](docs/performance.md) for all ten scenarios,
+CPU/RAM measurements, rare latency spikes and limitations, and the
+[benchmark guide](test/rps/README.md) to reproduce the measurements.
+
+## Implementation details
+
+### Concurrent polling
+
+A single writer thread polls **all hosts concurrently** using libpq's
+non-blocking API and one `poll()` system call across their sockets. Each host
+has an independent polling cycle: each check is scheduled
+`pg_status__sleep_ms` after the previous check **started**. Time spent checking
+the host counts toward this period, on both success and failure. If a check
+overruns the period, the next starts immediately after it finishes; missed
+periods do not accumulate, and checks of the same host never overlap.
+
+For example, with a 1000 ms period and a 200 ms check, the remaining wait is
+800 ms. This scheduling rule replaces the previous delay-after-completion
+behavior for all configurations; there is no mode switch.
+
+Every iteration has a deadline of
+`pg_status__query_timeout_ms`; when that deadline expires, the connection is
+closed and the host's failure counter is incremented.
+
+Waiting for a slow or unresponsive host's socket does not block updates for
+the other hosts. DNS resolution during connection setup can still block
+inside libpq and delay the monitoring loop, including deadline handling.
+
+### Byte lag
+
+`lag_bytes` estimates how many WAL bytes a replica has yet to replay.
+It uses the maximum of three known positions: the last observed master LSN
+(`pg_current_wal_lsn()`), WAL received by the replica
+(`pg_last_wal_receive_lsn()`), and the upstream WAL end reported to its receiver
+(`pg_stat_wal_receiver.latest_end_lsn`).
+
+```text
+lag_bytes = max(0, max(master_lsn, received_lsn, latest_end_lsn) - replay_lsn)
+```
+
+`replay_lsn` is `pg_last_wal_replay_lsn()`: WAL already applied by the replica.
+These observations can be stale, so zero byte lag does not guarantee freshness.
+
+For more complete measurements, the monitoring user needs `pg_read_all_stats`
+(or `pg_monitor`) and access to `pg_stat_wal_receiver`.
+
+If receiver statistics are unavailable, polling continues using other WAL
+positions. Permission errors produce a warning; access is retried after
+reconnection.
+
+### Connection reuse
+
+PostgreSQL connections are kept alive between polling iterations. Opening a
+new `PGconn` for every iteration would require a full TCP and authentication
+handshake every `pg_status__sleep_ms`, adding unnecessary load to the server.
+Instead, each host keeps its connection open and reuses it.
+
+To prevent stale connections from persisting indefinitely, for example after
+intermediate NAT state expires or server-side cleanup occurs, each connection
+is recycled when its age exceeds `pg_status__conn_max_age_ms`. Connections are
+also closed and reopened after any query error or socket-level failure.
+
+### Consistency
+
+Cross-host consistency is intentionally not provided.
+
+There is one writer (the polling thread) and many readers (HTTP handlers). The
+writer never blocks the readers, and the readers never block the writer.
+
+Each host's data is published as a consistent snapshot through a seqlock, so
+readers always see fields from the same poll iteration for that host.
+
+Cross-host inconsistency is permitted by design: at any moment, some hosts may
+contain newer snapshots than others. There is no global polling barrier; the
+freshness of each snapshot depends on that host's independent polling schedule
+and query deadline. Fast responses and up-to-date per-host data are more
+important for this project than a consistent view across all hosts.
+
+### Reaction speed to host unavailability
+
+If a host does not respond to a status check, the cause may be either a
+temporary issue or an actual outage. To avoid marking a host as dead
+prematurely, pg-status waits for `pg_status__max_fails` consecutive failed
+checks. With responsive event-loop scheduling, an unanswered check times out
+after `pg_status__query_timeout_ms`. Counting from the outage, the worst-case
+detection time is approximately:
+
+```text
+sleep_ms + query_timeout_ms
+  + (max_fails − 1) × max(sleep_ms, query_timeout_ms)
+```
+
+The initial `sleep_ms` allows for an outage just after a successful check.
+With the defaults (1000 ms period, 1000 ms timeout, 3 failures), detection
+takes up to roughly 4 seconds. Immediate connection errors can be detected
+sooner; DNS stalls or delays in the monitoring thread can extend this time.
+
+After the first failed check, but before the failure count reaches
+`pg_status__max_fails`, the host is marked as possibly dead. This state affects
+host selection:
+
+- Master selection prefers fully responsive masters, then possibly dead
+  masters. If neither exists, no master is selected. Dead hosts and replicas
+  are excluded.
+- When selecting a replica, pg-status prefers fully responsive hosts. If no
+  such replica meets the search criteria, it returns a possibly dead replica.
+  Round-robin applies within the best available health and locality group.
+
+Failed checks preserve the last successfully measured `lag_ms`, `lag_bytes`,
+and `lsn`. While the host is possibly dead, lag and LSN filters use these
+last known values. A failed check does not make a lagging replica appear
+synchronous. Once the host is marked dead, it is excluded from selection,
+and the HTTP API returns `null` for its lag and LSN fields. A successful check
+updates the measurements and clears the failure counter and possibly dead state.
+
+### Split-brain
+
+With client-side master detection, pg-status cannot determine which host
+*should* be the master during a split-brain scenario. Within the best available
+health group, the first master in `pg_status__hosts` wins.
+
+## Logging
+
+The service writes thread-safe, single-line logs to stderr.
+The default `text` format contains an RFC 3339 UTC timestamp, severity, component,
+and message:
+
+```text
+2026-08-21T12:34:56.123Z INFO http: server started address=0.0.0.0 port=8000
+2026-08-21T12:35:01.245Z WARNING monitor: host state changed host=pg-2 state=possible_dead
+```
+
+Set `pg_status__log_format=json` for one JSON object per line, with the same
+RFC 3339 UTC timestamps and Deploy-compatible fields:
+
+```json
+{"@timestamp":"2026-08-21T12:35:01.245Z","levelStr":"WARNING","component":"monitor","message":"host state changed host=pg-2 state=possible_dead"}
+```
+
+`pg_status__log_level` applies independently of the format. System errors add
+a numeric `errno`. Fatal records use `levelStr=ERROR`.
+Long values are shortened with `...[truncated]`
+while preserving valid JSON. Host names, states, and lag values remain in
+`message`.
+
+The default `info` level reports startup, shutdown, role changes, availability
+changes, and transitions across the global `pg_status__sync_max_lag_*`
+thresholds. PostgreSQL operation failures are logged at `error`. Detailed polling
+progress and replica-to-master fallback decisions are available at `debug`.
+
+pg-status never logs PostgreSQL passwords or complete connection strings. Log
+collection, storage, and rotation are delegated to the process supervisor,
+Docker, or the operating system.
+
+## Third-party components
+
+pg-status uses the following third-party components:
+
+- libevent —
+  [BSD 3-Clause License](https://github.com/libevent/libevent/blob/master/LICENSE)
+- cJSON —
+  [MIT License](https://github.com/DaveGamble/cJSON/blob/master/LICENSE)
+- libpq —
+  [PostgreSQL License](https://www.postgresql.org/about/licence/)

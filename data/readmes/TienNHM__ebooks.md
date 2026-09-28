@@ -1,0 +1,83 @@
+<p align="right"><a href="./README.en.md">English</a></p>
+
+<h1 align="center">📚 Bộ sưu tập Ebook CNTT</h1>
+
+<p align="center">
+  Một kho tàng sách điện tử chất lượng cao dành cho lập trình viên, sinh viên và những người đam mê công nghệ thông tin.
+</p>
+
+<p align="center">Truy cập blog của tôi tại: https://tiennhm.github.io/ để xem thêm nhiều bài hướng dẫn hữu ích khác ⭐</p>
+
+<p align="center">
+  <a href="https://github.com/TienNHM/ebooks/issues">
+    <img alt="Issues" src="https://img.shields.io/github/issues/TienNHM/ebooks?color=orange" />
+  </a>
+  <a href="https://github.com/TienNHM/ebooks/pulls">
+    <img alt="Pull Requests" src="https://img.shields.io/github/issues-pr/TienNHM/ebooks?color=brightgreen" />
+  </a>
+  <img alt="Contributions Welcome" src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg" />
+  <img alt="License" src="https://img.shields.io/badge/license-learning%20purpose-blue.svg" />
+</p>
+
+---
+
+## 📂 Danh mục sách
+
+| Chủ đề | Liên kết |
+|--------|---------|
+| 🤖 AI & Học máy | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/AI-Machine-Learning) |
+| 🧠 LLM (Mô hình ngôn ngữ lớn) | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/LLM) |
+| 📐 Thuật toán | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Algorithms) |
+| 🧮 Toán rời rạc | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Discrete-Math) |
+| 🔗 Lý thuyết đồ thị | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Graph-Theory) |
+| 🎨 Đồ họa máy tính | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Computer-Graphics) |
+| 🖌️ Adobe Photoshop | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Photoshop) |
+| 💻 C/C++ | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/C-Cpp) |
+| 🧩 C# | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/C-Sharp) |
+| 🧬 Lập trình hướng đối tượng (OOP) | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/OOP) |
+| 🏁 Lập trình thi đấu | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Competitive) |
+| 🌐 Mạng máy tính | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Computer-Network) |
+| 🧬 Kiến trúc máy & Assembly | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Comp-Org-Assembly) |
+| 💻 Tin học đại cương | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Computer-Literacy) |
+| ⚙️ Kỹ thuật phần mềm | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Engineering) |
+| ⚙️ Trình biên dịch | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Compiler) |
+| 🗄️ Cơ sở dữ liệu | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Database) |
+| 🌍 Phát triển Full-Stack | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Full-Stack) |
+| 🛒 Thương mại điện tử | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/E-Commerce) |
+| ☕ Java | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Java) |
+| 🖥️ Hệ điều hành | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/OS) |
+| 💻 Phỏng vấn IT | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Interview) |
+| 📘 Nhập môn lập trình | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Intro-to-Programming) |
+| ⚛️ ReactJS | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/ReactJS) |
+| 📊 Lập trình R | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/R) |
+| 🐍 Python | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Python) |
+| 🏗️ Thiết kế hệ thống & PTTK | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/System-Design) |
+| 🧪 Kiểm thử phần mềm | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Testing) |
+| 🇻🇳 Tin học THPT | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Tin-Hoc-THPT) |
+| 🧮 Pascal | [Xem sách](https://github.com/TienNHM/ebooks/tree/master/Pascal) |
+
+---
+
+## 🤝 Đóng góp
+
+> Rất hoan nghênh mọi đóng góp! Bạn có thể:
+
+- 📚 Thêm sách mới bằng cách tạo **Pull Request**
+- 📝 Sửa mô tả hoặc lỗi chính tả
+- 💡 Gửi ý tưởng hoặc phản hồi qua **[Issues](https://github.com/TienNHM/ebooks/issues)**
+
+<a href="https://github.com/TienNHM/ebooks/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=TienNHM/ebooks" />
+</a>
+
+---
+
+## ⚠️ Bản quyền
+
+> Tất cả tài liệu trong repo này được chia sẻ với mục đích **học tập và phi lợi nhuận**. Vui lòng đảm bảo tuân thủ điều kiện bản quyền của từng ebook nếu sử dụng cho mục đích khác.
+
+---
+
+<p align="center">
+  Made with ❤️ by <a href="https://github.com/TienNHM">TienNHM</a>
+</p>

@@ -1,0 +1,57 @@
+# pyseekdb
+
+pyseekdb is a Python SDK for seekdb and OceanBase AI search. It supports embedded and server deployments with vector, full-text, and hybrid retrieval, and exposes a collection-first API for application workflows. For advanced database operations, you can use MySQL-compatible drivers to run SQL against seekdb and OceanBase.
+
+Key features:
+
+- **Unified API**: Single interface for embedded and remote server modes
+- **Vector Operations**: Efficient vector similarity search
+- **Hybrid Search**: Combine vector and full-text search
+- **Embedding Functions**: Built-in support for various embedding models
+- **Collection Management**: Easy collection (table) creation and management
+- **Database Management**: Admin operations for database management
+
+## Documentation
+
+- Docs home: https://docs.seekdb.ai
+- SDK guide: https://docs.seekdb.ai/seekdb/pyseekdb-sdk-get-started
+- User guide: https://docs.seekdb.ai/seekdb/deploy-overview
+- API reference: https://docs.seekdb.ai/seekdb/api-overview
+- RAG demo: [English](demo/rag/README.md) / [中文](demo/rag/README_CN.md)
+- Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Installation
+
+```bash
+pip install -U pyseekdb
+# or with uv
+uv add pyseekdb
+```
+
+## Quick Start
+
+```python
+import pyseekdb
+
+client = pyseekdb.Client(path="./seekdb.db", database="demo")
+collection = client.get_or_create_collection("my_collection")
+
+collection.add(
+    ids=["doc1", "doc2"],
+    documents=["Hello world", "pyseekdb quick start"],
+    metadatas=[{"tag": "hello"}, {"tag": "demo"}],
+)
+
+# Refresh the index to make the added documents searchable
+collection.refresh_index()
+
+results = collection.query(query_texts=["hello"], n_results=3)
+print(results["ids"][0])
+```
+
+For full usage, connection modes, collection management, and operations, see the
+[User Guide](https://oceanbase.github.io/pyseekdb/guide/).
+
+## License
+
+This package is licensed under Apache 2.0. See [LICENSE](LICENSE).

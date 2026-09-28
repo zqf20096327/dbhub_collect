@@ -1,0 +1,184 @@
+# sqlmodelgen
+
+![Coverage badge](https://raw.githubusercontent.com/nucccc/sqlmodelgen/python-coverage-comment-action-data/badge.svg) ![PyPI version](https://img.shields.io/pypi/v/sqlmodelgen)
+
+`sqlmodelgen` is a library to generate models for the **sqlmodel** library ([repo](https://github.com/fastapi/sqlmodel), [official docs](https://sqlmodel.tiangolo.com/)).
+
+It accepts in input the following sources:
+
+* direct `CREATE TABLE` sql statements
+* sqlite file path
+* postgres connection string
+* mysql connection from the [mysql-connector-python](https://github.com/mysql/mysql-connector-python) library
+
+## Installation
+
+Available on PyPi, just run `pip install sqlmodelgen`
+
+Code generation from Postgres requires the separate `postgres` extension, installable with `pip install sqlmodelgen[postgres]`, while code generation from MySQL requires the separate `mysql` extension, installable with `pip install sqlmodelgen[mysql]`
+
+## Usage
+
+`sqlmodelgen` can be used both as a command line tool and as a library providing functions that can be invoked in python.
+
+### Generating from CREATE TABLE
+
+```python
+from sqlmodelgen import gen_code_from_sql
+
+sql_code = '''
+CREATE TABLE Hero (
+	id INTEGER NOT NULL, 
+	name VARCHAR NOT NULL, 
+	secret_name VARCHAR NOT NULL, 
+	age INTEGER, 
+	PRIMARY KEY (id)
+);
+'''
+print(gen_code_from_sql(sql_code))
+
+```
+
+generates:
+
+```python
+from sqlmodel import SQLModel, Field
+
+class Hero(SQLModel, table = True):
+    __tablename__ = 'Hero'
+    id: int = Field(primary_key=True)
+    name: str
+    secret_name: str
+    age: int | None
+```
+
+### Generating from SQLite
+
+```python
+from sqlmodelgen import gen_code_from_sqlite
+
+code = gen_code_from_sqlite('/home/my_user/my_database.sqlite')
+```
+
+### Generating from Postgres
+
+The separate `postgres` extension is required, it can be installed with `pip install sqlmodelgen[postgres]`.
+
+```python
+from sqlmodelgen import gen_code_from_postgres
+
+code = gen_code_from_postgres('postgres://USER:PASSWORD@HOST:PORT/DBNAME')
+```
+
+### Generating from MYSQL
+
+The separate `mysql` extension is required, it can be installed with `pip install sqlmodelgen[mysql]`.
+
+```python
+import mysql.connector
+from sqlmodelgen import gen_code_from_mysql
+
+# instantiate your connection
+conn = mysql.connector.connect(host='YOURHOST', port=3306, user='YOURUSER', password='YOURPASSWORD')
+
+code = gen_code_from_mysql(conn, 'YOURDBNAME')
+```
+
+### Relationships
+
+`sqlmodelgen` allows to build relationships by passing the argument `generate_relationships=True` to the functions:
+
+* `gen_code_from_sql`
+* `gen_code_from_sqlite`
+* `gen_code_from_postgres`
+* `gen_code_from_mysql`
+
+In such case `sqlmodelgen` is going to generate relationships between classes based on the foreign keys retrieved.
+The following example
+
+```python
+schema = '''CREATE TABLE nations(
+    id BIGSERIAL PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE athletes(
+    id BIGSERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    nation_id BIGSERIAL,
+    FOREIGN KEY (nation_id) REFERENCES nations(id)
+);'''
+
+sqlmodel_code = gen_code_from_sql(schema, generate_relationships=True)
+```
+
+will generate:
+
+```python
+from sqlmodel import SQLModel, Field, Relationship
+
+class Nations(SQLModel, table = True):
+    __tablename__ = 'nations'
+
+    id: int | None = Field(primary_key=True)
+    name: str
+    athletess: list['Athletes'] = Relationship(back_populates='nation')
+                                                                             
+class Athletes(SQLModel, table = True):
+    __tablename__ = 'athletes'
+
+    id: int | None = Field(primary_key=True)
+    name: str
+    nation_id: int | None = Field(foreign_key="nations.id")
+    nation: Nations | None = Relationship(back_populates='athletess')
+```
+
+### CLI usage
+
+CLI usage is supported, for example one can invokem with:
+
+```bash
+sqlmodelgen -f /my/path/to/file.sql -o /my/path/to/output.py
+```
+
+help description for input arguments:
+
+```
+usage: sqlmodelgen [-h] (-f FILE | -s SQLITE | -p POSTGRES | -m MYSQL)
+                   [-o OUTPUT] [-r] [--schema SCHEMA] [--dbname DBNAME]
+                   [--no-header]
+
+sqlmodel classes code generation
+
+options:
+  -h, --help            show this help message and exit
+  -f, --file FILE       SQL file path
+  -s, --sqlite SQLITE   SQLite database path
+  -p, --postgres POSTGRES
+                        PostgreSQL connection URL, requires postgres extension to be installed with "pip install
+                        sqlmodelgen[postgres]"
+  -m, --mysql MYSQL     MySQL connection URL, requires mysql extension to be installed with "pip install
+                        sqlmodelgen[mysql]"
+  -o, --output OUTPUT   Output file (default: stdout)
+  -r, --relationships   Generate relationships
+  --schema SCHEMA       PostgreSQL schema (default: public)
+  --dbname DBNAME       MySQL database name (required with --mysql)
+  --no-header            Don't include the `# Generated by: ` header in the output
+```
+
+## Internal functioning
+
+The library relies on [sqloxide](https://github.com/wseaton/sqloxide) to parse SQL code, then generates sqlmodel classes accordingly.
+
+## Contributions
+
+The project is small but contributions are really welcome. Feel free to post issues or provide PRs. In general it is preferred to provide PRs as "atomic" as possible, in order to ease reviews.
+
+## Contributors
+
+Some people helped improve the tool in several ways:
+
+- [matthaigh27](https://github.com/matthaigh27) provided functionality for attributes with custom names and the usage of `Any` as a type.
+- [s-weigand](https://github.com/s-weigand) added useful types.
+- [Zer0AlmostNull](https://github.com/Zer0AlmostNull) improved the documentation.
+- [JoaquimEsteves](https://github.com/JoaquimEsteves) set up script in the `pyproject.toml` and added a header for the code generated.

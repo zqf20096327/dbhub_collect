@@ -1,0 +1,674 @@
+<p align="center">
+  <img src=".github/logo.svg" width="120" alt="run402 logo">
+</p>
+
+<h1 align="center">run402: full-stack backend infrastructure for AI agents</h1>
+
+<p align="center">
+  Postgres, auth, storage, serverless functions and staged deploys &mdash;
+  provisioned, operated and paid for by an agent through the CLI, with a typed SDK for scripting
+  and MCP for tool-native hosts. No cloud console, no signup. Open source.
+</p>
+
+[![Tests](https://github.com/kychee-com/run402/actions/workflows/test.yml/badge.svg)](https://github.com/kychee-com/run402/actions/workflows/test.yml)
+[![CodeQL](https://github.com/kychee-com/run402/actions/workflows/codeql.yml/badge.svg)](https://github.com/kychee-com/run402/actions/workflows/codeql.yml)
+[![npm: @run402/sdk](https://img.shields.io/npm/v/@run402/sdk?label=%40run402%2Fsdk)](https://www.npmjs.com/package/@run402/sdk)
+[![npm: run402](https://img.shields.io/npm/v/run402?label=run402)](https://www.npmjs.com/package/run402)
+[![npm: run402-mcp](https://img.shields.io/npm/v/run402-mcp?label=run402-mcp)](https://www.npmjs.com/package/run402-mcp)
+[![npm: @run402/functions](https://img.shields.io/npm/v/@run402/functions?label=%40run402%2Ffunctions)](https://www.npmjs.com/package/@run402/functions)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
+**Run402 is open-source backend infrastructure for AI agents and coding agents** — a backend-as-a-service addressed to a machine rather than to a person. An autonomous agent provisions a Postgres database, user auth, file storage, serverless functions and site hosting, ships them through one staged deploy workflow, and pays for the usage itself. Comparable in surface to Supabase, Firebase or Vercel; different in that there is no dashboard you have to sign into to get started (the console exists for people; the agent never needs it) and no human-issued API key to copy.
+
+This is the backend Kychee's open products run on. We needed a layer an agent can drive end to end, with room for whatever each app turns out to need, and nothing off the shelf had all of it, so we built it and opened it the same way we open the apps: this repo holds the agent surfaces (MIT), [`run402-core`](https://github.com/kychee-com/run402-core) holds the open self-hostable runtime slice (Apache-2.0; the managed Cloud control plane remains proprietary, see [CLOUD_VS_CORE.md](https://github.com/kychee-com/run402-core/blob/main/CLOUD_VS_CORE.md)), and [kysigned](https://github.com/kychee-com/kysigned) is the first product running on it.
+
+One call to [run402](https://run402.com) gives an agent a full Postgres database, REST API, user auth, content-addressed file storage, static site hosting, serverless functions, and image generation, paid with x402 (USDC on Base) or MPP (pathUSD on Tempo, or sats over Bitcoin Lightning) — or card-funded allowance. The prototype tier is free on testnet.
+
+**Run402 is agent-first because agents are first-class participants, not because people disappear.** A person or agent acts through its own Run402 principal and authenticator, and its actions remain attributable. Identity answers who acted; memberships, roles, grants, grant keys, freshness, and spend policy determine what that principal may do.
+
+An autonomous agent may remain the legitimate owner of the org-of-one it creates. People may join through explicit co-ownership. Agents entering somebody else's organization receive bounded authority instead of borrowing a human account. Different keys. Equal standing. Explicit authority.
+
+**Use the CLI by default** to provision, deploy, inspect and recover. Use the typed, opinionated SDK when writing programmatic TypeScript/JavaScript workflows; shell scripts and CI can keep using CLI. MCP serves MCP-native hosts, and direct HTTP supports deliberate lower-level integrations.
+
+This monorepo ships these interfaces:
+
+| Surface | Use when… |
+|---------|-----------|
+| [`run402` CLI](./cli/) | Terminal, scripts, CI, agent-controlled shells: JSON in, JSON out, exit code on failure |
+| [`@run402/sdk`](./sdk/) | Calling run402 from TypeScript: typed kernel, isomorphic (Node 22 / Deno / Bun / V8 isolates) with a Node entry that auto-loads the local keystore + wallet + x402 / Lightning fetch |
+| [`run402-mcp`](./src/) | Claude Desktop, Cursor, Cline, Claude Code: core run402 operations as MCP tools |
+| [OpenClaw skill](./openclaw/) | OpenClaw agents (no MCP server required) |
+| [Run402 for Buzz](./buzz/) | Buzz people and agents: install from run402.com, preflight/link one agent's dedicated identities, deploy a contextual demo, then offer human co-ownership through a normal HTTPS/passkey handoff; Buzz remains unchanged |
+| [`@run402/functions`](https://www.npmjs.com/package/@run402/functions) | Imported _inside_ deployed functions (`db(req?)`, `adminDb()`, `auth.user()`, `email`, `ai`, `assets`) and for TypeScript autocomplete in your editor. Source lives in the public [`run402-core`](https://github.com/kychee-com/run402-core) repo under `packages/functions`; run402 Cloud consumes the published npm package when it bundles function zips. |
+| [`@run402/astro`](./astro/) | Astro integration for SSR, ISR cache, hosted auth components, and image variants |
+
+These interfaces share a single typed kernel where appropriate: `@run402/sdk`. MCP tools, CLI subcommands, and OpenClaw scripts are thin shims over SDK calls. `@run402/functions` is the in-function helper that runs inside deployed code; the npm package on the registry is the artifact Cloud bundles. `@run402/astro` layers the SDK and functions runtime into Astro's build and SSR flow. The HTTP API is the foundation; the SDK owns shared client workflows and orchestration; CLI and MCP expose them in machine-friendly forms. Native SDK/MCP references explain intentional alternatives.
+
+Deploy summaries share the SDK workflow view. CLI writes redacted detail under `.run402/diagnostics/`; MCP retains it through `expand_result`. Typed SDK callers keep the full result. Snapshot collection excludes platform runtime files automatically.
+
+## 30-second start
+
+First create the complete `run402.json` and `index.html` from [Your first deploy](https://docs.run402.com/start/first-deploy/). Run these commands in that application directory; `--name` requests a new project.
+
+```bash
+npm install -g run402@latest
+run402 up --name my-app -y                           # bootstrap wallet/tier/project/link, then deploy manifest
+run402 up verify                                     # rerun app HTTP verification without deploying
+run402 up --verify                                   # deploy, then wait for gateway/edge coherence
+```
+
+That's a real Postgres database + a deployed static site, paid for autonomously with testnet USDC.
+
+Buy from any x402 seller with the same wallet and a default $0.10 ceiling:
+
+```bash
+run402 pay https://seller.example/translate --method POST \
+  --body '{"text":"hello"}' --max-usd 0.05 \
+  --idempotency-key translation:1 --require-receipt
+```
+
+The SDK equivalent is
+`r.pay.fetch(url, init, { maxUsdMicros, idempotencyKey, requireReceipt })`;
+MCP callers run the same SDK call as a `run` snippet. All three return the
+same `x402-commerce-result.v1` settlement, movement/replay, delivery, offer,
+merchant-receipt, signer-relationship, policy, and raw-evidence fields and pass
+unpriced URLs through with `payment: null`. Requiring a receipt rejects before
+payment when no wallet-rooted offer is eligible. If a promised receipt cannot
+be verified after settlement, `PaymentPolicyError` retains the upstream
+response and paid result and tells the caller to reconcile—never to pay again.
+For a
+trusted Run402 `PAYMENT_INTENT_PENDING`, all three surfaces prescribe one
+recovery path: wait for `Retry-After`, then repeat the same request with the
+same payer and key. Never replace the key. The SDK and MCP can also re-present
+an ambiguous proof while their process remains alive; custom/arbitrary sellers
+remain ambiguous and require reconciliation.
+
+Prefer `run402 up` when a repo has `run402.deploy.json` or `app.json`. The CLI stays a thin shim over the Node SDK action runner (`r.actions.run(...)` / `r.up(...)`): it validates the manifest first, then recursively performs only the missing prerequisites. Project resolution is `--project`, `.run402/project.json`, manifest `project_id`, approved creation from `--name`; global active state never selects a deploy target. `--name` is project creation/link metadata only; it is not part of the deploy manifest and never renames an existing project. Use `--check` for local validation and `--plan` for gateway-reviewed intent before applying. Local validation covers every file the manifest references (migration `sql_path`/`sql_file`, function sources and `files`, site paths and `dir()` targets, `assets.put` sources): a missing one fails with `MANIFEST_FILE_MISSING` (`details.missing[]` of `{ field_path, path, kind }`, one `create_file` next action per file) before any gateway call, in every mode and in `run402 deploy`. With no manifest in the working directory, `UP_MANIFEST_REQUIRED` looks one directory down and names what it found (`details.nearby_manifests[]`, a read-only `run_in_directory` action for a single candidate, or one unranked `select_application` action for multiple apps); `--manifest <path>` to a missing file is a typed `MANIFEST_NOT_FOUND`.
+
+If an app manifest defines `verify.http[]`, `run402 up` verifies those URLs after deploy. Fresh run402 edge sentinel misses are reported as `propagation_pending` rather than permanent failures while the binding is still converging; tune that wait with `--propagation-budget-s` (default 120) or return immediately with `--no-propagation-wait`. `run402 up verify` reruns the same HTTP checks without uploading, deploying, creating projects, or mutating resources.
+
+The CLI checks for newer `run402` releases opportunistically and fail-open. Success stdout stays the command result; stale-version notices are advisory JSON on stderr, or `cli.update_available` NDJSON events in `--json-stream`. `run402 doctor --refresh` is the explicit live npm check and reports the install context plus the safest upgrade command for local, global, or ephemeral installs. `run402 doctor` answers `{ ok, blocking[], warnings[], checks[] }`: `ok` is true exactly when `blocking[]` is empty, every check carries `severity: "blocking" | "advisory" | "info"`, advisory findings (an unbound passkey, a stale CLI, vault gaps, a tier-less own org that can still reach another org's projects: `TIER_MISSING_ON_OWN_ORG`) land in `warnings[]` without changing `ok` or the exit code, and the `tier` check's `status` is a fixed vocabulary (`ok | inactive | frozen | past_due | dormant | purged | missing | unknown | error`, never a tier name; the name and raw lifecycle are in `value.tier` / `value.lifecycle`).
+
+Typed deploy configs use the same commands. Executable configs are trusted local code, so v1 only runs them when passed explicitly:
+
+```bash
+run402 up --manifest run402.deploy.ts --check
+run402 up --manifest run402.deploy.ts --plan
+run402 up --manifest run402.deploy.ts --require-plan plan_...
+```
+
+`--check` and `--print-spec` are local-only (both verify that every referenced file exists). `--plan` asks the gateway for a reviewed plan with `plan_id`, `plan_fingerprint`, warnings, diff, and one next action. `--require-plan` reapplies only if the normalized spec and reviewed gateway events still match.
+
+```ts
+import { defineConfig, dir, nodeFunction, sqlFile } from "@run402/sdk/config";
+
+export default defineConfig(({ env }) => ({
+  project_id: env.required("RUN402_PROJECT_ID"),
+  database: { migrations: [sqlFile("db/001_init.sql")] },
+  site: { replace: dir("dist"), public_paths: { mode: "implicit" } },
+  functions: { replace: { api: nodeFunction("dist/functions/api.js") } },
+  secrets: { require: ["OPENAI_API_KEY"] },
+}));
+```
+
+Helpers normalize to the same `ReleaseSpec` as JSON manifests. `dir()` walks deterministically and rejects unsafe files unless explicitly allowed, `sqlFile()` derives the migration id from the filename unless supplied, and `nodeFunction()` currently expects JavaScript output; point TypeScript functions at built `.js` files.
+
+## The patterns
+
+### Paste-and-go assets: content-addressed URLs with SRI
+
+Upload files with the CLI. Keep the returned AssetRef, including immutable identity and image variants, when saving references in application data. Do not reconstruct content hashes or variant URLs yourself.
+
+```bash
+run402 assets put ./logo.png ./app.js ./app.css --project prj_example
+```
+
+Use a manifest asset slice when these files must activate with a release. See the [storage guide](https://docs.run402.com/build/storage/) and [native SDK AssetRef helpers](https://docs.run402.com/sdk/patterns/) for HTML emitters and programmatic composition. Binary files must remain bytes; never read them as UTF-8 before uploading.
+
+### Dark-by-default tables + the expose manifest
+
+Tables you create are unreachable via `/rest/v1/*` until you declare them in a manifest. That closes the "agent created a table, forgot to set RLS, data leaked" footgun. A valid anon key against an existing but undeclared table gets a structured `403 TABLE_NOT_EXPOSED` (never a bare Postgres `42501`) whose `next_actions` say exactly that: `expose_table` (declare it and redeploy), `edit_request` (the expose endpoint), or `use_function` (keep it dark and read it from a function with `adminDb()`); it is not an RLS problem. The manifest is convergent: applying it twice is a no-op; items removed between applies have their policies, grants, triggers, and views dropped.
+
+```bash
+cat > manifest.json <<'EOF'
+{
+  "$schema": "https://run402.com/schemas/manifest.v1.json",
+  "version": "1",
+  "tables": [
+    { "name": "items",  "expose": true,  "policy": "user_owns_rows",
+      "owner_column": "user_id", "force_owner_on_insert": true },
+    { "name": "audit",  "expose": false }
+  ],
+  "views": [
+    { "name": "leaderboard", "base": "items", "select": ["user_id", "score"], "expose": true }
+  ],
+  "rpcs": [
+    { "name": "compute_streak", "signature": "(user_id uuid)", "grant_to": ["authenticated"] }
+  ]
+}
+EOF
+
+run402 projects validate-expose <project_id> --file manifest.json
+run402 projects apply-expose    <project_id> --file manifest.json
+run402 projects get-expose   <project_id>
+```
+
+Built-in policies: `user_owns_rows` (rows where `owner_column = auth.uid()`; with `force_owner_on_insert: true` a BEFORE INSERT trigger sets it), `public_read_authenticated_write` (anyone reads, any authenticated user writes), `public_read_write_UNRESTRICTED` (fully open; requires `i_understand_this_is_unrestricted: true`), and `custom` (escape hatch: your own `CREATE POLICY` SQL).
+
+Use `run402 projects validate-expose`  for a non-mutating feedback loop before applying. Optional migration SQL is used only to check manifest references; it is not executed as a PostgreSQL dry run, and this does not validate deploy manifests.
+
+**Auth-as-SDLC:** put the same JSON under `database.expose` in your v2 `ReleaseSpec`. The gateway validates it against your migration SQL during deploy and rejects mismatches with a structured `errors` array listing every violation.
+
+### Directory deploy (advanced primitive)
+
+For a standalone static directory on an existing project:
+
+```bash
+run402 sites deploy-dir ./dist --project prj_example > result.json 2> events.log
+```
+
+Use `run402 up` for a complete application with a deploy manifest. The SDK owns file hashing, upload deduplication and release orchestration; the CLI renders progress and the result.
+
+### Same-origin web routes: static site + function ingress
+
+Apply-v1 routes and static public paths are release resources: the release pointer activates after the required deploy stages in `run402 deploy`. Applied migrations and external side effects are not rolled back by changing that pointer. Release static asset paths such as `events.html` are distinct from browser-visible public static paths such as `/events`. Use `site.public_paths` for ordinary clean static URLs; keep routes for function ingress and exact, method-aware static aliases.
+
+```json
+{
+  "project_id": "prj_...",
+  "site": {
+    "replace": {
+      "index.html": { "data": "<!doctype html><main id='app'></main><script>fetch('/api/hello')</script>" },
+      "events.html": { "data": "<!doctype html><h1>Events</h1>" }
+    },
+    "public_paths": {
+      "mode": "explicit",
+      "replace": {
+        "/events": { "asset": "events.html", "cache_class": "html" }
+      }
+    }
+  },
+  "functions": {
+    "replace": {
+      "api": {
+        "runtime": "node22",
+        "source": {
+          "data": "export default async function handler(req) { const url = new URL(req.url); return Response.json({ ok: true, path: url.pathname }); }"
+        }
+      },
+      "login": {
+        "runtime": "node22",
+        "source": { "data": "export default async function handler(req) { return Response.json({ ok: true }); }" }
+      }
+    }
+  },
+  "routes": {
+    "replace": [
+      { "pattern": "/api/*", "methods": ["GET", "POST", "OPTIONS"], "target": { "type": "function", "name": "api" } },
+      { "pattern": "/login", "methods": ["POST"], "target": { "type": "function", "name": "login" } }
+    ]
+  }
+}
+```
+
+`site.public_paths.mode: "explicit"` means only the complete `public_paths.replace` table is directly reachable as static URLs. In the example, `/events` serves the release asset `events.html`, while `/events.html` is not public unless separately declared. `mode: "implicit"` restores filename-derived public reachability and can widen access, so review gateway warnings before confirming it.
+
+Omit `routes` or pass `routes: null` to carry forward base routes. Use `routes: { "replace": [] }` to clear the route table. Route entries are an ordered `replace` list, not a path-keyed map. Function targets use `{ "type": "function", "name": "<materialized function name>" }`. Static route targets use exact patterns only, methods `["GET"]` or `["GET","HEAD"]`, and `{ "pattern": "/events", "methods": ["GET","HEAD"], "target": { "type": "static", "file": "events.html" } }` where `file` is a release static asset path, not a public path, URL, CAS hash, rewrite, or redirect. Use static route targets for method-aware aliases such as static `GET /login` plus function `POST /login`; in explicit public path mode the backing asset can stay private by filename. Direct `/functions/v1/:name` calls remain API-key protected; browser-routed paths are public same-origin ingress.
+
+Function routes can charge a fixed tenant x402 price before the handler runs by adding `pricing: { "mode": "always", "amount_usd_micros": 250000, "pay_to": "org_default_payout" }` to the route entry. `250000` is $0.25 per matching action. The portable ReleaseSpec contract also accepts `receipt: "on_fulfillment"` on a priced function route; a compatible host then requires the function to return `payment.fulfilled(response)` before it authors a receipt. Run402-hosted advertising remains gated off until the standard delegated-signer carrier is available—receipt intent never silently downgrades. Omit `networks` for production mainnet only; include `"testnet"` explicitly for testnet acceptance. Static aliases cannot be priced, direct function invocation is not monetized, and service/admin keys do not bypass a priced browser route. The owning org must have a resolvable payout wallet: set it with `run402 orgs payout-wallet <org_id> <wallet_address>`. Conditional credit systems should expose one fixed-price route such as `POST /api/credits`, then keep the rest of the app behind unpriced routes and app-local authorization.
+
+Matching is exact or final-prefix-wildcard only. `/admin` and `/admin/` are exact trailing-slash equivalents; `/admin/*` matches children but not `/admin`, `/admin/`, `/admin.css`, or `/administrator`, so deploy both `/admin` and `/admin/*` for a routed section root. Query strings are ignored for matching and preserved in the handler's full public `req.url`. Exact routes beat prefix routes; longest prefix wins; method-compatible dynamic routes beat static assets. A `POST /login` route can coexist with static `GET /login` HTML. Unsafe method mismatch returns `405`, and matched dynamic route failures fail closed instead of falling back to static files.
+
+Routed functions use the Node 22 Fetch Request -> Response contract: `export default async function handler(req) { ... }`. `req.method` is the browser method, and `req.url` is the full public URL on managed subdomains, hosts, and verified custom domains. Derive OAuth callbacks from it, for example `new URL("/admin/oauth/google/callback", new URL(req.url).origin)`. Append multiple cookies with `headers.append("Set-Cookie", value)`; redirects, cookies, and query strings are preserved. On priced routes, import `getRoutedPaymentContext` from `@run402/functions`, read `const paymentContext = getRoutedPaymentContext(req)`, and key app-side idempotency by `paymentContext.paymentId`. For a receipt-enabled route, return `payment.fulfilled(response)` only after the response represents completed delivery; the helper fails closed outside a settled, current, receipt-enabled routed invocation. The context helper reads gateway-confirmed `x-run402-payment-*` headers and returns `null` for unpriced or direct calls. The raw `run402.routed_http.v1` envelope is internal; do not write route handlers against it.
+
+**Recipe: static home page + SPA shell.** A SPA site ships `index.html` as the shell serving every unmatched route (match `spa_fallback`), so by default `GET /` serves the shell too. To serve a real static home page at `/` while keeping the shell for app routes, ship `home.html` at the site root alongside `index.html` and add an exact root static route alias: `"routes": { "replace": [ { "pattern": "/", "target": { "type": "static", "file": "home.html" } } ] }`. Route matching runs before all static resolution (including the implicit `/` -> `index.html` root mapping), and SPA-fallback derivation is independent of the route table, so `GET /` serves `home.html` (`route_static_alias`), unmatched app routes such as `/dashboard` still serve the shell (`spa_fallback`), and named static pages keep serving unchanged (`static_exact`). Expect two non-blocking plan lints: `STATIC_ALIAS_SHADOWS_STATIC_PATH` (warn: the alias overrides what `/` would otherwise serve; accurate and expected here) and `STATIC_ALIAS_DUPLICATE_CANONICAL_URL` (info: `/home.html` stays directly reachable in implicit public-path mode; add `<link rel="canonical">` to `home.html` if duplicate-content SEO matters). Omitting `routes` on later deploys carries the alias forward; `routes.replace` is total, so a pipeline that sends it must include the alias every time. Verify with `run402 deploy resolve --url https://<your-site>/ --method GET` (or `r.project(id).apply.resolve`) and confirm `match: "route_static_alias"` with `target_file: "home.html"`.
+
+Avoid routing every static file, broad method lists by default, wildcard static route targets, leading-slash static files, directory shorthand, and one-static-route-target-per-page tables that exhaust route limits. Also watch wildcard function routes that shadow direct public static paths. Warning codes to handle include `STATIC_ALIAS_SHADOWS_STATIC_PATH`, `STATIC_ALIAS_RELATIVE_ASSET_RISK`, `STATIC_ALIAS_DUPLICATE_CANONICAL_URL`, `STATIC_ALIAS_EXTENSIONLESS_NON_HTML`, and `STATIC_ALIAS_TABLE_NEAR_LIMIT`; inspect active routes, `static_public_paths`, and resolve diagnostics to distinguish the route pattern from the backing `asset_path`.
+
+Resolve public URLs with the CLI or its MCP/SDK equivalents:
+
+```bash
+run402 deploy resolve https://example.com/events --project prj_123 --method GET
+run402 deploy resolve --url https://example.com/events?utm=x#hero --project prj_123 --method GET
+run402 deploy resolve --host example.com --path /events --project prj_123 --method GET
+```
+
+`r.project(id).apply.resolve({ url, method: "GET" })` (from MCP, a `run` snippet) returns `would_serve`, `diagnostic_status`, `match`, normalized request data, warnings, full resolution JSON, `edge_propagation`, and next steps. When returned, `asset_path`, `reachability_authority`, and `direct` explain which release asset backs the public URL and whether reachability came from implicit file-path mode, explicit `site.public_paths`, or a route-only static alias. Stable-host diagnostics may also include `authorization_result`, `cas_object` (`sha256`, `exists`, `expected_size`, `actual_size`), hostname-specific `response_variant`, route/static fields such as `allow`, `route_pattern`, `target_type`, `target_name`, and `target_file`, and `edge_propagation` (`settled`, `propagating`, or `sync_pending`). Known `match` literals are `host_missing`, `manifest_missing`, `active_release_missing`, `unsupported_manifest_version`, `path_error`, `none`, `static_exact`, `static_index`, `spa_fallback`, `spa_fallback_missing`, `route_function`, `route_static_alias`, and `route_method_miss`; preserve unknown future strings. Known `authorization_result` values include `authorized`, `not_public`, `not_applicable`, `manifest_missing`, `target_missing`, `active_release_missing`, `unsupported_manifest_version`, `path_error`, `missing_cas_object`, `unfinalized_or_deleting_cas_object`, `size_mismatch`, and `unauthorized_cas_object`. Known `fallback_state` values include `active_release_missing`, `unsupported_manifest_version`, and `negative_cache_hit`; preserve unknown future strings. `result` is the diagnostic body status, not the HTTP status of the SDK call, so host misses can still be successful CLI/MCP/SDK calls with `would_serve: false`. Do not treat resolve/diagnose as a fetch, cache purge, or cache-policy oracle; route method misses should inspect `allow`, CAS authorization/health failures should inspect or redeploy the affected static asset, and fresh host misses should inspect `edge_propagation` or rerun `run402 up verify`. Branch on structured JSON fields such as `cache_class` and preserve unknown cache classes.
+
+Release observability exposes stable asset identity and public reachability. Inventories include `release_generation`, `static_manifest_sha256`, nullable `static_manifest_metadata` (`file_count`, `total_bytes`, `cache_classes`, `cache_class_sources`, `spa_fallback`), and `static_public_paths[]` when returned. `site.paths` lists release static assets; `static_public_paths[]` lists browser-visible public paths with `public_path`, `asset_path`, `reachability_authority`, `direct`, cache class, and content type. Plan and release diffs expose `static_assets` counters: unchanged/changed/added/removed, `newly_uploaded_cas_bytes`, `reused_cas_bytes`, `deployment_copy_bytes_eliminated`, `legacy_immutable_warnings`, `previous_immutable_failures`, and `cas_authorization_failures`.
+
+Runtime route failure codes to branch on: `ROUTE_MANIFEST_LOAD_FAILED` (manifest/propagation), `ROUTED_INVOKE_WORKER_SECRET_MISSING` (custom-domain Worker secret), `ROUTED_INVOKE_AUTH_FAILED` (internal invoke signature), `ROUTED_ROUTE_STALE` (selected route failed release revalidation), `ROUTE_METHOD_NOT_ALLOWED` (method mismatch), `PAYOUT_WALLET_REQUIRED` / `PAYOUT_WALLET_AMBIGUOUS` / `PAYOUT_WALLET_UNRESOLVED` (priced-route payout setup), `PAYMENT_PROOF_MISMATCH` (stale or wrong x402 proof), and `ROUTED_RESPONSE_TOO_LARGE` (body over 6 MiB).
+
+### GitHub Actions OIDC deploys: link once, deploy with the same CLI
+
+For repo-driven deploys, run402 does not need service keys or wallet files in GitHub secrets. Run a local link command once:
+
+```bash
+run402 ci link github --project prj_... --manifest run402.deploy.json
+# Optional route authority for CI route declarations:
+run402 ci link github --project prj_... --manifest run402.deploy.json --route-scope /admin --route-scope /api/*
+```
+
+That creates a deploy-scoped `/ci/v1/*` binding and writes a workflow that grants `id-token: write`, checks out the repo, and runs the existing deploy primitive:
+
+```yaml
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to run402
+        run: npx --yes run402@3.7.5 deploy --manifest 'run402.deploy.json' --project 'prj_...'
+```
+
+CI deploys are intentionally narrow: `site`, `functions`, `database`, absent/current `base`, and route declarations only when the binding has covering `--route-scope` patterns. Without route scopes, CI cannot ship `routes`. Keep secrets, domains, subdomains, checks, non-current base, and broader trust changes in a local wallet-backed deploy. If the gateway returns `CI_ROUTE_SCOPE_DENIED`, re-link with exact scopes like `/admin` or final-wildcard scopes like `/api/*`, or deploy locally. Manage bindings with `run402 ci list` and `run402 ci revoke`.
+
+### In-function helpers: caller-context vs BYPASSRLS
+
+Inside a deployed function, import from `@run402/functions`. Two distinct DB clients keep RLS clean:
+
+```ts
+import { db, adminDb, auth, email, ai } from "@run402/functions";
+
+export default async (req: Request) => {
+  const user = await auth.requireUser();
+
+  // Caller-context: db() mints a 60s actor JWT so run402.current_user_id() resolves in RLS.
+  // No .eq("user_id", user.id) needed: RLS already binds the visitor's rows; the redundant
+  // filter is a deploy-fail (R402_AUTH_REDUNDANT_USER_FILTER) under @run402/functions v3.0+.
+  const mine = await db().from("items").select("*");
+
+  // BYPASSRLS: for platform-authored writes (audit logs, cron cleanup, webhook handlers).
+  await adminDb().from("audit").insert({ event: "items_read", user_id: user.id });
+
+  // Send mail from the configured default outbound mailbox.
+  if (mine.length === 0) {
+    await email.send({ to: user.email, subject: "Welcome", html: "<h1>hi</h1>" });
+  }
+
+  return Response.json(mine);
+};
+```
+
+`adminDb().sql(query, params?)` runs raw parameterized SQL and always bypasses RLS. The current runtime returns the gateway envelope, including `rows` and `row_count`; read `result.rows`, not `result[0]`. Older helper typings incorrectly described a bare array. See the [owning runtime reference](https://github.com/kychee-com/run402-core/tree/main/packages/functions#admindbsqlquery-params--raw-sql-bypassrls) and match local helper types to the runtime version used by your deploy.
+
+`@run402/functions` is auto-bundled into deployed code; install it in your editor for full TypeScript autocomplete (also works at build time for static-site generation with `RUN402_SERVICE_KEY` + `RUN402_PROJECT_ID` set).
+
+`ai.generateImage({ prompt, aspect? })` is available inside deployed functions for live app flows such as generated avatars or OG images. It calls the project runtime image endpoint with `RUN402_SERVICE_KEY`, so deployed functions do not need wallets or x402 signing code. Aspects are `square`, `landscape`, and `portrait`; the result is `{ image, content_type, aspect }` with base64 image bytes. Runtime image generation is billed, rate-limited, and spend-capped against the project organization; public routed functions should authenticate/rate-limit their users before calling it.
+
+`assets.put(key, source, opts?)` uploads bytes from inside a deployed function through the same CAS-backed apply substrate as deploy-time assets. It uses `RUN402_SERVICE_KEY`, accepts a string, `Uint8Array`, or `{ content | bytes }`, and returns an SDK-compatible `AssetRef` with mutable and immutable URLs.
+
+**Operating data from outside a function:** use the CLI with an explicit project. For deliberate HTTP integrations, the [native HTTP reference](https://run402.com/llms-full.txt) distinguishes administrative REST from caller-scoped REST. Never expose a service key to the browser.
+
+```bash
+run402 projects sql prj_example "SELECT count(*) FROM audit"
+```
+
+### repos: your repository history, encrypted before it leaves the machine
+
+`run402 repos` is a Git remote whose contents are encrypted on your own machine and stored as a chain of signed, admitted heads. It exists so your repository history outlives the machine it was written on — without that outliving requiring you to hand Run402 the plaintext. The wire protocol is `r402s/v0`. One noun, seventeen verbs: KyGit is the brand, a vault is the resource, a repo is what you have — `run402 repos` on the command line and `r.repos` in the SDK. Two pairs of the seventeen mint and claim a single-use bearer key: `handoff`/`resume` hand a checked-out working tree — dirty state included — from one agent to ANOTHER, the sender stopping; `invite`/`join` bring a SECOND agent into the SAME work while the first keeps going, sharing a coordination room. See "Handoff / resume" and "Invite / join" below.
+
+Three claims, three different strengths. These are the entire approved claims vocabulary for this feature:
+
+1. **Run402 cannot decrypt your vault or repository history. Deployment artifacts remain a disclosed plaintext custody boundary.** Cryptographic, against Run402 itself: in the vault lane, source payload and repository-history content are ciphertext-only; the substrate retains only enumerated plaintext metadata and holds zero vault keys. The deploy lane is separate and disclosed — the platform custodially holds the plaintext artifacts of every deploy. It can read what you deployed; it cannot read what you did not.
+2. **Activation requires vault admission by default; an explicit, audited override can bypass it.** An operational platform invariant, enforced and auditable — not cryptographic against the platform that enforces it.
+3. **Retention is an operational promise of the platform, not a cryptographic guarantee against it** (the host controls timestamps and bytes).
+
+**The vault-only track — three lines, muscle memory intact, nothing to pay:**
+
+```bash
+run402 init                                   # once per machine
+run402 repos create my-notes                  # project + vault + origin remote, one free call
+git push -u origin main                       # publishes, encrypted before it leaves the machine
+```
+
+`origin` is claimed additively: when the directory has no `origin` yet, the scaffold names ours `origin` — `git push origin main` just works, no side-remote name to remember. An existing `origin` is never touched; the fallback is `run402` instead, and the response says which happened and why. An app that lives inside another repository (a monorepo workspace) is never scaffolded into that repository: the skip carries a `create_nested_repo` next action, and `run402 repos create --nested --project <project_id>` (or `run402 up --nested`) gives the app root its own nested repository and `run402` remote, appending exactly one line to the enclosing repository's local `.git/info/exclude` and touching nothing else there; `repos create` prints a `git push` next action only for a remote it actually added. The free path is the whole path — no slug, no fee, no ceremony. When you want pretty `run402::<org-slug>/<name>` addresses (clone-by-name, push-to-create), claim an org slug once — the optional named-address upgrade described below.
+
+**Named addressing.** `run402::<org-slug>/<name>` works alongside the id-form `run402::<org_id>/<project_id>` in the same slot — pick an org slug once (`run402 orgs slug <slug>`, owner-only, a small one-time fee), and every repo under it is `run402::<slug>/<name>`. Pushing a name that doesn't exist yet **push-to-creates** it: the project and vault are allocated atomically, and a losing concurrent pusher resolves cleanly to the winner's repo instead of erroring — its work is not lost, it just wasn't the creator. The first time a named remote resolves on a checkout, the resolved id is **pinned** into that checkout's local git config — every later push/fetch follows the pin directly, so a later rename of the org slug or repo name never breaks an existing clone. The id-form address needs no pin (a project id never changes) and stays the cold-restart path: an agent that lost its local state but still holds authority on the project can always fall back to `run402::<org_id>/<project_id>`.
+
+**One thing to know up front: a vault has a writer set, not a single key.** Every admitted member or handoff recipient opens the vault and pushes under its OWN keystore key (`run402 repos access` lists them). A vault whose only admitted principal is this keystore is exactly as safe as this keystore — see "If you lose the keystore" below, or admit a second principal.
+
+The explicit, ceremonial form still works, and allocates the SAME way `git push` does lazily on first use — useful for scripts, or for the receipt to land in JSON stdout instead of stderr:
+
+```bash
+# 1. Provision. Inside a repository that already exists, this adds the origin
+#    remote (run402::<org_id>/<project_id>). Not a repository yet?
+#    `run402 init --git-remote` creates one first. It needs a project selected
+#    (`run402 projects use <project_id>`, or RUN402_PROJECT_ID).
+run402 init
+
+# 2. Allocate the repo's vault explicitly. Separate from `run402 init` on
+#    purpose: this is the step that mints key material on this machine and
+#    prints a one-shot recovery receipt. Idempotent — an existing vault comes
+#    back deduplicated. (Skip this step and git push / repos capture
+#    against an unallocated project allocates the SAME way, lazily, on
+#    first use — the two paths don't stack; this one just does it now,
+#    explicitly, so the receipt lands in JSON stdout instead of stderr.)
+run402 repos create --project <project_id>
+
+# 3. Snapshot — capture the working tree, encrypt it, publish a signed head.
+run402 repos capture --message "wip: refactor the parser"
+git push origin main            # ...or push your own branches, via git-remote-run402
+
+# 4. View, then fsck: walk the head chain from your authenticated pin.
+run402 repos view
+run402 repos fsck --budget 500
+
+# Restore anywhere, with plain git.
+git clone run402::<org_id>/<project_id> restored
+```
+
+Cloning needs a Run402 principal on this machine — a wallet and a keystore holding an envelope for this vault — this is encrypted git, not a shareable link.
+
+A fresh clone installs local `refs/r402/retain/<oid>` refs for every retained deploy-capture tip no branch reaches, so a plain `git fsck` is silent — `git for-each-ref refs/r402/` lists what is retained. Clones made by a client older than this one (or a checkout whose ref write degraded) may still show dangling commits under `git fsck`; harmless, not corruption — one `run402 repos fsck` run installs the missing refs. A retained ref locally pins that history against `git gc` until the vault prunes the capture, at which point the next fetch retracts it.
+
+`repos capture` is the CAPTURE lane — the protocol deploy ref plus the HEAD target — because a dirty tree captures as a synthetic commit that sits on no branch. Your own branches and tags reach the vault through `git push origin <branch>`.
+
+**Allocating a vault does NOT gate the project's deploys.** `vault_policy` stays unset until you set it — a vault created by a first `git push` or `repos create` never silently changes how you deploy. A deploy against a vaulted, ungated project proceeds ungated and its result carries a typed `next_actions` entry offering `run402 repos policy required`; every later ungated deploy carries a `warnings[]` entry naming the drift, until the policy is set either way — never a block, never an interactive prompt. Once `vault_policy` is `required`, a deploy must present a vaulted capture at commit — `run402 deploy` produces one automatically on any machine holding the keystore; un-gate with `run402 repos policy grandfathered --reason "<why>"` (owner + step-up, audited, reversible with `run402 repos policy required`). Vaulting your source is never gated on a deploy, either way. `run402 doctor` reports the policy, whether this machine can satisfy it, and where the keystore lives.
+
+Before `capture` reports that anything landed, the client compares every finalization receipt against its local expected manifest and reads the admitted head back from storage — a 200 alone is never enough. Maintenance is one verb, `run402 repos gc` — `git gc`'s own two halves (checkpoint publication + prune planning), never described as "exactly `git gc`" since the deletion ceremony is stricter: it plans locally, and submits only when handed both verifier receipts — one from this CLI, one from the independent `r402s-verify` — with `--submit --intent-core <path> --verifier-receipt <path>`; only the control-plane-signed completion says what was deleted.
+
+From the SDK, with identical semantics — vault reads run anywhere, and the verbs that touch a git working tree or the on-disk keystore are Node-only:
+
+For typed repository automation, see the [native SDK KyGit reference](https://docs.run402.com/sdk/resources/).
+
+**The encrypted second remote — the zero-migration pattern.** Keep GitHub/GitLab as the primary (collaboration, CI, reviews, unchanged) and add KyGit as the second remote: `git remote add vault run402::<org_id>/<project_id>` + `git push vault --all`, and a complete, continuously updated copy of your history exists that the storage provider itself cannot read. The reason this matters, said plainly and as capability rather than accusation: a host that can READ private repositories can — under a future policy, an acquisition, a training pipeline, a subpoena, or a breach — index them, train models on them, or hand them to someone who will. Run402 cannot decrypt your vault or repository history. Deployment artifacts remain a disclosed plaintext custody boundary.
+
+**A vault-only project is first-class.** `run402 init` (or `run402 repos create <name>`), then `git push origin …`, then `gc` / `fsck` / `access`, and never a deploy — a supported shape, not a degraded one. One consequence is worth stating plainly: a vault-only project has no deploy lane, so the disclosed plaintext custody boundary is empty and there is consequently no custodial restore path.
+
+**If you lose the keystore.** The vault protects source history from host-side loss while a principal keystore survives. The "while" clause is load-bearing: in V0-A, **whole-machine or whole-keystore loss is terminal for vault history until human envelopes ship**, and `run402 repos view` prints that sentence verbatim. Back up the keystore directory `run402 repos view` reports as `keystore.root` and prints under the terminal-loss statement — `~/.config/run402/vault` for the default wallet, `~/.config/run402/profiles/<wallet>/vault` for a named one. The recovery receipt is an integrity anchor, not a decryption key — it proves the vault you are served is the one you created, and it decrypts nothing. It is not a secret; the more copies the better. The reminder gets louder as the vault gets more valuable: quiet at genesis, a STANDING `run402 doctor` warning once the vault crosses any of ≥10 generations / ≥10 MB / ≥14 days since genesis — cleared only by adding a second principal, never by an attestation, because V0 cannot verify one is true.
+
+**The exit ramp: mirror your own copy.** `run402 repos mirror <destination> [--profile <name> | --ambient]` (S3 or a plain directory) configures a second, customer-owned copy of the vault's ciphertext — the destination and credential *name* live in a config file beside the keystore, never in `run402.config.json`, never a raw secret. Once set, every capture is mirrored to it automatically, reported as a separate `mirror_push` field beside the vault result; a mirror failure never blocks, slows, or changes the actual publish. `run402 repos mirror --backfill` (idempotent, resumable) catches it up on demand; `run402 repos fsck --mirror` is a KEYLESS integrity probe — it reports the recoverable generation without touching key material. `run402 repos recover <source> --out <dir>` needs no server at all: it reads the mirror, verifies the chain, and decrypts with the local keystore alone. Named `recover` rather than `restore`, which already means something else in git. Two things to know before you rely on it: it proves *validity, never freshness* — an older mirror looks identical to a genuinely short history — and a mirror without the keystore **or an equivalent key** recovers nothing, since mirroring ciphertext does not create a second key; the V0 terminal-loss statement above applies.
+
+**The human backup path (vault-recovery-custody).** A human org member who completed source enrollment at console.run402.com/account holds an *equivalent key* with no keystore at all: their member key lives as sealed wrappers (passkey PRF and/or a source recovery code), and `run402 repos recovery-bundle` downloads the versioned recovery bundle (key identity + wrapper ciphertexts — still nothing the platform can open). Kept with a vault mirror — copy it to `member-recovery-bundles/<name>.json` under the mirrored prefix — that bundle + the source recovery code + the vault's recovery receipt recover the repository with **no run402 server and no keystore**: `run402 repos recover <source> --out <dir> --receipt <pin.json>` (the code is prompted with hidden input; `--bundle <file>` if the bundle isn't in the mirror). A raw passkey PRF output is deliberately NOT a recovery input — the no-server path for a human is the recovery code. `run402 doctor`'s `recovery_posture` check tells you whether each vault-owning org actually has this backstop configured.
+
+```bash
+run402 repos mirror s3://acme-vault-mirror --profile acme --region us-east-1
+run402 repos mirror --backfill
+run402 repos recover s3://acme-vault-mirror --out ./restored --repo src_1a2b3c
+run402 repos recovery-bundle --out ./bundle.json     # the member's no-keystore recovery half
+run402 repos recover ./mirror-copy --out ./restored --receipt ./recovery-receipt.json --bundle ./bundle.json
+```
+
+**Handoff / resume — pass a working tree to another agent, dirty state and all.** `run402 repos handoff` captures the actual working tree — staged, unstaged, and untracked changes, exactly as `git stash push -u` would — and mints a single-use bearer key, `kgh1_…`, printed to stdout exactly once (`--json` still keeps it off stderr; there is no second place to find it if you lose it). Hand that key to another agent — another machine, another session, no shared keystore, no shared wallet — and `run402 repos resume kgh1_…` claims it, clones a fresh checkout, and reapplies the exact dirty state with `git stash apply --index`. The resuming agent also becomes a run402 wallet of its own on the way in: with no active tier, `resume` folds the same cold-start chain `create` does (wallet → faucet → one x402 prototype payment) before the claim; `--no-init` opts out, and the claim never waits on it. A Handoff Note rides alongside (a short JSON summary: what's done, what's in progress, what's failing, next steps) and renders as Markdown by default on `resume`. The key confers real authority — by default the sender's own org role — until it is claimed or its TTL (default 1h, `--ttl <seconds>`) expires; the mint response says so, and the CLI echoes the warning before printing the key. Sensitive untracked files (`.env`, `*.pem`, `*.key`, SSH/AWS/GPG directories, and 18 more patterns) are excluded from capture by default; opt one back in with `--include-sensitive <glob>`.
+
+```bash
+run402 repos handoff --note-file handoff.json     # captures the working tree, mints the key, prints it ALONE to stdout
+run402 repos resume kgh1_…                         # on the other machine: redeem it, clone, restore, print the note
+```
+
+Neither verb has an MCP tool — `handoff` mints a bearer secret and `resume` mutates org membership, the same "mutating verbs are CLI-only" reasoning as `create`/`delete` above.
+
+**Writers, plural.** A vault admits heads from a SET of writer keys, each a member's own keystore identity (protocol rev 47). `resume` makes the recipient a writer before it returns — `git push` works at once, under the recipient's own key, and the sender's environment can be deleted afterwards. Any member added with `run402 orgs members add` (developer or above) becomes a writer the same way: the adder's client admits the new key inline when it can, and REFUSES the add (`VAULT_WRITER_NOT_ADMITTED`, `request_writer_sync`) when it cannot, so no member is ever left able to read but not push. `run402 repos view` lists `writers[]` and `pending_writers[]`; `run402 repos access sync` admits pending keys on demand; removing a member rides the next epoch rotation and that key can never be re-added. Nobody's seed is ever copied: a writer is admitted by a live writer's signature or by a sender-signed handoff grant the recipient completes with its own key.
+
+**Invite / join — bring a second agent into the exact work, dirty tree included, and talk in a shared room.** A Handoff passes the work on; an Invite grows the team. `run402 repos invite` captures the working tree exactly like `handoff` does — the inviter's own worktree, index, branch, refs, and access are all untouched, and it keeps pushing throughout — registers the inviter's own presence in a coordination room (the project's default room, or `--room <key>` for a named org room), mints a single-use bearer key, `kgi1_…`, printed to stdout exactly once, and posts ONE room message naming the checkpoint and the invite id (never the key). Minting requires an ACTIVE writer key, the same as `handoff` (`INVITE_MINT_REQUIRES_WRITER` names `run402 repos access sync` as the fix). Hand that key to another agent and `run402 repos join kgi1_…` pays its own way in — the joining agent folds the SAME cold-start chain `resume` does (wallet → faucet → one x402 prototype payment) before the redemption, so it arrives as a paid-up run402 wallet of its own — clones a fresh checkout, **becomes a writer of the vault under its OWN key before the command returns** (nothing is copied from the inviter), restores the exact dirty state, pins the invite's room locally, registers its own presence, posts ONE arrival message, and reports who invited it (name, labels, whether they're still live), who else is in the room, and the last few messages. Both agents push, interleaved, each signing under its own key. From there `run402 messages wait` is the agent's ear: it blocks until the other side speaks (or a bounded timeout elapses) using the gateway's held read, never errors on silence, and reports who is still live either way. The minted role defaults to `developer` and never exceeds the inviter's own; the Invite Note (same shape as the Handoff Note) rides alongside and renders as Markdown by default on `join`. Taking access back is `run402 orgs members rm`, which rotates the vault's epoch so the removed key can no longer push while every remaining agent keeps working.
+
+```bash
+run402 repos invite --note-file invite.json       # captures the working tree, mints the key, prints it ALONE to stdout
+run402 repos join kgi1_…                           # on the other machine: pay in, redeem, become a writer, clone, restore
+run402 messages wait                               # then: block until the other agent speaks (or the timeout elapses)
+```
+
+Like `handoff`/`resume`, neither `invite` nor `join` has an MCP tool — `invite` mints a bearer secret and `join` mutates org membership and writes a working tree, the same reasoning as `create`/`delete`/`handoff`/`resume` above.
+
+**Verify it without trusting our client.** `r402s-verify` is an independent-lineage verifier for the same protocol — a separate language, separate authorship, and a separate primitive stack, deliberately sharing no implementation code with the SDK. That non-sharing is the point: a differential verifier that reuses the code it is checking verifies nothing. It lives on the `r402s-verify` branch of this repository with its own workflow, ships prebuilt release binaries, and also builds with `cargo build --release`. The full protocol specification and threat model it verifies against are published in [`docs/kygit/`](docs/kygit/README.md), and the frozen conformance vectors in [`test-vectors/r402s-v0/`](test-vectors/r402s-v0/README.md).
+
+**Cost.** There is no separate repos price — a vault's bytes count against the organization-pooled vault quota (`sourceBytes`: prototype 1 GB, hobby 10 GB, team 50 GB), a separate pool from the storage your projects share, charged once per unique object with a 4 KiB per-object accounting floor and a 1 MiB per-vault minimum.
+
+## SDK: `@run402/sdk`
+
+```bash
+npm install @run402/sdk
+```
+
+Two entry points:
+
+- **`@run402/sdk`**: isomorphic. Bring your own `CredentialsProvider` (a session-token shim, a remote vault, anything that resolves project keys + auth headers). Works in Node 22, Deno, Bun, V8 isolates.
+- **`@run402/sdk/node`**: Node-only convenience. Reads local profile state plus the project-key credential cache (`credentials/project-keys.v1.json`) and signs x402 payments from one deterministic source: an explicit opaque `paymentSigner`, explicit `walletPath`, the supplied provider's `readWallet()`, or the default active-profile wallet. Auth and payer may intentionally differ; a selected payment source never falls back to an ambient wallet. `r.paymentPayer()` reports only safe public payer/source provenance. Also exposes `sites.deployDir(...)`, `fileSetFromDir(...)`, typed deploy-manifest helpers (`loadDeployManifest`, `normalizeDeployManifest`), and `resolveRun402TargetProfile()` for app build scripts that need the same Core/Cloud target the CLI uses.
+
+```ts
+import { run402 } from "@run402/sdk/node";
+
+const r = run402();
+// Prepare the complete first-deploy manifest and referenced app files.
+const result = await r.up({ name: "my-app", manifest: "run402.json" }, { approval: "yes" });
+console.log(result);
+```
+
+The SDK is organised into focused namespaces: `actions` (Node recursive action runner), `pay` (bounded arbitrary-URL x402 buyer), `projects`, `snapshots`, `branches`, `archives`, `assets`, `cache`, `ci`, `sites`, `functions`, `jobs`, `secrets`, `subdomains`, `domains`, `email` (+ `webhooks`), `auth`, `apps`, `tier`, `billing`, `contracts`, `ai`, `wallets` (the local wallet: `status`, `create`, `export`, `faucet`; plus the server label), `service`, `admin`, `session` (a person's sign-in session: `run402 login` loopback and `--device` seams plus the browser surface), `writeApproval` (the passkey write approval behind `run402 approve`), `me` (account overview and status), `wallets` (signed server-side wallet label), `orgs` (org-owned control plane + `r.org(id)` sub-client), `grants` (per-project capability grants), and `identityLinks` (public, protocol-discriminated human/agent Nostr attribution), plus `const project = await r.project(id); await project.apply(spec)` for staged multi-resource writes (release slices + assets slice via `/apply/v1/*`). Every operation throws a typed `Run402Error` subclass on failure: `PaymentRequired`, `PaymentBuyerError`, `ProjectNotFound`, `Unauthorized`, `ApiError`, `NetworkError`, `LocalError`, `Run402DeployError`. `apply()` automatically re-plans safe current-base `BASE_RELEASE_CONFLICT` races and emits `apply.retry` progress events. See [`sdk/README.md`](./sdk/README.md).
+
+## Buzz/Nostr identity links
+
+Humans and agents can publicly attribute separately held Buzz/Nostr identities to their Run402 principal. Agent links use the EOA-plus-kind-1 protocol; human links use a normal browser, fresh passkey, and released Buzz consent ceremony at <https://console.run402.com/identity-links/connect>. Both produce the same public `idlnk_…` resource shape with a discriminating `proof_protocol`. One principal may have several active Nostr subjects, while one active Nostr subject belongs to only one principal. This is attribution only: Nostr identities never authenticate, authorize, pay, deploy, or receive transfers. Run402 never accepts or derives from an `nsec`, Nostr private key, mnemonic, seed, passkey, session credential, or derivation path.
+
+The human-facing install is a Buzz message—no terminal required:
+
+```text
+Please install the run402.com skill.
+```
+
+That is the entire human instruction. In a managed Buzz context, first-party discovery routes it to `run402-buzz`; the agent reads the apex install router and installs the self-contained skill into its workspace (normally the user-home `.buzz` directory). The request means install and connect: after verifying the inert files, the agent loads the installed skill directly and continues through preflight, setup, and identity linking in the same turn. It does not stop at “available next turn” or ask a second setup question. For a Codex runtime, prefer supplying the working directory and environment separately to the agent's command runner:
+
+```text
+working_directory: <user-home>/.buzz
+environment: { "DO_NOT_TRACK": "1" }
+command: npx --yes skills@latest add https://run402.com -s run402-buzz -a codex -y
+```
+
+Shell-only POSIX environments use:
+
+```sh
+cd "$HOME/.buzz"
+DO_NOT_TRACK=1 npx --yes skills@latest add https://run402.com -s run402-buzz -a codex -y
+```
+
+Windows PowerShell uses:
+
+```powershell
+Set-Location (Join-Path $HOME '.buzz')
+$env:DO_NOT_TRACK = '1'
+npx --yes skills@latest add https://run402.com -s run402-buzz -a codex -y
+```
+
+Claude Code uses `-a claude-code`, Goose uses `-a goose`, a confirmed `.agents/skills` consumer may use `-a universal`, and Claude Code plus Codex uses `-a claude-code codex`. `universal` is the shared path, not all runtimes; do not use the invalid explicit target `-a claude`. The skill bytes come from immutable digest-verified artifacts at `run402.com`; first-run `npx` can still require npm. GitHub is the one availability-only fallback, while any integrity failure stops before setup. Success reports the observed first-party digest and exact managed-workspace path; a GitHub source or global runtime path is never mislabeled first-party.
+
+The file installation stage is inert. Continuing onboarding publishes a durable public kind-1 Nostr event and durable Run402 proof connecting the two public identities; revocation does not erase their history, and a Buzz-managed event may also expose its owner's public NIP-OA attestation. The agent initializes only if needed, creates or reuses the link, independently verifies it, and immediately offers one context-relevant quick test or demo with `Deployment: none` retained in the expanded receipt. On Windows the setup helper runs npm's and Run402's JavaScript entrypoints through the exact managed Node runtime with `shell: false`, avoiding `.cmd` process-boundary failures. It waits for explicit approval before building or deploying. After independently verifying the live app, it creates an inert durable offer and posts a normal HTTPS “Become an owner” handoff. The browser owns human login/passkey and the existing Buzz six-digit consent callback; no human terminal command or Buzz change is required.
+
+See the [`buzz/` guide](./buzz/README.md) for prerequisites, the no-secret signer model, released-client fixtures, migration guidance, and the full workflow, or inspect the exact [`run402-buzz` listing on skills.sh](https://skills.sh/kychee-com/run402/run402-buzz). The low-level CLI commands remain available for debugging, but they are not a competing onboarding path.
+
+The community control plane keeps four concepts separate: installing the skill is inert shared capability; installing a community associates a Buzz relay community with a Run402 organization after dual consent; human adoption records a terminal consent receipt, creates the human's public Buzz identity link, and adds an ordinary owner membership without demoting the founder agent; agent enrollment gives each later agent principal only bounded, expiring grants to named existing projects. The completed receipt, public attribution, and membership remain independent: revoking the link does not remove org authority, and removing the membership does not revoke the link or rewrite the receipt. Buzz itself remains unchanged: approval uses already-shipped browser-fragment/kind-1 behavior plus released NIP-11/NIP-43 evidence, while Run402 owns offers, organizations, descriptor discovery, and lifecycle. `run402 buzz status` capability-detects older gateways; MCP only renders exact HTTPS/CLI next steps. See the [Fizz/Honey workflow](./buzz/references/community-control-plane.md).
+
+**Astro SSR + ISR cache.** For Astro apps, use `@run402/astro` 1.0+: `export default run402();` in `astro.config.mjs` returns an `AstroUserConfig` composing the SSR adapter (Lambda + SnapStart + ISR cache + AsyncLocalStorage request-context), image integration, and build-time detectors. Functions opt into the SSR class via `FunctionSpec.class: "ssr"` in `ReleaseSpec`; the gateway provisions SnapStart and caches HTML responses keyed by `(host, path, search, method, locale, release_id)`. Cache is bypass-by-default (no-store unless `Cache-Control` explicitly allows it AND no `Set-Cookie` AND no auth-taint flag from `auth.*` helpers / payment primitives). Invalidate from in-function code or out-of-band: `r.cache.invalidate(url)` / `r.cache.invalidatePrefix({ host, prefix })` / `r.cache.invalidateAll({ host })` (SDK), `run402 cache invalidate <url>` (CLI). Inspect cached state with `r.cache.inspect(url)` / `run402 cache inspect <url>`. Agent DX helpers also in the CLI: `run402 doctor` (5 health checks), `run402 dev` (Astro dev with `.env.local`), `run402 logs --request-id req_...` (correlate across functions). Full reference at [`astro/README.md`](./astro/README.md) and [`cli/llms-cli.txt`](./cli/llms-cli.txt) (R402_* SSR Runtime Error Codes section).
+
+## CLI: `run402`
+
+```bash
+npm install -g run402@latest
+```
+
+Every subcommand prints JSON to stdout, JSON errors to stderr, exits 0 on success and 1 on failure: designed for an agent shell, not a human. Full reference: [`cli/llms-cli.txt`](./cli/llms-cli.txt) (also at <https://docs.run402.com/llms-cli.txt>) — an index carrying the whole first-deploy contract plus a table of fetchable topic slices (`/llms-cli-deploy.txt`, `/llms-cli-commands.txt`, `/llms-cli-functions.txt`, …); `/llms-cli-full.txt` is the whole thing in one document.
+
+```bash
+run402 up --name my-app -y                # recursive SDK action runner: init/tier/project/link/deploy
+run402 up verify                          # rerun app HTTP verification without a deploy
+run402 up --nested -y                     # app root inside another repo: its own nested repo + encrypted remote
+run402 doctor                             # { ok, blocking[], warnings[], checks[] }: ok means this agent can ship
+run402 logs --request-id req_abc123       # every function in the project; app output only (--all for the raw stream)
+run402 init                              # one-shot wallet + faucet + tier check
+run402 pay https://seller.example/resource --max-usd 0.05 --require-receipt
+run402 status                            # organization snapshot (wallet, rail, balances, tier, projects)
+run402 projects provision --name my-app
+run402 projects sql <project_id> "CREATE TABLE …"
+run402 projects validate-expose <project_id> --file manifest.json
+run402 projects apply-expose <project_id> --file manifest.json
+run402 sites deploy-dir ./dist
+run402 deploy verify op_... --project <project_id> --wait  # confirm gateway/edge release coherence
+run402 deploy releases active --project <project_id>  # inspect current-live release inventory
+run402 deploy resolve https://example.com/events --project <project_id> --method GET
+run402 deploy --manifest app.json --json     # deploy only; rehearses automatically when a live release has migrations to protect
+run402 snapshots list prj_...
+run402 branches create prj_... --ttl-days 7 --json
+run402 functions deploy <project_id> <name> --file fn.ts
+run402 functions runs create <project_id> <name> --event-type reminder.send --idempotency-key reminder:123 --delay 10m
+run402 ci link github --project <project_id>       # GitHub Actions OIDC deploy binding (--route-scope for CI routes)
+run402 assets put ./asset.png --immutable
+run402 assets diagnose <url>             # inspect live CDN state for a public URL
+run402 cdn wait-fresh <url> --sha <hex>  # poll until a mutable URL serves the new SHA
+```
+
+`up` is the only compound CLI command: it calls the SDK action runner, emits `steps[]`, and writes `.run402/project.json` when it needs to remember the workspace project. Against run402 Core it skips Cloud wallet/tier prerequisites and fails closed if no Core project is selected.
+
+Rehearsal is automatic: a migration-bearing `run402 up` / `run402 deploy` against a project with a live release is rehearsed on a contained branch and committed only on a passing report (`result.deploy.rehearsal`); a first deploy has nothing to protect and commits directly (`reason: "no_live_release"`), and a redeploy whose migrations are all already applied with identical checksums is skipped as `migrations_unchanged`, so a page-only redeploy that still carries its migrations ships in seconds. `--no-rehearse` skips it. ADVANCED: `run402 deploy rehearse [<plan_id>] [--manifest <path>]` rehearses without committing — from a persisted plan, or from the manifest in the current directory (plan, upload, rehearse). Manual restore points live under `run402 snapshots create|list|get|restore|delete`; restore is a two-step plan/confirm flow. Branch projects live under `run402 branches create|list|renew|delete`, default to a 7-day TTL, use sandboxed email by default, and are marked noindex; a parent with no live release yields an empty branch.
+
+Your HTML never needs a pasted key: every Run402 host serves `/_run402/config.js` (`window.RUN402 = { project_id, api_base, anon_key }`) for the project it resolves to. `run402 up` also names this principal when it has none — `RUN402_AGENT_NAME` if your runtime declares one (it overrides an existing name), else a detected client (`claude-code`, `codex`, `cursor`, `grok`; `RUN402_CLIENT=<name>` declares a client with no marker of its own, checked first); when nothing is known nothing is written — so promotion credit names you; set it any time with `run402 whoami --set-name <name>`. `result.identity` always reports `detected` (the client seen this run) and `detection: { applied, reason }`, where `name_already_set` means a client was detected but the principal already had a name. `projects provision` never touches git; `up` scaffolds a `run402` remote on the app root only, and an app root inside another repository is skipped with a `create_nested_repo` next action unless you pass `--nested`, which makes it its own nested repository (one line appended to the enclosing repository's local `.git/info/exclude`, nothing else touched).
+
+Portable archives export the supported run402 Core runtime slice of a Cloud project for local Core import. This is the no-lock-in trust path, separate from allowance/spend-cap financial-risk controls.
+
+```bash
+run402 archives create <project_id> --target cloud --scope portable-runtime-v1 --auth stubs --consistency pause-writes --wait --output ./project.r402ar --json
+run402 archives verify ./project.r402ar --json
+run402 archives import ./project.r402ar --target core --name imported-project --env-file ./required.env --json
+```
+
+`--target` names the deployment each verb talks to: `create`, `status`, and `download` export from Run402 Cloud (`--target cloud`, the default); `import` loads into a local Run402 Core (`--target core`, the default). Archive v1 excludes secret values, auth credentials, logs, billing/allowance state, Cloud operations metadata, Cloud import, and existing-project merge import. Verify is local/offline and checks integrity plus compatibility; archives remain untrusted input until Core import verifies and stages them.
+
+The active project is sticky: `run402 projects use <project_id>` server-validates `<project_id>` and stores it as the default for subsequent `<project_id>`-taking subcommands, so most commands work without it. Local key material is managed separately under `run402 credentials project-keys ...`; that cache is never project inventory.
+
+## MCP server: `run402-mcp`
+
+```bash
+npx -y run402-mcp                        # standalone test
+```
+
+Eight tools, a few kilobytes of schema in a host's context: `up` and `deploy` for the first deploy, `status`, `whoami`, `doctor`, `docs`, `run`, and `expand_result`. Everything else is a `run` snippet against `r`, the Node SDK client, executed in a QuickJS-in-WebAssembly sandbox with no filesystem, process, or network of its own. Needs Node.js 22.13 or later. **Local, so it can actually pay:** an x402 payment needs a signing key, so a wallet-less remote server cannot make one.
+
+### Remote endpoint (no install)
+
+A hosted streamable-HTTP MCP server runs at **`https://mcp.run402.com/mcp`** with free discovery tools only: `run402_quickstart`, `x402_price_check` (decode any URL's x402 challenge, unpaid), and `experiment_scoreboard`. It never handles funds — paid capabilities (image generation, deploys, payments) require the local server below, which holds *your* wallet. Registry entry `com.run402/mcp` lists both (`packages[]` npm + `remotes[]`). The remote itself runs as a run402 function — the platform hosting its own MCP server.
+
+Stdio MCP transports must keep stdout reserved for JSON-RPC. Use the package bin (`npx -y run402-mcp`) or `node dist/index.js` from a built checkout. If a host insists on `npm start`, set `npm_config_loglevel=silent`; npm's lifecycle banner is stdout and otherwise appears as non-JSON prelude. The repo `.npmrc` and Docker image set this for source/container hosts.
+
+### Claude Desktop
+
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "run402": { "command": "npx", "args": ["-y", "run402-mcp"] }
+  }
+}
+```
+
+### Cursor
+
+Add to `.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "run402": { "command": "npx", "args": ["-y", "run402-mcp"] }
+  }
+}
+```
+
+### Cline
+
+Add to your Cline MCP settings:
+
+```json
+{
+  "mcpServers": {
+    "run402": { "command": "npx", "args": ["-y", "run402-mcp"] }
+  }
+}
+```
+
+### Claude Code
+
+```bash
+claude mcp add run402 -- npx -y run402-mcp
+```
+
+## OpenClaw skill
+
+```bash
+cp -r openclaw ~/.openclaw/skills/run402
+cd ~/.openclaw/skills/run402/scripts && npm install
+```
+
+Each script re-exports from `cli/lib/*.mjs`: the OpenClaw command surface is identical to the CLI command surface by construction. See [`openclaw/README.md`](./openclaw/README.md).
+
+## MCP tools
+
+| Tool | What it does |
+|------|--------------|
+| `up` | The first deploy: any missing setup (wallet, tier, project, workspace link), then the deploy. Returns the `run402.up.result` envelope. |
+| `deploy` | Applies a ReleaseSpec to a project (`r.project(id).apply`): database, functions, site, `site.public_paths`, assets, subdomains, `routes.replace`. Returns the `DeployResult`. |
+| `status` | `r.status()`: the wallet the server acts as (`local_label`, `server_label`, address), tier and lease, allowance, projects, active project. |
+| `whoami` | `r.orgs.whoami()`: the remote principal, its authenticators, org memberships, and sign-in session grade. |
+| `doctor` | `r.doctor()`: `{ ok, blocking[], warnings[], checks[] }`. |
+| `docs` | The SDK reference and the `run` primer, shipped in the package: `topic` (a namespace or section) or `search`. |
+| `run` | Runs a TypeScript snippet against the SDK in a sandbox; returns the value, the captured logs, and the SDK calls it made. |
+| `expand_result` | Pages a stored result: a `run` value or its logs, a `docs` answer, `up`'s detail. |
+
+A snippet is the body of an async function; the value of its last expression is the result:
+
+```json
+{ "code": "const { projects } = await r.projects.list();\nprojects.filter((p) => !p.site_url).map((p) => p.id)" }
+```
+
+The result is `{ status, value, value_ref, shown, total, logs, logs_ref, calls, duration_ms, wallet, error? }`: a large value is stored whole by item (an array's elements, a result's `rows`) and its leading whole items arrive in `value_window`, including in `structuredContent` (`expand_result` pages the rest by item), `calls[]` lists every SDK call with its outcome, and a timeout (60 s by default, 300 s at most) still lists the calls that completed. An SDK error passes through with its own `code` and `next_actions`.
+
+**Structured results.** Every tool also returns its result as `structuredContent` under a declared `outputSchema`, so a host reads fields instead of parsing text. The object has `status: "ok" | "error"`; the fixed tools put the SDK object under `result`, and every error carries `error.code`, `error.message`, and `error.next_actions`. The fenced JSON in the text is the same object.
+
+**One-time secrets stay in the CLI.** An operation that returns or consumes a one-time secret (minting or rotating a grant key, a Handoff or Invite Key, a Room Invite Key, provisioning a project or rotating its credentials, a project token, creating, importing, or exporting a wallet, the Lightning pairing) refuses inside `run` with `SECRET_REQUIRES_CLI` and one next action, `{ "type": "run_cli_command", "command": "run402 …" }`, naming the exact command to hand the person. The refusal is in the SDK method itself, before any request, so nothing secret reaches a result.
+
+Full reference: [`llms-mcp.txt`](https://docs.run402.com/llms-mcp.txt).
+
+## Configuration
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `RUN402_API_BASE`        | `https://api.run402.com`         | API base URL (override for staging) |
+| `RUN402_CONFIG_DIR`      | `~/.config/run402`               | Local credential storage base directory (named wallets live under `profiles/<name>/`) |
+| `RUN402_WALLET`          | `default`                        | Active named wallet (profile). Overridden by `--wallet <name>` and per-directory `.run402.json`; `RUN402_PROFILE` is an alias. See `run402 wallets`. |
+| `RUN402_WALLET_PATH`  | `{config_dir}/wallet.json`    | Custom wallet file path |
+| `RUN402_GRANT_KEY`       | *(unset)*                        | A grant-key bearer from `run402 grants create --key`. When set it is the only credential sent, so a process with no wallet can deploy. |
+
+Local state lives at:
+
+- profile `state.json`: active project pointer and profile state
+- profile `credentials/project-keys.v1.json` (`0600`): local anon/service key cache for explicit credential-required operations
+- `~/.config/run402/wallet.json` (`0600`): wallet for x402 / MPP signing
+
+Legacy `projects.json` files are one-way migration input only. `anon_key` and `service_key` have no expiry; lease enforcement happens server-side. Inspect cache state with `run402 credentials project-keys status --project <project_id>` and export secrets only with `run402 credentials project-keys export --project <project_id> --reveal`.
+
+## Development
+
+```bash
+npm run build           # builds core/, sdk/, then the MCP server
+npm test                # SKILL + sync + unit tests
+npm run test:e2e        # builds generated CLI SDK mirrors, then runs CLI end-to-end tests
+npm run test:sync       # checks MCP/CLI/OpenClaw/SDK stay in sync
+npm run test:skill      # validates SKILL.md frontmatter + body
+```
+
+Architecture: every tool / subcommand / skill script is a thin shim over an `@run402/sdk` call. `core/` holds Node-only filesystem primitives (keystore, wallet, SIWE signing) wrapped by the SDK's Node provider. See [`CLAUDE.md`](./CLAUDE.md) for the full layout.
+
+## Links
+
+- Web: <https://run402.com>
+- Self-host backend (run402 Core): <https://github.com/kychee-com/run402-core>
+- API docs (HTTP): <https://run402.com/llms.txt> · <https://run402.com/openapi.json>
+- CLI docs: <https://docs.run402.com/llms-cli.txt> (index + fetchable slices; <https://docs.run402.com/llms-cli-full.txt> for the whole reference)
+- Status: <https://api.run402.com/status>
+- Health: <https://api.run402.com/health>
+
+## License
+
+MIT for this repo (the agent surfaces: SDK, CLI, MCP server, Astro integration, OpenClaw skill). The full backend, [`run402-core`](https://github.com/kychee-com/run402-core), is Apache-2.0.

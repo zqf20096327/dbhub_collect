@@ -1,0 +1,130 @@
+# Snowflake Connector for Python
+
+> [!IMPORTANT]
+> A new version of the driver is being developed in [snowflakedb/drivers](https://github.com/snowflakedb/drivers) and is currently in public preview. See the [documentation](https://docs.snowflake.com/en/developer-guide/python-connector/python-connector-universal-core) for more information.
+
+This package includes the Snowflake Connector for Python, which conforms to the [Python DB API 2.0](https://www.python.org/dev/peps/pep-0249/) specification.
+
+The Snowflake Connector for Python provides an interface for developing Python
+applications that can connect to Snowflake and perform all standard operations. It
+provides a programming alternative to developing applications in Java or C/C++
+using the Snowflake JDBC or ODBC drivers.
+
+The connector has **no** dependencies on JDBC or ODBC.
+It can be installed using ``pip`` on Linux, Mac OSX, and Windows platforms
+where Python 3.10.0 (or higher) is installed.
+
+Snowflake Documentation is available at:
+https://docs.snowflake.com/
+
+Feel free to file an issue or submit a PR here for general cases. For official support, contact Snowflake support at:
+https://community.snowflake.com/s/article/How-To-Submit-a-Support-Case-in-Snowflake-Lodge
+
+## How to build
+
+### Locally
+
+Install a supported Python version. Clone the Snowflake Connector for Python repository, then run the following commands
+to create a wheel package using PEP-517 build:
+
+```shell
+git clone git@github.com:snowflakedb/snowflake-connector-python.git
+cd snowflake-connector-python
+python -m pip install -U pip setuptools wheel build
+python -m build --wheel .
+```
+
+Find the `snowflake_connector_python*.whl` package in the `./dist` directory.
+
+### In Docker
+Or use our Dockerized build script `ci/build_docker.sh` and find the built wheel files in `dist/repaired_wheels`.
+
+Note: `ci/build_docker.sh` can be used to compile only certain versions, like this: `ci/build_docker.sh "3.10 3.11"`
+
+## Code hygiene and other utilities
+These tools are integrated into `tox` to allow us to easily set them up universally on any computer.
+
+* **fix_lint**: Runs `pre-commit` to check for a bunch of lint issues. This can be installed to run upon each
+  time a commit is created locally, keep an eye out for the hint that this environment prints upon succeeding.
+* **coverage**: Runs `coverage.py` to combine generated coverage data files. Useful when multiple categories were run
+  and we would like to have an overall coverage data file created for them.
+* **flake8**: (Deprecated) Similar to `fix_lint`, but only runs `flake8` checks.
+
+## Log secret masking
+
+By default, the connector masks secrets (tokens, passwords, cloud credentials,
+private keys) in records emitted by `snowflake.connector` loggers and by the
+third-party loggers it uses (`botocore`, `boto3`, `aiohttp`, `aiobotocore`,
+`aioboto3`, and vendored `urllib3`). Masking applies even when logging is
+configured with `logging.basicConfig`, not only when Easy Logging
+(`save_logs = true` in `config.toml`) is enabled. The same opt-out covers
+those trees: they also interpolate the message and clear `record.args`.
+
+To disable masking, set `SNOWFLAKE_DISABLE_LOG_SECRET_MASKING` to `true`.
+The connector reads this on every log record, so it is an escape hatch if
+masking is incompatible with a log pipeline (for example one that depends
+on structured `record.args`). Setting it **before** importing
+`snowflake.connector` also skips installing the masking hook:
+
+```bash
+export SNOWFLAKE_DISABLE_LOG_SECRET_MASKING=true
+```
+
+The masker interpolates each log record and clears `record.args`. Leave
+masking enabled unless you need that escape hatch.
+
+## Disable telemetry
+
+By default, the Snowflake Connector for Python collects telemetry data to improve the product.
+You can disable the telemetry data collection by setting the session parameter `CLIENT_TELEMETRY_ENABLED` to `False`
+when connecting to Snowflake:
+```python
+import snowflake.connector
+conn = snowflake.connector.connect(
+    user='XXXX',
+    password='XXXX',
+    account='XXXX',
+    session_parameters={
+      "CLIENT_TELEMETRY_ENABLED": False,
+    }
+)
+```
+
+Alternatively, you can disable the telemetry data collection
+by setting the `telemetry_enabled` property to `False` on the `SnowflakeConnection` object:
+```python
+import snowflake.connector
+conn = snowflake.connector.connect(
+    user='XXXX',
+    password='XXXX',
+    account='XXXX',
+)
+conn.telemetry_enabled = False
+```
+
+## Verifying Package Signatures
+
+To ensure the authenticity and integrity of the Python package, follow the steps below to verify the package signature using `cosign`.
+
+**Steps to verify the signature:**
+- Install cosign:
+  - This example is using golang installation: [installing-cosign-with-go](https://edu.chainguard.dev/open-source/sigstore/cosign/how-to-install-cosign/#installing-cosign-with-go)
+- Download the file from the repository like pypi:
+  - https://pypi.org/project/snowflake-connector-python/#files
+- Download the signature files from the release tag, replace the version number with the version you are verifying:
+  - https://github.com/snowflakedb/snowflake-connector-python/releases/tag/v3.12.2
+- Verify signature:
+  ````bash
+  # replace the version number with the version you are verifying
+  ./cosign verify-blob snowflake_connector_python-3.12.2.tar.gz \
+  --key snowflake-connector-python-v3.12.2.pub \
+  --signature resources.linux.snowflake_connector_python-3.12.2.tar.gz.sig
+
+  Verified OK
+  ````
+
+## Notes
+
+This library currently does not support GCP regional endpoints.  Please ensure that any workloads using through this library do not require support for regional endpoints on GCP.  If you have questions about this, please contact [Snowflake Support](https://community.snowflake.com/s/article/How-To-Submit-a-Support-Case-in-Snowflake-Lodge).
+
+The driver uses Rust library called sf_mini_core, you can find its source code [here](https://github.com/snowflakedb/universal-driver/tree/main/sf_mini_core)

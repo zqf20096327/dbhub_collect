@@ -1,0 +1,936 @@
+# ocms-go
+
+> A single-binary Go CMS with HTMX/Alpine.js admin, REST API, themes & modules. SQLite by default — drop onto a server, run the rest.
+
+[![Live demo](https://img.shields.io/badge/demo-ocms--demo.fly.dev-success?logo=fly.io)](https://ocms-demo.fly.dev/)
+[![Go](https://github.com/olegiv/ocms-go/actions/workflows/go.yml/badge.svg)](https://github.com/olegiv/ocms-go/actions/workflows/go.yml)
+[![CodeQL](https://github.com/olegiv/ocms-go/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/olegiv/ocms-go/actions/workflows/github-code-scanning/codeql)
+[![Latest release](https://img.shields.io/github/v/release/olegiv/ocms-go)](https://github.com/olegiv/ocms-go/releases)
+[![Go Report Card](https://goreportcard.com/badge/github.com/olegiv/ocms-go)](https://goreportcard.com/report/github.com/olegiv/ocms-go)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+## Try it
+
+**Live demo:** [ocms-demo.fly.dev](https://ocms-demo.fly.dev/) · **Admin:** [/admin](https://ocms-demo.fly.dev/admin)
+
+Poke around, break things, see how it feels. The demo resets to a clean state every 24 hours (daily cron at 01:00 UTC, plus a catch-up reset on machine wake if Fly auto-stopped the instance during a quiet period). Worst-case staleness: 24h + the idle gap.
+
+Hosted on [Fly.io](https://fly.io) — see [`fly.toml`](fly.toml) and [`docs/demo-deployment.md`](docs/demo-deployment.md) for the full deployment recipe.
+
+## Why ocms-go?
+
+Most modern CMSs are PHP monoliths (WordPress, Drupal), Node-heavy with build steps (Strapi, Ghost), or fully headless and force you to build a frontend (Directus, Sanity). `ocms-go` is what falls out when you take Go's deployment model seriously and write the CMS as a single binary with an opinionated HTMX admin baked in:
+
+- **One binary.** `scp` it to a server, run it. No PHP-FPM, no Node toolchain, no Docker required.
+- **Admin UI included.** HTMX + Alpine.js, server-rendered. No SPA, no build pipeline, no JS framework lock-in.
+- **REST API for headless use.** Bearer-token auth, per-key permissions, rate limiting, source-CIDR allowlists.
+- **Security defaults that aren't opt-in.** Argon2id, CSP with nonces, CSRF, hCaptcha on forms, signed embed-proxy tokens, HMAC-signed webhooks.
+- **Production-tested.** Powers [ocms.tech](https://ocms.tech), [it-digest.info](https://it-digest.info) and [opossum.su](https://opossum.su).
+
+## Quickstart (90 seconds)
+
+```bash
+git clone https://github.com/olegiv/ocms-go.git && cd ocms-go
+make install-hooks && make assets
+OCMS_SESSION_SECRET=$(openssl rand -hex 32) OCMS_DO_SEED=true make dev
+# → http://localhost:8080/admin   admin@example.com / changeme1234
+```
+
+Or with Docker:
+
+```bash
+OCMS_SESSION_SECRET=$(openssl rand -base64 32) OCMS_DO_SEED=true \
+  docker compose up -d
+```
+
+Source-build prerequisites — see [Prerequisites](#prerequisites) below.
+
+## How it compares
+
+| Project | Lang | Single binary | Built-in admin | License | Active |
+|---|---|---|---|---|---|
+| **ocms-go** | Go | ✅ | ✅ HTMX | GPL-3.0 | ✅ |
+| [ponzu](https://github.com/ponzu-cms/ponzu) | Go | ✅ | ✅ | BSD-3 | last release 2020 |
+| [emarifer/goCMS](https://github.com/emarifer/goCMS) | Go | ✅ | basic | MIT | ✅ |
+| [gouniverse/cms](https://github.com/gouniverse/cms) | Go | (library) | partial | AGPL-3 | ✅ |
+| [Strapi](https://github.com/strapi/strapi) | Node | ❌ | ✅ | MIT | ✅ |
+| [Ghost](https://github.com/TryGhost/Ghost) | Node | ❌ | ✅ | MIT | ✅ |
+| [WordPress](https://wordpress.org) | PHP | ❌ | ✅ | GPL-2.0 | ✅ |
+
+`ocms-go` targets the gap in the Go CMS ecosystem: actively developed, production-grade, single-binary, with a real admin UI.
+
+## Production users
+
+- **[ocms.tech](https://ocms.tech)** — ocms-go official site
+- **[it-digest.info](https://it-digest.info)** — IT/dev news aggregation
+- **[opossum.su](https://opossum.su)** — feature testbed
+- **[tunisie.ru](https://tunisie.ru)** — Tunisia travel portal, migrated from PHP-Nuke
+- **[ocms-demo.fly.dev](https://ocms-demo.fly.dev/)** — public demo, deployed on Fly.io with daily auto-reset
+
+Running `ocms-go` in production? [Tell us about it.](https://github.com/olegiv/ocms-go/issues)
+
+## Roadmap
+
+The path to v1.0 is tracked in the [Roadmap to v1.0 issue](https://github.com/olegiv/ocms-go/issues). Headlines:
+
+- RSS / Atom feeds for pages and categories
+- JSON-LD structured data in the theme layer
+- PostgreSQL adapter alongside SQLite
+- ✅ Public demo — live at [ocms-demo.fly.dev](https://ocms-demo.fly.dev/), 24h auto-reset
+
+Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and the [Good first issues](https://github.com/olegiv/ocms-go/issues) list.
+
+---
+
+## Features
+
+### Content Management
+- **Page Management**: Create, edit, publish, and version pages with a rich content editor
+- **Video Embedding**: Embed YouTube, Vimeo, and Dailymotion videos in pages with responsive rendering
+- **Scheduled Publishing**: Schedule pages to publish at a future date/time
+- **Media Library**: Upload and manage images, documents, and videos with automatic image processing
+  - Automatic thumbnail and variant generation
+  - Folder organization
+  - Featured image support for pages
+- **Menu Builder**: Create navigation menus with drag-and-drop ordering
+  - Hierarchical menu structures
+  - Link to pages or external URLs
+  - Multiple menu locations
+- **Full-Text Search**: Built-in SQLite FTS5 search for fast content discovery
+
+### Taxonomy
+- **Categories**: Organize content with hierarchical categories
+- **Tags**: Add flat taxonomy tags to pages
+
+### Forms
+- **Form Builder**: Create contact forms, surveys, and data collection forms
+  - Multiple field types (text, email, textarea, select, checkbox, radio)
+  - Form submissions management
+  - Read/unread status tracking
+  - Email notifications
+
+### Theme System
+- **Multiple Themes**: Switch between different frontend themes
+- **Theme Settings**: Configurable theme options (colors, layout, etc.)
+- **Template Override**: Themes can customize page templates
+- **Static Assets**: Theme-specific CSS, JavaScript, and images
+
+### Module System
+- **Extensible Architecture**: Add custom functionality via modules
+- **Module Lifecycle**: Init, routes, admin routes, and shutdown hooks
+- **Module Migrations**: Modules can have their own database migrations
+- **Template Functions**: Built-in modules can add custom template functions (custom modules must not — see below)
+- **Active Status Toggle**: Enable/disable modules from admin UI without restart
+- **Module Translations**: Modules can embed their own i18n locale files
+
+### REST API
+- **Full CRUD API**: Complete REST API for pages, media, tags, and categories
+- **API Key Authentication**: Secure API access with bearer token authentication
+- **Permission-Based Access**: Fine-grained permissions (read/write per resource)
+- **Rate Limiting**: Per-key and global rate limiting
+- **API Documentation**: Built-in API documentation page
+
+### SEO
+- **Meta Tags**: Custom title, description, and keywords per page
+- **Open Graph**: Full Open Graph and Twitter Card support
+- **Sitemap**: Auto-generated sitemap.xml
+- **Robots.txt**: Configurable robots.txt generation
+- **Canonical URLs**: Set canonical URLs to avoid duplicate content
+- **NoIndex/NoFollow**: Control search engine indexing per page
+
+### Administration
+- **User Management**: Role-based access control (admin/editor)
+- **Authentication**: Secure session-based authentication with argon2id password hashing
+- **Event Logging**: Comprehensive audit trail for all actions
+- **Admin Dashboard**: Modern responsive UI with HTMX and Alpine.js
+  - Statistics overview
+  - Recent submissions widget
+  - Quick actions
+  - Collapsible sidebar with persistent state
+- **Cache Management**: View cache stats and clear cache
+- **API Key Management**: Create and manage API keys
+- **Bulk List Actions**: Multi-select and bulk delete/revoke on paged admin lists (pages, tags, users, API keys, media, and form submissions)
+- **Per-Page Selector**: Choose items per page on delete-capable admin lists (URL query `per_page`, current-page state in URL only)
+- **List Sorting**: Sort delete-capable admin lists by safe whitelisted columns with clear active sort highlighting (URL queries `sort` + `dir`)
+- **SQLite Database**: Zero-configuration embedded database with migrations
+
+### Multi-Language Support
+- **Content Translation**: Translate pages, categories, and tags into multiple languages
+- **Language Management**: Configure 2–10 character codes using lowercase ASCII letters, digits, and hyphens
+- **Translation Linking**: Link content across languages for seamless switching
+- **Language Switcher**: Built-in frontend component for language navigation
+- **URL Prefixes**: Language-prefixed URLs (e.g., `/ru/about-us`)
+- **RTL Support**: Right-to-left language support
+- **Admin UI Localization**: Translatable admin interface (English + Russian included)
+
+### Webhooks
+- **Event System**: Trigger webhooks on content events (create, update, delete, publish)
+- **Delivery Tracking**: Monitor delivery status and response codes
+- **Retry Logic**: Exponential backoff retry for failed deliveries
+- **HMAC Signatures**: Secure payloads with HMAC-SHA256 signatures
+- **Custom Headers**: Add custom headers to webhook requests
+- **Dead Letter Queue**: Track permanently failed deliveries
+- **Event Debouncing**: Coalesce rapid-fire events to reduce webhook noise
+
+### Import/Export
+- **JSON Export**: Export site content to portable JSON format
+- **ZIP Export**: Include media files in export archives
+- **Selective Export**: Choose which content types to include
+- **JSON Import**: Import content from JSON files
+- **ZIP Import**: Restore media files from archives
+- **Conflict Resolution**: Skip, overwrite, or rename on conflicts
+- **Dry Run Mode**: Preview import changes before applying
+
+### Performance
+- **Multi-Level Caching**: In-memory and optional Redis caching
+- **Redis Support**: Distributed caching for multi-instance deployments
+- **Response Compression**: Gzip compression for HTML and JSON responses
+- **Graceful Shutdown**: Clean shutdown with request draining
+- **Health Check**: `/health` endpoint for monitoring
+
+## Prerequisites
+
+Prebuilt release binaries have no external runtime dependencies beyond the operating system. Set `OCMS_SESSION_SECRET` before starting the server; see [Environment Variables](#environment-variables).
+
+Building from source requires:
+
+- Go 1.26 or later
+- [Node.js](https://nodejs.org/) (npm) for frontend dependencies
+- [sqlc](https://sqlc.dev/) for SQL code generation
+- [templ](https://templ.guide/) for type-safe HTML templates
+- [goose](https://github.com/pressly/goose) for database migrations
+- [Dart Sass](https://sass-lang.com/dart-sass) for SCSS compilation
+
+## Installation
+
+### Prebuilt binary (recommended)
+
+Download the latest release archive for your OS and architecture:
+
+```bash
+curl -L https://github.com/olegiv/ocms-go/releases/latest/download/ocms-linux-amd64.tar.gz | tar -xz
+./ocms -version
+```
+
+First run — scaffold a site and start it:
+
+```bash
+./ocms init my-site
+cd my-site
+../ocms serve        # or put ocms on your PATH and run: ocms serve
+```
+
+`ocms init` creates `my-site/` with a `.env` (including a freshly generated
+`OCMS_SESSION_SECRET`) plus `data/`, `uploads/`, and `custom/` directories.
+`ocms serve` starts the server, reading `./.env` from the current directory.
+Running `ocms` with no command still starts the server, so existing
+systemd/Docker setups are unaffected.
+
+Open `http://localhost:8080/admin/` and log in with
+`admin@example.com` / `changeme1234`. Change the admin email and password
+immediately. Stop the foreground process with `Ctrl+C`, set
+`OCMS_DO_SEED=false` in `my-site/.env`, then run `serve` again for normal runs.
+
+Keep `OCMS_SESSION_SECRET` stable; regenerating it invalidates active sessions.
+Do not set `OCMS_ENV=production` for this seeded bootstrap run. Production
+startup rejects default seeded credentials.
+
+Available release archives:
+
+- `ocms-linux-amd64.tar.gz`
+- `ocms-linux-arm64.tar.gz`
+- `ocms-darwin-arm64.tar.gz`
+
+`go install` is not supported for the CMS binary because Go does not run the frontend asset pipeline before evaluating `//go:embed`.
+
+### Build from source
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/olegiv/ocms-go.git
+   cd ocms-go
+   ```
+
+2. Install dependencies:
+   ```bash
+   go mod download
+   ```
+
+3. Install required tools:
+   ```bash
+   go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+   go install github.com/a-h/templ/cmd/templ@latest
+   go install github.com/pressly/goose/v3/cmd/goose@latest
+   ```
+
+4. Generate code:
+   ```bash
+   sqlc generate
+   templ generate
+   ```
+
+5. Build assets (installs npm dependencies and compiles SCSS):
+   ```bash
+   make assets
+   ```
+
+6. Build the production binary:
+   ```bash
+   make build-prod
+   ```
+
+## Environment Variables
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `OCMS_SESSION_SECRET` | Secret key for session encryption (min 32 bytes) | - | Yes |
+| `OCMS_DB_PATH` | Path to SQLite database file | `./data/ocms.db` | No |
+| `OCMS_SERVER_HOST` | Server host address | `localhost` | No |
+| `OCMS_SERVER_PORT` | Server port number | `8080` | No |
+| `OCMS_ENV` | Environment mode (`development`/`production`) | `development` | No |
+| `OCMS_LOG_LEVEL` | Log level (`debug`/`info`/`warn`/`error`) | `info` | No |
+| `OCMS_ERROR_LOG_PATH` | Path for a separate error log file (5xx/ERROR+ also go to stdout) | - | No |
+| `OCMS_CUSTOM_DIR` | Directory for custom themes and modules | `./custom` | No |
+| `OCMS_ACTIVE_THEME` | Active theme (overrides DB/admin setting) | `default` | No |
+| `OCMS_SITE_URL` | Full site URL written into site config on startup (overrides DB/admin setting). Required for the sitemap and agent-discovery documents, which answer 503 while it is unset. Must be scheme and host only, e.g. `https://example.com` — a path, query, fragment, credentials or an out-of-range port fails startup, because routes are served from the root | - | No |
+| `OCMS_DO_SEED` | Seed database with default admin and config | `false` | No |
+| `OCMS_CACHE_TTL` | Default cache TTL in seconds | `3600` | No |
+| `OCMS_REDIS_URL` | Redis URL for distributed caching | - | No |
+| `OCMS_CACHE_PREFIX` | Redis key prefix | `ocms:` | No |
+| `OCMS_CACHE_MAX_SIZE` | Max entries for in-memory cache | `10000` | No |
+| `OCMS_HCAPTCHA_SITE_KEY` | hCaptcha site key for login protection | - | No |
+| `OCMS_HCAPTCHA_SECRET_KEY` | hCaptcha secret key for login protection | - | No |
+| `OCMS_HCAPTCHA_DISABLED` | Force-disable hCaptcha regardless of database settings | `false` | No |
+| `OCMS_GEOIP_DB_PATH` | Path to GeoLite2-Country.mmdb for country detection | - | No |
+| `OCMS_UPLOADS_DIR` | Directory for uploaded media files | `./uploads` | No |
+| `OCMS_TRUSTED_PROXIES` | Trusted reverse-proxy CIDRs/IPs; forwarding headers are ignored unless peer is trusted | - | No |
+| `OCMS_REQUIRE_TRUSTED_PROXIES` | Fail startup in production if trusted proxy CIDRs/IPs are not configured | `false` (`true` in production when unset) | No |
+| `OCMS_API_ALLOWED_CIDRS` | Global source CIDRs/IPs allowed to use API keys | - | No |
+| `OCMS_REQUIRE_API_ALLOWED_CIDRS` | Fail API key auth when global API source CIDRs are not configured | `false` (`true` in production when unset) | No |
+| `OCMS_REQUIRE_API_KEY_EXPIRY` | Require API keys to have expiration timestamps | `false` (`true` in production when unset) | No |
+| `OCMS_REQUIRE_API_KEY_SOURCE_CIDRS` | Require API keys to have per-key source CIDR restrictions | `false` (`true` in production when unset) | No |
+| `OCMS_REVOKE_API_KEY_ON_SOURCE_IP_CHANGE` | Deactivate API keys when source IP changes and the key has no per-key CIDRs | `false` (`true` in production when unset) | No |
+| `OCMS_API_KEY_MAX_TTL_DAYS` | Maximum API key lifetime in days (`0` disables, max `365`) | `0` (`90` in production when unset) | No |
+| `OCMS_EMBED_ALLOWED_ORIGINS` | Allowed browser origins for public embed proxy routes; required for working browser embed requests in production | - | No |
+| `OCMS_EMBED_ALLOWED_UPSTREAM_HOSTS` | Allowed upstream hosts for embed provider API endpoints | - | No |
+| `OCMS_REQUIRE_EMBED_ALLOWED_ORIGINS` | Fail startup in production if embed proxy is active without origin allowlist | `false` (`true` in production when unset) | No |
+| `OCMS_REQUIRE_EMBED_ALLOWED_UPSTREAM_HOSTS` | Fail startup in production if embed proxy is active without upstream host allowlist | `false` (`true` in production when unset) | No |
+| `OCMS_EMBED_PROXY_TOKEN` | Secret used to mint short-lived signed embed proxy tokens; required for active embed proxy in production | - | No |
+| `OCMS_REQUIRE_EMBED_PROXY_TOKEN` | Enforce embed proxy token requirement in non-production too | `false` | No |
+| `OCMS_REQUIRE_HTTPS_OUTBOUND` | Require HTTPS for outbound integration URLs | `false` (`true` in production when unset) | No |
+| `OCMS_REQUIRE_FORM_CAPTCHA` | Require captcha on all public form submissions | `false` (`true` in production when unset) | No |
+| `OCMS_WEBHOOK_FORM_DATA_MODE` | `form.submitted` payload data mode (`redacted`/`none`/`full`) | `redacted` | No |
+| `OCMS_REQUIRE_WEBHOOK_FORM_DATA_MINIMIZATION` | Fail startup in production when form webhook payload mode is `full` | `false` (`true` in production when unset) | No |
+| `OCMS_WEBHOOK_ALLOWED_HOSTS` | Allowed destination hosts for active webhook deliveries (exact hostname match) | - | No |
+| `OCMS_REQUIRE_WEBHOOK_ALLOWED_HOSTS` | Fail startup in production when active webhooks exist without destination host allowlist | `false` (`true` in production when unset) | No |
+| `OCMS_MIGRATOR_ALLOWED_DB_HOSTS` | Allowed source-database hosts for the Migrator module (bare hostnames or IPs, no port). Empty = no restriction; migrator routes are admin-only regardless (see `docs/migrator-module.md`) | - | No |
+| `OCMS_REQUIRE_MIGRATOR_ALLOWED_DB_HOSTS` | Fail startup in production when the Migrator module is active without a source-database host allowlist | `false` (`true` in production when unset) | No |
+| `OCMS_MIGRATOR_ALLOWED_FILE_ROOTS` | Comma-separated absolute roots from which the Migrator may read local media. `DRUPAL_FILES` and `ELEFANT_FILES` are also trusted roots; media import fails closed when none are configured | - | No |
+| `OCMS_SANITIZE_PAGE_HTML` | Sanitize page HTML before rendering to visitors | `false` (`true` in production when unset) | No |
+| `OCMS_REQUIRE_SANITIZE_PAGE_HTML` | Fail startup in production if page HTML sanitization is disabled | `false` (`true` in production when unset) | No |
+| `OCMS_BLOCK_SUSPICIOUS_PAGE_HTML` | Reject page writes containing suspicious HTML patterns | `false` (`true` in production when unset) | No |
+| `OCMS_REQUIRE_BLOCK_SUSPICIOUS_PAGE_HTML` | Fail startup in production when suspicious page markup blocking is disabled or existing pages contain suspicious markers | `false` (`true` in production when unset) | No |
+| `OCMS_HSTS_PRELOAD` | Append `; preload` to the HSTS header in production; only enable after submitting to the HSTS preload list (see `docs/reverse-proxy.md`) | `false` | No |
+| `OCMS_DEMO_MODE` | Enable demo content seeding (users, pages, media) | `false` | No |
+
+## Development
+
+### Quick Start
+
+```bash
+# Set required environment variable
+export OCMS_SESSION_SECRET="your-secret-key-at-least-32-bytes"
+
+# Install repository-managed git hooks (run once per clone)
+make install-hooks
+
+# Run with asset compilation
+make dev
+
+# Or run without rebuilding assets
+make run
+```
+
+### Available Make Commands
+
+| Command | Description |
+|---------|-------------|
+| `make dev` | Build assets and run development server |
+| `make run` | Run development server (no asset build) |
+| `make stop` | Stop development server on port 8080 |
+| `make restart` | Stop and restart development server |
+| `make build` | Build binary to `bin/ocms` |
+| `make build-prod` | Build optimized binary (stripped, trimmed) |
+| `make build-linux-amd64` | Cross-compile no-cgo Linux AMD64 binary |
+| `make build-linux-arm64` | Cross-compile no-cgo Linux ARM64 binary |
+| `make build-darwin-arm64` | Cross-compile no-cgo macOS ARM64 binary |
+| `make build-all-platforms` | Build no-cgo Linux AMD64/ARM64 and macOS ARM64 binaries |
+| `make test` | Run all tests |
+| `make clean` | Remove build artifacts |
+| `make clean-db` | Remove database files |
+| `make migrate-up` | Apply pending migrations |
+| `make migrate-down` | Rollback last migration |
+| `make migrate-status` | Show migration status |
+| `make migrate-create` | Create new migration file |
+| `make assets` | Install npm deps and compile SCSS |
+| `make sqlc` | Regenerate sqlc code from SQL queries |
+| `make templ` | Regenerate templ Go code from `.templ` files |
+| `make deploy-binary` | Deploy binary to remote server (no custom content) |
+| `make commit-prepare` | Proxy to Claude slash command `/commit-prepare` |
+| `make commit-do` | Proxy to Claude slash command `/commit-do` |
+| `make code-quality` | Proxy to Claude slash command `/code-quality` |
+| `make security-audit` | Proxy to Claude slash command `/security-audit` |
+| `make commit-prepare-local` | Run local commit-prepare shell script |
+| `make commit-do-local` | Run local commit-do shell script |
+| `make code-quality-local` | Run local code quality shell script (`golangci-lint`, `nilaway`, `go test`) |
+| `make security-audit-local` | Run local security audit shell script (writes to `.audit/`) |
+| `make install-hooks` | Configure git to use repository-managed hooks from `.githooks` |
+| `make check-no-absolute-paths` | Fail if tracked files contain local absolute paths (`/Users/...`, `/home/...`, `C:\Users\...`) |
+
+### Default Admin Credentials
+
+On first run with `OCMS_DO_SEED=true`, the application seeds a default admin user:
+- **Email**: admin@example.com
+- **Password**: changeme1234
+
+Change these credentials immediately after first login.
+
+### Demo Mode
+
+With `OCMS_DEMO_MODE=true` (requires `OCMS_DO_SEED=true`), additional demo content is seeded including sample pages, categories, tags, media, and menu items. Two demo users are created:
+
+- **Admin**: demo@example.com / demo1234demo
+- **Editor**: editor@example.com / demo1234demo
+
+See [docs/demo-deployment.md](docs/demo-deployment.md) for Fly.io deployment and demo configuration details.
+
+## Docker
+
+### Quick Start with Docker
+
+```bash
+# Clone the repository
+git clone https://github.com/olegiv/ocms-go.git
+cd ocms-go
+
+# Start with Docker Compose (generates session secret automatically)
+OCMS_SESSION_SECRET=$(openssl rand -base64 32) OCMS_DO_SEED=true docker compose up -d
+
+# View logs
+docker compose logs -f ocms
+```
+
+Access the admin panel at http://localhost:8080/admin with:
+- **Email**: admin@example.com
+- **Password**: changeme1234
+
+### Docker Commands
+
+| Command | Description |
+|---------|-------------|
+| `docker compose up -d` | Start oCMS |
+| `docker compose --profile redis up -d` | Start with Redis caching |
+| `docker compose down` | Stop services |
+| `docker compose logs -f ocms` | View logs |
+| `docker compose build --pull ocms && docker compose up -d` | Rebuild local image and restart |
+
+### Volume Mounts
+
+| Volume | Container Path | Purpose |
+|--------|----------------|---------|
+| `ocms_data` | `/app/data` | SQLite database |
+| `ocms_uploads` | `/app/uploads` | Media uploads |
+| `./custom` | `/app/custom` | Custom themes and modules |
+
+### Building the Docker Image
+
+Docker builds use the repository source and generate `web/static/dist` inside the
+builder stage. GitHub release archives are for binary installs and are not used
+by Docker Compose.
+
+```bash
+# Build with version info
+docker build \
+  --build-arg VERSION=$(git describe --tags --always) \
+  --build-arg GIT_COMMIT=$(git rev-parse --short HEAD) \
+  --build-arg BUILD_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ) \
+  -t ocms:latest .
+```
+
+### Production Configuration
+
+Create a `.env` file for production:
+
+```bash
+OCMS_SESSION_SECRET=your-secure-secret-key-at-least-32-bytes
+OCMS_ENV=production
+OCMS_DO_SEED=false
+OCMS_ACTIVE_THEME=default
+OCMS_TRUSTED_PROXIES=127.0.0.1/32,10.0.0.0/8
+OCMS_API_ALLOWED_CIDRS=203.0.113.0/24
+
+# Hardened embed proxy baseline (when embed module/provider is enabled)
+# Origin matching is exact (scheme + host). Include all real hostnames.
+OCMS_EMBED_ALLOWED_ORIGINS=https://example.com,https://www.example.com
+OCMS_EMBED_ALLOWED_UPSTREAM_HOSTS=api.dify.ai
+OCMS_REQUIRE_EMBED_ALLOWED_ORIGINS=true
+OCMS_REQUIRE_EMBED_ALLOWED_UPSTREAM_HOSTS=true
+OCMS_EMBED_PROXY_TOKEN=replace-with-embed-proxy-token
+OCMS_WEBHOOK_ALLOWED_HOSTS=hooks.example.com,events.example.com
+
+# Required when OCMS_REQUIRE_FORM_CAPTCHA is enabled (enabled by default in production)
+OCMS_HCAPTCHA_SITE_KEY=your-site-key
+OCMS_HCAPTCHA_SECRET_KEY=your-secret-key
+
+# Optional: Redis caching
+OCMS_REDIS_URL=redis://redis:6379/0
+```
+
+Then start with:
+```bash
+docker compose --profile redis up -d
+```
+
+## Project Structure
+
+```
+ocms-go/
+├── cmd/ocms/             # Application entry point
+├── docs/                 # Documentation
+│   ├── multi-language.md # Multi-language guide
+│   ├── webhooks.md       # Webhooks configuration
+│   ├── import-export.md  # Import/export guide
+│   └── reverse-proxy.md  # Nginx/Apache/NPM setup
+├── internal/
+│   ├── auth/             # Password hashing utilities
+│   ├── cache/            # Caching layer (memory + Redis)
+│   ├── config/           # Configuration loading
+│   ├── handler/          # HTTP handlers
+│   │   └── api/          # REST API handlers
+│   ├── i18n/             # Internationalization (admin UI)
+│   ├── imaging/          # Image processing (thumbnails, variants)
+│   ├── middleware/       # HTTP middleware (auth, API, rate limiting)
+│   ├── model/            # Domain models
+│   ├── module/           # Module system (registry, hooks)
+│   ├── render/           # Template rendering
+│   ├── scheduler/        # Cron-based task scheduler
+│   ├── seo/              # SEO utilities (sitemap, robots.txt, meta)
+│   ├── service/          # Business logic (media, menus, forms)
+│   ├── session/          # Session management
+│   ├── store/            # Database layer (sqlc generated)
+│   │   ├── migrations/   # Goose SQL migrations
+│   │   └── queries/      # sqlc query definitions
+│   ├── theme/            # Theme loading and management
+│   ├── themes/           # Embedded core themes (default, developer)
+│   ├── transfer/         # Import/export functionality
+│   ├── util/             # Utility functions (slug generation)
+│   └── webhook/          # Webhook system
+├── modules/              # Custom modules directory
+│   └── example/          # Example module implementation
+├── custom/               # User content (mostly gitignored — see custom/README.md)
+│   ├── themes/           # Custom themes (override or extend core)
+│   └── modules/          # Custom modules (see Custom Modules below)
+├── web/
+│   ├── static/           # Static assets (CSS, JS)
+│   │   └── scss/         # SCSS source files
+│   └── templates/        # HTML templates
+│       ├── admin/        # Admin panel templates
+│       ├── api/          # API documentation templates
+│       ├── auth/         # Login/logout templates
+│       ├── errors/       # Error pages (404, 403, 500)
+│       ├── layouts/      # Base layouts
+│       └── partials/     # Reusable components
+├── uploads/              # Media uploads directory
+├── scripts/              # Build scripts
+├── Makefile              # Development commands
+├── site.mk               # Shared make targets for site instances (see below)
+├── package.json          # npm dependencies (htmx, alpine.js)
+└── sqlc.yaml             # sqlc configuration
+```
+
+## REST API
+
+The CMS provides a RESTful API for programmatic access to content.
+
+### Authentication
+
+API requests require a Bearer token in the Authorization header:
+
+```bash
+curl -H "Authorization: Bearer your-api-key" http://localhost:8080/api/v2/pages
+```
+
+Create API keys in the admin panel under **Settings > API Keys**.
+
+The REST surface is `/api/v2`. The OpenAPI 3.1 spec is generated from Go types via [huma](https://huma.rocks/) and served live at `/api/v2/openapi.json` (or `.yaml`). Swagger UI is available at `/api/v2/docs`.
+
+### Endpoints
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/v2/status` | API status | Public |
+| GET | `/api/v2/auth` | Inspect the calling API key | Required |
+| GET | `/api/v2/pages` | List pages | Optional |
+| GET | `/api/v2/pages/{id}` | Get page by ID | Optional |
+| GET | `/api/v2/pages/slug/{slug}` | Get page by slug | Optional |
+| POST | `/api/v2/pages` | Create page | Required |
+| PUT | `/api/v2/pages/{id}` | Update page | Required |
+| DELETE | `/api/v2/pages/{id}` | Delete page | Required |
+| GET | `/api/v2/media` | List media | Optional |
+| GET | `/api/v2/media/{id}` | Get media by ID | Optional |
+| POST | `/api/v2/media` | Upload a single file | Required |
+| POST | `/api/v2/media/batch` | Upload multiple files | Required |
+| PUT | `/api/v2/media/{id}` | Update media metadata | Required |
+| DELETE | `/api/v2/media/{id}` | Delete media | Required |
+| GET | `/api/v2/tags` | List tags | Public |
+| POST | `/api/v2/tags` | Create tag | Required |
+| PUT | `/api/v2/tags/{id}` | Update tag | Required |
+| DELETE | `/api/v2/tags/{id}` | Delete tag | Required |
+| GET | `/api/v2/categories` | List categories (tree or flat) | Public |
+| POST | `/api/v2/categories` | Create category | Required |
+| PUT | `/api/v2/categories/{id}` | Update category | Required |
+| DELETE | `/api/v2/categories/{id}` | Delete category | Required |
+| GET | `/api/v2/openapi.json` | OpenAPI 3.1 spec (JSON) | Public |
+| GET | `/api/v2/openapi.yaml` | OpenAPI 3.1 spec (YAML) | Public |
+| GET | `/api/v2/docs` | Swagger UI | Public |
+| GET | `/health` | Health check | Public |
+
+### Response Format
+
+```json
+{
+  "data": { ... },
+  "meta": {
+    "total": 100,
+    "page": 1,
+    "per_page": 20
+  }
+}
+```
+
+### Error Format
+
+```json
+{
+  "error": {
+    "code": "validation_error",
+    "message": "Validation failed",
+    "details": { "title": "Title is required" }
+  }
+}
+```
+
+## Theme Development
+
+Core themes (`default`, `developer`) are embedded in the binary. To create a custom theme, add a directory in `custom/themes/`:
+
+```
+custom/themes/my-theme/
+├── theme.json          # Theme configuration
+├── templates/
+│   ├── layouts/
+│   │   └── base.html   # Base layout
+│   ├── pages/
+│   │   ├── home.html   # Homepage template
+│   │   ├── page.html   # Single page template
+│   │   └── 404.html    # Not found page
+│   └── partials/
+│       ├── header.html
+│       └── footer.html
+└── static/
+    ├── css/
+    └── js/
+```
+
+To override an embedded theme, create a custom theme with the same name:
+```
+custom/themes/default/    # Overrides the embedded 'default' theme
+```
+
+Custom themes with the same name as core themes take priority.
+
+### theme.json
+
+```json
+{
+  "name": "My Theme",
+  "version": "1.0.0",
+  "author": "Your Name",
+  "description": "A custom theme",
+  "settings": [
+    {
+      "key": "primary_color",
+      "label": "Primary Color",
+      "type": "color",
+      "default": "#3b82f6"
+    }
+  ]
+}
+```
+
+## Module Development
+
+Create custom modules to extend functionality:
+
+```go
+package mymodule
+
+import (
+    "database/sql"
+    "embed"
+
+    "github.com/olegiv/ocms-go/internal/module"
+    "github.com/go-chi/chi/v5"
+)
+
+//go:embed locales
+var localesFS embed.FS
+
+type MyModule struct {
+    module.BaseModule
+}
+
+func New() *MyModule {
+    return &MyModule{
+        BaseModule: module.NewBaseModule("mymodule", "1.0.0", "My custom module"),
+    }
+}
+
+func (m *MyModule) RegisterRoutes(r chi.Router) {
+    r.Get("/my-endpoint", m.handleEndpoint)
+}
+
+func (m *MyModule) Migrations() []module.Migration {
+    return []module.Migration{
+        {
+            Version:     1,
+            Description: "Create my_table",
+            Up: func(db *sql.DB) error {
+                _, err := db.Exec("CREATE TABLE my_table (...)")
+                return err
+            },
+        },
+    }
+}
+
+// TranslationsFS returns embedded locale files for i18n support
+func (m *MyModule) TranslationsFS() embed.FS {
+    return localesFS
+}
+```
+
+Add self-registration in `register.go`:
+
+```go
+package mymodule
+
+import "github.com/olegiv/ocms-go/internal/module"
+
+func init() {
+    module.RegisterCustomModule(New())
+}
+```
+
+Then add a registration file — one per module, never a shared list:
+
+```go
+// custom/modules/imports_mymodule.go
+package modules
+
+import _ "github.com/olegiv/ocms-go/custom/modules/mymodule"
+```
+
+**Do not add template functions.** `AllTemplateFuncs()` returns funcs from
+*active* modules only, while `html/template` resolves names at *parse* time — so
+a theme calling one fails to parse on the next restart after the module is
+deactivated, and an unparseable theme is silently dropped rather than erroring.
+Avoiding that needs a no-op placeholder in `internal/render/render.go`, which is
+a core edit. Expose data over a route instead; `custom/modules/bookmarks/` shows
+the shape with `GET /bookmarks?favorites=1`.
+
+See `docs/custom-modules.md` for the full guide and `custom/modules/bookmarks/` for a working example.
+
+### Module Translations
+
+Modules can embed their own translation files:
+
+```
+mymodule/
+├── module.go
+├── handlers.go
+└── locales/
+    ├── en/
+    │   └── messages.json
+    └── ru/
+        └── messages.json
+```
+
+Translation keys should be prefixed with the module name (e.g., `mymodule.title`).
+
+### Module Active Status
+
+Modules can be enabled/disabled from the admin UI at **Admin > Modules**. When a module is disabled:
+- Public routes return 404
+- Admin routes redirect to the modules list
+- Template functions are not registered
+- The module remains initialized but inactive
+
+### Site instances
+
+Several sites can share one checkout of oCMS, each a small repository holding
+only its own `custom/themes/`, `custom/modules/`, `.env` and deploy wrappers,
+with `core` symlinked here. Their entire build is shared — the site Makefile is
+usually one line:
+
+```make
+include core/site.mk
+```
+
+That provides `dev`, `run`, `build`, `build-prod`, the three cross-builds,
+`test`, `migrate-*`, `sync-modules` and `clean-modules`. Run `make help` in the
+site repo for the full list, and override variables *before* the include.
+
+`sync-modules` copies the site's Go modules into this tree so the compiler can
+see them. Things worth knowing about it:
+
+- **It adds; it does not replace.** One binary serves every instance, so it must
+  carry every site's modules. `make clean-modules` removes a site's own copies.
+- **Ownership is tracked** in `custom/modules/.owners`, so a module you delete
+  from your site repo is removed here on your next sync, and two sites picking
+  the same module name is an error rather than a silent overwrite.
+- **`.templ` files are generated in the site repo** before copying, so `make dev`
+  and `make build` cannot disagree about the generated output.
+- **Targets that touch this tree hold a lock** (`.site-build.lock`), so two sites
+  cannot build into it at once.
+- **The union lives only in this working tree.** After a fresh clone or a
+  `git clean -fdx` here, run `make sync-modules` from *each* site that owns
+  modules before building a binary you intend to deploy — otherwise that binary
+  omits the others' modules and the deploy scripts ship it to every instance.
+
+Set `OCMS_DB_PATH` in each site's `.env`; it and `OCMS_CUSTOM_DIR` /
+`OCMS_UPLOADS_DIR` are resolved against the site directory, because `dev` and
+`run` execute from this checkout.
+
+See [docs/custom-modules.md](docs/custom-modules.md#modules-in-a-multi-site-deployment)
+for the full rationale.
+
+## Testing
+
+Run all tests:
+```bash
+OCMS_SESSION_SECRET=test-secret-key-32-bytes-long!! go test ./...
+```
+
+Run tests with verbose output:
+```bash
+OCMS_SESSION_SECRET=test-secret-key-32-bytes-long!! go test -v ./...
+```
+
+Run tests for a specific package:
+```bash
+OCMS_SESSION_SECRET=test-secret-key-32-bytes-long!! go test -v ./internal/store/...
+```
+
+Check for vulnerabilities:
+```bash
+govulncheck ./...
+```
+
+## Wiki
+
+Project documentation is published at the [GitHub Wiki](https://github.com/olegiv/ocms-go/wiki) and managed as a git submodule at `wiki/`.
+
+### Editing Wiki Pages
+
+```bash
+# Edit a page
+vim wiki/Getting-Started.md
+
+# Publish changes
+/update-wiki
+
+# Or manually:
+cd wiki
+git add -A && git commit -m "Update page" && git push
+cd ..
+git add wiki
+git commit -m "Update wiki submodule"
+```
+
+### Cloning with Wiki
+
+```bash
+git clone --recurse-submodules https://github.com/olegiv/ocms-go.git
+```
+
+## Claude Code Support Tools
+
+This project uses a shared submodule at `.claude/shared` containing reusable Claude Code extensions:
+
+- **Agents**: security-auditor, project-architect, code-quality-auditor
+- **Commands**: commit-prepare, commit-do, security-audit, setup-project-tools
+- **Global config**: CLAUDE.md rules and settings.json templates
+
+### Updating the Submodule
+
+To update the shared Claude Code tools to the latest version:
+
+```bash
+# Using the slash command (recommended)
+/update-submodule
+
+# Or manually
+git submodule update --remote --merge
+```
+
+If you are using Codex, Claude slash commands are not registered in the
+Codex UI and may show `No commands`. Use shell/make commands directly,
+or ask Codex in chat to run them.
+
+You can run slash-command equivalents through Claude CLI:
+
+```bash
+claude -p "/commit-prepare" --dangerously-skip-permissions
+claude -p "/commit-do" --dangerously-skip-permissions
+claude -p "/code-quality" --dangerously-skip-permissions
+claude -p "/security-audit" --dangerously-skip-permissions
+```
+
+Codex wrapper commands (Claude proxy by default):
+
+```bash
+./scripts/codex-commands code-quality
+./scripts/codex-commands security-audit
+./scripts/codex-commands commit-prepare
+./scripts/codex-commands commit-do
+
+# Explicit local fallback scripts
+./scripts/codex-commands code-quality-local
+./scripts/codex-commands security-audit-local
+./scripts/codex-commands commit-prepare-local
+./scripts/codex-commands commit-do-local
+```
+
+After updating, stage and commit the submodule change if you want to keep it:
+```bash
+git add .claude/shared
+git commit -m "Update Claude Code shared submodule"
+```
+
+## Technology Stack
+
+- **Backend**: Go 1.26+
+- **Database**: SQLite with [goose](https://github.com/pressly/goose) migrations
+- **SQL**: Type-safe queries with [sqlc](https://sqlc.dev/)
+- **Templates**: [templ](https://templ.guide/) for type-safe HTML
+- **Frontend**: HTMX + Alpine.js
+- **Rich Text Editor**: [TinyMCE](https://www.tiny.cloud/) for content editing
+- **Styling**: Custom SCSS framework
+- **Authentication**: Secure sessions with argon2id password hashing
+- **Containerization**: Docker with multi-stage builds
+
+## License
+
+Copyright (C) 2025-2026 Oleg Ivanchenko
+
+GNU General Public License v3.0 - see [LICENSE](LICENSE) file for details.

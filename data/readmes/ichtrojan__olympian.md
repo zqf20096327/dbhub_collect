@@ -1,0 +1,928 @@
+# Olympian
+
+A powerful, Laravel-inspired database migration system for Go. Olympian provides an elegant fluent API for managing database schema changes across PostgreSQL, MySQL, and SQLite.
+
+## Features
+
+- **Fluent API**: Chain methods elegantly to define your schema
+- **Database Agnostic**: Works with PostgreSQL, MySQL, and SQLite using standard `database/sql`
+- **Migration Tracking**: Automatic tracking of executed migrations with batch support
+- **Rollback Support**: Roll back migrations individually or in batches
+- **Foreign Keys**: Full support for foreign key constraints with cascading actions
+- **Rich Column Types**: UUID, ULID, String, Text, Integer, Float, Double, Boolean, Decimal, Timestamp, Date, Time, JSON, Enum, Binary, and more
+- **Schema Modifications**: Add columns to existing tables with position control
+- **Database Seeders**: Populate your database with test or initial data using structs or maps
+- **CLI Tool**: Command-line interface for running migrations and seeders
+- **Type-Safe**: Leverage Go's type system for compile-time safety
+
+## When to Use Olympian
+
+**Choose Olympian if you:**
+- Want a fluent, expressive API for database migrations (similar to Laravel/Rails)
+- Prefer defining schemas in Go code rather than raw SQL files
+- Need a single library for migrations, schema changes, and seeders
+- Want built-in rollback support with batch tracking
+- Are building a new Go project and want a modern migration experience
+
+**Consider alternatives if you:**
+- Prefer writing raw SQL migrations → use [golang-migrate](https://github.com/golang-migrate/migrate) or [goose](https://github.com/pressly/goose)
+- Need an ORM with migrations → use [GORM](https://gorm.io) (though Olympian can complement GORM for complex migrations)
+- Only need simple schema syncing → GORM's AutoMigrate may suffice
+
+**Olympian vs Other Tools:**
+
+| Feature | Olympian | golang-migrate | goose | GORM |
+|---------|----------|----------------|-------|------|
+| Fluent Go API | Yes | No | No | Limited |
+| Raw SQL support | Yes | Yes | Yes | No |
+| Rollback support | Yes | Yes | Yes | No |
+| Batch tracking | Yes | No | No | No |
+| Foreign key helpers | Yes | Manual | Manual | Yes |
+| Database seeders | Yes | No | No | No |
+| Column modifiers | Yes | Manual | Manual | Tags |
+
+## Installation
+
+```bash
+go get github.com/ichtrojan/olympian
+```
+
+## Quick Start
+
+### Basic Usage
+
+```go
+package main
+
+import (
+    "database/sql"
+    "log"
+
+    _ "github.com/mattn/go-sqlite3"
+    "github.com/ichtrojan/olympian"
+)
+
+func main() {
+    db, err := sql.Open("sqlite3", "./database.db")
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer db.Close()
+
+    migrator := olympian.NewMigrator(db, olympian.SQLite())
+
+    if err := migrator.Init(); err != nil {
+        log.Fatal(err)
+    }
+
+    migrations := []olympian.Migration{
+        {
+            Name: "create_users_table",
+            Up: func() error {
+                return olympian.Table("users").Create(func() {
+                    olympian.Uuid("id").Primary()
+                    olympian.String("name")
+                    olympian.String("email").Unique()
+                    olympian.Boolean("verified").Default(false)
+                    olympian.Timestamps()
+                })
+            },
+            Down: func() error {
+                return olympian.Table("users").Drop()
+            },
+        },
+    }
+
+    if err := migrator.Migrate(migrations); err != nil {
+        log.Fatal(err)
+    }
+}
+```
+
+## Column Types
+
+Olympian supports a rich set of column types:
+
+```go
+olympian.Uuid("id")                    // UUID column
+olympian.Ulid("id")                    // ULID column (26-char sortable ID)
+olympian.String("name")                 // VARCHAR(255)
+olympian.Text("description")            // TEXT
+olympian.TinyInteger("status")          // TINYINT
+olympian.Integer("count")               // INTEGER
+olympian.BigInteger("big_count")        // BIGINT
+olympian.Boolean("active")              // BOOLEAN
+olympian.Decimal("price", 10, 2)        // DECIMAL(10,2)
+olympian.Timestamp("created_at")        // TIMESTAMP
+olympian.Date("birth_date")             // DATE
+olympian.Json("metadata")               // JSON/JSONB
+olympian.Enum("status", "pending", "active", "inactive")  // ENUM type
+olympian.Float("price")                 // FLOAT/REAL
+olympian.Double("weight")               // DOUBLE/DOUBLE PRECISION
+olympian.SmallInteger("qty")            // SMALLINT
+olympian.MediumInteger("count")         // MEDIUMINT
+olympian.UnsignedInteger("views")       // INT UNSIGNED (MySQL)
+olympian.UnsignedBigInteger("total")    // BIGINT UNSIGNED (MySQL)
+olympian.UnsignedSmallInteger("age")    // SMALLINT UNSIGNED (MySQL)
+olympian.UnsignedTinyInteger("flag")    // TINYINT UNSIGNED (MySQL)
+olympian.Char("code", 3)               // CHAR(3)
+olympian.MediumText("body")            // MEDIUMTEXT
+olympian.LongText("content")           // LONGTEXT
+olympian.Binary("data")                // BLOB/BYTEA
+olympian.Time("open_at")               // TIME
+olympian.Year("birth_year")            // YEAR
+olympian.ForeignId("user_id").Constrained()  // UUID FK shorthand
+```
+
+### Auto-Incrementing Primary Keys
+
+For traditional auto-incrementing integer primary keys:
+
+```go
+olympian.Increments("id")              // INT AUTO_INCREMENT PRIMARY KEY
+olympian.BigIncrements("id")           // BIGINT AUTO_INCREMENT PRIMARY KEY
+```
+
+## Column Modifiers
+
+Chain modifiers to customize column behavior:
+
+```go
+olympian.String("email").Nullable()                    // Allow NULL values
+olympian.Uuid("id").Primary()                          // Primary key
+olympian.String("username").Unique()                   // Unique constraint
+olympian.Boolean("active").Default(true)               // Default value
+olympian.Integer("age").After("name")                  // Column position (MySQL)
+olympian.Integer("id").AutoIncrement()                 // Auto increment
+olympian.String("status").Change()                     // Modify existing column
+olympian.String("email").Index()                       // Add index (auto-named)
+olympian.String("slug").IndexWithName("idx_slug")      // Add index with custom name
+olympian.String("code").Length(100)                     // Custom VARCHAR length → VARCHAR(100)
+olympian.Integer("views").Unsigned()                    // Mark as unsigned
+olympian.String("priority").First()                     // Place column first (MySQL)
+olympian.String("email").Comment("User email")          // Column comment (MySQL)
+olympian.ForeignId("user_id").Constrained()             // Auto FK from naming convention
+olympian.ForeignId("user_id").Constrained().CascadeOnDelete()  // FK with cascade delete
+olympian.ForeignId("user_id").Constrained().CascadeOnUpdate()  // FK with cascade update
+olympian.ForeignId("user_id").Constrained().RestrictOnDelete() // FK with restrict delete
+olympian.ForeignId("user_id").Constrained().RestrictOnUpdate() // FK with restrict update
+olympian.ForeignId("user_id").Constrained().NullOnDelete()     // FK with set null on delete
+```
+
+## Foreign Keys
+
+Define relationships between tables using the `Foreign()` helper:
+
+```go
+olympian.Foreign("user_id").
+    References("id").
+    On("users").
+    OnDelete("cascade").
+    OnUpdate("restrict")
+```
+
+### ForeignId Shorthand
+
+Use `ForeignId` to create a UUID foreign key column with automatic constraint naming:
+
+```go
+olympian.ForeignId("user_id").Constrained()                    // FK to users.id
+olympian.ForeignId("user_id").Constrained().CascadeOnDelete()  // With cascade delete
+```
+
+### Composite Foreign Keys
+
+Define foreign keys across multiple columns:
+
+```go
+olympian.Foreign("user_id", "tenant_id").
+    References("id", "tenant_id").
+    On("users")
+```
+
+### Inline Foreign Keys
+
+You can also define foreign keys directly on the column:
+
+```go
+olympian.Uuid("user_id").
+    References("id").
+    On("users").
+    OnDelete("cascade")
+```
+
+### Dropping Foreign Keys
+
+```go
+olympian.DropForeignKey("posts", "fk_posts_user_id")
+```
+
+## Composite Unique Constraints
+
+Define unique constraints across multiple columns:
+
+```go
+olympian.Table("subscriptions").Create(func() {
+    olympian.Uuid("id").Primary()
+    olympian.Uuid("user_id")
+    olympian.Uuid("plan_id")
+    olympian.Timestamps()
+
+    // Ensure a user can only have one subscription per plan
+    olympian.Unique("user_id", "plan_id")
+
+    // With a custom constraint name
+    olympian.Unique("user_id", "plan_id").Name("unique_user_plan")
+})
+```
+
+## Enum Columns
+
+Define columns with restricted values using enum types:
+
+```go
+olympian.Table("orders").Create(func() {
+    olympian.Uuid("id").Primary()
+    olympian.Enum("status", "pending", "processing", "completed", "cancelled")
+    olympian.Enum("priority", "low", "medium", "high").Default("medium")
+    olympian.Enum("payment_method", "credit_card", "paypal", "bank_transfer").Nullable()
+})
+```
+
+### Database-Specific Implementation
+
+- **PostgreSQL**: Uses `VARCHAR(255)` with `CHECK` constraints to validate values
+- **MySQL**: Uses native `ENUM('value1', 'value2', ...)` type
+- **SQLite**: Uses `TEXT` with inline `CHECK` constraints
+
+Enum columns support all standard modifiers like `Nullable()`, `Default()`, and `Unique()`.
+
+## Helper Functions
+
+### Timestamps
+
+Automatically add `created_at` and `updated_at` columns:
+
+```go
+olympian.Timestamps()  // Adds created_at and updated_at
+```
+
+### Soft Deletes
+
+Add soft delete support:
+
+```go
+olympian.SoftDeletes()  // Adds deleted_at column
+```
+
+### Polymorphic Columns
+
+```go
+olympian.Morphs("commentable")          // Adds commentable_id (UUID) + commentable_type (VARCHAR)
+olympian.NullableMorphs("taggable")     // Nullable polymorphic columns
+```
+
+### Remember Token
+
+```go
+olympian.RememberToken()  // Adds remember_token VARCHAR(100) nullable
+```
+
+### Timezone-Aware Timestamps
+
+```go
+olympian.TimestampsTz()   // Timezone-aware created_at and updated_at
+olympian.SoftDeletesTz()  // Timezone-aware deleted_at
+```
+
+## Table Operations
+
+### Creating Tables
+
+```go
+olympian.Table("products").Create(func() {
+    olympian.Uuid("id").Primary()
+    olympian.String("name")
+    olympian.Decimal("price", 10, 2)
+    olympian.Integer("stock").Default(0)
+    olympian.Timestamps()
+})
+```
+
+### Modifying Tables
+
+Add columns to existing tables:
+
+```go
+olympian.Table("users").Modify(func() {
+    olympian.Integer("age").After("name").Nullable()
+    olympian.String("phone").Nullable()
+})
+```
+
+### Changing Existing Columns
+
+Modify the type or properties of existing columns using the `Change()` modifier:
+
+```go
+olympian.Table("invoices").Modify(func() {
+    // Change from Enum to String
+    olympian.String("currency").Default("GBP").Change()
+
+    // Make a column nullable
+    olympian.Text("notes").Nullable().Change()
+
+    // Change column type
+    olympian.BigInteger("amount").Change()
+})
+```
+
+**Database Support:**
+- **MySQL**: Uses `MODIFY COLUMN` syntax
+- **PostgreSQL**: Uses separate `ALTER COLUMN` statements for type, nullability, and default
+- **SQLite**: Not supported (SQLite requires table recreation for column modifications)
+
+### Dropping Tables
+
+```go
+olympian.Table("users").Drop()
+```
+
+### Dropping Columns
+
+```go
+olympian.DropColumnIfExists("users", "phone")
+
+// Batch column drop
+olympian.Table("users").DropColumns("email", "phone")
+```
+
+### Checking Table and Column Existence
+
+```go
+exists, err := olympian.HasTable("users")          // Check if table exists
+exists, err := olympian.HasColumn("users", "email") // Check if column exists
+```
+
+### Composite Indexes
+
+```go
+olympian.CompIndex("user_id", "product_id")                    // Composite multi-column index
+olympian.CompIndex("col1", "col2").Name("custom_idx")          // With custom name
+```
+
+### Dry-Run SQL Preview
+
+Preview the SQL that would be generated without executing it:
+
+```go
+olympian.PreviewCreate(func() {
+    olympian.Uuid("id").Primary()
+    olympian.String("name")
+    olympian.Timestamps()
+})
+
+olympian.PreviewModify(func() {
+    olympian.String("phone").Nullable()
+})
+```
+
+## Advanced Operations
+
+### Renaming Columns
+
+```go
+olympian.RenameColumn("users", "username", "user_name")
+```
+
+### Renaming Tables
+
+```go
+olympian.RenameTable("old_users", "users")
+```
+
+### Creating Indexes
+
+```go
+olympian.CreateIndex("users", []string{"email"}, "idx_users_email")
+olympian.CreateUniqueIndex("users", []string{"username"}, "idx_users_username")
+```
+
+### Dropping Indexes
+
+```go
+olympian.DropIndex("idx_users_email")
+```
+
+### Raw SQL
+
+For complex queries or database-specific operations, access the underlying connection:
+
+```go
+db, dialect := olympian.GetDB()
+
+// Run raw SQL
+_, err := db.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"")
+
+// Use in migrations
+{
+    Name: "add_postgis_extension",
+    Up: func() error {
+        db, _ := olympian.GetDB()
+        _, err := db.Exec("CREATE EXTENSION IF NOT EXISTS postgis")
+        return err
+    },
+    Down: func() error {
+        db, _ := olympian.GetDB()
+        _, err := db.Exec("DROP EXTENSION IF EXISTS postgis")
+        return err
+    },
+}
+```
+
+## Complete Migration Example
+
+```go
+migrations := []olympian.Migration{
+    {
+        Name: "create_businesses_table",
+        Up: func() error {
+            return olympian.Table("businesses").Create(func() {
+                olympian.Uuid("id").Primary()
+                olympian.String("name")
+                olympian.String("industry").Nullable()
+                olympian.Enum("status", "active", "inactive", "suspended").Default("active")
+                olympian.Timestamps()
+            })
+        },
+        Down: func() error {
+            return olympian.Table("businesses").Drop()
+        },
+    },
+    {
+        Name: "create_users_table",
+        Up: func() error {
+            return olympian.Table("users").Create(func() {
+                olympian.Uuid("id").Primary()
+                olympian.Foreign("business_id").
+                    References("id").
+                    On("businesses").
+                    OnDelete("cascade")
+                olympian.String("name")
+                olympian.String("email").Unique()
+                olympian.Boolean("verified").Default(false)
+                olympian.Enum("role", "admin", "user", "guest").Default("user")
+                olympian.Timestamps()
+                olympian.SoftDeletes()
+            })
+        },
+        Down: func() error {
+            return olympian.Table("users").Drop()
+        },
+    },
+    {
+        Name: "add_age_to_users",
+        Up: func() error {
+            return olympian.Table("users").Modify(func() {
+                olympian.Integer("age").After("name").Nullable()
+            })
+        },
+        Down: func() error {
+            return olympian.DropColumnIfExists("users", "age")
+        },
+    },
+}
+```
+
+## Database Dialects
+
+Olympian supports three database systems:
+
+### PostgreSQL
+
+```go
+import _ "github.com/lib/pq"
+
+db, _ := sql.Open("postgres", "host=localhost user=postgres dbname=mydb sslmode=disable")
+migrator := olympian.NewMigrator(db, olympian.Postgres())
+```
+
+### MySQL
+
+```go
+import _ "github.com/go-sql-driver/mysql"
+
+db, _ := sql.Open("mysql", "user:password@tcp(localhost:3306)/dbname")
+migrator := olympian.NewMigrator(db, olympian.MySQL())
+```
+
+### SQLite
+
+```go
+import _ "github.com/mattn/go-sqlite3"
+
+db, _ := sql.Open("sqlite3", "./database.db")
+migrator := olympian.NewMigrator(db, olympian.SQLite())
+```
+
+## Migration Commands
+
+### Running Migrations
+
+```go
+migrator.Migrate(migrations)  // Run all pending migrations
+```
+
+### Rolling Back
+
+```go
+migrator.Rollback(migrations, 1)  // Rollback last batch
+migrator.Rollback(migrations, 2)  // Rollback last 2 batches
+```
+
+### Migration Status
+
+```go
+migrator.Status(migrations)  // Show status of all migrations
+```
+
+### Reset All Migrations
+
+```go
+migrator.Reset(migrations)  // Rollback all migrations
+```
+
+### Fresh Migration
+
+```go
+migrator.Fresh(migrations)  // Drop all tables and re-run migrations
+```
+
+### Refresh Migrations
+
+```go
+migrator.Refresh(migrations)  // Rollback all migrations, then re-migrate
+```
+
+Unlike `Fresh` which drops all tables directly, `Refresh` runs each migration's `Down` function before re-running `Up`.
+
+## CLI Tool
+
+### Installation
+
+```bash
+go get github.com/ichtrojan/olympian/cmd/olympian@latest
+```
+
+### Quick Start
+
+Olympian automatically initializes on first use - no setup required! Just start creating and running migrations:
+
+```bash
+# Create a migration (automatically adds create_ prefix and _table suffix)
+olympian migrate create users
+
+# Run migrations
+olympian migrate
+
+# Check status
+olympian migrate status
+```
+
+### Configuration
+
+Olympian supports two ways to configure database connections:
+
+#### 1. Using .env File (Recommended for MySQL/PostgreSQL)
+
+Create a `.env` file in your project root:
+
+```env
+DB_DRIVER=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_NAME=bandit
+DB_USER=root
+DB_PASS=
+```
+
+For PostgreSQL:
+```env
+DB_DRIVER=postgres
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_NAME=mydb
+DB_USER=postgres
+DB_PASS=secret
+```
+
+Then run migrations without any flags:
+```bash
+olympian migrate
+```
+
+#### 2. Using Command Line Flags (For SQLite)
+
+For SQLite databases, use the `--driver` and `--dsn` flags:
+
+```bash
+olympian migrate --driver sqlite3 --dsn ./database.db
+```
+
+### Commands
+
+```bash
+# Create new migration (smart naming - adds create_ and _table automatically)
+olympian migrate create users              # Creates: create_users_table
+olympian migrate create posts              # Creates: create_posts_table
+olympian migrate create create_comments    # Creates: create_comments_table
+
+# Run migrations (auto-initializes on first use)
+olympian migrate
+
+# Rollback last batch
+olympian migrate rollback
+
+# Show migration status
+olympian migrate status
+
+# Reset all migrations
+olympian migrate reset
+
+# Fresh migration (drop all tables and re-run)
+olympian migrate fresh
+
+# Refresh (rollback all, then re-migrate)
+olympian migrate refresh
+
+# Create migration in custom path
+olympian migrate create posts --path ./database/migrations
+```
+
+### Auto-Initialization
+
+On first use, Olympian automatically creates `cmd/migrate/main.go` in your project. This file:
+- Imports your migrations package
+- Connects to your database using .env configuration
+- Handles all migration commands
+
+You can also manually initialize with:
+```bash
+olympian init
+```
+
+### CLI Flags
+
+- `--driver`: Database driver (`sqlite3`, `postgres`, `mysql`)
+- `--dsn`: Database connection string (for SQLite)
+- `--path`: Path to migrations directory (default: `./migrations`)
+- `--env`: Use .env file for configuration (default: `true`)
+
+### Environment Variables
+
+- `DB_DRIVER`: Database driver (`mysql`, `postgres`, `sqlite3`)
+- `DB_HOST`: Database host
+- `DB_PORT`: Database port
+- `DB_NAME`: Database name
+- `DB_USER`: Database user
+- `DB_PASS`: Database password
+
+## Migration File Structure
+
+When using the CLI to create migrations:
+
+```bash
+olympian migrate create create_products_table
+```
+
+This creates a file like `migrations/1634567890_create_products_table.go`:
+
+```go
+package migrations
+
+import "github.com/ichtrojan/olympian"
+
+func init() {
+    olympian.RegisterMigration(olympian.Migration{
+        Name: "1634567890_create_products_table",
+        Up: func() error {
+            return olympian.Table("products").Create(func() {
+                olympian.Uuid("id").Primary()
+                olympian.Timestamps()
+            })
+        },
+        Down: func() error {
+            return olympian.Table("products").Drop()
+        },
+    })
+}
+```
+
+## How It Works
+
+### Migration Tracking
+
+Olympian automatically creates an `olympian_migrations` table to track:
+- Migration name
+- Batch number (for grouped rollbacks)
+- Execution timestamp
+
+### Batching
+
+Migrations are grouped into batches. Each time you run `Migrate()`, pending migrations are executed as a new batch. This allows you to rollback related migrations together.
+
+### Transactions
+
+Each migration runs in a transaction. If a migration fails, it's automatically rolled back and the error is returned.
+
+### Dialect System
+
+Olympian uses a dialect system to generate database-specific SQL:
+- PostgreSQL: Uses `UUID`, `CHAR(26)` for ULIDs, `JSONB`, `SERIAL` types
+- MySQL: Uses `CHAR(36)` for UUIDs, `CHAR(26)` for ULIDs, `JSON`, `AUTO_INCREMENT`, automatically escapes reserved keywords with backticks
+- SQLite: Uses `TEXT` for most types, `AUTOINCREMENT`
+
+### Reserved Keywords
+
+Olympian automatically handles reserved keywords across all three dialects. Over 80 keywords are covered, including `role`, `date`, `time`, `action`, `comment`, `rank`, `position`, `offset`, `status`, `level`, `window`, `limit`, `order`, `group`, `key`, `index`, `type`, and more.
+
+- **MySQL**: Wraps in backticks (`` `column` ``)
+- **PostgreSQL**: Wraps in double quotes (`"column"`)
+- **SQLite**: Wraps in double quotes (`"column"`)
+
+Example:
+```go
+olympian.BigInteger("limit").Nullable()  // MySQL: `limit` BIGINT, PostgreSQL: "limit" BIGINT
+olympian.String("status")                // MySQL: `status` VARCHAR(255), PostgreSQL: "status" VARCHAR(255)
+```
+
+## Best Practices
+
+1. **Always provide a Down function**: This ensures migrations can be rolled back
+2. **Use descriptive migration names**: Include timestamp and clear description
+3. **One logical change per migration**: Don't mix unrelated schema changes
+4. **Test migrations**: Test both up and down migrations before deploying
+5. **Use foreign keys carefully**: Ensure referenced tables exist before creating foreign keys
+6. **Handle nullable columns**: Be explicit about nullable vs required fields
+7. **Use transactions**: Olympian handles this automatically, but be aware
+
+## Error Handling
+
+```go
+if err := migrator.Migrate(migrations); err != nil {
+    log.Printf("Migration failed: %v", err)
+    // Migration is automatically rolled back
+}
+```
+
+## Testing
+
+Run the test suite:
+
+```bash
+go test -v ./...
+```
+
+Example test:
+
+```go
+func TestMigration(t *testing.T) {
+    db, _ := sql.Open("sqlite3", ":memory:")
+    defer db.Close()
+
+    olympian.SetDB(db, olympian.SQLite())
+
+    err := olympian.Table("users").Create(func() {
+        olympian.Uuid("id").Primary()
+        olympian.String("name")
+    })
+
+    if err != nil {
+        t.Fatalf("Failed to create table: %v", err)
+    }
+}
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+MIT License - see LICENSE file for details
+
+## Credits
+
+Inspired by Laravel's elegant migration system, adapted for the Go ecosystem.
+
+## Documentation
+
+For more detailed documentation, visit our [documentation site](https://ichtrojan.github.io/olympian).
+
+## Support
+
+- GitHub Issues: [Report bugs or request features](https://github.com/ichtrojan/olympian/issues)
+- Discussions: [Ask questions and share ideas](https://github.com/ichtrojan/olympian/discussions)
+
+## Database Seeders
+
+Olympian provides a powerful seeding system to populate your database with test or initial data.
+
+### Creating Seeders
+
+```bash
+olympian seed create user
+```
+
+This creates `seeders/user_seeder.go`:
+
+```go
+package seeders
+
+import "github.com/ichtrojan/olympian"
+
+func init() {
+    olympian.RegisterSeeder(olympian.Seeder{
+        Name: "user",
+        Run: func() error {
+            return olympian.Seed("users",
+                map[string]interface{}{
+                    "id":   "uuid-here",
+                    "name": "John Doe",
+                },
+            )
+        },
+    })
+}
+```
+
+### Running Seeders
+
+```bash
+# Run all seeders
+olympian seed run
+
+# Run specific seeder
+olympian seed run user
+
+# Run multiple specific seeders
+olympian seed run user product
+```
+
+### Using Structs
+
+Struct field names are automatically converted to snake_case. Pass a slice for multiple records:
+
+```go
+type User struct {
+    ID        string
+    Name      string
+    UserAge   int       // becomes user_age
+    CreatedAt time.Time // converted to timestamp
+}
+
+olympian.Seed("users", []User{
+    {ID: "1", Name: "John", UserAge: 25, CreatedAt: time.Now()},
+    {ID: "2", Name: "Jane", UserAge: 30, CreatedAt: time.Now()},
+})
+```
+
+### Using Maps
+
+```go
+olympian.Seed("users",
+    map[string]interface{}{
+        "id":       "uuid-1",
+        "name":     "John Doe",
+        "email":    "john@example.com",
+        "user_age": 25,
+    },
+)
+```
+
+### Struct Tags
+
+Use `db` or `json` tags to customize column names:
+
+```go
+type User struct {
+    ID    string `db:"id"`
+    Name  string `json:"full_name"`
+    Email string // becomes "email" (snake_case)
+}
+```
+
+### Time Handling
+
+`time.Time` values are automatically converted to timestamp format (`2006-01-02 15:04:05`).
+
+## Roadmap
+
+- [ ] Migration squashing
+- [ ] Schema dumping
+- [x] Seed data support
+- [x] Column modifications (Change)
+- [ ] Migration dependencies
+- [x] Dry-run mode (PreviewCreate/PreviewModify)
+- [ ] SQL Server support
+- [ ] Migration templates

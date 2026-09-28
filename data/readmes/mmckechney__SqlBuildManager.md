@@ -1,0 +1,169 @@
+<img src="src/SqlBuildManager.Console/images/SqlBuildManager_logo.png" alt="Logo" width="50%" />
+
+# SQL Build Manager
+
+SQL Build Manager is a multi-faceted tool to allow you to manage the life-cycle of your databases (SQL Server, PostgreSQL, and MySQL). It provides a comprehensive set of command line options for the management from one to many thousands of databases.
+
+![.NET Core Build](https://github.com/mmckechney/SqlBuildManager/workflows/.NET%20Core%20Build/badge.svg)
+
+
+
+#### _Be sure to review the [change log](CHANGELOG.md) for the latest updates, enhancements and bug fixes_
+
+
+---
+### **Highlighted feature update, v16+: PostgreSQL and MySQL Support; Batch Execution via Linux Container**
+
+- Batch Execution is now run via Linux container (vs. uploaded zip package). This provides significant improvement in execution times and ensures code and platform consistency
+- SQL Build Manager supports **PostgreSQL** and **MySQL** as alternative database targets alongside Microsoft SQL Server. Use `--platform PostgreSQL` or `--platform MySQL` in any build command to target those databases.
+
+See:
+- [PostgreSQL documentation](docs/postgresql.md)
+- [MySQL documentation](docs/mysql.md)
+
+Features **not available** for PostgreSQL/MySQL:
+- DACPAC operations (extract, compare, `create fromdacpacs` / `create fromdacpacdiff`)
+- Object scripting (SMO-based)
+- Some SQL Server-specific script policies (`WithNoLockPolicy`, `QualifiedNamesPolicy`)
+
+---
+
+ **Kubernetes and ACI breaking changes in 15.0, be sure to review the change log**
+ 
+---
+### **Key feature enhancement with Version 14.4+: Expanded use of Azure User Assigned Managed Identity**
+
+With this update, it significantly reduces the the need to save and manage secrets and connection strings. For full details on leveraging Managed Identity to connect to the other Azure resources such as SQL Database, Blob storage, Service Bus, Event Hub, Key Vault and Azure Container registry, see the [Managed Identity documentation here](/docs/managed_identity.md).
+
+---
+
+## Contents
+
+
+- [SQL Build Manager](#sql-build-manager)
+      - [_Be sure to review the change log for the latest updates, enhancements and bug fixes_](#be-sure-to-review-the-change-log-for-the-latest-updates-enhancements-and-bug-fixes)
+    - [**Highlighted feature update, v16+: PostgreSQL and MySQL Support**](#highlighted-feature-update-v16-postgresql-and-mysql-support)
+    - [**Key feature enhancement with Version 14.4+: Expanded use of Azure User Assigned Managed Identity**](#key-feature-enhancement-with-version-144-expanded-use-of-azure-user-assigned-managed-identity)
+  - [Contents](#contents)
+  - [Important Concepts](#important-concepts)
+    - [**"Build"**](#build)
+    - [**"Package"**](#package)
+    - [**"Override" file**](#override-file)
+    - [**Remote Build Execution**](#remote-build-execution)
+    - [**"Settings" file**](#settings-file)
+    - [**"jobname"**](#jobname)
+    - [**Security**](#security)
+  - [Key Features](#key-features)
+  - [Running Builds (command line)](#running-builds-command-line)
+    - [**Local**](#local)
+    - [**Threaded**](#threaded)
+    - [**Batch**](#batch)
+    - [**Azure Container Apps**](#azure-container-apps)
+    - [**Kubernetes**](#kubernetes)
+    - [**Azure Container Instance (ACI)**](#azure-container-instance-aci)
+  - [Querying across databases (command line)](#querying-across-databases-command-line)
+    - [Threaded](#threaded-1)
+    - [Batch, Kubernetes and ACI](#batch-kubernetes-and-aci)
+  - [Command Line Reference](docs/commandline.md) - Full command reference with runtime options
+  - [MySQL Platform Guide](docs/mysql.md)
+  - [Execution Options and Exit Codes](docs/execution-options-and-exit-codes.md)
+  - [Dependency and Supply-Chain Policy](docs/dependency-management.md)
+  - [Detailed Process Flow](docs/threaded_build_process_flow.md)
+
+---
+
+## Important Concepts
+
+Below are some high level concepts used by SQL Build Manager. You will see these used through out the documents and how-to's so it is important to understand what they mean:
+
+### **"Build"**
+
+The action of updating to your database or fleet of databases with SQL Build Manager. Your build is wrapped in an all-or-nothing transaction meaning if a script fails, your database will be rolledback to the state it was prior to your build. The app also maintains a build history in the database by adding a logging table to the database.
+
+### **"Package"**
+
+The bundling of your scripts for updating your databases. In addition to managing the order of script execution, it also manages meta-data about the scripts such as a desription, the author and unique id. The package also maintains hash values of each script and the package as a whole to ensure the integrity and allow tracking. Details on package contents and creation can be found [here](docs/package.md)
+
+### **"Override" file**
+
+The list of servers/databases you want to update with a build. When a package is created, the scripts are assigned a default database named "client". The override file is a list of the SQL Server Name and database targets that will replace "client" at build time. This file is in a format of: `{sql server name}:client,{target database}` with one target per line. This is either used directly or used as a source to create Azure Service Bus messages that are leveraged in a build. See [here](docs/override_options.md) for additional information.
+
+### **Remote Build Execution**
+
+The ability to distribute the load across multiple compute nodes. There are four options with SQL Build Manager: Azure Batch, Azure Kubernetes Service, Azure Container Apps and Azure Container Instance. Each of these has some specific configuration required, but have simliar process steps. The concept of parallel remote build is outlined [here](docs/massively_parallel.md) with specifics for each options are available.
+
+### **"Settings" file**
+
+A configuration file that can be saved and re-used across multiple builds. It saves configurations for your remote envionment, identities, container names,  connection strings, etc. Any sensitive information is encrypted with AES265 encryption with the value you provide with the `--settingsfilekey`. Sensitive information can instead be stored in Azure Key Vault with a `--keyvault` parameter if desired.
+
+### **"jobname"**
+
+The name of a build. This is used as the name or name prefix for all of the Azure services used in a remote build including the blob storage container, running docker containers, service bus topic, etc.
+
+### **Security**
+
+SQL Build Manager is an operator-run tool that handles connection strings, account keys and SAS tokens. A few behaviors are worth understanding:
+
+- **Secrets are masked in logs.** Account/access keys are shown as their first 4 characters followed by `x`'s, passwords as their first and last character with the middle masked, and connection strings have their embedded secrets masked the same way. SAS tokens are never logged (only the storage account name is). This prevents credential leakage through log aggregation, Batch node logs, or support bundles.
+- **Settings-file encryption.** Sensitive values in a settings file are protected with AES-256 using a random salt and IV per value, PBKDF2-SHA256 (100,000 iterations) key derivation, and an HMAC integrity check. Existing settings files created by earlier versions remain readable and are upgraded to the stronger format the next time the file is saved.
+- **TLS certificate validation (`--trustservercertificate`).** Database server certificates are validated by default. If you connect to a server with a self-signed or otherwise untrusted certificate (common for local SQL Express), pass `--trustservercertificate true` to opt in to trusting it. This setting can also be stored in the settings file.
+
+---
+
+## Key Features
+
+- Packaging of all of your update scripts and runtime meta-data into a single .sbm (zip file) or leverage data-tier application ([DACPAC](https://docs.microsoft.com/en-us/sql/relational-databases/data-tier-applications/deploy-a-data-tier-application)) deployment across your entire database fleet.
+- **Supports Microsoft SQL Server, PostgreSQL, and MySQL** — select the target platform at runtime with `--platform SqlServer`, `--platform PostgreSQL`, or `--platform MySQL`
+- Massively parallel execution across thousands of databases utilizing local threading or an [Azure Batch, Kubernetes, Container Apps or Container Instance remote execution](docs/massively_parallel.md)
+- Single transaction handling. If any one script fails, the entire package is rolled back, leaving the database unchanged.
+- Handle multiple database updates in one package - seamlessly update all your databases with local threading or massively parallel remote processing.
+- Full script run management. Control the script order, target database, and transaction handling
+- Trial mode - runs scripts to test against database, then rolls back to leave in pristine state.
+- Automatic logging and version tracking of scripts on a per-server/per-database level
+- Full SHA-1 hashing of individual scripts and complete `.sbm` package files to ensure integrity of the scripts
+- Execution of a build package (see below) is recorded in the database for full tracking of update history, script validation and potential rebuilding of packages
+
+---
+
+## Running Builds (command line)
+
+There are 6 ways to run your database update builds each with their target use case
+
+### **Local**
+
+Leveraging the `sbm build` command, this runs the build on the [current local machine](docs/local_build.md). If you are targeting more than one database, the execution will be serial, only updating one database at a time and any transaction rollback will occur to all databases in the build.
+
+### **Threaded**
+
+Using the `sbm threaded run` command will allow for updating multiple databases in [parallel](docs/threaded_build.md), but still executed from the local machine. Any transaction rollbacks will occur per-database - meaning if 5 of 6 databases succeed, the build will be committed on the 5 and rolled back only on the 6th
+
+### **Batch**
+
+Using the `sbm batch run` command leverages Azure Batch to permit massively parallel updates across thousands of databases. To leverage Azure Batch, you will first need to set up your Batch account. The instructions for this can be found [here](docs/azure_batch.md).
+An excellent tool for viewing and monitoring your Azure batch accounts and jobs can be found here [https://azure.github.io/BatchExplorer/](https://azure.github.io/BatchExplorer/)
+
+### **Azure Container Apps**
+
+Using the `sbm containerapp run` commands leverages Azure Container Apps to permit massively parallel updates across thousands of databases. Learn how to use Container Apps [here](docs/containerapp.md).
+
+### **Kubernetes**
+
+Using the `sbm k8s run` commands leverages Kubernetes to permit massively parallel updates across thousands of databases. To leverage Kubernetes, you will first need to set up a Kubernetes Cluster. The instructions for this can be found [here](docs/kubernetes.md#).
+
+### **Azure Container Instance (ACI)**
+
+Using the `sbm aci` commands leverages Azure Container Instance to permit massively parallel updates across thousands of databases. Learn how to use ACI [here](docs/aci.md).
+
+---
+
+## Querying across databases (command line)
+
+In addition to using SQL Build Manager to perform database updates, you can also run SELECT queries across all of your databases to collect data. In the case of both `threaded` and `batch` a consolidated results file is saved to the location of your choice
+
+### Threaded
+
+Using the `sbm threaded query` command will allow for querying multiple databases in parallel, but still executed from the local machine.
+
+### Batch, Kubernetes and ACI
+
+Using the `sbm batch query` , `sbm k8s query` or `sbm aci query` commands leverage their respective compute to permit massively parallel queries across thousands of databases. 

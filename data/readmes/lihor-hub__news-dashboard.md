@@ -1,0 +1,461 @@
+# News Dashboard
+
+[![CI / CD](https://github.com/lihor-hub/news-dashboard/actions/workflows/ci.yml/badge.svg)](https://github.com/lihor-hub/news-dashboard/actions/workflows/ci.yml)
+[![Release](https://github.com/lihor-hub/news-dashboard/actions/workflows/release.yml/badge.svg)](https://github.com/lihor-hub/news-dashboard/actions/workflows/release.yml)
+[![Coverage Status](https://codecov.io/gh/lihor-hub/news-dashboard/branch/main/graph/badge.svg)](https://app.codecov.io/gh/lihor-hub/news-dashboard)
+[![CodeQL](https://github.com/lihor-hub/news-dashboard/actions/workflows/codeql.yml/badge.svg)](https://github.com/lihor-hub/news-dashboard/actions/workflows/codeql.yml)
+[![Trivy](https://github.com/lihor-hub/news-dashboard/actions/workflows/trivy-scan.yml/badge.svg)](https://github.com/lihor-hub/news-dashboard/actions/workflows/trivy-scan.yml)
+[![Version](https://img.shields.io/github/v/tag/lihor-hub/news-dashboard?filter=v*&sort=semver&label=version&color=blue)](https://github.com/lihor-hub/news-dashboard/releases/latest)
+[![License: MIT](https://img.shields.io/github/license/lihor-hub/news-dashboard)](LICENSE)
+![Python 3.14+](https://img.shields.io/badge/python-3.14%2B-blue)
+![Node 26](https://img.shields.io/badge/node-26-339933)
+![PostgreSQL 16+ pgvector](https://img.shields.io/badge/postgresql-16%2B%20pgvector-4169E1)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/lihor-hub/news-dashboard)
+[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/lihor-hub/news-dashboard)
+
+**Your AI research desk for technical news. Find what matters, understand why,
+and remember it.**
+
+News Dashboard helps developers keep up with fast-moving technical news without
+reading everything. Centralize the sources you trust, stay current with a
+ranked Today Feed, and receive a personalized briefing. Open an article for key
+takeaways, context, and perspectives; ask cited follow-up questions; then save,
+organize, or turn useful material into learning artifacts.
+
+[**Try it at news.lihor.ro**](https://news.lihor.ro) ·
+[**Run it on your infrastructure**](#quick-start) ·
+[Read the user guide](https://docs.lihor.ro/docs/user-guide)
+
+| Personalized AI briefing                                                                               | Article intelligence                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| ![Personalized AI briefing generated from deterministic demo articles](docs/screenshots/briefing.webp) | ![Article reader with AI-generated takeaways, context, and perspectives from deterministic demo data](docs/screenshots/article-detail.webp) |
+
+Screenshots are generated from demo-mode seed data by `npm run capture:screenshots`
+(see [scripts/capture-screenshots.spec.ts](scripts/capture-screenshots.spec.ts)); no
+real account data is shown.
+
+## How it works
+
+1. **Centralize and filter.** Bring together technical feeds, release notes,
+   trending projects, and other sources, then use freshness and personalized
+   recommendations to focus the Today Feed.
+2. **Understand.** Start with a generated briefing, inspect article takeaways
+   and wider context, and ask AI for cited answers grounded in your corpus.
+3. **Retain.** Save and organize worthwhile articles, build learning artifacts,
+   and revisit what you read through history, search, and the knowledge graph.
+
+News Dashboard can run on your own infrastructure for privacy and control over
+your sources, reading data, and AI-provider configuration.
+
+## Features
+
+- Curated Python, AI/LLM, agents, cloud, engineering, trending, and repository feeds.
+- RSS/Atom ingestion, GitHub release feeds, Hacker News/GitHub trending feeds, and custom scraped sources.
+- Article states: new, read, saved, skipped, archived, starred, and snoozed.
+- Source health, ingest run history, dashboard stats, and search.
+- Local password auth with first-admin bootstrap.
+- Optional Keycloak login.
+- OpenAI-compatible embeddings, cited Ask AI answers, article intelligence, and generated briefings when an AI provider is configured.
+- Google Reader-compatible sync API for third-party RSS clients (NetNewsWire, Reeder, Unread, ...).
+- Docker, Helm, and GitHub Actions deployment support.
+
+![News Dashboard Today Feed showing triaged technical articles with recommendation scores](docs/screenshots/today-feed.webp)
+
+## Stack
+
+- Backend: Python 3.14, FastAPI, Typer, psycopg, APScheduler, LangChain, LangGraph.
+- Frontend: React, TypeScript, Vite, TanStack Query.
+- Database: PostgreSQL.
+- Tooling: Ruff, mypy, pytest, ESLint, Prettier, Vitest, Playwright.
+
+## Requirements
+
+- Python 3.14+
+- Node.js and npm compatible with `package-lock.json`
+- PostgreSQL 16+ with the [pgvector](https://github.com/pgvector/pgvector) extension (the `pgvector/pgvector:pg16` image, or install `vector` on an external Postgres)
+- Docker and Docker Compose for the container flow
+- API key for AI features (`FREE_LLM_API_KEY` or `OPENAI_API_KEY`)
+
+## Configuration
+
+Copy [`.env.example`](.env.example) to `.env` and supply real values. Runtime
+storage is PostgreSQL only: set `DATABASE_URL` or the split `POSTGRES_*`
+variables.
+
+See the [environment variable reference](https://docs.lihor.ro/docs/self-hosting/environment-variables)
+for the full catalogue, AI orchestration and tracing, and production security
+settings. Existing deployments should read its pgvector upgrade note before
+changing the database image.
+
+## Try the demo
+
+Want to try News Dashboard before self-hosting it? One command runs a
+throwaway instance seeded with sample articles and a read-only guest account
+— no AI keys, no configuration:
+
+```bash
+docker compose -f docker-compose.demo.yml up
+```
+
+Open [http://localhost:8080](http://localhost:8080) and log in with:
+
+| Field    | Value   |
+| -------- | ------- |
+| Username | `guest` |
+| Password | `demo`  |
+
+The guest account is **read-only** — write actions (saving, marking read,
+adding sources, etc.) are rejected. This compose file uses fixed demo secrets
+and is not meant for real deployments; see [Quick Start](#quick-start) below
+to self-host for real.
+
+## Quick Start
+
+You can run News Dashboard in two ways:
+
+### Option 1: Build from source (recommended for development)
+
+```bash
+docker compose up --build
+```
+
+This stack now brings up PostgreSQL, Neo4j, and the app together, so the
+knowledge graph is enabled locally by default.
+
+### Option 2: Run the published image (recommended for production)
+
+First, start PostgreSQL:
+
+```bash
+docker run --rm -d \
+  --name news-dashboard-postgres \
+  -e POSTGRES_DB=news_dashboard \
+  -e POSTGRES_USER=news_dashboard \
+  -e POSTGRES_PASSWORD=news-dashboard-local-password \
+  -v news-dashboard-postgres-data:/var/lib/postgresql/data \
+  -p 5432:5432 \
+  pgvector/pgvector:pg16
+```
+
+Then run the application:
+
+```bash
+IMAGE_DIGEST="${IMAGE_DIGEST:?set IMAGE_DIGEST to the published sha256 digest}"
+docker run -d \
+  --name news-dashboard \
+  -p 8080:8080 \
+  --link news-dashboard-postgres:postgres \
+  -e POSTGRES_HOST=postgres \
+  -e POSTGRES_PORT=5432 \
+  -e POSTGRES_DB=news_dashboard \
+  -e POSTGRES_USER=news_dashboard \
+  -e POSTGRES_PASSWORD=news-dashboard-local-password \
+  -e SESSION_SECRET="$(python -c 'import secrets; print(secrets.token_hex(32))')" \
+  -e BOOTSTRAP_ADMIN_USERNAME=admin \
+  -e BOOTSTRAP_ADMIN_PASSWORD=change-me \
+  -e DATA_DIR=/data \
+  -v news-dashboard-data:/data \
+  --restart unless-stopped \
+  "ghcr.io/lihor-hub/news-dashboard@${IMAGE_DIGEST}"
+```
+
+Resolve the digest from the published image or CI build output; a tag or commit
+SHA can move or resolve to a different manifest. The
+`news-dashboard-data:/data` volume keeps generated audio and other app data
+across container recreates; without it, optional TTS and podcast MP3 caches are
+lost during upgrades. See [Configuration](#configuration) for all required
+environment variables.
+
+If you also want the knowledge graph enabled in a manual `docker run`
+deployment, run a Neo4j container and pass `NEO4J_URI`, `NEO4J_USER`,
+`NEO4J_PASSWORD`, and optionally `NEO4J_DATABASE=neo4j` to the app container.
+
+Open [http://localhost:8080](http://localhost:8080).
+
+Log in with the default local-development credentials:
+
+| Field    | Default value |
+| -------- | ------------- |
+| Username | `admin`       |
+| Password | `change-me`   |
+
+> **These are local-development defaults only.** Before deploying anywhere
+> outside your own machine, set `SESSION_SECRET`, `BOOTSTRAP_ADMIN_USERNAME`,
+> and `BOOTSTRAP_ADMIN_PASSWORD` to strong, unique values via environment
+> variables or a `.env` file — never use these defaults in production.
+
+Run ingestion in the app container:
+
+```bash
+docker exec news-dashboard news-dashboard ingest
+```
+
+## Local Development
+
+Install backend and frontend dependencies:
+
+> **Zero-setup alternative:** Click [Open in GitHub Codespaces](https://codespaces.new/lihor-hub/news-dashboard) or use the [Dev Container](https://code.visualstudio.com/docs/devcontainers/containers) in VS Code to skip all local installation. The devcontainer pre-installs Python, Node.js, and PostgreSQL automatically.
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -e '.[dev]'
+npm install
+pre-commit install
+```
+
+Start PostgreSQL:
+
+```bash
+docker run --rm -d \
+  --name news-dashboard-postgres \
+  -e POSTGRES_DB=news_dashboard \
+  -e POSTGRES_USER=news_dashboard \
+  -e POSTGRES_PASSWORD=news-dashboard-local-password \
+  -p 5432:5432 \
+  pgvector/pgvector:pg16
+```
+
+Set backend env (or copy `.env.example` to `.env` and adjust values):
+
+```bash
+export DATABASE_URL=postgresql://news_dashboard:news-dashboard-local-password@localhost:5432/news_dashboard
+export SESSION_SECRET="$(python -c 'import secrets; print(secrets.token_hex(32))')"
+# Optional: use a separate secret for digest mark-read links.
+export TOKEN_SECRET="$(python -c 'import secrets; print(secrets.token_hex(32))')"
+export BOOTSTRAP_ADMIN_USERNAME=admin
+export BOOTSTRAP_ADMIN_PASSWORD=change-me
+```
+
+Initialize schema and sources:
+
+```bash
+news-dashboard init
+news-dashboard ingest
+```
+
+Run backend and frontend:
+
+```bash
+uvicorn news_dashboard.main:app --reload --app-dir backend
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173).
+
+## Quality Checks
+
+```bash
+make lint        # ruff, eslint, prettier checks
+make format      # auto-format backend and frontend
+make typecheck   # mypy and TypeScript
+make test        # backend and frontend tests (everyday development loop)
+make build       # production frontend build
+make check       # full CI suite
+```
+
+### Test lanes
+
+| Command              | What it runs                                                     | When to use                                   |
+| -------------------- | ---------------------------------------------------------------- | --------------------------------------------- |
+| `make test-smoke`    | Backend `smoke`-marked tests + frontend smoke files              | Quick sanity check, ~seconds                  |
+| `make test-backend`  | Full `pytest` suite                                              | Before pushing backend changes                |
+| `make test-frontend` | Full Vitest suite                                                | Before pushing frontend changes               |
+| `make test-a11y`     | Accessibility smoke tests (axe-core serious/critical violations) | Before pushing UI changes; enforced in CI     |
+| `make test-e2e`      | Playwright end-to-end tests                                      | Before pushing UI/routing changes             |
+| `make test-full`     | Everything with coverage                                         | Same as nightly CI; use before major releases |
+
+**Local development loop:** run `make test-smoke` during active development, `make test-backend` or `make test-frontend` depending on what you changed, then `make check` before opening a PR.
+
+**Pre-push / pre-release:** run `make test-full` for comprehensive coverage including slow and DB-heavy tests.
+
+Pytest markers:
+
+- `smoke` — fast tests with no external services
+- `db` — auto-applied to any test using `pg_url` / `pg_clean`; requires PostgreSQL
+- `slow` — expensive tests reserved for the nightly schedule
+
+Run a specific lane with `pytest -m smoke`, `pytest -m "not db"`, or `pytest -m db`.
+
+## Project Layout
+
+```text
+backend/news_dashboard/   FastAPI app, ingest, auth, scheduler, CLI, database layer
+frontend/src/             React app
+docs/                     Architecture, product, deployment, auth, and user guides
+helm/news-dashboard/      Kubernetes chart
+deploy/                   Deployment files
+scripts/                  Maintenance scripts
+```
+
+## Getting Started
+
+To begin using News Dashboard as a reader, see the
+[Getting Started guide](website/docs/getting-started/index.md) which covers:
+
+- [Install the Android APK](website/docs/getting-started/install-android-apk.md)
+  — native Android app wrapping the PWA
+- [Create a web account](website/docs/getting-started/create-web-account.md)
+  — sign in from any browser
+- [Self-host your own instance](#quick-start)
+  — run News Dashboard on your own infrastructure
+
+## Documentation
+
+The full documentation site is published at **[docs.lihor.ro](https://docs.lihor.ro)**.
+
+For end-user documentation, see the [User Guide](https://docs.lihor.ro/docs/user-guide) which covers:
+
+- Concepts and terminology
+- The Today Feed and triage workflow
+- Managing sources and subscriptions
+- Search, briefings, and recommendations
+- Saved and read history
+- Sharing articles with other users
+
+For technical documentation (architecture, deployment, authentication), see the
+[docs index](docs/README.md).
+
+To preview the docs site locally: `cd website && npm install && npm run start`.
+
+## Synchronizing managed prompts
+
+The application keeps its 19 managed-prompt fallbacks in
+`backend/news_dashboard/prompt_catalog.py`. To verify catalog shape and sync behavior without
+contacting Langfuse, run:
+
+```bash
+dotenv run -- pytest backend/tests/test_prompt_catalog.py -q
+```
+
+To publish changed prompts, provide credentials only through your environment or secret manager:
+
+```bash
+export LANGFUSE_HOST="https://your-langfuse-host.example"
+export LANGFUSE_PUBLIC_KEY="<public-key>"
+export LANGFUSE_SECRET_KEY="<secret-key>"
+python scripts/sync_langfuse_prompts.py
+```
+
+The command compares every catalog entry with its current `production` version. Matching entries
+are left unchanged; changed or missing entries get one new version labeled `production`. Output is
+limited to prompt names, versions, and status and never prints credentials or prompt content.
+
+To roll back, open the prompt in Langfuse and move the `production` label from the new version to
+the previously known-good version. To disable Langfuse entirely and use the catalog fallbacks,
+remove `LANGFUSE_PUBLIC_KEY` and `LANGFUSE_SECRET_KEY` from the application environment and restart
+the application.
+
+## Deployment
+
+The production image serves the built frontend through FastAPI on port `8080`.
+
+For Kubernetes, start with the [chart installation guide and values reference](helm/news-dashboard/README.md).
+The command below upgrades the repository-specific production deployment using
+the versioned chart at `oci://ghcr.io/lihor-hub/charts/news-dashboard`. Set
+`CHART_VERSION` to the application release version without its `v` prefix.
+For a chart from your checkout, replace the OCI reference and `--version` with
+`./helm/news-dashboard`. See the [chart versioning policy](helm/news-dashboard/README.md#versioning-policy).
+
+```bash
+(
+set -euo pipefail
+CHART_VERSION="${CHART_VERSION:?set CHART_VERSION to the published chart version}"
+IMAGE_DIGEST="${IMAGE_DIGEST:?set IMAGE_DIGEST to sha256:<64 lowercase hex>}"
+: "${SESSION_SECRET:?set SESSION_SECRET}"
+: "${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}"
+: "${POSTGRES_HOST_PATH:?set POSTGRES_HOST_PATH}"
+source ./scripts/production-deploy-lib.sh
+production_cutover_enabled || { echo "Ingress cutover is not enabled" >&2; exit 2; }
+prepare_production_helm_secret_files
+
+helm upgrade --install news-dashboard oci://ghcr.io/lihor-hub/charts/news-dashboard \
+  --version "$CHART_VERSION" \
+  --namespace news-dashboard --create-namespace \
+  --values ./helm/news-dashboard/values-production.yaml \
+  --set-string image.digest="${IMAGE_DIGEST}" \
+  --set-string postgresql.persistence.hostPath="$POSTGRES_HOST_PATH" \
+  --set-file app.auth.sessionSecret="$PRODUCTION_SESSION_SECRET_FILE" \
+  --set-file postgresql.password="$PRODUCTION_POSTGRES_PASSWORD_FILE"
+)
+```
+
+The production values expose the app only through a TLS Ingress backed by a
+`ClusterIP` Service. Supply secrets and installation-specific persistence as
+runtime overrides; do not commit them to a values file. The shared helper writes
+the secrets to mode-0600 temporary files, removes them on exit, and keeps secret
+values out of Helm's process arguments. Pull-request CI renders this contract
+without requiring access to the production appliance.
+
+Public egress excludes private and other non-global networks. For an external
+PostgreSQL, SMTP, Keycloak, or other private/custom endpoint, copy
+`deploy/additional-egress-values.example.json` outside the repository and set
+`ADDITIONAL_EGRESS_VALUES_FILE` to that path for every manual deployment. CI
+operators can instead store the same non-secret strict JSON in the production
+environment variable `ADDITIONAL_EGRESS_VALUES`; both inputs are re-applied on
+every Helm upgrade. Keep credentials in Kubernetes/GitHub secrets, never in
+this policy-only values input. YAML syntax, aliases, merge keys, comments, and
+multiple documents are intentionally not accepted.
+
+Automated and local live application of this overlay is disabled until the
+operator sets `INGRESS_CUTOVER_ENABLED=true` after completing the readiness
+checks in issue #1302. `scripts/deploy-local-k8s.sh --render` remains available
+without that activation.
+
+For bundled or external PostgreSQL configuration and required credentials, see
+the [chart values reference](helm/news-dashboard/README.md#values-reference).
+For render-only validation, `scripts/deploy-local-k8s.sh --render` supplies
+protected temporary dummy files and never applies the result.
+
+**Existing deployments:** if you previously deployed with the old default
+password (`news-dashboard-local-password`), changing the Helm value or
+Kubernetes Secret alone does **not** rotate an already-initialized database
+password. You must also run `ALTER USER news_dashboard WITH PASSWORD
+'<new-password>'` inside PostgreSQL after updating the secret.
+
+For simple Docker deployments (single-node setups), see the
+[Self-Hosting guide](https://docs.lihor.ro/docs/self-hosting) for instructions on running
+the published image with persistent storage.
+
+Enable auth before exposing an instance outside a trusted network. See
+[Authentication (Keycloak)](https://docs.lihor.ro/docs/configuration/authentication) and
+[Ingress HTTPS and Caddy migration](https://docs.lihor.ro/docs/configuration/https-caddy).
+The live DNS/TLS, Keycloak-route, firewall, and rollback rehearsal requires
+appliance access and is tracked in
+[human rollout issue #1302](https://github.com/lihor-hub/news-dashboard/issues/1302).
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, conventions, and how to land your first PR.
+Participation is governed by our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+The project is maintainer-led — see [MAINTAINERS.md](MAINTAINERS.md) for who's
+involved, [GOVERNANCE.md](GOVERNANCE.md) for how decisions get made, and
+[ROADMAP.md](ROADMAP.md) for near-term direction.
+
+New to the project? Browse [good first issues](https://github.com/lihor-hub/news-dashboard/issues?q=is%3Aopen+label%3A%22good+first+issue%22) — beginner-friendly tasks with clear scope — or the meatier
+[help wanted](https://github.com/lihor-hub/news-dashboard/issues?q=is%3Aopen+label%3A%22help+wanted%22) projects.
+The [contributor announcement](https://github.com/lihor-hub/news-dashboard/discussions/1331)
+sums up where help is most wanted right now.
+
+Have a question or an open-ended feature idea? Use
+[GitHub Discussions](https://github.com/lihor-hub/news-dashboard/discussions) instead of
+opening an issue — see [SUPPORT.md](SUPPORT.md) for details. Issues are reserved for
+actionable, specified bugs and feature requests.
+
+Keep runtime database code PostgreSQL-specific: psycopg parameters, PostgreSQL
+SQL, and existing database helpers. Do not add SQLite runtime fallbacks or
+generic multi-database layers.
+
+## Security
+
+Do not commit secrets, API keys, database credentials, or production session
+keys. Use environment variables or deployment secrets.
+
+See [SECURITY.md](SECURITY.md) for the vulnerability-disclosure policy and
+supported versions, and [PRIVACY.md](PRIVACY.md) for what data leaves your
+instance and how to run fully self-contained.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

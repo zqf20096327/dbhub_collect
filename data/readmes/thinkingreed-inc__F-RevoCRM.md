@@ -1,0 +1,369 @@
+# F-RevoCRM 8.0.4
+
+F-RevoCRM は日本企業に合わせた形で開発された高機能なCRMです。
+あらゆる顧客接点を管理するために、キャンペーン・リード管理から顧客・商談管理、販売管理、サポート管理・プロジェクト管理まで幅広い機能を持ち合わせています。
+
+公式サイト
+https://f-revocrm.jp
+
+## ライセンス
+Vtiger Public License 1.2
+
+## サーバ推奨要件
+* 2コア以上、8GB以上のメモリ、40GB以上の空き容量（利用人数・用途によってスペックが大幅に変わる）
+* Apache 2.4以上
+* PHP 8.3～8.5
+  * php-gd
+  * php-mysqlnd
+  * php-imap
+  * php-mbstring
+  * php-xml
+  * php-bcmath
+  * php-opcache
+  * php-zip
+  * php-curl
+  * composer
+  * memory_limit = 512M(min. 256MB)
+  * max_execution_time = 0 (min. 60 seconds、0は無制限)
+  * error_reporting (E_ERROR & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED)
+  * display_errors = OFF
+  * short_open_tag = OFF
+* MySQL 8.4(LTS)
+  * storage_engine = InnoDB
+  * local_infile = ON (under [mysqld] section)
+  * sql_mode = NO_ENGINE_SUBSTITUTION
+* Node.js v22以上
+
+※PHPの下位バージョンでも概ね動作しますが、未検証のため推奨から除外しています。
+
+## F-RevoCRMへのアクセスについて
+本アプリケーションはWebアプリケーションとなりますので、URLへ直接アクセスしてください。  
+またリファラーチェックを行っておりますので、もしSharePointなどの社内イントラにリンクを設置する場合は、`rel=noreferrer`属性を追加してください。
+```
+<a href="https://example.com/{CRM_DIR}/index.php">F-RevoCRM</a>​​​​​​
+↓
+<a href="https://example.com/{CRM_DIR}/index.php" rel="noreferrer">F-RevoCRM</a>​​​​​​
+```
+
+## ヘルスチェック (HealthCheck)
+サーバー監視用に、Web・DB（MySQL）の疎通を確認できるエンドポイントを用意しています。  
+ロードバランサ（ALB/ELB 等）や外形監視からの定期的な死活監視に利用できます。認証は不要です。
+
+* エンドポイント: `https://example.com/{CRM_DIR}/healthcheck.php`
+* メソッド: 任意（GET でよい）
+* チェック内容:
+  * `web` … リクエストに PHP が応答できること
+  * `db` … MySQL へ接続し `SELECT 1` が成功すること
+
+### 返却条件
+* **正常（全チェック成功）**: HTTP `200` / `{"status":"ok","checks":{"web":"ok","db":"ok"}}`
+* **異常（いずれか失敗）**: HTTP `503` / `{"status":"error","checks":{"web":"ok","db":"error"}}`
+
+監視ツール側では基本的に **HTTPステータスコード（200=正常 / 503=異常）** で判定してください（ALB/ELB はボディを参照しません）。  
+レスポンスはホスト名・バージョン・エラー詳細を含まない最小構成です。
+
+## PCの推奨環境
+* Windows 11 Google Chrome最新 / Microsoft Edge(Chronium)最新
+* 最低1366×768以上の解像度、推奨1920×1080以上
+* Intel Core i5 第10世代以降、または AMD Ryzen 5 3000番台以降 (⚠️Atom・Celeron・Pentium・N系（N100 等）などの省電力・エントリー向けCPUでは、動作が不安定になる場合があります。)
+* 最低8GB以上のメモリ、推奨16GB以上
+
+## モバイルデバイスの推奨環境
+* Android 最新2世代 Google Chrome（タブレット未確認）
+* iOS 最新2世代 Safari（iPad未確認）
+
+## インストール方法（概要）
+以下、F-RevoCRMのインストール方法になります。
+
+* F-RevoCRM8.0のインストール方法はそのまま読み進めてください。
+* F-RevoCRM7.4からのバージョンアップはインストール方法の後に記載があります。
+* F-RevoCRM6.5からのバージョンアップはインストール方法の後に記載があります。
+* 本レポジトリをDockerで構築する場合は、[docker/README.md](./docker/README.md)を参照してください。
+* PDF出力にheadlesschromeを利用する場合は、[docker/headlesschrome/README.md](./docker/headlesschrome/README.md)を参照してください。
+
+### configファイルを独自に設定する場合
+configファイルは`config.inc.php`として、インストール後に生成されます。  
+このファイルは、`config.template.php`をベースに、インストーラーが自動生成するファイルとなりますので、もし独自に設定する必要がある場合は`config.template.php`を`config.inc.php`にリネームし、利用してください。
+
+### 前提条件
+データベース名などを「frevocrm」としてインストールすることを前提に記載します。
+
+### 1. Apache, PHP, MySQL, Node.jsのインストール
+事前にそれぞれをインストールしておいてください。
+
+***注意点1**
+
+MySQLのSTRICT_TRANS_TABLESを無効にしてください。
+```
+# 下記手順は設定例
+
+vi /etc/my.cnf
+
+# 以下の行を変更
+[変更前]
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+
+[変更後]
+sql_mode=NO_ENGINE_SUBSTITUTION
+
+# mysqlを再起動
+service mysqld restart
+```
+
+***注意点（MySQL 8.0以降）**
+
+`sql_generate_invisible_primary_key`がONの場合、セットアップが正常に完了しません。以下の設定でOFFにしてください。
+```sql
+SET GLOBAL sql_generate_invisible_primary_key = OFF;
+```
+
+~~MySQL8.0以降の場合は、認証モードの変更が必要です。~~
+
+**※ PHP 7.4.4以降では `caching_sha2_password`（MySQL 8.0のデフォルト認証）がサポートされているため、`mysql_native_password` への変更は不要です。**
+
+`mysql_native_password` はセキュリティ強度が低いため、PHP 7.4.4以降の環境では使用しないことを推奨します。
+
+***注意点2**
+
+php.iniにて以下の設定が必要です。
+```
+date.timezone = "Asia/Tokyo"
+max_input_vars = 100000
+post_max_size = 32M
+upload_max_filesize = 32M
+max_execution_time = 60
+```
+* 最低要件のため、利用用途等に合わせて数値を大きくしてください。
+
+***注意点3**
+
+「.htaccess」によるアクセス制限を実施しています。
+「.htacesss」が有効になるようにAllowOverride Allに設定してください。
+
+
+### 2. F-RevoCRMのZIPファイルを解凍、設置
+
+ApacheのDocumentRoot以下に解凍したディレクトリ毎、あるいはファイルを置いて下さい。
+ここでは仮に/var/www/frevocrmに設置したものをとして進めます。
+
+### 3. composer installの実行
+
+F-RevoCRMはPHPの各種ライブラリをcomposer経由でインストールする必要があります。
+
+```bash
+cd /var/www/html/frevocrm
+composer install
+```
+
+### 4. WebComponentsのビルド
+
+F-RevoCRMの一部機能はWebComponentsを使用しています。以下のコマンドでビルドしてください。
+
+```bash
+cd /var/www/html/frevocrm/assets/react-web-components
+npm install
+npm run build
+```
+
+### 5. 初期設定
+
+4.で設置したF-RevoCRMのURLを開きます。
+* http://example.com/frevocrm
+
+画面に従って初期設定を完了させてください。
+
+
+## バージョンアップ方法（F-RevoCRM 7.4 → 8.0）
+F-RevoCRM 7.4 を F-RevoCRM 8.0 にバージョンアップする手順になります。
+
+### 前提条件
+* F-RevoCRM 7.4 であること（パッチバージョンは問わない）
+* ソースコードの修正やモジュールの追加がされていないこと
+* F-RevoCRM 7.4のインストール済み環境があること
+
+### 1. バックアップの取得
+F-RevoCRMのデータベース、ファイルを全てバックアップを取得します。
+
+### 2. プログラムファイルの置き換え
+1. F-RevoCRMのディレクトリ全体を別名に置き換えます。
+```
+# コマンド例
+mv frevocrm frevocrm.20250101
+```
+2. F-RevoCRM 8.0 インストール直後のファイルをもともとのF-RevoCRMのディレクトリとしてコピーします。
+```
+# コマンド例
+cp -r frevocrm80 frevocrm
+```
+3. F-RevoCRMの設定ファイル(config.*, *.properties, *tabdata.php)をコピーします。
+```
+# コマンド例
+cp frevocrm.20250101/config.* frevocrm/
+cp frevocrm.20250101/*.properties frevocrm/
+cp frevocrm.20250101/*tabdata.php frevocrm/
+```
+4. F-RevoCRMのドキュメントファイルをコピーします。
+```
+# コマンド例
+cp -r frevocrm.20250101/storage/* frevocrm/storage/
+```
+5. config.inc.phpに以下の設定を追記します。
+```php
+// 本番環境/開発環境の設定
+// 本番環境であれば true を指定してください。
+$IS_PRODUCTION = true;
+```
+
+### 3. WebComponentsのビルド
+```bash
+cd /var/www/frevocrm/assets/react-web-components
+npm install
+npm run build
+```
+
+### 4. マイグレーションツールの実行
+タグとしてv8.0.xが追加されるまで、Migrationは実行されません。
+最新のバージョンで実行したい場合は、`vtigerversion.php`のファイルを編集し、次のバージョンを指定してから以下のマイグレーション用のURLを実行してください。
+
+1. アクセスすると自動でマイグレーションが実行されます。
+ * http://example.com/frevocrm/index.php?module=Migration&view=Index&mode=step1
+
+2. 動作確認
+  F-RevoCRMのログインや業務に関わる動作を確認してください。
+
+3. 作業ディレクトリの削除
+```
+# コマンド例
+rm -r frevocrm.20250101
+```
+
+<details>
+<summary>バージョンアップ方法（F-RevoCRM 6.5 → 7.4）※クリックで展開</summary>
+
+## バージョンアップ方法（F-RevoCRM 6.5 → 7.4）
+F-RevoCRM 6.5 を F-RevoCRM 7.4 にバージョンアップする手順になります。
+
+### 前提条件
+* F-RevoCRM 6.5 であること（パッチバージョンは問わない）
+* ソースコードの修正やモジュールの追加がされていないこと
+* F-RevoCRM 6.5のインストール済み環境があること
+
+### 1. バックアップの取得
+F-RevoCRMのデータベース、ファイルを全てバックアップを取得します。
+
+### 2. プログラムファイルの置き換え
+1. F-RevoCRMのディレクトリ全体を別名に置き換えます。
+```
+# コマンド例
+mv frevocrm frevocrm.20201001
+```
+2. F-RevoCRM 7.4 インストール直後のファイルをもともとのF-RevoCRMのディレクトリとしてコピーします。
+```
+# コマンド例
+cp -r frevocrm74 frevocrm
+```
+3. F-RevoCRMの設定ファイル(config.*, *.properties, *tabdata.php)をコピーします。
+```
+# コマンド例
+cp frevocrm.20201001/config.* frevocrm/
+cp frevocrm.20201001/*.properties frevocrm/
+cp frevocrm.20201001/*tabdata.php frevocrm/
+```
+4. F-RevoCRMのドキュメントファイルをコピーします。
+```
+# コマンド例
+cp -r frevocrm.20201001/storage/* frevocrm/storage/
+```
+
+### 3. マイグレーションツールの実行
+1. アクセスすると自動でマイグレーションが実行されます。
+ * http://example.com/frevocrm/index.php?module=Migration&view=Index&mode=step1
+
+2. 動作確認
+  F-RevoCRMのログインや業務に関わる動作を確認してください。
+
+3. 作業ディレクトリの削除
+```
+# コマンド例
+rm -r frevocrm.20201001
+```
+
+</details>
+
+## 開発環境の構築
+Dockerで構築する為、[docker/README.md](./docker/README.md)を参照してください。  
+
+### 初期設定
+Gitコマンドを使い以下の設定を行ってください。  
+下記コマンドにより、不要な変更点が表示されなくなります。
+```
+git update-index --assume-unchanged parent_tabdata.php
+git update-index --assume-unchanged tabdata.php
+git update-index --assume-unchanged user_privileges/user_privileges_1.php
+```
+
+### WebComponents開発
+WebComponentsの開発を行う場合は、以下の手順で設定・起動してください。
+
+1. config.inc.php の `$IS_PRODUCTION` を `false` に設定します。
+```php
+$IS_PRODUCTION = false;
+```
+
+2. Viteの開発サーバーを起動します。
+```bash
+cd assets/react-web-components
+npm install
+npm run dev
+```
+
+開発サーバーが起動すると、WebComponentsの変更がホットリロードで反映されます。
+開発が完了したら、`$IS_PRODUCTION` を `true` に戻し、以下のコマンドでビルドしてください。
+
+```bash
+npm run build
+```
+
+### xdebug
+xdebug3がインストール済みです。
+`compose.yaml` の以下の部分を修正してください
+```yml
+# Xdebugの設定を有効にしたい場合は、mode=debug に変更してください
+# XDEBUG_CONFIG: "mode=off client_host=host.docker.internal client_port=9003 start_with_request=yes"
+XDEBUG_CONFIG: "mode=debug client_host=host.docker.internal client_port=9003 start_with_request=yes"
+```
+#### WSL2での利用
+WSL2を利用の場合は、以下のように実行してください。
+```sh
+cp docker-compose.override.yml.exmple docker-compose.override.yml
+cp .env.example .env
+```
+その後、.envの中にWSL2のIPアドレスを入力してください。
+```sh
+hostname -I
+# 172.26.76.74
+vim .env
+# DOCKER_HOST_IP=172.26.76.74
+```
+#### VSCodeでの設定
+vscodeをご利用の場合は、xdebugのエクステンションをインストール後、以下のように `.vscode/launch.json`を修正してください。
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "F-RevoCRM XDebug:9003",
+      "type": "php",
+      "request": "launch",
+      "port": 9003, 
+      "pathMappings": {
+        "/var/www/html": "${workspaceRoot}"
+      }
+    }
+  ]
+}
+```
+
+## 更新履歴
+[更新履歴](./CHANGELOG.md)を参照してください。
+

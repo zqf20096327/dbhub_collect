@@ -1,0 +1,164 @@
+# mxLore
+
+Self-hosted MCP server for AI-assisted software development. Stores architectural decisions, specs, plans, findings, and lessons learned — accessed via [Model Context Protocol](https://modelcontextprotocol.io/) tools from AI coding assistants. Works with claude.ai, Claude Code, Cursor, Windsurf, and any MCP client.
+
+> **New here?** Check out the **[product overview at mxlore.dev](https://www.mxlore.dev)** first — see what mxLore does, how it compares, and why your AI assistant needs a memory.
+
+## Features
+
+- **46 MCP Tools** — search, create, update, recall knowledge across projects
+- **Private by design** — coding AIs (Claude Code, Cursor, Windsurf) reach all 46 tools through a local proxy: no third-party connector cloud in the path, no public endpoint, server stays on localhost or your LAN ([details](#private-by-design))
+- **Multi-Project** — one server, many codebases, cross-project search
+- **Skill Evolution** — tracks which AI checker rules actually help, auto-tunes
+- **Institutional Memory** — lessons learned with recall, gate levels, graph-based knowledge links
+- **Multi-Agent** — agents exchange messages across projects via inboxes, and an assistant that is *waiting* gets woken the moment a message lands: no polling loop in the conversation, no token cost while idle, and messages no longer sit unread until someone happens to type ([details](#agent-wakeup))
+- **Admin UI** — web dashboard for team members, keys, projects, intelligence metrics
+- **Team Connect** — invite links with rate-limited landing page, one-click setup for Claude Code, claude.ai, Cursor, and more
+- **Semantic Search** — hybrid vector + full-text search (MariaDB 11.6+ with VECTOR support)
+- **AI Batch** — automatic summaries, tagging, stale detection at boot time
+- **Works in claude.ai** — CTOs and PMs use mxLore from a chat window, developers from Claude Code — same server, same knowledge
+
+## Install the Server
+
+**Prerequisites:** Windows x64, MariaDB 10.6+, [Node.js](https://nodejs.org/) (7 of the 9 hooks are Node scripts — without it the server still runs, but state tracking and Recall-Gate stay silent).
+
+| Step | What | Details |
+|------|------|---------|
+| **1** | Install MariaDB | [mariadb.org/download](https://mariadb.org/download/) (Windows MSI) |
+| **2** | Create database | `mysql -u root -p -e "CREATE DATABASE mxai_knowledge CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"` |
+| **3** | Configure | `copy mxLoreMCP.ini.example mxLoreMCP.ini` — set `Password=` to your MariaDB root password |
+| **4** | Start | `mxLoreMCP.exe` — auto-detects MariaDB, creates schema, starts on port 8080 + 8081 |
+
+The console should show `Admin server listening on 127.0.0.1:8081`. **You're halfway there — don't stop.**
+
+## First Start — From Running Server to Connected AI
+
+> ⚠️ **The server is running, but your AI can't talk to it yet.** The API key you need lives inside the Admin UI. Here's how to pick it up and hand it to Claude Code.
+
+1. **Open the Admin UI** → browse to **<http://localhost:8081>**.
+   First start has no login (no team members exist yet, so the UI opens directly).
+2. **Create your first team member** — click **"New member"**, enter a name, save. An invite dialog appears right after.
+3. **Copy the API key** — format `mxk_...`. You'll paste this into Claude Code in the next step.
+4. **Connect Claude Code** — in any Claude Code session, run:
+   ```
+   /mxSetup mxk_your_api_key_here
+   ```
+   `mxSetup` downloads the 12 skills, installs the proxy, and writes your `.claude/settings.json`. Takes ~15 seconds.
+5. **Verify the handshake** — ask Claude: *"ping the mxLore server"*. You should see `version: 2.4.0` come back.
+
+**That's it.** Your AI now has persistent memory across sessions.
+
+**Other clients (claude.ai, Cursor, Windsurf, team invites):** [Team Onboarding Guide](docs/team-onboarding.md)
+**Full walkthrough:** [Installation Guide](docs/installation.md) | **Problems?** [Troubleshooting](docs/troubleshooting.md)
+
+## Documentation
+
+| Guide | Description |
+|-------|-------------|
+| **[Installation Guide](docs/installation.md)** | Step-by-step setup with MariaDB, configuration, first boot |
+| **[Team Onboarding](docs/team-onboarding.md)** | Connect Claude Code, claude.ai, Cursor + invite team members |
+| **[Team Collaboration](docs/team-collaboration.md)** | How PM, Dev, QA & Doc work together through mxLore — idea to shipped, friction-free handoffs |
+| **[Troubleshooting](docs/troubleshooting.md)** | Common issues and solutions |
+| **[mxlore.dev](https://www.mxlore.dev)** | Product overview, feature comparison, pricing |
+
+## Network Security
+
+| Scenario | Setup |
+|----------|-------|
+| **Localhost** (single user) | HTTP is fine. Default: `BindAddress=127.0.0.1` |
+| **LAN** (team) | Set `BindAddress=0.0.0.0` in INI. HTTP OK on trusted networks. |
+| **WAN / Cloud** | **HTTPS required.** Use a reverse proxy (IIS, nginx, Apache) with TLS. |
+
+## Private by Design
+
+Your coding AI connects **directly** to your server — no third-party MCP connector cloud sits in the path:
+
+| Client | Path | Notes |
+|--------|------|-------|
+| **Claude Code, Cursor, Windsurf** | AI -> local `mxMCPProxy` -> your server | Direct. Server can stay on `localhost`/LAN — no public endpoint needed. |
+| **claude.ai chat** | chat -> MCP connector -> your server | Chat windows can't run a local proxy, so they use the standard connector (routes through the chat provider). |
+
+- **No public endpoint** for coding clients — the proxy bridges stdio <-> HTTP locally, so the server never has to face the internet.
+- **No connector rate limits or broker outages** between you and your data.
+- **You own the transport** — Bearer-auth API keys, your own TLS/firewall. The proxy is a single dependency-free binary (Windows + macOS).
+- Your knowledge base is stored only on your server. (As with any AI tool, whatever the model reads to answer you is processed by that model.)
+
+## Where It Sits Next to Claude Code Self-Hosted Environments
+
+Claude Code's self-hosted environments (public beta since August 2026, Team and Enterprise plans) decide **where a session runs**: `claude self-hosted-runner` turns your machines or containers into the runtime, so repository checkouts, build artifacts, secrets and files a session creates stay on infrastructure you provision. Prompts, responses and tool results are still processed by Anthropic for inference, and the session transcript is stored by Anthropic so a session can be resumed from any surface. ([Anthropic announcement](https://claude.com/blog/run-claude-code-sessions-on-your-own-compute), [Claude Code docs, week 32](https://code.claude.com/docs/en/whats-new/2026-w32))
+
+mxLore decides **where the knowledge lives** that outlives any single session: specs, decisions, plans, lessons, the graph between them, and messages between sessions. It is the same layer under a cloud session, a self-hosted runner and a local terminal, on any plan.
+
+| Layer | Claude Code cloud session | Claude Code self-hosted environment | mxLore |
+|-------|---------------------------|-------------------------------------|--------|
+| Model inference | Anthropic | Anthropic | Does not run a model |
+| Session runtime (checkout, artifacts, secrets) | Anthropic-managed | Your infrastructure | Outside its scope |
+| Conversation transcript | Stored by Anthropic | Stored by Anthropic | Not collected; session notes only if your AI writes them |
+| Specs, ADRs, lessons, recall, graph | Outside the feature's scope | Outside the feature's scope | Your MariaDB, per project and developer |
+| Messages between sessions | Same machine, macOS/Linux (v2.1.224) | Same machine, macOS/Linux (v2.1.224) | Via your server, across machines, acknowledged |
+
+The two are complementary: a session inside your network on a self-hosted runner reads the decisions your team recorded before it started, and the session after that starts from what was decided rather than from what was said. Full comparison with sources: [mxlore.dev/compare.html](https://www.mxlore.dev/compare.html).
+
+mxLore is an independent project, not affiliated with, sponsored by, or endorsed by Anthropic. Claude and Claude Code are trademarks of Anthropic, PBC. Claude Code statements above reflect Anthropic's public documentation as of September 4, 2026.
+
+## Agent Wakeup
+
+When two assistants work on related projects, one can hand work to the other — a task, a status update, a question. Until now the receiving side noticed only when its developer typed something. An assistant that was simply *waiting* never checked, so a handoff could sit unread for weeks.
+
+mxLore pushes those messages through instead:
+
+1. `mx_agent_send` stores the message on the server.
+2. The local proxy (mxMCPProxy >= 1.0.9) polls the server and delivers pending messages straight into the receiving session via `CLAUDE_CODE_MESSAGING_SOCKET` — no file buffer, no client-side watcher.
+3. The receiving session sees the message as soon as the proxy delivers it, and acknowledges it (`mx_agent_ack`) once handled.
+
+Delivery is scoped per project: a session only ever sees messages for the project it is working on, never those of other projects sharing the same machine.
+
+Messages stay on the server until they are acknowledged, and `mx_agent_inbox` returns them at any time even if delivery was missed (older proxy, session not running, etc.).
+
+## Architecture
+
+- **Stack:** Delphi (RAD Studio) + TMS Sparkle + FireDAC + MariaDB
+- **Protocol:** MCP 2024-11-05 (JSON-RPC 2.0 over HTTP+SSE)
+- **Auth:** PBKDF2-HMAC-SHA256 API keys, per-project ACL
+- **Key convention:** one API key per machine — the key's name is the machine label. Documents record which developer *and* which machine created them (auth attribution).
+- **Units:** 65 Delphi units, dot-notation (`mx.*.pas`), 5 layers
+
+## Skills
+
+12 Claude Code skills via [mxLore-skills](https://github.com/MicrotronX/mxLore-skills) (MIT licensed), listed in the order you typically use them:
+
+| # | Skill | When you use it |
+|---|-------|-----------------|
+| 1 | `/mxSetup` | **Install everything** — run once per host. Downloads skills, hooks, proxy, patches `settings.json`. |
+| 2 | `/mxInitProject` | Register a new project in mxLore (creates slug, scaffolds `CLAUDE.md`). |
+| 3 | `/mxOrchestrate` | **Session manager.** Run `--resume` at session start to load briefing + context and pick up open workflows. Run `start ad-hoc "<summary>"` at the start of any substantial task — it wraps the work, tracks every step below as a workflow entry, and keeps session state across compacts. |
+| 4 | `/mxSpec` | Write a specification for a feature before planning. |
+| 5 | `/mxPlan` | Turn a spec into a step-by-step implementation plan. |
+| 6 | `/mxDecision` | Capture an architectural decision (ADR) the moment you make it. |
+| 7 | `/mxDesignChecker` | Review code/design against the spec before you ship. |
+| 8 | `/mxBugChecker` | Find bugs with verified proof (no hand-waving). |
+| 9 | `/mxSave` | End-of-session persistence — state, lessons, session notes into the DB. |
+| 10 | `/mxHealth` | Periodic consistency check on the knowledge DB and local docs. |
+| 11 | `/mxMigrateToDb` | One-time migration of legacy `docs/*.md` files into MCP. |
+| 12 | `/mxHelp` | Lists installed mx*-skills grouped by category, or explains one in detail. |
+
+Install all at once: run `/mxSetup` in Claude Code.
+
+## License
+
+**Server:** BSL 1.1 (Business Source License) — [LICENSE.txt](LICENSE.txt)
+- Source available: read, review, modify, build
+- Non-commercial use: free (personal projects, open source, students, evaluation)
+- Commercial use: **EUR 399 one-time** (regular EUR 599) — any size team, unlimited everything. Contact info@microtronx.com
+- After the change date (4 years): converts to Apache 2.0
+
+**Skills:** MIT — fully open source, no restrictions.
+
+**Pre-built binaries:** No Delphi or TMS license needed. Download from [GitHub Releases](https://github.com/MicrotronX/mxLore/releases).
+
+## Links
+
+- **[mxlore.dev](https://www.mxlore.dev)** — Features, demo, pricing
+- [MicrotronX/mxLore](https://github.com/MicrotronX/mxLore) — Server source
+- [MicrotronX/mxLore-skills](https://github.com/MicrotronX/mxLore-skills) — Claude Code skills (MIT)
+- [MicrotronX](https://github.com/MicrotronX) — More tools

@@ -1,0 +1,711 @@
+<p align="center">
+  <img alt="tota-agent" src="public/tota-agent-txt.png" width="340">
+</p>
+
+<p align="center">
+  <strong>AI agent built for control: permissioned tools, safe execution, token budgets, and multi-channel access.</strong>
+</p>
+
+<p align="center">
+  Remembers what matters. Asks before it acts. Runs 24/7 from CLI, Telegram, WhatsApp, REST API, or **local web UI**.<br>
+  60+ built-in tools · Web search · Vision · Code sandbox · Browser automation (36 tools) · Computer-use · Android control · Document readers · MCP plugins · Extensible skills · SQLite-backed Second Brain memory · 12 LLM providers (NVIDIA NIM, OpenRouter, DeepSeek, OpenAI, Anthropic, Grok, Groq, Ollama, MiMo…).
+</p>
+
+<p align="center">
+  <!-- Version & downloads -->
+  <a href="https://www.npmjs.com/package/tota-agent"><img src="https://img.shields.io/npm/v/tota-agent?color=blue&label=npm" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/tota-agent"><img src="https://img.shields.io/npm/dt/tota-agent?color=blue&label=total%20downloads" alt="npm total downloads"></a>
+  <!-- CI & Security -->
+  <a href="https://github.com/manu14357/tota-agent/actions/workflows/ci.yml"><img src="https://github.com/manu14357/tota-agent/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/manu14357/tota-agent/actions/workflows/security.yml"><img src="https://github.com/manu14357/tota-agent/actions/workflows/security.yml/badge.svg" alt="Security"></a>
+  <!-- Meta -->
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/node/v/tota-agent" alt="node"></a>
+  <a href="https://github.com/manu14357/tota-agent/blob/main/LICENSE"><img src="https://img.shields.io/github/license/manu14357/tota-agent" alt="license"></a>
+  <a href="https://github.com/manu14357/tota-agent"><img src="https://img.shields.io/github/stars/manu14357/tota-agent?style=social" alt="stars"></a>
+  <a href="https://github.com/sponsors/manu14357"><img src="https://img.shields.io/badge/sponsor-%E2%9D%A4-ea4aaa?logo=github-sponsors" alt="sponsor"></a>
+</p>
+
+---
+
+## Quick Start
+
+Install globally (recommended — makes `tota` available everywhere):
+
+```bash
+npm i -g tota-agent
+tota
+```
+
+Or try it once without installing:
+
+```bash
+npx tota-agent
+```
+
+> **Note:** `npx tota-agent` runs tota in a temporary session only.  
+> The `tota` command will **not** be available after that session ends.  
+> Use `npm i -g tota-agent` for a permanent install.
+
+> **Upgrading from the old `@manu14357/tota-agent` package?**
+> The package was renamed to `tota-agent` (unscoped). The old binary shim blocks the new install on Windows.
+> Uninstall the old package first, then reinstall:
+> ```bash
+> npm uninstall -g @manu14357/tota-agent
+> npm i -g tota-agent
+> ```
+
+First run launches the setup wizard — enter your name, an API key, and optionally a Telegram bot token. Takes about 30 seconds.
+
+To reconfigure at any time:
+
+```bash
+tota doctor
+```
+
+Or configure just one feature without running the full wizard:
+
+```bash
+tota setup websearch    # add a web search key
+tota setup telegram     # change your Telegram bot
+tota setup llm          # swap LLM provider
+tota setup browser      # install Chromium, Firefox, WebKit browser binaries
+tota setup computer     # enable computer-use & Android ADB tools
+tota setup api          # enable the REST API channel
+tota ui                 # open the local web UI (http://127.0.0.1:3001)
+```
+
+---
+
+## Why tota?
+
+Every AI agent can read files and run commands. Most do it silently. **tota asks first — and remembers what matters.**
+
+| Feature | What it means |
+|---------|--------------|
+| **Permission-hardened** | Shell blocklist, folder-level scoping, per-session approval modes. No surprises. |
+| **Second Brain** | Persistent SQLite memory with FTS5 search. 10 memory types. Learns your preferences automatically. |
+| **Soul-driven** | Personality from markdown files you own (`~/.tota/soul/`). No corporate wrapper. |
+| **Token-aware** | Daily budget with auto-concise at 70%. `/budget` command to check, reset, or override. |
+| **Live streaming** | Real-time token streaming on CLI with markdown re-render. Telegram streaming with editable messages. |
+| **Always on** | Daemon mode with crash recovery and system service (macOS, Linux, Windows). |
+| **Web search** | Built-in web search via Brave, Serper, or Tavily. Auto-detects from env keys. |
+| **Vision** | Analyze local images and URLs with your AI provider's vision capabilities. |
+| **Code sandbox** | Execute Python, JavaScript, Bash, TypeScript, Ruby, and Go in an isolated temp sandbox. |
+| **Document readers** | Read PDF, Excel (.xlsx/.csv), and Word (.docx) files — text, tables, metadata. |
+| **Advanced file finder** | Find files by glob, content keyword, type, date range, and size across deep directory trees. |
+| **Browser automation** | Full Playwright browser — Chromium, Firefox, or WebKit. Open pages, click, type, hover, drag, select, scroll, evaluate JS, manage cookies & storage, export PDF, set viewport. Switch engines mid-session. |
+| **Computer-use** | See your screen via vision AI, then click, type, scroll, drag, and press keys anywhere on the desktop. macOS, Linux, and Windows. |
+| **Android control** | ADB-powered Android device control — tap, swipe, type, key events, shell commands, file push/pull. No extra deps beyond `adb`. |
+| **Telegram file receiving** | Users can send documents, photos, audio, and video directly to tota via Telegram. |
+| **Task delegation** | Agent can spawn sub-tasks and delegate to itself for complex multi-step workflows. |
+| **Multi-agent crew** | Spawn specialized sub-agents (researcher, coder, reviewer) and coordinate their output. |
+| **Secrets vault** | Store and retrieve secrets using the OS keychain (macOS Keychain, GNOME Keyring, Windows Credential Manager) with AES-256-GCM encrypted file fallback. |
+| **Desktop notifications** | Send native desktop notifications from macOS, Linux, or Windows — great for long-running tasks. |
+| **Clipboard** | Read from and write to the system clipboard. |
+| **Voice TTS/STT** | Multi-provider TTS: OpenAI TTS-1, ElevenLabs, Google Cloud TTS. Multi-provider STT: OpenAI Whisper, Groq Whisper. Telegram voice messages auto-transcribed. |
+| **Google Calendar** | List, create, and delete events; check free/busy availability — full OAuth2 flow built in. |
+| **MCP plugins** | Connect any MCP-compatible tool server over HTTP — tools appear instantly in the agent. |
+| **Web UI** | Local dashboard at `http://127.0.0.1:3001` — chat, memory browser, scheduler, skills, logs, and settings. `tota ui` to launch. |
+| **REST API channel** | Control tota programmatically over HTTP with optional bearer-token auth. |
+| **WhatsApp channel** | Use tota from WhatsApp — no Meta Business API needed. Scan a QR code, manage access per phone number. |
+| **Extensible** | Install community skills with one command. Schedule skills as recurring tasks. |
+
+---
+
+## Daemon Mode
+
+One command to make tota persistent:
+
+```bash
+tota up
+```
+
+This installs the system service, starts the background daemon, and confirms everything is running. If tota is already running, it just shows the PID.
+
+```bash
+tota restart      # Restart the background process
+tota stop         # Stop the background process
+tota start -d     # Start in background (no service install)
+tota logs         # View recent daemon logs (last 100 lines)
+tota logs -f      # Live-follow daemon logs (Ctrl+C to stop)
+tota logs -n 50   # Show last 50 lines
+tota logs --clear # Clear the log file
+tota status       # Show if daemon is running
+```
+
+### System Service (auto-start on boot)
+
+`tota up` installs this automatically. Manage it directly:
+
+```bash
+tota service install
+tota service status
+tota service uninstall
+```
+
+| Platform | Method | Requires Admin |
+|----------|--------|---------------|
+| **macOS** | LaunchAgent (`~/Library/LaunchAgents/`) | No |
+| **Linux** | systemd user unit (`~/.config/systemd/user/`) | No |
+| **Windows** | Task Scheduler (`schtasks`) | No |
+
+---
+
+## Web UI
+
+tota ships a full browser-based dashboard that runs entirely on your machine — no cloud, no account, no data leaving localhost.
+
+```bash
+tota ui
+```
+
+Opens `http://127.0.0.1:3001` in your default browser. The server starts in seconds and streams responses over WebSocket in real time.
+
+### Options
+
+| Flag | Description |
+|------|-------------|
+| `--port <n>` | Custom port (default: `3001`) |
+| `--no-open` | Start server without opening a browser tab |
+| `--attach` | Proxy to an already-running tota daemon |
+
+```bash
+tota ui --port 4000          # custom port
+tota ui --no-open            # server only
+tota ui --attach             # connect to running daemon
+```
+
+### Pages
+
+| Page | Path | What you can do |
+|------|------|-----------------|
+| **Chat** | `/chat` | Full conversation interface with real-time token streaming, slash-command autocomplete (`/help`, `/status`, `/memory`, `/permissions`, `/exit`), file upload up to 50 MB (drag or attach), voice input via browser mic with auto-transcription, inline media preview, and rendered code blocks with copy button |
+| **Agents** | `/agents` | Live multi-agent canvas. Launch a crew (`/create-agent`) and watch the orchestrator fan out into worker agents as nodes — each shows role, status (queued/running/done/error), elapsed time, and output. Streams over WebSocket in real time |
+| **Dashboard** | `/dashboard` | Live agent overview — status badge, active model, provider, uptime, token budget (used / daily limit), and current permission mode. Auto-refreshes every 8 s |
+| **Memory** | `/memory` | Browse and manage Second Brain entries (short-term and long-term). Add entries with tags, edit existing ones, and delete stale facts — all changes sync to the SQLite database immediately |
+| **Scheduler** | `/scheduler` | View all scheduled tasks with name, cron/interval, last run, next run, and status. Create, edit, toggle, or cancel any task |
+| **Skills** | `/skills` | See every installed skill — name, description, version, and whether it is currently active. Add, edit, or delete skills |
+| **Settings** | `/settings` | Inspect and update agent behaviour config, provider configuration, API key status per provider, and active channel config |
+| **Logs** | `/logs` | Live log viewer with severity filter (debug / info / warn / error). Auto-refreshes every 5 s and streams new entries via WebSocket |
+| **Integrations** | `/integrations` | At-a-glance status of every channel (Telegram, WhatsApp, REST API, Web UI), configured GitHub and web-search settings, active providers, and tool category overview |
+
+### Enable via config (auto-start with daemon)
+
+```json
+// ~/.tota/config.json
+{
+  "channels": {
+    "ui": {
+      "enabled": true,
+      "port": 3001
+    }
+  }
+}
+```
+
+Or configure interactively:
+
+```bash
+tota setup ui
+```
+
+### Security
+
+The server binds to `127.0.0.1` (loopback) only — it is never exposed to the network. To access it from another machine, use an SSH tunnel:
+
+```bash
+ssh -L 3001:127.0.0.1:3001 user@your-server
+# then open http://127.0.0.1:3001 locally
+```
+
+---
+
+## CLI Commands
+
+| Command | Description |
+|---------|-------------|
+| `tota ui` | Launch the local web UI at `http://127.0.0.1:3001` |
+| `tota ui --port <n>` | Use a custom port for the web UI |
+| `tota ui --no-open` | Start the UI server without opening a browser |
+| `tota ui --attach` | Attach to an already-running tota instance via its API |
+| `tota up` | Install service + start daemon + confirm running |
+| `tota` | Start the agent |
+| `tota start` | Start in foreground |
+| `tota start -d` | Start in background |
+| `tota restart` | Restart background process |
+| `tota stop` | Stop background process |
+| `tota logs` | View daemon logs (last 100 lines) |
+| `tota logs -f` | Live-follow daemon logs |
+| `tota logs -n <n>` | Show last N lines |
+| `tota logs --clear` | Clear the log file |
+| `tota doctor` | Reconfigure all settings (Enter keeps current) |
+| `tota setup` | Re-run full setup wizard |
+| `tota setup <feature>` | Configure one feature only (see below) |
+| `tota status` | Show config and daemon status |
+| `tota help` | Show full manual |
+| `tota upgrade` | Upgrade to latest version |
+| `tota telegram list` | List Telegram users |
+| `tota telegram approve <code>` | Approve a pairing code |
+| `tota telegram reject <id>` | Reject a pending request |
+| `tota telegram remove <id>` | Remove an approved user |
+| `tota telegram promote <id>` | Promote member to admin |
+| `tota telegram demote <id>` | Demote admin to member |
+| `tota telegram reset` | Clear all Telegram access |
+| `tota whatsapp status` | Show WhatsApp status and access list |
+| `tota whatsapp setup` | Run WhatsApp setup wizard |
+| `tota whatsapp link` | Show QR code to link your WhatsApp device |
+| `tota whatsapp allow <phone>` | Add a phone to the allowed list |
+| `tota whatsapp approve <phone>` | Approve a pending access request |
+| `tota whatsapp reject <phone>` | Reject a pending access request |
+| `tota whatsapp remove <phone>` | Remove a number from access |
+| `tota whatsapp pending` | List pending WhatsApp requests |
+| `tota whatsapp disallow <phone>` | Remove a phone from the allowed list |
+| `tota whatsapp revoke` | Delete session auth and clear access lists (re-link required) |
+| `tota service install` | Install system service |
+| `tota service uninstall` | Uninstall system service |
+| `tota service status` | Show service status |
+| `tota --verbose` | Start with debug logging |
+
+### `tota setup <feature>`
+
+Configure a single section without touching everything else. The agent keeps running — open a new terminal tab.
+
+| Feature | What it configures |
+|---------|-------------------|
+| `identity` | Your name and agent name |
+| `llm` | LLM providers and models |
+| `telegram` | Telegram bot token and pairing |
+| `whatsapp` | WhatsApp channel (QR link, allowed numbers, auth directory) |
+| `github` | GitHub username, PAT, default repo |
+| `websearch` | Web search provider key (Brave / Serper / Tavily) |
+| `browser` | Install Chromium, Firefox, WebKit binaries |
+| `computer` | Enable computer-use & Android ADB tools |
+| `calendar` | Google Calendar OAuth2 credentials — **add `http://localhost:8765/oauth2callback` to Authorized redirect URIs in Google Cloud Console first** |
+| `voice` | TTS/STT providers (OpenAI / ElevenLabs / Google / Groq) |
+| `vault` | Show secrets vault backend and usage info |
+| `api` | REST API channel (port, auth key) |
+| `ui` | Web UI channel (port) |
+| `budget` | Daily token budget |
+
+---
+
+## In-Chat Commands
+
+These work on both CLI and Telegram and do not consume API tokens.
+
+| Command | Description |
+|---------|-------------|
+| `/help` | Show full manual |
+| `/status` | Show config, budget, usage |
+| `/create-agent <goal>` | Spawn 1+ parallel agents on a goal (e.g. `3 research vector DBs`) |
+| `/agents` | List recent multi-agent runs (watch live on the web UI canvas) |
+| `/tools` | List loaded tools |
+| `/skills` | List installed skills |
+| `/stream` | Toggle Telegram streaming |
+| `/budget` | Show token budget |
+| `/budget override` | Override budget for one request |
+| `/budget reset` | Reset usage to zero |
+| `/budget set <n>` | Change daily budget |
+| `/permissions` | Change permission mode |
+| `/tasks` | List scheduled tasks |
+| `/memory` | View and manage Second Brain |
+| `/unpair` | Reset all Telegram access |
+
+---
+
+## Built-in Tools
+
+| Category | Tools |
+|----------|-------|
+| **Filesystem** | `read_file`, `write_file`, `create_file`, `edit_file`, `list_dir`, `delete_file`, `send_file`, `approve_scope` |
+| **Document readers** | `read_pdf`, `read_excel`, `write_excel`, `read_docx` — PDF, Excel, Word document support |
+| **File finder** | `find_files` — advanced search by glob, content keyword, type, date range, and size |
+| **Browser** | `browser_open`, `browser_click`, `browser_type`, `browser_key`, `browser_wait`, `browser_screenshot`, `browser_extract`, `browser_scroll`, `browser_scroll_into_view`, `browser_hover`, `browser_select`, `browser_drag`, `browser_evaluate`, `browser_navigate`, `browser_get_url`, `browser_reload`, `browser_close`, `browser_engine`, `browser_cookies_get`, `browser_cookies_set`, `browser_cookies_clear`, `browser_storage_get`, `browser_storage_set`, `browser_storage_clear`, `browser_pdf`, `browser_set_viewport` |
+| **Computer-use** | `computer_screenshot`, `computer_see`, `computer_click`, `computer_move`, `computer_type`, `computer_key`, `computer_scroll`, `computer_drag`, `computer_screen_size` |
+| **Android (ADB)** | `adb_devices`, `adb_screenshot`, `adb_see`, `adb_tap`, `adb_swipe`, `adb_type`, `adb_key`, `adb_shell`, `adb_pull`, `adb_push` |
+| **Shell** | `run_command`, `cd`, `approve_command` |
+| **Code sandbox** | `run_code` — execute Python / JS / Bash / TS / Ruby / Go in an isolated sandbox |
+| **Messaging** | `send_message` |
+| **Git** | `git_status`, `git_diff`, `git_log`, `git_add`, `git_commit`, `git_push` |
+| **Web** | `fetch_url`, `web_search` — search via Brave, Serper, or Tavily |
+| **Vision** | `analyze_image` — analyze local images or image URLs |
+| **Delegation** | `delegate_task` — spawn a focused sub-agent for a sub-task |
+| **Multi-agent crew** | `spawn_agent` — spawn a specialized sub-agent (researcher, coder, reviewer) with scoped tools |
+| **Secrets vault** | `secret_store`, `secret_get`, `secret_list`, `secret_delete` — OS keychain + encrypted file fallback |
+| **Desktop notifications** | `notify` — send a native desktop notification (macOS, Linux, Windows) |
+| **Clipboard** | `clipboard_read`, `clipboard_write` — read from and write to the system clipboard |
+| **Voice** | `text_to_speech` (OpenAI TTS-1 / ElevenLabs / Google Cloud TTS), `transcribe_audio` (OpenAI Whisper / Groq Whisper) — Telegram voice messages auto-transcribed; `provider` param overrides default per call |
+| **Google Calendar** | `calendar_auth`, `list_events`, `create_event`, `check_availability`, `delete_event` — auto browser-based OAuth2 (tota opens the consent screen for you; one-time [redirect URI setup](#google-calendar-setup) required) |
+| **Skills** | `install_skill`, `list_skills`, `use_skill` |
+| **Scheduler** | `schedule_task`, `list_scheduled_tasks`, `cancel_scheduled_task` |
+| **System** | `budget_status` |
+| **MCP** | `mcp_<server>_<tool>` — tools loaded dynamically from MCP servers |
+
+---
+
+## Web Search
+
+tota can search the web using three providers — set one API key and it works automatically.
+
+| Provider | Env Var | Sign up |
+|----------|---------|---------|
+| **Brave Search** | `BRAVE_API_KEY` | [brave.com/search/api](https://brave.com/search/api/) |
+| **Serper** | `SERPER_API_KEY` | [serper.dev](https://serper.dev) |
+| **Tavily** | `TAVILY_API_KEY` | [tavily.com](https://tavily.com) |
+
+Auto-detection: if `WEB_SEARCH_PROVIDER=auto` (default), tota picks whichever key it finds. Or pin a specific provider:
+
+```bash
+# ~/.tota/.env
+WEB_SEARCH_PROVIDER=brave
+BRAVE_API_KEY=your-key-here
+```
+
+Disable entirely: `WEB_SEARCH_ENABLED=false`
+
+---
+
+## Vision / Image Analysis
+
+tota can analyze images — local files or URLs — using your provider's vision model.
+
+```
+Analyze this screenshot: /path/to/screenshot.png
+What's in this image? https://example.com/chart.jpg
+```
+
+The `analyze_image` tool automatically detects MIME types from magic bytes, supports JPEG, PNG, GIF, and WebP, and works with any provider that supports vision.
+
+---
+
+## Computer-Use (Desktop Control)
+
+tota can see and control your desktop — click, type, scroll, drag, and press keys anywhere on screen, on macOS, Linux, and Windows.
+
+### Enable
+
+```bash
+# Option 1 — wizard (recommended)
+tota setup computer
+
+# Option 2 — env var
+# ~/.tota/.env
+COMPUTER_USE_ENABLED=true
+```
+
+Or set `capabilities.computer.enabled: true` in `~/.tota/tota.yaml`.
+
+### Desktop tools
+
+| Tool | What it does |
+|------|--------------|
+| `computer_screenshot` | Capture the full screen or a region, save to temp file |
+| `computer_see` | Screenshot + vision AI analysis in one step |
+| `computer_click` | Left, right, or double-click at (x, y) |
+| `computer_move` | Move cursor to (x, y) |
+| `computer_type` | Type text at the current keyboard focus |
+| `computer_key` | Press a key or combo (`cmd+c`, `ctrl+z`, `enter`, etc.) |
+| `computer_scroll` | Scroll up/down/left/right at (x, y) |
+| `computer_drag` | Click and drag between two points |
+| `computer_screen_size` | Get display resolution |
+
+Desktop mouse/keyboard control uses [`@nut-tree-fork/nut-js`](https://github.com/nut-tree/nut.js) (cross-platform native module). On Linux, install `libxtst-dev` first:
+
+```bash
+sudo apt install libxtst-dev
+```
+
+### Android tools (ADB)
+
+All Android tools work via `adb` in your PATH — no new Node.js deps needed.
+
+| Tool | What it does |
+|------|--------------|
+| `adb_devices` | List connected devices |
+| `adb_screenshot` | Capture Android screen |
+| `adb_see` | Android screenshot + vision AI analysis |
+| `adb_tap` | Tap at (x, y) |
+| `adb_swipe` | Swipe between two points |
+| `adb_type` | Type text into focused field |
+| `adb_key` | Send key event (HOME=3, BACK=4, ENTER=66…) |
+| `adb_shell` | Run any `adb shell` command |
+| `adb_pull` | Pull file from device |
+| `adb_push` | Push file to device |
+
+---
+
+## Code Sandbox
+
+The `run_code` tool executes code in an isolated temporary directory — no access to your project files.
+
+Supported languages: **Python**, **JavaScript (Node.js)**, **Bash**, **TypeScript**, **Ruby**, **Go**
+
+```
+Run this Python script and show me the output:
+  import json; print(json.dumps({"x": 42}))
+```
+
+- Timeout: 30 s default, configurable up to 120 s
+- Output capped at 8,000 characters
+- Sandbox cleaned up after each run
+- Accepts optional stdin input
+
+---
+
+## REST API Channel
+
+Control tota programmatically over HTTP:
+
+```bash
+# Enable in ~/.tota/.env
+API_CHANNEL_ENABLED=true
+API_CHANNEL_PORT=3001
+API_CHANNEL_KEY=your-secret-key   # optional
+```
+
+**Endpoints:**
+
+```
+GET  /status          → { "status": "ok", "ready": true }
+POST /message         → { "content": "your message", "timeout": 30 }
+                      ← { "requestId": "...", "response": "..." }
+```
+
+**Authentication** (if `API_CHANNEL_KEY` set):
+```
+Authorization: Bearer your-secret-key
+# or
+X-Api-Key: your-secret-key
+```
+
+---
+
+## MCP Plugins
+
+Connect any [Model Context Protocol](https://modelcontextprotocol.io) server to tota. Tools load automatically at startup and appear with the prefix `mcp_<server>_<tool>`.
+
+```yaml
+# ~/.tota/tota.yaml
+mcp:
+  servers:
+    - name: filesystem
+      url: http://localhost:8080/mcp
+      enabled: true
+    - name: my-db
+      url: http://localhost:9090/mcp
+      apiKey: secret-token
+      enabled: true
+```
+
+Any MCP server speaking the JSON-RPC `tools/list` + `tools/call` protocol over HTTP is supported.
+
+---
+
+## Google Calendar Setup
+
+<a id="google-calendar-setup"></a>
+
+tota uses a local OAuth2 redirect (no code copy-paste, no "browser not safe" warning).
+
+**One-time setup in Google Cloud Console:**
+1. Go to [console.cloud.google.com](https://console.cloud.google.com) → APIs & Services → Credentials.
+2. Create (or open) your **Desktop app** OAuth 2.0 Client ID.
+3. Under **Authorized redirect URIs**, add:
+   ```
+   http://localhost:8765/oauth2callback
+   ```
+4. Run `tota setup calendar` and enter your Client ID and Secret.
+
+**After that — fully automatic:**  
+Just ask tota about your calendar. It opens your browser to Google's consent screen → you click **Allow** → done. Tokens saved to `~/.tota/calendar-token.json` and auto-refreshed forever.
+
+---
+
+## Gmail Setup
+
+tota can search, read, send, and triage Gmail (`gmail_search`, `gmail_read`, `gmail_send`, `gmail_modify`).
+
+**Setup:**
+1. In [Google Cloud Console](https://console.cloud.google.com), enable the **Gmail API**.
+2. Create a **Desktop app** OAuth Client ID (or reuse your existing one) and add the redirect URI `http://localhost:8765/oauth2callback`.
+3. Run `tota setup gmail` and enter the Client ID/Secret (these can be the shared `GOOGLE_CLIENT_ID/SECRET`).
+4. Ask tota to "check my email" — browser opens → **Allow** → token saved to `~/.tota/gmail-token.json`.
+
+### Company / Google Workspace accounts (e.g. `you@yourcompany.com`)
+
+Personal `@gmail.com` accounts work out of the box. **Workspace accounts often fail until you fix the Google-side config** — code alone can't bypass it:
+
+- **OAuth consent screen** → if it's in **Testing**, either add your address as a *Test user* or publish (**Testing → In production**). For a domain-only app, set **User type = Internal**.
+- **Restrict to your domain:** set `GOOGLE_HOSTED_DOMAIN=yourcompany.com` (adds the `hd=` param) and optionally `GOOGLE_LOGIN_HINT=you@yourcompany.com`.
+- **Admin block:** a Workspace admin may need to allow the app under **Admin console → Security → API controls**.
+- **Headless servers:** use a **service account with domain-wide delegation** — set `GOOGLE_SERVICE_ACCOUNT_KEY=/path/key.json` and `GOOGLE_IMPERSONATE_SUBJECT=you@yourcompany.com`. The admin grants the service-account client ID the Gmail/Calendar scopes under **Domain-wide delegation**. No interactive consent needed.
+
+tota surfaces actionable guidance automatically when a Workspace auth error (e.g. `access_denied`, `org_internal`) occurs.
+
+---
+
+## Multi-Agent Crews
+
+Spawn one or many agents that work **in parallel** on a goal, then synthesize a combined answer.
+
+```
+/create-agent build a REST API for todos
+/create-agent 3 research the best open-source vector databases
+/create-agent 2 reviewers audit the auth flow in src/
+```
+
+- A leading number spawns that many workers (1–8). With 2+, the orchestrator first asks the model to split the goal into distinct, non-overlapping sub-tasks (with a deterministic fallback), runs them concurrently, then synthesizes the results.
+- `/agents` lists recent runs in chat.
+- The **Agents** page in the web UI renders the whole run as a **live canvas** — orchestrator → worker nodes with status, timing, and per-agent output — streamed over WebSocket.
+- Under the hood this reuses the existing `spawn_agent` / `delegate_task` crew tools, so the model can also orchestrate agents itself mid-task.
+
+---
+
+## Second Brain
+
+tota builds structured persistent memory that grows with every conversation.
+
+- **10 memory types** — identity, preference, goal, project, habit, decision, constraint, relationship, episode, reflection
+- **Automatic extraction** — after each response, 0–3 facts extracted with confidence, importance, and durability scores
+- **Relevant recall** — top 5 matching memories (900-char budget) injected before each message
+- **Auto-consolidation** — every 60 min: profile summary, active-state summary, reflections from patterns
+- **Conflict resolution** — opposing memories resolved by confidence (higher wins) or recency
+- **Auto-pruning** — active memories stale after 21 days; inferred memories decay; low-confidence dismissed after 120 days
+- **User controls** — `/memory` for overview, search, pause, resume, clear
+- **Disable** — set `SECOND_BRAIN_ENABLED=false` or `memory.secondBrain.enabled: false` in config
+
+All data stored locally at `~/.tota/memory/second-brain/second-brain.db`. No cloud.
+
+---
+
+## Configuration
+
+All runtime data lives in `~/.tota/`.
+
+| Path | Purpose |
+|------|---------|
+| `~/.tota/tota.yaml` | Main config (providers, channels, budget) |
+| `~/.tota/.env` | API keys and tokens |
+| `~/.tota/soul/*.md` | Agent personality files |
+| `~/.tota/permissions.yaml` | Capabilities and approval rules |
+| `~/.tota/skills/` | Installed skills |
+| `~/.tota/schedules.yaml` | Scheduled tasks |
+| `~/.tota/token-usage.json` | Daily token usage |
+| `~/.tota/memory/` | All memory data |
+| `~/.tota/daemon.pid` | Background process PID |
+| `~/.tota/daemon.log` | Daemon logs |
+
+---
+
+## Providers
+
+| Provider | Default Model | API Key Env |
+|----------|--------------|-------------|
+| **DeepSeek** | deepseek-chat | `DEEPSEEK_API_KEY` |
+| **OpenAI** | gpt-4o-mini | `OPENAI_API_KEY` |
+| **Anthropic** | claude-sonnet-4 | `ANTHROPIC_API_KEY` |
+| **Grok (xAI)** | grok-4 | `GROK_API_KEY` |
+| **Groq** | llama-3.3-70b-versatile | `GROQ_API_KEY` |
+| **Ollama Cloud** | gpt-oss:120b | `OLLAMA_CLOUD_API_KEY` |
+| **Ollama Local** | gpt-oss:20b | — |
+| **OpenAI-compat** | custom | `OPENAI_COMPAT_BASE_URL` |
+| **NVIDIA NIM** | nemotron-3-super-120b | `NVIDIA_API_KEY` |
+| **OpenRouter** | openrouter/auto | `OPENROUTER_API_KEY` |
+
+tota tries providers in order and falls back automatically on failure.
+
+---
+
+## Telegram Access
+
+tota uses an organization access model with admins and members.
+
+1. Send `/start` to your bot → receive a pairing code
+2. Run `tota telegram approve <code>` in CLI → you become the first admin
+3. Additional users send `/start` → admins approve from CLI
+4. Admins: approve/reject requests, promote/demote users, reset access
+5. Members: chat with tota
+
+Private chats only. Group messages are always ignored.
+
+---
+
+## WhatsApp
+
+Use tota from WhatsApp — no Meta Business API, no phone number purchase needed. Uses WhatsApp Web (Baileys).
+
+### Quick setup
+
+```bash
+tota setup whatsapp        # enable + configure auth dir and allowed numbers
+tota whatsapp link         # show QR code — scan from WhatsApp → Linked Devices
+tota start                 # go live
+```
+
+### Access control
+
+Messages from unlisted numbers automatically generate a pending access request.
+
+```bash
+tota whatsapp allow +15551234567    # pre-allow a number
+tota whatsapp pending               # view pending requests
+tota whatsapp approve +15551234567  # approve a request
+tota whatsapp reject +15551234567   # reject a request
+tota whatsapp remove +15551234567   # revoke access for a number
+tota whatsapp disallow +15551234567 # remove from allowed list
+tota whatsapp revoke                # nuke session auth + clear all lists (re-link required)
+tota whatsapp status                # show full access list
+```
+
+### Agent outbound messages
+
+The agent can send messages back through WhatsApp:
+
+- **`send_message`** — sends back to whoever the agent is currently talking to (WhatsApp or Telegram automatically)
+- **`whatsapp_send`** — sends to a specific phone number (must be in your approved list)
+
+### Environment variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `WHATSAPP_ENABLED` | `false` | Enable the WhatsApp channel |
+| `WHATSAPP_AUTH_DIR` | `~/.tota/whatsapp-auth` | Where to store session auth files |
+| `WHATSAPP_ALLOW_FROM` | _(empty)_ | Comma-separated allowed phone numbers (E.164) |
+| `WHATSAPP_ALLOW_GROUPS` | `false` | Enable group message support |
+
+---
+
+## Architecture
+
+- **TypeScript + Node.js 20+** — ESM, tsup build
+- **Vercel AI SDK v6** — `generateText` + `streamText`, 50-step (configurable) agentic loop, provider fallback
+- **grammY** — Telegram bot with typing indicators, editable streaming, file uploads
+- **REST API channel** — Node.js `http.createServer`, bearer-token auth, request/response pairing
+- **SQLite + FTS5** — Second Brain with full-text search and auto-consolidation
+- **JSONL** — Short-term, long-term, and episodic conversation memory
+- **Custom daemon manager** — Background spawn + PID file + watchdog crash recovery
+- **Platform services** — macOS LaunchAgent, Linux systemd, Windows Task Scheduler
+- **MCP loader** — JSON-RPC `tools/list` + `tools/call` over HTTP, dynamic tool registration
+- **Code sandbox** — Isolated `os.tmpdir()/tota-sandbox/<runId>/` with cleanup after each run
+- **Tool truncation** — All tool outputs capped at 12,000 chars with clear truncation notice
+
+---
+
+## Contributing
+
+Contributions welcome. Please read the guidelines before submitting.
+
+- Fork the repo: <https://github.com/manu14357/tota-agent>
+- Run `npm install` and `npm run build`
+- Test locally with `tota`
+- Open a PR with a clear description
+
+---
+
+## License
+
+MIT © [manu14357](https://github.com/manu14357)
+
+---
+
+> **Disclaimer:** This is AI software. Use at your own risk.

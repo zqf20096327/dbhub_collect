@@ -1,0 +1,158 @@
+
+## What is Dash?
+Dash is a local-first SQL workbench built on top of DuckDB. Query your data, explore schemas, and visualize results.
+
+### Features
+- 🌐 **Runs in the browser** - no server, no data leaves your machine
+- 📊 **Visualize results** - charts and tables out of the box
+- 🔓 **Open-source** - MIT licensed
+- 🎨 **Interactive Canvas** - build and arrange queries and visualizations freely on a canvas
+- 🦆 **Powered by DuckDB** - fast, embedded, zero-config
+  
+[![Discord](https://discordapp.com/api/guilds/1491791731119755505/widget.png?style=banner3)](https://discord.gg/KUsDdkeG5G)
+
+## Getting Started
+
+You can use Dash straight from the browser (👉 https://app.dash.builders/) or install it as a DuckDB community extension:
+
+```
+INSTALL dash FROM community;
+LOAD dash;
+PRAGMA dash;
+```
+
+That's it. Dash opens directly from within DuckDB.
+
+## Community & Support
+Have a question, found a bug, or want to share feedback? Join us on [Discord](https://discord.gg/KUsDdkeG5G) or open an issue on GitHub.
+
+### Demo Video
+
+https://github.com/user-attachments/assets/96f3f4fb-1f53-4113-b1d5-d55934c865e0
+
+### Advanced Usage
+
+```sql
+-- Starts the http server
+CALL start_dash('127.0.0.1', 4200)
+
+-- Enable cors (false by default)
+CALL start_dash('127.0.0.1', 4200, enable_cors=true);
+
+-- Require authentication (off by default)
+CALL start_dash('127.0.0.1', 4200, api_key='abc123');
+
+-- Proxy the web UI from a different location
+CALL start_dash('127.0.0.1', 4200, ui_proxy='https://gropaul.github.io/dash-ui/');
+```
+
+Once the _dash_ is running, access the WebUI by opening http://127.0.0.1:4200 in your browser.
+
+## API Endpoints
+
+| Endpoint | Method | Description                     | Parameters                                                                                                                                                                                                                               |
+|----------|--------|---------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `/`      | GET    | View the integrated web UI.     |                                                                                                                                                                                                                                          |
+| `/query` | POST   | Execute an SQL query.           | **Header:** <br> - `X-Api-Key` (optional) – API key for authentication. <br><br> **Body (JSON):** <br> - `query` (string, required) – The SQL query to be executed. <br> - `format` (string, required) – Response format (`compact_json` | `json`). |
+| `/ping`  | GET    | Check if the server is running. |                                                                                                                                                                                                                                          |
+
+For detailed schema definitions refer to the [API documentation](openapi.yaml).
+This also contains instructions on querying and uploading files using the HTTP API. For worked examples of
+every endpoint, including file uploads, see the tests in [`test/sql/http/`](./test/sql/http).
+
+## Serialization pragmas
+
+The extension provides a set of pragmas to control the serialization of queries. These **SHOULD** be used independently
+of the web UI or the HTTP API and using them in a statement sent to the HTTP API is not advised, as the HTTP API already
+serializes the results using the same format.
+
+```sql
+-- Default format is JSON
+PRAGMA AS_JSON('SELECT {''key1'': range} as map, range FROM range(2)');
+
+PRAGMA AS_JSON('SELECT {''key1'': range} as map, range FROM range(2)', format='JSON');
+-- Output:
+-- [
+--   {"map":{"key1":0},"range":0},
+--   {"map":{"key1":1},"range":1}
+-- ]
+       
+PRAGMA AS_JSON('SELECT {''key1'': range} as map, range FROM range(2)', format='COMPACT_JSON');
+-- Output:       
+-- {
+--   "meta": [
+--     {"name": "map","type": "STRUCT(key1 BIGINT)"},
+--     {"name": "range","type": "BIGINT"}
+--   ],
+--   "data": [
+--     [{"key1": 0},0],
+--     [{"key1": 1},1]
+--   ],
+--   "statistics": {
+--     "rows": 2
+--   }
+-- }
+```
+
+## Development
+
+### Setting up the Repository
+
+Clone the repository and all its submodules
+
+```bash
+git clone <your-fork-url>
+git submodule update --init --recursive
+```
+
+**Build the UI:** Change into the _dash-ui_ directory and build the UI
+
+```bash
+cd dash-ui
+pnpm install --frozen-lockfile
+NEXT_PUBLIC_API_URL="" pnpm run build
+```
+
+**Generate source files:** Change back to the root directory and generate the source files containing the UI
+
+```bash
+python3 scripts/gen_ui_files.py
+```
+
+### Setting up CLion
+
+**Opening project:**
+Configuring CLion with the extension template requires a little work. Firstly, make sure that the DuckDB submodule is
+available.
+Then make sure to open `./duckdb/CMakeLists.txt` (so not the top level `CMakeLists.txt` file from this repo) as a
+project in CLion.
+Now to fix your project path go to
+`tools->CMake->Change Project Root`([docs](https://www.jetbrains.com/help/clion/change-project-root-directory.html)) to
+set the project root to the root dir of this repo.
+
+**Debugging:**
+To set up debugging in CLion, there are two simple steps required. Firstly, in
+`CLion -> Settings / Preferences -> Build, Execution, Deploy -> CMake` you will need to add the desired builds (e.g.
+Debug, Release, RelDebug, etc). There's different ways to configure this, but the easiest is to leave all empty, except
+the `build path`, which needs to be set to `../build/{build type}`. Now on a clean repository you will first need to run
+`make {build type}` to initialize the CMake build directory. After running make, you will be able to (re)build from
+CLion by using the build target we just created. If you use the CLion editor, you can create a CLion CMake profiles
+matching the CMake variables that are described in the makefile, and then you don't need to invoke the Makefile.
+
+The second step is to configure the unittest runner as a run/debug configuration. To do this, go to
+`Run -> Edit Configurations` and click `+ -> Cmake Application`. The target and executable should be `unittest`. This
+will run all the DuckDB tests. To specify only running the extension specific tests, add `--test-dir ../../.. [sql]` to
+the `Program Arguments`. Note that it is recommended to use the `unittest` executable for testing/development within
+CLion. The actual DuckDB CLI currently does not reliably work as a run target in CLion.
+
+### Testing
+
+Run the test suite:
+
+```bash
+make test_debug
+```
+
+The tests are [SQLLogicTests](https://duckdb.org/dev/sqllogictest/intro.html). The ones in
+`test/sql/http/` start the server and send it real HTTP requests; see
+[`test/README.md`](./test/README.md).

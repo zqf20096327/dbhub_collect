@@ -1,0 +1,251 @@
+# Readest Lite
+
+> Single-container, self-hostable fork of [Readest](https://github.com/readest/readest) — Supabase + R2/S3 replaced with SQLite + local filesystem, Pro/paywall removed, signup disabled, per-user AES-GCM encrypted vault, quota enforce, proxy toggle.
+
+## 💬 NodeByte 社区（最重要）
+
+> **所有问题、建议、讨论请优先前往 NodeByte 社区**：https://nodebyte.cn
+> 这是 Readest Lite 的官方社区，作者亲自在社区回答问题、收集反馈、发布更新。
+
+[![NodeByte](https://img.shields.io/badge/💬_NodeByte_社区-https%3A%2F%2Fnodebyte.cn-blue?style=for-the-badge)](https://nodebyte.cn)
+[![官网](https://img.shields.io/badge/🌐_官网-cshdotcom.github.io%2Freadestl-green?style=for-the-badge)](https://cshdotcom.github.io/readestl/)
+[![部署教程](https://img.shields.io/badge/📚_部署教程-deploy.html-orange?style=for-the-badge)](https://cshdotcom.github.io/readestl/deploy.html)
+
+## 开源重要声明（必看）
+本项目基于上游仓库 [readest/readest](https://github.com/readest/readest)（AGPL-3.0 协议）二次开发，本人衍生版完整开源仓库地址：
+https://github.com/cshdotcom/readest-lite
+
+### 1. 免费获取说明
+全套源码永久公开免费下载，内置一键化部署脚本，安装流程极简，**完全不需要付费购买源码、付费找人代安装**。
+任何平台（闲鱼、淘宝、各类资源站）以“源码收集费、独家源码、付费代部署”为由收费，均属于商家自主盈利行为，与本作者无关。
+
+### 2. AGPL-3.0 分发强制要求
+任何个人/商家转发、打包、售卖本源码，必须同时满足以下全部条件，缺一不可：
+1. 商品页面、压缩包内完整标注本开源仓库地址；
+2. 完整保留源码内所有版权注释、LICENSE 协议文件；
+3. 不得添加额外限制：禁止标注「独家源码、禁止转发、买断商用」等违规条款；
+4. 不得隐瞒源码免费开源事实，虚构付费专属资源。
+
+### 3. 侵权警示
+若商家存在以下行为，均违反 AGPL-3.0 开源协议，构成软件著作权侵权，本人将固定全套证据发起平台投诉、版权维权：
+- 商品全程不标注本开源仓库地址，隐瞒免费开源来源；
+- 谎称源码独家闭源，收取高额源码倒卖费用；
+- 限制买家二次转发、分享源码；
+- 删除源码内版权、协议、项目来源信息。
+
+## 📜 源与许可
+Readest-Lite 完全开源，遵循 AGPL-3.0 协议，源码可免费获取、部署、商用。
+在遵守 AGPL-3.0 协议前提下，个人、商业场景的使用与分发都是自由的；
+若你需要**闭源商用（不公开衍生源码）**，则必须联系作者获取独立商业授权，否则视为侵权。
+详见:
+[关于Readest－Lite商业授权要求](https://nodebyte.cn/888.html)
+
+[![CI](https://github.com/cshdotcom/readest-lite/actions/workflows/ci.yml/badge.svg)](https://github.com/cshdotcom/readest-lite/actions/workflows/ci.yml)
+[![Docker](https://github.com/cshdotcom/readest-lite/actions/workflows/docker-image.yml/badge.svg)](https://github.com/cshdotcom/readest-lite/actions/workflows/docker-image.yml)
+[![Version](https://img.shields.io/badge/version-v8.23.0-6c5ce7)](https://github.com/cshdotcom/readest-lite/releases)
+
+## 快速开始
+
+```bash
+# 一条命令拉起
+docker run -d \
+  --name readest-lite \
+  -p 8225:8225 \
+  -v readest-data:/data \
+  -e ADMIN_EMAIL=admin@example.com \
+  -e ADMIN_PASSWORD=changeme \
+  -e ADMIN_USERNAME=Admin \
+  -e SUPER_ADMIN_EMAIL=admin@example.com \
+  --restart unless-stopped \
+  ghcr.io/cshdotcom/readest-lite:latest
+
+# 30 秒后访问 http://localhost:8225
+```
+
+**请务必修改默认密码**，生产环境使用 16 位以上随机字符串。
+
+## Docker Compose 部署（推荐）
+
+```bash
+git clone https://github.com/cshdotcom/readest-lite.git
+cd readest-lite
+cp .env.example .env
+# 编辑 .env：设置 ADMIN_EMAIL / ADMIN_PASSWORD / ADMIN_USERNAME
+docker compose up -d
+```
+
+详细配置见 [部署教程](https://cshdotcom.github.io/readestl/deploy.html)。
+
+## 环境变量
+
+| 变量 | 必填 | 默认 | 说明 |
+|---|---|---|---|
+| `ADMIN_EMAIL` | ✅ | — | 管理员邮箱，首次启动自动创建账号 |
+| `ADMIN_PASSWORD` | ✅ | — | 管理员密码，建议 16+ 位随机字符 |
+| `ADMIN_USERNAME` | 可选 | — | v8.1：管理员显示名 |
+| `SUPER_ADMIN_EMAIL` | 可选 | — | 超级管理员邮箱，**设为与 ADMIN_EMAIL 相同的值**即可获得 super_admin 角色（可创建/降级 admin），重启容器后自动生效 |
+| `ADMIN_AVATAR_URL` | 可选 | — | v8.18.9：管理员头像 URL（`http(s)://` 或 `data:image/*`，拒绝 SVG）。优先级高于 DB 里手动设置的头像 |
+| `PORT` | 可选 | 8225 | 容器内监听端口 |
+| `JWT_SECRET` | 可选 | 派生值 | JWT 签名密钥，不设时由 ADMIN_EMAIL+ADMIN_PASSWORD 派生 |
+| `PUBLIC_BASE_URL` | 可选 | http://localhost:8225 | 对外访问 URL，反向代理场景下必填 |
+| `DEEPL_ENABLED` | 可选 | false | 设为 true 启用 DeepL 翻译 |
+| `DEEPL_FREE_API_KEYS` | 可选 | — | DeepL Free API key，逗号分隔 |
+| `DEEPL_PRO_API_KEYS` | 可选 | — | DeepL Pro API key，逗号分隔 |
+| `AI_GATEWAY_API_KEY` | 可选 | — | AI 聊天网关 key |
+
+指定特定版本：`ghcr.io/cshdotcom/readest-lite:8.13.1`（每个版本都有对应 git tag）。
+
+完整说明见 [部署教程 - 环境变量](https://cshdotcom.github.io/readestl/deploy.html#env)。
+
+## v8.0 → v8.13 功能列表
+
+| 版本 | 核心改动 |
+|---|---|
+| v7.0 | 多用户管理 · 远程书籍下载 · Edge TTS · 字体本地化 · DeepL 可选 |
+| v8.0 | 所有翻译/词典代理强制登录 |
+| v8.1 | 远程下载写 Book 表（修复书架不显示）· ADMIN_USERNAME env · 删除 WebSearchPopup |
+| v8.2 | 代理开关 proxyEnabled · 全站 Readest Lite 品牌 · GET health check |
+| v8.3 | 账号切换数据隔离（登出清空 library/settings/cursor） |
+| v8.4 | Per-user 加密 vault（服务端托管密钥 + AES-GCM 加密 library/settings） |
+| v8.5 | 配额真正 enforce · 真实配额 UI · SSRF 黑名单 · fire-and-forget 下载 |
+| v8.6 | 合并上游 0.11.12 · 图片保存/分享 · 永久分享 + 自定义有效期 · 下载任务队列 |
+| v8.7 | 跨设备下载任务队列（DownloadTask 表 · 暂停/恢复/重试 · 5s 轮询） |
+| v8.8 | 分块上传规避 Cloudflare 524 超时（大文件自动切 5MB · 流式合并） |
+| v8.9 | 下载进度条/速度/ETA/用时 · 点击任务看完整日志 · 批量下载 · 自动重命名 · Cookie/Headers 高级选项 |
+| v8.10 | 中文汉化 · 笔记链接手机默认走 web reader · 登出清空残留 library.json · 阅读统计（总/今日/本周 + 书榜） · 下载记录折叠 |
+| v8.10.1 | 批量下载 per-URL Cookie/Headers 语法（`URL \| cookie:VALUE \| header:Key: VALUE`） |
+| v8.10.2 | 笔记导出链接绝对 URL（站外可点击） · Reader 书不在库里时自动重试加载 · 用户管理折叠 |
+| v8.10.3 | 登出后隐藏全部书籍（修复 demo books 残留） · 移出分组不再踢出用户 |
+| v8.10.4 | 恢复跨设备视图设置同步（可选开关，默认关） |
+| v8.11 | 合并上游 v0.11.17（Markdown 渲染 · PDF/CBZ 对比度 · TTS 高亮粒度 · 最近阅读书架 · foliate-js 自动更新） |
+| **v8.12** | **上游 v0.11.17 全量同步（163 文件复制 + 21 新文件 + 58 Lite 自定义保留 · 排除 Google Drive/payment/tests · 手动同步 30+ 类型字段）** |
+| **v8.12.1** | **紧急修复 v8.12.0 误覆盖 Lite 自定义：恢复 `getRemoteBookFilename` 在 'local' 存储类型返回正确文件名（修复下载报 File not found）· 恢复 AboutWindow Lite 品牌（修复「关于」弹官方页面）** |
+| **v8.12.2** | **防御性文件名生成（即使 `getStorageType`/`book.format`/`book.title` 异常也永不返回空串）· 上传/下载失败响应体加 `hint`+`received` 字段方便诊断 · 放宽 download fallback `parts.length` 检查** |
+| **v8.13** | **上游 Readest v0.11.18 非覆盖式合入：Auto Scroll 阅读模式 · 中键自动滚动 · 翻页动画 · PDF 暗色模式页眉页脚 · 两指滚动 vs 捏合 · View Transitions API gating · TTS 大改版（无缝 Web Audio + 关书继续播放 + mini player + 词典朗读按钮）· 主题分段控件 · 校对规则开关 · OPDS 子目录爬取 + 自托管认证 · Calibre 自定义列 · 按阅读进度排序** |
+| **v8.13.1** | **翻页动画补全（幻灯片/卷页 JS-only port）· 修复「关于」页面版本号显示（package.json 0.11.4 → 8.13.1）· bookService 并发导入崩溃修复（createDir 幂等）** |
+| **v8.18.x** | **上游 v0.12.1 → v0.12.6 批量合入 + v8.18.x 一系列 Lite 自定义：feed:// 分享 · 加密设置同步 · 用户头像 URL · 阅读统计加密同步 · ABS/LocalSend/Audiobook stubs 非阻塞 · Admin 用户详情 Modal** |
+| **v8.19.x** | **回收站 + 文件去重 + 角色层级 super_admin > admin > user + 审计日志与回滚 + 分组管理 v1（在 SelectModeActions 加「更多」下拉）+ 创建用户时角色选择 + SVG 头像支持 + 隐藏头像文件** |
+| **v8.21.0** | **回收站批量选择（每行 checkbox + 批量恢复/批量删除/全选）· 管理员跨用户文件管理（list 支持 ?userId= 与 ?allUsers=1 + 移动/复制端点 + AdminFileTransfer 组件）· 分组管理 Modal（在书库三点菜单底部：搜索/添加/编辑/删除/上下移排序/滚动）· 49 个简体中文键补全** |
+| **v8.22.0** | **上游 v0.12.7/v0.12.8 适配移植：ReadEra 注释导入（API + ImportAnnotationsDialog 入口）· Notion 笔记同步（代理路由 + IntegrationsPanel + NotionForm）· 带登录的网页小说导入（novel/proxy 端点 + 高级选项 cookie/headers）· 修复分组管理点击无响应（createPortal 渲染到 body）· 修复有声书点击闪退（useSearchParams Suspense 包裹）· 修复创建用户无角色选择（永远显示 disabled select）· AdminFileTransfer 用户列表可搜索（datalist）· 32 个新简体中文键** |
+| **v8.22.2** | **关键修复：reader 页面 CORS 错误（download.readest.com / storage.readest.com）— updater 检查在 web 平台直接 short-circuit，constants.ts URL 全部本地化，新增 /public/releases/release-notes.json · 有声书点击改为「3 种播放方式」教程页（本地 MP3/M4A · Audiobookshelf 流式 · EPUB 内嵌朗读）· 用户中心布局：阅读统计卡片移到第一位 · AdminFileTransfer 默认折叠（与回收站一致）· 移动/复制到自身时友好提示** |
+| **v8.22.3** | **内置 HTML5 有声书播放器（无需外部服务）· ~~已在 v8.23 移除~~** |
+| **v8.23.0** | **删除有声书内置播放器（加到 TODO 待办）· 删除 RSS 自动 favicon 识别 · 修复超级管理员 ENV 识别（init-admin.mjs 不再降级 super_admin）· 分组管理与书库 GroupBy 融合 · README 更新** |
+
+## 📋 TODO 待办（规划中）
+
+- [ ] **有声书播放**：自研内置 HTML5 播放器（v8.22.3 曾实现但因稳定性问题暂时移除，计划重新开发）
+- [ ] **RSS 站点 favicon 自动识别**：v8.23 移除，计划用更稳定的方式重新实现
+- [ ] 官方网站 `cshdotcom.github.io/readestl` 内容更新
+
+## 数据持久化
+
+所有数据存储在容器 `/data` 目录：
+
+```
+data/
+├── db/             SQLite 数据库（用户、书籍、进度、批注）
+│   └── readest.db
+├── books/          书籍文件
+│   ├── uploads/    上传的电子书
+│   └── covers/     自动生成的封面
+├── inbox/          Send to Readest 入站文件
+└── config.json     运行时配置（自动生成）
+```
+
+通过卷挂载（`-v ./data:/data` 或 `-v readest-data:/data`）确保容器重建不丢失。
+
+## 安全模型（v8.4+）
+
+```
+登录：密码 → KE → 解密 K_enc → K → 解密本地 .enc 文件
+活跃：K 在内存，library/settings 自动 AES-GCM 加密写盘
+登出：清 K（内存），加密数据保留磁盘，K_enc 在服务端
+切换：不同 userId → 不同 .enc 文件 → 天然隔离
+改密码：admin 清 K_enc → 用户下次登录生成新 K
+```
+
+- 密码不存客户端
+- 浏览器存储只有密文
+- 跨账号数据彻底隔离
+
+## What changed vs upstream
+
+| 关注点 | 上游 Readest | Readest Lite |
+|---|---|---|
+| 数据库 | Supabase Postgres + RLS | SQLite via Prisma |
+| 对象存储 | R2/S3 预签名 URL | 本地文件系统 + HMAC 签名 URL |
+| 鉴权 | Supabase GoTrue（邮箱/OAuth/Magic Link） | 本地 JWT **多用户**系统，`/auth/v1/*` 兼容 shim |
+| Pro/付费 | Stripe + Apple IAP + Google IAP | 完全删除，所有功能无条件开放 |
+| 注册 | 开放 | 禁用 — 管理员通过用户管理面板创建用户 |
+| 数据加密 | — | v8.4：Per-user AES-GCM 加密 vault |
+| 配额 | Pro 体系限制 | v8.5：管理员分配配额，真正 enforce |
+| 代理 | 直连 | v8.2：服务器代理 + 用户可关代理走直连 |
+| 同步协议 | — | 1:1 复刻（books/configs/notes/stats + CRDT replicas） |
+| 分享协议 | — | 1:1 复刻（create/list/import/revoke/download/cover/og） |
+| 阅读器内核 | foliate-js | 完全一致（零改动） |
+
+## 文档
+
+- 🌐 [官网](https://cshdotcom.github.io/readestl/)
+- 📚 [部署教程](https://cshdotcom.github.io/readestl/deploy.html) — 完整部署指南
+- 💬 [交流社区](https://nodebyte.cn) — 用户讨论、问题反馈、功能建议
+- 🔧 [迭代提示词](https://cshdotcom.github.io/readestl/aph.html) — AI 维护交接（隐藏页面）
+- 📄 [DEPLOY.md](./DEPLOY.md) — 部署细节与验证
+- 📝 [FRONTEND_CHANGES.md](./FRONTEND_CHANGES.md) — 前端改造清单
+- 🗂️ [PROJECT_STRUCTURE.md](./PROJECT_STRUCTURE.md) — 改造后目录结构
+- 📦 [CHANGELOG.md](./CHANGELOG.md) — 详细变更日志
+
+## 架构
+
+```
+┌──────────────────────────────────────────────────────────┐
+│ Browser (Next.js web app, port 8225)                     │
+│  └── utils/supabase.ts → pseudo client → /auth/v1/*      │
+│  └── context/VaultContext → AES-GCM key (in-memory)      │
+└──────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌──────────────────────────────────────────────────────────┐
+│ Next.js standalone server (single container)             │
+│  ├── /auth/v1/*           — Supabase Auth compat shim    │
+│  ├── /auth/v1/vault-key   — v8.4: encrypted vault key    │
+│  ├── /api/sync            — books/configs/notes/stats    │
+│  ├── /api/sync/replicas   — CRDT replicas (HLC merge)    │
+│  ├── /api/storage/*       — files + HMAC-signed PUT/GET  │
+│  ├── /api/usage           — v8.5: quota usage             │
+│  ├── /api/share/*         — book shares + OG image       │
+│  ├── /api/admin/users     — v7: multi-user management    │
+│  ├── /api/translate/google— v8: proxy + v8.5: enforce    │
+│  ├── /api/proxy/{wiki,resource} — v8.5: SSRF blacklist   │
+│  ├── /api/books/download-url — v8.1: remote download     │
+│  ├── /api/deepl/translate — v8.5: quota enforce           │
+│  └── /api/{ai,tts,metadata,opds,hardcover,kosync}        │
+└──────────────────────────────────────────────────────────┘
+          │                              │
+          ▼                              ▼
+┌─────────────────────┐       ┌──────────────────────────┐
+│ SQLite (Prisma)     │       │ Local filesystem         │
+│  /data/db/readest.db│       │  /data/books/uploads/    │
+│  14 tables +        │       │  /data/books/covers/     │
+│  User.encryptedVaultKey│    │  /data/inbox/            │
+└─────────────────────┘       └──────────────────────────┘
+```
+
+## 升级
+
+```bash
+docker compose pull      # 拉取最新镜像
+docker compose up -d     # 重建容器（数据在 ./data 不受影响）
+docker image prune -f    # 清理旧镜像
+```
+
+启动时自动检测数据库版本并执行迁移，无需手动操作。SQLite 自动迁移、数据卷持久化，旧数据无损。
+
+## License
+
+Inherited from upstream Readest — see [LICENSE](./LICENSE).
+[LICENSE_NOTICE.md](LICENSE_NOTICE.md)
+
+## ☕ 支持作者
+ 如果你觉得这个项目对你有帮助，可以请作者喝杯咖啡，支持后续 Readest-Lite 的开发：
+ ![Support Author](coffe.png)

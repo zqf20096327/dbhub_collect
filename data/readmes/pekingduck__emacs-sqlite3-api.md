@@ -1,0 +1,516 @@
+#+OPTIONS: ^:nil
+* SQLite3 API for Emacs 25+
+** Introduction
+ ~sqlite3~ is a dynamic module for GNU Emacs 25+ that provides 
+ direct access to the core SQLite3 C API from Emacs Lisp.
+ #+BEGIN_SRC emacs-lisp :eval no :exports code
+(require 'sqlite3)
+
+(setq dbh (sqlite3-open "person.sqlite3" sqlite-open-readwrite sqlite-open-create))
+(sqlite3-exec dbh "create table temp (name text, age integer)")
+(setq stmt (sqlite3-prepare dbh "insert into temp values (?,?)"))
+(cl-loop for i from 1 to 10 do
+	 (sqlite3-bind-multi stmt (format "name%d" i) i)
+	  ;; execute the SQL
+	 (sqlite3-step stmt)
+	 ;; call reset if you want to bind the SQL to a new set of variables
+	 (sqlite3-reset stmt))
+(sqlite3-finalize stmt)
+
+(setq stmt (sqlite3-prepare dbh "select * from temp"))
+(while (= sqlite-row (sqlite3-step stmt))
+  (cl-destructuring-bind (name age) (sqlite3-fetch stmt)
+    (message "name: %s, age: %d" name age)))
+(sqlite3-finalize stmt)
+(sqlite3-close dbh)
+ #+END_SRC
+
+ While this module provides only 14 functions (vs [[https://sqlite.org/c3ref/funclist.html][200+ in the C API]]), it should satisfy most
+ users' needs.
+
+ The current version is v0.18.
+
+ This is an alpha release so it might crash your Emacs. Save your work before you try it out!
+
+** Table of Contents
+   :PROPERTIES:
+   :TOC:      :include all :depth 4 :ignore (this)
+   :END:
+
+# M-x org-make-toc to update the TOC 
+# Requires https://github.com/alphapapa/org-make-toc
+:CONTENTS:
+- [[#sqlite3-api-for-emacs-25][SQLite3 API for Emacs 25+]]
+  - [[#introduction][Introduction]]
+  - [[#requirements][Requirements]]
+  - [[#installation--removal][Installation & Removal]]
+    - [[#melpa][Melpa]]
+    - [[#elpa][Elpa]]
+    - [[#straightel][Straight.el]]
+    - [[#manual-installation][Manual Installation]]
+    - [[#removal][Removal]]
+    - [[#note-on-package-update][Note on Package Update]]
+  - [[#testing][Testing]]
+  - [[#api][API]]
+    - [[#sqlite3-open][sqlite3-open]]
+    - [[#sqlite3-close][sqlite3-close]]
+    - [[#sqlite3-prepare][sqlite3-prepare]]
+    - [[#sqlite3-finalize][sqlite3-finalize]]
+    - [[#sqlite3-step][sqlite3-step]]
+    - [[#sqlite3-changes][sqlite3-changes]]
+    - [[#sqlite3-reset][sqlite3-reset]]
+    - [[#sqlite3-last-insert-rowid][sqlite3-last-insert-rowid]]
+    - [[#sqlite3-get-autocommit][sqlite3-get-autocommit]]
+    - [[#sqlite3-exec][sqlite3-exec]]
+    - [[#sqlite3-bind-][sqlite3-bind-*]]
+    - [[#sqlite3-bind-multi][sqlite3-bind-multi]]
+    - [[#sqlite3-column-][sqlite3-column-*]]
+    - [[#sqlite3-fetch][sqlite3-fetch]]
+    - [[#sqlite3-fetch-alist][sqlite3-fetch-alist]]
+  - [[#transaction-support][Transaction Support]]
+  - [[#error-handling][Error Handling]]
+  - [[#note-on-garbage-collection][Note on Garbage Collection]]
+  - [[#known-problems][Known Problems]]
+  - [[#license][License]]
+  - [[#contributors][Contributors]]
+  - [[#changelog][Changelog]]
+  - [[#useful-links-for-writing-dynamic-modules][Useful Links for Writing Dynamic Modules]]
+:END:
+
+** Requirements
+- Emacs 25.1 or above, compiled with module support (~./configure
+  --with-modules~). Emacs 27.1 supports dynamic modules by default unless you
+  explicitly disable it.
+- SQLite3 v3.16.0 or above. Older versions might work but I have not personally tested those.
+- A C99 compiler
+
+It's been tested on macOS (Catalina), CentOS 7 and MS-Windows 11.
+
+** Installation & Removal
+*** Melpa
+The package is available on [[https://melpa.org/#/sqlite3][Melpa]] (thanks to @tarsius).
+
+The first time you ~(require 'sqlite3)~, you will be asked to confirm the
+compilation of the dynamic module:
+
+#+BEGIN_SRC text :eval no :exports code
+sqlite3-api module must be built.  Do so now?
+#+END_SRC
+
+The module is built using the ~make all~ command by default. To customize the build process, you can override this behavior by setting the =SQLITE3_API_BUILD_COMMAND= environment variable.
+
+*** Elpa
+#+BEGIN_SRC sh :eval no :exports code
+$ git clone https://github.com/pekingduck/emacs-sqlite3-api
+$ cd emacs-sqlite3-api
+$ make module
+#+END_SRC
+
+A tar archive called ~sqlite3-X.Y.tar~ will be created. Do a ~M-x package-install-file~ in Emacs to install that tar archive and 
+you're all set.
+
+For Homebrew users on MacOS or Linux:
+#+BEGIN_SRC sh :eval no :exports code
+$ make HOMEBREW=1
+#+END_SRC
+to build the module against sqlite3 installed by Homebrew.
+
+If you have sqlite3 installed in a nonstandard location:
+#+BEGIN_SRC sh :eval no :exports code
+$ make INC=/path/to/sqlite3/include LIB="-L/path/to/sqlite3/lib -lsqlite3"
+#+END_SRC
+
+*** Straight.el
+If you would like to use this library with [[https://github.com/radian-software/straight.el][the straight emacs package manager]], you will need git pre-installed.
+The following are example snippets of elisp that can be included in your init file for using straight.
+**** Setting up the build environment
+For those where sqlite3 C library is installed to a non-standard directory, such as with an installation via homebrew, you may need to add the path to the =libsqlite3.so= to your =LD_LIBRARY_PATH= environment variable with ~setenv~.
+
+#+begin_src emacs-lisp :eval no :exports code
+(defconst sqlite-lib-dir
+  ;; This example executes 'brew --prefix sqlite' to find the current installation path dynamically
+  (concat
+   (string-trim (shell-command-to-string "brew --prefix sqlite"))
+   "/lib"))
+
+;; Set LD_LIBRARY_PATH in Emacs' environment
+(setenv "LD_LIBRARY_PATH" 
+        (if-let (current-path (getenv "LD_LIBRARY_PATH"))
+            (concat sqlite-lib-dir ":" current-path)
+          sqlite-lib-dir))
+#+end_src 
+
+**** Installing via Straight without the use-package macro
+We need to modify =straight-default-files-directive= with an explicit list of =:files= or our shared object that we compile with ~make~ will not be linked into the emacs load path. 
+Hence, we add to the =:defaults=, the shared library file extensions with a globbing pattern.
+
+Homebrew users will want to uncomment the =:pre-build= directive so that straight runs ~make~ in a way that finds brew's sqlite installation directory.
+
+#+begin_src emacs-lisp :eval no :exports code
+(straight-use-package
+   '(sqlite3
+      :host github
+      :repo "pekingduck/emacs-sqlite3-api"
+      :files (:defaults "*.dll" "*.dylib" "*.so")
+      ;; :pre-build ("env" "HOMEBREW=1" "make" "all")
+    ))
+(load-library "sqlite3")
+#+end_src
+
+**** Straight with the use-package macro
+One can optionally use straight with the use-package macro to get all of the configuration - including homebrew - handled in one block:
+
+#+begin_src emacs-lisp :eval no :exports code
+(use-package sqlite3
+  :init
+  (defconst sqlite-lib-dir
+  ;; Execute 'brew --prefix sqlite' to find the current installation path
+	(concat
+	 (string-trim (shell-command-to-string "brew --prefix sqlite"))
+	 "/lib"))  
+  (setenv "LD_LIBRARY_PATH" 
+    (if-let (current-path (getenv "LD_LIBRARY_PATH"))
+        (concat sqlite-lib-dir ":" current-path)
+      sqlite-lib-dir))
+  ;; Customize straight.el's build process for the sqlite3 module
+  :straight
+  (sqlite3 
+   :host github
+   :repo "pekingduck/emacs-sqlite3-api"
+   :files (:defaults "*.dll" "*.dylib" "*.so")
+   :pre-build ("env" "HOMEBREW=1" "make" "all"))
+  :config
+  (load-library "sqlite3")
+)
+#+end_src
+
+The =:init= section runs before the package is loaded into emacs, so it is great for handling things the OS dynamic loader might want defined.
+
+*** Manual Installation
+#+BEGIN_SRC sh :eval no :exports code
+$ git clone https://github.com/pekingduck/emacs-sqlite3-api
+$ cd emacs-sqlite3-api
+$ make
+$ cp sqlite3.el sqlite3-api.so /your/elisp/load-path/
+#+END_SRC
+
+*** Removal
+If you installed manually, just remove ~sqlite3.el~ and ~sqlite3-api.so~ from
+your load path. Otherwise, do ~M-x package-delete~ to remove the sqlite3
+package.
+
+*** Note on Package Update
+Emacs 25 and 26: If you are updating from an older version, you'll need to
+restart Emacs for the new module to take effect. That's because ~unload-feature~
+doesn't work for dynamic modules.
+
+Emacs 27.1: I can't find it in [[https://github.com/emacs-mirror/emacs/blob/emacs-27.1/etc/NEWS][~etc/NEWS~]], but it seems Emacs 27.1
+does support unloading of dynamic modules. To unload ~sqlite3~ properly:
+
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(unload-feature 'sqlite3)
+(unload-feature 'sqlite3-api)
+#+END_SRC
+
+** Testing
+
+The tests can be run with the [[https://github.com/emacs-eldev/eldev][Eldev]] build tool
+
+#+BEGIN_SRC sh :eval no :exports code
+  # from source
+  eldev test
+  # or as a compiled package
+  eldev -p test
+#+END_SRC
+
+See [[https://emacs-eldev.github.io/eldev/][Eldev documentation]] for more information.
+
+** API
+To load the package, put the following in your ~.emacs~:
+
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(require 'sqlite3)
+#+END_SRC
+
+An application will typically use sqlite3_open() to create a single database connection during initialization. 
+
+To run an SQL statement, the application follows these steps:
+
+1. Create a prepared statement using sqlite3_prepare().
+1. Evaluate the prepared statement by calling sqlite3_step() one or more times.
+1. For queries, extract results by calling sqlite3_column() in between two calls to sqlite3_step().
+1. Destroy the prepared statement using sqlite3_finalize().
+1. Close the database using sqlite3_close().
+
+[[https://www.sqlite.org/rescode.html][SQlite3 constants]], defined in sqlite3.h, are things such as numeric result codes
+from various interfaces (ex: ~SQLITE_OK~) or flags passed into functions to
+control behavior (ex: ~SQLITE_OPEN_READONLY~).
+
+In elisp they are in lowercase and words are separated by "-" instead of
+"_". For example, ~SQLITE_OK~ would be ~sqlite-ok~.
+
+[[https://www.sqlite.org][www.sqlite.org]] is always a good source of information, especially 
+[[https://www.sqlite.org/cintro.html][An Introduction to the SQLite C/C++ Interface]] and [[https://www.sqlite.org/c3ref/intro.html][C/C++ API Reference]].
+
+*** sqlite3-open
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-open "/path/to/data-file" flag1 flag2 ...)
+#+END_SRC
+Open the database file and return a database handle.
+
+This function calls [[https://www.sqlite.org/c3ref/open.html][sqlite3_open_v2()]] internally and raises ~db-error~ in case of error.
+
+*flag1*, *flag2*.... will be ORed together.
+*** sqlite3-close
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-close database-handle)
+#+END_SRC
+Close the database file.
+*** sqlite3-prepare
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-prepare database-handle sql-statement)
+#+END_SRC
+Compile the supplied SQL statement and return a statement handle.
+
+This function calls [[https://www.sqlite.org/c3ref/prepare.html][sqlite3_prepare_v2()]] internally and raises 'sql-error in case of error.
+*** sqlite3-finalize
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-finalize statement-handle1 statement-handle2 ...)
+#+END_SRC
+Destroy prepared statements.
+*** sqlite3-step
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-step statement-handle)
+#+END_SRC
+Execute a prepared SQL statement. Some of the return codes are:
+
+~sqlite-done~ - the statement has finished executing successfully.
+
+~sqlite-row~ - if the SQL statement being executed returns any data, then ~sqlite-row~ is returned each time a new row of data is ready for processing by the caller. 
+
+*** sqlite3-changes
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-changes database-handle)
+#+END_SRC
+Return the number of rows modified (for update/delete/insert statements)
+
+*** sqlite3-reset
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-reset statement-handle)
+#+END_SRC
+Reset a prepared statement. Call this function if you want to re-bind 
+the statement to new variables, or to re-execute the prepared statement
+from the start.
+*** sqlite3-last-insert-rowid
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-last-insert-rowid database-handle)
+#+END_SRC
+Retrieve the last inserted rowid (64 bit). 
+
+Notes: Beware that Emacs only supports integers up to 61 bits.
+*** sqlite3-get-autocommit
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-get-autocommit database-handle)
+#+END_SRC
+Return 1 / 0 if auto-commit mode is ON / OFF.
+*** sqlite3-exec
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-exec database-handle sql-statements &optional callback)
+#+END_SRC
+The Swiss Army Knife of the API, you can execute multiple SQL statements
+(separated by ";") in a row with just one call.
+
+The callback function, if supplied, is invoked for *each row* and should accept 3
+ parameters: 
+ 1. the first parameter is the number of columns in the current row;
+ 2. the second parameter is the actual data (as a list strings or nil in case of NULL); 
+ 3. the third one is a list of column names. 
+ 
+To signal an error condition inside the callback, return ~nil~.
+~sqlite3_exec()~ will stop the execution and raise ~db-error~.
+
+Raises ~db-error~ in case of error.
+
+An example of a callback:
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(defun print-row (ncols data names)
+  (cl-loop for i from 0 to (1- ncols) do
+           (message "[Column %d/%d]%s=%s" (1+ i) ncols (elt names i) (elt data i)))
+  (message "--------------------")
+  t)
+  
+(sqlite3-exec dbh "select * from table_a; select * from table b"
+              #'print-row)
+#+END_SRC
+More examples:
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+;; Update/delete/insert
+(sqlite3-exec dbh "delete from table") ;; delete returns no rows
+
+;; Retrieve the metadata of columns in a table
+(sqlite3-exec dbh "pragma table_info(table)" #'print-row)
+#+END_SRC
+*** sqlite3-bind-*
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-bind-text statement-handle column-no value)
+(sqlite3-bind-int64 statement-handle column-no value)
+(sqlite3-bind-double statement-handle column-no value)
+(sqlite3-bind-null statement-handle column-no)
+#+END_SRC
+The above four functions bind values to a compiled SQL statements.
+
+Please note that column number starts from 1, not 0!
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-bind-parameter-count statement-handle)
+#+END_SRC
+The above functions returns the number of SQL parameters of a prepared 
+statement.
+*** sqlite3-bind-multi
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-bind-multi statement-handle &rest params)
+#+END_SRC
+~sqlite3-bind-multi~ binds multiple parameters to a prepared SQL 
+statement. It is not part of the official API but is provided for 
+convenience.
+
+Example:
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-bind-multi stmt 1234 "a" 1.555 nil) ;; nil for NULL
+#+END_SRC
+*** sqlite3-column-*
+These column functions are used to retrieve the current row
+of the result set.
+
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-column-count statement-handle)
+#+END_SRC
+Return number of columns in a result set.
+#+END_SRCe1
+(sqlite3-column-type statement-handle column-no)
+#+END_SRC
+Return the type (~sqlite-integer~, ~sqlite-float~, ~sqlite3-text~ or
+~sqlite-null~) of the specified column. 
+
+Note: Column number starts from 0.
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-column-text statement-handle column-no)
+(sqlite3-column-int64 statement-handle column-no)
+(sqlite3-column-double statement-handle column-no)
+#+END_SRC
+The above functions retrieve data of the specified column.
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-column-name statement-handle column-no)
+#+END_SRC
+This function returns the column name of the specified column.
+
+Note: You can call ~sqlite3-column-xxx~ on a column even 
+if ~sqlite3-column-type~ returns ~sqlite-yyy~: the SQLite3 engine will
+perform the necessary type conversion.
+
+Example:
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(setq stmt (sqlite3-prepare dbh "select * from temp"))
+(while (= sqlite-row (sqlite3-step stmt))
+	(let ((name (sqlite3-column-text stmt 0))
+	      (age (sqlite3-column-int64 stmt 1)))
+      (message "name: %s, age: %d" name age)))
+#+END_SRC
+*** sqlite3-fetch
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-fetch statement-handle) ;; returns a list such as (123 56 "Peter Smith" nil)
+#+END_SRC
+~sqlite3-fetch~ is not part of the official API but provided for 
+convenience. It retrieves the current row as a 
+list without having to deal with sqlite3-column-* explicitly.
+
+*** sqlite3-fetch-alist
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-fetch-alist statement-handle)
+#+END_SRC
+~sqlite3-fetch-alist~ is not part of the official API but provided for 
+convenience. It retrieves the current row as an
+alist in the form of ~(("col_name1" . value1) ("col_name2" . value2) ..)~
+
+** Transaction Support
+Use ~sqlite3-exec~ to start, commit and rollback a transaction:
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(sqlite3-exec dbh "begin")
+(sqlite3-exec dbh "commit")
+(sqlite3-exec dbh "rollback")
+#+END_SRC
+See Error Handling below on how to use the [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Handling-Errors.html][condition-case]] form to handle rollback.
+** Error Handling
+Currently two error symbols are defined in ~sqlite3.el~:
+1. ~sql-error~ is raised by ~sqlite3-prepare~
+2. ~db-error~ is raised by ~sqlite3-open~ and ~sqlite3-exec~
+
+#+BEGIN_SRC emacs-lisp :eval no :exports code
+(condition-case db-err
+    (progn
+      (sqlite3-exec dbh "begin")
+      (sqlite3-exec dbh "update temp set a = 1 where b = 2")
+      (sqlite3-exec dbh "commit"))
+  (db-error
+   (message "Symbol:%s, Message:%s, Error Code:%d" (elt db-err 0) (elt db-err 1) (elt db-err 2))
+   (sqlite3-exec dbh "rollback")))
+#+END_SRC
+~db-err~ is a list containing the error symbol (~db-error~ or ~sql-error~), an error message and finally an error code returned from the 
+corresponding SQLite
+C API.
+
+** Note on Garbage Collection
+Since Emacs's garbage collection is non-deterministic, it would be 
+a good idea 
+to manually free database/statement handles once they are not needed.
+
+** Known Problems
+- SQLite3 supports 64 bit integers but Emacs integers are only 61 bits.
+For integers > 61 bits you can retrieve them as text as a workaround.
+- BLOB and TEXT columns with embedded NULLs are not supported.
+
+** License
+The code is licensed under the [[https://www.gnu.org/licenses/gpl-3.0.html][GNU GPL v3]].
+
+** Contributors
+- [[https://github.com/tarsius][Jonas Bernoulli]] - Melpa package
+- @reflektoin
+- @yasuhirokimura
+- @ikappaki - added GitHub CI Actions (0aa2b03)
+  
+** Changelog
+*v0.18 - 2023-11-24*
+- Module is now loaded after compilation.
+- GitHub CI Actions added
+
+*v0.17 - 2023-03-15*
+- Added 28.2 to regression tests
+  
+*v0.16 - 2022-05-01*
+- Fixed a bug in ~sqlite3-bind-multi~ 
+  
+*v0.15 - 2020-09-16*
+- Fixed a bug in ~sqlite3-bind-multi~ under Emacs 27.1
+
+*v0.14 - 2020-07-08*
+- Added sqlite3.el (melpa)
+
+*v0.13 - 2020-04-20*
+- Rewrote README in .org format
+
+*v0.12 - 2019-05-12*
+- ~sqlite3-fetch-alist~ added
+- Fixed a compilation problem on macOS Mojave
+
+*v0.11 - 2017-09-14*
+- ~sqlite3-finalize~ now accepts multiple handles.
+
+*v0.1 - 2017-09-04*
+- Emacs Lisp code removed. The package is now pure C.
+
+*v0.0 - 2017-08-29*
+- Fixed a memory leak in ~sql_api_exec()~
+- Changed ~sqlite3_close()~ to ~sqlite3_close_v2()~ in ~sqlite_api_close()~
+- Better error handling: Error code is returned along with error message
+** Useful Links for Writing Dynamic Modules
+- https://phst.github.io/emacs-modules
+- http://nullprogram.com/blog/2016/11/05/

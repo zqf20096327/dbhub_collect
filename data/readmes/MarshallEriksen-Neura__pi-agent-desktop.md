@@ -1,0 +1,156 @@
+<div align="center">
+  <img src="./src-tauri/icons/icon.svg" alt="Pi Desktop logo" width="120" />
+  <h1>Pi Desktop</h1>
+  <p><b>An iOS-style desktop home for your <code>pi</code> coding agent.</b></p>
+  <p>Chat, terminal, editor, and project files — unified in one frosted-glass window that drives the <i>real</i> <code>pi</code> CLI.</p>
+  <p>
+    <a href="https://github.com/MarshallEriksen-Neura/pi-agent-desktop/releases">Download</a>
+    ·
+    <a href="#quick-start">Quick start</a>
+    ·
+    <a href="#how-it-works">How it works</a>
+    ·
+    <a href="#community--updates">Community</a>
+    ·
+    <a href="./README.zh-CN.md">中文</a>
+  </p>
+</div>
+
+<p align="center">
+  <img alt="Release" src="https://img.shields.io/github/v/release/MarshallEriksen-Neura/pi-agent-desktop?label=release" />
+  <img alt="Platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue" />
+  <img alt="Tauri" src="https://img.shields.io/badge/Tauri-v2-2B6CB0" />
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-green" />
+</p>
+
+
+## Why Pi Desktop
+
+Most "AI coding" tools are either a chat box bolted onto an editor, or a heavy IDE you have to learn. Pi Desktop takes a different line: it is a **thin, native shell that wraps the `pi` CLI you already use** — and makes it feel at home on the desktop.
+
+- **It runs the real `pi`.** Not a reimplementation and not a web wrapper. The Rust layer spawns `pi --mode rpc` and bridges it over a pipe, so every capability of your CLI is right there.
+- **It gets out of the way.** A borderless, transparent, frosted-glass window with custom controls — built to disappear while you work.
+- **One shared context.** Chat reads the live terminal, the editor shows the code, and files are a sidebar away. Nothing is siloed.
+
+## Features
+
+- **iOS-style UI** — borderless / transparent window (mica / acrylic), custom window controls, motion-driven animations.
+- **Real `pi` process** — Rust spawns `pi --mode rpc` and bridges a bidirectional JSONL pipe; a Mock transport lets you preview in the browser.
+- **Built-in terminal** — an xterm terminal shares context with chat, so the agent can see the live shell.
+- **Code editor** — CodeMirror 6 with syntax highlighting and interactive code blocks.
+- **Local-first persistence** — chat history is saved in SQLite and works fully offline.
+- **Built-in auto-update** — `tauri-plugin-updater` produces a signed `latest.json` for one-click in-app updates.
+- **Reviewed Git workflows** — Repository Inspector separates Fetch from integration and supports immutable, reviewed fast-forward, Merge commit, and linear Rebase operations on local and SSH repositories.
+- **Truly cross-platform** — one build yields Windows (NSIS / MSI), macOS (DMG), and Linux (AppImage / deb / rpm).
+
+## Quick start
+
+> [!NOTE]
+> Pi Desktop is a GUI for the `pi` CLI. Install `pi` on your machine first — the desktop app drives it in RPC mode.
+
+Download the latest build for your platform from [GitHub Releases](https://github.com/MarshallEriksen-Neura/pi-agent-desktop/releases).
+
+#### Windows
+
+Download `Pi_0.1.0_x64-setup.exe` or `Pi_0.1.0_x64_en-US.msi` and run it.
+
+> [!WARNING]
+> The installers are not code-signed yet. If SmartScreen blocks the first launch, click **Run anyway**.
+
+#### macOS
+
+Download `Pi_0.1.0_aarch64.dmg` or `Pi_0.1.0_x64.dmg`.
+
+> [!WARNING]
+> Apple notarization is not set up yet. On first launch, allow it in **System Settings → Privacy & Security**, or right-click and choose **Open** to bypass Gatekeeper.
+
+#### Linux
+
+Download the `.AppImage` / `.deb` / `.rpm` and install it the usual way.
+
+### Recommended: a `pi` editor that reports its own line counts
+
+```bash
+pi install npm:pi-hashline-edit-pro
+```
+
+Pi Desktop shows a `+12 −3` badge on every file-edit row in the transcript. It resolves that count from three sources, in this order:
+
+1. **Line metrics the edit tool reports in its own result** — exact, and available the instant the call ends.
+2. **A disk read-back** — reads the file after the write and diffs it against the pre-edit snapshot.
+3. **The tool's arguments** — a targeted replacement carries its own before/after text; a whole-file write carries the after text.
+
+[`pi-hashline-edit-pro`](https://github.com/YuGiMob/pi-hashline-edit-pro) hits the first path: its `replace` returns `added_lines` / `removed_lines` in the result payload, so the badge is published straight from the tool's own accounting and never depends on a filesystem read landing in time.
+
+It matters most for anchor-based editing specifically. That tool identifies the lines it removes by content anchor rather than by text, so the removed count genuinely cannot be reconstructed from the call arguments — path 3 is unavailable by construction, and without the reported metrics the badge would be left waiting on path 2.
+
+`pi`'s built-in `edit` / `write` work fine without this and fall back to paths 2 and 3. Installing it makes the count immediate and exact rather than dependent on a read-back.
+
+## How it works
+
+```mermaid
+flowchart LR
+  UI[Next.js UI<br/>chat · terminal · editor] <-->|JSONL pipe| Bridge[Rust pi_bridge]
+  Bridge <-->|stdin / stdout| PI[pi --mode rpc]
+  Bridge -->|pi://line events| Store[(SQLite chat store)]
+  UI -.->|check / download| Updater[tauri-plugin-updater]
+```
+
+- **Rust bridge** (`src-tauri/src/pi_bridge.rs`) — spawns `pi --mode rpc`, forwards each stdout JSONL line to the frontend as a `pi://line` event (`pi_send` writes back to stdin).
+- **Backend capability layer** (`src/lib/backend/`) — explicit desktop and browser composition roots inject process, filesystem, session, runtime, window, notification, and updater ports before the UI mounts.
+- **Protocol** (`src/lib/pi/protocol.ts`) — every RPC command and event, strict JSONL (one JSON object per LF-delimited line).
+- **State** — zustand stores (`usePi` / `chat` / `useUI`); `agent-bridge.ts` maps pi tool events into UI agent-task state.
+
+The platform boundary and mobile-sharing rules are documented in [docs/backend-architecture.md](docs/backend-architecture.md).
+
+### Reviewed Git workflows
+
+Repository Inspector deliberately does not provide an implicit Pull operation. Fetch is reviewed and executed separately; integration then uses an immutable snapshot of the repository root, generation, local branch and `HEAD`, upstream destination and OID, merge-base, and selected strategy.
+
+- **Fast-forward only** is available only for a clean behind-only branch and uses the reviewed upstream OID.
+- **Merge commit** is available only for clean, genuinely diverged histories. Its normalized reviewed message must be nonempty and already trimmed, is limited to 4096 UTF-8 bytes, and is preserved exactly.
+- **Linear Rebase** is available only for a bounded, merge-free reviewed local range and accepts no message.
+- Merge or Rebase conflicts are automatically aborted only when Git confirms the matching operation. A conflict is reported as safely unapplied only after the original branch, `HEAD`, operation state, refs, index, locks, and worktree are verified restored; otherwise the result is treated as potentially applied and forces an authoritative refresh.
+- Group **Stage all** / **Unstage all** actions submit one generation-bound batch containing the exact reviewed file entries, including rename origins. The backend validates the entire 1–4096 entry batch and its 16 KiB cumulative UTF-8 path budget before one temporary-index Git operation and one live-index installation; it never loops single-file mutations.
+- Conflicts block all staging writes and are disclosed beside the file groups. The Commit helper only stages the reviewed unstaged/untracked scope—it never combines staging with commit. Worktree drift before index installation is rejected as unapplied; uncertainty after dispatch or installation forces an authoritative refresh.
+- Local writes require the canonical `local` execution target. SSH Merge/Rebase requires launcher revision 13 with `repository-integration-v2`; SSH batch staging requires launcher revision 14 with the independent `repository-batch-write-v1` capability. Launcher revision 15 repaired global-only Git identity resolution; revision 16 adds provenance-validated, non-interactive Git Credential Manager access for HTTPS fetch/push while mutation commands remain isolated from arbitrary global/system Git configuration. The network child is bound to a provenance-validated Git executable and invokes the reviewed canonical GCM executable by absolute path; repository-local credential helpers and every repository-local `http.*` setting are rejected before network access so headers, cookies, client keys, and proxies cannot bypass the GCM-only boundary. Reviewed multi-ref fetches use atomic ref updates. Push pins the reviewed commit and destination, verifies reviewed-upstream ancestry, and uses an exact expected-OID lease so concurrent remote changes fail closed. Phase 3, integration, and batch replies are accepted only as one strict, operation-appropriate JSON document.
+- Effective Git configuration, including included and worktree-scoped configuration, is inspected. Executable filters and merge drivers, configured merge options, hooks, editors, signing prompts, autostash, rerere, update-refs, and submodule recursion are rejected or disabled.
+
+Integration makes no network request, never force-updates, never autostashes, and never performs automatic conflict resolution. A lost, malformed, or semantically ambiguous integration reply is treated as potentially applied and forces an authoritative refresh.
+
+
+The frontend is a Next.js App Router static export (`output: "export"`) — all pages are client-rendered, and the borderless window chrome is drawn by the app itself.
+
+## Auto-update
+
+The desktop app ships `tauri-plugin-updater`:
+
+- Each CI build generates a `.sig` signature per bundle (minisign; the private key is never committed).
+- A publish script assembles `latest.json` and uploads it to the Release.
+- The in-app `check()` fetches `latest.json`, verifies it, downloads and installs, then relaunches via `tauri-plugin-process`.
+
+## Development
+
+The package manager is pnpm.
+
+```bash
+pnpm install        # install dependencies
+pnpm dev            # Next.js dev server in the browser (uses the mock pi transport)
+pnpm tauri:dev      # full desktop app: starts pnpm dev + the Tauri window (real pi process)
+pnpm build          # Next.js static export to out/
+pnpm tauri:build    # production desktop bundle (runs pnpm build first)
+pnpm lint           # next lint
+pnpm test:backend   # focused backend ports/composition/boundary tests
+```
+
+Rust check:
+
+```bash
+cd src-tauri && cargo check
+```
+
+## Community & updates
+
+We value `sincerity`, `friendliness`, `solidarity`, and `professionalism` — you're welcome to join [LinuxDo](https://linux.do/latest).
+
+Pi Desktop updates are posted at: [GitHub Releases](https://github.com/MarshallEriksen-Neura/pi-agent-desktop/releases)

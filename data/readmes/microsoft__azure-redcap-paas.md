@@ -1,0 +1,135 @@
+# REDCap Deployment on Azure
+
+## Overview
+
+This repository provides you with the necessary resources and guidance to deploy the REDCap application on Microsoft’s Azure cloud platform. This allows you to leverage the power of cloud computing for your research data management needs.
+
+This template automates the deployment of the REDCap solution into Azure using managed PaaS resources. The template assumes you are deploying a version of REDCap that supports direct connection to Azure Blob Storage. If you deploy an older version, deployment will succeed but you will need to manually provision NFS storage in Azure, and delete the new storage account. For NFS, consider:
+
+## Deployment Options
+
+### Manual deployment
+
+- For manual deployment process, please see [***manual installation***](manual.md).
+
+### CI/CD Deployment with GitHub or Azure DevOps
+
+- Information pending
+
+## Details
+
+This template automates the deployment of the REDCap solution into Azure using managed PaaS resources. The template assumes you are deploying a version of REDCap that supports direct connection to Azure Blob Storage. If you deploy an older version, deployment will succeed but you will need to manually provision NFS storage in Azure, and delete the new storage account. For NFS, consider:
+
+- <https://learn.microsoft.com/azure/azure-netapp-files/>
+- <https://azuremarketplace.microsoft.com/marketplace/apps/softnas.buurst_nas>
+- <https://learn.microsoft.com/samples/azure/azure-quickstart-templates/nfs-ha-cluster-ubuntu/>
+
+To deploy the REDCap source to Azure App Service, you must supply your REDCap Community site credentials. The deployment automation will use them to pull the REDCap source directly from the community site.
+
+Alternatively, you may provide a publicly accessible URL (no network restrictions, no login requirement) that points to a valid REDCap zip file.
+
+> NOTE: These values will be stored within the Azure App Service as configuration settings. Once your deployment has succeeded, you should navigate to your Azure App Service resource and delete or clear the values so that they aren't stored here.
+
+![Azure App Service](/images/app-settings.png)
+
+<https://projectredcap.org/wp-content/resources/REDCapTechnicalOverview.pdf>
+
+- The template deploys the following:
+  - Azure Web App
+  - Azure DB for MySQL (1)
+  - Azure Storage Account
+  - Key Vault
+  - Private DNS zones
+  - Virtual Network
+  - Application Insights
+
+(1) Review <https://learn.microsoft.com/azure/mysql/flexible-server/concepts-service-tiers-storage> for details on available features, regions, and pricing models for Azure DB for MySQL.
+
+Advanced deployments can enable high availability for the MySQL Flexible Server and availability zone redundancy for the MySQL Flexible Server and web app. These capabilities can be controlled using parameters for the Bicep deployment.
+
+## Setup
+
+This template will automatically deploy the resources necessary to run REDCap in Azure using PaaS (Platform-as-a-Service) features.
+
+**IMPORTANT**: *The "Workload Name" you choose will be re-used as part of the storage, website, and MySQL database name. Make sure you don't use characters that will be rejected.*
+
+After the template is deployed, deployment automation will download the REDCap ZIP file you specify, and install it in your web app. It will then automatically update the database connection information in the app.
+
+With the download and unzipping of REDCap application, the entire operation will take between 12-16 minutes.
+
+If you need to connect to the MySQL database using the MySQL client, you will need to deploy a Virtual Machine with Bastion or AVD to the virtual network to run the client.
+
+The database user name defaults to `sqladmin` and the password is a random string of 25 characters. The password is stored in Key Vault.
+
+## Post-Setup
+
+After the deployment and installation of REDCap has completed, you will need to configure some database settings manually. The application gets deployed via Kudu which calls the `deploy.sh` script. After deployment, the `postbuild.sh` script will call REDCap's built-in capability to deploy the database schema. However, the configuration of the attachment storage to Azure Storage requires executing SQL statements that cannot be automated at this time. There is an `install.sh` file that contains the statements to be executed.
+
+Once the source control deployment of REDCap has completed, you will need to SSH into the running container:
+
+![ssh](images/ssh.png)
+
+Execute the following command from the `/home` directory:
+
+```sh
+bash ./site/repository/scripts/bash/install.sh
+```
+
+![ssh](images/install.png)
+
+Once you regain access to the console, you can navigate to the root of your app service and confirm everything shows green on the REDCap Configuration Check page. If anything displays on that page in red or yellow, it is recommended that you perform a "Restart" of the Azure "App Service". This needs to be done due to the fact that some necessary server environment settings get changed after the initial deployment, but restarting the App Service will load the service with the intended settings.
+
+### Known Issues
+
+| Date discovered | Issue description | GitHub issue |
+| --- | --- | --- |
+| 2026-09-02 | Imagick extension missing from PHP | [#128](https://github.com/microsoft/azure-redcap-paas/issues/128) |
+
+## Note about REDCap "Easy Upgrade"
+
+The "Easy Upgrade" feature in REDCap is currently *not* supported when deploying a REDCap instance on Azure. Support for "Easy Upgrade" on Azure is expected to come at a later time in a future REDCap release.
+
+> UPDATE: 2026-09-02: Users have reported that Easy Upgrade completes successfully, though the web interface might time out while waiting for the upgrade to complete. The background process completes though and the new version of REDCap is available after some time.
+
+## Resources
+
+- App Services overview
+  <https://learn.microsoft.com/azure/app-service/overview>
+- Application Settings
+  <https://learn.microsoft.com/azure/app-service/configure-common?tabs=portal>
+- Web Jobs (background tasks) overview
+  <https://learn.microsoft.com/azure/app-service/webjobs-create>
+- Project Kudu (App Service back end management and deployment engine)
+  <https://github.com/projectkudu/kudu/wiki>
+- Explanation of how isolation occurs in Azure Web Apps
+  <https://github.com/projectkudu/kudu/wiki/Azure-Web-App-sandbox>
+- Adding custom domain names
+  <https://learn.microsoft.com/azure/app-service/app-service-web-tutorial-custom-domain>
+- TLS/SSL Certificates
+  <https://learn.microsoft.com/azure/app-service/configure-ssl-certificate>
+- Updating PHP configurations
+  <https://learn.microsoft.com/azure/app-service/configure-language-php?pivots=platform-linux#customize-phpini-settings>
+- MySQL Flexible Server overview
+  <https://learn.microsoft.com/azure/mysql/flexible-server/overview>
+- SendGrid overview
+  <https://docs.sendgrid.com/for-developers/partners/microsoft-azure-2021>
+- Blob storage overview
+  <https://learn.microsoft.com/azure/storage/blobs/storage-blobs-introduction>
+- Azure Resource Manager (ARM) overview
+  <https://learn.microsoft.com/azure/azure-resource-manager/management/overview>
+- Exchange Online SMTP Relay Configuration
+  <https://learn.microsoft.com/Exchange/mail-flow-best-practices/how-to-set-up-a-multifunction-device-or-application-to-send-email-using-microsoft-365-or-office-365>
+
+## Contributing
+
+This project welcomes contributions and suggestions. Most contributions require you to agree to a
+Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
+the rights to use your contribution. For details, visit <https://opensource.microsoft.com/cla/>.
+
+When you submit a pull request, a CLA-bot will automatically determine whether you need to provide
+a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions
+provided by the bot. You will only need to do this once across all repos using our CLA.
+
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
+For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
+contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.

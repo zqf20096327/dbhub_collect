@@ -1,0 +1,213 @@
+= JDBSEE - CLI
+Davide Cavestro <https://github.com/davidecavestro[@davidecavestro]>
+// Settings:
+:idprefix:
+:idseparator: -
+ifndef::env-github[:icons: font]
+ifdef::env-github,env-browser[]
+:toc: macro
+:toclevels: 1
+endif::[]
+ifdef::env-github[]
+:branch: master
+:status:
+:outfilesuffix: .adoc
+:!toc-title:
+:caution-caption: :fire:
+:important-caption: :exclamation:
+:note-caption: :paperclip:
+:tip-caption: :bulb:
+:warning-caption: :warning:
+endif::[]
+// URIs:
+:uri-repo: https://github.com/davidecavestro/jdbsee
+:uri-issues: {uri-repo}/issues
+:uri-search-issues: {uri-repo}/search?type=Issues
+:uri-ci-travis: https://travis-ci.org/davidecavestro/jdbsee
+:uri-coverage-coveralls: https://coveralls.io/github/davidecavestro/jdbsee?branch=master
+:uri-twitter-jdbsee: https://twitter.com/intent/follow?screen_name=jdbsee
+:uri-twitter-davide: https://twitter.com/intent/follow?screen_name=davide_cavestro
+ifdef::status[]
+image:https://img.shields.io/github/license/davidecavestro/jdbsee.svg[Apache License 2.0, link=#copyright-and-license]
+image:https://img.shields.io/travis/davidecavestro/jdbsee/master.svg[Build Status (Travis CI), link={uri-ci-travis}]
+image:https://img.shields.io/coveralls/github/davidecavestro/jdbsee.svg[Coverage Status (Coveralls), link={uri-coverage-coveralls}]
+image:https://img.shields.io/github/commit-activity/y/davidecavestro/jdbsee.svg[GitHub commit activity]
+image:https://img.shields.io/github/languages/code-size/badges/shields.svg[GitHub code size in bytes]
+
+
+image:https://img.shields.io/github/release/davidecavestro/jdbsee.svg[GitHub release]
+image:https://img.shields.io/github/commits-since/davidecavestro/jdbsee/latest.svg[Github commits (since latest release)]
+
+endif::[]
+
+A CLI swiss-army knife for jdbc with batch and interactive mode
+
+toc::[]
+
+:imagesdir: docs/images
+:icons: font
+
+Jdbsee is tool providing database access from command line using JDBC.
+
+
+# Features
+
+Jdbsee CLI supports executing SQL queries from command line and
+exporting retrieved data.
+
+The JDBC drivers can be automatically downloaded or loaded from
+jars on filesystem. +
+Database connection settings and related credentials can be persisted
+for later reuse.
+
+The user interface supports both batch and interactive shell mode.
+
+For more info please see the link:docs/index.adoc[documentation].
+
+
+# Usage
+
+## Interactive mode
+
+Open the interactive shell and execute multiple commands within the
+application:
+
+  * type `jdbsee shell` to open the interactive shell
+  * hit `TAB` to get a list of available commands
+  * use `left`/`right` arrows or `TAB` to navigate through available
+  commands, or type some chars to filter by name
+  * hit `ENTER` to automatically type the selected command, then `ENTER`
+  again to execute it or `TAB` for further hints
+
+image::jdbsee_shell.png[Jdbsee shell message]
+
+
+In order to execute multiple queries within the same sql session:
+
+  * use the `jdbsee connect` command to open the interactive sql session
+  (i.e. `jdbsee connect -d "com.h2database:h2:1.4.196" -l "jdbc:h2:mem:test"`)
+  * type your query and hit ENTER for every query
+  * use `up`/`down` arrows to navigate into the history
+  * type `quit` and hit `ENTER` to exit
+
+image::jdbsee_connect.png[Jdbsee connect message]
+
+
+## Batch mode
+
+Invoke the `jdbsee` executable passing appropriate commands and params.
+`jdbsee help` provides the main help. `jdbsee COMMAND help` provides
+the help for COMMAND.
+
+image::jdbsee.Demo.png[Jdbsee help message]
+
+See the list of link:docs/index.adoc#available-commands[supported commands]
+for more details.
+
+
+# Examples
+
+## Automatic downloading drivers
+
+Use the `-d` switch to automatically download drivers
+```
+./bin/jdbsee run -u postgres -p postgres \
+  -d "org.postgresql:postgresql:42.2.1" \
+  -l "jdbc:postgresql://localhost:5432/test" \
+  "SELECT * FROM contacts;"
+```
+
+
+
+## Loading drivers from external jars
+
+Use the `-j` switch to load drivers from filesystem
+```
+./bin/jdbsee run -u postgres -p postgres \
+  -j "/path/to/postgresql.jar" \
+  -l "jdbc:postgresql://localhost:5432/test" \
+  "SELECT * FROM contacts;"
+```
+
+## Loading drivers from the `dropins` subfolder
+
+Copy your jdbc driver jars into the app distribution under the `dropins` folder, and they will be scanned for jdbc
+drivers
+
+```
+./bin/jdbsee run -u postgres -p postgres \
+  -l "jdbc:postgresql://localhost:5432/test" \
+  "SELECT * FROM contacts;"
+```
+
+
+# How to build
+
+The build system supports producing the distribution of the application both with or
+without drivers.
+
+The _main_ distribution comes without drivers, while the _full_ provides
+drivers within the `dropins` folder.
+
+The following command generates both _main_ and _full_ distribution archives
+
+```
+./gradlew fullDistTar fullDistZip distTar distZip
+```
+
+the generated archives are located into the `build/distributions` subfolder
+
+----
+build/distributions/
+├── jdbsee-x.y.z-SNAPSHOT.tar
+├── jdbsee-x.y.z-SNAPSHOT.zip
+├── jdbsee-full-x.y.z-SNAPSHOT.tar
+└── jdbsee-full-x.y.z-SNAPSHOT.zip
+----
+
+Follows an example on how to build with drivers (full distribution) and launch some queries on an in-memory h2 db
+
+----
+./gradlew installFullDist && \ //<1>
+./build/install/jdbsee-full/bin/jdbsee run \ //<2>
+-x "create table contacts (id int primary key, name varchar(100));" \ //<3>
+-x "insert into contacts (id, name) values (1, 'Alice');" \ //<4>
+-x "insert into contacts (id, name) values (2, 'Bob');" \
+-x "insert into contacts (id, name) values (3, 'John');" \
+-x "insert into contacts (id, name) values (4, 'Daisy');" \
+-d "com.h2database:h2:1.4.196" \
+-l "jdbc:h2:mem:test" \ //<5>
+"SELECT * FROM contacts;" //<6>
+----
+<1> Build project
+<2> invoke the `run` command
+<3> execute create table DDL
+<4> add some data
+<5> define jdbc url
+<6> specify select query
+
+you should get
+
+```
+┌───────────────────────────────────────┬──────────────────────────────────────┐
+│ID                                     │NAME                                  │
+├───────────────────────────────────────┼──────────────────────────────────────┤
+│1                                      │Alice                                 │
+├───────────────────────────────────────┼──────────────────────────────────────┤
+│2                                      │Bob                                   │
+├───────────────────────────────────────┼──────────────────────────────────────┤
+│3                                      │John                                  │
+├───────────────────────────────────────┼──────────────────────────────────────┤
+│4                                      │Daisy                                 │
+└───────────────────────────────────────┴──────────────────────────────────────┘
+
+```
+
+# How to release
+
+```
+./gradlew release \
+-Prelease.versionIncrementer=incrementMinor \
+-Prelease.dryRun  \
+-Prelease.customUsername="..." -Prelease.customPassword="..."
+```

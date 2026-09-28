@@ -1,0 +1,290 @@
+# springboot-react-social-login
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ivan.franchin-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/ivan.franchin)
+
+The goal of this project is to implement an application called `movie-app` to manage movies. For it, we will implement a back-end [`Spring Boot`](https://docs.spring.io/spring-boot/index.html) application called `movie-api` and a front-end [React](https://react.dev/) application called `movie-ui`. Additionally, we will use [`OAuth2`](https://en.wikipedia.org/wiki/OAuth#OAuth_2.0) (Social Login) to secure both applications.
+
+## Proof-of-Concepts & Articles
+
+On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-Concepts (PoCs) and articles. You can easily search for the technology you are interested in by using the filter. Who knows, perhaps I have already implemented a PoC or written an article about what you are looking for.
+
+## Additional Readings
+
+- \[**Medium**\] [**Implementing A Full Stack Web App Using Spring-Boot and React**](https://medium.com/@ivangfr/implementing-a-full-stack-web-app-using-spring-boot-and-react-7db598df4452)
+- \[**Medium**\] [**Implementing Social Login in a Spring Boot and React App**](https://medium.com/@ivangfr/implementing-social-login-in-a-spring-boot-and-react-app-6ce073c9983c)
+- \[**Medium**\] [**How to Create an OAuth2 App in GitHub**](https://medium.com/@ivangfr/how-to-create-an-oauth2-app-in-github-8e273e376408)
+- \[**Medium**\] [**How to Create an OAuth2 App in Google**](https://medium.com/@ivangfr/how-to-create-an-oauth2-app-in-google-10e846d23adb)
+- \[**Medium**\] [**Building a Web Chat with Social Login using Spring Boot: Introduction**](https://medium.com/@ivangfr/building-a-web-chat-with-social-login-using-spring-boot-introduction-644702e6be8e)
+- \[**Medium**\] [**Building a Single Spring Boot App with Keycloak or Okta as IdP: Introduction**](https://medium.com/@ivangfr/building-a-single-spring-boot-app-with-keycloak-or-okta-as-idp-introduction-2814a4829aed)
+
+## Project Overview
+
+![project-overview](documentation/project-overview.png)
+
+## Applications
+
+- ### movie-api
+
+  `Spring Boot` Web Java backend application that exposes a Rest API to create, retrieve and delete movies. If a user has `ADMIN` role he/she can also retrieve information of other users or delete them. The application secured endpoints can just be accessed if a valid JWT access token is provided.
+  
+  In order to get the JWT access token, the user can login using the credentials (`username` and `password`) created when he/she signed up directly to the application.
+  
+  `movie-api` stores its data in [`Postgres`](https://www.postgresql.org/) database.
+
+  `movie-api` has the following endpoints:
+
+  | Endpoint                                                      | Secured | Roles           |
+  | ------------------------------------------------------------- | ------- | --------------- |
+  | `POST /auth/authenticate -d {"username","password"}`          | No      |                 |
+  | `POST /auth/signup -d {"username","password","name","email"}` | No      |                 |
+  | `GET /public/numberOfUsers`                                   | No      |                 |
+  | `GET /public/numberOfMovies`                                  | No      |                 |
+  | `GET /api/users/me`                                           | Yes     | `ADMIN`, `USER` |
+  | `GET /api/users`                                              | Yes     | `ADMIN`         |
+  | `GET /api/users/{username}`                                   | Yes     | `ADMIN`         |
+  | `DELETE /api/users/{username}`                                | Yes     | `ADMIN`         |
+  | `GET /api/movies [?text]`                                     | Yes     | `ADMIN`, `USER` |
+  | `POST /api/movies -d {"imdb","title","poster"[opt]}`          | Yes     | `ADMIN`         |
+  | `DELETE /api/movies/{imdb}`                                   | Yes     | `ADMIN`         |
+
+- ### movie-ui
+
+  `React` frontend application where a user with role `USER` can retrieve the information about movies. On the other hand, a user with role `ADMIN` has access to all secured endpoints, including endpoints to create and delete movies.
+  
+  In order to access the application, a `user` or `admin` can login using his/her `Github` account or using the credentials (`username` and `password`) created when he/she signed up directly to the application. All the requests coming from `movie-ui` to secured endpoints in `movie-api` have the JWT access token. This token is generated when the `user` or `admin` logins.
+  
+  `movie-ui` uses [`Mantine`](https://mantine.dev/) as a UI component library, with [`Tabler Icons`](https://tabler.io/icons) for icons.
+
+## Creating OAuth2 apps for Social Login
+
+- **Github**
+
+  In the **Medium** article, [**How to Create an OAuth2 App in GitHub**](https://medium.com/@ivangfr/how-to-create-an-oauth2-app-in-github-8e273e376408), we will walk you through the process of creating an OAuth2 app in `GitHub`.
+
+- **Google**
+
+  In the **Medium** article, [**How to Create an OAuth2 App in Google**](https://medium.com/@ivangfr/how-to-create-an-oauth2-app-in-google-10e846d23adb), we will show in details how to create an OAuth2 app in `Google`.
+
+## How Social Login Works?
+
+In the **Medium** article, [**Implementing Social Login in a Spring Boot and React App**](https://medium.com/@ivangfr/implementing-social-login-in-a-spring-boot-and-react-app-6ce073c9983c), we show the complete Social Login flow, covering the request and redirections among `movie-ui`, `movie-api` and `GitHub` provider.
+
+## Prerequisites
+
+- [`npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [`Java 25`](https://www.oracle.com/java/technologies/downloads/#java25) or higher
+- A containerization tool (e.g., [`Docker`](https://www.docker.com), [`Podman`](https://podman.io), etc.)
+- [`Bash 4.0`](https://www.gnu.org/software/bash/) or higher (macOS ships with Bash 3.2; install via `brew install bash`)
+- [`jq`](https://jqlang.github.io/jq/)
+
+## Start Environment
+
+- In a terminal, make sure you are inside the `springboot-react-social-login` root folder;
+
+- Run the following command to start Docker Compose containers:
+  ```bash
+  docker compose up -d
+  ```
+
+## Running movie-app using Maven & Npm
+
+- **movie-api**
+
+  - Open a terminal and navigate to the `springboot-react-social-login/movie-api` folder;
+
+  - Export the following environment variables for the `Client ID` and `Client Secret` of the Social Apps (see how to get them in [Creating OAuth2 apps for Social Login](#creating-oauth2-apps-for-social-login)):
+    ```bash
+    export GITHUB_CLIENT_ID=...
+    export GITHUB_CLIENT_SECRET=...
+    export GOOGLE_CLIENT_ID=...
+    export GOOGLE_CLIENT_SECRET=...
+    ```
+
+  - Run the following `Maven` command to start the application:
+    ```bash
+    ./mvnw clean spring-boot:run
+    ```
+
+- **movie-ui**
+
+  - Open another terminal and navigate to the `springboot-react-social-login/movie-ui` folder;
+
+  - Run the command below if you are running the application for the first time:
+    ```bash
+    npm install
+    ```
+
+  - Run the `npm` command below to start the application:
+    ```bash
+    npm start
+    ```
+
+## Applications URLs
+
+| Application  | URL                                   | Credentials                                         |
+| ------------ | ------------------------------------- | --------------------------------------------------- |
+| movie-api    | http://localhost:8080/swagger-ui.html |                                                     |
+| movie-ui     | http://localhost:3000                 | `admin/admin`, `user/user` or signing up a new user |
+
+## Demo
+
+- The gif below shows a `user` logging in using `Github`:
+
+  ![github-login](documentation/github-login.gif)
+
+- The gif below shows an `admin` logging in using his application account:
+
+  ![admin-login](documentation/admin-login.gif)
+
+## Testing movie-api Endpoints
+
+- **Manual Test**
+
+  - Access `movie-ui` at http://localhost:3000;
+
+  - Click `Login` and then, connect with `Github`;
+  
+  - Provide your `Github` credentials.
+
+- **Automatic Endpoints Test**
+
+  - Open a terminal and make sure you are in the `springboot-react-social-login` root folder;
+
+  - Run the following script:
+    ```bash
+    ./movie-api/test-endpoints.sh
+    ```
+    It should return something like the output below, where it shows the http code for different requests:
+    ```text
+    POST auth/authenticate
+    ======================
+    admin access token
+    ------------------
+    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1ODY2MjM1MjksImlhdCI6MTU4Nj..._ha2pM4LSSG3_d4exgA
+    
+    user access token
+    -----------------
+    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1ODY2MjM1MjksImlhdCIyOSwian...Y3z9uwhuW_nwaGX3cc5A
+    
+    POST auth/signup
+    ================
+    user2 access token
+    ------------------
+    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJleHAiOjE1ODY2MjM1MjksImanRpIjoiYTMw...KvhQbsMGAlFov1Q480qg
+
+    Authorization
+    =============
+                    Endpoints | without token |  user token |  admin token |
+    ------------------------- + ------------- + ----------- + ------------ |
+     GET public/numberOfUsers |           200 |         200 |          200 |
+    GET public/numberOfMovies |           200 |         200 |          200 |
+    ......................... + ............. + ........... + ............ |
+            GET /api/users/me |           401 |         200 |          200 |
+               GET /api/users |           401 |         403 |          200 |
+         GET /api/users/user2 |           401 |         403 |          200 |
+      DELETE /api/users/user2 |           401 |         403 |          204 |
+    ......................... + ............. + ........... + ............ |
+              GET /api/movies |           401 |         200 |          200 |
+             POST /api/movies |           401 |         403 |          201 |
+       DELETE /api/movies/abc |           401 |         403 |          204 |
+    ------------------------------------------------------------------------
+     [200] Success -  [201] Created -  [204] No Content -  [401] Unauthorized -  [403] Forbidden
+    ```
+
+## Util Commands
+
+- **Postgres**
+  ```bash
+  docker exec -it postgres psql -U postgres -d moviedb
+  \dt
+  ```
+
+## Shutdown
+
+- To stop `movie-api` and `movie-ui`, go to the terminals where they are running and press `Ctrl+C`;
+
+- To stop and remove Docker Compose containers, network, and volumes, go to a terminal and, inside the `springboot-react-social-login` root folder, run the following command:
+  ```bash
+  docker compose down -v
+  ```
+
+## Running Tests
+
+- **movie-api**
+
+  - Open a terminal and navigate to the `springboot-react-social-login/movie-api` folder;
+
+  - Run the following command to execute all tests:
+    ```bash
+    ./mvnw clean test
+    ```
+
+- **movie-ui**
+
+  - Open a terminal and navigate to the `springboot-react-social-login/movie-ui` folder;
+
+  - Run the following command to execute all tests:
+    ```bash
+    npm test
+    ```
+
+## How to upgrade movie-ui dependencies to latest version
+
+- In a terminal, make sure you are in the `springboot-react-social-login/movie-ui` folder;
+
+- Run the following commands:
+  ```bash
+  npm upgrade
+  npm i -g npm-check-updates
+  ncu -u
+  npm install
+  ```
+
+## Code Formatting
+
+- **Spring Boot module** (`movie-api`): Code is formatted using [Spotless](https://github.com/diffplug/spotless/tree/main/plugin-maven) with [Google Java Format](https://github.com/google/google-java-format).
+
+  To check or apply formatting, make sure you are inside the module folder and run the following command:
+
+  - **Check formatting**:
+    ```bash
+    ./mvnw spotless:check
+    ```
+
+  - **Auto-fix formatting**:
+    ```bash
+    ./mvnw spotless:apply
+    ```
+
+- **React module** (`movie-ui`): Code is formatted using [Prettier](https://prettier.io/) with rules aligned to the project's style guide (2-space indentation, single quotes, no trailing semicolons). ESLint conflicts are resolved via `eslint-config-prettier`. Configuration is defined in `.prettierrc` (formatting rules) and `.editorconfig` (editor consistency).
+
+  To check or apply formatting, make sure you are inside the `movie-ui` folder and run the following commands:
+
+  - **Check formatting**:
+    ```bash
+    npm run format:check
+    ```
+
+  - **Auto-fix formatting**:
+    ```bash
+    npm run format
+    ```
+
+## How to optimize GIFs and PNGs in documentation folder
+
+\[**Medium**\]: [**How I Reduce GIF and Screenshot Sizes for My Technical Articles on macOS**](https://medium.com/itnext/how-i-reduce-gif-and-screenshot-sizes-for-my-technical-articles-on-macos-7fea331afc68)
+
+## Support
+
+If you find this useful, consider buying me a coffee:
+
+<a href="https://buymeacoffee.com/ivan.franchin"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50"></a>
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).
+
+## References
+
+- https://www.callicoder.com/spring-boot-security-oauth2-social-login-part-1/

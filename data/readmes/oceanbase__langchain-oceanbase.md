@@ -1,0 +1,612 @@
+# langchain-oceanbase
+
+[![PyPI version](https://badge.fury.io/py/langchain-oceanbase.svg)](https://badge.fury.io/py/langchain-oceanbase)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+
+This package contains the LangChain integration with OceanBase. See the [changelog](./CHANGELOG.md) for release notes.
+
+[OceanBase Database](https://github.com/oceanbase/oceanbase) is a distributed relational database.
+It is developed entirely by Ant Group. The OceanBase Database is built on a common server cluster.
+Based on the Paxos protocol and its distributed structure, the OceanBase Database provides high availability and linear scalability.
+
+OceanBase currently has the ability to store vectors. Users can easily perform the following operations with SQL:
+
+- Create a table containing vector type fields;
+- Create a vector index table based on the HNSW algorithm;
+- Perform vector approximate nearest neighbor queries;
+- ...
+
+## Version Compatibility
+
+`langchain-oceanbase` follows the major LangChain/LangGraph lines. **Pick the release that matches the LangChain stack your application already uses:**
+
+| langchain-oceanbase | langchain-core | langgraph | langgraph-checkpoint | Notes |
+| --- | --- | --- | --- | --- |
+| **0.6.x** (current) | `>=1.0,<2` | `>=1.0.6,<2` | `>=4.0,<5` | LangChain **1.x** + a `langgraph-checkpoint` **4.x** stack. Adds checkpointer `copy_thread` / `delete_for_runs` and non-blocking async. |
+| **0.5.x** | `>=0.3,<2` | `>=0.6,<2` | `>=3,<5` | Wider floor — works on older LangGraph (`0.6.x` / LangGraph 1.x with `langgraph-checkpoint 3.x`). Stay here if you cannot move to a `langgraph-checkpoint` 4.x stack. |
+
+Guidance:
+- **On LangChain `1.x` with `langgraph-checkpoint 4.x`** (langgraph `1.0.6+`): use `0.6.x`. `langgraph-checkpoint 4.x` is what provides the `copy_thread` / `delete_for_runs` / `prune` checkpoint capabilities.
+- **Pinned to `langgraph-checkpoint 3.x`, langgraph `<1.0.6`, or LangChain `0.3.x`**: pin `langchain-oceanbase>=0.5,<0.6`; `0.6.x` will not resolve against that stack.
+
+```bash
+# LangChain 1.x with a langgraph-checkpoint 4.x stack
+pip install "langchain-oceanbase>=0.6,<0.7"
+
+# Pinned to langgraph-checkpoint 3.x / older LangGraph you cannot upgrade yet
+pip install "langchain-oceanbase>=0.5,<0.6"
+```
+
+## LangChain Integration
+
+[![LangChain](https://img.shields.io/badge/LangChain-Integration-blue)](https://python.langchain.com/docs/integrations/vectorstores/oceanbase/)
+
+`OceanbaseVectorStore` is the official LangChain vector store integration for OceanBase.
+
+For LangGraph applications, the recommended persistence surfaces are:
+- `OceanBaseCheckpointSaver` for graph state, replay, and time-travel workflows
+- `OceanBaseStore` for long-term memory, retrieval, and TTL-backed storage
+
+The package support story is straightforward:
+- OceanBase: full pack support for vectorstore + checkpoint + store
+- seekdb: full pack support for vectorstore + checkpoint + store
+- MySQL: compatible checkpoint + store backend for existing on-prem MySQL estates
+
+Official documentation:
+https://python.langchain.com/docs/integrations/vectorstores/oceanbase/
+
+## Support Matrix
+
+| Backend | LangGraph checkpoint | LangGraph store | Vector store | Hybrid search | Notes |
+| --- | --- | --- | --- | --- | --- |
+| OceanBase | Yes | Yes | Yes | Yes | Best fit when you want the full SQL + vector database workflow. |
+| seekdb (server) | Yes | Yes | Yes | Yes | Full-pack seekdb deployment, including provider-backed AI function coverage in CI when AI test secrets are configured. |
+| embedded seekdb | Yes | Yes | Yes | Yes | Local path-based runtime through `pyseekdb` / `pylibseekdb`; no server deployment required. |
+| MySQL | Yes | Yes | No | No | Use your existing on-prem MySQL deployment for checkpoint and store compatibility when you do not need vector or hybrid retrieval. |
+
+### Recommended by Use Case
+
+- **LangGraph state persistence**: use OceanBase, seekdb, embedded seekdb, or MySQL depending on your operational requirements.
+- **LangGraph long-term memory / store API**: use `OceanBaseStore` when you need namespace-scoped key/value memory with filtering, semantic search, and TTL.
+- **Vector store and retrieval workflows**: use OceanBase, seekdb server, or embedded seekdb.
+- **Hybrid retrieval with dense + sparse + full-text search**: use OceanBase, seekdb server, or embedded seekdb.
+- **Existing on-prem MySQL estates**: MySQL remains supported for checkpoint and store workflows, but not vector features.
+
+## Connection Configuration
+
+All three persistence classes (`OceanbaseVectorStore`, `OceanBaseCheckpointSaver`, `OceanBaseStore`) accept a `connection_args` dict. The keys you provide determine whether the client connects to a remote server or runs an in-process embedded seekdb instance.
+
+### Embedded seekdb Mode (no server required)
+
+Set the `path` key to a local directory. No host, port, user, or password is needed. Requires `pip install langchain-oceanbase[pyseekdb]`.
+
+```python
+from langchain_oceanbase import OceanBaseCheckpointSaver, OceanBaseStore
+from langchain_oceanbase.vectorstores import OceanbaseVectorStore
+
+connection_args = {
+    "path": "./my_seekdb_data",   # local directory for seekdb storage
+    "db_name": "test",            # logical database name (default: "test")
+}
+
+# Checkpointer
+saver = OceanBaseCheckpointSaver(connection_args=connection_args)
+saver.setup()
+
+# Store
+store = OceanBaseStore(connection_args=connection_args)
+store.setup()
+
+# Vector store
+vector_store = OceanbaseVectorStore(
+    embedding_function=my_embeddings,
+    table_name="my_vectors",
+    connection_args=connection_args,
+    embedding_dim=384,
+)
+```
+
+### Server Mode (OceanBase / seekdb server / MySQL)
+
+Provide `host`, `port`, `user`, and `password`. This works with any MySQL-protocol-compatible backend.
+
+To set up your backend:
+- [OceanBase](https://www.oceanbase.com/product/opensource) — distributed relational database with vector support
+- [seekdb](https://www.seekdb.ai/) — lightweight vector-native database
+- MySQL — any MySQL 5.7+ or 8.0+ compatible server
+
+```python
+# OceanBase (default port 2881)
+connection_args = {
+    "host": "127.0.0.1",
+    "port": "2881",
+    "user": "root@test",
+    "password": "",
+    "db_name": "test",
+}
+
+# seekdb server (default port 2881)
+connection_args = {
+    "host": "127.0.0.1",
+    "port": "2881",
+    "user": "root@test",
+    "password": "",
+    "db_name": "test",
+}
+
+# MySQL (standard port 3306)
+connection_args = {
+    "host": "127.0.0.1",
+    "port": "3306",
+    "user": "root",
+    "password": "my_password",
+    "db_name": "langchain_db",
+}
+```
+
+All server-mode examples use the same classes:
+
+```python
+saver = OceanBaseCheckpointSaver(connection_args=connection_args)
+store = OceanBaseStore(connection_args=connection_args)
+vector_store = OceanbaseVectorStore(
+    embedding_function=my_embeddings,
+    table_name="my_vectors",
+    connection_args=connection_args,
+    embedding_dim=384,
+)
+```
+
+> **Note**: MySQL backends support checkpoint and store only — vector store requires OceanBase or seekdb.
+
+### Default Connection
+
+If `connection_args` is omitted, the client defaults to `localhost:2881` with user `root@test` and no password (matching a local OceanBase Docker deployment).
+
+## Features
+
+* **LangGraph Checkpointing**: Persist LangGraph conversation checkpoints with `OceanBaseCheckpointSaver`, including resume, replay, and time-travel workflows for multi-thread graph state. See [Migration Guide](./docs/migration_guide.md), [checkpoint notebook](./docs/langgraph_checkpoint.ipynb), and [examples/langgraph_agent.py](./examples/langgraph_agent.py).
+* **LangGraph Store**: Persist long-term memory with `OceanBaseStore`, including namespace-scoped key/value items, JSON filters, semantic search, async methods, and TTL-based expiry. See the [store notebook](./docs/langgraph_store.ipynb) and [examples/langgraph_store.py](./examples/langgraph_store.py).
+* **Vector Storage**: Store embeddings from LangChain models in OceanBase, seekdb, or embedded seekdb with automatic table creation and index management.
+* **Built-in Embedding**: Built-in embedding function using `all-MiniLM-L6-v2` model (384 dimensions) with no API keys required. Perfect for quick prototyping and local development.
+  * **No API Keys Required**: Uses local ONNX models, no external API calls needed
+  * **Quick Start**: Perfect for rapid prototyping and testing
+  * **LangChain Compatible**: Fully compatible with LangChain's `Embeddings` interface
+  * **Batch Processing**: Supports efficient batch embedding generation
+  * **Automatic Integration**: Can be automatically used in `OceanbaseVectorStore` by setting `embedding_function=None` after installing `langchain-oceanbase[pyseekdb]`
+  * **Technical Specs**: Model `all-MiniLM-L6-v2`, 384 dimensions, ONNX Runtime inference
+* **Embedded seekdb (optional)**: Run local embedded [seekdb](https://github.com/oceanbase/pyseekdb) through pyobvector (`path=` or `pyseekdb_client=` on `OceanbaseVectorStore`) without OceanBase; install `langchain-oceanbase[pyseekdb]` or a recent `pyseekdb` that installs `pylibseekdb`. See [docs/vectorstores.md#embedded-seekdb-optional](./docs/vectorstores.md#embedded-seekdb-optional) and [examples/embedded_seekdb_vectorstore.py](./examples/embedded_seekdb_vectorstore.py).
+* **Similarity Search**: Perform efficient similarity searches on vector data with multiple distance metrics (L2, cosine, inner product).
+* **Hybrid Search**: Combine vector search with sparse vector search and full-text search for improved results with configurable weights.
+* **Maximal Marginal Relevance**: Filter for diversity in search results to avoid redundant information.
+* **Multiple Index Types**: Support for HNSW, IVF, FLAT and other vector index types with automatic parameter optimization.
+* **Sparse Embeddings**: Native support for sparse vector embeddings with BM25-like functionality.
+* **Advanced Filtering**: Built-in support for metadata filtering and complex query conditions.
+* **Async Support**: Full support for async operations and high-concurrency scenarios.
+* **Custom Exceptions**: `OceanBaseError`, `OceanBaseConnectionError`, `OceanBaseVectorDimensionError`, `OceanBaseIndexError`, `OceanBaseVersionError`, `OceanBaseConfigurationError` with troubleshooting links in messages.
+
+## Installation
+
+```bash
+pip install -U langchain-oceanbase
+```
+
+### Requirements
+
+- Python >=3.11
+- langchain-core >=1.0,<2
+- langgraph >=1.0.6,<2 and langgraph-checkpoint >=4.0,<5 (for `OceanBaseCheckpointSaver`)
+- pyobvector >=0.2.29 (required for database client and embedded HNSW read-after-write)
+- `pyseekdb` extra (optional; install `langchain-oceanbase[pyseekdb]` for built-in embeddings and embedded seekdb support)
+
+> **Tip**: `0.6.x` requires a LangChain **1.x** / `langgraph-checkpoint` **4.x** stack. If you are pinned to `langgraph-checkpoint 3.x` or LangChain `0.3.x`, use `langchain-oceanbase>=0.5,<0.6` instead — see [Version Compatibility](#version-compatibility).
+
+### Platform Support
+
+- ✅ **Linux**: Full support (x86_64 and ARM64)
+- ✅ **macOS/Windows**: Supported - `pyobvector` works on all platforms
+
+### Built-in Embedding Dependencies
+
+For built-in embedding functionality (no API keys required), install the optional `pyseekdb` extra:
+
+```bash
+pip install -U "langchain-oceanbase[pyseekdb]"
+```
+
+It provides:
+- Local ONNX-based embedding inference
+- Default embedding model: `all-MiniLM-L6-v2` (384 dimensions)
+- No external API calls needed
+
+We recommend using Docker to deploy OceanBase:
+
+```shell
+docker run --name=oceanbase -e MODE=mini -e OB_SERVER_IP=127.0.0.1 -p 2881:2881 -d oceanbase/oceanbase-ce:latest
+```
+
+For AI Functions support, use OceanBase 4.4.1 or later:
+
+```shell
+docker run --name=oceanbase -e MODE=mini -e OB_SERVER_IP=127.0.0.1 -p 2881:2881 -d oceanbase/oceanbase-ce:4.4.1.0-100000032025101610
+```
+
+[More methods to deploy OceanBase cluster](https://github.com/oceanbase/oceanbase-doc/blob/V4.3.1/en-US/400.deploy/500.deploy-oceanbase-database-community-edition/100.deployment-overview.md)
+
+## Usage
+
+### Documentation Formats
+
+Choose your preferred format:
+
+- **[Jupyter Notebook](./docs/vectorstores.ipynb)** - Interactive notebook with executable code cells
+- **[Markdown](./docs/vectorstores.md)** - Static documentation for easy reading (includes [embedded seekdb](./docs/vectorstores.md#embedded-seekdb-optional))
+- **[Embedded seekdb example](./examples/embedded_seekdb_vectorstore.py)** - Runnable script using local seekdb without Docker
+
+### Additional Resources
+
+- **[Built-in Embedding Guide](./docs/embeddings.ipynb)** - Interactive notebook for built-in embedding functionality
+- **[Built-in Embedding Guide (Markdown)](./docs/embeddings.md)** - Static documentation for built-in embeddings
+- **[Hybrid Search Guide](./docs/hybrid_search.ipynb)** - Interactive notebook for hybrid search features
+- **[Hybrid Search Guide (Markdown)](./docs/hybrid_search.md)** - Static documentation for hybrid search
+- **[AI Functions Guide](./docs/ai_functions.md)** - Documentation for AI Functions (AI_EMBED, AI_COMPLETE, AI_RERANK)
+- **[AI Functions Guide (Notebook)](./docs/ai_functions.ipynb)** - Interactive notebook for AI Functions
+- **[LangGraph Checkpoint notebook](./docs/langgraph_checkpoint.ipynb)** - Interactive notebook for `OceanBaseCheckpointSaver`
+- **[Migration Guide](./docs/migration_guide.md)** - Migrating to LangGraph Checkpointer and schema changes
+- **[LangGraph Store notebook](./docs/langgraph_store.ipynb)** - Interactive notebook for `OceanBaseStore`
+- **[LangGraph Store example](./examples/langgraph_store.py)** - Runnable example for namespace-scoped memory, semantic search, and TTL
+
+#### Built-in Embedding Sections:
+- [**Installation**](./docs/embeddings.md#installation) - Install required packages
+- [**Direct Use**](./docs/embeddings.md#method-1-direct-use-of-defaultembeddingfunction) - Use DefaultEmbeddingFunction directly
+- [**LangChain Compatible**](./docs/embeddings.md#method-2-using-defaultembeddingfunctionadapter-langchain-compatible-interface) - Use DefaultEmbeddingFunctionAdapter
+- [**Vector Store Integration**](./docs/embeddings.md#method-3-using-default-embedding-in-oceanbasevectorstore) - Use in OceanbaseVectorStore
+- [**Text Similarity**](./docs/embeddings.md#computing-text-similarity) - Compute similarity between texts
+- [**Performance**](./docs/embeddings.md#performance-comparison-batch-processing-vs-single-processing) - Batch vs single processing comparison
+
+#### Hybrid Search Sections:
+- [**Setup**](./docs/hybrid_search.md#setup) - Deploy OceanBase and install packages
+- [**Vector Search**](./docs/hybrid_search.md#vector-search) - Semantic similarity matching
+- [**Sparse Vector Search**](./docs/hybrid_search.md#sparse-vector-search) - Keyword-based exact matching
+- [**Full-text Search**](./docs/hybrid_search.md#full-text-search) - Content-based text search
+- [**Multi-modal Search**](./docs/hybrid_search.md#multi-modal-search) - Combined search strategies
+
+#### AI Functions Sections:
+- [**Setup**](./docs/ai_functions.md#setup) - Deploy OceanBase and configure AI models
+- [**Initialization**](./docs/ai_functions.md#initialization) - Configure and create AI functions client
+- [**AI_EMBED**](./docs/ai_functions.md#ai_embed) - Convert text to vector embeddings
+- [**AI_COMPLETE**](./docs/ai_functions.md#ai_complete) - Generate text completions
+- [**AI_RERANK**](./docs/ai_functions.md#ai_rerank) - Rerank search results
+- [**Model Configuration API**](./docs/ai_functions.md#model-configuration-api) - Setup AI models and endpoints
+
+### Quick Start
+
+#### Using LangGraph Store Memory
+
+```python
+from langchain_core.embeddings import Embeddings
+from langchain_oceanbase import OceanBaseStore
+
+
+class DemoEmbeddings(Embeddings):
+    def embed_documents(self, texts: list[str]) -> list[list[float]]:
+        return [self.embed_query(text) for text in texts]
+
+    def embed_query(self, text: str) -> list[float]:
+        lowered = text.lower()
+        return [
+            1.0 if "python" in lowered else 0.0,
+            1.0 if "database" in lowered else 0.0,
+            float((len(lowered) % 13) + 1),
+        ]
+
+
+store = OceanBaseStore(
+    connection_args={
+        "host": "127.0.0.1",
+        "port": "2881",
+        "user": "root@test",
+        "password": "",
+        "db_name": "test",
+    },
+    index={"dims": 3, "embed": DemoEmbeddings(), "fields": ["memory"]},
+    ttl_config={"refresh_on_read": True, "default_ttl": 60},
+)
+store.setup()
+
+namespace = ("memories", "user-123")
+store.put(namespace, "favorite-language", {"memory": "The user prefers Python."})
+results = store.search(namespace, query="python", limit=3)
+```
+
+See [examples/langgraph_store.py](./examples/langgraph_store.py) for a complete runnable example.
+
+#### Using Built-in Embedding (No API Keys Required)
+
+The simplest way to get started is using the built-in embedding function, which requires no API keys. **Prerequisite**: OceanBase must be running (e.g. `docker run --name=oceanbase -e MODE=mini -e OB_SERVER_IP=127.0.0.1 -p 2881:2881 -d oceanbase/oceanbase-ce:latest`).
+
+```python
+from langchain_oceanbase.vectorstores import OceanbaseVectorStore
+from langchain_core.documents import Document
+
+# Connection configuration
+connection_args = {
+    "host": "127.0.0.1",
+    "port": "2881",
+    "user": "root@test",
+    "password": "",
+    "db_name": "test",
+}
+
+# Use default embedding (set embedding_function=None)
+vector_store = OceanbaseVectorStore(
+    embedding_function=None,  # Automatically uses DefaultEmbeddingFunction
+    table_name="langchain_vector",
+    connection_args=connection_args,
+    vidx_metric_type="l2",
+    drop_old=True,
+    embedding_dim=384,  # all-MiniLM-L6-v2 dimension
+)
+
+# Add documents
+documents = [
+    Document(page_content="Machine learning is a subset of artificial intelligence"),
+    Document(page_content="Python is a popular programming language"),
+    Document(page_content="OceanBase is a distributed relational database"),
+]
+ids = vector_store.add_documents(documents)
+
+# Perform similarity search
+results = vector_store.similarity_search("artificial intelligence", k=2)
+for doc in results:
+    print(f"* {doc.page_content}")
+```
+
+You can verify this example without OceanBase (imports and constructor only) by running: `poetry run python tests/run_readme_quickstart.py`.
+
+**Key Benefits of Built-in Embedding:**
+- ✅ No API keys or external services required
+- ✅ Works offline with local ONNX models
+- ✅ Fast batch processing
+- ✅ Perfect for prototyping and testing
+- ✅ Model files (~80MB) downloaded automatically on first use
+
+#### Additional Quick Start Guides
+
+- [**Setup**](./docs/vectorstores.md#setup) - Deploy OceanBase and install dependencies
+- [**Initialization**](./docs/vectorstores.md#initialization) - Configure and create vector store  
+- [**Manage vector store**](./docs/vectorstores.md#manage-vector-store) - Add, update, and delete vectors
+- [**Query vector store**](./docs/vectorstores.md#query-vector-store) - Search and retrieve vectors
+- [**Build RAG(Retrieval Augmented Generation)**](./docs/vectorstores.md#build-rag-retrieval-augmented-generation) - Build powerful RAG applications
+- [**Full-text Search**](./docs/vectorstores.md#full-text-search) - Implement full-text search capabilities
+- [**Hybrid Search**](./docs/vectorstores.md#hybrid-search) - Combine vector and text search for better results
+- [**Advanced Filtering**](./docs/vectorstores.md#advanced-filtering) - Metadata filtering and complex query conditions
+- [**Maximal Marginal Relevance**](./docs/vectorstores.md#maximal-marginal-relevance) - Filter for diversity in search results
+- [**Multiple Index Types**](./docs/vectorstores.md#multiple-index-types) - Different vector index types (HNSW, IVF, FLAT)
+
+## Troubleshooting
+
+### Connection Refused
+
+**Error**: `Can't connect to MySQL server on 'localhost'` or `ConnectionRefusedError`
+
+**Cause**: OceanBase is not running or not accessible on the specified host/port.
+
+**Solution**:
+1. Check if OceanBase is running:
+   ```bash
+   docker ps | grep oceanbase
+   ```
+2. Start OceanBase if not running:
+   ```bash
+   docker start oceanbase
+   ```
+3. Verify the port is correct (default: 2881 for local, 3306 for cloud)
+4. Check firewall settings if connecting to remote server
+
+### Vector Dimension Mismatch
+
+**Error**: `Vector dimension mismatch` or `OceanBaseVectorDimensionError`
+
+**Cause**: The embedding model's output dimension doesn't match the table's vector dimension.
+
+**Solution**:
+1. Check your embedding model's output dimension (e.g., `all-MiniLM-L6-v2` outputs 384 dimensions)
+2. Set the correct `embedding_dim` parameter when initializing `OceanbaseVectorStore`
+3. If the embedding model changed, recreate the table with `drop_old=True`:
+   ```python
+   vector_store = OceanbaseVectorStore(
+       embedding_function=new_embedding,
+       embedding_dim=new_dim,
+       drop_old=True,  # Recreate table with new dimension
+       ...
+   )
+   ```
+
+### Index Creation Failed
+
+**Error**: `Failed to create index` or `OceanBaseIndexError`
+
+**Cause**: Insufficient memory, incompatible OceanBase version, or invalid index parameters.
+
+**Solution**:
+1. Check available memory on your OceanBase server
+2. Verify OceanBase version supports the index type:
+   - HNSW: OceanBase 4.3.0+
+   - IVF variants: OceanBase 4.3.0+
+3. Try a simpler index type for small datasets:
+   ```python
+   vector_store = OceanbaseVectorStore(
+       index_type="FLAT",  # No index, exact search
+       ...
+   )
+   ```
+4. For HNSW, reduce `M` parameter if memory is limited:
+   ```python
+   vector_store = OceanbaseVectorStore(
+       index_type="HNSW",
+       vidx_algo_params={"M": 8, "efConstruction": 100},
+       ...
+   )
+   ```
+
+### AI Functions Not Supported
+
+**Error**: `AI functions are not supported` or `OceanBaseVersionError`
+
+**Cause**: OceanBase version is older than 4.4.1, which is required for AI functions.
+
+**Solution**:
+1. Upgrade to OceanBase 4.4.1 or later:
+   ```bash
+   docker run --name=oceanbase -e MODE=mini -e OB_SERVER_IP=127.0.0.1 \
+       -p 2881:2881 -d oceanbase/oceanbase-ce:4.4.1.0-100000032025101610
+   ```
+2. Alternatively, use seekdb which also supports AI functions
+3. Check current version:
+   ```sql
+   SELECT version();
+   ```
+
+### Slow Queries
+
+**Cause**: Missing vector index, wrong index type, or suboptimal search parameters.
+
+**Solution**:
+1. Ensure a vector index is created (check with `SHOW INDEX FROM table_name`)
+2. Use appropriate index type:
+   - **HNSW**: Best for large datasets with high recall requirements
+   - **IVF_FLAT**: Good balance of speed and accuracy
+   - **FLAT**: Best accuracy but slowest (no index)
+3. Tune search parameters for HNSW:
+   ```python
+   # Higher efSearch = better accuracy but slower
+   vector_store.hnsw_ef_search = 128  # Default is 64
+   ```
+4. For IVF indexes, adjust `nprobe` parameter
+
+### Sparse Vector / Full-text Search Not Working
+
+**Error**: `Sparse vector support not enabled` or `Full-text search support not enabled`
+
+**Cause**: The vector store was not initialized with sparse/fulltext support.
+
+**Solution**:
+```python
+# Enable sparse vector support
+vector_store = OceanbaseVectorStore(
+    include_sparse=True,
+    ...
+)
+
+# Enable both sparse and full-text search
+vector_store = OceanbaseVectorStore(
+    include_sparse=True,
+    include_fulltext=True,
+    ...
+)
+```
+
+Note: Full-text search requires `include_sparse=True` to be set as well.
+
+### Import Errors
+
+**Error**: `ModuleNotFoundError: No module named 'pyobvector'`
+
+**Cause**: Required dependencies are not installed.
+
+**Solution**:
+```bash
+pip install -U langchain-oceanbase pyobvector
+```
+
+For AI functions support:
+```bash
+pip install -U langchain-oceanbase pyobvector langgraph-checkpoint
+```
+
+## Quickstart
+
+A short quickstart to run the local dev environment and example scripts.
+
+Prerequisites:
+- Git
+- Docker & Docker Compose
+- Python 3.10+
+- (Optional) OpenAI API key for embeddings / LLM examples
+
+1. Clone the repo
+```bash
+git clone https://github.com/oceanbase/langchain-oceanbase.git
+cd langchain-oceanbase
+```
+
+2. Start the local database
+```bash
+# start OceanBase
+make docker-up
+
+# or start seekdb (lightweight alternative)
+make docker-up-seek
+```
+
+3. Set environment variables (create a `.env` file or export them)
+```
+OB_HOST=127.0.0.1
+OB_PORT=3306
+OB_USER=root
+OB_PASSWORD=changeme
+OB_DB=langchain_ob_demo
+OPENAI_API_KEY=sk-...
+```
+
+4. Install example dependencies (examples use these packages)
+```bash
+pip install openai mysql-connector-python numpy
+```
+
+5. Run an example
+```bash
+python examples/quickstart.py
+python examples/rag_demo.py
+python examples/hybrid_search_demo.py
+```
+
+## Files of interest
+
+- `docker-compose.yml` — OceanBase CE service for local development
+- `docker-compose.seekdb.yml` — seekdb lightweight alternative
+- `Makefile` — convenience targets: `make docker-up`, `make docker-down`, `make docker-logs`, plus format/lint/typecheck/test helpers
+- `CONTRIBUTING.md` — developer setup, running tests, code style, PR process
+- `examples/` — `quickstart.py`, `rag_demo.py`, `hybrid_search_demo.py`, and `examples/README.md`
+
+## Running tests and linters
+
+- Unit tests (no database required):
+```bash
+make test
+# or: poetry run pytest tests/unit_tests/
+```
+
+- Integration tests (requires OceanBase/seekdb, e.g. `make docker-up`):
+```bash
+make docker-up
+make integration_tests
+# or: poetry run pytest tests/integration_tests/
+```
+
+- Lint / formatting:
+```bash
+make format   # code formatting (ruff format + import sort)
+make lint    # ruff check + mypy
+```
+
+## Contributing
+
+See `CONTRIBUTING.md` for detailed developer setup and the PR process. When submitting a PR, please:
+- Target `develop` for regular work (`feature/*`, `bugfix/*`, `chore/*`, `docs/*`, `refactor/*`, `test/*`)
+- Use `release/*` or `hotfix/*` as the normal PR sources into `main`
+- Dependabot version updates now target `develop`
+- Dependabot security updates still follow the GitHub default branch until a repo admin switches the default branch from `main` to `develop`
+- Reference the issue (e.g., `Closes #43`) in the PR body
+- Run linters and tests locally

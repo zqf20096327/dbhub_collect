@@ -1,0 +1,148 @@
+# libsl3, a C++ interface for SQLite 3.x
+
+libsl3 is designed to enable comfortable and efficient communication with a
+SQLite database based on its natural language, which is SQL.
+
+libsl3 originated back at a time when C++11 was new.
+It has remained stable to support existing users for quite a while, over a decade.
+With the arrival of C++23, development has restarted, but due to a lack of time,
+not much has happened so far. The minimum required C++ standard is now C++17.
+The goal is to keep the interface stable, but using a newer C++ standard might
+justify some breaking changes.
+
+For people seeking the old version, release v1.1.31001 preserves the original
+C++11 state with CMake 2.8 support.
+
+**The full documentation for libsl3 can be found here:** \
+<https://a4z.github.io/libsl3/>
+
+## Using libsl3 in a project
+
+libsl3 supports CMake and Bazel
+
+### Consume via vcpkg
+
+libsl3 is available on [vcpkg](https://vcpkg.io/en/package/libsl3.html):
+
+```sh
+vcpkg install libsl3
+```
+
+If you do not use vcpkg, fetch_content works also.
+
+### Consume via Bazel
+
+libsl3 is available on the Bazel Central Registry.
+Add it to your `MODULE.bazel` file:
+
+```bazel
+bazel_dep(name = "libsl3")
+```
+
+## Building libsl3 from source
+
+Quickly summarized, there are dependencies, but they are all either development
+dependencies or optional
+
+- sqlite3
+- doctest
+- commonCompilerWarnings
+
+### Build via CMake
+
+The simple default is
+
+```sh
+cmake -S . -B build -DFETCH_DEPS_VIA=toolchain/fetch-dependencies
+cmake --build build --parallel
+cmake --build build --target test
+```
+
+To build libsl3 without any dependencies, run
+
+```text
+cmake -S . -B build -Dsl3_BUILD_TESTING=OFF -Dsl3_USE_INTERNAL_SQLITE3=ON -Dsl3_USE_COMMON_COMPILER_WARNINGS=OFF
+```
+
+This will build libsl3 with the internal sqlite distribution.
+The used sqlite version is documented in the patch level part of the actual
+libsl3 version.
+
+For using sqlite from the system, run
+
+```text
+cmake -S . -B build -Dsl3_BUILD_TESTING=OFF -Dsl3_USE_COMMON_COMPILER_WARNINGS=OFF
+```
+
+For more information about how to consume and build the library, visit [the documentation](https://a4z.github.io/libsl3/#Installation).
+
+You can also explore the existing presets.
+
+### Build with Bazel
+
+Just use Bazel
+
+```sh
+bazel build //...
+bazel test //...
+```
+
+## Using libsl3
+
+A short intro to sl3's api
+
+```cpp
+#include <cassert>
+#include <iostream>
+#include <sl3/database.hpp>
+
+int main()
+{
+  using namespace sl3;
+  // define a db
+  Database db(":memory:");
+  // run commands against the db
+  db.execute("CREATE TABLE tbl(f1 INTEGER, f2 TEXT, f3 REAL);");
+  // create a command with parameters
+  auto cmd = db.prepare("INSERT INTO tbl (f1, f2, f3) VALUES (?,?,?);");
+  //add some data
+  cmd.execute(parameters(1, "one", 1.1));
+  cmd.execute(parameters(2, "two", 2.2));
+  // access the data
+  Dataset ds = db.select("SELECT * FROM tbl;");
+  // Dataset is a container
+  assert(ds.size()==2);
+  // A row in a dataset is also a container
+  auto row = ds[0] ;
+  assert(row.size()==3);
+  // Type info for each field s available
+  assert ( row[0].type() == Type::Int ) ;
+  assert ( row[1].type() == Type::Text ) ;
+  assert ( row[2].type() == Type::Real ) ;
+  // there is also iterator access
+  for(const auto& row  :ds) {
+      for (const auto& field : row) {
+          std::cout << field << " " ;
+      }
+      std::cout << std::endl;
+  }
+}
+
+```
+
+This will output
+
+```bash
+1 one 1.1
+2 two 2.1
+```
+
+Additional samples can be found in the tests and tests/samples subfolder.
+
+## Documentation
+
+For more information, visit the docs as <https://a4z.github.io/libsl3/>.
+
+## License
+
+<https://www.mozilla.org/en-US/MPL/2.0/>

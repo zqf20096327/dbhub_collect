@@ -1,0 +1,544 @@
+# Vacuum
+
+[![Latest Version](https://img.shields.io/packagist/v/heyosseus/vacuum.svg)](https://packagist.org/packages/heyosseus/vacuum)
+[![Total Downloads](https://img.shields.io/packagist/dt/heyosseus/vacuum.svg)](https://packagist.org/packages/heyosseus/vacuum)
+[![Tests](https://img.shields.io/github/actions/workflow/status/Heyosseus/vacuum/tests.yml?branch=main&label=tests)](https://github.com/Heyosseus/vacuum/actions/workflows/tests.yml)
+[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen.svg)](https://github.com/Heyosseus/vacuum/actions/workflows/tests.yml)
+[![License](https://img.shields.io/packagist/l/heyosseus/vacuum.svg)](https://packagist.org/packages/heyosseus/vacuum)
+
+![PHP](https://img.shields.io/badge/php-8.3%2B-777BB4?logo=php&logoColor=white)
+![Laravel](https://img.shields.io/badge/laravel-11%20%7C%2012%20%7C%2013-FF2D20?logo=laravel&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/postgresql-14%2B-4169E1?logo=postgresql&logoColor=white)
+
+![Vacuum — a PostgreSQL monitoring and tuning dashboard for Laravel](art/hero.png)
+
+**A PostgreSQL monitoring dashboard for Laravel — and a schema linter for the pipeline that ships it.**
+
+Vacuum reads what PostgreSQL already knows about itself — `pg_stat_user_tables`, `pg_stat_user_indexes`, `pg_stat_activity`, `pg_stat_database`, `pg_stat_statements`, `pg_class` — and turns it into a page that says what is wrong, what it is costing you, and the statement that would put it right.
+
+It shows you that statement. It never runs it.
+
+**It does not need a production database to be useful.** `vacuum:lint` reads the catalog rather than the statistics, so it has something to say against the empty Postgres container your test job already starts: a foreign key with no index behind it, a primary key that stops accepting rows at two billion, a table nothing can address a single row of. One line in the workflow you already have —
+
+```yaml
+- run: php artisan vacuum:lint --format=github
+```
+
+— and the finding arrives as an annotation on the pull request that introduced it, on the line that introduced it. See [Linting the schema](#linting-the-schema).
+
+> **Status: 1.2.0.** The public API is frozen — see [What semver covers](#what-semver-covers). A breaking change to the rule contracts, `Finding`, the value objects, the configuration keys or the `--format=json` documents now requires a major version.
+
+## Quick start
+
+```bash
+composer require heyosseus/vacuum
+php artisan vacuum:install
+```
+
+Then open `/vacuum`. That is all of it: the installer publishes the config and asks one question, and everything Vacuum reads is already being kept by the server.
+
+![How Vacuum works: six catalogs PostgreSQL maintains, thirteen rules, and a finding carrying the statement that fixes it](art/how-it-works.png)
+
+Already running a Filament panel? `php artisan vacuum:install --filament` puts the same data inside it — see [Inside Filament](#inside-filament).
+
+**In a pipeline there are two commands, and they answer different questions.** `vacuum:check` runs the full advisor against a database that has been *running* — see [In your pipeline](#in-your-pipeline). `vacuum:lint` runs against one that has only been *migrated*, which is what a test job actually has — see [Linting the schema](#linting-the-schema). The first belongs on a schedule against staging; the second belongs in `require-dev`, on every push.
+
+## Contents
+
+- [What it tells you](#what-it-tells-you) — the thirteen rules, and the score they produce
+- [Learn](#learn) — thirteen lessons worked through your own tables
+- [Requirements](#requirements) · [Installation](#installation)
+- [The standalone dashboard](#the-standalone-dashboard) · [Inside Filament](#inside-filament)
+- [Who may look](#who-may-look) · [Which database](#which-database)
+- [In your pipeline](#in-your-pipeline) — `vacuum:check`, and failing a build
+- [Linting the schema](#linting-the-schema) — `vacuum:lint`, a baseline, and annotations on the pull request
+- [History over time](#history-over-time) — direction, forecasts, and what changed
+- [The SQL console](#the-sql-console) — and what actually makes it safe
+- [Tuning the thresholds](#tuning-the-thresholds) · [Writing your own rule](#writing-your-own-rule) · [Restyling the dashboard](#restyling-the-dashboard)
+- [What semver covers](#what-semver-covers) · [Development](#development)
+
+## What it tells you
+
+| Rule | Finds |
+| --- | --- |
+| `wraparound` | Tables nothing has frozen, on their way to shutting the database down |
+| `multixact-wraparound` | The same road, on the other clock: tables whose row locks nothing has frozen |
+| `autovacuum-disabled` | A server with autovacuum switched off and left off |
+| `dead-tuples` | Tables carrying more deleted-but-unreclaimed rows than they should |
+| `stale-statistics` | Tables the planner is reasoning about from numbers that are no longer true |
+| `table-bloat` | Tables whose files are much larger than the rows inside them |
+| `unused-index` | Large indexes no query has ever read |
+| `duplicate-index` | Indexes that are an exact copy of another index on the same table |
+| `invalid-index` | Indexes every write maintains and no query is allowed to use |
+| `cache-hit-ratio` | A database going to disk more often than it should |
+| `idle-in-transaction` | Transactions opened and then abandoned |
+| `blocked-session` | Sessions stuck waiting on somebody else's lock |
+| `slow-statement` | The shapes of query that cost the most per run |
+
+Every finding carries a severity, what the problem costs you, and — where a single statement would fix it — the SQL to run. Findings roll up into a health score out of 100, which is computed *from the findings themselves*, so the grade can never disagree with the list beneath it.
+
+![The score: 100, minus 25 for unused-index and 15 for cache-hit-ratio, leaves 60 and a grade of D](art/scoring.png)
+
+Most of those rules describe a database that is slower than it could be. `wraparound` describes one that **stops**: PostgreSQL counts transactions in 32 bits, and a table nothing freezes drags the whole cluster toward the end of that count, at which point the server refuses every write until it is shut down and vacuumed in single-user mode. It gives no warning of its own, and it does not slow down first.
+
+PostgreSQL has **two** of those clocks, and either one running out stops the cluster. The second counts *multixacts* — the objects it allocates when more than one transaction holds a lock on the same row at once, which is ordinary on a table with foreign keys pointing at it or one read with `SELECT ... FOR UPDATE`. It has its own horizon (`autovacuum_multixact_freeze_max_age`, 400 million by default, twice the transaction one) and autovacuum advances it separately. A table under a lock-heavy workload can therefore be perfectly healthy on `wraparound` and be the table that stops your database. `multixact-wraparound` watches that clock. The remedy is the same `VACUUM (FREEZE, ANALYZE)` — only the seeing had to be added.
+
+## Learn
+
+The advisor tells you what is wrong. **Learn**, at `/learn`, tells you why — using your own tables as the worked example.
+
+Every explainer on the internet already exists. None of them can say *"this is happening in your `orders` table right now"*, and that sentence is the entire point: a lesson that names no table of yours is a blog post and belongs somewhere else.
+
+Thirteen lessons across five tiers. Each renders in four bands — what is going on, what is going on **here**, what to do about it, and a statement to go and run. Band three is a **decision tree**: a lesson that says "it depends" and stops has failed you, so this is what it depends on, with your own tables sorted onto the branch they landed on.
+
+The fillfactor lesson is the sharp example. A poor HOT-update share has two unrelated causes with two unrelated remedies, and they are indistinguishable in the ratio alone — a page with no room left, or an indexed column changing. The tree separates them, so a table whose real problem is an index on `updated_at` is not told to lower its fillfactor, which would not move it an inch.
+
+| Tier | Lessons |
+| --- | --- |
+| Eloquent & Laravel | `unindexed-foreign-keys`, `n-plus-one`, `soft-deletes`, `framework-tables`, `timestamps-and-hot`, `chunking-large-tables`, `json-columns`, `transactions-and-locks` |
+| Storage & MVCC | `row-versions`, `fillfactor` |
+| Indexes | `unused-indexes` |
+| Maintenance | `dead-tuples` |
+| Advanced | `heap-page` |
+
+The Eloquent tier sorts first because it is the on-ramp: you arrive fluent in `$model->update()` and have never heard of a heap, so the first thing you meet is your own ORM, and each lesson there points down into the PostgreSQL material underneath it.
+
+Two of them earn their place immediately. **`unindexed-foreign-keys`** — PostgreSQL indexes a primary key and a unique constraint and creates *nothing* for a foreign key, where MySQL does. So `$table->foreignId('customer_id')->constrained()` leaves every `$customer->delete()` sequentially scanning the child table while holding a lock, and the cost never shows up where you look for it. **`n-plus-one`** is written from the database's side, which nothing else does: the database never sees your loop, it sees one statement executed a hundred thousand times, each one fast. Its signature is an enormous call count with a trivial mean time — which is exactly why every dashboard that ranks by slowest query is structurally blind to it.
+
+Laravel is recognised **in the schema, by convention**: `deleted_at` is what `SoftDeletes` adds, `jobs` and `sessions` are what `artisan` generated, a `jsonb` column is what a cast maps onto. Vacuum never loads your application's classes to find out — a monitoring package that boots the app it monitors can be brought down by a model that throws in its constructor. The lessons say so rather than claiming to have read your model: the catalog can prove a column exists, and cannot prove which trait put it there.
+
+Learn reads the catalog and the statistics views only, needs no extension and no superuser, and is **on by default**. Nothing in it writes — band four hands you a statement, exactly as the dashboard does, and never runs one.
+
+```php
+// config/vacuum.php
+'learn' => [
+    'enabled' => env('VACUUM_LEARN_ENABLED', true),
+],
+```
+
+## Requirements
+
+- PHP 8.3+
+- Laravel 11, 12 or 13
+- PostgreSQL 14+
+- Filament 4 or 5 — optional, only if you want the UI inside a panel
+
+`pg_stat_statements` is optional. Without it, Vacuum says so on the page rather than quietly showing you an empty panel.
+
+## Installation
+
+```bash
+composer require heyosseus/vacuum
+php artisan vacuum:install
+```
+
+`vacuum:install` publishes the config and asks one question: serve the UI as the standalone Blade dashboard, or inside a Filament panel? Answer Blade (the default) and you are done — open `/vacuum`. Prefer to do it by hand? `php artisan vendor:publish --tag=vacuum-config` and open `/vacuum` is the whole of the Blade path.
+
+### The standalone dashboard
+
+The health grade, and the findings that produced it — worst first, each with the statement that would put it right.
+
+![Vacuum's standalone dashboard: the health grade and the findings that produced it](art/blade-overview.png)
+
+Open any table to see its full profile — size, dead rows, freeze age, how it is read and written, and the findings against it, again worst first.
+
+The built-in SQL console runs every statement inside a read-only transaction that is always rolled back. See [The SQL console](#the-sql-console).
+
+## Inside Filament
+
+If your app already runs a [Filament](https://filamentphp.com) v4 or v5 panel, Vacuum can live inside it rather than at a separate `/vacuum` URL — the same data the Filament way.
+
+**Filament is an optional peer.** The package never requires `filament/filament`; the plugin's classes load only when your app already has it, so nothing changes for a Blade-only install.
+
+```bash
+composer require heyosseus/vacuum
+php artisan vacuum:install --filament
+```
+
+On the Filament path the installer finds your panel provider (`app/Providers/Filament/*PanelProvider.php`) and registers the plugin on it for you. It edits that file by **parsing it, not matching text** — it locates the `return $panel …;` chain with PHP's own tokenizer, backs the file up, splices in the plugin, and runs `php -l` on the result; if anything looks wrong it restores the backup and prints the one line to add by hand instead. It will not silently edit a file it cannot parse, and in a non-interactive shell it prints rather than writes unless you pass `--force`.
+
+The one line it adds:
+
+```php
+->plugin(\Heyosseus\Vacuum\Filament\VacuumPlugin::make())
+```
+
+Then set the UI mode so the standalone Blade routes stand down and the same data is not reachable by two different doors:
+
+```env
+VACUUM_UI=filament
+```
+
+Authorization is shared, not duplicated: the plugin's `canAccess()` calls the same [`Vacuum::auth()`](#who-may-look) callback the Blade dashboard uses. One gate governs both.
+
+### What the panel gives you
+
+Everything lands in one **Vacuum** navigation group:
+
+- **Overview** — the health story at a glance: the score and its grade, database vitals (size, table count, cache-hit ratio, live sessions), and charts for findings by severity, the largest tables, and how much index space is read versus never touched. Beneath them, the findings themselves, worst first — each with the statement that would put it right, shown and copied with one click, never run — and a live view of any vacuums PostgreSQL is running at that moment.
+- **History** — where the database has been and where it is heading: the health line over time, what is newly wrong, what has cleared, and what is forecast to cross critical. Appears only when history is switched on — see [History over time](#history-over-time).
+- **Tables** — a read-only resource over `pg_stat_user_tables` with native Filament sort, search, filter and pagination, and a drill-down carrying the same profile and findings as the Blade table page.
+- **Indexes**, **Sessions**, **Statements** — the same read-only treatment over `pg_stat_user_indexes`, `pg_stat_activity` (live, polling) and `pg_stat_statements`. The last hides itself where the extension is not installed.
+
+Every surface asks that one `Vacuum::auth()` callback, and every one opts out of Filament's tenant scoping — the catalogs Vacuum reads belong to the server, not to any one tenant — so the panel is at home in a multi-tenant install rather than throwing on a relationship these read-only models have no reason to carry.
+
+![The Overview page inside a Filament panel: health, database vitals, and charts](art/filament-overview.png)
+
+Beneath those charts sit the findings themselves, worst first, each with the statement that would fix it. The read-only resources over `pg_stat_user_indexes`, `pg_stat_activity` and `pg_stat_statements` come with native Filament sort, search, filter and pagination.
+
+> **The SQL console stays on the Blade UI for now.** It is not yet a Filament page, and `VACUUM_UI=filament` stands the standalone routes down, so if you rely on the console keep the Blade UI until a later release brings it inside the panel.
+
+Flags for scripted installs: `--blade` / `--filament` skip the prompt, `--panel=<name>` picks one panel out of several, `--force` applies the edit without confirming.
+
+## Who may look
+
+**Vacuum opens in `local` and refuses everywhere else.** A forgotten configuration should lock the door, not publish the shape of your database.
+
+To let anyone else in, register a callback — typically in `AppServiceProvider::boot()`:
+
+```php
+use Heyosseus\Vacuum\Vacuum;
+
+Vacuum::auth(fn (Request $request) => $request->user()?->isAdmin() === true);
+```
+
+This is a callback rather than a Laravel gate on purpose. A gate is skipped entirely for a guest unless its first parameter is nullable, so the `fn ($user) => …` everyone writes would silently deny a developer who is not logged in, on their own laptop, where the dashboard is most useful.
+
+If you authorize on the user, keep session middleware in the stack, or `$request->user()` will be null:
+
+```php
+'middleware' => ['web', 'auth'],
+```
+
+Vacuum appends its own authorization middleware to whatever you list, so the dashboard cannot be exposed by emptying that array.
+
+## Which database
+
+By default Vacuum inspects your application's default connection, which must be PostgreSQL — it refuses anything else rather than reporting nonsense.
+
+```env
+VACUUM_CONNECTION=pgsql_readonly
+```
+
+Point that at a role granted `pg_monitor` and nothing else. Vacuum never needs write access, and giving it none is the cheapest safety net you will ever configure.
+
+## In your pipeline
+
+The dashboard only tells you something if somebody opens it. The same rules run from a terminal:
+
+```bash
+php artisan vacuum:check
+```
+
+It exits **non-zero when the advisor finds something critical**, so a migration that ships a duplicate index fails the build, and a staging database drifting toward wraparound fails the nightly job, whether or not anybody was looking.
+
+![The output of php artisan vacuum:check in a terminal](art/cli-check.png)
+
+```bash
+php artisan vacuum:check --fail-on=warning   # critical, warning, info, or never
+php artisan vacuum:check --format=json       # score, grade, deductions, findings
+```
+
+Two things worth knowing. It **never writes** — the remediation is printed for you to read and decide on, exactly as it is on the page. And if Vacuum is disabled it **fails rather than passing**: a check that goes green because it never looked is worse than no check at all.
+
+## Linting the schema
+
+`vacuum:check` reads what the database has been *doing*, and a pipeline's database
+has not done anything. A Postgres container ninety seconds old with the migrations
+freshly applied has no dead tuples, no bloat, no freeze age and no statements —
+so most of the rules find nothing, and a perfect score on a database nobody has
+ever used is exactly the kind of green number this package exists to argue against.
+
+`vacuum:lint` asks the questions that *are* answerable there:
+
+```bash
+php artisan vacuum:lint
+```
+
+![vacuum:lint in a pipeline: the workflow step on the left, and the finding as an annotation on the pull request diff on the right](art/lint-in-ci.png)
+
+| Rule | Finds |
+| --- | --- |
+| `unindexed-foreign-key` | Foreign keys PostgreSQL created no index for, which `->constrained()` never does |
+| `foreign-key-type-mismatch` | A key referencing a different type, so the index exists and cannot be used |
+| `narrow-primary-key` | A primary key too narrow to keep counting -- `integer` or `smallint` -- that stops accepting rows the moment it runs out of values |
+| `missing-primary-key` | Tables nothing can address a single row of |
+| `unindexed-morphs` | A polymorphic pair with no composite index leading on the type |
+| `json-not-jsonb` | `json` where `jsonb` was almost certainly meant |
+
+Every one of them is true the moment `php artisan migrate` finishes, so this belongs
+in `require-dev` and in the job that already runs your tests.
+
+It **defaults to failing on a warning**, where `vacuum:check` defaults to critical.
+The two commands mean different things by the word: a warning from `check` is a
+database drifting, and a build should not go red because bloat grew overnight. A
+warning from `lint` is a schema that was wrong the moment somebody typed it.
+
+```bash
+php artisan vacuum:lint --fail-on=critical   # critical, warning, info, or never
+php artisan vacuum:lint --format=json        # score, grade, deductions, findings
+```
+
+Schema findings are scored on their own and are **not** part of the dashboard's
+health score. Adding rules to that score would silently re-grade every existing
+installation on a `composer update`, and a grade that moves for a reason nobody
+asked for is worse than one rule fewer.
+
+### Adopting it on a schema that predates it
+
+Run `vacuum:lint` on a five-year-old application and it will find a great many
+things. That is accurate and completely useless: nobody is going to fix four
+hundred findings this afternoon, and a build that is red for reasons nobody
+intends to act on is a build people learn to ignore.
+
+So write down what is already there, and let the linter tell you only what is new:
+
+```bash
+php artisan vacuum:lint --generate-baseline
+```
+
+That writes `vacuum-baseline.json`. **Commit it.** From then on the outstanding
+findings are excused and anything new fails the build, which is the only question
+worth asking of a legacy schema.
+
+A baseline matches on the rule and the subject and on nothing else, so rewording a
+rule — or making it more serious in a later release — never invalidates the file
+you committed. When an entry stops matching anything, because somebody fixed it,
+`vacuum:lint` says so as an `Info` finding rather than quietly carrying it: a
+baseline nobody prunes becomes a place the next defect hides.
+
+```bash
+php artisan vacuum:lint --no-baseline     # report everything, baseline or not
+php artisan vacuum:lint --baseline=path   # somewhere other than the default
+```
+
+The score is computed over what is left after suppression, and the count of what was
+suppressed is printed with the text output, carried as `suppressed` in the JSON document,
+and emitted as a `::notice` for `--format=github`. A number that quietly ignored four
+hundred findings would be the kind of green this package exists to argue against —
+and the pull request is the one place that number matters most.
+
+### On the pull request
+
+`--format=github` emits GitHub Actions workflow commands, so each finding lands as
+an annotation on the diff rather than in a log nobody opens.
+
+```yaml
+- run: php artisan vacuum:lint --format=github
+```
+
+Findings are traced back to the migration that introduced them by parsing
+`database/migrations` with PHP's own tokenizer — the same technique the Filament
+installer uses, and with the same refusal to guess. A migration whose table name is
+a variable, or that does not parse, yields no anchor; the finding is still
+reported, without a file and a line.
+
+**If you have run `php artisan schema:dump --prune`, expect few anchors.** That flag deletes
+`database/migrations` after squashing the schema into `database/schema/*.sql`, so the files
+that declared your columns are gone and there is nothing left to trace to. Plain
+`schema:dump` keeps the migrations and is unaffected. The findings are the same either way;
+only the annotations lose their line numbers.
+
+## History over time
+
+Vacuum is point-in-time by default: every page and every `vacuum:check` reads the database as it is this instant. Switch history on and it records a snapshot on a schedule, so it can tell you which way a number is *moving* — bloat that is growing, a freeze age climbing since the last time anything froze it, a cache-hit ratio measured over the last hour rather than over the life of the server.
+
+A forecast is drawn only through the climb since the most recent reset. Both of the numbers worth projecting are sawtooths — `age(relfrozenxid)` falls to nearly nothing every time a table is frozen, bloat falls on every `VACUUM FULL` — and a line fitted across one of those falls describes a future the database does not have. The one direction a wraparound forecast must not err in is the optimistic one.
+
+```env
+VACUUM_HISTORY_ENABLED=true
+```
+
+```bash
+php artisan vendor:publish --tag=vacuum-migrations
+php artisan migrate
+```
+
+Then take a snapshot on a schedule — hourly is a sensible default:
+
+```php
+use Illuminate\Support\Facades\Schedule;
+
+Schedule::command('vacuum:snapshot')->hourly();
+```
+
+Or let Vacuum register that for you: leave `VACUUM_HISTORY_SCHEDULE` at its default and it schedules the command itself. Set it to `null` when you would rather wire it up by hand.
+
+**This is the package's only write path, and it never touches the database it inspects.** Snapshots are written with ordinary Eloquent to your application's own database — the published migration's tables live there — while the inspected server is still only ever read, read-only, through the same rolled-back transaction everything else uses. Point `VACUUM_HISTORY_CONNECTION` at a different connection to keep the history somewhere else again.
+
+Once two snapshots exist, four things a single reading cannot say become available:
+
+- **Interval-accurate numbers.** `cache-hit-ratio` and `slow-statement` are lifetime averages until history can difference two snapshots; then they report what the database actually did *over the last interval*. That is also what quietly clears the false alarm a one-off `VACUUM FULL` leaves behind in the slow-statement list.
+- **Direction.** Each finding is marked climbing, easing or new, so a bloat figure inside its threshold but rising reads differently from the same figure holding steady.
+- **A forecast.** For the numbers that only climb — freeze age, table size — Vacuum fits the recent trend and projects when it will cross the line that makes it critical: *wraparound-critical in about nine days at the current rate*. It stays silent unless it has enough snapshots and the points genuinely sit on a line; a guess wearing the clothes of a measurement is worse than nothing.
+- **What changed.** The findings that are new since the previous snapshot, and the ones that have cleared.
+
+Inside Filament this is a **History** page in the Vacuum group; on the Blade dashboard it is a **history** tab. Both appear only while history is on. Snapshots older than `VACUUM_HISTORY_RETENTION_DAYS` (90 by default) are pruned as each new one is taken.
+
+## The SQL console
+
+Off by default. Off means the route does not exist — not a page that says no.
+
+```env
+VACUUM_CONSOLE_ENABLED=true
+```
+
+Statements run inside a transaction PostgreSQL has been told is `READ ONLY`, with a `statement_timeout`, and the transaction is always rolled back.
+
+![Three layers: the keyword check is a courtesy, the read-only transaction is what PostgreSQL enforces, and the role it connects as is what actually bounds it](art/safety.png)
+
+**The keyword check is not what makes this safe.** Vacuum turns away statements that do not begin with a word that reads, but that is a courtesy for people who type `DELETE` by accident. It is not a defence, and it cannot be one:
+
+```sql
+WITH written AS (INSERT INTO orders (id) VALUES (1) RETURNING *) SELECT * FROM written
+```
+
+That begins with `WITH`, walks straight past any keyword filter, and writes to your database. What stops it is PostgreSQL, which refuses the write inside a read-only transaction. There is a test that smuggles exactly that statement through and then asserts the table is still empty.
+
+**And the read-only transaction is not the whole story either.** It constrains *this backend's* writes through MVCC. It does not constrain a function that opens a second backend, or effects that happen outside MVCC — and all of these begin with `SELECT`:
+
+```sql
+SELECT dblink('dbname=app', 'DELETE FROM users');  -- a second backend, not read-only
+SELECT pg_read_file('/etc/passwd');                -- reads the server's disk
+SELECT pg_terminate_backend(pid);                  -- kills connections
+```
+
+Vacuum refuses those by name, as another courtesy. **What actually bounds the console is the role it connects as** — and with `VACUUM_CONNECTION` unset that is your application's own role, often the owner of everything. If you turn the console on, give it a dedicated role that owns nothing and has those functions revoked. [SECURITY.md](SECURITY.md) has the grants.
+
+Rows are capped by `VACUUM_CONSOLE_MAX_ROWS` (500), applied by PostgreSQL rather than to the answer: the statement is wrapped in a subquery with a `LIMIT`, so the rows past the cap are never produced. Every statement the console runs is written to the log — who, what, how many rows, how long — and the route is throttled.
+
+`EXPLAIN ANALYZE` really runs the query it explains, so it needs its own switch:
+
+```env
+VACUUM_CONSOLE_EXPLAIN_ANALYZE=true
+```
+
+### A word on Laravel and read-only transactions
+
+This is worth writing down, because it is not obvious and it silently defeats the naive implementation.
+
+Laravel's `LostConnectionDetector` treats PostgreSQL's `SQLSTATE[25006]` — *cannot execute INSERT in a read-only transaction* — as a **lost connection**. If your read-only transaction is one Laravel does not know about (a raw `BEGIN TRANSACTION READ ONLY`), then `Connection::run()` catches the rejection, decides the connection died, reconnects, and **retries the statement on a fresh connection outside the transaction** — committing the very write PostgreSQL just refused.
+
+Vacuum opens the transaction through Laravel's own `beginTransaction()` and then issues `SET TRANSACTION READ ONLY`. With `transactions >= 1`, Laravel rethrows instead of retrying. That is the entire reason the safety claim above is true rather than merely asserted, and it is covered by a test named `it does not let a rejected write be retried onto a fresh connection`.
+
+## Tuning the thresholds
+
+Every rule reads its limits from `config/vacuum.php`. The defaults are set for a database somebody depends on, not for a table you made a minute ago:
+
+```php
+'thresholds' => [
+    'dead_tuple_ratio' => 0.20,
+    'dead_tuple_minimum' => 1_000,
+    'cache_hit_ratio' => 0.99,
+    'cache_hit_minimum_blocks' => 100_000,
+    'wraparound_xid_age' => 200_000_000,          // match your autovacuum_freeze_max_age
+    'wraparound_xid_age_critical' => 1_000_000_000,
+    'wraparound_mxid_age' => 400_000_000,         // match your autovacuum_multixact_freeze_max_age
+    'wraparound_mxid_age_critical' => 1_000_000_000,
+    'stale_statistics_ratio' => 0.20,             // autoanalyze fires at 0.10
+    'stale_statistics_minimum' => 10_000,
+    'stale_statistics_minimum_rows' => 1_000,
+    'bloat_bytes' => 100 * 1024 * 1024,
+    'unused_index_min_size' => 1024 * 1024,
+    'long_running_query_seconds' => 60,
+    'idle_in_transaction_seconds' => 300,
+    'slow_query_milliseconds' => 500,
+],
+```
+
+## Writing your own rule
+
+A rule is handed one value object and returns a finding or nothing. It never touches the database, so it tests without one:
+
+```php
+use Heyosseus\Vacuum\Advisor\{Finding, Severity, TableRule};
+use Heyosseus\Vacuum\Values\TableStatistic;
+
+final readonly class NeverAnalyzed implements TableRule
+{
+    public function inspect(TableStatistic $table): ?Finding
+    {
+        if ($table->lastAnalyzedAt() !== null) {
+            return null;
+        }
+
+        return new Finding(
+            rule: 'never-analyzed',
+            subject: $table->qualifiedName(),
+            severity: Severity::Warning,
+            summary: 'Nothing has ever analyzed this table, so the planner is guessing.',
+            impact: 'Without statistics the planner cannot estimate row counts, and it will choose a bad plan confidently.',
+            remediation: "ANALYZE {$table->qualifiedName()};",
+        );
+    }
+}
+```
+
+Tag it, and the advisor picks it up:
+
+```php
+use Heyosseus\Vacuum\VacuumServiceProvider;
+
+$this->app->tag([NeverAnalyzed::class], VacuumServiceProvider::TABLE_RULES);
+```
+
+There is a tag per subject — `TABLE_RULES`, `BLOAT_RULES`, `INDEX_RULES`, `DUPLICATE_RULES`, `CACHE_RULES`, `SESSION_RULES`, `STATEMENT_RULES`, `SETTING_RULES` — because a rule should be given the one thing it reasons about, and adding a rule should never widen what has to be queried before it can run.
+
+## Restyling the dashboard
+
+```bash
+php artisan vendor:publish --tag=vacuum-views
+```
+
+The stylesheet is inlined rather than fetched from a CDN, on the grounds that the dashboard is what you open when the database is unwell, sometimes from a machine that cannot reach the internet.
+
+## What semver covers
+
+From 1.0 — and from 1.1 where a line says so — these are public API and a breaking change to any of them requires a major version:
+
+- **The rule contracts** — `TableRule`, `IndexRule`, `SessionRule`, `StatementRule`, `BloatRule`, `CacheRule`, `DuplicateRule`, `ConfigurationRule`, `SettingRule` (1.0) and `SchemaRule` (1.1) — and the `Inspection` contract behind them.
+- **`Finding`, `Severity` and `Grade`**, including `Finding`'s constructor signature. A custom rule constructs one, so its parameters are as public as the interface that returns it.
+- **The value objects the contracts hand a rule**: `TableStatistic`, `IndexStatistic`, `Session`, `Statement`, `CacheStatistic`, `Settings` and `Capabilities` (1.0), and `TableSchema` and `IndexDefinition` (1.1).
+- **Configuration keys** under `vacuum.*`, and the `VACUUM_*` environment variables that feed them. Keys may be added; existing ones will not change meaning.
+- **The `vacuum:check --format=json` and `vacuum:lint --format=json` documents**, which are what a pipeline parses.
+- **Route names** (`vacuum.dashboard` and the rest) and the `Vacuum::auth()` gate.
+- **The `SCHEMA_RULES` tag** (1.1), alongside the others a custom rule is registered under.
+- **The baseline file format** (1.2). It is committed to your repository, which makes it an interface whether or not it is called one. Keys may be added; the `findings` map will not change meaning.
+- **`vacuum:lint --format=github`** (1.2) as an accepted value, and its severity mapping. The exact wording of an annotation is not covered.
+
+Explicitly **not** covered, and free to change in a minor release:
+
+- The SQL files under `resources/sql`. They are readable on purpose and they are not an interface — a catalog query is rewritten whenever PostgreSQL gives a better way to ask.
+- The Blade views. Publishing them is supported; the markup inside them is not frozen.
+- Everything under `Internals` and `Learn`. Both are teaching surfaces, and pinning their shape would freeze the explanation as well as the code.
+- Anything marked `@internal`.
+- `MigrationMap` and `SourceLocation`, which are console implementation detail rather than something a rule or a pipeline consumes.
+
+Vacuum supports the PostgreSQL major versions the PostgreSQL project still supports, and CI runs the suite against each of them. A major going end-of-life is a minor release here, not a major one.
+
+## Development
+
+Vacuum tests against a real PostgreSQL server. The statistics views it reads are the whole product, and SQLite cannot pretend to have them.
+
+```bash
+composer install
+cp phpunit.xml.dist phpunit.xml     # then put your database credentials in it
+composer test
+```
+
+`phpunit.xml` is gitignored, which is where your credentials should live.
+
+`composer test` runs Rector, Pint, PHPStan at `level: max`, 100% type coverage and 100% line coverage. All of them have to pass.
+
+For the `pg_stat_statements` tests, the extension must exist. It needs the library preloaded, which is read at startup:
+
+```sql
+ALTER SYSTEM SET shared_preload_libraries = 'pg_stat_statements';  -- then restart the server
+CREATE EXTENSION pg_stat_statements;
+```
+
+Those tests skip themselves if it is missing, though the coverage gate will then fail.
+
+## License
+
+MIT. See [LICENSE.md](LICENSE.md).

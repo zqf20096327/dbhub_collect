@@ -1,0 +1,211 @@
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/rask-logo-dark.svg">
+  <img alt="Rask" src="assets/rask-logo.svg" width="300">
+</picture>
+
+### The full-stack .NET web framework — for a team of one or fifty.
+
+**[Site ↗](https://rask.sh/)** · **[Docs ↗](https://rask.sh/docs/)**
+
+</div>
+
+UI, data, auth, background work, realtime and deploy — **all in C#, in one codebase**, on standard
+ASP.NET Core and EF Core. [Rask.Data](docs/data.md) and source-generated [CQRS](docs/cqrs.md) with a
+cached [query layer](docs/query.md); accounts, [jobs](docs/jobs.md), [email](docs/mail.md), an
+[outbox](docs/outbox.md), [cache](docs/cache.md) and [file storage](docs/file-storage.md) on your own
+database; [realtime subscriptions](docs/subscriptions.md), [multi-tenancy](docs/multi-tenancy.md) and
+[full-text search](docs/full-text-search.md); the
+[`/_rask` operator console](docs/dashboard.md); and `rask new` → `rask db` → `rask deploy` from the
+[CLI](docs/cli.md). SQLite is the production default; PostgreSQL and SQL Server are a package away.
+Small teams ship like big ones, and one developer can still ship the whole thing alone.
+
+The UI is C# too. Components are plain C# classes that return a tree of HTML from `Render()`: state is a
+field, and an event handler is a delegate.
+
+```csharp
+[Route("/counter")]
+public sealed partial class Counter : Component
+{
+    private int _count;
+
+    protected override Component? Render() =>
+        Button.OnClick(() => _count++)[$"Current count: {_count}"];
+}
+```
+
+## Install
+
+```bash
+curl -sSL https://rask.sh/rask.sh | sh
+```
+
+On Windows, in PowerShell: `irm https://rask.sh/rask.ps1 | iex`.
+
+**Prerequisites: none.** The installer adds whatever is missing — the .NET SDK, the `wasm-tools`
+workload, Node — all under `$HOME`, no `sudo`. Already have the SDK and want only the tool?
+`dotnet tool install -g Rask.Cli`. See [installation](docs/installation.md).
+
+Adding Rask to a project you already have is one package — the host, with every battery:
+
+```bash
+dotnet add package Rask.Server   # an ASP.NET app: live pages, database, auth, jobs, mail, …
+dotnet add package Rask.Wasm     # a browser app on .NET WebAssembly
+```
+
+## Four front ends, one back end
+
+Rask is a superset, not a rival: your React, Vue, Svelte, Angular or Lit components,
+[a real Blazor component](docs/blazor-components.md), a TypeScript SPA or a Nuxt or Next.js app all run
+on it — and it builds on ASP.NET Core and EF Core rather than replacing them. Pick one per project — all
+four sit on the same C# back end. Islands also compose *inside* a Rask component tree, so those two mix
+freely.
+
+### Rask components
+
+C# components, server-rendered, with every state change streaming to the browser as a minimal diff
+over a WebSocket. Pick `--template wasm-hosted` and the pages run in the browser instead: a WebAssembly app in the
+project's `Client/` folder, served by the same server that answers its API — no second project to
+maintain, and message records in `Shared/` compile into both halves.
+
+```bash
+rask new Shop
+```
+
+→ [Render modes](docs/render-modes.md) · [Building components](docs/building-components.md)
+
+### Islands
+
+A `.tsx`, `.vue`, `.svelte` or Lit file as an *ordinary* Rask component. Derive from
+`ReactComponent`, `PreactComponent`, `SolidComponent`, `VueComponent`, `SvelteComponent`,
+`AngularComponent` or `LitComponent`, drop the front-end file beside
+it, and place it anywhere the chain goes — a leaf inside a card, or a whole route. Props are declared
+in C#, callbacks re-enter C# over the channel every handler already uses, and the live diff leaves the
+subtree alone because its own renderer owns it. This is the one pillar `Rask` does not bring on its
+own: add `Rask.External`, and Node, because your React does.
+
+A component from npm needs no front-end file at all: name the package export in `Module`, and its chain
+steps are generated from the package's own TypeScript into a committed `ColorPicker.props.json`. An
+island takes children of its own runtime, so a React island can hold another.
+
+```csharp
+public sealed partial class Chart : ReactComponent
+{
+    public required IReadOnlyList<Point> Series { get; set; }
+}
+
+public sealed partial class ColorPicker : ReactComponent
+{
+    protected override string Module => "react-colorful";
+    protected override string Export => "HexColorPicker";   // .Color(…), .OnChange(…)
+}
+```
+
+→ [Islands](docs/islands.md)
+
+### SPA
+
+A TypeScript single-page app on an ASP.NET host — React, Preact, Vue, Angular, Solid, Svelte or Lit.
+The client's TypeScript is generated from your C# message records on every build, so
+`await rask.dispatch(getOrder({ id }))` is typed and renaming a C# property breaks the build rather
+than the wire.
+
+```bash
+rask new Shop --template react
+```
+
+→ [TypeScript front ends](docs/spa.md)
+
+### Meta framework
+
+Nuxt, Next.js, SvelteKit, TanStack Start, SolidStart or Analog owning the *whole* front end — its own
+routing, its own rendering, its own Node server — with Rask as the backend behind it. The two ship as
+**one container on one port**: Rask fronts every request, supervises Node as a child process and
+forwards to it over loopback, so ASP.NET auth, rate limiting, logging and health stay in front of the
+framework and the session has one owner. The client was imported from the framework's *own* creator —
+`nuxi`, `create-next-app`, `sv`, `@tanstack/cli` — and is committed, so `rask new` writes it with no
+network and no Node, plus a node-server build and a dev proxy.
+`scripts/refresh-templates.sh` is how a newer upstream gets in. Add `Rask.Meta.Hosting`, and Node at
+runtime, because the framework needs it.
+
+```bash
+rask new Shop --template nuxt
+```
+
+→ [Meta framework front ends](docs/meta.md)
+
+## Ship it
+
+```bash
+rask dev                                                  # run it — the first migration is already applied
+rask db add AddProducts && rask db update                 # after you change the model
+rask deploy --host root@box --domain shop.example.com     # bare box → Docker + auto-HTTPS, zero-downtime
+```
+
+Run `rask` with no arguments for a wizard.
+
+## Batteries included
+
+Auth, jobs, mail, cache, events and file storage are on by default, and every one of them keeps its
+records in the app's own SQLite database (an upload's bytes go to disk or a bucket) — no broker, no
+Redis, no second service to run. A fresh app can register somebody, sign them in, confirm their address
+and reset their password with no auth code written.
+
+- **[Auth](docs/authentication.md)** — accounts out of the box: register, sign in, sign out, route
+  guards, and the first account to register is the administrator.
+- **[Background jobs](docs/jobs.md)** — enqueued, delayed and recurring work on your database,
+  at-least-once with exponential backoff.
+- **[Email](docs/mail.md)** — transactional mail queued in the same database and delivered over SMTP
+  off the request thread; bodies are Rask components.
+- **[Outbox](docs/outbox.md)** — domain events committed in the same transaction as your data and
+  relayed at-least-once, with no message broker.
+- **[Cache](docs/cache.md)** — the standard `IDistributedCache` plus `Cache.Remember(key, load).For(10.Minutes)`
+  and `Cache.Forget(key)`.
+- **[Data](docs/data.md)** · **[CQRS](docs/cqrs.md)** — audit stamps, opt-in soft delete, optimistic
+  concurrency and domain events on EF Core, and a source-generated, reflection-free mediator.
+- **[Production SQLite](docs/sqlite.md)** — WAL and busy-timeout pragmas, continuous Litestream backup,
+  scheduled snapshots.
+- **[Logging](docs/logging.md)** — the `ILogger` pipeline kept in a SQLite file of its own, with
+  retention by age and row count.
+- **[Operator console](docs/dashboard.md)** — `/_rask`: queue depth, dead letters and the errors behind
+  them, cache contents and a log tail, behind an authorization policy.
+- **[PWA](docs/pwa.md)** · **[Web Push](docs/webpush.md)** — installable, offline apps, and push sent
+  from your backend on your own VAPID keys.
+- **[File storage](docs/file-storage.md)** — uploads on disk, in S3-compatible storage or in Azure
+  Blob, with a row per file on your database and public or expiring links.
+- **[Deploy](docs/deployment.md)** — `rask deploy` takes a bare VPS to a live HTTPS site with
+  zero-downtime swaps.
+
+They build on the standard .NET pieces — EF Core, hosted services, `ILogger`, `IDistributedCache`,
+ASP.NET Core authentication — so adding one is a package reference, not a new stack to learn or a new
+box to operate.
+
+## Documentation
+
+| | |
+|---|---|
+| **[Philosophy: the One Person Framework](docs/one-person-framework.md)** | One codebase, one server, the batteries — and why that lets one developer or a whole team ship fast |
+| **[Getting started](docs/getting-started.md)** · **[Tutorial](docs/tutorial/00-overview.md)** | The UI end to end; then a whole product, one pillar per chapter |
+| **[Building components](docs/building-components.md)** · **[Routing](docs/routing.md)** · **[Forms](docs/forms.md)** | How markup is written, the URLs it answers, and the form pipeline |
+| **[The `rask` CLI](docs/cli.md)** · **[Deployment](docs/deployment.md)** | `new` / `dev` / `db` / `deploy`; Docker over SSH, auto-HTTPS, bare-VPS setup |
+| **[DevTools](docs/devtools.md)** | A panel in the page while you develop: the wire traffic and the component tree with props. Gone from every Release build |
+| **[Data](docs/data.md)** · **[CQRS](docs/cqrs.md)** · **[Auth](docs/authentication.md)** · **[Jobs](docs/jobs.md)** · **[File storage](docs/file-storage.md)** · **[SQLite](docs/sqlite.md)** | The database-backed pillars |
+| **[HTTP APIs](docs/api-endpoints.md)** | API controllers and minimal APIs, hosted properly and called through a client generated from them |
+| **[Migrating from Blazor](docs/migration-from-blazor.md)** · **[Diagnostics](docs/diagnostics.md)** | Day-to-day differences side by side; every RASK build error and its fix |
+
+The full index is **[`docs/`](docs/)**, and the other packages are listed in
+**[NUGET.md](NUGET.md)**. To see it running, [rask.sh](https://rask.sh) *is* a Rask app — landing page,
+guides and every live demo — built from [`src/Rask.Site`](src/Rask.Site).
+
+*Rask* is the Norwegian/Danish/Swedish word for **fast**.
+
+## Status
+
+Rask is pre-1.0; APIs may change between minor versions. Every package ships for **.NET 10 and .NET 11** (`net10.0` / `net11.0` for
+ASP.NET hosts, `net10.0-browser` / `net11.0-browser` for WASM); .NET 10 is the LTS release and the
+default `rask new` scaffolds, and `--framework net11.0` opts a new app into .NET 11. Production use at your own discretion — issues and PRs welcome.
+
+## License
+
+[MIT](LICENSE).

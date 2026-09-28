@@ -1,0 +1,43 @@
+= Reactive MySQL Client Compatibility TestKit
+
+image:https://img.shields.io/badge/Vert.x-4.0.0--milestone5-blue[link="https://github.com/eclipse/vert.x"]
+image:https://travis-ci.org/BillyYccc/vertx-mysql-client-compatibility-testkit.svg?branch=master["Build Status", link="https://travis-ci.org/BillyYccc/vertx-mysql-client-compatibility-testkit"]
+
+TestKit used to verify using the https://github.com/eclipse-vertx/vertx-sql-client/tree/master/vertx-mysql-client[Reactive MySQL Client] with different databases which are compatible with MySQL Client/Server Protocol.
+
+== Checked Features
+
+* Connection
+* Text Query
+* Server-side Prepared Statement
+
+== Database Compatibility
+
+=== https://www.mysql.com/[MySQL]
+
+* MySQL 5.5
+* MySQL 5.6
+* MySQL 5.7
+* MySQL 8.0
+
+=== https://mariadb.org/[MariaDB]
+
+* MariaDB 10.1
+* MariaDB 10.2
+* MariaDB 10.3
+* MariaDB 10.4
+
+=== https://github.com/pingcap/tidb[TiDB]
+
+* TiDB 3.0
+
+=== https://github.com/percona/percona-server[Percona]
+
+* Percona 5.5
+* Percona 5.6
+* Percona 5.7
+* Percona 8.0
+
+=== https://vitess.io/[Vitess]
+
+* Vitess 4.0

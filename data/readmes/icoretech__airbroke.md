@@ -1,0 +1,399 @@
+<p align="center">
+  <img src="public/logo-full.png" height="400">
+  <h1 align="center">Open Source Error Catcher</h1>
+</p>
+
+<p align="center">
+  <a aria-label="Build Status" href="https://github.com/icoretech/airbroke/actions/workflows/build.yml">
+    <img alt="" src="https://img.shields.io/github/actions/workflow/status/icoretech/airbroke/build.yml?style=for-the-badge">
+  </a>
+  <a href="https://github.com/icoretech/airbroke/blob/main/LICENSE">
+    <img alt="License" src="https://img.shields.io/github/license/icoretech/airbroke?style=for-the-badge" />
+  </a>
+  <a href="https://github.com/icoretech/airbroke/blob/main/package.json">
+    <img alt="Version" src="https://img.shields.io/github/package-json/v/icoretech/airbroke?style=for-the-badge" />
+  </a>
+</p>
+
+<div align="center">
+  <img src="public/aidemo.gif" alt="Demo" width="600" />
+</div>
+
+## Features
+
+> Airbroke is currently in active development! Using it in production environments is at your own discretion. We appreciate your feedback and support as we work towards a stable release.
+
+- :floppy_disk: Based on PostgreSQL
+- :globe_with_meridians: Airbrake(tm)/Sentry(tm)-compatible HTTP collector endpoints
+- :computer: Modern, React-based frontend for error management
+- :rocket: Designed with simplicity at its core
+- :wrench: Maintains small database footprint even under heavy data ingestion
+- :robot: Ask AI about issues
+- :clipboard: Provide cURL command to reproduce HTTP exceptions
+- :arrow_forward: Replay HTTP exceptions
+- :key: Supports multiple OAuth providers for secure user authentication
+- :bar_chart: Occurrence charts
+- :bookmark: Save and manage bookmarks for important occurrences
+- :electric_plug: MCP API for LLM/agent integrations
+
+## System Requirements
+
+- Node.js 22/24+ compatible environment
+- Minimum of 300MB RAM
+- At least 1000 millicores, equivalent to 1 CPU core
+- PostgreSQL 15+ database
+- 8+ free database connections slots per instance
+
+## Deployment Options
+
+Airbroke provides flexibility in deployment options. You can either deploy it from the built source code or use a multiarch Docker image. For Kubernetes deployments, a Helm chart is provided. As Airbroke is a Next.js 16 application, it can be deployed wherever a Node.js server is supported. This includes managed environments such as Vercel, Netlify, and Heroku.
+
+### Build from source
+
+For a production build, you can run:
+
+```sh
+cp .env.dist .env
+```
+
+Then edit the `.env` file to set your own values.
+
+```sh
+yarn install
+yarn build
+```
+
+This will generate a `.next` build output. Because this repo uses `output: "standalone"`, the runnable server output is in `.next/standalone` (see the `Dockerfile` for a working copy strategy / asset layout).
+
+You can also run `yarn start` to test the production build locally on port `3000`.
+
+### Docker
+
+We publish images for both `amd64` and `arm64` architectures on [ghcr.io](https://github.com/icoretech/airbroke/pkgs/container/airbroke) but in case you want to build your own image you can do so.
+
+You can build the Docker image with:
+
+```sh
+docker build --no-cache -t icoretech/airbroke:latest .
+```
+
+You can then run the image locally with:
+
+```sh
+docker run -p 3000:3000 icoretech/airbroke:latest
+```
+
+### Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ficoretech%2Fairbroke&project-name=airbroke&repository-name=airbroke&env=DATABASE_URL%2CDIRECT_URL%2CBETTER_AUTH_SECRET%2CAIRBROKE_CORS_ORIGINS&envDescription=Required+env+vars+for+Airbroke+%28Prisma+%2B+Better+Auth%29.+Generate+a+random+BETTER_AUTH_SECRET.+Set+AIRBROKE_CORS_ORIGINS+to+your+app+origin%28s%29.&envLink=https%3A%2F%2Fgithub.com%2Ficoretech%2Fairbroke%2Fblob%2Fmain%2F.env.dist&envDefaults=%7B%22AIRBROKE_CORS_ORIGINS%22%3A%22*%22%7D&build-command=if+%5B+%22%24VERCEL_ENV%22+%3D+%22production%22+%5D%3B+then+corepack+yarn+db%3Amigrate%3B+fi+%26%26+corepack+yarn+build)
+
+While [testing on Vercel](https://nextjs.org/docs/app/getting-started/deploying) has not been conducted, Airbroke should be fully compatible.
+
+It's important to keep the following points in mind:
+
+- For optimal performance, ensure your database is located in the same region.
+- The endpoints under `/api/*` will be converted into serverless functions, which may introduce potential cold boot time.
+- If you connect directly to Postgres, use a pooler (or Prisma Accelerate / Data Proxy) to avoid exhausting DB connections.
+- Migrations must be executed as part of deployment. The Deploy Button above sets a `build-command` that runs DB migrations only for `VERCEL_ENV=production` before building (adjust this in your Vercel project settings if you need a different workflow).
+- The Deploy Button defaults `AIRBROKE_CORS_ORIGINS` to `*` for quick starts. After your first deploy, set it to your deployed origin (for example `https://<project>.vercel.app`) and any custom domains.
+
+Detailed instructions for this process can also be found in the [Prisma deployment guide for Vercel](https://www.prisma.io/docs/orm/prisma-client/deployment/serverless/deploy-to-vercel).
+
+### Render.com
+
+[![Deploy with Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/icoretech/airbroke)
+
+The Render Deploy Button uses `render.yaml` (Render Blueprint). On the free tier, the template runs `yarn db:migrate` at boot (safe no-op if already applied). Airbroke allows all origins if `AIRBROKE_CORS_ORIGINS` is unset — once Render assigns your public URL, lock it down in the Render dashboard for production (this controls CORS for `/api/v3/notices` and `/api/sentry/*/envelope`).
+
+### Railway
+
+Railway supports one-click deployments via **Templates**. Because templates are created and published from within Railway, you’ll need to create a template once and then wire up the button URL.
+
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template/REPLACE_ME?utm_medium=integration&utm_source=button&utm_campaign=airbroke)
+
+Steps:
+
+- Create a Railway project from this repo (GitHub deploy).
+- Add a PostgreSQL database in Railway.
+- Set required environment variables (Railway can suggest vars from `.env.dist`).
+- Publish the project as a Template and replace `REPLACE_ME` above with the template ID.
+
+### Netlify
+
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/icoretech/airbroke)
+
+The Deploy to Netlify button is configured via `netlify.toml`. The build command runs DB migrations only for production deploys.
+
+Because you don't know your final `*.netlify.app` URL before the first deploy, you can start with `AIRBROKE_CORS_ORIGINS=*` and then tighten it to your deployed origin (for example `https://<site>.netlify.app`) and any custom domains.
+
+### Heroku
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://www.heroku.com/deploy?template=https://github.com/icoretech/airbroke)
+
+The Deploy to Heroku button uses `app.json` to provision add-ons and prompt for required environment variables.
+
+Because you don't know your final `*.herokuapp.com` URL before the app is created, you can start with `AIRBROKE_CORS_ORIGINS=*` and then tighten it to your deployed origin (for example `https://<app>.herokuapp.com`) and any custom domains.
+
+### Helm
+
+You can deploy Airbroke to Kubernetes using the dedicated Helm chart.
+
+The Helm chart includes a `values.yaml` file with some default values that you can override with your own. It also includes a pgBouncer chart as optional dependency.
+
+When using Helm we recommend using a GitOps approach to deploy your application(s), such as [Flux](https://fluxcd.io/).
+
+Please find more information about the Helm chart in the dedicated repository: [icoretech/charts](https://github.com/icoretech/helm/tree/main/charts/airbroke)
+
+### Docker Compose
+
+For users who prefer Docker Compose for managing multi-container Docker applications, a `docker-compose.yml` file is provided at the root of the repository.
+
+To get started, make sure you have Docker and Docker Compose installed on your system. Then, you can start the application using the following command in the terminal:
+
+```sh
+make build
+make run
+```
+
+You can override the default values in the `docker-compose.yml` file by creating a `docker-compose.override.yml` file in the same directory. This file is ignored by Git and will not be committed to the repository.
+
+## Setup
+
+Please view all the available configuration variables in the [`.env.dist`](https://github.com/icoretech/airbroke/blob/main/.env.dist) file.
+
+Airbroke requires `DATABASE_URL` at runtime. `DIRECT_URL` is required when you need a *direct* database connection for migrations (for example, when `DATABASE_URL` goes through PgBouncer or a data proxy). Some examples:
+
+```sh
+# Example Connection to Prisma Data Proxy
+DATABASE_URL="prisma://__HOST__/?api_key=__KEY__"
+# Example Connection to PostgreSQL
+DATABASE_URL="postgresql://__USER__:__PASSWORD__@__HOST__:__PORT__/__DATABASE__?connection_limit=20&pool_timeout=10&application_name=airbroke"
+# Direct connection to the database, used for migrations
+DIRECT_URL="postgresql://__USER__:__PASSWORD__@__HOST__:__PORT__/__DATABASE__"
+```
+
+The optimal connection pool size without pgBouncer (`connection_limit`) can be calculated using the following formula:
+
+```ruby
+connection_limit = (num_physical_cpus * 2 + 1) ÷ number_of_application_instances
+```
+
+For a system with 8 CPU cores and 3 application instances, the calculation would proceed as follows:
+
+```ruby
+connection_limit = (8 * 2 + 1) ÷ 3
+connection_limit = (16 + 1) ÷ 3
+connection_limit = 17 ÷ 3
+connection_limit ≈ 5.67
+```
+
+Since `connection_limit` must be an integer, it should be rounded down to the nearest whole number. In this scenario, each of the 3 application instances should have a `connection_limit` of `5`.
+
+This limit can be set in your connection strings.
+
+After deployment, you should be able to access your ingress (preferably secured with HTTPS) and start adding projects.
+This process will generate an API key that you can use with your Airbrake-compatible clients.
+This key, along with other essential information, will be provided to you.
+
+### About PgBouncer
+
+To optimize your experience with Airbroke, as well as with Postgres overall, we advise integrating PgBouncer 1.24.0+ into your tech stack in transaction mode. For more comprehensive information, we recommend reviewing [Prisma's Connection Management documentation](https://www.prisma.io/docs/guides/performance-and-optimization/connection-management#external-connection-poolers), which provides insights on external connection poolers.
+We recommend not setting `pgbouncer=true` in the database connection string if you're using **PgBouncer 1.21.0 or later** ([source](https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections/pgbouncer)).
+
+### About DIRECT_URL
+
+The `DIRECT_URL` environment variable should be configured to establish a direct connection to the database. This is particularly crucial when using PgBouncer, as it enables migrations that cannot be executed through a data proxy. You can find more detailed information about this subject in the [Prisma's guide on configuring pgBouncer](https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections/pgbouncer).
+
+## Architecture
+
+### Frontend
+
+The Airbroke frontend provides a user-friendly interface for managing and analyzing error reports. It utilizes a modern tech stack, including React, Tailwind CSS, and Next.js, to deliver a seamless user experience. The frontend leverages server-rendering capabilities to optimize initial page load times and ensure fast and responsive navigation.
+
+To optimize performance, the frontend may implement caching strategies to reduce the number of database queries and enhance overall responsiveness. This ensures that you can efficiently navigate through error reports and analyze critical information without experiencing unnecessary delays.
+
+### Data Collection API
+
+The Data Collection API is a core component of Airbroke responsible for handling the ingestion of error reports. It serves as the endpoint where clients can send error reports, enabling efficient data collection for error management.
+
+To ensure simplicity and performance, the Data Collection API sidesteps the use of queue systems and performs parsing and transactions in-band. This means that parsing and processing of error reports happen synchronously within the API request cycle. Despite this approach, the Data Collection API demonstrates robust request-per-minute (RPM) performance even under high traffic volumes.
+
+### MCP API (LLM/Agent Integrations)
+
+Airbroke exposes an MCP-compatible JSON-RPC API for read-only error triage workflows:
+
+- `POST /api/mcp`
+
+Authentication is static-header based (no OAuth in v1). Set `AIRBROKE_MCP_API_KEY` and send either:
+
+- `Authorization: Bearer <AIRBROKE_MCP_API_KEY>`
+- `X-Airbroke-Mcp-Key: <AIRBROKE_MCP_API_KEY>`
+
+Origin policy for browser clients:
+
+- Optional `AIRBROKE_MCP_ALLOWED_ORIGINS` (comma-separated) explicitly allows specific `Origin` values.
+- If `AIRBROKE_MCP_ALLOWED_ORIGINS` is unset, Airbroke allows same-origin browser requests by default.
+- Non-browser clients that do not send an `Origin` header are unaffected by this check.
+
+Available tools:
+
+- `airbroke_list_projects`
+- `airbroke_get_project`
+- `airbroke_list_notices`
+- `airbroke_list_occurrences`
+- `airbroke_get_notice`
+- `airbroke_search`
+- `airbroke_get_occurrence`
+- `airbroke_get_setup_guide`
+
+Notes on richer MCP outputs:
+
+- `airbroke_list_projects`, `airbroke_list_notices`, and `airbroke_list_occurrences`
+  support `offset` + `limit` for page-like iteration.
+- `airbroke_list_projects` is the recommended discovery-first tool for fresh conversations.
+  It matches both project names and organization names case-insensitively, so queries like
+  `my-app`, `school-portal`, or `example-org` can surface the right project candidates without
+  already knowing the internal project id.
+- `airbroke_get_project`, `airbroke_list_notices`, `airbroke_search`, and
+  `airbroke_get_setup_guide` accept exact project ids, but also resolve common LLM-style
+  project references such as partial project names when the match is unambiguous. If a
+  reference is ambiguous, they return candidate projects instead of a silent false negative.
+- `airbroke_list_notices` supports `include_project=true` to embed minimal project data
+  and `include_resolved=false` to hide resolved notices (default: `true`, show all).
+  Notice payloads include `resolved_at` (null when unresolved).
+- `airbroke_list_occurrences` is summary-first by default, and supports:
+  - `include_details=true` (+ optional `backtrace_frames`) for backtrace preview and key context fields.
+  - `include_notice=true` / `include_project=true` to embed parent notice/project context inline.
+  - `include_resolved=false` to hide resolved occurrences (default: `true`).
+  - When notice data is included, `resolved_at` is present in the notice payload.
+- `airbroke_get_notice` returns:
+  - the notice payload (includes `resolved_at`)
+  - `latest_occurrences` (by `updated_at desc`)
+  - `top_occurrences` (by `seen_count desc`, then `updated_at desc`)
+  - optional occurrence detail snippets for faster LLM triage.
+  - `include_resolved=false` filters occurrences to unresolved only (default: `true`).
+  - Includes `remarks_count` for notice-level remarks.
+- `airbroke_get_occurrence` returns full occurrence details with parent notice
+  (including `resolved_at`) and project. Includes `remarks` array with
+  notice-level and occurrence-level remarks (id, body, user_name, created_at,
+  is_notice_level).
+- `airbroke_search` supports cross-project query by occurrence message + notice/project metadata
+  with optional filters: `organization`, `project_id`, `env`, `include_resolved`,
+  and rich snippets via `include_details` + `backtrace_frames`.
+  Notice data in search results includes `resolved_at`.
+- `airbroke_get_setup_guide` returns integration code snippets for connecting applications
+  to Airbroke. Supports Airbrake-compatible SDKs and Sentry SDKs. Optional `project_id`
+  returns ready-to-use code with real credentials; without it, templates contain placeholders.
+  Filter by `sdk` (`airbrake` or `sentry`) and/or `framework` (e.g. `ruby`, `node`, `python`).
+  Each snippet explicitly disables non-error SDK features (APM, tracing, remote config, etc.)
+  since Airbroke is an error-only collector.
+
+Example Codex MCP server config:
+
+```toml
+[mcp_servers.airbroke]
+url = "https://myairbroke.xyz/api/mcp"
+
+[mcp_servers.airbroke.http_headers]
+X-Airbroke-Mcp-Key = "replace-me"
+```
+
+Example discovery flow:
+
+1. Call `airbroke_list_projects` with the best human-friendly hint you have, such as
+   `search: "my-app"` or `organization: "example-org"`
+2. If needed, call `airbroke_get_project` with the returned id or the same unambiguous
+   project reference
+3. Use the resolved project id for `airbroke_list_notices` / `airbroke_search`
+
+## Authentication Layer
+
+Airbroke includes an authentication layer that allows you to secure access to the application by enabling user authentication. It supports various authentication providers, including:
+
+- GitHub
+- Atlassian
+- Auth0
+- Google
+- Apple
+- Authentik
+- Bitbucket
+- BoxyHQ SAML
+- Cognito
+- FusionAuth
+- GitLab
+- Keycloak
+- Microsoft Entra ID
+- Salesforce
+- Slack
+- Okta
+
+To configure the authentication layer, you need to set the necessary environment variables corresponding to the authentication providers you want to use. These environment variables typically include client IDs, client secrets, and other provider-specific configuration details. Make sure to keep these environment variables secure, as they contain sensitive information.
+
+To complete the configuration, you also need to set the callback path in your OAuth applications for each provider. The callback path should be set to `https://<myhostname>/api/auth/callback/<provider>`. This path is where the authentication provider will redirect the user after successful authentication.
+
+You can find a list of available authentication providers and their documentation on the [Better Auth documentation](https://www.better-auth.com/docs/concepts/oauth). Each provider has its own specific configuration requirements and authentication flow, so refer to their documentation for more details.
+
+To configure the authentication providers, you'll need to set specific environment variables. You can find the list of required environment variables and their descriptions in the [`.env.dist`](https://github.com/icoretech/airbroke/blob/main/.env.dist) file in the Airbroke repository.
+
+To enable authentication in Airbroke and allow users to authenticate using third-party providers, follow these steps:
+
+1. Configure the necessary environment variables for the desired authentication providers. You can refer to the [`.env.dist`](https://github.com/icoretech/airbroke/blob/main/.env.dist) file in the Airbroke repository for a list of required environment variables and their descriptions. Copy this file as `.env` and fill in the necessary values for your authentication providers.
+
+2. Create OAuth applications with the respective authentication providers. Each provider will have its own developer console or settings page where you can create an OAuth application. During the application setup, configure the callback url to match the Airbroke authentication callback path: `https://myairbroke.xyz/api/auth/callback/<provider>`. Save the settings.
+
+3. Start the Airbroke application, ensuring that the environment variables are properly configured.
+
+4. Users can now authenticate with Airbroke by clicking on the login button and selecting their desired authentication provider. They will be redirected to the provider's authentication page to enter their credentials. Upon successful authentication, users will be logged in to Airbroke.
+
+Note: The callback path in step 2 is essential for the authentication flow to work correctly. It ensures that the authentication provider can redirect the user back to the Airbroke application after authentication is complete.
+
+Please refer to the documentation of the respective authentication providers to obtain the necessary configuration details and understand their authentication flows.
+
+## Best Practices for Efficient Error Collection and Storage
+
+Airbroke provides error grouping mechanisms that analyze the incoming error data and automatically group similar errors based on their attributes.
+
+However when working with exceptions that include dynamic information as part of the exception itself (e.g., `raise(NotFound, 'no record 1234')`), it is important to consider efficient error collection and storage strategies. By following these practices, you can ensure that Airbroke maintains an efficient database and effectively groups and displays related errors without much overhead.
+
+### Strategy 1: Use Generic Error Messages and Provide Detailed Reporting in `params`
+
+If the exceptions are generated within your own code, consider using more generic error messages and providing detailed reporting using the `params` field. Here's an example:
+
+```ruby
+begin
+  data = { book_id: 22 }
+  raise 'ugh' # no dynamic data
+rescue => e
+  Airbrake.notify(e, data) # ugh happened on book_id 22
+end
+```
+
+### Strategy 2: Collect and Wrap Exceptions Produced by Libraries
+
+If the exceptions are produced by libraries, consider collecting the necessary information, wrapping the exceptions, and re-raising them with cleaned-up messages. This approach allows you to provide more meaningful and informative error messages to Airbroke. Here's an example:
+
+```ruby
+begin
+  # Your code that interacts with a library
+rescue SomeLibraryError => e
+  # Collect necessary information
+  error_data = { library_error_message: e.message, library_error_code: e.code }
+
+  # Wrap and re-raise the exception with a cleaned-up message
+  wrapped_exception = RuntimeError.new("An error occurred in the library.")
+  Airbrake.notify(wrapped_exception, error_data)
+  raise wrapped_exception
+end
+```
+
+By wrapping the library exception with a customized error message and including the relevant information in the `params` field, you can ensure that Airbroke receives clean and consistent error messages while retaining the necessary context.
+
+By adopting these best practices, you can enhance the efficiency and effectiveness of error collection and storage in Airbroke. These strategies allow for better grouping and analysis of related errors, providing you with the insights needed to identify and address issues more effectively.
+
+### Limitations
+
+When working with error collection in Airbroke, you may come across situations where you find an error occurrence with a high count, but upon opening it, you discover that it only has one document to consult. This happens because Airbroke groups errors based on their "kind" and "message". If any of these attributes differ, Airbroke will create a new error group.
+
+As a result, you may encounter repeated errors that don't expose the specific parameter or stack trace after the first occurrence, or they may have originated from a different part of the application. This tradeoff is made to ensure a compact database size and high performance. The underlying idea is to encourage you to address and resolve errors, so maintaining a clean and organized error slate will yield better insights and improvements over time.
+
+By understanding these limitations and keeping your error collection streamlined, you can effectively utilize Airbroke's features to identify and resolve issues in your application.

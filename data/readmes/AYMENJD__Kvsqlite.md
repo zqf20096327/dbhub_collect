@@ -1,0 +1,58 @@
+# Kvsqlite [![version](https://img.shields.io/pypi/v/Kvsqlite?style=flat&logo=pypi)](https://pypi.org/project/Kvsqlite) [![Python Versions](https://img.shields.io/pypi/pyversions/kvsqlite?style=flat&logo=python)](https://pypi.org/project/kvsqlite) [![Downloads](https://img.shields.io/pepy/dt/kvsqlite?style=flat&logo=pypi)](https://pepy.tech/project/Kvsqlite)
+
+Easy, Simple and powerful key-value database backed by sqlite3.
+
+### Features
+
+- Fast and easy-to-use database
+- Simultaneously **asynchronous** or **synchronous** calls
+- Store any data supported by [**pickle**](https://docs.python.org/3/library/pickle.html)
+
+### Requirements
+
+- Python 3.8+
+
+### Installation
+
+```bash
+pip install kvsqlite
+```
+
+From github (dev version)
+
+```bash
+pip install git+https://github.com/AYMENJD/Kvsqlite
+```
+
+### Documentation
+
+[Kvsqlite](https://github.com/AYMENJD/Kvsqlite) documentation available at [kvsqlite.rtfd.io](https://kvsqlite.rtfd.io/).
+
+### Usage
+
+```python
+from kvsqlite import Client # For sync version do: from kvsqlite.sync import Client
+import asyncio
+
+async def main():
+    async with Client("kv.sqlite") as db:
+
+        key = "123-456-789"
+        result = await db.set(key, "Hello world. Bye!")
+
+        if await db.exists(key):
+            get_key = await db.get(key)
+
+            print(get_key) # Hello world. Bye!
+
+            await db.delete(key)
+
+            await db.setex(key, 60, "This key has a lifetime of 60 seconds")
+
+            print(await db.get(key))
+        else:
+            print("Key not found", result)
+
+
+asyncio.run(main())
+```

@@ -1,0 +1,374 @@
+![ddb-logo-banner](https://user-images.githubusercontent.com/1951843/86480474-0fcc4280-bd1c-11ea-8663-a7a37f631565.png)
+
+[![License: MPL 2.0](https://img.shields.io/badge/license-MPL--2.0-blue)](LICENSE.md)
+[![GitHub commits](https://img.shields.io/github/commit-activity/m/DroneDB/DroneDB)](https://github.com/DroneDB/DroneDB/commits)
+[![C/C++ CI](https://github.com/DroneDB/DroneDB/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/DroneDB/DroneDB/actions/workflows/c-cpp.yml)
+[![Discord](https://img.shields.io/discord/1491016144310767670?label=Discord&logo=discord&color=5865F2)](https://discord.gg/e9M3vBvzge)
+
+**DroneDB** is a free, open-source platform for modern geospatial data management. Store, visualize and share your geospatial data in the cloud. Orthophotos, point clouds, 3D models, geotagged files: all in one place.
+
+![DroneDB Screenshot](https://user-images.githubusercontent.com/1951843/147839499-0c263b47-4e51-437c-adbb-cc0bea50d29f.png)
+
+**See it in action:** [hub.dronedb.app/r/odm/waterbury](https://hub.dronedb.app/r/odm/waterbury)
+
+---
+
+## Key Features
+
+- **Smart Indexing** - Automatic metadata extraction from images (EXIF), raster data (GDAL), point clouds (PDAL), and vector files
+- **Interactive Visualization** - Web-based viewers for orthophotos, 3D point clouds, textured models, and 360° panoramas
+- **Geospatial Analysis** - Flight path visualization, EXIF metadata extraction, dataset partitioning, and STAC catalog support
+- **Multiple Sharing Options** - Direct links, embed codes, TMS tiles, Cloud-Optimized GeoTIFFs (COG), and Cloud-Optimized Point Clouds (COPC)
+- **Cloud Sync** - Push and pull datasets to/from DroneDB Hub for collaboration
+- **Format Support** - Orthophotos (GeoTIFF, COG), point clouds (LAS, LAZ, E57, PTS, XYZ, PLY), 3D models (OBJ, glTF/GLB, OGC 3D Tiles), Gaussian Splats (PLY, SPLAT, SPZ), vector files (GeoJSON, DXF, DWG, SHP, SHZ, FGB, TopoJSON, KML, KMZ, GPKG), videos (MP4, MOV, WEBM, M4V, AVI, MKV), and 360° panoramas
+- **Cross-Platform** - Works on Windows and Linux
+
+---
+
+## 💬 Community
+
+**[Join the DroneDB Discord](https://discord.gg/e9M3vBvzge)** to get help, share feedback, discuss features, and connect with other DroneDB users:
+
+## Quick Start
+
+### Installation
+
+#### Linux (Debian/Ubuntu)
+```bash
+# Download the latest .deb from the releases page, then:
+sudo apt install ./ddb_X.Y.Z_amd64.deb
+```
+
+The package installs the CLI as `ddb`. When building from source the executable is
+`build/ddbcmd` (same program, unprefixed build output).
+
+#### Windows
+Download the latest release from [GitHub Releases](https://github.com/DroneDB/DroneDB/releases) and run the installer.
+
+### Basic Usage
+
+```bash
+# Initialize a new DroneDB repository
+ddb init
+
+# Add files to the repository
+ddb add *.jpg orthophoto.tif
+
+# List indexed files with metadata
+ddb list
+
+# Get detailed information about files
+ddb info image.jpg
+
+# Generate thumbnails
+ddb thumbs *.jpg -o thumbs/
+
+# Search for files
+ddb search '*file*'
+
+# Build COG (Cloud-Optimized GeoTIFF) from raster (output first, then input)
+ddb cog output.tif input.tif
+
+# Generate OGC 3D Tiles from a 3D model (requires Obj2Tiles binary)
+ddb 3dtiles model.obj ./3dtiles
+
+# Convert Gaussian Splat to compressed .spz format
+ddb gsplat input.ply output.spz
+
+# Share your dataset to DroneDB Hub
+ddb share . --tag myproject/dataset
+```
+
+### Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `init` | Initialize a new DroneDB repository |
+| `add` | Add files to the index |
+| `remove` | Remove files from the index |
+| `list` | List indexed files |
+| `info` | Display file information and metadata |
+| `search` | Search files by criteria |
+| `build` | Build derivative products (tiles, previews) |
+| `thumbs` | Generate thumbnails |
+| `tile` | Generate map tiles |
+| `cog` | Create Cloud-Optimized GeoTIFFs |
+| `copc` | Create Cloud-Optimized Point Clouds |
+| `nxs` | Create Nexus 3D mesh format |
+| `3dtiles` | Generate OGC 3D Tiles (tileset.json + b3dm) from OBJ/glTF/GLB models |
+| `gsplat` | Convert Gaussian Splat to compressed .spz format |
+| `stac` | Export as STAC catalog |
+| `clone` | Clone a remote repository |
+| `push` / `pull` | Sync with DroneDB Hub |
+| `share` | Share datasets online |
+| `meta` | Manage metadata |
+| `password` | Set/manage repository password |
+
+Run `ddb <command> --help` for detailed usage of each command.
+
+---
+
+## Documentation
+
+Full documentation is available at **[docs.dronedb.app](https://docs.dronedb.app)**
+
+---
+
+## Architecture
+
+DroneDB consists of:
+
+- **Core Library** - C++ library for file processing, metadata extraction, and SQLite/SpatiaLite database operations
+- **CLI Tool (`ddb`)** - Command-line interface for all operations
+
+---
+
+## Building from Source
+
+DroneDB uses **vcpkg** for dependency management and CMake for building.
+
+### Prerequisites
+
+- **C++17 compiler** (GCC 9+, Clang 9+, MSVC 2019+)
+- **CMake 3.21+**
+- **Python 3.x**
+- **Git**
+- **Rust toolchain** (`cargo`, required for Gaussian Splat LOD support)
+- **Visual Studio 2019+** (Windows only, with C++ desktop development workload)
+
+### Quick Build
+
+**Windows (PowerShell):**
+```powershell
+git clone https://github.com/microsoft/vcpkg.git; cd vcpkg; .\bootstrap-vcpkg.bat
+$env:VCPKG_ROOT = $(Get-Location).Path
+cd ..; git clone https://github.com/DroneDB/DroneDB.git; cd DroneDB
+.\full-build-win.ps1
+```
+
+**Linux:**
+```bash
+git clone https://github.com/microsoft/vcpkg.git && cd vcpkg && ./bootstrap-vcpkg.sh
+export VCPKG_ROOT=$(pwd)
+cd .. && git clone https://github.com/DroneDB/DroneDB.git && cd DroneDB
+./full-build-linux.sh
+```
+
+### Windows Build Script
+
+DroneDB provides a robust PowerShell build script that automatically detects Visual Studio, configures CMake, and builds using Ninja.
+
+#### Basic Usage
+
+```powershell
+# Debug build (default)
+.\full-build-win.ps1
+
+# Release build
+.\full-build-win.ps1 -BuildType Release
+
+# Clean build
+.\full-build-win.ps1 -Clean
+
+# Custom configuration
+.\full-build-win.ps1 -BuildType Release -Clean -Jobs 8
+```
+
+#### Script Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `-BuildType` | String | `Debug` | Build configuration: `Debug`, `Release`, `RelWithDebInfo`, or `MinSizeRel` |
+| `-Clean` | Switch | `false` | Remove CMake cache and build artifacts before building |
+| `-SkipTests` | Switch | `false` | Disable test compilation |
+| `-Jobs` | Int | CPU cores | Number of parallel build jobs |
+
+#### Build Output
+
+After successful build, find executables in the `build/` directory:
+- **ddbcmd.exe** - Command-line tool
+- **ddb.dll** - Core library
+- **ddbtest.exe** - Test suite
+- **untwine.exe** - COPC converter (optional, see below)
+- **build-lod.exe** - Gaussian Splat LOD producer (required for Gaussian Splat support)
+
+#### Untwine COPC (optional)
+
+If the `vendor/untwine` git submodule is initialised, the build script automatically compiles [Untwine](https://github.com/hobuinc/untwine) and places `untwine.exe` next to `ddbcmd.exe`. Untwine significantly accelerates the generation of Cloud Optimized Point Clouds (COPC) compared to the PDAL fallback.
+
+> **Important:** Untwine is always compiled with the **same `-BuildType`** as DroneDB. Both binaries share vcpkg-managed DLLs (pdalcpp, gdal, proj, …) that must link against the same C runtime. Mixing configurations (e.g. DroneDB Debug + Untwine Release) causes a CRT mismatch and a crash at startup.
+
+To initialise the submodule:
+
+```powershell
+git submodule update --init vendor/untwine
+.\full-build-win.ps1          # or -BuildType Release
+```
+
+If the submodule is not present, DroneDB falls back to the built-in PDAL `writers.copc` pipeline automatically - no configuration required.
+
+#### build-lod (Gaussian Splat LOD producer)
+
+If the `vendor/spark` git submodule is initialised, the build script automatically compiles [Spark's `build-lod`](https://github.com/sparkjsdev/spark) Rust CLI and places `build-lod.exe` next to `ddbcmd.exe`. This binary is required for Gaussian Splat LOD streaming.
+
+> **Prerequisite:** A Rust toolchain (`cargo`) must be installed. Download it from [rustup.rs](https://rustup.rs).
+
+To initialise the submodule:
+
+```powershell
+git submodule update --init vendor/spark
+.\full-build-win.ps1          # or -BuildType Release
+```
+
+If `build-lod.exe` is missing, Gaussian Splat builds are deferred: `ddb build` reports build-lod as a missing dependency until it is available.
+
+#### Troubleshooting
+
+**Visual Studio Not Found**
+- The script automatically searches for VS 2019-2025 using `vswhere.exe`
+- Install Visual Studio with "Desktop development with C++" workload
+- Or set `VSINSTALLDIR` environment variable
+
+**CMake Not Found**
+- Install from [cmake.org/download](https://cmake.org/download/)
+- Or via Visual Studio Installer (Individual Components → CMake)
+
+**Build Failures**
+- Try a clean build: `.\full-build-win.ps1 -Clean`
+- Manually bootstrap vcpkg: `cd vcpkg; .\bootstrap-vcpkg.bat`
+- Check prerequisites are installed and in PATH
+
+### Linux Build Script
+
+The `full-build-linux.sh` script configures vcpkg, runs CMake, and optionally builds the Untwine COPC accelerator in a single step.
+
+#### Basic Usage
+
+```bash
+# Release build (default)
+./full-build-linux.sh
+
+# Debug build
+./full-build-linux.sh Debug
+```
+
+The first (optional) positional argument sets the build type and is passed directly to CMake's `-DCMAKE_BUILD_TYPE`. Accepted values match CMake conventions: `Release`, `Debug`, `RelWithDebInfo`, `MinSizeRel`.
+
+#### Build Output
+
+After a successful build, executables are placed in `build/`:
+- **ddbcmd** / **libddb.so** - CLI tool and core library
+- **ddbtest** - Test suite
+- **untwine** - COPC accelerator (optional, see below)
+- **build-lod** - Gaussian Splat LOD producer (required for Gaussian Splat support)
+
+#### Untwine COPC Accelerator (optional)
+
+Same logic as on Windows: if `vendor/untwine/CMakeLists.txt` exists, the script compiles Untwine using the **same build type** as DroneDB and copies the resulting binary next to `ddbcmd`.
+
+To initialise the submodule:
+
+```bash
+git submodule update --init vendor/untwine
+./full-build-linux.sh          # or Debug
+```
+
+A build failure in the Untwine step is **non-blocking** - DroneDB falls back to the PDAL `writers.copc` pipeline automatically.
+
+#### build-lod (Gaussian Splat LOD producer)
+
+Same logic as on Windows: if the `vendor/spark` submodule is present, the script compiles [Spark's `build-lod`](https://github.com/sparkjsdev/spark) via `cargo` and copies the resulting binary next to `ddbcmd`. This binary is required for Gaussian Splat LOD streaming.
+
+> **Prerequisite:** A Rust toolchain (`cargo`) must be installed. Download it from [rustup.rs](https://rustup.rs).
+
+To initialise the submodule:
+
+```bash
+git submodule update --init vendor/spark
+./full-build-linux.sh          # or Debug
+```
+
+If `build-lod` is missing, Gaussian Splat builds are deferred: `ddb build` reports build-lod as a missing dependency until it is available.
+
+### Docker Build
+
+```bash
+./build-docker.sh
+docker run --rm -it -v $(pwd):/data dronedb/dronedb:latest --help
+```
+
+### Manual Build Steps
+
+<details>
+<summary>Click to expand manual build instructions</summary>
+
+#### Set VCPKG_ROOT
+
+```bash
+# Linux/macOS
+export VCPKG_ROOT=/path/to/vcpkg
+
+# Windows PowerShell
+$env:VCPKG_ROOT = "C:\path\to\vcpkg"
+```
+
+#### Build Commands
+
+```bash
+git clone https://github.com/DroneDB/DroneDB.git
+cd DroneDB
+git submodule update --init --recursive
+
+# Configure
+cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE="$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake"
+
+# Build
+cmake --build build --config Release -j$(nproc)  # Linux
+cmake --build build --config Release -- /maxcpucount:14  # Windows
+```
+
+#### Windows Manual Build (Visual Studio Developer Command Prompt)
+
+```powershell
+mkdir build && cd build
+cmake .. -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="..\vcpkg\scripts\buildsystems\vcpkg.cmake"
+cmake --build . -- -j16
+```
+
+#### Run Tests
+
+```bash
+# Linux
+cd build && ./ddbtest --gtest_shuffle
+
+# Windows
+cd build && .\ddbtest.exe --gtest_shuffle
+```
+
+</details>
+
+---
+
+## Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to submit pull requests.
+
+## License
+
+This project is licensed under the [Mozilla Public License 2.0 (MPL-2.0)](LICENSE.md).
+
+Distribution archives (Windows ZIP, Debian package, Docker image) may include
+third-party components under different licenses - most notably the optional
+[Untwine](https://github.com/hobuinc/untwine) COPC accelerator (GPL-3.0), the
+[Obj2Tiles](https://github.com/OpenDroneMap/Obj2Tiles) 3D Tiles converter (AGPL-3.0)
+with its bundled libktx (Apache-2.0), libnexus mesh streaming (GPL-3.0+), the
+statically linked [SPZ](https://github.com/nianticlabs/spz) Gaussian Splat compression
+library (MIT), and the vcpkg-managed runtime libraries.
+See [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) for details and
+attributions.
+
+---
+
+<p align="center">
+  Made with ❤️ by <a href="https://digipa.tech">Digipa</a>
+</p>

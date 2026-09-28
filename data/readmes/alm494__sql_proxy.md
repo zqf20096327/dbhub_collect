@@ -1,0 +1,67 @@
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/alm494/sql_proxy/blob/main/README.md)
+[![en](https://img.shields.io/badge/lang-ru-red.svg)](https://github.com/alm494/sql_proxy/blob/main/README.ru.md)
+
+# SQL-PROXY
+
+## About 
+
+A lightweight REST service designed to replace ADODB calls in legacy software systems that support web requests. This service streamlines database interactions while maintaining security and efficiency.
+
+For example, you can remove all Linux-incompatible components, such as the following items (1C:Enterprise example): 
+```1C-Enterprise
+Connection = New COMObject("ADODB.Connection");
+Connection.Open(ConnectionString);
+```
+and use web requests in a similar manner instead, using a simple library to receive SQL query results in a JSON with variable columns you defined
+in SQL select statement:
+```1C-Enterprise
+Function OpenSQLConnection(ConnectionString) Export
+  HTTP = New HTTPConnection;
+  Path = "/api/v1/connection";
+  ...
+```
+Refer to the full example for the 1C:Enterprise language in the /docs folder to learn how to use this API.
+Note that this service is not limited to 1C and can be utilized in other contexts as well.
+
+## Key features:
+
+* Multi-Database Support : Compatible with PostgreSQL, Microsoft SQL Server, and MySQL databases. You do not need to
+  install the driver packages and setup ODBC sources. Additional standard Golang database drivers can be integrated as needed with a few lines of code;
+* Run mode: Can be used as a standalone service or containerized within server environments such as k8s;
+* Secure Credential Management : Does not store SQL credentials, ensuring sensitive information remains protected;
+* Secure Communication : Supports HTTPS for secure data transmission;
+* Efficient Connection Pooling : Utilizes a shared, reusable SQL connection pool with automated maintenance tasks to remove stale or dead connections;
+* Connection Limiting : Configurable maximum number of concurrent database connections to prevent resource exhaustion;
+* Command Support : Currently supports all SQL commands with no limitation (read below security tips). The SELECT command returns query results as a flexible JSON-formatted recordset;
+* Result Limitation : Allows configuration to limit the number of rows returned by SELECT statements;
+* Prepared Statements : supported;
+* BLOB read/write : supported;
+* Flexible Binding : Can bind to localhost or any specified IP address for enhanced security. By default, it is intended to bind to localhost and run alongside legacy software;
+* Security : Does not perform SQL query validation and any other security checks (!). It is the responsibility of DBA to configure appropriate database privileges. Keep in mind ADODB is the old-school engineering and this tool is the simple and quick replacement. All security-related work must be completed
+first at SQL server — as it always was, long before the era of shiny new toys. Never use admin accounts with this service! Does not expose it to the untrusted network!
+Consider to implement ORM model in the future or another secure-driven patterns;
+* Monitoring and Metrics : Provides Prometheus metrics for performance monitoring and observability; 
+
+## API description
+
+Current API version is 1.2. See Swagger OpenAPI 3.0 specification in /docs/api
+
+![API overview](/docs/api/swagger.png)
+
+## How to compile
+
+Current version is 1.4.5. Execute in the command line:
+
+```
+make prod
+```
+
+## How to run
+
+Just run the binary. Settings may be passed with environment variables, see Makefile for details and default values:
+
+```
+BIND_ADDR=localhost BIND_PORT=8081 MAX_ROWS=10000 MAX_CONNECTIONS=100 sql-proxy
+```
+
+or install it as a systemd service with install.sh script. Parameters may be changed later in sql-proxy.service file.

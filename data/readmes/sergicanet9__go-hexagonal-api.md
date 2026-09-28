@@ -1,0 +1,186 @@
+# go-hexagonal-api
+![CI](https://github.com/sergicanet9/go-hexagonal-api/actions/workflows/ci.yml/badge.svg)
+![CD](https://github.com/sergicanet9/go-hexagonal-api/actions/workflows/cd.yml/badge.svg)
+![Coverage](https://img.shields.io/badge/Coverage-73.5%25-brightgreen)
+[![Go Reference](https://pkg.go.dev/badge/github.com/sergicanet9/go-hexagonal-api.svg)](https://pkg.go.dev/github.com/sergicanet9/go-hexagonal-api)
+
+A robust gRPC + REST API for user management built with **Go** and implementing the **Hexagonal Architecture** (Ports & Adapters) pattern, built on top of the [scv-go-tools](https://github.com/sergicanet9/scv-go-tools) library.
+<br />
+The gRPC handlers are automatically exposed as REST endpoints, so the same functionality is available over HTTP without duplicating code.
+<br />
+The API is designed to work seamlessly with either a MongoDB or PostgreSQL database instance, using the same business logic and handlers.
+
+## 🚀 Features
+- **Hexagonal Architecture**: Clear separation of concerns with transport, business logic and repository layers.
+- **gRPC + gRPC-Gateway**: gRPC API implementation, with automatically generated REST endpoints from the gRPC handlers via gRPC-Gateway.
+- **Database Agnostic**: Decoupled repository adapters allow injecting a MongoDB or PostgreSQL storage without changing core logic.
+- **Authentication & Authorization**: Implements JWT authentication and claim-based authorization for secure endpoints.
+- **Asynchronous Processes**: Go routines management with built in processes for periodically health checking connectivity with the HTTP and gRPC servers.
+- **Testing**: Comprehensive unit tests with code coverage and integration tests for the happy path.
+- **Developer Experience**: Built-in Makefile, Swagger UI, gRPC UI, pgAdmin, and mongo-express.
+- **Lifecycle Management**: Multi-environment support with config files, Dockerfile and docker compose, CI/CD pipelines, Kubernetes deployment and New Relic observability.
+
+## 🏁 Getting Started
+### Run it with Docker
+To start the entire application stack using Docker Compose, run:
+```
+make up
+```
+This command launches six containers:
+* Two databases (MongoDB and PostgreSQL).
+* Two database UIs (mongo-express and pgAdmin).
+* Two API instances, one for each database.
+
+Check the console output for Swagger UI, gRPC UI, database UIs, and HTTP and gRPC command examples.
+
+To stop and remove all containers, run:
+```
+make down
+```
+
+### Run it with command line
+Run a single API instance with command-line arguments with the following command:
+```
+    go run cmd/main.go --ver={version} --env={environment} --hport={http_port} --gport={grpc_port} --db={database} --dsn={dsn} --jsecret={jwt_secret} --nrkey={newrelic_key}
+```
+or:
+```
+go build cmd/main.go
+ ./main --ver={version} --env={environment} --hport={http_port} --gport={grpc_port} --db={database} --dsn={dsn} --jsecret={jwt_secret} --nrkey={newrelic_key}
+```
+Provide the desired values for: `{version}`, `{environment}`, `{http_port}`, `{grpc_port}`, `{database}`, `{dsn}`, `{jwt_secret}`.
+<br />
+The `--nrkey` flag and its value `{newrelic_key}` are optional and can be omitted if you do not want to configure New Relic observability.
+<br />
+Then open:
+* Swagger UI: `http://localhost:{http_port}/v1/swagger/index.html`
+* gRPC UI: `http://localhost:{http_port}/v1/grpcui/`
+<br />
+
+NOTES:
+- The target database container needs to be up and running (run `make up`).
+
+### Debug it with VS Code
+The project includes debugging profiles in [launch.json](https://github.com/sergicanet9/go-hexagonal-api/blob/main/.vscode/launch.json) for both MongoDB and PostgreSQL setups. Simply select the desired configuration in the VS Code debugger and run it.
+<br />
+Then open:
+* Swagger UI: `http://localhost:{http_port}/v1/swagger/index.html`
+* gRPC UI: `http://localhost:{http_port}/v1/grpcui/`
+<br />
+
+NOTES:
+- The target database container needs to be up and running (run `make up`).
+
+## 📦 API Endpoints
+### Public Routes
+These endpoints do not require authentication.
+
+| HTTP Endpoint         | gRPC Method                         | Description                                   |
+| :-------------------- | :---------------------------------- | :-------------------------------------------- |
+| GET `/v1/health`      | `health.HealthService.HealthCheck`  | Performs a health check.                      |
+| POST `/v1/users`      | `user.UserService.Create`           | Creates a new user.                           |
+| POST `/v1/users/many` | `user.UserService.CreateMany`       | Creates multiple users.                       |
+| POST `/v1/users/login`| `user.UserService.Login`            | Authenticates a user and returns a JWT token. |
+
+### Protected Routes
+These endpoints require a valid JWT in the Authorization header, formatted as `Bearer {token}`.
+* For HTTP, include it as `Authorization` header.
+* For gRPC, include it in the metadata with the key `authorization`.
+
+| HTTP Endpoint                  | gRPC Method                    | Description                   |
+| :----------------------------- | :----------------------------- | :---------------------------- |
+| GET `/v1/users`                | `user.UserService.GetAll`      | Retrieves all users.          |
+| GET `/v1/users/email/{email}`  | `user.UserService.GetByEmail`  | Retrieves a user by email.    |
+| GET `/v1/users/{id}`           | `user.UserService.GetByID`     | Retrieves a user by ID.       |
+| PATCH `/v1/users/{id}`         | `user.UserService.Update`      | Updates a user's information. |
+| GET `/v1/claims`               | `user.UserService.GetClaims`   | Returns all claims.           |
+
+### Admin Routes
+These endpoints require a valid JWT, formatted as `Bearer {token}` and containing the `admin` claim.
+* For HTTP, include it as `Authorization` header.
+* For gRPC, include it in the metadata with the key `authorization`.
+
+| HTTP Endpoint           | gRPC Method                | Description           |
+| :---------------------- | :------------------------- | :-------------------- |
+| DELETE `/v1/users/{id}` | `user.UserService.Delete`  | Deletes a user by ID. |
+
+## ✅ Testing
+### Run unit tests with code coverage
+```
+make test-unit
+```
+
+### View coverage report
+```
+make cover
+```
+
+### Run integration tests
+```
+make test-integration
+```
+<br />
+
+ NOTES:
+- Docker is required for running integration tests.
+
+## 🛠️ Developer Commands 
+### (Re)Generate gRPC stubs and Swagger documentation
+```
+make swagger
+```
+### (Re)Generate Mockery mocks
+```
+make mocks
+```
+
+### Create a new PostgreSQL migration
+```
+make goose
+```
+Write the file name without ".sql" suffix and press enter.
+Then edit the newly created file to define the behavior of the migration.
+
+### Connect to pgAdmin
+Open the pgAdmin URL printed after running `make up`.
+<br />
+Log in with the email and password specified as `PGADMIN_LOGIN_EMAIL` and `PGADMIN_LOGIN_PASSOWRD` in the [.env](https://github.com/sergicanet9/go-hexagonal-api/blob/main/.env) file.
+<br />
+When prompted for the database user password, use the value of `POSTGRES_PASSWORD` from the same file.
+
+### Connect to mongo-express
+Open the mongo-express URL printed after running `make up`.
+<br />
+Log in with the username and password specified as `MONGO_EXPRESS_LOGIN_USERNAME`and `MONGO_EXPRESS_LOGIN_PASSWORD`in the [.env](https://github.com/sergicanet9/go-hexagonal-api/blob/main/.env) file.
+
+## 📤 Github Actions
+The following GitHub Actions workflows are included for Continuous Integration and Continuous Deployment (CI/CD):
+* [ci.yml](https://github.com/sergicanet9/go-hexagonal-api/blob/main/.github/workflows/ci.yml): Runs on every push to the main branch. It executes unit tests and integration tests to ensure code quality and stability before deploying.
+* [cd.yml](https://github.com/sergicanet9/go-hexagonal-api/blob/main/.github/workflows/cd.yml): Triggered when a Git tag is pushed. It performs the following steps:
+  1. Runs all the tests to validate the codebase.
+  2. Builds, validates and pushes protobuf schemas to the [Buf Schema Registry (BSR)](https://buf.build/sergicanet9/go-hexagonal-api-v1).
+  3. Builds and publishes the API Docker image to the [GitHub Container Registry (GHCR)](https://github.com/sergicanet9/go-hexagonal-api/pkgs/container/go-hexagonal-api%2Fgo-hexagonal-api).
+  4. Deploys the application to Kubernetes using the appropriate secrets and configs.
+  5. Exposes the API to the internet through a tunnel.
+* [gcp-infrastructure.yml](https://github.com/sergicanet9/go-hexagonal-api/blob/main/.github/workflows/gcp-infrastructure.yml): Manually triggered. It allows creating and deleting the GKE cluster required for deploying the application.
+
+## ☁️ Live Environment
+⚠️ **Cluster may be turned off:** To save costs, the cluster is usually deleted after use via the [gcp-infrastructure.yml](https://github.com/sergicanet9/go-hexagonal-api/blob/main/.github/workflows/gcp-infrastructure.yml) action.
+<br />
+<br />
+The API gets deployed on a Google Kubernetes Engine (GKE) cluster, using Mongo Atlas as database, New Relic Go agent for APM and log forwarding, and a Cloudflare tunnel for public access through HTTP.<br/>
+* Swagger UI: https://mongo-prod-go-hexagonal-api.sergicanet.com/v1/swagger/index.html
+* gRPC UI: https://mongo-prod-go-hexagonal-api.sergicanet.com/v1/grpcui/
+<br />
+
+NOTES:
+- The gRPC UI gets publically exposed through HTTP. However, direct gRPC calls (e.g., using `grpcurl`) are not allowed outside the cluster.
+
+## 📝 Other usage examples
+Check out [go-microservices-demo](https://github.com/sergicanet9/go-microservices-demo) to see this project used as a component in a microservices architecture.
+
+## ✍️ Author
+Sergi Canet Vela
+
+## ⚖️ License
+This project is licensed under the terms of the MIT license.

@@ -1,0 +1,43 @@
+![release-version](https://img.shields.io/github/v/release/vran-dev/databasir?include_prereleases&style=for-the-badge) ![downloads](https://img.shields.io/github/downloads/vran-dev/databasir/total?style=for-the-badge) ![language](https://img.shields.io/github/languages/top/vran-dev/databasir?style=for-the-badge) ![licence](https://img.shields.io/github/license/vran-dev/databasir?style=for-the-badge) ![stars](https://img.shields.io/github/stars/vran-dev/databasir?style=for-the-badge)
+
+## 简介
+
+![](docs/databasir.png) Databasir 是面向团队的**关系型数据库模型文档管理平台**，旨在通过自动化的方式解决模型文档管理过程中维护成本高、内容更新不及时以及团队协作复杂等问题。
+
+项目文档：https://github.com/vran-dev/databasir-docs
+
+问题反馈：https://github.com/vran-dev/databasir/issues
+
+## 支持平台
+
+理论上支持拥有 JDBC 驱动的任何数据库，以下是社区内已验证过的数据库
+
+- MySQL
+- PostgreSQL
+- Oracle
+- SqlServer
+- 达梦
+- TIDB
+- Hive
+- Clickhouse
+- MariaDB
+- .....
+
+注意：以上列表是目前社区已经验证过的，并不代表 [Databasir](https://github.com/vran-dev/databasir) 只支持这些。
+
+
+## 多图展示
+
+- 文档同步
+
+![sync.gif](https://s2.loli.net/2022/04/22/aoiSR1V3MuN67m8.gif)
+
+更多内容，请查看[文档](https://doc.databasir.com)
+
+## 捐赠
+
+<img src="https://s2.loli.net/2022/05/23/phDIKagHwjZl3kA.jpg" width="280">
+
+## License
+
+Apache License 2.0

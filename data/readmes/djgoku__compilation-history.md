@@ -1,0 +1,337 @@
+#+TITLE: Compilation History
+#+STARTUP: inlineimages
+
+This package provides automatic tracking of compilation history in Emacs.
+It captures compilation commands, timing, results, and metadata to help
+analyze build patterns and debug compilation issues.
+
+[[file:images/compilation-history-view.png]]
+
+* Features
+
+- Automatic tracking of all compilations in a SQLite database
+- Captures output, exit codes, timing, UTC offset, and git context (branch, commit, remotes)
+- Timestamps displayed in local timezone at time of compilation
+- Searchable history view with FTS5 full-text search
+- ANSI color preservation — reopened compilations display original colors
+- Incremental output saving for crash resilience
+- Unique buffer names per compilation for easy identification
+- Recompile support from history buffers
+
+* Requirements
+
+- Emacs 29.1+ (built-in SQLite support required)
+
+* Usage
+
+Enable the mode:
+
+#+begin_src elisp
+(compilation-history-mode 1)
+#+end_src
+
+Once enabled, every =M-x compile= invocation is automatically tracked. The database is created automatically on first compile. Use =M-x compilation-history-view= to browse your compilation history.
+
+To disable:
+
+#+begin_src elisp
+(compilation-history-mode -1)
+#+end_src
+
+* Recommended Setup
+
+A complete compilation stack using =use-package=. These three blocks work together but are independent — adopt all three or pick what you need.
+
+** compile
+
+Built-in settings for =M-x compile= buffers.
+
+#+begin_src elisp
+(use-package compile
+  :ensure nil
+  :custom
+  ;; Auto-scroll compilation output to follow progress
+  (compilation-scroll-output t)
+  ;; Tell subprocesses they can emit color/escape codes
+  (compilation-environment '("TERM=xterm-256color"))
+  :hook
+  ;; Render ANSI color codes in compilation buffers (built-in, no external dep)
+  (compilation-filter . ansi-color-compilation-filter))
+#+end_src
+
+** comint
+
+Comint settings enhance interactive compilations via =C-u M-x compile=, which runs the compilation in =comint-mode=. This is useful for commands that prompt for input (e.g., login scripts, interactive installers) — and compilation-history captures the full session.
+
+#+begin_src elisp
+(use-package comint
+  :ensure nil
+  :custom
+  ;; Store up to 10,000 input history entries (default is 500)
+  (comint-input-ring-size 10000)
+  ;; Skip duplicate consecutive inputs in history
+  (comint-input-ignoredups t)
+  ;; Use isearch-style history navigation (dwim = up/down + C-r both work)
+  (comint-history-isearch 'dwim)
+  ;; Expand history references (e.g. !!, !$) on input
+  (comint-input-autoexpand t)
+  ;; Yank previous arguments from the end (like bash M-.)
+  (comint-insert-previous-argument-from-end t)
+  ;; Announce terminal as xterm-256color for proper color support
+  (comint-terminfo-terminal "xterm-256color")
+  ;; Cap buffer size to prevent memory issues with long-running sessions
+  (comint-buffer-maximum-size 20000)
+  ;; Auto-scroll to bottom when you type input
+  (comint-scroll-to-bottom-on-input t)
+  ;; Don't force point to follow output (lets you read earlier output while new output arrives)
+  (comint-move-point-for-output nil)
+  ;; Don't force-scroll to bottom on every output
+  (comint-scroll-show-maximum-output nil)
+  ;; Use cat as pager so output stays in the buffer instead of spawning less/more
+  ;; (comint-pager "cat") ;; Emacs 30+ only
+  ;; If using zsh and you see every command echoed back, uncomment this:
+  ;; (comint-process-echoes t)
+  )
+#+end_src
+
+** compilation-history
+
+The database is created automatically on first compile — no manual initialization needed. Comint buffers (=C-u compile=) are automatically made read-only when the process finishes, with =q= bound to =quit-window=.
+
+#+begin_src elisp
+;; Elpaca (recommended)
+(use-package compilation-history
+  :ensure (:host github :repo "djgoku/compilation-history")
+  :after compile
+  ;; Bind C-c c as the prefix for compilation-history commands
+  ;; C-c c c → compile, C-c c v → view history
+  :bind-keymap ("C-c c" . compilation-history-map)
+  :config
+  ;; Enable automatic tracking of all compilations
+  (compilation-history-mode 1))
+
+;; Alternative install methods for compilation-history:
+;;
+;; straight.el:
+;;   :straight (:host github :repo "djgoku/compilation-history")
+;;
+;; vc-use-package (Emacs 30+):
+;;   :vc (:url "https://github.com/djgoku/compilation-history")
+;;
+;; Local checkout:
+;;   :load-path "~/path/to/compilation-history"
+#+end_src
+
+* Customization
+
+All customization variables are in the =compilation-history= group. Use =M-x customize-group RET compilation-history RET= to browse them interactively.
+
+** =compilation-history-db-file=
+
+Path to the SQLite database file.
+
+#+begin_src elisp
+;; Default: ~/.emacs.d/compilation-history.db
+(setq compilation-history-db-file
+      (expand-file-name "compilation-history.db" user-emacs-directory))
+#+end_src
+
+** =compilation-history-command-truncate-length=
+
+Maximum length of the sanitized command in buffer names.
+
+#+begin_src elisp
+;; Default: 25
+(setq compilation-history-command-truncate-length 25)
+#+end_src
+
+** =compilation-history-save-interval=
+
+Seconds between periodic saves of compilation output to the database. Provides crash resilience — if Emacs crashes mid-compilation, at most this many seconds of output is lost.
+
+#+begin_src elisp
+;; Default: 10 (nil to disable timer-based saving)
+(setq compilation-history-save-interval 10)
+#+end_src
+
+** =compilation-history-save-line-threshold=
+
+Number of new output lines that trigger an immediate save to the database, without waiting for the timer.
+
+#+begin_src elisp
+;; Default: 100 (nil to disable line-based saving)
+(setq compilation-history-save-line-threshold 100)
+#+end_src
+
+Setting both =compilation-history-save-interval= and =compilation-history-save-line-threshold= to =nil= disables incremental saving entirely.
+
+** =compilation-history-recompile-switch-behavior=
+
+Controls whether recompiling from a compilation-history buffer automatically switches to the new compilation buffer.
+
+#+begin_src elisp
+;; Default: 'switch (select the window showing the new buffer)
+;; Options: 'switch, 'pop (respect display-buffer-alist), nil (disabled)
+(setq compilation-history-recompile-switch-behavior 'switch)
+#+end_src
+
+** =compilation-history-view-split-direction=
+
+How to split the window when opening or previewing a compilation from the history view.
+
+#+begin_src elisp
+;; Default: 'horizontal (above/below)
+;; Options: 'horizontal, 'vertical (side-by-side)
+(setq compilation-history-view-split-direction 'horizontal)
+#+end_src
+
+** =compilation-history-view-columns=
+
+Column definitions for the history view table. Each entry is a plist with =:name=, =:key=, and optional =:formatter=, =:min-width=, =:max-width=, =:align=. Columns can be reordered, removed, or modified.
+
+#+begin_src elisp
+;; Default columns in order:
+;; #, Start Time, Duration, Status, Exit, Commit, Branch, Directory, Command
+(setq compilation-history-view-columns
+      '((:name "#" :key :row-number)
+        (:name "Start Time" :key :start-time)
+        (:name "Duration" :key :duration :min-width 8)
+        (:name "Status" :key :status)
+        (:name "Exit" :key :exit-code :min-width 5)
+        (:name "Commit" :key :commit :formatter compilation-history-view--format-commit)
+        (:name "Branch" :key :branch)
+        (:name "Directory" :key :directory :formatter compilation-history-view--format-directory)
+        (:name "Command" :key :command
+               :formatter compilation-history-view--format-command)))
+#+end_src
+
+The Command column includes a default formatter that collapses newlines, tabs, and multiple spaces into single spaces for cleaner display. For example, a multi-line shell command like:
+
+#+begin_example
+cd build &&
+  cmake .. &&
+  make -j8
+#+end_example
+
+displays as: =cd build && cmake .. && make -j8=
+
+To show raw commands instead, remove the =:formatter= entry from the Command column.
+
+* Keybindings
+
+** Global (via =compilation-history-map=)
+
+| Key     | Command                    |
+|---------+----------------------------|
+| =c=     | =compile=                  |
+| =v=     | =compilation-history-view= |
+
+Bind the prefix map to a key of your choice:
+
+#+begin_src elisp
+(global-set-key (kbd "C-c c") compilation-history-map)
+#+end_src
+
+** History View (=compilation-history-view-mode-map=)
+
+| Key       | Command                                    |
+|-----------+--------------------------------------------|
+| =RET=     | Open compilation in other window           |
+| =SPC=     | Preview compilation in other window        |
+| =n= / =M-n= | Preview next row                       |
+| =p= / =M-p= | Preview previous row                   |
+| =s=       | Search (FTS5 full-text search)             |
+| =g=       | Refresh view                               |
+| =C-v=     | Next page                                  |
+| =M-v=     | Previous page                              |
+| =<=       | First page                                 |
+| =>=       | Last page                                  |
+| =q=       | Quit view                                  |
+
+* Searching
+
+Press =s= in the history view to search. The search uses SQLite FTS5 with trigram tokenization, which means it supports substring matching out of the box.
+
+** Searchable Fields
+
+| Column              | Description                          |
+|---------------------+--------------------------------------|
+| =compile_command=   | The compilation command               |
+| =default_directory= | Directory where compilation was run   |
+| =git_branch=        | Git branch at time of compilation     |
+| =output=            | Full compilation output               |
+
+** Search Syntax
+
+*** Plain search (searches all indexed fields)
+
+| Example          | Matches                                      |
+|------------------+----------------------------------------------|
+| =make=           | Any record where command, directory, branch, or output contains "make" |
+| =test=           | Compilations involving "test" anywhere        |
+| =error=          | Compilations whose output contains "error"    |
+| =FAIL=           | Find failed test runs by output content       |
+
+*** Column-specific search (=column:value=)
+
+| Example                        | Matches                                     |
+|--------------------------------+---------------------------------------------|
+| =compile_command:pytest=       | Only compilations where the command contains "pytest" |
+| =git_branch:main=             | Only compilations run on the main branch     |
+| =default_directory:frontend=  | Only compilations run from a directory containing "frontend" |
+| =output:undefined reference=  | Only compilations whose output contains "undefined reference" |
+
+*** Short terms (< 3 characters)
+
+FTS5 trigram tokenization requires at least 3 characters. For shorter terms, the search automatically falls back to SQL =LIKE= queries. This is transparent — just type your search term.
+
+| Example              | Behavior                              |
+|----------------------+---------------------------------------|
+| =go=                 | Falls back to LIKE (2 chars)          |
+| =compile_command:cc= | Falls back to LIKE for the value "cc" |
+| =make=               | Uses FTS5 (4 chars)                   |
+
+** Tab Completion
+
+Column names are completed with =TAB= in the search minibuffer. Type a few characters and press =TAB= to complete to a valid column name.
+
+** Clearing Search
+
+Press =s= and submit an empty string to clear the current search and show all records.
+
+* Hooks
+
+There are currently no user-facing hooks. The package uses Emacs built-in hooks internally (=compilation-finish-functions=, =compilation-filter-hook=, =kill-buffer-hook=, =kill-emacs-hook=).
+
+* Buffer Naming
+
+Each compilation gets a unique buffer name:
+
+=*compilation-history-<identifier>==<path>__<command>*=
+
+- =<identifier>=: Timestamp in =YYYYMMDDTHHMMSSffffff= format (also the database ID)
+- =<path>=: Project name, with subdirectory parts joined by =--=
+- =<command>=: Sanitized compile command, truncated to configured length
+
+Examples:
+
+- At project root: =*compilation-history-20250812T153000123456==my-project__make-all*=
+- In subdirectory: =*compilation-history-20250812T153000123456==my-project--src--app__make-all*=
+
+* Database Schema
+
+Records include:
+- Compile command, directory, buffer name
+- Start time (with UTC offset for local timezone display), end time, exit code, killed status
+- Full compilation output
+- Git metadata: repo, branch, commit, commit message, remote URLs
+- System info: OS, OS version, Emacs version
+
+Full-text search is supported via FTS5 on command, directory, branch, and output fields.
+
+* Modules
+
+| File                         | Description                            |
+|------------------------------+----------------------------------------|
+| =compilation-history.el=     | Core tracking, hooks, and lifecycle    |
+| =compilation-history-view.el= | Searchable vtable-based history browser |

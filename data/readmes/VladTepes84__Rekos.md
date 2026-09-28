@@ -1,0 +1,353 @@
+# REKOS
+
+![PyPI](https://img.shields.io/pypi/v/rekos?style=for-the-badge)
+![Python](https://img.shields.io/pypi/pyversions/rekos?style=for-the-badge)
+![License](https://img.shields.io/github/license/VladTepes84/Rekos?style=for-the-badge)
+![Stars](https://img.shields.io/github/stars/VladTepes84/Rekos?style=for-the-badge)
+![Downloads](https://img.shields.io/pypi/dm/rekos?style=for-the-badge)
+![OSINT](https://img.shields.io/badge/OSINT-Passive-orange?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Active_Development-success?style=for-the-badge)
+
+![REKOS quickstart](assets/rekos-quickstart-v2.png)
+
+REKOS is a terminal-native passive OSINT CLI for local-first public-source investigation workspaces. It helps organize targets, evidence, source outputs, entities, relationships, normalized findings, and correlation-quality scores in a SQLite-backed case folder.
+
+REKOS is designed for passive public-source workflows:
+
+- Public-source investigation workspace
+- Target and evidence organizer
+- Username, profile, domain, URL, and indicator correlation tool
+- Local-first OSINT case workspace
+- No login automation, bypass, credential collection, or active exploitation
+
+A case is a local workspace for one public-source research thread. Cases are stored under `~/rekos_cases/<case_name>` by default. Each case keeps its own SQLite database, source outputs, evidence artifacts, graph records, findings, and exports.
+
+## Installation
+
+REKOS requires Python >=3.10. Python 3.12 is recommended.
+
+### Windows PowerShell
+
+Install:
+
+```powershell
+py -m pip install --upgrade rekos
+```
+
+Run:
+
+```powershell
+rekos
+```
+
+Uninstall:
+
+```powershell
+py -m pip uninstall -y rekos
+```
+
+### macOS / Linux
+
+Install:
+
+```bash
+pipx install rekos --python python3.12
+```
+
+Run:
+
+```bash
+rekos
+```
+
+Uninstall:
+
+```bash
+pipx uninstall rekos
+```
+
+If your default Python is already >=3.10:
+
+```bash
+pipx install rekos
+```
+
+### Latest version from GitHub
+
+Use this only if you need fixes that are already on GitHub but not yet published on PyPI.
+
+#### Windows PowerShell
+
+```powershell
+py -m pip uninstall -y rekos
+py -m pip install --force-reinstall git+https://github.com/VladTepes84/Rekos.git
+```
+
+#### macOS / Linux
+
+```bash
+python3 -m pip uninstall -y rekos
+python3 -m pip install --force-reinstall git+https://github.com/VladTepes84/Rekos.git
+```
+
+### If the `rekos` command is not found
+
+#### Windows PowerShell
+
+```powershell
+py -m pip show rekos
+py -m rekos version
+```
+
+#### macOS / Linux
+
+```bash
+python3 -m pip show rekos
+python3 -m rekos version
+```
+
+Run `rekos` with no arguments to open the quickstart screen.
+
+Users run REKOS commands such as `rekos investigate username <case> <username>` and `rekos investigate domain <case> <domain>`. REKOS calls available passive sources through its source adapters and continues cleanly when optional external tools are absent.
+
+### Local development install
+
+```bash
+git clone https://github.com/VladTepes84/Rekos.git
+cd Rekos
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install -e ".[dev]"
+pytest
+rekos
+```
+
+## Optional Integrations
+
+- `sherlock` enables the `sherlock_username` source when the `sherlock` command is installed
+- `maigret` enables the `maigret_username` source when available in the REKOS runtime
+- `exiftool` or `mediainfo` for file metadata collection
+- Playwright is optional for URL screenshots; HTTP snapshots still work without it
+
+Users always run `rekos`, not Sherlock or Maigret directly. `rekos investigate username <case> <username>` automatically uses the username sources available in the current environment.
+
+## Why Rekos Exists
+
+Rekos is not trying to replace tools like Sherlock, Maigret, or theHarvester.
+
+The goal is to provide a lightweight passive OSINT workflow with case-oriented investigations instead of isolated lookups and disconnected outputs.
+
+Rekos focuses on:
+- local-first investigations
+- passive public-source workflows
+- normalized findings
+- relationship tracking
+- evidence organization
+- CLI-native workflows
+
+The project intentionally avoids:
+- active exploitation
+- authenticated automation
+- breached datasets
+- aggressive crawling
+- AI-generated investigation claims
+
+## Quick Start
+
+```bash
+rekos new-case social_test
+rekos investigate username social_test username
+rekos investigate email social_test alice@example.com
+rekos enrich email social_test alice@example.com
+rekos check-breach social_test alice@example.com
+rekos findings social_test
+rekos findings social_test --verbose
+rekos score social_test
+rekos graph-summary social_test
+rekos export-case social_test --output social_test.zip
+```
+
+Normal workflow:
+
+1. Create a case with `rekos new-case`.
+2. Add or investigate a target with `rekos investigate username`, `rekos investigate email`, `rekos investigate domain`, or `rekos snapshot-url`.
+3. Review normalized results with `rekos findings`.
+4. Score correlation quality with `rekos score`.
+5. Inspect relationships with `rekos graph-summary` or `rekos list-entities`.
+6. Export the workspace with `rekos export-case`.
+
+Most users only need these commands:
+
+```bash
+rekos
+rekos new-case acme-osint
+rekos investigate username acme-osint alice.example
+rekos investigate email acme-osint alice@example.com
+rekos enrich email acme-osint alice@example.com
+rekos check-breach acme-osint alice@example.com
+rekos investigate domain acme-osint example.com
+rekos snapshot-url acme-osint https://example.com/profile/alice
+rekos findings acme-osint
+rekos findings acme-osint --verbose
+rekos score acme-osint
+rekos search acme-osint example.com
+rekos graph-summary acme-osint
+rekos export-case acme-osint --output ./acme-osint.zip
+```
+
+Use `rekos findings <case> --verbose` for grouped analyst detail. Add `--show-uuids` only when full finding IDs are needed.
+
+Users run only `rekos`. Sherlock and Maigret are optional integrations that REKOS orchestrates internally when available.
+
+During `rekos investigate username <case> <username>`, REKOS generates safe username variants, runs available passive username sources, stores raw source output, normalizes discovered profile URLs into findings, updates the entity graph, records timeline events, and computes correlation-quality scores. Results are correlation indicators, not proof of identity ownership.
+
+During `rekos investigate domain <case> <domain>`, REKOS runs passive DNS, RDAP with registry/WHOIS fallback, HTTP/HTTPS endpoint checks, TLS certificate metadata collection, and crt.sh certificate transparency lookup when available. It records registration evidence, DNS records, web endpoint metadata, redirects, TLS certificate summaries, SPF/mail-security summaries, provider hints from TXT records, and certificate transparency findings.
+
+During `rekos investigate email <case> <email>`, REKOS validates and normalizes the address, extracts the domain, checks passive public DNS MX/SPF/DMARC records, records provider hints, and stores a local Gravatar MD5 hash without checking account existence.
+
+Use `rekos enrich email <case> <email>` for optional passive enrichment such as unverified username candidates derived from the local-part and public Gravatar avatar metadata. Use `rekos check-breach <case> <email>` for passive breach exposure status: REKOS checks XposedOrNot without an API key and can additionally query Have I Been Pwned when `REKOS_HIBP_API_KEY` is configured. It records exposure metadata only and does not collect passwords or credential material.
+
+Domain, URL, and snapshot workflows reject localhost, private/internal IP ranges, link-local addresses, metadata-service IPs, reserved, multicast, and unspecified IP targets. REKOS is for public-source targets only.
+
+## How REKOS Works
+
+- Target input: user-provided usernames, domains, URLs, files, notes, and indicators are stored in a local case.
+- Source orchestration: REKOS runs passive adapters such as username sources, DNS, RDAP/WHOIS fallback, web/TLS checks, crt.sh, Wayback, metadata tools, and HTTP snapshots when available.
+- Findings normalization: raw source output is converted into normalized findings such as discovered profiles, URLs, domains, metadata records, archive records, and registration records.
+- Graph correlation: entities and relationships connect usernames, profiles, domains, URLs, files, and notes.
+- Quality scoring: REKOS scores correlation quality from source confidence, exact or normalized matches, duplicate source confirmation, evidence presence, and graph relationships.
+- Evidence export: raw outputs, artifacts, reports, SQLite data, and manifests can be exported with `rekos export-case`.
+
+## Why Rekos Exists
+
+Rekos is not trying to replace tools like Sherlock, Maigret, or theHarvester.
+
+The goal is to provide a lightweight passive OSINT workflow with case-oriented investigations instead of isolated lookups and disconnected outputs.
+
+Rekos focuses on:
+- local-first investigations
+- passive public-source workflows
+- normalized findings
+- relationship tracking
+- evidence organization
+- CLI-native workflows
+
+The project intentionally avoids:
+- active exploitation
+- authenticated automation
+- breached datasets
+- aggressive crawling
+- AI-generated investigation claims
+
+## Passive Sources And APIs
+
+REKOS uses only passive public-source integrations.
+
+Current integrations include:
+- Sherlock
+- Maigret
+- public RDAP services
+- public DNS resolution
+- crt.sh certificate transparency data
+- Wayback Machine CDX API
+- passive HTTP/TLS metadata collection
+
+REKOS does not use:
+- private breached credential datasets or password material
+- private leaks
+- authenticated scraping
+- account automation
+- active exploitation techniques
+
+Optional breach exposure checks use legitimate public APIs such as XposedOrNot and Have I Been Pwned. XposedOrNot provides the default free breached/not-breached status; HIBP is used only when the user provides an API key. REKOS records exposure metadata only and does not collect passwords, credential material, or account ownership claims.
+
+## Supported Sources
+
+| Source              | Target types    | Dependencies                     | Notes                                                                           |
+|---------------------|-----------------|----------------------------------|---------------------------------------------------------------------------------|
+| `sherlock_username` | `username`      | `sherlock` binary                | Runs Sherlock with safe subprocess arguments and parses public profile URLs.     |
+| `maigret_username`  | `username`      | optional `maigret` package/tool  | Runs Maigret when installed; REKOS continues without it.                        |
+| `wmn_username`      | `username`      | none                             | Checks local public profile URL templates, including LinkedIn, with conservative passive HTTP validation. |
+| `email_passive`     | `email`         | none                             | Checks passive public MX/SPF/DMARC records and local email metadata only.        |
+| `email_enrichment`  | `email`         | none                             | Derives unverified username candidates and checks public Gravatar avatar metadata. |
+| `xposedornot_breach` | `email`        | none                             | Checks free XposedOrNot breached/not-breached status; no passwords or credential material. |
+| `hibp_breach`       | `email`         | `REKOS_HIBP_API_KEY` env var     | Optional Have I Been Pwned breach exposure check; no passwords or credential material. |
+| `http_snapshot`     | `url`           | none                             | Captures public HTTP response artifacts and optional Playwright screenshot.      |
+| `rdap_domain`       | `domain`        | none                             | Uses public HTTPS RDAP lookup with registry and WHOIS fallback where available.  |
+| `dns_domain`        | `domain`        | none                             | Fetches public DNS A/AAAA/MX/NS/TXT records and extracts SPF/provider hints.     |
+| `web_domain`        | `domain`        | none                             | Performs passive HTTP/HTTPS endpoint and TLS certificate metadata checks.         |
+| `crtsh_domain`      | `domain`        | none                             | Queries the public crt.sh certificate transparency endpoint.                     |
+| `wayback_url`       | `url`, `domain` | none                             | Queries public Wayback CDX data and records archive URLs.                        |
+
+Source utilities:
+
+```bash
+rekos sources list
+rekos sources check
+rekos sources run acme-osint rdap_domain example.com
+```
+
+## Core Commands
+
+```bash
+rekos add-entity acme-osint --type domain --value example.com
+rekos relate-entities acme-osint --from <entity_uuid> --to <entity_uuid> --type related_to --confidence medium
+rekos list-targets acme-osint
+rekos list-sources acme-osint
+rekos show-investigation acme-osint
+rekos report acme-osint --format md
+```
+
+## Safety And Ethics
+
+REKOS is passive-only OSINT tooling. Use it only for lawful, authorized, and ethical public-source research.
+
+REKOS must not be used for:
+
+- Logging into accounts or automating authenticated sessions
+- Bypassing access controls, paywalls, CAPTCHAs, bot protection, or rate limits
+- Credential collection, phishing, account abuse, or social engineering
+- SMTP probing, password reset checks, breach checks, or account existence claims
+- Exploitation, destructive operations, or aggressive crawling
+- Claiming identity ownership from correlation results
+
+Scores are correlation-quality indicators only. A high score means stronger local correlation support, not proof of identity, ownership, compromise, or intent.
+
+## Local Data Model
+
+REKOS stores:
+
+- Case metadata in SQLite
+- Targets, entities, relationships, notes, timeline events
+- Raw source outputs under `exports/`
+- Evidence and snapshot artifacts
+- Normalized findings with correlation-quality scores
+- Case ZIP exports with manifest data
+
+## Development
+
+```bash
+python -m pip install -e ".[dev]"
+pytest
+rekos --help
+```
+
+Before submitting a change:
+
+```bash
+pytest
+python -m compileall rekos
+git diff --check
+```
+
+## Roadmap
+
+- More passive source adapters with explicit safety boundaries
+- Stronger report templates and case export validation
+- Improved graph summaries and finding explainability
+- Better import/export interoperability
+- Optional UI views while keeping the CLI and local-first storage as the core
+
+## License
+
+MIT License. See [LICENSE](LICENSE).

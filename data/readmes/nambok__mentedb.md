@@ -1,0 +1,943 @@
+# MenteDB
+
+> ⚠️ **Beta** — MenteDB is under active development. APIs may change between minor versions.
+
+[![Crates.io](https://img.shields.io/crates/v/mentedb-core)](https://crates.io/crates/mentedb-core) [![docs.rs](https://img.shields.io/docsrs/mentedb-core)](https://docs.rs/mentedb-core) [![CI](https://github.com/nambok/mentedb/actions/workflows/ci.yml/badge.svg)](https://github.com/nambok/mentedb/actions/workflows/ci.yml) [![dependency status](https://deps.rs/repo/github/nambok/mentedb/status.svg)](https://deps.rs/repo/github/nambok/mentedb) [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE) [![npm](https://img.shields.io/npm/v/mentedb)](https://www.npmjs.com/package/mentedb) [![PyPI](https://img.shields.io/pypi/v/mentedb)](https://pypi.org/project/mentedb/)
+
+**The Mind Database for AI Agents**
+
+MenteDB is a purpose built database engine for AI agent memory. Not a wrapper around existing databases, but a ground up Rust storage engine that understands how AI/LLMs consume data.
+
+> *mente* (Spanish): mind, intellect
+
+## Two ways to run it
+
+|  |  |
+|---|---|
+| **[Cloud](docs/CLOUD.md)** | Managed. Get an API key, set `MENTEDB_API_KEY`, connect. The overnight maintenance runs for you. |
+| **[Self-host](docs/SELF_HOSTING.md)** | Run the engine yourself with `cargo install mentedb-server` or Docker. Nightly maintenance is built in. |
+
+Building your own agent? **[Build an agent](docs/BUILD_AN_AGENT.md)** has a
+runnable example for every combination of cloud or self-hosted and Python, Node,
+or Rust.
+
+**Cloud in 30 seconds** ([full guide](docs/CLOUD.md)):
+
+```bash
+export MENTEDB_API_KEY=mdb_your_key        # from app.mentedb.com -> API Keys
+npx mentedb-mcp@latest setup claude-code   # or cursor, copilot, claude
+```
+
+**Self-host in 30 seconds** ([full guide](docs/SELF_HOSTING.md)):
+
+```bash
+cargo install mentedb-server
+mentedb-server --data-dir ./data           # REST on :6677, nightly maintenance built in
+```
+
+## Installation
+
+### Docker (fastest)
+
+```bash
+docker run -p 6677:6677 \
+  -e MENTEDB_LLM_PROVIDER=openai \
+  -e MENTEDB_LLM_API_KEY=sk-... \
+  -v mentedb-data:/var/mentedb/data \
+  ghcr.io/nambok/mentedb:latest
+```
+
+### Rust (from source)
+
+```bash
+cargo install mentedb-server
+mentedb-server --data-dir ./data
+```
+
+### Python SDK
+
+```bash
+pip install mentedb
+```
+
+On Debian and Ubuntu systems pip refuses system wide installs (PEP 668). Use a virtual environment or pipx:
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install mentedb
+# or: pipx install mentedb
+```
+
+### TypeScript SDK
+
+```bash
+npm install mentedb
+```
+
+### Integrations
+
+```bash
+pip install mentedb-langchain  # LangChain memory provider
+pip install mentedb-crewai     # CrewAI memory provider
+```
+
+### Command-line client
+
+`mentedb` runs MQL from the shell, against a local data directory (opened
+in-process, like `sqlite3`) or a running server (over HTTP). `cargo install
+mentedb-cli` installs the `mentedb` binary.
+
+With no flags it just works: it defaults to a local `./mentedb-data` (the server's
+default directory), so run it where you ran the server. Set `MENTEDB_URL` (and
+`MENTEDB_ADMIN_KEY`) or `MENTEDB_DATA_DIR` to point it elsewhere without repeating
+flags; explicit flags always win.
+
+```bash
+mentedb query 'RECALL memories WHERE type = semantic LIMIT 10'   # local ./mentedb-data
+mentedb query --data-dir ./data 'RECALL memories LIMIT 5'        # a specific directory
+
+# a running server (or export the vars once)
+export MENTEDB_URL=http://localhost:6677 MENTEDB_ADMIN_KEY="$KEY"
+mentedb query 'RECALL memories LIMIT 5'
+
+mentedb repl                                                     # interactive; --format json | csv
+```
+
+## Quick start: an agent that remembers
+
+Memory is one call. `process_turn` embeds the user message, recalls what is
+relevant from everything stored so far, saves the turn, and returns the memories
+to put in your next prompt. Full walkthrough for every stack (cloud vs
+self-hosted, Python / Node / Rust) is in **[Build an agent](docs/BUILD_AN_AGENT.md)**.
+
+**Self-hosted, Python:**
+
+```python
+from mentedb import MenteDB
+
+db = MenteDB("./my-agent-memory")
+
+# Turn 0: tell it something.
+db.process_turn(
+    user_message="I switched from PostgreSQL to SQLite for side projects",
+    assistant_response="Got it, SQLite going forward.",
+    turn_id=0,
+)
+
+# Turn 1: it remembers.
+result = db.process_turn(user_message="what database am I using?", turn_id=1)
+for memory in result.context:            # -> prepend these to your prompt
+    print(memory.content)
+
+# result.facts_extracted     -> what was learned this turn (needs an LLM)
+# result.contradiction_count -> conflicting beliefs detected
+```
+
+One call runs the full 14-step cognitive pipeline: embedding, speculative cache,
+hybrid search, pain signals, episodic storage, fact extraction, contradiction
+detection, sentiment analysis, and more. Fact extraction needs an LLM: set
+`MENTEDB_LLM_PROVIDER` and `MENTEDB_LLM_API_KEY` (or use [cloud](docs/CLOUD.md),
+where it is wired up for you). Without an LLM you still get storage and recall.
+
+> **Enrichment runs automatically in the background** — semantic facts, entity graphs,
+> community summaries, and a user profile are built over time after each `process_turn`.
+
+**Cloud, any language (no SDK, REST):**
+
+```bash
+export MENTEDB_API_KEY=mdb_your_key       # from app.mentedb.com
+curl -X POST https://api.mentedb.com/v1/process_turn \
+  -H "Authorization: Bearer $MENTEDB_API_KEY" -H "Content-Type: application/json" \
+  -d '{"user_message":"...","assistant_response":"...","turn_id":0}'
+```
+
+**Connect an existing AI tool (no code):**
+
+```bash
+npx mentedb-mcp@latest setup claude-code  # or copilot, claude, cursor
+```
+
+Your assistant then calls `process_turn` automatically every turn.
+
+**Embed in Rust:**
+
+```rust
+use mentedb::{MenteDb, process_turn::ProcessTurnInput};
+use mentedb_context::DeltaTracker;
+
+let db = MenteDb::open("./my-agent-memory")?;
+let mut delta = DeltaTracker::default();
+let result = db.process_turn(&ProcessTurnInput {
+    user_message: "I switched from PostgreSQL to SQLite".into(),
+    assistant_response: Some("Got it!".into()),
+    turn_id: 0,
+    project_context: None,
+    agent_id: None,
+    user_id: None,
+    session_id: None,
+}, &mut delta)?;
+```
+
+## Why MenteDB?
+
+Every database ever built assumes the consumer can compensate for bad data organization. **AI can't.** A transformer gets ONE SHOT, a single context window, a single forward pass. MenteDB is a *cognition preparation engine* that delivers perfectly organized knowledge because the consumer has no ability to reorganize it.
+
+### The Memory Quality Problem
+
+Most AI memory tools store everything and retrieve by similarity. The result: **context windows full of noise.** Studies show up to 97% of automatically stored memories are irrelevant.
+
+MenteDB solves this with **write time intelligence:**
+
+1. **LLM Powered Extraction** parses conversations and extracts only what matters: decisions, preferences, corrections, facts, entities
+2. **Entity-Centric Memory** extracts structured entities (people, pets, places, events) with typed attributes and links them to related memories via knowledge graph edges — so "bought a collar for my Golden Retriever" remembers the breed, not just the collar
+3. **Quality Filtering** rejects low confidence extractions before they hit storage
+4. **Deduplication** checks embedding similarity against existing memories
+5. **Contradiction Detection** flags when new information conflicts with existing beliefs
+6. **Belief Propagation** cascades updates when facts change
+
+The result: a clean, curated memory that actually helps the AI perform better.
+
+### What Makes MenteDB Different
+
+| Feature | Traditional DBs | Vector DBs | MenteDB |
+|---------|----------------|------------|---------|
+| Storage model | Tables/Documents | Embeddings | Memory nodes (embeddings + graph + bi-temporal) |
+| Entity understanding | Manual schemas | None | **Auto-extracted typed entities with graph edges** |
+| Query result | Raw data | Similarity scores | **Token budget optimized context** |
+| Memory quality | Manual | None | **LLM extract + quality filter + dedup + contradiction** |
+| Retrieval strategy | Index scan | Single-pass kNN | **Hybrid vector + BM25 + graph traversal** |
+| Understands AI attention? | No | No | **Yes, U curve ordering** |
+| Tracks what AI knows? | No | No | **Epistemic state tracking** |
+| Multi-agent isolation? | Schema level | Collection level | **Memory spaces with ACLs** |
+| Updates cascade? | Foreign keys | No | **Belief propagation** |
+
+### Core Features
+
+- **Automatic Memory Extraction** LLM powered pipeline extracts structured memories from raw conversations
+- **Entity-Centric Memory** Extracts typed entities (person, pet, place, event, item, organization) with structured attributes. Entity resolution merges attributes across mentions. `Derived` and labeled `Related` edges link entities to the memories they came from
+- **Hybrid Retrieval** Vector similarity (HNSW) fused with BM25 keyword search via reciprocal rank fusion, plus tag, temporal, and validity filtering. Optional second-pass reranking (pluggable, e.g. a cross-encoder or LLM judge) and optional MMR diversity selection so near-duplicate memories do not crowd the context budget
+- **Contextual Retrieval** An optional per-memory `context` blurb is indexed and embedded alongside the content (never stored in it), so a memory is findable by situating terms it never literally contains. The caller generates the context; the engine indexes it
+- **Project Scope Weighting** Recall can weight down memories tagged for other projects so the project you are working in ranks first, without hiding a strongly relevant cross-project memory
+- **Action Rules** Rules about how to perform a class of action (commit style, PR format) are tagged `trigger:<action>` and fetched with `recall_for_action(trigger, agent, user, k)` at the moment the action runs, not by topic similarity. Deterministic tag-index lookup, same visibility scoping as every other recall, superseded rules excluded, newest first. The Claude Code integration surfaces them through a PreToolUse hook right before `git commit` and `gh pr create`
+- **Write Time Intelligence** Quality filter, deduplication, and contradiction detection at ingest
+- **LLM Powered Cognitive Inference** CognitiveLlmService judges whether new memories invalidate, update, or are compatible with existing ones (supports Anthropic, OpenAI, Ollama)
+- **Bi-Temporal Validity** Memories and edges carry `valid_from`/`valid_until` timestamps. Temporal invalidation instead of deletion. Point-in-time queries via `recall_similar_at(embedding, k, timestamp)` or in MQL with `RECALL ... AS OF <timestamp>`
+- **Attention Optimized Context Assembly** Respects the U curve (critical data at start/end of context)
+- **Belief Propagation** When facts change, downstream beliefs are flagged for re evaluation
+- **Delta Aware Serving** Only sends what changed since last turn (90% reduction in memory retrieval tokens over 20 turns)
+- **Cognitive Memory Tiers** Working, Episodic, Semantic, Procedural, Archival
+- **Knowledge Graph** CSR/CSC graph with BFS/DFS traversal and contradiction detection
+- **Memory Spaces** Multi agent isolation with per space ACLs
+- **MQL** Mente Query Language with full boolean logic (AND, OR, NOT, and grouping), ordering (`ORDER BY salience DESC`), and point-in-time recall (`AS OF <timestamp>`)
+- **Type Safe IDs** MemoryId, AgentId, SpaceId newtypes prevent accidental mixing
+- **Binary Embeddings** Base64 encoded storage, 65% smaller than JSON arrays
+- **Local Candle Embeddings** Zero config semantic search using all-MiniLM-L6-v2 (384 dims), no API key required (Docker image includes it; source builds need `--features local-embeddings`)
+- **AWS Bedrock Embeddings** Native Amazon Titan embeddings via a lightweight SigV4 signer (no async AWS SDK); enable `mentedb-embedding`'s `bedrock` feature, credentials from the standard AWS environment variables. Also available from the Python SDK as `embedding_provider="bedrock"`
+- **gRPC + REST + MCP** Three integration paths for any use case
+
+### Entity-Centric Memory
+
+Most memory systems store flat text strings. When a user says *"I bought a collar for my Golden Retriever like Max"*, a flat system remembers the collar purchase but loses the breed. MenteDB extracts **structured entities** with typed attributes:
+
+```
+Entity: MAX (pet)
+  breed: Golden Retriever
+  ──linked to──> "User bought a collar for their dog Max"
+  ──linked to──> "User takes Max to the park on weekends"
+```
+
+**How it works** (via the background enrichment pipeline, requires an LLM provider):
+1. **Extraction** — The LLM identifies entities (people, pets, places, events, items) and their attributes, even from incidental mentions
+2. **Resolution** — Multiple mentions of the same entity are merged: "Max", "my dog", "the Golden Retriever" all resolve to one entity node
+3. **Graph linking** — `Derived` edges connect each entity node back to the episodic memories it was extracted from, and same-entity memories are linked with labeled `Related` edges
+4. **Retrieval** — Entity nodes are indexed like any memory, so "What breed is my dog?" surfaces the MAX entity (with its breed attribute) through hybrid search; the surrounding subgraph can be walked with an MQL `TRAVERSE` query
+
+So asking *"What breed is my dog?"* retrieves the entity MAX with its breed attribute, even if no single conversation turn explicitly says "my dog is a Golden Retriever".
+
+### Performance Targets (10M memories)
+
+| Operation | Target |
+|-----------|--------|
+| Point lookup | ~50ns |
+| Multi-tag filter | ~10us |
+| k-NN similarity search | ~5ms |
+| Full context assembly | <50ms |
+| Startup (mmap) | <1ms |
+
+## Integration Options
+
+### 1. Claude Code (lifecycle hooks)
+
+On Claude Code, MenteDB runs through lifecycle hooks instead of MCP tools: zero tool-schema tokens, memory on every turn, and re-injection after context compaction.
+
+```bash
+npx mentedb-mcp@latest setup claude-code
+```
+
+### 2. Claude app (custom connector)
+
+On claude.ai and the Claude apps, add MenteDB as a custom connector with just the URL (`https://api.mentedb.com/mcp`): sign in once, no install. Discovery, dynamic registration, and PKCE are handled automatically.
+
+### 3. MCP Server (other AI clients)
+
+For Copilot CLI, Cursor, Claude Desktop, and any MCP compatible client.
+
+```bash
+npx mentedb-mcp@latest setup copilot
+```
+
+Or install from crates.io if you prefer Rust:
+
+```bash
+cargo install mentedb-mcp
+mentedb-mcp setup copilot
+```
+
+See [mentedb-mcp](https://github.com/nambok/mentedb-mcp) for setup, configuration, and the full list of 32 tools.
+
+**Key tools:** `process_turn` (the primary API — one call per turn), `store_memory`, `search_memories`, `forget_memory`, `assemble_context`, `relate_memories`, `write_inference`, `get_cognitive_state`, and 20+ more covering knowledge graph, consolidation, and cognitive systems.
+
+### 2. REST API
+
+```bash
+# Start the server
+cargo run -p mentedb-server -- --data-dir ./data --jwt-secret-file ./secret.key
+
+# Store a memory
+curl -X POST http://localhost:6677/v1/memories \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"agent_id": "...", "content": "User prefers dark mode", "memory_type": "semantic"}'
+
+# Recall memories
+curl -X POST http://localhost:6677/v1/recall \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"mql": "RECALL memories WHERE tag = \"preferences\" LIMIT 10"}'
+```
+
+### 3. gRPC
+
+Bidirectional streaming for real time cognition updates. Proto file at `crates/mentedb-server/proto/mentedb.proto`.
+
+### 4. SDKs
+
+**Python:** `pip install mentedb`
+```python
+from mentedb import MenteDB
+
+db = MenteDB("./agent-memory")
+result = db.process_turn(
+    user_message="I switched to Vim",
+    assistant_response="Got it!",
+    turn_id=0,
+)
+# result.context has relevant memories for your prompt
+```
+
+**TypeScript:** `npm install mentedb`
+```typescript
+import { MenteDB } from 'mentedb';
+
+const db = new MenteDB('./agent-memory');
+const result = db.processTurn('I switched to Neovim', 'Noted!', 0);
+// result.context has relevant memories for your prompt (result.factsExtracted, etc.)
+```
+
+**LangChain:** `pip install mentedb-langchain`
+```python
+from mentedb_langchain import MenteDBChatHistory
+
+history = MenteDBChatHistory(session_id="chat-1", data_dir="./memory")
+history.add_user_message("I prefer dark mode")
+history.add_ai_message("Noted!")
+```
+
+**CrewAI:** `pip install mentedb-crewai`
+```python
+from mentedb_crewai import MenteDBCrewMemory
+
+memory = MenteDBCrewMemory(data_dir="./memory")
+```
+
+## Architecture
+
+```mermaid
+graph TD
+    subgraph Fleet["Fleet (optional sharding)"]
+        ROUTE["Request Routing<br/>forward to owner"]
+        GOSSIP["Gossip Membership"]
+        PLACE["Rendezvous Placement"]
+    end
+
+    subgraph API["API Layer"]
+        MQL["MQL Parser"]
+        QE["Query Planner"]
+        GRPC["gRPC / REST / MCP"]
+    end
+
+    subgraph Extraction["Memory Extraction"]
+        LLM["LLM Provider<br/>OpenAI / Anthropic / AWS Bedrock / Ollama"]
+        ENT["Entity Extraction<br/>typed attributes, resolution"]
+        QF["Quality Filter"]
+        DEDUP["Deduplication"]
+        CONTRA_EX["Contradiction Check"]
+    end
+
+    subgraph Embeddings["Embedding Providers"]
+        EMB["Candle local / OpenAI / Cohere / AWS Bedrock Titan / hash"]
+    end
+
+    subgraph Retrieval["Retrieval"]
+        HYB["Hybrid Fusion<br/>BM25 + vector, RRF<br/>+ project scope weight"]
+        RERANK["Optional Reranker<br/>pluggable second pass"]
+        MMR["Optional MMR<br/>diversity selection"]
+    end
+
+    subgraph Cognitive["Cognitive Engine"]
+        CTX["Context Assembly<br/>U curve, delta aware"]
+        INJ["Injection / Attention Policy<br/>outcome learning"]
+        STREAM["Stream Cognition<br/>live push corrections"]
+        PAIN["Pain Signals<br/>mistake aversion"]
+        PHANTOM["Phantom Memories<br/>knowledge gap tracking"]
+        TRAJ["Trajectory Tracking"]
+        SPEC["Speculative Pre-assembly"]
+    end
+
+    subgraph Intelligence["Inference Layer"]
+        BP["Belief Propagation"]
+        WI["Write Time Inference"]
+        INTERF["Interference Detection"]
+    end
+
+    subgraph Index["Index Layer"]
+        HNSW["HNSW Vector Index"]
+        BM25["BM25 Keyword Index<br/>context-aware"]
+        ROAR["Roaring Bitmap Tags"]
+        TEMP["Temporal / Bi-temporal Index"]
+    end
+
+    subgraph Graph["Knowledge Graph"]
+        CSR["CSR/CSC Storage"]
+        TRAV["BFS / DFS Traversal"]
+        ENTG["Entity Graph<br/>Derived edges, resolution"]
+    end
+
+    subgraph Lifecycle["Consolidation"]
+        DECAY["Decay / Salience"]
+        ARCH["Archival / Compression"]
+        FORGET["GDPR Forget"]
+    end
+
+    subgraph Storage["Storage Engine"]
+        BUF["Buffer Pool<br/>CLOCK eviction"]
+        WAL["Write Ahead Log<br/>LZ4, crash safe"]
+        PAGE["Page Manager<br/>64KB pages"]
+    end
+
+    GRPC --> ROUTE
+    ROUTE --> GOSSIP
+    ROUTE --> PLACE
+    ROUTE --> QE
+
+    LLM --> ENT --> QF --> DEDUP --> CONTRA_EX --> WI
+    EMB --> HNSW
+
+    MQL --> QE
+    QE --> Index
+    QE --> Graph
+    HNSW --> HYB
+    BM25 --> HYB
+    HYB --> RERANK
+    RERANK --> MMR
+    MMR --> CTX
+    CTX --> INJ
+
+    WI --> Graph
+    WI --> Index
+    BP --> Graph
+    INTERF --> Index
+
+    Index --> Storage
+    Graph --> Storage
+    Lifecycle --> Storage
+
+    BUF --> PAGE
+    WAL --> PAGE
+```
+
+## Agent File Ingestion and Rule Delivery
+
+`ingest_agent_file` (deterministic) and `ingest_agent_file_llm` (any format, any language, via an extraction provider) break an agent instruction file into atomic, self contained memories: open vocabulary action triggers (`trigger:git-commit`, `trigger:order-refund`), section tags for cluster completion, and exemplar turns that anchor mode activation for standing directives ("longterm fixes only", "use the t function for user visible text"). Delivery runs through four channels: relevance injection, action rules at the tool moment, mode activation by activity, and cluster completion for dense rule sections. Measured on real public agent files (openai/codex, kiali, temporal, freerouting), two pass delivery (retrieve at the prompt, review against the draft) reached 100 percent rule compliance at 2 to 8 times fewer tokens than carrying the file in context, including a held out file never used during development. Re ingesting keeps memory in sync with the file, so the file stays the source of truth and the normal workflow does not change: edit it as always and ingest again, new rules are stored, unchanged rules deduplicate, edited rules replace their old version, and rules deleted from the file are forgotten (report field `removed`; opt out with `sync: false`; give each file its own `source_tag` when several files share one agent scope). The benchmark lives in this repository under [benchmarks/agent_file](benchmarks/agent_file).
+
+## Cognitive Engine
+
+MenteDB isn't just a memory store — it's a cognitive engine that automatically maintains memory health. All cognitive features are wired into the core `MenteDb` facade and run automatically.
+
+### Write Inference (automatic on `store()` and `store_batch()`)
+
+Every time a memory is stored, the engine finds the 20 most similar existing memories and runs heuristic inference. The bands are mutually exclusive — each memory pair gets at most one action:
+
+| Cosine Similarity | Action | What happens |
+|-------------------|--------|-------------|
+| **> 0.95** | Contradiction detected | Creates `Contradicts` edge, flags conflict for review (both memories stay valid; a byte-identical duplicate is superseded instead) |
+| **0.85 – 0.95** | Supersedes old memory | Invalidates older memory (`valid_until` set), creates `Supersedes` edge |
+| **0.6 – 0.85** | Related | Creates `Related` edge with similarity as weight |
+| **< 0.6** | No action | Memories are independent |
+
+For `Correction` type memories, the engine also halves the confidence of the corrected memory and propagates belief changes through the knowledge graph.
+
+### Salience Decay (automatic on retrieval)
+
+Memory relevance decays over time using an exponential formula:
+
+```
+decayed = salience × 2^(-Δt / half_life) + boost × ln(1 + access_count)
+```
+
+- **Half-life:** 7 days (configurable)
+- **Access boost:** Frequently accessed memories resist decay
+- **Reinforcement:** Recalling a memory refreshes its decay clock (it counts as an access), so memories you keep using stay healthy
+- **Derive-on-read:** The decayed score is computed from the last-access time on every read, never re-persisted, so a memory decays with real elapsed time regardless of how often the sweep runs
+- **Retrieval blending:** Final score = 70% similarity + 30% decayed salience
+- **Floor:** Memories never decay below 0.01
+- **Never destructive by decay:** Decay only reorders results. Curated (non-episodic) memories are demoted but never deleted; only stale, low-salience episodic memories are archived
+
+### Memory Consolidation (on-demand)
+
+Similar memories can be merged into unified knowledge:
+
+```rust
+// Find clusters of similar, old memories eligible for merging
+let candidates = db.find_consolidation_candidates(2, 0.8)?;
+
+// Merge a cluster into a single Semantic memory
+let consolidated_id = db.consolidate_cluster(&memory_ids)?;
+// Source memories are invalidated (not deleted) with Derived edges
+```
+
+Eligibility: Episodic type, > 24 hours old, accessed > 2 times.
+
+### Configuration
+
+All cognitive features are enabled by default. Toggle individually:
+
+```rust
+use mentedb::{MenteDb, CognitiveConfig};
+
+let config = CognitiveConfig {
+    write_inference: true,        // auto-edges, contradiction detection
+    decay_on_recall: true,        // time-based salience decay
+    pain_tracking: true,          // recurring failure warnings
+    interference_detection: true, // confusable memory detection
+    phantom_tracking: true,       // missing knowledge gap detection
+    speculative_cache: true,      // predictive context pre-assembly
+    archival_evaluation: true,    // memory lifecycle management
+    ..Default::default()
+};
+let db = MenteDb::open_with_config("./memory", config)?;
+```
+
+### Pain Registry
+
+Track recurring failures and surface warnings when similar contexts arise:
+
+```rust
+db.record_pain(PainSignal { trigger_keywords: vec!["deploy".into()], .. });
+let warnings = db.get_pain_warnings(&["deploy".into(), "production".into()]);
+```
+
+### Interference Detection
+
+Find confusable memories and generate disambiguation hints:
+
+```rust
+let pairs = db.detect_interference(&retrieved_memories);
+for pair in &pairs {
+    println!("Confusable: {} ({})", pair.disambiguation, pair.similarity);
+}
+```
+
+### Phantom Tracking
+
+Detect referenced-but-missing knowledge gaps:
+
+```rust
+db.register_entities(&["PostgreSQL", "Redis"]);
+let phantoms = db.detect_phantoms("Deploy to Kubernetes", &known, turn_id);
+```
+
+### Speculative Cache
+
+Pre-fetch context for predicted topics:
+
+```rust
+let predictions = db.predict_next_topics();
+db.pre_assemble_speculative(predictions, |topic| { /* build context */ });
+let hit = db.try_speculative_hit("database design", Some(&query_embedding));
+```
+
+### Entity Resolution
+
+Resolve aliases to canonical names:
+
+```rust
+db.add_entity_alias("JS", "JavaScript", 0.95);
+let resolved = db.resolve_entity("JS"); // → "javascript"
+```
+
+### Memory Compression
+
+Compress verbose memories for token efficiency:
+
+```rust
+let compressed = db.compress_memory(&memory);
+println!("Ratio: {:.0}%", compressed.compression_ratio * 100.0);
+```
+
+### Archival Evaluation
+
+Evaluate memory lifecycle decisions (keep, archive, delete):
+
+```rust
+let decisions = db.evaluate_archival_global()?;
+for (id, decision) in decisions {
+    match decision {
+        ArchivalDecision::Archive => { /* move to cold storage */ },
+        ArchivalDecision::Delete => { db.forget(id)?; },
+        _ => {}
+    }
+}
+```
+
+## Sleeptime Enrichment
+
+MenteDB includes a 4-phase background enrichment pipeline that automatically converts raw conversations into structured knowledge. It runs after `process_turn` when enough new memories accumulate — no manual trigger needed.
+
+| Phase | What it does |
+|-------|-------------|
+| **Batch LLM Extraction** | Converts episodic memories into semantic facts and entity nodes |
+| **Entity Linking** | Resolves duplicates and aliases (e.g., "JS" ↔ "JavaScript") via rules + LLM |
+| **Community Detection** | Groups related entities by category and generates LLM summaries |
+| **User Model** | Builds an always-available user profile from accumulated knowledge |
+
+Enrichment results feed back into `process_turn` context retrieval — richer semantic memories, entity graphs, community summaries, and the user profile all improve recall quality. The pipeline is idempotent and tracks provenance via `source:enrichment` tags and `Derived` edges.
+
+**Requires an LLM provider** (OpenAI, Anthropic, or Ollama). Without one, the engine works perfectly — enrichment just doesn't run. See [LLM Extraction Config](#llm-extraction-config) for setup.
+
+```rust
+// Enable enrichment in Cargo.toml:
+// mentedb = { version = "0.8", features = ["enrichment"] }
+
+use mentedb::enrichment::{run_enrichment, EnrichmentResult};
+
+let result = run_enrichment(&db, config, &embedder, Some(&cognitive_llm), turn_id).await;
+println!("Stored {} memories, linked {} entities", result.memories_stored, result.sync_linked + result.llm_linked);
+```
+
+## Scaling
+
+MenteDB shards itself across a fleet and coordinates it on its own: no router to
+run, no hash ring to maintain, no external coordination service. Each user's memory
+is an embedded database with exactly one writer, guarded by an exclusive OS-level
+lock (a second process that opens the same user's database fails loudly with a
+"locked by another process" error instead of corrupting it), and that lock is what
+the engine passes between nodes to move ownership safely. Three pieces make it work:
+
+- **Membership (gossip).** Each node gossips with a few peers to converge on the
+  live set, with no external store and no coordinator process. A node that stops
+  heartbeating drops out; a new one is picked up from a seed address or a headless
+  service DNS name. This is the Cassandra/Dynamo model, not a consensus leader.
+- **Placement (rendezvous).** Every node maps a user to its owner by rendezvous
+  (highest-random-weight) hashing, computed identically everywhere, so a request
+  reaches the same owner from any node. Adding or removing a node re-homes only
+  about 1/N of users, not the full reshuffle a `hash % N` ring forces.
+- **Handoff (the lock).** Ownership is the single-writer lock: when a user re-homes,
+  the old owner releases the lock and the new owner takes it, so a user's database
+  is only ever written by one node and handoff moves the lock, not the data.
+
+A request that lands on a node that does not own the user is forwarded to the one
+that does, so any node can front the fleet. Zero-copy handoff assumes the fleet
+shares storage (each user's database on a shared volume); on purely local disks
+placement still routes correctly, but a rebalanced user's data does not follow it
+automatically yet. A single well-provisioned node already serves hundreds of users;
+the fleet is for when one node's write throughput becomes the ceiling.
+
+## Observability
+
+`mentedb-server` exposes Prometheus metrics at `GET /metrics` (no auth, aggregate
+only, no per-account labels): process CPU and memory, uptime, memories stored,
+engine store and search op latency (`mentedb_store_latency_microseconds`,
+`mentedb_search_latency_microseconds`), live cluster nodes, and HTTP request rate
+and latency. It also serves a bundled console at `GET /console` (live health, plus
+a memory browser gated by `--admin-key`).
+
+For a full stack, [`observability/`](observability/) has a one-command Prometheus +
+Grafana setup with the dashboard already provisioned:
+
+```bash
+docker compose -f observability/docker-compose.yml up -d
+open http://localhost:3000   # Grafana, "MenteDB" dashboard, live
+```
+
+Point [`observability/prometheus.yml`](observability/prometheus.yml) at your nodes,
+or import [`crates/mentedb-server/grafana-dashboard.json`](crates/mentedb-server/grafana-dashboard.json)
+into an existing Grafana.
+
+## Crates
+
+MenteDB is organized as a Cargo workspace with 13 crates:
+
+| Crate | Description |
+|-------|-------------|
+| `mentedb` | Facade crate with full cognitive engine (12 subsystems wired in) |
+| `mentedb-core` | Types (MemoryNode, MemoryEdge), newtype IDs, errors, config |
+| `mentedb-storage` | Page based storage engine with crash safe WAL, buffer pool, LZ4 |
+| `mentedb-index` | HNSW vector index (bounded, concurrent), roaring bitmaps, temporal index |
+| `mentedb-graph` | CSR/CSC knowledge graph with BFS/DFS and contradiction detection |
+| `mentedb-query` | MQL parser with AND/OR/NOT, grouping, and ORDER BY |
+| `mentedb-context` | Attention aware context assembly, U curve ordering, delta tracking |
+| `mentedb-cognitive` | Write inference, belief propagation, pain signals, phantom memories, speculative cache |
+| `mentedb-consolidation` | Temporal decay, memory consolidation, salience management, archival |
+| `mentedb-embedding` | Embedding provider abstraction |
+| `mentedb-extraction` | LLM powered memory extraction pipeline |
+| `mentedb-server` | REST + gRPC server with JWT auth, space ACLs, rate limiting |
+| `mentedb-replication` | Raft based replication (experimental) |
+
+## Security
+
+MenteDB includes production security features:
+
+- **JWT Authentication** on all REST and gRPC endpoints
+- **Agent Isolation** JWT claims enforce per agent data access
+- **Space ACLs** fine grained permissions for multi agent setups
+- **Admin Keys** separate admin authentication for token issuance
+- **Rate Limiting** per agent write rate enforcement
+- **Embedding Validation** dimension mismatch returns errors, not panics
+
+```bash
+# Production deployment
+export MENTEDB_JWT_SECRET="your-secret-here"
+export MENTEDB_ADMIN_KEY="your-admin-key"
+export MENTEDB_LLM_PROVIDER="openai"
+export MENTEDB_LLM_API_KEY="sk-..."
+
+mentedb-server --require-auth --data-dir /var/mentedb/data
+```
+
+## LLM Extraction Configuration
+
+Configure the extraction pipeline via environment variables:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `MENTEDB_LLM_PROVIDER` | openai, anthropic, ollama, none | none |
+| `MENTEDB_LLM_API_KEY` | API key for the provider | |
+| `MENTEDB_LLM_MODEL` | Model name | Provider default |
+| `MENTEDB_LLM_BASE_URL` | Custom base URL (Ollama, proxies) | Provider default |
+| `MENTEDB_EXTRACTION_QUALITY_THRESHOLD` | Min confidence to store (0.0 to 1.0) | 0.7 |
+| `MENTEDB_EXTRACTION_DEDUP_THRESHOLD` | Similarity threshold for dedup (0.0 to 1.0) | 0.85 |
+| `MENTEDB_EMBEDDING_PROVIDER` | Server embeddings: candle, hash, none | candle when built with `local-embeddings`, else hash |
+
+Semantic search, auto-linking, and contradiction detection all depend on real embeddings. The Docker image ships with local Candle embeddings; a plain `cargo install mentedb-server` falls back to non-semantic hash embeddings and warns loudly at startup — build with `--features local-embeddings` for full quality.
+
+## MQL Examples
+
+```sql
+-- Vector similarity search
+RECALL memories NEAR [0.12, 0.45, 0.78, 0.33] LIMIT 10
+
+-- Boolean filters with OR and NOT
+RECALL memories WHERE type = episodic AND (tag = "backend" OR tag = "frontend") LIMIT 5
+RECALL memories WHERE NOT tag = "archived" LIMIT 20
+
+-- Content similarity
+RECALL memories WHERE content ~> "database migration strategies" LIMIT 10
+
+-- Point-in-time recall (bitemporal AS OF): only memories whose validity
+-- window contained the timestamp. A fact superseded after t is still
+-- returned when you ask "as of" a moment it was true.
+RECALL memories WHERE type = semantic AS OF 1700000000 LIMIT 10
+
+-- Graph traversal
+TRAVERSE 550e8400-e29b-41d4-a716-446655440000 DEPTH 3 WHERE edge_type = caused
+
+-- Consolidation
+CONSOLIDATE WHERE type = episodic AND accessed < "2024-01-01"
+```
+
+## Docker
+
+```bash
+# Using the published image
+docker run -p 6677:6677 \
+  -e MENTEDB_JWT_SECRET=your-secret \
+  -e MENTEDB_LLM_PROVIDER=openai \
+  -e MENTEDB_LLM_API_KEY=sk-... \
+  -v mentedb-data:/var/mentedb/data \
+  ghcr.io/nambok/mentedb:latest
+
+# Or build from source
+docker build -t mentedb .
+docker run -p 6677:6677 \
+  -e MENTEDB_JWT_SECRET=your-secret \
+  -v mentedb-data:/var/mentedb/data \
+  mentedb
+```
+
+Or with docker-compose:
+
+```bash
+docker-compose up -d
+```
+
+## Benchmarks
+
+### Quality Benchmarks (5/5 passing)
+
+| Test | Result | Key Metric |
+|------|--------|------------|
+| Stale Belief | PASS | Superseded memories correctly excluded via graph edges |
+| Delta Savings | PASS | 90.7% reduction in memory retrieval tokens over 20 turns |
+| Sustained Conversation | PASS | 100 turns, 3 projects, 0% stale returns, 0.29ms insert |
+| Attention Budget | PASS | U-curve ordering maintains 100% LLM compliance |
+| Noise Ratio | PASS | 100% useful vs 80% naive, +20pp improvement |
+
+### LLM Accuracy Benchmarks (62 cases)
+
+MenteDB's cognitive layer uses LLM judgment for memory invalidation, contradiction detection, and topic canonicalization. We maintain a curated test suite of 62 cases to validate accuracy across providers.
+
+| Provider | Invalidation (23) | Contradiction (24) | Topic (15) | **Total** |
+|----------|-------------------|-------------------|------------|-----------|
+| Anthropic Claude Sonnet 4 | 100% | 100% | 100% | **100% (62/62)** |
+| Ollama llama3.1 8b | 87% | 66.7% | 93.3% | **80.6% (50/62)** |
+| Ollama llama3.2 3B | 78.3% | 58.3% | 80% | **71% (44/62)** |
+
+**Three tier design:** Works without any LLM (heuristics only), works well with a free local model via Ollama, and achieves perfect accuracy with a cloud API. We strongly recommend configuring your own LLM provider for the best experience.
+
+```bash
+# Run the accuracy benchmark yourself
+LLM_PROVIDER=anthropic LLM_API_KEY=sk-ant-... \
+  cargo test -p mentedb-extraction --test llm_accuracy -- --ignored --nocapture
+```
+
+### LongMemEval Benchmark
+
+[LongMemEval](https://arxiv.org/abs/2410.10813) (ICLR 2025) is the standard benchmark for long-term conversational memory: 500 questions across six reasoning types, over long multi-session histories (~115K tokens per question).
+
+**MenteDB — LongMemEval-S, all 500 questions, graded by the official judge (gpt-4o-2024-08-06, verbatim prompts):**
+
+| Category | Accuracy |
+|----------|----------|
+| Single-session (assistant) | 100.0% (56/56) |
+| Single-session (user) | 97.1% (68/70) |
+| Single-session (preference) | 93.3% (28/30) |
+| Temporal reasoning | 92.5% (123/133) |
+| Knowledge update | 91.0% (71/78) |
+| Multi-session reasoning | 85.7% (114/133) |
+| **Overall (500 questions)** | **92.0% (460/500)** |
+
+Multi-session reasoning is the weakest category: synthesizing facts scattered across many sessions is the hardest problem, and where the engine has the most room to grow. We report the full distribution rather than a single headline.
+
+**How we measured:** each conversation is ingested chronologically with timestamps; MenteDB extracts memories (gpt-4o-mini) into vectors, BM25, and graph. For each question it runs hybrid retrieval (BM25 + vector, RRF-merged, time-filtered to memories dated before the question) and answers with gpt-4o. Embeddings are text-embedding-3-small. Grading uses the official LongMemEval judge, unmodified. The raw per-question hypotheses and judge labels are committed under `benchmarks/longmemeval/results/` for audit.
+
+### 10K Scale Test (engine latency vs embedding provider)
+
+Run: `python3 benchmarks/scale_10k.py candle` (local Candle embeddings, no API key). The embedding round trip is timed separately from the engine, so the two are never conflated. A remote provider (OpenAI, Cohere) swaps the local embed for a network call of a few hundred ms, but the engine numbers below are unchanged.
+
+| Metric | Value |
+|--------|-------|
+| Total memories | 10,006 |
+| Engine search at 10K (no embed) | 1.05ms |
+| Engine insert, full write pipeline (no embed) | 13.9ms/mem |
+| Query embed (local Candle, per query) | 40ms |
+| Batch embed (amortized, one provider call per 512 inputs) | 30ms/mem |
+| Belief supersessions tracked | 6/6 |
+| Stale beliefs returned | 0 |
+
+Engine search stays near 1ms at 10,000 memories. An earlier version of this table reported roughly 431ms search: that figure was almost entirely the OpenAI round trip to embed the query, not engine work. Bulk inserts precompute embeddings in one batched provider call and pass them to `store(embedding=...)`, so the per item network round trip is paid once per batch instead of once per memory. To reproduce with OpenAI embeddings, set `OPENAI_API_KEY` before running.
+
+### Candle (Local) vs OpenAI Embedding Quality
+
+| Metric | Candle (all-MiniLM-L6-v2) | OpenAI (text-embedding-3-small) |
+|--------|---------------------------|----------------------------------|
+| Retrieval accuracy (8 queries) | 62% (5/8) | Requires API key to compare |
+| Engine search (identical code path) | 0.3ms | 0.3ms |
+| Query embed | 39ms (local, no network) | network round trip (hundreds of ms) |
+| Setup required | None (auto-downloads model) | OPENAI_API_KEY |
+| Cost | Free | ~$0.02 per 1M tokens |
+
+The engine search is the same for both providers, so the practical difference is embed latency (local model vs API round trip) and retrieval quality. Candle is zero-config and free but a smaller 384-dim model; OpenAI trades an API round trip for higher accuracy. Run `python3 benchmarks/candle_vs_openai.py` with OPENAI_API_KEY set for a head-to-head comparison.
+
+### Performance Benchmarks (Criterion)
+
+| Benchmark | 100 | 1,000 | 10,000 |
+|-----------|-----|-------|--------|
+| Insert throughput | 13ms | 243ms | 2.65s |
+| Context assembly | 218us | 342us | 696us |
+
+Context assembly stays sub-millisecond even at 10,000 memories.
+
+### Token Efficiency
+
+MenteDB's context assembler uses purpose-built serialization formats instead of dumping raw JSON into context windows. Measured by [`token_efficiency`](crates/mentedb/examples/token_efficiency.rs):
+
+**Format comparison** (25 memories, same content):
+
+| Format | Tokens | vs Raw JSON |
+|--------|-------:|------------:|
+| Raw JSON | 947 | — |
+| Structured (markdown) | 576 | 1.6x fewer |
+| **Compact (pipe-delimited)** | **414** | **2.3x fewer** |
+
+**Multi-turn delta serving** (20-turn conversation):
+
+| Metric | Tokens |
+|--------|-------:|
+| Full retrieval (cumulative) | 9,863 |
+| Delta serving (cumulative) | 2,004 |
+| **Savings** | **79.7%** |
+
+Delta serving only sends memories that changed since the last turn. Early turns have overhead from the delta header, but by turn 10+ savings exceed 85% per turn.
+
+**Memory density** (memories that fit within a serialized output budget):
+
+| Budget | Compact | Structured | Raw JSON |
+|-------:|--------:|-----------:|---------:|
+| 4,096 | 223 | 166 | 218 |
+| 8,192 | 448 | 333 | 436 |
+
+```bash
+# Run it yourself
+cargo run --example token_efficiency -p mentedb
+```
+
+### Running Benchmarks
+
+```bash
+# Engine tests (no LLM required)
+python3 benchmarks/run_all.py --no-llm
+
+# Full suite (requires ANTHROPIC_API_KEY or OPENAI_API_KEY)
+python3 benchmarks/run_all.py
+
+# Criterion performance benchmarks
+cargo bench
+```
+
+## Building
+
+```bash
+cargo build              # Build all crates
+cargo test               # Run 477+ tests
+cargo clippy             # Lint
+cargo bench              # Benchmarks
+cargo doc --open         # Documentation
+```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+Found a bug or have a feature request? [Open an issue](https://github.com/nambok/mentedb/issues).
+
+## License
+
+Apache 2.0, see [LICENSE](LICENSE) for details.

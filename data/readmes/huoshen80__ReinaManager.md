@@ -1,0 +1,150 @@
+<div align="center">
+  <div style="width:200px">
+    <a href="https://vndb.org/c64303">
+      <img src="src-tauri/icons/reina.png" alt="Reina">
+    </a>
+  </div>
+
+<h1>ReinaManager</h1>
+
+![Status](https://img.shields.io/badge/status-active-brightgreen) ![Stage](https://img.shields.io/badge/stage-beta-blue) ![Build Status](https://github.com/huoshen80/ReinaManager/actions/workflows/build.yml/badge.svg) ![Release](https://img.shields.io/github/v/release/huoshen80/ReinaManager) ![Downloads](https://img.shields.io/github/downloads/huoshen80/ReinaManager/total)
+
+[![QQ Group](https://img.shields.io/badge/QQ%20Group-556984160-12B7F5?logo=tencentqq&logoColor=white)](https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=KHB4Pm2fmtyWv3OklLNxDxkjIKtiwMBj&authKey=2KeSnTCv%2By6ORWuEOYEZx9q63pRrCKkQRK8VqpaOiGZUS1zZ%2BNVmCbRkN3F2lpc7&noverify=0&group_code=556984160) [![wakatime](https://wakatime.com/badge/user/36a51c62-bf3b-4b81-9993-0e5b0e7ed309/project/efb3bd00-20c2-40de-98b6-e2f4a24bc120.svg)](https://wakatime.com/badge/user/36a51c62-bf3b-4b81-9993-0e5b0e7ed309/project/efb3bd00-20c2-40de-98b6-e2f4a24bc120)
+
+Development time tracked since v0.9.0
+
+<p align="center">English|<a href="./README.zh_CN.md">中文</a>|<a href="./README.zh_TW.md">繁體中文</a>|<a href="./README.ja_JP.md">日本語</a></p>
+
+<h5>A lightweight galgame/visual-novel manager,Under development...</h5>
+
+The `Reina` in the name is the character <a href="https://vndb.org/c64303"><b>妃 玲奈(Kisaki Reina)</b></a> from game <a href="https://vndb.org/v21852"><b>金色ラブリッチェ(Kin'iro Loveriche)</b></a>
+
+</div>
+
+## Stacks
+
+- Tauri 2.0
+
+- React
+
+- Material UI
+
+- UnoCSS
+
+- Zustand
+
+- TanStack Query
+
+- Sqlite
+
+- Rust
+
+- SeaORM
+
+## Features
+
+- 🌐 **Multi-source Data Integration** - Seamlessly fetch and merge game metadata from multiple source APIs
+- 🔍 **Powerful Search** - Quickly search games by titles, aliases, custom names, and other information
+- 🗂️ **Filter and Sort** - Filter and sort games across multiple dimensions, such as source, status, tags, and more
+- 📚 **Collection Management** - Organize your game library with groups and categories, with support for drag and drop sorting
+- 🎮 **Play Time Tracking** - Automatic gameplay session recording with detailed play time statistics and history
+- 🎨 **Customization** - Customize game covers, names, descriptions, tags, and other information to build your own game library
+- 🔄 **Batch Operations** - Support bulk import, add and update game metadata from APIs
+- 🌍 **Multi-language Support** - Complete i18n support, including Simplified Chinese, Traditional Chinese, English, Japanese, and more
+- 🔒 **NSFW Filter** - Hide or cover NSFW content with a simple toggle
+- 💾 **Savedata Backup** - Support manual and automatic backup of game savedata
+- 🚀 **System Integration** - Auto-start on boot and minimize to system tray
+- 🛠️ **Tool Integration** - Launch games with Locale Emulator locale switching and Magpie upscaling integration
+
+## Todo
+
+- [x] Bulk import games from folders
+- [x] Basic support for the Linux platform
+- [x] Sync game status with Bangumi and VNDB
+- [ ] Beautify individual pages
+
+## Migration
+
+Need to migrate your data from other galgame/visual-novel managers? Check out [reina_migrator](https://github.com/huoshen80/reina_migrator) - a tool for migrating others manager data into ReinaManager.
+
+Currently supports:
+- **WhiteCloud v0.4.0** data migration
+
+The migrator helps you seamlessly transfer your game library, play time records, and other data from supported managers to ReinaManager.
+
+## Screenshots
+
+![Home](screenshots/home.png)
+![Library](screenshots/library.png)
+![Detail](screenshots/detail.png)
+![Stats](screenshots/stats.png)
+![Collection](screenshots/collection.png)
+
+For more, you can download the latest Release Version: [Download](https://github.com/huoshen80/ReinaManager/releases)
+
+## Contribution
+##### Start
+Contributions are welcome! If you have suggestions for improvements, bug reports, or want to submit a pull request, please follow these steps:
+
+1. Fork this repository and create your branch from `main`.
+2. If you have fixed a bug or added a feature, please try to conduct the corresponding tests (This project uses Biome to format and lint code).
+3. Ensure your code follows the existing style and passes all checks.
+4. Submit a pull request with a clear description of your changes.
+
+##### How to build and run the project locally
+1. Make sure you have [Node.js](https://nodejs.org/) and [Rust](https://www.rust-lang.org/) installed on your machine.
+2. Clone the repository:
+   ```bash
+   git clone https://github.com/huoshen80/ReinaManager.git
+   cd ReinaManager
+   ```
+3. Install the dependencies:
+   ```bash
+   pnpm install
+   ```
+4. Run the development server:
+   ```bash
+   pnpm tauri dev
+   ```
+5. Build the application for production:
+   ```bash
+   pnpm tauri build
+   ```
+
+Thank you for all the contributions you have made to ReinaManager!
+
+## Sponsor
+If you find this project helpful and would like to support its development, you can consider sponsoring. Your support is greatly appreciated!
+- [Sponsor link](https://huoshen80.top/233.html)
+
+## Acknowledgements
+
+- **[Bangumi](https://bangumi.tv/)** - Bangumi 番组计划
+
+- **[VNDB](https://vndb.org/)** - the visual novel database
+
+- **[Ymgal](https://www.ymgal.games/)** - 月幕Galgame
+
+- **[Kungal](https://www.kungal.com/)** - 鲲 Galgame
+
+- **[Hikarinagi](https://www.hikarinagi.org/)** - 你和同好的ACGN社区
+
+- **[Shionlib](https://shionlib.com/)** - A Visual Novel/Galgame Archive
+
+Special thanks to these platforms for providing public APIs, data, and resources!
+
+- **[7-Zip ZS (7-Zip-zstd)](https://github.com/mcmilk/7-Zip-zstd)** - a 7-Zip fork with additional compression codecs including Zstandard, based on [7-Zip](https://www.7-zip.org/).
+
+## License
+
+This project is licensed under the [AGPL-3.0 license](https://github.com/huoshen80/ReinaManager#AGPL-3.0-1-ov-file)
+
+## Star History
+
+<a href="https://www.star-history.com/?repos=huoshen80%2FReinaManager&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=huoshen80/ReinaManager&type=date&theme=dark&legend=top-left&sealed_token=8hJwvRzfF7BXsrTDsmX91vlKMmh-OU782v2ckuiCUm8XJc8v4vPWELSEqWkvVUZQhWnPygevDuNNJesLHwTVfm61OTlK0coF2jHWtmBIpC6kFrYHIVv6G5bHXVR0PkVEMtWasv4ybAZvIPPkGeSRZsopqmZoDStENlqvrCZxvxa4p3mkV99cA1ndh02b" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=huoshen80/ReinaManager&type=date&legend=top-left&sealed_token=8hJwvRzfF7BXsrTDsmX91vlKMmh-OU782v2ckuiCUm8XJc8v4vPWELSEqWkvVUZQhWnPygevDuNNJesLHwTVfm61OTlK0coF2jHWtmBIpC6kFrYHIVv6G5bHXVR0PkVEMtWasv4ybAZvIPPkGeSRZsopqmZoDStENlqvrCZxvxa4p3mkV99cA1ndh02b" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=huoshen80/ReinaManager&type=date&legend=top-left&sealed_token=8hJwvRzfF7BXsrTDsmX91vlKMmh-OU782v2ckuiCUm8XJc8v4vPWELSEqWkvVUZQhWnPygevDuNNJesLHwTVfm61OTlK0coF2jHWtmBIpC6kFrYHIVv6G5bHXVR0PkVEMtWasv4ybAZvIPPkGeSRZsopqmZoDStENlqvrCZxvxa4p3mkV99cA1ndh02b" />
+ </picture>
+</a>

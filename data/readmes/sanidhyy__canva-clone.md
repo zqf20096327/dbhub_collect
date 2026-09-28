@@ -1,0 +1,411 @@
+<a name="readme-top"></a>
+
+# Canva clone with customizable templates and AI-powered features
+
+![Canva clone with customizable templates and AI-powered features](/.github/images/img_main.png 'Canva clone with customizable templates and AI-powered features')
+
+[![Ask Me Anything!](https://flat.badgen.net/static/Ask%20me/anything?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy 'Ask Me Anything!')
+[![GitHub license](https://flat.badgen.net/github/license/sanidhyy/canva-clone?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/canva-clone/blob/main/LICENSE 'GitHub license')
+[![Maintenance](https://flat.badgen.net/static/Maintained/yes?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/canva-clone/commits/main 'Maintenance')
+[![GitHub branches](https://flat.badgen.net/github/branches/sanidhyy/canva-clone?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/canva-clone/branches 'GitHub branches')
+[![Github commits](https://flat.badgen.net/github/commits/sanidhyy/canva-clone?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/canva-clone/commits 'Github commits')
+[![GitHub issues](https://flat.badgen.net/github/issues/sanidhyy/canva-clone?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/canva-clone/issues 'GitHub issues')
+[![GitHub pull requests](https://flat.badgen.net/github/prs/sanidhyy/canva-clone?icon=github&color=black&scale=1.01)](https://github.com/sanidhyy/canva-clone/pulls 'GitHub pull requests')
+[![Vercel status](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://clone-canva.vercel.app/ 'Vercel status')
+
+<!-- Table of Contents -->
+<details>
+
+<summary>
+
+# :notebook_with_decorative_cover: Table of Contents
+
+</summary>
+
+- [Folder Structure](#bangbang-folder-structure)
+- [Getting Started](#toolbox-getting-started)
+- [Screenshots](#camera-screenshots)
+- [Tech Stack](#gear-tech-stack)
+- [Stats](#wrench-stats)
+- [Contribute](#raised_hands-contribute)
+- [Acknowledgements](#gem-acknowledgements)
+- [Buy Me a Coffee](#coffee-buy-me-a-coffee)
+- [Follow Me](#rocket-follow-me)
+- [Learn More](#books-learn-more)
+- [Deploy on Vercel](#page_with_curl-deploy-on-vercel)
+- [Give A Star](#star-give-a-star)
+- [Star History](#star2-star-history)
+- [Give A Star](#star-give-a-star)
+
+</details>
+
+## :bangbang: Folder Structure
+
+Here is the folder structure of this app.
+
+<!--- FOLDER_STRUCTURE_START --->
+```bash
+canva-clone/
+  |- drizzle/
+    |-- meta/
+    |-- 0000_busy_scourge.sql
+    |-- 0001_cultured_beast.sql
+    |-- 0002_glossy_cloak.sql
+    |-- 0003_clumsy_chat.sql
+  |- public/
+  |- src/
+    |-- app/
+      |--- (auth)/
+      |--- (dashboard)/
+      |--- api/
+      |--- editor/
+      |--- apple-icon.png
+      |--- error.tsx
+      |--- favicon.ico
+      |--- globals.css
+      |--- icon1.png
+      |--- icon2.png
+      |--- layout.tsx
+      |--- not-found.tsx
+    |-- components/
+      |--- ui/
+      |--- hint.tsx
+      |--- modal-provider.tsx
+      |--- providers.tsx
+      |--- query-provider.tsx
+    |-- config/
+      |--- index.ts
+    |-- db/
+      |--- drizzle.ts
+      |--- schema.ts
+    |-- features/
+      |--- ai/
+      |--- auth/
+      |--- editor/
+      |--- images/
+      |--- projects/
+      |--- settings/
+      |--- subscriptions/
+    |-- hooks/
+      |--- use-confirm.tsx
+      |--- use-is-client.ts
+    |-- lib/
+      |--- encryption.ts
+      |--- hono.ts
+      |--- openai.ts
+      |--- stripe.ts
+      |--- unsplash.ts
+      |--- uploadthing.ts
+      |--- user-api-keys.ts
+      |--- utils.ts
+    |-- auth.config.ts
+    |-- auth.ts
+    |-- proxy.ts
+  |- .env.example
+  |- .env/.env.local
+  |- .gitignore
+  |- .prettierignore
+  |- .prettierrc.json
+  |- .prettierrc.mjs
+  |- components.json
+  |- drizzle.config.ts
+  |- environment.d.ts
+  |- eslint.config.mjs
+  |- next.config.ts
+  |- package.json
+  |- pnpm-lock.yaml
+  |- pnpm-workspace.yaml
+  |- postcss.config.mjs
+  |- tsconfig.json
+  |- vercel.ts
+```
+<!--- FOLDER_STRUCTURE_END --->
+
+<br />
+
+## :toolbox: Getting Started
+
+1. Make sure **Git** and **NodeJS** is installed.
+2. Clone this repository to your local computer.
+3. Create `.env.local` file in **root** directory.
+4. Contents of `.env.local`:
+
+```env
+# disable next.js telemetry
+NEXT_TELEMETRY_DISABLED=1
+
+# app base url
+NEXT_PUBLIC_APP_BASE_URL=http://localhost:3000
+
+# unsplash api access key
+UNSPLASH_ACCESS_KEY=x-X-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+# uploadthing token
+UPLOADTHING_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# encrypted AI settings cookie (openssl rand -hex 32)
+AI_SETTINGS_COOKIE_NAME="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+VERIFICATION_SECRET="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# Added by `npx auth`. Read more: https://cli.authjs.dev
+AUTH_SECRET="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+# github oauth id and secret
+AUTH_GITHUB_ID=XXXXXXXXXXXXXXXX
+AUTH_GITHUB_SECRET=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+AUTH_GOOGLE_ID="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com"
+AUTH_GOOGLE_SECRET="XXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+# postgres neon db url
+DATABASE_URL="postgresql://<username>:<password>@<hostname>:<port>/image-ai?sslmode=require"
+
+# stripe secret key and price id and webhook secret
+STRIPE_SECRET_KEY=sk_test_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+STRIPE_PRICE_ID=price_XXXXXXXXXXXXXXXXX
+STRIPE_WEBHOOK_SECRET=whsec_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+```
+
+### 5. Disable Next.js Telemetry
+
+This disables Next.js telemetry (optional).
+
+- **Variable**: `NEXT_TELEMETRY_DISABLED`
+- **Value**: `1` (default for disabling telemetry)
+
+### 6. App Base URL
+
+Set the base URL where your app will be running locally or in production.
+
+### 7. Unsplash API Access Key
+
+To get the `Unsplash API Access Key`, follow these steps:
+
+- Go to [Unsplash Developers](https://unsplash.com/developers).
+- Log in with your Unsplash account.
+- Create a new application under "Your Applications."
+- Copy the **Access Key** from the application details.
+
+### 8. UploadThing Token
+
+To get the UploadThing token:
+
+- Visit [UploadThing](https://uploadthing.com/) and sign up.
+- Create a new project which will generate an API token.
+- Copy the token.
+
+### 9. AI Settings Cookie Secrets
+
+Generate both values with:
+
+```bash
+openssl rand -hex 32
+```
+
+- **`AI_SETTINGS_COOKIE_NAME`**: Cookie name used to store encrypted API keys.
+- **`VERIFICATION_SECRET`**: Secret used to encrypt/decrypt the cookie payload. Keep this secret safe.
+
+### 10. Auth.js Secret
+
+This is automatically generated by `npx auth` or `pnpm dlx auth` and used for session encryption. Keep this secret safe.
+
+### 11. GitHub OAuth Client ID and Secret
+
+To obtain GitHub OAuth credentials:
+
+- Go to [GitHub Developer Settings](https://github.com/settings/developers).
+- Create a new OAuth app:
+  - Homepage URL: Your app's base URL (e.g., `http://localhost:3000`).
+  - Authorization callback URL: `http://localhost:3000/api/auth/callback/github`.
+- After creation, you'll get **Client ID** and **Client Secret**.
+
+### 12. Google OAuth Client ID and Secret
+
+To obtain Google OAuth credentials:
+
+- Visit the [Google Cloud Console](https://console.cloud.google.com/).
+- Create a new project and configure **OAuth consent screen** with default settings.
+- Create **OAuth 2.0 credentials**:
+  - Authorized redirect URIs: `http://localhost:3000/api/auth/callback/google`.
+- After creation, you'll receive a **Client ID** and **Client Secret**.
+
+### 13. PostgreSQL Neon Database URL
+
+To get the Neon PostgreSQL database URL:
+
+- Sign up at [Neon](https://neon.tech/).
+- Create a new database and retrieve the connection URL.
+  - Replace `<username>`, `<password>`, `<hostname>`, `<port>` in the URL.
+- Ensure SSL mode is enabled (`sslmode=require`).
+
+### 14. Stripe API Keys
+
+To get the Stripe API keys:
+
+- Sign up at [Stripe](https://dashboard.stripe.com/).
+- Create a new account or use an existing one.
+- Go to **Developers** → **API keys** to get your **Secret Key**.
+- To create a **Price ID**, navigate to **Products** → **Create a Product** and set a price.
+- For **Webhook Secret**, set up a webhook in **Developers** → **Webhooks**:
+  - Endpoint: `http://localhost:3000/api/subscriptions/webhook`.
+
+15. Install Project Dependencies using `npm install --legacy-peer-deps` or `yarn install --legacy-peer-deps` or `pnpm install --legacy-peer-deps`.
+
+16. Now app is fully configured 👍 and you can start using this app using either one of `npm run dev` or `yarn dev` or `pnpm dev`.
+
+**NOTE:** Please make sure to keep your API keys and configuration values secure and do not expose them publicly.
+
+### :raising_hand: Need Help?
+
+If you run into issues during installation or setup:
+
+- **GitHub Discussions** — [Open a Q&A discussion](https://github.com/sanidhyy/canva-clone/discussions/new?category=q-a) for setup and troubleshooting help.
+- **Email** — [sanidhyyy@gmail.com](mailto:sanidhyyy@gmail.com)
+- **Discord** — `@sanidhyy`
+
+## :camera: Screenshots
+
+![Modern UI/UX](/.github/images/img1.png 'Modern UI/UX')
+
+![Fully functional Fabric.js editor](/.github/images/img2.png 'Fully functional Fabric.js editor')
+
+![Multi Template Feature](/.github/images/img3.png 'Multi Template Feature')
+
+![Unsplash Images and Custom Upload Support](/.github/images/img4.png 'Unsplash Images and Custom Upload Support')
+
+## :gear: Tech Stack
+
+[![React JS](https://skillicons.dev/icons?i=react 'React JS')](https://react.dev/ 'React JS') [![Next JS](https://skillicons.dev/icons?i=next 'Next JS')](https://nextjs.org/ 'Next JS') [![Typescript](https://skillicons.dev/icons?i=ts 'Typescript')](https://www.typescriptlang.org/ 'Typescript') [![PostgreSQL](https://skillicons.dev/icons?i=postgres 'PostgreSQL')](https://www.postgresql.org/ 'PostgreSQL') [![Tailwind CSS](https://skillicons.dev/icons?i=tailwind 'Tailwind CSS')](https://tailwindcss.com/ 'Tailwind CSS') [![Vercel](https://skillicons.dev/icons?i=vercel 'Vercel')](https://vercel.app/ 'Vercel')
+
+## :wrench: Stats
+
+[![Stats for Canva Clone](/.github/images/stats.svg 'Stats for Canva Clone')](https://pagespeed.web.dev/analysis?url=https://clone-canva.vercel.app/ 'Stats for Canva Clone')
+
+## :raised_hands: Contribute
+
+You might encounter some bugs while using this app. You are more than welcome to contribute. Just submit changes via pull request and I will review them before merging. Make sure you follow community guidelines.
+
+## :gem: Acknowledgements
+
+Useful resources and dependencies that are used in Canva Clone.
+
+- Thanks to CodeWithAntonio: https://codewithantonio.com/
+
+<!--- DEPENDENCIES_START --->
+- [@auth/core](https://www.npmjs.com/package/@auth/core): ^0.41.3
+- [@auth/drizzle-adapter](https://www.npmjs.com/package/@auth/drizzle-adapter): ^1.11.3
+- [@babel/eslint-parser](https://www.npmjs.com/package/@babel/eslint-parser): ^8.0.6
+- [@hono/auth-js](https://www.npmjs.com/package/@hono/auth-js): ^1.0.11
+- [@hono/zod-validator](https://www.npmjs.com/package/@hono/zod-validator): ^0.9.1
+- [@imgly/background-removal](https://www.npmjs.com/package/@imgly/background-removal): ^1.7.0
+- [@neondatabase/serverless](https://www.npmjs.com/package/@neondatabase/serverless): ^1.0.2
+- [@paralleldrive/cuid2](https://www.npmjs.com/package/@paralleldrive/cuid2): ^3.3.0
+- [@radix-ui/react-alert-dialog](https://www.npmjs.com/package/@radix-ui/react-alert-dialog): ^1.1.15
+- [@radix-ui/react-avatar](https://www.npmjs.com/package/@radix-ui/react-avatar): ^1.1.11
+- [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.1.15
+- [@radix-ui/react-dropdown-menu](https://www.npmjs.com/package/@radix-ui/react-dropdown-menu): ^2.1.16
+- [@radix-ui/react-label](https://www.npmjs.com/package/@radix-ui/react-label): ^2.1.8
+- [@radix-ui/react-scroll-area](https://www.npmjs.com/package/@radix-ui/react-scroll-area): ^1.2.10
+- [@radix-ui/react-separator](https://www.npmjs.com/package/@radix-ui/react-separator): ^1.1.8
+- [@radix-ui/react-slider](https://www.npmjs.com/package/@radix-ui/react-slider): ^1.3.6
+- [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.2.4
+- [@radix-ui/react-tooltip](https://www.npmjs.com/package/@radix-ui/react-tooltip): ^1.2.8
+- [@radix-ui/react-visually-hidden](https://www.npmjs.com/package/@radix-ui/react-visually-hidden): ^1.2.4
+- [@tailwindcss/postcss](https://www.npmjs.com/package/@tailwindcss/postcss): ^4.3.3
+- [@tanstack/react-query](https://www.npmjs.com/package/@tanstack/react-query): ^5.103.1
+- [@trivago/prettier-plugin-sort-imports](https://www.npmjs.com/package/@trivago/prettier-plugin-sort-imports): ^6.0.0
+- [@types/lodash.debounce](https://www.npmjs.com/package/@types/lodash.debounce): ^4.0.9
+- [@types/material-colors](https://www.npmjs.com/package/@types/material-colors): ^1.2.3
+- [@types/node](https://www.npmjs.com/package/@types/node): ^26.5.1
+- [@types/react](https://www.npmjs.com/package/@types/react): ^19.3.0
+- [@types/react-color](https://www.npmjs.com/package/@types/react-color): ^3.0.13
+- [@types/react-dom](https://www.npmjs.com/package/@types/react-dom): ^19.3.0
+- [@uploadthing/react](https://www.npmjs.com/package/@uploadthing/react): ^7.0.3
+- [@vercel/config](https://www.npmjs.com/package/@vercel/config): ^0.7.1
+- [bcryptjs](https://www.npmjs.com/package/bcryptjs): ^3.0.3
+- [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
+- [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
+- [date-fns](https://www.npmjs.com/package/date-fns): ^4.1.0
+- [dotenv](https://www.npmjs.com/package/dotenv): ^18.0.1
+- [drizzle-kit](https://www.npmjs.com/package/drizzle-kit): ^0.31.0
+- [drizzle-orm](https://www.npmjs.com/package/drizzle-orm): ^0.45.0
+- [drizzle-zod](https://www.npmjs.com/package/drizzle-zod): ^0.8.3
+- [eslint](https://www.npmjs.com/package/eslint): ^10
+- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.3.5
+- [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier): ^10.0.1
+- [eslint-plugin-prettier](https://www.npmjs.com/package/eslint-plugin-prettier): ^5.2.1
+- [fabric](https://www.npmjs.com/package/fabric): 7.4.0
+- [hono](https://www.npmjs.com/package/hono): ^4.13.7
+- [lodash.debounce](https://www.npmjs.com/package/lodash.debounce): ^4.0.8
+- [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.45.0
+- [material-colors](https://www.npmjs.com/package/material-colors): ^1.2.6
+- [next](https://www.npmjs.com/package/next): 16.3.4
+- [next-auth](https://www.npmjs.com/package/next-auth): ^5.0.0-beta.32
+- [next-themes](https://www.npmjs.com/package/next-themes): ^0.4.6
+- [onnxruntime-web](https://www.npmjs.com/package/onnxruntime-web): 1.29.0
+- [openai](https://www.npmjs.com/package/openai): ^7.15.0
+- [pg](https://www.npmjs.com/package/pg): ^8.18.0
+- [postcss](https://www.npmjs.com/package/postcss): ^8
+- [prettier](https://www.npmjs.com/package/prettier): ^3.9.6
+- [prettier-plugin-tailwindcss](https://www.npmjs.com/package/prettier-plugin-tailwindcss): ^0.8.1
+- [react](https://www.npmjs.com/package/react): ^19.3.0
+- [react-color](https://www.npmjs.com/package/react-color): ^2.19.3
+- [react-dom](https://www.npmjs.com/package/react-dom): ^19.3.0
+- [react-icons](https://www.npmjs.com/package/react-icons): ^5.5.0
+- [react-use](https://www.npmjs.com/package/react-use): ^17.6.0
+- [server-only](https://www.npmjs.com/package/server-only): ^0.0.1
+- [sonner](https://www.npmjs.com/package/sonner): ^2.0.7
+- [stripe](https://www.npmjs.com/package/stripe): 22.6.2
+- [tailwind-merge](https://www.npmjs.com/package/tailwind-merge): ^3.7.0
+- [tailwindcss](https://www.npmjs.com/package/tailwindcss): ^4.3.3
+- [tw-animate-css](https://www.npmjs.com/package/tw-animate-css): ^1.4.0
+- [typescript](https://www.npmjs.com/package/typescript): ^6.0.2
+- [unsplash-js](https://www.npmjs.com/package/unsplash-js): ^8.0.0
+- [uploadthing](https://www.npmjs.com/package/uploadthing): ^7.1.0
+- [use-file-picker](https://www.npmjs.com/package/use-file-picker): ^2.1.4
+- [zod](https://www.npmjs.com/package/zod): ^4.6.5
+- [zustand](https://www.npmjs.com/package/zustand): ^5.0.11
+
+<!--- DEPENDENCIES_END --->
+
+## :coffee: Buy Me a Coffee
+
+[<img src="https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" width="200" />](https://www.buymeacoffee.com/sanidhy 'Buy me a Coffee')
+
+## :rocket: Follow Me
+
+[![Follow Me](https://img.shields.io/github/followers/sanidhyy?style=social&label=Follow&maxAge=2592000)](https://github.com/sanidhyy 'Follow Me')
+[![Tweet about this project](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fx.com%2F_sanidhyy)](https://x.com/intent/tweet?text=Check+out+this+amazing+app:&url=https%3A%2F%2Fgithub.com%2Fsanidhyy%2Fcanva-clone 'Tweet about this project')
+
+## :books: Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+## :page_with_curl: Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## :star: Give A Star
+
+You can also give this repository a star to show more people and they can use this repository.
+
+## :star2: Star History
+
+<a href="https://star-history.com/#sanidhyy/canva-clone&Timeline">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=sanidhyy/canva-clone&type=Timeline&theme=dark" />
+  <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=sanidhyy/canva-clone&type=Timeline" />
+  <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=sanidhyy/canva-clone&type=Timeline" />
+</picture>
+</a>
+
+<br />
+<p align="right">(<a href="#readme-top">back to top</a>)</p>

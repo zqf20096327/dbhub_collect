@@ -1,0 +1,634 @@
+# adms
+
+_Pronounced "adams"._
+
+PostgREST-style HTTP API for PostgreSQL and MySQL, plus an optional bundled admin UI — all in one binary.
+
+[![CI](https://github.com/mickamy/adms/actions/workflows/ci.yaml/badge.svg)](https://github.com/mickamy/adms/actions/workflows/ci.yaml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/mickamy/adms)](https://goreportcard.com/report/github.com/mickamy/adms)
+[![Codecov](https://codecov.io/gh/mickamy/adms/branch/main/graph/badge.svg)](https://codecov.io/gh/mickamy/adms)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/mickamy?label=sponsor&logo=github)](https://github.com/sponsors/mickamy)
+
+> Status: the read / write API and the bundled admin UI both ship, including CSV / JSON export, keyboard shortcuts, an
+> a11y pass, and a schema ER diagram.
+
+## TL;DR
+
+Point `adms` at a database and you get two ways in: an HTTP API the frontend can call directly, and an optional
+browser-based admin UI hosted from the same binary. No service layer, no codegen, no schema duplicated in two places.
+
+![ui](assets/ui.png)
+
+### As an HTTP API
+
+```yaml
+# adms.yaml
+driver: postgres
+dsn: "${ADMS_DSN}"
+```
+
+```sh
+ADMS_DSN="postgres://postgres@localhost/myapp?sslmode=disable" adms
+```
+
+```sh
+# list active users, newest first, with their three latest posts embedded
+curl 'http://localhost:7777/users?status=eq.active&order=created_at.desc&limit=10&select=id,name,posts(id,title)'
+```
+
+```json
+[
+  {
+    "id": 42,
+    "name": "alice",
+    "posts": [
+      {
+        "id": 1001,
+        "title": "Hello"
+      },
+      {
+        "id": 998,
+        "title": "Notes on B-trees"
+      }
+    ]
+  }
+]
+```
+
+### As a browser UI
+
+```yaml
+# adms.yaml
+driver: postgres
+dsn: "${ADMS_DSN}"
+ui:
+  enabled: true
+```
+
+```sh
+ADMS_DSN="postgres://postgres@localhost/myapp?sslmode=disable" adms
+# → open http://localhost:7778/
+```
+
+You land on an admin console (light or dark, following your OS) with schema-grouped tables in the sidebar, sortable /
+filterable / pageable row views in the main pane, FK-aware embedded rows, inline editing, typed insert forms, CSV / JSON
+export, a built-in schema viewer, and a whole-schema ER diagram. No `node_modules`, no separate deploy — the UI is
+embedded in the binary.
+
+The same idea drives both surfaces: reads, writes, joins, ordering, paging, counting — all defined by your database
+schema.
+
+## Why
+
+Two friction points in every admin tool you have ever built:
+
+1. **The backend is generic, but you keep writing it.** List endpoints with filters, sorting, paging, related rows,
+   CRUD — the shape is already in the database schema, but every project hand-writes it again.
+2. **The frontend is generic too, eventually.** Once the API exists, the dashboard becomes "tables with filters and
+   forms" yet again. Spinning up a React app, picking a component library, and wiring it up is a separate, parallel
+   project.
+
+`adms` collapses both into a single binary. It introspects your database on startup and exposes
+a [PostgREST](https://postgrest.org/)-style HTTP API automatically. Set `ui.enabled: true` in the config and the same
+binary serves a complete admin frontend — no extra deploy, no separate codebase.
+
+The closest neighbor is PostgREST itself: excellent, but PostgreSQL only and API only. `adms` aims for **PostgreSQL +
+MySQL** and **API + (optional) UI**, with no extra dependencies to install beyond the binary.
+
+## Install
+
+Prebuilt binaries for macOS, Linux, and Windows are attached to each
+[release](https://github.com/mickamy/adms/releases). Install via Homebrew or `go install`:
+
+```sh
+# Homebrew (tap)
+brew install mickamy/tap/adms
+
+# go install
+go install github.com/mickamy/adms@latest
+```
+
+Or build from source:
+
+```sh
+git clone https://github.com/mickamy/adms
+cd adms
+make build
+./bin/adms --version
+```
+
+## Quickstart
+
+`adms` reads a YAML or TOML config file. With no positional argument it auto-detects `adms.yaml`, `adms.yml`, then
+`adms.toml` in the current directory; otherwise pass the path explicitly (e.g., `adms /etc/adms.yaml`). Strings in the
+config are expanded from the environment via `${VAR}` / `$VAR`, so secrets stay out of the file.
+
+### PostgreSQL
+
+```yaml
+# adms.yaml
+driver: postgres
+dsn: "${ADMS_DSN}"
+```
+
+```sh
+ADMS_DSN="postgres://postgres@localhost:5432/myapp?sslmode=disable" adms
+```
+
+### MySQL
+
+```yaml
+# adms.yaml
+driver: mysql
+dsn: "${ADMS_DSN}"
+```
+
+```sh
+ADMS_DSN="user:pass@tcp(localhost:3306)/myapp?parseTime=true" adms
+```
+
+On boot, `adms` introspects the target database, builds an in-memory schema model, and starts listening on `:7777`
+(override with `listen:` in the config). Every introspected table becomes a resource at `/<table_name>`. With
+`ui.enabled: true`, a second listener on `:7778` (override with `ui.listen:`) also serves the bundled admin UI from
+the same process.
+
+Verify it works:
+
+```sh
+curl http://localhost:7777/                  # schema dump (JSON)
+curl http://localhost:7777/healthz           # → "ok"
+curl http://localhost:7777/<some_table>      # first 100 rows as JSON
+```
+
+## The HTTP API
+
+`GET /<table>` returns rows. Everything else — filtering, projection, ordering, paging, embedding — is driven by URL
+query parameters. Writes use `POST` / `PATCH` / `DELETE` with JSON bodies. The shape mirrors PostgREST so existing
+clients and mental models transfer.
+
+### Reading data
+
+#### Filters
+
+A filter has the form `?<column>=<op>.<value>`. Multiple filters are AND-combined.
+
+| Operator     | Example                | SQL equivalent                                             |
+|--------------|------------------------|------------------------------------------------------------|
+| `eq`         | `status=eq.active`     | `status = 'active'`                                        |
+| `gt` / `gte` | `age=gte.18`           | `age >= 18`                                                |
+| `ilike`      | `name=ilike.AL*`       | `name ILIKE 'AL%'` (MySQL: case-insensitive via `LOWER()`) |
+| `in`         | `id=in.(1,2,3)`        | `id IN (1, 2, 3)`                                          |
+| `is`         | `deleted_at=is.null`   | `deleted_at IS NULL`                                       |
+| `like`       | `name=like.al*`        | `name LIKE 'al%'`                                          |
+| `lt` / `lte` | `score=lt.100`         | `score < 100`                                              |
+| `neq`        | `status=neq.banned`    | `status <> 'banned'`                                       |
+| `not`        | `status=not.eq.banned` | `NOT (status = 'banned')`                                  |
+
+Wildcards in `like` / `ilike` use `*` (translated to `%`); `_` remains a single-character wildcard.
+
+```sh
+curl 'http://localhost:7777/users?status=eq.active&age=gte.18&deleted_at=is.null'
+```
+
+#### Projection (`select`)
+
+By default, every column is returned. Use `select` to pick columns:
+
+```sh
+curl 'http://localhost:7777/users?select=id,name,email'
+```
+
+Use `*` to mean "all columns of this row":
+
+```sh
+curl 'http://localhost:7777/users?select=*,created_at'
+```
+
+#### Embedding related rows
+
+`adms` reads foreign keys from the schema and lets you embed related rows by table name in parentheses:
+
+```sh
+# user → posts (one-to-many via posts.user_id → users.id)
+curl 'http://localhost:7777/users?id=eq.1&select=id,name,posts(id,title,created_at)'
+```
+
+```sh
+# post → author (many-to-one), with an alias
+curl 'http://localhost:7777/posts?select=*,author:users(id,name)'
+```
+
+Embeds nest:
+
+```sh
+curl 'http://localhost:7777/users?select=*,posts(id,title,comments(id,body))'
+```
+
+Embedded relations resolve to JSON arrays for one-to-many, and JSON objects for many-to-one, derived from the FK
+direction.
+
+#### Ordering and paging
+
+```sh
+curl 'http://localhost:7777/users?order=created_at.desc,id.asc&limit=20&offset=40'
+```
+
+`limit` defaults to 100 when omitted and is capped at 1000.
+
+#### Counting rows
+
+To get a total count alongside the page, send `Prefer: count=exact`:
+
+```sh
+curl -i -H 'Prefer: count=exact' 'http://localhost:7777/users?limit=20'
+```
+
+```
+HTTP/1.1 200 OK
+Content-Range: 0-19/1342
+Content-Type: application/json
+```
+
+### Writing data
+
+All write methods accept JSON bodies (`Content-Type: application/json` assumed).
+
+#### Insert
+
+```sh
+curl -X POST http://localhost:7777/users \
+  -H 'Content-Type: application/json' \
+  -d '{"name": "carol", "status": "active"}'
+```
+
+```
+HTTP/1.1 201 Created
+Location: /users?id=eq.42
+```
+
+#### Bulk insert
+
+```sh
+curl -X POST http://localhost:7777/users \
+  -H 'Content-Type: application/json' \
+  -d '[{"name": "dave"}, {"name": "eve"}]'
+```
+
+#### Update
+
+`PATCH` requires at least one filter — `adms` rejects an unfiltered `PATCH` with `400 Bad Request` to prevent accidental
+table-wide updates.
+
+```sh
+curl -X PATCH 'http://localhost:7777/users?id=eq.1' \
+  -H 'Content-Type: application/json' \
+  -d '{"status": "inactive"}'
+```
+
+#### Delete
+
+Same rule as `PATCH`: a filter is mandatory.
+
+```sh
+curl -X DELETE 'http://localhost:7777/users?id=eq.1'
+```
+
+#### `Prefer` header
+
+| Value                                 | Effect                                      |
+|---------------------------------------|---------------------------------------------|
+| `count=exact`                         | `Content-Range` header with total row count |
+| `return=minimal` (default for writes) | Empty body, `Location` header for inserts   |
+| `return=representation`               | Body contains the affected rows             |
+
+```sh
+curl -X POST http://localhost:7777/users \
+  -H 'Content-Type: application/json' \
+  -H 'Prefer: return=representation' \
+  -d '{"name": "frank"}'
+```
+
+```json
+{
+  "id": 43,
+  "name": "frank",
+  "status": null,
+  "created_at": "2026-05-21T08:12:00Z"
+}
+```
+
+### Errors
+
+Errors follow a PostgREST-shaped JSON envelope with adms-specific codes (prefixed `ADMS_`):
+
+```json
+{
+  "code": "ADMS_UNKNOWN_COLUMN",
+  "message": "column \"foo\" does not exist in table \"users\"",
+  "details": null,
+  "hint": "available columns: id, name, status, created_at"
+}
+```
+
+| HTTP | code                    | When                                    |
+|------|-------------------------|-----------------------------------------|
+| 400  | `ADMS_INVALID_FILTER`   | Bad operator or value format            |
+| 400  | `ADMS_UNFILTERED_WRITE` | `PATCH` / `DELETE` without any filter   |
+| 400  | `ADMS_UNKNOWN_COLUMN`   | Column name not in schema               |
+| 403  | `ADMS_READ_ONLY`        | Write attempted while `read_only: true` |
+| 404  | `ADMS_UNKNOWN_TABLE`    | Table name not in (allowed) schema      |
+| 409  | `ADMS_CONFLICT`         | DB-level unique / FK violation          |
+| 422  | `ADMS_INVALID_BODY`     | JSON body fails column-type validation  |
+| 500  | `ADMS_INTERNAL`         | Anything unexpected                     |
+
+### Schema endpoint
+
+`GET /` returns the introspected schema as JSON. A frontend (yours or the bundled admin UI) uses this to render forms,
+infer column types, and discover relations without bundling a schema of its own.
+
+```sh
+curl http://localhost:7777/
+```
+
+```json
+{
+  "tables": [
+    {
+      "schema": "public",
+      "name": "users",
+      "primary_key": [
+        "id"
+      ],
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false,
+          "default": "nextval(...)"
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamptz",
+          "nullable": false,
+          "default": "now()"
+        }
+      ],
+      "foreign_keys": [],
+      "referenced_by": [
+        {
+          "table": "posts",
+          "columns": [
+            "user_id"
+          ],
+          "references": [
+            "id"
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+## The admin UI
+
+Enabled with `ui.enabled: true` in the config. Off by default, so API-only deployments stay lean. When on, the UI is
+served on a **separate listener** (`ui.listen`, default `:7778`) by the same process. The API at `:7777` stays
+untouched, with table names occupying the full URL root. The UI calls the same HTTP API documented above, with CORS
+auto-configured between the two listeners — it is not a parallel implementation, it is the first-class client of it.
+
+The UI is a single-binary affair: HTML, CSS, and JavaScript are embedded into the `adms` executable via `embed.FS` —
+including the tree-shaken minified Tailwind CSS bundle, so deployments in closed networks need no external CDN access.
+No `node_modules`, no separate frontend deploy. It is rendered server-side with Go's `html/template` and made
+interactive with vanilla `fetch` against the same HTTP API documented above.
+
+### What you get
+
+- **Sidebar** — schema-grouped table list with incremental search.
+- **Table view** — row list with PostgREST-style filter inputs (kind-aware placeholders, bare values auto-prefixed with
+  the kind-default operator), column-header sort, paging, FK arrows that jump to the referenced row, and CSV / JSON
+  export of the current filtered query.
+- **Keyboard** — `Cmd`/`Ctrl`+`K` opens a fuzzy table palette; `↑` / `↓` move the row selection and `Enter` opens the
+  highlighted row.
+- **Row detail** — type-aware inputs by column kind (`<select>` for booleans, `type="number"` / `type="date"`,
+  `<textarea>` for JSON), outgoing FK link that live-updates as you edit, and a "Referenced by" section listing
+  incoming relationships as filtered table views.
+- **Edit** — double-click any cell for in-place editing, or open the row in a modal via the row's "edit" button. Both
+  paths submit `PATCH /:table?<pk>=eq.<id>` and refresh the visible rows on success.
+- **Insert** — kind-aware form on `/t/{table}/new`. Empty inputs are omitted from the POST so column defaults / NULL
+  apply.
+- **Delete** — confirm dialog → `DELETE /:table?<pk>=eq.<id>`.
+- **Schema viewer** — at `/t/{table}/schema`: columns (name / type / nullable / default / generated-or-identity /
+  comment), primary key, outgoing FKs, incoming FKs (Referenced by), and indexes (name, columns, UNIQUE, method,
+  partial-index predicate). FK / Referenced-by entries link to the other table's schema page.
+- **Schema diagram** — at `/schema`: a force-directed ER diagram of every table and its foreign keys; drag to pan,
+  scroll to zoom, click a table to open its schema page.
+
+### Design
+
+- **Light and dark themes** — follow your OS preference by default, with a toggle that is remembered per browser.
+- **Responsive** down to tablet widths (>= 768px).
+- **Read-only gating** — when `read_only: true` the UI hides every write affordance (`+ New`, edit / delete buttons,
+  inline-edit, modal, Save / Delete on row detail) and `/t/{table}/new` returns 404.
+- **Type-aware forms** — boolean / integer / number / date / JSON / text inputs and the JS value parser dispatch on the
+  same Go-side `inputKind` classifier so client and server agree on the column shape.
+
+### Access
+
+The UI calls the same HTTP API you would. Cross-origin calls between the two listeners are handled automatically —
+`adms` adds the UI's origin to the API's allowed origins, so you do not need to list it in `cors_origins`. When
+`auth.mode` is `static`, the UI carries the resolved token on every request.
+When `read_only: true`, the UI hides edit / insert / delete affordances. The UI does not introduce its own login
+flow — keep it behind your network or gateway.
+
+## Security
+
+`adms` is designed to sit behind your authn layer (reverse proxy, API gateway, etc.), but it ships several built-in
+safety nets so an accidental misconfiguration is not catastrophic.
+
+### Identifier allowlist
+
+Table and column names from query parameters are checked against the introspected schema before they are interpolated
+into SQL. Unknown identifiers return `400 Bad Request`, never reach the database, and never appear in error messages
+echoed back to the client unsanitized.
+
+### Read-only mode
+
+```yaml
+read_only: true
+```
+
+Returns `403 Forbidden` for `POST`, `PATCH`, and `DELETE`. The admin UI hides write affordances in this mode. Useful for
+staging dashboards, demos, or anywhere writes must be impossible by construction.
+
+### Schema and table allowlist
+
+Restrict which schemas (or tables) are exposed:
+
+```yaml
+allowed_schemas: [ public, reporting ]
+allowed_tables: [ users, posts, comments ]
+```
+
+Anything outside the allowlist is invisible — at `GET /`, at the per-table endpoints, and in the UI sidebar.
+
+### Bearer token
+
+```yaml
+auth:
+  mode: static
+  static:
+    token_env: ADMS_TOKEN
+```
+
+With `auth.mode: static`, `adms` reads the bearer token from the env var named by `static.token_env` and requires
+every request to include `Authorization: Bearer <token>`. The admin UI carries the token automatically (the resolved
+value is exposed via a meta tag that an inline fetch wrapper picks up and attaches to every API-origin request). This
+is intentionally simple — a single shared secret. The token value itself never appears in the config file, so it does
+not leak into version control. `auth.mode` defaults to `none`, which leaves the API open.
+
+### OIDC / JWT
+
+```yaml
+auth:
+  mode: oidc
+  oidc:
+    issuer: https://your-tenant.auth0.com/
+    audience: adms
+    roles_claim: https://adms/roles   # optional
+```
+
+With `auth.mode: oidc`, `adms` validates the `Authorization: Bearer <jwt>` on every request against the issuer's
+published keys. The JWKS is fetched from the issuer's OIDC discovery document at startup and refreshed automatically on
+key rotation, so no key material lives in the config. The signature, issuer, audience, and expiry are all checked; a
+token that fails any of them is rejected with `401`. `roles_claim` names the claim carrying the caller's roles (a JSON
+array or a space-separated string); it is surfaced on the request principal for future role-based authorization. An
+unreachable issuer fails startup rather than silently serving an open API. adms itself has no login flow — obtain
+tokens from your identity provider (Auth0, Cognito, Keycloak, …) and present them as bearer tokens.
+
+The bundled UI has no token to forward in this mode (there is no shared secret), so front it with a gateway
+(oauth2-proxy, Cloudflare Access, GCP IAP, ALB OIDC) that terminates OIDC and injects `Authorization` on requests to
+the API; otherwise the UI's own API calls will be rejected with `401`. adms logs a warning at startup when `ui.enabled`
+is combined with `auth.mode: oidc`.
+
+### CORS
+
+```yaml
+cors_origins:
+  - "https://admin.example.com"
+  - "https://staff.example.com"
+```
+
+Defaults to no CORS headers, so the API is only reachable from same-origin contexts unless you opt in. When
+`ui.enabled: true`, the bundled admin UI's origin is automatically added to the allowed origins — you do not need to
+list it here.
+
+### Mandatory filters on writes
+
+`PATCH` and `DELETE` without a `where` clause return `400` — there is no "update every row" path, in the API or the UI.
+
+## CLI
+
+```
+adms [config-file]
+
+If the argument is omitted, adms looks for adms.yaml, adms.yml, then adms.toml
+in the current directory. Pass a path to use a specific config file.
+
+Flags:
+  --version, -v   Print version
+  --help, -h      Show help
+```
+
+The config file is the single source of configuration — there are no per-setting CLI flags or `ADMS_*` reserved
+environment variables. Strings in the config file are expanded via `${VAR}` / `$VAR` from the environment so secrets
+(DSN, bearer token, etc.) stay out of source control; the env var names you reference (`ADMS_DSN`, `DATABASE_URL`,
+anything you like) are entirely your choice. Unset variables expand to `""`, and literal `$` cannot be escaped, so
+put values containing `$` in an environment variable.
+
+## Configuration (config file)
+
+A minimal config:
+
+```yaml
+driver: postgres
+dsn: "${ADMS_DSN}"
+```
+
+The full set of fields, with defaults and meaning:
+
+| Field                   | Default            | Description                                                    |
+|-------------------------|--------------------|----------------------------------------------------------------|
+| `driver`                | _(required)_       | `postgres` or `mysql`                                          |
+| `dsn`                   | _(required)_       | Database connection string (prefer `${VAR}` expansion)         |
+| `listen`                | `:7777`            | API listen address                                             |
+| `read_only`             | `false`            | Reject all write methods with `403`                            |
+| `allowed_schemas`       | _(driver default)_ | Schemas to introspect                                          |
+| `allowed_tables`        | _(all)_            | Table allowlist (empty means every introspected table)         |
+| `timeout`               | `30s`              | Per-operation timeout (DSN parsing, introspect, OIDC discovery / JWKS) |
+| `cors_origins`          | _(none)_           | Allowed origins for CORS                                       |
+| `auth.mode`             | `none`             | `none` (open), `static` (shared bearer token), or `oidc` (JWT) |
+| `auth.static.token_env` | _(none)_           | Name of the env var holding the bearer token (`mode: static`)  |
+| `auth.oidc.issuer`      | _(none)_           | OIDC issuer URL for discovery / JWKS (`mode: oidc`)            |
+| `auth.oidc.audience`    | _(none)_           | Expected `aud` claim (`mode: oidc`)                            |
+| `auth.oidc.roles_claim` | _(none)_           | Claim carrying the caller's roles (`mode: oidc`, optional)     |
+| `log_level`             | `info`             | `debug` / `info` / `warn` / `error`                            |
+| `ui.enabled`            | `false`            | Mount the bundled admin UI                                     |
+| `ui.listen`             | `:7778`            | Listen address for the admin UI                                |
+
+TOML works the same way:
+
+```toml
+driver = "postgres"
+dsn = "${ADMS_DSN}"
+listen = ":7777"
+read_only = false
+allowed_schemas = ["public"]
+
+[ui]
+enabled = false
+listen = ":7778"
+```
+
+Working examples live in [`examples/adms.yaml`](examples/adms.yaml) and [`examples/adms.toml`](examples/adms.toml).
+
+## Why not PostgREST?
+
+Use PostgREST if you are PostgreSQL-only and want a battle-tested project with a large community — it is genuinely
+excellent, and `adms` borrows heavily from its URL conventions.
+
+Reach for `adms` when:
+
+- you are on MySQL, or operating a fleet with both PostgreSQL and MySQL, and want one server to manage,
+- you want a UI shipped in the same binary as the API, not a separate frontend project,
+- you prefer a single self-contained Go binary with no Haskell runtime to deploy,
+- you want a tighter scope focused on admin dashboards — opinionated defaults, identifier allowlists, mandatory filters
+  on writes — rather than a general-purpose data API.
+
+## Acknowledgements
+
+The URL conventions, the embedding syntax, and the `Prefer`-header semantics in this project are taken almost verbatim
+from [PostgREST](https://postgrest.org/). The admin UI is styled with [Tailwind CSS](https://tailwindcss.com/),
+generated by the standalone tailwindcss CLI and bundled into the binary at build time. Standing on giants'
+shoulders — thank you.
+
+## Sponsor
+
+If `adms` saves you time, consider supporting ongoing development
+via [GitHub Sponsors](https://github.com/sponsors/mickamy). Sponsorships pay for the maintenance time that keeps
+Postgres / MySQL parity, security fixes, and new features moving.
+
+## License
+
+[MIT](LICENSE)

@@ -1,0 +1,699 @@
+# E-Commerce Microservices Platform
+
+> Portfolio-grade **event-driven microservices** reference implementation: **distributed saga**, **transactional outbox**, **CQRS read models**, **JWT-secured API gateway**, and a full **observability stack** — runnable locally with a single `docker compose up`.
+
+**Frontend (separate repo):** [ecom-client](https://github.com/tahaberkamcadev/ecom-client) — web UI for browsing the catalog, checkout, and purchase flows against this backend. The fastest way to exercise the stack without curl or scripts.
+
+[![Java](https://img.shields.io/badge/Java-21-ED8B00?logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4-6DB33F?logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Kafka](https://img.shields.io/badge/Apache%20Kafka-KRaft-231F20?logo=apachekafka&logoColor=white)](https://kafka.apache.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+---
+
+## Table of Contents
+
+- [Why This Project](#why-this-project)
+- [Architecture at a Glance](#architecture-at-a-glance)
+- [Purchase Saga Flow](#purchase-saga-flow)
+- [Tech Stack](#tech-stack)
+- [Microservices](#microservices)
+- [Reliability & Security Patterns](#reliability--security-patterns)
+- [Observability](#observability)
+- [Quick Start](#quick-start)
+- [Frontend Client](#frontend-client)
+- [Demo Scripts](#demo-scripts)
+- [Concurrent Load Results](#concurrent-load-results)
+- [API Entry Points](#api-entry-points)
+- [Testing](#testing)
+- [Project Structure](#project-structure)
+- [Design Decisions](#design-decisions)
+- [License](#license)
+
+---
+
+
+
+## Why This Project
+
+This repository demonstrates how to design and operate a **cloud-native e-commerce backend** without hiding complexity behind a monolith. It is built to showcase skills that matter in modern backend and platform teams:
+
+
+| Area                     | What you can evaluate                                                             |
+| ------------------------ | --------------------------------------------------------------------------------- |
+| **Distributed systems**  | Choreography-based **saga**, compensation, **at-least-once** delivery handling    |
+| **Data consistency**     | **Transactional Outbox** + **Debezium CDC** instead of dual-write anti-patterns   |
+| **Architecture styles**  | **CQRS**, **database-per-service**, **API Gateway**, **event-driven** integration, **Redis cache-aside** |
+| **Operational maturity** | **Prometheus**, **Grafana**, **Loki**, health probes, structured dashboards       |
+| **Engineering quality**  | **Java 21**, **Spring Boot 4**, unit tests, Dockerized local environment          |
+
+
+The stack is intentionally **over-instrumented for a portfolio project** so reviewers can trace a purchase end-to-end across services, Kafka topics, databases, and dashboards.
+
+---
+
+
+
+## Architecture at a Glance
+
+![Runtime Architecture (Docker Compose)](screenshots/diagram0.png)
+
+```mermaid
+flowchart TB
+  CLIENT["Clients<br/>ecom-client · curl · demo script"]
+
+  subgraph edge["Edge"]
+    GW["api-gateway :8080<br/>JWT · Redis rate limit · CORS · routing"]
+  end
+
+  subgraph http["HTTP via gateway"]
+    USER["user-service :8081<br/>auth · JWT issue"]
+    INV["inventory-service :8082<br/>catalog write · purchase"]
+    REV["review-service :8086<br/>reviews"]
+    PRJ["projection-service :8087<br/>CQRS read API"]
+  end
+
+  subgraph saga["Kafka-only saga participants"]
+    ORD["order-service<br/>order aggregate"]
+    PAY["payment-service<br/>mock payment"]
+  end
+
+  subgraph readstore["Read-side & edge stores"]
+    ES["Elasticsearch"]
+    RD["redis-projection<br/>detail cache"]
+    RDG["redis-gateway<br/>rate-limit counters"]
+  end
+
+  subgraph data["Data & messaging"]
+    DB["PostgreSQL ×6<br/>database-per-service"]
+    DEB["Debezium Connect<br/>outbox → Kafka"]
+    K["Kafka KRaft"]
+  end
+
+  subgraph obs["Observability"]
+    PROM["Prometheus"]
+    LOKI["Loki + Promtail"]
+    GRAF["Grafana"]
+  end
+
+  CLIENT --> GW
+  GW --> USER
+  GW --> INV
+  GW --> REV
+  GW --> PRJ
+  GW --> RDG
+
+  USER --> DB
+  INV --> DB
+  ORD --> DB
+  PAY --> DB
+  REV --> DB
+  PRJ --> DB
+  PRJ --> ES
+  PRJ --> RD
+
+  INV --> DEB
+  ORD --> DEB
+  PAY --> DEB
+  REV --> DEB
+  DEB --> K
+
+  K --> ORD
+  K --> PAY
+  K --> PRJ
+  K --> INV
+
+  PROM -.-> GRAF
+  LOKI -.-> GRAF
+```
+
+Gateway exposes auth, products, reviews, and catalog. **order-service** and **payment-service** have no public HTTP routes — they only consume/produce saga events on Kafka.
+
+
+
+---
+
+
+
+## Purchase Saga Flow
+
+Purchase is a **choreography saga** (no central orchestrator). The happy path and compensation path are both observable in logs and Grafana.
+
+```mermaid
+sequenceDiagram
+  participant C as Client
+  participant GW as API Gateway
+  participant INV as inventory-service
+  participant DB as PostgreSQL + Outbox
+  participant K as Kafka
+  participant ORD as order-service
+  participant PAY as payment-service
+  participant PRJ as projection-service
+
+  C->>GW: POST /api/products/purchase
+  GW->>INV: reserve stock (sync, strong consistency)
+  INV->>DB: UPDATE stock + outbox stock_updated (single TX)
+  DB-->>K: Debezium → saga.inventory.stock_updated
+  par consumers of stock_updated
+    K->>ORD: create order + outbox order_created
+    K->>PRJ: create order projection (PROCESSING)
+  end
+  DB-->>K: Debezium → saga.order.order_created
+  K->>PAY: mock payment (~2s, ~90% success)
+  alt payment_completed
+    DB-->>K: Debezium → saga.payment.payment_completed
+    K->>ORD: mark DELIVERED
+    K->>PRJ: mark DELIVERED
+  else payment_failed
+    DB-->>K: Debezium → saga.payment.payment_failed
+    K->>ORD: mark CANCELLED + outbox order_cancelled
+    K->>PRJ: mark CANCELLED
+    DB-->>K: Debezium → saga.order.order_cancelled
+    K->>INV: restore stock (compensation)
+  end
+```
+
+
+
+**Notable implementation details:**
+
+- **Optimistic stock reservation** via atomic SQL (`UPDATE … WHERE stock >= :qty`) — no lost updates under concurrency.
+- **Checkout quote** hits inventory directly (not the read model) so price/stock are strongly consistent right before purchase.
+- **Idempotent consumers** via `processed_events` (`INSERT … ON CONFLICT DO NOTHING`).
+- **Saga compensation** on payment failure publishes `order_cancelled` to roll back inventory.
+
+---
+
+
+
+## Tech Stack
+
+
+| Layer                  | Technologies                                                                |
+| ---------------------- | --------------------------------------------------------------------------- |
+| **Language & runtime** | **Java 21**, Maven                                                          |
+| **Framework**          | **Spring Boot 4**, Spring Data JPA, Spring Security, Spring Kafka           |
+| **API edge**           | **Spring Cloud Gateway** (WebMVC), **JWT** (JJWT), **Redis**-backed **rate limiting** |
+| **Messaging**          | **Apache Kafka** (KRaft), **Debezium** Outbox Event Router                  |
+| **Databases**          | **PostgreSQL 17** (database-per-service, logical replication enabled)       |
+| **Read model**         | **CQRS** — precomputed projection DB, **Redis** cache-aside, **Elasticsearch 9** search |
+| **Observability**      | **Micrometer**, **Prometheus**, **Grafana**, **Loki**, **Promtail**         |
+| **Packaging**          | **Docker**, **Docker Compose**, multi-stage Dockerfiles, readiness probes   |
+| **Testing**            | JUnit 5, Mockito, AssertJ, `@WebMvcTest`, service-layer unit tests          |
+| **Frontend**           | [ecom-client](https://github.com/tahaberkamcadev/ecom-client) (separate repo) |
+
+
+---
+
+
+
+## Microservices
+
+
+| Service                | Port | Role                                                    | Persistence             |
+| ---------------------- | ---- | ------------------------------------------------------- | ----------------------- |
+| **api-gateway**        | 8080 | Single entry point, JWT validation, Redis rate limiting, route proxying | Redis (rate-limit counters) |
+| **user-service**       | 8081 | Registration, login, JWT issuance, profile              | PostgreSQL              |
+| **inventory-service**  | 8082 | Product catalog (write), checkout, purchase, stock saga | PostgreSQL + Outbox     |
+| **order-service**      | 8083 | Order aggregate, saga reactions, compensation           | PostgreSQL + Outbox     |
+| **payment-service**    | 8084 | Mock payment processor, saga participant                | PostgreSQL + Outbox     |
+| **review-service**     | 8086 | Product reviews, review-created events                  | PostgreSQL + Outbox     |
+| **projection-service** | 8087 | Catalog & order **read API** over a **precomputed** projection DB, Redis cache, ES search | PostgreSQL + Redis + ES |
+
+
+Published host ports above are for local inspection; the intended client entry point is still **api-gateway :8080**. `order-service` / `payment-service` are not published to the host.
+
+**Supporting infrastructure (Docker Compose):** 6× PostgreSQL, Kafka, Kafka UI, Debezium Connect, Prometheus, Grafana, Loki, Promtail, Redis ×2 (projection cache + gateway rate limit), Elasticsearch.
+
+---
+
+
+
+## Reliability & Security Patterns
+
+
+
+### Event reliability
+
+- **Transactional Outbox Pattern** — business data and outbox row committed in the same DB transaction.
+- **Debezium CDC** — outbox rows streamed to Kafka without polling; topic routing via `EventRouter`.
+- **Manual Kafka acknowledgment** — messages acked only after successful processing.
+- **Retry + Dead Letter Topics (DLT)** — `DefaultErrorHandler` with `DeadLetterPublishingRecoverer` and dedicated DLT listeners.
+- **Processed-event deduplication** — safe under **at-least-once** delivery semantics.
+- **Scheduled cleanup** — old idempotency records purged to control table growth.
+
+
+
+### Security
+
+- **JWT authentication** at the API Gateway; downstream services trust gateway-injected identity headers.
+- **Redis-backed rate limiting** at the gateway (dedicated `redis-gateway`, per client IP): stricter on `/api/v1/auth/**`, higher default for other API traffic; `/actuator/**` excluded. Counters are shared across gateway instances via a Lua `INCR` + `EXPIRE` fixed window — separate from `redis-projection` (product **detail** cache-aside).
+- **Shared gateway secret** (`X-Gateway-Secret`) — inventory, review, and projection reject requests without it; user-service requires it on `/api/v1/internal/**`. Clients should use the gateway (`:8080`); host-mapped backend ports are for **local debugging**, not a production exposure model.
+- **Role-based access** (e.g. admin-only product creation).
+- **Fail-closed** security configuration on protected routes.
+
+
+
+### Data & consistency
+
+- **Database-per-service** — no shared tables across bounded contexts.
+- **CQRS / precomputed read model** — write services own their transactional stores; Kafka events materialize **denormalized** product, review, and order views into `projection-service`'s PostgreSQL. **Browse/list** (`GET /api/catalog/products`) reads that Postgres model (paginated; optional `category`). **Product detail** uses **Redis** cache-aside then DB. **Full-text search** goes to **Elasticsearch**. Checkout still hits the inventory **write model** for an authoritative quote. The trade-off is **eventual consistency** until projections catch up.
+- **Redis cache-aside (product detail only)** — `GET /api/catalog/products/{id}` looks up `productById` in `redis-projection` first; on miss it loads Postgres and populates the cache. Entries use a TTL (default **30 minutes**) and are **`@CacheEvict`ed** when projection handlers update that product (stock, price, reviews, etc.). The full catalog is **not** kept in Redis — list/search stay on Postgres/ES so cache keys stay bounded and invalidation stays simple.
+- **Eventual consistency** on catalog/search; **strong consistency** on purchase via synchronous inventory reserve.
+
+---
+
+
+
+## Observability
+
+Pre-provisioned **Grafana** dashboards (folder: **E-Commerce**):
+
+
+| Dashboard            | Focus                                                                                                                                                     |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **E-Commerce Stack** | Service uptime, HTTP traffic, **5xx error rate**, JVM heap, Kafka listener activity, **HikariCP pool**, business counters (purchases, saga compensations) |
+| **JVM (Micrometer)** | Per-service JVM & HTTP drill-down                                                                                                                         |
+| **Service Logs**     | **Loki** log tail with service filter                                                                                                                     |
+
+
+
+| URL                                                         | Default credentials |
+| ----------------------------------------------------------- | ------------------- |
+| Grafana — [http://localhost:3000](http://localhost:3000)    | `admin` / `admin`   |
+| Prometheus — [http://localhost:9090](http://localhost:9090) | —                   |
+| Kafka UI — [http://localhost:8090](http://localhost:8090)   | —                   |
+
+### Recommended demo workflow
+
+The stack is easiest to validate with **Grafana open on a second monitor** while you drive traffic from the [frontend client](#frontend-client) or the [demo script](#demo-script):
+
+1. Start the backend: `docker compose up -d --build` and wait until all services are healthy (`docker compose ps`).
+2. Open **Grafana → Dashboards → E-Commerce → E-Commerce Stack** (auto-refresh every **5s**).
+3. Trigger purchases — either checkout in **ecom-client** or run `python scripts/demo_script.py`.
+4. Watch metrics move in real time; switch to **Service Logs** when you want the narrative behind a spike or a failed payment.
+
+This triad (UI or script + gateway + Grafana) is how the saga is meant to be explored: HTTP and business counters on the stack dashboard, event flow in Kafka listener panels, compensation in counters and logs — without attaching a debugger.
+
+![Grafana — E-Commerce Stack dashboard](screenshots/grafana0.png)
+
+### What to watch on **E-Commerce Stack**
+
+| Panel | Healthy signal | What changes during a purchase |
+| ----- | -------------- | ------------------------------ |
+| **Services UP** | **7** (all Spring Boot targets) | Drops if a container restarts or fails health checks |
+| **HTTP Request Rate** | Steady baseline; spikes when you browse or checkout | Gateway + user/inventory/review/projection traffic; not order/payment (Kafka-only) |
+| **HTTP 5xx Error Rate** | Near **0** in normal demo flow | Auth/validation issues show as **4xx**, not here; spikes mean a service is throwing |
+| **JVM Heap Used** | Stable sawtooth per service | Brief bumps under load; sustained climb may mean a leak |
+| **Kafka Listener Activity** | Idle until events flow | Rises on `stock_updated`, `order_created`, `payment_completed` / `payment_failed`, `order_cancelled`, etc. |
+| **DB Pool Connections** | **Total** shows warm HikariCP pools; **active** often **0** when idle | Short active spikes on reserve/pay steps; Kafka workers can look idle between bursts |
+| **Purchases Started** | Climbs on each successful stock reserve | `ecom_purchase_total` — counted when inventory accepts the purchase request, **before** payment completes |
+| **Saga Compensations** | **0** on happy path | `ecom_saga_compensation_total` — increments when mock payment fails (~10%) and the order is cancelled / stock restored |
+
+**Tips:** Set the time range to **Last 15 minutes** (dashboard default). If **Service Logs** looks empty, widen to **Last 3 hours** and pick a service from the dropdown — logs are emitted on business events, not continuously.
+
+![Grafana — Service Logs (Loki) dashboard](screenshots/grafana1.png)
+
+For raw topic inspection (payloads, consumer groups), use **Kafka UI**; Grafana is for rates, health, and correlated logs.
+
+All Spring services expose `/actuator/prometheus` and **readiness/liveness** probes used by Compose health checks.
+
+---
+
+
+
+## Quick Start
+
+
+
+### Prerequisites
+
+- **Docker Desktop** (or Docker Engine + Compose v2)
+- **8 GB+ RAM** recommended (Elasticsearch + full stack)
+- Optional: **Python 3.10+** for the demo script
+
+
+
+### 1. Clone and configure
+
+```bash
+git clone https://github.com/tahaberkamcadev/ecom.git
+cd ecom
+cp .env.example .env
+```
+
+
+
+### 2. Start the full stack
+
+```bash
+docker compose up -d --build
+```
+
+First boot takes **3–5 minutes** (Elasticsearch, Debezium connector registration, service health checks). Watch progress:
+
+```bash
+docker compose ps
+```
+
+
+
+### 3. Verify the gateway
+
+```bash
+curl -s http://localhost:8080/actuator/health | jq .
+```
+
+
+
+### 4. Log in (seeded demo users)
+
+
+| User     | Email                 | Password         | Role     |
+| -------- | --------------------- | ---------------- | -------- |
+| Admin    | `admin@demo.local`    | `DemoAdmin1!`    | ADMIN    |
+| Customer | `customer@demo.local` | `DemoCustomer1!` | CUSTOMER |
+
+
+```bash
+curl -s -X POST http://localhost:8080/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@demo.local","password":"DemoAdmin1!"}'
+```
+
+Use the returned `access_token` as `Authorization: Bearer <token>` on subsequent requests.
+
+### 5. Browse the catalog
+
+List active products from the **Postgres** read model (`category` optional; response is paginated):
+
+```bash
+# All products
+curl -s "http://localhost:8080/api/catalog/products?page=0&size=20"
+
+# Filter by category
+curl -s "http://localhost:8080/api/catalog/products?category=ELECTRONICS&page=0&size=20"
+```
+
+Full-text search still goes through **Elasticsearch**:
+
+```bash
+curl -s "http://localhost:8080/api/catalog/products/search?q=Monitor&page=0&size=20"
+```
+
+Both return `{ "items": [...], "total": N, "page": 0, "size": 20 }`. Catalog product GETs are **public** (Bearer optional).
+
+Product **detail** (`GET /api/catalog/products/{id}`) is served via **Redis cache-aside** (miss → Postgres; TTL + eviction on projection updates) — not a full-catalog dump in Redis.
+
+---
+
+## Frontend Client
+
+The backend is API-first, but the easiest way to explore it is the companion web app:
+
+**Repository:** [github.com/tahaberkamcadev/ecom-client](https://github.com/tahaberkamcadev/ecom-client)
+
+After `docker compose up -d --build` in this repo, start the frontend (see its README) and point it at `http://localhost:8080`. You can log in with the seeded demo users, browse the catalog, run checkout quotes, place orders, and watch saga outcomes in Grafana without writing HTTP requests by hand. See [Recommended demo workflow](#recommended-demo-workflow) for which panels to keep open while you click through checkout.
+
+Use the frontend for interactive demos; use the [demo script](#demo-script) or curl when you want scripted load or CI-style smoke tests.
+
+---
+
+
+
+## Demo Scripts
+
+Two Python clients exercise the gateway. Prefer the [ecom-client](https://github.com/tahaberkamcadev/ecom-client) UI for manual exploration.
+
+```bash
+python3 -m venv scripts/.venv && source scripts/.venv/bin/activate
+pip install -r scripts/requirements.txt
+```
+
+**`demo_script.py`** — single-user happy path (checkout quote + bulk purchase + a few small orders):
+
+```bash
+python scripts/demo_script.py
+python scripts/demo_script.py --dry-run          # login + catalog only
+python scripts/demo_script.py --skip-bulk        # small orders only
+```
+
+**`concurrent_purchases.py`** — synchronized traffic burst. Workers park on a `threading.Barrier` and are released together so N purchases hit the gateway at once (useful for optimistic stock reservation + parallel Kafka consumers):
+
+```bash
+python scripts/concurrent_purchases.py                       # 20 simultaneous purchases
+python scripts/concurrent_purchases.py -n 50                 # larger burst
+python scripts/concurrent_purchases.py --product "4K Monitor" -n 25   # hammer one SKU
+python scripts/concurrent_purchases.py --all-stock           # one request per seed stock unit (~485)
+python scripts/concurrent_purchases.py --dry-run             # login + catalog + plan only
+```
+
+`--all-stock` builds one `quantity=1` purchase per unit of seed inventory (mirrors `inventory-service` `DevDataSeeder` stock levels — assume a **fresh** stack). For large bursts: raise the client open-file limit (`ulimit -n 4096`) and, if you hit HTTP 429, disable the gateway rate limiter (`RATE_LIMIT_ENABLED=false` on `api-gateway`, or `app.rate-limit.enabled=false`).
+
+While a script runs, open **Grafana → E-Commerce Stack** (see [What to watch](#what-to-watch-on-e-commerce-stack)) to watch HTTP rates, Kafka activity, saga compensations (~10% payment failure rate), and DB pool metrics update in real time.
+
+---
+
+
+
+## Concurrent Load Results
+
+Local Docker Compose run of `concurrent_purchases.py --all-stock` against a fresh seed (entire demo inventory drained in one synchronized burst). These numbers measure the **HTTP purchase accept path** (`POST /api/products/purchase` → atomic stock reserve → `202 Accepted`), **not** the time until every order reaches `DELIVERED` / `CANCELLED` in the saga.
+
+### Setup
+
+| Item | Detail |
+| ---- | ------ |
+| Environment | Full stack via `docker compose` on a single developer machine |
+| Client | `scripts/concurrent_purchases.py --all-stock` |
+| Burst size | **485** concurrent purchases (sum of all seed SKU stock units) |
+| Pattern | `threading.Barrier` release → all workers hit `POST /api/products/purchase` together |
+| Stock path | Atomic `UPDATE … WHERE stock >= :qty RETURNING price, stock` (optimistic reservation, single round-trip) |
+| DB pools | Hikari `maximum-pool-size=50` per service |
+| Client note | Large bursts need a higher open-file soft limit (`ulimit -n 4096`); otherwise the Python client fails with `Errno 24` before the API does |
+
+### Measured results (HTTP accept)
+
+| Burst | Requests | Accepted (2xx) | Non-2xx | Barrier spread | Latency (min / p50 / p95 / max) | Mean | Throughput |
+| ----- | -------- | -------------- | ------- | -------------- | ------------------------------- | ---- | ---------- |
+| Full seed (`--all-stock`) | 485 | **485 / 485** | 0 | ~235 ms | 432 / **893** / 1594 / 1777 ms | 964 ms | **~268 req/s** (wall ~1.8 s) |
+
+### How to read this
+
+- **Purchase accept is concurrent and complete** — all 485 requests received `202` inside the ~1.8 s wall window. The client does **not** wait minutes on the HTTP call.
+- **Saga finalization is a separate queue** — after accept, `order_created` → mock payment (`app.payment.mock-delay-ms`, default ~2 s, outside the DB transaction) → `DELIVERED` / `CANCELLED`. With default mock delay and listener concurrency 3, draining hundreds of payments on one laptop takes a few minutes. That lag is the **mock PSP sleeping on consumer threads**, not the purchase API blocking the shopper.
+- **No overselling under contention** — every seed unit is reserved at most once; failed payments (~10%) compensate via `order_cancelled` + stock restore.
+- **Portfolio signal** — concurrent safety + outbox/CDC + choreography saga on a single Compose host. This is not a cloud capacity benchmark; production levers are async PSP/webhooks, more partitions/replicas, and dedicated DB resources (see roadmap below).
+
+Reproduce:
+
+```bash
+ulimit -n 4096
+# optional for large bursts if rate-limited:
+# RATE_LIMIT_ENABLED=false  → api-gateway env / application.properties
+
+python scripts/concurrent_purchases.py --all-stock
+python scripts/concurrent_purchases.py --all-stock --dry-run   # plan only
+```
+
+---
+
+
+
+## API Entry Points
+
+All external traffic goes through the **API Gateway** (`localhost:8080`):
+
+
+| Path prefix | Service | Examples |
+| ----------- | ------- | -------- |
+| `/api/v1/auth/**` | user-service | `POST /api/v1/auth/login`, `POST /api/v1/auth/register` (**public**) |
+| `/api/v1/users/**` | user-service | `GET /api/v1/users/me`, `PUT /api/v1/users/me`, `PUT /api/v1/users/me/password` |
+| `/api/products/**` | inventory-service | `POST /api/products/checkout`, `POST /api/products/purchase`, `POST /api/products` (admin create) |
+| `/api/reviews/**` | review-service | `POST /api/reviews` |
+| `/api/catalog/products/**` | projection-service | `GET /api/catalog/products` (**public** Postgres list; optional `category`, `page`, `size` → `{items,total,page,size}`), `GET .../search` (ES; optional `q`/`category`), `GET .../{id}` (**Redis** cache-aside → Postgres), `GET .../{id}/reviews` |
+| `/api/catalog/orders/**` | projection-service | `GET /api/catalog/orders`, `GET /api/catalog/orders/{orderId}` (JWT required) |
+
+
+**Auth notes:** `GET /api/catalog/products/**` and `/api/v1/auth/**` are public at the gateway. Other catalog/order and write endpoints expect `Authorization: Bearer <access_token>`.
+
+**Saga participants** (`order-service`, `payment-service`) are intentionally **not** exposed via the gateway — they communicate through **Kafka events** only.
+
+
+---
+
+
+
+## Testing
+
+```bash
+# Run tests per service (example)
+cd inventory-service && ./mvnw test
+cd projection-service && ./mvnw test
+cd order-service && ./mvnw test
+```
+
+The codebase includes **35 test classes (121 test methods)** covering saga consumers, outbox services, idempotency, catalog controllers, cache DTOs, JWT/auth flows, and core domain logic — with **Mockito**-based isolation (no full stack required for unit tests).
+
+---
+
+
+
+## Project Structure
+
+```
+ecom/
+├── api-gateway/           # Spring Cloud Gateway, JWT filter, Redis rate limiting
+├── user-service/          # Auth & identity
+├── inventory-service/     # Catalog write, purchase, stock saga
+├── order-service/         # Order aggregate & saga reactions
+├── payment-service/       # Payment saga participant
+├── review-service/        # Reviews & review-created events
+├── projection-service/    # CQRS read model, Redis, Elasticsearch
+├── infra/
+│   ├── prometheus/        # Scrape config (all Spring Boot services)
+│   ├── grafana/           # Dashboards + datasource provisioning
+│   ├── loki/              # Log aggregation
+│   ├── promtail/          # Docker log shipping
+│   └── debezium/          # Outbox connector definitions
+├── scripts/               # E2E demo + concurrent traffic clients
+├── compose.yaml           # Full local stack
+├── .env.example           # Environment template
+└── README.md
+```
+
+---
+
+
+
+## Design Decisions
+
+---
+
+### ADR-001 - Transactional Outbox + Debezium CDC
+
+| | |
+|---|---|
+| **Context** | Publishing to Kafka inside the same request as a DB write creates a **dual-write** risk: one side can succeed and the other fail, leaving services inconsistent. |
+| **Decision** | Persist outbound events in an `outbox_events` table in the **same database transaction** as domain changes. **Debezium** reads the WAL (`pgoutput`) and routes rows to Kafka via the **Outbox Event Router** transform. |
+| **Consequences** | **Pros:** Reliable, atomic write + publish intent; no in-app Kafka producer on the critical path.<br><br>**Cons:** Requires logical replication (`wal_level=logical`) and connector operations; slightly higher end-to-end latency than direct produce. |
+
+---
+
+### ADR-002 - Choreography Saga (No Central Orchestrator)
+
+| | |
+|---|---|
+| **Context** | A purchase spans inventory, order, payment, and read-model updates. A single distributed transaction (2PC) is brittle across microservices. |
+| **Decision** | Use an **event-driven choreography**: each service reacts to domain events (`stock_updated` -> `order_created` -> `payment_*`) and publishes its own outbox events. **Compensation** on `payment_failed` publishes `order_cancelled` to restore stock. |
+| **Consequences** | **Pros:** Services stay autonomous and deploy independently; flow mirrors real e-commerce boundaries.<br><br>**Cons:** End-to-end tracing requires disciplined logging and metrics; no central saga state table, so reasoning is distributed. |
+
+---
+
+### ADR-003 - Synchronous Stock Reserve, Asynchronous Downstream Steps
+
+| | |
+|---|---|
+| **Context** | The client must know immediately whether stock was reserved; waiting for payment/order projection over Kafka is unacceptable UX. |
+| **Decision** | `POST /api/products/purchase` performs an **atomic SQL stock decrement** (`UPDATE ... WHERE stock >= :qty`) and writes the outbox in one transaction. Order creation, payment, and projections proceed **asynchronously** via Kafka. |
+| **Consequences** | **Pros:** Strong consistency at the decision point the user cares about; optimistic concurrency without application-level locks.<br><br>**Cons:** Client receives `202 Accepted`; final order state is eventually consistent. |
+
+---
+
+### ADR-004 - CQRS with a Pragmatic Exception for Checkout
+
+| | |
+|---|---|
+| **Context** | Catalog browsing and search must stay fast under load. Serving those queries from write databases would force cross-service joins, contend with transactional traffic, and couple read latency to inventory/order write paths. Checkout, however, must not show stale prices or phantom stock from a lagging projection. |
+| **Decision** | **Writes** stay in `inventory-service` (and other write services). Domain events update a dedicated **projection database** in `projection-service`: **precomputed, denormalized** product/order/review views shaped for read APIs. **List/browse** is served from Postgres; **detail** uses **Redis cache-aside** (`productById`, TTL default 30m, `@CacheEvict` on projection updates — not a full-catalog warm cache); **full-text search** uses **Elasticsearch**. `POST /api/products/checkout` deliberately hits the **write model** for an authoritative quote right before purchase. Read views also store **precomputed aggregates** so read APIs never recompute or join at query time — e.g. `ProductView.averageRating` / `ratingSum` / `reviewCount` with a `latestReviews` JSON snapshot, and `OrderView.totalQuantity` / `lineCount` / `summaryPreview` (staleness semantics in ADR-010). |
+| **Consequences** | **Pros:** Optimized reads without touching write DBs; list/search scale independently of detail hot keys; cache footprint stays bounded; no overselling from stale projection data at purchase time.<br><br>**Cons:** Two intentional paths for product data (read vs. write); projection lag is visible until consumers catch up; detail can be briefly stale until TTL/evict — must stay documented. |
+
+---
+
+### ADR-005 - Idempotent Consumers (`processed_events`)
+
+| | |
+|---|---|
+| **Context** | Kafka delivers **at-least-once**. Retries and consumer restarts can replay the same event. |
+| **Decision** | Every saga consumer checks `processed_events` with `INSERT ... ON CONFLICT DO NOTHING` before side effects. Duplicates are logged and skipped; processing succeeds idempotently. A scheduled job prunes old rows. |
+| **Consequences** | **Pros:** Safe replays without double-reserving stock or double-creating orders; simple, auditable deduplication per service.<br><br>**Cons:** Per-service table. |
+
+---
+
+### ADR-006 - Kafka Error Handling: Retry, DLT, Manual Ack
+
+| | |
+|---|---|
+| **Context** | Transient failures (DB blips) should retry; poison messages must not block the partition forever. |
+| **Decision** | `DefaultErrorHandler` with **3 retries / 2s backoff**, `DeadLetterPublishingRecoverer` to dedicated **DLT topics**, and `IllegalArgumentException` marked non-retryable. Consumers use **manual acknowledgment** and commit only after successful handling. |
+| **Consequences** | **Pros:** Poison messages land in DLT for inspection; transient errors self-heal via retry.<br><br>**Cons:** DLT topics need operational monitoring (consumed and logged). |
+
+---
+
+### ADR-007 - API Gateway Trust Boundary
+
+| | |
+|---|---|
+| **Context** | Backend services must not trust client-supplied identity headers (`X-User-Id`, `X-User-Role`). |
+| **Decision** | **JWT validation** happens only at `api-gateway`. Valid tokens are translated to internal headers plus a shared `X-Gateway-Secret`. Downstream services that accept browser/API traffic reject requests missing the secret (user-service applies this to `/api/v1/internal/**`). |
+| **Consequences** | **Pros:** Clear **application-level** perimeter; identity headers cannot be spoofed without the shared secret; role-based rules at the edge and in services.<br><br>**Cons:** Shared secret rotation needs coordinated config. In local Compose, some backend ports are still published for debugging — that is convenience, not the production model (there, only the gateway/ingress should be reachable). |
+
+---
+
+### ADR-008 - Mock Payment with Controlled Failure Rate
+
+| | |
+|---|---|
+| **Context** | Integrating a real PSP is out of scope; the project still needs to prove **compensation** works. |
+| **Decision** | `payment-service` simulates processing (a **configurable ~2s delay** — `app.payment.mock-delay-ms` — run **outside** the DB transaction) with a **~10% random failure**, publishing `payment_failed` or `payment_completed` via outbox. Failures drive the full rollback path (cancel order, restore stock, update projection). |
+| **Consequences** | **Pros:** Demonstrates saga failure handling without external payment dependencies; visible in Grafana via `ecom_saga_compensation_total`.<br><br>**Cons:** Not production payment logic; replace with a PSP adapter in a real deployment. |
+
+---
+
+### ADR-009 - Observability by Default
+
+| | |
+|---|---|
+| **Context** | Distributed systems are hard to debug without correlated metrics and logs. |
+| **Decision** | All services expose `/actuator/prometheus` and readiness probes. **Prometheus** scrapes every instance; **Grafana** ships with stack health dashboards; **Loki + Promtail** aggregate container logs. Business counters (`ecom_purchase_total`, `ecom_saga_compensation_total`) track domain outcomes. |
+| **Consequences** | **Pros:** Single-command local demo is observable end-to-end; behavior verifiable without reading source.<br><br>**Cons:** Full stack needs ~8 GB RAM. |
+
+---
+
+### ADR-010 - Denormalized Read Models & Review Eventual Consistency
+
+| | |
+|---|---|
+| **Context** | Read models in `projection-service` are **denormalized on purpose**: rendering a product card or a review list must not require cross-service calls at query time. So the projection **copies** data owned by other services — most notably the **review author name** (`userFirstName`/`userLastName`, taken from `user-service` when the review is created) and **rating aggregates** on `ProductView` (`ratingSum`, `reviewCount`, `averageRating`, plus a `latestReviews` JSON snapshot). Copied data can drift from its source of truth. |
+| **Decision** | Denormalized fields are **point-in-time snapshots** kept in sync **only through domain events**, never via synchronous read-time lookups. `saga.review.review_created` incrementally updates the product's rating aggregates and `latestReviews`. The author name stored on a review is the name **as of when the review was written** — there is **no back-propagation** if the user later renames themselves. Consistency is **eventual** (bounded by consumer lag) and made safe by idempotent consumers (ADR-005). |
+| **Consequences** | **Pros:** Read APIs are single-store, join-free and fast; no fan-out to `user-service`/`review-service` on every catalog request; rating math runs once on write, not on every read.<br><br>**Cons:** Review author names are **not** updated retroactively on profile rename (arguably correct — a review should reflect the identity *at posting time* — but must be documented); rating aggregates are briefly stale until `review_created` is projected; rebuilding a projection requires replaying events. |
+
+---
+
+## Known Trade-offs & Production Roadmap
+
+> This backend is a **local, portfolio-grade** reference — it runs via `docker compose up` and is **not** intended to be deployed. The items below are **conscious** trade-offs given that scope; documenting them (rather than hiding them) is deliberate, and each has a clear production path.
+
+| Area | Current (local / portfolio) | Production direction |
+| ---- | --------------------------- | -------------------- |
+| **Schema management** | `ddl-auto=update` auto-generates DDL; only `user-service` ships a `prod` profile with `validate`. | Add **Flyway** migrations per service; run `validate` everywhere and version every schema change. |
+| **Persistence tests** | Unit/slice tests run on **H2** + `spring-kafka-test`, which can hide Postgres-specific behavior (JSON columns, logical replication). | **Testcontainers** (real Postgres + Kafka) for the outbox → CDC → saga paths. |
+| **JWT** | **Symmetric HS256** with a secret shared by gateway + user-service; no refresh token, no revocation. | **Asymmetric RS256/JWKS** (only the issuer signs; everyone else verifies with the public key) + refresh-token rotation. |
+| **Cross-cutting code** | Outbox, idempotency, and gateway/auth filters are **copy-pasted** across services. | Extract a thin shared **Spring Boot starter** — or keep the duplication as an explicit, documented decoupling choice. |
+| **Inter-service trust** | Static `X-Gateway-Secret` header asserts "came through the gateway". | Platform-layer enforcement: network policies / **mTLS** / a service mesh. |
+| **Payment throughput & saga parallelism** | Purchase accept scales on the write path (measured **485/485** `202`s in ~1.8 s, p50 ~900 ms — see [Concurrent Load Results](#concurrent-load-results)). Topics are **partitioned** with listener **`concurrency`**, so independent orders settle in parallel while per-order ordering is preserved by the `aggregateId` key. Final saga status still waits on a **mock PSP** that parks each listener thread for a configurable delay (`app.payment.mock-delay-ms`, outside the DB transaction) — so hundreds of payments drain over minutes on one host even though HTTP already returned. | Integrate a real PSP as a **truly asynchronous** flow: submit the charge and return immediately, then complete the saga on the provider's **webhook/callback** (or a reconciliation poll) — **non-blocking I/O** instead of a parked thread, an **idempotency key** per charge to make retries safe, and **lag-based consumer autoscaling with backpressure** rather than a fixed thread count. |
+
+---
+
+
+## License
+
+This project is licensed under the **MIT License** — see [LICENSE](LICENSE).
+
+---
+
+**Author:** [Taha Berk Amca](https://github.com/tahaberkamcadev)
+
+*Built as a portfolio-grade reference for event-driven microservices, distributed transactions, and cloud-native observability.*

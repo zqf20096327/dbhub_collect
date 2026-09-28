@@ -1,0 +1,272 @@
+<p align="center">
+  <a href="https://github.com/daffineq/kuroji-api">
+    <img src="https://raw.githubusercontent.com/veaquer/kuroji-api/main/public/img/logo.svg" alt="Logo" width="100%" style="max-height: 300px; object-fit: cover; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);" />
+  </a>
+</p>
+
+<h1 align="center">Kuroji API v2</h1>
+
+<p align="center">
+  <strong>A modern anime API</strong>
+</p>
+
+<p align="center">
+  <a href="#"><img src="https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white" alt="TypeScript"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Bun-000000?style=flat&logo=bun&logoColor=white" alt="Bun"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Elysia-FD4F00?style=flat&logo=elysia&logoColor=white" alt="Elysia"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Drizzle-C5F74F?style=flat&logo=drizzle&logoColor=black" alt="Drizzle"></a>
+  <a href="#"><img src="https://img.shields.io/badge/GraphQL-E10098?style=flat&logo=graphql&logoColor=white" alt="GraphQL"></a>
+  <a href="#"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License"></a>
+</p>
+
+---
+
+## Try It Out - Public Demo
+
+**Base URL:** `https://kuroji-api-j4mh.onrender.com`
+
+```bash
+# Check the home page
+open https://kuroji-api-j4mh.onrender.com
+
+# Check the docs
+open https://kuroji-api-j4mh.onrender.com/docs
+
+# GraphQL playground
+open https://kuroji-api-j4mh.onrender.com/graphql
+```
+
+---
+
+## Community
+
+Join our Discord community for support, updates, and discussions:
+
+[![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white)](https://discord.gg/fXhZ8ZQfJD)
+
+---
+
+## What's This?
+
+Fast anime database API that pulls from multiple sources (AniList, Kitsu, Shikimori, TMDB, TVDB, MyAnimeList, Zerochan)
+
+**Important:** You gotta index anime data before querying.
+
+---
+
+## Quick Start
+
+### Docker (Recommended)
+
+```bash
+git clone https://github.com/daffineq/kuroji-api.git
+cd kuroji-api
+cp .env.example .env
+# Edit .env with your config
+docker compose up --build -d
+```
+
+### Manual Install
+
+```bash
+bun install
+cp .env.example .env
+# Edit .env with your config
+bun run db:generate
+bun run db:migrate
+bun run dev  # or bun run prod
+```
+
+Server runs at `http://localhost:3000`
+
+---
+
+## How to Use
+
+### 1. Index Your Data
+
+```bash
+# Start indexing (delay in seconds between requests)
+curl -X POST "http://localhost:3000/anime/indexer/start?delay=5"
+
+# Stop it
+curl -X POST "http://localhost:3000/anime/indexer/stop"
+
+# Reset to page 1
+curl -X POST "http://localhost:3000/anime/indexer/reset"
+```
+
+### 2. Query Your Data
+
+Hit up the GraphQL playground at `http://localhost:3000/graphql` and play around with queries yourself.
+
+Or check the REST docs at `http://localhost:3000/docs`
+
+### 3. API Keys (Optional)
+
+```bash
+# Generate key (needs admin key)
+curl -X POST "http://localhost:3000/api-key/generate" \
+  -H "x-api-key: YOUR_ADMIN_KEY"
+```
+
+---
+
+## Free Hosting on Render
+
+### Prerequisites
+
+**Database - Neon (Required)**
+- Sign up at [Neon](https://neon.tech)
+- Free 500MB PostgreSQL
+- Copy connection string
+
+**Redis - Upstash (Optional but recommended)**
+- Create account at [Upstash](https://upstash.com)
+- Copy Redis URL
+
+### Deploy
+
+1. Create account at [Render](https://render.com)
+2. New Web Service → Connect your repo
+3. **Important:** Set environment to `Docker` and Dockerfile path to `./Dockerfile.render`
+4. Add your environment variables (check `.env.example` for all options)
+5. Deploy
+
+**Key env vars:**
+```
+DATABASE_URL=your_neon_url
+RENDER=true
+ANIME_POPULARITY_THRESHOLD=7500
+```
+
+After deploy, start the indexer:
+```bash
+curl -X POST "https://your-app.onrender.com/anime/indexer/start?delay=5"
+```
+
+**Free tier heads up:**
+- Spins down after 15min inactivity, unless you set RENDER to true
+- 512MB RAM - adjust `ANIME_POPULARITY_THRESHOLD` accordingly
+- Neon free tier = 500MB storage
+
+**Btw, the demo is being hosted using the same method as above!**
+
+---
+
+## Configuration
+
+Check **[.env.example](.env.example)** - it's already documented with everything you need to know.
+
+**Memory Requirements:**
+- Recommended-Minimum: 200MB-500MB
+- Recommended: 2GB-4GB
+- Depends on your `ANIME_POPULARITY_THRESHOLD` setting
+
+---
+
+## How It Stays Updated
+
+Kuroji keeps your data fresh automatically through a background scheduler. Here's what runs and when:
+
+### Update Queue
+| Schedule | What it does |
+|----------|-------------|
+| Every 30 minutes | Processes the update queue |
+| Every hour | Queues recently aired anime for update |
+| Every 6 hours | Queues anime airing today for update |
+| Every 12 hours | Queues anime that aired 2 days ago for update |
+
+### Re-indexing
+| Schedule | What it does |
+|----------|-------------|
+| Every 12 hours | Re-indexes all upcoming anime (`NOT_YET_RELEASED`) |
+| Every other day | Re-indexes all currently airing anime (`RELEASING`) |
+| Every other week | Full re-index of all anime in the database |
+
+> Re-indexing respects your `ANIME_POPULARITY_THRESHOLD` settings — upcoming anime uses `ANIME_POPULARITY_THRESHOLD_UPCOMING` specifically.
+> You can disable all re-indexing by setting `ANIME_REINDEXING_ENABLED=false` while keeping the update queue running.
+> To disable the update queue entirely, set `ANIME_UPDATE_ENABLED=false`.
+> Set both to `false` to run Kuroji as a fully static database with no background updates.
+
+---
+
+## Scripts
+
+```bash
+# Dev
+bun run dev              # Hot reload
+bun run prod             # Production
+
+# Database
+bun run db:generate      # Generate migrations
+bun run db:migrate       # Run migrations
+bun run db:studio        # Database GUI
+bun run db:truncate      # Clear data
+bun run db:drop          # Drop tables
+```
+
+---
+
+## 💖 Support My Work
+
+If you find this project useful, consider supporting its development with a crypto tip! Your donations will help me get a proper VPS to host this project at 🙂
+
+* **Solana (SOL / USDC):** `8jcFeDS8MBjDisX1W1r2FoGKFconG9wkCvmVMyxNen6v`
+* **Ethereum (ETH / Layer-2s):** `0x9Fe278b3b17C7360004967D429e92C8F746728eA` *(Please use cheap L2 networks like Arbitrum, Optimism, or Base to save on gas)*
+* **Monero (XMR):** `48Bz6doZfKg53FoTE8xgpEjH81cNVA8KEcqpq8CMZccYj3R4BPNLp5J57PEGNtx3rRfRrpHAkAebM5oPW8pUB2kEK5Ff3Pn`
+* **TRON (USDT - TRC20):** `TZ9BP3YaBJgK2jqigGDNzC9YNVZgXjufA6`
+
+*Please ensure you are utilizing the correct network layout before sending tokens. Thank you so much for the support!*
+
+---
+
+## Tech Stack
+
+- **[Elysia](https://elysiajs.com/)**
+- **[Bun](https://bun.sh/)**
+- **[TypeScript](https://www.typescriptlang.org/)**
+- **[Drizzle](https://orm.drizzle.team/)**
+- **[GraphQL Yoga](https://the-guild.dev/graphql/yoga-server)**
+- **[Scalar](https://github.com/scalar/scalar)**
+
+---
+
+## Database
+
+You can look at the visual anime schema at **[Schema](https://dbdiagram.io/d/kuroji_anime-69b1bbb877d079431b61a938)**
+
+---
+
+## Providers
+
+Kuroji API wouldn't be possible without the amazing data provided by these platforms
+
+### Data Sources
+- **[AniList](https://anilist.co/)** - Primary source for anime metadata and characters
+- **[MyAnimeList](https://myanimelist.net/)** - Additional metadata
+- **[Zerochan](https://www.zerochan.net/)** - High-quality anime imagery and art
+- **[Shikimori](https://shikimori.one/)** & **[Kitsu](https://kitsu.io/)** - Additional metadata
+- **[TMDB](https://www.themoviedb.org/)** & **[TVDB](https://thetvdb.com/)** - Episodes and imagery
+
+---
+
+## Contributing
+
+Fork it, branch it, commit it, push it, PR it.
+
+---
+
+## License
+
+**[MIT](LICENSE)** - do whatever you want
+
+---
+
+<p align="center">
+  Made by <a href="https://github.com/daffineq">daffineq</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/daffineq/kuroji-api/stargazers">⭐ Star this if it's useful</a>
+</p>

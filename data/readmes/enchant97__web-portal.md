@@ -1,0 +1,81 @@
+<img src="web_portal/static/icon.svg" width=200 height=200>
+
+# Web Portal
+![GitHub](https://img.shields.io/github/license/enchant97/web-portal?style=flat-square)
+![Supported Python Version](https://img.shields.io/badge/python%20version-3.14-blue?style=flat-square)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/enchant97/web-portal?include_prereleases&label=latest%20release&style=flat-square)
+
+Web Portal is a all-in-one web dashboard, providing many widgets to build a personal portal. With the ability to load external plugins.
+
+## Showcase
+[![web-portal showcase image, showing dashboard with background image](docs/assets/showcase-bi.webp)](docs/assets/showcase-bi.webp)
+
+[![web-portal showcase image, showing dark and light themes](docs/assets/showcase-nbi.webp)](docs/assets/showcase-nbi.webp)
+
+## State Of Project
+I currently find it feature complete. I will still perform bug fixes and security patches when required as I use this project myself.
+
+### Can I still suggest a feature?
+Of course! However, I may not implement it. But I will accept contributions.
+
+## Features
+- Minimal use of JavaScript, to provide a lightning fast experience
+- Icon based UI
+- Minimal docker image (if deployed with docker)
+- Adjustable site theme
+- Configurable background image
+- Plugin support
+- Inbuilt Plugin Widgets
+    - Core
+        - Digital Clock
+        - Links
+            - Groups
+            - Colors
+            - Icons
+        - Search bar
+    - Core-Extras
+        - HTML embed
+        - Website embed (through iframe)
+- Password protection for admin modification
+- Optionally secure the portal with user accounts & passwords
+- MySQL & SQLite support
+
+## Demo Video
+[![Demo Video](https://img.youtube.com/vi/a8IM_RD8MK0/0.jpg)](https://youtu.be/a8IM_RD8MK0 "Demo Video")
+
+<https://youtu.be/a8IM_RD8MK0>
+
+## Support Me
+Like this project? Consider supporting me financially so I can continue development.
+
+<a href="https://www.buymeacoffee.com/leospratt" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-blue.png" alt="Buy Me A Coffee" height=60></a>
+
+## Third-Party Plugins
+It is encouraged to extend and build upon this app to make it the ultimate dashboard.
+
+Here are some ideas:
+- Server status widget
+- Home Automation
+- Messages widget (leave messages for users)
+
+You can discuss plugins [here](https://github.com/enchant97/web-portal/discussions/categories/third-party-plugins).
+
+## Branches
+Please select a tag/release for stable version of project. "main"
+
+
+## Documentation
+More details and guides on installing can be found at: [webportal.docs.enchantedcode.co.uk/](https://web-portal.docs.enchantedcode.co.uk/) or view the markdown in the `docs` folder [here](docs/index.md).
+
+## License
+This project is Copyright (c) 2026 Leo Spratt, licences shown below:
+
+Code
+
+    AGPL-3 or any later version. Full license found in `LICENSE.txt`
+
+Documentation
+
+    FDLv1.3 or any later version. Full license found in `docs/LICENSE.txt`
+
+This project also uses some third party content, licences for those are found at: `THIRD-PARTY.txt`.

@@ -1,0 +1,290 @@
+# <img src="resources/weaviate-studio-color.png" alt="Weaviate Studio Logo" width="48" height="48" style="vertical-align:middle;"> Weaviate Studio
+
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?style=flat-square&logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=prasadmuley.weaviate-studio)
+[![Open VSX Registry](https://img.shields.io/badge/Open%20VSX-Registry-purple?style=flat-square&logo=eclipse-ide)](https://open-vsx.org/extension/prasadmuley/weaviate-studio)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+
+---
+
+**A powerful VS Code extension for managing [Weaviate](https://weaviate.io) vector databases with an intuitive GraphQL
+interface. Supports self-hosted and cloud Weaviate instances.**
+
+> 📖 **[Full Documentation →](https://muleyprasad.github.io/weaviate-studio/)** — Getting started, feature guides, sandbox setup, and release notes.
+
+![Extension Demo](docs/images/extension-demo.gif)
+
+### Data Explorer
+
+![Data Explorer Demo](docs/images/data-explorer-demo.gif)
+
+### Generative Search
+
+![Generative Search Demo](docs/images/generative-search-demo.gif)
+
+---
+
+## Key Benefits
+
+- **Unified Experience:** Manage, query, and monitor Weaviate directly in VS Code—no browser switching.
+- **Works Everywhere:** Connect to local, on-prem, or cloud Weaviate instances.
+- **Visual Data Exploration:** Interactive data browser with filtering, vector search, and export. Browse schema, run queries, and view results in rich tables and JSON.
+- **Intelligent GraphQL Editor:** Auto-complete (wip), schema-aware templates, and error highlighting.
+- **Secure & Productive:** Secure credential storage, hot reload, and type-safe development.
+
+---
+
+## Quick Install
+
+| **VS Code**                                                                                    | **Cursor**                                                             | **Windsurf**                                                           | **Manual Install**                                                       |
+| ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| [Marketplace](https://marketplace.visualstudio.com/items?itemName=prasadmuley.weaviate-studio) | [Open VSX](https://open-vsx.org/extension/prasadmuley/weaviate-studio) | [Open VSX](https://open-vsx.org/extension/prasadmuley/weaviate-studio) | [Download VSIX](https://github.com/muleyprasad/weaviate-studio/releases) |
+
+---
+
+## Top Features
+
+- **Multiple Connections:** Manage several Weaviate instances at once
+- **Generative Search:** Ask natural-language questions across one or more collections—configure top-k results per collection, view source-attributed context objects, and get combined LLM answers
+- **Data Explorer:** Interactive visual browser with advanced filtering, 4 vector search modes (text, object, vector, hybrid), discreet opt-in query profiling, and JSON/CSV export
+- **RBAC & Security:** Manage users, roles, and groups with native RBAC support and API key rotation
+- **Read-Only Mode:** Connection-level guards to prevent accidental modifications to production data
+- **Backup & Restore:** Create, monitor, and restore backups across multiple backends (filesystem, S3, GCS, Azure)
+- **Cluster Management:** Comprehensive cluster information panel with health monitoring
+- **Schema Explorer:** Visualize and browse collections, properties, and nested object structures
+- **Advanced Query Editor:** Monaco-powered GraphQL editor with intelligent, schema-aware templates
+- **Live Results:** Table and JSON views for query results
+- **Secure Storage:** Credentials stored with VS Code's secret storage
+- **Modern UI:** Responsive, dark-theme optimized interface
+
+---
+
+## Getting Started
+
+### New to Weaviate? 🚀
+
+**Try our quick local sandbox with Docker!** Perfect for learning and development:
+
+```bash
+cd sandbox
+docker-compose up -d
+python3 populate.py
+```
+
+This spins up a fully-configured Weaviate instance with sample jeopardy questions, vector embeddings, and backup support enabled. [Learn more →](sandbox/readme.md)
+
+### Try Query Profiling Locally
+
+For the release-ready profiling workflow, start the dedicated sandbox with its local text-vectorizer and seed the three searchable demo collections:
+
+```bash
+cd sandbox
+docker compose -f docker-compose.profiling.yml up -d
+docker compose -f docker-compose.profiling.yml ps
+node seed-query-profiling.cjs
+```
+
+Connect to `http://localhost:8080` with API key `test-key-123`. The sandbox creates `ProfileTest`, `TravelGuide`, and `ProductCatalog`; `TravelGuide` and `ProductCatalog` support normal **Text (Semantic)** search. In Data Explorer, select **Vector Search**, enable **Profile** beside **Run Vector Search**, run a search, then select **View profile** when you need the timing breakdown. The preference is remembered across Data Explorer panels and collection changes. [Profiling sandbox instructions →](sandbox/readme.md#2-start-the-query-profiling-sandbox)
+
+### Connecting to Weaviate
+
+1. **Install** Weaviate Studio from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=prasadmuley.weaviate-studio) or [Open VSX](https://open-vsx.org/extension/prasadmuley/weaviate-studio).
+2. **Open the Weaviate Studio panel** from the VS Code sidebar.
+3. **Add a connection** to your Weaviate instance (local, on-prem, or cloud).
+4. **Explore your schema, run queries, and manage your data—all within VS Code!**
+
+---
+
+<details>
+<summary><strong>Full Feature List</strong></summary>
+
+### Connection Management
+
+- Connect to multiple Weaviate instances simultaneously
+- Secure credential storage with VS Code's built-in secret storage
+- Connection health monitoring and automatic reconnection
+- Cloud and Custom endpoints with API key support for Cloud
+- Advanced options: per-operation timeouts and skip-initialization checks
+- API keys are not displayed when editing existing connections
+- Optional connect‑on‑expand prompt for disconnected connections
+
+### Data Explorer
+
+- Interactive table browser with sortable columns and pagination
+- Visual filter builder with 10+ operators and AND/OR logic
+- Four vector search modes: Text, Object, Vector, and Hybrid (BM25 + semantic)
+- Alpha slider for balancing keyword vs semantic search
+- **Query profiling** — check **Profile** beside **Run Vector Search** to request per-shard timing data; after results arrive, select **View profile** to reveal the on-demand timing breakdown (requires Weaviate ≥ 1.36.9)
+- Export to JSON/CSV with flexible scopes (current page, filtered results, or entire collection)
+- Keyboard shortcuts (Ctrl+F, Ctrl+K, Ctrl+E) for power users
+- User preferences persistence per collection
+- Query profiling preference persistence across collection changes and Data Explorer panel reopens
+- Virtual scrolling for large datasets (1000+ objects)
+- See [Data Explorer README](src/data-explorer/README.md) for full details
+
+### RBAC & Security
+
+- Manage roles, users, and groups with native Weaviate RBAC support
+- Create and edit complex role permissions with intuitive UI
+- User management with API key rotation and OIDC password support
+- Status tracking for active and inactive users
+- Integrated into the connection management workflow
+
+### Read-Only Mode
+
+- Enable connection-level read-only guards to protect production data
+- Visual indicators in the tree view for read-only connections
+- Prevents destructive and creative operations (Add/Delete/Modify) across all studio tools
+- Toggle state persisted per connection
+
+### Generative Search
+
+- Chat-style interface for Retrieval-Augmented Generation queries
+- **Multi-collection support**: Select one or more collections as pill badges; auto-add on selection from dropdown
+- **Query controls**:
+  - **Top results per collection**: Configure how many objects to retrieve from each collection (3, 5, 10, 20)
+  - **Query timeout**: Adjustable timeout (30s, 60s, 2min, 5min) for long-running queries with local vectorizers
+- **Answer tools**:
+  - **Copy button**: Copy full answer to clipboard
+  - **Markdown toggle**: Switch between formatted view and raw markdown source
+- **Query metadata**: Shows which collections were queried and execution time (e.g., "From: Books, PodcastSearch • Completed in 2m 34s")
+- Summary label ("3 collections selected") when 3+ collections are active to reduce visual clutter
+- Validation hint ("Select at least one collection to start") when no collection is selected; Ask button disabled until valid
+- Only RAG-capable collections (those with a generative module configured) are shown
+- Right-click a collection → **"Generative Search"** pre-selects that collection
+- Opening Generative Search from another collection while the panel is already open adds it as a new pill
+- Per-collection retrieval with non-blocking error handling
+- Source attribution: context objects display their originating collection name as a badge label
+- **Retrieved Context section**: Collapsible view grouped by collection, showing properties, UUID, and distance/certainty/score metrics
+- Click telescope icon (🔭) on any context object to open it in the Data Explorer
+- Relies on Weaviate's server-side generative config—no additional API keys needed in the extension
+- Loading, error, and empty states matching the rest of the extension UX
+- Clear chat button to reset conversation history
+- Enter to send, Shift+Enter for newline
+
+### Data Visualization
+
+- Table view: Flattened, readable tables for nested JSON
+- JSON view: Syntax-highlighted, collapsible JSON viewer
+- Schema explorer: Interactive browsing of your Weaviate schema
+- Real-time results: Live query execution with instant feedback
+
+### GraphQL Editor
+
+- Monaco Editor with full GraphQL syntax support
+- Auto-completion and context-aware suggestions
+- Intelligent, schema-aware query generation that adapts to your collection schema
+- Dynamic query templates with auto-populated properties and accurate vector dimensions
+- Real-time validation and error highlighting
+- Enhanced query templates for all major Weaviate operations with comprehensive error handling
+- Reference field support and type-safe generation
+
+### Schema Management
+
+- Browse collections and their properties
+- View detailed schema information, data types, and relationships
+- Support for cross-references and nested object structures with recursive navigation
+- Visual property type icons (text, number, boolean, date, object, geo coordinates, phone, blob)
+- Visual representation of your data model with hierarchical nested property display
+- Create collections via three paths: From scratch, Copy from existing, or Import from JSON schema
+
+### Cluster Management
+
+- Comprehensive Cluster Information Panel with real-time monitoring
+- Auto-opens on connection by default (configurable)
+- "Save and Connect" workflow for streamlined connection setup
+- Cluster health and status monitoring
+- Node information and statistics
+
+### Backup & Restore
+
+- Create backups with real-time progress tracking
+- Monitor backup status (in-progress, success, failed)
+- Restore backups from any available backend
+- Retry failed backups or cancel in-progress operations
+- Multi-backend support: filesystem, S3, GCS, Azure
+- Automatic detection of available backup modules
+- Advanced configuration: include/exclude collections, custom paths
+- Independent refresh controls for backups, collections, nodes, and metadata
+
+### Tree View
+
+- Connection-level: Cluster information panel, backups, modules, collections overview
+- Collection-level: Properties (with nested object support), vectors (with count), inverted index, generative config, statistics, sharding, replication, multi‑tenancy
+
+### Schema Analysis
+
+- Enhanced schema viewer with overview, properties, raw JSON, API equivalents, and creation scripts
+
+### Developer Experience
+
+- Hot reload for instant updates
+- Full TypeScript support
+- Modern, responsive UI
+
+### Query Templates
+
+- Core: Basic Get, Vector Search, Semantic Search, Hybrid Search
+- Advanced: Filter, Aggregation, Relationship, Sort, Explore
+- Intelligent, schema-aware templates that dynamically adapt to your collection's actual schema
+- Auto-populated properties based on data types (primitives, geo coordinates, references)
+- Support for 15+ popular embedding models with automatic dimension detection
+- Comprehensive error handling with graceful fallback system
+- Visual decision tree and troubleshooting guide for 41 common mistakes
+
+See the GraphQL Templates Guide for detailed usage, examples, and best practices: [docs/GRAPHQL_TEMPLATES.md](docs/GRAPHQL_TEMPLATES.md)
+
+### Bulk Operations
+
+- Delete All Collections (destructive) with double confirmation
+
+</details>
+
+---
+
+## Telemetry & Privacy
+
+Weaviate Studio collects anonymous usage telemetry (extension activation and error categories) to help improve the extension. We **never** collect prompts, queries, data, credentials, collection names, or personally identifiable information.
+
+Telemetry requires **dual consent** — both VS Code telemetry and the `weaviate.telemetry.enabled` setting must be enabled. Disable either to opt out completely. All collected events are documented in [`telemetry.json`](telemetry.json).
+
+---
+
+## Development & Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for setup, development, and pull request guidelines.
+
+Need a quick Weaviate instance for development or learning? Check out our [local sandbox environment](sandbox/readme.md) with pre-configured Docker setup and test data.
+
+### Architecture
+
+Weaviate Studio uses a modular architecture with external React components for enhanced UI:
+
+- **Add Collection UI**: Powered by [`weaviate-add-collection`](https://github.com/weaviate/weaviate-add-collection) ([Live Demo](https://weaviate.github.io/weaviate-add-collection/)) - a standalone React component for creating, cloning, and importing collections
+- **Extension Core**: TypeScript-based VS Code extension
+- **Generative Search**: Self-contained module (`src/rag-chat/`) for generative search with its own panel, API wrapper, and React webview
+- **Webviews**: React-based UIs with Monaco editor integration
+
+For details on updating external dependencies, see the [Working with Dependencies](CONTRIBUTING.md#working-with-dependencies) section in CONTRIBUTING.md.
+
+---
+
+## Testing & Quality
+
+- Comprehensive unit and integration tests with Jest
+- Strict TypeScript and linting for code quality
+- See [TESTING_GUIDE.md](TESTING_GUIDE.md) for details
+
+---
+
+## Support & License
+
+- **Issues:** [GitHub Issues](https://github.com/muleyprasad/weaviate-studio/issues)
+- **Marketplace:** [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=prasadmuley.weaviate-studio)
+- **Open VSX:** [Open VSX Registry](https://open-vsx.org/extension/prasadmuley/weaviate-studio)
+- **License:** MIT ([LICENSE](LICENSE))
+
+---
+
+**Happy querying with Weaviate Studio! 🚀**

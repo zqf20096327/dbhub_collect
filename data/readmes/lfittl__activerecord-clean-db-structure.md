@@ -1,0 +1,127 @@
+## activerecord-clean-db-structure [ ![](https://img.shields.io/gem/v/activerecord-clean-db-structure.svg)](https://rubygems.org/gems/activerecord-clean-db-structure) [ ![](https://img.shields.io/gem/dt/activerecord-clean-db-structure.svg)](https://rubygems.org/gems/activerecord-clean-db-structure)
+
+Ever been annoyed at a constantly changing `db/structure.sql` file when using ActiveRecord and Postgres?
+
+Spent hours trying to decipher why that one team member keeps changing the file?
+
+This library is here to help!
+
+It cleans away all the unnecessary output in the file every time its updated automatically. This helps avoid merge conflicts, as well as increase readability.
+
+## Installation
+
+Add the following to your Gemfile:
+
+```ruby
+gem 'activerecord-clean-db-structure'
+```
+
+This will automatically hook the library into your `rake db:migrate` task.
+
+## Supported Rails versions
+
+Whilst there is no reason this shouldn't work on earlier versions, this has only been tested on Rails 4.2 and newer.
+
+It also assumes you use ActiveRecord with PostgreSQL - other ORMs or databases are not supported.
+
+## Caveats
+
+Currently the library assumes all your `id` columns are either SERIAL, BIGSERIAL or uuid. It also assumes the `id` is the primary key.
+
+Multi-column primary keys, as well as tables that don't have `id` as the primary key are not supported right now, and might lead to wrong output.
+
+You can disable this part of the _cleaning_ process in your `config/environments/<environment>.rb` (or `config/application.rb`):
+
+```ruby
+Rails.application.configure do
+  config.activerecord_clean_db_structure.ignore_ids = true
+end
+```
+
+## Other options
+
+### group_table_definition
+
+You can optionally place indexes and constraints (limited to deferrable ones) after the main tables by setting group_table_definition:
+
+```ruby
+Rails.application.configure do
+  config.activerecord_clean_db_structure.group_table_definition = true
+end
+```
+
+When it is enabled the structure looks like this:
+
+```sql
+CREATE TABLE public.users (
+    id SERIAL PRIMARY KEY,
+    tenant_id integer,
+    email text NOT NULL
+);
+
+CREATE INDEX index_users_on_tentant_id ON public.users USING btree (tenant_id);
+CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
+ALTER TABLE public.users ADD CONSTRAINT unique_tenant UNIQUE (tenant_id) DEFERRABLE INITIALLY DEFERRED;
+```
+
+### order_column_definitions
+
+To enable sorting the table column definitions alphabetically, discarding the actual order provided by `pg_dump`, set `order_column_definitions`:
+
+```ruby
+Rails.application.configure do
+  config.activerecord_clean_db_structure.order_column_definitions = true
+end
+```
+
+### order_schema_migrations_values
+
+You can have the schema_migrations values reorganized to prevent merge conflicts by setting `order_schema_migrations_values`:
+
+```ruby
+Rails.application.configure do
+  config.activerecord_clean_db_structure.order_schema_migrations_values = true
+end
+```
+
+When it is enabled the values are ordered chronological and the semicolon is placed on a separate line:
+
+```sql
+INSERT INTO "schema_migrations" (version) VALUES
+ ('20190503120501')
+,('20190508123941')
+,('20190508132644')
+;
+```
+
+### keep_extensions
+
+By default the gem will remove [some extensions](https://github.com/ghiculescu/activerecord-clean-db-structure/blob/c9551391476a5e7a08ff314501af89baddcf669a/lib/activerecord-clean-db-structure/clean_dump.rb#L24) that typically aren't needed in structure dumps. You can choose to keep all, or just some, of those extensions:
+
+```ruby
+Rails.application.configure do
+  config.activerecord_clean_db_structure.keep_extensions = :all
+
+  # This does the same thing as :all. You can choose which optional extensions to keep.
+  config.activerecord_clean_db_structure.keep_extensions = ['pg_stat_statements', 'pg_buffercache']
+end
+```
+
+### ignore_schmeas
+
+You can ignore specific schemas, for example when dumping from a database copy that is integrated with pganalyze and has helper functions:
+
+```ruby
+Rails.application.configure do
+  config.activerecord_clean_db_structure.ignore_schemas = ['pganalyze']
+end
+```
+
+## Authors
+
+* [Lukas Fittl](https://github.com/lfittl)
+
+## License
+
+Copyright (c) 2017, Lukas Fittl<br>
+activerecord-clean-db-structure is licensed under the 3-clause BSD license, see LICENSE file for details.

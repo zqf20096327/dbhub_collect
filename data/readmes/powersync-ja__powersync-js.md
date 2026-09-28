@@ -1,0 +1,163 @@
+<p align="center">
+  <a href="https://www.powersync.com" target="_blank"><img src="https://github.com/powersync-ja/.github/assets/7372448/d2538c43-c1a0-4c47-9a76-41462dba484f"/></a>
+</p>
+
+_[PowerSync](https://www.powersync.com) keeps a client-side SQLite database in sync with your backend database. Changes appear across users and devices in real-time, user interactions feel instant and your app continues to work even when offline. Supports Postgres, MongoDB, MySQL, and SQL Server. Client SDKs are available for a wide range of environments including web, mobile, desktop, headless and embedded._
+
+# PowerSync JavaScript SDKs
+
+`powersync-js` is the monorepo for PowerSync JavaScript SDKs.
+
+## Monorepo Structure: Packages
+
+- [packages/react-native](./packages/react-native/README.md)
+
+  - React Native SDK implementation (extension of `packages/common`)
+
+- [packages/web](./packages/web/README.md)
+
+  - JS Web SDK implementation (extension of `packages/common`)
+
+- [packages/node](./packages/node/README.md)
+
+  - Node.js client implementation (extension of `packages/common`)
+
+- [packages/react](./packages/react/README.md)
+
+  - React integration for PowerSync.
+
+- [packages/vue](./packages/vue/README.md)
+
+  - Vue composables for PowerSync.
+
+- [packages/tanstack-query](./packages/tanstack-react-query/README.md)
+
+  - [TanStack Query](https://tanstack.com/query/) integration for React.
+
+- [packages/attachments](./packages/attachments/README.md)
+
+  - Attachments helper package for React Native and JavaScript/TypeScript projects (deprecated).
+
+- [packages/attachments-storage-react-native](./packages/attachments-storage-react-native/README.md)
+
+  - React Native file system storage adapters for PowerSync attachments (alpha).
+
+- [packages/kysely-driver](./packages/kysely-driver/README.md)
+
+  - [Kysely](https://kysely.dev/) integration (ORM) for React Native and JavaScript/TypeScript projects.
+
+- [packages/drizzle-driver](./packages/drizzle-driver/README.md)
+
+  - [Drizzle](https://orm.drizzle.team/) integration (ORM) for React Native and JavaScript/TypeScript projects.
+
+- [packages/common](./packages/common/README.md)
+  - Shared package: TypeScript implementation of a PowerSync database connector, streaming sync bucket implementation and attachment utilities.
+
+## Demo Apps / Example Projects
+
+Demo applications are located in the [`demos/`](./demos/) directory. Also see our [Demo Apps / Example Projects](https://docs.powersync.com/resources/demo-apps-example-projects) gallery which lists all projects by the backend and client-side framework they use.
+
+### React Native
+
+- [demos/react-native-supabase-todolist](./demos/react-native-supabase-todolist/README.md): A React Native to-do list example app using a Supabase backend.
+- [demos/react-native-supabase-group-chat](./demos/react-native-supabase-group-chat/README.md): A React Native group chat example app using a Supabase backend.
+- [demos/react-native-supabase-background-sync](./demos/react-native-supabase-background-sync/README.md): A React Native example app demonstrating background sync using PowerSync, Expo and Supabase.
+- [demos/react-native-web-supabase-todolist](./demos/react-native-web-supabase-todolist/README.md) A React Native to-do list example app using a Supabase backend that's compatible with React Native for Web.
+
+### Web
+
+- [demos/react-supabase-todolist](./demos/react-supabase-todolist/README.md): A React to-do list example app using the PowerSync Web SDK and a Supabase backend.
+- [demos/react-supabase-todolist-tanstackdb](./demos/react-supabase-todolist-tanstackdb/README.md): A React to-do list example app using the PowerSync Web SDK and a Supabase backend + [TanStackDB](https://tanstack.com/db/latest) collections.
+- [demos/react-supabase-time-based-sync](./demos/react-supabase-time-based-sync/README.md): A React demo using Sync Streams to subscribe to date-filtered data dynamically, with a Supabase backend.
+- [demos/react-multi-client](./demos/react-multi-client/README.md): A React widget that illustrates how data flows from one PowerSync client to another.
+- [demos/yjs-react-supabase-text-collab](./demos/yjs-react-supabase-text-collab/README.md): A React real-time text editing collaboration example app powered by [Yjs](https://github.com/yjs/yjs) CRDTs and [Tiptap](https://tiptap.dev/), using the PowerSync Web SDK and a Supabase backend.
+- [demos/vue-supabase-todolist](./demos/vue-supabase-todolist/README.md): A Vue to-do list example app using the PowerSync Web SDK and a Supabase backend.
+- [demos/angular-supabase-todolist](./demos/angular-supabase-todolist/README.md) An Angular to-do list example app using the PowerSync Web SDK and a Supabase backend.
+
+- [demos/example-webpack](./demos/example-webpack/README.md): A minimal example demonstrating bundling with Webpack.
+- [demos/example-vite](./demos/example-vite/README.md): A minimal example demonstrating bundling with Vite.
+- [demos/example-vite-encryption](./demos/example-vite-encryption/README.md): A minimal example demonstrating web encryption.
+- [demos/example-nextjs](./demos/example-nextjs/README.md): An example demonstrating setup with Next.js.
+
+### Electron
+
+- [demos/example-electron](./demos/example-electron/README.md) An Electron example web rendered app using the PowerSync Web SDK in the renderer process.
+- [demos/example-electron-node](./demos/example-electron-node/README.md) An Electron example that runs PowerSync in the main process using the PowerSync Node.js SDK.
+
+### Capacitor
+
+- [demos/example-capacitor](./demos/example-capacitor/README.md) A Capacitor example app using the PowerSync Web SDK.
+
+### Node
+
+- [demos/example-node](./demos/example-node/README.md) A small CLI example built using the PowerSync SDK for Node.js.
+
+## Tools
+
+- [tools/diagnostics-app](./tools/diagnostics-app): A standalone web app that presents stats about a user's local database (incl. tables and sync buckets).
+
+# Development
+
+This monorepo uses pnpm.
+
+Install workspace dependencies
+
+```bash
+pnpm install
+```
+
+Build packages
+
+```bash
+pnpm build:packages
+```
+
+## Tests
+
+Some packages use [Playwright](https://www.npmjs.com/package/playwright) for testing. Install Playwright dependencies with:
+
+```bash
+pnpm exec playwright install-deps
+pnpm exec playwright install
+```
+
+## Versioning
+
+### Development Packages
+
+Development packages can be published by manually triggering the `release` workflow. Development packages are versioned as `0.0.0-{tag}-DATETIMESTAMP`.
+
+For technical npm reasons, publishing dev and release packages needs to happen from within a single workflow. `release.yml` contains checks to only release
+dev packages when triggered by `workflow_dispatch`.
+
+### Production Packages
+
+Pull requests should contain Changesets for changed packages.
+
+Add changesets with
+
+```Bash
+pnpm changeset add
+```
+
+Merging a PR with Changesets will automatically create a PR with version bumps. That PR will be merged when releasing.
+
+## React Native Quick SQLite Development
+
+By default, the PowerSync React Native SDK uses [a fork of react-native-quick-sqlite](https://github.com/powersync-ja/react-native-quick-sqlite)
+
+Testing live development changes to `@journeyapps/react-native-quick-sqlite` will not work with standard `yarn link` commands. Metro does not work well with symlinks <https://github.com/facebook/metro/issues/286>.
+
+The process of releasing development packages for `@journeyapps/react-native-quick-sqlite` for each change can be tedious and slow. A faster (and hackier) method is to use [mtsl](https://www.npmjs.com/package/mtsl) which will watch and copy the package into this workspace's `node_modules`.
+
+```bash
+npm install -g mtsl
+```
+
+```bash
+mtsl add -s "[source path to your react-native-quick-sqlite repo folder]" -d "[this workspaces root node_modules folder]"/@journeyapps/react-native-quick-sqlite
+```
+
+```bash
+mtsl start "[the id returned from step above]"
+```

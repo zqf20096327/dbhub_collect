@@ -1,0 +1,213 @@
+= attr_masker
+:source-highlighter: pygments
+:pygments-style: native
+:pygments-linenums-mode: inline
+
+ifdef::env-github[]
+image:https://img.shields.io/gem/v/attr_masker[
+	"Gem Version",
+	link="https://rubygems.org/gems/attr_masker"]
+image:https://img.shields.io/github/workflow/status/riboseinc/attr_masker/Tests[
+	"Build Status",
+	link="https://github.com/riboseinc/attr_masker/actions"]
+image:https://img.shields.io/codeclimate/maintainability/riboseinc/attr_masker[
+	"Code Climate",
+	link="https://codeclimate.com/github/riboseinc/attr_masker"]
+image:https://img.shields.io/codecov/c/github/riboseinc/attr_masker[
+	"Test Coverage",
+	link="https://codecov.io/gh/riboseinc/attr_masker"]
+image:https://img.shields.io/badge/documentation-rdoc-informational[
+	"Documentation on RubyDoc.info",
+	link="https://rubydoc.info/gems/attr_masker"]
+endif::[]
+
+Mask ActiveRecord/Mongoid data with ease!
+
+== Introduction
+
+This gem is intended to mask sensitive data so that production database dumps
+can be used in staging or test environments.
+
+* Works with Rails 4.2+ and modern Rubies
+* Supports ActiveRecord and Mongoid models
+
+
+== Usage instructions
+
+=== Installation
+
+Add `attr_masker` to your `Gemfile`:
+
+[source,ruby]
+----
+gem "attr_masker"
+# or the HEAD version of the gem
+# gem "attr_masker", github: "riboseinc/attr_masker"
+----
+
+
+Then install the gem:
+
+[source,sh]
+----
+bundle install
+----
+
+=== Basic usage
+
+In your models, define attributes which should be masked:
+
+[source,ruby]
+----
+class User
+  attr_masker :email, :first_name, :last_name
+end
+----
+
+Then, when you want to mask the data, run the `db:mask` Rake task in some
+Rails environment other than production, for example:
+
+[source,sh]
+----
+bundle exec rake db:mask RAILS_ENV=staging
+----
+
+WARNING: Data are destructively overwritten.  Run `rake db:mask` with care!
+
+=== Masking records selectively
+
+You can use `:if` and `:unless` options to prevent some records from being
+altered.
+
+[source,ruby]
+----
+# evaluates given proc for each record, and the record is passed as a proc's
+# argument
+attr_masker :email :unless => ->(record) { ! record.tester_user? }
+
+# calls #tester_user? method on each record
+attr_masker :first_name, :if => :tester_user?
+----
+
+The ActiveRecord's `::default_scope` method has no effect on masking.  All
+table records are updated, provided that `:if` and `:unless` filters allow that.
+For example, if you're soft-deleting your data (with a gem like
+https://github.com/rubysherpas/paranoia[Paranoia]), records marked as deleted
+will be masked as well.
+
+=== Built-in maskers
+
+Attr Masker comes with several built-in maskers.
+
+==== `AttrMasker::Maskers::Simple`
+
+Simply replaces any value with the `"(redacted)"`.  Only useful for columns
+containing textual data.
+
+This is a default masker.  It is used when `:masker` option is unspecified.
+
+[example]
+====
+[source,ruby]
+----
+attr_masker :first_name
+attr_masker :last_name, :masker => AttrMasker::Maskers::Simple.new
+----
+
+Would set both `first_name` and `last_name` attributes to `"(redacted)"`.
+====
+
+==== `AttrMasker::Maskers::Replacing`
+
+Replaces characters with some masker string (single asterisk by default).
+Can be initialized with options.
+
+[options="header"]
+|===
+|Name|Default|Description
+
+|`replacement`|`"*"`|Replacement string, can be empty.
+|`alphanum_only`|`false`|When true, only alphanumeric characters are replaced.
+|===
+
+[example]
+====
+[source,ruby]
+----
+rm = AttrMasker::Maskers::Replacing.new(character: "X", alphanum_only: true)
+attr_masker :phone, :masker => rm
+----
+
+Would mask `"123-456-7890"` as `"XXX-XXX-XXXX"`.
+====
+
+=== Using custom maskers
+
+Apart from built-in maskers, any object which responds to `#call` can be used,
+e.g. some lambda or `Method` instance.  For instance, you may want to produce
+unique values basing on other attributes, to mask selectively, or to use
+tool like https://github.com/skalee/well_read_faker[Well Read Faker] to
+generate random replacement values:
+
+[source,ruby]
+----
+require "well_read_faker"
+
+attr_masker :email, masker: ->(model:, **) { "user#{model.id}@example.com" }
+attr_masker :phone, masker: ->(value:, **) { "******" + value[-3..-1] }
+attr_masker :bio, masker: ->(**) { WellReadFaker.paragraph }
+----
+
+Masker is called with following keyword arguments:
+
+`value`:: Original value of the field which is about to be masked
+
+`model`:: Model instance
+
+`attribute_name`:: Name of the attribute which is about to be masked
+
+`masking_options`:: Hash of options which were passed in `#attr_masker` call
+
+This list is likely to be extended in future versions, and that will not be
+considered a breaking change, therefore it is strongly recommended to always
+use a splat (`**`) at end of argument list of masker's `#call` method.
+
+=== Configuration file
+
+It is also possible to contain all the maskers configuration in one file.
+Just place it in `config/attr_masker.rb`, and it will be loaded from a Rake
+task after the application is fully loaded.  That means you can re-open classes
+and add masker definitions there, for example:
+
+[source,ruby]
+----
+# config/attr_masker.rb
+
+class User
+  attr_masker :first_name, :last_name
+end
+
+class Email
+  attr_masker :address, ->(model:, **) { "mail#{model.id}@example.com" }
+end
+----
+
+== Roadmap & TODOs
+
+- documentation
+- spec tests
+- Make the `Rails.env` (in which `db:mask` could be run) configurable
+** maybe by passing `ENV` vars
+- more masking options!
+** default scrambling algorithms?
+** structured text preserving algorithms
+*** _e.g._, keeping an HTML snippet valid HTML, but with masked inner text
+** structured *Object* preserving algorithms
+*** _i.e._ generalization of the above HTML scenario
+- I18n of the default `"(redacted)"` phrase
+- ...
+
+== Acknowledgements
+
+https://github.com/attr-encrypted/attr_encrypted[attr_encrypted] for the initial
+code structure

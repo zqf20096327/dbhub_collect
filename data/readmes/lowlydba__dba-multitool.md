@@ -1,0 +1,64 @@
+# DBA MultiTool
+
+[![License](https://img.shields.io/github/license/LowlyDBA/dba-multitool?color=blue)][license]
+![Code Coverage](https://raw.githubusercontent.com/lowlydba/dba-multitool/_xml_coverage_reports/data/main/badge.svg)
+
+[![Unit Test (Win SQL Server)](https://github.com/lowlydba/dba-multitool/actions/workflows/sqlserver-unit.yml/badge.svg)](https://github.com/lowlydba/dba-multitool/actions/workflows/sqlserver-unit.yml)
+[![Lint Code](https://github.com/lowlydba/dba-multitool/actions/workflows/lint.yml/badge.svg)](https://github.com/lowlydba/dba-multitool/actions/workflows/lint.yml)
+
+<img src="assets/dba-multitool-logo.png" align="left">
+
+</br>The DBA MultiTool is a suite of scripts for the long haul:
+optimizing storage, on-the-fly documentation, general administrative needs,
+and more. Each script relies solely on T-SQL to ensure it is secure,
+requires no third-party software, and can be installed in seconds.
+
+## Scripts
+
+To install/update all the scripts, use install_dba-multitool.sql.
+
+Looking for ways to automate the scripts? Try `Install-DbaMultiTool` from [dbatools :rocket:][dbatools],
+or the Ansible collection [lowlydba.sqlserver][lowlydba.sqlserver].
+
+For detailed instructions and documentation, see [the repo](https://github.com/lowlydba/dba-multitool)
+
+| Name | Description |
+| ---- | ----------- |
+| sp_doc | Always have current documentation by generating it on the fly in markdown. |
+| sp_estindex | Estimate a new index's size and statistics without having to create it. |
+| sp_help_revlogin | Stored procedures that will help generate necessary scripts to transfer logins and their passwords. |
+| sp_helpme |  A drop-in modern alternative to `sp_help`. |
+| sp_sizeoptimiser | Recommends space saving measures for data footprints, with special checks for SQL Server Express. |
+
+## Compatibility
+
+Only support for versions that are still in [mainstream][mainstream] support is guaranteed.
+
+| Version | Tested |
+| ------- | :----: |
+| Azure SQL | :heavy_check_mark: |
+| AWS RDS SQL Server * | :question: |
+| SQL Server 2022 | :heavy_check_mark: |
+| SQL Server 2019 | :heavy_check_mark: |
+| SQL Server 2014-2017 | :shrug: |
+| <= SQL Server 2012 | :x: |
+
+\* AWS RDS SQL Server is not tested, but should work *in theory*. YMMV.
+
+## Contributing
+
+* Want to help :construction_worker:? Check out the [contributing][contrib] doc
+* Missing a feature? Found a :bug:? Open an [issue][issue] to get some :heart:
+* Something else? Say hi in the SQL Server Community Slack [#multitool][slack] channel
+
+<sub>*Icon made by [mangsaabguru](https://www.flaticon.com/authors/mangsaabguru)
+from [www.flaticon.com](https://www.flaticon.com/)*</sub>
+
+[contrib]: ../.github/CONTRIBUTING.md
+[dbatools]: https://dbatools.io
+[issue]: https://github.com/LowlyDBA/dba-multitool/issues
+[license]: ../LICENSE
+[lowlydba.sqlserver]: https://docs.ansible.com/ansible/latest/collections/lowlydba/sqlserver/index.html
+[mainstream]: https://learn.microsoft.com/en-us/sql/sql-server/end-of-support/sql-server-end-of-support-overview?view=sql-server-ver16#lifecycle-dates
+[slack]: https://sqlcommunity.slack.com/archives/C026Y2YCM9N
+[sp_help_revlogin]: https://learn.microsoft.com/en-us/troubleshoot/sql/database-engine/security/transfer-logins-passwords-between-instances

@@ -1,0 +1,10 @@
+# adventureworks-neo4j
+Importing AdventureWorks data into Neo4j (subset)
+
+![alt tag](https://raw.githubusercontent.com/sfrechette/adventureworks-neo4j/master/graphmodel_adventureworks.png)
+AdventureWorks Graph Data Model
+
+Related blog post **Importing AdventureWorks data into Neo4j**
+
+[https://stephanefrechette.dev/posts/importing-adventureworks-data-into-neo4j/](https://stephanefrechette.dev/posts/importing-adventureworks-data-into-neo4j/)
+

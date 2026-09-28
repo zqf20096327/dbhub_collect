@@ -1,0 +1,46 @@
+#English
+Hello everyone, I'm Lorn! I'm still in my novice phase, and I've benefited a lot from the selfless sharing of technical skills and teaching from many netizens. Although my abilities are still not perfect, I still want to contribute my efforts to JAVA web development. As a JAVA beginner, I thought for a while and decided to write a tutorial book that is different from the usual Java Spring + Struts + Hibernate (SSH). I am attempting to write about the Play Framework.
+
+The Play Framework is a Web Framework that has gradually gained popularity abroad in recent years. It's primarily built with JAVA + Scala. It can be used to develop web applications, RestFul Api Servers, Cache Servers, and so on. I will also use MyBatis + MariaDB to implement database access functions. These features can meet the most common needs of developers for a Web + MVC structure and assist with various development needs. In this era, Google provides a lot of conveniences, but the information is scattered. My purpose is to consolidate these resources and help everyone deal with possible issues when using this framework.
+
+If you are a developer who is already familiar with JAVA and SSH architecture, I believe you will quickly get the hang of it after some practice! If you are a beginner, that's okay, you can follow the pace of each of my chapters, practice diligently, and hopefully, it will introduce you to some basic architecture and features of Play. The chapters will be as simple and easy to start with as possible.
+
+I will not cover all the details of Play. If you encounter any questions during operation and practice, learning to find answers online can be a great help in learning any language and will cultivate a good habit of self-learning.
+
+As I have no experience in developing with SSH, and I have only used parts of Spring, I can't objectively compare the advantages and disadvantages. If you are an original SSH developer, you can appreciate the differences between the two from my introduction.
+
+There will inevitably be imperfections in the book, and your suggestions are welcomed. If you have any questions, feel free to ask! Although my technical skills and knowledge are relatively weak compared to other developers, if there are any incorrect descriptions of concepts or techniques, I welcome corrections. I also hope that this book can be improved and benefit everyone!
+
+Let's get started!!
+Simple is good, simple makes your life be happy. by Lorn 2016.07.06
+
+Book link: https://bit.ly/3Jeurwd
+This book is no longer updated, but it is available for everyone to read. by Lorn 2021.04.02
+
+#繁體中文
+各位大家好，我是Lorn!個人還是新手時期，受惠於許多網友無私的分享技術與教學，受益良多。
+思考自己過能力還不夠完善，但我還是想貢獻一份心力在JAVA網頁開發上面。身為一個JAVA初心開發者，想了好段
+時間後，覺得寫一本不同於，Java Spring + Struts + Hibernate(SSH)的教學書。來嘗試寫看看Play Framework。
+
+Play Framework是近幾年國外慢慢流行起來的Web Framework，主要用JAVA + Scala語言打造。它可以用來於開發
+網頁程式、RestFul Api Server、Cache Server等等用途。而我也會用MyBatis + MaraiaDB，來實作資料庫存
+取功能。這些功能就可以達到開發者，最常需要的Web + MVC架構，協助各種開發需求。這個時代上，Google帶給大
+家超多便利性，但資訊是散落的，而我的目的是去匯整這些資源，協助大家使用這個框架時，可能會遇到的問題。
+
+若是原本就是JAVA熟悉SSH架構的開發者，相信熟練一段時間後，會很快就上手的!!，若是新手也沒關係，你可以按
+照我每個章結的步調，好好練習做下去，希望會帶給你Play一些基本架構與的特點，章節也會盡量簡單而容易上手。
+
+基本上我不會把Play全部細節介紹完畢，若是在操作與練習，發現疑問時，可以學習找上網答案，可以讓你對於
+學習任何一種語言都是很好的幫助，也會養成自我學習的好習慣。
+
+因為本人開發過SSH經驗目前是沒有，最多使有用過Spring的部分，所以我無法客觀比較優缺點，若是原本SSH開發者，可以
+從我的介紹去體會兩者不同之處。
+
+書本一定會不完善的地方，歡迎大家建議，有任何問題，可以發問唷!!雖然本人技術力與知識相對於其它
+開發者還是很微弱，若有觀念與技術有錯誤描述，歡迎指正，我也希望這本書能更完善，造福大家!!
+
+那我們開始吧!!
+Simple is good , simple make your life be happy. by Lorn 2016.07.06
+  
+書本連結 : https://bit.ly/3Jeurwd
+此書不再更新，但提供各位參閱。by Lorn 2021.04.02

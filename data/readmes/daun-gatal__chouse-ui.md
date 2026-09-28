@@ -1,0 +1,477 @@
+<p align="center">
+  <img src="public/logo.svg" alt="CHouse UI" width="120" />
+</p>
+
+<h1 align="center">CHouse UI</h1>
+
+<p align="center">
+  <strong>A web interface for ClickHouse with built-in RBAC, fleet monitoring, and an AI SRE</strong>
+</p>
+
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#architecture">Architecture</a> •
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#deployment">Deployment</a> •
+  <a href="#configuration">Configuration</a>
+</p>
+
+<p align="center">
+  <a href="https://chouse-ui.com">
+    <img src="https://img.shields.io/badge/Website-chouse--ui.com-blue?style=flat&logo=googlechrome&logoColor=white" alt="Website" />
+  </a>
+  <a href="https://github.com/daun-gatal/chouse-ui/actions/workflows/ci.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/daun-gatal/chouse-ui/ci.yml?label=Build%20%26%20Test" alt="Build & Test" />
+  </a>
+  <a href="https://github.com/daun-gatal/chouse-ui/actions/workflows/github-pages.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/daun-gatal/chouse-ui/github-pages.yml?label=GitHub%20Pages" alt="GitHub Pages" />
+  </a>
+  <a href="https://github.com/daun-gatal/chouse-ui/actions/workflows/release.yml">
+    <img src="https://img.shields.io/github/actions/workflow/status/daun-gatal/chouse-ui/auto-release.yml?label=Release" alt="Release" />
+  </a>
+</p>
+
+---
+
+## Overview
+
+CHouse UI is the team operator's console for on-prem ClickHouse. Most tools nail one piece — a query workspace, a dashboard, an AI assistant, a cluster monitor; this is the **combination**: a team access layer (app-level **RBAC**, audit logging, and encrypted server-side credentials so the browser never sees a password), **multi-cluster fleet monitoring** with Slack/email alerts, and **Chouse AI** — an autonomous, read-only SRE that runs root-cause scans, optimizes queries and diagnoses errors right in the monitoring tabs, writes fixes with before→after `EXPLAIN` proof, and delivers RCA to Slack on a breach. Open-source and Apache 2.0 — so you never copy-paste an error into a chatbot or hunt for a rewrite; the diagnosis and the fix live next to the problem.
+
+### Why CHouse UI?
+
+CHouse UI provides security and access control features for teams that need:
+
+| Feature | CHouse UI |
+|---------|-------------------|
+| **Credential Management** | Encrypted server-side storage (never in browser) |
+| **Architecture** | Secure backend proxy (no direct browser-to-ClickHouse) |
+| **Access Control** | Full RBAC with granular permissions |
+| **Multi-Connection** | Manage multiple ClickHouse servers |
+| **Audit Trail** | Audit logging |
+| **Monitoring** | ClickHouse-native observability — query logs, memory breakdown, top-resource queries, replica lag, parts/merges, schema lints — no exporter required |
+| **Fleet view** | Watch every cluster at once — one pane, per-card polling, status / memory / lag / exceptions, drill into any node |
+| **Chouse AI (SRE)** | Autonomous read-only diagnostics — root-cause fleet scans with history + auto-RCA to Slack/email, plus in-tab query optimization (before→after `EXPLAIN`) and error/parts diagnosis |
+
+---
+
+## Features
+
+### 🔐 Security & Access Control
+- **RBAC System** - Role-based permissions (Super Admin, Admin, Developer, Analyst, Viewer, Guest)
+- **ClickHouse User Management** - Create and manage ClickHouse users with native grants (Developer, Analyst, Viewer roles)
+- **Encrypted Credentials** - AES-256-GCM encryption for ClickHouse connection passwords
+- **Password Hashing** - Argon2id for user passwords
+- **JWT Authentication** - Secure token-based sessions with access and refresh tokens
+- **Data Access Rules** - Granular database/table permissions per user or role
+- **Audit Logging** - Track all user actions and query history
+- **AI-Powered Analysis** - Built-in query optimizer and debugger to improve performance and security
+
+### 🗄️ Database Management
+- **Multi-Connection Support** - Manage multiple ClickHouse servers
+- **Database Explorer** - Tree view with schema inspection
+- **Database Operations** - Create and drop databases
+- **Table Management** - Create, alter, and drop tables with various engines (MergeTree, ReplicatedMergeTree, etc.)
+- **File Upload** - Upload CSV, TSV, or JSON files to existing tables
+- **Data Preview** - Sample data with pagination
+
+### 📊 Query Workspace
+- **SQL Editor** - Monaco editor with syntax highlighting, auto-completion, and Visual EXPLAIN
+- **Query Execution** - Run queries with per-query execution statistics
+- **Saved Queries** - Persist frequently used queries, organize by connection
+- **Data Export** - CSV, JSON, TSV formats
+- **AI Assist** - Optimizer / Debugger / Chat with schema-aware context (provider-pluggable: OpenAI, Anthropic, Google, Azure OpenAI, AWS Bedrock, Groq, Mistral, Cohere, Ollama, xAI, DeepSeek, Cerebras, Fireworks, Together, OpenRouter, and any OpenAI-compatible API)
+- **Overview Dashboard** - System stats, recent queries, and quick actions (admin only)
+
+### 🔬 Monitoring & Observability
+- **Query logs** with five sub-views over `system.query_log`:
+  - **Queries** — every execution as a dense table with sortable columns, SQL-keyword tooltip preview, memory-pressure flag (Flame ≥ 25 % / AlertTriangle ≥ 10 % cluster RAM), row checkboxes for side-by-side **Compare**, expanded-row drill-downs for **Profile events** and **Views triggered** (`system.query_views_log`)
+  - **Patterns** — `normalizeQuery()` rollup with cumulative cost (Runs / Avg dur / **Total dur** / Max mem / Read rows / Read bytes), default sort Total dur DESC — finds the patterns hogging the most wall-clock time across all repetitions
+  - **By table** — `arrayJoin(tables)` per-table rollup with `arrayFilter` push-down so busy clusters return in ~1 s
+  - **By Redash** — groups every Redash-originated query by the `query_id` embedded in its leading SQL comment (`/* … query_id: NNNN … */`), so you can map cluster load back to the saved dashboard query. Runs / Min·Avg·Max·Total duration / Min·Max memory / read rows / read bytes, all sortable
+  - **Histogram** — distribution of duration / memory / read rows / read bytes across the active window, with **p50 / p95 / p99** chips (p99 amber-tinted to flag the tail)
+- **Query timeline chart** — stacked bar / stacked area / line variants, per `query_kind`
+- **Custom time range** — 15 m / 1 h / 6 h / 24 h presets + a Grafana-style drill-down calendar (day → month → year) in one popover
+- **Parts** — `system.part_log` stacked area chart of merges, mutations, downloads, removals + paginated event table
+- **Schema advisor** — Nullable column + oversized integer linter over `system.parts_columns`, ranked by on-disk bytes (renamed from "Schema doctor" to disambiguate from the AI Fleet Doctor)
+- **Cluster activity** — `system.mutations` + `system.replication_queue` with status chips, a blocked-task indicator strip (long queries / long merges / open mutations / max replica lag), and a per-replica status panel (`system.replicas` lag + queue depth)
+- **Live queries** — running queries with **CPU time + thread count**, sortable by duration / memory / rows / CPU, and kill support. A server-memory pressure strip puts the per-query totals in context (resident / total %)
+- **Metrics** — Overview / Performance / Storage / Merges / Errors / **Memory** / **CPU** / **ZooKeeper** / Network tabs:
+  - **Memory** — server RAM breakdown (RSS attributed to active queries / caches / merges / primary keys / index, vs total), allocator history, and a top-memory-queries table
+  - **CPU** — load avg / threads / pools, CPU mode-split + concurrency charts, and a top-CPU-queries table
+  - **ZooKeeper** — Keeper transactions, traffic, and system-load time-series
+
+### 🛰️ Fleet & Chouse AI
+- **Fleet view** (`/fleet`) — every configured connection side by side, grid or row layout. Each card polls its own connection independently, so a slow/down cluster never blocks the grid. Status (healthy / degraded / down), memory %, active queries, longest-running, exceptions feed, inventory strip, per-node trend sparklines. Drill into any card → that cluster's monitoring.
+- **Fleet poller** — a backend worker caches per-cluster metric snapshots to SQLite on a schedule (`FLEET_POLL_INTERVAL_SECONDS`), so the fleet page reads one fast endpoint instead of every browser hammering every cluster. HA-safe via a single-instance advisory lease. Toggle with `FLEET_POLLER_ENABLED`.
+- **Threshold alerts** — node memory %, per-query memory, and long-running-query rules with hysteresis to avoid flapping. Delivered as Slack Block Kit cards + email (SMTP), configured per install.
+- **Chouse AI — Fleet Doctor** (`/doctor`) — an autonomous, **read-only** AI SRE. Scans the fleet with a guarded `query_node` tool (single `SELECT`, `system.*` only, ClickHouse `readonly=1`), pins root causes, and writes a structured report: per-node verdict, recommendations, evidence, and a heavy-query deep-dive. Reports persist with a history rail; scope (node subset) + time-window selectable. On an alert breach it can auto-run RCA and deliver the analysis to Slack/email. Advisory only — the AI never mutates the cluster.
+- **Chouse AI in the monitoring tabs** — the same read-only engine surfaced where you're already looking, so you fix a problem without leaving the tab. **Optimize with Chouse AI** on a Query Logs row → an optimized rewrite with the same result, a before→after `EXPLAIN` estimate, and one click to **Open in Explorer**. **Fix** on a `system.errors` row → cause / impact / ordered solutions. **Diagnose** on a part-log row → part-health read (merge pressure, too many parts, partition key). Gated by `ai:optimize`; advisory only — review before running.
+- **Errors** (`/errors`) — a viewer over `system.errors` + the crash log, searchable and paginated, so recurring server-side errors surface without ad-hoc SQL.
+
+### 🎨 User Experience
+- **Editorial design system** — ClickHouse-yellow accent, Geist Sans + Geist Mono typography, hairline borders
+- **Light + dark themes** — full light theme with a warm-stone palette and amber-shifted brand, plus an **Auto** mode that switches by local time of day (light 06:00–18:00, dark otherwise). Every chart, table, and pill is theme-aware
+- **Command palette** — ⌘/Ctrl+K opens RBAC-gated quick switcher (recent queries, pages, databases, tables, saved queries, actions, help)
+- **Responsive** — works on desktop and tablet; container-query layouts adapt per component, not just per viewport
+- **Connection Selector** - Quick server switching
+- **Keyboard Shortcuts** - Power user support
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- [Bun](https://bun.sh/) v1.0+ (or Node.js 18+)
+- A ClickHouse server (or use Docker Compose)
+
+### Tested Compatibility
+
+Successfully tested with:
+- **ClickHouse**: Version 24.11 and 25 (monitoring suite verified end-to-end against a production 24.11 cluster)
+- **PostgreSQL**: Version 18 (for RBAC database)
+- **SQLite**: Version 3.51.0 (via Bun, for RBAC database)
+
+### Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/daun-gatal/chouse-ui.git
+cd chouse-ui
+
+# Install dependencies
+bun install
+
+# Start development servers
+bun run dev
+```
+
+This starts:
+- **Frontend**: http://localhost:5173
+- **Backend**: http://localhost:5521
+
+### Default Login
+
+On first run, an admin user is created:
+- **Email**: `admin@localhost`
+- **Username**: `admin`
+- **Password**: `admin123!`
+
+> ⚠️ **Change this password immediately in production!**
+
+---
+
+### Deployment (Docker)
+
+```bash
+# Clone the repository
+git clone https://github.com/daun-gatal/chouse-ui.git
+cd chouse-ui
+
+# Run with Docker Compose
+docker-compose up -d
+```
+
+Access at http://localhost:5521
+
+#### Production Deployment
+
+For production, we recommend using an external highly-available PostgreSQL database for RBAC storage. See the [Configuration](#configuration) section for details on how to configure `RBAC_POSTGRES_URL`.
+
+### Deployment (Kubernetes / Helm)
+
+The production Helm chart is published to GHCR as a signed OCI artifact:
+
+```bash
+helm install chouse-ui oci://ghcr.io/daun-gatal/charts/chouse-ui \
+  --set secrets.jwtSecret="$(openssl rand -base64 32)" \
+  --set secrets.encryptionKey="$(openssl rand -hex 32)" \
+  --set secrets.encryptionSalt="$(openssl rand -hex 32)"
+```
+
+The default install is single-replica SQLite on a PersistentVolumeClaim. For
+HA, point the chart at PostgreSQL (`database.type=postgres`) and scale
+`replicaCount` — the chart enforces the topology rules (SQLite cannot span
+pods) at render time and sets `CHOUSE_HA` for you. See
+[`charts/chouse-ui/README.md`](charts/chouse-ui/README.md) for all values,
+the topology guide, SSO/config examples, and ingress notes.
+
+### Deployment (MCP for AI agents)
+
+AI agents can operate CHouse UI without the browser through an MCP endpoint on
+a dedicated port (8752), authenticated with a personal access token. Disabled
+by default; enable with `MCP_ENABLED=true` (Docker) or `mcp.enabled: true`
+(Helm). Read-only unless the operator opts into writes; destructive tools
+require in-host human approval. See [`docs/mcp.md`](docs/mcp.md) and
+[ADR 0013](docs/adr/0013-chouse-mcp.md).
+
+---
+
+## Configuration
+
+CHouse UI can be configured using environment variables (`.env` file) or through a grouped YAML configuration file.
+
+### YAML Configuration (Recommended)
+
+You can set all configuration options via a hierarchical YAML file. To use this, set the `CHOUSE_CONFIG_PATH` environment variable pointing to your YAML file:
+
+```bash
+CHOUSE_CONFIG_PATH=./config.yaml bun run packages/server/src/index.ts
+```
+
+Example (mirrors `.config.example.yaml`):
+```yaml
+port: 5521
+node_env: production
+rbac:
+  db_type: sqlite           # or postgres
+  sqlite_path: ./data/rbac.db
+  encryption:
+    key: ""                 # openssl rand -hex 32  (required)
+    salt: ""                # openssl rand -hex 32  (required)
+  admin:
+    email: admin@localhost
+    username: admin
+    password: admin123!
+jwt:
+  secret: ""                # openssl rand -base64 32  (required)
+  access_expiry: 4h
+  refresh_expiry: 7d
+```
+
+### Environment Variables
+
+All configuration options are documented in [`.env.example`](.env.example). Key required variables:
+
+- `JWT_SECRET` — JWT signing secret (min 32 bytes) **Required**
+- `RBAC_ENCRYPTION_KEY` — AES-256 key for passwords (32-byte hex) **Required**
+- `RBAC_ENCRYPTION_SALT` — Salt for key derivation (32-byte hex) **Required**
+- `RBAC_DB_TYPE` — `sqlite` (default) or `postgres`
+- `RBAC_POSTGRES_URL` — PostgreSQL connection URL (for multi-instance deployments)
+
+### Generating Secrets
+
+```bash
+# Generate JWT secret
+openssl rand -base64 32
+
+# Generate encryption key
+openssl rand -hex 32
+
+# Generate strong password
+openssl rand -base64 16
+```
+
+---
+
+## RBAC System
+
+### How RBAC Works
+
+CHouse UI has its **own permission system** that controls access to the web interface.
+
+**Two separate things:**
+
+1. **CHouse UI RBAC** (for the web interface):
+   - Controls who can use CHouse UI and what they can do
+   - Stored in CHouse UI's own database
+   - All queries are checked against these permissions before reaching ClickHouse
+
+2. **ClickHouse User Management** (optional feature):
+   - CHouse UI can create ClickHouse users with native grants
+   - These are actual ClickHouse users (not CHouse UI users)
+   - Useful if you want to manage ClickHouse users through the web interface
+
+**In simple terms:** CHouse UI's RBAC controls access to the web interface. It can also optionally create ClickHouse users, but that's a separate feature.
+
+### Role Hierarchy
+
+| Role | Description | Key Permissions |
+|------|-------------|-----------------|
+| **Super Admin** | Full system access | All permissions |
+| **Admin** | Server management | Users, roles, connections |
+| **Developer** | Write access | Insert, update, DDL |
+| **Analyst** | Read access | Select, export |
+| **Viewer** | Read-only | Select only |
+| **Guest** | Read-only access | View all tabs, read-only queries, system tables access |
+
+### Data Access Rules
+
+Control access to specific databases and tables:
+
+```
+Rule: Allow "analyst" role to access "analytics.*"
+Rule: Deny "viewer" role from "system.*"
+Rule: Allow user "john" to access "sales.orders"
+```
+
+Features:
+- **Wildcards**: `*` matches any database/table
+- **Patterns**: Regex support for complex rules
+- **Deny Rules**: Explicit denials take precedence
+- **Priority**: Higher priority rules evaluated first
+
+### Permission Categories
+
+- **User Management**: Create, update, delete users
+- **Role Management**: Manage roles and permissions
+- **Connection Management**: Add/edit ClickHouse connections
+- **Query Operations**: Execute queries, DML, DDL; `ai:optimize` (in-tab AI query optimization + error/parts diagnosis)
+- **Table Operations**: Select, insert, update, delete
+- **Metrics & Monitoring**: Per-tab view grants — `logs:view`, `parts:view`, `schema_advisor:view`, `cluster:view`, `errors:view`
+- **Fleet Monitoring**: `fleet:view`, `doctor:view` (read reports), `doctor:run` (generate scans + schedules)
+- **System**: Audit logs, settings
+
+---
+
+## Architecture
+
+CHouse UI is a monorepo with two main packages:
+
+- **Frontend** (`src/`) — React 19 + Vite SPA with Zustand stores, TanStack Query, and shadcn/ui
+- **Backend** (`packages/server/`) — Bun + Hono API server with RBAC, ClickHouse proxy, and AI optimizer
+
+```mermaid
+graph TB
+    subgraph Browser["Browser (React 19 SPA)"]
+        UI["Vite 7 + React Router v7"]
+        Stores["Zustand 4 Stores"]
+        RQ["TanStack Query v5"]
+        ApiClient["ApiClient (fetch)"]
+    end
+
+    subgraph Server["Bun Server (packages/server)"]
+        Hono["Hono v4"]
+        MW["Middleware: CORS, Rate Limit, SQL Parser, Data Access"]
+        Routes["API Routes: query, explorer, metrics, saved-queries, live-queries, upload, ai-chat"]
+        Services["Services: ClickHouse proxy, AI Optimizer, Query Analyzer, AI Chat, Chat History, AI Config"]
+        RBAC["RBAC: Auth, Users, Roles, Connections, Audit, ClickHouse Users, Data Access, User Preferences, AI Providers, AI Models"]
+    end
+
+    subgraph External["External"]
+        CH["ClickHouse"]
+        AI["AI Provider (OpenAI, Anthropic, Google, Bedrock, etc.)"]
+        DB["SQLite / PostgreSQL"]
+    end
+
+    UI --> Stores --> ApiClient
+    UI --> RQ --> ApiClient
+    ApiClient -->|"/api/*"| Hono
+    Hono --> MW --> Routes --> Services
+    Routes --> RBAC
+    Services -->|"@clickhouse/client"| CH
+    Services -->|"DeepAgents / LangChain"| AI
+    RBAC -->|"Drizzle ORM"| DB
+```
+
+---
+
+## Security
+
+### Reporting Vulnerabilities
+
+If you discover a security vulnerability, please see [SECURITY.md](SECURITY.md) for information on how to report it responsibly.
+
+### Production Checklist
+
+- [ ] Generate unique `JWT_SECRET` (min 32 bytes)
+- [ ] Generate unique `RBAC_ENCRYPTION_KEY` (32 bytes hex)
+- [ ] Generate unique `RBAC_ENCRYPTION_SALT` (32 bytes hex)
+- [ ] Change default admin password
+- [ ] Set `CORS_ORIGIN` to your domain
+- [ ] Use PostgreSQL for multi-instance deployments
+- [ ] Enable HTTPS via reverse proxy
+- [ ] Configure firewall rules
+- [ ] Set up regular backups
+
+### Security Features
+
+| Feature | Description |
+|---------|-------------|
+| **No Browser Credentials** | ClickHouse passwords never reach the frontend |
+| **Encrypted Storage** | AES-256-GCM for ClickHouse connection passwords |
+| **Password Hashing** | Argon2id for user passwords |
+| **JWT Tokens** | Short-lived access tokens, long-lived refresh tokens |
+| **RBAC Enforcement** | Every request checked against permissions |
+| **Query Validation** | SQL parsed and validated against data access rules |
+| **Audit Logging** | All actions logged with user context |
+
+---
+
+## Database Migrations
+
+**Migrations run automatically on server startup** — no manual intervention required.
+
+| Scenario | What Happens |
+|----------|--------------|
+| **Fresh install** | Creates schema, seeds roles/permissions/admin user |
+| **Version upgrade** | Applies only pending migrations |
+| **Normal restart** | No migrations needed |
+
+### Upgrading (Docker)
+
+```bash
+docker pull ghcr.io/daun-gatal/chouse-ui:latest
+docker-compose up -d
+docker logs chouse-ui | grep RBAC   # verify migration status
+```
+
+For manual migration CLI tools, see `packages/server/` scripts: `bun run rbac:status`, `bun run rbac:migrate`, `bun run rbac:seed`.
+
+---
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to this project.
+
+---
+
+## License
+
+This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
+
+### Third-Party Code
+
+This project was initially based on **[CH-UI](https://github.com/caioricciuti/ch-ui)** by [Caio Ricciuti](https://github.com/caioricciuti). While significant modifications and additions have been made, we acknowledge the original work and maintain attribution as required by the Apache License 2.0.
+
+## Acknowledgments
+
+### Special Thanks
+
+**[CH-UI](https://github.com/caioricciuti/ch-ui)** by [Caio Ricciuti](https://github.com/caioricciuti) — This project was inspired by CH-UI's design and user experience.
+
+**[QueryDog](https://github.com/benjaminwootton/QueryDog)** by [Benjamin Wootton](https://benjaminwootton.com) (Elastic License 2.0) — The Monitoring deep-dive (Logs sub-views Queries / Patterns / By table / Histogram, Parts, Schema doctor, Cluster activity, and the Query timeline chart) is heavily inspired by QueryDog's chart-plus-table layout and aggregation patterns over ClickHouse system tables. No QueryDog source code is bundled here; every component was rewritten on top of React 19 + shadcn/ui + recharts + the editorial design system. Full attribution and the list of adapted ideas is in [NOTICE](./NOTICE).
+
+### Built With
+
+#### Runtime & Server
+- [Bun](https://bun.sh/) — JavaScript runtime & package manager
+- [Hono](https://hono.dev/) — Web framework
+- [Drizzle ORM](https://orm.drizzle.team/) — Database ORM (SQLite / PostgreSQL)
+- [Pino](https://getpino.io/) — Structured JSON logging
+- [jose](https://github.com/panva/jose) — JWT signing & verification
+- [DeepAgents](https://docs.langchain.com/oss/javascript/deepagents/overview) / [LangChain](https://js.langchain.com/) — Tool-using AI agents (OpenAI, Anthropic, Google, Azure OpenAI, AWS Bedrock, Groq, Mistral, Cohere, Ollama, xAI, DeepSeek, Cerebras, and OpenAI-compatible endpoints incl. Fireworks/Together/OpenRouter)
+- [node-sql-parser](https://github.com/taozhi8833998/node-sql-parser) — SQL parsing & validation
+
+#### Frontend
+- [React](https://react.dev/) v19 — UI library
+- [Vite](https://vitejs.dev/) v7 — Build tool
+- [React Router](https://reactrouter.com/) v7 — Routing
+- [Zustand](https://zustand-demo.pmnd.rs/) — State management
+- [TanStack Query](https://tanstack.com/query) — Data fetching & caching
+- [TanStack Table](https://tanstack.com/table) — Headless table
+- [TanStack Virtual](https://tanstack.com/virtual) — List virtualization
+- [shadcn/ui](https://ui.shadcn.com/) + [Radix UI](https://www.radix-ui.com/) — UI components
+- [Tailwind CSS](https://tailwindcss.com/) v4 — Styling
+- [Monaco Editor](https://microsoft.github.io/monaco-editor/) — SQL editor
+- [AG Grid](https://www.ag-grid.com/) — Data grid
+- [Recharts](https://recharts.org/) — Charts
+- [uPlot](https://github.com/leeoniya/uPlot) — High-performance time-series charts
+- [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/) — Forms & validation
+- [Framer Motion](https://www.framer.com/motion/) — Animations
+- [cmdk](https://cmdk.paco.me/) — Command palette
+- [DOMPurify](https://github.com/cure53/DOMPurify) — HTML sanitization
+
+#### ClickHouse
+- [@clickhouse/client](https://github.com/ClickHouse/clickhouse-js) — Server-side native client
+- [@clickhouse/client-web](https://github.com/ClickHouse/clickhouse-js) — Browser-side client

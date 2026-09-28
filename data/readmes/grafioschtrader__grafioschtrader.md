@@ -1,0 +1,87 @@
+## Update to Angular 22
+With GT version 0.36.7.2 the front end has switched to **Angular 22** from **Angular 21**. Angular 22 no longer runs on Node.js 20, it requires **Node.js ^22.22.3, ^24.15.0 or >=26.0.0**. A classic installation therefore has to raise its [Node.js installation](//github.com/grafioschtrader/grafioschtrader/wiki/Installation-on-Debian-10-to-13-based-Linux) before the next update; a Docker installation is not affected, because the front end is built inside the image.
+
+## Update to Java 25
+With GT version 0.36.1 we have switched to **Java 25** from **Java 21**. Please adjust the configuration accordingly. In addition to the configuration of [Java 25](//github.com/grafioschtrader/grafioschtrader/wiki/Install-Java), the existing [Maven Installation](//github.com/grafioschtrader/grafioschtrader/wiki/Installing-the-Latest-Release-of-Apache-Maven) may also need to be adapted.
+
+## Preface
+- **Unless otherwise described, GT will only get a new version if the new features require an update of the database. It is the goal that the master branch always contains the most reliable and feature rich source code.** 
+- **A release number has the form `major.minor.patch[.revision]`. When only the last digit, the revision, changes, as in `0.36.3` to `0.36.3.1`, the release contains no Flyway database migration and only carries source changes. Every other release does update the database.**
+- For importing transactions we refer to the [gt-import-transaction-template](//github.com/grafioschtrader/gt-import-transaction-template) and [gt-pdf-transform](//github.com/grafioschtrader/gt-pdf-transform) projects.
+
+# Grafioschtrader (GT)
++ **Multi-tenancy**: GT can be run for a group of investors or in single mode.
++ **Web application**: GT is a web application and provides the clearest results using a desktop web browser.
++ **Multiple portfolios with currency accounts**: Replicates multiple portfolios with one or more securities accounts and one or more bank cash accounts.
++ **Multiple currencies**: Trading securities in different currencies
++ **Trading from the turn of the millennium**: Basic support for historical price data from the year 2000 onwards, noting that obtaining price data from non-traded securities may be a problem.
++ **Different financial instruments**: Stocks, Bonds, ETF, securities without price data, short ETF, CFD, Forex.
++ **Import of transactions**: An import of single or multiple PDFs with securities transactions Via CSV file, account transactions can also be loaded.
++ **Evaluations by asset classes**: Evaluations by common asset classes such as stocks, bonds, real estate, commodities, etc.
++ **Correlation matrices**: Support for rolling correlations with different time windows.
+
+## Test Drive GT
+* Check the user manual in [english](//grafioschtrader.github.io/gt-user-manual/en/intro/) or [german](//grafioschtrader.github.io/gt-user-manual/de/intro/) and a [YouTube channel](//www.youtube.com/channel/UCpogJM4KxrZGOyPoQx1xVKQ) in German language which are in progress.
+* [GT in action](//www.grafioschtrader.info/grafioschtrader) with a following demo accounts or create your own account.
+
+| E-Mail  | Password | Language |
+| ------------- | ------------- |----|
+| gt1@grafioschtrader.info  | gt1  | German |
+| gt2@grafioschtrader.info  | gt2  | German |
+| gt3@grafioschtrader.info  | gt3  | German |
+| gt4@grafioschtrader.info  | gt4  | German |
+| gt5@grafioschtrader.info  | gt5  | English |
+| gt6@grafioschtrader.info  | gt6  | English |
+
+<p align="center">
+    <a href="https://grafioschtrader.github.io/gt-user-manual/de/gt_depot_report.png" target="_blank">
+        <img src="https://grafioschtrader.github.io/gt-user-manual/de/gt_depot_report.png">
+    </a>
+</p>
+
+For questions or suggestions please visit the [forum](//www.grafioschtrader.info/forums/), German and English language are welcome.
+
+## Installation and Development
+The easiest way to run your own instance is the **Docker installation** — one interactive script sets up the database, backend and web server with automatic HTTPS (Let's Encrypt), including Raspberry Pi and DuckDNS support. See [docker/README.md](./docker/README.md).
+
+For the classic manual installation and for supporting the development go to the [wiki of GT](//github.com/grafioschtrader/grafioschtrader/wiki).
+<p align="center">
+    <a href="https://grafioschtrader.github.io/gt-user-manual/de/Komponenten.svg" target="_blank">
+        <img src="https://grafioschtrader.github.io/gt-user-manual/de/Komponenten.svg">
+    </a>
+</p>
+
+### Email account
+GT requires access to an Email account for user registration. For encrypting you have to proceed according to the description of chapter [application.properties](./backend#applicationproperties).
+#### Settings for Gmail
+The settings for Google's Gmail would be similar to the following. For Gmail, 2-Step verification must be activated. Afterwards a **App password** can be generated for a specific application. This 16-character password must be used.
+```
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=grafiosch@gmail.com
+spring.mail.password=DEC("Generated 16-character App password")
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.ssl.enable = false
+```
+#### Settings for Outlook
+In my case, the following setting works:
+```
+spring.mail.host=smtp-mail.outlook.com
+spring.mail.port=587
+spring.mail.username=hugo.graf@outlook.com
+spring.mail.password=DEC(YOUR_MAIL_PASSWORD)
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.ssl.enable = false
+```
+
+## Contributing
+If you want to contribute to this project and make it better, your help is very welcome — code, tests, translations, documentation, new data feed connectors, or a good bug report.
+
+- [CONTRIBUTING.md](CONTRIBUTING.md) — the short version: how to report a bug, coding style, what a pull request needs.
+- [Development](//github.com/grafioschtrader/grafioschtrader/wiki/Development) — prerequisites, database preparation, first build and running GT locally.
+- [Testing](//github.com/grafioschtrader/grafioschtrader/wiki/Testing) — the two test stacks, Vitest, and how to turn data entered through the UI into a fixture and a test. Per stack: [application](//github.com/grafioschtrader/grafioschtrader/wiki/Testing-Grafioschtrader) · [library](//github.com/grafioschtrader/grafioschtrader/wiki/Testing-Grafiosch).
+- [AI-assisted development](//github.com/grafioschtrader/grafioschtrader/wiki/AI-Assisted-Development) — if you work with Claude Code, Codex or a similar agent.
+
+Open questions and ideas are collected in the [issues](//github.com/grafioschtrader/grafioschtrader/issues).

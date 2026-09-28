@@ -1,0 +1,765 @@
+# RedBase — typed object storage for .NET. Schema = C# class. Zero migrations. Full LINQ. Postgres, MSSQL & SQLite.
+
+**Trees, lists, aggregations, windows — one LINQ API.**
+
+> **LLMs / coding agents:** canonical training contract → <https://redbase.app/llms.txt>
+
+RedBase is a data platform for .NET that stores typed objects in a relational backend (PostgreSQL, Microsoft SQL Server, or SQLite — including embedded/offline, Blazor WebAssembly and mobile via the SQLite provider). You define schemas as plain C# classes — RedBase handles storage, indexing, querying, trees, lists, aggregation, and window functions through a single LINQ-style API.
+
+No Entity Framework. No migrations. No 40-table Include chains. Just C# classes and one line to save, one line to load.
+
+[![NuGet](https://img.shields.io/nuget/v/redb.Core?label=NuGet&color=blue)](https://www.nuget.org/packages/redb.Core)
+[![Downloads](https://img.shields.io/nuget/dt/redb.Core?label=Downloads&color=green)](https://www.nuget.org/packages/redb.Core)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![.NET](https://img.shields.io/badge/.NET-8%20%7C%209%20%7C%2010-purple)](https://dotnet.microsoft.com)
+[![Website](https://img.shields.io/badge/docs-redbase.app-orange)](https://redbase.app)
+[![Website RU](https://img.shields.io/badge/docs-redb.ru-blue)](https://redb.ru)
+
+---
+
+## Why RedBase
+
+| Problem | EF Core / Dapper | RedBase |
+|---------|------------------|---------|
+| 28 related tables | 40+ Include/ThenInclude, 200 lines of config | `LoadAsync<T>(id)` — 1 line, full object graph |
+| Add a field | Create migration, update DbContext, deploy | Add property to C# class, done |
+| Tree structures | Manual recursive CTEs, no reusable API | Built-in `TreeQuery<T>()` with CTE, depth, ancestors |
+| Dynamic schema | Pain. EF doesn't support it | Native. Schema = C# class. `SyncSchemeAsync()` |
+| Learn curve | DbContext, Fluent API, migrations, conventions | One interface: `IRedbService`. One attribute: `[RedbScheme]` |
+| Forgot Include? | Runtime crash or silent null | Impossible — Props are always loaded |
+
+> **Strong typing — real columns, not JSON blobs.** Every property of your `*Props` class maps to a dedicated typed column with a FK constraint and an index. `string` → `nvarchar`, `decimal` → `numeric(18,4)`, `DateTime` → `timestamptz`, arrays and dictionaries → normalised rows. Your data is queryable, filterable, and aggregatable at the SQL level — no `JSON_VALUE` hacks, no full-table JSON scans, no cast errors at runtime.
+
+---
+
+## Quick Start
+
+```csharp
+// 1. Define a schema — that's your "migration"
+[RedbScheme("Employee")]
+public class EmployeeProps
+{
+    public string FirstName { get; set; } = "";
+    public string LastName { get; set; } = "";
+    public int Age { get; set; }
+    public decimal Salary { get; set; }
+    public string Department { get; set; } = "";
+    public string Position { get; set; } = "";
+    public DateTime HireDate { get; set; }
+    public string[]? Skills { get; set; }
+    public Address? HomeAddress { get; set; }
+    public Dictionary<int, decimal>? BonusByYear { get; set; }
+}
+
+// 2. Sync scheme (creates storage automatically)
+await redb.SyncSchemeAsync<EmployeeProps>();
+
+// 3. Save — from E001_SaveAsync.cs
+var employee = new RedbObject<EmployeeProps>
+{
+    name = "New Developer",
+    Props = new EmployeeProps
+    {
+        FirstName = "Alice",
+        LastName = "Johnson",
+        Age = 28,
+        Position = "Developer",
+        Department = "Engineering",
+        Salary = 85000m,
+        HireDate = DateTime.Today,
+        Skills = ["C#", "React", "SQL"]
+    }
+};
+await redb.SaveAsync(employee);
+
+// 4. Load — from E002_LoadAsync.cs
+var loaded = await redb.LoadAsync<EmployeeProps>(employee.Id);
+// loaded.Props.FirstName → "Alice"
+
+// 5. Query — from E010_WhereSimple.cs
+var results = await redb.Query<EmployeeProps>()
+    .Where(e => e.Salary > 75000m)
+    .OrderByDescending(e => e.Salary)
+    .Take(100)
+    .ToListAsync();
+
+// 6. Projection — from E075_Select.cs
+var projected = await redb.Query<EmployeeProps>()
+    .Select(x => new { x.Props.FirstName, x.Props.LastName, x.Props.Salary })
+    .ToListAsync();
+```
+
+### Create from Template
+
+```bash
+dotnet new install redb.Templates
+dotnet new redb -n MyProject --provider postgres
+cd MyProject
+dotnet run
+```
+
+---
+
+## Packages
+
+| Package | NuGet | Description |
+|---------|-------|-------------|
+| `redb.Core` | [![NuGet](https://img.shields.io/nuget/v/redb.Core?label=)](https://www.nuget.org/packages/redb.Core) | Core abstractions, query builder, LINQ provider |
+| `redb.Postgres` | [![NuGet](https://img.shields.io/nuget/v/redb.Postgres?label=)](https://www.nuget.org/packages/redb.Postgres) | PostgreSQL provider (free, Apache 2.0) |
+| `redb.MSSql` | [![NuGet](https://img.shields.io/nuget/v/redb.MSSql?label=)](https://www.nuget.org/packages/redb.MSSql) | Microsoft SQL Server provider (free, Apache 2.0) |
+| `redb.SQLite` | [![NuGet](https://img.shields.io/nuget/v/redb.SQLite?label=)](https://www.nuget.org/packages/redb.SQLite) | SQLite provider (free, Apache 2.0) — embedded/offline, native loadable extension |
+| `redb.Core.Pro` | [![NuGet](https://img.shields.io/nuget/v/redb.Core.Pro?label=)](https://www.nuget.org/packages/redb.Core.Pro) | Pro extensions: parallel materialization, change tracking, migrations |
+| `redb.Postgres.Pro` | [![NuGet](https://img.shields.io/nuget/v/redb.Postgres.Pro?label=)](https://www.nuget.org/packages/redb.Postgres.Pro) | PostgreSQL Pro provider with optimized query generation |
+| `redb.MSSql.Pro` | [![NuGet](https://img.shields.io/nuget/v/redb.MSSql.Pro?label=)](https://www.nuget.org/packages/redb.MSSql.Pro) | MSSQL Pro provider with optimized query generation |
+| `redb.SQLite.Pro` | [![NuGet](https://img.shields.io/nuget/v/redb.SQLite.Pro?label=)](https://www.nuget.org/packages/redb.SQLite.Pro) | SQLite Pro provider — pure C# (no native extension): Blazor WebAssembly & mobile |
+| `redb.Export` | [![NuGet](https://img.shields.io/nuget/v/redb.Export?label=)](https://www.nuget.org/packages/redb.Export) | Database export/import: `.redb` files (JSONL/ZIP) for backup, migration between PostgreSQL ↔ MSSQL |
+
+---
+
+## Installation
+
+```bash
+# PostgreSQL (Free)
+dotnet add package redb.Postgres
+
+# or MSSQL (Free)
+dotnet add package redb.MSSql
+
+# Pro — includes redb.Core.Pro automatically
+dotnet add package redb.Postgres.Pro   # or redb.MSSql.Pro
+```
+
+Each provider package pulls in `redb.Core` (or `redb.Core.Pro`) as a transitive dependency.
+
+### Setup & InitializeAsync
+
+```csharp
+using redb.Core;
+using redb.Core.Extensions;
+using redb.Postgres.Pro.Extensions;  // or redb.MSSql.Pro.Extensions
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Register REDB Pro
+builder.Services.AddRedbPro(options => options
+    .UsePostgres("Host=localhost;Database=mydb;Username=postgres;Password=pass")
+    // .UseMsSql("Server=localhost;Database=mydb;User Id=sa;Password=pass;TrustServerCertificate=true")
+    .Configure(c =>
+    {
+        c.PropsSaveStrategy = PropsSaveStrategy.ChangeTracking;
+        c.EnableLazyReferences = false;   // V4: true makes `virtual` references stubs at any depth
+        c.EnablePropsCache = true;
+    }));
+
+var app = builder.Build();
+
+// Initialize and sync schemes
+var redb = app.Services.GetRequiredService<IRedbService>();
+await redb.InitializeAsync();
+await redb.SyncSchemeAsync<EmployeeProps>();
+```
+
+**The props cache pays off, and only while it fits.** `EnablePropsCache` keeps materialized Props in memory
+and validates a hit by the object hash. Measured on PostgreSQL Pro over 100 000 objects: a warm list of 300
+objects takes 339 ms without the cache and 44 ms with it, a point load 10 ms against 2 ms, and 0.11 ms with
+`SkipHashValidationOnCacheCheck`, which costs no round trip at all.
+
+That speedup lasts only while the cache holds the objects in use. `PropsCacheMaxSize` (10 000 objects by
+default) has to fit the working set: when it does not, every load evicts an object the next load needs, hits
+drop to almost none, and what is left is the cost - memory, and a hash check on every lookup. In production
+this looks like a cache that was fast on the first day and slower than no cache once the data grew. The cache
+says so ("Props cache is full: N least recently used objects evicted within 10s"), and it also reports a slow
+hit check and a run of lookups that find entries and serve none, which is a read model that does not reproduce
+the saved graph and never matches its hash. Raise the size to fit the working set, or leave the cache off for
+that database.
+
+**Free version** — same pattern, just `AddRedb` instead of `AddRedbPro`, no license:
+
+```csharp
+using redb.Core.Extensions;
+using redb.Postgres.Extensions;  // or redb.MSSql.Extensions
+
+builder.Services.AddRedb(options => options
+    .UsePostgres("Host=localhost;Database=mydb;Username=postgres;Password=pass"));
+```
+
+### Database Setup Options
+
+REDB provides several ways to create the database schema:
+
+**Option A — Automatic on startup (recommended):**
+
+```csharp
+// Creates schema if missing, then initializes
+await redb.InitializeAsync(ensureCreated: true);
+```
+
+**Option B — Explicit call:**
+
+```csharp
+await redb.EnsureDatabaseAsync(); // idempotent — safe to call every time
+await redb.InitializeAsync();
+```
+
+**Option C — Export SQL script for DBA / CI:**
+
+```csharp
+var sql = redb.GetSchemaScript();
+File.WriteAllText("redb_schema.sql", sql);
+```
+
+**Option D — CLI tool:**
+
+```bash
+dotnet tool install --global redb.CLI
+
+# Create schema in an existing database
+redb init --connection "Host=localhost;Database=mydb;..." --provider postgres
+
+# Export SQL to file
+redb schema --provider postgres --output redb_schema.sql
+```
+
+### Client-side: Blazor WebAssembly & mobile
+
+Both run on `redb.SQLite.Pro` — it is pure C#, while the Free tier hosts its SQL functions in a native
+loadable extension, which a browser cannot load. Pro requires no license key on the 3.x and 4.x lines.
+
+**Mobile (.NET MAUI)** needs nothing special: point the connection string at the app data directory.
+
+```csharp
+builder.Services.AddRedbPro(o => o
+    .UseSqlite($"Data Source={Path.Combine(FileSystem.AppDataDirectory, "app.db")}"));
+```
+
+**Blazor WebAssembly** needs three things beyond the usual setup:
+
+1. **Native relink.** For `browser-wasm` SQLite arrives as a static archive (`e_sqlite3.a`) rather than
+   a shared library, so it must be linked into the runtime at build time. Install the workload and, for
+   Debug runs, enable the relink explicitly:
+
+   ```bash
+   dotnet workload install wasm-tools
+   ```
+   ```xml
+   <WasmBuildNative>true</WasmBuildNative>
+   ```
+   Without it the app builds against the stock runtime and fails in the browser, not at compile time.
+
+2. **Manual initialization.** `WebAssemblyHost` does not start hosted services, so the automatic startup
+   initialization never runs:
+
+   ```csharp
+   var host = builder.Build();
+   var redb = host.Services.GetRequiredService<IRedbService>();
+   await redb.InitializeAsync(ensureCreated: true);
+   await redb.SyncSchemeAsync<NoteProps>();
+   await host.RunAsync();
+   ```
+
+3. **Persistence is yours to add.** The database file lives in the browser's in-memory filesystem, so it
+   is gone on reload. Persisting it (IDBFS + `syncfs`, a copy into IndexedDB/Cache API, or OPFS) is
+   application-level work — RedBase does not provide it.
+
+---
+
+## Capabilities
+
+### CRUD
+
+| Feature | API | Notes |
+|---------|-----|-------|
+| Save single object | `SaveAsync(obj)` | Create or update |
+| Load by ID | `LoadAsync<T>(id)` | Returns `RedbObject<T>` with Props |
+| Bulk insert | `AddNewObjectsAsync(objects)` | Single round-trip via COPY protocol, replaces thousands of INSERTs |
+| Batch save | `SaveAsync(IEnumerable<IRedbObject>)` | Save multiple objects at once |
+| Delete | `DeleteAsync(id)`, `DeleteWithPurgeAsync(ids)` | Single or batch delete with full purge |
+| Load-modify-save | `LoadAsync` → modify → `SaveAsync` | Standard update pattern |
+
+### Object Graph (RedbObject References in Props)
+
+Props can contain `RedbObject<T>` properties — single, array, or dictionary. The entire graph is saved and loaded in one call. No JOINs, no Include chains, no manual assembly.
+
+```csharp
+// Real model from redb.Examples/Models/ExampleModels.cs
+[RedbScheme("Employee")]
+public class EmployeeProps
+{
+    public string FirstName { get; set; } = "";
+    public int Age { get; set; }
+    public decimal Salary { get; set; }
+
+    // Nested business class (Address with nested BuildingInfo)
+    public Address? HomeAddress { get; set; }
+
+    // Array of business classes
+    public Contact[]? Contacts { get; set; }
+
+    // RedbObject reference — single
+    public RedbObject<ProjectMetricsProps>? CurrentProject { get; set; }
+
+    // RedbObject references — array
+    public RedbObject<ProjectMetricsProps>[]? PastProjects { get; set; }
+
+    // Dictionary with RedbObject values
+    public Dictionary<string, RedbObject<ProjectMetricsProps>>? ProjectMetrics { get; set; }
+
+    // Dictionary with nested classes
+    public Dictionary<string, Department>? DepartmentHistory { get; set; }
+
+    // Tuple key dictionary
+    public Dictionary<(int Year, string Quarter), string>? PerformanceReviews { get; set; }
+}
+
+// Save — entire graph persisted, ParentId set automatically
+await redb.SaveAsync(employee);
+
+// Load — full graph reconstructed, all nested objects hydrated
+var loaded = await redb.LoadAsync<OrderProps>(id);
+// loaded.Props.Payment.Props          — ready
+// loaded.Props.RelatedMetrics[0].Props — ready
+// loaded.Props.Coupons["SUMMER"].Props — ready
+```
+
+Nested objects are real `RedbObject` instances with their own `id`, `name`, `DateCreate`, `DateModify`, and `Props`. They can be queried independently, updated in place, and participate in tree structures.
+
+### Rich Props Structure
+
+Props fields can be any combination of scalars, nested classes, collections, and dictionaries — arbitrarily deep. Everything is serialized, stored, and fully restored on load. No extra tables, no FKs, no mapping.
+
+```csharp
+[RedbScheme("Analytics Record")]
+public class AnalyticsRecordProps
+{
+    // Scalars
+    public string Title { get; set; } = "";
+    public int Views { get; set; }
+    public decimal Revenue { get; set; }
+
+    // Primitive arrays
+    public string[]? Tags { get; set; }
+    public int[]? Scores { get; set; }
+
+    // Nested business class
+    public Address? HomeAddress { get; set; }
+
+    // Array of business classes
+    public Contact[]? Contacts { get; set; }
+
+    // Dictionary<string, primitive>
+    public Dictionary<string, string>? PhoneBook { get; set; }
+
+    // Dictionary<int, decimal>
+    public Dictionary<int, decimal>? PriceList { get; set; }
+
+    // Dictionary<string, nested class>
+    public Dictionary<string, Address>? AddressBook { get; set; }
+
+    // Dictionary<string, complex class with its own arrays and dicts>
+    public Dictionary<string, ProjectInfo>? ComplexBook { get; set; }
+
+    // Tuple key dictionary
+    public Dictionary<(int, string), string>? TupleKeyDict { get; set; }
+}
+
+public class Address
+{
+    public string City { get; set; } = "";
+    public string Street { get; set; } = "";
+    public BuildingDetails? Details { get; set; }   // nesting goes deeper
+}
+
+public class ProjectInfo
+{
+    public string Title { get; set; } = "";
+    public int Priority { get; set; }
+    public string[]? Tags { get; set; }             // arrays inside dict values
+    public MetricTag[]? MetricTags { get; set; }    // class arrays inside dict values
+    public Dictionary<string, int>? Scores { get; set; } // dict inside dict value
+}
+```
+
+All saved and loaded with a single `SaveAsync` / `LoadAsync`. Fields can be added or removed at any time — `SyncSchemeAsync` handles it.
+
+### Where Filters
+
+| Feature | Example | Notes |
+|---------|---------|-------|
+| Comparison | `.Where(e => e.Salary > 75000)` | `>`, `<`, `>=`, `<=`, `==`, `!=` |
+| AND / OR / NOT | `.Where(e => e.Age >= 30 && e.Salary > 70000)` | Standard boolean logic |
+| Chained Where | `.Where(...).Where(...)` | Multiple calls = AND |
+| WhereIn | `.WhereIn(e => e.Department, values)` | SQL `IN (...)` clause |
+| Nullable fields | `.Where(e => e.Code == null)` | IS NULL / IS NOT NULL |
+| Base field filters | `.WhereRedb(o => o.DateCreate.Year == 2025)` | Filter on `_objects` table fields directly |
+| WhereInRedb | `.WhereInRedb(x => x.Id, ids)` | IN on base fields — direct |
+
+### DateTime
+
+**`DateTime` is a reading on a clock, `DateTimeOffset` is a moment in time.** `14:00` written as a
+`DateTime` comes back as `14:00` on any machine, in any zone, through any read path. A
+`DateTimeOffset` carries a real instant and keeps native .NET semantics. Base object fields
+(`DateCreate`, `DateModify`, `DateBegin`, `DateComplete`) are `DateTimeOffset`, therefore instants.
+
+`DateOnly`, `TimeOnly` and `TimeSpan` are stored in a culture-invariant form, so a row written on a
+`ru-RU` host reads identically on an `en-US` one. Nothing to configure.
+
+See **[DATETIME.md](DATETIME.md)** for the full type table, the precision differences between
+providers, and the one trap worth knowing.
+
+| Feature | Example |
+|---------|---------|
+| Comparison | `.Where(e => e.HireDate >= cutoffDate)` |
+| Range | `.Where(e => e.HireDate >= start && e.HireDate < end)` |
+| Extract parts | `.WhereRedb(o => o.DateCreate.Year == 2025)` |
+| Ordering | `.OrderBy(e => e.HireDate)` |
+| `DateOnly` / `TimeOnly` / `TimeSpan` | equality on all three; ordered comparison on `DateTime`, `DateTimeOffset` and `DateOnly` |
+
+### String Operations
+
+| Feature | Example | SQL |
+|---------|---------|-----|
+| Contains | `.Where(e => e.Name.Contains("Smith"))` | `LIKE '%Smith%'` |
+| StartsWith | `.Where(e => e.Name.StartsWith("John"))` | `LIKE 'John%'` |
+| Case-insensitive | `.Contains("smith", StringComparison.OrdinalIgnoreCase)` | `ILIKE` |
+| Case-insensitive, **non-English text** | needs `c.StringCollation = "und-x-icu"` — see below | `(col COLLATE "und-x-icu") ILIKE` |
+| ToLower / ToUpper | `.Where(e => e.Name.ToLower().Contains("s"))` | `LOWER()` |
+| Trim + Length | `.Where(e => e.Name.Trim().Length > 3)` | `TRIM()`, `LENGTH()` |
+
+> **Searching non-English text?** A case-insensitive search folds case the way the database does, and
+> two of the three fold **ASCII only**: `Contains("привет", OrdinalIgnoreCase)` finds `HELLO` but not
+> `ПРИВЕТ`. Always on SQLite; on PostgreSQL only when the database was created with `LC_CTYPE=C`;
+> never on SQL Server. One setting fixes every script at once, Cyrillic, Greek, Hungarian, Polish,
+> Czech and French alike:
+> ```csharp
+> .Configure(c => c.StringCollation = "und-x-icu")
+> ```
+> It changes how PostgreSQL uses indexes and it does not make search accent-insensitive. Read
+> **[COLLATION.md](COLLATION.md)** before switching it on.
+
+### Nested Properties
+
+| Feature | Example |
+|---------|---------|
+| Nested class field | `.Where(e => e.HomeAddress!.City == "London")` |
+| Deep nesting (3+ levels) | `.Where(e => e.HomeAddress!.Building!.Floor > 10)` |
+
+### Array Operations
+
+| Feature | Example |
+|---------|---------|
+| Contains element | `.Where(e => e.Skills.Contains("C#"))` |
+| Contains any (OR) | `.Where(e => e.Skills.Contains("C#") \|\| e.Skills.Contains("Python"))` |
+| Contains all (AND) | `.Where(e => e.Skills.Contains("C#") && e.Skills.Contains("SQL"))` |
+| Exclude element | `.Where(e => e.Skills.Contains("C#") && !e.Skills.Contains("intern"))` |
+| Mixed with scalars | `.Where(e => e.Age > 30 && e.Skills.Contains("C#"))` |
+
+### Dictionary Operations
+
+| Feature | Example |
+|---------|---------|
+| ContainsKey | `.Where(e => e.PhoneDirectory!.ContainsKey("desk"))` |
+| Indexer filter | `.Where(e => e.BonusByYear![2023] > 6000)` |
+| Nested class in value | `.Where(e => e.Locations!["HQ"].City == "NY")` |
+| Tuple key | `.Where(e => e.Reviews![reviewKey] == "Excellent")` |
+
+### Projection & Pagination
+
+| Feature | API | Notes |
+|---------|-----|-------|
+| Select fields | `.Select(x => new { x.Props.FirstName, x.Props.Salary })` | Server-side projection, fetches only selected columns |
+| Distinct | `.Distinct()` | Dedup by Props hash |
+| DistinctBy | `.DistinctBy(x => x.Field)`, `.DistinctByRedb(x => x.Name)` | Distinct on specific field |
+| OrderBy | `.OrderBy(e => e.Salary)`, `.OrderByDescending(...)` | Ascending / descending |
+| ThenBy | `.ThenBy(...)`, `.ThenByDescending(...)` | Multi-field sorting |
+| Skip / Take | `.Skip(10).Take(10)` | Pagination |
+| FirstOrDefault | `.FirstOrDefaultAsync()` | Single result or null |
+
+### Existence & Count
+
+| Feature | API |
+|---------|-----|
+| Count | `.CountAsync()` |
+| Any | `.AnyAsync()`, `.AnyAsync(predicate)` |
+| All | `.AllAsync(predicate)` |
+
+### Arithmetic & Math
+
+| Feature | Example | SQL |
+|---------|---------|-----|
+| Arithmetic in Where | `.Where(e => e.Salary * 12 > 1_000_000)` | Inline `*`, `/`, `+`, `-` |
+| Multi-field formulas | `.Where(e => e.Age * 1000 + e.Salary > 120_000)` | Combined expressions |
+| Math.Abs | `.Where(e => Math.Abs(e.Age - 35) <= 5)` | `ABS()` |
+| Arbitrary SQL function | `Sql.Function<T>("COALESCE", e.Age, 0)` | Any SQL function by name |
+
+### Aggregation
+
+| Feature | API | Notes |
+|---------|-----|-------|
+| Sum | `.SumAsync(e => e.Salary)` | Server-side `SUM` |
+| Average | `.AverageAsync(e => e.Age)` | Server-side `AVG` |
+| Min / Max | `.MinAsync(e => e.Salary)`, `.MaxAsync(...)` | Server-side `MIN` / `MAX` |
+| Batch aggregation | `.AggregateAsync(x => new { Agg.Sum(...), Agg.Average(...), Agg.Count() })` | Multiple aggregations in one query |
+| Filtered aggregation | `.Where(...).SumAsync(...)` | Filter before aggregating |
+| Base-field aggregation | `.SumRedbAsync(x => x.Id)`, `.MinRedbAsync(x => x.DateCreate)` | Aggregate on `_objects` fields — direct |
+| Array element aggregation | `Agg.Sum(x.Props.SkillLevels.Select(s => s))` | Sum all array elements |
+
+### GroupBy
+
+| Feature | API | Notes |
+|---------|-----|-------|
+| Group by field | `.GroupBy(x => x.Department).SelectAsync(g => new { g.Key, Agg.Sum(g, x => x.Salary) })` | Server-side GROUP BY |
+| Filter + group | `.Where(...).GroupBy(...)` | WHERE before GROUP BY |
+| Composite key | `.GroupBy(x => new { x.Department, x.Position })` | Multi-field grouping |
+| Group by base field | `.GroupByRedb(x => x.OwnerId)` | GROUP BY on `_objects` — direct |
+| Group by array element | `.GroupByArray(e => e.Contacts!, c => c.Type)` | Expands arrays into groups |
+
+### Window Functions
+
+| Feature | API | Notes |
+|---------|-----|-------|
+| ROW_NUMBER | `Win.RowNumber()` | Rank within partition |
+| RANK / DENSE_RANK | `Win.Rank()`, `Win.DenseRank()` | Ranking with/without gaps |
+| Running sum | `Win.Sum(x.Props.Salary)` | Cumulative aggregation |
+| LAG / LEAD | `Win.Lag(x.Props.Salary)`, `Win.Lead(...)` | Previous / next row values |
+| FIRST_VALUE / LAST_VALUE | `Win.FirstValue(...)`, `Win.LastValue(...)` | Boundary values in partition |
+| NTILE | `Win.Ntile(4)` | Divide into equal buckets |
+| Custom frame | `.Frame(Frame.Rows(3))` | Sliding window: `ROWS BETWEEN N PRECEDING AND CURRENT ROW` |
+| Partition by base field | `.PartitionByRedb(x => x.SchemeId)` | Direct, no Props join |
+| Filter + window | `.Where(...).WithWindow(...)` | Pre-filter before windowing |
+| GroupBy + window | `.GroupBy(...).WithWindow(...).SelectAsync(...)` | Rank aggregated groups |
+
+### Tree Structures
+
+Built-in hierarchical data with closure-table storage and recursive CTEs.
+
+| Feature | API | Notes |
+|---------|-----|-------|
+| Create child | `CreateChildAsync(child, parent)` | Single node creation |
+| Bulk create | `AddNewObjectsAsync(treeObjects)` | Batch insert with pre-assigned IDs |
+| Load tree | `LoadTreeAsync<T>(root, maxDepth)` | Full hierarchy with depth limit |
+| Get children | `GetChildrenAsync<T>(parent)` | Direct children only |
+| Get descendants | `GetDescendantsAsync<T>(node)` | All descendants recursively |
+| Path to root | `GetPathToRootAsync<T>(node)` | Breadcrumb trail |
+| Move subtree | `MoveObjectAsync(node, newParent)` | Reparent node and its subtree |
+| Tree LINQ queries | `TreeQuery<T>().Where(...).OrderBy(...)` | Full LINQ on tree |
+| Filter roots | `.WhereRoots()` | Root nodes only |
+| Filter leaves | `.WhereLeaves()` | Leaf nodes only |
+| Filter by level | `.WhereLevel(2)` | Nodes at specific depth |
+| Scoped subtree query | `TreeQuery<T>(rootId, maxDepth)` | Query within a subtree |
+| Multiple roots | `TreeQuery<T>(parents[], maxDepth)` | Query across subtrees |
+| Ancestor filter | `.WhereHasAncestor<T>(a => a.Budget > 500000)` | Filter by ancestor properties |
+| Descendant filter | `.WhereHasDescendant<T>(d => d.Budget > 100000)` | Filter by descendant properties |
+| Relationship check | `node.IsDescendantOfAsync(ancestor)` | Without loading tree |
+| DFS / BFS traversal | `.DepthFirstTraversal()`, `.BreadthFirstTraversal()` | In-memory traversal |
+| Tree materialization | `.ToTreeListAsync()`, `.ToRootListAsync()`, `.ToFlatListAsync()` | Parent chains, recursive children, or flat |
+| Tree stats | `TreeCollection<T>.GetStats()` | Depth, leaf count, max width |
+| Aggregation on trees | `TreeQuery<T>().GroupBy(...)`, `.WithWindow(...)` | GroupBy and window functions in tree context |
+
+### Lists (Reference Dictionaries)
+
+Named lookup lists with items, useful for statuses, categories, roles.
+
+| Feature | API |
+|---------|-----|
+| Create list | `RedbList.Create(name, alias)` |
+| Add items | `ListProvider.AddItemsAsync(list, values, aliases)` |
+| Get by name | `ListProvider.GetListByNameAsync(name)` |
+| Item with linked object | `RedbListItem(list, value, alias, linkedObject)` |
+| Store in Props | `Props.Status = listItem` (single), `Props.Roles = listItems` (array) |
+| Filter by item value | `.Where(p => p.Status!.Value == "Active")` |
+| Filter by item identity | `.Where(p => p.Status == activeItem)` |
+| WhereIn on item values | `.WhereIn(p => p.Status!.Value, values)` |
+| Any in item array | `.Where(p => p.Roles!.Any(r => r.Value == "Admin"))` |
+
+### Export / Import (Database Portability)
+
+Full database export/import via `.redb` files (JSONL, optionally ZIP-compressed). Migrate between PostgreSQL and MSSQL, create backups, replicate data.
+
+| Feature | Notes |
+|---------|-------|
+| Export entire DB | `ExportService` — streams all schemes, objects, values, users, roles, permissions |
+| Export filtered | Export only selected schemes by ID |
+| Import | `ImportService` — streaming JSONL, bulk-insert batches |
+| Compression | Optional ZIP wrapping (auto-detected on import) |
+| Cross-platform | Export from PostgreSQL → Import to MSSQL (and vice versa) |
+| Dry run | Preview statistics without writing |
+| CLI | `redb export` / `redb import` commands |
+
+### Users, Roles & Permissions
+
+Built-in user management with password hashing, roles, and object-level permissions. No external identity provider required.
+
+| Feature | API | Notes |
+|---------|-----|-------|
+| Create user | `UserProvider.CreateUserAsync(request)` | Login, password, name, email, phone |
+| Authenticate | `UserProvider.ValidateUserAsync(login, password)` | Returns `IRedbUser?`, SHA256 + salt |
+| Change password | `UserProvider.ChangePasswordAsync(userId, old, new)` | Verifies old password first |
+| Enable / disable | `UserProvider.EnableUserAsync(id)`, `DisableUserAsync(id)` | Soft disable |
+| Search users | `UserProvider.GetUsersAsync(criteria)` | Filter by login, email, role, date range |
+| Create role | `RoleProvider.CreateRoleAsync(request)` | Named role with optional description |
+| Assign role | `RoleProvider.AssignUserToRoleAsync(userId, roleId)` | Many-to-many |
+| Grant permission | `GrantPermissionAsync(request)` | Per-object or per-scheme, CRUD flags |
+| Check permission | `CanUserSelectObject(objectId)` | Select / Insert / Update / Delete |
+| Effective permissions | `GetEffectivePermissionsAsync(userId, objectId)` | Resolved from user + role inheritance |
+| Security context | `SetCurrentUser(user)`, `CreateSystemContext()` | Ambient via `AsyncLocal`, disposable elevation |
+
+```csharp
+// Authenticate
+var user = await redb.UserProvider.ValidateUserAsync("admin", "password123");
+if (user != null)
+{
+    redb.SetCurrentUser(user);
+    // All subsequent operations run as this user
+}
+
+// Temporary system elevation (skip permissions)
+using (redb.CreateSystemContext())
+{
+    await redb.SaveAsync(sensitiveObject);
+}
+```
+
+---
+
+## Architecture
+
+```mermaid
+graph TD
+    A["IRedbService"] --> B["Query&lt;T&gt;()"]
+    A --> C["TreeQuery&lt;T&gt;()"]
+    A --> D["SaveAsync / LoadAsync"]
+    A --> E["SyncSchemeAsync"]
+    A --> F["ListProvider"]
+    A --> G["UserProvider / RoleProvider"]
+    
+    B --> H["ExpressionToSqlCompiler"]
+    C --> I["CTE recursive queries"]
+    D --> J["IRedbContext (SQL)"]
+    E --> K["Auto-migration"]
+    
+    H --> L["PostgreSQL / MSSQL"]
+    I --> L
+    J --> L
+    K --> L
+```
+
+```
+IRedbService          ← single entry point
+├── Query<T>()        ← flat LINQ queries  
+├── TreeQuery<T>()    ← hierarchical queries (CTE)
+├── SaveAsync()       ← create / update (full object graph)
+├── LoadAsync<T>()    ← load by ID (with all nested objects)
+├── ListProvider      ← reference dictionaries
+├── UserProvider      ← users, authentication, passwords
+├── RoleProvider      ← roles and user-role assignments
+├── SecurityContext   ← current user, permission checks
+└── SyncSchemeAsync() ← auto-migration from C# class
+```
+
+Storage is provider-based. Each `[RedbScheme]` class maps to an internal structure in the target database. Schema changes (new fields, removed fields, type changes) are handled automatically by `SyncSchemeAsync` — no migration files needed.
+
+**Supported backends:** PostgreSQL 14+, Microsoft SQL Server 2019+.
+
+### Schema lifecycle and multi-version deployments
+
+**Read path is graceful.** When deployed code has a `Props` class without a field
+that exists in the database, the materializer silently skips it. Old binaries
+safely read newer data — no exception is thrown.
+
+**Write path is destructive by default.** `InitializeAsync()` runs
+`AutoSyncSchemesAsync()` which calls `SyncSchemeAsync<T>()` per scheme. By
+default this **deletes** any `_structures` row not present in the C# Props
+class, and every `_values` row referencing those structures is silently
+removed as well:
+
+- **PostgreSQL** — the FK `_values._id_structure -> _structures._id` is
+  declared `ON DELETE CASCADE`.
+- **MSSQL** — the FK is `NO ACTION` (MSSQL forbids multiple cascade paths
+  into `_values`), but the trigger `TR__structures__cascade_values`
+  (`INSTEAD OF DELETE` on `_structures`) deletes the dependent `_values`
+  rows first, producing the same runtime effect as PostgreSQL.
+
+For rolling / blue-green deployments where old and new app versions may share
+the database, disable destructive sync:
+
+```csharp
+services.AddRedb(options => options
+    .UsePostgres(connectionString)
+    .Configure(c => c.DefaultStrictDeleteExtra = false));
+```
+
+When destructive sync is enabled and structures are actually removed, an
+`ILogger.LogWarning` is emitted listing the scheme name and the structure
+ids / names being deleted.
+
+The per-save value-set ownership contract (one object's `SaveAsync` rewrites
+its full value set) is still destructive in this release — old and new versions
+should not write to the same object during the multi-version window. An opt-in
+`PropsSaveMode.PreserveUnknownStructures` flag is planned; see ROADMAP.
+
+---
+
+## How It Compares
+
+### vs Entity Framework Core
+
+```csharp
+// EF Core — 28 related entities
+var order = await context.Orders
+    .Include(o => o.Customer)
+    .Include(o => o.Items).ThenInclude(i => i.Product).ThenInclude(p => p.Category)
+    .Include(o => o.Items).ThenInclude(i => i.Discounts)
+    .Include(o => o.Shipping).ThenInclude(s => s.Address)
+    .Include(o => o.Payment).ThenInclude(p => p.Transactions)
+    // ... 35 more Include lines ...
+    .FirstOrDefaultAsync(o => o.Id == orderId);
+
+// RedBase — same data
+var order = await redb.LoadAsync<OrderProps>(orderId);
+// All nested objects, arrays, dictionaries — loaded automatically.
+```
+
+### vs MongoDB / JSONB
+
+| Aspect | MongoDB/CosmosDB | RedBase |
+|--------|------------------|---------|
+| Type safety | `dynamic`, `BsonDocument` | `RedbObject<T>` — full IntelliSense |
+| LINQ support | Partial | Full (Where, GroupBy, Window, Aggregation) |
+| Transactions | Limited | Full ACID |
+| Referential integrity | None | Built-in |
+| Vendor lock-in | Yes | No (PostgreSQL / MSSQL) |
+
+---
+
+## Pro
+
+REDB Pro unlocks compiled query execution, parallel materialization, deep nested property queries, arithmetic and math expressions in WHERE, `Sql.Function<T>()` for calling arbitrary SQL functions, change tracking, schema migrations, and advanced analytics (window functions over grouped data). If performance matters — use Pro.
+
+**Pro is free — no license key required.** Just add the `redb.*.Pro` packages and use them. Pro packages are proprietary (closed-source), but free of charge — starting from version 3.3.0 no license is needed. The whole 3.x and 4.x lines are covered, in production, with no request limits; licensing re-enables only at major 5.0, and versions you already run stay free forever.
+
+**Need the Pro sources?** Larger companies that require them — for a security audit, source escrow, or to build in-house — can ask, and we hand them over. Write to [redbase.app](https://redbase.app).
+
+---
+
+## Documentation
+
+| Resource | Link |
+|----------|------|
+| Website & Docs (EN) | [redbase.app](https://redbase.app) |
+| Website & Docs (RU) | [redb.ru](https://redb.ru) |
+| API Reference | [redbase-app.github.io/redb](https://redbase-app.github.io/redb/) |
+| Architecture | [redbase.app/architecture](https://redbase.app/architecture) |
+| Quick Start | [redbase.app/quickstart](https://redbase.app/quickstart) |
+| Changelog | [CHANGELOG.md](CHANGELOG.md) |
+| NuGet | [nuget.org/packages/redb.Core](https://www.nuget.org/packages/redb.Core) |
+
+---
+
+## License
+
+Core packages (`redb.Core`, `redb.Postgres`, `redb.MSSql`, `redb.Export`,
+`redb.CLI`, `redb.Templates`, `redb.PropsEditor`) are licensed under
+[Apache License 2.0](LICENSE) starting from version 2.0.0.
+Versions ≤ 1.3.0 published on nuget.org remain under MIT.
+
+Pro packages (`redb.Core.Pro`, `redb.Postgres.Pro`, `redb.MSSql.Pro`, `redb.SQLite.Pro`) are proprietary (closed-source) but **free to use — no license key required** starting from version 3.3.0, for the entire 3.x and 4.x lines including commercial production use. Larger companies that need the Pro **sources** (audit, escrow, in-house builds) can request them — see [Pro](#pro).

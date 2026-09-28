@@ -1,0 +1,367 @@
+# DryRun PostgreSQL MCP
+
+The PostgreSQL MCP server that doesn't need connection to the production.
+
+`dryrun` gives AI agents, IDEs, and CI full schema awareness. From offline snapshot, not live database connection. Lint your schema, validate queries, check migration safety, and explore foreign key graphs. All without credentials leaving the DBA's machine.
+
+`dryrun` is part of the [boringSQL](https://boringsql.com) suite alongside [RegreSQL](https://github.com/boringsql/regresql) and [Fixturize](https://github.com/boringSQL/fixturize).
+
+## The problem
+
+LLM/AI coding assistants are very good in writing code/SQL queries. But they are blind. They don't know your schema, your indexes or your constraints. They might generate a migration that takes an `ACCESS EXCLUSIVE` lock on your busiest table and send your app down.
+
+Some PostgreSQL MCP server ask you for the database connection. And to perform the administrative tasks you might need SUPERUSER permission. But that's like asking for problem.
+
+We've already seen where this leads: [production databases wiped by AI agents](https://fortune.com/2025/07/23/ai-coding-tool-replit-wiped-database-called-it-a-catastrophic-failure/), and [SQL injection in MCP servers](https://securitylabs.datadoghq.com/articles/mcp-vulnerability-case-study-SQL-injection-in-the-postgresql-mcp-server/) that were supposed to be read-only.
+
+The model doesn't need to *query* your database. It needs to *understand* your schema: the structure, constraints, statistics, and version-specific behavior. That knowledge is structural. It changes when you deploy a migration, not between queries.
+
+## DryRun features
+
+`dryrun` is two things: a **CLI tool** and an **MCP server**. The CLI extracts and analyzes your schema. The MCP server exposes that analysis to AI assistants. They're separate on purpose.
+
+### CLI - extract and analyze
+
+The CLI connects to your PostgreSQL database, introspects the full catalog (tables, views, indexes, constraints, partitions, functions, enums, RLS policies, triggers, extensions, GUCs), and writes a snapshot into `.dryrun/history.db`. That snapshot is the source of truth for everything else.
+
+Once you have the snapshot, the CLI works offline:
+
+- **Lint** - 20+ convention rules (naming, types, primary keys, timestamps, partitioning) and 13 structural audit rules (duplicate indexes, FK coverage, circular FKs, vacuum tuning)
+- **Migration safety** - lock type analysis, duration estimates, table rewrite detection, safe alternatives for each DDL statement
+- **Query validation** - SQL parsing via libpg_query, column reference checks against the actual schema, anti-pattern detection
+- **Snapshot diff** - compare schema, planner stats, or activity between snapshots; detect drift against the live database
+- **[Query stats](docs/query-stats.md)** - captures `pg_stat_statements` per node, collapses ORM query variants into shapes, diffs two captures to surface new or slowed queries
+- **[Multi-node stats](docs/multi-node-stats.md)** - per-replica statistics, seq_scan hotspots, routing imbalances
+
+### MCP server - give your AI assistant a schema brain
+
+The MCP server reads the same snapshot. It exposes 9 tools over stdio or SSE: schema exploration and search, query validation, plan analysis, migration checks, linting, vacuum health, and captured `pg_stat_statements` top queries. Three more (`explain_query`, `check_drift`, `columnar_report`) join when a live database is connected. Your AI assistant understands your database while it writes SQL.
+
+No database connection needed. The assistant never sees credentials.
+
+## Why offline
+
+**Schema context belongs in a file, not a live connection.** Column types, row estimates, index definitions, FK relationships, and PostgreSQL version can all be exported once and committed to the repo. One person with database access dumps the schema. Everyone else, humans and AI agents alike, gets full schema intelligence without credentials.
+
+**Credentials shouldn't leave the DBA's machine.** If an MCP server needs `DATABASE_URL` to do anything useful, every developer who uses it needs production credentials. That's a security problem that has nothing to do with AI.
+
+**The server should do analysis, not pass-through.** Returning raw `\d+` output is marginally better than pasting it into the chat yourself. The value is in *interpreting* that data: checking whether a migration is safe for your PostgreSQL version, flagging missing FK indexes, and validating column references against the actual schema.
+
+## Install
+
+**Requires PostgreSQL 14 or newer.** Older servers are not refused — dryrun
+warns and captures what it can — but they are untested, and some streams
+(planner stats in particular) will be unavailable. The floor tracks the oldest
+release still supported upstream.
+
+**Homebrew:**
+
+Homebrew 6.0 requires third-party taps to be trusted before their formulae can load:
+
+```sh
+brew trust --tap boringsql/boringsql
+brew install boringsql/boringsql/dryrun
+```
+
+On Homebrew 5.x and older, skip the `brew trust` step. If you'd rather not trust the whole tap, trust just the formula with `brew trust --formula boringsql/boringsql/dryrun`.
+
+**npm / npx:**
+
+If you already have Node, you can run `dryrun` without installing anything:
+
+```sh
+npx @boringsql/dryrun --version
+```
+
+That fetches the prebuilt binary for your platform (darwin-arm64, linux-x64, linux-arm64), caches it, and prints the version. To put `dryrun` permanently on your PATH:
+
+```sh
+npm install -g @boringsql/dryrun
+dryrun --version
+```
+
+The npm package wraps the same Go binary; every CLI command works identically. Commands like `lint` need a schema snapshot first — see [Quickstart](#quickstart). Prebuilt binaries cover macOS (Apple Silicon + Intel), Linux (x64 + arm64), and Windows x64. On other platforms (Alpine/musl, Windows arm64), use Homebrew or build from source.
+
+**From source:**
+
+Requires Go 1.26+. If you don't have it, install via [go.dev/dl](https://go.dev/dl/).
+
+```sh
+git clone https://github.com/boringsql/dryrun.git
+cd dryrun
+go build -o bin/dryrun ./cmd/dryrun
+```
+
+The binary is at `bin/dryrun`.
+
+## 30-second demo
+
+With `dryrun` installed, lint a ready-made schema snapshot from a clone of this repo, no database and no setup:
+
+```sh
+git clone https://github.com/boringsql/dryrun.git
+cd dryrun/examples/demo
+dryrun lint
+```
+
+(Installed via npm or Homebrew but didn't clone the repo? You won't have `examples/demo` — jump to [Quickstart](#quickstart) to point `dryrun` at your own schema. The sample output below is what `lint` produces.)
+
+```
+[ERROR] public.audit_log: table has no primary key
+       fix: add a primary key (bigint GENERATED ALWAYS AS IDENTITY recommended)
+[WARN ] public.audit_log: gap in range partitions: ends at '2024-07-01' but next starts at '2024-10-01'
+       fix: inserts into the gap will fail unless a DEFAULT partition exists
+[ERROR] public.task_comments: table has no primary key
+       fix: add a primary key (bigint GENERATED ALWAYS AS IDENTITY recommended)
+[WARN ] public.projects.created_at: timestamp column uses timestamp without time zone instead of timestamptz
+       fix: use timestamptz for timestamp columns
+[ERROR] public.tasks.project_id: FK 'tasks_project_id_fkey' on column(s) (project_id) has no covering index
+       fix: add an index on FK columns to avoid sequential scans on DELETE/UPDATE
+[WARN ] public.users.email: column 'email' uses character varying(255), prefer text
+       fix: VARCHAR(n) adds a hidden CHECK constraint with no performance benefit
+[WARN ] public.user_notifications: table is missing 'created_at' column
+       fix: add: created_at timestamptz NOT NULL DEFAULT now()
+
+26 finding(s): 6 error, 20 warning, 0 info (13 tables checked)
+```
+
+No database needed. Works entirely from the offline snapshot.
+
+The same demo works over MCP. From `examples/demo`, register the server with your assistant:
+
+```sh
+claude mcp add dryrun -- npx -y @boringsql/dryrun mcp-serve
+```
+
+Then ask, from that directory: "what tables do I have, and what's wrong with them?"
+
+## MCP server
+
+One command wires the server into your AI agent. `setup` detects Claude Code, Cursor, Codex, and Zed, writes the agent's MCP config, and adds a directive to `AGENTS.md`/`CLAUDE.md` so the agent checks the schema before writing SQL:
+
+```sh
+dryrun setup
+```
+
+To pick the agents yourself, or from a non-interactive shell, pass `--agents`:
+
+```sh
+dryrun setup --agents=claude,cursor   # or: all
+```
+
+To register the server manually:
+
+```sh
+# for claude code
+claude mcp add dryrun -- dryrun mcp-serve
+
+# for codex
+codex mcp add dryrun -- dryrun mcp-serve
+```
+
+If you built from source, use the full path to the binary:
+
+```sh
+claude mcp add dryrun -- /path/to/dryrun mcp-serve
+```
+
+Or, with no install at all, point the client at `npx`:
+
+```sh
+claude mcp add dryrun -- npx -y @boringsql/dryrun mcp-serve
+```
+
+The raw client config for this form is:
+
+```json
+{
+  "mcpServers": {
+    "dryrun": {
+      "command": "npx",
+      "args": ["-y", "@boringsql/dryrun", "mcp-serve"]
+    }
+  }
+}
+```
+
+The server reads the newest snapshot from `.dryrun/history.db` in the current project. No database credentials needed; the assistant gets full schema intelligence from the offline snapshot.
+
+Without a snapshot the server still starts, and its tools answer that no schema is loaded. Capture one with `dryrun init --db "$DATABASE_URL"` or pull one a teammate pushed (`dryrun snapshot pull --from-path ./snapshots`, see [Quickstart](#quickstart)), and the server picks it up on the next tool call, without a restart.
+
+For projects with multiple databases, run one `dryrun mcp-serve` per database and add an entry per server in your client config. Native multi-database serving inside one MCP process is tracked in [#7](https://github.com/boringSQL/dryrun/issues/7).
+
+See the [Tutorial](TUTORIAL.md) for live database setup, SSE transport, and Claude Desktop configuration.
+
+## Quickstart
+
+There are two ways to get started, pick whichever fits your setup.
+
+### Option A: You have database access
+
+If you can connect to a PostgreSQL instance (local, dev, or production), one command does everything:
+
+```sh
+dryrun init --db "$DATABASE_URL"
+```
+
+This creates `dryrun.toml` (with `[project] id` and default profile), the `.dryrun/` data directory, and captures the database into `.dryrun/history.db`. Snapshots are keyed by `(project_id, database_id)`; set `database_id` per profile when a project has multiple databases (e.g. `auth`, `billing`). See [`docs/dryrun-toml.md`](docs/dryrun-toml.md) for the full config reference.
+
+### Option B: Someone else has database access
+
+The person with credentials captures once and pushes to a shared directory — one that lives in the repo, or anywhere both sides can reach:
+
+```sh
+dryrun init --db "$DATABASE_URL"
+dryrun snapshot push --to-path ./snapshots
+```
+
+They commit **both** `dryrun.toml` and `./snapshots`. Everyone else pulls:
+
+```sh
+dryrun snapshot pull --from-path ./snapshots
+```
+
+`snapshot pull` loads the snapshot into `.dryrun/history.db`. No database needed on their machine.
+
+Committing `dryrun.toml` is not optional: snapshots are keyed by `(project_id, database_id)`, and `dryrun init` bakes `database_id` from the live database name. A teammate who runs `dryrun init` without `--db` gets a different `database_id`, and `pull` then reports `0 copied` because it looked under a key the source does not have.
+
+A pushed snapshot carries planner and activity stats alongside the schema, so the offline tools that need sizing and vacuum data work too — which a plain JSON export cannot do. For a registry instead of a directory, see `dryrun remote add` and `snapshot push --remote`. To hand a human or an agent readable JSON, `dryrun dump-schema` still writes it; it is an export, not an input.
+
+### Then use it
+
+```sh
+dryrun lint
+```
+
+All commands work offline from `.dryrun/history.db`. Each project has its own `dryrun.toml` and `.dryrun/`, there is no global state. Add `.dryrun/` to your `.gitignore`.
+
+Snapshots live in `.dryrun/history.db`, keyed by `(project_id, database_id)`. It is the only schema source: the MCP server, `lint` and `drift` all read from it. A `.dryrun/schema.json` left over from an older dryrun is ignored.
+
+The database runs in SQLite's WAL mode so a scheduled `snapshot capture` and a long-lived `mcp-serve` can share it: the capture commits while the server is mid-query, instead of one waiting the other out. WAL adds `history.db-wal` and `history.db-shm` sidecars next to it, removed when the last process exits cleanly and left behind by a crash, so ignore them alongside `.dryrun/`. Two consequences worth knowing: a WAL `history.db` needs write access to `.dryrun/` even for read-only commands like `lint`, and WAL needs shared memory, which network filesystems do not provide — a `.dryrun/` on NFS or SMB keeps the rollback journal automatically (correct, just slower under contention).
+
+### Multi-node: capture activity from replicas
+
+`snapshot take` runs against the primary and writes schema + planner stats. Activity counters (`idx_scan`, `n_dead_tup`, last vacuum) live on each replica, so capture them separately:
+
+```sh
+dryrun --profile primary  snapshot take
+dryrun --profile replica1 snapshot activity --from "$REPLICA1_URL" --label replica1
+dryrun --profile replica2 snapshot activity --from "$REPLICA2_URL" --label replica2
+```
+
+The MCP `describe_table` (node breakdown) and `detect kind=anomalies` tools then expose per-node `idx_scan` so you can spot routing imbalances. See [docs/multi-node-stats.md](docs/multi-node-stats.md).
+
+### Multiple databases per project
+
+`dryrun snapshot take` keys snapshots by `(project_id, database_id)`. The defaults work — `project_id` is your folder name, `database_id` is the actual database name from `current_database()`:
+
+```sh
+dryrun init --db "$AUTH_DB"            # captures auth
+dryrun snapshot take --db "$BILLING_DB" # captures billing into its own stream
+dryrun snapshot list --db "$AUTH_DB"    # only auth snapshots
+```
+
+For stable refs (and so `list` / `diff` can run without retyping URLs), declare profiles in `dryrun.toml`:
+
+```toml
+[project]
+id = "myapp"
+
+[profiles.auth]
+db_url = "${AUTH_DATABASE_URL}"
+database_id = "auth"
+
+[profiles.billing]
+db_url = "${BILLING_DATABASE_URL}"
+database_id = "billing"
+```
+
+Then:
+
+```sh
+dryrun --profile billing snapshot list
+dryrun --profile billing snapshot diff --latest
+```
+
+See [`docs/dryrun-toml.md`](docs/dryrun-toml.md) for all profile options.
+
+Every DB-related command (`init`, `probe`, `dump-schema`, `drift`, `stats apply`, all `snapshot` subcommands) accepts `--profile` and falls back to the resolved profile's `db_url` when `--db` is not provided. `lint` is offline: it reads `.dryrun/history.db` and only touches a live database when you pass `--db` explicitly.
+
+> **Note:** the MCP server is currently single-database. Using the default profile. Or the option is to run one `dryrun mcp-serve` process per database. Native multi-database support inside one MCP process is tracked in [#7](https://github.com/boringSQL/dryrun/issues/7).
+
+### Sharing snapshots across a team
+
+DryRun's value increases in team setup. Multiple developers can pull snapshots from any POSIX compliant directory.
+
+To publish the snapshots you need
+
+```sh
+cd project_name
+
+# capture from the live DB (use cwd name for project name)
+dryrun init --db "$DATABASE_URL"
+dryrun snapshot take --db "$DATABASE_URL"
+dryrun snapshot push --to-path ./snapshots --all
+```
+
+Developers can then import the snapshots to the local history
+
+```sh
+dryrun snapshot pull --from-path ./shared/snapshots --all
+```
+
+Snapshots are content-addressed (`{project}/{database}/{ts}-{hash}.json.zst`) and idempotent: pushing the same snapshot twice won't change it.
+
+The simplest deployment is a dedicated git repo. Create the snapshots repo and add `*.json.zst binary` to `.gitattributes` so git stops trying to diff bundles.
+
+Offline tools (`lint`, `check_migration`, `drift`) work immediately after the pull.
+
+No server, no credentials. Same promise as before.
+
+### Push snapshots to an OCI registry
+
+Any OCI registry can hold snapshots: GitHub Container Registry, Google Artifact Registry, Amazon ECR, Docker Hub, Harbor, or a self-hosted one. The registry handles authentication, retention, and access control, so there is no server to run.
+
+Authenticate the same way you would for `docker push`, register the remote, and push:
+
+```sh
+docker login ghcr.io
+dryrun remote add ghcr --ref ghcr.io/myorg/dryrun --default
+dryrun snapshot take --push
+```
+
+`snapshot take --push` captures and publishes in one step. Consumers pull:
+
+```sh
+dryrun snapshot pull --remote ghcr
+```
+
+`push` and `pull` both move only the latest take by default, so cold pulls (fresh CI, empty `history.db`) and shared stores stay cheap regardless of how much history either side holds. Use `--full` to sync the entire history, or `--since 7d` (also `2w`, `24h`, or a UTC date like `2026-01-01`) for a window. Either way the copy is incremental by content hash, so an owner that pushes on a cadence only uploads the new observations each run.
+
+`--ref` is the registry base. Each database gets its own repository under it, `<ref>/<project_id>/<database_id>`, so `myapp`'s `auth` database lands at `ghcr.io/myorg/dryrun/myapp/auth`. Snapshots map to OCI artifacts addressed by content hash, so pushing the same one twice changes nothing and shared blobs deduplicate on the registry. For Google Artifact Registry, run `gcloud auth configure-docker us-docker.pkg.dev` in place of `docker login`; the rest is identical.
+
+**Authentication.** By default dryrun reuses your Docker credentials (`~/.docker/config.json` and credential helpers), so any registry you can `docker login` to works with no extra config. Two overrides on `remote add` cover the rest:
+
+- `--token-env VAR` reads a static bearer token from an environment variable, for registries that issue short-lived tokens (e.g. `--token-env GAR_TOKEN` fed by `gcloud auth print-access-token`).
+- `--auth gcp` uses Google Application Default Credentials directly, so Google Artifact Registry / Container Registry work after `gcloud auth login` (or a service-account key via `GOOGLE_APPLICATION_CREDENTIALS`) without `configure-docker`. The ADC token is refreshed automatically.
+
+See [`docs/dryrun-toml.md`](docs/dryrun-toml.md) for per-profile remotes and sharing one stream across projects.
+
+## More
+
+- **[Tutorial](TUTORIAL.md)** for offline, online, and multi-node workflows with full tool reference
+- **[Multi-node statistics](docs/multi-node-stats.md)** for cluster-wide stats collection, aggregation rules, and replica imbalance detection
+- **[Query stats](docs/query-stats.md)** for `pg_stat_statements` capture, shape grouping, and diffing
+- **[Anonymized snapshots](docs/anonymized-snapshots.md)** for producing a snapshot you can hand to someone else: the PII mapping, masked capture, and what to check before sending
+- **[Configuration reference](docs/dryrun-toml.md)** for `dryrun.toml` profiles, conventions, remotes, and lint rules
+- **[CLI stability](docs/cli-stability.md)** for which commands are stable versus experimental
+- **[Security overview](SECURITY.md)** for the CLI/MCP split and masking
+- **[boringSQL](https://boringsql.com)**, the blog and project home
+- **[dryrun project page](https://boringsql.com/products/dryrun/)**, overview and docs
+- **[Don't let AI touch your production database](https://boringsql.com/posts/dont-let-ai-to-prod/)**, why most Postgres MCPs are unsafe and what `dryrun` does differently
+- **[RegreSQL](https://github.com/boringsql/regresql)**, SQL regression testing and **`dryrun`**'s companion tool
+- **[Fixturize](https://github.com/boringSQL/fixturize)**, subset and mask production data for dev/test
+
+## License
+
+[BSD 2-Clause License](LICENSE)

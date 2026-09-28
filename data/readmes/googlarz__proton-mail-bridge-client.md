@@ -1,0 +1,669 @@
+```
+  ____  ____   ___ _____ ___  _   _   __  __    _    ___ _
+ |  _ \|  _ \ / _ \_   _/ _ \| \ | | |  \/  |  / \  |_ _| |
+ | |_) | |_) | | | || || | | |  \| | | |\/| | / _ \  | || |
+ |  __/|  _ <| |_| || || |_| | |\  | | |  | |/ ___ \ | || |___
+ |_|   |_| \_\\___/ |_| \___/|_| \_| |_|  |_/_/   \_\___|_____|
+  Bridge Client  ·  CLI + Claude Desktop MCP for Proton Mail
+```
+
+<div align="center">
+
+[![npm version](https://img.shields.io/npm/v/proton-mail-bridge-client?color=%236d4aff&label=npm)](https://www.npmjs.com/package/proton-mail-bridge-client)
+[![CI](https://github.com/googlarz/proton-mail-bridge-client/actions/workflows/ci.yml/badge.svg)](https://github.com/googlarz/proton-mail-bridge-client/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Node.js 20+](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![MCP](https://img.shields.io/badge/MCP-compatible-blueviolet)](https://modelcontextprotocol.io)
+[![GitHub stars](https://img.shields.io/github/stars/googlarz/proton-mail-bridge-client?style=social)](https://github.com/googlarz/proton-mail-bridge-client)
+[![Last commit](https://img.shields.io/github/last-commit/googlarz/proton-mail-bridge-client?color=brightgreen&label=last%20commit)](https://github.com/googlarz/proton-mail-bridge-client/commits/main)
+[![Platforms](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)](https://github.com/googlarz/proton-mail-bridge-client)
+[![proton-mail-bridge-client MCP server](https://glama.ai/mcp/servers/googlarz/proton-mail-bridge-client/badges/score.svg)](https://glama.ai/mcp/servers/googlarz/proton-mail-bridge-client)
+
+</div>
+
+---
+
+Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mail inbox: read, search, send, draft, triage threads, manage folders, save attachments, and more — 96 MCP tools in total. Most of the same capabilities are also available as a full CLI for scripting, cron, and piped automation — no Claude required.
+
+> **Battle-tested at scale (v2.0.0):** full mailbox backfill validated end-to-end against a real account with 57,000+ indexed messages across 62 folders/labels — including a 22,800-message Archive folder backfilled from scratch, UID-window by UID-window, with zero data loss across restarts, transient IMAP disconnects, and connection timeouts.
+
+## What you get
+
+- **Claude reads and manages your Proton Mail** — triage, reply, draft, archive, search, move, batch-act on threads, pull attachments
+- **Full CLI** — a dedicated command for every one of the 96 tools (plus a generic `tool <name>` passthrough), scriptable and pipeable, works in cron and shell scripts
+- **Fast local search** — full-text search across your inbox without hitting IMAP on every query
+- **Safety controls** — read-only mode, send gate, destructive-action confirmation, per-action allowlist
+- **Privacy-native** — no third-party email service involved; your mail stays on your machine
+
+---
+
+## Privacy model
+
+Your emails travel: **Proton Mail → Proton Bridge (local) → this server (local) → your AI client**.
+
+Nothing goes through a third-party email relay. Proton Bridge decrypts your mail locally; this server reads it over a local IMAP connection on `127.0.0.1`. The AI model (Claude Desktop, Cline, etc.) sees the email content you ask it to act on — that's the whole point — but no email leaves your machine except through your own Proton account when you send.
+
+If you use Claude Desktop with the default Anthropic API, conversation content (including email snippets) is sent to Anthropic per their [privacy policy](https://www.anthropic.com/privacy). If you self-host an LLM or use a local-only Claude setup, nothing leaves your machine at all.
+
+---
+
+## Prerequisites
+
+**1. Proton Bridge** — must be installed, signed in, and running.
+Download: [proton.me/mail/bridge](https://proton.me/mail/bridge)
+
+> **Bridge password vs Proton password:** Proton Bridge generates a separate local password that is *not* your Proton account password. Find it inside the Bridge app under **Account → Copy password** (or similar — exact label varies by Bridge version). You'll need this for setup.
+
+**2. Node.js 20 or later** — `node --version` to check.
+
+**3. Your Bridge credentials** — from the Bridge app:
+- IMAP host/port (default: `127.0.0.1:1143`)
+- SMTP host/port (default: `127.0.0.1:1025`)
+- Username (your Proton email address)
+- Bridge password (see note above)
+
+---
+
+## Install
+
+**npm (recommended):**
+
+```bash
+npm install -g proton-mail-bridge-client
+```
+
+**Homebrew:**
+
+```bash
+brew tap googlarz/tap
+brew install proton-mail-bridge-client
+```
+
+<details>
+<summary>Source install (development)</summary>
+
+```bash
+git clone https://github.com/googlarz/proton-mail-bridge-client.git
+cd proton-mail-bridge-client
+npm install
+npm run build
+```
+
+The `proton-mail-bridge-client` binary is available inside the repo after build.
+
+</details>
+
+---
+
+## Connect to Claude Desktop
+
+Run the guided setup wizard:
+
+```bash
+proton-mail-bridge-client setup-claude-desktop
+```
+
+The wizard:
+- checks your local Bridge ports
+- asks for your Bridge username and Bridge password
+- writes the Claude Desktop MCP config entry
+
+**After setup:** restart Claude Desktop, make sure Proton Bridge is open, then check **`+` → Connectors → proton-mail-bridge**.
+
+### Updating
+
+```bash
+npm update -g proton-mail-bridge-client
+proton-mail-bridge-client setup-claude-desktop
+```
+
+### Manual config
+
+The wizard handles config automatically. If you need to set it up by hand, three credential methods are supported:
+
+<details>
+<summary>Option 1 — Environment variables (simplest)</summary>
+
+```json
+{
+  "mcpServers": {
+    "proton-mail-bridge": {
+      "command": "proton-mail-bridge-mcp",
+      "env": {
+        "PROTONMAIL_USERNAME": "you@proton.me",
+        "PROTONMAIL_PASSWORD": "your-bridge-password",
+        "PROTONMAIL_IMAP_HOST": "127.0.0.1",
+        "PROTONMAIL_IMAP_PORT": "1143",
+        "PROTONMAIL_IMAP_SECURE": "false",
+        "PROTONMAIL_SMTP_HOST": "127.0.0.1",
+        "PROTONMAIL_SMTP_PORT": "1025"
+      }
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary>Option 2 — File-based secrets (credentials in files, not config)</summary>
+
+```json
+{
+  "mcpServers": {
+    "proton-mail-bridge": {
+      "command": "proton-mail-bridge-mcp",
+      "env": {
+        "PROTONMAIL_USERNAME_FILE": "/path/to/username.txt",
+        "PROTONMAIL_PASSWORD_FILE": "/path/to/password.txt",
+        "PROTONMAIL_IMAP_HOST": "127.0.0.1",
+        "PROTONMAIL_IMAP_PORT": "1143",
+        "PROTONMAIL_IMAP_SECURE": "false",
+        "PROTONMAIL_SMTP_HOST": "127.0.0.1",
+        "PROTONMAIL_SMTP_PORT": "1025"
+      }
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary>Option 3 — Command-based secrets (pass, gopass, or any secret manager)</summary>
+
+```json
+{
+  "mcpServers": {
+    "proton-mail-bridge": {
+      "command": "proton-mail-bridge-mcp",
+      "env": {
+        "PROTONMAIL_USERNAME_COMMAND": "pass proton/username",
+        "PROTONMAIL_PASSWORD_COMMAND": "pass proton/password",
+        "PROTONMAIL_IMAP_HOST": "127.0.0.1",
+        "PROTONMAIL_IMAP_PORT": "1143",
+        "PROTONMAIL_IMAP_SECURE": "false",
+        "PROTONMAIL_SMTP_HOST": "127.0.0.1",
+        "PROTONMAIL_SMTP_PORT": "1025"
+      }
+    }
+  }
+}
+```
+
+</details>
+
+---
+
+## Connect to Claude Code
+
+Install globally, then register the server with one command:
+
+```bash
+npm install -g proton-mail-bridge-client
+
+claude mcp add proton-mail-bridge \
+  -e PROTONMAIL_USERNAME=you@proton.me \
+  -e PROTONMAIL_PASSWORD=your-bridge-password \
+  -- proton-mail-bridge-mcp
+```
+
+`your-bridge-password` is the Bridge app's own password (**Bridge → account → Mailbox details**), not your Proton account password — see the note under [Prerequisites](#prerequisites).
+
+By default this registers the server for the current project only. Add `-s user` to make it available in every project:
+
+```bash
+claude mcp add proton-mail-bridge -s user \
+  -e PROTONMAIL_USERNAME=you@proton.me \
+  -e PROTONMAIL_PASSWORD=your-bridge-password \
+  -- proton-mail-bridge-mcp
+```
+
+Verify it's connected:
+
+```bash
+claude mcp list
+```
+
+For file-based or command-based credentials instead of plaintext env vars, add `-e PROTONMAIL_USERNAME_FILE=/path/to/file` (or `_COMMAND`) the same way — see the credential methods under [Manual config](#connect-to-claude-desktop) above.
+
+---
+
+## Connect to Cline (VS Code)
+
+Install globally (`npm install -g proton-mail-bridge-client`), then open Cline's MCP settings:
+
+- VS Code → Cline extension panel → MCP servers icon → **Edit MCP Settings**
+- Or edit directly: `~/Library/Application Support/Code/User/globalStorage/saoudrizwan.claude-dev/settings/cline_mcp_settings.json` (macOS)
+
+Add the server:
+
+```json
+{
+  "mcpServers": {
+    "proton-mail-bridge": {
+      "command": "proton-mail-bridge-mcp",
+      "env": {
+        "PROTONMAIL_USERNAME": "you@proton.me",
+        "PROTONMAIL_PASSWORD": "your-bridge-password",
+        "PROTONMAIL_IMAP_HOST": "127.0.0.1",
+        "PROTONMAIL_IMAP_PORT": "1143",
+        "PROTONMAIL_IMAP_SECURE": "false",
+        "PROTONMAIL_SMTP_HOST": "127.0.0.1",
+        "PROTONMAIL_SMTP_PORT": "1025"
+      }
+    }
+  }
+}
+```
+
+For file-based or command-based credentials, use the same `PROTONMAIL_USERNAME_FILE` / `PROTONMAIL_PASSWORD_COMMAND` pattern from the Claude Desktop manual config above.
+
+Reload the Cline extension after saving. Proton Mail tools will appear in Cline's tool list.
+
+---
+
+## Multi-account support (v2.1.0+)
+
+Support multiple Proton Mail addresses configured in Bridge (using Bridge's **Split Addresses** feature). Each address gets its own isolated service stack, local index, and drafts storage.
+
+### Setup
+
+First, enable **Split Addresses** in Proton Bridge and configure each address as a separate account. Bridge will generate a separate password for each address. Then set `PROTONMAIL_ACCOUNTS_JSON`:
+
+```json
+{
+  "mcpServers": {
+    "proton-mail-bridge": {
+      "command": "proton-mail-bridge-mcp",
+      "env": {
+        "PROTONMAIL_USERNAME": "primary@proton.me",
+        "PROTONMAIL_PASSWORD": "primary-bridge-password",
+        "PROTONMAIL_IMAP_HOST": "127.0.0.1",
+        "PROTONMAIL_IMAP_PORT": "1143",
+        "PROTONMAIL_IMAP_SECURE": "false",
+        "PROTONMAIL_SMTP_HOST": "127.0.0.1",
+        "PROTONMAIL_SMTP_PORT": "1025",
+        "PROTONMAIL_ACCOUNTS_JSON": "[
+          { \"address\": \"primary@proton.me\", \"password\": \"primary-bridge-password\" },
+          { \"address\": \"alias@proton.me\", \"password\": \"alias-bridge-password\" },
+          { \"address\": \"business@custom.com\", \"password\": \"business-bridge-password\" }
+        ]"
+      }
+    }
+  }
+}
+```
+
+**Note:** The password is the **Bridge password for each address**, not your Proton account password. Bridge generates a unique password for each Split Address.
+
+### How it works
+
+- **Primary account:** the first entry in `PROTONMAIL_ACCOUNTS_JSON` (or the main `PROTONMAIL_USERNAME`/`PROTONMAIL_PASSWORD` pair if not set). Email IDs from the primary account have no prefix.
+- **Additional accounts:** each has an auto-generated slug (e.g., `alias`, `business`). Email IDs carry an account prefix: `alias::message-id`, `business::message-id`.
+- **Sending:** `send_email`, `reply_to_email`, etc. route through the account matching the `from` address. If no account matches, the primary connection is used with a header override (for non-configured aliases).
+- **Search and read:** all read tools (search, threads, analytics, digest) automatically fan out across all configured accounts and merge results, preserving the account prefix in returned IDs.
+
+### Tools across accounts
+
+**Fan out across all accounts:**
+- Search & read: `search_indexed_emails`, `get_emails`, `get_threads`, `get_thread_by_id`, `count_messages`, `get_labels`, `folder_stats`, `top_senders`, `get_contacts`, `get_volume_trends`, `get_email_analytics`, `get_email_stats`, `get_folders`
+- Triage: `get_inbox_digest`, `get_follow_up_candidates`, `get_actionable_threads`, `find_document_threads`, `prepare_meeting_context`
+- Diagnostics: `get_connection_status`, `get_runtime_status`, `run_doctor` (include an `accounts` array showing per-account status)
+- Drafts: `list_drafts` — lists every configured account's drafts, merged and re-sorted by last update; supports optional `limit`/`offset`
+
+**Account-specific (prefix to target):**
+- Actions: `mark_email_read`, `star_email`, `move_email`, `delete_email`, etc. — prefix the `emailId` with account slug if targeting a non-primary account
+- Drafts: `create_draft`, `get_draft`, `send_draft`, etc. — drafts live per account; prefix `draftId` to access non-primary drafts
+- Send: `send_email`, `reply_to_email`, `forward_email` — match the `from` address to route through the correct account's SMTP
+
+**Primary-only (for now):**
+- `list_remote_drafts` — shows the primary account's remote Proton Drafts folder only
+- Thread actions (`move_thread`, `delete_thread`, `flag_thread`) — operate on the account the thread ID's prefix names
+
+### Verify setup
+
+Use `list_accounts` to check configured accounts and verify connection status:
+
+```bash
+proton-mail-bridge-client list_accounts --json
+```
+
+Output:
+```json
+[
+  { "slug": "primary", "address": "primary@proton.me", "isPrimary": true, "index": "fresh", "imap": "ok", "smtp": "ok" },
+  { "slug": "alias", "address": "alias@proton.me", "isPrimary": false, "index": "fresh", "imap": "ok", "smtp": "ok" },
+  { "slug": "business", "address": "business@custom.com", "isPrimary": false, "index": "stale", "imap": "timeout", "smtp": "ok" }
+]
+```
+
+---
+
+## Try it: example Claude prompts
+
+**Morning triage**
+> "Give me a digest of my inbox. Flag anything that needs a reply today and anything that looks like a bill or invoice."
+
+**Inbox zero**
+> "Go through my unread emails from the past 3 days. Archive newsletters, trash anything promotional, and tell me what's left that needs action."
+
+**Folder filing**
+> "Find all emails from stripe.com and move them to Folders/Receipts. Create the folder if it doesn't exist."
+
+**Meeting prep**
+> "I have a call with alice@example.com in an hour. Pull up our last 5 email threads and summarise the open items."
+
+**Draft review**
+> "Show me my drafts, pick the oldest one, and suggest a better subject line and closing paragraph."
+
+> **Tip:** When creating folders, use `Folders/Name` (not just `Name`) — that's the Proton Bridge namespace for real folders vs. labels.
+
+More recipes — expanded triage prompts, cron scripts for scheduled digests, and a Claude Code `/mail-triage` slash command — are in [examples/](examples/).
+
+---
+
+## Recommended System Prompt
+
+Add this to Claude Desktop's system prompt (Settings → Claude Desktop → System Prompt) for safer defaults:
+
+```
+You have access to my Proton Mail inbox via the proton-mail-bridge tool.
+
+Rules:
+- Always use dryRun: true before any batch operation (batch_email_action, apply_thread_action).
+- Before calling send_email, reply_to_email, or forward_email, summarise what you are about to send and ask me to confirm.
+- For anything important or hard to walk back (a wide CC list, a sensitive topic, an attachment), offer a short undo window via send_email's undoWindowSeconds instead of sending immediately — remind me it only protects against mistakes noticed in the next few seconds, not a change of mind days later.
+- Before calling delete_email, confirm with me — deletion is permanent.
+- Prefer create_draft over send_email when composing from scratch.
+- When revising a draft, change parts of it with update_draft's bodyEdits (find/replace) instead of resending the whole body, and pass syncToRemote:false while iterating; call sync_draft_to_remote once when I say the draft is ready. Each synced edit costs seconds (see "Performance and token cost").
+- Use get_inbox_digest or get_actionable_threads as your starting point for triage sessions.
+```
+
+---
+
+## CLI
+
+Every capability is also a scriptable terminal command — no Claude required:
+
+```bash
+proton-mail-bridge-client digest                                    # morning triage summary
+proton-mail-bridge-client search --from stripe.com --json | jq .    # scriptable search
+echo "Deploy done" | proton-mail-bridge-client send --to you@x.com --subject "Deploy"
+proton-mail-bridge-client notify &                                  # background new-mail alerts
+```
+
+All commands support `--json` for machine-readable output, and any MCP tool is directly callable via `proton-mail-bridge-client tool <name> --args '{...}'`.
+
+**Full command reference: [docs/cli.md](docs/cli.md)** (a named command for every one of the 96 tools, across read, triage, compose, mailbox actions, folders, drafts, templates, analytics, and diagnostics).
+
+---
+
+## Safety controls
+
+All flags work in both the MCP server and CLI:
+
+```bash
+PROTONMAIL_TOOL_TIER=core            # expose 25 core tools instead of all 96 — saves context window
+PROTONMAIL_READ_ONLY=true            # disable all write operations
+PROTONMAIL_ALLOW_SEND=false          # disable SMTP sends only (other writes still work)
+PROTONMAIL_CONFIRM_DESTRUCTIVE=true  # require confirmed:true on send, reply, forward, delete
+PROTONMAIL_RESTRICT_OUTBOUND_TO_SELF=true  # every send may only go to your own address — the safe way to try the server
+PROTONMAIL_ALLOW_EMPTY_FOLDER=true   # enable empty_folder (off by default): permanently deletes ALL messages in a folder
+PROTONMAIL_ALLOWED_ACTIONS='mark_read,archive,trash'  # per-action allowlist
+```
+
+`batch_email_action` and `apply_thread_action` both support `dryRun: true` regardless of the above flags.
+
+**Trying it safely: `PROTONMAIL_RESTRICT_OUTBOUND_TO_SELF=true`.** With this on, the server can compose, draft, reply, forward and send for real, but every recipient (To, CC and BCC) must be your own Bridge login address; a `+tag` alias of it counts as yours. Anything else is refused with `RESTRICT_OUTBOUND_TO_SELF is enabled. Cannot send to: …` before any mail is built or queued. It covers `send_email`, `reply_to_email`, `reply_all_email`, `forward_email`, `send_draft`, `schedule_draft`, `send_test_email` and `unsubscribe_sender`, and it is checked again when a queued or scheduled send fires, so a send queued before you turned it on cannot slip out later. It does not stop the model from *writing* a message to someone else into a draft; it stops it from being sent.
+
+**`PROTONMAIL_ALLOW_EMPTY_FOLDER`.** `empty_folder` deletes every message in a folder at once and cannot be undone, so it is switched off unless this is `true` (the call then fails with a message naming the variable). When enabled it still needs an explicit `confirmed: true` to delete: without it, it only returns a preview of what would be removed. For anything less than an entire folder use `bulk_delete`.
+
+---
+
+## Environment reference
+
+```bash
+# Credentials (required)
+PROTONMAIL_USERNAME='you@proton.me'
+PROTONMAIL_PASSWORD='your-bridge-password'   # Bridge password, not Proton account password
+PROTONMAIL_IMAP_HOST='127.0.0.1'
+PROTONMAIL_IMAP_PORT='1143'
+PROTONMAIL_IMAP_SECURE='false'
+PROTONMAIL_SMTP_HOST='127.0.0.1'
+PROTONMAIL_SMTP_PORT='1025'
+PROTONMAIL_SMTP_SECURE='true'         # Bridge's local SMTP port requires implicit TLS from the first byte; set false only for a non-Bridge SMTP relay
+PROTONMAIL_IMAP_USERNAME=''           # optional: log in to IMAP as a different user than PROTONMAIL_USERNAME (default: the same). The send identity, and RESTRICT_OUTBOUND_TO_SELF, still use PROTONMAIL_USERNAME.
+PROTONMAIL_IMAP_PASSWORD=''           # optional: a different IMAP password than PROTONMAIL_PASSWORD (default: the same)
+
+# Secrets via file or command (avoids raw credentials in config)
+PROTONMAIL_USERNAME_FILE='/path/to/user.txt'
+PROTONMAIL_PASSWORD_FILE='/path/to/pass.txt'
+PROTONMAIL_USERNAME_COMMAND='pass proton/username'
+PROTONMAIL_PASSWORD_COMMAND='pass proton/password'
+
+# Storage
+PROTONMAIL_DATA_DIR="$HOME/.proton-mail-bridge-client"
+
+# Tools
+PROTONMAIL_TOOL_TIER='full'          # 'core' exposes 25 essential tools, incl. draft review/edit and list_accounts (saves context window); 'full' exposes all 96
+
+# Safety
+PROTONMAIL_READ_ONLY='false'
+PROTONMAIL_ALLOW_SEND='true'
+PROTONMAIL_ALLOW_REMOTE_DRAFT_SYNC='true'
+PROTONMAIL_ALLOWED_ACTIONS='mark_read,mark_unread,star,unstar,archive,trash,restore,move,delete'
+PROTONMAIL_CONFIRM_DESTRUCTIVE='false'
+PROTONMAIL_RESTRICT_OUTBOUND_TO_SELF='false'  # true: sends may only go to your own Bridge login address (To, CC and BCC; +tag aliases count as yours); anything else is refused, and queued/scheduled sends are re-checked when they fire. Covers send_email, reply_to_email, reply_all_email, forward_email, send_draft, schedule_draft, send_test_email, unsubscribe_sender. The safest way to try the server.
+PROTONMAIL_ALLOW_EMPTY_FOLDER='false'         # true: enables empty_folder, which permanently deletes ALL messages in a folder (still needs confirmed:true; without it only a preview is returned). Off by default; use bulk_delete for a subset.
+PROTONMAIL_ALLOW_UNSAFE_HTML='false'          # HTML in outgoing mail is always sanitized (scripts, event handlers and remote images/beacons removed). A send that passes sanitizeHtml:false is IGNORED — still sanitized, with a warning logged — unless this is exactly 'true'. Leave it off unless you deliberately send raw HTML.
+PROTONMAIL_SEND_DELAY_SECONDS='0'    # >0: send_email, reply_to_email, reply_all_email and forward_email queue instead of sending immediately, cancelable via cancel_send (undoWindowSeconds overrides per call). send_draft is not delayed; use schedule_draft. Only fires while this server stays running.
+PROTONMAIL_SIGNATURE=''              # Plain text, appended to send_email/reply_to_email/reply_all_email/forward_email bodies (text + HTML), after your own text and before any quoted/forwarded content. Every send now goes out multipart (a plain-text send auto-gets an html alternative too), so the signature always gets its HTML treatment, not just the text/plain part. Opt out per-message with appendSignature: false. Never applied to send_draft/schedule_draft — draft content is already finalized.
+#
+# Note: a signature configured inside Proton Mail itself (Settings → Identity and addressing)
+# is only inserted by Proton's own web/app compose UI — it is NEVER applied to mail submitted
+# over SMTP by an external client, including this one. There is no way to make Bridge apply it
+# for you. Set PROTONMAIL_SIGNATURE above instead if you want a signature on messages this
+# server sends.
+
+# Sync
+PROTONMAIL_AUTO_SYNC='true'
+PROTONMAIL_AUTO_SYNC_FOLDER='INBOX,Sent'      # comma-separated folders the background sync keeps indexed
+PROTONMAIL_AUTO_SYNC_FULL='false'             # true: each background pass is a full sync (larger sample per folder, and messages moved/deleted elsewhere are pruned from the index) instead of incremental
+PROTONMAIL_AUTO_SYNC_LIMIT_PER_FOLDER='100'  # messages fetched per folder per background pass (1-500)
+PROTONMAIL_STARTUP_SYNC='true'
+PROTONMAIL_SYNC_INTERVAL_MINUTES='5'
+PROTONMAIL_IDLE_WATCH='true'
+PROTONMAIL_IDLE_MAX_SECONDS='30'
+
+# Tuning and diagnostics
+PROTONMAIL_OP_DELAY_MS='0'            # minimum gap in ms between IMAP mailbox operations (0-5000); raise it to be gentler on a slow Bridge. 0 = no throttling
+PROTONMAIL_DEBUG='false'              # true: get_connection_status and run_doctor include the raw underlying connection error text (otherwise only a classified cause and suggestion)
+PROTONMAIL_CLAUDE_RUNTIME_DIR=''      # where the Claude Desktop installer puts its runtime copy (default: ~/Library/Application Support/Proton Mail Bridge Client on macOS, %APPDATA%\Proton Mail Bridge Client on Windows, ~/.local/share/proton-mail-bridge-client on Linux)
+```
+
+---
+
+## Compared with Claude's native Gmail connector
+
+| Capability | Gmail connector | Proton Mail Bridge Client |
+|---|---|---|
+| Setup | First-party OAuth | Requires Proton Bridge + this client |
+| Search and read | Native Claude UX | IMAP + local index |
+| Send email | No | Yes |
+| Draft workflows | Better first-party UX | Full control incl. remote draft sync |
+| Attachment content | Limited | Fetch and save to disk |
+| Mailbox actions | Limited | Full (star, move, archive, trash, restore, delete, batch) |
+| Folder management | No | Yes (create, rename, delete) |
+| CLI access | No | Full parity with MCP |
+| Privacy | Google-hosted | Proton E2E encryption, local Bridge |
+
+---
+
+## Tool surface
+
+### Send
+`send_email` · `send_test_email` · `reply_to_email` · `reply_all_email` · `forward_email`
+
+### Drafts
+`create_draft` · `create_reply_draft` · `create_forward_draft` · `create_thread_reply_draft` · `list_drafts` · `list_remote_drafts` · `get_draft` · `update_draft` · `sync_draft_to_remote` · `send_draft` · `delete_draft`
+
+### Read
+`get_emails` · `get_email_by_id` · `count_messages` · `search_emails` · `search_indexed_emails` · `list_attachments` · `get_attachment_content` · `save_attachment` · `save_attachments`
+
+### Triage
+`get_folders` · `sync_folders` · `get_labels` · `get_threads` · `get_thread_by_id` · `get_thread_brief` · `get_actionable_threads` · `get_inbox_digest` · `get_follow_up_candidates` · `find_document_threads` · `prepare_meeting_context` · `delete_thread` · `flag_thread` · `move_thread`
+
+### Actions
+`mark_email_read` · `star_email` · `move_email` · `archive_email` · `trash_email` · `restore_email` · `delete_email` · `batch_email_action` · `apply_thread_action` · `empty_folder` · `bulk_delete` · `bulk_move` · `bulk_update_flags` · `bulk_update_labels` · `update_message_flags` · `update_message_labels`
+
+### Folder management
+`create_folder` · `rename_folder` · `delete_folder` · `create_label` · `rename_label` · `delete_label`
+
+### Analytics
+`get_email_stats` · `get_email_analytics` · `get_contacts` · `get_volume_trends` · `folder_stats` · `top_senders`
+
+### Diagnostics
+`get_connection_status` · `get_runtime_status` · `run_doctor` · `get_audit_logs` · `run_background_sync` · `wait_for_mailbox_changes` · `sync_emails` · `get_index_status` · `clear_cache` · `clear_index` · `get_logs`
+
+### Unsubscribe & trust
+`get_unsubscribe_info` · `unsubscribe_sender` — `get_email_by_id` also returns a `security` block (DKIM/SPF/DMARC, encryption, spam score)
+
+### Undo-send, scheduling & snooze
+`cancel_send` · `list_scheduled_sends` · `schedule_draft` · `snooze_email` · `cancel_snooze` · `list_snoozed` — send_email, reply_to_email, reply_all_email and forward_email queue instead of sending immediately when `PROTONMAIL_SEND_DELAY_SECONDS` is set; all three only fire while this server process stays running, see [Operational notes](#operational-notes)
+
+### Templates
+`create_template` · `list_templates` · `get_template` · `delete_template` · `render_template` — `{{variable}}` substitution, render then pass the result to `send_email`
+
+### Import/export & attachments
+`export_email` · `import_email` · `get_attachment_text` · `get_emails_by_ids`
+
+---
+
+## Using it as a library
+
+Beyond the CLI and MCP server, the underlying service classes are importable directly:
+
+```ts
+import { SimpleIMAPService, SMTPService } from "proton-mail-bridge-client/services";
+
+const imapService = new SimpleIMAPService(config, logger);
+const smtpService = new SMTPService(config);
+```
+
+`proton-mail-bridge-client/services` has no side effects on import — unlike the package's
+main entry point, which also self-starts the MCP server when run directly. Also exported:
+all shared types (`ProtonMailConfig`, `EmailSummary`, `EmailDetail`, …), `planFolderSync`,
+`isLikelyAuthenticationError`, and `sanitizeHeader`.
+
+---
+
+## Performance and token cost
+
+Measured against a real Proton Bridge with a ~57,000-message mailbox (INBOX 29k, Archive 23k, Sent 5k), September 2026. Your numbers depend on mailbox size and machine; the ratios are what to rely on.
+
+| Call | Typical time |
+|---|---|
+| `search_indexed_emails` (local SQLite index) | ~10 ms |
+| `get_emails` (3 messages) | ~0.2 s |
+| `search_emails` with a `label`, or `folder` set to a small folder | < 1 s |
+| `search_emails` in one large folder (INBOX, 29k) | ~2 s |
+| `search_emails` with only `dateFrom`/`dateTo` in INBOX (29k) | ~1 s |
+| `search_emails` with only `dateFrom`/`dateTo`, every real folder | ~2–2.5 s |
+| `search_emails` with `subject` or `from` in INBOX | ~1.6 s |
+| `search_emails` with free-text `query` in INBOX | ~2.5 s |
+| `search_emails` with `subject` or `query`, every real folder | ~5.5–7 s |
+| `search_emails` in a 50k-message label folder | ~3 s |
+| `list_remote_drafts` (79 drafts) | ~15 ms |
+
+Bridge answers IMAP `SEARCH` itself, and its cost grows with folder size. That is why a live search is slower than the local index, and why narrowing the scope matters most.
+
+**Make searches faster**
+
+- **Prefer `search_indexed_emails`** when the index is current (`get_index_status`, `sync_emails`). It does not touch Bridge at all.
+- **Pass `folder`** when you know it. With no `folder`, `search_emails` covers every *real* folder and skips **All Mail**, **Labels/\*** and **Starred**: those are views of mail that already lives in INBOX/Sent/Archive, and scanning them made an all-folders search about three times slower and inflated `totalMatched`. Pass `folder: "All Mail"` (or `"Labels/x"`) to search a view on purpose.
+- **Use `label` for labels.** On Proton Bridge a label is the folder `Labels/<name>`, so `label: "Newsletters"` searches only that folder. A name that matches no label answers immediately with nothing instead of scanning.
+- **Date filters are the cheapest filter Bridge offers** — about 1 s in INBOX and 2–2.5 s across every real folder, against 1.6 s / 5.5 s for `subject` and 2.5 s / 6–7 s for free-text `query`. When you can say *when* ("last week", "this month"), lead with `dateFrom`/`dateTo`. Even a wide range is fine: everything older than a year (about 20,000 messages) still took under 2 s.
+- **Adding a date range to a text search does not make the text search faster.** In INBOX, `dateFrom` (last 30 days) + `subject` took about as long as `subject` alone (1.6 s vs 1.6 s), and + `query` 2.1 s vs 2.5 s: Bridge still does the text work. Use dates on their own to find the window, then search inside it (for example by `folder`, or by fetching that window and reading it).
+- Free-text `query` searches message bodies on Bridge's side and is the slowest filter; `subject` and `from` are cheaper.
+- (Single runs on one machine, so read them as ratios, not guarantees.)
+
+**Keep responses (and token use) small**
+
+- List and search results are compact by default: attachments are metadata only, and empty or derivable fields are left out. Pass `fields: ["subject","from","date"]` to trim further — 10 results is roughly 800 tokens that way, versus about 11,000 for 50 full results.
+- Defaults are bounded: `search_emails`/`search_indexed_emails` return 50 (pass `limit` for more), `list_drafts` 20, `list_scheduled_sends` 50 newest first. Each reports `hasMore`; page with `offset`.
+- Draft and queued-message bodies are shortened to a preview in list and update responses (`bodyTruncated`, `bodyLength`); use `get_draft` for one full draft. Attachment content is never inlined in a listing.
+- Large attachments: set `PROTONMAIL_ALLOW_FILE_DOWNLOAD_DIR` and pass `saveTo`, rather than raising `PROTONMAIL_MAX_INLINE_BYTES`.
+- **`PROTONMAIL_TOOL_TIER=core`** exposes 25 tools instead of 96: about 7k tokens of tool definitions instead of about 20k (roughly 65% less, reference tokenizer), paid on every conversation that loads the server.
+- Repeating an `update_draft` that changes nothing on a draft whose remote copy is already in sync does no store write and no IMAP upload. (A draft whose last sync failed, or that was edited with `syncToRemote:false`, still syncs.)
+
+**Working with drafts**
+
+Drafts live in a local store first; the copy in Proton's Drafts folder is a separate upload.
+
+- **Edit a long draft with `bodyEdits`, not by resending `body`.** `update_draft` takes `bodyEdits: [{find, replace}]` (optionally `all:true`) and changes just those fragments of the stored body: a two-sentence change to a ~14,000-character draft is a request of about 200 characters instead of about 14,000 (roughly 70 times smaller), and the model only has to write the words that change. Each `find` must match exactly once (add surrounding text, or set `all:true`); otherwise nothing is changed and the error says which edit failed and why. Edits apply in order, all-or-nothing, and match the stored text literally — for an HTML draft, the HTML source. Pass either `body` or `bodyEdits`, not both. The response reports `bodyEditsApplied`.
+- **Each `update_draft` uploads the whole draft to the Drafts folder** (the full message, attachment bytes included — about 1.4 MB of MIME for a 1 MiB attachment) unless you pass `syncToRemote:false`. That upload is the slow part, and it is Bridge's, not ours: on the reference mailbox a local edit takes 2–6 ms, the first sync of a draft about 1.5 s, and a later sync that *replaces* the previous remote copy about 3.5 s (upload ≈ 1.4 s, then Bridge deleting the old copy ≈ 2.1 s; Bridge does not replace a draft appended with the same Message-ID, so the delete is required). Sending a change as `bodyEdits` or as a full `body` costs the same on the server side; `bodyEdits` saves the model's tokens, not Bridge time. So when you are making several edits in a row, do them with `syncToRemote:false` and finish with one `sync_draft_to_remote` — six edits are then about 3.5 s of waiting instead of about 20 s.
+- **The response stays small however big the draft is.** `create_draft`, the reply/forward/thread-reply draft creators, `update_draft` and `sync_draft_to_remote` return a body preview and attachment metadata only (an edit of a ~200 KB draft cost about 300 tokens; a draft with a 1 MiB attachment about 220–300). Only `get_draft` returns the full body and attachment content.
+- **Nothing to do if nothing changed:** repeating an `update_draft` that changes nothing on an already-synced draft does no write and no upload.
+- `list_drafts` is local and returns the 20 most recently updated (`hasMore`, `offset` to page); `list_remote_drafts` reads the Drafts folder over IMAP (about 15 ms for 79 drafts).
+- **Large attachments make every draft operation slower.** The store is one JSON file, so an edit reads and rewrites the whole file, attachment content of *every* draft included. In a benchmark (mocked IMAP), a tiny edit took about 1 ms normally and about 15 ms when a different draft held a 10 MiB attachment. If you edit drafts constantly, attach big files as late as possible.
+- A draft cannot be edited while it is being sent, and simultaneous syncs of the same draft are serialized (so two clients cannot upload two copies).
+
+**IMAP IDLE and the shared connection.** The server keeps one IMAP connection per account. The IDLE watcher (`PROTONMAIL_IDLE_WATCH`, on by default) waits on it, and since 2.1.25 it steps aside as soon as another operation needs the mailbox, so it no longer adds delay. Before that, with IDLE on, a single-folder search took 26–31 s and a multi-folder search did not finish.
+
+To check a real Bridge yourself, run the read-only smoke test: `PROTONMAIL_USERNAME=… PROTONMAIL_PASSWORD=… node test/live/readonly-smoke.mjs`. It uses `PROTONMAIL_READ_ONLY=true` and a throwaway data directory, sends nothing, and prints counts and timings only.
+
+---
+
+## Operational notes
+
+- `get_emails` and `search_emails` return a composite `emailId` — use it for all subsequent reads and actions.
+- `search_indexed_emails` supports `from:`, `to:`, `subject:`, `label:`, `domain:` shortcuts.
+- The local index lives at `PROTONMAIL_DATA_DIR/mail-index.sqlite`. Background sync and IMAP IDLE keep it warm.
+- Audit logs live at `PROTONMAIL_DATA_DIR/audit.log`.
+- Draft sync is best-effort — the local draft is always preserved even if remote sync fails.
+- System folders (INBOX, Sent, Trash, Spam, Archive, All Mail) are guarded against accidental deletion.
+
+---
+
+## Troubleshooting
+
+**"Wrong password" or connection refused**
+Make sure you're using the **Bridge password**, not your Proton account password. Find it in the Bridge app under Account → Copy password. Bridge must be running before the MCP server or CLI can connect.
+
+**macOS native module crash after update**
+`better-sqlite3` is a native binary built for your machine. After a major Node.js upgrade or environment change, rebuild it:
+```bash
+proton-mail-bridge-client setup-claude-desktop
+```
+This reinstalls the runtime and rebuilds native modules in place.
+
+**Claude can't see the connector**
+After changing the MCP config, restart Claude Desktop fully (not just reload). Then check **`+` → Connectors → proton-mail-bridge**. If it's not there, run `proton-mail-bridge-client doctor` to validate the connection.
+
+**Searches take ~30 seconds, or time out**
+Upgrade to 2.1.25 or later. Before that, the IMAP IDLE watcher held the shared connection for its whole idle period and every other operation waited behind it (see [Performance and token cost](#performance-and-token-cost)). On a current version, a slow `search_emails` is Bridge's own `SEARCH` over a large folder: pass `folder` or `label`, or use `search_indexed_emails`.
+
+**Folder not found when moving email**
+Use `Folders/Name` for real folders (e.g., `Folders/Receipts`), not just `Name`. Labels and folders share the same namespace in Proton Bridge but are structurally different.
+
+---
+
+## Related projects
+
+- **[proton-drive-mcp](https://github.com/googlarz/proton-drive-mcp)** — the companion MCP server and CLI for **Proton Drive**: upload, download, share and manage your end-to-end encrypted files from Claude. Run it next to this server to work with Proton Mail and Proton Drive in one conversation, for example by saving an attachment with `save_attachment` and then uploading it to Drive. If `PROTONMAIL_ALLOW_FILE_DOWNLOAD_DIR` points inside a folder that the Proton Drive desktop app syncs, attachments saved there also end up in Drive without any extra step.
+
+---
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for release history.
+
+## Contributing
+
+Bug reports and pull requests welcome: [github.com/googlarz/proton-mail-bridge-client/issues](https://github.com/googlarz/proton-mail-bridge-client/issues)
+
+## License
+
+MIT

@@ -1,0 +1,149 @@
+# Эксперимент в рамках микросервисной архитектуры
+![Image](https://github.com/user-attachments/assets/73967fb9-564b-4cd6-8749-3d6ff9f653a7)
+
+## :crystal_ball: Обзор системы
+
+Эксперимент по внедрению антипаттерна Anemic Domain Model при создании микросервисного приложения с целью исследования последствий.
+
+## :x: Экспериментальный системный дизайн
+
+![Image](https://github.com/user-attachments/assets/895af6f2-d602-4f15-b20a-6b3bce2193d3)
+
+## :white_check_mark: Правильный системный дизайн
+![Image](https://github.com/user-attachments/assets/af8fdaae-0004-4add-a18f-3e63d83ac1bf)
+
+### 🎯 Основные компоненты
+
+**Frontend (Vue 3 SPA)**
+- Порт: 3000
+- Адаптивный дизайн с поддержкой light/dark тем
+- Многоязычность (русский/английский)
+- Личный кабинет, проекты, комментарии
+
+**API Gateway**
+- Порт: 50055  
+- Единая точка входа с кэшированием в Redis
+- Rate limiting и агрегация запросов
+- Инвалидация кэша через Kafka
+
+**Микросервисы (gRPC)**
+- **Auth Service** (50052) - аутентификация, JWT, восстановление пароля
+- **Content Service** (50051) - управление контентом (проекты, технологии, публикации)
+- **Comments Service** (50054) - иерархические комментарии в PostgreSQL
+- **Notification Service** (50053) - email-уведомления через SMTP
+
+**Admin компоненты**
+- **Admin Service** (8000) - универсальный бекенд для управления
+- **Admin GUI** (9500) - SPA панель на Quasar Framework
+
+### 🗄️ Базы данных и хранилища
+
+**MongoDB** ×3
+- `content_db` - контент сайта
+- `auth_db` - пользователи и токены  
+- `notification_db` - история уведомлений
+
+**PostgreSQL**
+- `comments_db` - система комментариев
+
+**Дополнительные сервисы**
+- **Redis** - кэширование и rate limiting
+- **MinIO** - объектное хранилище для файлов
+- **Kafka** (3 брокера) - асинхронная коммуникация
+- **Elastic Stack** - сбор и анализ логов
+
+### 🛠️ Технологический стек
+
+**Бекенд**
+- FastAPI (REST API) + gRPC (микросервисы)
+- SQLAlchemy 2.0 + AsyncPG
+- Pydantic для валидации
+- JWT + bcrypt для безопасности
+
+**Фронтенд**  
+- Vue 3 + Composition API
+- Pinia для состояния, Vue Router
+- Vue I18n для локализации
+- Vite для сборки
+
+**Инфраструктура**
+- Docker + Docker Compose
+- Kubernetes (Minikube) для продакшена
+- Nginx для раздачи статики
+
+## 🚀 Быстрый запуск
+
+### Development (Docker Compose)
+**ВАЖНО**: для комфортной работы требуется 24 ГБ оперативной памяти (DDR4) и 8-миядерный процессор
+```bash
+git clone https://github.com/IvanZaycev0717/microservices-fastapi-vue-mongodb.git
+docker-compose up -d
+```
+
+Доступные сервисы:
+- Frontend: http://localhost:3000
+- API Gateway: http://localhost:50055  
+- Admin GUI: http://localhost:9500
+- MinIO Console: http://localhost:9001
+- Kibana: http://localhost:5601
+
+### Production (Kubernetes)
+```bash
+minikube start --memory=24g --cpus=7 --driver=docker --disk-size=50g
+kubectl apply -f k8s/
+minikube service -n microservices-app frontend
+```
+
+## 📊 Функциональность
+
+### Для пользователей
+- Просмотр портфолио проектов и технологий
+- Система комментирования с ответами
+- Личный кабинет с управлением комментариями
+- Многоязычный интерфейс
+
+### Для администраторов  
+- Полное управление контентом через Admin GUI
+- Модерация комментариев и пользователей
+- Загрузка медиа в MinIO
+- Просмотр логов через Kibana
+
+### Технические особенности
+- Асинхронная архитектура на всех уровнях
+- Кэширование для высокой производительности  
+- Централизованное логирование через Filebeat → Elasticsearch
+- Health-check эндпоинты для мониторинга
+- Graceful shutdown всех сервисов
+
+## 🔧 Конфигурация
+
+Основные настройки в `.env` файле:
+- Безопасность: JWT секреты, пароли БД
+- Базы данных: подключения к MongoDB и PostgreSQL
+- Внешние сервисы: SMTP, MinIO, Kafka
+- Лимиты: размеры полей, время жизни токенов
+
+## 📁 Структура проекта
+
+```
+├── frontend/                 # Vue 3 SPA
+├── backend/
+│   ├── api_gateway/         # Единая точка входа
+│   ├── auth_service/        # Аутентификация
+│   ├── content_service/     # Управление контентом
+│   ├── comments_service/    # Система комментариев
+│   ├── notification_service/# Email уведомления
+│   └── admin_service/       # Админка (бекенд + фронтенд)
+├── k8s/                     # Kubernetes манифесты
+├── mongo-init-scripts/      # Инициализация MongoDB
+├── postgres-init-scripts/   # Инициализация PostgreSQL
+├── filebeat/               # Конфигурация Elastic Stack
+└── docker-compose.yaml     # Development окружение
+```
+
+Система предоставляет полный цикл управления персональным сайтом - от публикации контента до взаимодействия с пользователями через комментарии и уведомления, с возможностью масштабирования как в development, так и в production среде.
+
+## 🧙 Автор
+**Иван Зайцев**,  
+FullStack Developer
+© Novemebr, 2025

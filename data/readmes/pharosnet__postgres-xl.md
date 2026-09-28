@@ -1,0 +1,31 @@
+Postgres-XL Database Management System
+======================================
+
+This directory contains the source code distribution of the Postgres-XL
+database management system.
+
+Postgres-XL is an advanced object-relational cluster database management
+ system that supports an extended subset of the SQL standard, including
+transactions, foreign keys, user-defined types and functions.  This
+distribution also contains C language bindings.
+
+Postgres-XL has many language interfaces similar to PostgreSQL, many of
+which are listed here:
+
+	https://www.postgres-xl.org
+        https://git.postgresql.org/gitweb/?p=postgres-xl.git;a=summary
+	http://www.postgresql.org/download
+
+See the file INSTALL for instructions on how to build and install
+Postgres-XL.  That file also lists supported operating systems and
+hardware platforms and contains information regarding any other
+software packages that are required to build or run the PostgreSQL-XL
+system.  Copyright and license information can be found in the
+file COPYRIGHT.  A comprehensive documentation set is included in this
+distribution; it can be read as described in the installation
+instructions.
+
+The latest version of this software may be obtained at
+http://sourceforge.net/projects/postgres-xl/.  For more information look at our
+web site located at http://postgres-xl.sourceforge.net/.
+

@@ -1,0 +1,120 @@
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="site/public/logo.png" />
+    <img src="site/public/logo-light.png" width="200" alt="cartapel" />
+  </picture>
+
+  **An admin panel for your existing database — Postgres, MySQL or MariaDB (and ClickHouse, read-only).**
+  One Rust binary · config as code · no framework, no ORM, no Node runtime.
+
+  [![CI](https://github.com/De-Rus/cartapel/actions/workflows/ci.yml/badge.svg)](https://github.com/De-Rus/cartapel/actions/workflows/ci.yml)
+  [![Release](https://img.shields.io/github/v/tag/De-Rus/cartapel?label=release&sort=semver)](https://github.com/De-Rus/cartapel/releases)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+  **[cartapel.com](https://cartapel.com)** · **[▶ Live demo](https://demo.cartapel.com)** (no login) · **[📖 Docs](https://docs.cartapel.com)** · **[🚀 Deploy to Render](https://render.com/deploy?repo=https://github.com/De-Rus/cartapel)**
+
+  <img src="site/public/shots/tour.webp" alt="cartapel walkthrough — filtering an orders list, the quick-view dock, a detail page with its related tables, the Customize drawer and the HCL it writes, and the dashboard" width="820" />
+
+  <sub>Forty seconds of the live demo: filter, quick view, relations, Customize → HCL, dashboard.</sub>
+</div>
+
+## Why
+
+Every project ends up needing an admin: support wants to fix a record, ops wants
+a dashboard, someone needs to flip a flag. The usual options are heavy (Retool),
+framework-locked (Django admin) or become a second codebase to maintain. If you
+already have Grafana for metrics, cartapel sits beside it — CRUD and a few SQL
+tiles in the same panel, not another product to learn.
+
+cartapel takes a different bet: **your database schema is the source of truth,
+and every customization is code you version** — a directory of small HCL files
+reviewed in pull requests, not a GUI you click. The binary introspects your
+database — Postgres, MySQL or MariaDB, picked from the connection URL — and
+renders a complete panel; config only refines it.
+
+```hcl
+# screens/sales/orders/screen.hcl — this is the whole customization
+list {
+  columns = ["id", "customer_id", "status", "total"]
+  filters = ["status"]
+  sort    = "-placed_at"
+}
+
+field "status" {
+  widget = "badge"
+  params = { colors = { paid = "green", refunded = "red" } }
+}
+
+action "refund" {
+  label   = "Refund"
+  kind    = "update"
+  set     = { status = "refunded" }
+  confirm = "Refund {count} orders?"
+}
+```
+
+An **empty** `screen.hcl` is already a working table: pagination, search,
+Notion-style filter chips on any column, sorting, inline editing, and foreign
+keys rendered as links carrying the related record's *name*, not a bare id.
+
+## Try it
+
+```bash
+# One binary, via Homebrew (macOS and Linux):
+brew install de-rus/tap/cartapel
+CARTAPEL_DB=postgres://user:pass@host/db cartapel serve --config ./config
+
+# Or the bundled demo (Acme dataset + a worked config), nothing touches your machine:
+git clone https://github.com/De-Rus/cartapel && cd cartapel
+docker compose up            # → http://localhost:8686/admin
+
+# Or against YOUR database, in one command:
+docker run -p 8686:8686 \
+  -e CARTAPEL_DB=postgres://user:pass@host/db \
+  -e CARTAPEL_SECRET_KEY=$(openssl rand -hex 32) \
+  -e CARTAPEL_ADMIN_EMAIL=you@example.com -e CARTAPEL_ADMIN_PASSWORD=change-me \
+  ghcr.io/de-rus/cartapel serve
+
+# The URL names the engine — nothing else to configure:
+#   CARTAPEL_DB=mysql://user:pass@host/db     → MySQL or MariaDB
+```
+
+First boot with an empty config drops you into a **setup wizard** that
+discovers your tables, suggests groups and writes the HCL for you — ready to
+commit.
+
+## What you get
+
+| | |
+|---|---|
+| **Introspected CRUD** | Lists, detail pages, inline child tables from reverse FKs, bulk actions, CSV/JSON import & export. Views and PK-less tables degrade to read-only. |
+| **Roles & permissions** | Per-table / per-column / row-level, in versioned config. Role inheritance (`extends`), multi-role union, a per-role `customize` grant, and a read-only **view-as** mode to verify what a role sees. |
+| **Audit & revert** | Every write logged with before/after diffs. Field edits revert in one click — and the revert is itself audited. |
+| **Pages & dashboards** | Stat tiles, charts and tables from SQL (`{{window}}` and friends), grids of panels in HCL — each from inline SQL, a named query, a table, or a source (HTTP, directory, bucket). Embed an existing Grafana panel in an `iframe` when you already have one. Read-only transactions, timeouts, no JavaScript. |
+| **Theming & i18n** | Presets (including a faithful Django look), your accent, per-mode design tokens — one hot-reloaded HCL block. Every viewer picks their language from the user menu (the browser's applies by default); your own labels carry per-locale translations next to the thing they name. |
+| **Several databases at once** | Postgres, MySQL and MariaDB are fully editable — the connection URL's scheme picks the engine. ClickHouse joins as a read-only source for browsing and SQL. Extra databases are `source` blocks; their tables share one sidebar. |
+| **Ops-friendly** | Single static binary or Docker image. Config hot-reloads from disk (a broken edit keeps the last good config). `cartapel check` validates the bundle in CI. Optional `public_role` for kiosk/demo access. |
+
+## Security model, in short
+
+Sessions are HMAC-signed HttpOnly cookies; passwords are argon2id; login is
+rate-limited. Every SQL identifier is validated against the introspected
+schema and every value is a bound parameter. Secret-shaped columns (`*token*`,
+`*secret*`, `*password*`, …) are auto-masked for **everyone, admins included**.
+Dashboard SQL runs `READ ONLY` with statement timeouts; webhook actions are
+HMAC-signed. Details: [docs → Security](https://docs.cartapel.com/security).
+
+## Build from source
+
+```bash
+cd ui && pnpm install && pnpm build && cd ..   # SPA, embedded into the binary
+cargo build --release                          # → target/release/cartapel
+```
+
+## The name
+
+A *cartapel* is old Spanish for the bundle of papers that holds all the
+records. That's the job: one place where everything in your database is
+findable, readable and safely editable.
+
+MIT licensed.

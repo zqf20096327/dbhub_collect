@@ -1,0 +1,237 @@
+
+<div align="center">
+
+<img src="images/banner.jpg" alt="PeerDB Banner" width="512" />
+
+#### Frustratingly simple ETL for Postgres
+
+[![Workflow Status](https://github.com/PeerDB-io/peerdb/actions/workflows/ci.yml/badge.svg)](https://github.com/Peerdb-io/peerdb/actions/workflows/ci.yml)
+[![ElV2 License](https://badgen.net/badge/License/Elv2/green?icon=github)](https://github.com/PeerDB-io/peerdb/blob/main/LICENSE.md)
+[![Slack Community](https://img.shields.io/badge/slack-peerdb-brightgreen.svg?logo=slack)](https://slack.peerdb.io)
+
+</div>
+
+## PeerDB
+
+At PeerDB, we are building a fast, simple and the most cost effective way to stream data from Postgres to Data Warehouses, Queues and Storage engines. If you are running Postgres at the heart of your data-stack and move data at scale from Postgres to any of the above targets, PeerDB can provide value.
+
+We support different modes of streaming - log based (CDC), cursor based (timestamp or integer) and XMIN based. Performance wise, we are 10x faster than existing tools. Features wise, we support native Postgres features such as comprehensive set of data-types incl. jsonb/arrays/geospatial, efficiently streaming TOAST columns, schema changes and so on.
+
+> **Mirror type deprecation notice:** CDC is the recommended and actively-maintained mirror type. The **Query Replication (QRep)** and **XMIN** mirror types are deprecated and no longer actively maintained; they remain fully functional, and no code is currently being removed.
+
+> **Connector deprecation notice:** The Snowflake, BigQuery, ElasticSearch, Kafka (including Confluent and Redpanda variants), Azure Event Hubs, Google Pub/Sub, and S3 **destination** connectors are deprecated and no longer actively maintained. They remain fully functional in the current and all prior releases, and no code is currently being removed. The actively-maintained paths going forward are Postgres → ClickHouse, Postgres → ClickHouse Cloud, and Postgres → Postgres. This deprecation applies to the **destination** role only — BigQuery remains a supported **source**. See the [connector status matrix](#status) and the [deprecated connectors migration guide](docs/deprecated-connectors.md) for how to pin to a release or fork the relevant code.
+
+## Get started
+
+```bash
+git clone git@github.com:PeerDB-io/peerdb.git
+cd peerdb
+
+# Run docker containers: postgres as catalog, temporal, PeerDB server, PeerDB flow API + workers, PeerDB UI
+# Requires docker and docker-compose installed: https://docs.docker.com/engine/install/
+bash ./run-peerdb.sh
+# OR for local development, images will be built locally.
+# Requires docker, docker-compose as well as the buf compiler for protobuf generation
+# https://buf.build/docs/installation
+bash ./generate-protos.sh
+bash ./dev-peerdb.sh
+
+# connect to peerdb and query away (Use psql version >=14.0)
+psql "port=9900 host=localhost password=peerdb"
+```
+
+<img src="images/peerdb-demo.gif" width="512" />
+
+### **IMPORTANT: Ensuring ClickHouse Access to MinIO**
+
+If your ClickHouse DB runs outside Docker (e.g., on VMs or ClickHouse Cloud), it may not have access to MinIO, which is used by PeerDB internally to stage files before loading them. Ensure ClickHouse has network access to MinIO.
+
+PeerDB stages PostgreSQL data in MinIO within the Docker stack. Since ClickHouse is outside Docker, it needs a resolvable hostname for MinIO.
+
+Update `docker-compose.yml` and set `AWS_ENDPOINT_URL_S3` to MinIO's accessible IP (from both PeerDB and ClickHouse):
+```yaml
+AWS_ENDPOINT_URL_S3: http://172.31.26.57:9001 # Change this to IP/host which is accessible by both PeerDB and ClickHouse
+```
+
+Rerun Docker Compose to apply changes. On AWS/GCP/Azure, also ensure the security group allows inbound access to MinIO.
+
+Follow this 5-minute [Quickstart Guide](https://docs.peerdb.io/quickstart#quickstart) to see PeerDB in action i.e. streaming data in real-time across stores.
+
+## Why PeerDB
+
+Current data tools prioritize a wide range of connectors, often neglecting to optimize for Postgres users. This can be problematic for those storing large amounts of data in Postgres and frequently transferring it. As a result, many resort to building custom pipelines when existing tools don't meet their needs. We've developed this project to provide a straightforward and reliable solution specifically for Postgres.
+
+### Postgres-first Approach
+
+PeerDB is an ETL/ELT tool built for PostgreSQL. We implement multiple Postgres native and infrastructural optimizations to provide a fast, reliable and a feature-rich experience for moving data in/out of PostgreSQL.
+
+**For performance** -  we can parallelize initial load for a large table, still ensuring consistency. Syncing 100s of GB reduces from days to minutes. Our architecture is designed for real-time syncs and implements multiple logical replication related optimizations (e.g., tuning Postgres configs, parallel reading of slot). This enables 10x faster Change Data Capture with data-freshness of a few 10s of seconds even at large throughputs (10k+ tps).
+
+**For reliability**, we have mechanisms in place for fault tolerance - state management, automatic retries, handling idempotency and consistency and so on (<https://blog.peerdb.io/using-temporal-to-scale-data-synchronization-at-peerdb>). Configurable batching and parallelism prevent out of memory (OOMs) and crashes.
+
+**From a feature richness standpoint**, we support efficient syncing of tables with large (TOAST) columns. We support multiple streaming modes - log based (CDC), cursor based (timestamp or integer) and XMIN based (the cursor-based / Query Replication and XMIN modes are deprecated; CDC is recommended). We provide rich data-type mapping and plan to support every possible type (incl. Custom types) that Postgres supports to the best extent possible on the target data-store.
+
+### Now available natively in ClickHouse Cloud (Generally Available)
+
+PeerDB is now available natively in ClickHouse Cloud (Generally Available). Learn more about it [here](https://clickhouse.com/cloud/clickpipes/postgres-cdc-connector).
+
+<a href="https://clickhouse.com/cloud/clickpipes/postgres-cdc-connector">
+<img src="images/in-clickpipes.png" width="512" />
+</a>
+
+#### **Postgres-compatible SQL interface to do ETL**
+
+The Postgres-compatible SQL interface for ETL is unique to PeerDB and enables you to operate in a language you are familiar with. You can do ETL the same way you work with your databases.
+
+You can use Postgres’ ecosystem to manage your ETL —
+
+1. Client tools like pgAdmin, psql to run SQL commands.
+2. BI tools like Grafana, Tableau to visually monitor syncs and transforms.
+3. Database migration and versioning tools like Flyway to manage your ETL.
+4. Any language (e.g., Python, Go, Node.js) and Scheduler (Airflow) for development.
+5. And many more.
+
+## Status
+
+We have expanded our connector ecosystem to support multiple source connectors beyond Postgres, including MySQL, MongoDB, BigQuery, and CockroachDB. You can check the status of connectors [here](https://docs.peerdb.io/sql/commands/supported-connectors).
+
+| Connector | Direction (source/destination) | Status |
+| --- | --- | --- |
+| Postgres | Source | **Actively maintained** |
+| MySQL | Source | **Actively maintained** |
+| MongoDB | Source | **Actively maintained** |
+| CockroachDB | Source | **Actively maintained** |
+| BigQuery | Source | **Actively maintained** |
+| ClickHouse | Destination | **Actively maintained** |
+| ClickHouse Cloud | Destination | **Actively maintained** |
+| Postgres | Destination | **Actively maintained** |
+| S3 | Destination | **Deprecated** |
+| Snowflake | Destination | **Deprecated** |
+| BigQuery | Destination | **Deprecated** |
+| ElasticSearch | Destination | **Deprecated** |
+| Kafka | Destination | **Deprecated** |
+| Redpanda | Destination | **Deprecated** |
+| Confluent | Destination | **Deprecated** |
+| Azure Event Hubs | Destination | **Deprecated** |
+| Google Pub/Sub | Destination | **Deprecated** |
+
+## Local End to End testing
+
+You can run locally the same end-to-end tests that our CI uses to validate changes, enabling fast iteration cycles during development.
+
+For example:
+
+```bash
+cd flow
+go clean -cache
+go test -tags tilt -v -run TestGenericCH_MySQL ./e2e/mysql_clickhouse/
+```
+
+Or local debugging sessions.
+
+These tests require both PeerDB services, source and destination stores to be running. We provide a local environment with all the necessary services and dependencies to run these tests.
+
+This is done through [Tilt](https://tilt.dev/) orchestrated Docker compose.
+
+To get the environment up you first need to specify the shared environment variables for both the test and the test environment in your local `.env` file. You can use the provided `.env.example` as a template: `cp .env.example .env `.
+
+If a `.env` file is present in the project root, tests will automatically load it. Any variable defined in `.env` can be overridden by user-provided environment variables.
+
+:memo: In the template, services URLs are set to `host.docker.internal`, which is the name for the default Docker gateway in Docker Desktop set-ups such as macOS and Windows. Using the default gateway address allows both test processes and services running inside Docker to access services on the host machine. In native Docker (Linux) this name is not resolved by default, you might replace it with the default gateway IP (e.g., `172.18.0.1`) or add a custom entry to your `/etc/hosts` file to resolve `host.docker.internal` to the appropriate IP address. e.g:
+
+```bash
+echo "172.18.0.1 host.docker.internal" | sudo tee -a /etc/hosts
+```
+
+Then you can just run:
+
+```bash
+./tilt.sh
+```
+
+And follow the status of the services and access logs through the Tilt UI at http://localhost:10352/. [Dozzle](https://dozzle.dev/) is also included at http://localhost:8118/, providing real-time container resource utilization metrics (CPU, memory) and log streaming for all running Docker containers.
+
+<img width="1593" height="693" alt="image" src="https://github.com/user-attachments/assets/6c294dda-ca8f-45cc-b75c-11594118a641" />
+
+Since `.env` is the environment configuration source of truth, tests automatically pick it up from the project root. For example:
+
+```bash
+go clean -cache; go test -tags tilt -v -run TestGenericCH_MySQL ./e2e/mysql_clickhouse/ # Some MySQL generic tests
+```
+
+:memo: For unit and Tilt-backed test commands, build tags, and editor setup, see [Testing in CONTRIBUTING.md](CONTRIBUTING.md#testing).
+
+### Running tests from Tilt
+
+The Tilt setup includes pre-configured test launcher resources under the `e2e` label. These resources do not start automatically; instead, you can trigger them on demand from the Tilt UI at http://localhost:10352/.
+
+<img width="964" height="265" alt="image" src="https://github.com/user-attachments/assets/04ecad65-5d60-44c3-96ad-d285b2706545" />
+
+Available test launchers:
+
+- **e2e_postgres** -- Postgres to ClickHouse generic tests (`TestGenericCH_PG`)
+- **e2e_mysql-gtid** -- MySQL GTID to ClickHouse generic tests (`TestGenericCH_MySQL`)
+- **e2e_mysql-pos** -- MySQL File-Pos to ClickHouse generic tests (`TestGenericCH_MySQL`)
+- **e2e_mariadb** -- MariaDB to ClickHouse generic tests (`TestGenericCH_MariaDB`)
+- **e2e_mongodb** -- MongoDB to ClickHouse test suite (`TestMongoClickhouseSuite`)
+
+Each launcher automatically depends on the required services and provisioning steps, so Tilt will ensure all prerequisites are running before executing the tests. To trigger a test, click the resource in the Tilt UI and press the trigger (play) button.
+
+### Manual DataStore Initialization
+
+DataStore resources (ClickHouse, MongoDB, MySQL variants, PostgreSQL) use **manual initialization** (`auto_init=False`) to conserve resources. This allows you to selectively start only the databases needed for your testing scenario.
+
+![DataStore Resources](https://github.com/user-attachments/assets/970568c6-f783-4250-8899-45ec4e5aac9e)
+
+To start a datastore:
+1. Navigate to the Tilt UI at http://localhost:10352/
+2. Locate the desired DataStore resource
+3. Click the resource and press the play/trigger button
+
+The provisioning step for each datastore will automatically execute once the datastore is running.
+
+### Testing Multiple MySQL Flavors
+
+The Tilt environment now supports running tests against different MySQL replication modes and MariaDB simultaneously without requiring file edits. Each MySQL variant has its own dedicated port and test launcher:
+
+- **mysql-gtid** (port 3306): MySQL 9.5 with GTID replication
+- **mysql-pos** (port 3307): MySQL 5.7 with file-position replication (ARM-compatible using `biarms/mysql` image)
+- **mariadb** (port 3308): MariaDB with binary log replication
+
+This allows comprehensive testing across different MySQL configurations in a single development session.
+
+### Named Volumes and Cleanup
+
+All ancillary services now use Docker Compose named volumes for data persistence. This enables:
+- Data analysis after environment teardown
+- Faster restarts by preserving database state
+- Easy cleanup via the Tilt UI
+
+To clean up unused volumes, use the **"Wipe ancillary volumes"** button in the Tilt UI navigation bar:
+
+![Volume Cleanup Success](https://github.com/user-attachments/assets/ecec7edf-298b-4d1d-960b-40cf22e0d8f5)
+
+This button removes all named volumes defined in `ancillary-docker-compose.yml` that are not currently in use. For example, if MongoDB is disabled, clicking this button will delete its data volume.
+
+![Volume Cleanup Button](https://github.com/user-attachments/assets/6c06d4fe-dd15-4979-b10e-91d8ad50e307)
+
+### Environment services versions
+
+Data stores versions are extracted from `.github/workflows/flow.yml`, select the last row of the test matrix except for MySQL version which defaults to `9.5`.
+This automatic extraction relies on the `yq` CLI; install the Go-based [`mikefarah/yq`](https://github.com/mikefarah/yq) version 4 or later so that local environment generation works correctly.
+You can specify different versions in the local `.env` file to override them as follows:
+
+```bash
+MYSQL_VERSION=8.0
+MONGODB_VERSION=4.4
+CLICKHOUSE_VERSION=21.8
+```
+
+## Support
+
+Our docs can be found [here](https://docs.peerdb.io/introduction). If you have any questions, feel free to drop by our [Slack](https://slack.peerdb.io/)!
+
+
+## License
+
+PeerDB is licensed under GNU Affero General Public License v3.0 (AGPLv3). Please see the LICENSE file for additional information. If you have any licensing questions please email **<db-integrations-support@clickhouse.com>**

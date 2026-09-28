@@ -1,0 +1,51 @@
+pg_migrate
+A lightweight utility to manage postgres schema, views, triggers, and functions.
+
+-------------------
+pg_migrate will recursively traverse a directory tree and run sql files postfixed with -up.sql or -down.sql. Down migrations are intended to rollback the operations defined in their up counterparts.
+
+
+    Project/
+	|--- views/
+		|--- restaurants-up.sql
+		|--- restaurants-down.sql
+		|--- food/
+	|--- triggers/
+		|--- waitStaff-up.sql
+		|--- waitStaff-down.sql
+		|--- kitchenStaff-up.sql
+		|--- kitchenStaff-down.sql
+
+
+usage: pg_migrate -H postgres://URI [options]... dir
+
+  -H   Host (in postgres URI format)
+  -h   Show help text
+  -v   Show version information
+  -s   Show last 10 forward migrations ran
+  -u   Migrate forward. Recursively traverses provided directory for -up.sql files
+  -d   Migrate rollback. Will attempt to locate matching -down.sql files to migrate backwards
+  -p   Soft run. Will display migrations to be ran / rolled back
+  -g   Provisions the public schema with the pg_migrate table, used to track migrations
+
+
+example usage:
+> pg_migrate -H postgres://postgres:pass@localhost:5432 -p -d .
+simulate an up migration for everything in this directory tree
+
+Installation
+-------------------
+
+Download: https://github.com/jwdeitch/pg_migrate/releases/latest
+
+** The release binaries are compiled against amd64 linux (ubuntu) and Apple OSX.
+
+Before first migration, you must provision the database by running pg_migrate with the -g and -H flags. This is to create the "pgmigrate.manifest" table, which stores information about which migrations have been ran:
+> pg_migrate -H postgres://postgres:pass@localhost:5432 -g
+
+Notes
+-------------------
+
+- Files are transactional unless there are explicit transactions within. The migration will abort if any statement within the file fail.
+- Corresponding up and down migrations must be in the same directory
+- Migrations are ran in order of alphanumeric descending sort, starting with the topmost directory.

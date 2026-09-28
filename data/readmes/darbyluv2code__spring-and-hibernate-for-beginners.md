@@ -1,0 +1,85 @@
+# Spring and Hibernate for Beginners (Includes Spring Boot)
+
+Source code for the course: [Spring and Hibernate for Beginners (Includes Spring Boot)](http://www.luv2code.com/spring-github)
+
+---
+
+**NOTE**: An updated version of the course is available based on **Spring Boot 4**:
+- Udemy Course Link [Spring Boot 4, Spring 7 and Hibernate for Beginners](http://www.luv2code.com/spring-github)
+- New Git Repo link: [Spring Boot 4, Spring 7 and Hibernate for Beginners](https://github.com/darbyluv2code/spring-boot-4-spring-7-hibernate-for-beginners)
+
+---
+
+If you have questions or need tech support, post your questions to the [classroom discussion forum](https://www.udemy.com/spring-hibernate-tutorial/learn/v4/questions).
+
+Happy coding!
+
+[<img src="images/spring-and-hibernate-thumbnail.png">](http://www.luv2code.com/spring-github)
+
+&#8287;
+## Spring Boot Road Map - Learning Path
+
+Here is a Spring Boot Learning Path and Roadmap to help you learn more about Spring Boot. These are links to luv2code courses on Udemy. You can purchase the courses to further your studies.
+
+I'd recommend the following road map:
+
+### Core Courses
+1. [Java Programming Introduction for Beginners](https://www.udemy.com/course/java-intro-for-beginners/?referralCode=325F0EA33466DA1D8710)
+1. [Spring Boot 4, Spring 7 and Hibernate for Beginners](http://www.luv2code.com/spring-github)
+1. [Spring Boot Unit Testing](https://www.udemy.com/course/spring-boot-unit-testing/?referralCode=4184DE360D78A70932EE)
+1. [Deploy Spring Boot 4 Applications on AWS](https://www.udemy.com/course/deploy-spring-boot-3-apps-to-aws/?referralCode=DCE8981B59C70BA6BDBF)
+1. [Hibernate: Advanced Development Techniques](https://www.udemy.com/course/hibernate-tutorial-advanced/?referralCode=6FB9E2BA9AF54A4C9E69)
+1. [Master Java Design Patterns](https://www.luv2code.com/master-java-design-patterns-github)
+
+### Project Course: Spring Boot, Spring MVC and Thymeleaf
+For end-to-end project with Spring Boot, Spring MVC and Thymeleaf:
+1. [Spring Boot 4 Project: Build a Job Portal Web Application](https://www.udemy.com/course/spring-boot-project-job-portal-web-app/?referralCode=BB9301596150194B61E2)
+
+### REST API Project Course: Spring Boot 4 REST APIs: Building Modern REST APIs
+This is an intermediate level course that includes four REST API projects:
+1. [Spring Boot 4 REST APIs: Building Modern REST APIs](https://www.udemy.com/course/spring-boot-rest-apis/)
+
+### Project Courses: Full Stack
+For full stack projects, you have the choice of either Angular or React. Pick the one that you like the best.
+1. [Full Stack: Angular and Spring Boot](https://www.udemy.com/course/full-stack-angular-spring-boot-tutorial/?referralCode=2264F90C65A86316BB6B)
+1. [Full Stack: React and Spring Boot](https://www.udemy.com/course/full-stack-react-and-java-spring-boot-the-developer-guide/?referralCode=4325FA579FD3D313E28D)
+
+### Java Web Test Automation
+Learn how to automate web browser testing using Java and test automation frameworks:
+1. [Java Playwright: Master Web Test Automation](https://www.luv2code.com/java-playwright-github)
+
+&#8287;
+## More luv2code Courses
+For more courses, visit the [luv2code website](https://www.luv2code.com). 
+
+I'm looking forward to seeing you in other luv2code courses! 
+
+&#8287;
+## Follow luv2code on Social Media
+* [YouTube Channel - luv2code](https://www.youtube.com/user/luv2codetv?sub_confirmation=1)
+* [Facebook Page - luv2code](https://www.facebook.com/luv2codetv)
+* [X (Twitter) - luv2code](https://twitter.com/luv2codetv)
+* [LinkedIn](https://www.linkedin.com/in/chaddarby/)
+
+&#8287;
+## License
+This source code and all related course materials are provided for your personal learning and educational use as part of a course by [luv2code LLC](https://www.luv2code.com).
+
+You may:
+- Use and modify the source code for your own personal projects  
+- Use and modify the source code in your work or professional projects, including commercial applications  
+- Integrate or extend the source code to build your own applications  
+
+No action or special requests are required to use the source code in this way.
+
+---
+
+You may not:
+- Republish, redistribute, or upload any course materials, including but not limited to videos, slides, images, text, or PDFs  
+- Use any course materials to create derivative educational content such as tutorials, blog posts, YouTube videos, online courses, training content, or social media content  
+- Use any course materials in teaching, training, or commercial educational products  
+- Claim any course materials as your own work  
+
+See the [LICENSE](./LICENSE) file for full terms and restrictions. 
+ 
+For permission requests, contact **copyright@luv2code.com**

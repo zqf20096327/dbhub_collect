@@ -1,0 +1,237 @@
+# spring-boot-nginx-keycloak-cluster
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ivan.franchin-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/ivan.franchin)
+
+The goal of this project is to use [`Nginx`](https://nginx.org/en/) as a reverse proxy and load balancer for a [`Keycloak`](https://www.keycloak.org/) cluster with two instances and a [`Spring Boot`](https://docs.spring.io/spring-boot/index.html) application, called `simple-service`, also with two instances. The `simple-service` app will use `Keycloak` for IAM.
+
+## Proof-of-Concepts & Articles
+
+On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-Concepts (PoCs) and articles. You can easily search for the technology you are interested in by using the filter. Who knows, perhaps I have already implemented a PoC or written an article about what you are looking for.
+
+## Additional Readings
+
+- \[**Medium**\] [**Using Nginx to Load Balance Requests to a Spring Boot Web application**](https://medium.com/@ivangfr/using-nginx-to-load-balance-requests-to-a-spring-boot-web-application-83a497a2f8ab)
+- \[**Medium**\] [**Using Nginx to Load Balance Requests to a Keycloak Cluster**](https://medium.com/@ivangfr/using-nginx-to-load-balance-requests-to-a-keycloak-cluster-52174c89a0e4)
+- \[**Medium**\] [**Nginx Load Balancing Requests to a Keycloak Cluster and a Spring Boot app that uses Keycloak as IAM**](https://medium.com/@ivangfr/nginx-load-balancing-requests-to-a-keycloak-cluster-and-a-spring-boot-app-that-uses-keycloak-as-iam-8e9e8280587d)
+- \[**Medium**\] [**Hardening a Load-Balanced Nginx + Keycloak + Spring Boot Setup with SSL/TLS**](https://medium.com/@ivangfr/hardening-a-load-balanced-nginx-keycloak-spring-boot-setup-with-ssl-tls-61371bde514f)
+
+## Project Overview
+
+![project-overview](documentation/project-overview.png)
+
+## Application
+
+- ### simple-service
+
+  `Spring Boot` Web Java application that exposes the following endpoints:
+  - `GET /api/public`: This endpoint is not secured; everyone can access it.
+  - `GET /api/secured`: This endpoint is secured and can only be accessed by users who provide a `JWT` access token issued by `Keycloak`. The token must include the role `APP_USER`.
+
+## Prerequisites
+
+- [`Java 25`](https://www.oracle.com/java/technologies/downloads/#java25) or higher.
+- A containerization tool (e.g., [`Docker`](https://www.docker.com), [`Podman`](https://podman.io), etc.)
+- [`jq`](https://jqlang.github.io/jq/)
+
+## Building simple-service Docker Image
+
+- In a terminal, navigate to the `spring-boot-nginx-keycloak-cluster` root folder.
+
+- Run the following script:
+  ```bash
+  ./build-docker-images.sh
+  ```
+
+## Configure /etc/hosts
+
+Add the following line to `/etc/hosts`:
+```text
+127.0.0.1 keycloak-cluster.lb simple-service.lb
+```
+
+## Starting Environment
+
+Open a terminal and inside the `spring-boot-nginx-keycloak-cluster` root folder run:
+```bash
+./init-environment.sh
+```
+
+This script will start:
+- one `PostgreSQL` Docker container.
+- two `Keycloak` Docker containers (realm configuration is imported automatically on startup).
+- two `simple-service` Docker containers.
+- one `Nginx` Docker container.
+
+### Configuring Keycloak
+
+The realm configuration is automatically imported when the Keycloak containers start via the `keycloak/company-services-realm.json` file. It includes:
+- `company-services` realm with `Verify Profile` required action disabled.
+- `simple-service` client with `directAccessGrantsEnabled`.
+- `APP_USER` client role for the `simple-service` client.
+- `USERS` group with `APP_USER` client role assigned.
+- `user-test` user with password `123` and assigned to `USERS` group.
+
+At the end of the `./init-environment.sh` output, you will see the `SIMPLE_SERVICE_CLIENT_SECRET` value. Copy it — it will be needed whenever we call `Keycloak` to get a JWT access token to access `simple-service`.
+
+## Testing the simple-service endpoints
+
+1. Open a new terminal.
+
+2. Call the endpoint `GET /public`:
+   ```bash
+   curl -i http://simple-service.lb/public
+   ```
+
+   It should return:
+   ```text
+   HTTP/1.1 200
+   ...
+   Hi World, I am a public endpoint
+   ```
+
+3. Try to call the endpoint `GET /secured` without authentication:
+   ```bash
+   curl -i http://simple-service.lb/secured
+   ```
+
+   It should return:
+   ```text
+   HTTP/1.1 401
+   ...
+   ```
+
+4. Create an environment variable with the `Client Secret` shown at the end of the `./init-environment.sh` output in the [Configuring Keycloak](#configuring-keycloak) step:
+   ```bash
+   SIMPLE_SERVICE_CLIENT_SECRET=...
+   ```
+
+5. Run the command below to get an access token for `user-test` user:
+   ```bash
+   USER_TEST_ACCESS_TOKEN="$(curl -s -X POST \
+     "http://keycloak-cluster.lb/realms/company-services/protocol/openid-connect/token" \
+     -H "Content-Type: application/x-www-form-urlencoded" \
+     -d "username=user-test" \
+     -d "password=123" \
+     -d "grant_type=password" \
+     -d "client_secret=$SIMPLE_SERVICE_CLIENT_SECRET" \
+     -d "client_id=simple-service" | jq -r .access_token)"
+   echo $USER_TEST_ACCESS_TOKEN
+   ```
+
+6. Call the endpoint `GET /secured`:
+   ```bash
+   curl -i http://simple-service.lb/secured -H "Authorization: Bearer $USER_TEST_ACCESS_TOKEN"
+   ```
+
+   It should return:
+   ```text
+   HTTP/1.1 200
+   ...
+   Hi user-test, I am a secured endpoint
+   ```
+
+7. The default expiration period for the access token is `5 minutes`. So, wait for this time and then, using the same access token, try to call the secured endpoint.
+
+   It should return:
+   ```text
+   HTTP/1.1 401
+   ...
+   WWW-Authenticate: Bearer error="invalid_token", error_description="An error occurred while attempting to decode the Jwt: Jwt expired at ...", error_uri="https://tools.ietf.org/html/rfc6750#section-3.1"
+   ...
+   ```
+
+8. Checking `Keycloak` and `simple-service` Docker container logs
+
+   We can verify that `Nginx` is appropriately load balancing the requests when an access token request to `Keycloak` is made. To view the `Keycloak` Docker container logs, execute the following commands in different terminals:
+   ```bash
+   docker logs -f keycloak1
+   ```
+   ```bash
+   docker logs -f keycloak2
+   ```
+
+   We can also verify that `Nginx` is appropriately load balancing requests to the `simple-service` endpoints. To view the `simple-service` Docker container logs, execute the following commands in different terminals:
+   ```bash
+   docker logs -f simple-service1
+   ```
+   ```bash
+   docker logs -f simple-service2
+   ```
+
+## Useful Links & Commands
+
+- **Keycloak**
+
+  The `Keycloak` website can be accessed at http://keycloak-cluster.lb
+
+- **Nginx**
+
+  If you wish to modify the `Nginx` configuration file without restarting its Docker container, follow these steps:
+  
+  - Apply the changes in the `nginx/nginx.conf` file.
+  - Execute the following command to access the `nginx` Docker container:
+    ```bash
+    docker exec -it nginx bash
+    ```
+  - In the `nginx` Docker container terminal, run:
+    ```bash
+    nginx -s reload
+    ```
+  - To exit, just run the command `exit`.
+
+## Shutdown
+
+To stop and remove Docker containers, network, and volumes, open a terminal, navigate to the `spring-boot-nginx-keycloak-cluster` root folder, and run the following script:
+```bash
+./shutdown-environment.sh
+```
+
+## Running Tests
+
+In a terminal and inside the `spring-boot-nginx-keycloak-cluster` root folder, run the following command:
+```bash
+./mvnw clean test
+```
+
+## Code Formatting
+
+This project enforces consistent Java formatting using the [Spotless](https://github.com/diffplug/spotless/tree/main/plugin-maven) Maven plugin with [google-java-format](https://github.com/google/google-java-format) (GOOGLE style).
+
+- **Check formatting**:
+  ```bash
+  ./mvnw spotless:check
+  ```
+
+- **Auto-fix formatting**:
+  ```bash
+  ./mvnw spotless:apply
+  ```
+
+Formatting is enforced automatically during `./mvnw test`.
+
+## Cleanup
+
+- To remove the `simple-service` Docker image created, open a terminal, navigate to the `spring-boot-nginx-keycloak-cluster` root folder, and run the following script:
+  ```bash
+  ./remove-docker-images.sh
+  ```
+
+- Remove the line below from `/etc/hosts`:
+  ```text
+  127.0.0.1 keycloak-cluster.lb simple-service.lb
+  ```
+
+## How to optimize PNGs in documentation folder
+
+\[**Medium**\]: [**How I Reduce GIF and Screenshot Sizes for My Technical Articles on macOS**](https://medium.com/itnext/how-i-reduce-gif-and-screenshot-sizes-for-my-technical-articles-on-macos-7fea331afc68)
+
+## Support
+
+If you find this useful, consider buying me a coffee:
+
+<a href="https://buymeacoffee.com/ivan.franchin"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50"></a>
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).

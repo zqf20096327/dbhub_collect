@@ -1,0 +1,275 @@
+# mycli
+
+[![Build Status](https://img.shields.io/github/actions/workflow/status/dbcli/mycli/ci.yml?style=for-the-badge&color=2E9356)](https://github.com/dbcli/mycli/actions/workflows/ci.yml)
+[![PyPI - Version](https://img.shields.io/pypi/v/mycli?style=for-the-badge&logo=pypi&logoColor=white)](https://pypi.org/project/mycli/)
+[![License](https://img.shields.io/github/license/dbcli/mycli.svg?style=for-the-badge&color=2E9356)](https://github.com/dbcli/mycli/blob/main/LICENSE.txt)
+
+Rich MySQL terminal client with auto-completion, syntax highlighting, and dataframes.
+
+Homepage: [https://mycli.net](https://mycli.net)
+
+Documentation: [https://mycli.net/docs](https://mycli.net/docs)
+
+<div align="center">
+  <img alt="Completion" src="https://raw.githubusercontent.com/dbcli/mycli/main/doc/screenshots/tables.png">
+</div>
+</br>
+<div align="center">
+  <img alt="CompletionGif" src="https://raw.githubusercontent.com/dbcli/mycli/main/doc/screenshots/main.gif">
+</div>
+
+Mycli is known to be compatible with
+
+ * [MySQL](https://www.mysql.com/)
+ * [MariaDB](https://mariadb.org/)
+ * [Percona](https://www.percona.com/)
+ * [TiDB](https://www.pingcap.com/)
+ * [Apache Doris](https://doris.apache.org/)
+
+Postgres equivalent
+
+ * [pgcli](https://pgcli.com)
+
+# Release 2.x
+
+Release 2.0.0 has [breaking changes](https://github.com/dbcli/mycli/blob/v2.0.0/changelog.md#breaking-changes)!
+
+
+# Quick Start
+
+If you already know how to install Python packages, then you can install mycli
+via `pip`.  This package is always up to date.
+
+```bash
+pip install --upgrade 'mycli[all]'
+```
+
+or, on macOS (`pygments` is optional):
+
+```bash
+brew update && brew install mycli pygments
+```
+
+or, on Debian or Ubuntu (`fzf` and `pygments` are optional):
+
+```bash
+apt-get install mycli fzf python3-pygments
+```
+
+## Try Without Installing: uv
+
+```bash
+uv tool run 'mycli[all]' --help
+```
+
+## Try Without Installing: Docker
+
+The images on Dockerhub are out of date!  [ghcr.io](https://github.com/dbcli/mycli/pkgs/container/mycli) images are preferred.  A sample database
+is included:
+
+```bash
+docker run --pull=always -it ghcr.io/dbcli/mycli:latest
+```
+
+The same image works with macOS [container](https://github.com/apple/container):
+
+```bash
+container run -it ghcr.io/dbcli/mycli:latest
+```
+
+# Features
+
+* Auto-completion as you type for SQL keywords as well as tables, views, columns, enums, and more!
+* Smart-completion suggests context-sensitive completion:
+    - `SELECT * FROM `<kbd>tab</kbd> will only show table names.
+    - `SELECT * FROM users WHERE `<kbd>tab</kbd> will only show column names.
+* Fuzzy history search using [fzf](https://github.com/junegunn/fzf).
+* Output explorer using [fzf](https://github.com/junegunn/fzf) or other tools.
+* Syntax highlighting using [Pygments](https://pygments.org/).
+* Multiline queries.
+* Favorite queries with positional or named parameters using [Jinja](https://jinja.palletsprojects.com/en/stable/). Save a query using
+    ```
+    /fs alias <query>
+    ```
+  and execute it with
+    ```
+    /f alias --key=value
+    ```
+* Timing of SQL statements and table rendering.
+* Many output formats for tabular results.
+* Shell-style trailing redirects with `$>`, `$>>` and `$|` operators.
+* [Polars](https://pola.rs) dataframe [transforms and plots](https://github.com/dbcli/mycli/blob/main/doc/transforms.md) with `.|`, and Parquet saves with `.>`.
+* [Querying LLMs](https://www.mycli.net/llm) with context derived from your schema using `/llm`.
+* Storing passwords in the system keyring.
+* Modern defaults such as UTF-8 connection type and SSL.
+* Integrations with: [SSH](https://www.openssh.org/), [Kubernetes](https://kubernetes.io/), [Vault](https://github.com/hashicorp/vault), and [Boundary](https://github.com/hashicorp/boundary).
+
+Mycli creates a config file `~/.myclirc` on the first run; you can use the
+options in that file to configure the above features, and more.
+
+Some features are only exposed as [key bindings](https://github.com/dbcli/mycli/blob/main/doc/key_bindings.md).
+
+
+# Usage
+
+See
+
+```bash
+mycli --help
+```
+
+
+# Contributing
+
+If you're interested in contributing to this project, first of all we would like
+to extend our heartfelt gratitude. We've written a small doc to describe how to
+get mycli running in a development setup.
+
+https://github.com/dbcli/mycli/blob/main/CONTRIBUTING.md
+
+
+# Additional Install Instructions
+
+## Shell Completions
+
+If installed via Homebrew, shell completions [may already be configured](https://docs.brew.sh/Shell-Completion).
+
+Otherwise, to configure shell completions for the current session, execute a
+command like this:
+
+```bash
+eval "$(mycli --completions SHELL)"
+```
+
+replacing `SHELL` with `bash`, `zsh`, or `fish`, depending on your choice of
+shell.
+
+To permanently install shell completions, the above command may be added to your
+`~/.bashrc`, `~/.zshrc`, or `~/.config/fish/config.fish`.  To speed up login
+time, the output of `mycli --completions SHELL` may be saved to a file and
+loaded with `source`.
+
+## Alternative Install Methods
+
+These are some alternative ways to install mycli that are not managed by our
+team but provided by OS package maintainers.
+
+**NOTE: OS packages could be considerably out of date.**
+
+If present, the `fzf` package can be used for fuzzy history search, and as an
+output "explorer" with the `\x` special command. `pygmentize` can be used for
+syntax highlighting within the fuzzy history search.  The `less` package is
+also expected, but almost always already installed.
+
+### Arch, Manjaro
+
+You can install the `mycli` package available in the AUR.  `fzf` and
+`python-pygments` are optional but recommended:
+
+```bash
+yay -S mycli fzf python-pygments
+```
+
+### Debian, Ubuntu
+
+On Debian and Ubuntu distributions, you can easily install the mycli package
+using apt.  The `fzf` and `python3-pygments` packages are optional but
+recommended:
+
+```bash
+apt-get install mycli fzf python3-pygments
+```
+
+### Fedora
+
+Fedora has a package available for mycli; install it using dnf.  The `fzf` and
+`python-pygments` packages are optional but recommended:
+
+```bash
+dnf install mycli fzf python-pygments
+```
+
+### Windows
+
+#### Option 1: Native Windows
+
+Install the `less` pager, for example by `scoop install less`.
+
+Install the `fzf` fuzzy finder, for example by `scoop install fzf`.
+
+Follow the instructions on this blog post: https://web.archive.org/web/20221006045208/https://www.codewall.co.uk/installing-using-mycli-on-windows/
+
+The libraries used in mycli are Windows-compatible, but there are known
+limitations according to the test suite.  The basics work without any
+modifications, but this configuration isn't supported software at this time.
+
+PRs to address shortcomings on Windows would be welcome!
+
+#### Option 2: WSL
+
+Mycli is more compatible with WSL than with native Windows, though still
+not 100% perfect.  This is a good option for using mycli on Windows.
+
+With WSL, you are probably using an Ubuntu distribution, in which case
+recommended dependencies can be installed by
+
+```bash
+apt-get install fzf python3-pygments
+```
+
+and mycli can be installed by `apt-get` or by `pip` (recommended):
+
+```bash
+pip install --upgrade 'mycli[all]'
+```
+
+PRs to complete WSL support would be welcome!
+
+# Thanks
+
+This project was funded through Kickstarter. Our thanks to the [backers](https://mycli.net/sponsors) who supported the project.
+
+A special thanks to [Jonathan Slenders](https://twitter.com/jonathan_s) for
+creating [Python Prompt Toolkit](https://github.com/jonathanslenders/python-prompt-toolkit),
+which is quite literally the backbone library, that made this app possible.
+Jonathan has also provided valuable feedback and support during the development
+of this app.
+
+[Click](https://palletsprojects.com/projects/click) is used for command line option parsing
+and printing error messages.
+
+Thanks to [PyMysql](https://github.com/PyMySQL/PyMySQL) for a pure Python adapter to MySQL databases.
+
+
+# Compatibility
+
+Mycli is tested on macOS (full), Linux (full), Windows (partial), and WSL
+(partial), and requires Python 3.11 or better.
+
+To connect to MySQL versions earlier than 5.5, you may need to set the
+following in `~/.myclirc`:
+
+```ini
+[connection]
+# character set for connections without --charset being set at the CLI
+default_character_set = utf8
+```
+
+or use `--charset=utf8` when invoking mycli.
+
+# Configuration and Usage
+
+For more information on using and configuring mycli, [check out our documentation](https://mycli.net/docs).
+
+Common topics include:
+- [Configuring mycli](https://mycli.net/config)
+- [Using/Disabling the pager](https://mycli.net/pager)
+- [Syntax colors](https://mycli.net/syntax)
+
+
+# License
+
+Mycli is Open Source Software provided under the [BSD 3-Clause License](LICENSE.txt).
+
+The Mycli Docker image and git repository include a copy of the [employees sample database](https://dev.mysql.com/doc/employee/en/)
+provided by Oracle under the [Creative Commons Attribution-Share Alike 3.0 Unported License](https://dev.mysql.com/doc/employee/en/employees-license.html).

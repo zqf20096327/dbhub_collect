@@ -1,0 +1,855 @@
+<img width="100%" src="./img/hero.png" alt="CRUD-bench hero">
+
+# crud-bench
+
+The crud-bench benchmarking tool is an open-source benchmarking tool for testing and comparing the performance of a
+number of different workloads on embedded, networked, and remote databases. It can be used to compare both SQL and NoSQL
+platforms including key-value, embedded, relational, document, and multi-model databases. Importantly crud-bench focuses
+on testing additional features which are not present in other benchmarking tools, but which are available in SurrealDB.
+
+The primary purpose of crud-bench is to continually test and monitor the performance of features and functionality built
+in to SurrealDB, enabling developers working on features in SurrealDB to assess the impact of their changes on database
+queries and performance.
+
+The crud-bench benchmarking tool is being actively developed with new features and functionality being added regularly.
+
+## Contributing
+
+The crud-bench benchmarking tool is open-source, and we encourage additions, modifications, and improvements to the
+benchmark runtime, and the datastore implementations.
+
+## How does it work?
+
+When running simple, automated tests, the crud-bench benchmarking tool will automatically start a Docker container for
+the datastore or database which is being benchmarked (when the datastore or database is networked). This configuration
+can be modified so that an optimised, remote environment can be connected to, instead of running a Docker container
+locally. This allows for running crud-bench against remote datastores, and distributed datastores on a local network
+or remotely in the cloud.
+
+In one table, the benchmark will operate 5 main tasks:
+
+- Create: inserting N unique records, with the specified concurrency.
+- Read: read N unique records, with the specified concurrency.
+- Update: update N unique records, with the specified concurrency.
+- Scans: perform a number of range and table scans, with the specified concurrency.
+- Delete: delete N unique records, with the specified concurrency.
+
+With crud-bench almost all aspects of the benchmark engine are configurable:
+
+- The number of rows or records (samples).
+- The number of concurrent clients or connections.
+- The number of concurrent threads (concurrent messages per client).
+- Whether rows or records are modified sequentially or randomly.
+- The primary id or key type for the records.
+- The row or record content including support for nested objects and arrays.
+- The scan specifications for range or table queries.
+
+## Benchmarks
+
+As crud-bench is in active development, some benchmarking workloads are already implemented, while others will be
+implemented in future releases. The list below details which benchmarks are implemented for the supporting datastores
+and lists those which are planned in the future.
+
+**CRUD**
+
+- [x] Creating single records in individual transactions
+- [x] Reading single records in individual transactions
+- [x] Updating single records in individual transactions
+- [x] Deleting single records in individual transactions
+- [x] Batch creating multiple records in a transaction
+- [x] Batch reading multiple records in a transactions
+- [x] Batch updating multiple records in a transactions
+- [x] Batch deleting multiple records in a transactions
+
+**Scans**
+
+- [x] Full table scans, projecting all fields
+- [x] Full table scans, projecting id field
+- [x] Full table count queries
+- [x] Scans with a limit, projecting all fields
+- [x] Scans with a limit, projecting id field
+- [x] Scans with a limit, counting results
+- [x] Scans with a limit and offset, projecting all fields
+- [x] Scans with a limit and offset, projecting id field
+- [x] Scans with a limit and offset, counting results
+
+**Filters**
+
+- [x] Full table query, using filter condition, projecting all fields
+- [x] Full table query, using filter condition, projecting id field
+- [x] Full table query, using filter condition, counting rows
+
+**Indexes**
+
+- [x] Indexed table query, using filter condition, projecting all fields
+- [x] Indexed table query, using filter condition, projecting id field
+- [x] Indexed table query, using filter condition, counting rows
+- [x] Full-text search query, using single search term, projecting all fields
+- [x] Full-text search query, using single search term, projecting id field
+- [x] Full-text search query, using single search term, counting rows
+- [x] Full-text search query, using boolean AND search terms, projecting all fields
+- [x] Full-text search query, using boolean AND search terms, projecting id field
+- [x] Full-text search query, using boolean AND search terms, counting rows
+- [x] Full-text search query, using boolean OR search terms, projecting all fields
+- [x] Full-text search query, using boolean OR search terms, projecting id field
+- [x] Full-text search query, using boolean OR search terms, counting rows
+
+**Vector search**
+
+- [x] Bruteforce (exact) KNN query
+- [x] HNSW KNN query, with configurable `m` / `ef_construction` / `ef_search`
+- [x] DiskANN KNN query, with configurable `degree` / `l_build` / `alpha` / `l_search`
+- [x] Vector index build timing
+- [x] Recall@k against exact ground truth, scored identically for every engine
+- [x] Parameter sweeps tracing the recall/latency curve over a single index build
+- [x] Reproducible corpora, so engines and runs are compared on identical data
+- [ ] Index size on disk and resident memory
+- [ ] Filtered KNN (`WHERE … ORDER BY <embedding> LIMIT k`)
+
+**Relationships**
+
+- [ ] Fetching or traversing 1-level, one-to-one relationships or joins
+- [ ] Fetching or traversing 1-level, one-to-many relationships or joins
+- [ ] Fetching or traversing 1-level, many-to-many relationships or joins
+- [ ] Fetching or traversing n-level, one-to-one relationships or joins
+- [ ] Fetching or traversing n-level, one-to-many relationships or joins
+- [ ] Fetching or traversing n-level, many-to-many relationships or joins
+
+**Workloads**
+
+- [ ] Workload support for creating, updating, and reading records concurrently
+
+## Requirements
+
+- [Docker](https://www.docker.com/) - required when running automated tests
+- [Rust](https://www.rust-lang.org/) - required when building crud-bench from source
+- [Cargo](https://github.com/rust-lang/cargo) - required when building crud-bench from source
+
+## Usage
+
+```bash
+cargo run -r -- -h
+```
+
+```bash
+Usage: crud-bench [OPTIONS] --database <DATABASE> --samples <SAMPLES>
+
+Options:
+  -n, --name <NAME>                            An optional name for the test, used as a suffix for the JSON result file name
+  -d, --database <DATABASE>                    The database to benchmark [possible values: dry, map, arangodb, dragonfly, fjall, keydb, mdbx, lmdb, mariadb, mongodb, mysql, neo4j, postgres, redb, redis, rocksdb, scylladb, slatedb, sqlite, surrealdb, surrealkv, surrealmx, surrealds]
+  -i, --image <IMAGE>                          Specify a custom Docker image
+  -p, --privileged                             Whether to run Docker in privileged mode
+  -e, --endpoint <ENDPOINT>                    Specify a custom endpoint to connect to
+  -b, --blocking <BLOCKING>                    Maximum number of blocking threads (default is the number of CPU cores) [default: 12]
+  -w, --workers <WORKERS>                      Number of async runtime workers (default is the number of CPU cores) [default: 12]
+  -c, --clients <CLIENTS>                      Number of concurrent clients [default: 1]
+  -t, --threads <THREADS>                      Number of concurrent threads per client [default: 1]
+  -s, --samples <SAMPLES>                      Number of samples to be created, read, updated, and deleted
+  -r, --random                                 Generate the keys in a pseudo-randomized order
+      --sync                                   Whether to ensure data is synced and durable
+      --operation-timeout <OPERATION_TIMEOUT>  Per-operation timeout in seconds [env: CRUD_BENCH_OPERATION_TIMEOUT=] [default: 1800]
+      --persisted                              Whether to enable disk persistence for Redis-family databases
+      --optimised                              Use optimised database configurations instead of defaults
+      --color <COLOR>                          When to use colour in terminal output (`NO_COLOR` disables colour for `auto` and `always`) [default: auto] [possible values: auto, always, never]
+  -k, --key <KEY>                              The type of the key [default: integer] [possible values: integer, string26, string90, string250, string506, uuid]
+      --show-sample                            Print-out an example of a generated value
+      --pid <PID>                              Collect system information for a given pid
+      --store-results                          Store benchmark results in SurrealDB
+      --storage-endpoint <STORAGE_ENDPOINT>    SurrealDB endpoint for storing results [env: CRUD_BENCH_STORAGE_ENDPOINT=] [default: ws://localhost:8000]
+      --config <CONFIG>                        Path to the benchmark TOML (`[[scans]]`, `[[batches]]`, `[value]`) [env: CRUD_BENCH_CONFIG=] [default: config/bench.toml]
+      --skip-scans                             Skip all scan benchmarks
+      --skip-batches                           Skip all batch benchmarks
+      --skip-indexes                           Skip index operations, but still table scan queries
+      --emit-phase-markers                     Emit line-oriented phase markers (`… starting`, `Benchmark starting`) for log-based tooling (e.g. `dev.sh` perf windows). Off by default; also on when `CRUD_BENCH_EMIT_PHASE_MARKERS` is `1`, `true`, `yes`, or `on`
+      --corpus-seed <CORPUS_SEED>              Seed for generated row content, overriding `seed` in the benchmark TOML. With a seed the corpus is a pure function of `(seed, sample)`, making the run reproducible and letting vector-search ground truth reconstruct the corpus instead of reading it back
+      --ground-truth-cache <DIR>               Directory holding cached vector-search ground truth [env: CRUD_BENCH_GROUND_TRUTH_CACHE=] [default: .crud-bench-gt]
+      --vector-warmup-seconds <SECONDS>        Seconds a vector index may be warmed before a timed leg. Warming stops on its own once latency plateaus; this is a safety cap. Raise it for large corpora [default: 30]
+  -h, --help                                   Print help (see more with '--help')
+  ```
+
+For more detailed help information run the following command:
+
+```bash
+cargo run -r -- --help
+```
+
+### Comparing `result*.json` files in the browser
+
+Open [`compare/index.html`](compare/index.html) locally (drag and drop benchmark JSON artefacts). Rows and labels match CLI/CSV ordering from [`src/result.rs`](src/result.rs). Nothing is uploaded; ApexCharts loads from jsDelivr (works offline only if that script is cached or vendored beside the HTML file).
+
+Workload shape (document template, scan cases, and batch throughput tests) is defined in a single TOML file. Use
+`--config <PATH>` or the environment variable `CRUD_BENCH_CONFIG` (default: `config/bench.toml`).
+
+### Value
+
+The `[value]` table in the benchmark TOML customizes the row, document, or record value used in the benchmark. It uses
+the same JSON-oriented template rules as before, expressed as TOML keys and nested tables.
+
+> [!NOTE]
+> For tabular, or column-oriented databases (e.g. Postgres, MySQL, ScyllaDB), the first-level fields of the JSON
+> structure are translated as columns, and any nested structures will be stored in a JSON column where possible.
+
+Within the JSON structure, the following values are replaced by randomly generated data:
+
+- Every occurrence of `string:X` will be replaced by a random string with `X` characters.
+- Every occurrence of `text:X` will be replaced by a random string made of words of 2 to 10 characters, for a total of
+  `X` characters.
+- Every occurrence of `string:X..Y` will be replaced by a random string between `X` and `Y` characters.
+- Every occurrence of `text:X..Y` will be replaced by a random string made of words of 2 to 10 characters, for a total
+  between `X` and `Y` characters.
+- Every `int` will be replaced by a random integer (i32).
+- Every `int:X..Y` will be replaced by a random integer (i32) between `X` and `Y`.
+- Every `float` will be replaced by a random float (f32).
+- Every `float:X..Y` will be replaced by a random float (f32) between `X` and `Y`.
+- Every `uuid` will be replaced by a random UUID (v4).
+- Every `bool` will be replaced by a `true` or `false`.
+- Every `string_enum:A,B,C` will be replaced by a string from `A` `B` or `C`.
+- Every `int_enum:A,B,C` will be replaced by a i32 from `A` `B` or `C`.
+- Every `float_enum:A,B,C` will be replaced by a f32 from `A` `B` or `C`.
+- Every `datetime` will be replaced by a datetime (ISO 8601).
+- Every `vector:X` will be replaced by an `X`-dimension vector with uniform components in `[-1, 1]`.
+- Every `vector:X:LO..HI` will be replaced by an `X`-dimension vector with uniform components in `[LO, HI]`.
+- Every `vector:X:clustered:N` will be replaced by an `X`-dimension unit vector drawn from a mixture
+  of `N` clusters. Add `:SIGMA` (default `0.35`) to widen or tighten the clusters.
+
+```json
+{
+  "text": "text:30",
+  "text_range": "text:10..50",
+  "bool": "bool",
+  "string_enum": "enum:foo,bar",
+  "datetime": "datetime",
+  "float": "float",
+  "float_range": "float:1..10",
+  "float_enum": "float:1.1,2.2,3.3",
+  "integer": "int",
+  "integer_range": "int:1..5",
+  "integer_enum": "int:1,2,3",
+  "uuid": "uuid",
+  "nested": {
+    "text": "text:100",
+    "array": [
+      "string:10",
+      "string:2..5"
+    ]
+  }
+}
+```
+
+### Scans
+
+Scan workloads are defined by `[[scans]]` entries in the benchmark TOML (see `config/bench.toml`). Each table describes
+one logical benchmark (or multiple `[[scans.runs]]` variants). The JSON examples below remain valid documentation for the
+fields on each scan object.
+
+> [!NOTE]
+> Not every database benchmark adapter supports scans or range queries. In such cases, the benchmark will not fail but
+> the associated tests will indicate that the benchmark was `skipped`.
+
+Unknown keys are rejected. A misplaced or misspelled key used to be dropped in silence, so a run would report a healthy-looking number for a configuration nobody had written — the same failure mode the vector-search measurement work exists to eliminate. Parsing now fails and names the offending key and the table it appeared in.
+
+Each scan object can make use of the following values:
+
+- `id` (**required**): Stable identifier for grouping in the CLI, result tables, CSV output, and for **index create/drop** when `with_index` is present and not skipped. Use a simple identifier (e.g. `where_field_integer_eq`); human-readable titles live in `name` / run `name` and may contain characters that are not valid in SurrealDB or Neo4j index names.
+- `name`: A descriptive name for the test (use this **or** `runs`, not both).
+- `runs`: An array of `{ "name", "iterations"?, "projection"?, "vector_query"? }` objects that share the same scan parameters (`condition`, `with_index`, and so on). Each run becomes a separate benchmark with its own display name. Per-run `iterations`, `projection` and `vector_query` override the entry-level value when both are set; if a run omits one, the entry-level value applies (`projection` defaulting to full-record scans like a single-object entry without `projection`). A per-run `iterations` matters when one array mixes leg kinds — a bruteforce KNN leg is a full table scan costing seconds per query at 100k rows, while the graph-index legs beside it answer in under a millisecond, and no single count suits both.
+- `projection`: The projection type of the scan:
+    - `"ID"`: only the ID is returned.
+    - `"FULL"`: the whole record is returned.
+    - `"COUNT"`: count the number of records.
+- `start`: Skips the specified number of rows before starting to return rows.
+- `limit`: Specifies the maximum number of rows to return.
+- `expect`: (optional) Asserts the expected number of rows returned.
+- `clients` / `threads`: (optional) Concurrency for this scan's timed legs, overriding `--clients`
+  and `--threads`. `clients` is capped at the pool `--clients` created. Index DDL is unaffected — it
+  always runs on a single client.
+
+```json
+[
+  {
+    "id": "paging_limit_100",
+    "name": "limit100",
+    "projection": "FULL",
+    "start": 0,
+    "limit": 100,
+    "expect": 100
+  },
+  {
+    "id": "paging_start_100",
+    "name": "start100",
+    "projection": "ID",
+    "start": 100,
+    "limit": 100,
+    "expect": 100
+  }
+]
+```
+
+Multiple benchmarks that share the same filter, index, and write settings can use `runs` instead of duplicating the object:
+
+```json
+[
+  {
+    "id": "idx_x_eq_1",
+    "runs": [
+      { "name": "select(*) where(x = 1)", "projection": "FULL" },
+      { "name": "count(*) where(x = 1)", "projection": "COUNT" }
+    ],
+    "iterations": 10000,
+    "condition": { "sql": "x = 1", "mysql": "x = 1" },
+    "with_index": { "fields": ["x"] }
+  }
+]
+```
+
+### Vector search
+
+Vector workloads live in [`config/vector.toml`](config/vector.toml). Each `[scans.runs.vector_query]`
+block describes one KNN benchmark:
+
+- `field` (**required**): the `vector:<dim>` column to search. The index, when the strategy needs
+  one, is derived from this — do not also declare `with_index`.
+- `top_k` (**required**): number of neighbours to return.
+- `distance`: `cosine` (default), `euclidean`, `inner_product`, or `manhattan`.
+- `index_strategy` (**required**): `{ kind = "bruteforce" }`, `{ kind = "hnsw", m, ef_construction,
+  ef_search }`, or `{ kind = "diskann", degree, l_build, alpha, l_search }`. All knobs are required —
+  results without explicit parameters cannot be interpreted. The search-time knob (`ef_search`,
+  `l_search`) also accepts a **list**, which is swept: see below.
+- `holdout`: `{ count, seed }` for the query set. Query vectors are generated from `seed` using the
+  schema's own vector generator and are **never inserted**, so no query is its own nearest neighbour.
+- `tie_epsilon`: relative tolerance when deciding whether a returned neighbour counts as correct
+  (default `0.0`, i.e. strict recall@k). Engines compute distances at different precisions, so rows
+  straddling the k-th boundary can swap without any real quality difference; a small tolerance stops
+  that reading as a recall gap.
+
+#### Engine support
+
+| engine | bruteforce | HNSW | DiskANN | notes |
+|---|---|---|---|---|
+| SurrealDB (3.x) | ✓ | ✓ | ✓ | `<\|k,ef\|>` operator; DiskANN needs a build that has the DDL |
+| SurrealDB (2.x) | ✓ | ✓ | — | 2.6 has no DiskANN |
+| PostgreSQL | ✓ | ✓ | — | pgvector; DiskANN would need pgvectorscale |
+| Redis Stack | ✓ (FLAT) | ✓ | — | no native L1/Manhattan metric |
+| everything else | — | — | — | the run is skipped, not failed |
+
+Engines without vector support skip these runs rather than failing, so a mixed run reports `-` for
+them rather than aborting. A leg whose strategy needs an index it cannot build is skipped the same
+way.
+
+#### Vector data
+
+Use `vector:<dim>:clustered:<n>` rather than `vector:<dim>` for anything whose recall you intend to
+read. Uniform components leave a corpus with no neighbourhood structure — under distance
+concentration every pair sits at roughly the same distance, so a query's true neighbours are
+conspicuous and any index walks straight to them. Measured over 20k 128-d rows, the nearest neighbour
+sits at 65% of a random pair's distance under `vector:128`, and at 8% under
+`vector:128:clustered:200`. Recall only tells you anything on the second.
+
+Clusters are drawn from the corpus seed, so two seeds give two genuinely different datasets rather
+than one structure populated differently. Query vectors come from the same generator, so they follow
+the corpus distribution by construction.
+
+Corpus size matters more than dimension. Dimension scales cost linearly without making the search
+harder; rows add candidates that can confuse a graph. Measured against embedded SurrealDB at 128
+dimensions, neither graph index beats a linear scan below ~100k rows — at 200k, HNSW is 1.7x faster
+than bruteforce and DiskANN 3.4x. Treat 100k as a floor, and 1M as the size worth quoting, which also
+matches the scale of the standard ANN datasets.
+
+#### Parameter sweeps
+
+`ef_search` and `l_search` accept a list as well as a single value:
+
+```toml
+index_strategy = { kind = "hnsw", m = 16, ef_construction = 200, ef_search = [16, 32, 64, 128, 256] }
+```
+
+Each value becomes its own timed leg, all sharing a **single** index build, and each is reported as a
+separate row labelled with the value it used. A lone `ef_search` is one arbitrary point on a curve —
+the comparison worth making is the curve itself, what recall an index reaches at a given latency
+budget — and tracing it this way costs one index build rather than one per point.
+
+Values must be at least `top_k`: a search budget narrower than `k` cannot return `k` neighbours.
+
+Engines apply the budget differently and crud-bench hides the difference. SurrealDB carries it in the
+KNN operator, Redis passes `EF_RUNTIME` on the query rather than fixing it at `FT.CREATE`, and
+pgvector takes it from the `hnsw.ef_search` session GUC, which is applied to every client before each
+leg — a setting made only on the client that built the index would reach one session out of
+`--clients`.
+
+#### Concurrency
+
+Vector legs default to `clients = 1`, `threads = 1` in `config/vector.toml`, and that default is
+load-bearing. Once an index is warm a KNN query answers in well under a millisecond, so at the
+benchmark's usual concurrency the timed legs measure queueing rather than search: the same query
+measured **0.4 ms at one client and roughly 1500 ms at sixty-four**. Raise the setting to measure
+throughput under load — that is a legitimate thing to want — but do not read the latency columns of
+such a run as search cost.
+
+The first leg timed after an index build is also warmed with untimed queries first. Without that it
+absorbs the whole cost of warming the index, and not by a little: on a 50k-row HNSW the first leg
+measured ~295 ms per query against ~0.5 ms for the identical query in the leg that followed, and it
+was *more accurate* as well — a cold index answers differently, not just slower.
+
+#### Recall
+
+An approximate index has a free parameter — `ef_search`, `l_search` — that trades accuracy for
+latency, so a latency number on its own cannot tell a fast index from an inaccurate one. Every KNN
+run is therefore scored for recall@k, reported as `mean / 5th percentile` in the summary table and in
+full in the JSON and CSV output. The 5th percentile is shown because a mean can look healthy while a
+tail of queries is answered badly.
+
+Ground truth is computed by crud-bench itself and shared by every engine, rather than taken from each
+engine's own bruteforce leg. Scoring an engine against itself measures whether its index agrees with
+its own exact path — useful for tracking regressions, but not a number that can sit beside another
+engine's, because a quirk shared by an engine's exact and approximate paths cancels out and divergent
+metric definitions leave every engine near 1.0 against itself. A useful side effect: each engine's
+own bruteforce leg is scored too, and should read `1.000`. Anything less is a metric divergence or an
+engine bug.
+
+Recall needs a reproducible corpus, so a vector config must set `seed` (or the run must pass
+`--corpus-seed`). Row content then becomes a pure function of the seed and the sample index, which
+also means the same dataset is benchmarked across engines and across runs. Without a seed the KNN
+runs still execute and report latency, and print why recall is unavailable.
+
+The answer key is a pure function of its inputs — both seeds, the sample count, `top_k`, the metric,
+the field, and the value template — so it is computed once, cached under `--ground-truth-cache`
+(default `.crud-bench-gt`, gitignored), and reused by every subsequent engine and run.
+
+```bash
+cargo run -r -- -d surrealdb -s 100000 -c 12 -t 24 --config config/vector.toml
+```
+
+## Databases
+
+### Dry
+
+This benchmark does not interact with any datastore, allowing the overhead of the benchmark implementation, written in
+Rust, to be measured.
+
+```bash
+cargo run -r -- -d dry -s 100000 -c 12 -t 24 -r
+```
+
+### [ArangoDB](https://arangodb.com/)
+
+ArangoDB is a multi-model database with flexible data modeling and efficient querying.
+
+```bash
+cargo run -r -- -d arangodb -s 100000 -c 12 -t 24 -r
+```
+
+The above command starts a Docker container automatically. To connect to an already-running ArangoDB instance use the following command:
+
+```bash
+cargo run -r -- -d arangodb -e http://127.0.0.1:8529 -s 100000 -c 12 -t 24 -r
+```
+
+### [Dragonfly](https://www.dragonflydb.io/)
+
+Dragonfly is an in-memory, networked, datastore which is fully-compatible with Redis and Memcached APIs.
+
+```bash
+cargo run -r -- -d dragonfly -s 100000 -c 12 -t 24 -r
+```
+
+The above command starts a Docker container automatically. To connect to an already-running Dragonfly instance use the
+following command:
+
+```bash
+cargo run -r -- -d dragonfly -e redis://:root@127.0.0.1:6379 -s 100000 -c 12 -t 24 -r
+```
+
+### [Fjall](https://fjall-rs.github.io/)
+
+Fjall is a transactional, ACID-compliant, embedded, key-value datastore, written in safe Rust, and based on LSM-trees.
+
+```bash
+cargo run -r -- -d fjall -s 100000 -c 12 -t 24 -r
+```
+
+### [KeyDB](https://docs.keydb.dev/)
+
+KeyDB is an in-memory, networked, datastore which is a high-performance fork of Redis, with a focus on multithreading.
+
+```bash
+cargo run -r -- -d keydb -s 100000 -c 12 -t 24 -r
+```
+
+The above command starts a Docker container automatically. To connect to an already-running KeyDB instance use the
+following command:
+
+```bash
+cargo run -r -- -d keydb -e redis://:root@127.0.0.1:6379 -s 100000 -c 12 -t 24 -r
+```
+
+### [LMDB](http://www.lmdb.tech/doc/)
+
+LMDB is a transactional, ACID-compliant, embedded, key-value datastore, based on B-trees.
+
+```bash
+cargo run -r -- -d lmdb -s 100000 -c 12 -t 24 -r
+```
+
+### [Map](https://github.com/xacrimon/dashmap)
+
+An in-memory concurrent, associative HashMap in Rust.
+
+```bash
+cargo run -r -- -d map -s 100000 -c 12 -t 24 -r
+```
+
+### [MDBX](https://github.com/erthink/libmdbx)
+
+MDBX is a transactional, key-value, memory-mapped, B-Tree storage engine without WAL.
+
+```bash
+cargo run -r -- -d mdbx -s 100000 -c 12 -t 24 -r
+```
+
+### [MongoDB](https://www.mongodb.com/)
+
+MongoDB is a NoSQL, networked, ACID-compliant, document-oriented database, with support for unstructured data storage.
+
+```bash
+cargo run -r -- -d mongodb -s 100000 -c 12 -t 24 -r
+```
+
+The above command starts a Docker container automatically. To connect to an already-running MongoDB instance use the
+following command:
+
+```bash
+cargo run -r -- -d mongodb -e mongodb://root:root@127.0.0.1:27017 -s 100000 -c 12 -t 24 -r
+```
+
+### [MySQL](https://www.mysql.com/)
+
+MySQL is a networked, relational, ACID-compliant, SQL-based database.
+
+```bash
+cargo run -r -- -d mysql -s 100000 -c 12 -t 24 -r
+```
+
+The above command starts a Docker container automatically. To connect to an already-running MySQL instance use the
+following command:
+
+```bash
+cargo run -r -- -d mysql -e mysql://root:mysql@127.0.0.1:3306/bench -s 100000 -c 12 -t 24 -r
+```
+
+### [Neo4j](https://neo4j.com/)
+
+Neo4j is a graph database management system for connected data.
+
+```bash
+cargo run -r -- -d neo4j -s 100000 -c 12 -t 24 -r
+```
+
+The above command starts a Docker container automatically. To connect to an already-running Neo4j instance use the
+following command:
+
+```bash
+cargo run -r -- -d neo4j -e '127.0.0.1:7687' -s 100000 -c 12 -t 24 -r
+```
+
+### [Postgres](https://www.postgresql.org/)
+
+Postgres is a networked, object-relational, ACID-compliant, SQL-based database.
+
+```bash
+cargo run -r -- -d postgres -s 100000 -c 12 -t 24 -r
+```
+
+The above command starts a Docker container automatically. To connect to an already-running Postgres instance use the
+following command:
+
+```bash
+cargo run -r -- -d postgres -e 'host=127.0.0.1 user=postgres password=postgres' -s 100000 -c 12 -t 24 -r
+```
+
+### [ReDB](https://www.redb.org/)
+
+ReDB is a transactional, ACID-compliant, embedded, key-value datastore, written in Rust, and based on B-trees.
+
+```bash
+cargo run -r -- -d redb -s 100000 -c 12 -t 24 -r
+```
+
+### [Redis](https://redis.io/)
+
+Redis is an in-memory, networked, datastore that can be used as a cache, message broker, or datastore.
+
+```bash
+cargo run -r -- -d redis -s 100000 -c 12 -t 24 -r
+```
+
+The above command starts a Docker container automatically. To connect to an already-running Redis instance use the
+following command:
+
+```bash
+cargo run -r -- -d redis -e redis://:root@127.0.0.1:6379 -s 100000 -c 12 -t 24 -r
+```
+
+### [RocksDB](https://rocksdb.org/)
+
+RocksDB is a transactional, ACID-compliant, embedded, key-value datastore, based on LSM-trees.
+
+```bash
+cargo run -r -- -d rocksdb -s 100000 -c 12 -t 24 -r
+```
+
+### [ScyllaDB](https://www.scylladb.com/)
+
+ScyllaDB is a distributed, NoSQL, wide-column datastore, designed to be compatible with Cassandra.
+
+```bash
+cargo run -r -- -d scylladb -s 100000 -c 12 -t 24 -r
+```
+
+The above command starts a Docker container automatically. To connect to a already-running ScyllaDB cluster use the
+following command:
+
+```bash
+cargo run -r -- -d scylladb -e 127.0.0.1:9042 -s 100000 -c 12 -t 24 -r
+```
+
+### [SlateDB](https://slatedb.io/)
+
+SlateDB is an embedded storage engine built as a log-structured merge-tree on object storage. It provides bottomless storage capacity and high durability by leveraging object storage (S3, GCS, MinIO, and more).
+
+```bash
+cargo run -r -- -d slatedb -s 100000 -c 12 -t 24 -r
+```
+
+### [SQLite](https://www.sqlite.org/)
+
+SQLite is an embedded, relational, ACID-compliant, SQL-based database.
+
+```bash
+cargo run -r -- -d sqlite -s 100000 -c 12 -t 24 -r
+```
+
+### [SurrealDB](https://surrealdb.com)
+
+```bash
+cargo run -r -- -d surrealdb -s 100000 -c 12 -t 24 -r
+```
+
+> [!NOTE]
+> The embedded engine tracks the **published version closest to SurrealDB's `main`**, prereleases
+> included, rather than the latest stable release — crud-bench exists to monitor SurrealDB as it is
+> developed, so it should sit where the development is. Server mode already does the same by pulling
+> the `surrealdb/surrealdb:nightly` image. Embedded and server therefore benchmark different builds,
+> and a result should say which it used.
+
+Specify a custom endpoint using `-e` or `--endpoint` to benchmark a custom deployment:
+
+| Endpoint | Meaning |
+|----------|---------|
+| `server:memory` | Docker server with in-memory storage engine |
+| `server:rocksdb` | Docker server with RocksDB storage engine |
+| `server:surrealkv` | Docker server with SurrealKV storage engine |
+| `memory` | Embedded with in-memory storage engine. |
+| `rocksdb:<path>` (`rocksdb:/tmp/db`) | Embedded with RocksDB storage engine. |
+| `surrealkv:<path>` (`surrealkv:/tmp/db`) | Embedded with RocksDB storage engine. |
+| `ws://...`, `wss://...`, `http://...`, `https://...` | Remote server you manage yourself (no Docker started by crud-bench). |
+
+### [SurrealKV](https://surrealkv.org)
+
+SurrealKV is a versioned, transactional, ACID-compliant, embedded key-value database implemented in Rust using an LSM (Log-Structured Merge) tree and B+tree architecture.
+
+```bash
+cargo run -r -- -d surrealkv -s 100000 -c 12 -t 24 -r
+```
+
+### [SurrealMX](https://surrealmx.org)
+
+SurrealKV is an embedded, in-memory, lock-free and wait-free, transactional, embedded key-value database engine implemented in Rust.
+
+```bash
+cargo run -r -- -d surrealmx -s 100000 -c 12 -t 24 -r
+```
+
+## SurrealDB local benchmark
+
+To run the benchmark against an already running SurrealDB instance, follow the steps below.
+
+Start a SurrealDB server:
+
+```bash
+surreal start --allow-all -u root -p root rocksdb:/tmp/db
+```
+
+Then run crud-bench with the `surrealdb` database option:
+
+```bash
+cargo run -r -- -d surrealdb -e ws://127.0.0.1:8000 -s 100000 -c 12 -t 24 -r
+```
+
+## SurrealDB Authentication
+
+When benchmarking SurrealDB (including `surrealdb`, and `surrealds`), you can configure authentication credentials using environment variables.
+
+### Environment Variables
+
+- **`SURREALDB_USER`**: Username for SurrealDB authentication (default: `root`)
+- **`SURREALDB_PASS`**: Password for SurrealDB authentication (default: `root`)
+
+These environment variables are used in two scenarios:
+
+1. **Docker Container Startup**: When crud-bench automatically starts a SurrealDB Docker container (`-d surrealdb` with no endpoint, or with `-e server:rocksdb` / `-e server:memory` / `-e server:surrealkv`), it uses these credentials to configure the database server
+2. **Client Authentication**: When connecting to SurrealDB instances (both embedded and networked), the benchmark client uses these credentials to authenticate
+
+### Usage Examples
+
+**Using default credentials (root/root):**
+
+```bash
+cargo run -r -- -d surrealdb -s 100000 -c 12 -t 24 -r
+```
+
+**Using custom credentials via environment variables:**
+
+```bash
+export SURREALDB_USER=admin
+export SURREALDB_PASS=secure_password
+cargo run -r -- -d surrealdb -s 100000 -c 12 -t 24 -r
+```
+
+**One-line command with custom credentials:**
+
+```bash
+SURREALDB_USER=admin SURREALDB_PASS=secure_password cargo run -r -- -d surrealdb -e ws://127.0.0.1:8000 -s 100000 -c 12 -t 24 -r
+```
+
+**Connecting to an external SurrealDB instance with custom credentials:**
+
+First, start your SurrealDB instance with custom credentials:
+
+```bash
+surreal start --allow-all -u admin -p secure_password rocksdb:/tmp/db
+```
+
+Then run the benchmark with matching credentials:
+
+```bash
+SURREALDB_USER=admin SURREALDB_PASS=secure_password cargo run -r -- -d surrealdb -e ws://127.0.0.1:8000 -s 100000 -c 12 -t 24 -r
+```
+
+> **Note**: When using the automatically started Docker containers, the environment variables configure both the server and client credentials, ensuring they match. When connecting to external instances, ensure the environment variables match the credentials configured on your SurrealDB server.
+
+## SurrealDS - Multi-Instance Distributed Benchmark with TiKV
+
+SurrealDS (SurrealDB Distributed System) enables benchmarking against multiple SurrealDB instances simultaneously, with the **primary use case being SurrealDB with TiKV as the distributed storage backend**. This is particularly useful for testing SurrealDB's performance characteristics when using TiKV's distributed, transactional key-value storage in production-like environments.
+
+### Features
+
+- **TiKV Integration**: Designed specifically for benchmarking SurrealDB with TiKV distributed storage
+- **Multi-Instance Support**: Connect to multiple SurrealDB instances using a single endpoint configuration
+- **Round-Robin Load Balancing**: Automatically distributes client connections evenly across all configured instances
+- **Networked Connections Only**: Designed for remote SurrealDB instances (supports ws://, wss://, http://, https://)
+
+### Prerequisites
+
+#### TiKV Cluster Setup (Primary Use Case)
+
+Before running SurrealDS benchmarks with TiKV, you need to have a TiKV cluster and multiple SurrealDB instances connected to it. Here's a typical setup:
+
+1. **Start a TiKV cluster** (using TiUP or your preferred deployment method):
+   ```bash
+   # Example using TiUP for local testing
+   tiup playground --mode tikv-slim
+   ```
+
+2. **Start multiple SurrealDB instances** connected to the TiKV cluster:
+   ```bash
+   # Terminal 1 - Start first SurrealDB instance connected to TiKV
+   surreal start --allow-all -u root -p root --bind 127.0.0.1:8001 tikv://127.0.0.1:2379
+   
+   # Terminal 2 - Start second SurrealDB instance connected to the same TiKV cluster
+   surreal start --allow-all -u root -p root --bind 127.0.0.1:8002 tikv://127.0.0.1:2379
+   
+   # Terminal 3 - Start third SurrealDB instance connected to the same TiKV cluster
+   surreal start --allow-all -u root -p root --bind 127.0.0.1:8003 tikv://127.0.0.1:2379
+   ```
+
+#### Alternative: Local Testing Without TiKV
+
+For testing the load distribution mechanism without TiKV, you can use independent local instances:
+
+```bash
+# Terminal 1 - Start first instance on port 8001
+surreal start --allow-all -u root -p root --bind 127.0.0.1:8001 rocksdb:/tmp/db1
+
+# Terminal 2 - Start second instance on port 8002
+surreal start --allow-all -u root -p root --bind 127.0.0.1:8002 rocksdb:/tmp/db2
+
+# Terminal 3 - Start third instance on port 8003
+surreal start --allow-all -u root -p root --bind 127.0.0.1:8003 rocksdb:/tmp/db3
+```
+
+> **Note**: When using independent storage backends (like RocksDB above), each instance maintains its own separate data. With TiKV, all instances share the same distributed storage, which is the recommended production setup.
+
+### Usage
+
+To benchmark against multiple SurrealDB instances backed by TiKV, specify the endpoints separated by semicolons:
+
+```bash
+cargo run -r -- -d surrealds -e "ws://127.0.0.1:8001;ws://127.0.0.1:8002;ws://127.0.0.1:8003" -s 100000 -c 12 -t 24 -r
+```
+
+### How It Works
+
+SurrealDS uses a round-robin algorithm to distribute client connections across all configured SurrealDB endpoints:
+
+1. When the benchmark engine starts, it parses the endpoint configuration string
+2. For each concurrent client creation, the engine selects the next endpoint in sequence
+3. Connections cycle through endpoints evenly (client 0 → endpoint 0, client 1 → endpoint 1, etc.)
+4. This ensures balanced load distribution across all SurrealDB instances
+
+When using TiKV as the storage backend, all SurrealDB instances read from and write to the same distributed TiKV cluster, allowing you to benchmark:
+- How SurrealDB performs with distributed storage
+- Load distribution across multiple SurrealDB query/compute nodes
+- TiKV's performance under distributed workloads
+- Network overhead and coordination costs
+
+**Example with 3 endpoints and 6 concurrent clients:**
+
+- Client 0 → `ws://127.0.0.1:8001` (SurrealDB instance 1 → TiKV cluster)
+- Client 1 → `ws://127.0.0.1:8002` (SurrealDB instance 2 → TiKV cluster)
+- Client 2 → `ws://127.0.0.1:8003` (SurrealDB instance 3 → TiKV cluster)
+- Client 3 → `ws://127.0.0.1:8001` (wraps around)
+- Client 4 → `ws://127.0.0.1:8002`
+- Client 5 → `ws://127.0.0.1:8003`
+
+### Configuration
+
+The endpoint string must:
+- Contain one or more SurrealDB endpoints separated by semicolons (`;`)
+- Use remote connection protocols only: `ws://`, `wss://`, `http://`, or `https://`
+- Point to instances that accept the same root credentials (default: `root`/`root`)
+
+> **Note**: You can customize authentication credentials using the `SURREALDB_USER` and `SURREALDB_PASS` environment variables. See the [SurrealDB Authentication](#surrealdb-authentication) section for details.
+
+**Valid endpoint configurations:**
+
+```bash
+# Local TiKV testing with three SurrealDB instances
+-e "ws://127.0.0.1:8001;ws://127.0.0.1:8002;ws://127.0.0.1:8003"
+
+# Production TiKV cluster with remote SurrealDB nodes
+-e "ws://surreal-node1.example.com:8000;ws://surreal-node2.example.com:8000;ws://surreal-node3.example.com:8000"
+
+# Single instance (still works, but no load distribution)
+-e "ws://127.0.0.1:8000"
+```
+
+### Use Cases
+
+SurrealDS is ideal for:
+
+- **TiKV Performance Benchmarking**: Evaluate SurrealDB's performance when using TiKV as the distributed storage backend
+- **Distributed Storage Testing**: Assess how SurrealDB handles distributed transactional workloads across a TiKV cluster
+- **Load Balancing Evaluation**: Test load distribution across multiple SurrealDB compute nodes sharing the same TiKV storage
+- **Scalability Assessment**: Compare single-node vs. multi-node SurrealDB performance with TiKV
+- **Production Deployment Simulation**: Benchmark configurations that mirror real-world distributed SurrealDB+TiKV deployments
+- **High Availability Testing**: Evaluate performance characteristics of redundant SurrealDB instances backed by TiKV

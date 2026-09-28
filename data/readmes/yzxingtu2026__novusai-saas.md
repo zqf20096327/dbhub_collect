@@ -1,0 +1,391 @@
+<p align="center">
+  <img src="docs/assets/branding/logo.png" alt="NovusAI SaaS Logo" width="160" />
+</p>
+
+<p align="center">
+  <a href="https://nvuai.cc">官网</a> ·
+  <a href="https://nvuai.cc/docs/quick-start">快速开始</a> ·
+  <a href="https://nvuai.cc/docs/quick-start">文档</a> ·
+  <a href="https://qm.qq.com/q/lyeGthTbm8">QQ 交流群</a>
+</p>
+
+> 使用 AI 全栈开发前，先复制 `AGENTS.example.md` 为本地 `AGENTS.md`，补全个人 GitHub 身份与协作信息，再让 AI agent 开始执行任务。
+
+# NovusAI SaaS
+
+**语言：** 简体中文 · [English](README.en-US.md)
+
+NovusAI SaaS 是一个面向二次开发的多租户 AI SaaS 开发框架。它提供平台管理端、企业端、用户端、权限体系、插件系统、AI Agent 运行链路、实时通知、附件存储、代码生成与数据库迁移等基础能力，适合作为企业级 SaaS 产品、行业应用和 AI 原生业务系统的工程底座。
+
+![NovusAI SaaS 系统预览](docs/assets/screenshots/dashboard-preview.png)
+
+## 目录
+
+- [核心能力](#核心能力)
+- [架构概览](#架构概览)
+- [技术栈](#技术栈)
+- [仓库结构](#仓库结构)
+- [环境要求](#环境要求)
+- [快速开始](#快速开始)
+- [配置说明](#配置说明)
+- [开发与测试](#开发与测试)
+- [代码生成](#代码生成)
+- [API 文档](#api-文档)
+- [部署说明](#部署说明)
+- [扩展开发](#扩展开发)
+- [贡献](#贡献)
+- [社区交流](#社区交流)
+- [安全](#安全)
+- [许可证](#许可证)
+
+## 核心能力
+
+| 能力 | 说明 |
+|------|------|
+| 多端应用 | 内置 `admin`、`tenant`、`user` 三类产品面，路由、菜单、权限和 API 命名空间相互隔离。 |
+| 多租户 | 支持平台级管理、企业级管理、企业用户和租户隔离的数据访问模型。 |
+| 权限体系 | 提供 RBAC、菜单权限、数据权限、组织边界和操作审计等基础能力。 |
+| AI 运行时 | 支持 **Agent → Skill → AIGateway** 的业务 AI 链路，可扩展模型、技能、知识库与工具调用。 |
+| 插件系统 | 支持后端插件、前端插件入口、插件菜单、插件资源、插件生命周期和插件扩展点。 |
+| 实时能力 | 使用 Socket.IO 支持管理端、企业端、用户端通知与实时事件。 |
+| 异步任务 | 使用 Celery 与 Redis 处理后台任务、定时任务和长耗时流程。 |
+| 附件与存储 | 提供可插拔的附件、对象存储、下载和插件存储扩展能力。 |
+| CRUD 代码生成 | 提供面向后台管理场景的 CRUD 生成与回滚清单机制。 |
+| 数据库迁移 | 使用 Alembic 管理主应用和插件迁移。 |
+
+## 架构概览
+
+```mermaid
+flowchart LR
+  subgraph UI [Frontend]
+    Admin[Admin App]
+    Tenant[Tenant App]
+    User[User App]
+  end
+
+  subgraph API [FastAPI Backend]
+    Routes[API Routes]
+    Services[Services]
+    Repos[Repositories]
+    Plugins[Plugin Runtime]
+  end
+
+  subgraph AI [AI Runtime]
+    Agent[Agent]
+    Skill[Skill]
+    Gateway[AIGateway]
+    KB[Knowledge Base]
+  end
+
+  subgraph Infra [Infrastructure]
+    DB[(PostgreSQL)]
+    Redis[(Redis)]
+    Celery[Celery Workers]
+    SocketIO[Socket.IO]
+  end
+
+  Admin --> Routes
+  Tenant --> Routes
+  User --> Routes
+  Routes --> Services --> Repos --> DB
+  Services --> Plugins
+  Services --> Agent --> Skill --> Gateway
+  Agent --> KB
+  Services --> Redis
+  Services --> SocketIO
+  Celery --> Services
+```
+
+## 技术栈
+
+| 层级 | 技术 |
+|------|------|
+| 后端 | Python 3.10+、FastAPI、SQLAlchemy 2.x、Alembic、Pydantic、Celery、Socket.IO |
+| 数据与缓存 | PostgreSQL、Redis，可按需启用 pgvector 等扩展镜像 |
+| 前端 | Vue 3、TypeScript、Vben Admin、Ant Design Vue、Vite、pnpm、vue-i18n |
+| 工程化 | Ruff、pytest、ESLint、Prettier、Stylelint、Vitest、Turbo |
+| 部署参考 | Docker、Docker Compose |
+
+## 仓库结构
+
+```text
+novusai-saas/
+├── backend/                 # FastAPI 后端、迁移、插件运行时、测试
+│   ├── app/                 # API、服务、模型、仓储、AI、RBAC、任务、存储、codegen
+│   ├── migrations/          # Alembic 迁移
+│   ├── plugins/             # 内置插件与插件示例
+│   └── tests/               # 后端测试
+├── frontend/                # 前端 pnpm monorepo
+│   ├── apps/web-antd/       # 主 Web 应用
+│   └── packages/            # 前端共享包与基础能力
+├── business/                # 业务模块扩展目录
+├── customer/                # 交付、部署、种子数据和品牌覆盖目录
+├── extensions/              # 可复用插件、连接器和集成资产
+├── docs/                    # 项目文档目录
+├── docker-compose.dev.yml   # 本地开发依赖服务
+├── docker-compose.prod.yml  # 生产编排参考
+├── README.md                # 中文自述
+└── README.en-US.md          # English README
+```
+
+## 环境要求
+
+- Python 3.10+
+- Node.js 20.19+
+- pnpm 10+
+- PostgreSQL
+- Redis
+- Docker 与 Docker Compose（推荐用于本地依赖服务）
+
+## 快速开始
+
+### 方式一：源码开发（推荐）
+
+适合二次开发，后端和前端以源码方式运行，仅将 PostgreSQL 和 Redis 放入容器。
+
+#### 1. 启动依赖服务
+
+在仓库根目录启动本地 PostgreSQL 与 Redis：
+
+```bash
+docker compose -f docker-compose.dev.yml up -d postgres redis
+```
+
+#### 2. 启动后端
+
+```bash
+cd backend
+cp .env.example .env
+
+python -m venv .venv
+
+# Windows
+.venv\Scripts\activate
+
+# macOS / Linux
+source .venv/bin/activate
+
+uv sync --extra dev
+# 或者使用 pip:
+# pip install -e ".[dev]"
+
+novusai db upgrade head
+novusai run --reload
+```
+
+另开一个终端启动 Celery worker：
+
+```bash
+cd backend
+source .venv/bin/activate
+novusai celery dev
+```
+
+#### 3. 启动前端
+
+```bash
+cd frontend
+pnpm install
+pnpm dev:antd
+```
+
+### 方式二：Docker 全栈构建
+
+适合快速体验或集成测试，后端、前端、数据库全部容器化运行。
+
+#### 1. 准备后端配置
+
+```bash
+cp backend/.env.example backend/.env
+```
+
+#### 2. 构建并启动所有服务
+
+```bash
+docker compose -f docker-compose.dev.yml up --build -d
+```
+
+首次构建约 5–10 分钟（前端 pnpm 安装较耗时），后续启动会使用缓存。
+
+若修改了数据库凭证等 Postgres 初始化参数，需先清除旧数据卷再重建：
+
+```bash
+docker compose -f docker-compose.dev.yml down -v
+docker compose -f docker-compose.dev.yml up --build -d
+```
+
+### 访问地址
+
+| 项目 | 源码开发 | Docker 全栈 |
+|------|----------|-------------|
+| Web 应用 | `http://localhost:5666` | `http://localhost:5666` |
+| API | `http://127.0.0.1:8000` | `http://localhost:8000` |
+| Swagger UI | `http://127.0.0.1:8000/docs` | `http://localhost:8000/docs` |
+| ReDoc | `http://127.0.0.1:8000/redoc` | `http://localhost:8000/redoc` |
+| PostgreSQL | `127.0.0.1:5432` | `localhost:5432` |
+| Redis | `127.0.0.1:6379` | `localhost:6379` |
+
+### 默认管理员账号
+
+初始迁移会自动创建平台超级管理员：
+
+| 字段 | 值 |
+|------|----|
+| 用户名 | `admin` |
+| 密码 | `admin123456` |
+| 邮箱 | `admin@novusai.com` |
+
+> **警告**：默认账号仅用于本地开发和初始测试，生产环境部署后请立即修改密码。
+
+## 配置说明
+
+请复制示例配置并按环境调整，真实密钥不要提交到 Git。
+
+| 范围 | 文件 | 说明 |
+|------|------|------|
+| 后端 | `backend/.env.example` → `backend/.env` | 数据库、Redis、JWT、日志、Celery、AI Provider、存储等配置 |
+| 前端 | `frontend/apps/web-antd/.env.development` | API 地址、开发端口、平台域名等配置 |
+| 本地覆盖 | `frontend/apps/web-antd/.env.local` | Vite 本地覆盖配置，可按需创建 |
+
+## 开发与测试
+
+后端常用命令：
+
+```bash
+cd backend
+pytest
+ruff check .
+ruff format .
+```
+
+前端常用命令：
+
+```bash
+cd frontend
+pnpm lint
+pnpm test:unit
+pnpm build:antd
+```
+
+## 代码生成
+
+框架包含 CRUD 代码生成能力。生成后，仓库根目录会产生运行时文件 `codegen_manifest.json`，用于记录生成产物并支持回滚。该文件属于工作区生成物，已被 Git 忽略，不应提交到仓库。
+
+## API 文档
+
+当后端 `DEBUG=true` 时，会开放以下接口文档：
+
+| 地址 | 说明 |
+|------|------|
+| `http://127.0.0.1:8000/docs` | Swagger UI |
+| `http://127.0.0.1:8000/redoc` | ReDoc |
+| `http://127.0.0.1:8000/openapi.json` | OpenAPI JSON |
+
+生产环境通常应关闭交互式 API 文档，并通过受控方式发布接口契约。
+
+## 部署说明
+
+本仓库提供框架源码和 Docker Compose 参考文件：
+
+- `docker-compose.dev.yml` 用于本地 PostgreSQL 与 Redis。
+- `docker-compose.prod.yml` 作为生产编排参考，实际部署时需要结合私有环境变量、反向代理、HTTPS、日志、监控、备份和容量规划。
+- `production.env.example` 是生产环境变量示例文件，复制为 `production.env` 后按部署环境修改。
+
+生产 Compose 参考启动方式：
+
+```bash
+cp production.env.example production.env
+docker compose --env-file production.env -f docker-compose.prod.yml up -d
+```
+
+生产部署前请至少完成：
+
+- 替换所有默认密钥和默认账号。
+- 使用独立数据库、Redis 和对象存储。
+- 配置 HTTPS、CORS、可信域名和安全响应头。
+- 配置日志、监控、告警、备份和恢复流程。
+- 按业务需要审查 AI Provider、插件权限、文件上传和外部 HTTP 工具策略。
+
+## 扩展开发
+
+建议按以下目录组织扩展代码：
+
+| 目录 | 用途 |
+|------|------|
+| `backend/plugins/` | 内置或随框架分发的插件 |
+| `business/` | 面向具体业务域的模块 |
+| `customer/` | 交付环境、品牌、配置、种子数据和部署覆盖 |
+| `extensions/` | 可复用插件、连接器、技能包和集成资产 |
+
+## 贡献
+
+欢迎提交 Issue 和 Pull Request。提交前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，并确保相关测试、格式化和静态检查通过。
+
+## 社区交流
+
+- **QQ 交流群**：[点击加群](https://qm.qq.com/q/lyeGthTbm8)，与其他开发者交流使用经验、反馈问题、参与讨论。
+
+## 安全
+
+安全漏洞请按 [SECURITY.md](SECURITY.md) 中的方式报告。请不要在公开 Issue 中披露敏感漏洞细节。
+
+## 鸣谢
+
+NovusAI SaaS 基于众多优秀的开源项目构建，在此向以下开源社区和项目表示感谢：
+
+### 前端
+
+- [Vue 3](https://vuejs.org/) — 渐进式前端框架
+- [Vben Admin](https://github.com/vbenjs/vue-vben-admin) — 中后台管理框架
+- [Ant Design Vue](https://antdv.com/) — 企业级 UI 组件库
+- [Vite](https://vitejs.dev/) — 下一代前端构建工具
+- [TypeScript](https://www.typescriptlang.org/) — 类型安全的 JavaScript 超集
+- [Tailwind CSS](https://tailwindcss.com/) — 实用优先的 CSS 框架
+- [Vue I18n](https://vue-i18n.intlify.dev/) — Vue 国际化方案
+- [Iconify](https://iconify.design/) / [Lucide](https://lucide.dev/) — 图标方案
+- [Vitest](https://vitest.dev/) — 单元测试框架
+- [pnpm](https://pnpm.io/) — 高效的包管理器
+- [Turbo](https://turbo.build/) —  Monorepo 构建系统
+
+### 后端
+
+- [FastAPI](https://fastapi.tiangolo.com/) — 高性能 Python Web 框架
+- [SQLAlchemy](https://www.sqlalchemy.org/) — Python SQL 工具包与 ORM
+- [Alembic](https://alembic.sqlalchemy.org/) — 数据库迁移框架
+- [Pydantic](https://docs.pydantic.dev/) — 数据验证与设置管理
+- [Celery](https://docs.celeryq.dev/) — 分布式任务队列
+- [Redis](https://redis.io/) — 内存数据结构存储
+- [PostgreSQL](https://www.postgresql.org/) — 关系型数据库
+- [pgvector](https://github.com/pgvector/pgvector) — PostgreSQL 向量扩展
+- [Socket.IO](https://socket.io/) — 实时双向通信
+- [OpenAI Python SDK](https://github.com/openai/openai-python) — OpenAI API 客户端
+- [Loguru](https://github.com/Delgan/loguru) — Python 日志库
+- [Jinja2](https://jinja.palletsprojects.com/) — Python 模板引擎
+- [Pillow](https://python-pillow.org/) — Python 图像处理库
+
+### RAG / 文档处理
+
+- [PyMuPDF](https://github.com/pymupdf/PyMuPDF) — PDF 解析与处理
+- [python-docx](https://github.com/python-openxml/python-docx) — Word 文档处理
+- [beautifulsoup4](https://www.crummy.com/software/BeautifulSoup/) — HTML/XML 解析
+- [pandas](https://pandas.pydata.org/) — 数据分析与处理
+- [openpyxl](https://openpyxl.readthedocs.io/) — Excel 读写
+
+### 工程化与测试
+
+- [pytest](https://docs.pytest.org/) — Python 测试框架
+- [Ruff](https://docs.astral.sh/ruff/) — Python 代码检查与格式化
+- [mypy](https://mypy.readthedocs.io/) — Python 静态类型检查
+- [ESLint](https://eslint.org/) / [Prettier](https://prettier.io/) / [Stylelint](https://stylelint.io/) — 前端代码质量工具
+
+### 文档与部署
+
+- [Docusaurus](https://docusaurus.io/) — 文档网站构建框架
+- [Docker](https://www.docker.com/) / [Docker Compose](https://docs.docker.com/compose/) — 容器化部署
+- [Nginx](https://nginx.org/) — 高性能 Web 服务器与反向代理
+
+感谢所有开源贡献者的辛勤工作，这些项目构成了 NovusAI SaaS 的技术基石。
+
+## 许可证
+
+本项目采用 [MIT License](LICENSE)。

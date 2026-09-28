@@ -1,0 +1,400 @@
+#+Title: DBDoc (Database Schema Documenter)
+
+Document your database schema (tables and columns), because your team will
+thank you, and this makes it easy. You really need a [[https://en.wikipedia.org/wiki/Data_dictionary][Data Dictionary]] to
+describe your database. Your team will be living in chaos until you have one.
+DBDoc gives you a simple one that everyone can easily work with.
+
+DBDoc enables you to describe (via generated =COMMENT ON= statements) your
+relational database schema(s) in a simple text file, which is easy for
+developers/DBAs to edit and search in the repo. The docs (each a snippet of a
+sentence or a few, all in a single, versatile =dbdoc.org= file) are then:
+
+- *viewable in an SQL client* like DBeaver or Datagrip (the main use
+  case) as tooltips and in other views
+
+- *greppable* in your code base
+
+- *web-publishable as docs*, enabling other
+  stakeholders (eg, Product people) to view DB documentation (in
+  Confluence or wherever)
+
+- *presentable* one table at a time for brainstorming, explaining, etc,
+  with an org presenter, like [[https://github.com/eschulte/epresent][epresent]] or [[https://github.com/takaxp/org-tree-slide][org-tree-slide]] (screenshot
+  at bottom)
+
+It works by running a simple =dbdoc= script to convert a very minimal
+ORG-valid and -prescribed syntax (top-level bullets, single paragraphs, and
+definition lists) into (long) [[https://www.postgresql.org/docs/current/sql-comment.html][SQL =COMMENT ON= statements]], which can be run
+automatically on your database (via migration or sourced or however you like).
+
+#+html: <p align="center"><img src="film-hover.png" title="DBeaver showing a hover on column/heading" /></p>
+#+caption: DBeaver showing a hover on column/heading
+
+_(See far below for more screenshots.)_
+
+** Changelog
+
+*** *2023-09-12* (all postgres-only)
+- Support non-=public= schemas (use =someschema.sometable= for top-level bullet)
+- Round-tripper: see data in DB not in ORG file
+- Round-tripper: see conflicts between DB and ORG file
+- Error checking for duplicate tables and fields in ORG file (common when
+  pasting from round-tripping)
+
+** Example dbdoc.org file
+
+The following shows an example =dbdoc.org= file describing a movie store
+rental database and a few of its tables: =film= (containing =title=
+and =description= columns), =movie= (a deprecated table with no
+columns documented), and =actor=. Notice: the hyphens instead of
+underscores, newlines before definitions, other indentation.
+
+An example translation then is from:
+
+#+begin_src org
+#+Title: Pagila Movie Store Rental Database
+
+This is the "dbdoc" description file for the Pagila database. See the
+[[https://github.com/micahelliott/dbdoc][dbdoc README]]
+for more detailed instructions on its purpose and expanding it. This file
+contains short documentation for any tables and columns that could use
+even the slightest bit of explanation.
+
+Edit this file whenever you make schema changes. And be a good citizen
+by helping to grow this file any time you're touching a table!
+The remainder of this file will be used processed into comment
+descriptions that will be visible in your SQL client, and can also be
+exported as HTML.
+
+* FILM
+
+A film, aka movie, is released initially in theaters, and then
+available to movie /stores/, at which point they become available to
+the DB.
+
+- title ::
+  The full name of the film, including things like sub-title and part
+  in a series; does not include language
+
+- description ::
+  A brief synopsis (catchy prose) about the plot
+
+* MOVIE
+
+DEPRECATED: replaced by =film=
+
+* ACTOR
+
+An actor is very simple and non-comprehensive table to record the main
+headlining /stars/ of the film. All fields are obvious. Note that
+there may be duplicate actors that use slightly different names on occasion.
+#+end_src
+
+to an SQL migration file containing:
+
+#+begin_src sql
+COMMENT ON TABLE film IS 'A film, aka movie …';
+COMMENT ON COLUMN film.title IS 'The full name …';
+…
+COMMENT ON TABLE movie IS 'DEPRECATED: replaced …';
+…
+#+end_src
+
+Compared to the ORG version, that SQL is pretty ugly – editing
+(quoting, line-length/newlines, indentation, formatting) becomes quite
+difficult. That’s why this tiny tool exists.
+
+There is a testable =docs/dbdoc.org= example (and its generated SQL
+migration file =resources/migrations/20210804162056-dbdoc.up.sql=) in
+this repo that was written to minimally describe the [[https://github.com/devrimgunduz/pagila][pagila toy
+database]]. Just run =dbdoc= in the root of this repo to try it out!
+
+** Installation
+
+- Install [[https://github.com/babashka/babashka#installation][Babashka]] (any OS, tiny, fast, no dependencies).
+- Clone this repo and put its root on your =PATH=.
+
+OR
+
+- Use [[https://github.com/babashka/bbin][bbin]] to install `dbdoc` as an
+  executable into =~/.local/bin=:
+
+  #+begin_src shell
+  bbin install io.github.micahelliott/dbdoc
+  #+end_src
+
+Now you're ready to run =dbdoc= from anywhere, and that's all
+there is to it! Not even any CLI options. :)
+
+** Documentation Process (Usage)
+
+*** One time only
+
+- Create a single living .org file in your repo, eg, =docs/dbdoc.org=
+  for growing docs for your tables.
+
+- Assuming you haven't already somehow written a =COMMENT= for your
+  DB, turn a SME analyst type or long-time developer or DBA in your
+  company loose to write up a bunch of notes in the org file. Then
+  edit a bit to ensure it's valid ORG that DBDoc can handle..
+
+- Set up env vars to change default file locations (optional, not well
+  tested):
+
+  #+begin_src shell
+  export DBDOC_ORG=docs/dbdoc.org
+  export DBDOC_SQL=resouces/migrations/<timestamp>-dbdoc.up.sql
+  export DBDOC_HTML=docs/dbdoc.html
+  #+end_src
+
+*** Continually (this is the only real process)
+
+1. Keep describing as many tables and columns as you see fit in your
+   =docs/dbdoc.org= file. Every time a developer changes or adds a
+   field or table, they also should put a sentence or two describing its
+   purpose in the org file.
+
+2. Run =dbdoc= to generate a time-stamped file like
+   =resources/migrations/20201027000000-dbdoc.up.sql=. IMPORTANT!!
+   Don't forget this step! (You don't need all the developers on the
+   teams do this, so long as /someone/ does the generation/migrating
+   once in a while.)
+
+3. Commit both the org and migration files.
+
+*** Optional
+
+- Generate HTML (from command line [[https://pandoc.org/][with Pandoc]] or [[https://stackoverflow.com/a/22091045/326516][Emacs]]) and publish
+  the new version to some site your company views (optional, see
+  =org2conflu.zsh= script).
+
+- If your migrations aren't automatic as part of your CI, run your
+  migration (or just load the new SQL file if you don't do
+  migrations).
+
+** Table Documentation Best Practices
+
+- Don’t need to be comprehensive and document every field when names
+  make them obvious
+- Add an example datum for a column
+- Used-by references: other tables (probably not FKs) and code areas
+- Gotchas/quirks
+- Add characteristic tags: deprecated/defunct, xl, hot, new, static,
+  performance, donttouch, dragons
+
+** Showing Comments in Clients
+
+- psql: =\d+=
+- [[https://dataedo.com/kb/tools/dbeaver/how-to-view-and-edit-table-and-column-comments][dbeaver]] (HIGHLY RECOMMENDED!! the docs pop up everywhere)
+- [[https://eggerapps.at/postico/][postico]] (see the _Structure_ tab, as shown is screenshot)
+- [[https://postgrest.org/en/v7.0.0/api.html#openapi-support][postgrest/swagger]]
+- [[https://dataedo.com/kb/tools/pgadmin/how-to-view-and-edit-table-and-column-comments][pgadmin]]
+- [[https://dataedo.com/kb/tools/datagrip/how-to-view-and-edit-table-and-column-comments][datagrip]] ([[https://stackoverflow.com/questions/66129447/how-to-show-column-and-table-comment-in-jetbrains-datagrip][how to enable]])
+
+** Read on if you want more details...
+
+*** Transformations
+
+The parser is limited and rigid and wants to see a _table_
+description paragraph for every table you wish to document. So, if you
+want to document some column in a table, you must also provide at
+least a tidbit sentence for the table too. It's not a robust parser so
+just be careful. Alignment/indentation is important too, so follow the
+example format precisely – this is a tiny subset of actual org.
+
+Org uses underscores for italic, and it’s tedious enough to have to
+wrap every DB entity in equals (+=+) in org to escape them, so they
+should instead be documented with hyphens ( =-= ) (though this isn’t
+required). IOW, all ORG hyphenated variables (eg, =my-var-name=)
+become underscores in SQL (=my_var_name=). So prefer to use
+=my-var-name= in the ORG description.
+
+It you use “straight” apostrophes ('), they’ll be converted to
+curlies so as not to need SQL string escaping (and be prettier).
+
+*** Git Diffs
+
+The first version of your migration file is a direct mapping from =dbdoc.org=:
+it contains a =COMMENT ON= for each description. Then each time you run
+=dbdoc=, that migration file is maintained but renamed and always has a 1-to-1
+mapping of org descriptions to =COMMENT ON=.
+
+The =dbdoc= script looks for an old migration file called
+=<timestamp>-dbdoc.up.sql= and renames it (via =git-move=) to a
+present timestamp. This enables Git to see the the new migration as
+simply a change from the last run, and so you can easily see the
+before/after diff. This also saves on a clutter of generating a bunch
+of extra migrations.
+
+*** Doc Coverage
+
+You can track progress of your documenting by noting how many tables
+have or have not been covered. Use the =coverage.zsh= script to offer
+a simple coverage report.
+
+*** Seeding an ORG doc file for first-time use
+
+You can create a listing of all existing tables as a starter
+ORG file: see =schema2org.zsh=. Once created, you can just start
+documenting! This is probably totally buggy; it's a tiny sed script
+working off a pg-dump.
+
+This may be improved to populate with existing comment descriptions
+to enable “round-tripping”.
+
+*** Round-Tripping (postgres only, for now)
+
+If you already have comments on your tables, you can pull them into your ORG
+doc (semi-manually) to still get the benefits of shared editing/viewing. So if
+some of your team happens to add comments (inside a client, or with =COMMENT
+ON= statements) to your production DB (instead of the using dbdoc process),
+/round-tripping/ ensures you never lose data, keeping your =dbcoc.org= as the
+SPOT and synced with the DB. But encourage your teammates not to be writing
+=COMMENT ON= statements and use dbdoc instead!
+
+To run the round-tripper, dbdoc needs access to an up-to-date, running DB
+instance. Export the =PGDATABASE= env var to specify that DB. It will query
+for all the descriptions and send them into a TSV =indb.tsv=. Then it converts
+the existing =dbdoc.org= texts (as inorg.tsv) to be able to diff and determine
+what's new. Run =roundtrip.zsh= to see it.
+
+#+begin_src shell
+PGDATABASE=mydb roundtrip.zsh >>docs/dbdoc.org # careful here with the append!
+#+end_src
+
+That output contains org formatted text. Rather than dbdoc trying to inject
+the new text into your hand-crafted =dbdoc.org= doc, it simply prints the new
+data in org-format to /stdout/, so that you can paste it into the appropriate
+places in your =dbdoc.org= file (or just append it as per that example). It is
+alphabetized, so simply appending may not be wanted if you're trying to keep
+your =dbdoc.org= file sorted by table name.
+
+If there are conflicts (same field described in both ORG and DB), those are
+WARNINGs printed to /stderr/, and you're expected to resolve and paste them into
+your =dbdoc.org= file with the description you feel is most up-to-date.
+
+*** FAQs
+
+*Why use org instead of the more popular/common markdown?*
+
+ORG has definition lists which work great for column docs. For the
+limited syntax that is DBDoc, org and md are effectively the same
+(just use =*= for heading instead of =#=).
+
+But [[https://github.com/MicahElliott/dbdoc/issues/2][I will implement Markdown]] if anyone feels they need it.
+
+*Do I need Emacs to work with Org files?*
+
+No! Emacs is not required to for any part of DBDoc. Most common
+editors have some proper way to work with Org. Even if yours doesn't,
+just edit in plain text mode.
+
+*How far should I go with documenting my tables?*
+
+Not super far. See recommendations above. I like to limit column docs
+to not more than a few sentences. A table doc can be a legthy
+paragraph (only one!). Your source code docstrings are probably a
+better place to get into the nitty gritty.
+
+*Why not just write the doc strings in SQL?*
+
+Then your editor would think you’re in SQL mode and wouldn’t do things
+like spell-checking or nice formatting. Plus, using ORG gives you a
+publishable HTML version of your docs.
+
+*Does this work for all databases?*
+
+It does work for many! It's been tested with PostgreSQL, and should
+work with others too, such as:
+
+- [[https://www.cockroachlabs.com/docs/stable/comment-on.html][CockroachDB]]
+- [[https://docs.oracle.com/cd/B19306_01/server.102/b14200/statements_4009.htm][Oracle]]
+- [[https://www.ibm.com/support/producthub/db2/docs/content/SSEPGG_11.5.0/com.ibm.db2.luw.sql.ref.doc/doc/r0000901.html][IBM DB2]]
+- [[https://docs.snowflake.com/en/sql-reference/sql/comment.html][Snowflake]]
+- [[https://www.vertica.com/docs/9.2.x/HTML/Content/Authoring/SQLReferenceManual/Statements/COMMENT/COMMENTONTABLE.htm?tocpath=SQL%20Reference%20Manual%7CSQL%20Statements%7CCOMMENT%C2%A0ON%C2%A0Statements%7C_____9][Vertica]]
+
+[[https://issues.apache.org/jira/browse/DERBY-7008][Apache Derby may get support]].
+
+[[https://stackoverflow.com/questions/7426205/sqlite-adding-comments-to-tables-and-columns][I don't think SQLite supports =COMMENT=.]] And [[https://stackoverflow.com/questions/2162420/alter-mysql-table-to-add-comments-on-columns][MySQL makes it very
+difficult]] (and [[https://stackoverflow.com/questions/58665398/modifing-comment-into-spark-table-on-databricks][Spark]]) to the point that DBDoc won't attempt to make it
+work. [[https://feedback.azure.com/forums/307516-sql-data-warehouse/suggestions/16317988-table-extended-properties][SQL Server/Azure is a fail too]]. And [[https://community.cloudera.com/t5/Support-Questions/Is-there-way-to-add-comment-to-a-phoenix-table/td-p/165405][Ignite]].
+
+*How do I get this into Confluence without API access?*
+
+Your Confluence setup might only support creating a page from markdown
+(not org or html). So you can use pandoc to convert from org to md
+with: =pandoc -s docs/dbdoc.org -o temp.md= and then paste it into
+Confluence from its "plus" menu while editing a page:
+/Markup > Markdown > Paste > Insert/
+
+*Why can't I use just my SQL client to add descriptive comments?*
+
+Because it seems wrong. Which copy of your DB are you wanting to
+modify? Are you connecting your client to a production DB and making
+edits to prod data? This doesn't make sense to me and I don't
+understand why SQL clients support =COMMENT= editing. Developers, DBAs,
+QA, and others may not have prod access, and probably all need
+different non-prod DBs to have up-to-date documentation at their
+fingertips, and DBDoc enables putting that documentation into every
+instance.
+
+** Similar Tools Comparison
+
+*** dbdocs (same name but plural!)
+
+[[https://dbdocs.io/][dbdocs]] (plural) is decsribed as: "A free & simple tool to create
+web-based database documentation using DSL code. Designed for
+developers. Integrate seamlessly with your development workflow." As a
+full DDL DSL, it is a much heavier commitment to incorporate. It also
+creates a rich website for your tables, whereas /DBDoc/ just creates a
+single webpage that can be synced with Confluence or published
+wherever you choose. dbdocs creates ERDs, but /DBDoc/ lets capable
+clients like DBeaver handle that for you.
+
+*** Rails ActiveRecord
+
+The [[https://github.com/rails/rails/pull/22911][ActiveRecord ORM]] has the ability to support comments as part of a
+schema definition and migration syntax. You may not need DBDoc if
+you're using AR. But if you want to publish your schema documentation,
+you should still use DBDoc!
+
+*** Commercial Tools
+
+There are many DB documentation tools in this realm. For any use cases
+I've encountered, they are overkill. But if you're interested in much
+more sophisticated kitchen sink tools that may work with other types
+of DBMSs, look into [[https://www.apexsql.com/sql-tools-doc.aspx][ApexSQL]], [[https://www.red-gate.com/products/sql-development/sql-doc/][Redgate]], and [[https://dataedo.com/][Dataedo]].
+
+** Future Enhancements
+
+- Support =COMMENT ON DATABASE= as top-level paragraph (but ignore
+  myriad other types). *Actually, this can't be done flexibly since it
+  requires knowing the DB name.*
+
+- Identify fields/tables that are missing comments
+
+Please submit an issue if you think of any enhancements or find bugs.
+I'm eager to improve this, but need your ideas!
+
+** More Screenshots
+
+Hover to see captions, just like in DB clients! There, you've been trained.
+
+#+html: <p align="center"><img src="film-table2.png" title="DBeaver properties view" /></p>
+#+caption: DBeaver properties view
+
+#+html: <p align="center"><img src="postico.png" title="Postico structure view with doc snippets in red" /></p>
+#+caption: Postico "structure" view with doc snippets in red
+
+#+html: <p align="center"><img src="datagrip1.png" title="Datagrip tree table hover" /></p>
+#+caption: Datagrip tree table hover
+
+#+html: <p align="center"><img src="datagrip2.png" title="Datagrip column comments" /></p>
+#+caption: Datagrip column hover
+
+#+html: <p align="center"><img src="datagrip3.png" title="Datagrip tree view comments" /></p>
+#+caption: Datagrip tree view comments
+
+#+html: <p align="center"><img src="org-preso.png" title="Emacs Org slide presentation view" /></p>
+#+caption: Emacs Org slide presentation view

@@ -1,0 +1,70 @@
+<div align="center">
+  <p>
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/redis/redis-original.svg" alt="Redis" width="52" />
+    <img src="https://bun.sh/logo.svg" alt="Bun" width="58" />
+    <img src="./apps/client/public/turborepo-icon-seeklogo.svg" alt="Turborepo" width="52" />
+    <img src="https://raw.githubusercontent.com/colinhacks/zod/main/logo.svg" alt="Zod" width="58" />
+    <img src="https://trpc.io/img/logo.svg" alt="tRPC" width="52" />
+    <img src="https://www.prisma.io/favicon.ico" alt="Prisma" width="52" />
+  </p>
+</div>
+
+<h2 align="center">
+  BETTER - UPTIME
+</h2>
+
+<p align="center">
+  A modern uptime monitoring platform built for performance, reliability, and scale.
+</p>
+
+<div align="center">
+  <img src="./apps/client/public/better-uptime.gif" alt="Uptiqe Demo" />
+</div>
+
+## Test Credentials
+
+> [!TIP]
+> Use the following credentials to explore the platform instantly.
+>
+> **Email**
+> ```bash
+> dummy.samaltman@gmail.com
+> ```
+>
+> **Password**
+> ```bash
+> ClaudeBetter<3
+> ```
+
+---
+## Proof of Work
+![poc](https://github.com/user-attachments/assets/0f6c38ba-9d43-413c-800b-234440edcf8f)
+![poc2](https://github.com/user-attachments/assets/a5b4edc3-6e3c-448c-9881-eeeda55a49a5)
+---
+
+## System Architecture
+
+<div align="center">
+  <img
+    width="1634"
+    height="735"
+    alt="Uptiqe Architecture Diagram"
+    src="https://github.com/user-attachments/assets/41b53477-dc73-497b-ad50-60efa2ffb12f"
+  />
+</div>
+
+ **Explore the full, detailed architecture here:**  
+ https://excalidraw.com/#json=10MK6ZkcCFbxAVLMBwLKa,jWBUnZGQSGjJJ1fYNKfwVA
+
+---
+
+## Tech Stack
+
+- **Backend:** tRPC
+- **Time-Series Data:** Clickhouse
+- **Streams:** Redis
+- **Monorepo:** Turborepo
+- **Runtime:** Bun
+- **Database:** Prisma
+- **Validation:** Zod
+

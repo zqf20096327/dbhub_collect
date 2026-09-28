@@ -1,0 +1,753 @@
+# zod-mongo-schema
+
+Convert Zod schemas to MongoDB-compatible JSON Schemas effortlessly.
+
+![NPM Version](https://img.shields.io/npm/v/%40udohjeremiah%2Fzod-mongo-schema)
+![NPM Downloads](https://img.shields.io/npm/dm/%40udohjeremiah%2Fzod-mongo-schema)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/udohjeremiah/zod-mongo-schema/ci.yaml)
+![GitHub License](https://img.shields.io/github/license/udohjeremiah/zod-mongo-schema)
+
+## Overview
+
+As your project matures, the structure of your database tends to stabilize.
+That's where JSON Schemas come in — they let you annotate and validate your
+MongoDB documents so that _invalid_ values don't sneak in and break your app in
+production.
+
+But writing JSON Schemas by hand isn't fun. As a JavaScript developer, chances
+are you're already using [Zod](https://github.com/colinhacks/zod) to define your
+schemas.
+
+Wouldn't it be great if you could just take your existing Zod schema and
+instantly turn it into a MongoDB-compatible JSON Schema?
+
+That's exactly what `zod-mongo-schema` does. It takes your Zod schema and
+converts it into a ready-to-use JSON Schema that can be applied directly to your
+MongoDB collections for validation.
+
+## Installation
+
+> **Note:** This library expects Zod `^3.25.0` or `4.x.x` as a peer dependency.
+
+```bash
+# npm
+npm install @udohjeremiah/zod-mongo-schema
+
+# yarn
+yarn add @udohjeremiah/zod-mongo-schema
+
+# pnpm
+pnpm add @udohjeremiah/zod-mongo-schema
+```
+
+## Usage
+
+### A basic example
+
+```js
+import z from "zod";
+import zodMongoSchema from "@udohjeremiah/zod-mongo-schema";
+
+const userSchema = z.object({
+  name: z.string(),
+  age: z.number().min(18),
+  isAdmin: z.boolean(),
+});
+
+const mongoSchema = zodMongoSchema(userSchema);
+console.log(JSON.stringify(mongoSchema, null, 2));
+```
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "age": {
+      "type": "number",
+      "minimum": 18
+    },
+    "isAdmin": {
+      "type": "boolean"
+    }
+  },
+  "required": ["name", "age", "isAdmin"],
+  "additionalProperties": false
+}
+```
+
+### A nested Zod schema
+
+```ts
+const userSchema = z.object({
+  name: z.string().meta({
+    title: "User Name",
+    description: "This is the name assigned to the user",
+  }),
+  profile: z.object({
+    bio: z.string().optional(),
+    followers: z.int().min(0),
+  }),
+});
+
+const mongoSchema = zodMongoSchema(userSchema);
+console.log(JSON.stringify(mongoSchema, null, 2));
+```
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "title": "User Name",
+      "description": "This is the name assigned to the user",
+      "type": "string"
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "bio": {
+          "type": "string"
+        },
+        "followers": {
+          "minimum": 0,
+          "bsonType": "long"
+        }
+      },
+      "required": ["followers"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["name", "profile"],
+  "additionalProperties": false
+}
+```
+
+### Specifying BSON types with `.meta()`
+
+If there's no direct Zod API for a BSON type, you can use `z.unknown().meta()`:
+
+```ts
+const userSchema = z.object({
+  _id: z.unknown().meta({ bsonType: "objectId" }),
+  createdAt: z.date(), // auto-mapped to { bsonType: "date" }
+});
+
+const mongoSchema = zodMongoSchema(userSchema);
+console.log(JSON.stringify(mongoSchema, null, 2));
+```
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "_id": {
+      "bsonType": "objectId"
+    },
+    "createdAt": {
+      "bsonType": "date"
+    }
+  },
+  "required": ["_id", "createdAt"],
+  "additionalProperties": false
+}
+```
+
+`z.date()` is automatically mapped to `{ bsonType: "date" }` in both strict and
+non-strict modes, since the mapping is unambiguous.
+
+For other BSON types without a direct Zod equivalent, in strict mode (the
+default) only `z.unknown()` can be used with `.meta()` to specify BSON types.
+Using `.meta({ bsonType })` on other Zod types will throw:
+
+```ts
+const userSchema = z.object({
+  _id: z.string().meta({ bsonType: "objectId" }),
+});
+const mongoSchema = zodMongoSchema(userSchema);
+```
+
+```bash
+Error: `bsonType` can only be used with `z.unknown()`.
+```
+
+In [non-strict mode](#non-strict-mode), `bsonType` can be used on any Zod type.
+
+### Order of `.meta()` with chained methods
+
+When chaining methods like `.and()`, `.or()`, or `.nullable()` on these custom
+fields, `.meta({ bsonType })` must come first. Otherwise, the metadata will be
+applied to the wrapper instead of the actual field, resulting in an error or
+incorrect Mongo schema.
+
+```ts
+import { ObjectId } from "mongodb";
+
+const userSchema = z.object({
+  _id: z.unknown().meta({ bsonType: "objectId" }).nullable(), // correct
+  // _id: z.unknown().nullable().meta({ bsonType: "objectId" }), // incorrect
+});
+const mongoSchema = zodMongoSchema(userSchema);
+console.log(JSON.stringify(mongoSchema, null, 2));
+```
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "_id": {
+      "anyOf": [
+        {
+          "bsonType": "objectId"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "required": ["_id"],
+  "additionalProperties": false
+}
+```
+
+### Runtime validation for `.meta` custom fields
+
+For runtime validation, `.refine()` can be applied before `.meta()`. This
+ensures the validation logic is preserved while still including the metadata:
+
+```ts
+import { ObjectId } from "mongodb";
+
+const userSchema = z.object({
+  _id: z
+    .unknown()
+    .refine((value) => ObjectId.isValid(value as any))
+    .meta({ bsonType: "objectId" }),
+  createdAt: z.date().refine((value) => !Number.isNaN(value.getTime())),
+});
+```
+
+### Non-strict mode
+
+By default, `zodMongoSchema` operates in strict mode, which:
+
+- Only allows `bsonType` on `z.unknown()` schemas (except `z.date()`, which is
+  auto-mapped)
+- Throws on Zod types that can't be represented in JSON Schema (like
+  `z.symbol()`)
+
+If you're working with types like `z.instanceof(Uint8Array)` and want to map
+them to BSON types, you can use non-strict mode by passing `{ strict: false }`:
+
+```ts
+const userSchema = z.object({
+  data: z.instanceof(Uint8Array).meta({ bsonType: "binData" }),
+});
+
+const mongoSchema = zodMongoSchema(userSchema, { strict: false });
+console.log(JSON.stringify(mongoSchema, null, 2));
+```
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "data": {
+      "bsonType": "binData"
+    }
+  },
+  "required": ["data"],
+  "additionalProperties": false
+}
+```
+
+In non-strict mode:
+
+- `bsonType` can be specified on any Zod type via `.meta()`
+- When both `type` and `bsonType` are present, `bsonType` takes precedence
+- Unrepresentable Zod types (like `z.instanceof()`) without a `bsonType`
+  override become empty schemas `{}`
+
+This is useful when you want your Zod schemas to provide accurate TypeScript
+types (e.g., `Uint8Array` instead of `unknown`) while still being convertible to
+MongoDB schemas.
+
+### Number types
+
+For numbers, `z.number()` is sufficient. It produces `type: "number"`, which can
+represent integer, decimal, double, or long BSON types.
+
+However, if you want to be specific, use:
+
+- `z.int32()` for BSON `int`
+- `z.int()` and `z.uint32()` for BSON `long`
+- `z.float32()` and `z.float64()` for BSON `double`
+- `.meta` to specify custom BSON numeric types like `decimal`
+
+```ts
+const userSchema = z.object({
+  height: z.number(),
+  age: z.int32(),
+  totalPoints: z.int(),
+  precision32: z.float32(),
+  precision64: z.float64(),
+  balance: z.unknown().meta({ bsonType: "decimal" }),
+});
+
+const mongoSchema = zodMongoSchema(userSchema);
+console.log(JSON.stringify(mongoSchema, null, 2));
+```
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "height": {
+      "type": "number"
+    },
+    "age": {
+      "bsonType": "int"
+    },
+    "totalPoints": {
+      "bsonType": "long"
+    },
+    "precision32": {
+      "minimum": -3.4028234663852886e38,
+      "maximum": 3.4028234663852886e38,
+      "bsonType": "double"
+    },
+    "precision64": {
+      "bsonType": "double"
+    },
+    "balance": {
+      "bsonType": "decimal"
+    }
+  },
+  "required": [
+    "height",
+    "age",
+    "totalPoints",
+    "precision32",
+    "precision64",
+    "balance"
+  ],
+  "additionalProperties": false
+}
+```
+
+When `.min()` or `.max()` is used with `z.int32()` or `z.int()`, the BSON type
+is inferred based on range:
+
+- Within the 32-bit range is `int`
+- Above 32-bit but within 64-bit range is `long`
+- Beyond the 64-bit range falls back to `number`
+
+```js
+const userSchema = z.object({
+  smallInt: z.int().min(-100).max(100),
+  mediumInt: z.int().min(-2_147_483_648).max(2_147_483_647),
+  largeInt: z.int().min(-9_000_000_000_000_000).max(9_000_000_000_000_000),
+});
+
+const mongoSchema = zodMongoSchema(userSchema);
+console.log(JSON.stringify(mongoSchema, null, 2));
+```
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "smallInt": {
+      "minimum": -100,
+      "maximum": 100,
+      "bsonType": "int"
+    },
+    "mediumInt": {
+      "bsonType": "int"
+    },
+    "largeInt": {
+      "minimum": -9000000000000000,
+      "maximum": 9000000000000000,
+      "bsonType": "long"
+    }
+  },
+  "required": ["smallInt", "mediumInt", "largeInt"],
+  "additionalProperties": false
+}
+```
+
+Zod's `z.number()`, `z.float32()`, and `z.float64()` all serialize to
+`"type": "number"` in JSON Schema. This means the original intent
+(float32 vs float64 vs generic number) is lost during conversion. To prevent
+incorrect type inference, only _exact_ IEEE-754 float32/float64 ranges are
+treated as `double`. Any custom or partial numeric range simply falls back to
+`"number"`, with its range preserved. This ensures precision is never assumed
+where intent is ambiguous:
+
+```ts
+const FLOAT32_MIN = -3.402_823_466_385_288_6e38;
+const FLOAT32_MAX = 3.402_823_466_385_288_6e38;
+const FLOAT64_MIN = -1.797_693_134_862_315_7e308;
+const FLOAT64_MAX = 1.797_693_134_862_315_7e308;
+
+const schema = z.object({
+  float32: z.float32(),
+  float32DefaultRange: z.number().min(FLOAT32_MIN).max(FLOAT32_MAX),
+  float64: z.float64(),
+  float64DefaultRange: z.number().min(FLOAT64_MIN).max(FLOAT64_MAX),
+  customRange1: z.float32().min(0.1).max(99.9), // Falls back to "number"
+  customRange2: z.float64().min(0.5), // Falls back to "number"
+});
+
+const mongoSchema = zodMongoSchema(schema);
+console.log(JSON.stringify(mongoSchema, null, 2));
+```
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "float32": {
+      "minimum": -3.4028234663852886e38,
+      "maximum": 3.4028234663852886e38,
+      "bsonType": "double"
+    },
+    "float32DefaultRange": {
+      "minimum": -3.4028234663852886e38,
+      "maximum": 3.4028234663852886e38,
+      "bsonType": "double"
+    },
+    "float64": {
+      "bsonType": "double"
+    },
+    "float64DefaultRange": {
+      "bsonType": "double"
+    },
+    "customRange1": {
+      "minimum": 0.1,
+      "maximum": 99.9,
+      "type": "number"
+    },
+    "customRange2": {
+      "minimum": 0.5,
+      "maximum": 1.7976931348623157e308,
+      "type": "number"
+    }
+  },
+  "required": [
+    "float32",
+    "float32DefaultRange",
+    "float64",
+    "float64DefaultRange",
+    "customRange1",
+    "customRange2"
+  ],
+  "additionalProperties": false
+}
+```
+
+## Unsupported JSON Schema keywords
+
+MongoDB's `$jsonSchema` operator does not support the following JSON Schema
+keywords:
+
+- `$ref`
+- `$schema`
+- `default`
+- `definitions`
+- `format`
+- `id`
+
+These keywords, along with unknown ones, are automatically removed during
+conversion unless they appear as property names:
+
+```ts
+const userSchema = z.object({
+  id: z.uuid(),
+  name: z.string().default("Anonymous"),
+  age: z.string().meta({ whatever: "trash" }),
+});
+
+const mongoSchema = zodMongoSchema(userSchema);
+console.log(JSON.stringify(mongoSchema, null, 2));
+```
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+    },
+    "name": {
+      "type": "string"
+    },
+    "age": {
+      "type": "number"
+    }
+  },
+  "required": ["id", "name", "age"],
+  "additionalProperties": false
+}
+```
+
+## Unsupported Zod APIs
+
+The following Zod APIs are not representable in JSON Schema and will throw an
+error if encountered in strict mode (the default):
+
+- `z.bigint()`
+- `z.uint64()`
+- `z.int64()`
+- `z.symbol()`
+- `z.void()`
+- `z.map()`
+- `z.set()`
+- `z.transform()`
+- `z.nan()`
+- `z.custom()`
+- `z.instanceof()`
+
+> [!WARNING]
+> `z.date()` is **not** in this list. Zod's `toJSONSchema` throws on `z.date()`
+> because dates aren't representable in standard JSON Schema, but since `date`
+> is a native BSON type the mapping is unambiguous — `zodMongoSchema`
+> automatically converts `z.date()` to `{ bsonType: "date" }` in both strict and
+> non-strict modes.
+
+In [non-strict mode](#non-strict-mode), these types won't throw. Instead, they
+produce empty schemas `{}` unless you provide a `bsonType` override via
+`.meta()`. This is particularly useful for `z.instanceof()` when you want to
+preserve TypeScript typing while mapping to BSON types like `binData`.
+
+## Use `.meta()` judiciously
+
+Note that any number of items can be added to the object passed to `.meta()`,
+and any fields added in `.meta()` will override those defined in the schema:
+
+```js
+const userSchema = z
+  .object({
+    name: z.string().meta({
+      title: "Username",
+      description: "A unique username",
+      example: "johndoe",
+      whatever: "trash",
+    }),
+  })
+  .meta({ additionalProperties: true });
+
+const jsonSchema = z.toJSONSchema(userSchema);
+console.log(JSON.stringify(jsonSchema, null, 2));
+```
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": true,
+  "type": "object",
+  "properties": {
+    "name": {
+      "title": "Username",
+      "description": "A unique username",
+      "example": "johndoe",
+      "whatever": "trash",
+      "type": "string"
+    }
+  },
+  "required": ["name"]
+}
+```
+
+This is the intended design of the [`.meta()` API](https://zod.dev/metadata) —
+Zod allows arbitrary metadata.
+
+However, `zod-mongo-schema` expects you to use it **only for two purposes**:
+
+1. **To specify `title` and `description` fields:**
+
+   ```js
+   const userSchema = z.object({
+     email: z.email().meta({
+       title: "User Email",
+       description: "The user's registered email address",
+     }),
+   });
+
+   const mongoSchema = zodMongoSchema(userSchema);
+   console.log(JSON.stringify(mongoSchema, null, 2));
+   ```
+
+   ```json
+   {
+     "type": "object",
+     "properties": {
+       "email": {
+         "title": "User Email",
+         "description": "The user's registered email address",
+         "type": "string",
+         "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+       }
+     },
+     "required": ["email"],
+     "additionalProperties": false
+   }
+   ```
+
+2. **To specify a custom BSON type** (either for `z.unknown()` in strict mode or
+   any type in [non-strict mode](#non-strict-mode)):
+
+   ```js
+   const userSchema = z.object({
+     _id: z.unknown().meta({ bsonType: "objectId" }),
+   });
+
+   const mongoSchema = zodMongoSchema(userSchema);
+   console.log(JSON.stringify(mongoSchema, null, 2));
+   ```
+
+   ```json
+   {
+     "type": "object",
+     "properties": {
+       "_id": {
+         "bsonType": "objectId"
+       }
+     },
+     "required": ["_id"],
+     "additionalProperties": false
+   }
+   ```
+
+Of course, you can choose to _break the rule_ and still extend it beyond those
+two cases:
+
+```js
+const userSchema = z.object({
+  name: z.string().meta({ maxLength: 50, default: "Anonymous" }),
+});
+
+const mongoSchema = zodMongoSchema(userSchema);
+console.log(JSON.stringify(mongoSchema, null, 2));
+```
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "maxLength": 50,
+      "type": "string"
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false
+}
+```
+
+However, you cannot specify `type` and `bsonType` simultaneously for a schema,
+since that would be invalid for MongoDB. In strict mode (the default), an error
+will be thrown. In non-strict mode, `bsonType` silently takes precedence and
+`type` is removed:
+
+```ts
+const userSchema = z.object({
+  _id: z.unknown().meta({ type: "boolean", bsonType: "objectId" }),
+});
+const mongoSchema = zodMongoSchema(userSchema);
+```
+
+```bash
+# Strict mode (default):
+Error: Cannot specify both `type` and `bsonType` simultaneously.
+
+# Non-strict mode: bsonType wins, type is dropped
+```
+
+Outside those two cases, the library assumes you know better than it — so
+**you're fully responsible** for ensuring the produced JSON Schema is valid for
+MongoDB.
+
+`zod-mongo-schema` encourages you to rely on your Zod schemas as much as
+possible, and only step outside them for the two supported `.meta()` uses listed
+above.
+
+The tables below show how to express common MongoDB JSON Schema patterns using
+standard Zod APIs.
+
+## Type mapping: MongoDB → Zod
+
+| MongoDB      | Zod                                 |
+| :----------- | :---------------------------------- |
+| `double`     | `z.float32()`, `z.float64()`        |
+| `string`     | `z.string()`                        |
+| `object`     | `z.object()`                        |
+| `array`      | `z.array()`, `z.tuple()`            |
+| `binData`    | `.meta({ bsonType: "binData" })`    |
+| `objectId`   | `.meta({ bsonType: "objectId" })`   |
+| `bool`       | `z.boolean()`, `z.stringbool()`     |
+| `date`       | `z.date()`                          |
+| `null`       | `z.null()`                          |
+| `regex`      | `.meta({ bsonType: "regex" })`      |
+| `javascript` | `.meta({ bsonType: "javascript" })` |
+| `int`        | `z.int32()`                         |
+| `long`       | `z.int()`, `z.uint32()`             |
+| `decimal`    | `.meta({ bsonType: "decimal" })`    |
+| `number`     | `z.number()`                        |
+
+> Note: `timestamp`, `minKey` and `maxKey` are BSON types not included in the
+> list above. They were not added as they're MongoDB internal types not intended
+> for outside usage.
+
+To learn more about MongoDB BSON types, check out the
+[MongoDB docs](https://www.mongodb.com/docs/manual/reference/bson-types).
+
+## Keyword mapping: MongoDB → Zod
+
+This table is a work in progress. If you know of a Zod API that maps to a
+MongoDB JSON Schema keyword but it isn't here, please open a PR for it.
+
+| MongoDB                | Zod                                                                                                                                                                                                                                                                                                                                                                                    |
+| :--------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `additionalItems`      | `.rest()`                                                                                                                                                                                                                                                                                                                                                                              |
+| `additionalProperties` | `.catchall()`, `.looseObject()`, `.object()`, `.record()`, `.strictObject()`                                                                                                                                                                                                                                                                                                           |
+| `allOf`                | `.and()`, `.intersection()`                                                                                                                                                                                                                                                                                                                                                            |
+| `anyOf`                | `.discriminatedUnion()`, `.nullable()`, `.nullish()`, `.or()`, `.union()`                                                                                                                                                                                                                                                                                                              |
+| `bsonType`             | `.meta({ bsonType: "objectId" })`                                                                                                                                                                                                                                                                                                                                                      |
+| `dependencies`         |                                                                                                                                                                                                                                                                                                                                                                                        |
+| `description`          | `.meta({ description: "..." })`                                                                                                                                                                                                                                                                                                                                                        |
+| `enum`                 | `.enum()`, `.keyOf()`, `.literal()`                                                                                                                                                                                                                                                                                                                                                    |
+| `exclusiveMaximum`     | `.lt()`, `.negative()`                                                                                                                                                                                                                                                                                                                                                                 |
+| `exclusiveMinimum`     | `.gt()`, `.positive()`                                                                                                                                                                                                                                                                                                                                                                 |
+| `items`                | `.array()`                                                                                                                                                                                                                                                                                                                                                                             |
+| `maximum`              | `.lte()`, `.max()`, `.nonpositive()`                                                                                                                                                                                                                                                                                                                                                   |
+| `maxItems`             | `.length()`, `.max()`                                                                                                                                                                                                                                                                                                                                                                  |
+| `maxLength`            | `.length()`, `.max()`                                                                                                                                                                                                                                                                                                                                                                  |
+| `maxProperties`        |                                                                                                                                                                                                                                                                                                                                                                                        |
+| `minimum`              | `.gte()`, `.min()`, `.nonnegative()`                                                                                                                                                                                                                                                                                                                                                   |
+| `minItems`             | `.length()`, `.min()`, `nonEmpty()`                                                                                                                                                                                                                                                                                                                                                    |
+| `minLength`            | `.length()`, `.min()`, `nonEmpty()`                                                                                                                                                                                                                                                                                                                                                    |
+| `minProperties`        |                                                                                                                                                                                                                                                                                                                                                                                        |
+| `multipleOf`           | `.multipleOf()`                                                                                                                                                                                                                                                                                                                                                                        |
+| `not`                  | `.never()`                                                                                                                                                                                                                                                                                                                                                                             |
+| `oneOf`                |                                                                                                                                                                                                                                                                                                                                                                                        |
+| `pattern`              | `.base64()`, `.base64url()`, `.cidrv4()`, `.cidrv6()`, `.cuid()`, `.cuid2()`, `.email()`, `.emoji()`, `.endsWith()`, `.hash()`, `.hex()`, `.hostname()`, `.includes()`, `.ipv4()`, `.ipv6()`, `.iso.duration()`, `.iso.date()`, `.iso.datetime()`, `.iso.time()`, `.lowercase()`, `.nanoid()`, `.regex()`, `.startsWith()`, `.templateLiteral()`, `.ulid()`, `.uppercase()`, `.uuid()` |
+| `patternProperties`    |                                                                                                                                                                                                                                                                                                                                                                                        |
+| `properties`           | Implicitly created whenever you define a schema that has other schemas nested in it                                                                                                                                                                                                                                                                                                    |
+| `required`             | `.optional()`, `.partial()`, `.required()`                                                                                                                                                                                                                                                                                                                                             |
+| `title`                | `.meta({ title: "..." })`                                                                                                                                                                                                                                                                                                                                                              |
+| `type`                 | Implicitly created whenever you define a schema                                                                                                                                                                                                                                                                                                                                        |
+| `uniqueItems`          |                                                                                                                                                                                                                                                                                                                                                                                        |
+
+To learn more about MongoDB JSON Schema keywords, check out the
+[MongoDB docs](https://www.mongodb.com/docs/manual/reference/operator/query/jsonSchema/#available-keywords).
+
+## Further reading
+
+I wrote a detailed post about why I built this library, the challenges I faced,
+and the design decisions that shaped it.
+[Read the full article](https://udohjeremiah.com/blog/how-to-convert-a-zod-schema-to-mongodb-json-schema).

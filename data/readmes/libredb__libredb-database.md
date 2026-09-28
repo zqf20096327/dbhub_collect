@@ -1,0 +1,363 @@
+# LibreDB
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/01-hero-dark.png">
+  <img alt="LibreDB - Multi-model without the magic. One core, three lenses, every line tested." src="docs/img/01-hero-light.png" width="100%">
+</picture>
+
+**Multi-model without the magic. One core, three lenses, every line tested.**
+
+[![npm version](https://img.shields.io/npm/v/@libredb/libredb.svg)](https://www.npmjs.com/package/@libredb/libredb)
+[![JSR](https://jsr.io/badges/@libredb/libredb)](https://jsr.io/@libredb/libredb)
+[![Docker Hub](https://img.shields.io/docker/v/libredb/libredb?logo=docker&logoColor=white&label=docker%20hub&color=2496ED&sort=semver)](https://hub.docker.com/r/libredb/libredb)
+[![CI](https://github.com/libredb/libredb-database/actions/workflows/ci.yml/badge.svg)](https://github.com/libredb/libredb-database/actions/workflows/ci.yml)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=libredb_libredb-database&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=libredb_libredb-database)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=libredb_libredb-database&metric=coverage)](https://sonarcloud.io/summary/new_code?id=libredb_libredb-database)
+[![license](https://img.shields.io/npm/l/@libredb/libredb.svg)](./LICENSE)
+[![types: included](https://img.shields.io/badge/types-included-blue.svg)](https://www.typescriptlang.org/)
+[![dependencies: 0](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](./package.json)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@libredb/libredb)](https://bundlephobia.com/package/@libredb/libredb)
+[![status: early beta](https://img.shields.io/badge/status-early%20beta-orange.svg)](#project-status--roadmap)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/libredb/libredb-database)
+
+LibreDB is a small, readable, embeddable, multi-model database written in TypeScript. It is built on
+one idea: a database can be powerful and still be understood by opening its source. A single ordered
+key-value core handles durability and transactions; key-value, document, and relational APIs are thin
+*lenses* over that one core — not three separate engines. It runs in-memory for tests or file-backed
+for durability, ships **zero runtime dependencies**, and proves its crash recovery with deterministic
+simulation testing. Today it is an early beta, aimed at test and development environments — small
+enough to learn how a database actually works, and serious enough to grow into more.
+
+## Highlights
+
+- **One small core, three lenses** — key-value, document, and relational over a single ordered
+  key-value engine (FoundationDB-style), not three engines bolted together.
+- **Multi-model** — raw strings, JSON documents, and schema-validated typed tables in the same
+  database, even the same file.
+- **Readable by design** — the kernel is one file of under a thousand lines, roughly half of it
+  explanatory prose; open the source and learn how a database
+  actually works.
+- **Embeddable, zero dependencies** — `bun add @libredb/libredb` and go; nothing else to install or
+  run.
+- **In-memory or durable** — `open()` for tests, `open({ path })` for a crash-safe, WAL-backed,
+  fsync-on-commit file.
+- **TypeScript-native** — full types shipped, ESM-only, tree-shakeable, under 6 kB min+brotli.
+- **Crash recovery you can trust** — 100% line coverage on the core, plus deterministic simulation
+  testing that tortures the write-ahead log under a simulated crashing filesystem.
+- **Nothing hidden** — queries are plain in-engine scans, errors surface, and costs are obvious (O(n)
+  scans, no secret indexes).
+
+## Quick start
+
+```sh
+bun add @libredb/libredb
+# or: npm install @libredb/libredb
+```
+
+LibreDB is ESM-only, ships zero runtime dependencies, and targets Bun (the development runtime) and
+Node 22+. The same database speaks all three lenses — here they are in one file:
+
+```ts
+import { open, kv, doc, table } from "@libredb/libredb";
+
+// In-memory for tests, or open({ path: "data.libredb" }) for a durable, crash-safe file.
+const db = open();
+
+// 1. Key-value: a durable, ordered, string-keyed map.
+const cache = kv(db);
+cache.set("user:1", "Ada");
+cache.get("user:1"); // "Ada"
+
+// 2. Document: a collection of JSON documents under string ids.
+const logs = doc(db, "logs");
+logs.put("l1", { level: "info", message: "started", at: 1 });
+logs.find({ level: "info" }).toArray(); // [{ id: "l1", doc: { ... } }]
+
+// 3. Relational: a schema-validated, typed table with where / select / join.
+const users = table(db, "users", {
+  primaryKey: "id",
+  columns: { id: "string", name: "string", age: "number" },
+});
+users.insert({ id: "1", name: "Ada", age: 36 });
+users.where({ name: "Ada" }).select("id", "age").toArray(); // [{ id: "1", age: 36 }]
+
+db.close();
+```
+
+Each lens has its own guide: [key-value](./docs/guides/key-value.md) ·
+[document](./docs/guides/document.md) · [relational](./docs/guides/relational.md) ·
+[catalog](./docs/guides/catalog.md).
+
+## Install elsewhere: JSR, CDN, and the browser
+
+LibreDB is the same ESM-only package everywhere; only how you reach it changes.
+
+**JSR** — published to [jsr.io](https://jsr.io/@libredb/libredb) alongside npm:
+
+```sh
+bunx jsr add @libredb/libredb
+# or: npx jsr add @libredb/libredb / deno add jsr:@libredb/libredb
+```
+
+**CDN** — every release is served from the npm registry by the usual CDNs. Pin a version:
+
+```ts
+import { open, kv } from "https://esm.sh/@libredb/libredb@0.2.2";
+```
+
+**Browser** — a dedicated entry that imports nothing from `node:`, so it bundles for the browser
+cleanly. Its `open` carries no default filesystem: an in-memory database works anywhere, and a
+path-backed open takes a filesystem you inject (e.g. the OPFS adapter shown below).
+
+```ts
+import { open, kv } from "@libredb/libredb/browser";
+
+const db = open(); // in-memory
+kv(db).set("greeting", "hello");
+```
+
+For durable storage in the browser, run inside a Web Worker and back the database with an OPFS sync
+access handle (the kernel stays synchronous — no async core):
+
+```ts
+import { open, opfsFileSystem } from "@libredb/libredb/browser";
+
+const root = await navigator.storage.getDirectory();
+const file = await root.getFileHandle("app.libredb", { create: true });
+const handle = await file.createSyncAccessHandle();
+const db = open({ path: "app.libredb", fs: opfsFileSystem(handle) });
+```
+
+A browser-targeting bundler also resolves the browser build from the main `@libredb/libredb` entry
+via the package's `browser` export condition. Note that TypeScript usually still resolves the Node
+types for that entry (where `fs` is optional) unless it is configured for the `browser` condition
+(`customConditions`). To get the browser-specific typing — `fs` required when `path` is given — and
+keep types in step with the runtime, import the explicit `@libredb/libredb/browser` subpath.
+
+**Using LibreDB in a web app with no backend?** The full guide —
+in-memory vs durable (OPFS) storage, the Web Worker pattern, and React / Vite /
+Next.js / Astro setup — is in [`docs/BROWSER.md`](./docs/BROWSER.md).
+
+## Command-line tool
+
+The package ships a `libredb` bin for inspecting and editing `.libredb` files — no code required:
+
+```sh
+npx libredb inspect data.libredb          # namespaces, kinds, and table schemas
+npx libredb stats data.libredb            # file size and namespace counts
+npx libredb get data.libredb user:1       # print one value
+npx libredb scan data.libredb user:       # print key=value under a prefix
+npx libredb export data.libredb dump.json # dump every key as import-compatible JSON
+npx libredb set data.libredb user:1 Ada   # set a key
+npx libredb delete data.libredb user:1    # remove a key
+npx libredb import data.libredb seed.json # bulk-set from a JSON object, atomically
+```
+
+Read commands open the file read-only, so inspection never mutates it. Write commands take an
+advisory `<path>.lock` to refuse a second concurrent writer. A lock left by a writer that crashed on
+the same host is reclaimed automatically — no flag needed. Use `--force` only for a lock whose
+holder cannot be verified (an anonymous lock or one written on another host); it refuses a holder
+that is verifiably alive, so it cannot knowingly admit two live writers. The remaining risk is the
+unverifiable case: a live writer on another machine sharing the file can still be forced past, which
+can corrupt the file.
+
+Prefer a standalone binary with no Node or Bun installed? Each release attaches self-contained
+executables (Linux and macOS on x64 and arm64; Windows on x64) with `.sha256` checksums on its
+[GitHub Release](https://github.com/libredb/libredb-database/releases). Or build one locally with
+`bun run compile`.
+
+Or run the CLI from a container (multi-arch, published to GHCR and Docker Hub) — mount your data and
+pass a command:
+
+```sh
+docker run --rm -v "$PWD:/data" ghcr.io/libredb/libredb inspect /data/app.libredb
+# or from Docker Hub: docker run --rm -v "$PWD:/data" libredb/libredb inspect /data/app.libredb
+```
+
+The same multi-arch image is published to both registries:
+[Docker Hub](https://hub.docker.com/r/libredb/libredb) and
+[GHCR](https://github.com/libredb/libredb-database/pkgs/container/libredb). It is a CLI shell, not a
+server: LibreDB stays an embedded, in-process database.
+
+Full references: the [CLI](./docs/CLI.md) (every command, safety model, exit codes), the
+[standalone binaries](./docs/BINARY.md) (download + verify), and the [Docker image](./docs/DOCKER.md).
+
+## How it works: one core, three lenses
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/02-lenses-dark.png">
+  <img alt="One core, three lenses: kv, document, and relational APIs over a single ordered key-value core (core.ts), reaching disk through one FileSystem seam." src="docs/img/02-lenses-light.png" width="100%">
+</picture>
+
+LibreDB has a single ordered byte key-value kernel (`src/core.ts`). Key-value, document, and relational
+are thin typed *lenses* over it — three faces of the same store. A relational table is physically a
+JSON document collection, which is physically ordered key-value entries built from composite keys like
+`users:42`. The kernel reaches the disk through one injectable filesystem seam, which is also what
+makes deterministic crash testing possible.
+
+```mermaid
+flowchart TB
+    subgraph consumers [Consumers]
+        App[Your app]
+        Studio[LibreDB Studio]
+        Platform[LibreDB Platform]
+    end
+
+    API["Public API · index.ts<br/>open · kv · doc · table · catalog"]
+
+    subgraph lenses [Lenses and shared edges - open, fast to contribute]
+        KV[kv<br/>strings]
+        DOC[document<br/>JSON]
+        REL[relational<br/>typed tables]
+        CAT[catalog<br/>self-describing registry]
+    end
+
+    CORE["core.ts - THE KERNEL<br/>ordered byte KV · serializable txns · WAL · crash recovery"]
+    FS["FileSystem seam<br/>node:fs adapter - or SimFS for crash tests"]
+
+    App --> API
+    Studio --> API
+    Platform --> API
+    API --> KV
+    API --> DOC
+    API --> REL
+    API --> CAT
+    REL --> DOC
+    KV --> CORE
+    DOC --> CORE
+    REL --> CORE
+    CAT --> CORE
+    CORE --> FS
+```
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/03-trust-dark.png">
+  <img alt="Open at the edges, guarded at the core: lenses, query surface, catalog, adapters, Studio, and docs are open to contribute; core.ts is guarded with 100% line coverage, deterministic crash tests, and heavy review - everything reaches the store through one narrow transact() port." src="docs/img/03-trust-light.png" width="100%">
+</picture>
+
+**The file boundary is the trust boundary.** Below the line (`core.ts`) is guarded: heavy review and
+deterministic crash tests, because a bug there corrupts data. Above the line (lenses, query, catalog)
+is open and fast to contribute to, because the worst a bug can do is present a bad *view* — it reaches
+the store only through one narrow `transact` port. For the full tour, read
+[`ARCHITECTURE.md`](./ARCHITECTURE.md).
+
+## When to use LibreDB
+
+**Reach for it when you want to:**
+
+- Back tests and local development with a real, durable, multi-model store instead of mocks.
+- Embed a small database directly in a TypeScript / Bun / Node app with zero infrastructure.
+- Learn how a database works by reading — and hacking — a small, honest codebase.
+- Prototype across key-value, document, and relational shapes without standing up three systems.
+
+**Do not use it (yet) when you need:**
+
+- A hardened production datastore at scale — it is an **early beta**; today's beachhead is test/dev.
+- Secondary indexes or a query planner — queries are O(n) scans by design in v1 (on the roadmap).
+- Concurrent multi-process access, replication, or a networked client/server — it is embedded,
+  in-process, and strictly single-writer (a second `open()` on the same file is refused by an
+  exclusive lock rather than silently corrupting it).
+- SQL wire compatibility or an existing-driver ecosystem.
+
+These limits are deliberate v1 scope, not hidden gaps — LibreDB's strength comes from what it refuses.
+See the [Manifesto](./MANIFESTO.md).
+
+## Reliability
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/04-reliability-dark.png">
+  <img alt="Crash recovery you can trust: a length-framed, CRC-32-checksummed write-ahead log fsync'd before commit; recovery truncates the last un-fsync'd record so what remains is always a valid committed prefix - proven by deterministic simulation testing." src="docs/img/04-reliability-light.png" width="100%">
+</picture>
+
+A transaction that returns has been written to a length-framed, CRC-32-checksummed write-ahead log and
+`fsync`'d *before* the commit becomes visible — so on a healthy disk a committed write survives a
+crash, and a crash can only ever damage the last, un-fsync'd record (which recovery detects,
+truncates, and reports). The failure modes *outside* the clean-crash model are handled explicitly, not
+assumed away: a failed append/fsync latches the database instead of writing past a torn record, a
+second writer is refused by an exclusive open lock, a file that is not a LibreDB database is refused
+untouched (the `LRDB` header), mid-log corruption refuses to open rather than silently truncating, and
+a short read is an IO error, never data loss. This is not just asserted: the crash/recovery path is
+proven by **deterministic simulation testing** — the real engine against a seeded in-memory filesystem
+that tears, corrupts, errors, and crashes the log on command — plus a binary round-trip fuzz.
+
+```sh
+bun run test    # includes a bounded 50-seed DST run and the fault-injection suites
+```
+
+The precise durability contract and the DST walkthrough are in
+[`docs/RELIABILITY.md`](./docs/RELIABILITY.md).
+
+## Performance envelope
+
+Honesty about scale (comprehension is the budget in v1, not throughput):
+
+- **The whole store lives in memory** as one sorted array; the file on disk is the append-only log
+  that rebuilds it on open. The practical ceiling is data that comfortably fits in RAM — the test/dev
+  beachhead, not a server working set.
+- **Each `transact()` copies the store** before applying writes, so a per-row auto-commit loop is
+  quadratic in store size and will look hung on large seeds. **Wrap bulk loads in one `transact()`**
+  (or use `libredb import`, which already does): one copy, one fsync, one record for the whole batch.
+- **No secondary indexes**: a `find`/`where` is an O(n) scan by design in v1.
+- **The log grows without bound** until compaction lands (tracked in
+  [#12](https://github.com/libredb/libredb-database/issues/12)); reopening replays the whole log.
+
+## Documentation
+
+| Topic | Where |
+|-------|-------|
+| Lens guides (kv, document, relational, catalog) | [`docs/guides/`](./docs/guides/) |
+| Browser — embed in a web app with no backend (in-memory + OPFS) | [`docs/BROWSER.md`](./docs/BROWSER.md) |
+| CLI — inspect and edit `.libredb` files (`npx libredb`) | [`docs/CLI.md`](./docs/CLI.md) |
+| Standalone binaries — download and run, no Node/Bun | [`docs/BINARY.md`](./docs/BINARY.md) |
+| Docker — run the CLI from a container | [`docs/DOCKER.md`](./docs/DOCKER.md) |
+| Architecture — the guided tour under the hood | [`ARCHITECTURE.md`](./ARCHITECTURE.md) |
+| Design — the locked engineering decisions | [`docs/DESIGN.md`](./docs/DESIGN.md) |
+| Reliability — durability and crash recovery | [`docs/RELIABILITY.md`](./docs/RELIABILITY.md) |
+| Manifesto — what LibreDB is and refuses to be | [`MANIFESTO.md`](./MANIFESTO.md) |
+| LibreDB Studio integration | [`docs/STUDIO.md`](./docs/STUDIO.md) |
+
+## Project status & roadmap
+
+LibreDB is an **early beta** (`0.1.x`). The architecture is in place, every line of the core is
+tested, and the durability contract above is enforced — but the API may still change before 1.0, and
+the recommended home is still test/dev data.
+
+- **Done:** the ordered key-value kernel (transactions, WAL with a versioned on-disk header, crash
+  recovery that refuses corruption and foreign files, an IO-failure latch, an exclusive open lock);
+  the key-value, document, and relational lenses; the self-describing catalog; typed `LibreDbError`
+  codes; the DST harness with IO-fault injection and binary fuzz; 100% line/function/statement
+  coverage.
+- **Next:** secondary indexes and a richer query surface; more query operators; additional lenses;
+  WAL compaction/checkpointing
+  ([#12](https://github.com/libredb/libredb-database/issues/12)); real-browser OPFS verification
+  ([#10](https://github.com/libredb/libredb-database/issues/10)).
+
+## The LibreDB family
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/05-family-dark.png">
+  <img alt="The LibreDB family: LibreDB (the database, this repo), LibreDB Studio (the open-source IDE for every database), and LibreDB Platform (the managed, team-oriented form of data) - three products, one access-model spine." src="docs/img/05-family-light.png" width="100%">
+</picture>
+
+LibreDB is the database in a three-product family that shares one access-model spine:
+
+- **LibreDB** — the database (this repository).
+- **LibreDB Studio** — the open-source IDE for *every* database (Postgres, MySQL, MongoDB, Redis, and
+  more). LibreDB is one database it supports natively, not a requirement.
+- **LibreDB Platform** — the managed, team-oriented form of data.
+
+## Contributing
+
+Contributions are welcome. LibreDB is open at the edges and guarded at the durability core — see
+[`CONTRIBUTING.md`](./CONTRIBUTING.md) for how to get set up, the `bun run gate` bar every change must
+pass, and where contributions land fastest. Please also read the
+[`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md).
+
+## Security
+
+To report a security vulnerability, see [`SECURITY.md`](./SECURITY.md) — please do not open a public
+issue.
+
+## License
+
+Open source and free under the [MIT License](./LICENSE).

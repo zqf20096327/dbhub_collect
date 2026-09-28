@@ -1,0 +1,213 @@
+# Laravel Model Validation
+
+[![Tests](https://github.com/theriddleofenigma/laravel-model-validation/actions/workflows/tests.yml/badge.svg)](https://github.com/theriddleofenigma/laravel-model-validation/actions/workflows/tests.yml)
+[![Latest Stable Version](https://img.shields.io/packagist/v/theriddleofenigma/laravel-model-validation.svg)](https://packagist.org/packages/theriddleofenigma/laravel-model-validation)
+[![Total Downloads](https://img.shields.io/packagist/dt/theriddleofenigma/laravel-model-validation.svg)](https://packagist.org/packages/theriddleofenigma/laravel-model-validation)
+[![License](https://img.shields.io/packagist/l/theriddleofenigma/laravel-model-validation.svg)](https://packagist.org/packages/theriddleofenigma/laravel-model-validation)
+
+Effortless, self-contained validation for your Eloquent models.
+
+Keep your validation rules where the data lives. Declare the rules on the model,
+opt in to the model event you care about, and every save is validated
+automatically &mdash; no form requests, no repeated calls to the validator.
+
+## Requirements
+
+| Package | Version              |
+|---------|----------------------|
+| PHP     | 8.2, 8.3, 8.4        |
+| Laravel | 12.x, 13.x           |
+
+> Laravel 13 requires PHP 8.3 or newer. Older Laravel releases that have reached
+> end-of-life are not supported.
+
+## Installation
+
+```shell
+composer require theriddleofenigma/laravel-model-validation
+```
+
+## Quick start
+
+Add the `Enigma\ValidatorTrait` to a model, declare its rules, and register the
+event you want to validate on:
+
+```php
+use Enigma\ValidatorTrait;
+use Illuminate\Database\Eloquent\Model;
+
+class User extends Model
+{
+    use ValidatorTrait;
+
+    public array $validationRules = [
+        'name' => 'required|max:10',
+        'email' => 'required|email',
+    ];
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Validate the model automatically whenever it is saved.
+        static::validateOnSaving();
+    }
+}
+```
+
+Now any attempt to save an invalid model throws an
+`Illuminate\Validation\ValidationException`, exactly like Laravel's own
+validation &mdash; so in an HTTP context the errors are flashed and redirected
+for you automatically.
+
+```php
+User::create(['name' => 'Kumar', 'email' => 'not-an-email']); // throws ValidationException
+```
+
+## Registering validation
+
+Three helpers register the matching Eloquent event listener for you:
+
+```php
+static::validateOnSaving();   // fires on create and update
+static::validateOnCreating(); // fires on create only
+static::validateOnUpdating(); // fires on update only
+```
+
+Prefer to validate on a different event, or on demand? Call `validate()`
+yourself. It returns the validated data and throws on failure:
+
+```php
+$validated = $user->validate();
+```
+
+## Customising the configuration
+
+Rules, messages and attribute names can each be declared **either** as a
+property **or** as a method of the same name. A method always takes precedence,
+so you can compute the configuration dynamically when you need to.
+
+```php
+class User extends Model
+{
+    use ValidatorTrait;
+
+    public array $validationMessages = [
+        'name.required' => 'Name field is required.',
+        'email.email' => 'The given email is in an invalid format.',
+    ];
+
+    public array $validationAttributes = [
+        'name' => 'User Name',
+    ];
+
+    public function validationRules(): array
+    {
+        return [
+            'name' => 'required|max:10',
+            'email' => ['required', 'email', 'unique:users,email,' . $this->id],
+        ];
+    }
+}
+```
+
+## Controlling the data that gets validated
+
+By default the model's raw attributes are validated. Declare a
+`validationData()` method to reshape that data first &mdash; the returned value
+is used only for validation and never changes what is persisted.
+
+```php
+/**
+ * @param  array<string, mixed>  $data  The value of $this->getAttributes().
+ * @return array<string, mixed>
+ */
+public function validationData(array $data): array
+{
+    $data['name'] = strtolower($data['name']);
+
+    return $data;
+}
+```
+
+## Skipping validation
+
+Sometimes you need to persist a model without validating it &mdash; a seeder, a
+data import, or an admin override. There are three ways to do it.
+
+Skip it on a single instance and save:
+
+```php
+$user = new User(['name' => 'Kumar']);
+
+$user->skipValidation()->save();
+// or, for a one-off save that leaves the instance's state untouched:
+$user->saveWithoutValidation();
+```
+
+Toggle the flag back on when you need to:
+
+```php
+$user->skipValidation();       // subsequent saves are not validated
+$user->skipValidation(false);  // validation is back on
+```
+
+Disable validation for a whole block &mdash; the cleanest way to skip it when
+creating through the query builder:
+
+```php
+User::withoutValidation(function () {
+    User::create(['name' => 'Kumar']); // not validated
+});
+
+// the return value of the callback is passed through
+$user = User::withoutValidation(fn () => User::create(['name' => 'Kumar']));
+```
+
+Validation is automatically re-enabled once the callback finishes, even if it
+throws.
+
+## Before & after hooks
+
+Implement `beforeValidation()` and/or `afterValidation()` to run logic around
+each validation pass:
+
+```php
+public function beforeValidation(): void
+{
+    // Normalise attributes, set defaults, etc.
+}
+
+public function afterValidation(): void
+{
+    // Anything that should run once validation succeeds.
+}
+```
+
+## Testing
+
+```shell
+composer install
+composer test
+```
+
+## Contributing
+
+Pull requests are welcome! Please read the [contributing guide](CONTRIBUTING.md)
+first, make sure the test suite passes, and add coverage for any behaviour you
+change. Notable changes are tracked in the [changelog](CHANGELOG.md).
+
+## Security
+
+If you discover a security vulnerability, please follow the process in
+[SECURITY.md](SECURITY.md) rather than opening a public issue.
+
+## Code of Conduct
+
+This project follows a [Code of Conduct](CODE_OF_CONDUCT.md). By participating,
+you are expected to uphold it.
+
+## License
+
+Laravel Model Validation is open-sourced software licensed under the
+[MIT license](https://opensource.org/licenses/MIT).

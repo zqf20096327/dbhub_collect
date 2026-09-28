@@ -1,0 +1,163 @@
+# Rust PGDataDiff
+
+`rust-pgdatadiff` is a rewrite of the Python version of [pgdatadiff](https://github.com/dmarkey/pgdatadiff)
+
+## What makes it different?
+
+* It is schema aware right from the get-go, as when we had to use the original
+  `pgdatadiff` we ended up having different schemas that we needed to perform checks on.
+
+* It runs DB operations in a parallel fashion,
+  making it at least 3x faster in comparison to the original `pgdatadiff` which performs the checks sequentially.
+
+* It is written in Rust, which means that it is memory safe and has a very low overhead.
+
+* It provides both a library and a client, which means that you can use it as a standalone tool
+  and in your own projects.
+
+_The benchmarks below are based on DBs with 5 tables and 1M rows each. The results are as follows:_
+
+## Python (sequential)
+![python-timings](images/python.png)
+
+## Rust (parallel)
+![rust-timings](images/rust.png)
+
+# Installation (Client)
+
+In case you want to use this as a client you can install it through `cargo`:
+
+Client supports two features that allow you to choose between `Clap` or `Inquire` for running it.
+
+[![asciicast](https://asciinema.org/a/647065.svg)](https://asciinema.org/a/647065)
+
+## Clap
+
+```shell
+cargo install rust-pgdatadiff-client --features with-clap
+```
+
+## Inquire
+
+```shell
+cargo install rust-pgdatadiff-client //or with `--features with-inquire`
+```
+
+# Installation (Library)
+
+In case you want to use this as a library you can add it to your `Cargo.toml`:
+
+```shell
+cargo add rust-pgdatadiff
+```
+
+or
+
+```toml
+[dependencies]
+rust-pgdatadiff = "0.1"
+```
+
+# Usage (Client)
+
+## Clap
+```shell
+Usage: rust-pgdatadiff-client diff [OPTIONS] <FIRST_DB> <SECOND_DB>
+
+Arguments:
+  <FIRST_DB>   postgres://postgres:postgres@localhost:5438/example
+  <SECOND_DB>  postgres://postgres:postgres@localhost:5439/example
+
+Options:
+      --only-tables                           Only compare data, exclude sequences
+      --only-sequences                        Only compare sequences, exclude data
+      --only-count                            Do a quick test based on counts alone
+      --chunk-size <CHUNK_SIZE>               The chunk size when comparing data [default: 10000]
+      --start-position <START_POSITION>       The start position for the comparison [default: 0]
+      --max-connections <MAX_CONNECTIONS>     Max connections for Postgres pool [default: 100]
+  -i, --include-tables [<INCLUDE_TABLES>...]  Tables included in the comparison
+  -e, --exclude-tables [<EXCLUDE_TABLES>...]  Tables excluded from the comparison
+      --schema-name <SCHEMA_NAME>             Schema name [default: public]
+  -h, --help                                  Print help
+  -V, --version                               Print version
+```
+
+## Inquire
+```shell
+rust-pgdatadiff-client
+```
+
+# Usage (Library)
+
+```rust
+use rust_pgdatadiff::diff::diff_ops::Differ;
+use rust_pgdatadiff::diff::diff_payload::DiffPayload;
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    let first_db = "postgres://postgres:postgres@localhost:5438/example";
+    let second_db = "postgres://postgres:postgres@localhost:5439/example";
+
+    let payload = DiffPayload::builder()
+        .first_db(first_db)
+        .second_db(second_db)
+        .only_tables(false)
+        .only_sequences(false)
+        .only_count(false)
+        .chunk_size(10_000)
+        .start_position(0)
+        .max_connections(100)
+        .include_tables(vec!["table1", "table2"])
+        .exclude_tables(Vec::<String>::new())
+        .schema_name("public")
+        .accept_invalid_certs_first_db(false)
+        .accept_invalid_certs_second_db(false)
+        .build();
+
+    let diff_result = Differ::diff_dbs(payload).await?;
+    // Handle `diff_result` in any way it fits your use case
+    Ok(())
+}
+```
+
+# Examples
+
+You can spin up two databases already prefilled with data through Docker Compose.
+
+```shell
+docker compose up --build
+```
+
+Prefilled databases include a considerable amount of data + rows, so you can run benchmarks against them to check the
+performance of it. You can modify a few of the generated data in order to see it in action.
+
+You can find an example of using it as a library in the [`examples`](./examples) directory.
+
+Run the example with the following command, after Docker Compose has started:
+
+```shell
+cargo run --example example_diff diff \
+  "postgresql://localhost:5438?dbname=example&user=postgres&password=postgres" \
+  "postgresql://localhost:5439?dbname=example&user=postgres&password=postgres"
+```
+
+You can also enable Rust related logs by exporting the following:
+
+```shell
+export RUST_LOG=rust_pgdatadiff=info
+```
+
+Switching from `info` to `debug` will give you more detailed logs. Also since we are utilizing
+`tokio-postgres` under the hood, you can enable its logs by exporting the following:
+
+```shell
+export RUST_LOG=rust_pgdatadiff=info,tokio_postgres=debug
+```
+
+# Authors
+
+* [Pavlos-Petros Tournaris](https://github.com/pavlospt)
+* [Nikolaos Nikitas](https://github.com/nikoshet)
+
+If you like my work, consider buying me a coffee 😄 
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/pavlospt)

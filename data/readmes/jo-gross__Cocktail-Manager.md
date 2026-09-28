@@ -1,0 +1,283 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jo-gross/Cocktail-Manager/main/public/images/The%20Cocktail%20Manager%20Logo.png" width="120">
+</p>
+<h1 align="center">Cocktail-Manager</h1>
+<p align="center">
+  <em>an efficient tool for easily documenting, managing and accessing cocktail recipes behind your bar. </em>
+</p>
+<p align="center">
+  <a href="https://github.com/jo-gross/cocktail-manager/releases/latest" rel="noopener noreferrer">
+    <img src="https://img.shields.io/github/v/release/jo-gross/cocktail-manager" >
+  </a>
+  <a href="https://github.com/jo-gross/cocktail-manager/actions" target="_blank" rel="noopener noreferrer">
+    <img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/jo-gross/cocktail-manager/semantic-release.yml">
+  </a>
+</p>
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+
+- [📍 Overview](#-overview)
+- [🧩 Features](#-features)
+- [🚀 Getting Started](#-getting-started)
+  - [🐳 Docker](#-docker)
+  - [⚙️ Local development](#-local-development)
+- [📒 Changelog](#-changelog)
+- [📚 Documentation](#-documentation)
+- [🤝 Contributing & Support](#-contributing--support)
+- [📄 License](#-license)
+- [🤗 Acknowledgments](#-acknowledgments)
+
+</details>
+
+---
+
+## 📍 Overview
+
+The Cocktail-Manager is a web application for managing cocktail recipes and ingredients. It is designed to be used in a
+bar with several users, with different roles and permissions.
+Originally a main goal was to create a compact view with all relevant infos from a high detailed cocktail recipes. Step
+by step the application grew and now it is a full-featured cocktail management tool. It combines the background
+management like financial/price calculation overview for partys or events, as well as the total production price of a
+cocktail, with the detailed recipe making and the compact view for the bartenders during the evening.
+
+---
+
+## 🧩 Features
+
+- **Multiple separated Bars** - You can manage multiple bars with different recipes and users without sharing data
+  between them.
+- **User management** - Invite and manage users with different roles
+- **Cocktail recipe management** - Add, edit and delete cocktail recipes - in very detailed form.
+- **Optimal and optimized for bartenders** - Option for easy search and compact view with the necessary steps for
+  a cocktail
+- **Party/Event appraisal** - Calculate the amount of ingredients for a specific event or party, based on the cocktails
+  you want to serve
+- **Financial and statistics** - See the costs of your cocktails and create statistics of the shaked cocktails easily
+- **Ingredient importer** - Ingredients from some websites (like conalco.de or rumundco.de) can be imported with a
+  single click
+- **Unit sensitive** - You can define available units for your ingredients and the application will use them for the
+  calculations
+- **Internationalization (DE/EN)** - UI language via user setting (fallback: browser locale). Workspace entity labels
+  (preparation actions, units, ice) support German and English display names.
+
+## 🌐 Internationalization
+
+The UI uses [i18next](https://www.i18next.com/) + `react-i18next`.
+
+| Topic | Convention |
+| --- | --- |
+| Locales | `de` (default/fallback), `en` |
+| Files | `locales/{de\|en}/{namespace}.json` |
+| Namespaces | `common`, `nav`, `auth`, `cocktail`, `ingredient`, `settings`, `errors`, `entity` |
+| Keys | Dot notation, e.g. `common.save` |
+| Plurals | i18next v4: `key_one` / `key_other` |
+| Preference | `UserSetting.language` → browser → `de` |
+
+```tsx
+const { t } = useTranslation('common');
+return <button>{t('save')}</button>;
+
+// Plurals
+t('entity:hasReferences', { count: n, type: entityType });
+```
+
+Workspace entity display names (actions/units/ice) stay in the DB translation catalog and are resolved with
+`userContext.getTranslation(key)` using the active UI locale.
+
+```sh
+pnpm i18n:check      # ensure EN keys match DE
+pnpm i18n:extract    # optional extract via i18next-parser
+```
+
+ESLint rule `i18next/no-literal-string` flags untranslated JSX text (`warn` globally; `error` on migrated shell/auth/entity paths). Remaining feature screens still emit warnings until fully migrated — treat new UI as requiring `t()` keys.
+
+---
+
+<details>
+  <summary>Bartenders view / Pre-configured overview card</summary>
+  <img src="https://raw.githubusercontent.com/jo-gross/Cocktail-Manager/main/docs/images/Main%20page%20in%20card%20mode.png">
+</details>
+<details>
+  <summary>Bartenders view / With search card</summary>
+  <img src="https://raw.githubusercontent.com/jo-gross/Cocktail-Manager/main/docs/images/Main%20page%20in%20search%20mode.png">
+</details>
+<details>
+  <summary>Cocktail form</summary>
+  <img src="https://raw.githubusercontent.com/jo-gross/Cocktail-Manager/main/docs/images/Example%20cocktail%20form.png">
+</details>
+
+<details>
+  <summary>Statistics</summary>
+  <img src="https://raw.githubusercontent.com/jo-gross/Cocktail-Manager/main/docs/images/Statistic%20page.png">
+</details>
+
+---
+
+## 🚀 Getting Started
+
+**System Requirements:**
+
+- Node.js 24
+- pnpm 11.25.0 (enabled via `corepack enable`)
+- Docker (optional, for containerized deployment or local database)
+- Google Cloud Project (for authentication) or another OIDC provider
+
+**Setting up the application:**
+
+1. Get started with cloning the repository and copy the .env.example to .env
+
+    ```sh
+    git clone https://github.com/jo-gross/Cocktail-Manager.git
+    cd Cocktail-Manager
+    cp .env.example .env
+    ```
+
+2. Set the required env vars for the authentication provider (See [Auth](docs/AUTH.md)) in the .env file and set the other environment variables (See [Environment Variables](docs/ENV.md))
+3. Start the application with `docker compose` (see more options below)
+
+    ```sh
+    docker compose up -d
+    ```
+4. When the application is running, you should be able to access it at [http://localhost:3000](http://localhost:3000)
+
+---
+
+### 🐳 Docker
+
+#### Using `docker compose`
+
+> Run with prebuild images from ghcr.io
+>
+> ```sh
+> docker compose up -d
+> ```
+
+#### Using `locally build`
+
+> Build the images
+>
+> ```sh
+> docker compose up -d --build
+> ```
+
+---
+
+### ⚙️ Local development
+
+One-time setup:
+
+> Enable `corepack` to use [`pnpm`](https://pnpm.io/)
+>
+> ```sh
+> sudo corepack enable
+> ```
+
+Starting development:
+
+> Start the database
+>
+> ```sh
+> docker compose up postgres -d
+> ```
+>
+> Install all dependencies
+>
+> ```sh
+> pnpm install
+> ```
+>
+> Apply migrations (WARNING: this could drop all of your local data, pay attention)
+>
+> ```sh
+> pnpm prisma migrate deploy
+> ```
+>
+> Start the application
+>
+> ```sh
+> pnpm dev
+> ```
+>
+> All ui changes are automatically reloaded, but you need to restart the server when changing the api
+
+Developing changes that include database schema changes:
+
+> Push your changes without creating a migration
+>
+> ```sh
+> pnpm prisma db push
+> ```
+>
+> When you are done with your changes, create a migration
+>
+> ```sh
+> pnpm prisma migrate dev
+> ```
+>
+> All other help can be found in the [Prisma Documentation](https://www.prisma.io/docs/orm/prisma-migrate)
+
+---
+
+## 📒 Changelog
+
+All changes to the project are documented in
+the [Changelog](https://github.com/jo-gross/Cocktail-Manager/blob/main/docs/CHANGELOG.md), automatically generated by
+when creating a new release.
+
+---
+
+## 📚 Documentation
+
+- [Authentication Methods](docs/AUTH.md) - Configure authentication providers (Google OAuth, Custom OIDC)
+- [Environment Variables](docs/ENV.md) - Complete list of all environment variables and configuration options
+
+---
+
+## 🤝 Contributing & Support
+
+To grow the project, we need your help! See the links below to get started.
+
+- [🔰 Contributing Guide][1]
+- [👋 Start a Discussion][2]
+- [🐛 Open an Issue][3]
+
+[1]: https://github.com/jo-gross/cocktail-manager/blob/main/CONTRIBUTING.md '🔰 Contributing Guide'
+
+[2]: https://github.com/jo-gross/cocktail-manager/discussions '👋 Start a Discussion'
+
+[3]: https://github.com/jo-gross/cocktail-manager/issues '🐛 Open an Issue'
+
+<p align="left">
+  <a href="https://github.com/jo-gross/cocktail-manager/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=jo-gross/cocktail-manager" />
+  </a>
+</p>
+
+---
+
+## 📄 License
+
+This project is licensed under
+the [GNU AGPL v3 license with a Common Clause v1.0 selling exception](https://github.com/jo-gross/cocktail-manager/blob/main/LICENSE).
+
+---
+
+## 🤗 Acknowledgments
+
+- [Shields.io](https://shields.io/) - badges for your projects
+- [contrib.rocks](https://contrib.rocks) - A tool to visualize GitHub contributors
+- [saadeghi/daisyui](https://github.com/saadeghi/daisyui) - An awesome component library for Tailwind CSS
+- [TandoorRecipes/recipes](https://github.com/TandoorRecipes/recipes) - Nice recipe book and a huge inspiration for the
+  licence and a possible payment model
+- [eli64s/readme-ai](https://github.com/eli64s/readme-ai/) - Inspiration for the README.md
+- [medium.com/@brandonlostboy](https://medium.com/@brandonlostboy/build-it-better-next-js-api-handler-75070dd1826f) -
+  Inspiration for
+  the API-Handling middleware
+
+<p align="right">
+  <a href="#-overview"><b>Return</b></a>
+</p>
+
+---

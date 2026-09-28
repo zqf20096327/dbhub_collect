@@ -1,0 +1,282 @@
+<a href="https://gigapipe.com/" target="_blank"><img src='https://github.com/user-attachments/assets/fc8c7ca9-7a18-403d-b2a6-17899a534d33' style="margin-left:-10px;width:200px;" height=200></a>
+
+# gigapipe-otel-collector
+
+Open Telemetry distribution for [Gigapipe](https://gigapipe.com/) > formerly known as _qryn_
+
+
+### About
+The **gigapipe-otel-collector** is designed to store observability data _(Traces, Logs, Metrics)_ from multiple vendors/platforms into [ClickHouse](https://github.com/clickhouse/clicklhouse) using [Gigapipe](https://github.com/metrico/gigapipe) _fingerprinting and table formats_ transparently accessible through [Gigapipe](https://gigapipe.com/) via _LogQL, PromQL, Tempo and Pyroscope queries_.
+
+<img src="https://github.com/metrico/otel-collector/assets/1423657/692b54e9-88ef-49c8-996d-5dbd73ee0782" height=250>
+
+
+#### Popular ingestion formats _(out of many more)_:
+
+- Logs
+  - [Loki](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/lokireceiver)
+  - [Splunk](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/splunkhecreceiver)
+  - [Fluentd](github.com/open-telemetry/opentelemetry-collector-contrib/receiver/fluentforwardreceiver)
+  - [Cloudwatch](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/awscloudwatchreceiver)
+  - [Syslog](github.com/open-telemetry/opentelemetry-collector-contrib/receiver/syslogreceiver)
+- Metrics
+  - [Prometheus](github.com/open-telemetry/opentelemetry-collector-contrib/receiver/prometheusreceiver)
+  - [InfluxDB](github.com/open-telemetry/opentelemetry-collector-contrib/receiver/influxdbreceiver)
+  - OTLP
+- Traces
+  - [Zipkin](github.com/open-telemetry/opentelemetry-collector-contrib/receiver/zipkinreceiver)
+  - [Jaeger](github.com/open-telemetry/opentelemetry-collector-contrib/receiver/jaegerreceiver)
+  - [Skywalking](github.com/open-telemetry/opentelemetry-collector-contrib/receiver/skywalkingreceiver)
+  - OTLP
+
+
+
+### Usage
+```yaml
+otel-collector:
+    container_name: otel-collector
+    image: ghcr.io/metrico/gigapipe-otel-collector:latest
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel/config.yaml
+    ports:
+      - "3100:3100"     # Loki/Logql HTTP receiver
+      - "3200:3200"     # Loki/Logql gRPC receiver
+      - "8088:8088"     # Splunk HEC receiver
+      - "5514:5514"     # Syslog TCP Rereceiverceiver
+      - "24224:24224"   # Fluent Forward receiver
+      - "4317:4317"     # OTLP gRPC receiver
+      - "4318:4318"     # OTLP HTTP receiver
+      - "14250:14250"   # Jaeger gRPC receiver
+      - "14268:14268"   # Jaeger thrift HTTP receiver
+      - "9411:9411"     # Zipkin Trace receiver
+      - "11800:11800"   # Skywalking gRPC receiver
+      - "12800:12800"   # Skywalking HTTP receiver
+      
+      - "8086:8086"     # InfluxDB Line proto HTTP
+
+    restart: on-failure
+```
+
+#### Versions and rollback
+
+Every push to `main` publishes two ghcr tags -- `latest` and an immutable
+version tag (`0.0.52`, `0.0.53`, ...) -- and a matching
+[GitHub Release](https://github.com/metrico/otel-collector/releases) with the
+changelog for that version.
+
+Production deployments should pin the version tag rather than track `latest`:
+
+```yaml
+image: ghcr.io/metrico/gigapipe-otel-collector:0.0.52
+```
+
+If a new build misbehaves, roll back by pointing at the previous release tag.
+Version tags are never overwritten, so a rollback always lands on the exact
+image that was tested.
+
+### Config Template [view](https://www.otelbin.io/s/55bd7b91-0c89-47d4-b84c-015ad2a76790)
+The following template enables popular log, metric and tracing ingestion formats supported by Gigapipe
+
+```yaml
+receivers:
+  loki:
+    use_incoming_timestamp: true
+    protocols:
+      http:
+        endpoint: 0.0.0.0:3100
+      grpc:
+        endpoint: 0.0.0.0:3200
+  syslog:
+    protocol: rfc5424
+    tcp:
+      listen_address: "0.0.0.0:5514"
+  fluentforward:
+    endpoint: 0.0.0.0:24224
+  splunk_hec:
+    endpoint: 0.0.0.0:8088
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+  jaeger:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:14250
+      thrift_http:
+        endpoint: 0.0.0.0:14268
+  zipkin:
+    endpoint: 0.0.0.0:9411
+  skywalking:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:11800
+      http:
+        endpoint: 0.0.0.0:12800
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'otel-collector'
+          scrape_interval: 5s
+          static_configs:
+            - targets: ['exporter:8080']
+  influxdb:
+    endpoint: 0.0.0.0:8086
+connectors:
+  servicegraph:
+    latency_histogram_buckets: [ 100us, 1ms, 2ms, 6ms, 10ms, 100ms, 250ms ]
+    dimensions: [ cluster, namespace ]
+    store:
+      ttl: 2s
+      max_items: 1000
+    cache_loop: 2m
+    store_expiration_loop: 2s
+    virtual_node_peer_attributes:
+      - db.name
+      - rpc.service
+  spanmetrics:
+    namespace: span.metrics
+    exemplars:
+      enabled: false
+    dimensions_cache_size: 1000
+    aggregation_temporality: 'AGGREGATION_TEMPORALITY_CUMULATIVE'
+    metrics_flush_interval: 30s
+    metrics_expiration: 5m
+    events:
+      enabled: false
+processors:
+  batch:
+    send_batch_size: 10000
+    timeout: 5s
+  memory_limiter:
+    check_interval: 2s
+    limit_mib: 1800
+    spike_limit_mib: 500
+  resourcedetection/system:
+    detectors: ['system']
+    system:
+      hostname_sources: ['os']
+  resource:
+    attributes:
+      - key: service.name
+        value: "serviceName"
+        action: upsert
+  metricstransform:
+    transforms:
+      - include: calls_total
+        action: update
+        new_name: traces_spanmetrics_calls_total
+      - include: latency
+        action: update
+        new_name: traces_spanmetrics_latency
+exporters:
+  gigapipe:
+    dsn: tcp://clickhouse-server:9000/qryn?username=default&password=*************
+    timeout: 10s
+    sending_queue:
+      queue_size: 100
+    retry_on_failure:
+      enabled: true
+      initial_interval: 5s
+      max_interval: 30s
+      max_elapsed_time: 300s
+    logs:
+       format: raw
+  otlp/spanmetrics:
+    endpoint: localhost:4317
+    tls:
+      insecure: true
+extensions:
+  health_check:
+  pprof:
+  zpages:
+
+service:
+  extensions: [pprof, zpages, health_check]
+  pipelines:
+    logs:
+      receivers: [fluentforward, otlp, loki, syslog, splunk_hec]
+      processors: [memory_limiter, resourcedetection/system, resource, batch]
+      exporters: [gigapipe]
+    traces:
+      receivers: [otlp, jaeger, zipkin, skywalking]
+      processors: [memory_limiter, resourcedetection/system, resource, batch]
+      exporters: [gigapipe, spanmetrics, servicegraph]
+    metrics:
+      receivers: [prometheus, influxdb, spanmetrics, servicegraph]
+      processors: [memory_limiter, resourcedetection/system, resource, batch]
+      exporters: [gigapipe]
+```
+
+
+
+### Kafka Receiver
+
+In order to correctly set labels when using Kafka _(or other generic receiver)_ you will have to elect fields as labels.
+
+For example this processor copies `severity` json field to the `severity` label:
+```
+processors:
+  logstransform:
+    operators:
+      - type: copy
+        from: 'body.severity'
+        to: 'attributes.severity'
+```
+
+Use the label processor inside the pipeline you want:
+
+```
+  pipelines:
+    logs:
+      receivers: [kafka]
+      processors: [logstransform, memory_limiter, batch]
+      exporters: [gigapipe]
+```
+
+#### Kafka Example
+
+A stream containing `{"severity":"info", "data": "a"}` should produce the following fingerprint and log:
+```
+┌───────date─┬──────────fingerprint─┬─labels──────────────┬─name─┐
+│ 2023-10-05 │ 11473756280579456548 │ {"severity":"info"} │      │
+└────────────┴──────────────────────┴─────────────────────┴──────┘
+
+┌──────────fingerprint─┬────────timestamp_ns─┬─value─┬─string─────────────────────────┐
+│ 11473756280579456548 │ 1696502612955383384 │     0 │ {"data":"a","severity":"info"} │
+└──────────────────────┴─────────────────────┴───────┴────────────────────────────────┘
+```
+
+### Upstream version
+
+Wraps [`open-telemetry/opentelemetry-collector`](https://github.com/open-telemetry/opentelemetry-collector) **v0.154.0** and [`opentelemetry-collector-contrib`](https://github.com/open-telemetry/opentelemetry-collector-contrib) **v0.153.0**. Building from source requires **Go 1.26**.
+
+### Migration notes (v0.108 → v0.154)
+
+The image tagged `v0.154.0-rc1` and later jumps 46 minor versions of upstream OTel in one step. Most existing configs keep working unchanged; the items below need a one-line edit if your config uses them.
+
+**Removed exporters** (upstream-deleted, dropped from this distribution):
+
+| Removed | Replacement |
+|---|---|
+| `loki` exporter | `otlphttp` to Loki's OTLP endpoint — Loki accepts OTLP natively, see [Grafana docs](https://grafana.com/docs/grafana-cloud/send-data/otlp/send-data-otlp/). The `lokireceiver` is **not** affected — receiving the legacy Loki HTTP push protocol is still supported. |
+| `opencensus` exporter & receiver | `otlp` |
+| `sapm` receiver | `otlp` or `signalfx` |
+| `carbon` exporter | `prometheusremotewrite` |
+| `bigip` receiver, `ecstaskobserver`, `routingprocessor` | — (see upstream contrib for status) |
+
+**Renamed YAML keys:**
+
+- `sending_queue: blocking: true` → `sending_queue: block_on_overflow: true` (only if you set it; default config is unaffected)
+
+**Behavioural defaults that changed:**
+
+- `processor/filter` and `processor/transform` default `error_mode` flipped from `propagate` to `ignore`. If you relied on errors propagating, set `error_mode: propagate` explicitly.
+- `sending_queue` now batches at the queue level by default (`min_size: 8192` items, `flush_timeout: 200ms`) via the new `queue_batch` machinery. The old `QueueSettings` had no batching concept, so a pipeline that previously flushed on every write may now buffer up to 8192 items or 200ms. Applies to `gigapipe` and `clickhouseprofile` exporters (any exporter using `exporterhelper`). To restore previous behaviour set `sending_queue.batch.min_size: 1` (or disable the queue with `sending_queue.enabled: false`).
+
+**Exporter component-type renames (backward-compatible aliases still work):**
+
+- `otlphttp` → `otlp_http` (the old key still parses via a deprecated alias)
+- `otlp` (gRPC) → `otlp_grpc` (same — alias preserved)
+- `qryn` → `gigapipe` (the old key still parses via a deprecated alias and logs a deprecation warning; the exporter also emits self-metrics under both the `exporter_qryn_` and `exporter_gigapipe_` prefixes during the transition)

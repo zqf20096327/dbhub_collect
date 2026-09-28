@@ -1,0 +1,61 @@
+#+TITLE: terraform-oci-free-compute-maximal-example
+* What it is
+  A Terraform configuration for compute resources on the Free Tier of Oracle Cloud Infrastructure.
+* What it does
+  Deploys a maximal set of resources to run compute instances on the OCI Free Tier.
+* How to use it
+  For simplicity—to avoid the need to install and configure Terraform and the OCI CLI—this configuration is designed for deployment as a stack in the OCI Resource Manager. Resource Manager offers two options for doing so: quick-create link (recommended) and manual deployment. Regardless of which option you choose, begin with the following steps and /then/ proceed to either *Quick-Create Link* or *Manual Deployment* below.
+  1. Log into the Oracle Cloud Infrastructure Console.
+  2. Ensure that your browser session is in your tenancy's root compartment:
+     1. From the hamburger menu (horizontal stripes) on the upper left, find *Identity & Security* → *Identity* and click on *Compartments*.
+     2. On the *Compartments* page, click on the name of your tenancy under the *Name* column. If you have done so successfully, the *Compartment Details* page should show the following description:
+        #+begin_example
+        The root Compartment of the tenancy
+        #+end_example
+** Quick-Create Link
+   1. Open the following link in your browser:
+      https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/RhubarbSin/terraform-oci-free-compute-maximal-example/archive/refs/tags/v0.2.1.zip
+   2. On the *Create stack* page, select the check box labeled "I have reviewed and accept the Oracle Terms of Use."
+   3. Click on the *Next* button and provide an SSH public key.
+   4. Click *Next* again.
+   5. Click on the *Create* button.
+   6. Wait for the submitted job to complete and proceed to *Next Steps* below if the job reaches the *SUCCEEDED* state. Otherwise, proceed to *Final Steps* below.
+** Manual Deployment
+   1. Download the repository as a ZIP file: on the repository's GitHub page, choose *Download ZIP* from the *Code* menu on the upper right.
+   2. Go to the Resource Manager: from the hamburger menu, find *Developer Services* → *Resource Manager* and click on *Stacks*.
+   3. Click on the *Create Stack* button, select *.zip file* under the *Stack Configuration* heading, and select the downloaded ZIP file via the *Browse* link.
+   4. Click on the *Next* button and provide an SSH public key.
+   5. Click *Next* again.
+   6. Select the check box labeled "Run apply" under the *Run apply on the created stack?* heading and click on the *Create* button.
+   7. Wait for the submitted job to complete and proceed to *Next Steps* below if the job reaches the *SUCCEEDED* state. Otherwise, proceed to *Final Steps* below.
+** Next Steps
+  1. From the hamburger menu, find *Compute* → *Compute* and click on *Instances*. Select the newly created compartment (named /OCI-Free-Compute-Maximal/ by default) from the *Compartment* menu.
+  2. Information for connecting to the instances with SSH can be found by clicking on an instance and viewing the details under *Instance access* on the *Instance information* tab.
+** Final Steps
+   Regardless of whether the deployment succeeds—it may fail because of inadequate capacity of AMD Flex instances for accounts on the free tier, for example—you will probably want to delete the stack's resources and the stack itself.
+   1. To destroy the resources, navigate back to *Resource Manager* » *Stacks* » *Stack Details* and click on the *Destroy* button and click *Destroy* again.
+   2. To delete the stack, after the destroy job completes, from the *Resource Manager* » *Stacks* » *Stack Details* » *Job Details* page go to *Resource Manager* » *Stacks*. From the kebab menu (vertical dots) on the far right for the stack, choose *Delete* and click on the *Delete* button.
+* Details
+  - The resources deployed include the following:
+    + One (1) Compartment
+    + One (1) Virtual Cloud Network
+    + One (1) Internet Gateway
+    + One (1) Subnet
+    + One (1) Network Security Group
+    + Two (2) AMD Micro instances running the latest available Ubuntu distribution with the following specifications:
+      - 1 OCPU
+      - 1 GiB of memory
+      - 50 GiB of storage
+      - 1 ephemeral public IP address
+    + One (1) Ampere Flex instance running the latest Oracle Linux distribution with the following specifications:
+      - 2 OCPUs
+      - 12 GiB of memory
+      - 100 GiB of storage
+      - 1 reserved public IP address
+    + One (1) volume backup policy that will create a backup of each boot volume on a daily basis and retain the backup for one day (due to the limitation of five volume backups)
+  - On the Ubuntu instances, Apparmor is removed by cloud-init.
+  - On the Oracle Linux instance, a kernel boot argument is added to disable loading of SELinux, but because cloud-init is configured not to execute its power-state-change module, that instance must be rebooted for the change to take effect.
+  - The default security list that is explicitly associated with the subnet allows inbound traffic to ports 22, 80, and 443 from any origin and all outbound traffic to any destination.
+  - The network security group associated with the instances' VNICs allows inbound ICMP echo (i.e. ping) traffic from any origin.
+* Note
+  Availability of Always Free Ampere A1 Compute instance capacity is not guaranteed.

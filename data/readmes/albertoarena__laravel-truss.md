@@ -1,0 +1,358 @@
+# Laravel Truss
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="art/cover-dark.png">
+  <img src="art/cover-light.png" alt="Laravel Truss: see your database structure as a live, zoomable ER diagram">
+</picture>
+
+<p align="center">
+  <a href="https://trussphp.com"><img alt="Documentation" src="https://img.shields.io/badge/docs-website-2f6feb?style=flat"></a>
+  <a href="https://packagist.org/packages/albertoarena/laravel-truss"><img alt="Latest version on Packagist" src="https://img.shields.io/packagist/v/albertoarena/laravel-truss.svg?style=flat"></a>
+  <a href="https://packagist.org/packages/albertoarena/laravel-truss"><img alt="Total downloads" src="https://img.shields.io/packagist/dt/albertoarena/laravel-truss.svg?style=flat"></a>
+  <a href="https://github.com/albertoarena/laravel-truss/actions/workflows/run-tests.yml"><img alt="Tests" src="https://img.shields.io/github/actions/workflow/status/albertoarena/laravel-truss/run-tests.yml?branch=main&amp;label=tests&amp;style=flat"></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/packagist/l/albertoarena/laravel-truss.svg?style=flat"></a>
+  <a href="https://whyphp.dev"><img alt="Why PHP in 2026" src="https://img.shields.io/badge/Why_PHP-in_2026-7A86E8?style=flat&amp;labelColor=18181b"></a>
+</p>
+
+Laravel Truss is a live database structure viewer. It scans your live schema and renders it as a scrollable, zoomable ER diagram right inside your app, so you can see how the tables actually connect without opening a DB client. It reads **structure only** (tables, columns, keys, indexes); row data is never queried or exposed.
+
+**[Try the live demo](https://trussphp.com/demo/)** to pan, zoom, focus, and export a sample schema in your browser, no install needed, then build a palette in the **[theme builder](https://trussphp.com/theme-builder/)** and copy the config. See what has shipped and what is next on the **[roadmap](https://trussphp.com/roadmap/)**.
+
+> **Stay updated:** click **Watch > Custom > Releases** to hear about new features, follow along in [Discussions](https://github.com/albertoarena/laravel-truss/discussions), or join the [Discord](https://discord.gg/x3Qt9CJkcE).
+
+## Features
+
+- Live ER diagram of your database, rendered with Mermaid.
+- Focus mode: a table and its foreign-key neighbours, centred and highlighted. The picker is searchable, matching anywhere in the table name, so it stays usable on a schema with hundreds of tables.
+- Filter by table name, and toggle native types against Laravel-style labels.
+- Map-style pan and zoom, with auto-fit and a Fit button.
+- Export the diagram as PNG or SVG, or its structure as JSON, CSV, a Markdown data dictionary, DBML, or a token-trimmed `llm` format, from the browser or, for CI and tooling, from the command line with `php artisan truss:export`. Structure-only and deterministic. `--format=html` writes the whole diagram as one self-contained file that opens with no server and no install.
+- Feed your real, live structure to a coding agent as grounding context: annotate it with business meaning, trim it with `--compact`, and narrow it with `--focus`, so the agent stops inventing columns. Structure only, never data.
+- Schema diff: see what changed since your last migration, in a dashboard "Changes" panel and via `php artisan truss:diff`. Structure-only, added / removed / changed tables, columns, indexes, and foreign keys.
+- Schema doctor: review your structure for problems (missing primary keys, unindexed foreign keys, duplicate indexes, risky types) in the terminal or in CI with `php artisan truss:doctor`, and in a dashboard "Health" panel that flags the same problems on the diagram. Deterministic and structure-only, no AI.
+- Multiple connections: list them in config and switch between their diagrams with a toolbar picker, each scoped to its own database.
+- Light and dark "blueprint" theme, or bring your own: define custom colours and fonts from config to match your app. Config driven, CSP-safe, no build step.
+- Keyboard and screen reader support: every trigger on the diagram answers Enter and Space, Escape closes an open menu and hands focus back, focus is always visible, and the diagram names and describes itself (its description follows the filter and focus you are looking at). Checked on every push with axe-core.
+- Self-contained: Mermaid and fonts are vendored and served from the package, so it works offline and under a strict Content-Security-Policy (no CDN).
+- Cached snapshot, rebuilt automatically after migrations.
+
+## Documentation
+
+Full documentation is at **[trussphp.com](https://trussphp.com)**.
+
+- [Installation](https://trussphp.com/getting-started/installation/)
+- [Quick start](https://trussphp.com/getting-started/quick-start/)
+- [Authorization](https://trussphp.com/guides/authorization/)
+- [Configuration reference](https://trussphp.com/reference/configuration/)
+- [Roadmap](https://trussphp.com/roadmap/)
+- [Video overview](https://www.youtube.com/watch?v=zogsFocamlU) by Laravel Daily (7 min)
+
+## Installation
+
+For local use, install Truss as a dev dependency:
+
+```bash
+composer require albertoarena/laravel-truss --dev
+```
+
+To run Truss gated on staging or production, install it as a **regular dependency** instead. Dev dependencies are excluded from `composer install --no-dev` builds, so a `--dev` install never reaches a production deploy and `/truss` returns 404 there:
+
+```bash
+composer require albertoarena/laravel-truss
+```
+
+Requires **PHP 8.2+** and **Laravel 12+**. The service provider is auto-discovered, so there is nothing to publish to get started.
+
+## Quick start
+
+By default Truss is enabled in the `local` environment only. Start your app and visit:
+
+```
+/truss
+```
+
+To use Truss in a non-local environment you must both enable it and authorize the viewers. See [Authorization](https://trussphp.com/guides/authorization/).
+
+## Multiple connections
+
+Out of the box Truss visualizes your application's default database connection. If your app spans more than one connection, for example a main database alongside a separate module database, list the connections you want to visualize under `truss.connections`:
+
+```php
+// config/truss.php
+'connections' => [
+    'mysql' => [],
+    'modules' => ['excluded_tables' => ['module_jobs']],
+],
+```
+
+When two or more connections are configured, a connection picker appears in the dashboard toolbar. Switching it re-renders that connection's schema, and the selection is kept in the URL so a given view can be shared or bookmarked. Each connection is introspected against its own database only, so a shared server never shows tables that belong to another database.
+
+The keys are Laravel connection names from `config/database.php`. Per-connection options mirror the global ones (such as `excluded_tables`), so you can hide different tables on each connection.
+
+## Hidden tables
+
+Framework and infrastructure tables (`migrations`, `sessions`, `cache`, `jobs`, and the rest) are hidden by default through `excluded_tables`. The footer says how much of the connection is on screen, `24 of 32 tables`, so a filtered diagram never presents itself as the whole schema, and `truss:show` reports the same way in the terminal.
+
+A **Show hidden tables** toggle draws them on request, muted, since they carry no change marks and no health findings. Whether the browser receives them at all is the operator's decision, not the viewer's:
+
+```php
+// config/truss.php
+'reveal_excluded' => env('TRUSS_REVEAL_EXCLUDED', env('APP_ENV', 'production') === 'local'),
+```
+
+On (the default in local, where the dashboard is already open to whoever is looking) they are sent flagged and undrawn, and the toggle appears. Off, they never leave the server and only the count does, so hiding a table to keep it off a shared dashboard keeps working. There is no query parameter for this, by design.
+
+## Schema doctor
+
+`php artisan truss:doctor` (aliased `truss:check`) reviews your database structure for problems visible from structure alone: a table with no primary key, a foreign key with no index, duplicate indexes, money stored as a float, and more. It is deterministic and structure-only, with no AI and no network call, so it is safe to run in CI.
+
+```bash
+php artisan truss:doctor
+php artisan truss:doctor --connection=mysql --format=json
+php artisan truss:doctor --preset=strict --fail-on=warning
+```
+
+It exits `0` when clean, `1` when a finding is at or above the `--fail-on` level (default `error`), and `2` on a bad option or a snapshot error, so a migration that introduces a problem can fail the build. Presets (`recommended`, `strict`, `none`), per-rule severity and enable / disable, ignore patterns, and the fail level are all configurable under `truss.doctor`. See the [configuration reference](https://trussphp.com/reference/configuration/).
+
+Every finding carries a stable code (e.g. `TRUSS-IDX-001`) shown in both the command and the panel; the [schema doctor guide](https://trussphp.com/guides/schema-doctor/) lists all the rule codes and what each checks.
+
+Structure only: it reads the same cached snapshot the diagram uses and never queries row data.
+
+### In the dashboard
+
+The same findings show in the dashboard, under the name **Health**: the command is `truss:doctor`, and the dashboard front end for it is the heart icon in the toolbar labelled "Health". Same feature, same findings. The Health panel lists them grouped by table, and every table with a problem carries a small severity badge on the diagram, so you can see what needs attention at a glance. Open the panel to read the findings, click a table to focus it, or click the marked column to see the finding for that field. Heuristic (lower-confidence) findings are marked as such.
+
+It rides the schema endpoint the diagram already loads, so there is no extra request. Two switches control it under `truss.doctor`:
+
+- `dashboard` (env `TRUSS_DOCTOR_DASHBOARD`, default on): show the Health panel at all. When off, the dashboard never receives any findings and the CLI is untouched.
+- `flag_tables` (env `TRUSS_DOCTOR_FLAG_TABLES`, default on): always badge tables with findings on the diagram, even with the panel closed. Turn it off to keep the diagram clean and surface findings only when the panel is open.
+
+## Schema export
+
+`php artisan truss:export` writes your database structure to a standard format for CI, tooling, and version control. It is the command-line counterpart to the dashboard's export button, generated from PHP so it does not need a human with the diagram open. Deterministic and structure-only, with no network call, so it is safe in CI and commit hooks.
+
+```bash
+php artisan truss:export                                  # DBML to stdout
+php artisan truss:export --format=json                    # dbml, json, csv, markdown, mermaid, llm, or html
+php artisan truss:export --format=dbml --output=docs/schema.dbml
+php artisan truss:export --tables=orders,order_lines      # only these (config exclusions still apply)
+php artisan truss:export --connection=mysql --exclude=telemetry
+```
+
+Output goes to stdout by default so it pipes cleanly; `--output` writes a file. The output is deterministic: the same schema always produces the same bytes, whatever order the database reports its tables in. That is what makes the CI drift-check reliable:
+
+```bash
+# Fail the build if the committed schema file is out of date
+php artisan truss:export --format=dbml --output=docs/schema.dbml --check
+```
+
+`--check` regenerates the export, compares it against `--output`, writes nothing, and exits non-zero when they differ, so a migration that changes the schema without refreshing the committed file fails the build. Exit codes: `0` written or up to date, `1` `--check` found drift, `2` a usage or runtime error (unknown format, unwritable path, an unmanaged connection, `--check` without `--output`, or no tables matched the filters). Add `--fresh` to rebuild the cached snapshot before exporting.
+
+Config `excluded_tables` always wins over `--tables`, so the export never exposes a table the dashboard hides. Structure only: it reads the same cached snapshot the diagram uses and never queries row data.
+
+### The whole diagram as one file
+
+`--format=html` writes the dashboard itself: the diagram, the filter, the focus picker, zoom and pan, in a single file that opens by double-clicking it. No server, no network, no database, and the person opening it does not need Truss installed.
+
+```bash
+php artisan truss:export --format=html --output=schema.html
+php artisan truss:export --format=html --mermaid=cdn --output=schema.html   # small file, needs a network
+```
+
+`--output` is required for this format. The default file is around 3.6 MB because it carries its own stylesheet, fonts and a copy of Mermaid, and that is not something to discover in a terminal or a CI log. `--mermaid=cdn` trades the offline guarantee for a file small enough to attach anywhere: it loads Mermaid from `truss.diagram.mermaid_url` if you have set it, or from a CDN.
+
+It is structure only, like every other format. Worth saying once, though: the file contains your table names, column names, types, defaults and comments, so committing one puts your schema into a pull request diff, where it outlives the branch. That is usually the point. Decide it deliberately.
+
+`--check` works with it, and the embedded snapshot deliberately leaves out the generated-at timestamp and the diff so a committed file does not report drift on a day when nothing changed. The doctor findings are included, so a Truss upgrade that changes a rule can move the file.
+
+### Truss as AI context
+
+The same export doubles as grounding context for a coding agent: hand it your real, live structure so it stops inventing columns. Three flags make the output worth pasting or piping into Claude Code, Cursor, or any agent:
+
+```bash
+php artisan truss:export --format=llm                     # a dense, token-trimmed plaintext format
+php artisan truss:export --compact                        # drop defaults and non-unique indexes
+php artisan truss:export --focus=orders --depth=1         # one table and its FK neighbourhood
+```
+
+**Annotations** add the business meaning a type cannot: that `status = 1` means paid, that a table is deprecated. Declare them in `config/truss.php` under `annotations` (per-table, per-column, and global notes), or read them from native database comments by keeping `'database'` in `annotations.source`. They render into every text format and are stripped with `--no-annotations`.
+
+This stays structure only. Native comments are part of the `CREATE TABLE` definition, not row content (the same boundary as column defaults), and no export, in any format or flag combination, ever contains row data. A schema is not a semantic layer: Truss says what exists, not what the business means beyond the annotations you write.
+
+The same pipeline is available programmatically through the `Truss` facade, so you can build context in your own code, tooling, or tests without shelling out to the command:
+
+```php
+use AlbertoArena\Truss\Facades\Truss;
+
+$dbml = Truss::snapshot()
+    ->only(['orders', 'order_lines'])
+    ->focus('orders', depth: 1)
+    ->compact()
+    ->toDbml();
+```
+
+The builder is immutable (each filter returns a new instance, so a base builder is safe to share) and offers `only()`, `except()`, `focus()`, `compact()`, `withoutAnnotations()`, `fresh()`, and `connection()`, plus a terminal per format (`toDbml()`, `toJson()`, `toCsv()`, `toMarkdown()`, `toMermaid()`, `toLlm()`, `toArray()`). It produces exactly the same bytes as `truss:export` for the same filters, and honours the same `excluded_tables` and managed-connection safeguards.
+
+The dashboard's structural downloads (DBML, Markdown, JSON, CSV) are served by the same pipeline over a gated `GET {prefix}/export/{format}` route (behind the `viewTruss` gate), which accepts the same filters as query parameters (`only`, `except`, `focus`, `depth`, `compact`, `connection`). The command, the facade, and the dashboard therefore share one source of truth. PNG and SVG stay in the browser (they are rendered from the live diagram).
+
+### Building your own view
+
+If you are rendering the structure somewhere Truss's own page cannot go (an admin panel, a Livewire component, an internal tool), `Truss::payload()` returns exactly what the dashboard runs on, without an HTTP request:
+
+```php
+use AlbertoArena\Truss\Facades\Truss;
+
+$payload = Truss::payload();              // the app's default connection
+$payload = Truss::payload('reporting');   // or a specific managed one
+```
+
+You get the same array `GET {prefix}/api/schema` serves: the cached snapshot with `excluded_tables` already filtered out, the structural `diff` against the recorded baseline, the embedded `doctor` report, an `excluded.count` of how many tables the exclusion list removed (a count, never the names, and always present even at zero; with `reveal_excluded` on, those tables are present too, each flagged `"excluded": true` and left for the client to draw or not), and the `cache_unavailable` / `diff_unavailable` flags when a subsystem was not reachable. Asking for a connection Truss does not manage throws an `InvalidArgumentException` (the route answers the same case with a 404).
+
+Two things it deliberately does not do. It never returns row data, like everything else here. And it does not consult the `viewTruss` gate: authorization belongs to whatever exposes the data, so a page of your own must run its own check. Truss's route does that in middleware, which also honours `truss.enabled` and leaves `local` open, and a caller that wants the dashboard's behaviour should reproduce all of it rather than only the gate.
+
+To render that payload with Truss's own diagram, embed it in your page and the frontend will use it instead of fetching:
+
+```blade
+<div id="truss-app" data-type-labels="native" data-focus-depth="1">
+    <script type="application/json" data-truss-payload>@json(Truss::payload())</script>
+    {{-- the same toolbar, banner and viewport markup the dashboard uses --}}
+</div>
+```
+
+With a payload embedded there is no request to `{prefix}/api/schema` at all, and no schema endpoint is needed. Filter, focus and the type-label toggle still run client-side against what you handed it, so the diagram stays interactive rather than becoming a picture. A `<script type="application/json">` block rather than an attribute, because a schema is large and the browser never executes one, so this stays safe under the same strict CSP the package is built for.
+
+The embedded payload is read once, on first load. A connection switcher on a page of your own is yours to handle, since only your page can produce the other connection's payload.
+
+### MCP server
+
+For coding agents that speak the Model Context Protocol (Claude Code, Cursor, and others), Truss ships an optional read-only, structure-only MCP server, so the agent queries your current schema on demand instead of working from a paste that goes stale. It is opt-in and adds no required dependency:
+
+```bash
+composer require laravel/mcp
+php artisan mcp:start truss
+```
+
+Point your MCP client at that command (local stdio). For Claude Code or Cursor:
+
+```json
+{
+  "mcpServers": {
+    "truss": { "command": "php", "args": ["artisan", "mcp:start", "truss"] }
+  }
+}
+```
+
+The server exposes five tools and one resource, all read-only and structure-only:
+
+- `list_tables`: the tables, each with a one-line structural summary.
+- `describe_table`: one table's columns, keys, indexes, foreign keys, and annotations.
+- `get_schema`: the whole structure in any format (`dbml`, `json`, `csv`, `markdown`, `mermaid`, `llm`), optionally compact or limited to some tables.
+- `focus_table`: a table and its foreign-key neighbourhood.
+- `get_structural_review`: the deterministic `truss:doctor` findings.
+- Resource `truss://schema`: the whole structure as one compact document.
+
+Every tool answers with structure only, never data, and honours the same `excluded_tables` and managed-connection safeguards as the rest of Truss. It requires Laravel 12.41.1 or newer (or Laravel 13); Truss's own minimum is unaffected. Set `truss.mcp.enabled` to `false` to turn it off. A note on safety: if you pair a schema like this with a tool that executes generated SQL, that tool needs its own read-only connection and validation; Truss produces context, it never runs a query for you.
+
+### Laravel Boost
+
+If your project uses [Laravel Boost](https://github.com/laravel/boost), Truss ships guidelines and a skill that Boost finds on its own, so an agent set up through Boost knows Truss is installed and reaches for your real schema. There is no MCP server to wire up by hand for this path.
+
+One step, and Boost prompts you for it:
+
+```bash
+php artisan boost:install
+```
+
+Tick **`albertoarena/laravel-truss (guidelines, skills)`** in the third-party list. Nothing third-party is selected by default, so this is your call, not something Truss imposes on your agent's context. Boost remembers the choice for later `boost:update` runs.
+
+You get two things. The **guideline** is short and always in context: what Truss is, the commands that ground a task in the real structure, and the structure-only boundary. The **skill** is longer and loaded only when a task is actually about the database: the workflow of reading the structure, checking it with `truss:doctor`, making the change, then confirming it with `truss:diff`.
+
+To turn either off later, in your own `config/boost.php` (Boost does not publish that file, so create it if you have not already, and note the two lists take different kinds of key):
+
+```php
+'guidelines' => ['exclude' => ['albertoarena/laravel-truss/truss']],
+'skills' => ['exclude' => ['truss-schema']],
+```
+
+This adds nothing to your dependencies: the shipped files are inert Markdown, and Truss is not aware of Boost at runtime. If Boost is not installed, nothing reads them and nothing changes.
+
+### Three ways an agent reaches your schema
+
+They are additive, and nobody has to choose just one:
+
+| Path | Best for | Setup |
+| --- | --- | --- |
+| **MCP server** | The richest surface: five tools and a resource, queried on demand, always current | `composer require laravel/mcp`, then point your client at `php artisan mcp:start truss` |
+| **Laravel Boost** | The lowest friction if you already use Boost, across every agent Boost configures | `php artisan boost:install`, tick Truss |
+| **`truss:export`** | CI, scripts, and any CLI-capable agent; no optional dependency at all | None, it ships with Truss |
+
+Boost cannot install or register the Truss MCP server for you (Boost writes only its own MCP entries), so the two paths stay independent. All three are read-only and structure only.
+
+## Theming
+
+Truss ships a light and dark "blueprint" theme. To match the app it is embedded in, redefine its colours and fonts from config under `truss.theme`. Everything is optional: you set a few semantic knobs and the rest stay on the default, so a handful of values re-skins the whole dashboard (chrome and diagram) in both light and dark.
+
+Prefer to design it visually? The **[theme builder](https://trussphp.com/theme-builder/)** lets you dial in colours and fonts against a live dashboard preview and copy the config block straight into `config/truss.php`.
+
+If you have not published the config yet (Truss works fine without it), publish it first with `php artisan vendor:publish --tag=truss-config`, then edit the `theme` block:
+
+```php
+// config/truss.php
+'theme' => [
+    'fonts' => [
+        'sans' => 'Inter, system-ui, sans-serif',
+    ],
+    'colors' => [
+        'light' => [
+            'accent' => '#3730a3',
+            'background' => '#ffffff',
+        ],
+        'dark' => [
+            'accent' => '#a5b4fc',
+            'background' => '#0b1020',
+        ],
+    ],
+],
+```
+
+The colour knobs are `accent`, `accent-secondary`, `background`, `surface`, `surface-alt`, `text`, `muted`, and `border`; each maps onto the tokens it paints (`accent`, for instance, covers headings, primary-key badges, entity borders, and the focus ring). Some tokens are derived rather than painted flat: the row hairlines inside a table are a translucent tint of `border`, and the background grid a faint tint of `accent`, so a themed diagram keeps its visual hierarchy instead of going uniform. Set a knob under both `light` and `dark` to theme both modes, or omit `dark` to theme light only. Colours accept hex, `rgb()` / `hsl()`, or a CSS colour keyword; fonts are family names only, so name a font your app already loads or a system font (Truss serves no font files here).
+
+The overrides are delivered as a same-origin stylesheet, so a strict Content-Security-Policy still needs only `style-src 'self'` (no inline styles), and a default install with no custom theme makes no extra request. Each value is validated before it is emitted, so an invalid value is ignored and falls back to the default rather than breaking the sheet. Contrast is yours to check: a custom palette can fail accessibility, so verify both modes against WCAG AA.
+
+## Storage
+
+Truss keeps its schema snapshot in the cache, which is derived and disposable. The one thing it writes to disk is the **schema-diff baseline**: a structure-only JSON file (never row data) recorded after each migration so the diff can show what changed. It lives at `truss/baselines/{connection}.json` on the disk set by `truss.diff.disk` (`local` by default, deliberately not your application's default disk, since this is derived tooling state rather than application data), is safe to delete, and is worth gitignoring alongside `storage/`. If that disk is unreadable, the diff is simply unavailable: the diagram, the doctor, and the exports are untouched. To turn the feature off entirely so nothing is written to disk, set `TRUSS_DIFF_ENABLED=false` (or `truss.diff.enabled` to `false`).
+
+A cache store Truss cannot reach costs speed, never correctness. If the store is unusable (`CACHE_STORE=database` before the `cache` table exists, an unreachable Redis), the structure is read live instead of from the cache and the dashboard says so, the commands print a notice and still work, and `php artisan migrate` is never failed by Truss. `truss:rebuild` is the one command that reports a failed write with a non-zero exit, because storing the snapshot is all it does.
+
+## Security
+
+Truss exposes structure only and never queries row data. Access is protected by the fixed `viewTruss` gate. If you discover a security issue, please email hello@albertoarena.it rather than opening a public issue.
+
+## Related packages
+
+Using Filament? [albertoarena/filament-truss](https://github.com/albertoarena/filament-truss) puts this diagram inside your admin, as a page rather than a frame around the dashboard. It is built from the panel's own components and takes the panel's own theme, so a custom panel needs no configuration. Access follows Truss, not the panel: `truss.enabled` first, then the `viewTruss` gate outside `local`, so being let into the admin is not on its own permission to read the structure. The guide is at [trussphp.com/filament](https://trussphp.com/filament/?utm_source=github&utm_medium=readme&utm_campaign=filament-truss).
+
+## Contributing
+
+Contributions are welcome. Feel free to fork, improve, and open a pull request. Forking to contribute needs no permission and keeps this project's name: [TRADEMARK.md](TRADEMARK.md) is about publishing your own distribution, not about pull requests.
+
+## Support
+
+Laravel Truss is free and open source. If it has saved you time, you can support its ongoing maintenance and new features with a coffee:
+
+**[ko-fi.com/albertoarena](https://ko-fi.com/albertoarena)**
+
+Starring the repo and sharing it help just as much.
+
+## 📬 Stay updated
+
+Subscribe and get my free Spatie Event Sourcing cheat sheet (printable PDF), plus practical notes on Laravel and AI-assisted development, roughly once a month. No spam.
+
+**[Get the cheat sheet →](https://albertoarena.it/subscribe/?utm_source=github&utm_medium=readme&utm_campaign=newsletter&utm_content=laravel-truss)**
+
+## License
+
+The MIT License (MIT). See [LICENSE](LICENSE).
+
+The licence covers the code. The project name, the logo and the tagline are not part of it, and [TRADEMARK.md](TRADEMARK.md) says what you can do with them. Most things need no permission, including writing about Truss, naming an add-on package, and contributing.

@@ -1,0 +1,488 @@
+# MarkdownDB
+
+[![](https://badgen.net/npm/v/mddb)](https://www.npmjs.com/package/mddb)
+[![](https://dcbadge.vercel.app/api/server/xfFDMPU9dC)](https://discord.gg/xfFDMPU9dC)
+
+MarkdownDB is a javascript library that turns markdown files into structured queryable databaase (SQL-based and simple JSON). It helps you build rich markdown-powered sites easily and reliably. Specifically it:
+
+- Parses your markdown files to extract structured data (frontmatter, tags etc) and builds a queryable index either in JSON files or a local database (SQLite, MySQL, or PostgreSQL)
+- Provides a lightweight javascript API for querying the index and using the data files into your application
+
+## Database Support
+
+MarkdownDB supports multiple database backends through [Knex.js](https://knexjs.org/):
+
+- **SQLite** (default) - Perfect for local development and small to medium sites. No additional setup required.
+- **MySQL** - Great for larger sites and when you need a separate database server. Requires `mysql2` package.
+- **PostgreSQL** - Enterprise-grade database with advanced features. Requires `pg` package.
+
+All databases provide the same API and features, so you can easily switch between them based on your needs.
+
+## Features and Roadmap
+
+- [x] **Index a folder of files** - create a db index given a folder of markdown and other files
+  - [x] **Command line tool for indexing**: Create a markdowndb (index) on the command line **v0.1**
+  - [x] SQL(ite) index **v0.2**
+  - [x] **MySQL and PostgreSQL support** - Use MySQL or PostgreSQL as your database backend
+  - [x] JSON index **v0.6**
+  - [ ] BONUS Index multiple folders (with support for configuring e.g. prefixing in some way e.g. i have all my blog files in this separate folder over here)
+  - [x] Configuration for Including/Excluding Files in the folder
+
+Extract structured data like:
+
+- [x] **Frontmatter metadata**: Extract markdown frontmatter and add in a metadata field
+  - [ ] deal with casting types e.g. string, number so that we can query in useful ways e.g. find me all blog posts before date X
+- [x] **Tags**: Extracts tags in markdown pages
+  - [x] Extract tags in frontmatter **v0.1**
+  - [x] Extract tags in body like `#abc` **v0.5**
+- [x] **Links**: links between files like `[hello](abc.md)` or wikilink style `[[xyz]]` so we can compute backlinks or deadlinks etc (see #4) **v0.2**
+- [x] **Tasks**: extract tasks like this `- [ ] this is a task` (See obsidian data view) **v0.4**
+
+Data enhancement and validation
+
+- [x] **Computed fields**: add new metadata properties based on existing metadata e.g. a slug field computed from title field; or, adding a title based on the first h1 heading in a doc; or, a type field based on the folder of the file (e.g. these are blog posts). cf https://www.contentlayer.dev/docs/reference/source-files/define-document-type#computedfields.
+- [ ] 🚧 **Data validation and Document Types**: validate metadata against a schema/type so that I know the data in the database is "valid" #55
+  - [ ] BYOT (bring your own types): i want to create my own types ... so that when i get an object out it is cast to the right typescript type
+
+## Quick start
+
+### Have a folder of markdown content
+
+For example, your blog posts. Each file can have a YAML frontmatter header with metadata like title, date, tags, etc.
+
+```md
+---
+title: My first blog post
+date: 2021-01-01
+tags: [a, b, c]
+author: John Doe
+---
+
+# My first blog post
+
+This is my first blog post.
+I'm using MarkdownDB to manage my blog posts.
+```
+
+### Index the files with MarkdownDB
+
+Use the npm `mddb` package to index Markdown files into an SQLite database. This will create a `markdown.db` file in the current directory. You can preview it with any SQLite viewer, e.g. https://sqlitebrowser.org/.
+
+```bash
+# npx mddb <path-to-folder-with-your-md-files>
+npx mddb ./blog
+```
+
+You can also index multiple directories at once:
+
+```bash
+# Index multiple directories into a single database
+npx mddb ./blog ./docs ./notes
+```
+
+If you pass a file path, the CLI prints the parsed JSON to stdout:
+
+```bash
+npx mddb ./blog/post.md
+```
+
+Non-markdown extensions still parse, but the CLI warns: "Is this a markdown file? Expected .md, .markdown, or .mdx."
+
+### Watching for Changes
+
+To monitor files for changes and update the database accordingly, simply add the `--watch` flag to the command:
+```bash
+npx mddb ./blog --watch
+```
+This command will continuously watch for any modifications in the specified folder (`./blog`), automatically rebuilding the database whenever a change is detected.
+
+### Execute a Script with MarkdownDB APIs
+
+Run a JS module that can call the MarkdownDB APIs directly.  Arguments after the script path are passed through.
+Internally, `--exec` uses `node --import` to set up module resolution so `mddb` is available.
+
+```bash
+npx mddb --exec ./scripts/report.mjs --flag value
+```
+
+If you need to wait for the database file to settle, pass `--wait-db-ms <ms>` before the script path.  The CLI waits until `markdown.db` has been idle for that many milliseconds.  If the file keeps updating, it waits indefinitely.
+
+```bash
+npx mddb --exec --wait-db-ms 500 ./scripts/report.mjs
+```
+
+You can also pass a module over stdin:
+
+```bash
+cat ./scripts/report.mjs | npx mddb --exec -
+```
+
+### Query your files with SQL...
+
+E.g. get all the files with with tag `a`.
+
+```sql
+SELECT files.*
+FROM files
+INNER JOIN file_tags ON files._id = file_tags.file
+WHERE file_tags.tag = 'a'
+```
+
+### ...or using MarkdownDB Node.js API in a framework of your choice!
+
+Use our Node API to query your data for your blog, wiki, docs, digital garden, or anything you want!
+
+Install `mddb` package in your project:
+
+```bash
+npm install mddb
+```
+
+Now, once the data is in the database, you can add the following script to your project (e.g. in `/lib` folder). It will allow you to establish a single connection to the database and use it across you app.
+
+#### SQLite (default)
+
+```js
+// @/lib/mddb.mjs
+import { MarkdownDB } from "mddb";
+
+const dbPath = "markdown.db";
+
+const client = new MarkdownDB({
+  client: "sqlite3",
+  connection: {
+    filename: dbPath,
+  },
+});
+
+const clientPromise = client.init();
+
+export default clientPromise;
+```
+
+#### MySQL
+
+First, install the MySQL driver:
+
+```bash
+npm install mysql2
+```
+
+Then configure MarkdownDB to use MySQL:
+
+```js
+// @/lib/mddb.mjs
+import { MarkdownDB } from "mddb";
+
+const client = new MarkdownDB({
+  client: "mysql2",
+  connection: {
+    host: "localhost",
+    port: 3306,
+    user: "your_username",
+    password: "your_password",
+    database: "your_database",
+  },
+});
+
+const clientPromise = client.init();
+
+export default clientPromise;
+```
+
+#### PostgreSQL
+
+First, install the PostgreSQL driver:
+
+```bash
+npm install pg
+```
+
+Then configure MarkdownDB to use PostgreSQL:
+
+```js
+// @/lib/mddb.mjs
+import { MarkdownDB } from "mddb";
+
+const client = new MarkdownDB({
+  client: "pg",
+  connection: {
+    host: "localhost",
+    port: 5432,
+    user: "your_username",
+    password: "your_password",
+    database: "your_database",
+  },
+});
+
+const clientPromise = client.init();
+
+export default clientPromise;
+```
+
+Now, you can import it across your project to query the database, e.g.:
+
+```js
+import clientPromise from "@/lib/mddb";
+
+const mddb = await clientPromise;
+const blogs = await mddb.getFiles({
+  folder: "blog",
+  extensions: ["md", "mdx"],
+});
+```
+
+
+### Process a single file or stream
+
+Use `processMarkdown` when you want to parse one markdown source without indexing a folder (e.g. in a Worker):
+
+```js
+import { processMarkdown } from "mddb";
+
+const source = "# Hello";
+const fileInfo = await processMarkdown(source, {
+  filePath: "posts/hello.md",
+  rootFolder: "posts",
+  pathToUrlResolver: (inputPath) => inputPath,
+});
+```
+
+You can pass a Node.js `Readable` stream or an `ArrayBuffer` as input. If you omit folder context, backlinks and folder-wide link resolution are not available.
+
+## Computed Fields
+
+This feature helps you define functions that compute additional fields you want to include.
+
+### Step 1: Define the Computed Field Function
+
+Next, define a function that computes the additional field you want to include. In this example, we have a function named `addTitle` that extracts the title from the first heading in the AST (Abstract Syntax Tree) of a Markdown file.
+
+```javascript
+const addTitle = (fileInfo, ast) => {
+  // Find the first header node in the AST
+  const headerNode = ast.children.find((node) => node.type === "heading");
+
+  // Extract the text content from the header node
+  const title = headerNode
+    ? headerNode.children.map((child) => child.value).join("")
+    : "";
+
+  // Add the title property to the fileInfo
+  fileInfo.title = title;
+};
+```
+
+### Step 2: Indexing the Folder with Computed Fields
+
+Now, use the `client.indexFolder` method to scan and index the folder containing your Markdown files. Pass the `addTitle` function in the `computedFields` option array to include the computed title in the database.
+
+```javascript
+client.indexFolder(folderPath: "PATH_TO_FOLDER", customConfig: { computedFields: [addTitle] });
+```
+
+## Configuring `markdowndb.config.js`
+
+- Implement computed fields to dynamically calculate values based on specified logic or dependencies.
+- Specify the patterns for including or excluding files in MarkdownDB.
+
+### Example Configuration
+
+Here's an example `markdowndb.config.js` with custom configurations:
+
+```javascript
+export default {
+  computedFields: [
+    (fileInfo, ast) => {
+      // Your custom logic here
+    },
+  ],
+  include: ["docs/**/*.md"], // Include only files matching this pattern
+  exclude: ["drafts/**/*.md"], // Exclude those files matching this pattern
+};
+```
+
+### (Optional) Index your files in a `prebuild` script
+
+```json
+{
+  "name": "my-mddb-app",
+  "scripts": {
+    ...
+    "mddb": "mddb <path-to-your-content-folder>",
+    "prebuild": "npm run mddb"
+  },
+  ...
+}
+
+```
+
+### With Next.js project
+
+For example, in your Next.js project's pages, you could do:
+
+```js
+// @/pages/blog/index.js
+import React from "react";
+import clientPromise from "@/lib/mddb.mjs";
+
+export default function Blog({ blogs }) {
+  return (
+    <div>
+      <h1>Blog</h1>
+      <ul>
+        {blogs.map((blog) => (
+          <li key={blog.id}>
+            <a href={blog.url_path}>{blog.title}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export const getStaticProps = async () => {
+  const mddb = await clientPromise;
+  // get all files that are not marked as draft in the frontmatter
+  const blogFiles = await mddb.getFiles({
+    frontmatter: {
+      draft: false,
+    },
+  });
+
+  const blogsList = blogFiles.map(({ metadata, url_path }) => ({
+    ...metadata,
+    url_path,
+  }));
+
+  return {
+    props: {
+      blogs: blogsList,
+    },
+  };
+};
+```
+
+## API reference
+
+### Queries
+
+**Retrieve a file by URL path:**
+
+```ts
+mddb.getFileByUrl("urlPath");
+```
+
+Currently used file path -> url resolver function:
+
+```ts
+const defaultFilePathToUrl = (filePath: string) => {
+  let url = filePath
+    .replace(/\.(mdx|md)/, "") // remove file extension
+    .replace(/\\/g, "/") // replace windows backslash with forward slash
+    .replace(/(\/)?index$/, ""); // remove index at the end for index.md files
+  url = url.length > 0 ? url : "/"; // for home page
+  return encodeURI(url);
+};
+```
+
+🚧 The resolver function will be configurable in the future.
+
+**Retrieve a file by it's database ID:**
+
+```ts
+mddb.getFileByUrl("fileID");
+```
+
+**Get all indexed files**:
+
+```ts
+mddb.getFiles();
+```
+
+**By file types**:
+
+You can specify `type` of the document in its frontmatter. You can then get all the files of this type, e.g. all `blog` type documents.
+
+```ts
+mddb.getFiles({ filetypes: ["blog", "article"] }); // files of either blog or article type
+```
+
+**By tags:**
+
+```ts
+mddb.getFiles({ tags: ["tag1", "tag2"] }); // files tagged with either tag1 or tag2
+```
+
+**By file extensions:**
+
+```ts
+mddb.getFiles({ extensions: ["mdx", "md"] }); // all md and mdx files
+```
+
+**By frontmatter fields:**
+
+You can query by multiple frontmatter fields at once.
+
+At them moment, only exact matches are supported. However, `false` values do not need to be set explicitly. I.e. if you set `draft: true` on some blog posts and want to get all the posts that are **not drafts**, you don't have to explicitly set `draft: false` on them.
+
+```ts
+mddb.getFiles({
+  frontmatter: {
+    key1: "value1",
+    key2: true,
+    key3: 123,
+    key4: ["a", "b", "c"], // this will match exactly ["a", "b", "c"]
+  },
+});
+```
+
+**By folder:**
+
+Get all files in a subfolder (path relative to your content folder).
+
+```ts
+mddb.getFiles({ folder: "path" });
+```
+
+**Combined conditions:**
+
+```ts
+mddb.getFiles({ tags: ["tag1"], filetypes: ["blog"], extensions: ["md"] });
+```
+
+**Retrieve all tags:**
+
+```ts
+mddb.getTags();
+```
+
+**Get links (forward or backward) related to a file:**
+
+```ts
+mddb.getLinks({ fileId: "ID", direction: "forward" });
+```
+
+## Architecture
+
+```mermaid
+graph TD
+
+markdown --remark-parse--> st[syntax tree]
+st --extract features--> jsobj1[TS Object eg. File plus Metadata plus Tags plus Links]
+jsobj1 --computing--> jsobj[TS Objects]
+jsobj --convert to sql--> sqlite[SQLite markdown.db]
+jsobj --write to disk--> json[JSON on disk in .markdowndb folder]
+jsobj --tests--> testoutput[Test results]
+```
+
+## Related Efforts
+
+Some related efforts:
+
+- https://github.com/sdorra/content-collections ⭐345 as of 2024-07-28
+- https://github.com/zce/velite ➕2024-06-27 ⭐327
+
+![image](https://github.com/datopian/markdowndb/assets/180658/5d94b5a2-163c-4b67-b9d7-78f1d246829d)
+
+![image](https://github.com/user-attachments/assets/88308e18-2426-4b8b-abe0-d7394de7e5a4)

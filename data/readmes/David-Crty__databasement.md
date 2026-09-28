@@ -1,0 +1,141 @@
+<p align="center">
+  <a href="https://github.com/David-Crty/databasement">
+    <img src="docs/static/img/banner-v2.png" alt="Databasement Banner" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://app.codecov.io/gh/David-Crty/databasement">
+    <img src="https://codecov.io/gh/David-Crty/databasement/graph/badge.svg" alt="Code Coverage" />
+  </a>
+  <a href="https://github.com/David-Crty/databasement/actions">
+    <img src="https://github.com/David-Crty/databasement/actions/workflows/tests.yml/badge.svg" alt="CI Status" />
+  </a>
+  <a href="https://artifacthub.io/packages/helm/databasement/databasement">
+    <img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/databasement" alt="Artifact Hub" />
+  </a>
+  <a href="https://hub.docker.com/r/davidcrty/databasement">
+    <img src="https://img.shields.io/docker/pulls/davidcrty/databasement" alt="Docker Pulls" />
+  </a>
+  <a href="https://snyk.io/test/github/David-Crty/databasement">
+    <img src="https://snyk.io/test/github/David-Crty/databasement/badge.svg" alt="Known Vulnerabilities" />
+  </a>
+</p>
+
+<p align="center">
+  A modern, self-hosted database backup management application for MySQL, PostgreSQL, MariaDB, Microsoft SQL Server, MongoDB, SQLite, Firebird, and Redis.
+</p>
+
+<p align="center">
+  <a href="https://databasement-demo.crty.dev/"><strong>Live Demo</strong></a> ·
+  <a href="https://david-crty.github.io/databasement/">Documentation</a> ·
+  <a href="https://david-crty.github.io/databasement/llms.txt">llms.txt</a> ·
+  <a href="https://github.com/David-Crty/databasement/issues">Report Bug or Request Feature</a>
+</p>
+
+---
+
+## Features
+
+- **Multi-database support** - Manage MySQL, PostgreSQL, MariaDB, Microsoft SQL Server, MongoDB, SQLite, Firebird, and Redis/Valkey servers from a single interface
+- **SSH tunnel support** - Connect to databases in private networks through a bastion/jump server with password or key-based authentication
+- **Remote agents** - Back up databases in firewalled or isolated networks with no inbound port: a lightweight agent connects out over HTTPS, dumps locally, and uploads to your storage
+- **Automated backups** - Schedule recurring backups on daily or weekly intervals. Flexible retention policies: simple time-based (days) or GFS (grandfather-father-son)
+- **Multiple compression options** - gzip, zstd (20-40% better compression), or encrypted (AES-256 for sensitive data)
+- **Cross-server restore** - Restore snapshots from production to staging, or between any compatible servers
+- **Scheduled restores** - Refresh a target database on a recurring schedule (e.g. nightly prod → staging) by replaying the latest completed snapshot
+- **Built-in data browser** - Open Adminer in-app to inspect MySQL, PostgreSQL, and SQLite servers (admin-enabled, role-gated)
+- **Flexible storage** - Store backups locally, on S3-compatible storage (AWS S3, MinIO, etc.), Azure Blob Storage, Samba/SMB shares, or remote servers via SFTP/FTP
+- **Real-time monitoring** - Track backup and restore progress with detailed job logs
+- **Failure notifications** - Get alerted via Email, Slack, Discord, Telegram, Pushover, Gotify, or Webhook when jobs fail
+- **Team ready** - Multi-tenant organizations with isolated workspaces, role-based access control, OAuth/SSO login (Google, GitHub, GitLab, OpenID Connect), and optional two-factor authentication
+- **Automation** - REST API and MCP server for scripting, CI/CD, and AI assistant integration
+- **Simple deployment** - Single Docker container with built-in web server, queue worker, and scheduler
+
+> **Try it out!** Explore the [live demo](https://databasement-demo.crty.dev/) to see Databasement in action before installing.
+
+## Self-Hosting
+
+Databasement is designed to be self-hosted. We provide several deployment options:
+
+| Method                | Description                                  | Guide                                                                                |
+|-----------------------|----------------------------------------------|--------------------------------------------------------------------------------------|
+| **Docker**            | Single container deployment                  | [View Guide](https://david-crty.github.io/databasement/self-hosting/docker)          |
+| **Docker Compose**    | Multi-container setup with external database | [View Guide](https://david-crty.github.io/databasement/self-hosting/docker-compose)  |
+| **Kubernetes + Helm** | For Kubernetes clusters                      | [View Guide](https://david-crty.github.io/databasement/self-hosting/kubernetes-helm) |
+| **Native Ubuntu**     | Traditional installation without Docker      | [View Guide](https://david-crty.github.io/databasement/self-hosting/native-ubuntu)   |
+
+### Quick Start
+
+```bash
+# Run the container
+docker run -d \
+  --name databasement \
+  -p 2226:2226 \
+  -e DB_CONNECTION=sqlite \
+  -e DB_DATABASE=/data/database.sqlite \
+  -e ENABLE_QUEUE_WORKER=true \
+  -v ./databasement-data:/data \
+  davidcrty/databasement:1
+```
+
+Open http://localhost:2226 and create your first admin account.
+
+> **Note:** The container automatically handles volume permissions. You can use `PUID` and `PGID` environment variables to match your system's user/group IDs.
+
+For production deployments, see our [configuration guide](https://david-crty.github.io/databasement/self-hosting/configuration) for environment variables and best practices.
+
+## Supported Database Versions
+
+| Engine     | Supported Versions            | CLI Tool                     | Restore |
+|------------|-------------------------------|------------------------------|---------|
+| MySQL      | 5.5, 5.6, 5.7, 8.x, 9.x, 26.x | `mysqldump`                  | Yes     |
+| MariaDB    | 5.x, 10.x, 11.x, 12.x         | `mariadb-dump` / `mysqldump` | Yes     |
+| PostgreSQL | 12, 13, 14, 15, 16, 17, 18    | `pg_dump` v16 / v18          | Yes     |
+| SQL Server | 2017, 2019, 2022, Azure SQL   | `sqlpackage` (`.dacpac`)     | Yes     |
+| MongoDB    | 4.2, 4.4, 5.0, 6.0, 7.0, 8.0  | `mongodump` / `mongorestore` | Yes     |
+| SQLite     | 3.x                           | `sqlite3 .backup`            | Yes     |
+| Firebird   | 3.x, 4.x, 5.x                 | `gbak` v5                    | Yes     |
+| Redis      | 2.8+                          | `redis-cli --rdb`            | No      |
+| Valkey     | 7.2+                          | `redis-cli --rdb`            | No      |
+
+See the [Database Servers documentation](https://david-crty.github.io/databasement/user-guide/database-servers#supported-versions) for version-specific backup and restore details.
+
+## Automation
+
+Databasement can be managed programmatically through its **REST API** and **MCP server**, enabling integration with scripts, CI/CD pipelines, and AI assistants.
+
+- **REST API** - Full API for managing servers, backups, and restores. See the [API documentation](https://david-crty.github.io/databasement/user-guide/api).
+- **MCP Server** - Connect AI assistants (Claude Code, Cursor, VS Code Copilot, etc.) to manage backups through natural language. See the [MCP documentation](https://david-crty.github.io/databasement/user-guide/mcp).
+
+## Documentation
+
+Full documentation is available at [david-crty.github.io/databasement](https://david-crty.github.io/databasement/).
+
+For LLMs and AI assistants, the documentation is also published in the [llmstxt.org](https://llmstxt.org/) format:
+- [llms.txt](https://david-crty.github.io/databasement/llms.txt) — index of all documentation pages
+- [llms-full.txt](https://david-crty.github.io/databasement/llms-full.txt) — full documentation content in a single file
+
+## Issues & Feature Requests
+
+Found a bug? Please [open an issue](https://github.com/David-Crty/databasement/issues) with reproduction steps.
+
+Have an idea for a new feature? Start a [discussion](https://github.com/David-Crty/databasement/discussions) first so we can evaluate together whether it fits the project scope.
+
+## Contributing
+
+Contributions are welcome! Before submitting a pull request, please:
+
+1. Check existing issues and discussions to avoid duplicates
+2. For significant changes, open an issue first to discuss the approach
+3. Follow the [development guide](https://david-crty.github.io/databasement/contributing/development) for setup instructions
+
+Small fixes (typos, documentation improvements) can be submitted directly as PRs.
+
+## Security
+
+If you discover a security vulnerability, please report it responsibly. See [SECURITY.md](SECURITY.md) for details.
+
+## License
+
+Databasement is open-source software licensed under the [MIT License](LICENSE).

@@ -1,0 +1,75 @@
+= MySQL 学习笔记^Alpha^
+D瓜哥 <https://www.diguage.com/>
+v0.1.0, 2016-12-11
+
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+
+D瓜哥的 MySQL 学习笔记。
+
+Github 对 Asciidoctor 的支持不是特别完善，另外很多人可能没有处理 Asciidoc 的工具。所以，D瓜哥把该文档处理后发布出来了。查看该文档内容请看下面官网。
+
+*该笔记官网： https://notes.diguage.com/mysql/[^] 。*
+
+该笔记尚未完成，后续还会持续增加新内容。敬请关注！
+
+== 文档来源
+
+本文档可以看作是 D瓜哥 学习《高性能MySQL》时，做的读书笔记。为了让内容更丰富易懂，还参考了《MySQL技术内幕》和《数据库索引设计与优化》。
+
+本文档暂时只关注开发人员眼中的 MySQL。所以，内容暂时只覆盖数据库设计、索引及其数据结构和查询优化三块内容。其他内容视情况再做补充。
+
+== 友情支持
+
+如果您觉得这个笔记对您有所帮助，看在D瓜哥码这么多字的辛苦上，请友情支持一下，D瓜哥感激不尽，😜
+
+[cols="2*^",frame=none]
+|===
+| image:assets/images/alipay.png[title="支付宝", alt="支付宝", width="85%", align="center"]
+| image:assets/images/wxpay.jpg[title="微信", alt="微信", width="85%", align="center"]
+|===
+
+有些打赏的朋友希望可以加个好友，欢迎关注D瓜哥的微信公众号，这样就可以通过公众号的回复直接给我发信息。
+
+image::assets/images/wx-jikerizhi.png[title="微信公众号：jikerizhi", alt="微信公众号：jikerizhi",width="98%",align="center"]
+
+TIP: **公众号的微信号是: jikerizhi**。__因为众所周知的原因，有时图片加载不出来。如果图片加载不出来可以直接通过搜索微信号来查找我的公众号。__
+
+== 亟需完善的内容
+
+. 事务的实现原理 -- OK
+. 分形树（抱歉，我还没搞懂）
+. 索引优化实践
+. 索引优化实际案例分析
+. 分布式数据库
+.. 分库分表
+.. NewSQL
+.. 分布式事务
+
+== 免责声明
+
+本文档绝大部分内容是针对 MySQL 5.5 的，随着 MySQL 的发展，部分的内容可能会过时。所以，如有错误之处，还请以相应版本的官方文档为准！
+
+本文档部分的内容可能会过时！
+
+本文档部分的内容可能会过时！
+
+本文档部分的内容可能会过时！
+
+参考使用时，还请格外注意！
+
+由于本文档造成的任何问题以及损失，D瓜哥本人概不负责！
+
+== 参考书籍
+
+更多参考资料，请查看文档最末尾的“参考资料”章节。这里只列出最重要的参考书籍。
+
+* https://book.douban.com/subject/23008813/[高性能MySQL^]
+* https://book.douban.com/subject/24708143/[MySQL技术内幕^]
+* https://book.douban.com/subject/26419771/[数据库索引设计与优化^]

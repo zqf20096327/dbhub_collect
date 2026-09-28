@@ -1,0 +1,132 @@
+### 基于SpringBoot + Vue在线电子书阅读平台.
+
+电子书在线阅读系统、数字图书平台、网络阅读服务平台
+
+#### 管理员功能模块介绍：
+> 创作中心：管理创作者入口，审核入驻申请与创作权限。我的书架：查看平台推荐或管理员收藏的优质书籍列表。系统公告：发布平台规则、活动通知或重要运营信息。作家管理：审核、编辑或封禁创作者账号及资质信息。书籍管理：审核、上下架全平台电子书，维护书目元数据。章节管理：监管书籍章节内容，处理违规或缺失章节。图书点赞：统计并分析用户对书籍的点赞行为数据。书籍评论：审核、管理用户发表的书评与互动内容。用户关注：监控读者与创作者之间的关注关系数据。会员订单：查看和管理用户购买会员服务的订单记录。会员价格：配置不同等级会员的定价与权益策略。主题模板：管理阅读界面的主题样式与UI模板配置。用户管理：维护读者账号信息，处理违规或异常账户。数据统计：汇总平台活跃度、收入、留存等核心运营指标。文章统计：分析书籍、章节的发布量、更新频率等数据。阅读排行：生成按阅读量、收藏数等维度的热门榜单。热门创作者：展示高活跃或高人气作者及其作品数据。
+
+#### 用户功能模块介绍：
+> 我的信息：查看和编辑个人资料、阅读偏好等账户信息。会员购买：选择会员类型并完成付费开通或续费操作。我的关注：查看已关注的创作者及他们的最新作品动态。我的评价：管理自己发布的书评、评分与互动记录。书籍点赞：对喜欢的电子书进行点赞表达支持。作品书库：浏览平台全部电子书，支持分类与搜索。支付成功：展示会员或付费内容购买成功的确认页面。
+
+#### 创作者功能模块介绍：
+> 我的信息：维护作者笔名、简介、头像等个人主页资料。我的书籍：管理自己创作的电子书，包括状态与封面设置。章节管理：上传、编辑、排序或删除书籍的各个章节内容。
+
+#### 安装环境
+
+JAVA 环境 
+
+Node.js环境 [https://nodejs.org/en/] 选择14.17
+
+Yarn 打开cmd， 输入npm install -g yarn !!!必须安装完毕nodejs
+
+Mysql 数据库 [https://blog.csdn.net/qq_40303031/article/details/88935262] 一定要把账户和密码记住
+
+redis
+
+Idea 编译器 [https://blog.csdn.net/weixin_44505194/article/details/104452880]
+
+WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
+
+#### 采用技术及功能
+
+后端：SpringBoot、MybatisPlus、MySQL、Redis、
+前端：Vue、Apex、Antd、Axios
+
+平台前端：vue(框架) + vuex(全局缓存) + rue-router(路由) + axios(请求插件) + apex(图表)  + antd-ui(ui组件)
+
+平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)
+
+开发环境：windows10 or windows7 ， vscode or webstorm ， idea + lambok
+
+
+> 管理员: 创作中心、我的书架、系统公告、作家管理、书籍管理、章节管理、图书点赞、书籍评论、用户关注、会员订单、会员价格、主题模板、用户管理、数据统计、文章统计、阅读排行、热门创作者
+
+> 用户: 我的信息、会员购买、我的关注、我的评价、书籍点赞、作品书库、支付成功
+
+> 创作者: 我的信息、我的书籍、章节管理
+
+
+
+#### 前台启动方式
+安装所需文件 yarn install 
+运行 yarn run dev
+
+#### 后端启动方式
+
+1.首先启动redis，进入redis目录终端。输入redis-server回车
+2.导入sql文件，修改数据库与redis连接配置
+3.idea中启动后端项目
+
+#### 默认后台账户密码
+[管理员]
+admin
+1234qwer
+
+[用户]
+fank
+1234qwer
+
+[创作者]
+sunxc
+1234qwer
+
+
+#### 项目截图
+
+|  |  |
+|---------------------|---------------------|
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107024013.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107308085.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107653495.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107287279.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107639764.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107257895.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107626035.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107241650.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107604210.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107168903.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107589213.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107125845.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107576392.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107086576.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107555852.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107072310.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107531675.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107058679.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107325629.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1732107044463.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/work/936e9baf53eb9a217af4f89c616dc19.png) |
+
+
+#### 演示视频
+
+暂无
+
+#### 获取方式
+
+Email: fan1ke2ke@gmail.com
+
+WeChat: `Storm_Berserker`
+
+`附带部署与讲解服务，因为要恰饭资源非免费，伸手党勿扰，谢谢理解😭`
+
+> 1.项目纯原创，不做二手贩子 2.一次购买终身有效 3.项目讲解持续到答辩结束 4.非常负责的答辩指导 5.**黑奴价格**
+
+> 项目部署调试不好包退！功能逻辑没讲明白包退！
+
+#### 其它资源
+
+[2025年-答辩顺利通过-客户评价🍜](https://berserker287.github.io/2025/06/18/2025%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
+
+[2024年-答辩顺利通过-客户评价👻](https://berserker287.github.io/2024/06/06/2024%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
+
+[2023年-答辩顺利通过-客户评价🐢](https://berserker287.github.io/2023/06/14/2023%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
+
+[2022年-答辩通过率100%-客户评价🐣](https://berserker287.github.io/2022/05/25/%E9%A1%B9%E7%9B%AE%E4%BA%A4%E6%98%93%E8%AE%B0%E5%BD%95/)
+
+[毕业答辩导师提问的高频问题](https://berserker287.github.io/2023/06/13/%E6%AF%95%E4%B8%9A%E7%AD%94%E8%BE%A9%E5%AF%BC%E5%B8%88%E6%8F%90%E9%97%AE%E7%9A%84%E9%AB%98%E9%A2%91%E9%97%AE%E9%A2%98/)
+
+[50个高频答辩问题-技术篇](https://berserker287.github.io/2023/06/13/50%E4%B8%AA%E9%AB%98%E9%A2%91%E7%AD%94%E8%BE%A9%E9%97%AE%E9%A2%98-%E6%8A%80%E6%9C%AF%E7%AF%87/)
+
+[计算机毕设答辩时都会问到哪些问题？](https://www.zhihu.com/question/31020988)
+
+[计算机专业毕业答辩小tips](https://zhuanlan.zhihu.com/p/145911029)
+
+
+#### 接JAVAWEB毕设，纯原创，价格公道，诚信第一
+
+`网站建设、小程序、H5、APP、各种系统 选题+开题报告+任务书+程序定制+安装调试+项目讲解+论文+答辩PPT`
+
+More info: [悲伤的橘子树](https://berserker287.github.io/)
+
+<p><img align="center" src="https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/%E5%90%88%E4%BD%9C%E7%89%A9%E6%96%99%E6%A0%B7%E5%BC%8F%20(3).png" alt="fankekeke" /></p>

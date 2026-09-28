@@ -22,7 +22,8 @@ tools/     sync_from_main.py（从主项目同步采集代码，防两份漂移�
 - `data/snapshot_YYYYMMDD/merged/all_projects.json` —— 历史快照（旧管道格式，
   2026-08-05 ～ 09-12，growth 计算双格式兼容）
 - `data/snapshot_YYYYMMDD/meta/` —— probe / run_summary
-- `data/readmes/`、`data/snapshot_*/parts/` —— **不入库**的工作区数据（见 .gitignore）
+- `data/readmes/` —— README 正文（**入库**；平均 7KB/仓，超 100KB 截断）
+- `data/snapshot_*/parts/` —— 不入库的中间数据（分通道原始结果，仅断点续采需要）
 
 ## 常用命令
 
@@ -47,10 +48,18 @@ python enrich/enrich.py --tier all
 python lib/merge_states.py --help
 ```
 
+## 自动采集（GitHub Actions，主采集器）
+
+`.github/workflows/collect.yml`：每晚北京 00:00 自动跑 **池采集（全量）→ README 增量
+（每月 1 号自动转月度校准）→ 富集（分层增量）**，数据直接 commit + push 回本仓库。
+用内置 `GITHUB_TOKEN`（独立 1000 次/时配额桶，不占用个人 PAT 的 5000/时），
+触线由 `--max-calls` 预算优雅收尾、次晚续采。也支持在 Actions 页面手动触发。
+
 ## 多机协作
 
-各机克隆本仓库 → 跑采集 → commit + push（服务器网络通畅，数据推送从服务器发）。
-token 放各自机器的 `.env`，永不入库。三机共用 token，注意配额抢占。
+- **本地/服务器**：以开发与数据消费为主（`git pull` 取数）。可以跑采集，但
+  **不要与 Actions 同晚跑同一任务**（state 文件双写会 git 冲突）；跑前先 `git pull --rebase`。
+- token 放各自机器的 `.env`（Actions 用 secrets，无需配置），永不入库。
 
 ## 代码同步
 

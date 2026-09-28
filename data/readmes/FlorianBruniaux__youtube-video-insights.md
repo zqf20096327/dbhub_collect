@@ -1,0 +1,1130 @@
+# yt-insights
+
+<table>
+  <tr>
+    <td width="64">
+      <a href="https://www.florian.bruniaux.com/about/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=youtube-video-insights"><img src="https://cc.bruniaux.com/author.png" width="56" height="56" alt="Florian Bruniaux" /></a>
+    </td>
+    <td>
+      <strong><a href="https://www.florian.bruniaux.com/about/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=youtube-video-insights">Florian BRUNIAUX</a></strong> &middot; AI Founding Engineer @ <a href="https://methode-aristote.fr/">Méthode Aristote</a><br />
+      13 years from developer to CTO / VP Eng &middot; <a href="https://www.florian.bruniaux.com/blog/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=youtube-video-insights">Blog &#8599;</a> &middot; <a href="https://www.florian.bruniaux.com/projects/?utm_source=github&amp;utm_medium=readme&amp;utm_campaign=youtube-video-insights">Projects &#8599;</a>
+    </td>
+  </tr>
+</table>
+
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+Turn YouTube into a cumulative, local-first research system. Acquire VTT
+sources, search timestamped evidence with SQLite/FTS5, measure coverage and
+freshness, grow the corpus through explicit decisions, then use the result from
+the web app, CLI, or a read-only MCP in Claude Code and Codex.
+
+For scientific literature, [Paper Insights](https://github.com/FlorianBruniaux/paper-insights)
+is the companion project for arXiv metadata, local FTS5 search, and citations.
+It is experimental, with human relevance review still pending. The two
+projects keep separate corpora; cross-corpus federation is planned.
+
+[Critical source review](docs/superpowers/specs/2026-09-22-critical-source-review-design.md)
+is a planned extension for both projects. For videos, it will assess added
+value and evidential support from inspected timestamped passages, record
+coverage limits, and keep editorial selection reversible. Current coverage,
+freshness, summaries, and Shorts scores are not quality verdicts; this filter
+is not implemented yet.
+
+Every research cycle starts with local evidence. If it is insufficient,
+YT Insights presents at most ten YouTube candidates and waits for a separate
+approval of one to five exact IDs before acquisition. It then rebuilds the
+derived indexes and asks the sufficiency question again. Catalogue search,
+FTS5 search, and deterministic exports do not require an LLM.
+
+![yt-insights workflow: preview and acquire VTT sources, build the local catalogue and FTS5 index, assess coverage and freshness, ask whether evidence is sufficient, acquire only approved IDs, then use the corpus through the local web app, CLI, read-only MCP, Claude Code, or Codex.](docs/assets/yt-insights-workflow.jpg)
+
+The diagram reflects the shipped local workflow. Its reviewable branching
+version is available as [Mermaid source](docs/assets/cumulative-research-workflow.mmd).
+See the [delivery recap](docs/DELIVERY-RECAP.md) for every implemented surface
+and the [implementation status](docs/IMPLEMENTATION-STATUS.md) for SHA-bound
+test evidence and remaining external validation.
+
+---
+
+## Start here
+
+| Goal | Command | Result |
+|---|---|---|
+| Check a local installation | `uv run yt-insights doctor --json` | Secret-safe dependency, corpus, index, catalog, and optional backend status |
+| Preview an acquisition | `uv run yt-insights acquire URL --dry-run --json` | Selected videos and exclusions, with no corpus write |
+| Acquire one channel | `uv run yt-insights acquire URL --slug NAME --yes` | VTT and metadata under the configured data root |
+| Export one transcript | `uv run yt-insights export video VIDEO_ID --format md` | Sourced VTT, text, or timestamped Markdown |
+| Analyze a channel | `uv run yt-insights run https://www.youtube.com/@ChannelName` | Transcripts, structured insights, and an aggregate report |
+| Index an existing corpus | `uv run yt-insights catalog import-corpus ./output` | One deduplicated SQLite catalog with durable import errors |
+| Build the timestamped search index | `uv run yt-insights index --all` | A derived FTS5 index over every VTT passage |
+| Find a sourced passage | `uv run yt-insights search "AI product discovery"` | Ranked excerpts, timestamps, and direct YouTube links |
+| Start cumulative research | `uv run yt-insights research start "AI product engineering workflows" --json` | A durable local assessment and a mandatory sufficiency question |
+| Resume research | `uv run yt-insights research status SESSION_ID --json` | Revision, evidence, candidates, required action, and the latest 100 acquisition attempts |
+| Export an evidence dossier | `uv run yt-insights research export SESSION_ID --output /absolute/path --json` | Deterministic `dossier.md` and `manifest.json`, kept outside source indexes |
+| Query from an LLM client | `uv run --extra mcp yt-insights-mcp` | Four read-only corpus, video, and passage tools |
+| Open the local web app | `uv run yt-insights serve` | Bilingual FR/EN loopback-only dashboard, search, sources, research decisions, jobs, and exports |
+
+Analysis uses a local or cloud LLM. Catalog import, transcript indexing, and
+both search commands do not. Repeated runs reuse analysis caches and avoid
+duplicating unchanged catalog artifacts.
+
+Before the first cumulative session, acquire at least one source or import an
+existing corpus, then build the timestamped index. A successful
+`research start ... --json` returns a `session_id`, a `revision`, coverage and freshness,
+plus `required_user_action=confirm_sufficiency_or_refresh`. It never contacts
+YouTube.
+
+### Use the web app in five steps
+
+Run `uv run yt-insights serve`, then follow the workflow shown on the dashboard:
+
+1. **Collect:** open **Sources**, preview a video, playlist, or channel, review
+   the selected IDs, then confirm the acquisition.
+2. **Search:** open **Search** to query the existing transcript passages before
+   requesting more sources.
+3. **Assess:** open **Research**, describe the question and useful angles, then
+   inspect coverage and freshness.
+4. **Decide:** mark the evidence sufficient or request discovery. Discovery
+   still requires a separate approval of one to five exact video IDs.
+5. **Use:** open **Exports** for deterministic dossiers, or query the same corpus
+   from Claude Code or Codex through the read-only MCP.
+
+Each task page repeats the relevant three-step instructions. The interface uses
+the dark theme by default, remembers a light-theme preference, and stays usable
+on a narrow mobile viewport. It starts in French when the browser prefers
+French, otherwise in English. The `EN` and `FR` controls persist an explicit
+choice. Only interface copy is translated: video titles, transcripts, excerpts,
+queries, and dossiers keep their source language. The server remains local to
+`127.0.0.1`.
+
+---
+
+## What it's actually for
+
+Point it at a YouTube channel to keep the VTT sources locally, generate one
+structured insight file per video, and build an aggregate report across the
+channel. The same VTT corpus can be indexed as timestamped passages, searched
+from the CLI, or queried by an LLM through MCP while preserving the source link.
+
+The Shorts pipeline uses those transcripts to score the top three moments per
+video, with verbatim text and precise timestamps. After you choose one,
+`yt-dlp` downloads that segment instead of the full video.
+
+Use it for content research, competitive monitoring, editorial analysis, or
+building a searchable source library across several channels. Deterministic
+exports in VTT, text, or Markdown can feed an article, a RAG pipeline, or a
+dataset without asking an LLM to rewrite the source.
+
+yt-insights uses subtitles already exposed as VTT by YouTube. It does not
+download audio for transcription. Audio transcription remains outside the
+runtime because it would add media downloads, compute cost, and a second text
+source without a demonstrated missing-subtitle use case.
+
+---
+
+## How it works
+
+### Four local data layers
+
+| Layer | Purpose | Mutation boundary |
+|---|---|---|
+| VTT and metadata files | Immutable source text, timestamps, and YouTube identity | Added only by explicit acquisition |
+| `catalog.sqlite3` | Inventory, memberships, artifacts, import runs, and durable errors | Rebuilt and atomically published from source files |
+| `.search/search-v1.sqlite3` | Derived FTS5 passages with timestamped YouTube URLs | Rebuilt and atomically published from VTT files |
+| `.research/research-v1.sqlite3` | Sessions, assessments, decisions, candidates, attempts, and events | Updated by the `research` state machine |
+
+`dossier.md` and `manifest.json` are deterministic publications, not a fifth
+source layer. They never enter the catalogue or FTS index.
+
+```mermaid
+flowchart LR
+    U[Research question] --> A[Local assessment]
+    VTT[VTT + metadata] --> CAT[catalog.sqlite3]
+    VTT --> FTS[search-v1.sqlite3]
+    CAT --> A
+    FTS --> A
+    A --> R[research-v1.sqlite3]
+    A --> Q{Evidence sufficient?}
+    Q -->|Yes| DONE[Completed research]
+    DONE -->|Optional export| D[Deterministic dossier]
+    Q -->|Refresh requested| C[Up to 10 candidates]
+    C --> P{Approve 1 to 5 exact IDs?}
+    P -->|Cancel| CANCEL[Cancelled session]
+    P -->|Defer| HOLD[Awaiting candidates, resumable]
+    P -->|Yes| X[Acquire, reindex once, reassess]
+    X --> A
+```
+
+<details>
+<summary>Insight pipeline</summary>
+
+```
+YouTube URL / channel
+        │
+        ▼
+   yt-dlp (subprocess)          Downloads auto-generated subtitles
+        │
+        ▼
+   output/transcripts/*.vtt
+        │
+        ▼
+   cleaner.py                   Deduplicates lines, strips timestamps
+        │                       and HTML tags from VTT format
+        ▼
+   analyzer.py ─────────────►  LLM backend
+   ThreadPoolExecutor           cc-bridge │ Ollama │ MLX │ Anthropic API
+   (3× remote, 1× local)        OpenAI-compatible endpoint supported
+        │
+        ├──► output/insights/<video>.json   ← source of truth (atomic write)
+        └──► output/insights/<video>.md     ← rendered from JSON
+                │
+                ▼
+        reporter.py
+        Counter (top tools, no LLM)
+        + one LLM call for narrative synthesis
+                │
+                ▼
+        AGGREGATE_REPORT.md + .json
+```
+
+</details>
+
+<details>
+<summary>Shorts suggestion pipeline</summary>
+
+```
+output/transcripts/*.vtt
+        │
+        ▼
+   vtt_parser.py                Timestamped dedup: first-occurrence tracking
+        │                       strips inline <c> tags, rolling caption dedup
+        ▼
+   [HH:MM:SS] text segments
+        │
+        ▼
+   shorts.py ──────────────►   LLM backend (same auto-detection)
+   ThreadPoolExecutor           Identifies top 3 moments (30-90s) per talk:
+                                hook, score/5, verbatim, timestamps
+        │
+        ├──► output/shorts/<video>.json   ← suggestion cache (atomic write)
+        ├──► output/shorts/<video>.md     ← human-readable suggestions
+        └──► output/shorts/INDEX.md       ← global index sorted by score
+                                         across all talks
+        │ (optional phase 2)
+        ▼
+   generate-short command
+   yt-dlp --download-sections   Downloads only the segment (~20-50MB,
+                                not the full video)
+        │
+        ▼
+   output/clips/<title>.mp4
+```
+
+</details>
+
+<details>
+<summary>Key design decisions</summary>
+
+- yt-dlp runs as a subprocess, never imported as a library (subprocess is the stable contract)
+- `stop_reason == "max_tokens"` gates writes: truncated responses are never cached, retried on next run
+- Insight and Shorts generation send at most 10,000 transcript characters per LLM call. The CLI reports `USED/TOTAL` before each real call and marks truncation without printing transcript content. Cache hits do not call the model or print this line. The full timestamped VTT remains available to the FTS index; long-form LLM analysis is not chunked yet.
+- `ThreadPoolExecutor` over asyncio: `httpx.Client` is thread-safe, no event loop needed
+- YouTube VTT rolling captions repeat each phrase 2-3x as it scrolls; `vtt_parser.py` tracks first occurrence per unique text fragment, giving clean timestamped segments
+
+</details>
+
+---
+
+## Prerequisites
+
+- Python 3.11 or later
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) installed in PATH (`brew install yt-dlp` or `pip install yt-dlp`)
+- At least one LLM backend (see [Backends](#backends))
+
+---
+
+## Installation
+
+The project is not published on PyPI. Install the checked-out source with
+[uv](https://docs.astral.sh/uv/):
+
+```bash
+git clone https://github.com/FlorianBruniaux/youtube-video-insights
+cd youtube-video-insights
+uv sync --extra dev
+uv run yt-insights --help
+```
+
+Add the optional MCP server when a local LLM client needs to query the index:
+
+```bash
+uv sync --extra mcp --extra dev
+```
+
+The versioned `uv.lock` fixes the complete application environment. See
+[INSTALL.md](INSTALL.md) for a standard `venv` and editable-install alternative.
+
+The wheel already contains the compiled web interface. Running it needs Python,
+not Node.js:
+
+```bash
+uv run yt-insights serve
+# Keep the browser closed when starting from an agent or terminal multiplexer.
+uv run yt-insights serve --no-open
+```
+
+The server binds only to `127.0.0.1` and does not provide remote access, user
+accounts, CORS, or a hosted sharing URL. Browser mutations require a per-process
+token fetched from the same origin. Stop the process with `Ctrl-C`.
+
+For a machine with no local LLM (no Ollama, no GPU), see [INSTALL.md](INSTALL.md): it covers every backend option step by step (Anthropic API key, Ollama, cc-bridge, any other OpenAI-compatible provider).
+
+---
+
+## Quick start
+
+```bash
+# Use one absolute corpus from any working directory
+export YT_INSIGHTS_DATA_ROOT="$HOME/Library/Application Support/yt-insights/corpus"
+
+# Validate the local runtime without changing the corpus or calling an LLM
+uv run yt-insights doctor --json
+
+# Preview first. Channel, playlist, and batch acquisition require --yes.
+uv run yt-insights acquire https://www.youtube.com/@DevWithAIYoutube --dry-run --json
+uv run yt-insights acquire https://www.youtube.com/@DevWithAIYoutube --slug dev-with-ai --yes
+
+# Export source material without an LLM
+uv run yt-insights export video VIDEO_ID --format md
+
+# Full pipeline: download subtitles + analyze + aggregate report
+uv run yt-insights run https://www.youtube.com/@DevWithAIYoutube
+
+# Re-analyze existing VTT files (no download)
+uv run yt-insights run https://www.youtube.com/@DevWithAIYoutube --skip-download
+
+# Regenerate the aggregate report only
+uv run yt-insights report
+
+# Suggest Shorts from all existing VTT files
+uv run yt-insights suggest-shorts
+
+# Suggest Shorts for a single talk
+uv run yt-insights suggest-shorts --vtt output/transcripts/20260423-talk.vtt
+
+# Regenerate the global Shorts index (no LLM call)
+uv run yt-insights suggest-shorts --index-only
+
+# Download a specific clip segment (no full-video download)
+uv run yt-insights generate-short VIDEO_ID --start 00:05:10 --end 00:05:55 --title "hook-context-engineering"
+```
+
+### Local web research flow
+
+`yt-insights serve` exposes the same durable data and workflow as the CLI. The
+dashboard starts with a five-step guide and every task page provides contextual
+instructions:
+
+1. Preview a YouTube video, playlist, or channel under **Sources**, inspect every
+   selected ID, then confirm the background acquisition job.
+2. Search the existing transcript index under **Search**.
+3. Start a session under **Research** and answer
+   `Is the current evidence sufficient?` before any discovery.
+4. If discovery is requested, approve one to five exact candidates or cancel.
+5. Open the deterministic dossier under **Exports**, or query the read-only MCP
+   from an LLM client.
+
+Failed jobs are never resubmitted automatically. A stale session reloads the
+durable snapshot and asks for the decision again. If the UI reports that the
+search index is unavailable, run `uv run yt-insights catalog import-corpus
+CORPUS`, then `uv run yt-insights index --all`, and restart the server.
+
+The interface is available in English and French. With no saved preference, it
+follows the browser language. Use the `EN` or `FR` control in the header to
+override it. That preference survives reloads and applies to static guidance,
+form labels, validation messages, job states, and research decisions. Corpus
+content is never machine-translated.
+
+Expected output, with paths shortened to keep the example readable:
+
+```
+Resolved backend: backend=ollama endpoint=http://127.0.0.1:11434/v1 model=qwen3:8b
+Downloading subtitles from https://www.youtube.com/@DevWithAIYoutube ...
+  47 subtitle file(s) downloaded.
+
+Analyzing 47 video(s) with model 'qwen3:8b' ...
+Transcript input: 10000/45678 characters (truncated)
+  47 insight(s) generated:
+    output/insights/<video>.md
+
+Generating aggregate report ...
+Resolved backend: backend=ollama endpoint=http://127.0.0.1:11434/v1 model=qwen3:8b
+  Aggregate  → output/insights/AGGREGATE_REPORT.md
+  Full       → output/insights/FULL_REPORT.md
+Done.
+```
+
+`data_root` resolves in this order: command override where available,
+`YT_INSIGHTS_DATA_ROOT`, `~/.config/yt-insights/config.toml`, then `output`
+relative to the current directory. Configure an absolute TOML or environment
+path for use from Claude Code, Codex, cron, or unrelated repositories. Explicit
+`--corpus-root` and `--database` values on index/search commands override the
+derived paths for that invocation.
+
+Set an optional absolute `research_output_root` in the same TOML file, or use
+`YT_INSIGHTS_RESEARCH_OUTPUT_ROOT`, to publish canonical dossiers. Without it,
+`research export` requires an explicit absolute `--output`.
+
+`acquire` downloads subtitles and metadata. It calls no LLM unless `--analyze`
+is present. A channel, playlist, or batch file exits with code 3 before download
+unless `--yes` is supplied; `--dry-run` always stops before corpus writes. A
+single-video URL does not need `--yes`.
+
+`export video` accepts an exact video ID or supported YouTube URL. `vtt` copies
+the source bytes, `txt` emits cleaned transcript text, and `md` includes source
+identity, language, canonical URL, SHA-256, and timestamped passages. The
+default destination is `<data_root>/exports`; `--output` selects one file and
+`--force` is required to replace it.
+
+## Local watch catalog (SQLite)
+
+The catalog commands turn existing outputs or newly discovered video lists into
+one local, searchable database. They do not require an LLM.
+
+```bash
+# Import an existing multi-channel corpus without modifying its files
+yt-insights catalog import-corpus \
+  ./output
+
+# Discover the current videos exposed by a channel/playlist through yt-dlp
+yt-insights catalog discover \
+  https://www.youtube.com/@PragmaticEngineer/videos
+
+# Search title, source, insight text, and cleaned transcripts
+yt-insights catalog search "AI product discovery"
+yt-insights catalog search "Martin Fowler" --source pragmaticengineer --limit 5
+
+# Inspect stable counts and every persisted collection/import error
+yt-insights catalog stats
+yt-insights catalog errors
+yt-insights catalog errors --run-id 3
+```
+
+The default database is `output/catalog.sqlite3` (gitignored). Override it on
+any catalog command with `--db PATH`. Canonical videos are unique by YouTube
+video ID. Source membership and French/English artifacts remain separate, while
+identical artifacts collapse by SHA-256. Every command is safe to rerun: a
+second corpus import creates a new audit run but no duplicate video or artifact.
+
+An import continues after malformed files and reports `status=partial`; use
+`catalog errors` to see the exact paths and diagnostics. JSON files with the
+expected keys but invalid value types are retained for search and explicitly
+logged as validation errors.
+
+`catalog discover` currently reuses the repository's unofficial `yt-dlp`
+collector. Treat this as a local experimental adapter, not a compliance claim.
+For a public or commercial service, review YouTube's Terms and prefer the
+official YouTube Data API for search and metadata. The detailed source trade-offs
+and phased architecture are in
+[`docs/superpowers/specs/2026-08-26-youtube-newsletter-watch-design.md`](docs/superpowers/specs/2026-08-26-youtube-newsletter-watch-design.md).
+
+---
+
+## Local transcript search
+
+The default command indexes a deterministic 50-file slice for quick validation.
+Use `--all` to build the full local corpus index. Neither mode sends transcripts
+to an LLM or a remote service.
+
+```bash
+# Inspect the first deterministic 50-file slice without creating a database
+yt-insights index --dry-run
+
+# Build the derived local FTS index (default: output/.search/search-v1.sqlite3)
+yt-insights index
+
+# Build the complete corpus index after a disk-space preflight
+yt-insights index --all
+
+# Build a more diverse 50-file evaluation slice
+yt-insights index --selection representative
+
+# Validate the existing index without scanning transcripts
+yt-insights index --status
+
+# Search passages, optionally narrowed to one channel or language
+yt-insights search "reliable agents" --channel my-channel --lang en
+
+# Same ranked results as deterministic JSON
+yt-insights search "reliable agents" --json
+```
+
+Use `--corpus-root`, `--database`, and `--limit` to point at a local corpus or a
+derived index. `index --limit` accepts only 1 through 50 in slice mode;
+`search --limit` accepts 1 through 20. The VTT corpus remains read-only and the
+SQLite database can be rebuilt at any time.
+
+### Prepare a relevance review packet
+
+Copy the tracked template, replace every placeholder with real article subjects
+and queries, then prepare a deterministic packet. The command records the Git
+commit, observed loaded-source hashes, captured index hash, query-set hash,
+ranked passages, timestamps, and source URLs. It never invents human judgments
+and keeps the evaluation status `UNKNOWN`.
+
+```bash
+cp plans/evidence/2026-08-30-p2-query-template.json /tmp/p2-queries.json
+uv run python scripts/prepare_search_relevance_evaluation.py \
+  --database /ABSOLUTE/PATH/TO/search-v1.sqlite3 \
+  --queries-file /tmp/p2-queries.json \
+  --output /tmp/p2-evaluation-packet.json \
+  --commit-sha "$(git rev-parse HEAD)" \
+  --top-k 10
+```
+
+The unedited template is rejected intentionally. See the
+[P2 evaluation protocol](plans/evidence/2026-08-28-p2-50-vtt-evaluation.md)
+for the 20-result pilot, the 60-to-100-case release gate, and human-review rules.
+
+### MCP access for local LLM clients
+
+Install the `mcp` extra, build an index, then configure the stdio command in the
+LLM client:
+
+```bash
+uv sync --extra mcp --extra dev
+uv run yt-insights index --all
+uv run yt-insights catalog import-corpus "$YT_INSIGHTS_DATA_ROOT"
+```
+
+```json
+{
+  "mcpServers": {
+    "yt-insights": {
+      "command": "uv",
+      "args": ["run", "yt-insights-mcp"],
+      "cwd": "/absolute/path/to/youtube-video-insights",
+      "env": {
+        "YT_INSIGHTS_SEARCH_DATABASE": "/absolute/corpus/.search/search-v1.sqlite3",
+        "YT_INSIGHTS_CATALOG_DATABASE": "/absolute/corpus/catalog.sqlite3"
+      }
+    }
+  }
+}
+```
+
+The server exposes exactly four read-only tools in this order:
+`list_corpora`, `search_videos`, `search_passages`, and `get_passage`. Set both
+database variables to absolute paths for a client launched outside the repo.
+When one is absent, the server derives it from the configured `data_root`.
+
+---
+
+## Supported sources
+
+| Source type | Example |
+|---|---|
+| YouTube channel | `https://www.youtube.com/@DevWithAIYoutube` |
+| YouTube channel (videos tab) | `https://www.youtube.com/@DevWithAIYoutube/videos` |
+| Playlist | `https://www.youtube.com/playlist?list=PLxxx` |
+| Single video | `https://www.youtube.com/watch?v=dQw4w9WgXcQ` |
+
+Any URL accepted by yt-dlp works as SOURCE.
+
+---
+
+## Backends
+
+Use `--backend` or `YT_INSIGHTS_BACKEND` when the execution target matters.
+Accepted values are `auto`, `ollama`, `mlx`, `cc-bridge`, `anthropic`, and
+`openai`. The same option is available on `run`, `report`, `suggest-shorts`,
+and `acquire --analyze`.
+
+| Explicit backend | Required configuration | Runtime behavior |
+|---|---|---|
+| `ollama` | Optional exact `--model`; optional `--base-url http://HOST:11434/v1` | Verifies the model against `/api/tags`; one local worker |
+| `mlx` | Exact MLX model name and the `mlx` extra | Loads model and tokenizer lazily in-process; one local worker |
+| `cc-bridge` | Local service on port 4141 | Requires a healthy endpoint and a usable completion route |
+| `anthropic` | `ANTHROPIC_API_KEY` | Uses only an Anthropic-scoped key |
+| `openai` | Explicit `--base-url`, model, and provider key | Calls the named OpenAI-compatible endpoint |
+
+An explicit backend never silently changes provider. `auto` keeps the existing
+local-first detection order. Within `auto`, an Explicit endpoint supplied by
+`--base-url` or `YT_INSIGHTS_BASE_URL` remains Priority 0 and is selected before
+any localhost probe. It short-circuits every automatic probe.
+
+| Priority | Backend | How to activate | Model format |
+|---|---|---|---|
+| 0 | Explicit endpoint | Set `--base-url` or `YT_INSIGHTS_BASE_URL` | provider-specific |
+
+Automatic detection order when no endpoint was configured:
+
+| Priority | Backend | How to activate | Model format |
+|---|---|---|---|
+| 1 | cc-bridge | Start cc-bridge on port 4141 | `anthropic/github_copilot/gpt-5-mini` |
+| 2 | Ollama | `ollama serve` | exact requested model, or automatic local selection |
+| 3 | Anthropic API | `export ANTHROPIC_API_KEY=sk-...` | `claude-haiku-4-5` |
+
+Backend selection matters only for `run`, `report`, `suggest-shorts`, or
+`acquire --analyze`. Acquisition without analysis, indexing, search, export,
+and MCP use no LLM. Override model and endpoint via flags:
+
+```bash
+yt-insights run <url> --model claude-sonnet-4-6 --base-url https://api.anthropic.com/v1
+```
+
+After Ollama has been selected, an explicit `--model` or `YT_INSIGHTS_MODEL`
+must match an installed model exactly. If it is missing, the CLI lists the
+available names and the corresponding `ollama pull` command. Automatic local
+selection happens only when no model was requested. Use both
+`--base-url http://127.0.0.1:11434/v1` and `--model` to force Ollama. `--model`
+alone keeps the normal detection order, including cc-bridge before Ollama.
+
+**cc-bridge model ID gotcha**: use the gateway format `anthropic/{provider}/{model}` (e.g. `anthropic/github_copilot/gpt-5-mini`) to route directly to the named provider via cc-bridge's stored credentials. A plain model ID (e.g. `claude-haiku-4-5`) uses cc-bridge's `active_route`. The probe requires `/health` to return 200 and the minimal completion to return 2xx or 3xx. A 4xx, 429, or 5xx response falls back to Ollama, then Anthropic when its API key is available.
+
+Use `--backend cc-bridge` with the gateway model ID to force cc-bridge. Use
+`--backend mlx --model mlx-community/Qwen3-4B` for direct MLX execution. MLX
+selection is explicit because loading a local model is materially different
+from probing an HTTP service.
+
+---
+
+## CLI reference
+
+<details>
+<summary>Show all commands and options</summary>
+
+```
+yt-insights run SOURCE [OPTIONS]
+
+  SOURCE  YouTube channel, playlist, video URL, or local file with one URL per line.
+
+  --skip-download           Skip yt-dlp, use existing VTT files in output/transcripts/
+  --force                   Re-analyze even if insight cache exists
+  --backend NAME            auto, ollama, mlx, cc-bridge, anthropic, or openai
+  --model TEXT              Override LLM model
+  --base-url TEXT           Override LLM API base URL
+  --concurrency INTEGER     Max parallel LLM calls (0 = auto: 3 for API, 1 for Ollama)
+  --output-dir PATH         Base directory for transcripts/ and insights/
+  --sleep-requests INTEGER  Seconds to wait between yt-dlp requests (rate limiting)
+
+yt-insights report [OPTIONS]
+
+  --output PATH    Output path (default: <insights_dir>/AGGREGATE_REPORT.md)
+  --backend NAME
+  --model TEXT
+  --base-url TEXT
+
+yt-insights suggest-shorts [OPTIONS]
+
+  Identify the top 3 Short-worthy moments (30-90s) in each VTT transcript.
+  LLM criteria: autonomous hook, punchy verbatim, clean in/out points, score 1-5.
+  Skips already-processed talks unless --force is set.
+
+  --vtt PATH         Process a single VTT file instead of the full transcripts dir
+  --force            Re-analyze even if suggestion cache exists
+  --index-only       Regenerate INDEX.md only, no LLM calls
+  --backend NAME     Select the LLM execution target
+  --model TEXT       Override LLM model
+  --base-url TEXT    Override LLM API base URL
+  --output-dir PATH  Base output directory (default: output/)
+
+yt-insights generate-short VIDEO_ID [OPTIONS]
+
+  Download a single clip segment from YouTube using yt-dlp --download-sections.
+  Only the requested range is fetched (~20-50MB), not the full video.
+
+  --start TEXT       Start timestamp HH:MM:SS  [required]
+  --end TEXT         End timestamp HH:MM:SS  [required]
+  --title TEXT       Short title for output filename
+  --output-dir PATH  Directory for clip output (default: output/clips/)
+  --output-format TEXT  Container format: mp4, webm, or mkv
+
+yt-insights config show [OPTIONS]
+
+  Print effective values and sources without probing or resolving a backend.
+  Endpoint diagnostics remove URL credentials, query strings, and fragments.
+  Accepts --backend, --model, and --base-url to simulate overrides before running.
+
+yt-insights config init
+
+  Create ~/.config/yt-insights/config.toml with all defaults commented.
+
+yt-insights doctor [--json] [--probe-backends]
+
+  Inspect dependencies and local corpus state without writes or completion calls.
+  Backend probes, when requested, are limited to localhost cc-bridge and Ollama.
+
+yt-insights acquire SOURCE [--dry-run] [--yes] [--slug NAME] [--years LIST]
+
+  Preview or acquire a video, channel, playlist, or bounded batch file.
+  Channel, playlist, and batch execution require --yes.
+
+yt-insights export video VIDEO_OR_URL [--format vtt|txt|md] [--lang CODE]
+
+  Export one source transcript. Existing targets require --force.
+
+yt-insights index [--dry-run|--status|--all]
+
+  Build or validate the timestamped SQLite transcript index.
+
+yt-insights search QUERY [--channel ID] [--lang CODE] [--limit 1..20] [--json]
+
+  Search timestamped passages in the derived transcript index.
+
+yt-insights research start TOPIC [--query QUERY]... [--freshness-profile PROFILE] [--json]
+yt-insights research status SESSION_ID [--json]
+yt-insights research decide SESSION_ID sufficient|refresh --revision N --idempotency-key KEY [--json]
+
+  Assess local evidence, resume a durable session, and record the mandatory
+  sufficiency decision. Status returns `acquisition_history` for the latest
+  100 attempts and an
+  `acquisition_history_truncated` flag. Each attempt has `attempt_id`, `status`,
+  and `items`; each item has `video_id`, `status`, `error_code`, and
+  `source_sha256`. `refresh` authorizes discovery, not acquisition.
+
+yt-insights research discover SESSION_ID --revision N [--json]
+yt-insights research candidates SESSION_ID [--json]
+yt-insights research approve SESSION_ID VIDEO_ID... --revision N --idempotency-key KEY [--json]
+yt-insights research acquire SESSION_ID --revision N --idempotency-key KEY [--json]
+
+  Present at most ten candidates, then acquire only one to five exact IDs
+  selected by the user. Refresh the indexes once and assess the corpus again.
+
+yt-insights research retry SESSION_ID --revision N --idempotency-key KEY [--json]
+yt-insights research cancel SESSION_ID --revision N --idempotency-key KEY [--json]
+yt-insights research export SESSION_ID [--output DIRECTORY] [--force] [--json]
+
+  Retry only the recorded failed stage. For a partial batch, retry only items
+  recorded as `failed_retryable`; do not reacquire items with terminal outcomes.
+  Cancel candidate review, or publish an optional deterministic evidence dossier.
+```
+
+These structured-history and partial-batch contracts are implemented in the
+current repository state.
+
+</details>
+
+---
+
+## Output structure
+
+<details>
+<summary>Show directory layout and example files</summary>
+
+```
+output/
+  transcripts/
+    20260101 - Video Title [videoID].fr.vtt   # raw subtitles
+    20260101 - Video Title [videoID].info.json # channel metadata sidecar
+  insights/
+    20260101 - Video Title [videoID].fr.json  # source of truth
+    20260101 - Video Title [videoID].fr.md    # rendered from JSON
+    AGGREGATE_REPORT.md                       # narrative synthesis
+    AGGREGATE_REPORT.json                     # top tools + per-video index
+  shorts/
+    20260101 - Video Title [videoID].fr.json  # suggestion cache
+    20260101 - Video Title [videoID].fr.md    # timestamps, hook, score, verbatim
+    INDEX.md                                  # table sorted across talks
+  clips/
+    talk-title_000510.mp4                     # downloaded segment
+  exports/
+    VIDEO_ID.en.md                            # sourced, timestamped transcript export
+  catalog.sqlite3                             # inventory database
+  .search/search-v1.sqlite3                   # timestamped passage index
+  .research/research-v1.sqlite3               # durable research sessions
+```
+
+When `research_output_root` is configured, dossiers use
+`<root>/<topic-slug>/<YYYY-MM-DD>-<session-id>/`. An explicit `--output`
+supports a safe copy into another project. Dossiers are never indexed as
+YouTube evidence.
+
+Full-channel automation may place the same `transcripts/`, `insights/`, and
+`shorts/` subdirectories under `output/<channel-slug>/`. The corpus scanner
+supports both layouts. Flat layouts require the adjacent `.info.json` sidecar
+to preserve channel identity.
+
+Example `output/shorts/video.md` entry:
+
+```markdown
+## Short 1 - Score : 5/5
+
+**Timestamps :** 00:05:10 -> 00:05:48 (38s)
+**Lien direct :** https://youtube.com/watch?v=VIDEO_ID&t=310s
+**Hook :** L'IA ne remplace pas le dev, elle remplace le flou
+**Rationale :** Formule autonome, tension forte, borne nette sur une chute.
+
+> "Le vrai problème c'est pas le code, c'est la spec. Et ça, l'IA ne peut pas
+> l'inventer à votre place."
+```
+
+Example `video.json`:
+
+```json
+{
+  "subject": "How to run local LLMs on consumer hardware",
+  "key_points": [
+    "RAM and VRAM constraints determine which models are viable",
+    "Quantisation (4-bit/8-bit) cuts memory use with minimal quality loss",
+    "Instruction-tuned models outperform base models for chat/code tasks"
+  ],
+  "tools": [
+    {"name": "Ollama", "context": "recommended runtime for local deployment"},
+    {"name": "Hugging Face", "context": "source for model cards and downloads"}
+  ],
+  "advice": [
+    "Check your VRAM first, then pick the largest model that fits",
+    "Read the model card before downloading (usage restrictions vary)"
+  ],
+  "quotes": [
+    "The best model is the one that actually runs on your machine."
+  ]
+}
+```
+
+</details>
+
+---
+
+## Idempotence
+
+Every run is idempotent. If `video.json` already exists for a given VTT file, it is loaded from disk with no LLM call. Interrupt the process at any point: partial runs leave `.tmp.json` orphans at worst, never a corrupt `.json`.
+
+Re-process everything from scratch:
+
+```bash
+yt-insights run <url> --force
+```
+
+---
+
+## Insight JSON schema
+
+<details>
+<summary>Show schema</summary>
+
+The LLM is always instructed to return exactly this structure:
+
+```
+subject      string        One-sentence description of the video topic
+key_points   string[]      3-5 main points covered
+tools        object[]      {name, context}: tools and technologies mentioned
+advice       string[]      Immediately actionable recommendations
+quotes       string[]      Notable quotes (empty array if none)
+```
+
+</details>
+
+---
+
+## Configuration file
+
+```bash
+yt-insights config init  # creates ~/.config/yt-insights/config.toml
+```
+
+All keys are optional. CLI flags and `YT_INSIGHTS_*` env vars take precedence over the file.
+
+---
+
+## Feature summary
+
+| Feature | Detail |
+|---|---|
+| Subtitle download | yt-dlp subprocess, any URL it accepts |
+| VTT cleaning | Dedup, strip timestamps, HTML tags, `[Musique]` annotations |
+| Insight extraction | 5-key JSON schema: subject, key_points, tools, advice, quotes |
+| Atomic writes | `.tmp.json` → `os.replace()`, no corrupt files on Ctrl-C |
+| Truncation guard | `stop_reason == "max_tokens"` → skip cache, retry next run |
+| Caching | Cache hit = zero LLM calls, `--force` to override |
+| Concurrency | 3 threads for remote APIs, 1 for Ollama or MLX (auto-tuned) |
+| Backends | Explicit or automatic cc-bridge, Ollama, MLX, Anthropic, and OpenAI-compatible endpoints |
+| Auto-detection | Backend probed at first LLM call, no config needed |
+| Aggregate report | `Counter` top tools (no LLM) + one narrative LLM call |
+| Config file | 4-layer merge: defaults → TOML → env vars → CLI flags |
+| Idempotence | Re-run safely at any time, skips existing insights |
+| Shorts suggestions | Top 3 moments per talk (30-90s), scored 1-5 by LLM, cross-talk INDEX.md |
+| Timestamped VTT | First-occurrence dedup with timestamps preserved for Shorts pipeline |
+| Clip download | `yt-dlp --download-sections`, segment only, no full-video fetch |
+| Local catalog | SQLite storage for canonical videos, sources, transcripts, insights, runs, and errors |
+| Full-text search | FTS5 across titles, sources, insight text, and cleaned transcripts |
+| Timestamped passage index | Full VTT corpus in `search-v1.sqlite3`, with deterministic excerpts and YouTube links |
+| Safe acquisition | Dry-run plan plus explicit confirmation for channel, playlist, and batch writes |
+| Deterministic export | VTT, cleaned text, or sourced Markdown without an LLM |
+| Runtime doctor | Secret-safe, no-write diagnostics with optional localhost-only probes |
+| MCP access | Exactly four read-only corpus, video, search, and passage tools |
+| Cumulative research | Catalogue-first coverage and freshness assessment with durable resume |
+| Human approval boundaries | Mandatory sufficiency question, then a separate exact-ID acquisition decision |
+| Research limits | At most 10 candidates and 5 approved acquisitions per cycle |
+| Evidence dossier | Deterministic Markdown and JSON manifest, separate from source indexes |
+| Index integrity | Generation receipt bound to the database SHA-256; cached validation invalidated by file identity and `ctime` |
+| Backend identity | CLI reports the resolved backend, endpoint, and exact model without exposing URL credentials |
+| LLM input visibility | CLI reports used and total transcript characters before each real generation call |
+
+---
+
+## For AI coding assistants
+
+Load [`llms.txt`](llms.txt) for the tracked, machine-readable project snapshot:
+commands, modules, storage model, invariants, generated data, and current gaps.
+The architecture rationale and implementation sequence live under
+[`docs/superpowers/`](docs/superpowers/).
+The [implementation status](docs/IMPLEMENTATION-STATUS.md) separates delivered
+features, conditional work, and reproducible validation commands.
+
+### Portable agent integration status
+
+The repository includes four portable skills, `youtube-acquire`,
+`youtube-research`, `youtube-export`, and `youtube-cumulative-research`, plus a
+read-only corpus researcher for Claude Code and Codex. The cumulative skill
+runs in the main session because discovery and approved acquisition may use the
+network and write source files. All four delegate to the packaged CLI or
+read-only MCP.
+
+Invoke the skills explicitly. The disjoint routing evaluation rejected the
+implicit BM25 hook because every generalizable calibration left either missed
+requests or forbidden activations.
+
+On the development workstation, the older digest-approved shared release
+`60cbcac…` contains three skills. The fourth cumulative skill exists in this
+repository and in the wheel candidate, but it has not been installed globally.
+A fresh Codex CLI 0.150.1 canary passed project-local discovery and the two
+mandatory human boundaries. The fresh Claude Code canary remains `UNKNOWN`
+because the installed CLI is not authenticated. `global_activation_ready`
+remains `false`.
+
+The setup command previews by default, refuses different existing files, and
+rolls back newly created state if one client registration fails:
+
+```bash
+uv run --extra mcp yt-insights setup assistants \
+  --client both \
+  --data-root "$YT_INSIGHTS_DATA_ROOT" \
+  --dry-run
+
+uv run --extra mcp yt-insights setup assistants \
+  --client both \
+  --data-root "$YT_INSIGHTS_DATA_ROOT" \
+  --apply
+
+uv run --extra mcp yt-insights setup assistants \
+  --client both \
+  --data-root "$YT_INSIGHTS_DATA_ROOT" \
+  --verify
+```
+
+Install or upgrade only repository skills and native agent files without
+reading or changing existing MCP registrations with:
+
+```bash
+uv run yt-insights setup assistants --client both --assets-only --dry-run
+uv run yt-insights setup assistants --client both --assets-only --apply
+uv run yt-insights setup assistants --client both --assets-only --verify
+```
+
+`--apply` changes the user-level Claude Code and Codex configuration. Cloning,
+installing, or running the default preview changes nothing globally. The
+development workstation has not applied this new four-skill transaction. Live
+YouTube research and the fresh Claude Code workflow canary remain `UNKNOWN`.
+The project-local Codex canary is `PASS`; this is not a global-installation
+claim.
+
+The final local delivery at `b62adaa` passed `1,089` Python tests plus `10`
+subtests, `155` frontend tests, `4` Playwright flows, Ruff, Astro Check on 51
+files, generated-asset verification, packaging, and Mypy on 53 source files.
+The current bilingual UI review passes `1,089` Python tests plus `10` subtests,
+`162` frontend tests, `6` Playwright flows, Ruff, Astro Check on 57 files, Mypy
+on 53 source files, and exact reproduction of the 20 packaged web files.
+Hosted GitHub Actions
+[run 33494963306](https://github.com/FlorianBruniaux/youtube-video-insights/actions/runs/33494963306)
+passed on the same SHA for the web interface, Python 3.11, Python 3.12, and
+packaging/runtime. Mypy was run as `mypy src`, not with `--strict`. Human
+relevance, live YouTube, and the fresh Claude Code canary remain `UNKNOWN`.
+The project-local Codex canary is `PASS`; global activation remains `false`.
+
+| Document | Purpose |
+|---|---|
+| [Delivery recap](docs/DELIVERY-RECAP.md) | Implemented product surfaces, architecture, safety boundaries, validation, and remaining work |
+| [Current Claude Code and Codex guide](docs/claude-code.md) | Supported skills, four MCP tools, local commands and verified installation boundary |
+| [Ready-to-copy assistant prompts](examples/agent-prompts.md) | Acquisition previews, cited research, article dossiers and deterministic exports |
+| [Agent platform architecture](plans/specs/AGENT-PLATFORM.md) | Target behavior, data boundaries, skills, agents and safety rules |
+| [Agent-ready runtime plan](plans/2026-08-28-09-agent-ready-runtime.md) | CLI, paths, backends, acquisition, export and MCP work |
+| [Claude Code and Codex integration plan](plans/2026-08-28-10-claude-codex-global-integration.md) | Portable skills, native agents, routing evaluation and digest-bound global installation |
+| [Hosted service and extension plan](plans/2026-08-28-11-hosted-extension.md) | Conditional browser and remote-access path |
+
+The runtime plan passes the package smoke gate. Cloning or installing this
+repository never changes global Claude Code or Codex configuration. Only
+`setup assistants --apply` performs that scoped user-level installation.
+Until a runtime transaction is approved and applied, use `uv run yt-insights`
+and `uv run --extra mcp yt-insights-mcp` from this checkout.
+
+---
+
+## Claude Code integration
+
+The five historical commands under `.claude/skills/` remain available only for
+explicit compatibility calls. Their frontmatter blocks model-triggered
+invocation so they do not compete with the portable skills.
+
+Use the portable skills below for new workflows. The historical commands and
+example remain as a compatibility reference.
+
+### Agent
+
+`youtube-corpus-researcher` is a read-only native agent for source-backed corpus
+research. It uses `youtube-research` and the MCP, returns timestamped evidence,
+and cannot acquire videos, rebuild indexes, or write exports. The historical
+`yt-video-analyst` remains in the repository but is not the supported implicit
+dispatcher.
+
+### Skills
+
+| Skill | What it does |
+|---|---|
+| `youtube-acquire` | Previews and acquires one video, playlist, or channel through the packaged CLI |
+| `youtube-research` | Searches the local catalogue and timestamped passage index without writes |
+| `youtube-export` | Exports an existing video as VTT, text, or sourced Markdown |
+| `youtube-cumulative-research` | Assesses local evidence, asks before discovery and exact-ID acquisition, reassesses, then optionally exports a dossier |
+
+Historical explicit-only compatibility commands:
+
+| Command | What it does |
+|---|---|
+| `/yt-get-transcript` | Downloads the VTT, checks cache first, retries with browser cookies on 429 |
+| `/yt-get-insights` | Runs insight analysis on an existing VTT, reads from cache when already processed |
+| `/yt-get-shorts` | Suggests the top 3 Short moments, presents them for your choice, downloads the chosen clip |
+| `/yt-run-pipeline` | Runs transcript, insights and Shorts selection in sequence for a single video |
+| `/yt-add-channel` | Processes a channel into `output/<slug>/`, rebuilds the Markdown/YAML indexes, then refreshes the SQLite catalog |
+
+### How it works
+
+1. Invoke one of the four portable skills explicitly.
+2. Acquisition runs `doctor`, then a dry-run preview before any multi-video write.
+3. Research uses the four read-only MCP tools and returns timestamped sources.
+4. Cumulative research asks whether local evidence is sufficient and keeps discovery separate from candidate approval.
+5. Export uses existing corpus artifacts and performs no LLM call.
+6. Historical Shorts commands remain explicit and download a clip only after confirmation.
+
+Each skill respects the same idempotence as the CLI: a VTT already on disk is not re-downloaded, a cached insight JSON triggers no LLM call.
+
+### Example session
+
+Explicitly invoke the historical pipeline when you need its Shorts workflow:
+
+```
+You:   https://www.youtube.com/watch?v=nfupYzLjFGc
+
+Agent: VIDEO_ID = nfupYzLjFGc
+       Cache: no transcript, no insights, no shorts yet.
+       What do you want? (transcript / insights / shorts / everything)
+
+You:   everything
+
+Agent: [/yt-get-transcript] → output/transcripts/1200-commits-600-PRs.fr.vtt (42KB)
+
+       [/yt-get-insights]
+       Subject: 7 months solo, 1200 commits, 600 PRs, 50 releases
+       Key points: solo dev velocity, AI-assisted release pipeline, PR review automation...
+       Notable quote: "Je pensais que l'IA allait coder à ma place. Elle m'a surtout appris à
+       mieux découper le travail."
+
+       [/yt-get-shorts]
+       Option 1 | Score 5/5 | 00:00:56 → 00:01:45 (49s)
+       Hook: "1 200 commits, 600 PRs en 7 mois, seul dev"
+       Verbatim: "Les chiffres c'est 7 mois à peu près, 1 200 commits..."
+
+       Option 2 | Score 5/5 | 00:03:47 → 00:04:47 (60s)
+       Hook: "Une plateforme de zéro en 5 semaines, seul"
+       Verbatim: "La première version était en prod au bout de 5 semaines..."
+
+       Option 3 | Score 4/5 | 00:07:12 → 00:08:05 (53s)
+       Hook: "L'IA ne code pas à ta place, elle t'oblige à mieux découper"
+       Verbatim: "Ce que j'ai découvert c'est que le vrai gain..."
+
+       Which option? (1/2/3 or custom timestamps)
+
+You:   2
+
+Agent: Downloading segment 00:03:47 → 00:04:47...
+       Clip saved: output/clips/plateforme-5-semaines-seul_000347.mp4 (1.8MB)
+```
+
+Run the pipeline on any video, skip any step you have already done. The agent never re-downloads a cached file or re-runs an LLM call unless you ask it to.
+
+---
+
+## Sponsor
+
+<table>
+  <thead>
+    <tr>
+      <th>Logo</th>
+      <th>URL</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td width="180" align="center">
+        <a href="https://neon.com/">
+          <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="docs/assets/sponsors/neon-logo-dark-color.svg" />
+            <source media="(prefers-color-scheme: light)" srcset="docs/assets/sponsors/neon-logo-light-color.svg" />
+            <img src="docs/assets/sponsors/neon-logo-light-color.svg" width="157" height="45" alt="Neon" />
+          </picture>
+        </a>
+      </td>
+      <td><a href="https://neon.com/">neon.com</a></td>
+      <td>Neon sponsors YT Insights and provides the PostgreSQL infrastructure for the project's future hosted data layer. The released CLI and web app remain local-first and use SQLite. Running the project does not require a Neon account or a remote database.</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+<!-- BEGIN GENERATED RELATED PROJECTS -->
+<!-- Source: https://github.com/FlorianBruniaux/FlorianBruniaux/blob/main/ecosystem/projects.json; project: yt-insights -->
+## Explore the ecosystem
+
+These projects extend the workflow without duplicating this tool:
+
+- **Research papers with [Paper Insights](https://github.com/FlorianBruniaux/paper-insights)**: search arXiv metadata and export traceable citations in a separate experimental corpus; cross-corpus federation is planned.
+- **Run with [CC-Copilot Bridge](https://github.com/FlorianBruniaux/cc-copilot-bridge)**: use the LLM backend that yt-insights already detects automatically.
+- **Measure with [Google Search Console MCP](https://github.com/FlorianBruniaux/google-search-console-mcp)**: connect content research to search visibility after publication.
+- **Learn with [Claude Code Ultimate Guide](https://github.com/FlorianBruniaux/claude-code-ultimate-guide)**: reuse the guide's research and synthesis workflows.
+
+[Browse the complete open-source galaxy](https://github.com/FlorianBruniaux#open-source-galaxy)
+<!-- END GENERATED RELATED PROJECTS -->
+
+## Contributing
+
+Open a PR. No CLA is required. Run `uv sync --extra mcp --extra dev`, then the
+following checks before submitting a change:
+
+```bash
+pnpm --dir web install --frozen-lockfile
+python scripts/verify_web_build.py
+pnpm --dir web test
+pnpm --dir web check
+pnpm --dir web test:e2e
+uv run --extra mcp --extra dev pytest -q
+uv run --extra dev ruff check src tests scripts
+uv run --extra dev mypy src
+uv lock --check
+git diff --check
+```
+
+`verify_web_build.py` copies the declared frontend inputs into a temporary
+checkout and builds there. This keeps generated or injected source files out of
+the repository. CI also rejects tracked and untracked checkout mutations. When
+changing the frontend, run `pnpm --dir web build` explicitly to refresh the
+packaged assets, inspect them, then run the verifier before the other gates.
+
+---
+
+## License
+
+MIT

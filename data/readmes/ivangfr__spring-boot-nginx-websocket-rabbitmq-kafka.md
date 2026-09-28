@@ -1,0 +1,246 @@
+# spring-boot-nginx-websocket-rabbitmq-kafka
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ivan.franchin-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/ivan.franchin)
+
+This project shows how to implement an interactive news broadcasting app. A user can post news using a REST API, and it gets sent out to users instantly through a live `WebSocket` connection. Users can react by liking or disliking the news, and the app keeps track of all those reactions to show the total likes and dislikes.
+
+## Proof-of-Concepts & Articles
+
+On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-Concepts (PoCs) and articles. You can easily search for the technology you are interested in by using the filter. Who knows, perhaps I have already implemented a PoC or written an article about what you are looking for.
+
+## Additional Readings
+
+- \[**Medium**\] [**Implementing an Interactive and Scalable News Broadcasting App**](https://medium.com/@ivangfr/implementing-an-interactive-and-scalable-news-broadcasting-app-333aa06ee2cd)
+- \[**Medium**\] [**Optimizing Spring Boot: App Ready 50% Faster, 48% Less CPU, 16% Less Memory — Zero Code Changes**](https://medium.com/@ivangfr/optimizing-spring-boot-app-ready-50-faster-48-less-cpu-16-less-memory-zero-code-changes-de15a12fb398)
+
+## Project Overview
+
+```mermaid
+flowchart TB
+    subgraph users ["Users"]
+        HTTP["REST Clients"]
+        Browser["Browser"]
+    end
+
+    subgraph infrastructure ["Infrastructure"]
+        Nginx["Nginx\nLoad Balancer"]
+
+        subgraph news-app ["news-app:8080\n(Spring Boot)"]
+            RestCtrl["NewsRestController\n(REST /api/news)"]
+            WsCtrl["ReactionWebsocketController\n(WebSocket /app/reaction)"]
+            EventCons["NewsEventConsumer\n(RabbitMQ → /topic/news)"]
+            ReactionCons["ReactionEventConsumer\n(Kafka → DB)"]
+        end
+
+        subgraph postgresql ["PostgreSQL"]
+            db[("news")]
+        end
+
+        subgraph rabbitmq ["RabbitMQ"]
+            Queue["news.events\n(queue)"]
+        end
+
+        subgraph kafka ["Kafka"]
+            Topic["reactions.events\n(topic)"]
+        end
+    end
+
+    Browser <-->|"WebSocket"| Nginx
+    Browser -->|"HTTP/REST API"| Nginx
+
+    HTTP -->|"HTTP/REST API"| Nginx
+
+    Nginx -->|"HTTP/REST"| RestCtrl
+    Nginx <-->|"WebSocket"| WsCtrl
+
+    RestCtrl -->|"creates"| db
+    RestCtrl -->|"publishes"| Queue
+
+    Queue -.->|"broadcast news"| EventCons
+    EventCons -.->|"/topic/news"| Nginx
+
+    WsCtrl -->|"publishes"| Topic
+    Topic -.->|"consumes"| ReactionCons
+    ReactionCons -->|"updates"| db
+```
+
+**Data Flow:**
+- **News Publishing:** `POST /api/news` → saves to PostgreSQL → broadcasts via RabbitMQ → WebSocket clients receive it
+- **Reactions:** Client reaction (via WebSocket) → sent to Kafka → processed in order → saved to PostgreSQL
+
+For a detailed explanation, check out the [**Medium article**](https://medium.com/@ivangfr/implementing-an-interactive-and-scalable-news-broadcasting-app-333aa06ee2cd).
+
+## Application
+
+- ### news-app
+
+  [`Spring Boot`](https://docs.spring.io/spring-boot/index.html) Java web app that provides a REST endpoint for publishing and broadcasting news. It also supports real-time broadcasting and user reactions through full-duplex [`WebSocket`](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API) channels. The app stores data in [`PostgreSQL`](https://www.postgresql.org/) and runs behind a [`Nginx`](https://nginx.org/index.html) load balancer. For broadcasting, it connects to [`RabbitMQ`](https://www.rabbitmq.com/), and user reactions are handled sequentially and partitioned by news ID using an [`Apache Kafka`](https://kafka.apache.org/) topic partition.
+
+  It has the following endpoints:
+  ```
+   GET /api/news
+   GET /api/news/{id}
+  POST /api/news {"description": "..."}
+   GET /actuator/health
+  ```
+
+## Prerequisites
+
+- [`Java 25`](https://www.oracle.com/java/technologies/downloads/#java25) or higher;
+- A containerization tool (e.g., [`Docker`](https://www.docker.com), [`Podman`](https://podman.io), etc.)
+- [`Bash 4.0`](https://www.gnu.org/software/bash/) or higher (macOS ships with Bash 3.2; install via `brew install bash`)
+
+## Build News App Docker Image
+
+Open a terminal and, inside the `spring-boot-nginx-websocket-rabbitmq-kafka` root folder, run the following script:
+```bash
+./build-docker-images.sh
+```
+
+## Configure /etc/hosts
+
+Add the following line to `/etc/hosts`
+```text
+127.0.0.1 news-app.lb
+```
+
+## Start Docker Compose services
+
+In a terminal and inside the `spring-boot-nginx-websocket-rabbitmq-kafka` root folder run:
+```bash
+podman compose up -d
+```
+
+## Simulation
+
+- Open one or more browsers and access:
+  ```
+  http://news-app.lb
+  ```
+
+- In a terminal, publish a news:
+
+  - Informing the news description:
+    ```bash
+    curl -X POST http://news-app.lb/api/news \
+      -H "Content-Type: application/json" \
+      -d '{"description": "This is the content of the breaking news."}'
+    ```
+  
+  - Not informing the news description. In this case, a random description will be generated:
+    ```bash
+    curl -X POST http://news-app.lb/api/news
+    ```
+
+- You should see the news being displayed in the browsers opened before.
+
+- You can react to the news by clicking on the "Like" or "Dislike" buttons.
+
+- You can check the news statistic by executing the following command in a terminal:
+  ```bash
+  curl http://news-app.lb/api/news/{id}
+  ```
+  > **Note**: Replace `{id}` with the actual news id returned when publishing the news.
+
+## Demo
+
+![demo](documentation/demo.gif)
+
+## Useful Commands
+
+- **Nginx**
+
+  If you wish to modify the `Nginx` configuration file without restarting its Docker container, follow these steps:
+
+    - Apply the changes in the `nginx/nginx.conf` file;
+    - Execute the following command to access the `nginx` Docker container:
+      ```bash
+      docker exec -it nginx bash
+      ```
+    - In the `nginx` Docker container terminal, run:
+      ```bash
+      nginx -s reload
+      ```
+    - To exit, just run the command `exit`.
+
+- **PostgreSQL**
+
+  - Execute the following command to access the `psql` terminal:
+    ```bash
+    docker exec -it postgres psql -U postgres -d newsdb
+    ```
+  - In the terminal, we can select all news records by running:
+    ```sql
+    select * from news;
+    ```
+  - To exit, just run the command `\q`.
+
+- **Kafdrop**
+
+  `Kafdrop` can be accessed at http://localhost:9000
+
+- **RabbitMQ UI**
+
+  `RabbitMQ UI` can be accessed at http://localhost:15672 (`guest` for _username_ and _password_)
+
+## Shutdown
+
+To stop and remove Docker Compose containers, network, and volumes, go to a terminal and, inside the `spring-boot-nginx-websocket-rabbitmq-kafka` root folder, run the following command:
+```bash
+podman compose down -v
+```
+
+## Running Integration Tests
+
+Run the integration tests from the project root:
+
+```bash
+./mvnw verify --projects news-app
+```
+
+## Running Benchmarks
+
+For a step-by-step guide on running benchmarks, see [BENCHMARKING.md](BENCHMARKING.md).
+
+## Cleanup
+
+- To remove the Docker images created by this project, go to a terminal and, inside the `spring-boot-nginx-websocket-rabbitmq-kafka` root folder, run the script below:
+  ```bash
+  ./remove-docker-images.sh
+  ```
+
+- Remove the line below from `/etc/hosts`:
+  ```text
+  127.0.0.1 news-app.lb
+  ```
+
+## Code Formatting
+
+Uses [Spotless Maven Plugin](https://github.com/diffplug/spotless/tree/main/plugin-maven) + [Google Java Format](https://github.com/google/google-java-format) (Java) and [Prettier](https://prettier.io/) (HTML) for automated formatting.
+
+- **Check formatting:**
+  ```bash
+  ./mvnw spotless:check
+  ```
+
+- **Auto-fix formatting:**
+  ```bash
+  ./mvnw spotless:apply
+  ```
+
+Formatting is enforced automatically during `./mvnw test`.
+
+## How to optimize the GIF in the documentation folder
+
+\[**Medium**\]: [**How I Reduce GIF and Screenshot Sizes for My Technical Articles on macOS**](https://medium.com/itnext/how-i-reduce-gif-and-screenshot-sizes-for-my-technical-articles-on-macos-7fea331afc68)
+
+## Support
+
+If you find this useful, consider buying me a coffee:
+
+<a href="https://buymeacoffee.com/ivan.franchin"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="50"></a>
+
+## License
+
+This project is licensed under the [MIT License](./LICENSE).

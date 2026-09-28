@@ -1,0 +1,399 @@
+= Testcontainers Spring Boot
+
+https://codecov.io/gh/PlaytikaOSS/testcontainers-spring-boot[image:https://codecov.io/gh/PlaytikaOSS/testcontainers-spring-boot/graph/badge.svg?token=9E0VBFIB5B[codecov]]
+https://maven-badges.sml.io/sonatype-central/com.playtika.testcontainers/testcontainers-spring-boot[image:https://maven-badges.sml.io/sonatype-central/com.playtika.testcontainers/testcontainers-spring-boot/badge.svg[Sonatype Central]]
+
+If you develop services using Spring Boot and maybe Spring Cloud and you do
+https://testing.googleblog.com/2010/12/test-sizes.html[medium sized] tests during build process, then this set of
+Spring Boot auto-configurations might be handy. By adding a module to the classpath, you will get a stateful service,
+like Couchbase or Kafka, auto-started and available for connection from your application service without wiring any
+additional code. https://www.docker.com/[Docker] and https://www.testcontainers.org/[TestContainers] are used to
+bootstrap stateful service using Spring Cloud https://cloud.spring.io/spring-cloud-static/spring-cloud.html#_the_bootstrap_application_context[bootstrap phase].
+Usage of Spring Cloud in your production code is optional, but __you will need it in tests__. See <<how-to-use, How to use>> below.
+
+== This project vs official Testcontainers
+
+https://github.com/testcontainers/testcontainers-java[testcontainers-java] and Spring Boot's
+https://docs.spring.io/spring-boot/reference/testing/testcontainers.html[Testcontainers support]
+(since 3.1, including `@ServiceConnection`) are the lower-level path: you declare containers in
+the test and wire connection details yourself (`@DynamicPropertySource` or a service connection).
+
+This project sits on top of Testcontainers. Putting an `embedded-*` module on the test classpath
+starts that service during the Spring Cloud bootstrap phase and exposes connection properties
+(`embedded.kafka.brokerList`, and so on) without extra test code.
+
+Use this project when you want that auto-configuration. Use official Testcontainers /
+`@ServiceConnection` when you want to own the container lifecycle in the test class.
+
+== Versions compatibility
+
+|===
+| Spring Boot | Testcontainers Spring Boot
+
+|2.5.X, 2.6.X, 2.7.X
+|2.X.X
+
+|3.0.X, 3.1.X
+|3.0.X
+
+|3.2.X, 3.3.X, 3.4.X, 3.5.X
+|3.1.X
+
+|4.0.X
+|4.0.X
+|===
+
+[[how-to-use]]
+== How to use
+
+. https://docs.docker.com/install/[Install Docker] on your machine
+. Make sure you have http://projects.spring.io/spring-cloud/#quick-start[Spring Boot and Spring Cloud] in the classpath of your tests.
+If needed, https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-bootstrap[pick a version].
++
+.pom.xml
+[source,xml]
+----
+<project>
+...
+      <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+            <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-bootstrap -->
+            <version>[pick version]</version>
+        </dependency>
+...
+</project>
+----
++
+NOTE: `testcontainers-spring-boot` project migrated to Spring Boot 2.4 in 2.0.0 version.
+Please note, that in order to use this project with Spring Boot 2.4, you need to use `spring-cloud-starter-bootstrap` dependency.
+For earlier Spring Boot (prior to 2.4) users -- you need to use `spring-cloud-starter` dependency instead.
+
+. If you do not use Spring Cloud - make it work for tests only:
++
+.pom.xml
+[source,xml]
+----
+<project>
+...
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter -->
+            <version>[pick version]</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+            <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-bootstrap -->
+            <version>[pick version]</version>
+            <scope>test</scope>
+        </dependency>
+...
+</project>
+----
+
+. Add data service library:
++
+.pom.xml
+[source,xml]
+----
+<project>
+...
+        <dependency>
+            <groupId>com.playtika.testcontainers</groupId>
+            <artifactId>embedded-kafka</artifactId>
+            <!-- https://mvnrepository.com/artifact/com.playtika.testcontainers/ -->
+            <version>[pick version]</version>
+            <scope>test</scope>
+        </dependency>
+...
+</project>
+----
+
+. Use produced properties in your configuration.
++
+Example:
++
+./src/test/resources/application.properties
+[source,properties]
+----
+spring.kafka.bootstrap-servers=${embedded.kafka.brokerList}
+----
++
+./src/test/resources/bootstrap.properties
+[source,properties]
+----
+embedded.kafka.topicsToCreate=some_topic
+----
+
+== In-depth guides, how-tos and samples
+
+- https://martinfowler.com/articles/microservice-testing/[Testing Strategies in a Microservice Architecture]
+- https://dzone.com/articles/advanced-functional-testing-in-spring-boot-by-usin[Functional Testing in Spring Boot Using Docker in Tests]
+- https://github.com/tdanylchuk/functional-tests-best-practices[Functional tests best practices sample repo]
+- https://medium.com/@isadounikau/microservices-integration-testing-spring-boot-404b6f8617d1[Spring Boot Microservices Integration Testing]
+- https://mydeveloperplanet.com/2020/05/05/easy-integration-testing-with-testcontainers[Easy Integration Testing With Testcontainers]
+- https://dev.to/sivalabs/springboot-integration-testing-using-testcontainers-starter-13h2[SpringBoot Integration Testing using TestContainers Starter]
+- https://alexromanov.github.io/2019/04/02/spring-boot-docker-containers/[Easy way to test Spring Boot microservices]
+
+== Common configuration options
+=== Shutdown of embedded containers on spring application shutdown immediately
+./src/test/resources/application.properties
+[source,properties]
+----
+embedded.containers.forceShutdown=true #default is false
+----
+NOTE: Otherwise, it will be shutdown with delay, see https://github.com/testcontainers/moby-ryuk
+
+=== Disable all embedded containers
+
+./src/test/resources/bootstrap.properties
+[source,properties]
+----
+embedded.containers.enabled=true #default is true
+----
+NOTE: If you setup, for example  embedded.kafka.enabled + embedded.containers.enabled, result will be same as using AND between two booleans.
+
+NOTE: embedded.kafka.enabled=false will cause DockerNotPresentException if you don't have docker installed. But embedded.containers.enabled=false won't cause any exceptions in this case.
+
+|===
+|Setting1 |Setting2 |Outcome
+
+|embedded.containers.enabled=false
+|embedded.memsql.enabled=true
+|Memsql will not start
+
+|embedded.containers.enabled=true
+|embedded.memsql.enabled=false
+|Memsql will not start
+
+|embedded.containers.enabled=true
+|embedded.memsql.enabled=true
+|Memsql will start
+
+|embedded.containers.enabled is missing
+|embedded.memsql.enabled is missing
+|Memsql will start
+|===
+
+=== Other specific container related properties
+[cols="a,a,a"]
+|===
+|Setting name | Default value |Description
+
+|embedded.{module-name}.dockerImage
+|Depends on module
+|Full Docker image name for container setup. Most of the modules have default value already setup.
+
+|embedded.{module-name}.dockerImageVersion
+|N/A
+|Use this property if you want to override only Docker image's version.
+
+|embedded.{module-name}.waitTimeoutInSeconds
+|60
+|Waiting time for a container to start in seconds
+
+|embedded.{module-name}.enabled
+|true
+|Enables a container to be started on startup
+
+|embedded.{module-name}.reuseContainer
+|false
+|Enables a reuse container Testcontainers feature. For more info please refer to: https://github.com/testcontainers/testcontainers-java/pull/2555 and https://github.com/testcontainers/testcontainers-java/pull/1781.
+
+|embedded.{module-name}.command
+|null
+|List of keywords which combines into command for container startup. Some modules ship container's commands by default, so resetting this value may lead to incorrect work of container.
+
+|embedded.{module-name}.attachContainerLog
+|false
+|Attach embedded container output log.
+
+|embedded.{module-name}.env
+|null
+|key-value map of additional environment variables. Where key is name of variable and value is actual value of it.
+
+|embedded.{module-name}.label
+|null
+|key-value map of additional labels to the container. Where key is name of label and value is actual value of label.
+
+|embedded.{module-name}.filesToInclude
+| empty list
+|List of files to include objects.
+Each object should have two parameters:
+
+ * `classpathResource` (path to local file)
+ * `containerPath` (path in a container to where file needs to be copied)
+
+Example:
+[source,yaml]
+----
+embedded.redis.filesToInclude:
+  classpathResource: "/my_local_file.txt"
+  containerPath: "/etc/path_in_container.txt"
+----
+
+|embedded.{module-name}.mountVolumes
+| empty list
+|List of mount volumes to persist between container restarts.
+Each object should have three parameters:
+
+ * `hostPath` (path to local file/directory)
+ * `containerPath` (path in container to mount file/directory onto)
+ * `mode` (access mode default *READ_ONLY*, or *READ_WRITE*)
+
+Example:
+[source,yaml]
+----
+embedded.postgresql.mountVolumes:
+  hostPath: "pgdata"
+  containerPath: "/var/lib/postgresql/data"
+  mode: READ_WRITE
+----
+
+|embedded.{module-name}.capabilities
+| empty list. `NET_ADMIN` is set for Aerospike, Couchbase, Elasticsearch, Kafka, Mariadb, Memsql, Minio, Mongodb, Mysql, Neo4j, Redis containers.
+|The Linux capabilities that should be enabled. You can disable all capabilities by providing empty value for this property.
+See: https://man7.org/linux/man-pages/man7/capabilities.7.html.
+Available values can be taken from `com.github.dockerjava.api.model.Capability` class.
+
+|embedded.{module-name}.tmpFs.mounts
+| empty list
+| A list of container directories which should be replaced by tmpfs mounts, and their corresponding mount options. Check https://docs.docker.com/storage/tmpfs/[TmpFs mount docs].
+
+For example, for MariaDb:
+[source,yaml]
+----
+embedded:
+  mariadb:
+    tmp-fs:
+      mounts:
+        - folder: /var/lib/mysql
+          options: rw
+----
+
+|===
+
+
+== Supported services
+
+=== link:embedded-mariadb/README.adoc[embedded-mariadb]
+
+=== link:embedded-couchbase/README.adoc[embedded-couchbase]
+
+=== link:embedded-kafka/README.adoc[embedded-kafka]
+
+=== link:embedded-native-kafka/README.adoc[embedded-native-kafka]
+
+=== link:embedded-rabbitmq/README.adoc[embedded-rabbitmq]
+
+=== link:embedded-aerospike/README.adoc[embedded-aerospike]
+
+=== link:embedded-memsql/README.adoc[embedded-memsql]
+
+=== link:embedded-redis/README.adoc[embedded-redis]
+
+=== link:embedded-neo4j/README.adoc[embedded-neo4j]
+
+=== link:embedded-postgresql/README.adoc[embedded-postgresql]
+
+=== link:embedded-elasticsearch/README.adoc[embedded-elasticsearch]
+
+=== link:embedded-opensearch/README.adoc[embedded-opensearch]
+
+=== link:embedded-dynamodb/README.adoc[embedded-dynamodb]
+
+=== link:embedded-voltdb/README.adoc[embedded-voltdb]
+
+=== link:embedded-minio/README.adoc[embedded-minio]
+
+=== link:embedded-mongodb/README.adoc[embedded-mongodb]
+
+=== link:embedded-google-pubsub/README.adoc[embedded-google-pubsub]
+
+=== link:embedded-google-storage/README.adoc[embedded-google-storage]
+
+=== link:embedded-keycloak/README.adoc[embedded-keycloak]
+
+=== link:embedded-keydb/README.adoc[embedded-keydb]
+
+=== link:embedded-influxdb/README.adoc[embedded-influxdb]
+
+=== link:embedded-vault/README.adoc[embedded-vault]
+
+=== link:embedded-oracle-xe/README.adoc[embedded-oracle-xe]
+
+=== link:embedded-mysql/README.adoc[embedded-mysql]
+
+=== link:embedded-localstack/README.adoc[embedded-localstack]
+
+=== link:embedded-cassandra/README.adoc[embedded-cassandra]
+
+=== link:embedded-clickhouse/README.adoc[embedded-clickhouse]
+
+=== link:embedded-pulsar/README.adoc[embedded-pulsar]
+
+=== link:embedded-vertica/README.adoc[embedded-vertica]
+
+=== link:embedded-prometheus/README.adoc[embedded-prometheus]
+
+=== link:embedded-grafana/README.adoc[embedded-grafana]
+
+=== link:embedded-consul/README.adoc[embedded-consul]
+
+=== link:embedded-artifactory/README.adoc[embedded-artifactory]
+
+=== link:embedded-azurite/README.adoc[embedded-azurite]
+
+=== link:embedded-toxiproxy/README.adoc[embedded-toxiproxy]
+
+=== link:embedded-nats/README.adoc[embedded-nats]
+
+=== link:embedded-k3s/README.adoc[embedded-k3s]
+
+=== link:embedded-mockserver/README.adoc[embedded-mockserver]
+
+=== link:embedded-solr/README.adoc[embedded-solr]
+
+=== link:embedded-cockroachdb/README.adoc[embedded-cockroachdb]
+
+=== link:embedded-git/README.adoc[embedded-git]
+
+=== link:embedded-wiremock/README.adoc[embedded-wiremock]
+
+=== link:embedded-mailhog/README.adoc[embedded-mailhog]
+
+=== link:embedded-spicedb/README.adoc[embedded-spicedb]
+
+== How to contribute
+
+=== Flow
+
+* You need to fork project and create branch from `develop`
+* You do not need to update project version in `pom.xml` files, this will be done by release job
+* Once finished - create pull request to `develop` from your fork, pass review and wait for merge
+* On release, ci job will update to next release version + publish artifacts to the Maven Central
+
+=== Checklist for contributing new module
+
+* Naming/formatting patterns match existing code
+* Test for success scenario
+* Test for negative scenario (autoconfiguration is disabled via properties). https://spring.io/blog/2018/03/07/testing-auto-configurations-with-spring-boot-2-0[How to test autoconfiguration]
+* Add new module to `testcontainers-spring-boot-bom`
+* Module provides documentation in `README.adoc` and this documentation is included in parent `README.adoc` (see an example in already existing modules). Documentation should include:
+** maven module declaration
+** consumed properties
+** produced properties
+** notes (if applicable)
+** example of usage
+
+== Release
+//* Release build is done using https://github.com/aleksandr-m/gitflow-maven-plugin[gitflow-maven-plugin]
+* Release is done per each major change, critical bug
+* Release can be done by contributor request
+* Contacts to start release:
+** mailto:sstus@playtika.com[sstus@playtika.com]
+** mailto:iyova@playtika.com[iyova@playtika.com]
+** mailto:admitrov@playtika.com[admitrov@playtika.com]
+** mailto:rkvasnytskyi@playtika.com[rkvasnytskyi@playtika.com]

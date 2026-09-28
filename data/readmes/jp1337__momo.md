@@ -1,0 +1,385 @@
+<p align="center">
+  <img src="public/icon.svg" width="80" height="80" alt="Momo" />
+</p>
+
+<h1 align="center">momo</h1>
+
+[![Build & Publish](https://github.com/jp1337/momo/actions/workflows/build-and-publish.yml/badge.svg)](https://github.com/jp1337/momo/actions/workflows/build-and-publish.yml)
+[![Tests](https://github.com/jp1337/momo/actions/workflows/test.yml/badge.svg)](https://github.com/jp1337/momo/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/jp1337/momo/graph/badge.svg)](https://codecov.io/gh/jp1337/momo)
+[![Version](https://img.shields.io/github/package-json/v/jp1337/momo?label=version&color=7c3aed)](https://github.com/jp1337/momo/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green?logo=opensourceinitiative&logoColor=white)](https://github.com/jp1337/momo/blob/main/LICENSE)
+[![Node.js](https://img.shields.io/badge/node-22-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Docker](https://img.shields.io/badge/Docker-ghcr.io-2496ed?logo=docker&logoColor=white)](https://github.com/jp1337/momo/pkgs/container/momo)
+[![GitHub Sponsors](https://img.shields.io/badge/sponsor-GitHub-ea4aaa?logo=github-sponsors&logoColor=white)](https://github.com/sponsors/jp1337)
+[![Ko-fi](https://img.shields.io/badge/support-Ko--fi-ff5e5b?logo=ko-fi&logoColor=white)](https://ko-fi.com/jpylypiw)
+[![PayPal](https://img.shields.io/badge/donate-PayPal-003087?logo=paypal&logoColor=white)](https://paypal.me/JPylypiw)
+
+> *"You must do one more thing, and you'll get to rest."*
+
+**Steal your time back.**
+
+Momo is a task management app built for people who struggle with avoidance, procrastination, and the overwhelming weight of everyday tasks. Not a power-user productivity suite — a quiet, daily companion that asks only one thing of you: *one small step, today.*
+
+🌐 **Live version:** [momotask.app](https://momotask.app)  
+📖 **Documentation:** [jp1337.github.io/momo](https://jp1337.github.io/momo)
+
+---
+
+## 📸 Screenshots
+
+| Dashboard | Topics |
+|:---------:|:------:|
+| ![Dashboard — Daily Quest lit as the page's one highlighted element, with a naked Quick Wins list below](public/screenshots/01-dashboard.png) | ![Topics — a hairline-separated list of topic rows, no cards, with progress bars](public/screenshots/02-topics.png) |
+
+| Habits | Statistics |
+|:------:|:----------:|
+| ![Habits — GitHub-style year heatmap with streak stats](public/screenshots/03-habits.png) | ![Statistics — the fourth Progress tab: flat counters in the rail, level as a fraction, streak sparkline, and best weekdays](public/screenshots/04-stats.png) |
+
+| Wishlist |
+|:--------:|
+| ![Wishlist — hairline-separated rows with prices in mono, budget and filters in the rail](public/screenshots/05-wishlist.png) |
+
+---
+
+## ✨ The Name
+
+The name **Momo** comes from Michael Ende's 1973 novel *Momo* — one of the most quietly radical books about time, attention, and what it means to be present.
+
+In the story, the Grey Gentlemen — shadowy figures carrying briefcases — visit ordinary people and convince them to "save time." They tell people to stop lingering, to cut out the things that don't produce anything: long conversations, idle afternoons, play, rest. People comply. They become efficient. They become joyless. They lose themselves.
+
+Momo is a small, homeless girl who has a rare gift: she truly listens. And through that gift, she sees what others cannot — that the Grey Gentlemen are *stealing* people's time, not saving it. She fights them. Alone. Slowly. One step at a time.
+
+The parallel to procrastination and avoidance is not accidental.
+
+When anxiety or overwhelm turns every task into a wall, when the Grey Gentlemen of your own mind tell you that you're behind, that you'll never catch up, that you should just wait until tomorrow — **Momo is on your side.** She doesn't ask you to be productive. She asks you to do *one thing.* Just one. That's enough for today.
+
+*This app is named in her honor.*
+
+---
+
+## 🌟 Features
+
+- **Onboarding Wizard** — Guided 4-step setup for new users: learn the core concepts (Quest, Energy, Coins, Streaks), create a first topic, add tasks, and enable notifications. Every step is skippable; existing accounts are unaffected.
+- **Daily Quest** — One small task, chosen for you each day. No overwhelm, just one step forward.
+- **Energy-aware Daily Quest** — Permanent check-in card on the dashboard: tell Momo whether you're at high / medium / low energy, and it auto-swaps the daily quest for a better-matching task (with Undo). Topics can set a default energy level that new tasks inherit. Quick Wins and 5-Minute Mode sort by energy fit. 14-day energy trend on `/stats`. Every check-in is logged so re-check-ins (morning HIGH, afternoon LOW) are preserved for pattern analysis.
+- **Topics & Subtasks** — Break big projects (like "Moving" or "Tax Return") into tiny, manageable pieces. Drag & drop to reorder tasks within a topic.
+- **Sequential Topics** — Flip a toggle on any topic to turn it into an ordered chain: only the first still-open task is eligible for the daily quest, and the drag & drop order decides what comes next. Perfect for projects where "buy the boxes" has to happen before "pack the boxes". Snoozing a task advances the chain so one paused step doesn't freeze the whole topic.
+- **Topic Templates** — One-click import for curated starter topics. Pick from **Moving** (10 sequential tasks), **Tax Return** (6 sequential tasks), **Workout Routine** (7 parallel tasks) or **Household** (6 recurring chores — laundry, vacuuming, kitchen, bathroom, windows, bedding — with sensible default intervals) and Momo creates a fully populated topic with icons, colours, default energy level and sensible priorities. Template titles are resolved in your current UI language at import time and become normal, editable tasks. Extend the catalogue by adding an entry to `lib/templates.ts`.
+- **Recurring Tasks** — Four schedule types: **Interval** (every N days, rolling), **Weekday** (e.g. every Mon + Wed), **Monthly** (same day each month), **Yearly** (same date each year). Each type has a Fixed/Rolling toggle: fixed = always advance from the scheduled date (calendar-aligned); rolling = advance from the completion date. iCal export generates correct `RRULE` per type. Habit streaks count in the natural period for the type (days / weeks / months / years).
+- **Habit Tracker** — A GitHub-style year heatmap per recurring task on `/habits`. Every completion lights up the day it happened; stat pills show totals for this year, 30 days, and 7 days. An amber flame pill tracks each habit's **individual streak** — consecutive periods you hit the habit, in the unit that fits the recurrence (days, weeks, months). Your all-time best streak is shown underneath, with a "New best" flourish when you beat it. Browse past years with the year selector. Uses your real completion events — no fake "expected" days, no invented streaks.
+- **Gamification** — Earn coins, build streaks (with a monthly **Cassiopeia** ✨ that protects against a single missed day), level up. Small wins deserve real celebration.
+- **Wishlist & Budget** — Track things you want to buy, set a coin threshold to earn the purchase through task completions, and use a monthly budget indicator to spend more consciously. Coins are deducted atomically on buy and refunded on undo.
+- **Search & Filter** — Real-time text search across tasks and wishlist, plus filter chips for priority and topic. Instantly narrow your list without a server round-trip.
+- **Bulk Actions** — Multi-select tasks via checkbox, then batch-delete, complete, change topic, or set priority from a floating action bar. Useful for cleanup after imports or inbox triage. Bulk-complete deliberately skips gamification — it's a cleanup tool, not a coin shortcut.
+- **Snooze / Pause** — Hide tasks until a future date. Quick options (tomorrow, next week, month) or custom date picker. Snoozed tasks vanish from the list, Quick Wins, and Daily Quest — then reappear automatically.
+- **Emotional Closure** — After completing the daily quest, a gentle Michael Ende quote or affirmation appears. Day-based selection (same quote all day, new one tomorrow). Toggleable in Settings.
+- **Push Notifications** — Daily quest reminders via browser push, plus an opt-in "due today" reminder that lists the tasks actually due today (silent on empty days — no "all clear" pings). Works via Web Push, ntfy.sh, Pushover, Telegram, or Email. **Morning Briefing** — opt-in daily digest that replaces individual quest and due-today pings with one compact message: quest, due tasks, streak, and new achievements, delivered at your chosen time (default 08:00). **Notification History** in Settings shows the last 50 delivery attempts with status and error details for debugging.
+- **Calendar Subscription (iCal)** — Subscribe to your Momo tasks from Google Calendar, Apple Calendar, Outlook or Thunderbird via a private `.ics` feed URL. All-day events for every task with a due date, open-ended `RRULE` series for recurring tasks, stable UIDs so updates merge in place on every poll. One-click rotate or revoke in Settings; the token is stored only as a SHA-256 hash.
+- **PWA** — Install on your phone like a native app. Works offline. The task creation form is fully usable on mobile — a corrected z-index ensures it renders above the bottom navigation bar as a proper full-height modal.
+- **REST API & API Keys** — Full public REST API with personal access tokens (read-only flag, expiry dates). Interactive Swagger UI at `/api-docs`.
+- **Account Linking** — Connect multiple OAuth providers to one account.
+- **Multilingual** — German, English, Spanish, French, Dutch, Russian and Chinese UI with cookie-based locale switching. Achievement titles and level names live in the message files too, so the whole surface follows the user's locale. Add any language by dropping in a `messages/XX.json` file.
+- **Statistics** — Personal stats dashboard with completion-rate per topic (sorted by avoidance), best weekdays bar chart, 90-day streak sparkline, energy trend chart, level progress, achievements, and wishlist overview. Fully localized (de/en/es/fr/nl/ru/zh).
+- **Admin Panel** — Platform-wide statistics for operators (user growth, top users, achievement distribution). Protected by `ADMIN_USER_IDS` env var — only listed user UUIDs can access `/admin`.
+- **Procrastination Counter** — Every task tracks how many times it has been postponed. Tasks postponed 3 or more times award double coins on completion.
+- **Daily Quest Postpone Limit** — Configurable per-user daily postpone limit (1–5, default 3) in Settings. Prevents endless deferral of the one thing that matters.
+- **Task Breakdown** — Split any task into subtasks with a single button. A new Topic is created from the breakdown; the original task is removed. The `totalTasksCreated` statistics counter is correctly incremented for each generated subtask.
+- **Timezone-Aware Daily Quest** — The daily quest selection respects the user's local timezone (`GET /api/daily-quest?timezone=Europe/Berlin`), ensuring the quest resets at local midnight rather than UTC.
+- **Immutable Statistics Counter** — `totalTasksCreated` is a cumulative counter that only ever increases. Deleting a task never decrements it, giving an accurate lifetime picture of your output.
+- **Time Estimates** — Assign a time estimate (5, 15, 30, or 60 minutes) to any task. Estimates are displayed as a badge on task cards.
+- **Quick Wins** — Dashboard section that surfaces all tasks estimated at 15 minutes or less, so a short window of focus never goes to waste.
+- **5-Minute Mode** — Dedicated focused view (`/quick`) showing only tasks with a 5-minute estimate. Sidebar and mobile nav entry. Complete tasks directly with full animation support.
+- **Focus Mode** — Distraction-free view (`/focus`) showing only the Daily Quest and Quick Wins (tasks ≤ 15 min). No stats, no links, no noise — just the quest and a few short tasks. Full completion animations. Reachable from the Daily Quest's own action row on the dashboard, the sidebar, and mobile nav.
+- **Public Landing Page** — Atmospheric Momo-themed landing page (Fraunces italic, dark forest green, feather animation, Michael Ende quote) for unauthenticated visitors.
+- **Dark & Light Mode** — Cozy warm tones in both themes. Because productivity shouldn't feel clinical.
+- **DSGVO / GDPR Ready** — Data export (JSON), account deletion with full cascade, Impressum + Datenschutzerklärung pages, no tracking cookies.
+- **Open Source & Self-Hostable** — Your data, your server, your rules. Migrations run automatically on container start.
+
+---
+
+## 🔐 Authentication
+
+Sign in with the account you already have. No new password to forget.
+
+| Provider | Live (momotask.app) | Self-hosted |
+|---|---|---|
+| **GitHub** | ✅ | ✅ (own OAuth App) |
+| **Discord** | ✅ | ✅ (own OAuth App) |
+| **Google** | ✅ | ✅ (own OAuth App) |
+| **Microsoft** (private accounts only — Outlook/Hotmail/Live/Xbox) | ✅ | ✅ (own Azure App) |
+| **OIDC** (Authentik, Keycloak, …) | — | ✅ |
+
+Optional **two-factor authentication** — either **TOTP** (Aegis, 2FAS,
+Google Authenticator, Authy, 1Password, …) or **Passkeys** (Touch ID,
+Windows Hello, iCloud Keychain, YubiKey, …). Passkeys additionally enable
+**passwordless primary login**: once registered, you can sign in with just
+a fingerprint or PIN — no OAuth round-trip required. Self-hosters can
+enforce a second factor for every account by setting `REQUIRE_2FA=true`.
+See [Two-Factor Auth Guide](docs/two-factor-auth.md) for the technical
+details and [OAuth Setup Guide](docs/oauth-setup.md) for provider setup.
+
+**Active session management + login alerts** — view all active sessions
+(browser, OS, IP, timestamps) in Settings and revoke any you don't recognise.
+Enable opt-in **new-device login notifications** to receive an alert on all
+your configured channels the moment an unfamiliar device signs in to your
+account.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | Next.js 16 (App Router) + React 19, TypeScript, Tailwind CSS v4 |
+| **Animations** | Motion |
+| **Auth** | Auth.js v5 (GitHub, Discord, Google, Microsoft (private accounts), OIDC) |
+| **Database** | PostgreSQL 18 + Drizzle ORM |
+| **i18n** | next-intl — German, English, French (cookie-based, no URL prefix) |
+| **Push Notifications** | Web Push API (VAPID, no third-party) |
+| **API** | OpenAPI 3.1.0 + Personal Access Tokens (Bearer) |
+| **Container** | Docker (Node.js 24 LTS) |
+| **Orchestration** | Kubernetes |
+| **CI/CD** | GitHub Actions (native multi-arch: amd64 + arm64) |
+| **Image Registries** | GHCR, Docker Hub, Quay.io |
+
+> **Note for React developers:** Next.js is a React framework. All UI is written in React — Next.js adds routing, server-side rendering, API routes, and PWA support on top.
+
+---
+
+## 🎨 Design
+
+Momo is intentionally cozy. Both the dark and light themes use warm, earthy tones — no harsh whites, no cold blues, no sterile greys. The goal is an app you *want* to open, not one that feels like a spreadsheet.
+
+- **Dark theme:** Deep forest greens and near-blacks with warm amber accents
+- **Light theme:** Pale sage paper, not cream — a daylight-in-the-woods tone rather than the warm-serif-on-cream look most productivity apps default to
+- **Typography:** Fraunces (once per page, large — the Daily Quest or a page title) · JetBrains Mono (tasks, figures) · Instrument Sans (everything else)
+- **Animations:** Subtle, purposeful — a small celebration when you finish something, not a distraction
+
+---
+
+## 🚀 Quick Start (Docker Compose)
+
+### Prerequisites
+
+- Docker & Docker Compose
+- Node.js 24+ (for local development only)
+- A GitHub or Discord OAuth App (see [OAuth Setup](docs/oauth-setup.md))
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/jp1337/momo.git
+cd momo
+```
+
+### 2. Configure environment variables
+
+```bash
+cp .env.example .env.local
+# Edit .env.local with your credentials
+```
+
+See [Environment Variables](docs/environment-variables.md) for a full reference.
+
+### 3. Start with Docker Compose
+
+```bash
+docker compose up -d
+```
+
+The app is available at `http://localhost:3000`. **Database migrations run automatically** before the server starts — no manual step needed.
+
+---
+
+## 🧑‍💻 Local Development (WSL / Linux)
+
+```bash
+# Install dependencies
+npm install
+
+# Start PostgreSQL via Docker Compose
+docker compose up db -d
+
+# Run database migrations (local dev only)
+npx drizzle-kit migrate
+
+# Start the development server
+npm run dev
+```
+
+The app runs at `http://localhost:3000`.
+
+### Running Tests
+
+Integration tests run against a separate `momo_test` database (dev data is never touched):
+
+```bash
+docker compose up db -d   # database must be running
+npm test                  # creates momo_test, migrates, runs 29 tests
+npm run test:watch        # re-run on file changes
+```
+
+See [docs/testing.md](docs/testing.md) for the full test catalogue and setup details.
+
+---
+
+## 📦 Container Images
+
+Momo images are published to three registries on every release for redundancy:
+
+| Registry | Image |
+|---|---|
+| GitHub Container Registry | `ghcr.io/jp1337/momo` |
+| Docker Hub | `docker.io/jp1337/momo` |
+| Quay.io | `quay.io/jp1337/momo` |
+
+Pull from whichever is available:
+
+```bash
+docker pull ghcr.io/jp1337/momo:latest
+# or
+docker pull jp1337/momo:latest
+# or
+docker pull quay.io/jp1337/momo:latest
+```
+
+---
+
+## 📖 Documentation
+
+Full documentation is available at **[jp1337.github.io/momo](https://jp1337.github.io/momo)**
+
+| Guide | Description |
+|---|---|
+| [Deployment](docs/deployment.md) | Docker Compose, production checklist, Kubernetes reference |
+| [Environment Variables](docs/environment-variables.md) | All configuration options |
+| [OAuth Setup](docs/oauth-setup.md) | GitHub, Discord, Google, Microsoft & OIDC configuration |
+| [API Reference](docs/api.md) | All REST endpoints — interactive Swagger UI at `/api-docs` |
+| [Database](docs/database.md) | Schema overview, migrations, Drizzle Studio |
+| [DSGVO / GDPR](docs/gdpr.md) | Compliance guide for operators |
+| [SEO](docs/seo.md) | Search-engine setup: metadata, robots, sitemap, JSON-LD |
+
+---
+
+## 🏗️ Project Status
+
+| Phase | Status | Description |
+|---|---|---|
+| Phase 1 – Foundation | ✅ Done | Next.js 16 + Auth.js v5 + Drizzle ORM + Design System |
+| Phase 2 – Core Tasks | ✅ Done | Task CRUD, Topics, Recurring |
+| Phase 3 – Daily Quest | ✅ Done | Quest algorithm, Dashboard |
+| Phase 4 – Gamification | ✅ Done | Coins, Streaks, Animations |
+| Phase 5 – Wishlist | ✅ Done | Wishlist CRUD, Budget tracking, Affordability, Coin-unlock |
+| Phase 6 – PWA & Push | ✅ Done | PWA manifest, Service Worker, VAPID push, Daily quest & streak notifications, Settings page |
+| Phase 7 – Deployment | ✅ Done | Multi-stage Docker, GitHub Actions (GHCR + DockerHub + Quay), Security Headers, Rate Limiting, K8s manifests |
+| Phase 8 – Polish | ✅ Done | Multilingual (DE/EN/ES/FR/NL/RU/ZH), DSGVO compliance, Dark mode redesign, self-hosted fonts, data export, account deletion |
+| Phase 9 – API & Keys | ✅ Done | Public REST API, Personal Access Tokens, Swagger UI, Account Linking, Font Awesome icons, SVG Logo |
+| Phase 10 – Statistics & Admin | ✅ Done | Personal stats page, Admin panel, Mobile bottom navigation |
+| Phase 11 – UX & Anti-Procrastination | ✅ Done | Procrastination counter, postpone limit, bonus coins, task breakdown, time estimates, Quick Wins, public landing page, dashboard redesign, FA icon picker |
+| Phase 11 – Bugfixes (2026-04-05) | ✅ Done | Timezone-aware daily quest selection, immutable statistics counter, task breakdown stat increment, mobile task form z-index fix |
+| Lichtkegel Phase 2 (2026-08-28) | ✅ Done | Zahlen-Seiten: /stats als Progress-Tab, Wunschliste als Zeilen, Errungenschaften als Liste; Messeinheit sind jetzt Zustände statt Routen (10 statt 6) |
+
+---
+
+## 🚢 Production Checklist
+
+Before deploying Momo to production, verify all items below:
+
+- [ ] **Generate AUTH_SECRET** — minimum 32 random bytes:
+  ```bash
+  openssl rand -base64 32
+  ```
+- [ ] **Set AUTH_TRUST_HOST=true** — required when running behind any reverse proxy (nginx, Caddy, Traefik) or in Kubernetes
+- [ ] **Set all required environment variables** — see [Environment Variables](docs/environment-variables.md)
+- [ ] **Generate VAPID keys** for push notifications:
+  ```bash
+  npx web-push generate-vapid-keys
+  ```
+- [ ] **Register OAuth apps** for your production domain with correct callback URLs
+- [ ] **Set CRON_SECRET** to protect cron endpoints:
+  ```bash
+  openssl rand -hex 32
+  ```
+- [ ] **Configure TLS** — use a reverse proxy (nginx, Caddy) or cert-manager in Kubernetes
+- [ ] **Configure legal pages** (for public deployments) — set `NEXT_PUBLIC_IMPRINT_NAME`, `NEXT_PUBLIC_IMPRINT_ADDRESS`, `NEXT_PUBLIC_IMPRINT_EMAIL` (see [DSGVO Guide](docs/gdpr.md))
+- [ ] **Set `NEXT_PUBLIC_APP_URL` to your public HTTPS origin** — drives `metadataBase`, `robots.txt`, `sitemap.xml`, Open Graph tags and JSON-LD. If left at the default `http://localhost:3000`, search engines and social previews will index `localhost`. See [SEO Guide](docs/seo.md).
+- [ ] **Set ADMIN_USER_IDS** (optional) — comma-separated UUIDs of users who can access `/admin`. If unset, the admin page is inaccessible to everyone:
+  ```bash
+  # Find your UUID in the database, or check the "access denied" screen at /admin
+  ADMIN_USER_IDS=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+  ```
+- [ ] **Migrations run automatically** — the container applies all pending migrations on startup. Check `docker compose logs app` after deployment to confirm.
+
+See the full [Deployment Guide](docs/deployment.md) for AUTH_SECRET rotation procedures and Kubernetes deployment steps.
+
+---
+
+## 🤝 Contributing
+
+Momo is open source — every contribution is welcome, from a one-line typo fix to a full feature.
+
+### Good First Issues
+
+Looking for a place to start? These areas are well-scoped and don't require deep knowledge of the whole codebase:
+
+| Area | What to do |
+|---|---|
+| **Translations** | Add missing keys or improve phrasing in `messages/*.json`. Run `npm run check:i18n` to find gaps. |
+| **Tests** | Add unit tests in `__tests__/` for an uncovered `lib/` function. Run `npm test` to verify. |
+| **Docs** | Improve or expand pages in `docs-site/` (user-facing) or `docs/` (operator-facing). |
+| **Accessibility** | Audit components for missing `aria-label`, keyboard navigation, or colour-contrast issues. |
+| **New template** | Add a new topic template in `lib/templates.ts` + translation strings in `messages/*.json`. |
+
+Browse [open issues](https://github.com/jp1337/momo/issues) — issues tagged **`good first issue`** are specifically chosen for newcomers.
+
+### Development Setup
+
+```bash
+# 1 — Clone and install
+git clone https://github.com/jp1337/momo.git
+cd momo
+npm install
+
+# 2 — Start the database
+docker compose up db -d
+
+# 3 — Copy and fill in environment variables
+cp .env.example .env.local
+
+# 4 — Run migrations
+npx drizzle-kit migrate
+
+# 5 — Start the dev server
+npm run dev
+```
+
+The app is then available at `http://localhost:3000`.
+
+### Before opening a PR
+
+```bash
+npm test          # all 1 680+ integration tests must pass
+npm run check:i18n  # no missing translation keys
+npx eslint .      # no lint errors
+npx tsc --noEmit  # no TypeScript errors
+```
+
+### Commit convention
+
+Momo uses [Conventional Commits](https://www.conventionalcommits.org/):
+`feat(scope): description` / `fix(scope): description` / `test(scope): ...`
+
+Scopes: `auth`, `tasks`, `topics`, `daily-quest`, `gamification`, `wishlist`, `push`, `ui`, `db`, `api`, `docs`.
+
+---
+
+## 📜 License
+
+MIT — see [LICENSE](LICENSE) for details.
+
+---
+
+*Named after Momo, by Michael Ende. For everyone whose Grey Gentlemen have been stealing their time.*

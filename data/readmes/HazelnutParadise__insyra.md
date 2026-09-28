@@ -1,0 +1,457 @@
+# Insyra - Create for the Next
+
+[![Test](https://github.com/HazelnutParadise/insyra/actions/workflows/test.yml/badge.svg)](https://github.com/HazelnutParadise/insyra/actions/workflows/test.yml)
+[![GolangCI-Lint](https://github.com/HazelnutParadise/insyra/actions/workflows/golangci-lint.yml/badge.svg)](https://github.com/HazelnutParadise/insyra/actions/workflows/golangci-lint.yml)
+[![Govulncheck](https://github.com/HazelnutParadise/insyra/actions/workflows/govulncheck.yml/badge.svg)](https://github.com/HazelnutParadise/insyra/actions/workflows/govulncheck.yml)
+[![Go version](https://img.shields.io/github/go-mod/go-version/HazelnutParadise/insyra.svg)](https://github.com/HazelnutParadise/insyra)
+[![Go Report Card](https://goreportcard.com/badge/github.com/HazelnutParadise/insyra)](https://goreportcard.com/report/github.com/HazelnutParadise/insyra)
+[![GoDoc](https://godoc.org/github.com/HazelnutParadise/insyra?status.svg)](https://pkg.go.dev/github.com/HazelnutParadise/insyra)
+[![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
+
+**[繁體中文](README_TW.md) | English**
+
+**Insyra** is a complete data analysis ecosystem for Go, spanning data loading and cleaning, statistics, visualization, machine learning, and deep learning. Every layer is checked against a reference implementation: statistics against R, models against scikit-learn, neural networks against PyTorch and onnxruntime. GPU acceleration, parallel processing, Python interop, and a CLI with its own REPL come built in.
+
+**Official Website: <https://insyra.hazelnut-paradise.com>**
+
+**Documentation: <https://hazelnutparadise.github.io/insyra/>**
+
+**Go.dev Package: <https://pkg.go.dev/github.com/HazelnutParadise/insyra>**
+
+> [!NOTE]
+> This project is evolving rapidly—please star and watch the repository to stay up to date with the latest changes!
+
+![logo](logo/logo_transparent.png)
+
+## Fast, Lovely, Easy To Use
+
+The **Insyra** library is a dynamic and versatile tool designed for managing and analyzing data in Go. It offers a rich set of features for data manipulation, statistical calculations, data visualization, and more, making it an essential toolkit for developers handling complex data structures.
+
+> [!TIP] 
+> `isr` package provides **Sytax Sugar**!<br/>
+> Any new project is recommended to use `isr` package instead of calling `insyra` main package directly.<br/>
+> For more details, please refer to the **[Documentation](/Docs/isr.md)**.
+
+> [!NOTE]
+> If some functions or methods in the documentation are not working, it may be because the feature is not yet included in the latest release. Please refer to the documentation in the source code of the corresponding version in **[Releases](https://github.com/HazelnutParadise/insyra/releases)**.
+
+> [!IMPORTANT] 
+> **For any functions or methods not explicitly listed in Insyra documents, it indicates that the feature is still under active development. These experimental features might provide unstable results.** <br/>
+> Please refer to our latest updates in **[Docs](/Docs)** folder for more details.
+
+## Machine Learning and Deep Learning in Pure Go
+
+You no longer need to leave Go to train a model. There is no Python runtime behind these packages, no cgo, and no external inference engine:
+
+- **[`ml`](/Docs/ml.md)** gives you scikit-learn-style modeling: regressions (linear, ridge, lasso, logistic), decision trees, random forests, gradient boosting, pipelines, cross-validation, and grid search. Every estimator is verified against scikit-learn, R, or statsmodels, and fitted models export to ONNX.
+- **[`nn`](/Docs/nn.md)** is a complete neural network engine:
+  - **Run real models.** Published ONNX checkpoints load and run unmodified: MobileNetV2, MiniLM (a BERT-class encoder), FCN-ResNet50, fast-neural-style, and tiny-YOLOv3, each verified against `onnxruntime`.
+  - **Train in Go.** An autodiff tape and a Sequential layer API (Dense, Conv2D, BatchNorm, MultiHeadAttention, and more) with AdamW, learning-rate schedules, and dropout. Gradients and optimizer steps match PyTorch.
+  - **Keep your weights portable.** SafeTensors files load and save with PyTorch-compatible naming, so weights move freely between Go and torch, and trained models export back to ONNX.
+  - **Use the GPU without thinking about it.** Large matrix products run on Metal, Vulkan, or DirectX 12 through a pure-Go WebGPU backend, fall back to a bit-identical CPU path when no device is available, and switch off with one line.
+
+```go
+tape := nn.NewTape(42)
+model, _ := nn.NewSequential(tape,
+    nn.Dense(784, 128), nn.ReLU(), nn.Dropout(0.2), nn.Dense(128, 10),
+)
+logits, _ := model.Forward(tape, batch)
+loss, _ := tape.SoftmaxCrossEntropy(logits, labels)
+tape.Backward(loss)
+tape.AdamW(1e-3, 1e-2)
+```
+
+## AI / Agent Skills
+
+This repository includes **agent skills**:
+
+- [`skills/insyra`](skills/insyra): helps AI agents use Insyra in Go code (DataList/DataTable workflows, CCL formulas, and common file I/O helpers).
+- [`skills/use-insyra-cli`](skills/use-insyra-cli): teaches agents how to use Insyra CLI/REPL and `.isr` scripts, including environment workflows and full command reference.
+
+Install the skills with:
+
+```bash
+npx skills add HazelnutParadise/insyra/skills
+```
+
+Quick picker:
+
+- Use `skills/insyra` when the task is to write or modify Go code using Insyra APIs.
+- Use `skills/use-insyra-cli` when the task should be done via `insyra` commands, REPL, or `.isr` scripts.
+- Use both when you need a hybrid flow (CLI prototyping first, then productionize in Go code).
+
+It is **platform-agnostic** and can be used with OpenClaw, Claude Code, opencode, or any skill-capable agent runtime.
+
+Example prompts:
+
+- "Use insyra to read data.csv, add a derived column with CCL, and export to output.csv."
+- "Use insyra DataList to compute mean/std and show a quick preview."
+
+## [Idensyra](https://github.com/HazelnutParadise/idensyra)
+
+We provide a mini Go IDE, `Idensyra`, which aims to make data analysis even more easier (though Insyra has already made it very easy).
+
+`Idensyra` comes with Insyra pre-installed, and allows you to run Go code without installing Go environment!
+
+**[Know more about Idensyra](https://github.com/HazelnutParadise/idensyra)**
+
+## [Syralit](https://github.com/HazelnutParadise/syralit)
+
+Want to turn your analysis into an interactive web app? We also build `Syralit`, a Go-native, Streamlit-inspired framework for data apps, dashboards, and AI tools. Write pure Go and get a live web UI, without touching JavaScript or any frontend build tooling.
+
+`Syralit` ships with first-class Insyra integration: render `DataTable`/`DataList` directly, chart your data, and even run Insyra DSL scripts inside your app.
+
+**[Know more about Syralit](https://github.com/HazelnutParadise/syralit)**
+
+## Getting Started
+
+### Start Here: Guided Tutorials
+
+If you want a practical, end-to-end way to learn Insyra, start with the guided tutorials.
+
+- Tutorial hub: **[Docs/tutorials/README.md](Docs/tutorials/README.md)**
+- Featured tutorial: **[Sales Analysis End-to-End](Docs/tutorials/sales-analysis-end-to-end.md)**
+- New tutorial tracks: **data quality**, **parquet streaming**, **A/B statistics**, **RFM+CAI segmentation**, **yfinance trend**, **interactive plot dashboards**, **static gplot reports**, **LP capacity planning**, **Python + parallel batch**.
+
+The featured tutorial walks through a full workflow:
+CSV setup -> DataTable loading -> CCL enrichment -> sorting -> KPI aggregation -> CSV export.
+
+### For those new to Golang
+
+> [!TIP]
+> Jump to [Installation](#installation) or [Quick Example](#quick-example) if you are familiar with Go.
+
+1. Download and install Golang from [here](https://golang.org/dl/).
+2. Set up your editor, we recommend using [VSCode](https://code.visualstudio.com/). Or even lighter weight, [Idensyra](https://github.com/HazelnutParadise/idensyra).
+3. Open or create a folder for your project, and open it in the editor.
+
+4. Create a new project by running the following command:
+
+   ```sh
+   go mod init your_project_name
+   ```
+
+5. Install **Insyra**:
+
+   ```sh
+   go get github.com/HazelnutParadise/insyra/allpkgs
+   ```
+
+6. Create a new file, e.g., `main.go`, and write the following code:
+
+   ```go
+   package main
+
+   import (
+       "fmt"
+       "github.com/HazelnutParadise/insyra"
+   )
+
+   func main() {
+       // Your code here
+   }
+   ```
+
+7. Run your project:
+
+   ```sh
+   go run main.go
+   ```
+
+### Installation
+
+- To start using **Insyra**, install it with the following command:
+
+  ```sh
+  go get github.com/HazelnutParadise/insyra/allpkgs
+  ```
+
+- To use the optional acceleration runtime surface only:
+
+  ```sh
+  go get github.com/HazelnutParadise/insyra/accel
+  ```
+
+  `accel` is also included in `allpkgs`, so the standard install already covers it.
+
+- Update **Insyra** to the latest version:
+
+  ```sh
+  go get -u github.com/HazelnutParadise/insyra/allpkgs
+  ```
+
+  or
+
+  ```sh
+  go get -u github.com/HazelnutParadise/insyra/allpkgs@latest
+  ```
+
+### Quick Example
+
+```go
+package main
+
+import (
+    "fmt"
+    "github.com/HazelnutParadise/insyra"
+)
+
+func main() {
+    dl := insyra.NewDataList(1, 2, 3, 4, 5)
+    dl.Append(6)
+    fmt.Println("DataList:", dl.Data())
+    fmt.Println("Mean:", dl.Mean())
+}
+```
+
+#### Syntactic Sugar
+
+It is strongly recommended to use syntactic sugar since it is much more power and easier to use. For example, the above code can be written as:
+
+```go
+package main
+
+import (
+ "fmt"
+
+ "github.com/HazelnutParadise/insyra/isr"
+)
+
+func main() {
+ dl := isr.DL.Of(1, 2, 3, 4, 5)
+ dl.Append(6)
+ dl.Show()
+ fmt.Println("Mean:", dl.Mean())
+}
+```
+
+To use the syntactic sugar, import `github.com/HazelnutParadise/insyra/isr`.
+
+### Console Preview with `insyra.Show`
+
+Need a quick labelled look at any showable structure (like `DataTable` or `DataList`)? Use the package-level `Show` helper, which delegates to `ShowRange` under the hood and supports the same range arguments:
+
+```go
+func main() {
+    dt := insyra.NewDataTable(
+        insyra.NewDataList("Alice", "Bob", "Charlie").SetName("Name"),
+        insyra.NewDataList(28, 34, 29).SetName("Age"),
+    ).SetName("Team Members")
+
+    insyra.Show("Preview", dt, 2) // First two rows
+}
+```
+
+### Configuration
+
+See **[Docs/Configuration.md](Docs/Configuration.md)**.
+
+### CLI Quick Examples
+
+Install the CLI (recommended):
+
+```sh
+go install github.com/HazelnutParadise/insyra/cmd/insyra@latest
+```
+
+The binary is installed to `$GOBIN` (or `$GOPATH/bin` if `$GOBIN` is not set).
+
+> [!TIP]
+> On Windows, if `insyra` is not found, add `%USERPROFILE%\\go\\bin` (or your `%GOBIN%`) to PATH, then reopen your terminal.
+
+Start REPL:
+
+```sh
+insyra
+```
+
+Run commands directly (non-REPL):
+
+```sh
+insyra newdl 1 2 3 4 5 as x
+insyra mean x
+```
+
+Advanced command examples:
+
+```sh
+# Regression
+insyra regression linear y x1 x2 as reg
+
+# Hypothesis test
+insyra ttest two group_a group_b equal
+
+# Plot
+insyra plot line sales save sales.html
+
+# Fetch (Yahoo Finance)
+insyra fetch yahoo AAPL quote as q
+
+# Partial Parquet load (selected columns + row groups)
+insyra load parquet data.parquet cols id,amount,status rowgroups 0,1 as t
+
+# Reproducible sampling and train/test split
+insyra sample t frac 0.1 seed 42 as preview
+insyra split t train 0.8 seed 42 as train test
+```
+
+> [!TIP]
+> Use `--env <name>` to isolate analysis contexts, e.g. `insyra --env exp1`.
+
+For full CLI + DSL documentation, see **[Docs/cli-dsl.md](Docs/cli-dsl.md)**.
+
+## Thread Safety and Defensive Copies
+
+- **Defensive copies:** Insyra returns defensive copies for all public data accessors. Any method that exposes internal slices, maps, or other mutable structures returns a copy so callers cannot mutate internal state unintentionally.
+- **Atomic operations:** For safe concurrent multi-step operations, use the helper `AtomicDo`. `AtomicDo` serializes all operations for an instance via a `sync.Mutex` plus a goroutine-id holder (using [`petermattis/goid`](https://github.com/petermattis/goid)) for fast same-goroutine re-entry detection (see [atomic.go](atomic.go)). Per-call overhead is ~30 ns; same-goroutine re-entry runs inline without re-acquiring the lock.
+
+## [DataList](/Docs/DataList.md)
+
+The `DataList` is the core structure in **Insyra**, enabling the storage, management, and analysis of dynamic data collections. It offers various methods for data manipulation and statistical analysis.
+
+For a complete list of methods and features, please refer to the **[DataList Documentation](/Docs/DataList.md)**.
+
+## [DataTable](/Docs/DataTable.md)
+
+The `DataTable` structure provides a tabular data representation, allowing for the storage and manipulation of data in a structured format. It offers methods for data filtering, sorting, and aggregation, making it a powerful tool for data analysis.
+
+**You can also convert between DataTables and CSV files with simply one line of code, enabling seamless integration with external data sources.**
+
+## Error Handling (instance-level)
+
+Both `DataList` and `DataTable` support instance-level error tracking for fluent/chained operations. Use `Err()` to obtain the last error on the instance (returns `*ErrorInfo` or `nil`) and `ClearErr()` to clear it.
+
+Example:
+
+```go
+// DataList example
+dl := insyra.NewDataList(1,2,3).Sort().Reverse()
+if err := dl.Err(); err != nil {
+    fmt.Println("Error:", err.Message)
+    dl.ClearErr()
+}
+
+// DataTable example (pseudo-args shown)
+dt := insyra.NewDataTable(insyra.NewDataList(1), insyra.NewDataList(2)).SortBy(/*config*/)
+if err := dt.Err(); err != nil {
+    fmt.Println("Error:", err.Message)
+    dt.ClearErr()
+}
+```
+
+For more details, see the **[DataList Documentation](/Docs/DataList.md)** and **[DataTable Documentation](/Docs/DataTable.md)**.
+
+### [Column Calculation Language (CCL)](/Docs/CCL.md)
+
+**Insyra** features a powerful **Column Calculation Language (CCL)** that works just like Excel formulas!
+
+With CCL, you can:
+
+- Create calculated columns using familiar Excel-like syntax
+- Reference columns using Excel-style notation (A, B, C...)
+- Use conditional logic with `IF`, `AND`, `OR`, and `CASE` functions
+- Perform mathematical operations and string manipulations
+- Execute chained comparisons like `1 < A <= 10` for range checks
+- Access specific rows using the `.` operator (e.g., `A.0`) and reference all columns with `@`
+- Use aggregate functions like `SUM`, `AVG`, `COUNT`, `MAX`, and `MIN`
+
+```go
+// Add a column that classifies data based on values in column A
+dt.AddColUsingCCL("category", "IF(A > 90, 'Excellent', IF(A > 70, 'Good', 'Average'))")
+
+// Perform calculations just like in Excel
+dt.AddColUsingCCL("total", "A + B + C")
+dt.AddColUsingCCL("average", "AVG(A + B + C)")
+
+// Use aggregate functions on rows or columns
+dt.AddColUsingCCL("row_sum", "SUM(@.0)")
+
+// Use range checks with chained comparisons (try this in Excel!)
+dt.AddColUsingCCL("in_range", "IF(10 <= A <= 20, 'Yes', 'No')")
+```
+
+#### Parquet Integration
+
+CCL can be applied **directly during Parquet file reading** to filter data at the source:
+
+```go
+// Filter rows while reading - only matching rows are loaded into memory
+dt, err := parquet.FilterWithCCL(ctx, "sales_data.parquet", "(['amount'] > 1000) && (['status'] = 'Active')")
+
+// Apply CCL transformations directly on parquet files (streaming mode)
+err := parquet.ApplyCCL(ctx, "data.parquet", "NEW('total') = A + B + C")
+```
+
+This approach reduces memory usage when working with large datasets by processing data in batches.
+
+For a complete guide to CCL syntax and features, see the **[CCL Documentation](/Docs/CCL.md)**.
+
+For a complete list of DataTable methods and features, please refer to the **[DataTable Documentation](/Docs/DataTable.md)**.
+
+## Exact Decimals
+
+When a number has to stay exact — money, rates, anything where `0.1 + 0.2` must be `0.3` — use [`github.com/TimLai666/go-decimal`](https://github.com/TimLai666/go-decimal). It is the decimal type Insyra is built around: every [`finance`](/Docs/finance.md) function takes and returns it, and a Parquet `Decimal128` column reads as it.
+
+```go
+import "github.com/TimLai666/go-decimal/decimal"
+
+ctx := decimal.Context{Scale: 2, Mode: decimal.RoundingModeHalfEven}
+prices := []decimal.Decimal{
+    decimal.MustParse(ctx, "19.99"),
+    decimal.MustParse(ctx, "5.01"),
+}
+dl := insyra.NewDataList(prices) // one cell per price
+```
+
+How a cell treats a decimal (it sorts by value, but `Mean` and `Sum` need it converted first), and why this package rather than another, compared against the current versions of the alternatives, is in **[Exact Decimals](/Docs/Decimal.md)**.
+
+## Packages
+
+**Insyra** also provides several expansion packages, each focusing on a specific aspect of data analysis.
+
+| Package | Description |
+|---|---|
+| **[isr](/Docs/isr.md)** | Syntactic sugar over **Insyra** — the recommended entry point for new code. |
+| **[stats](/Docs/stats.md)** | Statistical functions for data analysis: skewness, kurtosis, moment calculations, and more. |
+| **[ml](/Docs/ml.md)** | scikit-learn-style machine learning: regressions, trees, forests, boosting, pipelines, and model selection, verified against scikit-learn and R, with ONNX export. |
+| **[nn](/Docs/nn.md)** | Pure-Go neural networks: runs real ONNX models verified against `onnxruntime`, trains with a PyTorch-verified tape and layer API, SafeTensors in/out, GPU-accelerated MatMul. |
+| **[parallel](/Docs/parallel.md)** | Parallel processing for data manipulation; runs any function and auto-waits for all goroutines. |
+| **[accel](/Docs/accel.md)** | Opt-in GPU acceleration: device discovery, typed columnar projection, and real column reductions on a GPU. Pure Go, no CGO, nothing extra to install. |
+| **[plot](/Docs/plot.md)** | Data visualization wrapping [go-echarts](https://github.com/go-echarts/go-echarts). |
+| **[gplot](/Docs/gplot.md)** | Static charts via [gonum/plot](https://github.com/gonum/plot) — fast, no Chrome, supports function plots. |
+| **[csvxl](/Docs/csvxl.md)** | Work with Excel and CSV files (e.g. convert CSV to Excel). |
+| **[parquet](/Docs/parquet.md)** | Apache Parquet read/write, deeply integrated with `DataTable`/`DataList`; streaming, column-level reads, CCL filtering. |
+| **[mkt](/Docs/mkt.md)** | Marketing analytics: RFM, Customer Activity Index, and market-basket analysis. |
+| **[finance](/Docs/finance.md)** | High-precision fixed-point finance: TVM, NPV/IRR, depreciation, bond pricing, and amortization schedules. |
+| **[quant](/Docs/quant.md)** | Quantitative finance for strategy/backtest evaluation: Sharpe ratio, VaR/CVaR, Sortino and Calmar ratios, max drawdown, annualized return, market beta/CAPM, European option pricing and greeks, implied volatility, multi-factor attribution, PBO (CSCV), Deflated Sharpe Ratio, walk-forward validation, block-bootstrap path simulation with percentile bands, and mean-variance portfolio optimization with an efficient-frontier sweep. |
+| **[py](/Docs/py.md)** | Run Python from Go with no manual environment setup; pass variables both ways. |
+| **[pd](/Docs/pd.md)** | Pandas-like `DataFrame` helpers built on `gpandas`, with `DataTable` conversion. |
+| **[datafetch](/Docs/datafetch.md)** | Easy data fetching: Google Maps store reviews, Yahoo Finance, Taiwan reverse geocoding, and TWSE/TPEx stock data. |
+| **[lpgen](/Docs/lpgen.md)** | Generate linear programming (LP) models and export them as `.lp` files. |
+| **[lp](/Docs/lp.md)** | Fully automatic LP solver using [GLPK](https://www.gnu.org/software/glpk/). |
+| **[engine](/engine/README.md)** | Re-exports selected Insyra internals for reuse in other projects. |
+
+## Advanced Usage
+
+Beyond basic usage, **Insyra** provides extensive capabilities for handling different data types and performing complex statistical operations. Explore more in the **[detailed documentation](/Docs)**.
+
+## Changelog
+
+What is coming in the next release: [CHANGELOG.md](CHANGELOG.md). Everything already published: [GitHub Releases](https://github.com/HazelnutParadise/insyra/releases).
+
+## Contributing
+
+Contributions are welcome! You can contribute to **Insyra** by:
+
+- **[Issues](https://github.com/HazelnutParadise/insyra/issues):** Reporting issues or suggesting new features.
+- **[Pull Requests](https://github.com/HazelnutParadise/insyra/pulls):** Submitting pull requests to enhance the library.
+- **[Discussions](https://github.com/HazelnutParadise/insyra/discussions):** Sharing your feedback and ideas to improve the project.
+<!-- For more details, see the [contributing guidelines](https://github.com/HazelnutParadise/insyra/blob/main/CONTRIBUTING.md). -->
+
+## Contributors
+
+[![contributors](https://contrib.rocks/image?repo=HazelnutParadise/insyra)](https://github.com/HazelnutParadise/insyra/contributors)
+
+## License
+
+Insyra is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.

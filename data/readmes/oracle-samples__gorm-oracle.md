@@ -1,0 +1,125 @@
+# GORM Driver for Oracle
+
+The GORM Driver for Oracle provides support for Oracle Database, enabling full compatibility with GORM's ORM capabilities. It is built on top of the [Go Driver for Oracle (Godror)](https://github.com/godror/godror) and supports key features such as auto migrations, associations, transactions, and advanced querying.
+
+### Prerequisite: Install Instant Client
+
+To use ODPI-C with Godror, you’ll need to install the Oracle Instant Client on your system. Follow the steps on [this page](https://odpi-c.readthedocs.io/en/latest/user_guide/installation.html) to complete the installation.
+
+After that, you can connect to the database using the `dataSourceName`, which specifies connection parameters (such as username and password) using a logfmt-encoded parameter list.
+
+The way you specify the Instant Client directory differs by platform:
+
+- macOS and Windows: You can set the `libDir` parameter in the dataSourceName.
+- Linux: The libraries must be in the system library search path before your Go process starts, preferably configured with "ldconfig". The libDir parameter does not work on Linux.
+
+#### Example (macOS/Windows)
+
+``` go
+dataSourceName := `user="scott" password="tiger" 
+                   connectString="dbhost:1521/orclpdb1"
+                   libDir="/Path/to/your/instantclient_23_26"`
+```
+
+#### Example (Linux)
+
+``` go
+dataSourceName := `user="scott" password="tiger" 
+                   connectString="dbhost:1521/orclpdb1"`
+```
+
+## Getting Started
+
+```go main.go
+package main
+
+import (
+  "github.com/oracle-samples/gorm-oracle/oracle"
+  "gorm.io/gorm"
+)
+
+func main() {
+  dataSourceName := `user="scott" password="tiger"
+                     connectString="dbhost:1521/orclpdb1"`
+  db, err := gorm.Open(oracle.Open(dataSourceName), &gorm.Config{})
+}
+```
+
+## Documentation
+
+### OnUpdate Foreign Key Constraint
+
+Since Oracle doesn’t support `ON UPDATE` in foreign keys, the driver simulates it using **triggers**.
+
+When a field has a constraint tagged with `OnUpdate`, the driver:
+
+1. Skips generating the unsupported `ON UPDATE` clause in the foreign key definition.
+2. Creates a trigger on the parent table that automatically cascades updates to the child table(s) whenever the referenced column is changed.
+
+The `OnUpdate` tag accepts the following values (case-insensitive): `CASCADE`, `SET NULL`, and `SET DEFAULT`.
+
+Take the following struct for an example:
+
+```go
+type Profile struct {
+  ID    uint
+  Name  string
+  Refer uint
+}
+
+type Member struct {
+  ID        uint
+  Name      string
+  ProfileID uint
+  Profile   Profile `gorm:"Constraint:OnUpdate:CASCADE"`
+}
+```
+
+Trigger SQL created by the driver when migrating:
+
+```sql
+CREATE OR REPLACE TRIGGER "fk_trigger_profiles_id_members_profile_id"
+AFTER UPDATE OF "id" ON "profiles"
+FOR EACH ROW
+BEGIN
+  UPDATE "members"
+  SET "profile_id" = :NEW."id"
+  WHERE "profile_id" = :OLD."id";
+END;
+```
+
+### JSON Columns
+
+Use either JSON type—both fully support `INSERT`, `UPDATE`, and `DELETE` … `RETURNING`:
+
+- `gorm.io/datatypes.JSON` — convenient for logging/printing; returned as text then rewrapped.
+- `encoding/json.RawMessage` — raw `[]byte` fast-path; ideal for large payloads or minimal decoding.
+
+#### Notes:
+- On multi-row `RETURNING`, we use PL/SQL bulk blocks and map results back into your structs.
+- `datatypes.JSON` comes back as text; `json.RawMessage` comes back as bytes.
+  
+Take the following struct as an example:
+
+```go
+type Record struct {
+  ID         uint            `gorm:"primaryKey;autoIncrement;column:record_id"`
+  Name       string          `gorm:"column:name"`
+  // Text-oriented JSON
+  Properties datatypes.JSON  `gorm:"column:properties"`
+  // Raw bytes JSON
+  Payload    json.RawMessage `gorm:"column:payload"`
+}
+```
+
+## Contributing
+
+This project welcomes contributions from the community. Before submitting a pull request, please [review our contribution guide](./CONTRIBUTING.md)
+
+## Security
+
+Please consult the [security guide](./SECURITY.md) for our responsible security vulnerability disclosure process
+
+## License
+
+Copyright (c) 2025 Oracle and/or its affiliates. Released under the Universal Permissive License v1.0 as shown at <https://oss.oracle.com/licenses/upl/>.

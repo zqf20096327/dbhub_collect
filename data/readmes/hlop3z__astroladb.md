@@ -1,0 +1,312 @@
+<p align="center">
+  <img src="docs/src/assets/logo.png" alt="astrola-db" width="180" />
+</p>
+
+<h1 align="center">AstrolaDB (alab)</h1>
+
+<p align="center">
+    <a href="https://github.com/hlop3z/astroladb/actions/workflows/ci.yml"><img src="https://github.com/hlop3z/astroladb/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+    <a href="https://goreportcard.com/report/github.com/hlop3z/astroladb"><img src="https://goreportcard.com/badge/github.com/hlop3z/astroladb" alt="Go Report Card" /></a>
+    <a href="https://github.com/hlop3z/astroladb/releases"><img src="https://img.shields.io/github/v/release/hlop3z/astroladb?color=teal" alt="Release" /></a>
+    <img src="https://img.shields.io/badge/status-preview-indigo" alt="Preview" />
+</p>
+
+<p align="center">
+  <strong>One schema: many outputs.</strong>
+</p>
+
+---
+
+**Stop writing boilerplate.** Define your data model once. Use **custom generators** to produce REST APIs in **FastAPI**, **Go Chi**, **Rust Axum**, or **tRPC**. Export types, SQL migrations, and OpenAPI specs directly from the core engine.
+
+---
+
+## Documentation
+
+- **[Quick Start Guide](https://hlop3z.github.io/astroladb/quick-start/)** — Get started in 5 minutes
+- **[Tutorial](https://hlop3z.github.io/astroladb/tutorial/first-project/)** — Build your first project
+- **[Generator Guide](https://hlop3z.github.io/astroladb/advanced_users/generators/)** — Write custom generators
+- **[Migration Reference](https://hlop3z.github.io/astroladb/migrations/overview/)** — Schema evolution
+- **[Field Types](https://hlop3z.github.io/astroladb/cols/semantics/)** — All available column types
+- **[CLI Commands](https://hlop3z.github.io/astroladb/commands/)** — Complete command reference
+
+---
+
+## Download Release
+
+[![Windows](https://img.shields.io/badge/Windows-Download-blue?logo=windows)](https://github.com/hlop3z/astroladb/releases/latest/download/alab-windows-amd64.zip)
+[![Mac (Intel)](https://img.shields.io/badge/Mac%20Intel-Download-black?logo=apple)](https://github.com/hlop3z/astroladb/releases/latest/download/alab-darwin-amd64.tar.gz)
+[![Mac (Apple Silicon)](https://img.shields.io/badge/Mac%20ARM-Download-black?logo=apple)](https://github.com/hlop3z/astroladb/releases/latest/download/alab-darwin-arm64.tar.gz)
+[![Linux (amd64)](https://img.shields.io/badge/Linux%20amd64-Download-green?logo=linux)](https://github.com/hlop3z/astroladb/releases/latest/download/alab-linux-amd64.tar.gz)
+[![Linux (arm64)](https://img.shields.io/badge/Linux%20ARM-Download-green?logo=linux)](https://github.com/hlop3z/astroladb/releases/latest/download/alab-linux-arm64.tar.gz)
+
+**Or install via script:**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/hlop3z/astroladb/main/install.sh | sh
+```
+
+---
+
+## One Schema
+
+```js
+// schemas/blog/post.js
+export default table({
+  id: col.id(),
+  title: col.title(),
+  body: col.text(),
+  author: col.belongs_to("auth.user"), // Foreign key
+  published: col.flag(),
+})
+  .timestamps()
+  .many_to_many("blog.tags"); // Auto-creates join table
+```
+
+## Many Outputs
+
+```mermaid
+graph TD
+    A[Schema Files<br/>model.js] --> B[AstrolaDB Engine]
+
+    B --> C[Type Exports<br/>Rust • Go • Python • TypeScript]
+    B --> D[SQL Migrations<br/>PostgreSQL • SQLite]
+    B --> E[API Specifications<br/>OpenAPI • GraphQL]
+    B --> F[Custom Generators<br/>APIs • Infrastructure • SDKs • Tooling]
+```
+
+AstrolaDB turns a single schema into multiple artifacts through two approaches:
+
+**Core Engine** (built-in, versioned with AstrolaDB)
+
+- **Type Exports:** Rust, Go, Python, TypeScript
+- **SQL Migrations:** PostgreSQL, SQLite
+- **API Specs:** OpenAPI, GraphQL
+
+**Generators** (extensible, user-defined JavaScript functions)
+
+- **Complete APIs:** FastAPI, Chi, Axum, tRPC, Express
+- **Infrastructure:** Terraform, Docker, Kubernetes, Helm
+- **SDKs & Clients:** Language SDKs, RPC clients
+- **Tooling:** CLIs, test suites, documentation sites
+- **Any structured text** expressible from your schema
+
+```js
+// Example generator
+export default gen((schema) =>
+  render({
+    "models.py": buildModels(schema),
+    "router.py": buildRouter(schema),
+  }),
+);
+```
+
+[View generator guide →](https://hlop3z.github.io/astroladb/advanced_users/generators/)
+
+---
+
+## See It In Action
+
+**From schema to running API using an example generator:**
+
+```bash
+# 1. Initialize project
+alab init
+
+# 2. Create your schema
+alab table auth user
+
+# 3. Download an example generator
+alab gen add https://raw.githubusercontent.com/hlop3z/astroladb/main/examples/generators/generators/fastapi.js
+
+# 4. Run the generator
+alab gen run generators/fastapi -o ./backend
+
+# 5. Run it
+cd backend
+uv add fastapi[standard]
+uv run fastapi dev main.py
+# → http://localhost:8000/docs
+```
+
+**What the generator produced:**
+
+```
+backend/
+├── auth/
+│   ├── models.py      # Pydantic models with validation
+│   ├── router.py      # CRUD endpoints (list, get, create, update, delete)
+│   └── __init__.py
+└── main.py            # FastAPI app with Swagger docs
+```
+
+**All from that one schema file.** The generator handles the boilerplate.
+
+[View all generator examples →](https://github.com/hlop3z/astroladb/tree/main/examples/generators)
+
+---
+
+## 💎 Example Generators
+
+Example generators demonstrating what's possible with the platform:
+
+| Framework   | Language   | What It Generates                            | Example Output                                                                                           |
+| ----------- | ---------- | -------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| **FastAPI** | Python     | Pydantic models + CRUD routers + FastAPI app | [View Code](https://github.com/hlop3z/astroladb/tree/main/examples/generators/generated/python-fastapi)  |
+| **Chi**     | Go         | Structs + handlers + Chi router              | [View Code](https://github.com/hlop3z/astroladb/tree/main/examples/generators/generated/go-chi)          |
+| **Axum**    | Rust       | Structs + handlers + Axum server             | [View Code](https://github.com/hlop3z/astroladb/tree/main/examples/generators/generated/rust-axum)       |
+| **tRPC**    | TypeScript | Zod schemas + type-safe RPC routers          | [View Code](https://github.com/hlop3z/astroladb/tree/main/examples/generators/generated/typescript-trpc) |
+
+These are **reference implementations** you can use or modify. Or [write your own generator](https://hlop3z.github.io/astroladb/advanced_users/generators/) in JavaScript to produce any text output.
+
+---
+
+## How Generators Work
+
+**Sandboxed Runtime:** Generators run isolated with no network, eval, or filesystem access. [Full constraints →](https://hlop3z.github.io/astroladb/advanced_users/generators/#sandbox-constraints)
+
+**Migrations:** Reversible up/down migrations with interactive prompts. [Migration guide →](https://hlop3z.github.io/astroladb/migrations/overview/)
+
+---
+
+## ⚡ Core Features
+
+The platform provides built-in schema orchestration and a generator runtime:
+
+| Feature                   | Description                                                      |
+| ------------------------- | ---------------------------------------------------------------- |
+| **Single Binary**         | ~9 MB static executable. Zero dependencies.                      |
+| **Schema Engine**         | Type-safe JavaScript DSL for data modeling.                      |
+| **Auto Migrations**       | SQL migrations generated from schema changes.                    |
+| **Multi-Language Export** | Built-in types for Rust, Go, Python, TypeScript.                 |
+| **Generator Runtime**     | Sandboxed JS execution for custom code generation.               |
+| **No Runtime Lock-in**    | Works without Node.js, JVM, or Python runtime.                   |
+| **Live Development**      | Built-in HTTP server (`alab live`) with hot reload.              |
+| **OpenAPI Ready**         | Exports `openapi.json` for integration with 25+ languages.       |
+| **Namespace Support**     | Logical grouping (e.g., `auth.user`) prevents naming collisions. |
+
+---
+
+## 🎸 Complete Workflow
+
+### 1. Initialize Project
+
+```bash
+alab init
+```
+
+Creates:
+
+```
+project/
+├── alab.yaml        # Configuration
+├── schemas/         # Your schema definitions
+├── migrations/      # Generated SQL migrations
+└── types/           # TypeScript definitions for IDE support
+```
+
+### 2. Define Your Schema
+
+```bash
+alab table auth user
+```
+
+Edit `schemas/auth/user.js`:
+
+```js
+export default table({
+  id: col.id(),
+  email: col.email().unique(),
+  username: col.username().unique(),
+  password: col.password_hash(),
+  role: col.enum(["admin", "editor", "viewer"]).default("viewer"),
+  is_active: col.flag(true),
+}).timestamps();
+```
+
+### 3. Generate & Apply Migrations
+
+```bash
+# Generate migration
+alab new create_users
+
+# Preview SQL
+alab migrate --dry
+
+# Apply to database
+alab migrate
+```
+
+### 4. Export Types
+
+```bash
+# Export to all languages
+alab export -f all
+
+# Or specific language
+alab export -f typescript
+alab export -f python
+alab export -f go
+alab export -f rust
+```
+
+### 5. Use Generators (Optional)
+
+```bash
+# Download example generator
+alab gen add https://raw.githubusercontent.com/hlop3z/astroladb/main/examples/generators/generators/fastapi.js
+
+# Run generator
+alab gen run generators/fastapi -o ./backend
+```
+
+---
+
+## Live Development Mode
+
+Instant schema exploration with automatic hot reloading:
+
+```bash
+alab live
+```
+
+Opens an interactive HTTP server where you can explore your schema, test the normalized object, and see changes in real-time.
+
+---
+
+<p align="center">
+  <img src="docs/gifs/http-preview.gif" alt="HTTP Demo" width="800" />
+  <img src="docs/gifs/dx.gif" alt="DX Demo" width="800" />
+  <img src="docs/gifs/status.gif" alt="CLI status Demo" width="800" />
+</p>
+
+---
+
+## Who Is This For?
+
+- **Platform engineers** building code generation pipelines
+- **Polyglot developers** maintaining services in multiple languages
+- **Meta-programmers** who want deterministic code generation
+- **Startups** needing to move fast without sacrificing type safety
+- **Solo developers** prototyping full-stack applications
+- **API-first teams** who want to skip repetitive boilerplate
+
+---
+
+## Migrations — Preview Status
+
+- Migration engine is **actively evolving**
+- APIs may introduce breaking changes
+- **Recommendation**: Always test thoroughly in staging before production
+
+---
+
+## License
+
+BSD-3-Clause
+
+---
+
+<p align="center">
+  <sub>Built with ❤️ by hlop3z</sub>
+</p>

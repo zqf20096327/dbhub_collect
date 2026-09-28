@@ -1,0 +1,236 @@
+<p align="center">
+  <a href="https://daymon.io">
+    <img src="docs/banner.png" alt="Daymon — Run Claude while you sleep." width="100%">
+  </a>
+</p>
+
+# Daymon
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![macOS](https://img.shields.io/badge/macOS-12%2B-blue)](https://github.com/daymonio/daymon/releases/latest)
+[![Windows](https://img.shields.io/badge/Windows-10%2B-blue)](https://github.com/daymonio/daymon/releases/latest)
+[![Linux](https://img.shields.io/badge/Linux-x64-blue)](https://github.com/daymonio/daymon/releases/latest)
+[![GitHub release](https://img.shields.io/github/v/release/daymonio/daymon)](https://github.com/daymonio/daymon/releases/latest)
+[![GitHub stars](https://img.shields.io/github/stars/daymonio/daymon)](https://github.com/daymonio/daymon/stargazers)
+
+**Open source autopilot for Claude.**
+
+Scheduled tasks, persistent memory, background automation. No API keys. No cloud. Runs on your Mac, Windows, or Linux machine.
+
+[daymon.io](https://daymon.io)
+
+> Daymon is not affiliated with, endorsed by, or sponsored by Anthropic.
+
+<p align="center">
+  <video src="https://github.com/user-attachments/assets/4bb11bef-1f70-439b-b688-21855da40548" autoplay loop muted playsinline width="800"></video>
+</p>
+
+---
+
+## Why Daymon?
+
+Sleep. Daymon doesn't. It runs Claude tasks on schedule, remembers context across conversations, watches files for changes, and works in the background — all while you sleep, commute, or focus on other things.
+
+No API keys. No token costs. No cloud. Just your existing Claude subscription, finally working 24/7.
+
+---
+
+## Requirements
+
+- **macOS 12 (Monterey) or later** (Apple Silicon & Intel), **Windows 10+** (x64), or **Linux x64** (Ubuntu, Debian, Fedora, etc.)
+- **[Claude Desktop](https://claude.ai/download)** or **[Claude Code](https://docs.anthropic.com/en/docs/claude-code)** (you need at least one)
+- A Claude subscription (Pro, Max, or Team) — Daymon uses your existing subscription, no API keys needed
+
+## Installation
+
+### macOS — Homebrew (recommended)
+
+```bash
+brew install daymonio/daymon/daymon
+```
+
+### macOS — Download
+
+Download the latest `.dmg` from [GitHub Releases](https://github.com/daymonio/daymon/releases/latest).
+
+### Windows — Download
+
+Download the latest `.exe` installer from [GitHub Releases](https://github.com/daymonio/daymon/releases/latest).
+
+### Linux — Download
+
+Download the `.deb` or `.AppImage` from [GitHub Releases](https://github.com/daymonio/daymon/releases/latest).
+
+```bash
+# .deb (Ubuntu/Debian)
+sudo dpkg -i daymon_*.deb
+
+# AppImage (any distro)
+chmod +x Daymon-*.AppImage && ./Daymon-*.AppImage
+```
+
+### Build from Source
+
+```bash
+git clone https://github.com/daymonio/daymon.git
+cd daymon
+npm install
+npm run dev      # Development mode
+npm run build    # Production build
+```
+
+## Quick Start
+
+### Claude Desktop
+
+Install Daymon and open it. That's it — Daymon auto-configures Claude Desktop on first launch.
+
+Open Claude Desktop and try:
+
+> "Remember that I prefer TypeScript over JavaScript"
+
+> "Every weekday at 9am, check HackerNews for AI news and summarize the top 5 stories"
+
+> "Watch my Downloads folder and organize new files into subfolders by type"
+
+### Claude Code
+
+Install Daymon and open it. Daymon auto-configures Claude Code on first launch (if `~/.claude.json` exists).
+
+Then try:
+
+> "Remember this project uses PostgreSQL 16 and runs on port 5432"
+
+> "Schedule a daily code review of this repo every morning at 8am"
+
+## What is Daymon?
+
+Daymon is a desktop app for macOS, Windows, and Linux that lives in your menu bar (system tray on Windows). It gives Claude persistent memory, scheduled tasks, workers, and file watchers — all running locally on your machine.
+
+Your Claude subscription only works when you do. Daymon puts it to work 24/7.
+
+## Features
+
+**Scheduled Tasks** — "Every weekday at 9am, check HackerNews for AI news." Just tell Claude what you want. Daymon handles the scheduling.
+
+**Persistent Memory** — "Remember I'm fundraising Series A." Say it once, it sticks forever. Knowledge graph with semantic search, no API keys.
+
+**Workers** — Named agent personalities with system prompts. Assign a Researcher, Chief of Staff, or Code Reviewer to any task. 9 templates included.
+
+**Self-Improving Tasks** — Tasks get smarter every time they run. Daymon learns what works and skips the guesswork on future runs — faster results, no configuration needed.
+
+**Auto-Nudge** — When a background task finishes, Daymon shows results in your active Claude Code chat automatically. Per-task control: always, failures only, or never. Quiet hours keep nudges out of your way.
+
+**Session Continuity** — Tasks resume where they left off. "Compare today's results to yesterday's" just works.
+
+**File Watchers** — "When a new file appears in Downloads, organize it." Daymon watches folders and acts automatically.
+
+**100% Local** — No cloud. No account. Your data is a SQLite file you can inspect anytime.
+
+## Workers
+
+Workers are named agent profiles with system prompts. Each worker defines a personality, values, and anti-patterns that shape how tasks execute.
+
+| Template | Description |
+|----------|-------------|
+| Chief of Staff | Proactive business ops — triages, anticipates needs, proposes actions |
+| Researcher | Deep research with strong opinions — synthesis over summarization |
+| Code Reviewer | Catches what linters miss — leads with blockers, no bikeshedding |
+| Writer | Sharp writing — cuts fluff, clarity over everything |
+| Email Assistant | 3-tier triage, drafts replies, never sends |
+| Tech Trend Analyst | Tech-only trends + tweet drafts with real takes |
+| Competitor Tracker | Reports signal, not noise — silence is a valid report |
+| DevOps | Reliability over novelty — boring infrastructure that works |
+| Data Analyst | Analysis that drives decisions, not dashboards |
+
+Create workers in the Daymon UI or via Claude: "Create a worker called 'My Analyst' with this system prompt..."
+
+## All Tools
+
+<details>
+<summary>Full tool reference (click to expand)</summary>
+
+### Memory
+
+| Tool | Description |
+|------|-------------|
+| `daymon_remember` | Store a fact, preference, or project detail |
+| `daymon_recall` | Search memories by keyword |
+| `daymon_forget` | Delete a memory |
+| `daymon_memory_list` | List all stored memories |
+
+### Scheduler
+
+| Tool | Description |
+|------|-------------|
+| `daymon_schedule` | Create a task (recurring, one-time, or on-demand) |
+| `daymon_list_tasks` | Show all tasks |
+| `daymon_run_task` | Manually trigger a task |
+| `daymon_pause_task` | Pause a task |
+| `daymon_resume_task` | Resume a paused task |
+| `daymon_delete_task` | Delete a task |
+| `daymon_task_history` | Show past runs |
+| `daymon_task_progress` | Check running task progress |
+| `daymon_reset_session` | Clear session for a task |
+
+### Workers
+
+| Tool | Description |
+|------|-------------|
+| `daymon_create_worker` | Create a worker with name and system prompt |
+| `daymon_list_workers` | List all workers |
+| `daymon_update_worker` | Update a worker |
+| `daymon_delete_worker` | Delete a worker |
+
+### File Watching
+
+| Tool | Description |
+|------|-------------|
+| `daymon_watch` | Watch a folder for changes |
+| `daymon_unwatch` | Stop watching |
+| `daymon_list_watches` | List active watches |
+
+### Settings
+
+| Tool | Description |
+|------|-------------|
+| `daymon_get_setting` | Get a setting value |
+| `daymon_set_setting` | Update a setting (quiet hours, etc.) |
+
+</details>
+
+## Development
+
+```bash
+npm run dev          # Start dev mode
+npm run build        # Full build (main + renderer + MCP)
+npm test             # Run test suite
+npm run typecheck    # TypeScript type checking
+npm run build:mac    # Build + package macOS DMG
+npm run build:linux  # Build + package Linux AppImage + deb
+```
+
+<details>
+<summary>Project structure</summary>
+
+```
+daymon/
+├── src/
+│   ├── main/           # Desktop app (menu bar / tray)
+│   ├── sidecar/        # Standalone Node.js server (cron, watchers, task execution)
+│   ├── mcp/            # MCP server (stdio)
+│   │   └── tools/      # Memory, scheduler, worker, watcher, settings tools
+│   ├── renderer/       # React + Tailwind UI
+│   └── shared/         # Shared logic (DB queries, task runner, auto-nudge)
+├── docs/               # Landing page (daymon.io)
+└── resources/          # App icons
+```
+
+**Tech stack**: React 18, Tailwind CSS 4, TypeScript, Vite 7, better-sqlite3, node-cron, zod, MCP SDK, HuggingFace Transformers (local embeddings), Vitest
+
+</details>
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.
+

@@ -1,0 +1,188 @@
+<!--
+SPDX-FileCopyrightText: 2023 LakeSoul Contributors
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
+<img src='https://github.com/lakesoul-io/artwork/blob/main/horizontal/color/LakeSoul_Horizontal_Color.svg' alt="LakeSoul" height='200'>
+
+<img src='https://github.com/lfai/artwork/blob/main/lfaidata-assets/lfaidata-project-badge/sandbox/color/lfaidata-project-badge-sandbox-color.svg' alt="LF AI & Data Sandbox Project" height='180'>
+
+![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/7192/badge)
+
+![Maven Test](https://github.com/lakesoul-io/LakeSoul/actions/workflows/maven-test.yml/badge.svg)
+![Flink CDC Test](https://github.com/lakesoul-io/LakeSoul/actions/workflows/flink-cdc-test.yml/badge.svg)
+![Build](https://github.com/lakesoul-io/LakeSoul/actions/workflows/native-build.yml/badge.svg)
+![Python CI](https://github.com/lakesoul-io/LakeSoul/actions/workflows/python-ci.yml/badge.svg)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/lakesoul-io/LakeSoul)
+
+[中文介绍](README-CN.md)
+
+# Beyond Table Formats — A Complete Lakehouse Solution
+
+While Apache Iceberg provides a de-factor open table format, LakeSoul aims to deliver a batteries-included, production-ready lakehouse platform. Beyond the table format itself, LakeSoul comes with built-in automated disaggregated multi-level compaction, fine-grained RBAC (including S3 proxy-based access control), high-performance OLAP queries, vector retrieval, full-text retrieval, and native multimodal data processing powered by Ray and Daft. Instead of assembling and maintaining separate catalogs, compaction services, and auth layers, you get a production-ready lakehouse out of the box.
+
+# Rust-Native Core, Consistent Everywhere
+LakeSoul's metadata management and file format IO are implemented entirely in Rust — a single, high-performance core — with idiomatic bindings for Java, Python, and C++. Whether you're querying via Spark, streaming via Flink, or training models via PyTorch, Ray, or Daft, every engine and every language shares the same ACID guarantees, the same upsert semantics, and the same read performance. There are no per-language/per-engine re-implementations of the table format, no subtle behavioral divergences between bindings, and no fragmented compatibility matrix to navigate.
+
+Compute framework support matrix:
+
+| Engine  | Version      | Read          | Write         | Interface                   |
+| ------- | ------------ | ------------- | ------------- | --------------------------- |
+| Spark   | 3.5          | ✓ Batch       | ✓ Batch       | Java / Python / Scala / SQL |
+| Flink   | 1.20         | ✓ Streaming   | ✓ Streaming   | Java / SQL                  |
+| Presto  | 0.296(velox) | ✓ Batch       | -             | SQL                         |
+| Ray     | 2.55         | ✓ Distributed | ✓ Distributed | Python                      |
+| Daft    | 0.7+         | ✓ Distributed | ✓ Distributed | Python                      |
+| DuckDB  | latest       | ✓ Standalone  | —             | Python                      |
+| PyArrow | 16+          | ✓ Standalone  | ✓ Standalone  | Python                      |
+| Pandas  | 2.0+         | ✓ Standalone  | ✓ Standalone  | Python                      |
+
+
+# Core Features
+LakeSoul is a cloud-native Lakehouse framework that supports scalable metadata management, ACID transactions, efficient and flexible upsert operation, schema evolution, and unified streaming & batch processing.
+
+LakeSoul supports multiple computing engines to read and write lake warehouse table data, including Spark, Flink, Presto, PyTorch, Ray and Daft. LakeSoul supports storage systems such as HDFS and S3.
+
+LakeSoul supports three physical file format modes: vortex-compact (default), parquet, and [vortex](https://vortex.dev/). Vortex file format can be used to store multimodal data and vector embeddings.
+
+![LakeSoul Arch](website/static/img/lakeSoulModel.png)
+
+LakeSoul was originally created by DMetaSoul company and was donated to Linux Foundation AI & Data as a sandbox project since May 2023.
+
+LakeSoul implements incremental upserts for both row and column and allows concurrent updates.
+
+LakeSoul uses LSM-Tree like structure to support updates on hash partitioning table with primary key, and achieves very high write throughput while providing optimized merge on read performance (refer to [Performance Benchmarks](https://lakesoul-io.github.io/blog/2023/04/21/lakesoul-2.2.0-release)). LakeSoul scales metadata management and achieves ACID control by using PostgreSQL.
+
+LakeSoul uses Rust to implement the native metadata layer and IO layer, and provides C/Java/Python interfaces to support the connecting of multiple computing frameworks such as big data and AI.
+
+LakeSoul supports concurrent batch or streaming read and write. Both read and write supports CDC semantics, and together with auto schema evolution and exacly-once guarantee, constructing realtime data warehouses is made easy.
+
+LakeSoul supports multi-workspace and RBAC. LakeSoul uses Postgres's RBAC and row-level security policies to implement permission isolation for metadata. Together with the S3 proxy authorization layer, physical data isolation can be achieved. LakeSoul's permission isolation is effective for SQL/Java/Python jobs.
+
+LakeSoul supports automatic disaggregated size-tiered multi-level compaction, automatic table life cycle maintenance, automatic data asset statistics, and automatic redundant data cleaning, reducing operation costs and improving usability.
+
+More detailed features please refer to our doc page: [Documentations](https://lakesoul-io.github.io/docs/intro)
+
+# Quick Start
+Follow the [Quick Start](https://lakesoul-io.github.io/docs/Getting%20Started/setup-local-env) to quickly set up a test env.
+
+# Tutorials
+Please find tutorials in doc site:
+
+* Checkout [Examples of Python Data Processing and AI Model Training on LakeSoul](https://github.com/lakesoul-io/LakeSoul/tree/main/python/examples) on how LakeSoul connecting AI to Lakehouse to build a unified and modern data infrastructure.
+* Checkout [LakeSoul Flink CDC Whole Database Synchronization Tutorial](https://lakesoul-io.github.io/docs/Tutorials/flink-cdc-sink) on how to sync an entire MySQL database into LakeSoul in realtime, with auto table creation, auto DDL sync and exactly once guarantee.
+* Checkout [Flink SQL Usage](https://lakesoul-io.github.io/docs/Usage%20Docs/flink-lakesoul-connector) on using Flink SQL to read or write LakeSoul in both batch and streaming mode, with the supports of Flink Changelog Stream semantics and row-level upsert and delete.
+* Checkout [Multi Stream Merge and Build Wide Table Tutorial](https://lakesoul-io.github.io/docs/Tutorials/mutil-stream-merge) on how to merge multiple stream with same primary key (and different other columns) concurrently without join.
+* Checkout [Upsert Data and Merge UDF Tutorial](https://lakesoul-io.github.io/docs/Tutorials/upsert-and-merge-udf) on how to upsert data and Merge UDF to customize merge logic.
+* Checkout [Snapshot API Usage](https://lakesoul-io.github.io/docs/Tutorials/snapshot-manage) on how to do snapshot read (time travel), snapshot rollback and cleanup.
+* Checkout [Incremental Query Tutorial](https://lakesoul-io.github.io/docs/Tutorials/incremental-query) on how to do incremental query in Spark in batch or stream mode.
+
+# Usage Documentations
+Please find usage documentations in doc site:
+
+[Quick Start](https://lakesoul-io.github.io/docs/Getting%20Started/setup-local-env)
+
+[Tutorials](https://lakesoul-io.github.io/docs/Tutorials/consume-cdc-via-spark-streaming)
+
+[Usage Documentation](https://lakesoul-io.github.io/docs/Usage%20Docs/setup-meta-env)
+
+# Feature Roadmap
+## Roadmap 2026
+* Compute Engine Version
+  - [ ] Spark 4.0+
+  - [ ] Flink 2.0+
+* Multimodality
+  - [x] [Vortex](https://github.com/vortex-data/vortex) file format
+  - [x] [Daft](https://github.com/Eventual-Inc/Daft) integration
+  - [x] Vector ANN search on lakehouse (on object store), with upserts
+  - [x] Full-text search (Tantivy BM25) on lakehouse, with upserts
+* Performance
+  - [x] 2x faster merge-on-read with window-sliding merge (for both full and paritial merge).
+  - [x] 50% memory usage reduction with spill-sort in primary key table writer
+  - [x] Disk LRU cache for object store
+  - [x] [Apache Gluten](https://github.com/apache/gluten) integration
+  - [x] [Velox](https://github.com/facebookincubator/velox) integration
+  - [x] Up to 100x faster partition pruning and partition snapshot query with meta data index and query optimizations
+  - [x] Optionally route read-only meta data queries to PG standby instances
+  - [x] Secondary index framework with vector and full-text (Tantivy) index kinds
+  - [ ] Secondary index support in Spark/Flink
+  - [ ] Metadata cache
+* Maintenance
+  - [x] (auto) Leveled compaction strategy
+  - [x] (auto) Async cleanup(vacuum) via Flink CDC on PG replication slot
+* Security
+  - [x] S3 proxy with table rbac verification
+
+## Roadmap history
+* Data Science and AI
+  - [x] Native Python Reader (without PySpark)
+  - [x] PyTorch Dataset and distributed training
+  - [x] Ray/Daft support
+* Meta Management ([#23](https://github.com/lakesoul-io/LakeSoul/issues/23))
+  - [x] Multiple Level Partitioning: Multiple range partition and at most one hash partition
+  - [x] Concurrent write with auto conflict resolution
+  - [x] MVCC with read isolation
+  - [x] Write transaction (two-stage commit) through Postgres Transaction
+  - [x] Schema Evolution: Column add/delete supported
+* Table operations 
+  - [x] LSM-Tree style upsert for hash partitioned table
+  - [x] Merge on read for hash partition with upsert delta file
+  - [x] Copy on write update for non hash partitioned table
+  - [x] Automatic Disaggregated Compaction Service
+* Data Warehousing
+  - [x] CDC stream ingestion with auto ddl sync
+  - [x] Incremental and Snapshot Query
+    - [x] Snapshot Query ([#103](https://github.com/lakesoul-io/LakeSoul/issues/103))
+    - [x] Incremental Query ([#103](https://github.com/lakesoul-io/LakeSoul/issues/103))
+    - [x] Incremental Streaming Source ([#130](https://github.com/lakesoul-io/LakeSoul/issues/130))
+    - [x] Flink Stream/Batch Source
+  - [x] Multi Workspaces and RBAC
+* Spark Integration
+  - [x] Table/Dataframe API
+  - [x] SQL support with catalog except upsert
+  - [x] Query optimization
+    - [x] Shuffle/Join elimination for operations on primary key
+  - [x] Merge UDF (Merge operator)
+  - [x] Merge Into SQL support
+    - [x] Merge Into SQL with match on Primary Key (Merge on read)
+* Flink Integration and CDC Ingestion ([#57](https://github.com/lakesoul-io/LakeSoul/issues/57))
+  - [x] Table API
+    - [x] Batch/Stream Sink
+    - [x] Batch/Stream source
+    - [x] Stream Source/Sink for ChangeLog Stream Semantics
+    - [x] Exactly Once Source and Sink
+  - [x] Flink CDC
+    - [x] Auto Schema Change (DDL) Sync
+    - [x] Auto Table Creation (depends on #78)
+    - [x] Support sink multiple source tables with different schemas ([#84](https://github.com/lakesoul-io/LakeSoul/issues/84))
+* Hive Integration
+  - [x] Export to Hive partition after compaction
+  - [x] Apache Kyuubi (Hive JDBC) Integration
+* Realtime Data Warehousing
+  - [x] CDC ingestion
+  - [x] Time Travel (Snapshot read)
+  - [x] Snapshot rollback
+  - [x] Automatic global compaction service
+  - [x] MPP Engine Integration (depends on [#66](https://github.com/lakesoul-io/LakeSoul/issues/66))
+    - [x] Presto
+    - [x] Compatibility with Presto Native Execution(with Velox)
+    - [x] Apache Doris
+* Cloud and Native IO ([#66](https://github.com/lakesoul-io/LakeSoul/issues/66))
+  - [x] Object storage IO optimization
+  - [x] Native vectorized merge on read
+  - [x] Multi-layer storage classes support with local-disk data cache
+
+# Community guidelines
+[Community guidelines](docs/community/community-guideline.md)
+
+# Feedback and Contribution
+Please feel free to open an issue or dicussion if you have any questions.
+
+Join our [Discord](https://discord.gg/WJrHKq4BPf) server for discussions.
+
+# Contact Us
+Email us at [lakesoul-technical-discuss@lists.lfaidata.foundation](mailto:lakesoul-technical-discuss@lists.lfaidata.foundation).
+
+# Open Source License
+LakeSoul is opensourced under Apache License v2.0.

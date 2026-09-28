@@ -1,0 +1,568 @@
+<h1 align="center">Dense-Mem</h1>
+
+<p align="center">
+  <a href="README.md">English</a> · <a href="README.zh-CN.md">简体中文</a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Dense--Mem-governed_AI_memory-0f766e?style=for-the-badge&logo=github&logoColor=white" alt="Dense-Mem" />
+</p>
+
+<p align="center">
+  <strong>Self-hosted MCP memory with durable evidence, explicit lifecycle, and support-gated recall.</strong>
+</p>
+
+<p align="center">
+  <a href="https://demo-dense-mem.markhuang.ai"><img src="https://img.shields.io/badge/Try%20Dense--Mem%20live-Open%20hosted%20demo-0f766e?style=for-the-badge" alt="Try Dense-Mem live" /></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/markhuangai/dense-mem"><img src="https://img.shields.io/github/stars/markhuangai/dense-mem?style=flat-square&logo=github" alt="GitHub stars" /></a>
+  <a href="https://github.com/markhuangai/dense-mem/issues"><img src="https://img.shields.io/github/issues/markhuangai/dense-mem?style=flat-square&logo=github" alt="GitHub issues" /></a>
+  <a href="https://github.com/markhuangai/dense-mem/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-blue?style=flat-square" alt="License: Apache-2.0" /></a>
+  <img src="https://img.shields.io/badge/Go-1.26-00ADD8?style=flat-square&logo=go&logoColor=white" alt="Go 1.26" />
+  <a href="https://github.com/markhuangai/dense-mem/pkgs/container/dense-mem"><img src="https://img.shields.io/badge/Docker-GHCR-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker image on GHCR" /></a>
+</p>
+
+Dense-Mem is a standalone HTTP MCP memory server using Streamable HTTP. It
+stages exact evidence, derives semantic state through validated server policy,
+and returns active evidence contexts with graph-shaped Relationship handles.
+PostgreSQL is the durable authority for knowledge, lifecycle, provenance,
+search, authorization, and audit; Redis is coordination only. A single-node
+deployment may use process-local coordination; a multi-instance deployment
+requires Redis or an equivalent distributed coordination implementation.
+
+The host LLM owns conversation and judgment. Dense-Mem owns durable evidence,
+owner authorization, lifecycle events, support eligibility, and bounded recall.
+The external memory automation contract is MCP at `/mcp`; browser routes are
+first-party interfaces, not an alternative public automation API.
+
+Dense-Mem is part of the research preprint
+[Governed Enterprise AI Memory Beyond RAG: From Vector Retrieval to Permissioned
+Knowledge Graphs](https://zenodo.org/records/21403316).
+
+## Try the Hosted Demo
+
+Create a temporary isolated team at
+[https://demo-dense-mem.markhuang.ai](https://demo-dense-mem.markhuang.ai) to
+test disposable data before self-hosting.
+
+<p align="center">
+  <img src="assets/readme-hero.jpg" alt="AI clients submit evidence to a governed memory service, which records lifecycle and returns active relationships with provenance." />
+</p>
+
+## Why Dense-Mem
+
+- Evidence is exact, durable, and append-only. A lifecycle action changes its
+  effective state without deleting provenance or trace lineage.
+- Entity and typed Value are semantic nodes. Owner-alias-owned Relationships
+  become active graph edges only when their evidence support is eligible.
+- Provider output is a proposal. Closed-schema validation and deterministic
+  server policy decide durable state.
+- Default recall excludes candidates and Hypotheses and returns evidence only
+  when its active Relationship support path is eligible for the requested time.
+- Team visibility and owner mutation authority are distinct. An author can
+  change only their own evidence or owned semantic records.
+
+Authentication resolves one immutable actor as `team + identity + membership +
+permanent owner alias + optional credential`. An SSO browser session uses the
+selected membership's permanent owner alias and has no direct credential. An
+API-key request carries a credential whose stable ID is also its permanent
+owner alias. Team, identity, membership, and credential fields never let a
+client choose or replace the semantic owner.
+
+## 60-Second Quickstart
+
+Download the local compose example and environment template, configure the
+required secrets, and start Dense-Mem:
+
+```bash
+mkdir dense-mem-local
+cd dense-mem-local
+
+curl -fsSLo docker-compose.yml \
+  https://raw.githubusercontent.com/markhuangai/dense-mem/main/examples/docker-compose.base.yml
+curl -fsSLo .env.example \
+  https://raw.githubusercontent.com/markhuangai/dense-mem/main/examples/.env.example
+
+cp .env.example .env
+# Fill in POSTGRES_PASSWORD, CONTROL_PORTAL_TOKEN, and AI_API_KEY.
+${EDITOR:-vi} .env
+
+docker compose up -d
+```
+
+The base stack uses PostgreSQL with pgvector as the only durable authority.
+The v2.6.2 release requires the compatible cutover marker created by the
+stopped-service migration; it has no legacy database runtime or fallback. The
+local ports are:
+
+```text
+MCP:            http://127.0.0.1:8080/mcp
+User portal:    http://127.0.0.1:8080/ui
+Control portal: http://127.0.0.1:8090/
+```
+
+Open the control portal with `CONTROL_PORTAL_TOKEN`, then create a team and its
+first credential/API key. For control-plane automation, use the same private
+API:
+
+```bash
+control_token="<CONTROL_PORTAL_TOKEN from .env>"
+
+curl -fsS -X POST http://127.0.0.1:8090/control/api/teams \
+  -H "Authorization: Bearer ${control_token}" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"primary-memory"}'
+
+curl -fsS -X POST http://127.0.0.1:8090/control/api/teams/<team-id>/credentials \
+  -H "Authorization: Bearer ${control_token}" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"default credential"}'
+```
+
+Operational diagnostics use one process logger for console and the private
+control portal. `LOG_LEVEL` accepts `trace`, `debug`, `info`, `warn`, `error`,
+or `fatal` and defaults to `trace`; `fatal` records severity and does not stop
+the process. PostgreSQL slow-query logging uses
+`POSTGRES_SLOW_QUERY_THRESHOLD_MS`, which defaults to 200 and must be a
+positive value. The operation-log sink is required for readiness and reports
+gaps and recovery when it is unavailable. Startup and the OAuth compatibility
+harness use console-only logging until a PostgreSQL operation-log sink is
+available; they do not claim that pre-attachment events were persisted.
+
+The control portal's Logs view filters by severity, correlation ID, request
+hash, Remember attempt, execution/replay/conflict classification, and retry
+eligibility. A team's Remember diagnostics open on admitted calls and link to
+canonical attempts. Capture bodies are loaded only for an authorized detail
+view and are labelled as observed preparation, write, disconnect, or unknown
+receipt; a captured response does not prove delivery to the caller. Existing
+seven-day capture expiry, legal holds, erasure, and bounded unavailable or
+truncated states remain in force.
+
+The release image contains one project executable, `/app/server`. It applies
+pending PostgreSQL migrations under a database session lock before serving, so
+the Compose stack does not need a separate migration container. Multiple server
+replicas that share one writable primary serialize this startup step. Keep
+ordinary rolling-deployment migrations backward compatible with the previous app
+version. The v2.6.1 synchronous Remember migration remains the stopped-service
+boundary; v2.6.2 evidence-first activation runs after it. For the v2.6.1
+migration, stop every server instance, take the required PostgreSQL snapshot,
+and apply the stopped-service boundary before starting the new binary. Independent databases
+must each be migrated by a server connected to that database. Administration
+stays on the private control portal/API, while dreaming and automatic conflict
+review run as server background workers.
+
+The image healthcheck allows the default 30-minute migration window and becomes
+active after its first success. If `POSTGRES_MIGRATION_TIMEOUT_SECONDS` is set
+above 1800, override the deployment healthcheck start period to at least the
+same duration.
+
+Release candidates use `vX.Y.Z-rc.N` and `demo-vX.Y.Z-rc.N`. Stable releases use
+`vX.Y.Z`, `latest`, and `demo-vX.Y.Z`; there is no rolling demo tag.
+
+The server requires complete embedding and verifier configuration at
+startup: `AI_API_URL`, `AI_API_KEY`, `AI_API_EMBEDDING_MODEL`,
+`AI_API_EMBEDDING_DIMENSIONS`, and `AI_VERIFIER_MODEL`.
+The compose examples provide OpenAI defaults for embeddings; choose the chat
+models explicitly in `.env`.
+
+`AI_REMEMBER_MODEL`, `AI_CONFLICT_REVIEW_MODEL`, `AI_DREAM_GRAPH_MODEL`,
+`AI_DREAM_EVIDENCE_MODEL`, and `AI_COMMUNITY_SUMMARY_MODEL` are optional
+overrides for their existing AI sessions. An unset or whitespace-only override
+uses `AI_VERIFIER_MODEL`; a configured model failure is returned without trying
+the fallback model.
+
+Verifier and assessor calls send `temperature: 0` by default. Set
+`AI_VERIFIER_DISABLE_TEMPERATURE=true` to omit the field for providers or models
+that reject temperature.
+
+### Fully Local Setup (Ollama)
+
+Any OpenAI-compatible endpoint can provide embeddings and verification. With
+[Ollama](https://ollama.com) running on the Docker host:
+
+```bash
+ollama pull nomic-embed-text
+ollama pull llama3.1:8b
+```
+
+```text
+AI_API_URL=http://host.docker.internal:11434/v1
+AI_API_KEY=ollama
+AI_API_EMBEDDING_MODEL=nomic-embed-text
+AI_API_EMBEDDING_DIMENSIONS=768
+AI_VERIFIER_MODEL=llama3.1:8b
+AI_VERIFIER_TIMEOUT_SECONDS=300
+```
+
+Use `host.docker.internal`, not `127.0.0.1`, because the server calls the
+provider from the compose network. `AI_API_KEY` must remain non-empty because
+startup validation requires a complete provider configuration.
+
+- Set `AI_VERIFIER_MODEL` to a model that exists on the selected chat endpoint.
+  Startup validates the model configuration before the service accepts memory
+  writes. A 7B-8B class model works for local smoke tests; larger models can
+  exceed the default 60-second timeout while they load. Remember runs
+  synchronously within the request deadline; use the idempotency key to retry
+  after a client timeout or transient provider failure.
+
+## Evidence Lifecycle
+
+`remember` durably stages exact evidence, completes provider validation and the
+semantic commit, then returns a terminal result. The response includes the
+owner-scoped processing and search state; it does not expose provider output or
+internal run IDs.
+
+Callers submit logical Entity, predicate, and Value proposals rather than text
+offsets. `remember` does not accept `span`, `surface`, or relationship `supports`
+fields. Each optional Relationship lists the zero-based `evidence_indices` that
+support it; proposals may be omitted, and their indices do not need to cover every
+evidence item. The single assessor session reviews every evidence item for security
+and grounds or normalizes only submitted Relationship proposals against their
+cited evidence. It never searches memory or discovers Relationships. Closed-schema
+validation and deterministic server policy decide what is safe to commit.
+
+Each Relationship may also list up to 20 explicit `known_evidence_ids`. These UUIDs
+are resolved only from evidence visible to the caller and remain read-only assessor
+context; they do not receive security results. A stored Relationship must still cite
+at least one submitted `evidence_indices` span. Entity grounding accepts current
+canonical or alias names, and a pronoun only when the assessor is given a server-issued
+anchor for an earlier exact name span. Inaccessible or stale known evidence leaves the
+Relationship unsupported without revealing whether an ID exists. The aggregate known
+evidence content in one request is bounded to 20,000 Unicode code points before
+assessor boundary expansion; larger requests return `input_budget_exceeded`. The
+current public contract is `dense-mem.v2.6.3`; `dense-mem.v2.6.2` remains accepted
+for compatible replays.
+
+To replace a specific current evidence item you own, put its UUID in the new
+item's `supersedes_evidence_ids`. Direct targeting is separate from advancing a
+source revision with `previous_source_revision`; do not combine them.
+
+```json
+{
+  "evidence": [
+    {
+      "content": "Dense-Mem now uses PostgreSQL as its only deployment target.",
+      "source_type": "manual",
+      "supersedes_evidence_ids": ["<owned-current-evidence-uuid>"]
+    }
+  ],
+  "relationships": [
+    {
+      "ref": "deployment-target",
+      "subject": {
+        "name": "Dense-Mem",
+        "entity_kind": "project"
+      },
+      "predicate": {
+        "proposed_key": "uses_as_only_deployment_target"
+      },
+      "object": {
+        "entity": {
+          "name": "PostgreSQL",
+          "entity_kind": "product"
+        }
+      },
+      "polarity": "+",
+      "evidence_indices": [0]
+    }
+  ],
+  "idempotency_key": "deployment-target-correction-batch-20260729"
+}
+```
+
+Direct supersession is staged with the complete batch. The target is retired
+only inside the accepted semantic transaction; a failed submission leaves it
+active. This prevents a replacement that never becomes supported memory from
+invalidating current evidence.
+
+Remember uses one assessor conversation for the complete batch. Every evidence
+item receives a security result, including evidence-only submissions. Unsafe
+evidence fails the complete batch with `submission_policy_rejected` and no
+semantic, search, or embedding writes. Safe evidence is stored and indexed even
+when no Relationship is proposed or accepted. The assessor may ground and
+normalize only submitted Relationship proposals against their cited evidence; it
+does not search memory, find support for evidence, or discover Relationships.
+Every submitted Relationship ref gets a `stored` or `not_stored` disposition;
+unsupported proposals are completed-result warnings. Exact client-owned changes
+after staging are reported as `stale_input`. Provider, configuration, database,
+and internal faults are typed operational failures. All accepted semantic effects
+commit atomically, with no partial replacement or interactive placement review.
+
+Remember requires one top-level `idempotency_key`; evidence-level and derived
+keys are not accepted. If a complete batch needs correction, submit the entire
+batch again with a new key.
+
+To retract evidence without a replacement, call `retract_evidence` with owned
+current IDs, a bounded reason, and an idempotency key:
+
+```json
+{
+  "evidence_ids": ["<owned-current-evidence-uuid>"],
+  "reason": "The source was withdrawn.",
+  "idempotency_key": "withdrawn-source-20260729"
+}
+```
+
+Both operations append lifecycle events. They never physically delete evidence
+or trace lineage. Current recall excludes retired evidence, while a historical
+`known_at` view before the event can still show what the system knew then.
+
+`correct_relationship` replaces a specific active Relationship owned by the
+caller's permanent owner alias. It does not rewrite or delete the original
+record. The caller
+supplies the current Relationship version, its exact effective evidence spans,
+a bounded reason, and only the endpoints or predicate that need correction:
+
+```json
+{
+  "action": "submit",
+  "relationship_id": "<owned-active-relationship-uuid>",
+  "expected_version": 1,
+  "patch": {
+    "object_entity": {
+      "entity_id": "<correct-same-team-entity-uuid>"
+    }
+  },
+  "supports": [
+    { "evidence_id": "<supporting-evidence-uuid>", "start": 0, "end": 38 }
+  ],
+  "reason": "The object was resolved to the wrong Entity.",
+  "idempotency_key": "relationship-correction-20260808"
+}
+```
+
+On acceptance, Dense-Mem atomically supersedes the original Relationship,
+creates or reuses the active successor, copies the effective support lineage,
+and appends the correction event and `corrects` cross-reference. A different
+owner in the same team may read team-visible memory but cannot correct the
+author's Relationship. Ambiguous Entity names require one owner confirmation;
+the original remains active until that confirmation succeeds.
+
+## Recall and Graph State
+
+`recall_memory` is evidence-first but support-path gated. Its `results[]`
+contain evidence contexts only after final hydration proves an active,
+query-relevant Relationship support path remains eligible for the requested
+`valid_at` and `known_at` view. Related Relationships, communities, and
+Hypotheses are separate bounded fields; candidates and Hypotheses are not
+default memory results.
+
+```text
+remember evidence (+ optional Entity/Relationship proposals)
+        |
+        v
+durable staging -> validated terminal commit -> active eligible Relationships
+        |                                      |
+        +-- lifecycle event -------------------+
+                                               |
+                                               v
+                         support-gated evidence recall and trace lineage
+```
+
+## MCP Tool Catalog
+
+Discover the current closed-schema catalog with MCP `tools/list`; callers do
+not select a contract version. The server applies the same scope, feature, and
+visibility checks to `tools/call`.
+
+| Tool | Used by | Registration | Use case and capability |
+|------|---------|--------------|-------------------------|
+| `remember` | Both | Production and evaluation images | Production evidence intake; the harness also imports corpus rows through this real intake path. |
+| `retract_evidence` | Production | Production and evaluation images | Retire caller-owned evidence while preserving append-only provenance. |
+| `correct_relationship` | Production | Production and evaluation images | Owner-only replacement of an active supported Relationship; supersedes the original and preserves support lineage. |
+| `recall_memory` | Production | Production and evaluation images | Recall active evidence contexts and Relationship handles. When enabled features produce an actionable follow-up, the result includes `suggested_actions`. |
+| `trace_memory` | Production | Production and evaluation images | Trace one same-team Relationship through evidence, decisions, and lineage. |
+| `submit_recall_session_feedback` | Production | Conditional in both images | Record bounded session-level recall quality feedback. Registered only while recall feedback is enabled. |
+| `list_dreams` | Production | Conditional in both images | List reviewable Hypotheses without treating them as memory. Registered only when Dreaming is effective for the authenticated team. |
+| `get_dream` | Production | Conditional in both images | Fetch one authorized Hypothesis and its source references under the same team Dreaming gate. |
+| `resolve_dream_feedback` | Production | Conditional in both images | Confirm independently supported or refuted Hypotheses; uncertain items remain unresolved. Uses the same team Dreaming gate. |
+| `export_memory_pack` | Production | Production and evaluation images | Export selected active Relationships with support provenance. |
+| `eval_list_knowledge_refs` | Evaluation harness | Evaluation image only | Page stable team-scoped knowledge references used to map seed documents to stored records. |
+| `eval_run_dream_cycle` | Evaluation harness | Evaluation image only | Run an isolated, bounded manual Dream cycle, optionally with seed Hypotheses, for evaluation. |
+| `eval_run_recall_case` | Evaluation harness | Evaluation image only | Execute current recall logic and return ranked/context references for deterministic scoring. |
+
+The private control portal exposes bounded Dream investigation reads at
+`/control/api/teams/:teamId/dreaming/runs/:runId/diagnostics` and
+`/control/api/teams/:teamId/dreams/:dreamId/diagnostics`. They explain run,
+proposal, feedback, and confirmation outcomes without entering the memory
+graph. Retained provider projections expire after seven days and report
+unavailable or expired captures explicitly.
+
+The production release binary is compiled without the `evaluation` build tag,
+so no environment variable or control-panel setting can register evaluation
+tools in a live release. The evaluation target adds only the three harness tools
+above. `eval_get_manifest`, `eval_get_knowledge_item`,
+`eval_list_recall_feedback_events`, `eval_get_recall_feedback_event`, and
+`eval_score_retrieval_case` are removed because the current harness does not use
+them.
+
+When recall feedback is enabled and the feedback snapshot is stored,
+`recall_memory.suggested_actions` points to
+`submit_recall_session_feedback` with the matching recall ID. When effective
+team Dreaming is enabled and recall returns Hypotheses, it also points to
+`resolve_dream_feedback`: confirm true or false only with independent evidence,
+and leave uncertain Hypotheses unresolved.
+
+For local evaluation, the committed compose example builds the evaluation
+target and loads the ignored repository-root `.env` by default:
+
+```bash
+docker compose -p densemem_eval \
+  -f examples/docker-compose.evaluation.yml up -d --build
+
+go run ./cmd/eval-seedgen \
+  --preset local_eval_100 \
+  --out tests/eval/seeds/local_eval_100 \
+  --suite tests/eval/suites/local_eval_100.jsonl
+```
+
+The `local_eval_100` CLI preset emits the versioned `local_eval_100_v2` seed
+identity with 100 corpus rows and 25 scored cases. It is a smoke check for the
+evaluation image and harness plumbing, not a replacement for the approved
+deterministic 1k release gate. Use `IMPORT_CONCURRENCY=5` for this smoke; the
+full evaluation remains configurable up to the harness limit of 10.
+
+Memory-pack export emits the current `dense-mem.memory-pack.v2.4` artifact. Import
+and candidate-discovery workflows are not part of the public contract.
+
+## Supported HTTP Surfaces
+
+| Surface | Path | Intended use |
+|---------|------|--------------|
+| Streamable HTTP MCP | `GET /mcp`, `POST /mcp` | Supported external memory integration contract. |
+| User portal | `/ui` and `/ui/api/*` | First-party browser interface. |
+| Control portal | `/control/api/*` | Private or dedicated administrative ingress. |
+| Health | `/health`, `/ready` | Container liveness and readiness checks. |
+
+There is no supported public REST memory API. Do not automate browser routes or
+depend on retired `/api/v1` paths.
+
+## Telemetry Overlay
+
+Prometheus telemetry is optional and off by default. To collect HTTP, embedding,
+verifier, assessor, recall feedback, Remember, conflict-review, cost, Dream, and
+Relationship lifecycle telemetry, start the base stack with the telemetry
+overlay:
+
+```bash
+export TELEMETRY_SCRAPE_TOKEN="$(openssl rand -hex 32)"
+export GRAFANA_ADMIN_PASSWORD="$(openssl rand -hex 32)"
+docker compose \
+  -f examples/docker-compose.base.yml \
+  -f examples/docker-compose.telemetry.yml \
+  -f examples/docker-compose.grafana.yml \
+  up -d
+```
+
+The telemetry overlay starts Prometheus at `127.0.0.1:9090`, and the optional
+Grafana overlay starts Grafana at `127.0.0.1:3000`. It provisions the Prometheus
+datasource and dashboards from `examples/grafana/`; use the Grafana time picker
+for chart ranges and the `Rolling totals` selector for counters and canonical
+ledger windows. Select the Prometheus datasource and bounded scrape job in
+Grafana; dashboard JSON contains no credentials or installation-specific IDs.
+
+Existing scoped telemetry metrics retain team and profile labels for the
+first-party API. Grafana aggregates them into system-wide values without
+selecting or grouping by those labels. New operational metrics add no identity
+labels, and metric labels contain no evidence or request text. Missing provider
+usage or pricing stays no-data and is called out separately from a real zero.
+Ledger collector failure suppresses its gauges and exposes collector health.
+Counter measures aggregate across instances and preserve the telemetry service's
+sparse first-sample behavior; range rates use Grafana's query step. Durable
+ledger gauges use `max` across replicas and never use `rate` or `increase`. The operator dashboards are system-wide
+because canonical lifecycle measures carry no team or credential dimensions.
+
+The control Metrics and user Usage dashboards were removed after real Grafana
+and Prometheus parity validation. Team-overview request summaries, private
+diagnostics, settings, and the control telemetry reader used by conflict-queue
+health remain. See [`examples/grafana/README.md`](examples/grafana/README.md)
+for provisioning and the series map.
+
+### Grafana series map
+
+`internal/operations/telemetry_catalog.go` defines the retained control
+telemetry series and their availability rules. Grafana panel descriptions map
+to these identifiers. The metric names and labels remain available to operators.
+
+| Dashboard series | Prometheus source | Owner | Zero and failure meaning |
+| --- | --- | --- | --- |
+| `http_requests`, `http_errors`, `http_rps`, `http_errors_rps`, `avg_http_latency` | `densemem_http_requests_total`, `densemem_http_request_duration_seconds` | `internal/http/middleware` and `internal/observability` | A successful scrape with no requests is zero; HTTP error and latency series require request activity. |
+| `embedding_requests`, `embedding_errors`, `embedding_tokens`, `avg_embedding_latency` | `densemem_embedding_requests_total`, `densemem_embedding_errors_total`, `densemem_embedding_tokens_total`, `densemem_embedding_duration_seconds` | Embedding provider instrumentation in `internal/observability` | Missing provider usage stays unavailable when embedding calls occurred. |
+| `verifier_requests`, `verifier_tokens`, `avg_verifier_latency` | `densemem_verifier_requests_total`, `densemem_verifier_tokens_total`, `densemem_verifier_duration_seconds` | Assessor and provider instrumentation in `internal/observability` | Missing provider usage stays unavailable when verifier calls occurred. |
+| `recalls`, `avg_recall_results`, `p95_recall_latency`, `recall_results`, `recall_p95_latency` | `densemem_recall_requests_total`, `densemem_recall_results`, `densemem_recall_duration_seconds` | `internal/recall` | Results and latency are unavailable until a Recall request provides a sample. |
+| `llm_recall_used_rate`, `llm_recall_answer_supported_rate`, `llm_recall_quality_score`, `llm_recall_missing_context_rate`, `llm_recall_irrelevant_rate` | `densemem_recall_feedback_total`, `densemem_recall_feedback_quality_score` | `internal/recall/feedback.go` | No host feedback is unavailable, not a negative judgment. `llm_recall_feedback_events` is an internal parent activity series. |
+| `dream_feedbacks` | `densemem_dream_feedback_total` | `internal/dream` | An ignore count comes from an explicit ignore action; absence of feedback creates no event. |
+| `remember_requests`, `avg_remember_duration`, `p95_remember_duration` | `densemem_remember_acknowledgements_total`, `densemem_remember_acknowledgement_duration_seconds` | `internal/remember` | A successful scrape with no acknowledgements is zero. |
+| `assessor_requests`, `assessor_request_failures`, `assessor_validation_failures`, `assessor_tokens`, `avg_assessor_duration`, `assessor_duration`, `assessor_terminal_failures` | `densemem_assessor_requests_total`, `densemem_assessor_validation_failures_total`, `densemem_assessor_tokens_total`, `densemem_assessor_duration_seconds`, `densemem_assessor_terminal_failures_total` | Integrated assessor instrumentation | Token usage is unavailable when the provider does not report usage. |
+| `ai_cost_usd`, `verifier_cost_usd`, `embedding_cost_usd` | `densemem_ai_operation_cost_usd_total`, `densemem_ai_operation_unpriced_total` | `internal/observability/telemetry_cost.go` | Missing usage, pricing, or rate configuration remains unavailable, not zero cost. |
+| `avg_conflict_review_duration`, `conflict_review_duration` | `densemem_conflict_review_duration_seconds` | Conflict-review application | Requires a completed review sample. |
+| `conflict_queue_collection_success` | `densemem_conflict_queue_collection_success` | Conflict queue collector in `internal/observability` | Zero means collection failed; queue gauges are omitted on failure. |
+| `relationships_<status>`, `relationship_transitions_<status>`, `relationship_corrections` | `relationship_records`, `relationship_transition_events`, `relationship_correction_events` through the lifecycle reader | `internal/operations/postgres` | A successful ledger read with no matching rows is zero; ledger failure is unavailable. Status suffixes follow the current Relationship status registry. |
+
+Additional operational families are `densemem_mcp_transport_requests_total`,
+`densemem_mcp_transport_duration_seconds`, `densemem_mcp_tool_results_total`,
+`densemem_logical_operation_attempts_total`,
+`densemem_logical_operation_duration_seconds`,
+`densemem_logical_operation_recoveries_total`,
+`densemem_remember_phase_duration_seconds`, `densemem_dream_cycle_attempts_total`,
+`densemem_dream_cycle_duration_seconds`, `densemem_dream_provider_attempts_total`,
+`densemem_dream_provider_duration_seconds`, `densemem_dream_feedback_actions_total`,
+`densemem_recall_hypothesis_expansions_total`,
+`densemem_recall_hypotheses_returned_total`,
+`densemem_operation_provider_tokens_total`, and
+`densemem_operation_provider_usage_unpriced_total`. They distinguish MCP HTTP
+status from logical tool outcome, Remember execution/replay/conflict/recovery,
+bounded phase and provider usage, Dream run/provider outcomes, Recall hypothesis
+expansion, and canonical ledger state. New families use closed labels without
+team, profile, request, model, or content values. Their histogram buckets
+include the 180-second Remember budget and larger overruns. The canonical ledger collector reports
+`densemem_operational_ledger_collection_success`; a zero collection status
+means its other gauge families are omitted for that scrape. It uses a
+two-second read-only collection deadline.
+
+To compare baseline and candidate overhead, run
+[`compare_telemetry_load.py`](tests/eval/scripts/compare_telemetry_load.py)
+against isolated deployments with matching data and configuration. It warms
+both servers, sends paired authenticated `tools/list` requests, and scrapes
+both metrics endpoints during the measured run. It fails when candidate p95
+latency or throughput regresses by more than 10 percent. Set a shared
+`DENSE_MEM_LOAD_TOKEN` or the per-deployment
+`DENSE_MEM_BASELINE_LOAD_TOKEN` and `DENSE_MEM_CANDIDATE_LOAD_TOKEN`; set
+`DENSE_MEM_LOAD_SCRAPE_TOKEN` for both metrics endpoints. Use the optional
+`DENSE_MEM_BASELINE_SCRAPE_TOKEN` and `DENSE_MEM_CANDIDATE_SCRAPE_TOKEN` when
+the two scrape endpoints use different credentials. The JSON receipt is
+written under the ignored evaluation runtime directory.
+
+## Responsibility Boundary
+
+| Area | Dense-Mem owns | Host LLM owns |
+|------|----------------|---------------|
+| Evidence | Exact staging, provenance, lifecycle, and owner checks | Choosing what source material to submit |
+| Semantic state | Validation, deterministic policy, support eligibility | Proposing optional Entity/Relationship hints |
+| Recall | Active evidence contexts and Relationship handles | Selecting what to cite or ask in the conversation |
+| Corrections | Authorized supersession, retraction, and append-only lineage | Deciding whether a correction is warranted |
+| Operations | Teams, memberships, credentials, API keys, audit, and portals | MCP client configuration |
+
+## Data Egress and Consistency
+
+Dense-Mem can send evidence text, proposal context, and recall queries to the
+configured embedding and verifier providers. Self-hosted providers keep that
+traffic within your boundary; hosted providers do not. Embeddings are derived,
+versioned state and cannot overwrite newer sources. Startup checks prevent
+mixing incompatible embedding models or dimensions.
+
+## Documentation
+
+| Goal | Wiki page |
+|------|-----------|
+| Run Dense-Mem locally | [Quick Start](https://github.com/markhuangai/dense-mem/wiki/Quick-Start) |
+| Use evidence lifecycle and recall | [Using Dense-Mem](https://github.com/markhuangai/dense-mem/wiki/Using-Dense-Mem) |
+| Configure providers, Redis, and ingress | [Configuration](https://github.com/markhuangai/dense-mem/wiki/Configuration) |
+| Understand the design | [Architecture](https://github.com/markhuangai/dense-mem/wiki/Architecture) |
+| Review MCP and portal routes | [Technical Reference](https://github.com/markhuangai/dense-mem/wiki/Technical-Reference) |
+
+## License
+
+Apache-2.0

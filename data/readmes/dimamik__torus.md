@@ -1,0 +1,201 @@
+# Torus
+
+[![CI](https://github.com/dimamik/torus/actions/workflows/ci.yml/badge.svg)](https://github.com/dimamik/torus/actions/workflows/ci.yml)
+[![License](https://img.shields.io/hexpm/l/torus.svg)](https://github.com/dimamik/torus/blob/main/LICENSE)
+[![Version](https://img.shields.io/hexpm/v/torus.svg)](https://hex.pm/packages/torus)
+[![Hex Docs](https://img.shields.io/badge/documentation-gray.svg)](https://hexdocs.pm/torus)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-online-brightgreen?logo=bolt&logoColor=white)](https://torus.dimamik.com)
+
+<!-- MDOC -->
+
+Torus is a plug-and-play Elixir library that seamlessly integrates PostgreSQL's search into Ecto, streamlining the construction of advanced search queries. See [live demo](https://torus.dimamik.com) for examples.
+
+## Usage
+
+The package can be installed by adding `torus` to your list of dependencies in `mix.exs`:
+
+```elixir
+def deps do
+  [
+    {:torus, "~> 0.7"}
+  ]
+end
+```
+
+Then, in any query, you can (for example) add a prefixed full-text search:
+
+```elixir
+import Torus
+# ...
+
+Post
+# ... your complex query
+|> Torus.full_text([p], [p.title, p.body], "uncove hogwar")
+|> select([p], p.title)
+|> Repo.all()
+["Uncovered hogwarts"]
+```
+
+See [`full_text/5`](https://hexdocs.pm/torus/Torus.html#full_text/5) for more details.
+
+## 7 types of search:
+
+1. **Pattern matching**: Searches for a specific pattern in a string.
+
+   ```elixir
+   iex> insert_posts!(["Wand", "Magic wand", "Owl"])
+   ...> Post
+   ...> |> Torus.similar_to([p], [p.title], "(Wan|Ow)%")
+   ...> |> select([p], p.title)
+   ...> |> Repo.all()
+   ["Wand", "Owl"]
+   ```
+
+   Use it for fast prefix-search when semantics of the data you search through live in its characters. For example phone number, invoice number, email, filename, etc.
+
+   See [`like/5`](https://hexdocs.pm/torus/Torus.html#like/5), [`ilike/5`](https://hexdocs.pm/torus/Torus.html#ilike/5), and [`similar_to/5`](https://hexdocs.pm/torus/Torus.html#similar_to/5) for more details.
+
+1. **Similarity:** Searches for records that closely match the input text using trigram distance.
+
+   ```elixir
+   insert_posts!(["Hogwarts Secrets", "Quidditch Fever", "Hogwart’s Secret"])
+
+   Post
+   |> Torus.similarity([p], [p.title], "hoggwarrds")
+   |> limit(2)
+   |> select([p], p.title)
+   |> Repo.all()
+   ["Hogwarts Secrets", "Hogwart’s Secret"]
+   ```
+
+   Use it for fuzzy matching and catching typos in short text fields, such as names or titles. Works best with short strings.
+
+   See [`similarity/5`](https://hexdocs.pm/torus/Torus.html#similarity/5) for more details.
+
+1. **Full text**: Uses term-document matrix vectors, enabling efficient querying and ranking based on term frequency. Supports prefix search and is great for large datasets to quickly return relevant results. See [PostgreSQL Full Text Search](https://www.postgresql.org/docs/current/textsearch.html) for internal implementation details.
+
+   ```elixir
+   insert_post!(title: "Hogwarts Shocker", body: "A spell disrupts the Quidditch Cup.")
+   insert_post!(title: "Diagon Bombshell", body: "Secrets uncovered in the heart of Hogwarts.")
+   insert_post!(title: "Completely unrelated", body: "No magic here!")
+
+   Post
+   |> Torus.full_text([p], [p.title, p.body], "uncov hogwar")
+   |> select([p], p.title)
+   |> Repo.all()
+   ["Diagon Bombshell"]
+   ```
+
+   Use it when you don't care about spelling, the documents are long, you need multi-column search with weights, or if you need to order the results by rank.
+
+   See [`full_text/5`](https://hexdocs.pm/torus/Torus.html#full_text/5) for more details.
+
+1. **BM25 full text**: Modern [BM25](https://mbrenndoerfer.com/writing/bm25-search-algorithm-elasticsearch-implementation) ranking algorithm for superior relevance scoring using the [pg_textsearch](https://github.com/timescale/pg_textsearch) extension. BM25 generally provides better ranking than traditional built-in TF-IDF full text search and is optimized for top-k queries.
+
+   ```elixir
+   insert_post!(title: "Potion Class Notes", body: "Wiggenweld potion heals wounds.")
+   insert_post!(title: "Complete Potion Encyclopedia", body: "Edurus potion grants protection. Focus potion improves concentration. Maxima potion amplifies spells. Thunderbrew potion creates explosions.")
+   insert_post!(title: "Combat Guide", body: "Use Wiggenweld potion to heal during goblin fights.")
+
+   Post
+   |> Torus.bm25([p], p.body, "wiggenweld potion")
+   |> limit(2)
+   |> select([p], p.title)
+   |> Repo.all()
+   ["Potion Class Notes", "Combat Guide"]
+   ```
+
+   Use it when you need state-of-the-art relevance ranking for single-column search, especially with LIMIT clauses. Requires PostgreSQL 17+.
+
+   See [`bm25/5`](https://hexdocs.pm/torus/Torus.html#bm25/5) and the [BM25 Search Guide](https://dimamik.com/posts/bm25_search) for detailed setup instructions and examples.
+
+1. **Semantic Search**: Understands the contextual meaning of queries to match and retrieve related content utilizing natural language processing. Read more about semantic search in [Semantic search with Torus guide](guides/semantic_search.md).
+
+   ```elixir
+   insert_post!(title: "Hogwarts Shocker", body: "A spell disrupts the Quidditch Cup.")
+   insert_post!(title: "Diagon Bombshell", body: "Secrets uncovered in the heart of Hogwarts.")
+   insert_post!(title: "Completely unrelated", body: "No magic here!")
+
+   embedding_vector = Torus.to_vector("A magic school in the UK")
+
+   Post
+   |> Torus.semantic([p], p.embedding, embedding_vector)
+   |> select([p], p.title)
+   |> Repo.all()
+   ["Diagon Bombshell"]
+   ```
+
+   Use it when you need to understand intent and handle synonyms.
+
+   See [`semantic/5`](https://hexdocs.pm/torus/Torus.html#semantic/5) for more details.
+
+1. **Hybrid Search**: Combines multiple search techniques (e.g., keyword and semantic) to leverage their strengths for more accurate results. Fusion happens in a single SQL query using [Reciprocal Rank Fusion](https://learn.microsoft.com/en-us/azure/search/hybrid-search-ranking): each branch ranks its best rows, and rows are merged by summing `weight * 1.0 / (k + rank)` across branches.
+
+   ```elixir
+   insert_post!(title: "Hogwarts Shocker", body: "A spell disrupts the Quidditch Cup.")
+   insert_post!(title: "Diagon Bombshell", body: "Secrets uncovered in the heart of Hogwarts.")
+   insert_post!(title: "Completely unrelated", body: "No magic here!")
+
+   Post
+   |> Torus.hybrid([p], [
+        full_text: {[p.title, p.body], "uncov hogwar"},
+        similarity: {[p.title], "hogwarts"}
+      ])
+   |> select([p], p.title)
+   |> Repo.all()
+   ["Diagon Bombshell", "Hogwarts Shocker", "Completely unrelated"]
+   ```
+
+   Use it when no single search type is good enough - typically combining keyword search (`full_text` or `bm25`) with `semantic` search for RAG and retrieval pipelines.
+
+   See [`hybrid/4`](https://hexdocs.pm/torus/Torus.html#hybrid/4) and the [Hybrid search guide](guides/hybrid_search.md) for more details.
+
+1. **3rd Party Engines/Providers**: Utilizes external services or software specifically designed for optimized and scalable search capabilities, such as Elasticsearch or Algolia.
+
+You can see all of the above search types in action on the [live demo page](https://torus.dimamik.com).
+
+## Highlighting matches
+
+Searches can highlight their matches in the results - pass `highlight: [key: column]` to `full_text`, `bm25`, `similarity`, `ilike`, `like`, or a `hybrid` branch's options, and the search's own term and options are reused:
+
+```elixir
+Post
+|> Torus.full_text([p], [p.title, p.body], "shocker", highlight: [title: p.title])
+|> Repo.all()
+[%Post{title: "Hogwarts <b>Shocker</b>", ...}]
+```
+
+For full control (custom terms, snippets), use [`highlight/3`](https://hexdocs.pm/torus/Torus.html#highlight/3) directly in `select`/`select_merge`:
+
+```elixir
+Post
+|> Torus.full_text([p], [p.title, p.body], "shocker")
+|> select([p], Torus.highlight(p.title, "shocker"))
+|> Repo.all()
+["Hogwarts <b>Shocker</b>"]
+```
+
+## Optimizations and relevance
+
+Torus is designed to be as efficient and relevant as possible from the start. But handling large datasets and complex search queries tends to be tricky. The best way to combine these two to achieve the best result is to:
+
+1. Create a query that returns as relevant results as possible (by tweaking the options of search function). If there is any option missing - feel free to open an issue/contribute back with it, or implement it manually using fragments.
+2. Test its performance on real production data - maybe it's good enough already?
+3. If it's not:
+   - See optimization sections for your search type in [`Torus`](https://hexdocs.pm/torus/Torus.html) docs
+   - Inspect your query using [`Torus.QueryInspector.tap_substituted_sql/3`](https://hexdocs.pm/torus/Torus.QueryInspector.html#tap_substituted_sql/3) or [`Torus.QueryInspector.tap_explain_analyze/3`](https://hexdocs.pm/torus/Torus.QueryInspector.html#tap_explain_analyze/3)
+   - According to the above SQL - add indexes for the queried rows/vectors
+
+## Debugging your queries
+
+Torus offers a few helpers to debug, explain, and analyze your queries before using them on production. See [`Torus.QueryInspector`](https://hexdocs.pm/torus/Torus.QueryInspector.html) for more details.
+
+## Torus support
+
+For now, Torus supports pattern match, similarity, full-text (TF-IDF and BM25), semantic, and hybrid search, with plans to expand support further. These docs will be updated with more examples on which search type to choose and how to make them more performant (by adding indexes or using specific functions).
+
+<!-- MDOC -->
+
+## Future plans
+
+- [ ] Extend similarity search to support [`fuzzystrmatch`](https://www.postgresql.org/docs/current/fuzzystrmatch.html) extension distance options.

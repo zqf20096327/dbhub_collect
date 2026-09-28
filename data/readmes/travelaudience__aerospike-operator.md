@@ -1,0 +1,61 @@
+= aerospike-operator
+aerospike-operator manages Aerospike clusters atop Kubernetes, automating their creation and administration.
+:icons: font
+:toc:
+
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+image:https://img.shields.io/badge/status-development-blue.svg["Status"]
+image:https://quay.io/repository/travelaudience/aerospike-operator/status["Docker Repository on Quay", link="https://quay.io/repository/travelaudience/aerospike-operator"]
+
+WARNING: `aerospike-operator` is currently _alpha_, and is under active development. One should expect breaking changes to the API and behavior to be introduced at any moment.
+
+== Prerequisites
+
+* Kubernetes 1.13+.
+
+== Supported versions
+
+`aerospike-operator` currently supports launching Aerospike clusters running the following Aerospike Server CE versions:
+
+* https://www.aerospike.com/download/server/notes.html#4.0.0.4[`4.0.0.4`]
+* https://www.aerospike.com/download/server/notes.html#4.0.0.5[`4.0.0.5`]
+* https://www.aerospike.com/download/server/notes.html#4.0.0.5[`4.0.0.6`]
+* https://www.aerospike.com/download/server/notes.html#4.1.0.1[`4.1.0.1`]
+* https://www.aerospike.com/download/server/notes.html#4.1.0.1[`4.1.0.6`]
+* https://www.aerospike.com/download/server/notes.html#4.2.0.3[`4.2.0.3`]
+* https://www.aerospike.com/download/server/notes.html#4.2.0.4[`4.2.0.4`]
+* https://www.aerospike.com/download/server/notes.html#4.2.0.5[`4.2.0.5`]
+* https://www.aerospike.com/download/server/notes.html#4.2.0.10[`4.2.0.10`]
+* https://www.aerospike.com/download/server/notes.html#4.3.0.2[`4.3.0.2`]
+* https://www.aerospike.com/download/server/notes.html#4.3.0.4[`4.3.0.4`]
+* https://www.aerospike.com/download/server/notes.html#4.3.0.6[`4.3.0.6`]
+* https://www.aerospike.com/download/server/notes.html#4.3.0.7[`4.3.0.7`]
+* https://www.aerospike.com/download/server/notes.html#4.3.0.8[`4.3.0.8`]
+* https://www.aerospike.com/download/server/notes.html#4.3.0.10[`4.3.0.10`]
+
+== Documentation
+
+One can find comprehensive usage documentation in the link:./docs/usage[`docs/usage/`] directory of this repository. Existing usage documentation covers the following topics:
+
+1. <<./docs/usage/00-installation-guide.adoc#,Installation Guide>> provides instructions on how to install and configure `aerospike-operator`.
+1. <<./docs/usage/10-managing-clusters.adoc#,Managing Clusters>> includes details on how to create, configure, inspect and scale Aerospike clusters.
+1. <<./docs/usage/20-backing-up-namespaces.adoc#,Backing-up Namespaces>> details how to create backups of data in an Aerospike cluster.
+1. <<./docs/usage/30-restoring-namespaces.adoc#,Restoring Namespaces>> provides instructions on how to restore the abovementioned backups.
+1. <<./docs/usage/40-upgrading-clusters.adoc#,Upgrading Clusters>> details how to upgrade an Aerospike cluster to a later version.
+1. <<./docs/usage/50-upgrading-aerospike-operator.adoc#,Upgrading `aerospike-operator`>> describes how to upgrade the version of `aerospike-operator` itself.
+1. <<./docs/usage/80-metrics.adoc#,Metrics>> includes information on how to consume the metrics exported by `aerospike-operator`.
+1. <<./docs/usage/90-limitations.adoc#,Limitations>> provides a list of limitations that exist in the current version of `aerospike-operator`.
+
+In addition to these documents, and in order to understand the design and architecture of `aerospike-operator`, one should have a look at the link:./docs/design/[`docs/design/`] directory of this repository. Existing design documentation covers the following topics:
+
+1. <<./docs/design/api-spec.adoc#,API Specification>> describes the API introduced by `aerospike-operator`.
+1. <<./docs/design/architecture.adoc#,Architecture>> describes the design of `aerospike-operator` and the interactions between the custom resource definitions it introduces, its internal components and Kubernetes.
+1. <<./docs/design/upgrades.adoc#,Upgrades>> and <<./docs/design/upgrade-strategies.adoc#,Upgrade Strategies>> describe how upgrade operations are performed by `aerospike-operator`.
+1. <<./docs/design/garbage-collection.adoc#,Garbage Collection>> describes how `aerospike-operator` performs garbage collection on unused and outdated resources.

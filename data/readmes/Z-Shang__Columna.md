@@ -1,0 +1,115 @@
+# Columna
+## A Lightweight Columnar Database in Common Lisp
+
+# Next Step
+Change this into a standalone database that accepts socket connection, instead of an embedding database.
+
+# Usage
+
+* `create-db` name
+
+  keyword -> db
+
+* `create-table` name size db
+
+  keyword -> integer -> db -> table
+
+* `create-col` name table &optional &key pred
+
+  keyword -> table -> optional function -> column
+
+  The `pred` function is called when a new value is inserted into the column, it should have type  `object -> boolean`
+
+* `create-with-schema` db &body [table-name (col-names | (col-name . pred))]
+
+  keyword -> [keyword -> [keyword | (keyword . function)]] -> db
+
+  the `pred` function should be the same as used in `create-col`
+
+* `insert` values table
+
+  list -> table -> unit
+
+  inserts a list of values into the columns of a tale respectively
+
+  e.g.:
+
+  ```commonlisp
+  (create-with-schema db tb (c1 c2 c3))
+  (insert '(1 2 3) [db tb])
+  ```
+
+  => `(1 c1) (2 c2) (3 c3)` (This is ***NOT*** the return value)
+
+  or with predicators in the schema:
+  ```commonlisp
+  (create-with-schema db tb ((c1 #'pred1) (c2 #'pred2) (c3 #'pred3)))
+  ```
+  where the `pred*`s are functions that takes one argument and returns a boolean
+
+* `lookup` p table
+
+  [integer] | selector -> table -> list
+
+* `del` p table
+
+  integer | selector -> table -> list
+
+* `update` p n table
+
+  [integer] | selector -> {object | function} | [object | function] -> unit
+
+  `p` can be a list of position or a selector
+
+  `n` can be one of the following:
+
+  * a list of new values (one value for one column respectively) 
+  * a list of functions (one function for on column respectively) that takes two arguments: the index of the target position and current value of the target position
+  * a value that will be set to all matching values
+  * a function that will be called at all matching positions
+  
+* `take` n table
+
+  n -> table -> [row]
+
+  Take the first `n` rows of `table`
+  
+* `mapcol` fn table
+
+  (a -> b ... -> n) -> table -> [n]
+
+  Map `fn` over columns of `table`
+  
+* `write-data-to-file` db-name file-path
+
+  symbol -> pathname -> IO nil
+  
+  `file-path` should be a directory, and the db file will be created using `db-name`
+  
+  This function can only export the data in the db, but not the predicators of every column.
+
+* `load-data-from-file-to-db` file-path db `&key` override
+  
+  pathname -> DB -> (boolean) -> IO nil
+  
+  `db` should be already created with columns created matching the db file. If `override` is set to `t`, the data (if any) currently in the db will be erased.
+
+* `enable-reader-macro` & `disable-reader-macro` 
+
+  toggle reader macro
+
+### Selector
+
+A selector contains two slots:
+
+* `col` indicated the target column(s)
+* `pred` a predicate used for testing values in the target column(s)
+
+### Reader Macros
+
+You can use `[db table column index]` to access the elements in the database, `[db]` is equivalent to `(get-pos :db db)`, `[db table]` is equivalent to `(get-pos :db db :table table)`, etc.
+
+You can use `$col pred` to generate a selector, `$col pred` is equivalent to `(make-selector :col col :pred pred)`, and of course, `$(c1 c2 c3) pred` is equivalent to `(make-selector :col (list c1 c2 c3) :pred pred)`.
+
+# License
+AGPLv3+

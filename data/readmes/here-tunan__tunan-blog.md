@@ -1,0 +1,285 @@
+[中文说明](README.zh-CN.md)
+
+# Tunan Blog
+
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+A full-stack blog application built with Go and Next.js, featuring a modern, feature-rich admin panel and a clean, responsive public-facing interface.
+
+**✨ Perfect for Low-Spec Servers**: This blog system can be fully deployed on minimal server configurations (as low as 1-core, 1GB RAM), making it ideal for developers on a budget or those just starting with self-hosting.
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=here-tunan/tunan-blog&type=Date)](https://www.star-history.com/#here-tunan/tunan-blog&Date)
+
+## Live Demo
+
+[https://www.tunan.fun](https://www.tunan.fun)
+
+## Tech Stack
+
+- **Backend**: Go (Golang) with the [Fiber](https://gofiber.io/) web framework.
+- **Frontend (Public)**: [Next.js](https://nextjs.org/) (React), TypeScript, Tailwind CSS.
+- **Frontend (Admin)**: [Next.js](https://nextjs.org/) (React), TypeScript, [Ant Design](https://ant.design/).
+- **Database**: Designed to be compatible with MySQL and SQLite.
+
+### Why Support Both MySQL and SQLite?
+
+Many developers run their projects on servers with limited resources and may not have MySQL database services available. Since blog systems generally have low database requirements, we support SQLite as a lightweight alternative.
+
+## Features
+
+### Public-Facing Site (`/ui`)
+
+- **Blog & Articles**: Clean and readable interface for blog posts, with full Markdown rendering support.
+- **Multilingual Content**: Locale-prefixed routes such as `/zh-CN/blog/...` and `/en/blog/...`, localized UI text, localized article titles/slugs/content, language-aware search, and per-article fallback to the article's default language.
+- **Command Palette Search**: A fast, keyboard-driven search interface (like VS Code or GitHub) to quickly find articles and navigate the site.
+- **Interactive Comment System**: Integrated with [Remark42](https://remark42.com/) for a privacy-focused, self-hosted commenting experience. For setup instructions, see: [Use remark42 comment system](https://www.tunan.fun/blog/blog-embrace-remark42). We're also considering developing a custom comment system - stay tuned!
+- **View Count Tracking**: Tracks and displays view counts for each article with real client IP detection.
+- **RSS Feed Generation**: Automatically generates RSS feeds with article summaries (optimized for performance).
+- **Social Integration**: Header icons for easy access to GitHub, Discord, Folo, and RSS feeds.
+- **Folo Reader Integration**: Includes specific tracking points and direct links for the [Folo](https://folo.im/) RSS reader.
+- **Book Recommendations**: A dedicated section to display a curated list of books.
+- **Project Showcase**: Display personal or professional projects.
+- **SEO Friendly**: Includes Google Search Console verification and RSS auto-discovery meta tags.
+- **Responsive Design**: Fully responsive layout for an optimal experience on any device.
+- **Dark/Light Theme**: A theme switcher for user preference.
+
+### Admin Panel (`/ui-admin`)
+
+- **Secure Authentication**: JWT-based login system to protect admin routes.
+- **Analytics Dashboard**: View key metrics including page view leaderboard and traffic analytics.
+- **RSS Management**: One-click RSS feed generation and management tools.
+- **Full CRUD for Articles**: Create, Read, Update, and Delete articles with a Markdown editor.
+- **Multilingual Article Editor**: Manage per-article default language and multiple translation versions (`zh-CN` / `en`) from the admin panel.
+- **Server-Side Pagination**: Admin list pages use paginated API queries instead of loading all records at once.
+- **Full CRUD for Books**: Easily manage the book recommendation list.
+- **Modern UI**: Built with Ant Design for a professional and intuitive user experience.
+- **Themeable**: Supports both light and dark modes.
+
+## Getting Started
+
+To get a local copy up and running, follow these simple steps.
+
+### Prerequisites
+
+- Go (version 1.18 or higher)
+- Node.js (version 18 or higher)
+- A running database instance: MySQL (v8.0+) or SQLite3
+- npm or yarn
+
+### Installation & Setup
+
+1.  **Clone the repository:**
+    ```sh
+    git clone https://github.com/your-username/tunan-blog.git
+    cd tunan-blog
+    ```
+
+2.  **Setup the Database:**
+    - For MySQL, create a new database (e.g., `blog`) and import the table structure:
+      ```sh
+      # Example for MySQL
+      mysql -u your_user -p your_database < schema.sql
+      ```
+    - For SQLite, use the SQLite-specific schema file:
+      ```sh
+      # Example for SQLite
+      sqlite3 your_database.db < schema_sqlite.sql
+      ```
+
+3.  **Configure and Run the Backend:**
+    - Navigate to the project root.
+    - Create and configure your environment file (e.g., `env/dev.yaml`) with your database credentials and other settings.
+    - Run the backend server:
+      ```sh
+      go run cmd/tunan-blog/main.go
+      ```
+    - The backend will be available at `http://localhost:3002`.
+
+4.  **Setup the Public Frontend:**
+    - Navigate to the UI directory:
+      ```sh
+      cd ui
+      ```
+    - Install dependencies:
+      ```sh
+      npm install
+      ```
+    - Run the development server:
+      ```sh
+      npm run dev
+      ```
+    - The public site will be available at `http://localhost:3000`.
+
+5.  **Setup the Admin Panel:**
+    - Navigate to the admin UI directory:
+      ```sh
+      cd ui-admin
+      ```
+    - Install dependencies:
+      ```sh
+      npm install
+      ```
+    - Run the development server:
+      ```sh
+      npm run dev
+      ```
+    - The admin panel will be available at `http://localhost:3001`.
+
+### Performance Notes for Low-Spec Servers
+
+If you're running on a low-spec server (like 1-core, 1GB RAM), you might encounter issues with `npm install` and `npm run build`. For solutions to common problems like "npm install ends with 'Killed'", please see this blog post: [npm install ends with "Killed"](https://www.tunan.fun/blog/personal-cloud-server-tools#%E9%85%8D%E7%BD%AE%E5%A4%AA%E4%BD%8E%E5%AF%BC%E8%87%B4%E7%9A%84-npm-install-ends-with-killed-%E7%9A%84%E5%A4%84%E7%90%86).
+
+## Configuration
+
+All backend configuration is managed via YAML files in the `/env` directory. The application loads `dev.yaml` by default, or `prod.yaml` if the `GO_TUNAN_BLOG_ENV` environment variable is set to `prod`.
+
+### Database Configuration
+
+The application supports both SQLite and MySQL databases. You can configure which database to use by setting the `database_type` field in your configuration file:
+
+#### Using SQLite (Default)
+```yaml
+# Database type: sqlite3 or mysql  
+database_type: sqlite3  # or leave empty for default
+
+sqlite3:
+  file: /path/to/your/database.db
+```
+
+#### Using MySQL
+```yaml
+# Database type: sqlite3 or mysql
+database_type: mysql
+
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  username: your_username
+  password: your_password
+  database: your_database_name
+```
+
+**Important Notes:**
+- If `database_type` is not specified or empty, SQLite will be used by default
+- Make sure to create your MySQL database before running the application
+- Use the appropriate schema file for your chosen database:
+  - For MySQL: `schema.sql`
+  - For SQLite: `schema_sqlite.sql`
+
+### Multilingual Articles
+
+Article identity and localized article content are separated:
+
+- `article` stores article-level metadata such as type, default language, view count, like count, deletion state, and timestamps.
+- `article_translation` stores language-specific fields such as title, slug, Markdown content, SEO fields, publish state, and publish time.
+
+Each article can choose its own default language. If a visitor opens a language version that does not exist, the public site falls back to that article's default language. This allows Chinese-first, English-first, and partially translated articles to coexist.
+
+The public UI and command palette search are language-aware. The admin panel provides language tabs for editing translations and server-side pagination for large lists.
+
+### Admin Authentication
+
+Admin login is handled by JWT. You need to configure the password and JWT secret in your `.yaml` file.
+
+1.  **Set a temporary password**: In your `dev.yaml` or `prod.yaml`, set a plaintext password for `admin_password` and a random string for `jwt_secret`.
+    ```yaml
+    auth:
+      admin_password: "your-temporary-strong-password"
+      jwt_secret: "a-very-strong-and-secret-string-for-jwt"
+    ```
+2.  **Generate Password Hash**: Start the backend server (`go run cmd/tunan-blog/main.go`). The application will detect the plaintext password, automatically hash it using bcrypt, and print the hash in the console logs. The log message will look like this:
+    ```
+    IMPORTANT: Please update your dev.yaml with the new hashed password:
+    auth:
+      admin_password: "$2a$10$....(a long hash string)..."
+    ```
+3.  **Update Configuration**: Copy the entire hash string (`$2a$...`) from the log and replace your temporary password in the `.yaml` file. This is your permanent, secure password hash.
+4.  **Restart**: Restart the backend server. Now you can log in with the password you set in step 1.
+
+### Google Site Verification
+
+To verify your ownership of the site with Google Search Console:
+
+1.  **File Location**: The meta tag is located in `ui/app/layout.tsx`.
+2.  **Find the line**:
+    ```html
+    <meta name="google-site-verification" content="xxxx"/>
+    ```
+3.  **Update the code**: Replace `xxxx` with your own verification code provided by Google.
+
+### Folo Reader Integration
+
+To configure the Folo RSS reader tracking, update the following fields in your `.yaml` configuration file under the `website` key:
+
+```yaml
+website:
+  # ... other website settings
+  follow_feed_id: "YOUR_FOLO_FEED_ID"
+  follow_user_id: "YOUR_FOLO_USER_ID"
+```
+
+### RSS Feed Configuration
+
+The RSS feed is automatically generated with optimized article summaries for better performance:
+
+- **Location**: Generated at `/rss.xml` in the project root
+- **Content**: Article summaries (approximately 200 characters) instead of full content
+- **Auto-Discovery**: Meta tags are automatically included in the HTML head for RSS reader detection
+- **Management**: Use the admin panel dashboard to generate/update the RSS feed with one click
+
+### Social Links Configuration
+
+Update the social media links in the navigation component (`ui/app/components/Navigation.tsx`):
+
+- **GitHub**: Update the href in the GitHub icon link
+- **Discord**: Update the Discord server invitation URL
+- **Folo**: Update the Folo user profile URL
+
+### IP Address Tracking
+
+For accurate visitor IP tracking behind reverse proxies (nginx):
+
+1. **Fiber Configuration**: The app is configured to trust proxy headers
+2. **Nginx Setup**: Ensure your nginx configuration passes the real client IP:
+   ```nginx
+   location /api/ {
+       proxy_pass http://localhost:3002;
+       proxy_set_header X-Real-IP $remote_addr;
+       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+       proxy_set_header X-Forwarded-Proto $scheme;
+       proxy_set_header Host $host;
+   }
+   ```
+
+### Production Deployment with Nginx
+
+If you want to deploy your blog on your own server, we recommend using Nginx as a reverse proxy. For detailed guidance on Nginx multi-domain configuration and HTTPS certificates, see: [Nginx多域名解析、https证书](https://www.tunan.fun/blog/nginx-proxy-1).
+
+## Project Structure
+
+A brief overview of the key directories in this project:
+
+```
+.
+├── api/          # Go source code for the backend API
+├── cmd/          # Main application entry point for the backend
+├── internal/     # Backend business logic (services, repositories)
+├── ui/           # Next.js source for the public-facing website
+└── ui-admin/     # Next.js source for the admin panel
+```
+
+## Contributing
+
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1.  Fork the Project
+2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the Branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
+
+## License
+
+Distributed under the Apache 2.0 License. See `LICENSE` for more information.

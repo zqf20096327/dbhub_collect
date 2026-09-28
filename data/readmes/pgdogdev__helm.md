@@ -1,0 +1,448 @@
+# PgDog Helm Chart
+
+Production-ready [Helm](https://helm.sh) chart for PgDog with
+high availability, security, and resource management features.
+
+## Features
+
+✅ Resource limits with guaranteed QoS (1GB:1CPU ratio)
+
+✅ PodDisruptionBudget for high availability
+
+✅ Pod anti-affinity for spreading across nodes
+
+✅ ExternalSecrets integration for secure credential management
+
+✅ ServiceAccount and RBAC with minimal permissions
+
+✅ Pinned image versions for production deployments
+
+## Quick Start
+
+1. Install Helm
+2. Configure `kubectl` to point to your K8s cluster
+3. Add our Helm repository:
+   `helm repo add pgdogdev https://helm.pgdog.dev`
+4. Configure databases and users in `values.yaml`
+5. Install:
+   `helm install <name> pgdogdev/pgdog -f values.yaml`
+
+All resources will be created in `<name>` namespace.
+
+### Configuration
+
+Configuration is done via `values.yaml`. All PgDog settings from
+`pgdog.toml` and `users.toml` are supported. General settings
+(`[general]` section) are top level. Use camelCase format instead
+of snake_case, for example: `checkout_timeout` becomes
+`checkoutTimeout`.
+
+#### Basic Example
+
+```yaml
+workers: 2
+defaultPoolSize: 15
+openMetricsPort: 9090
+logFormat: json
+logLevel: info
+```
+
+### Docker Image
+
+By default, the chart uses the `appVersion` from `Chart.yaml` as the image
+tag. This ensures the chart deploys a known-compatible version of PgDog
+without requiring explicit configuration.
+
+To override with a specific version:
+
+```yaml
+image:
+  repository: ghcr.io/pgdogdev/pgdog
+  tag: "v1.2.3" # Pin to specific version
+  pullPolicy: IfNotPresent
+```
+
+To pin to an exact build, use a digest instead of a tag:
+
+```yaml
+image:
+  repository: ghcr.io/pgdogdev/pgdog
+  digest: "sha256:abc123def456..." # Immutable reference
+  pullPolicy: IfNotPresent
+```
+
+When `digest` is specified, it takes precedence over `tag`.
+
+**Legacy format** (still supported for backward compatibility):
+
+```yaml
+image:
+  name: ghcr.io/pgdogdev/pgdog:main
+  pullPolicy: Always
+```
+
+### Databases & Users
+
+Add databases to `databases` list:
+
+```yaml
+databases:
+  - name: "prod"
+    host: "10.0.0.1"
+```
+
+Add users to `users` list:
+
+```yaml
+users:
+  - name: "alice"
+    database: "prod"
+    password: "hunter2" # See ExternalSecrets for secure storage
+```
+
+**⚠️ For production**: Use ExternalSecrets instead of plain text
+passwords (see ExternalSecrets section below).
+
+### Mirroring
+
+Add mirrors to `mirrors` list. For example:
+
+```yaml
+mirrors:
+  - sourceDb: "prod"
+    destinationDb: "staging"
+```
+
+### High Availability
+
+#### StatefulSet WAL storage
+
+PgDog can persist its two-phase commit WAL when running as a StatefulSet.
+Enable `walPvc` and configure the requested capacity:
+
+```yaml
+statefulSet:
+  enabled: true
+  walPvc:
+    enabled: true
+    size: 5Gi
+```
+
+The StatefulSet creates one `ReadWriteOnce` persistent volume claim per replica
+and mounts it at `/var/lib/pgdog`. Before PgDog starts, an init container creates
+`/var/lib/pgdog/wal` on the volume. The generated PgDog configuration sets
+`two_phase_commit_wal_dir` to that directory automatically. An explicit
+`twoPhaseCommitWalDir` value still takes precedence.
+
+The claims use the cluster's default `StorageClass`. Ensure one is configured
+for dynamic provisioning before enabling `walPvc`. This option has no effect
+when PgDog runs as a Deployment.
+
+#### PodDisruptionBudget
+
+Ensures minimum pod availability during voluntary disruptions
+(enabled by default):
+
+```yaml
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 1 # At least 1 pod always available
+```
+
+#### Pod Anti-Affinity
+
+Spreads pods across nodes for better reliability (enabled by
+default):
+
+```yaml
+podAntiAffinity:
+  enabled: true
+  type: soft # "soft" (preferred) or "hard" (required)
+```
+
+#### Multi-AZ
+
+Spread replicas evenly across availability zones with a maximum skew of one:
+
+```yaml
+multiAz:
+  enabled: true
+  whenUnsatisfiable: ScheduleAnyway
+```
+
+This uses the `topology.kubernetes.io/zone` node label. Set
+`whenUnsatisfiable` to `DoNotSchedule` to make the constraint strict. Additional
+constraints can be set with `topologySpreadConstraints`.
+
+### Config Change Restarts
+
+By default, ConfigMap changes are not automatically picked up by
+running pods. Enable `restartOnConfigChange` to trigger a rolling
+restart whenever the rendered config changes:
+
+```yaml
+restartOnConfigChange: true
+```
+
+This injects a `checksum/config` pod annotation that changes when the
+config template output changes, causing Kubernetes to roll the pods.
+
+### ExternalSecrets Integration
+
+Securely manage credentials using ExternalSecrets operator:
+
+**Option 1: Create ExternalSecret with chart**
+
+```yaml
+externalSecrets:
+  enabled: true
+  create: true
+  secretStoreRef:
+    name: aws-secrets-manager
+    kind: SecretStore
+  remoteRefs:
+    - secretKey: users.toml
+      remoteRef:
+        key: pgdog/users
+```
+
+**Option 2: Use existing ExternalSecret**
+
+```yaml
+externalSecrets:
+  enabled: true
+  create: false
+  secretName: "my-secret" # Name of Secret you created
+```
+
+### Referencing Existing Secrets
+
+If you manage Kubernetes Secrets yourself (via `kubectl`, sealed-secrets,
+SOPS, etc.), point the chart at them directly instead of putting secret
+values in `values.yaml`. This works without the ExternalSecrets operator.
+
+#### users.toml from an existing Secret
+
+Set `usersSecret.name` to reference a Secret you created that holds the
+`users.toml` file. The chart then skips rendering its own users Secret and
+mounts yours instead:
+
+```yaml
+usersSecret:
+  name: my-pgdog-users # existing Secret in the same namespace
+  key: users.toml # key holding the users.toml content (default: users.toml)
+```
+
+Create the Secret, for example:
+
+```bash
+kubectl create secret generic my-pgdog-users \
+  --from-file=users.toml=./users.toml
+```
+
+The value is mounted at `/etc/secrets/pgdog/users.toml` regardless of the
+key name. A custom `key` is remapped automatically.
+
+#### pgdog.toml from an existing Secret
+
+Set `configSecret.name` to reference a Secret you created that holds the
+`pgdog.toml` file. The chart then skips rendering its own pgdog.toml
+ConfigMap and mounts your Secret as the config volume instead. Use this when
+your pgdog.toml contains values that must not live in a ConfigMap, such as
+database hosts or the admin password sourced from a secrets manager:
+
+```yaml
+configSecret:
+  name: my-pgdog-config # existing Secret in the same namespace
+  key: pgdog.toml # key holding the pgdog.toml content (default: pgdog.toml)
+```
+
+Create the Secret, for example:
+
+```bash
+kubectl create secret generic my-pgdog-config \
+  --from-file=pgdog.toml=./pgdog.toml
+```
+
+The value is mounted at `/etc/pgdog/pgdog.toml` regardless of the key name.
+A custom `key` is remapped automatically. All pgdog.toml-related chart values
+(`databases`, `defaultPoolSize`, sharding settings, etc.) are ignored, since
+your Secret provides the whole file.
+
+Note: swapping the volume source is required — overlaying a Secret-provided
+`pgdog.toml` on top of the chart's ConfigMap with a `subPath` volume mount
+fails at container start (the mount target is a symlink inside the ConfigMap
+volume; see
+[kubernetes/kubernetes#61545](https://github.com/kubernetes/kubernetes/issues/61545)).
+
+Note: `plugins[].config` entries render into the chart's ConfigMap and are
+not mounted when `configSecret.name` is set. A Secret-provided pgdog.toml
+controls its own plugin config paths, so mount plugin files elsewhere via
+`extraVolumes`/`extraVolumeMounts`.
+
+#### Datadog API key from an existing Secret
+
+PgDog reads the Datadog API key from the `DD_API_KEY` environment variable.
+Reference an existing Secret and the chart injects it as `DD_API_KEY`, so the
+key is never written into `pgdog.toml` (or the ConfigMap):
+
+```yaml
+otel:
+  endpoint: https://otlp.example.com/v1/metrics # your OTLP endpoint
+  datadogApiKeySecret:
+    name: my-datadog # existing Secret in the same namespace
+    key: dd-api-key # key holding the API key (default: dd-api-key)
+```
+
+Create the Secret, for example:
+
+```bash
+kubectl create secret generic my-datadog \
+  --from-literal=dd-api-key=<your-datadog-api-key>
+```
+
+This is mutually exclusive with the inline `otel.datadogApiKey`, which writes
+the key into the ConfigMap as plaintext and should be avoided.
+
+If both are set, the inline value takes precedence.
+
+### ServiceAccount & RBAC
+
+RBAC with minimal permissions is enabled by default:
+
+```yaml
+serviceAccount:
+  create: true
+  annotations: {}
+
+rbac:
+  create: true
+```
+
+### Resource Management
+
+Default resources use Guaranteed QoS with 1GB:1CPU ratio:
+
+```yaml
+resources:
+  requests:
+    cpu: 1000m # 1 CPU
+    memory: 1Gi # 1GB
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+```
+
+You can set `noCpuLimits: true` to omit CPU limits. This allows containers to use idle CPU on the host.
+
+```yaml
+noCpuLimits: true
+resources:
+  requests:
+    cpu: 500m
+    memory: 512Mi
+  limits:
+    memory: 512Mi
+```
+
+### Prometheus (optional)
+
+Prometheus metrics can be collected with a sidecar. Enable by
+configuring `prometheusPort`:
+
+```yaml
+prometheusPort: 9091
+
+# Resources for Prometheus sidecar
+prometheusResources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 100m
+    memory: 100Mi
+```
+
+Make sure it's different from `openMetricsPort`. You can configure
+Prometheus in `templates/prom/config.yaml`.
+
+#### Grafana Remote Write
+
+To send metrics to Grafana Cloud or a Grafana instance, configure
+the remote write settings:
+
+```yaml
+grafanaRemoteWrite:
+  url: "https://prometheus-prod-XX-XXX.grafana.net/api/prom/push"
+  basicAuth:
+    username: "123456" # Grafana Cloud user ID
+    password: "your-api-key" # Grafana Cloud API key
+  queueConfig:
+    capacity: 10000
+    maxShards: 50
+    minShards: 1
+    maxSamplesPerSend: 5000
+    batchSendDeadline: 5s
+    minBackoff: 30ms
+    maxBackoff: 5s
+```
+
+The `queueConfig` settings use Prometheus defaults and can be tuned
+for performance. Remote write is automatically enabled when `url` is
+set.
+
+### Plugins
+
+Add plugins to the `plugins` list. Each plugin requires a `name`; `config` is
+optional and accepts inline TOML content. When `config` is provided, a
+`<name>.toml` file is added to the ConfigMap and mounted at
+`/etc/pgdog/<name>.toml`.
+
+```yaml
+plugins:
+  - name: pgdog_routing
+    config: |
+      [routing]
+      key = "value"
+  - name: pgdog_auth
+```
+
+### TCP Keep-Alive Configuration
+
+Configure socket-level TCP keep-alive behavior (optional):
+
+```yaml
+tcpKeepalive: true
+tcpTime: 7200000 # 2 hours (ms) before first keepalive probe
+tcpInterval: 75000 # 75 seconds (ms) between keepalive probes
+tcpRetries: 9 # Number of keepalive probes before connection is dropped
+```
+
+These settings control the TCP keep-alive behavior for database
+connections. All time values are in milliseconds. If not specified,
+system defaults are used.
+
+### Connection storms
+
+`listenBacklog` controls the maximum number of pending client connections in
+PgDog's listening TCP socket. The kernel caps the queue length at
+`net.core.somaxconn`, so configure both values when increasing the connection backlog:
+
+```yaml
+listenBacklog: 4096
+podSecurityContext:
+  sysctls:
+    - name: net.core.somaxconn
+      value: "4096"
+```
+
+Read more about configuring `sysctl` [here](https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/).
+
+## Contributions
+
+Contributions are welcome. Please open a pull request / issue with
+requested changes.
+
+## License
+
+MIT

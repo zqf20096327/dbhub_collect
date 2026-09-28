@@ -1,0 +1,98 @@
+# QLens
+
+<img src="assets/QLens.png" width="64" align="left" style="margin-right:12px" />
+
+> **QLens 是一个看图工具，更重要的是，它提供了一套为 AI 时代思考设计的通用图片标签协议。**
+
+[English](README_EN.md) · 中文
+
+版本变动见 [CHANGELOG.md](CHANGELOG.md)。
+
+QLens 由三部分组成，围绕一套开放的图片标签协议（`qltag.db`）构建，
+让任何软件、脚本或 AGENT 都能读写图片标签：
+
+| 组件 | 说明 |
+|---|---|
+| **QLens QuickView** | 原生 Win32 + D3D11 极速看图器——启动快、支持 **HDR 渲染**、WIC 全格式 + 解码插件 |
+| **QLens Manager** | Qt 文件管理器风格——缩略图浏览、**标签管理**（打标/颜色/组合筛选）、**QC 质检**（自动检测过曝/模糊/色偏） |
+| **QLens MCP Server** | 把图片库开放给 AI 客户端（Claude / Cursor 等）——搜索/打标/统计/批量分析 |
+
+## 为什么是 QLens？
+
+**起点一：没有"像 Picasa 那样"的看图器。** Picasa 轻、快、干净，双击即看，界面不打扰——但它早已停止维护。ACDSee 之类功能全却太重，其他看图器要么够轻但效果差，要么效果还行却谈不上轻。QLens 要找回那种轻快干净的看图体验。
+
+**起点二：看图工具都缺一样东西。** 市面上所有看图器都能把图打开、缩放、翻页，做得又快又漂亮，但**没有一样东西能回答**：
+
+> "我去年在海边拍的那 200 张照片里，哪些是闭眼的？"
+
+QLens = 看图 + 一套开放的标签协议，让图片库可以被搜索、被 AI 理解。
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                  QLens 标签协议 (qltag.db)               │
+│  每文件夹一个 SQLite DB —— 任何软件/AGENT 可读写          │
+└───────────┬──────────────────────────┬──────────────────┘
+            │                          │
+   ┌────────▼────────┐       ┌─────────▼─────────┐
+   │  QLens Manager  │       │ QLens QuickView   │
+   │  (Qt 文件管理器) │       │ (原生 Win32+D3D11) │
+   │  缩略图/标签/QC  │       │ 极速看图 + HDR     │
+   └────────┬────────┘       └─────────┬─────────┘
+            │                          │
+   ┌────────▼──────────────────────────▼─────────┐
+   │            QLens MCP Server                  │
+   │  把图片库开放给 AI 客户端（Claude/Cursor…）   │
+   └──────────────────────────────────────────────┘
+```
+
+## 核心：标签协议
+
+一切围绕 `qltag.db`——每个文件夹一个 SQLite 数据库，纯文件名存取，树状天然。标签按**检测方式**分类：
+
+- **固定标（qc）**：非 AI 能靠谱检测的（曝光过度/模糊/色偏）——本地 CV 一键检测
+- **标准标（ai）**：必须 AI 检测的（红眼/闭眼）——通过 MCP 由外部 AGENT 打
+- **普通标签**：手动或任意
+
+详见 [标签协议规范](docs/QLENS_TAG_PROTOCOL.md) ★
+
+## 工程质量与验证
+
+QLens 按 [Anchorlaw 验证协议](docs/08-anchorlaw.md)开发：任何声称正确性的代码都带 `@anchor.test`/`@anchor.idk` 标注，source 指向可复现的验证载体——C++ 侧 `tag_store_probe`（CTest 探针，覆盖标签存储含跨进程并发场景）、MCP 侧 `test_qlens_lib.py` 单测；静态门禁与验证记录随仓库维护（`src/.investigations/`）。
+
+## 快速开始
+
+```
+bin/qlens_quickview.exe  双击图片或拖入图片即看（F=100% 原尺寸，S=适配窗口，滚轮翻页）
+bin/qlens_manager.exe    浏览文件夹、打标签、QC 检测（进入文件夹 → 双击图片进查看器）
+```
+
+**典型流程**：QuickView 看图 → 双击进 Manager → 选中图打标签 → 点「QC 检测」批量打固定标 → 组合筛选/QC 筛选找图 →（可选）让 AI 通过 MCP 读库补标准标。
+
+**系统要求**：Windows 10 1809+（HDR 功能需要 HDR 显示器；HEIC/AVIF 等格式需要 WIC 扩展或解码插件）。
+
+## HDR 测试：你的显示器真实亮度
+
+标称 HDR400/HDR600 的显示器，实际峰值往往远低于标称（例如 HDR400 实测常只有 200~350nit）。用 QLens 可以快速测出真实值：
+
+1. 打开 [`testdata/hdr/hdr_range_test.jxr`](testdata/hdr/hdr_range_test.jxr)，按 **F** 键 100% 显示
+2. 画面是 9 个亮度块：**SDR 100 / 200 / HDR400 / HDR600 / HDR1000 / HDR1400 / HDR2000 / 4000 / 10000 nit**，每块内线性渐变、底部标注峰值
+3. **从某个块开始不再变亮（灰阶钳住）**，那个值就是显示器的实际 HDR 峰值
+
+QLens 对真 HDR 图（16bit+）走 **16F 物理直通**（scRGB 1.0 = 80nit），不做自适应提亮/压暗——你看到的就是像素的真实物理亮度，所以这既是亮度计，也最能反映一台显示器的 HDR 兑现能力。
+
+**测试前请确认**：系统已开启 HDR、显示器亮度拉满、关闭护眼/省电模式、Windows 显示设置里 HDR 已生效。
+
+## 文档
+
+- [产品概述（详细版）](docs/01-overview.md) —— 设计哲学与三件套
+- [QuickView 手册](docs/02-quickview.md) —— 快捷键 / HDR / 插件
+- [Manager 手册](docs/03-manager.md) —— 文件管理 / 标签 / QC / 批量
+- [标签协议规范](docs/QLENS_TAG_PROTOCOL.md) —— `qltag.db` schema 与分类哲学 ★
+- [MCP Server 文档](docs/05-mcp.md) —— 工具列表 / 配置 / 示例
+- [插件开发指南](docs/06-plugin-dev.md) —— 解码插件 API
+- [构建与发布](docs/07-build.md) —— 依赖 / 编译 / 系统要求
+- [验证协议（Anchorlaw）](docs/08-anchorlaw.md) —— 任何声称必须有可验证的实践锚点 ★
+
+## 开源协议
+
+[LICENSE](LICENSE)

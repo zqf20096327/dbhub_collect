@@ -1,0 +1,199 @@
+# Project Genesis <img src="https://i.imgur.com/qMPqXBi.png" height="40" width="40" alt="Genesis Avatar" />
+
+[![Supported by the Warframe Community Developers](https://img.shields.io/badge/Warframe_Comm_Devs-supported-blue.svg?color=2E96EF&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOTgiIGhlaWdodD0iMTczIiB2aWV3Qm94PSIwIDAgMjk4IDE3MyI%2BPHBhdGggZD0iTTE4NSA2N2MxNSA4IDI4IDE2IDMxIDE5czIzIDE4LTcgNjBjMCAwIDM1LTMxIDI2LTc5LTE0LTctNjItMzYtNzAtNDUtNC01LTEwLTEyLTE1LTIyLTUgMTAtOSAxNC0xNSAyMi0xMyAxMy01OCAzOC03MiA0NS05IDQ4IDI2IDc5IDI2IDc5LTMwLTQyLTEwLTU3LTctNjBsMzEtMTkgMzYtMjIgMzYgMjJ6TTU1IDE3M2wtMTctM2MtOC0xOS0yMC00NC0yNC01MC01LTctNy0xMS0xNC0xNWwxOC0yYzE2LTMgMjItNyAzMi0xMyAxIDYgMCA5IDIgMTQtNiA0LTIxIDEwLTI0IDE2IDMgMTQgNSAyNyAyNyA1M3ptMTYtMTFsLTktMi0xNC0yOWEzMCAzMCAwIDAgMC04LThoN2wxMy00IDQgN2MtMyAyLTcgMy04IDZhODYgODYgMCAwIDAgMTUgMzB6bTE3MiAxMWwxNy0zYzgtMTkgMjAtNDQgMjQtNTAgNS03IDctMTEgMTQtMTVsLTE4LTJjLTE2LTMtMjItNy0zMi0xMy0xIDYgMCA5LTIgMTQgNiA0IDIxIDEwIDI0IDE2LTMgMTQtNSAyNy0yNyA1M3ptLTE2LTExbDktMiAxNC0yOWEzMCAzMCAwIDAgMSA4LThoLTdsLTEzLTQtNCA3YzMgMiA3IDMgOCA2YTg2IDg2IDAgMCAxLTE1IDMwem0tNzktNDBsLTYtNmMtMSAzLTMgNi02IDdsNSA1YTUgNSAwIDAgMSAyIDB6bS0xMy0yYTQgNCAwIDAgMSAxLTJsMi0yYTQgNCAwIDAgMSAyLTFsNC0xNy0xNy0xMC04IDcgMTMgOC0yIDctNyAyLTgtMTItOCA4IDEwIDE3em0xMiAxMWE1IDUgMCAwIDAtNC0yIDQgNCAwIDAgMC0zIDFsLTMwIDI3YTUgNSAwIDAgMCAwIDdsNCA0YTYgNiAwIDAgMCA0IDIgNSA1IDAgMCAwIDMtMWwyNy0zMWMyLTIgMS01LTEtN3ptMzkgMjZsLTMwLTI4LTYgNmE1IDUgMCAwIDEgMCAzbDI2IDI5YTEgMSAwIDAgMCAxIDBsNS0yIDItMmMxLTIgMy01IDItNnptNS00NWEyIDIgMCAwIDAtNCAwbC0xIDEtMi00YzEtMy01LTktNS05LTEzLTE0LTIzLTE0LTI3LTEzLTIgMS0yIDEgMCAyIDE0IDIgMTUgMTAgMTMgMTNhNCA0IDAgMCAwLTEgMyAzIDMgMCAwIDAgMSAxbC0yMSAyMmE3IDcgMCAwIDEgNCAyIDggOCAwIDAgMSAyIDNsMjAtMjFhNyA3IDAgMCAwIDEgMSA0IDQgMCAwIDAgNCAwYzEtMSA2IDMgNyA0aC0xYTMgMyAwIDAgMCAwIDQgMiAyIDAgMCAwIDQgMGw2LTZhMyAzIDAgMCAwIDAtM3oiIGZpbGw9IiMyZTk2ZWYiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvc3ZnPg%3D%3D)](https://github.com/WFCD/banner/blob/master/PROJECTS.md)
+[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
+
+### A [Discord.js](http://discord.js.org) bot for tracking Warframe alerts, invasions and more.
+
+# Contribute
+
+[![Crowdin](https://d322cqt584bo4o.cloudfront.net/genesis-discord/localized.svg)](https://crowdin.com/project/genesis-discord)
+[![Discord](https://img.shields.io/discord/146691885363232769.svg?logo=discord)](https://discord.gg/DuFunUv)
+
+## Live Public Bot info
+[![Discord Bots](https://discordbots.org/api/widget/status/123591822579597315.png)](https://discordbots.org/bot/123591822579597315?utm_source=widget)
+[![Discord Bots](https://discordbots.org/api/widget/servers/123591822579597315.png)](https://discordbots.org/bot/123591822579597315?utm_source=widget)
+[![Discord Bots](https://discordbots.org/api/widget/lib/123591822579597315.png)](https://discordbots.org/bot/123591822579597315?utm_source=widget)
+
+## JetBrains
+Thank you to <a href="https://www.jetbrains.com/" alt="JetBrains"><img src="/packages/shared/resources/jetbrains.svg"  height="16px" /> JetBrains</a> for providing us with free licenses to their great tools.
+
+* <a href="https://www.jetbrains.com/webstorm/" alt="WebStorm"><img src="/packages/shared/resources/icon-webstorm.svg" height="16px" /> WebStorm</a>
+
+Feel free to submit a pull request. We are working on build checks and tests. ESLint (with `@stylistic/eslint-plugin` formatting) runs via Husky on commit (`lint-staged` + root [`eslint.config.mjs`](eslint.config.mjs)).
+
+
+## Thanks, Discord... Legalese things
+
+Due to the New Discord T.O.S , if you continue to use, participate, be in, or not leave Cephalon Sanctuary, you agree to allowing me, any person, user, or member, any bot, service, app, and anything to collect, use, transmit, or any data related to your user account, any data made available by Discord in the API or SDK, any metadata from your user account, any messages and or content you send, and anything else you do or give by staying in Cephalon Sanctuary, or by using my bot.
+
+If you do not agree to letting Genesis, Oratoris, or any other bot there do so, please kick Genesis from your servers.
+
+tl;dr Bots need data. While I don't record any of your personal data or save it off for long-term use, I still need to tell you that bots can access your messages and user ID. If you don't want that, get rid of all of them, cause they all need that data.
+
+## Local Development Installation
+
+1. Clone this repo
+2. Install **Node.js 24 LTS** (`lts/krypton`) — e.g. `nvm install` (uses [`.nvmrc`](.nvmrc)) — needed for lint, tests, and local web dev
+3. Install [Docker](https://docs.docker.com/get-docker/) and Docker Compose
+4. Run `npm ci` at the repo root (workspaces + Husky hooks via `prepare`)
+5. Copy [`.env.example`](.env.example) to `.env.local` and set required variables (`TOKEN`, `OWNER`, `CLIENT_ID`)
+6. Optional web overrides: copy [`packages/web/.env.local.example`](packages/web/.env.local.example) to `packages/web/.env.local` for web-only vars; repo-root `.env.local` is loaded when unset
+7. Start MariaDB + bot + worker: `npm run docker:up`
+8. See below for config / commands
+
+Logs: `docker compose logs -f bot` (or `worker`, `mariadb`). Stop stack: `npm run docker:down`.
+
+MariaDB data is stored in [`data/db/`](data/db/) (gitignored). It persists across restarts until you delete that folder.
+
+See [`.env.example`](.env.example) and [`docker-compose.yaml`](docker-compose.yaml) for service details.
+
+## "Production"-like Installation
+
+1. Copy the docker-compose.yaml
+2. Add an `.env` file for your environment variables, or add them in the compose file itself.
+3. Replace references to context & Dockerfile with
+   ```bash
+   # if you want to pin a version
+   image: ghcr.io/wfcd/genesis/bot:3.1.4
+   # if you always want to pull the latest
+   image: ghcr.io/wfcd/genesis/bot:latest
+   ```
+4. Pull the images (`docker compose pull`)
+5. Start the containers (`docker compose up -d`)
+   i. Leave off `-d` if you want to watch the logs.
+   ii. Leverage `docker logs` if you want to watch a specific container's logs.
+It's generally good practice to start one at a time to make sure you have everything set up.
+You should also create 
+
+## Project layout
+
+npm workspaces monorepo — install once at the repo root (`npm ci`).
+
+| Package / folder | Role |
+|------------------|------|
+| [`packages/shared/`](packages/shared/) | Database, utilities, embeds, resources, shared models — used by bot, worker, and web |
+| [`packages/bot/`](packages/bot/) | Discord client, slash commands, event handlers |
+| [`packages/worker/`](packages/worker/) | Worldstate/Twitch/RSS notification loop |
+| [`packages/web/`](packages/web/) | Next.js dashboard ([genesis.warframestat.us](https://genesis.warframestat.us)) |
+| [`spec/`](spec/) | Integration tests (repo root) |
+
+Import shared code via the `#shared/*` path alias (see root `package.json` `imports` and each package’s `imports` where applicable).
+
+Common scripts (run from repo root):
+
+| Script | Purpose |
+|--------|---------|
+| `npm run docker:up` | MariaDB + bot + worker (detached bot/worker after DB ready) |
+| `npm run docker:down` | Stop stack and remove compose volumes (node_modules caches; DB data stays in `data/db/`) |
+| `npm run docker:db` | MariaDB only |
+| `npm run docker:bot:dev` | Bot container (foreground; rebuilds) |
+| `npm run docker:worker:dev` | Worker container (foreground; rebuilds) |
+| `npm run dev` | Bot + worker + web via concurrently (auto-starts compose MariaDB if needed; reads repo-root `.env.local`) |
+| `npm run dev:bot` | Bot on host (tsx; reads `.env.local`; run `npm run docker:db` first) |
+| `npm run dev:worker` | Worker on host (tsx; reads `.env.local`; run `npm run docker:db` first) |
+| `npm run dev:web` | Web dashboard (local Next.js) |
+| `npm run lint` | ESLint — all packages + `spec/` |
+| `npm run build:bundle` | Production bot/worker bundle (`tsup` → `dist/`) |
+| `npm run build:web` | Production Next.js build |
+| `npm run build` | Production bot Docker image ([`bot.Dockerfile`](bot.Dockerfile)) |
+
+## Configuration
+
+Genesis requires a MariaDB-compatible server. Connection uses **`MYSQL_*`** environment variables (historical names; works with MariaDB via the `mysql2` driver).
+
+### Base
+| Environment Variable | Description                                                            | Example                                     | Default     |
+|----------------------|------------------------------------------------------------------------|---------------------------------------------|-------------|
+| TOKEN                | Discord connection token                                               | `mfa.234089sdfasdf20dfada,f.asd`            | N\A         |
+| LOG_LEVEL            | Logging level of the bot, including info, debug, error, fatal          | `DEBUG`                                     | `ERROR`     |
+| MYSQL_DB             | Database name                                                          | `genesis`                                   | `genesis`   |
+| MYSQL_PASSWORD       | Database connection password                                           | `password`                                  | N\A         |
+| MYSQL_USER           | Database connection user                                               | `genesis`                                   | `genesis`   |
+| MYSQL_PORT           | Database connection port                                               | 3306                                        | 3306        |
+| MYSQL_HOST           | Hostname for connecting to the database                                | `127.0.0.1` (host dev) / `mariadb` (in compose) | `127.0.0.1` |
+| SHARD_OFFSET         | Offset of the first shard id for the local shards, default 0           | 2                                           | 0           |
+| LOCAL_SHARDS         | Number of shards locally                                               | 2                                           | 1           |
+| SHARDS               | Total number of shards                                                 | 1                                           | 1           |
+| OWNER                | ID of the person owning/running the bot, used for checking permissions |                                             |             |
+| PREFIX               | Default prefix to use for the instance                                 | `\`                                         | `\`         |
+| RAVEN_URL            | DSN url for logging data  to Sentry                                    | `'https://***:***@sentry.io/***'`           | N\A         |
+| CONTROL_WH_ID        | Webhook id for the control webhook for system notifications            | '0293485092348490834'                       | N\A         |
+| CONTROL_WH_TOKEN     | Webhook token for the control webhook for system notifications         | `asdpiofja[ospdj34095u8340wpodfj+_asdf-oja` | N\A         |
+| BUG_WH_ID            | Webhook id for the bug webhook                                         | '0293485092348490834'                       | N\A         |
+| BUG_WH_TOKEN         | Webhook token for the bug webhook                                      | `asdpiofja[ospdj34095u8340wpodfj+_asdf-oja` | N\A         |
+
+### Stats tracking
+| Environment Variable   | Description                                                | Example             | Default |
+|------------------------|------------------------------------------------------------|---------------------|---------|
+| DISCORD_BOTS_WEB_TOKEN | Token used to update bots.discord.pw bot statistics        | `as;dofiahsdf`      | N\A     |
+| DISCORD_BOTS_WEB_USER  | Bot user id on bots.discord.pw to update with server count | 6456514654966321321 | N\A     |
+| DISCORD_CARBON_TOKEN   | Carbonitex bot token for posting server data to Carbonitex | `as;dofiahsdf`      | N\A     |
+
+### Flair configuration
+| Environment Variable | Description                                                 | Example                                       | Default                                       |
+|----------------------|-------------------------------------------------------------|-----------------------------------------------|-----------------------------------------------|
+| EMBED_URL            | Default link that embeds use in their title                 | `https://warframestat.us`                     | `https://warframestat.us`                     |
+| EMBED_ICON_URL       | Default icon URL that embeds use in their footer            | `https://warframestat.us/wfcd_logo_color.png` | `https://warframestat.us/wfcd_logo_color.png` |
+| BASE_PRES_MSG        | Default presence message                                    | `@Bot help`                                   | `@Bot help`                                   |
+| BASE_PRES_ACT        | Default presence activity. Must be a valid discord.js value | `WATCHING`                                    | `PLAYING`                                     |
+
+### Feature Flags
+
+| Environment Variable | Description             | Example                 | Default |
+|----------------------|-------------------------|-------------------------|---------|
+| GAMES                | Feature flags to enable | `WARFRAME,UTIL,LOGGING` | `CORE`  |
+
+* `CORE` does not need to be specified ever, it will always load
+
+| Flag      | Feature                                                                     | Default |
+|-----------|-----------------------------------------------------------------------------|---------|
+| CORE      | Core features of the bot                                                    | ✓       |
+| UTIL      | Common utility functions that are domain agnostic, such as LFG and builds   | ✗       |
+| LOGGING   | Just what it sounds like, logging guild actions                             | ✗       |
+| CODES     | Managing promo codes, like Warframe Glyph codes                             | ✗       |
+| FUN       | Fun stuff, like 8Ball and corgis                                            | ✗       |
+| WARFRAME  | Warframe functionality, like tracking and Warframe informational Commands   | ✗       |
+| DESTINY2  | For an in-progress section allowing people to expand Genesis into Destiny 2 | ✗       |
+| GIVEAWAYS | Giveaway functionality                                                      | ✗       |
+| CUST_CMDS | Custom commands - user-generated simple commands                            | ✗       |
+| ROOMS     | Automated & manual room creation                                            | ✗       |
+| BLOCK     | Enable user disable features                                                | ✗       |
+| CMD_MGMT  | Command management                                                          | ✗       |
+| BOT_MGMT  | Bot Management                                                              | ✗       |
+
+### Setting up Twitch
+
+| Environment Variable    | Description                                                   | Example                        | Default  |
+|-------------------------|---------------------------------------------------------------|--------------------------------|----------|
+| TWITCH_CLIENT_ID        | Twitch Client ID for querying Twitch API                      | uo6dggojyb8d6soh92zknwmi5ej1q2 | N/A      |
+| TWITCH_USER_LOGIN       | The Twitch user login to watch                                | warframe                       | warframe |
+| TWITCH_POLL_INTERVAL_MS | How often to poll Twitch for stream updates (in milliseconds) | 10000                          | 10000    |
+
+In order to setup Twitch you need to specify your Twitch API Client ID. See the following link on how to get one:
+* Twitch API Client ID: https://dev.twitch.tv/docs/v5/ (See Getting a client ID)
+
+### Other Features
+
+| Environment Variable | Description                                    | Example      | Default      |
+|----------------------|------------------------------------------------|--------------|--------------|
+| LFG_ACTIVE_COLOR     | Hex color as a string for an active LFG embed  | `"0xaf01ff"` | `"0x9370db"` |
+| LFG_EXPIRED_COLOR    | Hex color as a string for an expired LFG embed | `"0xff0000"` | `"0xff0000"` |
+
+## Commands
+
+Honestly too many to put here
+
+## License
+
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
+
+
+### Private Docker Build
+
+Production-style images:
+
+- Bot: `npm run build` ([`bot.Dockerfile`](bot.Dockerfile))
+- Worker: `npm run build:worker` ([`notifier.Dockerfile`](notifier.Dockerfile))
+
+Optional worker only (without full stack): `docker compose --profile worker up --build`

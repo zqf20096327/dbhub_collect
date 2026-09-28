@@ -1,0 +1,95 @@
+<h3 align="center">Ochi is a cost-effective, Loki compatible, database for logs.</h3>
+
+<p align="center">
+  <img src="logo.png" alt="Ochi Logo" />
+</p>
+
+<p align="center">
+  <sub><i>Ochi (pronounced oh-chee) translates to "Eyes" in various Slavic languages.</i></sub>
+</p>
+
+## Introduction
+
+We are creating a more efficient alternative for storing logs.
+
+## Install
+
+#### Download pre-built binary
+
+```sh
+VERSION=v0.5.3 &&
+curl -Ls "https://github.com/ochi-team/ochi/releases/download/${VERSION}/Ochi-${VERSION}-linux-x86_64.tar.gz" | tar -xz
+```
+
+#### Build from source
+
+- install [zig](https://ziglang.org/learn/getting-started/#managers) 0.16.0
+- compile with `zig build -Doptimize=ReleaseSafe -Drelease=true`
+
+## Documentation
+
+https://ochi.dev/docs/guides/installation/
+
+## Roadmap
+
+- [x] store persists the data, working simple API queries
+- [x] Grafana datasource available
+- [x] home made query language
+- [x] installation scripts
+- [x] Ochi starts emitting logs to itself, [dogfooding](https://en.wikipedia.org/wiki/Eating_your_own_dog_food) Ochi
+- [x] Home made UI
+- [ ] Disk snapshots and recovery
+- [ ] Replication to a secondary mount
+- [ ] aarch64 release target
+- [ ] full support of Loki ingestion protocol (snappy, zstd, protobuf encoding, etc.)
+- [ ] docker-compose with configured datasource to grafana
+- [ ] OTEL collector API support
+- [ ] configuration support
+- [ ] windows devevlopment support
+- [ ] cost analysis
+- [ ] GDPR compliance
+
+## Goals
+- support aarch64 and x86_64 as Tier 1
+- support Windows and POSIX systems for development
+- support only Linux for production workloads (community is free to do whatever)
+- better core over features
+
+## Non goals
+- support every OS
+- "feature completeness"
+
+## Contributing
+
+Ochi is being actively developed by a small team of engineers (team of 1).
+
+Open an issue before submitting a PR. 
+Although bug fixes are exceptions, but they must be provided with a test to demonstrate a bug.
+
+Optimization improvements are welcome, but must be accompanied by a benchmark.
+
+Before submitting a PR, make sure the tests pass:
+```bash
+zig build test
+```
+
+For all questions, major changes, suggestions, notes, feel free to reach out to the team on [Discord](https://discord.gg/AsCKpCNp5c).
+
+## AI Policy
+
+1. We don't shame the lack of knowledge, it's better to accept not knowing, than spreading disinformation.
+2. Using LLMs you put your trust profile on a line, we don't encourage it, but you may.
+3. Complete slop will be rejected with a very short comment and a permanent ban.
+4. We can invest our time helping you learn. Don't fully rely on LLMs to implement a solution.
+
+We encourage to use AI in order to:
+1. generate a test that is able to crash the system
+
+## Code style
+- a good inner function comment describes why, not what
+- a good outer function comment (doc string) describes what
+- explicit is better than implicit
+- therefore default options are not the best
+- tests must either cover data or effects, not both
+- to produce effect it must take a data to produce a pre determined effect
+- pure functions are welcome

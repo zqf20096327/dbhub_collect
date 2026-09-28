@@ -1,0 +1,289 @@
+# Capubridge
+
+> A desktop devtool for developers debugging WebView-based Android apps — bridging the device world and runtime world in one place.
+
+Capubridge is a [Tauri 2](https://tauri.app) desktop application for debugging Android Chromium WebViews exposed through Chrome DevTools Protocol (CDP). It unifies ADB device management, CDP inspection, deep storage exploration, and live runtime tools into a single, native-feeling GUI. Framework wrappers are supported only when their WebView exposes a debuggable CDP target; native React Native/Hermes and iOS WebKit are outside the current scope.
+
+Inspired by [aya](https://github.com/liriliri/aya) and the raw power of the [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/).
+
+---
+
+## The Problem
+
+Debugging WebView apps on physical Android devices today means juggling:
+
+- `adb` commands in a terminal to manage devices
+- `chrome://inspect` in a browser to find WebView targets
+- Chrome DevTools opened in a separate floating window
+- Manual `adb forward` port management per device
+- No integrated view of IndexedDB, LocalStorage, Cache API, or SQLite
+
+Capubridge replaces this fragmented workflow with a single desktop app that speaks ADB and CDP for Android Chromium WebView targets.
+
+---
+
+## Features
+
+### Device Management
+
+- Auto-detect connected ADB devices (USB + TCP/IP)
+- Connect / disconnect / pair wireless devices
+- Per-device session with hot / warm / cold temperature model
+- Restart ADB server, switch to TCP mode, root shell
+- Shell command runner per device
+
+### WebView & CDP Inspection
+
+- Discover all debuggable WebView targets on the active device
+- Forward CDP ports automatically (one port per device)
+- Attach to any target — open Chrome DevTools externally or use the built-in console
+- CDP proxy for direct WebSocket access from the frontend
+- External DevTools lock prevents connection conflicts
+
+### Framework DevTools (Vue & React)
+
+- Runs the **official** Vue and React DevTools against a real Android WebView — component tree, props, reactive state, hooks
+- Detected per target: the Vue or React tab only appears when that framework is actually present
+- Backend injected at document start and bridged over CDP, so **no change to the debugged app is required** (an `adb reverse` WebSocket is impossible — Android refuses cleartext loopback with `ERR_CLEARTEXT_NOT_PERMITTED`)
+- A capability probe explains a blocked target instead of spinning forever
+
+> [!IMPORTANT]
+> **The target app must be built to allow inspection.**
+>
+> **Vue** — a stock production build is completely uninspectable: Vue drops `app._instance`, never emits `app:init`, and strips `__vnode` / `__vueParentComponent` from the DOM. Add `define: { __VUE_PROD_DEVTOOLS__: true }` to the target app's Vite config for staging builds, then rebuild.
+>
+> **React** — no flag needed; the Components tree works on a production build. But names are minified, and the **Profiler** requires a development or profiling build of React (`ionic cap run android -l --external`, or alias `react-dom/profiling`).
+>
+> Full details: [apps/docs/framework-devtools.md](apps/docs/framework-devtools.md)
+
+### Storage Explorer
+
+- **IndexedDB** — browse databases, object stores, records; edit and delete via CDP writes (changes go to the actual device)
+- **LocalStorage** — inspect and modify key/value pairs live
+- **Cache API** — explore cached request/response entries
+- **OPFS** — browse origin private file system
+- **SQLite** — list, scan, and query supported `.db` snapshots; native Android snapshots are read-only
+
+### Network Inspector
+
+- Capture supported HTTP request lifecycles from the selected target
+- Inspect headers, payloads, responses, redirects, timing, and failures
+- Bound request history and retained payload data for long sessions
+- Experimental request mocking backed by the local mock server
+
+### Logcat
+
+- Live log streaming with lease-based lifecycle (stops automatically when you leave)
+- Tag and level filtering
+- Bounded streaming output designed for high-throughput logs
+
+### Performance Monitor
+
+- Live CPU, memory, and network metrics per app process
+- Lease-bound: starts when you enter, stops when you leave
+
+### Screen Mirror
+
+- Mirror Android screen to the desktop via scrcpy
+- Touch, swipe, scroll, and keyboard injection
+- Screenshot capture and screen recording
+- Clipboard sync (device ↔ host)
+- Detachable mirror window with compact controls
+
+### Package Manager
+
+- List installed packages (third-party or all)
+- App icon resolution with persistent cache
+- Open package details, launch apps
+
+### File Browser
+
+- Browse device filesystem
+- Pull files to host and open in native OS app
+- Handles protected paths gracefully (`/storage/self`, `/storage/emulated`)
+
+### Session Recording & Replay
+
+- **Record** — capture DOM mutations, network requests, console logs, and rrweb events during app usage
+- **Playback** — replay recorded sessions with frame-by-frame scrubbing and timeline navigation
+- **Multi-lane view** — synchronized replay of DOM changes, network activity, and console output
+- **Event markers** — timeline shows key events (network requests, console logs) for quick navigation
+- **Zip export** — download recordings as portable `.zip` files for sharing or archival
+
+---
+
+## Architecture
+
+```
+Android device
+  ↕  ADB daemon / WebView sockets
+Rust session runtime (Tauri backend)
+  ├── device tracker          — USB/TCP attach/detach events
+  ├── session registry        — per-device session lifecycle
+  ├── per-device workers      — serialized control queue per device
+  ├── live lease manager      — logcat / perf / mirror / console
+  ├── cache store             — snapshot persistence (packages, targets, icons)
+  └── typed session events    — pushed to frontend via Tauri event channel
+Tauri IPC bridge
+  └── Effect runtime wrappers — typed invoke + listen + cancellation
+Pinia stores                  — presentation state, no invented device truth
+Vue 3 modules                 — feature UI, composables, TanStack Query/Table
+```
+
+### Session Temperature Model
+
+Each device session runs at one of three temperatures:
+
+| State    | Meaning                                           |
+| -------- | ------------------------------------------------- |
+| **hot**  | Active device — live leases allowed               |
+| **warm** | Known device — cached snapshots remain usable     |
+| **cold** | Stale / offline — visible but not trusted as live |
+
+### Work Classes
+
+| Type               | Examples                                                       | Rules                                            |
+| ------------------ | -------------------------------------------------------------- | ------------------------------------------------ |
+| Snapshot / control | device refresh, package list, target discovery, shell commands | Serialized per device, duplicate work coalesced  |
+| Live / leased      | logcat, perf, mirror, console attach                           | Explicit lease — starts on enter, stops on leave |
+
+### Key Design Rules
+
+- Rust owns all operational runtime state. Vue owns presentation state only.
+- No watcher-driven transport orchestration.
+- No hidden target refresh triggered by component mount chains.
+- Frontend never invents device or session truth.
+- CDP writes always go through `Runtime.evaluate` to the actual device — no fake local mutations.
+
+---
+
+## Tech Stack
+
+| Layer             | Technology                                |
+| ----------------- | ----------------------------------------- |
+| Desktop framework | Tauri 2                                   |
+| Frontend          | Vue 3 (Composition API, `<script setup>`) |
+| Language          | TypeScript (strict) + Rust                |
+| Build system      | Vite+ (`vp`)                              |
+| Styling           | Tailwind CSS v4                           |
+| State             | Pinia (setup stores) + TanStack Query     |
+| Tables            | TanStack Table v8                         |
+| Control plane     | Effect-TS (runtime/IPC boundary only)     |
+| ADB (Rust)        | `adb_client` crate                        |
+| SQLite (Rust)     | `rusqlite` (bundled static)               |
+| WebSocket         | `tokio-tungstenite`                       |
+| Monorepo          | Vite+ managed workspace                   |
+
+---
+
+## Status
+
+**v2.6.0** — active beta. Core session model, ADB management, CDP inspection, storage explorer, framework DevTools (Vue and React), logcat, performance monitor, screen mirror, recording, replay, in-app updates (stable/pre-release channels), and an embedded MCP server for AI-assisted device control are functional. Experimental surfaces remain hidden until their complete workflows are ready.
+
+---
+
+## Roadmap
+
+### Current beta scope
+
+- [x] Session model with hot/warm/cold device states
+- [x] Rust device tracker + per-device session workers
+- [x] ADB device management GUI
+- [x] CDP target discovery + automatic port forwarding
+- [x] IndexedDB explorer (read / write / delete via CDP)
+- [x] LocalStorage, Cache API, OPFS inspection
+- [x] SQLite browser + query console
+- [x] Logcat viewer (live, lease-bound)
+- [x] Performance monitor (live, lease-bound)
+- [x] Screen mirror (scrcpy, touch/keyboard injection)
+- [x] Package manager with persistent icon cache
+- [x] File browser with protected path fallbacks
+- [x] Multi-platform builds (Linux, macOS x64/arm64, Windows)
+- [x] Storage diff — compare storage snapshots between sessions or builds
+- [x] JS console REPL — run arbitrary JavaScript in the WebView context with full autocomplete
+- [x] Session recording & replay — capture DOM + network + console, replay with timeline scrubbing
+
+### v1.x — Planned
+
+- [ ] WebSocket frame inspection and network throttling
+- [ ] Capacitor plugin inspector — inspect plugin bridge calls and responses live
+- [ ] Crash symbolication — decode native Android stack traces using source maps
+- [ ] iOS support — WebKit inspector protocol (under investigation)
+
+### Future
+
+- [ ] Remote device sharing — proxy a connected device to a teammate over the network
+- [ ] Automated test runner integration — attach to a running test suite and capture storage state per test
+- [ ] AI context export — bundle device state, logs, and storage into a prompt-ready snapshot
+
+---
+
+## Getting Started
+
+### Download
+
+Grab the latest release for your platform from the [Releases](../../releases) page.
+
+| Platform            | Format               |
+| ------------------- | -------------------- |
+| macOS Apple Silicon | `.dmg` (arm64)       |
+| macOS Intel         | `.dmg` (x64)         |
+| Windows             | `.msi` / `.exe`      |
+| Linux               | `.AppImage` / `.deb` |
+
+### Requirements
+
+- Android device with **USB debugging enabled**
+- ADB in your PATH (install via Android SDK Platform Tools if needed)
+- For WebView inspection: app with debuggable WebViews (set `android:debuggable="true"` in `AndroidManifest.xml` — enabled by default for debug builds)
+
+### Build from Source
+
+```bash
+# Install Vite+ on Windows
+irm https://vite.plus/ps1 | iex
+
+# Clone and install
+git clone https://github.com/aybinv7/capubridge
+cd capubridge
+vp install
+
+# Run desktop app in dev mode
+vp run tauri
+
+# Production build
+vp run -r build
+```
+
+**Requirements:** Vite+, Node 22+, and a Rust stable toolchain. Linux builds also require `libwebkit2gtk-4.1-dev libxdo-dev libayatana-appindicator3-dev librsvg2-dev`.
+
+---
+
+### For mac users
+
+```bash
+xattr -cr /Applications/capubridge.app
+```
+
+### For Linux AppImage users
+
+On recent Wayland systems using Mesa, including Hyprland-based Arch distributions, the 2.6.0 AppImage can fail during WebKitGTK EGL startup. Launch it with the host Wayland client library:
+
+```bash
+LD_PRELOAD=/usr/lib/libwayland-client.so.0 ./capubridge_2.6.0_amd64.AppImage
+```
+
+This is a temporary AppImage compatibility workaround. `.deb` and `.rpm` packages do not use the affected bundled Wayland library path.
+
+## Acknowledgements
+
+- [aya](https://github.com/liriliri/aya) — inspiration for what a native Android devtool GUI can feel like
+- [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/) — foundation for all WebView inspection features
+- [scrcpy](https://github.com/Genymobile/scrcpy) — powering the screen mirror feature
+- [Tauri](https://tauri.app) — making a lean, native desktop app possible with web tech
+
+---
+
+## License
+
+MIT

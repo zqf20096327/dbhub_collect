@@ -1,0 +1,116 @@
+# Crona
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/brand/mark/crona-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="docs/brand/mark/crona-light.svg" />
+    <img src="docs/brand/mark/crona-light.svg" alt="Crona" width="180" />
+  </picture>
+</p>
+
+Crona is a local-first work tracker for developers. It combines a terminal UI, a scriptable CLI, and a background local daemon into one workflow for planning work, tracking focus sessions, reviewing momentum, and exporting structured artifacts.
+
+Managed package installers are the preferred distribution path:
+- Homebrew on macOS and Linux
+- Scoop on Windows
+- GitHub Releases as the canonical binary source
+
+Use [docs/install.md](docs/install.md) for installation and [docs/migration.md](docs/migration.md) when you need to switch install methods or release channels.
+Destination-specific migration guides live in the migration section of the docs.
+
+The repository is a Go monorepo with four main modules:
+- `kernel`: internal source tree for the background daemon, SQLite store, timer, IPC, and update checks
+- `tui`: Bubble Tea terminal UI
+- `cli`: scriptable commands and local daemon control flows
+- `shared`: shared types, config, protocol, and utilities
+
+## Screenshots
+
+![Daily dashboard showing planned issues, habits, and focus summary](docs/screenshots/daily-dashboard.png)
+
+![Issues view showing scoped work and lifecycle status](docs/screenshots/issues.png)
+
+![Wellbeing dashboard showing accountability, check-in trends, and activity heatmap](docs/screenshots/wellbeing-dashboard.png)
+
+## Quick Start
+
+See the full installation guide in [docs/install.md](docs/install.md).
+
+If you are migrating from the install script, another package manager, or a beta channel, use [docs/migration.md](docs/migration.md) before reinstalling.
+
+Runtime notes:
+- local alerts are emitted by the background daemon, not the TUI process
+- scheduled reminders only fire while the background daemon is running
+- the `Summary` view and `crona summary` are read-only at-a-glance surfaces; the TUI Summary also includes focus stats and an interactive score calendar via `[c]`; use `Daily` when you want to plan or make changes interactively
+- the Daily view adapts cleanly to smaller terminals with compact issue rendering and shorter pane hints
+- the Wellbeing view includes Momentum detail with current bucket metadata and contributor breakdowns
+- the TUI owns the terminal tab title while it is running and shows active session context when focused
+- PDF export depends on local renderer tooling; see [docs/install.md](docs/install.md)
+
+Launch the TUI:
+
+```bash
+crona
+```
+
+Get a quick read-only summary from the CLI:
+
+```bash
+crona summary
+crona summary --week
+crona summary --last-x-days 7
+```
+
+Inspect the daemon from the CLI:
+
+```bash
+crona daemon attach --json
+crona daemon status --json
+crona daemon info --json
+```
+
+The command group is named `daemon` because it controls the internal daemon process. User-facing docs generally call it the daemon or local daemon.
+
+Generate shell completions:
+
+```bash
+crona completion zsh
+crona completion bash
+crona completion fish
+```
+
+## macOS Companion
+
+The [Crona macOS companion](https://github.com/webxsid/crona-macos) is a native menu-bar app that connects to your local Crona daemon. It’s still in beta and changing quickly, so expect rough edges and occasional changes to the UI, APIs, and installation process.
+
+## Documentation
+
+- [Docs Index](docs/README.md)
+- [Concepts](docs/concepts.md)
+- [Install](docs/install.md)
+- [Migration](docs/migration.md)
+- [Development](docs/development.md)
+- [Contributing](docs/contributing.md)
+- [Release Process](docs/release.md)
+- [Socket API](docs/api/socket.md)
+- [Changelog](docs/changelog.md)
+- [Feature Design](docs/feature-design.md)
+
+Operational references:
+- [Notification and alert behavior](docs/install.md#notifications-and-alerts)
+- [PDF rendering support](docs/install.md#pdf-rendering)
+
+## Support And Updates
+
+Public support is available through these links:
+
+- Bugs: [UserJot](https://crona.userjot.com/)
+- Feedback and roadmap: [UserJot](https://crona.userjot.com/)
+- Release updates: [Releases](https://github.com/webxsid/crona/releases)
+- Release process: [docs/release.md](docs/release.md)
+
+Generate a support bundle from the TUI Support view before filing a bug when possible.
+
+## License
+
+[MIT](LICENSE)

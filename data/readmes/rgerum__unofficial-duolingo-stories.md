@@ -1,0 +1,106 @@
+# Unofficial Duolingo Stories
+
+[![Cypress Test](https://img.shields.io/endpoint?url=https://cloud.cypress.io/badge/simple/cvszgh/master&style=flat&logo=cypress)](https://cloud.cypress.io/projects/cvszgh/runs)
+[![chat](https://img.shields.io/discord/726701782075572277)](https://discord.com/invite/4NGVScARR3)
+
+This project brings the official Duolingo Stories to new languages, translated by a community effort.
+
+It is _not_ an official product of Duolingo, nor is there any plan to integrate it into their platform or app.
+
+It is hosted at https://duostories.org and reproduces the story experience from the official Duolingo stories.
+
+The app is built with Next.js and React.
+
+## Architecture snapshot
+
+- App/UI: Next.js 16 + React 19 (`src/app`, `src/components`)
+- Canonical app data access: Convex queries/mutations (`convex/*`)
+- Write-side side effects (GitHub/PostHog): Convex internal actions in `convex/editorSideEffects.ts`
+- Remaining Next route handlers are intentionally server-only:
+  - Auth entrypoint (`src/app/api/auth/[...all]/route.ts`)
+  - Audio endpoints (`src/app/audio/*/route.ts`)
+
+### Write flow
+
+Client component -> Convex mutation -> schedule internal actions:
+- `editorSideEffects.*` for GitHub/PostHog side effects
+
+This keeps write authorization, mutation semantics, and side effects centralized in Convex.
+
+## How to run locally
+
+Now create `.env.local` in the project root.
+
+Minimum local values:
+
+```
+NEXT_PUBLIC_CONVEX_URL=<your_convex_dev_url>
+CONVEX_URL=<your_convex_dev_url>
+BETTER_AUTH_SECRET=<your_secret>
+SITE_URL=http://localhost:3000
+```
+
+Convex runtime env (set via `pnpm exec convex env set ...`) should include:
+
+```
+GITHUB_REPO_TOKEN=<optional_for_side_effect_sync>
+POSTHOG_KEY=<optional_for_server_tracking>
+POSTHOG_HOST=<optional_for_server_tracking>
+RESEND_API_KEY=<optional_for_email_flows>
+AUTH_TRUSTED_ORIGIN=<optional_extra_origin_for_local_or_preview_auth>
+SITE_URL=http://localhost:3000
+BETTER_AUTH_SECRET=<must_match_auth_setup>
+```
+
+Install dependencies
+
+```
+pnpm install
+```
+
+To develop you can then run and visit http://localhost:3000
+
+```
+pnpm run dev
+```
+
+Recommended checks:
+
+```
+pnpm run typecheck
+pnpm run lint
+```
+
+## How to contribute
+
+To contribute to the project you should open an issue to discuss your proposed change.
+You can assign the issue to yourself to show that you want to work on that.
+If there is a consensus that this bug should be fixed or this feature should be implemented,
+then follow the following steps:
+
+- create a fork of the repository
+- clone it to your computer
+- create a branch for your feature
+- make the changes to the code
+- commit and push the changes to GitHub
+- create a pull request
+
+Please make sure to only commit changes to files that are necessary to the issue.
+Try to not commit accidentally other changes, e.g. package-lock.json files.
+This makes it harder to review and merge the pull request.
+
+### Contribution rules for new backend work
+
+- New app writes should be direct Convex mutations from the client or server action.
+- Avoid adding pass-through Next route handlers for simple reads/writes.
+- Server side effects should be scheduled from Convex mutations via internal actions.
+- Include an `operationKey` for mutation calls that can be retried.
+
+If everything is fine, I will accept the pull request and I will soon upload it to the website.
+
+## Legacy artifacts
+
+- `database/` — story text exports from the pre-Convex (MySQL/Postgres) era. Not used by the app.
+- `import_tools/` — one-off import scripts (Python/Greasemonkey) from the original data migration. Not used by the app.
+
+Both are kept for historical reference and are excluded from dead-code checks (`knip.json`).

@@ -1,0 +1,126 @@
+= immigrant
+
+++++
+<p align="center"><a href="https://github.com/CertainLach/immigrant"><img alt="immigrant logo by https://www.behance.net/fluqua" src="./docs/logo.svg" height="150"></img></a></p>
+<p align="center">
+  <a href="https://opencollective.com/jrsonnet"><img alt="opencollective" src="https://delta.rocks/badge/backers.svg"></img></a>
+  <a href="./LICENSE"><img alt="license" src="https://delta.rocks/badge/License · MIT.svg"></img></a>
+</p>
+++++
+
+An database schema definition language.
+
+== Example
+
+Everyone loves examples, here it is (github doesn't support immigrant code hightlighting yet):
+[source,plaintext]
+----
+/// You can define scalars, which are translated to PgSQL DOMAIN:
+scalar u31 = "INTEGER" @check "u31_is_unsigned" (_ >= 0);
+/// Or you can create normal type aliases, which will be used in tables as-is,
+/// the same way as everyone writes SQL. This is more idiomatic in immigrant to use non-inlined scalars,
+/// as immigrant schemas in the wild are much more constrained than the normal SQL databases.
+scalar non_zero_int = "INTEGER" @check "non_zero_int_cant_be_zero" (_ != 0) @inline;
+
+/// You can also specify some of the column attributes on scalars.
+/// I.e if you want all of your data to be serchable by user, you can specify index on the user id type itself.
+scalar user_id = "INTEGER" @index;
+
+/// Or enums, which are less useful with better @checks, yet still have some useful features:
+enum user_group {
+	/// Almost everywhere you can specify both schema name, and the database name.
+	/// I.e if you had superuser group, and then decided to rename it to admin, you don't necessary
+	/// need to change it in the database, you can specify its code name in the schema.
+	/// You can also rename it btw, if you change the database name in the schema, immigrant will reconcile
+	/// it in the database.
+	admin "superuser";
+	normal;
+};
+
+/// You can also define structs, which are translated to PgSQL COMPOSITE TYPE:
+struct test_struct {
+	/// Even if used database engine doesn't support struct checks, immigrant generators should try
+	/// to support some set of common features as much as possible.
+	a: u31 @check "extra_checks" (_ != 99);
+	/// Checks with the same name are merged to ease ON CONFLICT ON CONSTRAINT creation.
+	b: non_zero_int @check "extra_checks" (_ != 99);
+	/// Immigrant includes some syntax sugar to specify constraints on per-item basis, same
+	/// as sql allows to specify CHECKs on the columns.
+	@check "if_a_then_b" (if _.a > 10 then _.b > 10 else true);
+};
+
+/// And of course, you can create tables too.
+/// Note the naming: In immigrant it is idiomatic to name things like in the code, and then either use
+/// naming convention preprocessor (i.e postgres naming convention will automatically name this table as "users"),
+/// or manually define table name, as any other database name in immigrant:
+table User "clients" {
+	/// In SQL you can omit some things, such as foreign key targets...
+	/// In immigrant you can omit the field type, and it will pick type with the same name as the column.
+	user_id @primary_key;
+	user_group;
+
+	test_struct;
+};
+
+table Post "news" {
+	id: u31 @primary_key;
+	user_id ~ User;
+};
+----
+
+== Goals
+
+Be an extensible database schema modelling language:: Immigrant is designed to be highly extensible. It allows external
+tools to provide their own functionality and create code generators based on the immigrant database schema language.
+This extensibility makes it a versatile tool that can be adapted to meet a variety of needs.
+Provide support for modern, and well-established database features:: Immigrant aims to provide robust support for a wide
+range of database features. Every type, function, and database extension should be possible to use within the immigrant
+schema. Discouraged and deprecated database features should not be supported.
+[[readable-goal]]Generated migrations should be readable and easy to understand:: One of the guiding principles of
+immigrant is that the migrations it generates should be easily readable and understandable. There should be no arcane
+magic here; the logic behind migration decisions should be obvious to anyone reviewing the code.
+[[types-goal]]Provide more complete support for custom types, and make it easier to implement more validity checks::
+Most of the databases enforce users to perform checks on the application side, by i.e implementing only support for
+signed integers. Immigrant has support for user-defined scalars, allowing to reuse logic more easily, encouraging users
+to have more checks on the database level, and allowing codegenerators to provide better support for newtype wrapping of
+database primitives.
+[[autonomous-goal]]Be autonomous, work only on the defined schema, do not require the database connection:: Database
+connection requirements complicates local development and the CI a lot, immigrant should operate strictly on what user
+has defined in their schema definitions.
+
+== Non-goals
+Abstract SQL away:: While immigrant makes it easier to manage database schemas, it is not designed to completely
+abstract away SQL. Users should still be able to understand and write the generated migrations themselves. However,
+they can also take advantage of the tool to automate some of this work.
+Be an ORM (Object-Relational Mapping):: While users of immigrant may implement their own code generators based on the
+schema, immigrant itself does not provide any tools to implement ORM functionality. It is a tool specifically designed
+for managing database schemas, not for acting as a bridge between databases and objects in code.
+Version control system integrations:: The default immigrant Command-Line Interface (CLI) implements an opinionated
+file-based schema change management system. This should be sufficient for most users, but those who wish to integrate
+immigrant with a version control system will need to implement their own solutions.
+[[generic-nongoal]]Provide the support for most SQL databases/generic database driver:: This non-goal conflicts with
+<<readable-goal,readability goal>>, as some things are implemented very differently in some databases. In sqlite, you
+can only add/alter constraints using dropping and re-creating the table, and this will be messy to integrate into other
+database migration codegenerators. Mixed driver codebases will only be implemented for databases that promise some level
+of compatibility, like PostgreSQL and CockroachDB, which should support the majority of common functionality.
+Introspection-based schema generation:: This type of operation may be supported in initial database import, however it
+may not work correctly, as some of the immigrant features may not be directly convertible from SQL.
+
+== Inspiration
+
+https://prisma.io[Prisma]:: I have learned about prisma after I have started implementing immigrant, however, my
+design decisions may be affected by Prisma. The things I dislike about prisma, is the implementation of
+<<generic-nongoal,generic database migration generator>>. While this feature may sound like a good idea, in fact this
+thing complicates the implementation a lot, preventing them from implementing some of the good features (such as views)
+in a timely manner. In case of sqlite migration layer, this thing skips most of the sql code generation due to complex
+conditions, and sqlite implementation only performs the basic operations. In immigrant, this should be the short sqlite
+driver, which doesn't implement logic only required for more complete database solutions.
+https://github.com/zombodb/pg-schema-diff[pg-schema-diff] and similar schema diffing solutions:: I liked the idea, but
+none of the implementations seemed to be complete enough, and usage of raw sql does not permit the implementation of
+<<types-goal,user-defined types>>. They also don't provide good enough solution to storing the schema history, and
+most useable tools <<autonomous-goal,require the connection to the database>>.
+
+== Related Projects
+
+https://github.com/deltarocks/tree-sitter-immigrant[tree-sitter-immigrant]:: Tree-sitter grammar for the immigrant language, providing syntax highlighting and parsing support.
+

@@ -1,0 +1,374 @@
+# Terraform OCI Free Tier
+
+An OpenTofu/Terraform root module that provisions a self-hosted stack on Oracle Cloud Infrastructure using only Always Free resources: an ARM64 VM with Docker, an optional RunTipi homeserver and an optional WireGuard client.
+
+> **Upgrading from v4.x or earlier?** v5.0.0 lowers the default instance to 2 OCPUs / 12 GB and makes `region` required. See the [CHANGELOG](CHANGELOG.md) for breaking changes and migration guide, and [What can cost you money — or take your instance away](#what-can-cost-you-money--or-take-your-instance-away) for why.
+
+## Table of Contents
+
+- [Terraform OCI Free Tier](#terraform-oci-free-tier)
+  - [Table of Contents](#table-of-contents)
+  - [Changelog](#changelog)
+  - [Prerequisites](#prerequisites)
+  - [Setup](#setup)
+  - [Authentication](#authentication)
+  - [What can cost you money — or take your instance away](#what-can-cost-you-money--or-take-your-instance-away)
+  - [Usage](#usage)
+  - [Files](#files)
+  - [Security Configuration](#security-configuration)
+  - [RunTipi Configuration](#runtipi-configuration)
+  - [License](#license)
+  - [Requirements](#requirements)
+  - [Providers](#providers)
+  - [Modules](#modules)
+  - [Resources](#resources)
+  - [Inputs](#inputs)
+  - [Outputs](#outputs)
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history, breaking changes, and migration guides.
+
+## Prerequisites
+
+- [OpenTofu](https://opentofu.org/docs/intro/install/) (recommended) or [Terraform](https://developer.hashicorp.com/terraform/install) installed on your local machine.
+- An Oracle Cloud Infrastructure (OCI) account.
+- OCI CLI configured with your credentials.
+- To work on the module itself: `tofu` and `shellcheck` (both provided by the [toolbox](https://github.com/filippolmt/toolbox)). See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Setup
+
+1. **Clone the repository**:
+    ```bash
+    git clone https://github.com/filippolmt/terraform-oci-free-tier.git
+    cd terraform-oci-free-tier
+    ```
+
+2. **Configure your variables**:
+    Copy the `terraform.tfvars.template` to `terraform.tfvars` and fill in the required variables.
+    By default, the `install_runtipi` variable is set to `true`, which will trigger the installation of RunTipi. If you do not wish to install RunTipi, set this variable to `false`.
+    ```bash
+    cp terraform.tfvars.template terraform.tfvars
+    ```
+
+3. **Initialize Terraform or OpenTofu**:
+    Depending on the tool you are using, run:
+    ```bash
+    terraform init
+    ```
+    or
+    ```bash
+    tofu init
+    ```
+
+## Authentication
+
+The module supports two OCI provider authentication methods, selected via the `auth_method`
+variable (default: `"ApiKey"`).
+
+### API key (default)
+
+Upload an API signing key in the OCI Console and set the matching variables in `terraform.tfvars`:
+
+```hcl
+auth_method                 = "ApiKey" # default, can be omitted
+oracle_api_key_fingerprint  = "aa:bb:cc:..."
+user_ocid                   = "ocid1.user.oc1..aaaa..."
+tenancy_ocid                = "ocid1.tenancy.oc1..aaaa..."
+oracle_api_private_key_path = "~/.oci/oci_api_key.pem" # default
+```
+
+### Session token (browser login)
+
+If you authenticate through the OCI CLI with a browser-based session token, no API key upload is
+needed:
+
+```bash
+oci session authenticate   # creates a session-token profile in ~/.oci/config
+```
+
+Then set only the auth method and the profile name — the API key fields
+(`oracle_api_key_fingerprint`, `user_ocid`, `tenancy_ocid`, `oracle_api_private_key_path`) can be
+left empty, as they are read from the session profile:
+
+```hcl
+auth_method         = "SecurityToken"
+config_file_profile = "<your-session-profile>" # the profile created by `oci session authenticate`
+```
+
+> The provider also accepts `InstancePrincipal`, `InstancePrincipalWithCerts`, and
+> `ResourcePrincipal` as `auth_method` values for in-cloud execution.
+
+## What can cost you money — or take your instance away
+
+This module targets the **Always Free** allocation: resources Oracle grants
+perpetually at no cost, with fixed per-tenancy caps. There are four ways to end
+up outside it. The first two the module refuses to do unless you set
+`acknowledge_billable_resources = true`; the last two it cannot prevent.
+
+**1. Exceeding an Always Free cap.** Since 15 June 2026 the Ampere A1 Compute
+allocation is **2 OCPUs and 12 GB of memory** (previously 4 and 24), with a
+monthly budget of 1,500 OCPU hours and 9,000 GB hours. Block storage is
+**200 GB total** across the boot volume and the Docker volume — the module's
+defaults (50 GB + 150 GB) sit exactly on that line. On a Pay-As-You-Go account
+the excess is billed; on a Free Tier account OCI refuses the resource, and
+instances already above the cap have been terminated.
+
+Do not assume a Pay-As-You-Go account is safe at the old 4/24 sizing. Oracle
+Support has told some users it is, but Oracle's own documentation applies the
+new caps to every tenancy, and Pay-As-You-Go users have reported both the
+reduction notice and billing alerts on a single 4/24 instance.
+
+**2. Building outside your home region.** Always Free eligibility is scoped to
+the single region your tenancy was anchored to at sign-up. Elsewhere there is no
+Always Free allocation at all: the instance and every GB of storage are billed
+at full price, not just the excess over the caps. `region` is a required
+variable with no default, and the module compares it against the tenancy's home
+region before it will build. (The comparison is skipped when `tenancy_ocid` is
+null — with session-token or principal auth the module has no tenancy to query.)
+
+That comparison reads `data.oci_identity_region_subscriptions`, so whatever
+credentials you run with need `inspect tenancies` on the tenancy. A tenancy
+admin — the usual case on a Free Tier account — already has it. A
+compartment-scoped service user may not, and `plan` will then fail on the data
+source read with `NotAuthorizedOrNotFound` rather than on the precondition.
+
+**3. Idle reclamation.** Oracle reclaims an Always Free compute instance that
+stays below 20% CPU, network *and* memory utilisation across a seven-day window.
+This is independent of the caps: a perfectly compliant instance can still be
+taken. A container workload with real traffic generally stays above the
+threshold; an idle Docker host may not.
+
+**4. "Out of host capacity" on recreation.** Always Free Ampere A1 capacity is
+frequently exhausted in popular regions, and failing to create an instance is
+the common experience rather than the exception. Resizing an existing instance
+down is an in-place change with a reboot and is safe. Destroying an instance to
+rebuild it smaller may leave you with nothing.
+
+### Other limits worth knowing
+
+- **10 TB of outbound data transfer per month**, tenancy-wide.
+- **Network bandwidth and VNIC count scale with OCPUs** — at 2 OCPUs you get
+  half the bandwidth of a 4-OCPU instance.
+- **2 VCNs per tenancy** on a Free Tier account. This module creates one.
+
+## Usage
+
+1. **Plan the deployment**:
+    ```bash
+    terraform plan
+    ```
+    or
+    ```bash
+    tofu plan
+    ```
+
+2. **Apply the deployment**:
+    ```bash
+    terraform apply
+    ```
+    or
+    ```bash
+    tofu apply
+    ```
+
+3. **Destroy the deployment**:
+    ```bash
+    terraform destroy
+    ```
+    or
+    ```bash
+    tofu destroy
+    ```
+
+## Files
+
+- `versions.tf`: Specifies the required Terraform/OpenTofu version and provider versions.
+- `providers.tf`: OCI provider configuration.
+- `network.tf`: Networking resources (VCN, Subnet, Internet Gateway, Route Table, Security List).
+- `compute.tf`: Compute resources (Instance, Public IP, data sources).
+- `storage.tf`: Storage resources (Block Volume, Volume Attachment, Backup Policy).
+- `variables.tf`: Defines the variables used in the Terraform configuration. Includes validation rules for OCPUs, RAM, and volume sizes.
+- `checks.tf`: Always Free cap and home-region logic — the region-subscriptions data source, the shared locals, and the advisory `check` block.
+- `outputs.tf`: Defines the outputs of the Terraform configuration.
+- `terraform.tfvars.template`: Template for user-specific variables.
+- `scripts/startup.sh`: Instance setup, in two phases. Terraform attaches the block volume only after the instance reaches RUNNING, which is later than cloud-init is willing to wait, so the work is split:
+    - **Phase A** (cloud-init): system packages, Docker, SSH keys, timezone, and OS tuning and hardening — journald size cap, SSH hardening, open-file and inotify limits, swapfile, optional automatic reboot, optional fail2ban. It then writes the Phase B script and installs it as a systemd oneshot service.
+    - **Phase B** (`mnt-data-setup.service`): detects the block volume with exponential backoff for up to 60 minutes, mounts it at `/mnt/data` by UUID, makes Docker wait for that mount on reboot, and installs RunTipi and the WireGuard client if enabled.
+    - Both phases are re-run safe: a completion marker written at the end of Phase B gates the service, and the mount is guarded by `mountpoint`. Optional steps log their failures instead of aborting, and network operations retry.
+    - Changes here reach **new instances only** — `compute.tf` ignores `user_data` changes, and cloud-init runs it once. Existing instances need the change applied by hand; the `CHANGELOG.md` migration notes say when.
+- `.github/workflows/`: Contains GitHub Actions workflows for CI/CD.
+    - `documentation.yml`: Renders terraform-docs into `README.md` and commits it back to the PR branch.
+    - `terraform.yml`: Runs fmt-check, validate, tofu-test and shellcheck, and uploads a Trivy config scan to the Security tab.
+
+## Security Configuration
+
+Ingress firewall rules are managed automatically based on enabled features. No manual configuration is needed for common use cases.
+
+### Ingress Rules
+
+**Always enabled:**
+- TCP 22 (SSH) — source configurable via `ssh_source_cidr` (default: `0.0.0.0/0`)
+- ICMP type 3 code 4 (fragmentation needed — required for Path MTU Discovery)
+
+**Auto-added when `install_runtipi = true`:**
+- TCP 80 (HTTP)
+- TCP 443 (HTTPS)
+- UDP 51820 (WireGuard)
+
+**Optional:**
+- ICMP ping: set `enable_ping = true` (default: `false`)
+
+**Custom rules** — use `custom_ingress_security_rules` with a simplified format:
+```hcl
+custom_ingress_security_rules = [
+  {
+    description = "Allow Minecraft"
+    protocol    = "6"       # "6" (TCP) or "17" (UDP)
+    port_min    = 25565
+    port_max    = 25565
+    # source defaults to "0.0.0.0/0"
+  }
+]
+```
+
+### Egress Rules
+
+By default, all outbound traffic is allowed (`enable_unrestricted_egress = true`). To apply restrictive egress rules, set `enable_unrestricted_egress = false` — the default restrictive set allows only:
+- TCP 443 (HTTPS)
+- TCP 80 (HTTP)
+- UDP/TCP 53 (DNS)
+- UDP 123 (NTP)
+
+To further customize restrictive egress rules, override `egress_security_rules`.
+
+### Optional Features
+- **KMS Encryption**: Set `kms_key_id` to encrypt boot and data volumes with customer-managed keys
+- **Resource Tagging**: All resources are tagged with `freeform_tags` (default: `ManagedBy=Terraform`)
+
+## RunTipi Configuration
+
+If `install_runtipi` is set to `true`, the setup script will install RunTipi and configure the local network for running applications within the local domain. Follow these steps to correctly configure RunTipi:
+
+1. **Access RunTipi via Public IP**:
+    - Install AdGuard from the RunTipi apps.
+    - In the "Network Interface" section, add the IP `127.0.0.1` and ensure the system is also reachable from the internet.
+    - Add a valid DNS or any DNS by modifying the `hosts` file if needed.
+
+2. **Configure DNS Resolution for VPN Network**:
+    - Access the RunTipi dashboard and follow this guide for DNS resolution within the VPN network: [RunTipi DNS Resolution Guide](https://runtipi.io/docs/guides/local-certificate#dns-resolution).
+    - Configure the IP to `172.18.0.254`, which is the IP set for Traefik.
+
+3. **Configure WireGuard**:
+    - Install and configure WireGuard by adding a public IP or DNS.
+    - Set a password and configure the AdGuard IP to `172.18.0.253`.
+    - Restart RunTipi.
+
+4. **Disable Internet Access**:
+    - Once AdGuard is configured and running, you can disable internet access to ensure that applications are only reachable within the local network.
+
+Once these steps are complete, you will be able to use the local network without the applications being accessible externally.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.6 |
+| <a name="requirement_oci"></a> [oci](#requirement\_oci) | 8.29.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_oci"></a> [oci](#provider\_oci) | 8.29.0 |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [oci_core_default_route_table.default_route_table](https://registry.terraform.io/providers/oracle/oci/8.29.0/docs/resources/core_default_route_table) | resource |
+| [oci_core_instance.instance](https://registry.terraform.io/providers/oracle/oci/8.29.0/docs/resources/core_instance) | resource |
+| [oci_core_internet_gateway.internet_gateway](https://registry.terraform.io/providers/oracle/oci/8.29.0/docs/resources/core_internet_gateway) | resource |
+| [oci_core_public_ip.public_ip](https://registry.terraform.io/providers/oracle/oci/8.29.0/docs/resources/core_public_ip) | resource |
+| [oci_core_security_list.security_list](https://registry.terraform.io/providers/oracle/oci/8.29.0/docs/resources/core_security_list) | resource |
+| [oci_core_subnet.subnet](https://registry.terraform.io/providers/oracle/oci/8.29.0/docs/resources/core_subnet) | resource |
+| [oci_core_vcn.vcn](https://registry.terraform.io/providers/oracle/oci/8.29.0/docs/resources/core_vcn) | resource |
+| [oci_core_volume.docker_volume](https://registry.terraform.io/providers/oracle/oci/8.29.0/docs/resources/core_volume) | resource |
+| [oci_core_volume_attachment.docker_volume_attachment](https://registry.terraform.io/providers/oracle/oci/8.29.0/docs/resources/core_volume_attachment) | resource |
+| [oci_core_volume_backup_policy.docker_volume_backup_policy](https://registry.terraform.io/providers/oracle/oci/8.29.0/docs/resources/core_volume_backup_policy) | resource |
+| [oci_core_volume_backup_policy_assignment.docker_volume_backup_policy_assignment](https://registry.terraform.io/providers/oracle/oci/8.29.0/docs/resources/core_volume_backup_policy_assignment) | resource |
+| [oci_core_private_ips.instance_private_ip](https://registry.terraform.io/providers/oracle/oci/8.29.0/docs/data-sources/core_private_ips) | data source |
+| [oci_identity_availability_domain.ad](https://registry.terraform.io/providers/oracle/oci/8.29.0/docs/data-sources/identity_availability_domain) | data source |
+| [oci_identity_region_subscriptions.tenancy](https://registry.terraform.io/providers/oracle/oci/8.29.0/docs/data-sources/identity_region_subscriptions) | data source |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_acknowledge_billable_resources"></a> [acknowledge\_billable\_resources](#input\_acknowledge\_billable\_resources) | Acknowledge that the configuration provisions resources outside the Always Free allocation. Unlocks three things: compute above 2 OCPUs / 12 GB, more than 200 GB of total block storage, and a region other than the tenancy home region. On a Pay-As-You-Go account these are billed; on a Free Tier account they are refused by OCI. | `bool` | `false` | no |
+| <a name="input_additional_ssh_public_key"></a> [additional\_ssh\_public\_key](#input\_additional\_ssh\_public\_key) | Additional SSH public key to add to authorized\_keys (optional) | `string` | `""` | no |
+| <a name="input_auth_method"></a> [auth\_method](#input\_auth\_method) | OCI provider authentication method. Use "ApiKey" for API key auth or "SecurityToken" for CLI session-token auth (oci session authenticate). | `string` | `"ApiKey"` | no |
+| <a name="input_auto_reboot_time"></a> [auto\_reboot\_time](#input\_auto\_reboot\_time) | Time of day (HH:MM, 24-hour) for the unattended-upgrades automatic reboot. Only used when enable\_auto\_reboot=true. | `string` | `"03:30"` | no |
+| <a name="input_availability_domain_number"></a> [availability\_domain\_number](#input\_availability\_domain\_number) | The availability domain number (1-3 depending on region) | `number` | `1` | no |
+| <a name="input_compartment_ocid"></a> [compartment\_ocid](#input\_compartment\_ocid) | The OCID of the compartment | `string` | n/a | yes |
+| <a name="input_config_file_profile"></a> [config\_file\_profile](#input\_config\_file\_profile) | Profile in ~/.oci/config to use. Relevant for SecurityToken auth (the session-token profile created by `oci session authenticate`). | `string` | `"DEFAULT"` | no |
+| <a name="input_custom_ingress_security_rules"></a> [custom\_ingress\_security\_rules](#input\_custom\_ingress\_security\_rules) | Additional custom ingress rules. SSH (22/TCP) and ICMP fragmentation are always enabled. HTTP (80), HTTPS (443), and WireGuard (51820/UDP) are auto-added when install\_runtipi=true. Ping is controlled by enable\_ping. | <pre>list(object({<br/>    description = optional(string, "Custom rule")<br/>    protocol    = string # "6" (TCP) or "17" (UDP)<br/>    source      = optional(string, "0.0.0.0/0")<br/>    port_min    = number<br/>    port_max    = number<br/>  }))</pre> | `[]` | no |
+| <a name="input_docker_data_root_on_block_volume"></a> [docker\_data\_root\_on\_block\_volume](#input\_docker\_data\_root\_on\_block\_volume) | Move Docker's data-root to the block volume (/mnt/data/docker) via a one-time guarded copy-then-switch migration. Merges into any existing /etc/docker/daemon.json, preserving log-driver/log-opts and default-address-pools. Default false. | `bool` | `false` | no |
+| <a name="input_docker_volume_size_gb"></a> [docker\_volume\_size\_gb](#input\_docker\_volume\_size\_gb) | The size of the secondary block volume in GBs (mounted at /mnt/data for Docker data) | `number` | `150` | no |
+| <a name="input_egress_security_rules"></a> [egress\_security\_rules](#input\_egress\_security\_rules) | List of egress (outbound) security rules. Only used when enable\_unrestricted\_egress=false. Default allows HTTP, HTTPS, DNS, and NTP. | <pre>list(object({<br/>    description      = string<br/>    protocol         = string<br/>    destination      = string<br/>    destination_type = string<br/>    stateless        = bool<br/>    tcp_options = optional(object({<br/>      min = number<br/>      max = number<br/>    }))<br/>    udp_options = optional(object({<br/>      min = number<br/>      max = number<br/>    }))<br/>    icmp_options = optional(object({<br/>      type = number<br/>      code = number<br/>    }))<br/>  }))</pre> | <pre>[<br/>  {<br/>    "description": "Allow HTTPS outbound",<br/>    "destination": "0.0.0.0/0",<br/>    "destination_type": "CIDR_BLOCK",<br/>    "protocol": "6",<br/>    "stateless": false,<br/>    "tcp_options": {<br/>      "max": 443,<br/>      "min": 443<br/>    }<br/>  },<br/>  {<br/>    "description": "Allow HTTP outbound",<br/>    "destination": "0.0.0.0/0",<br/>    "destination_type": "CIDR_BLOCK",<br/>    "protocol": "6",<br/>    "stateless": false,<br/>    "tcp_options": {<br/>      "max": 80,<br/>      "min": 80<br/>    }<br/>  },<br/>  {<br/>    "description": "Allow DNS outbound (UDP)",<br/>    "destination": "0.0.0.0/0",<br/>    "destination_type": "CIDR_BLOCK",<br/>    "protocol": "17",<br/>    "stateless": false,<br/>    "udp_options": {<br/>      "max": 53,<br/>      "min": 53<br/>    }<br/>  },<br/>  {<br/>    "description": "Allow DNS outbound (TCP)",<br/>    "destination": "0.0.0.0/0",<br/>    "destination_type": "CIDR_BLOCK",<br/>    "protocol": "6",<br/>    "stateless": false,<br/>    "tcp_options": {<br/>      "max": 53,<br/>      "min": 53<br/>    }<br/>  },<br/>  {<br/>    "description": "Allow NTP outbound",<br/>    "destination": "0.0.0.0/0",<br/>    "destination_type": "CIDR_BLOCK",<br/>    "protocol": "17",<br/>    "stateless": false,<br/>    "udp_options": {<br/>      "max": 123,<br/>      "min": 123<br/>    }<br/>  }<br/>]</pre> | no |
+| <a name="input_enable_auto_reboot"></a> [enable\_auto\_reboot](#input\_enable\_auto\_reboot) | Enable automatic reboot via unattended-upgrades so kernel security updates take effect. Reboot occurs at auto\_reboot\_time. Default false (preserves current behavior). | `bool` | `false` | no |
+| <a name="input_enable_fail2ban"></a> [enable\_fail2ban](#input\_enable\_fail2ban) | Install and enable fail2ban (Phase A, non-fatal). Low value with key-only SSH but reduces auth-log noise. Default false (preserves current behavior). | `bool` | `false` | no |
+| <a name="input_enable_ping"></a> [enable\_ping](#input\_enable\_ping) | Whether to allow ICMP echo requests (ping) from anywhere | `bool` | `false` | no |
+| <a name="input_enable_unrestricted_egress"></a> [enable\_unrestricted\_egress](#input\_enable\_unrestricted\_egress) | Allow all outbound traffic (all protocols, all ports, 0.0.0.0/0). When false, only egress\_security\_rules are applied. NOTE: if using WireGuard with restrictive egress, add a UDP rule for your WireGuard server endpoint port to egress\_security\_rules. | `bool` | `true` | no |
+| <a name="input_fault_domain"></a> [fault\_domain](#input\_fault\_domain) | The fault domain for the instance (FAULT-DOMAIN-1, FAULT-DOMAIN-2, or FAULT-DOMAIN-3) | `string` | `"FAULT-DOMAIN-2"` | no |
+| <a name="input_freeform_tags"></a> [freeform\_tags](#input\_freeform\_tags) | Freeform tags to apply to all resources | `map(string)` | <pre>{<br/>  "ManagedBy": "Terraform"<br/>}</pre> | no |
+| <a name="input_install_runtipi"></a> [install\_runtipi](#input\_install\_runtipi) | Whether to install RunTipi homeserver (https://runtipi.io) | `bool` | `true` | no |
+| <a name="input_instance_display_name"></a> [instance\_display\_name](#input\_instance\_display\_name) | The display name of the instance (also used as hostname label — alphanumeric and hyphens only, must start with a letter) | `string` | `"DockerHost"` | no |
+| <a name="input_instance_image_ocids_by_region"></a> [instance\_image\_ocids\_by\_region](#input\_instance\_image\_ocids\_by\_region) | Map of OCI region to Ubuntu 24.04 ARM64 image OCID | `map(string)` | <pre>{<br/>  "af-johannesburg-1": "ocid1.image.oc1.af-johannesburg-1.aaaaaaaac74zk4rm447grg5rmu6ex2xj2sipgue2y26jpvquwxyfw6g2xowq",<br/>  "ap-chuncheon-1": "ocid1.image.oc1.ap-chuncheon-1.aaaaaaaaa3cuoai5lfap4e2w3l5jk5262rvafl7dpwlistkkntexiu5h25bq",<br/>  "ap-hyderabad-1": "ocid1.image.oc1.ap-hyderabad-1.aaaaaaaaxxuf3ebmgzy32bzlfjhbyr4vpn3rqtqodi5c24kwjojosea6zzbq",<br/>  "ap-melbourne-1": "ocid1.image.oc1.ap-melbourne-1.aaaaaaaameaiob3abo7nzzg4hb2kmwi5ihqmkpbwt2hax65szewv52rt3z6a",<br/>  "ap-mumbai-1": "ocid1.image.oc1.ap-mumbai-1.aaaaaaaacm56ci4xs3fqx7zsrxvedeqplrlp6gxy6lnga4qi62wywssusmkq",<br/>  "ap-osaka-1": "ocid1.image.oc1.ap-osaka-1.aaaaaaaawzfbc5pjimseh6eisfqhfztalzx46h5bhntvxomckmulk7hqtyoa",<br/>  "ap-seoul-1": "ocid1.image.oc1.ap-seoul-1.aaaaaaaay3tcv6ttdutmyu32prvdidg5lojd2lzhue4eqnycor5oofiodeyq",<br/>  "ap-singapore-1": "ocid1.image.oc1.ap-singapore-1.aaaaaaaamhhpqoyiobauojy3m2huj6tusesizrggbpek2wo4tksiwwv43ihq",<br/>  "ap-sydney-1": "ocid1.image.oc1.ap-sydney-1.aaaaaaaahbktlxr6owykyfvduw5b24giid5stnncevl2nif6pdcgtscd5h5q",<br/>  "ap-tokyo-1": "ocid1.image.oc1.ap-tokyo-1.aaaaaaaaj7gohm3adsdbhhn7emx7bd6jny7dj5mipwnq62ub6eeryjgr7gnq",<br/>  "ca-montreal-1": "ocid1.image.oc1.ca-montreal-1.aaaaaaaacezsnh42klz6sd5hlqsrlmypeqk4hxo3xphii4qa2l2gw2lkkm7a",<br/>  "ca-toronto-1": "ocid1.image.oc1.ca-toronto-1.aaaaaaaaypprlzb5aftk77ltpwspqtvdk2bbtsxiknqycci2kxznfcuihfsa",<br/>  "eu-amsterdam-1": "ocid1.image.oc1.eu-amsterdam-1.aaaaaaaaadazle32svd6dhz4ano5iqxh22bqoy3c6gaodvhg7x7iaq23yxnq",<br/>  "eu-frankfurt-1": "ocid1.image.oc1.eu-frankfurt-1.aaaaaaaajzudgoto32j5q245xjkm2p7nj6rrza2bb5yyqjgm56k4ib2to6sq",<br/>  "eu-madrid-1": "ocid1.image.oc1.eu-madrid-1.aaaaaaaawo47bihidpyebw2zlaptpbmeqx7zsww6bllr4uybttrblcmtmvjq",<br/>  "eu-marseille-1": "ocid1.image.oc1.eu-marseille-1.aaaaaaaa3334ijm2zwbgmkqrrbkh2ecyekudopjkcndrrw5nhbeoyk66kiqa",<br/>  "eu-milan-1": "ocid1.image.oc1.eu-milan-1.aaaaaaaae3hiyvu2hdfblxr4xp2tpvbiow7nvpner6ekvysc5whmzyaqjoqa",<br/>  "eu-paris-1": "ocid1.image.oc1.eu-paris-1.aaaaaaaaeagkmkwv5cl7x2f2ylekvqxlnnlkahuepxmck7yawdkjmg6e5ypq",<br/>  "eu-stockholm-1": "ocid1.image.oc1.eu-stockholm-1.aaaaaaaad5qwbyuemyoa2hrngbb4iydmb5nfcfn3s3jki7qqhlmkomoscv6q",<br/>  "eu-zurich-1": "ocid1.image.oc1.eu-zurich-1.aaaaaaaas6gvo5dqyqpisatcs56my2ldwc4xc57lydfrzfbuutnhjceapdqq",<br/>  "il-jerusalem-1": "ocid1.image.oc1.il-jerusalem-1.aaaaaaaac5e6i6ztlu7ksbn6qujaaqlgpr7xdpcryms3fviq6kpn26p3jhaa",<br/>  "me-abudhabi-1": "ocid1.image.oc1.me-abudhabi-1.aaaaaaaay4xdwt2tzpsqkifdxciuvbvfqwdij2btal7w2gucdguux6vs2iia",<br/>  "me-dubai-1": "ocid1.image.oc1.me-dubai-1.aaaaaaaalu3waogupaq2b2kvi4ny6uxuvjdbdfvgchpk7toinrn7ei6l7toq",<br/>  "me-jeddah-1": "ocid1.image.oc1.me-jeddah-1.aaaaaaaarqfbmwhhapsjv6ncotol2haolzsjg4bkqxngn7cjtdshohee575a",<br/>  "mx-monterrey-1": "ocid1.image.oc1.mx-monterrey-1.aaaaaaaayjefqnzikropxrizlxkdqlu4e4n7mallxolsur2ua2szyoczicza",<br/>  "mx-queretaro-1": "ocid1.image.oc1.mx-queretaro-1.aaaaaaaalob3n6p7hb2c7cabvax6cmzzcrxxl2cexakvytmhfi4vopusjwyq",<br/>  "sa-bogota-1": "ocid1.image.oc1.sa-bogota-1.aaaaaaaac5aytlzu6lk5s6n7frapmvg5xgkpdmc7fci6b56urie54ea46paa",<br/>  "sa-santiago-1": "ocid1.image.oc1.sa-santiago-1.aaaaaaaaeyf2gv5wo5mzsijd3zparivuzwexxaovx3fes3b4am6qn4vjkwrq",<br/>  "sa-saopaulo-1": "ocid1.image.oc1.sa-saopaulo-1.aaaaaaaayiprqwic72dwa6teukf4uyd2vqntqvm4cddvvvjcttsn7zn6jsza",<br/>  "sa-valparaiso-1": "ocid1.image.oc1.sa-valparaiso-1.aaaaaaaau4tjiejqqzfdbelzskgjvbkuc4n3rmwwylzuk3oon3l32ee5ydja",<br/>  "sa-vinhedo-1": "ocid1.image.oc1.sa-vinhedo-1.aaaaaaaahqhs7fl5b2eoarmbv2hibeum4qp6xf7bpuvndsxbwxow2g66xxka",<br/>  "uk-cardiff-1": "ocid1.image.oc1.uk-cardiff-1.aaaaaaaa3tw6w7xa3crrtumyidagfy5sfffm5ulf5wk4n4enq56cfgv3r7pq",<br/>  "uk-london-1": "ocid1.image.oc1.uk-london-1.aaaaaaaahfrghsffkvpikumb7v42bsxlk23medjry234dcspckdnbifbsocq",<br/>  "us-ashburn-1": "ocid1.image.oc1.iad.aaaaaaaaowocjhlbitbc5la6hvimvhi7iseebfzj2honlkyjgqdpuy5syxea",<br/>  "us-chicago-1": "ocid1.image.oc1.us-chicago-1.aaaaaaaa7kpyzoekvmsyvvwutgbnjv2cb4heft7fotyaplsuacdidgxnodwa",<br/>  "us-phoenix-1": "ocid1.image.oc1.phx.aaaaaaaasw7zpqcko4iqizjsnco6e4md6sxmiimdaedzzbb2appwvqn4uyma",<br/>  "us-sanjose-1": "ocid1.image.oc1.us-sanjose-1.aaaaaaaakvkyx6huyxk7vikyswxdcpxt74ix3nwgsbozoxikyoawetjyq7ta"<br/>}</pre> | no |
+| <a name="input_instance_shape"></a> [instance\_shape](#input\_instance\_shape) | The OCI compute shape (VM.Standard.A1.Flex for Always Free ARM instances) | `string` | `"VM.Standard.A1.Flex"` | no |
+| <a name="input_instance_shape_boot_volume_size_gb"></a> [instance\_shape\_boot\_volume\_size\_gb](#input\_instance\_shape\_boot\_volume\_size\_gb) | The size of the boot volume in GBs | `number` | `50` | no |
+| <a name="input_instance_shape_config_memory_gb"></a> [instance\_shape\_config\_memory\_gb](#input\_instance\_shape\_config\_memory\_gb) | The amount of memory in GBs for the instance. The Always Free cap is 12 GB; anything above it requires acknowledge\_billable\_resources. | `number` | `12` | no |
+| <a name="input_instance_shape_config_ocpus"></a> [instance\_shape\_config\_ocpus](#input\_instance\_shape\_config\_ocpus) | The number of OCPUs for the instance. The Always Free cap is 2 OCPUs; anything above it requires acknowledge\_billable\_resources. | `number` | `2` | no |
+| <a name="input_kms_key_id"></a> [kms\_key\_id](#input\_kms\_key\_id) | The OCID of the KMS key to use for volume encryption. If null, volumes will not be encrypted with customer-managed keys. | `string` | `null` | no |
+| <a name="input_oracle_api_key_fingerprint"></a> [oracle\_api\_key\_fingerprint](#input\_oracle\_api\_key\_fingerprint) | The fingerprint of the OCI API public key (required only for ApiKey auth). | `string` | `null` | no |
+| <a name="input_oracle_api_private_key_path"></a> [oracle\_api\_private\_key\_path](#input\_oracle\_api\_private\_key\_path) | The path to the OCI API private key file | `string` | `"~/.oci/oci_api_key.pem"` | no |
+| <a name="input_region"></a> [region](#input\_region) | The OCI region to deploy resources. Must be the tenancy home region: Always Free eligibility is scoped to it, and instances and volumes built anywhere else are billed at full price. Building outside it requires acknowledge\_billable\_resources. | `string` | n/a | yes |
+| <a name="input_runtipi_adguard_ip"></a> [runtipi\_adguard\_ip](#input\_runtipi\_adguard\_ip) | The static IP for AdGuard. Must be within runtipi\_main\_network\_subnet and different from reverse proxy IP | `string` | `"172.18.0.253"` | no |
+| <a name="input_runtipi_main_network_subnet"></a> [runtipi\_main\_network\_subnet](#input\_runtipi\_main\_network\_subnet) | The Docker network subnet for RunTipi containers | `string` | `"172.18.0.0/16"` | no |
+| <a name="input_runtipi_reverse_proxy_ip"></a> [runtipi\_reverse\_proxy\_ip](#input\_runtipi\_reverse\_proxy\_ip) | The static IP for RunTipi reverse proxy (Traefik). Must be within runtipi\_main\_network\_subnet | `string` | `"172.18.0.254"` | no |
+| <a name="input_ssh_public_key"></a> [ssh\_public\_key](#input\_ssh\_public\_key) | The public key to use for SSH access | `string` | n/a | yes |
+| <a name="input_ssh_source_cidr"></a> [ssh\_source\_cidr](#input\_ssh\_source\_cidr) | Source CIDR allowed for SSH access (default: 0.0.0.0/0 — all IPs) | `string` | `"0.0.0.0/0"` | no |
+| <a name="input_subnet_cidr_block"></a> [subnet\_cidr\_block](#input\_subnet\_cidr\_block) | The CIDR block for the subnet (must be within vcn\_cidr\_block; OCI will reject it at apply time otherwise) | `string` | `"10.1.0.0/24"` | no |
+| <a name="input_swap_size_gb"></a> [swap\_size\_gb](#input\_swap\_size\_gb) | Size in GB of an optional swapfile created on the boot disk (/swapfile). 0 disables swap. When > 0, vm.swappiness=10 is also applied. Defaults to 4 GB, which offsets the reduced Always Free memory cap. | `number` | `4` | no |
+| <a name="input_tenancy_ocid"></a> [tenancy\_ocid](#input\_tenancy\_ocid) | The OCID of the tenancy (for SecurityToken auth it is read from the session profile and can be left null). | `string` | `null` | no |
+| <a name="input_timezone"></a> [timezone](#input\_timezone) | IANA timezone for the instance (e.g. Europe/Rome, America/New\_York, UTC) | `string` | `"Europe/Rome"` | no |
+| <a name="input_user_ocid"></a> [user\_ocid](#input\_user\_ocid) | The OCID of the user to use for authentication (required only for ApiKey auth). | `string` | `null` | no |
+| <a name="input_vcn_cidr_block"></a> [vcn\_cidr\_block](#input\_vcn\_cidr\_block) | The CIDR block for the VCN | `string` | `"10.1.0.0/16"` | no |
+| <a name="input_wireguard_client_configuration"></a> [wireguard\_client\_configuration](#input\_wireguard\_client\_configuration) | WireGuard client configuration (wg0.conf content). If provided, WireGuard will be installed and configured automatically | `string` | `""` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_availability_domain"></a> [availability\_domain](#output\_availability\_domain) | The availability domain where resources are deployed |
+| <a name="output_docker_volume_id"></a> [docker\_volume\_id](#output\_docker\_volume\_id) | The OCID of the Docker volume |
+| <a name="output_instance_id"></a> [instance\_id](#output\_instance\_id) | The OCID of the instance |
+| <a name="output_internet_gateway_id"></a> [internet\_gateway\_id](#output\_internet\_gateway\_id) | The OCID of the internet gateway |
+| <a name="output_private_ip"></a> [private\_ip](#output\_private\_ip) | The private IP of the instance |
+| <a name="output_public_ip"></a> [public\_ip](#output\_public\_ip) | The public IP of the instance |
+| <a name="output_security_list_id"></a> [security\_list\_id](#output\_security\_list\_id) | The OCID of the security list |
+| <a name="output_ssh_connection"></a> [ssh\_connection](#output\_ssh\_connection) | SSH command to connect to the instance |
+| <a name="output_subnet_cidr_block"></a> [subnet\_cidr\_block](#output\_subnet\_cidr\_block) | The CIDR block of the subnet |
+| <a name="output_subnet_id"></a> [subnet\_id](#output\_subnet\_id) | The OCID of the subnet |
+| <a name="output_vcn_cidr_block"></a> [vcn\_cidr\_block](#output\_vcn\_cidr\_block) | The CIDR block of the VCN |
+| <a name="output_vcn_id"></a> [vcn\_id](#output\_vcn\_id) | The OCID of the VCN |
+<!-- END_TF_DOCS -->

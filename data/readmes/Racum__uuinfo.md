@@ -1,0 +1,357 @@
+# uuinfo: UUID (+others) Information
+
+A tool to debug unique identifiers (UUID, ULID, Snowflake, etc).
+
+This is a simple CLI program to parse and debug compound unique identifiers, that means, ID’s with built-in structure to achieve uniqueness, like randomness, hashed data, timestamp, node or sequence. It understands most 128 and 64-bit IDs, and some other obscure lengths, including text-only representations.
+
+Just input some ID and **uuinfo** will try to infer as much information as possible from it:
+
+![Screenshot of a terminal window showing an uuinfo output](assets/uuinfo.png)
+
+If the ID format allows for it, **uuinfo** also shows its bits, color-coded by type; the key of the color doubles as the values from the left column in the rendered card. The colors on your system may differ, since those are ANSI colors instead of hardcoded ones.
+
+## Supported ID Formats
+
+- Integer-based
+  - 128-bit
+    - [UUID](https://www.rfc-editor.org/rfc/rfc9562.html): versions 1 to 8, Nil, Max, NCS and Microsoft GUID.
+    - UUID wrappers: [ShortUUID](https://github.com/skorokithakis/shortuuid), [Base64](https://en.wikipedia.org/wiki/Base64), [Uuid25](https://github.com/uuid25/python) and integer
+    - [ULID](https://github.com/ulid/spec)
+    - [Julid](https://proclamations.nebcorp-hias.com/sundries/presenting-julids/)
+    - [UPID](https://github.com/carderne/upid)
+    - [COMB](https://github.com/richardtallent/RT.Comb) (RT.Comb)
+    - [Sandflake](https://github.com/celrenheit/sandflake)
+    - [SCRU128](https://github.com/scru128/spec)
+    - [Timeflake](https://github.com/anthonynsimon/timeflake)
+    - [Flake](https://github.com/boundary/flake) (Boundary)
+    - [Datadog Trace ID](https://docs.datadoghq.com/tracing/guide/span_and_trace_id_format/)
+    - [TypeID](https://github.com/jetify-com/typeid) (Jetify)
+    - [Spotify ID](https://developer.spotify.com/documentation/web-api/concepts/spotify-uris-ids)
+    - 128-bit formats encoded as UUID: ULID, UPID, Flake, Timeflake, SCRU128 and Sandflake
+  - 64-bit
+    - Snowflake variants:
+      - [Twitter](https://developer.x.com/en/docs/x-ids)
+      - [Discord](https://discord.com/developers/docs/reference#snowflakes)
+      - [Instagram](https://instagram-engineering.com/sharding-ids-at-instagram-1cf5a71e5a5c)
+      - [Sony](https://github.com/sony/sonyflake)
+      - [Spaceflake](https://github.com/kkrypt0nn/spaceflake)
+      - [Mastodon](https://github.com/mastodon/mastodon/blob/main/lib/mastodon/snowflake.rb)
+      - LinkedIn
+      - [Frostflake](https://github.com/ordo-one/package-frostflake)
+      - [Flake ID](https://github.com/T-PWK/flake-idgen)
+      - [Simpleflake](https://github.com/leodutra/simpleflakes)
+    - [TSID](https://github.com/f4b6a3/tsid-creator)
+    - [TID](https://atproto.com/specs/tid) (AT Protocol, Bluesky)
+    - [Thread ID](https://developers.facebook.com/docs/threads) (Meta Threads)
+    - [SCRU64](https://github.com/scru64/spec)
+    - [SnowID](https://github.com/qeeqez/snowid-rust)
+    - [Mist (薄雾)](https://github.com/asyncins/mist)
+    - [ASIN](https://en.wikipedia.org/wiki/Amazon_Standard_Identification_Number) (Amazon)
+    - [YouTube Video ID](https://www.youtube.com/watch?v=gocwRvLhDf8)
+    - Geo: [H3 Index](https://h3geo.org)
+    - [Unix timestamp](https://en.wikipedia.org/wiki/Unix_time) (seconds, ms, μs and ns)
+  - Misc
+    - [MongoDB ObjectId](https://www.mongodb.com/docs/manual/reference/method/ObjectId/)
+    - [KSUID](https://github.com/segmentio/ksuid)
+    - [Xid](https://github.com/rs/xid)
+    - [PushID](https://firebase.blog/posts/2015/02/the-2120-ways-to-ensure-unique_68/) (Firebase)
+    - [OrderlyID](https://github.com/orderlykit/orderlyid)
+    - [DUNS Number](https://en.wikipedia.org/wiki/Data_Universal_Numbering_System)
+    - [Google Docs ID](https://stackoverflow.com/questions/47151920)
+    - [SWHID](https://www.swhid.org) (Software Hash ID)
+    - [Bitcoin Address](https://rf5.github.io/2022/02/14/btc-address-intro.html)
+    - [Ethereum Address](https://ethereum.org/developers/docs/accounts/)
+    - [IPFS CID](https://docs.ipfs.tech/concepts/content-addressing/) (v0 and v1)
+    - Network: [IPv4](https://en.wikipedia.org/wiki/IPv4), [IPv6](https://en.wikipedia.org/wiki/IPv6), [MAC Address](https://en.wikipedia.org/wiki/MAC_address) and [IMEI](https://en.wikipedia.org/wiki/International_Mobile_Equipment_Identity)
+    - [Hex-encoded Hash](https://en.wikipedia.org/wiki/Secure_Hash_Algorithms)
+- ASCII-based
+  - [CUID1](https://github.com/paralleldrive/cuid) / [CUID2](https://github.com/paralleldrive/cuid2)
+  - [Nano ID](https://zelark.github.io/nano-id-cc/)
+  - [Sqids](https://sqids.org/)
+  - [Hashids](https://github.com/hashids)
+  - [Stripe ID](https://dev.to/stripe/designing-apis-for-humans-object-ids-3o5a)
+  - [NUID](https://github.com/nats-io/nuid) (NATS)
+  - [Breeze ID](https://github.com/tzwel/breezeid)
+  - [Puid](https://github.com/pid/puid)
+  - [Slack ID](https://docs.slack.dev/tools/deno-slack-sdk/reference/slack-types/)
+  - [Nano64](https://github.com/only-cliches/nano64)
+  - [IBAN](https://www.iban.com/structure) (International Bank Account Number)
+  - [Commerce Barcode](https://en.wikipedia.org/wiki/Global_Trade_Item_Number) (EAN-8, UPC-A, EAN-13 and GTIN-14; only auto-detected with dashes)
+  - [VIN](https://en.wikipedia.org/wiki/Vehicle_identification_number) (Vehicle Identification Number)
+  - [ISBN](https://en.wikipedia.org/wiki/ISBN) (10 and 13)
+
+
+## Installation
+
+### macOS (Homebrew)
+
+Requires macOS 11 Big Sur or newer.
+
+```shell
+$ brew tap racum/tap  # Setup (only needed once).
+
+$ brew install uuinfo  # Install.
+
+$ brew upgrade uuinfo  # Update.
+```
+
+### Linux (Debian/Ubuntu, APT)
+
+```shell
+$ # Set up APT source (only needed once):
+$ curl -fsSL https://racum.github.io/apt/key.gpg \
+    | sudo gpg --dearmor -o /etc/apt/keyrings/racum.gpg \
+  && echo "deb [signed-by=/etc/apt/keyrings/racum.gpg] https://racum.github.io/apt stable main" \
+    | sudo tee /etc/apt/sources.list.d/racum.list
+
+$ sudo apt update && sudo apt install uuinfo  # Install or update.
+```
+
+### Linux (other distros)
+
+Static binary, zero runtime deps. Pick the right arch:
+
+```shell
+$ # x86_64:
+$ curl -L https://github.com/racum/uuinfo/releases/latest/download/uuinfo-linux-x86_64.tar.gz | tar xz
+$ sudo mv uuinfo /usr/local/bin/
+
+$ # arm64:
+$ curl -L https://github.com/racum/uuinfo/releases/latest/download/uuinfo-linux-aarch64.tar.gz | tar xz
+$ sudo mv uuinfo /usr/local/bin/
+```
+
+### Windows (Scoop)
+
+Requires Windows 10 or newer.
+
+```shell
+> scoop bucket add racum https://github.com/racum/scoop-bucket  # Setup (only needed once).
+
+> scoop install uuinfo  # Install.
+
+> scoop update uuinfo  # Update.
+```
+
+The zipped `.exe` (x86_64 and arm64) can also be downloaded directly from the [GitHub releases page](https://github.com/racum/uuinfo/releases/latest).
+
+### Cargo (any platform)
+
+**Uuinfo** was developed in [Rust](https://www.rust-lang.org), thus it requires [its toolchain](https://www.rust-lang.org/tools/install); if you already have it available, you can install it with `cargo`:
+
+```shell
+$ cargo install uuinfo
+```
+
+## Usage
+
+For a complete list of options, just run the help: `uuinfo --help`.
+
+### Auto Detect
+
+If you just input an ID without any options, **uuinfo** will try to detect its format using very basic heuristics on its length and popularity; and this may work for most cases.
+
+```shell
+$ uuinfo 01941f29-7c00-7aaa-aaaa-aaaaaaaaaaaa
+...
+```
+
+### Parse Everything
+
+If you are not sure about the ID format, you can see the cards for all formats that it got parsed successfully with `-e`/`--everything`; and with that, you can see what result makes more sense.
+
+**Note**: this argument disables the output options.
+
+### Force Format
+
+Sometimes an ID could be valid for more than one format, if this happens and the auto-detection above picks the wrong one, you can disambiguate using the `-f` (of `--force`) parameter.
+
+For example, the ID `12345678901234567890` is automatically detected as a **Snowflake**, but, it could also be a valid **Xid**. If you want to force **uuinfo** to parse it as Xid, call it like this:
+
+```shell
+$ uuinfo -f xid 12345678901234567890
+...
+```
+
+Check the `--help` for a complete list of values of `-f`/`--force`.
+
+#### Snowflake Variants
+
+Snowflake is **not** an “ID format”, but rather a **category** of formats; since it is just a number, **uuinfo** can’t detect what variation was used to generate it, thus, specifying the variant with `-f`/`--force` is required to be able to get anything useful from it.
+
+Fortunately, **uuinfo** can compare time-aware IDs and sort them by date; for example:
+
+```shell
+$ date
+Sat May 16 21:05:33 CEST 2026
+
+$ uuinfo --compare 2039815312720154892
+Date/times of the valid IDs parsed as:
+- 1985-01-18T21:25:12.000Z Snowflake: Frostflake
+- 1985-05-30T19:37:48.488Z Snowflake: LinkedIn
+- 1985-05-30T19:37:48.488Z Snowflake: Flake ID
+- 2007-09-15T14:48:54.244Z Snowflake: Simpleflake
+- 2019-05-09T06:55:55.965Z Thread ID (Meta Threads)
+- 2019-05-09T06:55:55.965Z Snowflake: Instagram
+- 2026-04-02T21:20:43.145Z Snowflake: Twitter
+- 2026-05-16T19:07:22.371Z --- Now ---
+- 2030-05-30T19:37:48.488Z Snowflake: Discord
+- 2030-05-30T19:37:48.488Z Snowflake: Spaceflake
+- 2034-08-21T23:21:52.720Z Unix timestamp: Assuming nanoseconds
+- 2035-05-30T19:37:48.488Z TSID
+- 2039-05-30T19:37:48.488Z SnowID
+- 2053-03-12T01:04:31.220Z Snowflake: Sony
+- 2956-04-25T08:19:43.254Z Snowflake: Mastodon
+```
+
+In this case, the ID `2039815312720154892` is probably from Twitter, since it is the most recent value from the list that is not in the future.
+
+Once identified the variant, just run it again enforcing its type:
+
+```shell
+$ uuinfo -f sf-twitter 2039815312720154892
+...
+```
+
+### Pipe from STDIN
+
+Use a dash (`-`) instead of the ID to get the value from STDIN piped from another program:
+
+```shell
+$ echo 8ff95663-c8ee-48b9-a236-a2f29a991001 | uuinfo -
+...
+```
+
+### Output Options
+
+#### Card (default)
+
+This is the pretty-printed output, with all the extracted data, plus a hexadecimal and binary representation of the bits at the end:
+
+```shell
+$ uuinfo 01941f29-7c00-7aaa-aaaa-aaaaaaaaaaaa
+┏━━━━━━━━━━━┯━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ ID Type   │ UUID (RFC-9562)                             ┃
+┃ Version   │ 7 (sortable timestamp and random)           ┃
+┠───────────┼─────────────────────────────────────────────┨
+┃ String    │ 01941f29-7c00-7aaa-aaaa-aaaaaaaaaaaa        ┃
+┃ Integer   │ 2098319972277167143349324748782480042       ┃
+┠───────────┼─────────────────────────────────────────────┨
+┃ Size      │ 128 bits                                    ┃
+┃ Entropy   │ 74 bits                                     ┃
+┃ Timestamp │ 1735689600.000 (2025-01-01T00:00:00.000Z)   ┃
+┃ Node 1    │ -                                           ┃
+┃ Node 2    │ -                                           ┃
+┃ Sequence  │ -                                           ┃
+┠───────────┼─────────────────────────────────────────────┨
+┃ 0194 1f29 │ 0000 0001  1001 0100   0001 1111  0010 1001 ┃
+┃ 7c00 7aaa │ 0111 1100  0000 0000   0111 1010  1010 1010 ┃
+┃ aaaa aaaa │ 1010 1010  1010 1010   1010 1010  1010 1010 ┃
+┃ aaaa aaaa │ 1010 1010  1010 1010   1010 1010  1010 1010 ┃
+┗━━━━━━━━━━━┷━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+```
+
+#### Short
+
+This is just the 2 first lines of the card in one, with the ID type and version:
+
+```shell
+$ uuinfo -o short 01941f29-7c00-7aaa-aaaa-aaaaaaaaaaaa
+ID Type: UUID (RFC-9562), version: 7 (sortable timestamp and random).
+```
+
+#### JSON
+
+In case you need to integrate **uuinfo** with some other commands, there is a JSON output available:
+
+```shell
+$ uuinfo -o json 01941f29-7c00-7aaa-aaaa-aaaaaaaaaaaa | jq
+{
+  "id_type": "UUID (RFC-9562)",
+  "version": "7 (sortable timestamp and random)",
+  "standard": "01941f29-7c00-7aaa-aaaa-aaaaaaaaaaaa",
+  "integer": 2098319972277167143349324748782480042,
+  "uuid_wrap": null,
+  "parsed": "from hex",
+  "size": 128,
+  "entropy": 74,
+  "datetime": "2025-01-01T00:00:00.000Z",
+  "timestamp": "1735689600.000",
+  "relative_time": "a year ago",
+  "sequence": null,
+  "node1": null,
+  "node2": null,
+  "node3": null,
+  "hex": "01941f297c007aaaaaaaaaaaaaaaaaaa"
+}
+```
+
+#### Binary
+
+You can also return just the raw binary representation of the ID, but, be careful, this can mess up your terminal:
+
+```shell
+$ uuinfo -o binary 01941f29-7c00-7aaa-aaaa-aaaaaaaaaaaa
+�)|z���������%
+```
+
+I recommend piping into a command that can handle binary, like `xxd`:
+
+```shell
+$ uuinfo -o binary 01941f29-7c00-7aaa-aaaa-aaaaaaaaaaaa | xxd
+00000000: 0194 1f29 7c00 7aaa aaaa aaaa aaaa aaaa  ...)|.z.........
+```
+
+You can even see the same bits from the card with `xxd -b`:
+
+```shell
+$ uuinfo -o binary 01941f29-7c00-7aaa-aaaa-aaaaaaaaaaaa | xxd -b
+00000000: 00000001 10010100 00011111 00101001 01111100 00000000  ...)|.
+00000006: 01111010 10101010 10101010 10101010 10101010 10101010  z.....
+0000000c: 10101010 10101010 10101010 10101010                    ....
+```
+
+### Custom Epoch
+
+Time-based IDs store a timestamp as an offset from an epoch defined in their format. Use `--epoch` (seconds since `1970-01-01T00:00:00Z`) to override that epoch.
+
+For example: Simpleflake uses **2000-01-01** as its default epoch, but forcing **2020-01-01** (`1577836800`) shows a 20-year difference:
+
+```shell
+$ uuinfo -f sf-simpleflake 4242587201037260245 -o json | jq -r .datetime
+2016-01-10T20:43:26.092Z
+
+$ uuinfo -f sf-simpleflake 4242587201037260245 -o json --epoch 1577836800 | jq -r .datetime
+2036-01-10T15:43:26.092Z
+```
+
+Unix timestamp formats are unaffected (their value is already absolute).
+
+## Contributing
+
+### New ID Format Support
+
+
+Hunting for ID formats is a rabbit-hole! I published the first version of **uuinfo** with the formats I found on my research. If you want to add more formats, please create a [GitHub issue](https://github.com/racum/uuinfo/issues) containing the following:
+
+- Reference link,
+- Size in bits and the map of bits,
+- ID examples (more than one if possible) with its encoded data (timestamp, node, sequence, etc),
+- Alphabet (if applicable),
+- Epoch (if custom),
+- Source-code (if available).
+
+The more information I get, the easier it will be for me to implement it!
+
+### Code Contribution
+
+Just create a PR, but try to follow some basic guidelines:
+
+- Look at the current structure and try to emulate it.
+- One format per file, unless they are related.
+- Run `cargo fmt` and `cargo clippy` before committing.
+
+
+## License
+
+**Uuinfo** is under the 3-Clause BSD License.

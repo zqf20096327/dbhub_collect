@@ -1,0 +1,257 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/davidlastrucci/Trysil/blob/master/docs/Trysil_Dark.png">
+    <img width="300" height="107" src="https://github.com/davidlastrucci/Trysil/blob/master/docs/Trysil_Light.png" alt="Trysil - Delphi ORM" title="Trysil - Delphi ORM">
+  </picture>
+</p>
+
+<p align="center">
+  <strong>A lightweight, attribute-driven ORM for Delphi</strong><br>
+  Map database tables to classes. Query, insert, update, delete — all through clean Object Pascal.
+</p>
+
+<p align="center">
+  <a href="https://github.com/davidlastrucci/Trysil/blob/master/LICENSE.md"><img src="https://img.shields.io/badge/license-BSD--3--Clause-blue.svg" alt="License"></a>
+  <a href="https://github.com/davidlastrucci/Trysil/stargazers"><img src="https://img.shields.io/github/stars/davidlastrucci/Trysil?style=social" alt="GitHub Stars"></a>
+  <img src="https://img.shields.io/badge/Delphi-10.3%20%E2%80%94%2013-red" alt="Delphi 10.3 to 13">
+  <a href="https://getitnow.embarcadero.com/trysil-delphi-orm/"><img src="https://img.shields.io/badge/GetIt-available-orange.svg" alt="GetIt"></a>
+  <a href="https://trysil.lastrucci.net"><img src="https://img.shields.io/badge/blog-trysil.lastrucci.net-brightgreen.svg" alt="Blog"></a></p>
+
+---
+
+## Features
+
+- **Attribute-based mapping** — decorate classes with `[TTable]`, `[TColumn]`, `[TPrimaryKey]` and you're done
+- **7 database drivers** — Firebird, InterBase, MariaDB, Oracle, PostgreSQL, SQL Server, SQLite — all through FireDAC
+- **Fluent query builder** — type-safe filtering with `TTFilterBuilder<T>`
+- **Lazy loading** — `TTLazy<T>` and `TTLazyList<T>` for related entities
+- **Change tracking & soft delete** — `[TCreatedAt]`, `[TUpdatedAt]`, `[TDeletedAt]` with automatic timestamps and user tracking
+- **Optimistic locking** — built-in via `[TVersionColumn]`
+- **Identity map** — per-context, multi-tenant safe
+- **Unit of Work** — `TTSession<T>` applies the inserts, updates and deletes you mark in one transaction
+- **JSON serialization** — full round-trip with `TTJSonContext`
+- **REST HTTP module** — attribute-based routing, CORS, JWT (HS256 and RS256, with `kid` key rotation), multi-tenant support
+- **Nullable types** — `TTNullable<T>` generic wrapper
+- **Connection pooling** — delegated to FireDAC
+- **Structured logging** — SQL tracing with thread-safe correlation IDs
+- **IDE Expert** — visual entity designer, model & DDL generators, REST scaffolder, and one-click install of AI assistant skills (Claude Code, Cursor, Copilot, Windsurf)
+
+## Quick Start
+
+### 1. Define an entity
+
+```pascal
+type
+  [TTable('Persons')]
+  [TSequence('PersonsID')]
+  TPerson = class
+  strict private
+    [TPrimaryKey]
+    [TColumn('ID')]
+    FID: TTPrimaryKey;
+
+    [TColumn('Firstname')]
+    FFirstname: String;
+
+    [TColumn('Lastname')]
+    FLastname: String;
+
+    [TVersionColumn]
+    [TColumn('VersionID')]
+    FVersionID: TTVersion;
+  public
+    property ID: TTPrimaryKey read FID;
+    property Firstname: String read FFirstname write FFirstname;
+    property Lastname: String read FLastname write FLastname;
+  end;
+```
+
+### 2. Use it
+
+```pascal
+var
+  LContext: TTContext;
+  LPersons: TTList<TPerson>;
+  LPerson: TPerson;
+begin
+  LContext := TTContext.Create(LConnection);
+  try
+    // Read all
+    LPersons := LContext.CreateEntityList<TPerson>();
+    try
+      LContext.SelectAll<TPerson>(LPersons);
+      for LPerson in LPersons do
+        Writeln(Format('%s %s', [LPerson.Firstname, LPerson.Lastname]));
+    finally
+      LPersons.Free;
+    end;
+
+    // Insert
+    LPerson := LContext.CreateEntity<TPerson>();
+    try
+      LPerson.Firstname := 'David';
+      LPerson.Lastname := 'Lastrucci';
+      LContext.Insert<TPerson>(LPerson);
+    finally
+      LContext.FreeEntity<TPerson>(LPerson);
+    end;
+  finally
+    LContext.Free;
+  end;
+end;
+```
+
+### 3. Watch it in action
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=4qKkhO76DKA">
+    <img src="https://img.youtube.com/vi/4qKkhO76DKA/maxresdefault.jpg" alt="Trysil - Delphi ORM from scratch">
+  </a><br>
+  <sub>▶ Watch: <strong>Trysil — Delphi ORM from scratch</strong></sub>
+</p>
+
+### 4. Filter with the fluent builder
+
+```pascal
+var
+  LFilter: TTFilter;
+begin
+  LFilter := LContext.CreateFilterBuilder<TPerson>()
+    .Where('Lastname').Equal('Lastrucci')
+    .OrderByAsc('Firstname')
+    .Limit(10)
+    .Build;
+
+  LContext.Select<TPerson>(LPersons, LFilter);
+end;
+```
+
+## Database Support
+
+| Database | Driver unit | Notes |
+|---|---|---|
+| Firebird | `Trysil.Data.FireDAC.FirebirdSQL` | Localhost/embedded on Community; remote server requires Enterprise |
+| InterBase | `Trysil.Data.FireDAC.InterBase` | Community edition; generator-based sequences |
+| MariaDB | `Trysil.Data.FireDAC.MariaDB` | MariaDB 10.3+ (native sequences), via the FireDAC MySQL driver; localhost on Community, remote requires Enterprise |
+| Oracle | `Trysil.Data.FireDAC.Oracle` | Requires Enterprise edition; EZConnect descriptor `//host:port/service` |
+| PostgreSQL | `Trysil.Data.FireDAC.PostgreSQL` | Localhost on Community; remote server requires Enterprise |
+| SQL Server | `Trysil.Data.FireDAC.SqlServer` | Requires Enterprise edition |
+| SQLite | `Trysil.Data.FireDAC.SQLite` | Community edition; great for development and testing |
+
+FireDAC driver availability follows the [RAD Studio edition matrix](https://www.embarcadero.com/products/rad-studio/firedac): Professional/Community covers local/embedded access (SQLite, InterBase, and localhost-only PostgreSQL/MySQL-MariaDB/Firebird), while full client/server connectivity — and SQL Server and Oracle in any form — requires Enterprise/Architect.
+
+## Delphi Compatibility
+
+| Version | Codename |
+|---|---|
+| Delphi 10.3 | Rio |
+| Delphi 10.4 | Sydney |
+| Delphi 11 | Alexandria |
+| Delphi 12 | Athens |
+| **Delphi 13** | **Florence** (active development) |
+
+All packages build on Community Edition, except `Trysil.SqlServer` and `Trysil.Oracle`, which require Enterprise/Architect (their FireDAC driver units ship only with those editions).
+
+## Installation
+
+### Via GetIt (recommended)
+
+Install directly from the Delphi IDE: **Tools > GetIt Package Manager**, search for **Trysil**.
+
+Or visit: [getitnow.embarcadero.com/trysil-delphi-orm](https://getitnow.embarcadero.com/trysil-delphi-orm/)
+
+### Via Boss
+
+```
+boss install davidlastrucci/Trysil
+```
+
+Boss adds the core sources to the Search Path, subfolders included. For the JSON
+and HTTP modules add `modules\Trysil\Trysil.JSon` and `modules\Trysil\Trysil.Http`
+as well, together with the three subfolders of the latter: `Authentication`,
+`Log` and `MultiTenant`.
+
+### Manual
+
+1. Clone the repository
+   ```
+   git clone https://github.com/davidlastrucci/Trysil.git
+   ```
+2. Open `Packages/<ver>/Trysil.groupproj` in the Delphi IDE and **Build All**, or run from the command line:
+   ```
+   Packages\Build370.bat
+   ```
+3. Add the output path to your project's Search Path:
+   ```
+   $(Trysil)\$(Platform)\$(Config)
+   ```
+   where `$(Trysil)` points to `Lib/<ver>`.
+
+See the full [Installation guide](https://davidlastrucci.github.io/Trysil/getting-started/installation/) for details, including the optional IDE Expert.
+
+## Documentation
+
+| Resource | Link |
+|---|---|
+| Online Help | [davidlastrucci.github.io/Trysil](https://davidlastrucci.github.io/Trysil) |
+| Blog | [trysil.lastrucci.net](https://trysil.lastrucci.net) |
+
+## Architecture Overview
+
+```
+TTContext  ─────────────────────────────  Main API
+  ├── TTProvider                          SELECT / Read operations
+  ├── TTResolver                          INSERT / UPDATE / DELETE
+  │     ├── Validation (attributes)
+  │     └── Events (Before/After hooks)
+  ├── TTIdentityMap                       Per-context entity cache
+  ├── TTSession<T>                        Unit of Work
+  ├── TTTransaction                       Explicit transaction management
+  └── TTFilterBuilder<T>                  Fluent query builder
+
+TTConnection (abstract)
+  └── TTGenericConnection
+        ├── SQLite
+        ├── PostgreSQL
+        ├── SQL Server
+        ├── Firebird
+        ├── InterBase
+        ├── MariaDB
+        └── Oracle
+
+Modules
+  ├── Trysil          → ORM core
+  ├── Trysil.JSon     → JSON serialization via TTJSonContext
+  └── Trysil.Http     → REST hosting, routing, CORS, JWT, multi-tenant
+```
+
+## The Name
+
+During World War II, **ORM** was a British operation to establish a reception base centred on **Trysil** in eastern Norway ([source](http://codenames.info/operation/orm/)). That's why this ORM is called Trysil.
+
+## Built With Trysil
+
+Projects and applications using Trysil in production. [See the full list](https://github.com/davidlastrucci/Trysil/blob/master/BuiltWithTrysil.md) — and add yours!
+
+## Support the Project
+
+If Trysil is useful to you, please consider:
+
+- **Star** this repository — it's free and helps others discover the project
+- **Share** your project in the [Show and tell](https://github.com/davidlastrucci/Trysil/issues/9) issue
+- **Donate** via [![PayPal](https://img.shields.io/badge/PayPal-donate-blue.svg)](https://www.paypal.com/paypalme/DavidLastrucci)
+- **Reach out** at [david.lastrucci@gmail.com](mailto:david.lastrucci@gmail.com) — feedback is always welcome
+
+## License
+
+BSD-3-Clause — see [LICENSE.md](https://github.com/davidlastrucci/Trysil/blob/master/LICENSE.md) for details.
+
+## Naming
+
+*Trysil* takes its name from [Operation ORM](http://codenames.info/operation/orm/), a World War II Allied operation.
+
+---
+
+<p align="center">
+  Made with &#10084;&#65039; by <a href="https://www.lastrucci.net/">David Lastrucci</a>
+</p>

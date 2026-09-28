@@ -1,0 +1,129 @@
+# awesome-parallel-blockchain
+Faster, robust, and high-performanced blockchain systems are the cornerstone of tomorrow.
+
+1. `Contributions from the community are welcome; make sure the material you add is worth reading, at least you have read it yourself.`
+2. About the Format:
+    - for the papers: [Type] [Conference(If any)] Name, Author, Year, Accessible links
+        - Type: <font color=#1E88E5>[Academic]</font> Paper that demonstrates more about theoretical algorithms or theoretical analysis.
+        - Type: <font color=#00E676>[Engineering]</font> Paper that introduces a new system architecture or practical algorithms
+        - Type: <font color=#915099>[Tech Article]</font> Technical article or blog that introduces some novel insights or solid analysis.
+    - for the repos: [Type] Repo Name, Org, Year, Accessible links
+        - Type: <font color=#FFB300>[PoC]</font> Basic runnable codebase with some basic functions to evaluate the ideas. 
+        - Type: <font color=#F4511E>[Developing]</font> Systems under development that have some basic features but are not yet ready for use in a stable production environment.
+        - Type: <font color=#64DD17>[Product]</font> Systems that are still under maintenance are already ready to be used in production environments.
+        - Type: <font color=#F50057>[Archive]</font> Non-maintained code base.
+
+
+## Parallelism and concurrency in brief
+### Background
+Parallelism and concurrency are two sharp swords that could improve the transaction execution performance of Blockchain and Blockchain-related VMs(i.e., EVM and SVM). 
+
+This knowledge base collects information about state-of-the-art research and engineering works about parallel and concurrent blockchain, blockchain VM, and other related systems, with some relevant examples for better understanding.
+
+**Parallelism** and **concurrency** are two easily confused terms; although they are both used to improve the efficiency of the execution of the system, they differ in meaning and in the scenarios in which they are used.
+
+**Parallelism**, typically refers to multiple processes or threads working on different tasks at the same time. For example, ten threads are executing ten different transactions simultaneously. Or think of ten dogs eating from ten food bowls.
+
+<div align="center"><img src="img/misc/parallel_dogs.png" width="45%">
+</div>
+
+**Concurrency**, typically refers to a thread simultaneously working multiple tasks to increase efficiency. For instance, certain operations, like reading data from disk(i.e., sLoad in EVM), might need to wait for a while in order to be completed. In such a case, the main thread could move ahead and do other duties, like computation. Then, It returns to continuing execution after the disk's data has been read in complete. Again, think about using a bowl to feed ten dogs, and being in the middle of a meal the dog is chewing on a bone, when you could start by letting him out of the bowl for a while and letting the other dogs eat first.
+<div align="center"><img src="img/misc/concurrent_dogs.png" width="45%">
+</div>
+
+For further reading: [Difference between Concurrency and Parallelism](https://www.geeksforgeeks.org/difference-between-concurrency-and-parallelism/)
+
+### Core challenges
+
+In general, the core challenge of adopting a parallel or concurrent method is the data race problem, read-write conflict, or data hazard problem. All these terms describe the same issue: different threads or operations are trying to read and modify the same data at the same time. 
+
+Consider a transfer scenario on Ethereum where Alice and Bob both want to transfer 10 ETH to Carl at the same time. Suppose Carl's initial balance is 100 ETH. After these two transactions are completed, Carl's balance should be 120 ETH. Let's consider a fully concurrent scenario where Alice's and Bob's transactions start executing at the same time. The initial balance of Carl that their transactions read would be 100 ETH (see the error?). Eventually, they will update Carl's balance as 110 ETH.
+
+To resolve a data race issue, there are usually three ways:
+- Protecting competing data by adding **locks**,
+- **Scheduling module** to avoid conflicts,
+- **Optimistic approach** that doesn't worry about conflicts but **rolls back** transactions after encountering the conflict issue.
+
+So how do we implement these solutions in the blockchain world? Let's dig in!
+
+### Case Study: Parallel/Concurrent EVM
+
+In the current EVM architecture, the most fine-grained read and write operators are **[sload](https://github.com/ethereum/go-ethereum/blob/81fd1b3cf9c4c4c9f0e06f8bdcbaa8b29c81b052/core/vm/instructions.go#L515-L521)** and **[sstore](https://github.com/ethereum/go-ethereum/blob/81fd1b3cf9c4c4c9f0e06f8bdcbaa8b29c81b052/core/vm/instructions.go#L523-L531)**, which read and write data from the state trie, respectively. So the easiest entry point is how to make sure that different threads don't conflict on these two operators. In fact, there is a special kind of transaction in Ethereum that includes a special structure named [Access list](https://eips.ethereum.org/EIPS/eip-2930), which allows transactions carrying storage addresses that it will read and modify. Therefore, this is a good entry point for implementing scheduling-based concurrent methods.
+
+In terms of system implementations, there are three general forms of Parallel/Concurrent EVM.
+
+1. Multi-threads with one EVM instance.
+2. Multi-threads with multi-EVM instances on one node.
+3. Multi-threads with multi-EVM instances on multi-nodes (basically, this is system-level sharding).
+
+So, what makes Parallism/concurrency on blockchain different than in the database system?
+1. **Unreliable Timestmap** which makes timestamp-based concurrency methods hard to deploy in the blockchain world.
+2. **Absolute determinism** on a blockchain system to ensure that transactions are re-executed between different validators is the same.
+3. The ultimate goal of validator is higher earnings, not faster executing transactions.
+
+What do we need?
+1. System-level consensus is required, and faster execution will bring higher returns.
+2. **Multivariate scheduling algorithms** that, given a block limit, capture more revenue while being able to complete the execution faster.
+3. More fine-grained data operations, including **opcode-level data locks**, in-memory cache layers, etc.
+
+## Parallelism and Concurrency in Blockchain
+
+### Research Papers
+- <font color=#1E88E5>[Academic][TPDS]</font> PaVM: A Parallel Virtual Machine for Smart Contract Execution and Validation, 2023, [[Paper]](https://ieeexplore.ieee.org/document/10323104)
+- <font color=#1E88E5>[Academic]</font> Parallel and Asynchronous Smart Contract Execution, 2021, [[Paper]](https://ieeexplore.ieee.org/document/9477197)
+- <font color=#1E88E5>[Academic][SIGPLAN]</font> Practical smart contract sharding with ownership and commutativity analysis, 2021, [[Paper]](https://dl.acm.org/doi/pdf/10.1145/3453483.3454112)
+- <font color=#1E88E5>[Academic][VLDB]</font> SlimChain: scaling blockchain transactions through off-chain storage and parallel processing, 2021, [[Paper]](https://dl.acm.org/doi/abs/10.14778/3476249.3476283)
+- <font color=#1E88E5>[Academic][DASFAA]</font> PEEP: A Parallel Execution Engine for Permissioned Blockchain Systems, 2021, [[Paper]](https://link.springer.com/chapter/10.1007/978-3-030-73200-4_24)
+- <font color=#1E88E5>[Academic][SIGMOD]</font> A Transactional Perspective on Execute-order-validate Blockchains, 2020, [[Paper]](https://dl.acm.org/doi/10.1145/3318464.3389693)
+- <font color=#1E88E5>[Academic]</font> An Empirical Study of Speculative Concurrency in Ethereum Smart Contracts, 2019, [[Paper]](https://arxiv.org/pdf/1901.01376.pdf)
+- <font color=#1E88E5>[Academic][PDP]</font> An efficient framework for optimistic concurrent execution of smart contracts, 2019, [[Paper]](https://ieeexplore.ieee.org/document/8671637)
+- <font color=#1E88E5>[Academic]</font> FastFabric: Scaling hyperledger fabric to 20000 transactions per second, 2019, [[Paper]](https://ieeexplore.ieee.org/document/8751452)
+- <font color=#1E88E5>[Academic][SIGMOD]</font> Blurring the Lines between Blockchains and Database Systems: the Case of Hyperledger Fabric, 2019, [[Paper]](https://dl.acm.org/doi/10.1145/3299869.3319883)
+- <font color=#1E88E5>[Academic][ICDCS]</font> Parblockchain: Leveraging transaction parallelism in permissioned blockchain systems, 2019, [[Paper]](https://www.computer.org/csdl/proceedings-article/icdcs/2019/251900b337/1ezRUMDrfMc)
+- <font color=#1E88E5>[Academic][PODC]</font> Adding Concurrency to Smart Contracts, 2017, [[Paper]](https://doi.org/10.1145/3087801.3087835)
+- <font color=#00E676>[Engineering]</font> Block-STM: Scaling Blockchain Execution by Turning Ordering Curse to a Performance Blessing, **Aptos**, 2022, [[Paper]](https://arxiv.org/abs/2203.06871), [[Video]](https://www.youtube.com/watch?v=fK_V9Z1q10U)
+
+### Engineering Repos
+- <font color=#FFB300>[PoC]</font> Parallel-go-ethereum, **ABCDELabs**, 2022, [[Codebase]](https://github.com/ABCDELabs/parallel-go-ethereum)
+- <font color=#F4511E>[Developing]</font> Evmone-compiler, **MegaETH**, 2023, [[Codebase]](https://github.com/megaeth-labs/evmone-compiler)
+
+### Other Materials
+- <font color=#FFB300>[Blog]</font> Speeding up the EVM (part 1), Flashbots, 2022, [[Blog](https://writings.flashbots.net/speeding-up-evm-part-1)]
+
+
+
+## Parallelism and Concurrency in DBMS
+In the context of database management systems (DBMS), parallelism refers to the capability that a single query can be executed by utilizing multiple CPU and IO resources. The typical technical challenges of parallel query execution include parallel operator implementation, parallel query optimization, load balancing, etc.   
+
+On the other hand, concurrency in DBMS refers to the process that executes multiple transactions simultaneously without conflicting with each other. 
+
+### Research Papers
+- <font color=#1E88E5>[Academic]</font> On Optimistic Methods for Concurrency Control, 1981, [[Paper]](https://www.eecs.harvard.edu/~htk/publication/1981-tods-kung-robinson.pdf)
+- <font color=#1E88E5>[Academic]</font> Scheduling problems in parallel query optimization, 1995, [[Paper]](https://dl.acm.org/doi/pdf/10.1145/212433.212471)
+- <font color=#1E88E5>[Academic]</font> Efficient and accurate cost models for parallel query optimization, 1996, [[Paper]](https://dl.acm.org/doi/pdf/10.1145/237661.237707)
+- <font color=#1E88E5>[Academic]</font> Parallelizing query optimization, 2008, [[Paper]](http://www.vldb.org/pvldb/vol1/1453882.pdf)
+- <font color=#1E88E5>[Academic]</font> Flow algorithms for parallel query optimization, 2008, [[Paper]](https://ieeexplore.ieee.org/iel5/4492792/4497384/04497484.pdf?casa_token=HMsG6W9-6DgAAAAA:pSTUpQDjcZj6cTrk-KuaCI2U8drRyp9ExlMNA_nYRvdkjMTICoLs3qVu6p4fe2Hsikfdb8SCN5A)
+- <font color=#1E88E5>[Academic]</font> Query optimization for massively parallel data processing, 2011, [[Paper]](https://dl.acm.org/doi/pdf/10.1145/2038916.2038928?casa_token=1w8xkLfre-EAAAAA:nnTDmTDFPM5LDd9vO4z3jDP0VZM8Benf_NOhPBGD7h_wPr4KxY640w_Tj6XCC6oHV7PormnT0aEtJFE)
+- <font color=#1E88E5>[Academic]</font> Communication steps for parallel query processing, 2017, [[Paper]](https://dl.acm.org/doi/pdf/10.1145/3125644)
+- <font color=#1E88E5>[Academic]</font> Principles and realization strategies of multilevel transaction management, 1991, [[Paper]](https://dl.acm.org/doi/pdf/10.1145/103140.103145)
+- <font color=#1E88E5>[Academic]</font> Concurrency control in distributed database systems, 1981, [[Paper]](https://dl.acm.org/doi/pdf/10.1145/356842.356846)
+- <font color=#1E88E5>[Academic]</font> The log-structured merge-tree (LSM-tree), 1996, [[Paper]](https://www.inf.ufpr.br/eduardo/ensino/ci763/papers/lsmtree.pdf)
+- <font color=#1E88E5>[Academic]</font> An evaluation of distributed concurrency control, 2017, [[Paper]](https://dl.acm.org/doi/pdf/10.14778/3055540.3055548)
+
+
+### Engineering Repos
+- <font color=#F4511E>[Developing]</font> lotusdb, a GO implementation of LSM-tree and key-value store, 2023, [[Codebase]](https://github.com/lotusdblabs/lotusdb)
+- <font color=#F4511E>[Developing]</font> Presto, a distributed SQL query engine, 2023, [[Codebase]](https://github.com/prestodb/presto)
+
+
+### Other Materials
+- <font color=#915099>[Tech Article]</font> Concurrency Control in PostgreSQL, PostgreSQL, [[Doc link]](https://www.postgresql.org/docs/current/transaction-iso.html)
+- <font color=#915099>[Tech Article]</font> Using Parallel Execution, Oracle, [[Doc link]](https://docs.oracle.com/en/database/oracle/oracle-database/19/vldbg/using-parallel.html#GUID-3E2AE088-2505-465E-A8B2-AC38813EA355)
+
+## Parallelism and Concurrency in OS
+
+### Research Papers
+### Engineering Repos
+### Other Materials
+
+## Appendix
