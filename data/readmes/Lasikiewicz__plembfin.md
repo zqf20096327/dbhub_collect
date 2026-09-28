@@ -24,7 +24,7 @@
 
 ---
 
-> **v1.2.2.** Plembfin writes watched state and playback progress to connected media
+> **v1.3.0.** Plembfin writes watched state and playback progress to connected media
 > servers, so **back up first** (Settings → Backup → Local). Report
 > issues on the [issue tracker](https://github.com/Lasikiewicz/plembfin/issues).
 
@@ -58,8 +58,9 @@ None of these talk to each other - they all talk to Plembfin.
 - **Now Playing dashboard** - Real-time playback monitoring, optional Plembfin-authoritative Up Next sync that queues a coalesced provider push whenever the queue changes (to Plex/Emby Continue Watching and Jellyfin Next Up), show-level Up Next dismissals, media-type-aware Watch History, weekly watch activity trends, and recent history
 - **Sync Activity hub** - Live grouped activity by movie/show, with all resume checkpoints and destination results preserved behind each row, unresolved cross-platform matches with per-item Fix match actions, targeted retry for actual failed destinations (only the newest unresolved result per movie/episode is retried, individually or all at once as a background job that survives closing the tab; expected missing-library skips are excluded), show-wide Fix Match and retry-all controls for Trakt mismatches, dismiss controls for shows Trakt does not contain, blocked-restore repair grouped by show with Fix Match and skip controls, and downloadable group logs
 - **Rich analytics & stats** - In-depth all-time and period reports, top shows, and platform playback distribution
-- **Personal media organization** - Save movies, shows, and episodes to a watch list or custom lists, and rate them from their media pages; episode ratings use one canonical show/season/episode identity everywhere
+- **Personal media organization** - Save movies, shows, and episodes to a watch list or playlists (optionally synced two ways to Plex, Emby, and Jellyfin, or filled automatically from genre, original language, year, and watched rules, with TV playlists holding the next episode of each show, and watched items removed if you choose), and rate them from their media pages; episode ratings use one canonical show/season/episode identity everywhere
 - **Cache-first media detail pages** - Reuse the latest local history snapshot on reload so known artwork, summaries, watched rows, and watch dates stay visible while provider metadata refreshes
+- **Paged media libraries** - Movies and TV Shows load more cards as you scroll without rebuilding the cards already on screen; saved TV pages revalidate after 30 minutes when reopened
 - **Personal Rating Sync** - One-toggle, two-way rating sync with every connected Plex, Emby, Jellyfin, and Trakt account through an isolated durable queue, with Plembfin as the conflict authority
 - **Plex Watchlist Sync** - One-toggle, two-way sync between Plembfin and the Plex account watchlist, with safe first-run union, durable retries, a Sync now action, and a plain-language explanation of anything Plex refuses
 - **Upcoming episodes calendar** - Air date schedule for upcoming and past releases, pre-cached for instant loading
@@ -78,6 +79,20 @@ None of these talk to each other - they all talk to Plembfin.
 - **Progressive Web App (PWA)** - Installable directly on iOS, Android, macOS, and Windows with a native app experience
 
 See [`docs/architecture.md`](docs/architecture.md) for how each feature is actually built.
+
+---
+
+## Appearance
+
+Use the two switches at the bottom of the sidebar to choose **Classic** or **Modern** and
+**Light** or **Dark**. The choices are independent: each style works in either mode. Classic
+is the default; Modern changes the surfaces and accents while keeping the same pages and
+controls. Both choices are saved in your browser and restored when you reopen Plembfin.
+On a phone, open the navigation drawer to reach the switches.
+
+The **Appearance** menu on movie and TV detail pages controls which optional sections,
+such as cast, trailers, and reviews, are shown. It is separate from the style and mode
+switches.
 
 ---
 
@@ -197,6 +212,15 @@ rebuild an image.
    ```
 3. Start it: `docker compose up -d`
 4. Open `http://localhost:5055` and log in.
+
+> [!IMPORTANT]
+> On **Docker Desktop for macOS or Windows**, keep `/data` on a named volume, not a
+> folder bind mount such as `./data:/data`. The file sharing layer that bind mounts use
+> there can corrupt the SQLite database under heavy writes (for example a first Trakt
+> sync), which shows up as `database disk image is malformed`. Use
+> `- plembfin-data:/data` under `volumes:` and add a top-level `volumes: { plembfin-data: {} }`.
+> Never open `plembfin.db` from the host while the container is running. Linux hosts
+> are not affected.
 
 This base example is intended for a local or trusted network. For a remotely reachable
 tester instance, use the secure overlay below behind an HTTPS reverse proxy or VPN, and

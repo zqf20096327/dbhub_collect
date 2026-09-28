@@ -3,8 +3,8 @@
 [![Release](https://img.shields.io/github/v/release/dgahagan/shelf)](https://github.com/dgahagan/shelf/releases)
 [![Docker Pulls](https://img.shields.io/docker/pulls/dangahagan/shelf)](https://hub.docker.com/r/dangahagan/shelf)
 [![CI](https://github.com/dgahagan/shelf/actions/workflows/test.yml/badge.svg)](https://github.com/dgahagan/shelf/actions/workflows/test.yml)
-[![Unit tests](https://img.shields.io/badge/unit%20tests-4163%20passing-brightgreen)](https://github.com/dgahagan/shelf/actions/workflows/test.yml)
-[![E2E tests](https://img.shields.io/badge/e2e%20tests-274%20passing-brightgreen)](https://github.com/dgahagan/shelf/actions/workflows/test.yml)
+[![Unit tests](https://img.shields.io/badge/unit%20tests-4485%20passing-brightgreen)](https://github.com/dgahagan/shelf/actions/workflows/test.yml)
+[![E2E tests](https://img.shields.io/badge/e2e%20tests-303%20passing-brightgreen)](https://github.com/dgahagan/shelf/actions/workflows/test.yml)
 [![License: AGPL-3.0](https://img.shields.io/github/license/dgahagan/shelf)](LICENSE)
 
 A self-hosted home library catalog with barcode scanning, multi-mode scanning workflows, automatic metadata lookup, cover art, and collection management — all in a single Docker container.
@@ -119,7 +119,7 @@ of this whole directory carries the keys next to the data they protect.
 - **Edition language** — captured on lookup, editable on items, filterable in Browse; a settings dropdown picks the preferred language for title searches
 - **Cover art pipeline** — Open Library, Hardcover, DNB (German ISBNs), Amazon, Google Books, IGDB, and manual search/upload/paste-a-URL/remove, on any item. A **cover review queue** walks every cover-less item one at a time — discs, games and music included, which the automatic sweep deliberately never touches — with the picker inline, and a **Not available** verdict that is remembered so the list converges on zero. Cover search is media-type aware: books search Google Books and Open Library, DVDs the film's TMDb poster set, video games IGDB cover art and artwork. The picker reports a missing key, a rejected key, a spent quota and an unreachable provider by name, so "No covers found for this title." is only ever a genuine miss
 - **UPC support** — scan DVDs and Blu-rays with TMDb lookup, and music discs, which are detected on Auto. A barcode Shelf can resolve on MusicBrainz brings back the release; one it cannot is still filed under its own title
-- **Music by release, not by title** — a **Music** page searches MusicBrainz by title, artist, barcode or catalogue number and catalogues the exact pressing: country, date, label, catalogue number, packaging and medium, with real track lists across multiple discs. Vinyl, Cassette, CD and Digital Music. Two pressings of one album stay distinct and are linked to each other automatically. See [Music](docs/user-guide/music.md)
+- **Music by release, not by title** — a **Music** page searches MusicBrainz by title, artist, barcode or catalogue number and catalogues the exact pressing: country, date, label, catalogue number, packaging and medium, with real track lists across multiple discs. Vinyl, Cassette, CD and Digital Music. Two pressings of one album stay distinct and are linked to each other automatically. Artwork is shown square and uncropped. See [Music](docs/user-guide/music.md)
 - **Periodicals as publication plus issue** — a magazine run is one publication with many issues, not many unrelated rows. A 977 barcode resolves the publication from its ISSN; the issue number and date stay yours to confirm. When the barcode does not resolve, search for the magazine by title instead. See [Periodicals](docs/user-guide/periodicals.md)
 - **Manga as its own media type** — in the book family, so it carries an ISBN, belongs to a series, and filters separately from comics
 - **Retail barcodes on the edit form** — the Identifiers section takes a UPC/EAN as well as an ISBN, with the same camera scanner. UPC-A is canonicalised to EAN-13 and checksummed; 978/979 Bookland codes are refused, because they belong in the ISBN field. See [Editing barcodes](docs/user-guide/editing-barcodes.md)
@@ -191,6 +191,7 @@ each option before anything is sent.
 - **Arrange a shelf** — any location gets an Arrange page where you drag the physical copies into the order they actually sit in, or order them automatically by title, creator, series, release or issue. The order belongs to the copy, so duplicates stay distinct and can sit side by side
 - **Related media groups** — connect the different forms of one work (a novel, its audiobook, its film adaptation) as `format`, `related` or `adaptation`. Every item shows its whole group in a panel on the item page, with direct links marked apart from the ones reached through a third item; editors search the catalogue to add a relationship, viewers see the group read-only. A group is the connected set of links, so linking A to B and B to C presents all three. Matching is manual by design. See [Related Media](docs/related-media.md)
 - **Game platforms** — customizable list of platforms, add your own for niche or retro systems
+- **Authors as links** — every author on an item page links to everything by that person: `Martin Fowler, Kent Beck` is two authors, a translator is shown as one (*Ken Liu · translator*), and `J.R.R.` and `J. R. R. Tolkien` are the same author. Browse filters to one author and combines it with any other filter. The authors field stays exactly as stored — fix a mis-split by editing it. See [Items](docs/user-guide/items.md#whats-on-the-page)
 - **Checkout system** — lend to borrowers with the Lend scan mode, filter by "Lent Out" in browse
 - **Loan reminders** — overdue loans get a red badge, and an optional daily digest (ntfy or webhook) nags you about them; configure under Settings → Library → Lending
 - **Wishlist** — a list of what you want, kept alongside your catalog. Owning and wishing are separate: an item can also be neither — a book you read from the library stays in your catalog, with its reading history, without being owned or wished for
@@ -264,7 +265,7 @@ marked `noindex`, and revocable at any time.
 |-------|-----------|
 | Backend | Python 3.12, FastAPI, SQLite (WAL mode) |
 | Frontend | Jinja2, HTMX, Alpine.js, Tailwind CSS |
-| Auth | bcrypt, JWT in HTTP-only secure cookies |
+| Auth | bcrypt, JWT in HTTP-only cookies, `Secure` whenever the browser connects over HTTPS |
 | Container | Docker, non-root user, self-signed HTTPS |
 
 ## Roles

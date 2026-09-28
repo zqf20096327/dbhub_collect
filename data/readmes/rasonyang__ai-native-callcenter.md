@@ -21,22 +21,19 @@ inside it — plus PostgreSQL and FreeSWITCH.
 
 ## Try it
 
+Linux:
+
 ```sh
-git clone https://github.com/rasonyang/ai-native-callcenter
-cd ai-native-callcenter/deploy
-cp .env.example .env    # two lines: FS_EXTERNAL_IP and ALIYUN_API_KEY
-docker compose up -d
+curl -fsSL https://github.com/rasonyang/ai-native-callcenter/releases/latest/download/install.sh | sudo sh
 ```
 
-The first start builds the application from the checkout, which takes a few
-minutes; afterwards the stack starts in seconds.
+macOS:
 
-Open `http://<host>:8080` and sign in as `admin` / `aicc@123`. The database, the
-switch and the application come up together, seeded with a team, two queues, six
-published bilingual flows (each behind an English, a Chinese and a US number,
-the main line being 800-555-0199), eighteen simulated customer telephones and a
-week of history, so the wallboard is not empty and a softphone can ring the bot
-straight away. Every password is `aicc@123`. [More…](deploy/README.md)
+```sh
+curl -fsSL https://github.com/rasonyang/ai-native-callcenter/releases/latest/download/install.sh | sh
+```
+
+Details: [deploy/one-line-installer.md](deploy/one-line-installer.md).
 
 ## What it does
 

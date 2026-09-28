@@ -40,7 +40,7 @@ ARSM is a workshop scheduling and operations app for auto service teams. It help
 
 - `app/AutoService.ApiService`: API endpoints, domain model, EF Core, authentication
 - `app/AutoService.WebUI`: React frontend
-- `app/AutoService.AppHost`: Aspire orchestration (PostgreSQL + MinIO + ApiService + WebUI)
+- `app/AutoService.AppHost`: Aspire orchestration (PostgreSQL + RustFS + ApiService + WebUI)
 - `app/AutoService.ServiceDefaults`: shared service defaults and resilience setup
 - `tests/API`: HTTP endpoint test suites (`.http`)
 - `tests/Database`: SQL validation suites (`.sql`, read-only policy)
@@ -55,7 +55,7 @@ ARSM is a workshop scheduling and operations app for auto service teams. It help
 - .NET 10 SDK
 - Node.js 24+ with npm (CI pins Node 24)
 - Python 3.11+ for the local test runner
-- Docker Desktop running locally (required for the PostgreSQL and MinIO containers via AppHost)
+- Docker Desktop running locally (required for the PostgreSQL and RustFS containers via AppHost)
 
 ### 1) Create local API settings
 
@@ -106,11 +106,11 @@ dotnet run --project AutoService.AppHost
 AppHost starts and wires:
 
 - PostgreSQL
-- MinIO, the local S3-compatible object store for profile pictures (API on `Ports:MinioApi`, web console on `Ports:MinioConsole`)
-- `AutoService.ApiService`, which receives `ObjectStorage__ServiceUrl`, `ObjectStorage__AccessKeyId`, and `ObjectStorage__SecretAccessKey` from the MinIO resource
+- RustFS, the local S3-compatible object store for profile pictures (it replaced MinIO, whose images were withdrawn in 2026-09; the resource keeps the `minio` name) (API on `Ports:MinioApi`, web console on `Ports:MinioConsole`)
+- `AutoService.ApiService`, which receives `ObjectStorage__ServiceUrl`, `ObjectStorage__AccessKeyId`, and `ObjectStorage__SecretAccessKey` from the `minio` (RustFS) resource
 - `AutoService.WebUI` development server with `VITE_API_URL` injected from the API endpoint
 
-MinIO needs two Aspire secret parameters. Set them once per machine:
+The object store needs two Aspire secret parameters (named `minio-*` for compatibility). Set them once per machine:
 
 ```bash
 cd app/AutoService.AppHost
@@ -124,7 +124,7 @@ keep `ObjectStorage:AutoCreateBucket` disabled, and provision the private bucket
 Cloudflare R2 additionally needs `ObjectStorage:DisablePayloadSigning` and
 `ObjectStorage:DisableDefaultChecksumValidation` set to `true`: R2 does not support the streaming
 SigV4 implementation or the CRC32 checksum that AWSSDK.S3 v4 sends by default, and uploads fail
-without them. MinIO keeps both `false`.
+without them. RustFS (like MinIO before it) keeps both `false`.
 
 ## Useful Commands
 
@@ -137,6 +137,8 @@ without them. MinIO keeps both `false`.
 | Run selected local tests | `python scripts/run-local-test-suite.py playwright http sql` |
 
 NuGet restore is lock-file based: `app/Directory.Build.props` enables locked restores, AppHost keeps RID-specific lock files for Aspire Dashboard/DCP packages on Linux and macOS, and CI runs `dotnet restore --locked-mode`.
+
+GitHub Actions: `.github/workflows/dotnet.yml` builds and checks backend and frontend on Linux, Windows and macOS; `.github/workflows/tests.yml` runs the Playwright suite against the mocked API and the HTTP and SQL suites against PostgreSQL and RustFS containers with per-run generated credentials; `.github/workflows/publish-images.yml` pushes the deploy images to GHCR after a green `Tests` run on `main`.
 
 Local GitHub Actions smoke checks use [.actrc](.actrc), which maps `ubuntu-latest`, `windows-latest`, and `macos-latest` to the Linux act container so `act -j backend-build` and `act -j frontend-build` exercise every matrix row locally. GitHub-hosted runners remain authoritative for real Windows and macOS behavior.
 
@@ -159,7 +161,7 @@ python scripts/run-local-test-suite.py http sql
 Suite targets:
 
 - `playwright`: runs the WebUI Playwright E2E suite (`PORT=5173` default).
-- `http`: runs all `tests/API/**/*.http` suites through HTTPYAC.
+- `http`: runs `tests/API/_setup` first (test-account provisioning), then all `tests/API/**/*.http` suites through HTTPYAC.
 - `sql`: runs all `tests/Database/**/*.sql` files against the running PostgreSQL container with the read-only SQL user.
 
 Before full-suite runs, start Aspire in another terminal:
@@ -200,12 +202,15 @@ Then inspect `tests/.artifacts/test-suite-summary.json` and act in the matching 
 - Auth login/refresh rate limits and login bans are process-local. Non-Development deployments must set `Deployment:RateLimiterTopology=SingleInstance` only when exactly one ApiService instance is running; use a distributed limiter before scaling out.
 - The production WebUI static host or reverse proxy must enforce security headers because Vite is not the release server. Required headers include `Content-Security-Policy`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors` or equivalent frame protection, and `Strict-Transport-Security` when TLS terminates there.
 - The production WebUI static host should also enforce cache headers: `index.html` is not cached, Vite `assets/` files are cached for 30 days with `immutable`, public images/icons are cached for 30 days with ETag revalidation, and manifest/sitemap/robots-style files use a shorter one-day cache.
+- See [`docs/deployment-security-checklist.md`](docs/deployment-security-checklist.md) for the exact copy-ready header values, required configuration keys, and post-deployment verification commands.
+- [`docs/deployment-azure.md`](docs/deployment-azure.md) walks through the Azure Container Apps deployment (images in `deploy/`, Bicep template, account and credit setup).
 
 ## Contributor Notes (AI Workflow)
 
 - The agent workflow is the saved `arsm-chain` workflow (`.claude/workflows/arsm-chain.js`): an orchestrator
   plan that splits the task into work packages with disjoint owned paths (skipped for trivial single-area
-  tasks), jev-router model and effort per package, packages implemented in parallel (up to 8 at once, scaled
+  tasks), a fixed model policy (opus plans and reviews, sonnet at max effort implements and fixes, sonnet runs
+  the gate and tests; no Haiku and, for now, no fable), packages implemented in parallel (up to 8 at once, scaled
   by difficulty), each package reviewed as soon as it finishes (coding principles, UI/UX audit), docs sync
   beside one deterministic gate, then targeted tests.
 - `frontend` applies the `ui-ux-style-profile` policy itself; the profile audits the diff afterwards.

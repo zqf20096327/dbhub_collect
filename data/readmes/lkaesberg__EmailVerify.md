@@ -74,7 +74,7 @@ Use this link to invite the bot to your server:
 
 ### Quick Setup
 
-The fastest way: run **`/setup`** — a guided 3-step wizard that configures your verified roles, email domains, and posts the verification message for you. Then run `/testmail` to confirm email delivery.
+The fastest way: run **`/setup`** — a guided wizard that creates the verified role for you (or uses your existing roles), configures email domains, and posts the verification message. Then run `/testmail` to confirm email delivery.
 
 Prefer manual setup?
 
@@ -164,7 +164,7 @@ Assign different roles based on email domain:
 
 | Command | Description |
 |---------|-------------|
-| `/setup` | Guided 3-step setup wizard (roles → domains → verification channel) |
+| `/setup` | Guided setup wizard (verified role, created for you if you like → optional unverified role → domains → verification channel) |
 | `/button <channel> <buttontext>` | Create a verification button embed in a channel |
 | `/testmail <email>` | Send a test verification email to check delivery & spam placement |
 | `/manualverify <user> <email>` | Manually verify a user without email confirmation |
@@ -307,6 +307,9 @@ npm start
 | `smtpHost` | Your SMTP server (e.g., `smtp.gmail.com`) |
 | `isGoogle` | Set to `true` if using Gmail |
 | `topggToken` | *(Optional)* Your Top.gg API token |
+| `discordbotlistToken` | *(Optional)* Your discordbotlist.com API token; posts the server count and command list |
+| `discordbotsggToken` | *(Optional)* Your discord.bots.gg API token; posts the server count |
+| `topggWebhookSecret` / `discordbotlistWebhookSecret` | *(Optional)* Webhook secrets for vote rewards; the endpoints are `/webhooks/topgg` and `/webhooks/discordbotlist` on the stats server (port 8181) |
 
 > 💡 **Gmail Users:** You need to create an [App Password](https://support.google.com/accounts/answer/185833) and use that instead of your regular password.
 

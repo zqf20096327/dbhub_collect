@@ -33,6 +33,13 @@ plain files on hardware you control.
 
 Think Home Assistant, for your AI tools.
 
+<p align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="v3/docs/assets/readme/architecture-dark.svg">
+  <img src="v3/docs/assets/readme/architecture-light.svg" alt="Claude, Claude Code, ChatGPT, Codex, Gemini and any other MCP client connect to one palaia hub, which gives them one memory, shared tools and a way for agents to reach each other, stored as plain Markdown files on your own hardware.">
+</picture>
+</p>
+
 > [!NOTE]
 > **palaia v3 is a release candidate (`3.0.0-rc2`).** Everything below works and is
 > tested, but it has not had an outside security review yet. Try it, keep backups, and
@@ -104,7 +111,54 @@ LM Studio · any other MCP-compatible tool
 Each one has a short [connect guide](v3/site/docs/src/content/docs/connect/clients/).
 Claude Desktop gets a one-click bundle: download, click, connected.
 
-<!-- graphic: dashboard screenshots (issue #298 item 4): home screen, memory explorer, connect page, marketplace. One row of four goes here. -->
+Everything is managed from a dashboard in your browser:
+
+<table>
+<tr>
+<td width="50%">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="v3/docs/assets/readme/dashboard-home-dark.png">
+  <img src="v3/docs/assets/readme/dashboard-home-light.png" alt="Home: the hub's state, connected clients and live activity">
+</picture>
+
+<p align="center"><b>Home</b></p>
+
+</td>
+<td width="50%">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="v3/docs/assets/readme/dashboard-explorer-dark.png">
+  <img src="v3/docs/assets/readme/dashboard-explorer-light.png" alt="Explorer: a note with its fields, links and history">
+</picture>
+
+<p align="center"><b>Explorer</b></p>
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="v3/docs/assets/readme/dashboard-clients-dark.png">
+  <img src="v3/docs/assets/readme/dashboard-clients-light.png" alt="Clients: connect Claude Code, Codex, ChatGPT and others">
+</picture>
+
+<p align="center"><b>Clients</b></p>
+
+</td>
+<td width="50%">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="v3/docs/assets/readme/dashboard-marketplace-dark.png">
+  <img src="v3/docs/assets/readme/dashboard-marketplace-light.png" alt="Marketplace: add-ons from the official MCP registry">
+</picture>
+
+<p align="center"><b>Marketplace</b></p>
+
+</td>
+</tr>
+</table>
 
 ## Learn more
 
@@ -112,7 +166,7 @@ Claude Desktop gets a one-click bundle: download, click, connected.
 - **[How it works](v3/docs/how-it-works.md):** the full feature list, the architecture, the test evidence behind the claims, and when palaia is not the right fit.
 - **[Security](v3/SECURITY.md)** and the [threat model](v3/docs/security/threat-model.md).
 - **[What is left before 3.0.0](v3/RELEASING.md)** and [what shipped](v3/CHANGELOG.md).
-- **For contributors:** [`CONTRIBUTING.md`](CONTRIBUTING.md), [`AGENTS.md`](AGENTS.md), and [`v3/README.md`](v3/README.md) for the dev setup.
+- **For contributors:** [`CONTRIBUTING.md`](CONTRIBUTING.md) and [`v3/README.md`](v3/README.md) for the dev setup.
 
 ## Already using palaia v2?
 

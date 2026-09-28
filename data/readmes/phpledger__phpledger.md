@@ -10,22 +10,25 @@
   Built on PHP 8.2+ with MySQL 8.0.19+ (8.4 recommended) or MariaDB 10.4+. New code is AGPL-3.0-or-later licensed; a commercial licence is available.
 </p>
 
+> [!IMPORTANT]
+> Maintenance of PHP Ledger has stopped for lack of funds. 1.4.7 is the latest release.
+> **Help fund a year of open-source work (USD 135,000): https://phpledger.com/funding/**
+
 <p align="center">
   <a href="https://github.com/phpledger/phpledger/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/phpledger/phpledger?style=for-the-badge&label=release&labelColor=0c2052&color=4656e8"></a>
   <a href="https://packagist.org/packages/phpledger/phpledger"><img alt="Packagist version" src="https://img.shields.io/packagist/v/phpledger/phpledger?style=for-the-badge&label=packagist&labelColor=0c2052&color=f28d1a&logo=packagist&logoColor=white"></a>
   <a href="https://github.com/phpledger/phpledger/pkgs/container/phpledger"><img alt="Container image on GitHub Container Registry" src="https://img.shields.io/badge/ghcr.io-phpledger%2Fphpledger-2496ed?style=for-the-badge&labelColor=0c2052&logo=docker&logoColor=white"></a>
-  <a href="https://github.com/phpledger/phpledger/actions/workflows/foundation.yml"><img alt="Foundation checks" src="https://img.shields.io/github/actions/workflow/status/phpledger/phpledger/foundation.yml?branch=master&style=for-the-badge&label=checks&labelColor=0c2052&logo=githubactions&logoColor=white"></a>
 </p>
 
 <p align="center">
-  <a href="docs/INSTALLER.md"><img alt="PHP 8.2 or newer" src="https://img.shields.io/badge/PHP-8.2%2B-777bb4?style=for-the-badge&labelColor=0c2052&logo=php&logoColor=white"></a>
-  <a href="docs/INSTALLER.md"><img alt="MySQL 8.0.19 or newer" src="https://img.shields.io/badge/MySQL-8.0.19%2B-00758f?style=for-the-badge&labelColor=0c2052&logo=mysql&logoColor=white"></a>
-  <a href="docs/INSTALLER.md"><img alt="MariaDB 10.4 or newer" src="https://img.shields.io/badge/MariaDB-10.4%2B-c0765a?style=for-the-badge&labelColor=0c2052&logo=mariadb&logoColor=white"></a>
+  <a href="resources/release/INSTALL.md"><img alt="PHP 8.2 or newer" src="https://img.shields.io/badge/PHP-8.2%2B-777bb4?style=for-the-badge&labelColor=0c2052&logo=php&logoColor=white"></a>
+  <a href="resources/release/INSTALL.md"><img alt="MySQL 8.0.19 or newer" src="https://img.shields.io/badge/MySQL-8.0.19%2B-00758f?style=for-the-badge&labelColor=0c2052&logo=mysql&logoColor=white"></a>
+  <a href="resources/release/INSTALL.md"><img alt="MariaDB 10.4 or newer" src="https://img.shields.io/badge/MariaDB-10.4%2B-c0765a?style=for-the-badge&labelColor=0c2052&logo=mariadb&logoColor=white"></a>
   <a href="LICENSE"><img alt="Licence: AGPL-3.0-or-later" src="https://img.shields.io/badge/licence-AGPL--3.0--or--later-a42e2b?style=for-the-badge&labelColor=0c2052"></a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/phpledger/phpledger/releases"><strong>Release downloads</strong></a> &nbsp; · &nbsp;
+  <a href="https://github.com/phpledger/phpledger/releases/tag/v1.4.7"><strong>Release downloads</strong></a> &nbsp; · &nbsp;
   <a href="https://phpledger.com/demo/">Try the demo</a> &nbsp; · &nbsp;
   <a href="https://github.com/phpledger/phpledger/wiki">Read the Wiki</a> &nbsp; · &nbsp;
   <a href="https://github.com/phpledger/phpledger/wiki/Roadmap">Roadmap</a> &nbsp; · &nbsp;
@@ -40,27 +43,27 @@ Choose **one** guide and follow it from start to finish. Each guide shows what t
 
 | Where do you want to use it? | Follow this guide |
 |---|---|
-| On my Windows computer with Docker Desktop | [Install with Docker Desktop](docs/wiki/Install-with-Docker-Desktop.md) — one setup file and one copy-and-paste command |
-| On my Windows computer with XAMPP or WAMP | [Install with XAMPP or WAMP](docs/wiki/Install-on-XAMPP-or-WAMP.md) — put the folder in place and open your browser |
-| On my website using cPanel or Plesk | [Install on shared hosting](docs/wiki/Install-on-Shared-Hosting.md) — upload the folder and use your hosting panel |
+| On my Windows computer with Docker Desktop | [Install with Docker Desktop](https://github.com/phpledger/phpledger/wiki/Install-with-Docker-Desktop) — one Compose file and one copy-and-paste command |
+| On my Windows computer with XAMPP or WAMP | [Install with XAMPP or WAMP](https://github.com/phpledger/phpledger/wiki/Install-on-XAMPP-or-WAMP) — put the folder in place and open your browser |
+| On my website using cPanel or Plesk | [Install on shared hosting](https://github.com/phpledger/phpledger/wiki/Install-on-Shared-Hosting) — upload the folder and use your hosting panel |
 
 **Unsure?** If you already have Docker Desktop, XAMPP or WAMP, use the matching guide. To look around before installing, [try the online demo](https://phpledger.com/demo/) with sample data.
 
-**Using Docker?** Download the [ready-made setup file](compose.desktop.yaml) and follow its guide. It starts both PHP Ledger and the database and keeps your records between restarts. Pulling the application image alone is only part of the setup.
+**Using Docker?** Follow the [container guide](docs/CONTAINER.md) and its Compose file. It starts both PHP Ledger and the database and keeps your records between restarts. Pulling the application image alone is only part of the setup.
 
-[All installation guides in the Wiki](https://github.com/phpledger/phpledger/wiki/Getting-Started) · [Help if you get stuck](https://github.com/phpledger/phpledger/discussions)
+[All installation guides in the Wiki](https://github.com/phpledger/phpledger/wiki/Getting-Started) · [What to expect from support](SUPPORT.md)
 
 ## Accounting you can host yourself
 
 PHP Ledger helps small businesses keep their books, follow money owed by customers and to suppliers, and trace report balances back to the entries behind them. It is open-source PHP software that runs on infrastructure you control.
 
-**Start here:** [Try the demo](https://phpledger.com/demo/) · [Download the latest release](https://github.com/phpledger/phpledger/releases/latest) · [Installation guide](resources/release/INSTALL.md) · [Wiki](https://github.com/phpledger/phpledger/wiki)
+**Start here:** [Try the demo](https://phpledger.com/demo/) · [Download v1.4.7](https://github.com/phpledger/phpledger/releases/tag/v1.4.7) · [Installation guide](resources/release/INSTALL.md) · [Wiki](https://github.com/phpledger/phpledger/wiki)
 
-**PHP Ledger 1.4.5** rebuilds the installer, business setup, first Home, shell and Packages page from the owner's review of 25 to 26 September 2026: every step inside a laptop screen with plain-language help, legal forms in each country's own words with the country of registration recorded (migration 061), named bank and cash accounts with opening money and a strict cash policy for new businesses, a mandatory installation notice, a getting-started guide on Home, inlined icons, and Packages with tabs and per-business switches. The candidate passed 708 application tests with zero failures on MySQL and 708 on MariaDB before the exact-package gates.
+**PHP Ledger 1.4.7** (27 September 2026) is the latest release. Maintenance has stopped for lack of funds, so no further updates are planned; the notice now appears on the Updates screen and throughout the packaged documentation. It carries forward everything in 1.4.6 unchanged, with no migration or schema change.
 
-**PHP Ledger 1.4.1** improves date entry, employee date-of-birth and invoice/bill account validation, required-field guidance, sample completion, navigation and phone layouts. The exact release archive passed fresh installation and populated 1.4.0 upgrades on MySQL and MariaDB; both full application suites passed 699 tests with zero failures. See the [release notes](resources/release/RELEASE-NOTES.md), [upgrade guide](resources/release/UPGRADE.md) and [validation record](docs/repository/RELEASE-1.4.1-GATES.md).
+**1.4.6** refined the sample company gallery shown at Start and in Packages, added a per-partner capital and drawings account for partnerships (posting opening capital split by each partner's share), and cleaned up statement layout: the trial balance, balance sheet and profit and loss now prune zero lines and show one total per group.
 
-Version **1.4.0** added administrator-controlled cash and bank shortfall policies, linked payer/payee selection, contextual help and fictional-company learning stories. See its [release downloads and notes](https://github.com/phpledger/phpledger/releases/tag/v1.4.0).
+**1.4.5** rebuilt the installer, business setup, first Home, shell and Packages page from the owner's review of 25 to 26 September 2026: every step inside a laptop screen with plain-language help, legal forms in each country's own words with the country of registration recorded, named bank and cash accounts with opening money and a strict cash policy for new businesses, a mandatory installation notice, a getting-started guide on Home, inlined icons, and Packages with tabs and per-business switches. The candidate passed 708 application tests with zero failures on MySQL and 708 on MariaDB before the exact-package gates.
 
 ## What you can do
 
@@ -93,16 +96,16 @@ For a first exercise, create a small business or import a fictional sample, reco
 
 ## Install on your own hosting
 
-1. Download the application ZIP and checksum from the [latest release](https://github.com/phpledger/phpledger/releases/latest). Use the application package, which includes production dependencies.
+1. Download the application ZIP and checksum from the [v1.4.7 release](https://github.com/phpledger/phpledger/releases/tag/v1.4.7). Use the application package, which includes production dependencies.
 2. Prepare PHP and a dedicated database using the [installation guide](resources/release/INSTALL.md).
 3. Upload and extract the package, then open its address to start the browser installer. No Composer, Node or terminal is needed for a packaged browser installation.
 4. Create the administrator account, set up a business and review its accounts, currency and opening position before entering real records.
 
-**Requirements:** PHP 8.2 or newer (8.3 recommended), MySQL 8.0.19+ (8.4 recommended) or MariaDB 10.4+, and the extensions listed in the [installer documentation](docs/INSTALLER.md). Automatic browser updates also require PHP's zip extension. Use HTTPS for an internet-facing installation.
+**Requirements:** PHP 8.2 or newer (8.3 recommended), MySQL 8.0.19+ (8.4 recommended) or MariaDB 10.4+, and the extensions listed in the [installation guide](resources/release/INSTALL.md). Automatic browser updates also require PHP's zip extension. Use HTTPS for an internet-facing installation.
 
 The upload-anywhere package layout requires Apache or LiteSpeed with the supplied access rules. A dedicated document root at `www/phpledger/public` is the preferred layout; never serve the repository root. Follow the documented Nginx configuration when using Nginx.
 
-Prefer a container? Official images use **ghcr.io/phpledger/phpledger** and **phpledger/phpledger** on Docker Hub, built from the same verified release ZIP. Pin a released version and follow the [container guide](docs/CONTAINER.md). A registry tag is usable only after its release publication checks pass.
+Prefer a container? Official images (published up to 1.4.6) use **ghcr.io/phpledger/phpledger** and **phpledger/phpledger** on Docker Hub, built from the verified release ZIPs. Pin a released version and follow the [container guide](docs/CONTAINER.md). A registry tag is usable only after its release publication checks pass.
 
 Optional multi-year sample histories are separate data-only packages. The neutral starter remains in the core; use **Packages** to review and install a sample, then choose its structure or an isolated practice company during onboarding.
 
@@ -118,36 +121,39 @@ Already running PHP Ledger? Read the [upgrade and recovery guide](resources/rele
 | Accounting workflows and reports | [Accounting and reports](https://github.com/phpledger/phpledger/wiki/Accounting-and-Reports) |
 | Users, roles and access | [Users and roles](https://github.com/phpledger/phpledger/wiki/Users-and-Roles) |
 | API and MCP connections | [Integrations](docs/INTEGRATIONS.md) |
-| What changed in a release | [Release notes](resources/release/RELEASE-NOTES.md) and [release downloads](https://github.com/phpledger/phpledger/releases) |
-| Development setup and checks | [Development guide](docs/DEVELOPMENT.md) and [architecture](docs/ARCHITECTURE.md) |
-| Planned work | [Roadmap](docs/ROADMAP.md) |
-| Help or a reproducible bug report | [Support guide](SUPPORT.md) |
+| How it's built | [Architecture](https://github.com/phpledger/phpledger/wiki/Architecture) |
+| What changed in a release | [v1.4.7 release page](https://github.com/phpledger/phpledger/releases/tag/v1.4.7) |
+| Roadmap (historical) | [Roadmap](https://github.com/phpledger/phpledger/wiki/Roadmap) |
+| What to expect from support | [Support guide](SUPPORT.md) |
+| Report a security concern privately | [Security policy](SECURITY.md) |
 
 ## Scope and review status
 
 PHP Ledger's accounting core is country-neutral. A selected currency, sample business or researched tax template does not establish local tax compliance or activate statutory filing. Check the module documentation for operational limits; a sample labelled pharmacy or manufacturing is a teaching scenario, not a claim of a complete industry system.
 
-Published validation records distinguish automated checks, exact-package installation and upgrade tests, and developer-operated browser checks from independent accounting/security review and observed business use. Independent review, real-business pilots and restricted-host recovery qualification remain separate commitments. See [validation](docs/VALIDATION.md) and the evidence for the release you install.
+Published validation records distinguish automated checks, exact-package installation and upgrade tests, and developer-operated browser checks from independent accounting/security review and observed business use. Independent review, real-business pilots and restricted-host recovery qualification remain separate commitments. See the [v1.4.7 release page](https://github.com/phpledger/phpledger/releases/tag/v1.4.7) for the published validation evidence.
 
-## Help the project grow
+## Fund the next year
 
-Try PHP Ledger and tell us where a task became confusing. A small, reproducible example is especially useful. If you find the project useful, sharing it with another business owner or accountant also helps.
+Maintenance stopped in September 2026 for lack of funds. USD 135,000 would fund one year of open-source work on PHP Ledger:
 
-- **Ask a question:** [Discussions](https://github.com/phpledger/phpledger/discussions).
-- **Report a bug:** [Issues](https://github.com/phpledger/phpledger/issues), using fictional records and sanitized diagnostics.
-- **Contribute:** help with documentation, translations, testing, design, code or reviewed accounting examples. Start with the [contributor guide](https://github.com/phpledger/phpledger/wiki/Contributing-and-Support) and [CLA](CLA.md).
-- **Report a security issue privately:** follow [SECURITY.md](SECURITY.md).
-- **Help fund the project:** if PHP Ledger is useful to you and you can contribute, [contact the maintainer about a donation or sponsorship](mailto:rmak78@gmail.com?subject=Supporting%20PHP%20Ledger).
-- **Discuss installation assistance or support:** [contact the project](mailto:rmak78@gmail.com).
+| Share | Pays for |
+|---|---|
+| 45% | Programmers |
+| 20% | Accountants |
+| 15% | Legal and tax consultants |
+| 20% | AI tools and infrastructure |
 
-Help the project by trying a complete workflow, reporting a reproducible issue, improving a translation or contributing a reviewed change. [Join the discussion](https://github.com/phpledger/phpledger/discussions) to offer testing, documentation or development help.
+Everything built with this funding is released under the same [AGPL-3.0-or-later](LICENSE) licence PHP Ledger already uses.
+
+**[See the funding page →](https://phpledger.com/funding/)**
 
 ## Licence and project
 
-New project-owned code and documentation use [AGPL-3.0-or-later](LICENSE). Self-hosting requires no licence key or licensing-server call. A separate commercial licence is available; see the [licensing policy](docs/LICENSING-POLICY.md).
+1.4.7 is licensed under the GNU AGPL-3.0-or-later (see [LICENSE](LICENSE)); the 0.1.x previews remain under MIT. Self-hosting requires no licence key or licensing-server call. A separate commercial licence is available; see the [licensing policy](docs/LICENSING-POLICY.md).
 
-Historical releases and third-party material retain their own terms. [Licence scope](LICENSE-SCOPE.md) records those boundaries, including dependencies, fonts, datasets and company marks. Modern application source is in `www/phpledger`; the historical application remains in Git history.
+Third-party components keep their own licences (see [resources/release/THIRD-PARTY-NOTICES.md](resources/release/THIRD-PARTY-NOTICES.md)). [Licence scope](LICENSE-SCOPE.md) records further boundaries, including dependencies, fonts, datasets and company marks. Modern application source is in `www/phpledger`; the historical application remains in Git history. The PHP Ledger name and logos are trademarks of Bixisoft and are not licensed.
 
-PHP Ledger is supported by [BixiTech](https://www.bixitech.com/), [BixiSoft](https://bixisoft.com/), [BrownBag](https://brownbag.pk/) and [Agency75](https://agency75.com/).
+Made by [Bixisoft](https://bixisoft.com/), with BixiTech, BrownBag and Agency75.
 
 [Website](https://phpledger.com/) · [Demo](https://phpledger.com/demo/) · [Wiki](https://github.com/phpledger/phpledger/wiki) · [Releases](https://github.com/phpledger/phpledger/releases)

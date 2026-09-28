@@ -25,7 +25,7 @@
 
 ```
 pip install agentwatch-ai
-agentwatch watch "your agent command"
+agentwatch session watch "your agent command"
 ```
 
 *One command. Every failure caught. Before it runs.*
@@ -36,7 +36,7 @@ agentwatch watch "your agent command"
 
 </div>
 
-> **Branch `architecture/v3`: AgentWatch v3.** This branch rebuilds AgentWatch as a *passive instrument*. It reconstructs, compares, replays and explains the behaviour of AI-native systems from immutable runtime evidence, and it does not block or control them.
+> **AgentWatch v3** (merged into `main`) rebuilds AgentWatch as a *passive instrument*. It reconstructs, compares, replays and explains the behaviour of AI-native systems from immutable runtime evidence, and it does not block or control them.
 >
 > ```bash
 > agentwatch observe python examples/research_system.py   # record a program
@@ -252,21 +252,22 @@ sequenceDiagram
 # Install
 pip install agentwatch-ai
 
-# Configure environment variables (optional)
-# Copy the template and edit it to set custom DB passwords, API keys, etc.
+# Configure environment variables
+# Copy the template and set AGENTWATCH_API_KEY (docker compose requires it), e.g.
+#   python -c "import secrets; print(secrets.token_urlsafe(32))"
 cp .env.example .env
 
 # Start the dashboard
 docker compose up -d
 
 # Wrap your agent
-agentwatch watch "Build me a REST API"
+agentwatch session watch "Build me a REST API"
 ```
 
 **Dashboard** → http://localhost:3000
 **API Docs** → http://localhost:8000/docs
 
-That's it. Zero config for default settings, or customize via the [.env.example](.env.example) file. Real data immediately.
+That's it. Set `AGENTWATCH_API_KEY` in `.env` (compose refuses to start without it); everything else has working defaults, customizable via [.env.example](.env.example). The v3 evidence store lives on the Postgres service, so it survives container restarts.
 
 ---
 
@@ -335,7 +336,7 @@ except CommandError as exc:
 ### ⏪ One-Click Rollback
 
 ```bash
-agentwatch rollback <session-id> --to-step 12
+agentwatch session rollback <session-id> --to-step 12
 ```
 
 Every step is a **git-backed filesystem snapshot.** Irreversible actions become reversible. Click rollback in the dashboard or use the CLI.

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/banner.svg" alt="Telegram Archive — self-hosted Telegram backups" width="900"/>
+  <img src="https://raw.githubusercontent.com/GeiserX/Telegram-Archive/main/docs/images/banner.svg" alt="Telegram Archive — self-hosted Telegram backups" width="900"/>
 </p>
 
 <h1 align="center">Telegram Archive</h1>
@@ -7,7 +7,7 @@
 <p align="center">
   <a href="https://hub.docker.com/r/drumsergio/telegram-archive"><img src="https://img.shields.io/docker/pulls/drumsergio/telegram-archive?style=flat-square&logo=docker" alt="Docker Pulls"></a>
   <a href="https://github.com/GeiserX/Telegram-Archive/stargazers"><img src="https://img.shields.io/github/stars/GeiserX/Telegram-Archive?style=flat-square&logo=github" alt="GitHub Stars"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/GeiserX/Telegram-Archive?style=flat-square" alt="License"></a>
+  <a href="https://github.com/GeiserX/Telegram-Archive/blob/main/LICENSE"><img src="https://img.shields.io/github/license/GeiserX/Telegram-Archive?style=flat-square" alt="License"></a>
   <a href="https://github.com/GeiserX/Telegram-Archive/releases"><img src="https://img.shields.io/github/v/release/GeiserX/Telegram-Archive?style=flat-square" alt="Release"></a>
   <a href="https://codecov.io/gh/GeiserX/Telegram-Archive"><img src="https://codecov.io/gh/GeiserX/Telegram-Archive/graph/badge.svg" alt="codecov"></a>
 </p>
@@ -61,8 +61,8 @@
 
 ## 🗺️ Roadmap
 
-See **[docs/ROADMAP.md](docs/ROADMAP.md)** for what's planned, and
-**[docs/CHANGELOG.md](docs/CHANGELOG.md)** for complete version history.
+See **[docs/ROADMAP.md](https://github.com/GeiserX/Telegram-Archive/blob/main/docs/ROADMAP.md)** for what's planned, and
+**[docs/CHANGELOG.md](https://github.com/GeiserX/Telegram-Archive/blob/main/docs/CHANGELOG.md)** for complete version history.
 
 Have a feature request? [Open an issue](https://github.com/GeiserX/Telegram-Archive/issues)!
 
@@ -72,10 +72,10 @@ Have a feature request? [Open an issue](https://github.com/GeiserX/Telegram-Arch
 <summary>Click to view Desktop and Mobile screenshots</summary>
 
 ### Desktop
-![Desktop View](assets/Telegram-Archive-1.png)
+![Desktop View](https://raw.githubusercontent.com/GeiserX/Telegram-Archive/main/assets/Telegram-Archive-1.png)
 
 ### Mobile
-<img src="assets/Telegram-Archive-2.png" width="300" alt="Mobile View">
+<img src="https://raw.githubusercontent.com/GeiserX/Telegram-Archive/main/assets/Telegram-Archive-2.png" width="300" alt="Mobile View">
 
 </details>
 
@@ -155,7 +155,7 @@ docker run -it --rm \
   -e TELEGRAM_PHONE=+YOUR_PHONE_NUMBER \
   -e SESSION_NAME=telegram_backup \
   -v /path/to/your/session:/data/session \
-  drumsergio/telegram-archive:8.15.1 \
+  drumsergio/telegram-archive:8.16.1 \
   python -m src auth
 ```
 
@@ -166,7 +166,7 @@ docker run -it --rm \
 docker run -it --rm \
   --env-file .env \
   -v ./data:/data \
-  drumsergio/telegram-archive:8.15.1 \
+  drumsergio/telegram-archive:8.16.1 \
   python -m src auth
 
 # Then restart the backup container
@@ -207,7 +207,7 @@ The standalone viewer image (`drumsergio/telegram-archive-viewer`) lets you brow
 # Example: Viewer-only deployment
 services:
   telegram-viewer:
-    image: drumsergio/telegram-archive-viewer:8.15.1
+    image: drumsergio/telegram-archive-viewer:8.16.1
     ports:
       - "127.0.0.1:8000:8000"
     environment:
@@ -226,7 +226,7 @@ Browse your backups at **http://localhost:8000**
 
 ## Configuration
 
-All settings are configured via environment variables. Set them in your `.env` file or as `environment:` entries in `docker-compose.yml`. See [`.env.example`](.env.example) for a ready-to-use template.
+All settings are configured via environment variables. Set them in your `.env` file or as `environment:` entries in `docker-compose.yml`. See [`.env.example`](https://github.com/GeiserX/Telegram-Archive/blob/main/.env.example) for a ready-to-use template.
 
 > **`ENABLE_LISTENER` is a master switch.** When set to `false` (the default), all `LISTEN_*` and `MASS_OPERATION_*` variables have no effect. You only need to configure those when you set `ENABLE_LISTENER=true`.
 
@@ -283,10 +283,10 @@ The **Scope** column shows whether each variable applies to the backup scheduler
 | `STATS_CALCULATION_HOUR` | `3` | B | Hour (0-23) to recalculate backup statistics daily |
 | `PRIORITY_CHAT_IDS` | - | B | Comma-separated chat IDs to process first in all operations |
 | `SKIP_MEDIA_CHAT_IDS` | - | B | Skip media downloads for specific chats (messages still backed up with text) |
-| `EXCLUDE_DELETE_EXISTING` | `false` | B | Also delete what the archive already holds for chats in any `*_EXCLUDE_CHAT_IDS` list: their messages and other rows, their media folder and their avatars. Cannot be undone. Off by default: an excluded chat stops being backed up and keeps what was already archived |
-| `SKIP_MEDIA_DELETE_EXISTING` | `false` | B | Also delete the media files and DB records already archived for chats in the skip list. Off by default: the archive keeps what it downloaded. On a deduplicated archive only the chat folder's links are removed; the shared file behind them stays in `_shared/` and is not reclaimed |
+| `EXCLUDE_DELETE_EXISTING` | `false` | B | Also delete what the archive already holds for chats in any `*_EXCLUDE_CHAT_IDS` list: their messages and other rows, their media and their transcripts, their media folder and their avatars. Cannot be undone. Off by default: an excluded chat stops being backed up and keeps what was already archived |
+| `SKIP_MEDIA_DELETE_EXISTING` | `false` | B | Also delete the media files and DB records already archived for chats in the skip list, and their transcripts. Off by default: the archive keeps what it downloaded. On a deduplicated archive only the chat folder's links are removed; the shared file behind them stays in `_shared/` and is not reclaimed |
 | `DOWNLOAD_YOUTUBE_VIDEOS` | `false` | B | Archive the video file Telegram attaches to a YouTube link preview. Off by default; the message, link and thumbnail are archived either way |
-| `YOUTUBE_VIDEOS_DELETE_EXISTING` | `false` | B | Also delete YouTube link-preview videos already downloaded (needs `DOWNLOAD_YOUTUBE_VIDEOS=false`). Cannot be undone |
+| `YOUTUBE_VIDEOS_DELETE_EXISTING` | `false` | B | Also delete YouTube link-preview videos already downloaded (needs `DOWNLOAD_YOUTUBE_VIDEOS=false`), and their transcripts. Cannot be undone |
 | `SKIP_TOPIC_IDS` | - | B | Skip specific topics in forum supergroups (format: `chat_id:topic_id,...`) |
 | `LOG_LEVEL` | `INFO` | B/V | Logging verbosity: `DEBUG`, `INFO`, `WARNING`/`WARN`, `ERROR` |
 | `LOG_CHAT_TITLES` | `false` | B | Name the chat on the two per-chat progress lines: `[27/27] Backing up: "My Group"`. Opt-in. Chat ids are never logged either way, a one-to-one chat is named by kind only (`private chat`) and never by the person, and titles are sanitised so a chosen title cannot forge a log line |
@@ -319,7 +319,7 @@ The **Scope** column shows whether each variable applies to the backup scheduler
 | `ENABLE_LISTENER` | `false` | B | **Master switch** — enables all `LISTEN_*` features below |
 | `LISTEN_EDITS` | `true` | B | Apply text edits in real-time |
 | `LISTEN_DELETIONS` | `false` | B | Process deletion events from Telegram. Opt-in only |
-| `DELETION_MODE` | `soft` | B | When deletions are processed: `soft` keeps messages and marks them deleted, `hard` removes archived messages and cannot be undone. `hard` is opt-in |
+| `DELETION_MODE` | `soft` | B | When deletions are processed: `soft` keeps messages and marks them deleted, `hard` removes archived messages, their media and their transcripts and cannot be undone. `hard` is opt-in |
 | `LISTEN_NEW_MESSAGES` | `true` | B | Save new messages in real-time between scheduled backups |
 | `LISTEN_NEW_MESSAGES_MEDIA` | `false` | B | Also download media immediately (vs. next scheduled backup) |
 | `LISTEN_CHAT_ACTIONS` | `true` | B | Track chat photo, title, and member changes |
@@ -339,6 +339,23 @@ The **Scope** column shows whether each variable applies to the backup scheduler
 | `EVENT_WEBHOOK_EVENTS` | both | B | Comma list: `message_edited`, `message_deleted` |
 | `EVENT_WEBHOOK_CHAT_IDS` | — | B | Comma-separated marked chat ids to fire for; empty = all chats the listener processes |
 | `EVENT_WEBHOOK_BODY_TEMPLATE` | JSON body | B | Custom body with `{placeholder}` / `{placeholder\|filter}` substitution; empty = default JSON body |
+| **Voice Transcription** | | | See [Voice Transcription](#voice-transcription) below |
+| `TRANSCRIPTION_ENABLED` | `true` | B/V | **Master switch**. Off means no drain, no transcript button and no nudge |
+| `TRANSCRIPTION_URL` | — | B/V | Base URL of an [akou](https://github.com/GeiserX/akou) server, any server with the OpenAI transcription endpoint, or the provider's API (`https://api.deepgram.com`, `https://api.assemblyai.com`, `https://api.elevenlabs.io`). Empty with the feature on shows a one-line nudge and nothing fails. The viewer reads it for display only and never connects to it |
+| `TRANSCRIPTION_API_KEY` | — | B | Key for the server, sent the way the provider expects. Treated as a secret, never logged |
+| `TRANSCRIPTION_PROVIDER` | `auto` | B | `auto` asks the server and picks akou's job path or the OpenAI endpoint; `akou` insists on the job path; `openai` sends straight to the OpenAI endpoint (OpenAI, Groq, Mistral, speaches, LocalAI, whisper.cpp, vLLM); `deepgram`, `assemblyai` and `elevenlabs` use their own adapters. See [docs/TRANSCRIPTION.md](https://github.com/GeiserX/Telegram-Archive/blob/main/docs/TRANSCRIPTION.md#providers) |
+| `TRANSCRIPTION_MODEL` | — | B | The model the server is asked for, for every server but akou. Empty means `whisper-1` on the OpenAI endpoint, `nova-3` on Deepgram, `scribe_v2` on ElevenLabs and AssemblyAI's own choice |
+| `TRANSCRIPTION_HOTWORDS` | — | B | Comma-separated words the server should expect, sent as `prompt` on the OpenAI endpoint |
+| `TRANSCRIPTION_PRESET` | `auto` | B | `lite`, `fast`, `best`, `fusion` or `auto`. Passed through to akou; other servers ignore it |
+| `TRANSCRIPTION_TYPES` | `voice` | B | Media types transcribed ahead of time, before anyone opens them. Also accepts `video_note`, `audio`, `video` and `document`, where `document` means only a file whose mime type is audio or video (a `.wav`, `.flac` or `.mkv` sent as a file). Every file with sound gets the transcript button whatever this says; a press on a type not listed here transcribes that one file on the next backup run. Animations are never sent, and a file with no audio stream gets a `skipped` row |
+| `TRANSCRIPTION_MAX_SECONDS` | `1800` | B | Longer media is skipped with a stored reason. The length is the stored duration, or ffprobe's when there is none |
+| `TRANSCRIPTION_MAX_UPLOAD_MB` | `500` | B | Largest upload in megabytes. Videos and files sent as documents are uploaded as their audio track alone, so this is measured on that track, not on the video. A voice message or music file over it is extracted too, and only a track still over it is skipped with a stored reason. A 413 from the server or a proxy means its limit is lower: a file sent as stored is sent again as its audio track, and a track still refused is skipped, so only that file is affected. `0` means no limit. Unset, it is `500`, or `25` with `TRANSCRIPTION_PROVIDER=openai` (OpenAI and Groq's free tier) |
+| `TRANSCRIPTION_LANGUAGE` | — | B | Optional language hint; empty lets the server detect it |
+| `TRANSCRIPTION_DIARIZE` | `false` | B | Ask the server to label speakers. A transcript with more than one speaker then reads as turns ("Speaker 1:", "Speaker 2:") in the bubble. akou's job path, Deepgram, AssemblyAI and ElevenLabs diarize; a server with the OpenAI endpoint ignores it |
+| `TRANSCRIPTION_CALLBACK_URL` | — | B | The viewer's public URL plus `/api/transcriptions/callback`, sent to akou with each job. Its host must be on the key's callback allowlist in akou. Empty means the backup polls instead, which loses nothing |
+| `TRANSCRIPTION_WEBHOOK_SECRET` | — | V | The `whsec_` secret akou printed for the key. The callback route exists only when it is set. Never logged |
+| `TRANSCRIPTION_BACKFILL_PER_RUN` | `50` | B | How many media one backup run sends, newest first. With akou it also caps the jobs open at once per account |
+| `TRANSCRIPTION_PRIORITY_CHAT_IDS` | — | B | Comma-separated chat ids whose media a backup run sends first, in the order listed, in every account; the files whose button was pressed still go before them. It changes the order only: what is transcribed ahead of time still follows `TRANSCRIPTION_TYPES`. Empty means newest first |
 | **Database** | | | See [Database Configuration](#database-configuration) below |
 | `DATABASE_URL` | - | B/V | Full database URL (highest priority, overrides all below) |
 | `DB_TYPE` | `sqlite` | B/V | Database engine: `sqlite` or `postgresql` |
@@ -557,6 +574,24 @@ EVENT_WEBHOOK_BODY_TEMPLATE: '{"topic":"my-archive","title":"{event} in {chat_ti
 
 **Two caveats, loudly:** sweep-detected changes (`SYNC_DELETIONS_EDITS`) never fire the webhook — only the real-time listener does. And deletion events require `LISTEN_DELETIONS=true`, which is **off by default**; startup logs a warning for any selected event that can never fire under the current flags. The body carries message content by design — point the URL only at services you control.
 
+### Voice Transcription
+
+Voice messages get a transcript, written beside the audio and shown inside the bubble: a small button next to the waveform swaps the text in under it. Every other file with sound (round videos, music, videos, and audio or video files sent as documents) carries the same button, and pressing it transcribes that file on the next backup run; list its type in `TRANSCRIPTION_TYPES` to have it transcribed ahead of time instead. The engine is [akou](https://github.com/GeiserX/akou), a speech-to-text server that can run on any host; any server with the OpenAI transcription endpoint works too (set `TRANSCRIPTION_MODEL` for one that does not serve `whisper-1`), and so do Deepgram, AssemblyAI and ElevenLabs through `TRANSCRIPTION_PROVIDER`. The feature is on by default and does nothing until `TRANSCRIPTION_URL` points at a server:
+
+```yaml
+TRANSCRIPTION_URL: "http://akou:8476"         # or any host that runs akou
+TRANSCRIPTION_API_KEY: "..."                  # akou's bearer key, backup only
+# Optional, for results within seconds instead of on the next backup run:
+TRANSCRIPTION_CALLBACK_URL: "https://archive.example.test/api/transcriptions/callback"
+TRANSCRIPTION_WEBHOOK_SECRET: "whsec_..."      # viewer only
+```
+
+**How it works:** only the backup process talks to the server. At the end of every backup run it sends the files whose button was pressed, then up to `TRANSCRIPTION_BACKFILL_PER_RUN` downloaded media of the `TRANSCRIPTION_TYPES` types that have no transcript yet, newest first, so everything archived before the server existed is transcribed over the following runs. Results arrive through the signed callback into the viewer, through akou's event feed on the next run, or through a per-job poll; an archive with no reachable callback URL loses nothing. The viewer never makes an outbound request for this feature.
+
+**Archive rules:** a transcript is a new row, never a change to the media row, and a second transcript with another engine or preset is another row. The same audio held in two accounts is transcribed once: the second account gets a copy of the first one's transcript as its own row. Transcripts are searchable from the chat search box and the global search (a hit found only in a transcript opens that bubble), appear in the Voice tab of Shared Media, in `/api/changes` as a `transcript` change, and in both JSON exports. The only paths that remove them are the flag-gated deletes above (`DELETION_MODE=hard`, `EXCLUDE_DELETE_EXISTING`, `SKIP_MEDIA_DELETE_EXISTING`, `YOUTUBE_VIDEOS_DELETE_EXISTING`), which take the transcripts of the media they remove.
+
+**Privacy:** the audio is the only content that leaves the archive, and only to the configured host. No chat titles, names, message text or ids are sent. A viewer login with downloads disabled sees no transcripts, since a transcript is the audio's content. The full design is in [docs/TRANSCRIPTION.md](https://github.com/GeiserX/Telegram-Archive/blob/main/docs/TRANSCRIPTION.md).
+
 ### Group → supergroup migrations
 
 When a basic Telegram group is upgraded to a supergroup (adding admins, joining it to a channel, exceeding the member limit, and similar), Telegram gives it a brand-new supergroup id. The old group keeps its history but receives no further messages. Telegram delivers the migration only as a service message that the real-time handlers never see, so without help the archive would silently stop capturing the conversation at the old id.
@@ -573,7 +608,7 @@ The folder's membership is re-checked at the start of every scheduled backup cyc
 
 Worth knowing before relying on this:
 
-* **Explicit membership only.** Telegram folders can also be built from category toggles ("all groups", "non-contacts", "unmuted", etc.) instead of, or in addition to, a picked chat list. Only the folder's explicitly pinned/included chats are honored here — the category flags can't be evaluated at this point in the pipeline, because whether a not-yet-archived chat matches "groups" or "non-contacts" is exactly the thing this filtering pass is trying to decide, and there is no archived-chat record yet to check it against. (The existing per-chat folder metadata sync, which powers the *viewer's* folder view for chats you've already archived, does resolve category flags — that's a different, downstream question with different information available. See `src/folder_utils.py` for both.) Add chats to the folder explicitly if you want them picked up here.
+* **Explicit membership only.** Telegram folders can also be built from category toggles ("all groups", "non-contacts", "unmuted", etc.) instead of, or in addition to, a picked chat list. Only the folder's explicitly pinned/included chats are honored here — the category flags can't be evaluated at this point in the pipeline, because whether a not-yet-archived chat matches "groups" or "non-contacts" is exactly the thing this filtering pass is trying to decide, and there is no archived-chat record yet to check it against. (The existing per-chat folder metadata sync, which powers the *viewer's* folder view for chats you've already archived, does resolve category flags — that's a different, downstream question with different information available. See `telegram_archive/folder_utils.py` for both.) Add chats to the folder explicitly if you want them picked up here.
 * **A folder id, not a name.** Neither Telegram nor the viewer shows a folder's numeric id. After a scheduled backup has run with the folder visible to the account, the archive database lists them: `SELECT account_id, id, title FROM chat_folders;` (`account_id` tells accounts apart).
 * **Folder ids belong to one account.** Every Telegram account numbers its folders separately. With several accounts, set the variables per account (`TG_ACCOUNT_<N>_GROUPS_INCLUDE_FOLDER_IDS` and so on); an unprefixed variable may apply to one account only, so every other account must set its own value or `none`, or startup is refused.
 * **Ignored in whitelist mode.** When `CHAT_IDS` is set, only those chats are backed up, and the folder variables are not even resolved.
@@ -665,14 +700,14 @@ want and run `docker compose up -d`:
 ```yaml
 services:
   telegram-backup:
-    image: drumsergio/telegram-archive:8.15.1
+    image: drumsergio/telegram-archive:8.16.1
   telegram-viewer:
-    image: drumsergio/telegram-archive-viewer:8.15.1
+    image: drumsergio/telegram-archive-viewer:8.16.1
 ```
 
 Check [Releases](https://github.com/GeiserX/Telegram-Archive/releases) for available
-versions, and [docs/CHANGELOG.md](docs/CHANGELOG.md) for what changed. Only the
-newest release gets fixes — see [SECURITY.md](SECURITY.md).
+versions, and [docs/CHANGELOG.md](https://github.com/GeiserX/Telegram-Archive/blob/main/docs/CHANGELOG.md) for what changed. Only the
+newest release gets fixes — see [SECURITY.md](https://github.com/GeiserX/Telegram-Archive/blob/main/SECURITY.md).
 
 ### Building from Source
 
@@ -682,16 +717,50 @@ start:
 
 ```bash
 git pull
-docker build -t drumsergio/telegram-archive:8.15.1 .
-docker build -t drumsergio/telegram-archive-viewer:8.15.1 -f Dockerfile.viewer .
+docker build -t drumsergio/telegram-archive:8.16.1 .
+docker build -t drumsergio/telegram-archive-viewer:8.16.1 -f Dockerfile.viewer .
 docker compose up -d
 ```
 
 ## ⚠️ Upgrading (Breaking Changes)
 
-> 📦 **Upgrading to 8.0.0?** See **[docs/UPGRADING-8.0.md](docs/UPGRADING-8.0.md)** first — the database is rewritten once, and every viewer URL changes.
+> 📦 **Upgrading to 8.0.0?** See **[docs/UPGRADING-8.0.md](https://github.com/GeiserX/Telegram-Archive/blob/main/docs/UPGRADING-8.0.md)** first — the database is rewritten once, and every viewer URL changes.
 
-For major version upgrades with breaking changes and migration scripts, see **[docs/CHANGELOG.md](docs/CHANGELOG.md)**.
+For major version upgrades with breaking changes and migration scripts, see **[docs/CHANGELOG.md](https://github.com/GeiserX/Telegram-Archive/blob/main/docs/CHANGELOG.md)**.
+
+## Install from PyPI
+
+Docker stays the main way to run Telegram Archive. The images bring ffmpeg, run the database migrations on start and keep the viewer in its own container. The PyPI package is for running it without Docker, or for using it from Python.
+
+```bash
+pip install telegram-archive   # Python 3.14 or newer
+```
+
+The command reads the same [environment variables](https://github.com/GeiserX/Telegram-Archive#environment-variables) as the Docker image, and `--data-dir` sets where the data goes. Create the database first, and run `migrate` again after every upgrade:
+
+```bash
+telegram-archive --data-dir ./data migrate
+telegram-archive --data-dir ./data auth
+telegram-archive --data-dir ./data schedule
+```
+
+The other commands are `backup`, `export`, `stats`, `list-chats`, `import`, `fill-gaps`, `backfill-topics` and `reclassify-round-videos`; `telegram-archive --help` lists them all. The viewer runs with `uvicorn telegram_archive.web.main:app`. Video thumbnails need `ffmpeg` on the `PATH`.
+
+From Python, `run_backup` runs one backup of every configured account. It is a coroutine, and `Config()` reads the environment like the command does. Set `BACKUP_PATH` first: it defaults to `/data/backups`, the Docker path.
+
+```python
+import asyncio
+import os
+
+from telegram_archive import Config, run_backup
+
+os.environ.setdefault("BACKUP_PATH", "./data/backups")
+asyncio.run(run_backup(Config()))
+```
+
+`TelegramBackup`, the class `run_backup` drives, is exported too.
+
+Run `telegram-archive migrate` before any other command or API call. On SQLite the others build a schema without a migration version when the database has none, and `migrate` cannot adopt that database later.
 
 ## CLI Commands
 
@@ -735,7 +804,7 @@ telegram-archive --data-dir ./data list-chats
 
 ### Docker Usage
 
-All commands use the unified `python -m src` interface inside containers:
+All commands use the unified `python -m src` interface inside containers. Images released after the package rename also accept `python -m telegram_archive`, its new name, and keep `python -m src` working, so compose files need no change.
 
 ```bash
 # Show all available commands
@@ -886,6 +955,6 @@ DETAIL: Key (id)=(XXXX) already exists
 
 ## License
 
-GPL-3.0. See [LICENSE](LICENSE) for details.
+GPL-3.0. See [LICENSE](https://github.com/GeiserX/Telegram-Archive/blob/main/LICENSE) for details.
 
 Built with [Telethon](https://github.com/LonamiWebs/Telethon).

@@ -136,7 +136,7 @@ mode     = "write"
 
 ### Browse and query
 
-The object tree lists the database objects. Table views show data, columns, indexes, constraints, DDL, and query plans. An ER diagram shows a table and the tables linked to it by foreign keys.
+The explorer lists the database objects. Table views show data, columns, indexes, constraints, DDL, and query plans. An ER diagram shows a table and the tables linked to it by foreign keys.
 
 The editor has syntax highlighting and completion from the database catalog. Local checks, and server checks where the engine supports them, mark errors before execution. A statement with `:name` placeholders opens a form for the values. Query plans are drawn as a tree with estimated or measured costs.
 
@@ -212,18 +212,18 @@ See [headless mode](docs/headless.md) for formats, exit codes, dump, restore, an
 ## Command line
 
 ```text
-masume                                  open the client
-masume TARGET                           open a connection, postgres://you@host/shop
-masume --profile NAME                   open a user or project profile
-masume --detect                         open detected container databases
-masume run [TARGET | -p NAME] STATEMENT run statements
-masume nb run [TARGET | -p NAME] FILE   run a notebook
-masume dump [TARGET | -p NAME] FILE     dump schema and data
-masume restore [TARGET | -p NAME] FILE  restore a dump
-masume --mcp                            serve allowed MCP profiles
-masume --mcp --profile=NAME             serve one allowed MCP profile
-masume --mcp --check                    check enabled MCP profiles
-masume --version                        print the version
+masume                                   open the client
+masume TARGET                            open a connection, postgres://you@host/shop
+masume --profile NAME                    open a user or project profile
+masume --detect                          open detected container databases
+masume run [TARGET | -p NAME] STATEMENT  run statements
+masume nb run [TARGET | -p NAME] FILE    run a notebook
+masume dump [TARGET | -p NAME] FILE      dump schema and data
+masume restore [TARGET | -p NAME] FILE   restore a dump
+masume --mcp                             serve allowed MCP profiles
+masume --mcp --profile NAME              serve one allowed MCP profile
+masume --mcp --check                     check enabled MCP profiles
+masume --version                         print the version
 ```
 
 URL support is partial: most native driver options are ignored. See [connection targets](docs/usage.md#connection-targets).

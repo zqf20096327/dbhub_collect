@@ -70,16 +70,21 @@ Result: Never stop coding, minimal cost + 20-40% token savings via RTK
 **1. Install (one line):**
 
 ```bash
+# macOS / Linux
 curl -fsSL https://raw.githubusercontent.com/luqman-v1/9router-go/main/install.sh | bash
+```
+
+```powershell
+# Windows (PowerShell, no admin needed)
+irm https://raw.githubusercontent.com/luqman-v1/9router-go/main/install.ps1 | iex
 ```
 
 🎉 Then start it (defaults: port `20130`, data `~/.9router` — no flags needed):
 
 ```bash
 9router-go
-# dashboard: http://localhost:20130
+# Dashboard: http://localhost:20130 (Default password: 123456)
 ```
-
 > Already use upstream 9Router? Point Go at the same data dir — it opens the **same `DATA_DIR/db/data.sqlite`**: providers, connections, combos, and usage carry over. Details in [`DATABASE.md`](DATABASE.md).
 
 **2. Connect a FREE provider (no signup needed):**
@@ -104,6 +109,7 @@ Claude Code / Codex / OpenClaw / Cursor / Cline Settings:
 docker run -d --name 9router-go --restart unless-stopped \
   -p 20130:20130 -v "$HOME/.9router:/data" \
   -e PORT=20130 -e DATA_DIR=/data \
+  -e INITIAL_PASSWORD=your-secure-password \
   luqmenul/9router-go:latest
 
 # Manual download — pick your file, no command line guesswork:
@@ -162,7 +168,21 @@ DB_PATH=/srv/9router/data.sqlite ./9router-go   # explicit SQLite file
 HOST=127.0.0.1 ./9router-go                     # localhost only, behind a reverse proxy
 ```
 
-First dashboard login uses the compatibility password until you set your own (remote fresh installs must change it or set `INITIAL_PASSWORD`).
+### 🔑 Dashboard Login & Fresh Install
+
+- **Localhost (`localhost` / `127.0.0.1`)**: First login uses the default compatibility password `123456`. Once logged in, change your password in **Settings → Profile**.
+- **Remote / VPS / Docker / LAN**: For security (preventing public takeover of fresh installs with known defaults, CVE-2026-56679), remote access blocks the default `123456` password. You **must** either:
+  1. **Set `INITIAL_PASSWORD` on launch (Recommended)**:
+     ```bash
+     INITIAL_PASSWORD="your-secure-password" ./9router-go
+     # Or in your .env file:
+     # INITIAL_PASSWORD=your-secure-password
+     ```
+  2. **Or access via SSH port-forwarding first**:
+     ```bash
+     ssh -L 20130:127.0.0.1:20130 user@remote-host
+     # Open http://localhost:20130, login with 123456, then change password in Settings
+     ```
 
 ### Client example
 
@@ -224,7 +244,7 @@ GET  /api/version               Version metadata
 
 ### Database compatibility
 
-Go reads/writes the upstream 9router table/JSON shapes but does **not** create the schema, seed keys, or run migrations — only the Go-only `upstream_leases` table. Start with an existing initialized 9router database; a fresh empty file is not a supported bootstrap path. Full contract in [`DATABASE.md`](DATABASE.md), routing internals in [`ARCHITECTURE.md`](ARCHITECTURE.md).
+Go reads/writes the upstream 9router table/JSON shapes and bootstraps the core schema on startup (creates the 11 tables when absent, backfills missing columns, seeds an empty settings row) — a fresh `DATA_DIR` just works, no upstream install needed. Existing databases are never modified beyond additive backfills. Full contract in [`DATABASE.md`](DATABASE.md), routing internals in [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 </details>
 

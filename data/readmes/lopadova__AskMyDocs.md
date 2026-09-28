@@ -47,7 +47,7 @@ to Glean / Notion AI / ChatGPT Enterprise — without the per-seat lock-in.
 ## Table of Contents
 
 - [What it is](#what-it-is)
-- [Why AskMyDocs — the 6 moats](#why-askmydocs--the-6-moats)
+- [Why AskMyDocs — the 7 moats](#why-askmydocs--the-7-moats)
 - [✨ Universal Connectors](#universal-connectors)
 - [✨ Modern Chat Surface (Vercel AI SDK UI)](#modern-chat-surface-vercel-ai-sdk-ui)
 - [✨ KITT — Knowledge Interface Tour Toolkit](#kitt--knowledge-interface-tour-toolkit)
@@ -80,7 +80,9 @@ to Glean / Notion AI / ChatGPT Enterprise — without the per-seat lock-in.
 
 **What.** AskMyDocs is an **AI hub for enterprise knowledge** built on
 Laravel 13 + PostgreSQL + pgvector. It ingests markdown, text, PDF and
-DOCX documents into a typed canonical knowledge graph, answers
+DOCX documents — and, since v8.36, **scans and images via OCR**
+(pluggable docling / Mistral OCR / vision-LLM / tesseract drivers) — into
+a typed canonical knowledge graph, answers
 questions over them with streaming RAG, exposes the same knowledge as
 MCP tools for any agentic client (Claude Desktop, Claude Code,
 Cursor, custom agents), and ships a full React admin SPA — KPI
@@ -123,16 +125,16 @@ authoritative, argued, diagrammed reference.
 
 ---
 
-## Why AskMyDocs — the 6 moats
+## Why AskMyDocs — the 7 moats
 
 These differentiators come from the public competitor audit at
 [`docs/v4-platform/AUDIT-2026-05-11-competitor-comparison.md`](docs/v4-platform/AUDIT-2026-05-11-competitor-comparison.md)
-(Section 3, "Where AskMyDocs is genuinely AHEAD") plus the v8.11 Auto-Wiki
-cycle. They are the moats no other public RAG platform — open-source or SaaS —
-currently ships.
+(Section 3, "Where AskMyDocs is genuinely AHEAD"), the v8.11 Auto-Wiki
+cycle, and the [Annota AI gap audit](docs/v4-platform/AUDIT-2026-09-11-annota-ai-gap.md)
+that drove the v8.36 → v8.39 Document Intelligence cycle. They are the moats
+no other public RAG platform — open-source or SaaS — currently ships.
 
 | ★ | Moat | One-line |
 |:---:|---|---|
 | ★ | **Human-gated canonical promotion pipeline** (ADR 0003) | Three-stage API (`/suggest` → `/candidates` → `/promote`) holds the LLM at "draft"; only humans (git push → GH Action) and operators (`kb:promote` CLI) commit canonical storage. Immutable `kb_canonical_audit` trail. No public competitor splits "AI proposes" from "human writes" this way. |
-| ★ | **Retrieval-time knowledge graph + rejected-approach injection** | `GraphExpander` walks `kb_edges` 1-hop at every query and folds neighbours into the `SearchResult`. `RejectedApproachInjector` vector-correlates the query against `rejected-approach` canonical docs and surfaces them under a ⚠ marker so the LLM stops re-proposing dismissed options. ChatGPT Enterprise / Glean / Vectara do not do this. |
-| ★ | **PII redaction at 11 persistence boundaries** (default-OFF, granular per touch-point) | `padosoft/laravel-pii-redactor` v1.2 wired at 11 touch-points ac
+| ★ | **Retrieval-time knowledge graph + rejected-approach injection** | `GraphExpander` walks `kb_edges` 1-hop at every query and folds neighbours into the `SearchResult`. `RejectedApproachInjector` vector-correlates the query against `rejected-approach` canonical docs and surfaces them under a ⚠ marker so the LL

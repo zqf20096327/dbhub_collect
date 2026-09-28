@@ -250,7 +250,11 @@ your_profile:
 
 ### `prefer_single_alter_column`
 
-*(default: `false`)* Model-level config that controls how `alter_column_type` changes column types on tables. When `false` (default), the adapter uses the safer approach: add a temporary column, copy data, drop the original, and rename. When `true`, the adapter uses a single `ALTER COLUMN` statement, which is faster on small, medium tables and instant on safe type expansions but may fail for types that cannot be implicitly converted.
+*(default: unset)* Model-level config that controls how `alter_column_type` changes column types on tables:
+
+* `true`: a single `ALTER COLUMN` statement. It is atomic, instant for a longer `varchar`/`nvarchar`, and keeps the column's indexes, default constraint and position. It fails for types that cannot be implicitly converted, and changing `varchar` to `nvarchar` on a large clustered columnstore table can fail with Msg 35357 (dictionary size limit).
+* `false`: add a temporary column, copy the data, drop the original and rename. It fails when an index, default constraint or statistics object depends on the column, and it moves the column to the end of the table. A failed attempt no longer blocks the next run.
+* unset (default): `true` when column type expansion widens a column within its type (a longer `varchar`, or `varchar(max)`), `false` for every other change.
 
 ```sql
 -- In an incremental model
@@ -282,6 +286,10 @@ You can also set it per model:
 ```
 
 With `table_refresh_method: dml`, a schema change makes the refresh fall back to a rename-swap. On that run — and only that run — the scratch table is rebuilt the way this adapter builds every other table, so it carries the model's columnstore index, and under an enforced contract its `NOT NULL`s and inline constraints, into the swap. That run therefore executes the model's SQL twice — once for the `SELECT … INTO` that probes for the schema change, once for the rebuild — and builds the columnstore index once. Steady-state refreshes are unaffected and keep the single `SELECT … INTO`. A table that lost its columnstore index to this bug before you upgraded is not repaired automatically: its schema still matches, so it stays on the cheap path. To rebuild it, temporarily set `full_refresh_build: prebuilt` and run with `--full-refresh`.
+
+### Ephemeral models
+
+Ephemeral models are supported, with one limit: an ephemeral model can't start with its own `WITH`. dbt inlines it as a CTE, and T-SQL can't nest a `WITH` inside one (still true on SQL Server 2025). Write it with derived tables instead, or materialize it as a `view`, which SQL Server expands into the calling query the same way.
 
 ### Constraints
 

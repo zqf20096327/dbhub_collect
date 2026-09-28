@@ -64,16 +64,11 @@ This repository is the self-hosted edition. The optional managed service is avai
 OrbitPage publishes one multi-architecture Linux image for amd64 and arm64 on Docker Hub and GitHub Container Registry. Docker automatically selects the matching image for the host. The commands below use Docker Hub:
 
 ~~~bash
-sudo install -d -m 0700 /etc/orbitpage
 sudo install -d -m 0750 /var/lib/orbitpage
-printf 'NODE_ENV=production\nPORT=8080\nDATA_DIR=/app/data\nJWT_SECRET=%s\n' \
-  "$(openssl rand -hex 32)" | sudo tee /etc/orbitpage/orbitpage.env >/dev/null
-sudo chmod 0600 /etc/orbitpage/orbitpage.env
 
 sudo docker pull paoloronco/orbitpage:latest
 sudo docker run -d --name orbitpage \
   --restart unless-stopped \
-  --env-file /etc/orbitpage/orbitpage.env \
   -p 8080:8080 \
   -v /var/lib/orbitpage:/app/data \
   --security-opt no-new-privileges:true \
@@ -84,24 +79,26 @@ curl -fsSL https://raw.githubusercontent.com/paoloronco/OrbitPage/main/scripts/i
 
 Open the public page at <http://localhost:8080>, the dashboard at <http://localhost:8080/dashboard/profile>, and the health check at <http://localhost:8080/health>. The last command installs the host updater; run <code>sudo orbitpage-update</code> for later updates. Python 3 is required on the host for manual Docker and Compose installations.
 
-The same multi-architecture image is available as <code>ghcr.io/paoloronco/orbitpage:latest</code>. Registries contain only <code>latest</code> and complete release tags such as <code>4.21.7</code>; <code>latest</code> always points to the newest stable release. For deterministic updates and rollback, use the complete version from [GitHub Releases](https://github.com/paoloronco/OrbitPage/releases). The <code>unless-stopped</code> policy restarts OrbitPage after failures and host reboots while respecting an explicit stop; use <code>always</code> only when an explicit stop must not survive a Docker daemon restart.
+### Automatic JWT secret
+
+Docker users do not need to configure <code>JWT_SECRET</code>. On first start, the image generates a private 256-bit value in <code>/app/data/.jwt-secret</code> with mode <code>0600</code> and reuses it across restarts and updates. Persist and back up <code>/app/data</code>: losing or changing the secret invalidates active sessions and can make encrypted TOTP and saved provider credentials unreadable. An explicit <code>JWT_SECRET</code> override is still supported, but it must contain at least 32 random characters and remain stable and private.
+
+The same multi-architecture image is available as <code>ghcr.io/paoloronco/orbitpage:latest</code>. Registries contain only <code>latest</code> and complete release tags such as <code>4.21.19</code>; <code>latest</code> always points to the newest stable release. For deterministic updates and rollback, use the complete version from [GitHub Releases](https://github.com/paoloronco/OrbitPage/releases). The <code>unless-stopped</code> policy restarts OrbitPage after failures and host reboots while respecting an explicit stop; use <code>always</code> only when an explicit stop must not survive a Docker daemon restart.
 
 See the complete [Docker deployment procedure](./docs/wiki/Deployment.md#docker-image-recommended) for image selection, Compose, verification, updates, backups, and rollback.
 
 ### Docker Compose (local evaluation)
 
-Clone the repository and set a private secret before starting the local evaluation service:
+Clone the repository and start the local evaluation service:
 
 ~~~bash
 git clone https://github.com/paoloronco/OrbitPage.git
 cd OrbitPage
-umask 077
-printf 'JWT_SECRET=%s\n' "$(openssl rand -hex 32)" > .env
 docker compose up -d
 sudo ./scripts/install-updater.sh
 ~~~
 
-The tracked Compose file requires <code>JWT_SECRET</code>, binds only to <code>127.0.0.1:8080</code>, and persists data in <code>./orbitpage-data</code>. The ignored <code>.env</code> file keeps the secret available to later Compose updates; preserve it across restarts and back it up securely. For production, use the [protected env-file Compose procedure](./docs/wiki/Deployment.md#docker-image-recommended); never commit a real secret or put it in a <code>docker run -e</code> argument.
+The tracked Compose file binds only to <code>127.0.0.1:8080</code> and persists the database, uploads, and generated JWT secret in <code>./orbitpage-data</code>. For production, use the [Docker deployment procedure](./docs/wiki/Deployment.md#docker-image-recommended).
 
 ### One-command Linux install
 
@@ -186,7 +183,7 @@ The version check applies to a container named <code>orbitpage</code>; use your 
 
 ### Operations, privacy, and security
 
-- Built-in self-hosted click and CTA counters, plus optional GA4 integration on the public page.
+- Built-in self-hosted 7/30-day visit and content analytics, plus optional GA4 integration on the public page.
 - Self-hosted newsletters with your own SMTP server, confirmed subscriptions, scheduled campaigns, and delivery reports ([guide](./docs/user-guide/newsletters.md)).
 - Consent controls, policy links, Google Consent Mode, and optional external CMP integration.
 - Complete or selective JSON backup and restore, with optional portable image ZIP for OSS/SaaS transfers.
@@ -212,7 +209,7 @@ The current dashboard keeps related work together:
 | **Team** | Additional users and permissions |
 | **Account** | Password and two-factor authentication |
 
-The visual editor changes URL with the active section: <code>/dashboard/editor/page</code>, <code>/dashboard/editor/content</code>, <code>/dashboard/editor/menu</code>, <code>/dashboard/editor/shop</code>, and <code>/dashboard/editor/pages</code>. Classic dashboard routes include <code>/dashboard/profile</code>, <code>/dashboard/content/link</code>, <code>/dashboard/content/menu</code>, <code>/dashboard/content/shop</code>, and <code>/dashboard/content/pages</code>. Newsletter settings are at <code>/dashboard/newsletter</code>; the public signup page is <code>/newsletter</code>. Legacy routes such as <code>/admin</code>, <code>/dashboard/content</code>, and the old Links, Pages, Menu, and Access paths remain compatibility aliases.
+The visual editor changes URL with the active section: <code>/dashboard/editor/page</code>, <code>/dashboard/editor/content</code>, <code>/dashboard/editor/menu</code>, <code>/dashboard/editor/shop</code>, and <code>/dashboard/editor/pages</code>. Classic dashboard routes include <code>/dashboard/profile</code>, <code>/dashboard/content/link</code>, <code>/dashboard/content/menu</code>, <code>/dashboard/content/shop</code>, and <code>/dashboard/content/pages</code>. Public pages use locale prefixes such as <code>/en-US</code> and <code>/it-IT</code>; menus, legal pages, newsletters, and subpages stay below that prefix. The installation root and older page-slug URLs remain compatibility aliases.
 
 Read the [dashboard guide](./docs/user-guide/dashboard.md) for the complete route map and editing workflow.
 
@@ -252,9 +249,9 @@ See [app/README.md](./app/README.md) for application development boundaries.
 2. Open <code>/dashboard/profile</code>.
 3. Review the runtime, SQLite, storage, frontend, and session checks.
 4. Create the password for the fixed first username, <code>admin</code>.
-5. Complete setup and follow the dashboard guide. The main public page uses the installation's root URL automatically.
+5. Confirm the localized public URLs, complete setup, and follow the dashboard guide.
 
-The administrator and starter profile are created atomically. Existing page-slug URLs remain available as aliases, while the root URL is canonical.
+The administrator and starter profile are created atomically. Canonical public URLs are locale-prefixed, for example <code>/en-US</code> and <code>/it-IT</code>. The installation root redirects to the preferred language; older page-slug URLs remain aliases after an upgrade.
 
 ## Configuration
 
@@ -262,7 +259,7 @@ The essential production settings are:
 
 | Variable | Required | Default | Purpose |
 | --- | --- | --- | --- |
-| <code>JWT_SECRET</code> | Production | Random outside production | Signs sessions and protects encrypted server-side secrets |
+| <code>JWT_SECRET</code> | No in Docker; production source runs only | Generated and persisted in Docker | Optional explicit override for the session and encryption secret |
 | <code>DATA_DIR</code> | Recommended | Server directory; <code>/app/data</code> in Docker | Stores SQLite and uploads |
 | <code>PORT</code> | No | <code>3001</code>; <code>8080</code> in Docker | HTTP listener |
 | <code>PUBLIC_SITE_URL</code> | Recommended; set for newsletters | Request origin | Public HTTPS URL for sharing, QR, sitemap, confirmation, unsubscribe, and tracking links |
@@ -283,22 +280,22 @@ Everything that must survive a restart belongs under <code>DATA_DIR</code>:
 ~~~text
 orbitpage.db
 uploads/
+.jwt-secret (Docker-generated installations)
 ~~~
 
-Persist <code>/app/data</code> in Docker. Back up the database and uploads together before upgrades or restores. Never commit a database, database backup or sidecar, uploads, logs, environment file, or real user content.
+Persist and back up all of <code>/app/data</code> before upgrades or restores. Never commit a database, database backup or sidecar, uploads, generated secret, logs, environment file, or real user content.
 
 The dashboard creates complete or selective JSON exports by default. When images are available, **Include images (ZIP)** creates an archive that can be restored by OrbitPage OSS or SaaS. These exports do not replace a consistent infrastructure backup. Follow the [verified backup and restore runbook](./docs/wiki/Deployment.md#create-and-verify-an-infrastructure-backup), copy recovery archives off-host, and test a restore periodically.
 
 ## Production checklist
 
-1. Keep a stable, long, random <code>JWT_SECRET</code> in a protected env file or secret store.
-2. Persist <code>DATA_DIR</code> or <code>/app/data</code>.
-3. Put OrbitPage behind trusted HTTPS.
-4. Set <code>PUBLIC_SITE_URL</code> to the final public origin.
-5. Enable TOTP for privileged users under **Dashboard > Account**.
-6. Create a verified off-host backup and complete a restore drill before relying on it.
-7. Verify <code>/health</code> and the public, dashboard, login, edit, and upload paths after deployment.
-8. Set <code>SEO_INDEXING=false</code> on staging and private instances.
+1. Persist <code>DATA_DIR</code> so the Docker-generated <code>.jwt-secret</code> survives updates; if overriding <code>JWT_SECRET</code>, keep that value stable and private.
+2. Put OrbitPage behind trusted HTTPS.
+3. Set <code>PUBLIC_SITE_URL</code> to the final public origin.
+4. Enable TOTP for privileged users under **Dashboard > Account**.
+5. Create a verified off-host backup and complete a restore drill before relying on it.
+6. Verify <code>/health</code> and the public, dashboard, login, edit, and upload paths after deployment.
+7. Set <code>SEO_INDEXING=false</code> on staging and private instances.
 
 Read [Deployment](./docs/wiki/Deployment.md) before configuring a reverse proxy, base path, cloud platform, update, or rollback.
 

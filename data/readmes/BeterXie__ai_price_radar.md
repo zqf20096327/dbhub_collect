@@ -230,7 +230,6 @@ docs/              架构、部署与数据政策
 - [生产快速部署](docs/QUICK_DEPLOY.md)
 - [数据政策](docs/DATA_POLICY.md)
 - [项目交接文档](docs/HANDOVER.md)
-- [验证记录](VALIDATION.md)
 
 ## 数据与安全边界
 
@@ -255,7 +254,7 @@ docs/              架构、部署与数据政策
 
 ## 版本与发布
 
-当前代码版本：`3.9.3`。正式发布前请完成 `docs/RELEASE_CHECKLIST.md`，并为待发布版本准备对应发布说明。
+当前代码版本：`3.9.5`。正式发布前请完成 `docs/RELEASE_CHECKLIST.md`，并为待发布版本准备对应发布说明。
 
 ## 开源协议
 

@@ -76,11 +76,15 @@ flowchart TD
 pip install sqlalchemy-cubrid
 ```
 
-With the pure Python driver (no C build needed):
+With the pure Python driver (sync and async):
 
 ```bash
 pip install "sqlalchemy-cubrid[pycubrid]"
 ```
+
+The `[pycubrid]` extra supports both `cubrid+pycubrid://` and
+`cubrid+aiopycubrid://`. It includes SQLAlchemy's `asyncio` extra (`greenlet`);
+`greenlet` may need build tools if a compatible wheel is unavailable.
 
 With Alembic support:
 
@@ -97,7 +101,7 @@ pip install "sqlalchemy-cubrid[cubrid]"
 > The `[cubrid]` extra installs the legacy [CUBRID-Python](https://github.com/CUBRID/cubrid-python)
 > C-extension driver, which is the driver bound to the bare `cubrid://` URL. For new
 > projects, prefer the pure-Python `[pycubrid]` driver (the `cubrid+pycubrid://` URL) —
-> it installs with pip alone, needs no build tools, and is the recommended driver for
+> it is the recommended driver for
 > this dialect. To select the legacy C-extension driver explicitly and unambiguously,
 > use the `cubrid+cubriddb://` URL together with the `[cubriddb]` install extra.
 
@@ -196,7 +200,7 @@ after the statement (see [Known Limitations](#known-limitations)).
 - DML extensions -- `ON DUPLICATE KEY UPDATE`, `MERGE`, `REPLACE INTO`, `FOR UPDATE`, `TRUNCATE`
 - DDL support -- `COMMENT`, `IF NOT EXISTS` / `IF EXISTS`, `AUTO_INCREMENT`
 - Schema reflection -- tables, views, columns, PKs, FKs, indexes, unique constraints, comments
-- Alembic migrations via `CubridImpl` (auto-discovered entry point)
+- Alembic migrations via `CubridImpl` (registered automatically when the dialect loads)
 - Three CUBRID MVCC isolation levels — `READ COMMITTED` (default), `REPEATABLE READ`, `SERIALIZABLE`
 - Async support — `create_async_engine("cubrid+aiopycubrid://...")` via pycubrid.aio
 
@@ -205,7 +209,7 @@ after the statement (see [Known Limitations](#known-limitations)).
 - **No `RETURNING`** — `INSERT/UPDATE/DELETE ... RETURNING` not supported; for ORM use `await session.flush()` to populate `id` on the object (see [Async Quick Start](#async)), or for Core use `cursor.lastrowid` / `SELECT LAST_INSERT_ID()` after the statement
 - **No sequences** — CUBRID uses `AUTO_INCREMENT` only
 - **Single effective schema** — CUBRID exposes one schema per connection (the current user's schema); `get_schema_names()` reports that one schema and every reflection method honours `schema=` consistently (the default schema is reflected; any other schema yields no tables/views). Owner-qualified cross-schema reflection is not supported.
-- **DDL auto-commits** — migrations are not transactional (`transactional_ddl = False`); use Alembic batch migrations and test rollback scenarios manually
+- **Uncommitted DDL holds schema locks** — CUBRID DDL is transactional (`ROLLBACK` undoes it; only client autocommit, which the dialect turns off, commits it early), so by default a whole Alembic upgrade is one transaction (`transactional_ddl = True`) and keeps the tables it touches locked until it commits; use `transaction_per_migration=True` for long or large-table migrations
 - **SQLAlchemy 2.0–2.1 only** — pinned to `<2.3`; SA 2.1 pre-releases are forward-tested via shims and a `--pre` canary CI job ([details](docs/ARCHITECTURE.md))
 - **Async requires pycubrid >= 1.3.2,<2.0** — the `cubrid+aiopycubrid://` driver needs the async-capable pycubrid package line currently supported by this project
 - **CARDINALITY() broken** — `func.cardinality()` raises `CompileError` with workaround guidance; the CUBRID server has a [known bug](https://github.com/cubrid-lab/.github/issues/3)
@@ -235,7 +239,7 @@ after the statement (see [Known Limitations](#known-limitations)).
 | Python | 3.10, 3.11, 3.12, 3.13, 3.14 |
 | CUBRID | 10.2, 11.0, 11.2, 11.4 |
 | SQLAlchemy | 2.0–2.1 |
-| Alembic | >=1.7 |
+| Alembic | >=1.7.2 |
 | pycubrid (sync) | >=1.3.2,<2.0 |
 | pycubrid (async) | >=1.3.2,<2.0 |
 
@@ -248,7 +252,7 @@ from sqlalchemy import create_engine
 engine = create_engine("cubrid+pycubrid://dba:password@localhost:33000/demodb")
 ```
 
-The recommended way is the pure-Python `pycubrid` driver, which installs with pip alone (no compilation): `create_engine("cubrid+pycubrid://dba:password@localhost:33000/demodb")`. The bare `cubrid://` URL uses the legacy `CUBRID-Python` C-extension driver (requires a C build toolchain); to select it explicitly and unambiguously use `cubrid+cubriddb://` with the `[cubriddb]` extra.
+The recommended way is the pure-Python `pycubrid` driver: `create_engine("cubrid+pycubrid://dba:password@localhost:33000/demodb")`. The driver requires no CUBRID native libraries. The `[pycubrid]` extra also installs `greenlet` for SQLAlchemy's async bridge; it may require build tools when no compatible wheel is available. The bare `cubrid://` URL uses the legacy `CUBRID-Python` C-extension driver (requires a C build toolchain); to select it explicitly and unambiguously use `cubrid+cubriddb://` with the `[cubriddb]` extra.
 
 ### Does sqlalchemy-cubrid support SQLAlchemy 2.0–2.1?
 
@@ -256,7 +260,7 @@ Yes. sqlalchemy-cubrid is built for SQLAlchemy 2.0–2.1 and supports the 2.0-st
 
 ### Does sqlalchemy-cubrid support Alembic migrations?
 
-Yes. Install with `pip install "sqlalchemy-cubrid[alembic]"`. The dialect auto-registers via entry point. Note that CUBRID auto-commits DDL, so migrations are not transactional.
+Yes. Install with `pip install "sqlalchemy-cubrid[alembic]"`. The CUBRID migration implementation registers itself when the dialect loads, so the default `env.py` works unchanged with synchronous URLs; for `cubrid+aiopycubrid://`, use Alembic's async template (`alembic init -t async`). CUBRID DDL is transactional, so by default a failed `alembic upgrade` is rolled back whole, version bump included; set `transaction_per_migration=True` to commit after each revision for long or large-table migrations.
 
 ### What Python versions are supported?
 
@@ -275,9 +279,9 @@ stmt = insert(users).values(name="Alice").on_duplicate_key_update(name="Alice Up
 
 ### What's the difference between `cubrid://` and `cubrid+pycubrid://`?
 
-`cubrid://` uses the C-extension driver (CUBRIDdb) which requires compilation. `cubrid+pycubrid://` uses the pure Python driver which installs with pip alone — no build tools needed. `cubrid+aiopycubrid://` uses the async variant of the pure Python driver for use with `create_async_engine` and `AsyncSession`.
+`cubrid://` uses the C-extension driver (CUBRIDdb) which requires compilation. `cubrid+pycubrid://` uses the pure Python driver, which requires no CUBRID native libraries. The `[pycubrid]` extra includes `greenlet`, whose installation may require build tools when no compatible wheel is available. `cubrid+aiopycubrid://` uses the async variant of the pure Python driver for use with `create_async_engine` and `AsyncSession`.
 
-> **Recommendation:** for new projects prefer `cubrid+pycubrid://` (pure Python, no build tools). Use `cubrid+cubriddb://` (with the `[cubriddb]` extra) when you specifically need the legacy CUBRIDdb C-extension driver.
+> **Recommendation:** for new projects prefer `cubrid+pycubrid://` (pure Python driver, no CUBRID native libraries). The `[pycubrid]` extra's `greenlet` dependency may need build tools. Use `cubrid+cubriddb://` (with the `[cubriddb]` extra) when you specifically need the legacy CUBRIDdb C-extension driver.
 
 ### Does sqlalchemy-cubrid support async?
 
@@ -298,6 +302,18 @@ For the ecosystem-wide view, see the [CUBRID Labs Ecosystem Roadmap](https://git
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines and [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for development setup.
+
+### First contribution
+
+New to CUBRID? Pick the repository that matches what you want to work on:
+
+- Documentation and runnable examples: [cubrid-cookbook-python](https://github.com/cubrid-lab/cubrid-cookbook-python)
+- Pure-Python driver fixes: [pycubrid](https://github.com/cubrid-lab/pycubrid)
+- SQLAlchemy dialect fixes: [sqlalchemy-cubrid](https://github.com/cubrid-lab/sqlalchemy-cubrid)
+
+Most first issues can be developed and tested with the offline checks in CONTRIBUTING.md — no Docker or CUBRID server needed. Live CUBRID verification can be completed by CI and maintainers.
+
+Browse open [`good first issue`](https://github.com/cubrid-lab/sqlalchemy-cubrid/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee) tasks.
 
 ## Security
 
