@@ -89,6 +89,7 @@ This document describes the Go connector and its API. For information about the 
 - [Events subscription](#events-subscription)
 - [Logging, debug, profiling and tracing](#logging-debug-profiling-and-tracing)
   - [Turn on logger](#turn-on-logger)
+  - [Configure server logging via REST API](#configure-server-logging-via-rest-api)
   - [Slow actions logging](#slow-actions-logging)
   - [Debug queries](#debug-queries)
   - [Custom allocators support](#custom-allocators-support)
@@ -157,4 +158,4 @@ Reindexer has internal full text search engine. Full text search usage documenta
 
 ### Vector indexes (ANN/KNN)
 
-Reindexer has internal k-nearest neighbors search engine. k-nearest neighbors search usage documentation and examples are [here](float_vector.md). For selective post-filtered pages on HNSW, see [streaming KNN](float_vector.md#streaming-knn-hnsw) (omit `k` and `radius`, use `LIMI
+Reindexer has internal k-nearest neighbors search engine. k-nearest neighbors search usage documentation and examples are [here](float_vector.md). For selective post-filtered pages on HNSW, see [

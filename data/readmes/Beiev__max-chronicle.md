@@ -173,23 +173,117 @@ session context; Claude Code keeps up to 10,000 characters, above the brief's
 maximum. Without HTTP, `chronicle brief --cwd DIR` prints the same text. An MCP client can call `startup_bundle(mode="brief")`, which also unlocks
 writes, or read the resource `chronicle://brief/{project}`.
 
+### One name per project, domain and agent
+
+One project often gets written several ways (`status`, `chronicle`,
+`max-chronicle`), and so do tasks (`Launch_plan`, `launch_plan`) and agents
+(`Codex`, `codex-mcp-client`). Names match whatever their case, spaces and
+underscores, and the manifest lists the other spellings of a project, domain
+or agent:
+
+```toml
+[[projects]]
+id = "atlas"
+roots = ["~/code/atlas"]
+aliases = ["atlas-app", "old-atlas"]
+
+[[domains]]
+id = "memory"
+aliases = ["mem"]  # next to the domain's label and source_ids
+
+[[agents]]
+id = "claude"
+aliases = ["assistant"]  # exact spellings
+prefixes = ["claude"]    # claude-mac, claude-code, ...
+```
+
+A filter by any spelling finds what was written under every one of them
+(FR-14): recall, task context, open tasks, current facts, the brief and
+cursors. History is not rewritten: a write stores the canonical name and keeps
+the given one as `actor_raw`, `project_raw` or `domain_raw`. The common agents
+(claude, codex, glm, deepseek, gemini, opencode, transcript-analyst) are
+built in; an `[[agents]]` entry with the same id replaces a built-in one. A
+session that never names its agent is attributed to its MCP client, such as
+`claude-code`.
+
+### Notes written on purpose
+
+Agents often keep durable notes as files, such as Claude's file memory. With a
+`[notes]` section in the manifest, Chronicle indexes them so every agent can
+recall them (FR-10):
+
+```toml
+[notes]
+paths = ["~/.claude/projects/*/memory/*.md"]  # absolute, or from ~
+exclude = ["*.bak-*", "*/_archive/*"]
+deny = ["*api-key*", "*keys.md"]  # never read, whatever they hold
+sync_minutes = 15                  # the long-running server re-syncs this often
+```
+
+`chronicle notes sync` re-indexes the changed notes, keeps a tombstone for a
+deleted one, and never writes to a note; the server runs the same sync every
+`sync_minutes`.
+
+- **Secrets.** The secret filter runs on each section of a note (text under one
+  heading) as a whole, before a long section is cut into pieces: a key is never
+  cut in two, and a pattern never spans two sections. Every other stored string
+  is filtered too. Built-in name patterns such as `*secret*`, `*credential*`,
+  `*private-key*`, `id_rsa*` and `*.pem` apply on top of `deny`. When the parser
+  or the filter changes, every note is indexed again.
+- **Files not read.** A file reached through a symbolic link below the fixed
+  part of a pattern, a file whose path holds a likely secret, and a file that is
+  not UTF-8 text are reported, not read. `**` never descends through a link,
+  and wildcards skip hidden files and folders.
+- **Removal.** A deleted or newly denied note keeps only its path as a
+  tombstone. The sync compacts the full-text index, deletes with
+  `secure_delete`, and empties the write-ahead log when no reader holds it;
+  until then the log may keep an older copy.
+- **Projects.** A note inside a project root, or in the file memory of a
+  directory inside that root, belongs to that project. In the file memory of a
+  directory under the workspace, it belongs to that workspace child's project.
+  A note whose frontmatter names a project (`project: atlas`, any registered
+  spelling) belongs to that project wherever it lies. Any other note is global.
+
+`query_memory` returns notes in `notes`, next to events in `results`: the best
+section of each note, with its heading, path and id. In a project scope, the
+project's own notes come before global ones. `chronicle://note/{document_id}`
+serves a whole note; `chronicle notes status` counts what the index holds.
+
 | Tool | Purpose |
 | --- | --- |
 | `startup_bundle` | Task context, checkpoint, current facts, change cursor; unlock writes. `mode="brief"`: only the brief. |
 | `query_memory` | Scoped lexical/vector recall with provenance and coverage. |
 | `query_context` | Broader search through source documents and optional Mem0 dump. |
 | `recent_events` | Recent event history. |
-| `state_at` | Historical snapshots/events; `detail="full"` restores the full payload. |
+| `state_at` | Historical snapshots/events; `mode="as_of"` keeps only what was known then and adds the facts current then; `detail="full"` restores the full payload. |
 | `sources_audit` | Source coverage, freshness, and trust metadata. |
 | `record_event` | Attributed observation, evidence, optional checkpoint or explicit fact. |
 | `capture_snapshot` | Archive runtime state and update readable projections. |
 | `entity_admin` | Report, normalize, alias, or merge entities. |
-| `search_mem0_live` | Optional external semantic mirror through an operator-supplied bridge. |
+| `search_mem0_live` | Optional external semantic mirror through an operator-supplied bridge; absent without Mem0. |
 
 `chronicle-mcp-readonly` exposes only read surfaces. The deprecated `activate_agent`
 alias remains compatible. Failures set MCP `isError` and carry a JSON envelope
 with `error_type`, `retryable`, and `hint`; follow that hint. A committed snapshot
 can separately report `side_effect_errors` for failed evidence/projection outputs.
+
+### Without Mem0
+
+The Mem0 mirror is optional. It is on when the manifest names a bridge
+(`paths.mem0_bridge`), unless the manifest turns it off:
+
+```toml
+[mem0]
+enabled = false
+```
+
+Off, new events are not queued for Mem0, the daily capture syncs nothing, the
+`mem0-dump` job ends as `skipped` without calling the bridge, `query_context` and
+snapshots read no Mem0 dump, `search_mem0_live` is not offered, the MCP
+instructions do not mention Mem0, and audits report no Mem0 backlog or stale dump.
+`chronicle launchd install` and `chronicle launchd doctor` leave the `mem0-dump` job out. Rows
+queued before stay as they are. To keep what Mem0 held, export it as notes the
+index reads (FR-10).
 
 ## Recall and durability
 
@@ -246,13 +340,29 @@ can separately report `side_effect_errors` for failed evidence/projection output
   evidence file, or a generated text artifact (daybook, commit summary, audit
   report) is stored. It catches known key prefixes, values assigned to secret
   names, labelled keys (`key: <random>`), bearer and basic credentials, URL
-  passwords, private key blocks, and high-entropy tokens near a word such as
+  passwords, private keys, and high-entropy tokens near a word such as
   token, password, secret, or API key (anywhere on a short line, within 256
   characters on a long one). Hex digests, UUIDs, and pieces of long base64 runs
   (encoded images) never count as high-entropy tokens.
+  Private keys are found by their BEGIN or END line (in any case, spacing or
+  escaping) or by their own bytes: PKCS#1, PKCS#8, SEC1, encrypted PKCS#8 and
+  PKCS#12 bodies, OpenSSH and OpenPGP secret keys, a PEM encoded again in base64
+  (Kubernetes secrets, cloud key downloads), X25519, Ed448 and X448 keys,
+  PuTTY key files, JWK private members (in any order, quoting or escaping),
+  .NET XML RSA keys, and `openssl ... -text` dumps. From that line on, the
+  markers go, colon-separated hex dumps go, every line that continues a key
+  goes (however its line breaks are escaped), and so does every run of 16 or
+  more base64 characters that reads as random bytes; words, paths, links,
+  assignments, hex digests, UUIDs and image data stay, and so does everything
+  before the key. A key body cut into pieces shorter than 16 characters and
+  interrupted by other text is not recognised, and a random-looking
+  identifier after a key (an SSH fingerprint, a random URL id) may be
+  removed with it.
   Identifiers such as `request_id` and paths are left as given, the source file is
-  never modified, and binary evidence is archived unchanged. Not filtered yet:
-  snapshot excerpts, legacy imports, and Mem0 responses. Time is linear in the
+  never modified, and binary evidence is archived unchanged. `query_context`
+  filters what it reads from status files and the Mem0 dump, and
+  `search_mem0_live` what Mem0 returns. Not filtered yet: snapshot excerpts and
+  legacy imports. Time is linear in the
   input, so a hostile or huge text cannot stall the write path.
 - **Backups:** independent artifact copies, content-hash inventory, database
   integrity checks, and verification after relocation. Legacy backups disclose
@@ -270,7 +380,13 @@ knowledge updates, and latency percentiles, overall and per category and languag
 {"id": "why-sqlite", "query": "why did we pick SQLite", "category": "rationale", "lang": "en", "expected": ["event:<id>"], "scope": {"project": "demo"}}
 {"id": "db-now", "query": "current database", "category": "knowledge_update", "expected": ["event:<new>"], "stale": ["event:<old>"]}
 {"id": "unknown", "query": "office wifi password", "category": "abstention", "expected": []}
+{"id": "backup-rotation", "query": "how often do backups rotate", "category": "fact", "expected": ["note:~/notes/backups.md"]}
 ```
+
+A case expects events (`event:<id>`) or indexed notes (`note:<path>`), never both.
+Note cases are scored on the `notes` of the answer and ask recall for notes;
+event cases leave notes out, so their scores stay comparable across versions.
+The report adds a breakdown per surface.
 
 Categories follow LongMemEval: `fact`, `rationale`, `knowledge_update`, `temporal`,
 `handoff`, `abstention`. `--json` prints the full report, `--out` saves it, and
@@ -288,6 +404,7 @@ chronicle startup --project demo --task-id ship --focus "Continue review" --form
 chronicle query-memory "local storage" --project demo --task-id ship --format json
 chronicle eval --golden questions.jsonl --out results/baseline.json
 chronicle timeline --at "2026-09-15T12:00:00Z"
+chronicle timeline --at "2026-09-15T12:00:00Z" --as-of   # what was known then
 chronicle backup --force
 ```
 
@@ -305,7 +422,7 @@ Agents / CLI / MCP
         |--- recall.py       scoped lexical/vector ranking
         |--- store.py        SQLite transactions and archived evidence
         |
-   SQLite (schema 10) + content-addressed files
+   SQLite (schema 15) + content-addressed files
         |--- Markdown projections
         |--- optional Mem0 mirror
 ```

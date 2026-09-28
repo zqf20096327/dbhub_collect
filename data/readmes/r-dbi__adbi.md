@@ -6,11 +6,40 @@
 <!-- badges: start -->
 
 [![rcc](https://github.com/r-dbi/adbi/workflows/rcc/badge.svg)](https://github.com/r-dbi/adbi/actions)
-[![Codecov test coverage](https://codecov.io/gh/r-dbi/adbi/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/adbi?branch=main)
-[![CRAN status](https://www.r-pkg.org/badges/version/adbi)](https://CRAN.R-project.org/package=adbi)
+[![coverage](https://codecov.io/gh/r-dbi/adbi/graph/badge.svg)](https://app.codecov.io/gh/r-dbi/adbi)
+[![cran](https://www.r-pkg.org/badges/version/adbi)](https://CRAN.R-project.org/package=adbi)
 <!-- badges: end -->
 
-Bringing [arrow-adbc](https://github.com/apache/arrow-adbc) to R via [DBI](https://github.com/r-dbi), adbi aims to provide DBI-compliant database access.
+Bringing [arrow-adbc](https://github.com/apache/arrow-adbc) to R via
+[DBI](https://github.com/r-dbi), adbi aims to provide DBI-compliant database
+access.
+
+## Goals and non-goals
+
+The package aims to:
+
+- Expose ADBC drivers through DBI, so that a connection opened with
+  `dbConnect(adbi("sqlite"), ...)` behaves like any other DBI connection.
+- Accept a driver in any of the forms `adbi()` supports: an ADBC Driver Manager
+  driver name or manifest path, a driver function from an R package selected
+  with `pkg`, an `adbc_driver` object, or a function returning one.
+- Support DBI's Arrow extension next to the `data.frame` API, so that results
+  can stay in the Arrow format, fetched whole or chunk by chunk.
+- Offer an efficient alternative to ODBC for analytical applications.
+- Conform to the DBI specification, which DBItest checks against the adbcsqlite
+  driver.
+
+It is explicitly not trying to:
+
+- Implement ADBC.
+  The C API and the driver manager live in arrow-adbc and adbcdrivermanager;
+  adbi is the DBI layer on top of them.
+- Ship database drivers.
+  Drivers are installed separately, for example with
+  [dbc](https://docs.columnar.tech/dbc/), and loaded by name through the ADBC
+  driver manager.
+- Define the database interface.
+  DBI owns the generics and their specification.
 
 ## Installation
 
@@ -20,7 +49,8 @@ Install the latest release of adbi from CRAN with the following code:
 install.packages("adbi")
 ```
 
-To get a bug fix or to use a feature from the development version, you can install the development version of adbi from GitHub:
+To get a bug fix or to use a feature from the development version, you can
+install the development version of adbi from GitHub:
 
 ``` r
 # install.packages("devtools")
@@ -127,8 +157,18 @@ res <- dbSendQueryArrow(con, "SELECT * from swiss WHERE Agriculture < ?")
 dbBind(res, 30)
 
 ret <- dbFetchArrow(res)
-ret$length
-#> NULL
+as.data.frame(ret)
+#>    Fertility Agriculture Examination Education Catholic Infant.Mortality
+#> 1       80.2        17.0          15        12     9.96             22.2
+#> 2       55.7        19.4          26        28    12.11             20.2
+#> 3       54.3        15.2          31        20     2.15             10.8
+#> 4       58.3        26.8          25        19    18.46             20.9
+#> 5       65.7         7.7          29        11    13.79             20.5
+#> 6       72.7        16.7          22        13    11.22             18.9
+#> 7       64.4        17.6          35        32    16.92             23.0
+#> 8       67.6        18.7          25         7     8.65             19.5
+#> 9       35.0         1.2          37        53    42.34             18.0
+#> 10      42.8        27.7          22        29    58.33             19.3
 
 dbBind(res, 20)
 

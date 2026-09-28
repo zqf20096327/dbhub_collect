@@ -1,5 +1,5 @@
 # [WhereToLive.LA](https://wheretolive.la)
-
+                                                                         
 ## Table of contents
 
 - [MCP server](#mcp-server)

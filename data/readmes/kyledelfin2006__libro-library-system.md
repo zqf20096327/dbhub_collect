@@ -9,13 +9,13 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791?logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)
 
-Libro is a Spring Boot REST API and Library Management System. It manages books with CRUD operations, search, pagination, sorting, range filtering, genre analytics, and statistics. It also contains a user-domain foundation, while user and loan HTTP APIs are not yet exposed. The prototype uses DTO-driven validation, centralized exception handling, and a Docker-first workflow backed by PostgreSQL 18 with Flyway database migrations.
+Libro is a Spring Boot REST API and Library Management System. It manages books with CRUD operations, search, pagination, sorting, range filtering, genre analytics, and statistics. It also exposes user account and profile routes for creation, listing, lookup, profile updates, password changes, and deletion. Loan HTTP APIs are not implemented. The prototype uses DTO-driven validation, centralized exception handling, and a Docker-first workflow backed by PostgreSQL 18 with Flyway database migrations.
 
 The institutional context behind the user domain is documented in [Institutional Context](docs/institutional-context.md), including its ASU-CCS setting and alignment with existing MIS identity conventions.
 
 The current domain decision is documented in [Domain Decisions](docs/domain-decisions.md): each `Book` represents one physical borrowable copy, so one copy can be assigned to only one active borrower at a time. Separate copies of the same title are separate records.
 
-The API exposes generated OpenAPI documentation through Springdoc. Swagger UI is available at `/swagger-ui.html` and the machine-readable specification is available at `/v3/api-docs` when the application is running. The live specification includes request validation rules, filter and sorting constraints, pagination behavior, and representative request/response examples for the book API.
+The API exposes generated OpenAPI documentation through Springdoc. Swagger UI is available at `/swagger-ui.html` and the machine-readable specification is available at `/v3/api-docs` when the application is running. Operation descriptions and DTO schemas document book and user behavior for Swagger's interactive API reference. See the [API Documentation Guideline](docs/api-documentation-guideline.md) for the project standard. User endpoints currently permit unauthenticated access and are for development use only.
 
 Main Developer: **Aldrin Kyle Delfin**
 
@@ -56,16 +56,18 @@ Main Developer: **Aldrin Kyle Delfin**
 
 ## Documentation
 
-The README is the central entry point for project documentation. Supporting reports belong in `docs/`, while files that rely on repository-root discovery remain at the root.
+This README is the project's main portfolio entry point. The development reflection is the featured supporting document; the other references explain the system's context, decisions, API contract, contributor practices, and remaining work.
 
-- [Development Problems Solved](docs/development-problems-solved.md) is a first-person development reflection covering the major bugs, effects, fixes, and verification decisions made while building the prototype.
-- [Institutional Context](docs/institutional-context.md) records the ASU-CCS academic model and the existing MIS assumptions that shaped the user domain.
-- [Domain Decisions](docs/domain-decisions.md) records the physical-copy interpretation of `Book` and its implications for future loans.
-- [Agent and Contributor Guide](AGENTS.md) documents the repository architecture, layer contracts, coding rules, testing expectations, and definition of done. It remains at the repository root so coding agents can discover it automatically.
+1. [Development Problems Solved](docs/development-problems-solved.md) is the portfolio reflection: it explains major problems, their impact, the fixes, and how the results were verified.
+2. [Institutional Context](docs/institutional-context.md) describes the ASU-CCS academic model and existing MIS assumptions behind the user domain.
+3. [Domain Decisions](docs/domain-decisions.md) explains why a `Book` represents one physical copy and what that means for future loan features.
+4. [API Documentation Guideline](docs/api-documentation-guideline.md) sets the standard for accurate OpenAPI and Swagger documentation without unnecessary annotation boilerplate.
+5. [Agent and Contributor Guide](AGENTS.md) records the architecture, layer contracts, coding rules, testing expectations, and definition of done. It stays at the repository root so coding agents can discover it automatically.
+6. [Development TODO](internal-docs/TODO.md) tracks completed user-domain work and remaining authentication, loan, testing, and documentation tasks. It is a working roadmap, not part of the public API contract.
 
 ## Architecture Overview
 
-The system runs as a Spring Boot API alongside PostgreSQL. Book requests pass through the HTTP, business, and persistence layers; Flyway prepares the schema at startup. Shared validation, mapping, security configuration, and error handling support the API. The user service is implemented as a domain foundation, but has no controller or public routes yet.
+The system runs as a Spring Boot API alongside PostgreSQL. Book and user requests pass through the HTTP, business, and persistence layers; Flyway prepares the schema at startup. Shared validation, mapping, security configuration, and error handling support the API.
 
 ```mermaid
 flowchart LR
@@ -74,8 +76,8 @@ flowchart LR
         API["BookAPI<br/>Spring MVC"] --> Service["BookService<br/>business rules · transactions"]
         Service --> Repo["BookRepository<br/>Spring Data JPA"]
         Repo --> ORM["Hibernate / JPA"]
-        User["UserService<br/>profile and password rules"]
-        User -. "not exposed by a controller" .-> UserRepo["UserRepository"]
+        UserAPI["UserAPI<br/>account and profile routes"] --> User["UserService<br/>profile and password rules"]
+        User --> UserRepo["UserRepository"]
         Shared["Shared concerns<br/>DTOs · mappers · Jakarta validation<br/>GlobalExceptionHandler · OpenAPI"]
         Security --> API
         API -.-> Shared
@@ -116,9 +118,12 @@ flowchart TD
 AGENTS.md
 README.md
 docs/
+  api-documentation-guideline.md
   development-problems-solved.md
   domain-decisions.md
   institutional-context.md
+internal-docs/
+  TODO.md
 
 src/main/java/app/
   LibraryApplication.java
@@ -138,6 +143,7 @@ src/main/java/app/
       Book.java
     dto/
       BookRequestDTO.java
+      BookPatchRequestDTO.java
       BookResponseDTO.java
       LibraryStatisticsDTO.java
     mapper/
@@ -155,6 +161,7 @@ src/main/java/app/
       ErrorResponse.java
   user/
     config/PasswordConfig.java
+    controller/UserAPI.java
     dto/
       ChangePasswordDTO.java
       UserCreateRequestDTO.java
@@ -212,7 +219,7 @@ The application never exposes `Book` (or future entity) objects directly to clie
 
 - **Never** instantiate an entity directly from client input.
 - **Never** return an entity directly in a controller response.
-- Controllers always accept `BookRequestDTO` and return `BookResponseDTO` (or other DTOs).
+- Controllers accept request DTOs (`BookRequestDTO` for create/PUT and `BookPatchRequestDTO` for PATCH) and return response DTOs.
 - `BookMapper` is the sole conversion point between entities and DTOs.
 
 ### Why This Matters
@@ -227,7 +234,7 @@ The application never exposes `Book` (or future entity) objects directly to clie
    Response DTOs explicitly choose which fields are exposed. Sensitive or internal fields never appear in JSON unless intentionally added to the response DTO.
 
 4. **Enforces request validation at the boundary**
-   `BookRequestDTO` carries Jakarta Validation annotations (`@NotBlank`, `@Size`, `@NotNull`, `@Positive`). `@Valid` in the controller triggers these constraints before any business logic runs, ensuring only valid data reaches the service layer.
+   `BookRequestDTO` carries Jakarta Validation annotations (`@NotBlank`, `@Size`, `@NotNull`, `@Positive`). `@Valid` triggers them for create and PUT. PATCH uses a separate optional `BookPatchRequestDTO`; service logic validates supplied values without marking omitted fields as required in OpenAPI.
 
 5. **Allows response customization**
    Response DTOs can reshape, rename, compute, or omit fields without changing the entity. For example, `LibraryStatisticsDTO` aggregates data from multiple repository calls into a single read-only snapshot.
@@ -254,8 +261,8 @@ public ResponseEntity<ApiResponse<BookResponseDTO>> addBook(@Valid @RequestBody 
 - Budget filtering through `GET /app/books/budget`.
 - Statistics endpoints for total books, total library value, average price, and the most expensive book.
 - Genre distribution endpoint.
-- User-domain foundation with role/course/major enums, duplicate checks, academic business rules, and BCrypt password hashing; passwords require 8–72 characters with uppercase and lowercase letters, a number, and a symbol. No user controller exists yet.
-- OpenAPI 3 documentation through Springdoc Swagger UI and `/v3/api-docs`.
+- User-domain API for account creation, profile lookup and updates, password changes, and deletion; the service applies duplicate checks, academic business rules, and BCrypt password hashing.
+- OpenAPI 3 documentation through Springdoc Swagger UI and `/v3/api-docs`, with operation-specific behavior, DTO schemas, and expected error responses.
 - Validation with `@Valid` on create and replace requests.
 - Global handling for `BookNotFoundException`, validation errors, malformed JSON, number format errors, database issues, and unsupported methods.
 - Validation errors also include a `fieldErrors` map keyed by request field (or `_global` when no field is available), so clients can render precise messages without parsing the combined `details` string.
@@ -275,7 +282,7 @@ public ResponseEntity<ApiResponse<BookResponseDTO>> addBook(@Valid @RequestBody 
 
 ### Update flow (`PATCH /app/books/{id}`)
 
-1. The controller passes the incoming DTO to `BookService.patchBook()`.
+1. The controller passes `BookPatchRequestDTO` to `BookService.patchBook()`.
 2. The service loads the managed `Book` entity via `findBookById()`.
 3. Field changes are applied conditionally to the managed entity.
 4. Hibernate dirty checking detects the modifications.
@@ -303,52 +310,16 @@ public ResponseEntity<ApiResponse<BookResponseDTO>> addBook(@Valid @RequestBody 
 }
 ```
 
-### Partial Updates: PUT vs PATCH Design
+### Partial Updates: PUT vs PATCH
 
-The API deliberately distinguishes **full replacement (PUT)** from **partial updates (PATCH)** through a validation strategy that prevents the two most common mistakes in REST partial-update implementations.
+Separate request types make the OpenAPI schema match each contract:
 
-#### Architectural Decision
+| PUT (replacement) | PATCH (partial update) |
+| --- | --- |
+| `BookRequestDTO`; every field is required and validated. | `BookPatchRequestDTO`; every field is optional. Omitted/null fields and blank text values are ignored. |
+| Replaces all mutable fields. | Changes only supplied fields; a supplied price must be positive. |
 
-`BookRequestDTO` is reused for both PUT and PATCH. The distinction between "replace everything" and "change only what's sent" is expressed through where validation is applied:
-
-| Dimension | `PUT /app/books/{id}` (replace) | `PATCH /app/books/{id}` (partial) |
-|---|---|---|
-| Controller annotation | `@Valid @RequestBody BookRequestDTO` | `@RequestBody BookRequestDTO` (no `@Valid`) |
-| Omitted fields | Rejected — all `@NotBlank`/`@NotNull` constraints fire | Skipped — `null` means "leave unchanged" |
-| Empty strings | Rejected — `@NotBlank` fails on `""` | Skipped — `hasText()` treats `""` as absent |
-| Price `null` | Rejected — `@NotNull` fails | Skipped — only validated when non-null |
-| Price ≤ 0 | Rejected — `@Valid` + `@Positive` | Rejected — manual `compareTo` check in service |
-| Validation layer | DTO annotations (primary) + service guards (defense-in-depth) | Service-level field-by-field conditional logic |
-
-#### Problems Solved
-
-1. **Applying PUT rules to PATCH breaks partial updates entirely.** If `@Valid` were on the PATCH endpoint, sending `{"price": 15.99}` would fail because `title`, `author`, and `genre` arrive as `null` and violate `@NotBlank`. The request is semantically correct for a partial update, but annotation validation rejects it. The solution is omitting `@Valid` on PATCH so null fields pass through unvalidated, then validating only the fields that are actually present.
-
-2. **Applying PATCH rules to PUT allows silent data corruption.** If PUT used the same `hasText()` skip pattern (`if (hasText(dto.getTitle())) { existing.setTitle(dto.getTitle()); }`), a client could PUT `{"title": null, "author": "Orwell", "genre": "Drama", "price": 10.00}` and the `null` title would be silently ignored, leaving the old title in place. This violates the "complete replacement" contract of PUT. The solution is applying `@Valid` on PUT so every field is required and validated, plus redundant service-level checks as defense-in-depth for non-HTTP callers.
-
-3. **Empty strings vs. null are both treated as "no update" on PATCH.** The `hasText()` helper (`s != null && !s.trim().isEmpty()`) ensures `"title": ""` and `"title": "   "` are treated identically to `"title": null` during a partial update. This prevents clients from accidentally blanking a field with an empty string, which would otherwise overwrite valid persisted data with an empty value. On PUT, both cases are rejected by `@NotBlank`.
-
-#### Dirty-Checking Optimization
-
-Neither `patchBook` nor `replaceBook` calls `repository.save()` on the fetched entity. Both are `@Transactional`, so the persistence context keeps the entity managed, and Hibernate's dirty checker automatically detects field changes and flushes the required SQL `UPDATE` at commit. This avoids an unnecessary explicit save call and prevents accidental overwrites of the `createdAt` timestamp.
-
-```java
-@Transactional
-public Book patchBook(Long id, BookRequestDTO updates) {
-    Book existingBook = findBookById(id);
-    if (hasText(updates.getTitle())) {
-        existingBook.setTitle(updates.getTitle().trim());
-    }
-    if (updates.getPrice() != null) {
-        if (updates.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BookValidationException("Price must be greater than 0");
-        }
-        existingBook.setPrice(updates.getPrice());
-    }
-    return existingBook;
-}
-```
-
+Both service operations update a managed entity inside a transaction; Hibernate dirty checking persists the change.
 ### Centralized API errors
 
 ```java
@@ -395,10 +366,17 @@ public LibraryStatisticsDTO getLibraryStatistics() {
 | `GET` | `/app/books/stats` | Returns total books, total value, and the most expensive book | `GET /app/books/stats` | `{"totalBooks":6,"totalValue":123.45,"mostExpensiveBook":{"id":4,"title":"...","author":"...","genre":"...","price":49.99}}` |
 | `GET` | `/app/books/stats/average-price` | Returns the average price of all books | `GET /app/books/stats/average-price` | `{"success":true,"message":"Average Price of Collection: ","data":20.50,"timestamp":172...}` |
 | `GET` | `/app/books/stats/count` | Returns the total number of books | `GET /app/books/stats/count` | `{"success":true,"message":"Book Collection Count","data":6,"timestamp":172...}` |
+| `GET` | `/app/users` | Lists users with pagination | `GET /app/users?page=0&size=12` | Spring `Page<UserResponseDTO>` |
+| `GET` | `/app/users/{universityId}` | Gets one user by university ID | `GET /app/users/2025-4321` | `UserResponseDTO` |
+| `POST` | `/app/users` | Creates a user | `POST /app/users` with `UserCreateRequestDTO` | `ApiResponse<UserResponseDTO>`, HTTP 201 |
+| `PATCH` | `/app/users/{universityId}` | Updates supplied profile fields | `PATCH /app/users/2025-4321` with `UserCreateUpdateDTO` | `ApiResponse<UserResponseDTO>` |
+| `PUT` | `/app/users/{universityId}` | Replaces profile fields | `PUT /app/users/2025-4321` with `UserReplaceRequest` | `ApiResponse<UserResponseDTO>` |
+| `PUT` | `/app/users/{universityId}/password` | Changes password after current-password verification | `PUT /app/users/2025-4321/password` with `ChangePasswordDTO` | `ApiResponse<Void>` |
+| `DELETE` | `/app/users/{universityId}` | Deletes a user | `DELETE /app/users/2025-4321` | `ApiResponse<Void>` |
 
-### Planned user and loan APIs
+### User API
 
-User and loan controllers are not implemented yet, so they intentionally do not appear as live OpenAPI operations. The user-domain services currently provide the foundation for identity, profile updates, and password changes; a future `UserController` should document those contracts only after its routes, authorization rules, and response shapes are stable. The future loan API should document active-loan constraints, overdue behavior, and loan-history queries in the same way rather than presenting planned routes as callable endpoints.
+User routes are available under `/app/users` for account creation, paginated listing, lookup by university ID, profile PATCH/PUT, password changes, and deletion. They currently inherit the development `permitAll` security configuration. Create requests also accept a role, so do not expose this configuration to untrusted clients; design authorization and role assignment before deployment. Loan routes are not implemented.
 
 ## Setup & Installation
 
@@ -424,7 +402,7 @@ Docker is the preferred way to run the project because it brings up both Postgre
     ```bash
     docker compose up --build
     ```
-4. Open the [OpenAPI documentation (Swagger UI)](http://localhost:8080/swagger-ui.html) to explore and try the API endpoints. The raw OpenAPI specification is available at [`http://localhost:8080/v3/api-docs`](http://localhost:8080/v3/api-docs).
+4. Open [Swagger UI](http://localhost:8080/swagger-ui.html) to explore and try the API endpoints. The raw OpenAPI specification is available at [`http://localhost:8080/v3/api-docs`](http://localhost:8080/v3/api-docs). Swagger UI is an interactive API reference; it does not deploy the service. All API routes currently permit unauthenticated access and are intended for trusted development use only.
 
 ### Local development
 
@@ -479,18 +457,15 @@ The complete diagnosis, pre-release reset procedure, clean-install behavior, and
 - The app uses JPA and Hibernate for entity persistence with `ddl-auto=validate`.
 - `Book.createdAt` maps to `books.created_at` and is set automatically on insert. It is intentionally omitted from `BookResponseDTO`, so clients do not receive it and cannot provide it through create, patch, or replace requests.
 - Updates rely on Hibernate dirty checking inside transactional service methods.
-- `BookRequestDTO` is used for request validation, while `BookResponseDTO` and `LibraryStatisticsDTO` are used for response shaping.
+- `BookRequestDTO` validates create and replacement requests; `BookPatchRequestDTO` describes optional PATCH fields. `BookResponseDTO` and `LibraryStatisticsDTO` shape book responses.
 - `BookMapper` centralizes conversion between entities and DTOs.
 - `UserService` normalizes identity values, checks duplicates, enforces academic rules, validates create requests with Jakarta Validator, bounds passwords to 8–72 characters before BCrypt processing, and persists only BCrypt-hashed passwords.
 - `UserMapper` keeps password fields out of `UserResponseDTO`.
-- User DTO annotations, the transactional partial-update service contract, and
-  the transactional password-change service contract are implemented, but there
-  is no `UserController` yet and user API serialization still needs integration
-  coverage.
+- `UserAPI` delegates user operations to `UserService` and returns DTOs rather than entities. User API serialization and routing still need MVC integration coverage.
 
 ## Testing
 
-The project uses JUnit 5, Mockito, AssertJ, Jakarta Validator, and JaCoCo. Its 101 tests include fast MVC-slice coverage for the book HTTP contract plus unit coverage for the book and user service behavior, book entity and DTO, typed statistics and genre-distribution projections, mapper behavior, and global REST exception translation. The current suite has no user controller, JPA, Flyway, or PostgreSQL integration tests.
+The project uses JUnit 5, Mockito, AssertJ, Jakarta Validator, and JaCoCo. Its existing suite includes fast MVC-slice coverage for the book HTTP contract plus unit coverage for the book and user service behavior, book entity and DTO, typed statistics and genre-distribution projections, mapper behavior, and global REST exception translation. User controller, JPA, Flyway, and PostgreSQL integration tests are not yet present.
 
 - `BookTest` verifies book construction and request DTO constraints.
 - `BookApiMvcTest` verifies routes, status codes, JSON response shapes, invalid request payloads, pagination/query binding, and global exception responses without starting JPA or PostgreSQL.
@@ -552,10 +527,11 @@ The detailed, interview-ready account of the development problems I identified a
 
 ## Upcoming Improvements
 
+- Inspect the generated OpenAPI document and Swagger UI with the application and database running; verify parameter defaults, request/response schemas, statuses, errors, and examples against the implementation.
 - Learn Spring Security's filter chain, authentication, `UserDetailsService`, and `SecurityContext`, then choose an institutional SSO, session, or token-based authentication model.
 - Implement and test endpoint-specific authorization before exposing user endpoints; the current `permitAll()` configuration leaves every route public.
-- Add repository and controller coverage for the user domain, then implement and document `UserController` under the selected security model.
-- Implement the loan domain with active-loan constraints and overdue/history queries, using the authenticated identity for borrower operations.
+- Add repository and MVC controller coverage for the user domain; implement endpoint authorization and safe role assignment before deployment.
+- Implement the loan domain with active-loan constraints and overdue/history queries, using the authenticated identity for borrower operations; document its API when routes are added.
 - Add JPA, Flyway, and PostgreSQL integration tests alongside the existing unit and MVC-slice tests.
 - Expand search capabilities with more flexible filtering and sorting combinations.
 

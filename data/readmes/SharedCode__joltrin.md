@@ -17,7 +17,7 @@
 [![Go Tests](https://github.com/SharedCode/joltrin/actions/workflows/go.yml/badge.svg?event=push&branch=master)](https://github.com/SharedCode/joltrin/actions/workflows/go.yml)
 [![Release](https://img.shields.io/github/v/release/SharedCode/joltrin)](https://github.com/SharedCode/joltrin/releases)
 [![codecov](https://codecov.io/gh/SharedCode/joltrin/branch/master/graph/badge.svg)](https://app.codecov.io/github/SharedCode/joltrin)
-[![Go Reference](https://pkg.go.dev/badge/github.com/sharedcode/joltrin.svg)](https://pkg.go.dev/github.com/sharedcode/joltrin)
+[![Go Reference](https://pkg.go.dev/badge/github.com/sharedcode/joltrin/v5.svg)](https://pkg.go.dev/github.com/sharedcode/joltrin/v5)
 [![Go version](https://img.shields.io/github/go-mod/go-version/SharedCode/joltrin)](go.mod)
 [![License](https://img.shields.io/github/license/SharedCode/joltrin)](LICENSE)
 [![Live Demos](https://img.shields.io/badge/Live_Demos-GitHub_Pages-10B981?logo=github)](https://sharedcode.github.io/joltrin/arena/)
@@ -530,23 +530,69 @@ package main
 
 import (
 	"fmt"
-	"github.com/sharedcode/joltrin/inmemory"
+
+	"github.com/sharedcode/joltrin/v5/inmemory"
 )
 
 func main() {
-	// Create an in-memory B-Tree with unique integer keys and string values
-	tree := inmemory.NewBtree[int, string](true)
+	fmt.Println("Joltrin quickstart: in-memory ordered B-Tree")
 
-	// Add records
-	tree.Add(101, "Build #101: tests passed")
-	tree.Add(102, "Build #102: deployed to staging")
+	// Unique keys, string values.
+	b3 := inmemory.NewBtree[int, string](true)
 
-	// Ordered range scan (keys 100 to 105)
-	for k, v := range tree.Range(100, 105) {
-		fmt.Printf("Key %d -> %s\n", k, v)
+	// Add a few build records keyed by build number.
+	builds := map[int]string{
+		101: "commit 9f2c1a  build ok",
+		102: "commit 4be77d  build ok",
+		103: "commit c30e52  tests failed",
+		104: "commit 8d91f0  build ok",
+		105: "commit 77aa3e  released",
 	}
+	for k, v := range builds {
+		if !b3.Add(k, v) {
+			fmt.Printf("Add(%d) failed\n", k)
+			return
+		}
+	}
+	fmt.Printf("added %d items, count=%d\n", len(builds), b3.Count())
+
+	// Point lookup.
+	if b3.Find(103, true) {
+		fmt.Printf("Find(103): %s\n", b3.GetCurrentValue())
+	}
+
+	// Update in place.
+	b3.Update(103, "commit c30e52  tests fixed, build ok")
+	b3.Find(103, true)
+	fmt.Printf("after Update(103): %s\n", b3.GetCurrentValue())
+
+	// Ordered scan, no sort call needed: the tree keeps keys sorted.
+	fmt.Println("ordered scan:")
+	for k, v := range b3.All() {
+		fmt.Printf("  build %d -> %s\n", k, v)
+	}
+
+	// Range scan seeks straight to the start key, then walks in order.
+	fmt.Println("range scan, builds 102-104:")
+	for k, v := range b3.Range(102, 104) {
+		fmt.Printf("  build %d -> %s\n", k, v)
+	}
+
+	// Descending scan: newest builds first.
+	fmt.Println("descending scan, newest 3 builds:")
+	n := 0
+	for k, v := range b3.AllDesc() {
+		fmt.Printf("  build %d -> %s\n", k, v)
+		if n++; n == 3 {
+			break
+		}
+	}
+
+	fmt.Println("quickstart: OK")
 }
 ```
+
+This is the actual content of `examples/quickstart/main.go`, kept in sync here rather than paraphrased, so what you run and what you read match.
 
 ### 2. AI Agent Memory & Swarm Task Hand-off
 
@@ -625,7 +671,7 @@ If you are building distributed systems, cloud infrastructure, or AI data platfo
 
 | Language | Installation | Description |
 | :--- | :--- | :--- |
-| **Go** | `go get github.com/sharedcode/joltrin` | Native high-performance core engine. |
+| **Go** | `go get github.com/sharedcode/joltrin/v5` | Native high-performance core engine. |
 | **Python** | `pip install sop4py` | Python bindings with Data Manager and AI scripts. |
 | **C#** | `dotnet add package Sop` | Complete .NET Core integration. |
 | **WebAssembly** | `GOOS=js GOARCH=wasm go build` | Browser-sandboxed zero-server execution. |
@@ -639,14 +685,14 @@ When integrating Joltrin into your stack, choose between official versioned rele
 
 | Dimension | Official Tagged Releases (Recommended for Production) | In-Repo Source / Submodule (Active Prototyping & Contribution) |
 | :--- | :--- | :--- |
-| **Artifacts** | `go get github.com/sharedcode/joltrin@vX.Y.Z`<br>PyPI: `pip install sop4py`<br>NuGet: `dotnet add package Sop` | Git clone or submodule linked directly to `HEAD` or a feature branch |
+| **Artifacts** | `go get github.com/sharedcode/joltrin/v5@vX.Y.Z`<br>PyPI: `pip install sop4py`<br>NuGet: `dotnet add package Sop` | Git clone or submodule linked directly to `HEAD` or a feature branch |
 | **Best For** | Production services, reproducible CI/CD builds, audited dependencies | Modifying engine internals, local benchmarking, custom protocol servers |
 | **Stability** | Semantic versioning, tagged releases, audited dependency graph | Bleeding-edge features, experimental branches, unreleased protocol bridges |
 | **Maintenance** | Handled by standard language package managers | Requires manual git fetch/rebase and local workspace management |
 
 #### 1. Official Tagged Releases (Recommended for Production)
 For production deployments, pin your dependency to a tagged release. This guarantees reproducible builds, backward-compatible API guarantees, and security-scanned transitive dependencies:
-- **Go**: `go get github.com/sharedcode/joltrin@v5.4.0` (see [tags](https://github.com/sharedcode/joltrin/tags) for the latest)
+- **Go**: `go get github.com/sharedcode/joltrin/v5@v5.7.0` (see [tags](https://github.com/sharedcode/joltrin/tags) for the latest)
 - **Python**: `pip install sop4py==0.1.0`
 - **C# / .NET**: `dotnet add package Sop --version 0.1.0`
 
@@ -677,15 +723,15 @@ git add -A && git commit -m "chore: bump version to 5.4.0"
 # 4. Verify checksums, archive integrity, and SBOM before publishing
 ./scripts/verify_release.sh release
 
-# 5. Tag and push. This is what makes `go get github.com/sharedcode/joltrin@v5.4.0` resolve.
-git tag v5.4.0
-git push origin master v5.4.0
+# 5. Tag and push. This is what makes `go get github.com/sharedcode/joltrin/v5@v5.7.0` resolve.
+git tag v5.7.0
+git push origin master v5.7.0
 
 # 6. Create the GitHub Release from the tag (attaches release notes + artifacts)
-gh release create v5.4.0 --generate-notes
+gh release create v5.7.0 --generate-notes
 ```
 
-Go's package proxy needs no separate publish step: once the tag is pushed, `go get ...@v5.4.0` works immediately. Python, C#, and Java bindings still require the explicit `twine upload` / `dotnet nuget push` / `mvn deploy` steps in `RELEASE_PROCESS.md`.
+Go's package proxy needs no separate publish step: once the tag is pushed, `go get ...@v5.7.0` works immediately. Python, C#, and Java bindings still require the explicit `twine upload` / `dotnet nuget push` / `mvn deploy` steps in `RELEASE_PROCESS.md`.
 
 ## 📚 Technical Reference Guides
 

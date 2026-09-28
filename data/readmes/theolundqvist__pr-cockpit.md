@@ -37,7 +37,7 @@ Press <kbd>r</kbd> to filter repositories. Use arrows to highlight one, <kbd>Ent
 
 ### Bring up a PR without leaving your editor
 
-Press <kbd>⌥⌘K</kbd> on macOS or <kbd>Super+Alt+K</kbd> on Linux X11 to search from another app. Open the result in Cockpit, with the cached PR ready to read.
+Press <kbd>⌥⌘K</kbd> on macOS or <kbd>Super+Alt+K</kbd> on Linux X11 to search from another app. Move the pointer or use the arrow keys to select a result; Enter opens that highlighted result in Cockpit, with the cached PR ready to read. Typing a number such as `51` or `#51` lists that exact PR first, then PRs whose numbers contain it, open before closed and highest first, so `51` also finds `#10051`.
 
 ![Searching for a public rust-lang/rust pull request from the desktop and opening it in PR Cockpit](docs/screenshots/landing-search.gif)
 
@@ -96,7 +96,7 @@ pr-cockpit owner/repo#123 --logs verify --run 987 --attempt 2
 pr-cockpit listen owner/repo#123
 ```
 
-`listen` waits for substantive cached state changes—a push, check result, review, or comment—then prints what changed and exits. `--ci-only` and `--comments-only` narrow the wake signal.
+`listen` waits for substantive cached state changes—a push, check result, review, comment, or merge conflict—then prints what changed and exits. It returns at once when the PR already has failing checks, open comments, or merge conflicts. `--ci-only`, `--comments-only`, and `--conflicts-only` narrow the wake signal.
 
 `pr-cockpit listen owner/repo#123 --run 987` waits for a specific run and reconciles it about every 30 seconds at the default interval, so missed webhooks cannot leave completion unobserved. A failed reconciliation exits with an error.
 

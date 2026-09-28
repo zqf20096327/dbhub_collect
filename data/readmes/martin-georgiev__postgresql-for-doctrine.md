@@ -9,6 +9,8 @@
 
 <p align="center">Enhances Doctrine with PostgreSQL-specific features and functions. Supports PostgreSQL 9.4+ and PHP 8.2+.</p>
 
+<p align="center"><a href="https://postgresql-for-doctrine.dev">Documentation at postgresql-for-doctrine.dev</a></p>
+
 <p align="center">
   <a href="https://coveralls.io/github/martin-georgiev/postgresql-for-doctrine?branch=main"><img src="https://coveralls.io/repos/github/martin-georgiev/postgresql-for-doctrine/badge.svg?branch=main" alt="Coverage Status"></a>
   <a href="https://packagist.org/packages/martin-georgiev/postgresql-for-doctrine"><img src="https://poser.pugx.org/martin-georgiev/postgresql-for-doctrine/version" alt="Latest Stable Version"></a>
@@ -24,7 +26,12 @@ use MartinGeorgiev\Doctrine\DBAL\Type;
 use MartinGeorgiev\Doctrine\DBAL\Types\ValueObject\NumericRange;
 
 // Register types with Doctrine
-DoctrineType::addType('jsonb', "MartinGeorgiev\\Doctrine\\DBAL\\Types\\Jsonb");
+// DBAL 4.3+ ships its own jsonb type, which, unlike this one, reads integers beyond PHP_INT_MAX as floats and writes 1.0 instead of 1
+if (DoctrineType::hasType('jsonb')) {
+    DoctrineType::overrideType('jsonb', "MartinGeorgiev\\Doctrine\\DBAL\\Types\\Jsonb");
+} else {
+    DoctrineType::addType('jsonb', "MartinGeorgiev\\Doctrine\\DBAL\\Types\\Jsonb");
+}
 DoctrineType::addType('text[]', "MartinGeorgiev\\Doctrine\\DBAL\\Types\\TextArray");
 DoctrineType::addType('numrange', "MartinGeorgiev\\Doctrine\\DBAL\\Types\\NumRange");
 
@@ -77,7 +84,7 @@ $query = $em->createQuery('
   - Path (`path`, `path[]`)
   - Point (`point`, `point[]`)
   - Polygon (`polygon`, `polygon[]`)
-  - PostGIS Geometry (`geometry`, `geometry[]`)
+  - [PostGIS](https://postgis.net/docs/) Geometry (`geometry`, `geometry[]`)
   - PostGIS Geography (`geography`, `geography[]`)
 - **Range Types**
   - Date and time ranges (`daterange`, `daterange[]`, `tsrange`, `tsrange[]`, `tstzrange`, `tstzrange[]`)
@@ -101,7 +108,7 @@ $query = $em->createQuery('
 - **XML Types**
   - Native XML document storage (`xml`, `xml[]`)
 - **Hierarchical Types**
-  - Label-tree data (`ltree`, `ltree[]`)
+  - [Label-tree data](https://www.postgresql.org/docs/18/ltree.html) (`ltree`, `ltree[]`)
 - **Vector Types** (requires [pgvector](https://github.com/pgvector/pgvector) extension)
   - Fixed-dimension float vector (`vector`)
   - Half-precision float vector (`halfvec`)
@@ -128,7 +135,7 @@ $query = $em->createQuery('
 - **PostGIS Spatial Operations**
   - Bounding box relationships (`<<`, `>>`, `&<`, `&>`, `|&>`, `&<|`, `<<|`, `|>>`)
   - Spatial containment (`@`, `~`)
-  - Distance calculations (`<->`, `<#>`, `<<->>`, `<<#>>`, `|=|`)
+  - Distance calculations (`<->`, `<#>`, `<<->>`, `|=|`)
   - N-dimensional operations (`&&&`)
 
 ### Functions
@@ -183,24 +190,27 @@ $query = $em->createQuery('
 - **Vector Distance Functions** (requires [pgvector](https://github.com/pgvector/pgvector) extension)
   - Distance and similarity (`l2_distance`, `cosine_distance`, `inner_product`)
 
-Full documentation:
+Full documentation, also published at [postgresql-for-doctrine.dev](https://postgresql-for-doctrine.dev):
+- [Getting started](docs/GETTING-STARTED.md) - From install to a first query
 - [Available Types](docs/AVAILABLE-TYPES.md)
 - [Value Objects for Range Types](docs/RANGE-TYPES.md)
 - [PostgreSQL ltree Types](docs/LTREE-TYPE.md)
 - [Infinity Values](docs/INFINITY.md)
+- [Writing DQL](docs/WRITING-DQL.md) - How PostgreSQL syntax is written in DQL
 - [Available Functions and Operators](docs/AVAILABLE-FUNCTIONS-AND-OPERATORS.md) - Overview and cross-references
   - [Array and JSON Functions](docs/ARRAY-AND-JSON-FUNCTIONS.md)
   - [PostGIS Spatial Functions](docs/SPATIAL-FUNCTIONS-AND-OPERATORS.md)
   - [Text and Pattern Functions](docs/TEXT-AND-PATTERN-FUNCTIONS.md)
   - [Date and Range Functions](docs/DATE-AND-RANGE-FUNCTIONS.md)
-  - [Mathematical Functions](docs/MATHEMATICAL-FUNCTIONS.md)
+  - [Mathematical and statistical functions](docs/MATHEMATICAL-FUNCTIONS.md)
   - [Utility Functions](docs/UTILITY-FUNCTIONS.md)
   - [XML Functions](docs/XML-FUNCTIONS.md)
   - [Window Functions](docs/WINDOW-FUNCTIONS.md)
   - [Network Address Functions](docs/NETWORK-FUNCTIONS.md)
-- [Common Use Cases and Examples](docs/USE-CASES-AND-EXAMPLES.md)
-- [Spatial Types](docs/SPATIAL-TYPES.md)
+- [Examples](docs/USE-CASES-AND-EXAMPLES.md)
+- [PostGIS geometry and geography](docs/POSTGIS-GEOMETRY-AND-GEOGRAPHY.md)
 - [Geometry Arrays](docs/GEOMETRY-ARRAYS.md)
+- [Troubleshooting](docs/TROUBLESHOOTING.md) - Common errors, by the message you see
 
 ## 📦 Installation
 
@@ -208,14 +218,16 @@ Full documentation:
 composer require martin-georgiev/postgresql-for-doctrine
 ```
 
+Then follow [Getting started](docs/GETTING-STARTED.md) to register a type and a function and run a first query.
+
 ## 🔧 Integration Guides
 
-- [Integrating with Symfony](docs/INTEGRATING-WITH-SYMFONY.md)
-- [Integrating with Laravel](docs/INTEGRATING-WITH-LARAVEL.md)
-- [Integrating with Doctrine](docs/INTEGRATING-WITH-DOCTRINE.md)
+- [Symfony setup](docs/INTEGRATING-WITH-SYMFONY.md)
+- [Laravel setup](docs/INTEGRATING-WITH-LARAVEL.md)
+- [Doctrine setup](docs/INTEGRATING-WITH-DOCTRINE.md)
 
 ## 💡 Usage Examples
-See our [Common Use Cases and Examples](docs/USE-CASES-AND-EXAMPLES.md) for detailed code samples.
+See our [Examples](docs/USE-CASES-AND-EXAMPLES.md) for detailed code samples.
 
 ## 🧪 Testing
 

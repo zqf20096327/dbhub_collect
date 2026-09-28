@@ -1,9 +1,10 @@
 <div align="center">
-             
-# 𝑺𝒊𝒍𝒗𝒂𝒙𝒔    
-      
+<p align="center">بسم الله الرحمن الرحيم</p>   
+    
+# 𝑺𝒊𝒍𝒗𝒂𝒙𝒔     
+ 
 ### Junior Software Developer · Python & Web Development · IT Systems    
-  
+   
 I build practical, real-world software — from debugging and testing to full applications — and I keep learning how software and IT systems fit together.
 
 [![Deutsch version](https://img.shields.io/badge/Deutsche_Version-README.de.md-0A66C2?style=flat-square)](README.de.md)

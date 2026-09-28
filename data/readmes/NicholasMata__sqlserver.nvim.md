@@ -1,11 +1,30 @@
-# sqlserver.nvim
+<p align="center">
+  <img src="docs/assets/sqlserver-logo.png" alt="sqlserver.nvim logo" width="160">
+</p>
+
+<h1 align="center">sqlserver.nvim</h1>
+
+<div align="center">
 
 [![Neovim](https://img.shields.io/badge/Neovim-0.11.7%2B-57A143?style=flat-square&logo=neovim&logoColor=white)](https://neovim.io)
 [![Platforms](https://img.shields.io/badge/Platforms-Linux_%7C_macOS_%7C_Windows-blue?style=flat-square)](#installation)
 [![Release](https://img.shields.io/github/v/release/NicholasMata/sqlserver.nvim?include_prereleases&style=flat-square&label=release)](https://github.com/NicholasMata/sqlserver.nvim/releases)
 [![Tests](https://github.com/NicholasMata/sqlserver.nvim/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/NicholasMata/sqlserver.nvim/actions/workflows/test.yml)
-[![Documentation](https://img.shields.io/badge/Documentation-guides-blue?style=flat-square)](#documentation)
-[![License](https://img.shields.io/github/license/NicholasMata/sqlserver.nvim?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/github/license/NicholasMata/sqlserver.nvim?style=flat-square)](LICENSE.md)
+
+</div>
+
+<p align="center">
+  <a href="docs/usage.md">Usage</a>
+  ·
+  <a href="#configuration">Configuration</a>
+  ·
+  <a href="https://github.com/users/NicholasMata/projects/1/views/2">Roadmap</a>
+  ·
+  <a href="https://github.com/NicholasMata/sqlserver.nvim/milestones">Planned Releases</a>
+  ·
+  <a href="CHANGELOG.md">Changelog</a>
+</p>
 
 <p align="center">
   <img src="docs/assets/sqlserver-showcase.gif" alt="sqlserver.nvim showcase" width="900">
@@ -25,8 +44,8 @@ execution while keeping protocol, workspace, result, and UI concerns separate.
 - Complete, diagnose, format, hover, navigate, and inspect T-SQL signatures
   through Neovim's built-in LSP support and SQL Tools Service.
 - Search, browse, and script tables, views, procedures, and functions in the
-  connected database. The hierarchical Object Explorer is available when
-  `snacks.nvim` is installed with its picker enabled.
+  connected database. The [hierarchical Object Explorer](docs/object-explorer.md)
+  is available when `snacks.nvim` is installed with its picker enabled.
 - Execute the statement under the cursor, a visual selection, or the complete
   buffer.
 - Cancel active queries and inspect persistent workspace activity.
@@ -106,6 +125,9 @@ require("sqlserver").setup({
 })
 ```
 
+See the [full configuration reference](docs/configuration.md) for every
+supported option and default.
+
 Operational timeouts use milliseconds or `false` to wait indefinitely. Queries
 have no client-side timeout by default and can be stopped with `CancelQuery`.
 
@@ -113,7 +135,7 @@ With the prefix above, use `<leader>sx` for the statement under the cursor or a
 visual selection, and `<leader>sX` for the complete buffer. Commands are also
 available through `:SQLServer`.
 
-## SQL Tool Service Coverage
+## SQL Tools Service Coverage
 **Status**: ✅ Complete · 🟡 Partial · 🔵 Planned · ⚪ Not currently on the roadmap
 ```
                          SQL Tools Service
@@ -122,34 +144,30 @@ available through `:SQLServer`.
            │                    │                    │
       Development          Administration       Diagnostics
            │                    │                    │
-      ✅ IntelliSense       🔵 SQL Agent          ⚪ Profiler
-      ✅ Query              ⚪ Backup             ⚪ Query Store
-      ✅ Objects            ⚪ Restore            🔵 Query Plans
-      ⚪ Schema Compare     ⚪ Edit Data          ⚪ Assessment
-      ⚪ Table Design       ⚪ Security
+      ✅ Connections        🔵 SQL Agent          ⚪ Profiler
+      ✅ IntelliSense       ⚪ Backup             ⚪ Query Store
+      ✅ Query              ⚪ Restore            🔵 Query Plans
+      ✅ Objects            🔵 Edit Data          ⚪ Assessment
+      ⚪ Schema Compare     ⚪ Security
+      ⚪ Table Design
 ```
 
-## Documentation
-
-| Goal | Guide |
-| --- | --- |
-| Install and configure the plugin | [Configuration](docs/configuration.md) |
-| Create secure connection profiles | [Connection profiles](docs/connections-json.md) |
-| Execute queries and work with results | [Usage](docs/usage.md) |
-| Browse the SQL Tools Service hierarchy | [Object Explorer](docs/object-explorer.md) |
-| Configure SQL formatting and IntelliSense | [SQL Tools Service settings](docs/lsp-settings.md) |
-| Automate the plugin from Lua | [Public Lua API](docs/public-api.md) |
-| Move from `mssql.nvim` | [Migrating from mssql.nvim](docs/migrating-from-mssql.md) |
-| Understand the project direction | [Vision](docs/vision.md) and [roadmap](docs/roadmap.md) |
-| Understand module ownership | [Architecture](docs/architecture.md) |
-| Develop and test locally | [Contributing](CONTRIBUTING.md) |
-| Prepare a release | [Release checklist](docs/releasing.md) |
-| Review user-visible changes | [Changelog](CHANGELOG.md) |
+The [coverage definitions](docs/sql-tools-service-coverage.md) explain each
+term and status. For `1.1.0`, [Edit Data](https://github.com/NicholasMata/sqlserver.nvim/issues/22)
+means generating reviewable SQL from eligible result edits, alongside
+read-only SQL Agent Jobs and Alerts inspection. The
+[1.2.0 milestone](https://github.com/NicholasMata/sqlserver.nvim/milestone/2)
+tracks standalone Operators, Proxies, and Schedules inspection.
 
 ## Contributing
 
 Run `make test` for unit tests and `make lint` for formatting verification before
 submitting changes. See [CONTRIBUTING.md](CONTRIBUTING.md) for the complete local
 test environment, Docker integration workflow, coding style, and commit-message
-rules. Maintainers use the [release checklist](docs/releasing.md) for automated
-and manual `1.0.0` acceptance.
+rules. The [architecture](docs/architecture.md) explains module ownership, and
+the [public Lua API](docs/public-api.md) documents UI-independent integration.
+Maintainers use the [release checklist](docs/releasing.md) for automated and
+manual `1.0.0` acceptance.
+
+The logo adapts the [Neovim logo](https://neovim.io/) by Jason Long
+([CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)).

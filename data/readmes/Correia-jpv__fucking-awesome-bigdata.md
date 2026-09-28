@@ -2,7 +2,7 @@
 
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 
-A curated list of awesome big data frameworks, resources and other awesomeness. Inspired by <b><code>&nbsp;32706⭐</code></b> <b><code>&nbsp;&nbsp;5140🍴</code></b> [awesome-php](https://github.com/ziadoz/awesome-php)), <b><code>322629⭐</code></b> <b><code>&nbsp;28793🍴</code></b> [awesome-python](https://github.com/vinta/awesome-python)), <b><code>&nbsp;&nbsp;1265⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;174🍴</code></b> [awesome-ruby](https://github.com/Sdogruyol/awesome-ruby)), [hadoopecosystemtable](http://hadoopecosystemtable.github.io/) & [big-data](http://usefulstuff.io/big-data/).
+A curated list of awesome big data frameworks, resources and other awesomeness. Inspired by <b><code>&nbsp;32716⭐</code></b> <b><code>&nbsp;&nbsp;5140🍴</code></b> [awesome-php](https://github.com/ziadoz/awesome-php)), <b><code>323711⭐</code></b> <b><code>&nbsp;28818🍴</code></b> [awesome-python](https://github.com/vinta/awesome-python)), <b><code>&nbsp;&nbsp;1265⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;174🍴</code></b> [awesome-ruby](https://github.com/Sdogruyol/awesome-ruby)), [hadoopecosystemtable](http://hadoopecosystemtable.github.io/) & [big-data](http://usefulstuff.io/big-data/).
 
 Your contributions are always welcome!
 
@@ -61,7 +61,7 @@ Your contributions are always welcome!
 
 ## Frameworks
 
-* <b><code>&nbsp;&nbsp;1027⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;136🍴</code></b> [Bistro](https://github.com/facebook/bistro)) - general-purpose data processing engine for both batch and stream analytics. It is based on a novel data model, which represents data via *functions* and processes data via *column operations* as opposed to having only set operations in conventional approaches like MapReduce or SQL.
+* <b><code>&nbsp;&nbsp;1027⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;135🍴</code></b> [Bistro](https://github.com/facebook/bistro)) - general-purpose data processing engine for both batch and stream analytics. It is based on a novel data model, which represents data via *functions* and processes data via *column operations* as opposed to having only set operations in conventional approaches like MapReduce or SQL.
 * 🌎 [IBM Streams](www.ibm.com/analytics/us/en/technology/stream-computing/) - platform for distributed processing and real-time analytics.  Integrates with many of the popular technologies in the Big Data ecosystem (Kafka, HDFS, Spark, etc.)
 * [Ap
 
@@ -69,9 +69,9 @@ Your contributions are always welcome!
 
 ache Hadoop](http://hadoop.apache.org/) - framework for distributed processing. Integrates MapReduce (parallel processing), YARN (job scheduling) and HDFS (distributed file system).
 * <b><code>&nbsp;&nbsp;&nbsp;284⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;&nbsp;33🍴</code></b> [Tigon](https://github.com/caskdata/tigon)) - High Throughput Real-time Stream Processing Framework.
-* <b><code>&nbsp;&nbsp;2830⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;179🍴</code></b> [Numaflow](https://github.com/numaproj/numaflow)) - Kubernetes-native stream processing platform.
+* <b><code>&nbsp;&nbsp;2833⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;180🍴</code></b> [Numaflow](https://github.com/numaproj/numaflow)) - Kubernetes-native stream processing platform.
 * [Pachyderm](http://pachyderm.io/) - Pachyderm is a data storage platform built on Docker and Kubernetes to provide reproducible data processing and analysis.
-* <b><code>&nbsp;&nbsp;3735⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;330🍴</code></b> [Polyaxon](https://github.com/polyaxon/polyaxon)) - A platform for reproducible and scalable machine learning and deep learning.
+* <b><code>&nbsp;&nbsp;3737⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;330🍴</code></b> [Polyaxon](https://github.com/polyaxon/polyaxon)) - A platform for reproducible and scalable machine learning and deep learning.
 * <b><code>&nbsp;&nbsp;&nbsp;421⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;356🍴</code></b> [Smooks](https://github.com/smooks/smooks)) - An extensible Java framework for building XML and non-XML (CSV, EDI, Java, etc...) streaming applications.
 
 ## Distributed Programming

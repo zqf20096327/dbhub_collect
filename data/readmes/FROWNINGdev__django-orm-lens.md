@@ -9,7 +9,7 @@
 
 # Django ORM Lens
 
-### The schema intelligence layer for Django.
+### ER diagrams, N+1 detection and migration-risk checks for Django — without booting it.
 
 Your entire model graph — live in your editor sidebar, gating your CI, and answering your AI agent over MCP. All from static parsing: no database, no `runserver`, no working venv.
 
@@ -45,10 +45,12 @@ Your entire model graph — live in your editor sidebar, gating your CI, and ans
 ## ⚡ 10 seconds to first insight
 
 ```bash
-uvx django-orm-lens scan      # or: pipx run django-orm-lens scan
+uvx django-orm-lens scan -f table   # every app and model at a glance
+uvx django-orm-lens nplusone        # N+1 loops, with the select_related to add
+uvx django-orm-lens migration-risk  # migrations that lock tables or fail on existing rows
 ```
 
-Cold clone, broken venv, no settings module — you still get every app, model, field, and relation of the project in your terminal.
+Cold clone, broken venv, no settings module — you still see every app and model of the project, then the N+1 loops and risky migrations in it, right in your terminal. (`uvx` is from [uv](https://docs.astral.sh/uv/); `pipx run` works the same way.)
 
 **Then pick your surface** — three distributions, one parser core:
 
@@ -70,12 +72,12 @@ All of it is here, MIT-licensed, with no tier gate, no seat count, no account, a
 
 | Capability usually sold as a paid tier | Here |
 |---|---|
-| PR review bot for schema changes — posts once, then updates in place | [`blast-radius`](docs/rules/blast-radius.md) + the [Action](#️-gate-your-ci) |
+| PR review bot for schema changes — posts once, then updates in place | [`blast-radius`](https://github.com/FROWNINGdev/django-orm-lens/blob/main/docs/rules/blast-radius.md) + the [Action](#️-gate-your-ci) |
 | Analysis that follows a queryset across functions | [`nplusone`](docs/rules/nplusone.md) |
 | Schema drift detection | [`drift`](docs/rules/drift.md) |
 | Index proposals from observed QuerySet usage | `suggest-indexes` |
 | Migration risk weighed against real table sizes | `blast-radius --stats` |
-| Blast radius of a destructive migration | [`blast-radius`](docs/rules/blast-radius.md) |
+| Blast radius of a destructive migration | [`blast-radius`](https://github.com/FROWNINGdev/django-orm-lens/blob/main/docs/rules/blast-radius.md) |
 | Cross-layer impact of removing a field | `impact` |
 
 **There is no Pro tier, and none is planned.** If the tool saves you an afternoon, a star is the entire ask.
@@ -337,7 +339,7 @@ Stable `TreeItem.id` — refresh no longer collapses the tree. Rich `MarkdownStr
 ## 📸 What it looks like
 
 <div align="center" markdown="1">
-<img src="media/hero.png" alt="Django ORM Lens sidebar showing an app's models with fields, relations, and Meta options" width="90%" loading="lazy" decoding="async"/>
+<img src="media/screenshot-vscode.png" alt="VS Code with Django ORM Lens: the model tree, ORM diagnostics in views.py and the live ER diagram" width="100%" loading="lazy" decoding="async"/>
 </div>
 
 **Live sample** — real `django-orm-lens er` output, rendered by GitHub right here:
@@ -478,7 +480,7 @@ The comment goes up **before** the job fails, so a blocked PR still explains why
 # .pre-commit-config.yaml
 repos:
   - repo: https://github.com/FROWNINGdev/django-orm-lens
-    rev: py-v1.8.1
+    rev: py-v1.13.0
     hooks:
       - id: django-orm-lens-nplusone
       - id: django-orm-lens-migration-risk
@@ -773,7 +775,7 @@ Found by running the CLI over actual checkouts of django-oscar, django-guardian,
 **Next**
 
 - [x] **v0.13.0** — Field completion inside `.filter()` / `.exclude()` / `.get()` ([#3](https://github.com/FROWNINGdev/django-orm-lens/issues/3))
-- [ ] App / model toggle checkboxes to declutter huge schemas
+- [x] **v0.10.0** — App / model toggle checkboxes: untick an app or model in the sidebar to drop it from the ER diagram
 - [ ] DOL rule engine ported into the Python CLI — one rule catalogue, three surfaces
 
 **Later**

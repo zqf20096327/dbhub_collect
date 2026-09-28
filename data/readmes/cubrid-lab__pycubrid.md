@@ -151,7 +151,7 @@ marketers = cur.fetchall()
 - **Parameterized queries** — `cursor.execute(sql, params)` with driver-side parameter binding (`?` placeholders escaped and interpolated locally)
 - **Batch operations** — `executemany()` and `executemany_batch()` for bulk inserts
 - **LOB support** — `create_lob()`, read/write CLOB and BLOB columns
-- **Schema introspection** — `get_schema_info()` for tables, columns, indexes, constraints
+- **Owned schema introspection** — `get_schema_info()` plus eager `fetch_schema_info()` or explicit `close_schema_info()`; the #457 live matrix verifies CLASS/VCLASS/ATTRIBUTE/CONSTRAINT/PRIMARY_KEY/IMPORTED_KEYS/EXPORTED_KEYS on CUBRID 10.2/11.4, not all schema codes or native-driver parity
 - **Auto-commit control** — `connection.autocommit` property for transaction management
 - **Server version detection** — `connection.get_server_version()` returns version string (e.g., `"11.2.0.0378"`)
 - **Iterator protocol** — iterate over cursor results with `for row in cursor`
@@ -238,7 +238,7 @@ graph TD
     types[types.py - DB-API 2.0 type objects and constructors]
     exceptions[exceptions.py - PEP 249 exception hierarchy]
     constants[constants.py - CAS function codes, data types, protocol constants]
-    protocol["protocol.py - CAS wire protocol packet classes (18 packet types)"]
+    protocol["protocol.py - CAS wire protocol packet classes (20 packet types)"]
     packet[packet.py - Low-level packet reader/writer]
     lob[lob.py - LOB support]
     typed[py.typed - PEP 561 marker]
@@ -317,6 +317,18 @@ For the ecosystem-wide view, see the [CUBRID Labs Ecosystem Roadmap](https://git
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines and [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for development setup.
 
+### First contribution
+
+New to CUBRID? Pick the repository that matches what you want to work on:
+
+- Documentation and runnable examples: [cubrid-cookbook-python](https://github.com/cubrid-lab/cubrid-cookbook-python)
+- Pure-Python driver fixes: [pycubrid](https://github.com/cubrid-lab/pycubrid)
+- SQLAlchemy dialect fixes: [sqlalchemy-cubrid](https://github.com/cubrid-lab/sqlalchemy-cubrid)
+
+Most first issues can be developed and tested with the offline checks in CONTRIBUTING.md — no Docker or CUBRID server needed. Live CUBRID verification can be completed by CI and maintainers.
+
+Browse open [`good first issue`](https://github.com/cubrid-lab/pycubrid/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee) tasks.
+
 ## Security
 
 Report vulnerabilities via email — see [SECURITY.md](SECURITY.md). Do not open public issues for security concerns.
@@ -324,6 +336,8 @@ Report vulnerabilities via email — see [SECURITY.md](SECURITY.md). Do not open
 ## Acknowledgments
 
 During pycubrid's initial development, the official CUBRID Node.js driver — [node-cubrid](https://github.com/CUBRID/node-cubrid) (© 2008–2012 Search Solution Corporation, BSD-3-Clause) — was consulted as a reference implementation to understand CUBRID's CAS (Common Application Server) wire protocol: its packet structure and function codes. pycubrid is an independent pure-Python implementation; see [NOTICE](NOTICE) for details.
+
+We also thank the maintainers and contributors of [CUBRID/cubrid-python](https://github.com/CUBRID/cubrid-python). Its `tests3` suite informed the SQL-feature and type/data regression scenarios added in #409, #410 and #433: INDEX, PARTITION, VIEW, TRIGGER, collections, ENUM and LOB round-trips. These scenarios were adapted to pycubrid's APIs and documented differences, not a claim of full CUBRIDdb API parity. See [NOTICE](NOTICE) for the source files and [third-party notes](THIRD_PARTY_LICENSES.md#reference-test-suite) for provenance and licensing limits.
 
 
 ## Disclaimer

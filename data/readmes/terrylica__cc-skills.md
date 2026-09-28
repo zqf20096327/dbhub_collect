@@ -25,7 +25,7 @@ Claude Code Skills Marketplace: Meta-skills, foundational tools, and self-revisi
 | [gemini-deep-research](./plugins/gemini-deep-research/) | Run Gemini Deep Research via browser automation (claude-in-chrome MCP). Submit prompts, monitor progress, retrieve final reports.                                                                                                                                    | research      |
 | [gh-tools](./plugins/gh-tools/)                         | GitHub workflow automation with intelligent GFM link validation, fork intelligence, and issue creation tooling                                                                                                                                                       | development   |
 | [git-town-workflow](./plugins/git-town-workflow/)       | Prescriptive git-town workflow enforcement for fork-based development                                                                                                                                                                                                | devops        |
-| [gmail-commander](./plugins/gmail-commander/)           | Gmail bot + CLI lifecycle: 1Password OAuth, scheduled email triage via Agent SDK Haiku, interactive Telegram bot                                                                                                                                                     | productivity  |
+| [gmail-commander](./plugins/gmail-commander/)           | Gmail CLI + draft builder with 1Password OAuth; shared Telegram bot code (commands, on-demand triage, Agent SDK routing) imported by a private deployment                                                                                                            | productivity  |
 | [html-showcase](./plugins/html-showcase/)               | Canonical CSS kernel + HTML skeleton for static showcase pages (provenance reports, dashboards); single design-system SSoT via jsDelivr, per-page CSS overrides                                                                                                      | documents     |
 | [itp](./plugins/itp/)                                   | Implement-The-Plan workflow: ADR-driven 4-phase development with preflight, implementation, and release                                                                                                                                                              | productivity  |
 | [itp-hooks](./plugins/itp-hooks/)                       | ITP workflow enforcement + code correctness: PreToolUse / PostToolUse / Stop hooks for SSoT principles, file-size guard, type checks, ASCII art blocking, ty/oxlint/biome lint                                                                                       | enforcement   |
@@ -45,7 +45,7 @@ Claude Code Skills Marketplace: Meta-skills, foundational tools, and self-revisi
 | [ssh-tunnel-companion](./plugins/ssh-tunnel-companion/) | macOS launchd companion for SSH tunnels (Tailscale + CF Access) — see plugin's CLAUDE.md for the SSoT on tunnel architecture                                                                                                                                         | devops        |
 | [statusline-tools](./plugins/statusline-tools/)         | Custom Claude Code status line with git status indicators + global ignore patterns + session-info reporter                                                                                                                                                           | utilities     |
 | [tlg](./plugins/tlg/)                                   | Telegram operations toolkit: messages, channels, dialogs, members, media, search, dump, drafting, cleanup                                                                                                                                                            | productivity  |
-| [tts-tg-sync](./plugins/tts-tg-sync/)                   | TTS + Telegram sync stack: bot process control, voice quality audition, settings tuning, full-stack bootstrap, diagnostic resolver                                                                                                                                   | productivity  |
+| [tts-tg-sync](./plugins/tts-tg-sync/)                   | Hotkey text-to-speech: clipboard read-aloud via Kokoro with Supertonic fallback, speed and stop keys, voice audition, setup, health, diagnostics                                                                                                                     | productivity  |
 
 ## Installation
 
@@ -481,7 +481,7 @@ cc-skills/
 │   ├── devops-tools/             # ClickHouse, Doppler, MLflow, pueue, session recovery
 │   ├── claude-tts-companion/     # Swift macOS karaoke-subtitles companion
 │   ├── kokoro-tts/               # Kokoro TTS engine (install / server / synthesis)
-│   ├── tts-tg-sync/              # TTS + Telegram sync stack
+│   ├── tts-tg-sync/              # Hotkey text-to-speech (TTS only)
 │   ├── tlg/                      # Telegram operations toolkit
 │   ├── ssh-tunnel-companion/     # macOS launchd companion for SSH tunnels
 │   ├── floating-clock/           # macOS floating clock overlay

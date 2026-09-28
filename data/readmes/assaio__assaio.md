@@ -88,8 +88,9 @@ Then run the guided import:
 $ assaio-agent init
 ```
 
-`init` shows which local logs it will read, imports their history and writes the first report. It
-sends nothing over the network.
+`init` shows which local logs it will read and which configured parser plugins it will run, imports
+their history and writes the first report. assaio itself sends nothing over the network; a parser
+plugin from your config is your own program (see [PRIVACY.md](PRIVACY.md)).
 
 The usual loop is short:
 
@@ -119,8 +120,9 @@ reference](https://assaio.dev/docs/reference) is authoritative; the README omits
 | Impact | not shipped | a delivery, quality or business result changed |
 
 Every metric includes source coverage, sample size, freshness and parser version. If a source lacks
-a field, `assaio` leaves it out of the denominator instead of counting it as zero. A missing model
-price appears as `—`/`null`, not `$0`.
+a field, `assaio` excludes it from the denominator rather than counting it as zero. For an exec
+parser plugin, omitted token counters are still stored as 0 (`B212`). A missing model price appears
+as `—`/`null`, not `$0`.
 
 Run:
 
@@ -186,8 +188,8 @@ envelope. The [roadmap](ROADMAP.md) lists these gates.
 ## Extension points
 
 Executables in any language can add a parser, metric or `check` rule. Each protocol has a handshake,
-versioned JSON contract, boundary validation and `verify` command. The core does not import plugin
-internals.
+a versioned JSON contract and boundary validation. Parser and metric plugins have a `verify`
+command; a rule plugin is checked by running `check`. The core does not import plugin internals.
 
 Start with [docs/extending.md](docs/extending.md). The binary can also export the full
 machine-readable reference:

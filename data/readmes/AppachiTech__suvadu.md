@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="demo/hero.gif" alt="Suvadu — search history, browse AI agent prompts" width="700">
+  <img src="demo/hero.gif" alt="Suvadu 0.5.0 — Ctrl+R search with fictional command history" width="700">
 </p>
 
 **Suvadu** replaces your shell history with a SQLite-backed store. Every command gets structured context — exit code, duration, directory, executor, session. AI agents can query it via MCP. 100% local.
@@ -19,7 +19,7 @@
 - **AI agent tracking** — full session capture for Claude Code, Codex and OpenCode; commands and prompts for Cursor and pi.dev; command tagging alone for Antigravity, Windsurf, Aider, Continue and Copilot ([what each tier means](#what-each-agent-actually-gives-you))
 - **Prompt Explorer** — trace every recorded command back to the prompt that triggered it
 - **MCP Server** — **21 read-only tools, 8 resources and 6 prompts, all read-only by default.** The two write tools stay off until you turn their opt-in on. Agent session discovery, project context, failure learning, risk assessment, a shared skills library. Configurable via `suv settings`
-- **100% local** — no cloud, no telemetry, no account. MIT licensed.
+- **100% local** — no cloud, no telemetry, no account. The only request Suvadu makes on its own is a once-a-day check for a newer release, which you can turn off. MIT licensed.
 
 > **Website & Docs:** [suvadu.sh](https://suvadu.sh) &middot; **CLI Reference:** [suvadu.sh/cli](https://suvadu.sh/cli/) &middot; **Blog:** [suvadu.sh/blog](https://suvadu.sh/blog/) &middot; **What's new:** [CHANGELOG](CHANGELOG.md)
 
@@ -34,9 +34,25 @@ brew tap AppachiTech/suvadu && brew install suvadu
 # Install script (macOS & Linux)
 curl -fsSL https://downloads.appachi.tech/suvadu/install.sh | bash
 
+# Install script, into ~/.local/bin without sudo
+curl -fsSL https://downloads.appachi.tech/suvadu/install.sh | bash -s -- --user
+
 # Cargo
 cargo install suvadu
 ```
+
+The install script puts `suv` in `/usr/local/bin`, using sudo only when that
+directory is not writable; `--user` or `--dir DIR` (or `SUVADU_INSTALL_DIR`)
+choose another place. Re-running it updates a script-installed `suv` where it
+already is — recognised by the `suvadu` link the script puts beside it — and
+when nothing has changed it downloads nothing but still repairs that link. If
+the `suv` on your PATH came from Homebrew or Cargo, it stops and names that
+package manager's update command; any other `suv` it did not install is left
+alone, and `--user` or `--dir` installs a separate copy on purpose.
+Run at a terminal, it offers to add the shell hook below to `~/.zshrc` (or
+`~/.bashrc` on Linux): it shows the line first, writes nothing unless you type
+`y`, keeps a copy of the file as `.suvadu-backup`, and never adds the hook
+twice. `--no-modify-rc` turns the offer off.
 
 Then add shell hooks:
 
@@ -49,6 +65,15 @@ echo 'eval "$(suv init bash)"' >> ~/.bashrc && source ~/.bashrc
 ```
 
 Verify: `suv status`
+
+**Staying up to date.** Once a day, in the background, Suvadu looks up the
+newest release number (the same `version.txt` that `suv update` reads) and,
+when there is a newer one, says so in one line before a command you run at a
+terminal — at most once a day, with the update command for how you installed
+it (`brew upgrade suvadu`, `cargo install suvadu` or `suv update`). Nothing
+about you or your history is sent. It never runs in shell hooks, recall,
+scripts, pipes or CI. Turn it off with *Check for Updates* in `suv settings`,
+`[update] check = false` in `config.toml`, or `SUVADU_NO_UPDATE_CHECK=1`.
 
 ---
 
@@ -69,6 +94,7 @@ More at [suvadu.sh/cli/shell-integration](https://suvadu.sh/cli/shell-integratio
 ## Quick Start
 
 ```bash
+suv                         # Home: find any feature by what you want to do (also suv home)
 suv search                  # Interactive search TUI (also Ctrl+R)
 suv history                 # Print last 25 commands (pipeable)
 suv history --json -n 100   # Last 100 commands as JSONL
@@ -83,6 +109,48 @@ suv skills                  # Interactive skills management (browse, add, edit, 
 suv skills add my-skill     # Add a skill any MCP-capable agent can read
 suv skills sync             # Materialize skills into Claude Code/Cursor/Codex
 ```
+
+---
+
+## Find a feature: `suv`
+
+Run `suv` on its own (or `suv home`) to open Home: a searchable map of what
+Suvadu can do, grouped by task:
+find a command, review a session, organize commands, understand your
+activity, review AI activity, connect tools, and manage Suvadu. Type to
+search the features — not your history — with words like *failed*,
+*backup*, *prompts* or *atuin*; each feature shows what it does and the
+real command behind it.
+
+Enter opens what is selected, and never runs anything in your shell:
+
+- **Screens** (settings, sessions, stats, the agent dashboard, …) open as
+  they would from the shell; Esc brings you back to the same place.
+- **Pickers** (search, bookmarks) show the command you chose, with a
+  *Copy command* button. It has not been run — `Ctrl+R` from your shell is
+  still the way to put a command on your prompt.
+- **Reports** (status, doctor, version, history, tags, the agent report)
+  are shown inside Home.
+- Anything that changes data or your shell — imports, deletion, updates,
+  pausing, shell setup — opens **instructions** with copyable examples.
+
+`F1` lists the keys and `F2` opens the command reference: the overview
+`suv --help` prints and every command's own help.
+
+To have a bare `suv` print the classic command overview instead, set the
+*Startup Screen* to `help` in `suv settings`, or in your `config.toml`:
+
+```toml
+[home]
+startup = "help"   # or "home" (the default)
+icons = "ascii"    # or "unicode" for the category markers
+```
+
+This is read from your own config only — a project's `.suvadu.toml` cannot
+change it. Scripts, pipes and `TERM=dumb` always get the overview, on
+stderr with exit status 2 as before, so nothing that runs a bare `suv`
+non-interactively changes. `suv home` opens Home whatever the setting says,
+and `suv --help` always prints the overview.
 
 ---
 
@@ -135,6 +203,39 @@ matches and every page of it can be opened. Pages past the ranked window
 come back newest first — a relevance order computed from only part of the
 result set would be arbitrary there.
 
+**Typing never waits for a search.** Each query runs on a background thread
+with its own read-only connection. A keystroke that changes the query abandons
+the search still running — SQLite stops it mid-scan — and results that arrive
+for an older query are discarded. Enter, the arrow keys and every other key
+that acts on the results first waits for the results of what is typed now, so
+what you accept always matches the query on screen; until they arrive the
+results title says `searching…`.
+
+**Reading the list.** The characters your query matched are underlined and
+emphasised in every row, over the usual syntax colours, so it is clear why a
+command matched. Recall opens in **Commands**, where identical commands share
+one row showing when the command last ran and how many runs matched, so a
+command you ran fifty times does not push every other candidate off the
+screen. `^U` switches to **Executions** — every recorded run, with its time,
+directory and outcome — and back; the results title says which you are
+looking at and counts in those units, and the command you had selected stays
+selected across the switch. To start in Executions instead, set
+`search.show_unique_by_default = false` (or turn off *Start in Commands View*
+in `suv settings`). A row too long
+for the list ends in `…`; the selected row wraps so all of it is visible.
+
+A command is grouped only with *exactly* the same text, so whitespace that
+would otherwise be invisible is drawn: `·` for a leading or trailing space,
+`↵` and `⇥` for line breaks and tabs. When a command holds something that
+cannot be read off the screen — a tab, a zero-width space, a direction
+override — the detail pane adds its escaped *Raw* form. `^V` opens that raw
+view for any command, scrollable however long it is: every space drawn as `·`,
+every hidden character escaped, a line per line break, with its exact length.
+
+**Enter puts the command on your prompt** (or prints it, from `suv search`) —
+it never runs anything. The footer keeps to the core keys; `?` lists every
+shortcut.
+
 Up/Down arrow recall is a different, simpler path: prefix match, newest
 first, no deduplication, with the current directory used only to break ties
 between commands recorded at the same millisecond.
@@ -143,11 +244,12 @@ between commands recorded at the same millisecond.
 taking over the screen, so the output you were reading stays visible.
 
 **Making a choice stick.** `search.match_mode`, `search.scope` and
-`search.compact` set the default for every recall. All three are
-**config-file only**: `suv settings` does not offer them. Put them in the
-`[search]` section of `config.toml`, in the config directory listed under
-[Data Storage](SECURITY.md#data-storage). All three default to the behaviour
-of earlier releases.
+`search.compact` set the default for every recall. Set them on the Search tab
+of `suv settings` (*Default Match Mode*, *Starting Scope*, *Compact Recall*),
+or in the `[search]` section of `config.toml`, in the config directory listed
+under [Data Storage](SECURITY.md#data-storage). Saving from `suv settings`
+keeps every other key in that file, including ones it does not recognise. All
+three default to the behaviour of earlier releases.
 
 ---
 
@@ -190,8 +292,9 @@ restores it, then verifies afterwards that the Atuin file is byte-identical and
 that the entries it claims to have written are really there. Re-running the
 import adds nothing.
 
-Tested against Atuin 18.0.0 – 18.22.0 (history schema `20210422143411` –
-`20260818000000`). A database carrying a migration this release has not been
+Tested against Atuin 18.0.0 – 18.23.0 (history schema `20210422143411` –
+`20260818000000`); 18.23.0 by importing a database the real Atuin 18.23.0
+binary wrote, with [`scripts/test-atuin-import.sh`](scripts/test-atuin-import.sh). A database carrying a migration this release has not been
 tested against is rejected with the migration id rather than guessed at — run
 `suv update` and try again.
 
@@ -367,7 +470,8 @@ See the [full integration guide](https://suvadu.sh/blog/track-ai-agent-commands-
 
 | Feature | Details |
 |---------|---------|
-| **Search** | Full-history search TUI with four [matching modes](#how-recall-matches-and-ranks) (`^X`) and four scopes (`^P`), your own commands by default (`Ctrl+A` shows agents, `Ctrl+E` failures only), filters, Smart rank, detail pane, bookmarks, and `--compact` inline recall |
+| **Home** | A bare `suv` (or `suv home`) — search Suvadu's features by task, see the real command behind each, open screens, pickers and reports, or read copyable instructions for anything that changes data; *Startup Screen* in `suv settings` brings back the classic overview |
+| **Search** | Full-history search TUI with four [matching modes](#how-recall-matches-and-ranks) (`^X`) and four scopes (`^P`), matches highlighted in each row, every run or identical commands grouped with last-used and run counts (`^U`), your own commands by default (`Ctrl+A` shows agents, `Ctrl+E` failures only), filters, Smart rank, detail pane, a raw inspector for exact text (`^V`), bookmarks, and `--compact` inline recall |
 | **History** | Non-interactive `suv history` with filters, `--json`, pipeable to other tools |
 | **Agent Dashboard** | Timeline, risk assessment, per-agent analytics, exportable reports; `suv agent report --fail-on <low\|medium\|high\|critical>` for local CI / git-hook gating |
 | **MCP Server** | 21 read-only tools, 8 resources and 6 prompts, plus two opt-in write tools that are off by default — agent session replay and incremental cross-agent summary checkpoints, project context, failure learning; one response convention with explicit provenance |
@@ -388,27 +492,25 @@ Full feature documentation at [suvadu.sh/cli](https://suvadu.sh/cli/).
 <details>
 <summary><strong>More demos</strong></summary>
 
-<p><em>These recordings predate the current search footer, status row and
-session picker columns. They still show the shape of each screen, not its
-exact chrome.</em></p>
+<p><em>Recorded in Suvadu 0.5.0 with fictional data. The search demo above
+shows Ctrl+R recall; the demos below cover feature discovery and AI sessions.
+The AI example uses staged records, not a live agent run.</em></p>
 
 <p align="center">
-  <img src="demo/suvadu-search.gif" alt="Suvadu search TUI" width="700">
+  <img src="demo/suvadu-home.gif" alt="Suvadu Home — browse features, find failed commands, and open filtered history" width="960">
   <br>
-  <em>Search, stats & settings</em>
+  <em>Discover features — run suv, search by task, and open a tool</em>
 </p>
 
 <p align="center">
-  <img src="demo/suvadu-agent.gif" alt="Suvadu agent dashboard" width="700">
+  <img src="demo/suvadu-ai.gif" alt="Suvadu AI session — read a prompt, inspect a failed test and successful retry, then read the recorded response" width="960">
   <br>
-  <em>Agent dashboard — track what your AI agents execute</em>
+  <em>AI activity — follow the prompt, commands, exit status, and response in one timeline</em>
 </p>
 
-<p align="center">
-  <img src="demo/suvadu-prompts.gif" alt="Suvadu prompt explorer" width="700">
-  <br>
-  <em>Prompt Explorer — trace commands back to the prompt that triggered them</em>
-</p>
+Watch the [video versions](https://suvadu.sh/#demo), or read the
+[Home guide](https://suvadu.sh/cli/home/) and
+[session guide](https://suvadu.sh/cli/sessions/).
 
 </details>
 

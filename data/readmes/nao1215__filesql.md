@@ -4,6 +4,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/nao1215/filesql.svg)](https://pkg.go.dev/github.com/nao1215/filesql)
 [![MultiPlatformUnitTest](https://github.com/nao1215/filesql/actions/workflows/unit_test.yml/badge.svg)](https://github.com/nao1215/filesql/actions/workflows/unit_test.yml)
 ![Coverage](https://raw.githubusercontent.com/nao1215/octocovs-central-repo/main/badges/nao1215/filesql/coverage.svg)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/nao1215/filesql/badge)](https://scorecard.dev/viewer/?uri=github.com/nao1215/filesql)
 
 ![logo](./doc/image/filesql-logo.png)
 
@@ -57,6 +58,8 @@ filesql is for cases where the data is already in a file and the fastest useful 
 - Join across CSV, TSV, LTSV, JSON, JSONL, Parquet, XLSX, ACH, and Fedwire.
 - Keep edits in memory until you decide to save them.
 - Clean inputs with `prep` before loading them.
+
+If the job is analytics on data larger than memory, or on files in S3, use [DuckDB](https://duckdb.org/): its columnar engine is faster and its SQL is richer. filesql is for a Go program that wants file data behind `database/sql` with no cgo, edits written back into the file they came from, ACH, Fedwire and LTSV input, Shift-JIS or EUC-JP output, and validation with `prep` before a row becomes a table.
 
 ## Features
 

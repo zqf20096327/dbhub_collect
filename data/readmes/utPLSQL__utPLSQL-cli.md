@@ -98,15 +98,48 @@ Accepted formats:
 - `<user>/<password>@//<host>[:<port>]/<service>`
 - `<user>/<password>@<host>:<port>:<SID>` 
 - `<user>/<password>@<TNSName>`
+- `/@<TNSName>` - credentials are taken from an Oracle Wallet (Secure External Password Store), see [Oracle Wallet](#oracle-wallet-secure-external-password-store)
                          
-To connect using TNS, you need to have the ORACLE_HOME environment variable set.
-The file tnsnames.ora must exist in path %ORACLE_HOME%/network/admin
-The file tnsnames.ora must contain valid TNS entries. 
+To connect using a TNS name, the file `tnsnames.ora` with a valid entry for that name must be found.
+The directory holding `tnsnames.ora` (and `ojdbc.properties`, if used) is taken from the first of these that is set:
 
-In case you use a username containing `/` or a password containing `@` you should encapsulate it with double quotes `"`:
+1. `TNS_ADMIN` parameter in the connect string, e.g. `app/pass@MYDATABASE?TNS_ADMIN=/path/to/network/admin`
+2. Java system property `oracle.net.tns_admin`, e.g. `export JAVA_OPTS="-Doracle.net.tns_admin=/path/to/network/admin"`
+3. `TNS_ADMIN` environment variable
+4. `$ORACLE_HOME/network/admin`, when the `ORACLE_HOME` environment variable is set
+
+Options 1-3 are handled by the Oracle JDBC driver. Option 4 is a fallback provided by utPLSQL-cli, used only when none of the others is set.
+
+A password may contain `@`: everything up to the last `@` is taken as the password, e.g. `utplsql run myUser/myP@ssword@connectstring`.
+A username containing `/` must be enclosed in double quotes `"`, and so may the password:
 ```
 utplsql run "my/Username"/"myP@ssword"@connectstring
 ```
+
+#### Oracle Wallet (Secure External Password Store)
+
+To avoid passing the password on the command line, store the credentials in an Oracle Wallet and connect with `/@<TNSName>`:
+```
+utplsql run /@MYDATABASE
+```
+
+Setup example:
+```
+# create an auto-login wallet with credentials for TNS alias MYDATABASE
+orapki wallet create -wallet $HOME/oracle/wallet -auto_login_local
+mkstore -wrl $HOME/oracle/wallet -createCredential MYDATABASE someusername
+
+# point the JDBC driver to the wallet
+echo "oracle.net.wallet_location=(SOURCE=(METHOD=FILE)(METHOD_DATA=(DIRECTORY=$HOME/oracle/wallet)))" \
+  > $HOME/oracle/network/admin/ojdbc.properties
+
+# tnsnames.ora with the MYDATABASE entry must be in the same directory as ojdbc.properties
+export TNS_ADMIN=$HOME/oracle/network/admin
+```
+
+`ojdbc.properties` is read from the same directory as `tnsnames.ora`, so any of the options listed under [ConnectionURL](#connectionurl) can be used instead of `TNS_ADMIN`, for example `utplsql run "/@MYDATABASE?TNS_ADMIN=/path/to/network/admin"`.
+
+The TNS alias used in the connect string must match the alias of the credential stored in the wallet.
 
 ### run
 `utplsql run <ConnectionURL> [<options>]`
@@ -134,7 +167,7 @@ utplsql run "my/Username"/"myP@ssword"@connectstring
                       If defined, the output is not displayed on screen by default. This can be changed with the -s parameter.
                       If not defined, then output will be displayed on screen, even if the parameter -s is not specified.
                       If more than one -o parameter is specified for one -f parameter, the last one is taken into consideration.
-  -s                - Forces putting output to to screen for a given -f parameter.
+  -s                - Forces putting output to screen for a given -f parameter.
   
 -source_path=source - path to project source files, use the following options to enable custom type mappings:
   -owner="app"
@@ -153,7 +186,7 @@ utplsql run "my/Username"/"myP@ssword"@connectstring
   -name_subexpression=subexpression_number
     
 -c                  - If specified, enables printing of test results in colors as defined by ANSICONSOLE standards. 
-(--color)             Works only on reporeters that support colors (ut_documentation_reporter).
+(--color)             Works only on reporters that support colors (ut_documentation_reporter).
                       
 --failure-exit-code=code - Override the exit code on failure, defaults to 1. You can set it to 0 to always exit with a success status.
 
@@ -184,7 +217,7 @@ utplsql run "my/Username"/"myP@ssword"@connectstring
 -r                 - Enables random order of test executions
 (--random-test-order) Default: false
 
--seed              - Sets the seed to use for random test execution order. If set, it sets -random to true
+-seed=seed         - Sets the seed to use for random test execution order. If set, it sets -r (--random-test-order) to true
 (--random-test-order-seed)
 
 --coverage-schemes - A comma separated list of schemas on which coverage should be gathered

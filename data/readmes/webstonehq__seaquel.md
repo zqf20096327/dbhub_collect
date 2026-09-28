@@ -11,7 +11,7 @@
 [![Discord](https://img.shields.io/discord/1452421515164385436?label=Discord&logo=discord&logoColor=white)](https://seaquel.app/discord)
 [![Try Demo](https://img.shields.io/badge/Try-Live%20Demo-brightgreen)](https://seaquel.app/demo)
 
-![Seaquel Screenshot](https://seaquel.app/product-screenshot.png)
+![Seaquel Screenshot](https://seaquel.app/product-screenshot.jpg)
 
 Works with 6 database engines. No account required. Open source, free for personal use.<br>
 [Try it in your browser](https://seaquel.app/demo) in seconds.
@@ -26,6 +26,7 @@ Works with 6 database engines. No account required. Open source, free for person
 - **Inline result editing** — INSERT, UPDATE, and DELETE rows directly from the results table
 - **Visual query builder** — Drag-and-drop canvas for building queries without SQL
 - **AI assistant** — Get help writing and understanding SQL queries
+- **MCP server** — Let Claude Desktop, Claude Code or another MCP host read your schemas and run read-only queries (desktop)
 - **SQL learning sandbox** — Interactive challenges to practice SQL
 
 ### Explore & Visualize
@@ -39,7 +40,7 @@ Works with 6 database engines. No account required. Open source, free for person
 ### Collaborate & Share
 
 - **CSV/JSON export** — Export query results to CSV or JSON
-- **Query sharing** — Share queries via Git repositories
+- **Query sharing** — Share queries via Git repositories (desktop)
 - **Connection import** — Import connections from DBeaver and TablePlus
 - **Multi-project** — Organize connections and queries across projects
 
@@ -48,7 +49,7 @@ Works with 6 database engines. No account required. Open source, free for person
 - **Themes** — Light and dark modes with a built-in theme editor
 - **Internationalization** — Available in English, Spanish, German, French, Arabic, and Korean
 - **Command palette** — Quick access to all actions via keyboard
-- **SSH tunneling** — Connect securely through SSH tunnels
+- **SSH tunneling** — Connect securely through SSH tunnels (desktop)
 - **Auto-updates** — Stay current with automatic update notifications
 
 ## Comparison with Alternatives
@@ -82,9 +83,17 @@ Want to try it first? Check out the [browser demo](https://seaquel.app/demo) (po
 
 Seaquel ships a single container image at `ghcr.io/webstonehq/seaquel`,
 multi-arch (linux/amd64 + linux/arm64). It runs SvelteKit + Better Auth on
-the public port and a loopback-only Rust database service as a subprocess
-in the same container — one artifact, one `docker run`. A Seaquel subscription
-license key is required at first signup, the same as Cloud.
+the public port and a loopback-only Rust service (database connections,
+per-user metadata storage and licensing) as a subprocess in the same
+container — one artifact, one `docker run`. A Seaquel subscription license
+key is required at first signup, the same as Cloud.
+
+The web app connects to PostgreSQL, MySQL, MariaDB and SQL Server over the
+network. SQLite and DuckDB connections, SSH tunnels, shared projects (git),
+client-certificate TLS and Unix-socket connections are desktop-only: on a
+server they would read files or reach sockets on the host. The SQL tutorial
+still works, since it runs DuckDB-WASM in the browser from the image's own
+copy.
 
 #### `docker run`
 
@@ -126,19 +135,35 @@ The defaults work out of the box: port `8787`, data at `/data`, talks to
 secret at `/data/auth-secret` on first boot. Set the variables below only
 when the default doesn't fit your deployment.
 
-| Variable                  | Set this when…                                                                          |
-| ------------------------- | --------------------------------------------------------------------------------------- |
-| `SEAQUEL_TRUSTED_ORIGINS` | Deploying on a real domain. Localhost variants are always trusted. Comma-separated origins Better Auth's CSRF check allows. |
-| `BETTER_AUTH_URL`         | Sitting behind a reverse proxy that rewrites `Host`, or silencing the boot warning below. Sets Better Auth's canonical URL. |
-| `SEAQUEL_AUTH_SECRET`     | Running multiple replicas. All replicas must share a session key; single-container installs don't need to set this. |
-| `SEAQUEL_COOKIE_DOMAIN`   | Sharing sessions across subdomains, e.g. `.example.com`.                                |
-| `SEAQUEL_TRUSTED_PROXIES` | Running behind a reverse proxy or load balancer. Comma-separated proxy IPs/CIDRs (e.g. `10.0.0.0/8`). Without it, sign-in rate limits key on the socket address and `X-Forwarded-For` is ignored, so every client behind the proxy shares one limit. |
-| `SEAQUEL_CONTROL_URL`     | Pointing at a staging control plane, or `http://127.0.0.1:1` to test offline mode. Default `https://seaquel.app`. |
-| `PORT` / `DATA_DIR`       | Overriding `8787` / `/data`.                                                            |
+| Variable                  | Set this when…                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SEAQUEL_TRUSTED_ORIGINS` | The install is reached by a domain name and `BETTER_AUTH_URL` isn't set, or it has more than one public origin. Comma-separated origins the CSRF checks allow. `BETTER_AUTH_URL`'s origin (else `ORIGIN`'s) is always trusted. With neither set, an install reached at `localhost` or an IP address (`http://localhost:8787`, `http://192.168.1.20:8787`) trusts the address you opened; a domain name is never trusted that way, since a DNS-rebinding page could supply it. |
+| `BETTER_AUTH_URL`         | The install is reached by a domain name (set it to the public URL, e.g. `https://seaquel.example.com`), sits behind a reverse proxy, or you want to silence the boot warning below. Sets Better Auth's canonical URL and the origin the CSRF checks trust. Once it is set, only its origin and `SEAQUEL_TRUSTED_ORIGINS` are trusted.                                                                                                                                         |
+| `SEAQUEL_AUTH_SECRET`     | Running multiple replicas. All replicas must share a session key; single-container installs don't need to set this.                                                                                                                                                                                                                                                                                                                                                           |
+| `SEAQUEL_COOKIE_DOMAIN`   | Sharing sessions across subdomains, e.g. `.example.com`.                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `SEAQUEL_TRUSTED_PROXIES` | Running behind a reverse proxy or load balancer. Comma-separated proxy IPs/CIDRs (e.g. `10.0.0.0/8`). Without it, sign-in rate limits key on the socket address and `X-Forwarded-For` is ignored, so every client behind the proxy shares one limit.                                                                                                                                                                                                                          |
+| `SEAQUEL_CONTROL_URL`     | Pointing at a staging control plane, or `http://127.0.0.1:1` to test offline mode. Default `https://seaquel.app`.                                                                                                                                                                                                                                                                                                                                                             |
+| `PORT` / `DATA_DIR`       | Overriding `8787` / `/data`.                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 Internal tuning knobs (`SEAQUEL_LICENSE_SOFT_TTL`, `SEAQUEL_LICENSE_GRACE_TTL`,
 `SEAQUEL_BUNDLE_TRUSTED_PUBKEY`) have sensible defaults documented inline
 in the source; set them only when you need to.
+
+**Outbound proxies and TLS inspection.** License calls to seaquel.app come
+from the Rust service. They go through `HTTPS_PROXY`/`HTTP_PROXY` (and skip
+hosts in `NO_PROXY`) when those are set in the container's environment. If
+a proxy re-signs TLS, point `NODE_EXTRA_CA_CERTS` at a PEM file with its CA
+certificate; `SSL_CERT_FILE` and `SSL_CERT_DIR` work too.
+
+**What reaches the Rust service.** It gets only the variables it needs:
+the ones above, `DATA_DIR`, the proxy and CA variables, `PATH`, `TZ`,
+`LANG` and the temp directories. `PG*` and `MYSQL*` variables (`PGPASSWORD`,
+`PGHOST`, …) and a `~/.pgpass` file are never used for a user's connection.
+
+Node and the Rust service must run in the same container (the image's
+default). Licensing refuses calls from any other host, so a split
+deployment gets a 503 page on every request. The same page shows when the
+Rust service is down or can't answer.
 
 With `BETTER_AUTH_URL` unset, every boot logs:
 
@@ -149,11 +174,12 @@ BETTER_AUTH_URL environment variable. Without this, callbacks and
 redirects may not work correctly.
 ```
 
-This is expected and harmless for a single-host install reached at its
-own `Host` — signup, sessions and cookies all work, since the relevant
-requests are same-origin. Set `BETTER_AUTH_URL` to the instance's public
-URL to silence it, and do set it whenever anything rewrites `Host` or you
-rely on absolute links (e.g. emailed callbacks).
+This is expected and harmless for an install reached at `localhost` or an
+IP address: signup, sessions and cookies all work. An install reached by a
+domain name must set `BETTER_AUTH_URL` to its public URL (or list its origin
+in `SEAQUEL_TRUSTED_ORIGINS`), or signup, sign-in and every `/api` call are
+refused with 403. Set it also whenever anything rewrites `Host` or you rely
+on absolute links (e.g. emailed callbacks).
 
 #### Air-gapped / offline mode
 
@@ -184,7 +210,7 @@ contacted.
 - Revocations are cumulative — each new bundle carries the full
   revocation list for the subscription.
 - A subscription cancellation in seaquel.app automatically adds all of
-  that subscription's license keys to the revocation list (so the *next*
+  that subscription's license keys to the revocation list (so the _next_
   bundle the owner downloads carries the revocations).
 - If the bundle isn't refreshed before `not_after`, the install enters
   a read-only revalidate state until a fresh bundle is imported.
@@ -202,7 +228,7 @@ A bundle is verified against the public half of the signing keypair. The
 private half — a 32-byte Ed25519 seed — lives only on the control plane,
 as the `SEAQUEL_BUNDLE_SIGNING_PRIVATE_KEY` secret on seaquel-app. The
 public half is compiled into this repo, as `PROD_TRUSTED_PUBKEYS` in
-`src/lib/server/airgap/bundle-store.ts`.
+`crates/seaquel-license/src/server/airgap/bundle_store.rs`.
 
 To derive that public half from a seed without minting anything, pass
 `--only-derive`:
@@ -220,8 +246,8 @@ private half, so it belongs in the control-plane secret and nowhere else.
 The fingerprint is the first 16 bytes of `SHA-256(pubkey)`, and the
 verifier looks keys up by it, so an anchor whose fingerprint does not
 match its pubkey rejects every real bundle instead of erroring. The
-`ships a well-formed built-in production set` test in
-`bundle-store.test.ts` guards against exactly that.
+`ships_a_well_formed_built_in_production_set` test in
+`crates/seaquel-license/tests/bundle_store.rs` guards against exactly that.
 
 Because `PROD_TRUSTED_PUBKEYS` is a list, a key rotation can ship a
 release carrying both the old and new anchors, switch the control-plane
@@ -262,9 +288,10 @@ docker run \
   seaquel:test
 ```
 
-No env vars needed for a localhost smoke test — `127.0.0.1:8787` is
-auto-trusted by the CSRF gate and the session secret auto-generates on
-first boot. Wait for the health check to pass (~20 s), then probe it:
+No env vars needed for a localhost smoke test — the CSRF checks trust the
+address you open (`http://localhost:8787` or `http://127.0.0.1:8787`) as the
+install's own origin, and the session secret auto-generates on first
+boot. Wait for the health check to pass (~20 s), then probe it:
 
 ```bash
 docker ps --filter name=seaquel-test --format '{{.Status}}'
@@ -275,8 +302,9 @@ In the browser at <http://localhost:8787>:
 
 1. `/signup` — the first user becomes the tenant Owner. Paste an
    owner-tier subscription license key when prompted.
-2. Create a project, add a connection (try a Postgres/MySQL you have
-   access to, or a local SQLite path like `/data/test.db`).
+2. Create a project, add a connection to a Postgres, MySQL, MariaDB or
+   SQL Server database you have access to. (SQLite and DuckDB aren't
+   offered on web; a `sqlite:` connection string is refused.)
 3. Save the password on the connection — the credential-vault setup
    dialog should appear. Pick a passphrase; credentials are encrypted
    in the browser before they ever reach the server (zero-knowledge).
@@ -292,9 +320,9 @@ docker volume rm seaquel-test-data
 ##### Air-gapped mode
 
 Exercise the offline flow with a locally-minted bundle. Air-gapped mode
-itself is purely bundle-driven: once a bundle is imported, the dispatcher
-in `licensing.ts` routes every call to local helpers and never touches
-the network. **A real air-gapped deployment just imports the bundle —
+itself is purely bundle-driven: once a bundle is imported, the license
+service (`crates/seaquel-license/src/server`) routes every call to its
+air-gap equivalent and never touches the network. **A real air-gapped deployment just imports the bundle —
 there's no env var that turns offline mode "on."**
 
 **1. Mint a bundle with a dev keypair.**
@@ -355,8 +383,8 @@ there. On success you'll see tier/seats/expiry; the page then offers a
 
 **4. Sign up with the bundle's owner key.**
 
-At `/signup`, use `DEV-OWNER` as the license key. The dispatcher routes
-through `airgap.registerInstallLocal` (because a bundle is loaded), the
+At `/signup`, use `DEV-OWNER` as the license key. The license service
+routes through `register_install_local` (because a bundle is loaded), the
 owner's `member_license` row is written with `is_owner=1`, and a session
 cookie comes back. No network call to `seaquel.app` happened.
 
@@ -364,7 +392,7 @@ cookie comes back. No network call to `seaquel.app` happened.
 
 Open a private window, hit `/signup`, paste any random string as the
 license key. Expect a `license_not_found` rejection from
-`verifyLocalMembershipLicense`.
+`verify_local_membership_license`.
 
 **6. Sign up the member.**
 
@@ -402,10 +430,12 @@ node scripts/mint-airgap-bundle.ts \
   --out=/tmp/seaquel-test-v2.bundle
 ```
 
-Upload the new bundle at `/settings/airgap` as the owner. The endpoint
-walks `member_license`, stamps `revoked_at` on the member's row, and
-deletes their Better Auth session in one transaction. The member's next
-request returns 403 and they're bounced back to login.
+Upload the new bundle at `/settings/airgap` as the owner. The license
+service walks `member_license` and stamps `revoked_at` on the member's
+row in one transaction, then the Node server deletes their Better Auth
+sessions. If that last step fails, uploading the same bundle again
+finishes it. The member's next request returns 403 and they're bounced
+back to login.
 
 **9. Test offline → online transition.**
 
@@ -460,6 +490,97 @@ docker volume rm seaquel-airgap-data
 | ERD generation       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Inline editing       | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 | Statistics dashboard | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
+| Self-hosted web app  | :white_check_mark: | :white_check_mark: | :white_check_mark: |        :x:         | :white_check_mark: |        :x:         |
+
+SQLite and DuckDB are desktop-only. The self-hosted web app runs on a
+server, where a SQLite or DuckDB "connection" would be a file on that
+server, so it doesn't offer them.
+
+## MCP server
+
+The desktop app ships a command line tool, `seaquel-cli`, whose `mcp`
+subcommand runs an [MCP](https://modelcontextprotocol.io) server over stdio.
+An MCP host such as Claude Desktop or Claude Code can then list the
+connections you pick, read their schemas, run read-only queries and saved
+queries, and EXPLAIN a query. It uses your saved connections, passwords and
+SSH settings from the app, so there is nothing to configure twice. The app
+doesn't need to be running.
+
+### Setup
+
+Open **Settings → MCP** in the app. Check the connections, or whole projects,
+the server may use, then copy one of the snippets it builds:
+
+- **Claude Desktop:** add the JSON to `claude_desktop_config.json` (Settings →
+  Developer → Edit Config in Claude Desktop), merging it into `mcpServers` if
+  the file already has one, and restart Claude Desktop.
+- **Claude Code:** run the `claude mcp add seaquel -- …` line in a terminal.
+
+On macOS the snippets point at the tool inside the app,
+`/Applications/Seaquel.app/Contents/MacOS/seaquel-cli`. deb and rpm installs
+put it in `/usr/bin/seaquel-cli`. On Windows the panel shows its full path in
+the install folder; the installer doesn't add it to `PATH`. To type
+`seaquel-cli` in a terminal on macOS or in the Linux AppImage, use **Install
+Command Line Tool…** in the app menu (or the button in the panel). It links
+`/usr/local/bin/seaquel-cli` on macOS (asking for your password if needed) and
+`~/.local/bin/seaquel-cli` for the AppImage.
+
+Open the app once after installing or updating it before you start the
+server. The server never changes the app's data file, so if a new version has
+an update to make, it refuses with "Open the Seaquel app once to update your
+data".
+
+### What the server can see
+
+Only the connections named on its command line:
+
+```bash
+seaquel-cli mcp --connection <id or name> --connection <id or name>
+seaquel-cli mcp --project <id or name>
+```
+
+Both flags can be repeated, and names must match exactly. The list is read
+when the server starts, so a connection added to an exposed project shows up
+after the MCP host restarts the server. With neither flag the server starts
+with no connections. The settings panel names connections and
+projects by id, since names can change.
+
+The AI sharing settings apply here too, per connection or from Settings → AI:
+with schema sharing off the server won't describe that connection, and with
+"Allow AI to run read-only queries" off it won't run queries on it. Data
+sharing is off by default, so turn it on for each connection you want
+queried. Sharing changes apply to the next tool call, without a restart.
+
+### Read-only
+
+The server never writes. Queries go through the same read-only check as the
+in-app AI and then run in the database's read-only mode (on SQL Server,
+inside a transaction that is always rolled back; a read-only login is the
+only full guarantee there). EXPLAIN never runs ANALYZE. Results are capped
+at 1,000 rows (100 unless the host asks for more), 64 KB per cell and about
+4 MB per result, and each call is cancelled on the database after 60 seconds.
+
+### DuckDB
+
+DuckDB connections open locked down: the server can read the tables and
+views in the database file and nothing else. Reading other files (`read_csv`,
+`read_parquet`, a path used as a table, `glob`), `COPY`, `ATTACH`, and
+installing or loading extensions are refused, so a view over a CSV or Parquet
+file fails too. JSON functions work. There is no time zone support, so
+functions that need a time zone and arithmetic on `TIMESTAMPTZ` values fail.
+
+### Passwords and the macOS keychain
+
+The server reads saved passwords from the same keychain entries as the app.
+On macOS the first query on a connection with a saved password (or SSH
+password or key passphrase) shows a prompt asking whether `seaquel-cli` may use
+it. Choose **Always Allow** and it won't ask again for that item. The call
+waits while the prompt is open. If you choose Deny, the call fails with a
+message naming the connection. A connection without a saved password can't
+be used: save it in the app first.
+
+SSH tunnels work for hosts the app already trusts. The server never adds a
+host key, so for a new bastion, connect once in the app and accept its key.
 
 ## Community
 

@@ -9,6 +9,7 @@
 [![reviewdog](https://github.com/nao1215/sqly/actions/workflows/reviewdog.yml/badge.svg)](https://github.com/nao1215/sqly/actions/workflows/reviewdog.yml)
 ![GitHub](https://img.shields.io/github/license/nao1215/sqly)
 [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/nao1215/sqly/total)](https://github.com/nao1215/sqly/releases)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/nao1215/sqly/badge)](https://scorecard.dev/viewer/?uri=github.com/nao1215/sqly)
 
 
 # sqly
@@ -49,9 +50,12 @@ Pick the tool that fits the job:
 | A CSV-native SQL dialect with its own engine and cursors | [csvq](https://github.com/mithrandie/csvq) |
 | SQL over CSV/TSV/JSON with a choice of backend engines | [trdsql](https://github.com/noborus/trdsql) |
 | SQL over CSV with long-standing, mature tooling | [q](https://github.com/harelba/q), [textql](https://github.com/dinedal/textql) |
+| Analytics on data larger than memory, or on files in S3 | [DuckDB](https://duckdb.org/) |
 | SQL over files, with an interactive shell, cross-format joins, and write-back | sqly |
 
 sqly's emphasis is the session: an interactive shell with completion and history, files of different formats joined as peers, and the ability to write edits back into the source file.
+
+Against DuckDB, which is faster and has the richer SQL, sqly's ground is narrower: `UPDATE` a CSV or Excel file and `.save --in-place` it, read ACH, Fedwire and LTSV, keep a Shift-JIS or EUC-JP file in its encoding when it is saved, and write queries in MySQL, PostgreSQL or GoogleSQL syntax with `--dialect`.
 
 ## Install
 
@@ -344,7 +348,7 @@ sqly runs each statement in its own transaction on an in-memory database, so a f
 
 ## Benchmark
 
-sqly is measured end to end with [himorime](https://github.com/nao1215/himorime). The same query run by sqly, trdsql, csvq and textql, with the machine and the versions it was measured on, is on the [about page](https://nao1215.github.io/sqly/about/#benchmark); what the regression suite measures on every pull request is in [bench/README.md](./bench/README.md).
+sqly is measured end to end with [himorime](https://github.com/nao1215/himorime). The same queries run by sqly, trdsql, csvq, textql and DuckDB, with the machine and the versions they were measured on, are on the [Benchmark page](https://nao1215.github.io/sqly/benchmark/); what the regression suite measures on every pull request is in [bench/README.md](./bench/README.md).
 
 ## Contributing
 

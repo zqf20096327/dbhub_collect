@@ -4,6 +4,13 @@
 
 [English](#english) | [Русский](#русский) | [Deutsch](#deutsch) | [Español](#español) | [中文](#中文) | [日本語](#日本語) | [Français](#français) | [Italiano](#italiano) | [Português](#português) | [한국어](#한국어)
 
+| 💸 Поддержка проекта |
+|:---|
+| **Gram (TON):** `UQCXJEpjngpV1bx5TYuYbdUOMzewSUSu4ruTy3kO0Qq4FDqW` |
+| **RU-Card:** `2204321297371965` |
+
+<img width="1870" height="841" alt="image" src="https://github.com/user-attachments/assets/c129680a-fd62-4234-88b1-5d3224b9550f" />
+
 ---
 
 ## English
