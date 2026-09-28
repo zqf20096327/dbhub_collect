@@ -1,0 +1,21 @@
+# 敏感：绝不入库（GitHub token 在此）
+.env
+
+# 运行时产物
+__pycache__/
+*.pyc
+logs/
+.zcode/
+
+# 采集工作区的大体积中间数据（不入库；README 全文可按 state 里的 sha 重拉，
+# parts/ 是分通道原始结果，仅断点续采需要）
+data/readmes/
+data/snapshot_*/parts/
+
+# 状态轮转备份（atomic_write_json 的 .1~.4 备份）
+state/*.json.[0-9]
+state/*.json.[0-9][0-9]
+
+# 杂项
+*.tar.gz
+submit.json
