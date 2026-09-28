@@ -6,6 +6,7 @@
   python collect_pool.py --only topic         # 只跑某阶段
   python collect_pool.py --dry-run            # 只打印将执行的查询，不联网
   python collect_pool.py --max-calls 3000     # 覆盖当晚调用预算
+  python collect_pool.py --max-minutes 180    # 覆盖墙钟上限（默认 120 分钟）
 产物：data/snapshot_YYYYMMDD/pool.json + meta/{probe,run_summary}.json
 """
 from __future__ import annotations
@@ -151,7 +152,7 @@ def run(args):
         print("[dry-run] 白名单：", " ".join(gen["WHITELIST_REPOS"]))
         return
 
-    client = GitHubClient(Budget(max_calls=args.max_calls))
+    client = GitHubClient(Budget(max_calls=args.max_calls, max_minutes=args.max_minutes))
     budget_stopped = None
 
     try:
@@ -295,6 +296,7 @@ def main():
     ap.add_argument("--only", choices=["probe", "topic", "org", "keyword",
                                        "whitelist", "merge"])
     ap.add_argument("--max-calls", type=int, default=4000)
+    ap.add_argument("--max-minutes", type=float, default=120.0)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("-v", action="store_true")
     args = ap.parse_args()
