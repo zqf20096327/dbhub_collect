@@ -1,0 +1,329 @@
+# @fozikio/cortex-engine
+
+[![npm version](https://img.shields.io/npm/v/@fozikio/cortex-engine)](https://www.npmjs.com/package/@fozikio/cortex-engine)
+[![npm downloads](https://img.shields.io/npm/dw/@fozikio/cortex-engine)](https://www.npmjs.com/package/@fozikio/cortex-engine)
+[![GitHub stars](https://img.shields.io/github/stars/Fozikio/cortex-engine)](https://github.com/Fozikio/cortex-engine/stargazers)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+Persistent memory for AI agents. Open source, LLM-agnostic, works with any MCP client.
+
+<p align="center">
+  <img src="demo.gif" alt="cortex-engine demo — init, explore, serve" width="800" />
+</p>
+
+## Star History
+
+<a href="https://www.star-history.com/?repos=Fozikio%2Fcortex-engine&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Fozikio/cortex-engine&type=date&theme=dark&legend=top-left&sealed_token=m-r8kH953iT6pzBY9idt17lGZAGAPnwbLStINMT6BnqlJl0iwn1oc_xmkpc9bkzemp951q9oqe2HsZ94lae_47Ud_czVTwr-I8QaOwuQbPz-OGOHJroEFA" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Fozikio/cortex-engine&type=date&legend=top-left&sealed_token=m-r8kH953iT6pzBY9idt17lGZAGAPnwbLStINMT6BnqlJl0iwn1oc_xmkpc9bkzemp951q9oqe2HsZ94lae_47Ud_czVTwr-I8QaOwuQbPz-OGOHJroEFA" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Fozikio/cortex-engine&type=date&legend=top-left&sealed_token=m-r8kH953iT6pzBY9idt17lGZAGAPnwbLStINMT6BnqlJl0iwn1oc_xmkpc9bkzemp951q9oqe2HsZ94lae_47Ud_czVTwr-I8QaOwuQbPz-OGOHJroEFA" />
+ </picture>
+</a>
+
+## What It Does
+
+Most AI agents forget everything when the session ends. `cortex-engine` fixes that — it gives agents a persistent memory layer that survives across sessions, models, and runtimes.
+
+- **Semantic memory** — store and retrieve observations, beliefs, questions, and hypotheses as interconnected nodes
+- **Belief tracking** — agents hold positions that update when new evidence contradicts them
+- **Two-phase dream consolidation** — NREM compression (cluster, refine, create) + REM integration (connect, score, abstract) — modeled on biological sleep stages
+- **Goal-directed cognition** — `goal_set` creates desired future states that generate forward prediction error, biasing consolidation and exploration toward what matters
+- **Neuroscience-grounded retrieval** — GNN neighborhood aggregation, query-conditioned spreading activation, multi-anchor Thousand Brains voting, epistemic foraging
+- **Information geometry** — locally-adaptive clustering thresholds that respect embedding space curvature, schema congruence scoring
+- **Graph health metrics** — Fiedler value (algebraic connectivity) measures knowledge integration; PE saturation detection prevents identity model ossification
+- **Spaced repetition (FSRS)** — interval-aware scheduling with consolidation-state-dependent decay profiles
+- **Embeddings** — pluggable providers (built-in, OpenAI, Vertex AI, Ollama) — no external service required by default
+- **LLM-agnostic** — pluggable LLM providers: Ollama (free/local), Gemini, Kimi (Moonshot AI), DeepSeek, Hugging Face, OpenRouter, OpenAI, or any OpenAI-compatible API
+- **Three storage backends** — local SQLite (default), cloud Firestore, and JSON file (backup/migration). All share one `CortexStore` interface — see [docs/storage-backends.md](docs/storage-backends.md)
+- **Atomic transactions** — `withTransaction(fn)` primitive composes multi-step writes. SQLite uses `BEGIN IMMEDIATE` with a per-store mutex; Firestore uses `runTransaction` with a write-routing proxy. See [docs/concurrency.md](docs/concurrency.md)
+- **Migration tooling** — `fozikio migrate --from <url> --to <url>` clones between any pair of backends. ID-preserving, checkpointed, resumable, fails-loud on schema mismatch
+- **Typed tool catalogue** — every cognitive tool carries `category` + `whenToUse` + `doNotUse` metadata so LLMs disambiguate cleanly. Browse with `fozikio tools` or `GET /tools`. Auto-generated reference at [docs/tools-reference.md](docs/tools-reference.md)
+- **Long-context dream consolidation** — set `strategy: long-context` to run edge discovery and abstraction in a single large LLM pass instead of N² pairwise calls; surfaces transitive patterns and cross-domain connections that the sequential approach misses
+- **Agent dispatch** — `agent_invoke` lets your agent spawn cheap, cortex-aware sub-tasks using any configured LLM. Knowledge compounds across sessions.
+- **MCP server** — 60 cognitive tools (`query`, `observe`, `believe`, `wander`, `dream`, `goal_set`, `agent_invoke`, `thread_create`, `journal_write`, `evolve`, etc.) over the Model Context Protocol
+
+The result: personality and expertise emerge from accumulated experience, not system prompts. An agent with 200 observations about distributed systems doesn't need to be told "you care about distributed systems." It just knows.
+
+Works with Claude Code, Cursor, Windsurf, or any MCP-compatible client. Runs locally (SQLite) or in the cloud (Firestore + Cloud Run).
+
+## Security
+
+The engine includes defense-in-depth protections for deployed environments:
+
+- **Timing-safe auth** — REST server authentication uses `crypto.timingSafeEqual` to prevent timing side-channel attacks
+- **Plugin sandboxing** — the plugin loader validates import paths against trusted directories, blocking loads from untrusted locations; a path listed in config.yaml's `plugins:` is exempt, since that file is the operator's own and not something a tool call can steer
+- **REST tool blocklist** — destructive tools (`forget`, `dream`, `evolve`, `resolve`, `thread_resolve`) are blocked from the generic REST endpoint; they remain available via MCP for direct agent access
+- **SQLite injection prevention** — namespace names are validated (alphanumeric only), LIMIT clauses are parameterized
+- **Secret leak prevention** — config loader warns when API keys appear in config files instead of environment variables
+
+### Known advisories
+
+`npm install @fozikio/cortex-engine` reports **0 vulnerabilities**.
+
+This section previously documented three moderate advisories from
+`@hono/node-server`, pulled in transitively by the MCP SDK and unreachable here
+(the MCP server runs over stdio, which never mounts `serve-static`). That chain
+has since been fixed upstream: `@modelcontextprotocol/sdk@1.30.0` accepts
+`@hono/node-server` `^2.0.5`, and this package now requires SDK `^1.30.0` so the
+patched range resolves for every install rather than by chance.
+
+## Architecture
+
+| Module | Role |
+|--------|------|
+| `core` | Foundational types, config, and shared utilities |
+| `engines` | Cognitive processing: memory consolidation, FSRS, graph traversal |
+| `stores` | Persistence layer — SQLite (local), Firestore (cloud), JSON (backup/migration). All implement the shared `CortexStore` interface |
+| `tools` | All 60 cognitive tool implementations (one file per tool) |
+| `mcp` | MCP server, tool registry, and plugin loader |
+| `cognitive` | Higher-order cognitive operations (dream, wander, validate) |
+| `triggers` | Scheduled and event-driven triggers |
+| `bridges` | Adapters for external services and APIs |
+| `providers` | Embedding and LLM provider implementations |
+| `bin` | Entry points: `serve.js` (HTTP + MCP), `cli.js` (admin CLI) |
+
+## Quick Start
+
+```bash
+npm install @fozikio/cortex-engine
+npx fozikio init my-agent
+cd my-agent
+npx fozikio serve   # starts MCP server
+```
+
+Your agent now has 60 cognitive tools. The generated `.mcp.json` is version-pinned and platform-aware (Windows `cmd /c` wrapper handled automatically).
+
+See the **[Quick Start](docs/quick-start.md)** guide for the full 5-minute setup.
+
+### Multi-Agent
+
+```bash
+npx fozikio agent add researcher --description "Research agent"
+npx fozikio agent add trader --description "Trading signals"
+npx fozikio agent generate-mcp   # writes .mcp.json with scoped servers
+```
+
+Each agent gets isolated memory via namespaces. See the **[Architecture](#architecture)** section for details.
+
+### Agent-First Setup
+
+The fastest path: open an AI agent in an empty directory and say *"set up a cortex workspace."* The agent runs `npx fozikio init`, reads the generated files, and is immediately productive. See the **[Agent-First Setup](docs/agent-first-setup.md)** guide for the full walkthrough.
+
+### Dashboard
+
+**No dashboard currently ships with the package.** Releases 1.0.0 through 1.2.1 bundled one; it stopped being included at 1.2.2 when publishing moved to CI, and it is not coming back in its old form — see [#59](https://github.com/Fozikio/cortex-engine/issues/59) for what a replacement needs.
+
+The REST server still *serves* one. On startup it looks for `public/index.html` next to `dist/`, and if it finds it, serves that directory as a single-page app — assets first, `index.html` as the fallback route, with `/api/*` and `/health` reserved. Static assets bypass auth; the API calls the page makes do not. So you can drop any built front-end into `public/` and it will be served from the same origin as the API:
+
+```bash
+npx fozikio serve --rest --port 3000
+# with public/index.html present, open http://localhost:3000
+```
+
+If auth is enabled (`CORTEX_API_TOKEN`), a page served this way loads without auth but its API calls need a token. The old dashboard read one from localStorage:
+
+```js
+localStorage.setItem("cortex-settings", JSON.stringify({ token: "your-token" }));
+```
+
+The previous UI's source is [Fozikio/dashboard](https://github.com/Fozikio/dashboard) — a Vite/React build that still compiles, but predates the REST and CLI changes in 1.3.0 and 1.4.0 and has not been re-integrated.
+
+### CLI
+
+Run `fozikio` with no arguments for an interactive session — a prompt with tab
+completion, history, and a filterable command palette on an empty enter:
+
+```
+  fozikio 1.3.0
+  ● ollama  ● nli
+
+  enter a command · empty enter to browse · ? help · exit quit
+
+fozikio ›
+```
+
+Or use it directly:
+
+```bash
+npx fozikio doctor                         # diagnose the install, with fixes
+npx fozikio dashboard                      # live service and memory view
+npx fozikio up                             # start every service, wait until ready
+npx fozikio status                         # service status (exit 1 if unhealthy)
+npx fozikio down                           # stop every service
+npx fozikio serve                          # start MCP server
+```
+
+**Services.** The default setup (`--embed ollama --llm ollama`, plus NLI adjudication)
+depends on two background daemons: ollama on `:11434` and the NLI cross-encoder on
+`:11435`. When either stops answering, every semantic tool — `query`, `observe`,
+`wonder`, `dream` — fails while ops, threads and journal keep working, so the failure
+is easy to miss. `fozikio` supervises both:
+
+```bash
+npx fozikio service start nli              # start detached, wait for the probe
+npx fozikio service status                 # per-service state
+npx fozikio service logs ollama --lines 50 # tail ~/.fozikio/logs/
+npx fozikio service restart ollama
+npx fozikio up --watch                     # restart on failure, with backoff
+```
+
+A service counts as up when its HTTP endpoint answers, not when its process exists —
+a process that is alive but no longer responding reports as `degraded`, which is the
+failure this is built to catch.
+
+**Many sessions, one store.** `fozikio serve --rest` also serves MCP over Streamable HTTP at `/mcp` (1.8.0).
+That is the answer to the one-process-per-SQLite-file rule: a main checkout and its worktrees, or several
+agents on one host, point `.mcp.json` at the one running server instead of each spawning a stdio server on
+the same file:
+
+```bash
+CORTEX_API_TOKEN=<token> npx fozikio serve --agent <name> --rest --port 3111   # binds 127.0.0.1
+```
+
+```json
+{ "mcpServers": { "cortex": { "type": "http", "url": "http://127.0.0.1:3111/mcp",
+                              "headers": { "x-cortex-token": "${CORTEX_API_TOKEN}" } } } }
+```
+
+Each client session gets its own MCP session (the `mcp-session-id` header) over the one engine, with the same
+tool list as stdio. The generic `/api/tools/:name` blocklist does not apply here: this is an agent's own session.
+
+**Memory.**
+
+```bash
+npx fozikio memory health                  # memory health report
+npx fozikio memory vitals                  # behavioral vitals and prediction error
+npx fozikio memory wander --from "auth"    # seeded walk through the graph
+npx fozikio memory maintain fix            # scan and repair data issues
+npx fozikio memory report                  # weekly quality report
+npx fozikio tools --category memory        # browse the cognitive tool catalogue
+npx fozikio migrate --from sqlite:./cortex.db --to json:./backup.json --verify
+```
+
+The pre-`memory` spellings (`fozikio health`, `fozikio vitals`, …) still work and are
+not deprecated — existing scripts need no changes.
+
+Every command takes `--json` for machine-readable output and honours `NO_COLOR`;
+styling and progress indicators switch off automatically when output is piped.
+`--yes` skips confirmations for unattended use. Read-only commands honour
+`--namespace <ns>` and `--agent <name>`; in a workspace with `.fozikio/agent.yaml`,
+the agent's `default_namespace` is picked up automatically — no flag needed.
+
+### Development
+
+```bash
+npm run dev       # tsc --watch
+npm test          # vitest run
+npm run test:watch
+```
+
+## Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `CORTEX_API_TOKEN` | Optional | Used by the `cortex-telemetry` hook to send retrieval feedback to the cortex API. Not required to run the MCP server. |
+| `MOONSHOT_API_KEY` | Optional | Required when `llm: kimi` is set. Get one from [platform.moonshot.cn](https://platform.moonshot.cn). |
+| `OPENAI_API_KEY` | Optional | Required when `llm: openai` is set, or when using any OpenAI-compatible provider without an explicit API key. |
+| `CORTEX_STORE` | Optional | `sqlite` \| `firestore`. Overrides the config file — meant for containers that ship no config. |
+| `CORTEX_EMBED` | Optional | `built-in` \| `ollama` \| `vertex`. Same precedence as above. |
+| `CORTEX_LLM` | Optional | `ollama` \| `gemini` \| `anthropic` \| `openai` \| `kimi`. Same precedence as above. |
+| `CORTEX_SQLITE_PATH` | Optional | Path to the SQLite file, e.g. a mounted volume (`/data/cortex.db`). |
+
+Additional variables are required depending on which providers you enable (Firestore, Vertex AI, etc.). See `docs/` for provider-specific configuration, and [`docs/deploy-railway.md`](docs/deploy-railway.md) for a hosted deployment with no Ollama — or use the one-click template: [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/cortex-engine)
+
+## Rules, Skills & Agents
+
+`fozikio init` automatically installs safety rules, skills, and agent definitions from the `fozikio.json` manifest into the target workspace.
+
+### Safety Rules (Reflex)
+
+cortex-engine ships with [Reflex](https://github.com/Fozikio/reflex) rules — portable YAML-based guardrails that work across any agent runtime, not just Claude Code.
+
+| Rule | Event | What It Does |
+|------|-------|-------------|
+| `cognitive-grounding` | `prompt_submit` | Nudges the agent to call `query()` before evaluation, design, review, or creation work |
+| `observe-first` | `file_write` / `file_edit` | Warns if writing to memory directories without calling `observe()` or `query()` first |
+| `note-about-doing` | `prompt_submit` | Suggests capturing new threads of thought with `thread_create()` |
+
+Rules live in `reflex-rules/` as standard Reflex YAML. They're portable — use them with Claude Code, Cursor, Codex, or any runtime with a Reflex adapter. See [@fozikio/reflex](https://github.com/Fozikio/reflex) for the full rule format and tier enforcement.
+
+**Claude Code users** also get platform-specific hooks (in `hooks/`) for telemetry, session lifecycle, and project board gating. These are runtime adapters, not rules — they handle side effects that the declarative rule format doesn't cover.
+
+**To customize:** Edit the YAML rule files directly, or set `allow_disable: true` and disable them via Reflex config.
+
+### Skills
+
+Skills are invocable workflows that agents can use via `/skill-name`.
+
+| Skill | When to Use | What It Provides |
+|-------|-------------|-----------------|
+| `cortex-memory` | Query, record, and review work | Full memory workflow — query/observe patterns, belief tracking, memory-grounded code review, session patterns |
+
+### Agents
+
+| Agent | Description |
+|-------|-------------|
+| `cortex-researcher` | Deep research agent that queries cortex before external sources, observes novel findings back into memory |
+
+### How Auto-Install Works
+
+1. `fozikio init` reads `fozikio.json` from the package root
+2. Copies hooks, skills, and Reflex rules into the target workspace
+3. Missing source files are skipped with a warning — init never fails due to missing assets
+
+## Built-in Capabilities (v1.0.0+)
+
+As of v1.0.0, all 60 cognitive tools are built into cortex-engine core — no separate plugin installs needed. Previously these were separate `@fozikio/tools-*` packages; they've been absorbed into the engine.
+
+| Capability | Tools |
+|-----------|-------|
+| **Memory** | `observe`, `query`, `recall`, `wander`, `wonder`, `forget`, `retrieve`, `context`, `feedback`, `query_cross`, `federated_query` |
+| **Beliefs & Reasoning** | `believe`, `belief`, `contradict`, `speculate`, `validate`, `predict` |
+| **Threads** | `thread_create`, `thread_update`, `thread_resolve`, `threads_list` |
+| **Journaling** | `journal_write`, `journal_read` |
+| **Identity** | `evolve`, `evolution_list` |
+| **Social** | `social_read`, `social_update`, `social_draft`, `social_score` |
+| **Graph** | `neighbors`, `suggest_links`, `suggest_tags`, `link`, `graph_report` |
+| **Maintenance** | `dream`, `digest`, `reflect`, `abstract`, `find_duplicates`, `retrieval_audit`, `consolidation_status` |
+| **Vitals** | `vitals_get`, `vitals_set`, `sleep_pressure` |
+| **Reasoning** | `surface`, `ruminate`, `notice`, `intention`, `resolve` |
+| **Content** | `content_create`, `content_list`, `content_update` |
+| **Ops** | `ops_append`, `ops_query`, `ops_update` |
+| **Goals** | `goal_set` |
+| **Agents** | `agent_invoke` |
+| **Stats** | `stats`, `query_explain` |
+
+The plugin system is still available for custom extensions — see [Plugin Docs](https://www.fozikio.com/products/plugins/).
+
+## Documentation
+
+- **In-repo docs**:
+  - [Quick Start](docs/quick-start.md) — 5-minute setup
+  - [Storage backends](docs/storage-backends.md) — SQLite vs Firestore vs JSON, migration paths
+  - [Concurrency model](docs/concurrency.md) — `withTransaction` contract, single-process invariant, SQLite vs Firestore semantics
+  - [Tools reference](docs/tools-reference.md) — all 60 tools by category with when-to-use guidance (auto-generated)
+  - [Multi-agent design](docs/multi-agent-design.md) — namespace isolation, bridges, federation
+  - [Design specs](docs/superpowers/specs/) — design documents from the v1.2.0 audit-driven refactor
+  - [Agent-first setup](docs/agent-first-setup.md) — Workspace initialization walkthrough
+- **[Discussions](https://github.com/Fozikio/cortex-engine/discussions)** — Ask questions, share what you've built
+- **[Contributing](https://github.com/Fozikio/.github/blob/main/CONTRIBUTING.md)** — How to contribute
+- **[Project Board](https://github.com/orgs/Fozikio/projects/2)** — Roadmap and active work
+- **[Security](https://github.com/Fozikio/.github/blob/main/SECURITY.md)** — Report vulnerabilities
+
+## Community
+
+- [r/Fozikio](https://www.reddit.com/r/Fozikio/) — Project subreddit
+- [GitHub Discussions](https://github.com/Fozikio/cortex-engine/discussions) — Questions, feedback, show what you've built
+- ["I built 44 MCP tools for my cognitive system"](https://reddit.com/r/mcp/comments/1rno9pu/) — r/mcp deep dive (84 upvotes, 27 comments)
+- ["Gave my agent a subconscious"](https://reddit.com/r/clawdbot/comments/1rtvex3/) — r/clawdbot walkthrough (22 upvotes, 34 comments)
+
+## Related Projects
+
+- [@fozikio/reflex](https://github.com/Fozikio/reflex) — Portable safety guardrails for agents. Rules as data, not code.
+- [sigil](https://github.com/Fozikio/sigil) — Agent control surface. Signals and gestures, not conversations.
+- [fozikio.com](https://www.fozikio.com) — Documentation and guides
+
+## License
+
+MIT — see [LICENSE](LICENSE)

@@ -1,0 +1,134 @@
+![Supported Python versions](https://img.shields.io/badge/python-3.8+-blue.svg)
+![Supported Python versions](https://img.shields.io/badge/python-3.13+-blue.svg)
+![Vue3](https://img.shields.io/badge/vue-3+-3eaf7c.svg?style=flat-square&logo=vue.js)
+![Vue3 UI](https://img.shields.io/badge/vue3-UI-ff69b4.svg?style=flat-square&logo=vue.js)
+![MIT](https://img.shields.io/badge/license-MIT-ccc.svg?style=flat-square&logo=reliance-industries-limited)
+
+<p align="center">
+        <img alt="Static" src="https://github.com/sh94ya/MetaView/blob/main/workspace/view/icons/favicon/favicon-128x128.png?raw=true">
+</p>
+
+## <div align="center">MetaView</br>Metasploit Framework Web UI on Vue3</div>
+<div align="center">A web-based interface for the Metasploit Framework with multi-user support and an intuitive UI.
+
+![Arch](https://raw.githubusercontent.com/sh94ya/MetaView/assets/architecture.png)
+</div>
+For more detailed information on setting up and using <b>msfdb</b>, you can find out <a href="https://docs.rapid7.com/metasploit/managing-the-database" target="_blank" rel="noreferrer" class="x:focus-visible:nextra-focus">here<!-- -->&nbsp;<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24" height="1em" class="x:inline x:align-baseline x:shrink-0"><path d="M7 17L17 7"></path><path d="M7 7h10v10"></path></svg></a>.
+
+## ✨ Capabilities
+- Modern web interface
+- Project management (add, edit and remove workspaces)
+- Visualization of data stored in the Metasploit Framework Database: `Hosts, Services, Notes, Vulns, Creds, Loots, Sessions`
+- Import data from **MaxPatrol**, **Nmap**, **Acunetix**
+- Managing the structure of websites being tested (WMAP and Acunetix scanning)
+- View session events such as **meterpreter**
+![MainView](https://raw.githubusercontent.com/sh94ya/MetaView/assets/main.png)
+
+## 👥 Team mode
+- Separation of roles and projects
+- Tag operation history
+- Creating tasks for project users
+
+## 📊 Dashboards
+- Live dashboards with metrics
+- Visualization of scan results
+  ![Dashboards](https://raw.githubusercontent.com/sh94ya/MetaView/assets/dashboards.png)
+
+## 🚀 Quick start
+### 💻 Local installation (requires **Python 3.8 - 3.13**)
+```bash
+# Clone
+git clone https://github.com/sh94ya/MetaView.git
+cd MetaView
+
+# Linux
+python3 -m venv venv
+source venv/bin/activate
+pip install -e .
+# Edit config.ini (See Configuration section)
+# Run
+gunicorn --workers 4 --bind 127.0.0.1:5000 main:app
+
+# Windows
+python.exe -m venv venv
+venv\Scripts\activate.bat
+pip install -e .
+# Edit config.ini (See Configuration section)
+# Run
+python.exe main.py
+
+# Open in a browser (default creds - admin:admin)
+http://localhost:5000
+```
+### 🐋 Docker
+#### Single container
+```bash
+# Clone
+git clone https://github.com/sh94ya/MetaView.git
+cd MetaView
+
+# Build Docker Image
+docker build -t metaview .
+
+# Edit config.ini (See Configuration section)
+
+# Run container
+docker run -p 5000:5000 -v $(pwd)/config.ini:/app/config.ini metaview
+
+# Open in a browser (default creds - admin:admin)
+http://localhost:5000
+```
+#### Docker Compose (MetaView and PostgreSQL up)
+```bash
+# Clone
+git clone https://github.com/sh94ya/MetaView.git
+cd MetaView
+
+# Edit config.ini
+ADDRESS=db
+
+# Build and Run metaview-web and postgresql-db containers
+docker compose up --build
+
+# Open in a browser (default creds - admin:admin)
+http://localhost:5000
+```
+
+## 🔧 Configuration
+### Edit config.ini:
+In the [DB] section of the `config.ini` file, set the data for establishing a connection to the PostgreSQL database for joint work with msfconsole.
+```config.ini
+[DB]
+LOGIN=msf
+PASSWORD=msf
+ADDRESS=127.0.0.1
+PORT=5432
+DATABASE=msf
+```
+
+### Security
+Change your secret key:
+```config.ini
+[JWT]
+SECRET_KEY = '<change-your-secret_key>'
+```
+
+## 🛠 Тechnology stack
+Flask + Vue 3 (with Quasar Framework)
+
+## ⚠️ Disclaimer
+IMPORTANT: This tool is intended solely for:
+- Legal penetration testing
+- Educational purposes
+- Cybersecurity research
+
+**The developer is not responsible for illegal use.**
+
+## 📄 License
+Distributed under the MIT License. See the [LICENSE](https://github.com/sh94ya/MetaView?tab=MIT-1-ov-file) file for details.
+
+## 👨‍💻 Author
+sh94ya — Lead Developer — GitHub
+
+## 🌟 Support the project
+Give a ⭐️ on GitHub if you like the project!

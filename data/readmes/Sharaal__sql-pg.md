@@ -1,0 +1,114 @@
+[![Build Status](https://app.travis-ci.com/Sharaal/sql-pg.svg?branch=main)](https://app.travis-ci.com/Sharaal/sql-pg)
+[![Coverage Status](https://coveralls.io/repos/github/Sharaal/sql-pg/badge.svg?branch=main)](https://coveralls.io/github/Sharaal/sql-pg?branch=main)
+
+Latest Release: [v10.4.1](https://github.com/Sharaal/sql-pg/releases/tag/v10.4.1), Latest Major Release: [v10.0.0](https://github.com/Sharaal/sql-pg/releases/tag/v10.0.0), [All Releases](https://github.com/Sharaal/sql-pg/releases)
+
+# SQL-PG
+
+Complex queries can be written with normal SQL, including the values needs to be bound and prefixed with the sql tag.
+
+<table>
+  <tr>
+    <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/main/docs/sql.png"></td>
+    <td>Make the id variable?</td>
+    <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/main/docs/sql-pg.png"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Or even more simple?</td>
+    <td><img alt="SQL" src="https://github.com/sharaal/sql-pg/raw/main/docs/selection-method.png"></td>
+  </tr>
+</table>
+
+## Features
+
+* Built on top of `pg` as database driver
+* Simple data manipulation and selection methods without the need to write SQL
+* SQL Tag and Tag Helpers to write queries looks like native SQL and be secure by design
+* Write easy unit testable queries
+* Possibility to add own Tag Helpers to extend the functionality
+
+## Installation
+
+```bash
+npm install --save pg sql-pg
+```
+
+## Initialisation
+
+Use it in your project:
+
+```javascript
+const sql = require('sql-pg')()
+```
+
+The connection use per default the env var `DATABASE_URL`. It will only establish a database connection if manipulation/selection methods are used. Alternatively it's possible to provide a `sql.js` to customize the database connecting and `sql` object initializing.
+
+## Usage
+
+### Manipulation Methods
+
+Simple data manipulation can be done without writing any SQL Statements.
+
+E.g. some user data manipulation:
+
+```javascript
+const id = await sql.insert(
+  'users',
+  { name: 'Sharaal', email: 'sql-pg@sharaal.de', passwordhash: '...' }
+)
+
+await sql.update('users', { validated: 1 }, { id })
+
+await sql.delete('users', { id })
+```
+
+More complex data manipulation can be done with the SQL Tag.
+
+### Selection Methods
+
+Often needed convenient methods to check and extract query results are available with the Selection Methods.
+
+E.g. select all not validated users:
+
+```javascript
+const users = await sql.any('users', ['name', 'email'], { validated: 0 })
+```
+
+Also the Selection Methods supports SQL Tag as parameter for more complex selections. Because they are highly inspired by `pg-promise`, there are the Selection Methods `any`/`manyOrNone`, `many`, `oneOrNone` and `one` available.
+
+### SQL Tag and Tag Helpers
+
+If it becomes more complex the SQL Tag and Tag Helpers are the way to go.
+
+They are as near as possible to native SQL queries to be readable and easy to write. All variables can be directly used and will be exchanged via placeholders and given to the database separately as values. For non native values like lists, for table/column names and conditions there are Tag Helpers.
+
+E.g. list of not activated users filtered by name:
+
+```javascript
+const name = 'raa'
+
+const users = await sql.any(
+  sql`
+    SELECT "name", "email" FROM "users"
+      WHERE
+        "validated" = 0
+        AND
+        "name" LIKE ${`%${name}%`}
+  `
+)
+```
+
+There are a lot more Tag Helpers available like `.identifier`, `.table`, `.column(s)`, `.value(s)`, `.valuesList`, `.assignments`, `.conditions`, `.limit`, `.offset`, `.pagination`, `.if`, `.jsonColumnObject` and `.jsonColumnText`.
+
+## More
+
+Alternative initialization, available Tag Helpers, Nested Queries, Transaction, Writing Tag Helpers, Migrations, Syntax Highlighting in Atom... All additional documentation can be found in the [Wiki](https://github.com/Sharaal/sql-pg/wiki).
+
+## Contact
+
+Found a bug or missing a feature? -> Create a new [Issue](https://github.com/Sharaal/sql-pg/issues)
+
+Found a security issue? -> Look at the [Security Policy](https://github.com/Sharaal/sql-pg/security/policy)
+
+Having questions, want to give feedback or talk to me? -> E-Mail me sql-pg@sharaal.de

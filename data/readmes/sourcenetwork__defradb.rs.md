@@ -1,0 +1,260 @@
+# DefraDB.rs
+
+Rust implementation of [DefraDB](https://github.com/sourcenetwork/defradb) — a peer-to-peer document database with content-addressed CRDTs, access control, and GraphQL.
+
+Targets embedded, edge, browser (WASM), and server deployments with **full Go DefraDB network interoperability**.
+
+Storage is [Regolith](https://github.com/sourcenetwork/regolith), an ACID,
+pure-Rust embedded LSM-tree engine built for edge systems. It is the only
+backend, and the same engine runs on a server, on an embedded device, and in a
+browser tab: no C toolchain, no linker surprises, and nothing to select between.
+Reads and scans stream rather than materialize, so memory is bounded by the page
+being held and not by the size of the data.
+
+## Status
+
+Compatible with Go DefraDB v1.0.0-rc1. Full feature parity across CLI, HTTP API, GraphQL query engine, and P2P replication. Go and Rust nodes can connect and replicate data.
+
+## Features
+
+- **GraphQL query engine** — queries, mutations, subscriptions, aggregates, explain - full coverage of the defradb test suite
+- **P2P replication** — `libp2p` (primary, go compatable) and [`iroh`](https://github.com/n0-computer/iroh) (optional) transports
+- **Access control** — local Zanzibar engine, on-chain via [Vera](https://github.com/sourcenetwork/vera) (Cosmos/EVM) and [`hub.rs`](https://github.com/sourcenetwork/hub.rs) (Commonware/EVM)
+- **Full-text search** — (rust only) BM25 ranking with language-aware tokenization
+- **Schema migration** — non-destructive evolution via WASM transforms (Lens)
+- **Searchable encryption** — encrypted indexes with ACP integration
+- **[Regolith](https://github.com/sourcenetwork/regolith) storage engine**: one ACID, pure-Rust LSM-tree store on every target, on disk or in memory
+- **Postgres compatibility** — connect with `psql` or any Postgres client/ORM (experimental!)
+- **WASM client** — full database client compiled to WebAssembly for browsers
+- **FFI bindings** — C-compatible static library for embedding in Go and other languages
+- **Docker** — multi-arch images at `ghcr.io/sourcenetwork/defradb-rs`
+
+## Building
+
+Install [`just`](https://github.com/casey/just), then let it install everything else:
+
+```bash
+cargo install just    # one time, if you already have a Rust toolchain
+just setup            # Rust, protoc, Go, a JDK, Lean/lake, the TLC jar, wasm tooling
+```
+
+Without Rust yet, install a prebuilt `just` first, since `just setup` is what
+installs the toolchain:
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh \
+  | bash -s -- --to ~/.local/bin      # or grab a binary from the just releases page
+```
+
+`just setup` needs no root and no package manager: every tool is fetched from its
+official release into a git-ignored `.tooling/` inside the repo and put on `PATH`.
+It is written for Linux and macOS on x86_64 and arm64, and is currently verified
+on Linux x86_64. Downloads are pinned by version and checked against a SHA-256
+before use. The host needs `bash`, `curl`, `tar`, `unzip` and `git`.
+
+`just doctor` reports what resolved and what is missing.
+
+```bash
+just build             # Build all crates
+just build-release     # Release binary
+just test              # Unit tests
+just lint              # Lint (every lint and feature check CI runs)
+just check-node-graph  # Feature-graph contracts for defra-node
+just fmt               # Format
+just gate              # fmt + lint + docs + tests, before asking for a review
+just ci                # Reproduce the CI pipeline locally
+```
+
+### FFI release variants
+
+Every release ships three FFI families: **full** (`defra-ffi_*`), carrying the
+libp2p transport, Lens migrations, and Vera ACP; **iroh**
+(`defra-ffi-iroh_*`), an iOS XCFramework that adds the iroh transport on top of
+libp2p; and **lean** (`defra-ffi-lean_*`), libp2p-only with no Lens migrations
+and no Vera ACP. Iroh ships in that XCFramework alone, so no single
+artifact carries every capability. All of them expose the same `defra.h`
+and the same mobile JSON schema, so the choice is a size tradeoff and not an API
+one: configuring a capability the build does not carry fails with an explicit
+error naming the missing feature. The per-release capability matrix is in the
+release notes on the
+[releases page](https://github.com/sourcenetwork/defradb.rs/releases).
+
+## Configuration
+
+The CLI exposes GraphQL query guardrails on `defradb start`:
+
+| Flag | Default | Description |
+| --- | ---: | --- |
+| `--query-max-depth` | `20` | Max GraphQL selection nesting depth (`0` = unlimited). |
+| `--query-max-width` | `100` | Max fields at any GraphQL selection level (`0` = unlimited). |
+| `--query-max-filter-depth` | `50` | Max recursive filter nesting depth (`0` = unlimited). |
+
+## Telemetry (OpenTelemetry)
+
+Opt in at compile time with `--features otel`:
+
+```bash
+cargo build --release -p cli --features otel
+```
+
+Mirrors Go DefraDB's `//go:build telemetry` tag — when not compiled in, zero OTel dependencies and zero runtime cost. When compiled in, **traces** export to `http://localhost:4318` (OTLP/HTTP) by default, same endpoint as Go.
+
+Metrics export is planned alongside the first application metric.
+
+| Flag / env var | Effect |
+| --- | --- |
+| `--no-telemetry` / `DEFRA_NO_TELEMETRY=true` | Disable exporters at runtime. |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | Override collector URL (standard OTel env var). |
+| `OTEL_EXPORTER_OTLP_HEADERS` | Add headers, e.g. for auth. |
+| `OTEL_SERVICE_NAME` / `OTEL_RESOURCE_ATTRIBUTES` | Override service name / extra attributes. |
+| `OTEL_TRACES_SAMPLER` | Configure sampling (default: parent-based always-on, matching Go). |
+
+When no collector is reachable, the OTel SDK's repeated export errors are suppressed and a single actionable hint — `OpenTelemetry export failed, ensure your OTLP collector is running and reachable` — is emitted once per process. This ports Go's `otel.SetErrorHandler + sync.Once` behavior (issue #977); genuine non-connectivity OTel errors still log normally.
+
+### Embedded usage
+
+Library consumers (via `defra-node`) own the OTel lifecycle and hand the resulting handle to the node. The node flushes it via `Drop` or via an explicit `shutdown()` — explicit is preferred because `Drop` blocks for up to ~5 s on the SDK's trace batch-thread join.
+
+Add `telemetry` to your `Cargo.toml`:
+
+```toml
+[dependencies]
+defra-node = { version = "0.5", features = ["otel"] }
+telemetry  = { version = "0.5", features = ["otlp"] }
+```
+
+```rust
+use defra_node::EmbeddedNode;
+use telemetry::TelemetryConfig;
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+
+let (handle, tracer) = telemetry::init(
+    TelemetryConfig::new("my-service", env!("CARGO_PKG_VERSION"))
+)?;
+
+// Compose the OTel bridge onto your tracing subscriber so spans flow
+// to the collector. `try_init()` returns Err if a global subscriber is
+// already installed — preferred over `.init()` (which panics).
+tracing_subscriber::registry()
+    .with(tracing_subscriber::fmt::layer())
+    .with(telemetry::otel_layer(tracer))
+    .try_init()?;
+
+let node = EmbeddedNode::builder()
+    .with_telemetry(handle)
+    .build()
+    .await?;
+
+// ... use the node ...
+
+// Explicit shutdown flushes the buffered batch. Drop is a safety net,
+// but blocks the calling thread on the SDK batch-thread join (~5 s);
+// call shutdown() explicitly from an async-aware path when possible.
+// Note that the node should not be used after shutdown — subsequent spans
+// go to a no-op tracer.
+node.shutdown().await;
+```
+
+If the host process already runs its own OTel stack and you don't want `telemetry::init` to clobber your globals, use `.without_global()`:
+
+```rust
+let (handle, _tracer) = telemetry::init(
+    TelemetryConfig::new("my-service", "1.0.0").without_global()
+)?;
+// You'd compose `_tracer` into a layer of your own choosing instead of
+// installing it as the process-wide global tracer.
+```
+
+## HTTP transactions
+
+`GET /api/v0/collections` returns the full definitions of the selected versions.
+Document creation returns an array of document IDs. Supply `x-defradb-tx` to bind
+REST document reads, writes and ID listings to an existing transaction, including
+uncommitted schemas. Committing publishes those writes; discarding removes them.
+Read-only and finalized transactions reject mutations. Transaction handles belong
+to the identity that opened them; other callers receive the same not-found
+response as an unknown handle. Renewed tokens for the same identity retain access.
+
+## Testing
+
+### Integration Tests
+
+Rust-native tests that exercise the full node via CLI + HTTP API. Primary validation method.
+
+```bash
+cargo test -p integration-test                              # All areas
+cargo test -p integration-test --test basic                  # Specific area
+cargo test -p integration-test --test acp -- negative::      # Specific module
+```
+
+Areas: `basic`, `query`, `acp`, `nac`, `p2p`, `fts`, `encryption`, `identity`, `backup`, `vera`, `hubrs`
+
+Vera integration uses the `vera` crate, Cargo feature, and test suite. Select it
+with `--document-acp-type vera` and configure endpoints with `--vera-*` flags,
+`DEFRA_VERA_*` environment variables, or `vera_*` configuration fields. Older
+`--source-hub-*` flags, `DEFRA_SOURCE_HUB_*` environment variables,
+`sourcehub_*` configuration fields, and the `source-hub` ACP selector remain
+accepted. Mobile JSON uses `vera` (`sourcehub` is an alias). The `sourcehub`
+Cargo feature remains an alias for `vera`.
+
+### Go Compatibility Tests
+
+FFI-based tests that build the Rust implementation as a C library and run Go's integration test suite against it. Validates behavioral compatibility between implementations.
+
+```bash
+cargo install --path tools/ffi-test
+ffi-test run query/simple              # Run specific package
+ffi-test status                        # Show pass rates
+```
+
+See `tools/ffi-test/README.md` for full usage.
+
+## Performance
+
+Every push to `main` measures the suite across Linux, macOS and a browser, and
+publishes the run to the dashboard:
+
+**https://sourcenetwork.github.io/defradb.rs/**
+
+The run documents under `runs/` are the artifact; the page is a reader over
+them, so any metric can be plotted across every run ever recorded. A family the
+collector did not receive is drawn as an explicit gap and never as a zero, and a
+timing taken on a runner that was not quiet is marked contaminated rather than
+presumed comparable.
+
+Every pull request gets a quick check commented back onto it: a few families on
+Linux, measured against that PR's own merge base on the same runner with the
+same build profile. Run the whole matrix on a branch with the **Performance**
+workflow's `Run workflow` button.
+
+```bash
+just perf                     # measure this machine, build the dashboard locally
+just perf-serve               # then read it at http://127.0.0.1:8099/
+just perf-compare a.json b.json
+cargo bench -p benches --bench document_write
+```
+
+## P2P Replication
+
+### Filtered replication
+
+A replicator can carry an optional per-collection predicate so a source node only **pushes** documents whose field matches:
+
+```bash
+defradb client p2p replicator add -c MyCollection \
+  --filter-field agent_did --filter-value did:key:alice <peer-multiaddr>
+```
+
+The filter field must be a scalar, `@immutable` LWW field on the collection.
+
+**Filtered replication is a push-path selectivity optimization, not an access-control boundary.** A peer that also subscribes to the collection (`p2p collection add`) joins the collection's gossip topic and receives every document, bypassing the filter. Use ACP and encryption for confidentiality. The `--filter-value` is matched as a JSON string, so only string-valued fields can be filtered today.
+
+## Documentation
+
+- [DefraDB (Go)](https://github.com/sourcenetwork/defradb) — concepts, architecture, specifications
+- [DefraDB Docs](https://docs.source.network/defradb) — user documentation
+- `CLAUDE.md` — development workflow and conventions
+
+## License
+
+Apache-2.0 OR MIT

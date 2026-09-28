@@ -1,0 +1,215 @@
+# Cashew 🥜
+
+**Persistent thought-graph memory for AI agents.**
+
+[![PyPI](https://img.shields.io/pypi/v/cashew-brain)](https://pypi.org/project/cashew-brain/)
+[![Downloads](https://static.pepy.tech/badge/cashew-brain)](https://pepy.tech/project/cashew-brain)
+[![Downloads/month](https://static.pepy.tech/badge/cashew-brain/month)](https://pepy.tech/project/cashew-brain)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+The name comes from asking "do cats eat cashews?", a question I asked my aunt as a 10-year-old kid in India, because the cashews were left open in the kitchen and I knew stray cats sneak into homes to eat food. My family still brings it up every time I visit. I never stopped asking questions. This system doesn't either: autonomous think cycles find connections you didn't know existed.
+
+📝 **Blog post:** [I Built My AI a Brain and It Started Thinking for Itself](https://open.substack.com/pub/rajkripaldanday/p/i-built-my-ai-a-brain-and-it-started)
+
+## Architecture
+
+![Cashew Architecture](docs/architecture-diagram.png)
+
+## What It Does
+
+- **Remembers across sessions.** Decisions, patterns, relationships, and project context survive compaction and restart. Your agent picks up where it left off.
+- **Learns autonomously.** Think cycles find cross-domain connections without prompting. A pattern in your work habits connects to a pattern in your communication style, and the brain surfaces it.
+- **Constant context cost.** Seeds come from a brute-force sqlite-vec scan (O(N), microseconds at this scale), then a bounded recursive BFS walk returns the same amount of context regardless of graph size. 3,000 nodes costs the same as 300 to walk. Above ~100k vectors the seed scan wants a real ANN index (HNSW).
+
+## What If Forgetting Is the Intelligence?
+
+Cashew doesn't hoard everything. Organic decay means low-value knowledge fades naturally while important patterns strengthen through use. No manual curation needed: the graph self-organizes through cross-linking and natural selection. See [PHILOSOPHY.md](PHILOSOPHY.md) for the full manifesto.
+
+## Quick Start
+
+```bash
+pip install cashew-brain
+cashew init
+cashew context --hints "test"
+```
+
+That's it. Your brain is empty but ready. Start extracting knowledge:
+
+```bash
+echo "I prefer TypeScript over JavaScript for complex projects" | cashew extract --input -
+```
+
+Query it back:
+
+```bash
+cashew context --hints "programming language preferences"
+```
+
+## Integration
+
+### Claude Code
+
+Copy the skill into your personal skills directory:
+
+```bash
+# From the cashew repo
+cp -r skills/claude-code/ ~/.claude/skills/cashew/
+```
+
+This gives you the `/cashew` slash command and automatic context loading. Claude Code will query your brain before answering substantive questions and extract knowledge during conversations.
+
+Or if you cloned the repo, just open it in Claude Code. The `.claude/skills/cashew/` directory auto-discovers.
+
+### OpenClaw
+
+Install as an OpenClaw skill for full automation. Cron jobs handle extraction, think cycles, and dashboard deployment without manual intervention. See `skills/openclaw/SKILL.md` for setup instructions.
+
+### Hermes Agent
+
+Use cashew as the memory provider for [NousResearch's Hermes Agent](https://hermes-agent.nousresearch.com/) via [hermes-cashew](https://github.com/magnus919/hermes-cashew), a plugin maintained by [Magnus Hedemark](https://github.com/magnus919):
+
+```bash
+hermes plugins install magnus919/hermes-cashew
+```
+
+The plugin exposes `cashew_query` and `cashew_extract` as agent-callable tools, auto-injects relevant context at session start, and works against a local cashew brain with no extra services. See the [hermes-cashew README](https://github.com/magnus919/hermes-cashew) for configuration and tuning notes.
+
+### Ingest Sources
+
+Cashew ships with built-in extractors for common knowledge sources. Each one handles checkpointing, incremental updates, and deduplication automatically.
+
+**Obsidian vault:**
+
+```bash
+cashew ingest obsidian /path/to/vault
+```
+
+Parses YAML frontmatter (tags, aliases, dates), follows `[[wikilinks]]` to create edges between related notes, respects `.obsidianignore`, and auto-detects domains from your folder structure.
+
+**OpenClaw session logs:**
+
+```bash
+cashew ingest sessions /path/to/sessions/
+```
+
+Extracts knowledge from conversation history. Tracks how far into each session file it's read, so growing sessions get incrementally processed. Filters out tool calls and system messages.
+
+**Markdown directory:**
+
+```bash
+cashew ingest markdown /path/to/notes/
+```
+
+General purpose extractor for any directory of `.md` files. Respects `.cashewignore` for excluding files.
+
+**Claude.ai conversation archive:**
+
+```bash
+cashew ingest claude_archive /path/to/claude/export/
+```
+
+Extracts knowledge from `conversations.json` — the Claude.ai data export format. Walks content blocks to strip tool calls and results, keeping only human/assistant text. Supports incremental processing via conversation UUIDs, so re-running on the same directory only processes new or updated conversations. Also accepts a direct path to `conversations.json` for convenience.
+
+**Options:**
+
+```bash
+cashew ingest --list          # Show available extractors
+cashew ingest obsidian /path --no-llm  # Skip LLM, use paragraph splitting fallback
+```
+
+All extractors use LLM-based extraction by default for richer, typed knowledge (decisions, insights, facts). Use `--no-llm` for offline or token-free ingestion.
+
+### Python API
+
+```python
+from core.context import ContextRetriever
+from core.embeddings import load_embeddings
+
+# Query context
+embeddings = load_embeddings("path/to/graph.db")
+retriever = ContextRetriever("path/to/graph.db", embeddings)
+context = retriever.generate_context(hints=["work", "projects"])
+```
+
+## Architecture
+
+- **Single SQLite file.** No external servers, no separate indexes. Your entire brain is one portable file.
+- **Local embeddings.** all-MiniLM-L6-v2 (384 dims). Downloads ~500MB on first run, then runs locally forever. No API calls for retrieval.
+- **LLM for intelligence.** Extraction and think cycles need an LLM (Claude, GPT, etc). Retrieval and storage don't. Bring your own via `model_fn` parameter or API key.
+- **Retrieval.** sqlite-vec seeds (brute-force O(N) nearest neighbor, fast at this scale) → recursive BFS graph walk (seeds=5, picks_per_hop=3, max_depth=3). The graph's organic connectivity provides implicit hierarchy, so no synthetic summary nodes are needed.
+- **Organic decay.** Nodes that aren't accessed lose fitness over time. Low-fitness nodes get marked decayed and excluded from retrieval.
+
+## CLI Reference
+
+| Command | Purpose |
+|---------|---------|
+| `cashew init` | Initialize a new brain |
+| `cashew context --hints "..."` | Retrieve relevant context |
+| `cashew extract --input file.md` | Extract knowledge from text |
+| `cashew ingest obsidian /path` | Ingest an Obsidian vault |
+| `cashew ingest sessions /path` | Ingest OpenClaw session logs |
+| `cashew ingest markdown /path` | Ingest a directory of markdown files |
+| `cashew ingest claude_archive /path` | Ingest a claude.ai conversation archive |
+| `cashew think` | Run a think cycle |
+| `cashew sleep` | Full sleep cycle (consolidation) |
+| `cashew stats` | Graph statistics |
+| `cashew dashboard` | Launch the live dashboard (graph + BFS search visualization) |
+
+### Dashboard
+
+```bash
+cashew dashboard --db data/graph.db --port 8765
+# then open http://127.0.0.1:8765
+```
+
+A minimalist browser UI over the brain. The full graph renders as a canvas force layout colored by node type. The search box traces a live recursive-BFS walk: seeds arrive first, then each hop lights up in order with hop-colored edges and rings. Works on mobile (bottom sheet, drag-to-resize). Pass `--host 0.0.0.0` to expose on the LAN. Auto-trigger a search via `?q=...` in the URL.
+
+## Warm Daemon
+
+Every CLI invocation normally loads the sentence-transformer model from scratch (~2s cold start). For a responsive query loop, run the warm daemon once and every call routes through it automatically, with no code changes in consumers.
+
+```bash
+# Foreground (development)
+cashew serve
+
+# Persistent (macOS)
+cp packaging/com.cashew.daemon.plist ~/Library/LaunchAgents/
+# edit CASHEW_PATH in the plist to match your clone, then:
+launchctl load ~/Library/LaunchAgents/com.cashew.daemon.plist
+```
+
+The daemon listens on `~/.cashew/daemon.sock`. A content-hash embedding cache at `~/.cashew/embedding_cache.db` makes repeat embeds free, keyed by `(model_version, sha256(text))`. Deterministic by construction, so no invalidation logic is needed beyond model swaps.
+
+Every entry point (`context`, `extract`, `think`, sleep cycles) checks the cache first, then the daemon, then falls back to in-process embedding if the daemon is down. Clients never need to know which path served them.
+
+## Requirements
+
+- Python 3.10+
+- ~2GB RAM (for embedding model)
+- ~500MB disk (embedding model, downloaded on first use)
+- An LLM API key for extraction and think cycles (optional for retrieval-only use)
+
+## Philosophy
+
+Cashew ships with a philosophy document that defines how a brain-equipped agent should operate. It covers brain sovereignty, evidence over defaults, the sponge principle, cross-domain vision, and why divergence between instances is the whole point.
+
+Read it: [PHILOSOPHY.md](PHILOSOPHY.md)
+
+## Development
+
+```bash
+git clone https://github.com/rajkripal/cashew.git
+cd cashew
+pip install -e ".[dev]"
+pytest
+```
+
+See [CLAUDE.md](CLAUDE.md) for the developer guide: architecture, schema, conventions, and engineering philosophy.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
+
+---
+
+Built by [rajkripal](https://github.com/rajkripal).

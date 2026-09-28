@@ -1,0 +1,416 @@
+
+
+<h1 align="center">《Easy Data x AI》</h1>
+
+<h2 align="center">（Alpha 内测版，欢迎各位老师参与共建~）</h2>
+
+<p align="center">
+  <em>面向所有 AI 爱好者的 Data 与 AI 基础知识入门教程</em>
+</p>
+
+<p align="center">
+  <a href="https://datawhalechina.github.io/easy-data-x-ai/">在线阅读</a> &nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://open.oceanbase.com/course/760">社区在线课堂</a>
+</p>
+
+<p align="center">
+  <img src="docs/public/images/cover.png" alt="Easy Data x AI" width="100%" />
+</p>
+
+## 📚 这门课程适合谁？
+
+> 双轨并行，论道与习术
+
+为了满足不同角色的学习需求，我们将课程精心设计为两条路径："道篇"与"术篇"。
+
+### 道篇：悟其道（零基础 AI 爱好者和产品决策者的"心法篇"）
+
+**适合人群：** 零基础 AI 爱好者、产品决策者
+
+**学完收获：**
+- 🎯 场景判断力：学会评估"这个需求适不适合做 Agent"，避免在立项之初就走上弯路
+- 🔍 归因决策力：获得一套"三层度量框架"，精准定位问题出在数据层、模型层还是业务层
+- 🏗️ 系统设计力：理解 RAG、MCP、Skill、Memory 背后的产品设计哲学
+
+### 术篇：用其术（开发者的"功法篇"）
+
+**适合人群：** 已能调用 LLM API 的开发者
+
+**学完收获：**
+- 💪 坚实的工程基础：掌握流式输出（Streaming）和工具调用（Tool Use）
+- 🗄️ 完整的数据层构建经验：基于轻量级 AI Native 数据库从零搭建数据层
+- 📊 看得见的性能差距：通过对比实验见证"混合检索"与"纯向量检索"的效果差异
+- 🤖 从零到一的 Agent 构建：为 Agent 加上记忆系统，教会它使用技能
+
+### 产业应用篇：见其用（面向 AI 数据系统的产业实践）
+
+**适合人群：** 希望了解 AI 数据系统产业实践的开发者、技术爱好者和课程共建者
+
+**学完收获：**
+- 🧭 产业能力边界：理解 AI 原生数据库、上下文工程等技术在真实场景中的定位
+- 🧪 场景与实验设计：把概念拆成可运行、可观察、可评测的课程实践
+- 🤝 开源共建经验：围绕 AI Native 数据库、AI 记忆与上下文管理等方向完善学习材料和案例
+
+## 📖 课程目录
+
+> F 打底 → P 论道（为什么/怎么设计）→ D 习术（怎么动手实现）→ I 产业实践；X 提供相关主题扩展。
+
+### 公共基础篇
+
+| 课程编号 | 课程标题 |
+| --- | --- |
+| F1 | 大模型的本质与边界 |
+| F2 | AI Agent 的完整图景 |
+
+> F = 公共基础篇，Foundation（基础），F1/F2 是所有人都要先看的入门内容。 
+
+### 道篇
+
+| 课程编号 | 课程标题 |
+| --- | --- |
+| P1 | 找准 Agent 的用武之地 —— AI Agent 场景识别 |
+| P2 | 让 Agent 会查资料 —— RAG 产品设计 |
+| P3 | 让 Agent 真正记住你 —— 记忆系统设计 |
+| P4 | 把经验变可复用 —— Skill 与知识管理 |
+| P5 | 用数据验证价值 —— 案例与度量 |
+
+> P = 道篇，Product / PM（产品视角，"悟其道"），面向产品决策者、零基础 AI 爱好者，讲设计哲学与判断力。
+
+
+
+### 术篇
+
+| 课程编号 | 课程标题 |
+| --- | --- |
+| D1 | 打通 Agent 与数据 —— 大模型 API 入门 |
+| D2 | 一个系统搞定 —— 统一 AI Native 数据层实战 |
+| D3 | 实践出真知 —— Agentic RAG 实战 |
+| D4 | 记哪些、忘哪些？—— Agent 记忆系统开发 |
+| D5 | 课程总结 |
+
+> D = 术篇，Dev / Developer（开发者视角，"用其术"），面向能调 LLM API 的开发者，讲可运行的工程实战。
+
+### 产业应用篇
+
+| 课程编号 | 课程标题 | 开发状态 | 共建入口 |
+| --- | --- | --- | --- |
+| I1 | AI 原生数据库基础 | 已完成 | [#90](https://github.com/datawhalechina/easy-data-x-ai/issues/90) |
+| I2 | 向量数据库与 RAG | 已完成 | [#91](https://github.com/datawhalechina/easy-data-x-ai/issues/91) |
+| I3 | SQL × AI —— AI Functions 的设计与执行 | 已完成 | [#92](https://github.com/datawhalechina/easy-data-x-ai/issues/92) |
+| I4 | File SQL for AI Agent | 已完成 | [#93](https://github.com/datawhalechina/easy-data-x-ai/issues/93) |
+| I5 | AI 列 —— 模型驱动派生数据的自动维护 | 已完成 | [#94](https://github.com/datawhalechina/easy-data-x-ai/issues/94) |
+| I6 | 上下文工程概述 | 已完成 | [#95](https://github.com/datawhalechina/easy-data-x-ai/issues/95) |
+| I7 | PowerContext 的设计与实现 | 已完成 | [#96](https://github.com/datawhalechina/easy-data-x-ai/issues/96) |
+| I8 | 案例场景和测评构建 | 已完成 | [#97](https://github.com/datawhalechina/easy-data-x-ai/issues/97) |
+
+> I = 产业应用篇，Industry Practice（产业实践）。本篇连接现有 D2、D3、D4 的工程内容，补充产业技术主题、场景设计和测评方法。
+
+### Extra Chapter
+
+| # | 扩展章节标题 | 相关主题 | 共建入口 |
+| --- | --- | --- | --- |
+| **X1** | 探究 AI Agent 记忆系统：从遗忘曲线到永久记忆 | AI 记忆 | 多 Agent 记忆冲突解决（→ [#19](https://github.com/datawhalechina/easy-data-x-ai/issues/19)/[#20](https://github.com/datawhalechina/easy-data-x-ai/issues/20)/[#21](https://github.com/datawhalechina/easy-data-x-ai/issues/21)） |
+| **X2** | 多 Skill 给上下文工程带来的麻烦：如何应对 Agent「爆上下文」 | 多 Skill / 上下文工程 | Skill 设计规范（→ [#22](https://github.com/datawhalechina/easy-data-x-ai/issues/22)/[#23](https://github.com/datawhalechina/easy-data-x-ai/issues/23)） |
+| **X3** | 从零到一上手混合检索：AI Native 统一数据基座实战 | Agentic RAG / 混合检索 | 扩充 RAG 评测数据集（→ [#29](https://github.com/datawhalechina/easy-data-x-ai/issues/29)/[#30](https://github.com/datawhalechina/easy-data-x-ai/issues/30)） |
+| **X4** | 海量 AI Agent 多模数据降本：数据湖库登场 | 数据湖库 × AI | 开源「湖到 RAG」教程（→ [#32](https://github.com/datawhalechina/easy-data-x-ai/issues/32)/[#33](https://github.com/datawhalechina/easy-data-x-ai/issues/33)） |
+| **X5** | 从 Skill 到 MCP Tool | Skill / MCP | 从零实现 MCP Server（→ [#34](https://github.com/datawhalechina/easy-data-x-ai/issues/34)） |
+
+---
+
+## 🚀 快速开始
+
+### 在线阅读
+
+访问 [https://datawhalechina.github.io/easy-data-x-ai](https://datawhalechina.github.io/easy-data-x-ai) 在线阅读课程内容。
+
+### 本地阅读
+
+```bash
+# 克隆仓库
+git clone https://github.com/datawhalechina/easy-data-x-ai.git
+
+cd easy-data-x-ai
+
+# 安装依赖
+npm install
+
+# 本地预览
+npm run docs:dev
+```
+
+### 本地运行示例代码
+
+macOS/Linux：
+
+```bash
+# 在仓库根目录创建 Python 3.11 虚拟环境
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r code/requirements-test.txt
+python -m pip check
+
+# 先跑不需要 API Key 和数据库的离线评测
+PYTHONPATH=code/D3:code python code/D3/d3_5_evaluate.py
+
+# 真实模型示例才需要复制并填写本地配置
+cp code/.env.example code/.env
+python code/D1/d1_1_base.py
+```
+
+Windows PowerShell：
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r code/requirements-test.txt
+python -m pip check
+$env:PYTHONPATH = "code/D3;code"
+python code/D3/d3_5_evaluate.py
+Copy-Item code/.env.example code/.env
+python code/D1/d1_1_base.py
+```
+
+示例代码会优先读取 `code/.env`；如果该文件不存在，也支持从父目录向上查找 `.env`（例如仓库根目录 `.env`）。已有系统环境变量不会被 `.env` 覆盖。`.env` 已被 Git 忽略，但提交前仍应检查差异，避免密钥和个人数据库配置进入仓库。
+
+---
+
+## 🤝 参与贡献
+
+- 如果你发现了一些问题，可以提 [Issue](https://github.com/datawhalechina/easy-data-x-ai/issues) 进行反馈。
+
+- 欢迎加入课程共建，一起完善课程内容。如果您希望参与课程共建，请阅读：[贡献指南 CONTRIBUTING.md](CONTRIBUTING.md)，欢迎提交 [Pull Request](https://github.com/datawhalechina/easy-data-x-ai/pulls)。
+
+- 参与贡献的收获，详见：[贡献指南 CONTRIBUTING.md](CONTRIBUTING.md) 的 “致谢与收获” 部分。
+
+---
+
+## 友情链接
+
+这里为大家介绍本课程开发者 [沧海九粟](https://space.bilibili.com/28357052) 在 DataWhale 开源的另外一门进阶课程 —— [《Deep Agents 实战》](https://github.com/datawhalechina/deepagents-in-action)。
+
+这门课程，会面向想要动手构建 Agent 的开发者，系统地讲解虚拟文件系统、任务规划、子 Agent、Skills、Memory 等核心能力。欢迎大家来学习和积极参与共建。
+
+---
+
+## 模型算力支持
+
+<table>
+<tr>
+<td width="180" align="center" valign="middle">
+<a href="https://opc.aliyun.com/oceanbase?utm_content=g_1000415375" target="_blank" rel="noopener">
+  <img src="docs/public/images/sponsors/bailian.png" alt="阿里云百炼" width="150" />
+</a>
+</td>
+<td valign="middle">
+本课程的模型算力由 <strong><a href="https://opc.aliyun.com/oceanbase?utm_content=g_1000415375">阿里云百炼（Alibaba Cloud Bailian）</a></strong> 提供支持。阿里云百炼大模型服务平台，是企业级的大模型应用开发平台，一站式提供丰富的通义大模型与灵活的智能应用开发工具，助力企业快速落地AI应用，加速业务创新。
+</td>
+</tr>
+</table>
+
+- 🚀 **阿里云百炼课程专属福利**：通过 **[课程专属福利页面](https://opc.aliyun.com/oceanbase?utm_content=g_1000415375)** 即可领取百炼平台为课程共建、课程实验、课程学习提供的专属模型算力福利。
+  - 百炼用户通过专属福利页面，可获得 **1 亿 Token** 的模型免费使用额度（具体以活动页面规则为准，实测新、老用户均可获得）；
+  - 个人、企业新老用户均可参与无门槛 Token 满返补贴；
+  - 另有最高 **100 万元等额 Token** 的 OPC 创新助力；
+  - 以及高校学生 **模型通兑补贴**。
+
+<table>
+<tr>
+<td width="180" align="center" valign="middle">
+<a href="https://cloud.siliconflow.cn/i/Fq9zUwPf" target="_blank" rel="noopener">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/public/images/sponsors/siliconflow-dark.svg" />
+    <img src="docs/public/images/sponsors/siliconflow.svg" alt="SiliconFlow 硅基流动" width="150" />
+  </picture>
+</a>
+</td>
+<td valign="middle">
+本课程的模型算力也由 <strong><a href="https://cloud.siliconflow.cn/i/Fq9zUwPf">硅基流动（SiliconFlow）</a></strong> 提供支持。硅基流动是一站式大模型云服务平台，基于自研推理引擎实现大模型高效推理加速，提供高效能、低成本的多品类 AI 模型服务，让开发者和企业聚焦产品创新，无须担心大规模推广带来的高昂算力成本。
+</td>
+</tr>
+</table>
+
+- 🎁 **新用户福利**：通过 [课程专属注册链接](https://cloud.siliconflow.cn/i/Fq9zUwPf) 注册并完成实名认证，即可获得 **16 元全平台通用代金券**，可用于平台上百余种模型的调用，足够跑通本课程的全部示例。
+- 🧪 **实验配额补贴池**：用上面的链接注册时，作者也会获得平台返利。这部分返利会**全额回馈给学员**——汇集成一个「实验配额补贴池」：跟着课程做实验、复现示例时如果额度不够用，可以[联系作者](https://space.bilibili.com/28357052)申请额外的算力配额补贴，把福利转回给真正在动手的同学。
+
+
+---
+
+## 🧑‍💻 项目维护者
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/webup">
+        <img src="https://github.com/webup.png" width="100px;" alt="webup"/>
+        <br />
+        <sub><b>Haili Zhang (webup)</b></sub>
+      </a>
+      <br />
+      <sub>项目维护者</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/liboyang0730">
+        <img src="https://github.com/liboyang0730.png" width="100px;" alt="liboyang0730"/>
+        <br />
+        <sub><b>Zlatan (liboyang0730)</b></sub>
+      </a>
+      <br />
+      <sub>项目维护者</sub>
+    </td>
+  </tr>
+</table>
+
+## 👥 贡献者墙
+
+> 感谢每一位参与共建的贡献者！下方头像墙由 GitHub Action 自动更新，所有合并过 PR 的同学都会出现在这里（详见 [CONTRIBUTING.md](CONTRIBUTING.md)）。
+
+<!-- contributors:start -->
+<table width="100%">
+<tr>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/liboyang0730" title="liboyang0730">
+    <img src="https://avatars.githubusercontent.com/u/13233790?v=4&s=144" width="72" height="72" alt="liboyang0730" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/liboyang0730" title="打开 liboyang0730 的 GitHub 主页"><kbd><strong>liboyang073…</strong></kbd></a><br />
+  <sub>122 commits<br />15 merged PRs</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/knqiufan" title="knqiufan">
+    <img src="https://avatars.githubusercontent.com/u/34114995?v=4&s=144" width="72" height="72" alt="knqiufan" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/knqiufan" title="打开 knqiufan 的 GitHub 主页"><kbd><strong>knqiufan</strong></kbd></a><br />
+  <sub>26 commits<br />16 merged PRs</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/Kratos-Lee" title="Kratos-Lee">
+    <img src="https://avatars.githubusercontent.com/u/180283969?v=4&s=144" width="72" height="72" alt="Kratos-Lee" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/Kratos-Lee" title="打开 Kratos-Lee 的 GitHub 主页"><kbd><strong>Kratos‑Lee</strong></kbd></a><br />
+  <sub>26 commits<br />11 merged PRs</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/PsiACE" title="PsiACE">
+    <img src="https://avatars.githubusercontent.com/u/36896360?v=4&s=144" width="72" height="72" alt="PsiACE" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/PsiACE" title="打开 PsiACE 的 GitHub 主页"><kbd><strong>PsiACE</strong></kbd></a><br />
+  <sub>10 commits<br />3 merged PRs</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/haoye2" title="haoye2">
+    <img src="https://avatars.githubusercontent.com/u/199622891?v=4&s=144" width="72" height="72" alt="haoye2" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/haoye2" title="打开 haoye2 的 GitHub 主页"><kbd><strong>haoye2</strong></kbd></a><br />
+  <sub>6 commits<br />6 merged PRs</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/Terminator666666" title="Terminator666666">
+    <img src="https://avatars.githubusercontent.com/u/104662484?v=4&s=144" width="72" height="72" alt="Terminator666666" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/Terminator666666" title="打开 Terminator666666 的 GitHub 主页"><kbd><strong>Terminator6…</strong></kbd></a><br />
+  <sub>2 commits<br />1 merged PR</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/amber-moe" title="amber-moe">
+    <img src="https://avatars.githubusercontent.com/u/42762957?v=4&s=144" width="72" height="72" alt="amber-moe" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/amber-moe" title="打开 amber-moe 的 GitHub 主页"><kbd><strong>amber‑moe</strong></kbd></a><br />
+  <sub>1 commit<br />1 merged PR</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/ep-12221" title="ep-12221">
+    <img src="https://avatars.githubusercontent.com/u/149382359?v=4&s=144" width="72" height="72" alt="ep-12221" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/ep-12221" title="打开 ep-12221 的 GitHub 主页"><kbd><strong>ep‑12221</strong></kbd></a><br />
+  <sub>1 commit<br />1 merged PR</sub>
+</td>
+</tr>
+<tr>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/hu-qi" title="hu-qi">
+    <img src="https://avatars.githubusercontent.com/u/17986122?v=4&s=144" width="72" height="72" alt="hu-qi" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/hu-qi" title="打开 hu-qi 的 GitHub 主页"><kbd><strong>hu‑qi</strong></kbd></a><br />
+  <sub>1 commit<br />1 merged PR</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/Iridescent115" title="Iridescent115">
+    <img src="https://avatars.githubusercontent.com/u/209439429?v=4&s=144" width="72" height="72" alt="Iridescent115" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/Iridescent115" title="打开 Iridescent115 的 GitHub 主页"><kbd><strong>Iridescent1…</strong></kbd></a><br />
+  <sub>1 commit<br />1 merged PR</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/JasonZhang10086" title="JasonZhang10086">
+    <img src="https://avatars.githubusercontent.com/u/43478980?v=4&s=144" width="72" height="72" alt="JasonZhang10086" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/JasonZhang10086" title="打开 JasonZhang10086 的 GitHub 主页"><kbd><strong>JasonZhang1…</strong></kbd></a><br />
+  <sub>1 commit<br />1 merged PR</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/jay666mnj" title="jay666mnj">
+    <img src="https://avatars.githubusercontent.com/u/192066339?v=4&s=144" width="72" height="72" alt="jay666mnj" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/jay666mnj" title="打开 jay666mnj 的 GitHub 主页"><kbd><strong>jay666mnj</strong></kbd></a><br />
+  <sub>1 commit<br />1 merged PR</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/ksk2023" title="ksk2023">
+    <img src="https://avatars.githubusercontent.com/u/154514711?v=4&s=144" width="72" height="72" alt="ksk2023" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/ksk2023" title="打开 ksk2023 的 GitHub 主页"><kbd><strong>ksk2023</strong></kbd></a><br />
+  <sub>1 commit<br />1 merged PR</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/nha114514" title="nha114514">
+    <img src="https://avatars.githubusercontent.com/u/262920247?v=4&s=144" width="72" height="72" alt="nha114514" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/nha114514" title="打开 nha114514 的 GitHub 主页"><kbd><strong>nha114514</strong></kbd></a><br />
+  <sub>1 commit<br />1 merged PR</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/oiahoon" title="oiahoon">
+    <img src="https://avatars.githubusercontent.com/u/4361724?v=4&s=144" width="72" height="72" alt="oiahoon" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/oiahoon" title="打开 oiahoon 的 GitHub 主页"><kbd><strong>oiahoon</strong></kbd></a><br />
+  <sub>1 commit<br />1 merged PR</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/pzb5471" title="pzb5471">
+    <img src="https://avatars.githubusercontent.com/u/77824109?v=4&s=144" width="72" height="72" alt="pzb5471" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/pzb5471" title="打开 pzb5471 的 GitHub 主页"><kbd><strong>pzb5471</strong></kbd></a><br />
+  <sub>1 commit<br />1 merged PR</sub>
+</td>
+</tr>
+<tr>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/webup" title="webup">
+    <img src="https://avatars.githubusercontent.com/u/2936504?v=4&s=144" width="72" height="72" alt="webup" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/webup" title="打开 webup 的 GitHub 主页"><kbd><strong>webup</strong></kbd></a><br />
+  <sub>1 commit<br />1 merged PR</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/LINxiansheng" title="LINxiansheng">
+    <img src="https://avatars.githubusercontent.com/u/18351861?v=4&s=144" width="72" height="72" alt="LINxiansheng" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/LINxiansheng" title="打开 LINxiansheng 的 GitHub 主页"><kbd><strong>LINxianshen…</strong></kbd></a><br />
+  <sub>4 merged PRs</sub>
+</td>
+</tr>
+</table>
+<!-- contributors:end -->
+
+---
+
+## 关注我们
+<div align=center>
+<p>欢迎扫描下方二维码加入 Data x AI 课程交流群</p>
+<img src="https://raw.githubusercontent.com/datawhalechina/easy-data-x-ai/main/docs/public/images/base_knowledge/F0/F0-20.png" width = "300" height = "300">
+</div>
+
+## LICENSE
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="知识共享许可协议" style="border-width:0" src="https://img.shields.io/badge/license-CC%20BY--NC--SA%204.0-lightgrey" /></a><br />本作品采用<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>进行许可，完整条款详见 [LICENSE](LICENSE) 文件。

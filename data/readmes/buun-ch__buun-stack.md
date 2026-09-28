@@ -1,0 +1,720 @@
+# buun-stack
+
+A remotely accessible Kubernetes home lab with OIDC authentication. Build a modern development environment with integrated data analytics and AI capabilities. Includes an open data stack for data ingestion, transformation, serving, and orchestration—built on open-source components you can run locally and port to any cloud.
+
+- 📺 [Remote-Accessible Kubernetes Home Lab](https://www.youtube.com/playlist?list=PLbAvvJK22Y6vJPrUC6GrfNMXneYspckAo) (YouTube playlist)
+- 📝 [Building a Remote-Accessible Kubernetes Home Lab with k3s](https://dev.to/buun-ch/building-a-remote-accessible-kubernetes-home-lab-with-k3s-5g05) (Dev.to article)
+
+> [!NOTE]
+> **Longhorn is no longer part of the standard install.** The default StorageClass is now k3s's `local-path`. Longhorn remains available as an opt-in module under [`custom-example/longhorn`](./custom-example/longhorn) for users who still want it.
+
+## Architecture
+
+### Foundation
+
+- **[k3s](https://k3s.io/)**: Lightweight Kubernetes distribution
+- **[Just](https://just.systems/)**: Task runner with templated configurations
+- **[Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/)**: Secure internet connectivity
+
+### Core Components (Required)
+
+- **[PostgreSQL](https://www.postgresql.org/)**: Database cluster with pgvector extension
+- **[Keycloak](https://www.keycloak.org/)**: Identity and access management with OIDC authentication
+
+### Recommended Components
+
+- **[HashiCorp Vault](https://www.vaultproject.io/)**: Centralized secrets management
+    - Used by most stack modules for secure credential storage
+    - Can be deployed without, but highly recommended
+- **[External Secrets Operator](https://external-secrets.io/)**: Kubernetes secret synchronization from Vault
+    - Automatically syncs secrets from Vault to Kubernetes Secrets
+    - Provides secure secret rotation and lifecycle management
+
+### Observability (Optional)
+
+- **[Prometheus](https://prometheus.io/)**: Metrics collection and alerting
+- **[Grafana](https://grafana.com/)**: Metrics visualization and dashboards
+- **[Grafana Tempo](https://grafana.com/oss/tempo/)**: Distributed tracing backend
+- **[Grafana Loki](https://grafana.com/oss/loki/)**: Log aggregation system
+- **[Goldilocks](https://goldilocks.docs.fairwinds.com/)**: Resource recommendation dashboard powered by VPA
+
+### Storage (Optional)
+
+- **[NFS Subdir External Provisioner](https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner)**: Dynamic RWX volumes backed by an existing NFS server
+- **[MinIO](https://min.io/)**: S3-compatible object storage (uses the `pgsty/minio` community fork)
+- **[RustFS](https://rustfs.com/)**: S3-compatible object storage written in Rust (MinIO alternative, evaluation)
+
+### GPU Support (Optional)
+
+- **[NVIDIA Device Plugin](https://github.com/NVIDIA/k8s-device-plugin)**: NVIDIA GPU support for Kubernetes
+
+### Data & Analytics (Optional)
+
+- **[JupyterHub](https://jupyter.org/hub)**: Interactive computing with collaborative notebooks
+- **[Trino](https://trino.io/)**: Distributed SQL query engine for querying multiple data sources
+- **[Querybook](https://www.querybook.org/)**: Big data querying UI with notebook interface
+- **[ClickHouse](https://clickhouse.com/)**: High-performance columnar analytics database
+- **[Qdrant](https://qdrant.tech/)**: Vector database for AI/ML applications
+- **[FalkorDB](https://www.falkordb.com/)**: Graph database with vector similarity search for knowledge graphs
+- **[Memgraph](https://memgraph.com/)**: In-memory graph database for real-time streaming and analytics
+- **[Meilisearch](https://www.meilisearch.com/)**: Lightning-fast, typo-tolerant search engine
+- **[Redis Operator](https://github.com/OT-CONTAINER-KIT/redis-operator)**: Kubernetes operator for Redis standalone, cluster, and replication
+- **[Lakekeeper](https://lakekeeper.io/)**: Apache Iceberg REST Catalog for data lake management
+- **[DuckLake](https://ducklake.select/)**: Lakehouse format with a PostgreSQL catalog and Parquet files on S3, queried with DuckDB
+- **[Apache Superset](https://superset.apache.org/)**: BI platform with rich chart types and high customizability
+- **[Metabase](https://www.metabase.com/)**: Lightweight BI with simple configuration and clean, modern interface
+- **[DataHub](https://datahubproject.io/)**: Data catalog and metadata management
+
+### Machine Learning (Optional)
+
+- **[MLflow](https://mlflow.org/)**: Machine learning lifecycle management with experiment tracking and model registry
+- **[KServe](https://kserve.github.io/)**: Model serving platform for deploying ML models on Kubernetes
+
+### LLM & AI Applications (Optional)
+
+- **[Ollama](https://ollama.com/)**: Local LLM inference server with GPU acceleration
+- **[vLLM](https://vllm.ai/)**: High-throughput LLM serving engine with PagedAttention for production workloads
+- **[LiteLLM](https://litellm.ai/)**: Unified LLM gateway for accessing multiple providers through OpenAI-compatible API
+- **[LibreChat](https://www.librechat.ai/)**: Web-based chat interface with multi-model support and MCP integration
+- **[Langfuse](https://langfuse.com/)**: LLM observability and analytics platform for tracking and debugging AI applications
+
+### Orchestration (Optional)
+
+- **[Dagster](https://dagster.io/)**: Modern data orchestration platform
+- **[Apache Airflow](https://airflow.apache.org/)**: Workflow orchestration and task scheduling
+- **[Temporal](https://temporal.io/)**: Durable workflow execution for distributed applications
+
+### Development Environment (Optional)
+
+- **[Coder](https://coder.com/)**: Self-hosted development workspaces running as pods in the cluster
+
+### Security & Compliance (Optional)
+
+- **[OAuth2 Proxy](https://oauth2-proxy.github.io/oauth2-proxy/)**: Authentication proxy for adding Keycloak authentication
+- **[Fairwinds Polaris](https://polaris.docs.fairwinds.com/)**: Kubernetes configuration validation and security auditing
+
+### Opt-in Add-ons (under `custom-example/`)
+
+The [`custom-example/`](./custom-example) directory ships modules that are not part of the standard install but can be enabled from your own `custom/justfile`:
+
+- **[Airbyte](https://airbyte.com/)**: ELT data integration platform
+- **[Bytebase](https://bytebase.com/)**: Database schema change and version control
+- **[Cube](https://cube.dev/)**: Semantic layer for analytics APIs
+- **[Longhorn](https://longhorn.io/)**: Distributed block storage (legacy; superseded by the NFS provisioner above)
+
+## Quick Start
+
+For detailed step-by-step instructions, see the [Installation Guide](./INSTALLATION.md).
+
+1. **Clone and configure**
+
+   ```bash
+   git clone https://github.com/buun-ch/buun-stack
+   cd buun-stack
+   mise install
+   just env::setup
+   ```
+
+2. **Deploy cluster and services**
+
+   ```bash
+   just k8s::install
+   just vault::install
+   just postgres::install
+   just keycloak::install
+   ```
+
+3. **Configure authentication**
+
+   ```bash
+   just keycloak::create-realm
+   just vault::setup-oidc-auth
+   just keycloak::create-user
+   just k8s::setup-oidc-auth
+   ```
+
+## Component Details
+
+### k3s
+
+Lightweight Kubernetes distribution optimized for edge computing:
+
+- **Resource Efficient**: Runs on resource-constrained environments
+- **Production Ready**: Full Kubernetes functionality with minimal overhead
+- **Easy Deployment**: Single binary installation with built-in ingress
+
+### PostgreSQL
+
+Production-ready relational database:
+
+- **High Availability**: Clustered deployment with CloudNativePG
+- **pgvector Extension**: Vector similarity search for AI/ML workloads
+- **Multi-Tenant**: Shared database for Keycloak and applications
+
+### Keycloak
+
+Open-source identity and access management:
+
+- **Single Sign-On**: OIDC/OAuth2 authentication across all services
+- **User Federation**: Identity brokering and external provider integration
+- **Group-Based Access**: Role and permission management
+
+### HashiCorp Vault
+
+Centralized secrets management:
+
+- **Secure Storage**: Encrypted secret storage with access control
+- **Dynamic Secrets**: Automatic credential generation and rotation
+- **External Secrets Integration**: Syncs with Kubernetes via External Secrets Operator
+
+### External Secrets Operator
+
+Kubernetes operator for secret synchronization:
+
+- **Vault Integration**: Automatically syncs secrets from Vault to Kubernetes
+- **Multiple Backends**: Supports various secret management systems
+- **Secure Rotation**: Automatic secret lifecycle management
+
+### Prometheus and Grafana
+
+Comprehensive monitoring and observability stack:
+
+- **Metrics Collection**: Prometheus server with Prometheus Operator
+- **Visualization**: Grafana with customizable dashboards
+- **Alerting**: Alertmanager for alert routing and management
+- **Namespace-Based Control**: Explicit monitoring via labels
+- **OIDC Integration**: Optional Keycloak authentication for Grafana
+
+[📖 See Prometheus Documentation](./prometheus/README.md)
+
+### Grafana Tempo
+
+Distributed tracing backend for observability:
+
+- **Multi-Protocol**: OTLP, Jaeger, Zipkin, and OpenCensus receivers
+- **Grafana Integration**: Native datasource for trace visualization
+- **TraceQL**: Powerful query language for trace analysis
+- **Efficient Storage**: Cost-effective trace storage with local or S3 backends
+
+[📖 See Tempo Documentation](./tempo/README.md)
+
+### Goldilocks
+
+Resource recommendation dashboard for right-sizing workloads:
+
+- **VPA Integration**: Powered by Vertical Pod Autoscaler for metrics-based recommendations
+- **Visual Dashboard**: User-friendly interface for viewing resource recommendations
+- **QoS Guidance**: Recommendations for Guaranteed, Burstable, and BestEffort classes
+- **Monitoring-Only Mode**: Observes workloads without automatic scaling
+- **Namespace-Based**: Enable monitoring per namespace with labels
+
+[📖 See Goldilocks Documentation](./goldilocks/README.md)
+
+[📖 See VPA Documentation](./vpa/README.md)
+
+### NFS Subdir External Provisioner (Optional)
+
+Dynamic RWX volumes backed by an existing NFS server:
+
+- **ReadWriteMany**: Multiple pods can mount the same volume
+- **Bring Your Own NFS**: Works with any NFS server (NAS, TrueNAS, Linux NFS, etc.)
+- **Lightweight**: Only deploys the provisioner; storage capacity is the NFS server itself
+
+[📖 See NFS Provisioner Documentation](./nfs-subdir-external-provisioner/README.md)
+
+### MinIO
+
+S3-compatible object storage:
+
+- **S3 API**: Drop-in replacement for AWS S3
+- **High Performance**: Distributed object storage with erasure coding
+- **Multi-Tenancy**: Isolated storage buckets per application
+- **Community Fork**: Uses the `pgsty/minio` image, since MinIO's upstream Community Edition is archived/EOL; the embedded admin console is restored
+
+[📖 See MinIO Documentation](./minio/README.md)
+
+### RustFS
+
+S3-compatible object storage written in Rust (MinIO alternative, **evaluation**):
+
+- **S3 API**: Drop-in S3 replacement, Apache-2.0 licensed
+- **Lightweight**: Single Rust binary with strong small-object performance
+- **Beta**: Not yet 1.0.0 GA; deployed alongside MinIO for evaluation, not production-critical workloads
+
+[📖 See RustFS Documentation](./rustfs/README.md)
+
+### JupyterHub
+
+Multi-user platform for interactive computing:
+
+- **Keycloak Authentication**: OAuth2 integration with SSO
+- **Persistent Storage**: User notebooks stored on the cluster's StorageClass (k3s `local-path` by default; NFS optional)
+- **Collaborative**: Shared computing environment for teams
+- **GPU Support**: CUDA-enabled notebooks with nvidia-device-plugin integration
+
+[📖 See JupyterHub Documentation](./jupyterhub/README.md)
+
+### Trino
+
+Fast distributed SQL query engine:
+
+- **Multi-Source Queries**: Query PostgreSQL, Iceberg, and other sources in single query
+- **Keycloak Authentication**: OAuth2 for Web UI, password auth for JDBC clients
+- **Sample Data**: TPCH catalog with benchmark data for testing
+
+[📖 See Trino Documentation](./trino/README.md)
+
+### Querybook
+
+Big data querying UI with notebook interface:
+
+- **Trino Integration**: SQL queries against multiple data sources with user impersonation
+- **Notebook Interface**: Shareable datadocs with queries and visualizations
+- **Real-time Execution**: WebSocket-based query progress updates
+
+[📖 See Querybook Documentation](./querybook/README.md)
+
+### ClickHouse
+
+High-performance columnar OLAP database:
+
+- **Fast Analytics**: Optimized for analytical queries on large datasets
+- **Compression**: Efficient storage with columnar format
+- **Real-time Ingestion**: Stream data from Kafka and other sources
+
+[📖 See ClickHouse Documentation](./clickhouse/README.md)
+
+### Qdrant
+
+High-performance vector database:
+
+- **Similarity Search**: Fast vector search for AI/ML applications
+- **Rich Filtering**: Combine vector search with structured filters
+- **Scalable**: Distributed deployment for large-scale embeddings
+
+[📖 See Qdrant Documentation](./qdrant/README.md)
+
+### FalkorDB
+
+High-performance graph database with vector capabilities:
+
+- **Knowledge Graphs**: Build and query complex relationship networks with OpenCypher
+- **Vector Search**: Native vector similarity for GraphRAG applications
+- **Redis Compatible**: Uses Redis protocol for easy integration
+
+[📖 See FalkorDB Documentation](./falkordb/README.md)
+
+### Memgraph
+
+In-memory graph database for real-time analytics:
+
+- **High Performance**: In-memory storage for low-latency graph queries
+- **OpenCypher**: Standard graph query language compatible with Neo4j drivers
+- **Memgraph Lab**: Visual interface for graph exploration and querying
+
+[📖 See Memgraph Documentation](./memgraph/README.md)
+
+### Meilisearch
+
+Lightning-fast, typo-tolerant search engine:
+
+- **Instant Search**: Sub-50ms response times with typo tolerance
+- **Faceted Search**: Filtering and aggregations for rich search experiences
+- **RESTful API**: Simple HTTP API with SDKs for multiple languages
+
+[📖 See Meilisearch Documentation](./meilisearch/README.md)
+
+### Redis Operator
+
+Kubernetes operator for managing Redis instances:
+
+- **Multiple Modes**: Standalone, Cluster, Replication, and Sentinel configurations
+- **Persistent Storage**: Automatic PVC provisioning on the cluster's default StorageClass
+- **Monitoring**: Redis Exporter sidecar for Prometheus metrics
+- **Security**: Non-root containers with proper security contexts
+
+[📖 See Redis Operator Documentation](./redis-operator/README.md)
+
+### Lakekeeper
+
+Apache Iceberg REST Catalog:
+
+- **OIDC Authentication**: Keycloak integration for secure access
+- **Table Management**: Manages Iceberg tables with ACID transactions
+- **Multi-Engine**: Compatible with Trino, Spark, and other query engines
+
+[📖 See Lakekeeper Documentation](./lakekeeper/README.md)
+
+### DuckLake
+
+Lakehouse format that keeps its catalog in PostgreSQL and its data files on S3:
+
+- **No Catalog Server**: Installing it means provisioning a database, a bucket and credentials — any DuckDB client attaches the lake directly
+- **Snapshots and Time Travel**: Every write creates a snapshot, queryable with `AT (VERSION => n)`
+- **Remote Access**: An optional Quack server exposes the lake over HTTP with token auth, keeping PostgreSQL and S3 private
+- **Transformations**: dbt works against a direct attach; run it from a [Coder](#coder) workspace rather than over Quack
+
+[📖 See DuckLake Documentation](./ducklake/README.md)
+
+### Apache Superset
+
+Modern business intelligence platform:
+
+- **Rich Visualizations**: 40+ chart types including mixed charts, treemaps, and heatmaps
+- **SQL Lab**: Powerful editor for complex queries and dataset creation
+- **Keycloak & Trino**: OAuth2 authentication and Iceberg data lake integration
+
+[📖 See Superset Documentation](./superset/README.md)
+
+### Metabase
+
+Lightweight business intelligence:
+
+- **Simple Setup**: Quick configuration with clean, modern UI
+- **Multiple Databases**: Connect to PostgreSQL, Trino, and more
+- **Keycloak Authentication**: OAuth2 integration for user management
+
+[📖 See Metabase Documentation](./metabase/README.md)
+
+### DataHub
+
+Modern data catalog and metadata management:
+
+- **OIDC Integration**: Keycloak authentication for unified access
+- **Metadata Discovery**: Search and browse data assets across platforms
+- **Lineage Tracking**: Visualize data flow and dependencies
+
+[📖 See DataHub Documentation](./datahub/README.md)
+
+### MLflow
+
+Machine learning lifecycle management platform:
+
+- **Experiment Tracking**: Log parameters, metrics, and artifacts for ML experiments
+- **Model Registry**: Version and manage ML models with deployment lifecycle
+- **Keycloak Authentication**: OAuth2 integration with group-based access control
+
+[📖 See MLflow Documentation](./mlflow/README.md)
+
+### KServe
+
+Model serving platform for deploying ML models on Kubernetes:
+
+- **Multi-Framework Support**: TensorFlow, PyTorch, scikit-learn, XGBoost, MLflow, and more
+- **MLflow Integration**: Deploy models directly from MLflow Model Registry
+- **Inference Protocols**: REST and gRPC with v2 Open Inference Protocol
+- **RawDeployment Mode**: Uses native Kubernetes Deployments without Knative dependency
+
+[📖 See KServe Documentation](./kserve/README.md)
+
+### Ollama
+
+Local LLM inference server:
+
+- **Local Inference**: Run LLMs locally without external API dependencies
+- **GPU Acceleration**: NVIDIA GPU support with automatic runtime configuration
+- **Model Library**: Access to thousands of open-source models (Llama, Qwen, DeepSeek, etc.)
+- **OpenAI-Compatible API**: Drop-in replacement for OpenAI API endpoints
+
+[📖 See Ollama Documentation](./ollama/README.md)
+
+### vLLM
+
+High-throughput LLM serving engine:
+
+- **High Performance**: PagedAttention for efficient memory management and production-grade throughput
+- **Multi-Model Deployment**: Deploy multiple models with automatic load balancing via router
+- **OpenAI-Compatible API**: Drop-in replacement for OpenAI API endpoints
+- **GPU Optimization**: Tensor parallelism for large models across multiple GPUs
+
+[📖 See vLLM Documentation](./vllm/README.md)
+
+### LibreChat
+
+Web-based chat interface for LLMs:
+
+- **Multi-Model Support**: Connect to Ollama, OpenAI, Anthropic, and custom endpoints
+- **MCP Integration**: Model Context Protocol support for web search and tools
+- **Keycloak Authentication**: OAuth2 integration for user management
+
+[📖 See LibreChat Documentation](./librechat/README.md)
+
+### Langfuse
+
+LLM observability and analytics platform:
+
+- **Trace Tracking**: Monitor LLM calls, chains, and agent executions with detailed traces
+- **Prompt Management**: Version and test prompts with playground interface
+- **Analytics**: Track costs, latency, and token usage across all LLM applications
+- **Keycloak Authentication**: OAuth2 integration with automatic user provisioning
+
+[📖 See Langfuse Documentation](./langfuse/README.md)
+
+### LiteLLM
+
+Unified LLM gateway and proxy:
+
+- **Multi-Provider Support**: Anthropic, OpenAI, Ollama, Mistral, Groq, and more through single API
+- **OpenAI-Compatible**: Drop-in replacement for OpenAI SDK
+- **Virtual Keys**: Generate scoped API keys for users with usage tracking
+- **Cost Tracking**: Monitor spending across all LLM providers
+- **Keycloak Authentication**: OAuth2 for Admin UI with role-based access
+
+[📖 See LiteLLM Documentation](./litellm/README.md)
+
+### Dagster
+
+Modern data orchestration platform:
+
+- **Asset-Centric**: Define data assets and their dependencies
+- **Integrated Development**: Built-in UI for development and monitoring
+- **Testing & Validation**: Data quality checks and pipeline testing
+
+[📖 See Dagster Documentation](./dagster/README.md)
+
+### Apache Airflow
+
+Workflow orchestration platform:
+
+- **DAG-Based**: Define data pipelines as code with Python
+- **JupyterHub Integration**: Develop and test workflows in notebooks
+- **Keycloak Authentication**: OAuth2 for user management
+
+[📖 See Airflow Documentation](./airflow/README.md)
+
+### Temporal
+
+Durable workflow execution platform:
+
+- **Durable Execution**: Workflows survive process and infrastructure failures
+- **Saga Pattern**: Implement distributed transactions with compensating actions
+- **Multi-Language SDKs**: Go, Python, TypeScript, Java, .NET, PHP
+- **Keycloak Authentication**: OAuth2 for Web UI access
+
+[📖 See Temporal Documentation](./temporal/README.md)
+
+### Coder
+
+Self-hosted development workspaces defined as Terraform templates:
+
+- **In-Cluster Workspaces**: Workspace pods run next to the data, so a laptop only runs a terminal
+- **Keycloak Authentication**: OIDC SSO, included in the free Community edition
+- **SSH and IDE Access**: `coder ssh` from anywhere, plus VS Code Remote-SSH, a browser terminal and code-server
+- **Data Stack Image**: Ships `duckdb` and `dbt-duckdb` alongside clients for the stack's components, with DuckLake credentials injected from Vault
+
+[📖 See Coder Documentation](./coder/README.md)
+
+### Fairwinds Polaris
+
+Kubernetes configuration validation and best practices auditing:
+
+- **Security Checks**: Validates security configurations against best practices
+- **Efficiency Analysis**: Identifies missing resource requests and limits
+- **Real-time Auditing**: Continuous cluster configuration scanning
+- **Dashboard Interface**: Visual reporting of issues by severity
+
+[📖 See Fairwinds Polaris Documentation](./fairwinds-polaris/README.md)
+
+## Common Operations
+
+### User Management
+
+Create additional users:
+
+```bash
+just keycloak::create-user
+```
+
+Add user to group:
+
+```bash
+just keycloak::add-user-to-group <username> <group>
+```
+
+### Database Management
+
+Create database:
+
+```bash
+just postgres::create-db <dbname>
+```
+
+Create database user:
+
+```bash
+just postgres::create-user <username>
+```
+
+Grant privileges:
+
+```bash
+just postgres::grant <dbname> <username>
+```
+
+### Secret Management
+
+Store secrets in Vault:
+
+```bash
+just vault::put <path> <key>=<value>
+```
+
+Retrieve secrets:
+
+```bash
+just vault::get <path> <field>
+```
+
+## Security & Authentication
+
+### OAuth2 Proxy Integration
+
+For applications that don't natively support Keycloak/OIDC authentication, buun-stack provides OAuth2 Proxy integration to add Keycloak authentication to any application:
+
+- **Universal Authentication**: Add Keycloak SSO to any web application
+- **Automatic Setup**: Configures Keycloak client, secrets, and proxy deployment
+- **Security**: Prevents unauthorized access by routing all traffic through authentication
+- **Easy Management**: Simple recipes for setup and removal
+
+**Setup OAuth2 authentication for any application**:
+
+```bash
+# For CH-UI (included in installation prompt)
+just ch-ui::setup-oauth2-proxy
+
+# For any custom application
+just oauth2-proxy::setup-for-app <app-name> <app-host> [namespace] [upstream-service]
+```
+
+**Remove OAuth2 authentication**:
+
+```bash
+just ch-ui::remove-oauth2-proxy
+just oauth2-proxy::remove-for-app <app-name> [namespace]
+```
+
+The OAuth2 Proxy automatically:
+
+- Creates a Keycloak client with proper audience mapping
+- Generates secure secrets and stores them in Vault
+- Deploys proxy with Traefik ingress routing
+- Disables direct application access to ensure security
+
+## Remote Access
+
+Once configured, you can access your cluster from anywhere:
+
+```bash
+# SSH access
+ssh ssh.yourdomain.com
+
+# Kubernetes API
+kubectl --context yourpc-oidc get nodes
+
+# Web interfaces
+# Vault: https://vault.yourdomain.com
+# Keycloak: https://auth.yourdomain.com
+# Grafana: https://grafana.yourdomain.com
+# Trino: https://trino.yourdomain.com
+# Querybook: https://querybook.yourdomain.com
+# Superset: https://superset.yourdomain.com
+# Metabase: https://metabase.yourdomain.com
+# Airflow: https://airflow.yourdomain.com
+# JupyterHub: https://jupyter.yourdomain.com
+# MLflow: https://mlflow.yourdomain.com
+# Langfuse: https://langfuse.yourdomain.com
+# LiteLLM: https://litellm.yourdomain.com
+# LibreChat: https://chat.yourdomain.com
+```
+
+## Customization
+
+### Adding Custom Recipes
+
+You can extend buun-stack with your own Just recipes and services:
+
+1. Copy the example files:
+
+   ```bash
+   cp custom-example.just custom.just
+   cp -r custom-example custom
+   ```
+
+2. Use the custom recipes:
+
+   ```bash
+   # Install reddit-rss
+   just custom::reddit-rss::install
+
+   # Install Miniflux feed reader
+   just custom::miniflux::install
+   ```
+
+3. Create your own recipes:
+
+Add new modules to the `custom/` directory following the same pattern as the examples. Each module should have its own `justfile` with install, uninstall, and other relevant recipes.
+
+The `custom.just` file is automatically imported by the main Justfile if it exists, allowing you to maintain your custom workflows separately from the core stack.
+
+## Demo Projects
+
+The following demo projects showcase end-to-end data workflows using buun-stack:
+
+### ML Model Serving with MLflow and KServe
+
+[**examples/kserve-mlflow-iris**](./examples/kserve-mlflow-iris/README.md)
+
+End-to-end machine learning workflow demonstrating JupyterHub, MLflow, and KServe integration:
+
+- **JupyterHub** for model training and testing
+- **MLflow** for experiment tracking and model registry
+- **KServe** for model deployment and inference
+
+Key technologies: MLflow, KServe, MinIO, JupyterHub
+
+### Salesforce to Iceberg REST Catalog
+
+[**dlt-salesforce-iceberg-rest-demo**](https://github.com/buun-ch/dlt-salesforce-iceberg-rest-demo)
+
+Demonstrates Salesforce data ingestion into an Iceberg data lake:
+
+- **dlt** extracts data from Salesforce API (Account, Contact, Opportunity, etc.)
+    - **Custom Iceberg destination** loads data into Lakekeeper REST Catalog
+    - **Automatic schema conversion** from dlt to Iceberg with PyArrow
+- **Orchestration** with Dagster or Apache Airflow
+
+Key technologies: dlt, Iceberg, Lakekeeper, MinIO
+
+### E-commerce Lakehouse Analytics
+
+[**payload-ecommerce-lakehouse-demo**](https://github.com/buun-ch/payload-ecommerce-lakehouse-demo)
+
+Full-stack e-commerce application with integrated lakehouse analytics:
+
+- **Next.js + Payload CMS** for e-commerce application
+- **dlt** ingests data incrementally from Payload API to Iceberg
+- **dbt** transforms raw data into analytics-ready star schema
+- **Trino** queries across all data layers (raw, staging, marts)
+- **Superset/Metabase** for dashboards and business intelligence
+
+Key technologies: Next.js, Payload CMS, dlt, dbt, Iceberg, Lakekeeper, Trino, Superset, Metabase
+
+Both projects demonstrate the medallion architecture (raw → staging → marts) and showcase how buun-stack components work together for production data workflows.
+
+## Documentation
+
+### Troubleshooting
+
+Having issues? Check the [Troubleshooting Guide](./docs/troubleshooting.md) for solutions to common problems:
+
+### Resource Management
+
+See [Resource Management Guide](./docs/resource-management.md) for configuring CPU and memory:
+
+- QoS classes (Guaranteed vs Burstable)
+- Using Goldilocks for recommendations
+- Best practices and examples
+
+## License
+
+MIT License - See LICENSE file for details

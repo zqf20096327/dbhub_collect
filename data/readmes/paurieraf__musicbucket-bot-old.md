@@ -1,0 +1,116 @@
+MusicBucket Bot
+================
+
+.. |full_logo| image:: https://github.com/musicbucket/musicbucket-bot/blob/main/images/logos/musicbucket_bot_letter_logo.png?raw=True
+
+|full_logo|
+
+
+
+Importante notice as of 2025-08-03
+~~~~~~~~
+**Dropping Spotify support**
+
+I've made the decision to drop support for Spotify. This is in response to the news that Spotify's CEO, Daniel Ek, has invested in Helsing, a defense firm specializing in AI-powered military technology.
+
+As a result, the bot will progressively lose all Spotify features, including link handling, saving links, and API integrations. The bot will no longer interact with Spotify in any way. The bot may still support Last.fm features in the future.
+
+I apologize for any inconvenience this may cause.
+
+About
+~~~~~~~~
+
+MusicBucket Bot is a Telegram Bot that adds features and possibility to interact with **Spotify** music links that users send in
+a chat.
+
+Its main feature is to allow you to **save links that someones shares in a Chat** in a personal list.
+So you can easily track which music you have pending to listen to.
+
+When an user sends a link, the bot is able to get information from a Spotify link like:
+
+-  *Artist*
+-  *Album*
+-  *Track*
+-  *Genres*
+-  *Audio preview*
+
+It also integrates with **Last.fm** to retrieve information about your
+user like **Now Playing**.
+
+Why Telegram?
+_____________
+I chose Telegram because I'm in a few groups where we share music everyday. We soon realized that
+the links we shared in a group were often missed. Therefore, the idea of making a tool for keeping track
+of the music we share started growing so I started developing this bot.
+
+Why Spotify?
+_____________
+At the start the bot supported both Spotify and Deezer, but Spotify is the platform that we use
+mostly, so implementing new features for both platforms became complicated and I decided supporting Spotify
+only.
+
+
+Commands
+~~~~~~~~
+-  ``/music [@username]`` Retrieves the music shared in the chat from
+   the last week. Grouped by user. Filter by @username optionally.
+-  ``/music_from_beginning @username`` Retrieves the music shared in the
+   chat from the beginning of time by an user.
+-  ``/savedlinks`` Retrieves a list with your saved links
+-  ``/deletesavedlinks`` Shows a list of buttons for deleting saved links
+-  ``/mymusic`` Retrieves the music that you shared in all the chats.
+   It has to be called from a private conversation.
+- ``/topalbums [period](7day 'default'/1month/3month/6month/12month/overall)`` Top Albums. Returns the Last.fm top albums of your user.
+- ``/topartists [period](7day 'default'/1month/3month/6month/12month/overall)`` Top Artists. Returns the Last.fm top artists of your user.
+- ``/toptracks [period](7day 'default'/1month/3month/6month/12month/overall)`` Top Tracks. Returns the Last.fm top tracks of your user.
+-  ``/np`` Now Playing. Returns track information about what you are
+   currently playing in Last.fm.
+-  ``/collage [rows] [cols] [period](7day 'default'/1month/3month/6month/12month/overall)`` Returns a collage of your most listened albums in a period.
+-  ``/lastfmset username`` Sets a Last.fm username to your Telegram
+   user.
+-  ``/stats`` Retrieves an user list with a links counter for the
+   current chat.
+-  ``/help`` Retrieves a list of available commands and bot features.
+-  ``@music_bucket_bot artist|album|track name`` Search for an artist,
+   an album or a track and send it to the chat.
+
+**Official bot** => ``@music_bucket_bot``
+
+Screenshots
+~~~~~~~~~~~
+
+.. |screenshot_1| image:: https://github.com/paurieraf/musicbucket-bot/blob/master/images/screenshots/screenshot_1.jpg?raw=True
+.. |screenshot_2| image:: https://github.com/paurieraf/musicbucket-bot/blob/master/images/screenshots/screenshot_2.jpg?raw=True
+.. |screenshot_3| image:: https://github.com/paurieraf/musicbucket-bot/blob/master/images/screenshots/screenshot_3.jpg?raw=True
+.. |screenshot_4| image:: https://github.com/paurieraf/musicbucket-bot/blob/master/images/screenshots/screenshot_4.jpg?raw=True
+
+================================  ================================
+|screenshot_1|                    |screenshot_3|
+
+|screenshot_2|                    |screenshot_4|
+================================  ================================
+
+
+Installation
+~~~~~~~~~~~~
+
+-  Install ``pyenv`` and ``poetry``
+-  Do ``poetry install`` inside the folder.
+-  Copy the ``.env.dist`` file to ``.env`` and **fill the variables**
+   with your Telegram and Spotify data.
+-  Execute ``python main.py``
+
+
+Special thanks
+~~~~~~~~~~~~~~
+
+To the Sonomada community and its group in Telegram (https://t.me/Sonomada_gang) where we use and test the bot actively and propose new features.
+
+
+License
+~~~~~~~
+
+The content of this project is licensed under the GNU/GPLv3 license. See
+LICENSE file.
+
+

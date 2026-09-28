@@ -1,0 +1,214 @@
+<!-- markdownlint-disable MD001 MD033 MD034 MD041 -->
+# Dockerfile of SQLite3
+
+Alpine Docker image of SQLite3 built from the latest source code statically linked.
+
+```bash
+docker pull keinos/sqlite3:latest
+```
+
+- Current SQLite3 version:
+  - [![SQLite Version](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FKEINOS%2FDockerfile_of_SQLite3%2Fmaster%2FSQLite3-shields.io-badge.json)](https://github.com/KEINOS/Dockerfile_of_SQLite3/blob/master/VERSION_SQLite3.txt)
+  - [View Available Tags (SQLite version)](https://hub.docker.com/r/keinos/sqlite3/tags) @ DockerHub
+- Supported Architecture:
+  - Arm64, Armv6, Armv7, Intel/AMD64 and Apple Silicon (M series)
+- INIT System Support:
+  - [Tini](https://github.com/krallin/tini) (Fix:[#65](https://github.com/KEINOS/Dockerfile_of_SQLite3/pull/65))
+- Static Binary
+- Scan Status:
+  - [![Snyk Docker Scan](https://github.com/KEINOS/Dockerfile_of_SQLite3/actions/workflows/container-analysis.yml/badge.svg)](https://github.com/KEINOS/Dockerfile_of_SQLite3/actions/workflows/container-analysis.yml)
+  - [![Container Scan](https://github.com/KEINOS/Dockerfile_of_SQLite3/actions/workflows/container_scan.yml/badge.svg)](https://github.com/KEINOS/Dockerfile_of_SQLite3/actions/workflows/container_scan.yml)
+
+<details><summary>Image Information (Dockerfile, Security Scan, Image Signature, SBOM, etc.)</summary>
+
+- INIT Support:
+  - As of `3.47.2-20241207-tini`, the image supports [Tini](https://github.com/krallin/tini) as the default init process. (See issue [#65](https://github.com/KEINOS/Dockerfile_of_SQLite3/pull/65))
+    - Originally SQLite3 was run as the PID 1 process. [This](https://github.com/KEINOS/Dockerfile_of_SQLite3/pull/65) change was made to ensure the container stops gracefully when receiving `SIGTERM` or `SIGINT` (e.g., `docker stop`).
+- Repositories/Registries:
+  - [Image Registry](https://hub.docker.com/r/keinos/sqlite3)  @ DockerHub
+  - [Dockerfile](https://github.com/KEINOS/Dockerfile_of_SQLite3/blob/master/Dockerfile) @ GitHub
+  - [Issues](https://github.com/KEINOS/Dockerfile_of_SQLite3/issues) @ GitHub
+- Build Info:
+  - Base Image: `alpine:latest`
+  - SQLite3 Source: [https://www.sqlite.org/src/](https://www.sqlite.org/src/doc/trunk/README.md) @ SQLite.org
+  - Update Check Interval: [Once a week](https://github.com/KEINOS/Dockerfile_of_SQLite3/blob/master/.github/workflows/weekly-update.yml)
+  - Static Binary: As of `3.50.4-20250730-static` (Issue [#90](https://github.com/KEINOS/Dockerfile_of_SQLite3/issues/90)), the `sqlite3` CLI binary is built as a fully static binary and reduced size from ~7.0 MiB to ~977 KiB (x86_64, stripped). It improves portability across Linux distributions.
+- Basic Vulnerability Scan:
+  - [Snyk Docker Scan](https://docs.snyk.io/integrate-with-snyk/snyk-ci-cd-integrations/github-actions-for-snyk-setup-and-checking-for-vulnerabilities/snyk-docker-action) and [Grype Container Scan](https://github.com/anchore/scan-action) on push, PR and merge.
+  - Scan Interval: Once a week.
+  - See the [Security overview](https://github.com/KEINOS/Dockerfile_of_SQLite3/security) for the details.
+- Verification of Image Signature Using Cosign:
+  - As of `3.50.4`, the image is signed using [Cosign](https://github.com/sigstore/cosign). Check if the result contains "The cosign claims were validated". (See issue [#86](https://github.com/KEINOS/Dockerfile_of_SQLite3/issues/86) and [#88](https://github.com/KEINOS/Dockerfile_of_SQLite3/issues/88))
+
+    ```bash
+    # get digest
+    DIGEST=$(docker buildx imagetools inspect "docker.io/keinos/sqlite3:latest" --format '{{json .}}' | jq -r '.manifest.digest')
+
+    # verify
+    cosign verify \
+      --certificate-identity 'https://github.com/KEINOS/Dockerfile_of_SQLite3/.github/workflows/deploy-on-merge.yml@refs/heads/master' \
+      --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
+      "docker.io/keinos/sqlite3@${DIGEST}"
+    ```
+
+- SBOM
+  - The images supports [SBOM](https://www.cisa.gov/sbom). You can check the software components used in the image as below.
+
+  ```shellsession
+  $ docker sbom keinos/sqlite3:latest
+  Syft v0.43.0
+  ✔ Loaded image
+  ✔ Parsed image
+  ✔ Cataloged packages      [17 packages]
+  NAME                    VERSION      TYPE
+  alpine-baselayout       3.7.0-r0     apk
+  alpine-baselayout-data  3.7.0-r0     apk
+  alpine-keys             2.5-r0       apk
+  alpine-release          3.22.1-r0    apk
+  apk-tools               2.14.9-r2    apk
+  busybox                 1.37.0-r19   apk
+  busybox-binsh           1.37.0-r19   apk
+  ca-certificates-bundle  20250619-r0  apk
+  libapk2                 2.14.9-r2    apk
+  libcrypto3              3.5.2-r0     apk
+  libssl3                 3.5.2-r0     apk
+  musl                    1.2.5-r10    apk
+  musl-utils              1.2.5-r10    apk
+  scanelf                 1.3.8-r1     apk
+  ssl_client              1.37.0-r19   apk
+  tini                    0.19.0-r3    apk
+  zlib                    1.3.1-r2     apk
+  ```
+
+</details>
+
+## Usage
+
+### Pull the latest image
+
+```shellsession
+$ docker pull keinos/sqlite3:latest
+**snip**
+```
+
+### Specify the version to pull
+
+```shellsession
+$ docker pull keinos/sqlite3:3.44.2
+**snip**
+```
+
+- [Available versions](https://hub.docker.com/r/keinos/sqlite3/tags) @ hub.docker.com
+
+### Build locally
+
+```shellsession
+$ docker build -t sqlite3:local https://github.com/KEINOS/Dockerfile_of_SQLite3.git
+**snip**
+```
+
+### Interactive
+
+Running `sqlite3` command inside the container interactively.
+
+```shellsession
+$ docker run --rm -it -v "$(pwd):/workspace" -w /workspace keinos/sqlite3
+SQLite version 3.28.0 2019-04-16 19:49:53
+Enter ".help" for usage hints.
+Connected to a transient in-memory database.
+Use ".open FILENAME" to reopen on a persistent database.
+sqlite> .open ./sample.db
+sqlite> CREATE TABLE table_sample(timestamp TEXT, description TEXT);
+sqlite> INSERT INTO table_sample VALUES(datetime('now'),'First sample data. Foo');
+sqlite> INSERT INTO table_sample VALUES(datetime('now'),'Second sample data. Bar');
+sqlite> .quit
+$ ls
+sample.db
+```
+
+- Note that you need to mount the working directory as a volume to the container.
+
+> [!TIP]
+> For Windows users, use `%cd%` or `${PWD}` instead of `$(pwd)`.
+>
+> - `cmd.exe`: `docker run --rm -it -v "%cd%:/workspace" -w /workspace keinos/sqlite3`
+> - `PowerShell`: `docker run --rm -it -v "${PWD}:/workspace" -w /workspace keinos/sqlite3`
+
+### Command
+
+- Running `sqlite3 --version` command:
+
+```shellsession
+$ docker run --rm keinos/sqlite3 sqlite3 --version
+3.38.2 2022-03-26 13:51:10 d33c709cc0af66bc5b6dc6216eba9f1f0b40960b9ae83694c986fbf4c1d6f08f
+```
+
+- Executing SQL query to the mounted database:
+
+```shellsession
+$ ls
+sample.db
+$ docker run --rm -it -v "$(pwd):/workspace" keinos/sqlite3 sqlite3 /workspace/sample.db -header -column 'SELECT rowid, * FROM table_sample;'
+rowid  timestamp            description
+-----  -------------------  -----------------------
+1      2022-04-16 14:09:52  First sample data. Foo
+2      2022-04-16 14:09:58  Second sample data. Bar
+```
+
+- Note that you need to mount the working directory as a volume to the container.
+
+### Run test
+
+This container includes a [simple test script](https://github.com/KEINOS/Dockerfile_of_SQLite3/blob/master/run-test.sh).
+
+You can run the script to see if the container and `sqlite3` binary is working. Though, not sutiable for HEALTHCHECK usage.
+
+```shellsession
+$ docker run --rm keinos/sqlite3 /run-test.sh
+- Creating test DB ... created
+rowid  timestamp            description
+-----  -------------------  -----------------------
+1      2022-04-16 14:18:34  First sample data. Hoo
+2      2022-04-16 14:18:34  Second sample data. Bar
+- Testing ...
+  1st row value ... OK
+  2nd row value ... OK
+
+- Test result:
+success
+$ echo $?
+0
+```
+
+- [Let us know](https://github.com/KEINOS/Dockerfile_of_SQLite3/issues) if you have any test to be included.
+
+### Use in your Dockerfile
+
+Because the `sqlite3` binary is statically linked, you can also copy it into non-Alpine images (e.g., Debian/Ubuntu) without additional runtime dependencies:
+
+```Dockerfile
+FROM keinos/sqlite3:latest AS sqlite3
+
+FROM ubuntu:latest
+
+COPY --from=sqlite3 /usr/bin/sqlite3 /usr/bin/sqlite3
+
+# (Optional) quick smoke tests
+RUN sqlite3 --version
+```
+
+## ToDo
+
+- [x] ~~ARM support for DockerHub~~ (Issue #[2](https://github.com/KEINOS/Dockerfile_of_SQLite3/issues/2), PR #[20](https://github.com/KEINOS/Dockerfile_of_SQLite3/pull/20))
+
+## License
+
+- Dockerfile: [MIT License](https://github.com/KEINOS/Dockerfile_of_SQLite3/blob/master/LICENSE.md) by [The Dockerfile of SQLite3 Contributors](https://github.com/KEINOS/Dockerfile_of_SQLite3/graphs/contributors).
+- SQLite: [Public Domain](https://sqlite.org/copyright.html) by [D. Richard Hipp](https://en.wikipedia.org/wiki/D._Richard_Hipp) and [SQLite.org](https://sqlite.org/).
+- The below packages in the container are: [GPL-3.0-or-later](https://spdx.org/licenses/GPL-3.0-or-later.html)
+  - [GNU patch](https://savannah.gnu.org/projects/patch/)
+  - [GNU make](https://www.gnu.org/software/make/)
+  - [GNU dbm](https://www.gnu.org.ua/software/gdbm/) (gdbm)
+  - [Debian fakeroot](https://salsa.debian.org/clint/fakeroot)
+  - [GNU Readline Library](https://tiswww.cwru.edu/php/chet/readline/rltop.html)
+  - [GNU Tar](https://www.gnu.org/software/tar/)

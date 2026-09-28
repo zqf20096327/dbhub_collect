@@ -1,0 +1,100 @@
+# PostgreSQL Exercises
+
+This is a compilation of all the questions and answers on [Alisdair Owen's](https://github.com/AlisdairO) [PostgreSQL Exercises](https://pgexercises.com). Keep in mind that actually solving these problems will make you go further than just skimming through this guide, so make sure to pay [PostgreSQL Exercises](https://pgexercises.com) a visit.
+
+
+## Table of Contents
+
+- [Getting Started](#getting-started)
+  - [I want to use my own Postgres system](#i-want-to-use-my-own-postgres-system)
+  - [Schema](#schema)
+- [Simple SQL Queries](#simple-sql-queries)
+  - [Retrieve everything from a table](#retrieve-everything-from-a-table)
+  - [Retrieve specific columns from a table](#retrieve-specific-columns-from-a-table)
+  - [Control which rows are retrieved](#control-which-rows-are-retrieved)
+  - [Control which rows are retrieved, Part 2](#control-which-rows-are-retrieved-part-2)
+  - [Basic string searches](#basic-string-searches)
+  - [Matching against multiple possible values](#matching-against-multiple-possible-values)
+  - [Classify results into bucket](#classify-results-into-bucket)
+  - [Working with dates](#working-with-dates)
+  - [Removing duplicates, and ordering results](#removing-duplicates-and-ordering-results)
+  - [Combining results from multiple queries](#combining-results-from-multiple-queries)
+  - [Simple aggregation](#simple-aggregation)
+  - [More aggregation](#more-aggregation)
+- [Joins and Subqueries](#joins-and-subqueries)
+  - [Retrieve the start times of members' bookings](#retrieve-the-start-times-of-members-bookings)
+  - [Work out the start times of bookings for tennis courts](#work-out-the-start-times-of-bookings-for-tennis-courts)
+  - [Produce a list of all members who have recommended another member](#produce-a-list-of-all-members-who-have-recommended-another-member)
+  - [Produce a list of all members, along with their recommender](#produce-a-list-of-all-members-along-with-their-recommender)
+  - [Produce a list of all members who have used a tennis court](#produce-a-list-of-all-members-who-have-used-a-tennis-court)
+  - [Produce a list of costly bookings](#produce-a-list-of-costly-bookings)
+  - [Produce a list of all members, along with their recommender, using no joins](#produce-a-list-of-all-members-along-with-their-recommender-using-no-joins)
+  - [Produce a list of costly bookings, using a subquery](#produce-a-list-of-costly-bookings-using-a-subquery)
+- [Modifying Data](#modifying-data)
+  - [Insert some data into a table](#insert-some-data-into-a-table)
+  - [Insert multiple rows of data into a table](#insert-multiple-rows-of-data-into-a-table)
+  - [Insert calculated data into a table](#insert-calculated-data-into-a-table)
+  - [Update some existing data](#update-some-existing-data)
+  - [Update multiple rows and columns at the same time](#update-multiple-rows-and-columns-at-the-same-time)
+  - [Update a row based on the contents of another row](#update-a-row-based-on-the-contents-of-another-row)
+  - [Delete all bookings](#delete-all-bookings)
+  - [Delete a member from the c-members table](#delete-a-member-from-the-cdmembers-table)
+  - [Delete based on a subquery](#delete-based-on-a-subquery)
+- [Aggregation](#aggregation)
+  - [Count the number of facilities](#count-the-number-of-facilities)
+  - [Count the number of expensive facilities](#count-the-number-of-expensive-facilities)
+  - [Count the number of recommendations each member makes](#count-the-number-of-recommendations-each-member-makes)
+  - [List the total slots booked per facility](#list-the-total-slots-booked-per-facility)
+  - [List the total slots booked per facility in a given month](#list-the-total-slots-booked-per-facility-in-a-given-month)
+  - [List the total slots booked per facility per month](#list-the-total-slots-booked-per-facility-per-month)
+  - [Find the count of members who have made at least one booking](#find-the-count-of-members-who-have-made-at-least-one-booking)
+  - [List facilities with more than 1000 slots booked](#lis
+
+[...截断...]
+
+t-facilities-with-more-than-1000-slots-booked)
+  - [Find the total revenue of each facility](#find-the-total-revenue-of-each-facility)
+  - [Find facilities with a total revenue less than 1000](#find-facilities-with-a-total-revenue-less-than-1000)
+  - [Output the facility id that has the highest number of slots booked](#output-the-facility-id-that-has-the-highest-number-of-slots-booked)
+  - [List the total slots booked per facility per month, Part 2](#list-the-total-slots-booked-per-facility-per-month-part-2)
+  - [List the total hours booked per named facility](#list-the-total-hours-booked-per-named-facility)
+  - [List each member's first booking after September 1st 2012](#list-each-members-first-booking-after-september-1st-2012)
+  - [Produce a list of member names, with each row containing the total member count](#produce-a-list-of-member-names-with-each-row-containing-the-total-member-count)
+  - [Produce a numbered list of members](#produce-a-numbered-list-of-members)
+  - [Output the facility id that has the highest number of slots booked, again](#output-the-facility-id-that-has-the-highest-number-of-slots-booked-again)
+  - [Rank members by (rounded) hours used](#rank-members-by-rounded-hours-used)
+  - [Find the top three revenue generating facilities](#find-the-top-three-revenue-generating-facilities)
+  - [Classify facilities by value](#classify-facilities-by-value)
+  - [Calculate the payback time for each facility](#calculate-the-payback-time-for-each-facility)
+  - [Calculate a rolling average of total revenue](#calculate-a-rolling-average-of-total-revenue)
+- [Working with Timestamps](#working-with-timestamps)
+  - [Produce a timestamp for 1 a.m. on the 31st of August 2012](#produce-a-timestamp-for-1-am-on-the-31st-of-august-2012)
+  - [Subtract timestamps from each other](#subtract-timestamps-from-each-other)
+  - [Generate a list of all the dates in October 2012](#generate-a-list-of-all-the-dates-in-october-2012)
+  - [Get the day of the month from a timestamp](#get-the-day-of-the-month-from-a-timestamp)
+  - [Work out the number of seconds between timestamps](#work-out-the-number-of-seconds-between-timestamps)
+  - [Work out the number of days in each month of 2012](#work-out-the-number-of-days-in-each-month-of-2012)
+  - [Work out the number of days remaining in the month](#work-out-the-number-of-days-remaining-in-the-month)
+  - [Work out the end time of bookings](#work-out-the-end-time-of-bookings)
+  - [Return a count of bookings for each month](#return-a-count-of-bookings-for-each-month)
+  - [Work out the utilisation percentage for each facility by month](#work-out-the-utilisation-percentage-for-each-facility-by-month)
+- [String Operations](#string-operations)
+  - [Format the names of members](#format-the-names-of-members)
+  - [Find facilities by a name prefix](#find-facilities-by-a-name-prefix)
+  - [Perform a case-insensitive search](#perform-a-case-insensitive-search)
+  - [Find telephone numbers with parentheses](#find-telephone-numbers-with-parentheses)
+  - [Pad zip codes with leading zeroes](#pad-zip-codes-with-leading-zeroes)
+  - [Count the number of members whose surname starts with each letter of the alphabet](#count-the-number-of-members-whose-surname-starts-with-each-letter-of-the-alphabet)
+  - [Clean up telephone numbers](#clean-up-telephone-numbers)
+- [Recursive Queries](#recursive-queries)
+  - [Find the upward recommendation chain for member ID 27](#find-the-upward-recommendation-chain-for-member-id-27)
+  - [Find the downward recommendation chain for member ID 1](#find-the-downward-recommendation-chain-for-member-id-1)
+  - [Produce a CTE that can return the upward recommendation chain for any member](#produce-a-cte-that-can-return-the-upward-recommendation-chain-for-any-member)
+
+***
+
+## Getting Started
+
+It's pretty simple to get going with the exercises: all you have to do is [open the exercises](https://pgexercises.com/questions/basic/), take a look at the questions, and try to answer them!
+
+The dataset for thes

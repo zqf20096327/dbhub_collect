@@ -1,0 +1,215 @@
+# Iqro json
+
+<img src="https://raw.githubusercontent.com/dyazincahya/iqro-json/refs/heads/main/icon.png" width="200" />
+
+Berisi data Iqro `(Buku untuk belajar mengaji Al-quran)` 1 sampai 6 dalam format json.
+
+> Data json menggunakan mengacu pada buku iqro jaman dahulu ciptaan [KH. AS'AD HUMAM](https://id.wikipedia.org/wiki/As%27ad_Humam).
+>
+> Link referensi: https://archive.org/details/humam-2000-buku-iqro-cara-cepat-belajar-membaca-al-quran-1-6
+
+> [!NOTE]
+> **🛠️ Status Proyek: Masih Berjalan & Terbuka untuk Koreksi Data (*Work in Progress*)**
+>
+> Proyek digitalisasi ini **masih terus berjalan**. Hasil data JSON yang ada saat ini sebagian mungkin **belum 100% sama persis dengan buku fisik aslinya** (misalnya harakat, susunan baris/kolom, atau transliterasi Latin).
+>
+> Kami sangat terbuka terhadap masukan dan koreksi dari siapapun (asatidz, pengajar, santri, maupun pengembang)! Apabila Anda menemukan bagian yang belum sesuai:
+> - Silakan buat **[Issue Baru](https://github.com/dyazincahya/iqro-json/issues/new)** atau ajukan **Pull Request (PR)**.
+> - Mohon cantumkan secara spesifik: **Jilid**, **Nomor Halaman**, **Posisi (Baris & Kolom)**, serta **Bentuk Perbaikan** yang semestinya sesuai buku fisik resmi.
+
+## API
+
+Berikut adalah beberapa layanan yang dapat digunakan untuk mengakses data Iqro. Anda dapat menggunakan layanan CDN gratis seperti `Jsdelivr` dan `Statically`, atau layanan non-CDN seperti `Github Content`.
+
+<details>
+    <summary>Lihat Rincian Endpoint</summary>
+
+#### jsdelivr
+
+- [https://cdn.jsdelivr.net/gh/dyazincahya/iqro-json/hijaiyah-letters.json](https://cdn.jsdelivr.net/gh/dyazincahya/iqro-json/hijaiyah-letters.json)
+- [https://cdn.jsdelivr.net/gh/dyazincahya/iqro-json/hijaiyah-letters-with-vowels.json](https://cdn.jsdelivr.net/gh/dyazincahya/iqro-json/hijaiyah-letters-with-vowels.json)
+- [https://cdn.jsdelivr.net/gh/dyazincahya/iqro-json/iqro/easyocr/1/1-1.json](https://cdn.jsdelivr.net/gh/dyazincahya/iqro-json/iqro/easyocr/1/1-1.json)
+
+> Struktur URL untuk Iqro: `https://cdn.jsdelivr.net/gh/dyazincahya/iqro-json/iqro/{ocr_name}/{level}/{level}-{part}.json`
+
+#### statically
+
+- [https://cdn.statically.io/gh/dyazincahya/iqro-json/main/hijaiyah-letters.json](https://cdn.statically.io/gh/dyazincahya/iqro-json/main/hijaiyah-letters.json)
+- [https://cdn.statically.io/gh/dyazincahya/iqro-json/main/hijaiyah-letters-with-vowels.json](https://cdn.statically.io/gh/dyazincahya/iqro-json/main/hijaiyah-letters-with-vowels.json)
+- [https://cdn.statically.io/gh/dyazincahya/iqro-json/main/iqro/easyocr/1/1-1.json](https://cdn.statically.io/gh/dyazincahya/iqro-json/main/iqro/easyocr/1/1-1.json)
+
+> Struktur URL untuk Iqro: `https://cdn.statically.io/gh/dyazincahya/iqro-json/main/iqro/{ocr_name}/{level}/{level}-{part}.json`
+
+#### github content
+
+- [https://raw.githubusercontent.com/dyazincahya/iqro-json/refs/heads/main/hijaiyah-letters.json](https://raw.githubusercontent.com/dyazincahya/iqro-json/refs/heads/main/hijaiyah-letters.json)
+- [https://raw.githubusercontent.com/dyazincahya/iqro-json/refs/heads/main/hijaiyah-letters-with-vowels.json](https://raw.githubusercontent.com/dyazincahya/iqro-json/refs/heads/main/hijaiyah-letters-with-vowels.json)
+- [https://raw.githubusercontent.com/dyazincahya/iqro-json/refs/heads/main/iqro/easyocr/1/1-1.json](https://raw.githubusercontent.com/dyazincahya/iqro-json/refs/heads/main/iqro/easyocr/1/1-1.json)
+
+> Struktur URL untuk Iqro: `https://raw.githubusercontent.com/dyazincahya/iqro-json/refs/heads/main/iqro/{ocr_name}/{level}/{level}-{part}.json`
+
+</details>
+
+## Latar belakang
+
+Proyek ini bertujuan untuk mendokumentasikan buku Iqro' ke dalam format lain selain teks biasa. Tidak ada tujuan untuk penjiplakan atau plagiarisme dalam proyek ini; niat saya murni untuk mengabadikan sebuah karya luar biasa dari Bapak `KH. As‘ad Humam`.
+
+Sebagai bentuk apresiasi dan kekaguman saya terhadap manfaat besar dari buku ini, saya ingin memastikan bahwa karya ini tetap lestari dan dapat diakses oleh generasi mendatang. Teknologi mungkin terus berkembang pesat, tetapi warisan berharga seperti Iqro' harus tetap ada dan tidak lekang oleh waktu.
+
+## Tidak untuk di komersialisasikan
+
+> [!WARNING]
+> **PERINGATAN: TIDAK UNTUK DIKOMERSIALISASIKAN**
+>
+> Proyek ini **tidak dibuat untuk tujuan komersial**, melainkan semata-mata untuk kepentingan edukasi, khususnya dalam pemanfaatan teknologi sebagai media pembelajaran berbasis aplikasi. Dengan adanya dokumentasi ini, saya berharap semakin banyak orang dapat mengakses dan mempelajari Iqro' dengan lebih mudah melalui berbagai platform digital.
+>
+> **Imbauan bagi Pengembang:**
+> Mengimbau kepada para pengembang yang ingin menggunakan data dari proyek ini untuk membuat aplikasi agar **tidak mengkomersialisasikan** aplikasinya. Hendaknya aplikasi tersebut disebarluaskan secara **gratis** sebagai bentuk amal jariyah bagi Bapak `KH. As‘ad Humam`, sehingga pahalanya terus mengalir kepada beliau hingga akhirat kelak. Semoga setiap ilmu yang dipelajari dari aplikasi ini menjadi ladang pahala bagi beliau dan kita semua, Amiin.
+
+### Hak Cipta & Kebijakan Penghapusan (Notice & Takedown)
+
+> [!IMPORTANT]
+> **Pernyataan Hak Cipta & Kebijakan Konten:**
+>
+> 1. **Hak Kekayaan Intelektual:** Seluruh materi isi, teks Arab, metode pembelajaran, dan nama **Buku Iqro'** merupakan hak cipta milik Almarhum **KH. As'ad Humam** dan **Team Tadarus Angkatan Muda Masjid-Musholla (AMM) Yogyakarta**. Pengelola repositori ini tidak mengklaim kepemilikan hak cipta atas materi asli buku tersebut; proyek ini semata-mata merupakan inisiatif digitalisasi data terstruktur (JSON) untuk penelitian dan sarana edukasi nirlaba.
+> 2. **Dukungan terhadap Buku Fisik Asli:** Repositori dan aplikasi ini tidak bertujuan menggantikan peran buku fisik. Kami sangat mengimbau para santri, orang tua, pengajar, dan masyarakat luas untuk **tetap membeli Buku Iqro' fisik resmi** terbitan Team Tadarus AMM Yogyakarta sebagai wujud dukungan nyata terhadap pelestarian dakwah dan operasional lembaga. Pembelian buku fisik resmi dapat dilakukan di toko buku terdekat atau secara online melalui distributor resmi seperti [Gramedia](https://www.gramedia.com/products/bk-iqromembaca-al-quran-besar-cd).
+> 3. **Kebijakan Penghapusan (Notice & Takedown Policy):** Kami sangat menghormati hak cipta dan menjunjung tinggi itikad baik. Apabila pihak ahli waris Alm. KH. As'ad Humam, pengurus resmi Team Tadarus AMM Yogyakarta, atau pemegang hak cipta yang sah merasa keberatan atas ketersediaan data digital ini atau menginginkan penyesuaian/penghapusan, silakan hubungi kami melalui:
+>    - **Email:** `kangcahyakeren@gmail.com`
+>    - **GitHub Issue:** Buka tiket pada tab Issues di repositori ini.
+>
+>    Kami berkomitmen untuk segera merespons dan menindaklanjuti permintaan penghapusan (_takedown_) secara kooperatif dalam waktu 1x24 jam kerja dengan penuh rasa hormat.
+
+## Tentang Iqro
+
+<img src="https://upload.wikimedia.org/wikipedia/id/7/7a/Cover_of_Iqro.jpg" height="150" />
+
+Iqro (bahasa Arab: اقرأ, translit. iqraʾ, har. 'Bacalah!'; judul lengkap: Buku Iqro': Cara Cepat Belajar Membaca Al-Qur’an) adalah buku teks yang digunakan komunitas Muslim di Indonesia dan Malaysia untuk belajar membaca huruf-huruf Arab dan melafalkan bahasa tersebut. Buku ini disusun oleh As'ad Humam bersama Team Tadarus Angkatan Muda Masjid-Musholla (AMM) yang berbasis di Yogyakarta.[1] Diterbitkan pada awal 1990-an, Iqro ditujukan sebagai batu loncatan awal untuk dapat membaca Al-Qur'an dalam bahasa aslinya serta keterampilan dalam membaca Al-Qur'an. Iqro biasanya dipelajari oleh anak-anak TK sampai awal sekolah dasar, dan sering digunakan di sekolah khusus pembacaan Al-Qur'an, pesantren, surau, dan sekolah rumah (homeschooling) untuk pendidikan agama. ([Wikipedia: iqro](https://id.wikipedia.org/wiki/Iqro))
+
+| **Pengarang:**                       | **Negara:** | **Bahasa:**     | **Genre:**      | **Tanggal terbit:**          |
+| ------------------------------------ | ----------- | --------------- | --------------- | ---------------------------- |
+| KH. As'ad Humam dan Team Tadarus AMM | Indonesia   | Indonesia, Arab | Buku teks agama | Awal 1990-an (edisi pertama) |
+
+## Peta Baca
+
+- [x] [Huruf Hijaiyah](https://github.com/dyazincahya/iqro-json/blob/main/hijaiyah-letters.json)
+- [x] [Huruf Hijaiyah dengan Vokal](https://github.com/dyazincahya/iqro-json/blob/main/hijaiyah-letters-with-vowels.json)
+- [x] Iqro 1
+- [x] Iqro 2
+- [x] Iqro 3
+- [x] Iqro 4
+- [x] Iqro 5
+- [x] Iqro 6
+
+## Panduan OCR (Python & EasyOCR)
+
+Proyek ini menggunakan **EasyOCR** untuk mengekstrak teks Arab dari gambar halaman Iqro secara otomatis. Berikut adalah panduan penyiapan cepat:
+
+### 1. Instal Dependensi
+
+Hubungkan terminal Anda dan instal library yang dibutuhkan:
+
+```bash
+pip install easyocr pillow
+```
+
+### 2. Skrip Deteksi Cepat
+
+Buat berkas Python baru (misal: `ocr_test.py`) dan tempelkan kode berikut:
+
+```python
+import easyocr
+
+# Inisialisasi Reader untuk Bahasa Arab ('ar') dan Inggris ('en')
+# Atur gpu=True jika Anda memiliki kartu grafis NVIDIA yang mendukung CUDA
+reader = easyocr.Reader(['ar', 'en'], gpu=False)
+
+# Lakukan OCR pada berkas gambar halaman Iqro
+results = reader.readtext('path/ke/gambar/iqro.png', detail=1)
+
+# Tampilkan hasil pembacaan teks arab
+for bbox, text, confidence in results:
+    print(f"Teks: {text} (Confidence: {confidence:.2f})")
+```
+
+> **Catatan:** Untuk mengoptimalkan pembacaan huruf Hijaiyah berharakat, skrip ocr di proyek ini melakukan _preprocessing_ (resize gambar) dan penyesuaian parameter EasyOCR seperti `contrast_ths=0.1` dan `adjust_contrast=0.7`. Detail lengkapnya dapat Anda lihat di folder [ocr-scripts](./ocr-scripts).
+
+### 3. Cara Menjalankan Skrip OCR Proyek
+
+Anda dapat menjalankan skrip OCR yang sudah dikhususkan per halaman berkas gambar secara mandiri untuk memperbarui berkas JSON:
+
+- **Menjalankan OCR untuk satu gambar spesifik:**
+  Jalankan file skrip `.py` yang sesuai dengan halaman yang ingin Anda baca (misalnya Iqro 2 Halaman 2):
+
+  ```bash
+  python ocr-scripts/easyocr/iqro/2/2-2.py
+  ```
+
+  _Skrip ini akan membaca gambar `iqro-images/2/2-2.png` dan menghasilkan berkas JSON presisi di `iqro/easyocr/2/2-2.json`._
+
+- **Menjalankan semua skrip OCR pada satu Level Iqro sekaligus:**
+  Masuk ke folder level yang diinginkan dan jalankan berkas `main.py` di dalam folder tersebut:
+  ```bash
+  python ocr-scripts/easyocr/iqro/2/main.py
+  ```
+
+## Panduan Menjalankan UI (React & Vite)
+
+Untuk melihat dan menguji data hasil OCR secara visual melalui browser, Anda dapat menjalankan aplikasi `iqro-ui`:
+
+### Cara Praktis (Menggunakan Skrip Shortcut)
+
+Di folder root proyek ini, Anda dapat menjalankan skrip shortcut untuk otomatis menginstal dependensi dan menyalakan development server:
+
+- **Windows**:
+  Double-click berkas `run-ui.bat` atau jalankan lewat terminal:
+  ```cmd
+  run-ui.bat
+  ```
+- **Linux / macOS**:
+  Jalankan lewat terminal:
+  ```bash
+  chmod +x run-ui.sh
+  ./run-ui.sh
+  ```
+
+### Cara Manual
+
+Jika ingin menjalankannya secara manual langkah demi langkah:
+
+1. **Masuk ke Folder UI**:
+   ```bash
+   cd iqro-ui
+   ```
+2. **Instal Dependensi**:
+   ```bash
+   npm install
+   ```
+3. **Jalankan Server Development**:
+   ```bash
+   npm run dev
+   ```
+
+Aplikasi web dapat diakses melalui browser di alamat `http://localhost:5173`. Di sana Anda dapat memilih level Iqro, membaca halamannya, serta memilih engine OCR mana (misalnya `EasyOCR` atau lainnya) yang ingin dimuat datanya secara local melalui dropdown pilihan di bagian atas layar.
+
+## Kontribusi
+
+Data ini mungkin _belum sepenuhnya_ sesuai dengan referensi buku Iqro yang ada. Mohon bantuannya untuk mengoreksi atau memperbaiki jika Anda menemukan kesalahan. Kontribusi sekecil apa pun dari Anda akan sangat berarti dalam menyempurnakan data ini. Jika Anda ingin berkontribusi pada proyek ini, silakan fork dan clone repositori, lalu lakukan perubahan sesuai format yang sudah ada. Setelah itu, ajukan pull request (PR) agar perubahan dapat ditinjau dan digabungkan. Pastikan format JSON tetap seragam.
+
+Terima kasih atas kontribusi Anda! 🚀
+
+## Kontributor
+
+Terima kasih sebesar-besarnya kepada rekan-rekan yang telah berkontribusi dan meluangkan waktu serta tenaganya dalam mendigitalkan dan menyempurnakan repositori ini:
+
+<a href="https://github.com/dyazincahya/iqro-json/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=dyazincahya/iqro-json" alt="Daftar Kontributor" />
+</a>
+
+- [**Kang Cahya** (@dyazincahya)](https://github.com/dyazincahya) — _Inisiator & Maintainer_
+- [**Sony AK** (@sonyarianto)](https://github.com/sonyarianto) — _Kontributor_
+
+## Kredit
+
+- Ikon bertuliskan Iqro dalam bahasa arab: https://id.pngtree.com/freepng/iqra-islamic-caligraphy_8705921.html
+- Gambar buku iqro: https://id.wikipedia.org/wiki/Iqro
+- Pengarang buku iqro: [Bapak `KH. As'ad Humam`](https://id.wikipedia.org/wiki/As%27ad_Humam)

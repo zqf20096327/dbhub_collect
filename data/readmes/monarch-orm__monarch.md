@@ -1,0 +1,1111 @@
+# Monarch ORM
+
+Type-safe MongoDB collections, schema parsing, relations, and query helpers for TypeScript.
+
+## Features
+
+- **Strongly Typed:** Infer schema inputs and outputs for queries and collection methods.
+- **Flexible Schemas:** Use transforms, defaults, validation, virtuals, renames, and default omit rules.
+- **Typed Relations:** Define one and many relations with typed population support.
+- **Familiar MongoDB Access:** Use typed query methods, operators, aggregation, and raw collection access.
+- **Collection Initialization:** Automatically initialize collections with indexes and JSON Schema validation, or do it manually.
+
+## Installation
+
+```bash
+npm install monarch-orm
+```
+
+## Quick Start
+
+```ts
+import {
+  createClient,
+  createDatabase,
+  createSchema,
+  defineSchemas,
+} from "monarch-orm";
+import { boolean, number, string } from "monarch-orm/types";
+
+// Define collection schema.
+const userSchema = createSchema("users", {
+  name: string().trim(),
+  email: string().lowercase(),
+  age: number().integer().min(13).optional(),
+  isVerified: boolean().default(false),
+});
+
+const schemas = defineSchemas({ userSchema });
+
+// Create a MongoDB client.
+const client = createClient(process.env.MONGODB_URI!);
+
+// Create a database instance.
+const db = createDatabase(client.db("app"), schemas);
+
+// Insert one document.
+const user = await db.collections.users.insertOne({
+  name: "Alice",
+  email: "alice@example.com",
+});
+
+// Query documents.
+const users = await db.collections.users
+  .find({ isVerified: false })
+  .select({ name: true, email: true })
+  .sort({ email: "asc" });
+```
+
+## Schemas
+
+`createSchema()` defines a collection's shape. If you do not define `_id`, it defaults to `objectId()`. When a schema uses `ObjectId` for `_id`, Monarch makes the input optional for inserts.
+
+```ts
+import { createSchema } from "monarch-orm";
+import { array, date, object, objectId, string } from "monarch-orm/types";
+
+const postSchema = createSchema("posts", {
+  title: string().trim().nonempty(),
+  body: string(),
+  authorId: objectId(),
+  contributorIds: array(objectId()).default([]),
+  metadata: object({
+    slug: string().lowercase(),
+  }),
+  publishedAt: date().optional(),
+});
+```
+
+`defineSchemas()` normalizes schemas keyed by collection name. It also holds schema relations.
+
+```ts
+const schemas = defineSchemas({ userSchema, postSchema });
+```
+
+### Relations
+
+Use `withRelations()` on a schemas object to define typed relations.
+
+```ts
+const schemas = defineSchemas({ userSchema, postSchema });
+
+const schemasWithRelations = schemas.withRelations((r) => ({
+  users: {
+    posts: r.many.posts({ from: r.users._id, to: r.posts.authorId }),
+  },
+  posts: {
+    author: r.one.users({ from: r.posts.authorId, to: r.users._id }),
+    contributors: r.many.users({ from: r.posts.contributorIds, to: r.users._id }),
+  },
+}));
+```
+
+#### One relations
+
+Use `one` when a single local field points to a single document in another collection.
+
+```ts
+const userSchema = createSchema("users", { name: string() });
+const postSchema = createSchema("posts", {
+  title: string(),
+  authorId: objectId(),
+});
+
+const schemas = defineSchemas({ userSchema, postSchema });
+
+schemas.withRelations((r) => ({
+  posts: {
+    author: r.one.users({ from: r.posts.authorId, to: r.users._id }),
+  },
+}));
+```
+
+#### Many relations
+
+Use `many` when one document relates to many documents in another collection. The `from` and `to` fields can each be a single value or an array, so you can model different relation patterns:
+
+- **single → single** — a foreign key on the target side (`user._id` → `post.authorId`)
+- **single → array** — the target embeds a list of references (`post._id` → `tag.postIds`)
+- **array → single** — the source embeds a list of references (`post.tagIds` → `tag._id`)
+- **array → array** — match documents that share any element between two arrays (`post.tagIds` → `event.tagIds`)
+
+```ts
+const userSchema = createSchema("users", { name: string() });
+const postSchema = createSchema("posts", {
+  title: string(),
+  authorId: objectId(),
+  tagIds: array(objectId()).default([]),
+});
+const tagSchema = createSchema("tags", {
+  name: string(),
+  postIds: array(objectId()).default([]),
+});
+const eventSchema = createSchema("events", {
+  name: string(),
+  tagIds: array(objectId()).default([]),
+});
+
+const schemas = defineSchemas({ userSchema, postSchema, tagSchema, eventSchema });
+
+schemas.withRelations((r) => ({
+  users: {
+    // single → single: all posts where post.authorId equals user._id
+    posts: r.many.posts({ from: r.users._id, to: r.posts.authorId }),
+  },
+  posts: {
+    // single → array: all tags where post._id appears in tag.postIds
+    taggedBy: r.many.tags({ from: r.posts._id, to: r.tags.postIds }),
+    // array → single: all tags where tag._id appears in post.tagIds
+    tags: r.many.tags({ from: r.posts.tagIds, to: r.tags._id }),
+    // array → array: all events where event.tagIds shares any value with post.tagIds
+    relatedEvents: r.many.events({ from: r.posts.tagIds, to: r.events.tagIds }),
+  },
+}));
+```
+
+#### Indexes for relations
+
+Relations work by querying the target collection using the `to` field value collected from each source document. Without an index on the `to` field, MongoDB performs a full collection scan for every population. **Always create indexes on the fields used in relations.**
+
+- If `to` is `_id`, it is already indexed — no action needed.
+- For any other `to` field, add an **ascending index** (`{ field: 1 }`) on the target schema with `.indexes()`.
+- A `from` field does not need an index for the join, but you can index it on the source schema if you filter or sort by it in your own queries.
+
+**One relation — `from` points to `_id`**
+
+`to` is `_id` so it is already indexed. Index the `from` field (`authorId`) on `posts` so filtering posts by author is also fast.
+
+```ts
+const userSchema = createSchema("users", {
+  name: string(),
+});
+const postSchema = createSchema("posts", {
+  title: string(),
+  authorId: objectId(),
+}).indexes(({ createIndex }) => ({
+  byAuthor: createIndex({ authorId: 1 }),
+}));
+
+const schemas = defineSchemas({ userSchema, postSchema });
+const schemasWithRelations = schemas.withRelations((r) => ({
+  posts: {
+    author: r.one.users({ from: r.posts.authorId, to: r.users._id }),
+  },
+}));
+```
+
+**Many relation — foreign key on target**
+
+`to` is `posts.authorId` which is not `_id`, so index it on `posts`.
+
+```ts
+const userSchema = createSchema("users", {
+  name: string(),
+});
+const postSchema = createSchema("posts", {
+  title: string(),
+  authorId: objectId(),
+}).indexes(({ createIndex }) => ({
+  authorId: createIndex({ authorId: 1 }),
+}));
+
+const schemas = defineSchemas({ userSchema, postSchema });
+const schemasWithRelations = schemas.withRelations((r) => ({
+  users: {
+    posts: r.many.posts({ from: r.users._id, to: r.posts.authorId }),
+  },
+}));
+```
+
+**Many relation — array `to` field**
+
+`to` is `tags.postIds` which is an array field and not `_id`. MongoDB queries the target collection by the `to` field, so index it — MongoDB automatically uses a multikey index to cover each element in the array.
+
+An array `from` field does not need an index for the join itself — it is just read to collect lookup values and is never used as a query predicate. You can index it if you filter the source collection by that field in your own queries.
+
+```ts
+const tagSchema = createSchema("tags", {
+  name: string(),
+  postIds: array(objectId()),
+}).indexes(({ createIndex }) => ({
+  postIds: createIndex({ postIds: 1 }),
+}));
+const postSchema = createSchema("posts", {
+  title: string(),
+});
+
+const schemas = defineSchemas({ tagSchema, postSchema });
+const schemasWithRelations = schemas.withRelations((r) => ({
+  posts: {
+    tags: r.many.tags({ from: r.posts._id, to: r.tags.postIds }),
+  },
+}));
+```
+
+#### Default relation options
+
+Call `.options()` on any relation to set default population behavior. These defaults apply whenever the relation is populated with `true`. They can always be overridden by passing explicit options at query time.
+
+```ts
+const schemasWithRelations = schemas.withRelations((r) => ({
+  users: {
+    posts: r.many.posts({ from: r.users._id, to: r.posts.authorId }).options({
+      sort: { createdAt: -1 },
+      limit: 10,
+      select: { title: true, createdAt: true },
+    }),
+  },
+  posts: {
+    author: r.one.users({ from: r.posts.authorId, to: r.users._id }).options({
+      omit: { passwordHash: true },
+    }),
+  },
+}));
+```
+
+With these defaults in place, populating with `true` applies them automatically:
+
+```ts
+// applies sort, limit, and select from the relation definition
+const users = await db.collections.users.find().populate({ posts: true });
+
+// override the defaults for this query
+const users2 = await db.collections.users.find().populate({
+  posts: { sort: { title: 1 }, limit: 5 },
+});
+```
+
+### Schema Groups
+
+You can split schemas by concern or by file, define relations inside each group, then merge them together. This works well when different modules own different parts of your data model.
+
+```ts
+import { createSchema, defineSchemas, mergeSchemas } from "monarch-orm";
+import { objectId, string } from "monarch-orm/types";
+
+const userSchema = createSchema("users", {
+  name: string(),
+  tutorId: objectId().optional(),
+});
+
+const userGroup = defineSchemas({ userSchema }).withRelations((r) => ({
+  users: {
+    tutor: r.one.users({ from: r.users.tutorId, to: r.users._id }),
+  },
+}));
+
+const postSchema = createSchema("posts", {
+  title: string(),
+  authorId: objectId(),
+});
+
+const categorySchema = createSchema("categories", {
+  name: string(),
+  parentId: objectId().optional(),
+});
+
+const contentGroup = defineSchemas({ postSchema, categorySchema }).withRelations((r) => ({
+  categories: {
+    parent: r.one.categories({ from: r.categories.parentId, to: r.categories._id }),
+  },
+}));
+
+const schemas = mergeSchemas(userGroup, contentGroup);
+```
+
+You can also add cross-group relations after merging:
+
+```ts
+const schemasWithCrossGroupRelations = schemas.withRelations((r) => ({
+  users: {
+    posts: r.many.posts({ from: r.users._id, to: r.posts.authorId }),
+  },
+  posts: {
+    author: r.one.users({ from: r.posts.authorId, to: r.users._id }),
+  },
+}));
+```
+
+### Databases
+
+Pass schemas object into `createDatabase()` to create db with typed collections.
+
+```ts
+const schemas = defineSchemas({ userSchema, postSchema });
+
+const db = createDatabase(client.db("app"), schemas);
+await db.isReady;
+```
+
+By default, `createDatabase()` initializes all collections. If you want to do that manually, disable initialization and call `db.initialize()` yourself. `initialize()` can be configured and can target only selected schemas.
+
+```ts
+const db = createDatabase(client.db("app"), schemas, {
+  initialize: false,
+});
+
+await db.initialize({
+  indexes: true,
+  validation: true,
+  collections: {
+    users: true,
+  },
+});
+```
+
+`db.isReady` resolves when database initialization has finished. Each collection also has its own `isReady`, for example `db.collections.users.isReady`.
+
+## Queries
+
+Collections expose typed query methods.
+
+### `insertOne(data)`
+
+Inserts one document after parsing it through the schema.
+
+```ts
+const user = await db.collections.users.insertOne({
+  name: "Alice",
+  email: "alice@example.com",
+});
+```
+
+### `insertMany(data[])`
+
+Inserts multiple documents after parsing each one through the schema.
+
+```ts
+await db.collections.users.insertMany([
+  { name: "Grace", email: "grace@example.com" },
+  { name: "Linus", email: "linus@example.com" },
+]);
+```
+
+### `find(filter?)`
+
+Returns a query for multiple documents. It supports `select()`, `omit()`, `sort()`, `limit()`, `skip()`, `options()`, `cursor()`, and `populate()`.
+
+```ts
+const allUsers = await db.collections.users.find();
+
+const verifiedUsers = await db.collections.users
+  .find({ isVerified: true })
+  .omit({ age: true })
+  .limit(20)
+  .skip(10)
+  .sort({ email: "asc" });
+
+const cursor = await db.collections.users.find({ isVerified: true }).cursor();
+for await (const item of cursor) {
+  console.log(item.email);
+}
+```
+
+If your schema has relations, `find()` can populate them:
+
+```ts
+const posts = await db.collections.posts.find().populate({
+  author: true,
+  contributors: true,
+});
+```
+
+Populate options support nested `populate`, plus `select`, `omit`, `sort`, `skip`, and `limit` on the populated query.
+
+```ts
+const users = await db.collections.users.find().populate({
+  posts: {
+    sort: { title: -1 },
+    limit: 5,
+    populate: {
+      author: true,
+    },
+  },
+});
+```
+
+### `findOne(filter)`
+
+Returns a query for a single document. It supports `select()`, `omit()`, `options()`, and `populate()`.
+
+```ts
+const user = await db.collections.users.findOne({ email: "alice@example.com" });
+```
+
+### `findById(id)`
+
+Returns a query for a single document by `_id`. For `objectId()` schemas, it accepts either an `ObjectId` or a valid ObjectId string.
+
+```ts
+const byId = await db.collections.users.findById("67f0123456789abcdef0123");
+```
+
+### `updateOne(filter, update)`
+
+Updates one matching document. It supports `options()`.
+
+```ts
+await db.collections.users.updateOne(
+  { email: "alice@example.com" },
+  { $set: { isVerified: true } },
+);
+```
+
+### `updateMany(filter, update)`
+
+Updates all matching documents. It supports `options()`.
+
+```ts
+await db.collections.users.updateMany(
+  { isVerified: false },
+  { $set: { age: 18 } },
+);
+```
+
+### `findOneAndUpdate(filter, update)`
+
+Updates one document and returns the matched document by default, or the updated one when configured with `options({ returnDocument: "after" })`. It also supports `select()`, `omit()`, and `options()`.
+
+```ts
+const updated = await db.collections.users
+  .findOneAndUpdate(
+    { email: "alice@example.com" },
+    { $set: { isVerified: true } },
+  )
+  .options({ returnDocument: "after" });
+```
+
+### `findByIdAndUpdate(id, update)`
+
+Like `findOneAndUpdate()`, but matches by `_id`.
+
+```ts
+const updated = await db.collections.users
+  .findByIdAndUpdate("67f0123456789abcdef0123", {
+    $set: { isVerified: true },
+  })
+  .options({ returnDocument: "after" });
+```
+
+Schema parsing still runs for update input, so transforms like `.lowercase()` and validators still apply inside `$set`.
+
+### `replaceOne(filter, replacement)`
+
+Replaces one matching document. It supports `options()`.
+
+```ts
+await db.collections.users.replaceOne(
+  { email: "alice@example.com" },
+  { name: "Alice Lovelace", email: "alice@example.com" },
+);
+```
+
+### `findOneAndReplace(filter, replacement)`
+
+Replaces one document and returns the matched document by default, or the replacement when configured with `options({ returnDocument: "after" })`. It also supports `select()`, `omit()`, and `options()`.
+
+```ts
+const replaced = await db.collections.users
+  .findOneAndReplace(
+    { email: "alice@example.com" },
+    { name: "Alice", email: "alice@example.com" },
+  )
+  .options({ returnDocument: "after" });
+```
+
+### `deleteOne(filter)`
+
+Deletes one matching document.
+
+```ts
+await db.collections.users.deleteOne({ email: "alice@example.com" });
+```
+
+### `deleteMany(filter)`
+
+Deletes all matching documents.
+
+```ts
+await db.collections.users.deleteMany({ isVerified: false });
+```
+
+### `findOneAndDelete(filter)`
+
+Deletes one matching document and returns it.
+
+```ts
+const deleted = await db.collections.users.findOneAndDelete({
+  email: "alice@example.com",
+});
+```
+
+### `findByIdAndDelete(id)`
+
+Deletes one document by `_id` and returns it.
+
+```ts
+const deleted = await db.collections.users.findByIdAndDelete("67f0123456789abcdef0123");
+```
+
+### `distinct(key, filter?)`
+
+Returns a query for the distinct values of a field.
+
+```ts
+const emails = await db.collections.users.distinct("email", { isVerified: true });
+```
+
+### `bulkWrite(operations)`
+
+Runs multiple MongoDB bulk write operations.
+
+```ts
+await db.collections.users.bulkWrite([
+  {
+    insertOne: {
+      document: {
+        name: "Alice",
+        email: "alice@example.com",
+      },
+    },
+  },
+  {
+    updateOne: {
+      filter: { email: "alice@example.com" },
+      update: { $set: { isVerified: true } },
+    },
+  },
+]);
+```
+
+### `countDocuments(filter?, options?)`
+
+Counts matching documents.
+
+```ts
+const verifiedCount = await db.collections.users.countDocuments({ isVerified: true });
+```
+
+### `estimatedDocumentCount(options?)`
+
+Returns MongoDB's estimated document count for the collection.
+
+```ts
+const totalCount = await db.collections.users.estimatedDocumentCount();
+```
+
+### `aggregate(pipeline?)`
+
+Builds an aggregation pipeline. Accepts an optional pipeline, and additional stages can be appended with `addStage()`.
+
+```ts
+const result = await db.collections.users
+  .aggregate<{ count: number }>([
+    { $match: { isVerified: true } },
+    { $group: { _id: "$isVerified", count: { $sum: 1 } } },
+  ]);
+
+const result = await db.collections.users
+  .aggregate<{ count: number }>()
+  .addStage({ $match: { isVerified: true } })
+  .addStage({ $group: { _id: "$isVerified", count: { $sum: 1 } } });
+```
+
+### `raw()`
+
+Returns the underlying MongoDB collection.
+
+```ts
+const rawUsers = await db.collections.users.raw().find().toArray();
+```
+
+Queries are lazy and immutable — each builder method returns a new query instance, leaving the original unchanged. Queries run only when you `await` them or call a promise method like `.then()`, `.catch()`, or `.finally()`.
+
+```ts
+// Each builder method returns a new query — the original is never modified.
+const base = db.collections.users
+  .find({ isVerified: true })
+  .omit({ age: true });
+
+const sorted = base.sort({ email: "asc" }); // new instance
+const limited = base.limit(10);             // new instance from base, no sort
+
+const sortedUsers = await sorted;   // sorted, no limit
+const limitedUsers = await limited; // no sort, limited to 10
+const allVerified = await base;     // unchanged
+```
+
+### Schema features
+
+These schema methods control default output behavior, initialization behavior, and automatic write-time behavior.
+
+#### Omit fields from output
+
+`schema.omit()` defines the default output projection for that schema. Query-level `.select()` or `.omit()` overrides that default for the current query.
+
+```ts
+const userSchema = createSchema("users", {
+  name: string(),
+  passwordHash: string(),
+}).omit({
+  passwordHash: true,
+});
+```
+
+#### Virtual fields
+
+`schema.virtuals()` adds computed output fields. Virtuals are not stored in MongoDB, but they are available in query results and can depend on omitted source fields.
+
+```ts
+import { createSchema, virtual } from "monarch-orm";
+import { boolean, string } from "monarch-orm/types";
+
+const userSchema = createSchema("users", {
+  isAdmin: boolean(),
+  firstName: string(),
+  lastName: string(),
+}).virtuals({
+  role: virtual("isAdmin", ({ isAdmin }) => (isAdmin ? "admin" : "user")),
+  fullName: virtual(["firstName", "lastName"], ({ firstName, lastName }) => `${firstName} ${lastName}`),
+});
+```
+
+#### Rename output fields
+
+`schema.rename()` changes field names in query output without changing how the field is stored in MongoDB.
+
+```ts
+const userSchema = createSchema("users", {
+  name: string(),
+}).rename({
+  _id: "id",
+  name: "fullName",
+});
+```
+
+#### Indexes
+
+`schema.indexes()` declares the indexes Monarch should keep in sync during collection initialization.
+
+```ts
+const userSchema = createSchema("users", {
+  email: string().lowercase(),
+  name: string(),
+}).indexes(({ createIndex, unique }) => ({
+  email: unique("email"),
+  name: createIndex({ name: 1 }),
+}));
+```
+
+#### Collection validation
+
+`schema.validation()` enables collection-level document validation using a JSON Schema generated from your Monarch schema. It is not enabled by default. Validation can also be set on the database, where it acts as a default for all schemas.
+
+```ts
+const userSchema = createSchema("users", {
+  email: string().lowercase(),
+}).validation({
+  validationLevel: "strict",
+  validationAction: "error",
+});
+```
+
+You can also set the default validation policy at the database level:
+
+```ts
+const schemas = defineSchemas({ userSchema });
+
+const db = createDatabase(client.db("app"), schemas, {
+  validation: {
+    validationLevel: "strict",
+    validationAction: "error",
+  },
+});
+```
+
+#### Automatic update fields
+
+`schema.onUpdate()` injects update operators into every update query for that schema. This is useful for fields like `updatedAt`.
+
+```ts
+import { date } from "monarch-orm/types";
+
+const userSchema = createSchema("users", {
+  updatedAt: date().optional(),
+}).onUpdate(() => ({
+  $set: {
+    updatedAt: new Date(),
+  },
+}));
+```
+
+## Types
+
+Monarch provides types for all MongoDB value types.
+
+### `string()`
+
+Parses strings and supports helpers like `.trim()`, `.lowercase()`, `.uppercase()`, `.nonempty()`, `.minLength()`, `.maxLength()`, and `.pattern()`.
+
+```ts
+const username = string().trim().lowercase().minLength(3);
+```
+
+### `number()`
+
+Parses JavaScript numbers and supports `.min()`, `.max()`, and `.integer()`.
+
+```ts
+const age = number().integer().min(0);
+```
+
+### `boolean()`
+
+Parses booleans.
+
+```ts
+const isVerified = boolean();
+```
+
+### `date()`
+
+Parses `Date` values and supports `.before()`, `.after()`, and `.auto()`.
+
+Note: `.auto()` sets the default value for the type to `new Date()`.
+
+```ts
+const createdAt = date().auto();
+```
+
+### `objectId()`
+
+Parses MongoDB `ObjectId` values and valid `ObjectId` strings, and supports `.auto()`.
+
+Note: `.auto()` sets the default value for the type to `new ObjectId()`.
+
+```ts
+const authorId = objectId();
+```
+
+### `uuid()`
+
+Parses MongoDB `UUID` values and UUID strings, and supports `.auto()`.
+
+Note: `.auto()` sets the default value for the type to `crypto.randomUUID()`.
+
+```ts
+const sessionId = uuid().auto();
+```
+
+### `regex()`
+
+Parses `RegExp` and BSON regex values.
+
+```ts
+const pattern = regex();
+```
+
+### `binary()`
+
+Parses MongoDB binary values.
+
+```ts
+const fileData = binary();
+```
+
+### `int32()`
+
+Parses BSON `Int32` values.
+
+```ts
+const version = int32();
+```
+
+### `double()`
+
+Parses BSON `Double` values.
+
+```ts
+const score = double();
+```
+
+### `long()`
+
+Parses BSON `Long` values.
+
+```ts
+const totalViews = long();
+```
+
+### `decimal128()`
+
+Parses BSON `Decimal128` values.
+
+```ts
+const amount = decimal128();
+```
+
+### `object(shape)`
+
+Creates nested typed objects and rejects unknown fields.
+
+```ts
+const profile = object({
+  bio: string(),
+  website: string(),
+});
+```
+
+Use `.shape` to reuse an object's fields in another object or schema.
+
+```ts
+import { createSchema } from "monarch-orm";
+import { object, string } from "monarch-orm/types";
+
+const address = object({
+  street: string(),
+  city: string(),
+});
+
+const user = object({
+  name: string(),
+  address,
+});
+
+const addressSchema = createSchema("addresses", address.shape);
+```
+
+### `array(type)`
+
+Creates a typed array of values and supports `.minLength()`, `.maxLength()`, `.length()`, and `.nonempty()`.
+
+```ts
+const tags = array(string());
+```
+
+```ts
+const tags = array(string()).nonempty().maxLength(10);
+```
+
+### `tuple([...types])`
+
+Creates a fixed-length array with positional types.
+
+```ts
+const coordinates = tuple([number(), number()]);
+```
+
+### `record(type)`
+
+Creates a string-keyed object whose values all share the same type.
+
+```ts
+const scores = record(number());
+```
+
+### `literal(...values)`
+
+Limits a field to an exact set of primitive values.
+
+```ts
+const role = literal("admin", "editor", "member");
+```
+
+### `union(...types)`
+
+Accepts multiple unrelated type variants.
+
+```ts
+const phoneOrEmail = union(string(), number());
+```
+
+### `taggedUnion({ ...variants })`
+
+Creates discriminated unions using a `{ tag, value }` object shape.
+
+```ts
+const notification = taggedUnion({
+  email: object({
+    subject: string(),
+    body: string(),
+  }),
+  sms: object({
+    message: string(),
+  }),
+});
+```
+
+### `mixed()`
+
+Accepts arbitrary values when you need to opt out of strict typing for a field.
+
+```ts
+const metadata = mixed();
+```
+
+## Modifiers
+
+Modifiers let you adapt any type to the exact input and output behavior you want.
+
+### `.optional()`
+
+Allows a field to be omitted.
+
+```ts
+import { optional } from "monarch-orm/types";
+
+const nickname = string().optional();
+// or functional style
+const nickname2 = optional(string());
+```
+
+### `.nullable()`
+
+Allows `null`.
+
+```ts
+import { nullable } from "monarch-orm/types";
+
+const middleName = string().nullable();
+// or functional style
+const middleName2 = nullable(string());
+```
+
+### `.default(value | fn)`
+
+Provides a fallback when the input is `undefined`.
+
+```ts
+import { defaulted } from "monarch-orm/types";
+
+const isVerified = boolean().default(false);
+// or functional style
+const isVerified2 = defaulted(boolean(), false);
+```
+
+### `.validate(fn, message)`
+
+Adds validation after the base type has parsed successfully. The validate function should return `true`; otherwise the provided message is thrown as an error.
+
+```ts
+const username = string().validate((value) => value !== "admin", "username is reserved");
+```
+
+You can also use the exported namespace object if you prefer `m.string()` style:
+
+```ts
+import { createSchema, m } from "monarch-orm";
+
+const userSchema = createSchema("users", {
+  name: m.string(),
+  age: m.number().optional(),
+});
+```
+
+## Operators
+
+Monarch exports typed operator helpers from `monarch-orm/operators`.
+
+```ts
+import { and, eq, gt, inArray } from "monarch-orm/operators";
+
+const users = await db.collections.users.find(
+  and(
+    { isVerified: eq(true) },
+    { age: gt(18) },
+    { email: inArray(["alice@example.com", "grace@example.com"]) },
+  ),
+);
+```
+
+Available helpers:
+
+- `and`
+- `or`
+- `nor`
+- `not`
+- `eq`
+- `neq`
+- `gt`
+- `gte`
+- `lt`
+- `lte`
+- `inArray`
+- `notInArray`
+- `exists`
+- `notExists`
+- `size`
+
+## Aggregation and Raw Access
+
+Use `aggregate()` for pipeline-based reads:
+
+```ts
+const result = await db.collections.users
+  .aggregate()
+  .addStage({ $match: { isVerified: true } })
+  .addStage({ $group: { _id: "$isVerified", count: { $sum: 1 } } });
+```
+
+Use `raw()` when you need the underlying MongoDB collection:
+
+```ts
+const rawUsers = await db.collections.users.raw().find().toArray();
+```
+
+## Type Helpers
+
+Monarch exports helper types for inferring collection-level input and output types from a database instance.
+
+### `InferInput<typeof db, "collectionName">`
+
+Infers the input type for a collection from a database instance.
+
+```ts
+import type { InferInput } from "monarch-orm";
+
+type UserInsert = InferInput<typeof db, "users">;
+```
+
+### `InferOutput<typeof db, "collectionName">`
+
+Infers the default output type for a collection from a database instance.
+
+```ts
+import type { InferOutput } from "monarch-orm";
+
+type UserResult = InferOutput<typeof db, "users">;
+```
+
+### `InferOutput<typeof db, "collectionName", options>`
+
+You can also model projected or populated output shapes by passing options as the third type argument.
+
+```ts
+import type { InferOutput } from "monarch-orm";
+
+type UserWithPosts = InferOutput<
+  typeof db,
+  "users",
+  {
+    populate: {
+      posts: {
+        populate: {
+          author: true;
+        };
+      };
+    };
+  }
+>;
+```
+
+## Utilities
+
+- `ObjectId` is re-exported from `mongodb`
+- `toObjectId()` converts values to `ObjectId`
+- `createClient(uri, options?)` creates a MongoDB client
+- `getValidator(schema)` returns the generated `$jsonSchema` validator
+
+## License
+
+MIT

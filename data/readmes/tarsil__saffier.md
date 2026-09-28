@@ -1,0 +1,223 @@
+# Saffier
+
+<p align="center">
+  <a href="https://saffier.tarsild.io"><img src="https://res.cloudinary.com/dymmond/image/upload/v1675104815/Saffier/logo/logo_dowatx.png" alt='Saffier'></a>
+</p>
+
+<p align="center">
+    <em>🚀 The only Async ORM you need. 🚀</em>
+</p>
+
+<p align="center">
+<a href="https://github.com/tarsil/saffier/actions/workflows/test-suite.yml/badge.svg?event=push&branch=main" target="_blank">
+    <img src="https://github.com/tarsil/saffier/actions/workflows/test-suite.yml/badge.svg?event=push&branch=main" alt="Test Suite">
+  </a>
+
+<a href="https://pypi.org/project/saffier" target="_blank">
+    <img src="https://img.shields.io/pypi/v/saffier?color=2334D058&label=pypi%20package" alt="Package version">
+</a>
+
+<a href="https://pypi.org/project/saffier" target="_blank">
+    <img src="https://img.shields.io/pypi/pyversions/saffier.svg?color=2334D058" alt="Supported Python versions">
+</a>
+</p>
+
+---
+
+**Documentation**: [https://saffier.tarsild.io](https://saffier.tarsild.io) 📚
+
+**Source Code**: [https://github.com/tarsil/saffier](https://github.com/tarsil/saffier)
+
+**The official supported version is always the latest released**.
+
+---
+
+## Saffier 2.0+
+
+Saffier is currently revamped, powered up and ready to be more powerful and flexible, while maintaining the same familiar interface.
+The new version will be released as **Saffier 2.0** and the versioning will grow from there. The supported version will always be the latest released,
+so if you are using Saffier, make sure to keep it updated to the latest version to get the best experience and all the new features.
+
+Why this now? Saffier plays an important role in the ecosystem of tools I am building and I want to make sure it is the best it can be for everyone.
+The new version will be more powerful, flexible and easier to use, while maintaining the same familiar interface.
+
+Saffier was never neglected, or at least intentionally neglected, but it was always a challenge to maintain
+it while also working on other projects and tools.
+
+This will no longer be the case and Saffier will come to stay.
+
+Saffier is intentionally Python-native and ORM-focused.
+It is designed to stay framework-agnostic, lightweight in validation concerns,
+and aligned with the developer ergonomics that made Saffier popular.
+
+Now, if you are interested in helping and maintaining Saffier, please don't hesitate to reach out and contribute, it is always welcome and appreciated.
+
+## Motivation
+
+Almost every project, in one way or another uses one (or many) databases. An ORM is simply an mapping
+of the top of an existing database. ORM extends for Object Relational Mapping and bridges object-oriented
+programs and relational databases.
+
+Two of the most well known ORMs are from Django and SQLAlchemy. Both have their own strengths and
+weaknesses and specific use cases.
+
+This ORM is built directly on SQLAlchemy 2.x Async and aims to simplify setup and queries into a
+more common and familiar interface.
+
+## Before continuing
+
+Saffier is built for teams that want a direct SQLAlchemy Async ORM workflow without introducing a
+Pydantic-centric architecture in the model layer.
+
+## Why this ORM
+
+When investigating for a project different types of ORMs and compared them to each other, for a lot
+of use cases, SQLAlchemyalways took the win but had an issue, the async support (which now there
+are a few solutions). While doing the research I came across [Encode ORM](https://www.encode.io/orm/).
+
+The team is the same behind Django Rest Framework, Starlette, httpx and a lot more tools used by
+millions.
+
+There was one issue though, although ORM was doing a great familiar interface with SQLAlchemy and
+providing the async solution needed, it was, by the time of this writing, incomplete and they
+even stated that in the documentation and that is how **Saffier** was born.
+
+Saffier uses some of the same concepts from Encode ORM but with its own Python-native model layer.
+
+## Saffier
+
+Saffier is some sort of a fork from [Encode ORM](https://www.encode.io/orm/) but rewritten at its
+core and with a complete set of tools with a familiar interface to work with.
+If you are familiar with Django, then you came for a treat 😄.
+
+Saffier provides a Python-native field system while offering a friendly, familiar and easy to use
+interface.
+
+This ORM was designed to be flexible and compatible with pretty much every ASGI framework, like
+[Esmerald](https://esmerald.dymmond.com), Starlette, FastAPI, Sanic, Quart... With simple pluggable
+design thanks to its origins.
+
+### Special notes
+
+Saffier couldn't exist without [Encode ORM](https://www.encode.io/orm/) and the continous work
+done by the amazing team behind it. For that reason, thank you!
+
+## Features
+
+While adopting a familiar interface, it offers some cool and powerful features on the top of
+SQLAlchemy 2.x Async.
+
+### Key features
+
+* **Model inheritance** - For those cases where you don't want to repeat yourself while maintaining
+intregity of the models.
+* **Abstract classes** - That's right! Sometimes you simply want a model that holds common fields
+that doesn't need to created as a table in the database.
+* **Meta classes** - If you are familiar with Django, this is not new to you and Saffier offers this
+in the same fashion.
+* **Managers** - Versatility at its core, you can have separate managers for your models to optimise
+specific queries and querysets at ease.
+* **Filters** - Filter by any field you want and need.
+* **Model operators** - Classic operations such as `update`, `get`, `get_or_none`, `bulk_create`,
+`bulk_update` and a lot more.
+* **Relationships made it easy** - Support for `OneToOne` and `ForeignKey` in the same Django style.
+* **Admin subsystem** - Python-native admin site and Lilya admin app with JSONEditor-powered forms.
+* **Constraints** - Unique constraints through meta fields.
+* **Native test client** - We all know how hard it can be to setup that client for those tests you
+need so we give you already one.
+* **Multi-tenancy** - Saffier supports multi-tenancy and even offers a possible solution to be used
+out of the box if you don't want to waste time.
+
+And a lot more you can do here.
+
+## Migrations
+
+Since **Saffier** owns SQLAlchemy metadata and runs directly on
+[SQLAlchemy 2.x Async](https://docs.sqlalchemy.org/en/20/orm/extensions/asyncio.html), it brings
+its own native migration system running on the top of
+[Alembic](https://alembic.sqlalchemy.org/en/latest/) but making it a lot easier to use and more
+pleasant for you.
+
+Have a look at the [migrations](https://saffier.tarsild.io/migrations.md) for more details.
+
+## Installation
+
+To install Saffier, simply run:
+
+```shell
+$ pip install saffier
+```
+
+You can pickup your favourite database driver by yourself or you can run:
+
+**Postgres**
+
+```shell
+$ pip install saffier[postgres]
+```
+
+**MySQL/MariaDB**
+
+```shell
+$ pip install saffier[mysql]
+```
+
+**SQLite**
+
+```shell
+$ pip install saffier[sqlite]
+```
+
+## Quick Start
+
+The following is an example how to start with **Saffier** and more details and examples can be
+found throughout the documentation.
+
+**Use** `ipython` **to run the following from the console, since it supports** `await`.
+
+```python
+import saffier
+from saffier import Database, Registry
+
+database = Database("sqlite:///db.sqlite")
+models = Registry(database=database)
+
+
+class User(saffier.Model):
+    """
+    The User model to be created in the database as a table
+    If no name is provided the in Meta class, it will generate
+    a "users" table for you.
+    """
+
+    id = saffier.IntegerField(primary_key=True)
+    is_active = saffier.BooleanField(default=False)
+
+    class Meta:
+        registry = models
+
+
+# Create the db and tables
+# Don't use this in production! Use Alembic or any tool to manage
+# The migrations for you
+await models.create_all()
+
+await User.query.create(is_active=False)
+
+user = await User.query.get(id=1)
+print(user)
+# User(id=1)
+
+```
+
+As stated in the example, if no `tablename` is provided in the `Meta` class, Saffier automatically
+generates the name of the table for you by pluralising the class name.
+
+## Connect your application
+
+Do you want to have more complex structures and connect to your favourite framework? Have a look
+at [connections](https:/saffier.tarsild.io/connection.md) to understand how to do it properly.
+
+**Exciting!**
+
+In the documentation we go deeper in explanations and examples, this was just to warm up. 😁

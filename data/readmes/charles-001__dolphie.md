@@ -1,0 +1,391 @@
+# Dolphie
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/13244625/187600748-19d2ad15-42e8-4f9c-ada5-a153cdcf4070.png" width="120"><br>
+  Your single pane of glass for real-time analytics into MySQL/MariaDB & ProxySQL<br><br>
+  <img src="https://github.com/charles-001/dolphie/assets/13244625/88a41290-f52c-4b8e-97f8-3b7ef5096eae" width="30">
+  <img src="https://github.com/charles-001/dolphie/assets/13244625/1d94502a-9abf-4436-a7d0-cb2b08c105c1" width="30">
+  <img src="https://github.com/charles-001/dolphie/assets/13244625/9b1aadc8-cabb-4256-92f9-fe4d04451b83" width="30">
+</p>
+
+![Untitled](https://github.com/user-attachments/assets/b23426ad-060e-4a3a-bb10-66cf0ac95bd0)
+<p></p>
+<video src='https://github.com/user-attachments/assets/0818485e-f290-4ac4-95d4-8fdc25bb1124'></video>
+<p></p>
+<video src='https://github.com/user-attachments/assets/9eba7a32-1084-43de-9f62-268ad5f0f922'></video>
+
+## Installation
+
+Requires Python 3.10+
+
+#### Using PyPi
+
+```shell
+$ pip install dolphie
+```
+
+#### Using uv
+
+```shell
+$ uv tool install dolphie
+```
+
+#### Using Homebrew
+
+If you are a [Homebrew](https://brew.sh/) user, you can install [dolphie](https://formulae.brew.sh/formula/dolphie) via
+
+```sh
+$ brew install dolphie
+```
+
+#### Using Docker
+
+```sh
+$ docker pull ghcr.io/charles-001/dolphie:latest
+$ docker run -dit --name dolphie ghcr.io/charles-001/dolphie:latest
+$ docker exec -it dolphie dolphie --tab-setup
+```
+
+## Usage
+
+```
+positional arguments:
+  uri                   Use a URI string for credentials (mysql/proxysql) - format: mysql://user:password@host:port (port is optional with default 3306, or 6032 for ProxySQL)
+
+options:
+  --help                show this help message and exit
+  --tab-setup           Start Dolphie by showing the Tab Setup modal instead of automatically connecting with the specified options
+  -C , --cred-profile   Credential profile to use. See below for more information
+  -u , --user           Username
+  -p , --password       Password
+  -h , --host           Hostname/IP address
+  -P , --port           Port (socket has precedence)
+  -S , --socket         Socket file
+  -c , --config-file    Dolphie's config file to use, takes precedence over DOLPHIE_CONFIG environment variable. If neither is set, options are read from these files in the given order: ['/etc/dolphie.cnf', '/etc/dolphie/dolphie.cnf', '~/.dolphie.cnf']
+  -m , --mycnf-file     MySQL config file path to use. This should use [client] section [default: ~/.my.cnf]
+  -l , --login-path     Specify login path to use with mysql_config_editor's file ~/.mylogin.cnf for encrypted login credentials [default: client]
+  -r , --refresh-interval
+                        The time, in seconds, between each data collection and processing cycle [default: 1]
+  --host-cache-file     Resolve IPs to hostnames when your DNS is unable to. Each IP/hostname pair should be on its own line using format ip=hostname [default: ~/dolphie_host_cache]
+  --tab-setup-file      Specify location of file that stores the available hosts to use in Tab Setup modal [default: ~/dolphie_hosts]
+  --heartbeat-table     (MySQL only) If your hosts use pt-heartbeat, specify table in format db.table to use the timestamp it has for replication lag instead of Seconds_Behind_Master from SHOW REPLICA STATUS
+  --ssl-mode            Desired security state of the connection to the host. Supports: REQUIRED/VERIFY_CA/VERIFY_IDENTITY [default: OFF]
+  --ssl-ca              Path to the file that contains a CA (certificate authority)
+  --ssl-cert            Path to the file that contains a certificate
+  --ssl-key             Path to the file that contains a private key for the certificate
+  --panels              What panels to display on startup separated by a comma. Supports: ['dashboard', 'processlist', 'graphs', 'replication', 'metadata_locks', 'ddl', 'pfs_metrics', 'statements_summary', 'proxysql_hostgroup_summary', 'proxysql_mysql_query_rules', 'proxysql_command_stats'], [default: ['dashboard', 'processlist']]
+  --graph-marker        What marker to use for graphs (available options: https://tinyurl.com/dolphie-markers) [default: braille]
+  --pypi-repo           What PyPi repository to use when checking for a new version default: [https://pypi.org/pypi/dolphie/json]
+  -H , --hostgroup      This is used for creating tabs and connecting to them for hosts you specify in Dolphie's config file under a hostgroup section. As an example, you'll have a section called [cluster1] then below it you will list each host on a new line in the format key=<json> (keys have no meaning), i.e. 1={"host": "host1:3307", "tab_title": "production", "credential_profile": "prod"}. host is required and supports an optional port (default is whatever port parameter is). tab_title and credential_profile are optional
+  -R, --record          Enables recording of Dolphie's data to a replay file. Note: This can use significant disk space. Monitor accordingly!
+  -D, --daemon          Starts Dolphie in daemon mode. This will not show the TUI and is designed be put into the background with whatever solution you decide to use. Automatically enables --record. This mode is solely used for recording data to a replay file
+  --daemon-log-file     Full path of the log file for daemon mode
+  --daemon-panels       Which panels to run queries for in daemon mode separated by a comma. This can control significant load if the queries are responsible. Dashboard/Replication panels cannot be turned off. Supports: ['processlist', 'metadata_locks', 'pfs_metrics', 'statements_summary', 'proxysql_hostgroup_summary'], [default: ['processlist', 'metadata_locks', 'pfs_metrics']]
+  --replay-file         Specify the full path of the replay file to load and enable replay mode
+  --replay-dir          Directory to store replay data files
+  --replay-retention-hours
+                        Number of hours to keep replay data. Data will be purged every hour [default: 48]
+  --replay-summary      Store a compact summary next to each replay row: every metric's latest value, status values, system utilization, lock states, and replication state. Dolphie and other readers build timelines and rebuild graphs from it without decoding whole rows. Costs roughly a kilobyte per row
+  --exclude-notify-vars
+                        Dolphie will let you know when a global variable has been changed. If you have variables that change frequently and you don't want to see them, you can specify which ones with this option separated by a comma (i.e. --exclude-notify-vars=variable1,variable2)
+  --filters             Start with filters applied to threads, separated by a comma in the format name=value. Supports: user, host, db, hostgroup, time (minimum query time), query (partial query text). Prefix a value with ! to exclude what it matches (i.e. --filters user=!azure_superuser,time=5). Filters set by Dolphie's config, a credential profile and this option are merged, with the more specific source winning for the filters it sets. A name with no value (i.e. time=) unsets an inherited filter
+  --show-trxs-only      (MySQL only) Start with only showing threads that have an active transaction
+  --additional-columns  Start with additional columns in Processlist panel
+  --debug-options       Display options that are set and what they're set by (command-line, dolphie config, etc) then exit. WARNING: This will show passwords and other sensitive information in plain text
+  -V, --version         Display version and exit
+
+Order of precedence for methods that pass options to Dolphie:
+	1. Command-line
+	2. Credential profile (set by --cred-profile)
+	3. Environment variables
+	4. Dolphie's config (set by --config-file OR DOLPHIE_CONFIG)
+	5. ~/.mylogin.cnf (mysql_config_editor)
+	6. ~/.my.cnf (set by --mycnf-file)
+
+Credential profiles can be defined in Dolphie's config file as a way to store credentials for easy access.
+A profile can be created by adding a section in the config file with the format: [credential_profile_<name>]
+When using a credential profile, do not include the prefix 'credential_profile' (i.e. -C production)
+The following options are supported in credential profiles:
+	host
+	port (default is 3306)
+	user
+	password
+	socket
+	ssl_mode REQUIRED/VERIFY_CA/VERIFY_IDENTITY
+	ssl_ca
+	ssl_cert
+	ssl_key
+	tab_title
+	filters
+	mycnf_file
+	login_path
+
+MySQL my.cnf file supports these options under [client] section:
+	host
+	user
+	password
+	port
+	socket
+	ssl_mode REQUIRED/VERIFY_CA/VERIFY_IDENTITY
+	ssl_ca
+	ssl_cert
+	ssl_key
+
+Login path file supports these options:
+	host
+	user
+	password
+	port
+	socket
+
+Environment variables support these options:
+	DOLPHIE_USER
+	DOLPHIE_PASSWORD
+	DOLPHIE_HOST
+	DOLPHIE_PORT
+	DOLPHIE_SOCKET
+	DOLPHIE_SSL_MODE REQUIRED/VERIFY_CA/VERIFY_IDENTITY
+	DOLPHIE_SSL_CA
+	DOLPHIE_SSL_CERT
+	DOLPHIE_SSL_KEY
+	DOLPHIE_CONFIG
+
+Dolphie's config supports these options under [dolphie] section:
+	(bool) tab_setup
+	(str) credential_profile
+	(str) user
+	(str) password
+	(str) host
+	(int) port
+	(str) socket
+	(str) ssl_mode
+	(str) ssl_ca
+	(str) ssl_cert
+	(str) ssl_key
+	(str) mycnf_file
+	(str) login_path
+	(str) host_cache_file
+	(str) tab_setup_file
+	(int) refresh_interval
+	(str) heartbeat_table
+	(comma-separated str) startup_panels
+	(str) graph_marker
+	(str) pypi_repository
+	(str) hostgroup
+	(bool) show_trxs_only
+	(bool) show_additional_query_columns
+	(comma-separated str) filters
+	(bool) record_for_replay
+	(bool) daemon_mode
+	(comma-separated str) daemon_mode_panels
+	(str) daemon_mode_log_file
+	(str) replay_file
+	(str) replay_dir
+	(int) replay_retention_hours
+	(bool) replay_summary
+	(comma-separated str) exclude_notify_global_vars
+```
+
+## Supported MySQL versions
+
+- MySQL/Percona Server 5.6/5.7/8.x/9.x
+- AWS RDS/Aurora
+- Azure MySQL
+
+## Supported MariaDB versions
+
+- MariaDB 5.5/10.0/11.0+
+- AWS RDS
+- Azure MariaDB
+
+## Supported ProxySQL versions
+
+- ProxySQL 2.6+ (could work on previous versions but not tested)
+
+Note: Use `admin` user instead of `stats` user so you can use all features
+
+## MySQL Grants required
+
+#### Least privilege
+
+1. PROCESS (only if you switch to using processlist via `P` command)
+2. SELECT to `performance_schema` + `pt-heartbeat table` (if used)
+3. REPLICATION CLIENT/REPLICATION SLAVE
+
+#### Recommended
+
+1. PROCESS (only if you switch to using processlist via `P` command)
+2. Global SELECT access (good for explaining queries, listing all databases, etc)
+3. REPLICATION CLIENT/REPLICATION SLAVE
+4. SUPER (required if you want to kill queries)
+
+## Record & Replay
+
+Dolphie is capable of recording your live session data that can be used in a future replay if needed. To begin recording, specify the `--record` option along with `--replay-dir` and you're good to go! The data will be saved in a SQLite database compressed with ZSTD for efficient storage management.
+
+To view a replay from either a live session or daemon mode, specify the `--replay-file` option or bring up the `Tab Setup` modal. Replays enable you to navigate through the recorded data as if you were observing Dolphie in real-time at the exact time you need to investigate. The replay interface features intuitive controls for stepping backward, moving forward, playing/pausing, and jumping to specific timestamps. While some commands or features may be restricted in replay mode, all core functionalities for effective review and troubleshooting remain accessible.
+
+## Daemon Mode
+
+If you need Dolphie running incognito while always recording data to capture those critical moments when a database stall causes an incident or a tricky performance issue slips past other monitoring tools, then look no further! Daemon mode is the solution. Purpose-built for nonstop recording, it ensures you never miss the insights that matter most.
+
+To activate Daemon mode, specify the `--daemon` option, which will automatically enable `--record`. This will transform Dolphie into a resource-efficient, passive, always-on monitoring process that continuously records data. It removes Textual's TUI and creates a log file for messages while also printing them to the console.
+
+To run Dolphie in the background using daemon mode, I recommend `systemctl` for its flexibility and management capabilities. To see how to set that up, refer to the [service configuration example](https://github.com/charles-001/dolphie/blob/main/examples/dolphie.service). While alternatives like `nohup` or `tmux` can be used, they are not advisable due to their limited management features. Additionally, check out the [config example](https://github.com/charles-001/dolphie/blob/main/examples/dolphie-daemon.cnf) as a helpful starting point for setting up this mode.
+
+In Daemon mode, metrics are retained for the last 10 minutes to support graphing, with performance schema metric deltas automatically reset at 10-minute intervals. This approach keeps data fresh and relevant, providing an accurate view of recent activity.
+
+**Note**: Daemon mode's replay file can consume significant disk space, particularly on busy servers. To minimize disk usage, adjust the `--replay-retention-hours` and `--refresh-interval` options to control data retention and collection frequency.
+
+Example log messages in daemon mode:
+
+```
+[INFO] Starting Dolphie in daemon mode with a refresh interval of 1s
+[INFO] Log file: /var/log/dolphie/dolphie.log
+[INFO] Connected to MySQL with Process ID 324
+[INFO] Replay SQLite file: /var/lib/dolphie/replays/localhost/daemon.db (24 hours retention)
+[INFO] Connected to SQLite
+[INFO] Replay database metadata - Host: localhost, Port: 3306, Source: MySQL (Percona Server), Dolphie: 6.3.0
+[INFO] ZSTD compression dictionary built from 3 samples (size: 142.20KB)
+[WARNING] Read-only mode changed: R/W -> RO
+[INFO] Global variable innodb_io_capacity changed: 1000 -> 2000
+```
+
+## Reading replay files from other tools
+
+A replay file is a SQLite database that any SQLite client can open. Open it read-only (`sqlite3 -readonly` or a `file:...?mode=ro` URI) so a daemon writing to it is never blocked.
+
+While it records, the daemon keeps the file in WAL mode with `daemon.db-wal` and `daemon.db-shm` next to it. A clean stop folds the WAL back into the file and switches it to a plain rollback-journal database, so a stopped daemon's file has no sidecars and opens read-only from anywhere, including a directory the reader cannot write. These rules follow from that:
+
+- Copy the file only after the daemon stops, or copy `daemon.db-wal` with it. The main file alone is missing everything since the last checkpoint, up to about 4 MB of the newest rows.
+- Do not leave a `sqlite3` shell or a GUI tool sitting inside a query on a live file. An open read blocks every checkpoint, so the WAL takes every new row instead of the database file. Once the WAL reaches 64 MB the daemon logs an error and stops writing rows until the reader closes, so disk use never exceeds the retention window plus 64 MB. Recording resumes on its own.
+- A reader that is still inside a query when the daemon stops keeps the file in WAL mode with its sidecars, the same state an unclean stop leaves. The next start recovers it. Readers open that state as long as they can read the `-shm`, which Dolphie creates with the same group permissions as the file.
+- Apple's `/usr/bin/sqlite3 -readonly` cannot open a WAL file that has no `-shm` next to it, such as a `daemon.db` copied together with its `-wal`. Use the `file:...?immutable=1` URI or open it without `-readonly`.
+
+The daemon logs a warning when it recovers rows from a `-wal` that the previous run left behind (an unclean stop), and when the filesystem refuses WAL mode (NFS).
+
+When a new Dolphie version changes the replay schema, the daemon closes the old file, renames it to `daemon.db_old_schema_v<N>`, and starts a new `daemon.db`. The renamed file is complete and has no sidecars. Replay it with the Dolphie version that wrote it.
+
+- `metadata` has one row: `schema_version` (currently 2), `host`, `port`, `host_distro`, `connection_source`, `dolphie_version`, and `compression_dict`.
+- `replay_data` has one row per poll: `id`, `timestamp` (`YYYY-MM-DD HH:MM:SS` in UTC, to the second), `data`, and, when `replay_summary` is on, `summary`. Files written before 6.17 hold the host's local time.
+- `variable_changes` records global variable changes, linked to `replay_data.id` through `replay_id`.
+
+`data` and `summary` are zstd frames of a JSON object. Decompress them with the `compression_dict` bytes loaded as a zstd dictionary with type auto-detection (a raw-content dictionary in current files, a trained one in older files). The first three rows of a file were written before the dictionary existed and decode with it all the same. `compression_dict` is NULL until the fourth row is written.
+
+`data` is the whole snapshot: `global_status`, `global_variables`, `processlist`, `metric_manager`, `system_utilization`, and the tables each panel recorded. `summary` is a subset in the same shape, so one reader serves both columns:
+
+- `metric_manager`: every metric Dolphie graphs, cut to its latest value. Daemon files carry `_delta: true`. Dolphie has already converted counters into per-second rates
+- `global_status`, `system_utilization`, `innodb_metrics`, `binlog_status`: kept whole. Dolphie fetches a fixed list of status values: the ones its dashboard and graphs read, plus raw counters kept for readers, such as buffer pool page counts, read-ahead, and change buffer merges. A value added to that list reaches the summary with no change to the contract. Three keys are Dolphie's own: `replay_polling_interval` is the seconds between this poll and the one before it, the divisor of every per-second rate in the row, `replay_polling_latency` is how long the poll itself took, and `replay_longest_thread_time` is the `Time` of the oldest thread in the recorded processlist, in seconds, 0 when none was recorded. A reader that takes its own rate between two adjacent rows divides by `replay_polling_interval`, because `timestamp` holds whole seconds
+- `global_variables`: `version`, `read_only`, `super_read_only`, `max_connections`. The full set is about 25 KB a row, so a reader that needs another variable takes it from `data` at the instant it inspects
+- `metadata_locks`: `LOCK_TYPE` and `LOCK_STATUS` per lock
+- `replication_status`: channel, source host, the IO and SQL running flags, `Seconds_Behind`, `SQL_Delay`, and the last errors per channel. `Seconds_Behind` counts a configured delay, so the lag a reader rates is `Seconds_Behind` minus `SQL_Delay`
+
+A summary is about a tenth of the row's decoded size, so a tool that draws a timeline or samples metrics across a file reads `COALESCE(summary, data)` and falls back to the whole row where a summary is NULL. The column only exists in files written with `--replay-summary`, and rows written before it was turned on have no summary. Dolphie itself reads the summary to rebuild the graph window when a replay seeks backwards. The processlist is not summarized. A tool that needs full detail for one instant, such as the threads and their query text, reads `data`.
+
+`SUMMARY_WHOLE_KEYS` and `SUMMARY_FIELDS` in `dolphie/Modules/ReplayManager.py` name what the summary keeps. A top-level key that is not named there is left out. A new metric in `metric_manager` is summarized automatically.
+
+## System Utilization in the Dashboard Panel
+
+The System Utilization section in the Dashboard panel will only display when Dolphie is running on the same host as the server you're connected to. It displays the following information:
+- Uptime
+- CPU Usage (Percentage, # of cores)
+- Load Averages (1, 5, and 15 minutes)
+- Memory Usage (Percentage, Used/Total)
+- Swap Usage (Used/Total)
+- Network Traffic (Down, Up)
+
+Example:
+
+<img width="235" alt="Screenshot 2024-11-03 at 1 19 00 AM" src="https://github.com/user-attachments/assets/664269bc-c303-4222-b0d2-fb1e65ce6202">
+
+
+## Credential Profiles
+
+Credential profiles can be defined in Dolphie's config file as a way to store credentials for easy access. A profile can be created by adding a section in the config file with the format: `[credential_profile_<name>]`
+
+The following options are supported in credential profiles:
+
+- host
+- port (default is 3306)
+- user
+- password
+- socket
+- ssl_mode REQUIRED/VERIFY_CA/VERIFY_IDENTITY
+- ssl_ca
+- ssl_cert
+- ssl_key
+- tab_title
+- filters
+- mycnf_file
+- login_path
+
+`filters` starts the profile's tabs with filters applied to threads, separated by a comma in the format `name=value`. It supports `user`, `host`, `db`, `hostgroup`, `time` (minimum query time) and `query` (partial query text). Prefix a value with `!` to exclude what it matches, the same as the filter modal (`f`) does.
+
+Filters merge from the least specific source to the most: Dolphie's config, then the credential profile, then `--filters`. Each one only overrides the filters it sets, so a profile that sets `user` keeps a `time` filter that Dolphie's config set. To drop an inherited filter instead, give its name with no value (i.e. `time=`).
+
+Example:
+
+```ini
+[credential_profile_dev]
+user = dev_user
+password = dev_password
+
+[credential_profile_prod]
+mycnf_file = /secure/path/to/prod.cnf
+filters = user=!azure_superuser
+```
+
+To use a credential profile, you can specify it with `-C`/`--cred-profile` option without using the prefix `credential_profile` (i.e. `-C prod`) when starting Dolphie. Hostgroups can also use credential profiles (see below)
+
+## Hostgroups
+
+Hostgroups are a way to easily connect to multiple hosts at once. To set this up, you will create a section in Dolphie's config file with the name you want the hostgroup to be and list each host on a new line in the format `key=<json>` (keys have no meaning). Hosts support optional port (default is whatever `port` parameter is) in the format `host:port`. Once ready, you will use the parameter `hostgroup` or `Host Setup` modal to see it in action!
+
+Note: Colors can be used in the tab name by using the format `[color]text[/color]` (i.e. `[red]production[/red]`). You can also use emojis supported by Rich (can see them by running `python -m rich.emoji`) by using the format `:emoji:` (i.e. `:ghost:`). Rich supports the normal emoji shortcodes.
+
+Example:
+
+```ini
+[cluster1]
+1={"host": "host1", "tab_title": "[yellow]host1[/yellow] :ghost:", "credential_profile": "dev"}
+2={"host": "host2", "tab_title": "[blue]host2[/blue] :ghost:", "credential_profile": "dev"}
+3={"host": "host3:3307", "tab_title": "[red]production[/red]", "credential_profile": "prod"}
+4={"host": "host4"}
+```
+
+## Development
+
+```shell
+uv sync --all-groups
+uv run dolphie --help
+uv run ruff format .
+uv run ruff check .
+uv run basedpyright
+uv run pytest
+```
+
+BasedPyright runs without a baseline; new diagnostics must be fixed rather than suppressed as accepted debt.
+
+### Integration tests
+
+`uv run pytest` runs the unit tests only. The integration suite in `tests/integration` runs the real application against Docker servers and needs `docker compose`. It covers server detection, every panel, display commands, daemon mode through the `dolphie` executable, replay playback, and the TUI under a pseudo-terminal.
+
+```shell
+# Every server: MySQL 5.7, 8.0, 8.4, 9.7, Percona 8.4, MariaDB 10.11, 11.4, 11.8, 12.3, ProxySQL 3.0
+uv run pytest tests/integration -m integration
+
+# A subset
+DOLPHIE_IT_SERVERS=mysql84,proxysql uv run pytest tests/integration -m integration
+
+# Multi-node topologies: MariaDB replication, Group Replication, Galera, multi-source, InnoDB ClusterSet
+uv run pytest tests/integration/topologies -m topology
+DOLPHIE_IT_TOPOLOGIES=gr,galera uv run pytest tests/integration/topologies -m topology
+```
+
+`tests/dolphie/test_Snapshots.py` runs with the unit tests and needs no Docker. It plays the small daemon recordings in `tests/dolphie/replays` back through the real application and compares an SVG screenshot of each panel against `tests/dolphie/__snapshots__`. When a rendering change is intended, run `uv run pytest tests/dolphie/test_Snapshots.py --snapshot-update` and commit the new snapshots. A failure writes `snapshot_report.html` with both images side by side.
+
+Containers start in parallel at the beginning of the session and stop at the end. Set `DOLPHIE_IT_KEEP=1` to leave them running between runs. Data directories live on tmpfs, so nothing accumulates on disk. The `mysql:5.7` image is amd64 only, and its tests skip on a host that cannot emulate it. Compose files live in `tests/integration/compose`.
+
+## Feedback
+
+I welcome all questions, bug reports, and requests. If you enjoy Dolphie, please let me know! I'd love to hear from you :dolphin:

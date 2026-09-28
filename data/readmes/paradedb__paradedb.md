@@ -1,0 +1,114 @@
+<h1 align="center">
+  <a href="https://paradedb.com">
+    <picture align=center>
+      <source media="(prefers-color-scheme: dark)" srcset="docs/logo/paradedb-logo-dark-large.svg">
+      <source media="(prefers-color-scheme: light)" srcset="docs/logo/paradedb-logo-light-large.svg">
+      <img alt="The ParadeDB logo." src="docs/logo/paradedb-logo-light-large.svg">
+    </picture>
+  </a>
+  <br>
+</h1>
+
+<p align="center">
+  <b>Just use Postgres.</b><br/>
+  One Postgres for your application data, full-text search, vector retrieval, and aggregations.
+</p>
+
+<h3 align="center">
+  <a href="https://paradedb.com">Website</a> &bull;
+  <a href="https://www.paradedb.com/docs/start/introduction">Docs</a> &bull;
+  <a href="https://paradedb.com/slack">Community</a> &bull;
+  <a href="https://paradedb.com/blog/">Blog</a> &bull;
+  <a href="https://www.paradedb.com/docs/project/changelog">Changelog</a>
+</h3>
+
+<p align="center">
+  <a href="https://hub.docker.com/r/paradedb/paradedb"><img src="https://img.shields.io/docker/pulls/paradedb/paradedb" alt="Docker Pulls"></a>&nbsp;
+  <a href="https://github.com/paradedb/paradedb?tab=AGPL-3.0-1-ov-file#readme"><img src="https://img.shields.io/github/license/paradedb/paradedb?color=blue" alt="License"></a>&nbsp;
+  <a href="https://paradedb.com/slack"><img src="https://img.shields.io/badge/Community-Join%20Slack-purple?logo=slack" alt="Community"></a>&nbsp;
+  <a href="https://x.com/paradedb"><img src="https://img.shields.io/twitter/follow/paradedb" alt="Follow @paradedb"></a>
+</p>
+
+---
+
+## Installation
+
+To install ParadeDB locally in a fresh Docker container and drop straight into a `psql` session:
+
+```bash
+curl -fsSL https://paradedb.com/install.sh | sh
+```
+
+When you're ready to deploy, check out our [hosting options](https://www.paradedb.com/docs/operate/deploy/overview).
+
+## What is ParadeDB?
+
+[ParadeDB](https://paradedb.com) upgrades Postgres with a custom index for fast full-text and vector search, BM25 scoring, filters, facets, aggregations, and joins. Built as a Postgres extension, it keeps your application data and search engine in one database with standard SQL and ACID transactions.
+
+- [x] [Full-Text Search](https://www.paradedb.com/docs/concepts/full-text/overview)
+  - [x] [BM25 Scoring](https://www.paradedb.com/docs/reference/full-text/score)
+  - [x] [Top K](https://www.paradedb.com/docs/reference/full-text/top-k)
+  - [x] [Highlighting](https://www.paradedb.com/docs/reference/full-text/highlight)
+  - [x] [Tokenizers & Token Filters](https://www.paradedb.com/docs/reference/tokenizers/overview)
+- [x] [Vector Search](https://www.paradedb.com/docs/reference/vector/overview)
+- [x] [Hybrid Search](https://www.paradedb.com/docs/reference/hybrid/overview)
+- [x] [Filtering](https://www.paradedb.com/docs/reference/filtering/overview)
+- [x] [Aggregates](https://www.paradedb.com/docs/reference/aggregates/overview)
+  - [x] [Columnar Storage](https://www.paradedb.com/docs/reference/indexing/columnar)
+  - [x] [Bucket & Metrics](https://www.paradedb.com/docs/reference/aggregates/overview)
+  - [x] [Facets](https://www.paradedb.com/docs/reference/aggregates/facets)
+- [x] [JOINs](https://www.paradedb.com/docs/reference/joins/overview)
+
+Star and watch this repository to follow along. See our [current projects](https://github.com/paradedb/paradedb/projects?query=is%3Aopen) and [long-term roadmap](https://www.paradedb.com/docs/project/roadmap).
+
+## How It Works
+
+ParadeDB integrates battle-tested Rust libraries for search and analytics inside Postgres, contributing upstream whenever possible. Our primary dependencies are:
+
+- [pgrx](https://github.com/pgcentralfoundation/pgrx) — bridges Postgres and Rust
+- [Tantivy](https://github.com/quickwit-oss/tantivy) — powers full-text and vector search
+- [Apache DataFusion](https://github.com/apache/datafusion) — handles OLAP processing
+
+For a deeper dive, see our [architecture docs](https://www.paradedb.com/docs/concepts/architecture) or [CMU Database Group talk](https://db.cs.cmu.edu/events/building-blocks-paradedb-philippe-noel/).
+
+## Integrations
+
+ParadeDB integrates with the tools you already use, with more on the way.
+
+### ORMs & Frameworks
+
+- [Drizzle](https://github.com/paradedb/drizzle-paradedb)
+- [Django](https://github.com/paradedb/django-paradedb)
+- [SQLAlchemy](https://github.com/paradedb/sqlalchemy-paradedb)
+- [Rails](https://github.com/paradedb/rails-paradedb)
+- [EF Core](https://github.com/paradedb/efcore-paradedb)
+- More coming (Prisma, and others)
+
+### AI Agents
+
+- [Agent Skills](https://github.com/paradedb/agent-skills)
+- [MCP Integration](https://www.paradedb.com/docs/start/ai-agents)
+- [Cursor Plugin](https://cursor.com/marketplace/parade-db)
+
+### PaaS & Cloud Platforms
+
+- [Railway](https://www.paradedb.com/docs/operate/deploy/cloud-platforms/railway)
+- [Render](https://www.paradedb.com/docs/operate/deploy/cloud-platforms/render)
+- [Fly.io](https://www.paradedb.com/docs/operate/deploy/cloud-platforms/fly)
+- [DigitalOcean](https://www.paradedb.com/docs/operate/deploy/cloud-platforms/digitalocean)
+- [Dokku](https://www.paradedb.com/docs/operate/deploy/cloud-platforms/dokku)
+
+## Community & Support
+
+- [Slack](https://paradedb.com/slack) — ask questions, share what you're building
+- [GitHub Discussions](https://github.com/paradedb/paradedb/discussions) — longer-form Q&A
+- [GitHub Issues](https://github.com/paradedb/paradedb/issues/new/choose) — bug reports and feature requests
+- [Email](mailto:sales@paradedb.com) — enterprise support and commercial licensing
+
+## Contributing
+
+We welcome contributions of all sizes! Check out our [good first issues](https://github.com/paradedb/paradedb/labels/good%20first%20issue) to get started. For larger contributions, we recommend discussing them with us in [Slack](https://paradedb.com/slack) first. See our [Contributing Guide](/CONTRIBUTING.md) and [Code of Conduct](/CODE_OF_CONDUCT.md) for details.
+
+## License
+
+ParadeDB Community is licensed under the [GNU Affero General Public License v3.0](LICENSE). For [ParadeDB Enterprise](https://www.paradedb.com/docs/operate/deploy/enterprise) licensing, contact [sales@paradedb.com](mailto:sales@paradedb.com).

@@ -1,0 +1,175 @@
+<h1>
+  <img src="internal/dashboard/static/statlite-icon.png" alt="" width="40" height="40" align="absmiddle">
+  StatLite
+</h1>
+
+[![GitHub release](https://img.shields.io/github/v/release/PVRLabs/statlite)](https://github.com/PVRLabs/statlite/releases)
+[![Go powered](https://img.shields.io/github/go-mod/go-version/PVRLabs/statlite?label=Go%20powered&logo=go&logoColor=white)](go.mod)
+[![Frameworks: Spring Boot · Quarkus](https://img.shields.io/badge/Frameworks-Spring%20Boot%20%C2%B7%20Quarkus-e7e7e7?labelColor=333)](docs/integrations.md)
+[![CI](https://github.com/PVRLabs/statlite/actions/workflows/test.yml/badge.svg)](https://github.com/PVRLabs/statlite/actions/workflows/test.yml)
+[![License](https://img.shields.io/github/license/PVRLabs/statlite)](LICENSE)
+
+A lightweight, self-hosted metrics dashboard with a small memory and operational
+footprint, designed for applications running on VPSs and small servers. A single
+Go binary monitors Spring Boot applications through Actuator JSON or Micrometer
+Prometheus metrics, Quarkus applications through Micrometer metrics, and other
+applications that expose [a small, fixed JSON metrics
+endpoint](docs/statlite-metrics-v1.md), without requiring Prometheus or Grafana.
+It stores focused traffic, latency, CPU, memory, optional authoritative health,
+and optional host metrics in SQLite. When a target has no health signal, the
+dashboard reports whether StatLite is successfully receiving its metrics
+without treating reachability as application health.
+
+🌐 [Website](https://pvrlabs.xyz/statlite) · 👀 [Interactive demo](https://pvrlabs.xyz/statlite/demo.html)
+
+<p align="center">
+  <img src="docs/images/dashboard.webp" alt="StatLite dashboard monitoring a Spring Boot payments API">
+  <br><sub>Main application dashboard for the Spring target.</sub>
+</p>
+
+StatLite is built for [resource-constrained servers](docs/low-resource-monitoring.md).
+Low memory, CPU, disk, and operational overhead are treated as product
+constraints.
+
+<p align="center">
+  <img src="docs/images/dashboard-host-resources.webp" alt="StatLite host memory, CPU, and disk charts">
+  <br><sub>Host resources from the StatLite self-monitoring target.</sub>
+</p>
+
+Learn how to set up [lightweight Spring Boot monitoring without Prometheus and Grafana](https://pvrlabs.xyz/articles/lightweight-spring-boot-monitoring.html).
+
+## Try it
+
+```bash
+docker run --rm \
+  -p 127.0.0.1:9090:9090 \
+  ghcr.io/pvrlabs/statlite:latest
+```
+
+Open <http://127.0.0.1:9090>. StatLite monitors itself by default, so the
+dashboard starts with live data.
+
+See the [Docker guide](docs/docker.md) for persistent storage, container
+networking, local builds, and access guidance.
+
+StatLite is intentionally focused and is not a replacement for Prometheus and
+Grafana. See [monitoring options for small applications and VPS
+deployments](docs/monitoring-options.md) for the practical tradeoffs between
+StatLite, a general-purpose self-hosted stack, telemetry pipelines, and hosted
+platforms.
+
+## Install
+
+Install the latest release on macOS or Linux:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/PVRLabs/statlite/main/install.sh | sh
+```
+
+Or install with Homebrew:
+
+```bash
+brew install pvrlabs/tap/statlite
+```
+
+See [Installation](docs/install.md) for supported platforms, custom install
+locations, source builds, and server-wide Linux setup.
+
+## Configure an application
+
+To monitor a Spring Boot application, create a minimal `statlite.yaml`:
+
+```yaml
+server:
+  listen: "127.0.0.1:9090"
+
+storage:
+  sqlite_path: "./statlite.sqlite"
+
+polling:
+  interval: "30s"
+
+targets:
+  - name: "app"
+    type: "spring"
+    url: "http://localhost:8080/actuator"
+```
+
+For a new setup, save the configuration as `statlite.yaml`. If you already
+have a configuration, copy only the target entry into its `targets` list. Then
+run:
+
+```bash
+statlite
+```
+
+Alternatively, inspect a running application's base URL to generate the
+configuration:
+
+```bash
+statlite inspect 'http://localhost:8080'
+```
+
+For other supported frameworks, select the type explicitly when needed:
+
+```bash
+statlite inspect --type quarkus 'http://localhost:9000'
+```
+
+Inspection checks conventional supported endpoints and is bounded and
+read-only. For untyped discovery, start with a base HTTP or HTTPS URL without a
+query string or fragment.
+
+See [Configuration](docs/configuration.md) for exact endpoint forms, discovery
+limits, authentication limitations, all settings, and manual target
+configuration. See the [StatLite Metrics integration guides](docs/integrate/)
+when the application needs to add the `/statlite/metrics` endpoint. See
+[`examples/`](examples/) for complete configurations.
+
+> [!IMPORTANT]
+> StatLite has no built-in dashboard or API authentication. Review the
+> [server and access guidance](docs/configuration.md#server) before exposing it
+> remotely.
+
+## Supported metric sources
+
+- **Spring Boot:** Collects authoritative health when Actuator health is
+  available and automatically selects a compatible Micrometer Prometheus
+  endpoint or Actuator JSON for request, JVM, process, and optional host
+  metrics. Independently usable metrics remain reportable if health retrieval
+  fails.
+- **Quarkus Micrometer:** Collects bounded request, latency, CPU, heap, process,
+  and restart concepts from an exact Prometheus/OpenMetrics endpoint. SmallRye
+  Health is an optional capability when the application publishes it.
+- **[StatLite Metrics v1](docs/statlite-metrics-v1.md):** A small, fixed JSON
+  endpoint that applications in any language or framework can implement. See
+  the [direct integration guides](docs/integrate/) for FastAPI, Express,
+  Django, Go `net/http`, and Gin.
+- **StatLite self-monitoring:** StatLite can report its own health, traffic,
+  process, and host metrics.
+
+Use a `statlite-self` target for host metrics where StatLite runs. Spring
+targets can optionally collect host CPU and disk metrics for a remote
+application's environment.
+
+## Documentation
+
+- [Installation](docs/install.md)
+- [Docker](docs/docker.md)
+- [Configuration](docs/configuration.md)
+- [External API v1](docs/api.md)
+- [Deprecations and compatibility](docs/deprecations.md)
+- [Supported integrations](docs/integrations.md)
+- [Public integration testing](docs/integration-testing.md)
+- [StatLite Metrics integration guides](docs/integrate/)
+- [Monitoring on resource-constrained servers](docs/low-resource-monitoring.md)
+- [StatLite Metrics v1](docs/statlite-metrics-v1.md)
+- [systemd deployment](docs/systemd.md)
+- [Product and architecture](docs/product.md)
+- [Storage and schema direction](docs/storage.md)
+- [Spring Boot guide](https://pvrlabs.xyz/articles/lightweight-spring-boot-monitoring.html)
+- [Examples](examples/)
+
+## License
+
+MIT

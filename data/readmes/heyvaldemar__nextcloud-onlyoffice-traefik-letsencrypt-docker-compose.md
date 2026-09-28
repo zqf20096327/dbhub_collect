@@ -1,0 +1,135 @@
+# Nextcloud + ONLYOFFICE Docs + Traefik + Let's Encrypt on Docker Compose
+
+[![Deployment Verification](https://github.com/heyvaldemar/nextcloud-onlyoffice-traefik-letsencrypt-docker-compose/actions/workflows/deployment-verification.yml/badge.svg?branch=main)](https://github.com/heyvaldemar/nextcloud-onlyoffice-traefik-letsencrypt-docker-compose/actions/workflows/deployment-verification.yml)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/14839/badge)](https://www.bestpractices.dev/projects/14839)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+This repository deploys Nextcloud with a full ONLYOFFICE Docs document server (collaborative editing of Word, Excel, and PowerPoint files inside your own cloud) behind Traefik with automatic Let's Encrypt TLS. Nine services: Nextcloud with PostgreSQL 16 and Redis, ONLYOFFICE Docs with its own PostgreSQL, Redis, and RabbitMQ, Traefik, and a scheduled backup container with companion restore scripts.
+
+📙 Full narrative installation guide on the blog: [heyvaldemar.com/install-nextcloud-with-onlyoffice-using-docker-compose/](https://www.heyvaldemar.com/install-nextcloud-with-onlyoffice-using-docker-compose/).
+
+## Getting started
+
+You need two DNS records pointing at this server: one for Nextcloud, one for the document server.
+
+```bash
+# 1. Clone
+git clone https://github.com/heyvaldemar/nextcloud-onlyoffice-traefik-letsencrypt-docker-compose
+cd nextcloud-onlyoffice-traefik-letsencrypt-docker-compose
+
+# 2. Create the three Docker networks the stack expects
+docker network create traefik-network
+docker network create nextcloud-network
+docker network create onlyoffice-network
+
+# 3. Copy the environment template and fill in required values
+cp .env.example .env
+$EDITOR .env
+# ^ Required: both hostnames, NEXTCLOUD_URL, five generated secrets,
+#   ONLYOFFICE_DOCUMENT_JWT_SECRET, TRAEFIK_ACME_EMAIL, TRAEFIK_BASIC_AUTH.
+
+# 4. Deploy
+docker compose -f nextcloud-onlyoffice-traefik-letsencrypt-docker-compose.yml -p nextcloud up -d
+```
+
+Nextcloud installs itself on first start (admin account from `.env`). Once both services answer, connect them: in Nextcloud, install the ONLYOFFICE app from the app store, then in Administration settings → ONLYOFFICE set the Document Server address to `https://your-onlyoffice-hostname` and paste your `ONLYOFFICE_DOCUMENT_JWT_SECRET`.
+
+### What success looks like
+
+```bash
+docker compose -f nextcloud-onlyoffice-traefik-letsencrypt-docker-compose.yml -p nextcloud ps
+curl -fsk "https://${NEXTCLOUD_HOSTNAME}/status.php"   # {"installed":true,...}
+curl -fsk "https://${ONLYOFFICE_DOCUMENT_HOSTNAME}/healthcheck"   # true
+```
+
+### Common first-deploy issues
+
+- **Cert issuance fails.** DNS hasn't propagated for one of the two hostnames, or port 80 isn't reachable.
+- **`docker compose up` fails with `set in .env`.** A required variable is empty; the error names it.
+- **Networks not found.** Step 2 was skipped: all three are required.
+- **ONLYOFFICE says \"download failed\" when opening a document.** The two services talk to each other server-side: both hostnames must resolve from inside the containers (public DNS, not just your laptop's hosts file), and the JWT secret in the connector app must match `.env`.
+
+## Updating
+
+`./update.sh` moves this checkout to the latest release tag — a combination this repository's CI has booted, upgraded from the previous release on the same volumes, and smoke-tested — and then runs `docker compose up -d`. It refuses to cross a major version unattended, refuses to run over local changes, and names any variable that became required since your version before anything has moved. `./update.sh --dry-run` says what would happen. Every release cut by fleet triage also carries what upstream changed, read from its release notes against this compose file.
+
+## Supply chain trust
+
+Eight images ([`traefik`](https://hub.docker.com/_/traefik), [`nextcloud`](https://hub.docker.com/_/nextcloud), [`postgres`](https://hub.docker.com/_/postgres) ×2, [`redis`](https://hub.docker.com/_/redis) ×2, [`onlyoffice/documentserver`](https://hub.docker.com/r/onlyoffice/documentserver), [`rabbitmq`](https://hub.docker.com/_/rabbitmq)) pinned to `tag@sha256:<digest>` as interpolation defaults in the compose `x-images` block. `git pull` alone delivers the tested combination; an `*_IMAGE_TAG` variable in `.env` overrides deliberately.
+
+Two override levels exist per image. `<PREFIX>_IMAGE_VERSION` in `.env` swaps only the version of that image (Compose then pulls the tag, without a digest) and leaves every other pin as tested; `<PREFIX>_IMAGE_TAG` replaces the whole reference, digest included. The variable names are listed in `.env.example`. Nested defaults need Docker Compose v2.5 or newer (2022); v2.0 to v2.4 leave the inner `${...}` unexpanded and `docker compose up` fails with an invalid reference instead of deploying something unexpected.
+
+The daily `check-pin-freshness` CI job re-resolves each pin against its registry and compares the pinned Nextcloud, ONLYOFFICE, and Traefik versions against the latest upstream releases. GitHub Actions are pinned by commit SHA; Dependabot keeps those fresh.
+
+### Verify what you deploy
+
+Every release from v2.0.7 on carries three files made on GitHub's runner with a short-lived identity and no stored key: `nextcloud-onlyoffice-traefik-letsencrypt-docker-compose-<tag>.tar.gz`, a `git archive` of exactly the tree the tag points at; `nextcloud-onlyoffice-traefik-letsencrypt-docker-compose-<tag>.tar.gz.sigstore.json`, a keyless [Sigstore](https://www.sigstore.dev/) signature over it; and `nextcloud-onlyoffice-traefik-letsencrypt-docker-compose-<tag>.intoto.jsonl`, [SLSA](https://slsa.dev/) build provenance from the SLSA generator. To check them with nothing from this repository trusted:
+
+```bash
+cosign verify-blob nextcloud-onlyoffice-traefik-letsencrypt-docker-compose-<tag>.tar.gz \
+  --bundle nextcloud-onlyoffice-traefik-letsencrypt-docker-compose-<tag>.tar.gz.sigstore.json \
+  --certificate-identity-regexp '^https://github.com/heyvaldemar/nextcloud-onlyoffice-traefik-letsencrypt-docker-compose/' \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com
+
+slsa-verifier verify-artifact nextcloud-onlyoffice-traefik-letsencrypt-docker-compose-<tag>.tar.gz \
+  --provenance-path nextcloud-onlyoffice-traefik-letsencrypt-docker-compose-<tag>.intoto.jsonl \
+  --source-uri github.com/heyvaldemar/nextcloud-onlyoffice-traefik-letsencrypt-docker-compose
+```
+
+Add `--source-tag <tag>` for a release published after 24 September 2026, which is signed by the run that published it. The five releases before that date were signed by a run started by hand on `main`, so their provenance names the branch, not the tag; the archive is still the tag's tree, and the signature still belongs to this repository's workflow. The workflow that makes them is [`release-assets.yml`](.github/workflows/release-assets.yml).
+
+## Production checklist
+
+- [ ] **Strong secrets**: five generated passwords plus the JWT secret, 24+ random characters each.
+- [ ] **Both DNS records** in place before first start, so Let's Encrypt issues on the first attempt.
+- [ ] **Verify the ONLYOFFICE connection** by opening a document: it exercises the JWT secret and server-side connectivity in both directions.
+- [ ] **Host-mount the backup volumes** for disaster recovery.
+- [ ] **Upgrade Nextcloud one major at a time**: never skip majors; see the release notes.
+
+## Backups and restore
+
+The `backups` container runs a `pg_dump | gzip` + `tar.gz`-of-data → prune → sleep loop against the Nextcloud database (defaults: 30-minute warm-up, 24-hour interval, 7-day retention). Restore with the interactive scripts (`chmod +x *.sh` once): `./nextcloud-restore-database.sh`, then `./nextcloud-restore-application-data.sh`. Each lists the backups and asks, or takes a file name as its argument; both read every path and credential from the running backups container, and CI runs both on every push.
+
+Worth knowing: before v1.0.0 the backup loop pointed at a database host that does not exist in this stack, so it never produced a single backup. If you deployed an earlier revision, check that `/srv/nextcloud-postgres/backups` actually has files dated after your upgrade.
+
+## Resource limits
+
+Every service carries memory and CPU limits plus reservations as compose-level defaults, the same values CI boots the stack under. Override any of them in `.env` (the knobs and their defaults are listed in `.env.example`, e.g. `TRAEFIK_MEMORY_LIMIT=512m`) and the override survives every `git pull`. If a service is OOM-killed under real load, `docker inspect <container> --format '{{.State.OOMKilled}}'` says so; raise its `_MEMORY_LIMIT` and recreate.
+
+## Container hardening
+
+Every service runs with `security_opt: no-new-privileges:true`, so a process cannot gain privileges through setuid binaries even if it escapes its initial capability set. Infrastructure containers (the reverse proxy, databases, caches, backups) run with `cap_drop: [ALL]` and add back only what their entrypoints need: `NET_BIND_SERVICE` for Traefik to bind :80/:443, `CHOWN`/`SETUID`/`SETGID` (and friends) for database images to own their data directory and drop to their service user. Application containers keep the default capability set on purpose: upstream images assume it, and a wrong guess there is a boot loop in production rather than a hardening win. CI boots the stack under exactly these settings on every push, so what ships is what was tested.
+
+## Testing
+
+The [Deployment Verification](https://github.com/heyvaldemar/nextcloud-onlyoffice-traefik-letsencrypt-docker-compose/actions/workflows/deployment-verification.yml?query=branch%3Amain) workflow runs on every push, pull request, and every day at 06:00 UTC: shellcheck + actionlint, Trivy scans of the pinned images, the weekly freshness check, and a deploy-and-test job that boots all nine services with ephemeral credentials and requires Nextcloud's `status.php` to report `installed:true` and the ONLYOFFICE `/healthcheck` to return `true`, both through Traefik.
+
+### Backup and restore, proven
+
+`tests/e2e-backup-restore.sh` runs against the live stack and is what CI executes after the HTTPS smoke. The scenario that matters most is the restore roundtrip: insert a marker row, restore the earliest backup, assert the marker is gone. A backup that cannot be restored fails the build. Run it yourself against a running deployment with short intervals in `.env` (`BACKUP_INIT_SLEEP=15s`, `BACKUP_INTERVAL=60s`):
+
+```bash
+chmod +x tests/e2e-backup-restore.sh
+./tests/e2e-backup-restore.sh
+```
+
+It stops the database container briefly to prove failure detection. Run it on a staging copy, not on production.
+
+## Security notes
+
+- Credentials are read from `.env` at deploy time; `.env` is gitignored and compose fails fast on missing required variables.
+- **Pre-rotation advisory.** Releases before v1.0.0 (2026-08-31) shipped a tracked `.env` with generated-looking passwords for the database, Redis, the Nextcloud admin, ONLYOFFICE, and RabbitMQ. Rotate them all if your deployment reused them.
+- JWT auth between Nextcloud and ONLYOFFICE is enabled by default (`JWT_ENABLED: true`): without it, anyone who can reach the document server can feed it documents.
+- Databases, Redis, and RabbitMQ listen only on internal networks.
+
+---
+
+## About the maintainer
+
+<div align="center">
+
+**Maintained by [Vladimir Mikhalev](https://github.com/heyvaldemar)** — Docker Captain · IBM Champion · AWS Community Builder
+
+[YouTube](https://www.youtube.com/channel/UCf85kQ0u1sYTTTyKVpxrlyQ?sub_confirmation=1) · [Blog](https://heyvaldemar.com) · [LinkedIn](https://www.linkedin.com/in/heyvaldemar/)
+
+</div>

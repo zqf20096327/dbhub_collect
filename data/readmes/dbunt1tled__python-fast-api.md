@@ -1,0 +1,222 @@
+# FastAPI Boilerplate
+
+A modern, production-ready FastAPI boilerplate with built-in authentication, user management, and notification features. This project follows best practices for API development and includes essential tools and configurations out of the box.
+
+## 🚀 Features
+
+- **FastAPI** - Modern, fast (high-performance), web framework for building APIs
+- **SQLAlchemy 2.0** - Full async SQL toolkit and ORM
+- **Alembic** - Database migrations
+- **JWT Authentication** - Secure token-based authentication
+- **Pydantic v2** - Data validation and settings management
+- **Dependency Injection** - Clean architecture with dependency injection
+- **WebSockets** - Real-time bidirectional communication for notifications and live updates
+- **RabbitMQ Integration** - Message queuing for background tasks and email notifications
+- **Async MySQL** - Async database support with aiomysql
+- **Environment Configuration** - Easy environment variable management
+- **CORS** - Built-in CORS middleware
+- **Structured Logging** - Ready for production logging with Loki support
+- **Type Hints** - Full Python type support
+- **Email Service** - Built-in email service for user notifications with queue support
+- **Gunicorn with uvloop** - High-performance server with ultra-fast event loop implementation
+
+## 📦 Prerequisites
+
+- Python 3.13
+- MySQL 8.0
+- RabbitMQ 3.x - Message broker for background tasks
+- [uv](https://github.com/astral-sh/uv) - Fast Python package installer and resolver
+
+## 🛠️ Installation
+
+1. Clone the repository:
+   ```bash
+   git clone git@github.com:{your_username}/python-fast-api.git
+   cd python-fast-api
+   ```
+
+2. Create and activate a virtual environment using uv:
+   ```bash
+   uv venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   ```
+
+3. Install dependencies with uv:
+   ```bash
+   uv pip install -e .
+   ```
+
+4. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+5. Initialize the database:
+   ```bash
+   alembic upgrade head
+   ```
+
+## 🚀 Running the Application
+
+Start the development server:
+```bash
+# Development mode with auto-reload
+python server.py
+
+# Production mode with Gunicorn and uvloop
+gunicorn -c gunicorn.conf.py server:app
+```
+
+The API will be available at `http://localhost:8000`
+
+API documentation:
+- Swagger UI: `http://localhost:8000/docs`
+- ReDoc: `http://localhost:8000/redoc`
+
+### Running Background Workers
+
+The application uses RabbitMQ for background task processing. To process email notifications in the background:
+
+```bash
+# Start the email worker
+python src/cmd/email_worker.py
+```
+
+This worker connects to RabbitMQ and processes email tasks from the queue, allowing the main application to continue processing requests without waiting for emails to be sent.
+
+## 🏗️ Project Structure
+
+```
+src/
+├── app/                    # Application components
+│   ├── auth/              # Authentication module
+│   ├── user/              # User management
+│   ├── user_notification/ # Notification system
+│   └── ws/                # WebSockets implementation
+├── cmd/                    # Command-line tools
+│   └── worker/            # Background workers
+│       └── email/         # Email processing workers
+├── core/                  # Core functionality
+│   ├── di/               # Dependency injection
+│   ├── exception/         # Custom exceptions
+│   ├── http/             # HTTP-related code
+│   ├── log/              # Logging configuration
+│   ├── rabbit_mq/        # RabbitMQ integration
+│   ├── service/          # Core services
+│   ├── settings/         # Application settings
+│   └── web_socket/       # WebSockets core functionality
+└── database/              # Database configuration
+```
+
+## 📚 API Endpoints
+
+### Authentication
+- `POST /auth/signup` - Register a new user
+- `POST /auth/login` - User login
+- `POST /auth/refresh` - Refresh access token
+- `GET /auth/confirm-email` - Confirm email address
+- `POST /auth/re-send-confirm-email` - Resend confirmation email
+
+### Users
+- `GET /users` - List users
+- `POST /users` - Create a user
+- `GET /users/{user_id}` - Get user by ID
+
+### Notifications
+- `GET /user-notifications` - List user notifications
+- `POST /user-notifications` - Create a notification
+
+### WebSockets
+- `WebSocket /ws/{user_id}` - Real-time connection for user-specific notifications and updates
+
+## 🔒 Environment Variables
+
+Required environment variables are defined in `.env.example`. Copy this to `.env` and update the values:
+
+```
+# Application
+ENVIRONMENT=dev
+LOG_REQUEST=True
+LOKI_URL="http://127.0.0.1:3100"
+LOKI_ENABLED=False
+APP_NAME="App"
+SERVICE_NAME="api"
+X_API_KEY=
+
+# Database
+SQLALCHEMY_DATABASE_URI=mysqlaiomysql://user:password@host/db_name
+
+# JWT
+JWT_PUBLIC_KEY=""  # base64
+JWT_PRIVATE_KEY=""  # base64
+JWT_ALGORITHM="ES512"
+JWT_ACCESS_EXPIRATION_HOURS=8
+JWT_REFRESH_EXPIRATION_HOURS=24
+JWT_CONFIRM_TOKEN_EXP_HOURS=24
+
+# Email
+SMTP_SERVER="smtp.gmail.com"
+SMTP_PORT=587
+APP_PASSWORD="YOUR_PASSWORD"
+FROM_EMAIL="YOUR_EMAIL"
+APP_URL="http://localhost:8000"
+
+# RabbitMQ
+RABBITMQ_URL="amqp://guest:guest@localhost/"
+```
+
+## 🧪 Testing
+
+Run tests with pytest:
+```bash
+pytest
+```
+
+## 🛠️ Development
+
+### Code Quality
+
+This project enforces strict code quality standards using:
+
+- **Ruff** - An extremely fast Python linter and code formatter
+- **Mypy** - Static type checking
+- **Black** - Code formatting (via Ruff)
+- **isort** - Import sorting (via Ruff)
+
+#### Running Linters and Type Checking
+
+Run Ruff linter:
+```bash
+ruff check .
+```
+
+Run Ruff formatter:
+```bash
+ruff format .
+```
+
+Run Mypy type checking:
+```bash
+mypy .
+```
+
+### Database Migrations
+
+Create a new migration:
+```bash
+alembic revision --autogenerate -m "description of changes"
+```
+
+Apply migrations:
+```bash
+alembic upgrade head
+```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.

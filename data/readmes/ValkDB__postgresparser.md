@@ -1,0 +1,249 @@
+# postgresparser
+
+[![CI](https://github.com/valkdb/postgresparser/actions/workflows/ci.yml/badge.svg)](https://github.com/valkdb/postgresparser/actions/workflows/ci.yml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/valkdb/postgresparser.svg)](https://pkg.go.dev/github.com/valkdb/postgresparser)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+
+A pure-Go PostgreSQL parser. No cgo, no C toolchain — just `go build`.
+
+## Why postgresparser?
+
+Need to parse PostgreSQL SQL in Go but can't use cgo? Deploying to Alpine containers, Lambda, ARM, scratch images, or anywhere that requires `CGO_ENABLED=0`?
+
+`postgresparser` works everywhere `go build` works. It parses SQL into a structured intermediate representation (IR) that gives you tables, columns, joins, filters, CTEs, subqueries, and more — without executing anything.
+
+```go
+result, err := postgresparser.ParseSQL(`
+    SELECT u.name, COUNT(o.id) AS order_count
+    FROM users u
+    LEFT JOIN orders o ON o.user_id = u.id
+    WHERE u.active = true
+    GROUP BY u.name
+    ORDER BY order_count DESC
+`)
+
+fmt.Println(result.Command)       // "SELECT"
+fmt.Println(result.Tables)        // users, orders with aliases
+fmt.Println(result.Columns)       // u.name, COUNT(o.id) AS order_count
+fmt.Println(result.Where)         // ["u.active=true"]
+fmt.Println(result.JoinConditions) // ["o.user_id=u.id"]
+fmt.Println(result.GroupBy)       // ["u.name"]
+fmt.Println(result.ColumnUsage)   // each column with its role: filter, join, projection, group, order
+```
+
+For multi-statement behavior and strict mode, see [Statement Count Handling](#statement-count-handling).
+
+```go
+batch, err := postgresparser.ParseSQLAll(`
+CREATE TABLE public.api_key (
+    id integer NOT NULL
+);
+CREATE TABLE public.sometable (
+    id integer NOT NULL
+);`)
+if err != nil {
+    log.Fatal(err)
+}
+
+fmt.Println(len(batch.Statements))                              // 2
+fmt.Println(batch.Statements[0].Query.DDLActions[0].ObjectName) // "api_key"
+fmt.Println(batch.Statements[1].Query.DDLActions[0].ObjectName) // "sometable"
+```
+
+**Performance:** With [SLL prediction mode](docs/performance.md), most queries parse in **70–350 µs**.
+
+## Installation
+
+```bash
+go get github.com/valkdb/postgresparser
+```
+
+## What you can build with it
+
+- **Query linting** — detect missing WHERE on DELETEs, flag SELECT *, enforce naming conventions
+- **Dependency extraction** — map which tables and columns a query touches, build lineage graphs
+- **Migration tooling** — parse DDL to understand schema changes, diff CREATE statements
+- **Audit logging** — tag log entries with structured metadata (tables, operation type, filtered columns)
+- **Query rewriting** — inject tenant filters, add audit columns, transform SQL before execution
+- **Index advisors** — analyze column usage patterns to suggest optimal indexes
+
+## Parsing
+
+Handles the SQL you actually write in production:
+
+- **DML**: SELECT, INSERT, UPDATE, DELETE, MERGE
+- **DDL**: CREATE TABLE (columns/type/nullability/default + PK/FK/UNIQUE/CHECK constraints), CREATE INDEX, DROP TABLE/INDEX, ALTER TABLE, TRUNCATE, COMMENT ON
+- **CTEs**: `WITH ... AS` including `RECURSIVE`, materialization hints
+- **JOINs**: INNER, LEFT, RIGHT, FULL, CROSS, NATURAL, LATERAL
+- **Subqueries**: in SELECT, FROM, WHERE, and HAVING
+- **Set operations**: UNION, INTERSECT, EXCEPT (ALL/DISTINCT)
+- **Upsert**: INSERT ... ON CONFLICT DO UPDATE/DO NOTHING
+- **JSONB**: `->`, `->>`, `@>`, `?`, `?|`, `?&`
+- **Window functions**: OVER, PARTITION BY
+- **Type casts**: `::type`
+- **Parameters**: `$1`, `$2`, ...
+
+IR field reference: [ParsedQuery IR Reference](docs/parsed-query.md)
+Comment extraction guide: [Comment Extraction Guide](docs/comments.md)
+
+## Statement Count Handling
+
+Use the API variant that matches your input contract:
+
+- `ParseSQL(sql)` parses the first statement only (backward-compatible behavior).
+- `ParseSQLAll(sql)` parses all statements and returns `ParseBatchResult` with one `Statements[i]` result per input statement (`Index`, `RawSQL`, `Query`, `Warnings`).
+  - A statement failed conversion when `Statements[i].Query == nil`.
+  - Correlation is deterministic: `Statements[i].Index` maps to source statement order.
+  - `HasFailures` is `true` when any statement has a nil `Query` or any `Warnings`.
+- `ParseSQLStrict(sql)` requires exactly one statement and returns `ErrMultipleStatements` when input contains more than one.
+- `ParseSQLWithOptions(sql, opts)`, `ParseSQLAllWithOptions(sql, opts)`, and `ParseSQLStrictWithOptions(sql, opts)` expose optional extraction flags.
+  - `IncludeCreateTableFieldComments` enables inline `--` field-comment extraction in `CREATE TABLE`.
+  - `COMMENT ON` extraction is always enabled.
+
+## Supported SQL Statements
+
+See [docs/supported-statements.md](./docs/supported-statements.md) for full details on parsed commands, graceful handling (e.g. SET/SHOW/RESET), and what's currently UNKNOWN or unsupported.
+
+| Category | Statements | Status |
+|----------|-----------|--------|
+| **DML** | SELECT, INSERT, UPDATE, DELETE, MERGE | Full IR extraction |
+| **DDL** | CREATE TABLE, ALTER TABLE, DROP TABLE/INDEX, CREATE INDEX, TRUNCATE, COMMENT ON | Full IR extraction |
+| **Utility** | SET, SHOW, RESET | Graceful — returns `UNKNOWN`, no error |
+| **Other** | GRANT, REVOKE, CREATE VIEW/FUNCTION/TRIGGER, COPY, EXPLAIN, VACUUM, BEGIN/COMMIT/ROLLBACK, etc. | Not yet supported — may error or return `UNKNOWN` |
+
+## Analysis
+
+The `analysis` subpackage provides higher-level intelligence on top of the IR:
+
+- `analysis.AnalyzeSQL(sql)` analyzes the first statement only (matches `ParseSQL`).
+- `analysis.AnalyzeSQLAll(sql)` analyzes all statements and returns `SQLAnalysisBatchResult`.
+- `analysis.AnalyzeSQLStrict(sql)` requires exactly one statement (matches `ParseSQLStrict`).
+
+### Column usage analysis
+
+Know exactly how every column is used — filtering, joining, projection, grouping, ordering:
+
+```go
+result, err := analysis.AnalyzeSQL("SELECT o.id, c.name FROM orders o JOIN customers c ON o.customer_id = c.id WHERE o.status = 'active'")
+
+for _, cu := range result.ColumnUsage {
+    fmt.Printf("%s.%s → %s\n", cu.TableAlias, cu.Column, cu.UsageType)
+}
+// o.id → projection
+// c.name → projection
+// o.customer_id → join
+// c.id → join
+// o.status → filter
+```
+
+### WHERE condition extraction
+
+Pull structured conditions with operators and values:
+
+```go
+conditions, _ := analysis.ExtractWhereConditions("SELECT * FROM orders WHERE status = 'active' AND total > 100")
+
+for _, c := range conditions {
+    fmt.Printf("%s %s %v\n", c.Column, c.Operator, c.Value)
+}
+// status = active
+// total > 100
+```
+
+In multi-table queries, unqualified columns have an empty `Table`. Pass schema
+metadata to resolve them:
+
+```go
+schema := map[string][]analysis.ColumnSchema{
+    "orders":    {{Name: "id", IsPrimaryKey: true}, {Name: "customer_id"}, {Name: "total"}},
+    "customers": {{Name: "id", IsPrimaryKey: true}, {Name: "country"}},
+}
+
+conditions, _ := analysis.ExtractWhereConditionsWithSchema(
+    "SELECT * FROM orders o JOIN customers c ON o.customer_id = c.id WHERE total > 100",
+    schema,
+)
+// conditions[0].Table == "orders" — only orders has a "total" column
+```
+
+### Placeholder roles
+
+`AnalyzeSQL` exposes the syntactic role of each `?` or `$N` placeholder without
+re-parsing or scanning SQL text:
+
+```go
+result, _ := analysis.AnalyzeSQL("SELECT * FROM t WHERE id = ? LIMIT ?")
+for _, p := range result.Placeholders {
+    fmt.Printf("placeholder %d: role=%s\n", p.Index, p.Role)
+}
+// Output:
+//   placeholder 1: role=where_value
+//   placeholder 2: role=limit
+```
+
+Roles cover common placeholder positions such as predicate values, function
+arguments, `GROUP BY` and `ORDER BY` ordinals, `LIMIT`, `OFFSET`, `INTERVAL`,
+array members, `INSERT` values, and `UPDATE SET` values. This supports generic
+use cases such as ORM type-checking, query rewriting, SQL linting, and
+normalized-SQL inspection.
+
+### Schema-aware JOIN relationship detection
+
+Pass in your schema metadata and get back foreign key relationships — no heuristic guessing:
+
+```go
+schema := map[string][]analysis.ColumnSchema{
+    "customers": {
+        {Name: "id", PGType: "bigint", IsPrimaryKey: true},
+        {Name: "name", PGType: "text"},
+    },
+    "orders": {
+        {Name: "id", PGType: "bigint", IsPrimaryKey: true},
+        {Name: "customer_id", PGType: "bigint"},
+    },
+}
+
+joins, _ := analysis.ExtractJoinRelationshipsWithSchema(
+    "SELECT * FROM orders o JOIN customers c ON o.customer_id = c.id",
+    schema,
+)
+// orders.customer_id → customers.id
+```
+
+### DDL extraction
+
+For `CREATE TABLE` parsing, see [`examples/ddl/`](examples/ddl/).
+
+## Performance
+
+With SLL prediction mode, `postgresparser` parses most queries in **70–350 µs** with minimal allocations. The IR extraction layer accounts for only ~3% of CPU — the rest is ANTLR's grammar engine, which SLL mode keeps fast.
+
+See the [Performance Guide](docs/performance.md) for benchmarks, profiling results, and optimization details.
+
+## Examples
+
+See the [`examples/`](examples/) directory:
+
+- [`basic/`](examples/basic/) — Parse SQL and inspect the IR
+- [`analysis/`](examples/analysis/) — Column usage, WHERE conditions, JOIN relationships
+- [`ddl/`](examples/ddl/) — Parse CREATE TABLE / ALTER TABLE plus DELETE command metadata
+- [`multi_statement/`](examples/multi_statement/) — Correlate `ParseSQLAll` output back to each input statement and detect failures (`Query == nil`)
+- [`sll_mode/`](examples/sll_mode/) — SLL prediction mode for maximum throughput
+
+## Grammar
+
+Built on ANTLR4 grammar files in `grammar/`. To regenerate after modifying:
+
+```bash
+antlr4 -Dlanguage=Go -visitor -listener -package gen -o gen grammar/PostgreSQLLexer.g4 grammar/PostgreSQLParser.g4
+```
+
+## Compatibility
+
+This is an ANTLR4-based grammar, not PostgreSQL's internal server parser. Some edge-case syntax may differ across PostgreSQL versions. If you find a query that parses in PostgreSQL but fails here, please [open an issue](https://github.com/valkdb/postgresparser/issues) with a minimal repro.
+
+`ParseSQL` processes the first SQL statement for backward compatibility. For multi-statement input, use `ParseSQLAll`; to enforce exactly one statement, use `ParseSQLStrict`.
+
+## License
+
+Apache License 2.0 — see [LICENSE](LICENSE) for details.

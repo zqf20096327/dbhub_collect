@@ -1,0 +1,560 @@
+# pgBackRest Exporter
+
+[![Actions Status](https://github.com/woblerr/pgbackrest_exporter/workflows/build/badge.svg)](https://github.com/woblerr/pgbackrest_exporter/actions)
+[![Coverage Status](https://coveralls.io/repos/github/woblerr/pgbackrest_exporter/badge.svg?branch=master)](https://coveralls.io/github/woblerr/pgbackrest_exporter?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/woblerr/pgbackrest_exporter)](https://goreportcard.com/report/github.com/woblerr/pgbackrest_exporter)
+
+Prometheus exporter for [pgBackRest](https://pgbackrest.org/).
+
+The metrics are collected based on result of `pgbackrest info --output json` command. By default, the metrics are collected for all stanzas received by command. You can specify stanzas to collect metrics. You need to run exporter on the same host where pgBackRest was installed or inside Docker.
+
+## Grafana dashboard
+
+To get a dashboard for visualizing the collected metrics, you can use a ready-made dashboard [pgBackRest Exporter Dashboard](https://grafana.com/grafana/dashboards/17709-pgbackrest-exporter-dashboard/) or make your own.
+
+## Collected metrics
+### Stanza metrics
+
+| Metric | Description |  Labels | Additional Info |
+| ----------- | ------------------ | ------------- | --------------- |
+| `pgbackrest_stanza_backup_complete_bytes` | completed size for backup in progress | stanza | |
+| `pgbackrest_stanza_backup_total_bytes` | total size for backup in progress | stanza | |
+| `pgbackrest_stanza_backup_repo_complete_bytes` | completed size for backup in progress per repository | repo_key, stanza | |
+| `pgbackrest_stanza_backup_repo_total_bytes` | total size for backup in progress per repository | repo_key, stanza | |
+| `pgbackrest_stanza_backup_lock_status` | current stanza backup lock status | stanza | Values description:<br> `0` - no active operation with stanza,<br> `1` - one of the commands is running for stanza: backup, expire or stanza-*. |
+| `pgbackrest_stanza_restore_complete_bytes` | completed size for restore in progress | stanza | |
+| `pgbackrest_stanza_restore_total_bytes` | total size for restore in progress | stanza | |
+| `pgbackrest_stanza_restore_lock_status` | current stanza restore lock status | stanza | Values description:<br> `0` - no active restore,<br> `1` - restore is in progress. |
+| `pgbackrest_stanza_status` | current stanza status | stanza | Values description:<br> `0` - ok,<br> `1` - missing stanza path,<br> `2` - no valid backups,<br> `3` - missing stanza data,<br> `4` - different across repos,<br> `5` - database mismatch across repos,<br> `6` - requested backup not found,<br> `99` - other. |
+
+### Repository metrics
+
+| Metric | Description |  Labels | Additional Info |
+| ----------- | ------------------ | ------------- | --------------- |
+| `pgbackrest_repo_status` | current repository status | cipher, repo_key, stanza | Values description:<br> `0` - ok,<br> `1` - missing stanza path,<br> `2` - no valid backups,<br> `3` - missing stanza data,<br> `4` - different across repos,<br> `5` - database mismatch across repos,<br> `6` - requested backup not found,<br> `99` - other |
+
+### Backup metrics
+
+| Metric | Description |  Labels | Additional Info |
+| ----------- | ------------------ | ------------- | --------------- |
+| `pgbackrest_backup_annotations` | number of annotations in backup | backup_name, backup_type, database_id, block_incr, repo_key, stanza | |
+| `pgbackrest_backup_databases` | number of databases in backup | backup_name, backup_type, block_incr, database_id, repo_key, stanza | |
+| `pgbackrest_backup_references` | number of references to other backups (backup reference list) | backup_name, backup_type, block_incr, database_id, ref_backup, repo_key, stanza | |
+| `pgbackrest_backup_duration_seconds` | backup duration in seconds | backup_name, backup_type, block_incr, database_id, repo_key, stanza, start_time, stop_time | |
+| `pgbackrest_backup_error_status` | backup error status | backup_name, backup_type, block_incr, database_id, repo_key, stanza | Values description:<br> `0` - backup doesn't contain page checksum errors,<br> `1` - backup contains one or more page checksum errors. To display the list of errors, you need manually run the command like `pgbackrest info --stanza stanza --set backup_name --repo repo_key`. |
+| `pgbackrest_backup_info` | backup info | backrest_ver, backup_name, backup_type, block_incr, database_id, lsn_start, lsn_stop, pg_version, prior, repo_key, stanza, wal_start, wal_stop | Values description:<br> `1` - info about backup is exist. |
+| `pgbackrest_backup_delta_bytes` | amount of data in the database to actually backup | backup_name, backup_type, block_incr, database_id, repo_key, stanza | |
+| `pgbackrest_backup_size_bytes` | full uncompressed size of the database | backup_name, backup_type, block_incr, database_id, repo_key, stanza | |
+| `pgbackrest_backup_repo_delta_bytes` | compressed files size in backup | backup_name, backup_type, block_incr, database_id, repo_key, stanza | |
+| `pgbackrest_backup_repo_size_bytes` | full compressed files size to restore the database from backup | backup_name, backup_type, block_incr, database_id, repo_key, stanza | |
+| `pgbackrest_backup_repo_delta_map_bytes` | size of block incremental delta map | backup_name, backup_type, block_incr, database_id, repo_key, stanza | |
+| `pgbackrest_backup_repo_size_map_bytes` | size of block incremental map | backup_name, backup_type, block_incr, database_id, repo_key, stanza | |
+
+### Last backup metrics
+
+| Metric | Description |  Labels | Additional Info |
+| ----------- | ------------------ | ------------- | --------------- |
+| `pgbackrest_backup_since_last_completion_seconds` | seconds since the last completed full, differential or incremental backup | backup_type, block_incr, stanza | |
+| `pgbackrest_backup_repo_since_last_completion_seconds` | seconds since the last completed full, differential or incremental backup in repository | backup_type, block_incr, repo_key, stanza | |
+| `pgbackrest_backup_repo_last_duration_seconds` | backup duration for the last full, differential or incremental backup in repository | backup_type, block_incr, repo_key, stanza | |
+| `pgbackrest_backup_last_annotations` | number of annotations in the last full, differential or incremental backup | backup_type, block_incr, stanza | |
+| `pgbackrest_backup_last_databases` | number of databases in the last full, differential or incremental backup | backup_type, block_incr, stanza | |
+| `pgbackrest_backup_last_references` | number of references to other backups (backup reference list) in the last full, differential or incremental backup | backup_type, block_incr, ref_backup, stanza | |
+| `pgbackrest_backup_last_duration_seconds` | backup duration for the last full, differential or incremental backup | backup_type, block_incr, stanza | |
+| `pgbackrest_backup_last_error_status` | error status in the last full, differential or incremental backup | backup_type, block_incr, stanza | |
+| `pgbackrest_backup_last_delta_bytes` | amount of data in the database to actually backup in the last full, differential or incremental backup | backup_type, block_incr, stanza | |
+| `pgbackrest_backup_last_size_bytes` | full uncompressed size of the database in the last full, differential or incremental backup | backup_type, block_incr, stanza | |
+| `pgbackrest_backup_last_repo_delta_bytes` | compressed files size in the last full, differential or incremental backup | backup_type, block_incr, stanza | |
+| `pgbackrest_backup_last_repo_size_bytes` | full compressed files size to restore the database from the last full, differential or incremental backup | backup_type, block_incr, stanza | |
+| `pgbackrest_backup_last_repo_size_map_bytes` | size of block incremental map in the last full, differential or incremental backup | backup_type, block_incr, stanza | |
+| `pgbackrest_backup_last_repo_delta_map_bytes` | size of block incremental delta map in the last full, differential or incremental backup | backup_type, block_incr, stanza | |
+
+### WAL metrics
+| Metric | Description |  Labels | Additional Info |
+| ----------- | ------------------ | ------------- | --------------- |
+| `pgbackrest_wal_archive_status` | current WAL archive status | database_id, pg_version, repo_key, stanza, wal_max, wal_min | Values description:<br> `0` - any one of WALMin and WALMax have empty value, there is no correct information about WAL archiving,<br> `1` - both WALMin and WALMax have no empty values, there is correct information about WAL archiving. |
+
+### pgBackRest metrics
+| Metric | Description |  Labels | Additional Info |
+| ----------- | ------------------ | ------------- | --------------- |
+| `pgbackrest_version_info` | information about pgBackRest version | | Values description:<br> `0` - pgBackRest version information unavailable. |
+
+### Exporter metrics
+
+| Metric | Description |  Labels | Additional Info |
+| ----------- | ------------------ | ------------- | --------------- |
+| `pgbackrest_exporter_build_info` | information about pgBackRest exporter | branch, goarch, goos, goversion, revision, tags, version | |
+| `pgbackrest_exporter_status` | pgBackRest exporter get data status | stanza | Values description:<br> `0` - errors occurred when fetching information from pgBackRest,<br> `1` - information successfully fetched from pgBackRest. |
+
+### Additional description of metrics
+
+For `pgbackrest_*_last_*` metrics for differential backups (`backup_type="diff"`) the following logic is applied:
+* if the last backup was full, the metric will take full backup value;
+* otherwise, the value will be set.
+
+For `pgbackrest_*_last_*` metrics for incremental backups (`backup_type="incr"`) the following logic is applied:
+* if the last backup was full or differential, the metric will take full or differential backup value;
+* otherwise, the value will be set.
+
+For `pgbackrest_exporter_status` metric the following logic is applied:
+* if the information is collected for all available stanzas, the `stanza` label value will be `all-stanzas`;
+* if the information is collected for all available stanzas except excluded, the `stanza` label value will be `all-stanzas-except-excluded`;
+* otherwise, the stanza name will be set.
+
+If `pgbackrest_stanza_backup_lock_status` metric is `1`, then one of the commands is running for stanza: `backup`, `expire` or `stanza-*`.
+With a very high probability it is `backup/expire`.
+
+For `pgBackRest >= v2.48` it is possible to determine whether the backup is running:
+* if `pgbackrest_stanza_backup_complete_bytes` and `pgbackrest_stanza_backup_total_bytes` metrics are different from `0` and `pgbackrest_stanza_backup_lock_status` metric is equal to `1`, then a backup is running;
+* if `pgbackrest_stanza_backup_complete_bytes` and `pgbackrest_stanza_backup_total_bytes` metrics are equal to `0` and `pgbackrest_stanza_backup_lock_status` metric is equal to `1`, then one of the commands is running for stanza: `expire` or `stanza-*`. With a very high probability it is `expire`.
+
+For `pgBackRest >= v2.56.0` it is possible to determine whether a restore is running:
+* if `pgbackrest_stanza_restore_lock_status` metric is `1`, a restore is in progress;
+* `pgbackrest_stanza_restore_complete_bytes` and `pgbackrest_stanza_restore_total_bytes` metrics show the progress of the restore.
+
+For `pgbackrest_stanza_backup_repo_complete_bytes` and `pgbackrest_stanza_backup_repo_total_bytes` metrics the following logic is applied:
+* for `pgBackRest >= v2.59.0`, metrics contain actual progress for repositories with an active backup; configured repositories without an active backup retain value `0`;
+* for `pgBackRest >= v2.32` but `pgBackRest < v2.59.0`, metrics always return `0`, the `repo_key` label values are taken from the stanza repository configuration;
+* for `pgBackRest < v2.32`, metrics use `repo_key="0"` with value `0`.
+
+For `pgBackRest >= v2.32`, metrics are emitted for every repository in the stanza repository list to keep the `repo_key` label set stable when backups start or stop.
+
+For `pgbackrest_version_info` metric the value is pgBackRest version in numeric format (e.g., `2057000` for version `2.57.0`).
+
+## Compatibility with pgBackRest versions
+
+The number of collected metrics may vary depending on pgBackRest version.
+
+For different versions, some metrics may not be collected or have insignificant label values:
+
+* `pgBackRest < v2.59.0`
+
+    The following metrics will always be `0`:
+    * `pgbackrest_stanza_backup_repo_complete_bytes`,
+    * `pgbackrest_stanza_backup_repo_total_bytes`.
+
+    The `repo_key` label uses values from the stanza repository list (for `pgBackRest >= v2.32`) or `repo_key="0"` (for `pgBackRest < v2.32`).
+
+* `pgBackRest < v2.56.0`
+
+    The following metrics will always be `0`:
+    * `pgbackrest_stanza_restore_lock_status`,
+    * `pgbackrest_stanza_restore_complete_bytes`,
+    * `pgbackrest_stanza_restore_total_bytes`.
+
+* `pgbackrest < v2.55.0`
+
+    The following metrics will always be `0`:
+    * `pgbackrest_version_info`.
+
+* `pgBackRest < v2.48`
+
+    The following metrics will always be `0`:
+    * `pgbackrest_stanza_backup_complete_bytes`,
+    * `pgbackrest_stanza_backup_total_bytes`.
+
+* `pgBackRest >= v2.45`
+
+    For `pgbackrest_backup_repo_size_bytes` metric the values will be `0` for block incremental backups.
+
+* `pgBackRest < v2.44`
+
+    The following metrics will always be `0`:
+    * `pgbackrest_backup_repo_size_map_bytes`,
+    * `pgbackrest_backup_repo_delta_map_bytes`.
+
+    For `pgbackrest_backup_*` metrics the label will be `block_incr="n"`.
+
+* `pgBackRest < v2.41`
+
+    The following metrics will always be `0`:
+    * `pgbackrest_backup_databases`,
+    * `pgbackrest_backup_last_databases`,
+    * `pgbackrest_backup_annotations`,
+    * `pgbackrest_backup_last_annotations`.
+
+* `pgBackRest < v2.38`
+
+    For `pgbackrest_backup_info` metric the labels will be `lsn_start="-"` and `lsn_stop="-"`.
+
+* `pgBackRest < v2.36`
+
+    The following metrics will always be `0`:
+    * `pgbackrest_backup_error_status`.
+
+* `pgBackRest < v2.32`
+
+    The following metrics will always be `0`:
+    * `pgbackrest_repo_status`.
+
+    For all metrics the label will be `repo_key="0"`.
+
+## Getting Started
+### Building and running
+
+```bash
+git clone https://github.com/woblerr/pgbackrest_exporter.git
+cd pgbackrest_exporter
+make build
+./pgbackrest_exporter <flags>
+```
+
+Available configuration flags:
+
+```bash
+./pgbackrest_exporter --help
+usage: pgbackrest_exporter [<flags>]
+
+
+Flags:
+  -h, --[no-]help                Show context-sensitive help (also try --help-long and --help-man).
+      --web.telemetry-path="/metrics"  
+                                 Path under which to expose metrics.
+      --web.listen-address=:9854 ...  
+                                 Addresses on which to expose metrics and web interface. Repeatable for multiple addresses. Examples: `:9100` or `[::1]:9100` for http, `vsock://:9100` for vsock
+      --web.config.file=""       Path to configuration file that can enable TLS or authentication. See:
+                                 https://github.com/prometheus/exporter-toolkit/blob/master/docs/web-configuration.md
+      --collect.interval=600     Collecting metrics interval in seconds.
+      --backrest.config=""       Full path to pgBackRest configuration file.
+      --backrest.config-include-path=""  
+                                 Full path to additional pgBackRest configuration files.
+      --backrest.stanza-include="" ...  
+                                 Specific stanza for collecting metrics. Can be specified several times.
+      --backrest.stanza-exclude="" ...  
+                                 Specific stanza to exclude from collecting metrics. Can be specified several times.
+      --backrest.backup-type=""  Specific backup type for collecting metrics. One of: [full, incr, diff].
+      --[no-]backrest.database-count  
+                                 Exposing the number of databases in backups.
+      --backrest.database-parallel-processes=1  
+                                 Number of parallel processes for collecting information about databases.
+      --[no-]backrest.database-count-latest  
+                                 Exposing the number of databases in the latest backups.
+      --[no-]backrest.reference-count  
+                                 Exposing the number of references to other backups (backup reference list).
+      --[no-]backrest.verbose-wal  
+                                 Exposing additional labels for WAL metrics.
+      --[no-]collector.pgbackrest  
+                                 Enable pgBackRest collector. When disabled, only pgBackRest version and exporter build info are collected.
+      --log.level=info           Only log messages with the given severity or above. One of: [debug, info, warn, error]
+      --log.format=logfmt        Output format of log messages. One of: [logfmt, json]
+      --[no-]version             Show application version.
+```
+
+#### Additional description of flags
+
+Custom `config` and/or custom `config-include-path` for `pgbackrest` command can be specified via `--backrest.config` and `--backrest.config-include-path` flags. Full paths must be specified.<br>
+For example, `--backrest.config=/tmp/pgbackrest.conf` and/or `--backrest.config-include-path=/tmp/pgbackrest/conf.d`.
+
+Custom `stanza` for collecting metrics can be specified via `--backrest.stanza-include` flag. You can specify several stanzas.<br>
+For example, `--backrest.stanza-include=demo1 --backrest.stanza-include=demo2`.<br>
+For this case, metrics will be collected only for `demo1` and `demo2` stanzas.
+
+Custom `stanza` to exclude from collecting metrics can be specified via `--backrest.stanza-exclude` flag. You can specify several stanzas.<br>
+For example, `--backrest.stanza-exclude=demo1 --backrest.stanza-exclude=demo2`.<br>
+For this case, metrics **will not be collected** for `demo1` and `demo2` stanzas.<br>
+If the same stanza is specified for include and exclude flags, then metrics for this stanza will not be collected. 
+The flag `--backrest.stanza-exclude` has a higher priority.<br>
+For example, `--backrest.stanza-include=demo1 --backrest.stanza-exclude=demo1`.<br>
+For this case, metrics **will not be collected** for `demo1` stanza.<br>
+When flag `--backrest.stanza-exclude` is specified, the `pgbackrest_exporter_status` metric will have label `stanza=all-stanzas-except-excluded`.
+
+When flag `--backrest.verbose-wal` is specified - WALMin and WALMax are added as metric labels.<br>
+This creates new different time series on each WAL archiving.
+
+When `--log.level=debug` is specified - information of values and labels for metrics is printing to the log.
+
+The flag `--web.config.file` allows to specify the path to the configuration for TLS and/or basic authentication.<br>
+The description of TLS configuration and basic authentication can be found at [exporter-toolkit/web](https://github.com/prometheus/exporter-toolkit/blob/v0.19.0/docs/web-configuration.md).
+
+Custom `backup type` for collecting metrics can be specified via `--backrest.backup-type` flag. Valid values: `full`, `incr` or `diff`.<br>
+For example, `--backrest.backup-type=full`.<br>
+For this case, metrics will be collected only for `full` backups.<br>
+This flag works for `pgBackRest >= v2.38`.<br>
+When parameter value is `incr` or `diff`, all `pgbackrest_backup_last_*` metrics will not be collected.<br>
+When parameter value is `full`, the metrics will be as if the last backup was `full` (i.e. the same for `diff` and `incr`).<br>
+For earlier pgBackRest versions there will be an error like: `option 'type' not valid for command 'info'`.
+
+When flag `--backrest.database-count` is specified - information about the number of databases in backup is collected.<br>
+This flag works for `pgBackRest >= v2.41`.<br>
+For earlier pgBackRest versions there will be an error like: `option 'set' is currently only valid for text output`.<br>
+For a significant numbers of stanzas and backups, this may require much more additional time to collect metrics. Each stanza requires pgBackRest execution for backups to get data.
+
+The flag `--backrest.database-parallel-processes` allows to increase the number of parallel processes for collecting information about databases in backups.<br>
+This flag is valid only when the flag `--backrest.database-count` is specified.
+
+When flag `--backrest.database-count-latest` is specified - information about the number of databases in the last full, differential or incremental backup is collected.<br>
+This flag works for `pgBackRest >= v2.41`.<br>
+For earlier pgBackRest versions there will be an error like: `option 'set' is currently only valid for text output`.<br>
+For a significant number of stanzas, this may require additional time to collect metrics. Each stanza requires pgBackRest execution for the last full, differential or incremental backups to get data.
+
+When the `--backrest.reference-count` flag is specified, information about the number of references to other backups (backup reference list) is collected.<br>
+The `pgbackrest_backup_references` metric can be a little annoying. This metric is hidden behind the flag. However, the `pgbackrest_backup_last_references` metric is always collected for the latest backups.
+
+When the `--no-collector.pgbackrest` flag is specified, only `pgbackrest_version_info` and `pgbackrest_exporter_build_info` metrics will be collected.<br>
+This is useful for lightweight monitoring for comparing pgBackRest versions in a large environment.<br>
+
+### Building and running docker
+
+By default, pgBackRest version is `2.59.1`. Another version can be specified via arguments.
+For base image used [docker-pgbackrest](https://github.com/woblerr/docker-pgbackrest) image.
+
+Environment variables supported by this image:
+* all environment variables from [docker-pgbackrest](https://github.com/woblerr/docker-pgbackrest#docker-pgbackrest)  image;
+* `EXPORTER_TELEMETRY_PATH` - path under which to expose metrics, default `/metrics`;
+* `EXPORTER_PORT` - port for prometheus metrics to listen on, default `9854`;
+* `EXPORTER_CONFIG` - path to the configuration file for TLS and/or basic authentication, default `""`;
+* `STANZA_INCLUDE` - specific stanza for collecting metrics, default `""`;
+* `STANZA_EXCLUDE` - specific stanza to exclude from collecting metrics, default `""`;
+* `COLLECT_INTERVAL` - collecting metrics interval in seconds, default `600`;
+* `BACKUP_TYPE` - specific backup type for collecting metrics, default `""`;
+* `VERBOSE_WAL` - enabling additional labels for WAL metrics, default `false`;
+* `DATABASE_COUNT` - exposing the number of databases in backups, default `false`;
+* `DATABASE_PARALLEL_PROCESSES` - number of parallel processes for collecting information about databases in backups, default `1`;
+* `DATABASE_COUNT_LATEST` - exposing the number of databases in the latest backups, default `false`;
+* `COLLECTOR_PGBACKREST` - enable pgBackRest collector; when disabled, only pgBackRest version and exporter build info are collected, default `true`;
+
+#### Pull
+
+Change `tag` to the release number.
+
+* Docker Hub:
+
+```bash
+docker pull woblerr/pgbackrest_exporter:tag
+```
+
+```bash
+docker pull woblerr/pgbackrest_exporter:tag-alpine
+```
+
+* GitHub Registry:
+
+```bash
+docker pull ghcr.io/woblerr/pgbackrest_exporter:tag
+```
+
+```bash
+docker pull ghcr.io/woblerr/pgbackrest_exporter:tag-alpine
+```
+
+#### Build
+
+```bash
+make docker
+```
+
+```bash
+make docker-alpine
+```
+
+or for specific pgBackRest version
+
+```bash
+docker build -f Dockerfile --build-arg BACKREST_VERSION=2.34 -t pgbackrest_exporter .
+```
+
+```bash
+docker build -f Dockerfile --build-arg BACKREST_VERSION=2.34-alpine -t pgbackrest_exporter-alpine .
+```
+
+#### Run
+
+You will need to mount the necessary directories or files inside the container.
+
+Simple run:
+
+```bash
+docker run -d \
+    --name pgbackrest_exporter \
+    -p 9854:9854 \
+    -v  /etc/pgbackrest/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf \ 
+    pgbackrest_exporter
+```
+
+With some enviroment variables:
+
+```bash
+docker run -d \
+    --name pgbackrest_exporter \
+    -e BACKREST_USER=postgres \
+    -e BACKREST_UID=1001 \
+    -e BACKREST_GROUP=postgres \
+    -e BACKREST_GID=1001 \
+    -e TZ=America/Chicago \
+    -e COLLECT_INTERVAL=60 \
+    -p 9854:9854 \
+    -v  /etc/pgbackrest/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf \
+    pgbackrest_exporter
+```
+
+For specific stanza:
+
+```bash
+docker run -d \
+    --name pgbackrest_exporter \
+    -e STANZA_INCLUDE=demo \
+    -p 9854:9854 \
+    -v  /etc/pgbackrest/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf \
+    pgbackrest_exporter
+```
+
+If you want to specify several stanzas for collecting metrics, 
+you can run containers on different ports:
+
+```bash
+docker run -d \
+    --name pgbackrest_exporter_demo1 \
+    -e STANZA_INCLUDE=demo1 \
+    -p 9854:9854 \
+    -v  /etc/pgbackrest/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf \
+    pgbackrest_exporter
+
+docker run -d \
+    --name pgbackrest_exporter_demo2 \
+    -e STANZA_INCLUDE=demo2 \
+    -p 9855:9854 \
+    -v  /etc/pgbackrest/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf \
+    pgbackrest_exporter
+```
+
+To exclude specific stanza:
+
+```bash
+docker run -d \
+    --name pgbackrest_exporter \
+    -e STANZA_EXCLUDE=demo \
+    -p 9854:9854 \
+    -v  /etc/pgbackrest/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf \
+    pgbackrest_exporter
+```
+
+For specific backup type:
+
+```bash
+docker run -d \
+    --name pgbackrest_exporter \
+    -e BACKUP_TYPE=full \
+    -p 9854:9854 \
+    -v  /etc/pgbackrest/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf \
+    pgbackrest_exporter
+```
+
+With exposing the number of databases in backups:
+
+```bash
+docker run -d \
+    --name pgbackrest_exporter \
+    -e DATABASE_COUNT=true \
+    -p 9854:9854 \
+    -v  /etc/pgbackrest/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf \
+    pgbackrest_exporter
+```
+
+With exposing the number of databases in the latest backups:
+
+```bash
+docker run -d \
+    --name pgbackrest_exporter \
+    -e DATABASE_COUNT_LATEST=true \
+    -p 9854:9854 \
+    -v  /etc/pgbackrest/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf \
+    pgbackrest_exporter
+```
+
+To communicate with pgBackRest TLS server you need correct pgBackRest config, for example:
+
+```ini
+[demo]
+pg1-path=/var/lib/postgresql/16/main
+
+[global]
+repo1-host=backup
+repo1-host-ca-file=/etc/pgbackrest/cert/pgbackrest-test-ca.crt
+repo1-host-cert-file=/etc/pgbackrest/cert/pgbackrest-test-client.crt
+repo1-host-key-file=/etc/pgbackrest/cert/pgbackrest-test-client.key
+repo1-host-type=tls
+repo1-retention-diff=2
+repo1-retention-full=2
+```
+
+And run:
+
+```bash
+docker run -d \
+    --name pgbackrest_exporter \
+    -e BACKREST_UID=1001 \
+    -e BACKREST_GID=1001 \
+    -p 9854:9854 \
+    -v /etc/pgbackrest/pgbackrest.conf:/etc/pgbackrest/pgbackrest.conf \
+    -v /etc/pgbackrest/cert:/etc/pgbackrest/cert \
+    pgbackrest_exporter
+```
+
+### Running as systemd service
+
+* Register `pgbackrest_exporter` (already builded, if not - exec `make build` before) as a systemd service:
+
+```bash
+make prepare-service
+```
+
+Validate prepared file `pgbackrest_exporter.service` and run:
+
+```bash
+sudo make install-service
+```
+
+* View service logs:
+
+```bash
+journalctl -u pgbackrest_exporter.service
+```
+
+* Delete systemd service:
+
+```bash
+sudo make remove-service
+```
+
+---
+Manual register systemd service:
+
+```bash
+cp pgbackrest_exporter.service.template pgbackrest_exporter.service
+```
+
+In file `pgbackrest_exporter.service` replace `{PATH_TO_FILE}` to full path to `pgbackrest_exporter`.
+
+```bash
+sudo cp pgbackrest_exporter.service /etc/systemd/system/pgbackrest_exporter.service
+sudo systemctl daemon-reload
+sudo systemctl enable pgbackrest_exporter.service
+sudo systemctl restart pgbackrest_exporter.service
+systemctl -l status pgbackrest_exporter.service
+```
+
+### RPM/DEB packages
+
+You can use the already prepared rpm/deb package to install the exporter. Only the pgbackrest_exporter binary  and the service file are installed by package.
+
+For example:
+```bash
+rpm -ql pgbackrest_exporter
+
+/etc/systemd/system/pgbackrest_exporter.service
+/usr/bin/pgbackrest_exporter
+```
+
+### Running tests
+
+Run the unit tests:
+
+```bash
+make test
+```
+
+Run the end-to-end tests:
+
+```bash
+make test-e2e
+```

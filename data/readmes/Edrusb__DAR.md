@@ -1,0 +1,102 @@
+
+
+
+	DAR  -  D i s k    A R c h i v e
+
+
+
+PRESENTATION
+================
+Dar is a shell interface to the *libdar* library. This library
+is provided here beside dar and can also be accessed through Web
+interface (https://edrusb.github.io/webdar/) as well as desktop
+applications and more as listed here:
+http://dar.linux.free.fr/doc/presentation.html#external_tools
+
+
+FEATURES
+================
+The libdar library features include *in particular*:
+- *full*, *differential*, *incremental* and *decremental* backups
+- *binary delta* (including recursive binary delta with incremental backups)
+- directory tree *snapshots* (for later comparing or base of a diff backup)
+- catalog *isolation* (small file containing the table of content of a backup)
+  can be used as rescue in case of corruption or as reference for incrementa
+  and differential backup in place of the backup itself
+- selective *compression* (not compressing already compressed files)
+- Strong *encryption* (symmetric and asymmetric keys supported)
+- *multi-threading* support for compression and encryption
+- *remote backup* storage (FTP and SFTP)
+- backup *slicing* in several files a given size
+- *hard-links* and any inode type backup and restoration
+- *sparse file* handling
+- *Extended Attributes* support (Linux ACL, MacOS file Forks...)
+- Path based *filtering*
+- Filename based filtering
+- File-system based filtering
+- Extended Attribute based filtering
+- All filters are available at backup but also at restoration time
+- *Cache Directory Tagging Standard* automatic directory exclusion
+- backup *repairing* or catalog regeneration (for example in case of
+  storage saturation during a backup operation)
+- very *fast and efficient restoration* (even of a few files from a huge
+  multi terabytes backup)
+- *hooks for user scripts* to run at slice boundary and/or before and after
+  backing up some given files and directories.
+- *Database* to ease the restoration from a large amount of full,
+  differential, incremental backups eventually using binary delta
+- backup *merging* and *sub-setting* (without restoration to file-system)
+for the main features...
+
+On the command-line side, dar is the main command to handle 90% of
+libdar features. But some features are better handled from separated
+commands (though still relying on libdar):
+Actually the Dar project include a set of six command-line programs beside the
+libdar library:
+        dar
+        dar_xform
+        dar_slave
+        dar_manager
+        dar_cp
+        dar_split
+
+with in addition:
+        dar_static (statically linked version of dar, not all system
+	            support static linking)
+        dar_cp_static (statically linked version of dar_cp)
+
+
+LICENSING
+================
+The whole Dar project, including thus the libdar library is licensed
+under the terms of the GNU General Public License (GPL in the following).
+This means you can link libdar to your programs at the condition your
+programs are also covered by the GPL, which says in particular that
+you must provide source code of your programs. See COPYING file for details.
+
+
+SUPPORTED OS
+================
+Dar and libdar are available under:
+ - Linux (almost all distros do provide packages of dar and libdar)
+ - Windows (95, 2000, NT, XP, 7, 8, 10...),
+ - OpenSolaris,
+ - FreeBSD
+ - NetBSD,
+ - Mac OS X,
+ - Rasperry Pi
+...for the known platform+OS it has been tested against or reported
+to be working on.
+
+
+DOCUMENTATION
+==============
+Documentation is embedded in the code and built during the compilation
+ process, see doc/README. A built version is also available online at:
+ http://dar.linux.free.fr/doc
+
+
+INSTALLATION
+==============
+see INSTALL file
+

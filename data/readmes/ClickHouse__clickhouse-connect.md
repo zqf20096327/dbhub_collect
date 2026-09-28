@@ -1,0 +1,118 @@
+## ClickHouse Connect
+
+[![clickhouse-connect on PyPI](https://img.shields.io/pypi/v/clickhouse-connect?label=clickhouse-connect)](https://pypi.org/project/clickhouse-connect/)
+[![clickhouse-connect-core on PyPI](https://img.shields.io/pypi/v/clickhouse-connect-core?label=clickhouse-connect-core)](https://pypi.org/project/clickhouse-connect-core/)
+
+A high performance core database driver for connecting ClickHouse to Python, Pandas, and Superset
+
+* Pandas DataFrames (numpy and arrow-backed). Requires pandas 2.0 or later.
+* Numpy Arrays
+* PyArrow Tables
+* Polars DataFrames
+* Superset Connector
+* SQLAlchemy Core (select, joins, lightweight deletes; limited feature set)
+
+ClickHouse Connect uses the ClickHouse HTTP interface for maximum compatibility. An experimental
+[chDB](https://clickhouse.com/docs/chdb) backend is also available for running queries against an embedded
+in-process engine with `get_client(interface='chdb')`. Install it with `pip install clickhouse-connect[chdb]`.
+
+### Installation
+
+```
+pip install clickhouse-connect
+```
+
+ClickHouse Connect requires Python 3.10 or higher.
+
+#### Upgrading from 0.x
+
+The 1.0 release includes breaking changes. If you are upgrading from a 0.15.x or earlier release, see [MIGRATION.md](MIGRATION.md) for a guide to the changes and their replacements.
+
+### Releases
+
+`clickhouse-connect` and the optional `clickhouse-connect-core` Rust binding are versioned independently.
+The badges above show their latest published PyPI versions.
+[GitHub Releases](https://github.com/ClickHouse/clickhouse-connect/releases) track `clickhouse-connect`.
+See the [driver changelog](CHANGELOG.md) and the [core binding changelog](rust/ch-core-py/CHANGELOG.md) for release notes.
+
+### Superset Connectivity
+
+ClickHouse Connect is fully integrated with Apache Superset. Previous versions of ClickHouse Connect utilized a
+dynamically loaded Superset Engine Spec, but as of Superset v2.1.0 the engine spec was incorporated into the main
+Apache Superset project and removed from clickhouse-connect in v0.6.0. If you have issues connecting to earlier
+versions of Superset, please use clickhouse-connect v0.5.25.
+
+When creating a Superset Data Source, either use the provided connection dialog, or a SqlAlchemy DSN in the form
+`clickhousedb://{username}:{password}@{host}:{port}`.
+
+### SQLAlchemy Implementation
+
+ClickHouse Connect includes a lightweight SQLAlchemy dialect implementation focused on compatibility with **Superset**
+and **SQLAlchemy Core**. The synchronous dialect supports SQLAlchemy 1.4 and 2.x. SQLAlchemy 1.4 compatibility is
+maintained because Apache Superset currently requires `sqlalchemy>=1.4,<2`.
+
+Async SQLAlchemy usage is available with SQLAlchemy 2.0.44 and later. Install
+`clickhouse-connect[sqlalchemy-async]` and use `clickhousedb+async://` with `create_async_engine()`. Results are
+buffered. Server-side cursors are not supported. Always await the async engine's `dispose()` method during shutdown
+instead of calling `engine.sync_engine.dispose()`.
+
+Supported features include:
+- Basic query execution via SQLAlchemy Core
+- `SELECT` queries with `JOIN`s (including ClickHouse-specific strictness, `USING`, and `GLOBAL` modifiers),
+  `ARRAY JOIN` (single and multi-column), `FINAL`, `SAMPLE`, compound selects, and materialized CTEs
+- `VALUES` table function syntax
+- Lightweight `DELETE` statements
+- **Alembic** schema migrations (autogenerate, upgrade/downgrade, ClickHouse engine support)
+
+A small number of features require SQLAlchemy 2.x. `Values.cte()` specifically requires SQLAlchemy 2.0.42 or later.
+Certain literal-rendering behaviors also require SQLAlchemy 2.x.
+All other dialect features, including those used by Superset, work on both 1.4 and 2.x.
+
+Basic ORM usage works for insert-heavy, read-focused workloads: declarative model definitions, `CREATE TABLE`,
+`session.add()`, `bulk_save_objects()`, and read queries all function correctly. However, full ORM support is not
+provided. UPDATE compilation, foreign key/relationship reflection, autoincrement/RETURNING, and cascade operations
+are not implemented. The dialect is best suited for SQLAlchemy Core usage and Superset connectivity.
+
+#### Alembic Migrations
+
+ClickHouse Connect supports [Alembic](https://alembic.sqlalchemy.org/) for schema migrations, including
+autogeneration of migration scripts from SQLAlchemy metadata. ClickHouse table engines (`MergeTree`,
+`ReplacingMergeTree`, etc.) and dictionaries are preserved through the migration lifecycle.
+
+Supported operations include create/drop table, add/alter/drop/rename column, type and nullability
+changes, defaults, comments, and ClickHouse-specific features like `IF EXISTS` guards, column
+placement with `AFTER`, and operation-level `clickhouse_settings` on column add/alter/drop.
+
+To get started, install the Alembic extra:
+
+```bash
+pip install clickhouse-connect[alembic]
+```
+
+For Alembic with the async SQLAlchemy dialect, install `clickhouse-connect[alembic,sqlalchemy-async]`, run
+`alembic init -t async alembic`, and replace the generated `alembic/env.py` with the checked-in
+[async Alembic environment](examples/alembic_async/env.py). Keep the generated
+`script_location = %(here)s/alembic`, or update it if you chose a different migration directory. The example includes
+the ClickHouse Alembic hooks and options, runs online migrations through `AsyncConnection.run_sync()`, and compiles
+offline migrations without creating an engine.
+
+See the [Alembic worked example](clickhouse_connect/cc_sqlalchemy/alembic/WORKED_EXAMPLE.md) for a
+full end-to-end walkthrough covering setup, autogeneration, upgrades, downgrades, and manual
+migration operations.
+
+### Asyncio Support
+
+ClickHouse Connect provides native async support using aiohttp. To use the async client,
+install the optional async dependency:
+
+```
+pip install clickhouse-connect[async]
+```
+
+Then create a client with `clickhouse_connect.get_async_client()`. See the
+[run_async example](./examples/run_async.py) for more details.
+
+### Complete Documentation
+
+The documentation for ClickHouse Connect has moved to
+[ClickHouse Docs](https://clickhouse.com/docs/integrations/python)

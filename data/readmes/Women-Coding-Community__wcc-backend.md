@@ -1,0 +1,571 @@
+# WCC: Platform Backend Service
+
+<!-- TOC -->
+
+* [WCC: Platform Backend Service](#wcc-platform-backend-service)
+    * [How to start?](#how-to-start)
+    * [Setup locally](#setup-locally)
+        * [JAVA 21 with SDKMAN](#java-21-with-sdkman)
+        * [Setup IntelliJ](#setup-intellij)
+            * [Lombok](#lombok)
+            * [Enable Save Actions](#enable-save-actions)
+            * [Enable Checkstyle Warnings](#enable-checkstyle-warnings)
+            * [Google Format](#google-format)
+                * [IntelliJ JRE Config](#intellij-jre-config)
+        * [Setup PostgreSQL database](#setup-postgresql-database)
+    * [Run Locally](#run-locally)
+        * [Run the whole application with Docker](#run-the-whole-application-with-docker)
+        * [Run Locally without Authentication](#run-locally-without-authentication)
+    * [Generate Postman Collection](#generate-postman-collection)
+    * [Open API Documentation](#open-api-documentation)
+    * [API Documentation](#api-documentation)
+    * [Quality Checks](#quality-checks)
+    * [Deploy](#deploy)
+    * [Frontend (Administration Platform)](#frontend-administration-platform)
+        * [Run frontend locally](#run-frontend-locally)
+            * [Test credentials (seeded)](#test-credentials-seeded)
+        * [Frontend tests](#frontend-tests)
+        * [CORS configuration (backend)](#cors-configuration-backend)
+        * [CI/CD and deploy (Vercel)](#cicd-and-deploy-vercel)
+    * [API Testing Collection with Bruno](#api-testing-collection-with-bruno)
+        * [Prerequisites](#prerequisites)
+        * [Open the Collection in Bruno](#open-the-collection-in-bruno)
+        * [Running Requests](#running-requests)
+        * [How to Add New Flows / Requests](#how-to-add-new-flows--requests)
+
+<!-- TOC -->
+
+## How to start?
+
+**1.** Start by making a Fork
+of [wcc-backend](https://github.com/Women-Coding-Community/wcc-backend) repository.
+Click on <a href="https://github.com/Women-Coding-Community/wcc-backend/fork">
+<img src="https://i.imgur.com/G4z1kEe.png" height="21" width="21"></a>
+Fork symbol in the top right corner.
+
+**2.** Clone your new fork of the repository in the terminal/CLI on your computer with the following
+command:
+
+```bash
+git clone https://github.com/<your-github-username>/wcc-backend
+``` 
+
+## Setup locally
+
+### JAVA 21 with SDKMAN
+
+This project uses Java 21, you can run in 21.0.2 or 21.0.3. If you have installed a different
+version on your machine and don't want to remove it, you can use **SDKMAN** development tool.
+
+* Install SDKMAN
+
+Open your terminal and run the following command:
+
+```shell
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+```
+
+* Check the list of available Java versions:
+
+```shell
+sdk list java
+```
+
+* Install the desired Java version
+
+```shell
+sdk install java 21.0.2-open 
+```
+
+* Use the specific java version in the current session on your terminal
+
+```shell
+sdk use java 21.0.2-open
+```
+
+Set the default Java version for your system:
+
+* To set the newly installed Java version as the default:
+
+```shell
+sdk default java 21.0.2-open
+```
+
+* To verify if the java version is correct use:
+
+```shell
+java -version
+```
+
+### Setup IntelliJ
+
+#### Lombok
+
+Install lombok plugin and enable Annotation Processing, as the image below:
+
+![image](docs/images/annotation-procession.png)
+
+#### Enable Save Actions
+
+![image](docs/images/save-actions.png)
+
+#### Enable Checkstyle Warnings
+
+Install checkstyle plugin and the configuration will be enabled
+
+#### Google Format
+
+A google-java-format IntelliJ plugin is available from the plugin repository. To install it, go to
+your IDE's settings and select the Plugins category. Click the Marketplace tab, search for the
+google-java-format plugin, and click the Install button.
+
+The plugin will be disabled by default. To enable it in the current project, go to
+File→Settings...→google-java-format Settings (or IntelliJ IDEA→Preferences...→Other
+Settings→google-java-format Settings on macOS) and check the Enable google-java-format checkbox. (A
+notification will be presented when you first open a project offering to do this for you.)
+
+To enable it by default in new projects, use File→Other Settings→Default Settings....
+
+When enabled, it will replace the normal Reformat Code and Optimize Imports actions.
+
+![image](docs/images/google-format.png)
+
+##### IntelliJ JRE Config
+
+The google-java-format plugin uses some internal classes that aren't available without extra
+configuration. To use the plugin, go to Help→Edit Custom VM Options... and paste in these lines:
+
+```
+--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
+```
+
+Once you've done that, restart the IDE.
+
+Before starting the IDE:
+
+Install Docker Desktop if you do not already have it.
+
+Check if Docker is installed
+
+Run:
+
+```shell
+docker --version
+```
+
+### Setup PostgreSQL database
+
+PostgreSQL runs in Docker. The image (postgres:15) is downloaded from Docker Hub when running the
+`./scripts/docker-up.sh` as explained in [Run Locally](#run-locally) section.
+
+Setup Data source in the IntelliJ.
+
+![image](docs/images/intelliJ-data-sources.png)
+
+![image](docs/images/postgres-wcc-db.png)
+
+**Note**: In case of problems with the database during the development phase,
+when changes to the db tables are frequent, from the DB source connection in IntelliJ drop the
+tables and refresh the DB. Start the application.
+To fix database issues (for example, incompatibility errors with older DB versions, or a
+Flyway migration error that stops the application from starting), wipe this project's database
+volume and start again:
+
+```shell
+./scripts/app-stack.sh up --purge     # full stack (see below)
+# or, for the backend-only developer stack:
+docker compose -f docker/docker-compose.yml down -v && ./scripts/docker-up.sh
+```
+
+As a last resort, `docker system prune -a --volumes` also works — but be aware it deletes
+**every** unused image, container and volume on your machine, not just this project's.
+
+## Run Locally
+
+Verify if Docker is running.
+
+**Note**: Make sure you have docker daemon running locally to be able to run integration test, by
+execute
+
+``docker ps``
+
+* Build containers
+
+```shell
+./scripts/docker-up.sh
+```
+
+Now you have the application running connected to the postgres database.
+Test the application via: http://localhost:8080/swagger-ui/index.html
+
+### Run the all dependent applications with Docker
+
+One command starts everything — backend API, admin portal, public website, PostgreSQL,
+MailHog — and seeds it with the QA login accounts (admin, mentorship admin, leader, member, a
+long-term mentor and an ad-hoc mentor), a MENTORS page and an open mentorship cycle. No test
+account is baked into the application source: the backend bootstraps only `admin@wcc.dev`, and
+the seed script creates the rest through the API.
+
+```shell
+./scripts/app-stack.sh up
+```
+
+| Service        | URL                                        | Source                              |
+|----------------|--------------------------------------------|-------------------------------------|
+| Backend API    | http://localhost:8080 (Swagger at `/swagger-ui/index.html`) | this repository (`docker` profile) |
+| Admin portal   | http://localhost:3000                      | `admin-wcc-app/`                    |
+| Public website | http://localhost:3001                      | [`wcc-frontend`](https://github.com/Women-Coding-Community/wcc-frontend) |
+| MailHog inbox  | http://localhost:8025                      |                                     |
+| PostgreSQL     | `localhost:5432`, db `wcc` (`POSTGRES_PORT=5433` if 5432 is taken) |             |
+
+Log in to the admin portal with any account from
+[`docs/qa_local_setup.md`](docs/qa_local_setup.md#seeded-accounts) (e.g. `admin@wcc.dev` /
+`wcc-admin`).
+
+The public website is built from a **sibling checkout** of `wcc-frontend`
+(`../wcc-frontend`). If yours lives elsewhere, or you have no checkout, point
+`WCC_FRONTEND_CONTEXT` at a directory or a git URL:
+
+```shell
+WCC_FRONTEND_CONTEXT=https://github.com/Women-Coding-Community/wcc-frontend.git ./scripts/app-stack.sh up
+```
+
+Other commands:
+
+```shell
+./scripts/app-stack.sh up --purge        # wipe the database volume first, then start and re-seed
+./scripts/app-stack.sh up --no-seed      # start without seeding
+./scripts/app-stack.sh seed              # re-run the seed (idempotent)
+./scripts/app-stack.sh cycle ad-hoc      # switch the open+current mentorship cycle: long-term | ad-hoc | both | none | open <id>
+./scripts/app-stack.sh down              # stop; data is kept
+./scripts/app-stack.sh purge             # stop and delete this stack's database volume
+./scripts/app-stack.sh logs [service]    # follow logs
+```
+
+Notes:
+
+* The stack is defined in [`docker/docker-compose.qa.yml`](docker/docker-compose.qa.yml)
+  (`app-stack.sh` is a thin wrapper around `docker compose -f docker/docker-compose.qa.yml`).
+  If a local PostgreSQL already uses port 5432, run with `POSTGRES_PORT=5433`.
+* The seed runs [`scripts/init-local-env.sh`](scripts/init-local-env.sh) inside the stack; it
+  also works from the host against a running backend. Payloads live in
+  [`scripts/seed-data/`](scripts/seed-data).
+* Cycle scenarios are applied by [`scripts/seed-cycles.sh`](scripts/seed-cycles.sh) directly in
+  the database (there is no API to open a cycle). `both` opens both cycle types, which makes
+  `GET /cycles/current` and mentee registration pick one of them non-deterministically — use
+  `long-term` or `ad-hoc` for registration flows and `none` for the "registration closed" path.
+* The `admin-wcc-app` image bakes `NEXT_PUBLIC_API_BASE=http://localhost:8080` in at build time
+  because the portal calls the API from the browser; the public website calls it server-side and
+  uses the internal `springboot-app` hostname.
+* This stack shares container names, ports and the database volume with the backend-only
+  developer stack `docker/docker-compose.yml` (`./scripts/docker-up.sh`), so run only one of
+  them at a time.
+* The [wcc-qa](https://github.com/Women-Coding-Community/wcc-qa) Playwright suite runs against
+  this stack with its default settings (`API_HOST=http://localhost:8080`, `API_KEY=local`,
+  `ADMIN_BASE_URL=http://localhost:3000`).
+
+* Start the Application from your IDE
+
+Stop the docker container of the application, springboot-app. Do not stop
+the container of the postgres. Start the application from your IDE.
+
+* Run tests
+
+```shell
+./gradlew test
+```
+
+* Start the Spring Boot Application using Gradle:
+
+```shell
+./gradlew bootRun
+```
+
+* Start Spring Boot Application via IntelliJ IDEA:
+
+Open `PlatformApplication.java` right click and select `Run or Debub`.
+
+* Check if the application is running:
+
+```shell
+curl -X 'GET' \
+'http://localhost:8080/api/cms/v1/footer' \
+-H 'accept: */*' \
+-H 'X-API-KEY: e8-Mm0ybormRil7k_DZO9jYtRAYW5VX5MCQiQG2CLD4'
+```
+
+### Run Locally without Authentication
+
+- Check if the database is running in docker
+- Change the application.properties file to disable authentication
+
+> wcc.security.authentication.enabled=false
+
+- Build the application
+- Run the application
+
+After this you can tests execute this curl and you will get the response.
+> curl 'http://localhost:8080/api/cms/v1/footer'
+
+## Generate Postman Collection
+
+You can generate a Postman collection from the application’s OpenAPI specification.
+
+1. Start the application (e.g. via Docker Compose):
+
+```shell
+   ./scripts/docker-up.sh
+```
+
+2. In the root directory of the repository, there is a folder called `postman-collection` which
+   contains the OpenAPI specification and the generated Postman collection.
+
+
+3. You can download the OpenAPI specification directly from the running app. This will overwrite the
+   existing OpenAPI specification file in the `postman-collection` folder:
+
+```shell
+   curl http://localhost:8080/api-docs -o postman-collection/openapi.yaml
+```
+
+4. You can generate a new .json file of the Postman collection. This will overwrite the existing
+   Postman collection file in the `postman-collection` folder:
+
+```shell
+    ./gradlew postmanGenerate
+```
+
+## Open API Documentation
+
+* [Access swagger api](http://localhost:8080/swagger-ui/index.html)
+
+## API Documentation
+
+* [Resource API Documentation](docs/resource_api.md) - API for uploading, retrieving, and managing
+  resources and mentor profile pictures
+* [Google Drive API Setup](docs/google_drive_setup.md) - Instructions for setting up Google Drive
+  API credentials
+
+## Quality Checks
+
+**PMD Static Analysis**
+
+Before committing Java code changes, run PMD to check for code quality violations:
+
+```shell
+./gradlew :pmdAll
+```
+
+If violations are found, the build will fail and show the report location. Fix all violations before
+committing.
+
+**Pre-commit Hook (Automatic PMD Check)**
+
+A pre-commit hook is configured in `.husky/pre-commit` (using Husky) that runs PMD analysis on Java
+file changes before each commit. The hook will:
+
+- Detect staged Java files
+- Run `./gradlew :pmdAll`
+- Block the commit if violations are found
+- Show the path to the PMD report for review
+
+To bypass the hook (not recommended):
+
+```shell
+git commit --no-verify
+```
+
+**Note:** The project uses Husky for git hooks management. The pre-commit hook also runs
+`lint-staged` for frontend changes in `admin-wcc-app/`.
+
+**AI-Assisted Pre-Commit Review (Claude Code)**
+
+If you use [Claude Code](https://claude.ai/code), you can run a local code review on your staged and
+unstaged changes before committing:
+
+```shell
+/pre-commit-review
+```
+
+The skill will:
+
+- Analyse all local changes (`git diff HEAD` and `git diff --staged`)
+- Produce an **overall summary** of what the change does and whether it is safe to commit
+- List **per-file findings** anchored to the changed line numbers with severity levels:
+    - `[CRITICAL]` — must fix before committing (security, data loss, broken contract)
+    - `[WARNING]` — should fix (likely bug, convention mismatch, missing test)
+    - `[INFO]` — optional improvement (style, readability)
+- Call out **what looks good** to keep feedback balanced
+
+No GitHub CLI or open PR is required — it works entirely on your local diff.
+
+**Other Quality Checks**
+
+* [Setup Quality Checks](docs/quality_checks.md)
+
+## Deploy
+
+* [Deployment Guideline](docs/deployment.md)
+
+## Frontend (Administration Platform)
+
+A Next.js + MUI frontend is included under `admin-wcc-app/` to allow authenticated admins to manage
+users, mentors, and members using the backend APIs. It uses JWT bearer tokens and handles token
+expiry. The UI follows Women Coding Community colors (purple/pink palette).
+
+- Tech stack: Next.js 14, React 18, TypeScript, MUI 6, Jest + React Testing Library
+- Auth: Email/password login against `/api/auth/login` returning a JWT. Token is sent as
+  `Authorization: Bearer <token>` and stored locally with expiry checks.
+- Config: API base via `NEXT_PUBLIC_API_BASE` and optional `NEXT_PUBLIC_API_KEY` (sent as
+  `X-API-KEY`).
+
+### Run frontend locally
+
+#### Test credentials (seeded)
+
+A default admin user is auto-created at startup for local testing:
+
+- Email: admin@wcc.dev
+- Password: wcc-admin
+
+You can disable seeding with `app.seed.enabled=false`, or change this bootstrap user by editing
+the `app.seed.users` list in `application.yml`. Every other test account (mentorship admin,
+leader, member, long-term and ad-hoc mentors) is created by the seed script of the QA stack, not
+by the application — see [`docs/qa_local_setup.md`](docs/qa_local_setup.md#seeded-accounts).
+
+1. Copy env example and adjust as needed:
+
+   cp admin-wcc-app/.env.example admin-wcc-app/.env
+
+   Edit `NEXT_PUBLIC_API_BASE` to point to your backend (local or remote). If your backend uses API
+   key, set `NEXT_PUBLIC_API_KEY`.
+
+2. Install and start:
+
+```shell
+   cd admin-wcc-app
+   npm install
+   npm run dev
+
+   Open http://localhost:3000
+```
+
+> **Changing the port**: if port 3000 is already in use (e.g. by another frontend project), add
+> `PORT=3001` to `admin-wcc-app/.env.local`, update `allowed-origins` in `application-local.yml`
+> to include `http://localhost:3001,https://localhost:3001`, and run using `npx next dev -p 3001`.
+> The app will be available at `http://localhost:3001`. `.env.local` is gitignored so this only affects your local machine.
+
+3. Authentication
+
+- Use a valid user email/password from the backend auth tables. On success, you will be redirected
+  to `/admin`.
+
+### Frontend tests
+
+Run unit tests for the frontend:
+
+```shell
+cd admin-wcc-app
+npm test
+```
+
+### CORS configuration (backend)
+
+CORS is enabled via a `CorsConfig` bean. Allowed origins are controlled by the property:
+
+app.cors.allowed-origins=http://localhost:3000,https://your-frontend-domain
+
+Update `application.properties` or environment variables to include your deployed frontend domain to
+avoid CORS issues.
+
+### CI/CD and deploy (Vercel)
+
+The admin frontend is deployed to Vercel using Vercel's Git integration on pushes to `main`.
+
+Configure the following environment variables in the Vercel project dashboard:
+
+- `NEXT_PUBLIC_API_BASE` (Backend API URL, e.g. `https://wcc-backend-prod.fly.dev`)
+- `NEXT_PUBLIC_API_KEY` (Matching backend's API key)
+- `NEXT_PUBLIC_APP_URL` (Frontend URL, e.g. `https://wcc-admin.vercel.app`)
+
+## API Testing Collection with Bruno
+
+`api-flows` folder contains a Bruno API flow used for testing, and validating our backend APIs in a
+consistent, shareable way.
+
+Bruno is a fast, Git-friendly API client (think Postman, but local-first and text-based). This flow
+is designed so the whole team can run the same requests with minimal setup and predictable results.
+
+### Prerequisites
+
+Before using this flow, make sure you have:
+
+1. Bruno installed: https://www.usebruno.com/
+2. Access to the target API environment (local/dev/staging) by running docker locally.
+
+### Open the Collection in Bruno
+
+1. Open Bruno
+2. Click Open Collection
+3. Select the `api-flows` folder of this repository
+4. Bruno will automatically load all requests and local environment variables. Make sure to select
+   the environment `local` that was loaded alongside the collection
+
+### Running Requests
+
+**Run a Single Request**
+
+1. Select a request
+2. Choose the correct environment (top-right)
+3. Click Send
+
+**Run a Folder / Flow**
+
+1. Right-click a folder
+2. Select Run Folder
+3. Bruno will execute requests in order
+
+This is useful for end-to-end flows like:
+
+Mentor creation → Get Mentors and validate if the mentor was created → Update Mentor data → Get
+Mentors and validate if the mentor was updated → Delete Mentor → Get Mentors and validate if the
+mentor was deleted
+
+**Run a Folder and Generate HTML Report**
+
+1. Navigate to the root of the collection: `cd api-flows`
+2. Install necessary dependencies: `npm install`
+3. Create `.env` file based on the `.env.example`
+4. Execute Flow using this command: `npm run test:local`.
+5. Execute Flow using this command with HTML report generated: `npm run test:local:report`. Open
+   HTML report in browser
+
+### How to Add New Flows / Requests
+
+Follow these guidelines to keep the collection consistent and easy to maintain.
+
+**Adding a New Request**
+
+1. In Bruno, right-click the target folder
+2. Select New Request
+3. Give the request a clear, descriptive name
+4. Select the HTTP method and configure the endpoint, headers, and body
+5. Use environment variables (e.g. {{baseUrl}}, {{mentorId}}) instead of hardcoded values
+6. Use [dynamic variables](https://docs.usebruno.com/testing/script/dynamic-variables) in scripts to
+   generate realistic data for payloads
+
+**Adding a New Flow (Folder)**
+
+1. Right-click in the collection root or relevant parent folder
+2. Select New Folder
+3. Name the folder after the business flow or feature
+4. Example: `mentee-registration-approval-flow`, `matching-flow`
+5. Add requests in the order they should be executed
+6. Ensure each request can be run sequentially as part of a folder execution by running the whole
+   folder and making sure the HTML report is generated

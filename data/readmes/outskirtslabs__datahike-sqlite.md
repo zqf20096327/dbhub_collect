@@ -1,0 +1,190 @@
+= Datahike SQLite Backend
+
+____
+SQLite storage backend for Datahike, the open datalog database.
+____
+
+image:https://img.shields.io/badge/doc-outskirtslabs-orange.svg[doc,link=https://docs.outskirtslabs.com/datahike-sqlite/next/]
+image:https://img.shields.io/badge/status-experimental-red.svg[status: experimental,link=https://docs.outskirtslabs.com/open-source-vital-signs#experimental]
+image:https://ci.outskirtslabs.com/repos/github/outskirtslabs/datahike-sqlite/badge.svg[alt=nixbot,link=https://ci.outskirtslabs.com/repos/github/outskirtslabs/datahike-sqlite]
+
+This library provides a backend for
+https://github.com/replikativ/datahike[Datahike] using
+https://www.sqlite.org[SQLite] as the backing store, with direct native
+integration through
+https://github.com/andersmurphy/sqlite4clj[sqlite4clj].
+
+Project status: *https://docs.outskirtslabs.com/open-source-vital-signs#experimental[Experimental]*.
+
+== Why sqlite4clj?
+
+Unlike the https://github.com/replikativ/datahike-jdbc/[datahike-jdbc]
+backend, this implementation uses
+https://github.com/andersmurphy/sqlite4clj[sqlite4clj] - a minimalist
+FFI binding to SQLite’s C API using Java 22’s Foreign Function Interface
+(Project Panama). This approach offers several advantages:
+
+* Bypasses JDBC overhead by interfacing directly with SQLite’s C API
+through FFI for direct SQLite access.
+* SQLite’s embedded nature doesn’t require thread-backed connection
+pools like c3p0/HikariCP, eliminating that complexity.
+* Provides better performance through cached prepared statements per
+connection and inline caching of column reading functions.
+* Eliminates dependencies on sqlite-jdbc, c3p0, and next.jdbc for a
+smaller footprint.
+* Easier access to SQLite-specific features and pragmas for targeted
+optimizations.
+* More suitable architecture for SQLite’s single-writer, multiple-reader
+model.
+
+== Installation
+
+Include the library in your deps.edn:
+
+[source,clojure]
+----
+ org.replikativ/datahike  {:mvn/version "0.8.1686"} ;; Use latest 0.8.x version
+ com.outskirtslabs/datahike-sqlite {:git/url "https://github.com/outskirtslabs/datahike-sqlite"
+                                   :git/sha "7b6f3f8c3a88974b0ccd22c57086fb94c6ee92f0"}
+----
+
+=== Dependencies
+
+* The https://clojars.org/org.replikativ/datahike[org.replikativ/datahike
+dependency] must be provided by your project and must be 0.8.x or greater
+* https://github.com/andersmurphy/sqlite4clj[sqlite4clj] requires Java
+22 or later.
+* If you use this library as a git dependency, you will need to prepare
+the library with `clj -X:deps prep`.
+* You must include
+`:jvm-opts ++[++"--enable-native-access=ALL-UNNAMED"++]++` in your
+deps.edn alias.
+* When creating an executable jar file, you can avoid the need to pass
+this argument by adding the manifest attribute
+`Enable-Native-Access: ALL-UNNAMED` to your jar.
+
+=== Example
+
+[source,clojure]
+----
+(require
+ '[datahike-sqlite.core] ;; required to pull in the multi-method implementations
+ '[datahike.api :as d])
+
+(def cfg {:store {:backend :sqlite
+                  :dbname  "foobar.sqlite"
+                  ;; required by modern konserve/datahike
+                  :id #uuid "550e8400-e29b-41d4-a716-446655440000"
+                  ;; see sqlite4clj.core/init-db! for the possible options
+                  :sqlite-opts {:pool-size 4}}})
+
+(d/database-exists? cfg)
+;; => false
+
+(d/create-database cfg)
+
+(def conn (d/connect cfg))
+
+(d/transact conn [{:db/ident       :artifact
+                   :db/valueType   :db.type/string
+                   :db/cardinality :db.cardinality/one}
+                  {:db/ident       :level
+                   :db/valueType   :db.type/long
+                   :db/cardinality :db.cardinality/one}])
+
+(d/transact conn [{:artifact "Mighty Teapot" :level 20}])
+
+(d/q '[:find (pull ?e [*])
+       :in $ ?artifact
+       :where [?e :artifact ?artifact]]
+     @conn "Mighty Teapot")
+
+
+(d/release conn)
+
+;; this will delete the table in the sqlite file,
+;; but will not delete the sqlite file itself
+(d/delete-database cfg)
+----
+
+== Documentation
+
+* https://docs.outskirtslabs.com/datahike-sqlite/next/[Docs]
+* https://docs.outskirtslabs.com/datahike-sqlite/next/api[API Reference]
+* https://github.com/outskirtslabs/datahike-sqlite/issues[Support via GitHub Issues]
+
+== Configuration
+
+The value for `:store` is a configuration map. To invoke datahike-sqlite
+(this library) you must include `:backend :sqlite` in that map.
+
+You must also include `:dbname`, a path to the SQLite file.
+
+Konserve 0.9 and newer Datahike releases require a UUID under `:id`.
+Use a stable UUID literal in your store config.
+
+You can optionally include the key `:sqlite-opts` with an options map
+which will be passed to
+https://github.com/andersmurphy/sqlite4clj[`sqlite4clj.core/init-db!`].
+
+== Development
+
+=== Benchmarking
+
+The SQLite KV benchmark suite lives in
+`bench/datahike_sqlite/kv_benchmark.clj`.
+
+Run the full suite with:
+
+[source,bash]
+----
+clojure -M:dev:bench -m datahike-sqlite.kv-benchmark
+----
+
+Run a smaller smoke benchmark with:
+
+[source,bash]
+----
+clojure -M:dev:bench -m datahike-sqlite.kv-benchmark '{:mode :smoke}'
+----
+
+Run the suite at a specific entry count with:
+
+[source,bash]
+----
+clojure -M:dev:bench -m datahike-sqlite.kv-benchmark 1000
+----
+
+Write the benchmark results to a file with:
+
+[source,bash]
+----
+clojure -M:dev:bench -m datahike-sqlite.kv-benchmark '{:n 1000 :output "bench/results/sqlite-kv.txt"}'
+----
+
+=== Testing
+
+[source,bash]
+----
+bb test
+----
+
+=== Formatting
+
+[source,shell]
+----
+bb fmt
+----
+
+=== Linting
+
+[source,shell]
+----
+bb lint
+----
+
+== License: MIT License
+
+Copyright © 2025 Casey Link casey@outskirtslabs.com
+
+Distributed under the https://spdx.org/licenses/MIT.html[MIT], like dathike.

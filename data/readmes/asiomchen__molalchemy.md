@@ -1,0 +1,515 @@
+<p align="center">
+  <a href="https://molalchemy.readthedocs.io"><img src="https://raw.githubusercontent.com/asiomchen/molalchemy/refs/heads/main/docs/img/logo-full.svg" alt="MolAlchemy"></a>
+</p>
+<p align="center">
+    <em>molalchemy - Making chemical databases as easy as regular databases! 🧪✨</em>
+</p>
+
+
+[![pypi version](https://img.shields.io/pypi/v/molalchemy.svg)](https://pypi.org/project/molalchemy/)
+[![license](https://img.shields.io/github/license/asiomchen/molalchemy)](https://github.com/asiomchen/molalchemy/blob/main/LICENSE)
+[![python versions](https://shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue)]()
+![PyPI - Downloads](https://img.shields.io/pypi/dm/molalchemy)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/molalchemy?period=total&units=INTERNATIONAL_SYSTEM&left_color=GREY&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/molalchemy)
+[![codecov](https://codecov.io/gh/asiomchen/molalchemy/graph/badge.svg?token=B1GKJTDZCK)](https://codecov.io/gh/asiomchen/molalchemy)
+[![powered by rdkit](https://img.shields.io/badge/Powered%20by-RDKit-3838ff.svg?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAFVBMVEXc3NwUFP8UPP9kZP+MjP+0tP////9ZXZotAAAAAXRSTlMAQObYZgAAAAFiS0dEBmFmuH0AAAAHdElNRQfmAwsPGi+MyC9RAAAAQElEQVQI12NgQABGQUEBMENISUkRLKBsbGwEEhIyBgJFsICLC0iIUdnExcUZwnANQWfApKCK4doRBsKtQFgKAQC5Ww1JEHSEkAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0wMy0xMVQxNToyNjo0NyswMDowMDzr2J4AAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDMtMTFUMTU6MjY6NDcrMDA6MDBNtmAiAAAAAElFTkSuQmCC)](https://www.rdkit.org/)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-306998?logo=python&logoColor=white)](https://www.sqlalchemy.org/)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
+
+**Extensions for SQLAlchemy to work with chemical cartridges**
+
+molalchemy provides seamless integration between python and chemical databases, enabling powerful chemical structure storage, indexing, and querying capabilities. The library supports popular chemical cartridges (Bingo PostgreSQL & RDKit PostgreSQL) and provides a unified API for chemical database operations.
+
+
+**This project was originally supposed to be a part of RDKit UGM 2025 hackathon, but COVID had other plans for me. Currently it is in alpha stage as a proof of concept. Contributions are welcome!**
+
+## 🚀 Features
+
+- **Chemical Data Types**: Custom SQLAlchemy types for molecules, reactions and fingerprints
+- **Chemical Cartridge Integration**: Support for Bingo and RDKit PostgreSQL cartridges
+- **Substructure Search**: Efficient substructure and similarity searching
+- **Chemical Indexing**: High-performance chemical structure indexing
+- **Input Validation**: Molecules and reactions are validated before being sent to the database
+- **Similarity Threshold Management**: Get/set Tanimoto and Dice thresholds with a context manager
+- **Alembic Integration**: Automatic handling of extensions, types, and indexes in database migrations
+- **Typing Helpers**: Protocol helpers for precise comparator autocomplete and result types
+- **Easy Integration**: Drop-in replacement for standard SQLAlchemy types
+
+## 📦 Installation
+
+### Using pip
+
+```bash
+pip install molalchemy
+```
+
+### From source
+
+```bash
+pip install git+https://github.com/asiomchen/molalchemy.git
+
+# or clone the repo and install
+git clone https://github.com/asiomchen/molalchemy.git
+cd molalchemy
+pip install .
+```
+
+
+### Prerequisites
+
+- Python 3.10-3.14
+- SQLAlchemy 2.0+
+- rdkit 2024.3.1+
+- Running PostgreSQL with chemical cartridge (Bingo or RDKit) (see [`docker-compose.yaml`](https://github.com/asiomchen/molalchemy/blob/main/docker-compose.yaml) for a ready-to-use setup)
+
+For development or testing, you can use the provided Docker setup:
+
+```bash
+# For RDKit cartridge
+docker-compose up rdkit
+
+# For Bingo cartridge  
+docker-compose up bingo
+```
+
+For runtime smoke validation against both cartridges, use the dedicated smoke
+compose setup:
+
+```bash
+make smoke
+```
+
+If the default smoke ports are already in use, override them:
+
+```bash
+BINGO_SMOKE_PORT=15432 RDKIT_SMOKE_PORT=15433 make smoke
+```
+
+## 📁 Project Structure
+
+```
+molalchemy/
+├── src/molalchemy/
+│   ├── types.py              # Base type definitions
+│   ├── exceptions.py         # Custom exception hierarchy
+│   ├── helpers.py            # Typed comparator helper functions
+│   ├── protocols.py          # Static comparator protocols
+│   ├── alembic_helpers.py    # Alembic integration utilities
+│   ├── bingo/               # Bingo PostgreSQL cartridge support
+│   │   ├── types.py         # Bingo-specific types
+│   │   ├── index.py         # Bingo indexing
+│   │   ├── comparators.py   # SQLAlchemy comparators
+│   │   ├── search.py        # Shared Bingo search expression helpers
+│   │   └── functions/       # Bingo database functions
+│   └── rdkit/               # RDKit PostgreSQL cartridge support
+│       ├── types.py         # RDKit-specific types
+│       ├── index.py         # RDKit indexing
+│       ├── comparators.py   # SQLAlchemy comparators
+│       ├── settings.py      # Similarity threshold management
+│       └── functions/       # RDKit database functions
+├── tests/                   # Test suite
+├── docs/                    # Documentation
+└── dev_scripts/             # Development utilities
+```
+
+
+## 🔧 Quick Start
+
+To learn how to use molalchemy, check out the tutorials in the [documentation](https://molalchemy.readthedocs.io/):
+
+- [Quick Start - RDKit ORM](https://molalchemy.readthedocs.io/en/latest/tutorials/01_Getting_Started_rdkit_ORM/) - Molecules, substructure search, fingerprints, similarity
+- [Quick Start - RDKit Core](https://molalchemy.readthedocs.io/en/latest/tutorials/02_Getting_Started_rdkit_Core/) - Same features using SQLAlchemy Core API
+- [Quick Start - Bingo ORM](https://molalchemy.readthedocs.io/en/latest/tutorials/01_Getting_Started_bingo_ORM/) - Bingo cartridge with ORM
+- [Migrations with Alembic](https://molalchemy.readthedocs.io/en/latest/tutorials/03_alembic_migrations/) - Autogenerate-friendly MolAlchemy migrations
+- [Similarity Thresholds](https://molalchemy.readthedocs.io/en/latest/tutorials/04_Similarity_Threshold_Settings/) - Managing RDKit similarity thresholds
+- [RDKit Reactions](https://molalchemy.readthedocs.io/en/latest/tutorials/05_Reactions_rdkit_ORM/) - Storing and querying RDKit reactions
+- [Bingo Reactions and Binary Storage](https://molalchemy.readthedocs.io/en/latest/tutorials/06_bingo_reactions_binary/) - Bingo reaction and binary column workflows
+- [RDKit Descriptors and Advanced Queries](https://molalchemy.readthedocs.io/en/latest/tutorials/07_rdkit_descriptors_advanced/) - Descriptor functions and richer query patterns
+- [Typed Comparator Helpers](https://molalchemy.readthedocs.io/en/latest/tutorials/08_proxy_helpers/) - statically typed cartridge methods
+- [Bingo Comparator Migration](https://molalchemy.readthedocs.io/en/latest/migrations/bingo-comparator-api/) - migrate equality and typed comparator calls
+- [RDKit Comparator Migration](https://molalchemy.readthedocs.io/en/latest/migrations/rdkit-comparator-api/) - migrate legacy fingerprint and comparator calls
+
+## 🏗️ Supported Cartridges
+
+Application code should import public cartridge APIs from `molalchemy.rdkit`
+or `molalchemy.bingo`. These package facades are the canonical import paths and
+keep cartridge ownership explicit without coupling applications to the
+internal module layout. Existing root-package and leaf-module imports remain
+supported for compatibility; Alembic-generated migrations intentionally use
+leaf-module imports.
+
+### Bingo Cartridge
+
+```python
+from molalchemy.bingo import (
+    BingoMol,              # Text-based molecule storage (SMILES/Molfile)
+    BingoBinaryMol,        # Binary molecule storage with format conversion
+    BingoReaction,         # Reaction storage (reaction SMILES/Rxnfile)
+    BingoBinaryReaction,   # Binary reaction storage
+    BingoMolIndex,         # Molecule indexing
+    BingoBinaryMolIndex,   # Binary molecule indexing
+    BingoRxnIndex,         # Reaction indexing
+    BingoBinaryRxnIndex,   # Binary reaction indexing
+    functions as bingo_func,
+)
+from molalchemy.helpers import (
+    bingo_col,              # Typed molecule-column helper for IDE autocomplete
+    bingo_rxn_col,          # Typed reaction-column helper for IDE autocomplete
+)
+```
+
+### RDKit Cartridge
+
+```python
+from molalchemy.rdkit import (
+    RdkitMol,              # RDKit molecule type with configurable return formats
+    RdkitBitFingerprint,   # Binary fingerprints (bfp)
+    RdkitSparseFingerprint,# Sparse fingerprints (sfp)
+    RdkitReaction,         # Chemical reactions with input validation
+    RdkitQMol,             # Query molecules
+    RdkitXQMol,            # Extended query molecules
+    RdkitIndex,            # RDKit molecule indexing (GIST index)
+    get_tanimoto_threshold, set_tanimoto_threshold,  # Tanimoto threshold management
+    get_dice_threshold, set_dice_threshold,          # Dice threshold management
+    similarity_threshold,                            # Context manager for temporary thresholds
+    functions as rdkit_func,
+)
+from molalchemy.helpers import (
+    rdkit_col,              # Typed molecule-column helper for IDE autocomplete
+    rdkit_rxn_col,          # Typed reaction-column helper for IDE autocomplete
+)
+```
+
+## 🎯 Advanced Features
+
+### Chemical Indexing
+
+```python
+from molalchemy.bingo import BingoMol, BingoMolIndex
+
+class Molecule(Base):
+    __tablename__ = 'molecules'
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    structure: Mapped[str] = mapped_column(BingoMol())
+    name: Mapped[str] = mapped_column(String(100))
+    
+    # Add chemical index for faster searching
+    __table_args__ = (
+        BingoMolIndex('mol_idx', 'structure'),
+    )
+```
+
+### Typed Comparator Helpers
+
+The helper functions in `molalchemy.helpers` return the original SQLAlchemy
+column at runtime, but annotate it with a protocol so IDEs and type checkers
+can see cartridge-specific comparator methods.
+
+```python
+from sqlalchemy import select
+
+from molalchemy.helpers import bingo_col, rdkit_col, rdkit_fp_col
+
+# Bingo exact/substructure search with autocomplete-friendly column typing
+bingo_stmt = select(Molecule).where(
+    bingo_col(Molecule.structure).has_substructure("c1ccccc1")
+)
+
+# RDKit exact search with autocomplete-friendly column typing
+rdkit_stmt = select(MoleculeWithFormats).where(
+    rdkit_col(MoleculeWithFormats.structure_smiles).equals("CCO")
+)
+```
+
+Equality differs between the cartridges. Bingo `==` and `!=` use PostgreSQL
+storage equality (text or binary), so chemically equivalent representations
+such as `CCO` and `OCC` compare different; use `.equals()` or `.not_equals()`
+for Bingo chemical matching. RDKit molecule `==` and `!=` are chemically aware
+because PostgreSQL dispatches them to `mol_eq` and `mol_ne`; RDKit's explicit
+methods use the equivalent `@=` and `@<>` spellings. For RDKit reactions, use
+the explicit methods because native `=` is not implemented by the cartridge.
+
+Use the matching helper for the cartridge and data kind:
+`bingo_col`, `bingo_rxn_col`, `rdkit_col`, `rdkit_rxn_col`, or `rdkit_fp_col`.
+
+### Configurable Return Types
+
+```python
+from rdkit import Chem
+
+from molalchemy.rdkit import RdkitMol
+
+class MoleculeWithFormats(Base):
+    __tablename__ = 'molecules_formatted'
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    # Return as SMILES string (default)
+    structure_smiles: Mapped[str] = mapped_column(RdkitMol())
+    # Return as RDKit Mol object
+    structure_mol: Mapped[Chem.Mol] = mapped_column(RdkitMol(return_type="mol"))
+    # Return as raw bytes
+    structure_bytes: Mapped[bytes] = mapped_column(RdkitMol(return_type="bytes"))
+```
+
+The SQL type describes how PostgreSQL stores the value; `Mapped[...]` describes
+the Python value returned to the model. SQLAlchemy 2.0 does not infer
+`mapped_column()` attributes from the supplied type, so ORM models should always
+spell out `Mapped[T]`. Core `Column(...)` and generated SQL expressions infer
+the result directly from MolAlchemy's types.
+
+| Type configuration | Python result |
+| --- | --- |
+| `RdkitMol()` / `return_type="smiles"` | `str` |
+| `RdkitMol(return_type="bytes")` | `bytes` |
+| `RdkitMol(return_type="mol")` | `Chem.Mol` |
+| `RdkitReaction()` / `return_type="smiles"` | `str` |
+| `RdkitReaction(return_type="bytes")` | `bytes` |
+| `RdkitReaction(return_type="mol")` | `ChemicalReaction` |
+| `BingoBinaryMol(return_type="smiles" | "molfile" | "cml")` | `str` |
+| `BingoBinaryMol(return_type="bytes")` | `bytes` |
+
+### RDKit Cartridge Settings
+
+RDKit PostgreSQL uses GUC variables to control similarity, substructure matching, and fingerprint sizes. Use an immutable settings object to establish a baseline whenever a pooled connection is checked out:
+
+```python
+from sqlalchemy import create_engine
+
+from molalchemy.rdkit import (
+    RdkitSettings,
+    configure_engine,
+    get_tanimoto_threshold,
+    set_tanimoto_threshold,
+    similarity_threshold,
+)
+
+engine = configure_engine(
+    create_engine("postgresql+psycopg://localhost/chemistry"),
+    RdkitSettings(
+        tanimoto_threshold=0.5,
+        dice_threshold=0.5,
+        do_chiral_sss=True,
+        morgan_fp_size=2048,
+    ),
+)
+
+# Get/set thresholds directly
+print(get_tanimoto_threshold(session))  # 0.5 (default)
+set_tanimoto_threshold(session, 0.3)
+
+# Use context manager for temporary changes
+with similarity_threshold(session, tanimoto=0.1, dice=0.2):
+    # Thresholds are active inside the block
+    results = session.execute(query).all()
+# Original thresholds are restored automatically
+```
+
+`None` fields leave the server value unchanged. Calling `configure_engine` again replaces the previous MolAlchemy baseline, and `RdkitSettings()` removes it. Reconfiguration disposes idle pooled connections so they cannot retain settings from the previous baseline; connections already checked out continue normally until returned. See the [RDKit cartridge configuration reference](https://rdkit.org/new_docs/Cartridge.html#configuration) for the underlying settings.
+
+### Chemical Reactions
+
+Store and query chemical reactions using `RdkitReaction`:
+
+```python
+from molalchemy.rdkit import RdkitReaction, functions as rdkit_func
+
+class Reaction(Base):
+    __tablename__ = 'reactions'
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(100))
+    rxn: Mapped[str] = mapped_column(RdkitReaction())
+
+# Insert with validation (invalid SMARTS raises InvalidReactionError)
+session.add(Reaction(name="Amide formation", rxn="[C:1](=O)[OH].[N:2]>>[C:1](=O)[N:2]"))
+
+# Reaction substructure search
+results = session.execute(
+    select(Reaction).where(
+        rdkit_func.rxn_has_smarts(Reaction.rxn, ">>[C:1][N:2]")
+    )
+).all()
+```
+
+### Using Chemical Functions
+
+Chemical functions are available through each cartridge's `functions`
+namespace. Under the hood they use SQLAlchemy's `func` to call the corresponding
+database functions and provide type hints and syntax highlighting in IDEs.
+
+```python
+from molalchemy.bingo import functions as bingo_func
+
+# Calculate molecular properties using Bingo functions
+results = session.query(
+    Molecule.name,
+    bingo_func.getweight(Molecule.structure).label('molecular_weight'),
+    bingo_func.gross(Molecule.structure).label('formula'),
+    bingo_func.smiles(Molecule.structure).label('canonical_smiles')
+).all()
+
+# Validate molecular structures
+invalid_molecules = session.query(Molecule).filter(
+    bingo_func.checkmolecule(Molecule.structure).isnot(None)
+).all()
+
+# Format conversions
+inchi_keys = session.query(
+    Molecule.id,
+    bingo_func.inchikey(Molecule.structure).label('inchikey')
+).all()
+```
+
+For RDKit functions:
+
+```python
+from molalchemy.rdkit import functions as rdkit_func
+
+# Calculate molecular properties using RDKit functions
+results = session.query(
+    Molecule.name,
+    rdkit_func.mol_amw(Molecule.structure).label('molecular_weight'),
+    rdkit_func.mol_formula(Molecule.structure).label('formula'),
+    rdkit_func.mol_inchikey(Molecule.structure).label('inchikey')
+).all()
+```
+
+### Alembic Database Migrations
+
+MolAlchemy provides utilities for Alembic integration. For automatic import
+handling in migrations, the library provides type rendering utilities that
+ensure proper import statements are generated for MolAlchemy types. Generated
+type constructors explicitly include configurable defaults so migrations do
+not inherit different behavior if a future release changes those defaults.
+
+```python
+# ...
+from molalchemy import alembic_helpers
+# ...
+
+def run_migrations_offline():
+    # ...
+    context.configure(
+        # ...
+        render_item=alembic_helpers.render_item,
+    )
+    # ...
+
+
+def run_migrations_online():
+    # ...
+    context.configure(
+        # ...
+        render_item=alembic_helpers.render_item,
+    )
+    # ...
+```
+
+
+## 🧪 Development
+
+### Setting Up Development Environment
+
+1. Clone the repository:
+```bash
+git clone https://github.com/asiomchen/molalchemy.git
+cd molalchemy
+```
+
+2. Install dependencies:
+```bash
+uv sync
+```
+
+3. Activate the virtual environment:
+```bash
+source .venv/bin/activate
+```
+
+### Running Tests
+
+```bash
+# Run all tests with coverage
+make test
+
+# Or use uv directly
+uv run pytest
+
+# Run specific test module
+uv run pytest tests/bingo/
+
+# Run with coverage
+uv run pytest --cov=src/molalchemy
+
+# Run real Bingo and RDKit smoke validation
+make smoke
+```
+
+### Code Quality
+
+This project uses modern Python development tools:
+- **uv**: For virtual environment and dependency management
+- **Ruff**: For linting and formatting
+- **pytest**: For testing
+
+### Building Function Bindings
+
+The chemical function bindings are automatically generated from cartridge documentation:
+
+```bash
+# Update RDKit function bindings
+make update-rdkit-func
+
+# Update Bingo function bindings  
+make update-bingo-func
+
+# Update all function bindings
+make update-func
+```
+
+## 📚 Documentation
+
+- **[📋 Project Roadmap](ROADMAP.md)** - Development phases, timeline, and contribution opportunities
+- **[🤝 Contributing Guide](CONTRIBUTING.md)** - How to contribute to the project
+- **[🔧 API Reference](https://molalchemy.readthedocs.io/)** - Complete API documentation
+- **[🐳 Bingo Manual](https://lifescience.opensource.epam.com/bingo/user-manual-postgres.html)** - Bingo PostgreSQL cartridge guide
+- **[⚛️ RDKit Manual](https://www.rdkit.org/docs/Cartridge.html)** - RDKit PostgreSQL cartridge guide
+
+## 🤝 Contributing
+
+We welcome contributions! molalchemy offers many opportunities for developers interested in chemical informatics:
+
+- **🔰 New to the project?** Check out [good first issues](https://github.com/asiomchen/molalchemy/labels/good%20first%20issue)
+- **🔬 Chemical expertise?** Help complete RDKit integration or add ChemAxon support
+- **🐳 DevOps skills?** Optimize our Docker containers and CI/CD pipeline
+- **📚 Love documentation?** Create tutorials and improve API docs
+
+Read our **[Contributing Guide](CONTRIBUTING.md)** for detailed instructions on getting started.
+
+## 📄 License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](https://github.com/asiomchen/molalchemy/blob/main/LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+### Core Technologies
+- [RDKit](https://www.rdkit.org/) - Open-source cheminformatics toolkit
+- [Bingo](https://lifescience.opensource.epam.com/bingo/) - Chemical database cartridge by EPAM
+- [SQLAlchemy](https://sqlalchemy.org/) - Python SQL toolkit and ORM
+
+### Inspiration and Similar Projects
+- [GeoAlchemy2](https://github.com/geoalchemy/geoalchemy2) - Spatial extension for SQLAlchemy, served as architectural inspiration for cartridge integration patterns
+- [ord-schema](https://github.com/open-reaction-database/ord-schema) - Open Reaction Database schema, is one of the few projects using custom chemical types with SQLAlchemy
+- [Riccardo Vianello](https://github.com/rvianello) - His work on [django-rdkit](https://github.com/rdkit/django-rdkit) and [razi](https://github.com/rvianello/razi) provided valuable insights for chemical database integration (discovered after starting this project)
+
+## 📧 Contact
+
+- **Author**: Anton Siomchen
+- **Email**: anton.siomchen+molalchemy@gmail.com
+- **GitHub**: [@asiomchen](https://github.com/asiomchen)
+- **LinkedIn**: [Anton Siomchen](https://www.linkedin.com/in/anton-siomchen/)
+
+---
+
+**molalchemy** - Making chemical databases as easy as regular databases! 🧪✨

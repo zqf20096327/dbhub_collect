@@ -1,0 +1,152 @@
+<picture>
+      <source
+        srcset="/logo-dark.png"
+        media="(prefers-color-scheme: dark)"
+      />
+      <source
+        srcset="/logo.png"
+        media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)"
+      />
+      <img alt="Dgraph Logo" src="/logo.png">
+</picture>
+
+[![GitHub Repo stars](https://img.shields.io/github/stars/dgraph-io/dgraph)](https://github.com/dgraph-io/dgraph/stargazers)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/dgraph-io/dgraph)](https://github.com/dgraph-io/dgraph/commits/main/)
+[![Go Report Card](https://goreportcard.com/badge/github.com/dgraph-io/dgraph)](https://goreportcard.com/report/github.com/dgraph-io/dgraph)
+[![Docker Pulls](https://img.shields.io/docker/pulls/dgraph/dgraph)](https://hub.docker.com/r/dgraph/dgraph)
+
+Dgraph is a horizontally scalable and distributed GraphQL database with a graph backend. It provides
+ACID transactions, consistent replication, and linearizable reads. It's built from the ground up to
+perform a rich set of queries. Being a native GraphQL database, it tightly controls how the data is
+arranged on disk to optimize for query performance and throughput, reducing disk seeks and network
+calls in a cluster.
+
+Dgraph's goal is to provide Google production-level scale and throughput, with low enough latency to
+serve real-time user queries over terabytes of structured data. Dgraph supports
+[GraphQL query syntax](https://docs.dgraph.io/graphql), and responds in [JSON](http://www.json.org/)
+and [Protocol Buffers](https://developers.google.com/protocol-buffers/) over
+[GRPC](http://www.grpc.io/) and HTTP. Dgraph is written using the Go Programming Language.
+
+## Status
+
+Dgraph is at [version v25][rel] and is production-ready. Apart from the vast open source community,
+it is being used in production at multiple Fortune 500 companies.
+
+[rel]: https://github.com/dgraph-io/dgraph/releases/tag/v25.0.0
+
+## Supported Platforms
+
+Dgraph officially supports the Linux/amd64 and Linux/arm64 architectures. In order to take advantage
+of memory performance gains and other architecture-specific advancements in Linux, we dropped
+official support for Mac and Windows in 2021, see
+[this blog post](https://discuss.dgraph.io/t/dropping-support-for-windows-and-mac/12913) for more
+information. You can still build and use Dgraph on other platforms (for live or bulk loading for
+instance), but support for platforms other than Linux/amd64 and Linux/arm64 is not available.
+
+Running Dgraph in a Docker environment is the recommended testing and deployment method.
+
+## Install with Docker
+
+If you're using Docker, you can use the
+[official Dgraph image](https://hub.docker.com/r/dgraph/dgraph/).
+
+```bash
+docker pull dgraph/dgraph:latest
+```
+
+For more information on a variety Docker deployment methods including Docker Compose and Kubernetes,
+see the [docs](https://docs.dgraph.io/installation/).
+
+## Run a Quick Standalone Cluster
+
+```bash
+docker run -it -p 8080:8080 -p 9080:9080 -v ~/dgraph:/dgraph dgraph/standalone:latest
+```
+
+## Install from Source
+
+If you want to install from source, install Go 1.27+ or later and the following dependencies:
+
+### Ubuntu
+
+```bash
+sudo apt-get update
+sudo apt-get install build-essential
+```
+
+### Build and Install
+
+Then clone the Dgraph repository and use `make install` to install the Dgraph binary in the
+directory named by the GOBIN environment variable, which defaults to $GOPATH/bin or $HOME/go/bin if
+the GOPATH environment variable is not set.
+
+```bash
+git clone https://github.com/dgraph-io/dgraph.git
+cd dgraph
+make setup
+make install
+```
+
+## Get Started
+
+**To get started with Dgraph, follow:**
+
+- [Installation to queries in 4 quick steps](https://docs.dgraph.io/quick-start).
+- Tutorial and presentation videos on
+  [YouTube channel](https://www.youtube.com/playlist?list=PLzOEKEHv-5e3u2Tgv52O2rs5u3md58JON).
+
+## Is Dgraph the right choice for me?
+
+- Do you have more than 10 SQL tables connected via foreign keys?
+- Do you have sparse data, which doesn't elegantly fit into SQL tables?
+- Do you want a simple and flexible schema, which is readable and maintainable over time?
+- Do you care about speed and performance at scale?
+
+If the answers to the above are YES, then Dgraph would be a great fit for your application. Dgraph
+provides NoSQL like scalability while providing SQL like transactions and the ability to select,
+filter, and aggregate data points. It combines that with distributed joins, traversals, and graph
+operations, which makes it easy to build applications with it.
+
+## Dgraph compared to other graph DBs
+
+| Features                            | Dgraph                        | Neo4j                                                    | Janus Graph                           |
+| ----------------------------------- | ----------------------------- | -------------------------------------------------------- | ------------------------------------- |
+| Architecture                        | Sharded and Distributed       | Single server (+ replicas in enterprise)                 | Layer on top of other distributed DBs |
+| Replication                         | Consistent                    | None in community edition (only available in enterprise) | Via underlying DB                     |
+| Data movement for shard rebalancing | Automatic                     | Not applicable (all data lies on each server)            | Via underlying DB                     |
+| Language                            | GraphQL inspired              | Cypher                                                   | Gremlin                               |
+| Protocols                           | Grpc / HTTP + JSON / RDF      | Bolt + Cypher                                            | Websocket / HTTP                      |
+| Transactions                        | Distributed ACID transactions | Single server ACID transactions                          | Not typically ACID                    |
+| Full-Text Search                    | Native support                | Native support                                           | Via External Indexing System          |
+| Regular Expressions                 | Native support                | Native support                                           | Via External Indexing System          |
+| Geo Search                          | Native support                | External support only                                    | Via External Indexing System          |
+| License                             | Apache 2.0                    | GPL v3                                                   | Apache 2.0                            |
+
+## Users
+
+- **Dgraph official documentation is present at [docs.dgraph.io](https://docs.dgraph.io).**
+- For general information and questions, visit
+  [Github discussions](https://github.com/dgraph-io/dgraph/discussions).
+- Please see [releases tab](https://github.com/dgraph-io/dgraph/releases) to find the latest release
+  and corresponding release notes.
+
+## Developers
+
+Please see [Contributing to Dgraph](https://github.com/dgraph-io/dgraph/blob/main/CONTRIBUTING.md)
+for guidelines on contributions.
+
+## Client Libraries
+
+The Dgraph team maintains several
+[officially supported client libraries](https://docs.dgraph.io/clients/). There are also libraries
+contributed by the community
+[unofficial client libraries](https://docs.dgraph.io/clients/unofficial-clients).
+
+##
+
+## Contact
+
+- Please use [Github discussions](https://github.com/dgraph-io/dgraph/discussions) for questions,
+  feature requests and discussions.
+- Please use [GitHub Issues](https://github.com/dgraph-io/dgraph/issues) for filing bugs or feature
+  requests.

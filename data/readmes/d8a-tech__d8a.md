@@ -1,0 +1,112 @@
+<img src="./docs/static/img/logo-wide.svg" alt="d8a logo" />
+
+# Divine Data (d8a)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Docs](https://img.shields.io/badge/docs-d8a-1F7AE0.svg)](https://d8a-tech.github.io/d8a/getting-started)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg)](https://github.com/d8a-tech/d8a/issues)
+
+Divine Data (d8a) is an open source, warehouse-native analytics platform. Compatible with GA4 and Matomo tracking protocols, and has its own native web tracker. Clean schema, can be deployed anywhere, including your cloud or on-premises.
+
+## Highlights
+
+- **GA4 & Matomo tracking protocol compatibility** - Seamlessly integrates with the Google Analytics 4 and Matomo tracking protocols, allowing you to implement advanced web, server-side, or mobile tracking plans in just minutes
+- **Flat data model for visualization** - Data is stored in a flat, analytics-ready format - perfect as a source for reporting and data warehouses, with even custom events stored in dedicated columns
+- **Open source codebase** - Transparent, auditable, and community-driven. Fork, contribute, or self-host as you wish
+- **Works alongside GA4** - Can run in parallel with GA4 for a smooth transition or as a reliable backup
+- **Dedicated web tracker (beta)** - A drop-in replacement for `gtag.js` with a matching API for an easy switch to d8a tracking
+- **Full session scope support** - Sessions are calculated on the backend for accuracy and flexibility - no reliance on client-side hacks
+- **BigQuery, ClickHouse & Object Storage / Files support** - Export and analyze your data in Google BigQuery or ClickHouse for advanced analytics, or write CSV files directly to S3/MinIO, GCS, or local filesystem. Scales to billions of events with no upper limit
+
+## Core Use Cases
+
+- **Perfect for healthcare** - Collect traffic on healthcare websites under HIPAA requirements
+- **Well-suited for gov** - Collect traffic on gov't websites under FedRAMP requirements
+- **Europe & GDPR?** - Supports EU's independence from Bigtech
+
+## Screenshots & Reporting Demo
+
+<table>
+  <tr>
+    <td>
+      <a href="./docs/static/img/reporting-overview.png" target="_blank">
+        <img src="./docs/static/img/reporting-overview.png" alt="Overview Screenshot" width="260" />
+      </a>
+    </td>
+    <td>
+      <a href="./docs/static/img/reporting-location.png" target="_blank">
+        <img src="./docs/static/img/reporting-location.png" alt="Location Screenshot" width="260" />
+      </a>
+    </td>
+    <td>
+      <a href="./docs/static/img/reporting-ecommerce.png" target="_blank">
+        <img src="./docs/static/img/reporting-ecommerce.png" alt="Ecommerce Screenshot" width="260" />
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align:center;">Overview</td>
+    <td style="text-align:center;">Location</td>
+    <td style="text-align:center;">Ecommerce</td>
+  </tr>
+</table>
+
+You can also see the full demo [here](https://lookerstudio.google.com/reporting/0e4102b6-c38b-4f55-aa25-c1fe91d1c1e9/page/p_53ep5k8umd).
+
+## Running d8a
+
+### Cloud
+
+You can use our free Cloud at [app.d8a.tech](https://app.d8a.tech/).
+
+### Local production setup (using docker)
+
+See the [Getting started guide](https://docs.d8a.tech/getting-started).
+
+### Local development setup (from source)
+
+1. Run it.
+
+```bash
+go run main.go server --config config.dev.yaml
+```
+
+2. Make a request and wait ~10 seconds for the session to be closed.
+
+```bash
+curl "http://localhost:8080/g/collect?v=2&tid=14&dl=https%3A%2F%2Ffoo.bar&en=page_view&cid=ag9" -X POST
+```
+
+3. Check the console output to verify events are being processed.
+
+## Testing
+
+```bash
+go test ./...
+```
+
+## AI Usage disclaimer
+
+This work is developed with AI assistance, by professional software engineers with more than 10 years of experience in data/analytics space. Every line of code is manually reviewed before it's merged. Vibe-coded PRs made without understanding of the system will be declined.
+
+## Contributing
+
+We welcome contributions from the community. Bug fixes and targeted improvements are always appreciated. For larger refactors or architectural changes, we ask that you discuss your ideas with us on Discord or Github Issues first. While modern AI tools make it easy to generate extensive code changes, we need to carefully balance the needs of our community and maintain the project's direction.
+You may notice some abstractions in the codebase that seem unnecessary—these exist to support our cloud service, which uses alternative implementations in certain areas.
+Please ensure contributions are thoughtful and align with our project standards. PRs that appear to be purely AI-generated without human review and consideration may not be accepted. We value quality over quantity and appreciate the time you take to understand our codebase before contributing.
+
+## Documentation
+
+See the following resources:
+
+- [Getting Started Guide](https://docs.d8a.tech/getting-started)
+- [Database Schema & Columns](https://docs.d8a.tech/articles/database-schema)
+- [Technical Deep Dive](https://docs.d8a.tech/articles/technical-deep-dive)
+
+## Join us on Discord
+
+Connect with the team in our Discord community: [link](https://discord.gg/EegbcdsWUc)
+
+## License
+
+MIT — see `LICENSE` for details.

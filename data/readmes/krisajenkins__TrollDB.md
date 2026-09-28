@@ -1,0 +1,104 @@
+* TrollDB
+
+[[file:https://travis-ci.org/krisajenkins/TrollDB.svg]]
+
+TrollDB is an in-memory JavaScript database that prioritises
+performance over *everything*. It is blazingly fast. You *will not*
+find a faster in-memory JavaScript Database, so stop looking. You've
+arrived my friend.
+
+** Basic Usage
+
+First require the trolldb script:
+
+#+BEGIN_SRC html
+<script type="text/javascript" src="trolldb.js"></script>
+#+END_SRC
+
+*** Insert
+
+You can insert any form of structured data you like:
+
+#+BEGIN_SRC javascript
+db.insert({"balance": 12345});
+#+END_SRC
+
+TrollDB will optimize this insert for performance.
+
+*** Query
+
+You can query for data with pattern matching.
+
+#+BEGIN_SRC javascript
+db.query({"balance": undefined});
+#+END_SRC
+
+TrollDB will optimize this query for performance.
+
+*** Update
+
+You can update data with pattern matching.
+
+#+BEGIN_SRC javascript
+db.update({"balance": undefined}, {"balance": 54321});
+#+END_SRC
+
+TrollDB will optimize this update for performance.
+
+*** Delete
+
+You can delete data with pattern matching.
+
+#+BEGIN_SRC javascript
+db.delete({"balance": undefined});
+#+END_SRC
+
+TrollDB will optimize this delete for performance.
+
+** Advanced Usage
+
+*** Clustering
+
+TrollDB features powerful Clustering support that beats the CAP
+theorem. To connect to a cluster:
+
+#+BEGIN_SRC javascript
+db.connectToCluster();
+#+END_SRC
+
+TrollDB will seek out and connect to other nodes on the network in a
+way that is optimized for performance. Should a node go down, when it
+comes back up it will be re-synced with the rest of the cluster in a
+way that is optimized for performance.
+
+*** SQL API
+
+TrollDB can translate queries expressed in industry standard SQL to
+perfectly optimal TrollDB queries *on the fly* The TrollDB translator
+will parse SQL *faster than your legacy relational database*.
+
+#+BEGIN_SRC javascript
+db.executeSQL('DROP table Students;');
+#+END_SRC
+
+** Bugs
+
+Please report any bugs in the Github Issue tracker. Please note that
+only bugs that affect performance will be considered bugs.
+
+** Status
+
+Production-ready, if performance is your only concern.
+
+** Credits
+
+Thanks to...
+
+- [[http://lokijs.org/#/][LokiJS]] for the initial inspiration.
+- [[https://github.com/honza][Honza Pokorny]] for adding NodeJS support.
+
+** License
+
+Copyright © 2014-2017 Kris Jenkins
+
+Distributed under the Eclipse Public License.

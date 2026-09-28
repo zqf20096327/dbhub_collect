@@ -1,0 +1,117 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/k5mxtgstlgmbn1v8/branch/master?svg=true)](https://ci.appveyor.com/project/has-taiar/sqlite-net-cipher/branch/master)  [![NuGet](https://buildstats.info/nuget/sqlite.net.cipher)](https://www.nuget.org/packages/SQLite.Net.Cipher/)
+
+
+# SQLite.Net.Cipher
+
+An easy to use extension for SQLite.Net PCL that allows you to seamlessly encrypt/decrypt data when getting data in/out of the database. This library allows you to securely encrypt/decrypt group of your objects' properties simply by decorating these propertiese with one attribute (Secure). The library Works great one all major platforms (iOS, Android, Windows Universal, and .NET 4.0 onwards). There is a dependency on SQLite.Net PCL and PCLCrypto.  
+More details can be found [here](http://www.hasaltaiar.com.au/sqlite-net-cipher-secure-your-data-on-all-mobile-platforms-seamlessly-and-effortlessly/)
+
+
+
+## License
+This projected is licensed under the terms of the MIT license.
+See LICENSE.TXT
+
+
+## Code Sample
+To use the library you need to subclass SecureDatabase and add the attribute [Secure] on the properties that you want to secure. 
+    
+	public class MyDatabase : SecureDatabase
+	{
+		public MyDatabase(ISQLitePlatform platform, string dbfile, string someSalt): base(platform, dbfile, someSalt)
+		{
+		}
+			
+		protected override void CreateTables()
+		{
+			CreateTable<SampleUser>();
+		}
+	}
+	
+	public class SampleUser : IModel
+	{
+		public string Id { get; set; }
+		public string Name { get; set; }
+			
+		[Secure] // This property will be encrypted when inserted to the database, and decrypted when read out of the db again.
+		public string Password { get; set; }
+			
+		public string Bio { get; set; }
+	}
+	
+
+
+
+## iOS
+	var dbFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "mysequredb.db3");
+	var platform = new SQLite.Net.Platform.XamarinIOS.SQLitePlatformIOS();
+	var someSalt = CryptoService.GenerateRandomKey(16);
+	ISecureDatabase database = new MyDatabase(platform, dbFilePath, someSalt);
+	var keySeed = "my very very secure key seed. This can be any string, with any size. You should use PCLCrypt strong random generator for this";
+	
+	var user = new SampleUser()
+	{
+		Name = "Has AlTaiar",
+		Password = "very secure password :)",
+		Bio = "Very cool guy :) ",
+		Id = Guid.NewGuid().ToString()
+	};
+	
+	// insert object to the database (it will encrypt all [Secure] properties)
+	var inserted = database.SecureInsert<SampleUser>(user, keySeed);
+	
+	var newUser = database.SecureGet<SampleUser>(user.Id, keySeed);
+	Assert.AreEqual("very secure password :)", newUser.Password); // password will be decrypted seamlessly when acceed from db. 
+
+## Android
+	var dbFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "mysequredb.db3");
+	var platform = new SQLite.Net.Platform.XamarinAndroid.SQLitePlatformAndroid();
+	var someSalt = CryptoService.GenerateRandomKey(16);	
+	ISecureDatabase database = new MyDatabase(platform, dbFilePath, someSalt);
+	var keySeed = "my very very secure key seed. This can be any string, with any size. You should use PCLCrypto strong random generator for this";
+	
+	var user = new SampleUser()
+	{
+		Name = "Has AlTaiar",
+		Password = "very secure password :)",
+		Bio = "Very cool guy :) ",
+		Id = Guid.NewGuid().ToString()
+	};
+	
+	// insert object to the database (it will encrypt all [Secure] properties)
+	var inserted = database.SecureInsert<SampleUser>(user, keySeed);
+	
+	var newUser = database.SecureGet<SampleUser>(user.Id, keySeed);
+	Assert.AreEqual("very secure password :)", newUser.Password); // password will be decrypted seamlessly when acceed from db.
+
+
+## Windows Universal (and Other platform)
+You could use the same code samples above for all other platforms. The only things to change, you database file path and this line:
+	
+	var dbFilePath = "set-your-db-file-path";
+	var platform = new SQLite.Net.Platform.WhateverPlatformYouAreUsing.SQLitePlatformX();
+	var someSalt = CryptoService.GenerateRandomKey(16);	
+	ISecureDatabase database = new MyDatabase(platform, dbFilePath, someSalt);
+	
+	// the rest of the code samples above works the same way.
+
+
+## How-To use it?
+To install, simply grab the package from Nuget
+	
+	> Install-Package SQLite.Net.Cipher
+
+
+### Tips
+
++	Use Strong Random generators, like the one provided by PCLCrypto. Avoid using simple-to-guess passwords.
++	Avoid storing the encryption key on the device. If you have to do so, use KeyChain.Net to store your key in the device specialised database of keys. 
++	SQLite.Net.Cipher allows you to have your implementation of CryptoService, which is used for encryption/decryption. 
++	Your Data models (objects) need to implement IModel. 
+
+
+### Limitations:
+
+1.	The library assumes that your property values are using UTF-8 for encoding.
+2.	The [Secure] property can only be used on properties of type string. 
+3.	Limited support to generic methods like Query<T>(), and ExecuteScalar<T>(), use CryptoService along with these methods to construct your own secure sql query. 

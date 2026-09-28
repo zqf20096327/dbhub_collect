@@ -1,0 +1,252 @@
+# Tidal Memory
+
+A quiet, layered memory engine for conversational agents.
+
+It remembers nearby conversations as impressions, preserves exact details out
+of sight, and retrieves those details only when the recall policy permits.
+There is no memory dashboard. Memory should flow, not become homework.
+
+## What makes it different
+
+- **Two resolutions:** low-resolution continuity and high-resolution detail
+  never share the same injection path.
+- **In-band curation:** trusted primary chat models can preserve a meaningful
+  moment while its full texture is still in attention, without waiting for a
+  “remember this” command or a delayed batch extractor.
+- **Stable identity memory:** core and high-importance semantic facts have a
+  small, bounded opening block separate from both impressions and recall.
+- **Progressive forgetting:** window impressions become weekly impressions,
+  then monthly impressions. Source rows are archived, not destroyed.
+- **Quiet ongoing threads:** low-drama but continuing life or project matters
+  survive the two-window ladder without becoming permanent facts.
+- **A three-valve recall policy:** trigger sensitivity, association radius, and
+  injection budget are independent controls.
+- **Vector optional:** SQLite FTS5 plus multilingual lexical overlap works out
+  of the box. Any vector retriever can be added behind one small interface.
+- **Time-aware facts:** occurrence time and recording time are separate; old
+  facts can be superseded without erasing their history.
+- **No UI:** applications integrate the library or CLI. Debugging remains an
+  engineering concern instead of a daily chore for the person chatting.
+
+## Trial status
+
+This is a small, framework-agnostic preview of the architecture. It deliberately
+contains no data, prompts, credentials, or code copied from a private chat
+deployment.
+
+The offline impression writer is intentionally simple. For production, pass an
+LLM callback that generates deliberately vague impressions. The store,
+retrieval policy, context budgets, versioning, and rollup work without an LLM.
+
+## Quick start
+
+    python -m venv .venv
+    . .venv/bin/activate
+    pip install -e .
+    tidal-memory --db demo.db demo
+
+Manual use:
+
+    tidal-memory --db demo.db remember \
+      "Rin prefers jasmine tea to coffee." --layer semantic --importance 6
+
+    tidal-memory --db demo.db impression chat-001 \
+      "They talked about rainy walks; the mood was easy and affectionate."
+
+    tidal-memory --db demo.db context --conversation-id chat-002
+    tidal-memory --db demo.db recall --force \
+      "Do you remember what Rin likes to drink?"
+
+The complete integration pattern is in examples/chat_integration.py.
+
+## Let your coding agent install it
+
+Most people do not need to wire the hooks by hand. Give this repository to the
+coding agent that maintains your chat application and send it this instruction:
+
+> Read `AI_INTEGRATION.md`, inspect my current chat application, and integrate
+> Tidal Memory in shadow mode first. Do not delete, overwrite, or migrate my
+> existing conversations or memories. Back up every file and database you need
+> to change, run the required tests, and show me the recall test results before
+> enabling memory injection.
+
+[`AI_INTEGRATION.md`](AI_INTEGRATION.md) tells the agent how to locate the three
+integration hooks, preserve edits and regenerated branches, avoid prompt-cache
+churn, validate recall quality, and produce a rollback-ready handoff report.
+
+## The three paths
+
+    hot conversation -> primary model memory_save tool -> exact durable memory
+
+    window closes ----> fact extractor ----------> exact durable memory
+                  \----> vague impression -> recent windows -> weekly -> monthly
+                                                          |
+    new window -------------------------------------------+-> bounded background
+
+    explicit/contextual reference -> retriever(s) -> verifier -> exact detail
+
+Background types (window impression, weekly rollup, and monthly rollup) are
+excluded from detail retrieval at the retriever boundary. They cannot consume
+detail candidate slots.
+
+## Recall policy
+
+    from tidal_memory import RecallPolicy
+
+    policy = RecallPolicy(
+        trigger="balanced",                 # explicit | balanced | active
+        association="direct_plus_one_hop",  # direct | direct_plus_one_hop
+        max_items=2,
+        max_chars=900,
+        repeat_cooldown_turns=3,
+        candidate_pool=8,
+    )
+
+Search can be broad; injection stays strict. A production integration may pass
+a relevance verifier callback to TidalMemory for final candidate review.
+
+## Bring your own retriever
+
+Implement one method:
+
+    from tidal_memory import Retriever, RetrievalHit
+
+    class MyVectorRetriever(Retriever):
+        def retrieve(self, query, *, limit=8, exclude_event_types=()):
+            # Return RetrievalHit(memory, score, source="my-vector")
+            ...
+
+Combine it with the zero-dependency backend:
+
+    from tidal_memory import HybridRetriever, KeywordRetriever, TidalMemory
+
+    memory = TidalMemory("memory.db")
+    memory.retriever = HybridRetriever(
+        KeywordRetriever(memory.store),
+        MyVectorRetriever(...),
+    )
+
+The embedding provider, dimensions, index, and score scale are not part of the
+memory model.
+
+## Bring your own impression writer
+
+    def vague_writer(messages):
+        # Call any model. Keep only broad topics and relational atmosphere.
+        return "They spent the evening fixing things and teasing each other."
+
+    memory = TidalMemory("memory.db", impression_writer=vague_writer)
+
+The writer should remove exact numbers, quotations, tool names, instructions,
+and intimate detail. It may retain at most one clearly unresolved direction.
+
+For automatic durable facts, pass a fact_extractor callback. It receives the
+window messages and returns dictionaries accepted by remember:
+
+    def extract_facts(messages):
+        return [{
+            "summary": "Rin prefers jasmine tea.",
+            "layer": "semantic",
+            "importance": 6,
+            "tags": "preference,drink",
+        }]
+
+    memory = TidalMemory("memory.db", fact_extractor=extract_facts)
+
+## Let the primary model curate live moments
+
+Delayed extraction is good at facts but often flattens why a moment mattered.
+For a trusted primary conversational model, expose the provider-neutral tool
+definition and route successful calls back to Tidal Memory:
+
+    from tidal_memory import TidalMemory, proactive_memory_tool
+
+    memory = TidalMemory("memory.db")
+    tools = [proactive_memory_tool()]
+
+    # When the model calls memory_save:
+    memory_id = memory.curate(
+        tool_arguments,
+        conversation_id=current_conversation_id,
+    )
+
+The tool itself tells the model to save only lasting facts, decisions,
+relationship-defining moments, vivid shared episodes, or insights that a later
+summary would flatten. Routine affection, temporary moods, short-lived
+roleplay, assistant-only claims, and ordinary turns should remain unsaved.
+
+Keep this tool directly visible to the one or two models that actually serve as
+the long-term companion. Do not grant proactive write authority merely because
+a model is available in a picker. Other models can receive the tool only after
+an explicit “remember this” intent. `curate` validates the candidate and reuses
+an exact active match instead of duplicating it.
+
+For continuing matters that are too temporary for durable memory, pass a
+thread extractor. Reuse a short stable key across windows; emit `done` when the
+matter is explicitly completed or cancelled:
+
+    def extract_threads(messages):
+        return [{
+            "key": "cat-sitting-job",
+            "label": "The after-work cat-sitting job is still ongoing",
+            "status": "active",  # or "done"
+            "observed_at": "2026-08-09T08:54:00+08:00",
+            "expires_at": "2026-08-09T20:30:00+08:00",  # optional
+        }]
+
+    memory = TidalMemory("memory.db", thread_extractor=extract_threads)
+
+At most four active labels from the latest twelve windows and fourteen days are
+added to the opening context. Each label carries its fixed observation time and,
+when known, its expiry. Newer state wins; `done` is a tombstone; an expired newer
+state cannot reveal an older active version. The exact transcript is never
+injected through this path.
+
+Use ISO 8601 timestamps with an explicit offset; storage normalizes them to UTC
+so rows from different time zones still sort chronologically. Reuse the same
+`key` when a matter changes, and emit `done` when it is completed, cancelled, or
+corrected. One-time schedules should include `expires_at`; omit them from the
+active thread list if no reliable deadline can be derived. Legacy three-field
+thread records remain readable and use their window occurrence time as
+`observed_at`.
+
+`store.ongoing_threads()` remains a label-only compatibility API. Integrations
+that need provenance or clocks can use `store.active_threads()` for structured
+thread dictionaries.
+
+## Natural-language controls
+
+The library exposes primitives so a chat agent can map ordinary phrases:
+
+- “Remember this” calls remember.
+- “Forget that” calls forget.
+- “My preference changed” calls store.supersede.
+- “Why did you remember this?” can show retrieval hit provenance.
+
+Applications can connect exact memories with store.link. The one-hop association
+policy follows those edges after a direct match; background impressions remain
+excluded even when linked.
+
+No end-user management screen is required.
+
+## Privacy boundary
+
+Do not commit a live database. The default gitignore excludes SQLite files and
+environment files. Applications should also:
+
+- encrypt or protect the database at rest;
+- require explicit export and delete controls;
+- avoid storing secrets in memories;
+- keep exact intimate details out of background impressions;
+- log source IDs and policy decisions without logging private content.
+
+## Tests
+
+    python -m unittest discover -s tests -v
+
+The suite checks path separation, Chinese lexical recall, recall triggers,
+cooldown, fact supersession, rollup, and context budgets.
+
+## License
+
+AGPL-3.0-only.

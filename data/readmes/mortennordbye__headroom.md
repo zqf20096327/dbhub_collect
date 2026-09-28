@@ -1,0 +1,483 @@
+<div align="center">
+
+# Headroom
+
+### Budgets · Assets · Investments · Loan modeling
+
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev/) [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/) [![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)](https://vite.dev/) [![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)](https://www.docker.com/) [![SQLite](https://img.shields.io/badge/SQLite-003B57?logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+
+[![CI](https://github.com/mortennordbye/headroom/actions/workflows/build.yml/badge.svg)](https://github.com/mortennordbye/headroom/actions/workflows/build.yml) [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/mortennordbye/headroom/badge)](https://scorecard.dev/viewer/?uri=github.com/mortennordbye/headroom)
+
+[![License](https://img.shields.io/github/license/mortennordbye/headroom?style=flat-square)](LICENSE) [![Last Commit](https://img.shields.io/github/last-commit/mortennordbye/headroom?style=flat-square)](https://github.com/mortennordbye/headroom/commits/main) [![Issues](https://img.shields.io/github/issues/mortennordbye/headroom?style=flat-square)](https://github.com/mortennordbye/headroom/issues) [![Stars](https://img.shields.io/github/stars/mortennordbye/headroom?style=flat-square)](https://github.com/mortennordbye/headroom/stargazers)
+
+### [**Try the live demo → headroom.nordbye.it**](https://headroom.nordbye.it)
+
+Fictional numbers, nothing to sign up for. Click through everything — your
+changes stay in your own browser and are never saved. See
+[Public demo mode](#public-demo-mode) for how it is locked down.
+
+A self-hosted personal finance tracker. Track monthly budgets, manage assets and investments, model housing loans, and get smart spending recommendations. All data is stored server-side in a SQLite database via Docker — zero browser storage. Norwegian is natively supported.
+
+| Dashboard | Budget |
+|-----------|--------|
+| ![Dashboard](screenshots/dashboard.png) | ![Budget](screenshots/budget.png) |
+
+![Net worth](screenshots/assets.png)
+
+</div>
+
+## Features
+
+Track monthly budgets with variable-income support, fixed expenses, a daily transaction log, and a spend/invest split that adapts automatically to your income history. The dashboard gives a live view of total equity, budget health, asset allocation, and a running net worth chart.
+
+Assets covers your investment portfolio, property equity, crypto, and cash reserves with tax-aware calculations and a 15-year growth projection. The loan calculator handles first-time buyer, homeowner, and buy-and-sell scenarios with full amortization schedules and tax benefit calculations. Supports NOK, USD, or any custom currency, and ships with full Norwegian and English translations.
+
+## How to run it
+
+Three ways to run Headroom. All of them keep your data on your own machine, with nothing in the
+cloud and no account to create. Pick one:
+
+| | Best for | What you need |
+|---|---|---|
+| **[A. Download the app](#a-download-the-app)** | Anyone who just wants to use it | A Mac or Windows PC |
+| **[B. Docker](#b-docker)** | Keeping it always-on, on a laptop, server or NAS | Docker |
+| **[C. Build it yourself](#c-build-it-yourself)** | Changing the code, or preferring not to run a binary someone else built | Node 24 and git |
+
+They are the same application. The desktop app runs the same server, the same SQLite database and
+the same backups as the container, only wrapped so it starts on its own.
+
+## A. Download the app
+
+Download it from the [latest release](https://github.com/mortennordbye/headroom/releases/latest)
+and open it like any other program. No Docker, no terminal.
+
+| Your computer | File to download |
+|---|---|
+| Mac with Apple chip (M1 and newer) | `Headroom-<version>-arm64.dmg` |
+| Mac with Intel chip | `Headroom-<version>.dmg` |
+| Windows | `Headroom-Setup-<version>.exe` |
+
+Not sure which Mac you have? Click the Apple menu, then **About This Mac**. If the Chip line says
+Apple, take the arm64 file.
+
+### Installing
+
+**macOS** — open the `.dmg` and drag Headroom into the Applications folder, then eject the disk
+image.
+
+**Windows** — run the `.exe`. It installs for your user only, so it does not ask for an
+administrator password, and it adds a Start menu and desktop shortcut.
+
+### The first time you open it, your computer will warn you
+
+The app is not signed with a paid developer certificate, so neither system recognises who published
+it. The warning is about an unknown publisher, not about anything found in the app. You have to
+tell your computer once that you meant to open it:
+
+**Windows** — "Windows protected your PC" → click **More info** → **Run anyway**.
+
+**macOS (Sequoia / macOS 15 and newer)** — double-click Headroom. macOS refuses and offers only
+**Done**. Click it, then go to **System Settings → Privacy & Security**, scroll to the Security
+section where it says Headroom was blocked, and click **Open Anyway**. Confirm with Touch ID or
+your password. (On macOS 14 and older you can instead right-click the app and choose **Open**.
+Apple removed that shortcut for unsigned apps in macOS 15.)
+
+You only do this once. After that it opens by double-clicking like anything else.
+
+Want to check the file is the one CI built before you run it? Every release also carries a
+`SHA256SUMS.txt`. Compare it against your download with `sha256sum -c SHA256SUMS.txt` (macOS:
+`shasum -a 256 -c`), or on Windows `Get-FileHash Headroom-Setup-<version>.exe` in PowerShell.
+
+Would rather not click past a security warning at all? [Build it yourself](#c-build-it-yourself).
+An app compiled on your own machine never triggers it.
+
+Your data is stored on your own computer and never leaves it:
+
+- **macOS** — `~/Library/Application Support/Headroom/data`
+- **Windows** — `%APPDATA%\Headroom\data`
+
+That folder also gets the same automatic daily backups as the Docker version (see
+[Backups](#backups)). To move to a new version, download the new file and install over the old one.
+Your data is in a separate folder, so it is untouched.
+
+## B. Docker
+
+The way to run it always-on, or on a machine that isn't a Mac or Windows PC. All you need is Docker:
+
+- **macOS / Windows** — [Docker Desktop](https://www.docker.com/products/docker-desktop/) (free).
+- **Linux** — [Docker Engine](https://docs.docker.com/engine/install/).
+
+```bash
+docker run -d \
+  --name headroom \
+  -p 127.0.0.1:8080:3001 \
+  -v headroom_data:/data \
+  --restart unless-stopped \
+  ghcr.io/mortennordbye/headroom:latest
+```
+
+Open **http://localhost:8080** and you're done — **no config files, no environment variables required.**
+
+- The `--restart unless-stopped` flag means it comes back automatically after you reboot, so it's always there when you open the browser.
+- Everything you enter is saved in the **`headroom_data`** volume on your machine. It survives restarts, reboots, and updates (see [Updating](#updating) and [Data persistence](#data-persistence)).
+
+**Later, want it on a home server or another device?** Change the port binding (`-p 8080:3001` for all interfaces, or map it into a reverse proxy) — nothing else changes. Read [Security](#security) first: there's no login, so don't expose it to the open internet without a proxy or VPN in front.
+
+## C. Build it yourself
+
+Nothing here is a black box. Both the container image and the desktop installers are ordinary
+builds you can reproduce with the same commands CI runs.
+
+**As a container** (also needs [Make](https://www.gnu.org/software/make/)):
+
+```bash
+git clone https://github.com/mortennordbye/headroom.git
+cd headroom
+make build              # builds the image and starts it on http://localhost:8080
+```
+
+**As a Mac or Windows app** (needs [Node 24](https://nodejs.org/)):
+
+```bash
+git clone https://github.com/mortennordbye/headroom.git
+cd headroom
+npm install
+npm run build           # builds the frontend
+
+cd desktop
+npm install             # also rebuilds the SQLite binding for Electron
+npm run dist            # installer lands in desktop/release/
+```
+
+`npm run dist` builds for the machine you are on. It packages the server and the frontend into the
+app, then checks that they really are inside it (`npm run verify`, which the build runs for you).
+
+Worth knowing: an app you built yourself **does not show the unidentified-developer warning**. That
+warning is triggered by the quarantine flag your browser attaches to a download, and a file you
+built locally never has one. If the warning is what puts you off the release download, building it
+yourself sidesteps it entirely.
+
+For how the wrapper works and how releases are cut, see [`desktop/README.md`](desktop/README.md).
+
+## Updating
+
+New versions never touch your data. To move to a newer version:
+
+**The desktop app (A):** it tells you. On launch it checks whether a newer release exists and, if so,
+offers to open the download page — or to skip that version and stop asking about it. You can also
+just download the new installer from the
+[latest release](https://github.com/mortennordbye/headroom/releases/latest) yourself. Either way,
+install it over the old one: your data sits in a separate folder, so it carries over untouched.
+
+The check asks GitHub for the latest release number and nothing else — it sends no data about you and
+nothing about your finances. If it cannot reach GitHub it stays quiet.
+
+**Docker (B) — pre-built image:**
+
+```bash
+docker pull ghcr.io/mortennordbye/headroom:latest   # get the new version
+docker rm -f headroom                                # remove the old container (NOT the volume)
+docker run -d \
+  --name headroom \
+  -p 127.0.0.1:8080:3001 \
+  -v headroom_data:/data \
+  --restart unless-stopped \
+  ghcr.io/mortennordbye/headroom:latest              # start the new one, same volume
+```
+
+**From source (C):**
+
+```bash
+git pull
+make build
+```
+
+Because you re-attach the same `-v headroom_data:/data` volume, or reuse the same Docker Compose volume via `make build`, **all your budgets, transactions, and settings carry over untouched.** Only `docker-compose down -v` or deleting the volume by hand ever removes data.
+
+> **Tip:** before a big update, it costs nothing to take a snapshot first — `make backup`, or **Settings → Export** in the app (see [Data persistence](#data-persistence)).
+
+> **Pinning to a specific version (and rolling back).** `:latest` always moves to the newest build. Every CI build is *also* published under an **immutable `sha-<short-commit>` tag** — e.g. `ghcr.io/mortennordbye/headroom:sha-0112d73`. Pin to one for a reproducible deploy, and if an update misbehaves just start the previous `sha-` tag again (same volume, your data is untouched): swap `:latest` for `:sha-<short>` in the `docker run`/`docker pull` commands above. Browse the available tags on the [package page](https://github.com/mortennordbye/headroom/pkgs/container/headroom).
+
+> **Browser shows an old version after updating?** The app is a PWA and caches itself. Accept the "new version available" prompt, or hard-reload (Cmd/Ctrl+Shift+R). Your data is unaffected — this is only the UI cache.
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `make build` | Build image and start (also rebuilds if already running) |
+| `make up` | Start without rebuilding |
+| `make down` | Stop all containers |
+| `make restart` | Restart without rebuilding |
+| `make backup` | Copy the SQLite database to `./backups/` (timestamped) |
+| `make mcp-install` | Register the [AI access (MCP)](#ai-access-mcp) server with Claude Code |
+
+## Local development (without Docker)
+
+_For contributors hacking on the code — if you just want to **use** Headroom on your laptop, use [How to run it](#how-to-run-it) above instead._
+
+For iterating on the frontend you can run the API and Vite dev server directly:
+
+```bash
+npm install
+node server/index.js          # API on :3001 (writes to ./data)
+npm run dev                   # Vite on :5173, proxies /api → :3001
+make seed-local               # optional: seed ./data with demo data
+```
+
+`npm test` runs the Vitest suite; `npm run lint` runs ESLint.
+
+## AI access (MCP)
+
+Headroom ships a local [Model Context Protocol](https://modelcontextprotocol.io) server
+(`mcp/`) that lets an AI assistant (Claude Desktop, Claude Code, …) read your financial
+data, compute insights, and make guarded changes. It runs on **your machine over stdio**
+and talks to the running app's local API — nothing is exposed to the network.
+
+- **Numbers match the app** — the tools reuse Headroom's own tested `src/lib` math.
+- **Writes are safe** — every change goes through the same `/api/data` guards as the UI
+  (validation, optimistic-concurrency `rev`, whole-blob preserve) and touches exactly one
+  slice, so it can't quietly drop the rest of your data.
+
+Set it up (with the app running via `make up`):
+
+```bash
+make mcp-install                 # registers it with Claude Code (this project)
+# override the app URL if needed:
+make mcp-install HEADROOM_URL=http://localhost:3001
+```
+
+Then restart Claude Code and ask it something like *"give me a financial overview"* or
+*"where can I improve my budget?"*. For Claude Desktop, or the full tool list and env
+options, see [`mcp/README.md`](mcp/README.md). Remove it with `make mcp-uninstall`.
+
+If the app has the [optional password](#optional-password) enabled, set
+`HEADROOM_PASSWORD` in the MCP server's env so it can authenticate.
+
+## Security
+
+Headroom has **no login by default** (there's an [optional password](#optional-password) below) — it's built for single-user self-hosting, and anyone who can reach the port can otherwise read and overwrite your entire financial picture. So there are exactly **two safe ways to run it:**
+
+1. **Local only (default).** The port binds to `127.0.0.1` (loopback), so the app is reachable only from the machine it runs on. This is the recommended setup for a laptop.
+2. **In a locked-down homelab, reached over a private tunnel.** Host it on a home server and get to it through **WireGuard**, **Tailscale**, or a VPN — nothing is exposed to the public internet, and only your own devices (including your phone) can reach it.
+
+**Do not put it directly on the open internet.** If you want it reachable from a browser without a VPN, it must sit behind a reverse proxy (nginx, Caddy, Traefik) that adds authentication (basic auth or an SSO/identity layer) — and ideally HTTPS.
+
+Only change the port binding to `0.0.0.0` (all interfaces) if you understand that this exposes unauthenticated access to everyone who can reach that network.
+
+**Optional hardening:** set `ALLOWED_HOSTS` (see [Configuration](#configuration)) to reject requests whose `Host` header isn't one you expect — a small guard against DNS-rebinding. It's off by default so the app works behind any hostname without configuration.
+
+### Optional password
+
+A single shared password can gate the app (single-user, so it's one password — not user accounts). **Off by default.** Two ways to turn it on:
+
+- **In the app:** Settings → **Access** → set a password. Stored only as a `scrypt` hash.
+- **Via environment:** set `AUTH_PASSWORD` (e.g. a Kubernetes Secret). This forces auth on and takes precedence over the in-app setting, which then shows as "managed by server". Unset it to hand control back to the app.
+
+Sessions last 90 days (an httpOnly cookie). Health checks (`/healthz`) stay open. This gates the app's API — it is **not** a substitute for the reverse-proxy / VPN options above, and a password sent over plain `http://` on an untrusted network is weak, so only rely on it behind HTTPS. If you forget the password: unset `AUTH_PASSWORD`, or clear the `auth_config` row in the SQLite DB (or delete the DB to start fresh).
+
+## Use it on your phone
+
+Headroom has a full mobile layout and is a **PWA (installable web app)** — you can add it to your phone's home screen and it opens fullscreen with its own icon, just like a native app. There's nothing to install from an app store.
+
+**This only works if your phone can reach the server.** That rules out the laptop-only setup (`localhost` is just the laptop) — you need the **homelab + private tunnel** option from [Security](#security): host it on a home server and connect your phone over **WireGuard** or **Tailscale** first. Then open the app's address (e.g. `http://headroom.local` or the server's IP) on the phone.
+
+**iPhone / iPad (Safari)** — iOS only installs web apps from Safari, not Chrome:
+
+1. Connect your WireGuard/Tailscale tunnel so the phone can reach the server.
+2. Open the app's URL in **Safari**.
+3. Tap the **Share** button (the square with an upward arrow).
+4. Scroll down and tap **Add to Home Screen**.
+5. Keep the name "Headroom", tap **Add**.
+
+It now sits on your home screen and launches fullscreen in the mobile view.
+
+**Android (Chrome):** open the URL, tap the **⋮** menu → **Install app** / **Add to Home screen**.
+
+> **HTTPS recommended.** For the full PWA experience — offline app-shell caching and the "new version" update prompt — serve it over HTTPS (a reverse proxy with a certificate, or Tailscale's HTTPS). Over plain `http://`, iOS still lets you Add to Home Screen, but the service worker (offline caching) won't register.
+
+## Configuration
+
+All optional — the defaults are sensible and nothing needs to be set.
+
+| Env var | Default | Purpose |
+|---------|---------|---------|
+| `DATA_DIR` | `/data` (in Docker) | Where the SQLite database is stored. |
+| `PORT` | `3001` | Port the server listens on inside the container. |
+| `BIND_HOST` | _(unset — all interfaces)_ | Address to bind to. The desktop app sets `127.0.0.1`; in Docker the loopback restriction comes from the port mapping instead. |
+| `ALLOWED_HOSTS` | _(unset — all hosts allowed)_ | Comma-separated hostname allowlist, e.g. `finance.example.com,localhost`. When unset, no host filtering is applied. |
+| `AUTH_PASSWORD` | _(unset — auth off)_ | When set, forces the [optional password](#optional-password) on with this password, overriding the in-app Settings toggle. |
+| `DEMO_MODE` | _(unset — off)_ | Set to `1` to run this instance as a [public read-only demo](#public-demo-mode). |
+
+## Public demo mode
+
+**A live one runs at [headroom.nordbye.it](https://headroom.nordbye.it).**
+
+`DEMO_MODE=1` turns an instance into a public showcase — something you can link
+from a blog post and let strangers click through, without them reaching any real
+data or leaving anything behind.
+
+The demo is filled from `src/lib/demoData.ts`, a fictional dataset built to
+exercise the whole app rather than just render non-empty: an 11-year career
+across three employers with raises, promotions and a job change; bonuses,
+overtime and hours-worked history; imported payslips for the recent months
+alongside tax-estimated older ones; roughly six months of categorised
+transactions across two accounts, with categorisation, label and transfer rules
+applied; budgets that sit both under and over; property, second-home scenarios,
+pension, debts and goals. Transaction dates are relative to the day you open it,
+so the current month is always populated and nothing is ever dated in the future.
+
+What changes:
+
+- **The API is closed to writes.** Every non-GET request under `/api/` is refused
+  with `403`, and the whole `/api/bank/*` namespace is refused outright (its GETs
+  aren't safe reads — one proxies to Enable Banking on the instance's own
+  credentials, another completes a bank link). This is enforced server-side in
+  `server/demo.js`, so it holds no matter what a client sends.
+- **Each visitor gets their own sandbox.** The app detects demo mode at boot (via
+  `GET /api/config`) and fills itself with the fictional dataset in
+  `src/lib/demoData.ts`, generated in the browser. It never fetches or posts
+  `/api/data`. Visitors can edit anything; their changes stay in their own tab and
+  disappear on reload. No visitor can affect what another sees.
+- **The UI drops what doesn't apply.** No exit-demo button (there is no real data
+  behind it), no password settings, no restore points, no SQLite-backup restore,
+  no "delete all data". A "Reset sample data" button puts the dataset back.
+- **No background jobs.** Rotating backups and scheduled bank sync are both
+  skipped — a demo instance has nothing worth backing up and no bank to sync.
+
+A demo instance needs no persistent volume; give it ephemeral storage and no bank
+credentials. Run it as a **separate instance** from your real one — `DEMO_MODE`
+protects the API, but pointing it at your own data volume still serves that data
+to the internet on `GET /api/data`.
+
+```yaml
+# docker-compose snippet for a demo instance
+environment:
+  DEMO_MODE: "1"
+  ALLOWED_HOSTS: "demo.example.com"
+```
+
+## Data persistence
+
+Everything you enter lives in one SQLite database inside the named Docker volume **`headroom_data`** on your machine — there is no browser storage and nothing in the cloud. The volume is independent of the container, which is what makes your data stick around.
+
+**Your data survives:**
+- Stopping/starting the app (`make down` / `make up`, or `docker stop`/`start`)
+- Rebooting your laptop
+- Updating to a new version (see [Updating](#updating))
+
+**Your data is only removed if you explicitly delete it:**
+- `docker-compose down -v` (the `-v` deletes the volume), or
+- `docker volume rm headroom_data`
+
+### Backups
+
+The volume is the only live copy, so keep a backup — three options:
+
+1. **Automatic rotating snapshots (on by default).** The container writes a timestamped SQLite snapshot into `/data/backups` on a schedule and prunes to the newest N, so you always have recent copies without remembering to run anything. Tune via `docker-compose.yml`: `BACKUP_INTERVAL_HOURS` (default `24`, set `0` to disable) and `BACKUP_KEEP` (default `7`). These live on the same volume, so pair them with an occasional off-volume copy (below).
+2. **In-app export (best, portable).** **Settings → Export** downloads your entire state as a single JSON file. This is the safest backup: it's independent of Docker, survives losing the volume, and can be imported on a fresh install or a different machine via **Settings → Import**. Because it holds your full accumulated transaction history, an occasional export is a complete backup.
+3. **Database snapshot (off-volume).** `make backup` copies the live SQLite file to the host `./backups/` (timestamped, gitignored).
+
+> **No backup carries the bank connection — on purpose.** `make backup` copies `/data/database.sqlite` and nothing else, and the JSON export holds your finance data alone. The Enable Banking link lives beside the database as its own files in the volume (`eb-config.json`, `eb-session.json`, `eb-pending.json`, `eb-key.pem`, `eb-master.key`), and it is left out of both because those files hold OAuth tokens and a private key — credentials that have no business sitting in a file you copy around or hand to another machine. They stay in the volume, so this only shows up when you restore onto a fresh one (see [Restore](#restore)).
+
+### Restore
+
+Both paths open a **preview** first, where you pick which sections to restore (income & work, budget & spending, assets/debt/goals, settings) — the rest of your data is left untouched — and a safety copy of your current data is downloaded before anything is replaced.
+
+- **From a JSON export:** open the app and use **Settings → Import** (drop the file or browse).
+- **From a SQLite snapshot (in-app):** **Settings → Import → "restore from a SQLite backup (.sqlite)"**, then pick a `make backup` file. The server reads the finance blob out of the uploaded database and hands it to the same import preview — no terminal needed.
+- **From a SQLite snapshot (manual):** `docker cp backups/<file>.sqlite headroom:/data/database.sqlite && make restart` (for the pre-built image, replace `make restart` with `docker restart headroom`).
+- **From an automatic snapshot:** list them with `docker exec headroom ls /data/backups`, copy one out with `docker cp headroom:/data/backups/<file>.sqlite ./backups/`, then use either SQLite-restore path above.
+
+> **Restoring onto a fresh volume? Link the bank again.** All your money data comes back, but the bank connection does not — its credential files were never in the backup (see [Backups](#backups)). Nothing announces this: the app looks complete and simply stops pulling new transactions. Go to **Settings → Bank sync**, re-enter the Enable Banking application ID, callback URL and key, and connect the bank again. Transactions already in the restored data are kept; the sync picks up from there.
+
+> Bank sync only reaches ~90 days back per fetch, but stored transactions are never dropped — they accumulate as you keep syncing. So your history keeps growing on your machine, and an export captures all of it. Sync regularly (don't leave gaps longer than ~90 days) and export now and then, and you have a durable, ever-growing record.
+
+### HTTP API
+
+The app is a thin JSON API over the single-blob store (no per-field endpoints). It's **unauthenticated by default** (single-user, loopback-bound — see [Security](#security)) unless you enable the [optional password](#optional-password); either way, don't expose it to an untrusted network. The endpoints the UI drives:
+
+| Method & path | Purpose |
+|---------------|---------|
+| `GET /healthz` | Liveness probe (touches the DB). |
+| `GET /api/version` | Running `version` + build `sha`. |
+| `GET /api/config` | Server-side switches the client needs before it decides how to boot (currently just `demoMode`). |
+| `GET /api/data` | The whole finance blob; `X-Data-Rev` header carries the revision. |
+| `POST /api/data` | Overwrite the blob (shape-validated, last-write-wins with an optimistic-concurrency `X-Data-Rev` check → `409` on a stale write). |
+| `POST /api/restore` | Restore helper: upload a `make backup` SQLite file (raw body, `application/octet-stream`); the server opens it **read-only**, extracts the `headroom` JSON blob and returns `{ data }`. **It never writes** — the client applies it through the normal import preview/confirm. Rejects a non-SQLite / non-Headroom file with `400`. |
+| `GET /api/history` | Recent revisions (metadata only), newest first — backs the Settings restore-points card. |
+| `POST /api/history/:rev/restore` | Re-commit a past revision as the new current state (itself recorded in history, so a restore is reversible). |
+| `GET /api/auth/status` | Whether the optional password is enabled, its source, and whether the current session is authenticated. |
+| `POST /api/auth/login` | Verify a password and set the session cookie. |
+| `POST /api/auth/logout` | Clear the session cookie. |
+| `POST /api/auth/config` | Enable/disable the optional password (or change it). Refused once it's env-forced. |
+| `GET /api/inflation?from=YYYY-MM&to=YYYY-MM` | SSB CPI series (cached; `stale` flag when served from cache). Add **`&force=1`** to bypass the once-per-hour upstream-fetch cooldown for a user-initiated refresh. |
+| `GET /api/wage-stats` | Curated national median-wage series. |
+| `GET /api/kvmpris?postnr=####&type=…` | Average m²-price + sale count for the kommune a postnummer belongs to, by dwelling type (SSB) — backs the Loan page's estimated property value. Same cache/cooldown/serve-stale shape as inflation. |
+| `GET /api/policyrate` | Norges Bank key policy rate series — backs the Loan page's compare-rate card. Same cache/cooldown/serve-stale shape as inflation. |
+| `GET/POST/DELETE /api/bank/*` | Enable Banking transaction sync (`status`, `aspsps`, `link`, `callback`, `sync`, `config`, `key`, `connection/:id`) — see `scripts/enable-banking/`. |
+
+## Tech stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 19, TypeScript, Vite, Tailwind CSS v4 |
+| Charts | Recharts |
+| Backend | Node.js, Express |
+| Database | SQLite (better-sqlite3) |
+| Serving | Express (static files) |
+| Containers | Docker, Docker Compose |
+
+## Repository structure
+
+> **Note:** A simplified view of the main folders. Generated/ignored directories (`node_modules/`, `dist/`, `data/`, `backups/`) are omitted.
+
+```
+headroom
+├── server/              # Express API + SQLite persistence
+│   ├── index.js         # API, static SPA serving, host allowlist
+│   ├── bank.js          # Bank-sync integration
+│   ├── ssb.js           # SSB inflation fetch
+│   └── seed.js          # Demo-data seeding
+├── src/
+│   ├── context/         # FinanceContext — single source of app state
+│   ├── lib/             # Pure calc/domain logic + Vitest tests (tax, loan, debt)
+│   ├── pages/           # One component per route (Budget, Dashboard, Assets…)
+│   ├── components/      # Shared UI (modals, charts) + ui/ primitives
+│   ├── hooks/           # Small shared hooks
+│   ├── i18n/            # Translation tables
+│   └── assets/          # Static assets
+├── public/              # PWA manifest and icons
+├── desktop/             # Electron wrapper that ships server/ as a Mac/Windows app
+├── scripts/             # Enable Banking extractor (optional)
+└── Dockerfile
+```
+
+## CI/CD workflows
+
+| Workflow | Trigger | Purpose |
+|----------|---------|---------|
+| [**CI**](.github/workflows/build.yml) | Push to `main`, PRs, manual | Typecheck, lint, test, then build and push the Docker image to GHCR |
+| [**Release**](.github/workflows/release.yml) | Push to `main` | release-please keeps a release PR open; merging it cuts the release and attaches the desktop installers |
+| [**Desktop build**](.github/workflows/desktop-build.yml) | All PRs, manual | Builds the Mac and Windows installers so a break surfaces before release. Installers build only when a PR touches what they package; the `Desktop installers` check reports either way, so it can be a required check |
+| [**Dependency Review**](.github/workflows/dependency-review.yml) | PRs | Blocks PRs that introduce known-vulnerable dependencies |
+| [**Scorecard**](.github/workflows/scorecard.yml) | Push to `main`, weekly | OpenSSF supply-chain score published to the Security tab |
+| [**Container Scan**](.github/workflows/container-scan.yml) | Push to `main`, weekly | Trivy scan of the image; findings to the Security tab |
+| [**Dependabot**](.github/dependabot.yml) | Weekly | Grouped dependency-update PRs (npm root, `server/`+`desktop/` paired, GitHub Actions, Docker). Security fixes and non-major bumps [auto-merge](.github/workflows/dependabot-auto-merge.yml) once the required checks pass |
+
+---
+
+<div align="center">
+
+### ⭐ Star this repo if you find it useful ⭐
+
+<a href="https://www.star-history.com/#mortennordbye/headroom&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=mortennordbye/headroom&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=mortennordbye/headroom&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=mortennordbye/headroom&type=Date" width="600" />
+  </picture>
+</a>
+
+Made by [Morten Nordbye](https://nordbye.it/)
+
+</div>

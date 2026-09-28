@@ -1,0 +1,178 @@
+<br />
+<div align="center">
+  <a href="https://portabase.io">
+    <img src="/.github/assets/logo.png" alt="Logo" width="80" height="80">
+  </a>
+
+<h3 align="center">Portabase</h3>
+
+  <p align="center" style="margin-top: 20px; font-style: italic;">
+  <i>Portabase is a tool designed to simplify the backup and restoration of your database instances. It integrates seamlessly with <a href="https://github.com/Portabase/agent-rust">Portabase agents</a> for managing operations securely and efficiently.</i>
+  </p>
+
+
+[![Plumber Score](https://score.getplumber.io/github.com/Portabase/portabase.svg)](https://score.getplumber.io/github.com/Portabase/portabase)
+[![License: Apache](https://img.shields.io/badge/License-apache-yellow.svg)](LICENSE)
+[![Docker Pulls](https://img.shields.io/docker/pulls/portabase/portabase?color=brightgreen)](https://hub.docker.com/r/portabase/portabase)
+[![Helm Chart](https://img.shields.io/badge/Helm-Kubernetes-326ce5?logo=helm&logoColor=white)](https://github.com/Portabase/portabase/pkgs/container/charts%2Fportabase)
+[![Platform](https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-lightgrey)](https://github.com/Portabase/portabase)
+[![Sponsor Portabase](https://img.shields.io/badge/Sponsor-Portabase-ea4aaa?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/Portabase)
+
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![MariaDB](https://img.shields.io/badge/MariaDB-003545?logo=mariadb&logoColor=white)](https://mariadb.org/)
+[![SQLite](https://img.shields.io/badge/-SQLite-blue?logo=sqlite&logoColor=white)](https://sqlite.org/)
+[![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat&logo=Redis&logoColor=white)](https://redis.io/)
+[![MongoDB](https://img.shields.io/badge/-MongoDB-13aa52?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Valkey](https://img.shields.io/badge/Valkey-6284fc?style=flat&logo=Valkey&logoColor=white)](https://valkey.io/)
+[![Firebird](https://img.shields.io/badge/Firebird-f55b14?style=flat&logo=Firebird&logoColor=white)](https://firebirdsql.org/)
+[![Microsoft SQL Server](https://img.shields.io/badge/Microsoft%20SQL%20Server-CC2927?style=flat&logo=microsoftsqlserver&logoColor=white)](https://www.microsoft.com/en-us/sql-server)
+
+[![Self Hosted](https://img.shields.io/badge/self--hosted-yes-brightgreen)](https://github.com/Portabase/portabase)
+[![Open Source](https://img.shields.io/badge/open%20source-❤️-red)](https://github.com/Portabase/portabase)
+
+[![NextJS][NextJS]][NextJS-url]
+[![BetterAuth][BetterAuth]][BetterAuth-url]
+[![Drizzle][Drizzle]][Drizzle-url]
+[![ShadcnUI][ShadcnUI]][ShadcnUI-url]
+[![Docker][Docker]][Docker-url]
+
+
+  <p>
+    <strong>
+        <a href="https://portabase.io">Website</a> •
+        <a href="https://portabase.io/docs">Documentation</a> •
+        <a href="https://www.youtube.com/watch?v=nSTzT27GgAg">Demo</a> •
+        <a href="https://portabase.io/docs/dashboard/setup">Installation</a> •
+        <a href="https://github.com/Portabase/portabase/issues/new?labels=bug&template=bug-report---.md">Report Bug</a> •
+        <a href="https://github.com/Portabase/portabase/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    </strong>
+  </p>
+
+<img width="1280" height="868" alt="portabase" src="https://github.com/user-attachments/assets/251de1a7-98ad-48a4-aed0-5c83ee74e69d" />
+
+
+</div>
+
+## Installation
+
+You have 5 ways to install Portabase:
+
+- Automated CLI (recommended) - [details](https://portabase.io/docs/dashboard/setup#cli)
+- Docker Run - [details](https://portabase.io/docs/dashboard/setup#docker)
+- Docker Compose setup - [details](https://portabase.io/docs/dashboard/setup#docker-compose)
+- Unraid Community Apps - [details](https://ca.unraid.net/apps/portabase-dashboard-1sdc97m05ufd7q) - [unraid support thread](https://forums.unraid.net/topic/199072-support-portabase-dashboard-agent-dockers/)
+- Kubernetes with Helm - [details](https://portabase.io/docs/dashboard/setup#helm)
+- Development setup - [details](https://portabase.io/docs/dashboard/setup#development)
+
+**Ensure Docker is installed on your machine before getting started.**
+
+## Supported databases
+
+| Engine             | Support   | Supported Versions            | Restore |
+|:-------------------|:----------|:------------------------------|:--------|
+| **PostgreSQL**     | ✅ Stable  | 12, 13, 14, 15, 16, 17 and 18 | Yes     |
+| **MySQL**          | ✅ Stable  | 5.7, 8 and 9                  | Yes     |
+| **MariaDB**        | ✅ Stable  | 10 and 11                     | Yes     |
+| **MongoDB**        | ✅ Stable  | 4, 5, 6, 7 and 8              | Yes     |
+| **SQLite**         | ✅ Stable  | 3.x                           | Yes     |
+| **Redis**          | ✅ Stable  | 2.8+                          | No      |
+| **Valkey**         | ✅ Stable  | 7.2+                          | No      |
+| **Firebird**       | ✅ Stable  | 3.0, 4.0, 5.0                 | Yes     |
+| **MSSQL Server**   | ✅ Stable  | 2017, 2019, 2022, Azure SQL         | Yes     |
+| **Docker Volume**  | ✅ Stable  | Docker Engine 20.10+  | Yes |
+
+See the [Database Servers documentation](https://portabase.io/docs/agent/db) for version-specific backup and restore details.
+
+## Contributing
+
+Want to contribute? See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for guidelines.
+
+## Contributors
+
+[![Contributors](https://contrib.rocks/image?repo=Portabase/portabase)](https://github.com/Portabase/portabase/graphs/contributors)
+
+## Become a Sponsor
+
+🙏 Thank you to the incredible sponsors for supporting this project! Your contributions help keep Portabase running and growing. If you'd like to join and become a sponsor, please visit the [sponsorship page](https://github.com/sponsors/Portabase) and be part of something great! 🚀
+
+### 💎 Platinum Sponsors
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/sponsors/Portabase">
+        <img src="/.github/assets/plus-circle.svg" height="180" alt="Become a platinum sponsor"/>
+        <br />
+        Become a platinum sponsor
+      </a>
+    </td>
+  </tr>
+</table>
+
+### 🥇 Gold Sponsors
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/sponsors/Portabase">
+        <img src="/.github/assets/plus-circle.svg" height="150" alt="Become a gold sponsor"/>
+        <br />
+        Become a gold sponsor
+      </a>
+    </td>
+  </tr>
+</table>
+
+### 🥈 Silver Sponsors
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/sponsors/Portabase">
+        <img src="/.github/assets/plus-circle.svg" height="100" alt="Become a silver sponsor"/>
+        <br />
+        Become a silver sponsor
+      </a>
+    </td>
+  </tr>
+</table>
+
+### 🤝 Community Sponsors
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/sponsors/Portabase">
+        <img src="/.github/assets/plus-circle.svg" height="80" alt="Become a community sponsor"/>
+        <br />
+        Become a community sponsor
+      </a>
+    </td>
+  </tr>
+</table>
+
+## License
+
+Distributed under the Apache License. See `LICENSE.txt` for more details. 
+
+
+[Docker]: https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=fff&style=for-the-badge
+
+[NextJS]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+
+[BetterAuth]: https://img.shields.io/badge/Better%20Auth-FFF?logo=betterauth&logoColor=000&style=for-the-badge
+
+[Drizzle]: https://img.shields.io/badge/Drizzle-111?style=for-the-badge&logo=Drizzle&logoColor=c5f74f
+
+[ShadcnUI]: https://img.shields.io/badge/shadcn/ui-000000?style=for-the-badge&logo=shadcn/ui&logoColor=white
+
+[NextJS-url]: https://nextjs.org/
+
+[BetterAuth-url]: https://www.better-auth.com/
+
+[Drizzle-url]: https://orm.drizzle.team/
+
+[ShadcnUI-url]: https://ui.shadcn.com/
+
+[Docker-url]: https://www.docker.com/

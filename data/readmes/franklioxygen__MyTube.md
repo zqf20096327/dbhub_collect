@@ -1,0 +1,223 @@
+<p align="center">
+<img width="256" height="256" alt="logo" src="https://github.com/user-attachments/assets/cf900a36-8ed0-41f0-97b1-d330977eaa15" />
+</p>
+
+
+# MyTube
+
+Self-hosted downloader and player for YouTube, Bilibili, Twitch, MissAV, and [yt-dlp sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md). Features channel subscriptions, auto-downloads, local media storage, and private RSS feed links for external readers. Organize your library into collections with a sleek UI. Includes built-in Cloudflare Tunnel support for secure remote access without port forwarding. Docker-ready deployment.
+
+🚀 100% Prompt-Engineered. 0 Lines of Manual Code.
+Built using the [franklioxygen/agent-workflows](https://github.com/franklioxygen/agent-workflows) workflow.
+
+[![GitHub License](https://img.shields.io/github/license/franklioxygen/mytube)](https://github.com/franklioxygen/mytube)
+![Docker Pulls](https://img.shields.io/docker/pulls/franklioxygen/mytube)
+[![Discord](https://img.shields.io/badge/Discord-Join_Us-7289DA?logo=discord&logoColor=white)](https://discord.gg/dXn4u9kQGN)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/franklioxygen/MyTube/master.yml)
+![GHCR Image Workflow Status](https://img.shields.io/github/actions/workflow/status/franklioxygen/MyTube/ghcr.yml?label=GHCR%20Image)
+[![Lighthouse Performance](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/franklioxygen/MyTube/gh-pages/badges/lighthouse-performance.json)](https://github.com/franklioxygen/MyTube/actions/workflows/lighthouse.yml)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/266f0b53788f463a97230cb0c9d1d890)](https://app.codacy.com/gh/franklioxygen/MyTube/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/266f0b53788f463a97230cb0c9d1d890)](https://app.codacy.com/gh/franklioxygen/MyTube/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
+[![GitHub Repo stars](https://img.shields.io/github/stars/franklioxygen/mytube)](https://github.com/franklioxygen/mytube)
+[![GitHub Roast score badge](https://ghfind.com/api/badge/franklioxygen)](https://ghfind.com/u/franklioxygen?ref=badge)
+[![Lines of Code](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/franklioxygen/MyTube/gh-pages/badges/lines-of-code.json)](https://github.com/franklioxygen/MyTube/actions/workflows/loc-badge.yml)
+
+[中文](README-zh.md) | [Changelog](CHANGELOG.md)
+
+## Demo
+
+
+
+<p align="center">
+ 🌐 Try the live demo (read only): <a href="https://mytube-demo.vercel.app">https://mytube-demo.vercel.app</a>
+ <br />
+ <img width="512" height="320" alt="app-screenshot" src="https://github.com/user-attachments/assets/6889495e-c035-4bbd-9899-977f0f3aa4fb" />
+</p>
+
+## Features
+
+- **Video Downloading**: Download YouTube, Bilibili, Twitch, MissAV and other yt-dlp-supported videos with a simple URL input.
+- **Video Upload**: Upload local video files directly to your library with automatic thumbnail generation.
+- **D Mode (In-Car Playback)**: Uses Canvas and WebCodecs instead of a standard media element, enabling video playback on compatible in-car entertainment screens that otherwise block ordinary players while the vehicle is moving. Intended for passengers—always follow local laws, and never watch or operate the screen while driving.
+- **TMDB Metadata Scraping**: Automatically scrape movie and TV show metadata (title, description, poster, director, year, rating) from TMDB based on filename. Supports localized content matching your site language.
+- **Parallel Downloads**: Queue multiple downloads and track their progress simultaneously.
+- **Batch Download**: Add multiple video URLs at once to the download queue.
+- **Cloud Storage Integration**: Automatically upload videos and thumbnails to cloud storage (OpenList/Alist) after download.
+- **Media Integrity Check** (admin): Find videos already in your library whose files are missing, truncated or unreadable, under **Settings → Library & Storage**. It only reports; each finding links to the video and, where a re-download is recommended, offers **Download Again**.
+- **Auto Subtitles**: Automatically download YouTube / Bilibili default language subtitles.
+- **Live Audio Translation** (admin, optional): Stream the playing video's audio to Google Gemini Live Translation and play translated speech with live subtitles in the player's subtitle menu. Configure it under **Settings → Basic → Video Playback** (enable, Gemini API key, model, source/target language). The key is stored server-side and never sent to the browser. **Privacy:** while live translation is active, the video's audio is streamed to Google's Gemini API; transcripts are not persisted or logged. Requires an admin account when login is enabled and a same-origin (non-cross-origin) audio source.
+- **Subscriptions**: Manage YouTube, Bilibili and Twitch channel subscriptions to automatically download new content.
+- **Keyboard Shortcuts**: YouTube-style player shortcuts — play/pause, seeking, volume, speed, captions, fullscreen, cinema mode, frame stepping, and Up Next navigation. See [Keyboard Shortcuts](documents/en/keyboard-shortcuts.md).
+- **RSS Feeds**: Create private RSS links for external feed readers with per-link filters for channels, authors, tags, sources, recent videos, and item limits.
+- **Login Protection & Visitor Access**: Secure your application with password login, optional passkeys (WebAuthn), and an admin-only 3×3 Gesture Login, while named read-only visitor accounts allow safe sharing. Gesture failures are shared across devices; one or two expire 12 hours after the latest failure, while three lock gesture access until one successful admin password login.
+- **Internationalization**: Support for multiple languages including English, Chinese, Spanish, French, German, Japanese, Korean, Arabic, Portuguese, and Russian.
+- **Cookie Management**: Support for uploading `cookies.txt` to enable downloading of age-restricted or premium content.
+- **yt-dlp Configuration**: Customize global `yt-dlp` arguments, network proxy, and other advanced settings via settings page.
+- **TMDB Integration**: Configure your TMDB API key in settings to enable automatic metadata scraping for local video files. The scraper intelligently parses filenames to extract titles and matches them with TMDB database.
+- **Cloudflare Tunnel Integration**: Built-in Cloudflare Tunnel support to easily expose your local MyTube instance to the internet without port forwarding.
+- **Task Hooks**: Execute custom shell scripts at various stages of a download task (start, success, fail, cancel) for integration and automation. See [Task Hooks Guide](documents/en/hooks-guide.md).
+- **Telegram Notifications**: Receive instant notifications via Telegram bot when a download task succeeds or fails.
+- **Browser Extension**: A Chrome extension to download videos directly from your browser. Supports all yt-dlp supported sites.
+
+## Browser Extension
+
+For installation and usage instructions, please refer to [Browser Extension](documents/en/chrome-extension.md).
+
+## MikMok
+
+[MikMok](https://github.com/franklioxygen/MikMok) is a short-form video web client for MyTube. It connects to MyTube through the API and offers a feed-style viewing experience tailored for short videos.
+
+## Android Client
+
+[mytube-android](https://github.com/franklioxygen/mytube-android) is a native Android client for MyTube. It connects to your MyTube server through the API for browsing and playback on mobile devices.
+
+## MCP Server
+
+[mytube-mcp](https://github.com/franklioxygen/mytube-mcp) is a Model Context Protocol (MCP) server for MyTube. It exposes your MyTube instance to AI assistants and agents through the API, so they can search, manage, and play your video library on your behalf.
+
+## Directory Structure
+
+For a detailed breakdown of the project structure, please refer to [Directory Structure](documents/en/directory-structure.md).
+
+### Runtime Storage Layout
+
+By default, media and caches live under `backend/uploads/`:
+
+| Folder | Purpose |
+|---|---|
+| `videos/` | Downloaded video files and, when enabled, full-size thumbnails/subtitles/TV companion files stored next to videos. |
+| `images/` | Full-size thumbnails when thumbnail storage is set to the isolated images folder. |
+| `images-small/` | Internal downscaled preview cache for the UI. It mirrors the full-size thumbnail folder layout and can be ignored or excluded from media-server libraries. |
+| `subtitles/` | Subtitle files when subtitle storage is set to the isolated subtitles folder. |
+| `avatars/` | Channel/avatar artwork used by the app and media-server export. |
+| `cloud-thumbnail-cache/` | Internal cache for thumbnails fetched from cloud-backed media. |
+
+For how storage locations and filenames are decided — stable media identity, legacy vs. template naming, author-folder organization, collision-safe path allocation, and the no-overwrite publication model — please refer to [Media Storage & Filename Naming](documents/en/media-storage-and-naming.md).
+
+## Getting Started
+
+**Requirements:** Node.js **22.22+, 23.x, 24.x, 25.x, or 26.x** and npm v9+. The backend depends on `better-sqlite3`; unsupported Node versions fail during `npm install` (often with misleading `node-gyp` / Visual Studio errors on Windows). Docker images ship with Node 22.
+
+For installation and setup instructions, please refer to [Getting Started](documents/en/getting-started.md).
+
+## Visitor Accounts
+
+When login protection is enabled, admins can create named visitor accounts under **Settings -> Security**. Visitor accounts are read-only, and account changes such as create, disable, delete, and password reset apply immediately without saving the broader settings form.
+
+Existing installations with a shared visitor password are migrated automatically to a `visitor` account. Users who had the shared password can sign in with username `visitor` and the same password. The legacy shared-password login endpoint remains for compatibility and is deprecated.
+
+## Deployment Security Model
+
+For the three-tier admin trust and deployment security model, please refer to [Deployment Security Model](documents/en/deployment-security-model.md).
+
+## API Endpoints
+
+For a list of available API endpoints, please refer to [API Endpoints](documents/en/api-endpoints.md).
+
+## Technology Stack
+
+### Backend
+
+- **Runtime**: Node.js 22.22+ or 23.x–26.x with TypeScript
+- **Framework**: Express.js
+- **Database**: SQLite with Drizzle ORM
+- **Testing**: Vitest
+- **Architecture**: Layered architecture (Routes → Controllers → Services → Database)
+
+### Frontend
+
+- **Framework**: React 19 with TypeScript
+- **Build Tool**: Vite
+- **UI Library**: Material-UI (MUI)
+- **State Management**: React Context API
+- **Routing**: React Router v7
+- **HTTP Client**: Axios with React Query
+
+### Key Architectural Features
+
+- **Modular Storage Service**: Split into focused modules for maintainability
+- **Downloader Pattern**: Abstract base class for platform-specific implementations
+- **Database Migrations**: Automatic schema updates using Drizzle Kit
+- **Download Queue Management**: Concurrent downloads with queue support
+- **Video Download Tracking**: Prevents duplicate downloads across sessions
+
+## Environment Variables
+
+The application uses environment variables for configuration.
+
+### Frontend (`frontend/.env`)
+
+```env
+VITE_API_URL=/api
+VITE_BACKEND_URL=
+```
+
+### Backend (`backend/.env`)
+
+```env
+PORT=5551
+# Optional stable secret for Gesture Login (minimum 32 bytes).
+# When omitted, MyTube creates backend/data/gesture-login.pepper on first setup.
+# GESTURE_LOGIN_PEPPER=replace-with-at-least-32-random-bytes
+# Optional: declare the admin trust boundary for this deployment.
+# Valid values: application | container | host
+# Default: container
+# MYTUBE_ADMIN_TRUST_LEVEL=container
+```
+
+Data and uploads are stored under `backend/data` and `backend/uploads` by default (relative to the backend working directory).
+
+Copy `backend/.env.example` to `backend/.env` and adjust as needed. The frontend ships with `frontend/.env`; use `frontend/.env.local` to override defaults.
+
+## Database
+
+MyTube uses **SQLite** with **Drizzle ORM** for data persistence. The database is automatically created and migrated on first startup:
+
+- **Location**: `backend/data/mytube.db`
+- **Migrations**: Automatically run on server startup
+- **Schema**: Managed through Drizzle Kit migrations
+- **Legacy Support**: Migration tools available to convert from JSON-based storage
+
+Key database tables:
+
+- `videos`: Video metadata and file paths
+- `collections`: Video collections/playlists
+- `subscriptions`: Channel/creator subscriptions
+- `rss_tokens`: Private RSS feed links, filters, access status, and access counters
+- `downloads`: Active download queue
+- `download_history`: Completed download history
+- `video_downloads`: Tracks downloaded videos to prevent duplicates
+- `settings`: Application configuration
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to get started, our development workflow, and code quality guidelines.
+
+## Deployment
+
+For detailed Docker deployment instructions, including the official GitHub Container image (`ghcr.io/franklioxygen/mytube:latest`) and the single-container compose file (`stacks/docker-compose.single-container.yml`), please refer to [Docker Deployment Guide](documents/en/docker-guide.md).
+For the `application` / `container` / `host` admin trust boundary, please refer to [Deployment Security Model](documents/en/deployment-security-model.md).
+
+## Star History
+
+<a href="https://www.star-history.com/?repos=franklioxygen%2FMyTube&type=date&legend=bottom-right">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=franklioxygen/MyTube&type=date&theme=dark&legend=bottom-right&sealed_token=kHdrUgXQRTUsWrRPS_CU-LE2TewFIv7ZjKfQGG9Iw0sMaRaKsBXf1LUkdg4ZkJzGGGTIHuzZl36nLUnOnNgbhHfgUkQhV6s2FFNbu5r4XBXerJ3U19Wyw7Zf0oEAxmbu106p3KsnQoiwy_h-oI0fa6XutbMiL_Sadm14ECj7K1uL3WbY3davIlgGkF9H" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=franklioxygen/MyTube&type=date&legend=bottom-right&sealed_token=kHdrUgXQRTUsWrRPS_CU-LE2TewFIv7ZjKfQGG9Iw0sMaRaKsBXf1LUkdg4ZkJzGGGTIHuzZl36nLUnOnNgbhHfgUkQhV6s2FFNbu5r4XBXerJ3U19Wyw7Zf0oEAxmbu106p3KsnQoiwy_h-oI0fa6XutbMiL_Sadm14ECj7K1uL3WbY3davIlgGkF9H" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=franklioxygen/MyTube&type=date&legend=bottom-right&sealed_token=kHdrUgXQRTUsWrRPS_CU-LE2TewFIv7ZjKfQGG9Iw0sMaRaKsBXf1LUkdg4ZkJzGGGTIHuzZl36nLUnOnNgbhHfgUkQhV6s2FFNbu5r4XBXerJ3U19Wyw7Zf0oEAxmbu106p3KsnQoiwy_h-oI0fa6XutbMiL_Sadm14ECj7K1uL3WbY3davIlgGkF9H" />
+ </picture>
+</a>
+
+## Disclaimer
+
+- Purpose and Restrictions This software (including code and documentation) is intended solely for personal learning, research, and technical exchange. It is strictly prohibited to use this software for any commercial purposes or for any illegal activities that violate local laws and regulations.
+
+- Liability The developer is unaware of and has no control over how users utilize this software. Any legal liabilities, disputes, or damages arising from the illegal or improper use of this software (including but not limited to copyright infringement) shall be borne solely by the user. The developer assumes no direct, indirect, or joint liability.
+
+- Modifications and Distribution This project is open-source. Any individual or organization modifying or forking this code must comply with the open-source license. Important: If a third party modifies the code to bypass or remove the original user authentication/security mechanisms and distributes such versions, the modifier/distributor bears full responsibility for any consequences. We strongly discourage bypassing or tampering with any security verification mechanisms.
+
+- Non-Profit Statement This is a completely free open-source project. The developer does not accept donations and has never published any donation pages. The software itself allows no charges and offers no paid services. Please be vigilant and beware of any scams or misleading information claiming to collect fees on behalf of this project.
+
+## License
+
+MIT

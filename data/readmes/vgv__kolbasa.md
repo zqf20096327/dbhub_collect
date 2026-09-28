@@ -1,0 +1,302 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.vgv/kolbasa)](https://central.sonatype.com/artifact/io.github.vgv/kolbasa)
+[![GitHub License](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
+
+# kolbasa
+
+**kolbasa** — a reliable message & job queue for Java & Kotlin, built on PostgreSQL. Use the database you already have — no Kafka, no RabbitMQ. Supports transactional sends, deduplication, delays, retries, dead-letter & archive queues, and batching.
+
+## Features
+* PostgreSQL as a persistent storage
+* Message deduplication
+* Message send delay (initial delay before message will be visible to consumers)
+* Message visibility timeout (delay before consumed but not deleted message will be visible to another consumers)
+* Configurable amount of receive attempts
+* Ability to receive messages filtered by one or more meta-fields (like `user_id=42 and event_type=PAGE_VIEW`)
+* Ability to receive messages sorted by one or more meta-fields (like `priority desc, registration_date asc`)
+* Supports working in "external" transaction context (send/receive messages from a queue will follow "external" transaction commit/rollback)
+* Batch send/receive to improve performance
+* Different modes to deal with sending failures (fail the whole send, send all until first failure, send as many as possible)
+* Dead Letter Queue (DLQ) for messages that exhaust all processing attempts
+* Archive queue for retaining successfully processed messages (auditing, compliance, replay)
+* Enqueue messages straight from SQL — database triggers, stored functions, batch jobs (opt-in per-queue `q_<name>_put(...)` function)
+* Share load between different PostgreSQL servers
+
+## Concepts
+Kolbasa is a pure Kotlin library, so it can be used with any JVM language (Java, Kotlin, Clojure, Scala etc.).
+
+Kolbasa uses PostgreSQL as a storage to manage all queues, store all messages, ensure ACID and allow filtering and sorting.
+Kolbasa doesn't require any special PostgreSQL plugins or specific compile/runtime settings. It works on plain PostgreSQL
+version 10 and above.
+
+## Requirements
+* PostgreSQL 10+
+* JVM 17+
+
+
+## How to add Kolbasa into your project
+### Gradle
+```groovy
+implementation "io.github.vgv:kolbasa:0.211.0"
+```
+### Maven
+```xml
+<dependency>
+    <groupId>io.github.vgv</groupId>
+    <artifactId>kolbasa</artifactId>
+    <version>0.211.0</version>
+</dependency>
+```
+
+## Examples
+The easiest way to try kolbasa is to try running real, working examples, illustrating different features and modes. All examples
+can be found in the [examples](src/test/kotlin/examples) folder. Each example is a ready to run, complete mini-program that can
+be launched from the IDE or Gradle.
+
+The preferred way to run the examples is to use an IDE (like IntelliJ IDEA), as you can not only run the examples, but also
+modify them, set breakpoints, and see how everything goes step by step. But you can also run the examples from Gradle.
+
+To run from Gradle, you need to execute the command 
+
+`./gradlew example -Pname=FilterExample -Plang=kotlin`
+
+where `name` is the name of the file from the [examples](src/test/kotlin/examples) folder and `lang` is `java` or `kotlin`.
+
+Examples needs to have a working PostgreSQL instance to run and here you have two options:
+1) The default (and easiest) way – just have running Docker on your machine. All examples will use Docker to start PostgreSQL instance.
+2) If you don't want to or can't use Docker, you have a second option – use a real PostgreSQL installation.
+File [ExamplesDataSourceProvider](src/test/kotlin/examples/ExamplesDataSourceProvider.kt) is the place where you can specify
+url, username and password for your existing PostgreSQL instance.
+
+### Simple example
+The simplest possible example to send and receive one simple text message:
+* [SimpleExample (Kotlin)](src/test/kotlin/examples/SimpleExample.kt)
+* [SimpleExample (Java)](src/test/kotlin/examples/SimpleExample.java)
+
+No filtering, no message deduplication, sharding or other features. Just send and receive one message.
+
+`./gradlew example -Pname=SimpleExample`
+
+### Filtering and sorting
+What if every message is associated with additional, user-defined meta-data such as `userId` and `priority` (for example) and
+we want to receive messages with a specific userId and sort them by `priority`?
+
+Kolbasa can receive only specific messages from a queue, and only in a specific order, using a convenient type-safe DSL. Both
+filtering and ordering are performed on the queue broker side (PostgreSQL) to make receiving more efficient.
+
+For simplicity, this example is broken into two parts:
+1) First, let's look at filtering: [FilterExample](src/test/kotlin/examples/FilterExample.kt)
+
+`./gradlew example -Pname=FilterExample`
+
+2) Second, let's add sorting here: [FilterAndSortExample](src/test/kotlin/examples/FilterAndSortExample.kt)
+
+`./gradlew example -Pname=FilterAndSortExample`
+
+### Deduplication
+Kolbasa has the ability to use deduplication when sending messages to the queue.
+
+There are two different modes ([DeduplicationMode](src/main/kotlin/kolbasa/producer/DeduplicationMode.kt)): `FAIL_ON_DUPLICATE` and `IGNORE_DUPLICATE`
+
+The `FAIL_ON_DUPLICATE` mode is the default. If you try to send a message with an existing unique key, the operation will fail and,
+depending on the [PartialInsert](src/main/kotlin/kolbasa/producer/PartialInsert.kt) mode, only part of the messages (or none)
+will be sent. In business code, you can handle this error and, for example, write to log, postpone sending the message or change
+the unique key. Since this mode is trivial, in this example we will consider the second option, the more interesting `IGNORE_DUPLICATE` mode.
+
+The `IGNORE_DUPLICATE` mode allows you to simply silently ignore uniqueness errors and add to the queue only those messages that
+are not already in the queue. For example, you send 100 messages, 5 of which are duplicates of existing messages in the queue.
+In this case, only 95 messages will be added to the queue and no errors will occur.
+
+Example: [DeduplicationExample](src/test/kotlin/examples/DeduplicationExample.kt)
+
+`./gradlew example -Pname=DeduplicationExample`
+
+
+### Send delay
+By default, any message is available for receiving immediately after sending, but it often happens that the delivery of a
+message needs to be delayed for some time.
+
+Kolbasa has this option.
+
+When sending a message, you can specify an arbitrary delay (seconds, hours, days) and the message will "appear" for consumers
+no earlier than this delay expires.
+
+For example, your service has a "Delete account" button, but you start the actual data deletion only after 30 days, thereby
+giving the client the opportunity to change their mind. In this case, you can send the message "DELETE CLIENT #123456789" to a
+queue and set a delivery delay of 30 days. The message will be stored in the queue all this time, and after 30 days it will
+become available for reading by consumers. No additional actions are required for this, Kolbasa will do it automatically.
+
+![Send delay](docs/img/send_delay.svg)
+
+Example: [SendDelayExample](src/test/kotlin/examples/SendDelayExample.kt)
+
+`./gradlew example -Pname=SendDelayExample`
+
+
+### Partial insert and batching
+Imagine you want to send 10,000 messages with a single `Producer.send()` call, but among those 10,000 messages there is one
+invalid message that cannot be sent, for example due to uniqueness constraints.
+
+So, there will definitely be a send error, but if only one message out of 10,000 causes an error, there are several different
+options for handling this situation:
+
+1) Cancel sending all 10,000 messages
+2) Send messages up to the invalid one, and do not send any messages after the invalid one. This mode is useful if you want to
+preserve causal ordering
+3) Send as many messages as possible, skipping only the invalid one. This is useful if the messages are not related to each other
+in any way, and you just want to send as many messages as possible to the queue
+
+However, Kolbasa does not send all messages to the queue one by one, this is very bad for performance. The library sends
+messages to the queue in [chunks](src/main/kotlin/kolbasa/producer/SendOptions.kt) and all errors are processed along the
+boundary of these chunks, so if a specific chunk contains a invalid message, the entire chunk will be discarded.
+
+The easiest way to show the difference between these approaches is with pictures.
+In the example below, we send 6 messages with `chunkSize=2` and one poison message. It turns out, three chunks, one of
+which (the second) contains an incorrect message.
+
+Depending on [PartialInsert](src/main/kotlin/kolbasa/producer/PartialInsert.kt) mode, the sending result will be different:
+
+`PartialInsert.PROHIBITED`
+
+![Prohibited](docs/img/partial_insert_prohibited.svg)
+
+`PartialInsert.UNTIL_FIRST_FAILURE`
+
+![Until first failure](docs/img/partial_insert_until_first_failure.svg)
+
+`PartialInsert.INSERT_AS_MANY_AS_POSSIBLE`
+
+![As many as possible](docs/img/partial_insert_as_many_as_possible.svg)
+
+
+Example: [PartialInsertExample](src/test/kotlin/examples/PartialInsertExample.kt)
+
+`./gradlew example -Pname=PartialInsertExample`
+
+
+### Transaction context
+Imagine that in your application you have a `customer` table containing important information about your customers - name, email
+and some big and complex additional data that takes a long time to calculate. To calculate this data, you need to read a lot from
+a database or even from a third-party system. It may take several minutes or even hours to obtain all the necessary data.
+
+We can't calculate that data at the time of user registration, because it will slow down the registration process. So, the usual
+solution is to postpone this task and calculate this heavy data in the background a little later. For this, it is logical to
+queue the task like "Customer with id=NNN was registered". However, if the customer registration failed due to
+non-unique email (for example), we do not want this task to appear in the queue at all.
+
+We want the sending of the message to the queue to be commited (or rolled back) along with the request for user registration.
+New record in the `customer` table and the new message in the queue or nothing at all.
+
+To do this, we need to use special [ConnectionAwareDatabaseProducer](src/main/kotlin/kolbasa/producer/connection/ConnectionAwareDatabaseProducer.kt)
+and [ConnectionAwareDatabaseConsumer](src/main/kotlin/kolbasa/consumer/connection/ConnectionAwareDatabaseConsumer.kt) that can
+work in the context of an existing transaction. They do not take over the transaction management, completely delegating this work
+to the calling code. It works perfectly with plain JDBC or more complex frameworks like [Hibernate](https://hibernate.org),
+[Exposed](https://jetbrains.github.io/Exposed/home.html) etc.
+
+Example: [TransactionContextExample](src/test/kotlin/examples/TransactionContextExample.kt)
+
+`./gradlew example -Pname=TransactionContextExample`
+
+
+### Dead Letter Queue (DLQ)
+When a message exhausts all processing attempts, it is normally deleted during the sweep cycle. With DLQ enabled,
+the message is atomically moved to a separate Dead Letter Queue instead of being permanently deleted. This allows
+failed messages to be inspected, debugged, or reprocessed later.
+
+The DLQ is a regular `Queue` object accessible via `queue.deadLetterQueue`, so it works with all existing
+APIs — `Consumer`, `Producer`, `Inspector`, `Mutator` — without any special methods. The most common pattern is
+reprocessing: consume failed messages from the DLQ and send them back to the main queue for another attempt.
+
+DLQ retention is configurable by duration and/or approximate message count. Retention cleanup runs automatically
+during the probabilistic sweep cycle of the parent queue.
+
+```kotlin
+val queue = Queue(
+    name = "orders",
+    databaseDataType = PredefinedDataTypes.String,
+    options = QueueOptions(
+        defaultAttempts = 3,
+        dlqOptions = DlqOptions(
+            retention = Duration.ofDays(14),
+            maxMessages = 100_000
+        )
+    )
+)
+```
+
+Example: [DlqExample](src/test/kotlin/examples/DlqExample.kt)
+
+`./gradlew example -Pname=DlqExample`
+
+
+### Archive queue
+When a consumer deletes a message after successful processing, it is normally permanently deleted. With Archive
+enabled, the message is atomically moved to a separate Archive queue instead. This is useful for auditing,
+compliance, trailing, or replaying successfully processed messages.
+
+The Archive queue is a regular `Queue` object accessible via `queue.archiveQueue`, so it works with all existing
+APIs — you can consume archived messages for replay, inspect queue size, filter by metadata fields, and more.
+
+Archive retention is configurable by duration and/or approximate message count. Retention cleanup runs automatically
+during the probabilistic sweep cycle of the parent queue.
+
+```kotlin
+val queue = Queue(
+    name = "payments",
+    databaseDataType = PredefinedDataTypes.String,
+    options = QueueOptions(
+        archiveQueueOptions = ArchiveQueueOptions(
+            retention = Duration.ofDays(90),
+            maxMessages = 1_000_000
+        )
+    )
+)
+```
+
+Example: [ArchiveExample](src/test/kotlin/examples/ArchiveExample.kt)
+
+`./gradlew example -Pname=ArchiveExample`
+
+### Sending from SQL (triggers, batch jobs)
+Sometimes the event that should create a message originates in the database itself — an `AFTER INSERT` trigger on a
+business table, a stored procedure, a batch job in `psql`. Enable `sqlPutFunction` on a queue and kolbasa generates a
+typed `q_<name>_put(...)` function next to the queue table, so you can enqueue straight from SQL without a round-trip
+to the JVM. The function writes a correct "send" row (cluster-unique id, `scheduled_at`, attempts, meta-fields) and
+returns the new message id; pass `ignore_duplicates => true` for `ON CONFLICT DO NOTHING` dedup.
+
+```kotlin
+val queue = Queue(
+    name = "events",
+    databaseDataType = PredefinedDataTypes.String,
+    options = QueueOptions(
+        sqlPutFunction = true  // creates `q_events_put(data text, ...)` function in the database
+    )
+)
+```
+
+```sql
+-- e.g. from an AFTER INSERT trigger on a business table
+perform q_events_put(data => new.message);
+```
+
+Example: [SqlPutFunctionExample](src/test/kotlin/examples/SqlPutFunctionExample.kt)
+
+`./gradlew example -Pname=SqlPutFunctionExample`
+
+
+## Documentation
+
+Beyond the examples above, these documents explain how Kolbasa works under the hood:
+
+- [Architecture.md](docs/Architecture.md) — how Kolbasa works on a single node: the queue model, meta-fields,
+  the anatomy of a queue table, the message lifecycle, deduplication, DLQ and archive, sweep, and schema generation.
+- [Patterns.md](docs/Patterns.md) — recipes for the queue patterns people reach for most: a priority queue,
+  time-to-live (TTL), and at-most-once delivery — each built from Kolbasa's primitives.
+- [Cluster architecture.md](docs/Cluster%20architecture.md) — what changes when you run Kolbasa across multiple
+  PostgreSQL nodes: shards, routing, the shard-ownership map, and shard migration.
+- [Butcher.md](docs/Butcher.md) — operator guide for `butcher`, the CLI for running cluster health checks and
+  expanding, shrinking, or rebalancing a cluster by migrating shards between nodes. Distributed as a Docker image
+  (`ghcr.io/vgv/butcher`) and a `butcher.jar` on the [releases page](https://github.com/vgv/kolbasa/releases/latest).
+- [Message IDs.md](docs/Message%20IDs.md) — how a message's 64-bit `id` is structured (the per-node bucket) so
+  that ids stay globally unique across nodes, enabling shard migration and growing a standalone DB into a cluster.
+- [Message state transitions.md](docs/Message%20state%20transitions.md) — the message lifecycle deep-dive
+  (states, transitions, and how uniqueness scopes map onto them).

@@ -1,0 +1,439 @@
+<p align="center">
+    <img src="art/header.png" alt="Laravel Cooldown Banner" width="100%">
+</p>
+
+# Laravel Cooldown
+
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/zaber-dev/laravel-cooldown.svg?style=flat-square)](https://packagist.org/packages/zaber-dev/laravel-cooldown)
+[![Run Tests](https://img.shields.io/github/actions/workflow/status/zaber-dev/laravel-cooldown/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/zaber-dev/laravel-cooldown/actions/workflows/run-tests.yml)
+[![Total Downloads](https://img.shields.io/packagist/dt/zaber-dev/laravel-cooldown.svg?style=flat-square)](https://packagist.org/packages/zaber-dev/laravel-cooldown)
+[![PHP Version Require](https://img.shields.io/packagist/dependency-v/zaber-dev/laravel-cooldown/php.svg?style=flat-square)](https://packagist.org/packages/zaber-dev/laravel-cooldown)
+[![License](https://img.shields.io/packagist/l/zaber-dev/laravel-cooldown.svg?style=flat-square)](https://packagist.org/packages/zaber-dev/laravel-cooldown)
+
+**Supports:** Laravel 11, 12 & 13+ • PHP 8.2+ • Redis • Memcached • Database
+
+**Application-level action cooldown management for Laravel.**
+Enforce action cooldowns on actions, workflows, and endpoints using cache or database storage.
+
+Manage cooldowns with a clean, expressive API using cache or persistent database storage, attach them directly to Eloquent models, protect routes with declarative middleware, and extend the package with custom storage backends.
+
+> Unlike Laravel's built-in `RateLimiter`, Laravel Cooldown is designed for persistent, entity-scoped action cooldowns and workflow cooldowns with interchangeable cache and database storage.
+
+---
+
+
+## Quick Example
+
+```php
+Cooldown::for('password_reset', $user)
+    ->for(300);
+
+Cooldown::for('password_reset', $user)
+    ->enforce();
+```
+---
+
+## Documentation
+
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage Guide](#usage-guide)
+- [Agentic Development with Laravel Boost](#agentic-development-with-laravel-boost)
+- [LEARN.md](LEARN.md)
+
+---
+
+## Common Use Cases
+
+Laravel Cooldown is ideal for:
+
+- Password reset requests
+- Email verification
+- SMS / OTP sending
+- AI prompt generation
+- Report exports
+- Payment retries
+- Promotional rewards
+- API actions
+- Spam protection
+- User workflows
+
+---
+
+## Features
+
+- **Time-based action cooldowns** ⭐: Enforce action cooldowns on actions, workflows, and endpoints.
+- **Atomic execution** ⭐: Prevent concurrent double-clicks and race conditions using `block()` or the built-in middleware.
+- **Expressive API**: Chain expressive calls like `Cooldown::for('send_email', $user)->using('database')->for(300)` or enforce limits with `enforce()`.
+- **Eloquent integration**: Attach the `HasCooldowns` trait to any model for scoped action tracking (`$user->cooldown('password_reset')->active()`).
+- **Middleware**: Protect endpoints automatically using `cooldown:action_name,duration_in_seconds` with automatic HTTP `429` enforcement and `Retry-After` headers.
+- **Storage backends**: Switch seamlessly between high-performance `cache` stores (Redis, Memcached, Array) and persistent `database` storage with automatic cleanup.
+- **DTOs**: Work safely with strict `CooldownInfo` Data Transfer Objects returning precision durations (`remainingSeconds()`, `remainingForHumans()`).
+- **Extensibility**: Register custom storage backends on the fly with closure-based creators via `Cooldown::extend()`.
+- **Prunable storage**: Built-in `Prunable` trait integration ensures expired database records never clutter your database.
+
+---
+
+## Why not RateLimiter?
+
+Laravel's RateLimiter is excellent for protecting endpoints from bursts of traffic.
+
+Laravel Cooldown solves a different problem.
+
+* Password reset
+* Email verification
+* OTP delivery
+* Payment retries
+* Report exports
+* AI generation
+* Workflow delays
+
+| Feature | Laravel RateLimiter | Custom Cache Checks | Laravel Cooldown |
+| :--- | :---: | :---: | :---: |
+| **Fluent Builder API** (`Cooldown::for()->until()`) | ❌ | ❌ | ✅ **Expressive & Clean** |
+| **First-Class Eloquent Integration** (`$user->cooldown()`) | ❌ | ❌ | ✅ **Native (`HasCooldowns`)** |
+| **Driver-Based Architecture** (`cache` & `database`) | ❌ Cache Only | ❌ Manual | ✅ **Both Supported** |
+| **Atomic In-Flight Locking** (`block()`) | ❌ | ⚠️ Manual | ✅ **Built-in** |
+| **Success-Only Middleware Triggering** | ❌ (Triggers on 4xx/5xx) | ❌ | ✅ **Only on 2xx / 3xx** |
+| **Temporal / Time-Based Delays & Constraints** | ⚠️ Limited | ❌ Manual | ✅ **Subsecond Precision** |
+| **Immutable DTOs (`CooldownInfo`)** | ❌ | ❌ | ✅ **Strict (`CarbonImmutable`)** |
+| **Automatic Database Pruning** (`model:prune`) | N/A | ❌ Manual SQL | ✅ **Built-in (`Prunable`)** |
+| **Polymorphic Target Scoping** (Models, Scalars, IPs) | ❌ Manual Keys | ❌ Manual Keys | ✅ **Automatic Key Mapping** |
+| **Custom Driver Extensibility** (`Cooldown::extend()`) | ❌ | ❌ | ✅ **Closure / Container** |
+| **Event Dispatching** (`CooldownInitiated` / `Reset`) | ❌ | ❌ | ✅ **Configurable Events** |
+
+---
+
+## Installation
+
+Ready to get started? Install the package with Composer:
+
+```bash
+composer require zaber-dev/laravel-cooldown
+```
+
+Publish the configuration and database migrations:
+
+```bash
+php artisan vendor:publish --provider="ZaberDev\Cooldown\CooldownServiceProvider"
+```
+
+Run migrations if you intend to use the `database` driver:
+
+```bash
+php artisan migrate
+```
+
+---
+
+## Configuration
+
+The configuration file `config/cooldowns.php` allows you to define your default storage driver, driver parameters, and event dispatching behaviors:
+
+```php
+return [
+    /*
+    |--------------------------------------------------------------------------
+    | Default Storage Backend
+    |--------------------------------------------------------------------------
+    |
+    | Supported drivers: "cache", "database"
+    |
+    */
+    'default' => env('COOLDOWN_DRIVER', 'cache'),
+
+    'drivers' => [
+        'cache' => [
+            'driver' => 'cache',
+            'store' => env('COOLDOWN_CACHE_STORE', null),
+            'prefix' => 'cooldowns:',
+        ],
+        'database' => [
+            'driver' => 'database',
+            'table' => 'cooldowns',
+        ],
+    ],
+
+    'events' => [
+        'dispatch' => true,
+    ],
+];
+```
+
+---
+
+## Usage Guide
+
+### 1. The Fluent Cooldown API
+
+The `Cooldown` facade provides an expressive builder interface for setting, checking, enforcing, and resetting cooldowns.
+
+#### Setting a Cooldown
+```php
+use ZaberDev\Cooldown\Facades\Cooldown;
+
+// Put a 5-minute cooldown on "export_reports" globally
+Cooldown::for('export_reports')->for(300);
+
+// Put a 1-hour cooldown on a specific user
+Cooldown::for('send_sms', $user)->for(3600);
+
+// Set expiration using Carbon / DateTimeInterface
+Cooldown::for('daily_bonus', $user)->until(now()->endOfDay());
+```
+
+#### Checking Cooldown Status
+```php
+// Check if an action is currently active (on cooldown)
+if (Cooldown::for('send_sms', $user)->active()) {
+    $info = Cooldown::for('send_sms', $user)->info();
+    
+    echo "Please wait " . $info->remainingForHumans() . " before trying again.";
+    echo "Seconds remaining: " . $info->remainingSeconds();
+}
+
+// Check if NOT on cooldown
+if (Cooldown::for('send_sms', $user)->expired()) {
+    // Proceed with action...
+}
+```
+
+#### Enforcing Cooldowns (`enforce`)
+If you want to automatically halt execution and throw an HTTP `429 Too Many Requests` exception when a cooldown is active or currently locked mid-execution, call `enforce()`:
+
+```php
+// Throws CooldownActiveException (HTTP 429) if active or mid-flight, automatically attaching 'Retry-After' header
+Cooldown::for('login_attempt', $user)->enforce();
+```
+
+#### Atomic Block Execution (`block`)
+For operations vulnerable to concurrent double-click bursts (e.g., sending SMS or OTPs), use the `block()` helper. `block()` acquires a temporary atomic lock while the callback executes and only starts the cooldown if execution completes successfully:
+
+```php
+Cooldown::for('send_otp', $user)->block(function () use ($otpService, $user) {
+    $otpService->send($user->phone);
+}, duration: 120);
+```
+
+#### Advanced: Manual In-Flight Locking (`acquireLock`, `releaseLock`, `isLocked`)
+> We strongly recommend using `block()` for most use cases unless your workflow requires fine-grained manual locking across multi-step or asynchronous execution paths.
+
+```php
+if (! Cooldown::for('process_payment', $order)->acquireLock(10)) {
+    throw new \Exception('Payment processing is already mid-flight.');
+}
+
+try {
+    // Perform payment charge...
+} finally {
+    Cooldown::for('process_payment', $order)->releaseLock();
+}
+```
+
+#### Resetting / Clearing Cooldowns
+```php
+// Immediately clear the cooldown for this action/target
+Cooldown::for('send_sms', $user)->reset();
+```
+
+---
+
+### 2. Eloquent Model Integration (`HasCooldowns`)
+
+Add the `HasCooldowns` trait to any Eloquent model to scope cooldowns directly to that entity:
+
+```php
+namespace App\Models;
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use ZaberDev\Cooldown\HasCooldowns;
+
+class User extends Authenticatable
+{
+    use HasCooldowns;
+}
+```
+
+You can now interact directly with your model instance:
+
+```php
+$user = User::find(1);
+
+// Set a 2-minute cooldown on "update_profile" for this user
+$user->cooldown('update_profile')->for(120);
+
+// Check active status
+if ($user->cooldown('update_profile')->active()) {
+    return response()->json([
+        'message' => 'Too many profile updates.'
+    ], 429);
+}
+
+// Enforce limits and throw 429 exception if active
+$user->cooldown('update_profile')->enforce();
+
+// Reset the cooldown
+$user->cooldown('update_profile')->reset();
+```
+
+#### Polymorphic Database Querying
+When using the `database` driver, `HasCooldowns` also exposes a `cooldowns()` polymorphic relationship, allowing direct querying and bulk management:
+
+```php
+// Get all database cooldown records assigned to this user
+$activeCooldowns = $user->cooldowns()->where('expires_at', '>', now())->get();
+
+// Delete all cooldown records for this user
+$user->cooldowns()->delete();
+```
+
+---
+
+### 3. Route Middleware
+
+Protect routes declaratively without writing boilerplate checks in your controllers using the `CheckCooldown` middleware:
+
+```php
+use Illuminate\Support\Facades\Route;
+
+// Enforce a 60-second cooldown on form submissions per User / IP address
+Route::post('/contact/submit', [ContactController::class, 'submit'])
+    ->middleware('cooldown:contact_submit,60');
+
+// Use a specific driver or dynamic action key
+Route::post('/api/reports/generate', [ReportController::class, 'generate'])
+    ->middleware('cooldown:report_gen,300,database');
+```
+
+**How the Middleware Works:**
+- Before executing your controller, `CheckCooldown` verifies active status and acquires a temporary atomic in-flight lock across your configured driver to block concurrent double-click bursts (`HTTP 429`).
+- When your controller completes successfully (`2xx` or `3xx`), the permanent temporal cooldown is initiated (`for()`). If the controller fails due to validation (`4xx`) or server errors (`5xx`), the temporary lock is released without applying a cooldown so the user can immediately correct their input and retry.
+
+> For an architectural deep dive into check-lock-execute-set mechanics and driver internals, see [LEARN.md](LEARN.md).
+
+---
+
+### 4. Working with Storage Backends (`using` & `driver`)
+
+By default, the package uses the storage backend configured in `config/cooldowns.php`. You can switch storage backends on the fly per request or action:
+
+```php
+// Store transient rate checks in fast cache/Redis
+Cooldown::for('api_ping', $ip)->using('cache')->for(30);
+
+// Store billing/audit cooldowns persistently in SQL database
+Cooldown::for('billing_charge', $user)->using('database')->for(86400);
+
+// Direct driver instance access
+$cacheDriver = Cooldown::driver('cache');
+$cacheDriver->put('custom_key', 180);
+```
+
+#### Registering Custom Storage Backends
+You can extend the `CooldownManager` with your own storage backends (e.g., DynamoDB, MongoDB) in your `AppServiceProvider`:
+
+```php
+use ZaberDev\Cooldown\Contracts\CooldownDriverContract;
+use ZaberDev\Cooldown\Facades\Cooldown;
+
+public function boot(): void
+{
+    Cooldown::extend('redis-cluster', function ($app) {
+        return new MyRedisClusterCooldownDriver($app['redis']);
+    });
+}
+```
+
+---
+
+### 5. Database Pruning (`Prunable`)
+
+When using the `database` driver, expired records are automatically marked for pruning via Laravel's `Prunable` trait on the `ZaberDev\Cooldown\Models\Cooldown` model.
+
+To clean up old records automatically, schedule Laravel's `model:prune` command in your `console.php` or `Kernel.php`:
+
+```php
+use Illuminate\Support\Facades\Schedule;
+use ZaberDev\Cooldown\Models\Cooldown;
+
+Schedule::command('model:prune', ['--model' => Cooldown::class])->daily();
+```
+
+---
+
+### 6. Events
+
+Whenever a cooldown is initiated or cleared, the package dispatches strongly typed events if enabled (`cooldowns.events.dispatch = true`):
+
+- **`ZaberDev\Cooldown\Events\CooldownInitiated`**: Dispatched when `for()` or `until()` creates a cooldown (`$key`, `$expiresAt`, `$action`, `$target`).
+- **`ZaberDev\Cooldown\Events\CooldownReset`**: Dispatched when `reset()` clears a cooldown (`$key`, `$action`, `$target`).
+
+You can listen to these in your `EventServiceProvider` for logging, monitoring, or webhook triggers.
+
+---
+
+## Agentic Development with Laravel Boost
+
+**Laravel Cooldown** includes built-in AI support and architectural skills engineered for [Laravel Boost](https://github.com/laravel/boost).
+
+When using AI coding assistants (such as Cursor, Claude Code, or GitHub Copilot connected via the Boost MCP server), your AI agent can automatically load specialized design patterns and exact API rules for implementing rate limits and entity-scoped action cooldowns with our package.
+
+### Automatic Skill Installation
+When Laravel Boost (`laravel/boost`) is installed in your application, our package AI skill is **automatically discovered and published** during package installation and updates (`php artisan boost:install` or `php artisan boost:update`).
+
+If you install `laravel-cooldown` into an existing Boost-enabled project, our service provider also automatically synchronizes the skill directly into your `.ai/skills/laravel-cooldown` directory on boot with zero configuration needed.
+
+### Manual Skill Installation
+If you prefer to install or update the AI skill manually, you can use any of the following commands:
+
+```bash
+# Using Laravel Boost
+php artisan boost:add-skill zaber-dev/laravel-cooldown
+
+# Using Vendor Publish
+php artisan vendor:publish --tag=cooldowns-skill
+```
+
+### What the AI Skill Teaches Your Assistant
+By enabling our skill, your AI assistant will strictly follow package conventions, including:
+- Utilizing `Cooldown::for('action', $target)->block(...)` for atomic in-flight execution and double-click race condition protection.
+- Applying `use ZaberDev\Cooldown\HasCooldowns;` directly to Eloquent models (`$user->cooldown('send_sms')->for('5 minutes')`).
+- Selecting the proper storage driver (`cache` for high-throughput transient limits vs `database` for auditability and server-restart persistence).
+- Enforcing route middleware (`middleware('cooldown:action,duration')`) that respects controller validation failures cleanly.
+- Handling `CooldownActiveException` (`HTTP 429`) and `Retry-After` headers idiomatically.
+
+---
+
+## Related Packages
+
+This package is part of the **[ZaberDev Laravel Ecosystem](https://github.com/zaber-dev/laravel-ecosystem)** (Laravel Productivity Toolkit) — a cohesive suite of high-level application primitives engineered for concurrency, state management, and resource allocation.
+
+Explore the complete directory of packages, detailed use cases, and documentation in our **[Ecosystem Index Hub](https://github.com/zaber-dev/laravel-ecosystem/blob/main/PACKAGES.md)**.
+
+---
+
+## Testing & Quality
+
+Run the comprehensive PHPUnit test suite locally:
+
+```bash
+composer test
+```
+
+---
+
+## Contributing
+
+Thank you for considering contributing! Please ensure any pull requests include thorough PHPUnit tests covering unit, feature, and driver integration scenarios.
+
+---
+
+## License
+
+The MIT License (MIT). Please see [LICENSE.md](LICENSE.md) for more information.
+
+---
+
+<p align="center">
+    <b>Built with ❤️ as part of the ZaberDev Laravel Ecosystem.</b>
+</p>

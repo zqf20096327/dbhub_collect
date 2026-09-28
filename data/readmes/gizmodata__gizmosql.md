@@ -1,0 +1,379 @@
+# 🚀 GizmoSQL — High-Performance SQL Server for the Cloud
+
+[![DockerHub](https://img.shields.io/badge/dockerhub-image-green.svg?logo=Docker)](https://hub.docker.com/r/gizmodata/gizmosql)
+[![DockerHub LTS](https://img.shields.io/badge/dockerhub-LTS%20image-blue.svg?logo=Docker)](https://hub.docker.com/r/gizmodata/gizmosql-lts)
+[![LTS Channel](https://img.shields.io/badge/LTS-channel%20guide-orange.svg)](https://docs.gizmosql.com/lts_channel/)
+[![GitHub Container](https://img.shields.io/badge/github--package-container--image-green.svg?logo=Docker)](https://github.com/gizmodata/gizmosql/pkgs/container/gizmosql)
+[![Documentation](https://img.shields.io/badge/Documentation-dev-yellow.svg)](https://arrow.apache.org/docs/format/FlightSql.html)
+[![GitHub](https://img.shields.io/badge/GitHub-gizmodata%2Fgizmosql-blue.svg?logo=Github)](https://github.com/gizmodata/gizmosql)
+[![JDBC Driver](https://img.shields.io/badge/GizmoSQL%20JDBC%20Driver-download%20artifact-red?logo=Apache%20Maven)](https://github.com/gizmodata/gizmosql-jdbc-driver/releases/latest/download/gizmosql-jdbc-driver.jar)
+[![ADBC PyPI](https://img.shields.io/badge/PyPI-GizmoSQL%20ADBC%20Driver-blue?logo=PyPI)](https://pypi.org/project/adbc-driver-gizmosql/)
+[![SQLAlchemy Dialect](https://img.shields.io/badge/PyPI-GizmoSQL%20SQLAlchemy%20Dialect-blue?logo=PyPI)](https://pypi.org/project/sqlalchemy-gizmosql-adbc-dialect/)
+[![Ibis Backend](https://img.shields.io/badge/PyPI-GizmoSQL%20Ibis%20Backend-blue?logo=PyPI)](https://pypi.org/project/ibis-gizmosql/)
+[![App Store](https://img.shields.io/badge/App%20Store-GizmoSQL%20for%20iOS-black?logo=apple)](https://apps.apple.com/us/app/gizmosql/id6761951280)
+[![Slack Community](https://img.shields.io/badge/Slack-GizmoData%20Community-4A154B?logo=slack)](https://join.slack.com/t/gizmodatacommunity/shared_invite/zt-42jk7kdti-SJp7qk7d6XYCIKfBG~4HrA)
+
+---
+
+## 🌟 What is GizmoSQL?
+
+**GizmoSQL** is a lightweight, high-performance SQL server built on:
+
+- 🦆 [DuckDB](https://duckdb.org) or 🗃️ [SQLite](https://sqlite.org) for query execution
+- 🚀 [Apache Arrow Flight SQL](https://arrow.apache.org/docs/format/FlightSql.html) for fast, modern connectivity
+- 🔒 Middleware-based auth with optional TLS & JWT
+
+Originally forked from [`sqlflite`](https://github.com/voltrondata/sqlflite) — and now enhanced into a more extensible, production-ready platform under the Apache 2.0 license.
+
+---
+
+## 📦 Editions
+
+GizmoSQL is available in two editions:
+
+| Feature | Core | Enterprise |
+|---------|:----:|:----------:|
+| DuckDB & SQLite backends | ✅ | ✅ |
+| Arrow Flight SQL protocol | ✅ | ✅ |
+| TLS & mTLS authentication | ✅ | ✅ |
+| JWT token authentication | ✅ | ✅ |
+| Query timeout | ✅ | ✅ |
+| Session Instrumentation | ❌ | ✅ |
+| [Prometheus Metrics Endpoint & SQL Metrics](docs/monitoring.md) | ❌ | ✅ |
+| Kill Session | ❌ | ✅ |
+| Per-Catalog Permissions | ❌ | ✅ |
+| SSO/OIDC Authentication (JWKS) | ❌ | ✅ |
+| Authorized Email Filtering | ❌ | ✅ |
+| Statement Queuing | ❌ | ✅ |
+
+**GizmoSQL Core** is free and open source under the Apache 2.0 license.
+
+**GizmoSQL Enterprise** requires a commercial license. Contact [sales@gizmodata.com](mailto:sales@gizmodata.com) for licensing information.
+
+For more details, see the [Editions documentation](https://docs.gizmosql.com/editions/).
+
+Runtime metrics require the **`metrics` license feature** and are disabled by
+default. See the [monitoring guide](docs/monitoring.md) for enablement, the
+configurable HTTP port/bind address, SQL access, and Prometheus/Grafana setup.
+
+---
+
+## 🧠 Why GizmoSQL?
+
+- 🛰️ **Deploy Anywhere** — Run as a container, native binary, or in Kubernetes
+- 📦 **Columnar Fast** — Leverages Arrow columnar format for high-speed transfers
+- ⚙️ **Dual Backends** — Switch between DuckDB and SQLite at runtime
+- 🔐 **Built-in TLS + Auth** — Password-based login + signed JWT tokens
+- 📈 **Super Cheap Analytics** — TPC-H SF 1000 in 161s for ~$0.17 on Azure
+- 🧪 **CLI, Python, JDBC, SQLAlchemy, Ibis, WebSocket, MCP** — Pick your interface
+
+---
+
+## 📦 Component Versions
+
+| Component                                                                        | Version |
+|----------------------------------------------------------------------------------|---------|
+| [DuckDB](https://duckdb.org)                                                     | v1.5.5  |
+| [SQLite](https://sqlite.org)                                                     | 3.53.4  |
+| [Apache Arrow (Flight SQL)](https://arrow.apache.org/docs/format/FlightSql.html) | 25.0.1  |
+| [jwt-cpp](https://thalhammer.github.io/jwt-cpp/)                                 | v0.7.2  |
+| [OpenTelemetry C++](https://opentelemetry.io/docs/languages/cpp/)                | v1.28.0 |
+| [nlohmann/json](https://json.nlohmann.me)                                        | v3.12.0 |
+
+## 📚 Documentation
+
+For detailed instructions and configuration information, see our full documentation:
+
+[GizmoSQL Documentation](https://docs.gizmosql.com)
+
+---
+
+## 🚀 Quick Start
+
+> **Default credentials:** The server's default username is `gizmosql_user` (override with `--username` or `GIZMOSQL_USERNAME`). A password is always required via `--password` or `GIZMOSQL_PASSWORD`.
+
+### Option 1: Run from Docker
+
+```bash
+# Username defaults to "gizmosql_user" when GIZMOSQL_USERNAME is not set
+docker run --name gizmosql \
+           --detach \
+           --rm \
+           --tty \
+           --init \
+           --publish 31337:31337 \
+           --env TLS_ENABLED="1" \
+           --env GIZMOSQL_PASSWORD="gizmosql_password" \
+           --env PRINT_QUERIES="1" \
+           --pull always \
+           gizmodata/gizmosql:latest
+```
+
+### Option 2: Mount Your Own DuckDB database file
+
+```bash
+duckdb ./tpch_sf1.duckdb << EOF
+INSTALL tpch; LOAD tpch; CALL dbgen(sf=1);
+EOF
+
+docker run --name gizmosql \
+           --detach \
+           --rm \
+           --tty \
+           --init \
+           --publish 31337:31337 \
+           --env TLS_ENABLED="1" \
+           --env GIZMOSQL_PASSWORD="gizmosql_password" \
+           --pull always \
+           --mount type=bind,source=$(pwd),target=/opt/gizmosql/data \
+           --env DATABASE_FILENAME="data/tpch_sf1.duckdb" \
+           gizmodata/gizmosql:latest
+```
+
+### Option 3: Install via Homebrew (macOS & Linux)
+
+```bash
+brew tap gizmodata/tap
+brew trust gizmodata/tap
+brew install gizmosql
+```
+
+> **Note:** Homebrew 6.0 (June 2026) requires third-party taps to be explicitly
+> trusted before formulae can be installed from them — hence the `brew trust`
+> step. On older Homebrew versions the command doesn't exist; simply skip it.
+> Alternatively, `brew install gizmodata/tap/gizmosql` installs with a one-off
+> trust for just this formula.
+
+Supported platforms:
+- macOS (Apple Silicon / ARM64)
+- Linux (x86-64 / AMD64)
+- Linux (ARM64)
+
+Then run the server (username defaults to `gizmosql_user`):
+
+```bash
+GIZMOSQL_PASSWORD="gizmosql_password" gizmosql_server --database-filename your.duckdb --print-queries
+```
+
+### Option 4: Windows Installer (MSI)
+
+Download the latest MSI installer from the [GitHub Releases](https://github.com/gizmodata/gizmosql/releases) page — `GizmoSQL-amd64.msi` for x64 machines, or `GizmoSQL-arm64.msi` for Windows on Arm (e.g. Snapdragon X-class devices). The installer adds `gizmosql_server.exe` and `gizmosql_client.exe` to `C:\Program Files\GizmoSQL` and updates the system PATH.
+
+Then run the server from PowerShell or Command Prompt:
+
+```powershell
+$env:GIZMOSQL_PASSWORD="gizmosql_password"
+gizmosql_server --database-filename your.duckdb --print-queries
+```
+
+### Option 5: iOS App (iPhone & iPad) 📱
+
+GizmoSQL is available as a native iOS app on the Apple App Store — run a full GizmoSQL server right on your iPhone or iPad.
+
+[<img src="docs/app-store-badge.png" alt="Download GizmoSQL on the App Store" height="60">](https://apps.apple.com/us/app/gizmosql/id6761951280)
+
+The iOS edition bundles the DuckDB engine and the Arrow Flight SQL server, so any GizmoSQL client (JDBC, ADBC, CLI, UI, etc.) can connect to it over your local network.
+
+> [!IMPORTANT]
+> **The iOS app is intended for development, learning, demos, and local prototyping — not production workloads.** iOS enforces aggressive background execution limits, memory caps, and network/thermal throttling that make a phone or tablet unsuitable for hosting production SQL traffic. For production, run GizmoSQL via Docker, Kubernetes, Homebrew, or the native Linux/macOS/Windows binaries.
+
+---
+
+## 🧰 Clients and Tools
+
+### 🔗 JDBC
+
+Use with DBeaver or other JDBC clients:
+
+```text
+jdbc:gizmosql://localhost:31337?useEncryption=true&user=gizmosql_user&password=gizmosql_password&disableCertificateVerification=true
+```
+
+More info: [Setup guide](https://github.com/gizmodata/setup-gizmosql-jdbc-driver-in-dbeaver)
+
+---
+
+### 🐍 Python (ADBC)
+
+**Prerequisite:** Python 3.10+ and the [GizmoSQL ADBC driver](https://pypi.org/project/adbc-driver-gizmosql/):
+
+```bash
+pip install adbc-driver-gizmosql
+```
+
+As of v2.0, the driver is powered by the [native Go GizmoSQL ADBC driver](https://github.com/gizmodata/gizmosql-adbc)
+— same Python API, with DDL/DML immediate execution, `RETURNING` support,
+`gizmosql://` URIs, and OAuth/SSO provided by a shared driver library that
+also serves Go, C/C++, R, and other ADBC languages. The driver supports
+OAuth/SSO authentication for GizmoSQL Enterprise users.
+
+```python
+from adbc_driver_gizmosql import dbapi as gizmosql
+
+with gizmosql.connect(
+    "gizmosql://localhost:31337",  # TLS by default; legacy grpc+tls:// also works
+    username="gizmosql_user",
+    password="gizmosql_password",
+    tls_skip_verify=True,  # Not needed if you use a trusted CA-signed TLS cert
+) as conn:
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT n_nationkey, n_name FROM nation WHERE n_nationkey = ?",
+            parameters=[24],
+        )
+        x = cur.fetch_arrow_table()
+```
+
+---
+
+### 🔑 Token authentication
+See: https://github.com/gizmodata/generate-gizmosql-token for an example of how to generate a token and use it with GizmoSQL.
+
+### 💻 CLI Client
+
+GizmoSQL ships with an interactive SQL shell inspired by `psql` and the DuckDB CLI:
+
+```bash
+# Interactive session
+GIZMOSQL_PASSWORD="gizmosql_password" gizmosql_client --host localhost --username gizmosql_user --tls --tls-skip-verify
+```
+
+Run a single query with `--command`:
+
+```bash
+GIZMOSQL_PASSWORD="gizmosql_password" gizmosql_client \
+  --host localhost --username gizmosql_user --tls --tls-skip-verify \
+  --command "SELECT version()"
+```
+
+Pipe SQL from a heredoc:
+
+```bash
+GIZMOSQL_PASSWORD="gizmosql_password" gizmosql_client \
+  --host localhost --username gizmosql_user --tls --tls-skip-verify --quiet <<'EOF'
+SELECT n_nationkey, n_name
+FROM nation
+WHERE n_nationkey = 24;
+EOF
+```
+
+More info: [Client Shell documentation](https://docs.gizmosql.com/client/)
+
+---
+
+## 🏗️ Build from Source (Optional)
+
+```bash
+git clone https://github.com/gizmodata/gizmosql --recurse-submodules
+cd gizmosql
+cmake -S . -B build -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local
+cmake --build build --target install
+```
+
+Then run:
+
+```bash
+GIZMOSQL_PASSWORD="..." gizmosql_server --database-filename ./data/your.db --print-queries
+```
+
+---
+
+## 🧪 Advanced Features
+
+- ✅ DuckDB + SQLite backend support
+- ✅ TLS & optional mTLS
+- ✅ JWT-based auth (automatically issued, signed server-side)
+- ✅ Server initialization via `INIT_SQL_COMMANDS` or `INIT_SQL_COMMANDS_FILE`
+- ✅ Slim Docker image for minimal runtime
+
+---
+
+## 🛠 Backend Selection
+
+```bash
+# DuckDB (default)
+gizmosql_server -B duckdb --database-filename data/foo.duckdb
+
+# SQLite
+gizmosql_server -B sqlite --database-filename data/foo.sqlite
+```
+
+> [!TIP]
+> You can now use the: `--query-timeout` argument to set a maximum query timeout in seconds for the server.  Queries running longer than the timeout will be killed.  The default value of: `0` means "unlimited".
+> Example: `gizmosql_server (other args...) --query-timeout 10`
+> will set a timeout of 10 seconds for all queries.
+
+> [!TIP]
+> The health check query can be customized using `--health-check-query` or the `GIZMOSQL_HEALTH_CHECK_QUERY` environment variable.
+> The default is `SELECT 1`. This is useful when you need a more specific health check for your deployment.
+> Example: `gizmosql_server (other args...) --health-check-query "SELECT 1 FROM my_table LIMIT 1"`
+
+---
+
+
+## 🧩 Extensions & Integrations
+
+- 💻 [GizmoSQL UI](https://github.com/gizmodata/gizmosql-ui) 🚀 **NEW!**
+- 🤖 [MCP Server for AI agents (Claude Desktop, Claude Code, any MCP client)](https://github.com/gizmodata/gizmosql-mcp) 🚀 **NEW!**
+- 🔌 [SQLAlchemy dialect](https://github.com/gizmodata/sqlalchemy-gizmosql-adbc-dialect)
+- 💿 [Apache Superset compatible SQLAlchemy driver](https://github.com/gizmodata/superset-sqlalchemy-gizmosql-adbc-dialect)
+- 🔌 [Ibis adapter](https://github.com/gizmodata/ibis-gizmosql)
+- 🌐 [Flight SQL over WebSocket Proxy](https://github.com/gizmodata/flight-sql-websocket-proxy)
+- 📈 [Metabase driver](https://github.com/gizmodata/metabase-gizmosql-driver) 🚀 **NEW!**
+- ⚙️ [dbt Adapter](https://github.com/gizmodata/dbt-gizmosql)
+- 🥅 [SQLMesh Adapter](https://github.com/gizmodata/sqlmesh-gizmosql) 🚀 **NEW!**
+- ✨ [PySpark SQLFrame adapter](https://github.com/gizmodata/sqlframe-gizmosql) 🚀 **NEW!**
+- 🪩 [ADBC Scanner by Query.Farm](docs/adbc_scanner_duckdb.md) 🚀 **NEW!**
+- 🧲 [ADBC extension for DuckDB by Columnar](docs/adbc_duckdb_extension.md) 🚀 **NEW!**
+- ⚓️ [Kubernetes Operator](https://github.com/gizmodata/gizmosql-operator) 🚀 **NEW!**
+- 📺 [GizmoSQLLine JDBC CLI Client](https://github.com/gizmodata/gizmosqlline) **NEW!**
+- 🔥 [Grafana Plugin](https://grafana.com/grafana/plugins/gizmodata-gizmosql-datasource/) **NEW!**
+- 🕸️ [JavaScript/TypeScript Client](https://github.com/gizmodata/gizmosql-client-js) **NEW!**
+- ☕️ [JDBC Driver](https://github.com/gizmodata/gizmosql-jdbc-driver/releases/latest/download/gizmosql-jdbc-driver.jar) **NEW!**
+- 🐍 [Python ADBC Driver (with OAuth/SSO)](https://pypi.org/project/adbc-driver-gizmosql/) — v2.0 is powered by the [native Go ADBC driver](https://github.com/gizmodata/gizmosql-adbc), also loadable from Go, C/C++, R, and any ADBC driver manager **NEW!**
+- 🔌 [ODBC Driver](https://github.com/gizmodata/gizmosql-odbc-driver) **NEW!**
+- 📊 [Power BI Connector](https://github.com/gizmodata/gizmosql-powerbi-connector) **NEW!**
+- 🗺️ [QGIS Plugin (qgizmosql)](https://plugins.qgis.org/plugins/qgizmosql) 🚀 **NEW!**
+---
+
+## 📊 Performance
+
+💡 On Azure VM `Standard_E64pds_v6` (~$3.74/hr):
+
+- TPC-H SF 1000 benchmark:  
+  ⏱️ 161.4 seconds  
+  💰 ~$0.17 USD total
+
+> 🏁 Speed for the win. Performance for pennies.
+
+---
+
+## 🔒 License
+
+**GizmoSQL Core** is licensed under the [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
+**Enterprise features** (in `src/enterprise/`) are proprietary and require a commercial license from GizmoData LLC. See [src/enterprise/LICENSE](src/enterprise/LICENSE) for details.
+
+---
+
+## 💬 Community
+
+Want to contribute code? See [CONTRIBUTING.md](CONTRIBUTING.md) for setup,
+formatting, linting, clang-tidy, tests, and the checks required by CI.
+
+Join the **GizmoData Community Slack** to ask questions, share what you're building, and get help from the team and other users:
+
+👉 [Join the GizmoData Community on Slack](https://join.slack.com/t/gizmodatacommunity/shared_invite/zt-42jk7kdti-SJp7qk7d6XYCIKfBG~4HrA)
+
+---
+
+## 📫 Contact
+
+Questions or consulting needs?
+
+📧 info@gizmodata.com  
+🌐 [https://gizmodata.com](https://gizmodata.com)
+
+---
+
+> Built with ❤️ by [GizmoData™](https://gizmodata.com)

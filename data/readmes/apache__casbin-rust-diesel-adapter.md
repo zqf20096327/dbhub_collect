@@ -1,0 +1,104 @@
+# Diesel Adapter for Casbin-RS (Casbin for Rust)
+
+[![Crates.io](https://img.shields.io/crates/v/diesel-adapter.svg)](https://crates.io/crates/diesel-adapter)
+[![Docs](https://docs.rs/diesel-adapter/badge.svg)](https://docs.rs/diesel-adapter)
+[![CI](https://github.com/apache/casbin-rust-diesel-adapter/actions/workflows/ci.yml/badge.svg)](https://github.com/apache/casbin-rust-diesel-adapter/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/apache/casbin-rust-diesel-adapter/branch/master/graph/badge.svg)](https://codecov.io/gh/apache/casbin-rust-diesel-adapter)
+
+Diesel Adapter is the [Diesel](https://github.com/diesel-rs/diesel) adapter for [Casbin-RS](https://github.com/apache/casbin-rs). With this library, Casbin can load policy from Diesel supported database or save policy to it.
+
+Based on [Diesel](https://github.com/diesel-rs/diesel), The current supported databases are:
+
+- [MySQL](https://www.mysql.com/)
+- [PostgreSQL](https://github.com/lib/pq)
+- [SQLite](https://www.sqlite.org)
+
+*Attention*: `postgres`, `mysql`, `sqlite` are mutual exclusive which means that you can only activate one of them.
+
+## Notice
+
+In order to unify the database table name in Casbin ecosystem, we decide to use `casbin_rule` instead of `casbin_rules` from version `0.9.0`. If you are using old version `diesel-adapter` in your production environment, please use following command and update `diesel-adapter` version:
+
+````SQL
+# MySQL & PostgreSQL & SQLite
+ALTER TABLE casbin_rules RENAME TO casbin_rule;
+````
+
+## Install
+
+Add it to `Cargo.toml`
+
+```
+diesel-adapter = { version = "1.2.0", features = ["postgres"] }
+tokio = { version = "1.1.1", features = ["macros", "rt-multi-thread"] }
+```
+**Warning**: `tokio v1.0` or later is supported from `diesel-adapter v0.9.0`, we recommend that you upgrade the relevant components to ensure that they work properly. The last version that supports `tokio v0.2` is `diesel-adapter v0.8.3` , you can choose according to your needs.
+
+## Configure
+
+Configure `env`
+
+Rename `sample.env` to `.env` and put `DATABASE_URL`, `POOL_SIZE`   inside
+
+```bash
+DATABASE_URL=postgres://casbin_rs:casbin_rs@localhost:5432/casbin
+# DATABASE_URL=mysql://casbin_rs:casbin_rs@localhost:3306/casbin
+# DATABASE_URL=casbin.db
+POOL_SIZE=8
+```
+
+Or you can export `DATABASE_URL`, `POOL_SIZE`
+
+```bash
+export DATABASE_URL=postgres://casbin_rs:casbin_rs@localhost:5432/casbin
+export POOL_SIZE=8
+```
+
+## Example
+
+```rust
+use diesel_adapter::casbin::prelude::*;
+use diesel_adapter::DieselAdapter;
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    let mut m = DefaultModel::from_file("examples/rbac_model.conf").await?;
+    let a = DieselAdapter::new("postgres://casbin_rs:casbin_rs@127.0.0.1:5432/casbin", 8)?;
+    let mut e = Enforcer::new(m, a).await?;
+    Ok(())
+}
+```
+
+### Sharing an existing connection pool
+
+`DieselAdapter::new` creates its own `r2d2` pool. If your application already has
+one, use `DieselAdapter::with_pool` instead so Casbin reuses your connections
+rather than opening a second pool:
+
+```rust
+use diesel_adapter::casbin::prelude::*;
+use diesel_adapter::diesel::r2d2::{ConnectionManager, Pool};
+use diesel_adapter::{ConnectionPool, DieselAdapter};
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    let m = DefaultModel::from_file("examples/rbac_model.conf").await?;
+
+    // your application's pool
+    let pool: ConnectionPool = Pool::builder()
+        .max_size(8)
+        .build(ConnectionManager::new(
+            "postgres://casbin_rs:casbin_rs@127.0.0.1:5432/casbin",
+        ))
+        .unwrap();
+
+    let a = DieselAdapter::with_pool(pool.clone())?;
+    let mut e = Enforcer::new(m, a).await?;
+    Ok(())
+}
+```
+
+`ConnectionPool` is an alias for `Pool<ConnectionManager<Connection>>`, where
+`Connection` resolves to `PgConnection`, `MysqlConnection` or `SqliteConnection`
+depending on the enabled feature. `diesel` is re-exported as
+`diesel_adapter::diesel`, so you do not need to match diesel versions by hand.

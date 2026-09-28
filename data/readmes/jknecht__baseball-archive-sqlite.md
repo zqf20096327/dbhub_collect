@@ -1,0 +1,19 @@
+# SQLite Baseball Archive
+
+Sqlite database files are now available only as releases.  Download the latest release [here](https://github.com/jknecht/baseball-archive-sqlite/releases/latest).
+
+Thanks to the generous work of [Sean Lahman](https://www.seanlahman.com/baseball-archive/statistics), baseball geeks everywhere can 
+analyze and play with baseball stats dating all the way back to 1871.
+Unfortunately, this data is only published in MS Access or as a collection
+of comma-delimited files.  For those of us who want to use a relational
+database but can't install MS Access, we have to resort to other alternatives.
+
+The fine folks over at baseball-databank.org convert this data to MySQL
+each year.  But again, there are those of us who prefer the simplicity
+of a file-based database rather than running a server.
+
+So, here I present to you the Sean Lahman baseball database in SQLite format.
+Licensed under Creative Commons Share-alike 3.0 (http://creativecommons.org/licenses/by-sa/3.0).
+
+Special thanks to Sean Lahman for all his awesome work year after year.
+

@@ -1,0 +1,64 @@
+# Selekt
+
+[![Apache 2.0](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE) [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/bloomberg/selekt/badge)](https://securityscorecards.dev/viewer/?uri=github.com/bloomberg/selekt)
+
+[![Android Maven Central](https://img.shields.io/maven-central/v/com.bloomberg.selekt/selekt-android.svg?label=Android%20Maven%20Central&color=3DDC84)](https://search.maven.org/artifact/com.bloomberg.selekt/selekt-android)
+[![JDBC Maven Central](https://img.shields.io/maven-central/v/com.bloomberg.selekt/selekt-jdbc.svg?label=JDBC%20Maven%20Central&color=ED8B00)](https://search.maven.org/artifact/com.bloomberg.selekt/selekt-jdbc)
+
+[![Android KDoc](https://img.shields.io/static/v1?label=Android&message=KDoc&color=3DDC84)](https://bloomberg.github.io/selekt/kdoc/selekt-android/index.html)
+[![JDBC KDoc](https://img.shields.io/static/v1?label=JDBC&message=KDoc&color=ED8B00)](https://bloomberg.github.io/selekt/kdoc/selekt-jdbc/index.html)
+
+Selekt is a familiar Android and JDBC SQLite database library that by default wraps the community edition of [SQLCipher](https://www.zetetic.net/sqlcipher/open-source/), an SQLite extension that provides 256-bit AES encryption of database files. Selekt realises the maximum concurrency offered by SQLite3: When enabled for WAL-journal mode, "readers do not block writers and a writer does not block readers. Reading and writing can proceed concurrently."
+
+The Selekt project is used to securely and efficiently store data in the [Bloomberg Professional](https://play.google.com/store/apps/details?id=com.bloomberg.android.anywhere) application for Android.
+
+## Menu
+
+- [Rationale](#rationale)
+- [Quick start](#quick-start)
+- [Contributions](#contributions)
+- [Licenses](#licenses)
+- [Code of Conduct](#code-of-conduct)
+- [Security Vulnerability Reporting](#security-vulnerability-reporting)
+
+## Rationale
+
+### Android
+
+The two most popular publicly available alternatives to Selekt are the Android SDK's own SQLite database, and [SQLCipher for Android](https://www.zetetic.net/sqlcipher/sqlcipher-for-android/). The Android SDK's SQLite database does not encrypt databases, instead relying on the OS's user security model to restrict access. SQLCipher for Android uses the SQLCipher library to encrypt databases, but because the derivation of every key is by design expensive it's not allowed to make full use of the concurrency offered by SQLite3: Each database has only one connection, connections are not ephemeral and persist even if idling.
+
+Selekt sits somewhere between the two: when Selekt uses SQLCipher, it does so in a mode that moves the responsibility for deriving keys to the caller. This sacrifices some of the security guarantee offered by the default operating mode of SQLCipher, in return for allowing greater concurrency and efficient resource use by pooling connections while still retaining pretty good security.
+
+### JDBC
+
+JVM applications commonly use [Xerial SQLite JDBC](https://github.com/xerial/sqlite-jdbc). Applications that want a pooled `DataSource` must add a separate JDBC pool, such as the general-purpose HikariCP. Xerial's standard distribution does not support encrypted database files, while a generic pool treats every JDBC connection alike and does not understand SQLite's asymmetric concurrency model.
+
+Selekt provides its own database-scoped SQLite-aware connection pool behind the JDBC API. It coordinates a primary writer and pooled readers around SQLite's locking and transaction model, so no third-party connection pool is required. The pool enables WAL read/write concurrency by default and avoids repeatedly creating native connections. Selekt also supports encrypted database files through SQLCipher.
+
+## Quick Start
+
+Please refer to the [main documentation](https://bloomberg.github.io/selekt/getting_started_android/).
+
+## Contributions
+
+We :heart: contributions.
+
+Have you had a good experience with this project? Why not share some love and contribute code, or just let us know about any issues you had with it?
+
+We welcome issue reports [here](../../issues); be sure to choose the proper issue template for your issue, so that we can be sure you're providing the necessary information.
+
+Before sending a [Pull Request](../../pulls), please make sure you read our [Contribution Guidelines](https://github.com/bloomberg/.github/blob/master/CONTRIBUTING.md).
+
+## Licenses
+
+Please read the [LICENSE](LICENSE), [OPENSSL_LICENSE](OPENSSL_LICENSE) and [SQLCIPHER_LICENSE](SQLCIPHER_LICENSE) files.
+
+## Code of Conduct
+
+This project has adopted a [Code of Conduct](https://github.com/bloomberg/.github/blob/master/CODE_OF_CONDUCT.md). If you have any concerns about the Code, or behavior which you have experienced in the project, please contact us at opensource@bloomberg.net.
+
+## Security Vulnerability Reporting
+
+If you believe you have identified a security vulnerability in this project, please send an email to the project team at opensource@bloomberg.net, detailing the suspected issue and any methods you've found to reproduce it.
+
+Please do NOT open an issue in the GitHub repository, as we'd prefer to keep vulnerability reports private until we've had an opportunity to review and address them.

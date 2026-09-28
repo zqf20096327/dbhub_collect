@@ -1,0 +1,695 @@
+<p align="center">
+  <h1 align="center">Local Agent Viewer</h1>
+  <p align="center">
+    <strong>Your local long-term memory for AI agent interactions.</strong>
+    <br />
+    Every interaction you have with Claude Code, Codex CLI, Claude Desktop, and ChatGPT — parsed, classified, searchable, and visualized. Across all your machines.
+  </p>
+</p>
+
+<p align="center">
+  <a href="https://github.com/maxturazzini/local-agent-viewer/actions/workflows/ci.yml"><img src="https://github.com/maxturazzini/local-agent-viewer/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License" /></a>
+  <img src="https://img.shields.io/badge/python-3.9+-3776AB.svg?logo=python&logoColor=white" alt="Python 3.9+" />
+  <img src="https://img.shields.io/badge/dependencies-zero_(stdlib_only)-brightgreen.svg" alt="Zero dependencies" />
+  <img src="https://img.shields.io/badge/database-SQLite-003B57.svg?logo=sqlite&logoColor=white" alt="SQLite" />
+</p>
+
+---
+
+## Want to build your own AI agent?
+
+If LocalAgentViewer sparked your curiosity about AI agents, you might want to go deeper.
+
+**[AI, MAX Academy](https://academy.aimax.it)** offers practical AI training born from 200+ real-world workshops with 2000+ professionals. One of the flagship courses is:
+
+### [Your AI assistant. On your computer.](https://academy.aimax.it/corsi/minime-corso-base/index.html)
+
+A hands-on course that walks you through building a personal AI assistant that works on your own files, knows your work, and stays where it belongs — with you. No cloud dependency, no black boxes. You learn how to think *with* AI, not just how to click buttons.
+
+> The course is currently in **Italian**, but an **English version is on the way**. First lesson is free.
+
+---
+
+## The problem
+
+You talk to AI agents every day. You solve bugs, design systems, refactor codebases, debug deployments. But those interactions vanish into scattered JSONL files buried in `~/.claude/`, `~/.codex/`, and platform-specific directories. No search. No analytics. No memory.
+
+**What if you could remember everything?**
+
+## What LAV does
+
+**LocalAgentViewer** turns your AI agent logs into a persistent, searchable knowledge base — entirely on your machine.
+
+- **Parse** raw JSONL/JSON logs from multiple agents into a single SQLite database
+- **Classify** interactions with AI (topics, sensitivity, people, clients, tags)
+- **Search** by keyword (FTS5) or by meaning (Qdrant vector search)
+- **Visualize** tokens, costs, tools, files, and activity patterns in a real-time dashboard
+- **Distribute** across machines — each device parses locally, a central collector unifies everything
+
+No cloud. No accounts. No external dependencies. Just `pip install` and go.
+
+## Supported Agents
+
+| Agent | Source Format | Auto-detected |
+|-------|--------------|---------------|
+| **Claude Code** | JSONL | `~/.claude/projects/` |
+| **Codex** (CLI, Desktop, VS Code, ChatGPT Work Desktop) | JSONL | `~/.codex/sessions/` |
+| **Claude Desktop (Cowork)** | JSONL | `~/Library/Application Support/Claude/local-agent-mode-sessions/` |
+| **ChatGPT** | JSON export | Manual (`conversations.json` from data export) |
+
+> Codex rollouts are attributed to their real surface from
+> `session_meta.payload.originator`: `codex_cli`, `codex_desktop`,
+> `codex_vscode`, `chatgpt_work_desktop`, or `codex_local` (unknown). They all
+> share one local parser and the `codex_cli` sync alias (LAV-74).
+
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/lav1_redacted.png" width="80%" alt="Dashboard — overview with sessions, tokens, messages, and activity by project and model" />
+</p>
+
+<details>
+<summary><strong>More screenshots</strong></summary>
+
+<p align="center">
+  <img src="docs/screenshots/lav4_redacted.png" width="80%" alt="Dashboard — files tab with sync panel and source filtering" />
+</p>
+<p align="center">
+  <img src="docs/screenshots/lav2_redacted.png" width="80%" alt="Dashboard — subagent usage, MCP tool distribution" />
+</p>
+<p align="center">
+  <img src="docs/screenshots/lav3_redacted.png" width="80%" alt="Interactions — list with classification badges, cost, and duration" />
+</p>
+
+</details>
+
+## Installation
+
+### 1. Clone and install
+
+```bash
+git clone https://github.com/maxturazzini/local-agent-viewer.git
+cd local-agent-viewer
+pip install -e .
+```
+
+This installs the core package (zero external dependencies — stdlib only). All CLI commands become available immediately.
+
+### 2. (Optional) Install extras
+
+```bash
+pip install -e ".[classifiers]"   # AI classification (openai)
+pip install -e ".[qdrant]"        # Semantic search (qdrant-client, openai, anthropic)
+pip install -e ".[mcp]"           # MCP server (fastmcp)
+pip install -e ".[all]"           # Everything
+```
+
+### 3. (Optional) Configure environment
+
+Copy the example and fill in what you need:
+
+```bash
+cp .env.example .env
+```
+
+```env
+# Only needed for optional features — core works without any of these
+OPENAI_API_KEY=sk-...            # AI classification (lav-classify) + embeddings (lav-index)
+ANTHROPIC_API_KEY=sk-ant-...     # Qdrant KB auto-tagging via Haiku
+QDRANT_URL=http://localhost:6333 # Remote Qdrant server (omit for local file storage)
+CHATGPT_EXPORT_PATH=             # Path to ChatGPT conversations.json
+CLAUDE_AI_EXPORT_PATH=           # Folder of Anthropic claude.ai export (data-*-batch-0000)
+
+# Auth for CLI (lav) and MCP server (lav-mcp)
+# LAV_API_KEY=your-secret-key        # Required for write operations (sync, kb index, pricing add)
+# LAV_READ_API_KEY=your-read-key     # Optional — if set, read operations require this key
+
+# Classification config (optional — defaults work with OpenAI)
+# LAV_CLASSIFY_MODEL=gpt-4.1-mini
+# LAV_CLASSIFY_BASE_URL=http://localhost:11434/v1  # Ollama, vLLM, Azure, etc.
+# LAV_CLASSIFY_SYSTEM_PROMPT=/path/to/prompt.txt   # or inline text
+```
+
+## Quick Start
+
+```bash
+# Parse interactions from this machine
+lav-parse
+
+# Start the server
+lav-server
+```
+
+Open **http://localhost:8764** — that's it.
+
+The database is created automatically at `~/.local/share/local-agent-viewer/local_agent_viewer.db`. No configuration required for core functionality.
+
+### CLI Commands
+
+| Command | Description | Requires |
+|---------|-------------|----------|
+| `lav` | **Unified CLI** — query, search, KB management, sync, pricing | — |
+| `lav-parse` | Parse JSONL interactions (Claude Code, Codex, Desktop) | — |
+| `lav-parse-chatgpt` | Parse ChatGPT export | `CHATGPT_EXPORT_PATH` |
+| `lav-parse-claude-ai` | Parse Anthropic claude.ai account export | `CLAUDE_AI_EXPORT_PATH` (or `--folder`) |
+| `lav-server` | Start the web server | — |
+| `lav-classify` | Classify interactions via gpt-4.1-mini | `OPENAI_API_KEY` |
+| `lav-index` | Index interactions into Qdrant | `qdrant-client`, `openai` |
+| `lav-mcp` | Start MCP server | `fastmcp` |
+| `lav-pricing` | Manage model pricing for cost tracking | — |
+
+### Unified CLI (`lav`)
+
+The `lav` command provides direct access to queries, KB management, sync, and pricing — no server or MCP required.
+
+```bash
+# Search interactions (SQLite FTS5)
+lav search "newsletter pipeline"
+lav search "newsletter" --project miniMe --limit 5 --start 2026-03-01
+
+# Show full transcript
+lav show <session_id>
+
+# Semantic search (Qdrant KB)
+lav kb search "how does the blog publisher work"
+lav kb search "debugging MCP" --classification development
+
+# KB management
+lav kb status <session_id>
+lav kb index <session_id> --tags "blog,newsletter"
+lav kb remove <session_id>
+lav kb tags <session_id> --set "new,tags"
+
+# Day View — daily Gantt + honest worktime metrics
+lav day 2026-05-12
+lav day 2026-05-12 --project miniMe --format brief
+
+# Sync & pricing
+lav sync
+lav sync --scope project --project miniMe --full
+lav pricing list
+lav pricing add --model gpt-5.4 --input 2.0 --output 8.0 --from-date 2026-04-01
+
+# Backfill tool outcomes (status / error / duration) on historical tool rows
+lav backfill tool-outcomes
+
+# Rebuild Codex titles (see "Codex titles" below)
+lav backfill codex-titles
+lav backfill codex-titles --state-db /tmp/agent_state_5.sqlite   # another node's titles
+```
+
+**Output formats**: JSON (default, for piping/scripting), `--format table` (human-readable), `--format brief` (one line per result).
+
+**Auth**: write operations (`sync`, `kb index/remove/tags`, `pricing add`) require `LAV_API_KEY` env var. Read operations are open by default, or gated by `LAV_READ_API_KEY` if set.
+
+### Parser options
+
+```bash
+lav-parse                        # incremental (default, fast) — includes Codex by default
+lav-parse --project myProject    # parse one project only
+lav-parse --full                 # force full reparse
+lav-parse --exclude-codex        # skip Codex CLI sessions
+lav-parse --since 2026-06-01     # bounded re-read: widen the window, insert only
+
+lav-parse-chatgpt               # parse ChatGPT export
+lav-parse-chatgpt --full        # full reparse
+```
+
+**Codex titles.** Codex injects its context (permissions, skills, app-context) as messages
+marked `role: "user"`, indistinguishable from a real one, so the "first user message" heuristic
+titled 90% of Codex interactions with a wrapper like `<permissions instructions>`. The real
+title is not in the rollout files at all — it lives in Codex's own state database,
+`~/.codex/state_<N>.sqlite`, which is what the Codex app-server's `thread/list` method reads.
+The parser now reads it from there (`name`, falling back to the always-present `preview`),
+picking the **highest** `state_<N>` generation present; a missing or unreadable database costs
+you the nicer title and nothing else.
+
+`lav backfill codex-titles` repairs interactions parsed before this change, with no reparse:
+it re-derives `display` from the stored messages and takes `summary` from the state database.
+
+- **Run it on every machine**, like every other backfill.
+- **The collector cannot do it alone.** Codex's state database never leaves the machine Codex
+  runs on, so the collector can resolve none of the agent's threads. Copy the agent's
+  `state_<N>.sqlite` across and point `--state-db` at the copy.
+- **Check `injected_titles_after` in the output.** It is the residual — how many rows are still
+  titled with an injected block. Anything above a handful means a wrapper is being missed.
+
+**`--since <ISO>` — bounded re-read.** An incremental parse only reads what arrived after the
+stored watermark. `--since` temporarily lowers that watermark so the parser re-reads a window
+of history you already have on disk — the way to pick up rows a *new* parser feature would have
+recorded but an older one did not (for example the shell commands recovered by the
+`bash_commands` change, see *Database Schema*). Accepts `2026-06-01` or `2026-06-01T00:00:00Z`.
+
+- **Additive**: it only inserts. Nothing is deleted, no row is rewritten, and every insert is
+  duplicate-guarded, so re-running the same window is a no-op.
+- **Never lowers a stored watermark**: the widened window is used for *reading* only; the
+  watermark written back at the end is the usual high-water mark, and a `--since` newer than
+  the stored value is ignored rather than narrowing the window. Interrupting a `--since` run
+  cannot make a normal parse skip anything.
+- **Mutually exclusive with `--full`**, which is the destructive full reparse and already
+  ignores the watermark. `--project` composes normally.
+- **Run it on every machine.** Recovered rows keep their original (old) timestamps, which sit
+  behind the collector's pull cursor, so they do not travel over sync — same reason
+  `lav backfill tool-outcomes` is run per node.
+
+## Data Pipeline
+
+Three layers turn raw agent logs into a searchable, classified knowledge base:
+
+```
+JSONL / JSON logs
+    │
+    ▼
+┌─────────────────────────────────────────────────┐
+│  1. PARSE → SQLite                              │
+│  Raw interactions: sessions, messages, tokens,  │
+│  file ops, tool calls, costs, models            │
+│  ─ lav-parse / lav-parse-chatgpt                │
+└─────────────────┬───────────────────────────────┘
+                  │
+                  ▼
+┌─────────────────────────────────────────────────┐
+│  2. CLASSIFY → interaction_metadata (optional)  │
+│  AI classification via gpt-4.1-mini:            │
+│  summary, topics, people, clients, sensitivity, │
+│  process type, tags                             │
+│  ─ lav-classify (or auto after sync)            │
+└─────────────────┬───────────────────────────────┘
+                  │
+                  ▼
+┌─────────────────────────────────────────────────┐
+│  3. INDEX → Qdrant vector DB (optional)         │
+│  Semantic embeddings for meaning-based search.  │
+│  Reuses SQL metadata when available (no extra   │
+│  LLM call). Enables KB search in dashboard.     │
+│  ─ lav-index                                    │
+└─────────────────────────────────────────────────┘
+```
+
+Each layer is independent — the core works with just layer 1. Classification adds structured metadata. Qdrant adds semantic search on top.
+
+## Features
+
+### Analytics Dashboard
+- **Overview** — sessions, messages, tokens, costs across time
+- **Tokens** — input/output/cache breakdown by model and day
+- **Files** — most-modified files, operations heatmap
+- **Tools** — tool call frequency and distribution
+- **Timeline** — activity patterns and session duration
+- **Users** — per-user drill-down with 7 views
+- **Knowledge Base** — semantic search across interactions
+- **Cost Intelligence** — work patterns, task-type costs, efficiency metrics
+- **Day View** — daily Gantt of all sessions grouped by project, concurrency curve, and two honest worktime metrics (`active_wallclock`, `assistant_wallclock`) that avoid the ~13× inflation of span-sum. Hover any metric card for its definition. Toggle "Show subagents" to include sessions with `parent_session_id`.
+
+### 4D Filtering
+Every query supports four independent dimensions:
+
+| Dimension | What it filters |
+|-----------|----------------|
+| **Project** | Which codebase |
+| **User** | Which person |
+| **Host** | Which machine |
+| **Source** | Which agent (claude_code, codex_cli, cowork_desktop, chatgpt) |
+
+### Search
+- **Full-text search** via SQLite FTS5 — fast, no external dependencies
+- **Semantic search** via Qdrant vector DB (optional, layer 3)
+- **Classification filters** — search by topic, sensitivity, process type (layer 2)
+
+### AI Classification (optional)
+
+```bash
+# Requires OPENAI_API_KEY in .env
+lav-classify              # classify unclassified interactions
+lav-classify --full       # reclassify everything
+lav-classify --dry-run    # preview
+```
+
+Also runs automatically after each sync when `OPENAI_API_KEY` is set.
+
+**Configuration** — all optional, set in `.env`:
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `LAV_CLASSIFY_MODEL` | `gpt-4.1-mini` | Model name (any OpenAI-compatible model) |
+| `LAV_CLASSIFY_BASE_URL` | *(OpenAI default)* | API endpoint — e.g. `http://localhost:11434/v1` for Ollama |
+| `LAV_CLASSIFY_SYSTEM_PROMPT` | *(built-in)* | Custom system prompt: inline text or path to a `.txt` file |
+| `LAV_CLASSIFY_MAX_CHARS` | `12000` | Max chars of interaction text sent to the model |
+| `LAV_CLASSIFY_LANGUAGE` | `en` | Language for summary/abstract/process fields (enum fields stay English) |
+
+The `--model` CLI flag overrides `LAV_CLASSIFY_MODEL` for a single run.
+
+> **Note on small models:** The built-in prompt is optimized for small local models (phi4-mini, etc.). Avoid uppercase/NOT-heavy custom prompts — some small models enter degenerate repetition loops. See `tests/evals/` for model comparison reports.
+
+### MCP Server
+Expose your analytics to AI tools via the [Model Context Protocol](https://modelcontextprotocol.io). This lets Claude Code, Claude Desktop, or any MCP-compatible client query your interaction history, search the knowledge base, and trigger syncs — all through natural language.
+
+```bash
+# Requires: pip install fastmcp
+lav-mcp
+```
+
+**Available tools:**
+
+| Tool | Auth | Description |
+|------|------|-------------|
+| `get_interactions` | `LAV_READ_API_KEY` | List/search interactions (FTS, filters by project/user/date) |
+| `get_interaction_details` | `LAV_READ_API_KEY` | Full transcript by session ID |
+| `semantic_search` | `LAV_READ_API_KEY` | Qdrant vector search with classification/tag/project filters |
+| `kb_status` | `LAV_READ_API_KEY` | Check if an interaction is indexed |
+| `sync` | `LAV_API_KEY` | Trigger data re-parse (all, by project, or by source) |
+| `kb_index` | `LAV_API_KEY` | Index an interaction into Qdrant (auto-tag or pre-metadata) |
+| `kb_remove` | `LAV_API_KEY` | Remove an interaction from Qdrant |
+| `kb_update_tags` | `LAV_API_KEY` | Update tags without re-embedding |
+| `manage_pricing` | `LAV_READ_API_KEY` / `LAV_API_KEY` | List, add, or lookup model pricing |
+
+**Claude Code configuration** (`~/.claude/claude_code_config.json`):
+```json
+{
+  "mcpServers": {
+    "local-agent-viewer": {
+      "command": "lav-mcp",
+      "env": {
+        "LAV_API_KEY": "your-write-api-key",
+        "LAV_READ_API_KEY": "your-read-api-key"
+      }
+    }
+  }
+}
+```
+
+Write tools require `LAV_API_KEY`. Read tools require `LAV_READ_API_KEY` if set on the server — if not set, read access is open. Both keys are defined in `.env` and passed to MCP clients via config.
+
+#### Remote MCP server (HTTP transport)
+
+By default `lav-mcp` runs in **stdio** mode (in-process, local clients only). To consume the same tools from a different machine — without ssh-stdio tunnels — switch to the **streamable-http** transport:
+
+```bash
+LAV_MCP_TRANSPORT=streamable-http LAV_MCP_PORT=8765 lav-mcp
+# Listens on http://127.0.0.1:8765/mcp by default (loopback).
+# Set LAV_MCP_HOST=0.0.0.0 to expose on LAN/VPN.
+```
+
+| Env var | Default | Purpose |
+|---------|---------|---------|
+| `LAV_MCP_TRANSPORT` | `stdio` | Set to `streamable-http` to enable the HTTP server |
+| `LAV_MCP_HOST` | `127.0.0.1` | Bind address (use `0.0.0.0` for LAN/VPN) |
+| `LAV_MCP_PORT` | `8765` | HTTP port |
+
+**Client config** (Claude Desktop / Claude Code) via `mcp-remote`:
+
+```json
+{
+  "mcpServers": {
+    "local-agent-viewer": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "http://<host>:8765/mcp"]
+    }
+  }
+}
+```
+
+API keys are passed as tool arguments (field `api_key`), not as HTTP headers — the client reads them from local env and includes them in the MCP request payload.
+
+**Security**: when `LAV_MCP_HOST=0.0.0.0`, always set `LAV_READ_API_KEY` in your `.env` so read access is not open to the network. The transport itself is unencrypted (no TLS) — keep the port behind a VPN or trusted LAN.
+
+For LaunchAgent / systemd templates and installation, see [utils/services/README.md](utils/services/README.md). Full reference: [docs/remote-mcp-server.md](docs/remote-mcp-server.md).
+
+## Multi-Machine Setup
+
+<details>
+<summary><strong>Expand for distributed architecture details</strong></summary>
+
+### Architecture
+
+LocalAgentViewer supports a distributed agent/collector model. Each machine parses its own interactions locally. A central collector pulls from all agents into one unified database.
+
+```
+                  GET /api/export
+┌──────────────┐◄──────────────────┌──────────────┐
+│  Collector    │   (pull sessions) │  Agent       │
+│  role: both   │                   │  role: agent │
+│               │                   │              │
+│  Dashboard    │                   │  Parse local │
+│  Unified DB   │                   │  Local DB    │
+│  All APIs     │                   │  Thin API    │
+└──────────────┘                   └──────────────┘
+```
+
+### Roles
+
+| Role | Bind | Function |
+|------|------|----------|
+| **agent** | `0.0.0.0:8764` | Parses local interactions, exposes `/api/export` |
+| **both** (default) | `0.0.0.0:8764` | Full server: local parse + pull from agents + dashboard |
+
+### Configuration
+
+Each machine has a **local** config at `~/.local/share/local-agent-viewer/config.json` (not synced via git):
+
+**Collector** (the machine with the dashboard) — see [`config.collector.example.json`](config.collector.example.json):
+```json
+{
+  "role": "both",
+  "port": 8764,
+  "agents": [
+    {
+      "name": "laptop",
+      "url": "http://laptop.local:8764",
+      "fallback_url": "http://10.0.0.5:8764",
+      "timeout_seconds": 10
+    }
+  ]
+}
+```
+
+**Agent** (each remote machine) — see [`config.agent.example.json`](config.agent.example.json):
+```json
+{
+  "role": "agent",
+  "port": 8764,
+  "collector_url": "http://collector.local:8764"
+}
+```
+
+### Data flow
+
+```
+Agent machine (every 15 min via LaunchAgent)
+  → lav-parse parses local ~/.claude/projects
+  → notify_collector() → POST http://collector:8764/api/sync
+  → Collector pulls from agent via GET /api/export
+  → Canonical DB updated
+```
+
+Pull is **on-demand** (triggered by the agent after each parse), not periodic polling.
+
+### Setup
+
+**On the agent:**
+```bash
+mkdir -p ~/.local/share/local-agent-viewer
+cp config.agent.example.json ~/.local/share/local-agent-viewer/config.json
+# Edit collector_url to point to your collector machine
+
+lav-parse
+lav-server  # or install as a service (see below)
+curl http://localhost:8764/api/health
+```
+
+**On the collector:**
+```bash
+mkdir -p ~/.local/share/local-agent-viewer
+cp config.collector.example.json ~/.local/share/local-agent-viewer/config.json
+# Edit agents list with your remote machines
+
+lav-parse
+lav-server
+curl -X POST http://localhost:8764/api/sync -H "Content-Type: application/json" -d '{"scope":"all"}'
+```
+
+### What lives where
+
+| What | Path | Synced? |
+|------|------|---------|
+| Code | `local-agent-viewer/` | Yes (git) |
+| Runtime config | `~/.local/share/local-agent-viewer/config.json` | No (per-machine) |
+| Database | `~/.local/share/local-agent-viewer/local_agent_viewer.db` | No (per-machine) |
+| Qdrant data | `~/.local/share/local-agent-viewer/qdrant_data/` | No (per-machine) |
+
+</details>
+
+## Running as a Service (macOS)
+
+<details>
+<summary><strong>Expand for LaunchAgent setup</strong></summary>
+
+Run the server and parser automatically on login with auto-restart:
+
+```bash
+# Install services
+bash utils/services/install.sh
+
+# Activate
+launchctl load ~/Library/LaunchAgents/com.aimax.lav-server.plist
+launchctl load ~/Library/LaunchAgents/com.aimax.lav-parser.plist
+
+# Verify
+launchctl list | grep com.aimax.lav
+curl http://localhost:8764/api/health
+```
+
+The parser LaunchAgent runs incremental parsing every 15 minutes.
+
+**After code changes:**
+```bash
+bash utils/services/install.sh
+launchctl unload ~/Library/LaunchAgents/com.aimax.lav-server.plist
+launchctl load ~/Library/LaunchAgents/com.aimax.lav-server.plist
+```
+
+**Logs:** `~/.local/logs/lav-server.log` and `lav-server-err.log`
+
+</details>
+
+## API Reference
+
+<details>
+<summary><strong>Expand for full API documentation</strong></summary>
+
+### Universal endpoints (all roles)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/health` | GET | Status, hostname, role, uptime |
+| `/api/info` | GET | Sources, session count, DB size |
+| `/api/export?since=T&limit=N` | GET | Telemetry package for collector pull |
+
+### Dashboard endpoints (role: both)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/data` | GET | Full analytics with 4D filters |
+| `/api/projects` | GET | Project list with stats |
+| `/api/users` | GET | User list with stats |
+| `/api/user/{username}` | GET | User detail |
+| `/api/hosts` | GET | Host list |
+| `/api/interactions` | GET | Interaction list (paginated) |
+| `/api/interaction/{id}` | GET | Full interaction transcript |
+| `/api/search?q=term` | GET | Full-text search |
+| `/api/sync` | POST | Trigger sync |
+| `/api/sync/status` | GET | Sync progress |
+| `/api/classifications/stats` | GET | Classification aggregations |
+| `/api/classifications/tagcloud` | GET | Topic/people/client frequencies |
+| `/api/interaction/{id}/metadata` | GET | Classification metadata |
+| `/api/kb/*` | GET/POST | Qdrant knowledge base |
+
+### Query filters
+
+All dashboard endpoints accept:
+
+```
+?project=myProject&user=john&host=laptop&client=claude_code&start=2026-01-01&end=2026-03-01
+```
+
+</details>
+
+## Database Schema
+
+<details>
+<summary><strong>Expand for schema details</strong></summary>
+
+Single SQLite database with composite primary keys and 4 independent filter dimensions:
+
+| Table | Key | Contents |
+|-------|-----|----------|
+| `interactions` | `(session_id, project_id)` | Sessions with timestamps, cost, model |
+| `messages` | `(session_id, project_id, uuid)` | Individual messages |
+| `token_usage` | `(timestamp, session_id, project_id)` | Per-request token counts |
+| `file_operations` | `(timestamp, session_id, project_id, tool, file_path)` | File reads/writes |
+| `bash_commands` | | Shell commands — all of them, plus the derived `cmd_name` (see note below) |
+| `search_operations` | | Grep/glob operations |
+| `skill_invocations` | | Skill usage |
+| `subagent_invocations` | | Sub-agent calls |
+| `mcp_tool_calls` | | MCP tool invocations |
+| `interaction_metadata` | | AI classification results |
+| `parse_state` | `(key, project_id, source, host_id)` | Incremental parse cursors |
+
+Reference tables: `projects`, `users`, `hosts`, `session_sources`.
+
+**Tool outcomes**: the six tool tables (`file_operations`, `bash_commands`, `search_operations`, `skill_invocations`, `subagent_invocations`, `mcp_tool_calls`) also carry `tool_call_id`, `is_error` and `duration_ms`, plus `error_text` (`bash_commands`, `mcp_tool_calls`) and `exit_code` (`bash_commands`). `is_error` is `NULL` when no tool result was ever seen — that is *unknown*, not success, so error rates are computed over the measured rows only. Historical rows are filled in by `lav backfill tool-outcomes`, which works on the local database and must be run on every machine.
+
+**`bash_commands` records every shell command.** Until LAV-80 a Bash call was stored only when its first word was one of the 24 in the `FILE_COMMANDS` whitelist, which kept **24.8%** of calls (15,872 of 63,982) and dropped the rest — `cd`, `grep`, `git`, `python3`, `ssh`, `curl`, and every compound command starting `cd … && …`. That gate is gone: the table now takes any non-empty command, **+47,316 rows (3.05×)** on a real database. The measured Bash error rate moves from the **4.99%** that was visible under the whitelist to the true **5.79%**, and per-program rates that could not be computed at all before now can be: `sshpass` 24.1%, `python` 16.6%, `node` 15.4%, `npx` 14.2%, `gh` 13.9%, `ssh` 10.8% — against `grep` 1.7%, `sed` 1.7%, `wc` 1.2%. `file_operations` is unchanged: it is still fed only by the file-related commands, byte for byte.
+
+Two things to know before quoting a number from this table:
+
+- **Removing the gate only affects newly parsed content.** Historical calls appear once you re-read the window that contains them with `lav-parse --since <ISO>` — on **every** machine, since recovered rows carry their original timestamps and do not travel over sync.
+- **`cmd_name`** is the program the command actually runs, derived in Python and indexed: `cd /tmp && grep -r x .` → `grep`, `sudo -u root systemctl …` → `systemctl`, `FOO=1 python3 x.py` → `python3`. It is the column to group by; the raw first word is not (it is `cd` 17k times). Measured over 63,982 real commands: 303 distinct values, **99.86% usable**, `cd` = 0. `''` means "derived, undecidable" and is part of the 0.14% residual.
+
+> **⚠ `is_error` coverage cap on `bash_commands`.** After a **full** `lav backfill tool-outcomes`, **26.1%** of `claude_code` `bash_commands` rows still have `is_error IS NULL`: 14,795 of them have no `tool_use` block in `messages` at all — append-only rows written by an earlier parser era, whose source blocks were never stored. Nothing can recover them; they are a permanent hole in the denominator, not an error. It is **symmetric between agent and collector** — both sides derive outcomes from the same `messages` content — so this is a coverage cap, **not** agent/collector drift. Separately, the scheduled outcome self-heal runs on a **bounded lookback window** (`LAV_BACKFILL_LOOKBACK_HOURS`, default 72h): a collector outage longer than the window leaves those rows NULL permanently until someone runs the backfill once without `--since`.
+
+Anti-duplicate on pull: `INSERT OR IGNORE` on composite PKs ensures idempotent ingestion across machines.
+
+</details>
+
+## Project Structure
+
+```
+local-agent-viewer/
+├── lav/                           # Main package
+│   ├── __init__.py
+│   ├── cli.py                     # Unified CLI (lav command)
+│   ├── config.py                  # Paths, ports, runtime config
+│   ├── queries.py                 # SQL queries with 4D filters
+│   ├── pricing.py                 # Model pricing management + lav-pricing CLI
+│   ├── server.py                  # HTTP server with role-based gating
+│   ├── mcp_server.py              # FastMCP server for AI tool integration
+│   ├── parsers/
+│   │   ├── jsonl.py               # JSONL parser (Claude Code, Codex, Desktop)
+│   │   └── chatgpt.py             # ChatGPT export parser
+│   ├── classifiers/
+│   │   ├── openai_classifier.py   # OpenAI Structured Outputs classifier
+│   │   └── sql_classifier.py      # Batch CLI classifier (gpt-4.1-mini)
+│   ├── qdrant/
+│   │   ├── store.py               # Qdrant vector store client
+│   │   ├── indexer.py              # Interaction indexer
+│   │   └── kb_indexer.py           # CLI indexer (reuses SQL metadata)
+│   └── static/                    # Frontend
+│       ├── dashboard.html         # Analytics dashboard (Chart.js)
+│       ├── interactions.html      # Interaction browser
+│       └── tags.html              # Tag cloud + stats
+├── scripts/
+│   └── migrate.py                 # Migration from claude-parser
+├── tests/
+│   └── evals/
+│       ├── eval_classify.py       # Classification model eval (multi-model comparison)
+│       └── results/               # Eval reports (markdown)
+├── config.agent.example.json      # Example config for agent machines
+├── config.collector.example.json  # Example config for collector machine
+├── pyproject.toml                 # Package config + CLI entry points
+├── utils/services/                # LaunchAgent plists + install script
+└── docs/
+    └── CHANGELOG.md
+```
+
+## Requirements
+
+- **Python 3.9+** — core functionality uses stdlib only
+- **Optional:** `openai` for AI classification
+- **Optional:** `qdrant-client` for semantic search
+- **Optional:** `fastmcp` for MCP server
+
+## Contributing
+
+Contributions are welcome! Please open an issue first to discuss what you'd like to change.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/my-feature`)
+3. Commit your changes (`git commit -am 'Add my feature'`)
+4. Push to the branch (`git push origin feature/my-feature`)
+5. Open a Pull Request
+
+## License
+
+[MIT](LICENSE) — Max Turazzini

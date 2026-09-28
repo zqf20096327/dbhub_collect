@@ -1,0 +1,1531 @@
+<p align="center">
+<a href="https://github.com/qicosmos/ormpp/actions/workflows/ci-sqlite.yml">
+<img alt="ci-sqlite" src="https://github.com/qicosmos/ormpp/actions/workflows/ci-sqlite.yml/badge.svg?branch=master">
+</a>
+<a href="https://github.com/qicosmos/ormpp/actions/workflows/ci-mysql.yml">
+<img alt="ci-mysql" src="https://github.com/qicosmos/ormpp/actions/workflows/ci-mysql.yml/badge.svg?branch=master">
+</a>
+<a href="https://github.com/qicosmos/ormpp/actions/workflows/ci-pgsql.yml">
+<img alt="ci-pgsql" src="https://github.com/qicosmos/ormpp/actions/workflows/ci-pgsql.yml/badge.svg?branch=master">
+</a>
+<a href="https://codecov.io/gh/qicosmos/ormpp">
+<img alt="codecov" src="https://codecov.io/gh/qicosmos/ormpp/branch/master/graph/badge.svg">
+</a>
+<img alt="language" src="https://img.shields.io/github/languages/top/qicosmos/ormpp?style=flat-square">
+<img alt="last commit" src="https://img.shields.io/github/last-commit/qicosmos/ormpp?style=flat-square">
+</p>
+
+<p align="center">
+  <a href="https://github.com/qicosmos/ormpp/tree/master/lang/english/README.md">English</a> | <span>中文</span>
+</p>
+
+# 一个很酷的Modern C++ ORM库----ormpp
+
+iguana版本1.0.9
+https://github.com/qicosmos/iguana.git
+
+[谁在用ormpp](https://github.com/qicosmos/ormpp/wiki), 也希望ormpp用户帮助编辑用户列表，也是为了让更多用户把ormpp用起来，也是对ormpp 最大的支持，用户列表的用户问题会优先处理。
+
+## 目录
+
+* [ormpp的目标](#ormpp的目标)
+* [ormpp的特点](#ormpp的特点)
+* [自增主键](#自增主键)
+* [冲突主键](#冲突主键)
+* [快速示例](#快速示例)
+  * [链式调用](#链式调用)
+  * [新增链式调用接口](#新增了4个链式调用接口)
+  * [范围分区链式调用](#范围分区链式调用接口)
+* [如何编译](#如何编译)
+* [作为第三方库引入](#作为第三方库引入)
+* [接口介绍](#接口介绍)
+* [高级特性](#高级特性)
+  * [可空字段](#可空字段-stdoptional)
+  * [枚举类型映射](#枚举类型映射)
+  * [字段别名与表别名](#字段别名与表别名)
+  * [反射注册](#反射注册-ylt_refl)
+  * [类型映射表](#类型映射表)
+* [连接池](#连接池)
+* [异步 MySQL](#异步-mysql)
+* [线程安全](#线程安全)
+* [roadmap](#roadmap)
+* [联系方式](#联系方式)
+
+## ormpp的目标
+ormpp最重要的目标就是让c++中的数据库编程变得简单，为用户提供统一的接口，支持多种数据库，降低用户使用数据库的难度。
+
+## ormpp的特点
+ormpp是modern c++(c++11/14/17/20)开发的ORM库，目前支持了三种数据库：mysql, postgresql和sqlite，ormpp主要有以下几个特点：
+
+1. **header only** — 无需编译，直接包含头文件即可使用
+2. **cross platform** — 支持 Linux、macOS、Windows
+3. **unified interface** — 统一的 API，切换数据库只需改模板参数
+4. **easy to use** — 基于编译期反射，自动完成对象到数据表的映射
+5. **easy to change database** — 从 MySQL 切换到 PostgreSQL/SQLite 只需修改数据库类型
+6. **安全的链式调用** — 类型安全的 SQL 构建器，编译期检查字段类型
+7. **连接池** — 内置数据库连接池，支持自动回收和健康检查
+8. **异步 MySQL** — 支持基于 ASIO/async_simple 的异步非阻塞查询
+9. **AOP 切面** — 支持日志、校验等切面编程，通过 `warper_connect` 接入
+10. **SQLCipher 加密** — SQLite 支持 SQLCipher 加密存储
+
+## 自增主键
+
+使用REGISTER_AUTO_KEY注册自增主键
+
+```C++
+struct person {
+  int id;
+  std::string name;
+  int age;
+};
+REGISTER_AUTO_KEY(person, id)
+```
+
+## 冲突主键
+
+使用REGISTER_CONFLICT_KEY注册冲突主键来进行update，如果未注册冲突主键则会采用自增主键
+
+```C++
+struct student {
+  int code;
+  std::string name;
+  char sex;
+  int age;
+  double dm;
+  std::string classroom;
+};
+REGISTER_CONFLICT_KEY(student, code)
+```
+
+## 快速示例
+
+### 链式调用
+#### 简单查询
+```cpp
+auto l = sqlite.select(all).from<test_optional>().collect();
+
+auto l1 =
+    sqlite.select(col(&test_optional::id), col(&test_optional::name))
+        .from<test_optional>()
+        .collect();
+
+auto l2 = sqlite.select(all)
+              .from<test_optional>()
+              .where(col(&test_optional::id).in(1, 2))
+              .order_by(col(&test_optional::id).desc(),
+                        col(&test_optional::name).desc())
+              .limit(5)
+              .offset(0)
+              .collect();
+```
+
+#### 绑定参数
+```cpp
+// 调用param() 意味着它是一个占位符'?', 调用collect(2) 意味着绑定对应的参数
+auto l0 = sqlite.select(all)
+              .from<test_optional>()
+              .where(col(&test_optional::id).param())
+              .collect(2);
+auto l = sqlite.select(all)
+             .from<test_optional>()
+             .where(col(&test_optional::name).param())
+             .collect(std::string("test"));
+CHECK(l0.size() == 1);
+CHECK(l.size() == 1);
+```
+
+#### 简单聚合查询
+```cpp
+auto l = sqlite.select(count()).from<test_optional>().collect();
+auto l2 = sqlite.select(count(col(&test_optional::id)))
+              .from<test_optional>()
+              .collect();
+auto l3 = sqlite.select(count_distinct(col(&test_optional::id)))
+              .from<test_optional>()
+              .collect();
+CHECK(l == 2);
+CHECK(l2 == 2);
+CHECK(l3 == 2);
+
+auto l4 = sqlite.select(sum(col(&test_optional::id)))
+              .from<test_optional>()
+              .collect();
+auto l5 = sqlite.select(avg(col(&test_optional::id)))
+              .from<test_optional>()
+              .collect();
+auto l6 = sqlite.select(min(col(&test_optional::id)))
+              .from<test_optional>()
+              .collect();
+auto l7 = sqlite.select(max(col(&test_optional::id)))
+              .from<test_optional>()
+              .collect();
+```
+
+#### 聚合加group by查询
+```cpp
+auto l =
+    sqlite.select(count(col(&test_optional::id)), col(&test_optional::id))
+        .from<test_optional>()
+        .group_by(col(&test_optional::id))
+        .collect();
+auto l1 =
+    sqlite.select(sum(col(&test_optional::id)), col(&test_optional::id))
+        .from<test_optional>()
+        .group_by(col(&test_optional::id))
+        .collect();
+auto l2 =
+    sqlite.select(sum(col(&test_optional::id)), col(&test_optional::id))
+        .from<test_optional>()
+        .group_by(col(&test_optional::id))
+        .collect();
+auto l3 =
+    sqlite.select(sum(col(&test_optional::id)), col(&test_optional::id))
+        .from<test_optional>()
+        .where(col(&test_optional::id) > 0)
+        .group_by(col(&test_optional::id))
+        .collect();
+auto l4 =
+    sqlite.select(sum(col(&test_optional::age)), col(&test_optional::id))
+        .from<test_optional>()
+        .where(col(&test_optional::id) > 0)
+        .group_by(col(&test_optional::id))
+        .having(sum(col(&test_optional::age)) > 0 && count() > 0)
+        .collect();
+```
+
+#### join 查询
+```cpp
+auto l2 = sqlite.select(col(&test_optional::name), col(&person::name))
+              .from<test_optional>()
+              .inner_join(col(&test_optional::id), col(&person::id))
+              .where(col(&person::id) > 0 || col(&person::id) == 1)
+              .collect();
+
+/*
+    std::string sql =
+        "select a.title, a.content, u.user_name as author_name, t.name as "
+        "tag_name, a.created_at, a.updated_at, a.views_count, a.comments_count "
+        "from articles a INNER JOIN users u ON a.author_id = u.id INNER JOIN "
+        "tags t ON a.tag_id = t.tag_id WHERE a.slug = ? and a.is_deleted=0;";
+*/
+
+auto results =
+    conn->select(col(&articles_t::title), col(&articles_t::content),
+                 col(&users_t::user_name), col(&tags_t::name),
+                 col(&articles_t::created_at), col(&articles_t::updated_at),
+                 col(&articles_t::views_count),
+                 col(&articles_t::comments_count))
+        .from<articles_t>()
+        .inner_join(col(&articles_t::author_id), col(&users_t::id))
+        .inner_join(col(&articles_t::tag_id), col(&tags_t::tag_id))
+        .where(col(&articles_t::slug) == slug &&
+               col(&articles_t::is_deleted) == 0).collect();
+```
+
+这个例子展示如何使用ormpp实现数据库的增删改查之类的操作，无需写sql语句。
+
+```C++
+#include "dbng.hpp"
+#include "mysql.hpp"//注意，使用什么数据库时就需要include对应的hpp文件，里面是对相关函数的反射封装
+//#include "sqlite.hpp" //例如使用sqlite时，则包含sqlite.hpp
+using namespace ormpp;
+
+struct person {
+  int id;
+  std::string name;
+  std::optional<int> age; // 可以插入null值
+  static constexpr auto get_alias_field_names(person *) {
+    return std::array{ylt::reflection::field_alias_t{"person_id", 0},
+                      ylt::reflection::field_alias_t{"person_name", 1},
+                      ylt::reflection::field_alias_t{"person_age", 2}}; // 注意: 这里需与YLT_REFL的注册顺序一致
+  }
+  static constexpr std::string_view get_alias_struct_name(person *) {
+    return "CUSTOM_TABLE_NAME"; // 表名默认结构体名字(person), 这里可以修改表名
+  }
+};
+REGISTER_AUTO_KEY(person, id)
+REGISTER_CONFLICT_KEY(person, name)
+// REGISTER_CONFLICT_KEY(person, name, age) // 如果是多个
+
+int main() {
+  person p = {0, "test1", 2};
+  person p1 = {0, "test2", 3};
+  person p2 = {0, "test3", 4};
+  std::vector<person> v{p1, p2};
+
+  dbng<mysql> mysql;
+  mysql.connect("127.0.0.1", "dbuser", "yourpwd", "testdb");
+  mysql.create_datatable<person>(ormpp_auto_key{"id"});
+
+  // 插入数据
+  mysql.insert(p);
+  mysql.insert(v);
+
+  // 查询数据(id=1)
+  auto one_person = mysql.query_s<person>("id=?", 1);
+
+  // 获取插入后的自增id
+  person p3 = {0, "test4", 4};
+  person p4 = {0, "test5", 5};
+  person p5 = {0, "test6", 6};
+  auto id1 = mysql.get_insert_id_after_insert(p3);
+  auto id2 = mysql.get_insert_id_after_insert(std::vector<person>{p4, p5});
+
+  // 更新数据
+  mysql.update(p);
+  mysql.update(v);
+  mysql.update(p, "id=1");
+
+  // 替换数据
+  mysql.replace(p);
+  mysql.replace(v);
+
+  // 更新指定字段
+  // mysql.update_some<&person::name, &person::age>(p);
+  // mysql.update_some<&person::name, &person::age>(v);
+
+  auto persons = mysql.query_s<person>();
+  for (auto &item : persons) {
+    std::cout << item.id << " " << item.name << " ";
+    if (item.age.has_value()) {
+      std::cout << *item.age;
+    }
+    else {
+      std::cout << "NULL";
+    }
+    std::cout << std::endl;
+  }
+
+  mysql.delete_records<person>();
+
+  // transaction
+  mysql.begin();
+  for (int i = 0; i < 10; ++i) {
+    person s = {0, "tom", 19};
+    if (!mysql.insert(s)) {
+      mysql.rollback();
+      return -1;
+    }
+  }
+  mysql.commit();
+  return 0;
+}
+```
+
+```C++
+enum class Color { BLUE = 10, RED = 15 };
+enum Fruit { APPLE, BANANA };
+
+struct test_enum_t {
+  Color color;
+  Fruit fruit;
+  int id;
+};
+REGISTER_AUTO_KEY(test_enum_t, id)
+
+int main() {
+  dbng<sqlite> sqlite;
+  sqlite.connect(db);//或者开启sqcipher后sqlite.connect(db， password);
+  sqlite.execute("drop table if exists test_enum_t");
+  sqlite.create_datatable<test_enum_t>(ormpp_auto_key{"id"});
+  sqlite.insert<test_enum_t>({Color::BLUE});
+  auto vec1 = sqlite.query<test_enum_t>();
+  vec1.front().color = Color::RED;
+  sqlite.update(vec1.front());
+  auto vec2 = sqlite.query<test_enum_t>();
+  sqlite.update<test_enum_t>({Color::BLUE, BANANA, 1}, "id=1");
+  auto vec3 = sqlite.query<test_enum_t>();
+  vec3.front().color = Color::RED;
+  sqlite.replace(vec3.front());
+  auto vec4 = sqlite.query<test_enum_t>();
+  sqlite.delete_records<test_enum_t>();
+  auto vec5 = sqlite.query<test_enum_t>();
+  return 0;
+}
+```
+
+#### 新增了4个链式调用接口
+
+新增接口：
+
+- create_table<T>()                                                                                    
+- update<T>()                                                                                      
+- remove<T>()                                                                                           
+- alter_table<T>()
+
+例子：
+
+```cpp
+struct builder_person {
+  std::string name;
+  int age;
+  int id;
+  int score;
+};
+
+sqlite.create_table<builder_person>()
+      .auto_increment(col(&builder_person::id))
+      .not_null(col(&builder_person::name), col(&builder_person::age))
+      .default_value(col(&builder_person::score), 0)
+      .execute();
+
+CHECK(sqlite.update<builder_person>()
+            .set(col(&builder_person::name), "jerry")
+            .set(col(&builder_person::age), 20)
+            .where(col(&builder_person::id) == 1)
+            .execute() == 1);
+
+CHECK(sqlite.update<builder_person>()
+            .set(col(&builder_person::score), 0)
+            .where(col(&builder_person::id) == 1)
+            .execute() == 1);
+
+CHECK(sqlite.alter_table<builder_person>()
+            .add_index("idx_builder_person_name", col(&builder_person::name))
+            .drop_index("idx_builder_person_name")
+            .execute());
+
+CHECK(sqlite.remove<builder_person>()
+            .where(col(&builder_person::id) == 1)
+            .execute() == 1);
+```
+
+#### 范围分区链式调用接口
+
+范围分区通过统一的链式 API 表达，ormpp 会根据数据库类型生成不同 SQL：
+
+- MySQL：使用原生 `PARTITION BY RANGE COLUMNS`、`DELETE ... PARTITION`、`ALTER TABLE ... TRUNCATE/DROP PARTITION`
+- PostgreSQL：使用父表 `PARTITION BY RANGE` 和子分区表
+- SQLite：没有原生分区，使用分区字段范围条件模拟删除，并为分区字段创建索引
+
+例子：
+
+```cpp
+struct order_log {
+  int id;
+  int bucket;
+  std::string payload;
+};
+
+auto p202405 = ormpp::range_partition("p202405", 202405, 202406);
+auto p202406 = ormpp::range_partition("p202406", 202406, 202407);
+
+db.create_table<order_log>()
+    .primary_key(col(&order_log::id), col(&order_log::bucket))
+    .partition_by_range(col(&order_log::bucket))
+    .partition(p202405)
+    .partition(p202406)
+    .execute();
+
+// 删除一个逻辑分区中的数据
+db.remove<order_log>()
+    .partition(col(&order_log::bucket), p202405)
+    .execute_all();
+
+// 清空一个逻辑分区
+db.alter_table<order_log>()
+    .clear_partition(col(&order_log::bucket), p202406)
+    .execute();
+
+// 维护分区结构。SQLite 没有原生分区，drop_partition 会失败返回 false。
+auto p202407 = ormpp::range_partition("p202407", 202407, 202408);
+db.alter_table<order_log>()
+    .add_partition(col(&order_log::bucket), p202407)
+    .drop_partition(p202407)
+    .execute();
+```
+
+注意：分区名会按 SQL 标识符校验，只允许字母、数字和下划线，且不能以数字开头。MySQL 分区表的主键/唯一键需要满足 MySQL 自身限制，通常应包含分区字段。
+
+## 如何编译
+
+支持的选项如下:
+	1.	ENABLE_SQLITE3
+	2.	ENABLE_MYSQL
+	3.	ENABLE_PG
+
+cmake -B build -DENABLE_SQLITE3=ON -DCMAKE_BUILD_TYPE=Debug
+cmake --build build --config Debug
+
+## 作为第三方库引入
+
+mysql
+```cmake
+set(ENABLE_MYSQL ON)
+add_definitions(-DORMPP_ENABLE_MYSQL)
+add_subdirectory(ormpp)
+```
+或者
+```cmake
+set(ENABLE_MYSQL ON)
+add_definitions(-DORMPP_ENABLE_MYSQL)
+add_library(ormpp INTERFACE)
+include(ormpp/cmake/mysql.cmake)
+target_link_libraries(ormpp INTERFACE ${MYSQL_LIBRARY})
+target_include_directories(ormpp INTERFACE ormpp ormpp/ormpp ${MYSQL_INCLUDE_DIR})
+```
+
+sqlite
+```cmake
+set(ENABLE_SQLITE3 ON)
+add_definitions(-DORMPP_ENABLE_SQLITE3)
+add_subdirectory(ormpp)
+```
+或者
+```cmake
+set(ENABLE_SQLITE3 ON)
+add_definitions(-DORMPP_ENABLE_SQLITE3)
+add_subdirectory(ormpp/thirdparty)
+add_library(ormpp INTERFACE)
+target_link_libraries(ormpp INTERFACE sqlite3)
+target_include_directories(ormpp INTERFACE ormpp ormpp/ormpp ormpp/thirdparty/sqlite3)
+```
+
+如果需要开启sqlcipher
+
+因为sqlcipher需要链接到OpenSSL库，需要在本地先安装OpenSSL，然后添加下述cmake语句
+```cmake
+set(ENABLE_SQLITE3 ON)
+set(ENABLE_SQLITE3_CODEC)#开启sqlcipher需要同时开启ENABLE_SQLITE3和ENABLE_SQLITE3_CODEC
+add_definitions(
+  -DORMPP_ENABLE_SQLITE3 
+  -DSQLITE_HAS_CODEC
+)
+add_subdirectory(ormpp)
+```
+或者
+```cmake
+set(ENABLE_SQLITE3 ON)
+set(ENABLE_SQLITE3_CODEC)#开启sqlcipher需要同时开启ENABLE_SQLITE3和ENABLE_SQLITE3_CODEC
+add_definitions(
+  -DORMPP_ENABLE_SQLITE3 
+  -DSQLITE_HAS_CODEC
+)
+add_subdirectory(ormpp/thirdparty)
+add_library(ormpp INTERFACE)
+target_link_libraries(ormpp INTERFACE sqlite3)
+target_include_directories(ormpp INTERFACE ormpp ormpp/ormpp ormpp/thirdparty/sqlite3)
+```
+注意：最终发布的应用程序依赖于 OpenSSL 的动态库，
+- Windows 下通常为 `libssl-3-x64.dll`和 `libcrypto-3-x64.dll`；  
+  请将这两个 `.dll` 拷贝到可执行文件所在目录。  
+- Linux下通常已安装在 `/usr/lib` 或 `/usr/local/lib`，不需要拷贝；  
+  如果你使用自编译的 OpenSSL 或者希望随同可执行文件一起分发，也可以将 `libssl.so` 与 `libcrypto.so` 放在执行目录，并通过 `LD_LIBRARY_PATH` 或者 `-Wl,-rpath` 指定查找路径。
+- macOS 下通常为 `libssl.dylib` 和 `libcrypto.dylib`；
+  请将这两个 `.dylib` 拷贝到可执行文件所在目录，或通过 `DYLD_LIBRARY_PATH`、Mach-O `@rpath` 设置查找路径。  
+
+pg
+```cmake
+set(ENABLE_PG ON)
+add_definitions(-DORMPP_ENABLE_PG)
+add_subdirectory(ormpp)
+```
+或者
+```cmake
+set(ENABLE_PG ON)
+add_definitions(-DORMPP_ENABLE_PG)
+add_library(ormpp INTERFACE)
+include(ormpp/cmake/pgsql.cmake)
+target_link_libraries(ormpp INTERFACE ${PGSQL_LIBRARY})
+target_include_directories(ormpp INTERFACE ormpp ormpp/ormpp ${PGSQL_INCLUDE_DIR})
+```
+
+### 编译器支持
+
+需要支持C++17的编译器, 要求的编译器版本：linux gcc7.2, clang4.0; windows >vs2017 update5
+
+### 数据库的安装
+
+因为ormpp支持mysql和postgresql，所以需要安装mysql，postgresql，postgresql官方提供的libpq，安装之后，在CMakeLists.txt配置目录和库路径(默认安装不需要)。
+
+## 接口介绍
+ormpp屏蔽了不同数据库操作接口的差异，提供了统一简单的数据库操作接口，具体提供了数据库连接、断开连接、创建数据表、插入数据、更新数据、删除数据、查询数据和事务相关的接口。
+
+### 接口概览
+
+```c++
+//连接数据库
+template <typename... Args>
+bool connect(Args&&... args);
+
+//断开数据库连接
+bool disconnect();
+
+//创建数据表
+template<typename T, typename... Args>
+bool create_datatable(Args&&... args);
+
+//插入单条数据
+template<typename T, typename... Args>
+int insert(const T& t, Args&&... args);
+
+//插入多条数据
+template<typename T, typename... Args>
+int insert(const std::vector<T>& t, Args&&... args);
+
+//替换单条数据
+template <typename T, typename... Args>
+int replace(const T &t, Args &&...args);
+
+//替换多条数据
+template <typename T, typename... Args>
+int replace(const std::vector<T> &v, Args &&...args);
+
+//更新单条数据
+template<typename T, typename... Args>
+int update(const T& t, Args&&... args);
+
+//更新多条数据
+template<typename T, typename... Args>
+int update(const std::vector<T>& t, Args&&... args);
+
+//更新单条数据(指定字段)
+template <auto... members, typename T, typename... Args>
+int update_some(const T &t, Args &&...args);
+
+//更新多条数据(指定字段)
+template <auto... members, typename T, typename... Args>
+int update_some(const std::vector<T> &v, Args &&...args);
+
+//获取插入后的自增id
+template <typename T, typename... Args>
+uint64_t get_insert_id_after_insert(const T &t, Args &&...args);
+
+//删除数据(带预处理)
+template <typename T, typename... Args>
+int delete_records_s(const std::string &str = "", Args &&...args);
+
+//查询数据，包括单表查询和多表查询(带预处理)
+template <typename T, typename... Args>
+std::vector<T> query_s(const std::string &str = "", Args &&...args);
+
+//删除数据(不带预处理)
+template <typename T, typename... Args>
+[[deprecated]] bool delete_records(Args &&...where_condition)
+
+//查询数据，包括单表查询和多表查询(不带预处理)
+template <typename T, typename... Args>
+[[deprecated]] std::vector<T> query(Args &&...args);
+
+//执行原生的sql语句
+int execute(const std::string& sql);
+
+//开始事务
+bool begin();
+
+//提交事务
+bool commit();
+
+//回滚
+bool rollback();
+```
+
+### 具体的接口使用介绍
+先在entity.hpp中定义业务实体（和数据库的表对应），接着定义数据库对象：
+
+```C++
+#include "dbng.hpp"
+//#include "mysql.hpp"...等等，别忘记了
+using namespace ormpp;
+
+struct person {
+  int id;
+  std::string name;
+  std::optional<int> age; // 插入null值
+  static constexpr std::string_view get_alias_struct_name(person *) {
+    return "CUSTOM_TABLE_NAME";
+  }
+};
+REGISTER_AUTO_KEY(person, id)
+
+int main(){
+	dbng<mysql> mysql;
+  dbng<sqlite> sqlite;
+  dbng<postgresql> postgres;
+	//......
+}
+```
+
+1. 连接数据库
+```cpp
+	template <typename... Args>
+	bool connect(Args&&... args);
+```
+
+connect exmple:
+
+```C++
+// mysql.connect(host, dbuser, pwd, dbname);
+mysql.connect("127.0.0.1", "root", "12345", "testdb");
+// mysql.connect(host, dbuser, pwd, dbname, timeout, port);
+mysql.connect("127.0.0.1", "root", "12345", "testdb", 5, 3306);
+  
+postgres.connect("127.0.0.1", "root", "12345", "testdb");
+
+sqlite.connect("127.0.0.1", "testdb");//或直接sqlite.connect("testdb")；
+
+//开启sqlcipher后
+sqlite.connect("127.0.0.1", "root", "12345", "testdb");//或者直接sqlite.connect("testdb", "123456");
+```
+
+返回值：bool，成功返回true，失败返回false.
+
+2. 断开数据库连接
+```cpp	
+	bool disconnect();
+```
+
+disconnect exmple:
+
+```c++
+mysql.disconnect();
+
+postgres.disconnect();
+
+sqlite.disconnect();
+```
+
+注意：用户可以不用显式调用，在数据库对象析构时会自动调用disconnect接口。
+
+返回值：bool，成功返回true，失败返回false.
+
+3. 创建数据表
+
+```C++
+template<typename T, typename... Args>
+bool create_datatable(Args&&... args);
+```
+
+create_datatable example:
+
+```C++
+//创建不含主键的表
+mysql.create_datatable<student>();
+
+postgres.create_datatable<student>();
+
+sqlite.create_datatable<student>();
+
+//创建含主键和not null属性的表
+ormpp_key key1{"id"};
+ormpp_not_null not_null{{"id", "age"}};
+
+person p = {1, "test1", 2};
+person p1 = {2, "test2", 3};
+person p2 = {3, "test3", 4};
+
+mysql.create_datatable<person>(key1, not_null);
+postgres.create_datatable<person>(key1, not_null);
+sqlite.create_datatable<person>(key1);
+```
+
+注意：目前只支持了key、unique和not null属性。
+```
+mysql.create_datatable<person>(ormpp_unique{{"name"}});
+当在mysql中使用由unique声明的std::string成员创建表时，
+由于"BLOB/TEXT column 'NAME' used in key specification without a key length", 
+故在创建表时，如果是由unique声明的std::string成员对应的数据类型则为VARCHAR(512)，否则则为TEXT
+```
+
+返回值：bool，成功返回true，失败返回false.
+
+4. 插入单条数据
+
+```C++
+template<typename T, typename... Args>
+int insert(const T& t, Args&&... args);
+```
+
+insert example:
+
+```C++
+person p = {1, "test1", 2};
+TEST_CHECK(mysql.insert(p)==1);
+TEST_CHECK(postgres.insert(p)==1);
+TEST_CHECK(sqlite.insert(p)==1);
+
+// age为null
+person p = {1, "test1", {}};
+TEST_CHECK(mysql.insert(p)==1);
+TEST_CHECK(postgres.insert(p)==1);
+TEST_CHECK(sqlite.insert(p)==1);
+```
+
+返回值：int，成功返回插入数据的条数1，失败返回INT_MIN.
+
+5. 插入多条数据
+
+```C++
+template<typename T, typename... Args>
+int insert(const std::vector<T>& t, Args&&... args);
+```
+
+multiple insert example:
+
+```C++
+person p = {1, "test1", 2};
+person p1 = {2, "test2", 3};
+person p2 = {3, "test3", 4};
+std::vector<person> v1{p, p1, p2};
+
+TEST_CHECK(mysql.insert(v1)==3);
+TEST_CHECK(postgres.insert(v1)==3);
+TEST_CHECK(sqlite.insert(v1)==3);
+```
+
+返回值：int，成功返回插入数据的条数N，失败返回INT_MIN.
+
+6. 更新单条数据
+
+
+```C++
+template<typename T, typename... Args>
+int update(const T& t, Args&&... args);
+```
+
+update example:
+
+```C++
+person p = {1, "test1", 2};
+TEST_CHECK(mysql.update(p)==1);
+TEST_CHECK(postgres.update(p)==1);
+TEST_CHECK(sqlite.update(p)==1);
+```
+
+注意：更新会根据表的key字段去更新，如果表没有key字段的时候，需要指定一个更新依据字段名，比如
+```C++
+TEST_CHECK(mysql.update(p, "age")==1);
+TEST_CHECK(postgres.update(p, "age")==1);
+TEST_CHECK(sqlite.update(p, "age")==1);
+```
+
+返回值：int，成功返回更新数据的条数1，失败返回INT_MIN.
+
+7. 更新多条数据
+
+```C++
+template<typename T, typename... Args>
+int update(const std::vector<T>& t, Args&&... args);
+```
+
+multiple insert example:
+
+```C++
+person p = {1, "test1", 2};
+person p1 = {2, "test2", 3};
+person p2 = {3, "test3", 4};
+std::vector<person> v1{p, p1, p2};
+
+TEST_CHECK(mysql.update(v1)==3);
+TEST_CHECK(postgres.update(v1)==3);
+TEST_CHECK(sqlite.update(v1)==3);
+```
+
+注意：更新会根据表的key字段去更新，如果表没有key字段的时候，需要指定一个更新依据字段名，用法同上。
+
+返回值：int，成功返回更新数据的条数N，失败返回INT_MIN.
+
+8. 替换数据（INSERT OR REPLACE / UPSERT）
+
+```C++
+template <typename T, typename... Args>
+int replace(const T &t, Args &&...args);
+
+template <typename T, typename... Args>
+int replace(const std::vector<T> &v, Args &&...args);
+```
+
+replace example:
+
+```C++
+person p = {1, "test1", 2};
+TEST_CHECK(mysql.replace(p)==1);
+TEST_CHECK(postgres.replace(p)==1);
+TEST_CHECK(sqlite.replace(p)==1);
+
+// 批量替换
+std::vector<person> v{p1, p2};
+TEST_CHECK(mysql.replace(v)==2);
+```
+
+注意：`replace` 的行为在不同数据库间有差异：
+- **MySQL / SQLite**：使用 `REPLACE INTO` — 先删除旧记录，再插入新记录
+- **PostgreSQL**：使用 `INSERT ... ON CONFLICT ... DO UPDATE` — 遇到冲突时更新原有记录，不会删除
+
+因此，PostgreSQL 下的 `replace` 不会触发删除相关的触发器，自增 ID 也不会重置。建议根据业务场景选择合适的数据库。
+
+返回值：int，成功返回替换数据的条数，失败返回INT_MIN.
+
+9. 更新指定字段
+
+```C++
+template <auto... members, typename T, typename... Args>
+int update_some(const T &t, Args &&...args);
+
+template <auto... members, typename T, typename... Args>
+int update_some(const std::vector<T> &v, Args &&...args);
+```
+
+update_some example:
+
+```C++
+person p = {1, "new_name", 25};
+// 只更新 name 和 age 字段，不碰其他字段
+TEST_CHECK(mysql.update_some<&person::name, &person::age>(p)==1);
+TEST_CHECK(postgres.update_some<&person::name, &person::age>(p)==1);
+TEST_CHECK(sqlite.update_some<&person::name, &person::age>(p)==1);
+```
+
+注意：`update_some` 只会更新指定的成员字段，适合部分字段更新的场景，避免不必要的数据传输。
+
+返回值：int，成功返回更新数据的条数，失败返回INT_MIN.
+
+10. 获取插入后的自增ID
+
+```C++
+template <typename T, typename... Args>
+uint64_t get_insert_id_after_insert(const T &t, Args &&...args);
+```
+
+get_insert_id_after_insert example:
+
+```C++
+person p = {0, "test1", 2};  // id=0 表示让数据库自增
+// get_insert_id_after_insert 内部会执行 insert 并返回自增 ID
+auto id = mysql.get_insert_id_after_insert(p);
+std::cout << "inserted id: " << id << std::endl;
+```
+
+注意：`get_insert_id_after_insert` 内部会执行 insert 操作并返回自增 ID，无需在外部先调用 `insert`。仅对含有自增主键的表有效。
+
+返回值：uint64_t，成功返回自增ID，失败返回0.
+
+11. 删除数据
+```cpp
+template<typename T, typename... Args>
+int delete_records_s(const std::string &str = "", Args &&...args);
+```
+
+delete_records_s example:
+
+```C++
+//删除所有数据
+TEST_REQUIRE(mysql.delete_records_s<person>());
+TEST_REQUIRE(postgres.delete_records_s<person>());
+TEST_REQUIRE(sqlite.delete_records_s<person>());
+
+//根据条件删除数据
+TEST_REQUIRE(mysql.delete_records_s<person>("id=?", 1));
+TEST_REQUIRE(postgres.delete_records_s<person>("id=$1", 1));
+TEST_REQUIRE(sqlite.delete_records_s<person>("id=?", 1));
+```
+
+返回值：bool，成功返回true，失败返回false.
+
+12. 查询数据
+
+```C++
+template<typename T, typename... Args>
+std::vector<T> query_s(const std::string &str = "", Args &&...args);
+```
+
+query_s example:
+
+```C++
+auto result = mysql.query_s<person>();
+TEST_CHECK(result.size()==3);
+
+auto result1 = postgres.query_s<person>();
+TEST_CHECK(result1.size()==3);
+
+auto result2 = sqlite.query_s<person>();
+TEST_CHECK(result2.size()==3);
+
+//可以根据条件查询
+auto result3 = mysql.query_s<person>("id=?", 1);
+TEST_CHECK(result3.size()==1);
+
+auto result4 = postgres.query_s<person>("id=$1", 2);
+TEST_CHECK(result4.size()==1);
+
+auto result5 = sqlite.query_s<person>("id=?", 3);
+```
+
+返回值：std::vector<T>，成功vector不为空，失败则为空.
+
+13. 特定列查询
+
+```C++
+template<typename T, typename... Args>
+std::vector<T> query_s(const std::string &str = "", Args &&...args);
+```
+
+some fields query_s example:
+
+```C++
+auto result = mysql.query_s<std::tuple<int, std::string, int>>("select code, name, dm from person");
+TEST_CHECK(result.size()==3);
+
+auto result1 = postgres.query_s<std::tuple<int, std::string, int>>("select code, name, dm from person");
+TEST_CHECK(result1.size()==3);
+
+auto result2 = sqlite.query_s<std::tuple<int, std::string, int>>("select code, name, dm from person");
+TEST_CHECK(result2.size()==3);
+
+auto result3 = mysql.query_s<std::tuple<int>>("select count(1) from person");
+TEST_CHECK(result3.size()==1);
+TEST_CHECK(std::get<0>(result3[0])==3);
+
+auto result4 = postgres.query_s<std::tuple<int>>("select count(1) from person");
+TEST_CHECK(result4.size()==1);
+TEST_CHECK(std::get<0>(result4[0])==3);
+
+auto result5 = sqlite.query_s<std::tuple<int>>("select count(1) from person");
+TEST_CHECK(result5.size()==1);
+TEST_CHECK(std::get<0>(result5[0])==3);
+```
+
+返回值：std::vector<std::tuple<T>>，成功vector不为空，失败则为空.
+
+11. 执行原生sql语句
+
+```C++
+int execute(const std::string& sql);
+```
+
+execute example:
+
+```C++
+r = mysql.execute("drop table if exists person");
+TEST_REQUIRE(r);
+
+r = postgres.execute("drop table if exists person");
+TEST_REQUIRE(r);
+
+r = sqlite.execute("drop table if exists person");
+TEST_REQUIRE(r);
+```
+
+注意：execute接口支持的原生sql语句是不带占位符的，是一条完整的sql语句。
+
+返回值：int，成功返回更新数据的条数1，失败返回INT_MIN.
+
+14. 事务接口
+
+开始事务，提交事务，回滚
+
+```C++
+//transaction
+mysql.begin();
+for (int i = 0; i < 10; ++i) {
+  person s = {i, "tom", 19};
+      if(!mysql.insert(s)){
+          mysql.rollback();
+          return -1;
+      }
+}
+mysql.commit();
+```
+返回值：bool，成功返回true，失败返回false.
+
+15. 面向切面编程AOP
+
+定义切面：
+
+```C++
+struct log{
+	//args...是业务逻辑函数的入参
+    template<typename... Args>
+    bool before(Args... args){
+        std::cout<<"log before"<<std::endl;
+        return true;
+    }
+
+	//T的类型是业务逻辑返回值，后面的参数则是业务逻辑函数的入参
+    template<typename T, typename... Args>
+    bool after(T t, Args... args){
+        std::cout<<"log after"<<std::endl;
+        return true;
+    }
+};
+
+struct validate{
+	//args...是业务逻辑函数的入参
+    template<typename... Args>
+    bool before(Args... args){
+        std::cout<<"validate before"<<std::endl;
+        return true;
+    }
+
+	//T的类型是业务逻辑返回值，后面的参数则是业务逻辑函数的入参
+    template<typename T, typename... Args>
+    bool after(T t, Args... args){
+        std::cout<<"validate after"<<std::endl;
+        return true;
+    }
+};
+```
+
+注意：切面的定义中，允许你只定义before或after，或者二者都定义。
+
+```C++
+//增加日志和校验的切面
+dbng<mysql> mysql;
+auto r = mysql.warper_connect<log, validate>("127.0.0.1", "root", "12345", "testdb");
+TEST_REQUIRE(r);
+```
+
+## 高级特性
+
+### 可空字段 (std::optional)
+
+ormpp 支持 `std::optional<T>` 类型的字段，可优雅地处理数据库 NULL 值：
+
+```cpp
+struct person {
+  int id;
+  std::string name;
+  std::optional<int> age;  // age 可为 NULL
+};
+YLT_REFL(person, id, name, age);
+
+// 插入时 age 为 null
+person p1 = {1, "alice", {}};           // age = NULL
+person p2 = {2, "bob", 25};            // age = 25
+mysql.insert(p1);
+mysql.insert(p2);
+
+// 查询时自动还原 optional
+auto result = mysql.query_s<person>();
+for (auto& p : result) {
+  if (p.age.has_value()) {
+    std::cout << p.name << " age: " << *p.age << std::endl;
+  } else {
+    std::cout << p.name << " age: NULL" << std::endl;
+  }
+}
+```
+
+支持的可空类型：`std::optional<int>`, `std::optional<std::string>`, `std::optional<double>` 等。
+
+### 枚举类型映射
+
+ormpp 自动支持 C++ `enum` 和 `enum class` 与数据库整型字段的映射：
+
+```cpp
+enum class Color { BLUE = 10, RED = 15 };
+enum Fruit { APPLE, BANANA };
+
+struct test_enum_t {
+  Color color;
+  Fruit fruit;
+  int id;
+};
+YLT_REFL(test_enum_t, color, fruit, id);
+
+mysql.create_datatable<test_enum_t>(ormpp_auto_key{"id"});
+mysql.insert<test_enum_t>({Color::BLUE, APPLE, 0});
+
+auto vec = mysql.query<test_enum_t>();
+// vec[0].color == Color::BLUE
+// vec[0].fruit == APPLE
+```
+
+### 字段别名与表别名
+
+通过静态方法自定义数据库中的字段名和表名：
+
+```cpp
+struct person {
+  int id;
+  std::string name;
+  int age;
+
+  // 自定义字段别名（需与 YLT_REFL 注册顺序一致）
+  static constexpr auto get_alias_field_names(person *) {
+    return std::array{
+      ylt::reflection::field_alias_t{"person_id", 0},
+      ylt::reflection::field_alias_t{"person_name", 1},
+      ylt::reflection::field_alias_t{"person_age", 2}
+    };
+  }
+
+  // 自定义表名（默认使用结构体名 person）
+  static constexpr std::string_view get_alias_struct_name(person *) {
+    return "CUSTOM_TABLE_NAME";
+  }
+};
+YLT_REFL(person, id, name, age);
+```
+
+### 反射注册 (YLT_REFL)
+
+ormpp 基于 iguana 的编译期反射，需要在结构体定义后使用 `YLT_REFL` 宏注册字段：
+
+```cpp
+struct student {
+  int code;
+  std::string name;
+  int age;
+  std::optional<std::string> email;
+};
+
+// 注册所有字段（顺序决定数据库表中的列顺序）
+YLT_REFL(student, code, name, age, email);
+
+// 注册自增主键
+REGISTER_AUTO_KEY(student, code);
+
+// 注册冲突键（用于 replace / upsert）
+REGISTER_CONFLICT_KEY(student, name);
+```
+
+### 类型映射表
+
+ormpp 自动将 C++ 类型映射为对应数据库的 SQL 类型：
+
+| C++ 类型 | MySQL | PostgreSQL | SQLite |
+|---------|-------|-----------|--------|
+| `bool` | BOOLEAN | integer | INTEGER |
+| `char` | TINYINT | char | INTEGER |
+| `short` | SMALLINT | smallint | INTEGER |
+| `int` | INTEGER | integer | INTEGER |
+| `int64_t` | BIGINT | bigint | INTEGER |
+| `uint64_t` | BIGINT UNSIGNED | bigint | INTEGER |
+| `float` | FLOAT | real | FLOAT |
+| `double` | DOUBLE | double precision | DOUBLE |
+| `std::string` | TEXT | text | TEXT |
+| `std::string_view` | TEXT | text | TEXT |
+| `std::array<char, N>` | VARCHAR(N) | varchar(N) | VARCHAR(N) |
+| `blob` (std::vector<char>) | BLOB | bytea | BLOB |
+| `ormpp::date` | DATE | date | TEXT |
+| `ormpp::time` | TIME | time | TEXT |
+| `ormpp::datetime` | DATETIME | timestamp | TEXT |
+| `ormpp::timestamp` | TIMESTAMP | timestamp | TEXT |
+| `ormpp::decimal<P, S>` | DECIMAL(P,S) | numeric(P,S) | DECIMAL(P,S) |
+| `enum` / `enum class` | INTEGER | integer | INTEGER |
+| `std::optional<T>` | 同 T 类型 | 同 T 类型 | 同 T 类型 |
+
+### 日期、时间和定点数类型
+
+下面五种类型用于明确表达字段的数据库语义，避免把日期、时间和金额全部声明成普通
+`std::string`：
+
+| C++ 类型 | 含义 | 推荐文本形式 | 说明 |
+|---------|------|-------------|------|
+| `ormpp::date` | 不带时间的日历日期 | `2026-08-29` | 适合生日、账期、营业日期等字段 |
+| `ormpp::time` | 不带日期的时刻 | `14:30:05`、`14:30:05.123456` | 是否支持小数秒及其精度由数据库决定 |
+| `ormpp::datetime` | 不带时区的日期和时间 | `2026-08-29 14:30:05` | MySQL 映射为 `DATETIME`，PostgreSQL 映射为 `timestamp` |
+| `ormpp::timestamp` | 数据库的 TIMESTAMP 字段 | `2026-08-29 14:30:05` | 不是 Unix 整数时间戳；时区转换遵循数据库自身规则 |
+| `ormpp::decimal<P, S>` | 定点十进制数 | `12345.67` | `P` 是总位数，`S` 是小数位数，例如 `decimal<12, 2>` |
+
+这些类型都是轻量文本包装，内部通过公开的 `value` 成员保存 `std::string`，可以从
+字符串字面量或 `std::string` 构造：
+
+```cpp
+ormpp::date business_date{"2026-08-29"};
+ormpp::time created_time{"14:30:05"};
+ormpp::datetime paid_at{"2026-08-29 14:30:05"};
+ormpp::timestamp synced_at{"2026-08-29 14:30:05"};
+ormpp::decimal<12, 2> amount{"12345.67"};
+
+std::cout << amount.value;  // 12345.67
+```
+
+它们的作用是生成合适的列类型，并通过各数据库驱动按文本绑定和读取。ormpp 不解析日期，
+不校验日期/时间范围，也不检查传入值是否满足 decimal 的 `P`、`S`；非法值是被数据库拒绝、
+转换还是保留，取决于具体后端。应用需要日期运算、时区换算或精确十进制运算时，应先使用
+专门的日期/decimal 库完成计算，再把最终文本写入包装类型。
+
+`std::optional<T>` 可以与这些类型组合。空的 optional 写入 SQL `NULL`，非空值按内部类型
+映射，例如 `std::optional<ormpp::datetime>` 在 MySQL 中仍是可空的 `DATETIME` 列。
+
+下面的示例完全使用 ormpp 的实体和链式接口建表、写入、更新与查询：
+
+```cpp
+#include <iostream>
+#include <optional>
+
+#include "dbng.hpp"
+#include "sqlite.hpp"
+
+struct billing_record {
+  int id;
+  ormpp::date business_date;
+  ormpp::time created_time;
+  ormpp::datetime paid_at;
+  std::optional<ormpp::timestamp> synced_at;
+  ormpp::decimal<12, 2> amount;
+  std::optional<ormpp::decimal<5, 2>> discount_rate;
+};
+REGISTER_AUTO_KEY(billing_record, id)
+
+ormpp::dbng<ormpp::sqlite> database;
+database.connect(":memory:");
+
+database.create_table<billing_record>()
+    .auto_increment(ormpp::col(&billing_record::id))
+    .execute();
+
+billing_record item{
+    0,
+    {"2026-08-29"},
+    {"14:30:05"},
+    {"2026-08-29 14:30:05"},
+    std::nullopt,
+    {"12345.67"},
+    ormpp::decimal<5, 2>{"12.50"},
+};
+database.insert(item);
+
+database.update<billing_record>()
+    .set(ormpp::col(&billing_record::synced_at),
+         ormpp::timestamp{"2026-08-29 14:35:00"})
+    .where(ormpp::col(&billing_record::id) == 1)
+    .execute();
+
+auto rows =
+    database.select(ormpp::all)
+        .from<billing_record>()
+        .where(ormpp::col(&billing_record::business_date) >=
+                   ormpp::date{"2026-08-01"} &&
+               ormpp::col(&billing_record::amount) >
+                   ormpp::decimal<12, 2>{"1000.00"})
+        .order_by(ormpp::col(&billing_record::amount).desc())
+        .collect();
+
+if (!rows.empty()) {
+  std::cout << rows.front().amount.value;  // 12345.67
+}
+```
+
+MySQL 和 PostgreSQL 会使用各自的原生日期、时间及 decimal/numeric 类型，因此格式、范围、
+精度和时区行为最终由服务器定义。特别是 MySQL `TIMESTAMP` 可能根据连接时区进行转换，而
+`DATETIME` 不表达时区；ormpp 不在两者之间做隐式转换。
+
+SQLite 将日期和时间类型保存为 `TEXT`。使用统一的、固定宽度且从高位到低位排列的 ISO 风格
+文本（例如 `YYYY-MM-DD HH:MM:SS`），才能让字符串比较和排序与时间先后一致。SQLite 的
+`DECIMAL(P,S)` 使用 NUMERIC affinity，使常规比较和排序遵循数值语义；但 SQLite 不强制
+`P`/`S`，超出其原生整数/浮点表示能力的高精度 decimal 也不会获得额外精度保证。
+
+MySQL 读取超出初始缓冲区的长文本或 blob 字段时，单列补取缓冲区默认上限为 64MB，可通过
+`mysql::set_max_mysql_result_buffer_size()` 调整；超过
+`mysql::mysql_result_buffer_size_hard_limit`（1GB）的设置会被截断到该上限。
+查询结果中的 `std::string_view` 指向连接内部存储，在同一次查询的多行、多列结果中保持有效；
+该连接发起下一次查询或被销毁后视图会失效，需要长期保存时请使用 `std::string`。
+`std::array<char, N>` 和 C 字符数组按 C 字符串语义绑定，遇到 `\0` 会结束；需要保存含零字节的数据时请使用
+`blob`。
+
+## 连接池
+
+ormpp 内置了数据库连接池，支持自动创建、回收和健康检查，避免频繁创建/销毁连接带来的性能开销。
+
+### 基本用法
+
+```cpp
+#include "connection_pool.hpp"
+#include "mysql.hpp"
+
+// 初始化连接池（单例，全局只需初始化一次）
+// 参数：最大连接数, host, user, password, db, timeout, port
+ormpp::connection_pool<ormpp::mysql>::instance().init(
+    10, "127.0.0.1", "root", "12345", "testdb", 5, 3306);
+
+// 从连接池中获取连接（智能指针，超出作用域自动归还）
+auto conn = ormpp::connection_pool<ormpp::mysql>::instance().get();
+if (conn) {
+    conn->create_datatable<person>();
+    conn->insert(p);
+    auto result = conn->query_s<person>();
+    // conn 析构时自动归还到连接池
+}
+```
+
+### 连接池特性
+
+- **自动回收**：连接使用完毕后通过自定义 deleter 自动归还到池中
+- **超时等待**：获取连接时最多等待 3 秒，超时返回 `nullptr`
+- **健康检查**：自动检测连接是否存活（`ping`），失效连接会自动重建
+- **空闲超时**：连接空闲超过 8 小时会自动重建，避免数据库端超时断开
+- **线程安全**：连接池本身是线程安全的（`get()` / `init()` 内部使用 `std::mutex` 保护），但**从池中获取的单个连接对象不可跨线程并发使用**。如需多线程并发查询，每个线程应独立 `get()` 一个连接。
+
+## 异步 MySQL
+
+ormpp 支持基于 ASIO/async_simple 的异步 MySQL 查询，适合高并发场景。
+
+### 编译选项
+
+```bash
+cmake -B build -DENABLE_MYSQL_ASYNC=ON
+```
+
+### 基本用法
+
+```cpp
+#include <asio.hpp>
+#include "mysql_async.hpp"
+
+struct person {
+  int id;
+  std::string name;
+  int age;
+};
+YLT_REFL(person, id, name, age);
+
+asio::awaitable<void> run_mysql_async() {
+  ormpp::mysql_async async_mysql(co_await asio::this_coro::executor);
+  bool connected =
+      co_await async_mysql.connect("127.0.0.1", "root", "12345", "testdb");
+  if (!connected) {
+    co_return;
+  }
+
+  // 异步查询
+  auto result = co_await async_mysql.query_s<person>();
+  for (auto& p : result) {
+    std::cout << p.name << std::endl;
+  }
+
+  // 异步插入
+  person p{0, "tom", 20};  // id=0 表示自增
+  int affected = co_await async_mysql.insert(p);
+}
+
+int main() {
+  asio::io_context io;
+  asio::co_spawn(io, run_mysql_async(), asio::detached);
+  io.run();
+}
+```
+
+### 异步连接池
+
+```cpp
+#include <asio.hpp>
+#include "async_connection_pool.hpp"
+#include "mysql_async.hpp"
+
+asio::awaitable<void> run_pool() {
+  auto executor = co_await asio::this_coro::executor;
+  auto pool =
+      std::make_shared<ormpp::async_connection_pool<ormpp::mysql_async>>(
+          executor);
+
+  bool initialized =
+      co_await pool->init(10, "127.0.0.1", "root", "12345", "testdb");
+  if (!initialized) {
+    co_return;
+  }
+
+  auto conn = co_await pool->get();
+  if (conn) {
+    auto result = co_await conn->query_s<person>();
+  }
+}
+
+int main() {
+  asio::io_context io;
+  asio::co_spawn(io, run_pool(), asio::detached);
+  io.run();
+}
+```
+
+注意：异步接口需要 C++20 协程支持，编译器要求 GCC 10+、Clang 13+ 或 MSVC 2019 16.8+。
+
+## 线程安全
+
+### 问题背景
+
+ormpp 底层依赖 iguana 的编译期反射。iguana 的部分反射元数据采用**懒加载（Lazy Initialization）**策略：首次查询某个实体类型时才会初始化字段映射信息。
+
+在多线程场景下，如果多个线程**同时首次查询同一类型**，可能因并发初始化导致字段名映射错乱、字符串内存损坏（double-free）等问题。
+
+### 线程安全保证范围
+
+| 对象 | 线程安全性 | 说明 |
+|------|-----------|------|
+| `connection_pool` | ✅ 线程安全 | `init()`、`get()` 等操作内部使用 `std::mutex` 保护 |
+| 单个 `dbng` / 连接对象 | ❌ 非线程安全 | 不可跨线程共享同一个连接实例 |
+| `query` / `insert` / `update` | 依赖连接对象 | 底层调用数据库 C API，本身无额外锁保护 |
+
+**推荐做法**：每个工作线程通过 `connection_pool::get()` 独立获取连接，用完自动归还。严禁多个线程同时操作同一个连接对象。
+
+### 解决方案
+
+#### 方案一：预初始化（推荐）
+
+在启动工作线程之前，于主线程中显式调用 `ormpp::init_reflection<T>()` 触发一次性的反射初始化：
+
+```cpp
+#include "utility.hpp"
+
+struct person {
+  int id;
+  std::string name;
+  int age;
+};
+YLT_REFL(person, id, name, age);
+
+int main() {
+  // 1. 单线程预初始化（主线程）
+  ormpp::init_reflection<person>();
+
+  // 2. 此后可安全地在多线程中并发查询
+  std::vector<std::thread> threads;
+  for (int i = 0; i < 4; ++i) {
+    threads.emplace_back([]() {
+      dbng<mysql> mysql;
+      mysql.connect("127.0.0.1", "root", "12345", "testdb");
+      auto result = mysql.query<person>();  // 线程安全
+    });
+  }
+  for (auto &t : threads) t.join();
+}
+```
+
+#### 方案二：自动保护（内部缓存）
+
+ormpp 内部对 SQL 字段列表缓存（`get_fields<T>()`）已使用 `std::call_once` 保护，确保多线程首次并发访问时只初始化一次。但**仍强烈建议在应用层做预初始化**，因为 iguana 层面的反射元数据初始化不在 ormpp 控制范围内。
+
+### 适用场景
+
+- ✅ 单线程顺序查询：无需额外处理
+- ⚠️ 多线程同时首次查询**同一类型**：需要预初始化
+- ✅ 多线程查询不同类型（每个类型首次查询单线程）：无需额外处理
+- ❌ 多线程共享同一连接对象：不支持，必须使用连接池或每线程独立连接
+
+## roadmap
+
+1. ✅ 支持组合键（已通过链式调用 `primary_key(col1, col2)` 实现）
+2. ✅ 多表查询谓词（`where`, `group_by`, `having`, `order_by`, `join`, `limit`, `offset` 已支持）
+3. ✅ 日志支持（可通过 AOP 切面 `warper_connect<log>` 实现）
+4. ✅ 连接池（已实现，见[连接池](#连接池)）
+5. ✅ 异步 MySQL（已实现，见[异步 MySQL](#异步-mysql)）
+6. 🔄 增加获取错误消息的公开接口
+7. 🔄 支持更多的数据库（如 SQL Server、Oracle 等）
+8. 🔄 完善事务的嵌套支持
+9. 🔄 增加批量插入/更新的性能优化
+
+**历史版本**
+
+| 功能 | 版本 | 说明 |
+|------|------|------|
+| 链式查询 | v1.0+ | `select().from().where()` 类型安全构建器 |
+| 聚合查询 | v1.0+ | `count()`, `sum()`, `avg()`, `min()`, `max()` |
+| JOIN | v1.0+ | `inner_join()`, `left_join()` |
+| 连接池 | v1.0+ | 单例连接池，自动回收 |
+| 异步 MySQL | v1.0+ | ASIO/async_simple 协程支持 |
+| AOP 切面 | v1.0+ | `warper_connect` 日志/校验切面 |
+| 范围分区 | v1.0+ | MySQL/PostgreSQL/SQLite 统一分区 API |
+| 线程安全 | master | `init_reflection<T>()` 预初始化 + `call_once` 保护 |
+
+
+## 联系方式
+
+purecpp@163.com
+
+线上讨论: [项目讨论](https://purecpp.cn/chatroom.html)
+
+[http://purecpp.cn/](http://purecpp.cn/ "purecpp")
+
+[https://github.com/qicosmos/ormpp](https://github.com/qicosmos/ormpp "ormpp")

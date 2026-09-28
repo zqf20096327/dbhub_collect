@@ -1,0 +1,28 @@
+> [!IMPORTANT]
+>
+> Keep this file synchronized with [`index.md`](../index.md).
+
+# Table of contents
+
+- [DTO](../docs/dto.md).
+- [Dynamic modules](../docs/dynamic-modules/README.md).
+- [Dependency Injection](../docs/dependency-injection.md).
+- [Microservices](../microservices/README.md)
+  - [gRPC](../docs/grpc/README.md).
+  - [Protobuf](../docs/grpc/protobuf.md).
+- [How to debug your code and flaky tests](../docs/debugging/README.md).
+  - [A Crude Debug Mode For a Dockerized NestJS App](../docker/vscode-dev-mode/README.md).
+- [Designing and versioning RESTful APIs](../docs/designing-restful-api/README.md).
+  - [Pagination](../docs/designing-restful-api/pagination.md).
+- [MockServer and mocking 3rd-party HTTP/S calls](../docs/mockserver/README.md).
+- [Kafka intro](../docs/kafka/README.md).
+- RabbitMQ:
+  - [Intro](../docs/rabbitmq/README.md).
+  - [Batch processing and requeueing the failed messages and not the whole batch](https://github.com/kasir-barati/bugs/tree/nestjs-rabbitmq-batch-processing-messages).
+  - [Default value for prefetch count in `@golevelup/nestjs-rabbitmq`](https://github.com/kasir-barati/bugs/tree/golevelup-nestjs-rabbitmq-default-value-for-prefetch).
+  - [Share a RabbitMQ connection with a Dynamic modules](../docs/rabbitmq/share-rabbitmq-connection-with-dynamic-module/README.md).
+  - [How to configure a Dead letter queue (DLQ) in NestJS](../docs/rabbitmq/dead-letter-queue/README.md).
+  - [Updating a queue](../docs/rabbitmq/updating-queue.md).
+  - [Classic VS Quorum queues](../docs/rabbitmq/classic-vs-quorum.md).
+- [NestJS and GraphQL with `nestjs-query`](../docs/nestjs-query/README.md)
+- [Mongoose](../mongoose)

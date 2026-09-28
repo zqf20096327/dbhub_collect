@@ -1,0 +1,78 @@
+# نظام إدارة الصالات الرياضية
+
+
+
+[![zread](https://img.shields.io/badge/Ask_Zread-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTYxNTYgMS42MDAxSDIuMjQxNTZDMS44ODgxIDEuNjAwMSAxLjYwMTU2IDEuODg2NjQgMS42MDE1NiAyLjI0MDFWNC45NjAxQzEuNjAxNTYgNS4zMTM1NiAxLjg4ODEgNS42MDAxIDIuMjQxNTYgNS42MDAxSDQuOTYxNTZDNS4zMTUwMiA1LjYwMDEgNS42MDE1NiA1LjMxMzU2IDUuNjAxNTYgNC45NjAxVjIuMjQwMUM1LjYwMTU2IDEuODg2NjQgNS4zMTUwMiAxLjYwMDEgNC45NjE1NiAxLjYwMDFaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00Ljk2MTU2IDEwLjM5OTlIMi4yNDE1NkMxLjg4ODEgMTAuMzk5OSAxLjYwMTU2IDEwLjY4NjQgMS42MDE1NiAxMS4wMzk5VjEzLjc1OTlDMS42MDE1NiAxNC4xMTM0IDEuODg4MSAxNC4zOTk5IDIuMjQxNTYgMTQuMzk5OUg0Ljk2MTU2QzUuMzE1MDIgMTQuMzk5OSA1LjYwMTU2IDE0LjExMzQgNS42MDE1NiAxMy43NTk5VjExLjAzOTlDNS42MDE1NiAxMC42ODY0IDUuMzE1MDIgMTAuMzk5OSA0Ljk2MTU2IDEwLjM5OTlaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik0xMy43NTg0IDEuNjAwMUgxMS4wMzg0QzEwLjY4NSAxLjYwMDEgMTAuMzk4NCAxLjg4NjY0IDEwLjM5ODQgMi4yNDAxVjQuOTYwMUMxMC4zOTg0IDUuMzEzNTYgMTAuNjg1IDUuNjAwMSAxMS4wMzg0IDUuNjAwMUgxMy43NTg0QzE0LjExMTkgNS42MDAxIDE0LjM5ODQgNS4zMTM1NiAxNC4zOTg0IDQuOTYwMVYyLjI0MDFDMTQuMzk4NCAxLjg4NjY0IDE0LjExMTkgMS42MDAxIDEzLjc1ODQgMS42MDAxWiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNNCAxMkwxMiA0TDQgMTJaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00IDEyTDEyIDQiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K&logoColor=ffffff)](https://zread.ai/IbnTaymiyyah/GYM-Management-System)
+
+![GYM-POST-_0](https://github.com/user-attachments/assets/10dd6059-b224-4c8d-9dfc-a8aa81d256b4)
+
+
+
+
+## وصف المشروع
+
+نظام إدارة الصالات الرياضية هو تطبيق سطح مكتب بُني باستخدام **JavaFX**، صمم لمساعدة مديري الصالات الرياضية في إدارة العمليات.
+
+يتيح النظام إضافة متدربين جديدين، وتحديد مدة الاشتراك وسعره، وعرض المشتركين الجدد والاشتراكات المنتهية أو التي على وشك الانتهاء. بالإضافة، يمكن إدارة بيانات المتدربين، وإضافة أنظمة غذائية، وتحديث الاشتراكات، واستخراج البيانات في ملفات Excel.
+
+يحتوي النظام أيضًا على صفحة إحصاءات تعرض رسومًا بيانية توضح عدد المشتركين، والاشتراكات المنتهية، ونسبة الاشتراكات المجمدة. كما يوفر النظام إمكانية تجميد الاشتراكات وإدارتها بسهولة.
+
+
+## المميزات الرئيسية
+
+- **إدارة المتدربين**: إضافة، تعديل، حذف، وتجديد اشتراكات المتدربين.
+- **عرض البيانات**: عرض المشتركين الجدد والاشتراكات المنتهية في جداول.
+- **أنظمة غذائية**: إضافة أنظمة غذائية لكل متدرب.
+- **الإحصاءات**: عرض رسوم بيانية وجداول للإحصائيات مثل عدد المشتركين والاشتراكات المجمدة.
+- **الإعدادات**: تغيير اسم الصالة الرياضية، إدارة المستخدمين، واستيراد/تصدير البيانات.
+- **صلاحيات المستخدمين**: تحديد صلاحيات الوصول للمستخدمين المختلفين.
+
+
+---
+
+![GYM-POST-_1](https://github.com/user-attachments/assets/5de32a6f-603c-4fb6-8f3e-57e049555cae)
+
+![GYM-POST-_2](https://github.com/user-attachments/assets/308873bd-1a5e-47b8-8f39-b5a1f9d8b3bf)
+
+![GYM-POST-_3](https://github.com/user-attachments/assets/9d1ddfe8-08c8-4593-9e6b-4b8026e8aa16)
+
+![GYM-POST-_4](https://github.com/user-attachments/assets/d0884337-4b5c-4557-b415-ce7ea38e0f15)
+
+![GYM-POST-_5](https://github.com/user-attachments/assets/4afc3475-a1a5-40f0-9167-fdbc944998a8)
+
+![GYM-POST-_6](https://github.com/user-attachments/assets/ade98df9-c7d8-4f62-8776-a51cacc55139)
+
+
+
+
+## المتطلبات (Requirements)
+
+- **Java JDK 21.0.2**
+- **Javafx SDK 21.0.2**
+- **MySQL 8.0**
+
+
+## المكتبات المستخدمة (Libraries Used)
+- **JavaFX**
+- **MaterialFX**
+- **TilesFX**
+- **MySql Connector**
+- **openCSV**
+
+
+## إذا كان البرنامج لا يعمل
+
+1. تأكد من تثبيت **JDK** و **JavaFX SDK** على جهازك.
+2. إذا كان البرنامج لا يعمل ، قم بإضافة مسار `bin` الخاص بـ **JDK** و **JavaFX SDK** إلى متغيرات البيئة (**Environment Variables**) في المسار (**PATH**).
+   - كيفية إضافة المسار:
+     - ابحث عن **Environment Variables** في قائمة Start.
+     - اضغط على **Edit the system environment variables**.
+     - في النافذة الجديدة، اضغط على **Environment Variables**.
+     - في قسم **System variables**، ابحث عن المتغير **Path** واختر **Edit**.
+     - اضغط على **New** وأضف المسار إلى مجلد `bin` الخاص بـ **JDK** و **JavaFX SDK**.
+     - مثال:
+       - `C:\Program Files\Java\jdk-21.0.2\bin`
+       - `C:\path\to\javafx-sdk-21.0.2\bin`
+3. تأكد من أن قاعدة البيانات **MySQL** تعمل وأن اسم المستخدم وكلمة السر هما `root`.
+
+

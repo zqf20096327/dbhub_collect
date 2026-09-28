@@ -1,0 +1,657 @@
+# Kyn.ist Agent Studio
+
+**Build agent workflows that read cited evidence, deliberate independently,
+execute through bounded authority, and learn only through governed promotion.**
+
+**[Open the live Studio](https://buildweek.kyn.ist/app/)** ·
+**[Inspect the source](https://github.com/cakbudak/kyn-agent-studio)**
+
+**Model text is data. It is never authority.**
+
+An Agent here can choose an Action, but the Skill grant, the exact Action
+version, the strict schema, the runtime validation, and the effect policy decide
+whether anything happens. A failed Run cannot be edited into a success. A repair
+cannot rewrite its parent. And a mistake made three times independently stops
+being available.
+
+Agent Studio is a standalone OpenAI Build Week 2026 cut of one discipline inside
+Kyn.ist: its agent execution, ratification, and maintenance contracts. It is a
+configurable workflow product—not a prescribed click-through and not a frontend
+simulation.
+
+The flagship loop is executable end to end as one ordinary, editable Flow:
+
+```text
+immutable source → SmartRead Action ──────────────┐
+active promoted Memory → Recall Action ──────────┼→ cited handoff → BoardRoom subflow → Human gate
+                       ↑                         │                                ↓
+                       └── Human promotion ← verified child-Run evidence ←───────┘
+```
+
+## What you can build
+
+- **Define Actions** with strict input/output JSON Schemas and up to twelve named
+  outcomes. Built-in execution kinds are AI, template, transform, delay,
+  condition, multi-branch router, assertion, Human approval, idempotent data
+  store, SmartRead, Knowledge search, and Memory recall.
+- **Build Flows visually** on a full node canvas. Drag pinned Action, Agent, or
+  published Flow versions, connect exact outcome ports, map
+  input/literal/predecessor data, set retry and error policy, then publish an
+  immutable successor version.
+- Define what **“finished” actually means** for a Flow. Up to eight acceptance
+  promises pin admissible evidence kinds and exact graph sites, plus an
+  independent versioned Goal-Judge. The model may nominate anchors and explain
+  its claim; only deterministic resolution against Run-owned Steps, receipts,
+  approvals, and effects may admit completion.
+- Attach real **webhook and interval triggers**. A trigger always pins the Flow
+  version current when it is created. Model-backed trigger Runs wait safely for
+  the visitor's browser-owned key instead of persisting a credential.
+- Create **Versioned Agents, Prompts, and Skills**. Skills grant exact callable
+  Action version IDs; model text cannot widen authority.
+- Import immutable text or source code into the bounded **Knowledge layer**.
+  **SmartRead** exposes five intent-first modes—glance, outline, focus, grep, and
+  full—and returns exact version/fingerprint/line citations without a model
+  call. The same primitives are ordinary Actions that Agents may receive only
+  through exact Skill grants.
+- Turn any cited SmartRead result into a complete editable Flow draft. It pins
+  that exact source/read policy, recalls only active Human-promoted Memory,
+  combines both citation envelopes through a deterministic Action, and maps the
+  result into a published BoardRoom subflow. The first Run may recall nothing;
+  after promotion, the same pinned Flow automatically carries matching Memory
+  into its next Run.
+- Build a real **parallel BoardRoom** from two to eight pinned Action, Agent, or
+  Flow members. Every member receives the same typed input and executes in its
+  own operation session; code—not a model—owns all/quorum join semantics,
+  failure isolation, affirmative counting, and dissenting-member IDs. A final
+  editor sees completed records only after the barrier and must preserve
+  dissent. Approval and any bounded write stay visibly downstream.
+- Treat every BoardRoom as an ordinary editable Flow. Open its exact graph,
+  replace members, change input mappings, publish a successor, or reuse the
+  finished Flow as a node elsewhere.
+- **Operate Runs live** through the same graph, with current-node state, bounded
+  attempts/backoff, cancellation, Steps, model calls, Action receipts,
+  approvals, effects, and hash-linked events.
+- Pause a live graph at a real Human approval, commit an attributable decision,
+  then resume the same pinned Run.
+- Rerun a terminal execution as a linked child without rewriting its parent.
+- Close the context loop through **governed Memory**. Human or pinned-Agent
+  proposals begin in quarantine, cite exact events from a completed
+  ledger-verified Run, pass deterministic provenance qualification, and become
+  recallable only after a Human acknowledges the candidate fingerprint.
+  Rejection and retirement remain inspectable; neither Memory nor a model can
+  widen Agent authority or mutate a Flow.
+- On any supported blocked Run, use the integrated **maintenance loop**:
+  code-owned causal evidence → constrained Agent explanation → bounded repair →
+  human revision fence → immutable Action/Flow successors → linked proof Run.
+- Watch the runtime **ratify its own dead ends**. A structural failure recurring
+  across three independent Runs becomes `canonical` and is refused before a
+  fourth Run is created—deterministically, with citations, and with no model in
+  the loop.
+- See the same evidence **distilled into a stated principle** when three
+  *different* Flows fail the same declared way. A principle only ever advises:
+  it appears while you are authoring, publishing still succeeds, and the brake
+  remains the only thing that refuses anything. Warn early, refuse late.
+- Close the learning loop in the **Capability Forge**. Select one completed,
+  ledger-verified model Step; a pinned Agent from a different logical Agent
+  resource proposes a strict,
+  cited behavioral Skill candidate. Code replays eight provenance, integrity,
+  independence, fingerprint, and zero-authority gates. Only an acknowledged
+  human decision may publish the exact instructions as an immutable,
+  authority-free Skill v1. No Agent or Flow changes silently.
+- Run a **controlled cross-model sweep**. One immutable pinned Flow version, one
+  input, several models. Before provider I/O, the complete expected model ×
+  repetition × Run set is committed as a hash-linked manifest; every sibling
+  then pins a byte-identical `flow_version_id`. An incomplete, rewritten, or
+  silently aliased sweep is unusable rather than presentable. The question is
+  whether the scaffolding behaves the same on every brain, not which brain is
+  best.
+- Work in **light or dark**. The theme follows your system by default and the
+  choice is yours for the tab.
+
+The seeded `Agent-reviewed launch` Flow is one editable example:
+
+```text
+AI Action → condition → Human approval → sandbox effect
+                └ false → deterministic needs-work Action
+```
+
+You can ignore it and create a deterministic Flow, a new Agent stack, or your
+own mixed graph from scratch.
+
+## Three-minute judge path
+
+1. Open the live Studio, create an isolated workspace, then save a restricted
+   OpenAI project key in **Settings** for this tab.
+2. Create a **BoardRoom** and inspect its publication manifest: participant
+   Prompts, Skills, Agents and Actions, final editor stack, quorum, failure
+   policy, Human gate, and ordinary reusable Flow are all explicit.
+3. Open **Context & Memory**, import a short Markdown evidence brief, run
+   SmartRead, and inspect its immutable source version, fingerprint, and exact
+   line citations. Choose **Compose cited Flow** and open the generated graph:
+   SmartRead → governed Memory recall → deterministic cited handoff → BoardRoom.
+4. Publish and start the Flow. Three BoardRoom participants run concurrently and
+   independently through the official OpenAI Responses API. In **Runs**, inspect
+   the source and recall Step outputs, nested child Run, verdicts, code-owned
+   affirmative count, quorum result, and material dissent before approval.
+5. Approve or reject the durable Human gate. Both decisions follow explicit
+   routes; a write, if configured, can occur only after approval.
+6. Return to **Governed Memory**. Cite exact events from the completed nested
+   BoardRoom Run, create a quarantined candidate, run deterministic
+   qualification, acknowledge its exact fingerprint, and promote it.
+7. Run the same composed Flow again. Its unchanged Memory recall node now
+   carries the active promoted observation and source-Run provenance into the
+   deterministic handoff and nested council automatically.
+8. Continue with the deeper proof surfaces: editable registries, Capability
+   Forge, acceptance
+   contracts, dead-end ratification/brake, controlled cross-model comparison,
+   and evidence-owned repair with a linked proof Run.
+
+## Browser-owned OpenAI credential
+
+The application has no operator-key fallback.
+
+1. The visitor saves a key in browser `sessionStorage` for the current tab.
+2. The browser attaches it only to a same-origin command forecast to call a model.
+3. The server creates an ephemeral official `OpenAI` SDK client for that operation.
+4. The key is never written to SQLite, events, receipts, responses, logs, or Git.
+5. Only safe provider metadata—response ID, model, status, usage, hashes, and
+   request ID—is committed.
+
+The server ignores `OPENAI_API_KEY` from `.env`, even if the surrounding host has
+one. Deterministic Actions and Flows never require a credential.
+
+OpenAI's [API authentication guidance](https://developers.openai.com/api/reference/overview#authentication)
+recommends keeping standard API keys out of browser code. This anonymous Build
+Week BYOK mode is therefore an explicit visitor-owned trade-off: use a
+restricted, temporary project key, never a production credential, and clear it
+before sharing or leaving the tab.
+
+## Runtime contract
+
+### Definition plane
+
+Actions, Automation Flows, Agents, Prompts, and Skills are versioned and
+fingerprinted. A Flow version pins its complete transitive resource set. Version
+rows are immutable at the SQLite layer.
+
+### Execution plane
+
+A Run is created with one fully pinned Flow version before worker/provider I/O,
+then validates input, maps data into Steps, and invokes every graph capability
+through the same Action path. Attempts are bounded to three with explicit retry
+codes and backoff. Terminal states are absorbing. A rerun creates a linked new
+Run; it never reopens its parent.
+
+Events form a per-Run SHA-256 chain. Action receipts, model calls, approval
+decisions, and sandbox effects are append-only. External OpenAI I/O never occurs
+inside a SQLite write transaction.
+
+### Authority plane
+
+An AI Action pins an Agent. The Agent pins one Prompt and a set of Skills. Skills
+can grant only exact Action versions whose kinds are safe for model invocation.
+The runtime intersects those grants with its static public execution surface and
+uses strict OpenAI function schemas. A model response is data, never authority.
+
+### Context plane
+
+Knowledge sources and versions are immutable flat records. SmartRead accepts
+only admitted source-version IDs—never server paths or remote URLs—and returns
+bounded source text with exact line citations and the immutable source
+fingerprint. Deterministic Knowledge search ranks only current admitted
+passages. SmartRead, Knowledge search, and Memory recall are ordinary Flow
+Actions with strict structured results and directly mappable, bounded citation
+envelopes. They may also enter an Agent through the same exact-version Skill
+authority path as every other callable Action. A deterministic handoff Action
+can combine current-source and active-Memory envelopes without asking a model to
+rewrite provenance.
+
+### Deliberation plane
+
+A generic `fan_out` Flow node pins two to eight distinct Action, Agent, or Flow
+versions with identical mapped input contracts. Members execute concurrently in
+separate operation sessions; no SQLite write transaction spans member or
+provider I/O. Code derives completed/failed counts, affirmative votes, quorum,
+convergence, and dissenting IDs. Member targets cannot pause or mint effects,
+and nested fan-out is bounded out of the public cut. A BoardRoom is a guided
+factory over this generic mechanism, not a hidden second runtime.
+
+### Memory plane
+
+Memory candidates cite up to twenty exact events from one completed,
+ledger-verified Run. Human-authored and model-distilled candidates both enter
+quarantine. Deterministic qualification replays source completion, event
+ownership, ledger validity, and the unchanged evidence snapshot. Promotion
+requires a Human decision over the exact candidate fingerprint; only active
+promoted versions enter recall. Rejection and retirement append state without
+deleting history.
+
+### Completion plane
+
+A Flow version may pin up to eight acceptance criteria. Each criterion states an
+observable promise, one closed evidence kind (`step`, `receipt`, `approval`, or
+`effect`), and one or more graph sites capable of minting it. Publication
+refuses impossible contracts and refuses a Goal-Judge Agent that the judged
+graph itself casts, including through nested subflows.
+
+At the terminal seam, the pinned Judge receives its immutable Agent, Prompt, and
+Skill instructions plus a redacted view of the Run's actual evidence, bounded to
+96 KiB before provider I/O.
+Its assessment, reasons, and anchor nominations are recorded explicitly as a
+**non-authoritative model claim**. Code then resolves every nominated ID against
+the Run's own records, declared kind, declared site, and successful state. If
+any promise carries no surviving anchor, the Run records
+`completion_unevidenced` and never enters `completed`. A Flow with no declared
+criteria takes the ordinary completion path and makes zero Judge calls.
+
+### Maintenance plane
+
+The Studio derives a deterministic causal candidate from authoritative receipts,
+lets a pinned diagnostician explain only that candidate and its owned event IDs,
+validates one allow-listed repair operation, and applies it only through a human
+hash/revision compare-and-swap. Applying creates immutable Action and Flow
+successors. A linked proof child—not model prose—establishes the changed outcome.
+
+### Ratification plane
+
+Most agent systems have a memory of what they did. This one has a memory of what
+did not work, and that memory has veto power.
+
+When a Run terminates blocked or failed **in a ratifiable fault class**, the
+runtime mints append-only evidence of the exact approach that failed—the pinned
+Flow version, the node, the error code, and a normalized fault detail. Nothing
+increments a mutable counter. `ratification_state` is **derived** by counting
+distinct citing Runs:
+
+```text
+1 independent Run   → proposed    recorded; execution unaffected
+2 independent Runs  → confirmed   visible in the Run surface
+3 independent Runs  → canonical   check_brake refuses the Flow version
+```
+
+#### What is allowed to ratify
+
+Counting is only half the rule. Only a **structural** defect may be counted—one
+where the reason for the failure is a property of the pinned definition, so
+repeating that definition cannot succeed whatever data arrives. The membership
+rule is a declared table (`RATIFIABLE_FAULTS` and `NON_RATIFIABLE_FAULTS` in
+`backend/contracts.py`), exposed on every `check_brake` verdict as
+`fault_classes` so it can be audited rather than inferred:
+
+```text
+ratifies      a Data Store Action whose pinned `write_enabled` policy denies
+              its own declared bounded write
+never         an assertion rejecting bad input — the gate doing its job; its
+              message is static, so distinct bad inputs share one fingerprint
+never         a transient provider fault — a property of the moment, not the
+              path, and already a retry-policy concern
+never         a schema rejection of this Run's data, an inherited subflow
+              refusal, or anything the table does not name
+```
+
+Anything unrecognised **fails closed and does not ratify**. A brake that fires
+wrongly is worse than one that fires rarely.
+
+#### Scope of the refusal
+
+At `canonical`, a further Run of that **pinned Flow version** is refused *before
+it is created*: no Run row, no Step, no event, no effect. The refusal cites the
+prior Run IDs, and every citation resolves to a hash-linked event that already
+existed.
+
+The scope is the Flow version, not a traversal path, and that is deliberate.
+Which nodes a Run visits is decided by data that does not exist until the Run
+executes, so no pre-execution check can know the path. Admitting the Run and
+braking mid-traversal would forfeit the stronger guarantee—no Run row, no Step,
+no effect—so a canonical dead end on any node of a version refuses every
+candidate of that version.
+
+No model participates in any part of this. It is a count over append-only rows,
+so an Agent cannot argue its way past it.
+
+#### Distilled principles
+
+A dead end refuses one exact pinned path. A **principle** is the generalization:
+when three *different* Flows fail the same declared way, the runtime states the
+rule it has learned.
+
+The quorum is distinct Flows, not distinct Runs. Repetition inside one Flow is
+already the brake's job, and letting one Flow mint a workspace-wide rule would
+let a single loud failure speak for everyone.
+
+A principle **never refuses anything**. It surfaces while you are authoring—
+publishing a matching Flow still succeeds, and the Flow still runs—because being
+wrong there costs a reader two seconds instead of blocking real work. Warn early,
+refuse late.
+
+Its honest ceiling is stated in the product itself and derived from the shipped
+vocabulary rather than asserted: the mechanism groups any declared predicate over
+any executor kind, but `POLICY_MARKERS` currently recognises exactly one
+predicate, so that is the whole of what this system can say. A failure carrying
+no recognised predicate produces no signature and never distils, by construction.
+
+#### Capability Forge
+
+Principles generalize deterministic executor failures; they are not converted
+into Skills. Doing so would attach model-facing prose to a configuration-level
+predicate and pretend it changed behavior. The Forge starts somewhere stricter:
+one completed model-backed Step in a Run whose full event ledger verifies.
+
+Before provider I/O, code freezes the source Flow/Step/model-call pins, source
+Agent and Skill fingerprints, validated input/output, terminal state, and a
+bounded ledger excerpt. A different pinned Agent receives that envelope through
+one tool-free, strict-schema Responses call and must cite only event IDs inside
+it. The proposal is stored in quarantine with its own fingerprint and zero
+tool/Action authority.
+
+Qualification is deterministic and makes no model call. It replays the terminal
+source, full ledger chain, model-Step ownership, pre-I/O source snapshot,
+citation subset, candidate fingerprint, independent-Agent fence, and zero
+authority delta. Passing proves provenance—not improved performance. A human may
+then acknowledge the exact fingerprint and publish one immutable Skill v1. The
+Skill is not attached anywhere automatically: an operator must create a successor
+Agent and prove its outcome in a new Run. Rejection is append-only too; nothing
+is erased to make the learning history look cleaner.
+
+Publishing a repaired successor Flow version produces a new `flow_version_id`
+and therefore a new fingerprint. Fixing the problem always clears the brake; only
+repeating it unchanged is refused. The brake is a memory, not a trap.
+
+A braked subflow does not escape its parent: the parent Run terminates `blocked`
+with `brake_engaged`, its Step closes, and a `subflow.brake_engaged` event
+carries the refusal's citations into the parent's own ledger. The parent proved
+nothing new, so that inherited refusal never ratifies a second dead end.
+
+### Comparison plane
+
+Anyone can run a prompt against several models and show a table. Nothing in that
+proves the comparison was fair.
+
+A comparison here runs one immutable pinned Flow version across several models.
+Before the first provider call, the runtime prepares the complete sibling set
+and appends one hash-linked manifest naming every expected model, repetition,
+and Run ID. Every sibling then pins a **byte-identical `flow_version_id`**, so
+every Action, Agent, Prompt, Skill, schema and route is provably the same and
+the only recorded delta is the model. A crash cannot shrink the requested
+experiment into a smaller one that looks complete; a missing or altered sibling
+makes the derived result unusable. The manifest plus version pinning is what
+turns a table into a controlled experiment.
+
+The claim is deliberately not a ranking. The headline is **invariance** — same
+routed outcome, same terminal status, same guard behaviour across brains — with
+token and latency spread as the footnote. Ablation shows what breaks when a
+guard is removed; a sweep shows nothing breaks when the brain is swapped.
+
+Varying the model is the one deliberate hole in "everything is pinned", so it is
+contained: the override is settable only by the comparison command, must be in
+the supported set, is written on the Run row *and* into the hash-linked chain
+next to the pinned model it replaced, and marks the Run `relation_kind =
+"comparison"`. A sweep is its own evidence class and can never be a baseline —
+a baseline is model-pinned by definition.
+
+Two gates keep it from being theatre.
+
+**The model that actually answered is verified.** This is not hypothetical. On
+the live provider, requesting `gpt-5.6` returns `gpt-5.6-sol`. Without that check
+a sweep would compare a model against itself and report perfect agreement — the
+best-looking and most worthless result the system could produce. A mismatch
+marks the comparison unusable, and the surface says so above every number.
+
+**Controls that are not enforced are not claimed.** Sampling controls are not
+settable through this bounded invocation surface, so the payload names what is
+enforced-and-verified separately from what is not controllable here — each with
+its reason, as data rather than prose. Claiming an unenforced control is the
+fastest way to make an honest experiment dishonest.
+
+The instrument measures itself before it weighs anything. Repetitions of one
+model hold everything constant, so whatever they disagree by is the harness, not
+the brain: that spread is the noise band. The total model-call forecast includes
+every requested repetition and is charged before the comparison begins.
+Differences below it report as `within_noise`, never as findings. And where a
+model disagrees with *itself* across its own repetitions, cross-model invariance
+is not stated at all — picking the run that agreed would manufacture the result.
+
+No dollar figure is printed. Tokens and latency are what the provider reports,
+so tokens and latency are what this reports; a price table would be stale the
+week it ships, and a wrong cost number is worse than none.
+
+## Flat SQLite projection
+
+This repository contains conventional product tables—not Kyn.ist's internal
+ontology:
+
+```text
+workspaces
+prompts → prompt_versions
+skills → skill_versions
+agents → agent_versions
+actions → action_versions
+automation_flows → automation_flow_versions
+                 → automation_trigger_bindings
+automation_runs → automation_run_steps
+                → automation_events
+                → automation_model_calls
+                → automation_action_receipts
+                → automation_approval_requests → automation_approval_decisions
+                → automation_effects
+                → automation_diagnoses → automation_repair_proposals
+                                       → automation_repair_decisions
+                → automation_dead_end_evidence
+knowledge_sources → knowledge_source_versions → knowledge_passages
+memory_candidates → memory_candidate_qualifications
+                  → memory_candidate_decisions
+memories → memory_versions → memory_state_events
+```
+
+SQLite WAL and short `BEGIN IMMEDIATE` transactions serialize mutations. Database
+triggers enforce immutable definition/evidence rows, legal Run and Step
+transitions, terminal absorption, and optimistic revision fences.
+
+## What this is a projection of
+
+Agent Studio is a standalone cut of one discipline inside Kyn.ist: how agent work
+is authorized, executed, evidenced, and maintained. It runs from a clean clone
+with Python and a browser. Nothing here calls back to a private service.
+
+The mechanisms are real, and each is a projection of a deeper substrate:
+
+| Here | In the private stack |
+| --- | --- |
+| Ratification over repeated Runs | Ratification over a knowledge graph with constraint-trigger invariants, per-producer trust cells, and quorum distillation across independent sources |
+| Skill grants pinning exact Action versions | A capability catalog with per-operation maturity and live-proof ratification gating |
+| One attributable human approval | Risk-classed operations with separation of duties and crypto-shreddable decision reasons |
+| A hash-linked event ledger | The same ledger joined to a causal projection and saved graph lenses over one structure graph |
+| Citation-first SmartRead over immutable source versions | Purpose-directed reading over governed knowledge without exposing private storage semantics |
+| Generic fan-out plus code-owned quorum barriers | Independent multi-agent deliberation with richer private coordination and trust layers |
+| Quarantined, evidence-cited Memory promotion | Governed learning over deeper private memory and knowledge substrates |
+| Authorable acceptance contracts with an independent Goal-Judge | Goal/stop conditions joined to task and drift gates over the full intelligence runtime |
+| Pre-I/O cross-model manifests and invariance checks | The model-agnostic “Switch-the-Brain” evaluation axis in KynBench |
+
+The public cut is bounded on purpose. The only general write-capable Action
+appends an idempotent row to an isolated workspace sandbox; there is no shell,
+filesystem, arbitrary HTTP, arbitrary MCP registration, production authority, or
+tenant-wide secret store. That is the smallest environment in which real agent
+behavior, authority, orchestration, observation, approval, ratification, and
+maintenance can all be judged at once.
+
+## Run locally
+
+Requirements: Python 3.11+ and a modern browser.
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/python serve.py
+```
+
+Open <http://127.0.0.1:4173/app/>. Enter an OpenAI key in the browser Settings
+view only when you want to execute a model-backed command.
+
+Optional non-secret settings:
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `OPENAI_MODEL` | `gpt-5.6` | allow-listed model used by seeded Agent versions |
+| `KYN_DATABASE_PATH` | `var/kyn-agent-studio.sqlite3` | flat SQLite database path |
+| `KYN_WORKSPACE_MODEL_CALL_LIMIT` | `24` (deployed: `36`, so a cross-model sweep fits) | recorded model-call budget per workspace |
+| `KYN_PUBLIC_MODEL_CALLS_PER_HOUR` | `120` | global public model-action forecast budget |
+
+## Same-origin API
+
+`serve.py` serves both the browser application and `/api/v1`. Public workspace
+authority stays in an opaque hashed `HttpOnly`, `SameSite=Strict`,
+`Secure`-on-HTTPS cookie. Mutations require matching Origin and Fetch Metadata.
+Bodies, schemas, graph size, model turns, workspace usage, address/global usage,
+and concurrent model actions are bounded.
+
+Important Studio routes:
+
+```text
+POST /api/v1/studio/actions
+POST /api/v1/studio/actions/:id/versions
+POST /api/v1/studio/flows
+POST /api/v1/studio/flows/:id/versions
+POST /api/v1/studio/flows/:id/triggers
+POST /api/v1/studio/triggers/:id/state
+POST /api/v1/studio/flows/:id/runs:enqueue
+POST /api/v1/hooks/:webhook-secret
+GET  /api/v1/studio/runs/:id
+POST /api/v1/studio/runs/:id:continue
+POST /api/v1/studio/runs/:id:cancel
+POST /api/v1/studio/approvals/:id/decisions
+POST /api/v1/studio/runs/:id/reruns
+POST /api/v1/studio/runs/:id/diagnoses
+POST /api/v1/studio/diagnoses/:id/repairs
+POST /api/v1/studio/repairs/:id/apply
+POST /api/v1/studio/repairs/:id/proof
+POST /api/v1/studio/skill-candidates
+POST /api/v1/studio/skill-candidates/:id/qualifications
+POST /api/v1/studio/skill-candidates/:id/promotion
+POST /api/v1/studio/skill-candidates/:id/rejection
+POST /api/v1/studio/flows/:id/comparisons
+GET  /api/v1/studio/comparisons
+GET  /api/v1/studio/comparisons/:id
+POST /api/v1/studio/knowledge-sources
+POST /api/v1/studio/knowledge-sources/:id/versions
+POST /api/v1/studio/knowledge/smart-read
+POST /api/v1/studio/knowledge/search
+POST /api/v1/studio/boardrooms
+POST /api/v1/studio/memory-candidates
+POST /api/v1/studio/memory-candidates/:id/qualifications
+POST /api/v1/studio/memory-candidates/:id/promotion
+POST /api/v1/studio/memory-candidates/:id/rejection
+POST /api/v1/studio/memories/search
+POST /api/v1/studio/memories/:id/retirement
+
+POST /api/v1/prompts
+POST /api/v1/prompts/:id/versions
+POST /api/v1/skills
+POST /api/v1/skills/:id/versions
+POST /api/v1/agents
+POST /api/v1/agents/:id/versions
+```
+
+## Verification
+
+Run the backend, HTTP, database-invariant, security, and browser-state contracts:
+
+```bash
+.venv/bin/python scripts/verify.py
+```
+
+Run the full product journey in Chromium:
+
+```bash
+node scripts/browser_verify.mjs \
+  --report evidence/browser/agent-studio-report.json \
+  --artifacts evidence/browser
+```
+
+Run the maximum supported 64-node release-host and Chromium load gates:
+
+```bash
+.venv/bin/python scripts/verify.py --performance
+```
+
+The committed load proof executes twenty complete 64-node Runs (197
+hash-linked events each), snapshots the accumulated workspace thirty times,
+renders the same 64-node/63-edge graph in Chromium, and exercises Fit View. On
+the release host, complete deterministic Runs measured 397.676 ms p95 and
+snapshots 181.487 ms p95—each below its declared threshold (2000 ms and 400 ms)
+and without model calls, overflow, failed requests, or page errors.
+
+Each Run projection recomputes its full event chain from event material—197
+SHA-256 hashes on the maximum graph—rather than trusting that links merely join.
+The measured release-host result includes that authoritative ledger verdict and
+remains well inside both gates. See
+[`evidence/performance-report.json`](evidence/performance-report.json) and
+[`evidence/editor-performance-report.json`](evidence/editor-performance-report.json).
+
+The browser verifier exercises the real same-origin HTTP and SQLite stack through
+workspace creation; Action, Prompt, Skill, and Agent authoring; multi-output Flow
+composition; deterministic execution; canvas successor publication; reusable
+subflow execution; webhook activation; asynchronous AI execution;
+approval/resume; live graph evidence; dead-end ratification and brake refusal;
+authorable completion contracts with refuse/admit evidence; pre-I/O comparison
+manifests; integrated maintenance; immutable Knowledge import; bounded SmartRead
+with exact citations; parallel BoardRoom execution with code-owned quorum and
+visible dissent; editing that generated BoardRoom as a normal Flow successor;
+and quarantined, qualified, human-promoted Memory recall.
+The same journey also distils a completed model Step through a different logical
+Agent, proves all eight Capability Forge gates, and human-promotes an
+authority-free Skill without changing any Agent or Flow.
+Provider-shaped deterministic responses are used locally; the same journey can be
+run against the deployed OpenAI-backed service. The current local journey passes
+**56/56** checks, including always-visible modal confirmation, keyboard focus
+containment, 4,310 rendered contrast samples across all thirteen workbenches in
+both themes, and a legible pannable 390 px graph; see
+[`evidence/browser/agent-studio-report.json`](evidence/browser/agent-studio-report.json).
+
+The same journey passes **55/55** against the deployed public origin at
+`https://buildweek.kyn.ist` with real model calls, real provider latency, and no
+scripted responses; see
+[`evidence/live/agent-studio-report.json`](evidence/live/agent-studio-report.json)
+and the archived screenshots under `evidence/live/`. That proof includes the
+real Capability Forge path plus four real parallel BoardRoom calls whose honest
+0/3 verdict sent the decision to review instead of manufacturing consensus. Its
+one refused HTTP response is the brake's own asserted 409.
+
+Prove the guards are load-bearing rather than taking the green suite on trust:
+
+```bash
+.venv/bin/python scripts/verify.py --ablation
+```
+
+Each ablation takes a product function's own source, deletes exactly one named
+guard, and asserts a documented product-level violation becomes reachable. Nine
+of eleven ablations are load-bearing. Two are reported **redundant** because the
+same safety property remains independently enforced: the standalone terminal-
+absorption trigger is covered by the transition-shape trigger, and the Judge's
+early anti-fabrication check is covered again by deterministic anchor resolution.
+The suite reports that rather than dressing either one up.
+
+Ablation is test-local. No path reachable from `serve.py` or the HTTP API can
+disable a guard; a public deployment ships no switch for its own authority gate.
+
+## Codex provenance
+
+The primary Build Week Codex thread is:
+`019f7621-5200-7400-9242-920cb718d09a`.
+
+The repository preserves implementation and adversarial review as forward-only
+history. No reset, history rewrite, or hidden source import was used.
+
+## Repository map
+
+```text
+app/          compiled self-hosted browser assets (no CDN/runtime Node dependency)
+src/          React workbench source and Flow canvas
+backend/      flat stores, typed contracts, graph runtimes, tools, HTTP API
+docs/         runtime, trust-boundary, product, and quality contracts
+evidence/     sanitized browser and model proof
+scripts/      verification and browser journey runners
+tests/        runtime, HTTP, database, isolation, security, and UI contracts
+serve.py      single composition root
+```
+
+MIT — see [LICENSE](LICENSE).

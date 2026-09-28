@@ -1,0 +1,473 @@
+# LineSQL
+
+Turn messy production SQL into table and column lineage.
+
+[![Maven](https://github.com/jarredhj0214/linesql/actions/workflows/maven.yml/badge.svg)](https://github.com/jarredhj0214/linesql/actions/workflows/maven.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.jarredhj0214/linesql-all.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.jarredhj0214/linesql-all)
+[![License](https://img.shields.io/github/license/jarredhj0214/linesql.svg)](LICENSE)
+[![Java](https://img.shields.io/badge/Java-8%2B-blue.svg)](pom.xml)
+[![ANTLR4](https://img.shields.io/badge/ANTLR-4.9.3-orange.svg)](pom.xml)
+
+LineSQL is a JVM-native, ANTLR4-based SQL lineage parser for real-world data platform SQL.
+
+It parses SQL from engines such as Spark, Hive, Flink, StarRocks, MySQL, Oracle, SQL Server, PostgreSQL, and OceanBase, then returns a unified model for table lineage, column lineage, clause-level column usage, and parser diagnostics.
+
+LineSQL is not a SQL execution engine, optimizer, or query planner. It is built for metadata platforms, data catalogs, governance systems, quality platforms, impact analysis, and lineage services that need practical SQL understanding inside JVM applications.
+
+If LineSQL helps your data platform work, please star the repository. Stars make it easier for more SQL cases, dialect contributors, and production feedback to find the project.
+
+## Lineage in One Glance
+
+```sql
+CREATE TEMPORARY VIEW active_users AS
+SELECT id, name, dt
+FROM ods.users
+WHERE status = 'ACTIVE';
+
+INSERT OVERWRITE TABLE ads.user_summary(user_id, user_name)
+SELECT id, name
+FROM active_users
+WHERE dt = '${bizdate}';
+```
+
+LineSQL resolves the temporary view and keeps the final source-to-target lineage:
+
+**Table lineage**
+
+```text
+ods.users -> active_users -> ads.user_summary
+```
+
+**Column lineage**
+
+```text
+ods.users.id   -> active_users.id   -> ads.user_summary.user_id
+ods.users.name -> active_users.name -> ads.user_summary.user_name
+```
+
+**Clause column usage**
+
+```text
+ods.users.status  used by WHERE
+ods.users.dt      used by WHERE through active_users
+```
+
+It keeps useful lineage even when SQL is a script, contains temporary views, uses scheduler variables, or mixes dialect-specific syntax.
+
+```mermaid
+flowchart LR
+    source["ods.users"]
+    temp["active_users<br/>temporary view"]
+    target["ads.user_summary"]
+    c1["id -> user_id"]
+    c2["name -> user_name"]
+    filters["WHERE columns<br/>status, dt"]
+
+    source --> temp --> target
+    source --> c1 --> target
+    source --> c2 --> target
+    source --> filters
+```
+
+## At a Glance
+
+```java
+import io.github.linesql.core.LineSql;
+import io.github.linesql.core.model.LineageResult;
+
+LineageResult result = LineSql.parse(
+    "insert into ads.user_summary(user_id) select id from ods.users"
+);
+
+System.out.println(result.getInputTables());      // ods.users
+System.out.println(result.getOutputTables());     // ads.user_summary
+System.out.println(result.getColumnLineage());    // ods.users.id -> ads.user_summary.user_id
+```
+
+```xml
+<dependency>
+    <groupId>io.github.jarredhj0214</groupId>
+    <artifactId>linesql-all</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+## Why LineSQL
+
+Modern data platforms rarely run one clean SQL dialect. Real SQL often mixes Spark, Hive, Flink, StarRocks, MySQL, Oracle, SQL Server, scheduler placeholders, temporary views, UDTFs, Chinese identifiers, long scripts, and partially broken statements.
+
+LineSQL is designed around these constraints:
+
+- **Automatic dialect detection**: `LineSql.parse(sql)` is the default entry point.
+- **Lineage-first output**: table lineage, column lineage, and clause-level column usages are part of the public model.
+- **Graceful degradation**: return table lineage and diagnostics when column lineage is partial.
+- **Script-friendly parsing**: bad statements should not block the rest of a script.
+- **JVM-native integration**: suitable for Java catalog, governance, metadata, quality, and impact-analysis services.
+
+## Use Cases
+
+LineSQL is built for systems that need SQL understanding without owning a full query planner:
+
+| Use case | What LineSQL provides |
+| --- | --- |
+| Data catalog ingestion | Source tables, target tables, affected tables, and parser diagnostics |
+| Column-level lineage | Projection, insert, CTAS, view, update, and merge dependencies where supported |
+| Impact analysis | Downstream table and column dependencies from SQL scripts |
+| Data governance | Clause-level usages for filters, grouping, ordering, and DML predicates |
+| SQL inventory | Statement type, dialect, parse warnings, and unsupported SQL visibility |
+| Migration assessment | Dialect detection and case-backed compatibility checks |
+
+## What Makes It Different
+
+LineSQL optimizes for lineage extraction rather than query execution. The parser accepts production-oriented SQL shapes, keeps dialect-specific grammar modules, and exposes one result model so downstream services do not need to normalize every engine by themselves.
+
+The core contract is simple:
+
+- parse one statement or a multi-statement script;
+- detect the dialect automatically or accept an explicit dialect;
+- return source tables, target tables, column lineage, clause column usages, warnings, and errors;
+- preserve partial results when a script contains unsupported or broken SQL;
+- keep every supported scenario backed by SQL case files and manifest assertions.
+
+## Positioning
+
+| Project type | Primary goal | Best fit | LineSQL difference |
+| --- | --- | --- | --- |
+| Query planner and optimizer | Validate, transform, and optimize relational plans | Engines, optimizers, federated query layers | LineSQL avoids planning and focuses on practical lineage output |
+| General SQL parser | Parse SQL syntax into generic AST structures | SQL editors, simple analyzers, generic tooling | LineSQL returns a lineage model directly instead of only AST nodes |
+| SQL transpiler | Convert SQL across dialects | Migration and dialect conversion | LineSQL focuses on source-to-target lineage, diagnostics, and production scripts |
+| LineSQL | Extract table and column lineage from platform SQL | Catalogs, governance, quality, metadata, impact analysis | JVM-native, multi-dialect, lineage-first, case-backed |
+
+## Current Status
+
+LineSQL 1.0 is the first stable release line for the public API and lineage result model. Dialect coverage is still expanded case by case, and every user-visible claim is backed by SQL case files and manifest assertions.
+
+Current development version:
+
+```text
+1.0.0
+```
+
+Java compatibility:
+
+- Runtime target: Java 8 bytecode
+- Recommended build JDK: JDK 11
+- ANTLR runtime: 4.9.3
+
+## Support Matrix
+
+Detailed compatibility is case-backed and tracked in [Supported Scenarios](docs/supported-scenarios.md).
+Grammar-domain coverage and development priorities are tracked in [Grammar Coverage Matrix](docs/grammar-coverage-matrix.md).
+Case coverage and benchmark methodology are tracked in [Benchmark and Coverage](docs/benchmark.md).
+
+| Dialect | Status | Auto Detection | Table Lineage | Column Lineage | Column Usage |
+| --- | --- | --- | --- | --- | --- |
+| Spark | Active parser | Yes | Broad production SQL coverage | Broad production SQL coverage | `WHERE`, `GROUP_BY`, `HAVING`, `ORDER_BY` |
+| MySQL | Active parser | Yes | Broad SELECT, DML, DDL, transaction, account, admin, and lifecycle statement coverage | Direct mappings and common expressions | Common predicate and clause usages |
+| Hive | Active parser | Yes | Common SELECT, DML, MERGE, EXPLAIN wrappers, resource/session/function script control, directory export, table export/import, DDL, database lifecycle, repair/statistics statements, lateral view UDTF, Hive grouping extensions, Hive query organization | Direct mappings, MERGE update/insert mappings, lateral-view generated columns, directory export columns, aggregate/grouping expressions, and common expressions | Predicate, merge, grouping sets, ordering, window, sort/distribute/cluster usages |
+| Flink | Active parser | Yes | SELECT, DML, default/Hive-compatible DDL, connector/CDC DDL, materialized table, SQL Client utility, temporal join, window TVF, and MATCH_RECOGNIZE coverage | Direct mappings, common expressions, TVF generated columns, window TVF sink mappings, pattern measures | Common predicate, grouping, window descriptor, temporal join, pattern, and clause usages |
+| StarRocks | Active parser | Yes | Broad SELECT, DML, DDL, load, `FILES`, `native_query`, warehouse, lifecycle, proc-path, and vertical-output metadata statement coverage | Direct mappings and common expressions, including external table-function alias-column load mappings | Predicate, clause, metadata/statistics, index, and table-model usages |
+| Oracle | Active parser | Yes | Common SELECT, data dictionary views, TABLE(function)/JSON_TABLE/XMLTABLE sources, MATCH_RECOGNIZE, Oracle Text search, DML, DDL, ALTER TABLE maintenance, locking read/control, synonym/DBLink/directory object references, table privilege grants, routine/package lifecycle, and PL/SQL block envelope coverage | Direct mappings, common expressions, and MATCH_RECOGNIZE measures | Common predicate, text-search predicate, clause, window, and pattern usages |
+| SQL Server | Active parser | Yes | Common SELECT, temporal-table reads, DML, table variables, table-valued/external query functions, external table/data-source/file-format objects, OPENJSON/OPENXML schema columns, DML OUTPUT capture, PIVOT/UNPIVOT relation and generated-column lineage, transaction/session control, backup/restore utilities, DBCC metadata/control handling, privilege DDL, synonym object references, sequence/routine/trigger lifecycle with static routine-body table references, and index option coverage | Direct mappings, common expressions, sequence generated values, PIVOT aggregate columns, OPENJSON/OPENXML derived columns, and UNPIVOT generated columns | Common predicate, full-text predicate, and clause usages |
+| PostgreSQL | Active parser | Yes | SELECT, DML, EXPLAIN wrappers, CTAS, VIEW, `ON CONFLICT`, `RETURNING`, `MERGE`, generated columns, table constraints, partition/inheritance DDL, ALTER TABLE column/constraint maintenance, schema/routine/trigger/extension DDL, privilege/default-privilege statements, foreign data wrapper objects, table maintenance/locking, routine and notification control, LATERAL relations, JSON/array expressions | Direct mappings, generated column expressions, common expressions, `DISTINCT ON`, aggregate `FILTER`, ordered-set aggregates, grouping extensions, lateral derived columns, window frames, named windows | Predicate, merge, grouping, window, table-model, and clause usages |
+| OceanBase | Compatibility-mode parser | Yes | MySQL-mode and Oracle-mode SELECT, DML, DDL, constraints, DBLink, directory, sequence, synonym, package/block envelopes, flashback query, OUTFILE export, locking read, transaction control, EXPLAIN, outline, partition, set-operation, CTE, aggregate, window, hint, MERGE, resource, tenant, tablegroup, cluster zone/server, backup/restore control, and proxy-control coverage | Direct mappings and common expressions through compatibility modes | Predicate, join, merge, DBLink, flashback, and compatibility-mode clause usages |
+
+Automatic detection is anchor-based. Dialect-neutral SQL currently falls back to Spark; callers can pass an explicit dialect when the execution engine is known.
+
+Current regression corpus:
+
+| Metric | Current value |
+| --- | ---: |
+| Dialects | 9 |
+| SQL cases | 3094 |
+| Column-lineage cases | 1369 |
+| Diagnostic cases | 14 |
+
+The corpus is intentionally transparent: SQL case files and manifest expectations live under each dialect module, so contributors can inspect exactly what a release claims to support.
+
+## Modules
+
+| Module | Description |
+| --- | --- |
+| `linesql-all` | Aggregate dependency for core plus all bundled dialect parsers |
+| `linesql-core` | Public model, facade API, parser SPI, statement splitter, dialect detector, diagnostics |
+| `linesql-dialect-spark` | Spark SQL parser and lineage visitor |
+| `linesql-dialect-mysql` | MySQL parser module |
+| `linesql-dialect-hive` | Hive parser module |
+| `linesql-dialect-flink` | Flink parser module |
+| `linesql-dialect-starrocks` | StarRocks parser module |
+| `linesql-dialect-oracle` | Oracle parser module |
+| `linesql-dialect-sqlserver` | SQL Server parser module |
+| `linesql-dialect-postgresql` | PostgreSQL parser for common lineage, DML, DDL, maintenance, routine, and control SQL |
+| `linesql-dialect-oceanbase` | OceanBase MySQL/Oracle compatibility-mode parser module |
+| `linesql-cli` | Command-line JSON output |
+
+## Installation
+
+Most applications can depend on `linesql-all`. It brings in the public API and all bundled dialect parsers, and `LineSql.parse(sql)` discovers them from the classpath.
+
+```xml
+<dependency>
+    <groupId>io.github.jarredhj0214</groupId>
+    <artifactId>linesql-all</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+For smaller deployments, use `linesql-core` plus only the dialect modules you need.
+
+```xml
+<dependency>
+    <groupId>io.github.jarredhj0214</groupId>
+    <artifactId>linesql-core</artifactId>
+    <version>1.0.0</version>
+</dependency>
+
+<dependency>
+    <groupId>io.github.jarredhj0214</groupId>
+    <artifactId>linesql-dialect-spark</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+## Quick Start
+
+Automatic dialect detection:
+
+```java
+import io.github.linesql.core.LineSql;
+import io.github.linesql.core.model.LineageResult;
+
+LineageResult result = LineSql.parse(
+    "insert overwrite table ads.user_summary select id, name from ods.users"
+);
+```
+
+Explicit dialect:
+
+```java
+import io.github.linesql.core.LineSql;
+import io.github.linesql.core.model.LineageResult;
+import io.github.linesql.core.model.SqlDialect;
+
+LineageResult result = LineSql.parse(
+    "select id from ods.users",
+    SqlDialect.SPARK
+);
+```
+
+Script parsing:
+
+```java
+import io.github.linesql.core.LineSql;
+import io.github.linesql.core.model.LineageResult;
+
+import java.util.List;
+
+List<LineageResult> results = LineSql.parseScript(
+    "create temporary view v as select id from ods.users; "
+        + "insert into ads.user_ids select id from v;"
+);
+```
+
+Parse options:
+
+```java
+import io.github.linesql.core.LineSql;
+import io.github.linesql.core.model.LineageResult;
+import io.github.linesql.core.model.ParseOptions;
+import io.github.linesql.core.model.SqlDialect;
+
+import java.util.Arrays;
+
+LineageResult result = LineSql.parse(
+    "select id from ods.users",
+    ParseOptions.builder()
+        .dialectHints(Arrays.asList(SqlDialect.SPARK, SqlDialect.HIVE))
+        .build()
+);
+```
+
+OceanBase compatibility mode can be left to inference or set explicitly:
+
+```java
+import io.github.linesql.core.LineSql;
+import io.github.linesql.core.model.LineageResult;
+import io.github.linesql.core.model.ParseOptions;
+import io.github.linesql.core.model.SqlDialect;
+
+LineageResult result = LineSql.parse(
+    "select id from dual",
+    ParseOptions.builder()
+        .dialectHints(java.util.Collections.singletonList(SqlDialect.OCEANBASE))
+        .dialectOption("oceanbase.compatibilityMode", "oracle")
+        .build()
+);
+```
+
+## Output Model
+
+`LineageResult` is the main public output.
+
+| Field | Meaning |
+| --- | --- |
+| `version` | Output model version |
+| `dialect` | Selected SQL dialect |
+| `dialectConfidence` | Auto-detection confidence |
+| `dialectDetectionReason` | Why the dialect was selected |
+| `statementType` | Statement category such as `SELECT`, `INSERT`, `CREATE_TABLE`, `CREATE_SCHEMA`, `CREATE_ROUTINE`, `CONTROL` |
+| `inputTables` | Source tables |
+| `outputTables` | Target or affected tables |
+| `columnLineage` | Projection lineage edges from source columns to target columns |
+| `columnUsages` | Non-projection column usages such as `WHERE`, `GROUP_BY`, `HAVING`, `ORDER_BY`, `READ_METADATA`, `INDEX`, `TABLE_MODEL` |
+| `diagnostics` | Parser warnings and errors |
+
+Example JSON:
+
+```json
+{
+  "version": "0.1",
+  "dialect": "SPARK",
+  "dialectConfidence": 0.92,
+  "dialectDetectionReason": "Spark insert overwrite, lateral view, temporary view, or USING syntax",
+  "statementType": "INSERT",
+  "inputTables": [
+    {
+      "catalog": null,
+      "schema": "ods",
+      "name": "users"
+    }
+  ],
+  "outputTables": [
+    {
+      "catalog": null,
+      "schema": "ads",
+      "name": "user_summary"
+    }
+  ],
+  "columnLineage": [
+    {
+      "target": {
+        "table": {
+          "catalog": null,
+          "schema": "ads",
+          "name": "user_summary"
+        },
+        "name": "user_id"
+      },
+      "sources": [
+        {
+          "table": {
+            "catalog": null,
+            "schema": "ods",
+            "name": "users"
+          },
+          "name": "id"
+        }
+      ],
+      "expression": "id"
+    }
+  ],
+  "columnUsages": [
+    {
+      "type": "WHERE",
+      "column": {
+        "table": {
+          "catalog": null,
+          "schema": "ods",
+          "name": "users"
+        },
+        "name": "dt"
+      }
+    }
+  ],
+  "diagnostics": []
+}
+```
+
+## CLI
+
+Build the CLI:
+
+```bash
+./scripts/mvn-jdk11 -q -pl linesql-cli -am package
+```
+
+Run with auto detection:
+
+```bash
+java -jar linesql-cli/target/linesql-cli-1.0.0.jar \
+  "insert overwrite table ads.user_summary select id from ods.users"
+```
+
+Run with explicit dialect:
+
+```bash
+java -jar linesql-cli/target/linesql-cli-1.0.0.jar \
+  --dialect HIVE \
+  "select id from ods.users"
+```
+
+## Build From Source
+
+```bash
+git clone https://github.com/jarredhj0214/linesql.git
+cd linesql
+./scripts/mvn-jdk11 clean test
+```
+
+The helper script uses the locally configured JDK 11 for compilation while producing Java 8 compatible bytecode.
+
+## SQL Case Corpus
+
+SQL cases are first-class test assets. Every parser capability should be backed by SQL files and manifest expectations.
+
+Current case layout:
+
+```text
+linesql-dialect-*/src/test/resources/sql/<dialect>/manifest.json
+linesql-dialect-*/src/test/resources/sql/<dialect>/cases/*.sql
+```
+
+When adding a scenario, update both the manifest and [Supported Scenarios](docs/supported-scenarios.md).
+
+## Contributing
+
+Real SQL cases are the most valuable contributions right now. The best issue includes:
+
+- dialect and engine version;
+- SQL text, with sensitive names anonymized;
+- expected source tables and target tables;
+- expected column lineage when known;
+- whether partial results are acceptable.
+
+See [Contributing](CONTRIBUTING.md) for the development workflow.
+
+## Known Boundaries
+
+- LineSQL does not execute SQL.
+- LineSQL does not expand `select *` without schema metadata.
+- Column lineage can be partial for complex expressions, nested subqueries, procedural SQL, and dynamic SQL.
+- Dialect detection is conservative and anchor-based; explicit dialect is recommended when the engine is known.
+- Lineage coverage is case-backed and dialect-specific; unsupported grammar returns diagnostics instead of implying complete lineage.
+
+## Design Docs
+
+- [Architecture Vision](docs/design/architecture.md)
+- [Benchmark and Coverage](docs/benchmark.md)
+- [Supported Scenarios](docs/supported-scenarios.md)
+- [Spark Stage 1](docs/design/spark-stage-1.md)
+- [Development](docs/development.md)
+- [Launch and Community Notes](docs/community/launch.md)
+- [License Policy](docs/legal/license-policy.md)
+- [Third-party Notices](THIRD_PARTY_NOTICES.md)
+
+## Roadmap
+
+- **Stage 1**: production-oriented lineage parser foundation for Spark, Hive, StarRocks, Flink, MySQL, Oracle, and SQL Server.
+- **Stage 2**: deeper column lineage, clause-level column usages across dialects, UDTF, temp views, and CTE propagation.
+- **Stage 3**: anonymized production SQL corpus, compatibility matrix, CLI improvements, syntax diagnostics, and editor-facing metadata.
+
+## License
+
+LineSQL is released under the Apache License 2.0. Third-party grammar and dependency provenance is tracked in [Third-party Notices](THIRD_PARTY_NOTICES.md) and [License Policy](docs/legal/license-policy.md).

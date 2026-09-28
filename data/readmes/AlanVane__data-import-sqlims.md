@@ -1,0 +1,47 @@
+#+TITLE: 某某市某某镇 LIS 历史数据导入厂家 LIS 数据库，程序使用手册
+
+* 编译及打包
+mvn package
+
+* 部署
+** 安装 jdk 1.8
+
+** 安装 data-import-sqlims
+
+** 配置 data-import-sqlims
+
+*** start.bat
+- 1. 将 jdk 的安装目录 写在 “JAVA_INSTALL=”的后面。
+#+BEGIN_SRC bat
+set JAVA_INSTALL=C:\jdk\jdk1.8.0_45
+#+END_SRC
+
+- 2. 用记事本打开该文件，另存为“ANSI”编码。
+
+*** application.properties
+- 1. 修改 mysql 数据库的连接参数：
+#+BEGIN_SRC conf
+# mysql database of sqlims
+custom.datasource.sqlims-db.driver-class-name=com.mysql.jdbc.Driver
+custom.datasource.sqlims-db.url=jdbc:mysql://192.168.14.41:3306/test
+custom.datasource.sqlims-db.username=ncl
+custom.datasource.sqlims-db.password=daandev
+
+# mysql database of ncl
+custom.datasource.ncl-db.driver-class-name=com.mysql.jdbc.Driver
+custom.datasource.ncl-db.url=jdbc:mysql://192.168.14.41:3306/dg1110
+custom.datasource.ncl-db.username=ncl
+custom.datasource.ncl-db.password=daandev
+#+END_SRC
+
+- 2. 修改 检验项目对照表格文档的目录（sqlims-ncl-testitem.xls）
+#+BEGIN_SRC conf
+ms.access.sqlims.path=/data/sqlims-ncl-testitem.xls
+#+END_SRC
+
+*** times.properties
+修改要导入数据的时间区间（sync.sqlims.begintime <= 时间区间 < sync.sqlims.endtime）
+#+BEGIN_SRC conf
+sync.sqlims.begintime=2009-05-01 00:00:00
+sync.sqlims.endtime=2009-06-01 00:00:00
+#+END_SRC

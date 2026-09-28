@@ -1,0 +1,193 @@
+* shelf
+A list of blog posts, videos, exercises on various tech topics that I find useful.
+
+** Productivity
+*** Org mode
+ * [[https://www.youtube.com/watch?v=oJTwQvgfgMM][Emacs Org-mode - a system for note-taking and project planning - Carsten Dominik]]
+   An introduction to emacs org mode by the creator Carsten Dominik
+   himself. This was a part of the google tech talks 2008. This is a
+   very simple but comprehensive talk on why org mode exists and how to
+   use it.
+ * [[https://www.youtube.com/watch?v=SzA2YODtgK4][Getting Started With Org Mode]] - [[https://harryrschwartz.com/][Harry Schwartz]]
+   This is a getting started guide on what org mode is and some of the
+   crazy stuff you can get done using org mode on emacs.
+ * [[https://orgmode.org/orgguide.pdf][orgmode guide]]
+
+** System Design
+*** System Architecture
+ * [[http://thinkrelevance.com/blog/2011/11/15/documenting-architecture-decisions][Documenting Architecture Decisions - Michael Nygard]]
+
+*** Concurrency
+ * [[http://java.ociweb.com/mark/stm/article.html][Software Transactional Memory]]
+
+*** Distributed Systems
+ * [[https://github.com/theanalyst/awesome-distributed-systems][Awesome Distributed Systems]]
+ * [[https://www.allthingsdistributed.com/2007/10/amazons_dynamo.html][Amazon's Dynamo]]
+ * [[http://firmament.io/blog/scheduler-architectures.html][Cluster Scheduler Architecture]]
+ * [[https://www.youtube.com/watch?v=fU9hR3kiOK0][Turning the database inside out with Apache Samza by Martin Kleppmann]]
+ * [[https://www.youtube.com/watch?v=yO3SBU6vVKA][Building real-time data products at LinkedIn with Apache Samza]]
+**** Kubernetes
+ * [[https://kubernetes.io/docs/home/?path=users&persona=app-developer&level=foundational][Kubernetes Documentation]]
+ * [[https://www.youtube.com/watch?v=pozC9rBvAIs][Managing Containers at Scale with CoreOS and Kubernetes by Kelsey Hightower]]
+ * [[https://www.youtube.com/watch?v=tA8XNVPZM2w][Container Orchestration using CoreOS and Kubernetes, Part 1/3]] - [[https://www.youtube.com/watch?v=I9pF-Bv8AkI][Part 2/3]] - [[https://www.youtube.com/watch?v=UZbwDH-_a_M][Part 3/3]]
+
+*** Scalability
+ * [[https://github.com/binhnguyennus/awesome-scalability][Awesome Scalability]]
+ * [[https://vincent.bernat.ch/en/blog/2014-tcp-time-wait-state-linux][TCP Time Wait state on linux]]
+ * [[https://www.infoq.com/articles/Java-Thread-Pool-Performance-Tuning][Java Thread Pool Performance Tuning]]
+   * [[https://en.wikipedia.org/wiki/Little's_law][Little's Law - Wikipedia]]
+
+*** Experimentation - A/B Testing
+ * [[https://static.googleusercontent.com/media/research.google.com/en/us/pubs/archive/36500.pdf][Overlapping Experiment Infrastructure: More, Better, Faster Experimentation - Google]]
+ * [[https://ai.stanford.edu/~ronnyk/2007GuideControlledExperiments.pdf][Practical Guide to Controlled Experiments on the Web: Listen to Your Customers not to the HiPPO - Microsft]]
+ * [[http://ai.stanford.edu/~ronnyk/2009controlledExperimentsOnTheWebSurvey.pdf][Controlled experiments on the web: survey and practical guide - Ron Kohavi, et al]]
+ * [[https://content.linkedin.com/content/dam/engineering/site-assets/pdfs/ABTestingSocialNetwork_share.pdf][A/B Testing Challenges in Large Scale Social Networks - Linkedin]]
+ * [[https://www.researchgate.net/publication/324889185_The_Anatomy_of_a_Large-Scale_Online_Experimentation_Platform][The Anatomy of a Large-Scale Online Experimentation Platform - Microsft]]
+ * [[https://medium.com/netflix-techblog/its-all-a-bout-testing-the-netflix-experimentation-platform-4e1ca458c15][Netflix Experimentaiton Platform]]
+ * [[https://medium.com/airbnb-engineering/https-medium-com-jonathan-parks-scaling-erf-23fd17c91166][Scaling Airbnb’s Experimentation Platform]]
+ * [[https://medium.com/airbnb-engineering/experiment-reporting-framework-4e3fcd29e6c0][Experiment Reporting Framework - Airbnb]]
+ * [[https://exp-platform.com/Documents/2017-05%20ICSE2017_CharacterizingExP.pdf][Characterizing Experimentation in Continuous Deployment: a Case Study on Bing - Microsoft]]
+ * [[https://eng.uber.com/experimentation-platform/][Building an Intelligent Experimentation Platform with Uber Engineering]]
+ * [[https://assets.ctfassets.net/zw48pl1isxmc/6bUM4v36PCuAcScwiCIcAC/d17ec7521608974479c3cf5b67f9232e/Optimizely_12.26_Yearly_Article_License.pdf][The Surprising Power of Online Experiments - Harvard Business Review]]
+ * [[https://www.youtube.com/watch?v=AJX4W3MwKzU][Stanford Seminar: Peeking at A/B Tests - Why It Matters and What to Do About It]]
+ * More
+   * [[https://en.wikipedia.org/wiki/A/B_testing][A/B Testing - Wikipedia]]
+   * [[https://en.wikipedia.org/wiki/Null_hypothesis][Null Hypothesis - Wikipedia]]
+   * [[https://en.wikipedia.org/wiki/Stratified_sampling][Stratified Sampling - Wikipedia]]
+
+** Storage/Queue
+*** Postgresql
+ * [[https://www.youtube.com/watch?v=svqQzYFBPIo][Explaining the Postgres Query Optimizer]] - [[https://momjian.us/][Bruce Momjian]]
+ * [[https://www.youtube.com/watch?v=byl_CoucJE0][MVCC Unmasked]] - [[https://momjian.us/main/writings/pgsql/mvcc.pdf][slides]] - [[https://momjian.us/][Bruce Momjian]]
+ * [[https://www.citusdata.com/blog/2016/03/30/five-ways-to-paginate/][Five ways to paginate in Postgres, from the basic to the exotic - Joe Nelson]]
+   An interesting and detailed blog on 5 different ways to serve
+   paginated responses while using postgresql as your datastore.
+ * [[https://wiki.postgresql.org/wiki/Tuning_Your_PostgreSQL_Server][Tuning your postgresql server]]
+ * [[https://wiki.postgresql.org/wiki/Performance_Optimization][Performance Optimization]]
+ * [[https://www.youtube.com/watch?v=xAT6OZ9Xel4][A scalable, versioned document store in PostgreSQL]]
+   This is talk at the 2018 PostgresOpen which talks about how Udacity
+   maintains their whole curriculum in a postgres database while allowing
+   for versioning of changes in their tree like data model. It's a very
+   informative talk, if not for postgres but how they modeled a git like
+   semantics in postgres
+ * [[https://www.youtube.com/user/postgresopen][ANSI, Schmansi!]]
+   The not so ANSI SQL features that postgres provides that makes it a better
+   whole round database and that might nudge you into using postgres or even
+   using postgres in a better way. This is just an overall walk through of
+   such features. Quite a bit that I personally wasn't aware of.
+ * [[https://www.youtube.com/watch?v=yhOkob2PQFQ][Identifying Slow Queries and Fixing Them!]]
+   This talk revolves around methods of identifying slow queries like logs,
+   tools and in build postgres shared libs. Then it focuses on the reasons
+   why there could be slow queries in the first place. And lastly on to what
+   are the ways these could be avoided. This is not a very specific use case
+   fix my all problem guide but an overall where all to look guide.
+ * [[https://devcenter.heroku.com/articles/postgresql-concurrency][PostgreSQL Concurrency with MVCC - Heroku]]
+ * [[https://blog.sentry.io/2015/07/23/transaction-id-wraparound-in-postgres.html][Transaction ID Wraparound in Postgres - Sentry]]
+ * [[https://blog.gojekengineering.com/postgres-autovacuum-tuning-394bb99fe2c0][Tuning Postgres Autovacuum for Scale - Gojek]]
+ * [[https://blog.2ndquadrant.com/autovacuum-tuning-basics/][Autovacuum tuning basics]]
+ * [[https://wiki.postgresql.org/wiki/Lock_Monitoring][Lock Monitoring - postgresql wiki]]
+ * [[https://www.postgresql.org/docs/11/routine-vacuuming.html][Routine vacuuming - documentation]]
+ * [[https://www.postgresql.org/docs/11/explicit-locking.html][Explicit locking - documentation]]
+ * [[https://www.postgresql.org/docs/11/monitoring-stats.html][Monitoring stats]]
+ * [[https://justatheory.com/2012/04/postgres-use-timestamptz/][Use timestamptz]]
+ * [[http://www.interdb.jp/pg/index.html][Internals of PostgreSQL]]
+ * Blogs
+   * [[https://www.keithf4.com/tag/postgresql/][Keith Fiske]]
+   * [[https://rhaas.blogspot.com/][Robert Haas]]
+ * Tools
+   * [[https://pgtune.leopard.in.ua/#/][pgtune]] - Tune your postgresql instance better
+   * [[http://pgbadger.darold.net/][pgBadger]] - postgres log analyser
+   * [[https://www.postgresql.org/docs/10/static/pgbench.html][pgbench]] - benchmark postgres
+   * [[https://explain.depesz.com/][explain.depesz.com]] - better understand your query plan
+
+*** MySQL
+ * [[https://grimoire.ca/mysql/choose-something-else][Choose Something Else]]
+
+*** Redis
+ * [[https://redis.io/topics/cluster-tutorial][Redis Cluster]]
+ * [[https://redis.io/topics/persistence][Persistence]]
+
+*** Kafka
+ * [[https://kafka.apache.org/intro][Intro into kafka]]
+ * [[https://kafka.apache.org/documentation/#design][Kafka - design]]
+ * [[https://aws.amazon.com/blogs/big-data/best-practices-for-running-apache-kafka-on-aws/][Best practicies on running on aws]]
+ * [[https://www.confluent.io/wp-content/uploads/confluent-kafka-definitive-guide-complete.pdf][Confluent kafka: The definitive guide - pdf]]
+ * [[https://docs.confluent.io/current/streams/concepts.html][Kafka streams]]
+ * [[https://docs.confluent.io/current/streams/architecture.html][Kafka stream - architecture]]
+ * [[https://engineering.linkedin.com/distributed-systems/log-what-every-software-engineer-should-know-about-real-time-datas-unifying][Log: What every engineer should know ...]] - [[https://www.youtube.com/watch?v=wKe7w_wOzSI][I love logs]]
+
+** Programming Languages
+*** Clojure
+ * [[https://github.com/bbatsov/clojure-style-guide][Clojure Style Guide]] - [[https://github.com/bbatsov][@bbatsov]]
+ * [[https://re-find.it/][Find clojure functions that does a given data transformation]]
+ * [[http://clojure-doc.org/articles/language/concurrency_and_parallelism.html][Concurrency & Parallelism in Clojure]]
+ * [[https://clojure.org/guides/spec][Clojure Spec]]
+ * [[https://8thlight.com/blog/colin-jones/2012/05/22/quoting-without-confusion.html][Quoting Without Confusion]]
+ * [[https://github.com/rm-hull/infix][infix]] - lib
+ * [[https://github.com/rm-hull/jasentaa][jasentaa]] - lib, parser
+ * [[https://vimeo.com/45561411][Reducers - Rich Hickey @ EuroClojure 2012]]
+   A great talk by Rich Hickey on why he wrote reducers and why you would
+   want to use them. His example of apples -> apple pie is a great analogy
+   on why you would want to use reducers in your applications.
+
+*** Go
+ * [[https://github.com/golang/go/wiki#learning-more-about-go][Learning more about go]]
+ * [[https://github.com/golang/go/wiki/CodeReviewComments][Go Code Review Comments]]
+ * [[https://go-proverbs.github.io/][go proverbs]]
+ * [[https://about.sourcegraph.com/go/gophercon-2018-allocator-wrestling/][Gophercon 2018 - Allocator Wrestling]]
+ * [[https://github.com/google/gops][google/gops - A tool to list and diagnose Go processes currently running on your system]]
+
+** Leadership
+ * [[https://blog.usejournal.com/how-to-fail-as-a-new-engineering-manager-30b5fb617a][How to fail as a new engineering manager]] - [[https://news.ycombinator.com/item?id=18011381][HN]]
+ * [[http://www.defmacro.org/2014/10/03/engman.html][Engineering Management]] - [[https://news.ycombinator.com/item?id=14381264][HN]]
+ * [[https://charity.wtf/2019/01/04/engineering-management-the-pendulum-or-the-ladder/][Engineering management: The pendulum or the ladder]]
+  * [[https://blog.gitprime.com/camille-fournier-on-scaling-structure-and-growing-as-an-engineering-manager/][Camille Fournier on Scaling, Structure, and Growing as an Engineering Manager]]
+ * [[https://www.oreilly.com/library/view/the-managers-path/9781491973882/][Book: The managers path]]
+ * [[http://randsinrepose.com/archives/the-update-the-vent-and-the-disaster/][1:1s - The update the vent and the disaster]]
+
+** Misc
+ * [[https://sivers.org/book][Derek Sivers - Books read]]
+ * [[https://samnewman.io/patterns/architectural/bff/][Backend For Frontend - Sam Newman]]
+ * [[http://playbook.samaltman.com/][Startup Playbook - Sam Altman]]
+ * [[https://lamport.azurewebsites.net/pubs/pubs.html][Leslie Lamport's publications]]
+ * [[https://hbr.org/2010/07/how-will-you-measure-your-life][How will you measure your life?]]
+ * [[http://paulgraham.com/useful.html][How to write usefully - Paul Graham]]
+ * [[http://paulgraham.com/articles.html][Essays by Paul Graham]]
+ * [[https://teachyourselfcs.com/][Teach Yourself Computer Science]]
+   A collection of materials(books, online course etc) to help grasp the
+   concepts of computer science. This mostly takes you down the general
+   course material for computer science degree.
+
+** Conference talks
+ * [[https://www.youtube.com/watch?v=-U8UQzr8T4k][What Google Learned about Creating Effective Teams]] - leadership, team
+ * [[https://www.youtube.com/watch?v=iLS6NXMXtLI][GOTO 2018 • Talking with Tech Leads • Patrick Kua]] - leadership, team, tech-lead
+ * [[https://www.youtube.com/watch?v=WE9c9AZe-DY][How slack works]] - tech, messaging, architecture, distributed-systems
+ * [[https://www.youtube.com/watch?v=OFjvJmS_uDo][Paying Technical Debt at Scale - Migrations @Stripe]] - tech, team, management, scale, migration, technical-debts
+ * [[https://www.youtube.com/watch?v=RtMmxqkPVug][How to take great Engineers & make them great Technical Leaders • Courtney Hemphill]] - tech, team, management, leadership
+ * [[https://www.youtube.com/watch?v=j6ow-UemzBc][Design Microservice Architectures the Right Way]] - tech, doing-it-right, microservice
+ * [[https://www.infoq.com/presentations/neflix-push-messaging-scale][Scaling Push Messaging for Millions of Devices @Netflix]] - tech, scaling, push-messaging, netflix
+ * [[https://www.youtube.com/watch?v=ymIZ5HhH0o4][Refactoring Organizations - A Netflix Study]] - tech, management, scaling-organizations
+ * [[https://www.youtube.com/watch?v=-6BsiVyC1kM][The value of values with Rich Hickey]]
+ * [[https://www.youtube.com/watch?v=ROor6_NGIWU][The language of the system - Rich Hickey]]
+ * [[https://www.youtube.com/watch?v=wASCH_gPnDw][Expert to Expert: Rich Hickey and Brian Beckman - Inside Clojure]]
+ * [[https://www.youtube.com/watch?v=o_4EX4dPppA][The Hard Parts of Open Source - Evan Czaplicki]]
+ * [[https://www.youtube.com/watch?v=f84n5oFoZBc][Hammock driven development - Rich Hickey]]
+ * [[https://www.youtube.com/watch?v=34_L7t7fD_U][Simpel made Easy - Rich Hickey]]
+ * [[https://www.youtube.com/watch?v=dGVqrGmwOAw][Clojure concurrency - Rich Hickey]]
+ * [[https://www.youtube.com/watch?v=VC_MTD68erY][One Million Clicks per Minute with Kafka and Clojure - Devon Peticolas]]
+ * [[https://www.youtube.com/watch?v=cN_DpYBzKso&t=14s][Concurrency is not parallelism - Rob Pike]]
+ * [[https://www.youtube.com/watch?v=xrMbzHdPLKM][Tuning PostgreSQL for High Write Workloads]]
+ * [[https://youtu.be/30jNsCVLpAE][Debugging Under Fire: Keep your Head when Systems have Lost their Mind • Bryan Cantrill]]
+ * [[https://www.youtube.com/watch?v=wf-BqAjZb8M][Raymond Hettinger - Beyond PEP 8 -- Best practices for beautiful intelligible code]]
+ * [[https://vimeo.com/36579366][Inventing on Principle - Bret Victor]]
+ * [[https://www.destroyallsoftware.com/talks/wat][Wat - A lightning talk by Gary Bernhardt from CodeMash 2012]]
+ * [[https://www.youtube.com/watch?v=GAFZcYlO5S0][Software Architecture vs Code - Simon Brown]]
+ * [[https://www.youtube.com/watch?v=8pTEmbeENF4][The Future of Programming - Bret Victor]]
+ * [[https://www.youtube.com/watch?v=R9ITLdmfdLI][Keynote: Paul Graham, YCombinator]]
+ * [[https://www.youtube.com/watch?v=9QMGAtxUlAc][Principles of Technology Leadership - Bryan Cantrill]]
+ * [[https://www.youtube.com/watch?v=HxaD_trXwRE][Lexical Scanning in Go - Rob Pike]]
+ * [[https://www.youtube.com/watch?v=a1zDuOPkMSw][You and Your Research - Dr. Richard W. Hamming]]
+ * [[https://www.youtube.com/watch?v=_ahvzDzKdB0][Growing a Language - Guy Steele]]
+ * [[https://www.youtube.com/watch?v=rI8tNMsozo0][Simplicity Matters - Rich Hickey]]
+ * [[https://www.youtube.com/watch?v=fE2KDzZaxvE][Zebras All the Way Down - Bryan Cantrill]]
+ * [[https://www.youtube.com/watch?v=-zRN7XLCRhc][Fork Yeah! The Rise and Development of illumos]]

@@ -1,0 +1,76 @@
+#+TITLE: eww-history-ext
+#+DATE: 2022-02-21T11:41:31+0800
+#+LASTMOD: 2025-11-03T11:02:21+0800
+#+AUTHOR: Jiacai Liu
+
+[[https://github.com/1History/eww-history-ext/actions/workflows/lisp-ci.yml][https://github.com/1History/eww-history-ext/actions/workflows/lisp-ci.yml/badge.svg]]
+[[https://github.com/1History/eww-history-ext/actions/workflows/rust-ci.yml][https://github.com/1History/eww-history-ext/actions/workflows/rust-ci.yml/badge.svg]]
+
+#+begin_quote
+Persist [[https://www.gnu.org/software/emacs/manual/html_mono/eww.html][EWW]] histories into SQLite.
+#+end_quote
+
+Besides [[https://www.gnu.org/software/emacs/manual/html_mono/eww.html][EWW]], packages below are also supported:
+- [[https://github.com/skeeto/elfeed][elfeed]]
+
+Welcome to [[https://github.com/1History/eww-history-ext/issues][open an issue]] if you have any issues or suggestions.
+
+* Usage
+1. Download [[https://github.com/1History/eww-history-ext/blob/master/eww-history-ext.el][eww-history-ext.el]]
+2. Download required shared object, and rename it to =eww-history-ext-dyn.so= or =dll= suffix if you are on Windows
+   - From [[https://github.com/1History/eww-history-ext/releases][release page]] according to your operating system
+   - Or you can build it yourself by =make release=. Be sure [[https://doc.rust-lang.org/cargo/getting-started/installation.html][cargo]] is preinstalled.
+3. Put =el= and =so= files under =load-path=
+
+Here is a =use-package= config demo(=:vc= is introduced since Emacs 30.1):
+#+BEGIN_SRC emacs-lisp
+(use-package eww-history-ext
+  :vc (:url "https://github.com/1History/eww-history-ext.git"
+       :rev "v0.2.2"
+       :make "release")
+  :custom ((eww-history-ext-elfeed-integration t)
+           (eww-history-ext-db-file "/path/to/your/eww-history-ext.db")) ;; customize your db file location
+  :config
+  (eww-history-ext-enable))
+#+END_SRC
+
+After enable eww-history-ext, histories of eww (and elfeed) will be saved into SQLite, you can use =M-x eww-history-ext-list= to browse saved histories.
+
+In =*eww-history-ext*= buffer,
+- Only latest 1000 histories are displayed by default, users can customize this via =eww-history-ext-default-query-limit=.
+- Press =s= to filter histories with specific keyword.
+- Press =RET= to visit history at point
+- Press column name to sort.
+
+** macOS
+If you are using macOS, you may see error like below when loading shared object:
+#+BEGIN_EXAMPLE
+eww-history-ext-dyn.so not valid for use in process: library load disallowed by system policy)
+#+END_EXAMPLE
+
+Try
+#+BEGIN_EXAMPLE
+xattr -d com.apple.quarantine <location_of_eww-history-ext-dyn.so
+#+END_EXAMPLE
+
+* Screenshots
+[[file:screenshots/list.png]]
+* Development
+- [[https://ubolonton.github.io/emacs-module-rs/latest/reloading.html][Live Reloading - emacs-module-rs 0.18]]
+#+BEGIN_SRC emacs-lisp
+;;; 加载热启动模块
+(module-load "/tmp/emacs-module-rs/target/debug/libemacs_rs_module.dylib")
+(require 'rs-module)
+
+;;; 重启加载 so 文件
+(rs-module/load "/tmp/eww-history-ext/eww-history-ext-dyn.so")
+
+;;; 查询最新历史数据
+(setq eww-history-ext-db nil)
+(eww-history-ext-query-latest)
+#+END_SRC
+
+* LICENSE
+Copyright (c) 2022 Jiacai Liu <dev@liujiacai.net>
+
+eww-history-ext is distributed under [[https://www.gnu.org/licenses/gpl-3.0.txt][GPL-3.0]] license.

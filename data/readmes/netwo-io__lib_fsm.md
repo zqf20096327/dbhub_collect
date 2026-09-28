@@ -1,0 +1,122 @@
+== Finite State Machine (FSM) library for PostgreSQL (PL/pgSQL)
+
+lib_fsm is not maintained anymore at Netwo but its maintainer continue to work on it [here](https://github.com/FGRibreau/lib_fsm/)
+
+
+=== Features
+
+[x] User-defined state support: let your user specify their own state machine while still ensuring consistency
+
+[x] Multi-tenant: each row/column from your table can reference a state in another state machine
+
+[x] Historical support: successful state changes are recorded
+
+[x] Complete API
+
+[x] Fully tested
+
+[x] Visual graph generation
+
+=== Convention
+
+A finite state machine has `states`, `events` and `transitions`.
+
+A state machine can go from one `state` to another `state` through a `transition`.
+State change is triggered with an `event`.
+
+A transition is a tuple of a start (previous) `state`, the `event` that will trigger the transition and a next `state`.
+
+An `abstract state machine` describe a `state machine`, its `(abstract) state` and `(abstract) transition`.
+
+A `state machine` is an instance of an `abstract state machine` and points to an `abstract state`, thus an `abstract state machine`.
+A consistent naming convention is essential to build a futur-proof project.
+Use https://github.com/FGRibreau/sql-convention/[shared SQL convention] as well as an SQL linter.
+
+[#_states]
+====== `state` name
+
+- must be a verb
+- verb tense must be either at the simple past (+ed) or at present progressive (+ing)
+- lower-case
+- snake_case if multiple words (e.g. `locked_out`)
+
+Examples: opened, loading, loaded, recorded, closed, locked, dumped, shipped, finished, running, failed, entered, enabled, disabled, approved, published, archived, activated, pending, pending_renewal, expired, ordered, canceled, returned, refunded, checked_out
+
+[#_event]
+====== `event` name
+
+- should be a single word (use snake_case otherwise)
+- must be a verb
+- verb tense must be infinitive
+- lower-case
+
+Examples: start, open, close, lock, unlock, load, unload, dump, ship, fail, enter, enable, disable, run, return, order, cancel, refund, confirm
+
+
+=== Usage
+=== API
+==== What was tried before current implementation
+
+> Why did they do that?
+
+> I would not have done this way
+
+==== Try #1 Listen to every table column changes
+
+A trigger on every tables that listen to the table state column and that have a custom type like `lib_fsm.state_machine` to know it must be monitored.
+
+- Cons:
+* Custom types in PostgreSQL requires a C extension
+* C extensions are not supported in PostgreSQL managed environments
+
+Rejected.
+
+==== Try #2 Composite type
+
+The previous idea but instead of a custom type, we rely on a composite type `(last_state, abstract_machine__id)`.
+
+- Pros:
+* Easier to maintain
+* Does not need column names convention
+- Cons:
+* No foreign key on abstract_machine__id (ensure referential integrity with a trigger)
+* No foreign key on abstract_machine\__id (ensuring referential integrity with a trigger would require a schema introspection to retrieve all columns of type lib_fsm.state_machine.abstract_machine\__id === old.abstract_machine__id)
+
+Rejected.
+
+==== Try #3 External table to store every states
+
+Externalize each machine current states to an independent table.
+Each state is linked to a finite state machine (see `abstract state machine`).
+
+- Pros:
+* The table schema explicitly states that one of more columns are each linked to their state machine
+* Supports multiple state (e.g. a contract might two columns, a `signed_status` and a `writing_status`)
+- Cons:
+* Looking at a table, you don't know the value of the current state (e.g. a contract status attribute).
+It requires an extra join.
+
+[#_visual_graph_generation]
+==== Visual documentation generator
+
+```bash
+PGPASSWORD=$USER_PASSWORD psql -qtAX  -U $USER --password -c "select lib_fsm.state_machine_get_mermaid('081d831f-8f88-4650-aebe-4360599d4bdc') as mermaid;"
+```
+
+=== Next steps
+
+- [ ] add support for versioning
+- [ ] add support for transition `properties`
+- [ ] add support for transition `triggers`: 0-N triggers, what events should automatically trigger the transition
+- [ ] add support for transition `conditions`: 0-N (cf: https://github.com/FGRibreau/ui-predicate/[ui-predicate]), requires implementing `lib_rule_engine` first
+- [ ] add support for transition `pre_conditions`: 0-N, these pre-conditions are run before displaying available events from 'from_state'
+post_actions (0-N, what to do once we switched to `to_state`) <= WONT_IMPLEMENT
+
+=== Credits - Previous Work
+
+- https://felixge.de/2017/07/27/implementing-state-machines-in-postgresql.html[2017 - Implementing State Machines in PostgreSQL]
+- https://raphael.medaer.me/2019/06/12/pgfsm.html[2019 - Versioned FSM (Finite-State Machine) with Postgresql]
+
+=== SQL Conventions
+
+Code is written https://github.com/fgribreau/sql-convention/[following standard SQL-convention].

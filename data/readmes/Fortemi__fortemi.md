@@ -1,0 +1,1085 @@
+<div align="center">
+
+# Fortémi
+
+*Pronounced: for-TAY-mee*
+
+**An intelligent database for AI-ready applications.**
+
+A normalized data schema plus data-science and processing tooling for turning messy organizational data into searchable, linkable, provenance-aware structures. Knowledge management, RAG, agent memory, and team-documentation workflows are use cases built on the same substrate. Built in Rust. Runs affordably from CPU-only deployments to GPU-backed stacks.
+
+```bash
+docker compose -f docker-compose.bundle.yml up -d
+```
+
+[![License](https://img.shields.io/badge/license-BSL--1.1-blue.svg?style=flat-square)](BSL-LICENSE)
+[![Rust](https://img.shields.io/badge/Rust-2021_edition-orange?style=flat-square&logo=rust)](https://www.rust-lang.org)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791?style=flat-square&logo=postgresql)](https://www.postgresql.org)
+[![MCP](https://img.shields.io/badge/MCP-44_tools-purple?style=flat-square)](#mcp-server)
+[![Docker](https://img.shields.io/badge/Docker-Bundle-2496ED?style=flat-square&logo=docker)](#quick-start)
+
+[**Get Started**](#quick-start) · [**Features**](#features) · [**Architecture**](#architecture) · [**MCP Server**](#mcp-server) · [**API**](#api-endpoints) · [**Realtime Setup**](docs/deployment/realtime-providers.md) · [**Documentation**](#documentation) · [**🖥️ Desktop App (HotM)**](https://git.integrolabs.net/Fortemi/HotM/releases/latest)
+
+</div>
+
+---
+
+## 🖥️ Looking for a desktop app, not just an API?
+
+**You're probably here because you want to use this — install [HotM](https://git.integrolabs.net/Fortemi/HotM/releases/latest) instead.**
+
+| If you want… | Use | Install |
+|---|---|---|
+| **A native desktop app** with editor, knowledge graph, capture, search, attachments — no Docker, no Postgres setup, no backend ops | **HotM** (`.deb` / `.msi` / `.dmg` / `.AppImage`) — UI + Fortemi API bundled in one package | [Download HotM](https://git.integrolabs.net/Fortemi/HotM/releases/latest) → run [`setup-linux.sh`](https://git.integrolabs.net/Fortemi/HotM/raw/branch/main/scripts/setup-linux.sh) or [`setup-macos.sh`](https://git.integrolabs.net/Fortemi/HotM/raw/branch/main/scripts/setup-macos.sh) → install the bundle |
+| **A headless server** for agents over MCP, custom UIs, multi-user deployments, or air-gapped backends | **Fortemi** (this repo) — Docker bundle | `docker compose -f docker-compose.bundle.yml up -d` (see [Quick Start](#quick-start) below) |
+
+HotM ships the same `matric-api` from this repo as a bundled sidecar, so the two stay in lockstep on features. **Single user with a laptop?** HotM is the right answer. **Team, fleet of agents, or backend service?** Stay here.
+
+---
+
+## What Fortémi Is
+
+Fortémi is an intelligent database for AI-ready applications: a normalized data schema plus data-science and processing tooling that turns messy organizational data into searchable, linkable, provenance-aware structures. The same schema runs across the server, browser edition, and HotM sidecar, giving teams a common substrate for complex, data-rich, compute-heavy applications while keeping deployment affordable on local, edge, or hosted infrastructure.
+
+Notes, RAG, agent memory, knowledge graphs, and team-documentation hubs are expressions of that schema, not the whole product. Fortémi actively prepares data for AI: it finds conceptually relevant records even when terminology differs, discovers how new information connects to existing structures, and extracts searchable intelligence from images, audio, video, 3D models, emails, spreadsheets, archives, and code.
+
+Built for privacy-first, edge-first deployment. No cloud dependency. Runs on commodity hardware with 8GB GPU VRAM. ~160k lines of Rust + 18k lines of MCP server (Node.js).
+
+---
+
+## What Problems Does Fortémi Solve?
+
+### 1. Search That Misses the Point
+
+Traditional search requires you to guess the right keywords. If you stored a note about "retrieval-augmented generation" but search for "using AI to answer questions from documents," you get nothing.
+
+**Without Fortémi**: Keyword-only search. You find things only when you remember exactly how you phrased them.
+
+**With Fortémi**: Hybrid retrieval fuses BM25 full-text search with dense vector similarity and Reciprocal Rank Fusion (Cormack et al., 2009). Semantic search finds conceptually related content regardless of terminology. Multilingual support covers English, German, French, Spanish, Portuguese, Russian, CJK, emoji, and more — each with language-appropriate tokenization.
+
+### 2. Knowledge Without Connections
+
+Notes accumulate in folders. Ideas that should be connected sit in isolation. You know the answer is "somewhere in your notes" but can't find the thread.
+
+**Without Fortémi**: Manual linking, tagging by memory, or grep-and-hope. Connections exist only in your head.
+
+**With Fortémi**: Automatic semantic linking at >70% embedding similarity. A knowledge graph with recursive exploration, SNN similarity scoring, PFNET sparsification, and Louvain community detection — all with SKOS-derived labels. W3C SKOS vocabularies provide hierarchical concept organization. The graph grows organically as you add content.
+
+### 3. Media Trapped in Files
+
+A video recording contains knowledge — decisions, explanations, demonstrations — locked inside an opaque binary. An audio meeting has action items buried in hours of conversation. An email thread has attachments with critical context.
+
+**Without Fortémi**: Media files are dark matter. Unsearchable. Undiscoverable. You re-watch entire recordings to find one moment.
+
+**With Fortémi**: 13 extraction adapters process images (vision), audio (Whisper transcription + pyannote speaker diarization), video (keyframe extraction + scene detection + transcript alignment), 3D models (multi-view rendering + vision description), emails (RFC 2822/MIME parsing), spreadsheets (xlsx/xls/ods), and archives (ZIP/tar/gz). Every piece of media becomes searchable knowledge with derived attachments (thumbnails, transcripts, caption files, sprite sheets).
+
+### 4. One-Size-Fits-All Storage
+
+Notes, meeting minutes, code documentation, research papers, and movie reviews all get the same treatment. A meeting note should emphasize decisions and action items; a research paper should highlight methodology and findings.
+
+**Without Fortémi**: Everything processed identically. No content awareness.
+
+**With Fortémi**: 131 document types with auto-detection from filename patterns and content analysis. Each type has tailored chunking strategies (syntactic for code, semantic for prose), content-specific revision prompts (meetings get Decisions/Action Items sections, research gets Methodology/Findings), and type-aware extraction pipelines.
+
+---
+
+## Features
+
+- **Hybrid search** — BM25 + dense vectors + RRF fusion with MMR diversity reranking
+- **Multilingual FTS** — CJK bigrams, emoji trigrams, 6+ language stemmers, script auto-detection
+- **Search operators** — AND, OR, NOT, phrase search via `websearch_to_tsquery`
+- **Knowledge graph** — Automatic linking, recursive CTE exploration, SNN scoring, PFNET sparsification, Louvain community detection
+- **W3C SKOS vocabularies** — Hierarchical concept organization with semantic tagging
+- **131 document types** — Auto-detection with content-type-aware chunking and revision
+- **13 extraction adapters** — Image vision, audio transcription, speaker diarization, video scene analysis, 3D model rendering, email parsing, spreadsheet extraction, archive listing
+- **Synchronous chat** — Direct LLM conversation with GPU concurrency gating and multi-turn history
+- **Multi-memory archives** — Per-memory schemas for Community Edition data organization, with federated cross-archive search
+- **Embedding sets** — Matryoshka Representation Learning for 12x storage savings, auto-embed rules, two-stage retrieval
+- **Multi-provider inference** — Ollama, OpenAI, OpenRouter, llama.cpp with hot-swap runtime configuration
+- **OAuth2 + API keys** — Fail-closed authentication by default, with an explicit local-only anonymous development mode
+- **Public-key encryption** — X25519/AES-256-GCM for secure note sharing
+- **Real-time events** — SSE + WebSocket + webhook notifications
+- **Spatial-temporal search** — PostGIS location + time range queries
+- **TUS resumable uploads** — tus v1.0.0 protocol for reliable large-file uploads
+- **HTTP Range requests** — Partial content download for large attachments
+- **Thumbnail sprite sheets** — CSS sprite grids with WebVTT maps for video seek-bar previews
+- **44 MCP agent tools** — Model Context Protocol integration for AI agent workflows
+- **Edge hardware** — Runs on 8GB GPUs; scales with hardware profiles (`edge`, `gpu-12gb`, `gpu-24gb`)
+- **Knowledge health dashboard** — Orphan tags, stale notes, unlinked notes, cold spots, access frequency
+
+---
+
+## How It Works
+
+```
+ ┌──────────────────────────────────────────────────────────────────────────┐
+ │                              Fortémi                                     │
+ │                                                                          │
+ │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  │
+ │  │  Ingest  │─▶│ Extract  │─▶│  Embed   │─▶│  Link    │─▶│  Store   │  │
+ │  │          │  │          │  │          │  │          │  │          │  │
+ │  │ Notes    │  │ Vision   │  │ Dense    │  │ Auto-    │  │ pgvector │  │
+ │  │ Media    │  │ Audio    │  │ vectors  │  │ link     │  │ PostGIS  │  │
+ │  │ Email    │  │ Video    │  │ BM25     │  │ Graph    │  │ FTS      │  │
+ │  │ Archives │  │ 3D       │  │ index    │  │ build    │  │          │  │
+ │  └──────────┘  └──────────┘  └──────────┘  └──────────┘  └──────────┘  │
+ │                                                                          │
+ │  ┌──────────────────────────────────────────────────────────────────┐    │
+ │  │                         Search & Retrieve                        │    │
+ │  │  BM25 full-text ─┐                                               │    │
+ │  │  Dense vectors ──┼──▶ RRF Fusion ──▶ MMR Diversity ──▶ Results   │    │
+ │  │  Graph traverse ─┘                                               │    │
+ │  └──────────────────────────────────────────────────────────────────┘    │
+ │                                                                          │
+ │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  │
+ │  │ REST API │  │ MCP Srvr │  │  Chat    │  │  Events  │  │  OAuth2  │  │
+ │  │  :3000   │  │  :3001   │  │  (LLM)   │  │ SSE/WS   │  │ + Keys   │  │
+ │  └──────────┘  └──────────┘  └──────────┘  └──────────┘  └──────────┘  │
+ └──────────────────────────────────────────────────────────────────────────┘
+```
+
+1. **Ingest** — Notes, files, and media enter via REST API or MCP tools
+2. **Extract** — 13 adapters pull text, metadata, scenes, transcripts, and descriptions from every content type
+3. **Embed** — Content is vectorized for semantic search and indexed for full-text search
+4. **Link** — Embedding similarity >70% creates automatic graph connections; SNN + PFNET refine topology
+5. **Store** — PostgreSQL with pgvector (vectors), PostGIS (spatial), FTS (text), and per-memory schema isolation
+6. **Search** — BM25 + dense + graph results fused via RRF and diversified via MMR
+
+---
+
+## Quick Start
+
+Pick the install path that matches what you're trying to do:
+
+| You want to… | Use | Where to start |
+|---|---|---|
+| Build features end-to-end on a dev box (API + UI + local LLM, single-command up/down) | **Local workstation stack** (this repo's `./workstation` wrapper) | [QUICKSTART.md](./QUICKSTART.md) — five steps, no Docker experience required |
+| Run a headless backend on a server (Docker, GPU, no UI) | **Docker bundle** (`docker-compose.bundle.yml`) | [Docker Bundle section](#docker-bundle-headless-backend-deployment) below |
+| Use Fortémi as a desktop app on your laptop | **HotM** (UI + bundled API as a single installer) | [HotM releases](https://git.integrolabs.net/Fortemi/HotM/releases/latest) — `.deb` / `.msi` / `.dmg` / `.AppImage` |
+| Compile from source for hacking on the Rust crates | **From-source build** | [From Source](#from-source) below + [CONTRIBUTING.md](CONTRIBUTING.md) |
+
+HotM setup scripts (run after downloading the installer):
+- **Linux:** [`bash scripts/setup-linux.sh`](https://git.integrolabs.net/Fortemi/HotM/raw/branch/main/scripts/setup-linux.sh) — install guide: [desktop-linux.md](https://git.integrolabs.net/Fortemi/HotM/src/branch/main/docs/installation/desktop-linux.md)
+- **macOS:** [`bash scripts/setup-macos.sh`](https://git.integrolabs.net/Fortemi/HotM/raw/branch/main/scripts/setup-macos.sh) — install guide: [desktop-macos.md](https://git.integrolabs.net/Fortemi/HotM/src/branch/main/docs/installation/desktop-macos.md)
+- **Windows:** `scripts/prereq_once.ps1` (in HotM repo)
+- **Day-2 ops** (any platform): [`operator-guide.md`](https://git.integrolabs.net/Fortemi/HotM/src/branch/main/docs/operations/operator-guide.md)
+
+### Local Workstation (developer-friendly Docker stack)
+
+The fastest way to get the full backend + UI + local LLM running on your own machine. One unified Docker stack, one wrapper script, no manual postgres or compose juggling.
+
+```bash
+# Clone both repos as siblings (or skip HotM if you only want the API)
+git clone https://git.integrolabs.net/Fortemi/fortemi.git
+git clone https://git.integrolabs.net/Fortemi/HotM.git
+cd fortemi
+
+# Pre-flight check
+./workstation doctor
+
+# Bring everything up (postgres + matric-api + ollama + HotM agent-proxy + UI)
+./workstation up
+
+# Pull the two models the stack uses (~7 GB)
+./workstation models pull
+
+# Open the UI at http://localhost:4180
+```
+
+`./workstation help` lists every subcommand (status, logs, shell, psql, reset, models, …). Need only the API without HotM? Skip cloning HotM and run `./workstation up --backend-only`.
+The compose-managed Ollama service communicates with Fortemi on the private
+compose network and publishes its optional host port on loopback only.
+
+**Want a different LLM than Ollama?** Run `./workstation configure-llm` for an interactive picker covering vLLM (on host), real OpenAI, OpenRouter, llama.cpp (on host), or staying with Ollama. Writes `.env.workstation` (gitignored, mode 600); compose loads it automatically on next `up`. No Dockerfile or compose edits needed.
+
+Full walkthrough with expected output for every step is in **[QUICKSTART.md](./QUICKSTART.md)**; operations reference (including a dedicated "LLM backend selection" section with vLLM specifics) is in **[WORKSTATION-SETUP.md](./WORKSTATION-SETUP.md)**.
+
+### Docker Bundle (headless backend deployment)
+
+All-in-one container with PostgreSQL, Redis, API server, MCP server, and Open3D renderer. Runs on any GPU with 6GB+ VRAM.
+
+#### Prerequisite: Ollama on the host
+
+Fortémi expects an inference provider. The default is **host-installed Ollama** — the bundle reaches out to your host's Ollama daemon via `host.docker.internal:11434`. For other providers (OpenAI, OpenRouter, llama.cpp, custom OpenAI-compatible) see [Bring Your Own LLM](#bring-your-own-llm) below.
+
+**One-time host setup** (Linux/macOS):
+
+```bash
+# 1. Install Ollama if you don't have it
+curl -fsSL https://ollama.com/install.sh | sh
+
+# 2. Pull the two models the bundle defaults to
+ollama pull qwen3.5:9b           # ~6.5 GB — generation + vision
+ollama pull nomic-embed-text     # ~280 MB — embeddings
+```
+
+**Critical on Linux**: the systemd Ollama service binds `127.0.0.1` by
+default and rejects container traffic. Do not solve this by quietly listening
+on every host interface. Resolve Docker's configured host-gateway address,
+review it, and bind Ollama to that address only:
+
+```bash
+HOST_GATEWAY_IP="$(
+  docker network inspect bridge \
+    --format '{{(index .IPAM.Config 0).Gateway}}'
+)"
+test -n "${HOST_GATEWAY_IP}"
+printf 'Docker host gateway: %s\n' "${HOST_GATEWAY_IP}"
+
+sudo mkdir -p /etc/systemd/system/ollama.service.d
+printf '[Service]\nEnvironment="OLLAMA_HOST=%s:11434"\n' \
+  "${HOST_GATEWAY_IP}" |
+  sudo tee /etc/systemd/system/ollama.service.d/override.conf >/dev/null
+sudo systemctl daemon-reload
+sudo systemctl restart ollama
+```
+
+This exposes Ollama only on Docker's host-gateway address. Rootless/custom
+Docker and remote/shared Ollama require an explicit listener, firewall, and
+proxy decision; see
+[Ollama Connectivity and Network Exposure](docs/content/ollama-connectivity.md).
+On macOS the Ollama desktop app handles local Docker connectivity
+automatically. On Windows with WSL2, verify the actual gateway inside WSL.
+
+If you skip the systemd override, the bundle will start and the API will be healthy, but `GET /health` will report `capabilities.inference.available: false` — no chat, no embeddings, no auto-linking. Full-text search still works.
+
+#### Bring it up
+
+```bash
+mkdir -p fortemi && cd fortemi
+git clone --depth 1 https://github.com/Fortemi/fortemi.git .
+
+# Create .env with your hardware profile
+echo 'COMPOSE_PROFILES=edge' > .env          # 6-8GB VRAM (RTX 3060/4060/5060)
+# echo 'COMPOSE_PROFILES=gpu-12gb' > .env    # 12-16GB VRAM (RTX 4070/5070)
+# echo 'COMPOSE_PROFILES=gpu-24gb' > .env    # 24GB+ VRAM (RTX 4090/5090)
+
+scripts/init-bundle-env.sh
+scripts/validate-bundle-exposure.sh
+docker compose -f docker-compose.bundle.yml up -d
+```
+
+Wait ~30 seconds for first-time initialization, then verify:
+
+```bash
+curl http://localhost:3000/health
+# → {"status":"healthy","capabilities":{"inference":{"available":true,...},...}}
+```
+
+If `inference.available` is `false`, verify the selected connectivity profile
+and listener address above; see
+[Troubleshooting](#troubleshooting-docker--ollama) below.
+
+`scripts/init-bundle-env.sh` creates a unique database password in the ignored
+`.env` file, sets mode `0600`, and never prints the value. It is idempotent and
+replaces only empty or known reusable defaults. The bundle refuses to start
+without a generated or operator-supplied value.
+
+The default bundle contains no Docker socket mount. Services use
+`restart: unless-stopped`; operators monitor health and restart unhealthy
+containers through their normal operations tooling. Optional autoheal is an
+explicit host-control decision:
+
+```bash
+COMPOSE_PROFILES=edge,ops-autoheal
+```
+
+`ops-autoheal` runs the pinned third-party `willfarrell/autoheal:1.2.0` image
+with the host Docker socket. That access is root-equivalent host control; the
+read-only mount flag is not a security boundary. Enable it only after accepting
+that trust boundary. The installer exposes the same choice as
+`FORTEMI_AUTOHEAL_MODE=ops-autoheal` and defaults to `disabled`.
+
+Third-party image defaults are locked to reviewed multi-architecture digests.
+Use only complete `tag@sha256` values for customer registry overrides. The
+[dependency trust guide](docs/content/container-dependency-trust.md) documents
+the inventory, verification, mirror, update, and rollback process separately
+from Fortemi-published image evidence.
+
+**Ports:** 3000 (API + Swagger UI at `/docs`), 3001 (MCP), 8080 (Open3D renderer). API and MCP publish to `127.0.0.1` by default. If host port 3001 is taken, set `MCP_HOST_PORT=3002` in `.env`; `API_HOST_PORT` does the same for the API. Run `scripts/validate-bundle-exposure.sh` before starting the bundle.
+
+The bundle automatically initializes PostgreSQL, runs all migrations, auto-registers MCP OAuth credentials, starts Redis, and launches all services. During first upgrades, the API may spend longer applying database migrations before it begins listening. The entrypoint waits up to `API_STARTUP_TIMEOUT_SECONDS=7200` seconds by default, emits progress every `API_STARTUP_PROGRESS_SECONDS=30` seconds, and starts MCP only after `/health` succeeds. Set `API_STARTUP_TIMEOUT_SECONDS=0` to wait indefinitely while the API process remains alive. The Fortémi documentation knowledge base (the "support archive") is **not loaded by default** — see [Support Archive](#support-archive-fortemi-docs) below to add it with one command.
+
+When an existing bundle database has user data and pending migrations, startup creates or reuses a verified pre-migration recovery point under `/var/backups/matric-memory/` before checksum repair or schema/data migrations run. Reuse is allowed only when the artifact hash/size, database identity, source and target migration versions, migration-file manifest, and snapshot-bound logical state still match. The helper uses PostgreSQL exported read-only snapshots for fingerprinting and `pg_dump --snapshot`; it does not set the database into a persistent read-only mode or terminate client sessions. `FORTEMI_PRE_MIGRATION_REUSE_MAX_AGE_SECONDS=86400` is the default reuse window, and `0` disables reuse so every qualifying startup creates a new verified backup.
+
+Pre-migration dumps stage through a private scratch directory. The bundle defaults to `/dev/shm/fortemi-pre-migration-backup` and falls back to a private directory under the backup destination only when RAM-backed staging lacks headroom, logging that the fallback may touch disk unless the operator supplied encrypted storage. Increase Docker `shm_size` or set `BACKUP_TEMP_DIR` to a larger tmpfs for large databases. Retention for pre-migration backups runs only after the new artifact is verified and its recovery metadata is published, so a failed replacement preserves older recovery points.
+
+For constrained CPU-only Windows Docker Desktop upgrades, keep the existing Docker volume, run `scripts/init-bundle-env.sh` once if `.env` predates generated secrets, then start with optional sidecars disabled or reduced until migrations finish. The reusable recovery-point path runs inside the Linux bundle container; Windows-native HotM/MSI installs do not run these Docker bundle shell/Python helpers. On Docker Desktop with WSL2, size and verify the Linux container's `/dev/shm`, backup volume, and WSL storage rather than Windows host paths alone:
+
+```bash
+COMPOSE_PROFILES=edge
+RENDERER_ENABLED=false
+LOAD_SUPPORT_MEMORY=false
+API_STARTUP_TIMEOUT_SECONDS=0
+docker compose -f docker-compose.bundle.yml up -d
+docker compose -f docker-compose.bundle.yml logs -f fortemi
+```
+
+After the logs show `Matric Memory Bundle Ready`, restore the desired sidecar/profile settings and recreate the bundle normally.
+
+**Guided installer:** `installer/scripts/` provides 8 shell scripts for step-by-step deployment, plus a `setup.manifest.yaml` for the AIWG installer framework.
+
+Clean reset: `docker compose -f docker-compose.bundle.yml down -v && docker compose -f docker-compose.bundle.yml up -d`
+
+### From Source
+
+```bash
+# Prerequisites: Rust 1.70+, PostgreSQL 18+ with pgvector + PostGIS, Ollama (optional)
+psql -c "CREATE EXTENSION IF NOT EXISTS vector;"
+psql -c "CREATE EXTENSION IF NOT EXISTS postgis;"
+for f in migrations/*.sql; do psql -d matric -f "$f"; done
+DATABASE_URL="postgres://matric:matric@localhost/matric" cargo run --release -p matric-api
+```
+
+> **First build fails with "missing graph"?** Fortemi uses `sqlx::query!` compile-time checks. Either `export DATABASE_URL=...` against a Postgres with migrations applied, or generate offline metadata once with `cargo sqlx prepare --workspace` and build with `SQLX_OFFLINE=true`. See [CONTRIBUTING.md → sqlx compile-time query checks](CONTRIBUTING.md#sqlx-compile-time-query-checks).
+
+### Try It
+
+```bash
+# Store a note
+curl -X POST http://localhost:3000/api/v1/notes \
+  -H "Content-Type: application/json" \
+  -d '{"title": "RAG Architecture", "content": "Retrieval-augmented generation combines..."}'
+
+# Hybrid search (BM25 + semantic + RRF)
+curl "http://localhost:3000/api/v1/search?q=using+AI+to+answer+questions+from+documents"
+
+# Chat with your knowledge
+curl -X POST http://localhost:3000/api/v1/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "What do I know about retrieval architectures?"}'
+
+# Browse all endpoints
+open http://localhost:3000/docs
+```
+
+See [Getting Started](docs/content/getting-started.md) for the full walkthrough.
+
+---
+
+## Architecture
+
+```
+┌──────────────────┬──────────────────────────────────────────────┐
+│  matric-api      │ Axum HTTP REST API with OpenAPI/Swagger       │
+├──────────────────┼──────────────────────────────────────────────┤
+│  matric-search   │ Hybrid retrieval (BM25 + dense + RRF)         │
+├──────────────────┼──────────────────────────────────────────────┤
+│  matric-jobs     │ Async NLP pipeline (embed, revise, link,      │
+│                  │ extract, diarize, chunk)                       │
+├──────────────────┼──────────────────────────────────────────────┤
+│  matric-inference│ Multi-provider LLM abstraction                │
+│                  │ (Ollama, OpenAI, OpenRouter, llama.cpp)        │
+├──────────────────┼──────────────────────────────────────────────┤
+│  matric-db       │ PostgreSQL + pgvector + PostGIS repositories   │
+│                  │ (sqlx, 107 migrations)                         │
+├──────────────────┼──────────────────────────────────────────────┤
+│  matric-crypto   │ X25519/AES-256-GCM public-key encryption      │
+├──────────────────┼──────────────────────────────────────────────┤
+│  matric-core     │ Core types, traits, and error handling         │
+├──────────────────┼──────────────────────────────────────────────┤
+│  mcp-server      │ MCP agent integration (Node.js, 44/206 tools) │
+└──────────────────┴──────────────────────────────────────────────┘
+```
+
+### Directory Structure
+
+```
+fortemi/
+├── crates/
+│   ├── matric-api/          # Axum HTTP API server (routes, handlers, middleware)
+│   ├── matric-core/         # Core types, traits, models
+│   ├── matric-crypto/       # Public-key encryption (X25519/AES-256-GCM)
+│   ├── matric-db/           # PostgreSQL repositories (sqlx)
+│   ├── matric-inference/    # Multi-provider inference abstraction
+│   ├── matric-jobs/         # Background job worker (NLP pipeline)
+│   └── matric-search/       # Hybrid search (FTS + semantic + RRF)
+├── mcp-server/              # MCP server (Node.js, 44 core tools)
+├── migrations/              # 106 PostgreSQL migrations
+├── docker/                  # Docker entrypoints and configs
+├── build/                   # CI Dockerfiles (testdb, builder)
+├── installer/               # Guided installer scripts
+├── docs/                    # 65+ documentation files
+│   ├── content/             # Feature and operations guides
+│   ├── research/            # Research background
+│   └── releases/            # Release announcements
+└── docker-compose.bundle.yml  # All-in-one deployment
+```
+
+See [Architecture](docs/content/architecture.md) for detailed system design with research citations.
+
+---
+
+## API Endpoints
+
+Full REST API with OpenAPI/Swagger documentation at `/docs`.
+
+### Core Resources
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/notes` | GET, POST | List and create notes |
+| `/api/v1/notes/{id}` | GET, PUT, DELETE | Read, update, delete notes |
+| `/api/v1/search` | GET | Hybrid search (BM25 + semantic + RRF) |
+| `/api/v1/search/federated` | POST | Cross-archive federated search |
+| `/api/v1/chat` | POST | Synchronous LLM chat with knowledge context |
+| `/api/v1/tags` | GET, POST | Tag management |
+| `/api/v1/collections` | GET, POST | Collection/folder hierarchy |
+| `/api/v1/graph` | GET | Knowledge graph exploration |
+| `/api/v1/graph/maintenance` | POST | Graph quality pipeline (normalize, SNN, PFNET) |
+
+### Media & Attachments
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/notes/{id}/attachments` | POST | Upload file attachment |
+| `/api/v1/attachments/{id}/content` | GET | Download with HTTP Range support |
+| `/api/v1/upload` | POST | TUS resumable upload (tus v1.0.0) |
+
+### Inference & Configuration
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/inference/config` | GET, POST, DELETE | View/override/reset inference providers |
+| `/api/v1/inference/test-connection` | POST | Test backend connectivity |
+| `/api/v1/archives` | GET, POST | Multi-memory archive management |
+
+### Metadata & Health
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/concepts` | GET, POST | W3C SKOS concept management |
+| `/api/v1/concepts/schemes/{id}/export/turtle` | GET | SKOS Turtle export |
+| `/api/v1/embeddings` | GET, POST | Embedding set management |
+| `/health` | GET | System health with capability report |
+| `/docs` | GET | Swagger UI |
+| `/openapi.yaml` | GET | OpenAPI specification |
+
+See [API Reference](docs/content/api.md) for all endpoints with request/response examples.
+
+---
+
+## MCP Server
+
+44 core agent tools via Model Context Protocol. Docker bundle exposes MCP on port 3001 with automatic OAuth credential management.
+
+### Connect
+
+```json
+{
+  "mcpServers": {
+    "fortemi": { "url": "https://your-domain.com/mcp" }
+  }
+}
+```
+
+### Core Tools (44)
+
+Discriminated-union pattern for agent-friendly interaction:
+
+| Tool | What It Does |
+|------|-------------|
+| `capture_knowledge` | Create, update, and manage notes |
+| `upsert_external_notes` | Atomic, replay-safe persistence for externally managed notes |
+| `search` | Hybrid search with tag filtering and federation |
+| `record_provenance` | Track knowledge lineage and sourcing |
+| `manage_tags` | Tag lifecycle and vocabulary management |
+| `manage_collection` | Collection hierarchy operations |
+| `manage_concepts` | W3C SKOS concept and scheme management |
+| `manage_embeddings` | Embedding set configuration and lifecycle |
+| `manage_archives` | Multi-memory archive operations |
+| `manage_encryption` | Public-key encryption and key management |
+| `manage_backups` | Backup and restore operations |
+| `manage_jobs` | Background job monitoring |
+| `manage_inference` | Provider configuration and model selection |
+| `manage_attachments` | File upload, metadata, and retrieval |
+| `trigger_graph_maintenance` | Graph quality pipeline |
+| `explore_graph` | Knowledge graph traversal |
+| `get_knowledge_health` | Dashboard for orphans, stale notes, cold spots |
+| `select_memory` / `get_active_memory` | Multi-memory context switching |
+| `purge_note` / `purge_notes` / `purge_all_notes` | Destructive cleanup |
+
+Set `MCP_TOOL_MODE=full` for all 206 granular tools. See [MCP Guide](docs/content/mcp.md) · [MCP Deployment](docs/content/mcp-deployment.md).
+
+---
+
+## Search Capabilities
+
+### Query Syntax
+
+```
+hello world        # Match all words (AND)
+apple OR orange    # Match either word
+apple -orange      # Exclude word
+"hello world"      # Match exact phrase
+```
+
+### Multilingual Support
+
+| Script | Strategy | Languages |
+|--------|----------|-----------|
+| Latin | Full stemming | English, German, French, Spanish, Portuguese, Russian |
+| CJK | Bigram/trigram character matching | Chinese, Japanese, Korean |
+| Emoji & symbols | Trigram substring matching | Universal |
+| Arabic, Cyrillic, Greek, Hebrew | Basic tokenization | Various |
+
+### Search Modes
+
+| Mode | Description |
+|------|-------------|
+| **Hybrid** (default) | BM25 + dense vectors + RRF fusion |
+| **Semantic** | Dense vector similarity only |
+| **Full-text** | BM25 keyword matching only |
+| **Graph** | Traverse knowledge graph connections |
+| **Federated** | Search across multiple memory archives |
+
+See [Search Guide](docs/content/search-guide.md) · [Multilingual FTS](docs/content/multilingual-fts.md) · [Search Operators](docs/content/search-operators.md).
+
+---
+
+## Media Processing
+
+### Extraction Adapters (13)
+
+| Adapter | Input | Output |
+|---------|-------|--------|
+| **Vision** | Images (PNG, JPEG, WebP, etc.) | Scene descriptions via Ollama vision LLM |
+| **Audio Transcription** | Audio files (MP3, WAV, FLAC, etc.) | Timestamped transcripts via Whisper |
+| **Speaker Diarization** | Audio with multiple speakers | Speaker-labeled captions via pyannote |
+| **Video Multimodal** | Video files (MP4, MKV, WebM, etc.) | Keyframes + scene detection + transcript alignment |
+| **3D Model** | GLB/glTF files | Multi-view rendered images + vision description |
+| **Email** | EML/MSG files | RFC 2822/MIME parsing + embedded attachment extraction |
+| **Spreadsheet** | XLSX/XLS/ODS files | Markdown tables per sheet |
+| **Archive** | ZIP/tar/gz files | File listing + text content extraction |
+| **PDF** | PDF documents | Text extraction with layout preservation |
+| **Media Optimizer** | Video/audio | Faststart, web-compatible remux, 720p preview |
+| **Thumbnail** | Video | CSS sprite grids + WebVTT maps for seek-bar previews |
+| **GLiNER** | Text | Named entity extraction (concepts, topics) |
+| **Fast/Standard NLP** | Text | Concept extraction cascade (granite4:3b → gpt-oss:20b) |
+
+### Extraction Pipeline
+
+```
+ Upload ──▶ Type Detection ──▶ Adapter Selection ──▶ Extract ──▶ Embed ──▶ Link
+                │                                       │
+                ▼                                       ▼
+         131 document types                    Derived attachments
+         auto-detected from                    (thumbnails, transcripts,
+         filename + content                     captions, sprite sheets)
+```
+
+### Hardware Profiles
+
+| Profile | GPU VRAM | Audio/Diarization | Gen Model | Example GPUs |
+|---------|----------|-------------------|-----------|--------------|
+| `edge` (default) | 6-8GB | CPU | qwen3.5:9b | RTX 3060 8GB, 4060, 5060 |
+| `gpu-12gb` | 12-16GB | GPU | qwen3.5:9b | RTX 3060 12GB, 4070, 5070 |
+| `gpu-24gb` | 24GB+ | GPU | configurable | RTX 3090, 4090, 5090 |
+
+### Resource Requirements
+
+Idle footprint of the default Docker bundle:
+
+| Component | Idle RAM | Notes |
+|-----------|----------|-------|
+| PostgreSQL 18 | ~500 MB | required |
+| Redis | ~256 MB | required |
+| `qwen3.5:9b` (fast gen + vision) | ~8 GB VRAM/RAM | set `MATRIC_FAST_GEN_MODEL=` to disable |
+| `nomic-embed-text` (embeddings) | ~500 MB | required for indexing |
+| Whisper (`gpu-12gb`+ profile) | ~2 GB | optional |
+| GLiNER (`gpu-12gb`+ profile) | ~1 GB | optional |
+| **Default bundle total** | **~10 GB** | with qwen3.5:9b loaded |
+| **Minimal profile total** | **~2 GB** | qwen2.5:3b, no support archive |
+
+The Docker bundle does **not** auto-load the bundled support archive — it mirrors the native build path. See [Support Archive](#support-archive-fortemi-docs) below to opt in (one command).
+
+Operators on tight resources can stack the minimal overlay:
+
+```bash
+docker compose -f docker-compose.bundle.yml -f docker-compose.minimal.yml up -d
+```
+
+The minimal overlay swaps the fast-extraction model to `qwen2.5:3b`, caps `JOB_MAX_CONCURRENT=1`, and trims `MAX_MEMORIES=2`. Target idle ~2 GB. Trade-off: chat quality with `qwen2.5:3b` is materially lower than the default — this is for "make it run on my laptop", not production.
+
+---
+
+## Support Archive (fortemi-docs)
+
+The bundle ships a pre-built `.shard` of the Fortémi documentation as an in-product knowledge base — same content as the docs site, but searchable through the same `/api/v1/search` endpoint as your own notes. Off by default (the Docker bundle mirrors the native build path; neither auto-seeds). Opt in when you want it.
+
+### Add it with one command (running instance)
+
+```bash
+docker compose -f docker-compose.bundle.yml \
+  exec fortemi /app/seed-support-archive.sh
+```
+
+Idempotent — re-running is a no-op once seeded (a flag file on the persistent `pgdata` volume tracks state). Takes ~10–30 seconds depending on disk speed.
+
+### Auto-seed on first boot
+
+If you know up front you want the docs available, set this in `.env` before running `docker compose ... up`:
+
+```bash
+LOAD_SUPPORT_MEMORY=true
+```
+
+The seed runs in the background after the API reports healthy.
+
+### Querying the archive
+
+The seeded data lives at memory `fortemi-docs`. Reach it with the `X-Fortemi-Memory` header:
+
+```bash
+# Full-text search (works immediately after seeding)
+curl -H 'X-Fortemi-Memory: fortemi-docs' \
+  'http://localhost:3000/api/v1/search?q=hybrid+search'
+
+# List notes
+curl -H 'X-Fortemi-Memory: fortemi-docs' \
+  'http://localhost:3000/api/v1/notes?limit=10'
+```
+
+MCP tool clients can scope to the archive via the `memory` argument on most tools.
+
+### Add semantic search over the archive (additional opt-in)
+
+The seed populates Postgres `tsvector` (FTS) only — no embeddings, so the archive is queryable without an inference provider. To enable semantic search over the docs:
+
+```bash
+curl -X POST http://localhost:3000/api/v1/notes/reprocess \
+  -H 'X-Fortemi-Memory: fortemi-docs' \
+  -H 'Content-Type: application/json' \
+  -d '{"steps":["embedding"],"revision_mode":"none"}'
+```
+
+Adds `"linking"` to `steps` for auto-linking; drops `revision_mode:"none"` to also AI-revise notes. Cost depends on your configured inference provider (see [Multi-Provider Inference](#multi-provider-inference) for routing).
+
+### Refreshing on upgrade
+
+The bundle ships a fresh `.shard` baked into each release image (auto-rebuilt in CI from the source tree at the tagged commit; see #652). On upgrade the seed flag persists with your data, so the docs archive stays at whatever version you originally seeded. To pick up the latest docs after an image upgrade:
+
+```bash
+# Drop the existing archive and re-seed from the upgraded image
+docker compose -f docker-compose.bundle.yml exec fortemi \
+  curl -fsS -X DELETE http://localhost:3000/api/v1/archives/fortemi-docs
+docker compose -f docker-compose.bundle.yml exec fortemi \
+  rm -f /var/lib/postgresql/data/.fortemi-docs-seeded
+docker compose -f docker-compose.bundle.yml \
+  exec fortemi /app/seed-support-archive.sh
+```
+
+Your own data in other archives is unaffected.
+
+### Skipping or disabling
+
+- **Don't enable it**: do nothing. Default is off.
+- **Force-skip even if `LOAD_SUPPORT_MEMORY=true` is set**: `DISABLE_SUPPORT_MEMORY=true` (legacy override; useful if you're inheriting an `.env` from before the opt-in flip).
+
+---
+
+## Troubleshooting (Docker + Ollama)
+
+### `capabilities.inference.available: false` on `/health`
+
+The bundle started but can't reach Ollama. Three common causes:
+
+1. **Ollama not installed** — `ollama list` from your host shell errors → install via `curl -fsSL https://ollama.com/install.sh | sh`.
+2. **Ollama bound to `127.0.0.1` only** (Linux systemd default) — containers can reach the host gateway but Ollama refuses. Verify with:
+   ```bash
+   # From inside the bundle:
+   docker compose -f docker-compose.bundle.yml exec fortemi \
+     curl -fsS --max-time 3 http://host.docker.internal:11434/api/version
+   # Connection refused means the selected listener/profile is not reachable.
+   ```
+   For the Linux host-service profile, use the exact gateway-address systemd
+   drop-in from
+   [Prerequisite: Ollama on the host](#prerequisite-ollama-on-the-host).
+   For local development, prefer the compose-managed workstation Ollama
+   service. Do not broaden a listener merely to clear this error.
+3. **Models not pulled** — `ollama list` on the host shows neither `qwen3.5:9b` nor `nomic-embed-text` → pull them. The probe doesn't fail on missing models (the daemon is reachable; the model load happens at first request) but you'll get 404s on the first generation call.
+
+### Bundle port collision
+
+The bundle publishes API and MCP to loopback by default. On a host already running something on ports `3000` or `3001`:
+
+```bash
+# In .env
+API_HOST_BIND=127.0.0.1
+MCP_HOST_BIND=127.0.0.1
+API_HOST_PORT=3010
+MCP_HOST_PORT=3011
+```
+
+Container-side ports stay fixed; only the host mapping changes. For local development, `ISSUER_URL` must match the host-facing address (e.g. `http://localhost:3010`) and `FORTEMI_ALLOW_LOCAL_ISSUER=true` must be set.
+
+Non-loopback publishing is an explicit shared-appliance profile, not a port-only override:
+
+```bash
+FORTEMI_EXPOSURE_PROFILE=shared
+API_HOST_BIND=0.0.0.0
+MCP_HOST_BIND=0.0.0.0
+REQUIRE_AUTH=true
+ISSUER_URL=https://memory.example.com
+MCP_BASE_URL=https://memory.example.com/mcp
+ALLOWED_ORIGINS=https://memory.example.com
+POSTGRES_PASSWORD=<OPERATOR_SUPPLIED_DATABASE_PASSWORD>
+```
+
+The shared profile requires public HTTPS issuer/resource/origin metadata and a non-default database secret. Put TLS at the reverse proxy, restrict the published ports with the host firewall, and run `scripts/validate-bundle-exposure.sh` before `docker compose up`.
+
+### Connecting to a remote Ollama instead of host
+
+Edit `.env`:
+
+```bash
+OLLAMA_BASE=http://your-remote-ollama-host:11434
+```
+
+The bundle's `extra_hosts: host.docker.internal:host-gateway` only matters when reaching the local host. For remote hosts, use the real DNS name or IP. If TLS is in the path, prefix with `https://`.
+Remote Ollama is a shared inference service: restrict its listener/firewall to
+Fortemi clients, put authentication or mTLS and request limits at a TLS proxy,
+and account for GPU/CPU exhaustion. See
+[Ollama Connectivity and Network Exposure](docs/content/ollama-connectivity.md).
+
+### Using something other than Ollama entirely
+
+Three native alternatives ship as first-class profiles in `MATRIC_INFERENCE_DEFAULT`: `openai`, `openrouter`, `llamacpp`. See [Bring Your Own LLM](#bring-your-own-llm).
+
+---
+
+## Multi-Provider Inference
+
+Fortemi treats every advertised provider as a first-class peer. The runtime is driven by a static **provider profile catalog** — the four v1 entries below cover hosted (OpenAI, OpenRouter), local-daemon (Ollama), and bring-your-own-server (llama.cpp) inference, all reachable via the same hot-swap API.
+
+### Provider profiles (v1)
+
+| Provider | Backend protocol | API key | Embeddings | Default model |
+|----------|------------------|---------|------------|---------------|
+| **Ollama** | Ollama-native (`/api/generate`) | none | yes | `qwen3.5:9b` / `nomic-embed-text` |
+| **OpenAI** | OpenAI-compatible (`/v1/*`) | required | yes | `gpt-4o-mini` / `text-embedding-3-small` |
+| **OpenRouter** | OpenAI-compatible | required | **no** | `anthropic/claude-sonnet-4` / *(none)* |
+| **llama.cpp** | OpenAI-compatible | optional | depends on build | *(operator-set)* |
+
+Adding new well-known providers (vLLM, LiteLLM, LocalAI, Groq, Together, …) is a 5-line addition to `crates/matric-inference/src/provider_profiles.rs` with no enum or parser changes.
+
+### Provider-qualified slugs
+
+```
+qwen3:8b                                    → default provider
+ollama:qwen3:8b                             → explicit Ollama
+openai:gpt-4o                               → OpenAI
+openrouter:anthropic/claude-sonnet-4        → OpenRouter
+llamacpp:qwen2.5-7b-instruct                → llama.cpp
+```
+
+### Runtime reconfiguration
+
+Hot-swap any provider's credentials, model, or routing via `POST /api/v1/inference/config` — no restart required. Configuration precedence: `db_override` → `env` → `default`. Two safety primitives:
+
+- **`?dry_run=true`** — validate the merged config and return the effective state without persisting or hot-swapping. Useful for operator UIs running pre-flight checks.
+- **`?atomic=true`** — probe every backend the request touches before committing. On any probe failure: 503 + structured `failures: [...]` array; the live registry and DB stay on the previous good config. Avoids the brief error window where a half-applied swap serves bad creds.
+
+```bash
+# Validate without applying
+curl -X POST http://localhost:3000/api/v1/inference/config?dry_run=true \
+  -H 'Content-Type: application/json' \
+  -d '{"openrouter":{"api_key":"sk-or-v1-...","generation_model":"anthropic/claude-3.5-sonnet"}}'
+
+# Atomic swap — abort if any probe fails
+curl -X POST 'http://localhost:3000/api/v1/inference/config?atomic=true' \
+  -H 'Content-Type: application/json' \
+  -d '{"openrouter":{"api_key":"sk-or-v1-..."}}'
+```
+
+### Independent embedding/generation routing
+
+OpenRouter doesn't expose embeddings; Groq is API-only with no local model; some operators want to keep embeddings on-device for privacy while paying for hosted chat. Set `MATRIC_EMBEDDING_PROVIDER` (or the `embedding_backend` field on `POST /api/v1/inference/config`) to route embedding calls through a different provider than the active default.
+
+```bash
+# .env: chat through OpenRouter, embed locally via Ollama
+MATRIC_INFERENCE_DEFAULT=openrouter
+MATRIC_EMBEDDING_PROVIDER=ollama
+OPENROUTER_API_KEY=sk-or-v1-...
+```
+
+The runtime validates the override against the catalog at boot and on every `POST /config` call: pointing `embedding_backend` at OpenRouter (which has no embedding capability) returns 400 with a descriptive error before persisting.
+
+### Bring Your Own LLM
+
+Ollama is the default for the Docker bundle, but it is **one option among four** — Fortemi does not require Ollama. Pick a profile and set the matching `.env` block:
+
+```bash
+# Native llama.cpp profile (recommended for self-hosted local inference)
+MATRIC_INFERENCE_DEFAULT=llamacpp
+LLAMACPP_BASE_URL=http://host.docker.internal:8080/v1
+LLAMACPP_GEN_MODEL=qwen2.5-7b-instruct
+# LLAMACPP_API_KEY=...           # only if llama-server launched with --api-key
+
+# Native OpenAI proper
+MATRIC_INFERENCE_DEFAULT=openai
+OPENAI_API_KEY=sk-...
+OPENAI_GEN_MODEL=gpt-4o-mini
+
+# Native OpenRouter (chat only — pair with MATRIC_EMBEDDING_PROVIDER for embed)
+MATRIC_INFERENCE_DEFAULT=openrouter
+OPENROUTER_API_KEY=sk-or-v1-...
+OPENROUTER_GEN_MODEL=anthropic/claude-sonnet-4
+MATRIC_EMBEDDING_PROVIDER=ollama
+```
+
+OpenRouter routing rules and analytics use `HTTP-Referer` and `X-Title` headers; Fortemi defaults them to `https://fortemi.io` / `Fortemi`. Override per-app for downstream tools that ship Fortemi as a sidecar:
+
+```bash
+OPENROUTER_HTTP_REFERER=https://your-app.example.com
+OPENROUTER_APP_NAME=Your App
+```
+
+To run a llama.cpp sidecar alongside the bundle, place a GGUF model at `./models/model.gguf` and bring up both compose files:
+
+```bash
+docker compose -f docker-compose.bundle.yml -f docker-compose.llamacpp.yml up -d
+```
+
+`docker-compose.llamacpp.yml` ships the digest-locked
+`ghcr.io/ggml-org/llama.cpp:server` image with the OpenAI-compatible protocol
+exposed at `:8080/v1`. See the file header for tunables
+(`LLAMACPP_MODEL_FILE`, `LLAMACPP_CTX_SIZE`, `LLAMACPP_GPU_LAYERS`).
+
+**Custom OpenAI-compatible endpoints** (vLLM, LiteLLM, LocalAI, on-prem providers not yet in the catalog) keep working via the legacy escape hatch:
+
+```bash
+MATRIC_INFERENCE_DEFAULT=openai
+OPENAI_BASE_URL=http://your-host:8000/v1
+OPENAI_API_KEY=anything-or-real-key
+```
+
+**Intel Arc / XPU with host vLLM**: use the Intel compose overlay to clear
+NVIDIA container reservations and point Fortemi at a host vLLM endpoint
+(requires Docker Compose v2.17.0+ for the overlay's `!reset` tag):
+
+```bash
+docker compose -f docker-compose.bundle.yml -f docker-compose.intel.yml up -d
+```
+
+See [Intel Arc / XPU deployment with host vLLM](docs/content/intel-arc-vllm.md)
+for the full `.env` block, a systemd service template for vLLM, sidecar
+disable/override guidance, and routing verification.
+
+**Disabling Ollama entirely**: set `MATRIC_INFERENCE_DEFAULT` to anything other than `ollama` and leave `OLLAMA_BASE` unset. The Ollama backend isn't constructed when it isn't the default or embedding override, so a dead `host.docker.internal:11434` won't be probed.
+
+---
+
+## Multi-Memory Archives
+
+Parallel memory archives with schema-level boundaries for project segmentation
+or context switching. In Community Edition these schemas are memory
+boundaries, not hosted tenant-security boundaries. The internal hosted profile
+uses shared-schema forced RLS with a canonical authenticated tenant context.
+
+- `X-Fortemi-Memory` header selects target memory per request
+- Default memory maps to `public` schema (no header needed)
+- 14 shared tables (auth, jobs, config) + 41 per-memory tables (notes, tags, embeddings, etc.)
+- `POST /api/v1/archives` creates new archives with automatic schema cloning
+- `POST /api/v1/search/federated` searches across multiple archives simultaneously
+
+See [Multi-Memory Guide](docs/content/multi-memory.md) · [Agent Strategies](docs/content/multi-memory-agent-guide.md).
+
+---
+
+## Authentication
+
+Authentication is fail-closed by default via `REQUIRE_AUTH=true`. Anonymous local sidecar/dev mode requires setting both `REQUIRE_AUTH=false` and `I_UNDERSTAND_NO_AUTH=true`.
+
+| Method | How |
+|--------|-----|
+| **OAuth2** | Client credentials or authorization code via `/oauth/token` |
+| **API Keys** | Create via `POST /api/v1/api-keys`, use as Bearer token |
+
+Public endpoints (always accessible): `/health`, `/docs`, `/openapi.yaml`, `/oauth/*`, `/.well-known/*`
+
+See [Authentication Guide](docs/content/authentication.md).
+
+---
+
+## Configuration
+
+Key variables (see [full reference](docs/content/configuration.md) for all ~27 variables):
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `COMPOSE_PROFILES` | `edge` | Hardware profile: `edge`, `gpu-12gb`, `gpu-24gb`; optional `ops-autoheal` is a separate explicit host-control profile. |
+| `FORTEMI_AUTOHEAL_MODE` | `disabled` | Installer choice. `ops-autoheal` opts a pinned third-party container into root-equivalent Docker socket access. |
+| `FORTEMI_REDIS_IMAGE` | reviewed Redis digest | Complete `tag@sha256` override for an approved customer mirror. |
+| `FORTEMI_SPEACHES_CPU_IMAGE` / `FORTEMI_SPEACHES_CUDA_IMAGE` | reviewed Speaches digests | Complete CPU/GPU transcription image overrides for approved mirrors. |
+| `FORTEMI_AUTOHEAL_IMAGE` | reviewed autoheal digest | Complete optional autoheal mirror reference; `ops-autoheal` is still required. |
+| `FORTEMI_EXPOSURE_PROFILE` | `local` | `local` permits loopback publishing only; `shared` enables validated non-loopback publishing. |
+| `API_HOST_BIND` | `127.0.0.1` | Host IP for the published API port. |
+| `MCP_HOST_BIND` | `127.0.0.1` | Host IP for the published MCP port. |
+| `POSTGRES_PASSWORD` | none | Required unique Docker bundle database secret; generated by `scripts/init-bundle-env.sh` or supplied by the operator. |
+| `DATABASE_URL` | `postgres://localhost/matric` | Standalone PostgreSQL connection; the bundle constructs this from its generated secret. |
+| `PORT` | `3000` | API server port |
+| `REQUIRE_AUTH` | `true` | Require OAuth2/API key auth on protected routes. Security booleans accept only `true`, `false`, `1`, or `0`. |
+| `ISSUER_URL` | local `http://<HOST>:<PORT>` fallback | OAuth2/MCP/AsyncAPI issuer URL. Hosted and multi-tenant deployments require explicit public HTTPS. |
+| `OLLAMA_BASE` | `http://localhost:11434` | Ollama API endpoint |
+| `OLLAMA_GEN_MODEL` | `qwen3.5:9b` | Generation + vision model |
+| `OLLAMA_EMBED_MODEL` | `nomic-embed-text` | Embedding model |
+| `WHISPER_BASE_URL` | `http://whisper:8000` | Audio transcription endpoint |
+| `MAX_MEMORIES` | `10` | Max archives (scale with RAM: 10→8GB, 50→16GB, 200→32GB, 500→64GB+) |
+| `MCP_TOOL_MODE` | `core` | `core` (44 tools) or `full` (206 tools) |
+| `API_STARTUP_TIMEOUT_SECONDS` | `7200` | Bundle API readiness wait in seconds before MCP credential validation/registration; set `0` to wait indefinitely while the API process is alive. |
+| `API_STARTUP_PROGRESS_SECONDS` | `30` | Progress log interval in seconds during extended API startup or migrations. |
+| `FORTEMI_PRE_MIGRATION_REUSE_MAX_AGE_SECONDS` | `86400` | Maximum age, in seconds, for reusing a verified pre-migration recovery point whose artifact, database, migration, and logical-state bindings still match. Set `0` to disable reuse and always create a new verified backup. |
+
+---
+
+## Security Model
+
+| Feature | Description |
+|---------|-------------|
+| **Fail-closed auth** | OAuth2 and API keys are required by default; anonymous operation requires explicit local-only development flags. |
+| **Memory vs tenant boundaries** | Community Edition uses per-memory schemas for organization. Internal hosted builds use feature-gated shared-schema forced RLS and separate deployment evidence. |
+| **PKE encryption** | X25519/AES-256-GCM public-key encryption for notes |
+| **MCP credential auto-management** | Auto-registers OAuth client on startup; credentials persisted across restarts |
+| **Input validation** | Request validation at API boundary |
+| **TUS checksums** | Integrity verification on resumable uploads |
+| **Edge deployment** | No cloud dependency; runs entirely self-hosted |
+
+---
+
+## Development
+
+```bash
+# Install pre-commit hooks (first time)
+./scripts/install-hooks.sh
+
+# Run tests
+cargo test --workspace
+
+# Format + lint
+cargo fmt && cargo clippy -- -D warnings
+
+# Run with debug logging
+RUST_LOG=debug cargo run -p matric-api
+```
+
+### Database
+
+- PostgreSQL 18 with pgvector + PostGIS extensions
+- Connection: `postgres://matric:matric@localhost/matric`
+- 107 migrations in `migrations/` directory
+- Extensions created by entrypoint/CI as superuser
+
+### Testing
+
+```bash
+cargo test                    # Unit tests
+cargo test --workspace        # All crates
+```
+
+Tests run against real PostgreSQL (not mocks). CI provides dedicated test containers with pgvector + PostGIS. See [Testing Guide](docs/content/testing-guide.md).
+
+### Versioning
+
+**CalVer**: `YYYY.M.PATCH` (e.g., `2026.6.0`). Git tags use `v` prefix: `v2026.6.0`. See [Releasing](docs/content/releasing.md).
+
+---
+
+## Documentation
+
+### Getting Started
+
+- **[Getting Started](docs/content/getting-started.md)** — First steps and concepts
+- **[Quickstart](docs/content/quickstart.md)** — Deploy and run in minutes
+- **[Use Cases](docs/content/use-cases.md)** — Deployment patterns and scenarios
+- **[Best Practices](docs/content/best-practices.md)** — Research-backed guidance
+- **[Glossary](docs/content/glossary.md)** — Terminology
+
+### Features
+
+- **[Search Guide](docs/content/search-guide.md)** — Modes, RRF tuning, query patterns
+- **[Multilingual Search](docs/content/multilingual-fts.md)** — CJK, emoji, language-specific FTS
+- **[Search Operators](docs/content/search-operators.md)** — AND, OR, NOT, phrase search
+- **[Knowledge Graph](docs/content/knowledge-graph-guide.md)** — Traversal, linking, community detection
+- **[Embedding Sets](docs/content/embedding-sets.md)** — MRL, auto-embed, two-stage retrieval
+- **[Document Types](docs/content/document-types-guide.md)** — 131 types with auto-detection
+- **[File Attachments](docs/content/file-attachments.md)** — Media upload and extraction pipeline
+- **[Real-Time Events](docs/content/real-time-events.md)** — SSE, WebSocket, webhooks
+- **[Realtime Provider Setup](docs/deployment/realtime-providers.md)** — Twilio Voice + Deepgram deployment guide
+- **[Encryption](docs/content/encryption.md)** — PKE for secure sharing
+
+### Operations
+
+- **[Configuration](docs/content/configuration.md)** — All environment variables
+- **[Authentication](docs/content/authentication.md)** — OAuth2, API keys, migration path
+- **[Multi-Memory](docs/content/multi-memory.md)** — Archives, federated search, isolation
+- **[MCP Server](docs/content/mcp.md)** · **[MCP Deployment](docs/content/mcp-deployment.md)** — Agent integration
+- **[Inference Providers](docs/content/inference-providers.md)** — Multi-provider configuration
+- **[Operators Guide](docs/content/operators-guide.md)** — Monitoring, maintenance
+- **[Hardware Planning](docs/content/hardware-planning.md)** — Sizing and capacity
+- **[Backup & Restore](docs/content/backup.md)** — Database recovery
+- **[Troubleshooting](docs/content/troubleshooting.md)** — Diagnostics
+
+### Internal Hosted Operations
+
+These runbooks describe feature-gated internal deployment work; they do not
+make the public Community Edition image hosted-ready.
+
+- **[Hosted PostgreSQL Roles](docs/deployment/hosted-postgresql-role.md)** — Migration/runtime role split and forced-RLS checks
+- **[Durable Audit Sink](docs/ops/postgresql-audit-sink.md)** — Hosted authorization evidence
+- **[Key Rotation](docs/operations/key-rotation.md)** — KMS lifecycle and recovery boundaries
+- **[Hosted User Credentials](docs/operations/hosted-user-credentials.md)** — Stored provider credentials and DSAR behavior
+- **[Inference Destination Policy](docs/operations/inference-destination-policy.md)** — Approved outbound destinations
+- **[Hosted Inference Resilience](docs/operations/hosted-inference-resilience.md)** — Account-scoped circuit breakers
+
+### Technical
+
+- **[Architecture](docs/content/architecture.md)** — System design with research citations
+- **[API Reference](docs/content/api.md)** — All endpoints with examples
+- **[Research Background](docs/content/research-background.md)** — Methodology and benchmarks
+- **[Executive Summary](docs/content/executive-summary.md)** — Capabilities overview
+- **[Feature & Hardware Matrix](docs/content/feature-hardware-matrix.md)** — Requirements by feature
+
+---
+
+## References
+
+- Cormack, G.V., Clarke, C.L.A., & Büttcher, S. (2009). "Reciprocal rank fusion outperforms condorcet and individual rank learning methods." *SIGIR '09*.
+- Lewis, P. et al. (2020). "Retrieval-augmented generation for knowledge-intensive NLP tasks." *NeurIPS 2020*.
+- Reimers, N. & Gurevych, I. (2019). "Sentence-BERT: Sentence embeddings using siamese BERT-networks." *EMNLP 2019*.
+- Malkov, Y.A. & Yashunin, D.A. (2020). "Efficient and robust approximate nearest neighbor search using HNSW." *IEEE TPAMI*.
+- Hogan, A. et al. (2021). "Knowledge graphs." *ACM Computing Surveys*.
+- Kusupati, A. et al. (2022). "Matryoshka representation learning." *NeurIPS 2022*.
+- Miles, A. & Bechhofer, S. (2009). "SKOS simple knowledge organization system reference." *W3C Recommendation*.
+
+See [docs/research/](docs/research/) for detailed paper analyses.
+
+---
+
+## Related Projects
+
+- **[AIWG](https://github.com/jmagly/aiwg)** — Multi-agent AI framework with 44 Fortémi MCP tools
+- **[Agentic Sandbox](https://github.com/fortemi/agentic-sandbox)** — Runtime isolation for persistent AI agent processes
+- **[HotM](https://git.integrolabs.net/Fortemi/HotM)** ([GitHub mirror](https://github.com/Fortemi/HotM)) — first-party desktop app for Fortemi (React 19 SPA + bundled `matric-api` sidecar; Linux `.deb` / Windows `.msi` / macOS `.dmg` / `.AppImage`)
+
+---
+
+## License
+
+**BSL-1.1** (Business Source License 1.1) — converts to AGPL-3.0 on the Change Date (February 16, 2030).
+
+**Free as a workstation tool.** You may run Fortémi at no cost as a single-user workstation tool on your own local machine (localhost / single-workstation deployment) — including for your own commercial work — and for development and testing of applications that integrate with it.
+
+**Server deployments require a commercial license.** Deploying Fortémi as a multi-user, networked, hosted, or otherwise shared server requires a commercial license from the Licensor. (Think SQL Server Express vs. SQL Server: the workstation edition is free; running it as a server is licensed.)
+
+See [BSL-LICENSE](BSL-LICENSE) for the full terms and the Additional Use Grant, and [LICENSE.txt](LICENSE.txt) for the Change License.
+
+---
+
+<div align="center">
+
+**[Back to Top](#fortémi)**
+
+Made with determination by [Joseph Magly](https://github.com/jmagly)
+
+</div>

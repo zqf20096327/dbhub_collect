@@ -1,0 +1,172 @@
+# Celerp
+
+**Free business management software for you and your office. Setup in minutes. Easy enough for solo entrepreneurs and powerful enough for large enterprises**
+
+Inventory, invoicing, purchasing, consignment, manufacturing, accounting, and CRM - in one app, on your computer. No subscription. No cloud required.
+
+Website: [www.celerp.com](https://www.celerp.com)
+
+Celerp is simple to use, flexible, customizable, and designed to transition your business into the AI age with no technical knowledge needed to setup your whole office. We want to put businesses back in charge of their data.
+
+[![Downloads](https://static.pepy.tech/badge/celerp)](https://pepy.tech/project/celerp)
+[![Tests](https://github.com/celerp/celerp/actions/workflows/ci.yml/badge.svg)](https://github.com/celerp/celerp/actions)
+[![License](https://img.shields.io/badge/license-BUSL--1.1-blue)](LICENSE)
+
+<!-- PRESS_KIT:root-hero start -->
+![Celerp manufacturing cost worksheet](docs/press-kit/screenshots/manufacturing-worksheet.png)
+<!-- PRESS_KIT:root-hero end -->
+
+## Screenshots
+
+Real double-entry accounting, multi-location inventory, manufacturing, and a built-in REST API - one self-hosted app.
+
+<!-- PRESS_KIT:root-grid start -->
+| | |
+|---|---|
+| ![Dashboard with revenue trend, receivables aging, and inventory mix](docs/press-kit/screenshots/dashboard.png)<br>**Dashboard** - revenue trend, AR aging, inventory mix | ![Multi-location inventory with barcode scanning and valuation](docs/press-kit/screenshots/inventory.png)<br>**Inventory** - multi-location, barcode, valuation |
+| ![Double-entry trial balance that ties out to zero](docs/press-kit/screenshots/trial-balance.png)<br>**Trial balance** - ties out to zero | ![Balance sheet generated from the event-sourced ledger](docs/press-kit/screenshots/balance-sheet.png)<br>**Balance sheet** - live from the ledger |
+| ![Production planning by status, priority, and due date](docs/press-kit/screenshots/production-planning.png)<br>**Production planning** - work orders, priorities, due dates | ![International shipping document with commercial invoice and customs detail](docs/press-kit/screenshots/international-shipping-document.png)<br>**Shipping documents** - commercial invoice and customs |
+| ![Built-in REST API for integrations](docs/press-kit/screenshots/rest-api.png)<br>**REST API** - integrate anything | ![Customer statement of account showing receivables](docs/press-kit/screenshots/statement-of-account.png)<br>**Statement of account** - customer AR at a glance |
+<!-- PRESS_KIT:root-grid end -->
+
+More in the [press kit](docs/press-kit/).
+
+---
+
+## Install
+
+| Platform | Link |
+|----------|------|
+| Windows (.exe) | [Download](https://celerp.com/download-thanks.html?dl=win) |
+| Linux (.deb) | [Download](https://celerp.com/download-thanks.html?dl=linux) |
+| macOS (.dmg) | [Download](https://celerp.com/download-thanks.html?dl=mac) |
+
+**Double-click. No account. No credit card. Your computer securely becomes the server for your office**
+
+Or install via pip:
+
+```bash
+pip install celerp
+celerp init        # sets up the database and launches Celerp
+```
+
+Open **http://localhost:8080**. Done.
+Your office can securely access the system at your IP address :8080.
+
+No PostgreSQL to install: `celerp init` uses your existing PostgreSQL server if one is
+running, and otherwise starts a self-contained bundled database — no `sudo`, no system
+service. Point it at a specific server with `celerp init --db-url postgresql+asyncpg://…`.
+
+Running headless or under a process manager? Use `celerp init --no-start` to set up
+without launching, then have your service run `celerp start` — see
+[Run as a service (systemd)](CONTRIBUTING.md#run-as-a-service-systemd).
+
+---
+
+## What's inside
+
+- Track inventory across locations, scan barcodes, print labels
+- Send invoices, purchase orders, quotations, credit notes
+- Double-entry accounting with chart of accounts, P&L, balance sheet
+- Connect Shopify, WooCommerce, QuickBooks, Xero
+- Manufacturing - BOMs, production orders, merge/split/transform
+- CRM - contacts, pipeline, memos, activity feed
+- Recurring subscriptions with automatic invoicing
+- CSV import/export everything - idempotent, audited, column-mapped
+- Multi-company from one install
+- Role-based permissions - five access levels (viewer, operator, manager, admin, owner) for controlled employee access
+- Works offline, no internet required
+
+---
+
+## How it works
+
+Celerp runs on your machine and keeps its primary database local. Optional Connect features can relay remote access or send selected data to Celerp cloud services.
+
+- **No setup** - the desktop app bundles Postgres, runs migrations on launch, opens in your browser
+- **No lock-in** - your data stays in a standard Postgres database you control
+- **Teams** - run as a local server, teammates connect over the LAN
+
+---
+
+## Modules
+
+Every business domain is a self-contained module. The full set ships with the download:
+
+| Module | What it does |
+|--------|-------------|
+| `celerp-inventory` | Items, stock levels, locations, barcode scanning, valuation |
+| `celerp-contacts` | Contacts, addresses, tags, notes, file attachments |
+| `celerp-docs` | Invoices, POs, quotations, credit notes, receipts |
+| `celerp-accounting` | Chart of accounts, journal entries, P&L, balance sheet |
+| `celerp-reports` | AR/AP aging, sales, purchases, inventory valuation |
+| `celerp-subscriptions` | Recurring billing, auto-invoice generation |
+| `celerp-manufacturing` | BOMs, production orders, merge/split/transform |
+| `celerp-labels` | Label printing, barcode generation |
+| `celerp-verticals` | Industry presets - configure for your business type on first run |
+
+The onboarding wizard lets you pick your industry. Modules can be toggled any time at **Settings > Modules**.
+
+### Build your own
+
+> "My vision for Celerp is that anyone with AI coding tools can describe what their business needs and get a module that imports right into the system."
+>
+> Noah Severs, Founder
+
+Every feature above is a module on one loader API, and you can build against the same API. A module is a Python package you drop into Celerp's `modules/` folder; it adds its own tables, API routes, and UI pages, no fork or build step.
+
+- [**celerp-module-template**](https://github.com/celerp/celerp-module-template) - a working example module you can run in about ten minutes, plus a lint script
+- [**Build a module**](https://www.celerp.com/docs/modules) - the guide
+- [**community-modules**](https://github.com/celerp/community-modules) - a directory of community-built modules, and how to list yours
+
+---
+
+## Architecture
+
+- **Event-sourced** - every change is an immutable ledger entry, projections materialize queryable state
+- **Modular** - each domain is a plugin with its own models, routes, and projections
+- **Python/FastAPI** backend, **FastHTML** UI, embedded **PostgreSQL**
+- SQLite in-memory for tests - no external dependencies to run the test suite
+
+---
+
+## Development
+
+```bash
+git clone git@github.com:celerp/celerp.git
+cd celerp
+python3 -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+celerp init   # creates DB, runs migrations, starts servers
+```
+
+`celerp init` boots a bundled PostgreSQL when no server is running, so no `sudo` and no
+system Postgres are required. To develop against your own server instead, pass
+`--db-url postgresql+asyncpg://…`.
+
+Open **http://localhost:8080**. Run tests with `pytest tests/`.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for environment variables, troubleshooting, and coding guidelines.
+
+---
+
+## Contributing
+
+Issues and PRs welcome. The module system makes it straightforward to add new business domains without touching the kernel.
+
+---
+
+## License
+
+**Free to download. Free to self-host. Free to build on.**
+
+Celerp is open-core:
+
+- **Source-available core engine** under the [Business Source License 1.1](LICENSE) -
+  self-hosting permitted, contributions welcome.
+- **An MIT-licensed module ecosystem** - the default business modules are MIT, so you can
+  fork them, build your own modules, and ship them however you like. See [LICENSING.md](LICENSING.md).
+- **A source available application** (official UI, document/PDF output and AI & Connect services).
+
+See [LICENSING.md](LICENSING.md) for the full map and [TRADEMARK.md](legal/TRADEMARK.md) for use of the Celerp
+name. One restriction: don't resell Celerp itself as a competing product.

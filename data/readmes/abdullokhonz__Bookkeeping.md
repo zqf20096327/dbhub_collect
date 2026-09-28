@@ -1,0 +1,371 @@
+# 🌌 Bookkeeping Platform
+
+<p align="center">
+  <strong>Next-Generation Enterprise Accounting & ERP Foundation</strong>
+</p>
+
+<div align="center">
+
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen)](https://github.com/abdullokhonz/Bookkeeping/actions)
+[![Contributors](https://img.shields.io/github/contributors/abdullokhonz/Bookkeeping)](https://github.com/abdullokhonz/FoxBerry.API/graphs/contributors)
+
+</div>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/.NET_10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET 10" />
+  <img src="https://img.shields.io/badge/Blazor_Web_App-5C2D91?style=for-the-badge&logo=blazor&logoColor=white" alt="Blazor" />
+  <img src="https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/CQRS_with_MediatR-222222?style=for-the-badge" alt="CQRS" />
+  <img src="https://img.shields.io/badge/Clean_Architecture-00C853?style=for-the-badge" alt="Clean Architecture" />
+</p>
+
+---
+
+> **Bookkeeping** is a production-ready, scalable financial management system built on **Clean Architecture** and **CQRS**. Designed as a robust foundation for a full ERP ecosystem, it moves beyond simple CRUD to handle complex business logic, IFRS compliance, and real-time financial tracking.
+
+## ✨ Enterprise-Grade Features
+
+| 💰 Financial Engine | 🌍 IFRS Compliance | 📊 Real-Time Analytics |
+| :--- | :--- | :--- |
+| • Document lifecycle (Draft ➔ Processed)<br>• Automated sequence numbering<br>• Dynamic VAT calculation | • Tree-based account structures<br>• Hierarchical financial modeling<br>• Multi-region tax ready | • Live dashboard updates<br>• Interactive MudBlazor charts<br>• Instant financial insights |
+
+| 📚 Master Data | 🔐 Advanced Security | 📂 Asset Handling |
+| :--- | :--- | :--- |
+| • Centralized reference data<br>• Flexible categorization<br>• Smart alphabetical sorting | • JWT Auth & Refresh Tokens<br>• Protected API endpoints<br>• Role-based access control | • Secure file uploads<br>• Document attachment system<br>• Image & media management |
+
+---
+
+## 🏗️ Architecture & CQRS
+
+The platform enforces a strict **Clean Architecture**, ensuring the core domain remains isolated from infrastructure and presentation concerns. State mutations and data retrieval are strictly separated using the **CQRS** pattern via MediatR.
+
+* 🟢 **Commands:** Mutate state containing complex business validations.
+* 🔵 **Queries:** Highly optimized read operations returning clean DTOs.
+* 🧩 **Handlers:** Isolated business logic ensuring high testability and maintainability.
+
+<details open>
+<summary><b>📂 View Project Structure 👇</b></summary>
+<br>
+
+```text
+📦 Bookkeeping Solution  
+├── 📂 Bookkeeping  
+│   ├── 📂 Bookkeeping (Main Server / API)  
+│   │   ├── 📂 Application (Commands / Queries / Handlers)  
+│   │   ├── 📂 Entities (Domain Models)  
+│   │   ├── 📂 Controllers (API Endpoints)  
+│   │   ├── 📂 Infrastructure (EF Core, Auth, Repositories)  
+│   │   ├── 📂 Services (Business logic implementations)  
+│   │   └── 📂 Components (Blazor Server UI)  
+│   │  
+│   └── 📂 Bookkeeping.Client (Blazor WASM Frontend)  
+│       ├── 📂 Pages (Accounts, Auth, Orders, etc.)  
+│       ├── 📂 Providers (Auth State)  
+│       └── 📂 Layouts & Dialogs  
+│  
+└── 📂 Bookkeeping.Contracts (Shared Library)  
+    ├── 📂 DTOs & Models  
+    ├── 📂 Enums  
+    └── 📂 Common (Responses, Results, Pagination) 
+```
+</details>
+
+---
+
+# 📸 Application Gallery
+
+Explore the complete visual ecosystem of the Bookkeeping application. The gallery showcases our sophisticated UI, covering complex CRUD workflows for both data records and their respective categories across Light and Dark themes.
+
+<details>
+<summary><h3 style="display:inline;">🔐 1. Authentication & Onboarding (Fixed Theme)</h3></summary>
+<br/>
+<p><i>The authentication layer uses a dedicated, high-focus layout.</i></p>
+<table width="100%">
+  <tr><td width="50%" align="center"><b>Login Page</b></td><td width="50%" align="center"><b>Registration Page</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/auth/login.png" width="100%" alt="Login"/></td><td align="center"><img src="docs/imgs/screenshots/auth/register.png" width="100%" alt="Register"/></td></tr>
+</table>
+</details>
+
+<details>
+<summary><h3 style="display:inline;">☀️ 2. Light Theme Experience</h3></summary>
+<br/>
+
+<details>
+<summary><b>📊 Dashboard / Home Page</b></summary>
+<br/>
+<p align="center">
+  <img src="docs/imgs/screenshots/light/home/home.png" width="80%" alt="Dashboard Light" style="max-width:800px;"/>
+</p>
+</details>
+
+<details>
+<summary><b>👤 User Profile</b></summary>
+<br/>
+<table width="100%">
+  <tr><td width="50%" align="center"><b>Profile View</b></td><td width="50%" align="center"><b>Edit Profile</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/light/profile/details.png" width="100%" alt="Profile View"/></td><td align="center"><img src="docs/imgs/screenshots/light/profile/edit.png" width="100%" alt="Edit Profile"/></td></tr>
+</table>
+</details>
+
+<details>
+<summary><b>🗂️ IFRS Accounts (МСФО) — 9 Screen Workflow</b></summary>
+<br/>
+<p align="center"><b>Unified Main Table</b></p>
+<img src="docs/imgs/screenshots/light/ifrs/main-list.png" width="100%" alt="IFRS Main"/>
+<br/><br/>
+<h4>🔹 Account Management</h4>
+<table width="100%">
+  <tr><td width="25%" align="center"><b>Details</b></td><td width="25%" align="center"><b>Create</b></td><td width="25%" align="center"><b>Edit</b></td><td width="25%" align="center"><b>Delete</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/light/ifrs/acc-details.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/ifrs/acc-create.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/ifrs/acc-edit.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/ifrs/acc-delete.png" width="100%"/></td></tr>
+</table>
+<h4>🔹 Category Management</h4>
+<table width="100%">
+  <tr><td width="25%" align="center"><b>Details</b></td><td width="25%" align="center"><b>Create</b></td><td width="25%" align="center"><b>Edit</b></td><td width="25%" align="center"><b>Delete</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/light/ifrs/cat-details.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/ifrs/cat-create.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/ifrs/cat-edit.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/ifrs/cat-delete.png" width="100%"/></td></tr>
+</table>
+</details>
+
+<details>
+<summary><b>📋 Reference Books (Справочники) — 9 Screen Workflow</b></summary>
+<br/>
+<p align="center"><b>Unified Main Table</b></p>
+<img src="docs/imgs/screenshots/light/reference/main-list.png" width="100%" alt="Reference Main"/>
+<br/><br/>
+<h4>🔹 Reference Item Management</h4>
+<table width="100%">
+  <tr><td width="25%" align="center"><b>Details</b></td><td width="25%" align="center"><b>Create</b></td><td width="25%" align="center"><b>Edit</b></td><td width="25%" align="center"><b>Delete</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/light/reference/ref-details.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/reference/ref-create.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/reference/ref-edit.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/reference/ref-delete.png" width="100%"/></td></tr>
+</table>
+<h4>🔹 Category Management</h4>
+<table width="100%">
+  <tr><td width="25%" align="center"><b>Details</b></td><td width="25%" align="center"><b>Create</b></td><td width="25%" align="center"><b>Edit</b></td><td width="25%" align="center"><b>Delete</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/light/reference/cat-details.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/reference/cat-create.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/reference/cat-edit.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/reference/cat-delete.png" width="100%"/></td></tr>
+</table>
+</details>
+
+<details>
+<summary><b>💰 Cash Receipt Orders (ПКО)</b></summary>
+<br/>
+<img src="docs/imgs/screenshots/light/orders/list.png" width="100%" alt="Orders List"/>
+<table width="100%">
+  <tr><td width="25%" align="center"><b>Details</b></td><td width="25%" align="center"><b>Create</b></td><td width="25%" align="center"><b>Edit</b></td><td width="25%" align="center"><b>Delete</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/light/orders/details.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/orders/create.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/orders/edit.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/orders/delete.png" width="100%"/></td></tr>
+</table>
+</details>
+
+<details>
+<summary><b>📈 Income Articles (Статьи доходов)</b></summary>
+<br/>
+<img src="docs/imgs/screenshots/light/income/list.png" width="100%" alt="Income List"/>
+<table width="100%">
+  <tr><td width="25%" align="center"><b>Details</b></td><td width="25%" align="center"><b>Create</b></td><td width="25%" align="center"><b>Edit</b></td><td width="25%" align="center"><b>Delete</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/light/income/details.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/income/create.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/income/edit.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/income/delete.png" width="100%"/></td></tr>
+</table>
+</details>
+
+<details>
+<summary><b>⚖️ VAT Management (НДС)</b></summary>
+<br/>
+<img src="docs/imgs/screenshots/light/vat/list.png" width="100%" alt="VAT List"/>
+<table width="100%">
+  <tr><td width="25%" align="center"><b>Details</b></td><td width="25%" align="center"><b>Create</b></td><td width="25%" align="center"><b>Edit</b></td><td width="25%" align="center"><b>Delete</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/light/vat/details.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/vat/create.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/vat/edit.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/light/vat/delete.png" width="100%"/></td></tr>
+</table>
+</details>
+</details>
+
+<details>
+<summary><h3 style="display:inline;">🌙 3. Dark Theme Experience</h3></summary>
+<br/>
+
+<details>
+<summary><b>📊 Dashboard / Home Page</b></summary>
+<br/>
+<p align="center">
+  <img src="docs/imgs/screenshots/dark/home/home.png" width="80%" alt="Dashboard Dark" style="max-width:800px;"/>
+</p>
+</details>
+
+<details>
+<summary><b>👤 User Profile</b></summary>
+<br/>
+<table width="100%">
+  <tr><td width="50%" align="center"><b>Profile View</b></td><td width="50%" align="center"><b>Edit Profile</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/dark/profile/details.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/profile/edit.png" width="100%"/></td></tr>
+</table>
+</details>
+
+<details>
+<summary><b>🗂️ IFRS Accounts (МСФО) — 9 Screen Workflow</b></summary>
+<br/>
+<p align="center"><b>Unified Main Table</b></p>
+<img src="docs/imgs/screenshots/dark/ifrs/main-list.png" width="100%" alt="IFRS Main Dark"/>
+<br/><br/>
+<h4>🔹 Account Management</h4>
+<table width="100%">
+  <tr><td width="25%" align="center"><b>Details</b></td><td width="25%" align="center"><b>Create</b></td><td width="25%" align="center"><b>Edit</b></td><td width="25%" align="center"><b>Delete</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/dark/ifrs/acc-details.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/ifrs/acc-create.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/ifrs/acc-edit.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/ifrs/acc-delete.png" width="100%"/></td></tr>
+</table>
+<h4>🔹 Category Management</h4>
+<table width="100%">
+  <tr><td width="25%" align="center"><b>Details</b></td><td width="25%" align="center"><b>Create</b></td><td width="25%" align="center"><b>Edit</b></td><td width="25%" align="center"><b>Delete</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/dark/ifrs/cat-details.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/ifrs/cat-create.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/ifrs/cat-edit.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/ifrs/cat-delete.png" width="100%"/></td></tr>
+</table>
+</details>
+
+<details>
+<summary><b>📋 Reference Books (Справочники) — 9 Screen Workflow</b></summary>
+<br/>
+<p align="center"><b>Unified Main Table</b></p>
+<img src="docs/imgs/screenshots/dark/reference/main-list.png" width="100%" alt="Reference Main Dark"/>
+<br/><br/>
+<h4>🔹 Reference Item Management</h4>
+<table width="100%">
+  <tr><td width="25%" align="center"><b>Details</b></td><td width="25%" align="center"><b>Create</b></td><td width="25%" align="center"><b>Edit</b></td><td width="25%" align="center"><b>Delete</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/dark/reference/ref-details.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/reference/ref-create.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/reference/ref-edit.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/reference/ref-delete.png" width="100%"/></td></tr>
+</table>
+<h4>🔹 Category Management</h4>
+<table width="100%">
+  <tr><td width="25%" align="center"><b>Details</b></td><td width="25%" align="center"><b>Create</b></td><td width="25%" align="center"><b>Edit</b></td><td width="25%" align="center"><b>Delete</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/dark/reference/cat-details.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/reference/cat-create.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/reference/cat-edit.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/reference/cat-delete.png" width="100%"/></td></tr>
+</table>
+</details>
+
+<details>
+<summary><b>💰 Cash Receipt Orders (ПКО)</b></summary>
+<br/>
+<img src="docs/imgs/screenshots/dark/orders/list.png" width="100%" alt="Orders List Dark"/>
+<table width="100%">
+  <tr><td width="25%" align="center"><b>Details</b></td><td width="25%" align="center"><b>Create</b></td><td width="25%" align="center"><b>Edit</b></td><td width="25%" align="center"><b>Delete</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/dark/orders/details.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/orders/create.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/orders/edit.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/orders/delete.png" width="100%"/></td></tr>
+</table>
+</details>
+
+<details>
+<summary><b>📈 Income Articles (Статьи доходов)</b></summary>
+<br/>
+<img src="docs/imgs/screenshots/dark/income/list.png" width="100%" alt="Income List Dark"/>
+<table width="100%">
+  <tr><td width="25%" align="center"><b>Details</b></td><td width="25%" align="center"><b>Create</b></td><td width="25%" align="center"><b>Edit</b></td><td width="25%" align="center"><b>Delete</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/dark/income/details.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/income/create.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/income/edit.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/income/delete.png" width="100%"/></td></tr>
+</table>
+</details>
+
+<details>
+<summary><b>⚖️ VAT Management (НДС)</b></summary>
+<br/>
+<img src="docs/imgs/screenshots/dark/vat/list.png" width="100%" alt="VAT List Dark"/>
+<table width="100%">
+  <tr><td width="25%" align="center"><b>Details</b></td><td width="25%" align="center"><b>Create</b></td><td width="25%" align="center"><b>Edit</b></td><td width="25%" align="center"><b>Delete</b></td></tr>
+  <tr><td align="center"><img src="docs/imgs/screenshots/dark/vat/details.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/vat/create.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/vat/edit.png" width="100%"/></td><td align="center"><img src="docs/imgs/screenshots/dark/vat/delete.png" width="100%"/></td></tr>
+</table>
+</details>
+</details>
+
+<hr />
+
+<h2 id="getting-started">🚀 Getting Started</h2>
+<p>Follow these steps to get a local copy up and running. Running the commands from the main server directory will automatically restore and build all linked projects (Client and Contracts).</p>
+
+<h3>📋 1. Prerequisites</h3>
+<ul>
+    <li><strong><a href="https://dotnet.microsoft.com/download/dotnet/10.0">.NET 10 SDK</a></strong></li>
+    <li><strong><a href="https://www.postgresql.org/download/">PostgreSQL</a></strong></li>
+</ul>
+
+<h3>🛠️ 2. Installation &amp; Setup</h3>
+
+<ol>
+    <li>
+        <strong>Clone the repository:</strong>
+        <pre><code>git clone https://github.com/abdullokhonz/Bookkeeping.git
+cd Bookkeeping</code></pre>
+    </li>
+    <li>
+        <strong>Navigate to the Main Server project:</strong>
+        <p><i>The solution is structured to build all dependencies from this entry point:</i></p>
+        <pre><code>cd Bookkeeping
+cd Bookkeeping</code></pre>
+    </li>
+    <li>
+        <strong>Configure Environment (appsettings.json):</strong>
+        <p>Update the configuration file inside the <code>Bookkeeping</code> folder with your credentials. You will need to set up the database, JWT, and service providers:</p>
+<pre><code>{
+  "ApiSettings": { "BaseUrl": "https://localhost:7277/" },
+  "ConnectionStrings": {
+    "DbPostgres": "Host=localhost;Port=5432;Database=BookkeepingDB;User ID=postgres;Password=your_password"
+  },
+  "JwtSettings": {
+    "Key": "YOUR_SECURE_JWT_KEY_HERE",
+    "Issuer": "Bookkeeping_IdentityServer",
+    "Audience": "Bookkeeping_WebClient",
+    "LifetimeMinutes": 15
+  },
+  "EmailSettings": {
+    "SmtpHost": "YOUR_SMTP_HOST_HERE",
+    "SmtpPort": "YOUR_SMTP_PORT_HERE",
+    "FromName": "Bookkeeping Notifications",
+    "FromEmail": "YOUR_EMAIL_HERE",
+    "EmailPassword": "YOUR_EMAIL_PASSWORD_HERE"
+  },
+  "SmsSettings": {
+    "Dlm": "YOUR_SMS_DLM_HERE",
+    "T": "YOUR_SMS_T_HERE",
+    "Login": "YOUR_SMS_LOGIN_HERE",
+    "PassHash": "YOUR_SMS_PASSHASH_HERE",
+    "Sender": "YOUR_SMS_SENDER_HERE"
+  }
+}</code></pre>
+    </li>
+    <li>
+        <strong>Build &amp; Launch:</strong>
+        <p>This will restore all projects (Server, Client, Contracts) and start the application:</p>
+        <pre><code>dotnet restore
+dotnet build
+dotnet run</code></pre>
+        <p><i>The platform will be available at your configured <code>BaseUrl</code>.</i></p>
+    </li>
+</ol>
+
+<hr />
+
+<h2 id="authentication-notes">🔐 Important Notes on Authentication</h2>
+
+<table width="100%">
+    <thead>
+        <tr>
+            <th align="left">Environment</th>
+            <th align="left">Access Instructions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>🌐 Web Frontend (Blazor)</strong></td>
+            <td>Full authentication flow is active. You can register and log in to access the dashboard.</td>
+        </tr>
+        <tr>
+            <td><strong>🚀 Postman / External</strong></td>
+            <td>Use <code>/auth/login</code> to obtain a token and add it to <code>Authorization: Bearer</code> header.</td>
+        </tr>
+        <tr>
+            <td><strong>🛠️ Swagger UI</strong></td>
+            <td>
+                <strong>Warning:</strong> Authorize via Swagger UI is currently not configured.<br />
+                <u>To test via Swagger:</u> Manually remove the <code>[Authorize]</code> attribute from Controllers.
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<hr />
+
+## 🤝 Contributing
+
+Contributions are welcome! If you have suggestions or want to contribute, please feel free to open issues or pull requests.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details.
+
+---

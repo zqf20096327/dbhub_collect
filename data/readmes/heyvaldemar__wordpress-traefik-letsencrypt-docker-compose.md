@@ -1,0 +1,133 @@
+# WordPress + Traefik + Let's Encrypt on Docker Compose
+
+[![Deployment Verification](https://github.com/heyvaldemar/wordpress-traefik-letsencrypt-docker-compose/actions/workflows/deployment-verification.yml/badge.svg?branch=main)](https://github.com/heyvaldemar/wordpress-traefik-letsencrypt-docker-compose/actions/workflows/deployment-verification.yml)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/14838/badge)](https://www.bestpractices.dev/projects/14838)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+This repository deploys WordPress (official Docker image) behind Traefik with automatic Let's Encrypt TLS, backed by MariaDB 11.4 LTS, with scheduled backups (database + wp-content) and companion restore scripts. One `docker compose up` away from a website at `https://your-domain`.
+
+📙 Full narrative installation guide on the blog: [heyvaldemar.com/install-wordpress-using-docker-compose/](https://www.heyvaldemar.com/install-wordpress-using-docker-compose/).
+
+## Getting started
+
+```bash
+# 1. Clone
+git clone https://github.com/heyvaldemar/wordpress-traefik-letsencrypt-docker-compose
+cd wordpress-traefik-letsencrypt-docker-compose
+
+# 2. Create the two Docker networks the stack expects
+docker network create traefik-network
+docker network create wordpress-network
+
+# 3. Copy the environment template and fill in required values
+cp .env.example .env
+$EDITOR .env
+# ^ Required: WORDPRESS_DB_PASSWORD, WORDPRESS_DB_ADMIN_PASSWORD,
+#   WORDPRESS_HOSTNAME, TRAEFIK_HOSTNAME, TRAEFIK_ACME_EMAIL,
+#   TRAEFIK_BASIC_AUTH.
+
+# 4. Deploy
+docker compose -f wordpress-traefik-letsencrypt-docker-compose.yml -p wordpress up -d
+```
+
+Within a minute `https://${WORDPRESS_HOSTNAME}` serves the WordPress installer with a fresh Let's Encrypt certificate. Complete the installer immediately: it creates the admin account, and the screen is open until someone claims it.
+
+### What success looks like
+
+```bash
+docker compose -f wordpress-traefik-letsencrypt-docker-compose.yml -p wordpress ps
+curl -fskL -o /dev/null -w "%{http_code}\n" "https://${WORDPRESS_HOSTNAME}/"
+docker compose -p wordpress logs traefik | grep -i "adding certificate"
+```
+
+### Common first-deploy issues
+
+- **Cert issuance fails.** DNS hasn't propagated or port 80 isn't reachable from the internet.
+- **`docker compose up` fails with `set in .env`.** A required variable is empty; the error names it.
+- **Networks not found.** Step 2 was skipped.
+- **Mixed-content or redirect loops.** WordPress stores its URL at install time: install via the HTTPS hostname, not an IP.
+
+## Updating
+
+`./update.sh` moves this checkout to the latest release tag — a combination this repository's CI has booted, upgraded from the previous release on the same volumes, and smoke-tested — and then runs `docker compose up -d`. It refuses to cross a major version unattended, refuses to run over local changes, and names any variable that became required since your version before anything has moved. `./update.sh --dry-run` says what would happen. Every release cut by fleet triage also carries what upstream changed, read from its release notes against this compose file.
+
+## Supply chain trust
+
+Three upstream images ([`traefik`](https://hub.docker.com/_/traefik), [`wordpress`](https://hub.docker.com/_/wordpress), [`mariadb`](https://hub.docker.com/_/mariadb), all Docker Hub official) pinned to `tag@sha256:<digest>` as interpolation defaults in the compose `x-images` block. `git pull` alone delivers the tested combination; an `*_IMAGE_TAG` variable in `.env` overrides deliberately.
+
+Two override levels exist per image. `<PREFIX>_IMAGE_VERSION` in `.env` swaps only the version of that image (Compose then pulls the tag, without a digest) and leaves every other pin as tested; `<PREFIX>_IMAGE_TAG` replaces the whole reference, digest included. The variable names are listed in `.env.example`. Nested defaults need Docker Compose v2.5 or newer (2022); v2.0 to v2.4 leave the inner `${...}` unexpanded and `docker compose up` fails with an invalid reference instead of deploying something unexpected.
+
+Worth knowing: earlier versions of this template used `bitnami/wordpress:latest`. Bitnami's public images froze with Broadcom's 2025 catalog change, so the template now builds on the official image: see the v1.0.0 release notes if you deployed the Bitnami-based version.
+
+The daily `check-pin-freshness` CI job re-resolves each pin against its registry and compares the pinned WordPress and Traefik versions against the latest upstream releases. GitHub Actions are pinned by commit SHA; Dependabot keeps those fresh.
+
+### Verify what you deploy
+
+Every release from v1.9.1 on carries three files made on GitHub's runner with a short-lived identity and no stored key: `wordpress-traefik-letsencrypt-docker-compose-<tag>.tar.gz`, a `git archive` of exactly the tree the tag points at; `wordpress-traefik-letsencrypt-docker-compose-<tag>.tar.gz.sigstore.json`, a keyless [Sigstore](https://www.sigstore.dev/) signature over it; and `wordpress-traefik-letsencrypt-docker-compose-<tag>.intoto.jsonl`, [SLSA](https://slsa.dev/) build provenance from the SLSA generator. To check them with nothing from this repository trusted:
+
+```bash
+cosign verify-blob wordpress-traefik-letsencrypt-docker-compose-<tag>.tar.gz \
+  --bundle wordpress-traefik-letsencrypt-docker-compose-<tag>.tar.gz.sigstore.json \
+  --certificate-identity-regexp '^https://github.com/heyvaldemar/wordpress-traefik-letsencrypt-docker-compose/' \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com
+
+slsa-verifier verify-artifact wordpress-traefik-letsencrypt-docker-compose-<tag>.tar.gz \
+  --provenance-path wordpress-traefik-letsencrypt-docker-compose-<tag>.intoto.jsonl \
+  --source-uri github.com/heyvaldemar/wordpress-traefik-letsencrypt-docker-compose
+```
+
+Add `--source-tag <tag>` for a release published after 24 September 2026, which is signed by the run that published it. The five releases before that date were signed by a run started by hand on `main`, so their provenance names the branch, not the tag; the archive is still the tag's tree, and the signature still belongs to this repository's workflow. The workflow that makes them is [`release-assets.yml`](.github/workflows/release-assets.yml).
+
+## Production checklist
+
+- [ ] **Complete the web installer immediately after deploy.**
+- [ ] **Strong secrets**: both DB passwords at 24+ random characters; regenerate the Traefik dashboard hash.
+- [ ] **Host-mount the backup volumes** for disaster recovery.
+- [ ] **Verify Let's Encrypt cert issuance** in the Traefik logs on first start.
+- [ ] **Keep WordPress, themes, and plugins updated**: the image pins the core; plugins update from the admin UI.
+- [ ] **Back up before core upgrades**: restore is the rollback.
+
+## Backups and restore
+
+The `backups` container runs a `mysqldump | gzip` + `tar.gz`-of-wp-content → prune → sleep loop (defaults: 30-minute warm-up, 24-hour interval, 30-day retention). Restore with the interactive scripts (`chmod +x *.sh` once): `./wordpress-restore-database.sh`, then `./wordpress-restore-application-data.sh`. Each lists the backups and asks, or takes a file name as its argument; both read every path and credential from the running backups container, and CI runs both on every push.
+
+## Resource limits
+
+Every service carries memory and CPU limits plus reservations as compose-level defaults: the same values CI boots the stack under. Override any of them in `.env` (the knobs and their defaults are listed in `.env.example`, e.g. `TRAEFIK_MEMORY_LIMIT=512m`) and the override survives every `git pull`. If a service is OOM-killed under real load, `docker inspect <container> --format '{{.State.OOMKilled}}'` says so; raise its `_MEMORY_LIMIT` and recreate.
+
+## Container hardening
+
+Every service runs with `security_opt: no-new-privileges:true`, so a process cannot gain privileges through setuid binaries even if it escapes its initial capability set. Infrastructure containers (the reverse proxy, databases, caches, backups) run with `cap_drop: [ALL]` and add back only what their entrypoints need: `NET_BIND_SERVICE` for Traefik to bind :80/:443, `CHOWN`/`SETUID`/`SETGID` (and friends) for database images to own their data directory and drop to their service user. Application containers keep the default capability set on purpose: upstream images assume it, and a wrong guess there is a boot loop in production rather than a hardening win. CI boots the stack under exactly these settings on every push, so what ships is what was tested.
+
+## Testing
+
+The [Deployment Verification](https://github.com/heyvaldemar/wordpress-traefik-letsencrypt-docker-compose/actions/workflows/deployment-verification.yml?query=branch%3Amain) workflow runs on every push, pull request, and every day at 06:00 UTC: shellcheck + actionlint, Trivy scans of all three pinned images, the weekly freshness check, and a deploy-and-test job that boots the full stack with ephemeral credentials and requires the site to answer through Traefik.
+
+### Backup and restore, proven
+
+`tests/e2e-backup-restore.sh` runs against the live stack and is what CI executes after the HTTPS smoke. The scenario that matters most is the restore roundtrip: insert a marker row, restore the earliest backup, assert the marker is gone. A backup that cannot be restored fails the build. Run it yourself against a running deployment with short intervals in `.env` (`BACKUP_INIT_SLEEP=15s`, `BACKUP_INTERVAL=60s`):
+
+```bash
+chmod +x tests/e2e-backup-restore.sh
+./tests/e2e-backup-restore.sh
+```
+
+It stops the database container briefly to prove failure detection: run it on a staging copy, not on production.
+
+## Security notes
+
+- Credentials are read from `.env` at deploy time; `.env` is gitignored and compose fails fast on missing required variables.
+- **Pre-rotation advisory.** Releases before v1.0.0 (2026-08-31) shipped a tracked `.env` with generated-looking database passwords. Rotate them if your deployment reused them.
+- MariaDB listens only on the internal network.
+
+---
+
+## About the maintainer
+
+<div align="center">
+
+**Maintained by [Vladimir Mikhalev](https://github.com/heyvaldemar)** · Docker Captain · IBM Champion · AWS Community Builder
+
+[YouTube](https://www.youtube.com/channel/UCf85kQ0u1sYTTTyKVpxrlyQ?sub_confirmation=1) · [Blog](https://heyvaldemar.com) · [LinkedIn](https://www.linkedin.com/in/heyvaldemar/)
+
+</div>

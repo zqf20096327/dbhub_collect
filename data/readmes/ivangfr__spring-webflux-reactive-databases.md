@@ -1,0 +1,375 @@
+# spring-webflux-reactive-databases
+
+The goal of this project is to play with [`Spring WebFlux`](https://docs.spring.io/spring-framework/reference/web/webflux.html) both on client and server side. For it, we will implement [`Spring Boot`](https://docs.spring.io/spring-boot/index.html) Java Web applications (`product-api`, `customer-api`, `order-api`, `notification-api` and `client-shell`) and use different databases like [`Cassandra`](https://cassandra.apache.org/), [`MongoDB`](https://www.mongodb.com/), [`Postgres`](https://www.postgresql.org/) and [`MySQL`](https://www.mysql.com/).
+
+## Proof-of-Concepts & Articles
+
+On [ivangfr.github.io](https://ivangfr.github.io), I have compiled my Proof-of-Concepts (PoCs) and articles. You can easily search for the technology you are interested in by using the filter. Who knows, perhaps I have already implemented a PoC or written an article about what you are looking for.
+
+## Additional Readings
+
+- \[**Medium**\] [**Reactive Book API Tutorial w/ Spring Boot**](https://medium.com/@ivangfr/list/reactive-book-api-tutorial-w-spring-boot-b56befd9e647)
+
+## Project Architecture
+
+![project-diagram](documentation/project-diagram.jpeg)
+
+## Applications
+
+- ### product-api
+
+  `Spring Boot` Java Web application that exposes a REST API to manage `products`. It uses `MongoDB` as storage.
+  
+  ![product-api-swagger](documentation/product-api-swagger.jpeg)
+
+- ### customer-api
+
+  `Spring Boot` Java Web application that exposes a REST API to manage `customers`. It uses `Postgres` as storage.
+  
+  ![customer-api-swagger](documentation/customer-api-swagger.jpeg)
+
+- ### order-api
+
+  `Spring Boot` Web Java application that exposes a REST API to manage `orders`. It uses `Cassandra` as storage. In order to get more information about an `order`, i.e, the `name` of the customer who placed it or the `name` or `price` of the products in the order, `order-api` uses [`WebClient`](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html#webflux-client) and [`CompletableFuture`](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/CompletableFuture.html) to fetch this information from `customer-api` and `product-api`.
+  
+  ![order-api-swagger](documentation/order-api-swagger.jpeg)
+
+- ### notification-api
+
+  `Spring Boot` Web Java application that exposes a REST API to manage `notifications`.
+
+  ![notification-api-swagger](documentation/notification-api-swagger.jpeg)
+
+- ### client-shell
+
+  `Spring Boot` Shell Java application that has a couple of commands to interact with `product-api`, `customer-api`, `order-api` and `notification-api`. The picture below shows those commands.
+
+  ![client-shell](documentation/client-shell.jpeg)
+  
+## Prerequisites
+
+- [`Java 25`](https://www.oracle.com/java/technologies/downloads/#java25) or higher;
+- A containerization tool (e.g., [`Docker`](https://www.docker.com), [`Podman`](https://podman.io), etc.)
+
+## Initialize Environment
+
+- Open a terminal and inside the `spring-webflux-reactive-databases` root folder, run:
+  ```bash
+  ./init-environment.sh
+  ```
+
+- Wait for the script to finish.
+
+## Run applications with Maven
+
+- **product-api**
+
+  Open a new terminal and, inside the `spring-webflux-reactive-databases` root folder, run the following command:
+  ```bash
+  ./mvnw clean spring-boot:run --projects product-api
+  ```
+
+- **customer-api**
+
+  Open a new terminal and, inside the `spring-webflux-reactive-databases` root folder, run the following command:
+  ```bash
+  ./mvnw clean spring-boot:run --projects customer-api
+  ```
+
+- **order-api**
+
+  Open a new terminal and, inside the `spring-webflux-reactive-databases` root folder, run the following command:
+  ```bash
+  ./mvnw clean spring-boot:run --projects order-api
+  ```
+
+- **notification-api**
+
+  Open a new terminal and, inside the `spring-webflux-reactive-databases` root folder, run the following command:
+  ```bash
+  ./mvnw clean spring-boot:run --projects notification-api
+  ```
+
+- **client-shell**
+
+  Open a new terminal and, inside the `spring-webflux-reactive-databases` root folder, run the following command:
+  ```bash
+  ./mvnw clean spring-boot:run --projects client-shell
+  ```
+
+## Run applications as Docker containers
+
+- ### Build Docker Images
+  
+  - In a terminal, make sure you are in the `spring-webflux-reactive-databases` root folder.
+  - Run the following script to build the Docker images:
+    ```bash
+    ./build-docker-images.sh
+    ```
+
+- ### Environment Variables
+
+  - **product-api**
+
+    | Environment Variable | Description                                                       |
+    |----------------------|-------------------------------------------------------------------|
+    | `MONGODB_HOST`       | Specify host of the `Mongo` database to use (default `localhost`) |
+    | `MONGODB_PORT`       | Specify port of the `Mongo` database to use (default `27017`)     |
+
+  - **customer-api**
+
+    | Environment Variable | Description                                                          |
+    |----------------------|----------------------------------------------------------------------|
+    | `POSTGRES_HOST`      | Specify host of the `Postgres` database to use (default `localhost`) |
+    | `POSTGRES_PORT`      | Specify port of the `Postgres` database to use (default `5432`)      |
+
+  - **order-api**
+
+    | Environment Variable | Description                                                           |
+    |----------------------|-----------------------------------------------------------------------|
+    | `CASSANDRA_HOST`     | Specify host of the `Cassandra` database to use (default `localhost`) |
+    | `CASSANDRA_PORT`     | Specify port of the `Cassandra` database to use (default `9042`)      |
+    | `PRODUCT_API_HOST`   | Specify host of the `product-api` to use (default `localhost`)        |
+    | `PRODUCT_API_PORT`   | Specify port of the `product-api` to use (default `9080`)             |
+    | `CUSTOMER_API_HOST`  | Specify host of the `customer-api` to use (default `localhost`)       |
+    | `CUSTOMER_API_PORT`  | Specify port of the `customer-api` to use (default `9081`)            |
+
+  - **notification-api**
+
+    | Environment Variable | Description                                                       |
+    |----------------------|-------------------------------------------------------------------|
+    | `MYSQL_HOST`         | Specify host of the `MySQL` database to use (default `localhost`) |
+    | `MYSQL_PORT`         | Specify port of the `MySQL` database to use (default `3306`)      |
+    | `CUSTOMER_API_HOST`  | Specify host of the `customer-api` to use (default `localhost`)   |
+    | `CUSTOMER_API_PORT`  | Specify port of the `customer-api` to use (default `9081`)        |
+    | `ORDER_API_HOST`     | Specify host of the `order-api` to use (default `localhost`)      |
+    | `ORDER_API_PORT`     | Specify port of the `order-api` to use (default `9082`)           |
+
+  - **client-shell**
+
+    | Environment Variable    | Description                                                         |
+    |-------------------------|---------------------------------------------------------------------|
+    | `PRODUCT_API_HOST`      | Specify host of the `product-api` to use (default `localhost`)      |
+    | `PRODUCT_API_PORT`      | Specify port of the `product-api` to use (default `9080`)           |
+    | `CUSTOMER_API_HOST`     | Specify host of the `customer-api` to use (default `localhost`)     |
+    | `CUSTOMER_API_PORT`     | Specify port of the `customer-api` to use (default `9081`)          |
+    | `ORDER_API_HOST`        | Specify host of the `order-api` to use (default `localhost`)        |
+    | `ORDER_API_PORT`        | Specify port of the `order-api` to use (default `9082`)             |
+    | `NOTIFICATION_API_HOST` | Specify host of the `notification-api` to use (default `localhost`) |
+    | `NOTIFICATION_API_PORT` | Specify port of the `notification-api` to use (default `9083`)      |
+
+- ### Start Docker Containers
+
+  - In a terminal, make sure you are inside the `spring-webflux-reactive-databases` root folder.
+  - Run following command:
+    ```bash
+    ./start-apis.sh && ./start-shell.sh
+    ```
+    
+## Application's URL
+
+| Application      | URL                                   |
+|------------------|---------------------------------------|
+| product-api      | http://localhost:9080/swagger-ui.html |
+| customer-api     | http://localhost:9081/swagger-ui.html |
+| order-api        | http://localhost:9082/swagger-ui.html |
+| notification-api | http://localhost:9083/swagger-ui.html |
+
+## Playing around
+
+> **Warning**: the ids shown below will be different when you run it
+
+- In `client-shell` terminal, import some products and customers by running the following command:
+  - If you are running using `Maven`:
+    ```bash
+    script ../src/main/resources/samples.txt
+    ```
+  - If you are running as Docker container:
+    ```bash
+    script /workspace/BOOT-INF/classes/samples.txt
+    ```
+    
+- Get all customers
+  ```bash
+  get-customers
+  ```
+  
+  It should return:
+  ```bash
+  {"id":"1","name":"Customer A","email":"customer.a@test.com","city":"Berlin","street":"NYC Strasse","number":"123"}
+  {"id":"2","name":"Customer B","email":"customer.b@test.com","city":"Berlin","street":"LA Strasse","number":"234"}
+  {"id":"3","name":"Customer C","email":"customer.c@test.com","city":"Berlin","street":"DC Strasse","number":"345"}
+  ...
+  ```
+  
+- Get all products
+  ```bash
+  get-products
+  ```
+  
+  It should return:
+  ```bash
+  {"id":"5ee3ee31b460d868af49f389","name":"product-1","price":199.99}
+  {"id":"5ee3ee32b460d868af49f38a","name":"product-2","price":299.99}
+  ...
+  ```
+  
+- Create an order where `Customer A` buys `1 unit` of `product-1` and `2 units` of `product-2`
+  > **Warning**: the product ids informed here are just a sample. You will have different ones.
+  ```bash
+  create-order --customerId 1 --products 5ee3ee31b460d868af49f389:1;5ee3ee32b460d868af49f38a:2
+  ```
+  
+  It should return:
+  ```bash
+  {
+    "orderId":"5aaad64c-4e80-48e0-926d-8f1b7027955a",
+    "status":"OPEN",
+    "created":"2020-06-12T22:09:59.558232",
+    "products": [
+      {"id":"5ee3ee31b460d868af49f389", "quantity":1},
+      {"id":"5ee3ee32b460d868af49f38a", "quantity":2}
+    ],
+    "customerId":"1"
+  }
+  ```
+  
+- Get details about the order created
+  ```bash
+  get-order-detailed 5aaad64c-4e80-48e0-926d-8f1b7027955a
+  ```
+  
+  It should return:
+  ```bash
+  {
+    "orderId":"5aaad64c-4e80-48e0-926d-8f1b7027955a",
+    "status":"OPEN",
+    "created":"2020-06-12T22:09:59.558",
+    "products": [
+      {"id":"5ee3ee32b460d868af49f38a", "name":"product-2", "quantity":2, "price":299.99},
+      {"id":"5ee3ee31b460d868af49f389", "name":"product-1", "quantity":1, "price":199.99}
+    ],
+    "customer": {
+      "id":"1",
+      "name":"Customer A",
+      "email":"customer.a@test.com",
+      "city":"Berlin",
+      "street":"NYC Strasse",
+      "number":"123"
+    }
+  }
+  ```
+
+- To create a notification for the order created above
+  ```bash
+  create-notification 5aaad64c-4e80-48e0-926d-8f1b7027955a
+  ```
+
+- To check how fast `order-api` get details about the customer and products of an order, create another order where `Customer A` order `50` random products
+  ```bash
+  create-order-random --customerId 1 --numProducts 50
+  ```
+  
+  It should return:
+  ```
+  {
+    "orderId":"87133d36-67f0-4388-b15b-7d66ad739374",
+    "status":"OPEN",
+    "created":"2020-06-12T22:14:08.342338",
+    "products": [
+      {"id":"5ee3ee32b460d868af49f38a", "quantity":4},
+      ...
+      {"id":"5ee3ee32b460d868af49f396", "quantity":3}
+    ],
+    "customerId":"1"
+  }
+  ```
+  
+- In another terminal, to get the details of the previously created order and the response time of this call, use `order-api`'s endpoint `GET /api/orders/{orderId}/detailed`
+  ```bash
+  curl -w "\n\nResponse Time: %{time_total}s" -s localhost:9082/api/orders/87133d36-67f0-4388-b15b-7d66ad739374/detailed
+  ```
+  
+  It will return something like:
+  ```bash
+  {
+    "orderId":"87133d36-67f0-4388-b15b-7d66ad739374",
+    "status":"OPEN",
+    "created":"2020-06-12T22:14:08.342338",
+    "products": [
+      {"id":"5ee3ee32b460d868af49f395", "name":"product-13", "quantity":4, "price":1399.99},
+      ...
+    ],
+    "customer": {
+      "id":"1",
+      "name":"Customer A",
+      "email":"customer.a@test.com",
+      "city":"Berlin",
+      "street":"NYC Strasse",
+      "number":"123"
+    }
+  }
+  
+  Response Time: 0.292698s
+  ```
+
+## Useful Commands
+
+- **Cassandra**
+
+  ```bash
+  docker exec -it cassandra cqlsh
+  USE mycompany;
+  SELECT * FROM orders;
+  ```
+  > Type `exit` to get out of `cqlsh`
+
+- **MongoDB**
+
+  ```bash
+  docker exec -it mongodb mongosh productdb
+  db.products.find()
+  ```
+  > Type `exit` to get out of `MongoDB shell`
+
+- **Postgres**
+
+  ```bash
+  docker exec -it postgres psql -U postgres -d customerdb
+  \dt customer
+  SELECT * FROM CUSTOMER;
+  ```
+  > Type `exit` to get out of `psql`
+
+- **MySQL**
+
+  ```bash
+  docker exec -it -e MYSQL_PWD=secret mysql mysql -uroot --database notificationdb
+  SELECT * FROM notification;
+  ```
+  > Type `exit` to get out of `MySQL monitor`
+
+## Shutdown
+
+- To stop `client-shell`, go to the terminal where it is running and type `exit`.
+- To stop `product-api`, `customer-api`, and `order-api`:
+  - If you start them with `Maven`, go to the terminals where they are running and press `Ctrl+C`.
+  - If you start them as Docker containers, go to a terminal and, inside the `spring-webflux-reactive-databases` root folder, run the following script:
+    ```bash
+    ./stop-apis.sh
+    ```
+- To stop and remove the database containers, network, and volumes, go to a terminal and, inside the `spring-webflux-reactive-databases` root folder, run the script below:
+  ```bash
+  ./shutdown-environment.sh
+  ```
+
+## Cleanup
+
+To remove all Docker images created by this project, go to a terminal and, inside the `spring-webflux-reactive-databases` root folder, run the following script:
+```bash
+./remove-docker-images.sh
+```
+
+## References
+
+- https://projectreactor.io/docs/core/release/reference/

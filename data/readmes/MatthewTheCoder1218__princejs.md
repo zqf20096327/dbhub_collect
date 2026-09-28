@@ -1,0 +1,1236 @@
+<div align="center">
+
+# 👑 PrinceJS
+
+**Ultra-clean, modern & minimal Bun web framework.**  
+Built by a 14-year-old Nigerian developer (started at 13 — every line since). Among the top three in performance.
+
+[![npm version](https://img.shields.io/npm/v/princejs?style=flat-square)](https://www.npmjs.com/package/princejs)
+[![GitHub stars](https://img.shields.io/github/stars/MatthewTheCoder1218/princejs?style=flat-square)](https://github.com/MatthewTheCoder1218/princejs)
+[![npm downloads](https://img.shields.io/npm/dt/princejs?style=flat-square)](https://www.npmjs.com/package/princejs)
+[![license](https://img.shields.io/github/license/MatthewTheCoder1218/princejs?style=flat-square)](https://github.com/MatthewTheCoder1218/princejs/blob/main/LICENSE)
+
+[**Website**](https://princejs.vercel.app) · [**npm**](https://www.npmjs.com/package/princejs) · [**GitHub**](https://github.com/MatthewTheCoder1218/princejs) · [**Twitter**](https://twitter.com/princejs_bun)
+
+</div>
+
+---
+
+## ⚡ Performance
+
+Benchmarked with `oha -c 100 -z 30s` on a clean Windows 10 machine — one warmed server per framework, 5 sustained reps each, averaged. All five then ran on Bun 1.4.2, answering the same JSON route:
+
+| Framework | Avg Req/s | Peak Req/s |
+|-----------|----------:|-----------:|
+| Elysia | 27,723 | 45,966 |
+| Hono | 23,317 | 38,983 |
+| **PrinceJS** | **20,984** | **35,582** |
+| Fastify | 16,549 | 25,211 |
+| Express | 13,946 | 22,546 |
+
+> PrinceJS is **1.5× faster than Express**, within 10% of Hono, and ships with **zero runtime dependencies**.
+
+**Bundle size** (main entry, minified + gzipped):
+
+| Package | Minified | Minified + Gzipped |
+|---------|---------:|-------------------:|
+| **PrinceJS** | **17.1 kB** | **5.9 kB** |
+
+> That's the complete framework — core + middleware — measured the same way as your own size report.
+
+---
+
+## 🚀 Quick Start
+
+```bash
+bun add princejs
+# or
+npm install princejs
+```
+
+```ts
+import { prince } from "princejs";
+import { cors, logger } from "princejs/middleware";
+
+const app = prince();
+
+app.use(cors());
+app.use(logger());
+
+app.get("/", () => ({ message: "Hello PrinceJS!" }));
+app.get("/users/:id", (req) => ({ id: req.params?.id }));
+
+app.listen(3000);
+```
+
+---
+
+## 🧰 Features
+
+| Feature | Import |
+|---------|--------|
+| Routing, Route Grouping, WebSockets (rooms & broadcast), Custom 404, OpenAPI, Plugins, Lifecycle Hooks, Cookies, IP | `princejs` |
+| CORS, Logger, JWT, JWKS, Auth, Rate Limit, Validate, Compress, Session, API Key, Secure Headers, CSRF Protection, Timeout, Request ID, IP Restriction, Static Files, Trim Trailing Slash, ETag / 304 Caching, Body Size Limit, Middleware Combinators (`every`, `some`, `except`), `guard()` | `princejs/middleware` |
+| File Uploads, SSE, Streaming, In-memory Cache, Input Sanitization, Environment Validation, Response Helpers | `princejs/helpers` |
+| Cron Scheduler | `princejs/scheduler` |
+| JSX / SSR | `princejs/jsx` |
+| SQLite Database | `princejs/db` |
+| End-to-End Type Safety | `princejs/client` |
+| Vercel Edge adapter | `princejs/vercel` |
+| Cloudflare Workers adapter | `princejs/cloudflare` |
+| Deno Deploy adapter | `princejs/deno` |
+| Node.js / Express adapter | `princejs/node` |
+
+---
+
+## 🎨 JSX / SSR
+
+Write HTML with typed helper components — works both as direct function calls and with JSX syntax in `.tsx` files.
+
+```ts
+import {
+  render, Html, Head, Title, Meta, Style, Script,
+  Body, Header, Main, Footer, Nav,
+  H1, H2, P, Div, A, Span,
+  Form, Input, Button, Select, Option, Textarea,
+  Ul, Li, Br, Hr, Img,
+} from "princejs/jsx";
+
+// Direct function calls — works in .ts files
+const page = Html(
+  Head(
+    Meta({ charset: "utf-8" }),
+    Meta({ name: "viewport", content: "width=device-width, initial-scale=1" }),
+    Title("My App"),
+    Style(`body { font-family: system-ui; }`),
+  ),
+  Body(
+    Header(Nav(A({ href: "/" }, "Home"))),
+    Main(
+      H1("Hello World"),
+      P("Welcome to PrinceJS!"),
+    ),
+    Footer(P("Built with PrinceJS")),
+  ),
+);
+
+app.get("/", () => render("<!DOCTYPE html>" + page));
+```
+
+**Attribute normalization** — use JSX-friendly names, they convert automatically:
+
+| JSX attribute | HTML output |
+|---|---|
+| `className="box"` | `class="box"` |
+| `htmlFor="email"` | `for="email"` |
+| `tabIndex={0}` | `tabindex="0"` |
+| `httpEquiv="refresh"` | `http-equiv="refresh"` |
+| `required={true}` | `required` |
+| `disabled={false}` | *(omitted)* |
+
+**Layouts** — layouts are just functions that compose pages. No special API:
+
+```ts
+const BaseLayout = ({ title, children }) =>
+  Html(
+    Head(Meta({ charset: "utf-8" }), Title(title)),
+    Body(Div({ class: "container" }, children)),
+  );
+
+app.get("/", () => render(
+  BaseLayout({
+    title: "Home",
+    children: [
+      H1("Home Page"),
+      P("Welcome!"),
+    ],
+  })
+));
+```
+
+**Partials** — reusable components are just functions:
+
+```ts
+const navbar = () =>
+  Nav(
+    A({ href: "/" }, "Home"),
+    A({ href: "/about" }, "About"),
+    A({ href: "/docs" }, "Docs"),
+  );
+
+const page = Html(
+  Head(Title("My App")),
+  Body(navbar(), Main(H1("Content"))),
+);
+```
+
+---
+
+## 🚀 Demo App: URL Shortener
+
+Want to see it all working together? The repo ships a complete, runnable URL shortener — real app, not a toy:
+
+- Shorten long URLs into `pr.in/xxxxxx` links
+- SQLite storage (`bun:sqlite`) with a click counter per link
+- Rate limiting (10 req/min), zod input validation, request ID
+- Auto-generated Scalar OpenAPI docs at `/docs`
+- A styled homepage built with the JSX components above
+
+```bash
+bun demo/shortener/index.ts
+# open http://localhost:3000
+```
+
+```
+POST /api/links        { url: "https://example.com/foo" } → { code, shortUrl, clicks }
+GET  /:code            → 302 redirect to the original URL
+GET  /api/links/:code  → link info + click count
+GET  /api/stats        → total links + top 5 by clicks
+GET  /docs             → Scalar OpenAPI UI
+```
+
+The full source is at [`demo/shortener/index.ts`](demo/shortener/index.ts) — routing, middleware, SQLite, validation, and JSX SSR all in one file. Use it as a template for your own app.
+
+---
+
+## 🌐 CORS
+
+`cors()` allows requests from **any origin** out of the box — no config needed. Pass an explicit origin when you want to restrict.
+
+```ts
+import { cors } from "princejs/middleware";
+
+const app = prince();
+app.use(cors());                       // allow ALL origins
+app.use(cors("https://myapp.com"));    // allow one origin only
+```
+
+> ⚠️ **v2.3.2 and earlier pinned the default to `http://localhost:3000`**, silently blocking every real client. That's fixed — bare `cors()` is now wide open by default. If you relied on the old restrictive default, pass your origin explicitly.
+
+Preflights (`OPTIONS`) get a 204 with `Access-Control-Max-Age: 86400`; actual responses get the CORS headers merged in.
+
+---
+
+## 🍪 Cookies & 🌐 IP Detection
+
+### Reading Cookies
+
+Cookies are automatically parsed and available on every request:
+
+```ts
+import { prince } from "princejs";
+
+const app = prince();
+
+app.get("/profile", (req) => ({
+  sessionId: req.cookies?.sessionId,
+  theme: req.cookies?.theme,
+  allCookies: req.cookies, // Record<string, string>
+}));
+```
+
+### Setting Cookies
+
+Use the response builder for full cookie control:
+
+```ts
+app.get("/login", (req) =>
+  app.response()
+    .status(200)
+    .json({ ok: true })
+    .cookie("sessionId", "abc123", {
+      maxAge: 3600,       // 1 hour
+      path: "/",
+      httpOnly: true,     // not accessible from JS
+      secure: true,       // HTTPS only
+      sameSite: "Strict", // CSRF protection
+    })
+);
+
+// Chain multiple cookies
+app.response()
+  .json({ ok: true })
+  .cookie("session", "xyz")
+  .cookie("theme", "dark")
+  .cookie("lang", "en");
+```
+
+### Client IP Detection
+
+```ts
+app.get("/api/data", (req) => ({
+  clientIp: req.ip,
+  data: [],
+}));
+```
+
+**Supported headers** (in priority order):
+- `X-Forwarded-For` — load balancers, proxies (first IP in list)
+- `X-Real-IP` — Nginx, Apache reverse proxy
+- `CF-Connecting-IP` — Cloudflare
+- `X-Client-IP` — other proxy services
+- Fallback — `127.0.0.1`
+
+```ts
+// IP-based rate limiting
+app.use((req, next) => {
+  const count = ipTracker.getCount(req.ip) || 0;
+  if (count > 100) return new Response("Too many requests", { status: 429 });
+  ipTracker.increment(req.ip);
+  return next();
+});
+
+// IP allowlist
+app.post("/admin", (req) => {
+  if (!ALLOWED_IPS.includes(req.ip!)) {
+    return new Response("Forbidden", { status: 403 });
+  }
+  return { authorized: true };
+});
+```
+
+---
+
+## 🔐 Sessions
+
+Signed, cookie-based sessions — no database required. Your `secret` signs the session id so clients can't forge or tamper with it.
+
+```ts
+import { session } from "princejs/middleware";
+
+const app = prince();
+app.use(session({ secret: process.env.SESSION_SECRET! }));
+
+app.post("/login", (req) => {
+  req.session.userId = "user_123";
+  return { ok: true };
+});
+
+app.get("/me", (req) => ({
+  userId: req.session.userId,
+}));
+
+app.post("/logout", (req) => {
+  req.session.destroy(); // end the session
+  return { ok: true };
+});
+```
+
+- **&nbsp;** The `prince.sid` cookie holds `id.signature` — an HMAC-SHA256 of the session id signed with your secret. A tampered cookie starts a fresh session instead of hijacking a real one.
+- **&nbsp;** Session data lives in an in-memory store and expires after `maxAge` (seconds, default `3600`).
+- **&nbsp;** Options: `secret` (required), `maxAge`, `name` (cookie name, default `prince.sid`).
+
+---
+
+
+## 🗂️ Route Grouping
+
+Group routes under a shared prefix with optional shared middleware. Zero overhead at request time — purely a registration convenience.
+
+```ts
+import { prince } from "princejs";
+
+const app = prince();
+
+// Basic grouping
+app.group("/api", (r) => {
+  r.get("/users",     () => ({ users: [] }));
+  r.post("/users",    (req) => ({ created: req.parsedBody }));
+  r.get("/users/:id", (req) => ({ id: req.params?.id }));
+});
+// → GET  /api/users
+// → POST /api/users
+// → GET  /api/users/:id
+
+// With shared middleware — applies to every route in the group
+import { auth } from "princejs/middleware";
+
+app.group("/admin", auth(), (r) => {
+  r.get("/stats",   () => ({ stats: {} }));
+  r.delete("/users/:id", (req) => ({ deleted: req.params?.id }));
+});
+
+// Chainable
+app
+  .group("/v1", (r) => { r.get("/ping", () => ({ v: 1 })); })
+  .group("/v2", (r) => { r.get("/ping", () => ({ v: 2 })); });
+
+app.listen(3000);
+```
+
+---
+
+## 🛡️ CSRF Protection
+
+Double-submit cookie protection built in — blocks Cross-Site Request Forgery with no server-side state:
+
+```ts
+import { csrf } from "princejs/middleware";
+
+const app = prince();
+app.use(csrf());
+
+app.post("/submit", (req) => ({
+  ok: true,
+  comment: req.parsedBody?.comment,
+}));
+```
+
+**How it works:**
+
+1. PrinceJS sets a `csrf=<token>` cookie on the first request. The cookie is **not** `HttpOnly` — client JS must be able to read it.
+2. On every `POST` / `PUT` / `PATCH` / `DELETE`, the token must be echoed back via the `X-CSRF-Token` header. Missing or mismatched → **403**.
+3. Responses rotate the `csrf` cookie (`SameSite=Strict`, 1h expiry).
+
+```js
+// Client-side: read the cookie and send it back as a header
+const token = document.cookie
+  .split("; ")
+  .find((c) => c.startsWith("csrf="))
+  ?.split("=")[1];
+
+await fetch("/submit", {
+  method: "POST",
+  credentials: "include",
+  headers: { "Content-Type": "application/json", "x-csrf-token": token },
+  body: JSON.stringify({ comment: "hi" }),
+});
+```
+
+For a server-rendered form, read the token via `req.cookies?.csrf` and have a tiny JS submit handler forward it to the header:
+
+```ts
+app.get("/form", (req) => ({
+  html: `
+    <form id="f" method="POST" action="/submit">
+      <input type="hidden" name="csrf_token" value="${req.cookies?.csrf ?? ""}">
+      <input type="text" name="comment">
+      <button>Post</button>
+    </form>
+    <script>
+      const token = document.cookie.match(/(?:^|;\\s*)csrf=([^;]+)/)?.[1];
+      document.getElementById("f").addEventListener("submit", (e) => {
+        e.preventDefault();
+        fetch("/submit", {
+          method: "POST",
+          headers: { "x-csrf-token": token },
+          body: new FormData(document.getElementById("f")),
+        });
+      });
+    <\/script>`,
+}));
+```
+
+By default the token cookie is sent without `Secure`, so it works over plain `http://localhost` during development. Enable `Secure` in production:
+
+```ts
+app.use(csrf({ secure: true })); // requires HTTPS
+```
+
+Options: `cookieName` (default `csrf`), `headerName` (default `x-csrf-token`), `keyLength` (default 32), `secure` (default false).
+
+---
+
+## 🧹 Input Sanitization
+
+Prevent XSS attacks by sanitizing user input before rendering to HTML:
+
+```ts
+import { sanitize } from "princejs/helpers";
+
+const userComment = `<img src=x onerror="alert('xss')">Looks great!`;
+
+// Remove script tags and event handlers
+const safe = sanitize(userComment, 'text');
+// → "Looks great!"
+
+// Allow basic HTML but no scripts
+const htmlSafe = sanitize(userComment, 'html');
+// → "<img src=x>Looks great!"
+
+// Validate URLs are safe
+const url = "javascript:alert('xss')";
+const safeUrl = sanitize(url, 'url');
+// → "" (invalid URL removed)
+```
+
+---
+
+## ✅ Environment Validation
+
+Fail fast at startup if required environment variables are missing:
+
+```ts
+import { validateEnv } from "princejs/helpers";
+
+// Throws error immediately if any variable is missing
+const env = validateEnv(["DATABASE_URL", "JWT_SECRET", "API_KEY"]);
+
+const db = connect(env.DATABASE_URL);
+const secret = new TextEncoder().encode(env.JWT_SECRET);
+const apiKey = env.API_KEY;
+```
+
+Prevents runtime errors from missing config in production deployments.
+
+---
+
+## 📨 Response Helpers
+
+Consistent error and success response formatting:
+
+```ts
+import { errorResponse, successResponse } from "princejs/helpers";
+
+app.get("/users/:id", async (req) => {
+  try {
+    const user = await findUser(req.params!.id);
+    if (!user) {
+      return errorResponse("User not found", 404);
+    }
+    return successResponse(user);
+  } catch (err) {
+    return errorResponse("Internal server error", 500);
+    // Note: error details are hidden from client for security
+  }
+});
+
+// Responses are JSON with consistent structure:
+// Success: { ok: true, data: {...}, statusCode: 200 }
+// Error:   { ok: false, error: "...", statusCode: 400 }
+```
+
+---
+
+## 🛡️ Secure Headers
+
+One call sets all the security headers your production app needs:
+
+```ts
+import { secureHeaders } from "princejs/middleware";
+
+app.use(secureHeaders());
+// Sets: X-Frame-Options, X-Content-Type-Options, X-XSS-Protection,
+//       Strict-Transport-Security, Referrer-Policy
+
+// Custom options
+app.use(secureHeaders({
+  xFrameOptions: "DENY",
+  contentSecurityPolicy: "default-src 'self'",
+  permissionsPolicy: "camera=(), microphone=()",
+  strictTransportSecurity: "max-age=63072000; includeSubDomains; preload",
+}));
+```
+
+---
+
+## ⏱️ Request Timeout
+
+Kill hanging requests before they pile up:
+
+```ts
+import { timeout } from "princejs/middleware";
+
+app.use(timeout(5000));          // 5 second global timeout → 408
+app.use(timeout(3000, "Slow!")); // custom message
+
+// Per-route timeout
+app.get("/heavy", timeout(10000), (req) => heavyOperation());
+```
+
+---
+
+## 🏷️ Request ID
+
+Attach a unique ID to every request for distributed tracing and log correlation:
+
+```ts
+import { requestId } from "princejs/middleware";
+
+app.use(requestId());
+// → sets req.id and X-Request-ID response header
+
+// Custom header name
+app.use(requestId({ header: "X-Trace-ID" }));
+
+// Custom generator
+app.use(requestId({ generator: () => `req-${Date.now()}` }));
+
+app.get("/", (req) => ({ requestId: req.id }));
+```
+
+---
+
+## 🚫 IP Restriction
+
+Allow or block specific IPs:
+
+```ts
+import { ipRestriction } from "princejs/middleware";
+
+// Only allow these IPs
+app.use(ipRestriction({ allowList: ["192.168.1.1", "10.0.0.1"] }));
+
+// Block these IPs
+app.use(ipRestriction({ denyList: ["1.2.3.4"] }));
+```
+
+---
+
+## ✂️ Trim Trailing Slash
+
+Automatically redirect `/users/` → `/users` so you never get mysterious 404s from a stray trailing slash:
+
+```ts
+import { trimTrailingSlash } from "princejs/middleware";
+
+app.use(trimTrailingSlash());        // 301 by default
+app.use(trimTrailingSlash(302));     // or 302 temporary redirect
+```
+
+Trailing-slash redirects are **opt-in** — without this middleware, `/users/` is simply a 404.
+
+Root `/` is never redirected. Query strings are preserved — `/search/?q=bun` → `/search?q=bun`.
+
+---
+
+## 🔀 Middleware Combinators
+
+Compose complex auth rules in a single readable line.
+
+### `every()` — all must pass
+
+```ts
+import { every } from "princejs/middleware";
+
+const isAdmin = async (req, next) => {
+  if (req.user?.role !== "admin")
+    return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403 });
+  return next();
+};
+
+app.get("/admin", every(auth(), isAdmin), () => ({ ok: true }));
+// short-circuits on first rejection — isAdmin never runs if auth() fails
+```
+
+### `some()` — either must pass
+
+```ts
+import { some } from "princejs/middleware";
+
+// Accept a JWT token OR an API key — whichever the client sends
+app.get("/resource", some(auth(), apiKey({ keys: ["key_123"] })), () => ({ ok: true }));
+```
+
+### `except()` — skip middleware for certain paths
+
+```ts
+import { except } from "princejs/middleware";
+
+// Apply auth everywhere except /health and /
+app.use(except(["/health", "/"], auth()));
+
+app.get("/health", () => ({ ok: true }));   // no auth
+app.get("/private", (req) => ({ user: req.user })); // auth required
+```
+
+---
+
+## 🛡️ guard()
+
+Apply a validation schema to every route in a group at once — no need to repeat `validate()` on each handler:
+
+```ts
+import { guard } from "princejs/middleware";
+import { z } from "zod";
+
+app.group("/users", guard({ body: z.object({ name: z.string().min(1) }) }), (r) => {
+  r.post("/",      (req) => ({ created: req.parsedBody.name })); // auto-validated
+  r.put("/:id",    (req) => ({ updated: req.parsedBody.name })); // auto-validated
+});
+// Bad body → 400 { error: "Validation failed", details: [...] }
+```
+
+Also works as standalone route middleware:
+
+```ts
+app.post(
+  "/items",
+  guard({ body: z.object({ name: z.string(), price: z.number() }) }),
+  (req) => ({ created: req.parsedBody })
+);
+```
+
+---
+
+## 📁 Static Files
+
+Serve a directory of static files. Falls through to your routes if the file doesn't exist:
+
+```ts
+import { serveStatic } from "princejs/middleware";
+
+app.use(serveStatic("./public"));
+// → GET /logo.png        serves ./public/logo.png
+// → GET /               serves ./public/index.html
+// → GET /api/users      falls through to your route handler
+```
+
+Runs on Bun, Node, Deno and Cloudflare Workers, and is path-traversal safe — `../` can never escape the root directory.
+
+---
+
+## 🏷️ ETag / 304 Conditional Requests
+
+Serve `304 Not Modified` for cached resources and save bandwidth. Buffers only cacheable `GET`/`HEAD` text responses — streaming and already-encoded bodies are never touched:
+
+```ts
+import { etag } from "princejs/middleware";
+
+app.use(etag());
+
+app.get("/api/report", () => ({ report: "..." }));
+// → 200 + ETag: "3f9a7c..."
+// → 304 (empty body) when the client re-sends its ETag via If-None-Match
+```
+
+- Every cacheable 2xx response gets a fast, stable `ETag` header (a 64-bit hash — no string allocations, streams are skipped).
+- A matching `If-None-Match` (or `*`) turns the response into an empty **304**.
+- `etag({ weak: true })` prefixes tags with `W/` for byte-identical-or-weaker caches.
+
+---
+
+## 📏 Request Body Limit
+
+Reject oversized payloads before they're processed. The check is **O(1)** — it reads the `Content-Length` header and never touches the body:
+
+```ts
+import { limit } from "princejs/middleware";
+
+app.use(limit(10_000));                // ≤ 10 kB
+app.post("/upload", limit(1_000_000), (req) => ...); // per-route limit
+// → 413 { "error": "Payload Too Large" } when exceeded
+
+app.use(limit(10_000, "Way too big")); // custom message
+```
+
+> PrinceJS parses JSON/form bodies before the middleware chain runs, so `Content-Length` is the enforcement point. For chunked requests without a `Content-Length`, pair this with Bun's built-in `bodySizeLimit` in your server layer.
+
+---
+
+## 🌊 Streaming
+
+Stream chunked responses for AI/LLM output, large payloads, or anything that generates data over time:
+
+```ts
+import { stream } from "princejs/helpers";
+
+// Async generator — cleanest for AI token streaming
+app.get("/ai", stream(async function*(req) {
+  yield "Hello ";
+  await delay(100);
+  yield "from ";
+  yield "PrinceJS!";
+}));
+
+// Async callback
+app.get("/data", stream(async (req) => {
+  req.streamSend("chunk 1");
+  await fetchMoreData();
+  req.streamSend("chunk 2");
+}));
+
+// Custom content type for binary or JSON streams
+app.get("/events", stream(async function*(req) {
+  for (const item of items) {
+    yield JSON.stringify(item) + "\n";
+  }
+}, { contentType: "application/x-ndjson" }));
+```
+
+---
+
+## 💬 WebSockets — Rooms & Broadcast
+
+Broadcast to groups of connections without any external pub/sub. Rooms are created on demand — **zero overhead** unless a socket actually joins one.
+
+```ts
+const app = prince();
+
+app.ws("/chat", {
+  open: (ws) => {
+    ws.join("general");                 // join a room (auto-creates it)
+    ws.send("Welcome to #general!");
+  },
+  message: (ws, msg) => {
+    ws.broadcast("general", msg);       // send to everyone else in the room
+    // ws.broadcastAll(msg);            // send to every connection
+    // ws.broadcast("general", { user: ws.user, msg }); // objects → JSON automatically
+  },
+  close: (ws) => {
+    // ws.leave("general");             // could leave manually — cleanups are automatic on close
+  },
+});
+
+app.listen(3000);
+```
+
+**Room API on every websocket:**
+
+| Method | Does |
+|---|---|
+| `ws.join(room)` | Adds the socket to a room (creating it if needed) |
+| `ws.leave(room)` | Removes the socket from a room |
+| `ws.broadcast(room, data)` | Sends `data` to all **other** sockets in the room (strings sent as-is, objects as JSON) |
+| `ws.broadcastAll(data)` | Sends to every connected socket except self |
+| `ws.roomSize(room)` | Number of sockets currently in a room |
+
+Sockets are automatically removed from every room they're in when they disconnect.
+
+---
+
+## 🔑 JWKS / Third-Party Auth
+
+Verify JWTs from Auth0, Clerk, Supabase, or any JWKS endpoint — no symmetric key needed:
+
+```ts
+import { jwks } from "princejs/middleware";
+
+// Auth0
+app.use(jwks("https://your-domain.auth0.com/.well-known/jwks.json"));
+
+// Clerk
+app.use(jwks("https://your-clerk-domain.clerk.accounts.dev/.well-known/jwks.json"));
+
+// Supabase
+app.use(jwks("https://your-project.supabase.co/auth/v1/.well-known/jwks.json"));
+
+// req.user is set after verification, same as jwt()
+app.get("/protected", auth(), (req) => ({ user: req.user }));
+```
+
+---
+
+## 📖 OpenAPI + Scalar Docs ✨
+
+Auto-generate an OpenAPI 3.0 spec and serve a beautiful [Scalar](https://scalar.com) UI — all from a single `app.openapi()` call.
+
+```ts
+import { prince } from "princejs";
+import { z } from "zod";
+
+const app = prince();
+
+const api = app.openapi({ title: "My API", version: "1.0.0" }, "/docs", { theme: "moon" });
+
+api.route("GET", "/users/:id", {
+  summary: "Get user by ID",
+  tags: ["users"],
+  schema: {
+    response: z.object({ id: z.string(), name: z.string() }),
+  },
+}, (req) => ({ id: req.params!.id, name: "Alice" }));
+
+api.route("POST", "/users", {
+  summary: "Create user",
+  tags: ["users"],
+  schema: {
+    body:     z.object({ name: z.string().min(2), email: z.string().email() }),
+    response: z.object({ id: z.string(), name: z.string(), email: z.string() }),
+  },
+}, (req) => ({ id: crypto.randomUUID(), ...req.parsedBody }));
+
+app.listen(3000);
+// → GET /docs       Scalar UI
+// → GET /docs.json  Raw OpenAPI JSON
+```
+
+`api.route()` does three things at once:
+
+- ✅ Registers the route on PrinceJS
+- ✅ Auto-wires body validation — no separate middleware needed
+- ✅ Writes the full OpenAPI spec entry
+
+| `schema` key | Runtime effect | Scalar docs |
+|---|---|---|
+| `body` | ✅ Validates & rejects bad requests | ✅ requestBody model |
+| `query` | — | ✅ Typed query params |
+| `response` | — | ✅ 200 response model |
+
+> Routes on `app.get()` / `app.post()` stay private — they never appear in the docs.
+
+**Themes:** `default` · `moon` · `purple` · `solarized` · `bluePlanet` · `deepSpace` · `saturn` · `kepler` · `mars`
+
+---
+
+## 🔌 Plugin System
+
+```ts
+import { prince, type PrincePlugin } from "princejs";
+
+const usersPlugin: PrincePlugin<{ prefix?: string }> = (app, opts) => {
+  const base = opts?.prefix ?? "";
+
+  app.use((req, next) => {
+    (req as any).fromPlugin = true;
+    return next();
+  });
+
+  app.get(`${base}/users`, (req) => ({
+    ok: true,
+    fromPlugin: (req as any).fromPlugin,
+  }));
+};
+
+const app = prince();
+app.plugin(usersPlugin, { prefix: "/api" });
+app.listen(3000);
+```
+
+---
+
+## 🎣 Lifecycle Hooks
+
+```ts
+import { prince } from "princejs";
+
+const app = prince();
+
+app.onRequest((req) => {
+  (req as any).startTime = Date.now();
+});
+
+app.onBeforeHandle((req, path, method) => {
+  console.log(`🔍 ${method} ${path}`);
+});
+
+app.onAfterHandle((req, res, path, method) => {
+  const ms = Date.now() - (req as any).startTime;
+  console.log(`✅ ${method} ${path} ${res.status} (${ms}ms)`);
+});
+
+app.onError((err, req, path, method) => {
+  console.error(`❌ ${method} ${path}:`, err.message);
+});
+
+app.get("/users", () => ({ users: [] }));
+app.listen(3000);
+```
+
+**Execution order:**
+1. `onRequest` — runs before routing, good for setup
+2. `onBeforeHandle` — just before the handler
+3. Handler executes
+4. `onAfterHandle` — after success (skipped on error)
+5. `onError` — only when handler throws
+
+---
+
+## 🛑 Custom 404
+
+Replace the default `{ "error": "Not Found" }` with your own handler. Same return rules as a route handler — objects become JSON, strings become text:
+
+```ts
+app.notFound(() => ({ message: "Nothing here, friend" }));
+app.notFound(() => render(NotFoundPage())); // JSX/HTML pages work too
+app.notFound((req) => new Response("Page not found", { status: 404 }));
+```
+
+The custom response is always served with status `404`. Routes that exist still win — this only runs when nothing matches.
+
+---
+
+## 🔒 End-to-End Type Safety
+
+```ts
+import { createClient, type PrinceApiContract } from "princejs/client";
+
+type ApiContract = {
+  "GET /users/:id": {
+    params: { id: string };
+    response: { id: string; name: string };
+  };
+  "POST /users": {
+    body: { name: string };
+    response: { id: string; ok: boolean };
+  };
+};
+
+const client = createClient<ApiContract>("http://localhost:3000");
+
+const user = await client.get("/users/:id", { params: { id: "42" } });
+console.log(user.name); // typed as string ✅
+
+const created = await client.post("/users", { body: { name: "Alice" } });
+console.log(created.id); // typed as string ✅
+```
+
+---
+
+## 🌍 Deploy Adapters
+
+**Vercel Edge** — `api/[[...route]].ts`
+```ts
+import { toVercel } from "princejs/vercel";
+export default toVercel(app);
+```
+
+**Cloudflare Workers** — `src/index.ts`
+```ts
+import { toWorkers } from "princejs/cloudflare";
+export default toWorkers(app);
+```
+
+**Deno Deploy** — `main.ts`
+```ts
+import { toDeno } from "princejs/deno";
+Deno.serve(toDeno(app));
+```
+
+**Node.js** — `server.ts`
+```ts
+import { createServer } from "http";
+import { toNode, toExpress } from "princejs/node";
+import express from "express";
+
+const app = prince();
+app.get("/", () => ({ message: "Hello!" }));
+
+// Native Node http
+createServer(toNode(app)).listen(3000);
+
+// Or drop into Express
+const expressApp = express();
+expressApp.all("*", toExpress(app));
+expressApp.listen(3000);
+```
+
+---
+
+## 🎯 Full Example
+
+```ts
+import { prince } from "princejs";
+import {
+  cors,
+  logger,
+  rateLimit,
+  auth,
+  apiKey,
+  jwt,
+  signJWT,
+  session,
+  compress,
+  validate,
+  secureHeaders,
+  timeout,
+  requestId,
+  trimTrailingSlash,
+  csrf,
+  every,
+  some,
+  except,
+  guard,
+  etag,
+  limit,
+} from "princejs/middleware";
+import { cache, upload, sse, stream, sanitize, validateEnv, errorResponse, successResponse } from "princejs/helpers";
+import { cron } from "princejs/scheduler";
+import { Html, Head, Title, Meta, Style, Body, Main, H1, P, Div, Form, Input, Button, render } from "princejs/jsx";
+import { db } from "princejs/db";
+import { z } from "zod";
+
+// ── Environment Validation ────────────────────────────────
+const env = validateEnv(["DATABASE_URL", "JWT_SECRET", "API_KEY"]);
+
+const SECRET = new TextEncoder().encode(env.JWT_SECRET);
+const app = prince();
+
+// ── Lifecycle hooks ───────────────────────────────────────
+app.onRequest((req) => { (req as any).t = Date.now(); });
+app.onAfterHandle((req, res, path, method) => {
+  console.log(`✅ ${method} ${path} ${res.status} (${Date.now() - (req as any).t}ms)`);
+});
+app.onError((err, req, path, method) => {
+  console.error(`❌ ${method} ${path}:`, err.message);
+});
+
+// ── Global middleware ─────────────────────────────────────
+app.use(secureHeaders());
+app.use(requestId());
+app.use(trimTrailingSlash());
+app.use(timeout(10000));
+app.use(cors());
+app.use(logger());
+app.use(rateLimit(100, 60));
+app.use(jwt(SECRET));
+app.use(session({ secret: "session-secret" }));
+app.use(compress());
+app.use(csrf());
+app.use(etag());
+app.use(limit(100_000));
+
+// ── Custom 404 ────────────────────────────────────────────
+app.notFound(() => renderPage("<!DOCTYPE html>" + H1("404 — nothing here")));
+
+// ── JSX SSR ───────────────────────────────────────────────
+const BaseLayout = ({ title, children }) =>
+  Html(
+    Head(Meta({ charset: "utf-8" }), Title(title), Style(`body{font-family:system-ui}`)),
+    Body(Main(children)),
+  );
+
+const HomePage = BaseLayout({
+  title: "Home",
+  children: [
+    H1("Hello World"),
+    P("Welcome to PrinceJS!"),
+    Form({ method: "POST", action: "/submit" },
+      Input({ type: "text", name: "name", placeholder: "Your name", required: true }),
+      Button({ type: "submit" }, "Submit"),
+    ),
+  ],
+});
+
+app.get("/", () => render("<!DOCTYPE html>" + HomePage));
+
+// ── Cookies & IP ──────────────────────────────────────────
+app.post("/login", (req) =>
+  app.response()
+    .json({ ok: true, ip: req.ip })
+    .cookie("sessionId", "user_123", {
+      httpOnly: true, secure: true, sameSite: "Strict", maxAge: 86400,
+    })
+);
+app.get("/profile", (req) => ({
+  sessionId: req.cookies?.sessionId,
+  clientIp: req.ip,
+}));
+
+// ── Database ──────────────────────────────────────────────
+const users = db.sqlite("./app.sqlite", `
+  CREATE TABLE IF NOT EXISTS users (id TEXT PRIMARY KEY, name TEXT NOT NULL)
+`);
+app.get("/users", () => users.query("SELECT * FROM users"));
+
+// ── WebSockets ────────────────────────────────────────────
+app.ws("/chat", {
+  open:    (ws) => { ws.join("general"); ws.send("Welcome!"); },
+  message: (ws, msg) => ws.broadcast("general", sanitize(msg as string, 'text')),
+  close:   (ws) => console.log("disconnected"),
+});
+
+// ── Auth & API keys ───────────────────────────────────────
+app.get("/protected", auth(), (req) => ({ user: req.user }));
+app.get("/api", apiKey({ keys: ["key_123"] }), () => ({ ok: true }));
+app.get("/admin", every(auth(), async (req, next) => {
+  if (req.user?.role !== "admin")
+    return errorResponse("Forbidden", 403);
+  return next();
+}), () => ({ admin: true }));
+
+// ── Validated route group ─────────────────────────────────
+app.group("/items", guard({ body: z.object({ name: z.string().min(1) }) }), (r) => {
+  r.post("/", (req) => successResponse({ created: req.parsedBody.name }));
+});
+
+// ── Helpers ───────────────────────────────────────────────
+app.get("/cached",  cache(60)(() => ({ time: Date.now() })));
+app.post("/upload", upload());
+app.get("/events",  sse(), (req) => {
+  let i = 0;
+  const id = setInterval(() => {
+    req.sseSend({ count: i++ });
+    if (i >= 10) clearInterval(id);
+  }, 1000);
+});
+
+// ── Validation ────────────────────────────────────────────
+app.post(
+  "/items",
+  validate(z.object({ name: z.string().min(1), price: z.number().positive() })),
+  (req) => successResponse({ created: req.parsedBody })
+);
+
+// ── Cron ──────────────────────────────────────────────────
+cron("* * * * *", () => console.log("💓 heartbeat"));
+
+// ── OpenAPI + Scalar ──────────────────────────────────────
+const api = app.openapi({ title: "PrinceJS App", version: "1.0.0" }, "/docs");
+
+api.route("GET", "/items", {
+  summary: "List items",
+  tags: ["items"],
+  schema: {
+    query:    z.object({ q: z.string().optional() }),
+    response: z.array(z.object({ id: z.string(), name: z.string() })),
+  },
+}, () => [{ id: "1", name: "Widget" }]);
+
+api.route("POST", "/items", {
+  summary: "Create item",
+  tags: ["items"],
+  schema: {
+    body:     z.object({ name: z.string().min(1), price: z.number().positive() }),
+    response: z.object({ id: z.string(), name: z.string() }),
+  },
+}, (req) => ({ id: crypto.randomUUID(), name: req.parsedBody.name }));
+
+app.listen(3000);
+```
+
+---
+
+## 📦 Installation
+
+```bash
+bun add princejs
+# or
+npm install princejs
+```
+
+> **Zero runtime dependencies.** `zod` and `jose` are optional installs that are lazy-loaded only when you use the features that need them:
+> - `validate()`, `guard()`, and zod schemas in `openapi()` use whatever `zod` you already import to build your schemas — nothing extra to install.
+> - `jwt()`, `signJWT()`, and `jwks()` print a one-line install command (`npm install jose`) the first time you use them if `jose` isn't installed. Nothing else requires it, so a plain `npm install princejs` stays tiny.
+
+**Run it on other runtimes too:**
+
+- Bun is the native runtime — `app.listen()` and `princejs/db` (which uses `bun:sqlite`) require Bun.
+- Everything else — routing, middleware, helpers, JSX — runs on **Node.js, Deno, and Cloudflare Workers**. Both ESM `import` and CommonJS `require()` work from Node ≥ 20.17 (or 22+).
+- Use an adapter for a server entry point on another runtime:
+  - Node: `princejs/node` (`toNode`, `toExpress`)
+  - Vercel: `princejs/vercel`
+  - Cloudflare Workers: `princejs/cloudflare`
+  - Deno: `princejs/deno`
+
+Calling `db.sqlite()` outside Bun throws a clear error instead of crashing your app at import time.
+
+---
+
+## 🤝 Contributing
+
+```bash
+git clone https://github.com/MatthewTheCoder1218/princejs
+cd princejs
+bun install
+bun test
+```
+
+---
+
+## 🔗 Links
+
+- 🌐 Website: [princejs.vercel.app](https://princejs.vercel.app)
+- 📦 npm: [npmjs.com/package/princejs](https://www.npmjs.com/package/princejs)
+- 💻 GitHub: [github.com/MatthewTheCoder1218/princejs](https://github.com/MatthewTheCoder1218/princejs)
+- 🐦 Twitter: [@princejs_bun](https://twitter.com/princejs_bun)
+
+---
+
+<div align="center">
+
+**PrinceJS: ~5kB. Hono-speed. Everything included. 👑**
+
+*Built with ❤️ in Nigeria*
+
+</div>

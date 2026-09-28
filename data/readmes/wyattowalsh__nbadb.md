@@ -1,0 +1,595 @@
+# nbadb
+
+![nbadb logo](.github/assets/img/logo-full-600.png)
+
+**The most comprehensive open NBA database available.**
+
+[![PyPI](https://img.shields.io/pypi/v/nbadb?style=for-the-badge)](https://pypi.org/project/nbadb/)
+[![Python](https://img.shields.io/pypi/pyversions/nbadb?style=for-the-badge)](https://pypi.org/project/nbadb/)
+[![License](https://img.shields.io/github/license/wyattowalsh/nba-db?style=for-the-badge)](LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/wyattowalsh/nba-db/ci.yml?label=CI&style=for-the-badge)](https://github.com/wyattowalsh/nba-db/actions/workflows/ci.yml)
+[![DuckDB](https://img.shields.io/badge/DuckDB-1.5.5-yellow?style=for-the-badge&logo=duckdb)](https://duckdb.org)
+[![Polars](https://img.shields.io/badge/Polars-1.43.2-blue?style=for-the-badge&logo=polars)](https://pola.rs/)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json&style=for-the-badge)](https://github.com/astral-sh/ruff)
+[![Docs](https://img.shields.io/website?url=https%3A%2F%2Fnbadb.w4w.dev&label=docs&style=for-the-badge)](https://nbadb.w4w.dev)
+[![Kaggle](https://img.shields.io/badge/Kaggle-Dataset-blue?logo=kaggle&style=for-the-badge)](https://www.kaggle.com/datasets/wyattowalsh/basketball)
+[![Data Coverage](https://img.shields.io/badge/1946–present-data_coverage-orange?style=for-the-badge)](https://nbadb.w4w.dev/docs/schema)
+
+| Extractor coverage                | Public model                  | Derived outputs                              | Docs site                                       |
+| --------------------------------- | ----------------------------- | -------------------------------------------- | ----------------------------------------------- |
+| Current `nba_api` runtime surface | Generated star-schema outputs | Generated `agg_*` and `analytics_*` surfaces | Guides, references, diagrams, and lineage pages |
+
+## 📊 What's Inside
+
+nbadb exposes an analytics-first warehouse surface rather than a thin mirror of raw upstream payloads.
+
+| Surface           | What it covers                                                                                                                |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| **`dim_*`**       | Stable identity and lookup context for players, teams, games, seasons, arenas, officials, and other conformed dimensions      |
+| **`fact_*`**      | Event and measurement tables across box scores, tracking, shot charts, play-by-play, standings, matchups, and specialty feeds |
+| **`bridge_*`**    | Many-to-many connectors where public entities legitimately fan out                                                            |
+| **`agg_*`**       | Reusable rollups for season, career, pace, efficiency, and other repeated reporting needs                                     |
+| **`analytics_*`** | Convenience outputs for notebooks, dashboards, and quick exploratory analysis                                                 |
+
+For the current public contract, use the generated docs surfaces: **[Schema Reference](https://nbadb.w4w.dev/docs/schema)**, **[Data Dictionary](https://nbadb.w4w.dev/docs/data-dictionary)**, and **[Lineage](https://nbadb.w4w.dev/docs/lineage)**.
+
+## 🏀 Data Coverage
+
+nbadb covers the **1946-47 season to present** for executable `nba_api` contracts,
+with current seasons auto-updated by the daily pipeline and every upstream-unavailable,
+blocked, or not-yet-modeled contract classified explicitly rather than silently omitted.
+
+Trust floor: preserve and improve full historical `nba_api` coverage for every year available per endpoint. If an endpoint/year/season-type combination is unavailable upstream or blocked by a known contract gap, classify it explicitly in coverage reports and support matrices instead of silently dropping it.
+
+- **Game-level** — box scores (traditional, advanced, misc, four factors, hustle, tracking), play-by-play, shot charts, rotations, win probability, game context, scoring runs
+- **Player-level** — career stats, season splits, matchups, awards, draft combine measurements, player tracking (speed, distance, touches, passes, rebounding, shooting), estimated metrics
+- **Team-level** — game logs, matchups, splits, clutch stats, franchise history, IST standings, playoff picture, pace and efficiency, player dashboards
+- **League-level** — leaders, hustle stats, lineup visualizations, shot locations by zone, synergy play types, league-wide tracking
+- **Video/media** — video details, assets, events, and status surfaces, including every documented/runtime video context measure and explicit request provenance
+
+## 📦 Output Formats
+
+| Format  | Path         | Description                                                        |
+| ------- | ------------ | ------------------------------------------------------------------ |
+| DuckDB  | `nba.duckdb` | Canonical analytics engine — columnar storage and fast SQL queries |
+| SQLite  | `nba.sqlite` | Kaggle preview-friendly portable relational database               |
+| Parquet | `parquet/`   | Zstd-compressed columnar files, partitioned by season              |
+| CSV     | `csv/`       | Universal flat files for any tool                                  |
+
+## 🚀 Quick Start
+
+> [!TIP]
+>
+> ```bash
+> pip install nbadb    # or: uv add nbadb
+>
+> # Full local build from scratch (1946-present; runtime depends on endpoint availability and throttling)
+> nbadb init
+>
+> # Daily incremental update (~5-15 minutes)
+> nbadb daily
+>
+> # Export to all formats
+> nbadb export
+>
+> # Query with natural language
+> nbadb ask "who led the league in scoring last season"
+>
+> # Upload to Kaggle and verify the published bundle
+> nbadb upload --verify-remote
+> ```
+
+## ⌨️ CLI Reference
+
+| Command                             | Description                                                                                                        |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `nbadb init`                        | Local full historical build                                                                                        |
+| `nbadb daily`                       | Current-season refresh plus automatic live snapshot append when games are active                                   |
+| `nbadb monthly`                     | Last-3-seasons refresh plus automatic live snapshot append when games are active                                   |
+| `nbadb backfill`                    | Recovery and targeted historical repair                                                                            |
+| `nbadb live-snapshot`               | Manually append a live snapshot for active or explicit game ids                                                    |
+| `nbadb migrate`                     | Run schema migrations                                                                                              |
+| `nbadb scan --fail-on error`        | Hard assurance gate for missing data, gaps, and quality issues                                                     |
+| `nbadb export`                      | Re-export DuckDB → SQLite / Parquet / CSV                                                                          |
+| `nbadb upload`                      | Stage declared resources, validate the bundle, push to Kaggle, and optionally verify exact-version remote readback |
+| `nbadb download`                    | Pull the Kaggle dataset and seed local DuckDB                                                                      |
+| `nbadb extract-completeness`        | Report coverage gaps; with an upstream checkout, generate `nba_api` contracts                                      |
+| `nbadb endpoint-support-matrix`     | Report strict endpoint support + warehouse contract coverage                                                       |
+| `nbadb endpoint-adequacy-scorecard` | Generate endpoint adequacy scorecard artifacts                                                                     |
+| `nbadb audit-models`                | Generate end-to-end model + result-table audit artifacts                                                           |
+| `nbadb schema-annotation-audit`     | Generate schema annotation, route, and field fate audit artifacts                                                  |
+| `nbadb table-year-coverage`         | Generate table/year coverage summary artifacts                                                                     |
+| `nbadb docs-autogen`                | Regenerate generator-owned schema, data dictionary, ER, and lineage artifacts                                      |
+| `nbadb schema [TABLE]`              | Show schema for a table or list all star tables                                                                    |
+| `nbadb status`                      | Pipeline status, row counts, and watermarks                                                                        |
+| `nbadb journal-summary`             | Export pipeline telemetry summary artifacts                                                                        |
+| `nbadb ask QUESTION`                | Catalog-matched read-only Q&A (route-specific season support; optional `--strict`)                                 |
+| `nbadb chat`                        | Chainlit catalog Q&A UI (same guarded runtime as `ask`; requires an existing warehouse)                            |
+| `nbadb full`                        | Fill gaps and retry failed extractions (deprecated—use `backfill` instead)                                         |
+| `nbadb lint-sql`                    | Lint SQL in transformers against SQLFluff rules                                                                    |
+| `nbadb metadata`                    | Generate Kaggle metadata JSON                                                                                      |
+
+Run `nbadb --help` or `nbadb <command> --help` for full option details.
+
+Full-extraction release publishes should use `nbadb upload --full-publication`. This
+mode requires terminal extraction assurance and implies exact remote verification. The
+publication marker
+resolves an exact positive Kaggle version; verification then paginates that version's
+complete API file inventory and downloads one file at a time for full SHA-256
+readback, deleting each temporary file after it is checked. Full publication also
+requires a valid `assured-artifact-manifest.json` and matching
+`terminal-assurance-report.json` whose inventory and provenance exactly match the
+published files. Generic `--verify-remote` still proves the exact Kaggle version and
+every resource digest without requiring full-extraction provenance; an ordinary upload
+without readback is reported as submitted and unverified. Generated metadata covers all
+261 runtime transform outputs rather than a curated subset. A marker-specific HTTP 404
+can enter a one-upload bootstrap path after
+the dataset metadata API supplies the current version; any other baseline lookup error
+stops before upload. If an upload remains unresolved, every later bundle is
+reconciliation-only until exact evidence resolves it. Full, daily, and monthly
+workflows publish only from the approved default-branch head and serialize publishers
+through the exact `nbadb-kaggle-publish` FIFO job mutex. They use a dataset-scoped
+GitHub Deployment as the crash- and cross-host-durable write-ahead ledger: `pending`
+is created before the Kaggle mutation, `in_progress` is verified immediately before
+the call, and `success` is written only after exact-version inventory and SHA-256
+readback. Head discovery requests the newest two deployments through GraphQL
+`CREATED_AT DESC`, then validates each deployment and its complete at-most-two-status
+set through exact REST receipts; status transport order is ignored and chronology is
+sorted locally. Executor admission paginates up to 1,000 jobs for the exact attempt and
+direct-verifies the unique publisher job ID. The ledger binds the active workflow definition named by
+`GITHUB_WORKFLOW` at its immutable SHA; a workflow's dynamic `run-name` is only the
+run title, and a parent run may still be pending while that publisher job is already
+in progress. Historical status executors validate against their own workflow
+definitions. The Actions cache and publication artifacts retain secondary
+reconciliation evidence. Metadata is committed only after the remote file inventory
+and every resource digest match.
+
+For docs-site maintenance, regenerate generator-owned artifacts from the repo root with:
+
+```bash
+uv run nbadb docs-autogen --docs-root docs/content/docs
+```
+
+That command owns the generated schema references, data-dictionary tier pages,
+ER/lineage auto pages, `docs/lib/generated/*`, and `docs/lib/site-metrics.generated.ts`.
+
+## 🧭 Companion Surfaces
+
+This repository now carries two repo-owned companion surfaces alongside the warehouse code:
+
+- `chat/` — the canonical Chainlit chat application surface used by `nbadb chat`
+- `chat/skills/nba-data-analytics/` — offline analytics helper scripts, not a second chat or catalog Q&A entry point
+- `src/nbadb/chat/` — shared launcher, notebook, runtime, tracing, SQL, catalog, and memory helpers that back the chat UX
+- `kb/` — an intentional Obsidian-native companion knowledge base for maintainers and agents; it supplements repo canon and public docs, but does not replace them
+
+`README.md`, `AGENTS.md`, `docs/`, and `src/nbadb/` remain canonical material. The `kb/` vault is additive-first and exists to improve navigation, provenance, and maintainer context without replacing the public docs site.
+
+## 🤖 Catalog Query Interface
+
+`nbadb ask` matches natural-language questions to **curated catalog routes** (not free-form LLM NL→SQL). Routes declare whether they support a season year plus season type, a year only, or neither. When a year-capable route has no explicit year, the request executes that route's immutable visible-rowset `max(season_year)` probe once, using the requested/default Regular Season only for type-capable routes. Probe results are request-local; there is no shared or persistent season cache. If the probe is unavailable or returns no valid year, the query uses the calendar season and emits the stable warning `Warehouse season lookup was unavailable; used the calendar season.`
+
+Explicit seasons use exact adjacent ASCII `YYYY-YY` syntax. Season-like
+slash forms, Unicode digits or dashes, whitespace around the separator, and
+wrong-width or nonconsecutive suffixes return `needs_params` before a warehouse
+probe or SQL generation; valid full calendar dates, standalone years, and
+adjacent alphanumeric identifiers are not misclassified as seasons. A malformed candidate takes precedence over
+another valid or relative season phrase. Unsupported route dimensions likewise
+return `needs_params` without SQL or SQL/season provenance. Both `ask` and
+`chat` require an existing DuckDB warehouse and fail closed when it is missing:
+
+```bash
+nbadb ask "who led scoring last season?"
+nbadb ask "how many games are there?"
+nbadb ask "show team standings" --verbose
+nbadb ask "unmatchable xyz" --strict   # exits non-zero when unsupported/failed
+```
+
+Queries run against the star schema with safety guards: read-only DuckDB connections, external access disabled, static SQL validation, DuckDB planning checks, outer row limits, and optional `--verbose` SQL provenance.
+
+Launch the browser-based catalog chat UI with:
+
+```bash
+nbadb chat
+```
+
+`nbadb chat` injects absolute `NBADB_DUCKDB_PATH` / `NBADB_DATA_DIR` before starting Chainlit under `chat/`; the companion notebook anchors relative values to the checkout root before making the same working-directory transition. Neither launcher creates a missing warehouse. Shared runtime, catalog, memory, and SQL helpers live in `src/nbadb/chat/`.
+
+## 📓 Kaggle Notebooks
+
+Ten analysis notebooks are published on Kaggle, all powered by this dataset:
+
+| Notebook                                                                                     | Description                                           |
+| -------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| [NBA Aging Curves](https://www.kaggle.com/code/wyattowalsh/nba-aging-curves)                 | Peak, prime, and decline — career trajectory modeling |
+| [Defense Decoded](https://www.kaggle.com/code/wyattowalsh/nba-defense-decoded)               | Tracking + hustle + synergy PCA to quantify defense   |
+| [Draft Combine Analysis](https://www.kaggle.com/code/wyattowalsh/nba-draft-combine-analysis) | What pre-draft measurements actually predict          |
+| [Game Prediction](https://www.kaggle.com/code/wyattowalsh/nba-game-prediction)               | Stacking ensemble model for game outcomes             |
+| [MVP Predictor](https://www.kaggle.com/code/wyattowalsh/nba-mvp-predictor)                   | Explainable ML for MVP voting prediction              |
+| [Play-by-Play Insights](https://www.kaggle.com/code/wyattowalsh/nba-play-by-play-insights)   | Win probability, scoring runs, and clutch analysis    |
+| [Player Archetypes](https://www.kaggle.com/code/wyattowalsh/nba-player-archetypes)           | UMAP + GMM clustering — 8 data-driven player types    |
+| [Player Dashboard](https://www.kaggle.com/code/wyattowalsh/nba-player-dashboard)             | Interactive explorer with 50+ metrics                 |
+| [Player Similarity](https://www.kaggle.com/code/wyattowalsh/nba-player-similarity)           | Find any player's statistical twin                    |
+| [Shot Chart Analysis](https://www.kaggle.com/code/wyattowalsh/nba-shot-chart-analysis)       | The geography of scoring and the 3-point revolution   |
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart LR
+    A["NBA API + static sources"] -->|"extract"| B["Stage\nDuckDB staging"]
+    B --> C["Transform"]
+    C --> D["Warehouse\nDimensions / facts / bridges"]
+    C --> E["Derived outputs\nAggregates / analytics"]
+    D & E --> F["Export"]
+    F --> G["DuckDB"]
+    F --> H["SQLite"]
+    F --> I["Parquet / CSV"]
+```
+
+- **Polars** for all DataFrame operations with zero-copy Arrow interchange to DuckDB
+- **3-tier Pandera validation** — raw → staging → star
+- **SQL-first transforms** for the star surface, with dependency-ordered execution
+- **SCD Type 2** for `dim_player` and `dim_team_history` (surrogate keys, `valid_from`/`valid_to`)
+- **Checkpoint/resume** for interrupted transform runs
+- **Watermark tracking** for incremental extraction
+- **Proxy rotation** via proxywhirl with circuit-breaker failover
+
+The GitHub Actions full-extraction control plane defaults to the `standard` chunk
+profile and targets a `5:3:1:1` rotation across fresh, partial-progress, retry,
+and infrastructure lanes when every queue has work. When an alternative endpoint is
+available, the scheduler also prevents a six-lane runner window from containing only
+one endpoint identity. This spreads endpoint pressure across the six-runner window;
+it does not prove that the runners have six unique VPN exit IPs. Lane order is also
+attempt-local: durable restore and coverage identity use the semantic `lane_id`,
+pattern/endpoints, parameter scope, and coverage hash, while `lane_index` may change
+when the scheduler reorders a later attempt. Before planning, `workflow_guard`
+requires a fresh primary or partial `workflow_dispatch` attempt, observes the stable
+exact-title run inventory, and rejects `gh run rerun` attempts. Inline manifests,
+receipt-bound lane-manifest handoffs, and source-run recovery are mutually exclusive;
+recovery is an `operation=continue` dispatch that supplies the exact five-field
+continuation source — source run id, run attempt, manifest artifact name, artifact
+id, and artifact digest, where the attempt is never inferred — plus the original
+chain and a distinct completed source run. A centralized
+discovery job seeds only the current wave's exact
+season/season-type scopes, carries those artifacts forward by chain and source
+run, refreshes active-season player/game/workload evidence, and blocks matrix
+fan-out when any required scope remains unproven. Aggregate-only player waves still
+refresh the active season, and sparse player-team misses are fetched as exact pairs.
+The manifest is generated only from executable parameter contracts. The comparison
+surfaces `player_vs_player`, `team_vs_player`, `team_and_players_vs`, and its
+extractor-only `team_and_players_vs_players` alias remain schema-backed and
+documented, but are classified as `contract_not_modeled_yet` for
+historical fan-out because the current affiliation workload cannot supply observed
+player pairs or opposing lineups. They are not replaced with synthetic Cartesian
+requests, and restored manifests that still schedule them fail before VPN preflight.
+`league_game_log` is owned by the centralized discovery seed instead of redundant
+extract lanes. Canonical coverage rows that combine alternate wrappers are projected
+back to every concrete endpoint/pattern route before lane generation, preserving each
+distinct staging surface without scheduling endpoint-name aliases as zero-work jobs.
+`video_details` and `video_details_asset` parse every recursively nested result set
+instead of assuming one static table. Full extraction classifies 1946-47 through
+2003-04 as `contract_blocked` because an exact 290-scope discovery pass found 89,722
+LeagueGameLog rows with no video-bearing game; it retains every season from 2004-05
+onward.
+Their rows carry endpoint, result-set, player/team/season/type, and context-measure
+provenance. The extraction contract covers all 78 measures found across the installed
+runtime and upstream docs/tools, schedules at most three measures per lane, and
+classifies pre-2019 PlayIn, pre-1950-51 All Star, and cancelled 1998-99 All Star
+requests as upstream-unavailable. Non-2xx responses are rejected before JSON parsing;
+HTTP 429/5xx responses and equivalent JSON error envelopes remain retryable, while
+malformed success payloads fail closed as response-contract errors. The asset route
+also uses a ten-call persistence boundary, isolated two-call concurrency, a 15-second
+request timeout, no in-call retries, a fully-failed-chunk stop, and a 600-second
+no-completed-chunk watchdog. Empty successful responses are journaled only after their
+zero-row staging chunk is durable. `win_probability` similarly uses a ten-call
+persistence and zero-progress boundary. Three consecutive identical upstream
+response-contract failures open a pattern-local circuit. Every later call that reaches
+the open circuit is recorded as failed without an upstream request. Execution stops
+after the first fully failed newly attempted chunk, leaving all remaining calls
+explicitly unattempted. Neither category can satisfy coverage, so a later resume must
+still complete them.
+VPN-backed work accepts a tunnel only after route and changed-exit-IP checks, a
+bounded GitHub control-plane reachability probe, strict NBA result-set probe, and
+installed-stack player/game discovery canaries pass.
+The strict `TeamYears` canary sends the exact ordered header contract from the
+pinned `nba_api` runtime; dependency or header changes must update the standalone
+connector and public `nbadb.core.NBA_HEADERS` copy atomically.
+The player canary also requires a positive player/team membership row.
+NBA-blocked servers are rejected across fallback technologies. Preflight and discovery
+failures, plus failed hosts reported by successful concurrent capacity probes, are
+validated and merged into both the current lane quarantine and child manifests. A
+capacity probe that cannot complete leaves diagnostics and blocks the matrix before a
+child manifest exists; its unvalidated host inventory is not promoted. Authentication
+rejections remain separate from server-health quarantine: downstream jobs reuse the
+credential source proven by preflight, pause after bounded rejection sweeps, and
+rotate servers and protocols only after a budgeted cooldown. Servers that pass the
+preflight NBA probes are tried first by the serial discovery job; preflight and
+discovery successes are then handed to extraction as a verified pool. Logical lane
+indexes never wrap a verified preferred host onto a later lane. Matrix rows also carry
+one of the bounded `vpn_parallelism` slots; later logical lanes reuse a slot only after
+its named non-cancelling per-slot concurrency group (`cancel-in-progress: false`)
+releases it. Configured-credential runs admit
+the complete current matrix behind those slot groups, so a job waiting for one busy slot
+does not consume the admission credit needed to keep another slot active. Fresh recommendation hostnames are
+assigned by a run-attempt-seeded hash to exactly one live slot, and additive candidate
+expansion does not reassign hosts between slots. Each active lane still runs on a
+separate runner and tunnel, but neither server selection nor scheduling attests unique
+exit IPs. VPN lane parallelism defaults to two. Fast configured-credential production
+launches explicitly pass `vpn_parallelism=6` and proceed only after the six-tunnel
+admission gate succeeds. The global default remains two because planning occurs before
+the credential source is known; a default of six would make token-derived runs plan
+192 jobs that later execute serially. Token-derived extraction is serialized, disables
+parallel recommendation partitioning, and VPN/auto full-extraction workflows cannot
+overlap another VPN-backed full chain.
+Discovery uses hard request timeouts and spends its bounded retry budget on both
+transport-transient failures and response-contract/validation failures, including
+wrapped causes. True application errors remain permanent. It also uses a bounded
+homogeneous-outage canary, a 90-minute soft deadline, a 95-minute process watchdog,
+atomic coverage summaries, and content-addressed
+discovery/workload Parquet generations whose manifest pointers bind scope or pairs,
+schema, row counts, and SHA-256. A complete bundle is checked against the exact
+lane-manifest digest and independently reloaded before upload and after lane download.
+Partial state is retained under a run/attempt-scoped
+recovery name. A fresh workflow may restore it only from an explicit distinct source
+run; prior attempts of the current run are not a recovery boundary, and an unavailable
+or ambiguous explicit source fails closed instead of reseeding from scratch. Recovery
+state cannot spend lane retries, trigger child dispatch, or become canonical without
+passing the full seed and verifier gates.
+Each checkpoint generation copies the previous database into a new output before
+applying attested current lane deltas, preserving legitimate duplicate multiplicity
+while removing checkpoint overlap. Publication advances through `candidate`, `built`,
+`uploaded_verified`, and `committed`; only the committed transaction may populate the
+next manifest's latest-checkpoint pointer. The immutable upload receipt binds the exact
+artifact ID, run, name, digest, size, source, generation, coverage fingerprint,
+database hash, and report hash. Restore downloads that ID with digest mismatch treated
+as an error; name-based restore is a bounded legacy path for older manifests without a
+transaction receipt. Prior checkpoints and historical/current lane artifacts are
+otherwise accepted only when chain, source, run, artifact name, generation, and
+coverage provenance match exactly; a prior checkpoint containing any lane outside the
+current manifest is rejected. Lane snapshots are resumable only after a DuckDB
+checkpoint, WAL removal, structural validation, exact database digest, and a successful
+artifact upload whose positive ID and SHA-256 receipt are finalized into metadata. A
+failed checkpoint build remains attempt-scoped diagnostics and never advances the
+latest-checkpoint pointer. Canonical metadata schema v3 is uploaded even when no lane
+snapshot can be attested, so restore/VPN failures remain visible to lane control and
+failed servers still enter the chain quarantine.
+`vpn_network_error`, authentication failure, and connect timeout are all bounded
+`vpn_egress` failures rather than one-shot application failures.
+Configured-credential waves first run a concurrent VPN capacity gate sized to the
+actual active lane count and `vpn_parallelism`; any failed probe blocks the extraction
+matrix. Every probe publishes a run-attempt marker while its tunnel remains connected,
+waits for all peer markers, and then rechecks its process, route, and exit IP before
+disconnecting, so the gate proves overlapping live tunnels rather than sequential
+logins. Capacity slot zero is preferred-only on the just-proven discovery/preflight
+anchor and has no fresh or protocol fallback; failure blocks the gate immediately. The
+remaining probes partition the entire fresh recommendation pool across
+`capacity - 1` explicit slots; when only one fresh slot remains, it owns that full pool
+and uses Nord's current recommendation rank as the tie-breaker after network and city
+diversity instead of losing half of the candidates to the already-connected anchor. A separate
+fail-closed job downloads and validates every capacity marker,
+merges the successful probes' failed servers with preflight and discovery failures, and publishes the
+run-attempt-scoped effective-quarantine report before extraction is admitted.
+Extraction lanes then reserve a complete connection attempt and cleanup, one bounded
+five-minute cooldown, and a complete follow-up attempt and cleanup before starting an
+authentication-capacity probe. The recovery sweep tolerates up to three further
+rejections inside a 12-minute connector budget. Every server attempt stops before a
+120-second connector finalization reserve for process cleanup, work-directory
+readability, and action outputs; the outer supervisor retains a separate emergency
+margin.
+Preflight and discovery keep their shorter fail-closed deadlines. Token-derived and
+direct runs skip the configured-credential capacity gate.
+VPN-backed planning also caps each matrix wave at `vpn_parallelism * 32` jobs (64 at the
+default configured value of two); the later admission gate can prove fewer active
+tunnels, and token authentication serializes execution without changing that planned
+batch cap. For `N` matrix rows and `S` requested slots, the manifest uses
+`min(N, S)` contiguous slots and requires row `i` to use `i mod min(N, S)`. It also
+requires exact unique lane membership and order, integer in-range slot values, load
+counts differing by at most one, and no load above `ceil(N / S)`; `N=64, S=6`
+therefore yields `11, 11, 11, 11, 10, 10`. Any postcondition violation fails manifest
+generation before fan-out. A non-cancelling named per-slot concurrency group serializes every repeated slot. If a later connector receives
+`vpn_auth_failure`, it publishes an immutable
+run-attempt circuit marker. Queued lanes consult that marker before authentication and
+trust it only after the REST artifact identity, workflow run/source, archive SHA-256,
+single safe JSON member, and marker provenance all validate. If concurrent rejecting
+lanes race and GitHub finalizes more than one artifact under that exact shared name, the
+guard observes a bounded three-snapshot window, validates each changed inventory, and
+requires the final two exact-name snapshots to agree. It then selects the lowest artifact
+ID in that stable inventory; any malformed or unstable inventory still fails closed. Each
+lane repeats the guard immediately before connector authentication. A verified marker emits
+retry-neutral deferred metadata and prevents another connector call. An unavailable or
+invalid artifact lookup also prevents authentication, but emits
+`vpn_auth_circuit_check_failed` as a bounded `runner_infrastructure` retry; it neither
+opens the provider circuit nor suppresses a healthy redispatch. Lanes already admitted
+before the first marker can each receive a rejection and consume one bounded VPN retry.
+Any authoritative rejection or valid circuit-open deferral opens the lane-control
+circuit. The current wave checkpoints completed work and suppresses automatic
+redispatch until the account-capacity issue is repaired and the chain is resumed.
+Each extract job records a 350-minute internal deadline before checkout, inside the
+360-minute Actions job cap, and caps the lane's effective extraction timeout against
+current elapsed time. This preserves at least 20 minutes for status finalization,
+state attestation, artifact upload and retry, diagnostics, and tunnel cleanup, plus a
+separate job-level margin.
+State-attestation schema v3 binds each player/team/season snapshot to the exact
+lane workload, including zero-pair sentinels, and rejects unexpected journal identities
+during both restore and checkpoint merge. Append-only growth outside that lane is safe:
+checkpoints carry `included_lane_workload_contracts` and compare the generation-independent
+scope identity before rebinding the lane to the current cumulative generation. Only metadata
+with an explicitly attested, durably uploaded artifact pointer can carry state into a retry;
+active partial pointers use
+`extraction-lane-recovery-<chain>-<lane>-run-<run>-attempt-<attempt>` with matching positive
+run and attempt identities. Canonical complete-lane artifact names are not partial-resume
+pointers. An invalid or missing new receipt never replaces an older canonical recovery pointer
+or its counters. Without prior durable state, the pointer and progress baseline remain clear;
+in either case, unreceipted reported counter growth remains diagnostics-only and increments the
+cumulative no-progress streak.
+Partial lanes that add calls or rows retry in place so their journal progress remains reusable,
+including transport-class `needs_resume` outcomes. Timeout-class lanes split only when the
+latest attempt adds no durable progress. Complete and partial lane-state uploads each get one
+exact-name overwrite retry before metadata is downgraded to diagnostics-only. Split children
+clear parent pointers and progress baselines, and duplicate child IDs fail before checkpoint
+indexing. False
+`contract_blocked` declarations fail closed. Valid blocked lanes are recorded in a
+separate artifact-bound evidence inventory whose canonical rows and digest are committed
+in manifest chain state across generations. Cancellation/source resume carries newly
+classified rows in a digest-bound pending commitment until the next checkpoint consumes
+and clears it; they do not inflate the effective
+checkpoint coverage used for terminal assured identity.
+Manual workflow cancellation prevents queued network jobs from being admitted and the
+lane wrapper makes a bounded attempt to terminate its child and emit `cancelled`
+outputs. GitHub can still tear down an ephemeral runner before later artifact steps run,
+so cancellation is not an artifact-durability guarantee; recovery starts from the last
+attested upload or checkpoint. A dispatch interrupted before child acknowledgement also
+makes a best-effort API cancellation of the newly created child.
+Chained runs preserve literal `max_iterations=auto`, set one fixed numeric cap from
+remaining matrix dispatch credits and retry depth, and never extend that cap in a
+child run. They refuse an active or successful `chain=<id> iteration=<n>` dispatch
+while allowing recovery from `action_required`, failed, cancelled, or timed-out
+history. Cumulative no-progress retries
+remain bounded even when failure classes alternate. Self-dispatch posts an exact
+`workflow_dispatch` body containing only `{ref, inputs}`, requires the response to
+contain exactly `workflow_run_id`, `run_url`, and `html_url`, and re-reads that exact
+child to verify its API/browser URLs, workflow identity, title, event, branch,
+`run_attempt == 1`, head SHA, and source
+before acknowledgement. Cross-run provenance treats `WORKFLOW_SOURCE_SHA` as
+semantic source `S` and the producing run's `head_sha` as owner head `H`:
+manifests and checkpoints remain bound to `S`, REST artifacts remain bound to
+their exact run and `H`, and a handoff is valid only when `S == H` or `S` is an
+ancestor of `H` with byte-identical full-extraction workflow content. Committed
+next-manifest artifacts use run/attempt-unique
+names without overwrite; the parent forwards the exact artifact ID and digest, and
+the child REST-verifies ID/name/digest/size/owner run and `H`, separately retains
+semantic `S`, and completes that attestation before downloading by ID with
+digest mismatch set to error. Run/name-only handoff is a bounded legacy path when both
+receipt fields are absent; it still requires the exact producing owner,
+semantic-source ancestry, and workflow-byte
+identity, a stable unique artifact inventory, a direct artifact-ID recheck, digest
+verification when GitHub supplies one, and exactly one safe expected manifest member.
+If the parent exits earlier, its trap attempts to cancel that exact returned child
+instead of inferring a child from title polling.
+The pinned source SHA must remain on its trusted branch. Terminal assurance has
+read-only permissions and never receives Kaggle secrets. Publication is decoupled from
+extraction: there is no `publish` input. The terminal run uploads the checkpoint, next
+manifest, private evidence, and sanitized public candidate, re-reads each exact
+identity, and seals a `TerminalPublicationHandoffV1`; a separate handoff-bound publish
+dispatch consumes that sealed receipt in a writer job serialized by the named
+non-cancelling `nbadb-kaggle-publish` concurrency group.
+Terminal assurance exports every format before running the hard scan with
+required nonempty silver/gold domain anchors, declared silver-to-gold row-count parity,
+and a checkpoint report canonically bound to its
+manifest, database, chain, source commit, and every planned lane,
+then builds the sorted SHA-256 manifest from the
+validated effective checkpoint coverage. The assured artifact authority is always
+produced by attempt one: its exact ID, name, canonical digest, size, unexpired state,
+archive URL, and producing `GITHUB_SHA` must match the attempt-one upload receipt. The
+publisher also verifies the current owner run and repeats that owner read immediately
+before download. A later owner attempt is admissible only through the dedicated
+publication-recovery roles — exact cross-run `pending` takeover with a durably
+terminal origin, a takeover receipt plus artifact member, and stable double inventory
+evidence, or no-upload `in_progress` reconciliation — reusing that immutable
+attempt-one authority; it may neither upload nor substitute assured data. The publisher then verifies the
+archive SHA-256 and safe layout against that receipt,
+assured data identity, includes it in Kaggle metadata and marker v2, paginates the
+exact remote version inventory, and streams every remote file through SHA-256
+readback before pushing checked-in metadata as its final repository mutation.
+The complete ZIP inventory must pass before extraction; empty archives, duplicate
+normalized paths, absolute or traversing paths, symlinks, special files, and
+destination collisions fail before any assured member is consumed.
+Every marker-present baseline is matched to the current metadata version and rechecked immediately before
+upload, preventing a concurrent publisher from being silently superseded. The
+full-extraction writer requires `actions: write`, `deployments: write`, `GH_TOKEN`,
+`NBADB_KAGGLE_PUBLICATION_SOURCE_SHA`, default-head enforcement, and
+`nbadb upload --publication-ledger github-deployment --require-durable-intent`.
+The default-head REST request uses `/git/ref/heads/<branch>`, while GitHub
+canonicalizes the receipt URL to `/git/refs/heads/<branch>`; both identities are
+checked. A publication reconciliation execution accepts only the original source or
+its single byte-identical metadata-only child. Once a verified durable intent reaches
+`in_progress`, an exception or runner loss is reconciliation-only: no later execution
+may call Kaggle again until the exact marker, version, inventory, and streamed hashes
+resolve that intent. Direct success resolution is restricted to the fresh current
+run, attempt, publisher job, and executor-admission digest; deployment origin, claim,
+nonce, and executor are checked again immediately before the success POST, and drift
+through the first executor check is caught by a final exact remote observation while
+executor drift during that observation is caught by the adjacent final active check;
+either writes no success status. A later attempt of the same run may use only explicit
+reconciliation. A distinct run may recover an unresolved intent exactly two ways: it
+may take over a still-`pending` intent (`record_pending_takeover` binds an uploaded
+takeover receipt and artifact member durably, `claim_pending_takeover` claims it
+exactly once with that durable status still the ledger head and the origin executor
+proven durably terminal, then `mark_resolved` re-verifies the origin live), or it may
+reconcile an already-claimed `in_progress` intent readback-only from the exact remote
+marker, version, inventory, and streamed hashes without a second Kaggle mutation.
+Full-extraction publication cache restore/save keys are scoped to
+the current workflow run ID, so a later attempt of that same run can recover secondary
+reconciliation state without borrowing another run's cache; the durable Deployment
+ledger and remote evidence, never that cache, authorize cross-run recovery. The
+Deployment ledger and remote evidence remain authoritative. The FIFO publisher mutex is the serialization
+boundary for repository-sanctioned writers; GitHub has no cross-resource conditional
+write, so the sequential handshake does not claim atomic exclusion of arbitrary
+out-of-band status writers after its final claim observation. After an exact upload or remote reconciliation,
+the same publisher proceeds only to post-publication closeout: it resolves metadata
+head `M` as either the frozen source or one direct, non-merge child that changes only
+`dataset-metadata.json`, uses the fixed metadata commit subject, and is byte-reproducible
+from the assured data. A child `M` triggers an explicit `.github/workflows/ci.yml`
+dispatch with exact `{ref, inputs}` payload/response validation. The publisher binds
+that run directly to `M`, fully paginates its job inventory, directly verifies each
+job, and requires exactly six unique successes: `workflow-lint`, `lint`, `metadata`,
+`typecheck`, `docs`, and `test`. It rechecks that the default ref still equals `M`
+before uploading the run/attempt-scoped metadata-closeout receipt. An unchanged source
+skips dispatch but still records closeout. A zero-active source resume binds the plan's
+selected source manifest and `resume-source-selection.json` receipt into the uploaded
+plan artifact. Terminal replay first REST-verifies that artifact's exact ID, name,
+digest, size, unexpired state, archive URL, owner run at exact attempt one, and
+current producing `GITHUB_SHA` after a final owner re-read, separately
+checks the selected semantic source and any cross-run `S`/`H` attestation, then downloads it by ID and
+validates the selected manifest/report/database trio. It never reselects a same-name
+source artifact during terminal replay. If interruption occurred before terminal
+checkpoint promotion, checkpoint recovery instead rebuilds from the exact complete
+lane/database and metadata pairs named by `chain_state.artifact_run_ids`. It consumes
+each historical run's first-attempt `S`/`H` attestation, selects from a stable complete
+inventory, directly rechecks every artifact ID, and downloads by ID with archive
+digest enforcement; the GitHub archive digest and DuckDB database SHA-256 remain
+separate commitments.
+The committed next-manifest and terminal-replay output are independently
+direct-verified as current-run, attempt-one, `GITHUB_SHA`-bound receipts; terminal
+merge receives those receipts and downloads only their exact artifact IDs.
+For a one-lane VPN proof, `operation=targeted_smoke` requires a manual manifest,
+`max_iterations=1`, and `retry_pipeline_failures=false`. It skips
+global merge/scan and redispatch, then succeeds only when lane control and the
+checkpoint attest exactly one complete terminal lane. This is an extractor proof,
+not full-dataset assurance.
+
+Read more in the full **[Architecture Guide](https://nbadb.w4w.dev/docs/architecture)**.
+
+## 🔧 Tech Stack
+
+| Component       | Technology                                                                                                              |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Language        | Python ≥3.12                                                                                                            |
+| Package Manager | [uv](https://docs.astral.sh/uv/)                                                                                        |
+| NBA API client  | [nba_api](https://github.com/swar/nba_api) 1.11.4 (exact contract pin)                                                  |
+| DataFrames      | [Polars](https://pola.rs/) 1.43.2                                                                                       |
+| Validation      | [Pandera](https://pandera.readthedocs.io/) 0.32.1 (Polars backend)                                                      |
+| Analytics DB    | [DuckDB](https://duckdb.org/) 1.5.5                                                                                     |
+| Relational DB   | [SQLModel](https://sqlmodel.tiangolo.com/) 0.0.39 + SQLite                                                              |
+| HTTP / Proxy    | [proxywhirl](https://github.com/wyattowalsh/proxywhirl)                                                                 |
+| CLI             | [Typer](https://typer.tiangolo.com/) + [Rich](https://rich.readthedocs.io/) + [Textual](https://textual.textualize.io/) |
+| Type Checking   | [ty](https://github.com/astral-sh/ty) 0.0.58                                                                            |
+| Linting         | [Ruff](https://docs.astral.sh/ruff/)                                                                                    |
+| Docs            | [Fumadocs](https://fumadocs.vercel.app/) + [Next.js](https://nextjs.org/) + [pnpm](https://pnpm.io/) 11.x               |
+| CI              | GitHub Actions (SHA-pinned)                                                                                             |
+
+## 📖 Documentation
+
+Full documentation lives at **[nbadb.w4w.dev](https://nbadb.w4w.dev)**.
+
+- **[Getting Started](https://nbadb.w4w.dev/docs)** — install, run the pipeline, and learn where to go next
+- **[Architecture](https://nbadb.w4w.dev/docs/architecture)** — pipeline stages, validation layers, and state tables
+- **[Schema Reference](https://nbadb.w4w.dev/docs/schema)** — curated star-surface guide plus generated raw/staging/star references
+- **[Data Dictionary](https://nbadb.w4w.dev/docs/data-dictionary)** — glossary plus generated raw/staging/star field references
+- **[Diagrams](https://nbadb.w4w.dev/docs/diagrams)** — ER, endpoint map, and pipeline visuals
+- **[Lineage](https://nbadb.w4w.dev/docs/lineage)** — trace endpoints and staging inputs to final tables
+- **[Guides](https://nbadb.w4w.dev/docs/guides)** — onboarding, query recipes, Parquet, Kaggle, and troubleshooting
+- **[Playground](https://nbadb.w4w.dev/docs/playground)** — in-browser DuckDB SQL exploration
+
+## 📄 License
+
+MIT

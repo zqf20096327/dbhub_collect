@@ -1,0 +1,178 @@
+= Neo4j-Migrations
+Michael Simons <michael.simons@neo4j.com>
+:doctype: article
+:lang: en
+:listing-caption: Listing
+:source-highlighter: coderay
+:icons: font
+// tag::properties[]
+:fullVersion: 4.2.0
+:groupId: eu.michael-simons.neo4j
+:artifactIdMavenPlugin: neo4j-migrations-maven-plugin
+:artifactIdSpringBoot: neo4j-migrations-spring-boot-starter
+:artifactIdQuarkus: neo4j-migrations-quarkus
+:artifactIdCore: neo4j-migrations
+:artifactIdFormatAdoc: neo4j-migrations-formats-adoc
+:artifactIdFormatMarkdown: neo4j-migrations-formats-markdown
+:branch: main
+:url-apidocs: https://michael-simons.github.io/neo4j-migrations/main/site
+:url-projectinfo: https://michael-simons.github.io/neo4j-migrations/main/site
+:url-gh-releases: https://github.com/michael-simons/neo4j-migrations/releases
+// end::properties[]
+
+[abstract]
+--
+Neo4j-Migrations is a database migration and refactoring tool that allows running Cypher scripts and programmatic refactorings
+in a controlled and repeatable fashion against one or more Neo4j database.
+
+Neo4j-Migrations is a proud member of the https://neo4j.com/labs/[Neo4j-Labs] and maintained by authors of the Neo4j-Drivers- and SDN/OGM team.
+--
+
+image:https://github.com/michael-simons/neo4j-migrations/workflows/build/badge.svg[link=https://github.com/michael-simons/neo4j-migrations/actions] 
+image:https://sonarcloud.io/api/project_badges/measure?project=eu.michael-simons.neo4j%3Aneo4j-migrations-parent&metric=coverage[link=https://sonarcloud.io/summary/new_code?id=eu.michael-simons.neo4j%3Aneo4j-migrations-parent]
+image:https://sonarcloud.io/api/project_badges/measure?project=eu.michael-simons.neo4j%3Aneo4j-migrations-parent&metric=alert_status[link=https://sonarcloud.io/dashboard?id=eu.michael-simons.neo4j%3Aneo4j-migrations-parent]
+image:https://img.shields.io/maven-central/v/eu.michael-simons.neo4j/neo4j-migrations?logo=apache-maven&style=flat-squareg[link=https://mvnrepository.com/artifact/eu.michael-simons.neo4j/neo4j-migrations]
+
+== Introduction
+
+// tag::introduction[]
+Neo4j-Migrations are a set of tools to make your schema migrations as easy as possible.
+They provide a uniform way for applications, the command line and build tools alike to track, manage and apply changes to your database, in short: to refactor your database.
+The project is inspired to a large extent by https://flywaydb.org[FlywayDB], which is an awesome tool for migration of relational databases.
+Most things evolve around Cypher scripts, however the Core API of Neo4j-Migrations allows defining Java classes as migrations as well.
+
+Neo4j-Migrations builds directly on top of the official https://github.com/neo4j/neo4j-java-driver[Neo4j Java driver], and supports all 2025 and 2026 releases, but also Neo4j 3.5, Neo4j 4.1 to 4.4, and Neo4j 5; including enterprise features such as multidatabase support and impersonation.
+
+The only dependencies are said driver and https://github.com/classgraph/classgraph[ClassGraph], the latter being used to find migrations on the classpath.
+
+The history of migrations applied is stored as a subgraph in your database.
+// end::introduction[]
+
+The graph will look like this:
+
+image::docs/modules/ROOT/images/chain-of-migrations.png[]
+
+== Downloads
+
+Binary downloads for the CLI are available on our https://github.com/michael-simons/neo4j-migrations/releases[release page]
+for each version. Maven artifacts are available on https://search.maven.org/artifact/eu.michael-simons.neo4j/neo4j-migrations[central] under
+the following coordinates:
+
+* Core API: `{groupId}:{artifactIdCore}:{fullVersion}`
+* Spring-Boot-Starter: `{groupId}:{artifactIdSpringBoot}:{fullVersion}`
+* Quarkus extension: `{groupId}:{artifactIdQuarkus}:{fullVersion}`
+* Maven-Plugin: `{groupId}:{artifactIdMavenPlugin}:{fullVersion}`
+
+Binaries of Neo4j-Migration are available via https://sdkman.io/sdks/neo4jmigrations/[SDKMAN!], https://github.com/michael-simons/homebrew-neo4j-migrations[Homebrew].
+Other options includes the (sometimes dated) Neo4j https://www.jbang.dev[JBang] catalog and Zip bundles via GitHub. Please check out the full list of https://michael-simons.github.io/neo4j-migrations/current/#download[download options].
+
+== Compatibility
+
+Neo4j-Migrations can be used against Neo4j 3.5, all Neo4j 4 versions from 4.1 up to 4.4 and Neo4j 5, including all current Neo4j-Aura versions.
+
+NOTE: Neo4j 4.0 is only partially supported since version 2.0 due to the fact that Neo4j Java Driver does not support it fully anymore since 5.x. If you need to use this library with Neo4j 4.0 (which you shouldn't, because 4.0 is out of support anyway), look at the latest 1.x version of Neo4j-Migrations. *This does not affect new versions of the 4.x series, such as Neo4j 4.4, which is fully supported by this project!*
+
+// tag::compatibility[]
+The Core API and the JVM based version of the CLI module of Neo4j-Migrations requires at least Java 17 or higher since version 2.0.
+Neo4j-Migrations can safely be used on both the class- and module-path.
+Native binaries are provided for 64bit versions of macOS, Linux and Windows. The native binaries don't require a JVM to be installed.
+
+For a version compatible with JDK 8, check the 1.x releases. We still do maintain the latest minor, including support for older versions of Spring Boot (prio to Spring Boot 3). These are also the versions you should be using against Neo4j 4.0.
+
+The older releases of Neo4j-Migrations are compiled with JDK 17 while targeting JDK 8.
+The Core API is provided as a Multi-Release-Jar in the older releases, providing a `module-info.java` for JDK 11 and higher, making it a good citizen on the Java module path as well.
+// end::compatibility[]
+
+While the CLI module actually does not require a JVM installed (it is a native binary, available for a Linux, macOS and Windows alike), some people might prefer a solution native to their ecosystem. The following projects serve the same purpose as Neo4j-Migrations and use the same graph, check-summing and versioning scheme as this project:
+
+* https://github.com/booqoffsky/neo4j-python-migrations[neo4j-python-migrations], written in Python, actively maintained and published on https://pypi.org/project/neo4j-python-migrations/[PyPI]
+* https://github.com/marianozunino/morpheus[Morpheus], written in TypeScript and published as NPM package, by https://github.com/marianozunino[@marianozunino]
+* https://github.com/michael-simons/neo4j-flyway-database[Neo4j for Flyway], a plugin for Flyway that allows using Neo4j with Flyway through the https://github.com/neo4j/neo4j-jdbc[Neo4j JDBC Driver]
+
+If you want to be listed here too, please reach out, and we can collaborate to ensure compatibility.
+
+== Manual
+
+The complete manual is available here: https://michael-simons.github.io/neo4j-migrations[michael-simons.github.io/neo4j-migrations].
+The API documentation for the core module is available here: https://michael-simons.github.io/neo4j-migrations/main/site/neo4j-migrations/apidocs/index.html[Neo4j Migrations (Core) {fullVersion} API]. The comprehensive set of system diagrams including https://sourcespy.com/github/michaelsimonsneo4jmigrations/[build, module and class diagrams] is automatically generated weekly.
+
+== Presentations and features
+
+We try to promote this project as good as we can internally and externally while trying not to be too obtrusive. If you think it's a good idea to talk about it at your conference, just ask. Happy to answer CfPs. We are grateful about the coverage, presentations and features so far:
+
+* https://www.infoq.com/news/2021/12/neo4j-migrations/[InfoQ: Migrating Neo4j Graph Schemas with Neo4j Migrations (2021-12-28)] by https://www.infoq.com/profile/Johan-Janssen/[Johan Janssen]
+* https://jreleaser.org/guide/latest/index.html#_who_is_using_it[JReleaser: Who is using it] by https://twitter.com/aalmiray[Andres Almiray]
+* https://speakerdeck.com/michaelsimons/neo4j-migrations-the-lean-way-of-applying-database-refactorings-to-neo4j-efa52ac1-85e1-4688-97f3-566fc78de6cd[Nodes 22: Neo4j-Migrations - The lean way of refactoring Neo4j content] by https://twitter.com/rotnroll666[Michael Simons] (https://github.com/michael-simons/nodes2022[Demo repository] and the https://www.youtube.com/watch?v=5-j0xiVAeoM[recording of the presentation])
+* The first major upgrade, Neo4j-Migrations 2.0.0 was included in the https://github.blog/2023-02-08-release-radar-dec-2022-jan-2023/[GitHub Release Radar, Festive Edition · December 2022 – January 2023]
+
+== CLI in a nutshell
+
+image::docs/modules/ROOT/images/cli-demo.gif[]
+
+== Contributors
+
+++++
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://www.adamcowley.co.uk"><img src="https://avatars.githubusercontent.com/u/1372869?v=4?s=100" width="100px;" alt="Adam Cowley"/><br /><sub><b>Adam Cowley</b></sub></a><br /><a href="#infra-adam-cowley" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ali-ince"><img src="https://avatars.githubusercontent.com/u/24190262?v=4?s=100" width="100px;" alt="Ali Ince"/><br /><sub><b>Ali Ince</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/issues?q=author%3Aali-ince" title="Bug reports">🐛</a> <a href="#userTesting-ali-ince" title="User Testing">📓</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/amit-kumaryadav"><img src="https://avatars.githubusercontent.com/u/36166686?v=4?s=100" width="100px;" alt="Amit Kumar Yadav"/><br /><sub><b>Amit Kumar Yadav</b></sub></a><br /><a href="#userTesting-amit-kumaryadav" title="User Testing">📓</a> <a href="#ideas-amit-kumaryadav" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://andresalmiray.com/"><img src="https://avatars.githubusercontent.com/u/13969?v=4?s=100" width="100px;" alt="Andres Almiray"/><br /><sub><b>Andres Almiray</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/commits?author=aalmiray" title="Code">💻</a> <a href="#plugin-aalmiray" title="Plugin/utility libraries">🔌</a> <a href="#ideas-aalmiray" title="Ideas, Planning, & Feedback">🤔</a> <a href="#mentoring-aalmiray" title="Mentoring">🧑‍🏫</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://about.me/corneil"><img src="https://avatars.githubusercontent.com/u/466422?v=4?s=100" width="100px;" alt="Corneil du Plessis"/><br /><sub><b>Corneil du Plessis</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/issues?q=author%3Acorneil" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/David-Giliotti-Wonder"><img src="https://avatars.githubusercontent.com/u/113369321?v=4?s=100" width="100px;" alt="David Giliotti"/><br /><sub><b>David Giliotti</b></sub></a><br /><a href="#ideas-David-Giliotti-Wonder" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://fbiville.github.io"><img src="https://avatars.githubusercontent.com/u/445792?v=4?s=100" width="100px;" alt="Florent Biville"/><br /><sub><b>Florent Biville</b></sub></a><br /><a href="#ideas-fbiville" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://atomfrede.gitlab.io/"><img src="https://avatars.githubusercontent.com/u/203401?v=4?s=100" width="100px;" alt="Frederik Hahne"/><br /><sub><b>Frederik Hahne</b></sub></a><br /><a href="#ideas-atomfrede" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://meistermeier.com"><img src="https://avatars.githubusercontent.com/u/435872?v=4?s=100" width="100px;" alt="Gerrit Meier"/><br /><sub><b>Gerrit Meier</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/commits?author=meistermeier" title="Code">💻</a> <a href="https://github.com/michael-simons/neo4j-migrations/commits?author=meistermeier" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://blog.yuzutech.fr/"><img src="https://avatars.githubusercontent.com/u/333276?v=4?s=100" width="100px;" alt="Guillaume Grossetie"/><br /><sub><b>Guillaume Grossetie</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/commits?author=Mogztter" title="Code">💻</a> <a href="https://github.com/michael-simons/neo4j-migrations/commits?author=Mogztter" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://au.linkedin.com/in/guy-keller-au"><img src="https://avatars.githubusercontent.com/u/8213310?v=4?s=100" width="100px;" alt="Guy Keller"/><br /><sub><b>Guy Keller</b></sub></a><br /><a href="#research-guy-keller" title="Research">🔬</a> <a href="#ideas-guy-keller" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Hosch250"><img src="https://avatars.githubusercontent.com/u/6299719?v=4?s=100" width="100px;" alt="Hosch250"/><br /><sub><b>Hosch250</b></sub></a><br /><a href="#userTesting-Hosch250" title="User Testing">📓</a> <a href="https://github.com/michael-simons/neo4j-migrations/issues?q=author%3AHosch250" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sibethencourt"><img src="https://avatars.githubusercontent.com/u/114485431?v=4?s=100" width="100px;" alt="Israel Bethencourt"/><br /><sub><b>Israel Bethencourt</b></sub></a><br /><a href="#ideas-sibethencourt" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://zakjan.cz"><img src="https://avatars.githubusercontent.com/u/173585?v=4?s=100" width="100px;" alt="Jan Žák"/><br /><sub><b>Jan Žák</b></sub></a><br /><a href="#ideas-zakjan" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/rugbroed"><img src="https://avatars.githubusercontent.com/u/436972?v=4?s=100" width="100px;" alt="Kasper"/><br /><sub><b>Kasper</b></sub></a><br /><a href="#ideas-rugbroed" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/katya-dovgalets"><img src="https://avatars.githubusercontent.com/u/38248660?v=4?s=100" width="100px;" alt="Kateryna Dovhalets"/><br /><sub><b>Kateryna Dovhalets</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/commits?author=katya-dovgalets" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/marianozunino"><img src="https://avatars.githubusercontent.com/u/6627528?v=4?s=100" width="100px;" alt="Mariano Zunino"/><br /><sub><b>Mariano Zunino</b></sub></a><br /><a href="#ideas-marianozunino" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/medsouz"><img src="https://avatars.githubusercontent.com/u/1078339?v=4?s=100" width="100px;" alt="Matt Souza"/><br /><sub><b>Matt Souza</b></sub></a><br /><a href="#ideas-medsouz" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/michael-simons/neo4j-migrations/commits?author=medsouz" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/MaurizioCasciano"><img src="https://avatars.githubusercontent.com/u/12021064?v=4?s=100" width="100px;" alt="Maurizio Casciano"/><br /><sub><b>Maurizio Casciano</b></sub></a><br /><a href="#ideas-MaurizioCasciano" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/michael-simons/neo4j-migrations/issues?q=author%3AMaurizioCasciano" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://michael-simons.eu"><img src="https://avatars.githubusercontent.com/u/526383?v=4?s=100" width="100px;" alt="Michael Simons"/><br /><sub><b>Michael Simons</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/commits?author=michael-simons" title="Code">💻</a> <a href="https://github.com/michael-simons/neo4j-migrations/commits?author=michael-simons" title="Documentation">📖</a> <a href="#maintenance-michael-simons" title="Maintenance">🚧</a> <a href="#talk-michael-simons" title="Talks">📢</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/pepow"><img src="https://avatars.githubusercontent.com/u/7231727?v=4?s=100" width="100px;" alt="Peter Vavra"/><br /><sub><b>Peter Vavra</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/issues?q=author%3Apepow" title="Bug reports">🐛</a> <a href="#ideas-pepow" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Raf23"><img src="https://avatars.githubusercontent.com/u/6950771?v=4?s=100" width="100px;" alt="Raf23"/><br /><sub><b>Raf23</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/issues?q=author%3ARaf23" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://www.radcortez.com"><img src="https://avatars.githubusercontent.com/u/5796305?v=4?s=100" width="100px;" alt="Roberto Cortez"/><br /><sub><b>Roberto Cortez</b></sub></a><br /><a href="#mentoring-radcortez" title="Mentoring">🧑‍🏫</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/robsdedude"><img src="https://avatars.githubusercontent.com/u/4061254?v=4?s=100" width="100px;" alt="Robsdedude"/><br /><sub><b>Robsdedude</b></sub></a><br /><a href="#research-robsdedude" title="Research">🔬</a> <a href="https://github.com/michael-simons/neo4j-migrations/pulls?q=is%3Apr+reviewed-by%3Arobsdedude" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/adrien-sales/"><img src="https://avatars.githubusercontent.com/u/5235127?v=4?s=100" width="100px;" alt="SALES"/><br /><sub><b>SALES</b></sub></a><br /><a href="#ideas-adriens" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/SaschaPeukert"><img src="https://avatars.githubusercontent.com/u/6998439?v=4?s=100" width="100px;" alt="Sascha Peukert"/><br /><sub><b>Sascha Peukert</b></sub></a><br /><a href="#userTesting-SaschaPeukert" title="User Testing">📓</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://SeanKilleen.com"><img src="https://avatars.githubusercontent.com/u/2148318?v=4?s=100" width="100px;" alt="Sean Killeen"/><br /><sub><b>Sean Killeen</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/commits?author=SeanKilleen" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://bsideup.github.io"><img src="https://avatars.githubusercontent.com/u/1050762?v=4?s=100" width="100px;" alt="Sergei Egorov"/><br /><sub><b>Sergei Egorov</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/pulls?q=is%3Apr+reviewed-by%3Absideup" title="Reviewed Pull Requests">👀</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/SergeyPlatonov"><img src="https://avatars.githubusercontent.com/u/14233643?v=4?s=100" width="100px;" alt="Sergey"/><br /><sub><b>Sergey</b></sub></a><br /><a href="#ideas-SergeyPlatonov" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/buianhtai"><img src="https://avatars.githubusercontent.com/u/11797322?v=4?s=100" width="100px;" alt="Tai.Bui"/><br /><sub><b>Tai.Bui</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/issues?q=author%3Abuianhtai" title="Bug reports">🐛</a> <a href="https://github.com/michael-simons/neo4j-migrations/commits?author=buianhtai" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/vladas"><img src="https://avatars.githubusercontent.com/u/357636?v=4?s=100" width="100px;" alt="Vladas"/><br /><sub><b>Vladas</b></sub></a><br /><a href="#ideas-vladas" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/michael-simons/neo4j-migrations/commits?author=vladas" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/alexanoid"><img src="https://avatars.githubusercontent.com/u/110009335?v=4?s=100" width="100px;" alt="alexanoid"/><br /><sub><b>alexanoid</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/issues?q=author%3Aalexanoid" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ctytgat"><img src="https://avatars.githubusercontent.com/u/1969808?v=4?s=100" width="100px;" alt="ctytgat"/><br /><sub><b>ctytgat</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/issues?q=author%3Actytgat" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Dcanzano"><img src="https://avatars.githubusercontent.com/u/16004526?v=4?s=100" width="100px;" alt="dana canzano"/><br /><sub><b>dana canzano</b></sub></a><br /><a href="#userTesting-Dcanzano" title="User Testing">📓</a> <a href="https://github.com/michael-simons/neo4j-migrations/issues?q=author%3ADcanzano" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/injectives"><img src="https://avatars.githubusercontent.com/u/11927660?v=4?s=100" width="100px;" alt="injectives"/><br /><sub><b>injectives</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/commits?author=injectives" title="Code">💻</a> <a href="#userTesting-injectives" title="User Testing">📓</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ivu-mawi"><img src="https://avatars.githubusercontent.com/u/150349238?v=4?s=100" width="100px;" alt="ivu-mawi"/><br /><sub><b>ivu-mawi</b></sub></a><br /><a href="#ideas-ivu-mawi" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/michael-simons/neo4j-migrations/pulls?q=is%3Apr+reviewed-by%3Aivu-mawi" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/shanon84"><img src="https://avatars.githubusercontent.com/u/14245949?v=4?s=100" width="100px;" alt="shanon84"/><br /><sub><b>shanon84</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/commits?author=shanon84" title="Code">💻</a> <a href="https://github.com/michael-simons/neo4j-migrations/issues?q=author%3Ashanon84" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/szabopeter"><img src="https://avatars.githubusercontent.com/u/1254135?v=4?s=100" width="100px;" alt="szabopeter"/><br /><sub><b>szabopeter</b></sub></a><br /><a href="https://github.com/michael-simons/neo4j-migrations/commits?author=szabopeter" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ttemple06"><img src="https://avatars.githubusercontent.com/u/37306883?v=4?s=100" width="100px;" alt="ttemple06"/><br /><sub><b>ttemple06</b></sub></a><br /><a href="#ideas-ttemple06" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+++++

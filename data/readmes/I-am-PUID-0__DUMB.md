@@ -1,0 +1,273 @@
+﻿<div align="center" style="max-width: 100%; height: auto;">
+  <h1>🎬 Distributed Unlimited Media Bridge 🎬</h1>
+  <a href="https://github.com/I-am-PUID-0/DUMB">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://dumbarr.com/assets/images/DUMB.png">
+      <img alt="Distributed Unlimited Media Bridge ecosystem banner" src="https://dumbarr.com/assets/images/DUMB.png" style="max-width: 100%; height: auto;">
+    </picture>
+  </a>
+</div>
+<div
+  align="center"
+  style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 1em;"
+>
+  <a href="https://github.com/I-am-PUID-0/DUMB/stargazers">
+    <img
+      alt="GitHub Repo stars"
+      src="https://img.shields.io/github/stars/I-am-PUID-0/DUMB?style=for-the-badge"
+    />
+  </a>
+  <a href="https://github.com/I-am-PUID-0/DUMB/issues">
+    <img
+      alt="Issues"
+      src="https://img.shields.io/github/issues/I-am-PUID-0/DUMB?style=for-the-badge"
+    />
+  </a>
+  <a href="https://github.com/I-am-PUID-0/DUMB/blob/master/LICENSE">
+    <img
+      alt="License"
+      src="https://img.shields.io/github/license/I-am-PUID-0/DUMB?style=for-the-badge"
+    />
+  </a>
+  <a href="https://github.com/I-am-PUID-0/DUMB/graphs/contributors">
+    <img
+      alt="Contributors"
+      src="https://img.shields.io/github/contributors/I-am-PUID-0/DUMB?style=for-the-badge"
+    />
+  </a>
+  <a href="https://github.com/sponsors/I-am-PUID-0">
+    <img
+      alt="Sponsors"
+      src="https://img.shields.io/github/sponsors/I-am-PUID-0?style=for-the-badge&color=%23FF1493"
+    />
+  </a>  
+  <a href="https://hub.docker.com/r/iampuid0/dumb">
+    <img
+      alt="Docker Pulls"
+      src="https://img.shields.io/docker/pulls/iampuid0/dumb?style=for-the-badge&logo=docker&logoColor=white"
+    />
+  </a>
+  <a href="https://github.com/I-am-PUID-0/DUMB/actions/workflows/docker-image.yml">
+    <img
+      alt="Build Status"
+      src="https://img.shields.io/github/actions/workflow/status/I-am-PUID-0/DUMB/docker-image.yml?style=for-the-badge"
+    />
+  </a>  
+  <a href="https://discord.gg/T6uZGy5XYb">
+    <img
+      alt="Join Discord"
+      src="https://img.shields.io/badge/Join%20us%20on%20Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white"
+    />
+  </a>
+</div>
+
+## 📜 Description
+
+**Distributed Unlimited Media Bridge (DUMB)** is an All-In-One (AIO) platform for building and operating a complete automated media stack. It brings together Debrid and Usenet workflows, Arr automation, media servers, request/watchlist tools, service management, logs, metrics, notifications, updates, and embedded service UIs behind a guided setup experience. The maintained container image remains the normal deployment, while the Proxmox Community Scripts integration installs the same controller and managed services natively in an LXC.
+
+DUMB is designed to reduce the glue work that usually comes with multi-service media deployments. You can choose the services that fit your workflow, let DUMB wire the required dependencies, manage them from the DUMB dashboard, and optionally expose selected UIs or public routes through the bundled Traefik access layer.
+
+## 📦 Projects Included
+
+> You are free to use whichever components you like. Not all are required, and some may provide overlapping functionality in different ways.
+
+| Project                                                            | Author                                                               | Community / Docs / Support                                                                                                                     | 🍻 Support Dev                                                                                      |
+|--------------------------------------------------------------------|----------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| [AIOStreams](https://github.com/Viren070/AIOStreams)              | [Viren070](https://github.com/Viren070)                              | [Docs](https://aiostreams.viren070.me/) • [Issues](https://github.com/Viren070/AIOStreams/issues)                                               | [Sponsor](https://github.com/sponsors/Viren070)                                                    |
+| [AltMount](https://github.com/javi11/altmount)                    | [javi11](https://github.com/javi11)                                  | [Docs](https://altmount.kipsilabs.top/) • [Issues](https://github.com/javi11/altmount/issues)                                                   | —                                                                                                   |
+| [Authelia](https://github.com/authelia/authelia)                  | [Authelia Team](https://github.com/authelia)                         | [Docs](https://www.authelia.com/) • [Issues](https://github.com/authelia/authelia/issues)                                                       | [Sponsor](https://github.com/sponsors/authelia)                                                           |
+| [Bazarr](https://www.bazarr.media/)                              | [Bazarr Team](https://github.com/morpheus65535)                      | [Docs](https://wiki.bazarr.media/) • [Issues](https://github.com/morpheus65535/bazarr/issues)                                                   | [Donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XHHRWXT9YB7WE&source=url) |
+| [cli_debrid](https://github.com/godver3/cli_debrid)               | [godver3](https://github.com/godver3)                                | [Discord](https://discord.gg/ynqnXGJ4hU)                                                                                                         | [Sponsor](https://github.com/sponsors/godver3)                                                    |
+| [dmbdb](https://github.com/nicocapalbo/dmbdb)                     | [nicocapalbo](https://github.com/nicocapalbo)                        | [Issues](https://github.com/nicocapalbo/dmbdb/issues)                                                                                           | —                                                                                                   |
+| [Decypharr](https://github.com/sirrobot01/decypharr)              | [Mukhtar Akere](https://github.com/sirrobot01)                       | [Docs](https://sirrobot01.github.io/decypharr/) • [Issues](https://github.com/sirrobot01/decypharr/issues)                                     | [Sponsor](https://github.com/sponsors/sirrobot01)                                                 |
+| [Emby Media Server](https://emby.media) | [Emby, LLC](https://emby.media)                                     | [Support](https://emby.media/support/)                                                                                                              | [Donate](https://emby.media/premiere.html) (via Emby Premiere)                                           |
+| [Jellyfin Media Server](https://jellyfin.org/)                    | [Jellyfin Team](https://github.com/jellyfin)                         | [Docs](https://jellyfin.org/docs/) • [Support](https://jellyfin.org/contact/)                                                                   | [Donate](https://opencollective.com/jellyfin)                                                     |
+| [Maintainerr](https://github.com/Maintainerr/Maintainerr)        | [Maintainerr Team](https://github.com/Maintainerr)                   | [Docs](https://docs.maintainerr.info/) • [Issues](https://github.com/Maintainerr/Maintainerr/issues)                                              | [Support](https://opencollective.com/maintainerr)                                                |
+| [mediastorm](https://github.com/godver3/mediastorm)              | [godver3](https://github.com/godver3)                                | [README](https://github.com/godver3/mediastorm#readme) • [Issues](https://github.com/godver3/mediastorm/issues)                                  | [Sponsor](https://github.com/sponsors/godver3)                                                   |
+| [NeutArr](https://github.com/I-am-PUID-0/NeutArr)                | [I-am-PUID-0](https://github.com/I-am-PUID-0)                            | [Issues](https://github.com/I-am-PUID-0/NeutArr/issues)                                     | [Donate](https://github.com/sponsors/I-am-PUID-0)                                      |
+| [Lidarr](https://lidarr.audio/)                                   | [Lidarr Team](https://github.com/Lidarr/Lidarr)                      | [Docs](https://wiki.servarr.com/) • [Discord](https://lidarr.audio/discord)                                                                       | [Sponsor](https://github.com/sponsors/Lidarr)                                                     |
+| [InfiniDysk](https://github.com/infinidysk/infinidysk)  | [infinidysk](https://github.com/infinidysk)                                  | [Documentation](https://www.infinidysk.com/) • [Issues](https://github.com/infinidysk/infinidysk/issues) • [Migration guide](https://www.infinidysk.com/getting-started/migration/)              | [Support](https://buymeacoffee.com/hoivikaj)                                                        |
+| [Profilarr](https://github.com/Dictionarry-Hub/profilarr)         | [Dictionarry Hub](https://github.com/Dictionarry-Hub)                | [Docs](https://dictionarry.dev/profilarr-setup/installation) • [Issues](https://github.com/Dictionarry-Hub/profilarr/issues)                   | [Sponsor](https://github.com/sponsors/Dictionarry-Hub)                                            |
+| [pgAdmin 4](https://www.pgadmin.org/)                             | [pgAdmin Team](https://www.pgadmin.org/development/)                 | [Docs](https://www.pgadmin.org/docs/) • [Support](https://www.pgadmin.org/support/)                                                            | [Donate](https://www.pgadmin.org/donate/)                                                         |
+| [phalanx_db](https://github.com/godver3/phalanx_db_hyperswarm)   | [godver3](https://github.com/godver3)                                | [Discord](https://discord.gg/jAmqZJCZJ4)                                                                                                         | [Sponsor](https://github.com/sponsors/godver3)                                                    |
+| [Plex Media Server](https://www.plex.tv/media-server-downloads/) | [plexinc](https://www.plex.tv/)                                     | [Support](https://support.plex.tv/)                                                                                                              | [Donate](https://www.plex.tv/plex-pass/) (via Plex Pass)                                           |
+| [Pulsarr](https://github.com/jamcalli/Pulsarr)                   | [jamcalli](https://github.com/jamcalli)                              | [Docs](https://jamcalli.github.io/Pulsarr/) • [Issues](https://github.com/jamcalli/Pulsarr/issues)                                               | [Support](https://ko-fi.com/jamcalli)                                                             |
+| [Seerr](https://github.com/seerr-team/seerr)                     | [Seerr Team](https://github.com/seerr-team)                         | [Docs](https://github.com/seerr-team/seerr) • [Issues](https://github.com/seerr-team/seerr/issues)                                              | [Sponsor](https://opencollective.com/seerr)                                                                                                   |
+| [Tautulli](https://tautulli.com/)                                | [Tautulli](https://github.com/Tautulli)                             | [Docs](https://github.com/Tautulli/Tautulli/wiki) • [Issues](https://github.com/Tautulli/Tautulli/issues)                                       | [Donate](https://tautulli.com/#donate)                                                            |
+| [Traefik Proxy Admin](https://github.com/I-am-PUID-0/traefik-proxy-admin) | [I-am-PUID-0](https://github.com/I-am-PUID-0) | [Docs](https://github.com/I-am-PUID-0/traefik-proxy-admin/tree/main/docs) • [Issues](https://github.com/I-am-PUID-0/traefik-proxy-admin/issues) | [Sponsor](https://github.com/sponsors/I-am-PUID-0) |
+| [cloudflared](https://github.com/cloudflare/cloudflared)          | [Cloudflare](https://github.com/cloudflare)                         | [Docs](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) • [Issues](https://github.com/cloudflare/cloudflared/issues) | —                                                                                                   |
+| [PostgreSQL](https://www.postgresql.org/)                         | [Michael Stonebraker](https://en.wikipedia.org/wiki/Michael_Stonebraker) | [Docs](https://www.postgresql.org/docs/)                                                                                                         | [Donate](https://www.postgresql.org/about/#donate/)                                                |
+| [Prowlarr](https://prowlarr.com/)                                 | [Prowlarr Team](https://github.com/Prowlarr/Prowlarr)                | [Docs](https://wiki.servarr.com/) • [Discord](https://prowlarr.com/discord)                                                                       | [Sponsor](https://github.com/sponsors/Prowlarr)                                                   |
+| [Radarr](https://radarr.video/)                                   | [Radarr Team](https://github.com/Radarr/Radarr)                      | [Docs](https://wiki.servarr.com/) • [Discord](https://radarr.video/discord)                                                                       | [Sponsor](https://github.com/sponsors/Radarr)                                                     |
+| [rclone](https://github.com/rclone/rclone)                        | [Nick Craig-Wood](https://github.com/ncw)                            | [Docs](https://rclone.org/)                                                                                                                      | [Sponsor](https://rclone.org/sponsor/)                                                            |
+| [Riven](https://github.com/rivenmedia/riven)                      | [Riven Media](https://github.com/rivenmedia)                         | [Discord](https://discord.gg/rivenmedia) • [Discussions](https://github.com/orgs/rivenmedia/discussions)                                       | [Sponsor](https://github.com/sponsors/dreulavelle/)                                               |
+| [Sonarr](https://sonarr.tv/)                                      | [Sonarr Team](https://github.com/Sonarr/Sonarr)                      | [Docs](https://wiki.servarr.com/) • [Discord](https://discord.gg/M6BvZn5)                                                                       | [Sponsor](https://opencollective.com/sonarr)                                                     |
+| [Whisparr](https://github.com/Whisparr/Whisparr)                  | [Whisparr Team](https://github.com/Whisparr)                         | [Docs](https://wiki.servarr.com/) • [Discord](https://whisparr.com/discord)                                                                       | [Sponsor](https://opencollective.com/whisparr)                                                   |
+| [Zilean](https://github.com/iPromKnight/zilean)                   | [iPromKnight](https://github.com/iPromKnight)                        | [Docs](https://ipromknight.github.io/zilean/) • [Issues](https://github.com/iPromKnight/zilean/issues)                                         | [Sponsor](https://ko-fi.com/W7W616IBNG)                                                                                                   |
+| [Zurg](https://github.com/debridmediamanager/zurg-testing)        | [yowmamasita](https://github.com/yowmamasita)                        | [Wiki](https://github.com/debridmediamanager/zurg-testing/wiki)                                                                                 | [Sponsor](https://github.com/sponsors/debridmediamanager)                                         |
+
+## ⚖️ Licensing
+
+DUMB is licensed under [GNU GPLv3](LICENSE). Copyright and license notices for
+third-party components redistributed in the container image are collected in
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Package-manager and runtime
+license files are also retained in their standard locations inside the image.
+
+## 🌟 Features
+
+DUMB provides a guided, single-deployment control plane for configurable media
+stacks, including:
+
+- Debrid and Usenet workflows, Arr automation, media servers, and request tools
+- Service installation, configuration, lifecycle management, logs, health checks,
+  updates, and recovery automation
+- Embedded service UIs with optional Traefik and Cloudflare access tooling
+- Optional DUMB-managed Authelia identity provider with DUMB and Traefik Proxy
+  Admin OIDC linking plus reusable Traefik ForwardAuth protection
+- Metrics, database-health diagnostics, alerts, notifications, and operator
+  migration or repair utilities
+
+This README intentionally keeps the overview brief. See the DUMB
+[Features documentation](https://dumbarr.com/features/) for the comprehensive
+capability, configuration, and settings reference.
+
+## 🐳 Docker Hub
+
+A prebuilt image is hosted on [Docker Hub](https://hub.docker.com/r/iampuid0/dumb).
+
+## 🖥️ Proxmox LXC
+
+The Community Scripts helper installs DUMB and its managed services directly in
+a Debian LXC without Docker. See the
+[Proxmox deployment guide](https://dumbarr.com/deployment/proxmox/) for the
+recommended all-in-one topology, native paths, updates, backups, and the
+additional considerations for Plex or Arr applications in other LXCs.
+
+## 🏷️ GitHub Container Registry
+
+A prebuilt image is hosted on [GitHub Container Registry](https://github.com/I-am-PUID-0/DUMB/pkgs/container/DUMB).
+
+## 🐳 Docker-compose
+>
+> [!NOTE]
+> The below "ports" section of the compose should be updated based on the service ports used when needing to be exposed.
+> See the below [Default Ports Used](https://github.com/I-am-PUID-0/DUMB?tab=readme-ov-file#-defualt-ports-used) section for more details
+
+```YAML
+services:
+  DUMB:
+    container_name: DUMB
+    image: iampuid0/dumb:latest
+    stop_grace_period: 30s
+    shm_size: 128mb
+    stdin_open: true
+    tty: true
+    volumes:
+      - /home/username/docker/DUMB/config:/config
+      - /home/username/docker/DUMB/log:/log
+      - /home/username/docker/DUMB/data:/data
+      - /home/username/docker/DUMB/mnt/debrid:/mnt/debrid
+    environment:
+      - TZ=
+      - PUID=
+      - PGID=
+    ports:
+      - "3005:3005"
+    devices:
+      - /dev/fuse:/dev/fuse:rwm
+      - /dev/dri:/dev/dri
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+```
+
+## 🌐 Environment Variables
+
+The following table lists the required environment variables used by the container. The environment variables are set via the `-e` parameter or via the docker-compose file within the `environment:` section or with a .env file saved to the config directory. Value of this parameter is listed as `<VARIABLE_NAME>=<Value>`
+
+Variables required by DUMB:
+
+| Variable       | Default  | Description                                                       |
+| -------------- | -------- | ------------------------------------------------------------------|
+| `PUID`         | `1000`   | Managed-service user ID; must be greater than `0` |
+| `PGID`         | `1000`   | Managed-service group ID; must be greater than `0` |
+| `TZ`           | `(null)` | Your time zone listed as `Area/Location` |
+
+See the [.env.example](https://github.com/I-am-PUID-0/DUMB/blob/master/.env.example)
+
+## 🌐 Default Ports Used
+
+> [!NOTE]
+> The below examples are default and may be configurable with the use of additional environment variables.
+
+The following table describes the ports used by the container. The mappings are set via the `-p` parameter or via the docker-compose file within the `ports:` section. Each mapping is specified with the following format: `<HOST_PORT>:<CONTAINER_PORT>[:PROTOCOL]`.
+
+| Container port | Protocol | Description                                                                          |
+| -------------- | -------- | ------------------------------------------------------------------------------------ |
+| `5000`         | TCP      | CLI Debrid -  Web UI accessible at the assigned port                                 |
+| `5001`         | TCP      | CLI Battery - The API is accessible at the assigned port                             |
+| `8000`         | TCP      | DUMB API - The API is accessible at the assigned port                                |
+| `3005`         | TCP      | DUMB frontend -  Web UI accessible at the assigned port                              |
+| `8282`         | TCP      | Decypharr -  Web UI accessible at the assigned port                                  |
+| `8096`         | TCP      | Emby Media Server - Web UI accessible at the assigned port (default HTTP)            |
+| `8096`         | TCP      | Jellyfin Media Server - Web UI accessible at the assigned port (default HTTP)        |
+| `8686`         | TCP      | Lidarr - Web UI accessible at the assigned port                                      |
+| `8088`         | TCP      | AltMount - Web UI/API accessible at the assigned port                                |
+| `3000`         | TCP      | InfiniDysk frontend - Web UI accessible at the assigned port                             |
+| `3003`         | TCP      | Pulsarr - Web UI accessible at the assigned port                                     |
+| `3006`         | TCP      | AIOStreams - Web UI/API accessible at the assigned port                              |
+| `6246`         | TCP      | Maintainerr - Web UI accessible at the assigned port                                  |
+| `6767`         | TCP      | Bazarr - Web UI accessible at the assigned port                                      |
+| `3004`         | TCP      | Traefik Proxy Admin - Web UI/API accessible at the assigned port                     |
+| `9091`         | TCP      | Authelia - Identity portal/API accessible at the assigned port                       |
+| `18080`        | TCP      | Traefik - Reverse proxy entrypoint for embedded UIs and TPA-managed routes           |
+| `18081`        | TCP      | Traefik - Dashboard/API used by Traefik Proxy Admin diagnostics                      |
+| `8080`         | TCP      | InfiniDysk backend - The API is accessible at the assigned port                          |
+| `5050`         | TCP      | pgAdmin 4 -  Web UI accessible at the assigned port                                  |
+| `5055`         | TCP      | Seerr - Web UI accessible at the assigned port                                       |
+| `8888`         | TCP      | Phalanx DB - The API is accessible at the assigned port                              |
+| `32400`        | TCP      | Plex Media Server -  Web UI accessible at the assigned port                          |
+| `5432`         | TCP      | PostgreSQL - The SQL server is accessible at the assigned port                       |
+| `9696`         | TCP      | Prowlarr - Web UI accessible at the assigned port                                    |
+| `9705`         | TCP      | NeutArr - Web UI accessible at the assigned port                                     |
+| `7878`         | TCP      | Radarr - Web UI accessible at the assigned port                                      |
+| `3000`         | TCP      | Riven frontend -  Web UI accessible at the assigned port                             |
+| `8080`         | TCP      | Riven backend - The API is accessible at the assigned port                           |
+| `8989`         | TCP      | Sonarr - Web UI accessible at the assigned port                                      |
+| `8181`         | TCP      | Tautulli - Web UI accessible at the assigned port                                    |
+| `6868`         | TCP      | Profilarr - Web UI accessible at the assigned port                                   |
+| `6969`         | TCP      | Whisparr - Web UI accessible at the assigned port                                    |
+| `8182`         | TCP      | Zilean - The API and Web UI (/swagger/index.html) is accessible at the assigned port |
+| `9090`         | TCP      | Zurg -  Web UI accessible at the assigned port                                       |
+
+`cloudflared` does not expose a local web UI port. It opens an outbound Cloudflare Tunnel connection and forwards public hostname traffic to DUMB Traefik.
+
+## 📂 Data Volumes
+
+The following table describes the data volumes used by the container. The mappings
+are set via the `-v` parameter or via the docker-compose file within the `volumes:` section. Each mapping is specified with the following
+format: `<HOST_DIR>:<CONTAINER_DIR>[:PERMISSIONS]`.
+
+| Container path        | Permissions | Description                                                                          |
+| --------------------- | ----------- | -------------------------------------------------------------------------------------|
+| `/config`             | rw          | This is where the application stores the dumb_config.json and rclone.config          |
+| `/log`                | rw          | This is where the application stores its log files                                   |
+| `/data`               | rw          | This is where all services will store their data                                     |
+| `/mnt/debrid`         | rw          | This is where the symlinks and rclone mounts will be stored                          |
+
+## 📝 TODO
+
+See the [DUMB roadmap](https://github.com/users/I-am-PUID-0/projects/7) for a list of planned features and enhancements.
+
+## 🚀 Deployment
+
+DUMB allows for the simultaneous or individual deployment of any of the services
+
+For additional details on deployment, see the [DUMB Docs](https://dumbarr.com/services/)
+
+## 🌍 Community
+
+- For questions related to DUMB, see the GitHub [discussions](https://github.com/I-am-PUID-0/DUMB/discussions)
+- or create a new [issue](https://github.com/I-am-PUID-0/DUMB/issues) if you find a bug or have an idea for an improvement.
+- or join the DUMB [discord server](https://discord.gg/T6uZGy5XYb)

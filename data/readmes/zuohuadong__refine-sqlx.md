@@ -1,0 +1,926 @@
+# 🚀 Refine SQL X
+
+[English](./README.md) | [中文](./README_zh-CN.md)
+
+A type-safe, framework-agnostic SQL data provider powered by [Drizzle ORM](https://orm.drizzle.team). Compatible with [Refine](https://refine.dev), [svadmin](https://github.com/zuohuadong/svadmin), and any DataProvider-based framework.
+
+[![npm version](https://img.shields.io/npm/v/refine-sqlx.svg)](https://www.npmjs.com/package/refine-sqlx)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
+
+## 🎯 Why Refine SQL X?
+
+**Refine SQL X** combines the power of [Drizzle ORM](https://orm.drizzle.team) with the DataProvider pattern to provide:
+
+- ✅ **Full TypeScript Type Safety** - Catch errors at compile time, not runtime
+- ✅ **Single Source of Truth** - Define your schema once, use it everywhere
+- ✅ **Multi-Database Support** - Same API for SQLite, MySQL, PostgreSQL, and Cloudflare D1
+- ✅ **Framework Agnostic** - Works with Refine (React), svadmin (Svelte), or any DataProvider consumer
+- ✅ **IntelliSense Everywhere** - Auto-completion for tables, columns, and types
+- ✅ **Zero Runtime Cost** - Type checking happens at build time
+
+### Why Drizzle ORM?
+
+This library uses [Drizzle ORM](https://orm.drizzle.team) for schema definitions because it provides:
+
+1. **Type Safety** - Automatic TypeScript type inference from your schema
+2. **Cross-Database Compatibility** - Write once, run on SQLite, MySQL, or PostgreSQL
+3. **Familiar API** - SQL-like syntax that's easy to learn
+4. **Zero Magic** - Explicit, predictable behavior without hidden abstractions
+5. **Lightweight** - Minimal runtime overhead
+
+## ✨ Features
+
+- 🎯 **Schema-Driven Development** - Define your database schema in TypeScript
+- 🔄 **Multi-Database Support** - SQLite, MySQL, PostgreSQL, and Cloudflare D1
+- 🌐 **Multi-Runtime Support** - Bun, Node.js 24+, Cloudflare Workers, better-sqlite3
+- 📦 **Optimized D1 Build** - Tree-shaken bundle (~18KB gzipped) for Cloudflare Workers
+- 🛡️ **Type Inference** - Automatic type inference from Drizzle schemas
+- 🔌 **Unified API** - Single interface for all database types
+- 🔍 **Advanced Filtering** - Full filter operators support (eq, contains, between, etc.)
+- 💾 **Transaction Support** - Batch operations and atomic transactions
+- 🔄 **Smart ID Conversion** - Automatically converts string IDs to correct types
+- 🔗 **Relation Queries** - Support for nested relation loading
+- 🛠️ **Simple REST Adapter** - Easily adapt simple-rest style APIs
+- 📊 **Full CRUD** - Complete Create, Read, Update, Delete operations
+- 🚀 **ESM Only** - Modern ES Module architecture
+- 🎛️ **Flexible Connection** - Bring your own Drizzle instance (BYO)
+
+## 📦 Installation
+
+```bash
+# Using Bun
+bun add refine-sqlx drizzle-orm
+
+# Using npm
+npm install refine-sqlx drizzle-orm
+
+# Using pnpm
+pnpm add refine-sqlx drizzle-orm
+```
+
+### Database Drivers
+
+You install the driver you need:
+
+**SQLite**:
+
+```bash
+npm install better-sqlite3  # For Node.js < 24
+```
+
+**MySQL**:
+
+```bash
+npm install mysql2
+```
+
+**PostgreSQL**:
+
+```bash
+npm install postgres
+```
+
+Note: Bun and Node.js 24+ have native SQLite support. Cloudflare D1 is built-in.
+
+## 🚀 Quick Start
+
+Get started in 3 simple steps:
+
+### 1. Install Dependencies
+
+```bash
+npm install refine-sqlx drizzle-orm
+# Install your database driver (e.g., better-sqlite3 for Node.js)
+npm install better-sqlite3
+npm install --save-dev drizzle-kit @types/better-sqlite3
+```
+
+### 2. Configure Drizzle
+
+Define your schema and create a Drizzle database instance.
+
+```typescript
+// schema.ts
+import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+
+export const posts = sqliteTable('posts', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  title: text('title').notNull(),
+  content: text('content'),
+});
+```
+
+### 3. Initialize Refine Provider (Dependency Injection)
+
+**Breaking Change in v0.6.0**: `refine-sqlx` no longer creates database connections internally. You must pass a configured Drizzle `db` instance. This ensures compatibility with Edge runtimes (Cloudflare D1) and various drivers.
+
+#### Node.js (better-sqlite3)
+
+```typescript
+import { drizzle } from 'drizzle-orm/better-sqlite3';
+import Database from 'better-sqlite3';
+import { createRefineSQL } from 'refine-sqlx';
+import * as schema from './schema';
+
+const sqlite = new Database('sqlite.db');
+const db = drizzle(sqlite, { schema });
+
+const dataProvider = await createRefineSQL({
+  connection: db,
+  schema,
+});
+```
+
+#### Cloudflare D1
+
+```typescript
+import { drizzle } from 'drizzle-orm/d1';
+import { createRefineSQL } from 'refine-sqlx/d1';
+import * as schema from './schema';
+
+export default {
+  async fetch(request, env) {
+    const db = drizzle(env.DB, { schema });
+
+    // Create Refine provider with the D1 Drizzle instance
+    const dataProvider = await createRefineSQL({
+      connection: db,
+      schema,
+    });
+
+    // ... use provider with Refine Core ...
+    return Response.json({ ok: true });
+  }
+}
+```
+
+#### Bun
+
+**Using Bun native SQLite driver:**
+
+```typescript
+import { drizzle } from 'drizzle-orm/bun-sqlite';
+import { Database } from 'bun:sqlite';
+import { createRefineSQL } from 'refine-sqlx';
+import * as schema from './schema';
+
+const sqlite = new Database('sqlite.db');
+const db = drizzle({ client: sqlite, schema });
+
+const dataProvider = await createRefineSQL({
+  connection: db,
+  schema,
+});
+```
+
+**Using Bun native SQL driver (PostgreSQL/MySQL):**
+
+```typescript
+import { drizzle } from 'drizzle-orm/bun-sql';
+import { createRefineSQL } from 'refine-sqlx';
+import * as schema from './schema';
+
+// PostgreSQL
+const db = drizzle('postgres://user:pass@localhost:5432/mydb', { schema });
+
+// MySQL
+const db = drizzle('mysql://user:pass@localhost:3306/mydb', { schema });
+
+const dataProvider = await createRefineSQL({
+  connection: db,
+  schema,
+});
+```
+
+### 3. Initialize Refine Provider (Zero-config)
+
+If you have a Drizzle instance with schema, you can use the shortcut:
+
+```typescript
+import { drizzleDataProvider } from 'refine-sqlx';
+
+const dataProvider = await drizzleDataProvider(db);
+```
+
+## 🔌 Framework Integration
+
+refine-sqlx is **framework-agnostic** — the `DataProvider` it creates can be used with any framework that follows the DataProvider pattern. Here are examples for the two officially supported frameworks:
+
+### Refine (React)
+
+```tsx
+import { Refine } from '@refinedev/core';
+import { drizzleDataProvider } from 'refine-sqlx';
+
+// Create the data provider (server-side)
+const dataProvider = await drizzleDataProvider(db);
+
+// Use in your React app
+function App() {
+  return (
+    <Refine dataProvider={dataProvider}>
+      {/* Your Refine resources and pages */}
+    </Refine>
+  );
+}
+```
+
+For a full Refine setup, see the [Refine Documentation](https://refine.dev/docs).
+
+### svadmin (Svelte)
+
+```typescript
+// src/lib/server/data-provider.ts
+import { drizzleDataProvider } from 'refine-sqlx';
+import { db } from './db';
+
+export const dataProvider = await drizzleDataProvider(db);
+```
+
+```svelte
+<!-- src/routes/+layout.svelte -->
+<script>
+  import { SvAdmin } from '@svadmin/core';
+  import { dataProvider } from '$lib/server/data-provider';
+</script>
+
+<SvAdmin {dataProvider}>
+  <!-- Your svadmin resources and pages -->
+</SvAdmin>
+```
+
+For a full svadmin setup, see the [svadmin Documentation](https://github.com/zuohuadong/svadmin).
+
+### Using with Any Framework
+
+The `DataProvider` interface is simple and self-contained. You can use it directly in any server-side framework:
+
+```typescript
+import { drizzleDataProvider } from 'refine-sqlx';
+
+const dataProvider = await drizzleDataProvider(db);
+
+// Use in an Elysia / Express / Hono route handler
+app.get('/api/users', async () => {
+  const { data, total } = await dataProvider.getList({
+    resource: 'users',
+    pagination: { current: 1, pageSize: 20 },
+    sorters: [{ field: 'createdAt', order: 'desc' }],
+  });
+  return { data, total };
+});
+```
+
+### 4. Initialize Refine Provider (Advanced)
+
+Include security configuration and other options:
+
+```typescript
+import { createRefineSQL } from 'refine-sqlx';
+
+const dataProvider = await createRefineSQL({
+  connection: db,
+  schema,
+  security: {
+    // Only allow access to these tables
+    allowedTables: ['posts', 'users'],
+    // Hide sensitive fields
+    hiddenFields: { users: ['password'] },
+    // Restrict operations
+    allowedOperations: ['read', 'create', 'update'],
+    // Max records per request
+    maxLimit: 1000
+  },
+  softDelete: {
+    enabled: true,
+    field: 'deleted_at',
+  }
+});
+```
+
+### 5. Configured Providers
+
+```typescript
+const dataProvider = await createRefineSQL({
+  connection: db,
+  schema,
+
+  // Optional: Enable soft delete
+  softDelete: {
+    enabled: true,
+    field: 'deleted_at',
+  },
+
+  // Optional: Logging
+  logger: true,
+});
+```
+
+## 📊 Complete CRUD Examples
+
+### Create Operations
+
+```typescript
+import type { InferInsertModel } from 'refine-sqlx';
+import { users } from './schema';
+
+type UserInsert = InferInsertModel<typeof users>;
+
+// Create single record
+const { data } = await dataProvider.create<User, UserInsert>({
+  resource: 'users',
+  variables: {
+    name: 'Alice Smith',
+    email: 'alice@example.com',
+    status: 'active',
+    createdAt: new Date(),
+  },
+});
+
+// Create multiple records
+const { data: users } = await dataProvider.createMany<User, UserInsert>({
+  resource: 'users',
+  variables: [
+    {
+      name: 'Bob',
+      email: 'bob@example.com',
+      status: 'active',
+      createdAt: new Date(),
+    },
+    {
+      name: 'Carol',
+      email: 'carol@example.com',
+      status: 'active',
+      createdAt: new Date(),
+    },
+  ],
+});
+```
+
+### Read Operations
+
+```typescript
+// Get list with filtering, sorting, and pagination
+const { data, total } = await dataProvider.getList<User>({
+  resource: 'users',
+  pagination: { current: 1, pageSize: 10 },
+  filters: [
+    { field: 'status', operator: 'eq', value: 'active' },
+    { field: 'name', operator: 'contains', value: 'John' },
+  ],
+  sorters: [{ field: 'createdAt', order: 'desc' }],
+});
+
+// Get single record
+const { data: user } = await dataProvider.getOne<User>({
+  resource: 'users',
+  id: 1,
+});
+
+// Get multiple records by IDs
+const { data: users } = await dataProvider.getMany<User>({
+  resource: 'users',
+  ids: [1, 2, 3],
+});
+```
+
+### Update Operations
+
+```typescript
+// Update single record
+const { data } = await dataProvider.update<User>({
+  resource: 'users',
+  id: 1,
+  variables: { status: 'inactive' },
+});
+
+// Update multiple records
+const { data: users } = await dataProvider.updateMany<User>({
+  resource: 'users',
+  ids: [1, 2, 3],
+  variables: { status: 'active' },
+});
+```
+
+### Delete Operations
+
+```typescript
+// Delete single record
+const { data } = await dataProvider.deleteOne<User>({
+  resource: 'users',
+  id: 1,
+});
+
+// Delete multiple records
+const { data: users } = await dataProvider.deleteMany<User>({
+  resource: 'users',
+  ids: [1, 2, 3],
+});
+```
+
+## ⏰ Time Travel (SQLite Only)
+
+Enable automatic backup and restore functionality for SQLite databases:
+
+```typescript
+import { createRefineSQL, type DataProviderWithTimeTravel } from 'refine-sqlx';
+import * as schema from './schema';
+
+const dataProvider: DataProviderWithTimeTravel = await createRefineSQL({
+  connection: db, // Pass your Drizzle instance
+  schema,
+  timeTravel: {
+    enabled: true,
+    backupDir: './.time-travel', // Backup directory (default: './.time-travel')
+    intervalSeconds: 86400, // Backup interval in seconds (default: 86400 = 1 day)
+    retentionDays: 30, // Keep backups for 30 days (default: 30)
+  },
+});
+
+// List all available snapshots
+const snapshots = await dataProvider.listSnapshots?.();
+console.log(snapshots);
+// [
+//   {
+//     timestamp: '2025-10-16T10:30:00.000Z',
+//     path: './.time-travel/snapshot-2025-10-16T10-30-00-000Z-auto.db',
+//     createdAt: 1729077000000
+//   }
+// ]
+
+// Create a manual snapshot
+const snapshot = await dataProvider.createSnapshot?.('before-migration');
+
+// Restore to a specific timestamp
+await dataProvider.restoreToTimestamp?.('2025-10-16T10:30:00.000Z');
+
+// Restore to the most recent snapshot before a date
+await dataProvider.restoreToDate?.(new Date('2025-10-16'));
+
+// Cleanup old snapshots
+const deletedCount = await dataProvider.cleanupSnapshots?.();
+
+// Stop automatic backups (when shutting down)
+dataProvider.stopAutoBackup?.();
+```
+
+### Time Travel Features
+
+- 🔄 **Automatic Backups**: Configurable interval-based snapshots
+- 📸 **Manual Snapshots**: Create labeled snapshots on demand
+- 🕰️ **Point-in-Time Restore**: Restore to specific timestamps or dates
+- 🧹 **Automatic Cleanup**: Retention policy for old snapshots
+- 🔒 **Pre-Restore Backup**: Automatically creates backup before restoration
+- 📁 **File-Based**: Simple, efficient file system operations
+
+**Note**: Time Travel is only available for SQLite databases with file-based storage (not `:memory:`).
+
+## 🔍 Advanced Filtering
+
+Supports all standard Refine filter operators:
+
+```typescript
+const { data, total } = await dataProvider.getList<User>({
+  resource: 'users',
+  filters: [
+    // Equality
+    { field: 'status', operator: 'eq', value: 'active' },
+    { field: 'status', operator: 'ne', value: 'deleted' },
+
+    // Comparison
+    { field: 'createdAt', operator: 'gte', value: new Date('2024-01-01') },
+    { field: 'createdAt', operator: 'lte', value: new Date() },
+
+    // String operations
+    { field: 'name', operator: 'contains', value: 'John' },
+    { field: 'email', operator: 'startswith', value: 'admin' },
+
+    // Array operations
+    { field: 'status', operator: 'in', value: ['active', 'pending'] },
+    { field: 'status', operator: 'nin', value: ['deleted', 'banned'] },
+
+    // Null checks
+    { field: 'deletedAt', operator: 'null' },
+    { field: 'email', operator: 'nnull' },
+
+    // Range
+    { field: 'age', operator: 'between', value: [18, 65] },
+  ],
+  sorters: [
+    { field: 'createdAt', order: 'desc' },
+    { field: 'name', order: 'asc' },
+  ],
+});
+```
+
+### Supported Filter Operators
+
+- `eq`, `ne` - Equality/inequality
+- `lt`, `lte`, `gt`, `gte` - Comparison
+- `in`, `nin` - Array membership
+- `contains`, `ncontains` - Substring search (case-insensitive)
+- `containss`, `ncontainss` - Substring search (case-sensitive)
+- `startswith`, `nstartswith`, `endswith`, `nendswith` - String position
+- `between`, `nbetween` - Range checks
+- `null`, `nnull` - Null checks
+
+## 🔄 Smart ID Type Conversion
+
+Starting from v0.7.0, refine-sqlx automatically converts IDs to the correct type:
+
+```typescript
+// String IDs are automatically converted even if schema id is integer
+const { data } = await dataProvider.getOne({
+  resource: 'users',
+  id: "123",  // Automatically converted to number 123
+});
+
+// Batch operations also supported
+const { data } = await dataProvider.getMany({
+  resource: 'users',
+  ids: ["1", "2", "3"],  // Automatically converted to [1, 2, 3]
+});
+```
+
+### Manual ID Conversion Tools
+
+```typescript
+import { normalizeId, normalizeIds } from 'refine-sqlx';
+
+// Single ID conversion
+const id = normalizeId(table.id, "123");  // 123
+
+// Batch ID conversion
+const ids = normalizeIds(table.id, ["1", "2", "3"]);  // [1, 2, 3]
+```
+
+## 💾 Transaction Support
+
+Enable transactions to execute multiple operations atomically:
+
+```typescript
+const dataProvider = await createRefineSQL({
+  connection: db,
+  schema,
+  features: {
+    transactions: {
+      enabled: true,
+      timeout: 5000,           // Transaction timeout (ms)
+      autoRollback: true,      // Auto rollback on error
+    }
+  }
+});
+
+// Execute multiple operations in a transaction
+await dataProvider.transaction(async (tx) => {
+  const order = await tx.create({
+    resource: 'orders',
+    variables: { userId: 1, total: 100 },
+  });
+
+  await tx.create({
+    resource: 'order_items',
+    variables: { orderId: order.data.id, productId: 1, quantity: 2 },
+  });
+
+  await tx.update({
+    resource: 'products',
+    id: 1,
+    variables: { stock: sql`stock - 2` },
+  });
+});
+```
+
+## 🔗 Relation Queries
+
+Enable relations to load associated data:
+
+```typescript
+const dataProvider = await createRefineSQL({
+  connection: db,
+  schema,
+  features: {
+    relations: {
+      enabled: true,
+      maxDepth: 3,           // Maximum nesting depth
+      cache: false,          // Cache relation queries
+    }
+  }
+});
+
+// Load related data
+const { data } = await dataProvider.getOne({
+  resource: 'posts',
+  id: 1,
+  meta: {
+    include: {
+      author: true,          // Load author
+      comments: {
+        include: {
+          author: true,      // Nested load comment authors
+        }
+      }
+    }
+  }
+});
+
+// Result includes related data
+console.log(data.author.name);
+console.log(data.comments[0].author.name);
+```
+
+## 🛠️ Simple REST Adapter
+
+If you need to adapt simple-rest style API parameters, use the built-in conversion tool:
+
+```typescript
+import { convertSimpleRestParams } from 'refine-sqlx';
+
+// Convert from URL query parameters
+// GET /posts?_start=0&_end=10&_sort=title&_order=asc&status=active
+const query = {
+  _start: 0,
+  _end: 10,
+  _sort: 'title',
+  _order: 'asc',
+  status: 'active',
+};
+
+const { pagination, sorters, filters } = convertSimpleRestParams(query);
+
+// pagination: { current: 1, pageSize: 10 }
+// sorters: [{ field: 'title', order: 'asc' }]
+// filters: [{ field: 'status', operator: 'eq', value: 'active' }]
+
+// Use converted parameters
+const { data, total } = await dataProvider.getList({
+  resource: 'posts',
+  ...pagination,
+  sorters,
+  filters,
+});
+```
+
+### Supported Simple REST Parameters
+
+| Parameter | Description |
+|-----------|-------------|
+| `_start`, `_end` | Offset pagination |
+| `_page`, `_perPage` | Page number pagination |
+| `_sort` | Sort field (comma-separated for multiple) |
+| `_order` | Sort direction (asc/desc) |
+| `_fields` | Select fields |
+| `_embed` | Embed relations |
+| `{field}` | Equality filter |
+| `{field}_ne` | Not equal |
+| `{field}_gt`, `{field}_gte`, `{field}_lt`, `{field}_lte` | Comparison |
+| `{field}_contains` | Contains (case-insensitive) |
+| `{field}_startswith`, `{field}_endswith` | Prefix/suffix match |
+| `{field}_in` | Array contains (comma-separated) |
+| `{field}_between` | Range (comma-separated two values) |
+
+## 📡 Real-time Subscriptions
+
+refine-sqlx provides two real-time subscription strategies:
+
+### Option 1: Polling (All Platforms)
+
+```typescript
+import { createLiveProvider, LiveEventEmitter } from 'refine-sqlx';
+
+const emitter = new LiveEventEmitter();
+const liveProvider = createLiveProvider({
+  strategy: 'polling',
+  pollingInterval: 5000,  // Poll every 5 seconds
+}, emitter, dataProvider);
+
+// Subscribe to data changes
+liveProvider.subscribe({
+  channel: 'users',
+  types: ['created', 'updated', 'deleted'],
+  callback: (event) => {
+    console.log('User changed:', event);
+  },
+});
+```
+
+### Option 2: PostgreSQL LISTEN/NOTIFY (PostgreSQL Only)
+
+> ⚠️ **Note**: This is a temporary implementation that will be removed when Drizzle ORM adds native real-time support.
+
+```typescript
+import { createLiveProviderAsync, createPostgresNotifyTriggerSQL } from 'refine-sqlx';
+
+// 1. First create triggers in your database (run once)
+const triggerSQL = createPostgresNotifyTriggerSQL('users', 'users', 'id');
+await db.execute(triggerSQL);
+
+// 2. Create live provider
+const liveProvider = await createLiveProviderAsync({
+  strategy: 'postgres-notify',
+  postgresConfig: {
+    connectionString: process.env.DATABASE_URL,
+    channels: ['users', 'posts', 'comments'],
+  },
+});
+
+// 3. Subscribe to data changes
+const unsubscribe = liveProvider.subscribe({
+  channel: 'users',
+  types: ['created', 'updated', 'deleted'],
+  callback: (event) => {
+    console.log('User changed:', event);
+    // event.payload.ids - Changed record IDs
+    // event.payload.data - New data (INSERT/UPDATE)
+  },
+});
+
+// 4. Disconnect when app shuts down
+await liveProvider.disconnect();
+```
+
+### Generate Trigger SQL
+
+```typescript
+import { createPostgresNotifyTriggerSQL, dropPostgresNotifyTriggerSQL } from 'refine-sqlx';
+
+// Create trigger for a table
+const sql = createPostgresNotifyTriggerSQL('users', 'users_changes', 'id');
+console.log(sql);
+// Execute this SQL to create the trigger
+
+// Drop trigger
+const dropSQL = dropPostgresNotifyTriggerSQL('users');
+```
+
+## ⚙️ Configuration
+
+```typescript
+import { createRefineSQL } from 'refine-sqlx';
+import * as schema from './schema';
+
+const dataProvider = createRefineSQL({
+  // Database connection
+  connection: db, // Drizzle instance
+
+  // Drizzle schema (required)
+  schema,
+
+  // Optional Drizzle config
+  config: {
+    logger: true, // Enable query logging
+  },
+
+  // Field naming convention (default: 'snake_case')
+  casing: 'camelCase', // or 'snake_case' or 'none'
+
+  // Custom logger
+  logger: true, // or custom Logger instance
+});
+```
+
+## 🎯 Type Exports
+
+```typescript
+import type {
+  // Extended DataProvider types
+  DataProviderWithTransactions,
+  DataProviderWithAggregations,
+  ExtendedDataProvider,
+  // Infer types from schema
+  InferInsertModel,
+  InferSelectModel,
+  // Configuration
+  RefineSQLConfig,
+  FeaturesConfig,
+  // Runtime detection
+  RuntimeEnvironment,
+  // Table name helper
+  TableName,
+  // Time Travel
+  TimeTravelOptions,
+} from 'refine-sqlx';
+
+// Import utility functions
+import {
+  // ID type conversion
+  normalizeId,
+  normalizeIds,
+  // Simple REST adapter
+  convertSimpleRestParams,
+  toSimpleRestParams,
+  // Filter utilities
+  filtersToWhere,
+  sortersToOrderBy,
+  calculatePagination,
+} from 'refine-sqlx';
+
+// Usage
+type User = InferSelectModel<typeof users>;
+type UserInsert = InferInsertModel<typeof users>;
+```
+
+## 📋 Requirements
+
+- **TypeScript**: 5.0+
+- **Node.js**: 20.0+ (24.0+ recommended for native SQLite)
+- **Bun**: 1.0+ (optional)
+- **Peer Dependencies**: None (framework-agnostic)
+- **Dependencies**: `drizzle-orm ^0.44.0`
+- **Optional**: `better-sqlite3 ^12.0.0` (fallback for Node.js < 24)
+
+## 🧪 Testing
+
+```bash
+# Run tests
+bun test
+
+# Run integration tests
+bun run test:integration-bun
+bun run test:integration-node
+bun run test:integration-better-sqlite3
+
+# Build
+bun run build
+
+# Format code
+bun run format
+```
+
+## 📚 Documentation
+
+Comprehensive documentation is available:
+
+### Current Version (v0.6.x)
+
+- **[v0.6.0 Release Notes](./.changeset/v0-6-0-release.md)** - Breaking changes and new API
+- **[D1 Example](./example/D1_EXAMPLE.md)** - Cloudflare Workers setup guide
+- **[Example Code](./example/main-v0.3.0.ts)** - Full usage examples
+- **[Technical Specifications](./docs/specs/CLAUDE_SPEC.md)** - Architecture and standards
+
+### Roadmap & Future Versions
+
+- **[v0.7.0 Features (Released)](./docs/features/FEATURES_v0.7.0.md)** - Core features and enhancements
+  - ✅ custom() method for raw SQL queries
+  - ✅ Nested relations loading
+  - ✅ Aggregation support
+  - ✅ Field selection/projection
+  - ✅ Soft delete support
+  - ✅ Smart ID type conversion
+  - ✅ Simple REST adapter
+  - ✅ Transaction support exposed to DataProvider
+  - ✅ Bun SQL driver support (PostgreSQL/MySQL)
+
+- **[v0.8.0 Features (Released)](./docs/features/FEATURES_v0.8.0.md)** - Enterprise & developer experience
+  - ✅ Optimistic locking
+  - ✅ Multi-tenancy / row-level security
+  - ✅ Query caching
+  - ✅ Enhanced error handling
+  - ✅ Enhanced logging & debugging
+
+- **v0.9.0 Features (Released)** - Advanced features
+  - ✅ Live queries / real-time subscriptions (polling + PostgreSQL LISTEN/NOTIFY)
+  - ✅ Framework-agnostic DataProvider (compatible with Refine, svadmin, etc.)
+  - 🔄 Mock DataProvider for testing
+
+## 🔄 Migration from v0.5.x
+
+v0.6.0 introduces breaking changes to support Edge runtimes:
+
+### Breaking Changes
+
+- **Connection Injection**: `createRefineSQL` no longer accepts connection strings. You must pass a pre-configured Drizzle instance.
+- **Removed Detection**: Automatic database type detection has been removed in favor of explicit dependency injection.
+
+### Migration Steps
+
+1. Update `refine-sqlx` to v0.6.0
+2. Install appropriate Drizzle driver (e.g., `better-sqlite3`, `mysql2`)
+3. Update `createRefineSQL` calls to pass `db` instance instead of string
+
+## 📈 Performance
+
+- **Standard Build**: ~8 KB (main entry point)
+- **D1 Build**: ~18 KB gzipped
+- **Zero External Dependencies**: Drizzle ORM managed via peer/explicit dependency
+- **Type-Safe**: Zero runtime overhead for type checking
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🔗 Links
+
+- [Refine Documentation](https://refine.dev/docs)
+- [svadmin Documentation](https://github.com/zuohuadong/svadmin)
+- [Drizzle ORM Documentation](https://orm.drizzle.team)
+- [GitHub Repository](https://github.com/zuohuadong/refine-sqlx)
+- [npm Package](https://www.npmjs.com/package/refine-sqlx)
+- [Cloudflare D1 Documentation](https://developers.cloudflare.com/d1/)
+
+---

@@ -1,0 +1,299 @@
+= R2DBC-DSL
+
+This module provides `R2dbcRepository` for Web Querying throw REST API and Criteria building via `Dsl` class. Working with PostgreSQL, MySQL, Oracle, MS SQL.
+
+The extension of the `R2dbcRepository` from Spring Data R2DBC is due to the use of DSL features by all methods. Also modified integration tests to DSL features.
+
+The Maven Central dependency instead of the library `spring-data-r2dbc`:
+
+[source,xml]
+----
+<dependency>
+  <groupId>io.github.sevenparadigms</groupId>
+  <artifactId>spring-data-r2dbc-dsl</artifactId>
+  <version>4.8.8</version>
+</dependency>
+----
+
+there included common jar with `Dsl` and `MementoPage` models (it is convenient when using Reactive Feign Client):
+
+[source,xml]
+----
+<dependency>
+  <groupId>io.github.sevenparadigms</groupId>
+  <artifactId>spring-data-r2dbc-dsl-common</artifactId>
+  <version>4.8.8</version>
+</dependency>
+----
+
+That library produce `R2dbcRepository` interface with Dsl extention:
+[source,kotlin]
+----
+interface R2dbcRepository<T, ID> : ReactiveCrudRepository<T, ID> {
+    fun findOne(dsl: Dsl): Mono<T>
+    fun findAll(dsl: Dsl): Flux<T>
+    fun findAllPaged(dsl: Dsl): Mono<MementoPage<T>>
+    fun delete(dsl: Dsl): Mono<Integer>
+    fun count(dsl: Dsl): Mono<Long>
+    fun listener(): Flux<Notification>
+    fun cache(): CacheApi<T, ID>
+}
+----
+
+and `Dsl` class:
+[source,kotlin]
+----
+data class Dsl {
+    val fields: Array<String>
+    val query: String
+    val lang: String
+    val page: Int
+    val size: Int
+    val sort: String
+    val top: Int
+    val distinct: Boolean
+}
+----
+
+== Features
+
+* Support all predicates for PostgreSQL JSONB type, JsonNode in model automatically converted to JSONB and back
+
+* SpEL Expression type in model automatically converted to TEXT type of PostgreSQL and back
+
+* First level cache based on Caffeine with guided expire access and size for each cache from application.properties
+
+* Convert first level cache to second level cache by property in application.properties: `spring.r2dbc.dsl.secondCache = true` then subscribe to change from database
+
+* Support second level cache from any CacheManager implementation and may be both working with subscribe to change from database. Enabled by: `spring.r2dbc.dsl.cacheManager = true`
+
+* Full manage of cache from repository methods: evict(Dsl dsl), put(Dsl dsl, T value) and get(Dsl dsl): T
+
+* Dsl support all SQL predicates: `=, >, <, >=, <=, like, in, not in, is true, is false, is null, is not null`, also can operate with LocalDate, LocalDateTime, OffsetDateTime, ZonedDateTime types as `createdAt>=2000-10-31T01:30.000-05:00` or `createdAt==2000-10-31T01:30.001` or `createdAt<<2000-10-31T01:30`
+
+* Ability to choose resulted columns in `findAll(dsl: Dsl)` and `findOne(dsl: Dsl)` from `dsl.fields("id", "name")` or in url `fields=id,name`
+
+* Joins to any tables 'tableName.type' and model must have `tableNameId` field and build criteria on joined columns `tableName.type==space`, also can select joined columns in result `fields=id,name,type`
+
+* Annotation `@Id` is not required in model, because column with name `id` in 99% of all tables has name `id`
+
+* Annotation `@Table` is not required in model, because table name in 99% of all tables equals model class name, the camel name automatic convert to sql underlined
+
+* Any reserved database words can be used by column name
+
+* Repository `listener` method subscribe to listen of all changes of table from database in realtime over `Flux<Notification>` (Postgres only)
+
+* Ranked full text search by field `tsv` as default with RUM index operator in `Dsl.fts` method (Postgres only)
+
+* Paging and Sorting full support with ordering in several columns at once
+
+* Utility class `FastMethodInvoker` is a modern reflection access to object properties, in performance comparable to direct access.
+
+* Utility class `JsonUtils` is a powerful utils to flexibility manage any json operations around JsonNode type.
+
+* Utility class `R2dbcUtils` can create repository from url: `R2dbcUtils.getRepository("r2dbc:postgresql://postgres:postgres@localhost/abac_rules", AbacRepository::class)`, also have `fun saveBatch(models: Iterable<T>): Flux<Integer>` method for call native Postgres driver batch operation for massive insert as one sql.
+
+* Field with @Equality annotation on each update the value is comparing with previous value from database and throw exception is not equals, also can set in application.properties: `spring.r2dbc.dsl.equality = tenantId,userId`
+
+* Field with @ReadOnly or @CreatedBy annotation on each update the value getting from previous record if not null and setting to current record without comparing, also can set in application.properties: `spring.r2dbc.dsl.readOnly = tenantId,userId`
+
+* Field with name `createdAt` with type `ZonedDateTime`, `OffsetDateTime` or `LocalDateTime` on update using @CreatedDate annotation and @ReadOnly annotation logic, also can be set in application.properties: `spring.r2dbc.dsl.createdAt = createdAt`
+
+* Field with name `updatedAt` and type `ZonedDateTime`, `OffsetDateTime` or `LocalDateTime` on update using @LastModifiedDate annotation logic, also can be set in application.properties: `spring.r2dbc.dsl.updatedAt = updatedAt`
+
+* Field with name `version` do not required @Version annotation if it has type `Long`, `Integer`, `ZonedDateTime`, `OffsetDateTime` or `LocalDateTime` for optimistic locking, also can be set in application.properties: `spring.r2dbc.dsl.version = counter,innerIndex`
+
+* Fields with name `createdBy`, `updatedBy` or annotated by @CreatedBy, @UpdatedBy on create or update set current security userId, also fields can be set in application.properties: `spring.r2dbc.dsl.createdBy = createdBy`, `spring.r2dbc.dsl.updatedBy = updatedBy`
+
+* ApplicationContext implementation as `Beans` utility class with caching resolved beans and registering new beans as ect or recreate by classname
+
+* Utility class SqlField constants a most used sql-names in tables for no handwriting names
+
+* Integration with Spring Security via AuthenticationIdentifierResolver Bean to get current userId
+
+== Concepts
+
+The primary idea is to reduce development time when all kinds of criteria can be formed at the frontend:
+
+`localhost:8080/items?query=!@shops.data.assign,shops.data.type==mega,name~~biggest,price>=100 & fields=id,name & page=0 & size=20 & sort=itemType:asc,createdAt:desc`
+
+then generated SQL:
+
+`select id, name from items join shops on items.shop_id = shops.id where shops.data->>'assign' is not null and shops.data->>'type'='mega' and name like '%biggest%' and price >= 100 order by item_type asc, created_at desc limit 20 offset 0`
+
+==== Web query predicates (-> sql):
+
+* "con1,con2,()con3,con4,()con5" -> con1 and con2 or con3 and con4 or con5
+* "column^^1 2 3" -> column in (1, 2, 3)
+* "column!^1 2 3" -> column not in (1, 2, 3)
+* "column==value" -> column = value
+* "column!=value" -> column != value
+* "column" -> column is true
+* "!column" -> column is not true
+* "@column" -> column is null
+* "!@column" -> column is not null
+* "column>>value" -> column > value
+* "column>=value" -> column >= value
+* "column<<value" -> column < value
+* "column<=value" -> column <= value
+* "column~~value" -> column like '%value%'
+* "column@@value" -> column @@ '%value%'
+
+==== Web query columns:
+
+* column -> used as is
+* column.type -> join table if column is not JsonNode type (model must contain columnId variable)
+* column.header.title -> `column->'header'->>'title'` if column have JsonNode type
+
+In `fields` property also can be selected joined columns or jsonb path to output result:
+for example column `shops.type` and `jtree.header.title` in result is mapped to class fields `type` and `title` (in sql mapper to `column->'header'->>'title'`).
+
+[source,kotlin]
+----
+Dsl.create()
+   .distinct()
+   .top(10)
+   .equals("brotherTable.jtree.hobby.name", "Konami")
+   .isTrue("isMonicStyle")
+   .or()
+   .isNull("sisterTable.age")
+   .fields("age", "sisterTable.name", "jtree.hobby.description")
+----
+where after executing the next fields in the model will be set: age, name, description. The secondary idea is using dsl in tests as more readable than jdbcTemplate.
+
+Properties:
+[source,yaml]
+----
+spring.r2dbc.dsl:
+  secondCache: true                 # enable listen changes from database tables
+  listener: Item,Folder             # if property not set then listen all tables
+  cacheManager: true                # enable to use any CacheManager bean as r2dbc cache
+  equality: tenantId,userId
+  readOnly: tenantId,userId
+  createdAt: tenantId,userId
+  updatedAt: updatingTimeAndDateAt
+  version: counter,innerIndex
+  fts-lang: english
+----
+
+== First and Second Level Cache supporting
+
+Each R2dbcRepository by default activate Caffeine cache as First Level Cache, and it is alive 500 ms. But First Level Cache can be converted to Second Level Cache with property in application.yml:
+
+[source,yaml]
+----
+spring.r2dbc.dsl.secondCache: true
+----
+
+after turn on it is of the all repositories subscribed to listen database table for any changes and after receive event is evicted repository cache.
+
+If you need registered any CacheManager to using in R2dbcRepository as Second Level Cache, then set this property:
+
+[source,yaml]
+----
+spring.r2dbc.dsl.cacheManager: true
+----
+
+Previous property `secondCache` can be worked both with CacheManager of in-memory database [Hazelcast, Redis].
+
+We can manage for each R2dbcRepository internal Caffeine first level cache (also Caffeine as Second Level Cache) with custom timeouts and max size:
+
+[source,yaml]
+----
+spring.cache:
+  <model class simple name>.expireAfterAccess: 500 # seconds
+  <model class simple name>.expireAfterWrite: 1000 # seconds
+  <model class simple name>.maximumSize: 10000
+----
+
+Examples of manage internal repository cache:
+
+[source,kotlin]
+----
+// change feature in cache and get it
+featureRepository
+    .cache().put(feature.copy(group = ExpressionParserCache.INSTANCE.parseExpression("a==6")))
+    .findById(feature.id!!)
+
+// evict cache and get real feature from database and after from cache
+featureRepository
+    .cache().evict(feature.id)
+    .findById(feature.id!!)
+
+val exp = featureRepository.cache()[feature.id]?.group?.expressionString
+----
+
+== Subscribe to async database UPDATE/INSERT events:
+
+Before create universal notifier function:
+[source,postgresql]
+----
+create function notify_sender() returns trigger
+    language plpgsql
+as
+$$
+BEGIN
+    PERFORM pg_notify(
+                    TG_TABLE_NAME,
+                    json_build_object(
+                            'operation', TG_OP,
+                            'record', row_to_json(NEW)
+                        )::text
+                );
+    RETURN NULL;
+END;
+$$;
+----
+and set to tables notifier by trigger:
+[source,postgresql]
+----
+create trigger table_notify
+    after insert or update
+    on table
+    for each row
+execute procedure notify_sender();
+----
+
+and last in source code:
+[source,kotlin]
+----
+dslRepository.listener()
+          .onBackpressureLatest()
+          .concatMap { notification ->
+              val json = notification.parameter.toJsonNode()
+              if (json["operation"].asText() == "INSERT") {
+                  info("database event: $json")
+              }            
+          }          
+----
+
+== Ranked full text search:
+
+Default language may be setting in: `spring.r2dbc.dsl.fts-lang`
+
+or get if nothing from: `Locale.getCurrent()`
+
+or can dynamically set in Dsl class: `Dsl.create().lang('English')`
+
+In table look field by default name `tsv`: `Dsl.create().fts("web query text")`, but field name can be setting in parameter  `Dsl.create().fts("ts_vector", "web query text")`.
+[source,postgresql]
+----
+CREATE TABLE public.jobject
+(
+    id         uuid                     DEFAULT uuid_generate_v1mc() NOT NULL,
+    jtree      jsonb                    NOT NULL,
+    jfolder_id uuid                     NOT NULL REFERENCES jfolder (id),
+    created_at timestamp with time zone DEFAULT timezone('utc'::text, CURRENT_TIMESTAMP),
+    tsv        tsvector,
+    PRIMARY KEY (jfolder_id, id)
+) PARTITION BY LIST (jfolder_id);
+
+CREATE INDEX idx_jobject_tsv ON jobject USING rum (tsv rum_tsvector_ops);
+----
+
+and in source code:
+
+[source,kotlin]
+----
+dslRepository.findAll(Dsl.create().fts("cool | pencil").equals("jfolderId", folderId).pageable(0, 20))
+----

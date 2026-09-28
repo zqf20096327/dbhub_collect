@@ -1,0 +1,500 @@
+<p align="center">
+  <img src="logo.png" alt="pgmold" width="200">
+</p>
+
+# pgmold
+
+PostgreSQL schema-as-code management tool. Define schemas in native PostgreSQL DDL, diff against live databases, plan migrations, and apply them safely.
+
+## Features
+
+- **Schema-as-Code**: Define PostgreSQL schemas in native SQL DDL files
+- **Introspection**: Read schema from live PostgreSQL databases
+- **Diffing**: Compare schemas and generate migration plans
+- **Safety**: Lint rules prevent destructive operations without explicit flags
+- **Drift Detection**: Detect schema drift in CI/CD
+- **Transactional Apply**: All migrations run in a single transaction
+- **Partitioned Tables**: Full support for `PARTITION BY` and `PARTITION OF` syntax
+- **JSON Output**: Machine-readable output for all commands via `--json` / `-j`
+- **Describe**: Inspect available commands, object types, and providers with `pgmold describe`
+- **Grant Management**: `GRANT`/`REVOKE` sync enabled by default; `--manage-ownership` for `ALTER OWNER`
+- **Environment Variable**: Set connection string via `PGMOLD_DATABASE_URL`
+- **PostgreSQL 13-17**: Tested against every major version ([compatibility matrix](https://pgmold.dev/docs/reference/compatibility/))
+
+## How pgmold Works
+
+```
+┌─────────────────────┐     ┌─────────────────────┐
+│   Schema Files      │     │   Live Database     │
+│   (Desired State)   │     │   (Current State)   │
+└──────────┬──────────┘     └──────────┬──────────┘
+           │                           │
+           └───────────┬───────────────┘
+                       ▼
+              ┌─────────────────┐
+              │   pgmold diff   │
+              │   (compare)     │
+              └────────┬────────┘
+                       ▼
+              ┌─────────────────┐
+              │  Generated SQL  │
+              │  (only changes) │
+              └─────────────────┘
+```
+
+**Example:**
+
+Your schema file says:
+```sql
+CREATE TABLE users (
+  id UUID PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,  -- NEW
+  created_at TIMESTAMP
+);
+```
+
+Database currently has:
+```sql
+CREATE TABLE users (
+  id UUID PRIMARY KEY,
+  name TEXT NOT NULL,
+  created_at TIMESTAMP
+);
+```
+
+pgmold generates only the delta:
+```sql
+ALTER TABLE users ADD COLUMN email TEXT NOT NULL;
+```
+
+## Installation
+
+```bash
+cargo install pgmold
+```
+
+For the latest version from source:
+
+```bash
+cargo install --git https://github.com/fmguerreiro/pgmold
+```
+
+## Quick Start
+
+```bash
+# 1. Create a schema file
+cat > schema.sql << 'EOF'
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY,
+    email TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT now()
+);
+EOF
+
+# 2. See what would change
+pgmold plan -s sql:schema.sql -d postgres://localhost/mydb
+
+# 3. Apply the migration
+pgmold apply -s sql:schema.sql -d postgres://localhost/mydb
+```
+
+## Usage
+
+```bash
+# Diff two SQL schema files (outputs migration SQL)
+pgmold diff --from sql:old.sql --to sql:new.sql
+
+# Diff with JSON output for CI
+pgmold diff --from sql:old.sql --to sql:new.sql --json
+
+# Generate migration plan
+pgmold plan -s sql:schema.sql -d postgres://localhost/mydb
+
+# Generate rollback plan (reverse direction)
+pgmold plan -s sql:schema.sql -d postgres://localhost/mydb --reverse
+
+# Apply migrations (with safety checks)
+pgmold apply -s sql:schema.sql -d postgres://localhost/mydb
+
+# Apply with destructive operations allowed
+pgmold apply -s sql:schema.sql -d postgres://localhost/mydb --allow-destructive
+
+# Dry run (preview SQL without executing)
+pgmold apply -s sql:schema.sql -d postgres://localhost/mydb --dry-run
+
+# Lint schema (requires a database connection to resolve types)
+pgmold lint -s sql:schema.sql -d postgres://localhost/mydb
+
+# Detect drift (returns JSON report with exit code 1 if drift detected)
+pgmold drift -s sql:schema.sql -d postgres://localhost/mydb -j
+```
+
+## Guides
+
+### Multi-File Schemas
+
+Organize your schema across multiple files using directories or glob patterns:
+
+```bash
+# Load all SQL files from a directory (recursive)
+pgmold apply -s sql:./schema/ -d postgres://localhost/mydb
+
+# Use glob patterns
+pgmold apply -s "sql:schema/**/*.sql" -d postgres://localhost/mydb
+
+# Multiple sources
+pgmold apply -s sql:types.sql -s "sql:tables/*.sql" -d postgres://localhost/mydb
+```
+
+Example directory structure:
+```
+schema/
+├── enums.sql           # CREATE TYPE statements
+├── tables/
+│   ├── users.sql       # users table + indexes
+│   └── posts.sql       # posts table + foreign keys
+└── functions/
+    └── triggers.sql    # stored procedures
+```
+
+Duplicate definitions across files produce an error with file locations.
+
+### Filtering Objects
+
+Filter by name patterns or object types.
+
+**Filter by name pattern:**
+```bash
+# Include only objects matching patterns
+pgmold plan -s sql:schema.sql -d postgres://localhost/mydb \
+  --include 'api_*' --include 'users'
+
+# Exclude objects matching patterns
+pgmold plan -s sql:schema.sql -d postgres://localhost/mydb \
+  --exclude '_*' --exclude 'pg_*'
+```
+
+**Filter by object type:**
+```bash
+# Only compare tables and functions (ignore extensions, views, triggers, etc.)
+pgmold plan -s sql:schema.sql -d postgres://localhost/mydb \
+  --include-types tables,functions
+
+# Exclude extensions from comparison
+pgmold plan -s sql:schema.sql -d postgres://localhost/mydb \
+  --exclude-types extensions
+```
+
+**Combine type and name filters:**
+```bash
+# Compare only functions matching 'api_*', excluding internal ones
+pgmold plan -s sql:schema.sql -d postgres://localhost/mydb \
+  --include-types functions \
+  --include 'api_*' \
+  --exclude '_*'
+```
+
+**Filter nested types within tables:**
+```bash
+# Compare tables without RLS policies
+pgmold plan -s sql:schema.sql -d postgres://localhost/mydb \
+  --exclude-types policies
+
+# Compare only table structure (no indexes, constraints, or policies)
+pgmold plan -s sql:schema.sql -d postgres://localhost/mydb \
+  --exclude-types policies,indexes,foreignkeys,checkconstraints
+```
+
+Available object types:
+- Top-level: `extensions`, `tables`, `enums`, `domains`, `functions`, `views`, `triggers`, `sequences`, `partitions`
+- Nested (within tables): `policies`, `rules`, `indexes`, `foreignkeys`, `checkconstraints`
+
+### Extension Objects
+
+By default, pgmold excludes objects owned by extensions (e.g., PostGIS functions, pg_trgm operators) from diffs.
+
+```bash
+# Include extension objects if needed (e.g., for full database dumps)
+pgmold dump -d postgres://localhost/mydb --include-extension-objects -o full_schema.sql
+```
+
+### Adopting pgmold in an Existing Project
+
+Use `pgmold dump` to create a baseline from a live database:
+
+```bash
+# Export current database schema to SQL files
+pgmold dump -d postgres://localhost/mydb -o schema/baseline.sql
+
+# For specific schemas only
+pgmold dump -d postgres://localhost/mydb --target-schemas public,auth -o schema/baseline.sql
+
+# Split into multiple files by object type
+pgmold dump -d postgres://localhost/mydb --split -o schema/
+```
+
+The `--split` option creates separate files for extensions, types, sequences, tables, functions, views, triggers, and policies.
+
+After this, your schema files match the database exactly and `pgmold plan` shows zero operations.
+
+#### Workflow After Baseline
+
+1. **Make changes** by editing the SQL schema files
+2. **Preview** with `pgmold plan -s sql:schema/ -d postgres://localhost/mydb`
+3. **Apply** with `pgmold apply -s sql:schema/ -d postgres://localhost/mydb`
+
+#### Integrating with Existing Migration Systems
+
+pgmold is declarative -- it computes diffs and applies directly. To maintain compatibility with an existing migration system:
+
+```bash
+# Generate a numbered migration file automatically
+pgmold migrate \
+  -s sql:schema/ \
+  -d postgres://localhost/mydb \
+  --migrations ./migrations \
+  --name "add_email_column"
+# Creates: migrations/0044_add_email_column.sql
+
+# Or manually capture output
+pgmold diff --from sql:current.sql --to sql:schema/ > migrations/0044_my_change.sql
+```
+
+The `migrate` command auto-detects the next migration number. Use pgmold for diffing while keeping your existing migration runner.
+
+### CI Integration
+
+pgmold includes a GitHub Action for schema CI: migration plan comments, drift detection, PR auto-labeling, and warning annotations.
+
+#### GitHub Action Usage
+
+```yaml
+- uses: fmguerreiro/pgmold/.github/actions/drift-check@main
+  with:
+    schema: sql:schema/
+    database: db:${{ secrets.DATABASE_URL }}
+    target-schemas: public,auth
+```
+
+The action runs in two modes:
+
+- **Live database mode**: Requires `database`. Generates a migration plan, posts it as a PR comment, and optionally checks for drift.
+- **SQL-to-SQL baseline mode**: Requires `baseline`. Diffs `schema` against a baseline SQL file — no live database needed.
+
+**Key inputs:**
+- `schema` (required): Schema source(s), space-separated.
+- `database`: PostgreSQL connection string. Required unless `baseline` is set.
+- `baseline`: `sql:path/to/baseline.sql` for SQL-to-SQL diff mode.
+- `target-schemas`: Comma-separated PostgreSQL schemas. Default: `public`.
+- `fail-on-drift`: Fail if drift detected. Default: `true`.
+- `plan-comment`: Post migration plan as a PR comment. Default: `true`.
+- `drift-check`: Run drift detection. Default: `true`.
+- `auto-label`: Add `database-schema` label to the PR when schema changes are detected. Default: `true`.
+
+**Outputs:**
+- `has-drift`: Whether drift was detected (true/false).
+- `expected-fingerprint`: Expected schema fingerprint from SQL files.
+- `actual-fingerprint`: Actual schema fingerprint from database.
+- `report`: Full JSON drift report.
+- `plan-json`: Full plan JSON output.
+- `statement-count`: Number of SQL statements in the migration plan.
+- `has-destructive`: Whether the plan contains destructive operations.
+- `comment-id`: ID of the PR comment posted or updated.
+
+See `.github/actions/drift-check/README.md` for full documentation and `.github/workflows/examples/schema-check.yml` for a complete example.
+
+#### CLI Drift Detection
+
+For local or custom CI environments, use the `drift` command directly:
+
+```bash
+# Get JSON report with exit code 1 if drift detected
+pgmold drift -s sql:schema/ -d postgres://localhost/mydb --json
+```
+
+Output:
+```json
+{
+  "has_drift": true,
+  "expected_fingerprint": "abc123...",
+  "actual_fingerprint": "def456...",
+  "differences": ["AddColumn { schema: \"public\", table: \"users\", ... }"]
+}
+```
+
+Drift detection compares SHA256 fingerprints of normalized schemas. Any difference triggers drift.
+
+## Terraform Provider
+
+pgmold is available as a Terraform provider for infrastructure-as-code workflows.
+
+### Installation
+
+```hcl
+terraform {
+  required_providers {
+    pgmold = {
+      source  = "fmguerreiro/pgmold"
+      version = "~> 0.3"
+    }
+  }
+}
+
+provider "pgmold" {}
+```
+
+### Usage
+
+```hcl
+resource "pgmold_schema" "app" {
+  schema_file       = "${path.module}/schema.sql"
+  database_url      = var.database_url
+  allow_destructive = false  # Set true to allow DROP operations
+}
+```
+
+Terraform diffs against the live database and applies only necessary migrations on changes.
+
+### Attributes
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `schema_file` | string | yes | Path to SQL schema file |
+| `database_url` | string | yes | PostgreSQL connection URL |
+| `target_schemas` | list(string) | no | PostgreSQL schemas to manage (default: `["public"]`) |
+| `allow_destructive` | bool | no | Allow DROP operations (default: `false`) |
+
+**Computed attributes:**
+- `id` - Resource identifier
+- `schema_hash` - SHA256 hash of schema file
+- `applied_at` - Timestamp of last migration
+- `migration_count` - Number of operations applied
+
+### Migration Resource
+
+Generate numbered migration files instead of applying directly:
+
+```hcl
+resource "pgmold_migration" "app" {
+  schema_file  = "${path.module}/schema.sql"
+  database_url = var.database_url
+  output_dir   = "${path.module}/migrations"
+  prefix       = "V"  # Flyway-style prefix
+}
+```
+
+## Safety Rules
+
+By default, pgmold blocks destructive operations:
+
+- `DROP TABLE`, `DROP COLUMN`, `DROP ENUM` require `--allow-destructive`
+- Type narrowing and `SET NOT NULL` produce warnings
+
+Set `PGMOLD_PROD=1` for production mode, which blocks table drops entirely.
+
+## Known Limitations
+
+### Renames are not detected
+
+pgmold compares two snapshots (schema files vs. live database), so a rename of a column, table, index, or constraint looks identical to a drop + add. pgmold will emit the destructive form, which **destroys the column data and cascades to dependent objects**.
+
+```sql
+-- Schema file change: rename entity_id to supplier_id
+-- pgmold emits:
+ALTER TABLE orders ADD COLUMN supplier_id UUID;
+ALTER TABLE orders DROP COLUMN entity_id CASCADE;
+```
+
+Heuristic detection was rejected: a wrong guess silently destroys data.
+
+**Workaround**: apply the rename directly to the database first, then update the schema file:
+
+```sql
+ALTER TABLE orders RENAME COLUMN entity_id TO supplier_id;
+```
+
+`pgmold plan` will then show no changes. An explicit rename directive is under design; full rationale and edge cases are in the [limitations reference](https://pgmold.dev/docs/reference/limitations/).
+
+## Comparison with Other Tools
+
+### vs Declarative Schema-as-Code Tools
+
+These tools share pgmold's approach: define desired state, compute diffs automatically.
+
+| Feature | pgmold | [Atlas](https://atlasgo.io/) | [pg-schema-diff](https://github.com/stripe/pg-schema-diff) | [pgschema](https://www.pgschema.com/) | [pg-delta](https://github.com/supabase/pg-toolbelt/tree/main/packages/pg-delta) |
+|---------|--------|-------|----------------|----------|----------|
+| **Language** | Rust | Go | Go | Go | TypeScript |
+| **Schema Format** | Native SQL | HCL, SQL, ORM | Native SQL | SQL | Native SQL |
+| **Multi-DB Support** | PostgreSQL | ✅ Many | PostgreSQL | PostgreSQL | PostgreSQL |
+| **Drift Detection** | ✅ | ✅ | ❌ | ❌ | ❌[^pgdelta-drift] |
+| **Lock Hazard Warnings** | ✅ | ✅ | ✅ | ❌ | ❌ |
+| **Safety Linting** | ✅ | ✅ | ❌ | ❌ | ⚠️ data-loss only[^pgdelta-safety] |
+| **RLS Policies** | ✅ | ✅ | ❌ | ✅ | ✅ |
+| **Partitioned Tables** | ✅ | ✅ | ✅ | ⚠️ parent only[^pgschema-partitions] | ✅ |
+| **Cloud Service** | ❌ | Atlas Cloud | ❌ | ❌ | Supabase Cloud[^pgdelta-cloud] |
+| **Library Mode** | ❌ | ❌ | ✅ | ❌ | ✅ |
+| **Stability** | ✅ stable | ✅ stable | ✅ stable | ✅ stable | ⚠️ alpha[^pgdelta-alpha] |
+
+[^pgschema-partitions]: pgschema v1.9.0 dumps the parent's `PARTITION BY` clause correctly but emits children as standalone `CREATE TABLE` statements without `PARTITION OF`, so re-applying a dump loses the partition hierarchy.
+
+[^pgdelta-drift]: pg-delta has no dedicated `drift` command. An empty `pgdelta plan` between schema source and live database is functionally equivalent, but there is no fingerprint-based drift report or CI exit-code contract.
+
+[^pgdelta-safety]: pg-delta classifies plans as `safe` or `data-loss (N)` and gates `apply`/`sync` behind `--unsafe` for `DROP TABLE`, `DROP COLUMN`, and `DROP SEQUENCE`. It does not warn on lock-class hazards (e.g. `ALTER TABLE ... SET NOT NULL` on a large table) or type-narrowing risks.
+
+[^pgdelta-cloud]: pg-delta is the diffing engine behind Supabase's dashboard branching since the [May 2026 announcement](https://supabase.com/blog/branching-without-git-is-now-the-default), but it is also published as a standalone CLI/library on npm.
+
+[^pgdelta-alpha]: As of `1.0.0-alpha.24` (May 2026), the package is still pre-1.0 and its maintainers explicitly solicit bug reports. The npm `latest` tag points to a `0.0.0` placeholder; real releases ship under the `alpha` dist-tag.
+
+### vs Migration-Based Tools
+
+Traditional tools where you write numbered migration files manually.
+
+| Feature | pgmold | Flyway | Liquibase | Sqitch |
+|---------|--------|--------|-----------|--------|
+| **Approach** | Declarative | Versioned | Versioned | Plan-based |
+| **Auto-generates Migrations** | ✅ | ❌ | ❌ | ❌ |
+| **Multi-DB Support** | PostgreSQL | ✅ Many | ✅ Many | ✅ Many |
+| **Drift Detection** | ✅ | ✅ (preview) | ✅ | ❌ |
+| **Rollback Scripts** | Auto (reverse diff) | Manual | Manual | Required |
+| **Enterprise Features** | ❌ | Teams edition | Pro edition | ❌ |
+
+### When to Choose pgmold
+
+- **Pure SQL schemas** -- no HCL or DSLs to learn
+- **PostgreSQL-only** projects needing deep PG integration
+- **Single binary** -- no JVM/Go runtime required
+- **CI/CD drift detection**
+- **Safety-first** workflows with destructive operation guardrails
+- **RLS policies** as first-class citizens
+
+### When to Choose Alternatives
+
+- **Multi-database support** → [Atlas](https://atlasgo.io/), [Flyway](https://flywaydb.org), [Liquibase](https://www.liquibase.org/)
+- **HCL/Terraform-style syntax** → [Atlas](https://atlasgo.io/)
+- **Embeddable Go library** → [pg-schema-diff](https://github.com/stripe/pg-schema-diff)
+- **Embeddable TypeScript library** → [pg-delta](https://github.com/supabase/pg-toolbelt/tree/main/packages/pg-delta)
+- **Supabase-native projects** with dashboard branching → [pg-delta](https://github.com/supabase/pg-toolbelt/tree/main/packages/pg-delta)
+- **Zero-downtime migrations** → [pgroll](https://github.com/xataio/pgroll), [Reshape](https://github.com/fabianlindfors/reshape)
+- **Enterprise compliance/audit** → [Liquibase](https://www.liquibase.org/), [Bytebase](https://www.bytebase.com/)
+- **Managed cloud service** → [Atlas Cloud](https://atlasgo.io/cloud/getting-started)
+
+## Development
+
+```bash
+# Build
+cargo build
+
+# Test
+cargo test
+
+# Run integration tests (requires Docker)
+cargo test --test integration
+
+# Test with cargo-nextest (caps container-backed integration tests at 4 threads)
+cargo nextest run
+```
+
+## License
+
+MIT

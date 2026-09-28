@@ -1,0 +1,10 @@
+Basildon, a static site generator
+=================================
+
+For all information, see [basildon.samwilson.id.au](https://basildon.samwilson.id.au).
+
+[![StaticGen](https://img.shields.io/badge/StaticGen-Basildon-00C7B7)](https://www.staticgen.com/basildon)
+[![Packagist](https://img.shields.io/packagist/v/samwilson/basildon)](https://packagist.org/packages/samwilson/basildon)
+[![CI](https://github.com/samwilson/basildon/workflows/CI/badge.svg)](https://github.com/samwilson/basildon/actions?query=workflow:CI)
+[![Docker](https://img.shields.io/docker/pulls/freosam/basildon)](https://hub.docker.com/r/freosam/basildon)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/samwilson/basildon/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/samwilson/basildon/?branch=main)

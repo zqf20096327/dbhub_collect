@@ -1,0 +1,611 @@
+# SQL Server MCP Demo
+
+I've been thinking a lot lately about what it actually takes to make an AI agent genuinely useful for database work, both for administration and for application access to the data tier. Writing the T-SQL code is the easy part. A coding assistant can do that out of the box. The hard part is giving it visibility into a running SQL Server: which sessions are blocked right now, where the wait stats are pointing, which indexes the optimizer is begging for. Without that, the agent is just guessing. With application access, an agent can propose how things should work, but what if we had tools that added context describing the database's schema and what the entities actually mean to the application when interacting with the database agentically?
+
+Imagine being able to ask your database estate, "What's the situation with backups in my environment?" Or "What products are we going to sell out of by the end of the quarter?" With MCP, you can do just that.
+
+## Why I Built This
+
+The Model Context Protocol (MCP) is how you extend an AI agent's reach beyond what it already knows. It lets you expose Tools (structured function calls) that an agent can invoke during a conversation. The agent decides when to call them, chains them together, and synthesizes the results into a coherent answer. You can quickly get your arms around a complex estate with tools like this.
+
+For SQL Server, this means you can ask your agent a question like "are there any blocking sessions right now, and what SQL is causing it?" and instead of generating a query for you to run manually, it goes and gets the answer itself, calling DMVs, correlating the results, and giving you a diagnosis in plain English.
+
+I tried the zero-code path first. [Data API Builder (DAB)](https://learn.microsoft.com/en-us/azure/data-api-builder/mcp/overview) can automatically stand up an MCP server. Point it at a user database, and it exposes REST, GraphQL, and MCP endpoints with no code. It works great for controlled agentic interactions against user databases. Ask "which products are low on inventory?" and the agent calls the DAB MCP endpoint, filters the Products table, and returns the answer. No SQL written, no schema required. But when I tried to expose system DMVs via DAB, it quickly broke down. Unsupported data types and query patterns in the system views prevented DAB from surfacing what I needed. So I wrote a custom server.
+
+The result is an MCP server with 34 tools that query SQL Server DMVs directly. A single container manages connection pools to multiple SQL Server instances. The agent never touches the database directly. It calls the tool server, the tool server runs the structured SQL tools, and you stay in control.
+
+So what you have here is a container-based environment that allows you to experiment with both DBA tasks via the custom-built MCP server and to use DAB to interact with a user database, all agentically.
+
+## How It Works
+
+The demo wires up two complementary MCP servers, both running in Docker Compose:
+
+- **Data API Builder (DAB)**: zero-code MCP server for the ProductsDB application database. Exposes CRUD operations on Products, Categories, Orders, and OrderDetails over REST, GraphQL, and MCP. This is the right tool when you want natural-language data access against a known application schema.
+- **Custom SQL MCP Server**: 34 DBA-focused tools querying SQL Server DMVs directly. Blocking chains, wait stats, missing indexes, query plan cache, memory pressure, CPU history, AG health, backup status, and more. Supports multiple SQL Server instances. Add a new server to a JSON array in `.env`, restart the container, and the agent can reach it immediately.
+
+The multi-instance support is one of the parts I'm most happy with. Instances are registered via the `INSTANCES` environment variable at startup. Each gets its own lazy connection pool. The first tool call opens the pool, subsequent calls reuse it, and the pool self-heals if it errors. The `fan_out_query` tool runs the same T-SQL across all instances in parallel, so if one instance is down, it doesn't cancel queries on the others. When a tool call omits `instance_name`, the first registered instance is used; names are matched case-insensitively.
+
+Every query tool caps its result set and says so: responses carry `truncated` (true when rows were cut) and `row_limit` (the cap that applied), so the agent can tell a complete result from a clipped one and narrow its query instead of reasoning over partial data. `execute_query` returns `{ rows, truncated, row_limit }`.
+
+Let's go.
+
+## Quick Start
+
+```bash
+# 1. Clone and copy the env file
+git clone https://github.com/nocentino/sql-mcp-server.git
+cd sql-mcp-server
+cp .env.example .env          # set your passwords in .env
+
+# 2. Start everything
+./start.sh                    # builds images, starts containers, waits for healthy
+
+# 3. Verify
+docker compose ps
+curl http://localhost:3001/health   # SQL MCP server
+curl http://localhost:5001/health   # DAB
+
+# 4. Wire up VS Code add to ~/Library/Application Support/Code/User/mcp.json (or see below for additional client configs)
+{
+  "servers": {
+    "sql-dba":     { "type": "http", "url": "http://localhost:3001/mcp" },
+    "products-db": { "type": "http", "url": "http://localhost:5001/mcp" }
+  }
+}
+
+# 5. Open Copilot Chat in agent mode and ask:
+#    "Tell me about this SQL Server version, uptime, and any config concerns."
+
+# 6. Head to the demos/ folder to walk through real scenarios.
+
+# Optional: Configure Always On Availability Group between both instances
+./scripts/ag/setup-ag.sh    # certificate auth, sync replication, TestDB
+```
+
+See the [demos/](demos/) folder for scripted walkthroughs. The `demos/1-demo.sh` through `demos/6-demo.sh` scripts cover architecture, MCP wiring, blocking, query performance, fan-out queries, and Always On AG diagnostics. The `demos/de-1-demo.sh` through `demos/de-4-demo.sh` scripts are the complete Data Exposed episode walkthroughs (startup → MCP config → sql-dba DBA scenarios → products-db DAB scenarios). For Always On AG setup details, see the [Optional: Configure Always On Availability Group](#optional-configure-always-on-availability-group) section.
+
+## Architecture
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│                         Docker Network                               │
+│                                                                      │
+│  ┌───────────────┐   CRUD   ┌──────────────────────────────────┐     │
+│  │               │◄─────────│  DAB MCP  (dab-mcp :5001)        │     │
+│  │  sqlserver1   │          │  REST / GraphQL / MCP            │     │
+│  │  - ProductsDB │          └──────────────────────────────────┘     │
+│  │  Port 1433    │                                                   │
+│  │               │  SELECT  ┌──────────────────────────────────┐     │
+│  │               │◄────┐    │  SQL MCP Server  (sql-mcp-dba    │     │
+│  └───────────────┘     └────│  :3001)  connectionManager.ts    │     │
+│                         ┌───│                                  │     │
+│  ┌───────────────┐      │   └──────────────────────────────────┘     │
+│  │  sqlserver2   │◄─────┘                                            │
+│  │  Port 1433    │  SELECT (second instance)                         │
+│  └───────────────┘                                                   │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+| Service | Purpose | Host port |
+|---|---|---|
+| `sqlserver1` | SQL Server 2025 — ProductsDB + monitoring | 1433 |
+| `sqlserver2` | SQL Server 2025 — second instance for testing | 1434 |
+| `dab-mcp` | DAB — ProductsDB CRUD via MCP | 5001 |
+| `sql-mcp-server` | Custom MCP — DBA monitoring (multi-instance) | 3001 |
+
+## Connect AI Agents
+
+Once the containers are running, register both servers with your AI agent. For [GitHub Copilot in VS Code](https://code.visualstudio.com/docs/copilot/customization/mcp-servers), add them to the MCP configuration file:
+
+```json
+{
+  "servers": {
+    "sql-dba":     { "type": "http", "url": "http://localhost:3001/mcp" },
+    "products-db": { "type": "http", "url": "http://localhost:5001/mcp" }
+  }
+}
+```
+
+For [Claude Desktop](https://modelcontextprotocol.io/quickstart/user), use the same server URLs in the Claude configuration. The [demos/](demos/) folder has six scripted walkthroughs that show exactly what the agent can do.
+
+## What This Looks Like in Practice
+
+This is where it gets interesting. The agent doesn't just run a single query it chains tool calls, cross-references the results, and synthesizes a diagnosis, all from one natural-language question. Here are some examples straight from the demo scripts.
+
+---
+
+### Blocking investigation
+
+> **You:** "Are there any blocking sessions right now? Who is blocking whom, how long has the block been in place, and what SQL is running?"
+
+```
+Agent → get_blocking_chains(instance_name: "SqlServer1")
+      ← blocking_chains: [
+          {
+            blocked_session_id: 54,
+            blocking_session_id: 52,
+            wait_type: "LCK_M_S",
+            wait_seconds: 14.3,
+            blocked_login: "sa",
+            blocked_program: "SQLCMD",
+            blocked_statement: "SELECT ProductID, ProductName, UnitPrice
+                                FROM dbo.Products WHERE Category = 'Electronics'",
+            blocker_login: "sa",
+            blocker_program: "SQLCMD",
+            blocker_sql_text: "BEGIN TRANSACTION;
+                               UPDATE dbo.Products SET UnitPrice = UnitPrice * 1.01
+                               WHERE Category = 'Electronics';
+                               WAITFOR DELAY '00:05:00';"
+          },
+          {
+            blocked_session_id: 57,
+            blocking_session_id: 52,
+            wait_type: "LCK_M_S",
+            wait_seconds: 11.8,
+            blocked_program: "dab_oss_2.0.1",
+            blocked_statement: "SELECT [ProductID],[ProductName],[UnitPrice]...
+                                FROM [dbo].[Products] WHERE Category = 'Electronics'"
+          }
+        ]
+
+Agent: "Session 52 is the head blocker. It opened a transaction, ran an UPDATE on
+        all Electronics rows, then entered a WAITFOR — holding an exclusive lock for
+        over 14 seconds. Two sessions are queued behind it: a SQLCMD SELECT and a
+        DAB REST request (dab_oss_2.0.1). Kill session 52 with KILL 52 to unblock
+        both, or wait for the WAITFOR to expire and the transaction to roll back."
+```
+
+---
+
+### Missing index recommendations
+
+> **You:** "Are there any missing index recommendations? Show me the indexes with the highest impact score, what columns they cover, and give me the CREATE INDEX statements I can run."
+
+```
+Agent → get_missing_indexes(instance_name: "SqlServer1")
+      ← missing_indexes: [
+          {
+            database_name: "ProductsDB",
+            table_name: "dbo.Products",
+            impact_score: 98.4,
+            equality_columns: "Discontinued",
+            inequality_columns: null,
+            included_columns: "Category, UnitPrice",
+            estimated_seeks: 150,
+            estimated_scans: 2,
+            suggested_create_index:
+              "CREATE INDEX [IX_Products_Discontinued_INC]
+               ON [dbo].[Products] ([Discontinued])
+               INCLUDE ([Category],[UnitPrice])"
+          },
+          {
+            table_name: "dbo.Products",
+            impact_score: 84.1,
+            equality_columns: null,
+            inequality_columns: "UnitsInStock, UnitPrice",
+            included_columns: "ProductName",
+            suggested_create_index:
+              "CREATE INDEX [IX_Products_UnitsInStock_UnitPrice_INC]
+               ON [dbo].[Products] ([UnitsInStock],[UnitPrice])
+               INCLUDE ([ProductName])"
+          }
+        ]
+
+Agent → get_index_usage_stats(instance_name: "SqlServer1")
+      ← confirms both indexes have zero existing seeks — no covering index in place
+
+Agent: "Two high-impact indexes are missing on dbo.Products. The top one
+        (impact 98.4) covers the Discontinued filter used in category summary
+        queries. The second (impact 84.1) covers the UnitsInStock + UnitPrice
+        range scan seen in the low-stock report. Both CREATE INDEX statements
+        are ready to run — test in a non-prod environment first."
+```
+
+---
+
+### Low-stock check + summer sale discount (DAB)
+
+> **You:** "Show me all products with fewer than 50 units in stock, sorted by stock level. Which categories are most at risk of running out?"
+
+```
+Agent → products-db: read_records(entity: "Products",
+          filter: "UnitsInStock lt 50", orderby: "UnitsInStock asc")
+      ← [
+          { ProductName: "Standing Desk",  Category: "Furniture",    UnitsInStock: 15 },
+          { ProductName: "Bookshelf",      Category: "Furniture",    UnitsInStock: 20 },
+          { ProductName: "Air Purifier",   Category: "Electronics",  UnitsInStock: 25 },
+          { ProductName: "Office Chair",   Category: "Furniture",    UnitsInStock: 30 }
+        ]
+
+Agent: "Furniture is the most at-risk category — 3 of the 4 low-stock products
+        are Furniture. Standing Desk is critically low at 15 units."
+```
+
+> **You:** "We're running a summer sale. Apply a 15% discount to all Furniture products. Show me the before and after prices."
+
+```
+Agent → products-db: read_records(entity: "Products", filter: "Category eq 'Furniture'")
+      ← [Standing Desk $599.99, Bookshelf $149.99, Office Chair $299.99, ...]
+
+Agent → products-db: update_record(entity: "Products", id: 3,  body: { UnitPrice: 509.99 })
+Agent → products-db: update_record(entity: "Products", id: 8,  body: { UnitPrice: 127.49 })
+Agent → products-db: update_record(entity: "Products", id: 12, body: { UnitPrice: 254.99 })
+
+Agent: "15% discount applied to all Furniture products:
+        - Standing Desk:  $599.99 → $509.99
+        - Bookshelf:      $149.99 → $127.49
+        - Office Chair:   $299.99 → $254.99"
+```
+
+Notice that the agent never wrote an `UPDATE` statement. It read the records, calculated the new prices, and issued individual PATCH calls through the DAB REST layer. That's controlled agentic access to user data — no direct SQL, no schema knowledge required from the caller.
+
+You might be wondering where the guardrails are. That's inside the DAB configuration. The [dab-config.json](dab-config.json) file in this demo explicitly defines which tables, views, and other objects are exposed (Products, Categories, Orders, OrderDetails) and what actions are allowed on each. You could lock this down to read-only for certain entities, restrict updates to specific columns, or add authentication and role-based permissions. The agent never sees SQL. It just calls the MCP tool, and DAB enforces the rules.
+
+Each entity includes a description field that tells the agent when and how to use it. That's critical. The agent reads those descriptions at runtime to decide which tool to invoke. Good descriptions mean the agent picks the right entity for the job. Poor descriptions mean it guesses.
+
+---
+
+### Multi-instance wait stats comparison
+
+> **You:** "Check wait stats on both SQL Server instances and tell me if there are any concerns."
+
+```
+Agent → list_instances()
+      ← [
+          { name: "SqlServer1", host: "sqlserver1",  port: 1433 },
+          { name: "SqlServer2", host: "sqlserver2", port: 1433 }
+        ]
+
+Agent → get_wait_stats(instance_name: "SqlServer1")   [parallel]
+Agent → get_wait_stats(instance_name: "SqlServer2")   [parallel]
+      ← SqlServer1 top waits:
+          PAGEIOLATCH_SH  42 %   ← disk read pressure
+          SOS_SCHEDULER_YIELD  18 %   ← CPU pressure
+          LCK_M_S  11 %
+        SqlServer2 top waits:
+          ASYNC_NETWORK_IO  61 %   ← client consuming results slowly
+          PAGEIOLATCH_SH  14 %
+
+Agent: "SqlServer1 shows significant disk read pressure (PAGEIOLATCH_SH 42%) and
+        CPU contention (SOS_SCHEDULER_YIELD 18%) — worth checking get_file_io_stats
+        and get_top_queries. SqlServer2's dominant wait is ASYNC_NETWORK_IO, which
+        usually means a client is not consuming result sets fast enough; check for
+        large unbounded SELECTs or a slow application tier."
+```
+
+---
+
+### Full incident report
+
+> **You:** "Pull a full health snapshot of this SQL Server: server info, databases, wait stats, top queries by CPU, any blocking, and missing indexes. Write it up as an incident report I could hand to a DBA."
+
+```
+Agent → get_server_info(instance_name: "SqlServer1")
+      ← SQL Server 2025 Developer, 4 CPUs, 8192 MB RAM, uptime 2d 6h
+         MAXDOP=0 ⚠, cost threshold for parallelism=5 ⚠,
+         max server memory=2147483647 (uncapped) ⚠,
+         optimize for ad hoc workloads=0 ⚠
+
+Agent → get_database_info(instance_name: "SqlServer1")
+      ← ProductsDB: FULL recovery, 48 MB data, 8 MB log, log_reuse_wait=LOG_BACKUP
+
+Agent → get_wait_stats(instance_name: "SqlServer1")
+      ← PAGEIOLATCH_SH 38%, SOS_SCHEDULER_YIELD 19%, LCK_M_S 9%
+
+Agent → get_top_queries(instance_name: "SqlServer1", order_by: "cpu", top_n: 5)
+      ← #1: Products × OrderDetails × Orders join, avg_cpu_ms=312, 50 execs,
+             avg_logical_reads=8420 — no covering index on Products.Category
+
+Agent → get_blocking_chains(instance_name: "SqlServer1")
+      ← No blocking detected at this time.
+
+Agent → get_missing_indexes(instance_name: "SqlServer1")
+      ← 2 missing indexes (impact 98.4, 84.1) on dbo.Products
+
+Agent: "## SQL Server Health Report — SqlServer1
+        ...
+        Configuration concerns: MAXDOP is 0 (unlimited parallelism), cost threshold
+        for parallelism is 5 (too low — triggers parallelism too aggressively), max
+        server memory is uncapped. Recommend setting MAXDOP=2, CTFP=50, and capping
+        server memory to ~6 GB.
+
+        Top CPU query (avg 312 ms, 50 execs): the three-way join on Products ×
+        OrderDetails × Orders is scanning 8 420 pages per execution. Adding the
+        missing index on Products (Discontinued) INCLUDE (Category, UnitPrice)
+        would cover this query path.
+
+        No active blocking. ProductsDB log is waiting on LOG_BACKUP — ensure the
+        log backup job is running on schedule."
+```
+
+**Want to see a real example?** Check out the [4-multi-instance-health-report-with-ag-heavy-load.md](https://github.com/nocentino/sql-mcp-server/blob/main/examples/4-multi-instance-health-report-with-ag-heavy-load.md) report, which shows the agent diagnosing an Always On AG environment under a 100,000-row bulk insert workload — AG health metrics, replication throughput (594 MB/s send rate), wait statistics, query performance, and I/O latency, all captured in a single agent-generated report. The [examples/](examples/) folder includes four sequential reports demonstrating the full diagnostic workflow from baseline to production load.
+
+## Multi-Instance Architecture
+
+One of the things I'm most happy with in this design is how the multi-instance support works. A single `sql-mcp-server` container manages connection pools to as many SQL Server instances as you need. Instances are registered at startup via the `INSTANCES` environment variable in `.env`.
+
+### Instance configuration (`.env`)
+
+```
+INSTANCES='[
+  {"name":"SqlServer1", "host":"sqlserver1", "port":1433, "user":"dba_monitor", "password":"..."},
+  {"name":"SqlServer2", "host":"sqlserver2", "port":1433, "user":"dba_monitor", "password":"..."}
+]'
+```
+
+Add or remove instances by editing this file and restarting the container. No code changes required. The first entry is the default when a tool call omits `instance_name`, and names are matched case-insensitively, so `sqlserver2` reaches `SqlServer2`. The `password` values must match `MONITOR_PASSWORD`, which is what the init scripts use to create the `dba_monitor` login.
+
+### Connection flow
+
+```
+Copilot → MCP tool call (instance_name: "sqlserver2")
+           │
+           ▼
+     queryInstance("sqlserver2", sql)
+           │
+           ├─ pools.get("sqlserver2").connected?  →  reuse (fast path)
+           │
+           └─ first call → new ConnectionPool({ host: "sqlserver2", ... }).connect()
+                           → TCP to sqlserver2:1433 over Docker bridge
+                           → TDS handshake + SQL Server login
+                           → pool stored in module-level Map
+           │
+           ▼
+     pool.request().query(sql)   ← borrows one connection from the pool
+           │
+           ▼
+     rows returned to Copilot
+```
+
+### Concurrency model
+
+Each instance gets its own `ConnectionPool`. Here's how the settings are tuned:
+
+| Setting | Value | Effect |
+|---|---|---|
+| `max` | 5 | Up to 5 simultaneous TDS connections per instance |
+| `min` | 0 | No warm connections held — pools start empty |
+| `idleTimeout` | 30 s | Idle connections closed and evicted automatically |
+| Pools are lazy | — | First tool call to an instance opens the pool |
+| Pools are shared | — | All MCP sessions reuse the same per-instance pool; concurrent first calls share one connect |
+| Error recovery | — | Pool errors evict and close the pool; next request reconnects automatically |
+| Row cap | 200 default | Results are capped server-side (`execute_query` 500, `get_index_usage_stats` 1000); every response reports `truncated` and `row_limit` |
+
+### Fan-out across the fleet
+
+The `fan_out_query` tool runs the same T-SQL across all instances (or a named subset) in parallel using `Promise.allSettled`. One instance being down doesn't cancel queries on the others.
+
+```
+Copilot: "check wait stats across all SQL servers"
+
+1. list_instances()  →  ["default", "sqlserver2"]
+
+2. fan_out_query({ query: "SELECT ...", instances: ["default", "sqlserver2"] })
+
+   Promise.allSettled([
+     queryInstance("default",    sql)  ──► sqlserver1:1433  ─┐
+     queryInstance("sqlserver2", sql)  ──► sqlserver2:1433  ─┤  parallel
+   ])                                                          ↓
+   returns: {
+     "default":    { rows: [...] },
+     "sqlserver2": { rows: [...] }
+   }
+
+3. Copilot synthesizes across both result sets
+```
+
+Sequential chaining (`get_wait_stats(instance_name: "X")` per instance) is better for interactive investigation where each result shapes the next question. `fan_out_query` is better when you want a fleet-wide snapshot in a single round-trip.
+
+## REST and GraphQL (DAB)
+
+DAB also exposes a standard REST and GraphQL endpoint if you want to hit the API directly outside of the agent.
+
+```bash
+# Products list
+curl http://localhost:5001/api/Products
+
+# GraphQL
+curl -X POST http://localhost:5001/graphql \
+  -H "Content-Type: application/json" \
+  -d '{"query":"{ products(first:5) { items { ProductID ProductName UnitPrice } } }"}'
+```
+
+## Direct SQL access
+
+If you want to poke at the database directly during testing:
+
+```bash
+# The SQL Server containers already carry SQLCMDPASSWORD (the sa password from .env),
+# so sqlcmd inside them needs no -P and the password never appears on a command line.
+docker compose exec sqlserver1 /opt/mssql-tools18/bin/sqlcmd \
+  -S localhost -U sa -C -d ProductsDB \
+  -Q "SELECT TOP 5 ProductName, UnitPrice FROM Products"
+```
+
+## Optional: Configure Always On Availability Group
+
+The demo environment includes two SQL Server instances, both pre-configured with HADR enabled. By default, they run independently — perfect for basic multi-instance demos. If you want to test Always On Availability Groups (synchronous replication, manual failover, AG health monitoring), run the automated setup script:
+
+```bash
+# After containers are running and healthy
+./scripts/ag/setup-ag.sh
+```
+
+**What it does:**
+- Creates certificate-based authentication between both instances
+- Configures database mirroring endpoints (port 5022)
+- Creates a cluster-less availability group (`TestAG`)
+- Creates and seeds `TestDB` with sample data
+- Adds the database to the AG with synchronous commit
+- Verifies synchronization status
+
+**AG Configuration:**
+- **AG Name:** TestAG
+- **Primary:** sqlserver1 (port 1433)
+- **Secondary:** sqlserver2 (port 1434)
+- **Sync Mode:** SYNCHRONOUS_COMMIT
+- **Failover:** MANUAL
+- **Cluster Type:** NONE (cluster-less AG)
+
+Once the AG is running, you can test replication by inserting data on the primary and querying the secondary, or use the `get_ag_health` MCP tool to check synchronization queues and health status.
+
+**Tear it down:** The AG setup persists across container restarts. To reset everything:
+
+```bash
+docker compose down -v    # removes containers + volumes
+docker compose up -d      # clean start
+./scripts/ag/setup-ag.sh     # re-run if you want the AG back
+```
+
+See [docs/AG-SETUP.md](docs/AG-SETUP.md) for technical details and manual setup steps.
+
+## Wrapping Up
+
+I built this to see what a properly instrumented AI agent could actually do with a real SQL Server problem. Not just write queries, but diagnose them. The 30 DMV-backed tools give agents enough visibility to identify blocking chains, spot expensive queries, find missing indexes, and flag configuration concerns, all from a single natural-language question.
+
+Clone the repo, spin up the containers, and see what it does in your environment. The [demos/ folder](demos/) has six scripted walkthroughs that show exactly what the agent can do. Let me know how it works.
+
+## Stop
+
+```bash
+docker compose down       # stop, keep data
+docker compose down -v    # stop and delete all data
+```
+
+## Project layout
+
+```
+├── docker-compose.yml           # service orchestration (sqlserver1, sqlserver2, dab-mcp, sql-mcp-server)
+├── .env                         # SQL Server passwords, INSTANCES config
+├── dab-config.json              # DAB entity config for ProductsDB
+├── start.sh / stop.sh / setup.sh
+├── sql-mcp-server/
+│   ├── src/
+│   │   ├── index.ts             # Streamable HTTP transport, MCP session management
+│   │   ├── tools.ts             # 34 tools (list_instances, fan_out_query, execute_query + 31 DBA tools)
+│   │   ├── connectionManager.ts # Multi-instance pool manager lazy, per-instance, self-healing
+│   │   └── safety.ts            # Read-only guard for execute_query / fan_out_query (SELECT / WITH / DECLARE; DML, EXEC, DDL blocked)
+│   ├── Dockerfile
+│   └── package.json
+├── demos/                       # walkthrough demo scripts
+│   ├── 1-demo.sh … 6-demo.sh   # architecture, wiring, blocking, perf, fan-out, AG
+│   └── de-1-demo.sh … de-4-demo.sh  # Data Exposed episode: full end-to-end walkthrough
+├── examples/                    # agent-generated health reports (baseline → workload → AG setup → heavy load)
+├── scripts/
+│   ├── ag/
+│   │   ├── init-sqlserver1.sql      # ProductsDB schema, sample data, dba_monitor + dab_app logins
+│   │   ├── init-sqlserver2.sql      # dba_monitor setup for secondary instance
+│   │   └── setup-ag.sh              # Automated Always On AG setup script
+│   └── dab/
+│       ├── generate-dab-config.sh   # DAB configuration generator
+│       └── setup-dab-cli.sh         # DAB CLI setup
+├── tests/
+│   ├── integration.sh           # endpoint integration tests
+│   ├── smoke.sh                 # T-SQL smoke tests against dba_monitor
+│   ├── tools.sh                 # MCP tool integration tests (via mcp-integration.mjs)
+│   └── mcp-integration.mjs      # raw MCP protocol test harness
+└── docs/
+    ├── QUICKSTART.md
+    ├── AG-SETUP.md                       # Always On AG setup notes and verification commands
+    └── HANDOFF-row-limit-truncation.md   # diagnosis record for the row-limit bugs fixed in v1.1.0
+```
+
+## SQL MCP Server Tools
+
+Here's the full list of 34 tools available in the `sql-dba` server. Call `list_instances` first if you haven't specified which server you want to target; otherwise the first registered instance is used. Every result-set tool reports `truncated` and `row_limit` alongside its rows.
+
+### Instance Management
+| Tool | Description |
+|---|---|
+| `list_instances` | List all registered SQL Server instances — call first when no instance is specified |
+| `fan_out_query` | Run the same read-only T-SQL on all (or a subset of) instances in parallel; results keyed by instance name |
+
+### General Query & Session Monitoring
+| Tool | Description |
+|---|---|
+| `execute_query` | Run any read-only T-SQL (SELECT / WITH / DECLARE) against a named instance |
+| `get_active_sessions` | Sessions + current SQL text via CROSS APPLY |
+| `get_blocking_chains` | Full blocking chain with blocker and blocked SQL |
+
+### Query Performance & Plan Analysis
+| Tool | Description |
+|---|---|
+| `get_top_queries` | Plan cache ranked by CPU, reads, elapsed, memory, or executions |
+| `get_query_store_regressions` | Queries with plan regressions (Query Store) — forced plans, perf degradation |
+| `get_plan_cache_pollution` | Single-use plans wasting memory + parameter sniffing candidates |
+
+### Wait Statistics & Contention
+| Tool | Description |
+|---|---|
+| `get_wait_stats` | Cumulative waits since restart (benign waits filtered by default) |
+| `get_latch_stats` | Latch waits by class (PAGEIOLATCH vs PAGELATCH) |
+| `get_long_running_transactions` | Open transactions > N seconds with log space + lock count |
+| `get_deadlock_history` | Recent deadlocks from system_health XE ring buffer |
+
+### I/O, CPU & Memory
+| Tool | Description |
+|---|---|
+| `get_file_io_stats` | Read/write latency per file + volume free space |
+| `get_cpu_history` | Ring buffer CPU history (~256 minutes) |
+| `get_memory_usage` | Memory clerks + system RAM + grant semaphore status |
+| `get_buffer_pool_by_object` | Which tables/indexes are cached in RAM |
+| `get_perfmon_counters` | Windows PerfMon counters (batch requests/sec, page life expectancy, etc.) |
+
+### TempDB & Storage
+| Tool | Description |
+|---|---|
+| `get_tempdb_usage` | TempDB space by file and by session |
+| `get_database_info` | All databases with size, recovery model, log reuse wait |
+| `get_database_files` | Detailed file info: size, growth settings, space used |
+| `get_vlf_count` | Virtual Log File count per database (high VLF = slow recovery) |
+
+### Index & Statistics Health
+| Tool | Description |
+|---|---|
+| `get_missing_indexes` | Optimizer recommendations with ready-to-use CREATE INDEX DDL |
+| `get_index_usage_stats` | Seeks/scans/updates per index — identifies unused indexes |
+| `get_index_fragmentation` | Fragmentation + page density per index (rebuild vs reorganize) |
+| `get_statistics_health` | Stale statistics — high rowmodctr since last update |
+| `get_columnstore_health` | Columnstore rowgroup states, delta store bloat |
+
+### Availability & Operational
+| Tool | Description |
+|---|---|
+| `get_server_info` | Version, edition, CPU/RAM, uptime, key sp_configure values |
+| `get_ag_health` | Always On AG replica sync state, send/redo queue |
+| `get_backup_status` | Last full/diff/log backup per database |
+| `get_job_status` | SQL Agent job status: last run, currently executing, failed jobs |
+
+### Security & Auditing
+| Tool | Description |
+|---|---|
+| `get_security_config_drift` | Security-relevant `sp_configure` settings compared against a hardening baseline (xp_cmdshell, Ole Automation, CLR, remote access, etc.) |
+| `get_sysadmin_members` | Members of privileged server roles (sysadmin, securityadmin, serveradmin) with login type and status |
+| `get_failed_logins` | Failed login attempts from the error log, aggregated by login name over a time window |
+| `get_orphaned_users` | Database users whose SID has no matching server login, per database |
+
+## DAB entities (ProductsDB)
+
+| Entity | Table | Operations |
+|---|---|---|
+| Products | dbo.Products | CRUD |
+| Categories | dbo.Categories | CRUD |
+| Orders | dbo.Orders | CRUD |
+| OrderDetails | dbo.OrderDetails | CRUD |
+
+## Wrapping Up
+
+Clone the repo, spin up the containers, and ask Copilot to pull a health snapshot of your SQL Server. The 30 DMV-backed tools give it enough visibility to diagnose blocking, identify expensive queries, spot missing indexes, and flag configuration concerns all from a single natural-language question. Get out in your lab and start testing.
+
+The code is at [github.com/nocentino/sql-mcp-server](https://github.com/nocentino/sql-mcp-server). Let me know how it works in your environment.
+
+## Notes
+
+- **`dba_monitor` permissions** — created with `VIEW SERVER STATE` only. No stored procedures or views on the monitored server. All T-SQL lives inside the MCP server's tool definitions.
+- **Adding a new instance** — add an entry to the `INSTANCES` array in `.env` and restart `sql-mcp-server`. No code changes needed.
+- **SA password** — set in `.env` (see `.env.example` for the required variables). Never committed to git — `.gitignore` covers it.
+- **Regenerating `dab-config.json`** — if you change the schema, run `./scripts/dab/generate-dab-config.sh`.
+
+## Acknowledgements
+
+Several DMV queries in `sql-mcp-server/src/tools.ts` are derived from the **[Brent Ozar First Responder Kit](https://github.com/BrentOzarULTD/SQL-Server-First-Responder-Kit)** specifically the ignorable wait type list in `get_wait_stats` and the blocker SQL lookup via `dm_exec_connections.most_recent_sql_handle` in `get_blocking_chains`. The First Responder Kit is released under the **MIT License**.

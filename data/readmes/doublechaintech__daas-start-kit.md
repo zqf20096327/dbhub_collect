@@ -1,0 +1,228 @@
+
+
+# DaaS Start Kit 是什么
+
+DaaS是一个面向**大型软件开发系统**和**私有部署**的开发工具，生成后，开发和调试都在本地进行，运行时**无任何DaaS平台依赖**。通过上传一个易于理解的XML文本文件，收获包含极易定制的前端React、后端Java、数据和完整文档的完整系统工作区（Workspace）。投以滴水，报以涌泉。DaaS Start Kit 是DaaS（Development as a Service）开源客户端，源代码在云端生成，本地进行定制开发，测试和部署的客户端工具。
+
+* 利用Github Actions，只需要浏览器，就可以体验DaaS魅力，请访问 https://github.com/doublechaintech/daas-with-github-actions 体验一下
+* gradle 升级到了7.2，新项目需要使用gradle7.2编译
+
+# DaaS新特性TeaQL，用于支持大型复杂关联应用
+
+以下代码来自实际项目
+
+```java
+
+    Task task =Q.task(orderId) // 根据订单找到一个任务
+                .selectAll() // 取所有字段, 但是不包含子列表
+                .selectDropOffTaskItemList( // 选择所有的卸车任务
+                    Q.dropOffTaskItem() // 定制卸车任务
+                        .selectProduct() // 选择产品
+                        .selectCustomOrder( // 卸车任务上面还关联了一个订单
+                            Q.customOrder() // 定制订单选择
+                                .selectAll() // 选择订单所有字段
+                                .selectCustomOrderItemList() // 选择订单下面的订单项
+                                .selectDeliveryOrderAssetList( // 选择订单子列表下面的相关资产列表
+                                    Q.deliveryOrderAsset() // 定制订单资产列表
+                                        .selectAsset( // 选择资产对象
+                                            Q.asset() // 定制资产选择
+                                                .selectAssetStatus() // 状态要加上，便于显示资产状态
+                                                .where( // 把不合法的资产过滤出去
+                                                    Asset.ASSET_STATUS_PROPERTY,
+                                                    QueryOperator.NOT_EQUAL,
+                                                    AssetStatus.INVALID))))).execute(ctx);
+```
+
+
+## 输入
+只是需要写如下简短易懂的xml文件
+
+his.xml
+```
+
+<?xml version='1.0' ?>
+<root org="doublechaintech" 
+	chinese_name="医生排班系统" 
+	english_name="Doctor Scheduling System">
+
+    <hospital   
+        name="上和医院|[1,200]"  
+        address="毕升路22号" 
+        telephone="028-9123123" />
+	
+</root>  
+```
+
+### 在线练习(实时反馈，即将推出更多功能）
+
+
+![Screen Shot](/images/playground.jpg)
+
+尝试输入 
+
+```
+<root org="doublechain"
+    chinese_name="Simple PIM v1.0"
+    english_name="Product Information Management"
+>
+    <platform
+        name="PIM"
+        founded="now()"
+        contact_number="992887654321"
+    />
+    <brand 
+        name="Candys|Sees"  
+        platform="platform()"/>
+    <product 
+        name="popcorn|chocklate" 
+        image="snack.jpg" 
+        brand="brand()"  
+        platform="platform()"/>
+    <sku 
+        name="sku" 
+        product="product()" 
+        brand="brand()" 
+        platform="platform()" 
+        create_time="createTime()"/>
+    <brand_type 
+        name="food|drink"
+        platform="platform()" 
+        _vg4platform="System Setting"
+        
+    />
+    <sku_type 
+        name="food|drink"
+        platform="platform()" 
+        _vg4platform="System Setting"
+
+    />
+    <user_type 
+        name="consumer|dealer"
+        platform="platform()" 
+        _vg4platform="System Setting"
+
+    />
+    
+</root>
+```
+可以体验
+* 菜单分组 _vg4platform="System Setting"
+* 自动图片生成
+* 实时界面更新
+* 更多功能，比如实时文档，统计，方案即将生成
+
+
+## 处理
+交给软件开发云服务
+## 输出
+* 前端React源代码
+* 后端Java代码
+* 类设计文档
+* 数据库设计文档
+* 测试数据
+* 用于登录的账号名和密码
+* 更多如区块链，物联网等持续推出
+
+应用系统的所有的代码都是源代码形式，可以查看，修改和控制每行代码！
+
+
+参考医院系统，https://github.com/doublechaintech/his-biz-suite
+
+## 特征
+
+跟牛刀、APICloud、iVX、搭搭云、氚云、简道云、云表、宜搭云相比，DaaS更适合：
+* 不仅限于内部使用的互联网应用
+* 需要掌控全部源代码专业软件开发团队
+* 模型变更很关键，使用git等版本控制变更，进行行级变更跟踪
+* 长期维护的项目，强制对模型进行英文命名，利于长期维护
+* 业务计算逻辑复杂，约束复杂，图形语言无法表达的业务领域，如电商，优惠计算，拍卖，交易系统
+* 遗留系统API集成，比如支付，专用金融系统，财务系统，生产制造，设备集成
+* 集成物联网，区块链等先进技术
+
+## 特性
+
+* 只需要数行非常容易理解的xml文件，通过DaaS云平台就可以生成前后端代码（请参考bank.xml,his.xml)
+* 支持变量拼写检查，如果不是英文单词，会给出警告
+* 支持变量数据库和开发语言关键字冲突检查，避免使用关键字，保持系统各个部分词汇一致
+* 前端基于React+Ant Design+ Ant Design Pro
+* 后端基于Java 8， Spring Boot，自有Rest框架（CAF），JDBC Template
+* 缓存支持Redis和内存，SMTP Email支持
+* 内置支持Elastic Search
+* 支持Kafka事件流服务, 默认未打开
+* 支持一个用户访问多个App
+* 支持权限配置
+* 支持定制代码和生成代码目录分离，无需反复合并
+* 已经支持区块链语义模型
+* 计划支持物联网语义模型
+* 支持数据行级权限控制（需结合双链科技IAM平台)
+
+例子请参考
+
+https://github.com/doublechaintech/retailscm-biz-suite
+
+# 快速体验
+## 获取本项目
+
+中国大陆
+```
+git clone https://gitee.com/doublechaintech/daas-start-kit.git
+```
+中国大陆以外
+```
+git clone https://github.com/doublechaintech/daas-start-kit.git
+```
+## 利用示例的模型文件示例生成所有代码
+
+系统支持windows，Mac和Linux
+
+
+Windows下
+```
+> cd daas-start-kit
+> .\gencode.bat .\bank.xml all
+```
+Linux&MacOS下
+```
+$ cd daas-start-kit
+$ ./gencode.sh bank.xml all
+```
+修复Linux的文件监控问题，如果不执行偶尔会导致 yarn start失败
+
+```
+$ bash fixlinuxfilewatchers.sh
+```
+
+
+生成的代码在bizui（React+Ant Design前端）, bizcore(Java后端）
+
+
+# 深入学习DaaS
+
+针对Daas start kit的使用，我们提供了以下三份使用手册。
+
+|           文档名称            | 文档所在位置                                | 在线文档位置                       |                    其他位置                     |
+| :---------------------------: | :------------------------------------------ | ---------------------------------- | :---------------------------------------------: |
+| DaaS Start Kit 环境配置与准备 | ./docs/Daas-Start-Kit快速配置与开发准备.pdf | https://kdocs.cn/l/st71C0iyb?f=130 |                                                 |
+|        DaaS 概要与建模        | ./docs/DaaS概要与建模.pdf                   | https://kdocs.cn/l/sKrbw3KAP       |                                                 |
+|       DaaS 二次开发指南       | ./docs/DaaS-服务端Java-二次开发开发指南.pdf | https://kdocs.cn/l/sUdwkkyZD?f=130 | https://juejin.im/post/5e5db8bb5188254953720684 |
+
+
+ 掘金文章：https://juejin.cn/user/1626932941952637/posts
+
+
+### DaaS Start Kit 环境配置与准备
+
+在daas start kit 环境配置与准备文档中，我们描述了如何快速使用 dass start kit 工具包生成代码。
+
+### DaaS 概要与建模
+
+在 daas 概要与建模文档中，我们详细的描述了如何编写daas start kit工具包能够处理的XML 文件以及使用XML文件建模的高级特性。
+
+### DaaS 二次开发指南
+
+在 daas 开发指南文档中，描述了如何使用daas start kit 开发Java部分的定制化代码。
+
+# 扫描二维码, 带上暗号 DaaS 获得种子用户优惠 ！
+<img height="400" src="https://user-images.githubusercontent.com/29606832/120753658-18d21f00-c53e-11eb-8ce5-0c5e19afe13e.png" />
+
+

@@ -1,0 +1,1392 @@
+# Instaclustr Esop
+
+image:https://img.shields.io/maven-central/v/com.instaclustr/esop-core.svg?label=Maven%20Central[link=https://central.sonatype.com/search?q=esop-core]
+image:https://img.shields.io/circleci/build/github/instaclustr/esop/master.svg["Instaclustr",link="https://app.circleci.com/pipelines/github/instaclustr/esop?branch=master"]
+
+_Swiss knife for Apache Cassandra backup and restore_
+
+image::Esop.png[Esop,width=50%]
+
+- Website: https://www.instaclustr.com/
+
+- Documentation: https://www.instaclustr.com/support/documentation/
+
+This repository is home of backup and restoration tools from Instaclustr for Cassandra called https://en.wikipedia.org/wiki/Aesop[Esop]
+
+Esop of version 2.0.0 is not compatible with any Esop of version 1.x.x.
+Esop 2.0.0 has changed the manifest format which is uploaded to a remote
+location hence, as of now, Esop 2.0.0 can not read manifests for versions 1.x.x.
+
+It is recommended all your Esop instances to 4.0.3 version before upgrading them to 4.1.0 version. Esop v4.1.0 depends on the
+AWS S3 Client Encryption v4.0.0 version which is not compatible with versions older than v3.6.0.
+
+Esop is able to perform these operations and has these features:
+
+* Backup and restore of SSTables
+* Backup and restore of commit logs
+* Restoration of data into a Cassandra schema or diffrent table schema
+* Backing-up to and restoring from S3 (Oracle and Ceph via Object Gateway  too), Azure, or GCP, or into any local destination or other storage
+providing they are easily implementable
+* listing of backups and their removal (from remote location, s3, azure, gcp), global removal of backups across all nodes in cluster
+* periodic removal of backups (e.g. after 10 days)
+* Effective upload and download—it will upload only SSTables which are not present remotely so
+any subsequent backups will upload and restores will download only the difference
+* When used in connection with https://github.com/instaclustr/icarus[Instaclustr Icarus] it is possible to backup **simultaneously** so there
+might be more concurrent backups which may overlap what they backup
+* Possible to restore whole node / cluster _from scratch_
+* In connection with Icarus, it is possible to **restore on a running cluster**  so no
+downtime is necessary
+* It takes care of details such as initial tokens, auto bootstrapping, and so on...
+* Ability to throttle the bandwidth used for backup
+* Point-in-time restoration of commit logs
+* verification of downloaded data - computes hases upon upload and download and it has to match otherwise restoration fails
+* it is possible to restore tables under different names so they do not clash with your current tables ideal when you want to investigate / check data before you restore the original tables, to see what data you will have once you restore it
+* retry of failed operations against s3 when uploading / downloading failure happens
+* support of multiple data directories for Cassandra node
+
+This tool is used as a command line utility and it is meant to be executed from a shell
+or from scripts. However, this tooling is also embedded seamlessly into Instaclustr Icarus.
+The advantage of using Icarus is that you may backup and restore your node (or whole cluster)
+remotely by calling a respective REST endpoint so Icarus can execute respective backup or
+restore _operation_. Icarus is designed to be run alongside a node and it talks to Cassandra via
+JMX (no need to expose JMX publicly).
+
+In addition, this tool has to be run in the very same context/environment as a Cassandra
+node—it needs to see the whole directory structure of a node (data dir etc.) as it will
+upload these files during a backup and download them on a restore. If you want to be able to
+restore and backup remotely, use Icarus which embeds this project.
+
+## Supporter Cassandra Versions
+
+Since we are talking to Cassandra via JMX, almost any Cassandra version is supported.
+We are testing this tool with Cassandra 5.x and 4.x.
+
+## Usage
+
+Released artifact is on https://search.maven.org/artifact/com.instaclustr/esop[Maven Central].
+You may want to build it on your own by standard Maven targets. After this project is built by `mvn clean install`
+(refer to <<build and tests>> for more details), the binary is in `target` and it is called `instaclustr-esop.jar`.
+This binary is all you need to backup/restore. It is the command line application, invoke it without any arguments to
+see help. You can invoke `help backup` for `backup` command, for example.
+
+----
+$ java -jar target/esop.jar
+Missing required subcommand.
+Usage: <main class> [-V] COMMAND
+  -V, --version   print version information and exit
+Commands:
+  backup             Take a snapshot of this nodes Cassandra data and upload it
+                       to remote storage. Defaults to a snapshot of all
+                       keyspaces and their column families, but may be
+                       restricted to specific keyspaces or a single
+                       column-family.
+  restore            Restore the Cassandra data on this node to a specified
+                       point-in-time.
+  commitlog-backup   Upload archived commit logs to remote storage.
+  commitlog-restore  Restores archived commit logs to node.
+----
+
+You get detailed help by invoking `help` subcommand like this:
+
+----
+$ java -jar target/esop.jar backup help
+----
+
+### Connecting to Cassandra Node
+
+As already mentioned, this tool expects to be invoked alongside a node - it needs
+to be able to read/write into Cassandra data directories. For other operations such as
+knowing tokens etc., it connects to respective node via JMX. By default, it will try to connect
+to `service:jmx:rmi:///jndi/rmi://127.0.0.1:7199/jmxrmi`. It is possible to override this
+and other related settings via the command line arguments. It is also possible to connect to
+such nodes securely if it is necessary, and this tool also supports specifying keystore, truststore,
+user name and password etc. For brevity, please consult the command line `help`.
+
+If you do not want to specify credentials on the command line, you can put them into a file and 
+reference it by `--jmx-credentials` options. The content of this file is treated as a standard Java property file, 
+expecting this content:
+
+----
+username=jmxusername
+password=jmxpassword
+keystorePassword=keystorepassword
+truststorePassword=truststorepassword
+----
+
+Not all sub-commands require the connection to Cassandra to exist. As of now, a JMX connection is
+necessary for:
+
+. backup of tables/keyspaces
+. restore of tables/keyspaces (hard linking and importing strategies)
+
+The next release of this tool might relax these requirements so it would be possible to
+backup and restore a node which is offline.
+
+For backup and restore of commit logs, it is not necessary to have a node up as well in case you need to restore a node
+_from scratch_ or if you use <<In-place restoration strategy>>.
+
+### Storage Location
+
+Data to backup and restore from, are located in a remote storage. This setting is controlled by flag
+`--storage-location`. The storage location flag has very specific structure which also indicates where data will be
+uploaded. Locations consist of a storage _protocol_ and path. Please keep in mind that the protocol we are using is not a
+_real_ protocol. It is merely a mnemonic. Use either `s3`, `gcp`, `azure` or `file`.
+
+The format is:
+
+`protocol://bucket/cluster/datacenter/node`
+
+* `protocol` is either `s3`,`azure`,'gcp`, or `file.
+* `bucket` is name of the bucket data will be uploaded to/downloaded from, for example `my-bucket`
+* `cluster` is name of the cluster, for example, `test-cluster`
+* `datacenter` is name of the datacenter a node belongs to, for example `datacenter1`
+* `node` is identified of a node. It might be e.g. `1`, or it might be equal to node id (uuid)
+
+The structure of a storage location is validated upon every request.
+
+If we want to backup to S3, it would look like:
+
+`s3://cassandra-backups/test-cluster/datacenter1/1`
+
+In S3, data for that node will be stored under key `test-cluster/datacenter1/1`. The same mechanism works for other clouds.
+
+For `file` protocol, use `file:///data/backups/test-cluster/dc1/node1`.
+In every case, `file` has to start with full path (`file:///`, three slashes).
+File location does not have a notion of a _bucket_, but we are using it here regardless—in the following examples, the _bucket_ will be _a_.
+
+It does not matter you put slash at the end of whole location, it will be removed.
+
+.file path resolution
+|===
+|storage location |path
+
+|file:///tmp/some/path/a/b/c/d
+|/tmp/some/path/a
+
+|file:///tmp/a/b/c/d
+|/tmp/a
+|===
+
+
+### Authentication Against a Cloud
+
+In order to be able to download from and upload to a remote bucket, this tool needs to pick up
+security credentials to do so. This varies across clouds. `file` protocol does not need any authentication.
+
+#### S3
+
+The resolution of credentials for S3 uses the same resolution mechanism as the official AWS S3 client uses.
+The most notable fact is that if no credentials are set explicitly, it will try to resolve them from environment
+properties of the node it runs on. If that node runs in AWS EC2, it will resolve them by help of that particular instance.
+
+S3 connectors will expect to find environment properties `AWS_ACCESS_KEY_ID` and `AWS_SECRET_KEY`.
+They will also accept `AWS_REGION`.
+
+It is possible to connect to S3 via proxy; please consult "--use-proxy" flag and "--proxy-*" family of settings on command line.
+
+#### Azure
+
+Azure module expects `AZURE_STORAGE_CONNECTION_STRING` or `AZURE_STORAGE_ACCOUNT` and `AZURE_STORAGE_KEY` environment variable to be set.
+Only one of the options are necessary. If both are set, it will fail.
+
+Esop relies on Azure Block Blobs to store backups in Azure Blob Storage and it caps maximum size of the block to 4 MB. If there is a need
+to store bigger file, use `azure.max.blob.block.size` system property. Units are bytes. Default: 4194304 which is 4 MB.  
+
+#### GCP
+
+GCP module expects `GOOGLE_APPLICATION_CREDENTIALS` environment property or `google.application.credentials` to be set with the path to service account credentials.
+
+### Directory Structure of a Remote Destination
+
+Cassandra data files as well as some meta-data needed for successful restoration are uploaded into a bucket
+of a supported cloud provider (e.g. S3, Azure, or GCP) or they are copied to a local directory.
+
+Let's say we are in a bucket called `my-cassandra-backups` in Azure, and we did a backup with storage location set to
+`azure://test-cluster/dc1/1e519de1-58bb-40c5-8fc7-3f0a5b0ae7ee`. Snapshot name we set via `--snapshot-tag` was `snapshot3` and
+schema version of that node was `f1159959-593d-33d1-9ade-712ea55b31ef`.
+The content of that hypothetical bucket with same data will look like this:
+
+```
+.
+├── topology
+│   └── snapshot3-f1159959-593d-33d1-9ade-712ea55b31ef-1600645759830.json (1)
+└── test-cluster
+    └── dc1
+        ├── 1e519de1-58bb-40c5-8fc7-3f0a5b0ae7ee (2)
+        │   ├── data
+        │   │   ├── system
+        │   │   |     // data for this keyspace
+        │   │   ├── system_auth
+        │   │   |     // data for this keyspace
+        │   │   ├── system_schema
+        │   │   |     // data for this keyspace
+        │   │   ├── test1
+        │   │   │   ├── testtable1-52d74870fb9911eaa75583ff20369112
+        │   │   │   │   ├── 1-2620247400 (3)
+        │   │   │   │   │   ├── na-1-big-CompressionInfo.db
+        │   │   │   │   │   ├── na-1-big-Data.db
+        │   │   │   │   │   ├── na-1-big-Digest.crc32
+        │   │   │   │   │   ├── na-1-big-Filter.db
+        │   │   │   │   │   ├── na-1-big-Index.db
+        │   │   │   │   │   ├── na-1-big-Statistics.db
+        │   │   │   │   │   ├── na-1-big-Summary.db
+        │   │   │   │   │   └── na-1-big-TOC.txt
+        │   │   │   │   ├── 1-4234234234
+        │   │   │   │   │   ├── // other SSTable
+        │   │   │   │   └── schema.cql (4)
+        │   │   │   ├── testtable2-545c13b0fb9911eaadb9b998490b71f5
+        │   │   │   │     // other table
+        │   │   │   └── testtable3-55e8a720fb9911eaa2026b6b285d5a8a
+        │   │   │         // other table
+        │   │   └── test2
+        │   └── manifests (5)
+        │       └── snapshot1-f1159959-593d-33d1-9ade-712ea55b31ef-1600645216879.json
+        ├── 55d39d99-a9e1-44da-941c-3a46efed66b3
+        │      // other node
+        ├── 59b5e477-df39-4126-acd4-726c937fe8fc
+        │      // other node
+        └── e8fd8bca-e6cb-4a1a-82db-192e2b4b77a5
+
+```
+
+. When this tool is used in connection with Instaclustr Cassandra Sidecar, it also creates a _topology_ file.
+. Data for each node are stored under that very node, here we used UUID identifier which is host ID as Cassandra sees it, and it is unique.
+Hence, it is impossible to accidentally store data for a different node as each node will have unique UUID. It may happen
+that over time we will have a cluster of same name and data center of same name but the node id would be still different
+so no clash would occur.
+. Each SSTable is stored in a directory
+. `schema.cql` contains a CQL "create" statement of that table as it looked upon a respective snapshot. It is there for diagnostic purposes so we might
+as well import data by other means than this tool as we would have to create that table in the first place before importing any data to it.
+. `manifests` directory holds JSON files which contain all files related to a snapshot as well other meta information. Its content will be discussed later.
+
+The directory where SSTable files are found, in our example for `test1.testtable1`, is `1-2620247400`. `1` means the
+generation, `2620247400` is crc checksum from `na-1-big-Digest.crc32`. Through this technique, every SSTable is
+totally unique and it ensures that they would not clash, even if they were named the same. This crc is
+inherently the part of the path where all files are, and a manifest file is pointing to them so we have
+a unique match.
+
+#### Manifest
+
+A manifest file is uploaded with all data. It contains all information necessary to restore that snapshot.
+
+Manifest name has this format: `snapshot3-f1159959-593d-33d1-9ade-712ea55b31ef-1600645759830.json`
+
+* `snapshot3`—name of snapshot used during a backup
+* `f1159959-593d-33d1-9ade-712ea55b31ef` schema version of Cassandra
+* `1600645759830` timestamp when that snapshot/backup was taken
+
+The content of a manifest file looks like this:
+
+```
+{
+  "snapshot" : {
+    "name" : "snapshot3",
+    "keyspaces" : {
+      "ks1" : {
+        "tables" : {
+          "ks1t1" : {
+            "sstables" : {
+              "md-2-big" : [ {
+                "objectKey" : "data/test2/test2-9939cd004ed711ecbe182d028df13d6f/2-79610399/md-2-big-CompressionInfo.db",
+                "type" : "FILE",
+                "size" : 43,
+                "hash" : "f8678a952d1fadf8d3368e078318dbc6cdf5eb7666631c77b288ead7d42ed572"
+              }, {
+                "objectKey" : "data/test2/test2-9939cd004ed711ecbe182d028df13d6f/2-79610399/md-2-big-Data.db",
+                "type" : "FILE",
+                "size" : 55,
+                "hash" : "004a1da4ef6681c11a5119cd0fe5c2cf73adabd52d76b0b2139ab09b6e1ce2ea"
+              }, {
+                "objectKey" : "data/test2/test2-9939cd004ed711ecbe182d028df13d6f/2-79610399/md-2-big-Digest.crc32",
+                "type" : "FILE",
+                "size" : 8,
+                "hash" : "5ff7e315ca70052e3b8f31753d3bdc4b8ddc966d3ca9991e519eed0f558dd6a4"
+              }],
+            "id" : "e17ff4b0e89211eab4313d37e7f4ac07",
+            "schemaContent" : "CREATE TABLE IF NOT EXISTS ks1.ks1t1 ..."
+          },
+          "ks1t2" : {
+             // other table
+          }
+        }
+      }
+      "ks2": {
+        // other keyspace
+      }
+    }
+  },
+  "tokens" : [ "-1025679257793152318", "-126823146888567559", .... ],
+  "schemaVersion" : "f1159959-593d-33d1-9ade-712ea55b31ef"
+}
+```
+
+A manifest maps all resources related to a snapshot, their size as well as type (`FILE` or `CQL_SCHEMA`). It
+holds all schema content in a respective file too, so we do not need to read/parse the schema file as it is
+already a part of the manifest.
+
+Upon restore, this file is read into its Java model and _enriched_ by setting a path where each _manifest entry_ should be
+physically located on disk as we need to remove part of the file where a hash is specified. It is also possible
+to filter this manifest in such a way that we might backup 5 tables, but we want to restore only 2 of them so the other
+three tables would not be downloaded at all.
+
+#### Topology File
+
+Topology file is uploaded during a backup as well. It is uploaded into a bucket's `topology` directory in root.
+A topology file is provided not only as a reference to see what the topology was upon backup, but it also helps Instaclustr Cassandra operator
+to resolve which node it should download data for.
+
+If we are restoring a cluster from scratch and all we have is its former hostname, we need to know what
+was the node's id (`nodeId` below) because that id signifies which directory its data is stored in. When Instaclustr
+Cassandra operator restores a cluster from scratch, it knows a name of a pod (its hostname) but it does not know the
+id to load data from. The storage location upon a restore looks like `s3://bucket/test-cluster/dc1/cassandra-test-cluster-dc1-west1-b-0`.
+Internally, based on a snapshot and schema, we resolve the correct topology file and we filter its content to see
+which node starts on that hostname so we use, in this case, `nodeId` 8619f3e2-756b-4cb1-9b5a-4f1c1aa49af6 upon restoration.
+Storage location flag is then updated to use this node, so it will look like `s3://bucket/test-cluster/dc1/8619f3e2-756b-4cb1-9b5a-4f1c1aa49af6`.
+
+```
+{
+  "timestamp" : 1600645216879,
+  "clusterName" : "test-cluster",
+  "schemaVersion" : "f1159959-593d-33d1-9ade-712ea55b31ef",
+  "topology" : [ {
+    "hostname" : "cassandra-test-cluster-dc1-west1-b-0",
+    "cluster" : "test-cluster",
+    "dc" : "dc1",
+    "rack" : "west1-b",
+    "nodeId" : "8619f3e2-756b-4cb1-9b5a-4f1c1aa49af6",
+    "ipAddress" : "10.244.2.82"
+  }, {
+    "hostname" : "cassandra-test-cluster-dc1-west1-a-0",
+    "cluster" : "test-cluster",
+    "dc" : "dc1",
+    "rack" : "west1-a",
+    "nodeId" : "b7952bdc-ccae-4443-9521-908820d067c1",
+    "ipAddress" : "10.244.1.194"
+  }, {
+    "hostname" : "cassandra-test-cluster-dc1-west1-c-0",
+    "cluster" : "test-cluster",
+    "dc" : "dc1",
+    "rack" : "west1-c",
+    "nodeId" : "1e519de1-58bb-40c5-8fc7-3f0a5b0ae7ee",
+    "ipAddress" : "10.244.2.83"
+  } ]
+}
+```
+
+A name of a topology file has this format `clusterName-snapshotName-schemaVersion-timestamp`. This uniquely
+identifies a topology in time.
+
+#### Resolving Manifest and Topology File From Backup Request
+
+Lets say we have done a backup against a node, multiple times, where some snapshot names were the same
+and schema version was the same too, for some cases we will have these manifests in a bucket:
+
+```
+├── snapshot3-f1159959-593d-33d1-9ade-712ea55b31ef-1600645759830.json
+└── test-cluster
+    └── dc1
+        └── 1e519de1-58bb-40c5-8fc7-3f0a5b0ae7ee
+            └── manifests (5)
+                ├─ snapshot1-f1159959-593d-33d1-9ade-712ea55b31ef-1600645216000.json
+                ├─ snapshot1-f1159959-593d-33d1-9ade-712ea55b31ef-1600645217000.json
+                ├─ snapshot1-b555c56d-a89f-4002-9f9c-0d4c78d3eca9-1600645217800.json
+                ├─ snapshot2-f1159959-593d-33d1-9ade-712ea55b31ef-1600645218000.json
+                ├─ snapshot3-f1159959-593d-33d1-9ade-712ea55b31ef-1600645219000.json
+                └─ snapshot4-f1159959-593d-33d1-9ade-712ea55b31ef-1600645220000.json
+```
+
+Which manifest will be resolved when we use `snapshot1` as `--snapshot-tag`?
+
+If there are multiple manifests starting with same snapshot tag and having same schema version,
+in this particular case, it will pick the one with timestamp `1600645217800` as the latest manifest wins.
+
+You may specify `--snapshot-tag` as `snapshot1-f1159959-593d-33d1-9ade-712ea55b31ef` or even full version with timestamp.
+The longest prefix wins and when there are multiple manifests resolved, the latest wins.
+
+In case we have the same snapshot but different schema, only the snapshot name and schema version will be enough, not the snapshot name alone.
+
+By this logic, we are preventing the situation where two operators (as a person) will do two backups with the same
+snapshots against a node on the same schema version—the only information which makes these two requests unique is the timestamp.
+However, we may use just the same snapshot name (for practical reasons not recommended) and all would work just fine.
+
+The same resolution logic holds for topology file resolution—the longest prefix wins and it has to be uniquely filtered.
+
+Upon backup, the schema version is determined by calling respective JMX method. The user does not have to provide it on his own.
+On the other hand, the second way how to resolve the problems above during restoration is to specify `--exactSchemaVersion` flag.
+When set, it will try to filter only manifests which were done on the same schema version as a current node runs on.
+The last option is to use `--schema-version` option (in connection with `--exact-schema-version`) with the schema version manually.
+
+#### Multiple Cassandra data directories
+
+It is possible to work with a Cassandra node which
+has data in multiple locations, not only in one,
+as `data_files_directories` in `cassandra.yaml` is an array.
+
+In order to point backup or restore procedures to multiple
+data directories, there is a flag called `--data-dir`.
+This flag can be set multiple times - each one pointing to
+different data directory, as it is set in `cassandra.yaml`.
+
+Upon backup, files of all SSTables across all directories
+are uploaded to a remote location. However, upon restore,
+they are not necessarily put into the same directories.
+
+For in-place restoration strategy, SSTables are dispersed
+among all data directories in a round-robin fashion.
+
+For hard-linking strategy, it is logically same as for in-place, SSTables
+are again dispersed among all data directories with any signifant order.
+
+For importing strategy, Esop does not control where SSTables will be put
+at all as this is delegated to imporing mechanism of Cassandra itself so
+the support of multiple data directories is there out of the box.
+
+#### Backup
+
+The anatomy of a backup is quite simple. The successful invocation of `backup` sub-command will
+do the following:
+
+. Checks if a remote bucket for whatever storage provider exists, and will optionally create it if it doesn't (consult command line for help on how to achieve that). If a bucket does not
+exist and we are not allowed to create it automatically—the backup will fail.
+. Takes tokens of a respective node via JMX. Tokens are necessary for cases when we want to
+restore into a completely empty node. If we downloaded all data but tokens would be autogenerated,
+the data that node is supposed to serve would not match tokens that node is using.
+. Takes a snapshot of respective _entities_—either keyspaces or tables. It is not possible
+to mix keyspaces and some tables, it is _either_ keyspace(s) _or_ tables. This is inherited from the
+fact that Cassandra JMX API is designed that way. `nodetool snapshot` also permits us to specify
+entities to backup either as `ks1,ks2,ks3` or `ks1.t1,ks1.t2,ks2.t3` and we copy this behaviour here.
+The name of snapshot is auto generated when not specified via command line.
+. Creates internal mapping of snapshot to files it should upload.
+. Uploads SSTables and helper files to remote storage—only files which are not uploaded. By doing this,
+we will not "over-upload" as an SSTable is an immutable construct, so there is no need to upload what is
+already there. The backup procedure will check if a remote file is not there and uploads only in
+case it is not. Backup is doing a "hash" of an SSTable and it is uploaded under such key
+so it is not possible that two SSTables would be overwritten even if they are named the same as their
+hashes do not necessarily match.
+. The actual downloading/uploading is done in parallel—the number of simultaneous uploadings/downloadings is controlled by `concurrent-connections` setting which defaults to 10. It is possible
+to throttle the bandwidth so we do not use all available bandwidth for backups/restores so the
+node which might still be in operation would suffer performance-wise.
+. Writes meta-files to a remote storage—manifest and topology file (when Sidecar is used).
+. Clears taken snapshot.
+
+As of now, a node to be backed-up has to be online because we need tokens, we need to take a snapshot, etc.
+and this is done via JMX. In theory we do not need a node to be online if we take a snapshot beforehand
+and tokens are somehow provided externally, however the current version of the tool does require it.
+
+#### Restore
+
+This tool is seamlessly integrated into https://github.com/instaclustr/icarus[Icarus]
+which is able to do backup and restore in a distributed manner—cluster wide. Please refer to documentation of Icarus
+to understand what restoration phases are and what restoration strategies one might use. The very same
+restoration flow might be executed from CLI, Icarus just accepts a JSON payload which is a different representation
+of the very same data structure as the one used from command like but the functionality is completely the same.
+
+CLI tool is not responsive to `globalRequest` flag in restoration/backup requests—only Sidecar can coordinate
+cluster-wide restoration and backup.
+
+A restoration is a relatively more complex procedure than a backup. We have provided three _strategies_.
+You may control which strategy is used via command line.
+
+In general, the restoration is about:
+
+. Downloading data from remote location
+. Making Cassandra use these files
+
+While the first step is quite straightforward, the second depends on various factors we guide a
+reader through.
+
+Restoration strategy is determined by flag `--restoration-strategy-type` which might be
+`IN_PLACE`, `IMPORT`, or `HARDLINKS`, case-insensitive.
+
+#### In-Place Restoration Strategy
+
+In-place strategy must be used only in case a Cassandra node is _down_— Cassandra process
+does not run. This strategy will download only SSTables (and related files) which are not present
+locally, and it will directly download them to their respective data directories of a node. Then it will
+remove SSTables (and related files) which should not be there. As a backup is done against a _snapshot_;
+restore is also done from a snapshot.
+
+Use this strategy if you want to:
+
+* restore from an older snapshot and your node does not run
+* restore from a snapshot and your node is completely empty—it was never run/its `data` dir is empty
+* restore a cluster/node by Cassandra Operator. This feature is already fully embedded into our
+operator offering so one can restore whole clusters very conveniently.
+
+In more detail, in-place strategy does the following:
+
+. Checks that a remote bucket to download data from exists and errors out if it does not
+. In case `--resolve-host-id-from-topology` flag is used, it will resolve a host to restore from topology file.
+. Downloads a manifest—manifest contains the list of files which are logically related to a snapshot.
+. Filters out the files which need to be downloaded, as some files which are present locally might be
+also a part of a taken snapshot so we would download them unnecessarily.
+. Downloads files directly into Cassandra `data` dir.
+. Deletes files from `data` dir which should not be there.
+. Cleans data in other directories—hints, saved caches, commit logs.
+. Updates `cassandra.yaml` if present with `auto_bootstrap: false` and `initial_token` with tokens from
+manifest.
+
+It is possible to restore not only user keyspaces and tables but system keyspaces too. This is necessary for
+the successful restoration of a cluster/node exactly as it was before as all system tables would be same.
+Normally, system keyspaces are not restored and one has to set this explicitly by `--restore-system-keyspace` flag.
+
+In-place strategy uses also `--restore-into-new-cluster` flag. If specified, it will restore only system
+keyspaces needed for successful restoring (`system_schema`) but it will not attempt to restore anything else.
+We do not always want to restore _everything_ because system keyspaces
+contain details like tokens, peers with ips, etc. and this information is very specific to each one so
+we do not restore them. However, if we did not restore `system_schema`, the newly started node would not see
+the restored data as there would not be any schema. By restoring `system_schema`, Cassandra will detect
+these keyspaces and tables on the very first start.
+
+In-place restoration might update `cassandra.yaml` file if found. This is done automatically
+upon restoration in Cassandra operator but it might be required to be done manually for other cases. By default,
+`cassandra.yaml` is not updated. The updating is enabled by setting `--update-cassandra-yaml` flag upon restore. It is
+expected that `cassandra.yaml` is located in a directory `\{cassandraConfigDirectory\}/` (by default `/etc/cassandra`).
+The Cassandra configuration directory with `cassandra.yaml` might be changed via `--config-directory` flag. There are two
+options which are automatically changed when `cassanra.yaml` if found, in connection with this strategy:
+
+* `auto_bootstrap` - if not found, it will be appended and set to `false`. If found and set to `true`, it
+will be replaced by `false`. If `auto_bootstrap: false` is already present, nothing happens.
+* `initial_token`—set only in case it is not present `cassandra.yaml`. Tokens are set in order to
+have the node we are restoring to on the same tokens as the node we took a snapshot from.
+
+#### Hard-Linking Strategy
+
+This strategy is supposed to be executed against a _running_ node. Hard-linking strategy downloads data
+from a bucket to a node's local directory and it will make hardlinks from these files to Cassandra data dir
+for that keyspace/table. After hardlinks are done, it will _refresh_ a respective table / keyspace
+via JMX so Cassandra will start to read from them. Afterwards, the original files are deleted.
+
+This strategy works for Cassandra version 3 as well as for Cassandra 4.
+
+#### Importing Strategy
+
+This strategy is similar to hardlinking strategy — the node upon restoration can still run and serve
+other requests so a restoration process is not disruptive. _Importing_ means that it will
+import downloaded SSTables via JMX directly so no hardlinks and refresh are necessary. Importing of
+SSTables by calling respecting JMX method was introduced in Cassandra 4 only, so this does not work
+against a node of version 3 or below. Keep in mind that imported SSTables are physically deleted
+from download directory and moved to live Cassandra data directory.
+
+#### Restoration Phases for Hardlinking and Importing Strategy
+
+Hardlinking and importing strategy consists of _phases_. Each phase is done _per node_.
+
+. Cluster health check—this phase ensures that we are restoring into a healthy cluster,
+if any of this check is violated the restore will not proceed. We check that:
+.. A node under the restoration is in `NORMAL` state
+.. Each node in a cluster is `UP—the failure detector (as seen from that node) does not detect any node as failed
+.. All nodes are not in _joining_, _leaving_, _moving_ state and all are reachable
+.. All nodes are on same schema version
+. Downloading phase—this phase will download all data necessary for the restore to happen.
+. Truncate phase—this phase will truncate all respective tables we want to restore.
+. Importing phase—for hardlinking strategy. It will do hardlinks from download directory to
+live Cassandra data dir; for importing strategy, it will call JMX method to import them.
+. Cleaning phase—this phase will cleanup a directory where Cassandra put truncated data; it will also
+delete the directory where downloaded SSTables are.
+
+In a situation where we are restoring into a cluster of multiple nodes, the truncate
+operation should be executed only once against a particular node, as Cassandra will internally
+distribute the truncating operation to all nodes in a cluster. In other words, it is enough to
+truncate at one node only as data from all other nodes will be truncated too.
+
+Downloading phase is proceeding all other phases because we want to be sure that we are truncating the data if
+and only if we have all data to restore from. If we truncated all data and download fails, we
+can not restore and the node does not contain any data to serve, rendering it useless (for that table)
+with some complicated procedure to recover the truncated data.
+
+If any phases fail, all other phases fail too. Hence if we fail to download data, from an operational
+point of view nothing happens, as nothing was truncated and data on a running cluster were not touched.
+If we fail to truncate, we are still good. Once we truncate and we have all data, it is
+straightforward to import/hard-link data. This is the least invasive operation with a high
+probability of success.
+
+It can be decided if we want to delete downloaded as well as truncated data after a restore is finished.
+If we plan to restore multiple times with the same data—for whatever reason— and to return back to the same snapshot,
+it is not desired to download all data all over again. We might just reuse them. This is controlled by flags
+`--restoration-no-download-data` and `--restoration-no-delete-downloads` respectively.
+
+#### Restoring Into Different Schemas
+
+When a cluster we made a backup for is on the same schema at the time we want to do a restore, all is fine.
+However, a database schema evolves over time, columns are added or removed and we still want to be able to restore.
+Let's look at this scenario:
+
+. create keyspace `ks1` with table `table1`
+. insert data
+. make backup
+. alter table, **add** a column
+. insert data
+. restore into snapshot made in the 3rd step
+
+Clearly, the schema we are on differs from the schema back then—there is a new column which is not present in uploaded SSTables.
+However, this will work, resulting in a column which is new to have all values for that column as `null`. This tool does not
+try to modify a schema itself. An operator would have to take care of this manually and such column would have to be dropped.
+
+The opposite situation works as well:
+
+. create keyspace `ks1` with table `table1`
+. insert data
+. make backup
+. alter table, **drop** a column
+. insert data
+. restore into snapshot made in the 3rd step
+
+If we want to restore, we have one column less from snapshot, data will be imported but that column will just not be there.
+
+As of now, the restore is only "forward-compatible" on a table level. If we dropped whole table and we want to restore it,
+this is not possible—the table has to be there already. You may recreate them by applying respective CQL create statements
+from the manifest before proceeding. The tool might try to create these tables beforehand as we have that CQL schema at hand, but
+currently it is not implemented.
+
+### Simultaneous Backups
+
+Backups are non-blocking. It means that multiple backups might be in progress. However, no file is uploaded
+in one particular moment more than once. Each backup request forms a _session_. A session contains _units_ to
+upload, referencing an entry in a manifest. If the second backup wants to upload the same file as the first one
+which is already uploading, it will just wait until the first backup is complete. The simultaneous restore is not finished yet.
+
+The power of simultaneous backups is fully understood in connection with Instaclustr Cassandra Sidecar as
+that is a server-like application running for a long period of time where an operator can submit backup requests which
+might happen at the same time (uploading of files is happening concurrently). CLI application does not profit from this feature.
+
+### Resolution of Entities to Backup/Restore
+
+The flag `--entities` commands which database tables/keyspaces should be backed- up or restored.
+
+|===
+|--entities |backup |restore
+
+|empty
+|all keyspaces and tables
+|all keyspaces and tables except `system*`
+
+|`ks1`
+|all tables in keyspace ks1
+|all tables in keyspace ks1, except system keyspace
+
+|`ks1.t1,ks2.t2`
+|tables `t1` in `ks1` and table `t2` in `ks2`
+|tables `t1` in `ks1` and table `t2` in `ks2`
+|===
+
+Moreover, if `--restore-system-keyspace` is set upon restore, it is possible to restore system
+keyspaces only in case `--restoration-strategy-type` is `IN_PLACE`. Logically, we can not restore system
+keyspaces on a running cluster in case we use hardlinking or importing strategy. System keyspaces are
+filtered out from entities automatically for these strategy types. However, if `IN_PLACE` strategy is used
+and flag `--restore-into-new-cluster` is specified, such strategy will pick only system keyspaces necessary for
+successful bootstrapping, as it restores `system_schema` only from all system schemas. `system_schema` needs to
+already contain the keyspaces and tables we are restoring. If we started a completely new node without restoring `system_schema`,
+it would not detect these imported keyspaces.
+
+Keep in mind that if system keyspace (`system_schema`) is not specified upon backup, it will not be uploaded;
+`--entities` need to enumerate all entities explicitly (or if it is empty, absolutely everything will be uploaded).
+
+### Backup and Restore of Commit Logs
+
+It is possible to backup and restore commit logs too. There is a dedicated sub-command for this task.
+Please refer to examples how to invoke it. The commit logs are simply uploaded to a remote storage
+under node keys of the users choosing as specified in storage location property. The respective command
+does not derive the storage path on its own out of the box as commit logs might be uploaded even
+if a node is offline. So there might be no means to retrieve its host id via JMX, for example, but this
+might be turned on on demand.
+
+The example of backup (for brevity, we are showing just the sub-command):
+
+----
+$ java -jar esop.jar commitlog-backup \
+  --storage-location=s3://myBucket/mycluster/dc1/node1 \
+  --commit-log-dir /var/lib/cassandra/data/commitlog
+----
+
+Note that in this example, there is not any need to specify `--jmx-service` because it is not needed. JMX is needed
+for taking snapshots, for example, but here we do not take any. Commitlog directory is specified by
+`--commit-log-dir`. It is possible to override this by specifying `--cl-archive` with the path to the commit logs
+instead of expecting them to be under `--commit-log-dir`. This plays nicely especially with
+the commit log archiving procedure of Cassandra. Let's say you have this in `commitlog_archiving.properties` file:
+
+----
+archive_command=/bin/ln %path /backup/%name
+----
+
+where `%path` is a fully qualified path of the segment to archive and `%name` is name of the commit log (these variables
+will be automatically expanded by Cassandra). Then you might archive your commit logs like this:
+
+----
+$ java -jar esop.jar commitlog-backup \
+  --storage-location=s3://myBucket/mycluster/dc1/node1 \
+  --cl-archive=/backup
+----
+
+The backup logic will iterate over all commit logs in `/backup` and it will try to refresh them in the remote
+store, if they are refreshed, it means they are already uploaded. If refreshing fails, that commit log is not
+there so it will be uploaded.
+
+You might as well script this in such a way that a commit log would be automatically uploaded as part of
+Cassandra archiving procedure, like this:
+
+----
+archive_command=/bin/bash /path/to/my/backup-script.sh %path %name
+----
+
+The content of `backup-script.sh` might look like:
+
+----
+$!/bin/bash
+
+java -jar esop.jar commitlog-backup \
+    --storage-location=s3://myBucket/mycluster/dc1/node1 \
+    --commit-log=$1
+----
+
+There is one improvement to do here, even if we do not know what the host id or dc or name of a cluster is,
+this can be found out dynamically as part of the backup by specifying `--online` flag (if a Cassandra node is online it just archived a commit log for us).
+
+----
+$!/bin/bash
+
+# specifying --online will update s3://myBucket/mycluster/dc1/node1 to
+# s3://myBucket/real-dc/real-dc-name/68fcbda0-442f-4ca4-86ec-ec46f2a00a71 where uuid is host id.
+
+java -jar esop.jar commitlog-backup \
+    --storage-location=s3://myBucket/mycluster/dc1/node1 \
+    --commit-log=$1 \
+    --online
+----
+
+### Examples of Command Line Invocation
+
+Each example shown here should be prepended with `java -jar esop.jar`. We are showing here
+just respective commands.
+
+This command will copy over all SSTables to the remote location. It is also possible to choose a location
+in a cloud. For backup, a node has to be up to back it up.
+
+----
+
+backup \
+--jmx-service 127.0.0.1:7199 \
+--storage-location=s3://myBucket/mycluster/dc1/node1 \
+--data-dir /my/installation/of/cassandra/data/data \
+--entities=ks1,ks2 \
+--snapshot-tag=mysnapshot
+----
+
+If you want to upload SSTables into AWS, GCP, or Azure, just change protocol to either `s3`,
+`gcp`, or `azure`. The first part of the path is the bucket you want to upload files to, for `s3`,
+it would be like `s3://bucket-for-my-cluster/cluster-name/dc-name/node-id`. If you want to use a different
+cloud, just change the protocol respectively.
+
+We also support https://docs.cloud.oracle.com/en-us/iaas/Content/Object/Tasks/s3compatibleapi.htm[Oracle cloud];
+use `oracle://` protocol for your backup and restores.
+
+We also support CEPH S3 Gateway, use `ceph://` protocol for your backup and restores.
+
+If a bucket does not exist, it will be created only when `--create-missing-bucket` is specified.
+The verification of a bucket might be skipped by flag `--skip-bucket-verification`.
+If the verification is not skipped (which is default) and we detect that a
+bucket does not exist, the operation fails if we do not specify `--create-missing-bucket` flag.
+
+### Example of in-place `restore`
+
+The restoration of a node is achieved by following parameters:
+
+----
+$ restore --data-dir /my/installation/of/cassandra/data/data \ \
+          --config-directory=/my/installation/of/restored-cassandra/conf \
+          --snapshot-tag=stefansnapshot" \
+          --storage-location=s3://bucket-name/cluster-name/dc-name/node-id \
+          --restore-system-keyspace \
+          --update-cassandra-yaml=true"
+----
+
+Notice a few things here:
+
+* there is implicity used `--restoration-strategy-type=IN_PLACE`
+* `--snapshot-tag` is specified. Normally, when snapshot name is not used upon backup, there
+is a snapshot taken of some generated name. You would have to check the name of a snapshot in
+a backup location to specify it yourself, so it is better to specify that beforehand and just
+reference it.
+* `--update-cassandra-yaml` is set to true, this will automatically set `initial_tokens` in `cassandra.yaml` for the
+restored node. If it is false, you will have to set it up yourself, copying the content of tokens file
+in backup directory, under `tokens` directory.
+* `--restore-system-keyspace` is specified, which means it will restore system keyspaces too, which is not
+normally done. This might be specified only for IN_PLACE strategy as that strategy requires a node to be down and
+we can manipulate system keyspaces only on such a node.
+
+### Example of Hardlinking and Importing Restoration
+
+Hardlinking as well as importing restoration consists of phases. These strategies expect a Cassandra node
+to be up and fully operational. The primary goal of these strategies is to restore on a _running node_,
+so the restoration procedure does not require a node to be offline which greatly increases the availablity of the whole
+cluster. Backup and restore will look like the following:
+
+----
+
+backup \
+--jmx-service 127.0.0.1:7199 \
+--storage-location=s3://myBucket/mycluster/dc1/node1 \
+--data-dir /my/installation/of/cassandra/data/data \
+--entities=ks1,ks2 \
+--snapshot-tag=mysnapshot
+----
+
+The first restoration phase is DOWNLOAD as we need to download remote SSTables:
+
+----
+restore \
+--data-dir /my/installation/of/cassandra/data/data \
+--snapshot-tag=my-snapshot \
+--storage-location=s3://myBucket/mycluster/dc1/node1 \
+--entities=ks1,ks2 \
+--restoration-strategy-type=hardlinks \
+--restoration-phase-type=download, /// IMPORTANT
+--import-source-dir=/where/to/put/downloaded/sstables
+----
+
+Then we need to truncate `ks1` and `ks2`:
+
+----
+restore,
+--data-dir /my/installation/of/cassandra/data/data \
+--snapshot-tag=my-snapshot \
+--storage-location=s3://myBucket/mycluster/dc1/node1 \
+--entities=ks1,ks2 \
+--restoration-strategy-type=hardlinks \
+--restoration-phase-type=truncate \ /// IMPORTANT
+--import-source-dir=/where/to/put/downloaded/sstables
+----
+
+Once we truncate keyspaces, we can make hardlinks from directory where we downloaded SSTables
+to the Cassandra data directory:
+
+----
+restore,
+--data-dir /my/installation/of/cassandra/data/data \
+--snapshot-tag=my-snapshot \
+--storage-location=s3://myBucket/mycluster/dc1/node1 \
+--entities=ks1,ks2 \
+--restoration-strategy-type=hardlinks \
+--restoration-phase-type=import \ /// IMPORTANT
+--import-source-dir=/where/to/put/downloaded/sstables
+----
+
+Lastly we can cleanup downloaded data as well as truncated as they are not needed anymore:
+
+----
+restore,
+--data-dir /my/installation/of/cassandra/data/data \
+--snapshot-tag=my-snapshot \
+--storage-location=s3://myBucket/mycluster/dc1/node1 \
+--entities=ks1,ks2 \
+--restoration-strategy-type=hardlinks \
+--restoration-phase-type=cleanup \ /// IMPORTANT
+--import-source-dir=/where/to/put/downloaded/sstables
+----
+
+If you check this closely you see that the only flag we have changed is `--restoration-phase-type`
+and that is correct. All commands will look exactly the same but they will just differ on `--restoration-phase-type`.
+
+If we wanted to do a restore via Cassandra JMX _importing_, our `--restoration-strategy-type` would be `import`.
+
+### Renaming of a table to restore to
+
+It is possible to restore to a different table you backed up. This feature is very handy for cases
+when you want to examine data before you actually restore them - you might put them temporarily
+to a different table to see if all is right etc. From Esop CLI, you drive this feature by flag called `--rename`.
+This flag might repeat as many times as many times you need to rename.
+
+This feature might be used only for hardlinks or importing strategy, not for in-place.
+
+A table has to exist before a restore action is taken. Esop does **not** create this table for you automatically
+and it is left for a user to ensure such table exists before proceeding.
+
+Let's say you have backed up a table called `tb1` in a keyspace called `ks1` but you want to restore
+it into table `tb2` in the same keyspace. Hence you need to specify `--rename=ks1.tb1=ks1.tb2`.
+
+`--rename` options is meant to be used along with `--entities`. It is a valid scenario to do this:
+
+These examples show invalid cases for the combination of `--entities` and `--renamed`
+
+----
+--entities="" --rename=whatever non empty  -> invalid
+--entities=ks1 --rename=whatever non empty -> invalid, you can not use only a keyspace in --entities
+--entities=ks1.tb1 --rename=ks1.tb2=ks1.tb2 -> invalid as "from" is not in entities
+--entities=ks1.tb1 --rename=ks1.tb2=ks1.tb1 -> invalid as "to" is in entities (and from is not in entities)
+--entities=ks1.tb1 --rename=ks1.tb1=ks1.tb2 -> truncate ks1.tb2 and process just ks1.tb2, k1.tb1 is not touched
+----
+
+Valid cases:
+
+----
+--entities=ks1.tb1 --rename=ks1.tb1=ks1.tb2
+--entities=ks1.tb1 --rename=ks1.tb1=ks2.tb1
+--entities=ks1.tb1,ks2.tb2,ks3.tb4 --rename=ks1.tb1=ks1.tb2,ks2.tb2=ks3.tb3
+----
+
+* entities in "to" have to be unique across all renaming pairs, "ks1.tb1=ks1.tb2,ks1.tb3=ks1.tb2" is invalid
+* please keep in mind that if you are doing cross-keyspace renaming, as of now you are completely on your
+own when it comes to e.g. replication factors etc, Esop currently does not check that replication factor
+and replication strategy in source and target keyspace match. This might be addressed in the future versions.
+
+From Icarus point of view, you need to add a map under "rename" field:
+
+----
+{
+    "rename": {
+        "ks1.tb1": "ks1.tb2",
+        "ks2.tb3": "ks2.tb4",
+        "ks3.tb5": "ks3.tb6"
+    }
+}
+----
+
+### Skipping refreshment of remote objects
+
+By default, Esop "refreshes" remote objects. Refreshment means that the last modification
+date of a remote object will be updated to the time the backup was done. This is done because
+we need to somehow detect if a remote file already exists or not. If it does, we do not upload it.
+If it does not exist, we upload it. However, if it does exist, we need to update the modification date
+because there might be, for example, a retention policy on remote objects in a bucket to be set for
+some period of time (for example, 14 days) and if a particular files not touched for 14 days, it would be removed.
+This way you might automatically implement the deletion of older backups because if there is a newer backup
+consisting of a set of SSTables, all SSTables which were previously a part of the older backup but they are not
+a part of the current backup would not be touched - hence no modification date would be refreshed - so they would expire.
+
+For cases there is a versioning enabled (currently known to be an issue for S3 backups only),
+our attempt to refresh it would create new, versioned, file. This is not desired. Hence, we
+have the possibility to skip refreshment, and we just detect if a file is there or not, but you would
+lose the ability to expire objects as described above.
+
+This behavior is controlled by flag called `--skip-refreshing` on backup command. By default, when
+not specified, it is evaluated to `false`, so skipping would not happen.
+
+Currently, this functionality is not working for s3 protocol.
+
+### Retry of upload / download operations
+
+Imagine there is a restore happening which is downloading 100 GB of data and your connectivity
+to the Internet is disrupted when it is almost done, on 80%. If you restart whole restoration
+process, you do not want to download all 80 GB again. Hence, we want that if a restore is stopped
+in the middle, it will not start from scratch next time we run it and it will download what is necessary.
+
+As a result of these errors, a file might be corrupted, it may be incomplete on the disk
+so its loading or hard linking into Cassandra would fail. To be sure that data are not corrupted,
+there is a hash (sha512) of that file made and it is uploaded as part of the manifest. Upon restore,
+if that file already exists locally, it computes the has and it compares it withe the one in the manifest
+and they have to match. If they do not match, such corrupted file is deleted and whole operation
+as such (download phase in case of import or hardlinks strategy) fails. On the next restore attempt,
+it will skip files which are in download directory already present and donwloads ony missing ones,
+computing their hashes etc ...
+
+On backup path, if a communication error happens, this is also detected and operation fails
+as such but some files might be already uploaded. On next upload, Esop checks if such file
+is already present remotely and it will skip it from uploading if it does.
+
+If upload of a file fails, Esop can _retry_. The mechanism how this happens is controlled by
+the family of "--retry-*" switches on the command line. In a nutshell, your retry might be
+exponential or linear. The exponential retry will execute the same operation (e.g. uploading of a file)
+every time exponentially it terms of the pause between retries. Linear retry has the retry period constant.
+
+### Explanation of Global Requests
+
+It looks like the phases are an unnecessary hassle to go through, but the granularity is required in case we are
+executing a so called _global request_. A global request is used in the context of Cassandra Sidecar and it does not
+have any usage during CLI executions.
+
+### Example of `commitlog-restore`
+
+The restoration of commit logs can be done like this:
+
+----
+$ commitlog-restore --commit-log-dir=/my/installation/of/restored-cassandra/data/commitlog \
+                    --config-directory=/my/installation/of/restored-cassandra/conf \
+                    --storage-location=s3://bucket-name/cluster-name/dc-name/node-id \
+                    --commitlog-download-dir=/dir/where/commitlogs/are/downloaded \
+                    --timestamp-end=unix_timestamp_of_last_transaction_to_replay
+----
+
+The commit log restorations are driven by Cassandra's `commitlog_archiving.properties` file. This
+tool will generate such files into the node's `conf` directory so it will be read upon node start.
+
+After a node is restored in this manner, one has to *delete* `commitlog_archiving.properties` file
+in order to prevent commitlog replay by accident again if a node is restarted.
+
+----
+restore_directories=/home/smiklosovic/dev/instaclustr-esop/target/commitlog_download_dir
+restore_point_in_time=2020\:01\:13 11\:32\:51
+restore_command=cp -f %from %to
+----
+
+## Listing of backups
+
+This feature is available for file, s3, azure and gcp backups.
+
+Listing of a bucket provides a better visibility into what backups there are, how many files they
+consist of and how much space they occupy as well as how much space we would reclaim by their deletion.
+
+----
+$ java -jar esop.jar list \
+    --storage-location=file:///backup1/cluster/datacenter1/node1 \
+    --human-units
+
+Timestamp               Name             Files Occupied space Reclaimable space
+2021-04-27T15:38:40.284 name-of-backup-1 154   113.1 kB       10.1 kB
+2021-04-27T15:38:20.259 name-of-backup-2 138   103.0 kB       0 B
+                                         154   113.1 kB
+----
+
+Listing of a backup will read all manifests there are for a respective node and it will compute the statistics above.
+It is important to understand that the figure representing the number of files for a specific backup does not
+represent the unique files. Since a backup can have SSTables present in more than one backup, the sum of
+files per backup does not need to match the global number of files. Above we see that backup1 has 154 files and backup2
+has 138 files but in total there is 154 files. This means that backup2 is logically consisting of SSTables which
+are all in backup1 and backup1 contains all SSTables in backup2 plus some new ones. Same holds for occupied space.
+
+The figure of reclaimable space represents the number of bytes (or any human-readable size) which would be freed
+by deleting that particular backup. For example, from the above we see that by deleting backup-2, we would get
+no free space. Why? Because all SSTables in backup-2 also belongs to backup-1. So we can not just physically remove it
+because backup-1 would just be corrupted.
+
+On the other hand, by deletion of backup-1, we would gain 10.1 kB. Why? Because we just can not go and delete all SSTables
+belonging to backup-1, because backup-2 would be corrupted - it would miss SSTables. We can safely delete only
+these files from backup-1 which are not in backup-2 - and that difference occupies just 10 kB.
+
+However, we see that in total, our data occupy 113 kB at disk even though the sum of occupied space of all backups
+does not match the total - because there are SSTables logically belonging to multiple backups.
+
+Please keep in mind that this table reflects the reality as long as you do not add nor delete any backup.
+
+If you want to use different storage location, for example, if your backups are in AWS, use "--storage-location=s3://...".
+The same logic applies for Azure and GCP (`azure://` and `gcp://` respectively).
+
+|===
+|flag |explanation
+
+|--resolve-nodes
+|Resolves cluster name, data center and host id of a node Esop is connected to, otherwise
+it will try skip connecting to that node and it will expect valid --storage-location property.
+
+|--simple-format
+|prints out just names of backups instead of all statistics
+
+|--json
+|prints out a json instead of a table
+
+|--human-units
+|prints human-friendly sizes, e.g 5 kB, 1 GB etc instead of just number of bytes
+
+|--to-file
+|path to file to redirect the output of the command to, file is created when it does not exist
+
+|--from-timestamp
+|expects unix timestamp (also present in backup's name at the end), once set, it will only process backups taken since then, including.
+
+|--last-n
+|expects a postive integer to process only last (the oldest) n backups.
+|===
+
+All `--json`, `--simple-format` and `--to-file` might be freely turned on / off on demand. By
+default, it will print a table in complex format to the standard output.
+
+`list` command is receptive to all family of `--jmx-*` settings in order to connect to a running
+Cassandra node if necessary.
+
+## Removal of a backup
+
+Since we are storing each SSTable only once, ever, a deletion of a backup is not so straightforward.
+
+Removal works for file, s3, gcp and azure protocol.
+
+We might delete only SSTable which is present only in one backup. If some particular SSTable
+is present in multiple backups, we might delete that backup _logically_, but we can not
+delete that SSTable. The underlying logic computes how may backups a particular file is present it
+by scanning all manifests there are and if we specify we want to delete so and so backup, it will
+physically remove only files which are part of that very backup and they are not present anywhere
+else.
+
+By doing this, we are not forced to remove only the last backup (for example looking at its timestamp)
+however we can, in general, remove any backup.
+
+The general workflow is to either list all backups and remove only the one you want, or you can
+specify `--oldest` to delete the oldest one and you can do this repeatedly. If you want to
+remove all backups older than some time, you might get this information from listing the backups by
+specifying `--from-timestamp` and then you can delete these backups one by one.
+
+----
+$ java -jar esop.jar remove-backup \
+    --storage-location=file:///backup1/cluster/datacenter1/node1 \
+    --backup-name=full-backup-name-from-listing-with-timestamp-etc
+----
+
+All flags:
+
+|===
+|flag |explanation
+
+|--backup-name
+|name of manifest file to delete a backup for (minus .json)
+
+|--oldest
+|removes oldest backup there is, backup names does not need to be specified then
+
+|--dry
+|it will not delete files for real, good for evaluation to see what it would do before shooting
+
+|--resolve-nodes
+|consult list command, same logic
+|===
+
+## Global removal of backups
+
+From the previous section, you know how to delete an individual backup. However, it would be
+nice to be able to delete, for example, all backups older than 14 days, globally. "Globally" means
+that it will scan whole local backup destination of all nodes (all dcs). You have the
+option to either do individual removal or global removal.
+
+For global removal of backups older than 14 days:
+
+[source,bash]
+----
+$ esop remove-backup \
+    --global-request \
+    --storage-location=file:///submit/backup/Test-Cluster/dc1/ab3f1d62-1a61-4f84-a2e2-97a626940d8d \
+    --older-than=14day
+----
+
+It is enough to specify one node, all other nodes will be resolved automatically.
+
+`--older-than` accepts a format like "number+unit", for example "1h", "1minute".
+
+
+If you want to run this in a daemon mode - meaning this operation would be run repeatedly, you need to
+execute it like this:
+
+[source,bash]
+----
+$ esop remove-backup \
+    --global-request \
+    --storage-location=file:///submit/backup/Test-Cluster/dc1/ab3f1d62-1a61-4f84-a2e2-97a626940d8d \
+    --older-than=5minute \
+    --rate=1minute
+----
+
+This means it will execute a backup removal every 1 minute and it will delete all backups older than 5 minutes.
+For more real scenarios you might specify `--older-than=14day` and `--rate=1day`. The time for the next
+execution will count down from the time this command was firstly executed.
+
+You have also possibility to specify datacenters to remove by `--dcs` flag (might be specified multiple times
+for each dc separately)
+
+## Client-side encryption with AWS KMS
+
+In order to perform the encryption of your SSTables, so they are stored in a remote AWS S3 bucket already encrypted,
+we leverage AWS KMS client-side encryption by https://github.com/aws/amazon-s3-encryption-client-java[this library].
+
+Historically, Esop was using AWS API of version 1, however the library which makes client-side encryption possible
+is using API of version 2. The version 1 and version 2 API can live in one project simultaneously. As AWS KMS encryption
+feature in Esop is rather new, we decided to code one additional S3 module which is using V2 API, and
+we left V1 API implementation untouched if users still prefer it for whatever reason. We might eventually switch to
+V2 API completely and drop the code using V1 API in the future.
+
+A user also needs to supply KMS key id to encrypt data with. The creation of KMS key is out of scope of this document
+however keep in mind that such a key has to be symmetric.
+
+The example of encrypted backup is shown below:
+
+----
+java -jar esop.jar backup \
+    --storage-location=s3://instaclustr-oss-esop-bucket
+    --data-dir /my/installation/of/cassandra/data/data \
+    --entities=ks1 \
+    --snapshot-tag=snapshot-1 \
+    --kmsKeyId=3bbebd10-7e5f-4fad-997a-89b51040df4c
+----
+
+Notice we also set `kmsKeyId` referencing name of KMS key in AWS to use for encryption.
+
+KMS key ID is also read from system property `AWS_KMS_KEY_ID` or environment property of the same name.
+Key ID from the command line has precedence over system property which has precedence over environment property.
+
+If `--storage-location` is not fully specified, Esop will try to connect to a running node via JMX, and it resolves
+what cluster and datacenter it belongs to and what node ID it has.
+
+The uploading logic of a particular SSTable file is as follows. First we need
+to refresh the object to update its last modification date, the logic which leads
+to it is this:
+
+* try to list tags of a remote object / key in a bucket
+** if such key is not found, we need to upload a file
+* if we are using encrypting backup (by having `--kmsKeyId` set), we prepare a tag
+which has `kmsKey` as a key and KMS key ID as a value
+* if tags of a remote key are not set or if they are not contain `kmsKey` tag,
+that means that the remote object exists, but it is not encrypted. Hence, we
+will need to upload it again, but encrypted this time
+* if we are not skipping the refresh, we will copy the file with `kmsKey` tag
+
+Upon the actual upload, we check if `kmsKeyId` is set from the command line (or system / env properties)
+and based on that we will use encrypting or non-encrypting S3 client. Encrypting S3
+client wraps non-encrypting client. If encrypting client is used, everything
+which it uploads will be encrypted on the client and sent to AWS S3 bucket
+already encrypted.
+
+By the nature of Esop's directory layout and uploading logic, we see that
+if there was a backup which was not encrypted, we may decide later on that
+we start to encrypt. Let's cover this logic in the following example:
+
+Let's have a backup consisting of 3 SSTables, S1, S2 and S3 respectively.
+
+----
+bucket:
+    S1
+    S2  - all tables are not encrypted
+    S3
+----
+
+Later, we inserted new data into SSTable S4 and S5, so we have S1 - S5 on disk. However, now we want to encrypt. We might end up having this in a bucket:
+
+----
+bucket:
+    S1
+    S2 - all tables are not encrypted
+    S3
+    S4 - encrypted
+    S5 - encrypted
+----
+
+If we did it like this, we would end up having a backup partly encrypted which is not desired. For
+this reason, if we see that there is an object in S3 bucket already, we need to read its _tags_
+to see what key it was encrypted with. If it was not encrypted (it is not tagged), we know
+that we need to upload it again, now encrypted. Hence, eventually, all SSTables of a new backup will be encrypted.
+
+If there is a backup which was not encrypted and some backup was, these two backups may have some
+SSTables common. Imagine this scenario:
+
+----
+bucket:
+    S1 not encrypted, backup 1
+    S2 not encrypted, backup 1
+    S3 not encrypted, backup 1
+----
+
+As we started to encrypt and we want to backup, now, imagine that S1 and S2 were compacted into S4 and there were additional S5 and S6 encrypted:
+
+----
+bucket:
+    S1 not encrypted, backup 1, compacted into S4
+    S2 not encrypted, backup 1, compacted into S4
+    S3 not encrypted, backup 1
+    S4 encrypted, backup 2 - compacted S1 and S2
+    S5 encrypted, backup 2
+    S6 encrypted, backup 2
+----
+
+We see that we are going to back up S3, S4 (compacted S1 and S2), S5 and S6. S3 is already uploaded,
+but it is not encrypted, so S3 will be re-uploaded and encrypted. S4, S5 and S6 are not present remotely yet so all of them will be encrypted and uploaded.
+
+After doing so, we see this in the bucket:
+
+----
+bucket:
+    S1 not encrypted, backup 1, compacted into S4
+    S2 not encrypted, backup 1, compacted into S4
+    S3 encrypted, backup 1 and backup 2     // S3 is encrypted from now on
+    S4 encrypted, backup 2 - compacted S1 and S2
+    S5 encrypted, backup 2
+    S6 encrypted, backup 2
+----
+
+Backup no.1 consists of SSTables S1, S2 (both non-encrypted) and S3 (encrypted). Backup no.2 consists of S3 - S6 all of which are encrypted.
+
+Now, if we remove backup 1, only S1 and S2 SSTables will be removed because S3 is part of
+the backup 2 as well. As we remove all non-encrypted backups, we will be left with backups which contain SSTables which are encrypted. Hence, we converted a bucket with non-encrypted backups to encrypted only.
+
+This logic introduces these questions:
+
+* What if I have already encrypted backup, and I want to use a different KMS key?
+* How would restore look like when my backup contains SSTables which are both encrypted and in plaintext? How it would look like when I want to restore but there are different keys used?
+
+To answer the first question is rather easy. If you want to use a different KMS key, that is the same
+situation as if we were going to upload but no key was used. If we detect that already uploaded
+object was encrypted with a different KMS key (by reading its tags) from a key we want to use now,
+we just need to re-upload such SSTable and encrypt it with a different KMS key.
+All other logic already explained is same.
+
+Restoration will read tags of a remote object to see what KMS key it was encrypted with. If remote
+object was stored as plaintext, no wrapping S3 encryption client is used. If KMS key
+used is same as we supplied on the command line, the already initialized S3 encrypting client is used.
+If a particular object was encrypted with a KMS key we do not have S3 encrypting client for yet,
+such client is dynamically created as part of the restoration process and it will be cached to be re-used
+for the decryption of any other object using same KMS key.
+The net result of this logic is that a backup may consist of SSTables encrypted with
+whatever KMS key and as long as such KMS key exists in AWS KMS and we
+can reference it, it will be decrypted just fine.
+
+We *do not* encrypt Esop's manifest files. This is purely practical. If we were encrypting a manifest as well,
+operators would need to decrypt downloaded manifest from a bucket on their own by some other tool. As manifest
+does not contain any sensitive information and it serves solely as a metadata file to see what a particular backup
+consists of, we chose to not encrypt it to make life for operators just easier. Manifest file is the only file
+which is not encrypted - all other files are.
+
+We also decided to not store kmsKeyId in a manifest. It is better if a particular object is tagged with its key id
+it was encrypted with rather than store it in a manifest. If we used different kmsKeys, manifests would start to
+be obsolete and restoration of such backup would not be possible as key was already changed. Tags will make
+restoration in this scenario possible.
+
+## Logging
+
+We are using logback. There is already `logback.xml` embedded in the built JAR. However, if you
+want to configure it, feel free to provide your own `logback.xml` and configure it like this:
+
+----
+java -Dlogback.configurationFile=my-custom-logback.xml \
+    -jar instaclustr-backup-restore.jar backup
+----
+
+You can find the original file in `src/main/resources/logback.xml`.
+
+## Build and Test
+
+There are end-to-end tests which can test all GCP, Azure, and S3 integrations.
+
+Here are the test groups/profiles:
+
+* azureTests
+* googleTest
+* s3Tests
+* cloudTest—runs tests which will be using cloud "buckets" for backup / restore
+
+There is no need to create buckets in a cloud beforehand as they will be created and deleted
+as part of a test automatically, per cloud provider.
+
+Cloud tests are executed like this:
+
+----
+$ mvn clean install -PcloudTests
+----
+
+By default, `mvn install` is invoked with `noCloudTests` which will skip all tests dealing with
+storage provides but `file://`.
+
+You have to specify these system properties to run these tests successfully:
+
+----
+-Dawsaccesskeyid={your aws access key id}
+-Dawssecretaccesskey={your aws secret access key}
+-Dgoogle.application.credentials={path to google application credentials file on local disk}
+-Dazurestorageaccount={your azure storage account}
+-Dazurestoragekey={your azure storage key}
+----
+
+In order to skip tests altogether, invoke the build like `mvn clean install -DskipTests`.
+
+User can use a Maven wrapper script so all Maven will be downloaded automatically. The build
+in that case is run as `./mvnw clean install`.
+
+If you want to build rpm or deb package, you need to enable `rpm` and/or `deb` Maven profile.
+
+## Further Information
+
+- Please see https://www.instaclustr.com/support/documentation/announcements/instaclustr-open-source-project-status/ for Instaclustr support status of this project
+- See Data Backup Documentation (https://www.instaclustr.com/support/documentation/cassandra/cassandra-cluster-operations/cluster-data-backups/)
+

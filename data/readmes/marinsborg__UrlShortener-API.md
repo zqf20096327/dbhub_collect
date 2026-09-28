@@ -1,0 +1,29 @@
+# UrlShortener-API
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/45cfeb44822d09972ef7/maintainability)](https://codeclimate.com/github/AnteMarin/UrlShortener-API/maintainability)
+
+This is an API for URL shortener service like tiny url. 
+
+Url shortener is a service that converts long URLs into short aliases to save space when sharing URLs in messages, twitter, presentations, etc.
+When a user opens a short URL, it will be automatically redirected to the original (long) URL.
+
+# How to use 
++ With Docker and docker-compose: 
+
+```sh
+$ git clone https://github.com/AnteMarin/UrlShortener-API.git
+$ cd UrlShortener-API 
+$ docker-compose up 
+```
+
+    - Open localhost:8080/swagger-ui.html to see endpoints. 
+
+- Without Docker: 
+```sh
+$ git clone https://github.com/AnteMarin/UrlShortener-API.git
+```
+    - Make sure you have access to local or any MySQL server.
+    - Open project in your favorite editor and change application.properties file to point to your MySQL database
+    - Build Spring project 
+    - Open localhost:8080/swagger-ui.html to see endpoints.
+

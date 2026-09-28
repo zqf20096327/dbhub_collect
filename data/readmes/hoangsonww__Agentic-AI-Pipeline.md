@@ -1,0 +1,1117 @@
+# Agentic Multi‑Stage Bot - A Research & Outreach Agent 🤖
+
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](#)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.112%2B-009688?logo=fastapi&logoColor=white)](#)
+[![Uvicorn](https://img.shields.io/badge/Uvicorn-ASGI%20Server-222222?logo=gunicorn&logoColor=white)](#)
+[![Pydantic](https://img.shields.io/badge/Pydantic-v2-0E7C86?logo=pydantic&logoColor=white)](#)
+[![LangGraph](https://img.shields.io/badge/LangGraph-Agent%20Orchestration-5E6AD2?logo=graphql&logoColor=white)](#)
+[![LangChain](https://img.shields.io/badge/LangChain-Tooling%2FRAG-1C3C3C?logo=chainlink&logoColor=white)](#)
+[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o-412991?logo=openai&logoColor=white)](#)
+[![Anthropic](https://img.shields.io/badge/Anthropic-Claude-18181B?logo=anthropic&logoColor=white)](#)
+[![Google Gemini](https://img.shields.io/badge/Google-Gemini-4285F4?logo=google&logoColor=white)](#)
+[![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector%20Store-282828?logo=databricks&logoColor=white)](#)
+[![SQLite](https://img.shields.io/badge/SQLite-Conversations-003B57?logo=sqlite&logoColor=white)](#)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-ORM-D71F00?logo=databricks&logoColor=white)](#)
+[![FAISS](https://img.shields.io/badge/FAISS-Vector%20Search-0467DF?logo=meta&logoColor=white)](#)
+[![DuckDuckGo](https://img.shields.io/badge/DuckDuckGo-Search-FB542B?logo=duckduckgo&logoColor=white)](#)
+[![SSE](https://img.shields.io/badge/SSE-Streaming-5C5C5C?logo=electron&logoColor=white)](#)
+[![httpx](https://img.shields.io/badge/httpx-HTTP%20Client-3776AB?logo=python&logoColor=white)](#)
+[![Trafilatura](https://img.shields.io/badge/Trafilatura-Web%20Extract-2E7D32?logo=python&logoColor=white)](#)
+[![Vue.js](https://img.shields.io/badge/Vue.js-3-4FC08D?logo=vue.js&logoColor=white)](#)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES2022-F7DF1E?logo=javascript&logoColor=black)](#)
+[![HTML5](https://img.shields.io/badge/HTML5-Markup-E34F26?logo=html5&logoColor=white)](#)
+[![CSS3](https://img.shields.io/badge/CSS3-Stylesheet-1572B6?logo=css3&logoColor=white)](#)
+[![Mermaid](https://img.shields.io/badge/Mermaid-Diagrams-FF3670?logo=mermaid&logoColor=white)](#)
+[![Docker](https://img.shields.io/badge/Docker-Multi--Stage-2496ED?logo=docker&logoColor=white)](#)
+[![Docker Compose](https://img.shields.io/badge/Docker%20Compose-Orchestration-2496ED?logo=docker&logoColor=white)](#)
+[![Kubernetes](https://img.shields.io/badge/Kubernetes-Deployments-326CE5?logo=kubernetes&logoColor=white)](#)
+[![Terraform](https://img.shields.io/badge/Terraform-IaC-7B42BC?logo=terraform&logoColor=white)](#)
+[![Ansible](https://img.shields.io/badge/Ansible-Config%20Mgmt-EE0000?logo=ansible&logoColor=white)](#)
+[![AWS](https://img.shields.io/badge/AWS-ECS%20Fargate-FF9900?logo=amazonaws&logoColor=white)](#)
+[![GCP](https://img.shields.io/badge/GCP-Cloud%20Run-4285F4?logo=googlecloud&logoColor=white)](#)
+[![Azure](https://img.shields.io/badge/Azure-Container%20Apps-0078D4?logo=microsoftazure&logoColor=white)](#)
+[![OCI](https://img.shields.io/badge/OCI-Container%20Instances-F80000?logo=oracle&logoColor=white)](#)
+[![ArgoCD](https://img.shields.io/badge/ArgoCD-GitOps-EF7B4D?logo=argo&logoColor=white)](#)
+[![Flux](https://img.shields.io/badge/Flux%20v2-GitOps-5468FF?logo=flux&logoColor=white)](#)
+[![Nomad](https://img.shields.io/badge/Nomad-Orchestration-00CA8E?logo=hashicorp&logoColor=white)](#)
+[![Vault](https://img.shields.io/badge/Vault-Secrets-FFEC6E?logo=vault&logoColor=black)](#)
+[![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-CI/CD-2088FF?logo=githubactions&logoColor=white)](#)
+[![Pytest](https://img.shields.io/badge/Pytest-Tests-0A9EDC?logo=pytest&logoColor=white)](#)
+[![Ruff](https://img.shields.io/badge/Ruff-Lint%20%2B%20Format-000000?logo=ruff&logoColor=white)](#)
+[![CodeQL](https://img.shields.io/badge/CodeQL-Security-1F2937?logo=github&logoColor=white)](#)
+[![Renovate](https://img.shields.io/badge/Renovate-Deps-1A1F6C?logo=renovatebot&logoColor=white)](#)
+[![Makefile](https://img.shields.io/badge/Makefile-Build-000000?logo=make&logoColor=white)](#)
+[![Just](https://img.shields.io/badge/Just-Runner-6E4C13?logo=rust&logoColor=white)](#)
+[![Shell](https://img.shields.io/badge/Shell-Scripts-4EAA25?logo=gnu-bash&logoColor=white)](#)
+[![pre-commit](https://img.shields.io/badge/pre--commit-Hooks-F7B93E?logo=precommit&logoColor=black)](#)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Client%20SDK-3178C6?logo=typescript&logoColor=white)](#)
+[![.NET](https://img.shields.io/badge/.NET%208-Client%20SDK-512BD4?logo=dotnet&logoColor=white)](#)
+[![Twitter](https://img.shields.io/badge/Twitter%2FX-API-000000?logo=x&logoColor=white)](#)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-API-0A66C2?logo=linkedin&logoColor=white)](#)
+[![Facebook](https://img.shields.io/badge/Facebook-API-1877F2?logo=facebook&logoColor=white)](#)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](#)
+[![Open Source](https://img.shields.io/badge/Open%20Source-Community-FF5722?logo=open-source-initiative&logoColor=white)](#)
+
+A **full‑fledged, multi‑stage, agentic chatbot** that **plans → discovers → reasons → uses tools → learns**.
+The reference task baked into this repo is a **Research & Outreach Agent** (“**DossierOutreachAgent**”): given a topic/company, it builds a **compact, cited briefing** and (optionally) **drafts an outreach email**, saving artifacts to disk.
+
+## Table of Contents
+
+* [Architecture Guide](ARCHITECTURE.md) — comprehensive system design with Mermaid diagrams
+* [Key Features](#key-features)
+* [7‑Layer Architecture](#7-layer-architecture)
+* [Agent Graph (LangGraph)](#agent-graph-langgraph)
+* [Repository Layout](#repository-layout)
+* [Bonus: Agentic RAG](#bonus-agentic-rag)
+* [Bonus: Agentic Coding Pipeline](#bonus-agentic-coding-pipeline)
+* [Advanced Deployments & DevOps](#advanced-deployments--devops)
+* [Quickstart](#quickstart)
+* [Configuration](#configuration)
+* [Running](#running)
+* [Web UI](#web-ui)
+* [CLI Utilities](#cli-utilities)
+* [HTTP API](#http-api)
+* [Client SDKs](#client-sdks)
+* [MCP Server](#mcp-server)
+* [Tools & Capabilities](#tools--capabilities)
+* [Memory & Feedback](#memory--feedback)
+* [MCP Server](#mcp-server)
+* [Extending the System](#extending-the-system)
+* [Testing & Quality](#testing--quality)
+* [RunLedger Deterministic CI Check](#runledger-deterministic-ci-check)
+* [GitHub Actions](#github-actions)
+* [Security & Ops](#security--ops)
+* [Troubleshooting](#troubleshooting)
+* [Bonus: Agentic Social Media Automation](#bonus-agentic-social-media-automation-)
+* [Roadmap Ideas](#roadmap-ideas)
+
+## Key Features
+
+* **Multi‑stage reasoning & planning** with **LangGraph** state machine (plan → decide → act → tools → reflect → finalize).
+* **Autonomous tool use & tool‑chaining** (web search, URL fetch, calculator, file write, email draft, KB - Knowledge Base - search/add).
+* **Two memory systems**:
+
+  * **SQLite** conversation store (turn history, feedback).
+  * **ChromaDB** vector KB for **RAG** and persistent knowledge.
+* **Web experience layer**: minimal **FastAPI** + **SSE** streaming UI (no framework lock‑in).
+* **CLI** for ingestion & demos.
+* **Rate limiting** (token bucket) per chat.
+* **Batteries‑included tests** (unit + smoke), lint, formatting, and ready Makefile targets.
+* **Opinionated architecture**: 7‑layer separation, single action per step, reflect‑first finalization.
+* **Extensible**: add new tools, nodes, or agent profiles without breaking the core.
+* **Docker-ready**: multi-stage Dockerfile, Docker Compose with app + MCP services, non-root user, health checks.
+* **Production ready**: designed for real-world use with security, observability, and extensibility in mind.
+* **Open Source**: Apache licensed, built with community contributions in mind.
+
+---
+
+## 7-Layer Architecture
+
+This system is designed with a **7-layer architecture** to separate concerns and allow for easy extension. Each layer has a specific role, and they communicate through well-defined interfaces. The core agent logic is implemented in LangGraph, which orchestrates the reasoning and tool use.
+
+> [!NOTE]
+> **Agent ≠ LLM.** This system implements a layered design that’s easy to extend and operate.
+
+```
+Experience (UI/API)
+   └─ FastAPI + SSE → web UI, CLI, REST
+Discovery
+   └─ WebSearch, WebFetch, KB search (RAG)
+Agent Composition
+   └─ Agent profile (persona, objective, capabilities)
+Reasoning & Planning
+   └─ LangGraph plan→decide→act→reflect→finalize
+Tool & API
+   └─ Calculator, FileWrite, Emailer, Web tools, KB add/search
+Memory & Feedback
+   └─ SQLite (turns, feedback), ChromaDB (vector KB)
+Infrastructure
+   └─ Logging, rate limiting, config, packaging
+```
+
+**Directory mapping**
+
+| Layer                | Where                                                    |
+| -------------------- | -------------------------------------------------------- |
+| Experience           | `src/agentic_ai/app.py`, `web/`                          |
+| Discovery            | `src/agentic_ai/tools/webtools.py`, `tools/knowledge.py` |
+| Agent Composition    | `src/agentic_ai/layers/composition.py`                   |
+| Reasoning & Planning | `src/agentic_ai/layers/reasoning.py`, `graph.py`         |
+| Tools & API          | `src/agentic_ai/tools/*`, `layers/tools.py`              |
+| Memory & Feedback    | `src/agentic_ai/memory/*`, `layers/memory.py`            |
+| Infrastructure       | `src/agentic_ai/infra/*`, `config.py`, `pyproject.toml`  |
+
+By separating these layers, we ensure that each component can evolve independently while maintaining a clear contract with the others. This modularity allows for easy testing, debugging, and extension of the system.
+
+<p align="center">
+    <img src="img/agentic-ai.jpg" alt="7-Layer Architecture" width="100%">
+</p>
+
+> Credit: Anil Inamdar for the original 7-layer architecture diagram and for the inspiration behind the agentic design principles.
+
+## Agent Graph (LangGraph)
+
+The agent runs a **typed state machine** driving the LLM and tools. It uses **LangGraph** to orchestrate the reasoning and tool use, with a focus on **single atomic actions** per step. This design ensures clarity in execution and allows for easy debugging and extensibility.
+
+<p align="center">
+    <img src="img/arch.png" alt="Agentic AI Graph" width="100%">
+</p>
+
+Dynamic Mermaid graph of the agent's architecture:
+
+```mermaid
+flowchart LR
+
+%% =========================
+%% EXPERIENCE LAYER
+%% =========================
+subgraph EXP[Experience Layer FastAPI SSE]
+direction LR
+IN[User prompt]
+RL{Rate limit check}
+STREAM[Token stream SSE]
+FB[Feedback API]
+IN --> RL
+STREAM --> FB
+end
+
+%% =========================
+%% MEMORY LAYER
+%% =========================
+subgraph MEM[Memory and Feedback]
+direction TB
+SQL[(SQLite messages)]
+VEC[(Chroma vector KB)]
+CIT[Citations store]
+end
+
+RL -->|ok| START
+RL -->|429| HALT[Backoff and retry]
+
+%% =========================
+%% REASONING AND PLANNING
+%% =========================
+subgraph GRAPH[Reasoning and Planning LangGraph]
+direction LR
+START((START))
+PLAN[PLAN create plan]
+DECIDE{DECIDE next action}
+ACT[ACT bind tool emit call]
+TOOLS((ToolNode executes call))
+REFLECT[REFLECT briefing or next]
+FINALIZE([FINALIZE result])
+
+START --> PLAN
+PLAN --> DECIDE
+
+DECIDE -->|search| ACT
+DECIDE -->|fetch| ACT
+DECIDE -->|kb_search| ACT
+DECIDE -->|calculate| ACT
+DECIDE -->|write_file| ACT
+DECIDE -->|draft_email| ACT
+DECIDE -->|finalize| FINALIZE
+DECIDE -->|otherwise| REFLECT
+
+ACT --> TOOLS
+TOOLS --> REFLECT
+
+REFLECT -->|done| FINALIZE
+REFLECT -->|not done| DECIDE
+
+PLAN -.-> STREAM
+DECIDE -.-> STREAM
+REFLECT -.-> STREAM
+FINALIZE -.-> STREAM
+end
+
+PLAN -. use kb hits .-> VEC
+
+%% =========================
+%% TOOL AND API LAYER
+%% =========================
+subgraph TOOLS_LAYER[Tool and API Layer]
+direction TB
+TSEARCH[web search]
+TFETCH[web fetch]
+TKBS[kb search]
+TKBADD[kb add]
+TCALC[calculator]
+TWRITE[file write]
+TEMAIL[emailer]
+end
+
+TOOLS -->|query| TSEARCH
+TOOLS -->|url| TFETCH
+TOOLS -->|semantic| TKBS
+TOOLS -->|ingest| TKBADD
+TOOLS -->|expr| TCALC
+TOOLS -->|path content| TWRITE
+TOOLS -->|to subject body| TEMAIL
+
+TKBS -->|results| PLAN
+TKBADD --> VEC
+TSEARCH --> TFETCH
+TFETCH -->|text| PLAN
+TFETCH --> CIT
+TWRITE -->|artifact path| PLAN
+TEMAIL -->|eml path| PLAN
+
+IN -->|save user| SQL
+FINALIZE -->|save assistant| SQL
+FB -->|save feedback| SQL
+```
+
+The graph consists of the following key nodes:
+
+* **PLAN**: creates a short action plan (3–6 steps), with **KB context** pre‑retrieval.
+* **DECIDE**: selects the next atomic action (token): `search`, `fetch`, `kb_search`, `calculate`, `write_file`, `draft_email`, or `finalize`.
+* **ACT**: binds LLM to tool schema and forces a **single precise tool call**.
+* **TOOLS**: concrete execution via LangGraph `ToolNode`.
+* **REFLECT**: either emits `BRIEFING: ...` (final) or `NEXT: <action>`.
+* **FINALIZE**: completes, persisting the result.
+
+This design ensures that each step is clear and focused, allowing for easy debugging and understanding of the agent's behavior. The use of LangGraph allows for powerful state management and tool orchestration, making it a robust solution for building agentic systems.
+
+## Repository Layout
+
+```
+Agentic-RAG-Pipeline/     # Agentic RAG pipeline (Gemini + FAISS)
+Agentic-Coding-Pipeline/  # Autonomous coding assistant (GPT + Claude + Gemini QA)
+mcp/                      # Model Context Protocol server
+  server.py               # FastAPI MCP dispatcher
+  tools/                  # Web search, KB, sandboxed file I/O
+  schemas.py              # Pydantic request models
+clients/
+  python/                 # Python async client SDK
+  ts/                     # TypeScript/Node client SDK
+  dotnet/                 # .NET 8 client SDK (C#)
+src/
+  agentic_ai/
+    app.py                # FastAPI app (Experience) + /health
+    graph.py              # LangGraph runner (lazy init)
+    cli.py                # CLI utilities (ingest/demo)
+    config.py             # Pydantic Settings (.env)
+    infra/
+      logging.py          # Rotating file + console logger
+      rate_limit.py       # Token-bucket rate limiter
+    memory/
+      sql_store.py        # SQLite conversation store
+      vector_store.py     # ChromaDB vector KB
+    layers/
+      composition.py      # Agent profile (DossierOutreachAgent)
+      reasoning.py        # Plan→Decide→Act→Reflect→Finalize graph
+      memory.py           # Memory orchestrator facade
+      tools.py            # Tool registry
+    tools/
+      webtools.py         # DuckDuckGo search + URL fetch & extract
+      ops.py              # Calculator, FileWrite, Emailer
+      knowledge.py        # KB add/search tools
+      social_media_tools.py  # Social media platform tools
+      content_generation.py  # AI content generation tools
+    llm/
+      clients.py          # Lightweight OpenAI/Claude/Gemini HTTP clients
+      client.py           # LangChain ChatModel factory
+    agents/
+      social_media_agent.py  # Social media automation agent
+    social_media_api.py   # /api/social/* router
+    social_media_scheduler.py  # Campaign scheduler
+web/
+  index.html styles.css app.js  # Main chat UI
+  social_media.html             # Social media dashboard
+Dockerfile                # Multi-stage production build
+compose.yaml              # Docker Compose (app + MCP)
+.env.example              # Environment template
+Makefile / Justfile       # Build targets
+tests/                    # Unit + integration tests (8 tests)
+data/
+  seed/                   # Knowledge base seed documents
+  agent_output/           # Generated artifacts
+  emails/                 # Email drafts
+```
+
+> [!IMPORTANT]
+> This layout separates concerns clearly, with `src/agentic_ai` containing the core logic, `web/` for the UI, and `data/` for input/output artifacts. The `tests/` directory holds unit and smoke tests to ensure code quality.
+
+## Bonus: Agentic RAG
+
+Looking for a **full agentic RAG pipeline** (multi-step plan → retrieve → reflect → verify → answer) with memory, tool use, and quality checks? Check out the companion project **Agentic-RAG-Pipeline** for a complete, production-grade implementation and deeper docs.
+
+> [!TIP]
+> See **[Agentic-RAG-Pipeline Directory](Agentic-RAG-Pipeline/README.md)** for more info and end-to-end code.
+
+```mermaid
+flowchart TD
+  U[User] --> IR[Intent Router - Flash]
+  IR --> PL[Planner - Pro]
+  PL --> RP[Retrieval Planner - Pro]
+  RP --> R1[VectorRetriever - FAISS]
+  RP --> R2[WebRetriever - Google CSE + Fetch]
+  R1 --> W[Writer - Pro]
+  R2 --> W
+  W --> C[Critic - Pro]
+  C -->|follow-ups| RP
+  W --> G[Guardrails]
+  G --> A[Answer + Evidence]
+  PL -. session .-> M[(File-backed Memory)]
+```
+
+## Bonus: Agentic Coding Pipeline
+
+Need an **autonomous coding assistant** that drafts patches, formats them, synthesizes tests, runs quality gates, and iterates until everything passes? The companion **Agentic Coding Pipeline** coordinates GPT + Claude coders, Ruff formatting, pytest execution, and Gemini QA review through the same shared MCP bus that powers the rest of this monorepo.
+
+> [!TIP]
+> See **[Agentic-Coding-Pipeline Directory](Agentic-Coding-Pipeline/README.md)** for setup, architecture, and customization notes.
+
+```mermaid
+flowchart TD
+  T[Developer Task] --> OR[AgenticCodingPipeline]
+  OR --> C1[GPT Coding Agent]
+  OR --> C2[Claude Coding Agent]
+  C1 --> OR
+  C2 --> OR
+  OR --> F[Ruff Formatter]
+  F --> OR
+  OR --> TS[Claude Test Author + Pytest Runner]
+  TS --> OR
+  OR --> QA[Gemini QA Reviewer]
+  QA -->|PASS?| OR
+  OR --> OUT[Ready-to-commit Patch]
+  OR -. feedback .-> C1
+  OR -. feedback .-> C2
+```
+
+* **Multi-LLM pair programming** keeps GPT and Claude coders in lockstep via a shared state dictionary.
+* **Tool-backed gates** ensure Ruff formatting, pytest verification, and Gemini QA review all pass before the pipeline returns success.
+* **Iterative retry logic** loops until a completed state is reached or the max iteration budget is exhausted, surfacing feedback for humans or follow-up agents.
+
+```bash
+cd Agentic-Coding-Pipeline
+python run.py "Add pagination support to the API client"
+```
+
+## Advanced Deployments & DevOps
+
+This repository includes **production-grade deployment strategies** and **DevOps automation** for zero-downtime deployments, progressive rollouts, and GitOps-driven continuous delivery.
+
+### Multi-Cloud & On-Prem Support
+
+| Provider | Service | IaC Module |
+|----------|---------|------------|
+| **AWS** | ECS Fargate + ALB + CodeDeploy | `hashicorp/terraform/modules/ecs_fargate/` |
+| **GCP** | Cloud Run + Artifact Registry | `hashicorp/terraform/modules/gcp_cloud_run/` |
+| **Azure** | Container Apps + ACR | `hashicorp/terraform/modules/azure_container_apps/` |
+| **OCI** | Container Instances + OCIR + LB | `hashicorp/terraform/modules/oci_container_instances/` |
+| **Kubernetes** | Any cluster (EKS/GKE/AKS/OKE) | `k8s/` manifests |
+| **On-Prem** | Nomad, Ansible, Docker Compose | `hashicorp/nomad/`, `ansible/`, `compose.yaml` |
+
+### Deployment Strategies
+
+* **Blue/Green Deployments**: Zero-downtime deployments with instant rollback (Kubernetes + AWS ECS)
+* **Canary Deployments**: Progressive traffic shifting with automated health checks and metrics analysis
+* **GitOps**: Declarative deployments with ArgoCD and Flux v2, including image automation
+* **Automated Monitoring**: Continuous health checks with auto-rollback on failures
+* **Infrastructure as Code**: Multi-provider Terraform (`terraform apply -var="cloud_provider=aws|gcp|azure|oci"`)
+
+### Quick Examples
+
+```bash
+# Blue/Green deployment (Kubernetes)
+./scripts/blue_green_deploy.sh green agentic-ai:v1.2.0
+
+# Canary deployment with Flagger
+kubectl apply -f k8s/canary/flagger-canary.yaml
+kubectl set image deployment/agentic-ai app=agentic-ai:v1.2.0
+
+# GitOps with ArgoCD
+kubectl apply -f gitops/argocd/application.yaml
+
+# Monitor deployment with auto-rollback
+ROLLBACK_ENABLED=true ./scripts/deployment_monitor.sh agentic-ai
+```
+
+### Documentation
+
+> [!TIP]
+> **For comprehensive deployment guides, see:**
+> - **[Architecture Guide](ARCHITECTURE.md)** - Full system design with 15+ Mermaid diagrams
+> - **[Advanced Deployments Guide](docs/ADVANCED_DEPLOYMENTS.md)** - Complete documentation for all deployment strategies
+> - **[Deployment Quick Start](docs/DEPLOYMENT_QUICKSTART.md)** - Quick reference and common commands
+> - **[Deployments Overview](DEPLOYMENTS_README.md)** - Summary of all deployment capabilities
+
+**Features:**
+- Kubernetes manifests for blue/green and canary deployments
+- Terraform modules for AWS ECS with blue/green (CodeDeploy) and canary (weighted routing)
+- Automated deployment scripts with health validation
+- GitOps configurations for ArgoCD and Flux
+- Monitoring and rollback automation
+- HPA and Flagger integration
+
+## Quickstart
+
+To quickly get started with the Agentic AI bot, follow these steps:
+
+```bash
+# 1) Setup (venv + deps + .env)
+make setup
+# Edit .env with your OPENAI_API_KEY (or ANTHROPIC_API_KEY)
+
+# 2) Ingest seed knowledge into vector store
+make ingest
+
+# 3) Run the server
+make run
+# Open http://localhost:8000 and ask:
+# "Build a competitive briefing on ACME Robotics and draft a short outreach email."
+
+# -- OR with Docker --
+docker compose up --build -d
+# Open http://localhost:8000
+```
+
+**CLI demo (streams to stdout)**
+
+```bash
+. .venv/bin/activate
+python -m agentic_ai.cli demo "Summarize top AMR vendors for grocery DCs with citations"
+```
+
+This will start the agent, which will plan, search, and reflect on the topic, providing a compact briefing with citations. You can also use the CLI to ingest additional documents into the vector knowledge base.
+
+## System Topology
+
+The full monorepo connects multiple services, pipelines, and client SDKs through a unified FastAPI gateway and a shared MCP control plane:
+
+```mermaid
+flowchart TB
+    subgraph Clients["Client SDKs"]
+        direction LR
+        PY["Python Client"]
+        TS["TypeScript Client"]
+        NET[".NET Client"]
+        WEB["Web UI (Vue.js)"]
+    end
+
+    subgraph Gateway["FastAPI Gateway :8000"]
+        direction TB
+        HEALTH["/health"]
+        CHAT["/api/chat (SSE)"]
+        INGEST["/api/ingest*"]
+        SOCIAL["/api/social/*"]
+        CODING["/api/coding/*"]
+        RAG["/api/rag/*"]
+        DATA["/api/data/*"]
+    end
+
+    subgraph Core["Core Agent (LangGraph)"]
+        direction LR
+        PLAN["Plan"] --> DECIDE["Decide"]
+        DECIDE --> ACT["Act"]
+        ACT --> TOOLS["ToolNode"]
+        TOOLS --> REFLECT["Reflect"]
+        REFLECT -->|loop| DECIDE
+        REFLECT -->|done| FINAL["Finalize"]
+    end
+
+    subgraph MCP["MCP Server :8001"]
+        direction TB
+        PIPE["/pipeline/*"]
+        LLM["/llm/*"]
+        SEARCH["/search, /browse"]
+        KB["/kb/add, /kb/search"]
+        FS["/fs/read, /fs/write"]
+    end
+
+    subgraph Pipelines["Sub-Pipelines"]
+        direction LR
+        ACP["Agentic Coding\n(GPT + Claude + Gemini QA)"]
+        ARP["Agentic RAG\n(Gemini + FAISS)"]
+    end
+
+    subgraph Storage["Persistence"]
+        direction LR
+        CHROMA[("ChromaDB\nVector KB")]
+        SQLITE[("SQLite\nConversations")]
+        FILES["data/agent_output/"]
+    end
+
+    subgraph Infra["Infrastructure"]
+        direction LR
+        DOCKER["Docker\nMulti-Stage"]
+        K8S["Kubernetes\nBlue/Green + Canary"]
+        GHACTIONS["GitHub Actions\nCI/CD"]
+        TERRAFORM["Terraform\nAWS ECS"]
+    end
+
+    Clients --> Gateway
+    CHAT --> Core
+    CODING --> ACP
+    RAG --> ARP
+    Gateway --> MCP
+    Core --> Storage
+    MCP --> Storage
+    ACP --> MCP
+    ARP --> MCP
+```
+
+## Docker
+
+The project ships with a **production-grade, multi-stage Dockerfile** and Docker Compose setup:
+
+```bash
+# Build and run with Docker Compose (app + MCP server)
+docker compose up --build -d
+
+# Verify health
+curl http://localhost:8000/health
+curl http://localhost:8001/status
+
+# View logs
+docker compose logs -f app
+
+# Tear down
+docker compose down -v
+```
+
+| Service | Port | Health Check | Purpose |
+|---------|------|-------------|---------|
+| `app` | 8000 | `/health` | Main FastAPI gateway + Web UI |
+| `mcp` | 8001 | `/status` | MCP control plane |
+
+Both services share persistent volumes for ChromaDB and SQLite. The development override (`compose.override.yaml`) mounts source code for hot-reload.
+
+## Configuration
+
+The app uses **Pydantic Settings** and `.env`.
+
+```env
+MODEL_PROVIDER=openai          # openai | anthropic
+OPENAI_API_KEY=sk-...          # required if MODEL_PROVIDER=openai
+OPENAI_MODEL_CHAT=gpt-4o-mini
+OPENAI_MODEL_EMBED=text-embedding-3-small
+
+ANTHROPIC_API_KEY=sk-ant-...   # required if MODEL_PROVIDER=anthropic
+ANTHROPIC_MODEL_CHAT=claude-3-5-sonnet-latest
+
+GOOGLE_API_KEY=                # optional, used by MCP server Gemini adapter
+
+CHROMA_DIR=.chroma
+SQLITE_PATH=.sqlite/agent.db
+
+APP_HOST=0.0.0.0
+APP_PORT=8000
+
+LOG_LEVEL=INFO                 # DEBUG | INFO | WARNING | ERROR
+LOG_DIR=.logs
+```
+
+> You can switch providers at runtime by changing `MODEL_PROVIDER` and the corresponding keys/models. Copy `.env.example` to `.env` to get started.
+
+## Running
+
+We recommend using a **virtual environment** to isolate dependencies. The provided Makefile simplifies setup and common tasks:
+
+**Makefile targets**
+
+| Target | Description |
+|--------|-------------|
+| `make setup` | Create venv, install deps, copy `.env.example` → `.env` |
+| `make run` | Launch FastAPI with hot-reload |
+| `make test` | Run pytest (8 tests) |
+| `make lint` | Check with ruff |
+| `make format` | Auto-fix imports + formatting |
+| `make ingest` | Seed `data/seed/` into vector KB |
+| `make demo` | Run CLI demo prompt |
+| `make health` | Curl the `/health` endpoint |
+| `make docker-build` | Build production Docker image |
+| `make compose-up` | `docker compose up --build -d` |
+
+**Run the server**
+
+```bash
+make run
+# or directly:
+PYTHONPATH=src uvicorn agentic_ai.app:app --reload --host 0.0.0.0 --port 8000
+```
+
+Open `http://localhost:8000` to interact with the agent via the web UI.
+
+## Web UI
+
+A zero-build, single-page chat UI is included for the Research & Outreach Agent.
+
+- Start the server (any of):
+
+```bash
+make run
+# or
+uvicorn src.agentic_ai.app:app --host 0.0.0.0 --port 8000
+```
+
+- Open `http://127.0.0.1:8000`.
+- Enter your prompt and click Send; responses stream live via SSE.
+
+Features
+- Live streaming chat (SSE parsing) with “New Chat” and “Clear”.
+- Knowledge Base ingest:
+  - Paste text → POST `/api/ingest`
+  - Ingest from URL → POST `/api/ingest_url`
+  - Upload files (.txt/.md/.pdf/.docx/.png/.jpg) → POST `/api/ingest_file`
+- Feedback buttons (👍/👎) posting to `/api/feedback`.
+- Copy last assistant message.
+- No build step required — Vue 3 + Marked via CDN.
+
+Implementation Files
+- `web/index.html`:1 — Vue SPA markup.
+- `web/app.js`:1 — Chat logic, SSE parsing, ingest + feedback helpers.
+- `web/styles.css`:1 — Dark, minimal theme.
+
+## CLI Utilities
+
+This repository also provides a CLI for quick interactions and ingestion of knowledge:
+
+```bash
+# Ingest any folder recursively (adds text up to 10k chars per file)
+python -m agentic_ai.cli ingest ./data/seed
+
+# Run a single prompt through the graph (streams responses)
+python -m agentic_ai.cli demo "Give me a briefing on collaborative robots with citations"
+```
+
+The CLI allows you to quickly test the agent's capabilities without needing to set up the web UI. It streams responses directly to the console, making it easy to see how the agent processes prompts and uses tools.
+
+## HTTP API
+
+A simple HTTP API is provided for programmatic access to the agent's capabilities. It supports both synchronous and streaming interactions:
+
+### `GET /health`
+
+Lightweight health probe for load balancers and orchestrators. Returns `{"status": "ok", "version": "0.4.0"}`.
+
+### `GET /api/new_chat`
+
+Returns a new `chat_id`.
+
+### `POST /api/chat` (SSE stream)
+
+**Request body**
+
+```json
+{ "chat_id": "uuid-string", "message": "Your prompt" }
+```
+
+**Stream events**
+
+* `event: token` – incremental text chunks
+* `event: done` – `{"chat_id": "..."}`
+
+### `POST /api/ingest`
+
+Add an internal KB document.
+
+```json
+{ "id": "doc-123", "text": "content...", "metadata": { "source": "..." } }
+```
+
+### `POST /api/ingest_url`
+
+Add content from a URL (fetch + extract)
+
+```json
+{ "url": "https://example.com/article", "id": null, "metadata": { "tags": ["acme", "market"] } }
+```
+
+### `POST /api/ingest_file`
+
+Upload a document to extract and index (.txt/.md/.pdf/.docx/.png/.jpg)
+
+Form fields: `file`, `id?`, `tags?`
+
+## Client SDKs
+
+Three SDKs live under `clients/` to integrate with this server and the sibling pipelines:
+
+- **TypeScript** (Node/Browser): `clients/ts`
+- **Python** (async): `clients/python`
+- **.NET 8** (C#): `clients/dotnet` — see [`clients/dotnet/README.md`](clients/dotnet/README.md) for full docs and Mermaid architecture diagrams
+
+TypeScript usage (Node 18+)
+
+```ts
+import { AgenticAIClient } from "./clients/ts/src/client";
+
+const client = new AgenticAIClient({ baseUrl: "http://127.0.0.1:8000" });
+
+// Root chat
+const { chat_id } = await client.newChat();
+await client.chatStream({ chat_id, message: "Brief ACME Robotics", onToken: t => process.stdout.write(t) });
+
+// Root ingestion
+await client.ingest("text to index", { tags: ["acme"] });
+await client.ingestUrl("https://example.com/article", { tags: ["market"] });
+// await client.ingestFile(fileBlob, { filename: "doc.pdf", tags: ["pdf"] });
+
+// Coding pipeline
+await client.codingStream({ repo: "/path/to/repo", github: "owner/repo#123", onEvent: ev => console.log(ev.event, ev.data) });
+const result = await client.codingRun({ task: "Implement caching" });
+
+// RAG pipeline
+const sess = await client.ragNewSession();
+await client.ragAskStream({ session_id: sess.session_id, question: "Summarize X", onEvent: ev => console.log(ev.event, ev.data) });
+await client.ragIngestText({ url: "https://example.com" });
+```
+
+Python usage
+
+```python
+import anyio
+from clients.python.agentic_ai_client import AgenticAIClient
+
+async def main():
+    async with AgenticAIClient("http://127.0.0.1:8000") as c:
+        # Root chat
+        meta = await c.new_chat()
+        await c.chat_stream("Brief ACME Robotics", chat_id=meta["chat_id"], on_token=lambda t: print(t, end=""))
+
+        # Root ingestion
+        await c.ingest("notes", {"tags":["kb"]})
+        await c.ingest_url("https://example.com/article", {"tags":["market"]})
+        # await c.ingest_file("/path/to/file.pdf", title="Whitepaper", tags=["pdf"])  # optional deps required
+
+        # Coding pipeline
+        await c.coding_stream(repo="/path/to/repo", task="Implement X", on_event=lambda ev, data: print(ev, data))
+        out = await c.coding_run(task="Refactor Y")
+
+        # RAG pipeline
+        sess = await c.rag_new_session()
+        await c.rag_ask_stream("Summarize Z", session_id=sess["session_id"], on_event=lambda ev, data: print(ev, data))
+        await c.rag_ingest_text(url="https://example.com")
+
+anyio.run(main)
+```
+
+Build scripts
+- Export OpenAPI: `python scripts/export_openapi.py` → `openapi.json`
+- Build TS SDK: `bash scripts/install_ts_client.sh`
+- Regenerate Python client from OpenAPI (optional): `bash scripts/gen_client.sh`
+
+### `POST /api/feedback`
+
+Attach a rating/comment to a chat/message.
+
+```json
+{ "chat_id": "uuid", "message_id": null, "rating": 1, "comment": "👍" }
+```
+
+This API allows you to integrate the agent into your applications, enabling programmatic access to its reasoning and tool capabilities. The SSE stream provides real-time updates, making it suitable for interactive applications. Feedback can be used to improve the agent's performance over time.
+
+## Tools & Capabilities
+
+The agent uses a set of **atomic tools** to perform actions. Each tool is designed for a specific purpose, and they can be chained together to achieve complex tasks. The tools are registered in the `tools.py` layer and can be invoked by the agent during reasoning.
+
+| Tool         | Name           | Purpose                                      | Input                     | Output                          |
+| ------------ | -------------- | -------------------------------------------- | ------------------------- | ------------------------------- |
+| `web_search` | WebSearch      | General discovery                            | NL query                  | JSON list of results            |
+| `web_fetch`  | WebFetch       | Extract readable text from URL               | URL                       | Clean text                      |
+| `kb_search`  | KbSearch       | Vector KB semantic search                    | NL query                  | JSON list of {id,text,metadata} |
+| `kb_add`     | KbAdd          | Add doc to KB                                | JSON `{id,text,metadata}` | `"ok"`                          |
+| `calculator` | Calculator     | Safe math via `math` module                  | Expression                | Result string                   |
+| `file_write` | FileWrite      | Persist artifacts under `data/agent_output/` | JSON `{path,content}`     | Absolute path                   |
+| `emailer`    | Emailer (mock) | Draft/queue email as `.eml`                  | JSON `{to,subject,body}`  | `.eml` path                     |
+
+**Tool‑chaining** is managed by the graph: `DECIDE` picks one atomic action per step, `ACT` binds tools and **forces one structured call**, `TOOLS` executes, `REFLECT` synthesizes or continues.
+
+This design ensures that each tool is used in a controlled manner, allowing for clear reasoning and traceability of actions. The agent can also reflect on its actions and decide whether to finalize or continue with further steps.
+
+## Memory & Feedback
+
+The agent has two memory systems to persist conversation history and knowledge:
+
+* **Conversation turns**: persisted in **SQLite** via `SQLStore` (`messages` table holds `role`, `content`, `tool_call`).
+* **Vector KB**: **ChromaDB** persistent collection; `kb_add` and `kb_search` power **RAG** and context for planning.
+* **Feedback**: optional `feedback` table (rating + comment), useful for reinforcement signals and post‑hoc analysis.
+
+**DB schema (simplified)**
+
+```sql
+CREATE TABLE IF NOT EXISTS chats (
+  id TEXT PRIMARY KEY,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  title TEXT
+);
+CREATE TABLE IF NOT EXISTS messages (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  chat_id TEXT,
+  role TEXT,
+  content TEXT,
+  tool_call TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS feedback (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  chat_id TEXT,
+  message_id INTEGER,
+  rating INTEGER,
+  comment TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+Feel free to extend the memory layer with additional tables or fields as needed. The agent can use this memory to maintain context across interactions, allowing for more coherent and informed responses. More details on the memory layer can be found in `src/agentic_ai/memory/`.
+
+## MCP Server
+
+A shared control plane that exposes common tools and pipeline dispatch over HTTP for all subsystems (Research/Outreach, RAG, Coding, Data).
+
+- Run locally:
+
+```bash
+uvicorn mcp.server:create_app --factory --reload
+# Explore: http://127.0.0.1:8000/pipelines
+```
+
+- Key endpoints:
+  - `/pipelines` – list registered names
+  - `/pipeline/coding/stream` – stream logs/results (SSE)
+  - `/pipeline/rag/ask` – stream answer/sources (SSE)
+  - `/llm/{provider}` and `/llm/summarize`
+  - `/search`, `/browse`, `/research`
+  - `/kb/add`, `/kb/search`
+  - `/fs/write`, `/fs/read` (sandboxed to `data/agent_output`)
+
+See `mcp/README.md` for diagrams, examples, and deployment options.
+
+## Extending the System
+
+To extend the system, you can add new tools, nodes, or modify the agent profile. Here are some guidelines:
+
+### Add a new Tool
+
+1. Create `src/agentic_ai/tools/<your_tool>.py` implementing a `BaseTool` with `_run`.
+2. Register it in `src/agentic_ai/layers/tools.py::registry()`.
+3. Teach the decision policy by adding the token to `DECIDE`’s prompt and mapping in `ACT`.
+
+### Add a new Node (LangGraph)
+
+* Add a function `(state) -> state`, `g.add_node("name", fn)`, and wire edges.
+* Prefer **small atomic** nodes; use `reflect` to decide if you have enough evidence to finalize.
+
+### Change the Agent Profile
+
+* Edit `layers/composition.py::PROFILE` (persona, objective, capabilities).
+* Provide role or safety constraints in `SYSTEM` prompt in `layers/reasoning.py`.
+
+### Use Another Vector DB / Embeddings
+
+* Replace `VectorStore` implementation and/or embedding function.
+* Adjust ingestion (`cli.py`) and KB tool wiring accordingly.
+
+The system is designed to be modular and extensible, allowing you to adapt it to your specific use cases. The LangGraph framework provides a powerful way to manage the agent's reasoning and tool use, making it easy to add new capabilities without disrupting existing functionality.
+
+> [!TIP]
+> Feel free to experiment with different tools, nodes, and configurations to tailor the agent to your needs. The modular design allows for easy testing and iteration, making it a flexible platform for building agentic systems!
+
+## Testing & Quality
+
+This repository includes a comprehensive suite of tests to ensure code quality and functionality. The tests cover unit tests for individual components, as well as smoke tests for end-to-end scenarios.
+
+**Run all tests**
+
+```bash
+make test        # or: PYTHONPATH=src pytest -q --tb=short
+```
+
+**What’s covered (8 tests)**
+
+* Memory round-trips (SQLite + ChromaDB vector store).
+* Tool smoke tests (calculator, file write, email draft, KB add/search).
+* MCP server endpoints (pipeline dispatch, web search, LLM proxy, KB, status).
+* Agentic Coding Pipeline orchestration.
+* All tests run **without real API keys** — network calls are mocked in CI.
+
+**Lint & Format**
+
+```bash
+make lint        # ruff check + format --check
+make format      # ruff auto-fix + format
+```
+
+<!-- runledger:note:start -->
+## RunLedger Deterministic CI Check
+
+This repo includes a small RunLedger suite under `evals/runledger` for deterministic CI checks of tool-using agents (record once, replay in CI).
+
+Run locally:
+
+```bash
+runledger run evals/runledger --mode replay --baseline baselines/runledger-demo.json
+```
+
+This replays recorded tool calls from a cassette (no live calls) and fails on mismatches, assertion failures, or budget regressions.
+
+To wire this to a real agent, update `agent_command` in `evals/runledger/suite.yaml` to point at your agent entrypoint (or a thin adapter) that speaks the RunLedger JSONL protocol.
+
+See `evals/runledger/INTEGRATION.md` for repo-specific wiring hints (detected from config files and example folders).
+<!-- runledger:note:end -->
+
+## GitHub Actions
+
+This repository uses GitHub Actions for continuous integration (CI) to ensure code quality and functionality. The CI pipeline includes:
+
+* **Linting**: checks code style and formatting using `ruff`.
+* **Testing**: runs unit tests and smoke tests to verify functionality.
+* **Type checking**: ensures type safety using `mypy`.
+* **Dependency management**: checks for outdated dependencies and security vulnerabilities.
+* **Documentation generation**: builds the documentation from the code comments and README.
+* **Code coverage**: reports code coverage to ensure sufficient test coverage.
+* **Release management**: automatically creates releases based on tags.
+* **Docker build**: builds a Docker image for the application.
+* **Security checks**: runs security scans on the codebase.
+* and many more!
+
+You can view the CI pipeline in the `.github/workflows/` directory. This should provide you with a solid foundation for maintaining code quality and ensuring that your changes do not break existing functionality, and feel free to extend the CI pipeline with additional checks or steps as needed.
+
+## Security & Ops
+
+We also incorporate **DevSecOps** best practices to ensure the system is secure and production-ready:
+
+* **Rate limiting**: simple token bucket (`infra/rate_limit.py`) to mitigate spam.
+* **Logging**: rotating file + console (`.logs/agentic-ai.log`).
+* **Secrets**: `.env` (never commit) via Pydantic Settings.
+* **Isolation**: venv recommended; for servers, run behind a reverse proxy (nginx/Caddy).
+* **Outbound tools**: `web_fetch` honors redirects and has timeouts; consider adding domain allowlists for production.
+
+> [!CAUTION]
+> For production, consider:
+>
+> * API auth (JWT/OAuth) and per‑tenant namespaces for vector DB.
+> * Audit logging of tool calls.
+> * Observability (OpenTelemetry) and tracing via LangSmith or vendor of choice.
+> * Dockerization and CI/CD (GitHub Actions) – the Makefile is a good start.
+> * Rate limits on LLM calls to prevent abuse.
+> * Bounded tool I/O: ensure tools have strict input/output limits to prevent abuse.
+> * Security headers: set appropriate HTTP security headers (CSP, CORS, etc.) in FastAPI.
+> * HTTPS: always run behind HTTPS in production (use nginx/Caddy).
+> * Environment isolation: use separate environments for development, staging, and production.
+> * Monitoring: set up monitoring for performance, errors, and usage patterns.
+> * Backup: regularly back up the SQLite database and ChromaDB vector store.
+> * Data retention: implement data retention policies for conversation history and feedback.
+> * Compliance: ensure compliance with data protection regulations (GDPR, CCPA, etc.) if handling personal data.
+> * Security reviews: conduct regular security reviews and vulnerability assessments.
+> * Dependency management: keep dependencies up to date and monitor for vulnerabilities (e.g., using `pip-audit`).
+> * Incident response: have an incident response plan in place for security breaches or data leaks.
+
+This repository is designed to be a solid foundation for building agentic systems, with security and operational best practices in mind. However, always review and adapt the security measures based on your specific deployment environment and requirements. However, in production, make sure your agent is running behind a reverse proxy (like nginx or Caddy) to handle HTTPS, rate limiting, and security headers, and comply with standards like GDPR or CCPA if handling personal data.
+
+## Troubleshooting
+
+If you encounter issues while running the agent, here are some common troubleshooting steps:
+
+* **Model errors**: ensure `.env` has the correct provider and API key.
+* **Vector store empty?** Run `make ingest` or POST `/api/ingest`.
+* **Unicode or huge files on ingest**: the CLI truncates to \~10k chars per file; tweak in `cli.py`.
+* **Streaming stalls**: check browser console and server logs; SSE requires no buffering proxies (disable proxy buffering or set `proxy_buffering off` in nginx).
+* **Tool misuse**: update DECIDE prompt and `ACT` mapping to strongly bias the correct tool.
+
+If you still have issues, feel free to open an issue on GitHub with details about your setup and the error messages you're encountering. The community is here to help!
+
+## Bonus: Agentic Social Media Automation 🌐
+
+A newly integrated **social media automation system** extends the Agentic AI Pipeline with full-featured, AI-powered content creation and campaign management across major platforms.
+
+**Highlights**
+
+* 🤖 **AI-powered content generation** (GPT-4, Claude)
+* 📅 **Smart scheduling** with optimal posting times
+* 📊 **Analytics and performance tracking**
+* 📢 **Multi-platform support** — Twitter/X, LinkedIn, Instagram, Facebook
+* 🧠 **Campaign orchestration** (multi-day, multi-platform)
+* 🧵 **Thread generation**, **hashtag recommendations**, and **content optimization**
+* 🗂️ **Persistent SQLite storage**
+* 🧭 **Beautiful web dashboard** + **comprehensive REST API**
+
+**Tech Integration**
+
+* New modules: `social_media_tools.py`, `content_generation.py`, `social_media_scheduler.py`, and `social_media_api.py`
+* Integrated directly with the existing **FastAPI app**
+* Web dashboard: `web/social_media.html`
+* API endpoints: `/api/social/*`
+* Config template: `.env.social_media.example`
+* Docs: `docs/SOCIAL_MEDIA_AUTOMATION.md`
+
+To get started:
+
+```bash
+# Copy example env
+cp .env.social_media.example .env
+
+# Run FastAPI app
+make run
+# Open dashboard:
+# http://localhost:8000/social
+```
+
+## Roadmap Ideas
+
+We still have a lot of ideas for future improvements and features. Here are some potential roadmap items:
+
+* **Multi‑agent composition**: add specialist agents (e.g., “Citer”, “Editor”) and coordinate via LangGraph subgraphs.
+* **Structured outputs**: Pydantic validation for deliverables (JSON schemas for dossiers/emails).
+* **Retrieval upgrades**: hybrid search (BM25 + embeddings), reranking, summary chunking.
+* **Learning loop**: periodic fine‑tuning signals from `feedback` table or prompt cache.
+* **Real email**: integrate SMTP or provider SDK behind a feature flag.
+* **Auth & tenancy**: API keys per user, KB namespaces per tenant.
+
+If you have ideas or contributions, feel free to open an issue or PR! We welcome community input to make this agentic system even better.
+
+## Credits
+
+This project leverages several powerful libraries and frameworks to provide a robust agentic system:
+
+* **LangGraph** for robust agent graphs.
+* **LangChain** for tool abstractions.
+* **FastAPI/Uvicorn** for a sweet, fast developer experience.
+* **ChromaDB/SQLite** for pragmatic persistence.
+* **DuckDuckGo Search** for frictionless discovery.
+* **OpenAI/Anthropic** for chat LLMs.
+* and many more!
+
+### What makes this opinionated?
+
+This system is designed with a few key principles in mind:
+
+* **Single‑action per step**: encourages deterministic tool traces and readable logs.
+* **Reflect‑first finalization**: no wall‑of‑text dumps; concise, cited briefings.
+* **7‑layer separation**: swap or extend layers without breaking others.
+* **Extensible tools**: add new tools or nodes without disrupting the core logic.
+* **Opinionated defaults**: preconfigured agent profile, tools, and memory systems to get you started quickly.
+* **Production ready**: designed for real‑world use with security, observability, and extensibility in mind.
+* **Open Source**: Apache licensed, built with community contributions in mind.
+* **Community driven**: we welcome contributions and ideas to improve the system.
+* **Batteries included**: unit tests, linting, formatting, and a Makefile to simplify common tasks.
+* **Minimal web UI**: no framework lock‑in, just FastAPI + SSE for streaming responses.
+* **CLI utilities**: for quick interactions and ingestion of knowledge.
+* **Rate limiting**: simple token bucket to prevent abuse.
+* **Security best practices**: logging, secrets management, and outbound tool safety.
+
+This opinionated design allows for a clear and consistent development experience, making it easier to build and maintain agentic systems. The modular architecture ensures that you can adapt the system to your specific needs while still benefiting from the core features and best practices.
+
+## License
+
+This project is licensed under the [Apache License](LICENSE). You are free to use, modify, and distribute this code as long as you include the original license and copyright notice.
+
+> [!NOTE]
+> Regardless of use, make sure you credit the original authors and contributors when using this code in your projects. Contributions are welcome, and we encourage you to share your improvements or extensions to the system.
+
+## Conclusion
+
+This repository provides a solid foundation for building agentic systems with multi‑stage reasoning, autonomous tool use, and a focus on security and extensibility. The modular architecture allows for easy extension and customization, making it suitable for a wide range of applications.
+
+We hope this project serves as a useful resource for your agentic AI projects. Whether you're building research agents, outreach bots, or any other type of agentic system, the principles and patterns demonstrated here can help you get started quickly and effectively.
+
+If you have any questions, suggestions, or contributions, please feel free to open an issue or pull request on GitHub. We welcome community input and are excited to see how you use this system in your own projects!
+
+---
+
+**Happy building!** We hope this repository serves as a useful resource for your agentic AI projects. If you have any questions or suggestions, feel free to reach out or contribute.
+

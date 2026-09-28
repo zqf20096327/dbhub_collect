@@ -1,0 +1,100 @@
+* what & why?
+- [[https://svelte.dev/][svelte]] is the hot new FE dev stuff. do [[https://svelte.dev/tutorial/basics][the tutorial]] to get hooked. [[https://kit.svelte.dev/][SvelteKit]] - its equivalent of SSR
+  framework, not unlike next.js
+- [[http://postgrest.org/][postgrest]] is a really nice backend to quickly prototype apps by
+  definining data & permissions, without having to write backend.
+- [[https://every-layout.dev/][every layout]] is a fresh approach to plain css, with reusable components that make sense. borrowed from [[https://github.com/SilvanCodes/svelte-layout-components][SilvanCodes/svelte-layout-components]].
+- some social login love thrown in for good measure, uses [[https://github.com/beyonk-adventures/svelte-social-auth][beyonk-adventures/svelte-social-auth]]
+- tmux is used to run multiple processes and an editor, because nothing beats tmux and emacs (use [[http://web-mode.org/][web-mode]] to edit svelte!)
+* prequisites for dev env
+1. [[https://github.com/PostgREST/postgrest/releases/latest][postgrest]] - install according to [[http://postgrest.org/en/v6.0/tutorials/tut0.html][instructions]].
+   1. [[https://github.com/michelp/pgjwt][pgjwt]] - postgresql jwt extension for postgrest auth
+2. [[https://github.com/nvm-sh/nvm][nvm]] - to easily swap node/npm versions. tested with node v13.11.0.
+* cloning
+#+BEGIN_SRC bash
+npx degit https://github.com/guyromm/svelte-postgrest-template svelte-postgrest-app
+#+END_SRC
+* package.json dependencies
+#+BEGIN_SRC bash
+nvm use ; ./npm-init.sh
+#+END_SRC
+
+* .env
+  use envs/local.tpl to create an envs/local .env shell file, and then
+  expand/eval it using ./setenv.sh
+#+BEGIN_SRC bash
+    function freeport() {
+	FROM=$1
+	TO=$2
+	HOWMANY=$3
+	comm -23 \
+	     <(seq "$FROM" "$TO" | sort) \
+	     <(ss -Htan | awk '{print $4}' | cut -d':' -f2 | sort -u) \
+	    | shuf | head -n "$HOWMANY"
+    }
+  export APPNAME=$(basename $(pwd))
+  export DBNAME=$APPNAME
+  export APPPORT=$(freeport 3000 4000 1)
+  export POSTGRESTPORT=$[APPPORT+1]
+  export SERVERPORT=$[APPPORT+2]
+  export JWTSECRET=$(head /dev/urandom | tr -dc A-F0-9 | head -c 64 ; echo '')
+
+  cp envs/local.tpl envs/local
+  sed -i -E "s/APPPORTREPLACE/$APPPORT/g" envs/local
+  sed -i -E "s/SERVERPORTREPLACE/$SERVERPORT/g" envs/local
+  sed -i -E "s/POSTGRESTPORTREPLACE/$POSTGRESTPORT/g" envs/local
+  sed -i -E "s/DBNAMEREPLACE/$DBNAME/g" envs/local
+  sed -i -E "s/JWTSECRETREPLACE/$JWTSECRET/g" envs/local
+  ./setenv.sh local
+#+END_SRC
+
+* deploying on aws
+** create a separate env
+#+BEGIN_SRC bash
+test -f envs/aws || cp envs/local envs/aws
+sed -i -E "s/^RDS=''$/RDS=1/g" envs/aws
+echo POSTGREST_PATH_AS_ARG=1 >> envs/aws
+echo 'VITE_POSTGREST_PATH_AS_ARG=$POSTGREST_PATH_AS_ARG' >> envs/aws
+RDS_PASSWORD=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 16 ; echo '')
+aws rds describe-db-subnet-groups | tee /tmp/sng.json
+egrep '^RDS_VPC_GROUP=(.+)$' envs/aws || echo 'RDS_VPC_GROUP='$(aws rds describe-db-subnet-groups | jq '.DBSubnetGroups[]|select(.DBSubnetGroupName | startswith("default-vpc-")).DBSubnetGroupName' -r) >> envs/aws
+egrep '^RDS_PASSWORD=(.+)$' envs/aws || echo "RDS_PASSWORD=$RDS_PASSWORD" >> envs/aws
+./setenv.sh aws
+lambda/postgrest-download.sh
+#+END_SRC
+
+** create the rds
+#+BEGIN_SRC bash
+egrep '^RDS_HOSTNAME=(.+)$' envs/aws || (./lambda/rds-create.sh | egrep '^RDS_HOSTNAME=' | tee -a envs/aws
+echo 'DBURIADMIN="postgres://postgres:$RDS_PASSWORD@$RDS_HOSTNAME/template1"' | tee -a envs/aws
+echo 'DBURI="postgres://postgres:$RDS_PASSWORD@$RDS_HOSTNAME/"' | tee -a envs/aws
+)
+./setenv.sh aws
+#+END_SRC
+** create & deploy the lambda func
+#+BEGIN_SRC bash
+source .env
+egrep '^LAMBDA_ROLE=(.+)$' envs/aws || (
+aws iam create-role --role-name $APPNAME --assume-role-policy-document file://lambda/trust-policy.tpl.json | tee envs/$ENV.role.json
+aws iam attach-role-policy --role-name $APPNAME --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+)
+egrep '^LAMBDA_ROLE=(.+)$' envs/aws && echo 'LAMBDA_ROLE_ALREADY_SET' || (test -f envs/$ENV.role.json && (echo LAMBDA_ROLE=$(jq .Role.Arn envs/$ENV.role.json -r) | tee -a envs/aws) || echo 'NO_ROLE_FILE')
+./setenv.sh aws
+source .env
+lambda/pack.sh
+aws lambda create-function --function-name $APPNAME-postgrest --runtime nodejs14.x --role "$LAMBDA_ROLE" --zip-file fileb://lambda/function.zip --handler index.handler --timeout 15 | tee envs/$ENV.lambda.json
+egrep '^AWS_POSTGREST_LAMBDA_FUNC=(.+)$' envs/aws || echo 'AWS_POSTGREST_LAMBDA_FUNC='$(jq .FunctionName envs/$ENV.lambda.json -r) | tee -a envs/aws
+aws lambda create-function-url-config --function-name $APPNAME-postgrest --auth-type NONE --cors 'AllowOrigins=*' | tee envs/$ENV.lambda.url.json
+test -f envs/$ENV.lambda.url.json && sed -i -E 's/^POSTGREST_BASE_URI=(.*)$/POSTGREST_BASE_URI="'$(jq .FunctionUrl envs/$ENV.lambda.url.json -r | sed -E 's/\//\\\//g')'"/g' envs/aws
+#+END_SRC
+* database initialization
+#+BEGIN_SRC bash
+  source .env
+  echo 'DBNAME:'$DBNAME
+  ./db_init.sh
+#+END_SRC
+* launch
+#+BEGIN_SRC bash
+./tmux.sh
+#+END_SRC
+

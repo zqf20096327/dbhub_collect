@@ -1,0 +1,79 @@
+<p align="center">
+  <img src="./project-banner.png" width="700" alt="Project Banner"/>
+</p>
+
+<div align="center">
+
+<p align="center">
+  <img src="./app-screenshot.png" width="700" alt="App Screenshot"/>
+</p>
+
+### [Become a Sponsor!](https://dub.sh/tLh3JgA)
+
+</div>
+
+## CliqRelay
+
+An open-source platform that transforms page clicks and interactions into beautiful, step-by-step visual documentation. By coupling a native browser capture extension with a high-performance backend, CliqRelay tracks exact DOM interactions and contextual screenshots thereby instantly automating the heavy lifting of writing technical guides and docs. Capture and refine workflows instantly to help your teams perform at their best.
+
+---
+
+### ☁️ CliqRelay Cloud
+
+Don't want to self-host? CliqRelay Cloud is the hosted version of the platform, no infrastructure required. Sign up, install the extension, and start capturing guides in minutes.
+
+- **Platform**: [Get Started](https://app.cliqrelay.com)
+- **Chrome Extension**: [Install from the Chrome Web Store](https://chromewebstore.google.com/detail/cliqrelay/lpflcbiaiffchbkehkningmmckhlibha)
+
+---
+
+### Features
+
+- **Instant Capture**: Capture workflows in real-time with a Chrome/Firefox extension that listens for user interactions and captures them.
+- **Contextual Screenshots**: Automatically capture screenshots during interactions to provide visual context.
+- **Live Recording Sessions**: Start, pause, and review a capture session from the extension's sidepanel, watching steps populate in real time as you click through a workflow.
+- **Guide Editor**: Fine-tune captured guides in the web dashboard, reordering steps, editing titles and descriptions, and inserting custom annotation blocks (headers, tips, callouts, alerts) alongside captured steps.
+- **Guide Lifecycle Management**: Publish, archive, star, and trash guides, with soft-delete and restore support so nothing is lost by accident.
+- **PDF Export**: Export any guide as a polished, print-ready PDF for offline sharing or documentation handoff.
+
+---
+
+### Self-Hosting
+
+You can run the full CliqRelay stack locally or on your own infrastructure.
+
+**Prerequisites:**
+
+- [Docker](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/)
+
+**1. Start the backend stack:**
+
+```bash
+$ docker compose --env-file docker-compose.prod.env -f docker-compose.prod.yml down -v && \
+  docker compose --env-file docker-compose.prod.env -f docker-compose.prod.yml build --parallel && \
+  docker compose --env-file docker-compose.prod.env -f docker-compose.prod.yml up -d
+```
+
+**2. Build the browser extension and install it in Chrome:**
+
+Follow the `apps/extension` project's README for this step. This will enable you to run it as a local extension.
+
+---
+
+### Contributing
+
+Your contributions are welcome! Here's how you can get involved:
+
+- If you find a bug, please [submit an issue](https://github.com/CliqRelay/cliqrelay/issues).
+- Set up your development environment by following our [Contribution Guide](./.github/CONTRIBUTING.md).
+- Contribute code by making a [pull request](https://github.com/CliqRelay/cliqrelay/) to enhance features, improve user experience, or fix issues.
+
+---
+
+### Support & Community
+
+Join our growing community for support, discussions, and updates:
+
+- [Discord Server](https://discord.gg/FBM65P7GpZ)
+
+---

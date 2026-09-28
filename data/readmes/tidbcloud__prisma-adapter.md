@@ -1,0 +1,161 @@
+# @tidbcloud/prisma-adapter
+
+Prisma driver adapter for [TiDB Cloud Serverless Driver](https://github.com/tidbcloud/serverless-js). For more details, see [TiDB Cloud Serverless Driver Prisma Tutorial
+](https://docs.pingcap.com/tidbcloud/serverless-driver-prisma-example).
+
+## Before you start
+
+Before you start, make sure you have:
+
+- A TiDB Cloud account
+- Node >= 18
+- [Prisma CLI](https://www.prisma.io/docs/concepts/components/prisma-cli) installed
+
+## Install
+
+You will need to install the `@tidbcloud/prisma-adapter` driver adapter and the `@tidbcloud/serverless` serverless driver.
+
+```
+npm install @tidbcloud/prisma-adapter @tidbcloud/serverless
+```
+
+## DATABASE URL
+
+Set the environment to your .env file in the local environment. You can get connection information on the TiDB Cloud console.
+
+```env
+// .env
+DATABASE_URL="mysql://username:password@host:4000/database?sslaccept=strict"
+```
+
+> NOTE
+> 
+> The adapter only supports Prisma Client. Prisma migration and introspection still go through the traditional TCP way. If you only need Prisma Client, you can set the DATABASE_URL as the `mysql://username:password@host/database` format which port and ssl parameters are not needed).
+
+## Define Prisma schema
+
+First, you need to create a Prisma schema file called schema.prisma and define the model. Here we use the user as an example.
+
+```prisma
+// schema.prisma
+generator client {
+    provider        = "prisma-client-js"
+    output          = "../src/generated/prisma"
+    engineType      = "client"
+}
+
+datasource db {
+    provider     = "mysql"
+    url          = env("DATABASE_URL")
+}
+
+// define model according to your database table
+model user {
+    id    Int     @id @default(autoincrement())
+    email String? @unique(map: "uniq_email") @db.VarChar(255)
+    name  String? @db.VarChar(255)
+}
+```
+
+## Query
+
+Here is an example of query:
+
+```js
+// query.js
+import { PrismaTiDBCloud } from '@tidbcloud/prisma-adapter';
+import { PrismaClient } from './generated/prisma';
+import dotenv from 'dotenv';
+
+// setup
+dotenv.config();
+const connectionString = `${process.env.DATABASE_URL}`;
+
+// init prisma client
+const adapter = new PrismaTiDBCloud({url: connectionString});
+const prisma = new PrismaClient({ adapter });
+
+// insert
+const user = await prisma.user.create({
+    data: {
+        email: 'test@prisma.io',
+        name: 'test',
+    },
+})
+console.log(user)
+
+// query after insert
+console.log(await prisma.user.findMany())
+```
+
+## Transaction
+
+Here is an example of transaction:
+
+```js
+// query.js
+import { PrismaTiDBCloud } from '@tidbcloud/prisma-adapter';
+import { PrismaClient } from './generated/prisma';
+import dotenv from 'dotenv';
+
+// setup
+dotenv.config();
+const connectionString = `${process.env.DATABASE_URL}`;
+
+// init prisma client
+const adapter = new PrismaTiDBCloud({url: connectionString});
+const prisma = new PrismaClient({ adapter });
+
+const createUser1 = prisma.user.create({
+  data: {
+    email: 'yuhang.shi@pingcap.com',
+    name: 'Shi Yuhang',
+  },
+})
+
+const createUser2 = prisma.user.create({
+  data: {
+    email: 'yuhang.shi@pingcap.com',
+    name: 'Shi Yuhang2',
+  },
+})
+
+const createUser3 = prisma.user.create({
+  data: {
+    email: 'yuhang2.shi@pingcap.com',
+    name: 'Shi Yuhang2',
+  },
+})
+try {
+  await prisma.$transaction([createUser1, createUser2]) // Operations fail together
+} catch (e) {
+  console.log(e)
+  await prisma.$transaction([createUser1, createUser3], isolationLevel: "READ COMMITTED") // Operations succeed together
+}
+```
+
+## Choose a version
+
+| Adapter | Prisma/Prisma Client | serverless driver |
+|---------|----------------------|-------------------|
+| v5.4.x  | v5.4.x               | [v0.0.6, v0.1.0)  |
+| v5.5.x  | v5.5.x               | [v0.0.7, v0.1.0)  |
+| v5.6.x  | v5.6.x               | [v0.0.7, v0.1.0)  |
+| v5.7.x  | v5.7.x               | [v0.0.7, v0.1.0)  |
+| v5.8.x  | v5.8.x               | [v0.0.9, v0.1.0)  |
+| v5.9.x  | v5.9.x               | [v0.0.9, v0.1.0)  |
+| v5.10.x | v5.10.x              | \>= v0.1.0        |
+| v5.11.x | v5.11.x              | \>= v0.1.0        |
+| v5.12.x | v5.12.x              | \>= v0.1.0        |
+| v5.13.x | v5.13.x              | \>= v0.1.0        |
+| v5.14.x | v5.14.x              | \>= v0.1.0        |
+| v5.15.x | v5.15.x              | \>= v0.1.0        |
+| v5.20.x | v5.20.x              | \>= v0.1.0        |
+| v6.6.x  | v6.6.x               | \>= v0.1.0        |
+| v6.12.x | v6.12.x              | \>= v0.1.0        |
+| v6.17.x | v6.17.x              | \>= v0.1.0        |
+
+Here is the step to step guide for how to choose the version:
+1. Choose the Prisma version: Choose the one as you need.
+2. Choose the adapter version: If you are using Prisma vx.y.z, you can choose the latest adapter version in vx.y. Open an issue once you find the adapter version is not compatible with Prisma version.
+3. Choose the serverless driver version: You can always use the latest version according to the table above.

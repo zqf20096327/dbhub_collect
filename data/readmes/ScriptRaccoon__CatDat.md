@@ -1,0 +1,80 @@
+# CatDat
+
+![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![Build](https://github.com/ScriptRaccoon/CatDat/actions/workflows/deploy-prod.yaml/badge.svg?label=xyz)
+![Last commit](https://img.shields.io/github/last-commit/ScriptRaccoon/CatDat)
+
+_CatDat_ provides a growing collection of categorical structures such as categories and functors, each with detailed descriptions and properties. Built by and for those who love [category theory](https://en.wikipedia.org/wiki/Category_theory).
+
+### [**https://catdat.app**](https://catdat.app)
+
+## Features
+
+- **Four Types of Categorical Structures**: Supports categories, functors, morphisms, and symmetric monoidal categories.
+- **Structure Detail Pages**: Each categorical structure has a dedicated page with its definition, satisfied and unsatisfied properties, and related structures.
+- **Property Detail Pages**: Explore the definition of a property and view categorical structures that satisfy it and those that don't.
+- **Proofs and References**: Each property and implication includes a proof or reference, forming a data-driven knowledge base for category theory.
+- **Deduction System**: Automatically infers properties of categorical structures from existing ones using a database of implications.
+- **Automatic Dualization**: Automatically dualizes implications and property assignments.
+- **Searchable Database**: Find categorical structures based on satisfied properties and unsatisfied properties.
+- **Comparison Feature**: Compare multiple categorical structures to identify their differences and similarities.
+- **Intuitive User Interface**: Usable on both mobile and desktop. Supports Light/dark mode.
+
+## How to contribute
+
+This project is a **community effort**. Whether you're a mathematician spotting missing data or a developer improving the interface, your contributions are welcome. See our [contribution guidelines](CONTRIBUTING.md) for details.
+
+## Documentation
+
+- [The database of _CatDat_](DATABASE.md)
+- [Deployment](DEPLOYMENT.md)
+- [Status Page](https://catdat.openstatus.dev/)
+
+## Local Setup
+
+You need to have [Git](https://git-scm.com/), [NodeJS](https://nodejs.org/) and [pnpm](https://pnpm.io/) installed.
+
+1. Fork `ScriptRaccoon/CatDat` on GitHub.
+2. Clone your fork with `git clone https://github.com/{your_username}/CatDat.git`.
+3. Change into the directory with `cd CatDat`.
+4. Install dependencies with `pnpm install`.
+5. Create the local database with `pnpm db:setup`.
+6. Update the local database with `pnpm db:update`.
+7. Start the local development server with `pnpm dev`.
+
+## Tech Stack
+
+Built with modern web technologies:
+
+- Language: [TypeScript](https://www.typescriptlang.org)
+- Framework: [SvelteKit](https://svelte.dev/docs/kit/introduction)
+- Database: [SQLite](https://sqlite.org/)
+- Deployment: [Netlify](https://netlify.com)
+- Math Rendering: [katex](https://www.npmjs.com/package/katex)
+- End-to-end testing: [Playwright](https://playwright.dev)
+
+## Admin application
+
+The repository [CatDatAdmin](https://github.com/ScriptRaccoon/CatDatAdmin) contains the admin functionality for CatDat.
+
+## Similar projects
+
+_CatDat_ draws inspiration from and complements other resources in category theory:
+
+- **[Catabase](https://catabase.fly.dev)**: A similar project that appears to be abandoned. It is more ambitious in terms of available data types but less complete for basic categories. The UI is not very intuitive, and it lacks an integrated deduction system between properties. See the [nForum announcement](https://nforum.ncatlab.org/discussion/13419/catabase-a-database-of-categories/).
+- **[SmallCategories](https://smallcats.info/)**: A database that systematically enumerates isomorphism classes of small finite categories. Each entry represents one finite category by its multiplication table and provides a visualization and selected properties of that category. The database is currently complete for categories with at most 8 morphisms.
+- **[nLab](https://ncatlab.org)**: A wiki for (higher) category theory. _CatDat_ refers to nLab pages for detailed information on its entries.
+- **[Clowder Project](https://clowderproject.com)**: A new online reference for category theory. Unlike _CatDat_, which is data-based, Clowder follows a textbook-based approach.
+- **[Database of Ring Theory](https://ringtheory.herokuapp.com/)**: This database focuses on ring theory and module theory rather than category theory, but is very similar in nature and was a major inspiration for _CatDat_.
+- **[pi-Base](https://topology.pi-base.org/)**: This is a database of examples and counterexamples in topology. Just like _CatDat_ it uses three types of entries (objects, properties, and theorems) and automatically derives properties from the theorems.
+
+**[MathBases](https://mathbases.org/)** lists many other databases for other kinds of mathematical structure.
+
+## Financial Support
+
+If you find this project useful, you can support its development:
+
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-00AA00?logo=buymeacoffee&logoColor=white)](https://www.buymeacoffee.com/scriptraccoon)
+
+**Cost transparency.** The project currently only incurs domain costs of about $15 per year. There are no costs for hosting or the database. The project has no external funding.

@@ -1,0 +1,101 @@
+# Next Generation Monitoring Server
+
+## Build
+
+```shell
+make
+```
+
+## Arguments
+
+```shell
+$ bin/ng-monitoring-server --help
+  Usage of bin/ng-monitoring-server:
+        --address string             TCP address to listen for http connections
+        --advertise-address string   tidb server advertise IP
+        --config string              config file path
+        --log.path string            Log path of ng monitoring server
+        --pd.endpoints strings       Addresses of PD instances within the TiDB cluster. Multiple addresses are separated by commas, e.g. --pd.endpoints 10.0.0.1:2379,10.0.0.2:2379
+        --retention-period string    Data with timestamps outside the retentionPeriod is automatically deleted
+                                     The following optional suffixes are supported: h (hour), d (day), w (week), y (year). If suffix isn't set, then the duration is counted in months (default "1")
+        --storage.path string        Storage path of ng monitoring server
+pflag: help requested
+```
+
+## Config Example
+
+```shell
+$ cat config/config.toml.example
+  # NG Monitoring Server Configuration.
+  
+  # Server address.
+  address = "0.0.0.0:12020"
+  
+  advertise-address = "0.0.0.0:12020"
+  
+  [log]
+  # Log path
+  # When set, the following log files are written under this directory:
+  # - ng.log
+  # - service.log
+  # - tsdb.log
+  # - docdb.log (only when docdb-backend is not "sqlite")
+  #
+  # Example:
+  #   path = "/var/log/ng-monitoring"
+  #   => /var/log/ng-monitoring/ng.log
+  #   => /var/log/ng-monitoring/service.log
+  #   => /var/log/ng-monitoring/tsdb.log
+  #   => /var/log/ng-monitoring/docdb.log (only when docdb-backend is not "sqlite")
+  #
+  # When unset:
+  # - ng.log is written to stdout
+  # - service.log is written to stdout
+  # - tsdb.log is written to <storage.path>/tsdb-log/tsdb.log
+  # - docdb.log is written to ./docdb-log/docdb.log (only when docdb-backend is not "sqlite")
+  #
+  # Example when unset, storage.path = "data", and docdb-backend = "sqlite":
+  # - ng.log => stdout
+  # - service.log => stdout
+  # - tsdb.log => data/tsdb-log/tsdb.log
+  # - docdb.log => not generated
+  path = "log"
+  
+  # Log level: DEBUG, INFO, WARN, ERROR
+  level = "INFO"
+
+  # Max size per log file in MB before rotation
+  max-size = 300
+
+  # Max age in days for rotated logs. 0 means never delete by age
+  max-days = 0
+
+  # Maximum number of rotated log files to keep
+  max-backups = 10
+  
+  [pd]
+  # Addresses of PD instances within the TiDB cluster. Multiple addresses are separated by commas, e.g. ["10.0.0.1:2379","10.0.0.2:2379"]
+  endpoints = ["0.0.0.0:2379"]
+  
+  [storage]
+  # Storage path of ng monitoring server
+  path = "data"
+  
+  [security]
+  ca-path = ""
+  cert-path = ""
+  key-path = ""
+```
+
+## Reload Config
+
+```shell
+$ bin/ng-monitoring-server --config config/config.toml.example
+
+# Another shell session
+$ pkill -SIGHUP ng-monitoring-server
+```
+
+<!-- VERSION_PLACEHOLDER: v8.1.0-alpha -->
+
+<!-- VERSION_PLACEHOLDER: v8.2.0-alpha -->

@@ -1,0 +1,485 @@
+# pgdbtemplate
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/andrei-polukhin/pgdbtemplate.svg)](https://pkg.go.dev/github.com/andrei-polukhin/pgdbtemplate)
+[![CI](https://github.com/andrei-polukhin/pgdbtemplate/actions/workflows/test.yml/badge.svg)](https://github.com/andrei-polukhin/pgdbtemplate/actions/workflows/test.yml)
+[![Coverage](https://codecov.io/gh/andrei-polukhin/pgdbtemplate/branch/main/graph/badge.svg)](https://codecov.io/gh/andrei-polukhin/pgdbtemplate)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/andrei-polukhin/pgdbtemplate/blob/main/LICENSE)
+
+A high-performance Go library for creating PostgreSQL test databases using
+template databases for lightning-fast test execution.
+
+## Features
+
+- **🚀 Lightning-fast test databases** - 1.2-1.6x faster than traditional approach,
+  scales to 500 databases, ~17% less memory usage
+- **🔒 Thread-safe** - concurrent test database management
+- **📊 Scales with complexity** - performance advantage increases with schema complexity
+- **⚡ Multiple drivers** - supports both `pq` and `pgx` drivers
+- **🧪 Flexible testing** support for various test scenarios
+- **📦 Testcontainers integration** for containerized testing
+- **🔧 Configurable** migration runners and connection providers
+
+## Why Choose `pgdbtemplate`?
+
+Evaluating PostgreSQL testing libraries? See our detailed
+[comparison with other solutions](docs/COMPARISON.md).
+
+## Installation
+
+```bash
+go get github.com/andrei-polukhin/pgdbtemplate
+```
+
+## Choose a PostgreSQL Driver
+
+Choose either one of these PostgreSQL drivers:
+
+- `github.com/andrei-polukhin/pgdbtemplate-pgx` (for `pgx/v5` with connection pooling)
+- `github.com/andrei-polukhin/pgdbtemplate-pq` (for `database/sql` with `lib/pq`)
+- `github.com/andrei-polukhin/pgdbtemplate-pgx-v4` (for `pgx/v4` with connection pooling)
+
+## Migration Library Support
+
+`pgdbtemplate` supports multiple migration libraries through dedicated adapters:
+
+- **[goose](https://github.com/andrei-polukhin/pgdbtemplate-goose)** - Popular migration tool with broad feature set
+- **[golang-migrate](https://github.com/andrei-polukhin/pgdbtemplate-golang-migrate)** - Widely-used CLI and library
+- **[Atlas](https://github.com/andrei-polukhin/pgdbtemplate-atlas)** - Modern declarative migration tool
+
+Or use the built-in file-based migration runner for simple SQL migrations.
+
+```bash
+# Choose your migration adapter
+go get github.com/andrei-polukhin/pgdbtemplate-goose
+# or
+go get github.com/andrei-polukhin/pgdbtemplate-golang-migrate
+# or
+go get github.com/andrei-polukhin/pgdbtemplate-atlas
+```
+
+## Quick Start
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/andrei-polukhin/pgdbtemplate"
+	"github.com/andrei-polukhin/pgdbtemplate-pgx"
+)
+
+func main() {
+	// Create a connection provider with pooling options.
+	connStringFunc := func(dbName string) string {
+		return fmt.Sprintf("postgres://user:pass@localhost/%s", dbName)
+	}
+	provider := pgdbtemplatepgx.NewConnectionProvider(connStringFunc)
+	defer provider.Close() // Close all connection pools.
+
+	// Create migration runner.
+	migrationRunner := pgdbtemplate.NewFileMigrationRunner(
+		[]string{"./migrations"}, 
+		pgdbtemplate.AlphabeticalMigrationFilesSorting,
+	)
+
+	// Create template manager.
+	config := pgdbtemplate.Config{
+		ConnectionProvider: provider,
+		MigrationRunner:    migrationRunner,
+	}
+
+	tm, err := pgdbtemplate.NewTemplateManager(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Initialize template with migrations.
+	ctx := context.Background()
+	if err := tm.Initialize(ctx); err != nil {
+		log.Fatal(err)
+	}
+
+	// Create test database (fast!).
+	testDB, testDBName, err := tm.CreateTestDatabase(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer testDB.Close()
+	defer tm.DropTestDatabase(ctx, testDBName)
+
+	// Use testDB for testing...
+	log.Printf("Test database %s ready!", testDBName)
+}
+```
+
+## Usage Examples
+
+### 1. Pgx Testing with Existing PostgreSQL
+
+```go
+package myapp_test
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"os"
+	"testing"
+
+	"github.com/andrei-polukhin/pgdbtemplate"
+	"github.com/andrei-polukhin/pgdbtemplate-pgx"
+)
+
+var templateManager *pgdbtemplate.TemplateManager
+var provider *pgdbtemplatepgx.ConnectionProvider
+
+func TestMain(m *testing.M) {
+	// Setup template manager once.
+	ctx := context.Background()
+	if err := setupPgxTemplateManager(ctx); err != nil {
+		log.Fatalf("failed to setup template manager: %v", err)
+	}
+
+	// Run tests.
+	code := m.Run()
+
+	// Cleanup.
+	templateManager.Cleanup(ctx)
+	provider.Close()
+
+	os.Exit(code)
+}
+
+func setupPgxTemplateManager(ctx context.Context) error {
+	baseConnString := "postgres://postgres:password@localhost:5432/postgres?sslmode=disable"
+
+	// Create pgx connection provider with connection pooling.
+	connStringFunc := func(dbName string) string {
+		return pgdbtemplate.ReplaceDatabaseInConnectionString(baseConnString, dbName)
+	}
+	
+	// Configure connection pool settings using options.
+	provider = pgdbtemplatepgx.NewConnectionProvider(
+		connStringFunc,
+		pgdbtemplatepgx.WithMaxConns(10),
+		pgdbtemplatepgx.WithMinConns(2),
+	)
+
+	// Create migration runner.
+	migrationRunner := pgdbtemplate.NewFileMigrationRunner(
+		[]string{"./testdata/migrations"},
+		pgdbtemplate.AlphabeticalMigrationFilesSorting,
+	)
+
+	// Configure template manager.
+	config := pgdbtemplate.Config{
+		ConnectionProvider: provider,
+		MigrationRunner:    migrationRunner,
+	}
+
+	var err error
+	templateManager, err = pgdbtemplate.NewTemplateManager(config)
+	if err != nil {
+		return fmt.Errorf("failed to create template manager: %w", err)
+	}
+
+	// Initialize template database with migrations.
+	if err = templateManager.Initialize(ctx); err != nil {
+		return fmt.Errorf("failed to initialize template: %w", err)
+	}
+	return nil
+}
+
+// Individual test function using pgx.
+func TestUserRepositoryPgx(t *testing.T) {
+	ctx := context.Background()
+
+	// Create isolated test database with pgx connection.
+	testConn, testDBName, err := templateManager.CreateTestDatabase(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer testConn.Close()
+	defer templateManager.DropTestDatabase(ctx, testDBName)
+
+	// Use pgx-specific features like native PostgreSQL types.
+	_, err = testConn.ExecContext(ctx, 
+		"INSERT INTO users (name, email, created_at) VALUES ($1, $2, NOW())", 
+		"Jane Doe", "jane@example.com")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	var count int
+	err = testConn.QueryRowContext(ctx, "SELECT COUNT(*) FROM users").Scan(&count)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if count != 1 {
+		t.Errorf("Expected 1 user, got %d", count)
+	}
+}
+```
+
+### 2. Integration with `testcontainers-go`
+
+```go
+package myapp_test
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"strings"
+	"testing"
+	"time"
+
+	"github.com/andrei-polukhin/pgdbtemplate"
+	"github.com/andrei-polukhin/pgdbtemplate-pq"
+	"github.com/testcontainers/testcontainers-go"
+	"github.com/testcontainers/testcontainers-go/modules/postgres"
+	"github.com/testcontainers/testcontainers-go/wait"
+)
+
+var (
+	pgContainer     *postgres.PostgresContainer
+	templateManager *pgdbtemplate.TemplateManager
+)
+
+func TestMain(m *testing.M) {
+	ctx := context.Background()
+
+	// Start PostgreSQL container.
+	if err := setupPostgresContainer(ctx); err != nil {
+		log.Fatalf("failed to setup postgres container: %v", err)
+	}
+
+	// Setup template manager.
+	if err := setupTemplateManagerWithContainer(ctx); err != nil {
+		log.Fatalf("failed to setup template manager: %v", err)
+	}
+
+	// Run tests.
+	code := m.Run()
+
+	// Cleanup.
+	templateManager.Cleanup(ctx)
+	pgContainer.Terminate(ctx)
+
+	os.Exit(code)
+}
+
+func setupPostgresContainer(ctx context.Context) error {
+	var err error
+	pgContainer, err = postgres.RunContainer(ctx,
+		testcontainers.WithImage("postgres:15"),
+		postgres.WithDatabase("testdb"),
+		postgres.WithUsername("testuser"),
+		postgres.WithPassword("testpass"),
+		testcontainers.WithWaitStrategy(
+			wait.ForLog("database system is ready to accept connections").
+			WithOccurrence(2).
+			WithStartupTimeout(5*time.Second),
+		),
+	)
+	return err
+}
+
+func setupTemplateManagerWithContainer(ctx context.Context) error {
+	// Get connection details from container.
+	connStr, err := pgContainer.ConnectionString(ctx, "sslmode=disable")
+	if err != nil {
+		return err
+	}
+
+	// Create connection provider using the built-in standard provider.
+	connStringFunc := func(dbName string) string {
+		// Replace the database name in the connection string.
+		return pgdbtemplate.ReplaceDatabaseInConnectionString(connStr, dbName)
+	}
+	provider := pgdbtemplatepq.NewConnectionProvider(connStringFunc)
+
+	// Create migration runner.
+	migrationRunner := pgdbtemplate.NewFileMigrationRunner(
+		[]string{"./testdata/migrations"},
+		pgdbtemplate.AlphabeticalMigrationFilesSorting,
+	)
+
+	// Configure template manager.
+	config := pgdbtemplate.Config{
+		ConnectionProvider: provider,
+		MigrationRunner:    migrationRunner,
+		AdminDBName:        "testdb", // Use the container's default database.
+	}
+
+	templateManager, err = pgdbtemplate.NewTemplateManager(config)
+	if err != nil {
+		return err
+	}
+
+	// Initialize template database.
+	return templateManager.Initialize(ctx)
+}
+
+// Example test using testcontainers.
+func TestUserServiceWithContainer(t *testing.T) {
+	ctx := context.Background()
+
+	// Create test database from template.
+	testDB, testDBName, err := templateManager.CreateTestDatabase(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer testDB.Close()
+	defer templateManager.DropTestDatabase(ctx, testDBName)
+
+	// Test your service with the isolated database.
+	userService := NewUserService(testDB)
+
+	user := &User{Name: "Alice", Email: "alice@example.com"}
+	if err := userService.Create(ctx, user); err != nil {
+		t.Fatal(err)
+	}
+
+	users, err := userService.List(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(users) != 1 {
+		t.Errorf("Expected 1 user, got %d", len(users))
+	}
+}
+```
+
+## Advanced Cases
+
+For advanced usage scenarios including custom connection providers and
+custom migration runners, see **[ADVANCED.md](docs/ADVANCED.md)**.
+
+## Performance Benefits
+
+Using template databases provides significant performance improvements over
+traditional database creation and migration:
+
+### Real Benchmark Results (Apple M4 Pro)
+- **Traditional approach**: ~28.9–43.1ms per database (scales with schema complexity)
+- **Template approach**: **~28.2–28.8ms per database** (consistent regardless of complexity)
+- **Performance gain increases with schema complexity**: 1.03x → 1.43x → 1.50x faster
+- **Superior concurrency**: Thread-safe operations with ~86.5 ops/sec vs ~78.5 ops/sec traditional
+- **Memory efficient**: 17% less memory usage per operation
+
+### Schema Complexity Impact
+| Schema Size | Traditional | Template | Performance Gain |
+|-------------|-------------|----------|------------------|
+| 1 Table     | ~28.9ms    | ~28.2ms  | **1.03x faster** |
+| 3 Tables    | ~39.5ms    | ~27.6ms  | **1.43x faster** |
+| 5 Tables    | ~43.1ms    | ~28.8ms  | **1.50x faster** |
+
+### Scaling Benefits  
+| Test Databases | Traditional | Template | Time Saved |
+|---|---|---|---|
+| 20 DBs | 906.8ms (45.3ms/db) | 613.8ms (29.4ms/db) | **32% faster** |
+| 50 DBs | 2.29s (45.8ms/db) | 1.53s (29.8ms/db) | **33% faster** |
+| 200 DBs | 9.21s (46.0ms/db) | 5.84s (29.2ms/db) | **37% faster** |
+| 500 DBs | 22.31s (44.6ms/db) | 14.82s (29.6ms/db) | **34% faster** |
+
+For comprehensive benchmark analysis, methodology, and detailed results,
+see **[BENCHMARKS.md](docs/BENCHMARKS.md)**.
+
+## Migration Files Structure
+
+Organize your migration files for automatic alphabetical ordering:
+
+```
+migrations/
+├── 001_create_users_table.sql
+├── 002_create_posts_table.sql
+├── 003_add_user_posts_relation.sql
+└── 004_add_indexes.sql
+```
+
+## Thread Safety
+
+The library is **fully thread-safe** and designed for concurrent use
+in production test suites:
+
+### Concurrency Guarantees
+- **Template initialization**: Protected by mutex - safe to call from multiple goroutines
+- **Database creation**: Each `CreateTestDatabase()` call is fully isolated
+- **Unique naming**: Automatic collision-free database naming
+  with timestamps and atomic counters
+- **Parallel testing**: Safe for `go test -parallel N` with any parallelism level
+
+The template manager internally handles all synchronization,
+making it safe to use in any concurrent testing scenario.
+
+## Best Practices
+
+1. **Initialize once**: Set up the template manager in `TestMain()`
+
+2. **Cleanup**: Always call `DropTestDatabase()` for each created test database,
+   and `Cleanup()` once at the end:
+   - `DropTestDatabase(dbName)`: Drops a specific test database and removes it from tracking.
+   - `Cleanup()`: Drops all remaining tracked test databases AND the template database
+   (call once in `TestMain()`).
+
+3. **Isolation**: Each test should use its own database to prevent interference
+between tests.
+
+4. **Naming**: Let `pgdbtemplate` auto-generate unique database names
+(recommended for most cases):
+   ```go
+   // Good: Auto-generated name (recommended).
+   testDB, testDBName, err := templateManager.CreateTestDatabase(ctx)
+   
+   // Advanced: Custom name only when needed for debugging.
+   testDB, testDBName, err := templateManager.CreateTestDatabase(ctx, "my_test_debug")
+   ```
+
+5. **Migration order**: Use numbered prefixes for deterministic ordering.
+
+## Requirements
+
+- PostgreSQL 9.5+ (for template database support)
+- Go 1.20+
+
+## Related Projects
+
+### Connection Providers
+- [pgdbtemplate-pq](https://github.com/andrei-polukhin/pgdbtemplate-pq) - `lib/pq` (`database/sql`) connection provider
+- [pgdbtemplate-pgx](https://github.com/andrei-polukhin/pgdbtemplate-pgx) - `pgx/v5` connection provider with pooling
+- [pgdbtemplate-pgx-v4](https://github.com/andrei-polukhin/pgdbtemplate-pgx-v4) - `pgx/v4` connection provider with pooling
+
+### Migration Adapters
+- [pgdbtemplate-goose](https://github.com/andrei-polukhin/pgdbtemplate-goose) - [goose](https://github.com/pressly/goose) migration adapter
+- [pgdbtemplate-golang-migrate](https://github.com/andrei-polukhin/pgdbtemplate-golang-migrate) - [golang-migrate](https://github.com/golang-migrate/migrate) adapter
+- [pgdbtemplate-atlas](https://github.com/andrei-polukhin/pgdbtemplate-atlas) - [Atlas](https://atlasgo.io/) migration adapter
+
+## Contributors
+
+We appreciate all the contributors who have helped make this project better!
+Please see [CONTRIBUTORS.md](docs/CONTRIBUTORS.md) for the full list.
+
+## Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](docs/CONTRIBUTING.md) for
+guidelines.
+
+## Security
+
+If you discover a security vulnerability, please report it responsibly.
+See [SECURITY.md](docs/SECURITY.md) for our security policy and reporting process.
+
+## Disclaimer
+
+This is a personal project developed in my own time.
+It is not affiliated with or endorsed by any company.
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.

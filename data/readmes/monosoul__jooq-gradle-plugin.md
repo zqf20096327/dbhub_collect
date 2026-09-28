@@ -1,0 +1,551 @@
+# Gradle Docker jOOQ Plugin
+
+[![Build Status](https://github.com/monosoul/jooq-gradle-plugin/actions/workflows/build-on-push-to-main.yml/badge.svg?branch=main)](https://github.com/monosoul/jooq-gradle-plugin/actions/workflows/build-on-push-to-main.yml?query=branch%3Amain)
+[![codecov](https://codecov.io/gh/monosoul/jooq-gradle-plugin/branch/main/graph/badge.svg?token=7SWSOTIBMX)](https://codecov.io/gh/monosoul/jooq-gradle-plugin)
+[![Gradle Plugins Release](https://img.shields.io/maven-metadata/v/https/repo1.maven.org/maven2/dev/monosoul/jooq-docker/dev.monosoul.jooq-docker.gradle.plugin/maven-metadata.xml.svg?label=Gradle%20Plugin%20Portal)](https://plugins.gradle.org/plugin/dev.monosoul.jooq-docker)
+[![Maven Central Release](https://img.shields.io/maven-metadata/v/https/repo1.maven.org/maven2/dev/monosoul/jooq-docker/dev.monosoul.jooq-docker.gradle.plugin/maven-metadata.xml.svg?label=Maven%20Central)](https://mvnrepository.com/artifact/dev.monosoul.jooq/jooq-gradle-plugin)
+[![license](https://img.shields.io/github/license/monosoul/jooq-gradle-plugin.svg)](LICENSE)
+[![Semantic Release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+
+Copyright 2021 [Adrian Skrobacz](https://github.com/adrianskrobaczrevolut)
+
+Copyright 2021 Revolut Ltd
+
+Copyright 2022 - 2026 [Andrei Nevedomskii](https://github.com/monosoul)
+
+---
+
+Notice: this plugin was originally developed at [revolut-engineering/jooq-plugin](https://github.com/revolut-engineering/jooq-plugin), but since
+I can't publish it under the same group, I had to change the group from `com.revolut` to `dev.monosoul`.
+
+---
+
+This repository contains Gradle plugin for generating jOOQ classes in dockerized databases.
+Plugin registers task `generateJooqClasses` that does following steps:
+
+* pulls docker image
+* starts database container
+* runs migrations using Flyway
+* generates jOOQ classes
+
+---
+
+The plugin uses [testcontainers library](https://www.testcontainers.org) to spin up the DB container. 
+To avoid conflicts with other plugins using docker java library or testcontainers, the plugin shades testcontainers
+library and it's dependencies into `dev.monosoul.jooq.shadow` package.
+
+Due to that in case you'd like to 
+[customize docker client strategy](https://www.testcontainers.org/features/configuration/#customizing-docker-host-detection), 
+the class names will have to be prefixed with `dev.monosoul.jooq.shadow`, while the property name will be 
+`dev.monosoul.jooq.docker.client.strategy` instead of `docker.client.strategy`. E.g.:
+
+```properties
+dev.monosoul.jooq.docker.client.strategy=dev.monosoul.jooq.shadow.org.testcontainers.dockerclient.EnvironmentAndSystemPropertyClientProviderStrategy
+```
+
+Also, instead of `TESTCONTAINERS_DOCKER_CLIENT_STRATEGY` environment variable, you should use
+`DEV_MONOSOUL_JOOQ_TESTCONTAINERS_DOCKER_CLIENT_STRATEGY`.
+
+# Examples
+
+Detailed examples are available in the [examples directory](examples) of this repository.
+
+By default plugin is configured to work with PostgreSQL, so the following minimal config is enough:
+
+```kotlin
+import dev.monosoul.jooq.RecommendedVersions
+
+plugins {
+    id("dev.monosoul.jooq-docker")
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("org.jooq:jooq:${RecommendedVersions.JOOQ_VERSION}")
+    jooqCodegen("org.postgresql:postgresql:42.3.6")
+}
+```
+
+It will look for migration files in `src/main/resources/db/migration` and will output generated classes
+to `build/generated-jooq` in package `org.jooq.generated`. All of that details can be configured on the task itself
+as shown in examples below.
+
+Configuring schema names and other parameters of the task:
+
+```kotlin
+import dev.monosoul.jooq.RecommendedVersions
+
+plugins {
+    id("dev.monosoul.jooq-docker")
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks {
+    generateJooqClasses {
+        schemas.set(listOf("public", "other_schema"))
+        basePackageName.set("org.jooq.generated")
+        migrationLocations.setFromFilesystem("src/main/resources/db/migration")
+        outputDirectory.set(project.layout.buildDirectory.dir("generated-jooq"))
+        flywayProperties.put("flyway.placeholderReplacement", "false")
+        includeFlywayTable.set(true)
+        outputSchemaToDefault.add("public")
+        schemaToPackageMapping.put("public", "fancy_name")
+        usingJavaConfig {
+            /* "this" here is the org.jooq.meta.jaxb.Generator configure it as you please */
+        }
+    }
+}
+
+dependencies {
+    implementation("org.jooq:jooq:${RecommendedVersions.JOOQ_VERSION}")
+    jooqCodegen("org.postgresql:postgresql:42.3.6")
+}
+```
+
+To configure the plugin to use another version or edition of Flyway the following config can be used:
+
+```kotlin
+import dev.monosoul.jooq.RecommendedVersions
+
+plugins {
+    id("dev.monosoul.jooq-docker")
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("org.jooq:jooq:${RecommendedVersions.JOOQ_VERSION}")
+    jooqCodegen("org.postgresql:postgresql:42.3.6")
+    jooqCodegen("org.flywaydb.enterprise:flyway-core:${RecommendedVersions.FLYWAY_VERSION}")
+    jooqCodegen("org.flywaydb:flyway-database-postgresql:${RecommendedVersions.FLYWAY_VERSION}")
+}
+```
+
+To configure the plugin to use another version or edition of jOOQ the following config can be used:
+
+```kotlin
+plugins {
+    id("dev.monosoul.jooq-docker")
+}
+
+repositories {
+    mavenCentral()
+}
+
+val jooqVersion = "3.15.10"
+
+dependencies {
+    implementation("org.jooq:jooq:$jooqVersion")
+    jooqCodegen("org.postgresql:postgresql:42.3.6")
+    jooqCodegen("org.jooq:jooq-codegen:$jooqVersion")
+}
+```
+
+To configure the plugin to work with another DB like MySQL the following config can be applied:
+
+```kotlin
+import dev.monosoul.jooq.RecommendedVersions
+
+plugins {
+    id("dev.monosoul.jooq-docker")
+}
+
+repositories {
+    mavenCentral()
+}
+
+jooq {
+    withContainer {
+        image {
+            name = "mysql:8.0.29"
+            envVars = mapOf(
+                "MYSQL_ROOT_PASSWORD" to "mysql",
+                "MYSQL_DATABASE" to "mysql"
+            )
+        }
+
+        db {
+            username = "root"
+            password = "mysql"
+            name = "mysql"
+            port = 3306
+
+            jdbc {
+                schema = "jdbc:mysql"
+                driverClassName = "com.mysql.cj.jdbc.Driver"
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation("org.jooq:jooq:3.16.5")
+    jooqCodegen("mysql:mysql-connector-java:8.0.29")
+    jooqCodegen("org.flywaydb:flyway-mysql:${RecommendedVersions.FLYWAY_VERSION}")
+}
+```
+
+To register custom types:
+
+```kotlin
+plugins {
+    id("dev.monosoul.jooq-docker")
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks {
+    generateJooqClasses {
+        usingJavaConfig {
+            database.withForcedTypes(
+                ForcedType()
+                    .withUserType("com.google.gson.JsonElement")
+                    .withBinding("com.example.PostgresJSONGsonBinding")
+                    .withTypes("JSONB")
+            )
+        }
+    }
+}
+
+dependencies {
+    implementation("org.jooq:jooq:3.16.5")
+    jooqCodegen("org.postgresql:postgresql:42.3.6")
+}
+```
+
+To use XML-based configuration:
+
+```kotlin
+plugins {
+    id("dev.monosoul.jooq-docker")
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks {
+    generateJooqClasses {
+        usingXmlConfig()
+    }
+}
+
+dependencies {
+    implementation("org.jooq:jooq:3.16.5")
+    jooqCodegen("org.postgresql:postgresql:42.3.6")
+}
+```
+by default the path to the XML config is `src/main/resources/db/jooq.xml`, where it's content looks as following:
+
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.16.5.xsd">
+    <generator>
+        <database>
+            <inputSchema>public</inputSchema>
+            <includes>.*</includes>
+            <forcedTypes>
+                <forcedType>
+                    <includeTypes>JSONB</includeTypes>
+                    <userType>com.google.gson.JsonElement</userType>
+                    <binding>com.example.PostgresJSONGsonBinding</binding>
+                </forcedType>
+            </forcedTypes>
+        </database>
+    </generator>
+</configuration>
+```
+
+To customize the XML config path:
+```kotlin
+tasks {
+    generateJooqClasses {
+        usingXmlConfig(project.layout.projectDirectory.file("src/main/resources/db/other-jooq-config.xml"))
+    }
+}
+```
+
+To customize the loaded XML config:
+```kotlin
+tasks {
+    generateJooqClasses {
+        usingXmlConfig {
+            database.withExcludes("BAR")
+        }
+    }
+}
+```
+
+To exclude flyway schema history table from generated classes:
+
+```kotlin
+plugins {
+    id("dev.monosoul.jooq-docker")
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks {
+    generateJooqClasses {
+        schemas.set(listOf("other"))
+        usingJavaConfig {
+            database.withExcludes("flyway_schema_history")
+        }
+    }
+}
+
+dependencies {
+    implementation("org.jooq:jooq:3.16.5")
+    jooqCodegen("org.postgresql:postgresql:42.3.6")
+}
+```
+
+### Remote docker setup
+
+If you want to use the plugin with remote docker instance, refer to the
+[testcontainers documentation](https://www.testcontainers.org/features/configuration/#customizing-docker-host-detection)
+.
+
+### Remote database setup
+
+The plugin supports remote database setup, where an external DB can be used to generate jOOQ classes instead of
+spinning up a container with the DB. This setup can also be convenient when a container with the DB is created
+externally (for example with Docker compose).
+
+To use the plugin with a remote DB:
+
+```kotlin
+plugins {
+    id("dev.monosoul.jooq-docker")
+}
+
+repositories {
+    mavenCentral()
+}
+
+jooq {
+    withoutContainer {
+        db {
+            username = "postgres"
+            password = "postgres"
+            name = "postgres"
+            host = "remotehost"
+            port = 5432
+        }
+    }
+}
+
+dependencies {
+    jooqCodegen("org.postgresql:postgresql:42.3.6")
+}
+```
+
+### Multi-database setup
+
+The plugin supports multi-database setup, where jOOQ classes could be generated out of different RDBMS.
+This could be achieved by registering a separate class generation task for every RDBMS.
+
+Here's an example how to generate jOOQ classes for PostgreSQL and MySQL in a single project:
+
+```kotlin
+import dev.monosoul.jooq.GenerateJooqClassesTask
+import dev.monosoul.jooq.RecommendedVersions
+
+plugins {
+    kotlin("jvm") version "2.2.20"
+    id("dev.monosoul.jooq-docker")
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks {
+    generateJooqClasses {
+        basePackageName.set("org.jooq.generated.postgres")
+        migrationLocations.setFromFilesystem("src/main/resources/postgres/migration")
+        outputDirectory.set(project.layout.buildDirectory.dir("postgres"))
+    }
+
+    register<GenerateJooqClassesTask>("generateJooqClassesForMySql") {
+        basePackageName.set("org.jooq.generated.mysql")
+        migrationLocations.setFromFilesystem("src/main/resources/mysql/migration")
+        outputDirectory.set(project.layout.buildDirectory.dir("mysql"))
+
+        withContainer {
+            image {
+                name = "mysql:8.0.29"
+                envVars = mapOf(
+                    "MYSQL_ROOT_PASSWORD" to "mysql",
+                    "MYSQL_DATABASE" to "mysql"
+                )
+            }
+            db {
+                username = "root"
+                password = "mysql"
+                name = "mysql"
+                port = 3306
+
+                jdbc {
+                    schema = "jdbc:mysql"
+                    driverClassName = "com.mysql.cj.jdbc.Driver"
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation(kotlin("stdlib"))
+    jooqCodegen("org.postgresql:postgresql:42.3.6")
+    jooqCodegen("mysql:mysql-connector-java:8.0.29")
+    jooqCodegen("org.flywaydb:flyway-mysql:${RecommendedVersions.FLYWAY_VERSION}")
+    jooqCodegen("org.flywaydb:flyway-database-postgresql:${RecommendedVersions.FLYWAY_VERSION}")
+    implementation("org.jooq:jooq:3.16.6")
+}
+```
+
+where:
+
+- For PostgreSQL:
+    - migrations are located in `src/main/resources/postgres/migration`
+    - generated classes are located in `build/postgres` under `org.jooq.generated.postgres` package
+- For MySQL:
+    - migrations are located in `src/main/resources/mysql/migration`
+    - generated classes are located in `build/mysql` under `org.jooq.generated.mysql` package
+
+Basically, the plugin has 2 sets of configurations: **global** (or project-wide) configuration declared within `jooq {}`
+block and **local** (or task-specific) configuration declared for each task separately.
+
+Local (or task-specific) configuration initial values are inherited from the global (or project-wide) configuration.
+So if you modify the global configuration first, and then modify the local configuration, the local configuration's
+initial values will be equal to the global configuration's values.
+
+Modifying the local configuration *will not affect* the global configuration.
+
+### Configuration with properties
+
+The plugin supports configuration with properties.
+
+Here's an example of how to use `gradle.properties` file to configure the plugin to generate jOOQ classes for MySQL:
+
+`gradle.properties`:
+
+```properties
+dev.monosoul.jooq.withContainer.db.username=root
+dev.monosoul.jooq.withContainer.db.password=mysql
+dev.monosoul.jooq.withContainer.db.name=mysql
+dev.monosoul.jooq.withContainer.db.port=3306
+dev.monosoul.jooq.withContainer.db.jdbc.schema=jdbc:mysql
+dev.monosoul.jooq.withContainer.db.jdbc.driverClassName=com.mysql.cj.jdbc.Driver
+dev.monosoul.jooq.withContainer.image.name=mysql:8.0.29
+dev.monosoul.jooq.withContainer.image.envVars.MYSQL_ROOT_PASSWORD=mysql
+dev.monosoul.jooq.withContainer.image.envVars.MYSQL_DATABASE=mysql
+```
+
+`build.gradle.kts`:
+
+```kotlin
+import dev.monosoul.jooq.RecommendedVersions
+
+plugins {
+    kotlin("jvm") version "2.2.20"
+    id("dev.monosoul.jooq-docker")
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    jooqCodegen("mysql:mysql-connector-java:8.0.29")
+    jooqCodegen("org.flywaydb:flyway-mysql:${RecommendedVersions.FLYWAY_VERSION}")
+    implementation("org.jooq:jooq:${RecommendedVersions.JOOQ_VERSION}")
+}
+```
+
+And here's an example how to customize the plugin configuration from command line:
+
+```shell
+./gradlew build -Pdev.monosoul.jooq.withContainer.db.username=root -Pdev.monosoul.jooq.withContainer.db.password=password
+```
+
+#### ❗ NOTE: `withoutContainer` properties have higher priority than `withContainer` properties.
+
+#### ❗ NOTE: properties only affect global (or project-wide) configuration.
+
+### Java-based migrations
+
+The plugin
+supports [Java-based Flyway migrations](https://documentation.red-gate.com/fd/tutorial-java-based-migrations-184127624.html).
+
+If you have Java-based migrations as a part of your project in a Gradle submodule, you can use the following
+configuration:
+
+```kotlin
+import dev.monosoul.jooq.RecommendedVersions
+
+plugins {
+  id("dev.monosoul.jooq-docker")
+}
+
+repositories {
+  mavenCentral()
+}
+
+tasks {
+  generateJooqClasses {
+    migrationLocations.setFromClasspath(
+      project(":migrations").sourceSets.main.map { it.output },
+      "package/with/migrations"
+    )
+  }
+}
+
+dependencies {
+  implementation("org.jooq:jooq:${RecommendedVersions.JOOQ_VERSION}")
+  jooqCodegen("org.postgresql:postgresql:42.3.6")
+}
+```
+
+If you want to run migrations provided in a JAR file by some third party:
+```kotlin
+import dev.monosoul.jooq.RecommendedVersions
+
+plugins {
+  id("dev.monosoul.jooq-docker")
+}
+
+repositories {
+  mavenCentral()
+}
+
+val migrationClasspath by configurations.creating
+
+tasks {
+  generateJooqClasses {
+    migrationLocations.setFromClasspath(
+      migrationClasspath,
+      "package/with/migrations"
+    )
+  }
+}
+
+dependencies {
+  implementation("org.jooq:jooq:${RecommendedVersions.JOOQ_VERSION}")
+  migrationClasspath("third.party:library:version")
+  jooqCodegen("org.postgresql:postgresql:42.3.6")
+}
+```

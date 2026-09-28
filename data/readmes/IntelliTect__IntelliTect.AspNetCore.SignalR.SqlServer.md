@@ -1,0 +1,219 @@
+# IntelliTect.AspNetCore.SignalR.SqlServer
+
+A Microsoft SQL Server backplane for ASP.NET Core SignalR.
+
+[![Nuget](https://img.shields.io/nuget/v/IntelliTect.AspNetCore.SignalR.SqlServer)](https://www.nuget.org/packages/IntelliTect.AspNetCore.SignalR.SqlServer/)
+
+
+This project is largely based off of a fork of the [SignalR Core Redis provider](https://github.com/dotnet/aspnetcore/tree/main/src/SignalR/server/StackExchangeRedis), reworked to use the underlying concepts of the [classic ASP.NET SignalR SQL Server backplane](https://github.com/SignalR/SignalR/tree/main/src/Microsoft.AspNet.SignalR.SqlServer). This means it supports subscription-based messaging via SQL Server Service Broker, falling back on periodic polling when not available.
+
+
+## SQL Server Configuration
+
+For optimal responsiveness and performance, [SQL Server Service Broker](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-service-broker?view=sql-server-ver15) should be enabled on your database. NOTE: **Service Broker is not available on Azure SQL Database.** If you are running in Azure, consider a Redis or Azure SignalR Service backplane instead.
+
+If Service Broker is not available, a fallback of periodic queries is used. This fallback querying happens very rapidly when messages are encountered, but slows down once traffic stops.
+
+You can check if Service Broker is enabled with the following query:
+``` sql
+SELECT [name], [service_broker_guid], [is_broker_enabled]
+FROM [master].[sys].[databases]
+```
+
+To enable it, execute the following against the database. Note that this requires an exclusive lock over the database:
+``` sql
+ALTER DATABASE [DatabaseName] SET ENABLE_BROKER WITH NO_WAIT;
+```
+
+If the above command does not work due to existing connections, try terminating existing sessions automatically using
+``` sql 
+ALTER DATABASE [DatabaseName] SET ENABLE_BROKER WITH ROLLBACK IMMEDIATE
+```
+
+You can also set `AutoEnableServiceBroker = true` when configuring in your `Startup.cs`, but this requires that the application have permissions to do so and has the same caveats that there can be no other active database sessions.
+
+## Usage
+
+1. Install the `IntelliTect.AspNetCore.SignalR.SqlServer` NuGet package.
+2. In `ConfigureServices` in `Startup.cs`, configure SignalR with `.UseSqlServer()`:
+
+
+Simple configuration:
+``` cs
+services
+    .AddSignalR()
+    .AddSqlServer(Configuration.GetConnectionString("Default"));
+```
+
+Advanced configuration:
+
+``` cs 
+services
+    .AddSignalR()
+    .AddSqlServer(o =>
+    {
+        o.ConnectionString = Configuration.GetConnectionString("Default");
+        // See above - attempts to enable Service Broker on the database at startup
+        // if not already enabled. Default false, as this can hang if the database has other sessions.
+        o.AutoEnableServiceBroker = true;
+        // Every hub has its own message table(s). 
+        // This determines the part of the table named that is derived from the hub name.
+        // IF THIS IS NOT UNIQUE AMONG ALL HUBS, YOUR HUBS WILL COLLIDE AND MESSAGES MIX.
+        o.TableSlugGenerator = hubType => hubType.Name;
+        // The number of tables per Hub to use. Adding a few extra could increase throughput
+        // by reducing table contention, but all servers must agree on the number of tables used.
+        // If you find that you need to increase this, it is probably a hint that you need to switch to Redis.
+        o.TableCount = 1;
+        // The SQL Server schema to use for the backing tables for this backplane.
+        o.SchemaName = "SignalRCore";
+    });
+```
+
+Alternatively, you may configure `IntelliTect.AspNetCore.SignalR.SqlServer.SqlServerOptions` with [the Options pattern](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-5.0).
+
+``` cs
+services.Configure<SqlServerOptions>(Configuration.GetSection("SignalR:SqlServer"));
+```
+
+## OpenTelemetry Support
+
+This library includes OpenTelemetry instrumentation that wraps background database queries in activities, making them more easily identified and grouped in your collected telemetry.
+
+### Setup
+
+To enable OpenTelemetry collection of these trace spans and metrics, add the source and meter to your configuration:
+
+``` cs
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracing => tracing
+        .AddSource("IntelliTect.AspNetCore.SignalR.SqlServer")
+        // ... other instrumentation
+    )
+    .WithMetrics(metrics => metrics
+        .AddMeter("IntelliTect.AspNetCore.SignalR.SqlServer")
+        // ... other instrumentation
+    );
+```
+
+### Activity Names
+
+The library creates activities for the following operations:
+- `SignalR.SqlServer.Install` - Database schema installation/setup
+- `SignalR.SqlServer.Start` - Receiver startup operations
+- `SignalR.SqlServer.Listen` - Service Broker listening operations (database reads)
+- `SignalR.SqlServer.Poll` - Polling operations (database reads, when Service Broker is not used)
+- `SignalR.SqlServer.Publish` - Message publishing operations (database writes)
+
+### Metrics
+
+The library also provides metrics to help monitor the health and performance of the SQL Server backplane:
+
+- `signalr.sqlserver.poll_delay` - Histogram showing the distribution of polling delay intervals, useful for understanding backoff patterns and system health
+- `signalr.sqlserver.query_duration` - Histogram tracking the duration of SQL Server query execution for reading messages
+- `signalr.sqlserver.rows_read_total` - Counter tracking the total number of message rows read from SQL Server
+- `signalr.sqlserver.rows_written_total` - Counter tracking the total number of message rows written to SQL Server
+
+These metrics help you understand polling patterns, database performance, message throughput, and can be useful for tuning performance or identifying when Service Broker fallback to polling occurs.
+
+### Filtering Noise
+
+Since the SQL Server backplane performs frequent polling operations, you may want to filter out successful, fast queries to reduce trace noise. 
+
+The following example assumes using package `OpenTelemetry.Instrumentation.SqlClient >= 1.12.0-beta.3` for SqlClient instrumentation. There are currently [4 different packages for SqlClient instrumentation](https://github.com/dotnet/aspire/issues/2427#issuecomment-3259572206), so your method of collecting or filtering the command details may vary if you're using Aspire's instrumentation or Azure Monitor's instrumentation. Be sure to update the CommandText filter if you customize the schema name:
+
+``` cs
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracing => tracing
+        .AddSqlClientInstrumentation()
+        .AddSource("IntelliTect.AspNetCore.SignalR.SqlServer")
+        .AddProcessor<SignalRTelemetryNoiseFilter>()
+    );
+
+internal sealed class SignalRTelemetryNoiseFilter : BaseProcessor<Activity>
+{
+    public override void OnEnd(Activity activity)
+    {
+        if (activity.Status != ActivityStatusCode.Error &&
+            activity.Duration.TotalMilliseconds < 100 &&
+            (activity.GetTagItem("db.query.text") ?? activity.GetTagItem("db.statement")) is string command &&
+            command.StartsWith("SELECT [PayloadId], [Payload], [InsertedOn] FROM [SignalR]"))
+        {
+            // Sample out successful and fast SignalR queries
+            activity.ActivityTraceFlags &= ~ActivityTraceFlags.Recorded;
+        }
+    }
+}
+```
+
+## Caveats
+
+As mentioned above, if SQL Server Service Broker is not available, messages will not always be transmitted immediately since a fallback of periodic querying must be used.
+
+### Performance
+
+This is not the right solution for applications with a need for very high throughput, or very high degrees of scale-out. Consider Redis or Azure SignalR Service instead for such cases. You should always do an appropriate amount of testing to determine if a particular solution is suitable for your application. 
+
+The results of some ad-hoc performance testing yielded that you can expect about 1000 messages per second per table (setting `TableCount`). However, increasing table count does have diminishing returns; attempting to push 20,000 messages/sec with 20 tables had a throughput of only ~10,000 messages/sec. This was observed with a SQL Server instance and load generator running on the same machine, an i9 9900k with an SSD, with a message size of ~200 bytes. A Redis backplane on the same hardware sustained 20,000 messages per second without issue.
+
+Do note that a broadcast message is considered a single message. Any call to `SendAsync` within a hub is a single message.
+
+## SQL Server Permissions
+
+By default, the library will automatically create its required schema and tables on startup (`AutoInstallSchema = true`). If you allow this, the SQL login used by your application will need elevated permissions to perform DDL operations. Alternatively, you can pre-install the schema using the [`install.sql`](./src/IntelliTect.AspNetCore.SignalR.SqlServer/Internal/SqlServer/install.sql) script and then configure `AutoInstallSchema = false` to run with minimal permissions.
+
+### Minimal Runtime Permissions (Recommended for Production)
+
+If you pre-install the database schema and set `AutoInstallSchema = false`, the application only needs the following permissions. Replace `SignalR` with your configured schema name and `YourHubName` with your hub's table name. Repeat for each table index from `0` to `TableCount - 1` (e.g. with the default `TableCount = 1`, you would have `Messages_YourHubName_0` and `Messages_YourHubName_0_Id`):
+
+``` sql
+-- Permissions on message tables (repeat for each table index from 0 to TableCount - 1):
+GRANT SELECT, INSERT, DELETE ON [SignalR].[Messages_YourHubName_0] TO [YourUser];
+GRANT SELECT, UPDATE ON [SignalR].[Messages_YourHubName_0_Id] TO [YourUser];
+```
+
+If Service Broker is enabled and you want to use it for real-time notifications (instead of falling back to polling), the `SqlDependency` mechanism requires additional permissions to create and manage its temporary Service Broker objects. The simplest approach is to grant the `db_owner` role:
+
+``` sql
+EXEC sp_addrolemember 'db_owner', 'YourUser';
+```
+
+If `db_owner` is too broad, the following individual permissions are required at a minimum, though `SqlDependency` may still require `db_owner` in some environments:
+
+``` sql
+-- Required for SqlDependency to subscribe to query notifications:
+GRANT SUBSCRIBE QUERY NOTIFICATIONS TO [YourUser];
+
+-- Required for SqlDependency to create and manage its temporary Service Broker objects in the dbo schema:
+GRANT CREATE PROCEDURE TO [YourUser];
+GRANT CREATE QUEUE TO [YourUser];
+GRANT CREATE SERVICE TO [YourUser];
+GRANT CONTROL ON SCHEMA::dbo TO [YourUser];
+GRANT REFERENCES ON CONTRACT::[http://schemas.microsoft.com/SQL/Notifications/PostQueryNotification] TO [YourUser];
+
+-- Required for receiving Service Broker error notifications:
+GRANT RECEIVE ON QueryNotificationErrorsQueue TO [YourUser];
+```
+
+### Schema Installation Permissions
+
+If using the default `AutoInstallSchema = true`, the login needs permissions to create the schema and tables. The simplest but broadest approach is to grant the `db_ddladmin` and `db_datawriter` database roles. For more restricted access, grant only the specific permissions needed:
+
+``` sql
+GRANT CREATE SCHEMA TO [YourUser];
+GRANT CREATE TABLE TO [YourUser];
+GRANT ALTER ON SCHEMA::[SignalR] TO [YourUser];
+GRANT INSERT ON SCHEMA::[SignalR] TO [YourUser];
+GRANT SELECT ON SCHEMA::[SignalR] TO [YourUser];
+```
+
+If also using `AutoEnableServiceBroker = true`, the login needs `ALTER` permission on the database:
+
+``` sql
+GRANT ALTER ON DATABASE::[YourDatabase] TO [YourUser];
+```
+
+## License
+
+[Apache 2.0](./LICENSE.txt). 
+
+Credit to Microsoft for both Microsoft.AspNet.SignalR.SqlServer and Microsoft.AspNetCore.SignalR.StackExchangeRedis, upon which this project is based.

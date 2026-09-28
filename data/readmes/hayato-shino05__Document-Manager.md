@@ -1,0 +1,154 @@
+<div align="center">
+
+# Document Manager
+
+学習資料と業務文書をローカルで整理する Avalonia デスクトップアプリケーションです。
+
+[![.NET](https://img.shields.io/badge/9.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
+[![Avalonia](https://img.shields.io/badge/Avalonia-11.2.7-7C3AED?style=for-the-badge)](https://avaloniaui.net/)
+[![SQLite](https://img.shields.io/badge/SQLite-Local_DB-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![Desktop](https://img.shields.io/badge/Platform-Desktop-0F172A?style=for-the-badge)](https://github.com/hayato-shino05/study-document-manager)
+
+[![Version](https://img.shields.io/badge/Version-4.0.0-14B8A6?style=for-the-badge)](https://github.com/hayato-shino05/Document-Manager/releases)
+<!--
+  【ダウンロード実績の注記】
+  旧バージョン（v2.x / v3.x）のリリースアセット整理に伴い GitHub API の累計カウンターがリセットされたため、
+  過去のダウンロード実績（180 回）をベースとした「180」を初期値に設定しています。
+-->
+[![Downloads](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fhayato-shino05%2FDocument-Manager%2Fmain%2F.github%2Fbadges%2Fdownloads.json%3Fv%3D2&style=for-the-badge&logo=github&logoColor=white)](https://github.com/hayato-shino05/Document-Manager/releases)
+[![License](https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/hayato-shino05/Document-Manager?style=for-the-badge&color=EF4444&logo=github&logoColor=white)](https://github.com/hayato-shino05/Document-Manager)
+
+<img src="./StudyDocumentManager/Assets/Brand/banner.png" alt="Document Manager banner" width="100%" />
+
+<video src="./StudyDocumentManager/Assets/Brand/video/video.mp4" width="100%" controls></video>
+
+</div>
+
+## 目次
+
+- [概要](#概要)
+- [主な機能](#主な機能)
+- [技術スタック](#技術スタック)
+- [セットアップ](#セットアップ)
+- [ビルドとテスト](#ビルドとテスト)
+- [Windows セットアップの作成](#windows-セットアップの作成)
+- [Linux（Debian/Ubuntu）パッケージ](#linuxdebianubuntuパッケージ)
+- [プロジェクト構成](#プロジェクト構成)
+- [貢献](#貢献)
+- [ライセンス](#ライセンス)
+
+## 概要
+
+Document Manager は、ローカルの SQLite データベースを使って文書を整理するデスクトップアプリケーションです。検索、分類、期限管理、コレクション管理、レポート表示までを 1 つのアプリケーションで扱えます。
+
+現在の実装は Avalonia 11.2.7 と .NET 9.0 をベースにしており、表示層は MVVM、データ永続化は `Microsoft.Data.Sqlite` を使っています。日本語を既定ロケールとし、言語設定は SQLite の `app_settings` に保存します。
+
+## 主な機能
+
+- 文書の追加、編集、削除、検索、複合フィルター
+- カテゴリ、文書タイプ、コレクション、関連文書による整理
+- 重要フラグ、期限、個人メモ、ごみ箱による管理
+- 一括インポート、重複検出、ファイル整合性確認
+- 最近開いた文書、CSV エクスポート、データベースのバックアップと復元
+- レポート画面と TreeMap による可視化
+- 日本語、英語、ベトナム語、中国語の UI 切り替え
+- Dashboard での欠損ファイル修復、launcher 失敗の案内、空の collection の作成と文書追加
+
+## 技術スタック
+
+| 項目 | 内容 |
+| --- | --- |
+| UI | Avalonia 11.2.7 |
+| Runtime | .NET 9.0 |
+| Pattern | MVVM (`CommunityToolkit.Mvvm`) |
+| DI | `Microsoft.Extensions.DependencyInjection` |
+| Database | SQLite (`Microsoft.Data.Sqlite`) |
+| Tests | xUnit |
+
+## セットアップ
+
+### 前提条件
+
+- .NET 9 SDK
+- Git
+- `.NET` デスクトップアプリを扱える開発環境、または `dotnet` CLI
+
+### 取得
+
+```bash
+git clone https://github.com/hayato-shino05/study-document-manager.git
+cd study-document-manager
+```
+
+### 起動
+
+```powershell
+dotnet run --project "StudyDocumentManager\StudyDocumentManager.csproj"
+```
+
+## ビルドとテスト
+
+```powershell
+dotnet build "StudyDocumentManager.sln" -c Debug
+dotnet test "StudyDocumentManager.Tests\StudyDocumentManager.Tests.csproj" -c Debug
+```
+
+現行のテストスイートは xUnit ベースです。データベース、repository、model/service の自動検証を行います。CI は build と test を実行し、成果物を artifact として保存します。Dashboard の deferred lifecycle、drag/drop の event bridge、native dialog、restore 後の再オープンなど、デスクトップ実行が必要な項目は手動確認の対象です。
+
+## Windows セットアップの作成
+
+利用者向けの setup EXE は self-contained publish から生成します。
+
+```powershell
+.\scripts\build-windows-setup.ps1 -Configuration Release
+```
+
+生成物:
+
+- publish: `artifacts\publish\win-x64\`
+- setup EXE: `artifacts\installer\document-manager.exe`
+
+この setup は .NET Framework 4.8 を要求せず、`win-x64` 向け自己完結型の Windows アプリとして配布します。
+
+## Linux（Debian/Ubuntu）パッケージ
+
+初期サポートは Debian/Ubuntu の `linux-x64`（amd64）向けです。自己完結型 publish を含む `.deb` パッケージは、Linux 環境で次のコマンドから作成します。
+
+```bash
+bash ./scripts/build-debian-package.sh
+```
+
+生成物は `artifacts/installer/` に作成されます。Debian/Ubuntu では生成した versioned package と SHA-256 checksum を取得して検証します。
+
+```bash
+package="artifacts/installer/document-manager.deb"
+test -n "$package"
+sha256sum "$package"
+sudo apt install "$package"
+```
+
+タグ付き Release では `document-manager.deb` と対応する `.sha256` が release assets として公開されます。インストール後の lifecycle 検証は `.github/workflows/linux-deb-lifecycle.yml` を参照してください。workflow は versioned Release asset の URL と SHA-256 を `workflow_dispatch` で受け取り、checksum と package metadata を検証してから install、`xvfb-run` 下の launch/database initialization、purge、application files の消失、user database の存続を fail-closed で確認します。
+
+アプリケーション本体は `/usr/lib/document-manager/`、起動コマンドは `/usr/bin/document-manager` に配置されます。ユーザーデータはパッケージ領域に書き込みません。データベースは `XDG_DATA_HOME` または `$HOME/.local/share` 配下の `StudyDocumentManager/data/study_documents.db` に保存されます。
+
+現時点では Debian/Ubuntu の amd64 を対象とします。ARM、AppImage、Flatpak、Snap、RPM、リポジトリ署名、Linux 向け自動更新は提供していません。Avalonia の native 依存関係はホスト環境が提供する必要があり、Wayland/X11 の実行互換性や native dialog は CI のパッケージ検証だけでは保証しません。
+
+## プロジェクト構成
+
+| プロジェクト | 役割 |
+| --- | --- |
+| `StudyDocumentManager` | Avalonia UI、画面モデル、サービス、テーマ |
+| `StudyDocumentManager.Core` | エンティティ、DTO、契約、共通ロジック |
+| `StudyDocumentManager.Data` | SQLite、スキーマ、マイグレーション、リポジトリ |
+| `StudyDocumentManager.Tests` | xUnit テスト |
+
+詳細な構成とデータベース仕様は、[DATABASE.md](./DATABASE.md)、[CONTRIBUTING.md](./CONTRIBUTING.md) を参照してください。
+
+## 貢献
+
+開発フロー、ビルド、テスト、PR 作成のガイドは [CONTRIBUTING.md](./CONTRIBUTING.md) を参照してください。
+
+## ライセンス
+
+このプロジェクトは [MIT License](./LICENSE) の下で公開しています。

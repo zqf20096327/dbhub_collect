@@ -1,0 +1,1342 @@
+# Relica
+
+[![CI](https://github.com/coregx/relica/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/coregx/relica/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/coregx/relica/graph/badge.svg)](https://codecov.io/gh/coregx/relica)
+[![Go Version](https://img.shields.io/badge/Go-1.25%2B-00ADD8?style=flat&logo=go)](https://go.dev/)
+[![Go Report Card](https://goreportcard.com/badge/github.com/coregx/relica)](https://goreportcard.com/report/github.com/coregx/relica)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/coregx/relica?include_prereleases&style=flat)](https://github.com/coregx/relica/releases)
+[![Go Reference](https://pkg.go.dev/badge/github.com/coregx/relica.svg)](https://pkg.go.dev/github.com/coregx/relica)
+
+**Relica** is a lightweight, type-safe database query builder for Go with zero production dependencies.
+
+> **🤖 AI Agents**: Before generating code, read **[AGENTS.md](AGENTS.md)** for correct API patterns. Use `Model()` API for CRUD, `Expression API` for WHERE conditions. Avoid `map[string]interface{}`.
+
+## ✨ Features
+
+- **Zero Dependencies** - Truly empty go.mod, uses only Go standard library
+- **High Performance** - LRU statement cache, batch operations (3.3x faster)
+- **Type-Safe** - Generic `One[T]`/`All[T]`/`Scalar[T]` + reflection-based struct scanning
+- **Model() API** - ORM-style CRUD with auto-populated IDs (int + UUID via `autoincrement` tag), composite PKs
+- **AutoID** - Stripe-like prefixed IDs (`usr_`, `ord_`) with dual-key pattern, `FindByPublicID()`, prefix validation
+- **NullStringMap** - Dynamic scanning without predefined structs
+- **Named Placeholders** - `{:name}` syntax with `Bind(Params{})` for readable queries
+- **Functional Expressions** - CASE, COALESCE, NULLIF, GREATEST, LEAST, CONCAT
+- **Transactional()** - Auto commit/rollback helper with panic recovery
+- **Dynamic WHERE** - `AndWhere()` / `OrWhere()` for conditional query building
+- **Row() / Column()** - Convenient scalar and single-column queries
+- **Prepare() / Close()** - Manual statement control for batch operations
+- **Transaction Support** - Full ACID with all isolation levels
+- **Security** - Parameterized queries prevent SQL injection by design
+- **Batch Operations** - Efficient multi-row INSERT and UPDATE
+- **JOIN Operations** - INNER, LEFT, RIGHT, FULL, CROSS JOIN support
+- **Sorting & Pagination** - ORDER BY, LIMIT, OFFSET, DISTINCT, FOR UPDATE/FOR SHARE
+- **Aggregate Functions** - COUNT, SUM, AVG, MIN, MAX, GROUP BY, HAVING
+- **Subqueries** - IN, EXISTS, FROM subqueries, scalar subqueries
+- **Set Operations** - UNION, UNION ALL, INTERSECT, EXCEPT
+- **Common Table Expressions** - WITH clause, recursive CTEs
+- **Multi-Database** - PostgreSQL, MySQL 8.0+, SQLite 3.25+ support
+- **Well-Tested** - 85%+ coverage, stdlib testing only
+- **Clean API** - Fluent builder pattern with context support
+
+> **Latest Release:** See [CHANGELOG.md](CHANGELOG.md) for version history and [GitHub Releases](https://github.com/coregx/relica/releases) for release notes.
+
+## 📌 API Usage Priority
+
+| Priority | API | When to Use |
+|----------|-----|-------------|
+| **PREFERRED** | `db.Model(&struct).Insert/Update/Delete/Upsert()` | All CRUD operations with structs |
+| **PREFERRED** | `relica.Eq()`, `relica.And()`, `relica.In()`, etc. | WHERE conditions |
+| **PREFERRED** | `relica.HashExp{"col": val}` | Simple equality conditions |
+| **ACCEPTABLE** | `Where("col = {:col}", relica.Params{"col": val})` | Named placeholders |
+| **ACCEPTABLE** | `Where("col = ?", val)` | Positional placeholders |
+| **AVOID** | `map[string]interface{}` | Only for dynamic/unknown schemas |
+
+> **For AI Agents**: See [AGENTS.md](AGENTS.md) for complete patterns and examples.
+
+## 🚀 Quick Start
+
+### Installation
+
+```bash
+go get github.com/coregx/relica
+```
+
+> **Note**: Always import only the main `relica` package. Internal packages are protected and not part of the public API.
+
+### Basic Usage
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "log"
+
+    "github.com/coregx/relica"
+    _ "github.com/lib/pq" // PostgreSQL driver
+)
+
+type User struct {
+    ID    int    `db:"id"`
+    Name  string `db:"name"`
+    Email string `db:"email"`
+}
+
+func main() {
+    // Connect to database
+    db, err := relica.Open("postgres", "postgres://user:pass@localhost/db")
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer db.Close()
+
+    ctx := context.Background()
+
+    // SELECT with Expression API (PREFERRED)
+    var user User
+    err = db.Select().
+        From("users").
+        Where(relica.Eq("id", 1)).
+        WithContext(ctx).
+        One(&user)
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Printf("User: %+v\n", user)
+
+    // SELECT with multiple conditions (PREFERRED)
+    var users []User
+    err = db.Select().
+        From("users").
+        Where(relica.And(
+            relica.GreaterThan("age", 18),
+            relica.Eq("status", "active"),
+        )).
+        All(&users)
+
+    // FIND by primary key (one-liner)
+    var user User
+    err = db.Model(&user).Find(42)
+
+    // FIND with column selection and filters (PK from struct)
+    user = User{ID: 42}
+    err = db.Select("name", "email").Where(relica.IsNull("deleted_at")).Model(&user)
+
+    // INSERT with Model() API (PREFERRED)
+    newUser := User{Name: "Alice", Email: "alice@example.com"}
+    err = db.Model(&newUser).Insert()
+    fmt.Println(newUser.ID) // Auto-populated!
+
+    // UPDATE with Model() API (PREFERRED)
+    newUser.Name = "Alice Updated"
+    err = db.Model(&newUser).Update()
+
+    // DELETE with Model() API (PREFERRED)
+    err = db.Model(&newUser).Delete()
+
+    // CTE (Common Table Expression)
+    statsQuery := db.Select("user_id", "COUNT(*) as order_count").
+        From("orders").
+        GroupBy("user_id")
+
+    var results []struct {
+        UserID     int `db:"user_id"`
+        OrderCount int `db:"order_count"`
+    }
+    err = db.Select().
+        With("stats", statsQuery).
+        From("stats").
+        All(&results)
+}
+```
+
+## 📚 Core Features
+
+### CRUD Operations
+
+#### Model() API (PREFERRED)
+
+**Use Model() API for all struct-based CRUD operations:**
+
+```go
+// INSERT - Auto-populates ID (PREFERRED)
+user := User{Name: "Bob", Email: "bob@example.com"}
+db.Model(&user).Insert()
+fmt.Println(user.ID) // Auto-populated!
+
+// INSERT - Selective fields
+db.Model(&user).Insert("name", "email") // Only these fields
+
+// UPDATE - By primary key (PREFERRED)
+user.Status = "inactive"
+db.Model(&user).Update()
+
+// UPDATE - Selective fields
+db.Model(&user).Update("status") // Only update status
+
+// DELETE - By primary key (PREFERRED)
+db.Model(&user).Delete()
+```
+
+#### SELECT with Expression API (PREFERRED)
+
+```go
+// Simple equality
+db.Select().From("users").
+    Where(relica.Eq("id", 1)).
+    One(&user)
+
+// Multiple conditions
+db.Select().From("users").
+    Where(relica.And(
+        relica.GreaterThan("age", 18),
+        relica.Eq("status", "active"),
+    )).
+    All(&users)
+
+// HashExp for simple equality
+db.Select().From("users").
+    Where(relica.HashExp{"status": "active", "role": "admin"}).
+    All(&users)
+```
+
+#### Map-based Operations (AVOID - Use Only for Dynamic Data)
+
+> **Warning**: Use `map[string]interface{}` ONLY when struct is not available (dynamic schemas, JSON payloads).
+
+```go
+// AVOID - Only for dynamic/unknown schemas
+db.Insert("users", map[string]interface{}{
+    "name": dynamicData["name"],
+}).Execute()
+
+// PREFER - Use Model() API instead
+user := User{Name: dynamicData["name"].(string)}
+db.Model(&user).Insert()
+```
+
+### Expression API
+
+Relica supports fluent expression builders for type-safe, complex WHERE clauses:
+
+#### HashExp - Simple Conditions
+
+```go
+// Simple equality
+db.Select().From("users").
+    Where(relica.HashExp{"status": 1}).
+    All(&users)
+
+// Multiple conditions (AND)
+db.Select().From("users").
+    Where(relica.HashExp{
+        "status": 1,
+        "age":    30,
+    }).
+    All(&users)
+
+// IN clause (slice values)
+db.Select().From("users").
+    Where(relica.HashExp{
+        "status": []interface{}{1, 2, 3},
+    }).
+    All(&users)
+
+// NULL handling
+db.Select().From("users").
+    Where(relica.HashExp{
+        "deleted_at": nil,  // IS NULL
+    }).
+    All(&users)
+
+// Combined: IN + NULL + equality
+db.Select().From("users").
+    Where(relica.HashExp{
+        "status":     []interface{}{1, 2},
+        "deleted_at": nil,
+        "role":       "admin",
+    }).
+    All(&users)
+```
+
+#### Comparison Operators
+
+```go
+// Greater than
+db.Select().From("users").
+    Where(relica.GreaterThan("age", 18)).
+    All(&users)
+
+// Less than or equal
+db.Select().From("users").
+    Where(relica.LessOrEqual("price", 100.0)).
+    All(&products)
+
+// Available: Eq, NotEq, GreaterThan, LessThan, GreaterOrEqual, LessOrEqual
+```
+
+#### NULL Checks
+
+```go
+// IS NULL / IS NOT NULL
+db.Select().From("users").
+    Where(relica.IsNull("deleted_at")).
+    All(&activeUsers)
+
+db.Select().From("orders").
+    Where(relica.IsNotNull("shipped_at")).
+    All(&shippedOrders)
+```
+
+#### IN and BETWEEN
+
+```go
+// IN
+db.Select().From("users").
+    Where(relica.In("role", "admin", "moderator")).
+    All(&users)
+
+// NOT IN
+db.Select().From("users").
+    Where(relica.NotIn("status", 0, 99)).
+    All(&users)
+
+// BETWEEN
+db.Select().From("orders").
+    Where(relica.Between("created_at", startDate, endDate)).
+    All(&orders)
+```
+
+#### LIKE with Automatic Escaping
+
+```go
+// Default: %value% (partial match)
+db.Select().From("users").
+    Where(relica.Like("name", "john")).  // name LIKE '%john%'
+    All(&users)
+
+// Multiple values (AND)
+db.Select().From("articles").
+    Where(relica.Like("title", "go", "database")).  // title LIKE '%go%' AND title LIKE '%database%'
+    All(&articles)
+
+// Custom matching (prefix/suffix)
+db.Select().From("files").
+    Where(relica.Like("filename", ".txt").Match(false, true)).  // filename LIKE '%.txt'
+    All(&files)
+
+// OR logic
+db.Select().From("users").
+    Where(relica.OrLike("email", "gmail", "yahoo")).  // email LIKE '%gmail%' OR email LIKE '%yahoo%'
+    All(&users)
+```
+
+#### Logical Combinators
+
+```go
+// AND
+db.Select().From("users").
+    Where(relica.And(
+        relica.Eq("status", 1),
+        relica.GreaterThan("age", 18),
+    )).
+    All(&users)
+
+// OR
+db.Select().From("users").
+    Where(relica.Or(
+        relica.Eq("role", "admin"),
+        relica.Eq("role", "moderator"),
+    )).
+    All(&users)
+
+// NOT
+db.Select().From("users").
+    Where(relica.Not(
+        relica.In("status", 0, 99),
+    )).
+    All(&users)
+
+// Nested combinations
+db.Select().From("users").
+    Where(relica.And(
+        relica.Eq("status", 1),
+        relica.Or(
+            relica.Eq("role", "admin"),
+            relica.GreaterThan("age", 30),
+        ),
+    )).
+    All(&users)
+```
+
+#### Named Placeholders
+
+Named parameters use `{:name}` syntax with `relica.Params` map — readable, safe, and reusable:
+
+```go
+// Single parameter
+db.Select().From("users").
+    Where("id = {:id}", relica.Params{"id": 1}).
+    One(&user)
+
+// Multiple parameters
+db.Select().From("users").
+    Where("status = {:status} AND role = {:role}", relica.Params{
+        "status": "active",
+        "role":   "admin",
+    }).
+    All(&users)
+
+// Same parameter used multiple times
+db.Select().From("categories").
+    Where("parent_id = {:id} OR id = {:id}", relica.Params{"id": categoryID}).
+    All(&categories)
+```
+
+Named placeholders work in `Where`, `AndWhere`, `OrWhere` on Select, Update, and Delete queries.
+
+#### Positional Placeholders
+
+Positional `?` parameters also work (backward compatible):
+
+```go
+db.Select().From("users").
+    Where("status = ? AND age > ?", 1, 18).
+    All(&users)
+
+// Can mix styles
+db.Select().From("users").
+    Where("status = ?", 1).
+    Where(relica.GreaterThan("age", 18)).
+    All(&users)
+```
+
+### Model() API
+
+**ORM-style operations** with automatic struct mapping, auto-populated IDs, and selective field control.
+
+#### Basic CRUD Operations
+
+```go
+type User struct {
+    ID    int64  `db:"id"`     // Auto-populated after INSERT
+    Name  string `db:"name"`
+    Email string `db:"email"`
+    Status string `db:"status"`
+}
+
+// INSERT - Auto-populates ID after insert
+user := User{Name: "Alice", Email: "alice@example.com"}
+err := db.Model(&user).Insert()
+fmt.Println(user.ID) // 1 (auto-populated!)
+
+// INSERT - Selective fields
+user := User{Name: "Bob", Email: "bob@example.com", Status: "pending"}
+err := db.Model(&user).Insert("name", "email") // Only name and email inserted
+
+// UPDATE - Updates all fields by primary key
+user.Name = "Alice Updated"
+err := db.Model(&user).Update()
+
+// UPDATE - Selective fields
+err := db.Model(&user).Update("status") // Only update status field
+
+// DELETE - By primary key
+err := db.Model(&user).Delete()
+```
+
+#### Auto-Populate ID
+
+Works across all databases (PostgreSQL, MySQL, SQLite):
+
+```go
+user := User{Name: "Charlie"}
+err := db.Model(&user).Insert()
+
+// PostgreSQL: Uses RETURNING clause
+// MySQL/SQLite: Uses LastInsertId()
+// ID automatically populated in all cases
+fmt.Println(user.ID) // Auto-generated ID
+```
+
+#### Selective Fields
+
+Control exactly which fields are inserted/updated:
+
+```go
+user := User{
+    Name:   "Alice",
+    Email:  "alice@example.com",
+    Status: "pending",
+}
+
+// Insert only name and email (status remains default)
+db.Model(&user).Insert("name", "email")
+
+// Update only status (name and email unchanged)
+user.Status = "active"
+db.Model(&user).Update("status")
+
+// Exclude fields (Exclude takes precedence)
+db.Model(&user).Exclude("status").Insert("name", "email", "status")
+// Result: Only name and email inserted
+```
+
+#### Primary Key Detection
+
+Priority order:
+1. Field tagged `db:"pk"` — legacy single PK (maps to column "pk")
+2. Field tagged `db:"column,pk"` — explicit PK with column name
+3. Field named `ID` (no tag) — auto-detected
+4. Field named `Id` (no tag) — last resort
+
+```go
+type Product struct {
+    ProductID int    `db:"product_id,pk"` // Explicit PK with column name
+    Name      string `db:"name"`
+}
+
+type Order struct {
+    ID int // Detected automatically (field named "ID")
+}
+```
+
+#### Transactions
+
+```go
+tx, err := db.Begin(ctx)
+defer tx.Rollback()
+
+user := User{Name: "Alice"}
+err = tx.Model(&user).Insert()
+
+if err == nil {
+    tx.Commit()
+}
+```
+
+#### Advanced Usage
+
+```go
+// Custom table name
+db.Model(&user).Table("custom_users").Insert()
+
+// Exclude fields from operation
+db.Model(&user).Exclude("created_at", "updated_at").Update()
+
+// Pre-set IDs (won't be overwritten)
+user := User{ID: 999, Name: "System"}
+db.Model(&user).Insert() // ID stays 999
+```
+
+#### Upsert (INSERT or UPDATE)
+
+```go
+// INSERT ... ON CONFLICT (id) DO UPDATE SET all non-PK fields
+user := User{ID: 1, Name: "Alice", Email: "alice@example.com"}
+err := db.Model(&user).Upsert()
+
+// Selective: only update specific fields on conflict
+err = db.Model(&user).Upsert("name", "email")
+```
+
+Works with PostgreSQL (`ON CONFLICT DO UPDATE`), MySQL (`ON DUPLICATE KEY UPDATE`), SQLite (`ON CONFLICT DO UPDATE`).
+
+#### UpdateChanged (Dirty Field Detection)
+
+```go
+// Load user
+var user User
+db.Select().From("users").Where(relica.Eq("id", 1)).One(&user)
+
+// Save original, modify fields
+original := user
+user.Name = "Alice Updated"
+user.Status = 2
+
+// UPDATE only changed fields (name, status) — not all fields
+err := db.Model(&user).UpdateChanged(&original)
+// Generates: UPDATE users SET name=?, status=? WHERE id=?
+
+// If nothing changed — returns nil, no query executed
+```
+
+### JOIN Operations
+
+**Solve N+1 query problems with JOIN support** - reduces 101 queries to 1 query (100x improvement).
+
+```go
+// Simple INNER JOIN
+var results []struct {
+    UserID   int    `db:"user_id"`
+    UserName string `db:"user_name"`
+    PostID   int    `db:"post_id"`
+    Title    string `db:"title"`
+}
+
+db.Select("u.id as user_id", "u.name as user_name", "p.id as post_id", "p.title").
+    From("users u").
+    InnerJoin("posts p", "p.user_id = u.id").
+    All(&results)
+
+// Multiple JOINs with aggregates
+db.Select("messages.*", "users.name", "COUNT(attachments.id) as attachment_count").
+    From("messages m").
+    InnerJoin("users u", "m.user_id = u.id").
+    LeftJoin("attachments a", "m.id = a.message_id").
+    Where("m.status = ?", 1).
+    GroupBy("messages.id").
+    All(&results)
+
+// All JOIN types supported
+db.Select().From(table1).InnerJoin(table2, on)  // INNER JOIN
+db.Select().From(table1).LeftJoin(table2, on)   // LEFT OUTER JOIN
+db.Select().From(table1).RightJoin(table2, on)  // RIGHT OUTER JOIN
+db.Select().From(table1).FullJoin(table2, on)   // FULL OUTER JOIN (PostgreSQL, SQLite)
+db.Select().From(table1).CrossJoin(table2)      // CROSS JOIN (no ON condition)
+
+// JOIN with Expression API
+db.Select().
+    From("messages m").
+    InnerJoin("users u", relica.And(
+        relica.NewExp("m.user_id = u.id"),
+        relica.GreaterThan("u.status", 0),
+    )).
+    All(&results)
+```
+
+**Performance**: 100x query reduction (N+1 problem solved), 6-25x faster depending on database.
+
+See the [Advanced Patterns Guide](docs/guides/ADVANCED_PATTERNS.md) for comprehensive JOIN examples and best practices.
+
+### Sorting and Pagination
+
+**Database-side sorting and pagination** for efficient data retrieval - 100x memory reduction.
+
+```go
+// ORDER BY with multiple columns
+db.Select().
+    From("messages").
+    OrderBy("created_at DESC", "id ASC").
+    All(&messages)
+
+// Pagination with LIMIT and OFFSET
+const pageSize = 100
+const pageNumber = 2 // Third page (0-indexed)
+
+db.Select().
+    From("users").
+    OrderBy("age DESC").
+    Limit(pageSize).
+    Offset(pageNumber * pageSize).
+    All(&users)
+
+// Table column references
+db.Select().
+    From("messages m").
+    InnerJoin("users u", "m.user_id = u.id").
+    OrderBy("m.created_at DESC", "u.name ASC").
+    Limit(50).
+    All(&results)
+```
+
+**Performance**: 100x memory reduction (fetch only what you need vs all rows), 6x faster.
+
+### DISTINCT
+
+```go
+// Eliminate duplicate rows
+db.Select("category").From("products").Distinct().All(&categories)
+// SELECT DISTINCT "category" FROM "products"
+```
+
+### Row Locking (FOR UPDATE / FOR SHARE)
+
+**Pessimistic locking** for concurrent data access. Silently ignored for SQLite (database-level locking).
+
+```go
+// Exclusive lock — block other transactions from reading/writing
+db.Select().From("accounts").
+    Where(relica.Eq("id", accountID)).
+    ForUpdate().
+    One(&account)
+
+// Shared lock — allow concurrent reads, block writes
+db.Select().From("products").
+    Where(relica.Eq("id", productID)).
+    ForShare().
+    One(&product)
+
+// Non-blocking lock — skip locked rows (job queue pattern)
+db.Select().From("tasks").
+    Where(relica.Eq("status", "pending")).
+    ForUpdateSkipLocked().
+    Limit(10).
+    All(&tasks)
+```
+
+### Aggregate Functions
+
+**Database-side aggregations** for COUNT, SUM, AVG, MIN, MAX - 2,500,000x memory reduction.
+
+```go
+// Simple COUNT
+var count struct{ Total int `db:"total"` }
+db.Select("COUNT(*) as total").
+    From("messages").
+    One(&count)
+
+// Multiple aggregates
+type Stats struct {
+    Count int     `db:"count"`
+    Sum   int64   `db:"sum"`
+    Avg   float64 `db:"avg"`
+    Min   int     `db:"min"`
+    Max   int     `db:"max"`
+}
+
+var stats Stats
+db.Select("COUNT(*) as count", "SUM(size) as sum", "AVG(size) as avg", "MIN(size) as min", "MAX(size) as max").
+    From("messages").
+    One(&stats)
+
+// GROUP BY with HAVING
+type UserStats struct {
+    UserID       int `db:"user_id"`
+    MessageCount int `db:"message_count"`
+}
+
+var userStats []UserStats
+db.Select("user_id", "COUNT(*) as message_count").
+    From("messages").
+    GroupBy("user_id").
+    Having("COUNT(*) > ?", 100).
+    OrderBy("message_count DESC").
+    All(&userStats)
+```
+
+**Performance**: 2,500,000x memory reduction (database aggregation vs fetching all rows), 20x faster.
+
+See the [Advanced Patterns Guide](docs/guides/ADVANCED_PATTERNS.md) for comprehensive aggregate examples and patterns.
+
+### Query Helpers
+
+#### Exists
+
+```go
+exists, err := db.Select().From("users").
+    Where(relica.Eq("email", "alice@example.com")).
+    Exists()
+// SELECT EXISTS(SELECT 1 FROM "users" WHERE "email" = $1)
+```
+
+#### Count
+
+```go
+count, err := db.Select().From("users").
+    Where(relica.Eq("status", "active")).
+    Count()
+// SELECT COUNT(*) FROM "users" WHERE "status" = $1
+```
+
+#### ToSQL (Query Preview)
+
+```go
+// Preview SQL without executing
+sql, params := db.Select().From("users").
+    Where(relica.Eq("id", 1)).
+    ToSQL()
+// sql = `SELECT * FROM "users" WHERE "id" = $1`
+// params = []interface{}{1}
+
+// Works on Update and Delete too
+sql, params = db.Update("users").
+    Set(map[string]interface{}{"status": "active"}).
+    Where(relica.Eq("id", 1)).
+    ToSQL()
+```
+
+### Error Handling
+
+#### ErrNotFound
+
+`One()` returns `relica.ErrNotFound` instead of raw `sql.ErrNoRows`:
+
+```go
+var user User
+err := db.Select().From("users").Where(relica.Eq("id", 999)).One(&user)
+
+if errors.Is(err, relica.ErrNotFound) {
+    // record not found — clean, library-level error
+}
+
+// sql.ErrNoRows still works too (wrapped inside)
+if errors.Is(err, sql.ErrNoRows) {
+    // also true
+}
+```
+
+Note: `All()` returns empty slice for no results, not an error.
+
+#### Error Classification
+
+Database-agnostic error helpers — work with PostgreSQL, MySQL, and SQLite:
+
+```go
+_, err := db.Model(&user).Insert()
+
+if relica.IsUniqueViolation(err) {
+    // duplicate key (e.g., email already exists)
+}
+if relica.IsForeignKeyViolation(err) {
+    // referenced record doesn't exist
+}
+if relica.IsNotNullViolation(err) {
+    // required field is missing
+}
+if relica.IsCheckViolation(err) {
+    // CHECK constraint failed
+}
+```
+
+### Advanced SQL Features
+
+Relica adds powerful SQL features for complex queries.
+
+#### Subqueries
+
+**IN/EXISTS Subqueries**:
+```go
+// Find users who have placed orders
+sub := db.Select("user_id").From("orders").Where("status = ?", "completed")
+db.Select().From("users").Where(relica.In("id", sub.AsExpression())).All(&users)
+
+// Find users with at least one order (EXISTS is often faster)
+orderCheck := db.Select("1").From("orders").Where("orders.user_id = users.id")
+db.Select().From("users").Where(relica.Exists(orderCheck.AsExpression())).All(&users)
+```
+
+**FROM Subqueries**:
+```go
+// Calculate aggregates, then filter
+stats := db.Select("user_id", "COUNT(*) as order_count", "SUM(total) as total_spent").
+    From("orders").
+    GroupBy("user_id")
+
+db.Select("user_id", "order_count", "total_spent").
+    FromSelect(stats, "order_stats").
+    Where("order_count > ? AND total_spent > ?", 10, 5000).
+    All(&topCustomers)
+```
+
+**Scalar Subqueries in SELECT** (type-safe, no raw SQL):
+```go
+// Count orders per user — correlated subquery
+sub := db.Select("COUNT(*)").From("orders").
+    Where(relica.EqCol("orders.user_id", "users.id"))
+db.Select("id", "name").
+    SelectSub(sub.AsExpression(), "order_count").
+    From("users").All(&users)
+```
+
+See [Subquery Guide](docs/SUBQUERY_GUIDE.md) for complete examples and performance tips.
+
+#### Set Operations
+
+**UNION/UNION ALL**:
+```go
+// Combine active and archived users (UNION removes duplicates)
+active := db.Select("name").From("users").Where("status = ?", 1)
+archived := db.Select("name").From("archived_users").Where("status = ?", 1)
+active.Union(archived).All(&allNames)
+
+// UNION ALL is 2-3x faster (keeps duplicates)
+active.UnionAll(archived).All(&allNames)
+```
+
+**INTERSECT/EXCEPT** (PostgreSQL, MySQL 8.0.31+, SQLite):
+```go
+// Find users who have placed orders (INTERSECT)
+allUsers := db.Select("id").From("users")
+orderUsers := db.Select("user_id").From("orders")
+allUsers.Intersect(orderUsers).All(&activeUsers)
+
+// Find users without orders (EXCEPT)
+allUsers.Except(orderUsers).All(&inactiveUsers)
+```
+
+See [Set Operations Guide](docs/SET_OPERATIONS_GUIDE.md) for database compatibility and workarounds.
+
+#### Common Table Expressions (CTEs)
+
+**Basic CTEs**:
+```go
+// Define reusable query
+orderTotals := db.Select("user_id", "SUM(total) as total").
+    From("orders").
+    GroupBy("user_id")
+
+// Use CTE in main query
+db.Select().
+    With("order_totals", orderTotals).
+    From("order_totals").
+    Where("total > ?", 1000).
+    All(&premiumUsers)
+```
+
+**Recursive CTEs** (organizational hierarchies, trees):
+```go
+// Anchor: top-level employees
+anchor := db.Select("id", "name", "manager_id", "1 as level").
+    From("employees").
+    Where("manager_id IS NULL")
+
+// Recursive: children
+recursive := db.Select("e.id", "e.name", "e.manager_id", "h.level + 1").
+    From("employees e").
+    InnerJoin("hierarchy h", "e.manager_id = h.id")
+
+// Build hierarchy
+db.Select().
+    WithRecursive("hierarchy", anchor.UnionAll(recursive)).
+    From("hierarchy").
+    OrderBy("level", "name").
+    All(&orgChart)
+```
+
+See [CTE Guide](docs/CTE_GUIDE.md) for hierarchical data examples (org charts, bill of materials, category trees).
+
+#### Window Functions
+
+Relica supports window functions via `SelectExpr()` for advanced analytics:
+
+```go
+// Rank users by order total within each country
+db.Select().
+    SelectExpr("user_id", "country", "total",
+        "RANK() OVER (PARTITION BY country ORDER BY total DESC) as rank").
+    From("orders").
+    All(&rankedOrders)
+
+// Running totals with frame specification
+db.Select().
+    SelectExpr("date", "amount",
+        "SUM(amount) OVER (ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) as running_total").
+    From("transactions").
+    OrderBy("date").
+    All(&runningTotals)
+```
+
+See [Window Functions Guide](docs/WINDOW_FUNCTIONS_GUIDE.md) for complete reference with RANK(), ROW_NUMBER(), LAG(), LEAD(), and frame specifications.
+
+### Transactions
+
+```go
+// Start transaction
+tx, err := db.BeginTx(ctx, &relica.TxOptions{
+    Isolation: sql.LevelSerializable,
+})
+if err != nil {
+    return err
+}
+defer tx.Rollback() // Rollback if not committed
+
+// Execute queries within transaction
+_, err = tx.Insert("users", userData).Execute()
+if err != nil {
+    return err
+}
+
+_, err = tx.Update("accounts").
+    Set(map[string]interface{}{"balance": newBalance}).
+    Where("user_id = ?", userID).
+    Execute()
+if err != nil {
+    return err
+}
+
+// Commit transaction
+return tx.Commit()
+```
+
+### AutoID — Enterprise ID Pattern
+
+**Stripe-like prefixed IDs** with dual-key pattern. First query builder with native support.
+
+```go
+// 1. Define model — one tag per field:
+type User struct {
+    ID       int64  `db:"id,pk"`                    // internal PK (auto-increment)
+    PublicID string `db:"public_id,autoid:usr"`      // external ID (auto-generated)
+    Name     string `db:"name"`
+}
+
+// 2. Insert — PublicID auto-generated, ID auto-populated:
+user := User{Name: "Alice"}
+db.Model(&user).Insert()
+fmt.Println(user.PublicID) // "usr_019078fa-b37e-7abc-..."
+fmt.Println(user.ID)       // 42
+
+// 3. Lookup by public ID (one-liner with prefix validation):
+var found User
+err := db.Model(&found).FindByPublicID("usr_019078fa-b37e-7abc-...")
+
+// 4. Wrong prefix → safe error (prevents cross-model lookups):
+err = db.Model(&found).FindByPublicID("ord_019078fa-...")
+// errors.Is(err, relica.ErrAutoIDPrefixMismatch) == true
+
+// 5. Pre-set ID for testing (not overwritten):
+user := User{PublicID: "usr_test-id", Name: "Test"}
+db.Model(&user).Insert() // PublicID stays "usr_test-id"
+```
+
+**BeforeInserter hook** for custom pre-insert logic:
+
+```go
+func (u *User) BeforeInsert() error {
+    u.CreatedAt = time.Now()
+    return nil // return error to abort insert
+}
+```
+
+**Custom generators** (ULID, Snowflake, etc.):
+
+```go
+relica.RegisterIDGenerator("ulid", func() string {
+    return ulid.Make().String()
+})
+
+type Event struct {
+    ID       int64  `db:"id,pk"`
+    PublicID string `db:"public_id,autoid:evt,gen=ulid"` // "evt_01H9XZ..."
+}
+```
+
+See [Primary Key Strategy](docs/guides/BEST_PRACTICES.md#-primary-key-strategy) for when to use autoincrement vs UUID v7 vs dual-key pattern.
+
+### Batch Operations
+
+**Batch INSERT** (3.3x faster than individual inserts):
+
+```go
+result, err := db.BatchInsert("users", []string{"name", "email"}).
+    Values("Alice", "alice@example.com").
+    Values("Bob", "bob@example.com").
+    Values("Charlie", "charlie@example.com").
+    Execute()
+
+// Or from a slice
+users := []User{
+    {Name: "Alice", Email: "alice@example.com"},
+    {Name: "Bob", Email: "bob@example.com"},
+}
+
+batch := db.BatchInsert("users", []string{"name", "email"})
+for _, user := range users {
+    batch.Values(user.Name, user.Email)
+}
+result, err := batch.Execute()
+```
+
+**Batch UPDATE** (updates multiple rows with different values):
+
+```go
+result, err := db.BatchUpdate("users", "id").
+    Set(1, map[string]interface{}{"name": "Alice Updated", "status": "active"}).
+    Set(2, map[string]interface{}{"name": "Bob Updated", "status": "active"}).
+    Set(3, map[string]interface{}{"age": 30}).
+    Execute()
+```
+
+### Context Support
+
+```go
+// Query with timeout
+ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+defer cancel()
+
+var users []User
+err := db.Select().
+    From("users").
+    WithContext(ctx).
+    All(&users)
+
+// Context on query level
+err = db.Select().
+    From("users").
+    WithContext(ctx).
+    One(&user)
+
+// Transaction context auto-propagates
+tx, _ := db.BeginTx(ctx, nil)
+tx.Select().From("users").One(&user) // Uses ctx automatically
+```
+
+## 🏗️ Database Support
+
+| Database | Status | Placeholders | Identifiers | UPSERT |
+|----------|--------|--------------|-------------|--------|
+| **PostgreSQL** | ✅ Full | `$1, $2, $3` | `"users"` | `ON CONFLICT` |
+| **MySQL** | ✅ Full | `?, ?, ?` | `` `users` `` | `ON DUPLICATE KEY` |
+| **SQLite** | ✅ Full | `?, ?, ?` | `"users"` | `ON CONFLICT` |
+
+## ⚡ Performance
+
+### Statement Cache
+
+- **Default capacity**: 1000 prepared statements
+- **Hit latency**: <60ns
+- **Thread-safe**: Concurrent access optimized
+- **Metrics**: Hit rate, evictions, cache size
+
+```go
+// Configure cache capacity
+db, err := relica.Open("postgres", dsn,
+    relica.WithStmtCacheCapacity(2000),
+    relica.WithMaxOpenConns(25),
+    relica.WithMaxIdleConns(5),
+)
+
+// Check connection pool statistics
+stats := db.Stats()
+fmt.Printf("Open: %d, Idle: %d, InUse: %d\n",
+    stats.OpenConnections, stats.Idle, stats.InUse)
+```
+
+### Batch Operations Performance
+
+| Operation | Rows | Time | vs Single | Memory |
+|-----------|------|------|-----------|--------|
+| Batch INSERT | 100 | 327ms | **3.3x faster** | -15% |
+| Single INSERT | 100 | 1094ms | Baseline | Baseline |
+| Batch UPDATE | 100 | 1370ms | **2.5x faster** | -55% allocs |
+
+## 🔧 Configuration
+
+```go
+db, err := relica.Open("postgres", dsn,
+    // Connection pool
+    relica.WithMaxOpenConns(25),
+    relica.WithMaxIdleConns(5),
+
+    // Statement cache
+    relica.WithStmtCacheCapacity(1000),
+)
+```
+
+### Connection Management
+
+#### Standard Connection
+
+```go
+// Create new connection with Relica managing the pool
+db, err := relica.Open("postgres", dsn)
+defer db.Close()
+```
+
+#### Wrap Existing Connection
+
+Use `WrapDB()` when you need to integrate Relica with an existing `*sql.DB` connection:
+
+```go
+import (
+    "database/sql"
+    "time"
+
+    "github.com/coregx/relica"
+    _ "github.com/lib/pq"
+)
+
+// Create and configure external connection pool
+sqlDB, err := sql.Open("postgres", dsn)
+if err != nil {
+    log.Fatal(err)
+}
+
+// Apply custom pool settings
+sqlDB.SetMaxOpenConns(100)
+sqlDB.SetMaxIdleConns(50)
+sqlDB.SetConnMaxLifetime(time.Hour)
+sqlDB.SetConnMaxIdleTime(10 * time.Minute)
+
+// Wrap with Relica query builder
+db := relica.WrapDB(sqlDB, "postgres")
+
+// Use Relica's fluent API
+var users []User
+err = db.Select().
+    From("users").
+    Where("status = ?", 1).
+    All(&users)
+
+// Caller is responsible for closing the connection
+defer sqlDB.Close()  // NOT db.Close()
+```
+
+**Use Cases for WrapDB:**
+
+- **Existing Codebase Integration**: Add Relica to projects with established `*sql.DB` connections
+- **Custom Pool Configuration**: Apply advanced connection pool settings before wrapping
+- **Shared Connections**: Multiple parts of your application can share the same pool
+- **Testing**: Wrap test database connections without managing lifecycle
+
+**Important Notes:**
+
+- Each `WrapDB()` call creates a new Relica instance with its own statement cache
+- The caller is responsible for closing the underlying `*sql.DB` connection
+- Multiple wraps of the same connection are isolated (separate caches)
+
+#### Connection Inspection
+
+Access the underlying connection for pool tuning, health checks, or driver identification:
+
+```go
+// Get underlying *sql.DB for direct pool configuration
+sqlDB := db.SqlDB()
+sqlDB.SetMaxOpenConns(100)
+
+// Health check
+if err := db.PingContext(ctx); err != nil {
+    log.Fatal("database unreachable:", err)
+}
+
+// Driver name (useful for dialect-specific logic)
+fmt.Println(db.DriverName()) // "postgres", "mysql", or "sqlite3"
+```
+
+## 🛡️ Security
+
+Relica's primary defense against SQL injection is **parameterized queries by design**. All query builder methods pass values as parameters, never interpolated into SQL strings:
+
+```go
+// Safe — values are always parameterized
+db.Select().From("users").
+    Where(relica.Eq("id", userInput)).
+    One(&user)
+
+// Safe — Model() API uses parameterized queries internally
+db.Model(&user).Insert()
+db.Model(&user).Update("status")
+```
+
+See [Security Guide](docs/guides/SECURITY.md) for more details.
+
+## 📖 Documentation
+
+### Migration Guides
+
+Switching from another library? We've got you covered:
+
+- **[Migration from GORM](docs/guides/MIGRATION_FROM_GORM.md)** - Complete guide for GORM users
+  - ORM vs Query Builder philosophy
+  - Side-by-side API comparisons
+  - Association handling (Preload → JOIN)
+  - Gradual migration strategies
+
+- **[Migration from sqlx](docs/guides/MIGRATION_FROM_SQLX.md)** - Complete guide for sqlx users
+  - Drop-in replacement patterns
+  - Query builder advantages
+  - Statement caching benefits
+  - Using both together
+
+### Comprehensive User Guides
+
+**Getting Started:**
+- **[Getting Started Guide](docs/guides/GETTING_STARTED.md)** - Installation, first query, CRUD operations, common patterns
+- **[Best Practices Guide](docs/guides/BEST_PRACTICES.md)** - Repository pattern, error handling, testing strategies
+
+**Production:**
+- **[Production Deployment Guide](docs/guides/PRODUCTION_DEPLOYMENT.md)** - Configuration, health checks, Docker/Kubernetes, monitoring
+- **[Performance Tuning Guide](docs/guides/PERFORMANCE_TUNING.md)** - Query optimization, connection pooling, caching strategies
+- **[Troubleshooting Guide](docs/guides/TROUBLESHOOTING.md)** - Common errors and solutions
+
+**Advanced:**
+- **[Advanced Patterns Guide](docs/guides/ADVANCED_PATTERNS.md)** - Complex queries, CTEs, window functions, UPSERT
+
+### SQL Feature Guides
+
+- **[Subquery Guide](docs/SUBQUERY_GUIDE.md)** - IN, EXISTS, FROM, scalar subqueries with performance tips
+- **[Set Operations Guide](docs/SET_OPERATIONS_GUIDE.md)** - UNION, INTERSECT, EXCEPT with database compatibility
+- **[CTE Guide](docs/CTE_GUIDE.md)** - WITH clauses, recursive CTEs for hierarchical data
+- **[Window Functions Guide](docs/WINDOW_FUNCTIONS_GUIDE.md)** - Analytics with RANK(), ROW_NUMBER(), LAG(), LEAD()
+
+### Additional Resources
+
+- **[Performance Comparison](docs/PERFORMANCE_COMPARISON.md)** - Benchmarks vs GORM, sqlx, sqlc, database/sql
+- [API Reference](https://pkg.go.dev/github.com/coregx/relica)
+
+## 🧪 Testing
+
+```bash
+# Run unit tests
+go test ./...
+
+# Run with coverage
+go test -cover ./...
+
+# Run integration tests (requires Docker)
+go test -tags=integration ./test/...
+
+# Run benchmarks
+go test -bench=. -benchmem ./benchmark/...
+```
+
+## 🎯 Design Philosophy
+
+1. **Zero Dependencies** - Production code uses only Go standard library
+2. **Type Safety** - Compile-time checks, runtime safety
+3. **Performance** - Statement caching, batch operations, zero allocations in hot paths
+4. **Simplicity** - Clean API, easy to learn, hard to misuse
+5. **Correctness** - ACID transactions, proper error handling
+6. **Observability** - Built-in metrics, context support for tracing
+
+## 📊 Project Status
+
+- **Go Version**: 1.25+
+- **Production Ready**: Yes (beta)
+- **Test Coverage**: 88.2%
+- **Dependencies**: 0 (production), test-only: testify + DB drivers
+- **API**: Stable public API, internal packages protected
+
+## 🤝 Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) first.
+
+## 📝 License
+
+Relica is released under the [MIT License](LICENSE).
+
+## 🙏 Acknowledgments
+
+- Inspired by [ozzo-dbx](https://github.com/go-ozzo/ozzo-dbx)
+- Built with Go 1.25+ features
+- Zero-dependency philosophy inspired by Go standard library
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/coregx/relica/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/coregx/relica/discussions)
+- **Email**: support@coregx.dev
+
+## ✨ Special Thanks
+
+**Professor Ancha Baranova** - This project would not have been possible without her invaluable help and support. Her assistance was crucial in bringing Relica to life.
+
+---
+
+**Made with ❤️ by Andrey Kolkov and CoreGX contributors**
+
+*Relica - Lightweight, Fast, Zero-Dependency Database Query Builder for Go*
+
+
+## Star History
+
+<a href="https://starhistory.io">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.starhistory.io/png?repos=coregx/relica&style=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.starhistory.io/png?repos=coregx/relica&style=professional" />
+   <img alt="Star History Chart" src="https://api.starhistory.io/png?repos=coregx/relica" width="800" />
+ </picture>
+</a>

@@ -1,0 +1,35 @@
+# wait4it
+ 
+![TESTS](https://img.shields.io/github/actions/workflow/status/ph4r5h4d/wait4it/tests.yaml?label=Tests&style=for-the-badge) [![Docker Pull](https://img.shields.io/docker/pulls/ph4r5h4d/wait4it?style=for-the-badge)](https://hub.docker.com/r/ph4r5h4d/wait4it) [![GHCR](https://img.shields.io/badge/GHCR-available-181717?style=for-the-badge&logo=github)](https://github.com/ph4r5h4d/wait4it/pkgs/container/wait4it) ![GO Version](https://img.shields.io/github/go-mod/go-version/ph4r5h4d/wait4it?style=for-the-badge) ![TAG](https://img.shields.io/github/v/tag/ph4r5h4d/wait4it?style=for-the-badge) ![LICENSE](https://img.shields.io/github/license/ph4r5h4d/wait4it?style=for-the-badge) ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/ph4r5h4d/wait4it/total?style=for-the-badge&label=Github%20Downloads)
+
+A simple go application to test whether a port is ready to accept a connection or check 
+MySQL, PostgreSQL, MongoDB or Redis server is ready or not, Also you can do Http call and check 
+the response code and text in response.  
+It also supports **timeout** so it can wait for a particular time and then fail.  
+Multiple checks can be defined in a YAML file (see [Multi-Check docs](https://wait4it.dev/docs/multi-check/)).
+
+## Supported Services
+* [TCP port](https://wait4it.dev/docs/tcp/)
+* [MySQL](https://wait4it.dev/docs/mysql/)
+* [PostgresQL](https://wait4it.dev/docs/postgresql/)
+* [Http](https://wait4it.dev/docs/http/)
+* [MongoDB](https://wait4it.dev/docs/mongodb/)
+* [Oracle](https://wait4it.dev/docs/oracle/)
+* [InfluxDB](https://wait4it.dev/docs/influxdb/)
+* [Redis](https://wait4it.dev/docs/redis/)
+* [RabbitMQ](https://wait4it.dev/docs/rabbitmq/)
+* [Memcached](https://wait4it.dev/docs/memcached/)
+* [ElasticSearch](https://wait4it.dev/docs/elasticsearch/)
+* [Aerospike](https://wait4it.dev/docs/aerospike/)
+* [Kafka](https://wait4it.dev/docs/kafka/)
+* [DNS](https://wait4it.dev/docs/dns/)
+* [Multi-Check YAML](https://wait4it.dev/docs/multi-check/)
+
+## Install
+You can download the latest [release](https://github.com/ph4r5h4d/wait4it/releases), or you can build it yourself.
+To build just run `go build`.
+For detailed installation instructions, visit the [installation doc](https://wait4it.dev/docs/installation/).
+
+## Documentation
+Visit the [website](https://wait4it.dev) for detailed documentation.
+

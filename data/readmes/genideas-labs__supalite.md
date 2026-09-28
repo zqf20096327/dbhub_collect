@@ -1,0 +1,1236 @@
+# SupaLite
+If Supabase feels slow due to serverless latency, SupaLite can be a faster alternative for database queries.
+[한국어 README](README.ko.md)
+
+[![npm version](https://img.shields.io/npm/v/supalite.svg)](https://www.npmjs.com/package/supalite)
+[![npm downloads](https://img.shields.io/npm/dm/supalite.svg)](https://www.npmjs.com/package/supalite)
+[![license](https://img.shields.io/npm/l/supalite.svg)](LICENSE)
+[![types](https://img.shields.io/npm/types/supalite.svg)](https://www.npmjs.com/package/supalite)
+[![node](https://img.shields.io/node/v/supalite.svg)](https://www.npmjs.com/package/supalite)
+[![ci](https://img.shields.io/github/actions/workflow/status/genideas-labs/supalite/ci.yml?branch=main)](https://github.com/genideas-labs/supalite/actions/workflows/ci.yml)
+
+A lightweight PostgreSQL client focused on the Supabase query builder. It keeps the familiar API but trims the surface area so you get a smaller footprint and less overhead in production.
+
+In one line: **SupaLite is a slim Supabase client for query builder + RPC + transactions.** If you need full Supabase features (auth/storage/realtime), use `supabase-js`.
+
+Used in production by [oqoq.ai](https://oqoq.ai).
+
+Compatibility at a glance:
+- ✅ Select/filters/order/pagination
+- ✅ PostgREST-style embeds (`related_table(*)`, `!inner`)
+- ✅ Insert/update/delete/upsert (including `ignoreDuplicates`)
+- ✅ RPC (including `single`/`maybeSingle`)
+- ❌ Auth/Storage/Realtime
+
+## 0.13.0 Highlights
+
+- **Manual transactions are now safe on a shared singleton (#17 follow-up)** — **breaking**: `begin()` returns a **connection-scoped handle** (`const tx = await db.begin(); … await tx.commit()`) instead of mutating the client, so calling it on a module-global singleton no longer routes other concurrent queries into the transaction. `commit()`/`rollback()` (and a nested `begin()`) now throw when misused; transaction scopes no longer share their metadata cache with the owner. `transaction(cb)` is unchanged. See [Transactions](#transactions) for migration.
+
+Earlier (0.12.0): **`supalite migrate mark-applied --dry-run` (#14)** — a **write-free** prod-adoption preview (exact versions + SQL, no writes); `up --dry-run` write-free with file paths.
+
+Earlier (0.11.0): **`supalite migrate` (#7)** — a built-in `up` / `status` / `new` / `mark-applied` runner (advisory-locked, atomic per-migration recording, `transaction:false` escape) closing the `db pull → migrate → gen types` toolchain; **`db pull --format dbmate` (#8)** wraps the baseline in `-- migrate:up` / `-- migrate:down` markers.
+
+Earlier (0.7.2): `gen types --format supabase` matches Supabase CLI byte-for-byte; default `--format supalite` superset (constraints/indexes, referenced schema, setof RPC options); BigInt controls `--no-bigint` / `--no-json-bigint`.
+
+Cloud migration note (GCP/AWS):
+If you are moving off Supabase, SupaLite replaces only the **DB query layer**. You still need alternatives for Auth/Storage/Realtime. Typical choices are:
+- Auth: managed identity (AWS Cognito / Google Identity Platform) or self-hosted (GoTrue/Keycloak)
+- Storage: object storage (S3 / GCS)
+- Realtime: managed pub/sub, WebSocket services, or PostgreSQL LISTEN/NOTIFY + your own gateway
+
+## Key Features
+
+- Type safety: written in TypeScript with full type support
+- Powerful query builder: Supabase-style chainable API
+- Multi-schema support: work across multiple schemas
+- CRUD operations: clear and concise database operations
+- RPC support: call stored procedures
+- Performance: connection pooling and efficient SQL generation
+- Transactions: safe DB transactions (not supported by Supabase)
+- UPSERT support: control insert/update behavior
+- Advanced filtering: OR conditions, ILIKE, and more
+- Array support: multi-row inserts and array fields (JSON/JSONB included)
+- Views, Functions, Enums: full Supabase-style typing
+- BigInt handling: configurable transforms for JSON-safe values
+
+## Project Scope
+
+SupaLite targets a focused subset of the Supabase client: query builder, RPC, and transactions. It does not aim for full Supabase feature parity (auth/storage/realtime). The supported query patterns are documented below; if a pattern is missing, please open an issue so we can prioritize it.
+
+## Migrations and schema management
+
+SupaLite is intentionally ORM-light. For schema management and migrations, use dedicated tools:
+- Migrations/schema sync: [pg-schema-sync](https://github.com/genideas-labs/pg-schema-sync)
+- Alternatives: Atlas, dbmate, Sqitch, Goose, Flyway
+- Type generation: `supabase gen types typescript --db-url <postgres_url>` (works with just a DB URL)
+
+ORM features (relations, nested writes, etc.) are best handled by Prisma/Drizzle/Kysely in a separate service when needed. Keeping SupaLite light is part of the value.
+
+About `supabase db pull`: SupaLite ships a native equivalent — `supalite db pull` — that introspects any Postgres via `--db-url` and emits a dependency-ordered baseline migration SQL (see below). Diffing and applying migrations remain the job of the dedicated tools above.
+
+SupaLite now includes `supalite gen types`, which defaults to the SupaLite format (a superset of Supabase CLI output). Use `--format supabase` for byte-for-byte Supabase CLI output.
+
+### `supalite db pull` (baseline schema dump)
+
+Bring an existing database (e.g. after leaving the Supabase platform for Cloud SQL) under version control:
+
+```bash
+supalite db pull --db-url "$DB_CONNECTION" --schema public
+# writes supabase/migrations/<UTC timestamp>_baseline.sql (use --out - for stdout)
+supalite db pull --db-url "$DB_CONNECTION" --format dbmate
+# same, wrapped in -- migrate:up / -- migrate:down (dbmate & supalite migrate drop-in)
+```
+
+- **Dependency-ordered output**: schemas → extensions → sequences → types (enums/domains/composites, topologically sorted) → type-stage functions → tables → sequence ownership → table-dependent functions → deferred column defaults → constraints → foreign keys (always after all tables) → views → view-dependent functions → triggers → indexes → footer notes.
+- **Idempotent by default**: `IF NOT EXISTS` / `CREATE OR REPLACE`, and constraints are wrapped in `DO` guards — re-applying the file to the database it was pulled from is a no-op, constraints included (assumes the executing role owns the objects). Pass `--no-if-not-exists` for plain DDL.
+- **Extension-owned objects are excluded by default** (`pg_depend`), so e.g. `pg_trgm`'s 30+ functions are not dumped individually — `CREATE EXTENSION IF NOT EXISTS` covers them. Pass `--include-extension-objects` to include them.
+- **Nothing is silently dropped**: v1 unsupported objects (partitioned table hierarchies, aggregate/window functions, RLS policies) and anything depending on them are listed in a footer comment instead of emitting failing DDL; dependencies on objects outside the selected schemas are disclosed there too. Grants are omitted in v1 (not enumerated).
+- Replaying the file requires PostgreSQL 14+ on the target (`CREATE OR REPLACE TRIGGER`). `--mode diff` is reserved for a future release.
+- **dbmate / `supalite migrate` drop-in**: `--format dbmate` wraps the baseline in `-- migrate:up` / `-- migrate:down` markers so `dbmate up` (or the upcoming `supalite migrate up`) applies it with zero manual edits; `--format plain` (default) is unchanged. db pull emits only transaction-safe DDL (all `IF NOT EXISTS`), so the default transactional `-- migrate:up` is correct and atomic — if it ever emits non-transactional DDL, that file must switch to `-- migrate:up transaction:false`.
+- Programmatic API: `import { generateBaselineSql } from 'supalite'` (pass `{ format: 'dbmate' }` for the wrapped output).
+
+### `supalite migrate` (apply + track migrations)
+
+Close the loop between `db pull` (schema → baseline SQL) and `gen types` (schema → TS) with a built-in migration runner — no external tool (dbmate/Flyway) required.
+
+```bash
+supalite migrate new add_orders_table                            # scaffold supabase/migrations/<ts>_add_orders_table.sql
+supalite migrate up      --db-url "$DB_CONNECTION"               # apply pending, in timestamp order
+supalite migrate status  --db-url "$DB_CONNECTION"               # list applied/pending
+supalite migrate mark-applied --all --db-url "$DB_CONNECTION"    # adopt an existing DB (record without running)
+supalite migrate mark-applied --all --dry-run --db-url "$DB_CONNECTION"  # preview the adoption write — writes nothing
+```
+
+- **Adopt-safely preview (`--dry-run`)**: `mark-applied` is the first production write when you adopt an existing DB, so `--dry-run` lets you approve it first. It probes the tracking table **read-only** and prints the exact versions it would record and the exact SQL it would run — **without writing anything** (not even `schema_migrations`). `up --dry-run` is likewise write-free and lists each pending migration with its file path.
+  ```
+  [dry-run] would ensure table: public.schema_migrations (create if absent)
+  [dry-run] would record 1 version(s):
+    - 20260712000000
+  [dry-run] SQL:
+    CREATE SCHEMA IF NOT EXISTS "public";
+    CREATE TABLE IF NOT EXISTS "public"."schema_migrations" (version text PRIMARY KEY, applied_at timestamptz NOT NULL DEFAULT now());
+    INSERT INTO "public"."schema_migrations" (version) VALUES ('20260712000000') ON CONFLICT (version) DO NOTHING;
+  [dry-run] no migration DDL is executed by mark-applied.
+  ```
+- **Migration format** is dbmate-compatible: `-- migrate:up` / `-- migrate:down` sections in `<YYYYMMDDHHMMSS>_<name>.sql`. A `db pull --format dbmate` baseline is a drop-in input.
+- **Tracking table** `public.schema_migrations(version, applied_at)` is created automatically (override with `--migrations-table`). Inserts write only `version`, so an existing dbmate table is compatible.
+- **Payment-DB safety**: the whole `up` run holds a Postgres **advisory lock** (concurrent deploys can't double-apply); each migration's DDL and its version row commit in **one transaction** (a failure rolls back, is not recorded, and stops the run at the first failure).
+- **Concurrent DDL**: mark a migration `-- migrate:up transaction:false` to run statements that can't execute inside a transaction (`CREATE INDEX CONCURRENTLY`, `ALTER TYPE ADD VALUE`); keep such files to a single, idempotent (`IF NOT EXISTS`) statement.
+- `--db-url` falls back to `DB_CONNECTION`, then `DATABASE_URL`. `migrate new` needs no database.
+- `down` is not supported in v1 (forward-only).
+- Programmatic API: `import { migrateUp, migrateStatus, migrateMarkApplied, migrateNew } from 'supalite'`.
+
+## SupaLite vs Prisma / Drizzle
+
+SupaLite is a lightweight SQL-first client with a Supabase-style query builder. Prisma and Drizzle are ORMs with schema-first workflows and migrations.
+
+When SupaLite fits best:
+- You want a thin query layer with minimal abstraction.
+- You are migrating from Supabase and want similar query ergonomics.
+- You handle migrations and schema management separately.
+
+When Prisma or Drizzle fits best:
+- You want schema-first modeling and built-in migrations.
+- You want richer ORM features (relations, nested writes, generated client APIs).
+- You want stronger compile-time guarantees tied to a schema file.
+
+Trade-offs:
+- SupaLite is simpler and closer to SQL, but does not provide ORM-level modeling or migration tooling.
+- Prisma/Drizzle add features and structure, with some abstraction overhead.
+- SupaLite includes built-in BIGINT transform options for JSON-safe output.
+- Prisma/Drizzle still require manual decisions for BIGINT (JSON serialization vs precision), while SupaLite centralizes it with `bigintTransform`.
+
+## Example comparison (SupaLite vs Prisma vs Drizzle)
+
+SupaLite keeps Supabase-style naming so the query reads close to SQL. Below is the same query in each tool:
+
+Task: fetch active users, ordered by `created_at` desc, page 2 (10 per page).
+
+SupaLite:
+```typescript
+const page = 2;
+const pageSize = 10;
+const { data } = await client
+  .from('users')
+  .select('id, name, email, created_at')
+  .eq('status', 'active')
+  .order('created_at', { ascending: false })
+  .limit(pageSize)
+  .offset((page - 1) * pageSize);
+```
+
+Prisma:
+```typescript
+const page = 2;
+const pageSize = 10;
+const data = await prisma.user.findMany({
+  select: { id: true, name: true, email: true, created_at: true },
+  where: { status: 'active' },
+  orderBy: { created_at: 'desc' },
+  take: pageSize,
+  skip: (page - 1) * pageSize,
+});
+```
+
+Drizzle:
+```typescript
+const page = 2;
+const pageSize = 10;
+const data = await db
+  .select({ id: users.id, name: users.name, email: users.email, created_at: users.createdAt })
+  .from(users)
+  .where(eq(users.status, 'active'))
+  .orderBy(desc(users.createdAt))
+  .limit(pageSize)
+  .offset((page - 1) * pageSize);
+```
+
+## Roadmap (near-term)
+
+- CI matrix for Node/pg versions with integration tests
+- Benchmarks and performance guidance
+- Auth/Storage/Realtime migration guidance (Cognito/GIP, S3/GCS, Realtime options)
+- `supalite db pull --mode diff` (diff against existing migrations)
+- `supalite gen types` (SupaLite-first generator with Supabase-compatible output)
+- Contribution guide and issue templates
+
+## Performance notes (serverless Supabase vs cloud Postgres)
+
+General differences you can expect when moving off serverless Supabase to a managed Postgres on GCP/AWS:
+- Network hops: Supabase often adds extra hops (edge/API/REST layer) vs direct Postgres access, especially within the same VPC.
+- Cold starts and pooling: serverless tiers can cold-start or aggressively pool; dedicated poolers (pgBouncer/RDS Proxy) reduce tail latency.
+- Network path: public Internet vs private VPC/peering changes jitter and p95/p99 latency.
+- Overhead: HTTP/PostgREST layers add serialization cost; direct SQL clients minimize that overhead.
+
+Benchmarks and numbers: **TBD (source needed)**. If you have public benchmarks, please open a PR with sources.
+Sources needed:
+- Links to public benchmarks/blogs/docs comparing serverless Postgres vs managed Postgres latency and pooling.
+
+## Benchmark methodology (draft)
+
+- Workloads: simple `select`, filtered `select + order`, `insert`, `rpc`.
+- Measure p50/p95/p99 with warm and cold runs.
+- Keep region and instance size identical; record DB version and pool settings.
+- Separate client latency vs query time when possible.
+- Publish scripts and raw results.
+
+## Why SupaLite
+
+- Direct PostgreSQL connection (no PostgREST hop) for lower latency and fewer moving parts
+- Supabase-style, SQL-like method names for easy migration
+- Native `bigint` support with configurable transforms
+- Transactions and multi-step flows that Supabase client does not support
+- Type generator that can include relationships/constraints/indexes and function signatures
+
+See `docs/limitations.md` for known trade-offs.
+
+## Installation
+
+```bash
+npm install supalite
+```
+
+### CLI
+
+```bash
+npm install -g supalite
+```
+
+```bash
+supalite gen types --help
+```
+
+You can also use `npx supalite ...` without a global install.
+
+## Type System
+
+### Database schema definition
+
+```typescript
+// Database types generated by SupaLite CLI
+// Example: npx supalite gen types --db-url "postgresql://user:pass@localhost:5432/db" --out database.types.ts
+import { Database } from './types/database';
+
+// Typed client
+const client = new SupaLitePG<Database>({
+  user: 'testuser',
+  password: 'testpassword',
+  host: 'localhost',
+  database: 'testdb',
+  port: 5432,
+  ssl: false,
+  // bigintTransform: 'number-or-string', // numbers when safe, strings otherwise (default: 'number-or-string')
+  // verbose: true // verbose logging
+});
+
+// Or use environment variables
+const client = new SupaLitePG<Database>();
+
+// Database interface example (same shape as Supabase CLI output)
+interface Database {
+  public: {
+    Tables: {
+      users: {
+        Row: {
+          id: number;
+          name: string;
+          email: string;
+          status: string;
+          last_login: string | null;
+          created_at: string;
+        };
+        Insert: {
+          name: string;
+          email: string;
+          status?: string;
+          last_login?: string | null;
+        };
+        Update: {
+          name?: string;
+          email?: string;
+          status?: string;
+          last_login?: string | null;
+        };
+        Relationships: unknown[];
+      };
+      // Other tables...
+    };
+    Views: {
+      // View definitions...
+    };
+    Functions: {
+      // Function definitions...
+    };
+    Enums: {
+      // Enum definitions...
+    };
+  };
+  // Other schemas...
+}
+```
+
+### Generate types with supalite gen types
+
+```bash
+npx supalite gen types --db-url "postgresql://user:pass@localhost:5432/db" --schema public,analytics --out database.types.ts --date-as-date
+```
+
+- `--out -` prints to stdout
+- Default output is SupaLite format (superset of Supabase CLI). Use `--format supabase` for byte-for-byte Supabase CLI output.
+- SupaLite format also includes `Constraints`/`Indexes`, `referencedSchema` in `Relationships`, `bigint` + `Json` bigint support, and `SetofOptions` for setof RPCs.
+- BIGINT type mapping is controlled by `--bigint-type bigint|number|string` (default: supabase=number, supalite=bigint)
+- `--no-bigint` is a shortcut for `--bigint-type number`
+- `--json-bigint` includes `bigint` in the `Json` union (default: supabase=false, supalite=true)
+- `--no-json-bigint` disables bigint in the `Json` union
+- `--date-as-date` maps `date`/`timestamp` columns to `Date`
+- `--include-relationships` emits foreign-key metadata into `Relationships` (default: true)
+- `--include-constraints` emits primary/unique/check/foreign key metadata (default: supabase=false, supalite=true)
+- `--include-indexes` emits index metadata (name, uniqueness, definition) (default: supabase=false, supalite=true)
+- `--include-composite-types` emits `CompositeTypes` definitions (default: true)
+- `--include-function-signatures` maps `Functions.Args/Returns` from schema metadata (default: true)
+- `Functions` always lists detected function names; signatures are included by default
+- `--type-case` controls enum/composite type key casing (`preserve` | `snake` | `camel` | `pascal`)
+- `--function-case` controls function key casing (`preserve` | `snake` | `camel` | `pascal`)
+- `--dump-functions-sql [path]` writes `CREATE FUNCTION/PROCEDURE` definitions (from `pg_get_functiondef`) to a local file
+- Use `--schema public` to exclude test/dev schemas from generated types
+- Uses `DB_CONNECTION` if `--db-url` is omitted
+
+Roadmap
+- TODO (AI): generate transactional TypeScript wrappers for RPC/functions from schema metadata
+
+## Usage Examples
+
+### Database connection
+
+```typescript
+import { SupaLitePG } from 'supalite';
+import { Database } from './types/database';
+
+const client = new SupaLitePG<Database>({
+  user: 'testuser',
+  password: 'testpassword',
+  host: 'localhost',
+  database: 'testdb',
+  port: 5432,
+  ssl: false,
+  // bigintTransform: 'number-or-string', // default: 'number-or-string'
+  // verbose: true
+});
+```
+
+```typescript
+import { SupaliteClient } from 'supalite';
+import { Database } from './types/database';
+
+// SupaliteClient is a thin wrapper around SupaLitePG.
+const client = new SupaliteClient<Database>({
+  connectionString: process.env.DB_CONNECTION || 'postgresql://user:pass@localhost:5432/db',
+});
+```
+
+```typescript
+import { Pool } from 'pg';
+import { SupaLitePG } from 'supalite';
+import { Database } from './types/database';
+
+const pool = new Pool({
+  connectionString: process.env.DB_CONNECTION || 'postgresql://user:pass@localhost:5432/db',
+  max: 5,
+});
+
+const client = new SupaLitePG<Database>({
+  pool,
+});
+```
+
+### Basic CRUD
+
+```typescript
+// Read
+const { data, error } = await client
+  .from('users')
+  .select('*')
+  .eq('id', 1)
+  .single();
+
+// Insert single
+const { data, error } = await client
+  .from('users')
+  .insert({
+    name: 'Hong',
+    email: 'hong@example.com'
+  });
+
+// Insert multiple
+const { data, error } = await client
+  .from('users')
+  .insert([
+    { name: 'Hong', email: 'hong@example.com' },
+    { name: 'Kim', email: 'kim@example.com' }
+  ]);
+
+// Select specific columns
+const { data } = await client
+  .from('profiles')
+  .select('user_id, bio, interests')
+  .limit(2);
+
+// Multi-column ordering
+const { data } = await client
+  .from('users')
+  .select('name, status, last_login')
+  .order('status', { ascending: true })
+  .order('last_login', { ascending: false });
+
+// Pagination
+const page1 = await client
+  .from('posts')
+  .select('*')
+  .limit(2)
+  .offset(0);
+
+// Range query
+const { data } = await client
+  .from('comments')
+  .select('*')
+  .range(1, 3);
+
+// Conditional UPDATE
+const { data } = await client
+  .from('posts')
+  .update({
+    views: 10,
+    updated_at: new Date().toISOString()
+  })
+  .eq('user_id', userId)
+  .select();
+
+// UPSERT
+const { data } = await client
+  .from('profiles')
+  .upsert({
+    user_id: userId,
+    bio: 'New profile.',
+    interests: ['coding', 'music'],
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'id' })
+  .select()
+  .single();
+```
+
+### Advanced features
+
+```typescript
+// Transactions (not supported by Supabase)
+await client.transaction(async (tx) => {
+  const { data: user } = await tx
+    .from('users')
+    .insert({ name: 'Hong' })
+    .select()
+    .single();
+
+  await tx
+    .from('profiles')
+    .insert({ user_id: user.id });
+});
+
+// OR filtering
+const { data, error } = await client
+  .from('users')
+  .or('status.eq.active,role.eq.admin');
+
+// Case-insensitive search
+const { data, error } = await client
+  .from('users')
+  .ilike('email', '%@example.com');
+
+// Relationship embed (PostgREST-style)
+// 1:N returns arrays (default: [])
+const { data: authors } = await client
+  .from('authors')
+  .select('*, books(*)');
+
+// N:1 returns objects (or null)
+const { data: books } = await client
+  .from('books')
+  .select('*, authors(*)');
+
+// Exact count
+const { data, count, error } = await client
+  .from('users')
+  .select('*', { count: 'exact' });
+
+// Array inserts
+const { data, error } = await client
+  .from('posts')
+  .insert([
+    {
+      title: 'First post',
+      tags: ['programming', 'tips'],
+      content: '...'
+    },
+    {
+      title: 'Second post',
+      tags: ['travel'],
+      content: '...'
+    }
+  ]);
+
+// JSONB array/object insert
+// JSON/JSONB columns are stringified automatically (schema-based)
+const myJsonArray = ['tag1', 2025, { active: true }];
+const myJsonObject = { active: true, score: 10 };
+const { data: jsonData, error: jsonError } = await client
+  .from('your_jsonb_table')
+  .insert({
+    metadata_array: myJsonArray,
+    metadata_obj: myJsonObject
+  })
+  .select('metadata_array, metadata_obj')
+  .single();
+
+// Native arrays (TEXT[], INTEGER[])
+// JS arrays are passed through to pg driver.
+const { data: nativeArrayData, error: nativeArrayError } = await client
+  .from('your_native_array_table')
+  .insert({
+    tags_column: ['tech', 'event'],
+    scores_column: [100, 95, 88]
+  })
+  .select('tags_column, scores_column')
+  .single();
+
+// Other schema
+const { data, error } = await client
+  .from('users', 'other_schema')
+  .select('*');
+```
+
+## Supported Query Patterns (Test-Based Examples)
+
+The examples below are based on `src/__tests__`/`examples/tests` and the actual implementation.
+
+### Filters
+
+```typescript
+// match: multiple columns at once
+const { data: matched } = await client
+  .from('test_table')
+  .select('*')
+  .match({ name: 'test1', value: 10 });
+
+// Comparison/pattern/array/NULL filters
+await client.from('users').select('*').eq('id', 1);
+await client.from('users').select('*').neq('status', 'inactive');
+await client.from('users').select('*').gt('age', 18);
+await client.from('users').select('*').gte('score', 80);
+await client.from('users').select('*').lt('rank', 100);
+await client.from('users').select('*').lte('rank', 10);
+await client.from('users').select('*').like('email', '%@example.com');
+await client.from('users').select('*').ilike('email', '%@example.com');
+await client.from('users').select('*').in('id', [1, 2, 3]);
+await client.from('users').select('*').in('id', []); // no results (WHERE FALSE)
+await client.from('posts').select('*').in('user_id', [1, null, 3]); // NULLs are matched via OR IS NULL
+await client.from('posts').select('*').in('user_id', [1, 2]).in('views', [50, 100, 150]);
+await client.from('posts').select('*').contains('tags', ['travel']);
+await client.from('profiles').select('*').is('avatar_url', null);
+
+// NOT (currently only IS NULL is supported)
+await client.from('users').select('*').not('email', 'is', null);
+
+// OR conditions: 'column.operator.value'
+// now() is inlined as NOW() in the WHERE clause.
+// Quote values to include dots/commas: name.eq."last, first"
+const { data: credits } = await client
+  .from('credits')
+  .select('*')
+  .eq('wallet_id', 123)
+  .gt('amount', 0)
+  .or('valid_until.is.null,valid_until.gt.now()');
+
+// Nested and(...) inside or(...) (PostgREST-style keyset pattern)
+const { data: images } = await client
+  .from('priv_images')
+  .select('id,created_at')
+  .or('created_at.lt.2026-02-13T09:09:32.000Z,and(created_at.eq.2026-02-13T09:09:32.000Z,id.lt.1462)');
+
+// in / not.* inside or()
+const { data: users } = await client
+  .from('users')
+  .select('*')
+  .or('and(id.in.(1,2,3),status.not.eq.inactive)');
+```
+
+### Sorting/Pagination
+
+```typescript
+await client.from('posts').select('*').order('created_at'); // ASC by default
+await client.from('posts').select('*').order('created_at', { ascending: false });
+
+await client
+  .from('shop_gen_images')
+  .select('*')
+  .order('is_final', { ascending: true })
+  .order('pass_no', { ascending: true, nullsFirst: true })
+  .order('created_at', { ascending: true });
+
+await client.from('posts').select('*').limit(10).offset(20);
+await client.from('comments').select('*').range(1, 3);
+
+const page = 2;
+const pageSize = 10;
+await client
+  .from('posts')
+  .select('*')
+  .limit(pageSize)
+  .offset((page - 1) * pageSize);
+```
+
+### Real-World Patterns (Production-Inspired)
+
+```typescript
+// Multi-order + NULLS FIRST
+const { data: genImages } = await client
+  .from('shop_gen_images')
+  .select('*')
+  .eq('request_hash', requestHash)
+  .order('is_final', { ascending: true })
+  .order('pass_no', { ascending: true, nullsFirst: true })
+  .order('created_at', { ascending: true });
+
+// INNER embed + related table filter
+const { data: orderableItems } = await client
+  .from('cur_menu_item')
+  .select('id, name, menu_item_id, ext_menu_item!inner(id, deleted_at)')
+  .eq('cur_menu_id', Number(cur_menu_id))
+  .is('deleted_at', null)
+  .is('ext_menu_item.deleted_at', null);
+
+// Nested embed (option sets)
+const { data: optionSets } = await client
+  .from('menu_item_opts_set')
+  .select(`
+    id,
+    created_at,
+    menu_item_id,
+    schema_id,
+    menu_item_opts_set_schema!inner (
+      id,
+      name,
+      desc,
+      type,
+      mandatory,
+      multiple_choices,
+      max_choice_count,
+      min_choice_count,
+      name_i18n,
+      desc_i18n,
+      translated
+    ),
+    menu_item_opts (
+      id,
+      created_at,
+      menu_item_opts_schema (
+        name,
+        add_price,
+        price,
+        order,
+        type,
+        name_i18n,
+        translated
+      ),
+      soldout,
+      hidden,
+      modified_at
+    )
+  `)
+  .eq('menu_item_id', Number(menu_item_id));
+
+// Bulk insert + ignore duplicates (ON CONFLICT DO NOTHING)
+const { data: inserted } = await client
+  .from('menu_section_items')
+  .insert(deduplicatedRowList, {
+    onConflict: ['section_id', 'menu_item_id'],
+    ignoreDuplicates: true,
+  })
+  .select('*');
+```
+
+### Count / Head
+
+```typescript
+const { data, count } = await client
+  .from('count_test_users')
+  .select('*', { count: 'exact' });
+
+const { data: headOnly, count: total } = await client
+  .from('count_test_users')
+  .select('*', { count: 'exact', head: true });
+
+const { data: limited, count: totalLimited } = await client
+  .from('count_test_users')
+  .select('*', { count: 'exact' })
+  .limit(3);
+
+const { data: ranged, count: totalRanged } = await client
+  .from('count_test_users')
+  .select('*', { count: 'exact' })
+  .range(2, 5);
+```
+
+When using `count: 'exact'`, result rows do not include the `exact_count` column. `count` always returns the total row count even when `limit`/`range` is used. `count: 'planned' | 'estimated'` uses `EXPLAIN (FORMAT JSON)` row estimates and may differ from the exact total. `head: true` returns `data: []` (or just the estimate for planned/estimated counts).
+
+### single / maybeSingle
+
+```typescript
+const { data: user } = await client
+  .from('users')
+  .select('*')
+  .eq('id', 1)
+  .single();
+
+const { data: maybeUser } = await client
+  .from('users')
+  .select('*')
+  .eq('id', 999)
+  .maybeSingle();
+
+const { data: multiRow, error: multiRowError } = await client
+  .from('test_table_for_multi_row')
+  .select('*')
+  .eq('group_key', 'groupA')
+  .single();
+```
+
+`single()` throws when 0 rows (PGRST116) or 2+ rows (PGRST114) are returned. `maybeSingle()` returns `data: null` + `error: null` on 0 rows, and returns PGRST114 on 2+ rows. Internal PGRST errors set `error.code` to `PGRST116`/`PGRST114`.
+
+### Relationship Embed (PostgREST-style)
+
+```typescript
+// 1:N returns arrays, N:1 returns objects
+const { data: authors } = await client
+  .from('authors')
+  .select('*, books(*)');
+
+const { data: books } = await client
+  .from('books')
+  .select('*, authors(*)')
+  .order('id');
+
+const { data: authorNames } = await client
+  .from('authors')
+  .select('name, books(title)');
+
+const { data: bookAuthors } = await client
+  .from('books')
+  .select('title, authors(name)')
+  .order('id');
+
+// INNER JOIN + related table filter (table.column)
+const { data: orderableItems } = await client
+  .from('cur_menu_item')
+  .select('id, name, menu_item_id, ext_menu_item!inner(id, deleted_at)')
+  .eq('cur_menu_id', 10)
+  .is('deleted_at', null)
+  .is('ext_menu_item.deleted_at', null);
+
+// Nested embed
+const { data: optionSets } = await client
+  .from('menu_item_opts_set')
+  .select(`
+    id,
+    created_at,
+    menu_item_id,
+    schema_id,
+    menu_item_opts_set_schema!inner (
+      id,
+      name,
+      desc,
+      type,
+      mandatory,
+      multiple_choices,
+      max_choice_count,
+      min_choice_count,
+      name_i18n,
+      desc_i18n,
+      translated
+    ),
+    menu_item_opts (
+      id,
+      created_at,
+      menu_item_opts_schema (
+        name,
+        add_price,
+        price,
+        order,
+        type,
+        name_i18n,
+        translated
+      ),
+      soldout,
+      hidden,
+      modified_at
+    )
+  `)
+  .eq('menu_item_id', 10);
+```
+
+### Writes (INSERT/UPDATE/DELETE/UPSERT)
+
+```typescript
+// INSERT (single/multiple)
+await client.from('users').insert({ name: 'User', email: 'user@example.com' });
+await client.from('users').insert([
+  { name: 'User A', email: 'a@example.com' },
+  { name: 'User B', email: 'b@example.com' }
+]).select();
+
+// INSERT with ignoreDuplicates (ON CONFLICT DO NOTHING)
+await client
+  .from('menu_section_items')
+  .insert(
+    [
+      { section_id: 1, menu_item_id: 2 },
+      { section_id: 1, menu_item_id: 3 },
+    ],
+    { onConflict: ['section_id', 'menu_item_id'], ignoreDuplicates: true }
+  )
+  .select('*');
+
+// UPDATE + IS NULL
+await client
+  .from('order_menu_items')
+  .update({ order_closed_time: new Date().toISOString(), last_act_member_owner_id: 123 })
+  .eq('table_name', 'test_table')
+  .eq('menu_id', 456)
+  .is('order_closed_time', null)
+  .select();
+
+// DELETE
+await client.from('posts').delete().eq('user_id', 1).select();
+
+// DELETE + IN
+await client
+  .from('users')
+  .delete()
+  .in('email', ['a@example.com', 'b@example.com']);
+
+// UPSERT (onConflict: string/array)
+await client
+  .from('profiles')
+  .upsert({ user_id: 1, bio: 'hello' }, { onConflict: 'user_id' })
+  .select();
+
+await client
+  .from('menu_item_opts_schema')
+  .upsert({ set_id: 1, name: 'Soup' }, { onConflict: 'set_id, name' })
+  .select();
+
+await client
+  .from('ext_menu_item_section_change')
+  .upsert({ ext_menu_id: 10, ext_menu_item_id: 20 }, { onConflict: ['ext_menu_id', 'ext_menu_item_id'] });
+
+// UPSERT (ignoreDuplicates: true -> ON CONFLICT DO NOTHING)
+await client
+  .from('ai_prompt_snapshots')
+  .upsert(
+    { prompt_hash: 'hash_1', content: 'hello' },
+    { onConflict: 'prompt_hash', ignoreDuplicates: true }
+  );
+```
+
+Empty array `insert([])` throws `Empty array provided for insert`.
+`undefined` fields in insert/update/upsert payloads are omitted. For multi-row inserts, missing/undefined values emit `DEFAULT`. Single-row inserts with no defined fields emit `DEFAULT VALUES`.
+
+### Data Types (JSONB/Arrays/BigInt)
+
+```typescript
+// JSONB (auto stringify for arrays/objects; BigInt values inside JSON become strings)
+await client
+  .from('jsonb_test_table')
+  .insert({ jsonb_data: ['string', 123, { nested: true }], another_json_field: { key: 'value' } })
+  .select('jsonb_data, another_json_field')
+  .single();
+
+await client
+  .from('jsonb_test_table')
+  .insert({ jsonb_data: [] })
+  .select('jsonb_data')
+  .single();
+
+// Native arrays (TEXT[], INTEGER[])
+await client
+  .from('native_array_test_table')
+  .insert({ tags: ['alpha', 'beta'], scores: [10, 20] })
+  .select('tags, scores')
+  .single();
+
+await client
+  .from('native_array_test_table')
+  .insert({ tags: [], scores: [] })
+  .select('tags, scores')
+  .single();
+
+await client
+  .from('native_array_test_table')
+  .update({ tags: ['updated_tag'] })
+  .eq('id', 1)
+  .select('tags')
+  .single();
+
+await client
+  .from('native_array_test_table')
+  .select('id')
+  .contains('tags', ['initial_tag1'])
+  .single();
+
+await client
+  .from('native_array_test_table')
+  .insert({ tags: null, scores: null })
+  .select('tags, scores')
+  .single();
+
+// BigInt
+await client
+  .from('bigint_test_table')
+  .insert({ bigint_value: 8000000000000000000n })
+  .select()
+  .single();
+
+await client
+  .from('bigint_test_table')
+  .update({ bigint_value: 7000000000000000000n })
+  .eq('id', 2)
+  .select()
+  .single();
+
+await client
+  .from('bigint_test_table')
+  .insert({ bigint_value: null })
+  .select()
+  .single();
+
+await client
+  .from('bigint_test_table')
+  .select('id, bigint_value')
+  .eq('bigint_value', 1234567890123456789n)
+  .single();
+```
+
+### Reserved Keyword Columns
+
+```typescript
+const { data: reserved } = await client
+  .from('reserved_keyword_test_table')
+  .select('id, order, desc, user, limit, group')
+  .eq('order', 100)
+  .order('order', { ascending: false });
+
+const { data: insertedReserved } = await client
+  .from('reserved_keyword_test_table')
+  .insert({ order: 300, desc: 'Description D', user: 'user_d', limit: 30, group: 'group_y' })
+  .select()
+  .single();
+
+const { data: updatedReserved } = await client
+  .from('reserved_keyword_test_table')
+  .update({ desc: 'Updated Description A', limit: 15 })
+  .eq('order', 100)
+  .select()
+  .single();
+
+const { data: upsertReserved } = await client
+  .from('reserved_keyword_test_table')
+  .upsert({ order: 500, desc: 'Upserted', user: 'user_e', limit: 51, group: 'group_z' }, { onConflict: 'order' })
+  .select()
+  .single();
+```
+
+### Views
+
+```typescript
+const { data: userPosts } = await client
+  .from('user_posts_view')
+  .select('*');
+
+const { data: activeUsers } = await client
+  .from('active_users_view')
+  .select('*')
+  .gte('post_count', 2);
+
+const { data: singlePost } = await client
+  .from('user_posts_view')
+  .select('*')
+  .eq('post_id', 1)
+  .single();
+```
+
+Views are read-only; Insert/Update are disallowed at the type level.
+
+### RPC
+
+```typescript
+const { data: rows } = await client.rpc('get_users');
+
+const { data: singleUser } = await client
+  .rpc('get_user')
+  .single();
+
+const { data: maybeUser } = await client
+  .rpc('get_user')
+  .maybeSingle();
+
+const { data: count } = await client.rpc('get_count'); // scalar return
+
+const { data: countSingle } = await client
+  .rpc('get_count')
+  .single();
+
+const { data: tableExists } = await client
+  .rpc('check_table_exists', { table_name: 'code_routes' });
+
+const { data: noneRpc, error: noneRpcError } = await client
+  .rpc('get_user')
+  .single();
+
+const { data: manyRpc, error: manyRpcError } = await client
+  .rpc('get_user')
+  .maybeSingle();
+```
+
+RPC notes:
+- `rpc()` returns arrays for set-returning functions (even if there's a single column).
+- Scalar unwrapping happens only for scalar-returning functions.
+- Empty results return `[]` (not `null`).
+
+### Transactions
+
+```typescript
+await client.transaction(async (tx) => {
+  const { data: user } = await tx
+    .from('users')
+    .insert({ name: 'Hong', email: 'hong@example.com' })
+    .select()
+    .single();
+
+  if (!user?.id) {
+    throw new Error('Failed to create user');
+  }
+
+  await tx
+    .from('profiles')
+    .insert({ user_id: user.id, bio: 'Transaction profile' });
+});
+```
+
+`transaction(cb)` runs the callback on an **isolated, connection-bound scope**. Each call checks out its own pooled connection, so concurrent `transaction(cb)` calls on the same client never interfere, and plain (non-transactional) queries keep using the pool. The transaction commits if the callback resolves and rolls back if it throws — a rollback failure never masks the original error, and the connection is always returned to the pool.
+
+For manual control (a transaction spanning several functions, or conditional commit points), `begin()` returns a **connection-scoped handle**. It borrows one connection from the pool and is safe to call on a shared singleton — the singleton itself is never mutated, so concurrent queries through it are unaffected:
+
+```typescript
+const tx = await client.begin();          // borrows one connection, runs BEGIN
+try {
+  await tx.from('accounts').update({ balance: 100 }).eq('id', 1);
+  await tx.from('ledger').insert({ account_id: 1, delta: 100 });
+  await tx.commit();                       // COMMIT + release the connection
+} catch (e) {
+  await tx.rollback();                     // ROLLBACK + release the connection
+  throw e;
+}
+```
+
+Run your statements on the returned `tx` handle (not on `client`). `commit()` / `rollback()` finalize the handle and release its connection; calling them with no active transaction throws, as does a nested `begin()`. Prefer `transaction(cb)` when you don't need manual control — it commits, rolls back, and releases the connection for you.
+
+### Connection check
+
+```typescript
+const isConnected = await client.testConnection();
+await client.close();
+```
+
+## API Reference
+
+### Query methods
+
+- `select(columns?: string, options?: { count?: 'exact' | 'planned' | 'estimated', head?: boolean })`: choose columns
+  - `options.count`: `'exact'` returns total row count unaffected by `limit`; `'planned' | 'estimated'` returns EXPLAIN-based estimates
+  - `options.head`: `true` returns only `count` without data (estimated when using planned/estimated)
+  - PostgREST-style embed: `select('*, related_table(*)')` or `select('col, related_table(col1, col2)')`
+- `insert(data: T['Tables'][K]['Insert'] | T['Tables'][K]['Insert'][], options?: { onConflict?: string | string[]; ignoreDuplicates?: boolean })`: insert, `ignoreDuplicates: true` emits `ON CONFLICT DO NOTHING`
+- `update(data: T['Tables'][K]['Update'])`: update rows
+- `delete()`: delete rows
+- `upsert(data: T['Tables'][K]['Insert'], options?: { onConflict?: string | string[]; ignoreDuplicates?: boolean })`: insert/update, `ignoreDuplicates: true` emits `ON CONFLICT DO NOTHING`
+
+### Filter methods
+
+- `match(conditions)`: multiple `eq` at once (e.g., `match({ status: 'active', role: 'admin' })`)
+- `eq(column, value)`: equals
+- `neq(column, value)`: not equals
+- `gt(column, value)`: greater than
+- `gte(column, value)`: greater or equal
+- `lt(column, value)`: less than
+- `lte(column, value)`: less or equal
+- `like(column, pattern)`: LIKE
+- `ilike(column, pattern)`: case-insensitive LIKE
+- `in(column, values)`: IN
+- `is(column, value)`: IS
+- `not(column, operator, value)`: currently only `not('column', 'is', null)` is supported
+- `contains(column, value)`: array/JSON contains
+- `or(conditions)`: OR condition string (ops: eq/neq/like/ilike/gt/gte/lt/lte/is/in + `not.*`, `now()` is inlined as `NOW()`)
+  - Supports nested `and(...)` and `or(...)` groups (PostgREST-style), e.g. `created_at.lt.ts,and(created_at.eq.ts,id.lt.1462)`
+  - Supports `in.(...)` and negated ops such as `status.not.eq.inactive`, `id.not.in.(1,2,3)`, `deleted_at.not.is.null`
+  - Quote values to include dots/commas (e.g. `name.eq."last, first"`)
+  - Related table filters are not supported inside `or()`
+
+### Other methods
+
+- `order(column, { ascending?: boolean, nullsFirst?: boolean })`
+- `limit(count: number)`
+- `offset(count: number)`
+- `range(from: number, to: number)`
+- `single()`
+- `maybeSingle()`
+- `returns<T>()`
+
+### Transaction methods
+
+- `transaction<T>(callback: (tx: SupaLitePG) => Promise<T>)` — auto-managed; runs on an isolated scope, commits on success, rolls back on throw, always releases the connection
+- `begin(): Promise<SupaLitePG>` — manual control; returns a **connection-scoped handle** (safe on a shared singleton). Run statements on the returned handle; throws on a nested `begin()`
+- `commit()` / `rollback()` — finalize the handle from `begin()` and release its connection; throw if there is no active transaction
+
+### Client methods
+
+- `testConnection()`
+- `close()`
+
+## Environment variables
+
+```env
+DB_USER=your_db_user
+DB_HOST=your_db_host
+DB_NAME=your_db_name
+DB_PASS=your_db_password
+DB_PORT=5432
+DB_SSL=true
+# SUPALITE_VERBOSE=true
+```
+
+### SupaLitePG constructor options
+
+- `pool?: Pool`: use an external `pg` Pool instance (other connection options are ignored; pool lifecycle is managed by the caller)
+- `connectionString?: string`: connection string (e.g. `postgresql://user:password@host:port/database`)
+- `user?: string`: DB user (env: `DB_USER`)
+- `host?: string`: DB host (env: `DB_HOST`)
+- `database?: string`: DB name (env: `DB_NAME`)
+- `password?: string`: DB password (env: `DB_PASS`)
+- `port?: number`: DB port (default: 5432, env: `DB_PORT`)
+- `ssl?: boolean`: SSL (default: `false`, env: `DB_SSL`)
+- `schema?: string`: default schema (default: `public`)
+- `verbose?: boolean`: verbose logging (default: `false`, env: `SUPALITE_VERBOSE`)
+- `bigintTransform?: 'bigint' | 'string' | 'number' | 'number-or-string'`:
+  - `'bigint'`: uses native `BigInt`
+  - `'string'`: returns string values (safe for JSON)
+  - `'number'`: returns `Number` (may lose precision, warns if unsafe)
+  - `'number-or-string'` (default): returns `Number` when safe; otherwise keeps the string to preserve precision
+
+### Json type and BigInt
+The internal `Json` type includes `bigint` to allow explicit BigInt usage in TypeScript. When inserting or updating JSON/JSONB columns, SupaLite stringifies arrays/objects and converts any BigInt values to strings to avoid `JSON.stringify()` errors. If you need numeric JSON values, convert BigInt to `Number` yourself (mind precision). Standard `JSON.stringify()` still cannot handle native `BigInt` in userland; use a custom replacer if you serialize objects yourself. For JSON-safe query results without precision loss, use `bigintTransform: 'number-or-string'` so only safe values become numbers.
+
+## Response format
+
+```typescript
+interface QueryResult<T> {
+  data: Array<T>;
+  error: Error | null;
+  count: number | null;
+  status: number;
+  statusText: string;
+}
+
+interface SingleQueryResult<T> {
+  data: T | null;
+  error: Error | null;
+  count: number | null;
+  status: number;
+  statusText: string;
+}
+```
+
+- `QueryResult.data` is always an array (empty on no results or error).
+- `SingleQueryResult.data` is `null` on no results or error.
+
+## Development setup
+
+### Install PostgreSQL
+See [examples/README.md](examples/README.md) for local setup.
+
+### Project setup
+
+```bash
+# clone
+git clone https://github.com/your-username/supalite.git
+
+# install
+npm install
+
+# dev
+npm run dev
+
+# test
+npm test
+
+# build
+npm run build
+```
+
+## Contributing
+
+Issues and PRs are welcome. For larger changes, please open an issue first to align on scope. Tests expect a local Postgres (or `DB_CONNECTION`), and we run `npm run build`, `npm test`, and `npm run lint` before publishing.
+
+## License
+
+Released under the MIT License. See [LICENSE](LICENSE).
+
+## Copyright
+
+Copyright 2025 Genideas Inc. and Wondong Shin (wodshin@gmail.com)

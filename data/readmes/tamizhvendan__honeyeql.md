@@ -1,0 +1,95 @@
+## HoneyEQL
+
+HoneyEQL is a Clojure library that enables you to query the database declaratively using the [EDN Query Language](https://edn-query-language.org)(EQL). It aims to simplify the effort required to work with relational databases in Clojure. It also provides database modification operations support using Clojure maps with namespace qualified keys.   
+
+[![Clojars Project](https://img.shields.io/clojars/v/com.github.tamizhvendan/honeyeql.svg)](https://clojars.org/com.github.tamizhvendan/honeyeql)
+
+> Supports Postgres (9.4 & above) and MySQL (8.0 & above)
+
+## Rationale
+
+When a query involves more than one table, the declarative nature of SQL depreciates. Depending on the type of relationship, we have to put appropriate join conditions. 
+
+Let's assume that we have the following schema.
+
+![](./doc/img/film_actor_er_diagram.png)
+
+To get all the films of an actor with the id `148` along with his/her first name & last name, we have to query it as 
+
+```clojure
+(jdbc/execute! ds ["SELECT actor.first_name, actor.last_name, film.title
+                    FROM actor
+                    LEFT OUTER JOIN film_actor ON film_actor.actor_id = actor.actor_id
+                    LEFT OUTER JOIN film ON film_actor.film_id = film.film_id
+                    WHERE actor.actor_id = ?" 148])
+```
+
+The query result would look like 
+
+```clojure
+[{:actor/first_name "EMILY", :actor/last_name "DEE", :film/title "ANONYMOUS HUMAN"}
+ {:actor/first_name "EMILY", :actor/last_name "DEE", :film/title "BASIC EASY"}
+ {:actor/first_name "EMILY", :actor/last_name "DEE", :film/title "CHAMBER ITALIAN"}
+ ...]
+```
+
+Then we need to do the **group by** operation on the `first_name` & `last_name` attributes at the application layer to get the exact result that we want!
+
+How about making these steps truly declarative? 
+
+With HoneyEQL, we can do it as
+
+```clojure
+(heql/query-single 
+  db-adapter  
+  {[:actor/actor-id 148] 
+   [:actor/first-name 
+    :actor/last-name 
+    {:actor/films 
+     [:film/title]}]})
+```
+The above query **yields the results in the exact-shape that we wanted** and **without any** explicit data transformations.
+
+```clojure
+{:actor/first-name "EMILY"
+ :actor/last-name "DEE"
+ :actor/films [{:film/title "ANONYMOUS HUMAN"}
+               {:film/title "BASIC EASY"}
+               {:film/title "CHAMBER ITALIAN"}
+               ...]}
+```
+
+As the query syntax is made up of Clojure's data structures, we can construct it **dynamically** at runtime. 
+
+HoneyEQL transforms the EQL into single efficient SQL and queries the database using [next.jdbc](https://github.com/seancorfield/next-jdbc).
+
+## Documentation
+
+[![cljdoc badge](https://cljdoc.org/badge/com.github.tamizhvendan/honeyeql)](https://cljdoc.org/d/com.github.tamizhvendan/honeyeql/CURRENT)
+
+## Running Tests
+
+```bash
+> ./test/database/start.sh # starts four docker containers
+> clj -X:test # run after all the docker container started running
+> ./test/database/stop.sh # stops all the four running docker containers
+```
+
+## Acknowledgements
+
+[Walkable](https://walkable.gitlab.io/) is the inspiration behind HoneyEQL.
+
+HoneyEQL is not possible without the following excellent Clojure libraries.
+
+- [HoneySQL](https://github.com/jkk/honeysql)
+- [next-jdbc](https://github.com/seancorfield/next-jdbc)
+- [inflections](https://github.com/r0man/inflections-clj)
+- [data-json](https://github.com/clojure/data.json)
+
+The samples in the documentation of HoneyEQL use the [Sakila](https://www.jooq.org/sakila) database from [JOOQ](https://www.jooq.org) extensively.
+
+## License
+
+The use and distribution terms for this software are covered by the [Eclipse Public License - v 2.0](https://www.eclipse.org/legal/epl-2.0). By using this software in any fashion, you are agreeing to be bound by the terms of this license.
+
+

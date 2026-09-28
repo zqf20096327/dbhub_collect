@@ -1,0 +1,154 @@
+# Agentic Data Stack
+
+The open-source stack for ClickHouse's suite of agentic analytic tools — your chat, your models, your data.  
+Powered by [ClickHouse](https://clickhouse.com), [LibreChat](https://librechat.ai), and [Langfuse](https://langfuse.com).
+
+Learn more at [clickhouse.ai](https://clickhouse.ai) and the [Agentic Data Stack blog](https://clickhouse.com/blog/the-agentic-data-stack).
+
+## One Click Deploy
+
+Want to skip the setup and jump straight into adding agentic analytics into your workflow? Choose a Railway template below to spin up a preconfigured instance of the Agentic Data Stack in the cloud.
+
+<table align="center">
+  <tr>
+    <th><div align="center">Langfuse OSS</div></th>
+    <th><div align="center">Langfuse Cloud</div></th>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://railway.com/deploy/agentic-data-stack-lite">
+        <img src="https://railway.com/button.svg" alt="Deploy on Railway">
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://railway.com/deploy/agentic-data-stack-lite-langfuse-cloud">
+        <img src="https://railway.com/button.svg" alt="Deploy on Railway (Langfuse Cloud)">
+      </a>
+    </td>
+  </tr>
+</table>
+
+More details available in the [Deploy on Railway](#deploy-on-railway) section.
+
+## Overview
+
+This project runs a fully self-hosted agentic analytics environment with Docker Compose. It connects a chat UI (LibreChat) to your data (ClickHouse) via MCP, with full LLM observability (Langfuse) — all in a single `docker compose up` command.
+
+### What's included
+
+| Component | Purpose | Port |
+|---|---|---|
+| **LibreChat** | Modern Chat UI with multi-model / provider support (OpenAI, Anthropic, Google) | `3080` |
+| **Admin Panel** | Browser-based configuration UI for LibreChat | `3081` |
+| **ClickHouse MCP** | MCP server that gives agents access to ClickHouse | `8000` |
+| **Langfuse** | LLM observability — traces, evals, prompt management | `3000` |
+| **ClickHouse** | World's fastest analytical database | `8123` |
+| **PostgreSQL** | Transactional database for Langfuse | `5432` |
+| **MongoDB** | Transactional database for LibreChat | `27017` |
+| **MinIO** | S3-compatible object storage | `9090` |
+| **Redis** | Caching and queue | `6379` |
+| **Meilisearch** | Full-text search for LibreChat | `7700` |
+| **pgvector** | Vector database for RAG | `5433` |
+| **RAG API** | Retrieval-augmented generation service for LibreChat | `8001` |
+
+## Deploy on Railway
+
+One-click deploy of two "Lite" variants of the stack:
+
+- **Langfuse OSS** — Deploys LibreChat, the Admin Panel, Langfuse v3, and a ClickHouse MCP server pre-configured against the public ClickHouse demo cluster.
+- **Langfuse Cloud** — Deploys LibreChat, the Admin Panel, and ClickHouse MCP, and is pre-configured to send traces to your existing Langfuse Cloud (or other remote Langfuse) project.
+
+Both Railway templates skip Meilisearch, pgvector, and the RAG API for simplicity. The ClickHouse MCP server ships pointed at `sql-clickhouse.clickhouse.com` so you can chat with the public demo data immediately; the ClickHouse Cloud MCP is also wired up if you want to OAuth into your own Cloud account post-deploy. Prefer to self-host? See [Quick Start](#quick-start) below.
+
+## Quick Start
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) and Docker Compose v2+
+
+### 1. Prepare the environment
+
+```bash
+./scripts/prepare-demo.sh
+```
+
+This is your fastest way to get started with the Agentic Data Stack. It generates a `.env` file with random credentials for all services, then presents an interactive menu to optionally configure API keys for OpenAI, Anthropic, and/or Google. Any providers you skip will remain as `user_provided`, letting users enter their own keys in the LibreChat UI.
+
+The script then asks whether LibreChat should send its Langfuse traces to the local Langfuse container (the default) or to a remote Langfuse project. Choose the cloud option to point LibreChat at Langfuse Cloud (or any self-hosted Langfuse) by entering the base URL, public key, and secret key for that project. Choosing local restores the local endpoint and initialized project keys even if a previous run configured a remote project. If LibreChat is already running, the script recreates that service when its Compose configuration changed and verifies the effective runtime target, so new settings take effect immediately. You can change this later by editing `LANGFUSE_BASE_URL`, `LANGFUSE_PUBLIC_KEY`, and `LANGFUSE_SECRET_KEY` in `.env`, then running `scripts/reconcile-demo-runtime.sh`.
+
+You can also generate credentials separately and customize the initial administrator account credentials:
+
+```bash
+USER_EMAIL="you@example.com" USER_PASSWORD="supersecret" USER_NAME="YourName" ./scripts/generate-env.sh
+```
+
+Learn more about configuring your LibreChat instance at https://librechat.ai/docs.
+
+> **Note:** To use LibreChat's **file search / RAG** features, the RAG API needs a real API key for embeddings — `user_provided` won't work because the RAG API calls the embeddings endpoint directly. If `OPENAI_API_KEY` is set to `user_provided`, set `RAG_OPENAI_API_KEY` to a valid OpenAI key (it overrides `OPENAI_API_KEY` for RAG only). You can also switch embedding providers via `EMBEDDINGS_PROVIDER` (`openai`, `azure`, `huggingface`, `huggingfacetei`, `ollama`). See the [RAG API docs](https://librechat.ai/docs/configuration/rag_api) for details.
+
+### 2. Start the stack
+
+```bash
+docker compose up -d
+```
+
+### 3. Access the services
+
+- **LibreChat** — [http://localhost:3080](http://localhost:3080)
+- **Admin Panel** — [http://localhost:3081](http://localhost:3081)
+- **Langfuse** — [http://localhost:3000](http://localhost:3000)
+- **MinIO Console** — [http://localhost:9091](http://localhost:9091) (Find credentials in `.env` under MINIO_ROOT_* fields)
+
+An admin user is created automatically on first startup using the credentials from your `.env` file.
+
+## Architecture
+
+![Architecture](assets/architecture.png)
+
+LibreChat connects to ClickHouse through the MCP server, allowing AI agents to query and analyze your data. All LLM interactions are traced in Langfuse for observability, evaluation, and prompt management. The Admin Panel provides a browser-based UI for LibreChat configuration without editing `librechat.yaml` by hand.
+
+## Scripts
+
+| Script | Description |
+|---|---|
+| `scripts/prepare-demo.sh` | Generate `.env` and interactively configure API keys |
+| `scripts/generate-env.sh` | Generate `.env` with random credentials |
+| `scripts/reconcile-demo-runtime.sh` | Apply `.env` changes to a running LibreChat container and verify its Langfuse target |
+| `scripts/reset-all.sh` | Stop all containers and wipe all data/volumes |
+| `scripts/create-librechat-user.sh` | Manually create a LibreChat admin user |
+| `scripts/init-librechat-user.sh` | Auto-init user on container startup (used internally) |
+
+## Configuration
+
+- **LibreChat** — `librechat.yaml` configures endpoints, MCP servers, and agent capabilities. The Admin Panel ([http://localhost:3081](http://localhost:3081)) offers a browser-based alternative for most of these settings.
+- **Environment** — `.env` holds all credentials and service configuration (see `.env.example` for reference).
+- **Admin Panel authentication** — Local HTTP uses password login with SSO disabled and non-Secure session cookies. Set `ADMIN_SSO_ENABLED=true` after configuring LibreChat OpenID, and set `ADMIN_SESSION_COOKIE_SECURE=true` whenever the Admin Panel is served over HTTPS.
+- **Docker** — `docker-compose.yml` includes the four compose files:
+  - `langfuse-compose.yml` — Langfuse, ClickHouse, PostgreSQL, Redis, MinIO
+  - `clickhouse-mcp-compose.yml` — ClickHouse MCP server
+  - `librechat-compose.yml` — LibreChat, MongoDB, Meilisearch, pgvector, RAG API
+  - `admin-panel-compose.yml` — LibreChat Admin Panel
+
+## Reset Everything
+
+To tear down all containers and delete all data:
+
+```bash
+./scripts/reset-all.sh
+```
+
+Then set up again and start fresh:
+
+```bash
+./scripts/prepare-demo.sh
+docker compose up -d
+```
+
+## Links
+
+- [clickhouse.ai](http://clickhouse.ai) — Project homepage
+- [Documentation](https://clickhouse.com/docs/use-cases/AI/MCP/librechat) — Full setup guide for adding ClickHouse MCP to LibreChat
+- [ClickHouse MCP](https://github.com/ClickHouse/mcp-clickhouse) — MCP server for ClickHouse
+- [LibreChat](https://github.com/danny-avila/LibreChat) — Chat UI
+- [LibreChat Admin Panel](https://github.com/ClickHouse/librechat-admin-panel) — Browser-based configuration UI for LibreChat
+- [Langfuse](https://langfuse.com) — LLM observability

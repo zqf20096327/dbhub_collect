@@ -1,0 +1,172 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/eventum-generator/eventum/master/static/logo.svg" alt="Eventum" width="120" />
+</p>
+
+<h1 align="center">Eventum</h1>
+
+<p align="center">
+  <strong>
+    Data generation platform
+  </strong>
+</p>
+
+<p align="center">
+  Realistic synthetic events for testing, demos, and pipelines — streamed live or generated in bulk.
+</p>
+
+<p align="center">
+  <a href="https://github.com/eventum-generator/eventum/actions/workflows/ci.yml"><img src="https://github.com/eventum-generator/eventum/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://codecov.io/gh/eventum-generator/eventum"><img src="https://codecov.io/gh/eventum-generator/eventum/graph/badge.svg" alt="Coverage" /></a>
+  <a href="https://pypi.org/project/eventum-generator"><img src="https://img.shields.io/pypi/v/eventum-generator?color=3873a3" alt="PyPI" /></a>
+  <a href="https://pypi.org/project/eventum-generator"><img src="https://img.shields.io/pypi/pyversions/eventum-generator?color=3873a3" alt="Python" /></a>
+  <img src="https://img.shields.io/badge/platform-🐧%20Linux%20%7C%20🐳%20Docker-lightgrey" alt="Platform: Linux | Docker" />
+  <a href="https://hub.docker.com/r/rnv812/eventum-generator"><img src="https://img.shields.io/docker/v/rnv812/eventum-generator?label=docker&color=2986ff" alt="Docker" /></a>
+  <a href="https://pepy.tech/projects/eventum-generator"><img src="https://static.pepy.tech/badge/eventum-generator?color=8282ef" alt="Downloads" /></a>
+  <a href="https://eventum.run/docs/studio/repositories"><img src="https://img.shields.io/badge/works%20with-GitHub-181717?logo=github&logoColor=white" alt="Works with GitHub" /></a>
+  <a href="https://deepwiki.com/eventum-generator/eventum"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
+  <a href="https://www.bestpractices.dev/projects/13171"><img src="https://www.bestpractices.dev/projects/13171/baseline"></a>
+  <a href="https://github.com/eventum-generator/eventum/blob/master/LICENSE"><img src="https://img.shields.io/github/license/eventum-generator/eventum?color=8282ef" alt="License" /></a>
+</p>
+
+<p align="center">
+  <a href="https://eventum.run"><strong>Documentation</strong></a> &nbsp;·&nbsp;
+  <a href="https://eventum.run/docs/tutorials"><strong>Tutorials</strong></a> &nbsp;·&nbsp;
+  <a href="https://eventum.run/docs/api"><strong>API Reference</strong></a> &nbsp;·&nbsp;
+  <a href="https://github.com/eventum-generator/eventum/blob/master/CHANGELOG.md"><strong>Changelog</strong></a> &nbsp;·&nbsp;
+  <a href="https://github.com/orgs/eventum-generator/projects/4"><strong>Task tracker</strong></a>  &nbsp;·&nbsp;
+  <a href="https://github.com/orgs/eventum-generator/discussions"><strong>Discuss</strong></a>
+</p>
+
+---
+
+Eventum produces synthetic events and delivers them anywhere — in real time or in batch. Generate a continuous stream of logs for your SIEM, seed a staging database with realistic data, or stress-test a pipeline with high-throughput traffic.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/eventum-generator/eventum/master/.github/assets/pipeline-dark.svg" />
+    <img src="https://raw.githubusercontent.com/eventum-generator/eventum/master/.github/assets/pipeline.svg" alt="Input → Event → Output pipeline" width="784" />
+  </picture>
+</p>
+
+<p align="center">
+  <a href="https://app.arcade.software/share/QjQVk47rN7AJd5Eft38x"><strong>▶ Launch the interactive tutorial</strong></a>
+</p>
+
+## Highlights
+
+- **Realistic data** — Jinja2 templates with [Faker](https://faker.readthedocs.io/) and [Mimesis](https://mimesis.name/) generate believable names, IPs, timestamps, and domain-specific values
+- **Flexible scheduling** — cron expressions, fixed intervals, or statistical time patterns that mimic real-world traffic curves
+- **Multiple destinations** — fan-out to stdout, files, ClickHouse, OpenSearch, or any HTTP endpoint simultaneously
+- **Two modes** — stream events in real time at their scheduled timestamps, or generate everything as fast as possible
+- **Built-in web UI** — [Eventum Studio](https://eventum.run) for visual editing, event preview, and monitoring
+- **Ready-made generators** — connect a git repository that publishes generators and install one as a project; the repositories published on GitHub under the `eventum-generators` topic are listed in Studio
+- **REST API** — start, stop, and manage generators programmatically
+- **MCP server** — manage generators and author configurations from AI assistants via the Model Context Protocol
+- **Encrypted secrets** — credentials stored securely via an encrypted keyring
+- **Docker ready** — multi-stage builds, runs anywhere
+
+## Quick start
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/eventum-generator/eventum/master/.github/assets/demo.gif" alt="Eventum CLI generating events in live mode" width="680" />
+</p>
+
+**Install**
+
+```bash
+pip install eventum-generator
+```
+
+> Also available via [uv](https://docs.astral.sh/uv/) (`uv tool install eventum-generator`) or [Docker](https://hub.docker.com/r/rnv812/eventum-generator) (`docker pull rnv812/eventum-generator`).
+
+**Create a template** — `events.jinja`
+
+```jinja
+{{ timestamp }} INFO  user={{ module.faker.locale.en.user_name() }} action=login ip={{ module.faker.locale.en.ipv4() }}
+```
+
+**Create a config** — `generator.yml`
+
+```yaml
+input:
+  - cron:
+      expression: "* * * * * *"
+      count: 1
+
+event:
+  template:
+    mode: all
+    templates:
+      - my_event:
+          template: events.jinja
+
+output:
+  - stdout: {}
+```
+
+**Run**
+
+```bash
+eventum generate --path generator.yml --id demo
+```
+
+```
+2026-02-23 12:00:01+00:00 INFO  user=jsmith action=login ip=192.168.44.12
+2026-02-23 12:00:02+00:00 INFO  user=amiller action=login ip=10.0.128.55
+2026-02-23 12:00:03+00:00 INFO  user=kwilson action=login ip=172.16.0.91
+```
+
+
+## Plugins
+
+Each part of the pipeline is a plugin. Swap, combine, or extend — change the schedule without touching templates, add new outputs without modifying anything else. See the [plugin reference](https://eventum.run/docs/plugins) for the full list.
+
+## Application mode
+
+Run multiple generators with a web UI and REST API:
+
+```bash
+eventum run -c eventum.yml
+```
+
+Starts on port **9474** with **Eventum Studio** (web UI), **REST API**, and **multi-generator orchestration** — each generator runs independently with its own schedule, templates, and outputs.
+
+## Eventum Studio
+
+**Eventum Studio** is the web UI included in application mode: edit generator configurations and templates, preview rendered events, and monitor running generators.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/eventum-generator/eventum/master/.github/assets/studio_project_dark.png" alt="Eventum Studio — an open project with four input plugins and the timestamp distribution they produce together" width="680" />
+</p>
+
+## Documentation
+
+Full documentation at **[eventum.run](https://eventum.run)**:
+
+- [Getting started](https://eventum.run/docs) — overview and first example
+- [Installation](https://eventum.run/docs/core/introduction/installation) — pip, Docker, or from source
+- [Core concepts](https://eventum.run/docs/core/concepts/generator) — pipeline, plugins, scheduling
+- [Plugin reference](https://eventum.run/docs/plugins) — every plugin with full parameter tables
+- [Tutorials](https://eventum.run/docs/tutorials) — end-to-end walkthroughs (SIEM, clickstream, IoT, and more)
+
+## Activity
+
+<p align="center">
+  <img src="https://repobeats.axiom.co/api/embed/f22feef9f6aaae3972c8368e5e425dd06be42c87.svg" alt="Repobeats analytics image" />
+</p>
+
+## Star History
+
+<p align="center">
+<a href="https://www.star-history.com/?repos=eventum-generator%2Feventum&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=eventum-generator/eventum&type=date&theme=dark&legend=top-left&sealed_token=tCYUdE3KrJjqf4xX1VbQo5rxwlhSN410KyP9dnqLyyhdjt1M7nsjFtm-w1w2wR3D0D8te3ytgYS0VmJkHiR_urxSyRJb0Pt9JBS2DC_hd9f8qwBDfu_JfO4NzmR1K7tWjjLTcdWahzQQKJMlQyBtct6kKEXo7t3mOIUe2kP0ARW-RJxrt5HV-hqOeGS8" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=eventum-generator/eventum&type=date&legend=top-left&sealed_token=tCYUdE3KrJjqf4xX1VbQo5rxwlhSN410KyP9dnqLyyhdjt1M7nsjFtm-w1w2wR3D0D8te3ytgYS0VmJkHiR_urxSyRJb0Pt9JBS2DC_hd9f8qwBDfu_JfO4NzmR1K7tWjjLTcdWahzQQKJMlQyBtct6kKEXo7t3mOIUe2kP0ARW-RJxrt5HV-hqOeGS8" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=eventum-generator/eventum&type=date&legend=top-left&sealed_token=tCYUdE3KrJjqf4xX1VbQo5rxwlhSN410KyP9dnqLyyhdjt1M7nsjFtm-w1w2wR3D0D8te3ytgYS0VmJkHiR_urxSyRJb0Pt9JBS2DC_hd9f8qwBDfu_JfO4NzmR1K7tWjjLTcdWahzQQKJMlQyBtct6kKEXo7t3mOIUe2kP0ARW-RJxrt5HV-hqOeGS8" />
+ </picture>
+</a>
+</p>
+
+## License
+
+[Apache License 2.0](LICENSE)

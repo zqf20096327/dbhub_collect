@@ -1,0 +1,29 @@
+= The Reactive SQL Client
+
+image:https://github.com/eclipse-vertx/vertx-sql-client/actions/workflows/ci-5.x.yml/badge.svg["Build Status (5.x)",link="https://github.com/eclipse-vertx/vertx-sql-client/actions/workflows/ci-5.x.yml"]
+image:https://github.com/eclipse-vertx/vertx-sql-client/actions/workflows/ci-4.x.yml/badge.svg["Build Status (4.x)",link="https://github.com/eclipse-vertx/vertx-sql-client/actions/workflows/ci-4.x.yml"]
+
+* Simple API focusing on scalability and low overhead.
+* Reactive and non-blocking which able to handle many database connections with a single thread.
+* Ranked *#1* in the https://www.techempower.com/benchmarks/#section=data-r15&hw=ph&test=db[TechEmpower Benchmark Round 15] _Single query_ benchmark.
+
+Supported databases
+
+** link:vertx-pg-client/README.adoc[Reactive PostgreSQL Client]
+** link:vertx-mysql-client[Reactive MySQL Client]
+** link:vertx-mssql-client[Reactive MSSQL Client]
+** link:vertx-db2-client[Reactive DB2 Client]
+** link:vertx-oracle-client[Reactive Oracle Client]
+
+This project is the natural evolution of the original Reactive PostgreSQL Client and will be part of Vert.x 3.8 stack release.
+
+The original project is located https://github.com/vietj/reactive-pg-client/[here] for Vert.x 3.x
+it will only handle bug fixes.
+
+== Snapshots
+
+Snapshots are deployed in Sonatype OSS repository: https://s01.oss.sonatype.org/content/repositories/snapshots/io/vertx/vertx-sql-client/
+
+== License
+
+Apache License - Version 2.0

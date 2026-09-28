@@ -1,0 +1,49 @@
+# [Oracle AI Database Metrics Exporter](https://oracle.github.io/oracle-db-appdev-monitoring/)
+
+View the documentation here: [Oracle AI Database Metrics Exporter](https://oracle.github.io/oracle-db-appdev-monitoring/)
+
+This project provides observability for Oracle AI Database so that users can understand performance and diagnose issues across applications and databases. Metrics can be collected by Prometheus from the `/metrics` endpoint, published to an OpenTelemetry backend using OTLP/gRPC, or delivered through both paths at the same time.
+
+See [OTLP metric publishing](https://oracle.github.io/oracle-db-appdev-monitoring/docs/next/configuration/otlp) for a quickstart, TLS configuration, and troubleshooting guidance.
+
+## Main Features
+
+The exporter supports the following main features
+
+- Expose Oracle AI Database metrics in Prometheus format on the `/metrics` endpoint
+- Publish metrics to an OpenTelemetry backend using OTLP/gRPC
+- Works with on-prem, in the cloud, and in Kubernetes, with single instance, clustered, or Autonomous Oracle AI Database instances
+- Authenticate with plaintext, TLS, and Oracle Wallet
+- Secure credentials with Oracle Cloud Infrastructure (OCI) Vault, Azure Vault, or HashiCorp Vault
+- Load metrics from one or more databases using a single exporter instance
+- Export the Prometheus Alert Log in JSON format for easy ingest by log aggregators
+- Pre-built AMD64 and ARM64 images provided
+- Standard, default metrics included "out of the box"
+- Easily define custom metrics using YAML or TOML
+- Rich metric customization defining scrape interval, database query timeout, and other parameters on a per-metric, per-database level
+- Customize the database connection pool using go-sql, Oracle AI Database connection pools, and works with Database Resident Connection Pools
+- Includes a sample [Grafana dashboards](https://github.com/oracle/oracle-db-appdev-monitoring/tree/main/docker-compose/grafana) for inspiration or customization
+- Available as a [Grafana Alloy](https://grafana.com/docs/alloy/latest/reference/components/prometheus/prometheus.exporter.oracledb/) component
+
+## Docker Compose Demo
+
+The `docker-compose/` stack is intended for local testing only.
+
+- Set `DB_PASSWORD` before starting it so the demo database, exporter sample configs, and TxEventQ load generator all use the same credential.
+- The sample database listeners are bound to `127.0.0.1` and should not be exposed on a shared or public host.
+
+## Contributing
+
+This project welcomes contributions from the community. Before submitting a pull request, please [review our contribution guide](./CONTRIBUTING.md)
+
+## Security
+
+Please consult the [security guide](./SECURITY.md) for our responsible security vulnerability disclosure process
+
+## License
+
+Copyright (c) 2016, 2026, Oracle and/or its affiliates.
+
+Released under the Universal Permissive License v1.0 as shown at
+<https://oss.oracle.com/licenses/upl/>
+and the MIT License (MIT)

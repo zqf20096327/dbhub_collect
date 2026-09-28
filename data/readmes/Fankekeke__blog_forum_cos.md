@@ -1,0 +1,115 @@
+### 基于SpringBoot + Vue的博客论坛系统.
+
+博客社区系统、在线论坛平台、互动博客平台、内容分享与评论系统
+
+#### 管理员功能模块介绍：
+> 公告管理：发布、编辑或删除全站公告，传达重要信息。分类管理：创建和维护帖子的分类标签，便于内容归类。文章管理：审核、编辑、置顶或删除用户发布的所有帖子。用户管理：查看用户资料，处理违规账号或权限调整。评论管理：监控、审核或删除帖子下的用户评论内容。访问记录：统计并分析用户访问行为与热门内容数据。消息管理：管理平台发送的系统通知及用户私信记录。数据统计：生成用户活跃度、发帖量、访问量等运营报表。用户对话聊天：查看或监管用户间的私信交流内容。用户关注：跟踪用户之间的关注关系与互动情况。贴子收藏：查看用户收藏的热门或优质帖子数据。
+
+#### 用户功能模块介绍：
+> 用户注册登录：通过账号完成注册并安全登录系统。修改个人信息：编辑昵称、头像、简介等个人资料。搜索贴子：按关键词查找感兴趣的帖子或话题内容。搜索用户：查找其他用户并查看其公开信息。用户详情：浏览他人主页，了解其发帖与关注动态。贴子回复：在帖子下方发表评论或参与讨论。系统消息：接收平台通知、回复提醒或私信内容。用户关注：关注感兴趣的人，及时获取其新帖动态。贴子收藏：将优质帖子加入收藏夹以便后续查看。发布贴子：创建新主题，分享文字、图片等内容。贴子管理：编辑、删除或查看自己发布的所有帖子。
+
+#### 安装环境
+
+JAVA 环境 
+
+Node.js环境 [https://nodejs.org/en/] 选择14.17
+
+Yarn 打开cmd， 输入npm install -g yarn !!!必须安装完毕nodejs
+
+Mysql 数据库 [https://blog.csdn.net/qq_40303031/article/details/88935262] 一定要把账户和密码记住
+
+redis
+
+Idea 编译器 [https://blog.csdn.net/weixin_44505194/article/details/104452880]
+
+WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
+
+#### 采用技术及功能
+
+后端：SpringBoot、MybatisPlus、MySQL、Redis、
+前端：Vue、Apex、Antd、Axios
+
+平台前端：vue(框架) + vuex(全局缓存) + rue-router(路由) + axios(请求插件) + apex(图表)  + antd-ui(ui组件)
+
+平台后台：springboot(框架) + redis(缓存中间件) + shiro(权限中间件) + mybatisplus(orm) + restful风格接口 + mysql(数据库)
+
+开发环境：windows10 or windows7 ， vscode or webstorm ， idea + lambok
+
+##### 管理员：
+公告管理、分类管理。文章管理，用户管理，评论管理，访问记录，消息管理，数据统计，用户对话聊天，用户关注，贴子收藏
+
+##### 用户：
+用户注册登录、修改个人信息、搜索贴子，搜索用户，用户详情，贴子回复，系统消息，用户关注，贴子收藏，发布贴子，贴子管理
+
+
+#### 前台启动方式
+安装所需文件 yarn install 
+运行 yarn run dev
+
+#### 默认后台账户密码
+[管理员]
+admin
+1234qwer
+
+[用户]
+小程序登录
+#### 项目截图
+
+|  |  |
+|---------------------|---------------------|
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478064534.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728477962040.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478049824.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728477952047.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478032184.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728477942373.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478021718.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728477931236.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478011574.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728477915697.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728477902429.png) |  |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478390351.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478195416.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478378099.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478258534.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478339094.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478248471.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478325471.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478235224.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478307241.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478222427.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478296456.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478207133.png) |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1728478276850.png) |  |
+| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/work/936e9baf53eb9a217af4f89c616dc19.png) |
+
+#### 演示视频
+
+暂无
+
+#### 获取方式
+
+Email: fan1ke2ke@gmail.com
+
+WeChat: `Storm_Berserker`
+
+`附带部署与讲解服务，因为要恰饭资源非免费，伸手党勿扰，谢谢理解😭`
+
+> 1.项目纯原创，不做二手贩子 2.一次购买终身有效 3.项目讲解持续到答辩结束 4.非常负责的答辩指导 5.**黑奴价格**
+
+> 项目部署调试不好包退！功能逻辑没讲明白包退！
+
+#### 其它资源
+
+[2025年-答辩顺利通过-客户评价🍜](https://berserker287.github.io/2025/06/18/2025%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
+
+[2024年-答辩顺利通过-客户评价👻](https://berserker287.github.io/2024/06/06/2024%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
+
+[2023年-答辩顺利通过-客户评价🐢](https://berserker287.github.io/2023/06/14/2023%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
+
+[2022年-答辩通过率100%-客户评价🐣](https://berserker287.github.io/2022/05/25/%E9%A1%B9%E7%9B%AE%E4%BA%A4%E6%98%93%E8%AE%B0%E5%BD%95/)
+
+[毕业答辩导师提问的高频问题](https://berserker287.github.io/2023/06/13/%E6%AF%95%E4%B8%9A%E7%AD%94%E8%BE%A9%E5%AF%BC%E5%B8%88%E6%8F%90%E9%97%AE%E7%9A%84%E9%AB%98%E9%A2%91%E9%97%AE%E9%A2%98/)
+
+[50个高频答辩问题-技术篇](https://berserker287.github.io/2023/06/13/50%E4%B8%AA%E9%AB%98%E9%A2%91%E7%AD%94%E8%BE%A9%E9%97%AE%E9%A2%98-%E6%8A%80%E6%9C%AF%E7%AF%87/)
+
+[计算机毕设答辩时都会问到哪些问题？](https://www.zhihu.com/question/31020988)
+
+[计算机专业毕业答辩小tips](https://zhuanlan.zhihu.com/p/145911029)
+
+#### 接JAVAWEB毕设，纯原创，价格公道，诚信第一
+
+`网站建设、小程序、H5、APP、各种系统 选题+开题报告+任务书+程序定制+安装调试+项目讲解+论文+答辩PPT`
+
+More info: [悲伤的橘子树](https://berserker287.github.io/)
+
+<p><img align="center" src="https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/%E5%90%88%E4%BD%9C%E7%89%A9%E6%96%99%E6%A0%B7%E5%BC%8F%20(3).png" alt="fankekeke" /></p>

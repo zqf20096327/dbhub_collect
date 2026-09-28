@@ -1,0 +1,55 @@
+name: nightly-collect
+on:
+  schedule:
+    - cron: '0 16 * * *'      # UTC 16:00 = 北京 00:00，每晚
+  workflow_dispatch: {}        # 支持手动触发
+permissions:
+  contents: write
+concurrency:
+  group: nightly-collect
+  cancel-in-progress: false
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install requests
+
+      - name: 池采集（每日全量重扫，断点续采）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python collect/collect_pool.py --max-calls 800
+
+      - name: 衔接当日池 + README 增量（每月 1 号自动转月度全量校准）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          d=$(date -u +%Y%m%d)
+          mkdir -p data/snapshot_latest
+          POOL=$(ls -t data/snapshot_*/pool.json 2>/dev/null | head -1)
+          [ -z "$POOL" ] && { echo "无可用 pool，跳过后续"; exit 0; }
+          cp "$POOL" data/snapshot_latest/pool.json
+          MODE=weekly; [ "$(date -u +%d)" = "01" ] && MODE=monthly
+          python collect/readme_sweep.py --mode "$MODE" --pool data/snapshot_latest/pool.json --max-calls 2500
+
+      - name: 富集（分层增量：未到期零调用，到期才采）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python enrich/enrich.py --tier all --pool data/snapshot_latest/pool.json --max-calls 1500
+
+      - name: 提交并推送数据
+        run: |
+          git config user.name "zqf20096327"
+          git config user.email "zqf20096327@users.noreply.github.com"
+          git add -A
+          git commit -m "采集 $(date -u +%F)" || { echo "无变更"; exit 0; }
+          git pull --rebase --autostash || true
+          git push

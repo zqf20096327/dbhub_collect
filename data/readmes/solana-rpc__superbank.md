@@ -1,0 +1,444 @@
+<div align="center">
+
+<h1>
+  <img width="220" alt="Superbank" src="./docs/assets/superbank.png" />
+  <br/>Superbank
+</h1>
+
+[![CI](https://github.com/solana-rpc/superbank/actions/workflows/ci.yml/badge.svg)](https://github.com/solana-rpc/superbank/actions/workflows/ci.yml)
+
+Ingest Solana ledger data into ClickHouse and serve Solana-compatible JSON-RPC from that data.
+
+[Ingestor](crates/superbank/README.md) · [RPC server](crates/superbank-rpc/README.md) · [superbank-solparq](crates/superbank-solparq/README.md) · [PoH validator](crates/superbank-verify/README.md) · [ClickHouse DDL](ddl/) · [k6 tests](tests/k6/README.md)
+
+</div>
+
+Superbank is a Rust workspace for ingesting Solana ledger data into ClickHouse and serving
+Solana-compatible JSON-RPC endpoints backed by that data.
+
+> [!NOTE]
+> Superbank is licensed under **AGPL-3.0-only** (see `LICENSE`).
+> `superbank-rpc` supports an optional in-memory gRPC "head cache" (`--features grpc-head-cache`) to reduce perceived ingestion lag and (optionally) expose `processed` commitment for a subset of methods. It also supports an independent localhost ClickHouse forward cache (`--features disk-cache`) for recent finalized slots, with bounded in-process signature/address partition routing (`DISK_CACHE_KEY_INDEX_MAX_MEMORY_BYTES`, default 4 GiB). See `crates/superbank-rpc/README.md` for details.
+
+## Features
+
+- Ingest from Yellowstone Fumarole, Yellowstone gRPC (DragonsMouth), Solana JSON-RPC (`getBlock`), or Solana Bigtable
+- Store blocks + transactions in ClickHouse (`ddl/`)
+- Serve Solana-compatible JSON-RPC backed by ClickHouse (`crates/superbank-rpc`)
+- Archive Superbank ClickHouse table bundles to Parquet (`crates/superbank-solparq`)
+- Inspect and read superbank-solparq Parquet archives from local files or S3 (`superbank-solparq-read` binary in `crates/superbank-solparq`)
+- Restore superbank-solparq Parquet archives (local or S3) back into ClickHouse (`source: solparq`)
+- Validate Proof-of-History over the stored data (`crates/superbank-verify`)
+- Optionally expose ClickHouse-backed gRPC block and transaction streams (`--features grpc-streaming`)
+- k6 load + validation scenarios for supported RPC methods (`tests/k6/`)
+
+## Architecture
+
+```mermaid
+flowchart LR
+  Source[Fumarole / gRPC / RPC / Bigtable] --> Ingest[superbank]
+  Ingest --> CH[ClickHouse]
+  CH --> RPC[superbank-rpc]
+  CH --> Archive[superbank-solparq Parquet archives]
+  CH --> Verify[superbank-verify]
+```
+
+## Table of contents
+
+- [Features](#features)
+- [Architecture](#architecture)
+- [Table of contents](#table-of-contents)
+- [Quick start](#quick-start)
+  - [1) Start ClickHouse (local)](#1-start-clickhouse-local)
+  - [2) Create tables](#2-create-tables)
+  - [3) Configure the ingestor](#3-configure-the-ingestor)
+  - [4) Run the ingestor](#4-run-the-ingestor)
+  - [5) Run the RPC server](#5-run-the-rpc-server)
+- [Configuration](#configuration)
+- [Docker local development](#docker-local-development)
+- [Production image](#production-image)
+- [Load testing](#load-testing)
+- [Repository layout](#repository-layout)
+- [Development](#development)
+  - [Nix (flakes)](#nix-flakes)
+- [Contributing \& Docs](#contributing--docs)
+- [License](#license)
+
+## Quick start
+
+For a native setup without Docker, including testnet genesis configuration, see
+[Local testnet with native ClickHouse](docs/local-testnet.md).
+
+### 1) Start ClickHouse (local)
+
+```bash
+	docker run -d --name clickhouse \
+	  --ulimit nofile=262144:262144 \
+	  -e CLICKHOUSE_SKIP_USER_SETUP=1 \
+	  -p 8123:8123 -p 9000:9000 \
+	  clickhouse/clickhouse-server:26.1.2.11
+```
+
+`CLICKHOUSE_SKIP_USER_SETUP=1` makes the image's `default` user reachable through the mapped
+ports for local development. Do not use this insecure local-only setting for production
+ClickHouse.
+
+### 2) Create tables
+
+For single-node ClickHouse (local dev), apply the schemas under `ddl/local/` in this order.
+`transactions.sql` must be applied before the materialized-view schemas (`gsfa*.sql`,
+`signatures.sql`, and `token_owner_activity.sql`) because those views read from the transactions
+table.
+
+```bash
+cat ddl/local/transactions.sql | docker exec -i clickhouse clickhouse-client --multiquery
+cat ddl/local/blocks_metadata.sql | docker exec -i clickhouse clickhouse-client --multiquery
+# Required for Superbank Fumarole/gRPC source defaults and Old Faithful / Jetstreamer PoH entry ingestion.
+cat ddl/local/entries.sql | docker exec -i clickhouse clickhouse-client --multiquery
+cat ddl/local/gsfa.sql | docker exec -i clickhouse clickhouse-client --multiquery
+cat ddl/local/signatures.sql | docker exec -i clickhouse clickhouse-client --multiquery
+# Optional: required only for `tokenAccounts` filters in `getTransactionsForAddress`.
+cat ddl/local/token_owner_activity.sql | docker exec -i clickhouse clickhouse-client --multiquery
+```
+
+If you use `gsfa_hot.sql` and want hot addresses excluded from the main GSFA table, apply
+`ddl/local/gsfa_nohot.sql` instead of `ddl/local/gsfa.sql`, then apply `ddl/local/gsfa_hot.sql`.
+
+For a one-command local PoH entries smoke test that starts or reuses ClickHouse, applies the
+required local schemas, replays a small Old Faithful range through the Jetstreamer ClickHouse
+plugin, and prints verification queries, run:
+
+```bash
+scripts/dev/run-jetstreamer-entries-smoke.sh
+```
+
+That helper also adjusts the local Docker ClickHouse `default` user so the host-side Jetstreamer
+HTTP client can connect to `localhost:8123`.
+
+For ClickHouse clusters, use `ddl/cluster/*.sql` when shard-local tables are plain
+`ReplacingMergeTree`, or `ddl/replicated/*.sql` when shard-local tables should use
+`ReplicatedReplacingMergeTree`. The replicated schemas require ClickHouse Keeper/ZooKeeper plus
+`{cluster}`, `{shard}`, and `{replica}` macros configured in ClickHouse, and they assume the
+cluster uses `internal_replication=1` for distributed inserts. See `ddl/README.md` for the full
+schema set and `crates/superbank-rpc/README.md` for the required tables.
+
+### 3) Configure the ingestor
+
+```bash
+cp superbank.example.yaml superbank.yaml
+```
+
+Edit `superbank.yaml` to choose a source and set credentials/endpoints:
+
+- Fumarole: `source: fumarole`, `fumarole-endpoint`, `fumarole-consumer-group`, optional `fumarole-x-token`
+- gRPC (DragonsMouth): `source: grpc`, `endpoint`, optional `x-token`
+- RPC: `source: rpc`, `rpc-url`, `rpc-from-slot`, and either `rpc-to-slot` or `rpc-slot-count`
+  (add `rpc-skip-ingested-slots` to backfill only slots missing from ClickHouse in that range)
+- Bigtable: `source: bigtable` plus range/slot file and GCP credentials
+- solparq restore: `source: solparq`, `solparq-archive-location` (`local`/`s3`) plus
+  `solparq-archive-path` or the `solparq-archive-s3-*` settings — loads Parquet
+  archive bundles back into ClickHouse
+- Prometheus metrics and health: `metrics-host` / `metrics-port` (default `0.0.0.0:9901`,
+  exposed at `/metrics` and `/health`) plus `health-stale-secs`
+- Optional static metrics label: `metrics-cluster-label`
+
+Full option reference: `crates/superbank/README.md`
+
+### 4) Run the ingestor
+
+```bash
+cargo run -p superbank -- --config superbank.yaml
+```
+
+Minimal RPC-source example (ingest a bounded range via `getBlock`):
+
+```bash
+SUPERBANK_SOURCE=rpc \
+RPC_URL=https://api.mainnet-beta.solana.com \
+RPC_FROM_SLOT=0 \
+RPC_SLOT_COUNT=1000 \
+CLICKHOUSE_URL=http://localhost:8123 \
+CLICKHOUSE_DATABASE=default \
+cargo run -p superbank --
+```
+
+### 5) Run the RPC server
+
+```bash
+RPC_HOST=0.0.0.0 RPC_PORT=8899 \
+CLICKHOUSE_URL=http://localhost:8123 CLICKHOUSE_DATABASE=default \
+cargo run -p superbank-rpc --
+```
+
+Quick JSON-RPC smoke check (after ingesting some data):
+
+```bash
+curl -sS http://localhost:8899 \
+  -H 'content-type: application/json' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"getFirstAvailableBlock"}'
+```
+
+## Configuration
+
+Address history requests share a separate `DISK_CACHE_ADDRESS_QUERY_TIMEOUT_MS` cache budget
+(default `100` ms) across signature bounds, address scans, and transaction hydration. Expiry
+falls back to primary ClickHouse; the general cache and maintenance deadlines remain independent.
+
+The RPC server bounds primary signature-status history work with
+`GET_SIGNATURE_STATUSES_MAX_CONCURRENCY` (default `4`) and
+`GET_SIGNATURE_STATUSES_MAX_THREADS` (default `2`). `CLICKHOUSE_CLUSTER` identifies the primary
+cluster for gateway-based termination verification in distributed HTTP mode as well as shard
+discovery in shard-direct mode. HTTP SELECT reads use shared disconnect cancellation across
+RPC methods, local-cache reads, background readers, and shard-local HTTP reads. Cancellation
+capability is initialized before an endpoint can serve reads. Successful responses drain to EOF
+without extra probes; abandoned reads retain admission until every expected node is observed
+clear twice through a separate control connection pool. Startup and runtime verification each
+have a 10-second default: `CLICKHOUSE_STARTUP_VERIFICATION_TIMEOUT_MS` applies per initialization
+query and `CLICKHOUSE_RUNTIME_VERIFICATION_TIMEOUT_MS` applies per abandoned-query batch.
+Both accept positive integer milliseconds (CLI flags take precedence). They leave normal query
+deadlines and the independent 2-second HTTP connection timeout unchanged. Longer runtime probes
+retain admission longer; the five-second unconfirmed threshold is evaluated after a probe finishes.
+Writes and native TCP reads retain
+their existing behavior. Use `rbx2` for RBX2 or an empty value for standalone ClickHouse. See the
+[RPC configuration and cancellation requirements](crates/superbank-rpc/README.md#http-select-lifetime-and-cancellation).
+
+- `superbank` supports YAML config, CLI flags, and environment variables.
+  Precedence is: flags > env > config file > defaults.
+  See `crates/superbank/README.md` and `superbank.example.yaml`.
+  Fumarole ingest includes a default memory soft-limit backpressure guard; set
+  `fumarole-memory-soft-limit-bytes: 0` only if you want to disable it.
+- `superbank-rpc` is configured via CLI flags and environment variables.
+  It can also read RPC parameter filters from the shared YAML file when started
+  with `--config superbank.yaml` / `SUPERBANK_CONFIG=superbank.yaml`.
+  See `crates/superbank-rpc/README.md`.
+
+## Docker local development
+
+Use Compose when you want the local ClickHouse + DDL + RPC stack without setting up Kubernetes/Tilt:
+
+```bash
+docker compose up --build
+```
+
+If you prefer the Tilt dashboard for the same Docker Compose stack, use the Compose shim:
+
+```bash
+tilt up -f Tiltfile.compose
+```
+
+This starts ClickHouse, applies `ddl/local/*.sql`, builds the Superbank image, and runs
+`superbank-rpc` on `http://localhost:8899`. ClickHouse stays on the internal Compose network by
+default to avoid conflicts with local ClickHouse instances.
+
+To ingest a small bounded range through the Solana JSON-RPC source, enable the `ingest-rpc` profile:
+
+```bash
+SUPERBANK_INGEST_RPC_URL=https://api.mainnet-beta.solana.com \
+SUPERBANK_INGEST_RPC_FROM_SLOT=350918000 \
+SUPERBANK_INGEST_SLOT_COUNT=64 \
+docker compose --profile ingest-rpc up --build
+```
+
+To expose the optional ingestor in the Tilt UI, enable the same Compose profile before starting the
+shim:
+
+```bash
+COMPOSE_PROFILES=ingest-rpc tilt up -f Tiltfile.compose
+```
+
+`superbank-ingest-rpc` is manual in `Tiltfile.compose`, so trigger it from the Tilt UI when you want
+the optional ingest container.
+
+The ingestor still requires an external data source. For larger or credentialed sources, set the
+same environment variables documented in `crates/superbank/README.md`.
+
+Useful local commands:
+
+```bash
+docker compose exec clickhouse clickhouse-client \
+  --user default --password superbank \
+  --query "SHOW TABLES"
+
+curl -sS http://localhost:8899 \
+  -H 'content-type: application/json' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"getFirstAvailableBlock"}'
+```
+
+If you change DDL files after the first run, recreate the one-shot DDL container:
+
+```bash
+docker compose up --force-recreate clickhouse-ddl
+```
+
+## Production image
+
+Build the production image from the repo root:
+
+```bash
+docker build -t superbank:0.6.0 .
+```
+
+The image contains all three binaries (`superbank`, `superbank-rpc`,
+`superbank-verify`). It runs `superbank-rpc` by default:
+
+```bash
+docker run --rm -p 8899:8899 \
+  -e RPC_HOST=0.0.0.0 \
+  -e RPC_PORT=8899 \
+  -e CLICKHOUSE_URL=http://clickhouse:8123 \
+  -e CLICKHOUSE_DATABASE=default \
+  -e CLICKHOUSE_USER=default \
+  -e CLICKHOUSE_PASSWORD=superbank \
+  superbank:0.6.0
+```
+
+Run the ingestor from the same image by overriding the entrypoint:
+
+```bash
+docker run --rm --entrypoint /usr/local/bin/superbank \
+  -e SUPERBANK_SOURCE=rpc \
+  -e RPC_URL=https://api.mainnet-beta.solana.com \
+  -e RPC_FROM_SLOT=350918000 \
+  -e RPC_SLOT_COUNT=64 \
+  -e CLICKHOUSE_URL=http://clickhouse:8123 \
+  -e CLICKHOUSE_DATABASE=default \
+  -e CLICKHOUSE_USER=default \
+  -e CLICKHOUSE_PASSWORD=superbank \
+  superbank:0.6.0
+```
+
+Optional `superbank-rpc` features can be enabled at build time:
+
+```bash
+docker build \
+  --build-arg SUPERBANK_RPC_FEATURES=grpc-head-cache \
+  -t superbank:grpc-head-cache .
+```
+
+## Load testing
+
+Install k6 and run a basic scenario:
+
+```bash
+k6 run tests/k6/scenarios/basic/superbank-rpc-get-signatures.js -e RPC_URL=http://localhost:8899
+```
+
+Full suite docs + helper runner:
+
+- `tests/k6/README.md`
+- `scripts/test/run-k6.sh`
+
+Quick RPC consistency probe for `getSignatureStatuses`:
+
+```bash
+python3 scripts/analysis/check-signature-status-consistency.py \
+  --rpc-url http://localhost:8899 \
+  --block-commitment confirmed \
+  --max-slots-back 200 \
+  --sample-size 100 \
+  --poll-rounds 3 \
+  --poll-interval-ms 250
+```
+
+This samples recent processed blocks, polls `getSignatureStatuses`, and flags cases where
+`confirmations` and `confirmationStatus` disagree.
+
+To inspect whether statuses progress cleanly over time, add:
+
+```bash
+python3 scripts/analysis/check-signature-status-consistency.py \
+  --rpc-url http://localhost:8899 \
+  --block-commitment confirmed \
+  --sample-size 50 \
+  --poll-rounds 40 \
+  --poll-interval-ms 400 \
+  --persist-until-finalized \
+  --show-timelines
+```
+
+## ClickHouse Repair Helpers
+
+To compare source and target clusters for missing block or transaction keys, run
+`scripts/analysis/check-cluster-table-missing-keys.sh`. When the block metadata diff produces a
+`blocks_metadata_local/missing-keys-epoch-*.csv` slot file, copy those slots from the trusted source
+cluster into the target cluster with:
+
+```bash
+MISSING_SLOTS_FILE=cluster-missing-keys/blocks_metadata_local/missing-keys-epoch-980.csv \
+SOURCE_CH_HOST=<source-control-host> SOURCE_CLUSTER=<source-cluster> \
+TARGET_CH_HOST=<target-control-host> TARGET_CLUSTER=<target-cluster> \
+scripts/analysis/copy-cluster-missing-blocks.sh
+```
+
+The copy helper inserts through the target `transactions` and `blocks_metadata` Distributed tables,
+copying transaction rows before block metadata rows. Add `SKIP_EXISTING_TARGET_ROWS=1` to skip
+rows already present on the target by exact table key instead of failing the run.
+
+## Repository layout
+
+- `crates/superbank` ingestor binary (Yellowstone Fumarole, Yellowstone gRPC, Solana JSON-RPC, or Solana Bigtable sources, plus the `solparq` source that restores Parquet archives back into ClickHouse)
+- `crates/superbank-rpc` Solana-compatible JSON-RPC server backed by ClickHouse
+- `crates/superbank-solparq` ClickHouse table archiver that writes Parquet bundles locally or to S3-compatible storage
+- `crates/superbank-verify` Proof-of-History validator for the stored data (genesis-to-tip or arbitrary slot/epoch ranges)
+- `ddl/` ClickHouse schemas (transactions, block metadata, optional PoH entries, GSFA/signatures, token owner activity)
+- `tests/k6/` load/validation tests for `superbank-rpc`
+- `scripts/` helper scripts (local runs, analysis, k6 orchestration)
+- `ingest/jetstreamer` git submodule — standalone Jetstreamer workspace (not part of the root Cargo workspace); requires `git clone --recurse-submodules` or `git submodule update --init`
+- `ingest/jetstreamer-clickhouse-plugin` Jetstreamer ClickHouse ingestion plugin (standalone workspace — build with `cargo build --release` from within this directory, not `-p jetstreamer-clickhouse-plugin` from the repo root)
+
+## Development
+
+```bash
+cargo build -p superbank -p superbank-rpc -p superbank-solparq -p superbank-verify
+
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets --locked -- -D warnings
+cargo clippy -p superbank-rpc --all-targets --all-features --locked -- -D warnings
+cargo test --workspace --locked
+cargo test -p superbank-rpc --all-features --locked
+```
+
+Local RPC helper:
+
+```bash
+scripts/dev/run-local-rpc.sh
+```
+
+### Nix (flakes)
+
+This repo includes a Nix flake with a dev shell that provides `tilt`, `docker`, `kubectl`, `kind`,
+Rust tooling, `k6`, and common CLI utilities.
+
+Enable flakes (if needed):
+
+```bash
+# ~/.config/nix/nix.conf
+experimental-features = nix-command flakes
+```
+
+Enter the dev shell:
+
+```bash
+nix develop
+```
+
+If you don't want to change global Nix config, you can also run:
+
+```bash
+nix --extra-experimental-features 'nix-command flakes' develop
+```
+
+Note: the shell provides the Docker CLI, but you still need a running Docker daemon (or `DOCKER_HOST`
+set) on your machine.
+
+## Contributing & Docs
+
+- [CONTRIBUTING.md](CONTRIBUTING.md)
+- [docs/README.md](docs/README.md)
+- [docs/agents/codex.md](docs/agents/codex.md)
+
+## License
+
+Copyright 2025-2026 Triton One Limited. All rights reserved.
+
+Licensed under the GNU Affero General Public License v3.0 only. See `LICENSE`.

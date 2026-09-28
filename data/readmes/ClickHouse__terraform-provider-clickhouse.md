@@ -1,0 +1,321 @@
+# ClickHouse Cloud Terraform Provider
+
+[![Docs](https://github.com/ClickHouse/terraform-provider-clickhouse/actions/workflows/docs.yaml/badge.svg)](https://github.com/ClickHouse/terraform-provider-clickhouse/actions/workflows/docs.yaml)
+[![Dependabot Updates](https://github.com/ClickHouse/terraform-provider-clickhouse/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/ClickHouse/terraform-provider-clickhouse/actions/workflows/dependabot/dependabot-updates)
+[![Unit tests](https://github.com/ClickHouse/terraform-provider-clickhouse/actions/workflows/test.yaml/badge.svg)](https://github.com/ClickHouse/terraform-provider-clickhouse/actions/workflows/test.yaml)
+
+This is the official Terraform provider for [ClickHouse Cloud](https://clickhouse.com/docs/en/about-us/cloud). The provider allows you to safely and predictably manage ClickHouse Cloud resources in a declarative configuration language (i.e., "Infrastructure-as-Code").
+
+The following service groups can be managed using the ClickHouse Cloud Terraform provider:
+
+| Service group | What you can manage |
+|---|---|
+| **ClickHouse Cloud** | Cloud services and their lifecycle (e.g., auto-scaling, scheduled scaling, upgrade windows), SQL console access control (e.g., organization members, custom roles, API keys), **[ClickPipes](https://clickhouse.com/docs/integrations/clickpipes)**, and other resources. |
+| **ClickStack** | [ClickStack](https://clickhouse.com/docs/use-cases/observability/clickstack) (HyperDX) observability resources (e.g., connections, sources, dashboards, alerts, saved searches, teams, roles, webhooks). |
+| **Postgres** | [Managed Postgres](https://clickhouse.com/docs/cloud/postgres) services and their lifecycle. |
+
+> This provider allows managing **SQL console-level** access control (i.e., organization roles and permissions). To manage **database-level** access control (i.e., database users, roles, grants), use the separate [`clickhousedbops`](https://github.com/ClickHouse/terraform-provider-clickhousedbops) provider.
+
+## Authentication
+
+To use this provider, you need a ClickHouse Cloud account. Once you have [signed up for an account](https://console.clickhouse.cloud/signUp), you can [sign in](https://clickhouse.cloud/signIn) and generate an [API key](https://clickhouse.com/docs/en/cloud/manage/openapi) for authentication.
+
+## Usage
+
+For examples on how to use the ClickHouse Cloud Terraform provider, see the [`examples`](https://github.com/ClickHouse/terraform-provider-clickhouse/tree/main/examples/) directory.
+
+Check out the [documentation](https://registry.terraform.io/providers/ClickHouse/clickhouse/latest/docs) in the Terraform Registry for resource-specific guidance.
+
+## Breaking changes and deprecations
+
+### Upgrading to version >= 3.26.0
+
+In version 3.26.0 we deprecated the `channel` attribute on `clickhouse_clickstack_alert` in favor of `channels`. You can keep using `channel`, but it will be removed in a future release, and it can only ever notify a single target.
+
+`channels` takes a list of 1 to 10 notification channels, so one alert can notify several destinations when it fires. Exactly one of `channel` or `channels` must be set.
+
+```terraform
+# Before
+resource "clickhouse_clickstack_alert" "too_many_errors" {
+  channel = {
+    type       = "webhook"
+    webhook_id = clickhouse_clickstack_webhook.slack.id
+  }
+  # ...
+}
+
+# After
+resource "clickhouse_clickstack_alert" "too_many_errors" {
+  channels = [
+    {
+      type       = "webhook"
+      webhook_id = clickhouse_clickstack_webhook.slack.id
+    },
+    {
+      type       = "webhook"
+      webhook_id = clickhouse_clickstack_webhook.pagerduty.id
+    },
+  ]
+  # ...
+}
+```
+
+Two things to know when migrating:
+
+- Updating an alert replaces its channel list rather than merging into it. Sending only `channel` for an alert that has several channels reduces it to that one channel, so fetch the alert and send the complete `channels` list to preserve them.
+- `terraform import` always populates `channels`. A config still using `channel` shows a diff after importing an alert; switching it to a single-entry `channels` list resolves that.
+
+### Upgrading to version >= 3.15.0
+
+In version 3.15.0 we deprecated the `CLICKHOUSE_TOKEN_KEY` and `CLICKHOUSE_TOKEN_SECRET` environment variables in favor of `CLICKHOUSE_CLOUD_API_KEY` and `CLICKHOUSE_CLOUD_API_SECRET`. The new names align with how API credentials are referred to in the [ClickHouse Cloud UI](https://clickhouse.cloud/) and the [OpenAPI docs](https://clickhouse.com/docs/en/cloud/manage/openapi).
+
+You can keep using the old env vars, but they will be removed in a future release. If both are set, the new ones take precedence.
+
+| Old (deprecated)          | New                           |
+|---------------------------|-------------------------------|
+| `CLICKHOUSE_TOKEN_KEY`    | `CLICKHOUSE_CLOUD_API_KEY`    |
+| `CLICKHOUSE_TOKEN_SECRET` | `CLICKHOUSE_CLOUD_API_SECRET` |
+
+### Upgrading to version >= 3.2.0
+
+In version 3.2.0 we introduced a change in the `Private Endpoints` feature that requires a change on your side if you use this setting.
+
+Before 3.2.0, this was the way to connect a ClickHouse Cloud service running using Private Link to an external VPC:
+
+```hcl
+resource "clickhouse_service" "svc1" {
+  ...
+}
+
+data "clickhouse_private_endpoint_config" "endpoint_config" {
+  cloud_provider = "aws"
+  region         = var.region
+}
+
+resource "aws_vpc_endpoint" "pl_vpc_foo" {
+  vpc_id            = aws_vpc.vpc.id
+  service_name      = data.clickhouse_private_endpoint_config.endpoint_config.endpoint_service_id
+  ...
+}
+
+resource "clickhouse_private_endpoint_registration" "private_endpoint_aws_foo" {
+  cloud_provider      = "aws"
+  private_endpoint_id = aws_vpc_endpoint.pl_vpc_foo.id
+  region              = var.region
+  description         = "Private Link from VPC foo"
+}
+
+resource "clickhouse_service_private_endpoints_attachment" "svc1_attachment" {
+  private_endpoint_ids = [clickhouse_private_endpoint_registration.private_endpoint_aws_foo.private_endpoint_id]
+  service_id = clickhouse_service.svc1.id
+}
+```
+
+After 3.2.0 this became much simpler:
+
+```hcl
+resource "clickhouse_service" "svc1" {
+  ...
+}
+
+resource "aws_vpc_endpoint" "pl_vpc_foo" {
+  vpc_id            = aws_vpc.vpc.id
+  service_name      = clickhouse_service.svc1.private_endpoint_config.endpoint_service_id
+  ...
+}
+
+resource "clickhouse_service_private_endpoints_attachment" "svc1_attachment" {
+  private_endpoint_ids = [aws_vpc_endpoint.pl_vpc_foo.id]
+  service_id = clickhouse_service.svc1.id
+}
+```
+
+So after upgradring the terraform provider version from < 3.2.0 to >= 3.2.0, please do the following:
+
+- Remove any stanzas of to the `clickhouse_private_endpoint_config` data source
+- Remove any stanzas of the `clickhouse_private_endpoint_registration` resource (delete operation is a no-op so you can safely apply)
+- Replace any reference to the `clickhouse_private_endpoint_config` data source with the `private_endpoint_config` attribute of the `clickhouse_service`
+- Change the `private_endpoint_ids` value of `clickhouse_service_private_endpoints_attachment` stanza to use `private_endpoint_id` of the `aws_vpc_endpoint` resource
+
+### Upgrading to version >= 3.0.0
+
+In version 3.0.0 we revisited how to deal with `clickhouse_service` endpoints.
+
+If you are using the `clickhouse_service.endpoints_configuration attribute` or reading the `clickhouse_service.endpoints` read only attribute, then you might be affected.
+
+This is a list of all the changes:
+
+- the `endpoints_configuration` attribute was removed. Please use the `endpoints` attribute in a similar fashion. For example if you had
+
+```hcl
+resource "clickhouse_service" "service" {
+  ...
+  endpoints_configuration = {
+    mysql = {
+      enabled = true
+    }
+  }
+  ...
+}
+```
+
+you need to replace it with
+
+```hcl
+resource "clickhouse_service" "service" {
+...
+  endpoints = {
+    mysql = {
+      enabled = true
+    }
+  }
+...
+}
+```
+
+- the `endpoints` attribute's type changes from a list to a map.
+
+Where before you had:
+
+```hcl
+endpoints = [
+  {
+    protocol = "https"
+    host = "ql5ek38hzz.us-east-2.aws.clickhouse.cloud"
+    port: 8443
+  },
+  {
+    protocol: "mysql"
+    host: "ql5ek38hzz.us-east-2.aws.clickhouse.cloud",
+    port: 3306
+  },
+  ...
+]
+```
+
+Now you'll have:
+
+```hcl
+endpoints = {
+  "https": {
+    "host": "ql5ek38hzz.us-east-2.aws.clickhouse.cloud",
+    "port": 8443
+  },
+  "mysql": {
+    "enabled": false,
+    "host": null,
+    "port": null
+  },
+  "nativesecure": {
+    "host": "ql5ek38hzz.us-east-2.aws.clickhouse.cloud",
+    "port": 9440
+  }
+}
+```
+
+### Upgrading to version >= 1.1.0
+
+In version 1.1.0 we deprecated the `min_total_memory_gb` and `max_total_memory_gb` fields. You can keep using them, but they will eventually be removed.
+
+The intended replacement for those fields are:
+
+- `min_replica_memory_gb`: Minimum memory used by *each replica* during auto-scaling
+- `max_replica_memory_gb`: Maximum memory used by *each replica* during auto-scaling
+
+The key difference between the old and new fields is that the old ones indicated a *total amount of memory* for the whole service (the sum of all replicas) while the new ones act on a *single replica*.
+
+For example, if you had a 3 replica cluster with the following settings:
+
+```hcl
+resource "clickhouse_service" "svc" {
+  ...
+  min_total_memory_gb = 24
+  max_total_memory_gb = 36
+}
+```
+
+you should convert it to
+
+```hcl
+resource "clickhouse_service" "svc" {
+  ...
+  min_replica_memory_gb = 8
+  max_replica_memory_gb = 12
+}
+```
+
+### Upgrading to version >= 1.0.0 of the Clickhouse Terraform Provider
+
+If you are upgrading from version < 1.0.0 to anything >= 1.0.0 and you are using the `clickhouse_private_endpoint_registration` resource or the `private_endpoint_ids` attribute of the `clickhouse_service` resource,
+then a manual process is required after the upgrade.
+
+1) In the `clickhouse_private_endpoint_registration` resource, rename the `id` attribute to `private_endpoint_id`.
+
+Before:
+
+```hcl
+resource "clickhouse_private_endpoint_registration" "example" {
+  id = aws_vpc_endpoint.pl_vpc_foo.id
+  ...
+}
+```
+
+After:
+
+```hcl
+resource "clickhouse_private_endpoint_registration" "example" {
+  private_endpoint_id = aws_vpc_endpoint.pl_vpc_foo.id
+  ...
+}
+```
+
+2) If you used the `private_endpoint_ids` in any of the `clickhouse_service` resources
+
+For each service with `private_endpoint_ids` attribute set:
+
+2a) Create a new `clickhouse_service_private_endpoints_attachment` resource  like this:
+
+```hcl
+resource "clickhouse_service_private_endpoints_attachment" "example" {
+  # The ID of the service with the `private_endpoint_ids` set
+  service_id = clickhouse_service.example.id
+
+  # the same attribute you previously defined in the `clickhouse_service` resource goes here now
+  # Remember to change `id` with `private_endpoint_id` in the `clickhouse_private_endpoint_registration` reference.
+  private_endpoint_ids = [clickhouse_private_endpoint_registration.example.private_endpoint_id]
+}
+```
+
+2b) Remove the `private_endpoint_ids` attribute from the `clickhouse_service` resource.
+
+Example:
+
+Before:
+
+```hcl
+resource "clickhouse_service" "example" {
+  ...
+  private_endpoint_ids = [clickhouse_private_endpoint_registration.example.id]
+}
+```
+
+After:
+
+```hcl
+resource "clickhouse_service" "example" {
+  ...
+}
+
+resource "clickhouse_service_private_endpoints_attachment" "example_attachment" {
+  private_endpoint_ids = [clickhouse_private_endpoint_registration.example.private_endpoint_id]
+  service_id = clickhouse_service.example.id
+}
+```
+
+If everyting is fine, there should be no changes in existing infrastructure but only one or more `clickhouse_service_private_endpoints_attachment` should be pending creation. That is the expected status.
+
+If you have trouble, please open an issue and we'll try to help!
+
+## Development and contributing
+
+Please read the [Development readme](https://github.com/ClickHouse/terraform-provider-clickhouse/blob/main/development/README.md)

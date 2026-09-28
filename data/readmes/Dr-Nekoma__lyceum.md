@@ -1,0 +1,190 @@
+#+TITLE: Lyceum 🏛️
+#+html: <a href="https://builtwithnix.org"><img alt="built with nix" src="https://builtwithnix.org/badge.svg" /></a><br>
+#+html: <a href="https://github.com/Dr-Nekoma/lyceum/actions/workflows/client_build.yml"> <img alt="[Client] Build" src="https://github.com/Dr-Nekoma/lyceum/actions/workflows/client_build.yml/badge.svg" /></a><br>
+#+html: <a href="https://github.com/Dr-Nekoma/lyceum/actions/workflows/server_build.yml"> <img alt="[Server] Build" src="https://github.com/Dr-Nekoma/lyceum/actions/workflows/server_build.yml/badge.svg" /></a>
+#+html: <a href="https://github.com/Dr-Nekoma/lyceum/actions/workflows/server_dialyzer.yml"> <img alt="[Server] Dialyzer" src="https://github.com/Dr-Nekoma/lyceum/actions/workflows/server_dialyzer.yml/badge.svg" /></a>
+
+- [[#about][About]]
+  - [[#featured][Featured]]
+  - [[#annoucements][Announcements]]
+- [[#development][Development]]
+  - [[#nix-shell][Nix Shell]]
+  - [[#running-the-demo][Running the Demo]]
+  - [[#deployment][Deployment]]
+- [[#lore][Lore]] 
+- [[#assets][Assets]] 
+
+* About
+
+This is Lyceum --- an MMO game with the server written in [[https://www.erlang.org/][Erlang]] and the client
+written in [[https://ziglang.org/][Zig]] (supercharged with [[https://github.com/raysan5/raylib][raylib]] and [[https://github.com/dont-rely-on-nulls/zerl][Zerl]]).
+
+#+html: <p align="center"><img src="./menu.jpg" alt="The game menu"></p>
+#+html: <p align="center"><img src="./game.gif" alt="game"/></p>
+
+** Featured
+
+| Year | Language | Description                                                                              | Link                                                            |
+|------+----------+------------------------------------------------------------------------------------------+-----------------------------------------------------------------|
+| 2024 | 🇺🇸       | A demo of version 0.1.0 was featured on [[https://www.youtube.com/c/FuncProgSweden][Func Prog Sweden 2024]], as part of a talk on [[https://github.com/dont-rely-on-nulls/zerl][Zerl]] | [[https://www.youtube.com/watch?v=ejYcWRERetM&t=2745s][Zerl: Making Zig in the BEAM an ez time]]                         |
+| 2025 | 🇧🇷       | Explains how our Erlang backend and Nix/NixOS environment works, from [[https://gambiconf.dev/][Gambiconf 2025]]     | [[https://www.youtube.com/watch?v=RJWmmI9Vwgw][Criando um MMO RPG com Erlang, PostgreSQL, Zig, Nix e gambiarra]] |
+
+** Announcement
+
++ Currently, client-side changes (besides Zig updates) are currently paused, our focus now is with the Erlang + PostgreSQL server. We plan to properly return to this project at some point in the future.
++ Feel free to make contributions/pull requests, one of our developers will eventually see it. 
+
+* Development
+
+There are several ways to run this project, but they all leverage [[https://nixos.org/][Nix]]. We have a
+single [[https://devenv.sh/][devenv]] configured, that has all the tooling required to run this project,
+it also includes postgres.
+
+** Nix Shell
+
+To enter a development shell we assume you have at least [[https://nixos.org/][Nix]] installed:
+
+#+BEGIN_SRC shell
+  # To enter the developmet shell
+  nix develop --impure
+  # To spawn postgres (for instance)
+  devenv up -d
+#+END_SRC
+
+For more commands, make sure to check ~just~.
+
+#+BEGIN_SRC shell
+    # Will list all commands we have right now
+    just
+#+END_SRC
+
+to migrate the local dababase, you can use ~just db-up~ or ~db-up~.
+
+*** Nix Builds
+
+You can also build the server and related OCI images with Nix.
+
+#+BEGIN_SRC shell
+  nix build .#server
+#+END_SRC
+
+if you prefer running a container for the server:
+
+#+BEGIN_SRC shell
+  nix build .#buildImage
+  docker load < ./result
+  docker container run --network=host lyceum:latest
+#+END_SRC
+
+or if you want to build the ~zig~ client, run ~nix build .#client~.
+
+** Running the Demo
+
+To run our DEMO you need to follow the steps in this particular order:
+
+1. ~nix develop --impure~ (to enter a development shell)
+2. ~devenv up~ to launch a local ~postgres~
+3. Run the ~erlang~ backend in a separate shell with either:
+
+    #+begin_src shell
+      server
+      # or
+      just server
+      # or if you want a pure build
+      nix build .#server
+      ./result/bin/lyceum foreground
+    #+end_src
+
+4. Followed by running the ~zig~ client in a third shell with either:
+
+    #+begin_src shell
+      client-release
+      # or
+      just client-release
+      # or if you prefer a pure build
+      nix build .#client
+      ./result/bin/lyceum-client
+    #+end_src
+
+    *Addendum*: We got [[https://github.com/Dr-Nekoma/lyceum/pull/83#issuecomment-2550476288][reports]] that (sometimes) non-NixOS users will have to rely on[[https://github.com/nix-community/nixGL][ nixGL]]. Make sure you run ~nix build .#client~ beforehand.
+
+    #+begin_src shell
+      nix run --impure github:nix-community/nixGL -- ./result/bin/lyceum-client
+    #+end_src
+
+5. Once you get the client to launch, connect to ~localhost~ and you can try
+   playing with any of the local credentials [[https://github.com/Dr-Nekoma/lyceum/blob/master/server/database/main.input.sql#L3][here]].
+
+** Deployment
+
+This game is deployed in our [[https://github.com/Dr-Nekoma/trashcan][NixOS server]].
+
+* Lore
+
+At the dawn, a solitary tower rose at the very heart of creation. Its
+heights soared beyond measure, each stone wrought by the hand of
+Adraman. Within its lofty chambers, knights slumbered in homage to
+their lord, their dreams steeped in profound reverence, each to an
+ultimate idea.
+
+With time, some knights, restless and wide awake amidst the collective
+slumber, were drawn by the haunting whispers of the wind. Captivated
+by the unseen melodies that danced upon the breeze, he cast himself
+from the tower's precipice. As he plummeted, his trumpet echoed
+through the realms, a clarion call that shattered the tranquility of
+ages past.
+
+The reverberations of the trumpet stirred the knights from their deep
+repose, igniting a tumultuous awakening. With swords unsheathed and
+hearts ablaze, they clashed in a thunderous symphony of war, each
+seeking to claim dominance over the waking realm. Now at each strike,
+the meanings of such ideas changed; losing the ideas with time.
+
+In the aftermath of countless battles, only one knight remained
+standing amidst the echoes of strife. His valor and defiance marked
+him as both hero and pariah, banished to the realm of the lowly ones
+where he ascended to rule over the twin cities of Tlova.
+
+To reclaim the lost harmony and seek redemption in Adraman's eyes, the
+Lyceum arose — a monumental testament to humanity's quest to bridge the
+chasm between the heavenly mind and the mortal libraries.
+
+Now far from the tower, a new era dawns as humanity's torch flickers
+into darkness, its once radiant light dimming against the encroaching
+shadow of over their minds! With trepidation etched upon their faces,
+barbarian tribes lay claim to the northern realms, and their conquests
+marking a steady advance southward. Meanwhile, corruption festers
+within the cities' beating heart, severing its ancient ties to the
+source of all truth.
+
+In the fading twilight of their former glory, the heavens whisper of
+impending change, and the lands tremble beneath the weight of
+uncertainty. As the cities now struggle to stem the tide of internal
+decay and external aggression, the balance of power shifts perilously,
+casting doubt upon the fate of civilizations wrought by the hands of
+gods and men alike. It is your duty, oh great Philosopher, to mend the
+meanings and bring us all closer to truth once again.
+
+* Assets
+
+References for assets used in this project:
+
+- [[https://opengameart.org/node/33425][sand_texture]]
+- [[https://opengameart.org/content/stylized-grass][grass_texture]]
+- [[https://opengameart.org/content/simple-seamless-tiles-of-dirt-and-sand-dirt-2-png][dirt_texture]]
+- [[https://opengameart.org/content/texture-water][water_texture]]
+- [[https://free3d.com/3d-model/-rectangular-grass-patch--205749.html][tile_model]] (used for all types of tiles)
+- [[https://free3d.com/3d-model/treasure-chest-v1--156264.html][chest_model]]
+- [[https://opengameart.org/content/fern][bush_model]]
+- [[https://opengameart.org/content/tree-24][tree_model]]
+- [[https://free3d.com/3d-model/rock-v2-lp-63239.html][rock_model]]  
+- [[https://www.dafont.com/eari.font?text=Lyceum][logo_font]]
+- [[https://www.dafont.com/kelmscott.font?text=Connect][text_font]]
+- [[https://opengameart.org/content/menu-selection-click][button_select_sound]]
+- [[https://opengameart.org/content/click][button_click_sound]]
+- [[https://opengameart.org/content/soundpack-04][error_sound]]  
+- [[https://youtu.be/gFf5eGCjUUg?si=cmJcKlSzoV4ES0p8][character_model]] (slightly modified in blender)
+
+Special thanks to [[https://tholgrimar.bandcamp.com/][Tholgrimar]] for allowing us to use "[[https://tholgrimar.bandcamp.com/track/linear-b][Linear B]]" as our background music.
+
+Everything else was made by developers from the project or generated using tools.  

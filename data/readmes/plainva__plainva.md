@@ -1,0 +1,118 @@
+# Plainva
+
+[![CI](https://github.com/plainva/plainva/actions/workflows/ci.yml/badge.svg)](https://github.com/plainva/plainva/actions/workflows/ci.yml)
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL%203.0-blue.svg)](LICENSE)
+[![Latest release](https://img.shields.io/github/v/release/plainva/plainva?label=latest%20release&color=0f766e)](https://github.com/plainva/plainva/releases/latest)
+
+### [⬇ Download](https://github.com/plainva/plainva/releases/latest) &nbsp;·&nbsp; [🌐 plainva.com](https://plainva.com) &nbsp;·&nbsp; [📖 User guide](docs/user/README.md)
+
+**Your notes are plain Markdown files in a folder you own. Plainva makes them feel like a modern app — without ever locking you in.**
+
+Plainva is an open-source, local-first Markdown vault editor for Windows, macOS and Linux. It opens existing Obsidian vaults without migration, adds Notion-style databases over plain files, syncs through YOUR storage — and every file it writes stays readable in any text editor, forever.
+
+> **Status: Beta.** Plainva is used daily on real vaults, ships with an extensive test suite (1,500+ tests) and automatic per-file versioning — but it is pre-1.0 software. Keep backups of irreplaceable vaults (Plainva also creates daily ZIP backups by default).
+
+![Plainva editor with live preview and the slash command menu](docs/assets/screenshot-editor.png)
+
+<p align="center">
+  <img src="docs/assets/screenshot-base-board.png" alt="A .base board over plain Markdown notes" width="49%" />
+  <img src="docs/assets/screenshot-graph.png" alt="Plainva's vault map / graph view" width="49%" />
+</p>
+
+**Arch Linux community package:** [plainva in the AUR](https://aur.archlinux.org/packages/plainva) is maintained independently. Review its PKGBUILD before building; Plainva does not verify these community builds. The application’s licence remains AGPL-3.0-only.
+
+## Highlights
+
+- **Real Markdown editor** — live preview (Obsidian- or Notion-style syntax display), slash menu, tables with inline cell editing, callouts, wiki links with fuzzy autocomplete, block drag handles, math (KaTeX), Mermaid diagrams, footnotes, clickable task checkboxes in read mode, print/PDF export.
+- **Databases over plain notes (`.base`)** — tables, boards, calendars, galleries, timelines and a graph view over your notes' frontmatter, including relations with computed reverse columns. The data IS your notes; the `.base` format stays Obsidian-compatible.
+- **Graph** — a context graph beside every note, a semantic-zoom vault map with cleanup tools (orphans, broken links, unlinked mentions) and time travel.
+- **Sync through your storage** — WebDAV/Nextcloud, S3-compatible object storage (R2, MinIO, B2, …), Google Drive, OneDrive and Dropbox. Offline queue, 3-way merge, a visual conflict resolver, and nothing ever leaves your chosen storage. Credentials live in the OS keychain.
+- **Versioning built in** — every write is snapshotted locally; browse, diff and restore any version, recover deleted files, daily ZIP backups.
+- **Fast on large vaults** — SQLite/FTS5 full-text search as you type, incremental indexing, a measured performance budget (see `docs/engineering/Performance_Notes.md`).
+- **Yours** — 10 UI languages, 13+ themes (including a few delightful secrets), no telemetry, no account, AGPL-licensed.
+
+## Obsidian compatibility
+
+Plainva follows a strict rule: **every file it writes must still open in Obsidian.** Notes are standard Markdown + YAML frontmatter; Plainva-specific presentation lives under a single namespaced `plainva:` key that other tools simply ignore. Existing vaults are never migrated or reformatted. The optional [OKF conventions](docs/user/en/OKF.md) (typed notes, managed `index.md` files) are opt-in.
+
+Note that the guarantee runs one way: Obsidian can always **open** what Plainva writes, but once a vault uses Plainva features (`.base` extensions such as boards or relations, managed `index.md` files), **editing** those specific files in Obsidian can break that functionality — Obsidian does not know the `plainva:` extensions. Notes without Plainva extensions can be edited anywhere, anytime. Details in the [FAQ](docs/user/en/FAQ.md#can-i-use-plainva-and-obsidian-side-by-side).
+
+## Automation & scripting
+
+Plainva has no code-plugin sandbox — the vault *is* the interface. Every file is plain Markdown or YAML with an open, documented format, so any script, CLI tool or AI agent can read and write your vault directly and safely, with no Plainva-specific API to learn. See the guide's [Automation & Scripts](docs/user/en/Automation_and_Scripts.md) page and the machine-oriented [file format reference](docs/user/en/File_Format_Reference.md). (A dedicated in-app plugin system remains a separate post-1.0 idea.)
+
+## Download & install
+
+**[⬇ Download the latest release](https://github.com/plainva/plainva/releases/latest)** — or, for OS-detected one-click downloads, use **[plainva.com](https://plainva.com/#download)**. Every release page lists installers for all three platforms; updates after that are delivered in-app (signed, with an opt-out).
+
+- **Windows** — the `.msi` installer (or the `.exe`), code-signed as of 0.6.3. A fresh certificate has no SmartScreen reputation yet, so a warning may still appear on first launch: click **More info → Run anyway**.
+- **macOS** — the universal `.dmg` (Apple Silicon + Intel), signed and notarized: a normal double-click works.
+- **Linux** — the `.deb` (Debian/Ubuntu) or `.rpm` (Fedora/openSUSE) for your package manager; the `.AppImage` (`chmod +x Plainva*.AppImage`, then run) is the fallback for distributions without a package. On a very new system the AppImage can clash with the host's graphics libraries — the packages never do; see [Getting Started](docs/user/en/Getting_Started.md#system-requirements).
+
+### Mobile (beta)
+
+The same vault on a phone or tablet, synced through your own cloud or a folder another app keeps. Both betas are open:
+
+- **Android** — the open test on Google Play: [https://play.google.com/apps/testing/com.plainva.app](https://play.google.com/apps/testing/com.plainva.app) (tap *Become a tester*, install from Play), or the `.apk` attached to every [mobile release](https://github.com/plainva/plainva/releases?q=mobile). Android 8.0 or newer.
+- **iPhone and iPad** — public TestFlight: [https://testflight.apple.com/join/ZRSEfZBn](https://testflight.apple.com/join/ZRSEfZBn). iOS/iPadOS 16.4 or newer.
+
+It is a beta: keep a backup of your vault, and read [Mobile App](docs/user/en/Mobile_App.md) in the user guide before pointing it at a vault you care about.
+
+### System requirements
+
+Plainva draws its window with the system's web engine, so the engine — not the CPU — sets the floor.
+
+| | Minimum |
+|---|---|
+| **Windows** | 10 or newer, with the WebView2 runtime (Windows 11 ships it; the installer adds it on 10) |
+| **macOS** | **13.3 (Ventura)** or newer, Apple Silicon or Intel |
+| **Linux** | WebKitGTK **2.40** or newer — check with `pkg-config --modversion webkit2gtk-4.1` |
+
+The engine bar is **Safari 16.4**, and on macOS the system version is what decides it: an app draws
+its window with the system WebView, which moves with macOS updates and not with Safari. On a Mac
+Apple no longer updates, Safari can therefore run years ahead of the engine every other app gets —
+Monterey stops at Safari 15.6.1 however current its Safari is. Ventura reached 16.4 at 13.3, which
+is where the floor sits. Installing a newer Safari does not move it.
+
+On a system below that line the app says so on startup instead of opening a blank window. The floor
+is the engine, not the app: no released version of Plainva runs below it, so an older build is not a
+way around it.
+
+Cloud providers: WebDAV/Nextcloud, S3, OneDrive and Dropbox work out of the box. Only Google Drive currently requires a free app registration of your own ("bring your own client ID") — the settings link a step-by-step guide, and the [user guide](docs/user/en/Sync_Setup.md) covers every provider.
+
+## User guide
+
+A multilingual handbook lives in [`docs/user/`](docs/user/README.md): **[Deutsch](docs/user/de/README.md)** | **[English](docs/user/en/README.md)** | **[Français](docs/user/fr/README.md)** | **[Español](docs/user/es/README.md)** | **[Português (Brasil)](docs/user/pt-BR/README.md)** | **[Italiano](docs/user/it/README.md)** | **[Nederlands](docs/user/nl/README.md)** | **[Polski](docs/user/pl/README.md)** | **[简体中文](docs/user/zh-CN/README.md)** | **[日本語](docs/user/ja/README.md)**
+
+It covers getting started, notes & Markdown, `.base` databases, sync per provider, search, backups & versioning, the graph, keyboard shortcuts, an FAQ — and a machine-oriented [file format reference](docs/user/en/File_Format_Reference.md) so scripts and AI tools can work on your vault correctly. Languages other than German and English are machine-translated; corrections welcome.
+
+## Roadmap (excerpt)
+
+A stable mobile release in the stores (the betas above are open), the independent review of the encrypted workspaces, a plugin system and real-time collaboration are planned post-1.0 — staging and priorities are tracked in GitHub Issues and Discussions. No feature will ever compromise the plain-Markdown rule.
+
+## Building from source
+
+Requirements: Git, Node.js ≥ 22, pnpm 10 (`npm i -g pnpm@10.0.0`), and for the native app Rust/Cargo plus the [Tauri prerequisites](https://tauri.app/start/prerequisites/).
+
+```bash
+git clone https://github.com/plainva/plainva.git
+cd plainva
+pnpm install --frozen-lockfile
+
+pnpm --filter desktop tauri dev     # run the desktop app
+pnpm test && pnpm lint && pnpm typecheck   # checks
+pnpm --filter desktop test:e2e      # Playwright E2E (Vite dev server)
+pnpm --filter desktop smoke:prod    # production-build smoke (vite build + preview + boot check)
+```
+
+The repo is a pnpm/Turborepo monorepo: `apps/desktop` (Tauri v2 + React + CodeMirror 6), `packages/core` (vault logic: indexing, sync, merge — UI-free and heavily unit-tested), `docs/` (user guide, ADRs, engineering notes).
+
+The experimental [Core SDK](packages/core/README.md) can also be packed for use outside the monorepo, with separate browser, Node filesystem and optional SQLite entry points. Its README describes the public API, isolated consumer checks and publication procedure.
+
+## Contributing
+
+Issues and pull requests are welcome — please read [CONTRIBUTING.md](CONTRIBUTING.md) first (tests, the 10-language locale rule, the Obsidian-compatibility rule) and sign the [CLA](CLA.md) on your first PR. Security issues go through [SECURITY.md](SECURITY.md), never public issues.
+
+## License
+
+[AGPL-3.0-only](LICENSE). Your vault content is yours; Plainva never phones home.

@@ -1,0 +1,102 @@
+[![CI](https://github.com/mzabani/hpgsql/actions/workflows/main.yml/badge.svg)](https://github.com/mzabani/hpgsql/actions/workflows/main.yml)
+
+Hpgsql is a PostgreSQL driver written in pure Haskell (no libpq), with an API largely inspired by the great [postgresql-simple](https://hackage.haskell.org/package/postgresql-simple) library, but featuring:
+
+- Usage of PostgreSQL's binary protocol
+- Query arguments passed via the protocol instead of being escaped into the query string
+- Pipelining
+- Prepared statements
+- Ability to stream query results directly from the socket (not just with cursors)
+- [Interruption safety](/INTERRUPTION-SAFETY.md), except for very specific (and documented) edge cases
+- Thread safety, unless specific (and documented) instructions say otherwise
+- A SQL quasiquoter like the one in [postgresql-query](https://hackage.haskell.org/package/postgresql-query) and [hasql-interpolate](https://hackage-content.haskell.org/package/hasql-interpolate-1.0.1.0/docs/Hasql-Interpolate.html)
+
+Here's an example of a pipeline mixing streams, prepared and non prepared statements:
+
+```haskell
+f :: Int -> IO (Stream (Of Aeson.Value) IO ())
+f val = do
+  (updateTbl :: IO (), aggRes :: IO (Only Int), largeResults) <-
+    runPipeline conn $
+      (,,)
+        <$> pipelineExec_ [sql|UPDATE tbl SET val=#{val}|]
+        <*> pipeline1 [sql|SELECT SUM(val) FROM tbl|]
+        <*> pipelineSWith
+          (rowDecoder @(Vector Int, Vector Text))
+          -- We use a prepared statement for the query below
+          [sqlPrep|SELECT x, y FROM tbl|]
+  updateTbl
+  Only total <- aggRes
+  Streaming.map Aeson.toJSON <$> largeResults
+```
+
+## Current status
+
+Hpgsql is in active development, is new and has not been used in Production yet. It currently lacks many of the authentication methods that libpq provides; for now only cleartext, MD5 and SCRAM-SHA-256 password auth are supported, and only unencrypted connections.
+
+That being said, one of my other projects, codd, [has a tests-passing branch using hpgsql-simple-compat](https://github.com/mzabani/codd/pull/227) (the nearly API compatible fork of postgresql-simple described in the next section) with very few modifications.
+
+## Migrating from postgresql-simple
+
+This repository contains [a fork of postgresql-simple](https://github.com/mzabani/hpgsql/tree/master/hpgsql-simple-compat) that preserves as much as possible** the names of modules, functions, types, classes, exceptions, etc. Its purpose is to ease migrating to hpgsql, and I intend to fully support its development to make it and keep it as similar to postgresql-simple as it can be.
+
+It is called hpgsql-simple-compat, and its implementation uses hpgsql. You can get a `HPgConnection` out of it so you can gradually migrate your queries to hpgsql.
+
+It also contains parts of [postgresql-libpq](https://hackage.haskell.org/package/postgresql-libpq) and [postgresql-query](https://hackage.haskell.org/package/postgresql-query), all implemented on top of hpgsql.
+
+You should start by swapping all of "postgresql-simple", "postgresql-libpq", and "postgresql-query" in your cabal files by "hpgsql-simple-compat". But read [MIGRATING.md](/MIGRATING.md) for tips and gotchas.
+
+- <sub>I haven't been able to preserve _everything_, so some differences do exist. Also the library is not feature complete yet.</sub>
+- <sub>There may be small intentional differences added to help the transition, like a `sqlStatement` field in the `SqlError` exception so it's easier to know which queries are failing.</sub>
+
+## Performance
+
+Some benchmarks show materializing large query results with hpgsql takes 28% the time postgresql-simple takes, and 51% the time hasql takes (on my computer, Linux x64, GHC 9.10.3, compiled with -O1).
+
+When comparing hpgsql's Stream querying, hpgsql takes 7-11% the time of both [streaming-postgresql-simple](https://hackage.haskell.org/package/streaming-postgresql-simple) and postgresql-simple's cursor folding functions, although this might not be a fair comparison for some use cases.
+
+hpgsql's binary COPY runs in ~68% the time of postgresql-simple's textual COPY.
+
+Peak allocated memory is harder to analyze.
+
+See [BENCHMARKS.md](/BENCHMARKS.md) for more details.
+
+## Contributing
+
+### Working with this repository
+
+Once you clone this repository, you will need [Nix](https://nixos.org/download/) and optionally [direnv](https://direnv.net/). Then you can run `direnv allow` or `nix-shell` in the project's root and you will have everything you need to build, run tests and benchmarks, locally.
+
+I recommend you run `run list` to see what's available, but I'll paste a sample here as of 2026-04-22 as well:
+```shell
+$ run list
+Commands:
+  list            (builtin) List available commands
+  help            (builtin) Show help for a command
+  version         (builtin) Show run version
+  benchmarks      Runs benchmarks with a postgresql DB listening.
+  bench-single    Runs the benchmarks executable without all the metrics-producing and memory usage collecting tooling around it.
+  ci-tests        Runs all tests that CI runs, exactly like CI runs them.
+  format          Formats all Haskell files with fourmolu and lints with hlint.
+  tests           Runs all tests.
+  tests-stress    Runs tests 100 times, reporting how many passed and how many failed.
+  tests-compat    Runs hpgsql-simple-compat's tests.
+```
+
+You don't need to install and configure PostgreSQL yourself: all the commands start temporary instances of PostgreSQL as necessary, and stop them at the end, including e.g. `run tests`.
+
+But you can run `pg_ctl start` and then `psql postgres` to play with a local instance. Use `pg_ctl stop` to stop it.
+
+For example:
+
+```shell
+$ run tests -- --match Pipelining # No need to start postgres as it happens automatically
+```
+
+### CI pipeline
+
+Hpgsql's CI pipeline runs tests against all major supported versions of PostgreSQL, on Linux and Mac, and also tests the multi-threaded and single-threaded RTS.
+
+It also runs hpgsql-simple-compat's (the API-compatible fork of postgresql-simple that uses Hpgsql internally) test suite, which is a slightly modified subset of postgresql-simple's own test suite.
+
+My hope is that you can have a reasonable level of assurance that your contributions are sound.

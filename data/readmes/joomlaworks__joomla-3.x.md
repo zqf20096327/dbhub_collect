@@ -1,0 +1,184 @@
+Joomla 3.x UTD (up-to-date)
+===========================
+
+According to [market share estimates](https://w3techs.com/technologies/details/cm-joomla) (as of May 2026), Joomla 3.x is currently used on more than 50% of all installed Joomla sites worldwide.
+
+However, official support for Joomla 3.x ended in February 2025 (counting the eLTS program).
+
+So we're actively developing Joomla 3.x UTD as an up-to-date distribution of the Joomla 3.x content management system, built to ensure code security, support modern PHP & MySQL/MariaDB versions & fix any broken behaviour that never got sorted before the release of newer major versions of Joomla.
+
+If you are a Joomla extension developer reading this, ensure your extension update XML files don't stop at Joomla 3.10.x. Do your users a favour ;)
+
+---
+
+## CHANGELOG
+
+## Version 3.15 - released July 18th, 2026
+Summary of changes:
+- Backported 13 CVEs from official Joomla security advisories, independently confirmed to also affect 3.x (several labelled "affects 4.0.0+ only" upstream, but the vulnerable code is present in 3.x regardless)
+- Resolved a number of functional/compatibility issues, some reported directly by the community
+
+**Security fixes (CVE backports), most to least severe:**
+- Local file inclusion (LFI) via the view layout parameter (CVE-2026-40383) — **High**
+- SQL injection in the com_tags "all tags" list ordering (CVE-2026-352212) — **Moderate, High impact**
+- Privilege-escalation XSS via language overrides, where a non-Super-User with delegated translation access could inject quote characters that break out of the many places Joomla renders language strings unescaped (CVE-2026-48954) — **Moderate**
+- XSS in the template manager's file/image/font editor, where a crafted (but filter-legal) request parameter could decode to a `<script>` tag on display — affecting three code paths in this codebase where the official fix only covered one (CVE-2026-48950) — **Moderate**
+- Unescaped attribute output in the generic image layout used by extensions (CVE-2026-48953) — **Moderate**
+- Reflected XSS in the com_installer update list view (CVE-2026-48952) — **Moderate**
+- Additional XSS gaps in com_associations left over from an earlier fix (CVE-2026-25901) — **Moderate**
+- Stored XSS in the content history preview screen (CVE-2026-30894) — **Moderate**
+- XSS in the feed modules, front and back end (CVE-2026-25900) — **Moderate**
+- XSS in article "read more" links via unescaped titles (CVE-2026-30895) — **Moderate**
+- Password/username reset links being sent over plain HTTP even on HTTPS-only sites (CVE-2026-48902) — **Low**
+- An instance-cache key bug in InputFilter that could serve a wrongly-configured filter instance (CVE-2026-48901) — **Low**
+- An access-control bypass allowing anyone to download restricted contacts' vCards in com_contact (CVE-2026-48948) — **Low**
+- Two further CVEs confirmed already covered by earlier hardening in this project, no new gap: CVE-2026-48905 and CVE-2026-48903 (both related to the core HTML attribute filter)
+- Two further CVEs confirmed not applicable, as the vulnerable code/feature doesn't exist in this version of Joomla: CVE-2026-48899 (sample data plugin permissions) and CVE-2026-48951 (a "modal return" screen XSS)
+
+**Functional & compatibility fixes:**
+- Fixed modules set to "Use Global" caching (mod_menu and 25 other core modules) silently ignoring Global Configuration's Cache Time in favour of their own separate Cache Time field — which, due to a hardcoded/reverting default, almost always meant a fixed 15-minute refresh regardless of what Global Configuration was actually set to; affected sites are fixed automatically on upgrade, no manual database changes needed
+- Added an explicit "Use custom cache time" caching option to all 26 cache-capable core modules (including mod_whosonline, which now also supports Global/custom caching for the first time), so overriding a single module's cache TTL is now a clear, self-documenting choice instead of an unlabelled number field
+- Fixed modules set to "Use custom cache time" never actually being cached on real page loads — the site's per-module page renderer only attempted caching for "Use Global", so the new option silently fell through to always rendering live
+- Added "sort by Author" to "Extensions > Manage", so third-party extensions can be easily distinguished from Joomla core ones when auditing a large site for vulnerable or old/unmaintained extensions
+- Fixed a misleading "Refresh Manifest Cache failed: X Extension is not currently installed" warning shown on every Joomla Update run, for any stock core extension (e.g. the protostar template, or com_banners/mod_banners) a site admin has deliberately removed
+- Fixed the removed beez3/hathor templates not actually being deleted from the database on upgrade from an earlier Joomla 3.x release, which left stale entries in Template Manager that threw a PHP error when opened (see [issue #7](https://github.com/joomlaworks/joomla-3.x/issues/7)) — affected sites will self-heal automatically on their next update, no manual fix needed
+- Fixed a PHP 8.4 deprecation warning from the session garbage-collection plugin's use of `lcg_value()` (see [issue #12](https://github.com/joomlaworks/joomla-3.x/issues/12))
+- Fixed literal `"_QQ_"` text appearing instead of quotation marks in various admin messages (e.g. the "Add Install from Web tab" notice) — a legacy language-file placeholder that was never being converted back to a real quote mark; fixed across all 80 affected language files
+- Raised the hardcoded minimum-PHP-version check from a stale `5.3.10` to `7.1.0` (the actual floor this codebase can run on), and lowered the update feed's own PHP requirement to match — sites on PHP 7.1–7.3 now keep receiving updates and security patches instead of being silently skipped or hitting an unhandled error page. PHP 7.4+ remains our recommended production baseline, both for broader hosting support (e.g. AlmaLinux 8 with cPanel, or Ubuntu 22.04+ with Ondřej's PHP repos) and for the best experience overall
+- Housekeeping: removed the stock, unedited `README.txt` (superseded by this file) and renamed `LICENSE.txt` to `LICENSE.md`; sites upgrading from an older release get the old files cleaned up automatically
+
+## Version 3.14 - released July 4th, 2026
+Summary of changes:
+- Fixed two PHP 8.5 deprecations reported via PR #13: null array offsets in `HtmlDocument::getBuffer()`/`setBuffer()`, and the now-deprecated `imagedestroy()` call in `Image::destroy()` and `Backgroundfill::execute()` (supplemental to PR #13).
+- Updated Joomla language file versioning, in-line with the main version (this would also "trip" some scanners)
+
+## Version 3.13 - released May 31st, 2026
+Summary of changes:
+- The Isis administrator (backend) template now uses CSS view transitions
+- All obsolete CSS has been removed from the Isis template
+- Further PHP 8.x compatibility fixes, extending coverage to newly reported files
+- Fixed: Database update version (OLD-VERSION) does not match CMS version (CURRENT-VERSION) - under Extensions > Manage > Database
+
+## Version 3.12 - released May 21st, 2026
+Summary of changes:
+- Built-in update server: sites running 3.12 or newer can now receive updates directly via the Joomla backend updater
+- Removed legacy bundled items: `eos310` & `phpversioncheck` quickicon plugins, `beez3` frontend template, `hathor` backend template
+- Further PHP 8.x compatibility fixes, extending coverage to previously missed files
+- Additional security patches backported from Joomla 4/5/6
+- Fixed the getModuleById method in JModuleHelper to correctly return a module's data using its ID.
+
+Please note that if you had `beez3` or `hathor` as one of your frontend or backend (respectively) default templates, upgrading to this version will set `protostar` and `isis` as your new defaults (respectively). If you use another frontend template, it will (of course) not be updated...
+
+## Version 3.11 - released April 20th, 2026
+Summary of changes:
+- Joomla 3.x is now compatible with PHP up to version 8.5
+- Includes security patches for CVEs reported after Joomla 3.10.20 eLTS was released
+- Includes additional security patches & some quality-of-life improvements
+- Works better with MySQL 8.x
+
+For detailed changelog, please visit: https://github.com/joomlaworks/joomla-3.x/blob/main/CHANGELOG.md
+
+---
+
+## HOW TO UPGRADE FOR EXISTING JOOMLA 3.X SITES
+
+### Using the Joomla Update component in the backend (Web UI method)
+In the Joomla backend, adjust the options for the Joomla Update component (either from the component's "Options" or through Joomla's "Global Configuration") and use the following update URL in the "Custom URL" field, along with these settings:
+
+- Update Channel: Custom URL
+- Minimum Stability: Stable
+- Custom URL: `https://joomlaworks.github.io/joomla-3.x/list.xml`
+
+Refresh and you should see the latest release available to upgrade.
+
+Future updates will also show up there and you can also be notified (as a super admin) about them (if you have these notifications enabled).
+
+Happy updating!
+
+
+### Using a terminal (CLI method)
+Using your server's terminal, extract the latest rolling release https://github.com/joomlaworks/joomla-3.x/releases/download/rolling/joomla-latest.zip on top of an existing Joomla 3.x installation.
+
+Remember to remove the `/installation` folder afterwards.
+
+In a typical Linux based server, you can easily do the upgrade using the following one-liner command (after you "cd" into your Joomla site's folder):
+```
+wget -qO- https://github.com/joomlaworks/joomla-3.x/archive/refs/heads/main.tar.gz | tar -xz --strip-components=1 && rm -rf installation .github .gitignore *.md
+```
+
+
+## HOW TO INSTALL (FOR NEW SITES)
+To install, just extract the latest rolling release https://github.com/joomlaworks/joomla-3.x/releases/download/rolling/joomla-latest.zip where you want the site to be and then follow the normal Joomla installation process.
+
+
+## PHP COMPATIBILITY
+This distribution targets at least PHP 7.4. This is the baseline version we use for broader compatibility with hosts and the Joomla 3.x ecosystem (e.g. other extensions and templates that are actively maintained).
+
+Sites on PHP 7.1 through 7.3 will still be offered updates to this distribution through the Joomla Update component — 7.4 is our recommended baseline, not a hard cutoff, so those sites can keep receiving security patches even before upgrading their PHP version. PHP 7.0 and below is not supported; the update won't be offered and installing manually isn't recommended.
+
+**For end users:**
+If your site's server/webspace is configured with PHP 7.0 to 7.3, upgrading to PHP 7.4 is typically a safe switch. The same applies to sites on PHP 5.6, just make sure your extensions and templates are not holding you back.
+
+**For professionals/hosting companies:**
+If you are hosting sites for others, consider letting them know they can safely upgrade to this Joomla distribution, both for security as well as newer PHP compatibility/features/performance.
+
+Switching to this distribution will also allow you (or take you closer) to upgrade your server(s). E.g. a server hosting Joomla sites using PHP prior to version 7.2 may be stuck in CentOS 7/cPanel, which is no longer supported by either the OS vendor or cPanel, with whatever that entails primarily for security.
+
+
+## NOTES ON MYSQL & MARIADB
+For Joomla 3.x to work flawlessly with MySQL versions 8.0 or newer, you need to have this setting enabled in your my.cnf configuration:
+```
+# For MySQL 8.0 only
+default_authentication_plugin = mysql_native_password
+
+# For MySQL 8.4+
+mysql_native_password         = ON
+authentication_policy         = mysql_native_password
+```
+Use one or the other, not both. The above settings do not apply to MariaDB.
+
+We also recommend the following setting for maximum compatibility in both MySQL and MariaDB:
+```
+sql_mode = ""
+```
+
+## NOTES ON OPERATING SYSTEM SUPPORT
+This distribution is built solely for Linux/BSD based systems, cause let's be honest, you'll be hosting this on some Linux/BSD flavour, not Windows or macOS. As such, we don't test on Windows or macOS. Things ***should*** work just fine if you use something like XAMPP or MAMP respectively, but just know that we don't test against these two operating systems.
+
+
+## CONTRIBUTE
+If you'd like to contribute meaningful upgrades to existing functionality or fix bugs, feel free to open an issue in this project.
+
+
+## DISCUSS
+The discussion forum is now open: https://github.com/joomlaworks/joomla-3.x/discussions
+
+Use it to report bugs with this distribution of Joomla 3.x only - this includes functional bugs for any existing feature in Joomla 3.x itself.
+
+
+## CODE DOCUMENTATION (AI Generated)
+Ask/search the project's codebase using one of the options below:
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/joomlaworks/joomla-3.x) [![zread](https://img.shields.io/badge/Ask_Zread-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTYxNTYgMS42MDAxSDIuMjQxNTZDMS44ODgxIDEuNjAwMSAxLjYwMTU2IDEuODg2NjQgMS42MDE1NiAyLjI0MDFWNC45NjAxQzEuNjAxNTYgNS4zMTM1NiAxLjg4ODEgNS42MDAxIDIuMjQxNTYgNS42MDAxSDQuOTYxNTZDNS4zMTUwMiA1LjYwMDEgNS42MDE1NiA1LjMxMzU2IDUuNjAxNTYgNC45NjAxVjIuMjQwMUM1LjYwMTU2IDEuODg2NjQgNS4zMTUwMiAxLjYwMDEgNC45NjE1NiAxLjYwMDFaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00Ljk2MTU2IDEwLjM5OTlIMi4yNDE1NkMxLjg4ODEgMTAuMzk5OSAxLjYwMTU2IDEwLjY4NjQgMS42MDE1NiAxMS4wMzk5VjEzLjc1OTlDMS42MDE1NiAxNC4xMTM0IDEuODg4MSAxNC4zOTk5IDIuMjQxNTYgMTQuMzk5OUg0Ljk2MTU2QzUuMzE1MDIgMTQuMzk5OSA1LjYwMTU2IDE0LjExMzQgNS42MDE1NiAxMy43NTk5VjExLjAzOTlDNS42MDE1NiAxMC42ODY0IDUuMzE1MDIgMTAuMzk5OSA0Ljk2MTU2IDEwLjM5OTlaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik0xMy43NTg0IDEuNjAwMUgxMS4wMzg0QzEwLjY4NSAxLjYwMDEgMTAuMzk4NCAxLjg4NjY0IDEwLjM5ODQgMi4yNDAxVjQuOTYwMUMxMC4zOTg0IDUuMzEzNTYgMTAuNjg1IDUuNjAwMSAxMS4wMzg0IDUuNjAwMUgxMy43NTg0QzE0LjExMTkgNS42MDAxIDE0LjM5ODQgNS4zMTM1NiAxNC4zOTg0IDQuOTYwMVYyLjI0MDFDMTQuMzk4NCAxLjg4NjY0IDE0LjExMTkgMS42MDAxIDEzLjc1ODQgMS42MDAxWiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNNCAxMkwxMiA0TDQgMTJaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00IDEyTDEyIDQiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K&logoColor=ffffff)](https://zread.ai/joomlaworks/joomla-3.x)
+
+
+## LONGTERM PLAN (as a different project)
+A new fork is on the way, based on Joomla 3.x. This fork is WIP (but very, very active) and when released it will feature:
+- A stripped down version of Joomla 3.x with all non-essential extensions removed.
+- Fully compatible with PHP versions from 7.4 to 8.x and so on.
+- Fully compatible with the latest versions of MySQL & MariaDB.
+- The focus shifts to using K2 for content. This means that com_content (and anything related) is removed entirely. This way important content features are decoupled from the CMS base, which aims to be a solid platform for building sites, while maintaining true backwards compatibility with past releases (of the fork).
+- Admin refresh.
+- Gradual jQuery/Mootools removal - switch to modern JS only.
+- Gradual codebase modernization to support future PHP & MySQL/MariaDB versions without much effort.
+
+## LEGAL
+Joomla 3.x UTD is an independent community project. It is not affiliated with, endorsed by, or supported by Open Source Matters, Inc. or The Joomla! Project™.
+
+The Joomla!® name and logo are trademarks of Open Source Matters, Inc. in the United States and other countries. This project does not use the Joomla! logo.
+
+This distribution is free software, released under the GNU General Public License version 2 or later. See LICENSE.md.
+
+Original Joomla! code: Copyright &copy; 2005 - 2025 Open Source Matters, Inc.
+
+Modifications in this distribution: Copyright &copy; 2026 JoomlaWorks Ltd. and this project's contributors

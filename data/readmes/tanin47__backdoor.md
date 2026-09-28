@@ -1,0 +1,306 @@
+Backdoor: Database Querying and Editing Tool
+==============================================================
+
+[![Sonatype Central](https://maven-badges.sml.io/sonatype-central/io.github.tanin47/backdoor/badge.png)](https://central.sonatype.com/artifact/io.github.tanin47/backdoor)
+[![Github Actions](https://github.com/tanin47/backdoor/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tanin47/backdoor/actions/workflows/ci.yml?query=branch%3Amain)
+[![codecov](https://codecov.io/gh/tanin47/backdoor/graph/badge.svg?token=SODPQLLTDM)](https://codecov.io/gh/tanin47/backdoor)
+
+_Explore, edit, and investigate data faster and more securely with a better database tool_
+
+Get
+started: [<ins>Self-hostable version (great for teams)</ins>](#self-hostable-version-great-for-teams) | [<ins>Desktop app version (great for personal use)</ins>](#desktop-app-version-great-for-personal-use) | [Website](https://backdooradmin.app)
+
+Backdoor is a database querying and editing tool for you and your team.
+
+* 🔥 __<ins>Easy to setup:</ins>__ -- Takes minutes to set up for you and your team to edit, explore, and investigate
+  data quickly.
+* 💵 __<ins>Cost Saving:</ins>__ -- Reduces the need to build an admin dashboard. Saves weeks and months in effort.
+* 🔒 __<ins>Secure:</ins>__ -- Supports masked users, so you don't have to share the database credentials. The best
+  security practices
+  are implemented e.g. encrypted cookies with AES-256 and proof-of-work captcha.
+* ✨ __<ins>Modern UI:</ins>__ -- Exploring and investigating large data is a breeze and enjoyable. Offers modern UI with
+  infinitely scrollable table.
+
+Try the live demo at: [backdooradmin.app](https://backdooradmin.app)
+
+| ![View and write SQL](readme/view-write.png)        | ![Filter data](readme/filter-data.png)              | ![New data source](readme/new-data-source.png) |
+|-----------------------------------------------------|-----------------------------------------------------|------------------------------------------------|
+| ![Multi Data Sources](readme/multi-data-source.png) | ![Filter data with SQL](readme/filter-data-sql.png) | ![Rename Table](readme/rename-table.png)       |
+
+### Supported Databases
+
+| Database      | Status         |
+|---------------|----------------|
+| PostgreSQL    | ✅ Supported    |
+| ClickHouse    | ✅ Supported    |
+| SQLite        | ✅ Supported    |
+| DuckDB        | 🔜 Coming Soon |
+| MySQL         | 🔜 Coming Soon |
+| Oracle        | 🔜 Coming Soon |
+| MS SQL Server | 🔜 Coming Soon |
+| IBM DB2       | 🔜 Coming Soon |
+| MariaDB       | 🔜 Coming Soon |
+
+Desktop app version (great for personal use)
+---------------------------------------------
+
+| Platform              | Direct Download                                                                                 | App Store                                                                                                                               |
+|-----------------------|-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| MacOS (Apple Silicon) | 🟢 [Link](https://github.com/tanin47/backdoor/releases/download/desktop-1.1.3/Backdoor-1.1.dmg) | [![Download from Mac App Store](./readme/download-button.svg)](https://apps.apple.com/us/app/backdoor-database-tool/id6755612631?mt=12) |
+| Windows               | 🟢 [Link](https://github.com/tanin47/backdoor/releases/download/desktop-1.1.3/Backdoor-1.1.msi) | [![Download from Microsoft Store](https://get.microsoft.com/images/en-us%20dark.svg)](https://apps.microsoft.com/detail/xpffkhnn08lsrn) |
+| Linux                 | 🟡 In Progress                                                                                  | N/A                                                                                                                                     |
+| MacOS (Intel)         | 🔜 Coming Soon                                                                                  | 🔜 Coming Soon                                                                                                                          |
+
+Please see our [Privacy Policy](./PRIVACY_POLICY.md)
+
+Self-hostable version (great for teams)
+----------------------------------------
+
+There are 3 ways:
+
+1. Run as a standalone: JAR file, Docker, and Render.com.
+2. Embed into your Java application and serve on a specific port.
+3. Embed into your Java application and serve on your main port but at a specific path.
+
+Backdoor is based on [Embeddable Java Web Framework](https://github.com/tanin47/embeddable-java-web-framework) and
+published as a fat jar. Therefore, there is no external dependency. Its jar is self-contained and suitable for embedding
+into your JVM application.
+
+### 1. Run as a standalone
+
+__<ins>Use Docker</ins>__
+
+The docker image is here: https://hub.docker.com/repository/docker/tanin47/backdoor
+
+```
+docker run -p 9999:9999 \
+           --entrypoint "" \
+           --pull always \
+           tanin47/backdoor:web-latest \
+           java -jar backdoor.jar \
+           -port 9999 \
+           -url "postgres://127.0.0.1:5432/backdoor_test,jdbc:ch://localhost:8123?user=backdoor&password=test_ch" \
+           -secret-key SbZlbmJIXh \
+           -user test_user:test_pass,another_user:another_pass
+```
+
+__<ins>Run from the JAR file</ins>__
+
+First, you can download the `backdoor-VERSION.jar` file from
+the [Maven Central](https://central.sonatype.com/artifact/io.github.tanin47/backdoor) page.
+
+Then, you can run the command below:
+
+```
+java -jar backdoor-VERSION.jar \
+  -port 9999 \
+  -url "postgres://127.0.0.1:5432/backdoor_test,jdbc:ch://localhost:8123?user=backdoor&password=test_ch" \
+  -secret-key SbZlbmJIXh \
+  -user test_user:test_pass,another_user:another_pass
+```
+
+You can visit http://localhost:9999 and login with a Postgres user, a ClickHouse user, or a masked user (e.g.
+`test_user` and `another_user`).
+
+See FAQ for how authentication works.
+
+__<ins>Use Render.com</ins>__
+
+The file [render.yaml](./render.yaml) shows a blueprint example of how to run Backdoor on Render.
+
+### 2. Embed and serve on a specific port
+
+First, you see the latest version in
+the [Maven Central](https://central.sonatype.com/artifact/io.github.tanin47/backdoor) page.
+
+Add the dependency to your project:
+
+```
+<dependency>
+    <groupId>io.github.tanin47</groupId>
+    <artifactId>backdoor</artifactId>
+    <version>LATEST_VERSION</version>
+</dependency>
+```
+
+Then, initialize Backdoor when your Java application starts:
+
+```
+var server = new BackdoorServerBuilder()
+  .addDatabaseConfig("postgres", "postgres://127.0.0.1:5432/backdoor_test", null, null)
+  .addDatabaseConfig("clickhouse", "jdbc:ch://localhost:8123", "backdoor", "test_ch")
+  .withPort(9999)
+  .withSecretKey("SbZlbmJIXh")
+  .addUser("test_user", "test_pass")
+  .addUser("another_user", "another_pass")
+  .build();
+
+server.start();
+```
+
+Then, when your Java application stops, make sure to stop Backdoor with:
+
+```
+server.stop();
+```
+
+### 3. Embed and serve on a specific path
+
+First, you must follow the steps above in order to serve Backdoor at a specific internal port.
+
+Then, you can designate a specific path and use the below code to proxy requests to Backdoor:
+
+```
+var client = HttpClient.newHttpClient();
+var httpRequest = HttpRequest
+  .newBuilder()
+  .uri(URI.create("http://localhost:9999" + path)) 
+  .method("GET", HttpRequest.BodyPublishers.ofByteArray(new byte[0])) // Set the method and body in bytes
+  .headers(/* ... */) // Forward the headers as-is.    
+  .build();
+var response = client.send(httpRequest, HttpResponse.BodyHandlers.ofByteArray());
+```
+
+The above code uses the HTTP client offered by Java. It doesn't require any external dependency.
+
+
+Features
+---------
+
+* Support multi-databases.
+* Edit a field, delete a row, sort, and filter
+* Rename and drop table
+* Run arbitrary SQLs
+* Activity history (through regular logs).
+* Support its own users, so you don't have to share the database credentials.
+* Support database users e.g. logging in with Postgres or ClickHouse users.
+
+Secure your Backdoor instance
+------------------------------
+
+While Backdoor comes with strong security limiting the session lengths and deterring brute-force attacks through a
+Proof-of-Work Captcha through [altcha](https://github.com/altcha-org/altcha), you can add more layers of security.
+Here are 2 more ways:
+
+### 1. SSH tunneling
+
+You can block your port using a firewall and use SSH tunneling to allow you to connect to a Backdoor instance.
+
+You can run: `ssh -L <local_port>:<remote_backdoor_host>:<remote_backdoor_port> <user>@<ssh_server>` and visit:
+`http://localhost:<local_port>` to access Backdoor.
+
+### 2. VPN
+
+Your company might already use VPN. It's a great option to connect to a server that hosts a Backdoor instance.
+
+The setup might be complicated and overkilled, so I'd recommend using this option if your company already have a
+VPN. [Tailscale](https://tailscale.com/) is one example that provides a company VPN.
+
+FAQ
+-----
+
+### How does the authentication work?
+
+Backdoor supports __masked users__ and __database users__.
+
+1. __Masked users__ are the users you set on Backdoor through `BackdoorServerBuilder.addUser(..)` or `-user`.
+2. __Database users__ are the users that you set on the databases
+   e.g. [Postgres users](https://www.postgresql.org/docs/16/sql-createuser.html), [ClickHouse users](https://clickhouse.com/docs/operations/settings/settings-users).
+
+These 2 types of users work in conjunction with the database configurations as follows:
+
+1. Any 2 type of users can login into the dashboard.
+2. Any logged-in user can access any database whose config contains valid credentials.
+3. If a database config doesn't contain credentials, then the logged-in user can click on the "locked" database to
+   provide valid credentials for that database.
+
+With these combinations, you can configure the authentication to fit your needs.
+
+For simplicity, I'd recommend using masked users and providing valid credentials in all database configurations.
+
+### How to configure the loggers?
+
+Backdoor uses `java.util.logging`. The default logging config is at
+`./web/src/main/java/resources/logging.properties`.
+
+If you have your own log config file, you can load it using:
+
+```
+try (var configFile = YourClass.class.getResourceAsStream("/YOUR_LOG_CONFIG_FILE")) {
+  LogManager.getLogManager().readConfiguration(configFile);
+  logger.info("The log config) has been loaded.");
+} catch (IOException e) {
+  logger.warning("Could not load the log config file: "+e.getMessage());
+}
+```
+
+Contributing
+==============
+
+How to develop
+---------------
+
+1. Run `npm install` to install all dependencies.
+2. Change the target database URL in `tanin.backdoor.BackdoorServier.main(..)`
+2. Run `./gradlew web:run` in order to run the web server.
+3. On a separate terminal, run `npm run hmr` in order to hot-reload the frontend code changes.
+4. Visit http://localhost:9090 and login with `masked_test` and `1234`
+
+How to run tests
+-----------------
+
+1. Run `./setup/setup_db.sh` in order to set the postgres database.
+2. Set up the ClickHouse instance as follows:
+
+- The HTTP port is 8123
+- The database `backdoor_test` is created.
+- The username is `backdoor_test`.
+- The password is `test_ch`
+
+3. Run `npm install` to install all dependencies.
+4. On a separate terminal, run `npm run hmr`.
+5. Start the ClickHouse server by running `clickhouse server`.
+6. Run `./gradlew test` in order to run all the tests.
+
+Publish JAR
+------------
+
+This flow has been set up as the Github Actions workflow: `publish-jar`.
+
+1. Run `./gradlew clean publish`. It is *IMPORTANT* to include *clean*.
+
+The far JAR is built at `./build/libs/backdoor-VERSION.jar`
+
+You can run your server with: `java -jar ./build/libs/backdoor-VERSION.jar`
+
+To publish to a Maven repository, please follow the below steps:
+
+1. Set up `~/.jreleaser/config.toml` with `JRELEASER_MAVENCENTRAL_USERNAME` and `JRELEASER_MAVENCENTRAL_PASSWORD`
+2. Run `./gradlew jreleaserDeploy`
+
+Test Docker locally
+--------------------
+
+This flow has been set up as a part of the Github Actions workflow: `create-release-web`.
+
+1. Run `./gradlew clean publish`. It is *IMPORTANT* to include *clean*.
+2. Run `docker buildx build --platform linux/amd64,linux/arm64 -t backdoor:web-latest .`
+3. Test locally with: `docker run -p 9092:9092 backdoor:web-latest -port 9092`
+
+Release a new self-hostable version
+------------------------------------
+
+1. Create an empty release with a new tag. The tag must follow the format: `web-X.Y.Z`.
+2. Go to Actions and wait for the `create-release-web` (which is triggered automatically) workflow to finish.
+3. Test the docker with `docker run -p 9090:9090 tanin47/backdoor:web-latest -port 9090`.
+4. Go to Actions and trigger the workflow `publish-web-jar` on the tag `web-X.Y.Z` in order to publish the JAR to
+   Central Sonatype.
+
+Release a new desktop version
+------------------------------------
+
+1. Create an empty release with a new tag. The tag must follow the format: `desktop-X.Y.Z`.
+2. Go to Actions and wait for the `create-release-desktop` (which is triggered automatically) workflow to finish.
+3. Download the DMG and test it locally.
+4. Go to Actions and trigger the workflow `publish-desktop-testflight` on the tag `desktop-X.Y.Z` in order to publish
+   the JAR to Central Sonatype.

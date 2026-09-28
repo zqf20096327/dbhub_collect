@@ -1,0 +1,80 @@
+<div align="center">
+    <img src="docs/public/weasel.png" alt="Weasel logo" width="200">
+</div>
+
+# Weasel
+
+[![Nuget Package](https://badgen.net/nuget/v/weasel.core)](https://www.nuget.org/packages/Weasel.Core/)
+[![Nuget](https://img.shields.io/nuget/dt/weasel.core)](https://www.nuget.org/packages/Weasel.Core/)
+
+Weasel is a library for low level database development with Postgresql and Sql Server. Weasel is in the process of being extracted from [Marten](https://martendb.io) with the goal of making this code reusable in other projects.
+
+Read also more in [Introducing Weasel for Database Development](https://jeremydmiller.com/2023/08/15/introducing-weasel-for-database-development/) by [Jeremy D. Miller](https://github.com/jeremydmiller).
+
+You can acccess the docs [here](https://weasel.jasperfx.net).
+
+## Branch Strategy
+
+| Branch | Version line | Purpose |
+| --- | --- | --- |
+| **`master`** | **9.0** (Critter Stack 2026) | Active development. All new work targets this branch. |
+| `8.0` | 8.x | Maintenance only — critical fixes for the 8.x line. |
+
+Weasel 9.0 is part of the [Critter Stack 2026](https://github.com/JasperFx/jasperfx/issues/217) release wave, shipping in lockstep with [JasperFx 2.0](https://github.com/JasperFx/jasperfx), [JasperFx.Events 2.0](https://github.com/JasperFx/jasperfx), [Marten 9.0](https://github.com/JasperFx/marten), and [Polecat 4.0](https://github.com/JasperFx/polecat). See the [9.0 master plan](https://github.com/JasperFx/weasel/issues/263) and the [migration guide](https://weasel.jasperfx.net/migration-guide) for upgrade details.
+
+## Support Plans
+
+<div align="center">
+    <img src="https://www.jasperfx.net/logo.png" alt="JasperFx logo" width="70%">
+</div>
+
+While Weasel is open source, [JasperFx Software offers paid support and consulting contracts](https://jasperfx.net/support-plans/) for Weasel. 
+
+## Key Components
+
+*   **Core**: Foundational interfaces and base classes for database interactions.
+*   **Postgresql**: Types and classes specific to PostgreSQL database features.
+*   **SqlServer**: Types and classes specific to SQL Server database features.
+*   **Schema**: Tools for managing database schema.
+
+## Usage
+
+### Setting up databases locally
+
+To run tests, you need to set up databases locally. The easiest option is to do it by running Docker images. You can use [predefined Docker Compose setup](./docker-compose.yml) by calling in your terminal:
+
+```bash
+docker compose up
+```
+
+It'll spin up PostgreSQL and MSSQL databases.
+
+Then, you can run tests from the terminal:
+
+```bash
+dotnet test
+```
+
+Or your favourite IDE.
+
+### Test Config Customization
+
+Some of our tests are run against a particular PostgreSQL version. If you'd like to run different database versions, you can do it by setting `POSTGRES_IMAGE` or `MSSQL_IMAGE` env variables, for instance:
+
+```bash
+POSTGRES_IMAGE=postgres:15.3-alpine MSSQL_IMAGE=mcr.microsoft.com/mssql/server:2022-latest docker compose up
+```
+
+By default Postgres tests are run with case insensitive names. To run tests against case sensitive, set environment variable:
+
+```
+USE_CASE_SENSITIVE_QUALIFIED_NAMES=true
+```
+
+## Support Plans
+
+<div align="center">
+    <img src="https://www.jasperfx.net/wp-content/uploads/2023/07/logo-alt-min.png" alt="JasperFx logo" width="70%">
+</div>
+
+While Weasel is open source, [JasperFx Software offers paid support and consulting contracts](https://bit.ly/3szhwT2) for Weasel.

@@ -1,0 +1,239 @@
+# ripoff - generate fake data from templated yaml files
+
+ripoff is a command line tool that generates fake data from yaml files (ripoffs) and inserts that data into PostgreSQL.
+
+Some features of ripoff are:
+
+- Model your fake data in one or more yaml files, god's favorite file format
+- Provide templated yaml files in cases where a row in one table requires many other rows, or you want loops
+- Due to deterministic random generation, re-running ripoff will perform upserts on all generated rows
+
+# Installation
+
+1. Run `go install github.com/mortenson/ripoff/cmd/ripoff@latest`
+2. Set the `DATABASE_URL` env variable to your local PostgreSQL database
+3. Run `ripoff <directory to your yaml files>`
+
+When writing your initial ripoffs, you may want to use the `-s` ("soft") flag which does not commit the generated transaction.
+
+# File format
+
+ripoffs define rows to be inserted into your database. Any number of ripoffs can be included in a single directory.
+
+## Basic example
+
+```yaml
+# A map of rows to upsert, where keys are in the format <table_name>:<valueFunc>(<seed>),
+# and values are maps of column names to values.
+rows:
+  # A "users" table row identified with a UUID generated with the seed "fooBar"
+  users:uuid(fooBar):
+    email: foobar@example.com
+    # Note that ripoff will automatically set primary key columns, so you don't need to add:
+    # id: users:uuid(fooBar)
+  avatars:uuid(fooBarAvatar):
+    # ripoff will see this and insert the "users:uuid(fooBar)" row before this row
+    user_id: users:uuid(fooBar)
+  users:uuid(randomUser):
+    # Generate a random email with the seed "randomUser"
+    email: email(randomUser)
+```
+
+For more (sometimes wildly complex) examples, see `./testdata`.
+
+## More on valueFuncs
+
+Most valueFuncs allow you to generate random data that's seeded with a static string. This ensures that repeat runs of ripoff are deterministic, which enables upserts (consistent primary keys).
+
+ripoff provides:
+
+- `uuid(seedString)` - generates a v1 UUID
+- `uuidv7(seedString)` - generates a v7 UUID. the timestamp is randomly generated between the epoch and Go's v1 release date (March 28th, 2012), to ensure that new inserts appear first when sorting.
+- `int(seedString) | int(seedString, MAX) | int(seedString, MIN, MAX)` - generates an integer (note: might be awkward on auto incrementing tables).
+- `naturalDate(human readable text) | naturalDate(seedString, text with placeholder)` - generates a date using syntax defined by [go-naturaldate](https://github.com/tj/go-naturaldate), for example `naturalDate(one day ago)` (note: non-deterministic).
+  - If a `seedString` is provided, you can use the syntax `rMIN-MAX` to generate random values within a half-open range, ex: `naturalDate(seed, r1-5 days ago)`.
+
+and also all functions from [gofakeit](https://github.com/brianvoe/gofakeit?tab=readme-ov-file#functions) that have no arguments and return a string (called in camelcase, ex: `email(seedString)`). For the full list, see `./gofakeit.go`.
+
+## Using templates
+
+ripoff files can be used as templates to create multiple rows at once.
+
+Yaml files that start with `template_` will be treated as Go templates. Here's a template that creates a user and an avatar:
+
+```yaml
+rows:
+  # "rowId" is the id/key of the row that rendered this template.
+  # You could also pass an explicit seed and use it like `users:uuid({{ .seed }})`
+  {{ .rowId }}:
+    email: {{ .email }}
+    # It's convenient to use the rowId as a seed to other valueFuncs.
+    avatar_id: avatars:uuid({{ .rowId }})
+  avatars:uuid({{ .rowId }}):
+    url: {{ .avatarUrl }}
+```
+
+which you would use from a "normal" ripoff like:
+
+```yaml
+rows:
+  # The row id/key will be passed to the template in the "rowId" variable.
+  # This is useful if you'd like to reference "users:uuid(fooBar)" in a foreign key elsewhere.
+  users:uuid(fooBar):
+    # The template filename.
+    template: template_user.yml
+    # All other variables are arbitrary.
+    email: foobar@example.com
+    avatarUrl: image.png
+    avatarGrayscale: false
+```
+
+### Special template variables
+
+- `rowId` - The map key of the row using this template, ex `users:uuid(fooBar)`. Useful for allowing the "caller" to provide their own ID for the "main" row being created, if there is one. Optional to use if you find it awkward.
+- `enums` - A map of SQL enums names to an array of enum values. Useful for creating one row for each value of an enum (ex: each user role).
+- `intSlice count` - A function that generates an array of numbers from `[0..count]`, which is useful for generating N rows like so:
+  ```go
+  rows:
+    {{ range $k, $v := (intSlice .numUsers) }}
+    users:uuid({{ print $.rowId $k }}):
+      email: multi-user-{{ $k }}@example.com
+    {{ end }}
+  ```
+
+# Plugins
+
+If you would like to implement your own `valueFuncs`, you can do so by writing a ripoff plugin, which is a local TCP server that sends/recieves JSON.
+
+## Writing a plugin
+
+Plugins must meet the following requirements:
+
+- Listen to a local TCP port
+- Consume newline-separated JSON messages, which come in as a stream
+- Output newline-separated JSON responses
+- Ouput `READY` in the first line of standard output when the plugin is ready for TCP connections
+
+Each incoming message will be a single line of JSON of the following shapes:
+
+### valueFunc
+
+Your plugin must process an arbitrary `valueFunc` and return a string value. You can decide how to handle functions you do not expect/provide, by either returning an empty value or disconnecting the client.
+
+The `id` field is used to support unordered stream messages, so you can return responses at any time and in any order as long as they have the same `id` as the relevant request.
+
+Message from ripoff:
+
+```json
+{"id": "some-id", "type": "valueFunc", "valueFunc": "someFuncName", "args": ["some", "argument", "list"]}
+```
+
+Response from your TCP server:
+
+```json
+{"id": "the-same-id-from-the-request", "value": "someString"}
+```
+
+### Example
+
+An example plugin can be found at `cmd/helloplugin/helloplugin.go`. although TCP servers in other languages may be much easier to implement.
+
+### Using a plugin
+
+Plugins are defined in your ripoff files, which instruct ripoff to spawn a process to start your TCP server.
+
+Here's an example from ripoff's tests:
+
+```yml
+# A list of plugins to register with ripoff.
+plugins:
+  # An arbitrary name for the plugin. Used only to handle merging ripoff files
+  # that may define duplicate plugins, which would otherwise conflict.
+  helloplugin:
+    # An arbitrary command to execute, which should start your TCP server.
+    # The command must output READY in its first line of stdout.
+    command: [go, run, cmd/helloplugin/helloplugin.go]
+    # A TCP address to connect to after your command is ready. Note that a
+    # single connection is used to avoid a handshake per valueFunc call.
+    address: localhost:6767
+    # The list of valueFuncs this plugin provides. If ripoff encounters these
+    # it will call out to your plugin. Note that these take precedence over
+    # built in valueFuncs, so you can override ripoff's defaults (like uuid()).
+    valueFuncs: [sayHello]
+rows:
+  users:uuid(fooBar):
+    # In your ripoff files, you can now call your plugin's registered
+    # valueFuncs the same as any other valueFunc.
+    name: sayHello(World)
+```
+
+# Export from your database to ripoff files
+
+An experimental command has been added to generate ripoff files from your database. This may be useful to users just starting to use ripoff who don't have so much fake data that templating is required yet.
+
+Currently, it attempts to export all data from all tables into a single ripoff file. You can use the `--exclude` flag to exclude specific tables from the export, and the `--exclude-columns` flag to exclude specific columns:
+
+```bash
+# Export all tables except 'users' and 'audit_logs'
+ripoff-export --exclude users --exclude audit_logs /path/to/export
+
+# Exclude created_at and updated_at columns from all tables
+ripoff-export --exclude-columns created_at --exclude-columns updated_at /path/to/export
+
+# Exclude email column only from users table
+ripoff-export --exclude-columns users.email /path/to/export
+
+# Combine exclusions: exclude created_at globally and email from users table
+ripoff-export --exclude-columns created_at --exclude-columns users.email /path/to/export
+
+# Combine table and column exclusions
+ripoff-export --exclude audit_logs --exclude-columns created_at --exclude-columns users.email /path/to/export
+```
+
+## Column Exclusion Format
+
+The `--exclude-columns` flag accepts two formats:
+
+- `table.column` - Excludes a specific column from a specific table
+- `column` - Excludes the column from ALL tables
+
+The latter format is especially useful if you have generated columns on every table like `created_at` or `updated_at` to avoid noisy updates when you re-export your data.
+
+In the future, additional flags may be added to allow you to include tables, add arbitrary `WHERE` conditions, modify the row id/key, export multiple files, or use existing templates.
+
+## Installation
+
+1. Run `go install github.com/mortenson/ripoff/cmd/ripoff-export@latest`
+2. Set the `DATABASE_URL` env variable to your local PostgreSQL database
+3. Run `ripoff-export <directory to be deleted and exported to>`
+
+# Security
+
+This project explicitly allows SQL injection due to the way queries are constructed. Do not run `ripoff` on directories you do not trust.
+
+# Why this exists
+
+Fake data generators generally come in two flavors:
+
+1. Model your fake data in the same language/DSL/ORM that your application uses
+2. Fuzz your database schema by spewing completely randomized data at it
+
+I find generating fake data to be a completely separate use case from "normal" ORM usage, and truly randomized fake data is awkward to use locally.
+
+So ripoff is my approach to fake (but not excessively random) data generation. Since it's not aware of your application or schema, it's closer to writing templated SQL than learning some crazy high level DSL.
+
+# FAQ
+
+## Why use Go templates and valueFuncs?
+
+It's kind of weird that `template_*` files use Go templates, but there's also valueFuncs like `uuid(someSeed)`.
+
+This is done for two reasons - first, Go templates are ugly and result in invalid yaml, so no reason to force you to write them unless you need to. Second, ripoff builds its dependency graph based on the row ids/keys, not the actual generated random value. So you can think of the query building pipeline as:
+
+1. Load all ripoff files
+2. For each row in each file, check if the row uses a template
+3. If it does, process the template and append the templated rows into the total rows
+4. If not, just append that row
+5. Now we have a "total ripoff" (har har) file which contains all rows. I think it's cool at this point that the templating is "done"
+6. For each row, check if any column references another row and build a directed acyclic graph, then sort that graph
+7. Run queries for each row, in order of least to greatest dependencies

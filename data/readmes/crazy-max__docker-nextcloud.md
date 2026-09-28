@@ -1,0 +1,340 @@
+<p align="center"><a href="https://github.com/crazy-max/docker-nextcloud" target="_blank"><img height="128" src="https://raw.githubusercontent.com/crazy-max/docker-nextcloud/master/.github/docker-nextcloud.jpg"></a></p>
+
+<p align="center">
+  <a href="https://hub.docker.com/r/crazymax/nextcloud/tags?page=1&ordering=last_updated"><img src="https://img.shields.io/github/v/tag/crazy-max/docker-nextcloud?label=version&style=flat-square" alt="Latest Version"></a>
+  <a href="https://github.com/crazy-max/docker-nextcloud/actions?workflow=build"><img src="https://img.shields.io/github/actions/workflow/status/crazy-max/docker-nextcloud/build.yml?branch=master&label=build&logo=github&style=flat-square" alt="Build Status"></a>
+  <a href="https://hub.docker.com/r/crazymax/nextcloud/"><img src="https://img.shields.io/docker/stars/crazymax/nextcloud.svg?style=flat-square&logo=docker" alt="Docker Stars"></a>
+  <a href="https://hub.docker.com/r/crazymax/nextcloud/"><img src="https://img.shields.io/docker/pulls/crazymax/nextcloud.svg?style=flat-square&logo=docker" alt="Docker Pulls"></a>
+  <br /><a href="https://github.com/sponsors/crazy-max"><img src="https://img.shields.io/badge/sponsor-crazy--max-181717.svg?logo=github&style=flat-square" alt="Become a sponsor"></a>
+  <a href="https://www.paypal.me/crazyws"><img src="https://img.shields.io/badge/donate-paypal-00457c.svg?logo=paypal&style=flat-square" alt="Donate Paypal"></a>
+</p>
+
+## About
+
+[Nextcloud](https://nextcloud.com) Docker image with advanced features.
+
+> [!TIP] 
+> Want to be notified of new releases? Check out 🔔 [Diun (Docker Image Update Notifier)](https://github.com/crazy-max/diun)
+> project!
+
+___
+
+* [Features](#features)
+* [Build locally](#build-locally)
+* [Image](#image)
+* [Environment variables](#environment-variables)
+  * [General](#general)
+  * [Nextcloud](#nextcloud)
+  * [Cron](#cron)
+  * [Previews generator](#previews-generator)
+* [Volumes](#volumes)
+* [Ports](#ports)
+* [Usage](#usage)
+  * [Docker Compose](#docker-compose)
+  * [Command line](#command-line)
+* [Upgrade](#upgrade)
+* [Notes](#notes)
+  * [First installation](#first-installation)
+  * [OCC command](#occ-command)
+  * [Cron sidecar](#cron-sidecar)
+  * [Previews generator sidecar](#previews-generator-sidecar)
+  * [Email server](#email-server)
+  * [Custom configuration](#custom-configuration)
+  * [Redis cache](#redis-cache)
+  * [Running in a subdir](#running-in-a-subdir)
+* [Contributing](#contributing)
+* [License](#license)
+
+## Features
+
+* Run as non-root user
+* Multi-platform image
+* Tarball authenticity checked during building process
+* Data, config, user apps and themes persistence in the same folder
+* [Automatic installation](https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/automatic_configuration.html)
+* Cron task for [Nextcloud background jobs](https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/background_jobs_configuration.html#cron) as a [sidecar cron container](#cron-sidecar)
+* Execute pre-generation of previews through [Preview Generator](https://github.com/rullzer/previewgenerator) plugin
+* OPCache enabled to store precompiled script bytecode in shared memory
+* APCu installed and configured
+* Memcached and Redis also enabled to enhance server performance
+* Database connectors MySQL/MariaDB, PostgreSQL and SQLite3 enabled
+* Exif, IMAP, LDAP, FTP, GMP, SMB enabled (required for specific apps)
+* FFmpeg, iconv, Imagick installed for preview generation
+* [s6-overlay](https://github.com/just-containers/s6-overlay/) as process supervisor
+* [Traefik](https://github.com/containous/traefik-library-image) as reverse proxy and creation/renewal of Let's Encrypt certificates (see [this template](examples/traefik))
+* [msmtpd SMTP relay](https://github.com/crazy-max/docker-msmtpd) image to send emails
+* [Redis](https://github.com/docker-library/redis) for caching
+* [MariaDB](https://github.com/docker-library/mariadb) as database instance
+
+## Build locally
+
+```shell
+git clone https://github.com/crazy-max/docker-nextcloud.git
+cd docker-nextcloud
+
+# Build image and output to docker (default)
+docker buildx bake
+
+# Build multi-platform image
+docker buildx bake image-all
+```
+
+## Image
+
+| Registry                                                                                             | Image                         |
+|------------------------------------------------------------------------------------------------------|-------------------------------|
+| [Docker Hub](https://hub.docker.com/r/crazymax/nextcloud/)                                           | `crazymax/nextcloud`          |
+| [GitHub Container Registry](https://github.com/users/crazy-max/packages/container/package/nextcloud) | `ghcr.io/crazy-max/nextcloud` |
+
+Following platforms for this image are available:
+
+```
+$ docker buildx imagetools inspect crazymax/nextcloud --format "{{json .Manifest}}" | \
+  jq -r '.manifests[] | select(.platform.os != null and .platform.os != "unknown") | .platform | "\(.os)/\(.architecture)\(if .variant then "/" + .variant else "" end)"'
+
+linux/amd64
+linux/arm64
+linux/ppc64le
+linux/riscv64
+linux/s390x
+```
+
+## Environment variables
+
+### General
+
+* `TZ`: The timezone assigned to the container (default `UTC`)
+* `PUID`: Nextcloud user id (default `1000`)
+* `PGID`: Nextcloud group id (default `1000`)
+* `MEMORY_LIMIT`: PHP memory limit (default `512M`)
+* `UPLOAD_MAX_SIZE`: Upload max size (default `512M`)
+* `PM_MAX_CHILDREN`: Maximum number of child processes to be created for PHP-FPM (default `20`)
+* `NGINX_WORKER_PROCESSES`: Number of Nginx worker processes (default `auto`)
+* `BODY_TIMEOUT`: Defines a timeout for reading client request body (default `300s`)
+* `CLEAR_ENV`: Clear environment in FPM workers (default `yes`)
+* `OPCACHE_MEM_SIZE`: PHP OpCache memory consumption (default `128`)
+* `LISTEN_IPV6`: Enable IPv6 for Nginx (default `true`)
+* `APC_SHM_SIZE`: APCu memory size (default `128M`)
+* `REAL_IP_FROM`: Trusted addresses that are known to send correct replacement addresses (default `0.0.0.0/32`)
+* `REAL_IP_HEADER`: Request header field whose value will be used to replace the client address (default `X-Forwarded-For`)
+* `LOG_IP_VAR`: Use another variable to retrieve the remote IP address for access [log_format](http://nginx.org/en/docs/http/ngx_http_log_module.html#log_format) on Nginx. (default `remote_addr`)
+
+### Nextcloud
+
+* `HSTS_HEADER`: [HTTP Strict Transport Security](https://docs.nextcloud.com/server/stable/admin_manual/installation/harden_server.html#enable-http-strict-transport-security) header value (default `max-age=15768000; includeSubDomains`)
+* `XFRAME_OPTS_HEADER`: [X-Frame-Options](https://docs.nextcloud.com/server/stable/admin_manual/installation/harden_server.html#serve-security-related-headers-by-the-web-server) header value (default `SAMEORIGIN`)
+* `RP_HEADER`: [Referrer Policy](https://docs.nextcloud.com/server/stable/admin_manual/installation/harden_server.html#serve-security-related-headers-by-the-web-server) header value (default `strict-origin`)
+* `DB_TYPE`: Database type (mysql, pgsql or sqlite) (default `sqlite`)
+* `DB_NAME`: Database name (default `nextcloud`)
+* `DB_USER`: Username for database (default `nextcloud`)
+* `DB_PASSWORD`: Password for database user
+* `DB_HOST`: Database host (default `db`)
+* `DB_TIMEOUT`: Time in seconds after which we stop trying to reach the database server. Only used for `mysql` and `pgsql` db type (default `60`)
+
+> [!NOTE]
+> `DB_PASSWORD_FILE` can be used to fill in the value from a file, especially
+> for Docker's secrets feature.
+
+### Cron
+
+> [!WARNING]
+> Only used if you enable and run a [sidecar cron container](#cron-sidecar)
+
+* `SIDECAR_CRON`: Set to `1` to enable sidecar cron mode (default `0`)
+* `CRON_PERIOD`: Periodically execute Nextcloud [cron](https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/background_jobs_configuration.html#cron) (eg. `*/5 * * * *`)
+
+### Previews generator
+
+> [!WARNING]
+> Only used if you enable and run a [sidecar previews generator container](#previews-generator-sidecar)
+
+* `SIDECAR_PREVIEWGEN`: Set to `1` to enable sidecar previews generator mode (default `0`)
+* `PREVIEWGEN_PERIOD`: Periodically execute pre-generation of previews (eg. `0 * * * *`)
+
+## Volumes
+
+* `/data`: Contains config, data folders, installed user apps (not core ones), session, themes, tmp folders
+* `/data/config/*.config.php`: Additional Nextcloud configuration files loaded from the persistent config directory
+
+> [!WARNING]
+> Note that the volume should be owned by the user/group with the specified
+> `PUID` and `PGID`. If you don't give the volume correct permissions, the
+> container may not start.
+
+## Ports
+
+* `8000`: HTTP port
+
+## Usage
+
+### Docker Compose
+
+Docker compose is the recommended way to run this image. Copy the content of
+folder [examples/compose](examples/compose) in `/var/nextcloud/` on your host
+for example. Edit the compose and env files with your preferences and run the
+following commands:
+
+```bash
+docker compose up -d
+docker compose logs -f
+```
+
+### Command line
+
+You can also use the following minimal command:
+
+```bash
+docker run -d -p 8000:8000 --name nextcloud \
+  -v "$(pwd)/data:/data" \
+  crazymax/nextcloud:latest
+```
+
+## Upgrade
+
+To upgrade to the latest version of Nextcloud, pull the newer image and launch
+the container. Nextcloud will upgrade automatically:
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+## Notes
+
+### First installation
+
+If you run the container for the first time, the installation will be automatic
+using the `DB_*` environment variables. Then open your browser to configure
+your admin account.
+
+### OCC command
+
+If you want to use the [occ command](https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/occ_command.html)
+to perform common server operations like manage users, encryption, passwords,
+LDAP setting, and more, type:
+
+```bash
+docker compose exec nextcloud occ
+```
+
+### Cron sidecar
+
+If you want to enable the cronjob, you have to run a "sidecar" container (see
+cron service in [compose.yml](examples/compose/compose.yml) example) or run a
+simple container like this:
+
+```bash
+docker run -d --name nextcloud_cron \
+  --env-file $(pwd)/nextcloud.env \
+  -e "SIDECAR_CRON=1" \
+  -e "CRON_PERIOD=*/5 * * * *" \
+  -v "$(pwd)/data:/data" \
+  crazymax/nextcloud:latest
+```
+
+And do not forget to choose **Cron** as background jobs:
+
+![Background jobs](.github/background-jobs.png)
+
+### Previews generator sidecar
+
+To execute pre-generation of previews through the [Preview Generator](https://github.com/rullzer/previewgenerator)
+plugin, you have to run a "sidecar" container (see cron service in [compose.yml](examples/compose/compose.yml)
+example) or run a simple container like this:
+
+```bash
+docker run -d --name nextcloud_previewgen \
+  --env-file $(pwd)/nextcloud.env \
+  -e "SIDECAR_PREVIEWGEN=1" \
+  -e "PREVIEWGEN_PERIOD=0 * * * *" \
+  -v "$(pwd)/data:/data" \
+  crazymax/nextcloud:latest
+```
+
+### Email server
+
+You can use our SMTP relay `msmtpd` service published on port `2500` and
+declared in our [`compose.yml`](examples/compose/compose.yml):
+
+![Email server config](.github/email-server-config.png)
+
+### Custom configuration
+
+Nextcloud can load additional
+[`*.config.php` files](https://docs.nextcloud.com/server/stable/admin_manual/configuration_server/config_sample_php_parameters.html#multiple-merged-configuration-files)
+from its config directory.
+Use `/data/config/<name>.config.php` for custom settings instead of editing
+`/data/config/config.php`, which is managed by Nextcloud and this image.
+
+These files are merged with `config.php` and take precedence over values defined
+there. You can inspect the merged configuration with:
+
+```bash
+docker compose exec nextcloud occ config:list system --private
+```
+
+Do not store backup files ending with `.config.php` in `/data/config`, because
+Nextcloud will load them as active configuration.
+
+### Redis cache
+
+Redis is recommended, alongside APCu to make Nextcloud faster. If you want to
+enable Redis, deploy a redis container (see [compose file](examples/compose/compose.yml))
+and create `/data/config/redis.config.php`:
+
+```php
+<?php
+
+$CONFIG = [
+    'memcache.local' => '\OC\Memcache\APCu',
+    'memcache.distributed' => '\OC\Memcache\Redis',
+    'memcache.locking' => '\OC\Memcache\Redis',
+    'redis' => [
+        'host' => 'redis',
+        'port' => 6379,
+    ],
+];
+```
+
+### Running in a subdir
+
+This image does not rewrite requests for subdir deployments. The bundled Nginx
+configuration expects requests to arrive at the root path it serves and emits
+root-relative redirects.
+
+If you expose Nextcloud below a path prefix like `/nextcloud`, configure the
+reverse proxy to own that routing. For example, strip `/nextcloud` before
+forwarding requests to this container and handle any public redirects for that
+prefix in the proxy configuration.
+
+Configure Nextcloud's own URLs separately with a custom configuration file such
+as `/data/config/proxy.config.php`:
+
+```php
+<?php
+
+$CONFIG = [
+    'overwritewebroot' => '/nextcloud',
+];
+```
+
+CalDAV/CardDAV discovery uses root `/.well-known/...` URLs. If your reverse
+proxy only routes `/nextcloud/...` to this container, also route those
+`/.well-known` requests to Nextcloud or redirect them at the proxy to
+`/nextcloud/remote.php/dav/`.
+
+Remember to remove `includeSubDomains` from `HSTS_HEADER` if the prefixed
+deployment does not cover all subdomains.
+
+## Contributing
+
+Want to contribute? Awesome! The most basic way to show your support is to star
+the project, or to raise issues. You can also support this project by [**becoming a sponsor on GitHub**](https://github.com/sponsors/crazy-max)
+or by making a [PayPal donation](https://www.paypal.me/crazyws) to ensure this
+journey continues indefinitely!
+
+Thanks again for your support, it is much appreciated! :pray:
+
+## License
+
+MIT. See `LICENSE` for more details.

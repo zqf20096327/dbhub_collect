@@ -1,0 +1,320 @@
+# Tiger CLI
+
+Tiger CLI is the command-line interface for Tiger Cloud. It provides commands for managing and querying database services, as well as an integrated Model Context Protocol (MCP) server for use with AI assistants.
+
+## Installation
+
+Multiple installation methods are provided. Choose your preferred method from the options below. If you aren't sure, use the first one!
+
+### Install Script (macOS/Linux/WSL)
+
+```bash
+curl -fsSL https://cli.tigerdata.com | sh
+```
+
+### Install Script (Windows)
+
+```powershell
+irm https://cli.tigerdata.com/install.ps1 | iex
+```
+
+### Homebrew (macOS/Linux)
+
+```bash
+brew install --cask timescale/tap/tiger-cli
+```
+
+### Debian/Ubuntu
+
+```bash
+# Add repository
+curl -s https://packagecloud.io/install/repositories/timescale/tiger-cli/script.deb.sh | sudo os=any dist=any bash
+
+# Install tiger-cli
+sudo apt-get install tiger-cli
+```
+
+For manual repository installation instructions, see [here](https://packagecloud.io/timescale/tiger-cli/install#manual-deb).
+
+### Red Hat/Fedora
+
+```bash
+# Add repository
+curl -s https://packagecloud.io/install/repositories/timescale/tiger-cli/script.rpm.sh | sudo os=rpm_any dist=rpm_any bash
+
+# Install tiger-cli
+sudo yum install tiger-cli
+```
+
+For manual repository installation instructions, see [here](https://packagecloud.io/timescale/tiger-cli/install#manual-rpm).
+
+### Go Install
+
+```bash
+go install github.com/timescale/tiger-cli/cmd/tiger@latest
+```
+
+## Updating
+
+To upgrade an existing installation to the latest release:
+
+```bash
+tiger upgrade
+```
+
+This downloads the latest published binary, verifies its checksum, and replaces the currently running binary in place. If Tiger CLI was installed via a package manager (Homebrew, apt, yum/dnf), `tiger upgrade` will instead point you at the matching package-manager command.
+
+## Quick Start
+
+After installing Tiger CLI, authenticate with your Tiger Cloud account:
+
+```bash
+# Login to your Tiger account
+tiger auth login
+
+# View available commands
+tiger --help
+
+# List your database services
+tiger service list
+
+# Create a new database service
+tiger service create --name my-database
+
+# Get connection string
+tiger db uri
+
+# Connect to your database
+tiger db psql
+
+# Run a query without psql
+tiger db query -c "SELECT now()"
+
+# Install the MCP server
+tiger mcp install
+```
+
+## Usage
+
+Tiger CLI provides the following commands:
+
+- `tiger auth` - Authentication management
+  - `login` - Log in to your Tiger account (use `--headless` to authorize with a short code in a browser on any machine)
+  - `logout` - Log out from your Tiger account
+  - `status` - Show current authentication status and project ID (alias: `whoami`)
+- `tiger project` - Project management
+  - `list` - List all projects you have access to, marking the active one (alias: `ls`)
+  - `use` - Switch the active project (requires an OAuth login; clears the default `service_id`, since it belonged to the previous project) (alias: `switch`)
+- `tiger service` - Service lifecycle management (aliases: `services`, `svc`)
+  - `list` - List all services (alias: `ls`)
+  - `create` - Create a new service
+  - `get` - Show detailed service information (aliases: `describe`, `show`)
+  - `fork` - Fork an existing service
+  - `start` - Start a stopped service (alias: `resume`)
+  - `stop` - Stop a running service (alias: `pause`)
+  - `rename` - Rename a service
+  - `resize` - Resize service CPU and memory allocation
+  - `delete` - Delete a service (alias: `rm`)
+  - `update-password` - Update service master password
+  - `logs` - View service logs (alias: `log`)
+- `tiger db` - Database operations
+  - `psql` - Connect to a database with psql (in an interactive terminal, if the service has read replicas, offers to connect to one of them; use `--no-replica-prompt` to skip) (alias: `connect`)
+  - `query` - Execute a SQL query against a database and display the results, without needing psql (alias: `sql`)
+  - `uri` - Get connection URI for a service (alias: `connection-string`)
+  - `ping` - Test database connectivity (aliases: `test`, `test-connection`)
+  - `schema` - Display database schema information (tables, views, indexes, functions, TimescaleDB hypertables, and more)
+  - `save-password` - Save a database password to configured password storage (keyring, pgpass, or none)
+  - `create role` - Create a new database role, with optional read-only enforcement, inherited grants (`--from`), and statement timeout (alias: `create user`)
+- `tiger config` - Configuration management (alias: `cfg`)
+  - `list` - List current configuration (aliases: `ls`, `show`)
+  - `set` - Set configuration value
+  - `unset` - Remove configuration value (aliases: `rm`, `delete`)
+  - `reset` - Reset configuration to defaults (alias: `clear`)
+- `tiger mcp` - MCP server setup and management
+  - `install` - Install and configure MCP server for an AI assistant (alias: `add`)
+  - `start` - Start the MCP server
+  - `list` - List available MCP tools, prompts, and resources (alias: `ls`)
+  - `get` - Get detailed information about a specific MCP capability (aliases: `describe`, `show`)
+- `tiger feedback` - Submit feedback or a bug report to the Tiger Data team (pass the message as an argument or on stdin)
+- `tiger version` - Show version information
+- `tiger upgrade` - Upgrade the Tiger CLI to the latest version (alias: `update`)
+
+Use `tiger <command> --help` for detailed information about each command, or browse the generated [CLI reference](docs/cli/tiger.md).
+
+## MCP Server
+
+Tiger CLI includes a Model Context Protocol (MCP) server that enables AI assistants like Claude Code to interact with your Tiger Cloud infrastructure. The MCP server provides programmatic access to database services and operations.
+
+### Installation
+
+Configure the MCP server for your AI assistant:
+
+```bash
+# Interactive installation (prompts for client selection)
+tiger mcp install
+
+# Or specify your client directly
+tiger mcp install claude-code      # Claude Code
+tiger mcp install codex            # Codex
+tiger mcp install copilot          # GitHub Copilot CLI
+tiger mcp install cursor           # Cursor IDE
+tiger mcp install devin            # Devin
+tiger mcp install gemini           # Gemini CLI
+tiger mcp install vscode           # VS Code
+```
+
+After installation, restart your AI assistant to activate the Tiger MCP server.
+
+#### Manual Installation
+
+If your MCP client is not supported by `tiger mcp install`, follow the client's
+instructions for installing MCP servers. Use `tiger mcp start` as the command to
+start the MCP server. For example, many clients use a JSON file like the
+following:
+
+
+```json
+{
+  "mcpServers": {
+    "tiger": {
+      "command": "tiger",
+      "args": [
+        "mcp",
+        "start"
+      ]
+    }
+  }
+}
+```
+
+#### Streamable HTTP Protocol
+
+The above instructions install the MCP server using the stdio transport. If you
+need to use the Streamable HTTP transport instead, you can start the server with
+`tiger mcp start http --port 8080` and install it into your client using
+`http://localhost:8080` as the URL.
+
+### Available MCP Tools
+
+The MCP server exposes the following tools to AI assistants:
+
+**Service Management:**
+- `service_list` - List all database services in your project
+- `service_get` - Get detailed information about a specific service
+- `service_create` - Create new database services with configurable resources
+- `service_fork` - Fork an existing database service to create an independent copy
+- `service_start` - Start a stopped database service
+- `service_stop` - Stop a running database service
+- `service_rename` - Rename a database service
+- `service_resize` - Resize a database service by changing CPU and memory allocation
+- `service_delete` - Permanently delete a database service; deleting a service tagged PROD first asks the user to confirm through the MCP client (elicitation), and is refused if the client cannot prompt
+- `service_update_password` - Update the master password for a service
+- `service_logs` - View logs for a database service
+
+**Database Operations:**
+- `db_query` - Execute SQL queries against a database service, passed inline or as a path to a SQL file, with support for parameterized queries, custom timeouts, and connection pooling
+- `db_schema` - Display a service's database schema (tables, views, materialized views, enums, functions, procedures, indexes, triggers, and TimescaleDB hypertable/continuous aggregate metadata) as readable text for an agent's context
+
+**Feedback:**
+- `feedback` - Submit feedback or a bug report to the Tiger Data team
+
+The MCP server automatically uses your CLI authentication and configuration, so no additional setup is required beyond `tiger auth login`.
+
+#### Proxied Tools
+
+In addition to the service management tools listed above, the Tiger MCP server also proxies tools from a remote documentation MCP server. This feature provides AI assistants with semantic search capabilities for PostgreSQL, TimescaleDB, and Tiger Cloud documentation, as well as prompts/guides for various Tiger Cloud features.
+
+The proxied documentation server ([pg-aiguide](https://github.com/timescale/pg-aiguide)) currently provides the following tools:
+- `view_skill` - Retrieve comprehensive guides for Postgres and TimescaleDB features and best practices
+- `search_docs` - Search PostgreSQL and TimescaleDB documentation using natural language queries
+
+This proxy connection is enabled by default and requires no additional configuration.
+
+To disable the documentation proxy:
+
+```bash
+tiger config set docs_mcp false
+```
+
+## Configuration
+
+The CLI stores configuration in `~/.config/tiger/config.yaml` by default, and supports hierarchical configuration through environment variables and command-line flags.
+
+```bash
+# List current configuration
+tiger config list
+
+# Set configuration values
+tiger config set output json
+
+# Remove configuration value
+tiger config unset output
+
+# Reset to defaults
+tiger config reset
+```
+
+### Configuration Options
+
+All configuration options can be set via `tiger config set <key> <value>`:
+
+- `analytics` - Enable/disable analytics (default: `true`)
+- `color` - Enable/disable colored output (default: `true`)
+- `docs_mcp` - Enable/disable docs MCP proxy (default: `true`)
+- `mcp_max_rows` - Maximum number of rows the `db_query` MCP tool returns per result set before truncating, to limit how much data lands in an AI agent's context. Only applies to the MCP tool, not CLI commands. Default: `100`
+- `output` - Output format: `json`, `yaml`, or `table` (default: `table`)
+- `password_storage` - Password storage method: `keyring`, `pgpass`, or `none` (default: `keyring`)
+- `read_only` - Which services this CLI may change: `all`, `prod`, or `off` (default: `off`, which protects nothing). An interactive `tiger auth login` offers a menu of the three modes, and records your choice either way, so it only asks until you answer once. `true` and `on` are accepted as aliases for `all`, and `false` for `off`, so existing config files and `TIGER_READ_ONLY=true` behave as before.
+
+  Changing a protected service is refused, and so is creating one: `tiger service create`/`fork`/`start`/`stop`/`rename`/`resize`/`update-password`/`delete` and `tiger db create role` return an error. Connection strings for it open the session in Tiger Cloud's immutable read-only mode, so the server rejects writes and DDL — that covers `tiger db psql`, `tiger db query`, `tiger db uri`, the `db_query` MCP tool, and the connection strings embedded in `tiger service` output and the equivalent MCP tools.
+
+  - `all` protects every service, and the MCP write tools aren't registered at all, so they don't appear in `tools/list` and can't be called.
+  - `prod` protects only services tagged `PROD`, leaving `DEV` services writable. `tiger service create`/`fork` and the `service_create`/`service_fork` MCP tools are gated on the environment they request, so creating a `DEV` service is allowed and a `PROD` one is not — otherwise you could create a service this same mode then refuses to delete. Forking a `PROD` service into a `DEV` fork is allowed, since that reads production without changing it. The MCP write tools stay registered — they still work on `DEV` services — and refuse per call instead. Reading a service's tag costs one extra API call for `tiger service start`/`stop`/`rename`/`resize`/`delete`, and the operation is refused if that lookup fails. A read replica is judged on its own tag, so a replica of a `PROD` primary is protected only if that replica set is itself tagged `PROD`.
+
+- `service_id` - Default service ID. Cleared automatically when the active project changes: by `tiger project`, and by `tiger auth login` unless it lands on the same project as the previous login. A service belongs to the project it was created in
+- `version_check` - When `true`, the CLI checks for a newer version on each invocation (in an interactive terminal) and prints a notice if one is available. Set to `false` to disable. Default: `true`.
+
+### Environment Variables
+
+Environment variables override configuration file values. All variables use the `TIGER_` prefix:
+
+- `TIGER_ANALYTICS` - Enable/disable analytics
+- `TIGER_COLOR` - Enable/disable colored output
+- `TIGER_CONFIG_DIR` - Path to configuration directory (default: `~/.config/tiger`)
+- `TIGER_DOCS_MCP` - Enable/disable docs MCP proxy
+- `TIGER_OUTPUT` - Output format: `json`, `yaml`, or `table`
+- `TIGER_PASSWORD_STORAGE` - Password storage method: `keyring`, `pgpass`, or `none`
+- `TIGER_READ_ONLY` - Which services this CLI may change: `all`, `prod`, or `off` (same aliases as `read_only`)
+- `TIGER_PUBLIC_KEY` - Public key to use for authentication (takes priority over stored credentials)
+- `TIGER_SECRET_KEY` - Secret key to use for authentication (takes priority over stored credentials)
+- `TIGER_SERVICE_ID` - Default service ID
+- `TIGER_VERSION_CHECK` - When `true`, the CLI checks for a newer version on each invocation (in an interactive terminal) and prints a notice if one is available; `false` to disable
+
+### Global Flags
+
+These flags are available on all commands and take precedence over both environment variables and configuration file values:
+
+- `--analytics` - Enable/disable analytics
+- `--color` - Enable/disable colored output
+- `--config-dir <path>` - Path to configuration directory (default: `~/.config/tiger`)
+- `--password-storage <method>` - Password storage method: `keyring`, `pgpass`, or `none`
+- `--service-id <id>` - Specify service ID
+- `--version-check` - Enable/disable checking for updates on startup
+- `-h, --help` - Show help information
+
+## Contributing
+
+We welcome contributions! Here's how to get started:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Ensure all tests pass (`go test ./...`)
+6. Submit a pull request
+
+For detailed development information, see [docs/development.md](docs/development.md).
+
+## License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.

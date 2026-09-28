@@ -1,0 +1,511 @@
+# 気になる分散DB、OceanBaseのまとめ
+
+## Overview
+
+ >OceanBaseデータベース(OceanBase Database)は、企業向けに完全自社開発されたネイティブ分散データベースです。一般的なハードウェア上でも、金融業界が求める高可用性を実現します。業界初の「3リージョン・5データセンター」構成アーキテクチャにより、都市レベルでの自動ディザスタリカバリを損失なく実現し、TPC-Cベンチマークで新記録を達成しました。単一クラスタで1,500ノードを超える規模にも対応可能で、クラウドネイティブ、強い整合性、そしてOracleやMySQLとの高い互換性を誇ります。
+
+- [OceanBase - AI時代を支える分散データベース](https://jp.oceanbase.com/)
+- 公式Document
+    - [OceanBase概要](https://jp.oceanbase.com/docs/common-oceanbase-database-1000000000011376)
+
+とりあえず、数ある分散SQLデータベースの中でもすごいものであることわかる。
+よく知られている話としては独身の日（ダブルイレブン）のトラフィックを捌くほどの実績がある。
+
+## point
+
+- 分散型データベースであること
+- Paxosプロトコル、Multi-Paxosが採用されている
+    - [Paxos](https://jp.oceanbase.com/docs/common-oceanbase-database-1000000000044169)
+- 既存DBの互換性
+    - MySQL/Oracle につよい
+
+## How to use
+
+## Python環境のセットアップ
+
+このリポジトリのサンプルを実行するには、Python 3.12以上と `pip` が必要です。Ubuntu/Debian系の環境では、以下のコマンドでPythonと `pip` をインストールします。
+
+```bash
+sudo apt update
+sudo apt install -y python3 python3-pip
+```
+
+依存関係の管理には `uv` を使用します。まず `pip` で `uv` をインストールしてください。
+
+```bash
+python3 -m pip install --user uv
+```
+
+ディストリビューションがPEP 668の `externally-managed-environment` エラーを表示する場合は、ユーザー領域へのインストールであることを確認したうえで、次のコマンドを使用します。
+
+```bash
+python3 -m pip install --user --break-system-packages uv
+```
+
+`uv` のインストール先がPATHに含まれていない場合は、次のコマンドで追加してください。
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+その後、リポジトリのルートで `uv sync` を実行すると、`.venv` の作成と `uv.lock` に固定された依存関係のインストールが行われます。
+
+```bash
+uv sync
+```
+
+環境を有効化する場合は、次のコマンドを実行します。
+
+```bash
+source .venv/bin/activate
+```
+
+仮想環境を有効化せずにサンプルを実行する場合は、`uv run` を使用できます。
+
+```bash
+uv run python main.py
+```
+
+## OceanBase Dashboard
+
+OceanBase CEの `users` テーブルをブラウザで確認する開発者向けDashboardを起動できます。DB接続情報は環境変数から読み込みます。
+
+```bash
+export OCEANBASE_HOST=127.0.0.1
+export OCEANBASE_PORT=2881
+export OCEANBASE_USER='root@sys'
+export OCEANBASE_PASSWORD=''
+export OCEANBASE_DATABASE=test
+export WEB_PORT=8000
+
+uv run python example/dashboard/dashboard.py
+```
+
+サーバーは `0.0.0.0:8000` で待ち受けるため、CodespacesのPortsタブでポート `8000` を開いてブラウザからアクセスできます。画面の `Refresh` を押すと、OceanBaseへ再接続して `VERSION()`、`users` の件数、レコード一覧を再取得します。
+
+接続に失敗した場合は、接続状態を `Connection error` として表示し、エラー内容を画面に表示します。DashboardのSQLは固定クエリのみで、ユーザー入力をSQLへ連結しません。
+
+## JupyterLabでデータ分析
+
+JupyterLabとNotebook用の依存関係をセットアップします。
+
+```bash
+uv sync
+```
+
+Dashboardと同じ環境変数を設定して、JupyterLabを `0.0.0.0:8888` で起動します。
+
+```bash
+export OCEANBASE_HOST=127.0.0.1
+export OCEANBASE_PORT=2881
+export OCEANBASE_USER='root@sys'
+export OCEANBASE_PASSWORD=''
+export OCEANBASE_DATABASE=test
+
+uv run jupyter lab \
+   --ip=0.0.0.0 \
+   --port=8888 \
+   --no-browser
+```
+
+CodespacesのPortsタブでポート `8888` を開き、表示されたJupyterLabのURLへアクセスしてください。Notebook一覧から `notebooks/oceanbase_quickstart.ipynb` を開き、上から順番にセルを実行します。NotebookではOceanBaseへの接続、`SELECT VERSION()`、`users` の取得、pandasによる集計、matplotlibによる可視化を確認できます。
+
+## NotebookをWebアプリとして表示
+
+Voilàを使うと、Notebookのコードセルを表示せず、実行結果をWebアプリとして配信できます。Voilàは起動したプロセスの環境変数を使うため、別のターミナルで起動する場合も、先にDashboardと同じ接続情報を設定してください。
+
+```bash
+export OCEANBASE_HOST=127.0.0.1
+export OCEANBASE_PORT=2881
+export OCEANBASE_USER='root@sys'
+export OCEANBASE_PASSWORD=''
+export OCEANBASE_DATABASE=test
+
+uv run voila notebooks/oceanbase_quickstart.ipynb \
+   --Voila.ip=0.0.0.0 \
+   --port=8866 \
+   --no-browser
+```
+
+環境変数が不足している場合は、Notebookの接続セルで不足している変数名を表示して停止します。パスワードなどの接続情報はソースコードへ書き込まないでください。
+
+CodespacesのPortsタブでポート `8866` を開くと、OceanBaseのバージョン、usersの一覧、集計結果、グラフをWeb画面で確認できます。Notebookのコードを変更した場合は、Voilàを再起動して変更を反映してください。
+
+## dbtによるAnalyticsテーブル作成
+
+`dbt-mysql`を使って、OceanBaseのOperational DataからAnalytics用のstaging viewとmart tableを作成します。dbtのプロフィールは [dbt/profiles.yml](dbt/profiles.yml) にありますが、接続情報はすべて環境変数から読み込みます。パスワードをファイルへ直接書かないでください。
+
+### dbtの実行
+
+まず、DashboardやJupyterLabと同じ環境変数を設定します。
+
+```bash
+export OCEANBASE_HOST=127.0.0.1
+export OCEANBASE_PORT=2881
+export OCEANBASE_USER='root@sys'
+export OCEANBASE_PASSWORD=''
+export OCEANBASE_DATABASE=test
+```
+
+dbtプロジェクトの設定とOceanBaseへの接続を確認します。
+
+```bash
+uv run python dbt/run.py debug --project-dir dbt --profiles-dir dbt
+```
+
+接続互換性を確認したあと、モデル作成とテストを実行します。
+
+```bash
+uv run python dbt/run.py run --project-dir dbt --profiles-dir dbt
+uv run python dbt/run.py test --project-dir dbt --profiles-dir dbt
+```
+
+モデルは次の構成です。
+
+- `operational.users`: 移行済みの `users` テーブルをsourceとして定義
+- `stg_users`: usersの基本列を扱うstaging view
+- `user_summary`: ユーザー名ごとの件数と作成日時を集計するmart table
+
+## Compatibility Status
+
+OceanBase CE 4.4.2.1に対して、現在のリポジトリで確認済みの結果です。未検証の組み合わせは含めていません。
+
+| Client / Path | Connect | SELECT 1 | CRUD | Notes |
+|---|---|---|---|---|
+| PyMySQL | PASS | PASS | PASS | Dashboard、migration、Notebookで利用する既存アプリケーション経路 |
+| mysql-connector Pure Python | PASS | PASS | PASS | `use_pure=True`、default/explicitの両ケースで確認 |
+| mysql-connector C Extension | FAIL | - | - | default/explicitの両ケースで接続初期化中に失敗、調査継続中 |
+| dbt-mysql + compatibility workaround | PASS | PASS | PASS | Pure Pythonを明示的に強制し、`debug`、`run`、`test`に成功 |
+
+### Production / Usability Path: dbt compatibility workaround
+
+[dbt/run.py](dbt/run.py) は、現在検証しているOceanBase、dbt-mysql、mysql-connector-pythonの組み合わせでdbtを実用上動かすため、mysql-connectorへ `use_pure=True` を明示的に設定します。これは根本修正ではなく、site-packagesやdbt-mysql本体も変更しません。
+
+このラッパーはC Extension接続を試してからPure Pythonへ切り替える自動fallbackではありません。最初からPure Python経路だけを選択し、原因調査は行いません。OceanBase用のdbtコマンドは、このラッパーから実行してください。
+
+確認済みの結果:
+
+```text
+dbt debug: All checks passed
+dbt run:   PASS=2 WARN=0 ERROR=0 SKIP=0 TOTAL=2
+dbt test:  PASS=4 WARN=0 ERROR=0 SKIP=0 TOTAL=4
+```
+
+`dbt run` により `test.stg_users` viewと `test.user_summary` tableが作成されます。Jupyter Notebookのdbt mart読み取りセルから `user_summary` をpandas DataFrameとして確認できます。
+
+### Research / Compatibility Path: observed failure
+
+OceanBase CE 4.4.2.1に対して `dbt-mysql 1.7.0` を通常実行すると、mysql-connector-pythonのC Extension経路が選択され、接続初期化中にcharset/collation関連のメッセージと `Malformed packet` が観測されます。同じ接続条件のPure Python経路は成功します。
+
+通常の `uv run dbt` で確認されたエラー:
+
+```text
+Character set '45' is not a compiled character set and is not specified in the '/usr/local/mysql/share/charsets/Index.xml' file
+_mysql_connector.MySQLInterfaceError: Malformed packet
+```
+
+tracebackには、接続初期化中にmysql-connectorが次の形式のSQLを実行する経路が含まれます。
+
+```sql
+SET NAMES '<charset_name>' COLLATE '<collation_name>';
+```
+
+これは観測された実行経路であり、このSQL、charset ID 45、OceanBase、mysql-connector-pythonのいずれかが直接原因だとは現時点で断定しません。OceanBaseとC Extension間のprotocol / metadata handlingのどの差分が失敗を引き起こすかは未特定です。
+
+## MySQL Connector Compatibility Experiment
+
+`dbt-mysql`を介さず、`mysql-connector-python`だけで接続する最小実験を [experiments/mysql_connector_compat.py](experiments/mysql_connector_compat.py) に用意しています。このResearch pathはC ExtensionとPure Pythonを独立して実行し、失敗を失敗のまま記録します。fallbackやworkaroundは行いません。
+
+接続情報は他のサンプルと同じ環境変数から読み込みます。
+
+```bash
+export OCEANBASE_HOST=127.0.0.1
+export OCEANBASE_PORT=2881
+export OCEANBASE_USER='root@sys'
+export OCEANBASE_PASSWORD=''
+export OCEANBASE_DATABASE=test
+
+uv run python experiments/mysql_connector_compat.py
+```
+
+完全な結果をJSONへ保存する場合は `--json` を指定します。保存される接続情報のパスワードは `<redacted>` に置き換えられます。
+
+```bash
+uv run python experiments/mysql_connector_compat.py \
+   --json experiments/results/mysql_connector_compat.json
+```
+
+`experiments/results/` は再現可能な互換性evidenceをGit管理する保存先です。実行環境、バージョン、例外、tracebackを含むため、結果を更新する場合は対象DBで再実行し、内容を確認してからコミットします。
+
+デフォルトは既存互換のためターゲット名`oceanbase`、環境変数prefix `OCEANBASE`です。別のMySQL互換ターゲットを比較する場合は、同じ5項目を任意のprefixで設定します。
+
+```bash
+export MYSQL8_HOST=127.0.0.1
+export MYSQL8_PORT=3306
+export MYSQL8_USER=experiment_user
+export MYSQL8_PASSWORD='...'
+export MYSQL8_DATABASE=experiment_db
+
+uv run python experiments/mysql_connector_compat.py \
+   --target-name mysql8 \
+   --env-prefix MYSQL8 \
+   --json experiments/results/mysql8.json
+```
+
+上記は将来の比較方法を示す例であり、このリポジトリではMySQL 8.xに対する結果をまだ検証していません。
+
+実験は次の4ケースを独立して実行し、失敗時に別の実装へfallbackしません。
+
+- C Extension / charsetとcollationの指定なし
+- Pure Python / charsetとcollationの指定なし
+- C Extension / charsetとcollationを明示
+- Pure Python / charsetとcollationを明示
+
+明示するcharset/collationは固定値ではありません。Pure Pythonの接続からセッション変数を取得し、`SHOW COLLATION`の結果に存在することを確認してから使用します。各接続成功後に `SELECT VERSION()`、セッションのcharset/collation、`SELECT 1`、実験専用テーブルによるCREATE/INSERT/SELECT/DROPを実行します。
+
+### FACT: 観測された事実
+
+- `mysql-connector-python 26.7.0`のC Extension (`use_pure=False`) は、通常クエリを実行できる接続オブジェクトが返る前に `Malformed packet` で失敗した
+- Pure Python (`use_pure=True`) は接続、`SELECT 1`、最小CRUD、cleanupに成功した
+- OceanBaseセッションから取得したcharset/collationを明示しても、今回のC Extensionの結果は失敗のままだった
+- 同じ明示値を使ったPure Pythonは接続とクエリに成功した
+- この再現コードはdbtをimportまたは実行していない
+
+### HYPOTHESIS: 未検証の説明候補
+
+- 失敗はcharset/collation negotiationまたはMySQL protocol metadataの処理に関係する可能性がある
+- C ExtensionとPure Pythonにおけるprotocol処理の差が結果へ影響している可能性がある
+
+この実験結果だけでは、OceanBase、mysql-connector-python、dbt-mysqlのいずれかに原因があるとは断定しません。標準出力とJSONに残る例外、traceback、セッション情報を追加調査の材料として扱います。
+
+### MySQL 8.x Control Experiment
+
+OceanBaseとは別に、固定バージョン`mysql:8.0.46`をDocker Composeで起動し、同じPython環境、mysql-connector-python、experiment runnerで比較できます。既存のOceanBase 2881番とMySQL 3306番を変更せず、control targetは3307番を使用します。
+
+ローカルcredentialファイルを作成し、値を必要に応じて変更します。`experiments/mysql8/.env`は`.gitignore`対象であり、commitしません。
+
+```bash
+cp experiments/mysql8/.env.example experiments/mysql8/.env
+```
+
+MySQL 8.0.46と専用database/userを起動します。
+
+```bash
+docker compose \
+   --env-file experiments/mysql8/.env \
+   -f experiments/mysql8/compose.yaml \
+   up -d --wait
+```
+
+同じ環境変数を現在のシェルへ読み込み、4ケースを実行します。
+
+```bash
+set -a
+source experiments/mysql8/.env
+set +a
+
+uv run python experiments/mysql_connector_compat.py \
+   --target-name mysql8 \
+   --env-prefix MYSQL8 \
+   --json experiments/results/mysql8.json
+```
+
+MySQL 8.x control targetを停止するには次を実行します。データvolumeも削除して初期状態へ戻す場合だけ`--volumes`を追加してください。
+
+```bash
+docker compose \
+   --env-file experiments/mysql8/.env \
+   -f experiments/mysql8/compose.yaml \
+   down
+```
+
+### MySQL 5.7 Control Experiment
+
+本家MySQL 5.7との比較には、公式イメージの固定タグ`mysql:5.7.44`を使用します。5.7.44はMySQL 5.7系列の最終リリースであり、タグが提供するLinux amd64イメージがこのCodespaceのx86_64環境で利用可能なことを確認しています。既存のOceanBase 2881番とMySQL 8.x 3307番を変更せず、MySQL 5.7 control targetは3308番を使用します。
+
+ローカルcredentialファイルを作成し、値を必要に応じて変更します。`experiments/mysql57/.env`は`.gitignore`対象であり、commitしません。
+
+```bash
+cp experiments/mysql57/.env.example experiments/mysql57/.env
+```
+
+MySQL 5.7.44と専用database/userを起動します。
+
+```bash
+docker compose \
+   --env-file experiments/mysql57/.env \
+   -f experiments/mysql57/compose.yaml \
+   up -d --wait
+```
+
+同じ環境変数を現在のシェルへ読み込み、既存runnerで4ケースを実行します。
+
+```bash
+set -a
+source experiments/mysql57/.env
+set +a
+
+uv run python experiments/mysql_connector_compat.py \
+   --target-name mysql57 \
+   --env-prefix MYSQL57 \
+   --json experiments/results/mysql57.json
+```
+
+MySQL 5.7 control targetを停止するには次を実行します。
+
+```bash
+docker compose \
+   --env-file experiments/mysql57/.env \
+   -f experiments/mysql57/compose.yaml \
+   down
+```
+
+### Control Experiment Comparison
+
+記録済みの3ターゲットのJSONだけから比較表を再生成します。入力順が比較表の列順になります。
+
+```bash
+uv run python experiments/compare_results.py \
+   experiments/results/mysql57.json \
+   experiments/results/mysql8.json \
+   experiments/results/mysql_connector_compat.json \
+   --output experiments/results/comparison.md
+```
+
+実測結果と比較条件は [experiments/results/comparison.md](experiments/results/comparison.md) に保存しています。
+
+| Case | MySQL 5.7.44 | MySQL 8.0.46 | OceanBase CE 4.4.2.1 |
+|---|---|---|---|
+| C Extension / default | PASS / PASS / PASS | PASS / PASS / PASS | FAIL / - / - |
+| Pure Python / default | PASS / PASS / PASS | PASS / PASS / PASS | PASS / PASS / PASS |
+| C Extension / explicit | PASS / PASS / PASS | PASS / PASS / PASS | FAIL / - / - |
+| Pure Python / explicit | PASS / PASS / PASS | PASS / PASS / PASS | PASS / PASS / PASS |
+
+各セルは`Connect / SELECT 1 / CRUD`です。同じPython 3.12.14、mysql-connector-python 26.7.0、experiment runnerで、MySQL 5.7.44とMySQL 8.0.46は4ケースすべてPASSしました。mysql-connector-python C Extensionの失敗は、このMySQL 5.7 control targetでは再現しませんでした。これは比較で観測された事実であり、OceanBase、mysql-connector-python、charset ID 45、MySQL 5.7 protocolのいずれかを原因またはbugと断定するものではありません。
+
+使い方はローカル/ クラウドのどちらかで利用できる。クイックスタートはローカル版
+
+- [quick start](https://jp.oceanbase.com/docs/common-oceanbase-database-1000000000011372)
+
+なお、ローカル版はパッケージかコンテナかを選択できる。状況に併せて利用可能
+
+クラウド版は以下のとおりです。
+
+- [クラウドではじめる](https://console-en.oceanbase.com/?fromDomain=japan)
+
+AWSのマーケットプレイスにもある。[AWS Marketplace: OceanBase](https://aws.amazon.com/marketplace/seller-profile?id=684ef0d6-1b0c-4af5-870a-2f7f51b20512)
+
+## 制限
+
+ハードウェア、クラスタ名、モードでそれぞれ制限がある。よく読むこと。
+
+- [制限事項](https://jp.oceanbase.com/docs/common-oceanbase-database-1000000000011375)
+
+## OceanBase Community Edition
+
+小さく始めるならOSS版が良いだろう。Prometheusも対応しているみたいなので可視化もバッチリ。
+ちなみにコンポーネントは5つあるが、そのうち3つが重要、あと2つはPrometheusとGrafanaなので実質可視化コンポーネント
+
+- [OceanBase Community Editionクイックスタート](https://jp.oceanbase.com/docs/common-oceanbase-database-1000000000011372)
+
+## 疑問など
+
+OceanBaseのドキュメントや他のサービスなどを見ていて調べたことを書いておく。
+
+## 小規模なデータベースでOceanBase相当のAIネィティブな検索をしたい
+
+もし「どうしても少ないメモリで、AIネイティブなハイブリッド検索を動かしたい」というニーズに対して、OceanBaseは2025年12月に「SeekDB」というAIネイティブな検索データベースを発表しました。
+
+これはOceanBaseの分散エンジンをベースにしつつ、リソース消費を極限まで削ぎ落としたもので、わずか1 vCPU / 2GB RAMといった非常に軽量な環境（エッジデバイスや検証環境など）でも、ベクトル検索とハイブリッド検索を実用的なパフォーマンスで動かせるように最適化されています。
+
+## DiskANNではないということはメモリを大量消費するようなパターンで不利になるのでは
+
+結論述べるとならない。むしろ、ハイブリッド検索と16,000次元をサポートしているのでとんでもないベクトル検索サポートである。
+
+高速な近似最近傍探索（ANN）に不可欠な HNSW や IVF（IVFFLAT）インデックスに対応しています。また、ユークリッド距離、コサイン距離、内積（ドット積）、マンハッタン距離など多様な計算をサポートしています。
+
+「DiskANNではない（＝主にHNSWなどのグラフ型インデックスをベースにしている）ため、インデックスを丸ごとメモリに載せる必要があり、データ量に比例してメモリを大量に消費する」というのは、純粋なインメモリ型ベクトルDBの一般的な課題そのものです。
+
+しかし、OceanBaseは以下の3つのアプローチによって、そのメモリ問題を大幅に緩和しています。
+
+1. IVFFlat（反転ファイル）インデックスのサポート
+2. LSMツリー（ストレージエンジン）による圧縮効果
+3. 分散アーキテクチャによる「メモリの横展開」
+
+### IVFFlat（反転ファイル）インデックスのサポート
+
+まず、HNSWは精度と速度に優れる一方でメモリ消費が極めて激しいというデメリットがあります。
+
+OceanBaseは、メモリ消費を大幅に抑えられるIVFFlatインデックスという仕組みをサポートしています。両者を比較すると以下のとおりです。
+
+HNSW: ベクトルデータだけでなく、複雑なグラフ構造（エッジ情報）もすべてメモリに乗せるため、数千万〜億件規模になるとメモリが破綻しやすいです。
+
+IVFFlat: データをいくつかのクラスターに分割して管理するため、HNSWに比べてメモリ消費量を数分の一以下に削減できます。大規模データでメモリコストを抑えたい場合の現実的な選択肢です。
+
+### LSMツリー（ストレージエンジン）による圧縮効果
+
+OceanBaseの土台はデータを高度に圧縮してディスクに保存する「LSMツリー」アーキテクチャです。
+
+一般的なリレーショナルデータやベクトルデータそのものはディスク側（SSTable）で強力に圧縮されます。データベース全体のストレージ効率が非常に高く、メモリへの過度なキャッシュ依存を減らす設計になっています。
+
+実はメモリへの依存をしていないという点だけで見れば、DiskANNの理屈に近いということになります。
+
+### 分散アーキテクチャによる「メモリの横展開」
+
+単一サーバーのメモリ限界（OOM）に対してOceanBaseは「データをシャード（パーティション）に分割して、複数ノードのメモリに分散配置する」というスケールアウトがネイティブで可能です。
+
+1台の巨大なモンスターマシン（高価な高メモリサーバー）を用意しなくても、普通のサーバーを並べることで、クラスター全体として大容量のインデックスを抱え込めるようになっています。
+
+つまりは単一ではなく複数のマシンを置くことが重要なポイントです。これはPaxosの合意形成アルゴリズムに合致するものです。
+
+## 既存のDB、DiskANNを採用したDBと比較したときに性能で見劣りするパターンがあるのでは
+
+これはユースケース次第だが、見劣りするパターンは技術的にあり得る話です。OceanBaseはそもそも大きなそれこそ億単位のトランザクションを捌くことを得意としている。つまりは大きなものほど費用対効果を得やすいという特徴がある。
+つまりは小規模なトランザクションではDiskANNを採用したDBをぶん回したほうがお得になる可能性は十分にある。ちなみに小規模向けにOceanBaseではなく、SeekDBというのがある。
+
+SeekDBであれば、OceanBaseの思想を受け継ぎつつ、小規模にも対応できる。
+
+## 分散しているということはネットワークのレイテンシがあるのではないか
+
+これはそのとおり。そもそもこれは分散アーキテクチャやマイクロサービスのアーキテクチャにありがちなことなのでOceanBaseに限ったことではない。
+
+## Paxosの合意形成アルゴリズムについて
+
+3台に分散することで高可用なアーキテクチャを実現している。データを分散するとデータの容量が3倍になるのではないか？という疑問が浮かぶ。結論から言うとそれはない。
+説明あり：[分散型データベースのストレージは本当に高いのか？アーキテクチャから紐解くコストの真実](https://qiita.com/oceanbasejapan/items/b6229157e0a8c8f8b93c)
+
+## 他の観点、結論
+
+他のサービスとの比較も含め、OceanBaseを使うべきかどうかの判断材料を整理してみた。
+
+## 1. 各データベースの特徴と本質
+
+- OceanBase (本格分散HTAP)
+- 本質: 金融システム級の「絶対的な安全性（Paxosによるデータ損失ゼロ）」と「自動スケールアウト」を誇る巨大な重機。
+   - 強み: 1つのDBでトランザクション（OLTP）、リアルタイム分析（OLAP）、ベクトル/全文検索（AI）をこなす。SQLでの複雑な絞り込み（ハイブリッド検索）や、リアルタイムの激しいデータ更新に圧倒的に強い。
+   - 弱み: メモリ消費が激しく、高可用性のために最低3台構成が必要なため、小規模システムにはToo Much（オーバースペック）。
+- DiskANN (特化型ベクトルインデックス技術)
+- 本質: 「インメモリはメモリが足りないから、安価なSSDにインデックスを逃がそう」という思想。
+   - 強み: メモリを極限までケチり（HNSW比で1/15〜1/50）、1台のサーバー（低予算）で数億件のベクトルを処理する。
+   - 弱み: 複雑なSQL絞り込みや、秒間数千件といったリアルタイムのデータ更新には弱い。
+- SeekDB (極小リソース向けAIネイティブDB)
+- 本質: OceanBaseのDNA（SQL＋ベクトル＋全文）を受け継ぎつつ、分散機能を削って個人・中小向けに特化させた1台完結型DB。
+   - 強み: 1 vCPU / 2GB RAM のような極小リソースで動作し、SQL内で直接AI関数（Embeddingなど）を叩ける。
+- Neon (サーバーレスPostgreSQL)
+  - 本質: クエリが来ない時は自動サスペンド（0 vCPU）し、最小 0.25 vCPU / 1GB RAM から自動伸縮する。
+
+## 2. 主要な論点と結論
+
+- リソース制限下での勝敗（OceanBase vs DiskANN）
+- 「サーバー1台・少ないメモリ」という制限下であればDiskANNの圧勝。OceanBaseは起動だけで大量のリソースを要求するため、極小の検索には向かない。
+- データを分割して持つと、サーバー故障時にデータが損失するのでは？
+- 損失しない。 OceanBaseはデータをただ分割するだけでなく、各ノードに「本尊（リーダー）」と「コピー（フォロワー）」を3重にバランスよく配置（Paxos）している。1台が爆発しても数秒で別のフォロワーが本尊に昇格し、検索も止まらない。
+- 3重にコピーしたらメモリコストも3倍になるのでは？
+- メモリは3倍にならない。 高価なメモリを大量に消費するのはアクセスを直接受ける「本尊（リーダー）」のみ。「コピー（フォロワー）」は普段ディスクにログを書くだけなのでメモリを食わない。そのため、コストはディスク（安いSSD）だけで済む。
+- 運用の難しさはどうする？
+- 分散システムの運用は爆高（難易度が高い）だが、クラウド（OceanBase Cloud）のフルマネージドサービスを使えば解決する。ただし、ネットワーク通信のミリ秒単位の遅延や、最低3台分の基本固定費という壁は残る。
+- プラットフォームエンジニアリングやWordPressでの活用
+- プラットフォーム: 「マルチテナントでの完全なリソース隔離」や「Online DDL（サービスを止めないテーブル変更）」により、開発者にオンデマンドで安全なDBを提供する基盤として最強。
+   - WordPress: 普通のサイトには完全なオーバースペック。ただし、数億PVの爆速メディアや大規模EC、プラグインなしでのAIサイト内検索（SeekDBの活用など）であれば莫大なメリットがある。
+- 2 vCPUや0.25 vCPUは小さすぎないか？
+- 開発・検証用やエッジ向けとしては、インデックスの圧縮技術（IVF_PQ）や、クエリが来た瞬間だけ一瞬バーストして処理する「オートスケーリング（Neon等）」の仕組みがあるため、この極小スペックでも十分に実用できる。

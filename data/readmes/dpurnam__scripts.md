@@ -1,0 +1,37 @@
+# Scripts
+- Vaultwarden Rsync to Cloudflare R2 **[VWRsync2R2](https://github.com/dpurnam/scripts/tree/main/Vaultwarden)**
+  - Script for `Vaultwarden Docker Container` backup/restore via Rclone to Cloudflare R2 storage
+  - Customize/rewrite the script as per your requirements
+  - Automate the tasks using custom cron jobs
+
+-----
+- Termux Udocker's **[Vaultwarden](https://github.com/dpurnam/scripts/tree/main/termux-udocker)**
+  - Script for `Single Container` docker compose files to be used by [udocker](https://github.com/George-Seven/Termux-Udocker/tree/main)
+  - [Sample Script for Vaultwarden](https://github.com/dpurnam/scripts/blob/main/termux-udocker/vaultwarden.sh) along with its [docker compose file](https://github.com/dpurnam/scripts/blob/main/termux-udocker/vaultwarden-docker-compose.yml) available
+  - Customize/rewrite the script for any other services you'd like to run
+  - Automate service start using `termux-boot` and `termux-services` pkgs at Android Host unlock after boot
+  - Tested on a **Rootless** Android phone running Termux from F-Droid
+
+-----
+- Pangolin's **Newt VPN Client [Service Manager](https://github.com/dpurnam/scripts/tree/main/newt)**
+  - User-friendly prompt based bash script, primarily for debian based Linux hosts
+  - Freshly Install Newt VPN Client Systemd Service
+  - Update Newt VPN Client Binary
+  - Remove Newt Systemd Service
+  - Supports OLM Clients and Native Mode
+
+-----
+- Stalwart Mailserver [Scripts](https://github.com/dpurnam/scripts/tree/main/stalwart)
+  - **[Cloudflare TLSA Record Updater](https://github.com/dpurnam/scripts/blob/main/stalwart/cloudflare-tlsa-record-updater.sh)**
+    -  Set up or Update a TLSA record (used for `DANE` feature of Stalwart) on an associated Cloudflare Account
+    -  Now compatible with latest Stalwart Server Version, by using `openssl` instead of `deprecated` Stalwart REST API's
+  - **[Full Backup/Restore Manager](https://github.com/dpurnam/scripts/tree/main/stalwart)**
+    -  Complete backup or restore of PostgresSQL DB and any files/folders in Stalwart Directory; In case of Stalwart Server v =< v0.15.x, also includes - all (or pre-defined list of) Accounts - `Individual type Principals`
+    -  Compression and Encryption before/after syncing with desired Storage Provider via `rclone`
+    -  Compatibility: `swmanage.sh` - tested upto v0.15.x; `swmanage-v0.16.sh` - tested on v0.16.3
+
+-----
+- Device Availability Manager - **[WakeMyPotata](https://github.com/dpurnam/scripts/tree/main/WakeMyPotata)**
+  - Automatically boot up a device after AC power outage using `rtcwakeup` tool. Now supports both battery-powered as well as battery-less devices!
+
+-----

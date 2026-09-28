@@ -1,0 +1,454 @@
+# remem: Local-first memory for Claude Code and OpenAI Codex
+
+[![MCP Toplist](https://mcptoplist.com/badge/io.github.majiayu000%2Fremem.svg)](https://mcptoplist.com/server/io.github.majiayu000%2Fremem)
+
+> Stop re-explaining your project every new coding-agent session.
+
+Language: **English** | [简体中文](README.zh-CN.md)
+
+`remem` automatically captures, distills, searches, and injects engineering
+memory across Claude Code and OpenAI Codex CLI sessions. Decisions,
+bug-fix rationale, project patterns, and preferences stay available through
+hooks, MCP, CLI, and a localhost REST API.
+
+[![CI](https://github.com/majiayu000/remem/actions/workflows/ci.yml/badge.svg)](https://github.com/majiayu000/remem/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/majiayu000/remem?sort=semver)](https://github.com/majiayu000/remem/releases/latest)
+[![crates.io](https://img.shields.io/crates/v/remem-ai)](https://crates.io/crates/remem-ai)
+[![npm](https://img.shields.io/npm/v/%40remem-ai%2Fremem)](https://www.npmjs.com/package/@remem-ai/remem)
+[![License MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+![Remem recall demo showing a new session picking up an earlier bug fix](assets/remem-recall-demo.gif)
+
+*A new Claude Code session recalls the earlier root cause, commit, and open
+TODO with memory citations and no re-explaining.*
+
+## What remem gives you
+
+- Automatic session capture and background LLM distillation.
+- Project-scoped recall across Claude Code and Codex using one local store.
+- Searchable decisions, bug fixes, architecture notes, preferences, and raw
+  session evidence.
+- Source attribution, staleness labels, suppression, review queues, and
+  injection audits.
+- SQLite with SQLCipher encryption by default for fresh installs.
+- MCP, CLI, and authenticated localhost REST access from one Rust runtime.
+
+remem prioritizes memory quality. Automatic capture is the primary path;
+manual `save_memory` calls supplement it when a decision needs to be recorded
+immediately.
+
+## Install in five minutes
+
+### Homebrew
+
+```bash
+brew install majiayu000/tap/remem
+"$(brew --prefix remem)/bin/remem" install --target codex
+```
+
+Use `--target claude` for Claude Code. `--target all` configures every known
+host, including Cursor where its v1 renderer is supported.
+
+### Standalone installer
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/majiayu000/remem/main/install.sh | env REMEM_NO_CONFIG=1 sh
+~/.local/bin/remem install --target codex
+```
+
+### npm or Cargo
+
+```bash
+npm install -g @remem-ai/remem
+# or
+cargo install remem-ai --bin remem
+
+remem install --target codex
+```
+
+GitHub Releases: prebuilt binaries for macOS and Linux on x64/arm64, with
+published checksums. Use one canonical `remem` executable on `PATH`;
+`remem doctor` warns when hooks and terminals resolve different copies.
+
+For channel-specific upgrades, platform boundaries, PATH drift, and manual
+install notes, read the [installation and upgrade guide](docs/installation.md).
+The broader [documentation guide](docs/README.md) links plugin and operational
+material.
+
+## Verify the installation
+
+Restart the selected coding agent, then run:
+
+```bash
+remem doctor
+remem status
+remem search "last decision"
+```
+
+A healthy Claude Code or Codex installation injects relevant project memory at
+SessionStart and queues durable session distillation at Stop. Codex also uses
+`UserPromptSubmit` to capture each prompt and surface compact optional memory
+candidates. `remem doctor` checks the schema, encryption key, database, hooks,
+MCP registration, worker, and common install-path drift.
+
+Repository contributors can verify duplicate SessionStart suppression with the
+[isolated executable smoke fixture](scripts/ci/smoke_sessionstart_context_gate.sh).
+
+For a focused, read-only view of current-memory truth:
+
+```bash
+remem doctor truth --cwd .
+```
+
+## Host support
+
+| Capability | Claude Code | Codex CLI | Cursor v1 |
+|---|---|---|---|
+| MCP memory tools | Yes | Yes | Yes on macOS/Linux |
+| SessionStart injection | Yes | Yes | Not supported |
+| Automatic session memory | Yes | Yes, Stop-based and low-noise | Not enabled by the v1 installer |
+| Tool-event capture | Installed hooks | No high-frequency Bash hook by default | Runtime command exists; no installed hook |
+| Compiled command-rule enforcement | Optional warn/block on Bash | Not supported | Not supported |
+| Windows | Supported | Supported | Not supported |
+
+Cursor's v1 installer registers MCP only. The verified `observe` and
+`summarize` runtime commands exist, but `remem install --target cursor` does
+not install automatic capture hooks or SessionStart injection.
+
+The repository also includes a Codex plugin wrapper. See
+[plugins/remem/README.md](plugins/remem/README.md) for local plugin runtime and
+explicit hook activation instructions.
+
+## Why use remem alongside built-in memory
+
+Built-in `MEMORY.md`, `CLAUDE.md`, and agent instruction files are ideal for a
+small set of stable facts that should always be visible. remem covers the
+engineering history that is too large, dynamic, or evidence-heavy to maintain
+by hand.
+
+| Need | Built-in files | remem |
+|---|---|---|
+| Stable project rules | Excellent | Supported |
+| Automatic session capture | Manual upkeep | Hook-driven |
+| Search older rationale | Limited by loaded text | Curated and raw search |
+| Branch, time, and staleness handling | Manual | Built in |
+| Provenance and injection audit | Git history | Database-backed audit |
+| Review, suppression, and lifecycle governance | Manual edits | First-class commands |
+
+Use both. Keep concise rules in native files and let remem retain the long tail
+of decisions, failures, evidence, and changing project state.
+
+The broader ecosystem comparison lives in the dated
+[memory-tool survey](docs/research/claude-memory-mcp-ecosystem-2026-03.md).
+
+## How it works
+
+```text
+Claude Code / Codex hooks
+          |
+          v
+append-only captured_events ledger
+          |
+          v
+coalesced background extraction and session rollup
+          |
+          v
+governed candidates -> curated memories + workstreams + raw archive
+          |
+          v
+FTS, entity, temporal, vector, graph, and optional local rerank retrieval
+          |
+          v
+budgeted, source-attributed SessionStart context
+```
+
+Hooks return quickly after durable capture or queueing. Background workers
+perform extraction, candidate governance, compression, retrieval enrichment,
+and lifecycle cleanup. MCP, CLI, REST, and SessionStart share the same local
+store and governance model, but apply surface-specific eligibility policies.
+Explicit search is an inspection and recovery surface, so it may return
+labeled `legacy_unverified` memories; default SessionStart and CurrentTruth
+exclude those rows and record the reason.
+
+Generated memory is treated as untrusted until it passes source-support,
+secret, instruction-pattern, scope, and lifecycle checks. Unsafe content is
+dropped or routed to review with a diagnosable reason.
+
+For module ownership and current data flow, read
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+The experimental MCP `context_bundle` tool exposes the versioned, budgeted
+compiler to explicit callers. The experimental `remem context-plan` command
+prints a request-specific retrieval plan. These opt-in interfaces are tracked
+by the [Context Bundle](docs/specs/GH932/PRODUCT.md) and
+[retrieval-router](docs/specs/GH934/PRODUCT.md) contracts.
+
+The default Codex integration stays low-noise: `SessionStart` provides stable
+context, `UserPromptSubmit` provides a compact candidate index, and `Stop`
+queues background summarization. Prompt candidates contain IDs, titles,
+state, retrieval reason, estimated read cost, and a detail lookup hint, but no
+memory bodies. They are optional leads that Codex may ignore, open, or search
+beyond. The first prompt may also receive up to two continuity anchors so a
+prompt such as `continue` does not depend on lexical overlap. Existing hybrid
+RRF ranks memory candidates; no final confidence threshold decides relevance
+for the model. Automatic extraction asks for short, specific candidate titles
+without a redundant project-name prefix; existing stored titles remain intact.
+
+For your own Codex sidebar, an optional rename convention is
+`MMDD｜TYPE｜Topic`, such as `0903｜FIX｜FTS5 tokenizer mismatch`. If you use a
+separate host-supported rename workflow, preview its proposed names before
+applying a batch. This is host-sidebar organization only: Remem does not rename
+host conversations or import those names as intent overrides. Remem's structured
+session/workstream fields remain authoritative, and a host title does not change
+memory types or workstream identity. See the
+[session intent contract](docs/specs/session-intent-display/PRODUCT.md) and
+[implementation epic #1065](https://github.com/majiayu000/remem/issues/1065).
+
+## Everyday workflows
+
+### Recall and inspect
+
+```bash
+remem search "database encryption"
+remem search "deployment decision" --branch main --explain
+remem show <memory-id>
+remem why <memory-id>
+remem current <state-key>
+```
+
+`remem search` keeps the terminal clean: per-query `[INFO] [search-perf]`
+diagnostics are written to the log file, not stderr, in normal use. Set
+`REMEM_DEBUG=1` to mirror them to stderr while debugging.
+
+### Project aliases for Git worktrees
+
+When a worktree has its own project key, preview an alias to the main checkout,
+then apply it after checking the paths and Git proof:
+
+```bash
+remem project alias add /path/to/worktree --canonical /path/to/main \
+  --actor you --reason "same project"
+remem project alias add /path/to/worktree --canonical /path/to/main \
+  --actor you --reason "same project" --apply
+remem project alias list
+remem search "decision" --project /path/to/main
+remem project alias revoke /path/to/worktree \
+  --actor you --reason "worktree retired" --apply
+```
+
+The main checkout must already have a project row from normal remem capture.
+The alias keeps historical rows at their recorded paths while CLI and MCP
+project searches include the worktree's memories. `add` and `revoke` preview
+without database writes unless `--apply` is present. Revocation removes the
+worktree from the main project's search scope; `list` reports active aliases
+with the actor and reason from their latest activation.
+
+Agents can use MCP `search` for compact results, then `get_observations` for
+selected details. Use raw recall only when curated memory misses exact
+transcript evidence:
+
+```bash
+remem raw search "exact phrase" --since 2026-06-01 --json
+```
+
+List complete host-bound sessions before reading an exact transcript:
+
+```bash
+remem raw sessions --latest 20 --json
+remem raw messages --host codex-cli --source-root local \
+  --project "/path/to/project" --session-id SESSION_ID --json
+remem ingest-sessions --root codex-cli:archive=/path/to/sessions --json
+```
+
+Copy `host`, `source_root`, `project`, and `session_id` unchanged from one
+`raw sessions` summary into `raw messages`. Existing scripts must add the
+required `--host` selector and replace `--root LABEL=PATH` with
+`--root HOST:LABEL=PATH`; the same root format applies to `raw reconcile`.
+The JSON envelope reports `excluded_legacy_rows`, `excluded_legacy_sessions`,
+and `excluded_legacy_identities` when some archive rows cannot enter the
+host-bound session contract. Each listed session also carries additive nullable
+`mmdd`, `session_intent`, `session_topic`, `display_label`, and
+`session_intent_source` fields. `mmdd` is derived from the session created epoch
+in Asia/Shanghai; the full `{MMDD}｜{INTENT}｜{topic}` label is present only when
+both intent and topic are known. Stop summaries may fill those fields with
+source `summary`; unknown, empty, too-long, or redacted values abstain instead
+of blocking the rest of the summary. Automatic Stop rollups preserve manual
+label overrides, including explicit clears, across later turns. Listing still returns healthy sessions;
+`--latest N` fills that bound from healthy sessions only and does not let
+unresolved rows occupy those slots. Use the skipped identities (`source_root`,
+`project`, `session_id`, and `host` when known) to inspect or repair those
+rows. Exact `raw messages` for a skipped selector stays fail-closed. Do not
+re-ingest a skipped row unless ingest can actually claim it — many legacy
+rows have no trusted host provenance.
+`HOST` is `claude-code` or `codex-cli`, and `LABEL` becomes the persisted
+`source_root`. Cursor snapshot evidence requires a manually configured and
+verified `remem summarize --host cursor` Stop integration; filesystem `--root`
+ingestion and reconciliation reject `cursor` explicitly.
+
+### Review and govern
+
+```bash
+remem review list
+remem review approve <candidate-id>
+remem memory suppress memory:<id> --reason "no longer relevant"
+remem govern --action stale --dry-run --json <id>
+```
+
+Mutating governance commands expose previews, explicit confirmations, or
+review boundaries according to their risk. Run `remem <command> --help` for
+the current contract instead of relying on a copied command inventory.
+
+MCP tools share that store with stricter wire contracts. The canonical MCP
+contract is [GH981](docs/specs/GH981/PRODUCT.md), including the #1061
+mutation and scope boundary:
+
+- `save_memory`: pass `host` when the calling host is known. An omitted host is
+  recorded as `unknown`, never inferred as `codex-cli`.
+- `govern_memory`: dry-run first to preview IDs and current versions from that
+  governance transaction. Non-dry-run mutations require `expected_versions`
+  for every ID, `confirm_destructive=true`, and an explicit reason.
+- `recall_user_context`: supply `project` or `cwd`. The server does not infer
+  this scope from its own process working directory.
+
+The local [Remem app](plugins/remem/apps/remem/README.md#correct-session-and-workstream-labels)
+shows session/workstream labels or explicit abstention. Sessions can be filtered
+by intent and created date in Asia/Shanghai. Operators can correct labels in
+batches with a Before/After preview, explicit confirmation, and an audit;
+workstream identity and host conversation titles stay stable.
+
+### Configure memory AI and retrieval
+
+```bash
+remem config show
+remem model current
+remem model use balanced --dry-run
+remem embedding status
+remem embedding download --model multilingual-e5-small
+remem embedding backfill --limit 1000
+```
+
+`auto` embedding mode stays local unless a remem-specific API key is selected.
+The verified local model is optional; the labeled feature-hash fallback remains
+available. The second-stage local reranker is also optional and disabled until
+configured.
+
+Use the [current configuration routes](docs/README.md#configuration), the
+[local embedding contract](docs/specs/local-semantic-embedding/PRODUCT.md), and
+`remem config`, `remem embedding`, or `remem reranker` help for details.
+
+### Share or edit memory outside the database
+
+<!-- remem-doc-contract:current-project-export:start -->
+```bash
+remem sync-memory --cwd .
+remem export --markdown --output ./remem-memory
+remem export --pack .remem-pack
+```
+<!-- remem-doc-contract:current-project-export:end -->
+
+Markdown mirrors are human-editable. Project memory packs are deterministic,
+git-committable exports with provenance-aware import and quarantine behavior.
+See the [memory usage guide](docs/memory-usage-guide.md) and
+[project memory pack contract](docs/specs/project-memory-pack/PRODUCT.md).
+
+## Evidence and benchmarks
+
+The checked-in public suite separates memory-system capability evidence from
+coding-agent outcome evidence. Verify it locally with:
+
+```bash
+cargo run -- bench verify --root eval/public --json-out /tmp/remem-bench-verify.json
+```
+
+Verification resolves `claims/registry.json` beside the parent of `--root`, so
+an external bundle keeps `public/` and `claims/` as siblings and is independent
+of the caller's working directory.
+
+Public adversarial SQLite snapshots are capped at 64 MiB and must be canonical
+`VACUUM` images; verifier-consumed artifact targets must also resolve inside the
+declared public root.
+
+The current public report does not support public benchmark claims and is
+deliberately labeled
+`directional_only_no_public_claim`. The historical isolated coding baseline is
+useful engineering evidence, but its preloaded-memory condition is not
+comparable with the current SessionStart retrieval path.
+
+Reproduction commands, artifact schemas, claim boundaries, and current gates
+live in:
+
+- [eval/README.md](eval/README.md)
+- [eval/public/README.md](eval/public/README.md)
+- [eval/coding-bench/README.md](eval/coding-bench/README.md)
+
+README claims intentionally exclude unsealed local metrics that have no
+checked-in report.
+
+## Security and privacy
+
+- Fresh installs create a SQLCipher-encrypted database and private key file.
+- The data directory and key use restrictive per-user permissions.
+- The REST API binds to `127.0.0.1` and requires a bearer token.
+- Hook-captured event previews are redacted before durable storage.
+- MCP and CLI workstream listings project redacted text: credential-like
+  assignments, short inline secrets, and sensitive command options are replaced
+  with `[REDACTED]` in returned fields (and CLI `--json` envelope `project`),
+  while ordinary filesystem project paths stay readable. Stored workstream rows
+  keep their canonical values for matching and scope checks, so queried output
+  can differ from the database when secrets were present.
+- Memory candidates and injected content pass secret and poisoning defenses.
+- `remem doctor` reports encryption, plaintext residue, schema, and audit
+  failures without printing memory payloads.
+
+Read [SECURITY.md](SECURITY.md) for reporting and security policy. Operational
+contracts for [SQLite tuning](docs/specs/GH949/PRODUCT.md) and
+[memory-poisoning defense](docs/specs/memory-poisoning-defense/PRODUCT.md) are
+kept outside the landing page.
+
+## REST API
+
+```bash
+remem api --port 5567
+TOKEN=$(cat ~/.remem/.api-token)
+curl -H "Authorization: Bearer $TOKEN" http://127.0.0.1:5567/api/v1/health
+curl -H "Authorization: Bearer $TOKEN" http://127.0.0.1:5567/api/v1/capabilities
+```
+
+Clients should feature-detect through `/api/v1/capabilities`. The current
+endpoint and compatibility contract is maintained in
+[docs/specs/SPEC-web-api.md](docs/specs/SPEC-web-api.md).
+
+## Documentation
+
+Use [docs/README.md](docs/README.md) as the jump page for installation,
+configuration, memory lifecycle, retrieval, governance, API, plugin,
+operations, architecture, and benchmark material.
+
+The most common destinations are:
+
+- [Architecture and data flow](docs/ARCHITECTURE.md)
+- [Memory usage guide](docs/memory-usage-guide.md)
+- [Memory lifecycle](docs/memory-lifecycle.md)
+- [Codex plugin](plugins/remem/README.md)
+- [REST API contract](docs/specs/SPEC-web-api.md)
+- [Current spec index](docs/specs/README.md)
+- [Changelog](CHANGELOG.md)
+- [Contributing](CONTRIBUTING.md)
+
+## Uninstall
+
+Preview and remove host hooks and MCP registration without deleting memory:
+
+```bash
+remem uninstall --dry-run
+remem uninstall
+```
+
+The encrypted database remains in the configured `REMEM_DATA_DIR`. Back it up
+before manually deleting that directory if data removal is intended. Ordinary
+file deletion removes remem's local data but does not guarantee secure erasure
+from filesystem snapshots, backups, or the underlying storage media.
+
+## License
+
+MIT

@@ -1,0 +1,189 @@
+<br />
+<p align="center">
+  <a href="https://supabase.com">
+    <img alt="Supabase ETL" width="100%" src="site/public/assets/etl-logo-extended.png">
+  </a>
+</p>
+
+<h1 align="center">Supabase ETL</h1>
+
+<p align="center">
+  High-performance Postgres replication, written in Rust.
+  <br />
+  Embed it as a library or run it as a standalone binary.
+</p>
+
+<p align="center">
+  A project by <a href="https://supabase.com">Supabase</a>.
+</p>
+
+<p align="center">
+  <a href="https://github.com/supabase/etl/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/supabase/etl/actions/workflows/ci.yml/badge.svg?branch=main"></a>
+  <a href="https://coveralls.io/github/supabase/etl?branch=main"><img alt="Coverage" src="https://coveralls.io/repos/github/supabase/etl/badge.svg?branch=main"></a>
+  <a href="https://github.com/supabase/etl/actions/workflows/docs.yml"><img alt="Docs" src="https://github.com/supabase/etl/actions/workflows/docs.yml/badge.svg?branch=main"></a>
+  <a href="https://github.com/supabase/etl/actions/workflows/dependency-audit.yml"><img alt="Dependency audit" src="https://github.com/supabase/etl/actions/workflows/dependency-audit.yml/badge.svg?branch=main"></a>
+  <a href="LICENSE"><img alt="Apache 2.0 license" src="https://img.shields.io/badge/License-Apache_2.0-blue.svg"></a>
+</p>
+
+<p align="center">
+  <a href="https://supabase.github.io/etl/"><strong>Documentation</strong></a>
+  ·
+  <a href="https://supabase.github.io/etl/guides/first-pipeline/"><strong>First Pipeline</strong></a>
+  ·
+  <a href="https://supabase.github.io/etl/guides/standalone-replicator/"><strong>Standalone Replicator</strong></a>
+  ·
+  <a href="crates/etl-examples/README.md"><strong>Examples</strong></a>
+  ·
+  <a href="https://github.com/supabase/etl/issues"><strong>Issues</strong></a>
+</p>
+
+> [!NOTE]
+> Supabase ETL is under active development. APIs and setup steps may change
+> before the first stable release.
+
+Supabase ETL is a high-performance Postgres replication engine written in Rust.
+Embed it in your Rust application or run it as a standalone binary. For each
+published table, it performs an initial sync of existing rows, then replicates
+changes to a built-in or custom destination.
+
+This repository contains the framework, destination modules, standalone
+replicator, examples, and documentation. For the managed product in the
+Supabase Dashboard—including availability, pricing, and operations—use the
+[Supabase Pipelines documentation](https://supabase.com/docs/guides/database/replication/pipelines).
+
+## How It Works
+
+```mermaid
+flowchart LR
+    Postgres["Postgres publication"] --> Sync["Initial sync"]
+    Sync --> Replication["Ongoing replication"]
+    Replication --> Destination["Destination"]
+```
+
+Supabase ETL replicates each table in two phases:
+
+1. **Initial sync:** Copy the existing rows selected by the publication, then
+   catch up changes that occurred while the copy was running.
+2. **Ongoing replication:** Capture subsequent inserts, updates, deletes, and
+   truncates, then deliver those changes as ordered events.
+
+Across both phases, a store persists checkpoints, schemas, destination
+metadata, and table state so replication can recover safely after a restart.
+Copy and change data capture (CDC) are replication paths, not customer-visible
+phases. Initial sync uses the copy path followed by CDC catch-up; ongoing
+replication uses the CDC path after the table is ready.
+
+## Start Here
+
+| Goal | Documentation |
+| --- | --- |
+| Build a working pipeline | [First Pipeline](https://supabase.github.io/etl/guides/first-pipeline/) |
+| Run the standalone process | [Standalone Replicator](https://supabase.github.io/etl/guides/standalone-replicator/) |
+| Prepare a source database | [Configure Postgres](https://supabase.github.io/etl/guides/configure-postgres/) |
+| Implement a store or destination | [Custom Implementations](https://supabase.github.io/etl/guides/custom-implementations/) |
+| Understand the runtime | [Architecture](https://supabase.github.io/etl/explanation/architecture/) |
+| Browse runnable destinations | [`etl-examples`](crates/etl-examples/README.md) |
+
+ETL is installed from Git while we prepare for a crates.io release:
+
+```toml
+[dependencies]
+etl = { git = "https://github.com/supabase/etl" }
+tokio = { version = "1", features = ["full"] }
+```
+
+## Why Supabase ETL?
+
+- **Library or standalone binary:** Embed the engine in a Rust application or
+  run the ready-made replicator.
+- **High performance, small footprint:** Run one Rust process without Kafka,
+  Flink, Debezium, or another coordination service.
+- **Postgres-native selection:** Use publications to select tables, columns,
+  rows, and operation types.
+- **Flexible by design:** Implement custom destinations and durable stores with
+  typed Rust APIs.
+- **Recovery-aware:** Persist checkpoints and table state for safe restarts and
+  at-least-once delivery.
+
+## Independent Benchmark
+
+**~33× lower tail latency. ~125× smaller measured runtime memory footprint.**
+Compared with Debezium Server 3.1.3.Final in Hardbyte's
+[independent CDC benchmark](https://github.com/hardbyte/postgresql-job-queue-benchmarking/blob/7b2919a0fd668a84efc68500ac94cfbfbd3b7356/results/cdc-sweep-long/REPORT.md#fanout_steady):
+**26 ms vs. 848 ms** and **13 MB vs. 1,629 MB**, at 200 source changes/s
+across four fast HTTP consumers.
+
+Tested ETL `d206d66e` (July 2026) with a custom `HttpDestination` and
+`MemoryStore`. Results compare specific configurations: versions, polling,
+batching, destination, store, workload, and deployment all affect performance.
+See [benchmark details](https://supabase.github.io/etl/reference/benchmarks/)
+for versions, measurement methodology, and configuration differences.
+
+## [Destinations](https://supabase.github.io/etl/reference/destinations/)
+
+| Feature | Destination | Status |
+| --- | --- | --- |
+| `clickhouse` | ClickHouse | Private alpha |
+| `bigquery` | Google BigQuery | Stable |
+| `ducklake` | DuckLake | In progress |
+| `snowflake` | Snowflake | In progress |
+| `iceberg` | Apache Iceberg | Deprecated |
+
+ClickHouse is the fastest way to start locally: `cargo x init` runs it, and
+`cargo x setup replicator` configures it by default. BigQuery is the most
+mature cloud destination. See the
+[Destinations reference](https://supabase.github.io/etl/reference/destinations/)
+for maturity and limitations, and the
+[`etl-examples` guide](crates/etl-examples/README.md) for runnable examples.
+
+## Requirements
+
+Supabase ETL supports PostgreSQL 14 through 18. PostgreSQL 15 or newer is
+recommended for column and row publication filters. PostgreSQL 16 or newer is
+required when the replication connection points at a physical read replica.
+
+The source must use `wal_level = logical`, and the replication user needs the
+`REPLICATION` role. See [Configure Postgres](https://supabase.github.io/etl/guides/configure-postgres/)
+for the complete setup and production guidance.
+
+## Container images
+
+The standalone replicator is publicly available; no private registry credentials
+are required. Set `IMAGE_TAG` to a published full commit SHA or release tag:
+
+```bash
+docker pull "public.ecr.aws/supabase/etl-replicator:$IMAGE_TAG"
+```
+
+Each newly published tag contains Linux AMD64 and ARM64 images. Docker selects
+the host architecture automatically; use `--platform linux/amd64` or
+`--platform linux/arm64` to select it explicitly. Pin deployments to a commit,
+release tag, or digest. `latest` follows the current `main` tip and is mutable.
+Manual builds publish only `<full-commit-sha>-experimental`, even for commits on `main`.
+
+The image includes the replicator, the DuckLake maintenance binary, and DuckDB
+extensions. Supply configuration at runtime; see the
+[replicator guide](crates/etl-replicator/README.md).
+
+## Development
+
+```bash
+cargo x init              # Docker, databases, migrations
+cargo x setup replicator && cargo x seed && cargo x run replicator
+```
+
+See [DEVELOPMENT.md](DEVELOPMENT.md) to start the replicator, pick a
+destination, and run tests. The workspace uses Rust 1.95.0 from
+`rust-toolchain.toml`.
+
+## Contributing
+
+Contributions are welcome. Before proposing a new destination, start a
+[discussion or issue](https://github.com/supabase/etl/issues) so maintainership
+and long-term demand can be evaluated first.
+
+Report suspected vulnerabilities privately according to [SECURITY.md](SECURITY.md).
+
+## License
+
+Apache-2.0. See [LICENSE](LICENSE).

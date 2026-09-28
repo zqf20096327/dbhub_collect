@@ -1,0 +1,281 @@
+<div align="center">
+
+# ▍ LiteEditorAI
+
+### Your agents write the code. This is where you watch them.
+
+A terminal-first desktop workspace for developers who **supervise AI coding agents**
+(Claude Code, Codex, Gemini CLI, Qwen…) instead of typing every line themselves.
+
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/DanielLetto2020/LiteEditorAI?include_prereleases&sort=semver)](https://github.com/DanielLetto2020/LiteEditorAI/releases)
+[![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows%20%7C%20macOS-blue.svg)](#install)
+[![Built with Electron](https://img.shields.io/badge/Electron-42-47848F.svg?logo=electron&logoColor=white)](https://www.electronjs.org/)
+[![Status: alpha](https://img.shields.io/badge/status-alpha-orange.svg)](#status)
+
+**English** · [Русский](README.ru.md) · [简体中文](README.zh.md) · [lite-editor-ai.ru](https://lite-editor-ai.ru)
+
+</div>
+
+![LiteEditorAI](assets/screenshots/hero.png)
+
+*Three agents in three projects: the one in `web-shop` has answered, `api-gateway` asked a question, `dashboard`
+is still working. Amber dots mark the agents waiting for you, and the badge up top counts them. The tab named
+itself after the task; under the terminal sit the project folder, its git branch with the number of changed
+files, and the quick bar.*
+
+> [!NOTE]
+> **Interface language: English, Russian or 简体中文** — switch it in *Settings → Appearance*, applied
+> live without a restart. Languages are **pluggable files** (`locales/<code>.json`), so adding your own is one
+> file and no build — see [Languages](#languages).
+
+## Why
+
+Your editor was built around a person typing code. That person now spends most of the day
+**reading, steering and reviewing an agent** instead. The shape no longer fits:
+
+- The center of the work is not a file — it's a **conversation in a terminal**.
+- A full IDE is overkill for that. A bare terminal is blind: which agent finished? which one is stuck
+  waiting for your answer? what did it just change in your files?
+- Run agents in three projects at once and you lose track by lunchtime.
+
+LiteEditorAI puts the terminal first and keeps everything else exactly one keystroke away.
+Open a folder and you're working — no project wizard, no language servers to configure.
+
+## What makes it different
+
+### 1. Every agent, at a glance
+
+![Switching projects with live agents](assets/screenshots/demo.gif)
+
+Each project keeps its own **live shell tabs** — an agent in one, a dev server in another, a throwaway
+command in a third. A tab **names itself after the terminal title**, which for an agent means "the task it is
+working on right now".
+
+A traffic light shows the state without switching anywhere: **working** (spinner) · **waiting for your
+answer** (amber) · **done** (green) · **not started yet** (dashed). The project row aggregates all its tabs,
+and the terminal header carries a counter — *how many agents are blocked on you*; click it to jump to the
+next one. Notifications included. For Claude Code the light doesn't guess from the output: Claude reports its
+own state, so status-line redraws and typing never start the spinner, and amber means it is asking for
+permission, asking a question or showing a dialog.
+
+An optional **time scale** runs down the left edge of the terminal. It marks when you sent a command, when
+output resumed after a pause, and every new minute — so an hour of agent output stops being an undated wall
+of text. It is a separate layer, not text in the buffer: the agent's own rendering stays intact, and the
+time never lands in your copy. Toggle it with the clock button under the terminal, in *Settings → Terminal*
+or from `Ctrl+K`.
+
+Under the terminal sit the active project's **folder** (a menu: open the Project window, the file manager,
+copy the path) and its **git branch with the number of changed files** — click it for the list, a click on
+a file opens it. The clip also shows the **More** menu, the module catalog, the appearance panel and the
+single-terminal mode. [Full-size video](assets/screenshots/demo.mp4).
+
+### 2. See what the agent touched
+
+![Code and git in one window](assets/screenshots/workspace.png)
+
+The **Project** window keeps the code viewer and git side by side, PhpStorm-style: a file tree that refreshes
+itself while the agent edits, syntax highlighting for every language, minimap, autocomplete, **blame**
+annotations, **side-by-side diff vs HEAD**, project-wide replace, an **agent-review mode** (authorship layer
+over the code, "ask the agent" from the context menu) and — the safety net — **local file history with
+rollback** for everything the agent changed before you committed. Around the code: a toolbar with the branch and
+Pull / Push commit counters, `Ctrl+P` to jump to a file by name, open files as a vertical tab list and a status bar
+with position, indentation, encoding and line endings.
+
+Git lives in the same window: selective staging by checkbox, amend, commit / push / pull / fetch, stash,
+per-file history, cherry-pick / revert, three-pane conflict resolution, branch management.
+
+### 3. Keep the agent's context in order
+
+The **Context** module shows the project's `CLAUDE.md` as sections on a canvas: you see the token
+weight of every piece and of the whole file. Editing a section writes straight to the file, and the
+previous version goes into history — 50 copies, a lock against rotation, a comment per version and a
+diff against the current file. An edit made by the agent itself is noticed and saved too, so it can
+be rolled back just like your own.
+
+Three tabs sit next to it: **Memory** — what Claude Code remembered about the project (facts, links
+between them, mismatches with the index, a trash bin with restore); **Files** — the tree of the
+project's `.claude` and `~/.claude` with an editor, copy history and windowed viewing of large files;
+**Conversation analysis** — mining long-lived rules out of your history with the agent, writing them
+into `CLAUDE.md` or creating skill and command drafts.
+
+### 4. Everything one click away
+
+The sidebar holds your projects and three entries: **Find in all projects**, **Modules** and **More**. More
+slides out beside it with the rest of the menu — folders, recent projects, your own modules, view and tools,
+help and every built-in module. `Ctrl+\` folds the sidebar into a thin rail of project initials that still
+shows each agent's state.
+
+![The More menu](assets/screenshots/more.png)
+
+### 5. The same project on your server
+
+Leave an agent working on your own server and pick up at home where it stopped — the cloud next to a project
+keeps its folder identical on both machines. A short setup checks your SSH key, `rsync` and the clocks and tells
+you the exact command if something is missing. Files go only to your server, over your own `ssh`; replaced files
+land in a trash folder instead of disappearing. Linux and macOS; details in
+[`scripts/server-sync`](scripts/server-sync/README.md).
+
+## Install
+
+Prebuilt binaries live on the [**Releases**](https://github.com/DanielLetto2020/LiteEditorAI/releases) page.
+
+| OS | How |
+|---|---|
+| **Ubuntu / Debian** (x64) | `sudo apt install ./LiteEditorAI_*.deb` — system-wide install; updates ask for the administrator password once. |
+| **Linux portable** (x64) | Download `LiteEditorAI-*-linux-x64.tar.gz`, unpack it anywhere in your home directory, run `liteeditor-ai`. No root, and **updates apply in one click**. |
+| **Windows** (x64) | Download `LiteEditorAI_*-win.zip`, unpack anywhere, run `LiteEditorAI.exe`. No installer. Unsigned, so SmartScreen may warn: *More info → Run anyway*. |
+| **macOS** (arm64 / x64) | Download the matching `.dmg` (`-arm64` for M1–M4, `-x64` for Intel) and drag the app to Applications. Ad-hoc build without an Apple signature, so on first launch: *System Settings → Privacy & Security → Open anyway* (or `xattr -dr com.apple.quarantine /Applications/LiteEditorAI.app`). |
+| **From source** | `npm install && npm start` (Node.js 22+) |
+
+**Updating is one click.** The editor checks GitHub Releases in the background, downloads the new version
+and shows a **Restart** badge at the bottom of the sidebar (a dot next to the version number means a new
+release is out): press it and the editor closes and reopens already updated —
+no visit to the download page. The portable builds (Linux `tar.gz`, Windows `zip`, macOS `.app`) update
+without any password; the `.deb` install asks for the administrator password once, because it lives in a
+system directory. Update mode is in **Settings → Updates**.
+
+## And 20+ tool modules, so you don't leave the workspace
+
+![Module catalog](assets/screenshots/modules.png)
+
+A **module** is a separate window next to the editor. Open it from **Modules** (tiles with search — pin a
+module to the quick bar or have it open at startup right on its tile), from **More**, `Ctrl+K` or the quick
+bar under the terminal. Open several at once — each remembers its size and position, and the set reopens on
+next launch. Project-bound modules follow the active project.
+
+<details>
+<summary><b>Full list of built-in modules</b> (click to expand)</summary>
+
+| Module | What it does |
+|---|---|
+| 👁 **Project** (viewer + Git) | Code and git in one window — see [above](#2-see-what-the-agent-touched). Plus Markdown / image / HTML preview, project-wide replace (`Ctrl+Shift+R`, regex and `$1` groups), history search, favourite branches, git status inside the file tree. |
+| 🧠 **Context** | `CLAUDE.md` by sections, memory, `.claude` files, conversation mining — see [above](#3-keep-the-agents-context-in-order). |
+| ✅ **Tasks** | TODO with statuses and priority, list **and kanban** (drag to change status), search, subtask checklists with progress, Markdown preview, project/global tabs, send a task straight into the terminal, JSON export/import. Plus a **Calendar** tab with due dates, **native reminders** and a month view — and a built-in **MCP server** (`lite-tasks`) so the agent in your terminal can read and set reminders itself. |
+| 🔍 **Audit** | Quick X-ray of a project: file types, largest files by lines/size with anomaly flags, media by weight, hygiene (junk in git, duplicates, minified, orphans), tech debt (TODO/FIXME and possible secrets — click jumps to the line), history (hot files by git churn, stale ones). Source: git-tracked or the whole directory; summary to clipboard, report export. |
+| 🤖 **AI company** | A team of agents on one project: a **director** agent decomposes the goal, "hires" specialists (coder, reviewer, tester…) and keeps a shared task board with progress; live log, role library, dry-run **plan mode**, budget cap, goal queue, run history with cost. |
+| 🌐 **Web/SEO audit** | Standalone site analyzer (local dev server **or** a public domain): security headers with a score, TLS certificate, exposed `.git`/`.env`, SEO meta from the **rendered** page (headless Chromium), Core Web Vitals and page weight, screenshots, tech stack, broken links, robots/sitemap, DNS · SPF/DMARC · WHOIS · geo. Own site list and audit history with deltas. |
+| 🐳 **Containers** | Docker **and** Podman in one panel: containers grouped by compose project (a collapsed group shows each container's state as a dot in its coloured header), pods, images, volumes, disk usage; start / stop / restart / remove one at a time or a whole group; live status refresh, **live logs**, **exec terminal**, container file browser (files open in the viewer). Recognizes **databases, RabbitMQ, Kafka, MinIO and web services** — **one click** opens them in the matching module with the connection pre-filled; containers with a web UI get an "open in browser" button. Works against a **remote host** too: docker/podman over an SSH tunnel to the socket, with a "fix over SSH" button when permissions are missing. |
+| 🗄 **Databases** | Postgres / MySQL · MariaDB / SQLite client: direct or **over an SSH tunnel**, connection tabs (several databases at once), schema tree, paginated table data with cell-level selection, **SQL console** (`Ctrl+Enter`), CSV / JSON / SQL export, read-only mode. Passwords in the system keychain, drivers bundled. |
+| 🐰 **RabbitMQ** | Broker client over the management API: server profiles with a **PRODUCTION** guard, tabs for several brokers, overview with **live charts** (queued messages, publish / deliver rates), queues with depth sparklines and a "no consumers" badge, **peek messages without consuming**, publish with a routing check, **live tail of an exchange** (keeps working in a background tab); purge / delete behind a confirmation. |
+| 📨 **Kafka** | Cluster client on kafkajs: profiles with a PRODUCTION guard (SASL / TLS), tabs for several clusters, live throughput and **total consumer-group lag** charts, topics with **ISR health** (create / delete / DeleteRecords / partitions / retention / configs), **peek without traces** (ephemeral group), produce with key and headers, **consumer groups with lag and trend**, offset reset, **live tail**. |
+| 🔌 **Remote hosts** | **SSH / SFTP / FTP** profiles by category, one-click login and several live sessions as tabs (password or a key from the system, keepalive), an **SFTP/FTP file tree** with per-type icons, permissions (`rwxr-xr-x` and octal), owner:group, size and date, plus resolved symlinks; a file opens in a **code editor with line numbers and syntax highlighting** and **saves straight back to the host** (`Ctrl+S`), with copy and **download** (binaries too) — or open it in the viewer, where every save uploads it back. **"Services"** scans the host's ports and opens Postgres / MySQL / RabbitMQ / Kafka in their modules **through an SSH tunnel**, even when the service only listens on the server's localhost; web ports go to the site monitor, a docker/podman socket to Containers. Passwords never leave the backend. |
+| ☁️ **Object storage** | S3 browser with **presets for 11 providers** (AWS, MinIO, Cloudflare R2, Yandex, Backblaze B2, DO Spaces, Wasabi, GCS, Selectel, VK, Timeweb): project and global connections, bucket and folder tree, object table with sorting, filtering and multi-select (batch download / delete), **preview a file straight from the bucket**, "open in the editor's viewer", drag-and-drop upload, downloads of files **and whole folders** with progress and cancel (multipart for big ones), folders / rename / copy / move / delete. **Privacy under control**: anonymous mode for other people's public buckets, per-object public/private toggle and **pre-signed links** with a chosen lifetime. Keys in the system keychain; read-only mode enforced in the backend. |
+| 🔑 **Password vault** | A KeePass `.kdbx` database unlocked by master password: search, copy a password / token / any field, **clipboard auto-clear after 20 s**. Connection forms in Databases / RabbitMQ / Kafka / Remote hosts / Object storage get **"from vault" / "to vault"** buttons. Decryption is entirely local — the master password never leaves the machine. |
+| 📡 **Site monitor** | Any number of checks per URL: availability, a **JSON field** by path, text on the page, a number against a threshold, "it changed" — or a **custom check an agent writes for that URL from your plain-language description** (it sees the live response, is refined in dialogue, runs sandboxed). Four colour statuses with notifications, history blocks or **month charts** (uptime %, average latency, days with alerts). Checks keep running **with the window closed**. |
+| 🧩 **Jira** | Your own issues from several Jira accounts at once (Cloud and Server/DC alike): aggregated list with JQL presets or your own JQL, accordion by status, favourites with drag-and-drop, auto-refresh from 1 to 60 minutes with unread highlighting and an "appeared in the last 8 hours" counter, filters by board, sprint, status and issue type. An issue card carries status transitions and time tracking over three tabs — description, links and comments, people and fields — with wiki markup cleaned up (code blocks kept). Someone else's Jira schema is **discovered, not hardcoded**: statuses via `statusCategory`, transitions from the server's own answer, custom fields (sprint, issue type) via `/field`. The token is encrypted through `safeStorage` and never reaches the renderer. |
+| 📋 **IterFlow** | The [IterFlow](https://iter-flow.ru) tracker inside the editor: create and edit iterations and tasks, deadlines, kanban status changes, iteration stage transitions (submit / approve / accept), project notes. Handy for freelancers and studios who agree scope with a client. |
+| ✍️ **Text processing** | An Obsidian-style AI document editor: sidebar with the project's document tree, tabs, **rich-text ⇄ Markdown** modes, **KaTeX formulas**, formatting bar. Select a fragment and ask for a rewrite — handled by a **local agent with no API keys** (Claude Code / Codex / Gemini), streamed live; agent roles come from the project's `Roles/*.md`, autosave included. |
+| 💬 **OpenRouter chat** | Bring your own key: any model with its price and context size, **streamed** answers with Markdown and code highlighting, several sessions per key, images, key balance. Keys stay local. |
+| 🍅 **Pomodoro** | A work/rest timer for a workspace where agents keep working on their own: during a break a translucent overlay covers the terminals — input is blocked, **agents keep running**, output stays visible. Classic 25/5, 52/17, ultradian 90/20 or your own technique, habit stats with a day streak, a timer pill in the terminal header with pause and break controls. The countdown lives in the background. |
+| 🔊 **Voice** | Listen to the agent's answers instead of reading them: select terminal output and pick **Read aloud** in the context menu (or turn on clipboard capture), and a natural Russian voice reads it sentence by sentence — pause, skip by sentence, the current sentence highlighted, click a sentence to read from there. Terminal junk (box drawing, ANSI leftovers, spinners, Markdown) is stripped, numbers and versions are spoken as words, stress in homographs is placed automatically. The voice is **Silero v5** in a separate Python process and is **not bundled** (CC BY-NC-SA licence): you need Python with `torch`, the model (145 MB) downloads with one button. Russian only. |
+| 📈 **Resource monitor** | How much RAM and CPU the editor eats — per process (windows, GPU, core) **and per agent in the terminals** (PTY process trees), memory sparkline, summary snapshot to clipboard. |
+| 🖳 **System terminal** | Standalone shells outside projects (home directory), several tabs, for one-off system commands next to your working terminal. |
+| 🔧 **Dev tools** | An offline swiss knife: **Base64 ↔ image** (drop a file in, get a data-URI with preview and dimensions, and back), **JSON viewer**, Base64 / URL / Hex / HTML entities, **JSON ↔ YAML**, query ↔ JSON, CSV ↔ JSON, JSONPath, hashes (MD5 / SHA-1/256/512), **JWT decoder**, Unix **timestamp** and **cron** (explained, with next runs), **line rejoin** (text mangled by terminal wrapping stitched back into paragraphs, keeping lists, tables and code), case / translit, string ops, regex tester, text diff, Lorem and fake-data generator, colour converter. |
+
+</details>
+
+**🧩 Write your own.** *Modules → My modules → Create module* scaffolds a plugin and **opens a terminal inside its folder**,
+where **your own AI agent** writes the code against the bundled spec (`GUIDE.md` and prompts are dropped next
+to it). The result appears under "My modules" and can be hot-reloaded. A simple example (a calculator) ships
+with the app; the spec for authors is in [`module-kit/`](module-kit/).
+
+## Languages
+
+The interface ships in **English, Russian and Simplified Chinese**; pick one in *Settings → Interface language*
+and it applies immediately — no restart, no reopening of module windows.
+
+Every language is a plain JSON file where the key is the original string:
+
+```
+locales/en.json              # bundled with the app
+~/.LiteEditorAI/locales/     # your own files; they override the bundled ones
+```
+
+To add a language, copy `locales/en.json`, translate the values, drop it in as `<code>.json` and pick it in the
+settings — no rebuild required. The same folder also lets you fix a wording you dislike in an existing language:
+put just that one key in your own file. `node scripts/i18n-extract.js` refreshes the source dictionary and
+reports how complete each locale is; strings a locale is missing fall back to English rather than Russian.
+
+## Look and feel
+
+One theme — **Graphite**: rounded cards on a dark window whose background and terminal are slightly
+translucent, while menus and buttons stay solid. The colours are yours: pick an accent, change the six base
+colours, the status colours or any of 16 more by hand, and set the corner radius, sidebar width, project row
+height, terminal font and background opacity. It all applies live in the **Appearance** panel (the palette
+button at the bottom of the sidebar), module windows follow along, transparency included, and a theme can be copied and pasted as
+text to share it.
+
+![Appearance panel](assets/screenshots/appearance.png)
+
+## Keyboard
+
+| Keys | Action |
+|---|---|
+| `Ctrl+Shift+T` / `Ctrl+Shift+W` | new / close terminal tab |
+| `Ctrl+PageUp` / `Ctrl+PageDown` | switch terminal tabs |
+| `Ctrl+Enter` | newline in the terminal (continue input, don't run) |
+| `Ctrl+C` / `Ctrl+V` | copy selection / paste (any keyboard layout) |
+| `Ctrl+\` | single-terminal mode |
+| `Ctrl+K` | command palette |
+| `Ctrl+F` / `Ctrl+Shift+F` | search in the terminal or file / find in all projects (files and terminal output) |
+| `Ctrl+S` | save file |
+| `Ctrl+Shift+R` | project-wide replace (Project window) |
+| `Ctrl+1..9` / `Ctrl+Tab` | switch projects |
+| `Ctrl + +/−` · `F11` | font size · fullscreen |
+
+## Status
+
+**Alpha**, actively developed. A project can keep as many terminal tabs as you need and their **names** survive
+a restart (the processes do not; they do survive a reload of the window, so a crashed window does not stop
+your agents). The viewer keeps open files as a vertical tab list and skips files over 2 MB. It is a viewer
+with editing, not a replacement for your IDE's refactoring engine — that's on purpose.
+
+**Removed after v1.1.173: the Android remote and its relay.** The `.apk`, the PC-side relay client and the
+self-hosted relay under `relay/` are gone from the project. The last release that shipped them is
+[v1.1.173](https://github.com/DanielLetto2020/LiteEditorAI/releases/tag/v1.1.173) — grab it there, or restore
+the sources from that tag.
+
+Bugs and ideas → [Issues](https://github.com/DanielLetto2020/LiteEditorAI/issues).
+
+## Build from source
+
+```bash
+npm install        # dependencies + node-pty rebuilt for Electron
+npm start          # bundle the frontend and launch
+```
+
+Node.js 22+ (Linux / Windows x64; macOS builds are made on macOS only).
+More for developers: [CONTRIBUTING.md](CONTRIBUTING.md).
+
+### Pull requests
+
+You don't need write access — contribution goes through a fork. Fork the repo, branch off **`contrib`** and
+open the PR **into `contrib`** (not `main`). Accepted changes are ported into development and ship in one of
+the next releases; review is manual, at the maintainer's discretion. Details in
+[CONTRIBUTING.md](CONTRIBUTING.md).
+
+**Translations are very welcome**: a language is one file in [`locales/`](locales/), so translating the whole
+interface into your language means editing a single JSON — no build, no code.
+
+## Acknowledgements
+
+The project grows in no small part thanks to the community — thank you to everyone who helps.
+
+**For pull requests**
+- [@Ainour108](https://github.com/Ainour108) — redesign of the "Text processing" module: document-tree sidebar, tabs, live streaming of the agent's answer, native file dialogs ([#6](https://github.com/DanielLetto2020/LiteEditorAI/pull/6)), the "Agent" mode, context paperclip, the "Outline" tab, a configurable agent list and page-zoom fixes ([#10](https://github.com/DanielLetto2020/LiteEditorAI/pull/10))
+- [@anupamme](https://github.com/anupamme) — the relay's `/reports` endpoint moved from a query-string secret to an `Authorization` header ([#9](https://github.com/DanielLetto2020/LiteEditorAI/pull/9))
+
+**For bug reports**
+- [@Eurgen](https://github.com/Eurgen) — emoji in the status line ([#1](https://github.com/DanielLetto2020/LiteEditorAI/issues/1)), a crash caused by a file missing from the distribution ([#5](https://github.com/DanielLetto2020/LiteEditorAI/issues/5))
+
+**For ideas and suggestions**
+- [@Eurgen](https://github.com/Eurgen) — terminal shell selection ([#2](https://github.com/DanielLetto2020/LiteEditorAI/issues/2)), `Ctrl+Enter` newline ([#4](https://github.com/DanielLetto2020/LiteEditorAI/issues/4)) and other proposals ([#3](https://github.com/DanielLetto2020/LiteEditorAI/issues/3))
+
+## License
+
+[Apache License 2.0](LICENSE) © 2026 Maksim Kuzminskiy. Keep the attribution in use and in derivative works
+(see [NOTICE](NOTICE)).
+
+Built on [Electron](https://www.electronjs.org/), [xterm.js](https://xtermjs.org/),
+[node-pty](https://github.com/microsoft/node-pty) and [CodeMirror 6](https://codemirror.net/).

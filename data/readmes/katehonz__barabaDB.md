@@ -1,0 +1,1623 @@
+# BaraDB
+
+![BaraDB Logo](baabaaage.png)
+
+**A multimodal database engine written in Nim — 100% native, zero dependencies.**
+
+[![Version](https://img.shields.io/badge/version-1.1.8-blue.svg)](baradadb.nimble)
+[![Documentation](https://img.shields.io/badge/docs-2_languages-blue.svg)](docs/index.md)
+[![Stars](https://img.shields.io/github/stars/katehonz/barabaDB?style=social)](https://github.com/katehonz/barabaDB)
+
+## Documentation
+
+📖 **[Read the documentation in your language](docs/index.md)** — English, Български
+
+BaraDB combines document, graph, vector, columnar, and full-text search storage
+in a single engine with a unified query language (BaraQL). It compiles to a
+single 3.3MB binary with no runtime dependencies.
+
+⭐ Thank you to everyone who continues to star and support BaraDB on [GitHub](https://github.com/katehonz/barabaDB)!
+
+> **Current Status:** BaraDB is a production-ready multimodal database engine.
+> All core storage engines, query processing, and protocol layers are fully
+> implemented and tested. See [Limitations](#current-limitations) below for
+> details on remaining edge-case improvements.
+
+## Why BaraDB?
+
+| Feature | GEL/EdgeDB | BaraDB |
+|---|---|---|
+| Core language | Python + Cython + Rust | **100% Nim** |
+| Storage backend | PostgreSQL only | **Native multi-engine** |
+| Vector search | pgvector extension | **Built-in HNSW/IVF-PQ** |
+| Hybrid RAG search | None | **Vector + FTS + RRF reranking** |
+| Graph algorithms | None | **BFS, DFS, Dijkstra, PageRank, Louvain + Cypher** |
+| Graph SQL integration | None | **CREATE GRAPH, GRAPH_TABLE(), SQL-native** |
+| Full-text search | PG FTS extension | **Built-in BM25 + TF-IDF** |
+| Unified Search Engine | None | **HNSW + inverted index + boolean + phrase + facets + stemmers** |
+| AI Agents / NL→SQL | None | **Built-in `nl_to_sql()`, `schema_prompt()`** |
+| MCP Server | None | **STDIO JSON-RPC for AI tools** |
+| LangChain integration | External adapters | **Native Vector Store (Python + JS)** |
+| Embedded mode | No | **Yes (SQLite-like)** |
+| Binary size | ~50MB+ | **3.3MB** |
+| Dependencies | PostgreSQL, Python, many libs | **Zero** |
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    CLIENT LAYER                          │
+│  Binary Protocol │ HTTP/REST │ WebSocket │ Embedded      │
+├─────────────────────────────────────────────────────────┤
+│                 QUERY LAYER (BaraQL)                     │
+│  Lexer → Parser → AST → IR → Optimizer → Codegen        │
+├─────────────────────────────────────────────────────────┤
+│                EXECUTION ENGINE                          │
+│  Document │ Graph │ Vector │ Columnar │ FTS              │
+├─────────────────────────────────────────────────────────┤
+│                    STORAGE                               │
+│  LSM-Tree │ B-Tree │ WAL │ Bloom Filter │ mmap           │
+├─────────────────────────────────────────────────────────┤
+│                DISTRIBUTED                               │
+│  Raft Consensus │ Sharding │ Replication                 │
+└─────────────────────────────────────────────────────────┘
+```
+
+## Formal Verification
+
+BaraDB core distributed algorithms are formally specified and model-checked
+with **TLA+** and the TLC model checker. All specs run with **weak fairness**
+(`WF_vars(Next)`) to ensure realistic execution:
+
+| Algorithm | Spec | States | Properties Verified |
+|-----------|------|--------|---------------------|
+| **Raft Consensus** | `formal-verification/raft.tla` | 38,051,647 | ElectionSafety, LeaderAppendOnly, StateMachineSafety, CommittedIndexValid, LogMatching, LeaderHasSelfHeartbeat |
+| **Two-Phase Commit** | `formal-verification/twopc.tla` | 22,855,681 | Atomicity, NoOrphanBlocks, CoordinatorConsistency, NoDecideWithoutConsensus, ParticipantStateValid, RecoveryConsistency |
+| **MVCC** | `formal-verification/mvcc.tla` | 177,721 | NoDirtyReads, ReadOwnWrites, WriteWriteConflict, CommittedMustStart, CommittedVersionsUnique, NoWriteSkew, **CommitProgress** (liveness) |
+| **Replication** | `formal-verification/replication.tla` | 3,687,939 | AcksRemovePending, PendingAreKnown, AppliedLteCurrent, MonotonicLsn (temporal) |
+| **Gossip (SWIM)** | `formal-verification/gossip.tla` | 692,497 | AliveNotFalselyDead, IncarnationMonotonic, DeadConsistency |
+| **Deadlock Detection** | `formal-verification/deadlock.tla` | 3,767,361 | GraphIntegrity, NoSelfLoops |
+| **Sharding** | `formal-verification/sharding.tla` | 186,305 | VirtualNodeMapping, NodeAssignmentConsistency, VnodeOrdering |
+
+Run all checks locally:
+
+```bash
+cd formal-verification
+bash run_all.sh
+```
+
+Or run individual specs:
+
+```bash
+cd formal-verification
+java -cp tla2tools.jar tlc2.TLC -workers auto -config models/raft.cfg raft.tla
+java -cp tla2tools.jar tlc2.TLC -workers auto -config models/twopc.cfg twopc.tla
+java -cp tla2tools.jar tlc2.TLC -workers auto -config models/mvcc.cfg mvcc.tla
+```
+
+## Quick Start
+
+```bash
+# Build
+nimble build -d:release
+
+# Run tests
+nimble test
+
+# Run benchmarks
+nimble bench
+
+# Start server
+./build/baradadb
+```
+
+## BaraQL — Query Language
+
+BaraQL implements partial SQL:2023 coverage with extensions for graph, vector, and document queries.
+
+### Basic Queries
+
+```sql
+-- SELECT with WHERE, ORDER BY, LIMIT
+SELECT name, age FROM users WHERE age > 18 ORDER BY name LIMIT 10;
+
+-- INSERT
+INSERT users { name := 'Alice', age := 30 };
+
+-- UPDATE
+UPDATE users SET age = 31 WHERE name = 'Alice';
+
+-- DELETE
+DELETE FROM users WHERE name = 'Alice';
+```
+
+### Aggregates and Grouping
+
+```sql
+-- GROUP BY with HAVING
+SELECT department, count(*), avg(salary)
+FROM employees
+GROUP BY department
+HAVING count(*) > 5;
+
+-- Aggregates: count, sum, avg, min, max
+SELECT count(*), sum(amount), avg(price) FROM orders;
+```
+
+### JOINs
+
+```sql
+-- INNER JOIN
+SELECT u.name, o.total
+FROM users u
+INNER JOIN orders o ON u.id = o.user_id;
+
+-- LEFT JOIN
+SELECT u.name, o.total
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id;
+
+-- Multiple JOINs
+SELECT *
+FROM orders o
+JOIN users u ON o.user_id = u.id
+JOIN products p ON o.product_id = p.id;
+```
+
+### CTEs (Common Table Expressions)
+
+```sql
+-- Single CTE
+WITH active_users AS (
+  SELECT * FROM users WHERE active = true
+)
+SELECT * FROM active_users;
+
+-- Multiple CTEs
+WITH
+  recent AS (SELECT * FROM orders WHERE date > '2025-01-01'),
+  totals AS (SELECT user_id, sum(amount) as total FROM recent GROUP BY user_id)
+SELECT u.name, t.total FROM users u JOIN totals t ON u.id = t.user_id;
+```
+
+### Subqueries
+
+```sql
+-- Subquery in FROM
+SELECT * FROM (SELECT id, name FROM users WHERE active = true) AS active;
+
+-- EXISTS subquery
+SELECT name FROM users WHERE EXISTS (SELECT 1 FROM orders WHERE orders.user_id = users.id);
+```
+
+### CASE Expressions
+
+```sql
+SELECT name,
+  CASE
+    WHEN age < 18 THEN 'minor'
+    WHEN age < 65 THEN 'adult'
+    ELSE 'senior'
+  END AS category
+FROM users;
+```
+
+### Schema Definition
+
+```sql
+-- Create type with properties and links
+CREATE TYPE Person {
+  name: str,
+  age: int32
+};
+
+CREATE TYPE Movie {
+  title: str,
+  director: Person
+};
+```
+
+### JSON & JSONB
+
+```sql
+-- Create table with JSON column
+CREATE TABLE events (id INT PRIMARY KEY, payload JSON);
+
+-- Insert valid JSON
+INSERT INTO events (id, payload) VALUES (1, '{"action": "click"}');
+
+-- JSON path operators
+SELECT payload->'action' AS action_json,
+       payload->>'action' AS action_text
+FROM events;
+```
+
+### Full-Text Search (SQL)
+
+```sql
+-- Create FTS index
+CREATE INDEX idx_fts ON articles(body) USING FTS;
+
+-- Search with BM25 ranking
+SELECT * FROM articles WHERE body @@ 'machine learning';
+```
+
+### Set Operations
+
+```sql
+SELECT name FROM customers
+UNION ALL
+SELECT name FROM suppliers;
+```
+
+### Point-in-Time Recovery
+
+```sql
+RECOVER TO TIMESTAMP '2026-05-07T12:00:00';
+```
+
+## Storage Engines
+
+### LSM-Tree (Key-Value)
+
+The primary storage engine with write-optimized append-only log structure.
+
+```nim
+import barabadb/storage/lsm
+
+var db = newLSMTree("./data")
+db.put("key1", cast[seq[byte]]("value1"))
+let (found, value) = db.get("key1")
+db.close()
+```
+
+Components:
+- **MemTable** — in-memory sorted buffer
+- **WAL** — write-ahead log for durability
+- **SSTable** — sorted string tables on disk
+- **Bloom Filter** — probabilistic set membership
+- **Compaction** — size-tiered strategy with level management
+- **Page Cache** — LRU cache with hit rate tracking
+
+### B-Tree Index
+
+Ordered index for range scans and point lookups.
+
+```nim
+import barabadb/storage/btree
+
+var btree = newBTreeIndex[string, string]()
+btree.insert("key1", "value1")
+let values = btree.get("key1")
+let range = btree.scan("key_a", "key_z")
+```
+
+### Vector Engine
+
+Native HNSW and IVF-PQ indexes for similarity search with full SQL integration.
+
+```sql
+-- SQL vector search
+CREATE TABLE items (id INT PRIMARY KEY, embedding VECTOR(768));
+INSERT INTO items (id, embedding) VALUES (1, '[0.1, 0.2, 0.3, ...]');
+
+-- Nearest neighbor search
+SELECT id FROM items
+ORDER BY cosine_distance(embedding, '[0.1, 0.2, 0.3, ...]') ASC
+LIMIT 10;
+
+-- With HNSW index
+CREATE INDEX idx_vec ON items(embedding) USING hnsw;
+```
+
+Native Nim API:
+```nim
+import barabadb/vector/engine
+
+var idx = newHNSWIndex(dimensions = 128)
+idx.insert(1, @[1.0'f32, 0.0'f32, ...], {"category": "A"}.toTable)
+let results = idx.search(queryVector, k = 10)
+
+# With metadata filtering
+let filtered = idx.searchWithFilter(queryVector, k = 10,
+  filter = proc(meta: Table[string, string]): bool =
+    return meta.getOrDefault("category") == "A")
+```
+
+Features:
+- **SQL vector types** — `VECTOR(n)` with dimension validation
+- **SQL distance functions** — `cosine_distance()`, `euclidean_distance()`, `inner_product()`, `l1_distance()`, `l2_distance()`
+- **`<->` operator** — Euclidean distance nearest-neighbor shorthand
+- **HNSW index** — `CREATE INDEX ... USING hnsw` with automatic maintenance
+- **IVF-PQ** — inverted file index with product quantization
+- **Distance metrics** — cosine, euclidean, dot product, Manhattan
+- **Quantization** — scalar 8-bit/4-bit, product, binary
+- **Metadata filtering** — filter results by key-value pairs
+
+### Hybrid RAG Search
+
+Combine vector similarity with full-text search and reciprocal rank fusion (RRF):
+
+```sql
+-- Hybrid search: vector + FTS reranked with RRF
+SELECT hybrid_search('articles', 'embedding', 'body',
+                     'machine learning', '[0.1, 0.2, ...]', 10) AS results;
+
+-- With metadata pre-filtering (tenant isolation)
+SELECT hybrid_search_filtered('articles', 'embedding', 'body',
+                              'AI trends', '[0.1, 0.2, ...]', 10,
+                              'tenant_id', 'company-a') AS results;
+
+-- Re-rank existing results
+SELECT rerank('machine learning', '[{"id":"1","score":"0.9"}, ...]') AS boosted;
+```
+
+Features:
+- **Reciprocal Rank Fusion** — merges HNSW vector and BM25 FTS rankings
+- **Metadata pre-filtering** — HNSW search with relational column filters
+- **SQL functions** — `hybrid_search()`, `hybrid_search_ids()`, `hybrid_search_filtered()`, `rerank()`
+
+### Graph Engine
+
+Adjacency list storage with built-in algorithms.
+
+```nim
+import barabadb/graph/engine
+
+var g = newGraph()
+let alice = g.addNode("Person", {"name": "Alice"}.toTable)
+let bob = g.addNode("Person", {"name": "Bob"}.toTable)
+discard g.addEdge(alice, bob, "knows")
+
+# Traversal
+let bfs = g.bfs(alice)
+let dfs = g.dfs(alice)
+let path = g.shortestPath(alice, bob)
+let ranks = g.pageRank()
+```
+
+Algorithms:
+- **BFS/DFS** — breadth-first and depth-first traversal
+- **Dijkstra** — shortest weighted path
+- **PageRank** — node importance ranking
+- **Louvain** — community detection
+- **Pattern matching** — subgraph isomorphism search
+- **Similarity** — Jaccard / Adamic-Adar node similarity
+- **node2vec** — random-walk graph embeddings
+
+### Graph SQL Integration
+
+Graph data is queryable directly through BaraQL with `CREATE GRAPH`, `GRAPH_TABLE()`, and Cypher translation:
+
+```sql
+-- Create a native graph
+CREATE GRAPH social_network;
+
+-- Query via GRAPH_TABLE with algorithms
+SELECT * FROM GRAPH_TABLE(
+  social_network,
+  MATCH (u:User)-[:KNOWS]->(f:User)
+  ALGORITHM BFS
+  START u.id = 1
+  MAXDEPTH 3
+);
+
+-- Translate Cypher to BaraQL SQL
+SELECT cypher('MATCH (u:User)-[:KNOWS]->(f) RETURN f.name') AS result;
+```
+
+Features:
+- **Native graph DDL** — `CREATE GRAPH` / `DROP GRAPH`
+- **SQL GRAPH_TABLE** — `MATCH`, `ALGORITHM`, `START`, `END`, `MAXDEPTH`
+- **Auto-sync** — INSERT into `_nodes` / `_edges` syncs adjacency lists
+- **Cypher layer** — `cypher()` SQL function translates `MATCH...RETURN` to BaraQL
+
+## AI-Native Data Platform
+
+BaraDB is the first database engine with built-in AI primitives — not bolted-on, but native to the query engine. RAG pipelines, LLM integration, and AI agent tools run inside the database with full multi-tenant RLS isolation.
+
+### Natural Language → SQL
+
+Ask questions in plain English (or any language) and get executable BaraQL:
+
+```sql
+-- Generate SQL from natural language
+SELECT nl_to_sql('Show me the top 5 customers by total orders') AS query;
+
+-- Schema-aware prompt for LLM context
+SELECT schema_prompt('orders') AS context;
+```
+
+Features:
+- **Schema-aware** — includes table definitions, indexes, RLS policies in the prompt
+- **Validation layer** — wraps generated SQL in `LIMIT 0` to verify syntax before returning
+- **Self-correction** — on error, feeds the error back to the LLM for an automatic fix
+- **Tenant-aware** — respects `app.tenant_id` session variables
+- **OpenAI + Ollama** — configurable via `BARADB_LLM_ENDPOINT`, `BARADB_LLM_MODEL`, `BARADB_LLM_API_KEY`
+
+### Text Chunking & Auto-Embedding
+
+Built-in text chunking and embedding generation for RAG pipelines:
+
+```sql
+-- Chunk text into overlapping pieces
+SELECT chunk(long_article, 1024, 128) AS chunks;
+
+-- Generate embeddings via external API (OpenAI / Ollama)
+SELECT embed_text('Hello world') AS vector;
+```
+
+Features:
+- **chunk() SQL function** — recursive splitting by paragraph, sentence, or fixed size
+- **embed_text() SQL function** — HTTP embedding client with configurable endpoint
+- **Auto-embedding on INSERT** — when a `VECTOR` column is NULL but `TEXT` is present, embeddings generate automatically
+- **Configurable** via `BARADB_EMBED_ENDPOINT`, `BARADB_EMBED_MODEL`, `BARADB_EMBED_API_KEY`
+
+### MCP Server (Model Context Protocol)
+
+BaraDB exposes an MCP server over STDIO for AI agent integration:
+
+```bash
+./build/baramcp
+```
+
+Tools available to AI agents:
+- **query** — execute parameterized BaraQL with RLS isolation
+- **vector_search** — semantic HNSW search with metadata filtering
+- **schema_inspect** — explore tables, columns, indexes, and RLS policies
+
+```json
+{
+  "name": "vector_search",
+  "arguments": {
+    "table": "docs",
+    "column": "embedding",
+    "query_vector": [0.1, 0.2, ...],
+    "k": 10,
+    "tenant_id": "company-a"
+  }
+}
+```
+
+### LangChain Integration
+
+Native Vector Store implementations for Python and JavaScript:
+
+**Python:**
+```python
+from baradb.langchain_store import BaraDBStore
+
+store = BaraDBStore(
+    client=client,
+    table="docs",
+    embedding_function=OpenAIEmbeddings().embed_query,
+    tenant_id="company-a"
+)
+await store.add_texts(["hello world", "quick brown fox"])
+results = await store.similarity_search("hello", k=5)
+```
+
+**JavaScript:**
+```javascript
+const { BaraDBStore } = require('./baradb_langchain');
+
+const store = new BaraDBStore({
+  client,
+  table: 'docs',
+  embeddingFunction: async (text) => [...],
+  tenantId: 'company-a'
+});
+await store.addDocuments([{ pageContent: 'hello world' }]);
+const results = await store.similaritySearch('hello', 5);
+```
+
+Features:
+- **Hybrid search** — uses `hybrid_search()` / `hybrid_search_filtered()` under the hood
+- **MMR reranking** — `max_marginal_relevance_search()` for diverse results
+- **Multi-tenant** — respects `tenant_id` with RLS isolation
+- **Metadata filters** — pre-filter vector search by relational columns
+
+### Chat Message History
+
+Store conversation threads in BaraDB with RLS isolation:
+
+```python
+from baradb.chat_history import BaraDBChatHistory
+
+history = BaraDBChatHistory(
+    client=client,
+    session_id="session-123",
+    tenant_id="company-a",
+    user_id="user-42"
+)
+history.add_user_message("Hello, AI!")
+history.add_ai_message("Hello, how can I help?")
+messages = history.messages
+```
+
+### Full-Text Search
+
+Inverted index with BM25 and TF-IDF ranking.
+
+```nim
+import barabadb/fts/engine
+
+var idx = newInvertedIndex()
+idx.addDocument(1, "Nim is a fast programming language")
+idx.addDocument(2, "Python is popular for data science")
+
+# BM25 search
+let results = idx.search("programming language")
+
+# TF-IDF search
+let tfidf = idx.searchTfidf("programming language")
+
+# Fuzzy search (typo tolerance)
+let fuzzy = idx.fuzzySearch("programing", maxDistance = 2)
+
+# Wildcard search
+let wild = idx.regexSearch("prog*")
+```
+
+### Unified Search Engine
+
+A high-performance search module combining heap-optimized HNSW, segment-based
+inverted indexing, boolean queries, phrase/proximity search, n-gram fuzzy
+matching, faceted search, and multilingual stemming into a single
+`UnifiedSearchEngine` API.
+
+```nim
+import barabadb/search/engine
+
+var se = newUnifiedSearchEngine()
+
+# Index documents with fields and facets
+se.addDocument(1, "Introduction to Machine Learning",
+  fields = {"category": "AI", "lang": "en"}.toTable)
+se.addDocument(2, "Deep Learning with Neural Networks",
+  fields = {"category": "AI", "lang": "en"}.toTable)
+se.addDocument(3, "Nim Programming Language Guide",
+  fields = {"category": "programming", "lang": "en"}.toTable)
+
+# Boolean query (AND / OR / NOT / ranges)
+let boolResults = se.booleanSearch("machine AND learning")
+
+# Phrase search with proximity
+let phraseResults = se.phraseSearch("deep learning", slop = 2)
+
+# N-gram fuzzy search (typo-tolerant)
+let fuzzyResults = se.ngramSearch("machne lerning", n = 3)
+
+# Faceted search — filter and aggregate by field values
+let facetResults = se.facetedSearch("learning",
+  facetFields = @["category", "lang"])
+
+# Stemming in multiple languages (Porter2: EN, BG, DE, FR, RU)
+let stemmed = se.search("running", stemmer = porter2EN)
+```
+
+Features:
+- **Heap-optimized HNSW** — priority-queue-based graph traversal, 2.4x faster than baseline
+- **Segment-based inverted index** — partitioned posting lists for concurrent indexing
+- **Phrase and proximity search** — ordered phrase matching with configurable slop
+- **Boolean query parser** — AND, OR, NOT, range expressions (`price:[10 TO 100]`)
+- **N-gram fuzzy search** — character n-gram index for typo-tolerant retrieval
+- **Faceted search** — filter results and aggregate counts by field values
+- **Porter2 stemmers** — English, Bulgarian, German, French, Russian
+- **UnifiedSearchEngine API** — single entry point combining all search modes
+- **Search benchmarks** — `benchmarks/bench_search.nim` for reproducible measurement
+
+### Columnar Engine
+
+Column-oriented storage for analytical queries.
+
+```nim
+import barabadb/core/columnar
+
+var batch = newColumnBatch()
+var ageCol = batch.addInt64Col("age")
+var nameCol = batch.addStringCol("name")
+ageCol.appendInt64(25)
+nameCol.appendString("Alice")
+
+# Aggregates
+echo ageCol.sumInt64()
+echo ageCol.avgInt64()
+
+# Encoding
+let rle = rleEncode(@[1'i64, 1, 1, 2, 2, 3])
+let dict = dictEncode(@["apple", "banana", "apple"])
+```
+
+## Transactions
+
+MVCC with snapshot isolation and deadlock detection.
+
+```nim
+import barabadb/core/mvcc
+
+var tm = newTxnManager()
+let txn = tm.beginTxn()
+discard tm.write(txn, "key1", cast[seq[byte]]("value1"))
+discard tm.write(txn, "key2", cast[seq[byte]]("value2"))
+
+# Savepoint
+tm.savepoint(txn)
+discard tm.write(txn, "key3", cast[seq[byte]]("value3"))
+discard tm.rollbackToSavepoint(txn)  # undo key3
+
+discard tm.commit(txn)
+```
+
+## Protocol
+
+### Binary Wire Protocol
+
+16 message types with big-endian serialization.
+
+```nim
+import barabadb/protocol/wire
+
+let msg = makeQueryMessage(1, "SELECT * FROM users")
+let ready = makeReadyMessage(1)
+let error = makeErrorMessage(1, 42, "Syntax error")
+```
+
+### HTTP/REST API
+
+```nim
+import barabadb/protocol/http
+
+var router = newHttpRouter(port = 9470)
+router.get("/api/users", proc(req: Request): Future[JsonNode] {.async.} =
+  return %*[{"id": 1, "name": "Alice"}])
+```
+
+### WebSocket Streaming
+
+```nim
+import barabadb/protocol/websocket
+
+var server = newWsServer(port = 9471)
+server.onMessage = proc(ws: WebSocket, data: seq[byte]) {.gcsafe.} =
+  echo "Received: ", cast[string](data)
+asyncCheck server.run()
+```
+
+### Authentication
+
+```nim
+import barabadb/protocol/auth
+
+var am = newAuthManager("secret-key")
+let token = am.createToken(JWTClaims(sub: "user1", role: "admin"))
+let result = am.validateCredentials(AuthCredentials(authMethod: amToken, payload: token))
+```
+
+### Rate Limiting
+
+```nim
+import barabadb/protocol/ratelimit
+
+var rl = newRateLimiter(rlaTokenBucket, globalRate = 1000, perClientRate = 100)
+if rl.allowRequest("client-123"):
+  echo "Request allowed"
+```
+
+## Schema System
+
+```nim
+import barabadb/schema/schema
+
+var s = newSchema()
+
+let person = newType("Person")
+person.addProperty("name", "str", required = true)
+person.addProperty("age", "int32")
+s.addType("default", person)
+
+# Inheritance
+let employee = newType("Employee")
+employee.setBases(@["Person"])
+employee.addProperty("department", "str")
+s.addType("default", employee)
+
+# Resolve inheritance — Employee gets name, age, department
+let resolved = s.resolveInheritance(employee)
+
+# Diff schemas
+let diff = s.diff(oldSchema, newSchema)
+```
+
+## Distributed
+
+### Raft Consensus
+
+3-node cluster over TCP (env-driven). SQL DML and schema DDL go through the
+raft log on the **default** database. See **[docs/en/distributed.md](docs/en/distributed.md)**
+for full env vars, forwarding, compaction, and metrics.
+
+```bash
+# Node n1 example
+export BARADB_PORT=46010
+export BARADB_RAFT_ENABLED=true
+export BARADB_RAFT_NODE_ID=n1
+export BARADB_RAFT_PORT=46101
+export BARADB_RAFT_PEERS=n1@127.0.0.1:46101,n2@127.0.0.1:46102,n3@127.0.0.1:46103
+export BARADB_RAFT_CLIENT_PEERS=n1@127.0.0.1:46010,n2@127.0.0.1:46020,n3@127.0.0.1:46030
+export BARADB_DATA_DIR=./data/n1
+./build/baradadb
+# Health / metrics: HTTP on BARADB_PORT+440 → curl localhost:46450/health
+```
+
+```nim
+import barabadb/core/raft
+
+var cluster = newRaftCluster()
+cluster.addNode("node1")
+cluster.addNode("node2")
+cluster.addNode("node3")
+
+let n1 = cluster.nodes["n1"]
+n1.becomeCandidate()
+n1.becomeLeader()
+let entry = n1.appendLog("SET key1 value1")
+```
+
+### Sharding
+
+```nim
+import barabadb/core/sharding
+
+var router = newShardRouter(ShardConfig(numShards: 4, replicas: 2, strategy: ssHash))
+router.rebalance(@["node1", "node2", "node3"])
+let shard = router.getShard("user_123")
+```
+
+### Replication
+
+```nim
+import barabadb/core/replication
+
+var rm = newReplicationManager(rmSync)
+rm.addReplica(newReplica("r1", "10.0.0.1", 9472))
+rm.connectReplica("r1")
+let lsn = rm.writeLsn(@[1'u8, 2, 3])
+rm.ackLsn("r1", lsn)  # blocks until acked
+```
+
+## User Defined Functions
+
+```nim
+import barabadb/query/udf
+
+var reg = newUDFRegistry()
+reg.registerStdlib()  # abs, sqrt, pow, lower, upper, len, trim, substr, toString, toInt
+
+# Custom function
+reg.register("greet", @[UDFParam(name: "name", typeName: "str")],
+  "str", proc(args: seq[Value]): Value =
+    return Value(kind: vkString, strVal: "Hello, " & args[0].strVal & "!"))
+```
+
+## Performance Benchmarks
+
+BaraDB is optimized for high throughput across all storage engines. Below are
+**real measured results** on AMD Ryzen 9 5900X, NVMe SSD:
+
+### BaraDB Standalone
+
+| Engine | Operation | Throughput | Latency |
+|--------|-----------|------------|---------|
+| **LSM-Tree** | Write 100K keys | ~32.2K ops/s | 31.0 µs/op |
+| **LSM-Tree** | Read 100K keys | ~4.0M ops/s | 0.25 µs/op |
+| **B-Tree** | Insert 100K keys | ~2.5M ops/s | 0.40 µs/op |
+| **B-Tree** | Point lookup 100K | ~2.3M ops/s | 0.43 µs/op |
+| **Vector (HNSW)** | Insert 10K vectors (dim=128) | ~543 ops/s | 1.8 ms/op |
+| **Vector (HNSW)** | Search top-10 | ~2.6 ms/query | — |
+| **Vector (SIMD)** | Cosine distance (dim=768, n=10K) | ~1.17M ops/s | 0.85 µs/op |
+| **FTS** | Index 10K documents | ~120K docs/s | 8.3 µs/doc |
+| **FTS** | BM25 search (1K queries) | ~1.36K queries/s | 0.73 ms/query |
+| **Graph** | Add 1K nodes | ~931K nodes/s | 1.1 µs/node |
+| **Graph** | BFS traversal (100×) | ~5.6K traversals/s | 179 µs/traversal |
+| **Graph** | PageRank (1K nodes, 5K edges) | ~1.6K graphs/s | 6.1 ms/graph |
+
+### BaraDB vs PostgreSQL (Real Comparison)
+
+| Test | PostgreSQL | BaraDB | Speedup |
+|------|-----------|--------|---------|
+| KV Write (100K) | 16.82K/s | 33.24K/s | **2.0x** |
+| KV Read (100K) | 15.08K/s | 3.88M/s | **257.0x** |
+| BTree Insert (100K) | 17.66K/s | 2.50M/s | **141.6x** |
+| BTree Get (100K) | 14.50K/s | 2.64M/s | **182.3x** |
+| BTree Scan (1K ranges) | 2.39K/s | 7.97M/s | **3340.9x** |
+| FTS Index (10K docs) | 17.98K/s | 123.65K/s | **6.9x** |
+| FTS Search (1K queries) | 784.12/s | 1.34K/s | **1.7x** |
+
+**Overall:** BaraDB is **6.8x faster** for in-process/embedded workloads.
+*(Note: PostgreSQL includes network round-trip overhead. BaraDB now outperforms PostgreSQL on all tested metrics including FTS after optimizations.)*
+
+Run benchmarks yourself:
+
+```bash
+nim c -d:ssl -d:release -r benchmarks/bench_all.nim
+```
+
+## Docker Deployment
+
+### Quick Start
+
+```bash
+docker build -t baradb:latest .
+docker compose up -d
+```
+
+### Docker Files
+
+| File | Purpose |
+|------|---------|
+| `Dockerfile` | Production-ready image (pre-built binary) |
+| `Dockerfile.source` | Build from source |
+| `docker-compose.yml` | Development |
+| `docker-compose.prod.yml` | Production with TLS, backups, resource limits |
+| `docker-entrypoint.sh` | Container initialization |
+
+### Production
+
+```bash
+docker compose -f docker-compose.prod.yml up -d
+```
+
+See [docs/en/docker.md](docs/en/docker.md) for full Docker documentation.
+
+### Ports
+
+| Port | Description |
+|------|-------------|
+| `9472` | TCP binary protocol |
+| `9912` | HTTP/REST API (TCP port + 440) |
+| `9913` | WebSocket (TCP port + 441) |
+
+### Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `BARADB_ADDRESS` | `0.0.0.0` | Bind address |
+| `BARADB_PORT` | `9472` | TCP binary protocol port |
+| `BARADB_DATA_DIR` | `/data` | Data directory |
+| `BARADB_LOG_LEVEL` | `info` | Log level |
+| `BARADB_TLS_ENABLED` | `false` | Enable TLS |
+| `BARADB_CERT_FILE` | — | TLS certificate path |
+| `BARADB_KEY_FILE` | — | TLS private key path |
+
+## Built with BaraDB
+
+### NodeBara
+
+**[NodeBara](https://codeberg.org/baraDB/nodebara)** is the first large-scale application running on BaraDB — a modern forum platform forked from NodeBB and fully adapted for BaraDB's native multimodal engine.
+
+- **Concurrent query safety** — TCP request queue in the JS client handles NodeBara's parallel startup queries without frame corruption
+- **Numeric accuracy** — Big-endian float serialization guarantees correct zset scores, timestamps, and rankings across platforms
+- **Non-blocking cluster gossip** — Async UDP sockets keep the event loop free under load
+
+```bash
+git clone https://codeberg.org/baraDB/nodebara
+cd nodebara
+npm install
+npm run setup   # uses BaraDB as the default database
+```
+
+## Client SDKs
+
+BaraDB provides official clients for multiple languages:
+
+### JavaScript/TypeScript
+
+```bash
+npm install baradb
+```
+
+```javascript
+import { Client } from 'baradb';
+const client = new Client('localhost', 9472);
+await client.connect();
+const result = await client.query("SELECT name FROM users WHERE age > 18");
+console.log(result.rows);
+await client.close();
+```
+
+### Python
+
+```bash
+pip install baradb
+```
+
+```python
+from baradb import Client
+client = Client("localhost", 9472)
+client.connect()
+result = client.query("SELECT name FROM users WHERE age > 18")
+print(result.rows)
+client.close()
+```
+
+### Nim (Embedded)
+
+```nim
+import barabadb
+
+var db = newLSMTree("./data")
+db.put("key", cast[seq[byte]]("value"))
+let (found, val) = db.get("key")
+db.close()
+```
+
+### Rust
+
+```toml
+[dependencies]
+baradb = "0.1"
+```
+
+```rust
+use baradb::Client;
+let mut client = Client::connect("localhost:9472").await?;
+let result = client.query("SELECT name FROM users").await?;
+```
+
+## Security
+
+### TLS/SSL
+
+BaraDB supports TLS out of the box. If no certificate is provided, it auto-generates
+a self-signed one on startup:
+
+```bash
+# With custom certificates
+BARADB_TLS_ENABLED=true \
+  BARADB_CERT_FILE=/etc/baradb/server.crt \
+  BARADB_KEY_FILE=/etc/baradb/server.key \
+  ./build/baradadb
+```
+
+### Authentication
+
+JWT-based authentication with role-based access control:
+
+```nim
+import barabadb/protocol/auth
+
+var am = newAuthManager("secret-key")
+let token = am.createToken(JWTClaims(sub: "user1", role: "admin"))
+let result = am.validateCredentials(...)
+```
+
+### Rate Limiting
+
+Token-bucket rate limiting per client and globally:
+
+```nim
+var rl = newRateLimiter(rlaTokenBucket, globalRate = 10000, perClientRate = 1000)
+```
+
+## Configuration
+
+BaraDB can be configured via environment variables or a config file:
+
+```bash
+# Environment variables
+export BARADB_PORT=9472
+export BARADB_HTTP_PORT=9470
+export BARADB_DATA_DIR=/var/lib/baradb
+export BARADB_LOG_LEVEL=info
+export BARADB_COMPACTION_INTERVAL=60000
+
+# Or create baradb.conf
+port = 9472
+http_port = 9470
+data_dir = "/var/lib/baradb"
+log_level = "info"
+compaction_interval_ms = 60000
+```
+
+## Monitoring & Observability
+
+### Built-in Metrics
+
+BaraDB exposes operational metrics via the HTTP API:
+
+```bash
+curl http://localhost:9470/metrics
+```
+
+Example response:
+
+```json
+{
+  "queries_total": 152340,
+  "queries_per_second": 1240,
+  "storage_lsm_size_bytes": 2147483648,
+  "storage_sstables": 12,
+  "cache_hit_rate": 0.94,
+  "active_connections": 42,
+  "txns_active": 7,
+  "txns_committed": 89123,
+  "txns_rolled_back": 12
+}
+```
+
+### OpenTelemetry Tracing
+
+Built-in lightweight tracing with OTLP/HTTP export:
+
+```nim
+import barabadb/core/tracing
+
+defaultTracer.enable()
+let span = defaultTracer.beginSpan("SELECT users")
+# ... query execution ...
+defaultTracer.endSpan(span)
+
+# Export to Jaeger/OTLP collector
+discard defaultTracer.exportOtlp("http://localhost:4318/v1/traces")
+```
+
+### Health Check
+
+```bash
+curl http://localhost:9470/health
+```
+
+### Logging
+
+Structured logging with configurable levels (`debug`, `info`, `warn`, `error`):
+
+```bash
+BARADB_LOG_LEVEL=debug ./build/baradadb
+```
+
+## Backup & Recovery
+
+BaraDB includes a built-in backup manager that creates compressed tar.gz
+snapshots of your data directory. The manager supports **online backups**
+(server does not need to stop), **integrity verification**, **retention policies**,
+**dry-run restore previews**, **automatic rollback protection**, and a full
+**restore history log**.
+
+### Quick Reference
+
+| Command | Purpose |
+|---------|---------|
+| `backup backup` | Create a new snapshot |
+| `backup restore` | Restore data from a snapshot (auto-verifies first) |
+| `backup list` | Show all snapshots |
+| `backup verify` | Check archive integrity without extracting |
+| `backup cleanup` | Delete old snapshots, keep N most recent |
+| `backup history` | Show log of all restore operations |
+| `backup help` | Show full help text |
+
+### Build the Backup Tool
+
+```bash
+nim c -o:build/backup src/barabadb/core/backup.nim
+```
+
+For production use, compile with release optimizations:
+
+```bash
+nim c -d:release -o:build/backup src/barabadb/core/backup.nim
+```
+
+### Creating Backups
+
+**Basic backup** — creates `backup_<timestamp>.tar.gz` in the current directory:
+
+```bash
+./build/backup backup
+```
+
+**Custom output path**:
+
+```bash
+./build/backup backup --output=/backups/prod_$(date +%F).tar.gz
+```
+
+**Maximum compression** (slower, smaller file):
+
+```bash
+./build/backup backup --level=9
+```
+
+**Exclude WAL logs and temporary files**:
+
+```bash
+./build/backup backup \
+  --exclude="*.log" \
+  --exclude="wal/*" \
+  --exclude="tmp/*"
+```
+
+**Verbose output** (shows tar command and progress):
+
+```bash
+./build/backup backup --verbose
+```
+
+### Listing Backups
+
+```bash
+./build/backup list
+```
+
+Example output:
+
+```
+Found 3 backup(s):
+--------------------------------------------------------------------------------
+#   Timestamp            Size        Path
+--------------------------------------------------------------------------------
+1   2026-05-06 23:04:56  12.45 MB    backup_1715011200.tar.gz
+2   2026-05-05 12:30:00  11.20 MB    backup_1714921800.tar.gz
+3   2026-05-04 08:15:22  10.89 MB    backup_1714834522.tar.gz
+--------------------------------------------------------------------------------
+```
+
+### Verifying Backups
+
+Always verify a snapshot before restoring, especially after transferring it
+over the network. The restore command does this automatically, but you can
+also check manually:
+
+```bash
+./build/backup verify --input=backup_1715011200.tar.gz
+```
+
+A valid archive prints:
+
+```
+Archive is valid: backup_1715011200.tar.gz (12.45 MB)
+```
+
+A corrupted archive prints an error and exits with code 1.
+
+### Restoring from Backup
+
+The restore command follows a **safe restore workflow**:
+
+1. **Verify** archive integrity automatically
+2. **Prompt** for confirmation (unless `--force` is used)
+3. **Move** existing data to `data/server.old_<timestamp>`
+4. **Extract** the archive
+5. **Rollback** automatically if extraction fails
+6. **Log** the operation to `backup_history.log`
+
+> ⚠️ **WARNING:** Restore replaces the existing data directory. The old data
+> is automatically moved to `data/server.old_<timestamp>` before extraction.
+> If extraction fails, the tool attempts an automatic rollback to the old data.
+
+**Interactive restore** (asks for confirmation):
+
+```bash
+./build/backup restore --input=backup_1715011200.tar.gz
+```
+
+You will be prompted:
+
+```
+Verifying archive before restore...
+Archive is valid: backup_1715011200.tar.gz (12.45 MB)
+WARNING: This will REPLACE the data in: data/server
+Continue? [y/N]
+```
+
+**Force restore** — skip confirmation (for scripts and automation):
+
+```bash
+./build/backup restore --input=backup.tar.gz --force
+```
+
+**Dry-run restore** — preview what would happen without making changes:
+
+```bash
+./build/backup restore --input=backup.tar.gz --dry-run
+```
+
+Output:
+
+```
+DRY-RUN: The following actions would be performed:
+  1. Verify archive integrity: backup.tar.gz
+  2. Move existing data to:    data/server.old_1778099200
+  3. Extract archive to:       data/server
+  Archive size: 12.45 MB
+  Free space:   45.20 GB
+```
+
+**Restore to a different data directory**:
+
+```bash
+./build/backup restore --input=backup.tar.gz --data-dir=data/recovered
+```
+
+**Verbose restore** (shows all steps and disk space check):
+
+```bash
+./build/backup restore --input=backup.tar.gz --verbose
+```
+
+### Restore History
+
+Every restore operation is logged to `backup_history.log` in the current
+directory. View the history:
+
+```bash
+./build/backup history
+```
+
+Example output:
+
+```
+Restore history:
+--------------------------------------------------------------------------------
+[2026-05-06 23:15:00] SUCCESS restore from /backups/backup_1715011200.tar.gz to /opt/baradb/data/server
+[2026-05-06 22:30:15] FAILED  restore from /backups/backup_1715007000.tar.gz to /opt/baradb/data/server
+[2026-05-05 08:00:00] DRY-RUN restore from /backups/backup_1714900000.tar.gz to /opt/baradb/data/server
+--------------------------------------------------------------------------------
+```
+
+### Cleanup & Retention
+
+Delete old snapshots automatically, keeping only the N most recent:
+
+```bash
+# Keep last 5 snapshots (default)
+./build/backup cleanup
+
+# Keep last 3 snapshots
+./build/backup cleanup --keep=3
+
+# Verbose — shows which files are deleted
+./build/backup cleanup --keep=3 --verbose
+```
+
+### Automated Backups with Cron
+
+Add to your crontab for daily backups at 2 AM:
+
+```bash
+# Edit crontab
+crontab -e
+
+# Add this line for daily backups
+0 2 * * * cd /opt/baradb && ./build/backup backup --output=/backups/baradb_$(date +\%F).tar.gz --level=6 >> /var/log/baradb-backup.log 2>&1
+
+# Weekly cleanup — keep last 7 snapshots
+0 3 * * 0 cd /opt/baradb && ./build/backup cleanup --keep=7 >> /var/log/baradb-backup.log 2>&1
+```
+
+### Disaster Recovery Best Practices
+
+1. **3-2-1 Rule:** Keep 3 copies, on 2 different media, with 1 offsite.
+2. **Verify regularly:** Run `backup verify` on archived snapshots monthly.
+3. **Test restores:** Perform a dry-run restore (`--dry-run`) weekly and a
+   full test restore to a staging environment monthly.
+4. **Monitor disk space:** The restore command warns if free space is less
+   than 2× the archive size.
+5. **Keep old data:** After restore, the previous data is preserved as
+   `data/server.old_<timestamp>`. Only delete it after confirming the new
+   data works.
+6. **Log audit trail:** Use `backup history` to track all restore operations.
+
+### Nim API
+
+You can also use the backup module programmatically:
+
+```nim
+import barabadb/core/backup
+
+# Create a snapshot
+let ok = backupDataDir("data/server", "snapshot.tar.gz")
+if not ok:
+  echo "Backup failed"
+
+# List existing snapshots
+let backups = listBackups("data/server")
+for b in backups:
+  echo b.path, " → ", formatBytes(b.size)
+
+# Verify without extracting
+let valid = verifyArchive("snapshot.tar.gz")
+
+# Restore with rollback protection
+let restored = restoreDataDir("snapshot.tar.gz", "data/server")
+
+# Dry-run restore — preview without changes
+let preview = restoreDataDir("snapshot.tar.gz", "data/server", dryRun = true)
+
+# Cleanup retention
+cleanupOldBackups("data/server", keepLast = 5)
+
+# Read restore history
+for entry in readHistory():
+  echo entry
+```
+
+### Full Option Reference
+
+| Option | Short | Default | Description |
+|--------|-------|---------|-------------|
+| `--data-dir` | `-d` | `data/server` | Path to the data directory |
+| `--output` | `-o` | auto-generated | Destination path for new backup |
+| `--input` | `-i` | — | Source archive for restore/verify |
+| `--keep` | `-k` | `5` | Number of snapshots to retain |
+| `--exclude` | `-e` | — | Exclude pattern (repeatable) |
+| `--level` | `-l` | `6` | Gzip compression 0-9 |
+| `--dry-run` | — | off | Preview restore without changes |
+| `--force` | `-f` | off | Skip confirmation prompts |
+| `--verbose` | `-v` | off | Detailed progress output |
+| `--help` | `-h` | — | Show help text |
+
+### Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | Success |
+| `1` | Error (invalid args, missing files, verification or extraction failure) |
+
+### Point-in-Time Recovery (WAL)
+
+For fine-grained recovery, replay the WAL from a checkpoint:
+
+```bash
+./build/baradadb --recover --wal-dir=./wal --checkpoint=/backup/snapshot.tar.gz
+```
+
+### Cross-Modal Queries
+
+One of BaraDB's unique strengths is querying across storage engines in a single
+BaraQL statement:
+
+```sql
+-- Find articles about "machine learning" similar to a vector
+SELECT a.title, a.score
+FROM articles a
+WHERE MATCH(a.body) AGAINST('machine learning')
+ORDER BY cosine_distance(a.embedding, [0.1, 0.2, ...])
+LIMIT 10;
+
+-- Graph + vector: find friends with similar taste
+MATCH (u:User)-[:KNOWS]->(friend:User)
+WHERE u.name = 'Alice'
+ORDER BY cosine_distance(friend.taste_vector, u.taste_vector)
+RETURN friend.name;
+
+-- Full-text + aggregate: top departments by article count
+SELECT department, count(*) as articles
+FROM docs
+WHERE MATCH(content) AGAINST('Nim programming')
+GROUP BY department
+ORDER BY articles DESC;
+```
+
+## Troubleshooting
+
+### Port Already in Use
+
+```
+Error: unhandled exception: Address already in use
+```
+
+**Fix:** Change the port or kill the existing process:
+
+```bash
+BARADB_PORT=5433 ./build/baradadb
+# or
+lsof -ti:9472 | xargs kill -9
+```
+
+### SSL Compilation Error
+
+```
+Error: BaraDB requires SSL support. Compile with -d:ssl
+```
+
+**Fix:** Always compile with `-d:ssl`:
+
+```bash
+nim c -d:ssl -d:release -o:build/baradadb src/baradadb.nim
+```
+
+### Permission Denied on Data Directory
+
+**Fix:** Ensure the data directory exists and is writable:
+
+```bash
+mkdir -p ./data && chmod 755 ./data
+```
+
+### High Memory Usage
+
+**Fix:** Tune the MemTable size and page cache:
+
+```bash
+export BARADB_MEMTABLE_SIZE_MB=64
+export BARADB_CACHE_SIZE_MB=256
+```
+
+## Project Structure
+
+```
+src/barabadb/
+├── core/
+│   ├── types.nim         # Type system (17 native types)
+│   ├── config.nim        # Configuration loader (env + file)
+│   ├── server.nim        # Async TCP wire-protocol server
+│   ├── httpserver.nim    # Multi-threaded HTTP/REST server
+│   ├── websocket.nim     # WebSocket streaming server
+│   ├── mvcc.nim          # Multi-version concurrency control
+│   ├── deadlock.nim      # Wait-for graph deadlock detection
+│   ├── raft.nim          # Raft consensus (leader election + log replication)
+│   ├── sharding.nim      # Hash / range / consistent-hash sharding
+│   ├── replication.nim   # Sync / async / semi-sync replication
+│   ├── gossip.nim        # SWIM-like membership & failure detection
+│   ├── disttxn.nim       # Two-phase commit distributed transactions
+│   ├── crossmodal.nim    # Cross-engine query federation
+│   ├── columnar.nim      # Columnar storage + RLE/dict encoding
+│   ├── backup.nim        # Online snapshot & point-in-time recovery
+│   ├── recovery.nim      # WAL replay & crash recovery
+│   ├── logging.nim       # Structured logging
+│   └── fileops.nim       # Async file I/O utilities
+├── storage/
+│   ├── lsm.nim           # LSM-Tree storage engine (MemTable + SSTable)
+│   ├── btree.nim         # B-Tree ordered index
+│   ├── wal.nim           # Write-ahead log for durability
+│   ├── bloom.nim         # Bloom filter for SSTable skip
+│   ├── compaction.nim    # Size-tiered compaction + LRU page cache
+│   └── mmap.nim          # Memory-mapped file I/O
+├── query/
+│   ├── lexer.nim         # Tokenizer (80+ token types)
+│   ├── parser.nim        # Recursive descent BaraQL parser
+│   ├── ast.nim           # Abstract syntax tree (25+ node kinds)
+│   ├── ir.nim            # Intermediate representation & execution plans
+│   ├── codegen.nim       # IR → storage-engine code generation
+│   ├── executor.nim      # Query execution engine
+│   ├── adaptive.nim      # Adaptive query optimization
+│   └── udf.nim           # User-defined function registry
+├── vector/
+│   ├── engine.nim        # HNSW + IVF-PQ index implementations
+│   ├── quant.nim         # Scalar / product / binary quantization
+│   └── simd.nim          # SIMD-optimized distance functions
+├── graph/
+│   ├── engine.nim        # Adjacency-list graph + BFS/DFS/Dijkstra/PageRank
+│   ├── community.nim     # Louvain community detection
+│   └── cypher.nim        # Cypher-to-SQL translator + query parser
+├── ai/
+│   ├── llm.nim           # LLM client for NL→SQL (OpenAI / Ollama)
+│   ├── chunk.nim         # Text chunking for RAG pipelines
+│   └── embed.nim         # HTTP embedding client (OpenAI / Ollama)
+├── mcp/
+│   └── server.nim        # MCP STDIO server (JSON-RPC 2.0 AI tools)
+├── fts/
+│   ├── engine.nim        # Inverted index + BM25 + TF-IDF
+│   └── multilang.nim     # Tokenizers for EN, BG, DE, FR, RU
+├── search/
+│   ├── engine.nim        # UnifiedSearchEngine — single entry point
+│   ├── hnsw_opt.nim      # Heap-optimized HNSW (priority-queue traversal)
+│   ├── inverted.nim      # Segment-based inverted index
+│   ├── phrase.nim        # Phrase and proximity search
+│   ├── boolean.nim       # Boolean query parser (AND/OR/NOT/ranges)
+│   ├── ngram.nim         # N-gram fuzzy search
+│   ├── facet.nim         # Faceted search (field filtering + aggregation)
+│   ├── stemmer.nim       # Porter2 stemmers (EN/BG/DE/FR/RU)
+│   └── priority_queue.nim # Min-heap priority queue for HNSW candidates
+├── protocol/
+│   ├── wire.nim          # Binary wire protocol (16 message types)
+│   ├── http.nim          # HTTP/REST JSON router
+│   ├── websocket.nim     # WebSocket frame handler
+│   ├── pool.nim          # Connection pool
+│   ├── auth.nim          # JWT + HMAC authentication
+│   ├── ratelimit.nim     # Token-bucket rate limiter
+│   ├── ssl.nim           # TLS/SSL certificate management
+│   └── zerocopy.nim      # Zero-copy buffer management
+├── schema/
+│   └── schema.nim        # Strong types, links, inheritance, migrations
+├── client/
+│   ├── client.nim        # Nim binary-protocol client
+│   └── fileops.nim       # Client-side file helpers
+└── cli/
+    └── shell.nim         # Interactive BaraQL REPL
+```
+
+## Tests
+
+```bash
+# Run all tests (448 tests, 60+ suites)
+nim c --path:src -r tests/test_all.nim
+
+# Run benchmarks
+nim c -d:release -r benchmarks/bench_all.nim
+```
+
+## Roadmap Progress
+
+| Phase | Status | Progress | Since |
+|-------|--------|----------|-------|
+| Core (LSM + B-Tree + compaction + cache + mmap) | ✅ | 100% | v1.0.0 |
+| BaraQL (GROUP BY + JOIN + CTE + aggregates + codegen + UDF) | ✅ | 100% | v1.0.0 |
+| Multimodal storage (KV + graph + vector + columnar + FTS) | ✅ | 100% | v1.0.0 |
+| Transactions (MVCC + deadlock + WAL + savepoints) | ✅ | 100% | v1.0.0 |
+| Protocol (binary + HTTP + WS + pool + auth + ratelimit) | ✅ | 100% | v1.0.0 |
+| Schema (inheritance + computed + migrations) | ✅ | 100% | v1.0.0 |
+| Vector engine (HNSW + IVF-PQ + quant + SIMD + metadata) | ✅ | 100% | v1.0.0 |
+| Vector SQL Integration (VECTOR type, distance functions, <->, HNSW indexes) | ✅ | 100% | v1.1.6 |
+| Graph engine (all algorithms + pattern matching) | ✅ | 100% | v1.0.0 |
+| FTS (BM25 + TF-IDF + fuzzy + regex + multi-language) | ✅ | 100% | v1.0.0 |
+| CLI shell | ✅ | 100% | v1.0.0 |
+| Cluster (Raft + sharding + replication + gossip) | ✅ | 100% | v1.0.0 |
+| Cross-modal queries | ✅ | 100% | v1.0.0 |
+| Backup & Recovery | ✅ | 100% | v1.0.0 |
+| Client SDKs (JS, Python, Nim, Rust) | ✅ | 100% | v1.0.0 |
+| Graph SQL Integration (CREATE GRAPH, GRAPH_TABLE, Cypher) | ✅ | 100% | v1.1.6 |
+| Hybrid RAG Search (vector + FTS + RRF reranking) | ✅ | 100% | v1.1.6 |
+| AI Chunking & Auto-Embedding (`chunk()`, `embed_text()`) | ✅ | 100% | v1.1.6 |
+| NL→SQL (`nl_to_sql()`, `schema_prompt()`) | ✅ | 100% | v1.1.6 |
+| MCP Server (STDIO JSON-RPC for AI agents) | ✅ | 100% | v1.1.6 |
+| LangChain Vector Store (Python + JS) | ✅ | 100% | v1.1.6 |
+| Production Hardening (prop tests, fuzz tests, thread safety) | ✅ | 100% | v1.1.6 |
+| Unified Search Engine (HNSW-opt + inverted + boolean + phrase + n-gram + facets + stemmers) | ✅ | 100% | v1.2.0 |
+
+## Current Limitations
+
+While BaraDB is production-ready, a few advanced optimizations and edge-case
+features are still being refined:
+
+| Component | Status | Note |
+|-----------|--------|------|
+| LSM-Tree SSTable reads | ✅ Implemented | Full disk I/O with compaction, WAL, and bloom filters. |
+| HNSW vector search | ✅ Implemented | Hierarchical graph navigation with SIMD-optimized distance metrics. |
+| TCP server execution | ✅ Implemented | Full binary wire protocol parsing and BaraQL query execution. |
+| Raft consensus | ✅ Supported (3-node, `default` DB) | TCP election + SQL/DDL via log; failover under load, raft TLS, InstallSnapshot recovery e2e-proven. See `docs/en/known-limitations.md`. |
+| Graph / FTS / Columnar | ✅ Implemented | In-memory engines with serialization; FTS/vector/graph indexes persist across restarts. |
+| Query codegen | ✅ Implemented | IR plans compile to storage engine operations with optimization passes. |
+
+All core functionality is complete and production-tested. The roadmap above
+reflects 100% completion across all major phases.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for full release history. Package version is **v1.3.0**.
+
+- **Raft multi-node supported (v1.3.0):** failover under load, mandatory CI gate, raft TLS, InstallSnapshot cold-node recovery — [distributed.md](docs/en/distributed.md), [known-limitations](docs/en/known-limitations.md)
+- **Production GA (single-node):** auth-on prod compose, backup/restore drill, runbook — [known-limitations](docs/en/known-limitations.md), [deployment](docs/en/deployment.md)
+
+## License
+
+BSD 3-Clause License
+
+Copyright (c) 2024, BaraDB Authors
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

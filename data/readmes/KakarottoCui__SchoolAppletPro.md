@@ -1,0 +1,28 @@
+# SchoolAppletPro
+基于java SpringBoot和Vue uniapp的校园信息交流小程序
+
+演示视频链接：https://www.bilibili.com/video/BV1uz4y1q7da/
+
+详询 微信1：egvh56ufy7hh ，微信2：dabocode  。承接商业项目、课设、毕设和论文，包括但不限于Web、APP、小程序等，课设、毕设提供远程部署和不限次数代码解答！
+
+技术： 
+
+后端使用JAVA语言的SpringBoot框架，MySQL数据库，Maven依赖管理等技术
+
+前端使用Vue.js语法的uniapp框架，可以发布成微信小程序
+
+学生用户功能：
+
+校园动态：学校通知、各院动态、就业通知、大赛宣传
+
+校园社区：社团活动、互动中心（表白墙、校内互助、跳蚤市场）
+
+消息订阅：我发布的、我评论的、回复我的
+
+个人中心：微信授权登录、学生认证、清除缓存、关于小程序
+
+管理端功能（电脑浏览器端操作）：
+
+管理员可以对以上信息进行管理，增删改查等
+
+管理员和学生用户均为小程序端的版本，传送门：https://github.com/KakarottoCui/SchoolApplet

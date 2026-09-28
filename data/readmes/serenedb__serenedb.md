@@ -1,0 +1,78 @@
+
+<div align=center>
+
+<picture align=center>
+    <source media="(prefers-color-scheme: dark)" srcset="resources/images/serenedb-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="resources/images/serenedb-light.svg">
+    <img alt="The SereneDB company logo." src="resources/images/serenedb-light.svg">
+</picture>
+
+<h2>The First Real-Time Search Analytics Database</h2>
+
+[![Star Us](https://img.shields.io/badge/⭐-Star%20Us-9865e8?style=for-the-badge)](https://github.com/serenedb/serenedb)
+[![Apache License 2.0](https://img.shields.io/badge/License-Apache%202.0-a2b9f4?style=for-the-badge)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Website](https://img.shields.io/website?up_message=VISIT&down_message=FIXING&color=fbe5f5&url=https%3A%2F%2Fwww.serenedb.com&style=for-the-badge)](https://www.serenedb.com)
+
+</div>
+
+SereneDB unifies **Elasticsearch-like search** and **ClickHouse-like analytics** in a single, **Postgres-compatible** database.
+
+Search is a first-class citizen of the query engine. All search functionality is powered by [IResearch](iresearch/README.md), an open-source C++ information retrieval library that core members of the SereneDB team have been developing since 2016.
+
+
+## Open Benchmarks
+
+### 10x faster than ClickHouse on [10 billion OpenTelemetry logs](https://serenedb.com/searchbench?dataset=otel_logs_10b&include=SereneDB,ClickHouse,ClickHouse-sorted&run=hot)
+
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="resources/images/searchbench-10b-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="resources/images/searchbench-10b-light.svg">
+    <img alt="SearchBench at 10B rows." src="resources/images/searchbench-10b-light.svg">
+</picture>
+
+### [1 billion OpenTelemetry logs](https://playground.serenedb.com/searchbench?s=eyJ2IjoxLCJkIjoib3RlbF9sb2dzXzFiIiwidGgiOiJsaWdodCJ9)
+
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="resources/images/searchbench-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="resources/images/searchbench-light.svg">
+    <img alt="SearchBench at 1B rows." src="resources/images/searchbench-light.svg">
+</picture>
+
+* [SearchBench](https://serenedb.com/searchbench) - open benchmark for search and analytics: SereneDB, ClickHouse, Elastic, OpenSearch, ParadeDB
+* [Search Benchmark, The Game](https://serenedb.com/search-benchmark-game) - low-level search engine benchmark: [IResearch](iresearch/README.md), Lucene, Tantivy
+
+## Links
+
+* [Official website](https://www.serenedb.com) for a quick high-level overview of SereneDB.
+* [Blog](https://www.serenedb.com/blog) for technical articles, project announcements and event updates.
+* [Slack](https://www.serenedb.com/slack) and [Telegram](https://telegram.me/serenedb) for real-time discussion and support.
+* [Reddit](https://www.reddit.com/r/serenedb) for community discussions and Q&A.
+* [LinkedIn](https://www.linkedin.com/company/serenedb) for official company news and professional updates.
+* [X](https://x.com/serenedata) for quick updates, announcements and community news.
+
+## Why Choose SereneDB?
+
+SereneDB is designed to be powerful, convenient and dev-friendly.
+
+* **[Zero-ETL Remote Search](https://github.com/serenedb/serenedb/tree/main/examples)**: Query your data (Parquet, Iceberg, CSV, JSON) directly on remote storage (S3/HDFS) with full BM25 ranking and vector search, eliminating the need for expensive ingestion pipelines.
+* **Unified Search & Analytics:** The search experience of Elasticsearch and the analytical power of ClickHouse in a **single, high-performance solution**.
+* **Faster Than Elasticsearch:** Powered by IResearch, which outperforms Lucene (the engine behind Elasticsearch) across every query type in the [Search Benchmark, the Game](https://serenedb.com/search-benchmark-game).
+* **Efficient Real-Time Updates:** Column-wise updates that keep your data fresh without performance hits.
+* **Vector & Hybrid Search:** Built-in vector search and hybrid ranking for AI-powered applications.
+* **Postgres-Compatible:** Leverage your existing Postgres ecosystem, tools and knowledge. If you know SQL, you know SereneDB.
+* **[UI Client](https://www.youtube.com/watch?v=mVaudH7w8yw):** An intuitive Postgres-compatible UI for managing and querying your data.
+
+## Our Philosophy
+
+* **Truly Open Source:** The complete, single-node version is and always will be licensed under **Apache 2.0**.
+* **Built for Scale:** Horizontal scalability, high availability and advanced security for production deployments.
+* **Transparent Performance:** All benchmarks are open and reproducible. Methodology, hardware and raw results are published alongside numbers.
+* **Giving Back:** We build on, contribute back to and openly collaborate with the open-source community, including projects like Velox, PostgreSQL and RocksDB.
+* **Open Interaction:** Your feedback matters. We are committed to open communication and collaboration with our community.
+
+## Get Involved
+
+* **⭐ Star this repo** to show your interest and help us grow.
+* **Watch** releases to stay updated on our progress.
+* **[Contributing](CONTRIBUTING.md)** -- build instructions, code style, and how to get started.
+* Join the conversation on [Slack](https://www.serenedb.com/slack), [Telegram](https://telegram.me/serenedb) or [Reddit](https://www.reddit.com/r/serenedb).

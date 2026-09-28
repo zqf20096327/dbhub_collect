@@ -1,0 +1,160 @@
+<div align="center">
+  <a href="#">
+    <img src="client/public/readme/readme-banner.jpg" alt="ReconBanker" />
+  </a>
+
+  <h1>ReconBanker</h1>
+
+  <p>Automated bank-to-order reconciliation for financial operations teams.</p>
+
+  <p><a href="#quick-start">Get Started</a> · <a href="#documentation">Documentation</a> · <a href="#api-reference">API Reference</a></p>
+</div>
+
+---
+
+ReconBanker is a self-hosted reconciliation engine that scrapes bank transactions using browser automation, polls pending orders from customer ERP systems, and matches them using a deterministic + heuristic engine. When a match is found, it notifies the customer system via configurable webhooks.
+
+## What it does
+
+- **Scrapes bank transactions** from customer bank accounts using Playwright browser automation (Mi Dinero, Banco Pichincha Empresas, and more)
+- **Polls pending orders** from customer ERP or order-management systems via HTTP
+- **Reconciles transactions to orders** using a rule-based engine (exact amount + date window) and a fuzzy sender-name heuristic
+- **Notifies customers** via webhook when a match is found, including match type and transaction detail
+- Operates in a **multi-account, multi-bank** model - each account has its own config, scrape schedule, and webhook
+
+## Feature surface
+
+### Reconciliation engine
+
+- Exact amount matching (configurable currency support)
+- 5-day date window rule
+- Fuzzy sender-name heuristic scoring (0–1)
+- Ambiguity detection when multiple candidates score equally
+- Per-request attempt history with unmatched reasons
+
+### Account management
+
+- Register accounts linked to supported banks
+- Per-account configuration: polling endpoint, webhook URL, authentication headers
+- Manual or scheduled scraping and polling triggers
+- Script versioning: promote bank scripts from `review` → `active`
+
+### Bank session management
+
+- **One-shot scrapes** (open → scrape → close, run periodically) or long-lived **persistent sessions** (a browser monitor kept open per account), selectable per account via `session_type`
+- **Login mode** per account (`login_mode`): `simple` logs in unattended, `assisted` waits for a human to complete 2FA
+- **Needs attention**: an assisted persistent session that cannot keep itself authenticated (auth timeout, lost session, watchdog, crash) is parked in `needs_attention`, surfacing a badge in the UI and an alert, until an operator reactivates it
+- **Failure diagnostics**: every execution records its stages, failure category and stop reason, with the pre-failure event trail written to the logs — searchable via `pnpm failures` (see [architecture](docs/architecture.md#failure-diagnostics))
+
+### Async job processing
+
+- Six BullMQ queues: `order-ingestion`, `bank-scrape`, `conciliation`, `tx-conciliation`, `webhook`, `bank-movement-webhook`
+- Domain event bus: `TransactionIngested` → conciliation and movement notification, `ConciliationMatched` → webhook
+- Configurable polling, scraping, and stale-request expiry intervals via env vars
+
+### Frontend dashboard
+
+- Login / register
+- Account list with a "needs attention" badge for accounts blocked by a fatal failure
+- Per-account config, including session settings (`session_type` / `login_mode`) and a restart action to unblock a fatally failed account
+- Conciliation requests with status, attempt history, and matched transaction detail
+- Bank movement passthrough mode
+- Bank and script management
+- Feature-scoped i18n support (i18next)
+
+## Tech stack
+
+| Layer              | Technology                                    |
+| ------------------ | --------------------------------------------- |
+| Backend runtime    | Node.js + TypeScript (tsx watch)              |
+| Web framework      | Express v5                                    |
+| Database           | PostgreSQL 16 (pg driver, raw SQL migrations) |
+| Queue / cache      | Redis 7 + BullMQ                              |
+| Browser automation | Playwright                                    |
+| Authentication     | JWT + bcrypt                                  |
+| Frontend           | React 19 + Vite 8                             |
+| UI                 | Tailwind CSS v4, shadcn/ui                    |
+| HTTP client        | Axios + TanStack Query                        |
+| i18n               | i18next                                       |
+
+## Quick start
+
+```bash
+git clone <repo-url>
+cd reconbanker
+
+cp .env.example .env
+# Edit .env with your values
+
+./setup.sh
+```
+
+`setup.sh` pulls the latest git changes, installs all dependencies, starts Docker (PostgreSQL + Redis), runs migrations, and launches both backend and frontend.
+
+- Backend API: `http://localhost:3000/api`
+- Frontend: `http://localhost:5173`
+
+See [docs/getting-started.md](docs/getting-started.md) for manual setup and environment variable reference.
+
+## Environment variables
+
+**Required:**
+
+| Variable       | Description                   |
+| -------------- | ----------------------------- |
+| `DATABASE_URL` | PostgreSQL connection string  |
+| `REDIS_URL`    | Redis connection string       |
+| `JWT_SECRET`   | Secret for signing JWT tokens |
+
+**Optional:**
+
+| Variable                   | Default       | Description                                                                            |
+| -------------------------- | ------------- | -------------------------------------------------------------------------------------- |
+| `PORT`                     | `3000`        | Backend API port                                                                       |
+| `NODE_ENV`                 | `development` | Environment                                                                            |
+| `POLLING_INTERVAL_SECONDS` | `600`         | How often to poll customer order endpoints                                             |
+| `SCRAPE_INTERVAL_SECONDS`  | `1200`        | How often to run bank scraping                                                         |
+| `EXPIRE_STALE_REQUESTS_INTERVAL_SECONDS` | `3600` | How often to expire stale conciliation requests |
+| `BANK_SCRAPE_CONCURRENCY`  | `2`           | Maximum number of bank scraping jobs, and Playwright browsers, to run at the same time |
+
+## Development
+
+Common commands:
+
+```bash
+# Run everything (recommended)
+./setup.sh
+
+# Backend only (watch mode)
+pnpm dev
+
+# Frontend only
+cd client && pnpm dev
+
+# Database migrations
+pnpm migrate
+
+# Tests and type-checking
+pnpm test
+pnpm typecheck
+
+# Build backend and frontend
+pnpm build
+cd client && pnpm build
+```
+
+For a detailed workflow see [docs/development.md](docs/development.md).
+
+## Documentation
+
+| File                                               | Purpose                                    |
+| -------------------------------------------------- | ------------------------------------------ |
+| [docs/getting-started.md](docs/getting-started.md) | Setup, env vars, manual run guide          |
+| [docs/architecture.md](docs/architecture.md)       | Bounded contexts, DDD patterns, job queues |
+| [docs/api-reference.md](docs/api-reference.md)     | REST endpoints and request/response shapes |
+| [docs/development.md](docs/development.md)         | Common commands, migrations, adding scripts and contexts |
+| [docs/repository-map.md](docs/repository-map.md)   | Compact source tree reference              |
+
+## License
+
+ISC

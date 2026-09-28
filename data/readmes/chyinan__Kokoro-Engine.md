@@ -1,0 +1,314 @@
+<div align="center">
+  <a href="README.md">简体中文</a> | <a href="README_ZH-TW.md">繁體中文</a> | <a href="README_EN.md">English</a> | <a href="README_JA.md">日本語</a> | <a href="README_KO.md">한국어</a> | <a href="README_RU.md">Русский</a>
+</div>
+
+<br/>
+
+<p align="center">
+  <img src="pictures/Poster_Girl.png" alt="Kokoro Engine banner" width="100%" />
+</p>
+
+<h1 align="center">Kokoro Engine</h1>
+<p align="center"><strong>在桌面上运行有形象、有声音、有长期记忆的 AI 角色。</strong></p>
+<p align="center">选择或导入角色，连接自己的模型服务，然后开始一段会延续下去的对话。</p>
+
+<p align="center">
+  <a href="https://t.me/+U39dgiUspCo2NDNh"><img src="https://img.shields.io/badge/Telegram-Community-26A5E4?logo=telegram&logoColor=white" alt="Telegram community" /></a>
+  <img src="https://img.shields.io/badge/Tauri-v2-24C8DB?logo=tauri&logoColor=white" alt="Tauri v2" />
+  <img src="https://img.shields.io/badge/React-19-20232A?logo=react&logoColor=61DAFB" alt="React 19" />
+  <img src="https://img.shields.io/badge/Rust-Stable-000000?logo=rust&logoColor=white" alt="Rust" />
+  <img src="https://img.shields.io/badge/License-MIT-2EA44F" alt="MIT License" />
+</p>
+<p align="center">
+  <a href="https://github.com/chyinan/Kokoro-Engine/releases"><strong>下载安装</strong></a> ·
+  <a href="docs/quick-start.md">10 分钟快速开始</a> ·
+  <a href="docs/troubleshooting.md">故障排查</a> ·
+  <a href="#-技术架构">架构</a> ·
+  <a href="#-参与贡献">贡献</a>
+</p>
+
+
+
+---
+
+## 你可以用 Kokoro 做什么
+
+- 让桌面角色根据当前屏幕内容作出反应。
+- 导入 SillyTavern 角色卡，用不同人格延续各自的对话与记忆。
+- 连接本地或云端 LLM，并按需开启语音、视觉、MCP、MOD 和 Bot 能力。
+
+> 当前版本内置三个角色，并已提供主界面角色选择、首次回复引导，以及设置中的角色管理与导入功能。设计背景见[角色生态设计](docs/design-plans/2026-07-12-user-activation-character-ecosystem.md)。
+
+##  Kokoro Engine 的独到之处
+
+Kokoro Engine 不是“聊天壳子 + 桌宠皮肤”。它是一个完整的桌面角色运行时：
+
+- **All-in-one**：Live2D、LLM、TTS、STT等技术集成在一个运行时闭环。
+- **Built for extensibility**：高自由度 MOD 系统 + MCP 协议，天然面向扩展。
+- **Local-first**：本地存储记忆、离线优先、数据链路可控。
+- **Developer-friendly & Zero-waste**：告别 Rust/Tauri 项目常见的 `target` 目录数十 GB 暴涨与磁盘写满痛点，内置全链路自动闭环存储看门狗（KSS），支持分支切换孤儿消解、测试产物时效收敛与低空间紧急熔断，保障日常开发极速轻快。
+
+## 一览
+
+| 维度 | 内容 |
+|---|---|
+| 面向用户 | 虚拟角色创作者、开发者、普通用户 |
+| 交互能力 | 文本、语音、图片、视觉输入、多模态对话 |
+| 扩展方式 | MOD（HTML/CSS/JS + QuickJS）、MCP Servers |
+| 技术栈 | React + TypeScript + Rust + Tauri v2 + SQLite |
+| 语言支持 | 简体中文 / 繁體中文 / English / 日本語 / 한국어 / Русский |
+
+## 📸 UI截图
+
+<div align="center">
+  <img src="pictures/Homepage.png" alt="Homepage" width="800" />
+  <p><em>主界面</em></p>
+  <img src="pictures/Settings.png" alt="Settings" width="800" />
+  <p><em>设置界面</em></p>
+</div>
+
+## 🚀 快速开始
+
+### 路径一：下载发布版（推荐）
+
+前往 [Releases 页面](https://github.com/chyinan/Kokoro-Engine/releases) 下载对应平台安装包后直接运行。
+
+### 路径二：从源码构建
+
+#### 环境要求
+
+- [Node.js](https://nodejs.org/)（v20.19+ 或 v22.12+）
+- [Rust](https://www.rust-lang.org/tools/install)（stable）
+
+#### 安装与运行
+
+```bash
+git clone https://github.com/chyinan/kokoro-engine.git
+cd kokoro-engine
+npm install
+npm run tauri dev
+```
+
+> 💡 **开发者友好说明（100% 全自动化存储闭环看门狗）**：
+> 频繁调试与测试 Rust/Tauri 项目常导致 `target` 目录突破数十 GB 甚至写满磁盘。Kokoro Engine 内置了**全生命周期闭环存储看门狗（Kokoro Storage Sentinel, KSS）**：`npm install` 自动配置安全 Hooks，分支切换自动写入标记，后续运行内置 npm 开发命令或手动 prune 时定向消解孤儿代际，启动 `npm run tauri dev` 或 `npm run dev` 自动控水在 12GB 警戒线内（带编译器锁安全避让），测试产物自动按 30 分钟窗口收敛，驱动器剩余空间 < 5GB 自动紧急熔断。**每次启动开发前自动静默检查与修剪，日常开发无需任何手动清理命令**。
+> 开发者亦可随时运行 `npm run storage:doctor` 进行透明体检，详见 [开发者存储占用全生命周期闭环管理与极速编译指南](docs/developer-storage-guide.md)。
+
+#### 构建发行版
+
+```bash
+npm run tauri build
+```
+
+### 路径三：Nix / Flakes（仅 Linux）
+
+```bash
+nix develop
+npm install
+npm run tauri dev
+```
+
+更多 Nix 用法见 [docs/nix.md](docs/nix.md)。
+
+## ✨ 核心能力
+
+### 交互引擎
+
+- Live2D 渲染、视线追踪、动作触发、桌面浮窗
+- 模型热切换、帧率自定义
+
+### 多维架构
+
+- 支持 Ollama 、llama.cpp 与 OpenAI 、Anthropic 兼容协议API接口
+- `Codex Runtime — Experimental`：可选的本机运行时桥接，通过 `codex app-server --listen stdio://` 复用用户现有的 Codex 认证、模型与 provider 配置；Kokoro 不读取或存储 Codex 凭据，也不修改 Codex 配置。详见 [Codex Runtime 文档](docs/codex-runtime.md)。
+- 支持多模态输入、上下文回溯、长期记忆与情感状态
+
+### 音频交互
+
+- TTS（文本转语音）：GPT-SoVITS、VITS、OmniVoice、OpenAI、Azure、ElevenLabs、Edge TTS、Browser TTS
+- STT（语音转文本）：Whisper / faster-whisper / whisper.cpp / SenseVoice
+- 支持 VAD 自动停录与唤醒词链路
+
+### 可拓展性
+
+- MOD 框架：HTML/CSS/JS 超高自由度 UI 主题替换 + QuickJS 脚本沙箱
+- MCP 支持：连接 MCP Server 并调用外部工具
+- 内置官方示范 MOD：`mods/genshin-theme`
+- 支持 SillyTavern 角色卡导入功能（酒馆）
+
+### 远程连接
+
+- 内置 QQ、Telegram、Discord、LINE、Webhook 五种 Bot 服务
+- AstrBot 集成：通过带认证的通用 Webhook 将 AstrBot 消息接入 Kokoro，支持按角色与会话处理文本、图片和音频，并返回文本或媒体响应。详见 [AstrBot 集成文档](integrations/astrbot-kokoro/README.md)。
+- 将各平台支持的消息类型桥接到 AI 管线
+
+## 🏗️ 技术架构
+
+```mermaid
+flowchart LR
+  subgraph FE["Frontend (React + TypeScript)"]
+    FE_UI["UI Layout Engine"]
+    FE_REG["Component Registry"]
+    FE_THEME["Theme & MOD UI"]
+    FE_BRIDGE["kokoro-bridge.ts"]
+    FE_UI --> FE_REG
+    FE_REG --> FE_THEME
+    FE_THEME --> FE_BRIDGE
+  end
+
+  subgraph IPC["Tauri Typed IPC"]
+    IPC_INVOKE["invoke / events"]
+  end
+
+  subgraph BE["Backend (Rust / Tauri v2)"]
+    BE_CMD["Commands Layer"]
+    BE_ORCH["AI Orchestrator"]
+    BE_MULTI["LLM / TTS / STT / Vision / ImageGen / MCP"]
+    BE_MOD["MOD Runtime (QuickJS)"]
+    BE_BOT["Bot Bridges (QQ / Telegram / Discord / LINE / Webhook)"]
+    BE_CMD --> BE_ORCH
+    BE_ORCH --> BE_MULTI
+    BE_MOD --> BE_CMD
+    BE_BOT --> BE_CMD
+  end
+
+  subgraph DATA["Data & Runtime Config"]
+    DB[("SQLite: memories / summaries / conversations / characters")]
+    CFG["Config Files: llm/tts/stt/vision/imagegen/mcp/bot"]
+  end
+
+  subgraph EXT["External Services"]
+    EXT_LLM["OpenAI-Compatible / Anthropic / Ollama / llama.cpp / Codex Runtime"]
+    EXT_TTS["TTS Providers"]
+    EXT_MCP["MCP Servers"]
+    EXT_BOT["QQ / Telegram / Discord / LINE / Webhook"]
+  end
+
+  FE_BRIDGE <--> IPC_INVOKE
+  IPC_INVOKE <--> BE_CMD
+
+  BE_MULTI <--> EXT_LLM
+  BE_MULTI <--> EXT_TTS
+  BE_MULTI <--> EXT_MCP
+  BE_BOT <--> EXT_BOT
+
+  BE_ORCH <--> DB
+  BE_CMD <--> CFG
+```
+
+- 前端：声明式布局、组件注册、主题系统、MOD UI 注入
+- 后端：命令模块 + 多模态编排（LLM/TTS/STT/Vision/ImageGen/MCP）
+- 数据层：以 SQLite 为底座构建本地优先记忆层，统一持久化角色、会话、摘要与长期记忆，并通过 `embedding + FTS5 BM25 + RRF` 混合检索提供稳定长期上下文；梦境整理结合规则筛选、LLM 复核与定时/手动任务，对重复、冲突和可合并记忆进行持续治理。
+
+详细设计见 [docs/architecture.md](docs/architecture.md)。
+
+## 🗺️ 路线图
+
+### 现在
+
+- 跨平台稳定性与兼容性验证（Windows / Linux / macOS）
+- 在线服务链路深度测试
+- 记忆系统与多模态体验持续优化
+
+### 下一步
+
+- 角色市场 / 工坊
+- 移动端支持探索（iOS / Android）
+- 开发者扩展生态增强
+
+## 🤝 参与贡献
+
+欢迎通过以下方式参与：
+
+1. **Pull Requests**：修复问题或新增功能。
+2. **Issues**：提交问题与改进建议。
+3. **Discussions**：分享想法与实践。
+4. **Design contributions**：欢迎提供 Logo / 视觉资产。
+
+## 💬 社区
+
+👉 [**Kokoro Engine 官方讨论群（Telegram）**](https://t.me/+U39dgiUspCo2NDNh)
+
+👉 [**Kokoro Engine 官方讨论群（QQ）**](https://qm.qq.com/q/V8ljISeAUM)
+
+## ❤️ 赞助
+
+👉 [**查看赞助方式 / Sponsor**](SPONSOR.md)
+
+
+## 🎉 特别鸣谢
+
+感谢所有为 Kokoro Engine 做出贡献的贡献者。
+
+<table align="center">
+  <tr>
+    <td align="center">
+      <a href="https://github.com/aegbirou">
+        <img src="https://github.com/aegbirou.png?size=120" alt="@aegbirou" width="88" height="88" />
+      </a>
+      <br />
+      <sub>@aegbirou</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Initsnow">
+        <img src="https://avatars.githubusercontent.com/u/79002121?s=96&v=4" alt="@Initsnow" width="88" height="88" />
+      </a>
+      <br />
+      <sub>@Initsnow</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/huwany1">
+        <img src="https://avatars.githubusercontent.com/u/154432693?v=4" alt="@huwany1" width="88" height="88" />
+      </a>
+      <br />
+      <sub>@huwany1</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/classical-coderrr">
+        <img src="https://avatars.githubusercontent.com/u/153351622?v=4" alt="@classical-coderrr" width="88" height="88" />
+      </a>
+      <br />
+      <sub>@classical-coderrr</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/xilingjie">
+        <img src="https://avatars.githubusercontent.com/u/215126570?v=4" alt="@xilingjie" width="88" height="88" />
+      </a>
+      <br />
+      <sub>@xilingjie</sub>
+    </td>
+  </tr>
+</table>
+
+
+## 📄 许可协议
+
+本项目核心代码遵循 **MIT License**。
+
+### ⚠️ Live2D Cubism SDK 声明
+
+本项目使用 **Live2D Cubism SDK**，相关部分归 Live2D Inc. 所有。使用本项目（包括编译、分发、修改）时，请遵守 Live2D 许可协议：
+
+- [Live2D Proprietary Software License Agreement](https://www.live2d.com/eula/live2d-proprietary-software-license-agreement_en.html)
+- [Live2D Open Software License Agreement](https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html)
+
+> 若您属于年营业额超过 1000 万日元的中大型企业，可能需要与 Live2D Inc. 签署单独商业授权协议。
+
+### ⚠️ 内置 Live2D 样本模型声明
+
+本项目内置的默认模型 **Hiyori Momose - PRO** 来自 Live2D 官方样本数据。该样本模型的使用受 Live2D Free Material License Agreement 与样本数据条款约束：
+
+- [Live2D Sample Data](https://www.live2d.com/en/learn/sample/)
+- [Live2D Sample Model Terms](https://www.live2d.com/en/learn/sample/model-terms/)
+
+版权信息：Illustration: Kani Biimu / Modeling: Live2D。请勿修改 Hiyori Momose 的角色设计。非一般用户或小规模企业用户使用时，请自行确认是否需要 Live2D Inc. 的额外许可。
+
+---
+
+**Kokoro Engine** is an open-source project.
+Live2D is a registered trademark of Live2D Inc.
+
+## Star History
+
+<a href="https://www.star-history.com/?type=date&repos=chyinan%2FKokoro-Engine">
+ <img alt="Star History Chart" src="pictures/StarHistory.png" width="100%" />
+</a>

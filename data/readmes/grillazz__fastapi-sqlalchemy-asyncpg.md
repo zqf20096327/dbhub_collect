@@ -1,0 +1,343 @@
+# fastapi-sqlalchemy-asyncpg
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
+
+![fastapi-sqlalchemy-asyncpg](/static/fsap_1.jpg)
+
+<a name="readme-top"></a>
+
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#make-will-help-you">Make will help you</a></li>
+        <li><a href="#how-to-feed-database">How to feed database</a></li>
+        <li><a href="#structured-asynchronous-logging-with-rotoger">Structured & Asynchronous Logging with Rotoger</a></li>
+        <li><a href="#setup-user-auth">Setup user auth</a></li>
+        <li><a href="#setup-local-env-with-uv">Setup local development with uv</a></li>
+        <li><a href="#import-xlsx-files-with-polars-and-calamine">Import xlsx files with polars and calamine</a></li>
+        <li><a href="#worker-aware-async-scheduler">Schedule jobs</a></li>
+        <li><a href="#smtp-setup">Email Configuration</a></li>
+        <li><a href="#testing-strategy">Testing Strategy</a></li>
+        <li><a href="#uv-knowledge-and-inspirations">UV knowledge and inspirations</a></li> 
+        <li><a href="#large-language-model">Integration with local LLM</a></li>  
+        <li><a href="#ha-sample-with-nginx-as-load-balancer">High Availability sample with nginx as load balancer</a></li>
+        <li><a href="#performance-profiling-with-pyinstrument">Performance Profiling with Pyinstrument</a></li>
+      </ul>
+    </li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
+
+[//]: # (TODO: Usage,Roadmap, Contributing, License, Contact)
+
+    
+## About The Project
+
+This demonstration application showcases the powerful integration of [FastAPI](https://fastapi.tiangolo.com/)—a modern, high-performance web framework—with [Pydantic 2.0](https://github.com/pydantic/pydantic) for robust data validation. The backend architecture is further reinforced by leveraging the [SQLAlchemy ORM](https://www.sqlalchemy.org/) along with an asynchronous connection to a [PostgreSQL 17](https://www.postgresql.org/docs/17/release.html) relational database. High-throughput communication across the stack is achieved using the [asyncpg](https://github.com/MagicStack/asyncpg) database client library, delivering an efficient, non-blocking interface to process database transactions seamlessly within Python's asyncio event loop.
+
+### Built With
+[![FastAPI][fastapi.tiangolo.com]][fastapi-url]
+[![Pydantic][pydantic.com]][pydantic-url]
+[![SQLAlchemy][sqlalchemy.org]][sqlalchemy-url]
+[![Uvicorn][uvicorn.org]][uvicorn-url]
+[![pytest][pytest.org]][pytest-url]
+[![asyncpg][asyncpg.github.io]][asyncpg-url]
+[![alembic][alembic.sqlalchemy.org]][alembic-url]
+[![rich][rich.readthedocs.io]][rich-url]
+[![redis][redis.io]][redis-url]
+[![structlog][structlog.org]][structlog-url]
+[![rotoger][rotoger]][rotoger-url]
+[![granian][granian]][granian-url]
+
+
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Getting Started
+
+### Make will help you
+To simplify building, running, testing, and managing this project, a `Makefile` is provided. Run `make help` to see a full list of available commands.
+```shell
+1. make docker-build
+2. make docker-up > alternatively > make docker-up-granian
+3. make docker-apply-db-migrations
+4. make docker-feed-database
+```
+
+### Adjust make with just
+[//]: # (TODO: switch form make to just)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### How to feed database
+
+Finding a robust and engaging dataset can be challenging. Fortunately, the works of William Shakespeare provide an excellent foundation for demonstrating read-only declarative models and executing a wide variety of complex queries.
+The dataset originates from https://github.com/catherinedevlin/opensourceshakespeare.
+The data models were subsequently generated using https://github.com/agronholm/sqlacodegen.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Structured & Asynchronous Logging with Rotoger 🪵
+
+To elevate the logging capabilities beyond simple colored output,
+this project has transitioned to [Rotoger](https://github.com/tinyplugins/rotoger).
+This tiny library provides a comprehensive, production-ready logging setup for modern asynchronous applications,
+addressing challenges like log management, performance, and readability.
+
+Rotoger is built upon the excellent [structlog](http://structlog.org/) library and brings several key advantages:
+
+- `Structured Logging`: By using structlog, all log entries are generated as structured data (JSON), making them machine-readable and significantly easier to query, parse, and analyze in log management systems.
+- `Asynchronous & Non-Blocking`: Designed for async frameworks like FastAPI, Rotoger performs logging operations in a non-blocking manner. This ensures that I/O-bound logging tasks do not hold up the event loop, maintaining high application performance.
+- `High-Performance JSON`: It leverages orjson for serialization, which is one of the fastest JSON libraries for Python. This minimizes the overhead of converting log records to JSON strings.
+- `Built-in Log Rotation`: Rotoger implements its own log rotation mechanism in Python, allowing you to manage log file sizes and retention policies directly within your application without relying on external tools like logrotate.
+
+This setup solves common logging pain points in production environments, such as managing large log files, ensuring logs don't impact performance, and making logs easily searchable.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Setup User Auth
+
+Setup user authentication with JWT and Redis as token storage.
+
+### Setup local env with uv
+```shell
+uv sync
+source .venv/bin/activate
+```
+
+### Import xlsx files with polars and calamine
+Power of Polars Library in data manipulation and analysis.
+It uses the polars library to read the Excel data into a DataFrame by passing the bytes to the `pl.read_excel()` function -
+https://docs.pola.rs/py-polars/html/reference/api/polars.read_excel.html
+In `pl.read_excel()` “calamine” engine can be used for reading all major types of Excel Workbook (.xlsx, .xlsb, .xls) and is dramatically faster than the other options, using the fastexcel module to bind calamine.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Worker aware async scheduler
+The project uses the APScheduler library to schedule tasks in the background.
+The APScheduler library is a powerful and flexible in-process task scheduler with Cron-like capabilities.
+It allows you to schedule jobs to run at specific times or intervals, and it supports multiple job stores, triggers, and executors.
+The library is designed to be easy to use and highly configurable, making it suitable for a wide range of use cases.
+It was added to project in version 4.0.0a5 with Redis as event broker and SQLAlchemy as data store.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### SMTP setup
+The project uses the `smtplib` library to send emails.
+The `smtplib` library is a built-in Python library that provides a simple interface for sending emails using the Simple Mail Transfer Protocol (SMTP).
+It allows you to connect to an SMTP server, send an email message, and disconnect from the server.
+The library is easy to use and provides a flexible and powerful way to send emails from your Python applications.
+
+SMTPEmailService provides a reusable interface to send emails via an SMTP server.
+This service supports plaintext and HTML emails, and also allows sending template-based emails using the Jinja2 template engine.
+It is implemented as a singleton to ensure that only one SMTP connection is maintained
+throughout the application lifecycle, optimizing resource usage.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Testing Strategy
+The project employs a robust testing strategy to ensure code quality and reliability. The test fixture infrastructure has been designed to provide strong test isolation, particularly concerning database interactions.
+
+A key component of this strategy is a `db_session` fixture that manages database transactions on a per-test basis. Each test runs within its own transaction, which is rolled back at the end of the test. This ensures that tests are independent and do not interfere with each other by leaving residual data in the database.
+
+This approach offers several benefits:
+- **Improved Test Isolation**: By rolling back transactions, each test starts with a clean database state.
+- **Explicit Session Management**: Test fixtures use explicit dependency overrides with the new session management, making the testing setup clear and maintainable.
+- **Direct Database Manipulation**: Where appropriate, tests use direct database manipulation for setting up test data, which can be more efficient and straightforward than using API endpoints.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Large Language Model
+The `/v1/ml/chat/` endpoint is designed to handle chat-based interactions with the LLM model.
+It accepts a user prompt and streams responses back in real-time.
+The endpoint leverages FastAPI's asynchronous capabilities to efficiently manage multiple simultaneous requests,
+ensuring low latency and high throughput.
+
+FastAPI's async support is particularly beneficial for reducing I/O bottlenecks when connecting to the LLM model.
+By using asynchronous HTTP clients like `httpx`,
+the application can handle multiple I/O-bound tasks concurrently,
+such as sending requests to the LLM server and streaming responses back to the client.
+This approach minimizes idle time and optimizes resource utilization, making it ideal for high-performance applications.
+
+Install ollama and run the server
+```shell
+ollama run llama3.2
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### HA sample with nginx as load balancer
+Sample high availability setup with nginx as load balancer and 2 uvicorn instances running on different ports.
+```shell
+make docker-up-ha
+```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+### Performance Profiling with Pyinstrument
+To help identify performance bottlenecks and analyze request handling, this project integrates `pyinstrument` for on-demand profiling.
+The `ProfilingMiddleware` allows you to profile any endpoint by simply adding a query parameter to your request.
+
+When profiling is enabled for a request, `pyinstrument` will monitor the execution, and the server will respond with a detailed HTML report that you can download and view in your browser.
+This report provides a visual breakdown of where time is spent within your code.
+
+To enable profiling for an endpoint, you need to:
+1. Add a `pyprofile` query parameter to the endpoint's signature. This makes the functionality discoverable through the API documentation.
+2. Make a request to the endpoint with the query parameter `?pyprofile=true`.
+
+Here is an example from the `redis_check` health endpoint:
+```python
+from typing import Annotated
+from fastapi import Query
+
+@router.get("/redis", status_code=status.HTTP_200_OK)
+async def redis_check(
+    request: Request,
+    pyprofile: Annotated[
+        bool, Query(description="Enable profiler for this request")
+    ] = False,
+):
+    # ... endpoint logic
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+### UV knowledge and inspirations
+- https://docs.astral.sh/uv/
+- https://hynek.me/articles/docker-uv/
+- https://thedataquarry.com/posts/towards-a-unified-python-toolchain/
+- https://www.youtube.com/watch?v=ifj-izwXKRA&t=760s > UV and Ruff: Next-gen Python Tooling
+- https://www.youtube.com/watch?v=8UuW8o4bHbw&t=1s > uv IS the Future of Python Packaging! 🐍📦
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Acknowledgments
+Use this space to list resources you find helpful and would like to give credit to.
+I've included a few of my favorites to kick things off!
+
+* [Open Source Shakespeare Dataset](https://github.com/catherinedevlin/opensourceshakespeare)
+* [SQL Code Generator](https://github.com/agronholm/sqlacodegen)
+* [Passlib - password hashing library for Python](https://passlib.readthedocs.io/en/stable/)
+* [Polars - fast DataFrame library for Rust and Python](https://docs.pola.rs/)
+* [Rich - Traceback and logging, made easy](https://rich.readthedocs.io/en/stable/traceback.html)
+* [Calamine - Excel reader in Rust](https://github.com/tafia/calamine)
+* [Inline Snapshots - pytest plugin for inline snapshots]()
+* [Connection pool for asyncpg](https://magicstack.github.io/asyncpg/current/usage.html#connection-pools)
+* [Granian - A Rust HTTP server for Python applications](https://github.com/emmett-framework/granian)
+* [APScheduler - In-process task scheduler with Cron-like capabilities](https://apscheduler.readthedocs.io/en/master/)
+* [Valkey - A simple and fast key-value store](https://github.com/valkey-io/valkey)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+## Change Log
+<details>
+  <summary>2026 (2 changes)</summary>
+      <ul>
+        <li>[MAY 10 2026] bump project to Python 3.14 :fast_forward:</li>
+        <li>[FEB 5 2026] add profiler middleware :crystal_ball:</li>
+        <li>[JAN 11 2026] refactor test fixture infrastructure to improve test isolation :test_tube:</li>
+      </ul>
+</details>
+<details>
+  <summary>2025 (7 changes)</summary>
+      <ul>
+         <li>[SEP 2 2025] add sample high availability with nginx as load balancer</li>   
+         <li>[AUG 23 2025] intro exception handlers</li>
+         <li>[JUL some sunny day 2025] add rotoger</li>   
+         <li>[MAY 3, 2025] add large language model integration :robot:</li>
+         <li>[MAR 8 2025] switch from poetry to uv :fast_forward:</li>
+         <li>[JAN 28 2025] add SMTP setup :email:</li>
+      </ul>
+</details>
+<details>
+  <summary>2024 (6 changes)</summary>
+      <ul>
+         <li>[DEC 16 2024] bump project to Python 3.13 :fast_forward:</li>
+         <li>[OCT 16 2024] apscheduler added to project :clock1:</li>
+         <li>[AUG 17 2024] granian use case implemented with docker compose and rich logger :fast_forward:</li>
+         <li>[JUN 8 2024] implement asyncpg connection pool :fast_forward:</li>
+         <li>[MAR 15, 2024] add polars and calamine to project :heart_eyes_cat:</li>
+         <li>[FEB 1 2024] bump project to Python 3.12 :fast_forward:</li>
+      </ul>
+</details>
+<details>
+  <summary>2023 (7 changes)</summary>
+      <ul>
+         <li>[OCT 21 2023] refactor shakespeare models to use sqlalchemy 2.0 :fast_forward:</li>
+         <li>[SEP 2 2023] add passlib and bcrypt for password hashing :lock: :key:</li>
+         <li>[JUL 25 2023] add user authentication with JWT and Redis as token storage :lock: :key:</li>
+         <li>[JUL 7 2023] migrate to pydantic 2.0 :fast_forward:</li>
+         <li>[APR 28 2023] Rainbow logs with rich :rainbow:</li>
+         <li>[APR 10 2023] implement logging with rich</li>
+         <li>[FEB 14 2023] bump project to Python 3.11</li>
+      </ul>
+</details>
+<details>
+  <summary>2022 (5 changes)</summary>
+      <ul>
+         <li>[NOV 12 2022] ruff implemented to project as linting tool</li>
+         <li>[OCT 3 2022] poetry added to project</li>
+         <li>[JUN 6 2022] initial dataset for shakespeare models</li>
+         <li>[JUN 4 2022] alembic migrations added to project</li>
+         <li>[long time ago...] it was a long time ago in galaxy far far away...</li>
+      </ul>
+</details>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/grillazz/fastapi-sqlalchemy-asyncpg.svg?style=for-the-badge
+[contributors-url]: https://github.com/grillazz/fastapi-sqlalchemy-asyncpg/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/grillazz/fastapi-sqlalchemy-asyncpg.svg?style=for-the-badge
+[forks-url]: https://github.com/grillazz/fastapi-sqlalchemy-asyncpg/network/members
+[stars-shield]: https://img.shields.io/github/stars/grillazz/fastapi-sqlalchemy-asyncpg.svg?style=for-the-badge
+[stars-url]: https://github.com/grillazz/fastapi-sqlalchemy-asyncpg/stargazers
+[issues-shield]: https://img.shields.io/github/issues/grillazz/fastapi-sqlalchemy-asyncpg.svg?style=for-the-badge
+[issues-url]: https://github.com/grillazz/fastapi-sqlalchemy-asyncpg/issues
+[license-shield]: https://img.shields.io/github/license/grillazz/fastapi-sqlalchemy-asyncpg.svg?style=for-the-badge
+[license-url]: https://github.com/grillazz/fastapi-sqlalchemy-asyncpg/blob/main/LICENSE
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/ordinary-hobbit/
+
+[fastapi.tiangolo.com]: https://img.shields.io/badge/FastAPI-0.124.4-009485?style=for-the-badge&logo=fastapi&logoColor=white
+[fastapi-url]: https://fastapi.tiangolo.com/
+[pydantic.com]: https://img.shields.io/badge/Pydantic-2.12.5-e92063?style=for-the-badge&logo=pydantic&logoColor=white
+[pydantic-url]: https://docs.pydantic.dev/latest/
+[sqlalchemy.org]: https://img.shields.io/badge/SQLAlchemy-2.0.45-bb0000?color=bb0000&style=for-the-badge&logo=python&logoColor=white
+[sqlalchemy-url]: https://docs.sqlalchemy.org/en/20/
+[uvicorn.org]: https://img.shields.io/badge/Uvicorn-0.38.0-2094f3?style=for-the-badge&logo=python&logoColor=white
+[uvicorn-url]: https://www.uvicorn.org/
+[asyncpg.github.io]: https://img.shields.io/badge/asyncpg-0.31.0-2e6fce?style=for-the-badge&logo=postgresql&logoColor=white
+[asyncpg-url]: https://magicstack.github.io/asyncpg/current/
+[pytest.org]: https://img.shields.io/badge/pytest-9.0.2-fff?style=for-the-badge&logo=pytest&logoColor=white
+[pytest-url]: https://docs.pytest.org/en/9.0.x/
+[alembic.sqlalchemy.org]: https://img.shields.io/badge/alembic-1.17.2-6BA81E?style=for-the-badge&logo=python&logoColor=white
+[alembic-url]: https://alembic.sqlalchemy.org/en/latest/
+[rich.readthedocs.io]: https://img.shields.io/badge/rich-14.2.0-009485?style=for-the-badge&logo=rich&logoColor=white
+[rich-url]: https://rich.readthedocs.io/en/latest/
+[redis.io]: https://img.shields.io/badge/redis-7.1.0-dc382d?style=for-the-badge&logo=redis&logoColor=white
+[redis-url]: https://redis.io/
+[structlog.org]: https://img.shields.io/badge/structlog-25.5.0-000000?style=for-the-badge&logo=python&logoColor=white
+[structlog-url]: https://www.structlog.org/en/stable/
+[rotoger]: https://img.shields.io/badge/rotoger-0.3.0-00bfff?style=for-the-badge&logo=python&logoColor=white
+[rotoger-url]: https://github.com/tinyplugins/rotoger
+[granian]: https://img.shields.io/badge/granian-2.6.0-4f6cb4?style=for-the-badge&logo=rust&logoColor=white
+[granian-url]:  https://github.com/emmett-framework/granian

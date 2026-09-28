@@ -1,0 +1,1043 @@
+# SmoothDB  ![Tests](https://github.com/sted/smoothdb/actions/workflows/tests.yml/badge.svg)
+
+SmoothDB provides a RESTful API to PostgreSQL databases.
+
+Configured databases and schemas can be accessed and modified easily with a REST JSON-based interface.
+
+It is mostly compatible with [PostgREST](https://postgrest.org/en/stable/), with which it shares many characteristics.
+
+The main differences are:
+
+* SmoothDB is actively developed and maturing quickly; PostgREST remains the more battle-tested option for critical production workloads
+* SmoothDB is faster and has a lower CPU load 
+* It is written in Go
+* Can be used both stand-alone and as a library (the main motivation for writing this)
+* It also supports DDL operations (create / alter / drop databases, tables, manage constraints, roles, etc)
+* Supports multiple databases with a single instance
+* It has an Admin UI web dashboard
+
+See [TODO.md](TODO.md) for the many things to be completed.
+Please create issues to let me know your priorities.
+
+## About this project
+
+SmoothDB is not *vibe-coded*. It was started in 2022 as a solid, versatile middleware meant to serve as a reliable building block for data-driven applications. Since 2025 we have been pairing that foundation with strong LLMs to harden, review, and extend the code - aiming to follow the high bar set by PostgREST in correctness, safety, and API fidelity.
+
+## Getting started
+
+### Install
+
+SmoothDB can be installed using the pre-built binaries published on [github](https://github.com/sted/smoothdb/releases) for each of the supported platforms. Support on Windows is not yet well tested.
+
+If you are on macOS (or Linux) you can use Homebrew to install the package, a Cask (Homebrew 7 loads a third-party tap's casks only once you trust it):
+
+```
+brew tap sted/tap
+brew trust sted/tap
+brew install --cask smoothdb
+```
+
+If you have Go installed, you can install SmoothDB using:
+
+```
+go install github.com/sted/smoothdb@latest
+```
+
+To test your installation type 
+
+```
+smoothdb -h
+```
+
+### Start
+
+Starting SmoothDB, it creates a configuration file named **config.jsonc** in the current directory, with default values:  edit it for further customizations (see [Configuration](#Configuration-file)).
+
+You can configure the database instance for SmoothDb invoking
+
+```
+smoothdb --initdb
+```
+
+Details in [Database configuration](#Database-configuration).
+
+## API
+
+Here you find some examples for the API.
+For more detailed information, see [PostgREST API](https://postgrest.org/en/stable/references/api.html).
+
+The compability with PostgREST has also the great advantage of being able to use the many existing client libraries, starting from [postgrest-js](https://github.com/supabase/postgrest-js). See the [complete list of available client libraries](https://github.com/supabase/postgrest-js).
+
+The default Content-Type is "**application/json**".
+
+### Authentication
+
+Like PostgREST (see [PostgREST Authentication](https://postgrest.org/en/stable/references/auth.html)), SmoothDB is designed to keep the database at the center of API security.
+
+To make an authenticated request, the client must include an Authorization HTTP header with the value **Bearer \<jwt\>**, where **jwt** is a [Java Web Token](jwt.io). 
+
+A valid JWT for SmoothDB must include at least the **role** claim in the payload:
+
+```json
+{
+    "role": "user1"
+}
+```
+
+To generate a JWT for testing, you can use the generator at [jwt.io](jwt.io), using as a secret the same value configured in the configuration file for JWTSecret.
+
+Below is an example of an authenticated API call:
+
+```http
+GET /test HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic3RlZCJ9.-XquFDiIKNq5t6iov2bOD5k_LljFfAN7LqRzeWVuv7k
+```
+
+#### Token Generation
+
+SmoothDB provides a `/token` endpoint that generates JWT tokens:
+
+```http
+POST /token HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "user@example.com",
+    "password": "your_password"
+}
+```
+
+The response contains the access token and related information:
+
+```json
+{
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR...",
+    "token_type": "Bearer",
+    "expires_in": 3600,
+    "expires_at": 1683036800,
+    "refresh_token": "aaaabbbbccccddddeeee",
+    "user": {
+        "aud": "authenticated",
+        "role": "authenticated",
+        "email": "user@example.com"
+    }
+}
+```
+
+SmoothDB supports two authentication methods via the `LoginMode` configuration option:
+
+1. **Internal Authentication** (`LoginMode: "db"`), suitable for local development but not recommended for production. Credentials are verified against PostgreSQL database users. 
+
+2. **Supabase Auth** (`LoginMode: "gotrue"`), recommended for production applications. Authentication is delegated to the Supabase Auth service specified in the `AuthURL` configuration.
+
+**Important Notes:**
+
+- No explicit authorization step is needed beyond providing the JWT token with each request
+- Both authentication methods require email and password for token generation through the `/token` endpoint
+- `/token` is the one route reachable without credentials, so it is rate limited per client address (`LoginRateLimit` attempts per minute, answered `429` with a `Retry-After` header beyond that; proxy headers are not trusted for the address) and its body is capped by `RequestMaxBytes` like every other route
+- With `SessionMode` other than `none`, a session keyed by the token caches the verified claims, so a repeated token is not re-verified; its expiry is still checked on every request, and a session left half-built by a failed request is discarded. `role` also keeps the prepared database connection attached to the session for about a second after each request, so the pool must be sized for active sessions rather than in-flight queries; `claims` avoids that retention.
+- Choosing a `SessionMode`: `role` is the fastest, `claims` the safest for the pool, `none` the simplest. Measured on localhost with `go test ./server -run '^$' -bench BenchmarkSessionModeRequest -benchtime=2000x` (a table-list request repeated with the same token, catalog query included): `role` ≈ 455 µs per request, `claims` ≈ 595 µs, `none` ≈ 625 µs. `role` saves the two round trips that prepare the connection (`SET ROLE`, `set_config` of the claims) on every hit, `claims` saves only the JWT verification. Pick `role` when the pool can hold one connection per active session (roughly one per distinct token in use, released about a second after its last request), `claims` when many distinct tokens share a small pool, `none` when requests must be fully independent.
+- `JWTSecret` must be set whenever authentication is enabled (`LoginMode` other than `none`): the server refuses to start with an empty secret, because an empty HMAC key would let anyone forge a token for any role. Set it in the configuration file or via the `SMOOTHDB_JWT_SECRET` environment variable. In debug mode (`SMOOTHDB_DEBUG=true`) a random secret is generated automatically for the run. With `LoginMode: "none"` the secret may stay empty, and then every bearer token is refused with 401 rather than verified against the empty key.
+- When TLS is configured (`CertFile`/`KeyFile`), a certificate that fails to load is a fatal startup error - SmoothDB will not silently fall back to plaintext HTTP.
+- The configuration file holds secrets (the JWT secret and the database URL with its password); it is written with `0600` permissions. Keep it that way and out of version control.
+
+We will omit the Authorization header in the following examples.
+
+### Create a database
+```http
+POST /admin/databases HTTP/1.1
+
+{ "name": "testdb" }
+```
+
+### Create a table
+
+```http
+POST /admin/databases/testdb/tables HTTP/1.1
+
+{ 
+    "name": "test",
+    "columns": [
+		{"name": "col1", "type": "text", "notnull": true},
+		{"name": "col2", "type": "boolean"},
+		{"name": "col3", "type": "integer", "default": "42", "constraints": ["CHECK (col3 > 40)"]},
+		{"name": "col4", "type": "timestamp"},
+		{"name": "arr", "type": "integer[]"},
+		{"name": "extra", "type": "json"},
+		{"name": "duration", "type": "tsrange"},
+		{"name": "other", "type": "text", "constraints": ["REFERENCES test (col1)"]}
+	],
+	"constraints": ["PRIMARY KEY (col1)"]
+}
+```
+
+### Insert records
+
+Insert one record:
+
+```http
+POST /api/testdb/test HTTP/1.1
+
+{
+	"col1": "",
+	"col2": false,
+	"extra": {
+		"a": "pippo",
+		"b": 4444,
+		"c": [1,2,3,"d"]
+	},
+	"arr": [1,2,3],
+	"duration": "['2022-12-31 11:00','2023-01-01 06:00']"
+}
+```
+
+Insert multiple records:
+
+```http
+POST /api/testdb/test HTTP/1.1
+
+[
+	{ "col1": "one", "col3": 43},
+	{ "col1": "two", "col3": 44}
+]
+```
+
+> [!IMPORTANT]
+> In these example we use the default configuration for SmoothDB.
+> To have fully PostgREST API compliancy, you should have a configuration similar to:
+> ```json 
+>{
+> 	"EnableAdminRoute": false,
+> 	"BaseAPIURL": "",
+> 	"ShortAPIURL": true,
+> 	"Database.AllowedDatabases": ["testdb"]
+>} 
+> ```
+> With these configurations the "/admin" is no longer accessible and "/api/testdb/test..." becomes simply "/test...".
+
+### Select records
+
+```http
+GET /api/testdb/test?col3=gt.42 HTTP/1.1
+```
+```json
+[
+  { "col1": "one", "col2": null, "col3": 43, "col4": null, "arr": null, "extra": null, "duration": null, "other": null },
+  { "col1": "two", "col2": null, "col3": 44, "col4": null, "arr": null, "extra": null, "duration": null, "other": null }
+]
+```
+
+Most operators in [PostgREST Operators](https://postgrest.org/en/stable/references/api/tables_views.html#operators) are supported.
+
+More conditions can be combined with the **and**, **or**, **not** operators ('and' being the default):
+
+```http
+GET /api/testdb/people?grade=gte.90&student=is.true&or=(age.eq.14,not.and(age.gte.11,age.lte.17)) HTTP/1.1
+```
+
+Use the **select** parameter to specify which column to show:
+
+```http
+GET /api/testdb/test?select=col1,col3&col3.gt=42 HTTP/1.1
+```
+```json
+[
+  { "col1": "one", "col3": 43 },
+  { "col1": "two", "col3": 44 }
+]
+```
+
+Pagination is controlled with **limit** and **offset** query parameters:
+
+```http
+GET /api/testdb/pages?limit=15&offset=30 HTTP/1.1
+```
+
+Often it is better to manage pagination "out of band", using the Range header:
+
+```http
+GET /api/testdb/pages HTTP/1.1
+Range-Unit: items
+Range: 30-44
+```
+
+In both ways the response will be similar to:
+
+```http
+HTTP/1.1 200 OK
+Range-Unit: items
+Content-Range: 30-44/*
+```
+
+If both limit or offset parameters and range are present, the latter has precedence.
+
+### Relationships
+
+You can include related resources in a single API call.
+
+SmoothDB uses Foreign Keys to determine which tables can be joined together, allowing many-to-one, many-to-many, one-to-many and one-to-one relationships.
+
+To make a request joining data from multiple tables, you use again the **select** parameter, specifying the additional tables and the required columns for each:
+
+```http
+GET /api/testdb/orders?select=id,amount,companies(name,category) HTTP/1.1
+```
+```json
+[
+  { "id": "1234", "amount": 1000 , "companies": { "name": "audi", "category": "cars"}},
+  { "id": "5678", "amount": 2000 , "companies": { "name": "bmw", "category": "cars"}}
+]
+```
+
+You can use the **spread** operator to flatten the results:
+
+```http
+GET /projects?select=id,...clients(client_name:name) HTTP/1.1
+```
+```json
+[
+	{"id":1,"client_name":"Microsoft"},
+	{"id":2,"client_name":"Microsoft"},
+	{"id":3,"client_name":"Apple"},
+	{"id":4,"client_name":"Apple"},
+	{"id":5,"client_name":null}
+]
+```
+
+You can nest relationships on multiple levels.
+
+```http
+GET /api/testdb/clients?select=id,projects(id,tasks(id,name))&projects.tasks.name=like.Design* HTTP/1.1
+```
+
+### Functions
+
+Functions are called on `/rpc/<name>`, with the arguments in the body of a `POST` or in the query string of a `GET` (or `HEAD`), as in [PostgREST functions](https://postgrest.org/en/stable/references/api/functions.html). Any other method on `/rpc/` answers `405` with an `Allow` header.
+
+As in PostgREST, the access mode of a request follows the HTTP method and, for functions, their volatility: `GET` and `HEAD` run **read-only** (tables, views and functions alike), `POST`, `PATCH` and `DELETE` run read-write, except that a `POST` calling a `STABLE` or `IMMUTABLE` function runs read-only too. Anything that tries to write in a read-only request — a `VOLATILE` function that inserts, a view whose expression calls `nextval()`, a `STABLE` function that writes despite its marker — fails inside PostgreSQL with SQLSTATE `25006` (`cannot execute INSERT in a read-only transaction`), answered as `405 Method Not Allowed` with `Allow: POST`; nothing is written. Volatility itself is not a gate: a `VOLATILE` function that only reads is callable with `GET`.
+
+```http
+GET /api/testdb/rpc/delete_everything HTTP/1.1
+```
+```http
+HTTP/1.1 405 Method Not Allowed
+Allow: POST
+
+{"subsystem":"database","message":"cannot execute DELETE in a read-only transaction","code":"25006", ...}
+```
+
+With `Database.TransactionMode` other than `none` the request transaction is begun `READ ONLY`; with `none` (the default, one implicit transaction per statement) the session setting `default_transaction_read_only` is switched for the request, and switched back before the next write on the same connection.
+
+### Aggregate Functions
+
+SmoothDB supports aggregate functions for performing calculations on data sets, compatible with [PostgREST aggregate queries](https://postgrest.org/en/stable/references/api/aggregate_functions.html).
+
+#### Basic Aggregates
+
+Simple aggregates return a single result:
+
+```http
+GET /orders?select=amount.sum() HTTP/1.1
+```
+```json
+[{"sum":108000}]
+```
+
+Supported aggregate functions:
+- `avg()` - Average value
+- `count()` - Count of rows
+- `max()` - Maximum value  
+- `min()` - Minimum value
+- `sum()` - Sum of values
+
+#### Grouped Aggregates
+
+Include non-aggregate fields to group results:
+
+```http
+GET /orders?select=amount.sum(),customer_id&order=customer_id.asc HTTP/1.1
+```
+```json
+[
+  {"sum":36000,"customer_id":1},
+  {"sum":24000,"customer_id":2},
+  {"sum":48000,"customer_id":3}
+]
+```
+
+#### Custom Labels and Type Casting
+
+```http
+GET /orders?select=total_revenue:amount.sum(),avg_order:amount.avg()::int HTTP/1.1
+```
+```json
+[{"total_revenue":108000,"avg_order":36000}]
+```
+
+#### Count Without Specifying Field
+
+```http
+GET /orders?select=count() HTTP/1.1
+```
+```json
+[{"count":25}]
+```
+
+#### Aggregates with JSON Columns
+
+```http
+GET /orders?select=details->tax::numeric.sum() HTTP/1.1
+```
+```json
+[{"sum":1250.50}]
+```
+
+#### Aggregates in Embedded Resources
+
+```http
+GET /customers?select=name,orders(amount.sum()) HTTP/1.1
+```
+```json
+[
+  {"name":"Alice","orders":[{"sum":15000}]},
+  {"name":"Bob","orders":[{"sum":22000}]}
+]
+```
+
+#### Configuration
+
+Aggregate functions are enabled by default. To disable them, set `Database.AggregatesEnabled` to `false` in your configuration:
+
+```json
+{
+  "Database": {
+    "AggregatesEnabled": false
+  }
+}
+```
+
+When disabled, attempts to use aggregate functions will return an error.
+
+
+### Recursive Queries
+
+> [!NOTE]
+> This is a SmoothDB extension to PostgREST syntax. We plan to propose it to PostgREST.
+
+SmoothDB walks self-referential tables (and separate edge tables) with the `start`/`recurse` operators, generating PostgreSQL recursive CTEs with automatic cycle detection.
+
+```http
+GET /api/testdb/employees?id=start.1&manager_id=recurse.3 HTTP/1.1
+```
+
+Returns row `id=1` and its descendants up to 3 levels deep, following `manager_id → id`. Use `recurse.all` (or bare `recurse`) for unlimited depth (capped by `MaxRecursiveDepth`), and `after` instead of `start` to exclude the seed row.
+
+**Walking upward (`recurse!up`).** By default recursion follows the FK toward descendants. Add the `!up` hint to walk toward ancestors instead - the chain from a node up to the root:
+
+```http
+GET /api/testdb/employees?id=start.5&manager_id=recurse!up.all HTTP/1.1   # employee 5 and its manager chain
+```
+
+`recurse!up` is single-table only; it is rejected with `via()`, where the same reversal is expressed by swapping the edge's source/target columns.
+
+**Result vs. traversal filters.** A plain filter restricts the *result*: the whole subtree is walked, then non-matching rows are dropped. Prefix a filter with `walk.` to prune the *traversal* instead - a non-matching node, and everything beyond it, is skipped:
+
+```http
+GET /api/testdb/employees?id=start.1&manager_id=recurse.all&is_active=is.true       HTTP/1.1   # keep only active rows
+GET /api/testdb/employees?id=start.1&manager_id=recurse.all&walk.is_active=is.true  HTTP/1.1   # stop walking at inactive nodes
+```
+
+Standard parameters (`select`, `order`, `limit`, …) apply to the result set. Two pseudo-columns can be selected or ordered by: `__depth`, each row's traversal depth (seed = 0), and `__path`, the array of keys from the seed to the row (ordering by `__path` gives a depth-first order). Related resources can be embedded:
+
+```http
+GET /api/testdb/employees?id=start.1&manager_id=recurse.all&select=id,name,__depth,tasks(title)&order=__depth HTTP/1.1
+GET /api/testdb/employees?id=start.1&manager_id=recurse.all&select=id,name,__path&order=__path HTTP/1.1
+```
+
+**Edge tables (`via`).** Traverse a graph through a separate edge table with source/target columns. Add the `!both` hint to follow edges in either direction; filter which edges to follow with the standard `table.column` syntax (`eq`, `in`, `or`, …):
+
+```http
+GET /api/testdb/documents?id=after.1&id=recurse.all&relationships=via(src_id,dst_id) HTTP/1.1
+GET /api/testdb/documents?id=after.1&id=recurse.all&relationships=via!both(src_id,dst_id)&relationships.rel_type=in.(contains,references) HTTP/1.1
+```
+
+A node reachable along several paths is returned once, at its shortest depth. The walk visits nodes, not paths: its cost is bounded by the number of nodes times the depth, whatever the number of paths between them. A cycle only re-enters a node at a greater depth, so on a cyclic graph (and on every `via!both` walk, where each edge can be followed back) the traversal runs until the depth cap - `recurse.N` or `MaxRecursiveDepth` - which is what bounds it; the seed itself is never re-entered.
+
+Selecting or ordering by `__path` on a `via` walk is different: to carry a path the traversal has to enumerate every simple path of the graph, whose number grows exponentially with the depth (on a layered DAG of 650 nodes and 1800 edges: 797,161 paths for 490 reachable nodes, a walk of 1.2 s against 1 ms without `__path`). Ask for it on small graphs or with a small `recurse.N`. In single-table walks each node has one path, so `__path` costs nothing there.
+
+Embedding is not supported together with `via` traversal.
+
+### jq Support
+
+> [!NOTE]
+> This is a SmoothDB extension to PostgREST syntax.
+
+SmoothDB can evaluate [jq](https://jqlang.github.io/jq/) programs server-side, via [gojq](https://github.com/itchyny/gojq). The feature is **disabled by default**: set `JQ.Enabled` to `true` in the configuration to use it. Evaluation is strictly bounded - programs have no I/O, run under a timeout (`JQ.Timeout`, default 250ms) and a size cap (`JQ.MaxProgramBytes`), and must produce **exactly one** output value (wrap streams in an array: `[.items[] | ...]`).
+
+There are three surfaces, sharing the same evaluation core:
+
+#### jq updates
+
+`PATCH` with a `jq=` query parameter (and an empty body) performs an atomic read-modify-write of the matched rows, with no client round trip:
+
+```http
+PATCH /api/testdb/products?id=eq.42&jq={"counter": (.counter + 1)} HTTP/1.1
+```
+
+Within the request transaction, the matched rows are selected `FOR UPDATE`; each row (a JSON object with all the columns visible to the role) is fed to the program, whose output must be a JSON object of columns to update - it becomes that row's `UPDATE ... SET` (an empty object `{}` leaves the row untouched). Any error - parse, evaluation, non-object output, unknown column - aborts the whole request: all rows or none. Row level security and triggers apply as in a normal update. At most `JQ.MaxUpdateRows` (default 1000) rows can be updated in one request.
+
+`Prefer: return=representation` returns the resulting rows (all visible columns). Arguments can be passed with `jq_args=` (a URL-encoded JSON object) and are available as jq variables:
+
+```http
+PATCH /api/testdb/products?id=eq.42&jq={"stock": (.stock - $n)}&jq_args={"n": 3} HTTP/1.1
+```
+
+For longer programs, the raw program text can be sent as the request body with `Content-Type: application/vnd.smoothdb.jq` instead of the `jq=` parameter — no URL encoding, newlines and `#` comments allowed (`jq_args=` stays in the query string):
+
+```http
+PATCH /api/testdb/products?id=eq.42&jq_args={"n": 3} HTTP/1.1
+Content-Type: application/vnd.smoothdb.jq
+
+# restock and log
+{
+  "stock": (.stock + $n),
+  "history": (.history + [{restocked: $n}])
+}
+```
+
+#### Response transforms
+
+`jq=` (with optional `jq_args=`) on table reads and on function calls (`GET /rpc/fn`, `POST /rpc/fn`) transforms the JSON response body before it is returned:
+
+```http
+GET /api/testdb/products?category=eq.tools&jq=map(.name) HTTP/1.1
+GET /api/testdb/products?jq={total: (map(.price) | add)} HTTP/1.1
+```
+
+The transform applies after the query: filters, `select`, `order`, `limit` and the `Content-Range`/count headers all reflect the pre-transform result set. Only JSON content types can be transformed (`Accept: text/csv` with `jq=` is an error).
+
+#### POST /jq
+
+A standalone endpoint (behind the normal authentication) evaluates a batch of programs against provided inputs - useful for testing programs and for authoring-time validation with `parse_only`:
+
+```http
+POST /jq HTTP/1.1
+
+{
+  "parse_only": false,
+  "evals": [
+    {"program": ".a + $delta", "input": {"a": 1}, "args": {"delta": 41}}
+  ]
+}
+```
+
+The response is a `200` array with one item per evaluation: `{"output": ...}` or `{"error": "..."}` - errors are reported per item. With `"parse_only": true` each program is only compile-checked (no input needed). The endpoint is not registered when `JQ.Enabled` is false (404).
+
+#### Configuration
+
+```json
+{
+  "JQ": {
+    "Enabled": true
+  }
+}
+```
+
+See the [configuration table](#configuration-file) for `JQ.Timeout`, `JQ.MaxProgramBytes`, `JQ.MaxUpdateRows` and `JQ.CacheEntries`.
+
+## Example for using SmoothDB in your application
+
+You can embed SmoothDB functionalities in your backend app with relative ease.
+
+This short example is a minimal app that exposes a **/products** GET route to obtain the JSON array of the products and a **/view** route to view them in a formatted HTML table.
+
+In this note we omit error handling for brevity, see the whole example in [examples/server.go](examples/server.go).
+
+> [!WARNING]
+> While you can already be confident with the retro compatibility of the API, because of the goal of
+> compatibility with PostgREST, this is not yet the case for the exported functions in the various
+> packages.
+
+```go
+import (
+	...
+	
+	"github.com/sted/heligo"
+	"github.com/sted/smoothdb/api"
+	"github.com/sted/smoothdb/database"
+	smoothdb "github.com/sted/smoothdb/server"
+)
+
+func main() {
+	// base configuration
+	baseConfig := map[string]any{
+		"Address":                   ":8085",
+		"AllowAnon":                 true,
+		"BaseAPIURL":                "",
+		"ShortAPIURL":               true,
+		"Logging.FilePath":          "./example.log",
+		"Database.AllowedDatabases": []string{"example"},
+	}
+	// smoothdb initialization
+	s, _ := smoothdb.NewServerWithConfig(baseConfig, nil)
+	
+	// -- here the database is connected and the standard routes are prepared
+	
+	// prepare db content
+	prepareContent(s)
+	// create template and a view route
+	prepareView(s)
+	// run
+	s.Run()
+}
+```
+In *prepareContent* we see the basic interactions with the database.
+
+```go
+func prepareContent(s *smoothdb.Server) error {
+
+	dbe_ctx, _, _ := database.ContextWithDb(context.Background(), nil, "postgres")
+	// create a database
+	db, _ := s.DBE.GetOrCreateActiveDatabase(dbe_ctx, "example")
+	ctx, _, err := database.ContextWithDb(context.Background(), db, "postgres")
+	// delete previous table if exists
+	database.DeleteTable(ctx, "products", true)
+	// create a table 'products'
+	database.CreateTable(ctx, &database.Table{
+		Name: "products",
+		Columns: []database.Column{
+			{Name: "name", Type: "text"},
+			{Name: "price", Type: "int4"},
+			{Name: "avail", Type: "bool"},
+		},
+		IfNotExists: true,
+	})
+	// insert records
+	database.CreateRecords(ctx, "products", []database.Record{
+		{"name": "QuantumDrive SSD 256GB", "price": 59, "avail": true},
+		{"name": "SolarGlow LED Lamp", "price": 99, "avail": false},
+		{"name": "AquaPure Water Filter", "price": 20, "avail": true},
+		{"name": "BreezeMax Portable Fan", "price": 5, "avail": true},
+		{"name": "Everlast Smartwatch", "price": 200, "avail": false},
+		{"name": "JavaPro Coffee Maker", "price": 45, "avail": true},
+		{"name": "SkyView Drone", "price": 150, "avail": true},
+		{"name": "EcoCharge Solar Charger", "price": 30, "avail": false},
+		{"name": "GigaBoost WiFi Extender", "price": 75, "avail": true},
+		{"name": "ZenSound Noise-Canceling Headphones", "price": 10, "avail": false},
+	}, nil)
+	// grant read access to everyone
+	database.CreatePrivilege(ctx, &database.Privilege{
+		TargetName: "products",
+		TargetType: "table",
+		Types:      []string{"select"},
+		Grantee:    "public",
+	})
+	return nil
+}
+```
+
+In *prepareView* we create a standard html/template and register a route to view the content.
+
+```go
+func prepareView(s *smoothdb.Server) error {
+	// create the template
+	t, _ := template.New("").Parse(`
+		<html>
+		<head>
+		<style>
+			table {
+				margin-left: auto;
+    			margin-right: auto;
+				border-collapse: collapse;
+				border: 2px solid rgb(200, 200, 200);
+				letter-spacing: 1px;
+				font-family: sans-serif;
+				font-size: 0.8rem;
+			}
+			th {
+				background-color: #3f87a6;
+				color: #fff;
+		  	}
+			td {
+				background-color: #e4f0f5;
+			}
+			td,th {
+				border: 1px solid rgb(190, 190, 190);
+				padding: 5px 10px;
+			}  
+		</style>
+		</head>
+		<body>
+		<h1>Products</h1>
+		<table>
+			<tr><th>Name</th><th>Price</th><th>Avail</th></tr>
+			{{range .}}
+				<tr>
+					<td><b>{{.Name}}</b></td><td>{{.Price}}</td><td>{{.Avail}}</td>
+				</tr>
+			{{end}}
+		</table>
+		</body>`)
+	
+	// register a route
+	r := s.GetRouter()
+	m := s.MiddlewareWithDbName("example")
+	g := r.Group("/view", m)
+	g.Handle("GET", "", func(ctx context.Context, w http.ResponseWriter, r heligo.Request) (int, error) {
+		results, err := database.GetDynStructures(ctx, "products")
+		if err != nil {
+			return api.WriteError(w, err)
+		}
+		err = t.Execute(w, results)
+		if err == nil {
+			return http.StatusOK, nil
+		} else {
+			return http.StatusInternalServerError, err
+		}
+	})
+	return nil
+}
+```
+
+To try the example
+
+	go run server.go
+
+in the examples directory and browse to *localhost:8085/products* and *localhost:8085/view*.
+
+## Admin UI
+
+> [!WARNING] 
+> Beta.
+
+![](/misc/screenshot.png)
+
+A simple interface for the basic administration commands.
+
+It allows to configure databases, tables, colums, roles, etc., must be explicitly enabled and for now needs the configuration of the anonymous role to work.
+
+These are the required configurations:
+
+```json 
+{
+	"AllowAnon": true,
+ 	"EnableAdminRoute": true,
+	"EnableAdminUI": true,
+} 
+```
+
+## Plugins
+
+> [!WARNING]
+> This is experimental.
+>
+> It is inherently complicated to build plugins in Go, and it is normally advisable to compile them together with the host program code.
+
+Another way to extend the capabilities of SmoothDB is through the plugin mechanism: the plugins are Go libraries that comply with the `plugins.Plugin` interface and are loaded when the server starts.
+
+Currently, the plugins have access to the logger, the router, and the database. More granular interfaces between plugins and host will be created if deemed appropriate.
+
+In the directory `plugins/plugins/example` there is a sample plugin:
+
+```go
+type examplePlugin struct {
+	logger *logging.Logger
+	router *heligo.Router
+}
+
+func (p *examplePlugin) Prepare(h plugins.Host) error {
+	p.logger = h.GetLogger()
+	p.logger.Info().Msg("examplePlugin: Preparing")
+	p.router = h.GetRouter()
+	p.router.Handle("GET", "/example", func(c context.Context, w http.ResponseWriter, r heligo.Request) (int, error) {
+		w.Write([]byte("Here we are"))
+		return http.StatusOK, nil
+	})
+	return nil
+}
+
+func (p *examplePlugin) Run() error {
+	p.logger.Info().Msg("examplePlugin: Started")
+	return nil
+}
+```
+
+To build it use the following command:
+
+```
+	go build -trimpath -buildmode=plugin -o example.plugin main.go
+```
+
+## Configuration
+
+Configuration parameters can be provided via configuration file, environment variables and command line, with increasing priority.
+
+### Configuration file
+
+The configuration file *config.jsonc* (JSON with Comments) is created automatically on the first start, in the working directory. It contains the following parameters with their defaults:
+
+| Name | Description | Default |
+| --- | --- | --- |
+| Address | Server address and port | 0.0.0.0:4000 |
+| CertFile | TLS certificate file | "" |
+| KeyFile | TLS certificate key file | "" |
+| LoginMode | Login mode: "none", "db", "gotrue" | none |
+| AuthURL | URL of the external AuthN service | "" |
+| LoginRateLimit | Max POST /token attempts per minute per client address, 0 to disable | 30 |
+| AllowAnon | Allow unauthenticated connections; also requires a non-empty Database.AnonRole, otherwise anonymous requests are refused (401) | false |
+| JWTSecret | Secret for JWT tokens | "" |
+| SessionMode | Session mode: "none" (no cache), "role" (cache the verified claims and keep the prepared connection attached to the session between requests), "claims" (cache the verified claims only; the connection returns to the pool after every request) | "role" |
+| MaxSessions | Maximum number of cached sessions; beyond it a request runs without a session | 10000 |
+| EnableAdminRoute | Enable administration of databases and tables | false |
+| EnableAdminUI | Enable Admin dashboard | false |
+| EnableAPIRoute | Enable API access | true |
+| BaseAPIURL | Base URL for the API | "/api" |
+| ShortAPIURL | Skip database name in API URL. Database.AllowedDatabases must contain a single db | false |
+| BaseAdminURL | Base URL for the Admin API | "/admin" |
+| CORSAllowedOrigins | CORS Access-Control-Allow-Origin | ["*"] |
+| CORSAllowCredentials | CORS Access-Control-Allow-Credentials | false |
+| EnableDebugRoute | Enable debug access | false |
+| PluginDir | Plugins' directory | "./_plugins" |
+| Plugins | Ordered list of plugins | [] |
+| ReadTimeout | The maximum duration for reading the entire request, including the body (seconds) | 60 |
+| WriteTimeout | The maximum duration before timing out writes of the response (seconds) | 60 |
+| GracefulShutdownTimeout | The maximum duration to wait for in-flight requests to complete on shutdown (seconds, 0 to wait until done) | 0 |
+| DrainDelay | Seconds to keep serving after /ready starts reporting 503 on a SIGTERM shutdown, so load balancers can deregister the instance; SIGINT skips the delay (0 to disable) | 0 |
+| VerboseErrors | Return full database error details (hint, detail) to clients; off by default because they help fingerprint the schema | false |
+| RequestMaxBytes | Max bytes allowed in requests, to limit the size of incoming request bodies (0 for unlimited) | 1048576 (1MB) |
+| Database.URL | Database URL as postgresql://user:pwd@host:port/database | "" |
+| Database.MinPoolConnections | Miminum connections per pool | 10 |
+| Database.MaxPoolConnections | Maximum connections per pool | 100 |
+| Database.AnonRole | Role for anonymous requests when AllowAnon is true; empty refuses anonymous access (like PostgREST's unset db-anon-role). Set it to an explicit non-superuser role, never the connecting role | "" |
+| Database.AllowedDatabases | Allowed databases | [] for all |
+| Database.SchemaSearchPath | Schema search path of the connections (name resolution of unqualified types, functions and views) | [] for Postgres search path |
+| Database.ExposedSchemas | Schemas a request may select with `Accept-Profile`/`Content-Profile`, the first being the default (PostgREST's `db-schemas`); a header naming another schema answers 406 | [] for every schema, with the first of the search path as default |
+| Database.TransactionMode | General transaction mode for operations: "none", "commit", "rollback" (also "commit-allow-override", "rollback-allow-override", overridable per request with `Prefer: tx=commit` / `tx=rollback`). Whatever the mode, GET and HEAD requests (and POST calls to STABLE or IMMUTABLE functions) run read-only, see [Functions](#functions) | "none" |
+| Database.AggregatesEnabled | Enable aggregate functions | true |
+| Database.MaxRecursiveDepth | Maximum recursive query depth; 0 disables recursive queries | 100 |
+| JQ.Enabled | Enable jq evaluation: /jq route, jq= query parameter | false |
+| JQ.Timeout | Timeout in milliseconds for a single jq evaluation | 250 |
+| JQ.MaxProgramBytes | Maximum size in bytes for a jq program or its arguments | 4096 |
+| JQ.MaxUpdateRows | Maximum number of rows updatable with a single jq update | 1000 |
+| JQ.CacheEntries | Size of the compiled jq program cache | 256 |
+| JQ.MaxOutputBytes | Maximum size in bytes of a single jq evaluation output | 1048576 |
+| JQ.BatchTimeout | Wall-clock budget in milliseconds for a whole POST /jq batch | 2000 |
+| Logging.Level | Log level: trace, debug, info, warn, error, fatal, panic | "info" |
+| Logging.FileLogging | Enable logging to file | true |
+| Logging.FilePath | File path for file-based logging | "./smoothdb.log" |
+| Logging.MaxSize | MaxSize is the maximum size in megabytes of the log file before it gets rotated | 25 |
+| Logging.MaxBackups |  MaxBackups is the maximum number of old log files to retain | 3 |
+| Logging.MaxAge | MaxAge is the maximum number of days to retain old log files | 5 |
+| Logging.Compress | True to compress old log files | false |
+| Logging.StdOut | Enable logging to stdout | false |
+| Logging.PrettyConsole | Enable pretty output for stdout | false |
+| Logging.ColorConsole | Enable colorful output for stdout | false |
+
+### Environment variables
+
+| Name | Description |
+| --- | --- | 
+| SMOOTHDB_DATABASE_URL | Database.URL |
+| SMOOTHDB_JWT_SECRET | JWTSecret |
+| SMOOTHDB_AUTH_URL | AuthURL |
+| SMOOTHDB_ALLOW_ANON | AllowAnon |
+| SMOOTHDB_ENABLE_ADMIN_ROUTE | EnableAdminRoute | 
+| SMOOTHDB_CORS_ALLOWED_ORIGINS | CORSAllowedOrigins (comma-separated list) |
+| SMOOTHDB_CORS_ALLOW_CREDENTIALS | CORSAllowCredentials (true/false) |
+| SMOOTHDB_DEBUG | true forces: AllowAnon: true, LoginMode: "db", EnableAdminRoute: true, EnableAdminUI: "true", Logging.Level: "trace", Logging.StdOut: true, EnableDebugRoute: true |
+	
+### Command line parameters
+
+You can pass some configuration parameters in the command line:
+
+```
+$ ./smoothdb -h
+
+Usage: smoothdb [options]
+
+Server Options:
+	-a, --addr <host>                Bind to host address (default: '0.0.0.0:4000')
+	-d, --dburl <url>                Database URL	
+	-c, --config <file>              Configuration file (default: './config.jsonc')
+	--initdb                         Initialize db interactively and exit
+	-h, --help                       Show this message
+```
+
+### Database configuration
+
+The way SmoothDB connect to PostgreSQL is through the Database.URL configuration:
+	
+	postgresql://[user:password@]host:port[/database]
+
+The specified user will be used as the **authenticator**, so it should be a user with limited privileges.
+The authenticator must be able to login and should not "inherits” the privileges of roles it is a member of.
+
+```sql
+CREATE ROLE auth LOGIN NOINHERIT
+```
+
+Invoking
+
+```
+smoothdb --initdb
+```
+
+and following the prompt, is an easy way to initialize the role and other configurations
+
+## Health Check Endpoints
+
+SmoothDB provides two health check endpoints for monitoring and integration with load balancers, orchestrators, and monitoring systems:
+
+### GET /live
+
+Returns a 200 OK response if the server is running. This endpoint can be used for basic liveness probes.
+
+Example:
+```bash
+curl -I "http://localhost:8000/live"
+```
+
+Response:
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+```
+
+### GET /ready
+
+Returns a 200 OK response if the server is ready to handle requests. In the current implementation, this endpoint behaves the same as `/live`.
+
+Example:
+```bash
+curl -I "http://localhost:8000/ready"
+```
+
+Response:
+```
+HTTP/1.1 200 OK
+Content-Type: application/json
+```
+
+Both endpoints return a JSON response body:
+```json
+{
+  "status": "ok"
+}
+```
+
+## Schema Cache Reload via PostgreSQL NOTIFY
+
+SmoothDB supports reloading the schema cache without restarting the server, similar to PostgREST's functionality. This feature uses PostgreSQL's LISTEN/NOTIFY mechanism to trigger schema cache reloads. The same system will be used soon also to reload configuration.
+
+### How it works
+
+1. SmoothDB listens on the `smoothdb` channel for notifications
+2. When a notification is received with the payload `reload schema`, it triggers a schema cache reload
+3. You can reload schema cache for all databases or specific databases
+
+### Usage
+
+#### Reload schema cache for all active databases
+
+```sql
+NOTIFY smoothdb, 'reload schema';
+```
+
+#### Reload schema cache for a specific database
+
+```sql
+NOTIFY smoothdb, 'reload schema mydatabase';
+```
+
+#### Using the helper function
+
+For convenience, you can create a helper function in your database:
+
+```sql
+-- Create the helper function (run this once)
+CREATE OR REPLACE FUNCTION notify_schema_reload(database_name text DEFAULT NULL)
+RETURNS void AS $$
+BEGIN
+  IF database_name IS NULL THEN
+    -- Reload all databases
+    PERFORM pg_notify('smoothdb', 'reload schema');
+  ELSE
+    -- Reload specific database
+    PERFORM pg_notify('smoothdb', 'reload schema ' || database_name);
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Usage examples:
+SELECT notify_schema_reload();        -- Reload all databases
+SELECT notify_schema_reload('mydb');  -- Reload specific database
+```
+
+#### Automatic schema reload on DDL changes
+
+You can set up automatic schema cache reload when DDL changes occur:
+
+```sql
+-- Create the event trigger function
+CREATE OR REPLACE FUNCTION auto_notify_schema_reload()
+RETURNS event_trigger AS $$
+BEGIN
+  -- Get the current database name
+  PERFORM pg_notify('smoothdb', 'reload schema ' || current_database());
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create the event trigger
+CREATE EVENT TRIGGER schema_change_trigger
+ON ddl_command_end
+EXECUTE FUNCTION auto_notify_schema_reload();
+```
+
+This will automatically reload the schema cache whenever DDL operations (CREATE, ALTER, DROP) are performed.
+
+### Notes
+
+- The listener automatically reconnects if the connection is lost
+- Schema reloads are performed asynchronously and do not block other operations
+- If a specific database is not found or not active, the reload request for that database is ignored
+
+## Development
+
+Contributions are warmly welcomed in the form of Pull Requests and Issue reporting.
+
+Some areas needing particular attention:
+
+* Security
+* Completing features present in PostgREST (see [TODO.md](TODO.md))
+* Verifying compatibility
+* Documentation
+* Performances and benchmarks
+
+### Tests
+
+There are three categories of tests: 
+
+* Internal unit tests
+* API tests 
+* PostgREST tests
+
+The last ones are taken directly from the PostgREST project.
+
+To launch all the tests:
+
+```
+make test
+```
+
+To initialize and reset PostgREST fixtures:
+
+```
+make prepare-postgrest-tests
+```
+
+## Acknowledgments
+
+This project owes a debt of gratitude to:
+
+* [pgx](https://github.com/jackc/pgx), upon whose solid foundations it is built
+* [PostgREST](https://github.com/PostgREST/postgrest), which served as an inspiration, particularly for its excellent APIs, documentation, and robust testing.

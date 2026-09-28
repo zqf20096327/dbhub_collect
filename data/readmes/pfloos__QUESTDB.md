@@ -1,0 +1,219 @@
+# 🚀 QUESTDB: A Database of Highly-Accurate Excitation Energies
+
+[![Funding](https://img.shields.io/badge/Funding-ERC%20PTEROSOR-orange)](https://lcpq.github.io/PTEROSOR/)
+[![License](https://img.shields.io/badge/License-CC%20BY%20SA%204.0-lightgrey)](https://creativecommons.org/licenses/by/4.0/)
+[![Last Update](https://img.shields.io/github/last-commit/pfloos/QUESTDB?label=last%20update)](https://github.com/pfloos/QUESTDB/commits/main)
+
+[![GitHub Repo stars](https://img.shields.io/github/stars/pfloos/QUESTDB?style=social)](https://github.com/pfloos/QUESTDB/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/pfloos/QUESTDB?style=social)](https://github.com/pfloos/QUESTDB/network/members)
+[![GitHub watchers](https://img.shields.io/github/watchers/pfloos/QUESTDB?style=social)](https://github.com/pfloos/QUESTDB/watchers)
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15671384.svg)](https://doi.org/10.5281/zenodo.15671384)
+
+---
+
+## 📚 Table of Contents
+
+- [✨ Key Features](#-key-features)
+- [🧪 Why Use QUESTDB?](#-why-use-questdb)
+- [📂 Repository Contents](#-repository-contents)
+- [⚡ Charged Excitations (charged/)](charged/README.md)
+  - [valence_IPs](charged/valence_IPs/)
+  - [DIPs](charged/DIPs/)
+  - [core_IPs](charged/core_IPs/)
+- [👥 Contributors](#-contributors)
+- [📚 Main References](#-main-references)
+- [📖 Other References](#-other-references)
+- [🔋 Extension to Charged Excitations](#-extension-to-charged-excitations)
+- [🗂️ Data Structure](#️-data-structure)
+- [💰 Funding](#-funding)
+- [🧮 HPC resources](#-hpc-resources)
+
+---
+
+## ✨ Key Features
+
+- **🔬 High Accuracy:**  
+  Data obtained using state-of-the-art methods (FCI, CC3, CCSDT, CCSDTQ, CC4, CASPT2/3, NEVPT2, etc.)
+
+- **🌍 Wide Chemical Coverage:**  
+  Includes small molecules, radicals, charged species, and transition metal complexes.
+
+- **🎯 Challenging Excitations:**  
+  Focus on **double excitations** and **intramolecular charge-transfer (CT) states**.
+
+- **🛠️ Continuously Updated:**  
+  Regularly improved with new high-level calculations and critical assessments.
+
+- **📂 Easy-to-Use Format:**  
+  Organized `.xlsx` spreadsheets and `.json` files for simple extraction and analysis.
+
+---
+
+## 🧪 Why Use QUESTDB?
+
+QUESTDB supports researchers to:
+- **Benchmark** TD-DFT, wavefunction-based, and emerging excited-state methods.
+- **Guide** the development of new computational models.
+- **Facilitate** interpretation of experimental spectra and photochemistry.
+
+> **Note:** Our vision is to establish QUESTDB as a cornerstone resource for benchmarking and training the next generation of AI-driven models in excited-state science.
+
+---
+
+## ⚙️ Scripts for Subset Generation and Analysis
+
+This repository includes Python scripts to help users generate representative *"diet"* subsets of QUEST excitation energies—for instance, sets of 50, 100, or 200 transitions that reproduce the s[...]
+
+These tools are especially useful for benchmarking new methods quickly or for training machine learning models when computational cost is a limiting factor.
+
+**Main functionalities include:**
+
+- ✅ Generation of optimized subsets matching the full dataset’s distribution across:
+  - Spin states
+  - Valence vs Rydberg states  
+  - Excitation types (e.g., nπ*, ππ*, etc.)  
+  - Molecule sizes or other custom filters  
+- ✅ Support for flexible user-defined filters (e.g., only valence, only singlets, exclude genuine doubles)  
+- ✅ Preservation of full metadata in output JSON files  
+- ✅ Optional optimization of subset selection using a genetic algorithm with Bayesian hyperparameter tuning (via [`optuna`](https://optuna.org/))  
+
+---
+
+## 📂 Repository Contents
+
+This repository provides:
+- **Molecular Structures**
+- **Vertical Excitation Energies**
+- **Oscillator Strengths**
+- **Many Other Properties**
+- **Charged Excitations:** High-quality datasets for ionization potentials (IPs), valence double ionization potentials (DIPs), and core ionization potentials — see the `charged/` directory for details and per-molecule JSON files (`charged/README.md`).
+
+📌 **See the accompanying paper:**  
+[**The QUEST database of highly-accurate excitation energies**](https://arxiv.org/abs/2506.11590)  
+P.-F. Loos, M. Boggio-Pasqua, A. Blondel, F. Lipparini, and D. Jacquemin,  
+*J. Chem. Theory Comput.* **21**, 8010 (2025). [DOI:10.1021/acs.jctc.5c00975](https://doi.org/10.1021/acs.jctc.5c00975)
+
+<img src="logo/TOC.jpg"  width="250">
+© Béatrice Lejeune (@bea_quarelle)
+
+---
+
+## 👥 Contributors
+
+The QUESTDB project is maintained by a collaboration between:
+
+- [Denis Jacquemin](https://www.univ-nantes.fr/denis-jacquemin-1) (Nantes)
+- [Pierre-François Loos](https://pfloos.github.io/WEB_LOOS) (Toulouse)
+- [Martial Boggio-Pasqua](https://www.lcpq.ups-tlse.fr/spip.php?rubrique313&lang=fr) (Toulouse)
+- [Fábris Kossoski](https://kossoski.github.io) (Toulouse)
+- [Filippo Lipparini](https://people.unipi.it/filippo_lipparini) (Pisa)
+- [Anthony Scemama](https://scemama.github.io) (Toulouse)
+- [Aymeric Blondel](https://www.univ-nantes.fr/aymeric-blondel) ( Nantes)
+- [Mickael Véril](https://mveril.github.io) (Toulouse)
+- [Yann Damour](https://ydrnan.github.io/damour) (Toulouse)
+- [Antoine Marie](https://antoine-marie.github.io) (Toulouse)
+
+---
+
+## 📚 Main References
+
+Review articles on the QUEST database:
+
+- [**The QUEST database of highly-accurate excitation energies**]()  
+  P.-F. Loos, M. Boggio-Pasqua, A. Blondel, F. Lipparini, and D. Jacquemin,  
+  *J. Chem. Theory Comput.* **21**, 8010 (2025).  
+
+- [**QUESTDB: a database of highly-accurate excitation energies for the electronic structure community**](https://doi.org/10.1002/wcms.1517)  
+  M. Véril, A. Scemama, M. Caffarel, F. Lipparini, M. Boggio-Pasqua, D. Jacquemin, and P.-F. Loos,  
+  *WIREs Comput. Mol. Sci.* **11**, e1517 (2021).
+
+- [**The quest for highly accurate excitation energies: a computational perspective**](https://dx.doi.org/10.1021/acs.jpclett.0c00014)  
+  P.-F. Loos, A. Scemama, and D. Jacquemin,  
+  *J. Phys. Chem. Lett.* **11**, 2374 (2020).
+
+- [**Reference energies for double excitations: improvement & extension**](https://doi.org/10.1021/acs.jctc.4c00410)  
+  F. Kossoski, M. Boggio-Pasqua, P.-F. Loos, and D. Jacquemin,  
+  *J. Chem. Theory Comput.* **20**, 5655 (2024).
+
+- [**Reference vertical excitation energies for transition metal compounds**](https://doi.org/10.1021/acs.jctc.3c01080)  
+  D. Jacquemin, F. Kossoski, F. Gam, M. Boggio-Pasqua, and P.-F. Loos,  
+  *J. Chem. Theory Comput.* **19**, 8782 (2023).
+
+- [**A mountaineering strategy to excited states: revising reference values with EOM-CC4**](https://doi.org/10.1021/acs.jctc.2c00416)  
+  P.-F. Loos, F. Lipparini, D. A. Matthews, A. Blondel, and D. Jacquemin,  
+  *J. Chem. Theory Comput.* **18**, 4418 (2022.
+
+---
+
+## 📖 Other References
+
+- [**Excited-state absorption: Reference oscillator strengths, wavefunction and TD-DFT benchmarks**](https://doi.org/10.1021/acs.jctc.5c00159)  
+  J. Širůček, B. Le Guennic, Y. Damour, P.-F. Loos, and D. Jacquemin,  
+  *J. Chem. Theory Comput.* **21**, 4688 (2025).
+
+- [**Reference CC3 excitation energies for organic chromophores: benchmarking TD-DFT, BSE/GW and wave function methods**](https://doi.org/10.1021/acs.jctc.4c00906)  
+  I. Knysh, F. Lipparini, I. Duchemin, X. Blase, P.-F. Loos, and D. Jacquemin,  
+  *J. Chem. Theory Comput.* **20**, 8152 (2024).
+
+---
+
+## 🔋 Extension to Charged Excitations
+
+The QUEST database also contains charged excitations, mainly ionization potentials (IPs) at the moment.
+Here is the short description of the **charged** excited states included in QUEST (see the `charged` directory):
+
+- Inner- and Outer-Valence IPs and Satellite Transitions:  
+[**Reference energies for valence ionizations and satellite transitions**](https://doi.org/10.1021/acs.jctc.4c00216)  
+A. Marie and P.-F. Loos,  
+*J. Chem. Theory Comput.* **20**, 4751 (2024).
+
+- Valence Double IPs (DIPs) and Double Core Holes (DCHs):  
+[**Anomalous propagators and the particle-particle channel: Bethe-Salpeter equation**](https://doi.org/10.1063/5.0250155)  
+A. Marie, P. Romaniello, X. Blase, and P.-F. Loos,  
+*J. Chem. Phys.* **162**, 134105 (2025).
+
+- Core IPs:  
+[**Reference energies for non-relativistic core ionization potentials**](https://arxiv.org/pdf/2604.05920)  
+A. Marie, L. Burth, and P.-F. Loos,  
+*J. Chem. Theory Comput.* (submitted) arXiv:2604.05920.
+
+---
+
+## 🗂️ Data Structure
+
+- **Molecular Structures:**  
+  `.xyz` or `.TeX` formats
+
+- **Excitation Energies, Oscillator Strengths and Other Properties:**  
+  `.xls` spreadsheets and `.json` files
+
+- **Scripts to Convert and Analyze Data**  
+  `.py` scripts to convert data from one format to another and analyze them.
+
+- **Additional Metadata:**  
+  *(Planned for future releases)*
+
+---
+
+## 💰 Funding
+
+<p align="center">
+  <img src="logo/ERC.png" width="200" alt="ERC Logo" />
+</p>
+
+This database is supported by the **[PTEROSOR project](https://lcpq.github.io/PTEROSOR/)**, funded by the **European Research Council (ERC)** under the **EU Horizon 2020** research and innovation prog[...]
+
+
+<p align="center">
+  <img src="logo/ANR.jpg" width="200" alt="ERC Logo" />
+</p>
+
+This database is also funded, in part, by the Agence Nationale de la Recherche (ANR), grant [ANR-25-CE29-4996](https://anr.fr/Projet-ANR-25-CE29-4996).
+
+---
+
+## 🧮 HPC resources
+
+This work was performed using HPC resources from [**CALMIP**](https://www.calmip.univ-toulouse.fr) (Toulouse, France) under allocations **2018-18005 through 2026-18005**, as well as resources provided[...]
+

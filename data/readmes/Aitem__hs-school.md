@@ -1,0 +1,79 @@
+#+TITLE: HS SCHOOL
+#+AUTHOR: M. Surmashev @muradbei
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+
+
+* Table of Contents                                                   :TOC_3:
+- [[#postgresql-intensive][PostgreSQL intensive]]
+  - [[#sql][SQL]]
+  - [[#jsonjsonb][JSON/JSONB]]
+  - [[#qopt][QOPT]]
+  - [[#postgresql-internal][PostgreSQL internal]]
+  - [[#administration][Administration]]
+- [[#devops][DevOps]]
+- [[#clojureclojurescript][Clojure/ClojureScript]]
+
+* PostgreSQL intensive
+
+PostgreSQL intensive Crash Course by Healt-Samurai
+
+** SQL
+
+  - Query types
+  - Data types
+  - Aggregates
+  - JOINS
+  - CTE
+
+** JSON/JSONB
+
+  - [[#basic-operators-and-functions][Basic operators and functions]]
+  - [[#jsquery][Jsquery]]
+  - [[#jsonpath][JsonPath]]
+  - [[#json-knife][Json knife]]
+
+** PostgreSQL internal
+
+  - MVCC
+  - Isolation
+  - Storage
+  - Toast
+  - Checkpoints
+  - Wal
+
+** QOPT
+
+  - [[#query][Query]]
+  - Access Methods
+    - [[#seq-scan][SEQ scan]]
+    - [[#index-scan][Index scan]]
+    - [[#bitmap-index-scan][Bitmap Index scan]]
+  - [[#join][JOIN]]
+    - [[#nested-loop][Nested loop]]
+    - [[#hash-join][Hash join]]
+    - [[#merge-join][Merge join]]
+  - [[#gin-index][GIN index]]
+  - Index variation
+    - MultiColumnt
+    - Partial
+    - Functional
+
+** Administration
+
+  - Replication
+  - Backup and resotre
+  - Monitoring
+
+
+* DevOps
+
+   #+BEGIN_QUOTE
+   ⚡ Work In Progress
+   #+END_QUOTE
+
+
+* Clojure/ClojureScript
+
+   #+BEGIN_QUOTE
+   ⚡ Work In Progress
+   #+END_QUOTE

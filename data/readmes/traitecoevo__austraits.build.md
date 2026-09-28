@@ -1,0 +1,150 @@
+
+# `austraits.build`: source for `AusTraits`
+
+<!-- badges: start -->
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3568417.svg)](https://doi.org/10.5281/zenodo.3568417)
+[![build](https://github.com/traitecoevo/austraits.build/actions/workflows/check-build.yml/badge.svg)](https://github.com/traitecoevo/austraits.build/actions/workflows/check-build.yml)
+<!-- badges: end -->
+
+![](inst/figures/logo.png)
+
+AusTraits is a transformative database, containing measurements on the traits of Australia’s plant species, standardised from hundreds of disconnected primary sources. So far, data have been assembled \> 300 distinct sources, describing > 500 plant traits for > 25k taxa. The dataset and approach is documented in detail in the following publication
+
+> Falster D, Gallagher R, Wenk, E et al. (2021) AusTraits, a curated plant trait database for the Australian flora. Scientific Data 8: 254. DOI: [10.1038/s41597-021-01006-6](http://doi.org/10.1038/s41597-021-01006-6)
+
+The repo contains the data for rebuilding AusTraits, while the workflow to rebuild the dataset is on the [traits.build repo](https://github.com/traitecoevo/traits.build).
+
+AusTraits is continually evolving, as new datasets are contributed. As such, there is no single canonical version. We are continually making new versions available. Overtime, we expect that different versions will be released and used in different analyses.
+
+## Accessing data
+
+Those interested in simply using data from AusTraits, should visit download the compiled resource from the versioned releases archived on Zenodo at DOI: [10.5281/zenodo.3568417](https://doi.org/10.5281/zenodo.3568417).
+
+Users will want to read up on the [database structure, described in the `traits.build` manual](https://traitecoevo.github.io/traits.build-book/content/database_structure.html).
+
+Definitions for the traits are described the AusTraits Plant Dictionary (APD), at
+
+- Formalised vocabulary at <http://w3id.org/APD/>
+
+> A publication describes this vocabulary: Wenk EH, Sauquet H, Gallagher RV, Brownlee R, Boettiger C, Coleman D, Yang S, Auld T, Barrett RL, Brodribb T, Choat B, Dun L, Ellsworth D, Gosper C, Guja L, Jordan GJ, Breton T, Leigh A, Irving P, Medlyn B, Nolan R, Ooi M, Sommerville KD, Vesk P, White M, Wright IJ, Falster DS (2024) The AusTraits Plant Dictionary. *Scientific Data* 11:537. DOI: [10.1038/s41597-024-03368-z](http://doi.org/10.1038/s41597-024-03368-z)
+
+## Citation
+
+Users of AusTraits are requested to cite the source publication, which documents the dataset and approach:
+
+> Falster D, Gallagher R, Wenk, E et al. (2021) AusTraits, a curated plant trait database for the Australian flora. Scientific Data 8: 254.  DOI: [10.1038/s41597-021-01006-6](https://doi.org/10.1038/s41597-021-01006-6)
+
+AusTraits is built on two companion resources you may also wish to cite — the AusTraits Plant Dictionary (trait definitions) and APCalign (taxonomy alignment):
+
+> Wenk EH, Sauquet H, Gallagher RV, Brownlee R, Boettiger C, Coleman D, *et al.* (2024) The AusTraits Plant Dictionary. *Scientific Data* 11:537. DOI: [10.1038/s41597-024-03368-z](https://doi.org/10.1038/s41597-024-03368-z)
+
+> Wenk EH, Cornwell WK, Fuchs A, Kar F, Monro AM, Sauquet H, Stephens RE, Falster DS (2024) APCalign: An R package workflow and app for aligning and updating flora names to the Australian Plant Census. *Australian Journal of Botany* 72(4):BT24014. DOI: [10.1071/BT24014](https://doi.org/10.1071/BT24014)
+
+**Related work**: the textual-extraction workflow (Coleman D, Gallagher RV, Falster DS, Sauquet H, Wenk E (2023) A workflow to create trait databases from collections of textual taxonomic descriptions. *Ecological Informatics* 78:102312. DOI: [10.1016/j.ecoinf.2023.102312](https://doi.org/10.1016/j.ecoinf.2023.102312)) and the gap-filled growth-form, life-history and woodiness dataset (Wenk EH, Coleman D, Gallagher RV, Falster DS (2024) A near-complete dataset of plant growth form, life history, and woodiness for all Australian plants. *Australian Journal of Botany* 72(4):BT23111. DOI: [10.1071/BT23111](https://doi.org/10.1071/BT23111)).
+
+## Rebuilding AusTraits from source
+
+This repository (`austraits.build`) contains the raw data to compile AusTraits from diverse, original sources. 
+
+![](inst/figures/Workflow.png)
+
+We use the [`traits.build`](https://traitecoevo.github.io/traits.build/)  R package and workflow to harmonise > 400 different sources into a unified dataset. The workflow is fully-reproducible and open, meaning it exposes the decisions made in the processing of data into a harmonised and curated dataset and can also be rerun by others. AusTraits is built so that the database can be rebuilt from its parts at any time. This means that decisions made along the way (in how data is transformed or encoded) can be inspected and modified, and new data can be easily incorporated.
+
+A publication describes the `traits.build` workflow:
+> Wenk EH, Bal P, Coleman D, Gallagher RG, Yang S, Falster DS, (2024) Traits.build: A data model, workflow and R package for building harmonised ecological trait databases. *Ecological Informatics* 83: 102773. DOI: [10.1016/j.ecoinf.2024.102773](https://doi.org/10.1016/j.ecoinf.2024.102773)
+
+To build the database follows these steps
+
+***Install `traits.build`***
+
+The first step is to install a copy of [traits.build](https://github.com/traitecoevo/traits.build/): 
+
+```{r, eval=FALSE, echo=TRUE}
+remotes::install_github("traitecoevo/traits.build", quick = TRUE)
+```
+***Clone repository***
+
+Next you need to download a copy of this repository from GitHub. Then open the Rstudio project, or open R into the right repo directory.
+
+***Build***
+
+Building the database should then be as easy as running the code in the file `build.R`. Note this code can use multiple CPUs, to do this, change the number of workers to > 1.
+
+```
+source("build.R")
+```
+
+After running, you should have an object `austraits` available in your workspace, as well as a version saved in `export/data`.
+
+## Updating the build script
+
+To update the build process
+
+```
+traits.build::build_setup_pipeline(method="furrr", database_name = "austraits", workers = 1)
+```
+
+## Contributing to AusTraits
+
+We envision AusTraits as an ongoing collaborative community resource that:
+
+1.  Increases our collective understanding of the Australian flora
+2.  Facilitates the accumulation and sharing of trait data
+3.  Builds a sense of community among contributors and users
+4.  Aspires to be fully transparent and reproducible research of the highest standard.
+
+We'd love for you to contribute to the projects. Below are some ways you can contribute:
+
+- Contributing new data
+- Improving data quality and reporting errors 
+- Improving documentation
+- Development of `traits.build`` workflow
+
+For details on on how to contribute, please see the file [CONTRIBUTING.md](https://github.com/traitecoevo/austraits.build/blob/develop/.github/CONTRIBUTING.md)
+
+The AusTraits project is released with a [Contributor Code of Conduct](https://github.com/traitecoevo/austraits.build/blob/develop/.github/CODE_OF_CONDUCT.md). By contributing to this project you agree to abide by its terms.
+
+## AusTraits family
+
+`austraits.build` is part of the **AusTraits family** of packages maintained by the
+[AusTraits](https://austraits.org) team. See **[austraits.org](https://austraits.org)** for the
+project, the data, and the people behind it.
+
+Contributing? Issues across the family are tracked on one board,
+[AusTraits #9](https://github.com/orgs/traitecoevo/projects/9), and new issues are auto-added. Please
+read the [issue & labelling guide](https://github.com/traitecoevo/austraits-meta/blob/main/governance/issue-guide.md)
+in [`austraits-meta`](https://github.com/traitecoevo/austraits-meta) — the family's cross-package
+knowledge and governance hub — before filing.
+
+## Acknowledgements
+
+AusTraits is made possible by contributions from our partner organisations — the
+[University of New South Wales](https://www.unsw.edu.au/),
+[Western Sydney University](https://www.westernsydney.edu.au/),
+[Botanic Gardens of Sydney](https://www.botanicgardens.org.au/),
+[the University of Melbourne](https://www.unimelb.edu.au/),
+the [Atlas of Living Australia](https://www.ala.org.au/), and the Australian Government
+[Department of Climate Change, Energy, the Environment and Water](https://www.dcceew.gov.au) — and
+from our [advisory board, data contributors, and past partners](https://austraits.org/team/team-partners.html).
+
+AusTraits is a co-investment partnership with the
+[Australian Research Data Commons](https://ardc.edu.au/) (ARDC) through the Planet Research Data
+Commons ([DOI: 10.3565/nyk4-4r91](https://doi.org/10.3565/nyk4-4r91)). The ARDC is enabled by the
+Australian Government's [National Collaborative Research Infrastructure Strategy](https://www.education.gov.au/ncris)
+(NCRIS).
+
+This work received investment ([TD044](https://doi.org/10.47486/TD044),
+[DP720](https://doi.org/10.47486/DP720)) from the ARDC.
+
+**Funding**: AusTraits has also been supported by:
+
+- Fellowships from the Australian Research Council to Falster (FT160100113), Gallagher (DE170100208) and Wright (FT100100910),
+- A UNSW Research Infrastructure Grant to Falster, and
+- A grant from Macquarie University to Gallagher.
+
+**Recognition**: Many people have contributed to AusTraits. A list of contributors  is provided on the on Zenodo at DOI:
+    [10.5281/zenodo.3568417](https://doi.org/10.5281/zenodo.3568417).
+
+Further information about the AusTraits project is available at the project website [austraits.org](https://austraits.org).
+
+**Resuse**: At this stage, only the compiled AusTraits dataset is available for reuse, via Zenodo. The raw data sources provided in this repository are not available for reuse in their current form, without further discussion from data contributors.

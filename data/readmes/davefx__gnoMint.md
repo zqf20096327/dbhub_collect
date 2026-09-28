@@ -1,0 +1,80 @@
+gnoMint - A Certification Authority Software using GTK libraries.
+
+Documentation
+-------------
+
+The full user manual, install guide, tutorial, and feature reference
+are published as a GitHub Pages site:
+
+    https://davefx.github.io/gnoMint
+
+The Markdown source for the same content lives under docs/ in this
+repository, so you can also read it offline:
+
+    docs/index.md            Landing page
+    docs/install.md          Install guide (packages + source build)
+    docs/manual.md           Task-oriented user manual
+    docs/tutorial.md         Worked example: small-firm CA with OpenVPN
+    docs/features.md         Feature overview
+    docs/releases.md         Release history since 2006
+
+The legacy site at gnomint.sourceforge.net is no longer maintained;
+its content has been archived into the docs/ tree above.
+
+Quick start
+-----------
+
+    ./autogen.sh        # only after a fresh clone / when configure.ac changes
+    ./configure
+    make
+    sudo make install
+    gnomint &           # GUI
+    gnomint-cli         # readline shell
+
+See docs/install.md for the full dependency list.
+
+On Windows, install the prebuilt gnomint-<version>.msi from the GitHub
+Releases page instead of building from source; see the "Windows"
+section of docs/install.md.
+
+Two binaries
+------------
+
+The build produces two binaries from a shared source tree:
+
+    gnomint       The GTK 4 desktop application.
+    gnomint-cli   A readline CLI with the same capabilities. Use it
+                  in cron jobs, CI pipelines, and anywhere a script
+                  is more convenient than clicking.
+
+Year 2038 (Y2K38) Support
+-------------------------
+
+gnoMint handles certificates whose validity extends past the Year 2038
+boundary (2038-01-19 03:14:07 UTC, where a signed 32-bit time_t
+overflows), so CAs and certificates with multi-decade lifetimes work
+correctly.
+
+How it works:
+- gnoMint relies on the platform's native 64-bit time_t. It defines
+  _FILE_OFFSET_BITS=64 but deliberately does NOT force _TIME_BITS=64:
+  that is a glibc ABI switch which must match every linked library, and
+  forcing it only in gnoMint corrupted the GnuTLS ABI (see issue #86).
+  Modern targets — amd64, and 32-bit ports such as armhf — already
+  provide a 64-bit time_t through the toolchain.
+- A conditional compile-time assertion (src/time64_check.h) verifies
+  time_t really is 64-bit wherever 64-bit time_t is the ABI.
+- On legacy 32-bit-time_t platforms such as i386, where the distribution
+  keeps time_t at 32 bits for binary compatibility, gnoMint does not
+  force a mismatched ABI. Instead it warns and clamps a new CA's
+  expiration to the 2038 limit, while still correctly displaying any
+  post-2038 dates already stored in a database.
+
+On any platform with a 64-bit time_t, gnoMint can safely issue and
+manage certificates with validity periods reaching decades past 2038.
+
+Issues and patches
+------------------
+
+    https://github.com/davefx/gnoMint/issues
+    https://github.com/davefx/gnoMint/pulls

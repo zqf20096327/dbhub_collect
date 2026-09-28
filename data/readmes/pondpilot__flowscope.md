@@ -1,0 +1,225 @@
+# FlowScope
+
+[![CI](https://github.com/pondpilot/flowscope/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/pondpilot/flowscope/actions/workflows/ci.yml)
+[![Docs](https://img.shields.io/badge/docs-available-brightgreen.svg)](docs/README.md)
+[![codecov](https://codecov.io/gh/pondpilot/flowscope/graph/badge.svg)](https://codecov.io/gh/pondpilot/flowscope)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![Rust](https://img.shields.io/badge/rust-1.82+-orange.svg)](https://www.rust-lang.org)
+[![TypeScript](https://img.shields.io/badge/typescript-5.0+-blue.svg)](https://www.typescriptlang.org)
+[![WebAssembly](https://img.shields.io/badge/wasm-ready-purple.svg)](https://webassembly.org)
+[![Crates.io](https://img.shields.io/crates/v/flowscope-core.svg)](https://crates.io/crates/flowscope-core)
+[![Crates.io](https://img.shields.io/crates/v/flowscope-export.svg)](https://crates.io/crates/flowscope-export)
+[![Crates.io](https://img.shields.io/crates/v/flowscope-cli.svg)](https://crates.io/crates/flowscope-cli)
+[![npm](https://img.shields.io/npm/v/@pondpilot/flowscope-core.svg)](https://www.npmjs.com/package/@pondpilot/flowscope-core)
+
+FlowScope includes a full web application at [flowscope.pondpilot.io](https://flowscope.pondpilot.io) for interactive, multi-file SQL lineage analysis.
+
+Under the hood, it is a client-side SQL lineage engine that runs entirely in the browser. Built with Rust and WebAssembly, it analyzes SQL queries to produce lineage graphs that describe how tables, CTEs, and columns flow through transformations.
+
+The engine is designed for embedding into web apps, browser extensions, and developer tools that need instant lineage analysis without sending SQL to a server.
+
+## Getting Started
+
+### Web Application
+
+The easiest way to use FlowScope is through the hosted web app — no installation required:
+
+**[flowscope.pondpilot.io](https://flowscope.pondpilot.io)**
+
+Features:
+- Drag and drop SQL files or paste queries directly
+- Interactive lineage graph with table and column-level views
+- Multi-file project support with schema DDL
+- dbt/Jinja template preprocessing for dbt models
+- Export to Mermaid, JSON, CSV, Excel, or HTML reports
+- Librarian — AI chat panel that answers questions about your data based on lineage analysis and uploaded PDF docs
+- SQL lineage analysis runs in your browser by default. Librarian sends prompt context to an AI provider only after you configure the provider and submit a question.
+
+When Librarian is used, its request includes the active SQL snippet, formatted lineage, relevant text excerpts and citations from uploaded PDFs, recent Librarian chat history, and the question. The browser sends this data directly to the configured AI provider. PDF extraction, embeddings, and vector search remain local. See the [Librarian privacy details](docs/librarian.md#privacy).
+
+### Command-Line Interface
+
+For scripting and CI/CD integration, install the CLI:
+
+[GitHub Releases](https://github.com/pondpilot/flowscope/releases) include prebuilt
+CLI archives for Linux (x86_64 and aarch64), macOS (Intel and Apple Silicon),
+and Windows (x86_64).
+Each archive has a SHA-256 checksum file. See the [CLI installation guide](crates/flowscope-cli/README.md#prebuilt-binaries)
+for download and verification steps.
+
+To build from source instead:
+
+```bash
+# Core CLI (analysis, linting, fixing, exports)
+cargo install flowscope-cli
+
+# With the bundled local web server (see "Serve Mode" below)
+cargo install flowscope-cli --features serve
+```
+
+Basic usage:
+
+```bash
+# Analyze a SQL file
+flowscope query.sql
+
+# Analyze with a specific dialect
+flowscope -d snowflake etl/*.sql
+
+# Generate a Mermaid diagram
+flowscope -f mermaid -v column query.sql > lineage.mmd
+
+# Export to Excel with schema awareness
+flowscope -s schema.sql -f xlsx -o report.xlsx queries/*.sql
+
+# Pipe from stdin
+cat query.sql | flowscope -d postgres
+```
+
+Output formats: `table` (default), `json`, `mermaid`, `html`, `sql`, `csv`, `xlsx`, `duckdb`
+
+### Linting
+
+FlowScope includes a SQL linter with 72 rules covering aliasing, layout, conventions, structure, and more:
+
+```bash
+# Lint SQL files
+flowscope --lint queries/*.sql
+
+# Lint and auto-fix
+flowscope --lint --fix queries/*.sql
+
+# JSON output for CI integration
+flowscope --lint -f json queries/*.sql
+```
+
+See [CLI documentation](crates/flowscope-cli/README.md) for all lint options and rule configuration.
+
+### Serve Mode (Local Web UI)
+
+Run FlowScope as a local HTTP server with the full web UI embedded in a single binary:
+
+```bash
+# Start server watching SQL directories
+flowscope --serve --watch ./sql
+
+# With database schema and custom port
+flowscope --serve --watch ./models -d postgres --metadata-url postgres://user@localhost/db --port 8080
+
+# Open browser automatically
+flowscope --serve --watch ./sql --open
+```
+
+The serve mode watches directories for `.sql` file changes and provides the same interactive experience as the hosted web app, with all processing happening locally. Requires building with the `serve` feature.
+
+See [CLI documentation](crates/flowscope-cli/README.md) for all options.
+
+## Key Features
+
+- Local SQL lineage analysis by default, with explicit provider requests only when Librarian is configured and used
+- Multi-dialect coverage (PostgreSQL, Snowflake, BigQuery, DuckDB, Redshift, and more)
+- dbt and Jinja templating support with built-in macro stubs (`ref()`, `source()`, `var()`)
+- Table and column lineage with schema-aware wildcard expansion
+- SQL linting with 72 rules across 9 categories (aliasing, layout, convention, structure, and more)
+- Auto-fix engine with safe and unsafe fix modes
+- Structured diagnostics with spans for precise highlighting
+- Completion API for SQL authoring workflows
+- TypeScript API and shared React visualization components for the bundled app and extension
+- Librarian AI chat panel for natural-language Q&A over SQL lineage and uploaded PDF documentation (OpenAI, Anthropic, or custom endpoints)
+
+## Components
+
+- `app/` — the hosted web application at [flowscope.pondpilot.io](https://flowscope.pondpilot.io)
+- `crates/` — Rust engine, WASM bindings, and CLI
+- `packages/` — published TypeScript API and private React visualization workspace
+
+## TypeScript API
+
+Install the core package:
+
+```bash
+npm install @pondpilot/flowscope-core
+```
+
+Analyze a query:
+
+```typescript
+import { analyzeSql, initWasm, nodesInStatement } from '@pondpilot/flowscope-core';
+
+await initWasm();
+
+const result = await analyzeSql({
+  sql: 'SELECT * FROM analytics.orders',
+  dialect: 'postgres',
+});
+
+console.log('All graph nodes:', result.nodes);
+
+const statement = result.statements[0];
+console.log(
+  'First statement nodes:',
+  nodesInStatement(result, statement.statementIndex)
+);
+```
+
+## Completion API
+
+Use the completion API to provide SQL authoring hints at a cursor position. See [docs/guides/schema-metadata.md](docs/guides/schema-metadata.md) for schema setup details.
+
+```typescript
+import {
+  charOffsetToByteOffset,
+  completionItems,
+  initWasm,
+} from '@pondpilot/flowscope-core';
+
+await initWasm();
+
+const sql = 'SELECT * FROM analytics.';
+const cursorOffset = charOffsetToByteOffset(sql, sql.length);
+
+const result = await completionItems({
+  sql,
+  dialect: 'postgres',
+  cursorOffset,
+  schema: {
+    defaultSchema: 'analytics',
+    tables: [{ name: 'orders', columns: [{ name: 'order_id' }, { name: 'total' }] }],
+  },
+});
+
+console.log(result.items.slice(0, 5));
+```
+
+## Visualization
+
+The demo app and VS Code extension provide interactive lineage graphs. Their shared React
+components live in the repository's private `packages/react` workspace and are not published
+to npm. See [docs/guides/quickstart.md](docs/guides/quickstart.md) for a core API walkthrough.
+
+## Documentation
+
+- [docs/README.md](docs/README.md) — documentation map and reference index
+- [docs/librarian.md](docs/librarian.md) — Librarian AI chat panel user guide
+- [docs/guides/quickstart.md](docs/guides/quickstart.md) — TypeScript quickstart guide
+- [docs/guides/schema-metadata.md](docs/guides/schema-metadata.md) — schema metadata setup
+- [docs/dialect-coverage.md](docs/dialect-coverage.md) — dialect and statement coverage
+- [crates/flowscope-cli/README.md](crates/flowscope-cli/README.md) — CLI usage and examples
+- [docs/linter-architecture.md](docs/linter-architecture.md) — linter engine design and rule families
+- [docs/workspace-structure.md](docs/workspace-structure.md) — monorepo layout and build entry points
+
+## Development
+
+FlowScope uses `just` for common tasks. Run `just build`, `just test`, or `just dev`, and see [docs/workspace-structure.md](docs/workspace-structure.md) for the full command list.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, testing expectations, and contribution guidelines.
+
+## License
+
+The core engine and packages are released under Apache-2.0. See [LICENSE](LICENSE) for details. The `app/` directory uses the O'Saasy License; see [app/LICENSE](app/LICENSE).
+
+---
+
+Part of the [PondPilot](https://github.com/pondpilot/pondpilot) project.

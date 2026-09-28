@@ -1,0 +1,218 @@
+<p align="center"><em>CommonSpec is a structured Markdown language for typed, traceable specifications.</em></p>
+
+<p align="center">
+  <img src="assets/logo.jpg" alt="SpecCompiler logo" width="160"/>
+</p>
+
+<p align="center">
+  <a href="https://github.com/SpecIR/SpecCompiler/actions/workflows/docker-publish.yml"><img src="https://github.com/SpecIR/SpecCompiler/actions/workflows/docker-publish.yml/badge.svg" alt="CI"></a>
+  <a href="https://codecov.io/gh/SpecIR/SpecCompiler"><img src="https://codecov.io/gh/SpecIR/SpecCompiler/branch/main/graph/badge.svg?token=GC8S08LK2G" alt="Coverage"></a>
+  <a href="https://github.com/SpecIR/SpecCompiler/blob/main/LICENSE"><img src="https://img.shields.io/github/license/SpecIR/SpecCompiler" alt="License"></a>
+  <img src="https://img.shields.io/badge/status-alpha-orange" alt="Status: Alpha">
+</p>
+
+## CommonSpec, SpecIR & SpecCompiler
+
+**CommonSpec** is a structured Markdown language for authoring typed, traceable specifications. It extends standard Markdown with six constructs — specifications, objects, floats, attributes, relations, and views — that give documents a formal type system.
+
+**SpecIR** is a typed relational intermediate representation stored in SQLite. CommonSpec compiles into SpecIR. Other formats (ReqIF, DOORS CSV) can also encode and decode into SpecIR, making it a universal interchange hub for specification data.
+
+**SpecCompiler** is the reference compiler. It lowers CommonSpec into SpecIR and executes declarative structural constraints over the resulting model.
+
+By imposing a type system on Markdown, SpecCompiler guarantees referential and schema integrity: detecting invalid object kinds, missing mandatory attributes, and traceability gaps at **compile time**.
+
+> "The fundamental purpose of a type system is to prevent
+> the occurrence of execution errors during the running of
+> a program." Cardelli, [Type Systems](http://lucacardelli.name/Papers/TypeSystems.pdf)
+
+The fundamental purpose of SpecCompiler is to prevent the occurrence of *findings* during the review of a specification.
+
+### See It in Action
+
+<p align="center">
+  <img src="assets/demo.gif" alt="SpecCompiler demo: writing CommonSpec, catching type errors, and compiling to DOCX" width="700"/>
+</p>
+
+<p align="center"><em>Well-typed specifications don't go wrong.</em></p>
+
+## Output
+
+**DOCX (Print is Default):** Maps types directly to DOCX style presets and supports direct OOXML transformations. Generate branded corporate templates or academic formats.
+
+**HTML + WASM (Web Native):** A self-contained html file bundled with SQLite.js enables queries directly in the browser without any server infrastructure.
+
+**ReqIF (Interoperability):** Author and validate your specs in Git but emit industry-standard ReqIF to integrate with legacy RE tools.
+
+**Anything (that Pandoc supports):** The pipeline is extensible via custom Lua filters and post-processing hooks for any format Pandoc can target.
+
+## Quickstart
+
+### Install
+
+**Container (recommended).** One command, needs docker or podman
+(Linux/macOS/WSL2):
+```bash
+curl -fsSL https://raw.githubusercontent.com/SpecIR/SpecCompiler/main/scripts/install.sh | bash
+```
+
+**Windows.** One command in PowerShell, after Docker Desktop or Podman is
+installed:
+```powershell
+irm https://raw.githubusercontent.com/SpecIR/SpecCompiler/main/scripts/install.ps1 | iex
+```
+
+**Native — Ubuntu 24.04** (stock apt pandoc + compiled Lua extensions):
+```bash
+git clone https://github.com/SpecIR/SpecCompiler.git
+cd SpecCompiler
+bash scripts/install-native.sh
+```
+
+Other Linux distros: install the equivalents of the packages below, then run
+`bash scripts/install-native.sh` (its apt step is skipped on non-apt systems):
+
+- `pandoc` >= 3.1 — the **distro package**, which links a shared liblua5.4
+  (not the official static release tarball — its sealed Lua cannot load our
+  extensions)
+- `build-essential` (gcc, make), `cmake`, `pkg-config`, `git`, `curl`,
+  `unzip`, `ca-certificates`
+- `liblua5.4-dev`, `libsqlite3-dev`, `libzip-dev`
+- `poppler-utils`, `fontconfig`, `ttf-mscorefonts-installer` (Microsoft core
+  fonts used by the official DOCX templates; the installer auto-accepts the
+  EULA)
+- `peg` — optional; built from source when absent
+- Default-on extras (disable with `WITH_PUML=0` / `WITH_LIBREOFFICE=0`):
+  `default-jre-headless` for PlantUML floats; `libreoffice-writer`,
+  `libreoffice-math`, `python3-uno` for DOCX field update and PDF export
+
+To build the Docker image locally instead of pulling from GHCR:
+```bash
+git clone https://github.com/SpecIR/SpecCompiler.git
+cd SpecCompiler
+docker build -t speccompiler-core:latest .
+bash scripts/install.sh
+```
+
+Build the docs.
+
+```bash
+specc build docs/commonspec/project.yaml
+specc build docs/specir/project.yaml
+specc build docs/user_docs/project.yaml
+specc build docs/engineering_docs/project.yaml
+```
+
+## Documentation
+
+[**Published Documentation**](https://specir.github.io/SpecCompiler/) — generated HTML and DOCX documentation.
+
+[**CommonSpec Language Specification**](https://github.com/SpecIR/SpecCompiler/blob/main/docs/commonspec) — formal language definition, syntax, and type system. [Published HTML](https://specir.github.io/SpecCompiler/commonspec/).
+
+[**SpecIR Schema Specification**](https://github.com/SpecIR/SpecCompiler/blob/main/docs/specir) — intermediate representation, database schema, and public API views. [Published HTML](https://specir.github.io/SpecCompiler/specir/).
+
+[**User Manual**](https://github.com/SpecIR/SpecCompiler/blob/main/docs/user_docs) — installation, authoring, configuration, and troubleshooting. [**Published HTML — start here**](https://specir.github.io/SpecCompiler/manual/#/manual).
+
+[**Engineering Specifications**](https://github.com/SpecIR/SpecCompiler/blob/main/docs/engineering_docs) — SRS, SDD, and SVC for SpecCompiler. [Published HTML](https://specir.github.io/SpecCompiler/engineering/#/srs).
+
+## How It Works
+
+### A Minimal Spec
+
+**srs.md** — a requirement in CommonSpec:
+
+```markdown
+# SRS: Login Service
+
+## HLR: Authenticate Users @0013
+
+The system shall authenticate users via OAuth 2.0.
+
+> status: Draft
+```
+
+**svc.md** — a verification case that covers it:
+
+```markdown
+# SVC: Login Verification
+
+## VC: Verify Authentication
+
+Verify the authentication flow works end to end.
+
+> objective: Confirm OAuth 2.0 login succeeds
+
+> verification_method: Test
+
+> traceability: [0013](@)
+```
+
+### CommonSpec → SpecIR → Output
+
+SpecCompiler runs as a Pandoc Lua filter and adds a SQLite middle-end between Pandoc's reader and writer:
+
+**0. Type loading (Γ).** Before any document is parsed, SpecCompiler reads
+type definitions from Lua modules and INSERTs them into SpecIR. A type defines
+what a spec object *is*: its identifier, display name, PID format, and typed
+attributes.
+
+For example, the HLR type (`models/sw_docs/types/objects/hlr.lua`):
+
+```lua
+M.object = {
+    id = "HLR",
+    long_name = "High-Level Requirement",
+    extends = "TRACEABLE",
+    attributes = {
+        { name = "rationale", type = "XHTML" },
+    }
+}
+```
+
+Loading this module produces:
+
+```sql
+INSERT INTO spec_object_types (identifier, long_name, ...)
+VALUES ('HLR', 'High-Level Requirement', ...);
+```
+
+**1. Frontend (Pandoc reader).** Parse CommonSpec (`commonmark_x`) into Pandoc AST.
+
+**2. Middle-end (SpecCompiler).** Lower the AST into SpecIR (SQLite), apply type
+rules, and assemble the transformed AST. For the two-file spec above, the
+middle-end produces the following SpecIR entries:
+
+```sql
+-- Specification (from the # heading)
+INSERT INTO specifications (identifier, long_name, type_ref)
+VALUES ('srs', 'Login Service', 'SRS');
+
+-- Object (from the ## heading)
+INSERT INTO spec_objects (specification_ref, type_ref, pid)
+VALUES ('srs', 'HLR', '0013');
+
+-- Attribute (from the > blockquote)
+INSERT INTO spec_attribute_values
+  (specification_ref, owner_object_id, name, raw_value, enum_ref, datatype)
+VALUES ('srs', 1, 'status', 'Draft', 'TRACEABLE_status_Draft', 'ENUM');
+
+-- Relation (from [0013](@) in svc.md's traceability attribute → inferred as VERIFIES)
+INSERT INTO spec_relations
+  (specification_ref, source_object_id, target_text, type_ref, link_selector, source_attribute)
+VALUES ('svc', 2, '0013', 'VERIFIES', '@', 'traceability');
+```
+
+Type-checking is then a query against SpecIR. For example, the verification view
+`invalid_cast` checks whether `'Pending'` is a legal value for
+`TRACEABLE.status` — it is not (only Draft, Review, Approved, Implemented are).
+And `traceability_hlr_to_vc` finds HLRs that are never the target of a
+VERIFIES relation.
+
+**3. Backend (Pandoc writer).** If no violations are found render the AST to selected formats.
+
+**4. Post-processing (optional).** Format-specific adjustments to the emitted artifacts. For example, OOXML tweaks in DOCX output or packaging sqlite.js in HTML.
+
+## License
+
+Apache License 2.0, see [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+[THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES.md).

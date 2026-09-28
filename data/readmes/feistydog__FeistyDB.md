@@ -1,0 +1,240 @@
+# FeistyDB
+
+A powerful and performant Swift interface to [SQLite](https://sqlite.org) featuring:
+
+- Type-safe and type-agnostic database values.
+- Thread-safe synchronous and asynchronous database access.
+-  Full support for [transactions](#perform-a-transaction) and savepoints.
+- [Custom SQL functions](#custom-sql-functions), including aggregate and window functions.
+- [Custom collating sequences](#custom-collating-sequences).
+- Custom commit, rollback, update, and busy handler hooks.
+- Custom virtual tables.
+- Custom FTS5 tokenizers.
+- Optional support for pre-update hooks and [sessions](https://www.sqlite.org/sessionintro.html)
+
+FeistyDB allows fast, easy database access with robust error handling.  It is not a general-purpose object-relational mapper.
+
+## Installation
+
+### Swift Package Manager
+
+Add a package dependency to https://github.com/feistydog/FeistyDB in Xcode.
+
+### Manual or Custom Build
+
+1. Clone the [FeistyDB](https://github.com/feistydog/FeistyDB) repository.
+2. `swift build`.
+
+### CSQLite and SQLite Build Options
+
+FeistyDB is built atop [CSQLite](https://github.com/sbooth/CSQLite), a Swift package of the SQLite [amalgamation](https://sqlite.org/amalgamation.html) with the [carray](https://www.sqlite.org/carray.html), [decimal](https://sqlite.org/src/file/ext/misc/decimal.c), [ieee754](https://sqlite.org/src/file/ext/misc/ieee754.c), [series](https://sqlite.org/src/file/ext/misc/series.c), [sha3](https://sqlite.org/src/file/ext/misc/shathree.c), and [uuid](https://sqlite.org/src/file/ext/misc/uuid.c) extensions added.
+
+Unfortunately there is no way using Swift Package Manager to expose [package features](https://forums.swift.org/t/my-swiftpm-wishlist-aka-proposal-proposals/35292) or build options, in this case the SQLite [pre-update hook](https://sqlite.org/c3ref/preupdate_count.html) and the [session](https://sqlite.org/sessionintro.html) extension. For this reason SQLite build options must be customized by changing to a local CSQLite package dependency and editing [CSQLite/Package.swift](https://github.com/sbooth/CSQLite/blob/main/Package.swift).
+
+## Quick Start
+
+```swift
+// Initialize FeistyDB
+try FeistyDB.initialize()
+
+// Create an in-memory database
+let db = try Database()
+
+// Create a table
+try db.execute(sql: "CREATE TABLE t1(a,b);")
+
+// Insert a row
+try db.execute(sql: "INSERT INTO t1(a,b) VALUES (?,?);", 
+               parameterValues: [33, "lulu"])
+
+// Retrieve the values
+try db.execute(sql: "SELECT a,b FROM t1;") { row in
+    let a: Int = try row.value(at: 0)
+    let b: String = try row.value(at: 1)
+}
+```
+
+### Segue to Thread Safety
+
+FeistyDB uses SQLite with thread safety disabled for improved performance. While this increases performance, it also means a `Database` instance may only be accessed from a single thread or dispatch queue at a time.
+
+Most applications should not create a `Database` directly but instead should use a thread-safe `DatabaseQueue`.
+
+```swift
+// Create a queue serializing access to an in-memory database
+let dbQueue = try DatabaseQueue("myapp.database-isolation-queue")
+```
+
+This creates a queue which may be used from multiple threads or dispatch queues safely.  The queue serializes access to the database ensuring only a single operation occurs at a time. Database operations may be performed synchronously or asynchronously.
+
+```swift
+// Perform a synchronous database access
+try dbQueue.sync { db in
+    // Do something with `db`
+}
+
+// Perform an asynchronous database access
+dbQueue.async { db in
+    // Do something with `db`
+} completion: { result in
+    // Handle any errors that occurred
+}
+```
+
+For databases using [Write-Ahead Logging](https://www.sqlite.org/wal.html) concurrent reading and writing is supported. Multiple read operations may be performed simultaneously using more than one `DatabaseReadQueue` instance.  Write operations must always be confined to a single `DatabaseQueue`.  A typical usage pattern is one global `DatabaseQueue` instance used for writing located in the application's delegate, with `DatabaseReadQueue` instances located in individual view or window controllers.  When used with long-running read transactions each `DatabaseReadQueue` maintains a separate, consistent snapshot of the database that may be updated in response to database changes.
+
+## Design
+
+The core of FeistyDB is the types `Database`, `Statement`, and `Row`.
+
+- `Database` is an SQLite database.
+
+- `Statement` is a compiled SQL statement.
+
+- `Row` is a single result row.
+
+The fundamental type for native database values is `DatabaseValue`.
+
+- `DatabaseValue` contains an integer, floating-point, textual, or blob value.
+
+Type-safe access to database values is provided by classes implementing the `ColumnConvertible` protocol.
+
+- `ColumnConvertible` is a type that can be initialized from a column in a result row.
+
+SQL parameter binding is provided by classes implementing the `ParameterBindable` protocol.
+
+- `ParameterBindable ` is a type that can bind its value to an SQL parameter.
+
+General object storage is provided by classes implementing the `DatabaseSerializable` protocol.
+
+- `DatabaseSerializable ` is a type that can be serialized to and deserialized from a database column.
+
+Thread-safe access to a database is provided by `DatabaseQueue`.
+
+- `DatabaseQueue` serializes work items on a database.
+- `DatabaseReadQueue` serializes read operations on a database.
+
+## Examples
+
+### Create an In-Memory Database
+
+```swift
+let db = try Database()
+```
+
+This creates a database for use on a single thread or dispatch queue only. Most applications should not create a `Database` directly but instead should use a thread-safe `DatabaseQueue`.
+
+### Create a Table
+
+```swift
+try db.execute(sql: "CREATE TABLE t1(a,b);")
+```
+
+The created table *t1* has two columns, *a* and *b*.
+
+### Insert Data
+
+```swift
+for i in 0..<5 {
+    try db.execute(sql: "INSERT INTO t1(a,b) VALUES (?,?);",
+                   parameterValues: [2*i, 2*i+1])
+}
+```
+SQL parameters are passed as a sequence or series of values.  Named parameters are also supported.
+
+```swift
+try db.execute(sql: "INSERT INTO t1(a,b) VALUES (:a,:b);",
+               parameters: [":a": 100, ":b": 404])
+```
+
+### Insert Data Efficiently
+
+Rather than parsing SQL each time a statement is executed, it is more efficient to prepare a statement and reuse it.
+
+```swift
+let s = try db.prepare(sql: "INSERT INTO t1(a,b) VALUES (?,?);")
+for i in 0..<5 {
+    try s.bind(parameterValues: [2*i, 2*i+1])
+    try s.execute()
+    try s.reset()
+    try s.clearBindings()
+}
+```
+
+### Fetch Data
+
+The closure passed to `execute()` will be called with each result row.
+
+```swift
+try db.execute(sql: "SELECT * FROM t1;") { row in
+    let x: Int = try row.value(at: 0)
+    let y: Int? = try row.value(at: 1)
+}
+```
+
+*row* is a `Row` instance.
+
+### Perform a Transaction
+
+```swift
+let result = try db.transaction { db in
+    // Do something with `db`
+    return .commit
+}
+// Result is either `.commit`. or `.rollback`
+```
+
+Database transactions may also be performed asynchronously using `DatabaseQueue`.
+
+```swift
+dbQueue.asyncTransaction { db in
+    // Do something with `db`
+    return .commit
+} completion: { result in
+    // Handle any errors that occurred
+}
+```
+
+### Custom SQL Functions
+
+```swift
+let rot13Mapping: [Character: Character] = [
+    "A": "N", "B": "O", "C": "P", "D": "Q", "E": "R", "F": "S", "G": "T", "H": "U", "I": "V", "J": "W", "K": "X", "L": "Y", "M": "Z",
+    "N": "A", "O": "B", "P": "C", "Q": "D", "R": "E", "S": "F", "T": "G", "U": "H", "V": "I", "W": "J", "X": "K", "Y": "L", "Z": "M",
+    "a": "n", "b": "o", "c": "p", "d": "q", "e": "r", "f": "s", "g": "t", "h": "u", "i": "v", "j": "w", "k": "x", "l": "y", "m": "z",
+    "n": "a", "o": "b", "p": "c", "q": "d", "r": "e", "s": "f", "t": "g", "u": "h", "v": "i", "w": "j", "x": "k", "y": "l", "z": "m"]
+
+try db.addFunction("rot13", arity: 1) { values in
+    let value = values.first.unsafelyUnwrapped
+    switch value {
+        case .text(let s):
+            return .text(String(s.map { rot13Mapping[$0] ?? $0 }))
+        default:
+            return value
+    }
+}
+```
+
+*rot13* can now be used just like any other [SQL function](https://www.sqlite.org/lang_corefunc.html).
+
+```swift
+let s = try db.prepare(sql: "INSERT INTO t1(a) VALUES (rot13(?));")
+```
+
+### Custom Collating Sequences
+
+```swift
+try db.addCollation("localized_compare", { (lhs, rhs) -> ComparisonResult in
+    return lhs.localizedCompare(rhs)
+})
+```
+
+*localized_compare* is now available as a [collating sequence](https://www.sqlite.org/c3ref/create_collation.html).
+
+```swift
+let s = try db.prepare(sql: "SELECT * FROM t1 ORDER BY a COLLATE localized_compare;")
+```
+
+## License
+
+FeistyDB is released under the [MIT License](LICENSE.txt).

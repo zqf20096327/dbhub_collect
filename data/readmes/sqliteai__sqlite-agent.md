@@ -1,0 +1,261 @@
+<div align="center">
+  <a href="https://sqlite.ai">
+    <img src="https://www.sqlite.ai/social/logo-ai.png" alt="SQLite AI" height="56">
+  </a>
+
+  <h1>SQLite-Agent</h1>
+  <p><strong>Autonomous AI agents that run inside SQLite.</strong><br>
+  Define agents in SQL, give them tools and memory, run them locally. Built on sqlite-ai, sqlite-memory, and sqlite-mcp. No orchestration server required.</p>
+
+  <p>
+    <a href="https://dashboard.sqlitecloud.io/auth/sign-in"><strong>Free managed instance →</strong></a> ·
+    <a href="https://docs.sqlitecloud.io/docs/ai-overview">Docs</a> ·
+    <a href="https://sqlite.ai">Website</a> ·
+    <a href="https://blog.sqlite.ai">Blog</a>
+  </p>
+
+  <p>
+    <sub><strong>Data:</strong>
+    <a href="https://github.com/sqliteai/sqlite-vector">Vector</a> ·
+    <a href="https://github.com/sqliteai/sqlite-sync">Sync</a> ·
+    <a href="https://github.com/sqliteai/sqlite-columnar">Columnar</a> ·
+    <a href="https://github.com/sqliteai/sqlite-js">JS</a>
+    <br>
+    <strong>AI:</strong>
+    <a href="https://github.com/sqliteai/sqlite-ai">AI</a> ·
+    <a href="https://github.com/sqliteai/sqlite-agent">Agent</a> ·
+    <a href="https://github.com/sqliteai/sqlite-memory">Memory</a> ·
+    <a href="https://github.com/sqliteai/sqlite-mcp">MCP</a>
+    </sub>
+  </p>
+</div>
+
+<br>
+
+> **Running agents in production?** SQLite-Agent works standalone; **[SQLite Cloud](https://dashboard.sqlitecloud.io/auth/sign-in)** adds shared agent state, webhooks, edge functions, and observability across a fleet of agents. Free tier available.
+
+---
+
+# SQLite Agent
+
+**SQLite Agent** is a cross-platform SQLite extension that brings autonomous AI agents to your database. It enables databases to run multi-step, tool-using agents that fetch data from external sources (web, APIs, etc.) through [sqlite-mcp](https://github.com/sqliteai/sqlite-mcp) and populate database tables. The extracted data can then be analyzed by LLMs, displayed in UIs, or used in applications.
+
+## Highlights
+
+* **Autonomous Agents** – Run AI agents that can plan and execute multi-step tasks
+* **MCP Integration** – Works with [sqlite-mcp](https://github.com/sqliteai/sqlite-mcp) for external tool access
+* **AI Powered** – Uses [sqlite-ai](https://github.com/sqliteai/sqlite-ai) for LLM inference and embeddings
+* **Table Extraction Mode** – Automatically fetch and populate database tables
+* **Auto-Embeddings** – Optionally uses [sqlite-vector](https://github.com/sqliteai/sqlite-vector) to generate vector embeddings automatically when inserting data for BLOB columns named `*_embedding`
+* **Auto-Vector Indexing** – Initialize vector search indices automatically
+
+## 🚀 Quick Start
+
+### Installation
+
+#### Pre-built Binaries
+
+Download the appropriate pre-built binary for your platform from the [Releases](https://github.com/sqliteai/sqlite-agent/releases) page: we do support **Linux**, **macOS**, **Windows**, **Android** and **iOS**.
+
+#### Swift Package
+
+You can [add this repository as a package dependency to your Swift project](https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app#Add-a-package-dependency). After adding the package, you'll need to set up SQLite with extension loading by following steps 4 and 5 of [this guide](https://github.com/sqliteai/sqlite-extensions-guide/blob/main/platforms/ios.md#4-set-up-sqlite-with-extension-loading).
+
+Here's an example of how to use the package:
+```swift
+import agent
+
+...
+
+var db: OpaquePointer?
+sqlite3_open(":memory:", &db)
+sqlite3_enable_load_extension(db, 1)
+var errMsg: UnsafeMutablePointer<Int8>? = nil
+sqlite3_load_extension(db, agent.path, nil, &errMsg)
+var stmt: OpaquePointer?
+sqlite3_prepare_v2(db, "SELECT agent_version()", -1, &stmt, nil)
+defer { sqlite3_finalize(stmt) }
+sqlite3_step(stmt)
+log("agent_version(): \(String(cString: sqlite3_column_text(stmt, 0)))")
+sqlite3_close(db)
+```
+
+#### Android Package
+
+Add the [following](https://central.sonatype.com/artifact/ai.sqlite/agent) to your Gradle dependencies:
+
+```gradle
+implementation 'ai.sqlite:agent:0.1.3'
+```
+
+Here's an example of how to use the package:
+```java
+SQLiteCustomExtension agentExtension = new SQLiteCustomExtension(getApplicationInfo().nativeLibraryDir + "/agent", null);
+SQLiteDatabaseConfiguration config = new SQLiteDatabaseConfiguration(
+    getCacheDir().getPath() + "/agent_test.db",
+    SQLiteDatabase.CREATE_IF_NECESSARY | SQLiteDatabase.OPEN_READWRITE,
+    Collections.emptyList(),
+    Collections.emptyList(),
+    Collections.singletonList(agentExtension)
+);
+SQLiteDatabase db = SQLiteDatabase.openDatabase(config, null, null);
+```
+
+**Note:** Additional settings and configuration are required for a complete setup. For full implementation details, see the [complete Android example](https://github.com/sqliteai/sqlite-extensions-guide/blob/main/examples/android/README.md).
+
+#### Flutter Package
+
+Add the [sqlite_agent](https://pub.dev/packages/sqlite_agent) package to your project:
+
+```bash
+flutter pub add sqlite_agent  # Flutter projects
+dart pub add sqlite_agent     # Dart projects
+```
+
+Usage with `sqlite3` package:
+```dart
+import 'package:sqlite3/sqlite3.dart';
+import 'package:sqlite_agent/sqlite_agent.dart';
+
+sqlite3.loadSqliteAgentExtension();
+final db = sqlite3.openInMemory();
+print(db.select('SELECT agent_version()'));
+```
+
+For a complete example, see the [Flutter example](https://github.com/sqliteai/sqlite-extensions-guide/blob/main/examples/flutter/README.md).
+
+### Basic Usage
+
+```sql
+-- Load required extensions
+SELECT load_extension('./dist/mcp');
+SELECT load_extension('./dist/ai');
+SELECT load_extension('./dist/agent');
+
+-- Initialize AI model
+SELECT llm_model_load('/path/to/model.gguf', 'gpu_layers=99');
+
+-- Connect to MCP server
+SELECT mcp_connect('http://localhost:8000/mcp');
+
+-- Run an autonomous agent (text-only mode)
+SELECT agent_run('Find affordable apartments in Rome with AC', 8);
+-- Agent uses MCP tools to accomplish the task and returns result
+```
+
+## 📖 API Reference
+
+### Available Functions
+
+| Function | Description |
+|----------|-------------|
+| `agent_version()` | Returns extension version |
+| `agent_run(goal, [table_name], [max_iterations], [system_prompt])` | Run autonomous AI agent |
+
+See [API.md](API.md) for complete API documentation with examples.
+
+## Example: AirBnb MCP Server
+
+This example demonstrates combining agent, MCP, AI, and vector extensions:
+
+```sql
+-- Load all extensions
+.load ../sqlite-mcp/dist/mcp
+.load ./dist/agent
+.load ../sqlite-ai/dist/ai
+.load ../sqlite-vector/dist/vector
+
+-- Initialize AI model (one-time)
+SELECT llm_model_load('/path/to/model.gguf', 'gpu_layers=99');
+
+-- Connect to MCP server (one-time)
+SELECT mcp_connect('http://localhost:8000/mcp');
+
+-- Create table with embedding column
+CREATE TABLE listings (
+  id INTEGER PRIMARY KEY,
+  title TEXT,
+  description TEXT,
+  location TEXT,
+  property_type TEXT,
+  amenities TEXT,
+  price REAL,
+  rating REAL,
+  embedding BLOB
+);
+
+-- Run agent to fetch and populate data
+-- Embeddings and vector index are created automatically!
+SELECT agent_run(
+  'Find affordable apartments in Rome under 100 EUR per night',
+  'listings',
+  8
+);
+-- Returns: 5 (number of rows inserted)
+
+-- Semantic search (works immediately!)
+SELECT title, location, price, v.distance
+FROM vector_full_scan('listings', 'embedding',
+  llm_embed_generate('cozy modern apartment', ''), 5) v
+JOIN listings l ON l.rowid = v.rowid
+ORDER BY v.distance ASC;
+```
+
+Run the full demo:
+```bash
+make airbnb #first place a .gguf model inside the models folder and run your AirBnb MCP server
+```
+See [USAGE.md](USAGE.md) for complete usage examples.
+
+## How It Works
+
+The agent operates through an iterative loop:
+
+1. Receives goal and available tools from MCP
+2. Decides which tool to call
+3. Executes tool via sqlite-mcp extension
+4. Receives tool result
+5. Continues until goal achieved or max iterations reached
+6. Returns final result
+
+## Support
+
+- [GitHub Issues](https://github.com/sqliteai/sqlite-agent/issues)
+- [SQLite Extension Load Guide](https://github.com/sqliteai/sqlite-extensions-guide)
+
+---
+
+## License
+
+This project is licensed under the [Elastic License 2.0](./LICENSE). You can use, copy, modify, and distribute it under the terms of the license for non-production use. For production or managed service use, please [contact SQLite Cloud, Inc](mailto:info@sqlitecloud.io) for a commercial license.
+
+---
+
+## ☁️ Hosted version
+
+Coordinating multiple agents in production? **[SQLite Cloud](https://sqlite.ai)** is the managed backbone for SQLite-Agent — shared state, webhooks, REST APIs, and observability for fleets of autonomous agents.
+
+[**Start free →**](https://dashboard.sqlitecloud.io/auth/sign-in)
+
+---
+
+## Part of the SQLite AI stack
+
+SQLite-Agent is one piece of a larger ecosystem that turns SQLite into a runtime for intelligent, distributed data:
+
+**Data layer**
+- [sqlite-vector](https://github.com/sqliteai/sqlite-vector) — ANN vector search inside SQLite
+- [sqlite-sync](https://github.com/sqliteai/sqlite-sync) — Offline-first CRDT sync across devices
+- [sqlite-columnar](https://github.com/sqliteai/sqlite-columnar) — Column-oriented analytics for OLAP queries
+- [sqlite-js](https://github.com/sqliteai/sqlite-js) — Custom SQLite functions written in JavaScript
+
+**AI layer**
+- [sqlite-ai](https://github.com/sqliteai/sqlite-ai) — On-device LLM inference and embeddings
+- [**sqlite-agent**](https://github.com/sqliteai/sqlite-agent) — Autonomous AI agents running inside SQLite *(you are here)*
+- [sqlite-memory](https://github.com/sqliteai/sqlite-memory) — Persistent, searchable memory for agents
+- [sqlite-mcp](https://github.com/sqliteai/sqlite-mcp) — Call MCP tools directly from SQL queries
+
+**Managed platform**
+- [SQLite Cloud](https://sqlite.ai) — Hosted SQLite with sync, auth, edge functions, and analytics. [Free tier →](https://dashboard.sqlitecloud.io/auth/sign-in)
+
+Built by [SQLite AI](https://sqlite.ai). Questions? [Contact us](https://sqlite.ai/support).

@@ -1,0 +1,170 @@
+:version: 5.0.10
+
+image:https://github.com/neo4j/neo4j-ogm/actions/workflows/maven.yml/badge.svg[https://github.com/neo4j/neo4j-ogm/actions/workflows/maven.yml]
+image:https://img.shields.io/maven-central/v/org.neo4j/neo4j-ogm.svg[Maven Central,link=http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.neo4j%22%20AND%20a%3A%22neo4j-ogm%22]
+
+= Neo4j-OGM - An Object Graph Mapping Library for Neo4j.
+
+Neo4j-OGM is a fast object-graph mapping library for https://neo4j.com/[Neo4j], optimised for server-based installations utilising https://neo4j.com/developer/cypher-query-language/[Cypher].
+
+It aims to simplify development with the Neo4j graph database and like JPA, it uses annotations on simple POJO domain objects.
+
+Please have a look at the current supported versions and which combinations we recommend:
+https://github.com/neo4j/neo4j-ogm/wiki/Versions[Recommended versions]
+
+== Quick start
+
+=== Dependencies for Neo4j-OGM
+
+==== Maven
+
+[source,xml,subs="verbatim,attributes"]
+----
+<dependency>
+    <groupId>org.neo4j</groupId>
+    <artifactId>neo4j-ogm-core</artifactId>
+    <version>{version}</version>
+</dependency>
+
+<dependency> <!-- If you're using the Bolt driver -->
+    <groupId>org.neo4j</groupId>
+    <artifactId>neo4j-ogm-bolt-driver</artifactId>
+    <version>{version}</version>
+</dependency>
+----
+
+==== Gradle
+
+[source,xml,subs="verbatim,attributes"]
+----
+dependencies {
+    compile 'org.neo4j:neo4j-ogm-core:{version}'
+    compile 'org.neo4j:neo4j-ogm-bolt-driver:{version}'
+}
+----
+
+
+=== Set up domain entities
+
+[source,java]
+----
+
+@NodeEntity
+public class Actor {
+
+	@Id @GeneratedValue
+	private Long id;
+	private String name;
+
+	@Relationship(type = "ACTS_IN", direction = Relationship.OUTGOING)
+	private Set<Movie> movies = new HashSet<>();
+
+	public Actor() {
+	}
+
+	public Actor(String name) {
+		this.name = name;
+	}
+
+	public void actsIn(Movie movie) {
+		movies.add(movie);
+		movie.getActors().add(this);
+	}
+}
+
+@NodeEntity
+public class Movie {
+
+	@Id @GeneratedValue
+	private Long id;
+	private String title;
+	private int released;
+
+	public Movie() {
+	}
+
+	public Movie(String title, int year) {
+		this.title = title;
+		this.released = year;
+	}
+
+}
+
+----
+
+=== Configuration
+
+The either configure Neo4j-OGM with properties files, or programmatically.
+
+Please see examples http://neo4j.com/docs/ogm-manual/current/reference/#reference:configuration[here].
+
+=== Persist/Load entities
+
+[source,java]
+----
+
+//Set up the Session
+SessionFactory sessionFactory = new SessionFactory(configuration, "movies.domain");
+Session session = sessionFactory.openSession();
+
+Movie movie = new Movie("The Matrix", 1999);
+
+Actor keanu = new Actor("Keanu Reeves");
+keanu.actsIn(movie);
+
+Actor carrie = new Actor("Carrie-Ann Moss");
+carrie.actsIn(movie);
+
+//Persist the movie. This persists the actors as well.
+session.save(movie);
+
+//Load a movie
+Movie matrix = session.load(Movie.class, movie.getId());
+for(Actor actor : matrix.getActors()) {
+    System.out.println("Actor: " + actor.getName());
+}
+----
+
+== Integrations within other frameworks
+
+We do offer two offical integrations:
+
+* The https://github.com/neo4j/neo4j-ogm-quarkus[Neo4j-OGM Quarkus Extension], which works nicely with Quarkus' "do everything and then some" at buildtime-approach
+* The https://github.com/neo4j/neo4j-ogm-spring[Neo4j-OGM Spring Data fork], which provides continued support for Spring Data Neo4j 5, but for modern Spring versions
+
+== Getting Help
+
+The http://neo4j.com/docs/ogm-manual/current/[reference guide] is the best place to get started.
+
+You can also post questions in our https://community.neo4j.com/c/drivers-stacks/spring-data-neo4j-ogm[community forums] or on http://stackoverflow.com/questions/tagged/neo4j-ogm[StackOverflow].
+
+== Building locally
+
+To use the latest development version, just clone this repository and run `mvn clean install`.
+
+The tests default to Bolt.
+If you want to change this, you have to define the property `ogm.properties` when calling Maven.
+e.g. `./mvnw clean verify -Dogm.properties=ogm-bolt.properties`.
+
+For testing we are using https://www.testcontainers.org/[TestContainers].
+The default image right now is `neo4j:5`.
+If you want to use other images or the enterprise edition, you have to opt-in.
+
+Here is a list of the possible environment variables you can provide.
+
+[options="header"]
+|===
+|Variable |Description |Default value
+|`NEO4J_OGM_NEO4J_ACCEPT_AND_USE_COMMERCIAL_EDITION`
+|Use enterprise edition and accept the Neo4j licence agreement.
+|`no`
+|`NEO4J_OGM_NEO4J_IMAGE_NAME`
+|Image to be used by TestContainers.
+|`neo4j:5`
+|===
+
+== License
+
+Neo4j-OGM and it's modules are licensed under the Apache License v 2.0.
+
+The only exception is the neo4j-embedded-driver which is GPL v3 due to the direct use of the Neo4j Java API.

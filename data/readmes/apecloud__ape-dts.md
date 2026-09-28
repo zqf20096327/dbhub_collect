@@ -1,0 +1,196 @@
+# English | [中文](README_ZH.md)
+
+# ApeDTS
+
+**A production-ready Rust binary (~17 MB compressed) for multi-engine snapshot
+migration, CDC, and data validation.**
+
+ApeDTS is a lightweight, standalone data migration and CDC engine. It handles snapshot migration,
+continuous synchronization, data validation, correction, and in-flight transformation across
+databases, message queues, and analytical engines. Designed for cloud-native, stateless
+deployments.
+
+## Key features
+
+- **Lightweight by design** — Runs as a single standalone process, with no external runtime
+  components or intermediate storage.
+- **Mature multi-engine coverage** — Supports currently validated homogeneous and heterogeneous
+  paths spanning MySQL, PostgreSQL, MongoDB, Redis, Kafka, TiDB, StarRocks, ClickHouse, and Doris.
+- **Production-ready reliability** — Provides checkpoint-based recovery for snapshot and CDC
+  tasks, Prometheus-compatible metrics, and task-level observability.
+- **Source- and task-specific parallelism** — Uses dedicated parallel strategies for different
+  sources, targets, and task types to improve throughput.
+- **Advanced data capabilities** — On supported paths, validates, corrects, and reviews data;
+  filters and routes at the database, table, and column levels; and applies lightweight Lua
+  transformations in flight.
+
+## Supported task types
+
+Currently supported mature task types:
+
+|                          | mysql -> mysql | pg -> pg | mongo -> mongo | redis -> redis | mysql -> kafka | pg -> kafka | mysql -> starrocks | mysql -> clickhouse | mysql -> tidb | pg -> starrocks | pg -> clickhouse | mysql -> doris | pg -> doris |
+| :----------------------- | :------------- | :------- | :------------- | :------------- | :------------- | :---------- | :----------------- | :------------------ | :------------ | :-------------- | :--------------- | :------------- | :---------- |
+| Snapshot                 | &#10004;       | &#10004; | &#10004;       | &#10004;       | &#10004;       | &#10004;    | &#10004;           | &#10004;            | &#10004;      | &#10004;        | &#10004;         | &#10004;       | &#10004;    |
+| CDC                      | &#10004;       | &#10004; | &#10004;       | &#10004;       | &#10004;       | &#10004;    | &#10004;           | &#10004;            | &#10004;      | &#10004;        | &#10004;         | &#10004;       | &#10004;    |
+| Data check/revise/review | &#10004;       | &#10004; | &#10004;       |                |                |             |                    |                     | &#10004;      |                 |                  |                |             |
+| Structure migration      | &#10004;       | &#10004; | &#10004;       |                |                |             | &#10004;           | &#10004;            | &#10004;      | &#10004;        | &#10004;         | &#10004;       | &#10004;    |
+
+# Quick starts
+
+## CLI
+
+`dtscli` is a lightweight local CLI for creating and managing ApeCloud DTS tasks.
+It can generate task configs, start `dt-main`, list tasks, stream logs, and stop,
+restart, or delete local task records.
+
+![dtscli demo](./docs/img/demo.gif)
+
+For installation and detailed usage, see [dt-cli/README.md](./dt-cli/README.md).
+
+## Tutorial
+
+- [prerequisites](./docs/en/tutorial/prerequisites.md)
+- [mysql -> mysql](./docs/en/tutorial/mysql_to_mysql.md)
+- [pg -> pg](./docs/en/tutorial/pg_to_pg.md)
+- [mongo -> mongo](./docs/en/tutorial/mongo_to_mongo.md)
+- [redis -> redis](./docs/en/tutorial/redis_to_redis.md)
+- [mysql -> starrocks](./docs/en/tutorial/mysql_to_starrocks.md)
+- [mysql -> doris](./docs/en/tutorial/mysql_to_doris.md)
+- [mysql -> clickhouse](./docs/en/tutorial/mysql_to_clickhouse.md)
+- [mysql -> tidb](./docs/en/tutorial/mysql_to_tidb.md)
+- [mysql -> kafka -> consumer](./docs/en/tutorial/mysql_to_kafka_consumer.md)
+- [pg -> starrocks](./docs/en/tutorial/pg_to_starrocks.md)
+- [pg -> doris](./docs/en/tutorial/pg_to_doris.md)
+- [pg -> clickhouse](./docs/en/tutorial/pg_to_clickhouse.md)
+- [pg -> kafka -> consumer](./docs/en/tutorial/pg_to_kafka_consumer.md)
+- [snapshot + cdc without data loss](./docs/en/tutorial/snapshot_and_cdc_without_data_loss.md)
+- [modify data by lua](./docs/en/tutorial/etl_by_lua.md)
+
+## Run tests
+
+Refer to [test docs](./dt-tests/README.md) for details.
+
+# More docs
+
+- Configurations
+  - [config details](./docs/en/config.md)
+- Error handling
+  - [error codes](./docs/en/error_codes.md)
+- Structure tasks
+  - [migration](./docs/en/structure/migration.md)
+  - [check](./docs/en/structure/check.md)
+  - [check by Liquibase](./docs/en/structure/check_by_liquibase.md)
+- Snapshot tasks
+  - [data migration](./docs/en/snapshot/migration.md)
+  - [data check](./docs/en/snapshot/check.md)
+  - [data revise](./docs/en/snapshot/revise.md)
+  - [data review](./docs/en/snapshot/review.md)
+  - [resume at breakpoint](./docs/en/snapshot/resume.md)
+  - [multiple tables in parallel](./docs/en/snapshot/tb_in_parallel.md)
+- CDC tasks
+  - [data sync](./docs/en/cdc/sync.md)
+  - [heartbeat to source database](./docs/en/cdc/heartbeat.md)
+  - [two-way data sync](./docs/en/cdc/two_way.md)
+  - [generate sqls from CDC](./docs/en/cdc/to_sql.md)
+  - [resume at breakpoint](./docs/en/cdc/resume.md)
+- Custom consumers
+  - [mysql/pg -> kafka -> consumer](./docs/en/consumer/kafka_consumer.md)
+- Data processing
+  - [modify data by lua](./docs/en/etl/lua.md)
+- Monitor
+  - [monitor info](./docs/en/monitor/monitor.md)
+  - [position info](./docs/en/monitor/position.md)
+- Task templates
+  - [mysql -> mysql](./docs/templates/mysql_to_mysql.md)
+  - [pg -> pg](./docs/templates/pg_to_pg.md)
+  - [mongo -> mongo](./docs/templates/mongo_to_mongo.md)
+  - [redis -> redis](./docs/templates/redis_to_redis.md)
+  - [mysql/pg -> kafka](./docs/templates/rdb_to_kafka.md)
+  - [mysql -> starrocks](./docs/templates/mysql_to_starrocks.md)
+  - [mysql -> doris](./docs/templates/mysql_to_doris.md)
+  - [mysql -> clickhouse](./docs/templates/mysql_to_clickhouse.md)
+  - [pg -> starrocks](./docs/templates/pg_to_starrocks.md)
+  - [pg -> doris](./docs/templates/pg_to_doris.md)
+  - [pg -> clickhouse](./docs/templates/pg_to_clickhouse.md)
+
+# Benchmark
+
+`ape-dts: 2.0.26.1; Environment: Alibaba Cloud, same VPC; MySQL: 8.4.11 8c16g; Full load: 8 tables × 4 million rows; CDC: 8 tables × 1 million baseline rows, 4 million UPDATEs`
+
+- MySQL -> MySQL, Snapshot
+
+| Node Specs | Rows/s | Source MySQL CPU / RSS (MiB) | Target MySQL CPU / RSS (MiB) |
+| :--------- | :----- | :--------------------------- | :--------------------------- |
+| 1c2g       | 109067 | 7.28% / 8725                 | 112.59% / 14235              |
+| 2c4g       | 131783 | 9.18% / 8636                 | 156.01% / 14291              |
+| 4c8g       | 133283 | 9.06% / 8634                 | 172.36% / 14254              |
+
+- MySQL -> MySQL, CDC
+
+| Node Specs | UPDATE/s | Source MySQL CPU / RSS (MiB) | Target MySQL CPU / RSS (MiB) |
+| :--------- | :------- | :--------------------------- | :--------------------------- |
+| 1c2g       | 23477    | 2.71% / 1989                 | 69.38% / 6915                |
+| 2c4g       | 51171    | 5.73% / 1947                 | 191.92% / 5627               |
+| 4c8g       | 52538    | 5.63% / 2061                 | 193.22% / 6058               |
+
+- More benchmark [details](./docs/en/benchmark.md)
+
+# Contributing
+
+## Structure
+
+![Structure](docs/img/structure.png)
+
+## Modules
+
+- dt-main: program entry
+- dt-precheck: pre-check, to minimize interruptions during subsequent data operations by identifying issues early for fast failure
+- dt-connector: extractors + sinkers for databases
+- dt-pipeline: pipeline to connect extractors and sinkers
+- dt-parallelizer: parallel algorithms
+- dt-task: create extractors + sinkers + pipelines + parallelizers according to configurations
+- dt-common: common utils, basic data structures, metadata management
+- dt-tests: integration tests
+
+- related sub module: [mysql binlog connector in rust](https://github.com/apecloud/mysql-binlog-connector-rust)
+
+## Crate features
+
+The dt-main crate provides several optional components which can be enabled via `Cargo [features]`:
+
+- `metrics`: Enable Prometheus format task metrics HTTP service interface.
+  See the [task metrics reference](./docs/en/monitor/task_metrics.md) for metric
+  names, units, and semantics.
+  After enabling this feature, you can customize the metrics service with the following configuration:
+
+  ```
+  [metrics]
+  # http service host
+  http_host=127.0.0.1
+  # http service port
+  http_port=9090
+  # http service worker count
+  workers=2
+  # prometheus metrics const labels
+  labels=your_label1:your_value1,your_label2:your_value2
+  ```
+
+## Build
+
+- Minimum supported Rust version (MSRV)
+  The current minimum supported Rust version (MSRV) is 1.85.0.
+- cargo build
+- [build images](./docs/en/build_images.md)
+
+## Checklist
+
+- run `cargo clippy --all-targets --all-features --workspace` fix all clippy issues.
+
+## Community
+
+If you have any questions, you can reach out to us through:
+
+- ApeDTS GitHub [Discussions](https://github.com/apecloud/ape-dts/discussions)
+- ApeDTS Wechat Account with note **ape-dts**:
+
+  <img src=".\docs\img\wechat-assistant.png" alt="wechat" width="100" height="100" style="margin-top:10px">

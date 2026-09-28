@@ -1,0 +1,200 @@
+[![Documentation](https://img.shields.io/badge/Documentation-%F0%9F%93%9C-666?logo=github)](https://cybertec-postgresql.github.io/pg_timetable/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Build and Test](https://github.com/cybertec-postgresql/pg_timetable/actions/workflows/build.yml/badge.svg)](https://github.com/cybertec-postgresql/pg_timetable/actions/workflows/build.yml)
+[![Coverage Status](https://img.shields.io/coverallsCoverage/github/cybertec-postgresql/pg_timetable?branch=master&label=Coverage&color=green)](https://coveralls.io/github/cybertec-postgresql/pg_timetable?branch=master)
+[![Github All Releases](https://img.shields.io/github/downloads/cybertec-postgresql/pg_timetable/total?label=Downloads)](https://github.com/cybertec-postgresql/pg_timetable/releases)
+[![Docker Pulls](https://img.shields.io/docker/pulls/cybertecpostgresql/pg_timetable?label=Docker%20Pulls)](https://hub.docker.com/r/cybertecpostgresql/pg_timetable)
+[![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go)
+
+# pg_timetable: Advanced scheduling for PostgreSQL
+
+**pg_timetable** is an advanced standalone job scheduler for PostgreSQL, offering many advantages over traditional schedulers such as **cron** and others.
+It is completely database driven and provides a couple of advanced concepts. It allows you to schedule PostgreSQL commands, system programs and built-in operations:
+
+```sql
+-- Run public.my_func() at 00:05 every day in August:
+SELECT timetable.add_job('execute-func', '5 0 * 8 *', 'SELECT public.my_func()');
+
+-- Run VACUUM at minute 23 past every 2nd hour from 0 through 20 every day:
+SELECT timetable.add_job('run-vacuum', '23 0-20/2 * * *', 'VACUUM');
+
+-- Refresh materialized view every 2 hours:
+SELECT timetable.add_job('refresh-matview', '@every 2 hours', 
+  'REFRESH MATERIALIZED VIEW public.mat_view');
+
+-- Clear log table after pg_timetable restart:
+SELECT timetable.add_job('clear-log', '@reboot', 'TRUNCATE public.log');
+
+-- Run a job at every scheduler loop tick (every 60 seconds by default):
+SELECT timetable.add_job('every-minute', NULL, 'SELECT 1');
+
+-- Reindex at midnight on Sundays with reindexdb utility:
+
+--  using default database under default user (no command line arguments)
+SELECT timetable.add_job('reindex-job', '0 0 * * 7', 'reindexdb', job_kind := 'PROGRAM');
+
+--  specifying target database and tables, and be verbose
+SELECT timetable.add_job('reindex-job', '0 0 * * 7', 'reindexdb',
+          '["--table=foo", "--dbname=postgres", "--verbose"]'::jsonb, 'PROGRAM');
+
+--  passing password using environment variable through bash shell
+SELECT timetable.add_job('reindex-job', '0 0 * * 7', 'bash',
+    '["-c", "PGPASSWORD=5m3R7K4754p4m reindexdb -U postgres -h 192.168.0.221 -v"]'::jsonb,
+    'PROGRAM');    
+```
+
+## Documentation
+
+<https://cybertec-postgresql.github.io/pg_timetable/>
+
+## Main features
+
+- Tasks can be arranged in chains
+- Each task executes SQL, built-in or executable command
+- Parameters can be passed to tasks
+- Missed chains (possibly due to downtime) can be retried automatically
+- Support for configurable repetitions
+- Builtin tasks such as sending emails, downloading, importing files, etc.
+- Fully database driven configuration
+- Full support for database driven logging
+- Enhanced cron-style scheduling
+- Optional concurrency protection
+- Chain and task definitions can be enabled or disabled without deleting them
+- YAML-based chain definitions for easy configuration
+- OpenTelemetry tracing and metrics export (opt-in)
+- Official Docker images published for both `linux/amd64` and `linux/arm64`
+
+## YAML Configuration
+
+You can now define chains using YAML files instead of SQL inserts, making configuration more readable and maintainable:
+
+```yaml
+chains:
+  - name: "Daily ETL Pipeline"
+    schedule: "0 2 * * *"  # 2 AM daily
+    live: true
+    max_instances: 1
+    timeout: 3600000  # 1 hour
+    
+    tasks:
+      - name: "Extract data"
+        command: "SELECT extract_sales_data($1)"
+        parameters: ["yesterday"]
+        
+      - name: "Transform data"
+        command: "CALL transform_sales_data()"
+        autonomous: true
+        
+      - name: "Load to warehouse"
+        command: "CALL load_to_warehouse()"
+```
+
+Load YAML chains with one or more startup files:
+
+```bash
+pg_timetable --file chains.yaml postgresql://user:pass@host/db
+pg_timetable --file bootstrap.sql --file chains/base.yaml --file chains/prod.yaml ******host/db
+```
+
+See [`samples/yaml/`](samples/yaml/) for more examples and [YAML Schema](https://cybertec-postgresql.github.io/pg_timetable/latest/yaml-format/) for complete format specification.
+
+## Installation
+
+Complete installation guide can be found in the [documentation](https://cybertec-postgresql.github.io/pg_timetable/latest/installation/).
+
+Possible choices are:
+
+- official [release packages](https://github.com/cybertec-postgresql/pg_timetable/releases);
+- [Docker images](https://hub.docker.com/r/cybertecpostgresql/pg_timetable);
+- [build from sources](https://cybertec-postgresql.github.io/pg_timetable/latest/installation/#build-from-sources).
+
+## Quick Start
+
+Complete usage guide can be found in the [documentation](https://cybertec-postgresql.github.io/pg_timetable/latest/how-to-schedule-common-jobs/).
+
+1. Download **pg_timetable** executable
+
+1. Make sure your **PostgreSQL** server is up and running and has a role with `CREATE` privilege for a target database, e.g.
+
+    ```sql
+    my_database=> CREATE ROLE scheduler PASSWORD 'somestrong';
+    my_database=> GRANT CREATE ON DATABASE my_database TO scheduler;
+    ```
+
+1. Create a new job, e.g. run `VACUUM` each night at 00:30
+
+    ```sql
+    my_database=> SELECT timetable.add_job('frequent-vacuum', '30 0 * * *', 'VACUUM');
+    add_job
+    ---------
+        3
+    (1 row)
+    ```
+
+1. Run the pg_timetable
+
+    ```terminal
+    pg_timetable postgresql://scheduler:somestrong@localhost/my_database --clientname=vacuumer
+    ```
+
+1. PROFIT!
+
+## Supported Environments  
+
+| Cloud Service    | Supported | PostgreSQL Version  | Supported | OS | Supported |
+| ---------------- |:---------:| ------------------- |:---------:| -- |:---------:|
+| [Alibaba Cloud]  | ✅       | [19 (devel)]         | ✅       | Linux     | ✅ |
+| [Amazon RDS]     | ✅       | [18 (current)]       | ✅       | Darwin    | ✅ |
+| [Amazon Aurora]  | ✅       | [17]                 | ✅       | Windows   | ✅ |
+| [Azure]          | ✅       | [16]                 | ✅       | FreeBSD\* | ✅ |
+| [Citus Cloud]    | ✅       | [15]                 | ✅       | NetBSD\*  | ✅ |
+| [Crunchy Bridge] | ✅       | [14]                 | ✅       | OpenBSD\* | ✅ |
+| [DigitalOcean]   | ✅       | [13]                 | ✅       | Solaris\* | ✅ |
+| [Google Cloud]   | ✅       | [12]                 | ✅       |           |     |
+| [Heroku]         | ✅       | [11]                 | ✅       |           |     |
+| [Supabase]       | ✅       | [10]                 | ✅       |           |     |
+
+\* - there are no official release binaries made for these OSes. One would need to build them from sources.
+
+\** - previous PostgreSQL versions may and should work smoothly. Only [officially supported PostgreSQL versions](https://www.postgresql.org/support/versioning/) are listed in this table.
+
+[Alibaba Cloud]: https://www.alibabacloud.com/help/doc-detail/96715.htm
+[Amazon RDS]: https://aws.amazon.com/rds/postgresql/
+[Amazon Aurora]: https://aws.amazon.com/rds/aurora/
+[Azure]: https://azure.microsoft.com/en-us/services/postgresql/
+[Citus Cloud]: https://www.citusdata.com/product/cloud
+[Crunchy Bridge]: https://www.crunchydata.com/products/crunchy-bridge/
+[DigitalOcean]: https://www.digitalocean.com/products/managed-databases/
+[Google Cloud]: https://cloud.google.com/sql/docs/postgres/
+[Heroku]: https://elements.heroku.com/addons/heroku-postgresql
+[Supabase]: https://supabase.io/docs/guides/database
+[19 (devel)]: https://www.postgresql.org/docs/devel/index.html
+[18 (current)]: https://www.postgresql.org/docs/18/index.html
+[17]: https://www.postgresql.org/docs/17/index.html
+[16]: https://www.postgresql.org/docs/16/index.html
+[15]: https://www.postgresql.org/docs/15/index.html
+[14]: https://www.postgresql.org/docs/14/index.html
+[13]: https://www.postgresql.org/docs/13/index.html
+[12]: https://www.postgresql.org/docs/12/index.html
+[11]: https://www.postgresql.org/docs/11/index.html
+[10]: https://www.postgresql.org/docs/10/index.html
+
+## Contributing
+
+If you want to contribute to **pg_timetable** and help make it better, feel free to open an [issue][issue] or even consider submitting a [pull request][PR].
+
+[issue]: https://github.com/cybertec-postgresql/pg_timetable/issues
+[PR]: https://github.com/cybertec-postgresql/pg_timetable/pulls
+
+## Support
+
+For professional support, please contact [Cybertec](https://www.cybertec-postgresql.com/).
+
+## Authors
+
+- Implementation: [Pavlo Golub](https://github.com/pashagolub)
+- Initial idea and draft design: [Hans-Jürgen Schönig](https://github.com/postgresql007)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=cybertec-postgresql/pg_timetable&type=Date)](https://star-history.com/#cybertec-postgresql/pg_timetable&Date)
