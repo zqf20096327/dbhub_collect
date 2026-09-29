@@ -14,28 +14,33 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 import sys as _sys, pathlib as _pl
 ROOT = _pl.Path(__file__).resolve().parents[1]
-for _d in (ROOT, ROOT / "lib", ROOT / "config"):
+for _d in (ROOT, ROOT / "lib", ROOT / "config", ROOT / "interpret"):
     _sys.path.insert(0, str(_d))
 HERE = ROOT                      # 历史引用兼容：统一指向项目根
 import strategy                              # noqa: E402
 from gh import atomic_write_json             # noqa: E402
-from interpret import (CACHE, ISTATE, REVIEW, info_gain, validate)  # noqa: E402
+from interpret import (CACHE, ISTATE, REVIEW, info_gain,  # noqa: E402
+                       latest_pool, merge_review, validate)
 
 BATCH = HERE / "state" / "pending_batch.json"
 
 
-def next_batch(n: int):
-    rstate = json.loads((HERE / "state" / "readme_state.json").read_text(encoding="utf-8"))
+def next_batch(n: int, pool_path: Path | None):
+    rstate_p = HERE / "state" / "readme_state.json"
+    if not rstate_p.is_file() or not (pool_path or (HERE / "data")).is_dir():
+        sys.exit("readme_state.json 或 pool 不存在（先跑采集）")
+    rstate = json.loads(rstate_p.read_text(encoding="utf-8"))
     cache = json.loads(CACHE.read_text(encoding="utf-8")) if CACHE.is_file() else {}
     pool = {it["full_name"]: it
-            for it in json.loads((HERE / "data" / "snapshot_20260925" / "pool.json").read_text(encoding="utf-8"))}
+            for it in json.loads(pool_path.read_text(encoding="utf-8"))}
     todo = [(fn, rec["sha"]) for fn, rec in rstate.get("items", {}).items()
             if rec.get("status") in ("done", "oversized") and rec.get("sha")
-            and rec["sha"] not in cache]
+            and rec["sha"] not in cache and fn in pool]
     todo.sort(key=lambda x: -((pool.get(x[0]) or {}).get("stars") or 0))
     todo = todo[:n]
     out = []
@@ -55,6 +60,7 @@ def submit(path: str):
     cache = json.loads(CACHE.read_text(encoding="utf-8")) if CACHE.is_file() else {}
     st = json.loads(ISTATE.read_text(encoding="utf-8")) if ISTATE.is_file() else {"items": {}}
     batch = {b["fn"]: b for b in json.loads(Path(path).read_text(encoding="utf-8"))}
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     ok, rej = 0, []
     # 与 interpret.py 相同的校验：readme 全文做 evidence 原文核对；sha 须与批次一致防缓存键错位
     for fn, b in batch.items():
@@ -70,28 +76,35 @@ def submit(path: str):
             obj["identity"]["review"] = ""
         if obj is None:
             rej.append({"fn": fn, "why": errs[:3]})
-            st["items"][fn] = {"sha": b.get("sha"), "status": "rejected", "violations": errs[:5]}
+            st["items"][fn] = {"sha": b["sha"], "status": "rejected", "violations": errs[:5]}
             continue
         obj.update({"fn": fn, "sha": b["sha"], "source": "glm-5.3-session",
-                    "generated_at": "2026-09-26"})
+                    "generated_at": today})
         cache[b["sha"]] = obj
         st["items"][fn] = {"sha": b["sha"], "status": "done"}
         ok += 1
     atomic_write_json(CACHE, cache)
     atomic_write_json(ISTATE, st)
-    atomic_write_json(REVIEW, {"rejected": rej})
+    prev_review = json.loads(REVIEW.read_text(encoding="utf-8")) if REVIEW.is_file() else {}
+    failed_fns = [fn for fn, r in st["items"].items()
+                  if r.get("status") in ("failed", "rejected")]
+    atomic_write_json(REVIEW, merge_review(prev_review, [], rej, failed_fns))
     print(f"入库 {ok} / 拒收 {len(rej)}（缓存总 {len(cache)}）")
     for r in rej:
         print("  拒收:", r["fn"], r["why"])
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--next", type=int)
-    ap.add_argument("--submit")
+    ap = argparse.ArgumentParser(description="会话内解读批处理")
+    ap.add_argument("--next", type=int, help="导出 N 条待解读")
+    ap.add_argument("--submit", help="提交 submit.json 入库")
+    ap.add_argument("--pool", default=None, help="池路径（默认取最新 snapshot_20*/pool.json）")
     args = ap.parse_args()
+    if not args.next and not args.submit:
+        ap.error("--next 与 --submit 至少其一")
+    pool_path = Path(args.pool) if args.pool else latest_pool()
     if args.next:
-        next_batch(args.next)
+        next_batch(args.next, pool_path)
     if args.submit:
         submit(args.submit)
 

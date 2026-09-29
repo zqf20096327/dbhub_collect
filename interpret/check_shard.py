@@ -20,8 +20,8 @@ from interpret import info_gain, validate    # noqa: E402
 
 def main():
     n = sys.argv[1]
-    shard_in = HERE / f"shard_{n}.json"
-    shard_out = HERE / f"submit_shard_{n}.json"
+    shard_in = HERE / "state" / f"shard_{n}.json"
+    shard_out = HERE / "state" / f"submit_shard_{n}.json"
     gen = strategy.derive()
     batch = {b["fn"]: b for b in json.loads(shard_in.read_text(encoding="utf-8"))}
     out = json.loads(shard_out.read_text(encoding="utf-8"))

@@ -6,19 +6,26 @@
   ② 输出禁词扫描（复用旧管道 SOP 红线禁词表并扩充中英文）
   ③ 违规拒收→带原因重试一次→再违规清空文本字段、降 confidence=low 进人工队列
 程序化验收：evidence 必须是 README 原文子串（防幻觉）；review 须有信息增量；
-枚举字段超集即拒收。
+枚举字段（cat/eco/dbs/official.of 等）超集即拒收。
 
+并发模型：worker 线程只返回结果 dict，共享 cache/state 由主线程统一落账
+（避免遍历与插入并发的 dict 竞态）；落盘按 chunk 批量（每条全量重写 55MB
+缓存的 O(n²) 磁盘 I/O 不可持续）。
+待办过滤：出池 fn 不解读；同 sha 已拒收不重烧（进人工队列，勿反复花钱）；
+no_readme 仓空描述跳过、描述变化（desc:: 键变化）可重试。
 缓存两层：state/interp_cache.json（sha→结果，跨仓同内容共用）
          state/interp_state.json（fn→sha）
 用法：
-  python interpret.py --pool data/snapshot_.../pool.json --max-items 50   # 小样本
-  python interpret.py --concurrency 4                                     # 放量
+  python interpret.py                                # 默认取最新池
+  python interpret.py --pool data/snapshot_.../pool.json --max-items 50
+  python interpret.py --concurrency 4                # 放量
 """
 from __future__ import annotations
 
 import argparse
 import json
 import logging
+import os
 import re
 import sys
 import time
@@ -33,15 +40,22 @@ ROOT = _pl.Path(__file__).resolve().parents[1]
 for _d in (ROOT, ROOT / "lib", ROOT / "config"):
     _sys.path.insert(0, str(_d))
 HERE = ROOT                      # 历史引用兼容：统一指向项目根
-import db_profiles as dp           # noqa: E402
 import strategy                    # noqa: E402
-from gh import atomic_write_json   # noqa: E402
+from gh import atomic_write_json, load_env  # noqa: E402
 
 log = logging.getLogger("interpret")
 
 CACHE = HERE / "state" / "interp_cache.json"
 ISTATE = HERE / "state" / "interp_state.json"
 REVIEW = HERE / "state" / "manual_review.json"
+
+
+def latest_pool() -> Path:
+    pools = sorted((HERE / "data").glob("snapshot_20*/pool.json"))
+    if not pools:
+        raise SystemExit("无可用 pool（data/snapshot_20*/pool.json）")
+    return pools[-1]
+
 
 # ============================================================
 # 禁词表（SOP 红线 templates.BANNED_WORDS 为底，扩充中英文）
@@ -111,7 +125,7 @@ SCHEMA_DESC = """输出一个 JSON 对象（只输出 JSON，不要其他文字�
 }}
 cat 裁决规则：{cat_rule}
 ai.kind 只在 flag=true 时填，从 ["text2sql","mcp","dba-agent","rag","other"] 里选。
-official.of 只在 flag=true 时填一个库名。"""
+official.of 只在 flag=true 时填一个库名（也必须来自 dbs_enum）。"""
 
 PROMPT_TMPL = """你是数据库开源生态的编目员，为周报项目库做中立的结构化编目。
 {contract}
@@ -138,22 +152,16 @@ audit(confidence,evidence 填简介原句) 字段，JSON 格式，参照：
 # ---------------- AI 客户端（OpenAI 兼容 / DeepSeek 协议同旧管道） ----------------
 
 class AIClient:
-    def __init__(self):
-        import os
-        env = HERE / ".env"
-        if env.is_file():
-            for line in env.read_text(encoding="utf-8").splitlines():
-                line = line.strip()
-                if line and not line.startswith("#") and "=" in line:
-                    k, _, v = line.partition("=")
-                    os.environ.setdefault(k.strip(), v.strip())
+    def __init__(self, deadline: float | None = None):
+        load_env()                     # gh 的读取（config/.env 与根 .env 都认）
         self.key = os.environ.get("AI_API_KEY") or os.environ.get("DEEPSEEK_API_KEY")
         self.base = (os.environ.get("AI_BASE_URL") or "https://api.deepseek.com").rstrip("/")
         if self.base.endswith("/chat/completions"):          # 容错：粘了完整端点时剥掉，防路径拼重
             self.base = self.base.rsplit("/chat/completions", 1)[0]
         self.model = os.environ.get("AI_MODEL") or "deepseek-chat"
+        self.deadline = deadline       # 墙钟截止：额度睡等不得越过（防进程僵尸数小时）
         if not self.key:
-            raise SystemExit("AI_API_KEY 未配置：写入 dbhub_v2/.env")
+            raise SystemExit("AI_API_KEY 未配置：写入本仓库 .env（dbhub_collect/.env）")
 
     def chat(self, prompt: str, timeout: int = 180) -> str:
         attempt = 0
@@ -177,6 +185,8 @@ class AIClient:
                 quota_waits += 1
                 if quota_waits > 33:
                     raise RuntimeError("额度等待超 5.5 小时仍报 1113，放弃本条")
+                if self.deadline and time.time() + 600 > self.deadline:
+                    raise RuntimeError("额度耗尽，等待将超墙钟预算，本条放弃（下次运行续）")
                 log.warning("额度耗尽，10 分钟后探测重试（第 %d 次）", quota_waits)
                 time.sleep(600)
                 continue
@@ -266,6 +276,9 @@ def validate(obj: dict, gen, readme_norm: str, desc: str) -> tuple[dict | None, 
     dbs = [d for d in (cls.get("dbs") or []) if d in gen["CANON_PATTERNS"]]
     if len(dbs) != len(cls.get("dbs") or []):
         errs.append("dbs 含白名单外库名")
+    official = cls.get("official") or {}
+    if official.get("flag") and official.get("of") not in gen["CANON_PATTERNS"]:
+        errs.append(f"official.of 非法: {official.get('of')}（不在库名单）")
     ai = cls.get("ai") or {}
     kinds = [k for k in (ai.get("kind") or []) if k in _AI_KIND]
     install = [i for i in (sig.get("install") or []) if i in _INSTALL]
@@ -301,83 +314,101 @@ def info_gain(review: str, desc: str) -> bool:
     return len((btoks - dtoks) - _CN_STOP) >= 3
 
 
+def merge_review(prev: dict, low_conf: list, rejected: list, failed_fns: list) -> dict:
+    """人工复核队列跨运行累积合并——旧版整体覆盖写，历史队列永远只剩最后一次运行。"""
+    by_fn = {}
+    for r in list(prev.get("rejected") or []) + list(rejected):
+        by_fn[r.get("fn")] = r            # 同 fn 保最新
+    return {"low_confidence": sorted(set(prev.get("low_confidence") or []) | set(low_conf)),
+            "rejected": list(by_fn.values())[-500:],
+            "failed": sorted(set(prev.get("failed") or []) | set(failed_fns))}
+
+
 # ---------------- 主流程 ----------------
 
 def run(args):
     st = json.loads(ISTATE.read_text(encoding="utf-8")) if ISTATE.is_file() else {"items": {}}
     cache = json.loads(CACHE.read_text(encoding="utf-8")) if CACHE.is_file() else {}
-    rstate = json.loads((HERE / "state" / "readme_state.json").read_text(encoding="utf-8")) \
-        if (HERE / "state" / "readme_state.json").is_file() else {"items": {}}
-    pool = {it["full_name"]: it
-            for it in json.loads(Path(args.pool).read_text(encoding="utf-8"))}
+    rstate_p = HERE / "state" / "readme_state.json"
+    rstate = json.loads(rstate_p.read_text(encoding="utf-8")) if rstate_p.is_file() else {"items": {}}
+    pool_path = Path(args.pool) if args.pool else latest_pool()
+    pool = {it["full_name"]: it for it in json.loads(pool_path.read_text(encoding="utf-8"))}
 
     gen = strategy.derive()
     schema = SCHEMA_DESC.format(dbs_enum="、".join(gen["CANON_PATTERNS"]), cat_rule=_CAT_RULE)
 
-    # 待办：readme 有内容且 sha 未解读（或 sha 变化）；含 no_readme 降级项
+    # 待办：readme 有内容且 sha 未解读（或 sha 变化）；含 no_readme 降级项。
+    # 过滤：出池 fn 不解读；同 sha 已拒收不重烧（进人工队列）；空描述降级项跳过
     todo: list[tuple[str, str, bool]] = []      # (fn, sha, degraded)
+    n_skip = {"out_of_pool": 0, "rejected_same_sha": 0, "empty_desc": 0}
     for fn, rec in rstate.get("items", {}).items():
+        if fn not in pool:
+            n_skip["out_of_pool"] += 1
+            continue
         sha = rec.get("sha")
+        prev = st["items"].get(fn) or {}
         if rec.get("status") in ("done", "oversized") and sha and sha not in cache:
+            if prev.get("status") == "rejected" and prev.get("sha") == sha:
+                n_skip["rejected_same_sha"] += 1
+                continue
             todo.append((fn, sha, False))
         elif rec.get("status") == "no_readme":
-            dkey = "desc::" + (pool.get(fn, {}).get("description") or "")[:100]
-            if fn not in st["items"] and dkey not in cache:
+            desc = (pool.get(fn, {}).get("description") or "")[:100]
+            if not desc:
+                n_skip["empty_desc"] += 1
+                continue
+            dkey = "desc::" + desc
+            if prev.get("sha") != dkey and dkey not in cache:
                 todo.append((fn, dkey, True))
     todo.sort(key=lambda x: -((pool.get(x[0]) or {}).get("stars") or 0))
     total_todo = len(todo)
     todo = todo[:args.max_items]
-    log.info("待解读 %d 项（缓存已有 %d）｜真实剩余 %d，本次截取 %d",
-             total_todo, len(cache), total_todo, len(todo))
+    log.info("待解读 %d 项（缓存已有 %d）｜真实剩余 %d，本次截取 %d · 跳过 %s",
+             total_todo, len(cache), total_todo, len(todo), n_skip)
 
-    ai = AIClient()
     t0 = time.time()
-    done, failed, low_conf, rejected = 0, 0, [], []
+    ai = AIClient(deadline=t0 + args.max_minutes * 60)
+    done, low_conf, rejected = 0, [], []
 
-    def work(job):
-        nonlocal done, failed
+    def work(job) -> dict:
+        """worker 线程只读共享结构、只返回结果——落账一律在主线程（防 dict 竞态）。"""
         fn, sha, degraded = job
-        it = pool.get(fn) or {}
-        desc = (it.get("description") or "")[:300]
-        topics = ",".join((it.get("topics") or [])[:12])
-        if degraded:
-            prompt = PROMPT_DESC.format(contract=NEUTRALITY_CONTRACT, schema=schema,
-                                        fn=fn, desc=desc, topics=topics)
-            readme_norm = desc.lower()
-        else:
-            path = HERE / "data" / "readmes" / (fn.replace("/", "__") + ".md")
-            text = path.read_text(encoding="utf-8", errors="ignore")[:10000] if path.is_file() else ""
-            prompt = PROMPT_TMPL.format(contract=NEUTRALITY_CONTRACT, schema=schema,
-                                        fn=fn, desc=desc, topics=topics,
-                                        readme=text or "（无 README 正文）")
-            readme_norm = text.lower()
-        violations: list[str] = []
-        obj = None
-        for attempt in (1, 2):                     # 违规带原因重试一次
-            try:
-                raw = ai.chat(prompt + ("" if attempt == 1 else
-                              f"\n\n【上次输出被拒收，原因：{'；'.join(violations)}。请修正后重新输出合规 JSON。】"))
-            except Exception as e:                 # noqa: BLE001
-                failed += 1
-                st["items"][fn] = {"sha": sha, "status": "failed", "error": str(e)[:150]}
-                return False
-            obj, violations = validate(extract_json(raw) or {}, gen, readme_norm, desc)
-            if obj is not None:
-                break
-        if obj is None:
-            rejected.append((fn, violations[:3]))
-            st["items"][fn] = {"sha": sha, "status": "rejected", "violations": violations[:5]}
-            return False
-        review = (obj["identity"].get("review") or "")
-        if not degraded and not info_gain(review, desc):
-            obj["identity"]["review"] = ""          # 无增量则空置，不展示
-        obj.update({"fn": fn, "sha": sha, "source": "desc" if degraded else "readme",
-                    "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d")})
-        cache[sha] = obj
-        st["items"][fn] = {"sha": sha, "status": "done"}
-        if obj["audit"]["confidence"] == "low":
-            low_conf.append(fn)
-        return True
+        try:
+            it = pool.get(fn) or {}
+            desc = (it.get("description") or "")[:300]
+            topics = ",".join((it.get("topics") or [])[:12])
+            if degraded:
+                prompt = PROMPT_DESC.format(contract=NEUTRALITY_CONTRACT, schema=schema,
+                                            fn=fn, desc=desc, topics=topics)
+                readme_norm = desc.lower()
+            else:
+                path = HERE / "data" / "readmes" / (fn.replace("/", "__") + ".md")
+                text = path.read_text(encoding="utf-8", errors="ignore")[:10000] if path.is_file() else ""
+                prompt = PROMPT_TMPL.format(contract=NEUTRALITY_CONTRACT, schema=schema,
+                                            fn=fn, desc=desc, topics=topics,
+                                            readme=text or "（无 README 正文）")
+                readme_norm = text.lower()
+            violations: list[str] = []
+            obj = None
+            for attempt in (1, 2):                     # 违规带原因重试一次
+                try:
+                    raw = ai.chat(prompt + ("" if attempt == 1 else
+                                  f"\n\n【上次输出被拒收，原因：{'；'.join(violations)}。请修正后重新输出合规 JSON。】"))
+                except Exception as e:                 # noqa: BLE001
+                    return {"kind": "failed", "fn": fn, "sha": sha, "error": str(e)[:150]}
+                obj, violations = validate(extract_json(raw) or {}, gen, readme_norm, desc)
+                if obj is not None:
+                    break
+            if obj is None:
+                return {"kind": "rejected", "fn": fn, "sha": sha, "violations": violations[:5]}
+            review = (obj["identity"].get("review") or "")
+            if not degraded and not info_gain(review, desc):
+                obj["identity"]["review"] = ""          # 无增量则空置，不展示
+            obj.update({"fn": fn, "sha": sha, "source": "desc" if degraded else "readme",
+                        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d")})
+            return {"kind": "done", "fn": fn, "sha": sha, "obj": obj}
+        except Exception as e:                         # noqa: BLE001 worker 全身防御
+            return {"kind": "failed", "fn": fn, "sha": sha, "error": str(e)[:150]}
 
     with ThreadPoolExecutor(max_workers=args.concurrency) as ex:
         chunk = max(args.concurrency * 4, 16)
@@ -386,24 +417,40 @@ def run(args):
                 log.warning("墙钟预算先到，收尾（断点已存）")
                 break
             futs = [ex.submit(work, job) for job in todo[i:i + chunk]]
-            for f in as_completed(futs):        # 按完成序消费：单条卡住（如额度熔断长等待）不阻塞落盘
-                done += 1 if f.result() else 0
-                atomic_write_json(CACHE, cache)  # 每完成一条立即落盘
+            chunk_done = 0
+            for f in as_completed(futs):        # 主线程统一落账
+                r = f.result()
+                if r["kind"] == "done":
+                    cache[r["sha"]] = r["obj"]
+                    st["items"][r["fn"]] = {"sha": r["sha"], "status": "done"}
+                    if r["obj"]["audit"]["confidence"] == "low":
+                        low_conf.append(r["fn"])
+                    done += 1
+                elif r["kind"] == "rejected":
+                    st["items"][r["fn"]] = {"sha": r["sha"], "status": "rejected",
+                                            "violations": r["violations"]}
+                    rejected.append({"fn": r["fn"], "why": r["violations"][:3]})
+                else:
+                    st["items"][r["fn"]] = {"sha": r["sha"], "status": "failed",
+                                            "error": r["error"]}
+                chunk_done += 1
+            if chunk_done:                      # 按 chunk 落盘（每条全量重写是 O(n²) I/O）
+                atomic_write_json(CACHE, cache)
                 atomic_write_json(ISTATE, st)
-    # 失败计数并入人工队列
+    # 收尾必落 + 人工队列累积合并
     atomic_write_json(CACHE, cache)
     atomic_write_json(ISTATE, st)
-    atomic_write_json(REVIEW, {"low_confidence": low_conf,
-                               "rejected": [{"fn": f, "why": v} for f, v in rejected[:50]],
-                               "failed": [fn for fn, r in st["items"].items()
-                                          if r.get("status") in ("failed", "rejected")]})
-    log.info("==== 解读完成：成功 %d · 拒收 %d · 失败 %d · 低置信 %d · 缓存 %d · %.1f 分钟 ====",
-             done, len(rejected), failed, len(low_conf), len(cache), (time.time() - t0) / 60)
+    prev_review = json.loads(REVIEW.read_text(encoding="utf-8")) if REVIEW.is_file() else {}
+    failed_fns = [fn for fn, r in st["items"].items()
+                  if r.get("status") in ("failed", "rejected")]
+    atomic_write_json(REVIEW, merge_review(prev_review, low_conf, rejected, failed_fns))
+    log.info("==== 解读完成：成功 %d · 拒收 %d · 低置信 %d · 缓存 %d · %.1f 分钟 ====",
+             done, len(rejected), len(low_conf), len(cache), (time.time() - t0) / 60)
 
 
 def main():
     ap = argparse.ArgumentParser(description="AI 结构化解读（中立版）")
-    ap.add_argument("--pool", default=str(HERE / "data" / "snapshot_20260925" / "pool.json"))
+    ap.add_argument("--pool", default=None, help="池路径（默认取最新 snapshot_20*/pool.json）")
     ap.add_argument("--concurrency", type=int, default=1)
     ap.add_argument("--max-items", type=int, default=800)
     ap.add_argument("--max-minutes", type=float, default=90.0)
