@@ -22,13 +22,15 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 
 CODE_FILES = [
-    "collect/collect_pool.py", "collect/readme_sweep.py",
+    "collect/collect_intl.py", "collect/collect_cn.py", "collect/pool_core.py",
+    "collect/readme_sweep.py",
     "enrich/enrich.py",
     "config/db_profiles.py", "config/strategy.py",
     "lib/gh.py", "lib/merge_states.py",
 ]
 STATE_FILES = [
-    "collect_state.json", "readme_state.json", "readme_summary.json",
+    "collect_state_intl.json", "collect_state_cn.json", "collect_state.json",
+    "readme_state.json", "readme_summary.json",
     "enrich_state.json", "enrich_cache.json", "enrich_summary.json",
 ]
 

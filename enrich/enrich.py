@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 """信号富集采集：commit 活跃 / release / GHSA 安全通告 / contributor / 语言构成。
 
-覆盖并超越旧管道（daily_github/v2 run_enrich + commit_activity）：
-  - commit：近 7 天（必采）+ 近 90 天（条件采：仅活跃仓，死仓跳过）
-  - release：最新版 / 发布日 / 近 90 天发版数 / 预发布
-  - security：GHSA 数量 / 最高严重级 / 最近披露 / ID 列表
-  - contributor：贡献者总数（慢变量，各层基本一次性）
-  - lang：语言构成（纯一次性，永不重采）
-分层增量（每维度独立时间戳，节奏按数据变化速度定）：
+维度刷新原则（按数据变化成因二分）：
+  push 依赖维度（commit/release/contrib/lang）——无 push 物理上不会变
+  （发版必有 tag push、贡献者必有 commit、语言构成随代码变）：
+      首轮必采；此后仅当 pushed_at 变化且到期才重采
+  时间依赖维度（security）——GHSA 披露是外部事件，与仓库死活无关：到期即采
+  整仓跳过：pushed_at 未变且无任何到期维度才跳过（修复旧版死仓连 security
+  到期都被短路豁免的问题）；进 targets 只采到期维度（死仓只花 1 次调用）
+分层（star 分层 + 国产 floor）：
   head(star>=1000)：commit/release 7 天、security 30 天、contrib 90 天、lang 一次性
   mid(star>=100)：commit/release 30 天、security 90 天、contrib/lang 一次性
-  tail：仅 security 180 天；release/contrib/lang 首轮一次；死活靠池 pushed_at（免费）
-死仓跳过：pushed_at 未变且已采过 → 长尾整仓跳过（趋零成本）
+  tail：仅 security 180 天；release/contrib/lang 首轮一次；死活看池 pushed_at（免费）
+  国产仓 floor=mid（识别双信号：topics ∩ 国产 topic 集，或发现通道命中国产词/org），
+  活跃国产仓享受 30 天 commit/release，死仓也只花 security 轮转
 状态：state/enrich_state.json（断点/三振）+ state/enrich_cache.json（信号数据侧车）
 预算：--max-calls / --max-minutes / 保底线（gh.py 内置）
 
@@ -25,7 +27,6 @@ from __future__ import annotations
 import argparse
 import json
 import logging
-import sys
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -38,6 +39,7 @@ HERE = ROOT                      # 历史引用兼容：统一指向项目根
 
 import requests  # noqa: E402
 
+import strategy                  # noqa: E402
 from gh import Budget, BudgetOut, GitHubClient, QuotaPatienceOut, atomic_write_json  # noqa: E402
 
 log = logging.getLogger("enrich")
@@ -61,17 +63,38 @@ REFRESH_DAYS = {
 SEV_ORDER = {"critical": 4, "high": 3, "moderate": 2, "low": 1}
 
 
+def _cn_signals():
+    """国产识别信号（双信号：仓库自身 topics ∪ 发现通道命中），不改池 schema。"""
+    cn = strategy.derive_sections()["cn"]
+    return (set(cn["topics"]), set(cn["queries"]),
+            {strategy.norm(o) for o in cn["orgs"]})
+
+
+CN_TOPICS, CN_WORDS, CN_ORGS = _cn_signals()
+
+
+def is_cn_item(it: dict) -> bool:
+    if set(it.get("topics") or []) & CN_TOPICS:
+        return True
+    st = it.get("source_topic") or ""
+    if it.get("source") == "keyword":
+        return st in CN_WORDS
+    if it.get("source") == "org":
+        return st in CN_ORGS
+    return False
+
+
 def load_json(path: Path, default):
     if path.is_file():
         return json.loads(path.read_text(encoding="utf-8"))
     return default
 
 
-def tier_of(stars: int) -> str:
+def tier_of(stars: int, cn: bool = False) -> str:
     for name in ("head", "mid"):
         if stars >= TIER_STAR[name]:
             return name
-    return "tail"
+    return "mid" if cn else "tail"    # 国产 floor=mid
 
 
 def iso_days_ago(days: int) -> str:
@@ -100,6 +123,21 @@ def _needs_refresh(rec: dict, dim: str, refresh_days) -> bool:
     except ValueError:
         return True
     return (datetime.now(timezone.utc) - done).days >= refresh_days
+
+
+def due_dims(rec: dict, tier: str, pushed_changed: bool) -> list[str]:
+    """到期维度：security 到期即采；push 依赖维度首轮必采、其后需 pushed_at 变化且到期。"""
+    due = []
+    for d in TIER_DIMS[tier]:
+        rd = REFRESH_DAYS[tier][d]
+        if d == "security":
+            if _needs_refresh(rec, d, rd):
+                due.append(d)
+        elif not (rec.get("dims") or {}).get(d):
+            due.append(d)
+        elif pushed_changed and rd and _needs_refresh(rec, d, rd):
+            due.append(d)
+    return due
 
 
 def collect_dims(client: GitHubClient, fn: str, cache: dict, dims: tuple,
@@ -164,13 +202,19 @@ def collect_dims(client: GitHubClient, fn: str, cache: dict, dims: tuple,
         sig["lang"] = {k: round(v * 100 / total) for k, v in
                        sorted(langs.items(), key=lambda x: -x[1])[:5]}
     sig["enriched_at"] = today
+    # 字段级采集时间：enriched_at 是记录级触碰时间（多机合并取新用），
+    # security-only 刷新会 bump enriched_at 而不动 commit_7d/rel_ver 等旧值——
+    # 解读侧判断这些字段的新鲜度必须以 dim_ts 为准，防止陈旧值被"洗白"成今天
+    tsmap = sig.setdefault("dim_ts", {})
+    for d in dims:
+        tsmap[d] = today
     return sig
 
 
 def run(args):
     pool_path = Path(args.pool)
     if not pool_path.is_file():
-        raise SystemExit(f"pool 不存在：{pool_path}（先跑 collect_pool.py）")
+        raise SystemExit(f"pool 不存在：{pool_path}（先跑 collect_intl.py / collect_cn.py）")
     pool = json.loads(pool_path.read_text(encoding="utf-8"))
     st = load_json(STATE, {"version": 1, "items": {}})
     cache = load_json(CACHE, {})
@@ -178,24 +222,29 @@ def run(args):
 
     tiers = ["head", "mid", "tail"] if args.tier == "all" else [args.tier]
     want_dims = [args.only] if args.only else None
-    # 目标：按层过滤后 star 降序；已新鲜（维度时间戳未到期 + 长尾 pushed_at 未变整仓跳过）排除
+    # 目标：star 降序；已新鲜（无到期维度——含长尾死仓 pushed_at 未变）排除
     targets = []
+    n_cn = 0
     for it in sorted(pool, key=lambda x: -(x.get("stars") or 0)):
-        tier = tier_of(it.get("stars") or 0)
+        cn = is_cn_item(it)
+        tier = tier_of(it.get("stars") or 0, cn=cn)
+        if cn and tier_of(it.get("stars") or 0) == "tail":
+            n_cn += 1                      # 只计星层 tail、被 floor 提到 mid 的国产仓
         if tier not in tiers:
             continue
         fn = it["full_name"]
         rec = items.get(fn) or {}
         if rec.get("status") == "failed" and rec.get("fail_count", 0) >= THREE_STRIKES:
             continue
-        dims = want_dims or TIER_DIMS[tier]
         pushed = it.get("pushed_at") or ""
-        if tier == "tail" and rec.get("dims") and rec.get("pushed_checked") == pushed:
-            continue  # 长尾死仓：pushed_at 未变且采过 → 整仓跳过
-        if any(_needs_refresh(rec, d, REFRESH_DAYS[tier][d]) for d in dims):
+        changed = pushed != rec.get("pushed_checked")
+        due = due_dims(rec, tier, changed)
+        if want_dims:
+            due = [d for d in due if d in want_dims]
+        if due:
             targets.append(fn)
-    log.info("层 %s · 维度 %s · 目标 %d 项（池 %d）", tiers, want_dims or "按层",
-             len(targets), len(pool))
+    log.info("层 %s · 维度 %s · 目标 %d 项（池 %d · 国产 floor=mid 命中 %d）",
+             tiers, want_dims or "按层", len(targets), len(pool), n_cn)
 
     client = GitHubClient(Budget(max_calls=args.max_calls, max_minutes=args.max_minutes))
     t0 = time.time()
@@ -207,15 +256,19 @@ def run(args):
 
     try:
         for i, fn in enumerate(targets):
-            rec = items.setdefault(fn, {"dims": {}, "fail_count": 0})
             it = by_fn.get(fn, {})
-            tier = tier_of(it.get("stars") or 0)
-            dims = want_dims or TIER_DIMS[tier]
-            pushed_changed = (it.get("pushed_at") or "") != rec.get("pushed_checked")
+            tier = tier_of(it.get("stars") or 0, cn=is_cn_item(it))
+            rec = items.setdefault(fn, {"dims": {}, "fail_count": 0})
+            changed = (it.get("pushed_at") or "") != rec.get("pushed_checked")
+            dims = due_dims(rec, tier, changed)
+            if want_dims:
+                dims = [d for d in dims if d in want_dims]
+            if not dims:
+                continue
             try:
-                collect_dims(client, fn, cache, dims, pushed_changed)
+                collect_dims(client, fn, cache, tuple(dims), changed)
                 today = datetime.now(timezone.utc).strftime("%Y%m%d")
-                for d in dims:
+                for d in dims:                 # 只给真正采到的维度盖时间戳
                     rec["dims"][d] = today
                 rec["pushed_checked"] = it.get("pushed_at") or ""
                 rec["fail_count"] = 0
@@ -250,6 +303,7 @@ def run(args):
         atomic_write_json(CACHE, cache)
 
     summary = {"tiers": tiers, "dims": want_dims or "per-tier", "targets": len(targets),
+               "cn_floor_mid": n_cn,
                "counts": counts,
                "api_calls": client.stats_summary()["calls"],
                "elapsed_min": round((time.time() - t0) / 60, 1),

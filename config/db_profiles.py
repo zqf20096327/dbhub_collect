@@ -9,6 +9,8 @@
   orgs          org 扫描通道；dict 形式可带 cadence
   search        关键词全文检索通道：None=关（词泛）/"auto"(纯词别名)/显式词列表
   watch         白名单兜底（内核/官方仓库/曾误杀项目）
+  orgs.class    dedicated=org 即产品（无星线）/ cloud=云厂商超集 org（>=10 当范围噪音闸）；
+                国产 org 必须 dict+class，国际 org 默认 star_min
   brand_infer   品牌词→库推断（canon 层：percona→MySQL+PostgreSQL）
   collisions    撞名词 → 排除规则（tdsql 撞 Teradata）
   known_empty   声明性空列（GitHub 无公开生态，不算采集故障）
@@ -16,9 +18,17 @@
 """
 
 GLOBAL = {
-    "star_min": 10,                 # 宇宙边界：信噪比线，不是编辑性排除
+    "star_min": 10,                 # 国际侧宇宙边界：信噪比线，不是编辑性排除
     "star_min_new": 3,
     "new_project_days": 30,
+    # 分 section 采集策略（collect_intl.py / collect_cn.py 消费）：
+    #   intl：topic/keyword 带 stars:>=10；新项目窗口 stars:>=3（主通道星线挡住的 3-9 星新仓）
+    #   cn  ：国产不设星（生态总量小、星分布低；自标签 topic 与专属 org 即信号），
+    #         故无需新项目窗口——新仓从第 0 天起即被主通道覆盖
+    "sections": {
+        "intl": {"star_min": 10, "new_star_min": 3, "new_days": 45},
+        "cn":   {"star_min": 0,  "new_star_min": 0, "new_days": 45},
+    },
     "search_qualifiers": "stars:>={star} fork:false",
     "per_page": 100,
     "max_pages": 10,                # GitHub Search 单查询 1000 条硬上限
@@ -108,21 +118,26 @@ PROFILES = [
     {"name": "TiDB", "section": "cn", "enabled": True,
      "aliases": ["tidb", "tikv"],
      "topics": ["tidb"],
-     "orgs": ["pingcap", "tikv"],
+     "orgs": [{"name": "pingcap", "class": "dedicated"},
+              {"name": "tikv", "class": "dedicated"},
+              {"name": "tidb-samples", "class": "dedicated"},
+              {"name": "tidb-incubator", "class": "dedicated"}],
      "search": "auto",
      "watch": ["pingcap/tidb", "tikv/tikv"],
-     "notes": "tikv 并入 TiDB"},
+     "notes": "tikv 并入 TiDB；tidb-samples/incubator 为官方低星子 org（org 审计首轮补录）"},
     {"name": "OceanBase", "section": "cn", "enabled": True,
      "aliases": ["oceanbase"],
      "topics": ["oceanbase"],
-     "orgs": ["oceanbase", "ApsaraDB"],
+     "orgs": [{"name": "oceanbase", "class": "dedicated"},
+              {"name": "ApsaraDB", "class": "cloud"}],
      "search": "auto",
      "watch": ["oceanbase/oceanbase"],
      "notes": ""},
     {"name": "PolarDB", "section": "cn", "enabled": True,
      "aliases": ["polardb"],
      "topics": ["polardb", "polardb-x"],
-     "orgs": ["polardb", "ApsaraDB"],
+     "orgs": [{"name": "polardb", "class": "dedicated"},
+              {"name": "ApsaraDB", "class": "cloud"}],
      "search": "auto",
      "watch": ["polardb/PolarDB-for-PostgreSQL", "polardb/polardbx-engine"],
      "notes": "polardb 子串覆盖 polardb-x/polardbx"},
@@ -137,7 +152,7 @@ PROFILES = [
     {"name": "openGauss", "section": "cn", "enabled": True,
      "aliases": ["opengauss"],
      "topics": ["opengauss"],
-     "orgs": ["opengauss-mirror"],
+     "orgs": [{"name": "opengauss-mirror", "class": "dedicated"}],
      "search": "auto",
      "exclude_repos": ["math-inc/OpenGauss"],
      "watch": ["opengauss-mirror/openGauss-server"],
@@ -145,7 +160,7 @@ PROFILES = [
     {"name": "GaussDB", "section": "cn", "enabled": True,
      "aliases": ["gaussdb"],
      "topics": ["gaussdb"],
-     "orgs": [{"name": "huaweicloud", "cadence": "weekly"}],
+     "orgs": [{"name": "huaweicloud", "class": "cloud", "cadence": "weekly"}],
      "search": "auto",
      "watch": [],
      "notes": "云 SDK 噪音大，org 降频每周"},
@@ -159,7 +174,7 @@ PROFILES = [
     {"name": "TDSQL", "section": "cn", "enabled": True,
      "aliases": ["tdsql"],
      "topics": ["tdsql"],
-     "orgs": [{"name": "tencentcloud", "cadence": "weekly"}],
+     "orgs": [{"name": "tencentcloud", "class": "cloud", "cadence": "weekly"}],
      "search": "auto",
      "collisions": {"teradata": "tdsql=Teradata SQL 缩写，命中 teradata 即排除"},
      "watch": [],
@@ -167,7 +182,7 @@ PROFILES = [
     {"name": "YashanDB", "section": "cn", "enabled": True,
      "aliases": ["yashandb"],
      "topics": [{"name": "yashandb", "known_empty": True}],
-     "orgs": ["yashan-technologies"],
+     "orgs": [{"name": "yashan-technologies", "class": "dedicated"}],
      "search": "auto",
      "watch": [],
      "notes": "topic 实测 0，org 唯一路径"},

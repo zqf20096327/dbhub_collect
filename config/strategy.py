@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-"""策略生成器 + 一致性校验器：档案 → 四通道清单，五道校验。
+"""策略生成器 + 一致性校验器：档案 → 分 section 通道清单，六道校验。
 
+分 section 是采集策略的单一事实源（db_profiles.GLOBAL["sections"] + orgs 的 class）：
+  intl：topic/keyword 带 stars:>=star_min；新项目窗口 stars:>=new_star_min
+  cn  ：国产不设星（star_min=0）——查询不加星限定，超 1000 结果纯按创建期拆分
 用法：
   python strategy.py              # 校验 + 打印通道报告
   python strategy.py --json       # 另存 state/generated_strategy.json
@@ -20,10 +23,18 @@ HERE = ROOT                      # 历史引用兼容：统一指向项目根
 import db_profiles as dp  # noqa: E402
 
 PLAIN = re.compile(r"^[A-Za-z0-9\u4e00-\u9fff ]+$")
+ORG_CLASSES = {"dedicated", "cloud", "standard"}
 
 
 def norm(v):
     return v["name"] if isinstance(v, dict) else v
+
+
+def org_class(o, section: str) -> str:
+    """org 过滤线：dedicated=0（org 即产品）/ cloud 与 standard=star_min（范围噪音闸）。"""
+    if isinstance(o, dict) and o.get("class"):
+        return o["class"]
+    return "cloud" if section == "cn" else "standard"
 
 
 def search_words(p) -> list[str]:
@@ -41,34 +52,68 @@ def search_words(p) -> list[str]:
     return out
 
 
+def derive_sections() -> dict:
+    """按 section 生成通道包：查询词带各自星线（cn 不带）。"""
+    secs = {}
+    for sec_name in ("intl", "cn"):
+        pol = dp.GLOBAL["sections"][sec_name]
+        star = pol.get("star_min") or 0
+        topics, orgs, queries, watch = [], [], {}, []
+        for p in dp.PROFILES:
+            if not p.get("enabled", True) or p.get("section") != sec_name:
+                continue
+            topics += [norm(t) for t in p["topics"]]
+            orgs += list(p["orgs"])
+            for w in search_words(p):
+                q = f"{w} fork:false"
+                if star:
+                    q += f" stars:>={star}"
+                for ex in p.get("exclude_repos") or []:
+                    q += f" -repo:{ex}"
+                queries[w] = q
+            watch += p.get("watch") or []
+        if sec_name == "intl":
+            topics += dp.GLOBAL["discovery_topics"]
+            watch += dp.GLOBAL["watch_insurance"]
+        secs[sec_name] = {
+            "star_min": star,
+            "new_star_min": pol.get("new_star_min", 0),
+            "new_days": pol.get("new_days", 45),
+            "topics": sorted(set(topics)),
+            "orgs": orgs,
+            "queries": queries,
+            "watch": sorted(set(watch)),
+        }
+    return secs
+
+
 def derive() -> dict:
-    active = [p for p in dp.PROFILES if p.get("enabled", True)]
-    topics, orgs, queries, watch = [], [], {}, []
+    secs = derive_sections()
     canon, intl, cn, brand, collide, empty = {}, [], [], {}, [], []
-    for p in active:
-        topics += [norm(t) for t in p["topics"]]
-        orgs += [norm(o) for o in p["orgs"]]
-        for w in search_words(p):
-            q = f"{w} {dp.GLOBAL['search_qualifiers'].format(star=dp.GLOBAL['star_min'])}"
-            for ex in p.get("exclude_repos") or []:
-                q += f" -repo:{ex}"
-            queries[w] = q
-        watch += p.get("watch") or []
+    for p in dp.PROFILES:
+        if not p.get("enabled", True):
+            continue
         canon[p["name"]] = list(p["aliases"])
         (intl if p["section"] == "intl" else cn).append(p["name"])
         brand.update(p.get("brand_infer") or {})
         collide += [f"{p['name']}: {k} → {v}" for k, v in (p.get("collisions") or {}).items()]
         if p.get("known_empty"):
             empty.append(p["name"])
-    topics += dp.GLOBAL["discovery_topics"]
-    watch += dp.GLOBAL["watch_insurance"]
-    return {"TOPICS": sorted(set(topics)), "ORG_SCAN_LIST": orgs,
-            "KEYWORD_SEARCH_QUERIES": queries, "WHITELIST_REPOS": sorted(set(watch)),
-            "CANON_PATTERNS": canon, "SCOPE_INTL": intl, "SCOPE_CN": cn,
-            "BRAND_INFER": brand, "COLLISION_RULES": collide, "KNOWN_EMPTY_DBS": empty,
-            "OUT_OF_SCOPE_DBS": dp.GLOBAL["out_of_scope_dbs"],
-            "DISCOVERY_TOPIC": dp.GLOBAL["discovery_topics"][0],
-            "BIG_FOUR_MUTUAL_EXCLUDE": dp.GLOBAL["big_four"]}
+    return {
+        # 分 section 通道包（新脚本消费）
+        "SECTIONS": secs,
+        # 扁平兼容视图（跨 section 并集）
+        "TOPICS": sorted({t for s in secs.values() for t in s["topics"]}),
+        "ORG_SCAN_LIST": [norm(o) for s in secs.values() for o in s["orgs"]],
+        "KEYWORD_SEARCH_QUERIES": {w: q for s in secs.values()
+                                   for w, q in s["queries"].items()},
+        "WHITELIST_REPOS": sorted({w for s in secs.values() for w in s["watch"]}),
+        "CANON_PATTERNS": canon, "SCOPE_INTL": intl, "SCOPE_CN": cn,
+        "BRAND_INFER": brand, "COLLISION_RULES": collide, "KNOWN_EMPTY_DBS": empty,
+        "OUT_OF_SCOPE_DBS": dp.GLOBAL["out_of_scope_dbs"],
+        "DISCOVERY_TOPIC": dp.GLOBAL["discovery_topics"][0],
+        "BIG_FOUR_MUTUAL_EXCLUDE": dp.GLOBAL["big_four"],
+    }
 
 
 def validate(gen) -> list[str]:
@@ -94,22 +139,37 @@ def validate(gen) -> list[str]:
         problems.append(f"④悬空 org：{orphan}")
     for repo, why in dp.LEGACY_WATCH.items():
         problems.append(f"⑤遗留白名单（建议移除）：{repo} —— {why}")
+    # ⑥ org 声明规范：国产 org 必须 dict+class；class 值合法
+    for p in dp.PROFILES:
+        if not p.get("enabled", True):
+            continue
+        for o in p["orgs"]:
+            if isinstance(o, dict) and o.get("class") not in ORG_CLASSES:
+                problems.append(f"⑥org class 非法：{p['name']}/{o}")
+            if p["section"] == "cn" and not isinstance(o, dict):
+                problems.append(f"⑥国产 org 必须 dict+class：{p['name']}/{o}")
     return problems
 
 
 def main() -> None:
     gen = derive()
     print("==== 一致性校验 ====")
-    for p in validate(gen):
+    problems = validate(gen)
+    for p in problems:
         print("  ", p)
-    else:
-        print("   ①-④ 通过" if not [p for p in validate(gen) if not p.startswith("⑤")] else "")
-    print(f"\n==== 通道清单（{len(gen['TOPICS'])} topics · "
-          f"{len(set(gen['ORG_SCAN_LIST']))} orgs · {len(gen['KEYWORD_SEARCH_QUERIES'])} 检索词）====")
-    print("topics:", " ".join(gen["TOPICS"]))
-    print("orgs  :", " ".join(dict.fromkeys(gen["ORG_SCAN_LIST"])))
-    for w, q in gen["KEYWORD_SEARCH_QUERIES"].items():
-        print(f"search: {q}")
+    if not [p for p in problems if not p.startswith("⑤")]:
+        print("   ①-⑥ 通过")
+    for sec_name, s in gen["SECTIONS"].items():
+        orgs = " ".join(f"{norm(o)}"
+                        + (f"({o['class']})" if isinstance(o, dict) and o.get("class") else "")
+                        for o in s["orgs"])
+        print(f"\n==== [{sec_name}] {len(s['topics'])} topics · "
+              f"{len(set(norm(o) for o in s['orgs']))} orgs · "
+              f"{len(s['queries'])} 检索词 · star_min={s['star_min']} ====")
+        print("topics:", " ".join(s["topics"]))
+        print("orgs  :", orgs)
+        for w, q in s["queries"].items():
+            print(f"search: {q}")
     if "--json" in sys.argv:
         out = HERE / "state" / "generated_strategy.json"
         out.parent.mkdir(exist_ok=True)
