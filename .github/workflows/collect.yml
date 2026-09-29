@@ -21,11 +21,17 @@ jobs:
 
       - run: pip install requests
 
-      - name: 池采集（每日全量重扫，断点续采）
+      - name: 池采集·国际（stars>=10 + 新项目窗口，断点续采）
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python collect/collect_pool.py --max-calls 800
+          python collect/collect_intl.py --max-calls 800
+
+      - name: 池采集·国产（无星线，超1000按创建期拆分，断点续采）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python collect/collect_cn.py --max-calls 1000
 
       - name: 衔接当日池 + README 增量（每月 1 号自动转月度全量校准）
         env:
@@ -44,6 +50,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python enrich/enrich.py --tier all --pool data/snapshot_latest/pool.json --max-calls 1500
+
+      - name: state 残渣 GC（每月 1 号）
+        run: |
+          d=$(date -u +%d)
+          if [ "$d" = "01" ]; then
+            python tools/gc_states.py --apply || echo "::warning::gc_states 失败（不影响当晚采集数据）"
+          else
+            echo "非月初，跳过"
+          fi
 
       - name: 提交并推送数据
         run: |
