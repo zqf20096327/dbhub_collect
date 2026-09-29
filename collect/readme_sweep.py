@@ -130,12 +130,21 @@ def run(args):
                 status, text, new_etag = r[0], r[1], r[2]
                 truncated = r[3] if len(r) > 3 else False
             except requests.HTTPError as e:
-                if getattr(e.response, "status_code", None) == 404:
+                code = getattr(e.response, "status_code", None)
+                if code == 404:
                     rec.update({"status": "no_readme", "etag": None, "fail_count": 0,
                                 "last_error": ""})
                     counts["no_readme"] += 1
                     continue
-                raise
+                # 其余 HTTP 状态按仓记振继续（毒仓不得阻断循环，与 enrich 同策略）
+                rec["fail_count"] += 1
+                rec["last_error"] = f"HTTP {code}"[:200]
+                if rec["fail_count"] >= THREE_STRIKES:
+                    rec["status"] = "failed"
+                    quarantined.append(fn)
+                counts["failed"] += 1
+                log.warning("%s HTTP %s(%d)", fn, code, rec["fail_count"])
+                continue
             except (BudgetOut, QuotaPatienceOut):
                 # 预算/配额停止是全局事件（由外层优雅收尾），绝不能记成该仓失败——
                 # 旧版在这里被 except Exception 吞掉，预算触线后剩余目标被逐个记

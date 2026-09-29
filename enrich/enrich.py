@@ -280,7 +280,16 @@ def run(args):
                     rec.update({"status": "gone", "last_error": f"HTTP {code}"})
                     counts["failed"] += 1
                     continue
-                raise
+                # 其余 HTTP 状态（409 空仓类/5xx 重试耗尽）按仓记振继续——
+                # 绝不 raise：毒仓会每晚卡死在同一位置，阻断其后全部目标
+                rec["fail_count"] += 1
+                rec["last_error"] = f"HTTP {code}"[:200]
+                if rec["fail_count"] >= THREE_STRIKES:
+                    rec["status"] = "failed"
+                    quarantined.append(fn)
+                counts["failed"] += 1
+                log.warning("%s HTTP %s(%d)：%s", fn, code, rec["fail_count"], str(e)[:60])
+                continue
             except (BudgetOut, QuotaPatienceOut):
                 raise                            # 预算/配额停止不算仓库失败
             except Exception as e:               # noqa: BLE001
