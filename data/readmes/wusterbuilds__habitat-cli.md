@@ -11,6 +11,13 @@ HT captures Codex and Claude Code sessions into a private local SQLite ledger
 you can inspect and search. Connect Habitat Cloud only when you want shared team
 history and hosted intelligence.
 
+## See Habitat in action
+
+A two-minute tour of team activity, semantic summaries, usage analytics, and
+shared MCP tools:
+
+https://github.com/user-attachments/assets/39031b71-7e12-4ec3-9834-698ba65db54c
+
 - **Local-first:** capture, inspect, and search without an account or network.
 - **Read-only providers:** HT never modifies Codex or Claude Code transcripts.
 - **Durable delivery:** optional uploads use deterministic batches, cursors,

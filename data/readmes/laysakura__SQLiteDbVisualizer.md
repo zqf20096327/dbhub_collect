@@ -1,0 +1,131 @@
+* SQLiteDbVisualizer
+  /SQLiteDbVisualizer/ is a tool to visualize SQLite databases.
+
+  It is fairly useful to see the extent of fragmentation in a database.
+  It is *not* a database schema visualizer.
+
+  [[http://github.com/laysakura/SQLiteDbVisualizer/raw/master/doc/mainView.png]]
+
+* Use case
+** See fragmentation and issue VACUUM
+   [[http://github.com/laysakura/SQLiteDbVisualizer/raw/master/doc/fragmented.png]]
+   [[http://github.com/laysakura/SQLiteDbVisualizer/raw/master/doc/fragmentedVacuumed.png]]
+
+   A database seems fragmented (left).
+   Then issue /VACUUM/ command and defragment it (right).
+   #+BEGIN_SRC sh
+$ sqlite3 foobar.db vacuum
+   #+END_SRC
+
+** Filter database pages by B-tree
+   [[http://github.com/laysakura/SQLiteDbVisualizer/raw/master/doc/mainView.png]]
+
+   If you just want to see records in table /T0/ , then you can filter the output.
+
+   [[http://github.com/laysakura/SQLiteDbVisualizer/raw/master/doc/filterFeature.png]]
+
+* Usage
+  SQLiteDbVisualizer command (/sqlite-visualizer/) has svn-like subcommand interfaces.
+  The simplest usage to visualize a SQLite database as SVG image is shown below.
+  #+BEGIN_SRC sh
+$ sqlite-visualizer svg foobar.db foobar.svg
+  #+END_SRC
+
+  For more detailed usage, use help options.
+  #+BEGIN_SRC sh
+$ sqlite-visualizer -h
+$ sqlite-visualizer svg -h
+  #+END_SRC
+
+* Requirements
+  - Python (checked with v2.7.2)
+  - sqlite3 python module
+  - SQLite3 database (checked with v3.7.14)
+  - PySVG
+    - http://code.google.com/p/pysvg/
+
+* Features
+** Filtering by B-tree
+   Use /--filterBtrees/ option to get only pages of your interest.
+   #+BEGIN_SRC sh
+$ sqlite-visualizer svg foobar.db foobar.svg --filterBtrees T0 T0_idx  # Show only pages related to table "T0" and index "T0_idx"
+   #+END_SRC
+
+** Pluggable visualizer unit
+   /SQLiteDbVisualizer/ has /database analyzer/ and /visualizer/ modules separately.
+   Database analyzer (/SQLiteAnalyzer.py/) reads a SQLite database and output its information in JSON form.
+   See the JSON format in /DbInfoTemplate.py/ .
+
+   Only SVG format is supported currently (/Json2Svg.py/).
+   Looking forward to other visualizers' pull requests!
+
+* Limitations
+  - WAL mode database is not supported
+    - http://www.sqlite.org/wal.html
+  - Only UTF-8 is supported as TEXT encoding (easily fixed)
+  - Not suitable for quite large databases mainly because SVG is
+    not so good format to visualize large images.
+    But you can convert SVG image into other luster formats (lighter to show) like PNG.
+
+* Methodology
+  SQLiteDbVisualizer is written carefully referring to http://www.sqlite.org/fileformat2.html .
+  Here is the explanation of a bit complicated methods to analyze SQLite database.
+
+** Specify page types
+*** B-tree page
+    1. Assume a page has b-tree header and read b-tree header flag, cell counts,
+       offset to first free-block, and offset to cell content area.
+    2. Check if b-tree header flag is either of 0x0D, 0x0A, 0x02, or 0x05.
+    3. Check if both offset to first free-block and offset to cell content area are
+       between b-tree header length (= 8 or 12) and page size, or 0.
+    4. Check if cell count is between 0 and (page size) / (minimum cell length (= 5))
+
+*** Overflow page
+    A cell with large payload cell can have a link to overflow page.
+    (It is complicated to determine whether a payload is split into overflow pages.
+    See "Track overflow pages" for detail.)
+    Jump to the overflow page and read overflow page header to get a pointer to next overflow page.
+    Last overflow page has 0x00 as a overflow page header.
+
+*** Freelist pages
+    Freelist trunk header is found in DB header.
+    Each freelist trunk page has the pointer to the next trunk page and leaf page numbers.
+
+*** Other pages
+    Not supported yet
+
+** Track overflow pages
+   1. Read a payloadSize from a cell.
+   2. usableSize = pageSize - reservedSpace.
+      Both pageSize and reservedSpace are read from database header.
+   3. maxLocal = usableSize - 35
+   4. minLocal = ((usableSize - 12) * 32/255) - 23
+   5. If payloadSize <= maxLocal, there is no overflow page for the cell
+   6. Else, let localSize = minLocal + ((payloadSize - minLocal) % (usableSize - 4))
+      a. If localSize > maxLocal, minLocal bytes are in this page.
+      b. Else, localSize bytes are in this page.
+   7. Remnant payload is split into overflow pages.
+      Overflow page number is in the last 4 bytes in the cell.
+   8. Each overflow page has a link to the next overflow page in page[0x00-0x03].
+      Page[0x04 - usableSize] is reserved exclusively for the part of the payload.
+
+** Read payloads
+   1. Read a varint from offset 0 (payloadHeaderSize).
+      Let the varint size be firstStypeOffset.
+   2. Read varints from firstStypeOffset to payloadHeaderSize.
+      Treat each value as a Serial Type.
+      (See: http://www.sqlite.org/fileformat2.html - Serial Type Codes Of The Record Format)
+   3. Payload values follow the varints.
+      Each size of the values is calculated from the table "Serial Type Codes Of The Record Format".
+   4. payloadHeaderSize + sum(valueSize) is the payload size.
+
+** Relate B-tree and pages
+   It is beneficial to see the b-tree name (table name or index name) for each b-tree page.
+   But unfortunately, either b-tree pages and cells do not have b-tree name information.
+
+   To relate B-tree and pages, tree traversal method was used.
+   /sqlite_master/ table (in first page) has page numbers of root b-trees.
+   And each b-tree interior page has its children pages (nodes) information.
+   (Strictly speaking, a left child is held by a cell and the rightmost child is held by b-tree header.)
+
+   Give the b-tree name to each b-tree page while traversal.

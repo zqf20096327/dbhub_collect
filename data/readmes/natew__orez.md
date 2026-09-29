@@ -1,0 +1,550 @@
+# oreZ
+
+[![npm version](https://img.shields.io/npm/v/orez.svg)](https://www.npmjs.com/package/orez)
+[![license](https://img.shields.io/npm/l/orez.svg)](https://github.com/natew/orez/blob/main/LICENSE)
+
+Run [Zero](https://zero.rocicorp.dev) locally with zero native dependencies. No Postgres install, no SQLite compilation, no Docker.
+
+Read the [Orez documentation](https://orez-docs.natewienert.workers.dev).
+
+```
+bunx orez
+```
+
+oreZ makes Zero work on [PGlite](https://pglite.dev) (Postgres in WASM) and [bedrock-sqlite](https://www.npmjs.com/package/bedrock-sqlite) (SQLite in WASM), bundled together so local development is as simple as `bun install && bunx orez`.
+
+## Lite Sync
+
+Lite Sync is the separate SQLite-native Zero engine. The current preview ships
+as [`orez-lite`](https://www.npmjs.com/package/orez-lite) while its package
+boundary is being split from Orez. It runs on Cloudflare and other constrained
+hosts, replaces Zero's server side, and speaks the Zero protocol to the real
+`@rocicorp/zero` client. `orez-lite/client` supplies the transport without
+forking Zero's query or mutation API. Read the
+[Lite Sync documentation](https://lite-sync-docs.natewienert.workers.dev).
+
+`orez-lite/aggregate` maintains queryable count and sum columns until Zero ships
+aggregate queries. One declaration generates the SQLite migration and triggers
+and projects the same change during optimistic on-zero mutations. See the
+[aggregate documentation](docs/aggregates.md).
+
+## Cloudflare
+
+`orez-lite/cloudflare` is the workerd runtime. A complete data worker is one factory
+call; the generated descriptor carries the real Zero schema, migration, and
+publication metadata, so applications never list tables or columns again:
+
+```ts
+import { createOrezDataWorker } from 'orez-lite/cloudflare'
+import { orezAppSchema } from 'orez:cloudflare-migrations'
+
+const orez = createOrezDataWorker({
+  name: 'example',
+  schema: orezAppSchema,
+})
+
+export const { ZeroSqlDO, ZeroDO } = orez
+export default orez
+```
+
+Lite Sync owns namespace routing, schema readiness and coalescing, change-feed
+projection, write budgets, and optional streaming backups. Applications add
+only product routes, telemetry, cron work, and namespace inventory.
+
+Applications whose JavaScript mutation executor uses the application SQL
+client can move the whole push into the owning Durable Object with the
+`applicationPush` option. A custom route calls `executeApplicationPush` once;
+inside the callback, `applicationSql()` is a local client for that object, while
+an explicitly selected different namespace still uses ordinary Durable Object
+RPC:
+
+```ts
+const orez = createOrezDataWorker({
+  name: 'example',
+  schema: orezAppSchema,
+  applicationPush: ({ input, applicationSql }) => executePush(input, applicationSql()),
+  routes: async ({ request, executeApplicationPush }) => {
+    const match = new URL(request.url).pathname.match(
+      /^\/(proj-[A-Za-z0-9_-]+)\/api\/push$/
+    )
+    return match ? executeApplicationPush(await readPush(request), match[1]) : null
+  },
+})
+```
+
+The callback does not change transaction or response semantics and adds no
+Orez-owned SQLite rows. It removes the begin/query/exec/commit RPCs inside the
+push; application code is still responsible for keeping mutation transactions
+free of network and other long-running work.
+
+Node-side migration, bundling, Wrangler configuration, pruning, and readiness
+helpers live at `orez-lite/cloudflare/build`.
+
+Cloudflare query compilation is available at
+`orez-lite/cloudflare/query-compiler`. Lite applications depend on `orez-lite`,
+not `orez`; the workspace packages behind these exports are internal
+implementation units.
+
+## Requirements
+
+- **Bun** 1.0+ or **Node.js** 20+
+- **Zero** 1.0+ (the conformance suite is pinned to 1.7.0)
+
+Repository development uses the exact Node, Bun, and wasm-pack versions in
+`mise.toml`. Run checks through `mise exec -- bun run check:all` so native test
+dependencies use the matching Node ABI. Ambient Node 25 can load an incompatible
+native addon and is not a supported contributor environment.
+
+## Node runner limitations
+
+The Node runner and CLI described below are **development tools only**. They are
+not suitable for production.
+
+- **Single-session per database** (pglite backend) — queries are serialized through a mutex. Fine for development, would bottleneck under load. The `postgres` backend has no such limit.
+- **Trigger overhead** (pglite backend) — every write fires change-tracking triggers.
+- **Local filesystem** — no replication, no HA. Use `orez pg_dump` for backups.
+
+Orez does not embed zero-cache in Cloudflare Durable Objects. Cloudflare server
+work uses the SQLite-native Lite Sync runtime from `orez-lite/cloudflare`.
+
+## Backends
+
+orez picks how the upstream database runs via `backend`:
+
+- **`pglite`** (default) — Postgres compiled to WASM. Zero native deps, works everywhere, but single-session: every query serializes through one mutex over one WASM thread, and logical replication is emulated (change-tracking triggers + a change-log table + a fake replication protocol).
+- **`postgres`** — real Postgres via the optional [`embedded-postgres`](https://github.com/leinelissen/embedded-postgres) package (per-platform server binaries shipped as npm optional deps, no Docker/brew). zero-cache connects directly and runs its production logical-replication path: no proxy, no mutex, no CDC emulation, real `statement_timeout`. Multi-process, multi-connection.
+
+```sh
+bun add -D embedded-postgres
+bunx orez --backend=postgres    # or backend: 'postgres' in orez.config.ts, or OREZ_BACKEND=postgres
+```
+
+Note for bun users: the `@embedded-postgres/*` platform packages hydrate their
+shared-library symlinks in a postinstall script that bun blocks by default.
+orez recreates missing symlinks automatically at startup, so no
+`trustedDependencies` entry is needed.
+
+Pick `postgres` when the stack runs long-lived under real load (background daemons, many agents writing); pick `pglite` when you want zero native dependencies.
+
+## Features
+
+```
+bunx orez
+```
+
+**What oreZ handles automatically:**
+
+- **Zero native deps** — both Postgres and SQLite run as WASM. Nothing to compile, nothing platform-specific.
+- **Memory management** — auto-sizes Node heap (~50% RAM, min 4GB), purges consumed WAL, batches restores with CHECKPOINTs
+- **Real-time replication** — changes sync instantly via `pg_notify` triggers, with adaptive polling fallback (20ms catching up, 500ms idle)
+- **Auto-recovery** — finds available ports if configured ones are busy, provides reset/restart controls
+- **PGlite compatibility** — rewrites unsupported queries, fakes wire protocol responses, filters unsupported column types
+- **Admin dashboard** — live logs, HTTP request inspector, restart/reset controls, env viewer
+- **Production restores** — `pg_dump`/`pg_restore` with COPY→INSERT conversion, auto-coordinates with zero-cache
+- **Extensions** — pgvector, pg_trgm, pgcrypto, uuid-ossp, citext, hstore, ltree, fuzzystrmatch, btree_gin, btree_gist, cube, earthdistance enabled by default (lazy-loaded, no overhead unless used)
+
+## CLI
+
+```
+bunx orez
+```
+
+```
+--pg-port=6434            postgresql proxy port
+--zero-port=5849          zero-cache port
+--data-dir=.orez          data directory
+--migrations=DIR          migrations directory (skipped if not set)
+--seed=FILE               seed file path
+--pg-user=user            postgresql user
+--pg-password=password    postgresql password
+--skip-zero-cache         run pglite + proxy only, skip zero-cache
+--log-level=warn          error, warn, info, debug
+--s3                      also start a local s3-compatible server
+--s3-port=9200            s3 server port
+--force-wasm-sqlite       force wasm sqlite even if native is available
+--disable-wasm-sqlite     force native sqlite (fail if not available)
+--ephemeral               keep PGlite in memory and use a per-run replica cache
+--on-db-ready=CMD         command to run after db+proxy ready, before zero-cache
+--on-healthy=CMD          command to run once all services healthy
+--disable-admin           disable admin dashboard
+--admin-port=6477         admin dashboard port (default: 6477)
+```
+
+Ports auto-increment if already in use.
+
+## Config File
+
+Create an `orez.config.ts` (or `.js` / `.mjs`) in your project root:
+
+```typescript
+import { defineConfig } from 'orez'
+
+export default defineConfig({
+  pgPort: 5433,
+  zeroPort: 4848,
+  adminPort: 6477,
+  migrations: './db/migrations',
+  seed: './db/seed.sql',
+  s3: true,
+  s3Port: 9300,
+  logLevel: 'info',
+  onHealthy: 'echo "ready!"',
+})
+```
+
+All options mirror the CLI flags in camelCase. CLI flags override config file values, so `orez --pg-port 6000` wins over `pgPort: 5433` in the config.
+
+| Config key          | CLI flag                | Default    |
+| ------------------- | ----------------------- | ---------- |
+| `pgPort`            | `--pg-port`             | `6434`     |
+| `zeroPort`          | `--zero-port`           | `5849`     |
+| `adminPort`         | `--admin-port`          | `6477`     |
+| `s3Port`            | `--s3-port`             | `9200`     |
+| `dataDir`           | `--data-dir`            | `.orez`    |
+| `pgUser`            | `--pg-user`             | `user`     |
+| `pgPassword`        | `--pg-password`         | `password` |
+| `migrations`        | `--migrations`          | —          |
+| `seed`              | `--seed`                | —          |
+| `skipZeroCache`     | `--skip-zero-cache`     | `false`    |
+| `s3`                | `--s3`                  | `false`    |
+| `disableAdmin`      | `--disable-admin`       | `false`    |
+| `disableWasmSqlite` | `--disable-wasm-sqlite` | `false`    |
+| `forceWasmSqlite`   | `--force-wasm-sqlite`   | `false`    |
+| `noWorkerThreads`   | `--no-worker-threads`   | `false`    |
+| `singleDb`          | `--single-db`           | `false`    |
+| `ephemeral`         | `--ephemeral`           | `false`    |
+| `logLevel`          | `--log-level`           | `warn`     |
+| `onDbReady`         | `--on-db-ready`         | —          |
+| `onHealthy`         | `--on-healthy`          | —          |
+
+`.ts` config files require Node 22.6+ or Bun. Use `.js`/`.mjs` on older Node versions.
+
+## Admin Dashboard
+
+Enabled by default at `http://localhost:6477`.
+
+- **Logs** — live-streaming logs from zero-cache, filterable by source and level
+- **HTTP** — request/response inspector for zero-cache traffic
+- **Env** — environment variables passed to zero-cache
+- **Actions** — restart zero-cache, reset (wipe replica + resync), full reset (wipe CVR/CDB too)
+
+Logs are also written to separate files in your data directory: `zero.log`, `proxy.log`, `pglite.log`, etc.
+
+```
+bunx orez --disable-admin  # disable dashboard
+```
+
+## Programmatic API
+
+```
+bun install orez
+```
+
+```typescript
+import { startZeroLite } from 'orez'
+
+const { config, stop, db, instances } = await startZeroLite({
+  pgPort: 6434,
+  zeroPort: 5849,
+  migrationsDir: 'src/database/migrations',
+  seedFile: 'src/database/seed.sql',
+  adminPort: 6477, // set to 0 to disable
+})
+
+// your app connects to zero-cache at localhost:5849
+// database is at postgresql://user:password@localhost:6434/postgres
+
+// db is the postgres PGlite instance (for direct queries)
+// instances has all three: { postgres, cvr, cdb }
+
+await stop()
+```
+
+All options are optional with sensible defaults.
+
+### Lifecycle hooks
+
+| Hook        | CLI                 | Programmatic                          | When                                |
+| ----------- | ------------------- | ------------------------------------- | ----------------------------------- |
+| on-db-ready | `--on-db-ready=CMD` | `onDbReady: 'CMD'` or `onDbReady: fn` | after db + proxy ready, before zero |
+| on-healthy  | `--on-healthy=CMD`  | `onHealthy: 'CMD'` or `onHealthy: fn` | after all services ready            |
+
+Shell commands receive env vars: `DATABASE_URL`, `OREZ_PG_PORT`, `OREZ_ZERO_PORT`.
+On the PGlite backend, change-tracking triggers are re-installed after
+`onDbReady`.
+
+#### Startup blocking and the callback context
+
+`onDbReady` runs before zero-cache. On the PGlite and DO proxy backends, shell
+hooks and context-aware callbacks hold every ordinary PG client at connection
+startup until `onDbReady` returns, so an early application `SELECT` can't race
+schema provisioning (or monopolize the shared DB mutex while a migration is
+still creating tables).
+
+- **Shell command:** receives the tagged connection strings via
+  `ZERO_UPSTREAM_DB` / `ZERO_CVR_DB` / `ZERO_CHANGE_DB` / `DATABASE_URL`, plus
+  `PGAPPNAME`. Connecting with any of these bypasses the barrier.
+- **Context-aware callback:** declare a context parameter to opt into the
+  barrier and receive its privileged connection strings:
+
+  ```typescript
+  onDbReady: async (ctx) => {
+    // ctx.upstreamConnectionString / cvrConnectionString / cdbConnectionString
+    // are tagged so they bypass the startup barrier; ctx.applicationName is the
+    // tag itself (for clients that set application_name separately), and
+    // ctx.pgPort is the proxy port.
+    const sql = postgres(ctx.upstreamConnectionString)
+    await sql`CREATE TABLE ...`
+    await sql.end()
+  }
+  ```
+
+  A context-aware callback **must** provision through one of these privileged
+  connections. An ordinary (untagged) connection is held by the same barrier;
+  if the hook does that accidentally, the connection fails after a bounded wait
+  with an error pointing back to `HookContext` instead of hanging forever. Both
+  the hook and barrier default to a 30-second deadline; set
+  `onDbReadyTimeoutMs` higher for a legitimately longer migration.
+
+- **Legacy callback:** a zero-argument callback (`onDbReady: async () => { ... }`)
+  does not opt into the barrier. It keeps the behavior from orez v0.4.73 and
+  earlier, including the ability to open its existing ordinary proxy connection.
+  Callback arity is the runtime contract, so callbacks that need the context
+  should declare `ctx` without a default value or rest-parameter wrapper.
+
+## Vite Plugin
+
+```typescript
+import { orezPlugin } from 'orez/vite'
+
+export default {
+  plugins: [
+    orezPlugin({
+      pgPort: 6434,
+      zeroPort: 5849,
+      migrationsDir: 'src/database/migrations',
+      onDbReady: () => console.log('db ready'),
+      onHealthy: () => console.log('all services healthy'),
+    }),
+  ],
+}
+```
+
+Starts oreZ when vite dev starts, stops on close. Supports all `startZeroLite` options plus `s3` and `s3Port`.
+
+## Backup & Restore
+
+Dump and restore your local database — no native Postgres install needed.
+
+```bash
+bunx orez pg_dump > backup.sql
+bunx orez pg_dump --output backup.sql
+bunx orez pg_restore backup.sql
+bunx orez pg_restore backup.sql --clean  # drop public schema first
+```
+
+### Restoring into a running instance
+
+When oreZ is running, restore through the wire protocol:
+
+```bash
+bunx orez pg_restore backup.sql --pg-port 6434
+```
+
+This automatically:
+
+1. Stops zero-cache before restore (via admin API)
+2. Clears replication state and shard schemas
+3. Restores the dump
+4. Adds all public tables to the publication
+5. Restarts zero-cache
+
+The `--direct` flag forces direct PGlite access, skipping wire protocol.
+
+### What restore handles
+
+- **COPY → INSERT** — PGlite doesn't support COPY protocol; converted to batched multi-row INSERTs
+- **Unsupported extensions** — `pg_stat_statements`, `pg_buffercache`, `pg_cron` etc. silently skipped
+- **Idempotent DDL** — `CREATE SCHEMA` → `IF NOT EXISTS`, `CREATE FUNCTION` → `OR REPLACE`
+- **Oversized rows** — rows >16MB skipped with warning (WASM limit)
+- **Transaction batching** — 200 statements per transaction, CHECKPOINT every 3 batches
+- **Dollar-quoting** — correctly parses `$$` and `$tag$` in function bodies
+
+Standard Postgres tools (`pg_dump`, `pg_restore`, `psql`) also work against the running proxy.
+
+## Environment Variables
+
+All `ZERO_*` env vars are forwarded to zero-cache. oreZ provides defaults:
+
+| Variable                    | Default            | Overridable |
+| --------------------------- | ------------------ | ----------- |
+| `NODE_ENV`                  | `development`      | yes         |
+| `ZERO_LOG_LEVEL`            | from `--log-level` | yes         |
+| `ZERO_NUM_SYNC_WORKERS`     | `1`                | yes         |
+| `ZERO_ENABLE_QUERY_PLANNER` | `false`            | yes         |
+| `ZERO_UPSTREAM_DB`          | _(managed)_        | no          |
+| `ZERO_CVR_DB`               | _(managed)_        | no          |
+| `ZERO_CHANGE_DB`            | _(managed)_        | no          |
+| `ZERO_REPLICA_FILE`         | _(managed)_        | no          |
+| `ZERO_PORT`                 | _(managed)_        | no          |
+
+Common vars you might set:
+
+```bash
+ZERO_MUTATE_URL=http://localhost:3000/api/zero/push
+ZERO_QUERY_URL=http://localhost:3000/api/zero/pull
+```
+
+## Local S3
+
+Since Zero apps often need file uploads and MinIO requires Docker:
+
+```bash
+bunx orez --s3           # with orez
+bunx orez s3             # standalone
+```
+
+```typescript
+import { startS3Local } from 'orez/s3'
+
+const server = await startS3Local({ port: 9200, dataDir: '.orez' })
+```
+
+Handles GET, PUT, DELETE, HEAD with CORS. Files stored on disk. No multipart, no ACLs, no versioning.
+
+---
+
+# How It Works
+
+## Architecture
+
+oreZ runs three components:
+
+1. **Three PGlite instances** — PostgreSQL 17 in WASM, one per database zero-cache expects (postgres, zero_cvr, zero_cdb)
+2. **TCP proxy** — speaks PostgreSQL wire protocol, routes to correct PGlite, handles logical replication
+3. **zero-cache** — child process connecting to proxy, thinks it's real Postgres
+
+### Why three instances?
+
+zero-cache expects three databases with independent transaction contexts. PGlite is single-session — all connections share one session. Without isolation, CVR transactions get corrupted by postgres queries (`ConcurrentModificationException`).
+
+| Connection database | PGlite instance | Data directory    |
+| ------------------- | --------------- | ----------------- |
+| `postgres`          | postgres        | `pgdata-postgres` |
+| `zero_cvr`          | cvr             | `pgdata-cvr`      |
+| `zero_cdb`          | cdb             | `pgdata-cdb`      |
+
+### Replication
+
+PGlite doesn't support logical replication, so oreZ fakes it:
+
+1. Triggers capture every mutation into `_orez._zero_changes`
+2. Changes are encoded as pgoutput binary protocol
+3. Streamed to zero-cache through the replication connection
+
+Change notifications use `pg_notify` for real-time sync. Polling (20ms/500ms adaptive) is fallback only.
+
+### SQLite WASM
+
+zero-cache needs SQLite via `@rocicorp/zero-sqlite3` (native C addon). oreZ intercepts this at runtime using Node's ESM loader hooks, redirecting to [bedrock-sqlite](https://www.npmjs.com/package/bedrock-sqlite) — SQLite's bedrock branch compiled to WASM with BEGIN CONCURRENT and WAL2.
+
+The shim also polyfills the better-sqlite3 API surface zero-cache expects.
+
+### Native SQLite mode
+
+For `--disable-wasm-sqlite`, bootstrap the native addon first:
+
+```bash
+bun run native:bootstrap
+```
+
+## Internal Schema
+
+oreZ stores replication state in the `_orez` schema (survives `pg_restore --clean`):
+
+- `_orez._zero_changes` — change log for replication
+- `_orez._zero_replication_slots` — slot tracking
+- `_orez._zero_watermark` — LSN sequence
+
+## Wire Protocol Compatibility
+
+The proxy intercepts and rewrites to make PGlite look like real Postgres:
+
+| Query/Command                   | What oreZ does                                      |
+| ------------------------------- | --------------------------------------------------- |
+| `version()`                     | Returns `PostgreSQL 17.4 on x86_64-pc-linux-gnu...` |
+| `current_setting('wal_level')`  | Returns `logical`                                   |
+| `IDENTIFY_SYSTEM`               | Returns fake system ID and timeline                 |
+| `CREATE_REPLICATION_SLOT`       | Persists to local table, returns valid LSN          |
+| `START_REPLICATION`             | Streams changes as pgoutput binary                  |
+| `pg_replication_slots`          | Redirects to local tracking table                   |
+| `READ ONLY` / `ISOLATION LEVEL` | Stripped (single-session)                           |
+
+## Workarounds
+
+Things that don't "just work" when replacing Postgres with PGlite and native SQLite with WASM:
+
+### Session state bleed
+
+PGlite is single-session — if `pg_restore` sets `search_path = ''`, every subsequent connection inherits it. On disconnect, oreZ resets `search_path`, `statement_timeout`, `lock_timeout`, and rolls back open transactions.
+
+### Query planner disabled
+
+`ZERO_ENABLE_QUERY_PLANNER=false` because it relies on SQLite scan statistics that cause infinite loops in WASM.
+
+### Unsupported column types
+
+Columns with `tsvector`, `tsquery`, `USER-DEFINED` types are filtered from replication messages.
+
+### Publication-aware tracking
+
+If `ZERO_APP_PUBLICATIONS` is set, only tables in that publication get change-tracking triggers.
+
+### Broken trigger cleanup
+
+After restore, triggers whose backing functions don't exist are dropped (happens with filtered pg_dump).
+
+## Tests
+
+```bash
+bun run test                                # orez tests
+bun run test:integration:native             # native sqlite integration
+cd sqlite-wasm && bunx vitest run           # bedrock-sqlite tests
+```
+
+## Project Structure
+
+```
+src/
+  cli-entry.ts          auto heap sizing wrapper
+  cli.ts                cli with citty
+  index.ts              main entry, orchestrates startup
+  config.ts             configuration types and defaults
+  load-config.ts        orez.config.ts file loader
+  log.ts                colored log prefixes, log files
+  mutex.ts              serializing pglite access
+  port.ts               auto port finding
+  pg-proxy.ts           postgresql wire protocol proxy
+  pglite-manager.ts     multi-instance pglite, migrations
+  s3-local.ts           local s3 server (orez/s3)
+  vite-plugin.ts        vite plugin (orez/vite)
+  admin/
+    server.ts           admin dashboard backend
+    ui.ts               admin dashboard frontend
+    log-store.ts        log aggregation
+    http-proxy.ts       http request logging
+  replication/
+    handler.ts          replication state machine, adaptive polling
+    pgoutput-encoder.ts binary pgoutput encoder
+    change-tracker.ts   trigger installation, change purging
+  integration/
+    *.test.ts           end-to-end tests
+sqlite-wasm/
+  Makefile              emscripten build
+  native/api.js         better-sqlite3 compatible API
+  native/vfs.c          custom VFS with SHM for WAL2
+```
+
+## License
+
+MIT

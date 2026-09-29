@@ -1,0 +1,239 @@
+# AI Reader V2 — AI 小说分析可视化工具
+
+[![Version](https://img.shields.io/badge/version-0.78.0-blue)](https://github.com/mouseart2025/AI-Reader-V2)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![GitHub Stars](https://img.shields.io/github/stars/mouseart2025/AI-Reader-V2?style=social)](https://github.com/mouseart2025/AI-Reader-V2)
+[![Python](https://img.shields.io/badge/python-≥3.9-3776ab?logo=python&logoColor=white)](https://www.python.org/)
+[![Node.js](https://img.shields.io/badge/node-≥22-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/react-19-61dafb?logo=react&logoColor=white)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/typescript-5.9-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Ollama](https://img.shields.io/badge/ollama-supported-FF6B35)](https://ollama.com/)
+[![Tauri](https://img.shields.io/badge/tauri-2-FFC131?logo=tauri&logoColor=white)](https://v2.tauri.app/)
+
+> **[English Version](./README_EN.md)**
+
+> **声明：** 本项目正处于数据分析质量提升的密集迭代期，版本变化较快，尚未达到可实用阶段。当前提供的 Web 开发版和桌面端安装包**仅供尝鲜体验**，分析结果可能包含较多错误。欢迎试用并反馈，但请勿用于正式的学术研究或文学分析。
+
+**开源 AI 小说分析工具** — 上传任意 TXT/Markdown 小说，AI 自动提取人物关系、地点层级、事件时间线，生成交互式知识图谱、世界地图、时间线等多维可视化。支持本地 Ollama 和云端 LLM，数据 100% 本地存储，无需联网。
+
+适用于：网文分析、小说世界观整理、文学研究、创作辅助、角色关系梳理、剧情梳理、同人创作参考。
+
+<p align="center">
+  <a href="https://ai-reader.cc"><strong>官网</strong></a> ·
+  <a href="https://ai-reader.cc/demo/honglou/graph?v=3"><strong>在线体验</strong></a> ·
+  <a href="#快速开始"><strong>快速开始</strong></a> ·
+  <a href="#桌面应用下载"><strong>桌面下载</strong></a>
+</p>
+
+## 核心功能
+
+### 🕸️ 人物关系知识图谱
+
+力导向关系网络图，自动识别 70+ 种关系类型（血亲、师徒、同盟、敌对...），六大分类着色。实体别名智能合并（孙悟空 = 美猴王 = 行者 = 齐天大圣），支持路径查找、分类过滤、边权重调节。
+
+<img src="https://ai-reader.cc/assets/feature-graph.png" width="720" alt="人物关系图谱 - AI Reader 自动生成的小说角色关系网络" />
+
+### 🗺️ 小说世界地图自动生成
+
+从文本全自动构建多层级交互式地图。天界/冥界/海底/秘境多空间层、传送门连接、程序化地形（生物群落 + 河流 + 道路 + 大陆架）、人物轨迹动画回放、rough.js 手绘风格渲染。**v0.59 新增：LLM 宏观方位锚定 + 三重水域检测 + 海岸线覆盖保证 + 道路跨海过滤。**
+
+<img src="https://ai-reader.cc/assets/feature-map.png" width="720" alt="小说世界地图 - AI 自动生成的虚构世界地图" />
+
+### ⏳ 多泳道时间线 / 故事线视图
+
+多源事件聚合（角色登场、物品流转、关系变迁、组织变动），智能降噪过滤，情绪基调标签，章节自动折叠。故事线泳道视图追踪多角色并行叙事线。
+
+<img src="https://ai-reader.cc/assets/feature-timeline.png" width="720" alt="小说时间线 - 多角色叙事时间线可视化" />
+
+### 📖 小说百科全书
+
+五类实体分类浏览（人物/地点/物品/组织/概念），地点层级树与空间关系面板，场景索引定位原文，世界观总览。
+
+<img src="https://ai-reader.cc/assets/feature-encyclopedia.png" width="720" alt="小说百科 - 人物地点物品组织百科全书" />
+
+### 更多功能
+
+- 🖥️ **桌面应用** — Tauri 2 原生桌面客户端，下载即用，全功能离线运行
+- 📚 **书架管理** — 拖拽上传 .txt/.md，智能章节切分（50+ 格式），搜索排序，导入/导出/全量备份
+- 🔍 **实体预扫描** — jieba 中文分词 + LLM 分类，生成高频实体词典提升提取质量
+- 📖 **智能阅读** — 实体高亮（5 类着色），别名解析，书签系统，场景/剧本面板
+- ⚔️ **势力图** — 组织架构与势力关系网络
+- 💬 **RAG 智能问答** — 基于原文的检索增强问答，流式对话，答案来源溯源
+- 📤 **设定集导出** — Markdown / Word / Excel / PDF 四种格式，可选模板
+- 🤖 **多 LLM 支持** — 本地 Ollama（qwen3:8b 等）+ 10 大云端供应商（DeepSeek、MiniMax、Claude、OpenAI、Gemini 等）
+- 📊 **全链路分析管线** — 实体预扫描 → 逐章提取 → 聚合 → 可视化，异步执行、暂停恢复、失败重试、Token 预算自动缩放
+- 🔁 **独立二审（多轮独立 Pass）** — 分析完成后可选二次独立重读（读不到一审结果），逐章对比两次结果暴露分歧，成本按 pass 分账、单独可见
+
+## 适用场景
+
+| 场景 | 说明 |
+|------|------|
+| 网文/小说世界观整理 | 自动梳理人物关系、地点层级、势力分布 |
+| 文学研究 | 角色关系网络分析、叙事结构可视化 |
+| 创作辅助 | 设定集导出、世界观一致性检查 |
+| 同人/二创参考 | 快速了解原著角色关系和世界观 |
+| 读书笔记 | 阅读中高亮标注、书签、场景索引 |
+| 教学演示 | 可视化展示小说结构 |
+
+## 开发故事
+
+📝 [全程不写一行代码，我如何用 AI 做出一个复杂的小说分析系统](https://zhuanlan.zhihu.com/p/2016598051163218226) — 从零到一的完整开发历程
+
+## 桌面应用下载
+
+无需配置开发环境，下载即用。内置 Python 后端，只需安装 [Ollama](https://ollama.com/) 或配置云端 API。
+
+| 平台 | 下载 | 架构 |
+|------|------|------|
+| macOS | [AI Reader_0.78.0_aarch64.dmg](https://github.com/mouseart2025/AI-Reader-V2/releases/download/v0.78.0/AI.Reader_0.78.0_aarch64.dmg) | Apple Silicon (M1/M2/M3/M4) |
+| Windows | [AI Reader_0.78.0_x64-setup.exe](https://github.com/mouseart2025/AI-Reader-V2/releases/download/v0.78.0/AI.Reader_0.78.0_x64-setup.exe) | x86_64 |
+
+> **macOS 首次打开提示"已损坏"？** 在终端运行：`xattr -cr "/Applications/AI Reader.app"`，然后重新打开即可。
+>
+> 更多版本请查看 [Releases](https://github.com/mouseart2025/AI-Reader-V2/releases) 页面。
+
+### 🧪 体验版（抢先尝鲜）
+
+除正式版外，还提供**体验版**通道，包含尚在打磨的新功能（如**实体别名手动合并/拆分**等节点级编辑）。体验版以 **Pre-release** 形式发布，版本号带 `-beta` 后缀，应用内顶栏会显示「体验版」标识。
+
+- 想尝鲜：到 [Releases](https://github.com/mouseart2025/AI-Reader-V2/releases) 页面下载标记为 **Pre-release** 的版本
+- 求稳定：用上方表格的正式版即可
+
+> 体验版功能可能存在未完善之处，欢迎反馈；正式版（论文与稳定使用基准）不受体验版改动影响。
+
+## 快速开始
+
+**环境要求：** Python 3.10+ / Node.js 22+ / [uv](https://docs.astral.sh/uv/) / [Ollama](https://ollama.com/)（或云端 API）
+
+```bash
+# 1. 启动 Ollama（本地 LLM）
+ollama pull qwen3:8b && ollama serve
+
+# 2. 启动后端
+cd backend && uv sync && uv run uvicorn src.api.main:app --reload
+
+# 3. 启动前端（新终端）
+cd frontend && npm install && npm run dev
+```
+
+打开 http://localhost:5173 即可使用。上传 TXT 小说 → 分析 → 查看可视化。
+
+> 不想本地部署？试试 [在线 Demo](https://ai-reader.cc/demo/honglou/graph?v=3)，含红楼梦和西游记完整分析数据。
+
+## 技术栈
+
+| 层 | 技术 |
+|----|------|
+| 前端 | React 19 + TypeScript 5.9 + Vite 7 + Tailwind CSS 4 + shadcn/ui |
+| 桌面 | Tauri 2（Rust）+ Python sidecar（PyInstaller 打包） |
+| 可视化 | D3.js + SVG（地图）/ react-force-graph-2d（图谱）/ react-leaflet（地理） |
+| 状态管理 | Zustand 5 |
+| 后端 | Python + FastAPI（async）+ aiosqlite |
+| 数据库 | SQLite（结构化数据）+ ChromaDB（向量检索） |
+| LLM | Ollama（本地）或 OpenAI 兼容 API（云端，支持 DeepSeek/MiniMax/Claude/OpenAI/Gemini 等 10 大供应商） |
+| 中文 NLP | jieba 分词 + 实体预扫描 |
+
+## 版本记录
+
+| 版本 | 日期 | 主要更新 |
+|------|------|---------|
+| **v0.78.0** ✅正式版 | 2026-09-28 | **地图"从色块到地貌"的一轮收束 + 本地 OpenAI 兼容端点恢复可用** — 把 β 线（beta.1–beta.3）毕业为正式版，并修掉一处**会让 /map 整请求 500** 的回归。①**地形重做（v7→v11）**：原先陆地是一层"生物群区色块"、没有山体阴影，给该场打光只会得到圆鼓包（属**架构**问题，非调参）；改为**脊线高度场 + Lambert 打光 + 沿同一高度场的连续色阶**，三档基波长叠出大山体/山脊/丘陵三级；②**海洋双环深度带**（v11），并修好它**从未到达客户端**的缓存装配漏洞（v14：`shelf_depth` 未持久化，缓存命中分支只装配 landmasses+shelves）；③**移除"伪几何"**：道路层的**共现直线弦**（数据只有 2 个端点，改为只渲染带真实中间路径点的道路）、区域/势力范围的**棕色多边形轮廓**（含一个退化巨型三角凸包「东土大唐」）；④**本地 OpenAI 兼容端点恢复可用（#84）**：新版 llama.cpp / LM Studio 只接受 `json_schema`/`text`，客户端却一直硬发 `json_object` 且无回退，导致本地用户「模型测试」503、「开始分析」400 —— 现为**命中该 400 时摘掉该字段重试一次**（附 3 条回归测试）；⑤**修 /map 的 `UnboundLocalError`**：`_ws_cw/_ws_ch` 只在 `if active_regions:` 内赋值却无条件使用 ⇒ **凡"世界结构没有 region"的小说，地图接口直接 500**；⑥**测试隔离修复 → CI 自 2026-09-23 起首次转绿**：4 个测试文件会走到未 mock 的真实 `novel_store.get_connection`，一直在读开发者本机的 `~/.ai-reader-v2/data.db`（本机有库故"本地通过"、CI 新 runner 无此目录故全红）；现改指向临时目录 + 会话级建 schema；⑦工程：`bump-version.sh` 补齐 `-beta.N` 的三处缺口（`Cargo.lock` / `uv.lock` PEP 440 / README badge 双横线），并清掉本分支引入的 16 个 ruff 错误。**已知遗留**：深缩放（z2/z3）受烤图分辨率上限会糊，需 LOD 叠加层；封神演义被判为 `geographic`、丢了仙界/地府图层（题材识别失效）；区域/势力范围现无边界墨线 |
+| **v0.78.0-beta.3** 🧪体验版（隔离 beta，未并入 main） | 2026-09-27 | **海洋深度带真正抵达浏览器 + 地图"伪几何"清理** — ①**海洋双环深度带此前从未到客户端**：生成端与前端都正确，但中间的**地理产物缓存装配层**漏传 `shelf_depth`（缓存命中分支只装配 landmasses+shelves；且 `map_geo_artifacts` 表根本没这一列，写缓存即丢弃）——典型"代码没错但功能不出现"；已补列 + 迁移 + 装配/保存透传，`_LAYOUT_VERSION` 13→14，实测重启后首请求 31s 重算、`shelf_depth` 6 值入库、再次请求命中缓存仍为 6 值。②**移除道路层的"共现直线弦"**：每条 road 数据只有 2 个端点（是"同章共现地点对"、不是道路），被渲染成一堆横穿全图的直线；改为**只渲染携带真实中间路径点的 road**（当前数据即渲染 0 条，上游给出真路径会自动恢复）。③**移除区域/势力范围棕色多边形轮廓**：`#regions`（30 个多边形，1.6px 棕描边）与 `#territories`（凸包轮廓）叠成一张"跨区域棕线网"（读者报"奇怪的直线/三角形"），且 territories 未被裁剪、凸包边直穿海洋；现两层描边全部去除、只保留色块，`#territories` 并入 **land-clip** 裁剪到陆地。**已知遗留**：区域/势力范围现无边界墨线，如需结构可加极淡虚线 |
+| **v0.78.0-beta.2** 🧪体验版（隔离 beta，未并入 main） | 2026-09-25 | **地图布局确定性修复 + 层级锚定修复 + 布局质量门禁** — ①**地图不再每次长得不一样**：坐标求解的力导向种子阶段误用**全局随机数发生器**，导致同一份输入反复求解得到不同地图——实测西游记 751 个地点中 **53 个（7.68%）每次漂移**，且**同一进程内连续调用就会漂**（因此不是环境变量问题）。修复后同一输入连续三次求解坐标**完全一致（0/690）**；②**细尺度地点不再飞出父地点**：求解器只对 80 个粗尺度锚点做约束优化，其余地点走兜底散布，而兜底的最后两级分支**完全不受父节点约束**（跨度可达 0.8 倍画布宽），散布半径还用了无视层级的全局常数——实测「东山坡」距「东山」5683 单位、「佛殿」距「镇海禅林寺」4867 单位（一间庙的佛殿不可能在 4800 之外）。现改为**沿层级链回溯最近已解祖先作吸引子**、半径按 tier 从画布短边推导、并保证父节点先于子节点放置——散布路径父子距离中位数 50.7→**4.5**、p90 806.6→**50.6（−94%）**；③**新增布局质量门禁**：`/map` 响应新增 `layout_quality` 字段（绝对分位口径，按父子尺度分层），配套 CLI `backend/scripts/measure_layout_quality.py`；**弃用**此前的「兄弟离群比率」口径——它存在**分母效应**，会把上述 −94% 的真实改善误报成违规率上升（6.51%→10.13%）。**本版本门禁实测：基线 3 项 FAIL → ALL PASS**。**已知遗留**：仍有 23 条求解器侧大尺度离群边（最大 4828 单位，如「西梁国→西牛贺洲」），属跨洲际尺度存疑，需**人工判读原文**后再治，本轮不处理 |
+| **v0.78.0-beta.1** 🧪体验版 | 2026-09-22 | **别名归一四层闭环 + 用户侧层级对齐管线真实质量 + 金标区域震荡根治** — ①**地名别名归一**（新子系统）：原别名机制只管人物、地理全链路用原始字符串做 key（东京/京师/汴梁城曾是三个独立节点、高太尉府的票被三方分摊）；新增按书白名单映射表（双源证据逐条注释，同名异地绝不并），vote 层票仓合流 → 先验边迁移 → apply 层节点归并 → 地图展示层 canonical 化四层闭环——水浒 chain 0.7074→**0.7130**（历史最优）、西游 0.7837→**0.8050**、红楼/封神防分裂、三国核验后零收录；②**Auditor 入网门禁**（默认启用）：层级倒挂/成环边入全局图前剔除，先验权威边豁免；词表精确名保护 23 条（瓜洲/府邸类 rank 怪癖）；③**资信边免疫**：修复图层渲染脚手架覆盖金标知识边——水浒 20 条「天下」金标边曾被改挂虚拟「主世界」（用户侧顶层结构修复，chain 0.40→**0.72**），西游 龙宫→东海 恢复，三本书用户看到的就是管线真实质量（applied≈rebuilt）；④**金标区域震荡根治**：度均衡纯结构启发式从不查票仓、把全票的 省亲别墅 改挂零票 紫菱洲 且随重建交替——新增零票改挂禁止（通用启发式，非金标钉入），红楼 PP 0.8333→**0.9167**、chain 0.7447→**0.8298** 且轮间摆动终结；⑤数据层：红楼图层跨书污染清理（存量骨架幻觉）、西游 南膳部洲 错字归一、水浒 30 章高质重抽（金标名 +61、新地名 +310、零丢失）；⑥评测增强：per-level 分层指标 / 约束解释器（成环/倒挂/跨级/同名检查）/ 重访一致性（同地点跨章断言一致性，无需金标的自动回归信号）；⑦安全：anyio 4.14.2（TLS 证书伪造修复）。**升级说明**：编辑器内点「重建层级」后全部改进生效，新导入分析直接享受新管线。1563 backend tests 通过 |
+| **v0.77.0-beta.1** 🧪体验版 | 2026-09-19 | **地点层级质量大跃升（标注勘误驱动的自迭代 R2–R4）+ 语义根/工程根分离 + demo 全量重导** — ①量化对比（与 v0.76.0 同数据同尺子实测）：父节点准确率西游 0.33→**0.88**、红楼 0.54→**0.90**（链式 0.31→**0.81**）、水浒 0.56→**0.83**（链式 0.30→**0.70**），换章节序双种子复测逐值一致；②**先验权威通道 prior_edges**：策展文史知识不再被噪声票覆盖（三国 荆州不再倒挂益州之下），证据门槛补入缺失先验节点；③Edmonds 结构修复三连：度均衡/幻父上提不覆盖高置信边、passage 门豁免策展先验边（红楼 荣国府→宁荣街→都中 主链恢复）、佛教部洲剔除改证据门槛；④五本 errata 勘误先验共 6 批（仅采纳人工勘误与黄金标准双来源互证、原文/史实可核验的条目，不过拟合评测集）；⑤**语义根/工程根分离**：新增 virtual_locations 标记——红楼/西游的「天下」是工程容器（编辑器淡显 +「虚拟」徽标），水浒/三国/封神的「天下」是文本真实概念（天下观），水浒 root 4→2；⑥可靠性修复：层级「重建+应用」可能悄悄应用前一天陈旧快照的陷阱（西游实测回退）、水浒 盖州坐标定位山西晋城方向（非辽宁盖州）、净化器新增描述性/方位/路途短语形态规则；⑦五本 demo 数据全量重导（在线 demo 同步刷新）。**升级说明**：旧书层级不自动刷新——编辑器内点「重建层级」后生效，新导入分析直接享受新管线；已知问题：同一本书反复重建可能出现个别边退化（幻影捕获，投票质量降噪工作流跟进中）。1472 backend tests + CI lint 门禁通过 |
+| **v0.76.0** | 2026-09-16 | **独立二审 Source Pass + 抽取质量加固系列（issue #70）+ 地图预建开图即渲染** — ①独立二审 Source Pass MVP（#70 Phase 1：第二遍独立抽取与一审对照，提升事实召回与一致性）；②抽取/消解质量加固（#70 系列：准入语义三修——幻觉审查双维度/别名语境指称分层/物品关系证据门控、canonical 原文锚定与扶正机制、别名簇劈叉修复、数组形式响应不再静默丢 section、地点层级与关系语义加固——邻近≠包含/到访≠成员/type 收敛、组织识别噪音收窄、裸旧边证据门控、名字决策 provenance 审计与查询 API）；③geo 链确定性修复 + P0 实体净化（Story 5.5）+ passage-like 门控与特殊空间 realm 分类（Story 5.2/5.3）；④**分析后后台预建世界地图 + 地理产物持久化 + 前端会话级地图缓存**——开图即渲染，预建进度可见；⑤分析管线成本/耗时三项优化（#61 #51）+ LLM 输出截断可观测（finish_reason=length 追踪，quality 增 output_truncated_chapters）；⑥桌面端修复：sidecar 版本握手 + Windows 进程树清理防新旧混装（#71）、导出 .air/markdown 补 sidecar 鉴权头修 401（#75）、物品详情 500 修复；⑦工程化：ruff/eslint 告警清零并纳入 CI lint 门禁、maplibre-gl 5→6（XSS 修复）、npm 漏洞清零、可复现性回归 harness（同文本 fresh×2 五层 overlap）；⑧**新装环境地图接口挂死修复（#82：GeoNames 数据集下载加 300s 整体超时，下载/解析失败抛 GeoDataUnavailableError 并降级为虚构布局，不持久化错误的 geo_type，下次请求自动重试）**。1284 backend tests + frontend tsc/vitest 通过 |
+| **v0.75.0** | 2026-08-30 | **实体修正工具链扩展 + AI 助手预设问题修复（issue #66 Epic 1 / #67）** — ①实体隐藏（误识别实体一键隐藏，百科/图谱/地图/阅读高亮四端即时生效，软删可撤销，重建后存活）；②实体类型修改（人物/地点/物品/组织/概念五类互改，「⋯」菜单入口）；③**小说数据导出补齐 entity_overrides**（此前换机导入会丢全部手动修正，格式 v5→v6，旧包兼容）；④修正冲突提示（重建后实体消失/自动类型漂移时「我的修正」面板标注）；⑤AI 助手预设问题修复（issue #67：FAQ 关键词计分改为命中数制，"怎么上传小说"等预设问题不再误入小说 RAG，本地作答无需 AI）；⑥Dependabot 漏洞清理（前端 npm audit 清零，后端锁文件升级，requires-python ≥3.10）。813 backend tests + frontend tsc/vitest 通过，冻结论文数字复验 20 PASS |
+| **v0.74.1** | 2026-08-30 | **热修：桌面端上传小说 401（issue #68）** — v0.73.1 的 sidecar 令牌鉴权（V-01）要求所有 API 请求携带令牌，但带进度条的上传走独立 XHR 通道漏挂 Authorization 头，桌面端上传小说一律「未授权：缺少或无效的 sidecar 令牌」；其他功能走正常通道不受影响。v0.73.1 / v0.74.0 均受影响，请桌面用户升级至此版本。frontend tsc + vitest 通过 |
+| **v0.74.0** | 2026-08-28 | **质量提升轮 Epic 1–4 + Epic 6 重跑** — ①关系三维抽取 schema（关系类型/方向/强度/证据锚定）；②LLM 增量实体消解（跨章别名识别与 protected_names 保护）；③证据锚定抽取（每个事实带原文 span 与引用）；④judge 校验回路（自动化抽取忠实度评分，记录 judge_model/judge_base_url）；⑤两遍制 recall（每章二次查漏，召回遗漏的人物/关系/事件）；⑥幻觉人物 LLM 过滤层（银驮类规则漏网人物二次判断）；⑦分析后后台任务竞态修复（geo 链串行化，防止 world_structures 被覆盖）；⑧质量改进循环编排（M1–M6 指标聚合 + 硬回归守卫 + `quality_history.jsonl`）；⑨五本 demo 数据用 v0.73+ 管线全量重跑。790 backend tests 通过 |
+| **v0.72.0** | 2026-07-21 | **实体修正工具链转正 + 幻觉兜底 + 导出修复** — ①实体别名手动合并/拆分（百科卡/关系图/阅读页「⋯」操作，可撤销、不污染原文，修正节点显紫色虚线环）；②实体改名（少年→杨过类错误命名一键改对，原名保留为别名）；③概念编辑（改名/改分类/删除）；④导出可读分析报告（按章排版的人物/关系/地点/物品/组织/事件/概念 Markdown，名称已套用别名与手动修正）；⑤**幻觉孤岛过滤**（issue #30：本名与别名均未见于原文的人物节点自动剔除，防本地小模型预训练知识泄漏，60+ 本小说回归零误伤）；⑥设定集导出修复（issue #39：导出全部实体/关系/事件，不再截断）；⑦自动重试失败章节 KeyError 崩溃修复；⑧地图地点层级修环改不动点迭代（跨 LLM 复现实验发现）。550 backend tests + frontend build 通过 |
+| **v0.72.1** | 2026-08-05 | **问答模块修复（issue #55 / #56）** — ①流式回复跨对话泄漏修复（issue #55：发送时记录流所属对话，流式气泡渲染与完成写回仅在所属对话进行，切换对话不再残留"思考中"与他话输出，切回即见完整回复）；②问答防幻觉三修复（issue #56）：寒暄类消息前置识别直接回固定引导语（不进检索、不调 LLM，堵住"你好"触发任意章节原文注入的入口）、检索全空不再调用 LLM（直接回"已分析 N 章，未检索到相关内容"，省 token 且杜绝空上下文幻觉）、原文全文检索按分析进度过滤（堵住未分析章节原文泄漏的"未来章节幽灵信息"）；③embedding 语义检索异常日志升级为 warning（桌面端静默失败可定位）。550 backend tests + frontend build + Playwright 端到端复现验证 5/5 通过 |
+| **v0.72.2** | 2026-08-05 | **命名质量守护体系 + 问答加固第二刀（issue #56 后续）** — ①命名决策单一事实来源（`name_authority.py`：canonical 选择/泛称判断各只此一个入口，删除 9 处重复列表，泛称不再凭高频率赢得 canonical，如"爷爷(1872次)"不再压过"刘(1811次)"）；②黄金标准回归守卫（西游/红楼审阅数据转 CI 断言：陈玄奘必须归唐僧、猴王/行者必须归孙悟空、阮小二/阮小五/阮小七相似名绝不合并——今后"孙悟空变猴王"类回归 CI 直接红灯）；③chroma 向量索引生命周期对齐（清除分析/排除章节时同步删向量，堵住重分析后旧章节幽灵检索）；④实体停用词表（"主人公"不再误中别名"公主"注入无关人物档案）；⑤问答系统提示词加硬约束（知识库无关/不足时禁答具体内容）；⑥问答页显示"已分析 N/M 章"进度徽标（分析中途可见，管理预期）。586 backend tests + frontend build 通过 |
+| **v0.73.1** | 2026-08-12 | **安全修复：桌面端 sidecar API 鉴权（V-01，外部安全研究报告）** — ①桌面端 Python sidecar 此前监听 loopback 随机端口但无任何访问凭证，同机任意进程在识别端口后可请求全部本地数据接口（含完整备份导出、小说删除）；②现 Tauri 宿主每次启动生成 32 字节随机令牌并经环境变量传入 sidecar（不出现在进程参数），FastAPI 中间件对 /api/* 强制 Bearer 令牌、/ws/* 要求 ?token=（豁免 /api/health 与 CORS 预检）；③web 直跑/开发模式（未配置令牌）行为不变；④新增 7 条鉴权回归测试。感谢独立研究者 finch joc 的负责任披露。634 backend tests + frontend tsc + cargo check 通过 |
+| **v0.73.0** | 2026-08-05 | **阅读划线批注 + agentic 问答（issue #43 / #26）** — ①阅读页划线批注（issue #43：选中正文即出浮层，4 色划线 + 批注，锚定章节位置可跳转，批注列表与书签并列，下划线图层与实体高亮正交共存互不遮盖，数据本地持久化可编辑/删除）；②**agentic 问答模式**（issue #26：设置 `QA_MODE=agent` 后，AI 回答前主动"取证"——调实体档案/全文搜索/章节摘录三类工具查证（界面实时显示"正在查证第57章…"），再基于证据生成带章节引用的回答，替代一次性 RAG 直答；默认仍为 rag 模式，Ollama/弱模型自动降级，云端 DeepSeek/Anthropic 可用）。597 backend tests + frontend build + Playwright 端到端验证 5/5 通过 |
+| v0.71.9 | 2026-07-21 | 导出设定集数据不全修复(issue #39) + 两个深层稳定性修复 — ①设定集导出此前实体/关系/事件不全,现后端全链路导出 + 前端开关,+6 测试;②地点层级修环失效:极端数据下 2-环可存活到最终输出(跨 LLM 复现实验实测发现,黑水河↔黑水河水府),修环改不动点迭代 + 全流程终检,+5 回归测试;③分析任务自动重试失败章节时 KeyError('chapter_number') 崩溃,任务僵尸化为永久 running(任何章节失败即触发),已修。另:抽取温度支持 `LLM_EXTRACTION_TEMPERATURE` 环境变量覆盖(默认 0.1 不变)。509 backend tests + frontend tsc 通过 |
+| v0.72.0-beta.2 🧪体验版 | 2026-06-07 | **导出可读分析报告 + 实体改名**(issue #26 magik163 实测反馈)— ①导出页新增"导出可读分析(.md)":按章排版的人物/关系/地点/物品/组织/事件/概念,名称已套用别名与手动修正,替代难读的裸 JSON;②实体改名:百科卡 ⋯ →「改名…」把错误命名改对(少年→杨过、道姑→李莫愁、轮国师→金轮国师),原名保留为别名、可撤销、不污染原文。529 backend tests + frontend build 通过。仍为体验版(Pre-release),正式版 v0.71.8 不受影响 |
+| v0.72.0-beta.1 🧪体验版 | 2026-06-05 | **实体别名手动合并/拆分**(节点级编辑第一刀,GitHub issue #26 / 知乎需求)— 百科卡 / 关系图 / 阅读页点实体右上「⋯」即可合并散落别名、拆出误归别名(沙僧别名误入八戒一键纠正),修正以 override 层叠加在自动归并之后,**持久、可撤销(「我的修正」集中列表)、不污染原文数据**,关系图已修正节点显紫色虚线环。后端单点注入 `alias_resolver._apply_user_overrides`,一处生效于百科/图/阅读/检索全部消费端;新增 `entity_overrides` 表 + `/entity-overrides` API。顺带实体卫生:过滤 群妖/众小妖类集体泛称、清理别名 Ch.0 章节、剔除跨实体误归(沙僧)与代词(我)。**仅人物视图,地点层级零影响**。以 **体验版(Pre-release)** 发布,正式版 v0.71.8 不受影响。backend 523 tests + frontend build/vitest 通过 |
+| v0.71.8 | 2026-05-29 | 空间关系 null 值致整章解析失败 hotfix(知乎用户 元图AI研究 反馈) — 弱模型/本地小模型在抽取 `contains`/`adjacent` 类空间关系时常对 `value` 输出 `null`,但 `SpatialRelationship.value` 是必填 `str`,Pydantic 整章原子校验,一个 `value: null` 就让整章作废(人物/地点/关系/事件全丢),表现为"分析几十章全部报错 9 validation errors"。修:`chapter_fact.py` 给 `SpatialRelationship` 加 `field_validator` 把 source/target/relation_type/value/confidence/narrative_evidence 的 `None` 统一转 ""(value 默认 ""),保住 contains 等有效层级信号;下游 vote_builder / visualization / world_structure 已容忍空串。+5 回归测试,503 tests passed |
+| v0.71.7 | 2026-05-12 | 补 `.generate()` 漏传 timeout hotfix(issue #25, ymilv) — `entity_pre_scanner.py:661` 实体扫描 + `synopsis_generator.py:66` 简介生成两处调 `.generate()` 没传 timeout 参数,吃 LLM 客户端 120s 默认值,精确匹配用户"扫描实体 1-2 分钟终止"症状。补传 timeout=600 / 300 + model_benchmark Ollama 路径 300s→600s(冷启 Gemma 4B 留够) + `_check_ollama` / recommendations `/api/tags` 2s→5s 防御性(Ollama 忙时模型列表也可能慢) + 498 tests passed |
+| v0.71.6 | 2026-05-08 | 本地 OpenAI 兼容服务支持 hotfix(issue #22) — `/cloud/validate` 容错(503 视为可达带 warning + probe 用真实模型名替代写死 `__probe__` + timeout 10s→30s + 本地服务允许空 API Key) + `OpenAICompatibleClient` localhost 检测(generate / generate_stream timeout 至少 600s,本地慢硬件 + 7B 模型推理几千字不再超时) + `CLOUD_PROVIDERS` 显式加 LM Studio / vLLM / Ollama-openai 三个本地预设(UI 引导用户走云端模式,不再误以为只能走 Ollama) + `ValidateCloudRequest` 加 model 字段 + 前端 `cloudValidResult` amber warning 区别 green success + 498 tests + 9 vitest passed |
+| v0.71.5 | 2026-05-02 | 导出功能 hotfix(issue #19) — 设定集导出点击无反应修复(`exportSeriesBible` 创建 `<a>` 后未 `appendChild` 就 `.click()`,Tauri WebView 静默失败,改为 `appendChild → click → removeChild` 对照 `.air` 导出已修工作模式) + `.air` 导出失败 UI 错误提示(之前 catch 只 console.error 零提示,改为 `setAirError` 红字显示) + vitest 9/9 + build 通过 |
+| v0.71.4 | 2026-04-23 | 数据质量审计后续 — 沙/八戒别名错合并 hotfix(西游关系图沙僧独立呈现,entity_dictionary 复合实体"八戒沙僧"触发 Union-Find 桥接的签名驱动后处理修复) + 师兄弟/同门关系色回归 social 蓝(横向同辈语义修正) + 地图单根保证(西游泾河/封神属天界/朝歌或商朝 原为游离根,_inject_layer_roots Phase 0 orphan-close 补齐) + 同门 extraction prompt 收紧(加 5 条 negative rule 制止 LLM 把山寨结义/同朝权臣/一僧一道误抽为同门,v0.72.0 重分析生效) + DB 去重(重复上传副本清理,用户手工 map_user_overrides 迁移保留) + 498 tests |
+| v0.71.3 | 2026-04-18 | 修复 Ollama 模型限制(issue #9) — REQUIRED_MODEL 默认值 qwen2.5:7b → qwen3:8b + _check_ollama 改为"任意已装模型即可用" + InlineLlmSetup 三态 UI(已装推荐/已装其他/未装) + "开始使用"按钮自动选用第一个已装模型 |
+| v0.71.2 | 2026-04-18 | 网络可达性 + 模型列表刷新 + paper 工作流 — httpx trust_env=True(4 处,修复 China-region 代理被静默绕过) + CLOUD_PROVIDERS 加 Anthropic opus-4-7/sonnet-4-6 + OpenAI gpt-5/gpt-5-mini + 内部脚本默认模型升 claude-sonnet-4-6 + Paper 工作流 9 个脚本(synthesize_novel/baseline_comparison/audit_paper_numbers/compute_iaa 等) |
+| v0.71.1 | 2026-04-12 | 跨本质量守护(西游+红楼重分析后) — 关系图canonical崩溃修复: Phase A 7项(字形归一化+HOMONYM扩充+BLOCKLIST扩称谓/戏称+nickname扩大将/太君/那X+unknown rescue+幻影清理+pick_canonical 3-char 10x阈值) + B3 Layer 0.5 substring例外(红楼"贾X"前缀5对合并:贾宝玉/贾探春/贾惜春/贾迎春/薛宝钗) + Phase C 人物知识先验(西游14组+红楼16组:孙悟空/贾母/观音等) + S3 TierClassifier红楼京城覆盖 + S4 phantom lift门槛收紧(catch-all 27→19) + S6 FactValidator规则20-24(X国界/X城池/X山路/X山顶) + S2 SuffixNormalizer新GeoSkill(60+后缀变体合并) + Phase C地点先验(石头城/金陵/神京→都中) + 483 tests |
+| v0.71.0 | 2026-04-10 | 命名质量守护+分析后自动层级重建(Edmonds管线)+开发过程规范(L1/L2/L3分级+影响分析+单一事实来源) + 482 tests |
+| v0.70.3 | 2026-04-10 | 命名管线质量守护体系(name_authority.py 单一入口+canonical回归守卫) |
+| v0.70.2 | 2026-04-09 | 修复NameResolver canonical选择倒退 |
+| v0.70.1 | 2026-04-08 | GeoStateDoc地理状态注入+百科字形变体提示 |
+| v0.70.0 | 2026-04-08 | 提取管线质量修正: NameResolver+泛称升级+地点知识 |
+| v0.69.1 | 2026-04-07 | 层级架构修正+副本分离 — 天下→层根节点(主世界/天界/冥界/龙宫)自动注入, 跨层parent关系断开修复, sci-fi层检测genre门控(水浒太阳阵不再触发太阳系层) + 407 tests |
+| v0.69.0 | 2026-04-06 | 朝代感知地名分类+原文上下文校验 — 三层校验方法论完整实现: Layer 2 朝代感知"州"分类(三国→kingdom/封神→city/红楼→city, era自动检测) + Layer 3 TextVerifier上下文提取(60字窗口snippet证据) + 上下文感知"府"分类(荣国府→site/大名府→city) + "X处"细分(贾母处→valid/鸳鸯自尽处→error) + 原文存在性校验(850K字<0.5s) + 5本小说gold标准(5941节点) + 407 tests |
+| v0.68.0 | 2026-04-05 | 地图渲染质量 — 大陆覆盖优化+核心地标不折叠+子地点分布收紧(海洋漂移修复)+智能重绘后层重检测+map布局缓存(5分钟TTL)+自动清缓存 |
+| v0.67.2 | 2026-04-05 | 增量Edmonds重构+编辑器双栏布局+智能重绘秒级完成 — Edmonds从全量重建改为增量修复(golden_P 59%→97%)+名字包含规则(306修正)+编辑模式开关+双栏详情卡片+父级搜索选择器+标记无效地点+进度对话框+管线精简(LLM依赖移除,<1s完成)+352 tests |
+| v0.67.0 | 2026-04-03 | 地点层级质量跃迁 — Geographic Agent Skill 架构 + Edmonds全局最优树算法(McDonald 2005) + 领域知识先验注入 — 将层级构建建模为"最大权有向生成树"组合优化问题，用Chu-Liu/Edmonds算法130ms求解(替代5-10min LLM依赖) + 不可变快照版本链(回滚/A-B对比) + 西游记144条黄金标准 — golden_P 40%→97% + avg_depth 2.78→3.13 + max_children 103→39 + 智谱GLM兼容性修复 + 352 tests |
+| v0.66.0 | 2026-03-30 | AliasResolver重构 — Canonical选名(3字全名优先+频率fallback+绰号降权) + 防桥接(相似名阻断+归属冲突检测扩展+集体引用blocklist) + 阅读页per-chapter上下文高亮 — 核心人物canonical 0%→84%(水浒35/35,红楼18/24,西游5/10) + 跨人物灾难合并消除(阮氏三兄弟独立,宝钗/凤姐独立) + 352 tests |
+| v0.65.0 | 2026-03-29 | 数据质量跃迁 — 师兄弟/结拜兄弟独立关系类型 + AliasResolver短称呼消歧 + 实体类型投票 + 血亲关系锁定 + 名字号提取 + 泛称人物地点消歧(樵夫→灵台方寸山·樵夫) + 352 tests |
+| v0.64.1 | 2026-03-28 | LLM审阅驱动FactValidator规则大幅扩充 — 6本跨题材小说自动审阅3轮迭代收敛 + 237条新规则 + 5条模式匹配规则 + 清理1076无效人物+194无效地点 + Prompt修复(父子/父女性别+事件幻觉+师兄弟≠师徒) + 别名高亮 + 分析完成stage广播 + 352 tests |
+| v0.64.0 | 2026-03-28 | 太空科幻地图主题(深色背景+发光节点) + 科幻层检测(太阳系/银河系自动分离) + 层传播修复 + 科幻后缀排名 + 用户反馈修复(别名/关系/搜索/时间线) + 5轮系统审查 |
+| v0.63.6 | 2026-03-28 | 用户反馈修复: 别名合并 + 师兄妹→同门归一化 + 描述性人名过滤 + 搜索跳转 + 时间线状态保持 + 章节切分修复 |
+| v0.63.5 | 2026-03-27 | 章节切分numbered模式修复 + API空响应补全 + goToChapter竞态修复 |
+| v0.63.4 | 2026-03-27 | 3轮系统审查修复(4C+4M): auto-retry crash + @staticmethod + cycle detection + CKJ归一化 + alias cache + 并发隔离 |
+| v0.63.3 | 2026-03-27 | 别名canonical修正(预扫描实体优先+通用词blocklist+称谓降级) + 西游记层级手动修正61处(P:95.3%) + demo数据更新 + 英文landing page + ChiNovelKE benchmark发布 + 344 tests |
+| v0.63.2 | 2026-03-27 | 实体卡片500修复 + 评估基础设施(eval_dashboard+标注模板+消融脚本) + FactValidator消融开关 + 344 tests |
+| v0.63.1 | 2026-03-26 | 骨架缓存(超时自动复用) + 安全阈值精细化(LLM审查驱动) + region→continent救援 + 角色共现降噪(阈值3→5+kingdom排除+跨洲过滤) + 黄金标准别名修正 + 投票间接continent推断 + 累积P:37.7%→65.6%(+27.9pp) |
+| v0.63.0 | 2026-03-26 | 地点归属质量跃迁 — 拓扑质量指标(5项+黄金标准) + 传递性闭包校验 + 时序权重衰减 + 地点别名归一化 + 后缀排名扩充(11新后缀+府歧义修复) + LLM审查增强(evidence+uncertain+并发限制) + Genre-aware地点规则(3题材) + rebuild安全阈值 + kingdom→continent救援 + 骨架max_tokens修复(根因+18pp) + 344 tests |
+| v0.62.0 | 2026-03-25 | Contains四层防御(FactValidator suffix rank自动修正+prompt后缀层级表+CoT逐条校验+负面示例) + LLM截断JSON自动修复 + max_tokens 8K→16K + .air导出文件名(小说名_日期) + 269 tests |
+| v0.61.0 | 2026-03-24 | Prompt Registry(核心能力保护) + Scene Graph CoT空间推理 + contains方向修复(3个示例反转) + LLM输出容错(数组响应+abilities字符串) + .air导出修复(fetch+blob) + 云端免密切换 + 269 tests |
+| v0.60.0 | 2026-03-24 | 数据质量体系 — ProfileQualityChecker(关系突变+自引用+参与者修复) + LLM聚合审查(opt-in) + Genre-aware验证(修仙/武侠/现实分化) + 空间悬空引用过滤 + prompt负面示例 + 云模型更新(MiniMax M2.7/Gemini 2.5/GPT-4.1) + 269 tests |
+| v0.59.1 | 2026-03-24 | ProfileQualityChecker Phase 1+2 + 云模型版本更新 + 251 tests |
+| v0.59.0 | 2026-03-23 | 地图质量大版本 — LLM宏观方位锚定(MacroSkeleton directions) + 三重水域检测(icon+type+parent链) + 递归归陆(3轮) + 海岸线覆盖保证(Chaikin收缩补偿) + 道路跨海过滤(land_mask采样) + Solver容量40→80 + 能量函数自适应权重 + 方向提示LLM anchor×3 + 道路性能优化(roughjs→SVG, top 150) + non-scaling-stroke海岸线 + 218 tests |
+| v0.58.0 | 2026-03-23 | 跨章节空间补全(LLM gap检测+方位距离补全) + 空间尺度自适应(9级画布) + 智能重绘(层级重建+空间补全一键执行) + 约束增强(轨迹邻接+传递推导) + underwater层检测 + 父级层传播 + 海中地点自动归陆 + 192 tests |
+| v0.57.0 | 2026-03-22 | 测试体系(151 tests+CI) + 大陆合并(18→5) + 道路网络(Delaunay MST) + 时间线↔地图联动(flyTo) + 全量坐标补全(824/824) + 别名 canonical 优化(3字全名优先) |
+| v0.56.1 | 2026-03-21 | 桌面端 9 项修复 — Ch.X 导航 404、Tab 顺序调整、通用地名消歧扩充、CJK 字形变体归一化、空间关系中文化 |
+| v0.56.0 | 2026-03-21 | 世界层级重检测 + 领地跨海过滤 + 大陆架淡化 |
+| v0.55.0 | 2026-03-20 | 时间线故事线视图 + 关系图路径着色 |
+| v0.54.0 | 2026-03-19 | FTUE 新用户首次体验改造 — 预装数据、AI 助手、内联配置 |
+| v0.53.0 | 2026-03-18 | 章节切分大幅改进 — 文体预检测、智能推断、50+ 格式支持 |
+| v0.52.0 | 2026-03-15 | 智能问答增强 + 别名合并修复 |
+| v0.51.0 | 2026-03-14 | 章节切分预览增强 + Windows CI 修复 |
+| v0.50.0 | 2026-03-13 | 别名爆炸修复 + Windows DLL 兼容 |
+| v0.49.0 | 2026-03-12 | GitHub Actions CI/CD + 桌面安装包瘦身(218→75MB) |
+| v0.48.0 | 2026-03-10 | 世界地图增强 — 冲突检测、轨迹路径点、渐进式求解 |
+| v0.47.0 | 2026-03-10 | 地图质量透明化 + 桌面端个性化 |
+| v0.46.0 | 2026-03-10 | 章节拆分修复 + VoT 空间推理增强 |
+| v0.45.0 | 2026-03-08 | 文档系统（13 页产品文档） |
+| v0.44.0 | 2026-03-08 | Tauri 2 桌面应用 + Python sidecar 集成 |
+| v0.43.0 | 2026-03-06 | .air 分析数据导出/导入 + 小说概览 |
+
+<details>
+<summary>更早版本</summary>
+
+| 版本 | 日期 | 主要更新 |
+|------|------|---------|
+| v0.42.0 | 2026-02-28 | 导出功能升级 — 4 格式模板选择器 |
+| v0.41.0 | 2026-02-26 | 书架升级 — 搜索排序、拖拽上传 |
+| v0.40.0 | 2026-02-24 | 阅读页升级 — 实体高亮、场景面板 |
+| v0.39.0 | 2026-02-22 | 关系图升级 — 分类过滤、暗色适配 |
+| v0.38.0 | 2026-02-20 | 时间线升级 — 智能降噪、关系变化事件 |
+| v0.37.0 | 2026-02-18 | 百科升级 — 实体卡片、场景索引 |
+| v0.36.0 | 2026-02-16 | 地图绘制优化 — 海岸线、子节点分散 |
+| v0.35.0 | 2026-02-14 | 地图层级 — LLM 自我反思验证 |
+
+</details>
+
+## 文档
+
+- 📋 [贡献指南](./CONTRIBUTING.md) — 开发环境搭建、代码规范、PR 流程
+- 🏗️ [技术架构](./CLAUDE.md) — 完整架构设计、代码约定、数据模型
+- 💼 [商业许可](./LICENSE-COMMERCIAL.md) — 商业使用条款
+
+## License
+
+[GNU Affero General Public License v3.0](./LICENSE) (AGPL-3.0)
+
+个人、教育和研究用途免费。商业闭源部署请参阅 [商业许可](./LICENSE-COMMERCIAL.md)。
+
+---
+
+**关键词：** 小说分析工具 / 网文分析 / AI 阅读器 / 知识图谱生成 / 人物关系图 / 小说世界地图 / 时间线可视化 / NLP 文本分析 / LLM 应用 / Ollama / 中文小说 / 网络小说工具 / 角色关系梳理 / 世界观整理 / novel analysis / knowledge graph / character relationship

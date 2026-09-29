@@ -1,0 +1,140 @@
+callPopPy
+=========
+
+callPopPy is a utility to monitor an Asterisk server's Manager 
+Interface and provide popup notification of incoming calls. callPopPy
+looks up the incoming number in a SQLite database and includes the 
+caller's name in the popup notification if it is found. Separate 
+utilities are available for managing this database.
+
+callPopPy can make use of pynotify on Gnome based Linux distros 
+such as Ubuntu. Otherwise it will use Daniel Woodhouse's gtkPopupNotify
+(https://github.com/woodenbrick/gtkPopupNotify), which is included
+in the distribution.
+
+callPopPy is written by Chris Hastie, http://www.oak-wood.co.uk and
+is a fork of pyCalledMe by Olivier H. Beauchesne
+http://olihb.com/2010/08/08/incoming-call-popup-under-ubuntu-and-asterisk/
+
+Requirements
+============
+
+callPopPy is a Python script. It requires Python 
+(http://www.python.org)
+
+callPopPy uses the starPy library to interact with Asterisk. Grab that 
+from http://www.vrplumber.com/programming/starpy/
+
+Other requirements will probably be present on a modernish Linux system. 
+Windows users should refer to README-WINDOWS.txt. Other requirements 
+include:
+
+pysqlite2
+twisted.internet
+  zope.interface
+gobject
+gtk2
+
+
+
+Installation
+============
+
+Unpack the archive to a suitable location.
+
+Create the directory <homedirectory>/.callpoppy
+On Linux/Unix based systems 
+
+mkdir ~/.callpoppy
+
+On Windows, the directory should be somewhere like
+c:\Documents and Settings\<username>\.callpoppy
+
+Copy config.sample into this directory, edit it and rename it to 
+config, ie you should now have a file at
+
+<homedirectory>/.callpoppy/config
+
+If you're not sure where it should be, just run callPopPy anyway and
+the resulting error message should help you.
+
+Create a SQLite database at <homedirectory>/.callpoppy/callpoppy.db (see
+later).
+
+Now run callpoppy. From the directory to which you unpacked it:
+
+python callpoppy
+
+On Unix like systems you can run it by calling it directly. From the 
+directory in which it is
+
+./callpoppy
+
+You may have to ensure the first line of the script points to your 
+python binary, and ensure that the script is executable:
+
+chmod 755 callpoppy
+
+Once you're sure that it's all working you'll probably want to set it
+up to start when you login or start your computer. How you do this will
+depend on your operating system.
+
+Configuration
+=============
+For a minimal configuration you will need to provide information about
+logging into the Asterisk server in the [Asterisk] section of the 
+config file. All values in this section are required, expcept for port,
+which defaults to 5038.
+
+You will also need to configure which extension(s) you wish to monitor.
+You can monitor multiple devices for incoming calls. The section
+[Extensions] consists of key: value pairs of devices. The key is an 
+Asterisk channel / device, the value is an arbitary friendly name that 
+will be used in the popup. For example
+
+[Extensions]
+SIP/john: John
+
+will monitor the channel SIP/john for incoming calls and result in 
+a popup titled "Incoming call for John" when it detects one.
+
+Database
+========
+callPopPy expects to find a SQLite database at
+<homedirectory>/.callpoppy/callpoppy.db. Other utilities should 
+maintain this database, such as Squalit 
+(http://www.oak-wood.co.uk/callpopy/squalit).
+
+The database must contains at least a table named 'numbers'. 
+
+This table should contain at least a field 'tel' and a field 'name'.
+Duplicates should not be allowed in 'tel'. A suggested schema is:
+
+CREATE TABLE numbers (id INTEGER PRIMARY KEY, tel VARCHAR(20) UNIQUE, name VARCHAR(255))
+
+The 'tel' field should contain the phone number, with all punctuation 
+(hyphens, spaces, periods, brackets) stripped. callPopPy checks against
+only the last 10 digits of this number. The number of digits is 
+configurable (in the [Database] section of config, the 'digits' key), 
+but in the UK at least, 10 seems a good figure.
+
+The reason for using only the last 10 digits is to get around 
+inconsistencies in the way in which different providers and trunks
+report calling numbers, some with country codes, some without, some 
+with dial prefixes. For example, the UK number 01926 410410 may appear
+as any of
+
+01926410410
+00441926410410
++441926410410
+901926410410
+
+What is consistent is that the last ten digits are always
+1926410410
+
+callPopPy does not mind if the database contains additional tables,
+or if the table 'numbers' contains additional fields.
+
+A Thunderbird extension, Squalit, is available that can create and
+maintain a suitable database from Thunderbird's address book.
+http://www.oak-wood.co.uk/callpopy/squalit

@@ -1,0 +1,571 @@
+# memem
+
+**Persistent, self-evolving memory for Claude Code.** Stop re-explaining your project every session.
+
+<!--
+The Glama badge URL below intentionally uses the legacy `cortex-plugin`
+slug. Glama listing slugs are fixed-once-created and the project was
+renamed cortex → memem in v0.7.0. The badge keeps rendering A-tier under
+the old slug via GitHub's repo-rename redirect. Re-listing under the
+new slug requires manual coordination via https://glama.ai/discord.
+DO NOT "fix" this URL — `glama.ai/mcp/servers/TT-Wang/memem` returns 404.
+-->
+[![CI](https://github.com/TT-Wang/memem/actions/workflows/ci.yml/badge.svg)](https://github.com/TT-Wang/memem/actions/workflows/ci.yml) [![memem MCP server](https://glama.ai/mcp/servers/TT-Wang/cortex-plugin/badges/score.svg?v=4)](https://glama.ai/mcp/servers/TT-Wang/cortex-plugin) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+
+> For LLM/AI tool discovery, see [llms.txt](./llms.txt).
+
+```
+  ███╗   ███╗███████╗███╗   ███╗███████╗███╗   ███╗
+  ████╗ ████║██╔════╝████╗ ████║██╔════╝████╗ ████║
+  ██╔████╔██║█████╗  ██╔████╔██║█████╗  ██╔████╔██║
+  ██║╚██╔╝██║██╔══╝  ██║╚██╔╝██║██╔══╝  ██║╚██╔╝██║
+  ██║ ╚═╝ ██║███████╗██║ ╚═╝ ██║███████╗██║ ╚═╝ ██║
+  ╚═╝     ╚═╝╚══════╝╚═╝     ╚═╝╚══════╝╚═╝     ╚═╝
+  persistent memory for Claude Code
+```
+
+## What is memem?
+
+memem is a Claude Code plugin that gives Claude persistent memory across sessions. An event-triggered miner (Stop-hook → detached `mine_delta` subprocess) extracts durable lessons (decisions, conventions, bug fixes, preferences) from each new conversation turn, stores them as markdown in an Obsidian vault, and automatically surfaces relevant ones as an Active Memory Slice working state. An explicit narrative assembly path still exists, but the default runtime context is slice-first.
+
+It's **local-first**: no cloud services, no API keys required, no vendor lock-in. Everything lives in `~/obsidian-brain/memem/memories/` as human-readable markdown.
+
+### What's new in v2.9.1 (Path-Scope Activation)
+
+v2.9.1 activates the path-scoped retrieval that shipped dormant in v2.9.0: recall now **auto-derives `paths_context`** from the current session so the `paths:` bonus actually fires without any caller action. The new `recent_session_paths()` in `memem/transcripts.py` resolves `session_id` → JSONL via a direct CWD-slug stat first (O(1)), falling back to `next(base_dir.rglob(...), None)` (short-circuit on first match); it then **tail-reads the last 512 KB** of the file (~5 ms even on a 64 MB session, vs ~390 ms for a full read), walks assistant turns most-recent-first, and extracts the top-N deduplicated file paths from `Read`/`Edit`/`Write`/`NotebookEdit` `file_path` inputs and Bash command first-line path tokens via `_extract_paths_from_content_blocks()`. The auto-derivation is wired into `active_memory_slice` (MCP tool), the `auto-recall.sh` UserPromptSubmit hook, and the `cli.py` slice path; caller-supplied `paths_context` still wins; derivation failures are logged at `debug`/`warning` and never propagate — any exception returns `[]` silently. No API or schema changes; 12 new tests in `tests/test_recent_paths.py` cover extraction, recency/dedup/limit, missing/malformed sessions, and end-to-end `active_memory_slice` integration. See [CHANGELOG](CHANGELOG.md) for full details.
+
+### What's new in v2.9.0 (Tool Diet + Transcript FTS5 + Path Scope)
+
+v2.9.0 trims the MCP surface from **14 tools to 6** — removing `memory_recall`, `memory_graph`, `memory_graph_audit`, `memory_graph_rebuild`, `memory_list`, `memory_import`, `context_assemble`, and `memory_remind` from the MCP layer (CLI and library equivalents remain for all eight) — and cuts total tool-description schema size **57%** (12,827 → 5,474 chars). `transcript_search` is backed by a **persistent FTS5 index** at `~/.memem/transcript_fts.db` (one row per Q/A turn-pair, `index_session()` called incrementally from `mine_delta`; old single-row-per-session indexes auto-migrate; the grep fallback is bounded by size/count/time caps and never silently truncates). **Path-scoped memories** arrive via a new `paths:` frontmatter field and a 1.05× `w_path` bonus in `retrieve()` for memories whose path globs match `paths_context`; `memory_save` gains an optional `paths` param; `active_memory_slice` accepts `paths_context`; and the miner annotates candidates with `paths:` when ≥2 paths each appear ≥3 times. Telemetry isolation is hardened via `MEMEM_TELEMETRY_SOURCE`. Closed-loop evaluation tooling is wired: a canary `--doctor` check, `--dual-engine` replay, and deferred-gate comments in `lessons.py` / `feedback.py`. Benchmark **79.3% (119/150)**, all acceptance gates pass. See [CHANGELOG](CHANGELOG.md) for full details.
+
+### What's new in v2.8.0 (Vault Structure)
+
+v2.8.0 retires the L0–L3 layer system and replaces it with a context model that reflects how memory actually works. The starting point was honest data: 462 memories had been auto-classified L0 ("always relevant"), which was not a layer, it was a full briefing that no session could absorb. The new model has three tiers: (1) **profiles** — schema-shaped always-injected documents per user (`profile_user.md`: Preferences / Conventions / Environment) and per project (`profile_<project>.md`: Identity / Stack & Structure / Conventions), stored at `<vault>/memem/profiles/`, populated by the miner's new `PROFILE` reconcile op and bootstrappable from your existing vault via `--migrate-layers`; (2) **working rules** — `type:procedural` memories (failure→fix patterns, corrections) ranked by citation count and injected as a `## Working rules` block at session start (≤1200 chars); (3) **episode index** — the existing 25-entry episodic title index, unchanged. Consolidation logic moves from the deleted `consolidation.py` into the dreamer's `cluster_merge` category with a bug fix: only the members listed in `supporting_ids` are bi-temporally invalidated after a successful merge, not all cluster members unconditionally. The dreamer gains `reflection_with_citations` (synthesizes `type:insight` memories from episodic clusters) and `tense_rewrite` (corrects expired future-tense memories) as additive-safe categories that fire automatically every 25 substantive mining deltas via `--dream --safe-auto`. The 18-query benchmark improved to **80.0% (120/150)** after L0 MMR pre-seeding was removed — the anchor mechanism was penalizing relevance, not helping it (measured during release validation; up from 79.3%/119/150 in v2.7.0). See [CHANGELOG](CHANGELOG.md) for full details.
+
+### What's new in v2.7.0 (Write Path + Instrumentation)
+
+v2.7.0 makes the miner smarter about what it writes: instead of adding every extracted candidate blindly, it compares each one against its nearest vault neighbors in a single batched Haiku call and picks ADD, UPDATE, SUPERSEDE, or NOOP with safety rails (protected-target guard, truncation guard, ≤5 destructive ops per delta, global fallback to ADD-all on any exception). The previously unreachable bi-temporal invalidation path (`invalid_at` / `replaced_by`) is now exercised by SUPERSEDE ops. Every retrieval is now linked to a session id, and the miner scans assistant text for cited memory ids and writes `{"type":"citation"}` rows to `.recall_log.jsonl` — closing the feedback loop so `--analyze-recalls` shows citation rate per tool and the dreamer demotion guard is live again after sitting inert since v2.5. Additional improvements: key expansion (miner emits up to 8 synonyms/aliases per memory, FTS+BM25 indexed), tool-trace digest (Bash/Edit decisions are now minable), `memory_save` three-band dedup (merge instead of reject for 0.70–0.92 near-duplicates), `--purge-contaminated --exclude`, and flock-safe feedback EMA writes. Benchmark unchanged at 79.3%. See [CHANGELOG](CHANGELOG.md) for full details.
+
+### What's new in v2.6.0 (One Engine)
+
+v2.6.0 unifies retrieval: a single three-way RRF engine (cosine + BM25 + FTS5) now serves every call path — hook, MCP tools, and CLI. The unbenchmarked heuristic engine that served `memory_search`/`memory_recall` since v2.4.0 is deleted (−218 LOC: 5-signal re-ranker, ngram union, file-scan fallback, and a 15% feedback weight reading a file nothing ever wrote). Deprecated and invalidated memories are now excluded from the retrieval index at vault-load time, fixing a leak via the hook path. The `scope_id` parameter changes from a hard filter to a soft ranking bonus — cross-project results that score well now appear. The 18-query benchmark is maintained at ≥74% precision (79.3%, measured during release validation). See the [A/B comparison report](docs/ab-report-v2.6.0.md) for transparency on result-set divergence vs the prior engine, and [CHANGELOG](CHANGELOG.md) for full details.
+
+### What's new in v2.5.0 (Repair & Prune)
+
+v2.5.0 is a maintenance release: 24 audited defects fixed and ~2,256 LOC of dead code removed. No new memory capabilities. Key fixes: self-mining contamination guard (stale-sweep now skips headless mining transcripts), RRF/MMR scoring bugs fixed (18-query benchmark measured during release validation: 74.7% → 78.7%), embedding index staleness fixed (incremental upsert + mtime invalidation + cross-process flock), double access-count stores eliminated (telemetry sidecar is now the single store), episode deduplication (one stable-id episode per session). Removed: `compaction.py`, `reaper.py`, attribution pipeline, `storage.py`, 8 dead settings knobs, and `hybrid` injection mode (was documented but never implemented). New CLI: `python3 -m memem.server --purge-contaminated [--apply]`. See [CHANGELOG](CHANGELOG.md) for full details.
+
+### What's new in v2.4.0 (passive mode + episode catalog + telemetry)
+
+v2.4.0 flips the default injection mode from `auto` to `tool`: Claude no longer receives memory context on every prompt automatically. Instead, it pulls memory on demand via `memory_search`, `memory_get`, and `active_memory_slice`. This eliminates ~85% per-turn noise that was masking v2.3.0's ranking improvements. At session start, Claude now receives a `## Episode index` section listing up to 25 episodic memories by title — a clean menu without a full content dump. Every retrieval is logged to `~/.memem/.recall_log.jsonl`; run `python3 -m memem.server --analyze-recalls` to inspect recall patterns. All 5 MCP tool descriptions have been rewritten to be trigger-explicit so Claude knows *when* to call each tool. Existing users with `MEMEM_INJECTION_MODE=auto` in their shell profile are unaffected; see the [CHANGELOG breaking change banner](CHANGELOG.md) to restore old behavior.
+
+### What's new in v2.3.0 (hybrid retrieval)
+
+`active_memory_slice` now uses a two-stage hybrid retrieval pipeline: BM25 + cosine Reciprocal Rank Fusion (RRF) builds a top-20 candidate pool, then Maximal Marginal Relevance (MMR, λ=0.7) selects the final 8 results to suppress near-duplicate memories. Access writeback is on by default (`MEMEM_WRITEBACK_ENABLED=1`); each recall fires a daemon thread that increments `access_count` in a JSON sidecar at `~/.memem/telemetry.json` (NOT in memory frontmatter — deliberate, to keep `load_vault_index`'s mtime cache stable). Net benchmark result: **75.3% precision** (+1.3 pp vs v2.0.0 baseline), 133ms warm latency. Recency decay scoring was prototyped but reverted due to a negative-cosine ranking regression — see CHANGELOG for details.
+
+### What's new in v2.2.0 (episodic seeds)
+
+Two architectural additions targeting the episodic-query gap vs everme. (a) `retrieve.py` parses temporal phrases in queries ("yesterday" / "last week" / "N days ago") and re-ranks candidates by `created:` proximity (+0.2 boost). Zero behavior change for non-temporal queries. (b) `mine_delta.py` emits one per-session "episode" memory after substantive Stop events (tagged `type:episodic`, Haiku-generated 100-word narrative). Benchmark is unchanged at 74% in this release — the gains are forward-looking and accrue as the vault accumulates v2.2.0-shaped episodes. Backward-compat is 100%.
+
+### What's new in v2.1.0 (event-triggered mining)
+
+The miner daemon is gone. `miner_daemon.py`, `miner-wrapper.sh`, `miner_circuit_breaker.py`, `miner_errors.py`, and `miner_protocol.py` (~1,500 LOC) have been deleted. Mining now triggers on every Claude Code Stop event via a detached subprocess.
+
+- **Stop hook** (`hooks/stop-mine.sh`) spawns `mine_delta` as a detached background process on every `Stop` event. Hook overhead is ~50ms; extraction happens in background after the hook returns.
+- **`memem/mine_delta.py`** — new module (~200 LOC): reads the JSONL session file from a byte offset tracked per session, filters to new turns since the last invocation, calls the same Haiku `extract_from_text` function, and marks the session in `~/.memem/.mined_sessions`.
+- **Stale-session sweep** — the `SessionStart` hook now scans for JSONL files older than 10 min that aren't in `.mined_sessions` and spawns up to 3 parallel `mine_delta` processes. Catches sessions where Stop never fired (Claude crash, `kill -9`, network drop).
+- **Per-session flock** — `mine_delta` acquires an `fcntl.flock` on a lock file per session so concurrent Stop events on the same session don't race.
+- **Adaptive empty-streak backoff** — if the last 3 consecutive Stop events yielded zero memories, the next 5 Haiku calls are skipped. Resets on any non-empty result.
+- **Token cost** is ~5–20× higher per session vs v2.0.0's session-end batching (many small Haiku calls instead of one big one), but mining feels real-time — memories appear seconds after each conversation turn.
+- **Extraction quality unchanged** — the same Haiku prompt and `extract_from_text` function from `mining.py` are used. The 18-query benchmark still passes at ≥70% precision.
+
+### What's new in v2.0.0 ("less is more")
+
+BREAKING — schema rebuild from 18 sections → 2 (Working + Relevant). Retrieval pipeline rewritten from ~12,400 LOC to ~210 LOC (POC v3b architecture). Net delete: **87 files, +915 / -19,941 LOC**.
+
+- **NEW `memem/retrieve.py` (~145 LOC) + `memem/render.py` (~65 LOC)** — query → embed → cosine top-K + FTS-conditional supplement for version/date literals, then a 2-section renderer. Pure embedding similarity, no scope filter, no kind classifier, no LLM judge, no daemon.
+- **Slice schema collapsed to 2 sections**: `## Working` (current state) + `## Relevant` (ranked list). The v1.13 schema (Anchors / Episodic / Skills / Cases / Working / Pending) is gone.
+- **`active_memory_slice` MCP tool slimmed** from 8 params to 2 (`query`, `task_mode`). Backward-incompatible.
+- **Deleted (~14,500 LOC)**: 15 memem modules (active_slice*, activation, candidate_generation, kind_classifier, slice_daemon, slice_client, slice_history, delta*, working_memory, boundaries, artifact_context, environment_context), 36 legacy test files, all v1.13 env-var flags (`MEMEM_USE_LLM_JUDGE`, `MEMEM_USE_EMBEDDINGS`, `MEMEM_RENDER_LEGACY`, `MEMEM_LLM_JUDGE_TIMEOUT`, `MEMEM_AUTO_SLICE_DAEMON` — all no-op now).
+- **Preserved**: all 14 MCP tools (same names + return shapes), all 7 CLI flags, mining pipeline, vault format, embedding model + cache.
+- **Benchmark (18 queries × 6 categories)**: 74% precision (vs v1.13's 24% — 3× improvement) | 98ms warm latency (vs v1.13's 675ms — 6× faster) | 24/8 cross-scope hits (lexie/SSH/HFT queries that v1.13 returned 0 results for).
+- **Daemon retired**: `slice_daemon` and `MEMEM_AUTO_SLICE_DAEMON` removed. Retrieval is now in-process via `memem.retrieve`; the hook spawns python directly per prompt. After upgrade run `pkill -f slice_daemon` once to clear any old process.
+- **Hook envelope** now uses tempfile (avoids ARG_MAX on large prompts).
+- **Embedding writes are atomic**: `embeddings.npy` via tmpfile + `os.replace`, `embedding_ids.json` written first so readers never see torn-write or shape mismatch.
+
+### What's new in v1.9.4 (data correctness pass)
+
+Two release pair (v1.9.3 + v1.9.4) targeting silent-corruption paths. All changes are no-ops on the happy path.
+
+- **Atomic writes everywhere** — shared `atomic_write_text` helper (tempfile + fsync + `os.replace`) applied to 5 previously non-atomic data paths (embedding ID map, tournament cache, lesson frontmatter, dreamer output, mined-sessions reset). `MEMEM_FSYNC=0` opts out per-call. Power-loss / NFS-jitter / SIGKILL no longer torn-writes vault data.
+- **WAL on every SQLite DB** — `graph.db` and `search.db` now use `journal_mode=WAL` + `synchronous=NORMAL` + `busy_timeout=5000`, matching `session_state_db.py` since v1.6. Concurrent reads from the slice engine no longer race with miner writes. New `memem --integrity-check` CLI command (also called from `--doctor`) runs `PRAGMA integrity_check` on all three DBs.
+- **Strict frontmatter validation** — files without `---` frontmatter are no longer silently ingested with `schema_version=0`. New `MEMEM_FRONTMATTER_STRICT` env var: `quarantine` (default — move to `~/.memem/quarantine/<hash>_<name>`), `skip` (log + ignore), or `raise`.
+- **Writeback idempotency cache** — `commit_deltas` hashes `(scope_id, dry_run, auto_only, deltas, DELTA_WRITEBACK_VERSION)` on entry; matching hits return cached result with `deduped: True` markers. Cache at `~/.memem/writeback-idempotency.json`. Dry-runs and partial-failure batches are not cached. `force_writeback=True` bypasses the lookup. RMW guarded by `fcntl.flock`.
+- **Daemon-side subprocess-timeout accounting** (v1.9.2) — fixed an infinite-loop where a huge JSONL session would re-queue forever because the daemon's SIGKILL preempted `mine_session`'s in-process timeout cap. Now the daemon itself increments `timeout_failures` and permanently skips after `MEMEM_MAX_SESSION_TIMEOUTS` (default 3).
+
+### What's new in v1.9 (smart injection gating)
+
+Four layered gating heuristics between the `UserPromptSubmit` hook and the active-slice engine, plus a new `MEMEM_INJECTION_MODE` env (`auto` / `hybrid` / `tool`). Hybrid mode reduces hook overhead on trivial turns via: (1) trivial-query regex EN+ZH, (2) per-session turn cadence (`MEMEM_INJECT_CADENCE`, default 2), (3) empty-streak exponential backoff (`MEMEM_EMPTY_STREAK_MAX`, default 8), (4) topic-shift cosine via cached query embedding (`MEMEM_TOPIC_SHIFT_THRESHOLD`, default 0.85). Persistent slice daemon since v1.8 eliminates cold-start cost. See `CLAUDE.md` for the full tunables table.
+
+### What's new in v1.1
+
+- **Layered memory becomes real end-to-end.** Every memory now lives in one of four layers (L0/L1/L2/L3) at save time, not just at mining time. `memory_save` accepts an optional `layer` param (Claude can override) and auto-classifies otherwise. The slice engine pins L0 (project identity) on every prompt and gates L3 (rare archival) behind explicit search.
+- **Slice as universal recall format.** `memory_search`, `memory_get`, `memory_timeline`, `memory_recall`, and `context_assemble` all return slice-formatted output via a single `render_slice_markdown` dispatcher. `context_assemble` composes via `active_memory_slice` rather than rolling its own briefing.
+
+### What's new in v1.0 (miner hardening)
+
+A 16-module refactor closed the entire spawn-storm class of bugs that had previously taken down hosts. The miner now uses `start_new_session=True` + `os.killpg` for process-group cleanup on timeout, an inverted `TransientError`/`PermanentError` taxonomy with `PermanentError` as default, persisted attempt counters with DLQ at MAX_FAILURES, a SIGTERM-drained graceful shutdown, SQLite WAL state storage, a hand-rolled circuit breaker, structured JSON logs with `RotatingFileHandler`, and a 5-in-60s wrapper crash guard.
+
+## When should I use memem?
+
+Use memem if:
+- You use Claude Code daily and keep re-explaining your project to every new session
+- You want durable memory you can browse and edit as markdown
+- You like local-first tools with zero vendor lock-in
+- You already use Obsidian (memem plugs straight into your vault)
+
+## How is memem different from CLAUDE.md?
+
+`CLAUDE.md` is a single hand-edited file per project. memem gives you:
+
+- **Automatic extraction** — no manual note-taking, the miner captures lessons from every completed session
+- **Query-aware context** — only the memories relevant to your current question get injected, not a static dump
+- **Self-evolving** — memories merge, update, and deprecate automatically as your project evolves
+- **Cross-project** — works across every Claude Code project you use, not scoped to one repo
+- **Security scanning** — every write is scanned for prompt injection and credential exfiltration
+- **Browsable** — Obsidian vault with graph view and backlinks for free
+
+## Architecture — slice-first runtime
+
+memem uses layered recall plus a slice-first runtime kernel inspired by [claude-mem](https://github.com/thedotmack/claude-mem) and [mem0](https://mem0.ai). Instead of treating memory as one big briefing, it first turns recall results into an explicit working state:
+
+```
+   Session start / user prompt
+   ┌─────────────────────────────┐
+   │ Candidate generation        │
+   │   • memories / graph        │
+   │   • playbooks               │
+   │   • runtime environment     │
+   │   • current artifacts       │
+   └──────────┬──────────────────┘
+              │
+              ▼
+   ┌─────────────────────────────┐
+   │ Activation judgement        │
+   │   • goals                   │
+   │   • constraints             │
+   │   • decisions / failures    │
+   │   • artifacts / tensions    │
+   └─────────────────────────────┘
+              │
+              ▼
+   ┌─────────────────────────────┐
+   │ Active Memory Slice         │ → rendered markdown working state
+   │ generate_prompt_context()   │    used by hooks, MCP, and CLI
+   └─────────────────────────────┘
+```
+
+The lower-level recall tools still exist for explicit drilling:
+
+1. `memory_search(query)` -> compact index
+2. `memory_get(ids=[...])` -> full content
+3. `memory_timeline(id)` -> chronological thread
+4. `active_memory_slice(query)` -> on-demand working-state slice
+
+**Context model (v2.8+) — three tiers injected at session start:**
+
+| Tier | What | Budget |
+|------|------|--------|
+| **Profiles** | `profile_user.md` + `profile_<project>.md` — always-injected, schema-shaped, populated by the `PROFILE` reconcile op | ≤~600 tokens |
+| **Working rules** | `type:procedural` memories ranked by citation count (last 30d) | ≤~300 tokens |
+| **Episode index** | Up to 25 recent `type:episodic` titles | ~25 entries |
+
+Everything else is available on demand via `memory_search` / `memory_get`. Legacy memories with `layer:` frontmatter are readable; `memory_save(layer=N)` is still accepted but deprecated.
+
+**Active Memory Slice runtime kernel:**
+
+For ongoing work, `active_memory_slice(query, task_mode?)` is the default
+runtime path. It uses `memory_search`/FTS/graph/playbooks/transcripts plus
+runtime environment and current artifacts as candidate generation, then
+activates a structured working state:
+
+```text
+Memory Vault
+→ Candidate Generation
+→ Activation Judgement
+→ Active Memory Slice
+→ Delta Proposals
+→ Memory Vault
+```
+
+The slice explicitly separates goals, constraints, background, decisions,
+preferences, failure patterns, artifacts, open tensions, and candidate deltas.
+If you pass `session_id` together with runtime context such as `task_mode` and
+`repo_path`, memem also carries forward continuity across slices and records
+slice history under `~/.memem/`.
+
+Default runtime behavior is still non-mutating. Delta proposals are validated
+and surfaced in the slice, but safe writeback only runs when you opt in via
+`writeback_preview=True` or `auto_commit_safe=True`.
+
+Opt-in features:
+- **`MEMEM_SHOW_BANNER=1`** — show a one-line status banner at session start (off by default)
+- **`MEMEM_PRETOOL_GATING=1`** — enrich Read tool calls with memories about the target file (off by default)
+
+Injection mode (v1.9+, default changed in v2.4.0) — controls auto-injection behavior:
+- **`MEMEM_INJECTION_MODE`** — `tool` (**default since v2.4.0** — silence hook, LLM pulls via MCP tools), `auto` (pre-v2.4.0 behavior — inject on every prompt). To restore the old default: `export MEMEM_INJECTION_MODE=auto`. Note: `hybrid` was removed in v2.5.0 (was documented but never implemented; treated as `auto`).
+
+Selective recall:
+- **`MEMEM_RECALL_MIN_ITEM_SCORE=0.0`** — per-item composite-score floor for recall results (0.0 = disabled).
+
+Migration note (v2.4.0): if you previously relied on per-turn auto-injection, set `export MEMEM_INJECTION_MODE=auto` in your shell profile. The new `tool` default reduces token overhead ~85% but requires the LLM to pull memory via the MCP tools when it judges context is needed.
+
+## How do I install memem?
+
+Copy-paste:
+
+```bash
+claude plugin marketplace add TT-Wang/memem
+claude plugin install memem@memem-marketplace
+```
+
+If you already added the marketplace once, future installs only need the second command.
+
+Then:
+
+1. restart Claude Code if it was already open
+2. open any project
+3. send your first normal message
+4. memem will show a welcome/status message and offer the mining options
+
+That's it. On first run, `bootstrap.sh` self-heals everything:
+
+1. Verifies Python ≥ 3.11 — or installs it via `uv python install 3.11` if your system Python is too old
+2. Installs `uv` if missing (via the official Astral installer)
+3. Syncs deps into a plugin-local `.venv` (hash-cached against `uv.lock`)
+4. Creates and canary-tests `~/.memem/` and `~/obsidian-brain/`
+5. Writes `~/.memem/.capabilities` (used for degraded-mode decisions)
+6. Execs the real MCP server
+
+**First run:** ~5 seconds. **Every run after:** ~100ms. No separate `pip install` step.
+
+**Nothing mines until you opt in.** memem is strictly opt-in as of v0.9.0 — install does not start the miner or touch your sessions. Type `/memem` to see status and choose what to do next. You can start mining two ways:
+
+- `/memem-mine` — mine **new sessions only** (from now on)
+- `/memem-mine-history` — mine **everything, including past history** (uses Haiku API credits)
+
+Or just tell Claude "start mining new sessions" / "start mining everything including history" — it knows what to do.
+
+### Recommended first-run choice
+
+- choose **`/memem-mine`** if you only want memory from new sessions going forward
+- choose **`/memem-mine-history`** if you want memem to process your old Claude Code sessions too
+
+If you are unsure, start with **`/memem-mine`**. It is the safer and cheaper default.
+
+## What happens on my first Claude Code session?
+
+At session start, the SessionStart hook tries to prime a slice-first working state for the current project scope. On each user prompt, the UserPromptSubmit hook regenerates the slice for the current query. If you just installed memem and have no relevant context yet, the hooks stay quiet and Claude proceeds normally.
+
+You work normally. When each conversation turn completes, the Stop hook spawns `mine_delta` in the background to extract memories from the new turns using Claude Haiku and write them to your vault. No daemon, no 5-minute wait — memories appear seconds after each turn.
+
+**During the session:** in `tool` mode (default since v2.4.0), Claude pulls memory on demand via `memory_search`, `memory_get`, and `active_memory_slice` when context is needed. In `auto` mode (`export MEMEM_INJECTION_MODE=auto`), every user prompt goes through `active_memory_slice` automatically, building a structured working-state briefing from relevant memories, playbooks, transcripts, and graph neighbors.
+
+## 30-Second Setup
+
+```bash
+claude plugin marketplace add TT-Wang/memem
+claude plugin install memem@memem-marketplace
+```
+
+Then in Claude Code:
+
+```text
+/memem
+```
+
+And choose one:
+
+```text
+/memem-mine
+```
+
+or
+
+```text
+/memem-mine-history
+```
+
+## What does memem save?
+
+It saves durable knowledge, not session logs:
+
+- **Architecture decisions** with rationale ("we use RS256 JWTs because HS256 can't be verified by third parties without sharing the secret")
+- **Conventions** ("tests go in `tests/` not `spec/`", "commit messages use imperative mood", "never import from `internal/` outside its package")
+- **Bug fixes you might forget** ("`bcrypt.compare` is async — must `await`", "timezone math must use `dayjs.utc()` or DST shifts the result by an hour")
+- **User preferences** ("prefer single commits, not stacked PRs", "terse responses — no trailing summaries", "ask before running migrations in prod")
+- **Known issues & workarounds** ("`JWT_SECRET` defaults to `'secret'` if unset — tracked in #123", "pnpm install hangs on corporate VPN, use `--network-timeout=600000`")
+- **Environment & tooling facts** ("project uses Poetry, not pip", "CI runs on Node 20 but local defaults to 22 — pin with `nvm use`", "Redis must be running on :6380 not :6379")
+- **Project structure & invariants** ("auth middleware requires Redis", "all DB writes go through `repo/` layer, never raw SQL in handlers")
+- **Failure patterns & post-mortems** ("mocking the DB hid a broken migration last quarter — integration tests must hit a real DB", "don't ship on Fridays after the 2025-11 rollback incident")
+- **Third-party quirks** ("Stripe webhooks retry for 3 days — idempotency key is mandatory", "OpenAI streaming drops the final token if client closes early")
+- **Domain knowledge** ("a 'merchant' in our schema is what the legal team calls a 'counterparty'", "revenue is recognized at ship time, not order time")
+
+It does NOT save:
+
+- Raw session transcripts (those are searchable via `transcript_search`, not stored as memories)
+- Trivial or obvious facts
+- Session outcomes ("today I worked on X")
+
+## Where does memem store my memories?
+
+| Store | Path | Purpose |
+|-------|------|---------|
+| Memories | `~/obsidian-brain/memem/memories/*.md` | Source of truth (human-readable markdown) |
+| Playbooks | `~/obsidian-brain/memem/playbooks/*.md` | Per-project curated briefings |
+| Search DB | `~/.memem/search.db` | SQLite FTS5 index (machine-fast lookup) |
+| Graph DB | `~/.memem/graph.db` | Rebuildable typed/scored memory-edge index |
+| Telemetry | `~/.memem/telemetry.json` | Access tracking (atomic writes) |
+| Event log | `~/.memem/events.jsonl` | Append-only audit trail |
+| Capabilities | `~/.memem/.capabilities` | Degraded-mode flags written by bootstrap |
+| Bootstrap log | `~/.memem/bootstrap.log` | First-run diagnostics |
+
+You can point memem elsewhere via `MEMEM_DIR` and `MEMEM_OBSIDIAN_VAULT` env vars.
+
+## What are the MCP tools Claude can call?
+
+As of v2.9.0, memem exposes **6 MCP tools** (reduced from 14; removed tools are available via CLI or Python library — see note below).
+
+| Tool | Signature | What it does |
+|------|-----------|------|
+| `memory_save` | `content, title?, scope_id?, tags?, layer?(deprecated), paths?` | Store one atomic durable lesson. Security-scanned for prompt injection and credential exfil. Three-band dedup: ≥0.92 rejects as duplicate, 0.70–0.92 merges into existing memory, <0.70 saves new. `layer` is accepted for backward compat but has no effect (deprecated v2.8.0). `paths` is an optional list of file-glob patterns stored as `paths:` frontmatter for path-scoped recall. |
+| `memory_search` | `query, limit?=10, scope_id?="default"` | Compact-index search (~50 tok/result) via three-way RRF (cosine + BM25 + FTS5). Use first to narrow candidates; returns IDs + titles + 1-line snippets. `scope_id` is a soft bonus, not a hard filter. |
+| `memory_get` | `ids, scope_id?="default"` | Full content fetch by IDs (~500 tok/result). Use after `memory_search` when you know which memories you need. `ids` is a list of 8-character ID prefixes. |
+| `memory_timeline` | `memory_id, depth_before?=5, depth_after?=5, scope_id?="default"` | Chronological thread via `related[]` graph + same-project window. Use when you need the narrative around a memory (what led to it, what came after). |
+| `transcript_search` | `query, limit?=5` | Search raw Claude Code session JSONL logs via persistent FTS5 index at `~/.memem/transcript_fts.db` (grep fallback when index is empty). Different corpus from the vault — use for actual back-and-forth conversation lookup. |
+| `active_memory_slice` | `query, task_mode?=None, scope_id?="", paths_context?=None` | Query-shaped working-state slice (~150 ms). Uses three-way RRF + MMR diversification (λ=0.7, top-20 → 8 results). Auto-derives `paths_context` from the current session (v2.9.1) when the caller does not supply it; caller-supplied value takes precedence. Memories whose `paths:` frontmatter globs match `paths_context` receive a 1.05× bonus. |
+
+**Removed in v2.9.0** — 8 tools were removed from the MCP surface; their replacements:
+
+| Removed tool | Replacement |
+|---|---|
+| `memory_recall` | Use `memory_search` then `memory_get` |
+| `memory_list` | CLI: `python3 -m memem.server --compact-index` |
+| `memory_graph` | CLI: `python3 -m memem.server graph neighbors <memory_id>` |
+| `memory_graph_audit` | CLI: `python3 -m memem.server graph audit` |
+| `memory_graph_rebuild` | CLI: `python3 -m memem.server graph rebuild [scope]` |
+| `context_assemble` | CLI: `python3 -m memem.server --assemble-context <query>` |
+| `memory_import` | Python: `memem.operations.memory_import()` |
+| `memory_remind` | Python: `memem.cross_vault.search_across_vaults()` |
+
+### Structured host index (Python, v2.10+)
+
+Agent hosts that already own canonical record identity should use the external-index protocol instead of
+`memory_save`:
+
+```python
+from memem.operations import memory_index_remove, memory_index_upsert
+from memem.retrieve import retrieve
+
+memory_index_upsert(
+    "host:record-123",
+    full_value,
+    primary_index="Parser bounds regression fix",
+    cues=["request boundary", "src/parser.py"],
+    scope_id="host.project:stable-project-id",
+)
+hits = retrieve(
+    "parser validation", scope_id="host.project:stable-project-id",
+    scope_mode="hard", writeback=False,
+)
+memory_index_remove("host:record-123")
+```
+
+`external_id` is stable and bypasses fuzzy merge. The full Markdown value remains readable, while FTS, BM25,
+embeddings, contradiction checks, and graph links index only `primary_index` plus cues. `scope_mode="hard"`
+filters candidates before ranking; the default `"soft"` preserves ordinary Memem cross-project behavior.
+
+## How do I inspect slices or writeback manually?
+
+Use the CLI when you want raw slice JSON, continuity debugging, or explicit
+writeback preview:
+
+```bash
+python3 -m memem.server slice "continue auth rollout" --scope memem --session-id sess-42 --cwd "$PWD" --task-mode coding --json --no-llm
+python3 -m memem.server slice "continue auth rollout" --scope memem --session-id sess-42 --cwd "$PWD" --task-mode coding --writeback-preview --json --no-llm
+python3 -m memem.server slice "continue auth rollout" --scope memem --session-id sess-42 --cwd "$PWD" --task-mode coding --auto-commit-safe --json --no-llm
+```
+
+Semantics:
+- default `slice` is read-side and non-mutating
+- `--writeback-preview` runs the delta pipeline in dry-run mode
+- `--auto-commit-safe` commits only deltas classified as auto-safe
+
+## What slash commands does memem add?
+
+- `/memem` — welcome, status, help
+- `/memem-status` — memory count, projects, search DB size, miner health
+- `/memem-doctor` — preflight health check with fix instructions for any blocker
+- `/memem-mine` — opt in to event-triggered mining (touches `~/.memem/.miner-opted-in`; new sessions mined automatically via the Stop hook)
+- `/memem-mine-history` — opt-in + backfill all pre-install Claude Code sessions
+
+## What if the `claude` CLI isn't on my PATH?
+
+memem enters **degraded mode** — it still works, just without Haiku-powered context assembly and smart recall. You get FTS-only keyword recall instead of query-tailored briefings. Every session shows `[memem] N memories · miner OK · assembly degraded (claude CLI missing — FTS-only recall)` at the top of the context, so you know why.
+
+This is by design: missing optional dependencies should degrade, not fail.
+
+## How do I diagnose problems?
+
+Run `/memem-doctor`. It runs the same preflight the bootstrap shim runs (Python version, `mcp` importable, `claude` CLI on PATH, directory writability, `uv` available) **plus a SQLite integrity check on all three WAL DBs** (v1.9.3+), then prints a report labelled **HEALTHY**, **DEGRADED**, or **FAILING** with explicit fix instructions for each blocker.
+
+For deeper debugging:
+
+```bash
+tail -f ~/.memem/bootstrap.log              # first-run shim log
+cat ~/.memem/events.jsonl                   # memory operation audit trail
+cat ~/.memem/mine_delta.log                 # stop-hook mining log (v2.1.0+)
+python3 -m memem.server --status            # detailed status dump
+python3 -m memem.server --integrity-check   # PRAGMA integrity_check on every DB
+```
+
+## How does the mining pipeline work?
+
+```
+Claude Code Stop event fires → stop-mine.sh hook spawns mine_delta (detached, ~50ms)
+  → mine_delta reads session JSONL from byte offset (new turns only)
+  → Filters to human messages + assistant prose (strips tool calls, system reminders)
+  → One Haiku call with the delta context: "extract durable lessons"
+  → Haiku returns JSON array of memory candidates
+  → Each candidate runs: security scan → dedup check → contradiction detection → save
+  → Offset advanced; session marked in ~/.memem/.mined_sessions
+  → SessionStart stale-sweep catches any sessions where Stop never fired (crash, kill -9)
+```
+
+## How does the recall pipeline work?
+
+```
+First message in a new session → auto-recall.sh hook fires
+  → Reads ~/.memem/.capabilities for status banner
+  → Builds an active memory slice from recall candidates + graph/playbook/transcript context
+  → Emits a structured "Active Memory Slice" prompt block
+  → If the slice engine is unavailable → falls back to compact recall
+  → Either way, Claude starts its reply with active work-state context already loaded
+```
+
+## Architecture
+
+memem is split into small, focused modules:
+
+- `models.py` — data types, path constants
+- `security.py` — prompt injection + credential exfil scanning
+- `telemetry.py` — access tracking, event log (atomic writes, fcntl-locked)
+- `search_index.py` — SQLite FTS5 index
+- `graph_index.py` — typed/scored related-memory graph side index
+- `retrieve.py` — v2.0.0: cosine top-K + FTS-conditional supplement for version/date literals. Mtime-invalidated vault index + embedding caches.
+- `render.py` — v2.0.0: 2-section renderer (`## Working` + `## Relevant`).
+- `obsidian_store.py` — memory I/O, dedup scoring, contradiction detection, layer auto-classification on save
+- `recall.py` — slice-format recall library (`memory_search`/`memory_get`/`memory_timeline`; `memory_recall` still available as a library function) — surgically rewritten in v2.0.0 with inline `_render_recall_markdown` (the legacy `active_slice` renderer is gone)
+- `playbook.py` — per-project playbook grow + refine
+- `assembly.py` — `context_assemble` narrative briefing (used by CLI `--assemble-context`; removed from MCP surface in v2.9.0)
+- `capabilities.py` — runtime feature detection for degraded mode
+- `server.py` — thin MCP entrypoint (FastMCP imported lazily; `storage.py` server-lifecycle helpers folded in v2.5.0)
+- `cli.py` — command dispatcher for non-MCP entrypoints
+- `mining.py` — session mining pipeline (Haiku extraction, `extract_from_text`)
+- `mine_delta.py` — v2.1.0: event-triggered delta miner; reads new turns since last offset, calls `extract_from_text`, marks session complete
+- `session_state.py` / `session_state_db.py` — SQLite WAL state for the miner (auto-migrates from JSONL on first run)
+
+**Multi-signal recall scoring:**
+- 50% FTS relevance
+- 15% recency (0.995^hours decay)
+- 15% access history (usage reinforcement)
+- 20% importance (1-5 scale from Haiku)
+
+**Related-memory graph:**
+
+The Obsidian markdown files remain the source of truth. The `related: [...]`
+frontmatter stays intentionally simple so memories are portable and readable.
+memem also builds `~/.memem/graph.db`, a local SQLite side index with typed,
+scored edges such as `same_topic`, `supports`, `depends_on`, `supersedes`, and
+`contradicts`. Recall uses this graph when available and falls back to the
+Markdown `related` field if the graph has not been built yet.
+
+Useful maintenance commands:
+
+```bash
+memem graph rebuild
+memem graph audit
+memem graph stats
+memem graph neighbors <memory-id>
+```
+
+**Memory schema** (markdown frontmatter):
+```yaml
+---
+id: uuid
+schema_version: 1
+title: "descriptive title"
+project: project-name
+tags: [mined, project-name]
+related: [id1, id2, id3]
+created: 2026-04-13
+updated: 2026-04-13
+source_type: mined | user | import
+source_session: abc12345
+importance: 1-5
+status: active | deprecated
+valid_to:                     # set when deprecated
+contradicts: [id1]            # flagged conflicts
+---
+```
+
+## Configuration
+
+| Env var | Default | Purpose |
+|---------|---------|---------|
+| `MEMEM_DIR` | `~/.memem` | State directory (PID files, search DB, logs) |
+| `MEMEM_OBSIDIAN_VAULT` | `~/obsidian-brain` | Vault location |
+| `MEMEM_EXTRA_SESSION_DIRS` | (none) | Colon-separated extra session dirs to mine |
+| `MEMEM_MINER_SETTLE_SECONDS` | `1800` | (legacy) Settle-window seconds. In v2.1.0 both the Stop hook AND `--mine-all` bypass this gate; retained only for forward-compat with future tooling that may opt into it. |
+| `MEMEM_SKIP_SYNC` | `0` | Bootstrap skips `uv sync` when set to `1` (dev only) |
+
+## Setup Obsidian (optional, recommended)
+
+memem works without Obsidian — it just writes markdown. But Obsidian gives you graph view and backlinks for free:
+
+1. Download: https://obsidian.md (free)
+2. Open `~/obsidian-brain` as a vault
+3. Memories appear in `memem/memories/`, playbooks in `memem/playbooks/`
+4. Use Graph View to see how memories link via the `related` field
+
+## Requirements
+
+- Claude Code
+- Python ≥ 3.11
+- `uv` (auto-installed by bootstrap.sh on first run)
+- `claude` CLI on PATH (optional — required for Haiku-powered assembly; degraded mode works without it)
+
+## Development
+
+```bash
+git clone https://github.com/TT-Wang/memem.git
+cd memem
+pip install -e ".[dev]"
+pytest             # ~391 tests (14 skipped)
+ruff check .       # lint
+mypy memem         # type check
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the PR process and [CHANGELOG.md](CHANGELOG.md) for version history.
+
+## Works great with
+
+- **[forge](https://github.com/TT-Wang/forge)** — Structured planning,
+  parallel execution, and deep validation for Claude Code. memem + forge
+  is the recommended pairing: forge plans and executes multi-file
+  changes, memem remembers what worked across runs. Forge's
+  `memory_save` patterns land in memem's recall index, so next week's
+  run starts with last week's lessons already loaded.
+
+## License
+
+MIT

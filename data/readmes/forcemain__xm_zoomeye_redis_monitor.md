@@ -1,0 +1,32 @@
+# 安装说明
+#>安装依赖
+yum -y install python python-devel python-setuptools
+easy_install --upgrade pip
+pip install --upgrade -r requirements.txt
+
+
+# 高级配置
+#>初始数据
+rm -rf <pwd>/migrations
+rm -rf <pwd>/app/conf/rdsdata.db
+vim app/conf/config.py
+SQLALCHEMY_DATABASE_URI = 'sqlite:///app/conf/rdsdata.db'
+#>数据迁移
+python <pwd>/xmzoomeye-redis db init
+python <pwd>/xmzoomeye-redis db migrate
+python <pwd>/xmzoomeye-redis db upgrade
+#>还原配置
+vim app/conf/config.py
+SQLALCHEMY_DATABASE_URI = 'sqlite:///conf/rdsdata.db'
+#>设置监听
+vim <pwd>/start_service.sh
+(python ${prog_path} runserver -h 0.0.0.0 -p 8081 --threaded -r -D &>/dev/null)&
+说明: -h 表示监听的地址, -p表示监听的端口, 如果无法启动请检查(lsof -i:port)IP或端口是否被占用
+
+# 运行说明
+cd <pwd>/xmzoomeye-redis
+chmod u+x *.sh
+./restart_service.sh
+
+# 测试访问
+curl http://127.0.0.1:8081/

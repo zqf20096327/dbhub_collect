@@ -23,7 +23,7 @@ cd chwezi-dev-engine
 
 On Windows PowerShell, run `./install.ps1 -scope project`. The wrappers expose scope and dry-run options; consult their help before installing. The active catalogue is routed by the [skill index](docs/skill-routing-index.md) and current `SKILL.md` files.
 
-## Skills
+## Capabilities
 
 | Category | Skill groups | Coverage |
 |---|---|---|
@@ -37,6 +37,13 @@ On Windows PowerShell, run `./install.ps1 -scope project`. The wrappers expose s
 | Games and GIS | [`game-development/`](skills/game-development/), [`gis/`](skills/gis/) | Game architecture, production, platform release and live operations; GIS platform and enterprise engineering. |
 
 The catalogue is discovered from active `SKILL.md` files under `skills/` and `00-meta-initialization/`; the root `SKILL.md` supplies the engineering baseline. Browse the [skills](skills/) and [initialisation](00-meta-initialization/) directories for current entries. The [routing index](docs/skill-routing-index.md) distinguishes active routes, aliases, and finance-engine ownership.
+
+The catalogue size below is a checked count surface: the test suite compares it with the files on disk, so update it in the same change that adds or retires a skill.
+
+| Measure | Value |
+|---|---:|
+| Active `SKILL.md` files | 167 |
+| Guardrail maximum | 200 |
 
 ## References
 

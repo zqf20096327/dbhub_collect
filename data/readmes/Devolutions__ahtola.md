@@ -1,0 +1,525 @@
+# Ahtola .NET
+
+An experimental pure managed (C#) port of [Turso](https://turso.tech)’s
+SQLite-compatible database engine, with [ADO.NET](https://learn.microsoft.com/dotnet/framework/data/adonet/) and [EF Core](https://learn.microsoft.com/efcore/) providers.
+
+> ⚠️ **Experimental project.** Ahtola is a research / prototype engine and is
+> **not** production-ready. For production .NET workloads, use the official
+> bindings to the original Turso Rust core at
+> [tursodatabase/turso](https://github.com/tursodatabase/turso).
+
+Ahtola is a C# engine that reads and writes SQLite’s on-disk format directly —
+automatically vibe-ported from Turso’s Rust core, as a fun experiment. It is
+**not** a binding over native SQLite or over any Rust core — no native
+companion, P/Invoke SDK, or Rust toolchain is required to restore, build, pack,
+or run.
+
+- [Install](#install) ([full guide](docs/dotnet-packages.md))
+- [Quick start](#quick-start)
+- [Browser WebAssembly](#browser-webassembly) ([deployment guide](docs/browser-wasm.md))
+- [PowerShell module](#powershell-module) ([full guide](docs/powershell-module.md))
+- [What this is good for](#what-this-is-good-for)
+- [Important limits](#important-limits)
+- [Building from source](#building-from-source)
+
+## Install
+
+```bash
+dotnet add package Devolutions.Ahtola.Data.Sqlite
+# optional EF Core provider (9.x on net8/net9, 10.x on net10):
+dotnet add package Devolutions.Ahtola.EntityFrameworkCore.Sqlite
+# optional Blazor/browser OPFS support:
+dotnet add package Devolutions.Ahtola.Data.Sqlite.Browser
+```
+
+Targets: `net8.0`, `net9.0`, `net10.0`. No `net48` / .NET Framework assets.
+
+| Package | Role | NuGet |
+| --- | --- | --- |
+| `Devolutions.Ahtola.Core` | Managed engine | [nuget.org](https://www.nuget.org/packages/Devolutions.Ahtola.Core) |
+| `Devolutions.Ahtola.Data.Sqlite` | ADO.NET provider + `Microsoft.Data.Sqlite`-compatible facade; embeds `Ahtola.Data` | [nuget.org](https://www.nuget.org/packages/Devolutions.Ahtola.Data.Sqlite) |
+| `Devolutions.Ahtola.Data.Sqlite.Browser` | Blazor/.NET WebAssembly data source with durable OPFS storage | [nuget.org](https://www.nuget.org/packages/Devolutions.Ahtola.Data.Sqlite.Browser) |
+| `Devolutions.Ahtola.EntityFrameworkCore.Sqlite` | EF Core provider (`UseAhtola`) | [nuget.org](https://www.nuget.org/packages/Devolutions.Ahtola.EntityFrameworkCore.Sqlite) |
+
+`Devolutions.Ahtola.Core` flows in transitively via `Devolutions.Ahtola.Data.Sqlite`
+— most consumers never add it directly unless they implement an `IPageCodec`
+or touch `Ahtola.Core.Storage` types directly.
+
+| Layer | Name |
+| --- | --- |
+| NuGet PackageId | `Devolutions.Ahtola.*` |
+| Assemblies | `Devolutions.Ahtola.*` |
+| Namespaces / types | `Ahtola.*` (`AhtolaConnection`, `UseAhtola`, …) |
+| Project folders | `src/Ahtola.*` |
+
+For connection strings, Turso Cloud (direct + managed embedded replica),
+concurrent writes (MVCC), encryption, and EF Core in more depth, see the
+[**.NET packages guide**](docs/dotnet-packages.md).
+
+## Quick start
+
+**SQLite-compatible facade** (drop-in `using` swap from Microsoft.Data.Sqlite):
+
+```csharp
+using Ahtola.Data.Sqlite;
+
+using var connection = new SqliteConnection("Data Source=app.db");
+connection.Open();
+connection.ExecuteNonQuery("CREATE TABLE t(a INTEGER, b TEXT)");
+connection.ExecuteNonQuery("INSERT INTO t VALUES (1, 'hello')");
+
+using var command = connection.CreateCommand();
+command.CommandText = "SELECT a, b FROM t";
+using var reader = command.ExecuteReader();
+while (reader.Read())
+    Console.WriteLine($"{reader.GetInt32(0)} {reader.GetString(1)}");
+```
+
+**Ahtola types** (same package):
+
+```csharp
+using Ahtola;
+
+using var connection = new AhtolaConnection("Data Source=:memory:");
+connection.Open();
+connection.ExecuteNonQuery("CREATE TABLE t(a, b)");
+// AhtolaConnection, AhtolaCommand, AhtolaParameter, AhtolaFactory.Instance, …
+```
+
+**EF Core:**
+
+```csharp
+options.UseAhtola("Data Source=app.db");
+
+// Direct Turso/Hrana:
+options.UseAhtola("Data Source=turso://my-db.turso.io;Auth Token=" + authToken);
+
+// Same server over a persistent Hrana WebSocket (legacy libSQL/sqld):
+options.UseAhtola("Data Source=wss://my-db.turso.io;Auth Token=" + authToken);
+```
+
+## Browser WebAssembly
+
+`Devolutions.Ahtola.Data.Sqlite.Browser` stores local databases in the browser's
+Origin Private File System (OPFS). A dedicated module worker owns synchronous
+OPFS handles while .NET awaits its operations, so the browser event loop is
+never blocked on storage I/O.
+
+```csharp
+using Ahtola.Data.Sqlite.Browser;
+
+await using var dataSource = new AhtolaBrowserDataSource("my-app/main.db");
+await using var connection = await dataSource.OpenConnectionAsync();
+await using var command = connection.CreateCommand();
+command.CommandText = "CREATE TABLE IF NOT EXISTS items(id INTEGER PRIMARY KEY, name TEXT)";
+await command.ExecuteNonQueryAsync();
+```
+
+Browser connections are asynchronous by default: `OpenAsync`,
+`ExecuteReaderAsync`, `ReadAsync`, transaction async methods, `OpenBlobAsync`,
+`BackupDatabaseAsync`, `CloseAsync`, and `DisposeAsync`. The synchronous
+counterparts fail rather than blocking WebAssembly on an incomplete browser
+promise.
+
+Opting into `AhtolaBrowserSynchronousMode.ReadOnlyMirror` additionally allows
+provably read-only statements to run on the synchronous ADO.NET surface. The
+asynchronous open materializes the database into managed memory, so those reads
+never touch OPFS:
+
+```csharp
+await using var dataSource = new AhtolaBrowserDataSource(
+    "my-app/main.db",
+    "my-app",
+    AhtolaBrowserOptions.DefaultSharedBufferSize,
+    readOnly: false,
+    encryption: null,
+    synchronousMode: AhtolaBrowserSynchronousMode.ReadOnlyMirror);
+var connection = await dataSource.OpenSynchronousReadConnectionAsync();
+
+using var query = connection.CreateCommand();
+query.CommandText = "SELECT name FROM items WHERE id = 42";
+var name = (string?)query.ExecuteScalar();   // no OPFS, no worker call
+```
+
+Only `SELECT`, `VALUES`, and `WITH …` whose terminal statement is
+`SELECT`/`VALUES` qualify. Mutations, DDL, `PRAGMA`, `EXPLAIN`, transactions,
+`ATTACH`/`DETACH`, writable CTEs, blobs, backup, and any batch containing an
+unproven statement still require the asynchronous API, because their durability
+depends on an OPFS flush. Synchronous `Close`/`Dispose` are allowed only while
+no mutation is pending; otherwise they fail closed and asynchronous cleanup is
+required.
+
+The host must be a secure context and cross-origin isolated:
+
+```text
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Embedder-Policy: require-corp
+```
+
+The package supplies its worker and JavaScript modules through normal Razor
+static web assets. Browser OPFS files can use the same byte-compatible AHTLA
+AES-GCM format as desktop databases. See
+[docs/browser-wasm.md](docs/browser-wasm.md) for deployment and usage, and
+[docs/browser-encrypted-storage.md](docs/browser-encrypted-storage.md) for the
+encryption/durability design.
+
+### Trimming profile
+
+`Devolutions.Ahtola.Core`, `Devolutions.Ahtola.Data.Sqlite` (which embeds
+`Devolutions.Ahtola.Data`), `Devolutions.Ahtola.Data.Sqlite.Browser`, and
+`Devolutions.Ahtola.EntityFrameworkCore.Sqlite` all build with
+`IsTrimmable`/`IsAotCompatible` and no trim-warning suppression.
+
+| Stack | Trim status |
+| --- | --- |
+| Core ADO (`…Data.Sqlite` → `…Core`), desktop | **Trim- and NativeAOT-clean.** Zero `IL2xxx`/`IL3xxx` warnings across the closure under ILLink and ILC, and the published binary is executed by the gate. |
+| Browser + core ADO (`…Data.Sqlite.Browser` → `…Data.Sqlite` → `…Core`) | **Trim-clean.** A browser publish with `-p:SuppressTrimAnalysisWarnings=false -p:TrimmerSingleWarn=false` reports zero `IL2xxx`/`IL3xxx` warnings across the whole closure. |
+| Anything adding `…EntityFrameworkCore.Sqlite` | Zero warnings originate in Ahtola, but EF Core is annotated `RequiresUnreferencedCode`/`RequiresDynamicCode` upstream, so the published app still reports EF's own warnings. An EF profile is only trim-clean once that upstream chain is warning-free. |
+
+Both are gated by `./build.ps1 validate-browser-trim` (browser profiles) and
+`./build.ps1 validate-trim` (browser plus the desktop trimmed and NativeAOT
+publishes).
+
+Common connection-string keywords: `Data Source`, `Mode`, `Cache`, `Pooling`,
+`Foreign Keys`, `Recursive Triggers`, `Default Timeout` / `Command Timeout`, `Foreign Read Only`,
+`DateTimeKind`, `BinaryGUID`, or `Encryption Cipher` + `Encryption Key` (hex
+AES-GCM or AEGIS keys). Turso/Hrana URLs
+also accept `Auth Token`, `Replica Path`, `Sync Interval`, `Read Your Writes`,
+and `Tls` through either ADO.NET facade. Default local provider is managed-only.
+
+### Standard SQLite files
+
+Managed open of **unencrypted** SQLite databases created by System.Data.SQLite /
+Microsoft.Data.Sqlite / native sqlite3 is supported (`Data Source=path` only;
+no special flags). Ahtola is byte-compatible with the on-disk format for normal
+read/write workloads.
+
+### File encryption (not SEE / SQLCipher)
+
+Encryption uses Turso-compatible raw keys:
+
+| Layer | Role | Extension point |
+| --- | --- | --- |
+| **Built-in AHTLA page crypto** | On-disk AES-GCM or AEGIS pages (`AHTLA` header) | `AhtolaEncryptionOptions` / `Encryption Cipher` + `Encryption Key` |
+| **External page codec** | Entirely different page layout | `IPageCodec` (mutually exclusive with built-in encryption) |
+
+| Connection string | Notes |
+| --- | --- |
+| `Encryption Cipher=Aes256Gcm; Encryption Key=<64 hex chars>` | Exact 32-byte raw key |
+| `Encryption Cipher=Aes128Gcm; Encryption Key=<32 hex chars>` | Exact 16-byte raw key |
+
+Like Turso, Ahtola performs no password-based key derivation. `Password` and
+`Password Scheme` are unsupported. Legacy SEE/SQLCipher files require a
+dedicated `IPageCodec` or export/recreation under Ahtola encryption or plain
+SQLite. Wrong or missing keys include the phrase
+`file is encrypted or is not a database`.
+
+## PowerShell module
+
+`Devolutions.Ahtola.Sqlite` is a binary PowerShell module that exposes the
+Ahtola engine through `*-AhtolaSqlite*` cmdlets. Its implementation is ported
+from synedgy.PSSqlite and re-backed onto `Ahtola.Data.Sqlite` instead of
+Microsoft.Data.Sqlite / SQLitePCLRaw — so importing it pulls in **no native
+SQLite assets**. The
+public command noun is `AhtolaSqlite` to avoid collisions with other SQLite
+PowerShell modules.
+
+Requires PowerShell **7.4+**. Windows PowerShell 5.1 is not supported.
+
+### Getting the module
+
+Install it from the [PowerShell Gallery](https://www.powershellgallery.com/packages/Devolutions.Ahtola.Sqlite):
+
+```powershell
+Install-Module -Name Devolutions.Ahtola.Sqlite -Scope CurrentUser
+```
+
+Then import it from anywhere pwsh 7 runs — no native SQLite binary, no .NET SDK
+needed at import time:
+
+```powershell
+Import-Module Devolutions.Ahtola.Sqlite
+Get-Command -Module Devolutions.Ahtola.Sqlite
+```
+
+Model types are available as module-qualified type accelerators, e.g.
+`[Devolutions.Ahtola.Sqlite.SqliteDBConfig]`.
+
+### Cmdlets
+
+| Cmdlet | Purpose |
+| --- | --- |
+| `New-AhtolaSqliteConnection` / `Test-AhtolaSqliteConnection` / `Close-AhtolaSqliteConnection` / `Clear-AhtolaSqliteConnectionPool` | Open, test, close/dispose, and explicitly clear managed connection pools |
+| `Invoke-AhtolaSqliteQuery` | Run parameterized SQL; emits `PSCustomObject` rows by default and supports scalar, non-query, `DataTable`, `DataSet`, and detached-reader modes |
+| `Start-AhtolaSqliteTransaction` / `Save-AhtolaSqliteTransaction` / `Complete-AhtolaSqliteTransaction` / `Undo-AhtolaSqliteTransaction` | Start, save, commit/release, or roll back managed transactions and savepoints |
+| `Invoke-AhtolaSqliteBulkCopy` | Insert pipeline objects, dictionaries, or `DataRow` values in an all-or-nothing transaction |
+| `Backup-AhtolaSqliteDatabase` | Copy one managed SQLite database into a distinct destination connection |
+| `Get-AhtolaSqliteSchema` / `Get-AhtolaSqliteTable` / `Get-AhtolaSqliteIndex` / `Get-AhtolaSqliteDatabaseInfo` | Inspect provider schema, database objects, and database page/journal information |
+| `Test-AhtolaSqliteIntegrity` / `Optimize-AhtolaSqliteDatabase` / `Checkpoint-AhtolaSqliteDatabase` / `Invoke-AhtolaSqliteMaintenance` | Run focused integrity, optimization, WAL checkpoint, and constrained maintenance operations |
+| `Export-AhtolaSqliteTable` / `Import-AhtolaSqliteTable` | Move table data as portable JSON or CSV; this is distinct from a database backup |
+| `Get-AhtolaSqliteRow` / `New-AhtolaSqliteRow` / `Set-AhtolaSqliteRow` / `Remove-AhtolaSqliteRow` | CRUD driven by a programmatically constructed `SQLiteDBConfig` + `-Table` (+ `-Values` / `-Where`); update/delete emit affected-row counts |
+| `Get-AhtolaSqliteDatabaseMetadata` / `Compare-AhtolaSqliteDatabaseVersion` | Read stored metadata; compare deployed vs expected configuration version |
+
+`New-AhtolaSqliteConnection` returns an open connection. Every cmdlet that
+receives `-Connection` may open a closed connection but never closes or
+disposes it. Configuration-driven CRUD creates and disposes its own temporary
+connection only when `-Connection` is omitted. `-SqliteConnection`,
+`-SqliteDBConfig`, `-TableName`, `-RowData`, and `-ClauseData` remain
+compatibility aliases; use `-Connection`, `-Configuration`, `-Table`,
+`-Values`, and `-Where` in new scripts.
+
+`Invoke-AhtolaSqliteQuery` and the `Get-AhtolaSqliteRow` family support
+`-As DataTable | DetachedDataReader | DataSet | OrderedDictionary |
+PSCustomObject`; `Invoke-AhtolaSqliteQuery` additionally supports `Scalar` and
+`NonQuery`. `DataReader` remains a compatibility alias for
+`DetachedDataReader`: it is a materialized snapshot, not a live streaming
+reader.
+
+Bulk imports fail and roll back their own transaction on the first conflicting
+row. When passed a caller-owned transaction, the cmdlet uses a savepoint and
+rolls back only that bulk operation.
+
+### Example
+
+```powershell
+# Ad hoc query and default PowerShell-object output
+$connection = New-AhtolaSqliteConnection -ConnectionString 'Data Source=:memory:'
+Invoke-AhtolaSqliteQuery -Connection $connection `
+    -CommandText 'SELECT id, name FROM t WHERE name = $name' `
+    -Parameters @{ '$name' = 'b' }
+
+$transaction = Start-AhtolaSqliteTransaction -Connection $connection
+Invoke-AhtolaSqliteQuery -Connection $connection -Transaction $transaction `
+    -CommandText 'UPDATE Items SET Name = $name WHERE Id = $id' `
+    -Parameters @{ '$name' = 'updated'; '$id' = 1 } -As NonQuery
+Complete-AhtolaSqliteTransaction -Transaction $transaction
+
+# Portable table export/import infers JSON or CSV from the file extension.
+Export-AhtolaSqliteTable -Connection $connection -Table Items -Path ./items.json
+Import-AhtolaSqliteTable -Connection $connection -Table Items -Path ./items.csv
+$connection | Close-AhtolaSqliteConnection -ClearPool
+```
+
+If you'd rather call the ADO.NET provider from a plain script module instead of
+using these cmdlets, see [samples/PSSqlite.Managed](samples/PSSqlite.Managed).
+
+For a deeper cmdlet reference plus worked walkthroughs — a local SQLite file,
+local concurrent writes with MVCC/`BEGIN CONCURRENT`, a direct Turso Cloud
+connection, and a managed embedded replica — see
+[docs/powershell-module.md](docs/powershell-module.md).
+
+## What this is good for
+
+- Fully managed local SQLite-format databases with **no native assets**
+- Small-to-moderate workloads, in-process embedding, constrained deployment
+- A familiar ADO.NET / MDS-shaped API and an EF Core provider
+
+## Important limits
+
+Treat Ahtola as SQLite-*compatible*, not a full SQLite replacement:
+
+- **Working set** — base-table rows and several intermediates still stay in the
+  process heap. Sorters, compiled equijoin build sides, DISTINCT/compound keyed
+  sets, buffered window partitions, recursive-worktable frontiers, and ephemeral
+  tables bound retained rows to the `cache_size`-derived execution budget and
+  spill deterministic runs/partitions through the managed temporary file
+  system; skewed hash partitions fall back to bounded scans. With
+  `temp_store=MEMORY`, exceeding that finite budget fails instead of moving the
+  same data into a heap-backed temporary file. The evaluator's nested-loop join
+  materializes both sides as the query result by design, so it is not a spill
+  candidate (an architectural property of the evaluator, not a missing spill
+  path); an aggregate's own accumulator is a single bounded value per group.
+  Buffered-window input, its offset index, large row-dependent function inputs,
+  and its drained output can spill, but the window evaluator's partition
+  metadata, smaller retained function inputs, and computed result scratch are
+  not yet fully bounded by the execution ledger;
+  `WindowEvaluatorMemoryUnbounded` makes that limitation explicit.
+  Prefer modest databases
+  and explicit transactions for writes (managed writes are slower than native
+  SQLite and the gap grows with table size).
+- **Planner** — `ANALYZE` / `sqlite_stat1` and validated `sqlite_stat4`
+  histograms feed index scoring, System-R DP join reordering for up to twelve
+  freely reorderable INNER members (deterministic greedy planning through
+  SQLite's 64-table limit above that), hash-build selection,
+  costed multi-index AND intersections, and transient automatic covering
+  indexes. Eligible committed, transaction-local, and MVCC joins/scans seek
+  durable SQLite index b-trees directly, including partial and expression
+  indexes and `WITHOUT ROWID` primary/secondary indexes. Transaction and MVCC
+  paths merge their own ordered mutation/version overlays with a pinned pager
+  snapshot instead of rebuilding the index. Registered custom collations are
+  supported by secondary indexes and stay connection-bound; callback changes
+  are revalidated and require `REINDEX` when physical order changes.
+  Custom-collated `WITHOUT ROWID` primary keys and unsupported range shapes
+  retain deterministic fallbacks or fail closed. OUTER/NATURAL/USING barriers
+  remain correctness-preserving. Prefer `ORDER BY` when order matters
+  (`GROUP BY` is first-encounter order).
+- **File-backed platforms** — desktop physical files support Windows, 64-bit
+  Linux, and macOS. Browser WebAssembly uses the separate OPFS package and its
+  asynchronous data source (with an opt-in synchronous read-mirror profile, see
+  [docs/browser-wasm.md](docs/browser-wasm.md)); in-memory works everywhere.
+  Other platforms (e.g.
+  32-bit Linux) throw `PlatformNotSupportedException` on physical open. macOS uses POSIX
+  `fcntl(F_SETLK)` (process-associated locks, not Linux OFD); multi-engine
+  claims on macOS need host verification.
+- **Multi-engine files (Stage 6)** — physical opens use SQLite main-file SHARED
+  locking (Windows / 64-bit Linux / macOS). Managed and stock SQLite can share
+  the same live WAL database on Windows/Linux (`-shm` DMS + peer WAL visibility
+  on new statements). Ordinary closes retain `-shm` so a later read-only open
+  can coordinate without mutating storage. On Windows/Linux, an explicit
+  transition to `locking_mode=EXCLUSIVE` removes the carrier only after an
+  exclusive DMS proof, keeps the main-file lock, and uses a private heap
+  WAL-index. macOS keeps the carrier and rejects physical EXCLUSIVE mode because
+  process-owned `fcntl` locks cannot distinguish an in-process foreign mapping.
+  Pooling may retain managed handles
+  until `Pooling=False` or `SqliteConnection.ClearAllPools()`. A Turso binary
+  differential remains optional qualification. See
+  [docs/wal-interoperability-contract.md](docs/wal-interoperability-contract.md).
+- **Foreign read-only** — `Mode=ReadOnly;Foreign Read Only=True;Pooling=False`
+  can read a DB still held by native SQLite/Turso (e.g. winget `index.db`) without
+  taking main-file locks.
+- **MVCC** — process-local `PRAGMA journal_mode=mvcc` + `BEGIN CONCURRENT` with
+  generation-scoped schema/table identities, typed rowid/composite-key lazy
+  base/version cursors, a sorted secondary-index overlay, a durable logical log,
+  and a crash-ordered page-WAL checkpoint state machine
+  (`PRAGMA wal_checkpoint` in MVCC mode). Checkpoint GC honors each reader's
+  pinned materialization generation, and recovery watermarks advance the
+  logical clock after interrupted log retirement. It is not cross-process;
+  schema publication fails busy while a peer concurrent snapshot is active.
+  See [docs/mvcc-port-contract.md](docs/mvcc-port-contract.md).
+- **Managed virtual-table subset** — statically registered `fts5`, `rtree`, and
+  `rtree_i32` modules persist module-owned state in the managed catalog. R-Tree
+  covers SQLite's 1–5D declarations, `+aux` columns (100 total columns),
+  float32 outward rounding/int32 conversion, conflict-aware DML, spatial plans,
+  transactions, metadata, and integrity helpers. Direct scans and lifecycle
+  callbacks execute through resumable `V*` bytecode; built-in table-valued
+  functions share the same planner/cursor contract and stream bounded series.
+  Native geometry callbacks and
+  SQLite `%_node`/`%_parent`/`%_rowid` file interoperability remain out of scope;
+  foreign shadow layouts fail closed. FTS5 storage is likewise not a portable
+  shadow-table representation. See
+  [docs/managed-vtab-fts-rtree-integration.md](docs/managed-vtab-fts-rtree-integration.md).
+- **Turso full-text search** — `CREATE INDEX … USING fts` with `fts_match`,
+  `fts_score`, `fts_highlight`, `MATCH` and `OPTIMIZE INDEX`, Tantivy-exact
+  tokenizers over a pinned Unicode table, incremental maintenance, and join-arm
+  planning, on the desktop and in the browser (Turso's own WebAssembly builds omit
+  FTS). Postings are derived state rebuilt on open, not a Tantivy file layout. See
+  [docs/managed-index-methods.md](docs/managed-index-methods.md).
+- **SQL CDC** — `PRAGMA capture_data_changes_conn` implements Turso v0.7.2's
+  per-connection V1/V2 CDC tables and transactional COMMIT records. It is
+  independent of the managed replica's private journal and does not provide a
+  full sync engine or logical-replication replay.
+- **Partial replica bootstrap** — `AhtolaPartialBootstrapOptions.Prefix(...)` and
+  `QueryPages(...)` install a sparse image plus a durable page-state sidecar and
+  fault missing pages from the pinned bootstrap revision. `QueryPages` sends
+  Turso's `server_query_selector` (tag 7) on one unchunked request and therefore
+  **requires a remote that implements query selection** — Turso's vendored dev
+  server ignores tag 7 by design and returns the whole database instead. The
+  sidecar stores materialized pages as a run list, so a worst-case scattered
+  query result costs one run per page. Neither kind can be combined with remote
+  encryption, and `QueryPages` cannot be combined with `PullBytesThreshold`.
+  A fresh MVCC-logical bootstrap is not exposable until its mandatory logical
+  catch-up is durably marked complete; a crash in between is detected and the
+  catch-up resumed on the next open. See
+  [docs/replica-bootstrap-publication.md](docs/replica-bootstrap-publication.md).
+- **Managed replica sync** — physical-page and MVCC-logical protocols are
+  detected and persisted explicitly. `SyncAsync` pushes first, waits for remote
+  changes without closing sibling hosts, then applies one-shot staged changes
+  under the publication and cross-process leases. Local journal advancement is
+  rebased without another network pull; genuinely stale remote bases retry with
+  a bound. Page replacement retains crash-safe revert evidence; protected
+  snapshots can reuse a SHA-pinned full-image history root across generations
+  and store sparse original/committed revert segments. Pulls request
+  raw pages explicitly and reject zstd responses because no approved
+  pure-managed, trim-safe zstd implementation is shipped.
+- **Not implemented** — loadable extensions, raw `sqlite3*` handles (`Handle`
+  is null), zstd-compressed replica page sets, and general typed-value semantics.
+  The core-only `EmbeddedConnection.ExperimentalCustomTypesEnabled` opt-in
+  allows `CREATE TYPE name BASE INTEGER` (identity types) and
+  `CREATE DOMAIN name AS INTEGER` with DEFAULT, NOT NULL and CHECK clauses to
+  persist definitions in `__turso_internal_types`. Definitions survive reopen,
+  participate in transactions and advance the schema cookie. **INTEGER-based
+  DOMAIN columns** and identity `TYPE name BASE INTEGER` columns are supported
+  only in STRICT tables. Domain writes apply INTEGER affinity and inherited
+  DEFAULT/NOT NULL/CHECK constraints; identity TYPE columns use INTEGER
+  affinity and declared column constraints without an encode/decode expression.
+  `CAST(value AS identity_type)` preserves the input storage value.
+  Reads use the primitive INTEGER storage class. Both retain their type
+  metadata through reopen, transactions, and savepoints; compiled DML
+  falls back to the validating evaluator while the type registry is present.
+  Domain CHECK remains enforced even when `ignore_check_constraints` disables
+  ordinary table CHECKs.
+  Non-STRICT custom columns, generated/custom-primary-key columns, and
+  ALTER TABLE on typed tables fail closed. Domain DEFAULT is
+  limited to constant INTEGER expressions and CHECK to literal/value unary
+  and binary expressions; unsupported expressions are rejected at declaration.
+  Non-identity TYPE bodies, non-INTEGER bases, DROP TYPE/DOMAIN and domain or
+  non-identity typed casts are not supported. The opt-in is not exposed through
+  the ADO.NET connection string.
+  The bounded asynchronous catalog scan fails closed for databases containing
+  type definitions until that reader can resolve their metadata.
+  `CREATE SEQUENCE` / `DROP SEQUENCE` and the `nextval` / `currval` / `setval`
+  functions are supported as a Turso-compatible extension: sequences persist a
+  backing table whose watermark row is ordinary transactional state (a rolled-back
+  allocation can be re-emitted), and `currval` is per-connection session state.
+  The sqlean-compatible `time_*` / `dur_*` family (13-byte time blob, nanosecond
+  precision, `time_date`/`time_get*`/`time_unix`/`time_add`/`time_trunc`/
+  `time_round`/`time_fmt_*`/`time_parse`) and the built-in regexp family
+  (`regexp`, `regexp_like`, `regexp_substr`, `regexp_replace`, `regexp_capture`,
+  plus the `X REGEXP Y` operator without user registration) match the pinned
+  Turso corpus.
+  `DELETE`/`UPDATE ... ORDER BY`/`LIMIT`/`OFFSET` are supported as a
+  deliberate extension (the SQLite `SQLITE_ENABLE_UPDATE_DELETE_LIMIT` build
+  option); the upstream conformance corpus pins the default-build rejection,
+  which is recorded as an intentional expected-failure.
+  `EXPLAIN QUERY PLAN FORMAT=JSON` emits one `plan_json` row with the
+  machine-readable envelope from Turso's `docs/eqp-json.md`. The inner
+  statement's result columns (including DML `RETURNING`) and several
+  structured per-node `op` variants are modeled, including virtual-table
+  scans, selected managed index methods, compiled two-table join scans/seeks,
+  and proven materialized three-table hash prefixes. Other plan shapes still
+  carry explicit `unmodeled` operations or no nodes when no access path is proven
+  (for example, an unmodeled view). Built-in `get_byte`/`set_byte`
+  (PostgreSQL-compatible byte access) and `json_object(*)`/`jsonb_object(*)`
+  (one label/value pair per FROM-row column) match the pinned Turso corpus.
+- **Native / Sync companions** — not shipped. Connection-string paths that need
+  them fail closed. OS P/Invoke in the pager for locks/WAL is intentional engine
+  code, not a Rust SDK binding.
+- **Remote Hrana** — optional pure-managed transports on `AhtolaConnection`:
+  the HTTP pipeline (`/v3/pipeline` + `/v3/cursor`, with `/v2/pipeline`
+  fallback) for `http`/`https`/`libsql`/`turso` URLs, and a persistent
+  WebSocket connection for `ws`/`wss` URLs (hrana3/hrana2/hrana1 subprotocol
+  negotiation, multiplexed request ids, v3 cursor paging). The WebSocket
+  transport targets legacy libSQL/sqld servers; the pinned Turso engine has no
+  native Hrana WebSocket server. Tests use canned servers. Not a cloud product
+  surface.
+
+Encryption format v0 uses a fixed 5-byte magic `AHTLA`, then version and cipher
+id (AES-GCM page AEAD).
+
+## Building from source
+
+Requires the .NET SDK and PowerShell 7+:
+
+```powershell
+./build.ps1 build
+./build.ps1 test
+./build.ps1 test-coverage     # managed suite + per-assembly coverage ratchet
+./build.ps1 pack              # -> ./artifacts/managed-packages
+./build.ps1 pack-powershell   # -> ./artifacts/powershell-modules
+./build.ps1 validate-runtime  # packed consumer trim + NativeAOT publish
+./build.ps1 validate-browser-trim  # browser trim analysis (ADO-only must be warning-free)
+./build.ps1 validate-trim          # browser + desktop trimmed/NativeAOT trim analysis
+./build.ps1 benchmark -BenchmarkProfile write-short
+```
+
+Contributor details — the full task list, validation gates, conformance suite,
+repo layout, and [managed testing capabilities](docs/testing-capabilities.md)
+live in [AGENTS.md](AGENTS.md) and [docs/](docs).
+
+The consolidated [performance suite](src/Benchmarks/README.md) ports applicable
+workloads from the pinned Turso benchmark corpus, compares managed Ahtola with
+Microsoft.Data.Sqlite, and supports historical Ahtola regression reports.
+
+## License
+
+MIT — see [LICENSE](LICENSE).

@@ -1,0 +1,542 @@
+# AGY Memory Engine (v2.4.0)
+
+> Hardening branch: see [runtime setup and audit coverage](HARDENING.md). Automatic extraction now requires an explicitly configured tool-free chat-completions endpoint. It no longer launches an unrestricted AGY agent. Failed extraction retains pending turns. Schema upgrades run on first engine access; restart all clients together for rollout.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Tests: 229/229 Passing](https://img.shields.io/badge/Tests-229%2F229%20Passed-brightgreen.svg)]()
+
+> Lightweight, high-performance, standalone dynamic cognitive memory layer for Google Antigravity (`agy`) and autonomous agent frameworks.
+
+Inspired by Hermes Agent's multi-pillar memory architecture, using SQLite FTS5 for ultra-fast local retrieval (<2ms), multilingual compound sub-token decomposition & morphological stemming (DE, EN, FR, IT, ES, NL, SV), relational entity linking, and autonomous background queue workers with calm-memory session debouncing.
+
+---
+
+## 📑 Table of Contents
+
+- [The Big Picture: Autonomous Omni-Channel Stack](#-the-big-picture-autonomous-omni-channel-stack)
+- [The 4-Layer Cognitive Memory Model](#️-the-4-layer-cognitive-memory-model)
+- [Evolution: From Pure Tokenizer to In-Process Hybrid Search](#-evolution-from-pure-tokenizer-to-in-process-hybrid-search)
+- [5-Minute Quickstart Guide for Newbies](#-5-minute-quickstart-guide-for-newbies)
+- [CLI Reference & Quick Commands](#-cli-reference--quick-commands)
+- [Model Context Protocol (MCP) Server](#-model-context-protocol-mcp-server)
+- [Seamless Integration with Antigravity Telegram Bot](#-seamless-integration-with-antigravity-telegram-bot)
+- [Configuration (`.env`)](#️-configuration-env)
+- [Real-Time Debug Web Dashboard](#-real-time-debug-web-dashboard)
+- [Autonomous Background Pipeline (Cron & Lifecycle Hooks)](#-autonomous-background-pipeline-cron--lifecycle-hooks)
+- [Testing](#-testing)
+- [Release Notes](#-release-notes)
+- [Roadmap](#️-roadmap)
+- [License](#-license)
+
+---
+
+## 🧩 The Big Picture: Autonomous Omni-Channel Stack
+
+`agy-memory-engine` acts as the persistent semantic backbone across all client interfaces (Telegram, Terminal CLI, Web Cockpit, IDE):
+
+```text
+                  ┌────────────────────────────────────────────────────────┐
+                  │    Omni-Channel Interfaces (Telegram, CLI, Web, IDE)   │
+                  └───────────────────────────┬────────────────────────────┘
+                                              │
+                                              ▼
+                    ┌────────────────────────────────────────────────────┐
+                    │       Global AGY Stop-Hook (hooks.json)            │
+                    │   • Enqueues turn in < 1ms to turn_queue.db        │
+                    │   • Zero latency impact on active conversations    │
+                    └─────────────────────────┬──────────────────────────┘
+                                              │
+                                              ▼ (5m Idle OR 15m Timeout)
+                    ┌────────────────────────────────────────────────────┐
+                    │      Calm Memory Worker (memory_worker.py)         │
+                    │   • Batches full conversation into 1 LLM pass      │
+                    │   • Single consolidated Telegram status update     │
+                    │   • Loop prevention (AGY_INTERNAL_INVOCATION=1)    │
+                    └─────────────────────────┬──────────────────────────┘
+                                              │
+                                              ▼
+                    ┌────────────────────────────────────────────────────┐
+                    │     4-Layer Cognitive Memory (~/.gemini/memory.db) │
+                    │   • Layer 1: Atomic Facts (memories)               │
+                    │   • Layer 2: Narrative Episodes (episodes)         │
+                    │   • Layer 3: Experiential Learnings (learnings)    │
+                    │   • Layer 4: Relational Entity Graph (links)       │
+                    └────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🏛️ The 4-Layer Cognitive Memory Model
+
+```text
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    ~/.gemini/memory.db                                      │
+├───────────────────┬────────────────────────────┬────────────────────────────┬───────────────┤
+│ Layer 1: Facts    │ Layer 2: Narrative Dossiers│ Layer 3: Learnings         │ Layer 4: Graph│
+│   (`memories`)    │        (`episodes`)        │       (`learnings`)        │(`entity_links`)
+├───────────────────┼────────────────────────────┼────────────────────────────┼───────────────┤
+│ - Server IPs/ports│ - Background histories     │ - Rules of thumb, lessons  │ - Directional │
+│ - Hardware specs  │ - Stances & sentiment      │ - Tested heuristics        │   relations   │
+│ - Master data     │ - Lifecycle status decay   │ - Contextual guidelines    │   (hosted_on, │
+│ - Exact BM25 match│   (active->cooling->past)  │ - Decision rationale       │    owns, etc.)│
+└───────────────────┴────────────────────────────┴────────────────────────────┴───────────────┘
+```
+
+---
+
+## 🔍 Evolution: From Pure Tokenizer to In-Process Hybrid Search
+ 
+In version 2.0/2.1, `agy-memory-engine` deliberately avoided external, resource-heavy vector databases (such as Chroma, Milvus, or Qdrant) and PyTorch bloat (~500MB RAM, 150ms latency) to stay ultra-lightweight.
+ 
+**The limitation of pure keyword / FTS5 search:**
+Pure FTS5 struggles with *vocabulary mismatch*: If a user asks in everyday conversational language about *"preventing data loss during disk cleanup"*, while the database stores the heuristic *"Deletions of any kind require explicit approval (deletion protection)"*, pure FTS5 keyword matching returns exactly **0 results**.
+ 
+**The solution starting in v2.2.0: In-Process Hybrid Search (sqlite-vec + FastEmbed)**
+Instead of introducing a heavy server backend, v2.2.0 combines the best of both worlds:
+1. **Ultra-fast CLI Prefetch (< 2ms):** The synchronous pre-invocation hook remains unchanged on pure FTS5 + trigram decomposition for compound words — zero perceptible latency in chat.
+2. **In-Process Vector Extension (`sqlite-vec`):** Runs natively in C directly inside the SQLite process (SIMD-accelerated, zero daemon, zero network hop).
+3. **Lightweight Local Embeddings (`fastembed`):** Powered by ONNX Runtime with `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` (384 dimensions, ~9ms inference time, outstanding multilingual semantics).
+4. **Reciprocal Rank Fusion (RRF):** Mathematically blends BM25 results (100% precision for IPs, IDs, exact names) and vector distance (understanding vague concepts and synonyms).
+5. **Automatic Synchronization:** Background workers (`memory_worker.py`) and MCP storage tools index vectors transparently in the background; SQLite cascade triggers handle deletions automatically.
+
+---
+
+## ⚡ 5-Minute Quickstart Guide for Newbies
+
+Get up and running from zero to autonomous memory in 5 minutes.
+
+### 1. Prerequisites & Installation
+
+Clone the repository and install the lightweight Python dependencies (no PyTorch, no heavyweight vector DBs needed):
+
+```bash
+git clone https://github.com/HydStAn/agy-memory-engine.git
+cd agy-memory-engine
+
+# Optional: set up your environment configuration
+cp .env.example .env
+```
+
+The database (`~/.gemini/memory.db`) will be automatically initialized with all FTS5 virtual tables on first run!
+
+---
+
+### 2. See Instant Results in the Web Dashboard
+
+The easiest way to see what's happening and test queries is the built-in live dashboard:
+
+```bash
+# Start the web UI on port 8085
+python3 agy_memory.py ui --port 8085
+```
+Open **`http://localhost:8085`** in your browser. You can:
+* Test hybrid multilingual searches in real-time with sub-millisecond metrics.
+* Visually browse Facts, Episodes, Learnings, and Graph Links.
+* Monitor pending debounced background tasks.
+
+---
+
+### 3. Add Your First Memories via CLI
+
+You can seed your agent's memory directly from the terminal:
+
+```bash
+# 1. Add an atomic fact (Layer 1)
+python3 agy_memory.py add --id "infra.server.ip" --category "infra" --fact "Home server IP is 192.168.1.100" --keywords "home server ip host"
+
+# 2. Add a personal learning / heuristic (Layer 3)
+python3 agy_memory.py add-learning --id "workflow.email.style" --category "communication" --insight "Keep email replies strictly under 3 bullet points." --keywords "email communication reply rule"
+
+# 3. Test sub-millisecond prefetch (< 2ms)
+python3 agy_memory.py prefetch "server"
+```
+
+---
+
+### 4. Hook it up to your Agent (AGY / Claude Code)
+
+#### Option A: Native MCP Integration (Works with Claude Code, Cursor, AGY)
+Add the memory engine as an MCP tool server so your agent can actively search and store knowledge:
+
+```bash
+# For Claude Code:
+claude mcp add memory python3 $(pwd)/agy_memory_mcp.py
+
+# Or in your MCP config JSON (~/.gemini/antigravity-cli/mcp_config.json or Claude Desktop):
+{
+  "mcpServers": {
+    "memory": {
+      "command": "python3",
+      "args": ["/path/to/agy-memory-engine/agy_memory_mcp.py"]
+    }
+  }
+}
+```
+
+#### Option B: Configure Agent Prompt / Instructions (`GEMINI.md` or `CLAUDE.md`)
+Add a simple memory rule to your global agent instructions (e.g. `~/.gemini/config/GEMINI.md`, `CLAUDE.md`, or your project's system prompt) so your agent knows when to query memory:
+
+```markdown
+## Long-Term Memory
+- Before answering questions regarding personal preferences, server IPs, hardware, or past projects, call `search_memory` or run `agy_memory.py prefetch "<topic>"`.
+- When the user states a new permanent fact or personal rule, persist it using `store_memory` or `record_learning`.
+```
+
+#### Option C: Autonomous Background Sync (Zero-friction)
+To have the memory engine automatically learn from your conversations without you lifting a finger:
+
+1. Register the turn hook in `~/.gemini/config/hooks.json` (see [Autonomous Background Pipeline](#-autonomous-background-pipeline-cron--lifecycle-hooks)).
+2. Add the debounced background worker to your crontab (`*/5 * * * * python3 /path/to/agy-memory-engine/memory_worker.py`).
+
+---
+
+## 🚀 CLI Reference & Quick Commands
+
+```bash
+# Multi-Layer Prefetch (< 2ms)
+python3 agy_memory.py prefetch "Hundeversicherung"
+
+# Add Layer 1 Fact
+python3 agy_memory.py add --id "infra.server.ip" --category "infra" --fact "Home server IP is 192.168.1.50" --keywords "server host ip home"
+
+# Add Layer 2 Episode
+python3 agy_memory.py add-episode --id "travel.iceland2027" --topic "travel" --title "Laugavegur Trekking" --narrative "Hut booking watchdog active for July 2027." --status "active" --keywords "island laugavegur"
+
+# Add Layer 3 Learning
+python3 agy_memory.py add-learning --id "travel.flights.cdp" --category "travel" --insight "Use CDP browser for Google Flights to avoid bot-blocking." --keywords "google flights bot cdp"
+
+# Link Entities in Graph
+python3 agy_memory.py link --source "service.immich" --target "infra.server.ip" --relation "hosted_on"
+
+# Optimize & Decay Maintenance
+python3 agy_memory.py optimize --apply
+
+# Migrate Database from v2.0 to v2.1 (Taxonomies, Relations, Graph Pruning)
+python3 agy_memory.py migrate --dry-run
+python3 agy_memory.py migrate
+```
+
+## 🔌 Model Context Protocol (MCP) Server
+
+The engine includes a native FastMCP server (`agy_memory_mcp.py`) that equips autonomous AI agents (Antigravity, Claude, Cursor, OpenCode) with explicit memory reading and writing capabilities:
+
+### Available MCP Tools
+
+| Tool | Description | Key Parameters |
+| :--- | :--- | :--- |
+| `search_memory` | Hybrid multilingual search across Facts, Episodes, Learnings & Graph relations | `query` *(str)*, `limit` *(int, default: 5)* |
+| `store_memory` | Store or update an atomic configuration parameter or fact (Layer 1) | `id`, `fact`, `category`, `keywords` |
+| `record_episode` | Record a rich narrative chronicle, ongoing topic, or history (Layer 2) | `id`, `topic`, `title`, `narrative`, `status`, `stance` |
+| `record_learning` | Record a practical heuristic, tested rule of thumb, or stance (Layer 3) | `id`, `category`, `insight`, `context`, `keywords` |
+| `link_entities_mcp` | Create directional knowledge graph links between memory entities (Layer 4) | `source_id`, `target_id`, `relation` |
+| `list_memories` | Full multi-layer inventory export of all stored memories | — |
+| `migrate_memory` | Migrate database to canonical v2.1 taxonomies, map relations, prune orphans | `dry_run` *(bool, default: True)* |
+| `optimize_memory` | Rebuild FTS indexes, execute episode aging decay, prune links, and VACUUM | `apply_changes` *(bool, default: True)*, `consolidate` *(bool)* |
+
+### MCP Configuration
+
+Add to your MCP settings file (e.g. `~/.gemini/antigravity-cli/mcp_config.json` or Claude/Cursor config):
+
+```json
+{
+  "mcpServers": {
+    "memory": {
+      "command": "python3",
+      "args": ["/opt/agy-memory-engine/agy_memory_mcp.py"],
+      "env": {
+        "AGY_MEMORY_DB": "~/.gemini/memory.db"
+      }
+    }
+  }
+}
+```
+
+---
+
+## 📱 Seamless Integration with Antigravity Telegram Bot
+ 
+ `agy-memory-engine` is designed to work in synergy with the [Antigravity Telegram Bot (`antigravity-cli-telegram-bot`)](https://github.com/ardiannurcahya/antigravity-cli-telegram-bot) to form a completely autonomous, mobile memory pipeline:
+
+```text
+  📱 Mobile User in Telegram (Voice, Text, Photos, Topics)
+            │
+            ▼
+  🤖 AGY Telegram Bot (/opt/agy-telegram-bot)
+            │  (Executes standard agy prompt with --add-dir)
+            ▼
+  ⚡ AGY Global Stop-Hook (~/.gemini/config/hooks.json -> scripts/auto_sync_hook.py)
+            │  (Enqueues turn in <1ms to turn_queue.db, resolves Telegram topic/chat ID)
+            ▼
+  🧠 Calm Memory Worker (memory_worker.py)
+            │  (Debounces 5m idle / 15m timeout, batches conversation into 1 LLM pass)
+            ▼
+  💾 SQLite FTS5 Memory Store (~/.gemini/memory.db)
+            │
+            ▼
+   📲 Instant Status Notification back to Telegram Topic / Chat
+      "🧠 Autonomous memory updated (1 fact, 1 learning)
+       • ➕ Home server IP is 192.168.1.50
+       • ➕ Use CDP browser for Google Flights"
+```
+
+### Key Synergy Highlights:
+1. **Zero Chat Latency:** The global stop-hook returns in `< 1ms`, ensuring the Telegram Bot responds instantly without waiting for memory extraction.
+2. **Context-Aware Topic Routing:** The worker automatically preserves the originating Telegram `chat_id` and `message_thread_id`, routing notifications directly back into the relevant topic thread.
+3. **Loop Prevention:** Ingestion runs under `AGY_INTERNAL_INVOCATION=1` with prompt marker guards to prevent recursive agent loops.
+
+---
+
+## ⚙️ Configuration (`.env`)
+
+All engine parameters, database locations, LLM model choice, and debounce thresholds can be configured via `.env` (or environment variables). A ready-to-use template is provided in [`.env.example`](file:///opt/agy-memory-engine/.env.example):
+
+```bash
+# Copy template to .env
+cp .env.example .env
+```
+
+```ini
+# ==============================================================================
+# AGY Memory Engine - Configuration File
+# ==============================================================================
+
+# LLM model used for background memory extraction & consolidation
+AGY_MEMORY_MODEL=gemini-3.8-flash-low
+
+# SQLite Database Storage Paths
+AGY_MEMORY_DB=~/.gemini/memory.db
+AGY_TURN_QUEUE_DB=~/.gemini/turn_queue.db
+
+# Calm-Memory Debounce Settings (in seconds)
+AGY_MEMORY_INACTIVITY_SECONDS=300   # 5 minutes idle threshold
+AGY_MEMORY_MAX_WAIT_SECONDS=900     # 15 minutes max timeout
+
+# Telegram Notification Recipient (optional: your numeric Telegram user or group ID)
+AGY_MEMORY_TELEGRAM_CHAT_ID=your_telegram_chat_id_here
+
+# Path to Antigravity CLI binary
+AGY_BIN=agy
+
+# Real-Time Debug Dashboard (Web UI)
+AGY_MEMORY_DEBUG_DASHBOARD=true
+AGY_MEMORY_DASHBOARD_PORT=8085
+AGY_MEMORY_DASHBOARD_HOST=127.0.0.1
+# Dashboard Authentication: set custom token or let engine auto-generate in ~/.gemini/dashboard.token
+AGY_MEMORY_DASHBOARD_TOKEN=your_secure_dashboard_token_here
+# Remote access (VPN, Tailscale, LAN): specify allowed hostnames and private networks
+AGY_MEMORY_DASHBOARD_ALLOWED_HOSTS=my-node.ts.net,*.ts.net
+AGY_MEMORY_DASHBOARD_ALLOW_PRIVATE_NETWORKS=true
+
+# Optional: trusted OpenAI-compatible chat-completions URL for tool-free HTTP extraction.
+# If unset (default), the engine gracefully falls back to native Antigravity CLI (agy --print).
+AGY_MEMORY_INFERENCE_URL=
+AGY_MEMORY_INFERENCE_MODEL=
+AGY_MEMORY_INFERENCE_KEY=
+
+# Jev relevance gate: one evaluation-model call per retrieval drops memory
+# candidates that do not serve the request. Fail-open: without a key or on any
+# error every candidate is kept. Key falls back to ~/.config/agy/sage.env.
+AGY_JEV_API_KEY=
+AGY_MEMORY_JEV_GATE=true
+AGY_MEMORY_JEV_GATE_FLOOR=0.75
+AGY_MEMORY_JEV_GATE_TIMEOUT=6
+# Skip the call only when the candidate set is tiny AND short.
+AGY_MEMORY_JEV_GATE_MIN_ITEMS=3
+AGY_MEMORY_JEV_GATE_MIN_CHARS=600
+```
+
+---
+
+## Jev relevance gate
+
+Retrieval results pass through one evaluation-model call before they reach the agent. Each candidate is scored against the request in a single batched question set; candidates below `AGY_MEMORY_JEV_GATE_FLOOR` are dropped. This keeps unrelated facts, episodes, and learnings out of the agent context. The gate covers both `search_memory` and `prefetch`.
+
+The call is skipped when the candidate set is smaller than `AGY_MEMORY_JEV_GATE_MIN_ITEMS` and shorter than `AGY_MEMORY_JEV_GATE_MIN_CHARS`. Many small candidates still get gated. Every failure mode fails open: a missing key, a timeout, or an unparseable answer keeps all candidates.
+
+---
+
+## 📊 Real-Time Debug Web Dashboard
+
+A zero-dependency, standalone live web dashboard is included to inspect, search, and monitor memory state in real time:
+
+* **Live FTS5 Search Sandbox:** Test hybrid multilingual queries with sub-millisecond latency metrics.
+* **Interactive Knowledge Graph (vis.js):** Real-time interactive network graph visualization of entity relations with cluster domain filtering, relation-type pruning, and node physics.
+* **Turn Queue & Debounce Monitor:** Visual countdown bar for active conversation debouncing (5m idle / 15m timeout) with an instant *"Process batch now"* trigger.
+* **4-Layer Visualizer:** Browse Facts (Layer 1), Thematic Episodes with status badges (Layer 2), Experiential Learnings (Layer 3), and Knowledge Graph Entity Links (Layer 4).
+* **Consolidation Audit Log & Opt-In Control:** Review automated background merges, deduplications, and semantic rationale, with optional LLM semantic consolidation checkbox in optimization modal.
+* **Engine Status & Version Control:** Live git commit SHA, message display, and one-click engine restart button in the header.
+* **Multi-User Profile Switcher:** Seamlessly switch between configured user profiles on the host via the header dropdown.
+
+### Authentication & Token Security
+
+The dashboard is protected by authentication tokens for all viewing and mutation endpoints:
+
+1. **Auto-Generated Token (Default)**:  
+   On first start, the dashboard generates a 256-bit secure token stored in `~/.gemini/dashboard.token` (permissions `0600`, user-only).
+2. **Explicit Token via `.env`**:  
+   You can specify your own token in `.env` via `AGY_MEMORY_DASHBOARD_TOKEN=your-secret-token`.
+3. **Browser Access**:  
+   Append `?token=<your_token>` to the URL on your first visit:
+   ```text
+   http://localhost:8085/?token=your_secure_dashboard_token_here
+   # Or over Tailscale:
+   https://<your-tailscale-node>.ts.net:8085/?token=your_secure_dashboard_token_here
+   ```
+   The token is saved in browser `localStorage`, so subsequent reloads and visits do not require re-entering it.
+4. **API Requests**:  
+   Pass the header `Authorization: Bearer <your_token>`.
+
+### Starting the Dashboard
+
+```bash
+# Via CLI command
+python3 agy_memory.py ui --port 8085
+
+# Or directly via standalone runner
+python3 dashboard.py --port 8085
+
+# Or via systemd background user service
+systemctl --user start agy-memory-dashboard.service
+```
+
+---
+
+## ⏰ Autonomous Background Pipeline (Cron & Lifecycle Hooks)
+
+To enable 100% autonomous background learning without manual intervention, configure the **AGY Lifecycle Hook** and the **Linux Crontab**:
+
+### 1. Global Lifecycle Hook (`~/.gemini/config/hooks.json`)
+
+Registers the transcript collector on every agent turn stop:
+
+```json
+{
+  "memory-auto-sync": {
+    "enabled": true,
+    "Stop": [
+      {
+        "type": "command",
+        "command": "python3 /opt/agy-memory-engine/scripts/auto_sync_hook.py",
+        "timeout": 15
+      }
+    ]
+  }
+}
+```
+
+### 2. Crontab Configuration (`crontab -e`)
+
+```bash
+# Process pending memory queue every 5 minutes (debounced)
+*/5 * * * * python3 /opt/agy-memory-engine/memory_worker.py >/dev/null 2>&1
+
+# Nightly deterministic maintenance only (04:30); semantic consolidation is opt-in
+30 4 * * * python3 /opt/agy-memory-engine/agy_memory.py optimize --apply >/dev/null 2>&1
+```
+
+---
+
+## 🧪 Testing
+
+```bash
+python3 -m unittest discover tests/ -v
+# Ran 229 tests (OK)
+```
+
+---
+
+## 🚀 Release Notes
+
+### v2.4.0 (2026-09-21)
+- **Vector Index Synchronization & Outbox Architecture**:
+  - Self-healing vector synchronization with `vector_index_jobs`, `vector_index_state`, and `vector_index_config` (schema version 212).
+  - Decoupled embedding computation from SQLite write transactions; atomic revision tracking and job enqueueing via database triggers.
+  - Generational fencing, revision fencing, and lease tracking preventing race conditions during background vector draining.
+  - Dedicated CLI inspection & draining tool (`scripts/vector_index_cli.py`).
+- **Interactive Knowledge Graph & Dashboard Enhancements**:
+  - Interactive vis.js network graph visualization for exploring Layer 4 relational entity links directly in the Web Dashboard.
+  - Cluster domain filtering and relationship-type pruning for dense graph navigation.
+  - Live engine status indicators in the dashboard header: Git commit SHA, commit message, and one-click engine restart.
+  - Optional semantic LLM consolidation checkbox in the optimization modal.
+- **Queue Reliability & Inference Hardening**:
+  - Turn size capping at enqueue time to prevent poisoned oversized claim batches.
+  - Adaptive batch splitting on retries instead of replaying failed batches whole.
+  - Configurable queue batch sizing and increased per-run worker caps (`memory_worker.py`).
+  - Streamed JSON input/output for CLI inference (`agy --print`) and compact prompt inventory.
+- **Taxonomy & Graph Normalization**:
+  - Canonical mapping of `relates_to` to `related_to`.
+- **Jev Relevance Gate (Post-v2.4.0 / PR #3)**:
+  - Evaluation-model candidate filtering dropping irrelevant retrieval results before context injection, with full fail-open behavior.
+
+### v2.3.0 (2026-09-14)
+- **Comprehensive Hardening, WAL-Safe Storage & Queue Reliability**:
+  - Atomic batch claims with durable batch receipts and recoverable expiring leases in `turn_queue.db`.
+  - Concurrency hardening: serialized schema bootstrap, entity revision tracking, and generation fencing preventing stale overwrites across restores.
+  - Native `agy --print` CLI fallback for tool-free background inference when `AGY_MEMORY_INFERENCE_URL` is unset, with automatic markdown extraction and slash-command retry.
+  - Multi-user dashboard and permission resilience: shared maintenance lock (`LOCK_SH`) allowing seamless cross-user profile inspection between multiple Linux user profiles.
+  - Tolerant entity graph linking: invalid or unresolvable relationship endpoints are skipped with warnings instead of rolling back the entire extraction transaction (`AGY_MEMORY_STRICT_GRAPH=false`).
+  - First-turn Telegram routing: in-flight session resolution in `scripts/auto_sync_hook.py` ensuring immediate chat attribution from the very first message.
+  - Bounded MCP maintenance offloading to a single background worker thread to keep the event loop responsive.
+
+### v2.2.0 (2026-09-07)
+- **Semantic Recall & In-Process Hybrid Search (FTS5 + `sqlite-vec`)**:
+  - In-process vector extension via `sqlite-vec` (C-extension, SIMD-accelerated, zero external daemon).
+  - Dense 384-dimensional multilingual embeddings via `fastembed` with `paraphrase-multilingual-MiniLM-L12-v2`.
+  - Reciprocal Rank Fusion (RRF) combining BM25 lexical precision with semantic cosine similarity in `search_memory`.
+  - Zero latency impact on CLI prefetch: Pre-invocation prefetch remains strictly < 2ms (FTS5 + Trigram).
+  - Background vector indexing of facts, episodes and learnings in `~/.gemini/memory.db`.
+  - Automatic cascade deletion triggers from SQLite parent tables to virtual vector tables (`vec_memories`, `vec_episodes`, `vec_learnings`).
+  - Standalone reindexing utility `scripts/reindex_vectors.py`.
+
+### v2.1.0 (2026-09-03)
+- **Quality-First Extraction & Consolidation Pipeline**:
+  - Strict litmust test and exclusion rules for experiential learnings (no transient bug fixes, UI tweaks or code-internal details; strictly reusable heuristics and behavioral insights).
+  - Closed canonical relationship taxonomy (26 canonical link types) preventing relationship fragmentation.
+  - Closed canonical categories across all layers (Facts, Learnings, Episodes) with automated runtime alias normalization (`_normalize_category`).
+  - Automated orphan link pruning (`prune_orphan_links`) removing severed graph relationships when entities are deleted or consolidated.
+  - Category normalization enforcement during semantic LLM fact consolidation.
+- **Unified Maintenance & Web Dashboard**:
+  - Full end-to-end integration of batch normalization and graph pruning into `optimize_db` (`compact`) CLI command and Web Dashboard `/api/optimize` endpoint.
+- **Automated Database Migration Tool (`v2.0 -> v2.1`)**:
+  - Dedicated CLI migration command `agy_memory.py migrate` and standalone runner `scripts/migrate_v2_to_v2_1.py`.
+  - Automatic safety snapshot backups in `~/.gemini/archive/` before applying modifications.
+  - Semantic relation remapping and directional inversion (e.g. `hosts` -> `hosted_on`, `monitored_by` -> `monitors`).
+  - Strict episode status normalization (`monitoring` -> `active`), topic mapping, and orphan link pruning.
+  - FTS5 virtual table rebuilds and database vacuuming with `PRAGMA user_version = 210`.
+
+---
+
+## 🗺️ Roadmap
+
+- [x] **Semantic Recall & Hybrid Search (FTS5 + `sqlite-vec`)**:
+  - In-process vector extension via `sqlite-vec` alongside FTS5.
+  - Multilingual embedding model (`sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`) via `fastembed` for vague natural language queries.
+  - Reciprocal Rank Fusion (RRF) to combine BM25 keyword precision with semantic vector similarity for on-demand queries (`search_memory`).
+  - Keep pre-invocation prefetch strictly < 2ms (FTS5 + Trigram).
+- [x] **Hermes-Style 3-Tier Memory Architecture**:
+  - **Tier 1 (Profile/Preferences)**: Lean, fixed identity facts injected directly into agent system prompt (0ms latency, ~150-250 tokens max).
+  - **Tier 2 (Episodic & Semantic Store)**: 4-Layer SQLite `memory.db` with Hybrid Search on-demand.
+  - **Tier 3 (Working Memory)**: Active session context & scratchpad.
+- [x] **Production Hardening, WAL Concurrency & Tool-Free Inference (v2.3.0)**:
+  - Atomic batch claims, durable batch receipts, and recoverable expiring worker leases in `turn_queue.db`.
+  - Concurrency hardening: serialized schema bootstrap, entity revision tracking, and generation fencing.
+  - Tool-free Direct Provider API: Native lightweight connector for OpenAI-compatible endpoints without external CLI dependencies (`memory_inference.py`).
+  - Native Antigravity CLI fallback (`agy --print`) with markdown JSON extraction and slash-command retry.
+  - Multi-user dashboard resilience and cross-user maintenance locking.
+  - Tolerant graph linking (`AGY_MEMORY_STRICT_GRAPH=false`) and first-turn Telegram in-flight session resolution.
+- [x] **Vector Index Synchronization & Interactive Knowledge Graph (v2.4.0)**:
+  - Asynchronous, self-healing vector index outbox (`vector_index_jobs`) with schema 212 and generational fencing.
+  - Interactive vis.js graph visualization in Web Dashboard with domain filtering and physics layout.
+  - Turn size capping, retry batch-splitting, and streaming CLI inference.
+  - Jev candidate relevance gating for clean retrieval contexts.
+- [ ] **Extended Agent & CLI Integrations**:
+  - **Claude Code Compatibility**: Support Claude CLI (`claude -p`) as alternate background extraction engine.
+  - Dynamic extraction profile tagging per client/agent session (multi-agent orchestration).
+- [ ] **Selective Synced Subgraphs**:
+  - Export and sync filtered memory subsets across distributed nodes over Tailscale mesh.
+
+---
+
+## 📄 License
+
+MIT License © 2026 HydStAn

@@ -1,0 +1,581 @@
+<!-- mcp-name: io.github.cdeust/hypermnesia-mcp -->
+
+<p align="center">
+  <img src="assets/banner.svg" alt="Cortex — cross-platform persistent memory for AI coding agents" width="820">
+</p>
+
+<p align="center">
+  <a href="https://github.com/cdeust/Cortex/actions/workflows/ci.yml"><img src="https://github.com/cdeust/Cortex/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="LICENSE"><img src="assets/badge-license.svg" alt="License: MIT"></a>
+  <img src="assets/badge-python.svg" alt="Python 3.10+">
+  <img src="assets/badge-tests.svg" alt="tests passing">
+  <img src="assets/badge-references.svg" alt="97 referenced papers">
+  <img src="assets/badge-version.svg" alt="Version 4.23.5">
+  <a href="https://www.bestpractices.dev/projects/13836"><img src="https://www.bestpractices.dev/projects/13836/badge" alt="OpenSSF Best Practices"></a>
+  <a href="https://mcptoplist.com/server/io.github.cdeust%2Fhypermnesia-mcp"><img src="assets/badge-mcp-toplist.svg" alt="MCP Toplist: Top 1.2% of 81,919 tracked MCP servers, July 2026"></a>
+</p>
+
+<p align="center">
+  <strong>Memory for AI coding agents that you can hold accountable.</strong><br>
+  Keep decisions, fixes and project context between sessions, and inspect what was retrieved.<br>
+  Runs locally by default. No account, no API key, no server to manage.
+</p>
+
+---
+
+**Sovereign is what it is today.** Everything runs on your machine: a local SQLite file by
+default, or PostgreSQL + pgvector if you prefer. No LLM in the retrieval loop, and nothing
+leaves localhost unless you configure an integration that does. Your project's memory is a
+file you own and can delete.
+
+**Claude Code and Codex share Cortex memory.** Both native plugins provide the same
+memory tools and 11 lifecycle hook modules for automatic capture, recall and project
+context. Use either agent on a project and keep its memory when you switch.
+[Verified with real Claude and Codex sessions on macOS](docs/verification/claude-codex-handoff-2026-09-22/README.md).
+The same stdio MCP server also supplies memory tools to Claude Desktop, Claude Cowork
+and other local MCP hosts.
+
+**Eco-responsible is what we are aiming at.** Work that never reaches a datacenter is work
+nobody has to power, and an agent that finds the right context first time re-reads fewer
+files. We hold that intent to the
+[Green Software Foundation's SCI method](https://sci.greensoftware.foundation/), and we
+publish **no CO₂ or energy figure**, because we have not measured one.
+[What we do and do not claim ↓](#green-software-engineering)
+
+> **36 neuroscience mechanisms · 57 memory tools · 11 lifecycle hooks · a self-curating per-project wiki — all local, all open-source, MIT.**
+
+## Install
+
+**Claude Code** — add the marketplace and install the plugin:
+
+```bash
+claude plugin marketplace add cdeust/Cortex
+claude plugin install hypermnesia-mcp
+```
+
+Update the same way, one command:
+
+```bash
+claude plugin update hypermnesia-mcp
+```
+
+**Claude Desktop** — download `hypermnesia-mcp.mcpb` from
+[Releases](https://github.com/cdeust/Cortex/releases) and open it, or use
+**Settings → Extensions**. The bundle carries the tools but no hooks; the MCPB format has none.
+
+**Claude Cowork** is detected automatically (`CLAUDE_ENVIRONMENT=cowork`) and uses the local
+SQLite store. No PostgreSQL required.
+
+For **Codex**, install the native plugin for memory tools and automatic hooks:
+
+```bash
+uv tool install "hypermnesia-mcp[sqlite]"
+codex plugin marketplace add cdeust/Cortex
+codex plugin add hypermnesia-mcp-codex@cortex-codex-plugins
+```
+
+Open `/hooks` in Codex to review and trust the Cortex hooks, then start a fresh
+session. Changed hook definitions require renewed trust after an update. The
+plugin uses the same saved backend selection as Claude Code; both hosts share
+memory when they use the same configuration root and store.
+[Codex setup details](docs/codex-plugin.md).
+
+**Other stdio MCP hosts** (Gemini CLI, Cursor, Windsurf, VS Code) launch the same
+server and get the same tools. See [launch commands](#every-other-mcp-host).
+WSL, TLS client certificates and corporate proxies are covered in
+[deployment scenarios](docs/deployment-scenarios.md).
+
+The first use creates a local SQLite store under `~/.claude/methodology/`. Models are downloaded
+once when needed and then run offline. The embedding and reranking model files are both fetched
+on first use. Optional integrations, remote PostgreSQL, and OTLP telemetry use the network only
+when explicitly configured. [PRIVACY.md](PRIVACY.md) lists the exact scope.
+
+An existing PostgreSQL install is never silently downgraded: the installer detects a
+configured `DATABASE_URL`, a prior backend marker, or a reachable local `cortex` database and
+keeps it across updates.
+
+<details>
+<summary><strong>Upgrading from an older plugin identity</strong></summary>
+
+The plugin was renamed `hypermnesia-mcp` in v4.15.0, after a community-directory collision
+with an unrelated `cortex` plugin. Memories, configuration and storage paths are untouched.
+
+```bash
+claude plugin uninstall cortex
+claude plugin install hypermnesia-mcp
+```
+
+The visualization companion, <a href="https://github.com/cdeust/cortex-viz">hypermnesia-mcp-viz</a>,
+was renamed the same way:
+
+```bash
+claude plugin uninstall cortex-viz@cortex-plugins
+claude plugin marketplace update cortex-plugins
+claude plugin install hypermnesia-mcp-viz@cortex-plugins
+```
+
+The retained `cortex-viz@cortex-plugins` entry is a frozen shim that only prints this notice
+and exposes no server or tools.
+
+Allowlists, hooks, skills and agents must migrate both composed tool names:
+`mcp__plugin_cortex-viz_cortex-viz__open_visualization` becomes
+`mcp__plugin_hypermnesia-mcp-viz_hypermnesia-mcp-viz__open_visualization`, and
+`mcp__plugin_cortex-viz_cortex-viz__get_methodology_graph` becomes
+`mcp__plugin_hypermnesia-mcp-viz_hypermnesia-mcp-viz__get_methodology_graph`.
+
+</details>
+
+## Keep context useful
+
+Across sessions, agents need to remember decisions, bring prior fixes back when a similar problem
+returns, and show you which sources support a memory so you can correct it. Cortex keeps that
+context available while making its status visible.
+
+Cortex does this with local quality checks: what is written, whether its references resolve, what
+happens when a decision changes, and what can fade over time.
+
+### What gets in
+
+A write passes a local novelty check (the implementation calls it a predictive-coding gate) against
+what is already stored. Novel content is written; a near-duplicate is merged into the memory it
+restates rather than filed beside it.
+
+```js
+// Illustrative project decision:
+remember({ content: "Keep session state in Redis so TTL expiry is handled consistently." })
+// → { stored: true, action: "stored" }
+```
+
+Deliberate writes are never rejected for being unsurprising. Unattended capture is, which is
+what keeps automatic capture from burying the memories you meant to keep.
+
+### Whether it can be checked
+
+Every memory is graded at write time, locally, with no network call. The grade is not a
+confidence score: it is whether the claims carry references that resolve on this machine.
+
+```js
+// → provenance: { grade: "unverifiable",
+//                 reason: "dead_refs: deps/numpy/_core/_multiarray_umath.cpython-313-darwin.so",
+//                 hint: "1 of 9 checkable reference(s) could not be resolved" }
+```
+
+That memory named a file that no longer existed, so it was stored and labelled `unverifiable`
+instead of being silently presented as verified. Rewritten against paths that resolve, the same
+memory grades `verified`. A recalled memory tells you which kind it is; a `verified` grade still
+means that the references resolve locally, not that the claim has been independently proven true.
+
+### When it turns out wrong
+
+Corrections supersede rather than overwrite. The new memory records what it replaces, the old
+one is demoted in recall, and the chain stays readable.
+
+```js
+remember({ content: "...", supersedes_id: 4360411 })
+// → { action: "superseded", memory_id: 4360412, superseded_id: 4360411 }
+```
+
+### Whether it was right
+
+A memory records what happened. A prediction records what was expected before the outcome
+was known, so that Cortex can later find out it was wrong. `predict` writes a falsifiable
+claim with the confidence held at the time; `resolve_prediction` settles it against an
+observation the caller supplies, naming the verdict, the kind of source that decided it and
+a reference to that source; `calibration` scores the resolved set.
+
+```js
+predict({ claim: "The p90 of the SQLite job is under 6 minutes",
+          prediction: "a 20-minute budget leaves headroom", test: "21 attempts of 2026-09-16",
+          confidence: 0.8 })
+// → { prediction_id: 12, status: "open" }
+resolve_prediction({ prediction_id: 12, verdict: "confirmed",
+                     observed: "p90 348 s over 18 successes",
+                     source_kind: "ci", source_ref: "cdeust/Cortex actions, 2026-09-16" })
+// → { prediction_id: 12, verdict: "confirmed", resolved: true }
+calibration()
+// → { scored: 9, brier: 0.11, uninformative_brier: 0.25, confirmed: 7, refuted: 2,
+//     reliability: [{ band: [0.6, 0.8], resolved: 4, mean_confidence: 0.78,
+//                     observed_frequency: 0.75 }, ...] }
+```
+
+`brier` is the mean squared distance between confidence and outcome; 0.25 is what a constant
+0.5 forecast earns, so a score above it means the confidences carried less information than
+saying nothing. Cortex never fetches the evidence itself: the verdict, the observation and
+the source reference come from the caller, which is what lets the same contract hold in any
+repository and under any review convention.
+
+### What fades
+
+Memories carry heat that decays unless replay reinforces them, and episodic traces can consolidate
+into semantic ones. A specific debugging session may compress to the principle it taught; the
+commands can fade while the lesson survives. This lifecycle is designed to keep the store useful
+as it grows, though it is not a promise of a fixed size or guaranteed semantic compression.
+
+## What it feels like in use
+
+Here is an illustrative workflow: decisions, prior fixes, and source checks becoming useful again.
+
+**Monday.** An hour debugging a webhook handler ends in a race condition: TTL expiry firing
+between the auth check and the permission lookup. You agree on a fix, implement it, close the
+session.
+
+**Thursday.** In another session, a user reports intermittent logouts. Cortex surfaces relevant
+prior analysis, the Redis decision, and the TTL lesson when their content matches the new work.
+
+**Three weeks later.** The sessions can consolidate into a pattern about authentication and
+TTL-based caches; some details may fade while the principle remains useful.
+
+In Claude Code and Codex alike that is automatic: 11 lifecycle hooks inject context at session
+start, recall per prompt, capture as you work, checkpoint before compaction, and run a wiki that
+curates itself. In any other stdio MCP host you call the same 57 tools yourself, or 60 when
+the optional `ai-architect-mcp-codebase` and `ai-architect-mcp-spec` integrations are present.
+
+## Does the retrieval work
+
+Measured against a published benchmark, retrieval only. No LLM reader in the loop: the
+question is whether the right memory surfaces, not whether a model can write a good answer
+from it.
+
+**LongMemEval**: 500 human-curated questions buried in about 40 sessions of history.
+
+| | v4.14.1 (historical) | v4.20.0 (current release) |
+|---|---|---|
+| Recall@10 | **98.2%** | **97.8%** |
+| MRR | **0.9167** | **0.905** |
+
+Both are single runs: n=500, clean database, consolidation disabled, retrieval only.
+
+v4.14.1, 2026-07-14: [artifact JSON](benchmarks/results/repro/20260714-v4.14.1-pretag/longmemeval-s.json);
+[code SHA](https://github.com/cdeust/Cortex/commit/28145f0b7a113fc06e22568de6feea7f8444eaf5).
+This is the run the ablation campaign in [Verification](#verification) was built around.
+
+v4.20.0, 2026-09-09: [artifact JSON](benchmarks/results/repro/20260909-v4.20.0-longmemeval-s/longmemeval-s.json) and its
+[manifest](benchmarks/results/repro/20260909-v4.20.0-longmemeval-s/MANIFEST.json); [code SHA](https://github.com/cdeust/Cortex/commit/86251ab8fc27a18f80f9b09b99a75f3b60edd9cb),
+dirty=false. A single run of the LongMemEval-S leg alone (`benchmarks/reproduce.sh --only longmemeval
+--no-ablation`) in an isolated ephemeral PostgreSQL container, reranker loaded, consolidation
+disabled. Against v4.14.1 the change is 0.4 points of Recall@10 and 0.012 of MRR. The run's own
+floor check reports Recall@10 within the 0.005 tolerance of the July floor (0.982) and MRR
+0.0093 below its floor (0.914), which the script treats as non-blocking by design;
+[docs/agent-guidance.md](docs/agent-guidance.md) records that `main` no longer clears those
+floors and that the release gate is `--no-regression` against `origin/main`. The same tree has
+no LoCoMo or BEAM figure yet.
+
+Reproduce with `benchmarks/reproduce.sh`, which runs in an isolated ephemeral container, never
+against a live store.
+
+Recall@10 is the share of questions whose answer-bearing session appears in the first ten
+retrieved sessions. MRR (mean reciprocal rank) rewards finding that session near the top. These
+numbers describe retrieval only; they do not measure whether an LLM writes a correct answer.
+
+Retrieval fuses vector similarity, full-text search, trigram match, heat and recency, then
+reranks with a cross-encoder. PostgreSQL combines the signals as a weighted sum; SQLite uses
+weighted reciprocal-rank fusion and has no trigram signal. LoCoMo
+and BEAM results, the ablations and the floor gates are in [benchmarks/](benchmarks/).
+
+## Storage
+
+SQLite by default. PostgreSQL is one configuration field, worth it for very large stores or a
+database shared across a team.
+
+```bash
+bash <plugin-dir>/scripts/install-plugin.sh --postgres
+```
+
+|  | SQLite (default) | PostgreSQL 15+ |
+|---|---|---|
+| Setup | none | pgvector, pg_trgm |
+| All 57 tools | yes | yes |
+| Retrieval contract | identical | identical |
+| Fusion | in-process | server-side PL/pgSQL |
+| ANN index | none | pgvector HNSW |
+| Cross-agent team decisions, preemptive context, pipeline heat bumps | no-op | active |
+
+Three hook enrichments are PostgreSQL-only and degrade to silent no-ops on SQLite. Session
+banners, auto-recall, auto-capture, checkpoints and every memory tool work on both.
+
+## Cortex in Codex and Claude Code
+
+Both plugins expose the complete memory tool profile and use the same 11 Cortex
+hook modules. They share project-associated memories when connected to the same
+store, so a decision saved in Claude can be recalled in Codex and vice versa.
+
+With the native Codex plugin installed and its hooks trusted, Cortex:
+
+- **Restores project context when a session starts** and recalls relevant memories
+  as you submit prompts.
+- **Captures significant tool results automatically**, keeping useful work
+  available across sessions.
+- **Preserves session state** through compaction checkpoints and durable
+  session-end recording.
+- **Briefs subagents** with project and role context.
+- **Provides the full memory toolset** for decisions, lessons, wiki pages, ADRs,
+  predictions, calibration, triggers, rules and codebase ingestion.
+- **Shares memories with Claude Code** when both use the same store and project
+  association. You can switch agents and retrieve what the other saved.
+
+Claude Code uses the same Cortex memory tools and hook modules. Both plugins
+support the autonomous wiki cycle, SQLite storage and optional PostgreSQL.
+
+**Verified on installed hosts:** Claude wrote a random test payload and Codex
+retrieved it; Codex wrote another and a fresh Claude session retrieved it. Neither
+read prompt supplied the expected payload. Both hosts excluded the test record
+when recalling from another project, and both delivered Cortex context through
+native startup hooks. [Read the verification and tool traces](docs/verification/claude-codex-handoff-2026-09-22/README.md).
+
+Hook trust is part of Codex setup: review `/hooks` after installation or a changed
+hook definition, then start a fresh session. Event mapping, task-context handling
+and session-end delivery are documented in the [Codex integration guide](docs/codex-plugin.md).
+Cognitive profiles are shared too; the current profile builder derives them from
+Claude Code session logs, so that historical input must exist for either host to
+retrieve a populated profile.
+
+## Every other MCP host
+
+Any host that can launch the stdio server gets the complete memory tool profile,
+with SQLite by default and PostgreSQL as an option. A direct MCP registration,
+including `codex mcp add`, provides explicit `remember` and `recall` tools.
+Automatic lifecycle behavior comes with the native Claude Code or Codex plugin.
+The Claude Desktop bundle provides tools without hooks. ChatGPT web would require
+a remote deployment; this repository ships a local stdio server.
+
+The launch command on every host is the PyPI package. The `[sqlite]` extra enables
+sqlite-vec vector search; without it the store still works, with vector search disabled.
+
+```bash
+uvx --from "hypermnesia-mcp[sqlite]" hypermnesia-mcp
+```
+
+**Gemini CLI** ships as an extension (`gemini-extension.json` is in this repository):
+
+```bash
+gemini extensions install https://github.com/cdeust/Cortex
+```
+
+**Codex and ChatGPT desktop** have a native plugin with the full tool surface and the same
+11 lifecycle hooks the Claude Code plugin installs. It reads the
+same saved backend selection as the Claude Code launcher (`~/.claude/methodology/backend.json`),
+so both hosts write to one store (since 4.23.0); explicit `CORTEX_MEMORY_STORE_BACKEND`, `CORTEX_BACKEND` or a database URL
+still wins. Pre-install
+the package once so the plugin's first `uvx` handshake reuses the local uv cache instead of
+spending its startup budget downloading a Python environment:
+
+```bash
+uv tool install "hypermnesia-mcp[sqlite]"
+codex plugin marketplace add cdeust/Cortex
+codex plugin add hypermnesia-mcp-codex@cortex-codex-plugins
+```
+
+The direct fallback registers the executable without the plugin:
+
+```bash
+codex mcp add cortex --env CORTEX_MEMORY_STORE_BACKEND=sqlite -- hypermnesia-mcp
+```
+
+The host boundary, the measured startup ceiling and the public-directory requirements Cortex
+deliberately does not claim are in [docs/codex-plugin.md](docs/codex-plugin.md).
+
+## Green software engineering
+
+Cortex runs a standing efficiency programme, gated by the same evidence rule as
+the retrieval work: **no unsourced efficiency claim ships.** Waste is treated as
+a defect with a reproduction, not as a virtue to advertise.
+
+### The measurement harness — and what it does not establish
+
+`benchmarks/energy/` implements the [Green Software Foundation SCI
+specification](https://sci.greensoftware.foundation/): operational emissions
+`O = E × I`, embodied allocation `M = TE × TS × RS`, reported per functional
+unit. For the embedding path the functional unit is **1000 model input tokens**,
+counted from the tokenizer's own `attention_mask` — never estimated from
+characters.
+
+Read `benchmarks/energy/README.md` before quoting anything from it. Its own
+first paragraph is the important one: the automated fixtures exercise arithmetic
+and failure paths, they **do not measure device energy and do not establish an
+energy improvement.** Further, by design:
+
+- **No default carbon factors.** `--carbon-intensity` (gCO2eq/kWh) and
+  `--embodied` (gCO2eq/s, an *already allocated* rate) are mandatory operator
+  inputs, validated before any model import. The harness records the values and
+  their units; it does not vouch for their provenance. You supply the region,
+  observation period, lifecycle assessment and reservation assumptions.
+- **A stated boundary.** `raw_system_energy_j` is the sensor's combined
+  CPU+GPU+ANE estimate. It is neither wall-plug energy nor a complete device SCI
+  score: memory, storage, screen, power-supply losses, model warm-up and token
+  counting are all excluded.
+- **Artifacts or it did not happen.** A successful run preserves `results.json`,
+  a `MANIFEST.json` of commit and source hashes, and the exact analyzed
+  `powermetrics.txt` snapshot.
+
+No energy results are committed to this repository. That is deliberate: a
+figure measured on one operator's machine, region and duty cycle is not a
+property of the software, and publishing it as one would be the drift this
+programme exists to prevent.
+
+### What has actually shipped
+
+Efficiency work lands as ordinary reviewed PRs. Two workstreams are merged:
+
+| Workstream | Change | PR |
+|---|---|---|
+| **CI / build** | run pytest once, on the coverage leg, instead of twice | [#475](https://github.com/cdeust/Cortex/pull/475) |
+| | build runtime images only on Docker changes + a weekly validation | [#476](https://github.com/cdeust/Cortex/pull/476) |
+| | cache pinned dependency and actionlint downloads | [#477](https://github.com/cdeust/Cortex/pull/477) |
+| | sdist under 5 MB, with a byte-identical wheel | [#478](https://github.com/cdeust/Cortex/pull/478) |
+| | measured job timeouts; cancel superseded PR runs | [#479](https://github.com/cdeust/Cortex/pull/479) |
+| | bound the local Docker build context | [#481](https://github.com/cdeust/Cortex/pull/481) |
+| | stop exporting an unreadable layer cache on every PR run | [#506](https://github.com/cdeust/Cortex/pull/506) |
+| **Runtime** | defer unused pipeline hook imports | [#482](https://github.com/cdeust/Cortex/pull/482) |
+| | route PostToolUse hooks by the tool names they handle | [#483](https://github.com/cdeust/Cortex/pull/483) |
+| | audit and clean orphan plugin dependencies | [#484](https://github.com/cdeust/Cortex/pull/484) |
+| | rotate telemetry and detached-worker logs | [#485](https://github.com/cdeust/Cortex/pull/485) |
+| | persist hook cascade cadence; cool down misses | [#486](https://github.com/cdeust/Cortex/pull/486) |
+| | pinned CPU-only Torch on Linux — no CUDA payload pulled | [#487](https://github.com/cdeust/Cortex/pull/487) |
+
+The hook work is the load-bearing one, because hooks run on *every* tool event.
+Deferring the handler/store stack keeps hook boot at **~0.05 s** against
+**~0.6 s** for the full registry import (measured 2026-07-28; the constant is
+cited in `mcp_server/hooks/auto_recall.py` at its call sites, per the
+no-invented-constants rule).
+
+### Demand reduction is the primary lever
+
+The largest efficiency term in an LLM-assisted workflow is not this server's own
+CPU — it is the tokens a model must process because the right context was not
+found the first time. That makes retrieval quality an energy property, and it is
+why the benchmark tables above and this section are the same programme:
+`response_budget.py` bounds a payload and keeps ids so truncation stays
+resumable, the reranker degrades to first-stage scores rather than fetching a
+model, and `CORTEX_RERANKER_OFFLINE=1` refuses the download outright.
+
+This paragraph is a design rationale, not a measurement. Cortex publishes no
+token-savings or CO2 figure for end-to-end agent sessions, because it has not
+measured one.
+
+---
+
+## Verification
+
+The v4.14.1 figures above are backed by a per-mechanism ablation campaign — full *n*, single-seed, with code SHAs, dirty flags, manifests, and per-row JSON preserved; the v4.20.0 figures are a single measurement without one:
+
+- **LongMemEval-S, 17 rows, n=500** — `docs/benchmarks/e1-v3-results.md`. Per-mechanism deltas at the calibrated equilibrium + category-specialization analysis.
+- **LoCoMo, 14 rows, n=1986** — `docs/benchmarks/e1-v3-locomo-results.md` (pre-fix) and `docs/benchmarks/e1-v3-locomo-results-post-fix.md` (post plasticity result-shape fix). Two-baseline design (NO_CONSOLIDATION / WITH_CONSOLIDATION).
+
+The full per-mechanism evidence lives in the thermodynamic paper (§6.3); the BEAM decay dose-response (§6.4) documents a re-scoped negative result after a dirty-store confound was caught and traced. **[Thermodynamic Memory vs. Flat-Importance Stores (PDF, 34 pages)](docs/arxiv-thermodynamic/main.pdf)** · **[Stage-Aware Context Assembly (PDF, 39 pages)](docs/arxiv-context-assembly/main.pdf)**.
+
+---
+
+## Under the hood
+
+The mechanisms above are implemented as 36 system mechanisms spanning encoding, consolidation,
+retrieval and forgetting. Each is cited to published work and exposed as a live system vital. The
+[bibliography](docs/papers/bibliography.md) is
+the check: its entry count is what the references badge reports, and a gate fails the build if
+the two disagree.
+
+Clean Architecture, concentric layers: `server → handlers → core ← shared`, and
+`infrastructure → shared`. Core is pure and testable without mocks.
+[docs/agent-guidance.md](docs/agent-guidance.md) is the map;
+[docs/mcp-tools.md](docs/mcp-tools.md) is the tool reference.
+
+<p align="center">
+  <img src="assets/how-cortex-works.svg" alt="A Claude Code session reaches Cortex through two doors: plugin hooks, and MCP tools that go through the server layers. Both wire core's seams through one composition-root function; infrastructure writes to PostgreSQL, SQLite or files under ~/.claude/methodology." width="100%">
+</p>
+
+[Where Claude's memories go](https://ai-architect.tools/notes/how-cortex-remembers)
+follows a memory from the hook that captures it to the recall that brings it back, and a decision
+from its ADR file to the session that reads it, with every claim linked to the lines of the
+v4.22.0 release ([en français](https://ai-architect.tools/fr/notes/how-cortex-remembers)).
+
+## Limits worth knowing before you install
+
+- Automatic capture and context injection are provided by the native Claude Code and
+  Codex plugins. Direct MCP connections use explicit memory tools.
+- SQLite fusion is in-process and unindexed. Fine at personal scale, slower at very large one.
+- The retrieval scores above are retrieval-only. They say nothing about answer quality.
+- Provenance grading is local and structural. It checks that a reference resolves, not that a
+  claim is true; a DOI or arXiv link is never auto-verified.
+- No energy or carbon figure is published, for the reasons stated above.
+- First use downloads both the embedding and reranking model files. Optional integrations, remote
+  PostgreSQL and OTLP telemetry add network activity only when explicitly configured; see
+  [PRIVACY.md](PRIVACY.md).
+
+## Security
+
+Runs **100% locally** — MCP over stdio, the storage backend (SQLite file or PostgreSQL on localhost) never leaves your machine (the optional [hypermnesia-mcp-viz](https://github.com/cdeust/cortex-viz) companion binds its server to 127.0.0.1). No data leaves your machine. SafeSkill scan: **94/100** (code 97, content 88 — [docs/safeskill-report.json](docs/safeskill-report.json)).
+
+## Privacy Policy
+
+Cortex is **local-first**: your memories, conversations, and profiles stay on your machine — stored in a local SQLite database (`~/.claude/methodology/memory.db`) by default, or in a PostgreSQL database you control. Cortex sends **no** memories, content, or telemetry to the author, Anthropic, or any third party. The only outbound network activity is a one-time download of open-source embedding/reranking models from Hugging Face (model files only), plus any integrations you explicitly configure. Full policy: **[PRIVACY.md](PRIVACY.md)**.
+
+## Support
+
+- **Issues & bug reports:** [GitHub Issues](https://github.com/cdeust/Cortex/issues)
+- **Security disclosures:** see [SECURITY.md](SECURITY.md)
+- **Contact:** [admin@ai-architect.tools](mailto:admin@ai-architect.tools)
+
+## Development
+
+```bash
+pytest                                # full suite; assets/badge-tests.svg carries the current count
+ruff check . && ruff format --check . # lint and format, both enforced in CI
+python scripts/check_doc_claims.py    # advertised counts must match the repo
+python scripts/check_craftsmanship.py # file and method caps, layer whitelist, sourced constants
+```
+
+[CONTRIBUTING.md](CONTRIBUTING.md) describes the gates a change has to clear.
+[GOVERNANCE.md](GOVERNANCE.md) says who decides and what happens if the maintainer stops.
+[docs/ROADMAP.md](docs/ROADMAP.md) says where the project is going, and
+[docs/ASSURANCE-CASE.md](docs/ASSURANCE-CASE.md) states the security argument and its limits.
+[CHANGELOG.md](CHANGELOG.md) is the complete release history.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
+
+This software is the independent work of Clément Deust. It was developed outside any
+employment relationship and is not affiliated with, endorsed by, or owned by any past or
+present employer. It is part of the ai-architect ecosystem
+([zetetic-team-subagents](https://github.com/cdeust/zetetic-team-subagents),
+[ai-architect-mcp-codebase](https://github.com/cdeust/ai-architect-mcp-codebase),
+[ai-architect-mcp-spec](https://github.com/cdeust/ai-architect-mcp-spec)).
+
+The neuroscience and information-retrieval algorithms encoded in this software are derived
+from published academic work cited in
+[`docs/papers/bibliography.md`](docs/papers/bibliography.md) and inline in the source via
+`# source:` annotations (Friston on predictive coding, Anderson & Lebiere on rate-distortion
+forgetting, Nader et al. on retrieval-induced lability, McClelland et al. on consolidation,
+and others). The MIT license covers this implementation; it does not assert ownership over
+the underlying mechanisms, which remain attributable to their original authors and
+publications.
+
+## Citation
+
+The paper PDFs on `main` are the canonical artefacts (arXiv IDs forthcoming, endorsement in
+progress):
+
+```bibtex
+@software{cortex2026,
+  title={Cortex: Persistent Memory for Claude Code},
+  author={Deust, Clement},
+  year={2026},
+  url={https://github.com/cdeust/Cortex}
+}
+
+@unpublished{deust2026thermodynamic,
+  title={Thermodynamic Memory vs. Flat-Importance Stores:
+         Why Long-Term Retrieval Collapses Without Decay},
+  author={Deust, Clement},
+  year={2026},
+  note={arXiv ID forthcoming, endorsement in progress},
+  url={https://github.com/cdeust/Cortex/blob/main/docs/arxiv-thermodynamic/main.pdf}
+}
+
+@unpublished{deust2026context,
+  title={Stage-Aware Context Assembly for Long-Context Memory Retrieval},
+  author={Deust, Clement},
+  year={2026},
+  note={arXiv ID forthcoming, endorsement in progress},
+  url={https://github.com/cdeust/Cortex/blob/main/docs/arxiv-context-assembly/main.pdf}
+}
+```
