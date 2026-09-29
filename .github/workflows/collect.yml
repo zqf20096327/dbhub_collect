@@ -33,23 +33,28 @@ jobs:
         run: |
           python collect/collect_cn.py --max-calls 1000
 
-      - name: 衔接当日池 + README 增量（每月 1 号自动转月度全量校准）
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 衔接当日池（准备 snapshot_latest）
         run: |
-          d=$(date -u +%Y%m%d)
           mkdir -p data/snapshot_latest
           POOL=$(ls -t data/snapshot_*/pool.json 2>/dev/null | head -1)
           [ -z "$POOL" ] && { echo "无可用 pool，跳过后续"; exit 0; }
           cp "$POOL" data/snapshot_latest/pool.json
-          MODE=weekly; [ "$(date -u +%d)" = "01" ] && MODE=monthly
-          python collect/readme_sweep.py --mode "$MODE" --pool data/snapshot_latest/pool.json --max-calls 3000 --max-minutes 60
 
+      # 顺序即配额策略：富集慢节奏(~1000/时)先行，各自吃满滚动小时窗；
+      # README 是 45 分钟 3000 次的爆发(~4200/时)，放最后独占一个新小时窗，
+      # 否则紧跟 README 之后会让富集立刻触到 Core 小时配额保底线（09-29 实测）
       - name: 富集（分层增量：未到期零调用，到期才采）
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python enrich/enrich.py --tier all --pool data/snapshot_latest/pool.json --max-calls 5000 --max-minutes 220
+
+      - name: README 增量（每月 1 号自动转月度全量校准）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          MODE=weekly; [ "$(date -u +%d)" = "01" ] && MODE=monthly
+          python collect/readme_sweep.py --mode "$MODE" --pool data/snapshot_latest/pool.json --max-calls 3000 --max-minutes 60
 
       - name: state 残渣 GC（每月 1 号）
         run: |
