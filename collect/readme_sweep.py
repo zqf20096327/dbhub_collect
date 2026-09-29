@@ -31,7 +31,8 @@ for _d in (ROOT, ROOT / "lib", ROOT / "config"):
 HERE = ROOT                      # 历史引用兼容：统一指向项目根
 import requests
 
-from gh import Budget, BudgetOut, GitHubClient, atomic_write_json  # noqa: E402
+from gh import (Budget, BudgetOut, GitHubClient, QuotaPatienceOut,  # noqa: E402
+                atomic_write_json)
 
 log = logging.getLogger("readme")
 STATE = HERE / "state" / "readme_state.json"
@@ -135,6 +136,11 @@ def run(args):
                     counts["no_readme"] += 1
                     continue
                 raise
+            except (BudgetOut, QuotaPatienceOut):
+                # 预算/配额停止是全局事件（由外层优雅收尾），绝不能记成该仓失败——
+                # 旧版在这里被 except Exception 吞掉，预算触线后剩余目标被逐个记
+                # 假振次，三晚后错误隔离约 2.4k 仓（2026-09-29 实发事故）
+                raise
             except Exception as e:                     # noqa: BLE001
                 rec["fail_count"] += 1
                 rec["last_error"] = str(e)[:200]
@@ -163,7 +169,7 @@ def run(args):
             if (i + 1) % 200 == 0:
                 save_state(st)
                 log.info("进度 %d/%d · %s", i + 1, len(targets), counts)
-    except BudgetOut as e:
+    except (BudgetOut, QuotaPatienceOut) as e:
         stop_reason = str(e)
     finally:
         save_state(st)
