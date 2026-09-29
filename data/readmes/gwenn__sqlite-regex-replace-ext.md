@@ -1,0 +1,7 @@
+SQLite extensions that uses glib2/icu to provide a regex_replace() function.
+* The glib code was adapted from the pcre match implementation by Alexey Tourbin:
+http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git
+* The icu code was adapted from SQLite official extension:
+https://github.com/sqlite/sqlite/blob/master/ext/icu/icu.c
+
+See [sqlean](https://github.com/nalgeon/sqlean/blob/main/docs/regexp.md#regexp_replace) for a `pcre` based implementation.

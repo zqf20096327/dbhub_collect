@@ -1,0 +1,419 @@
+# iso27001-mcp
+
+**Turn Claude into an ISO 27001 compliance assistant** — controls, risk register, policies, evidence tracking, SoA generation, and full audit workflows in one local encrypted MCP server.
+
+[![npm version](https://img.shields.io/npm/v/iso27001-mcp.svg)](https://npmjs.com/package/iso27001-mcp)
+[![npm downloads](https://img.shields.io/npm/dt/iso27001-mcp.svg)](https://npmjs.com/package/iso27001-mcp)
+[![CI](https://github.com/Sushegaad/MCP-Server-for-ISO27001/actions/workflows/ci.yml/badge.svg)](https://github.com/Sushegaad/MCP-Server-for-ISO27001/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![ISO 27001:2022](https://img.shields.io/badge/ISO%2027001-2022-blue.svg)](https://www.iso.org/standard/27001)
+[![Socket Badge](https://badge.socket.dev/npm/package/iso27001-mcp/0.9.83)](https://socket.dev/npm/package/iso27001-mcp/overview/0.9.83)
+
+**[▶ Live Interactive Demo](https://sushegaad.github.io/MCP-Server-for-ISO27001/)** · **[Guided First-Run Checklist →](QUICKSTART.md)** · **[Roadmap →](ROADMAP.md)**
+
+<div align="center">
+  <a href="https://youtu.be/BGHYTYbL8wE">
+    <img src="https://img.youtube.com/vi/BGHYTYbL8wE/hqdefault.jpg" alt="▶ Getting Started with iso27001-mcp (YouTube)" width="480">
+  </a>
+  <br/>
+  <sub>▶ <a href="https://youtu.be/BGHYTYbL8wE">Getting Started — watch on YouTube</a></sub>
+</div>
+
+---
+
+## Why this exists
+
+ISO 27001 compliance work is typically scattered across spreadsheets, Word docs, ticketing systems, and shared drives. Security teams and consultants spend more time chasing evidence and reformatting documents than actually improving security posture.
+
+**`iso27001-mcp` solves this by giving Claude a live, stateful ISMS** — all 93 ISO 27001:2022 controls seeded and ready, a real risk register, policy and procedure generators, evidence tracking, audit workflows, and a Statement of Applicability, backed by an encrypted local database that never leaves your machine.
+
+The difference from generating static documents: Claude can *query, reason, and update* across your entire ISMS in a single conversation. Ask it to run a gap assessment, identify which open risks are linked to unimplemented controls, generate the policies that close those gaps, and produce a remediation roadmap — all without switching tools.
+
+**Who it's for:** Security teams · Compliance consultants · GRC engineers · Startups preparing for ISO 27001 · Internal audit functions
+
+---
+
+## What Claude can do with it
+
+| Capability | Example prompt |
+|------------|----------------|
+| **Gap assessment** | *"Run an ISO 27001:2022 gap assessment for a 50-person SaaS company."* |
+| **Risk register** | *"Create a risk register for a startup using AWS, GitHub, Slack, and Google Workspace."* |
+| **Statement of Applicability** | *"Generate a Statement of Applicability for all 93 ISO 27001:2022 controls."* |
+| **Policy generation** | *"Create an Access Control Policy mapped to ISO 27001 controls."* |
+| **Procedure generation** | *"Generate an Incident Handling Procedure with GDPR breach notification triggers."* |
+| **Internal audit** | *"Plan an internal audit for clause 9.1 — Performance Evaluation."* |
+| **Corrective actions** | *"List open audit findings and suggest corrective actions."* |
+| **Evidence tracking** | *"Show me all implemented controls with no current evidence."* |
+| **Remediation roadmap** | *"Generate a 26-week remediation roadmap grouped by risk level."* |
+| **Management review** | *"Prepare agenda items for our Clause 9.3 management review."* |
+| **CSV bulk import** | *"Import this CSV of 40 risks into the risk register — dry-run first to check for errors."* |
+| **Risk acceptance** | *"Record the risk owner's acceptance of residual risk for RISK-012."* |
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- **Node.js 20.11.0+** — [nodejs.org](https://nodejs.org) or [nvm](https://github.com/nvm-sh/nvm) / [Volta](https://volta.sh)
+
+> **Build tools are usually not needed.** The package ships pre-built binaries for macOS (arm64 + x64), Windows (x64), and Linux (x64/glibc). Try `npm install -g iso27001-mcp` first — if it succeeds, you're done.
+>
+> <details><summary>↳ If the install fails with a <code>node-gyp</code> error, expand for OS-specific fix</summary>
+>
+> - **macOS:** `xcode-select --install`
+> - **Ubuntu / Debian:** `sudo apt-get install build-essential python3`
+> - **Windows:** [Visual Studio Build Tools](https://visualstudio.microsoft.com/downloads/) → "Desktop development with C++"
+>
+> </details>
+>
+> <details><summary>↳ If you get an <code>EACCES</code> permission error on macOS or Linux</summary>
+>
+> Your Node.js was installed system-wide and `npm install -g` needs write access to a root-owned directory. **Do not use `sudo npm install -g`** — it causes other issues. Instead, install Node via [nvm](https://github.com/nvm-sh/nvm) or [Volta](https://volta.sh), which place Node in your home directory where no elevated permissions are required.
+>
+> </details>
+>
+> <details><summary>↳ If you get <code>command not found</code> on Windows after a successful install</summary>
+>
+> The npm global bin directory (`%APPDATA%\npm`) may not be on your PATH yet. **Open a new terminal window** — the installer updates PATH for new sessions but not the one already open. If it still fails, add `%APPDATA%\npm` to your PATH manually in System Settings → Environment Variables.
+>
+> </details>
+
+### Three commands to get running
+
+```bash
+npm install -g iso27001-mcp     # 1. install globally
+iso27001-mcp init --yes         # 2. one-shot setup — all defaults, no prompts
+                                #    (omit --yes to choose custom paths interactively)
+iso27001-mcp doctor             # 3. verify everything is working
+```
+
+After running `iso27001-mcp doctor` you should see:
+
+```
+iso27001-mcp — health check
+────────────────────────────────────────────────────────
+✅  DB_ENCRYPTION_KEY      set (64 hex chars)
+✅  HMAC_SECRET            set (64 hex chars)
+✅  MCP_API_KEY            set (starts with iso27001_)
+✅  Database file          /Users/you/.iso27001/isms.db
+✅  Database accessible    opened and queried successfully
+✅  Migrations             11/11 applied
+✅  Controls seeded        93 ISO 27001:2022 controls
+✅  Active API key         1 active key found
+✅  Claude Desktop config  /Users/you/.../claude_desktop_config.json
+✅  iso27001-mcp entry     present in mcpServers
+✅  Database writable      read-write test passed
+✅  Env vars in config     DB_ENCRYPTION_KEY, HMAC_SECRET, MCP_API_KEY all present
+────────────────────────────────────────────────────────
+  All 12 checks passed. Restart Claude Desktop if you just ran init.
+```
+
+Then **restart Claude Desktop fully** and you should see 56 tools in the tools panel.
+
+> **macOS:** press **Cmd+Q** to quit (clicking the red dot only closes the window — the server won't reload).  
+> **Windows:** right-click the taskbar icon → **Quit**.
+
+### Tools not appearing after restart?
+
+Check the MCP server log — Claude Desktop writes server stderr here:
+
+```
+macOS:   ~/Library/Logs/Claude/mcp-server-iso27001-mcp.log
+Windows: %APPDATA%\Claude\Logs\mcp-server-iso27001-mcp.log
+```
+
+Common causes: wrong Node.js version loaded by Claude Desktop, missing `DB_ENCRYPTION_KEY` in the config, or a database path that doesn't exist yet. Run `iso27001-mcp doctor` in a fresh terminal for a guided diagnosis.
+
+> **Switched Node versions with nvm or Volta?** The absolute Node.js path baked into your Claude Desktop config at init time now points to a deleted binary. Re-run `iso27001-mcp init` — it will detect your current setup and update the path. Your existing database and API keys are preserved (the wizard aborts if your secrets file already exists and you run with `--yes`).
+
+### Five prompts to try first
+
+```
+"Read the iso27001://server/info resource to check the server is running."
+"Run an ISO 27001 gap assessment for a 50-person SaaS company."
+"Create a risk register for a startup using AWS, GitHub, Slack, and Google Workspace."
+"Generate a Statement of Applicability for ISO 27001:2022."
+"Create an Access Control Policy mapped to ISO 27001 controls."
+```
+
+---
+
+## Tool Categories
+
+56 tools across 16 groups. All require an API key; minimum role is shown. Read-only lookups (single-record fetches, summaries) have been moved to MCP Resources (`iso27001://` URIs) — they appear in Claude's resource panel, not the tools list.
+
+| Group | Tools | Min. role | What it does |
+|-------|-------|-----------|--------------|
+| **Control Registry** | 5 | viewer | Search, filter, and compare ISO 27001:2022 and 2013 controls; browse clause requirements |
+| **Gap Analysis** | 6 | viewer / analyst | Create and track gap assessments; export gap reports; generate remediation roadmaps |
+| **Risk Management** | 6 | viewer / analyst | Risk register with likelihood × impact scoring, treatment plans, and heat-map summaries |
+| **Policy Management** | 3 | analyst / admin | Generate, version, and export policies from 12 Mustache templates |
+| **Statement of Applicability** | 3 | analyst | Build and export SoA from a gap assessment; all 93 controls with applicability decisions |
+| **Audit Management** | 5 | admin | Plan audits, record findings (NCs, OFIs), raise CARs, and close with effectiveness check |
+| **Evidence Tracking** | 5 | viewer / analyst | Register evidence artefacts, record independent verification, spot gaps, link to Jira / GitHub issues |
+| **Server Info** | — | — | Retired to MCP Resource — access via `iso27001://server/info` |
+| **Admin & Key Management** | 3 | admin | Generate / revoke API keys, query the HMAC audit log |
+| **Organisation Profile** | 1 | admin | Set org name, scope, and defaults used by all templates |
+| **Procedure Management** | 4 | analyst / admin | Generate, version, and export procedures from 12 Mustache templates |
+| **Management Review** | 5 | admin | Full Clause 9.3 lifecycle — inputs, outputs, completion (enforces all 7 required input categories) |
+| **Improvement Plan** | 3 | analyst | Clause 10.1 improvement opportunities — track, link, and report |
+| **Evidence Templates** | 2 | analyst | Generate Mustache-rendered evidence documents; dual-write to evidence and generated_evidence tables |
+| **CSV Import** | 2 | analyst | Bulk-import risks and control statuses from a CSV string; supports `dry_run=true` validation preview before writing; imports are HITL-gated with a preview of row counts before commit |
+| **Risk Governance** | 3 | viewer / analyst / admin | §6.1.3 risk methodology (scales, bands, acceptance threshold) and formal risk-owner acceptance of residual risk |
+
+### MCP Workflow Prompts
+
+Beyond individual tools, the server registers **4 MCP prompts** — guided workflows that sequence the right tool calls for you:
+
+| Prompt | Guides Claude through |
+|--------|----------------------|
+| `conduct_gap_assessment` | Org profile → assessment → control statuses → compliance summary → remediation roadmap → export |
+| `register_and_treat_risk` | Duplicate check → risk registration → risk landscape review → treatment plan |
+| `prepare_internal_audit` | Scope review → audit creation → findings (NC/OBS/OFI) → corrective actions → audit report |
+| `prepare_management_review` | Scheduling → all 7 Clause 9.3.2 inputs → outputs → completion |
+
+They appear in Claude's prompt picker when the server is connected.
+
+---
+
+## Templates
+
+The server ships 30 Mustache templates that Claude renders on demand with your organisation's name, scope, and control references automatically injected.
+
+### ISO 27001 Policy Templates
+
+Generate any of these with a single Claude prompt:
+
+`information_security` · `access_control` · `risk_management` · `asset_management` · `incident_response` · `business_continuity` · `supplier_security` · `cryptography` · `physical_security` · `acceptable_use` · `data_classification` · `secure_development`
+
+### ISO 27001 Procedure Templates
+
+`incident_handling` · `access_provisioning` · `asset_onboarding_offboarding` · `audit_log_review` · `backup_restore` · `bcp_testing` · `change_management` · `cryptographic_key_management` · `data_classification_handling` · `secure_development_workflow` · `supplier_onboarding` · `vulnerability_management`
+
+### Evidence Document Templates
+
+Pre-structured evidence documents for auditor submissions: `access_review_attestation` · `bcp_test_report` · `incident_post_mortem` · `risk_treatment_sign_off` · `supplier_security_questionnaire` · `training_acknowledgement`
+
+### Sample Outputs
+
+The [`samples/`](samples/) directory contains audit-pack-ready example outputs for a fictitious organisation ("Acme Financial Services Ltd") — a full gap assessment, remediation roadmap, risk register CSV, SoA CSV, access control policy, incident handling procedure, internal audit report, corrective action records, and evidence package. See [Sample Outputs](docs/REFERENCE.md#sample-outputs) for the full index.
+
+> **ISO 27001 keywords:** ISO 27001 Statement of Applicability generator · ISO 27001 risk register template · ISO 27001 gap assessment tool · ISO 27001 audit evidence tracker · ISO 27001 MCP server · Claude ISO 27001 compliance assistant · AI GRC tool open source
+
+---
+
+## Content Accuracy
+
+Control identifiers, Annex A control names, clause numbers (4–10), and the 93-control 2022 / 114-control 2013 structure are mapped directly from the published ISO/IEC 27001:2022 and ISO/IEC 27001:2013 texts. Policy and procedure templates follow the clause structure and RACI patterns common in practitioner guidance.
+
+> **Note:** Template content and clause mappings have not yet been independently reviewed by a certified ISO 27001 Lead Auditor. They are intended as a starting point, not a substitute for professional audit or legal advice. A formal practitioner review is planned — see [Roadmap](ROADMAP.md).
+
+---
+
+## Security Model
+
+### Role-Based Access Control (RBAC)
+
+Three roles with strict hierarchy. A key can only call tools at or below its assigned role level.
+
+| Capability | Viewer | Analyst | Admin |
+|------------|--------|---------|-------|
+| Read controls, clauses, version mappings | ✅ | ✅ | ✅ |
+| Read gap assessments, risks, policies, audits, evidence | ✅ | ✅ | ✅ |
+| Create / update gap assessments and control statuses | — | ✅ | ✅ |
+| Create and manage risks and treatment plans | — | ✅ | ✅ |
+| Generate policies and procedures | — | ✅ | ✅ |
+| Create and export Statements of Applicability | — | ✅ | ✅ |
+| Track and link evidence artefacts | — | ✅ | ✅ |
+| Record and track improvement opportunities | — | ✅ | ✅ |
+| Record risk-owner acceptance of residual risk; verify evidence | — | ✅ | ✅ |
+| Plan and close internal audits; raise CARs | — | — | ✅ |
+| Set organisation profile | — | — | ✅ |
+| Run management reviews (Clause 9.3) | — | — | ✅ |
+| View and query the audit log | — | — | ✅ |
+| Generate and revoke API keys | — | — | ✅ |
+| Set the risk methodology (scales, bands, acceptance threshold) | — | — | ✅ |
+
+**Tool counts:** Viewer — 19 tools · Analyst — 41 tools · Admin — 56 tools
+
+### What never leaves your machine
+
+**Server egress:** `iso27001-mcp` itself does not transmit ISMS records to the package author, analytics services, or any AI provider. In local stdio mode the server opens no network listener and makes no outbound requests except explicitly configured integrations (Jira/GitHub). The encrypted SQLite database, the `.env` secrets file, and the append-only audit log are all stored locally. There is no telemetry and no cloud sync.
+
+**MCP client/model boundary:** your MCP client (e.g. Claude Desktop) may transmit prompts and tool outputs to its configured model provider as part of normal operation. That processing happens outside `iso27001-mcp`'s trust boundary and is governed by your client's and model provider's deployment and data-handling settings. Treat tool outputs containing sensitive risk, incident, or audit data accordingly.
+
+For the full security profile — threat model, hardening guide, supply chain attestation, and audit log integrity verification — see the **[Trust Center](https://github.com/Sushegaad/MCP-Server-for-ISO27001/tree/main/docs/security/)**.
+
+### Encryption and audit trail summary
+
+- **Database** — AES-256 encrypted SQLite via `better-sqlite3-multiple-ciphers`
+- **Secrets** — `HMAC_SECRET` and `DB_ENCRYPTION_KEY` must be exactly 64 hex chars; the server refuses to start on a missing or malformed value, so a placeholder can never become a live key
+- **API keys** — HMAC-SHA256 hashed; raw key printed once and never stored
+- **Audit log** — HMAC-SHA256 hash chain; every row linked to its predecessor — insertion, deletion, or reordering is detectable; `actor_type` (`ai` | `human` | `system`) and `model_id` are included in the hash so provenance claims are tamper-evident
+- **Prompt injection** — free-text fields sanitised before passing to any handler
+- **Verification and acceptance as first-class records** — evidence verification (independent reviewer, must differ from the collector) and risk-owner acceptance of residual risk are enforced, immutable objects in their own right — not free-text notes
+- **HITL confirmation gates** — 19 mutating tools require `confirmed: true` plus a server-issued `proposal_id` to commit; omitting either returns a preview diff and records `outcome: "proposed"` in the audit log. The `proposal_id` is a server-generated single-use UUID (10-minute TTL) — the model cannot self-confirm by calling the same tool twice with `confirmed: true`, because it must return a token it received from the preview response. Each proposal is bound to the authenticated caller (key_hash), a SHA-256 hash of the exact argument payload (constant-time compared at commit), and — for update tools — the target row's `updated_at` at preview time, so parameter substitution, target substitution, credential swap, replay, and stale-object writes are all rejected. The pipeline additionally verifies the gate actually executed on every confirmed call — a confirmed call that never consumed its proposal is rejected as a server bug rather than silently committed
+
+---
+
+## Table of Contents
+
+- [Why this exists](#why-this-exists)
+- [What Claude can do with it](#what-claude-can-do-with-it)
+- [Quick Start](#quick-start)
+- [Tool Categories](#tool-categories)
+- [Templates](#templates)
+- [Security Model](#security-model)
+- [Use Cases](#use-cases)
+- [Full Reference](#full-reference) — installation, tools API, architecture, modes, development, security
+
+---
+
+## Use Cases
+
+### 1 — Run a Gap Assessment
+
+Ask Claude to assess your organisation against ISO 27001:2022, track the status of each control, and generate a prioritised remediation roadmap.
+
+> *"Create a gap assessment for Acme Ltd covering all 2022 controls. Our scope is cloud infrastructure and development. Exclude physical security controls."*
+
+Claude will create the assessment, pre-populate all 93 controls as `not_started`, and let you work through them one by one or in bulk. When you're done:
+
+> *"Generate a remediation roadmap grouped by risk level. Give us 26 weeks to get to certification."*
+
+The roadmap groups work by theme (Technological first), links controls to open risks, and assigns recommended due dates.
+
+---
+
+### 2 — Manage the Risk Register
+
+Track information security risks end-to-end from identification through treatment.
+
+> *"Register a new risk: our customer database is at risk from SQL injection due to unparameterised queries. Likelihood 4, impact 5."*
+
+> *"Create a treatment plan to mitigate this risk. Link it to controls 8.26 and 8.28. Owner: head of engineering. Due: end of Q3."*
+
+> *"Show me all critical and high risks that still have open treatment plans."*
+
+Risk scores are computed automatically (likelihood × impact) and reflected in summaries and heatmaps without any manual input.
+
+---
+
+### 3 — Generate ISMS Policies and Procedures
+
+Generate a full suite of ISO 27001-aligned policy and procedure documents in seconds.
+
+> *"Set our organisation profile: Acme Ltd. ISMS scope: all cloud-hosted systems and remote employees."*
+
+> *"Generate an information security policy. Owner: CISO. Effective from 1 June 2026."*
+
+> *"Create an Incident Handling Procedure linked to our Information Security Policy."*
+
+Policies and procedures are rendered from Mustache templates with automatic ISO clause and control mappings. Once the organisation profile is set, `organisation_name` and `scope` are injected automatically — no need to repeat them on every call.
+
+**12 policy types:**
+`information_security` · `access_control` · `risk_management` · `asset_management` · `incident_response` · `business_continuity` · `supplier_security` · `cryptography` · `physical_security` · `acceptable_use` · `data_classification` · `secure_development`
+
+**12 procedure types:**
+`incident_handling` · `access_provisioning` · `asset_onboarding_offboarding` · `audit_log_review` · `backup_restore` · `bcp_testing` · `change_management` · `cryptographic_key_management` · `data_classification_handling` · `secure_development_workflow` · `supplier_onboarding` · `vulnerability_management`
+
+---
+
+### 4 — Produce a Statement of Applicability
+
+Generate an SoA directly from your gap assessment, pre-populated with inclusion/exclusion decisions and justifications.
+
+> *"Generate a Statement of Applicability from assessment A-001. Export it as a CSV for the auditors."*
+
+---
+
+### 5 — Run Internal Audits
+
+Plan audits, record findings (NCs, observations, OFIs), raise corrective action requests, and track effectiveness.
+
+> *"Create an audit of our access control and cryptography controls. Auditor: Jane Smith. Planned for 15 June 2026."*
+
+> *"Record a major non-conformity against clause 9.1: no evidence of ongoing monitoring of security objectives."*
+
+> *"Raise a CAR for this finding. Owner: compliance manager. Due in 30 days."*
+
+The server enforces ISO 27001:2022 Clause 10.1 — a corrective action cannot be closed unless `effectiveness_verified` is `true`.
+
+---
+
+### 6 — Track Evidence
+
+Register evidence artefacts for each control, spot gaps, and link them directly to Jira tickets or GitHub issues.
+
+> *"Show me all controls marked as implemented or partial that have no current evidence."*
+
+> *"Register a screenshot of our firewall config as evidence for control 8.20. Collector: ops team. Expires in 12 months."*
+
+> *"Link this evidence to a new Jira ticket in the SEC project: 'Firewall config screenshot — annual review'."*
+
+---
+
+### 7 — Query the Audit Log
+
+Every tool call is logged in a tamper-evident audit trail. Admins can query it at any time. Each entry records who triggered the action (`actor_type`: `ai` | `human` | `system`) and which model was running (`model_id`), both included in the HMAC hash chain so provenance claims are tamper-evident.
+
+> *"Show me all tool calls made in the last 7 days that resulted in an error."*
+
+> *"Query the audit log filtered to actor_type=human to see which calls were made by human operators."*
+
+> *"List all API keys and when they were last used."*
+
+---
+
+## Full Reference
+
+The detailed documentation has been moved to keep this page scannable. Everything below is in **[`docs/REFERENCE.md`](docs/REFERENCE.md)**:
+
+- [Installation](docs/REFERENCE.md#installation) — prerequisites, `iso27001-mcp init`, `doctor`, Claude Desktop config
+- [Connecting to Claude](docs/REFERENCE.md#connecting-to-claude) — Claude Desktop JSON, Claude Code, API key management
+- [Advanced / Manual Setup](docs/REFERENCE.md#advanced--manual-setup) — CI/CD, custom paths, full env var table
+- [Tools Reference](docs/REFERENCE.md#tools-reference) — all 56 tools across 16 groups with full parameter tables
+- [MCP Resources](docs/REFERENCE.md#mcp-resources) — 20 `iso27001://` URIs, formats, example prompts
+- [MCP Prompts](docs/REFERENCE.md#mcp-prompts) — 4 guided workflow prompts (gap assessment, risk treatment, internal audit, management review)
+- [Architecture](docs/REFERENCE.md#architecture) — 8-step security pipeline, database schema, seed data
+- [Modes](docs/REFERENCE.md#modes) — local / CI / team / hosted with SSE endpoint reference
+- [Sample Outputs](docs/REFERENCE.md#sample-outputs) — 9 audit-pack-ready example files for Acme Financial Services Ltd
+- [Integrations](docs/REFERENCE.md#integrations) — Jira and GitHub issue linking
+- [Development](docs/REFERENCE.md#development) — build, test, typecheck, project structure
+- [Security](docs/REFERENCE.md#security) — API key storage, encryption, audit trail, production checklist
+
+---
+
+## Discovery (ARD)
+
+This server publishes an [Agentic Resource Discovery](https://agenticresourcediscovery.org/) entry so ARD-implementing registries and agents can find it by semantic search ("run an ISO 27001 gap assessment") without prior installation:
+
+- **Identifier:** `urn:air:sushegaad.github.io:server:iso27001-mcp`
+- **Manifest:** [`ard.json`](https://sushegaad.github.io/MCP-Server-for-ISO27001/ard.json) — advertised via `<link rel="ard">` and in-page JSON-LD on the [demo site](https://sushegaad.github.io/MCP-Server-for-ISO27001/)
+- **Server card:** [`server-card.json`](https://sushegaad.github.io/MCP-Server-for-ISO27001/server-card.json) — all 56 tools with descriptions, minimum roles, and MCP behaviour annotations, generated from the tool registry on every build
+
+---
+
+## Community
+
+[Discussed on r/mcp](https://www.reddit.com/r/mcp/comments/1u2mid8/built_an_isms_iso_27001_mcp_server_looking_for/) · 15K views · 28 upvotes
+
+> "Ace dude! I've used your GRC skills, and I'm a fan of the work. Keep it up!!"
+> — [asachs01](https://www.reddit.com/r/mcp/comments/1u2mid8/comment/), r/mcp
+
+> "Compliance tools are different from most MCP servers because every write needs to be traceable … the 'human in the loop' isn't just a nice-to-have, it's often a regulatory requirement."
+> — [NovaAgent2026](https://www.reddit.com/r/mcp/comments/1u2mid8/comment/), r/mcp *(audit trail HMAC chain and HITL confirmation gates shipped in v0.9.4–v0.9.6)*
+
+---
+
+## Author
+
+**Hemant Naik** · [LinkedIn](https://www.linkedin.com/in/tanaji-naik/) · [hemant.naik@gmail.com](mailto:hemant.naik@gmail.com) · Built April 2026
+
+---
+
+## License
+
+MIT © 2026

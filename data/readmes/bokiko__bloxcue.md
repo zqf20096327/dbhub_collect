@@ -1,0 +1,288 @@
+# BloxCue
+
+<p align="center">
+  <img src="assets/bloxcue-v3.jpg" alt="BloxCue — local context retrieval for AI coding tools" width="600" />
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="MIT" /></a>
+  <img src="https://img.shields.io/badge/python-3.8+-blue?style=flat-square" alt="Python 3.8+" />
+  <img src="https://img.shields.io/badge/MCP-stdio-blueviolet?style=flat-square" alt="MCP" />
+</p>
+
+BloxCue is a standalone local context retrieval layer for AI coding tools. It indexes small markdown knowledge blocks and learned memory, then exposes search and context injection through MCP.
+
+BloxCue v3 is MCP-first for Claude, Codex, Gemini, Cursor, Windsurf, and generic MCP clients. Claude Code hooks are an optional adapter. Continuous-Claude and PostgreSQL are legacy import sources, not required runtime services.
+
+## Contents
+
+- [Why BloxCue?](#why-bloxcue)
+- [Do Claude and Codex share memory?](#do-claude-and-codex-share-memory)
+- [Quick Start](#quick-start)
+- [Upgrading from v2](#upgrading-from-v2)
+- [What Changed In v3](#what-changed-in-v3)
+- [MCP Setup](#mcp-setup)
+- [Knowledge Blocks](#knowledge-blocks)
+- [Learned Memory](#learned-memory)
+- [Legacy PostgreSQL Import](#legacy-postgresql-import)
+- [Optional Claude Code Hook](#optional-claude-code-hook)
+- [Commands](#commands)
+- [Environment](#environment)
+- [Security](#security)
+- [More Documentation](#more-documentation)
+
+## Why BloxCue?
+
+A `CLAUDE.md` (or any always-loaded system prompt) gets reloaded on every turn. A 30 KB file becomes hundreds of thousands of wasted tokens per session. BloxCue moves that knowledge into ranked, on-demand markdown blocks: BM25 + IDF + stemming, with token-budgeted injection. Your assistant gets the deployment guide when you ask about deployments, not on every prompt about anything.
+
+The same engine indexes locally-captured "learned memory" (decisions, fixes, patterns) and exposes both through one MCP server, so it works the same way in Claude Code, Codex, Gemini CLI, Cursor, and Windsurf.
+
+## Do Claude and Codex share memory?
+
+**Short answer: yes for knowledge, no for chat.**
+
+Think of BloxCue as a **shared filing cabinet** sitting on your machine. Claude reaches into it. Codex reaches into it. So does Cursor, Windsurf, and any other MCP client you point at the same setup. They all read and write the same files.
+
+What's in the cabinet:
+
+- Your markdown notes under `~/.bloxcue/knowledge/`
+- Your saved learnings inside `~/.bloxcue/learnings.db`
+- Your old `~/.claude-memory/` blocks if you have them
+
+What's **not** in the cabinet:
+
+- Your conversations. Claude doesn't see what you said to Codex. Codex doesn't see what you said to Claude. Each chat is private to that tool.
+
+### What this means in practice
+
+| Scenario | Does it work? |
+|---|---|
+| You write a note in `~/.bloxcue/knowledge/guides/deploy.md`. Both Claude and Codex find it on their next search. | ✅ Automatic. |
+| You tell Claude *"save a learning that we picked Postgres for X."* Later you ask Codex *"what did we pick for X?"* | ✅ Works after one re-index — ask either tool to call `index_blocks` to refresh. |
+| You're mid-debug in Claude. You switch to Codex and want it to continue right where you left off. | ❌ Doesn't work. Codex starts fresh. Either save a learning summarizing where you are, or just brief Codex manually. |
+
+### The handoff trick
+
+If you want Codex to pick up where Claude left off, end your Claude session with something like:
+
+> *"Save a learning titled 'Investigating X — current state'. Body: hypothesis is Y, next step is Z, ruled out W."*
+
+Then in Codex:
+
+> *"Search bloxcue for 'investigating X' and tell me what you find."*
+
+Not real-time, not automatic, but it works for any pair of tools that talk to BloxCue.
+
+## Quick Start
+
+**Fresh install:**
+
+```bash
+git clone https://github.com/bokiko/bloxcue.git ~/bloxcue
+cd ~/bloxcue
+./install.sh --auto
+python3 ~/.bloxcue/knowledge/scripts/indexer.py --search "getting started"
+```
+
+**Already have `~/bloxcue/` from v2?** `git clone` will fail silently and leave you running the old installer. Use `git pull` instead:
+
+```bash
+cd ~/bloxcue
+git pull origin main
+./install.sh --auto
+python3 ~/.bloxcue/knowledge/scripts/indexer.py --search "getting started"
+```
+
+If the installer banner says *"Save 90% of your tokens"* or the first path option is `~/.claude-memory`, you're running the v2 installer — pull again and re-run.
+
+Two locations are involved and they're easy to mix up:
+
+| Path | Contains | Why it lives there |
+|------|----------|--------------------|
+| `~/bloxcue/` | The cloned source repo | Where `mcp_server.py` runs from — one canonical install per machine |
+| `~/.bloxcue/knowledge/` | Your markdown blocks + a copy of `indexer.py` | The indexer ships with the data so it can read/write its index alongside the blocks |
+
+The installer creates the knowledge folder, copies `indexer.py` into it, and prints MCP setup instructions. It does not install or enable Claude Code hooks unless `--claude-hook` is passed.
+
+## Upgrading from v2
+
+If you used BloxCue v2, you have `~/.claude-memory/` with your existing markdown blocks. v3 keeps that directory readable — no migration needed.
+
+```bash
+cd ~/bloxcue && git pull origin main
+./install.sh --auto
+```
+
+After upgrade:
+
+- Existing markdown blocks under `~/.claude-memory/` are auto-indexed alongside `~/.bloxcue/knowledge/`. They appear in search results with `legacy://claude-memory/` virtual paths.
+- If you used the v2 PostgreSQL runtime integration, set `BLOXCUE_DATABASE_URL` and run `./scripts/indexer.py --import-postgres` once to copy `archival_memory` rows into SQLite. After that, you don't need a running Postgres anymore.
+- The shell hook (`hooks/memory-retrieve.sh`) is now a 5-line shim that exec's the new Python adapter. If you previously enabled it, it keeps working.
+- Claude Code auto-injection is no longer wired by default. Re-run with `./install.sh --claude-hook` if you want it.
+
+## What Changed In v3
+
+- New default knowledge path: `~/.bloxcue/knowledge`
+- Existing `~/.claude-memory` directories remain readable for compatibility
+- Learned memory is stored in BloxCue-owned SQLite at `~/.bloxcue/learnings.db`
+- Learned memory records use virtual paths like `memory://learning/1`
+- Legacy PostgreSQL records can be imported once from Continuous-Claude `archival_memory`
+- Claude Code prompt hooks use `hooks/memory-retrieve.py`; the shell hook is only a compatibility shim
+- Installer defaults to client-agnostic setup instructions and does not mutate client config unless explicitly requested
+
+## MCP Setup
+
+Use the repository copy of the MCP server:
+
+```json
+{
+  "mcpServers": {
+    "bloxcue": {
+      "type": "stdio",
+      "command": "python3",
+      "args": ["/home/USER/bloxcue/scripts/mcp_server.py"],
+      "env": {
+        "BLOXCUE_MEMORY_DIR": "/home/USER/.bloxcue/knowledge"
+      }
+    }
+  }
+}
+```
+
+Known config locations:
+
+- Claude Code: `~/.claude/mcp_config.json`
+- Cursor: `.cursor/mcp.json`
+- Windsurf: `~/.codeium/windsurf/mcp_config.json`
+- Generic MCP: use stdio command `python3 /absolute/path/to/scripts/mcp_server.py`
+
+Prefer config snippets for Codex and Gemini unless your installed CLI documents a stable MCP add command.
+
+## Knowledge Blocks
+
+Blocks are markdown files with optional frontmatter:
+
+```markdown
+---
+title: Production Deploy
+category: deployment
+tags: [deploy, production]
+---
+
+# Production Deploy
+
+Run tests, apply migrations, restart services, and verify health checks.
+```
+
+Place blocks under `~/.bloxcue/knowledge`, then index or search:
+
+```bash
+python3 ~/.bloxcue/knowledge/scripts/indexer.py
+python3 ~/.bloxcue/knowledge/scripts/indexer.py --search "production deploy"
+python3 ~/.bloxcue/knowledge/scripts/indexer.py --list
+```
+
+If `~/.claude-memory` exists, BloxCue also indexes it as read-compatible legacy knowledge. Legacy entries are exposed with `legacy://claude-memory/...` paths.
+
+## Learned Memory
+
+BloxCue v3 stores learned memory locally in SQLite:
+
+```bash
+python3 ~/.bloxcue/knowledge/scripts/indexer.py --add-learning "Use uv for Python project dependency sync" --learning-title "Python dependencies" --learning-tags python,uv
+python3 ~/.bloxcue/knowledge/scripts/indexer.py --list-learnings
+python3 ~/.bloxcue/knowledge/scripts/indexer.py --search "python dependencies"
+```
+
+Learned memory appears in the same index as markdown blocks using `memory://learning/{id}` paths.
+
+## Legacy PostgreSQL Import
+
+PostgreSQL is no longer a default runtime integration. Continuous-Claude users can import existing `archival_memory` rows once:
+
+```bash
+BLOXCUE_DATABASE_URL="postgresql://user:pass@host:5432/db" \
+  python3 ~/.bloxcue/knowledge/scripts/indexer.py --import-postgres
+```
+
+Readable compatibility for old `pg://learning/{uuid}` records remains in the code path, but new learned records should live in SQLite.
+
+## Optional Claude Code Hook
+
+Install the Python hook adapter only when you want automatic `UserPromptSubmit` injection:
+
+```bash
+./install.sh --auto --claude-hook
+```
+
+Add the printed hook command to `~/.claude/settings.json`. The hook parses stdin JSON, sanitizes `user_prompt`, calls the indexer with `subprocess.run([...], shell=False)`, and emits JSON with `json.dumps`.
+
+## Commands
+
+```bash
+# Rebuild index
+python3 ~/.bloxcue/knowledge/scripts/indexer.py --rebuild
+
+# Search
+python3 ~/.bloxcue/knowledge/scripts/indexer.py --search "query" --limit 5
+
+# JSON search output
+python3 ~/.bloxcue/knowledge/scripts/indexer.py --search "query" --json
+
+# Health report
+python3 ~/.bloxcue/knowledge/scripts/indexer.py --health
+
+# Add/list learned memory
+python3 ~/.bloxcue/knowledge/scripts/indexer.py --add-learning "text" --learning-title "title"
+python3 ~/.bloxcue/knowledge/scripts/indexer.py --list-learnings
+```
+
+## Environment
+
+**Core paths**
+
+| Variable | Default | Purpose |
+|---|---:|---|
+| `BLOXCUE_MEMORY_DIR` | `~/.bloxcue/knowledge` | Primary markdown knowledge directory |
+| `BLOXCUE_LEARNINGS_DB` | `~/.bloxcue/learnings.db` | SQLite learned memory database |
+| `BLOXCUE_INDEX_FILE` | `<MEMORY_DIR>/.bloxcue/index.json` | Search index cache location |
+| `BLOXCUE_USAGE_FILE` | `<MEMORY_DIR>/.bloxcue/usage.jsonl` | Local search analytics log |
+| `BLOXCUE_MAX_TOKENS` | `3000` | Token budget for `inject_context` |
+
+**Hook tuning** (only read by `hooks/memory-retrieve.py`)
+
+| Variable | Default | Purpose |
+|---|---:|---|
+| `BLOXCUE_HOOK_MAX_RESULTS` | `3` | Max blocks returned per Claude Code prompt |
+| `BLOXCUE_HOOK_MAX_CONTEXT_CHARS` | `3000` | Cap on injected context size per prompt |
+| `BLOXCUE_HOOK_MIN_QUERY_LENGTH` | `5` | Minimum prompt length before search runs |
+
+**Legacy PostgreSQL** (one-time import only, not runtime)
+
+| Variable | Default | Purpose |
+|---|---:|---|
+| `BLOXCUE_DATABASE_URL` | unset | PostgreSQL connection URL for `--import-postgres` |
+| `BLOXCUE_ENABLE_LEGACY_PG_RUNTIME` | `0` | Temporary compatibility switch for v2 live PG indexing |
+
+`BLOXCUE_PG_ENABLED` from v2 no longer enables runtime PostgreSQL merging. Use `--import-postgres` for migration; temporary live compatibility requires `BLOXCUE_ENABLE_LEGACY_PG_RUNTIME=1`.
+
+## Security
+
+BloxCue reads local markdown and SQLite records. File retrieval blocks path traversal outside configured knowledge directories. Index writes are atomic (tempfile + `os.replace`) and cross-platform — no `fcntl` dependency, so v3.0.1+ runs on Windows. Legacy PostgreSQL import uses read-only fetches through `pg_provider.py`.
+
+For the full policy, audit history, and per-component analysis, see [`SECURITY.md`](SECURITY.md).
+
+## More Documentation
+
+- [`CHANGELOG.md`](CHANGELOG.md) — release notes for each version
+- [`AI_SETUP.md`](AI_SETUP.md) — concise setup guide for AI assistants installing BloxCue on a user's machine
+- [`SECURITY.md`](SECURITY.md) — full security policy, what BloxCue accesses, and the audit history
+- [`security/2026-02-06-audit-remediation.md`](security/2026-02-06-audit-remediation.md) — v2 audit findings and fixes
+- [`security/2026-05-04-v3-audit-remediation.md`](security/2026-05-04-v3-audit-remediation.md) — v3.0.1 audit findings and fixes
+- [`templates/`](templates/) — example knowledge blocks (deployment guides, runbooks, API references)
+- [Releases](https://github.com/bokiko/bloxcue/releases) — tagged versions and changelogs
+- [Issues](https://github.com/bokiko/bloxcue/issues) — bug reports and feature requests
+
+## License
+
+[MIT](LICENSE)

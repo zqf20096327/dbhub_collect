@@ -1,0 +1,249 @@
+# Nagual-QE
+
+[![CI](https://github.com/proffesor-for-testing/nagual-qe/actions/workflows/rust.yml/badge.svg)](https://github.com/proffesor-for-testing/nagual-qe/actions/workflows/rust.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Rust 1.75+](https://img.shields.io/badge/rust-1.75%2B-orange)](https://www.rust-lang.org)
+
+**A Rust-native self-learning knowledge system for Quality Engineering.**
+
+Nagual-QE stores every pattern, test insight, and decision you encounter,
+learns which ones actually work, and surfaces the right one when you need it
+again. It is a local-first, privacy-respecting memory layer for engineers and
+their AI agents.
+
+> *"The Tonal is the island of the known. The Nagual is the vast unknown
+> surrounding the island. The warrior's path is not to destroy the Tonal, but
+> to keep it lean so the Nagual can emerge."*
+
+New here? Read **[learn-nagual.md](learn-nagual.md)** — a layered,
+earned-recognition onboarding walkthrough that takes you from your first
+pattern to the Constitution in six steps. The full principles live in
+[NAGUAL_CONSTITUTION.md](NAGUAL_CONSTITUTION.md).
+
+---
+
+## What it does
+
+- **Stores** problem → solution patterns with provenance, tags, and embeddings
+- **Learns** from outcomes: every success or failure updates a Bayesian quality
+  score (Beta distribution), not just a scalar reward
+- **Retrieves** with hybrid search — full-text (FTS5) + cosine similarity over
+  128-dim embeddings + graph-boosted scoring
+- **Consolidates** near-duplicates automatically (BLAKE3 + cosine thresholds)
+- **Predicts** with Brier-calibrated confidence; self-scores its own accuracy
+- **Redacts PII** before any data ever leaves the local machine
+- **Serves** a browser dashboard + HTTP/WebSocket API + Unix socket for local
+  agent integration
+
+Designed to be the memory layer behind AI-assisted QE workflows — but it works
+equally well as a standalone engineer's notebook.
+
+---
+
+## Why `nagual-qe`
+
+This is the **public** edition of Nagual — the same core engine, shipped with
+a QE-flavoured seed pattern set (optional) so you get value on day one. Use it
+to back an [agentic-qe](https://github.com/proffesor-for-testing/agentic-qe)
+fleet, or stand it up on its own.
+
+### Core features
+
+| Capability | Feature flag | Default |
+|---|---|---|
+| ReasoningBank (pattern storage + retrieval) | always on | ✅ |
+| Hash embedder (no external deps) | always on | ✅ |
+| ONNX embedder (all-MiniLM-L6-v2) | `onnx-embed` | ✅ |
+| KOS (lineage, witness, delta, tiers, epochs) | `kos` | ✅ |
+| HTTP + WebSocket dashboard | `serve` | opt-in |
+| Terminal UI | `tui` | opt-in |
+| MinCut graph clustering | `mincut` | opt-in |
+| Cross-domain transfer learning | `domain-expansion` | opt-in |
+| Meta-cognitive self-critique | `strange-loop-meta` | opt-in |
+
+---
+
+## What it looks like
+
+```console
+$ nagual knowledge store "Flaky async test caused by race in setup fixture" \
+    --solution "Add explicit await on the shared fixture. The fixture runs in a
+                tokio::spawn and the test starts before it completes ~5% of
+                the time. Using an Arc<Notify> fixes this." \
+    --domain "qe.flaky" --tags "async,race-condition,tokio"
+  stored pattern 7a9f3b1c (domain=qe.flaky, reward=0.500, tier=booster)
+
+$ nagual knowledge search "flaky async"
+  1. qe.flaky  score=0.84  Flaky async test caused by race in setup fixture
+     Add explicit await on the shared fixture. The fixture runs in a
+     tokio::spawn and the test starts before it completes ~5% of the time.
+     Using an Arc<Notify> fixes this.
+
+$ nagual learn record 7a9f3b1c success --feedback "Worked on CI too"
+  recorded outcome — bayesian_score: Beta(2.0, 1.0) → mean 0.667 (1 trial)
+
+$ nagual status
+  Patterns:       515 (seed) + 3 (local)    Avg reward: 0.547
+  Embeddings:     518 / 518 (onnx)          DB size:    1.6 MB
+  Drift (7d):     +0.02                     Sessions:   1 active
+  Constitution:   enforce (audit)           Tier:       booster 3, reflex 0
+```
+
+**Reproduce it**: `bash scripts/demo.sh` (drops a temp DB so your real store
+stays untouched). Or record your own session:
+
+```bash
+brew install asciinema
+asciinema rec demo.cast -c 'bash scripts/demo.sh'
+```
+
+---
+
+## Quick start
+
+### Fastest path — no ONNX Runtime, no model files
+
+Needs only Rust and a C toolchain. Uses the built-in hash embedder (deterministic SHAKE-256,
+128-dim) instead of the ONNX sentence model, and includes the dashboard. Good for trying the
+learning loop, CI and minimal containers. (The
+[HUSTEF 2026 masterclass](https://github.com/proffesor-for-testing/hustef-2026-memory-masterclass)
+devcontainer uses the ONNX build below, so `knowledge search --semantic` works.)
+
+```bash
+git clone https://github.com/proffesor-for-testing/nagual-qe
+cd nagual-qe
+cargo build --release --no-default-features --features "kos serve"
+cp target/release/nagual ~/.local/bin/
+
+nagual status --db-path ./nagual.db
+nagual knowledge import --seed seeds/qe-seed-v1.jsonl --db-path ./nagual.db   # optional QE seed
+```
+
+Hash vectors are not semantic, so `knowledge search --semantic` is of little use in this build;
+full-text search, the learning loop, scoring and the dashboard behave the same. Don't mix
+hash and ONNX embeddings in one database.
+
+### macOS (with ONNX embeddings)
+
+```bash
+# Prereqs: Rust, ONNX Runtime
+brew install onnxruntime
+
+# Build + install
+git clone https://github.com/proffesor-for-testing/nagual-qe
+cd nagual-qe
+bash scripts/mac-setup.sh
+
+# Verify
+nagual status
+nagual knowledge store "Flaky test caused by async race" \
+  --solution "Add explicit await on the setup fixture" \
+  --domain "qe.flaky" --tags "async,race-condition"
+nagual knowledge search "flaky async"
+```
+
+### Linux (Debian/Ubuntu, with ONNX embeddings)
+
+```bash
+# Prereqs
+sudo apt-get install -y build-essential pkg-config libssl-dev sqlite3
+# ONNX Runtime (arm64 example; x86_64: replace aarch64 with x64). Tested with 1.24.1.
+wget https://github.com/microsoft/onnxruntime/releases/download/v1.24.1/onnxruntime-linux-aarch64-1.24.1.tgz
+tar xf onnxruntime-linux-aarch64-1.24.1.tgz
+sudo cp onnxruntime-linux-aarch64-1.24.1/lib/libonnxruntime.so* /usr/lib/ && sudo ldconfig
+
+# Model (~90 MB): anywhere in $NAGUAL_MODEL_DIR, ./models or ~/.nagual/models
+mkdir -p ~/.nagual/models
+curl -L -o ~/.nagual/models/all-MiniLM-L6-v2.onnx \
+  https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/onnx/model.onnx
+curl -L -o ~/.nagual/models/tokenizer.json \
+  https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer.json
+
+# Build
+cargo build --release
+sudo cp target/release/nagual /usr/local/bin/
+```
+
+### Without ONNX (hash embedder only)
+
+```bash
+cargo build --release --no-default-features --features kos
+```
+
+### Run the dashboard
+
+```bash
+cargo build --release --features serve          # or: --no-default-features --features "kos serve"
+nagual serve --port 3333
+# open http://localhost:3333
+```
+
+---
+
+## Documentation
+
+- [learn-nagual.md](learn-nagual.md) — **start here** — layered onboarding walkthrough
+- [docs/setup.md](docs/setup.md) — local installation (all platforms)
+- [docs/database-setup.md](docs/database-setup.md) — SQLite + optional PostgreSQL
+- [docs/gcloud-deploy.md](docs/gcloud-deploy.md) — production deployment on GCE
+- [docs/seeding-qe.md](docs/seeding-qe.md) — importing the optional QE seed
+- [docs/architecture.md](docs/architecture.md) — module map + data flow
+- [NAGUAL_CONSTITUTION.md](NAGUAL_CONSTITUTION.md) — the eight principles
+
+---
+
+## Data storage
+
+- **SQLite** at `./nagual.db` (or `~/.nagual/nagual.db`) — always.
+- **PostgreSQL** (optional) via `DualWriteAdapter` — needed for the
+  `ruvector-postgres` extension (HNSW + GNN + SONA) and multi-host deployments.
+
+No data ever leaves your machine unless you explicitly enable cloud sync.
+When you do, the PII redactor strips 12 classes of sensitive strings
+(paths, IPs, emails, API keys, SSH keys, JWTs, phone numbers, etc.) before
+any write to PostgreSQL or any outbound HTTP call. The same redactor runs on the
+`nagual serve` read path (`/api` search, get and list responses), so a secret stored
+locally is not handed to an agent through an ordinary search. The local SQLite file
+itself is never rewritten.
+
+---
+
+## Status
+
+Pre-1.0, actively developed. The public surface is stable enough to build on,
+but expect migration notes between minor versions. All changes are documented
+in [CHANGELOG.md](CHANGELOG.md).
+
+---
+
+## Contributing
+
+Issues and PRs welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the local
+development loop, code style, and the test requirements we enforce before
+merging.
+
+---
+
+## Acknowledgements
+
+Nagual-QE stands on the work of three upstream projects:
+
+- **[RuVector](https://github.com/ruvnet/RuVector)** — the pgvector-compatible
+  PostgreSQL extension (GNN + SONA + hybrid search) that backs the optional
+  Postgres dual-write path. Nagual's `ruvector(128)` columns, cosine operator
+  class, and HNSW indexing all come from here.
+- **[Ruflo](https://github.com/ruvnet/ruflo)** — the agent workflow framework
+  whose memory primitives, hooks, and MCP tooling informed the shape of
+  Nagual's own hooks and swarm coordination.
+- **[agentic-qe](https://github.com/proffesor-for-testing/agentic-qe)** — the
+  sister QE fleet. Nagual-QE is designed to be the memory layer that an
+  agentic-qe swarm reads and writes through, and the two projects share a
+  common vocabulary for patterns, outcomes, and learning.
+
+Thanks to the authors and contributors of all three.
+
+---
+
+## License
+
+MIT — see [LICENSE](LICENSE).

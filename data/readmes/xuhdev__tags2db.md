@@ -1,0 +1,52 @@
+Tags2db is a program that converts tags files (ctags, gccxml, etc.) to database
+tables (sqlite3, etc.). Currently only ctags, gccxml and sqlite3 are supported.
+Other tags files such as etags, and other databases such as MySQL will be
+supported in the future.
+
+1. Installation
+
+To build and install it, First install sqlite3 development packages. On
+Debian, you could do this by executing the following command:
+
+# aptitude install libsqlite3-dev
+
+If you are using a source tarball, then extract it:
+
+$ tar zxvf tags2db-{version}.tar.gz
+$ cd tags2db-{version}
+
+Or you obtained the source code through the git repository, run ./autogen.sh:
+
+$ cd /path/to/source/dir
+$ ./autogen.sh
+
+Run ./configure and make:
+
+$ ./configure
+$ make
+
+You could also run "./configure --help" to see more compilation arguments
+before run "./configure".
+
+Now the binary executables should be built. To install it, run the following
+command:
+
+$ su -c 'make install'
+
+This command requires root privilege.
+
+
+2. Usage
+
+Run "tags2db --help" to see how to use it:
+
+$ tags2db --help
+
+
+3. License
+
+See the file COPYING.
+
+
+Hong Xu
+2011/09/27

@@ -1,0 +1,203 @@
+<p align="center">
+  <img src="frontend/src/assets/latent-mark.svg" width="64" alt="Latent Logo">
+</p>
+
+# Latent Library
+
+![Java](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![Vue.js](https://img.shields.io/badge/Vue.js-3-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
+![PrimeVue](https://img.shields.io/badge/PrimeVue-3-06C167?style=for-the-badge&logo=primevue&logoColor=white)
+![SQLite](https://img.shields.io/badge/Database-SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![Electron](https://img.shields.io/badge/Electron-31-47848F?style=for-the-badge&logo=electron&logoColor=white)
+
+A high-performance desktop asset manager built for the AI image generation ecosystem. It unifies metadata parsing across fragmented formats, providing **SQL-backed search**, **Smart Collections**, **live folder monitoring**, and **AI-powered interrogation** in a modern, multi-themed desktop interface.
+
+---
+
+## 📸 Interface
+
+<p align="center">
+  <img src="frontend/src/assets/screenshots/hero.jpg" width="800" alt="Main Browser and Metadata Sidebar">
+  <br>
+  <i>Unified grid gallery with instant SQLite search and dynamic metadata parsing.</i>
+</p>
+
+<p align="center">
+  <img src="frontend/src/assets/screenshots/gallery.jpg" width="800" alt="Virtualized Grid Gallery with AI Tags">
+  <br>
+  <i>Virtualized grid browsing with AI-tag overlays, model/sampler/LoRA filters, and star ratings.</i>
+</p>
+
+### Rapid Organization & Inspection
+
+<p align="center">
+  <img src="frontend/src/assets/screenshots/duplicate.jpg" width="800" alt="Duplicate Detective">
+  <br>
+  <i><b>Duplicate Detective:</b> Identify and manage identical or similar generations across your entire library.</i>
+</p>
+
+<p align="center">
+  <img src="frontend/src/assets/screenshots/comparator.jpg" width="800" alt="Image Comparator Slider">
+  <br>
+  <i><b>Image Comparator:</b> Pixel-peep fine details between two generations with the draggable slider.</i>
+</p>
+
+<details>
+<summary><b>View More Features (Collections, Speed Sorter, Scrubber & Settings)</b></summary>
+<br>
+
+<p align="center">
+  <img src="frontend/src/assets/screenshots/collections.png" width="800" alt="Smart Collections">
+  <br>
+  <i><b>Smart Collections:</b> Create dynamic, auto-populating folders based on complex metadata filters.</i>
+</p>
+
+<p align="center">
+  <img src="frontend/src/assets/screenshots/sorter.jpg" width="800" alt="Speed Sorter">
+  <br>
+  <i><b>Speed Sorter:</b> Rapidly categorize massive generation dumps using keyboard hotkeys.</i>
+</p>
+
+<p align="center">
+  <img src="frontend/src/assets/screenshots/scrubber.png" width="800" alt="Metadata Scrubber">
+  <br>
+  <i><b>Metadata Scrubber:</b> Strip hidden EXIF, prompts, and workflow data before sharing an image.</i>
+</p>
+
+<p align="center">
+  <img src="frontend/src/assets/screenshots/settings.png" width="500" alt="Settings">
+  <br>
+  <i><b>Settings:</b> Control scanning behavior, manage the local database, and adjust appearance.</i>
+</p>
+
+</details>
+
+---
+
+## 🔐 Portable, Private & Secure
+
+Designed for the privacy-conscious artist, this application operates on a strictly "Local-First" philosophy.
+
+* **Standalone Desktop App:** Runs as a single `.exe` (Windows), `.AppImage` (Linux), or `.dmg` (macOS). No installer required.
+* **Bundled Runtime:** Includes a self-contained Java 21 environment. No system-wide Java installation is required.
+* **Portable Data:** All data (database, thumbnails, settings) is stored in a local `data/` folder next to the executable, including on macOS (it sits beside the app bundle, not in `~/Library/Application Support`), making it easy to backup or move.
+* **100% Offline / No Telemetry:** There are no "cloud sync" features, analytics, or background API calls. Your prompts and generation data never leave your machine.
+* **Privacy Scrubbing:** Integrated **Scrubber View** allows you to sanitize images before sharing. It strips hidden generation metadata (Prompts, ComfyUI Workflows, Seed data) while preserving visual quality.
+
+---
+
+## ✨ Key Features
+
+* **Universal Metadata Engine:** Advanced parsing strategies for the entire stable diffusion ecosystem.
+  * **ComfyUI:** Traverses complex node graphs (recursive inputs) and API formats to identify the true Sampler, Scheduler, and LoRAs used.
+  * **Automatic1111 / Forge:** Parses standard "Steps: XX, Sampler: XX" text blocks.
+  * **Others:** Native support for **InvokeAI**, **SwarmUI**, and **NovelAI**.
+  * *Note: Metadata extraction requires images to contain embedded EXIF or PNG text chunks (standard for most AI generators).*
+* **AI Auto-Tagger:** Integrated **WD14 ONNX** model for local image interrogation. Automatically generate descriptive tags for your library without external API calls.
+* **Library Management:**
+  * **Smart Collections:** Create dynamic collections based on metadata filters (e.g., "All images using Flux model with > 4 stars").
+  * **Visual Previews:** Collections feature a 3D-stacked image preview for immediate visual context.
+  * **Pinned Folders:** Bookmark frequently accessed directories for rapid navigation.
+  * **Star Ratings:** Rate images (1-5 stars) with instant filtering.
+* **Speed Sorting:** A dedicated mode for processing high-volume generation batches.
+  * **Hotkeys:** Instantly move images to configurable target folders using numeric keys (1-5).
+  * **Recycle Bin:** Safely move unwanted results to the OS trash (Recycle Bin/Trash).
+* **Performance:**
+  * **FTS5 Search:** Powered by SQLite's Full-Text Search for near-instant results across tens of thousands of images.
+  * **Virtualization:** Uses virtual scrolling to handle massive folders without UI lag.
+  * **Project Loom:** Uses Java 21 Virtual Threads for non-blocking background indexing.
+* **Modern UX & Customization:**
+  * **Latent Design System:** A unified dark interface (cyan & violet accents) built from a shared component library for visual consistency across every tool view.
+  * **Image Comparator:** Side-by-side comparison tool with a draggable slider.
+* **Real-Time Hot Folder Sync:** Keep the app open alongside your generator. A background file watcher detects new images and injects them into your gallery in real-time as they are generated, without locking the database.
+* **Network Drive & WSL Path Support:** Folder monitoring works with any path your OS can browse to, including mapped network drives and Windows Subsystem for Linux shares (`\\wsl$\`). Handy for pinning Dockerized ComfyUI/Automatic1111 output folders.
+
+---
+
+## 💻 System Requirements
+
+* **OS:** Windows 10/11 (64-bit), Linux (AppImage), or macOS (11+).
+* **Memory:** 
+  * **Minimum:** 4GB RAM.
+  * **Recommended:** 8GB+ RAM (especially when using the AI Auto-Tagger).
+* **Storage:** ~300MB for the application + additional space for the WD14 AI model (~300MB) and thumbnail cache (~50MB per 10,000 images).
+* **GPU:** Not required. AI interrogation runs efficiently on the CPU via ONNX Runtime.
+
+---
+
+## 🛠️ Technical Architecture
+
+The application is built as a highly concurrent hybrid desktop app, combining a resilient Spring Boot backend with a strict lazy-loading Vue.js frontend, packaged via Electron.
+
+* **Backend (Java 21 + Spring Boot 3.3):**
+  * **SQLite + FTS5:** High-performance local indexing and relational storage.
+  * **Virtual Threads:** Optimized for heavy I/O tasks (file scanning and metadata extraction).
+  * **ONNX Runtime:** Local execution of AI models with automated native resource management and idle-eviction.
+  * **Flyway:** Automated database schema migrations.
+
+* **Frontend (Vue 3 + PrimeVue):**
+  * **Pinia:** Centralized state management for the image library and UI state.
+  * **PrimeVue:** Premium UI component library with custom glassmorphism overrides.
+  * **Vite:** Modern build pipeline for the frontend assets.
+
+* **Desktop (Electron):**
+  * **Process Management:** Automatically spawns and terminates the Spring Boot backend.
+  * **Native Integration:** Provides access to native folder selection dialogs and OS file explorer.
+  * **Cross-Platform:** Builds for Windows, Linux, and macOS using GitHub Actions.
+
+---
+
+## 🚀 Getting Started
+
+[![Download Latest Release](https://img.shields.io/badge/Download-Latest_Release-2ea44f?style=for-the-badge&logo=github&logoColor=white)](https://github.com/erroralex/Latent-Library/releases/latest)
+
+1.  **Download** the appropriate file for your OS:
+    *   **Windows:** `Latent Library X.X.X.exe` (portable, no installer)
+    *   **Linux:** `Latent Library-X.X.X.AppImage` (mark as executable with `chmod +x`)
+    *   **macOS:** `Latent Library-X.X.X.dmg`
+2.  **Run** the application. No installation is required.
+3.  **Select a Folder** containing your AI-generated images to start indexing.
+
+> **🍎 macOS Users:**
+> Because this app is not yet signed with an Apple Developer Certificate, you may see an error saying the app is **"damaged and can't be opened."** This is a standard macOS security message for unsigned apps.
+>
+> **To fix this:**
+> 1. Move the app to your **Applications** folder.
+> 2. Open **Terminal**.
+> 3. Run the following command to clear the quarantine attribute:
+>    ```bash
+>    sudo xattr -cr "/Applications/Latent Library.app"
+>    ```
+> 4. You can now open the app normally.
+
+---
+
+### 🔄 How to Update
+Latent Library is completely portable. To update to a new version without losing your collections, tags, or database:
+1. **Download** the latest release for your OS.
+2. **Replace** your old executable with the new one.
+3. **Keep your `data/` folder intact.** As long as the new executable is placed next to your existing `data/` folder, it will load your existing library automatically.
+
+---
+
+## 📜 License
+
+Distributed under the **MIT License with the Commons Clause**. Free to use, modify, and share. The Commons Clause restricts *selling* the Software or offering it as a paid hosted/consulting service. See [LICENSE](LICENSE) for the full text.
+
+---
+
+## 💖 Support the Project
+
+If **Latent Library** has been useful to you, consider supporting its ongoing development.
+
+[![GitHub Sponsors](https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?style=for-the-badge&logo=github-sponsors)](https://github.com/sponsors/erroralex)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/error_alex)
+
+---
+
+<p align="center">
+  <b>Developed by</b><br>
+  <img src="frontend/src/assets/alx_logo.png" width="120" alt="Alexander Nilsson Logo"><br>
+  Copyright (c) 2026 Alexander Nilsson
+</p>

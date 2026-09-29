@@ -1,0 +1,349 @@
+<!--
+  Author: Bladestar2105
+  License: MIT
+-->
+<div align="center">
+  <img src="public/logo.png" alt="IPTV-Manager Logo" width="120" />
+  <h1>IPTV-Manager</h1>
+  <p>A comprehensive IPTV management system with automatic provider synchronization, intelligent category mapping, and multi-user support.</p>
+  <p>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+  </p>
+  <p><strong>⚠️ DISCLAIMER: This project is for educational purposes only.<br>IPTV-Manager does not provide any IPTV content or subscriptions. Use your own legal IPTV service.</strong></p>
+</div>
+
+## 🚀 Features
+
+### Core Functionality
+- **Multi-User Management**: Support for multiple users with individual channel configurations, secure login, and customizable concurrent stream limits (max connections).
+- **Per-User Provider Access**: Administrators can show or hide the upstream provider information and management box per user without removing provider selection or access to that user's channel, movie, series, or EPG mapping lists.
+- **Provider Management**: Connect to multiple IPTV providers via Xtream Codes API with automatic connection pooling.
+- **Category Organization**: Drag & drop sorting and visual channel assignment.
+- **EPG Integration**: Comprehensive Electronic Program Guide (EPG) support with automatic updates.
+
+### Advanced Features
+- **Experimental AI Assistant (opt-in)**: Use an OpenAI-compatible API or your own private ChatGPT connection for list editing, name cleanup, duplicate review, EPG suggestions, sync reports, search, diagnostics and description translation/summaries/tags. Both connection options are experimental. List changes require a preview and confirmation, with conflict-aware undo. AI is disabled by default; see [AI setup and operation](docs/AI_INTEGRATION.md).
+- **Automatic Synchronization**: Configurable intervals (hourly, daily, weekly) with intelligent category mapping.
+- **Provider Connection Pooling**: Add the same provider multiple times to create a pool; streams automatically round-robin and fall back to available accounts when connection limits are reached.
+- **HDHomeRun Emulation**: Emulate HDHomeRun devices for seamless integration with Plex, Emby, and Jellyfin.
+- **Stalker/MAG (Experimental)**: MAC-authenticated live TV, movies, synchronized series, radio, EPG-backed catch-up, and tokenized playback links.
+- **Shared Links**: Create public share links with customizable slugs (short URLs) and expiration dates.
+- **Bulk Operations**: Optimized bulk category import and deletion for managing large playlists efficiently.
+- **VOD & Series Support**: Full proxy support for Movies and TV Series.
+- **Internationalization**: Localized UI (English, German, French, Greek).
+- **M3U Playlist Generation**: Generate custom M3U playlists for external players.
+- **Import/Export**: Secure, password-protected data migration.
+- **User Backups**: Automatically create and manage backups of assigned categories and channels per user.
+
+### Security
+- **🛡️ SSRF Protection**: Robust validation of upstream URLs (preventing access to private IPs, localhost, cloud metadata).
+- **🔐 Rate Limiting**: Tunable protection for general API traffic, brute force (Login), and DoS attacks (Client Logs).
+- **🎫 Secure Authentication**: JWT-based auth with session management and Bcrypt password hashing.
+- **🚫 IP Blocking**: Configurable IP blocking and whitelisting.
+- **🔒 Security Headers**: Comprehensive Helmet.js security headers.
+
+### Performance
+- **🔥 Multi-Core Optimization**: Node.js Clustering utilizes all CPU cores.
+- **⚡ Optional Redis**: Shared active-stream tracking across workers or instances.
+- **🧵 Worker Threads**: Offloads CPU-intensive tasks like EPG mapping.
+- **⚡ Optimized Channel Matching**: Fast channel matching algorithms using bitwise signatures.
+- **⚡ Optimized Database Schema**: Optimized indices for faster streaming performance and EPG updates.
+
+## 📋 Requirements
+- **Node.js**: 24.x+
+- **npm**: 10.x+
+- **SQLite**: 3.x (included)
+- **MaxMind GeoLite2 License Key**: While basic region locking functions work out of the box with the included database, updating the internal GeoIP database requires a free MaxMind License Key. You can get one at [maxmind.com](https://support.maxmind.com/hc/en-us/articles/4407111582235-Generate-a-License-Key) and enter it in the WebUI Security Settings. On startup, IPTV-Manager checks MaxMind checksums first and only downloads/rebuilds GeoIP data when an update is available.
+
+### Production Deployment
+For production environments, it is strongly recommended to set `NODE_ENV=production` and run the application behind a reverse proxy (like Nginx or Traefik) that handles HTTPS. The application will enforce secure cookies when in production mode.
+
+## 🐳 Docker Installation (Recommended)
+
+### Using Docker Compose or Portainer
+The standard stack is self-contained and uses Docker's default security profiles.
+It supports IPTV management and the experimental AI Assistant with API connections;
+it does not require extra files or host setup.
+
+```bash
+mkdir -p iptv-manager && cd iptv-manager
+curl -fsSL https://raw.githubusercontent.com/Bladestar2105/IPTV-Manager/main/docker-compose.yml -o docker-compose.yml
+docker compose up -d
+```
+
+In Portainer (Docker Standalone), paste `docker-compose.yml` into the stack's
+**Web editor**. Keep your existing port, environment and `/data` volume mapping
+when updating an existing stack. Access `http://localhost:3000`.
+
+**Repair a stack reporting `opening seccomp profile ... no such file or directory`:**
+remove the complete `security_opt` block from that stack's editor, set
+`AI_CODEX_ENABLED=false`, and update the stack. Leave all data mounts unchanged;
+do not delete the stack or its volumes. This restores the standard Docker security
+profiles and the ordinary application/API connection path, not personal ChatGPT
+connections. An image pull alone cannot fix a missing Compose-side file.
+
+### Personal ChatGPT in Docker
+The image already includes the pinned ChatGPT runtime. Its restricted sandbox
+also needs a seccomp file accessible to **the process running Compose** and,
+on AppArmor hosts, a profile loaded **on the Docker host**. Docker applies these
+before starting the container, so putting them inside the image cannot install
+them. This optional setup requires host administrator access; Portainer Web
+Editor alone is not sufficient. API connections do not need this setup.
+
+From the directory containing `docker-compose.yml`, download the optional overlay
+and profiles:
+
+```bash
+mkdir -p docker
+base=https://raw.githubusercontent.com/Bladestar2105/IPTV-Manager/main
+curl -fsSL "$base/docker-compose.chatgpt.yml" -o docker-compose.chatgpt.yml
+curl -fsSL "$base/docker/ai-seccomp.json" -o docker/ai-seccomp.json
+curl -fsSL "$base/docker/ai-apparmor" -o docker/ai-apparmor
+```
+
+On a Docker host with AppArmor (`docker info` lists it under Security Options),
+install and load the named profile **on that Linux host** before starting:
+
+```bash
+sudo install -o root -g root -m 0644 docker/ai-apparmor /etc/apparmor.d/iptv-manager-ai
+sudo apparmor_parser -r -W /etc/apparmor.d/iptv-manager-ai
+```
+
+Keep the host's AppArmor boot service enabled so the installed profile is loaded
+again before Docker restarts containers after a reboot.
+
+On a host without AppArmor, remove only `apparmor=iptv-manager-ai` from
+`security_opt` in `docker-compose.chatgpt.yml`; keep `seccomp=./docker/ai-seccomp.json`. Do not disable
+another host security module. For a remote daemon or a Docker VM, loading a
+profile on the client computer is not sufficient.
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.chatgpt.yml up -d
+docker compose exec -T --user app iptv-manager npm run check:ai-runtime
+```
+
+Access `http://localhost:3000`. The check must pass before testing a ChatGPT
+link. It makes no sign-in or model request. Existing installations using personal
+ChatGPT connections must retain their sandbox profiles and enable this overlay
+when updating. See [configuration](docs/CONFIGURATION.md#ai-installation-verification).
+
+## 🔧 Bare Metal / Manual Installation (Debian/Ubuntu)
+
+We provide automated scripts for easy local deployment on Debian and Ubuntu systems. This is ideal for users who do not want to use Docker.
+
+### Automated Installation
+To install IPTV-Manager as a background systemd service, run the following command as `root`:
+```bash
+curl -fsSL https://raw.githubusercontent.com/Bladestar2105/IPTV-Manager/main/scripts/install.sh -o install.sh
+chmod +x install.sh
+sudo ./install.sh
+```
+
+### Automated Updates
+To update an existing automated installation, refresh the updater first, then run it:
+```bash
+cd /opt/iptv-manager
+sudo curl -fsSL https://raw.githubusercontent.com/Bladestar2105/IPTV-Manager/main/scripts/update.sh -o scripts/update.sh
+sudo chmod +x scripts/update.sh
+sudo ./scripts/update.sh
+```
+
+### Manual Installation (Development)
+1.  Clone repo and enter it: `git clone https://github.com/Bladestar2105/IPTV-Manager.git && cd IPTV-Manager`
+2.  Install application dependencies: `npm ci`
+3.  On Debian/Ubuntu, provision the ChatGPT runtime: `sudo bash scripts/install-ai-runtime.sh`
+4.  Configure: `cp .env.example .env` (edit as needed)
+5.  As the non-root application user, run `npm run check:ai-runtime`, then `npm start`.
+
+The automated installer and updater perform this provisioning and check for
+you, preserving explicit disable settings. A failed ChatGPT preflight is printed
+as a warning; API-key connections and the server remain usable.
+
+Runtime databases, secrets, uploads, and caches are stored under `DATA_DIR`.
+Local runs use the repository root by default; the Docker example uses
+`/data`. Set `REDIS_URL` to use Redis for active stream tracking across
+workers or instances. Without Redis, the server uses the SQLite
+`current_streams` table.
+
+### Proxmox LXC Installation
+For Proxmox VE users, you can easily deploy an LXC container running IPTV-Manager.
+Run the following command directly on your **Proxmox Host Shell**:
+```bash
+curl -fsSL https://raw.githubusercontent.com/Bladestar2105/IPTV-Manager/main/scripts/proxmox.sh -o proxmox.sh
+chmod +x proxmox.sh
+./proxmox.sh
+```
+
+This uses an unprivileged LXC with nesting enabled and the same Debian/Ubuntu
+installer. The container's real runtime preflight must pass; host LXC/AppArmor
+restrictions can still require administrator configuration. Do not switch to a
+privileged or unconfined container. Proxmox has not yet been verified on a real
+test host; Docker and Ubuntu checks do not substitute for that acceptance test.
+
+### AI setup after installation
+
+The AI integration is **experimental**, including API and ChatGPT connections.
+All paths use the same [AI setup](docs/AI_INTEGRATION.md): enable AI in the
+administrator policy, allow the required users/functions, then enable personal
+AI preferences. For API connections, configure the endpoint/key and test a
+model. For ChatGPT, run the installation preflight first, then link your own
+account in the Web UI and test a model. Runtime checks do not prove account
+eligibility or a live model response.
+
+For example, select a user and ask **“Erstelle eine Liste mit allen Fußball-Sendern”**.
+The assistant can propose matching entries such as Sky Sport Bundesliga and
+DAZN from that user's available catalog. Review the proposal, use **Select all
+actions** or choose individual actions, then confirm. **Clear selection** clears
+the checkboxes without applying changes.
+
+### Development
+- **Linting**: `npm run lint`
+- **Testing**: `npm test`
+- **Build check**: `npm run build`
+- **Browser smoke test**: `npm run test:playwright:smoke`
+- **Developer notes**: `docs/DEVELOPMENT.md`
+- **Configuration reference**: `docs/CONFIGURATION.md`
+- **API reference**: `docs/API_REFERENCE.md`
+
+### First Time Setup
+- **Default Username**: `admin`
+- **Default Password**: Set by `scripts/install.sh` and printed at the end of the install (also saved as `INITIAL_ADMIN_PASSWORD` in `/opt/iptv-manager/.env`).
+- **Important**: Change password immediately after login.
+
+### CORS Configuration
+The application blocks Cross-Origin Resource Sharing (CORS) by default for security. If you need to access the API or streams from another domain (e.g., an external web player), you must configure the `ALLOWED_ORIGINS` environment variable.
+
+- **Default**: Cross-origin requests are blocked (`false`).
+- **Setup**: Add `ALLOWED_ORIGINS=https://your-web-player.com,https://another-site.com` to your `.env` file.
+- **Allow All**: Set `ALLOWED_ORIGINS=*` to allow all domains (⚠️ Not recommended for production).
+
+### Rate Limit Tuning
+Defaults are intentionally high enough for IPTV clients that make bursty
+playlist, XMLTV, and Xtream API requests. They can still be tuned via
+environment variables:
+
+- `API_RATE_LIMIT_MAX` (default: `1000` per `60000` ms)
+- `AUTH_RATE_LIMIT_MAX` (default: `100` per `900000` ms)
+- `CLIENT_LOG_RATE_LIMIT_MAX` (default: `120` per `3600000` ms)
+
+Each limit also has a matching `*_WINDOW_MS` variable documented in
+`docs/CONFIGURATION.md`.
+
+### Stream Session Cleanup (Live / VOD / Series)
+To prevent stale sessions from blocking new playback with false `Max connections reached` / `HTTP 403` responses, stream session cleanup is applied across **Live TV, Movies, and Series**.
+
+Optional tuning via environment variables:
+
+- `STREAM_MAX_AGE_MS` (default: `86400000` = 24h)  
+  Hard safety cap for a single session age. Very old orphan sessions are removed before limit checks.
+- `STREAM_INACTIVITY_TIMEOUT_MS` (default: `120000` = 2 minutes)  
+  Inactivity expiry for stalled streams to prevent orphan sessions from blocking new playback.
+
+For most deployments, keep the defaults unless you have a specific operational need.
+
+## 📸 Screenshots
+
+| Login | Dashboard |
+|:---:|:---:|
+| ![Login Page](docs/images/login.png) | ![Dashboard](docs/images/dashboard.png) |
+
+| User Backups | Import/Export |
+|:---:|:---:|
+| ![User Backups](docs/images/backups.png) | ![Import/Export](docs/images/import_export.png) |
+
+| Categories | Channels |
+|:---:|:---:|
+| ![Category Management](docs/images/categories.png) | ![Channel Assignment](docs/images/channels.png) |
+
+| Sync Logs |
+|:---:|
+| ![Sync Logs](docs/images/sync_logs.png) |
+
+| EPG Sources | EPG Browse |
+|:---:|:---:|
+| ![EPG Sources](docs/images/epg_sources.png) | ![EPG Browse](docs/images/epg_browse.png) |
+
+| EPG Mapping | Statistics |
+|:---:|:---:|
+| ![EPG Mapping](docs/images/epg_mapping.png) | ![Statistics](docs/images/statistics.png) |
+
+| Security | Xtream Credentials |
+|:---:|:---:|
+| ![Security](docs/images/security.png) | ![Xtream Credentials](docs/images/xtream_view.png) |
+
+| Web Player |
+|:---:|
+| ![Web Player](docs/images/web_player.png) |
+
+## 📚 API Overview
+
+The full route inventory is maintained in `docs/API_REFERENCE.md`.
+
+### Main Endpoint Groups
+- **Auth**: login, token verification, OTP, password changes, player tokens
+- **Users**: user CRUD, clone/copy settings, user backups
+- **Providers**: provider CRUD, sync, channel/category import
+- **Categories**: category/channel assignment, reorder, bulk actions, mappings
+- **EPG**: source management, schedule browsing, mapping, auto matching
+- **System**: settings, security, import/export, sync config, statistics
+- **Shares**: authenticated share management and public short links
+
+### Xtream Codes / Player API
+- `GET /player_api.php`: Auth & Metadata
+- `GET /player_api.php?action=get_live_categories`
+- `GET /player_api.php?action=get_live_streams&category_id=<id>`: Category-scoped live streams
+- `GET /player_api.php?action=get_vod_categories`
+- `GET /player_api.php?action=get_vod_streams&category_id=<id>`: Category-scoped VOD
+- `GET /player_api.php?action=get_series_categories`
+- `GET /player_api.php?action=get_series&category_id=<id>`: Category-scoped series
+- `GET /player_api.php?action=get_short_epg&stream_id=<id>&limit=<n>`: Short stream EPG
+- `GET /player_api.php?action=get_simple_date_table&stream_id=<id>`: Full stream EPG
+- `GET /player_api.php?action=get_simple_data_table&stream_id=<id>`: Full stream EPG compatibility alias
+- `GET /player_api.php?action=get_epg_batch&stream_ids=<ids>&date=<YYYY-MM-DD>`: Batched Xtream EPG listings
+- `GET /live/:user/:pass/:id.ts`: Live Stream
+- `GET /movie/:user/:pass/:id.ext`: Movie Stream
+- `GET /series/:user/:pass/:id.ext`: Series Stream
+- VOD track metadata: append `tracks=true`; VOD audio selection uses
+  `audio_track=<index>`; VOD subtitles use `subtitle_track=<index>&subtitle_format=vtt`.
+- `GET /xmltv.php`: XMLTV EPG, gzip-compressed when requested with `Accept-Encoding: gzip`
+
+### Share + Companion App Integration
+- Share companion integration guide (Xtream/M3U/EPG): `docs/SHARE_COMPANION_INTEGRATION.md`
+
+### Stalker/MAG (Experimental)
+- This is a full experimental software-client portal covering live TV, movies,
+  synchronized series episodes, radio, EPG, and EPG-backed catch-up. It does
+  not claim compatibility with hardware MAG devices.
+- Register one or more MAC addresses in the selected user's **Stalker/MAG** tab.
+- Configure the client with the canonical portal URL
+  `http(s)://your-server/stalker_portal/c/`. Compatible clients derive the API
+  endpoint `http(s)://your-server/stalker_portal/server/load.php` from it.
+- Simple/legacy clients may continue to use `http(s)://your-server/c/` and
+  `/portal.php`; the existing compatibility aliases remain available.
+- An optional 4–8 digit parental PIN can be set per device. It is encrypted at
+  rest and delivered only in that device's authenticated profile; when absent,
+  the profile returns an empty parental PIN. Bulk channel lists exclude adult
+  categories, while an authenticated session can explicitly request an adult
+  category. This is client-side Stalker parental control: the server does not
+  challenge every adult `create_link` request with the PIN.
+- The portal serves live TV with EPG, movies, series episodes synchronized in
+  the background or fetched when a series is opened,
+  radio categories, and EPG-backed catch-up through the existing authenticated
+  stream proxies.
+- Bulk EPG responses clamp the requested period to 168 hours, return at most
+  500 programmes per channel and 20,000 programmes overall, and preserve empty
+  arrays for channels without returned rows. Click-through catch-up playback
+  has been validated with OTT Navigator 1.7.4.1 on Android 16 through the
+  authenticated IPTV-Manager timeshift proxy.
+- Radio categories can be created or imported from a provider's live categories;
+  Xtream has no separate standard radio stream type.
+  MP3/AAC sources pass through directly; transport-stream radio is transcoded
+  to MP3 for software clients. A hardware-specific MAG portal UI is not included.
+
+### HDHomeRun Emulation
+- `GET /hdhr/:token/discover.json`
+- `GET /hdhr/:token/lineup.json`
+- `GET /hdhr/:token/auto/v:channelId`
+
+## 📄 License
+MIT License

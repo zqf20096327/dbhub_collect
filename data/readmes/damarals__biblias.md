@@ -1,0 +1,77 @@
+<h1 align="center">Bíblias</h1>
+<div align="center">
+    <img src="https://img.shields.io/github/v/tag/damarals/biblias?color=success&label=" alt="Latest Tag" />
+    <img src="https://img.shields.io/github/last-commit/damarals/biblias/main?path=README.md&label=%C3%BAltima%20atualiza%C3%A7%C3%A3o&color=blue" alt="Última atualização" />
+</div>
+<br />
+<div align="center"><strong>Uma coletânea de 18 Bíblias em português</strong></div>
+<div align="center">Traduções em formatos abertos: Zefania (XML), SQLite e JSON,<br/> prontas para uso no OpenLP, Quelea ou em qualquer outra aplicação.</div>
+<br />
+<div align="center">
+  <sub>Desenvolvido por <a href="https://github.com/damarals">Daniel Amaral</a> 👨‍💻</sub>
+</div>
+<br />
+
+## Formatos
+
+- **Zefania XML**: formato padrão, importado por Quelea, MyBible, And Bible, OpenLP e outros.
+- **SQLite**: banco no esquema do [OpenLP](https://openlp.org/) (outros programas usam esquemas SQLite diferentes).
+- **JSON**: formato aberto, para qualquer outro uso.
+
+<table>
+  <tr>
+    <td width="50%"><img src="data/stats/stars.svg" alt="Estrelas ao longo do tempo" width="100%"></td>
+    <td width="50%"><img src="data/stats/downloads.svg" alt="Downloads por versão" width="100%"></td>
+  </tr>
+</table>
+
+## Traduções
+
+Baixe o formato que quiser na última [release](https://github.com/damarals/biblias/releases/latest). As de domínio público (†) podem ser redistribuídas livremente; as demais pertencem a suas editoras.
+
+| Bíblia | Sigla | Ano | Editora | Baixar |
+|---|:---:|:---:|:---:|:---|
+| Almeida Corrigida e Fiel | ACF | 1994 | SBTB | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/ACF.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/ACF.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/ACF.json) |
+| Almeida Revista e Atualizada | ARA | 1993 | SBB | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/ARA.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/ARA.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/ARA.json) |
+| Almeida Revista e Corrigida | ARC | 1995 | SBB | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/ARC.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/ARC.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/ARC.json) |
+| Almeida Século 21 | AS21 | 2009 | Vida Nova | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/AS21.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/AS21.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/AS21.json) |
+| Almeida Atualizada | JFAA | — | — | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/JFAA.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/JFAA.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/JFAA.json) |
+| King James Atualizada | KJA | 1999 | Abba Press | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/KJA.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/KJA.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/KJA.json) |
+| King James Fiel | KJF | 1611 | BVBooks | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/KJF.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/KJF.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/KJF.json) |
+| Nova Almeida Atualizada | NAA | 2017 | SBB | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/NAA.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/NAA.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/NAA.json) |
+| Nova Bíblia Viva | NBV | 2007 | Mundo Cristão | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/NBV.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/NBV.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/NBV.json) |
+| Nova Tradução na Linguagem de Hoje | NTLH | 1988 | SBB | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/NTLH.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/NTLH.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/NTLH.json) |
+| Nova Versão Internacional | NVI | — | Biblica | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/NVI.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/NVI.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/NVI.json) |
+| Nova Versão Transformadora | NVT | 2016 | Mundo Cristão | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/NVT.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/NVT.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/NVT.json) |
+| Tradução Brasileira † | TB | 2010 | SBB | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/TB.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/TB.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/TB.json) |
+| Bíblia Livre † | BLIVRE | 2018 | — | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/BLIVRE.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/BLIVRE.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/BLIVRE.json) |
+| Almeida 1911 † | ALM1911 | 1911 | — | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/ALM1911.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/ALM1911.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/ALM1911.json) |
+| O Livro | OL | 2000 | Biblica | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/OL.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/OL.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/OL.json) |
+| A Mensagem | MENS | 2016 | Editora Vida | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/MENS.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/MENS.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/MENS.json) |
+| Versão Fácil de Ler | VFL | 2017 | Bible League International | [![Zefania](https://custom-icon-badges.demolab.com/badge/Baixar-Zefania-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/VFL.xml)<br>[![SQLite](https://custom-icon-badges.demolab.com/badge/Baixar-SQLite-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/VFL.sqlite)<br>[![JSON](https://custom-icon-badges.demolab.com/badge/Baixar-JSON-F25278?style=for-the-badge&logo=download&logoColor=white)](https://github.com/damarals/biblias/releases/latest/download/VFL.json) |
+
+<sub>† domínio público · pacotes completos: [todas em Zefania](https://github.com/damarals/biblias/releases/latest/download/biblias-zefania.zip) · [todas em SQLite](https://github.com/damarals/biblias/releases/latest/download/biblias-sqlite.zip)</sub>
+
+> **Compatibilidade:** os arquivos da geração anterior (formatos antigos, incl. ProPresenter) seguem em [`inst/`](https://github.com/damarals/biblias/tree/main/inst). Os links antigos continuam funcionando.
+
+## Para mantenedores
+
+Toolkit em Python (com [uv](https://docs.astral.sh/uv/)). Os formatos saem do canônico em `data/canonical/` (JSON fatiado por livro, versionado).
+
+```bash
+uv sync
+uv run biblias fetch KJA --source bolls   # fonte → canônico
+uv run biblias validate                   # valida e gera as worklists
+uv run biblias diff-sources NTLH          # compara fontes
+uv run biblias build KJA --format zefania,sqlite,json --out dist
+```
+
+Fontes: `openlp` (SQLite local), `bolls`, `getbible`.
+
+## Contribuindo
+
+Algumas versões têm versículos truncados na origem, e as com direito autoral nem sempre têm fonte limpa para corrigir. Se quiser ajudar mas não souber por onde começar, abra a worklist da versão em [`data/worklist/`](data/worklist/): é a lista dos versículos suspeitos, gerada pelo `validate`. Para corrigir um, edite o texto em `data/canonical/<VERSÃO>/<LIVRO>.json`, anote o ref em `data/corrections/<VERSÃO>.json` (para protegê-lo de sobrescrita) e abra um pull request.
+
+## Licença
+
+MIT. Veja [LICENSE](LICENSE).

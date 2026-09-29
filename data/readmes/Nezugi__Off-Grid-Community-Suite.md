@@ -1,0 +1,120 @@
+## Off-Grid Community Suite
+
+A suite of community tools for [NomadNet](https://github.com/markqvist/NomadNet) nodes — built for off-grid, decentralised mesh networks running on the [Reticulum](https://github.com/markqvist/Reticulum) protocol.
+
+All tools share the same stack: **Python 3 · Micron Markup · SQLite · No external dependencies**.
+
+---
+
+## Tools
+
+Go to the individual sites for the tools you need.
+In this project you find an indx.mu for your Node to link them all for easy access
+
+|Project|Description|
+|---|---|
+|[./nomadComBoard](https://github.com/Nezugi/nomadComBoard)|Community discussion forum with subforums, tags, user roles and moderation|
+|[./nomadChat](https://github.com/Nezugi/nomadChat/tree/main)|Public chat room — single file, no login required|
+|[./nomadBlog](https://github.com/Nezugi/nomadBlog)|Node blog and news page|
+|[./nomadYellow](https://github.com/Nezugi/nomadYellow)|Curated community directory — like Yellow Pages for the mesh|
+|[./nomadMarket](https://github.com/Nezugi/nomadMarket)|Classifieds board — Offer / Wanted / Trade / Free|
+|[./nomadCalendar](https://github.com/Nezugi/nomadCalendar/tree/main)|Shared event calendar with recurring event support|
+|[./nomadMission](https://github.com/Nezugi/nomadMission)|Task board for closed groups with granular permissions|
+|[./nomadWarehouse](https://github.com/Nezugi/nomadWarehouse)|Inventory management with per-category user permissions|
+|[./nomadNews](https://github.com/Nezugi/nomadNews)|Community news portal with editorial workflow, comments and an LXMF bot for submitting, subscribing and reading news|
+|[./nomadBooks](https://github.com/Nezugi/nomadBooks)|Community book catalog with a paginated reader, file/LXMF/website upload, and an LXMF bot for reading and searching books|
+
+---
+
+## Design Principles
+
+Built for real use in an off-grid community. Every tool follows the same philosophy:
+
+- **No internet required** — everything runs locally on the mesh
+- **No external Python packages** — only the standard library; no `pip install`
+- **No background processes** — cleanup and maintenance happen passively on page load
+- **No cookies** — session tokens are passed as URL parameters (NomadNet requirement)
+- **Minimal hardware** — runs well on Raspberry Pi–class devices
+- **SQLite storage** — simple, reliable, serverless
+- **Consistent UI** — shared header, navigation, and footer across all tools
+
+One exception: **nomadNews** and **nomadBooks** each have an LXMF bot (`lxmf_bot.py`) that is a manually-started, long-running process, depending on the `rns`/`lxmf` packages already needed by NomadNet itself. Everything else about both tools — the website — still follows the same stateless, standard-library-only pattern as every other tool. See their own READMEs for details.
+
+---
+
+## Common Architecture
+
+Each tool follows the same structure:
+
+```text
+tool/
+├── main.py           # SQLite DB, sessions, shared functions
+├── setup_admin.py    # CLI script to set the admin password
+├── help.mu           # Built-in user guide
+└── *.mu              # Micron/Python pages served by NomadNet
+```
+
+`main.py` initializes the database on import, runs passive cleanup, and provides:
+
+- `print_header(subtitle=None)` — consistent title + description header
+- `print_footer()` — suite attribution footer
+- `nav_bar(...)` — navigation with orange ← Node Start as the last link
+- `lxmf_link(address)` — clickable `lxmf` address links for direct contact to everyone
+
+---
+
+## Shared Configuration Variables
+
+Each tool defines the following in `main.py`:
+
+```python
+storage_path = "/home/YOUR_USER/.nomadToolName"  # always set this
+page_path = ":/page/toolname"
+site_name = "nomadToolName"
+site_description = "Short description shown below the title"
+node_homepage = ":/page/index.mu"
+```
+
+---
+
+## Installation
+
+
+
+```bash
+Install the tools independently
+
+or
+
+Use the Suite_Install.sh to choose the tool you want and set the admin account for all tools in one go
+it also creats the index.mu with the tools you choose
+
+```
+
+---
+
+## Structure on the Node
+
+```text
+pages/
+├── blog
+├── books
+├── calendar
+├── chat
+├── comboard
+├── market
+├── mission
+├── news
+├── warehouse
+├── yellow
+└──index.mu
+```
+---
+
+## License
+
+MIT
+
+---
+
+*Built for an off‑grid community that needed practical communication and coordination tools on a local mesh network. Shared in the hope that other communities find it useful.*

@@ -1,0 +1,1612 @@
+<p align="center">
+  <img src="hull_logo.svg" alt="Hull" width="480">
+</p>
+
+# Hull
+
+Hardened, capability-secure runtime infrastructure for AI-native systems. Lua, JavaScript, and WASM execute under declared, kernel-enforced capability boundaries. SQLite storage. Single static binary.
+
+**Code became disposable. Trust is not.** AI generates code endlessly. Hull constrains what that code can actually do, at a kernel-enforced boundary the script cannot cross.
+
+The app declares its capabilities (files, environment variables, outbound hosts, database resources) in a manifest. The runtime enforces those bounds. `hull build` produces a single static executable (under 10 MB) that runs on Linux, macOS, Windows, FreeBSD, OpenBSD, and NetBSD. Code, schema, static assets, tests, and signatures all packaged together. The resulting binary is the product.
+
+## Why
+
+AI made code abundant. Trusted execution did not get cheaper. The runtime is now the scarce layer. The only place where you can still say *what code is allowed to do* and have it stick.
+
+Hull is that layer. Applications are distributed as a single file with no infrastructure required. Each app declares its capabilities in a manifest enforced by the runtime, so users can verify exactly what it can access.
+
+In a world where AI writes code, the runtime becomes the trust boundary. Hull is that boundary.
+
+## Name
+
+Hull. Hardened Userspace Lockdown Layer.
+
+- **Hardened**. Capability-secure, sandboxed execution  
+- **Userspace**. Single binary, no kernel modules, no cloud  
+- **Lockdown**. The app declares what it can access, the runtime enforces it  
+- **Layer** (sits on top of Keel (Kernel Event Engine) Lightweight), mirroring the nautical metaphor
+
+## Quick Start
+
+### Install
+
+```bash
+# Download the latest signed release binary:
+curl -fsSL https://gethull.dev/install.sh | sh
+```
+
+The installer detects your OS/arch, downloads a native binary (or the universal Cosmopolitan APE fallback), verifies the SHA-256 checksum against the release manifest, and installs to `~/.local/bin/hull` (no sudo). Override with `HULL_PREFIX=/usr/local/bin sh install.sh`.
+
+Environment knobs: `HULL_VERSION=v0.1.0` (specific tag), `HULL_FLAVOR=cosmo` (force universal APE), `HULL_FORCE=1` (overwrite existing), `HULL_DRY_RUN=1` (preview only).
+
+On **Windows** (PowerShell, no admin or Developer Mode needed):
+
+```powershell
+irm https://gethull.dev/install.ps1 | iex
+```
+
+This installs `hull.com` to `%LOCALAPPDATA%\Programs\Hull`, adds it to your user `PATH`, **and updates the PATH of the session you ran it in** - so with the `irm | iex` form above, `hull` works immediately, without opening a new terminal. Then:
+
+```powershell
+hull doctor          # what is ready, what is missing
+hull doctor --fix    # installs the missing Hull-managed toolchain (cosmocc)
+hull new hello; cd hello
+hull build           # produces .\app.com  (Windows needs an executable extension)
+.\app.com
+```
+
+See [Installing Hull on Windows](docs/windows_install.md) for the full five-minute path, options (`-Version` / `-Prefix` / `-Force` / `-DryRun` / `-NoPath` / `-Uninstall`), verification, and the one-time v0.13.0 -> v0.14.0 manual upgrade.
+
+> **Scripting `hull` on Windows:** a failing `hull` reads as SUCCESS in MSYS2 / Git Bash / Cygwin - `&&` chains and `set -e` do not catch it. Every Cosmopolitan APE on Windows reports its exit status shifted left by 8 ([jart/cosmopolitan#1521](https://github.com/jart/cosmopolitan/issues/1521)), and a POSIX shell keeps only the low byte. PowerShell (`$LASTEXITCODE -ne 0`) and cmd (`if errorlevel 1`) detect failure correctly; from bash, assert the built artifact instead. See [Exit codes on Windows](docs/windows_install.md#exit-codes-on-windows-read-this-before-scripting-hull).
+
+Or build from source:
+
+```bash
+git clone --recursive https://github.com/artalis-io/hull
+cd hull
+make
+make test
+```
+
+On **Windows**, building Hull *itself* from source additionally requires MSYS2 -
+a native Win32 make cannot pass the Makefile's escaped-quote version defines
+through to the compiler. See [Building Hull itself from
+source](docs/windows_install.md#building-hull-itself-from-source-needs-msys2).
+Installing Hull and building *apps* with the released `hull.com` need no MSYS2.
+
+### Develop
+
+```bash
+# Create a new project (single-file default. Best for small services and demos)
+hull new myapp
+cd myapp
+
+# Or scaffold a modular layout for larger apps:
+#   --type rest   modular REST API (routes/ models/ middleware/ lib/)
+#   --type cli    modular CLI tool (commands/ + lib/)
+#   --type tui    modular TUI app  (views/ + lib/, Lua-only)
+hull new --type rest myapp
+
+# Run in development mode (hot reload)
+hull dev app.lua
+
+# Build a standalone binary
+hull build -o myapp .
+
+# Run it
+./myapp -p 8080 -d app.db
+```
+
+Default stays flat; modular layouts opt in via `--type`. See
+[App Layout Conventions](#app-layout-conventions) below and the canonical
+examples: [`examples/rest_api_modular/`](examples/rest_api_modular/),
+[`examples/cli_modular/`](examples/cli_modular/),
+[`examples/tui_modular/`](examples/tui_modular/).
+
+For server-rendered HTMX apps, scaffold a hypermedia project in place:
+
+```bash
+hull init --profile htmx
+```
+
+This wires up HTMX 2 + Pico CSS, CSRF + per-request CSP nonce, session-backed
+flash messages, pagination, and an idempotency-aware POST cache. See
+[`examples/hypermedia_photos/`](examples/hypermedia_photos/) for the reference
+app and [docs/htmx.md](docs/htmx.md) for the integration guide.
+
+### Shell completions
+
+Tab-completion for bash, zsh, and fish is shipped in [`completions/`](completions/). See [completions/README.md](completions/README.md) for install instructions.
+
+## Hull Tools
+
+Hull ships 30+ subcommands for the full development lifecycle:
+
+| Command | Purpose |
+|---------|---------|
+| <code>hull new &lt;name&gt;</code> | Scaffold a new project in a new directory |
+| `hull init [dir] [--profile htmx]` | Initialize a hull project in-place (idempotent, like `git init`). `--profile htmx` scaffolds a full HTMX + Pico app (CSP nonce, CSRF, session, flash, pagination, search, inline edit) |
+| <code>hull dev &lt;app&gt; [--tui]</code> | Development server with hot reload. [`--tui`](#terminal-ui) streams the child's log into an alt-screen pane with substring filtering, file-watch auto-reload, and `r` for manual reload |
+| <code>hull build -o &lt;out&gt; &lt;dir&gt;</code> | Compile app into a standalone binary |
+| <code>hull build [--compiler=system\|&lt;path&gt;]</code> | Compiler-free by default (emits `app_registry.o` directly and links, no C compiler needed). `--compiler=system` (or an explicit path) opts into a system `cc`; `--with=` features and cosmo/APE targets fall back to a system compiler automatically |
+| <code>hull build [--linker=lld\|zig\|lld-static\|&lt;path&gt;]</code> | Select the linker (default: system `cc`/`ld`). `--linker=zig` uses the self-contained `hull tools install zig` bundle (also cross-compiles via `--target=&lt;triple&gt;`); `--linker=lld-static` links fully static against the musl floors |
+| <code>hull test &lt;dir&gt;</code> | In-process test runner (no TCP, memory SQLite) |
+| <code>hull deploy &lt;target&gt; [app_dir]</code> | [Generate deployment configs](#deployment). Dockerfile, systemd, fly.toml |
+| <code>hull agent &lt;subcommand&gt;</code> | [AI agent interface](#using-hull-with-ai-agents). Routes, schema, tests, requests as JSON |
+| <code>hull inspect &lt;dir&gt;</code> | Display declared capabilities and signature status |
+| <code>hull verify [--developer-key &lt;key&gt;]</code> | Verify Ed25519 signatures and file integrity |
+| <code>hull verify-self [--manifest PATH]</code> | Verify the running `hull` binary against its release manifest + Ed25519 signature |
+| <code>hull verify-release &lt;manifest&gt; &lt;sig&gt; [--pubkey HEX]</code> | Offline-audit any release manifest against the embedded release pubkey |
+| <code>hull sign-release &lt;manifest&gt; --key &lt;key&gt;</code> | Sign a release manifest with the Ed25519 release key (CI use) |
+| <code>hull sbom [--format=human\|json\|cyclonedx\|spdx]</code> | Print the Software Bill of Materials baked into this binary. CycloneDX 1.5 / SPDX 2.3 outputs for compliance pipelines |
+| <code>hull eject &lt;dir&gt;</code> | Export to a standalone Makefile project |
+| <code>hull keygen &lt;name&gt;</code> | Generate Ed25519 signing keypair |
+| <code>hull sign-platform &lt;key&gt;</code> | Sign platform library with per-arch hashes |
+| <code>hull manifest &lt;app&gt;</code> | Extract and print manifest as JSON |
+| `hull modules available [--tui]` | Print the full first-party module registry. Names, deps, capability requirements. [`--tui`](#terminal-ui) opens a searchable two-pane picker (`/` to filter) |
+| <code>hull modules list [app_dir]</code> | Print modules declared by an app's manifest |
+| <code>hull modules explain &lt;NAME&gt;</code> | Print spec for one module (deps, required caps, intrinsic flag) |
+| <code>hull modules analyze [app_dir]</code> | Static scan of source. Flag `require`/`import` of undeclared modules; warn on unused declarations |
+| `hull check [app_dir]` | Validate manifest + import declarations, then run tests + verify |
+| `hull version [--json]` | Print version string (`--json` for machine-readable output) |
+| `hull doctor [--json\|--tui]` | Check environment: compiler, platform embed, module subsystems (DB/WASM/GPU), build readiness. [`--tui`](#terminal-ui) opens a live, color-coded interactive readiness pane with `r` to reprobe and `c` to copy JSON to the clipboard |
+| `hull update [--check] [--force] [--channel=beta]` | Self-update from GitHub releases (verifies SHA-256, atomic replace) |
+| `hull tools install <name>` / `list` / `uninstall <name>` | Side-load optional companion tools (`wamrc`, the `zig` linker bundle, the `libc-musl-<arch>` static floors, the `cosmocc` bundle) routed through the signed `blob_store` from the same release as the running hull |
+| `hull cache list \| prune \| clear \| verify` | Runtime cache management (Lua/JS bytecode, Lua/JS template, compute AOT, tools store). Per-app isolation via `HULL_CACHE_DIR` |
+| <code>hull &lt;app&gt; --max-instructions N</code> | Set per-request instruction limit (default: 100M) |
+| <code>hull &lt;app&gt; --audit</code> | Enable capability audit logging (JSON to stderr) |
+| <code>hull &lt;app&gt; --max-connections N</code> | Max concurrent connections (default: 256) |
+| <code>hull &lt;app&gt; --body-max-size SIZE</code> | Max request body size (default: 1m) |
+| <code>hull &lt;app&gt; --read-timeout MS</code> | Read timeout in milliseconds (default: 30000) |
+| <code>hull &lt;app&gt; --workers N</code> | Thread pool worker count (default: 4) |
+| <code>hull &lt;app&gt; --queue-capacity N</code> | Thread pool queue capacity (default: 64) |
+| <code>hull &lt;app&gt; --no-compress</code> | Disable gzip response compression |
+| <code>hull &lt;app&gt; --ca-bundle PATH</code> | Custom CA bundle (overrides system + embedded) |
+| <code>hull &lt;app&gt; --no-ca-bundle</code> | Skip TLS certificate verification (dev only) |
+| `hull migrate [app_dir]` | Run pending SQL migrations |
+| `hull migrate status [--tui]` | Show migration status (applied/pending). [`--tui`](#terminal-ui) opens a two-pane view with the .sql source preview on the right |
+| <code>hull migrate new &lt;name&gt;</code> | Create a new numbered migration file |
+| <code>hull compute new &lt;name&gt; [--lang c]</code> | [Scaffold a new WASM compute module](#authoring-compute-modules) under <code>compute/&lt;name&gt;/</code> |
+| `hull compute build [name]` | Compile <code>compute/&lt;name&gt;/&lt;name&gt;.c</code> → <code>compute/&lt;name&gt;.wasm</code> (all modules if no name) |
+| <code>hull compute test &lt;name&gt;</code> | Run JSON fixtures against a compiled module |
+| <code>hull compute check &lt;name&gt;</code> | Validate that a `.wasm` module loads correctly in WAMR |
+| `hull compute refresh-header [name]` | Overwrite per-module `hull_compute.h` from the canonical embedded version (all modules if no name) |
+
+### Build Pipeline
+
+```
+Source files (Lua/JS/HTML/CSS/static assets)
+        ↓
+hull build: collect → generate sorted registry (hl_app_entries[]) → compile → link → sign
+        ↓
+Single binary + package.sig (Ed25519 signed)
+```
+
+The build links against `libhull_platform.a`, the **SLIM base** static archive. The distributed base drops every reducible subsystem (both interpreters, the HTTP core + web bindings, the Keel event loop + server, mbedTLS + TLS transport, SQLite, WASM/WAMR, image codecs) and `hull build` composes back exactly what the app uses via signed feature archives whole-archived in at link time. A stock build of a compute-only `app.main` links zero Keel / mbedTLS / SQLite / WAMR (~2.1 MB); a full web app composes them all back. See [The composable base](#the-composable-base-features-flavors-and-tools) below. The platform library (and every composed feature archive) is signed with the gethull.dev key.
+
+### Compiler-free and toolchain-free builds
+
+**`hull build` is compiler-free by default.** It emits the app registry (`app_registry.o`) directly through Hull's own object emitter and links, needing **no C compiler at all**. You opt into a system compiler only when you need one:
+
+| Backend | When it's used |
+|---------|----------------|
+| (none - object emitter) | The default. `hull build -o myapp .` links the emitted `app_registry.o` against the platform lib. No `cc` on the box required. |
+| `--compiler=system` / `--compiler=<path>` | Opt into a system `cc`/`gcc`/`clang`. Auto-selected for `--with=` features (a C++ feature like duckdb needs a C++ driver) and for cosmo/APE targets, which can't go through the emit path. |
+
+**`hull build` needs only a *linker* by default**, and the linker is itself pluggable via `hull tools install`:
+
+```bash
+hull build -o myapp .                       # compiler-free: emit + link with system cc/ld
+hull build -o myapp . --linker=lld          # link with a system/PATH lld
+hull tools install zig                      # self-contained zig bundle (driver + libc + lld)
+hull build -o myapp . --linker=zig          # toolchain-free link - runs on a bare box
+hull build -o myapp . --linker=zig --target=x86_64-linux-musl   # cross-compile
+hull tools install libc-musl-x86_64         # static musl floor for lld-static
+hull build -o myapp . --linker=lld-static   # fully static link against the musl floor
+hull build -o myapp . --compiler=system     # opt into a system cc (e.g. for a C++ feature)
+hull build -o myapp . --compiler=/path/to/cc  # explicit compiler path
+```
+
+Net: a stock box with **no toolchain installed** can `hull build` end to end (emit the object, link with the `zig` or `lld` bundle). Note: a standalone `lld` bundle is **not** shipped (a binary `lld` is dynamically linked against libLLVM, so it can't be bundled flat); `--linker=lld` still works against a system/PATH `lld`. **tcc is fully retired** - Hull no longer vendors, bundles, or installs it (a user's own `tcc` on `$PATH` still works as a plain system compiler via `--compiler=tcc`). `hull doctor` reports which system compilers and linkers are resolvable. Full design: [docs/compiler_free_build.md](docs/compiler_free_build.md) · [docs/toolchain_free_build.md](docs/toolchain_free_build.md).
+
+### Cross-platform builds
+
+Hull supports these compiler/target combinations:
+
+| Compiler | Target | Binary Type | Notes |
+|----------|--------|-------------|-------|
+| (none - object emitter) | Native | ELF / Mach-O | The default compiler-free path; links with `cc`/`ld` or a `--linker=` bundle |
+| `gcc` / `clang` | Linux / macOS | ELF / Mach-O | `--compiler=system` or an explicit path |
+| `cosmocc` | Any x86_64/aarch64 | APE (Actually Portable Executable) | Multi-arch fat binary. `hull tools install cosmocc` makes a cosmo `hull` self-contained on stock Windows |
+
+Cosmopolitan APE binaries run on Linux, macOS, Windows, FreeBSD, OpenBSD, and NetBSD from a single file. Hull builds multi-architecture platform archives (`make platform-cosmo`) so the resulting APE binary is a true fat binary for both x86_64 and aarch64. As of v0.10.0, a cosmo `hull` plus the `hull tools install cosmocc` bundle can run a self-contained `hull build` on a stock Windows box.
+
+### The composable base: features, flavors, and tools
+
+The distributed `hull` ships a **fully-composable SLIM base**. Its app-build base drops **every** reducible subsystem - both interpreters (Lua VM + QuickJS), the HTTP core + per-runtime web bindings, the Keel event loop + server, mbedTLS + the TLS transport, SQLite, WASM/WAMR, and the image codecs - and `hull build` composes back exactly what the app uses. Composition is **static** (each subsystem is whole-archived in at *build* time; there is no `dlopen`, no runtime plugin, so the manifest stays enforceable and builds stay reproducible), **auto-inferred** (from the entry extension + the resolved manifest - you never install or flag these), and **embedded** (the pieces live inside the distributed `hull`). A stock `hull build` of a compute-only `app.main` links **zero** Keel / mbedTLS / SQLite / WAMR (~2.1 MB); a full web app composes them all back. (The Cosmopolitan APE base is exempt - a fat APE can't force-load native archives, so it keeps everything compiled in.)
+
+On top of that mandatory axis, capability reaches an app through exactly one of **five shipping units** (full taxonomy in [docs/features_and_flavors.md](docs/features_and_flavors.md)):
+
+| Unit | What it is | Ships as | Reached via |
+|------|-----------|----------|-------------|
+| **stdlib** | pure Lua/JS over caps the base already has (no new C, no new authority) | in the base VFS | `require`/`import` + `manifest.modules` |
+| **base cap module** | a small always-in-base C capability (a codec / sniffer / store), no `HL_ENABLE_*` gate, no `--with` | compiled into the base | `require`/`import` + `manifest.modules` |
+| **feature** (additive) | a large optional C subsystem, off by default (a vendored engine, a wire backend, a new authority) | a signed `libhull_feature-<name>-<arch>.a` | `hull build --with=<name>` (installed via `hull feature install`) |
+| **flavor** (subtractive) | a build.lua **preset** validating an app against a slimmer cap set - since Phase 4.3 there are **no** pre-built per-flavor libs | a preset on the default base | `hull build --flavor=<name>` |
+| **tool** | a separate companion **program** Hull spawns (never linked in) | a `hull-<name>-<platform>` binary or `.tar` bundle | `hl_tool_spawn` at build time; `hull tools install` |
+
+**Features** are the additive axis. Five ship today, all **native-only (no cosmo)**, published for `linux-x86_64` / `linux-aarch64` / `darwin-arm64`:
+
+| Feature | What | Reached via |
+|---------|------|-------------|
+| `duckdb` | embedded DuckDB OLAP backend (~58 MB, C++) | a `duckdb://` DSN on `hull/db` |
+| `postgres` | pure-C PostgreSQL wire backend (no libpq) | a `postgres://` / `postgresql://` DSN on `hull/db` |
+| `mysql` | pure-C MySQL / MariaDB wire backend (no libmysql) | a `mysql://` / `mariadb://` DSN on `hull/db` |
+| `gpu` | wgpu-native GPU compute | `gpu.*` |
+| `tui` | terminal UI subsystem (`hull.tui`) | the `hull/tui` module (auto-inferred + force-loaded) |
+
+```bash
+hull feature install duckdb               # fetch + verify + cache to ~/.hull/feature/
+hull feature list                         # not installed / installed, per feature
+hull build --with=duckdb -o myapp .        # compose the feature into the app binary
+hull build --with=gpu --compiler=system .  # gpu links -lvulkan / Metal frameworks
+```
+
+`hull feature install` shares the same Ed25519 `hull.sha256` trust chain as `hull update` / `hull tools install`; `hull build --with=<name>` re-verifies a cached lib before linking and generates a small registry that fills the base's weak backend hook with the composed backend (`duckdb`/`postgres`/`mysql` all fill the same `HlDbBackend` hook, so they compose together). Build from source with `make feature-duckdb` / `make feature-gpu` / `make feature-postgres` / `make feature-mysql` / `make feature-tui`.
+
+**Flavors** are the subtractive axis - and since Phase 4.3 they are **build.lua presets, not pre-built libs**. The base already composes, so a compute app is *already* minimal without a flavor:
+
+| Flavor | What it does | Use case |
+|--------|--------------|----------|
+| `full` | the embedded default base - the only "real" base | Web apps that serve requests and call out to APIs (default) |
+| `pure-compute` | a **preset**: validates the app declares no HTTP/TLS (rejects e.g. `hull/http-server` at build time). The size win comes from the composable base, not the flavor. | Offline compute / signing binary |
+| `auto` | infers the minimal flavor from the app's declared modules | - |
+
+```bash
+hull build --flavor=pure-compute -o mytool .   # validate: no HTTP/TLS
+hull build --flavor=auto -o myapp .            # infer the minimal flavor
+```
+
+`hull flavor install pure-compute` reports "preset flavor, nothing to install"; `hull flavor list` shows `full` as `embedded` and `pure-compute` as `preset (default base)`. (The fetch/verify machinery still exists for any *future* non-preset flavor but has no user today.) Each subject still gets a signed SBOM via `hull sbom` for compliance pipelines. Full design: [docs/build_flavors.md](docs/build_flavors.md) · [docs/features_and_flavors.md](docs/features_and_flavors.md).
+
+### libhull: embed the hardened core (no runtime)
+
+`make libhull` produces `libhull.a`, Hull's runtime-free core as a static archive a native program (C / Rust / Zig) links directly. There is no Lua/QuickJS runtime and no `app.main` lifecycle: the host owns `main()` and drives the two-phase kernel sandbox, the capability-mediated I/O layer, the WASM/GPU compute isolation, and the signed-artifact/SBOM machinery itself, through one stable header, [`<hull/embed.h>`](include/hull/embed.h).
+
+Reach for it when you have an **existing native codebase** that needs one of Hull's guarantees but shouldn't adopt a scripting runtime to get it:
+
+- **Run untrusted compute inside a native service** - WAMR gas-metered, no-I/O WASM isolation for user-supplied transforms/scoring/UDFs, without embedding a script engine.
+- **Put a capability boundary on a native tool's own I/O** - a portable (Linux / macOS / cosmo) pledge/unveil + a declared fs / host / env allowlist, so a bug or malicious input can't reach outside what the program declared.
+- **Defense-in-depth for a Rust/Zig service** - add the kernel sandbox (seatbelt / landlock / pledge) + W^X enforcement + a filesystem/network allowlist that the language runtime alone does not give you.
+- **Signed-artifact / SBOM tooling** - link the Ed25519 verify + SBOM + release-verification machinery instead of reimplementing it.
+
+Writing a **new** app from scratch? Use Hull's Lua/JS instead - same hardening, far less glue. libhull is for the case where the host must stay native and is trusted to sequence the lifecycle. `libhull.a` is release-signed per arch (native + dual-arch cosmo) with its own scoped SBOM (`hull sbom --subject=libhull`). Reference hosts in C, Rust, and Zig live under `examples/embed_{c,rust,zig}`; the trust boundary and seal lifecycle are in [docs/libhull_flavor.md](docs/libhull_flavor.md).
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────┐
+│  Application Code (Lua / JS)                │  ← Developer writes this
+├─────────────────────────────────────────────┤
+│  WASM Compute Plugins (WAMR)                │  ← Sandboxed data-plane computation
+├─────────────────────────────────────────────┤
+│  GPU Compute Shaders (wgpu-native)          │  ← Parallel data processing (optional)
+├─────────────────────────────────────────────┤
+│  Standard Library (stdlib/)                 │  ← cors, ratelimit, csrf, auth, jwt, session
+├─────────────────────────────────────────────┤
+│  Runtimes (Lua 5.4 + QuickJS)               │  ← Sandboxed interpreters
+├─────────────────────────────────────────────┤
+│  Capability Layer (src/hull/cap/)           │  ← C enforcement boundary
+│  fs, db, crypto, time, env, http, gpu, tool │  ← audit logging (--audit)
+├─────────────────────────────────────────────┤
+│  Hull Core                                  │  ← Manifest, sandbox, signatures, VFS
+├─────────────────────────────────────────────┤
+│  Keel HTTP Server (vendor/keel/)            │  ← Event loop + routing + async + thread pool
+│                                             │  ← gzip compression + client connection pool
+├─────────────────────────────────────────────┤
+│  Kernel Sandbox (pledge + unveil)           │  ← OS enforcement
+└─────────────────────────────────────────────┘
+```
+
+Each layer only talks to the one directly below it. Application code cannot bypass the capability layer.
+
+### App Lifecycle
+
+Hull apps execute in one of two modes, chosen by what the app registers:
+
+**Server mode**. App registers route handlers (`app.get/post/use/ws/sse/every/daily`):
+
+```
+process start → init runtime → sandbox phase 1 → load app code
+  → manifest extracted → modules resolved → sandbox phase 2
+  → migrations (HL_ENABLE_DB + migrations/) → start Keel
+  → event loop: dispatch requests until SIGINT/SIGTERM
+  → graceful shutdown → exit
+```
+
+**CLI mode** (see [docs/cli_mode.md](docs/cli_mode.md)). App registers a single entry point with `app.main(fn)`:
+
+```
+process start → init runtime → sandbox phase 1 → load app code
+  → manifest extracted → modules resolved → sandbox phase 2
+  → migrations (same gate as server mode)
+  → call app.main(ctx) where ctx = { args, env, stdin, stdout, stderr }
+  → main returns (sync or via coroutine/Promise)
+  → cleanup → exit with main's return value
+```
+
+Both modes share the same manifest, sandbox, module resolver, signature
+system, and capability layer. Only the dispatch surface differs.
+`app.main` and route registration are **no longer mutually exclusive**:
+register them in any order. `app.main` runs once as a startup hook (run
+migrations, warm caches); a non-zero return short-circuits the serve
+loop, matching shell exit-code conventions, while a zero/nil return with
+handlers registered enters the serve loop. A compute-only `app.main` app
+built on the composable base already drops Keel + mbedTLS + SQLite
+automatically (no flavor needed); `--flavor=pure-compute` just adds the
+"reject any HTTP/TLS module" validation.
+
+### App Layout Conventions
+
+Hull's runtime supports both single-file apps and modular trees. Pick
+the layout that matches the app's scope; `hull new` scaffolds either:
+
+**Flat** (default, `hull new myapp`). One `app.lua` (or `app.js`)
+holds the manifest, requires, and all routes / commands. Best for
+small services, demos, single-resource APIs, one-shot CLI tools.
+
+**Modular REST** (`hull new --type rest myapp`). Bootstrap +
+per-resource files, models separate from routes:
+
+```
+myapp/
+  app.lua         . Manifest + bootstrap (mounts each route group)
+  routes/         . One file per resource; exports register(app)
+    users.lua     . Verb registration only
+  models/         . DB access per resource (no SQL in routes)
+    user.lua      . { create, find_by_id, list, delete_by_id }
+  middleware/     . App-specific wrappers around stdlib middleware
+  lib/            . Shared schemas, formatters, helpers
+  migrations/, tests/, static/, templates/, locales/
+```
+
+Routes import models via relative requires (`require("./../models/user")`);
+Hull's path normalizer (`src/hull/path_normalize.c`, shared by both
+runtimes) collapses `./`/`../` safely and fails closed on escape past
+the app root.
+
+**Modular CLI** (`hull new --type cli mytool`). `app.main` is a
+dispatcher; subcommands live as files:
+
+```
+mytool/
+  app.lua           . Ctx.args[1] picks the command; the rest forward as args
+  commands/
+    greet.lua       . Exports M.run(ctx); returns exit code
+    count.lua
+  lib/fmt.lua       . Shared output helpers
+```
+
+**Modular TUI** (`hull new --type tui mydash`, Lua-only). Single
+`state` table threaded through views; immediate-mode loop in `app.lua`:
+
+```
+mydash/
+  app.lua           . Tui.run({ draw, on_event }); dispatches via state.view
+  views/
+    menu.lua        . Render(ctx, state) + handle_event(state, ev)
+    detail.lua
+  lib/state.lua     . Initial state + helpers
+  tests/views/test_menu.lua  . Pure-function unit tests
+```
+
+Both runtimes coexist in the same modular tree (`app.lua` + `app.js`
+side by side, parallel `routes/`, `models/`, `lib/` etc.). `hull build`
+walks subdirectories automatically. No build-config change needed.
+`hull deploy` is layout-agnostic.
+
+Canonical examples: [`examples/rest_api_modular/`](examples/rest_api_modular/),
+[`examples/cli_modular/`](examples/cli_modular/),
+[`examples/tui_modular/`](examples/tui_modular/).
+
+### Module Declaration
+
+Apps declare which first-party stdlib modules they import via the manifest's `modules` array; runtime gates refuse imports of anything not declared. Three principles:
+
+1. **Every external capability is declared.** Language intrinsics (Lua: `string/table/math`; JS: `Object/Array/JSON`) and Hull's intrinsic core are always available; every other first-party module must appear in `manifest.modules` or the import fails. The intrinsic core is just `hull/app` (the registration API: `app.manifest`, `app.get/post/use`, `app.router`, `app.ws/sse`, `app.every/daily`, `app.main`). `hull/app` stays intrinsic because the manifest itself is expressed via `app.manifest(...)` and must exist before parsing. Everything else, including `hull/log` and `hull/json`, must be declared. Apps that call `log.X` or `json.X` directly need `"hull/log@1"` / `"hull/json@1"` in `manifest.modules`.
+2. **Import-only exposure.** Declared modules are reached via `require("hull.X")` (Lua) / `import "hull:X"` (JS). They are NOT exposed as globals.
+3. **Capability + module are separate gates.** Declaring `hull/http-client@1` doesn't open the network. The app still needs a non-empty `hosts` allowlist. The resolver pairs them.
+
+```lua
+app.manifest({
+    modules = {
+        "hull/crypto@1",
+        "hull/db@1",
+        "hull/time@1",
+        "hull/web/middleware/auth@1",
+        "hull/web/middleware/session@1",   -- the resolver enforces that its
+                                       -- deps (db, crypto, time) are
+                                       -- also declared
+    },
+    hosts = {"api.stripe.com"},        -- required if http is declared
+    fs    = { read = {"data/"} },      -- required if fs is declared
+})
+
+-- require/import are standard Lua/JS. Choose any local binding name:
+local crypto = require("hull.crypto")
+local cookie = require("hull.web.cookie")
+```
+
+Each entry is a canonical spec `"<vendor>/<name>@<major>"`. The manifest declares *what's in scope*; the `require()` / `import` call site picks *what to call it locally*. First-party modules use `hull/`; future third-party packages would use the same form (`"acme/widgets@2"`).
+
+**Optional modules (`?` suffix).** A trailing `?` (`"hull/gpu@1?"`) marks a module optional: on a build that lacks its capability (a compiled-out subsystem with no matching `--with=` feature), the resolver skips it instead of failing app load, and `require` returns `nil` (Lua) / `import` binds `null` (JS) so the app can fall back. A present optional module is gated normally; a non-optional spec for an absent capability stays a hard error.
+
+```lua
+local gpu = require("hull.gpu")           -- nil on a base binary
+if gpu and gpu.available() then use_gpu() else use_cpu() end
+```
+
+**Failure modes** (all surface with the canonical spec + dep list + a pointer to `hull modules available`):
+
+| Error | Cause |
+|-------|-------|
+| `module 'hull.X' is not declared in app.manifest` | App imports a known module not in `modules` |
+| `module 'hull/X' transitively requires 'hull/gpu', which needs HL_ENABLE_GPU but it is disabled in this hull build` | An auto-admitted dep needs a compile-time subsystem this binary doesn't have |
+| `http.fetch: host 'api.x.com' not in manifest hosts allowlist` | Module loaded fine; per-call cap layer rejected the URL. Add to `hosts` |
+| `module 'hull/gpu@1' requires HL_ENABLE_GPU (build-time)` | Build wasn't compiled with the subsystem |
+| `unknown module 'X' in app.manifest.modules` | Typo or non-existent module |
+
+The resolved set is recorded in `package.sig` as `modules_resolved` and covered by the existing Ed25519 signature. `hull verify` ensures the module surface hasn't been tampered with since `hull build --sign`.
+
+**CLI / agent tooling:** `hull modules available | list | explain | analyze`, `hull check` (analyzer-integrated), `hull agent modules` (JSON), `hull doctor` (build-subsystem readiness). See [docs/security.md §5b](docs/security.md) for the full design.
+
+### Standard Library
+
+Hull ships a full set of middleware and utility modules for building secure backends:
+
+**Authentication & authorization** (v0.3.0; 13 audit rounds, converged in round 13):
+
+| Module | Lua | JS | Purpose |
+|--------|-----|-----|---------|
+| `auth-flows` | `hull.web.auth-flows` | `hull:web:auth-flows` | End-to-end auth flows: registration, email verify, login, password reset, magic link, email change, optional TOTP 2FA |
+| `totp` | `hull.web.middleware.totp` | `hull:web:middleware:totp` | RFC 6238 2FA. Dual-row enrollment, multi-key at-rest encryption + rekey, per-user + opt-in per-IP lockout |
+| `oauth` | `hull.web.middleware.oauth` | `hull:web:middleware:oauth` | OIDC Authorization Code + PKCE. Google + Microsoft Entra presets. RS256/384/512 + PS256 + ES256/384 ID-token verify |
+| `audit-log` | `hull.web.middleware.audit-log` | `hull:web:middleware:audit-log` | Append-only auth-event log with per-device fingerprint, tri-state cleanup status, paged salt-rotation helper |
+| `auth-health` | `hull.web.auth-health` | `hull:web:auth-health` | Probe for session / audit-log / pwned / TOTP / RBAC. Backs `hull agent auth-status` |
+| `pwned` | `hull.web.pwned` | `hull:web:pwned` | HIBP k-anonymity check + 80KB embedded offline blocklist |
+| `qrcode` | `hull.qrcode` | `hull:qrcode` | Pure Lua/JS QR Code generator (ISO/IEC 18004), SVG output |
+| `session` | `hull.web.middleware.session` | `hull:web:middleware:session` | Server-side sessions backed by SQLite. Sliding + absolute (24h default) expiry. Device fingerprinting. `login_handler` / `logout_handler` factories |
+| `cookie` | `hull.web.cookie` | `hull:web:cookie` | Cookie parse/serialize. CRLF/NUL/`;` rejection on path/domain/value |
+| `jwt` | `hull.jwt` | `hull:jwt` | JWT sign/verify. HS256 + RS256/384/512 + PS256 + ES256/384. Alg allowlist enforced BEFORE key resolution |
+| `csrf` | `hull.web.middleware.csrf` | `hull:web:middleware:csrf` | Stateless CSRF tokens via HMAC-SHA256. Per-form-pair + body-size caps |
+| `auth` | `hull.web.middleware.auth` | `hull:web:middleware:auth` | Session-based + JWT-based authentication middleware factories |
+| `rbac` | `hull.web.middleware.rbac` | `hull:web:middleware:rbac` | Role-based access control |
+| `csp` | `hull.web.middleware.csp` | `hull:web:middleware:csp` | Content-Security-Policy middleware with per-request nonce (htmx / strict profiles) |
+
+**Files, storage, MIME** (v0.3.0):
+
+| Module | Lua | JS | Purpose |
+|--------|-----|-----|---------|
+| `attachment` | `hull.attachment` | `hull:attachment` | File-attachment store backed by `hull/blob@1`. Multipart-part ingestion, content-addressed dedup, refcount GC |
+| `attachment-serve` | `hull.web.attachment-serve` | `hull:web:attachment-serve` | Serve attachments with Content-Type + ETag + Range |
+| `blob` | `hull.blob` | `hull:blob` | Streaming content-addressed blob storage (writer / reader / hard-link layout) |
+| `mime` | `hull.mime` | `hull:mime` | MIME type sniffer (magic-bytes + extension fallback) |
+
+**HTMX + page composition**:
+
+| Module | Lua | JS | Purpose |
+|--------|-----|-----|---------|
+| `template` | `hull.template` | `hull:template` | HTML template engine with inheritance, includes, filters, auto-escaping |
+| `htmx` | `hull.web.htmx` | `hull:web:htmx` | HTMX server helpers: `is()`, `trigger()`, `reswap()`, `redirect()`, response headers |
+| `flash` | `hull.web.flash` | `hull:web:flash` | Session-backed flash messages with HX-Trigger integration |
+| `pagination` | `hull.web.pagination` | `hull:web:pagination` | Page/per_page query parsing + safe URL builder + offset/limit math |
+| `form` | `hull.web.form` | `hull:web:form` | URL-encoded form body parsing |
+| `validate` | `hull.validate` | `hull:validate` | Declarative input validation with schema rules |
+| `i18n` | `hull.i18n` | `hull:i18n` | Internationalization: locale detection, translations, formatting |
+
+**Resilience & observability**:
+
+| Module | Lua | JS | Purpose |
+|--------|-----|-----|---------|
+| `cors` | `hull.web.middleware.cors` | `hull:web:middleware:cors` | CORS headers + preflight handling |
+| `ratelimit` | `hull.web.middleware.ratelimit` | `hull:web:middleware:ratelimit` | In-memory rate limiting with configurable windows |
+| `logger` | `hull.web.middleware.logger` | `hull:web:middleware:logger` | Request logging with logfmt output and request IDs |
+| `transaction` | `hull.web.middleware.transaction` | `hull:web:middleware:transaction` | Wraps handlers in SQLite BEGIN IMMEDIATE..COMMIT |
+| `idempotency` | `hull.web.middleware.idempotency` | `hull:web:middleware:idempotency` | Idempotency-Key middleware with response caching + HTML replay |
+| `outbox` | `hull.web.middleware.outbox` | `hull:web:middleware:outbox` | Transactional outbox for reliable webhook delivery |
+| `inbox` | `hull.web.middleware.inbox` | `hull:web:middleware:inbox` | Inbox deduplication for incoming events/webhooks |
+| `health` | `hull.web.middleware.health` | `hull:web:middleware:health` | Health check + readiness endpoints |
+| `etag` | `hull.web.middleware.etag` | `hull:web:middleware:etag` | ETag response helpers with 304 Not Modified |
+| `csv` | `hull.csv` | `hull:csv` | CSV parse/encode (RFC 4180) |
+| `search` | `hull.search` | `hull:search` | Full-text search (SQLite FTS5) |
+| `json` | `hull.json` | (built-in) | JSON encode/decode |
+
+All middleware modules follow the same factory pattern: `module.middleware(opts)` returns a function `(req, res) -> 0|1` where `0` = continue, `1` = short-circuit.
+
+#### Background Timers
+
+`app.every(ms, fn)` and `app.daily("HH:MM", fn)` register repeating background callbacks. Timer callbacks run on the event loop thread with full async support. `hull.sleep()`, `http.fetch()`, and `db.*` all work inside timers.
+
+```lua
+-- Flush outbox every 30 seconds
+app.every(30000, function()
+    outbox.flush()
+end)
+
+-- Clean up expired sessions daily at 2am UTC
+app.daily("02:00", function()
+    session.cleanup()
+end)
+
+-- Return false to self-cancel
+app.every(1000, function()
+    local pending = outbox.flush()
+    if pending == 0 then return false end
+end)
+```
+
+Minimum interval: 100ms. Errors are logged but don't stop the timer. One invocation at a time. If a callback is still running (async yield), the next tick is deferred.
+
+#### Database & Migrations
+
+Hull apps use SQLite with WAL mode, parameterized queries, and a prepared statement cache. Schema changes are managed through numbered SQL migration scripts.
+
+**Convention:** Place migration files in `migrations/` in your app directory, numbered sequentially:
+
+```
+myapp/
+  app.lua
+  migrations/
+    001_init.sql        ← creates initial tables
+    002_add_index.sql   ← adds an index
+    003_new_feature.sql ← adds a new table
+```
+
+Migrations run automatically on startup (opt out with `--no-migrate`). Each migration runs in a transaction, and the `_hull_migrations` table tracks which migrations have been applied.
+
+```bash
+hull migrate new add_tags        # creates migrations/002_add_tags.sql
+hull migrate                     # run pending migrations
+hull migrate status              # show applied/pending migrations
+```
+
+In built binaries (`hull build`), migration files are embedded alongside Lua/template/static assets. `hull test` runs migrations against an in-memory database.
+
+#### Static File Serving
+
+Place files in `static/` in your app directory. They're served at `/static/*` automatically.
+
+```
+myapp/
+  app.lua
+  static/
+    style.css       → GET /static/style.css
+    js/app.js       → GET /static/js/app.js
+    images/logo.png → GET /static/images/logo.png
+```
+
+In dev mode, files are read from disk with zero-copy sendfile and `Cache-Control: no-cache`. In built binaries (`hull build`), static files are embedded in the unified `hl_app_entries[]` array and looked up via the VFS module (O(log n) binary search). `Cache-Control: public, max-age=86400`. ETag and 304 Not Modified are supported in both modes.
+
+#### Backend Best Practices
+
+Recommended middleware stack for a typical API backend:
+
+```lua
+local cors = require("hull.web.middleware.cors")
+local ratelimit = require("hull.web.middleware.ratelimit")
+local auth = require("hull.web.middleware.auth")
+local session = require("hull.web.middleware.session")
+
+session.init()
+
+-- Order matters: rate limit → CORS → auth → routes
+app.use("*", "/api/*", ratelimit.middleware({ limit = 100, window = 60 }))
+app.use("*", "/api/*", cors.middleware({ origins = {"https://myapp.com"} }))
+app.use("*", "/api/*", auth.session_middleware({}))
+
+app.get("/api/me", function(req, res)
+    res:json({ user = req.ctx.session })
+end)
+```
+
+Key principles: rate limit before auth (reject early), CORS before auth (preflight must not require credentials), scope middleware to paths (`"/api/*"` not `"/*"`). For simple CORS needs, use `cors` in `app.manifest()`. It registers Keel-level CORS middleware automatically. Use the stdlib `hull.web.middleware.cors` for per-route or conditional CORS logic. See [examples/middleware/](examples/middleware/) and [CLAUDE.md](CLAUDE.md) for full API reference.
+
+### Vendored Libraries
+
+| Component | Purpose |
+|-----------|---------|
+| [Keel](https://github.com/artalis-io/keel) | HTTP server (epoll/kqueue/io_uring/poll), routing, middleware, TLS vtable, async primitives, thread pool |
+| [Lua 5.4](https://www.lua.org/) | Application scripting (1.9x faster than QuickJS) |
+| [QuickJS](https://bellard.org/quickjs/) | ES2023 JavaScript runtime with instruction-count gas metering |
+| [SQLite](https://sqlite.org/) | Embedded database (WAL mode, parameterized queries) |
+| [WAMR](https://github.com/bytecodealliance/wasm-micro-runtime) | WebAssembly Micro Runtime for gas-metered compute plugins (composed by the `wasm` axis) |
+| [mbedTLS](https://github.com/Mbed-TLS/mbedtls) | TLS client for outbound HTTPS |
+| [TweetNaCl](https://tweetnacl.cr.yp.to/) | Ed25519 signatures, XSalsa20+Poly1305, Curve25519 |
+| [miniz](https://github.com/richgel999/miniz) | gzip compression (response compression, client decompression) |
+| [pledge/unveil](https://github.com/jart/pledge) | Kernel sandbox (Linux seccomp/landlock) |
+
+## Security Model
+
+Hull apps declare a manifest of exactly what they can access. Files, hosts, environment variables. The kernel enforces it.
+
+```lua
+app.manifest({
+    fs = { read = {"data/"}, write = {"data/uploads/"} },
+    env = {"PORT", "DATABASE_URL"},
+    hosts = {"api.stripe.com"},
+    cors = {
+        origins = {"https://myapp.com"},
+        methods = "GET, POST, PUT, DELETE",
+        credentials = true,
+    },
+})
+```
+
+**Three verification points:**
+
+| When | Tool | Checks |
+|------|------|--------|
+| Before download | [verify.gethull.dev](https://verify.gethull.dev) (offline browser tool) | Platform sig, app sig, canary, manifest |
+| Before install | `hull verify --developer-key dev.pub` | Both signatures + file hashes |
+| At startup | `./myapp --verify-sig dev.pub` | Signatures verified before accepting connections |
+
+**Defense depth by platform:**
+
+| Platform | Kernel Sandbox | Violation | Static Binary |
+|----------|---------------|-----------|---------------|
+| Linux (gcc/clang) | seccomp-bpf + Landlock | SIGKILL | No |
+| Cosmopolitan APE | Native pledge/unveil | SIGKILL | Yes (no LD_PRELOAD) |
+| macOS | Seatbelt (sandbox_init, deny-default SBPL) | EPERM | No |
+
+See [docs/security.md](docs/security.md) for the full attack model and [docs/architecture.md](docs/architecture.md) for implementation details.
+
+### Audit Logging
+
+Hull can log every capability call (database queries, file I/O, HTTP requests, env access) as structured JSON to stderr. Off by default for zero overhead.
+
+```bash
+# Enable via CLI flag
+hull app.lua --audit
+
+# Or via environment variable
+HULL_AUDIT=1 hull app.lua
+```
+
+Each line is a self-contained JSON object with a UTC timestamp and the capability name:
+
+```
+{"ts":"2026-03-06T14:23:01Z","cap":"db.query","sql":"SELECT * FROM tasks WHERE id = ?","nparams":1,"result":0}
+{"ts":"2026-03-06T14:23:01Z","cap":"fs.read","path":"uploads/file.txt","bytes":4096}
+{"ts":"2026-03-06T14:23:02Z","cap":"http.request","method":"POST","url":"https://api.example.com","status":200,"result":0}
+{"ts":"2026-03-06T14:23:02Z","cap":"env.get","name":"DATABASE_URL","result":"ok"}
+```
+
+When disabled (default), the audit check is a single branch on a global flag. Zero escaping, formatting, or I/O.
+
+## Performance
+
+77,000–86,000 requests/sec on a single core. ~15% overhead vs raw C (Keel baseline: 101,000 req/s). SQLite write-heavy routes sustain 19,000 req/s.
+
+| Route | Lua 5.4 | QuickJS |
+|-------|--------:|--------:|
+| GET /health (no DB) | 98,531 req/s | 52,263 req/s |
+| GET / (DB write + JSON) | 6,866 req/s | 4,588 req/s |
+| GET /greet/:name (params) | 102,204 req/s | 57,405 req/s |
+
+See [docs/benchmark.md](docs/benchmark.md) for methodology.
+
+## Authoring Compute Modules
+
+WASM compute modules let you drop pure-function workloads (scoring,
+transforms, parsing, vector math, image kernels) into a Hull app at
+near-native speed without leaving the capability-secure sandbox.
+Modules are written in C (Rust planned), compiled to WebAssembly,
+and either embedded in the final binary or loaded from disk in dev.
+
+> See [docs/wamr_architecture.md](docs/wamr_architecture.md) for the
+> full WAMR design (ABI, gas metering, pooling, segments, streaming,
+> AOT, Memory64); this section is the developer guide.
+
+### Directory convention
+
+A compute module is a pair of paths inside your app:
+
+```
+myapp/
+  app.lua
+  compute/
+    score.wasm           ← compiled artifact (what gets embedded)
+    score/               ← source directory (one per module)
+      score.c            ← required: the actual source
+      hull_compute.h     ← required: the freestanding ABI header
+      test_fixtures.json ← optional: input/output fixtures for `hull compute test`
+```
+
+The runtime only ever loads `compute/<name>.wasm` (and the AOT siblings
+`compute/<name>.aot.<arch>`). The source directory `compute/<name>/`
+is purely a build input. It's not embedded in the final binary and
+nothing in production looks at it.
+
+### Lifecycle
+
+```
+                                              hull build (auto)
+                                                  ▼
+hull compute new score          ┌───────────────────┐
+        │                       │ compute/score.wasm│ ──── embedded into
+        ▼                       └───────────────────┘      the app binary
+compute/score/score.c (edit)            ▲
+        │                               │
+        ├──► hull compute build score ──┘   (manual rebuild)
+        │
+        ├──► hull compute test  score        (run JSON fixtures)
+        │
+        └──► hull compute check score        (load + smoke-test in WAMR)
+```
+
+### Step 1. Scaffold
+
+```bash
+hull compute new score
+```
+
+Creates:
+
+- `compute/score/score.c`. A 30-line skeleton implementing
+  `hull_process(in, in_len, out, out_max)`. The default scaffold sums
+  input bytes into a 0-100 score; replace it with your actual logic.
+- `compute/score/hull_compute.h`. The freestanding ABI header
+  (described below). Don't edit it; it's owned by Hull.
+- `compute/score/test_fixtures.json`. A few example fixtures.
+
+`hull compute new` is **idempotent-safe**: re-running on an existing
+module errors instead of clobbering. Names must match
+`[A-Za-z0-9_-]+`.
+
+### Step 2. Write your module
+
+Implement `hull_process` in `compute/<name>/<name>.c`. The ABI is the
+function signature you export, nothing more:
+
+```c
+#include "hull_compute.h"
+
+HULL_VERSION_EXPORT
+
+HULL_EXPORT
+int32_t hull_process(const void *in_ptr, int32_t in_len,
+                     void *out_ptr, int32_t out_max)
+{
+    /* Read up to in_len bytes from in_ptr.
+     * Write up to out_max bytes to out_ptr.
+     * Return number of bytes written, or a negative HULL_ERR_* code. */
+    if (out_max < 4) return HULL_ERR_OUTPUT;
+    /* ... your logic ... */
+    return 4;
+}
+```
+
+`hull_compute.h` is freestanding (no libc dependency) and provides:
+
+| API | Use |
+|-----|-----|
+| `HULL_EXPORT` / `HULL_VERSION_EXPORT` | Visibility macros. Required on `hull_process` and `hull_version`. |
+| `HULL_OK`, `HULL_ERR_OUTPUT`, `HULL_ERR_INPUT`, `HULL_ERR_INTERNAL` | Standard return codes. |
+| `int32_t host_call(opcode, ptr, len)` | The single host import. For logging, shared-data access, and UDF callbacks. |
+| `hull_log(msg, len)` | Convenience wrapper around `host_call(HULL_OP_LOG, ...)`. |
+| `hull_segment_count()` / `hull_segment_addr(id)` / `hull_segment_size(id)` | Read shared data segments loaded via `compute.segment(...)`. |
+| `hull_memcpy`, `hull_memset`, `hull_memcmp`, `hull_strlen` | Minimal libc replacements. |
+| `hull_alloc(n)` / `hull_alloc_reset()` | 64 KB bump allocator scoped to one call. |
+| `HULL_UDF_*` constants | UDF wire format for modules registered as SQL functions via `db.udf.register`. |
+
+Modules cannot import anything else. No WASI, no `open`, no `socket`,
+no `time`. They are pure functions from input bytes to output bytes
+with a strict gas budget (default 100M instructions per call) and a
+strict memory budget (default 2 MiB heap, configurable up to ~4 GiB
+on WASM32 or 16 GiB on Memory64).
+
+> **Keeping `hull_compute.h` current.** Hull owns this header; the
+> canonical version is embedded in the `hull` binary and written into
+> each module's directory by `hull compute new`. When you upgrade Hull
+> the per-module copies will not change automatically. Run
+> `hull compute refresh-header <name>` (or with no name for all
+> modules) to overwrite each `compute/<name>/hull_compute.h` from the
+> embedded canonical version.
+
+### Step 3. Build
+
+```bash
+hull compute build score        # one module
+hull compute build              # all modules under compute/
+```
+
+`hull compute build` invokes `clang --target=wasm32-unknown-unknown -nostdlib`
+with the flags Hull's runtime expects (`-Wl,--no-entry`, exports
+`hull_process` + `hull_version` + `memory`, 128 KiB initial / 64 MiB max
+linear memory). Toolchain expectations:
+
+- **macOS**: `brew install llvm@18` (bundles `wasm-ld`). The build
+  prefers `/opt/homebrew/opt/llvm@18/bin/clang` then falls back to
+  Homebrew `llvm` and finally to system `clang`.
+- **Linux**: `apt install clang lld` (or equivalent. `wasm-ld` must
+  be in PATH).
+- **No toolchain installed?** `hull compute build` errors with a hint;
+  pre-compiled `.wasm` files can be committed and used directly.
+
+Output: `compute/<name>.wasm`. The compiler removes everything you
+don't reference (LTO + `-O2`), so a typical module is 500 bytes - 5 KB.
+
+### Step 4. Test
+
+`compute/<name>/test_fixtures.json` is a JSON array of test cases:
+
+```json
+[
+    {"name": "happy path", "input": "hello", "expect_status": 0},
+    {"name": "empty input", "input": "", "expect_status": 0},
+    {"name": "rejects nul", "input": "
+]
+```
+
+Each fixture's `input` is fed to `compute.call("<name>", input)`. The
+runner asserts the HTTP status matches `expect_status` (200 if `0`,
+otherwise the literal value).
+
+```bash
+hull compute test score
+```
+
+Under the hood the runner generates a tempdir app with one route
+(`GET /call?input=...`) and runs `hull test` against it. This means
+your fixtures exercise the exact same `compute.call` codepath your
+real handlers use. Same gas metering, same instance pool, same
+limits.
+
+For one-shot invocations with arbitrary inputs (no fixture file
+needed), use `hull agent compute-call <name> <input-file>`.
+
+### Step 5. Sanity-check
+
+```bash
+hull compute check score
+```
+
+Validates the WASM magic bytes, the WASM version, then loads the
+module in WAMR with a trivial input and asserts the call returns 200.
+This is the "yes, this module can actually run inside Hull" gate. If
+`hull compute check` passes, `compute.call()` from your app code will
+at least find the module.
+
+### Step 6. Build and embed
+
+`hull build` automatically:
+
+1. **Rebuilds stale sources.** Before any other build step, it scans
+   `compute/<name>/<name>.c` for sources whose mtime is newer than the
+   matching `.wasm`. Any stale source is recompiled inline using the
+   same logic as `hull compute build`. Output is reported as
+   `hull build: compiled N compute source(s): <names>`.
+2. **AOT-compiles `.wasm` artifacts.** If `wamrc` is available (`make
+   wamrc`), every `compute/*.wasm` is AOT-compiled to
+   `compute/*.aot.<arch>` for near-native speed. For cosmocc fat
+   binaries both `x86_64` and `aarch64` AOT files are produced.
+3. **Embeds both into the binary** via the unified VFS array. At
+   runtime, AOT is preferred over interpreter; `hull build --no-aot`
+   skips AOT compilation.
+
+Opt out of step 1 with `--no-build-compute` (for hermetic CI builds
+that ship pre-committed `.wasm` artifacts). Opt out of step 2 with
+`--no-aot`.
+
+Once embedded, modules are loaded via `compute.call("<name>", input)`
+from Lua or `compute.call("<name>", input)` from JS, just like any
+other capability. The bytes-in-bytes-out contract is the entire API.
+
+### Deployment
+
+`hull agent deploy <app_dir>` reports per-module status in its JSON
+output:
+
+```json
+{
+  "files": { "compute": 3, ... },
+  "compute_modules": [
+    {"name": "score",       "wasm_size": 1023, "has_aot": true,  "has_source": true,  "source_stale": false},
+    {"name": "transform",   "wasm_size": 718,  "has_aot": true,  "has_source": true,  "source_stale": false},
+    {"name": "vendored",    "wasm_size": 135,  "has_aot": false, "has_source": false, "source_stale": false}
+  ],
+  "recommendations": [
+    "Compute source newer than .wasm. Run `hull compute build` or rebuild (hull build auto-rebuilds when clang is available)"
+  ]
+}
+```
+
+`hull deploy dockerfile`, `hull deploy systemd`, and `hull deploy fly`
+don't need any compute-specific configuration: the `.wasm` (and any
+AOT) files are already embedded in the binary at `hull build` time, so
+the deployment artifact is whatever your build pipeline produces. The
+generated configs treat compute modules transparently.
+
+For pure compute services (no DB), combine with `HL_ENABLE_DB=0`:
+
+```bash
+make HL_ENABLE_DB=0          # ~3.66 MB binary, no SQLite
+hull build myapp             # embeds compute/*.wasm + AOT
+```
+
+### Sharing data with modules
+
+For multi-GB read-only datasets (routing graphs, ML weights, embeddings),
+load via shared data segments instead of passing through input bytes:
+
+```lua
+compute.segment("router", "graph", fs.mmap("graph.bin"))
+local out = compute.call("router", query)
+```
+
+Inside the module, query segments via `host_call(0x02, segment_id, 0/1)`:
+
+```c
+void *graph = (void *)(size_t)host_call(0x02, 0, 0);  /* segment 0 address */
+int32_t graph_size = host_call(0x02, 0, 1);           /* segment 0 size */
+```
+
+Segments are page-aligned mmap regions in shared heaps. Multiple
+worker threads read concurrently. Adding or removing segments drains
+the instance pool and rebuilds it transparently.
+
+### Stateful compute (persistent instances)
+
+For stateful workloads (model weights you want to keep between calls,
+pre-built indexes), use `compute.instance()` instead of `compute.call`:
+
+```lua
+local m = compute.instance("model", { heap = 64 * 1024 * 1024 })
+m:call(query_1)   -- linear memory persists between calls
+m:call(query_2)
+m:close()
+```
+
+### Streaming I/O
+
+For datasets larger than memory:
+
+```lua
+compute.stream("transform", { file = "input.csv" },
+                            { file = "output.json" },
+                            { chunk_size = 65536 })
+```
+
+The module exports `hull_process_chunk` instead of `hull_process` and
+queries chunk metadata via `host_call(0x03, ...)`. See `examples/compute/`
+for working modules.
+
+### What about Rust?
+
+C is the only supported source language today. Rust support
+(`--lang=rust`) is on the roadmap. It requires Cargo + a
+`#[no_mangle] extern "C"` template + `wasm32-unknown-unknown` target
++ a `panic_handler`. Until then, modules in any compiled language are
+loadable as long as they expose `hull_process` and `hull_version` with
+the documented signatures (`Rust`, `Zig`, `AssemblyScript`, `TinyGo`
+all work. Only the scaffolding shortcut is C-only).
+
+### WASM Compute Overhead
+
+WASM plugins run in isolated linear memory with no I/O. Both sync (`compute.call()`) and async (`compute.async.call()`) APIs are available. Async yields to the event loop so other requests are served during execution. The overhead vs native C depends on execution mode:
+
+| Mode | Compute-intensive | Memory-intensive | Notes |
+|------|------------------:|------------------:|-------|
+| **Fast interpreter** | ~54x | ~37x | Fast-interp with gas metering |
+| **AOT** | ~1.2x | ~1.9x | Pre-compiled with `wamrc -O3` |
+
+Measured on Apple M-series (aarch64, -O2) with large inputs (4 MB) where per-call setup is amortized. Compute workload: iterative hash compression (64 rounds/block, integer ALU + rotations). Memory workload: histogram + counting sort (3-pass over input, scattered writes).
+
+AOT compilation is automatic during `hull build` when `wamrc` is available. Per-call setup overhead (~50 µs) dominates at small input sizes; at 4 MB+ inputs the ratios above reflect steady-state throughput.
+
+```bash
+make wamrc                         # one-time: build AOT compiler (requires LLVM)
+make bench-wasm                    # run benchmarks (interpreter + AOT if .aot files present)
+hull build myapp                   # auto-AOT compiles compute/*.wasm during build
+hull build myapp --no-aot          # skip AOT, interpreter only
+hull build myapp --target=x86_64   # cross-compile AOT for different arch
+```
+
+### GPU Compute
+
+GPU compute uses wgpu-native for massively parallel workloads via WGSL compute shaders. It ships as the **`gpu` composable feature** - `hull feature install gpu` then `hull build --with=gpu` (native-only; see [The composable base](#the-composable-base-features-flavors-and-tools) above) - or build hull from source with `make HL_ENABLE_GPU=1`. Declare `"hull/gpu@1"` in the manifest (`"hull/gpu@1?"` to fall back gracefully when no GPU is present). Features:
+
+- **Dispatch + Pipeline**. Single or multi-stage shader execution with shared named buffers
+- **Persistent buffers**. Keep data GPU-resident across requests (`gpu.buffer()`)
+- **Fire-and-forget**. Update GPU buffers in-place without readback (`output = false`)
+- **GPU-side copy**. Copy between persistent buffers without CPU roundtrip (`gpu.buffer_copy()`)
+- **Zero-copy disk→GPU**. `fs.mmap()` data passes directly to GPU buffers
+- **Shader files**. `gpu.load("name")` reads `shaders/<name>.wgsl` (dev: disk, build: embedded in binary via VFS)
+- **GPU timeout**. 5-second deadline prevents shader hangs (`HL_GPU_TIMEOUT_MS`)
+- **Unified buffer protocol**. WASM and GPU accept the same input types (string, MappedBuffer, WasmBuffer) for zero-copy data flow between disk, WASM, and GPU
+
+**Performance** (cosine similarity, 128-dim vectors, Apple M1 Max):
+
+| Vectors | Native C | WASM AOT | GPU | GPU vs AOT |
+|---------|----------|----------|-----|------------|
+| 64 | 7 µs | 7 µs | 2,630 µs | 0.0x |
+| 1K | 118 µs | 108 µs | 2,630 µs | 0.0x |
+| 16K | 1,830 µs | 2,534 µs | 2,629 µs | 1.0x |
+| 64K | 7,270 µs | 10,969 µs | 2,653 µs | **4.1x** |
+
+GPU latency is constant ~2.6ms. Use `gpu.pipeline()` for multi-stage compute (2.4x faster than separate dispatches). Use fire-and-forget for index updates that don't need results returned.
+
+```bash
+make fetch-wgpu                                            # download wgpu-native (SHA-256 verified)
+make HL_ENABLE_GPU=1                                       # build with GPU
+make bench-gpu HL_ENABLE_GPU=1                             # GPU vs WASM vs native benchmark
+```
+
+## Compute-only builds (`HL_ENABLE_DB=0`)
+
+For pure compute deployments (REST endpoints wrapping WASM/GPU shaders, transform pipelines, signing services) where state lives elsewhere, drop SQLite entirely:
+
+```bash
+make HL_ENABLE_DB=0       # ~3.66 MB binary vs ~5.06 MB default (≈28% smaller)
+```
+
+Removed: SQLite + `db.*` + `migrate.*` + `worker_db` + DB-backed stdlib modules (session, ratelimit, idempotency, outbox, inbox, rbac, search) + the `hull migrate` and `hull agent db|migrate` subcommands.
+
+Still works: HTTP routing, middleware, both runtimes, sandbox, `http.fetch`, `ws.*`, `fs.*`, `crypto.*`, `compute.*`, `gpu.*`, templates, static files, image codecs, SSE, timers, validation, CSV, i18n, CORS, ETag, health, JWT, stateless CSRF, form parsing, logger.
+
+Combine with other flags freely, e.g. `make HL_ENABLE_DB=0 HL_ENABLE_HTTP=0 HL_ENABLE_GPU=1 WGPU_LIB_DIR=vendor/wgpu` for a GPU-focused compute service. (`HL_ENABLE_HTTP=0` is the `pure-compute` knob - drops mbedTLS + Keel entirely.)
+
+## Terminal UI
+
+Hull ships a built-in `hull.tui` module for interactive terminal apps. The same primitives power `hull doctor --tui`, `hull dev --tui`, and friends. Designed to make the obvious thing easy: one canonical entry point, cell-level diff rendering (flicker-free over ssh), async-integrated input (background fetches keep ticking while waiting for keystrokes), and an embedded Unicode 16.0 width table for identical rendering across glibc / musl / cosmo / macOS.
+
+```lua
+local tui = require("hull.tui")
+
+app.manifest({
+    tui = true,
+    modules = { "hull/tui@1" },
+})
+
+app.main(function(ctx)
+    local picked = tui.list({"apple", "banana", "cherry"}, {
+        title = "Pick a fruit",
+    })
+    ctx.stdout:write((picked and "you picked: " .. picked or "aborted") .. "\n")
+    return 0
+end)
+```
+
+Helpers: `tui.run` (canonical immediate-mode loop), `tui.list` / `tui.confirm` / `tui.input` / `tui.frame` / `tui.progress` / `tui.spinner`, plus `tui.async` for fire-and-forget background work on the same event loop.
+
+### First-party `--tui` tools
+
+Five subcommands ship interactive TUI variants. Each is a Lua tool module (`stdlib/cli/lua/hull/X_tui.lua`) dispatched by the matching C command. All refuse cleanly without a real terminal.
+
+| Command | TUI |
+|---------|-----|
+| `hull doctor --tui` | Live readiness pane: platform/compilers/subsystems/compute/CA-bundle sections with ✓/✗ glyphs, theme-aware colors via OSC 11, `r` reprobes, `c` copies the JSON to the system clipboard via OSC 52 |
+| `hull dev --tui` | Live request log streamed from child's stderr+stdout into a ring buffer, status line (pid, reloads, lines, app_dir), inline substring filter, file-watch auto-reload, manual `r` reload |
+| `hull agent context --interactive` | Two-pane task picker w/ live preview; ←/→ cycles level; Enter prints chosen context as JSON for shell pipelines |
+| `hull agent errors --tui` | Scrollable error list + detail panel from `.hull/last_error.json` |
+| `hull modules available --tui` | Searchable registry. `/` opens filter prompt; right pane shows caps + deps + a manifest snippet |
+| `hull migrate status --tui` | Two-pane migration ledger with applied/pending counts; right pane shows the `.sql` source for the focused entry |
+
+### Examples
+
+Under `examples/`:
+
+- **`tui_picker`**. Minimal `tui.list` usage in both Lua and JS, plus an `async_proof.lua/.js` that demonstrates how `tui.poll` yields to the event loop (a background ticker advances a counter while the main coroutine awaits a key).
+- **`tui_dashboard`**. Three-pane layout via `tui.frame` (round / single borders), live progress bars in the metrics pane, a task list with cursor + checkbox glyphs, opt-in SGR mouse support.
+- **`tui_repl`**. Single-line editor with full history navigation (↑/↓), ctrl+u/k for line kill, etc. The "eval" is a tiny safe calculator (Lua's `load` is sandboxed out).
+- **`tui_chat`**. Split-pane chat mock; each user message spawns a background `tui.async` "bot reply" that hull.sleep()s 200–500ms before appending, proving the input stays responsive while async work is pending.
+- **`tui_log_tailer`**. `tail -f`-style file follower; a `tui.async` coroutine polls the file via `fs.read` every 200ms while the main loop awaits keystrokes.
+
+### Disabling
+
+The TUI capability is gated by `HL_ENABLE_TUI` (default on). Disabling drops the cap layer (`cap/tui.c`, `cap/tui_input.c`), the runtime bindings, the `hull.tui` stdlib module, and every `--tui` flag for ~80–150 KB binary savings:
+
+```bash
+make HL_ENABLE_TUI=0
+```
+
+See [`docs/tui_mode.md`](docs/tui_mode.md) for the full design. Phases, architectural decisions, the Cosmo support matrix, and the async-integration model.
+
+## Server Tuning
+
+- **Response Compression**. Gzip via miniz, automatic for bodies >= 860 bytes when `Accept-Encoding: gzip`. Disable with `--no-compress`.
+- **Connection Pooling**. Outbound HTTP reuses TCP+TLS connections (32 pool, 4 per host, 60s idle). Automatic when `hosts` declared in manifest.
+- **Redirect Following**. 3xx redirects followed automatically (up to 10 hops). Cross-origin auth headers stripped per RFC 7231.
+- **Server Stats**. `server.stats()` (Lua) / `server.stats()` (JS) returns `{active_connections, max_connections, async_suspended, listen_paused}`.
+
+| Flag | Default | Purpose |
+|------|---------|---------|
+| `--max-connections N` | 256 | Max concurrent connections |
+| `--body-max-size SIZE` | 1m | Max request body size |
+| `--read-timeout MS` | 30000 | Read timeout (milliseconds) |
+| `--workers N` | 4 | Thread pool worker count |
+| `--queue-capacity N` | 64 | Thread pool queue capacity |
+| `--no-compress` | enabled | Disable gzip response compression |
+
+## Examples
+
+Example apps in both Lua and JavaScript:
+
+| Example | What it demonstrates |
+|---------|---------------------|
+| [hello](examples/hello/) | Routing, query strings, route params, DB visits |
+| [rest_api](examples/rest_api/) | CRUD API with JSON bodies and migrations |
+| [auth](examples/auth/) | Session-based authentication with migrations |
+| [jwt_api](examples/jwt_api/) | JWT Bearer authentication with refresh tokens |
+| [crud_with_auth](examples/crud_with_auth/) | Task CRUD with per-user isolation and migrations |
+| [middleware](examples/middleware/) | Request ID, logging, rate limiting, CORS, server stats |
+| [webhooks](examples/webhooks/) | Webhook delivery with HMAC-SHA256 signatures |
+| [templates](examples/templates/) | Template engine: inheritance, includes, filters |
+| [todo](examples/todo/) | Full CRUD todo app with HTML frontend and migrations |
+| [hypermedia_photos](examples/hypermedia_photos/) | HTMX hypermedia app (Pico CSS) scaffolded by `hull init --profile htmx` |
+| [bench_db](examples/bench_db/) | SQLite performance benchmarks with migrations |
+| [async_http](examples/async_http/) | Non-blocking HTTP requests via event loop |
+| [timers](examples/timers/) | Background timers with `app.every()` and self-cancellation |
+| [bench_template](examples/bench_template/) | Template engine performance benchmarks |
+| [email](examples/email/) | SMTP email sending with templates |
+| [cors_manifest](examples/cors_manifest/) | CORS via manifest + server stats API |
+| [gpu_search](examples/gpu_search/) | GPU vector similarity search (dispatch + persistent buffers) |
+| [gpu_pipeline](examples/gpu_pipeline/) | Multi-stage GPU pipeline (normalize → weight → reduce) |
+| [compute_gpu_chain](examples/compute_gpu_chain/) | WASM→GPU zero-copy data flow (unified buffer protocol) |
+
+```bash
+# Run an example
+./build/hull -p 8080 -d /tmp/test.db examples/hello/app.lua
+
+# Run its tests
+./build/hull test examples/hello
+```
+
+## Documentation
+
+Full index with start-here guidance by role lives in [`docs/README.md`](docs/README.md).
+
+**Top-level guides:**
+
+| Document | When to read |
+|---|---|
+| [CLAUDE.md](CLAUDE.md) | Contributor guide. Build commands, conventions, full module reference. The canonical project doc. |
+| [AGENTS.md](AGENTS.md) | Quick reference for AI agents using `hull agent` CLI and stdlib. |
+| [docs/agent_guide.md](docs/agent_guide.md) | **Full SDLC reference**. Install → dev → test → build → sign → deploy → release. Every CLI command, every module API, common patterns/anti-patterns. ~1700 lines, deeply hyperlinked. |
+| [docs/api/](docs/api/) | **Per-function API reference (Javadoc-style).** [`api/c.md`](docs/api/c.md) for C public headers, [`api/lua.md`](docs/api/lua.md) for Lua stdlib, [`api/js.md`](docs/api/js.md) for JS stdlib. Use when you need to look up a specific signature. |
+
+**Core reference (`docs/`):**
+
+| Document | Content |
+|---|---|
+| [docs/architecture.md](docs/architecture.md) | System layers, capability API, request flow, build pipeline |
+| [docs/security.md](docs/security.md) | Threat model, sandbox phases, signature system, enforcement invariants |
+| [docs/stability.md](docs/stability.md) | API stability tiers, semver mapping |
+| [docs/known_limitations.md](docs/known_limitations.md) | Compile-time limit constants, override knobs |
+| [docs/benchmark.md](docs/benchmark.md) | Performance methodology and measured numbers |
+| [docs/release_signing.md](docs/release_signing.md) | Three-layer signature flow + release-key handling |
+| [docs/archive/api_review.md](docs/archive/api_review.md) | Pre-v0.1.0 API surface review (archived) |
+| [docs/roadmap.md](docs/roadmap.md) · [docs/roadmap_next.md](docs/roadmap_next.md) | What's built; what's next |
+
+The full, categorized index (active architecture / invariants / historical) is
+[`docs/README.md`](docs/README.md).
+
+**Subsystem deep-dives:**
+
+| Document | Content |
+|---|---|
+| [docs/wamr_architecture.md](docs/wamr_architecture.md) | WASM compute design. WAMR integration, ABI, pooling, segments, streaming, AOT, Memory64 |
+
+**Security audits (historical, all findings closed):**
+
+| Document | Scope |
+|---|---|
+| [docs/archive/audits/audit_2026_05_15.md](docs/archive/audits/audit_2026_05_15.md) | Main audit. Phase 5 surface, 49 findings, all closed |
+| [docs/archive/audits/audit_2026_05_15_phase6.md](docs/archive/audits/audit_2026_05_15_phase6.md) | Phase 6 (extended `hull agent` + MCP). 21 findings, all closed |
+| [docs/archive/audits/audit_2026_05_15_phase6_reaudit.md](docs/archive/audits/audit_2026_05_15_phase6_reaudit.md) | Re-audit of the Phase 6 fixes. 3 follow-ups, all closed |
+
+To report a vulnerability, see [SECURITY.md](SECURITY.md).
+
+**Strategic / positioning (non-developer audience):**
+
+[docs/MANIFESTO.md](docs/MANIFESTO.md) · [docs/archive/ASSESSMENT.md](docs/archive/ASSESSMENT.md) · [docs/INVESTORS.md](docs/INVESTORS.md) · [docs/PERSONAS.md](docs/PERSONAS.md)
+
+**Archive:** historical audits and completed roadmaps (architecture A–L refactor, db-vtable, WASM-improvement, v0-to-v1) live in [`docs/archive/`](docs/archive/). Preserved for reproducibility, not current state.
+
+## Using Hull with AI Agents
+
+**Starting a new app with an AI coding agent?** Hand the agent
+**[BOOTSTRAP.md](BOOTSTRAP.md)** plus your product spec. It's a
+single-file prompt (Claude Code / Codex / OpenCode / Cursor compatible)
+that installs Hull, walks the agent through the required-reading order,
+forces a Phase 1 (discovery + clarifying questions) → Phase 2 (`PLAN.md`
+for human approval) → Phase 3 (implement, tests after each step)
+workflow, and sets up a `PLATFORM_GAPS.md` log so the agent flags
+Hull-side gaps instead of coding around them. Same prompt works for
+any product spec - fully app-agnostic.
+
+Hull provides structured JSON interfaces for AI coding agents via the `hull agent` command. The same interfaces work for any automation (CI scripts, service orchestrators, or human developers who prefer structured output. **Twenty-eight machine-readable subcommands** cover routes, database schema, test results, server status, HTTP responses, deployment readiness, capability analysis, request preview, one-shot eval, the analyzed project model, and more) no screen-scraping or log parsing required.
+
+```
+# Core introspection
+hull agent routes [app_dir]              # routes + middleware as JSON
+hull agent db schema [app_dir] [-d path] # database tables and columns
+hull agent db query "SQL" [app_dir]      # read-only SQL → rows as JSON
+hull agent request METHOD PATH [opts]    # HTTP request → structured response
+hull agent status [app_dir] [-p port]    # check if dev server is running
+hull agent errors [app_dir]              # structured errors from last reload
+hull agent test [app_dir]                # run tests, per-test pass/fail JSON
+hull agent context --task=T [--level=L]  # task-relevant documentation
+hull agent migrate [app_dir] [-d path]   # migration status
+hull agent deploy [app_dir]              # deployment readiness analysis
+
+# Extended introspection
+hull agent manifest [app_dir]            # effective manifest JSON
+hull agent endpoint METHOD PATH [dir]    # request preview (no execution)
+hull agent middleware METHOD PATH [dir]  # middleware stack for path
+hull agent capabilities [app_dir]        # declared vs used analysis
+hull agent modules [app_dir]             # declared + intrinsic modules + build caps
+hull agent inspect [app_dir]             # analyzed project model: annotated declarations (JSON)
+hull agent validate <file>               # single-file syntax + sandbox check
+hull agent vfs [app_dir]                 # list embedded files
+hull agent compute [app_dir]             # WASM modules + AOT
+hull agent gpu [app_dir]                 # WGSL shaders + GPU availability
+hull agent perf [app_dir]                # runtime stats snapshot
+hull agent logs [app_dir] [--tail N]     # tail .hull/dev.log
+hull agent eval <code> [app_dir]         # one-shot Lua/JS snippet → JSON result
+hull agent template <name> [data] [dir]  # render template via runtime
+hull agent compute-call <mod> <in> [dir] # invoke WASM module on file input
+hull agent schema-diff [app_dir]         # DB schema drift vs migrations
+hull agent sql named <qname> [--params J] [dir]  # named query from queries.json
+```
+
+27 of these (all but `hull agent inspect`, which delegates to the source-analysis tool VM) are also exposed via MCP (`hull mcp [app_dir]`) for IDE integrations like Cursor / Claude Code's MCP support.
+
+Combined with `hull dev --agent` (which writes `.hull/dev.json`, `.hull/last_error.json`, and a per-reload `.hull/discovery.json` generation as sidecar files), agents get a complete feedback loop: edit code, check for errors, run tests, inspect the database, make HTTP requests, validate manifest coverage. All structured.
+
+`hull agent inspect` surfaces Hull's **project source-discovery** model: a static, host-owned analysis of the app's source (Lua via the pure-Lua `hull.source.*` layer, JavaScript via a bundled QuickJS frontend session, without executing app code) that reports the annotated declarations - annotations attached to declarations, with exact ranges, deterministic IDs, and by-annotation indexes. It runs standalone, or serves the live generation a running `hull dev --agent` session has published. JavaScript is a first-class analyzable frontend on a default build (analyzed via a bundled QuickJS frontend session with parity to Lua; reported unsupported only on a `RUNTIME=lua` build, never parsed as Lua). This is the foundation a future codegen step (e.g. Query/Compute IR) consumes.
+
+### Agent Development Workflow
+
+The workflow is the same regardless of which AI coding tool you use:
+
+```
+1. hull new myapp && cd myapp        # scaffold project
+2. hull dev --agent --audit app.lua  # start dev server (hot-reload + audit logging)
+3. Agent edits code                  # dev server auto-reloads
+4. hull agent status .               # did the reload succeed?
+5. hull agent errors .               # if not, what broke?
+6. hull agent test .                 # run tests, check results
+7. hull agent request GET /health    # verify endpoint behavior
+8. hull agent db schema .            # inspect current schema
+9. hull build -o myapp .             # build standalone binary
+```
+
+Steps 3–8 repeat in a tight loop. The agent writes code, checks its work, and iterates. All through structured JSON interfaces.
+
+### Claude Code
+
+Claude Code reads [CLAUDE.md](CLAUDE.md) automatically on session start. Hull ships both `CLAUDE.md` (contributor guide with build commands, conventions, and API reference) and `AGENTS.md` (agent-specific guide with `hull agent` usage, app patterns, and stdlib reference). No additional configuration needed.
+
+**Setup:**
+
+```bash
+# Install Claude Code
+npm install -g @anthropic-ai/claude-code
+
+# Start working on a Hull project
+cd myapp
+claude
+```
+
+Claude Code discovers the project structure through `CLAUDE.md` and uses its built-in Bash tool to run `hull` commands. It reads `AGENTS.md` when it needs agent-specific patterns.
+
+**Example session:**
+
+```
+You: Create a task management API with CRUD endpoints and tests
+
+Claude Code:
+  1. Reads CLAUDE.md/AGENTS.md for Hull conventions
+  2. Creates migrations/001_init.sql (tasks table)
+  3. Writes app.lua with GET/POST/PUT/DELETE /tasks routes
+  4. Writes tests/test_app.lua
+  5. Runs: hull agent test .              → checks all tests pass
+  6. Runs: hull agent routes .            → verifies route registration
+  7. Runs: hull agent db schema .         → confirms schema matches expectations
+```
+
+**Optional: Custom skills** for repeated workflows. Create `.claude/skills/deploy/SKILL.md`:
+
+```yaml
+---
+name: deploy
+description: Build and deploy the Hull app
+---
+1. Run `hull agent test .`. Abort if any tests fail
+2. Run `hull build -o app .` to produce a standalone binary
+3. Show the user the binary path and size
+```
+
+Then invoke with `/deploy` in Claude Code.
+
+### OpenAI Codex CLI
+
+Codex CLI reads `AGENTS.md` automatically (it's the [open standard](https://agents.md/) for agent instructions, supported by 60,000+ projects). Hull ships `AGENTS.md` with complete `hull agent` documentation, app patterns, and stdlib reference.
+
+**Setup:**
+
+```bash
+# Install Codex CLI
+npm install -g @openai/codex
+
+# Start working on a Hull project
+cd myapp
+codex
+```
+
+Codex reads `AGENTS.md` on session start and runs `hull` commands through its shell tool.
+
+**Optional: Project config** at `.codex/config.toml` for project-specific settings:
+
+```toml
+# .codex/config.toml
+project_doc_max_bytes = 65536
+```
+
+**Optional: Read CLAUDE.md too**. Codex can be configured to read additional instruction files:
+
+```toml
+# .codex/config.toml
+project_doc_fallback_filenames = ["CLAUDE.md"]
+```
+
+### OpenCode
+
+OpenCode reads both `AGENTS.md` (primary) and `CLAUDE.md` (fallback) automatically. Hull ships both, so no configuration is needed.
+
+**Setup:**
+
+```bash
+# Install OpenCode
+curl -fsSL https://opencode.ai/install | bash
+
+# Start working on a Hull project
+cd myapp
+opencode
+```
+
+**Optional: Custom commands** at `.opencode/commands/test.md`:
+
+```yaml
+---
+description: Run Hull tests and show results
+---
+Run `hull agent test .` and analyze the results.
+If any tests fail, read the failing test file and the relevant app code,
+then fix the issue. Re-run tests until all pass.
+```
+
+Then invoke with `/test` in OpenCode.
+
+### What Agents See
+
+Every `hull agent` subcommand returns structured JSON. Here's what a typical agent interaction looks like:
+
+```bash
+$ hull agent routes .
+```
+```json
+{
+  "runtime": "lua",
+  "routes": [
+    {"method": "GET", "pattern": "/health"},
+    {"method": "GET", "pattern": "/tasks"},
+    {"method": "POST", "pattern": "/tasks"},
+    {"method": "GET", "pattern": "/tasks/:id"},
+    {"method": "DELETE", "pattern": "/tasks/:id"}
+  ],
+  "middleware": [
+    {"method": "*", "pattern": "/api/*", "phase": "pre"}
+  ]
+}
+```
+
+```bash
+$ hull agent test .
+```
+```json
+{
+  "runtime": "lua",
+  "files": [
+    {
+      "name": "test_app.lua",
+      "tests": [
+        {"name": "GET /health returns ok", "status": "pass"},
+        {"name": "POST /tasks creates task", "status": "pass"},
+        {"name": "DELETE /tasks/:id removes task", "status": "fail",
+         "error": "expected 204 got 200"}
+      ]
+    }
+  ],
+  "total": 3, "passed": 2, "failed": 1
+}
+```
+
+The agent reads the structured error, opens the relevant handler, fixes the status code, and re-runs the test. All without human intervention.
+
+```bash
+$ hull agent db schema .
+```
+```json
+{
+  "tables": [
+    {
+      "name": "tasks",
+      "columns": [
+        {"name": "id", "type": "INTEGER", "pk": true},
+        {"name": "title", "type": "TEXT", "notnull": true},
+        {"name": "done", "type": "INTEGER", "default": "0"},
+        {"name": "created_at", "type": "INTEGER"}
+      ]
+    }
+  ]
+}
+```
+
+```bash
+$ hull agent request POST /tasks -d '{"title":"Buy milk"}' -H 'Content-Type: application/json'
+```
+```json
+{
+  "status": 201,
+  "elapsed_ms": 3,
+  "headers": {"Content-Type": "application/json", "Content-Length": "42"},
+  "body": "{\"id\":1,\"title\":\"Buy milk\",\"done\":0}"
+}
+```
+
+### Deployment
+
+```bash
+# Build standalone binary (embeds app + stdlib + the composable subsystems it uses)
+hull build -o myapp .
+
+# The binary is the product. No runtime, no dependencies
+./myapp -p 8080 -d /data/app.db
+
+# Cross-platform (Linux, macOS, Windows, FreeBSD, OpenBSD, NetBSD)
+hull build -o myapp . CC=cosmocc
+```
+
+The agent workflow for deployment: run `hull agent test .` to verify all tests pass, then `hull build -o myapp .` to produce the binary. Because the base is composable, the output size tracks what the app actually uses: a compute-only `app.main` links ~2.1 MB (zero Keel / mbedTLS / SQLite / WAMR), while a full web app composing all of them back is ~6.5 MB on aarch64. Copy the single file anywhere and run it.
+
+#### `hull deploy`. Config Generator
+
+`hull deploy` generates deployment configs informed by the app's manifest. It writes files that standard tools consume. It never makes network calls or executes the generated configs.
+
+```bash
+hull deploy dockerfile myapp/              # Dockerfile + .dockerignore
+hull deploy systemd myapp/ --name myapp    # deploy/myapp.service + deploy/install.sh
+hull deploy fly myapp/ --region lax        # fly.toml (+ Dockerfile if missing)
+```
+
+| Target | Output | Consumed by |
+|--------|--------|-------------|
+| `dockerfile` | `Dockerfile` + `.dockerignore` | `docker build` |
+| `systemd` | <code>deploy/&lt;name&gt;.service</code> + `deploy/install.sh` | `systemctl` |
+| `fly` | `fly.toml` + `Dockerfile` (if missing) | `flyctl deploy` |
+
+**Manifest-aware generation:** The generated configs automatically adapt based on the app's manifest and directory structure:
+- **CA bundle**. Included only when manifest declares `hosts` (outbound HTTPS)
+- **ENV declarations**. From manifest `env` array (documentation + `docker run -e`)
+- **VOLUME**. Only when app has migrations (uses a database)
+- **systemd hardening**. 17 security directives (NoNewPrivileges, ProtectSystem=strict, SystemCallFilter, etc.)
+- **fly.toml mounts**. Persistent volume only for database apps
+
+```bash
+# Common flags
+hull deploy <target> [app_dir] --port 8080 --name myapp -o /tmp/out
+hull deploy dockerfile myapp/ --distroless     # FROM distroless instead of scratch
+hull deploy dockerfile myapp/ --sign           # add hull verify step in build stage
+hull deploy systemd myapp/ --user webapp       # custom system user
+hull deploy fly myapp/ --memory 512            # 512 MB VM
+
+# Agent introspection
+hull agent deploy myapp/                       # JSON deployment readiness analysis
+```
+
+## Building Hull
+
+```bash
+make                    # build hull binary
+make test               # run all unit tests (~58 suites, ~1280 cases)
+make e2e                # end-to-end tests (all examples, both runtimes)
+make e2e-migrate        # migration system tests
+make e2e-templates      # template engine tests (40 tests, both runtimes)
+make debug              # ASan + UBSan build
+make msan               # MSan + UBSan (Linux clang only)
+make check              # full validation (clean + ASan + test + e2e)
+make analyze            # Clang static analyzer
+make cppcheck           # cppcheck static analysis
+make platform           # build libhull_platform.a
+make platform-cosmo     # build multi-arch cosmo platform archives
+make self-build         # reproducible build verification (hull→hull2→hull3)
+make CC=cosmocc         # build with Cosmopolitan (APE binary)
+make clean              # remove all build artifacts
+```
+
+## Release Process
+
+Releases are tagged commits (`v0.1.0`, `v0.1.1`, …) that trigger
+`.github/workflows/release.yml`. The workflow builds four platform
+binaries in parallel (`hull-linux-x86_64`, `hull-linux-aarch64`,
+`hull-darwin-arm64`, `hull-cosmo`), signs a SHA-256 manifest with an
+offline Ed25519 key, and publishes a GitHub release. `hull update` then
+verifies the signature against the public key embedded in the binary
+(`HL_RELEASE_PUBKEY_HEX` in `include/hull/release.h`) before atomically
+replacing itself.
+
+### One-time setup
+
+Generate the release-signing key on the maintainer's machine:
+
+```bash
+mkdir -p ~/.hull/keys && chmod 700 ~/.hull/keys
+cd ~/.hull/keys && hull keygen release      # writes release.{pub,key}
+```
+
+- `release.key` is 128 hex chars, mode `0600`. **Back this up offline**
+  (USB stick / password-manager attachment / sealed envelope). Losing
+  it means no more signed `v0.1.x` releases.
+- `release.pub` is 64 hex chars. Paste its contents into
+  `include/hull/release.h` as the value of `HL_RELEASE_PUBKEY_HEX`,
+  replacing the all-zero placeholder. Commit and push.
+- Set the GitHub Actions secret:
+  `gh secret set HULL_RELEASE_KEY --body "$(cat ~/.hull/keys/release.key)" --repo artalis-io/hull`
+
+### Per release
+
+1. Wait for CI to go green on the commit being tagged. The release
+   workflow re-runs `make`, signs from the freshly built linux native
+   binary, and publishes. Broken CI means a broken release.
+2. `git tag -a vX.Y.Z -m "Hull vX.Y.Z" && git push origin vX.Y.Z`
+3. `.github/workflows/release.yml` builds `hull-{linux-x86_64,linux-aarch64,darwin-arm64,cosmo}`,
+   produces `hull.sha256` and `hull.sha256.sig`, and publishes the
+   GitHub release.
+4. Smoke-test on a clean machine:
+   `curl -fsSL https://gethull.dev/install.sh | sh && hull update --check`.
+
+Threat model, key-rotation plan, and the rationale for signing the
+manifest rather than each binary individually are in
+[docs/release_signing.md](docs/release_signing.md).
+
+## Status
+
+Hull is at **v0.15.0** (2026-09-20). Pre-stable: APIs and the manifest schema may change. Pin versions and read the [changelog](https://github.com/artalis-io/hull/releases) before upgrading. The v0.15.0 release completes the first-party Windows install story and widens backend + test coverage: `install.ps1` ships with non-admin installer tests plus Winget and Scoop metadata, the cosmo base compiles in the PostgreSQL and MySQL wire backends, `hull tools install` gains `--tag=` to pull from a named release, and SMTP now routes through Keel v3 public primitives. Two capability-layer fixes land with it: a server-supplied SCRAM iteration count is now bounded (an unbounded one let a hostile or MITM'd PostgreSQL server stall the client in PBKDF2), and `hull/search` rejects a SQL keyword as an identifier on the JS side as it already did on the Lua side. The 28 co-located stdlib test suites under `stdlib/{lua,js}/hull/tests/` now run in CI for the first time; wiring them up also surfaced an uninitialised read in vendored QuickJS that every `const [a, b] = x` triggered (see [`docs/quickjs_patches.md`](docs/quickjs_patches.md)). **Windows note:** Hull process startup on Windows is currently about 53ms slower per invocation than v0.14.0, traced to the vendored Keel v3.1.1 bump and reported upstream; it is felt most by tooling that shells out repeatedly. **Windows upgrade note:** a v0.13.0 Windows binary cannot self-update (that fix ships in v0.14.0); download `hull-cosmo` and replace `hull` once manually while it is not running, after which `hull update` works normally. Recent milestones: v0.14.0 (Windows stabilization, acceptance-tested on a non-admin, Developer-Mode-off environment, [`docs/release_acceptance_v0.14.0.md`](docs/release_acceptance_v0.14.0.md)), v0.13.0 (stdlib maturation), v0.10.0 (self-contained `hull build` on stock Windows), v0.9.0 (the fully-composable SLIM base).
+
+**Platform coverage.** Linux (gcc + clang, x86_64 + aarch64), macOS (arm64), and Cosmopolitan APE (multi-arch fat binary). Capability sandbox enforced via pledge/unveil (Linux / Cosmo / OpenBSD) or Seatbelt (macOS). All releases are signed with Ed25519 (plus Sigstore/Rekor + SLSA provenance). Verify with `hull verify-release` or in-browser at [verify.gethull.dev](https://verify.gethull.dev).
+
+See [docs/roadmap.md](docs/roadmap.md) for what's next (module ecosystem, HTTP/2, agent platform).
+
+## Changelog & Contributing
+
+See [CHANGELOG.md](CHANGELOG.md) for release notes and
+[CONTRIBUTING.md](CONTRIBUTING.md) for the contributor terms (CCT 1.0)
+and the sign-off mechanics. Every commit in every PR must carry a
+`Signed-off-by` line acknowledging copyright assignment to Artalis Ltd.;
+a CI check enforces this.
+
+## License
+
+Hull is dual-licensed:
+
+- **AGPL-3.0** for open source use. see [LICENSE](LICENSE).
+- **Commercial license** for closed-source embedding and proprietary distribution. email <licensing+site@artalis.io>.
+
+See [LICENSING.md](LICENSING.md) for which license applies to your use case, or [`docs/MANIFESTO.md`](docs/MANIFESTO.md#licensing) for the longer rationale.
+
+---
+
+<sub>Engineered in Europe for sovereign, deploy-anywhere AI infrastructure.</sub>

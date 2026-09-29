@@ -10,7 +10,7 @@ A high-performance statusline for [Claude Code](https://docs.anthropic.com/en/do
 
 **Example output:**
 ```
-~/myproject [main +2 ~1 ?3] • 45% [====------] Sonnet • 1h 23m • +150 -42 • $3.50 ($2.54/h)
+~/myproject [main +2 ~1 ?3] • 45% [=====>----] Sonnet • 1h 23m • +150 -42 • $3.50 ($2.54/h)
 ```
 
 ## Quick Install
@@ -27,11 +27,11 @@ curl -fsSL https://raw.githubusercontent.com/hagan/claudia-statusline/main/scrip
 
 - **Current directory** with `~` shorthand
 - **Git branch and changes** (+2 added, ~1 modified, ?3 untracked)
-- **Context usage** with progress bar (45% [====------])
+- **Context usage** with progress bar (45% [=====>----])
 - **Real-time compaction detection** (experimental) - instant feedback via hooks (~600x faster)
   - Normal: `79% [========>-] ⚠` (warning when approaching limit)
   - In Progress: `Compacting... ⠋` (hook-based, <1ms detection)
-  - Completed: `35% [===>------] ✓` (checkmark after successful compact)
+  - Completed: `35% [====>-----] ✓` (checkmark after successful compact)
 - **Claude model** (O4.5/S4.5/H4.5 - consistent version display)
 - **Session duration** (1h 23m)
 - **Cost tracking** ($3.50 session, $2.54/hour burn rate)
@@ -94,7 +94,7 @@ vim ~/.config/claudia-statusline/config.toml
 
 | Preset | Output |
 |--------|--------|
-| `default` | `~/project • main +2 • 75% [======>---] • S4.5 • $12.50` |
+| `default` | `~/project • main +2 • 75% [========>-] ⚠ • S4.5 • $12.50 ($3.50/hr)` |
 | `compact` | `project main S4.5 $12` |
 | `detailed` | Two-line with context on second line |
 | `minimal` | `~/project S4.5` |
@@ -235,6 +235,39 @@ See [Usage Guide](docs/USAGE.md#database-maintenance) for details.
 </details>
 
 <details>
+<summary><b>API-Equivalent Cost (Optional)</b></summary>
+
+Opt-in template variables that price the **last API call's** tokens against public Claude
+API list prices, using a price table compiled into the binary (no network at render). The
+figure is per call, not a session total, and is empty before the first call and right after
+`/compact`:
+
+```toml
+[layout]
+format = "{directory} {git} {model} {api_equiv_cost_labeled}"
+```
+
+```
+~/projects/app main +2 O4.8 ~$0.10 API-equiv
+```
+
+**This is not what you are billed.** On a Pro/Max subscription you pay your plan price
+regardless — it shows what the same usage *would* cost at API rates, for comparison only.
+The separate `{cost}` variable is unaffected, though it is not billed money either: it
+reports Claude Code's own usage-based estimate, which is likewise notional on a
+subscription.
+
+Also available: `{api_equiv_cost}` (unlabeled), plus per-dimension
+`{api_equiv_cost_input}` / `_output` / `_cache_write` / `_cache_read`, and
+`{api_equiv_cost_by_model}`. A model with no exact price-table entry renders `unknown`,
+never `$0.00`; a trailing `+` means the payload reported only part of the cost basis, so
+the figure is a lower bound.
+
+See the [Configuration Guide](docs/CONFIGURATION.md#api-equivalent-cost-variables) for the
+full variable list, the `[pricing]` section, and model aliases.
+</details>
+
+<details>
 <summary><b>ant Enrichment Refresh (Optional)</b></summary>
 
 The optional `ant` enrichment (model metadata + per-account usage/cost, off by default) reads
@@ -243,17 +276,25 @@ wrapper script; you add the wiring yourself. The credential-reality split: a **S
 hook** refreshes **usage** (the per-account Admin key lives in your interactive shell), while
 **cron/launchd** refreshes **models** (the standard key is headless-safe).
 
+`ant sync-pricing` is the **keyless** one — its upstream is a public LiteLLM snapshot, so it needs
+no Anthropic credential and is safe anywhere (hook, cron or launchd); without it, `[pricing]
+source = "auto"` never has a cache to prefer and always uses the bundled price table. Keep the
+commands **independent** — separately detached, never `&&`-chained — so a failing credentialed
+sync cannot stop the price refresh.
+
 SessionStart hook in `~/.claude/settings.json` (always `--quiet` + redirect + detach so
 nothing leaks into Claude's context and session start stays instant):
 
 ```jsonc
-"command": "statusline ant sync-usage --quiet --max-age 10m >/dev/null 2>&1 & statusline ant sync-models --quiet --max-age 24h >/dev/null 2>&1 &"
+"command": "statusline ant sync-usage --quiet --max-age 10m >/dev/null 2>&1 & statusline ant sync-models --quiet --max-age 24h >/dev/null 2>&1 & statusline ant sync-pricing --quiet --max-age 7d >/dev/null 2>&1 &"
 ```
 
-Models daily via cron (absolute path — cron has a minimal PATH):
+Models daily and prices weekly via cron — separate lines (absolute path — cron has a minimal
+PATH):
 
 ```cron
 0 9 * * * /home/USERNAME/.local/bin/statusline ant sync-models --quiet --max-age 24h >/dev/null 2>&1
+5 9 * * 1 /home/USERNAME/.local/bin/statusline ant sync-pricing --quiet --max-age 7d >/dev/null 2>&1
 ```
 
 See [INSTALLATION.md](docs/INSTALLATION.md#ant-enrichment-refresh-optional) for the full

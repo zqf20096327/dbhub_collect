@@ -1,0 +1,473 @@
+# Mutano
+
+Convert database schemas to TypeScript types, Zod schemas, or Kysely definitions.
+
+- **Supports:** MySQL, PostgreSQL, SQLite, Prisma, SQL DDL Files
+- **Features:** Views, Magic Comments, Type Overrides, Multiple Outputs
+
+## Installation
+
+```bash
+npm install mutano
+```
+
+## Quick Start
+
+```typescript
+import { generate } from 'mutano'
+
+// Basic usage with database
+await generate({
+  origin: {
+    type: 'mysql', // or 'postgres', 'sqlite', 'prisma', 'sql'
+    host: '127.0.0.1',
+    port: 3306,
+    user: 'root',
+    password: 'secret',
+    database: 'myapp'
+  },
+  destinations: [{
+    type: 'zod', // or 'ts', 'kysely'
+    folder: './generated'
+  }]
+})
+
+// Using SQL DDL files (no database required)
+await generate({
+  origin: {
+    type: 'sql',
+    path: './schemas/myapp.sql', // Path to SQL file
+    dialect: 'mysql' // or 'postgres', 'sqlite'
+  },
+  destinations: [{
+    type: 'zod',
+    folder: './generated'
+  }]
+})
+
+// Multiple outputs
+await generate({
+  origin: { /* ... */ },
+  destinations: [
+    { type: 'zod', folder: './zod' },
+    { type: 'ts', folder: './types' },
+    { type: 'kysely', outFile: './db.ts' }
+  ]
+})
+
+// With views support
+await generate({
+  origin: { /* ... */ },
+  destinations: [{ type: 'zod' }],
+  includeViews: true,
+  views: ['user_profile_view'], // optional filter
+  ignoreViews: ['temp_view'] // optional exclude
+})
+```
+
+## Output Examples
+
+**Zod Schema:**
+```typescript
+export const user = z.object({
+  id: z.number().nonnegative(),
+  name: z.string().min(1),
+  email: z.string().email(),
+  role: z.enum(['admin', 'user']),
+})
+
+export const insertable_user = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+  role: z.enum(['admin', 'user']),
+})
+
+export type UserType = z.infer<typeof user>
+```
+
+**TypeScript Interface:**
+```typescript
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  role: 'admin' | 'user';
+}
+
+export interface InsertableUser {
+  name: string;
+  email: string;
+  role: 'admin' | 'user';
+}
+```
+
+**Kysely Types:**
+```typescript
+export interface User {
+  id: Generated<number>;
+  name: string;
+  email: string;
+  role: 'admin' | 'user';
+}
+
+export type SelectableUser = Selectable<User>;
+export type InsertableUser = Insertable<User>;
+export type UpdateableUser = Updateable<User>;
+```
+
+## Configuration
+
+### Origin Options
+```typescript
+// MySQL/PostgreSQL
+{
+  type: 'mysql' | 'postgres',
+  host: string,
+  port: number,
+  user: string,
+  password: string,
+  database: string,
+  schema?: string, // PostgreSQL only
+  ssl?: { ca, cert, key }
+}
+
+// SQLite
+{
+  type: 'sqlite',
+  path: string
+}
+
+// Prisma
+{
+  type: 'prisma',
+  path: string  // Path to a .prisma file or a directory containing .prisma files
+}
+
+// SQL DDL Files (no database required)
+{
+  type: 'sql',
+  path: string, // Path to .sql file with CREATE TABLE statements
+  dialect: 'mysql' | 'postgres' | 'sqlite' // Determines type mappings
+}
+```
+
+### Destination Options
+```typescript
+{
+  type: 'zod' | 'ts' | 'kysely',
+  folder?: string,
+  suffix?: string,
+  outFile?: string, // Kysely only
+  header?: string, // Custom imports
+
+  // Zod specific
+  useDateType?: boolean,
+  useBooleanType?: boolean,
+  useTrim?: boolean,
+  nullish?: boolean,
+  requiredString?: boolean,
+  version?: 3 | 4,
+
+  // TypeScript specific
+  enumType?: 'union' | 'enum',
+  modelType?: 'interface' | 'type',
+
+  // Kysely specific
+  schemaName?: string // Default: 'DB'
+}
+```
+
+### Zod Configuration Options
+
+- **`useDateType`**: When `true`, generates `z.union([z.number(), z.string(), z.date()]).pipe(z.coerce.date())` instead of `z.date()` for date fields
+- **`useBooleanType`**: When `true`, generates `z.union([z.number(), z.string(), z.boolean()]).pipe(z.coerce.boolean())` instead of `z.boolean()` for boolean fields
+- **`useTrim`**: When `true`, adds `.trim()` to string fields
+- **`nullish`**: When `true`, uses `.nullish()` instead of `.nullable()` for nullable fields (except selectable schemas)
+- **`requiredString`**: When `true`, adds `.min(1)` validation to required string fields
+- **`version`**: Zod version (3 or 4) for compatibility
+
+### Global Options
+| Option | Description |
+|--------|-------------|
+| `tables` | Include only specified tables |
+| `views` | Include only specified views |
+| `ignore` | Exclude specified tables (supports regex) |
+| `ignoreViews` | Exclude specified views (supports regex) |
+| `includeViews` | Process database views |
+| `camelCase` | Convert to camelCase |
+| `dryRun` | Return content without writing files |
+| `magicComments` | Enable @zod/@ts/@kysely comments (Obs.: no SQLite support) |
+| `inflection` | Transform model names: `'singular'`, `'plural'`, or `'none'` (default) |
+| `overrideTypes` | Override types globally per destination (see below) |
+| `overrideColumns` | Override specific columns per table (see below) |
+
+### Inflection
+
+Transform table/view names to singular or plural form in generated types:
+
+```typescript
+// Singular inflection - "users" table becomes "User" type
+await generate({
+  origin: { /* ... */ },
+  destinations: [{ type: 'zod' }],
+  inflection: 'singular'
+})
+
+// Plural inflection - "user" table becomes "Users" type
+await generate({
+  origin: { /* ... */ },
+  destinations: [{ type: 'ts' }],
+  inflection: 'plural'
+})
+```
+
+**Examples:**
+
+| Table Name | `inflection: 'singular'` | `inflection: 'plural'` | `inflection: 'none'` |
+|------------|-------------------------|----------------------|---------------------|
+| `users` | `UserType` | `UsersType` | `UsersType` |
+| `companies` | `CompanyType` | `CompaniesType` | `CompaniesType` |
+| `people` | `PersonType` | `PeopleType` | `PeopleType` |
+| `categories` | `CategoryType` | `CategoriesType` | `CategoriesType` |
+| `user_accounts` | `UserAccountType` | `UserAccountsType` | `UserAccountsType` |
+
+Works with all output types (Zod, TypeScript, Kysely) and combines with `camelCase` option.
+
+## Magic Comments
+
+Override types for specific columns using database comments:
+
+```sql
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COMMENT '@zod(z.string().min(2).max(50))',
+  `email` varchar(255) COMMENT '@ts(EmailAddress) @kysely(string)',
+  `metadata` json COMMENT '@ts(UserMetadata)',
+  `password_hash` varchar(255) COMMENT '@ignore',
+  PRIMARY KEY (`id`)
+);
+```
+
+**Supported Comments:**
+- `@zod(...)` - Override Zod schema
+- `@ts(...)` - Override TypeScript type
+- `@kysely(...)` - Override Kysely type
+- `@ignore` - Exclude column from generated types
+- `@@ignore` - Exclude table/model from generated types
+
+### Ignoring Columns and Tables
+
+Use `@ignore` and `@@ignore` directives to exclude columns and tables from code generation:
+
+#### Prisma Schemas
+
+**Ignore specific fields:**
+```prisma
+model User {
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  password  String  @ignore  // This field will be excluded
+  createdAt DateTime @default(now())
+}
+```
+
+**Ignore entire models:**
+```prisma
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  action    String
+  userId    Int
+  timestamp DateTime @default(now())
+
+  @@ignore  // This entire model will be excluded
+}
+```
+
+#### SQL Databases (MySQL, PostgreSQL, SQLite)
+
+**Ignore specific columns in MySQL:**
+```sql
+ALTER TABLE users MODIFY COLUMN password_hash VARCHAR(255) COMMENT '@ignore';
+ALTER TABLE users MODIFY COLUMN internal_id VARCHAR(100) COMMENT 'Internal tracking @ignore';
+```
+
+**Ignore specific columns in PostgreSQL:**
+```sql
+COMMENT ON COLUMN users.password_hash IS '@ignore';
+COMMENT ON COLUMN users.internal_id IS 'Internal tracking @ignore';
+```
+
+**Ignore entire tables in MySQL:**
+```sql
+ALTER TABLE audit_logs COMMENT = '@@ignore';
+ALTER TABLE internal_metrics COMMENT = 'Internal table @@ignore';
+```
+
+**Ignore entire tables in PostgreSQL:**
+```sql
+COMMENT ON TABLE audit_logs IS '@@ignore';
+COMMENT ON TABLE internal_metrics IS 'Internal table @@ignore';
+```
+
+**Example with mixed ignored and non-ignored columns:**
+```sql
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) NOT NULL,
+  `name` varchar(255),
+  `password_hash` varchar(255) COMMENT '@ignore',
+  `internal_tracking_id` varchar(100) COMMENT 'Internal use only @ignore',
+  `metadata` json COMMENT '@ts(UserMetadata)',
+  PRIMARY KEY (`id`)
+);
+```
+
+Generated types will only include: `id`, `email`, `name`, and `metadata`
+
+## Type Overrides
+
+Override default types globally. Define destination-specific overrides for each output type:
+
+```typescript
+{
+  origin: {
+    type: 'mysql',
+    // ... connection config
+  },
+  overrideTypes: {
+    zod: {
+      json: 'z.record(z.string())',
+      text: 'z.string().max(1000)',
+      decimal: 'z.number().positive()'
+    },
+    ts: {
+      json: 'Record<string, string>',
+      text: 'string',
+      decimal: 'number'
+    },
+    kysely: {
+      json: 'Json',
+      text: 'string',
+      decimal: 'Decimal'
+    }
+  }
+}
+```
+
+**Single destination with multiple outputs:**
+
+```typescript
+{
+  origin: {
+    type: 'postgres',
+    // ...
+  },
+  destinations: [
+    { type: 'zod', folder: './zod' },
+    { type: 'ts', folder: './types' },
+    { type: 'kysely', outFile: './db.ts' }
+  ],
+  overrideTypes: {
+    zod: { jsonb: 'z.record(z.string())' },
+    ts: { jsonb: 'Record<string, string>' },
+    kysely: { jsonb: 'Json' }
+  }
+}
+```
+
+**Overriding `tinyint(1)` to a Zod boolean coercion (with preserved defaults):**
+
+When using SQL DDL files with MySQL `tinyint(1)` columns, you can override the generated type while preserving default values:
+
+```sql
+CREATE TABLE settings (
+  id int NOT NULL AUTO_INCREMENT,
+  is_active tinyint(1) NOT NULL DEFAULT '1',
+  is_public tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (id)
+);
+```
+
+```typescript
+await generate({
+  origin: {
+    type: 'sql',
+    path: './schema.sql',
+    dialect: 'mysql'
+  },
+  destinations: [{
+    type: 'zod',
+    folder: './generated',
+    useBooleanType: true
+  }],
+  overrideTypes: {
+    zod: {
+      'tinyint(1)': 'z.union([z.number(), z.string(), z.boolean()]).pipe(z.coerce.boolean())'
+    }
+  }
+})
+```
+
+This generates correct defaults from the SQL `DEFAULT` clause:
+```typescript
+// is_active has DEFAULT '1' -> .default(true)
+// is_public has DEFAULT '0' -> .default(false)
+export const settings = z.object({
+  is_active: z.union([z.number(), z.string(), z.boolean()]).pipe(z.coerce.boolean()).default(true),
+  is_public: z.union([z.number(), z.string(), z.boolean()]).pipe(z.coerce.boolean()).default(false),
+})
+```
+
+> **Note:** `overrideTypes` preserves nullability, optionality, and default values from the schema. Only the base type is replaced. For boolean columns, mutano correctly maps MySQL `DEFAULT '1'` to `true` and `DEFAULT '0'` to `false`.
+
+**Common Overrides:**
+- **MySQL**: `json`, `text`, `decimal`, `enum`
+- **PostgreSQL**: `jsonb`, `uuid`, `text`, `numeric`
+- **SQLite**: `json`, `text`, `real`
+- **Prisma**: `Json`, `String`, `Decimal`
+
+### Override Columns
+
+Override specific columns from specific tables. Takes priority over magic comments:
+
+```typescript
+{
+  origin: {
+    type: 'mysql',
+    // ... connection config
+  },
+  destinations: [
+    { type: 'zod', folder: './zod' },
+    { type: 'ts', folder: './types' },
+    { type: 'kysely', outFile: './db.ts' }
+  ],
+  overrideColumns: {
+    zod: {
+      users: {
+        email: 'z.string().email()',
+        metadata: 'z.record(z.unknown())'
+      },
+      posts: {
+        content: 'z.string().max(10000)'
+      }
+    },
+    ts: {
+      users: {
+        email: 'EmailAddress',
+        metadata: 'Record<string, unknown>'
+      }
+    },
+    kysely: {
+      users: {
+        metadata: 'CustomJsonType'
+      }
+    }
+  }
+}
+```
+
+**Priority order** (highest to lowest):
+1. `overrideColumns` - Specific column overrides
+2. Magic comments (`@zod`, `@ts`, `@kysely`) - Column-level comments
+3. `overrideTypes` - Global type overrides
+4. Default type mappings

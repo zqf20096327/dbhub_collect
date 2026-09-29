@@ -1,0 +1,9 @@
+Sqlite proxy to handle Db operations.
+Following  ST v1 class structure
+
+
+
+
+Issue
+
+mapping property is not working with fields

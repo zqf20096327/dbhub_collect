@@ -1,0 +1,50 @@
+# Apple Notes database parser
+
+## About
+
+Apple Notes data is stored in a SQLite database. Some month ago the data has been stored in the file
+`/Users/<user>/Library/Containers/com.apple.Notes/Data/Library/Notes/NotesV7.storedata` respectively
+`NotesV6.storedata` for the prior version. The notes have been stored in a HTML subset in clear text.
+
+Then Apple kept the file but didn't update it anymore. Instead, a new location was used:
+`/Users/christian/Library/Group Containers/group.com.apple.notes/NoteStore.sqlite`. The data is not
+in clear text anymore. I needed the access badly, because my MacBook Pro was defect (spilled a bottle
+of wine over it), my last backup was long ago and I didn't sync into iCloud.  
+
+So I found [apple_cloud_notes_parser](https://github.com/threeplanetssoftware/apple_cloud_notes_parser),
+a Perl script which showed me how to parse the data. However, they have a small bug in calculating the
+length of the data, so you will get only the first 27 chars or so of the note.
+
+I decided to port the code to Java (ok, to Groovy) to be able to fix that. I could have adopted the
+perl script but I thought I will have to strip the HTML fragments, but this was wrong. In the new
+format, there are no HTML fragments any more. Anyway, even if I used it only once, the script evolved
+based on feedback.
+
+I do not know what Z_ENT (see WHERE clause in `src/main/groovy/notes.groovy`, line 31) is for. In my case it had to be `8`,
+in [jdsteinbach](https://github.com/jdsteinbach)'s case the clause had to be removed,
+in [agnoski](https://github.com/agnoski)'s case it had to be `11`. So the user has to experiment to find his correct value.
+
+## Usage
+
+Copy the database (location above) to the input folder, rename it to `NoteStore.sqlite` and start the
+script with `./gradlew runScript`. You will receive a file per document in the output folder.
+Afterwards I created empty notes and copy/pasted the notes back to Apple Notes again (at this time with
+activated iCloud sync).
+
+## Remark
+
+I also tried to copy the whole database to my new MacBook, but this didn't work.
+
+## Tested with
+
+    openjdk version "21.0.1" 2023-10-17
+    OpenJDK Runtime Environment Homebrew (build 21.0.1)
+    Groovy Version: 4.0.19
+
+## Acknowledgement
+
+- [Duncan Brown](https://github.com/duncanjbrown) provided a PR to obtain name, structure and creation timestamp for all notes
+
+## Links
+
+- Found another statement, didn't test it: https://github.com/ydkhatri/mac_apt/issues/46#issuecomment-766418508
