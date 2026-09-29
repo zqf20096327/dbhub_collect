@@ -1,0 +1,1 @@
+# tidb-idc-config

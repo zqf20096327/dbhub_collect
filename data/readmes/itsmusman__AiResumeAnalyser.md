@@ -1,0 +1,91 @@
+# AiResumeAnalyser
+
+AiResumeAnalyser is an AI-powered resume analysis platform built with Python, Flask, TiDB, and OpenAI API. It helps users analyze their resumes and receive personalized career guidance based on their target role.
+
+## Features
+
+- User Authentication (Login / Signup)
+- Dashboard for managing resume insights
+- Upload Resume in PDF/DOCX format
+- AI Resume Analysis
+- Role-based Career Guidance
+- Suggested Skills to Learn
+- Interview Questions Preparation
+- Recommended Projects
+- Modern, responsive UI with dynamic animations
+
+## Tech Stack
+
+- Backend: Python, Flask
+- Database: TiDB
+- AI Integration: OpenAI API
+- Frontend: HTML, CSS, JavaScript
+
+## How It Works
+
+1. User creates an account or logs in
+2. Uploads resume (PDF/DOCX)
+3. Selects target role (e.g. Backend Engineer)
+4. AI analyzes the resume
+5. System provides:
+   - Resume feedback
+   - Missing skills
+   - Interview questions
+   - Recommended projects
+
+## Installation
+
+```bash
+git clone <repository-url>
+cd AiResumeAnalyser
+```
+
+### Create Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+### Activate Environment
+
+```bash
+# Windows
+venv\Scripts\activate
+
+# Linux/Mac
+source venv/bin/activate
+```
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Run the Application
+
+```bash
+python app.py
+```
+
+## Environment Variables
+
+Create a `.env` file and add:
+
+```env
+OPENAI_API_KEY=your_openai_api_key
+DATABASE_URL=your_tidb_database_url
+SECRET_KEY=your_secret_key
+```
+
+## Future Improvements
+
+- Resume scoring system
+- ATS compatibility checker
+- AI-generated cover letters
+- Job matching system
+- Multi-role analysis
+
+## License
+
+This project is open-source and available under the MIT License.

@@ -1,0 +1,1121 @@
+<h1 align="center">lake-search</h1>
+
+<p align="center">
+  <strong>Lucene-style search syntax, compiled to Databend SQL.</strong><br>
+  A <code>$__search</code> macro for TiDB Cloud Lake and any other Databend-backed warehouse.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="Apache-2.0" />
+  <img src="https://img.shields.io/badge/go-1.19%2B-00ADD8?logo=go&logoColor=white" alt="Go 1.19+" />
+  <img src="https://img.shields.io/badge/dependencies-none-4f9d69" alt="No dependencies" />
+  <img src="https://img.shields.io/badge/conformance-47%2F47%20live-4f9d69" alt="47 of 47 conformance cases passing against a live warehouse" />
+</p>
+
+<p align="center">
+  <a href="#why">Why</a> • <a href="#quick-start">Quick start</a> • <a href="#syntax">Syntax</a> •
+  <a href="#the-one-search-function-rule">Engine rules</a> • <a href="#grafana">Grafana</a> •
+  <a href="#testing-against-a-real-warehouse">Conformance</a> • <a href="pipeline/">Pipeline</a>
+</p>
+
+Databend has a genuinely strong text-search engine — BM25 relevance through `score()`,
+order-sensitive phrase search, English stemming, index-backed fuzzy matching, Ngram substring
+search. What it has no equivalent of is the query *language* an engineer arriving from
+Elasticsearch already knows. lake-search closes that gap by **translating** rather than passing
+through, so the habits people already have either work or fail loudly.
+
+- 🔍 **Lucene-style syntax** — `field:value`, `field:(a OR b)`, `"phrases"`, `AND`/`OR`, `-exclude`, `field:[a TO b]`, `field:>100`, `field:*`, `term~2`, `pref*`, `/regex/`, `term^2`
+- 🧨 **Kills the silent failures** — a fuzzy `term~N` and a wildcard `*` return **zero rows and no error** inside this engine's search syntax; they are rewritten, not forwarded
+- 🧠 **Knows the one-search-function rule** — the engine allows at most one search function per *scan*, so full-text logic folds into a single `query()` call where it can and into a row-key subquery where it cannot; two in one scan is `[1065]`
+- 🔁 **Rewrites what the engine gets wrong** — `a OR -b` has its negative clause silently dropped here, so De Morgan folds it into the one clause shape that evaluates correctly, still inside a single `query()`
+- 🧮 **Excludes with an anti-join, not a bare `NOT`** — `NOT (query(x))` returns **zero** rows rather than every row when `x` matches nothing, so `-pdctl` used to blank the screen
+- 📦 **Zero dependencies** — standard library only, so it vendors into a Grafana datasource plugin without dragging anything along
+- 🔭 **Bootstraps itself, without a driver** — `introspect` prints probe SQL, you run it through whatever client you already have, and a second call writes the descriptor. It reads a *sampled value profile*, not only types, because a column's declared type does not tell you whether its values suit the role
+- 🔌 **Schema is data, not code** — describe your table in a JSON file (`-schema`) or pick a built-in (`-preset`); unknown fields route into a `VARIANT` bag, which is what makes open-ended log schemas searchable, and a schema that cannot support something says so when it loads rather than when a panel renders
+- 📊 **A Grafana macro** — `$__search(msg, '$q')` expands in the datasource backend, retiring the hidden predicate-generating dashboard variable
+- ✅ **Conformance by row count, not by exit code** — 98 cases across two fixtures asserting *relationships between counts*, because a wrong query here is indistinguishable from an empty result
+- 🧪 **Verified live** — every engine claim below was measured on a running warehouse, not read off a doc page
+
+<img alt="Lucene-style search text compiled to a Databend SQL predicate" src="docs/img/pipeline.svg">
+
+## Quick start
+
+```console
+$ lake-search compile 'level:(error OR warn) region -snapshot'
+((lower(level) = lower('error') OR lower(level) = lower('warn')) AND query('(msg:region) NOT (msg:snapshot)'))
+```
+
+One statement, one search function: the field-scoped group becomes ordinary SQL on a plain
+column, and the full-text half — including its exclusion — folds into the single `query()` call
+the engine allows. On the reference table that predicate returns 955 rows, 296 of them from the
+last two hours.
+
+```bash
+go install github.com/choudharypankaj/lake-search/cmd/lake-search@latest
+```
+
+```
+lake-search compile [-score] <query>    print the WHERE predicate
+lake-search sql [-table T] <query>      print a complete SELECT
+lake-search conform                     print the row-count conformance script
+```
+
+Or as a library:
+
+```go
+import "github.com/choudharypankaj/lake-search/databend"
+
+schema, notes, err := databend.LoadSchema("my-logs.json") // or databend.Preset("k8s-logs")
+// notes  -> "no severity field: a log view over this schema cannot colour …"
+r, err := databend.CompileString(userInput, schema)
+// r.SQL       -> predicate, safe to splice into WHERE
+// r.Warnings  -> "this will be a full scan", "fuzziness ignored", …
+// r.UsesMatch -> whether score() is legal alongside it
+```
+
+## Why
+
+The gap is worse than a missing feature, because the familiar syntax does not error — it silently
+returns nothing:
+
+| What you type | What Databend does | What you conclude |
+| --- | --- | --- |
+| `snapshot~1` | `~1` is not understood; **0 rows** | "there are no matches" |
+| `snapsh*` | the term is **truncated at the star**, and `snapsh` is not a token; **0 rows** | "prefix search is broken" |
+| `snapshot*` | truncated to `snapshot`, which *is* a token; **full result set** | "prefix search works!" |
+| `reg*on` | truncated at the star, so this searches for `reg`; **36 rows, none about regions** | "there were 36 region events" |
+| `pod:tikv-??????` | `?` is not a wildcard, it is compared literally; **0 rows** | "no pods match" |
+| `no`, `not`, `to`, `is` | 33 English stopwords are deleted from the query; **0 rows** | "the word isn't in the logs" |
+| `"not ready"` | the phrase loses `not` and stops being a phrase; **9x too many rows** | "there are 2,320 of these" |
+| `"peer stat*"` | inside quotes the star is punctuation: the phrase splits there and `stat` is not a token; **0 rows** against 88,441 for `peer status` | "there are no peer status lines" |
+| `msg:not` | the value is read as an operator and the filter disappears; **every row** | "everything matches" |
+| `http://a.com` | the colon reads as a field selector; **0 rows** | "that URL isn't in the logs" |
+| `-absent_term` | the search function prunes the scan; **0 rows** | "nothing survives the exclusion" |
+| *(empty box)* | `match(col,'')` matches nothing; **0 rows** | "there are no logs" |
+| `RemoteStopped OR level:ERROR` | a search function under `OR` prunes the scan to the blocks its index says match, and the other branch is evaluated only there; **253,587 rows against a true 343,695** — and **0** if the text term matches nothing | "that is all the errors there are" |
+| a word the collector parsed out of the message | `err=RemoteStopped` is moved into the `kv` bag, so `RemoteStopped` is not in `msg` any more; **0 rows** against 605 for the same word in the reconstructed line | "that error never happened" |
+| `latency_ms:>30` on a bag key | one non-numeric value anywhere in that key fails the **whole statement**: `[1006] invalid float literal ... to_float64('Some(25)')`, where the truth is 39,140 rows | "the query is broken" |
+| `err:RemoteStopped` through the index alone | `query()` is tokenised and stemmed, so it matches a value merely *containing* a token that stems to the term: `kv.request:command` is **501 rows** whose value is `batch_commands`, where the equality is 0 | "501 requests were `command`" |
+
+Every row above is rewritten into SQL that answers the question that was asked, with one
+exception, and the exception is marked: `"peer stat*"` is **explained rather than rewritten**.
+Quotes and a wildcard ask for contradictory things — one says "these exact characters in this
+order", the other says "any token shaped like this" — and guessing which one was meant would be
+inventing a query nobody typed. The compiler says what the engine will do with it instead:
+measured on two disjoint windows, `"peer stat*"` returns 0 both times where `peer status` returns
+88,441 and 38,076.
+
+The exclusion row is the most quietly wrong, and it is the one a responder is most likely to hit:
+excluding a noise pattern that has stopped being emitted in the selected window empties the screen
+rather than leaving it untouched. It is covered under
+[engine rules](#why-a-leading-not-is-compiled-as-an-anti-join).
+
+The last row is the sharpest, and its reason is narrower than it looks — it is the **empty
+argument** that poisons the statement, not the boolean around it. An empty search function prunes
+the index scan before any surrounding boolean is evaluated, so even `(1=1 OR match(msg,''))`
+returns zero. A *non-empty* search function composes with ordinary SQL exactly: measured,
+`query('msg:peer')` is 109,950, `lower(level) = lower('warn')` is 9,287, their conjunction 341,
+and their disjunction 118,896 — the union to the row.
+
+## Syntax
+
+| Lucene | Databend |
+| --- | --- |
+| `term` | `query('col:term')` |
+| `"two words"` | `query('col:"two words"')` — order-sensitive |
+| `a b`, `a AND b` | `query('(col:a) AND (col:b)')` — one call, not two |
+| `a -b` | `query('(col:a) NOT (col:b)')` — bare and trailing, never `AND NOT` |
+| `-a -b` | De Morgan to `(col:a) OR (col:b)`, then excluded by anti-join — **not** a bare `NOT` |
+| `a OR -b` | De Morgan to `(b) NOT (a)`, then excluded the same way |
+| `term~2` | `match(col, 'term', 'fuzziness=2')` |
+| `pref*`, `*sub*`, `a*b`, `a?b` on the text column | one **token**: `lower(col) RLIKE '(^\|[^a-z0-9])pref[a-z0-9]*([^a-z0-9]\|$)'`, `*` being any run of token characters and `?` exactly one. A star does not cross a word boundary — served as `LIKE '%reg%on%'`, `reg*on` is exactly `RLIKE 'reg.*on'` and 4,196 of its rows contain no word matching reg…on at all. It does not stem either, so the bare token still finds inflections the pattern does not |
+| a wildcard the tokenizer would split (`tikv-tikv-*`, `*0.0.0.0:8686/x*`) | `LIKE` — it cannot describe one token, so the substring reading is kept and the warning says which one was used |
+| `pod:tikv*`, `pod:a?b` on a plain column | `LIKE 'tikv%'`, `LIKE 'a_b'` — anchored, because on a value column a prefix really does mean "the value starts with" |
+| a stopword (`no`, `not`, `to`, …) | `lower(col) RLIKE '(^\|[^a-z0-9])no([^a-z0-9]\|$)'` — the index deletes these 33 words, so they are matched by scan |
+| `"a b"` the analyzer cuts to one token | `query('col:b')` **and** `lower(col) LIKE lower('%a b%')` — the token keeps the index and its stemming, the scan checks the adjacency the quotes asked for. A phrase the analyzer leaves alone, `"snapshots"` included, is untouched: it is 17,595 rows through the index against 9 as a substring, because the index stems |
+| `"a b"` the analyzer empties | `lower(col) LIKE lower('%a b%')` — nothing left for the index to match |
+| `and`, `or`, `not` — any case | an operator only where an operator is **grammatical**: `and`, `or`, `&&` and `\|\|` between two terms, `NOT` before a term. Anywhere else — the whole query, a field's value, the only thing inside a `field:(…)` group, leading with nothing to its left — it is the word the user typed, matched by a word-boundary scan; read as an operator there, `msg:(not)` and a bare `not` compiled to a filter that matched everything. `NOT` is the one that must be capitalised, because it **inverts** the term it takes while `and`/`or` only join terms that keep their own meaning either way: `msg:(not ready)` is the two words, `msg:(NOT ready)` is the complement of `ready` — 3,537 rows against 711,157 over `ts < '2026-08-19 08:00:00'` (715,185 rows). A *trailing* `and`/`or` is dropped rather than demoted — `region or` is someone mid-keystroke, so it still returns `region`. The cost of the word reading, stated rather than hidden: on a single-valued column `level:(error not warn)` is three ANDed equalities and can never match — write `level:(error -warn)` or `level:(error NOT warn)` |
+| `term^2` | `(col:term)^2` inside the one `query()` — reorders `score()`, matches the same rows |
+| `/re/`, `field:/re/` | `col RLIKE 're'` — not a search function, but no index serves it |
+| `file.rs:360`, `file.rs` | a source **file position**: `query('(line:…) OR (source_file:…)') AND (source_file = 'file.rs:360' OR source_file LIKE '%/file.rs:360' OR line LIKE '%file.rs:360%')` — one call over both surfaces to prune, a literal comparison to make it exact. Read as `field:value` it was a bag key nothing writes, and 0 rows; read as a token search alone it was 40% of the table. Needs a declared `source_file` role; without one nothing changes |
+| `field:value` | `lower(field) = lower('value')` — there is no case-insensitive `=` here |
+| `field:(a OR b)` | the group compiles under the field: SQL on a plain column, one `query()` on the text one |
+| `-field:value` | `COALESCE(NOT (…), TRUE)` — so `x` and `-x` partition the table |
+| `field:>100` | `field > 100` |
+| `ts:>2026-08-18 22:30:00` | one instant, space and all; a bound that is not a complete instant is a compile error, because the engine rounds it up to the top of the unit in silence |
+| `field:[a TO b]`, `{a TO b}`, `[a TO *]` | `field BETWEEN a AND b`, `>`/`<` — plain SQL, never inside `query()` |
+| `field:*` | `field IS NOT NULL AND field <> ''` on a real column; plain `kv['field'] IS NOT NULL` on a bag key, where a key present with an empty value still exists |
+| `"key with space":value` | a quoted name is a field name, so a bag key containing a space is reachable |
+| `+term` | consumed — adjacency already means AND, and the literal `+term` matches nothing |
+| `"a b"~N` | `query('col:"a b"~N')` — real proximity, `N` honoured |
+| `http://a.com`, `localhost:3000` | whole-term searches: a colon before `//`, or a port, is not a field selector |
+| *(empty)* | `1=1` — and no search function anywhere in the output |
+| unknown field | `kv['field']::VARCHAR` via the VARIANT column; `kv.a.b` chains subscripts |
+
+## The one-search-function-per-scan rule
+
+Verified on a live warehouse (Databend v0.34.0), and it shapes the whole design:
+**a search function may appear only in a `WHERE` clause, and at most one may appear in any one
+scan.** Both halves are load-bearing and both were measured.
+
+*Only in `WHERE`.* `SELECT query('line:peer') …`, `HAVING … AND query(…)` and `count_if(query(…))`
+are each `[1065] search function query can only be used in where clause` — even with a single call.
+That is why the conformance suite counts with `count(*)` over a `WHERE` and never with `count_if`
+over a search function.
+
+*One per scan, not per statement.* Two search functions in one `WHERE` are `[1065] duplicate search
+function for table 0` — the same call twice, `query()` beside `match()`, two `match()`es, under
+`AND` or under `OR`, and even on two different indexed columns:
+
+```sql
+match(msg,'a') AND match(msg,'b')                 -- [1065] duplicate search function for table 0
+match(msg,'a') AND query('msg:b')                 -- same
+query('msg:a') AND query('msg:b')                 -- same
+query('msg:peer') AND query('source_file:raft')   -- same, two different indexed columns
+```
+
+But the limit binds a **scan**, so one statement may hold as many search functions as it has scans.
+Measured over `ts < '2026-08-20 04:00:00'` (1,072,856 rows):
+
+```sql
+query('line:rpc') AND query('line:RemoteStopped')          -- [1065]
+
+query('line:rpc')                                          -- 717 rows
+  AND _row_id IN (SELECT _row_id FROM logs.k8s_logs WHERE query('line:RemoteStopped'))
+  AND _row_id IN (SELECT _row_id FROM logs.k8s_logs
+                  WHERE match(line,'RemoteStopped','fuzziness=1'))
+```
+
+— the same 717 as the search-free reference `line ILIKE '%rpc%' AND line ILIKE '%RemoteStopped%'`,
+and the same 717 with the calls spread over the two scans in either order, all three hoisted, four
+calls over four scans, or nested four subqueries deep. A row-key subquery is one such scan; so is
+each branch of a `UNION ALL`, each CTE, and each scalar subquery in a select list. That is why the
+compiler can put more than one text condition in a statement, and it is the reason the
+[row-key subquery](#why-a-schema-declares-a-row-key) works at all rather than merely being a
+workaround for block pruning.
+
+Two consequences worth knowing. `score()` needs a **bare** search function in its own scan: beside
+only a hoisted call it is `[1065] Score function must be used together with match or query
+function`, which is why `-score` emits `0` rather than `score()` for any query whose search function
+was hoisted or anti-joined. And a search function cannot be applied to a joined or derived table at
+all — `match(a.line,'peer')` in a self-join is `[1006] Unable to get field named …` — so a row-key
+subquery is the only way to put two of them in one answer.
+
+So boolean full-text logic still folds into one `query()` call wherever it *can* — `a b` merges and
+costs nothing extra — but where it cannot, the extra call is given a scan of its own rather than
+being refused, and the refusal survives only where there is nowhere to hoist to: a schema that
+declares no `row_key`. Inside that one `query()` call, the mini-language has three undocumented
+behaviours that all fail silently:
+
+| Form | Result |
+| --- | --- |
+| `(a) AND NOT (b)` | **0 rows** — `AND NOT` is broken in every spelling |
+| `(a) NOT (b) AND (c)` | everything after the first `NOT` is **ignored** |
+| `(a) OR NOT (b)` | the negative clause is **silently dropped** |
+| `NOT (…)` alone | `[1903] Invalid query: Only excluding terms given` |
+| `(a) AND (b) NOT (c)` | correct — matches the equivalent LIKE exactly |
+| `(a) NOT (b) NOT (c)` | correct — matches the equivalent LIKE exactly |
+| `(a) NOT ((b) NOT (c))` | correct — a `NOT` nested in a negative group evaluates properly |
+| `msg:peer msg:status` | the default operator is **OR**, not AND |
+
+lake-search emits only the forms that work: negatives are bare and trailing, never `AND NOT`, and
+operators are always explicit. The two shapes the engine gets wrong are rewritten rather than
+refused — an all-negative search and an `OR` with a negative both fold through De Morgan into one
+positive `query()` under a SQL `NOT`:
+
+```
+   p1 OR p2 OR NOT n1 OR NOT n2
+== NOT( n1 AND n2 AND NOT(p1 OR p2) )
+-> NOT( query('(n1) AND (n2) NOT ((p1) OR (p2))') )
+```
+
+Still one search function, and the result is still a *text* fragment, so it composes further —
+which is only sound because a `NOT` nested inside a negative group evaluates correctly here.
+Measured: `query('(region) NOT ((peer) NOT ((store)))')` returns 15,634, exactly
+20,144 − 4,853 + 343.
+
+### Why a leading `NOT` is compiled as an anti-join
+
+`NOT (query(x))` is **not** the complement of `query(x)`. The search function is pushed into the
+index scan whatever the surrounding boolean, so when `x` matches no row the scan is pruned to
+nothing and the `NOT` returns **zero rows instead of every row**. Measured over a 152,317-row
+window:
+
+| token | `query()` | `NOT (query())` | anti-join |
+| --- | ---: | ---: | ---: |
+| `zzzznosuchtoken` | 0 | **0** | 152,317 |
+| `qqqqwwww` | 0 | **0** | 152,317 |
+| `pdctl` | 0 | **0** | 152,317 |
+| `tiflash` | 23,381 | 128,936 | 128,936 |
+
+The three absent tokens are the defect. "Everything except a term that does not occur here" is
+the whole window, and the bare `NOT` answers nothing — which is exactly what a responder gets
+when excluding a noise pattern that has stopped being emitted in the selected time range. No SQL
+wrapping rescues it: `COALESCE`, `CASE`, `= FALSE`, `AND TRUE` and `1=1 OR …` were each measured
+and each returns zero, because the pruning happens before any of them is evaluated.
+
+So a *leading* negation compiles to an anti-join instead, which keeps tokenised semantics rather
+than degrading to a substring `NOT LIKE`:
+
+```sql
+COALESCE(msg NOT IN (SELECT msg FROM logs.k8s_logs WHERE msg IS NOT NULL AND query('msg:pdctl')), TRUE)
+```
+
+The search function now runs in its own scan, where pruning it to nothing correctly yields an
+*empty exclusion set*. It costs a second scan — measured at 0.25–0.32s against 0.12s for the
+(wrong) bare `NOT`, on the same half-million rows — and it needs `Schema.Table`, which is the one
+thing a `WHERE` fragment cannot infer. A negation that keeps a positive term beside it, `a -b`,
+never comes here at all: it stays inside the single `query()` call, where the positive drives the
+scan and an absent excluded term costs nothing.
+
+Two consequences worth knowing. The exclusion's search function is in a *different scan*, so it
+neither counts against the one-per-scan rule — `snapshoot~1 -tiflash` compiles now, and returns
+17,608 rows — nor satisfies `score()`, whose binder does not see through the subquery. And
+because the outer scan carries no search function, it sees every row including the most recent
+hour of ingest, which the inverted index has not caught up on; a fresh row that should have been
+excluded is included until the index does.
+
+Structured predicates, `LIKE` and ranges are *not* search functions, so they compose freely with the
+single `query()` call. Fuzziness is the exception: it exists only as an option argument to `match()`,
+so a fuzzy term is a search function in its own right and cannot merge into the shared `query()`
+string. Combined with another full-text term it therefore takes a scan of its own — `a b~1` compiles
+to a `query()` call beside a row-key subquery — rather than emitting SQL that dies with `[1065]`, and
+it is refused only when the schema declares no `row_key` and there is nowhere to hoist to.
+
+> **A small `LIMIT` and a row-key subquery do not mix (engine bug, Databend v0.34.0).**
+> `SELECT ts, level … WHERE _row_id IN (SELECT …) LIMIT 10` is
+> `[1006] Unable to get field named "2"`; `LIMIT 11` and above is fine, one projected column is fine
+> at any limit, and `count(*)` is always fine. `lake-search sql` defaults to `LIMIT 100`, above the
+> threshold — but `-limit 3` over a hoisted or anti-joined query walks into it.
+
+## Testing against a real warehouse
+
+`go test ./...` covers the compiler offline. It cannot tell you whether the *engine* behaves as
+documented — and on this engine a wrong query is indistinguishable from an empty result, so a
+harness that checks "the SQL executed successfully" proves nothing.
+
+`lake-search conform` generates a script that asserts on **row counts**:
+
+```console
+$ lake-search conform > conformance.sql
+$ # run conformance.sql through lakesql, the REST endpoint, or a Grafana panel
+```
+
+Each statement prints PASS or FAIL. Assertions are relative — `snapshoot~1` must return at least
+what `snapshot` returns, `"status peer"` must return nothing when `"peer status"` returns many — so
+the suite stays valid as the table grows.
+
+An upper bound is not enough here. `actual <= baseline` passes when `actual` is zero, which is
+precisely the failure the suite exists to detect, so cases whose result must be non-empty assert
+`narrows` (non-zero **and** not wider), and the negation cases assert `partitions`: `a -b` and `a b`
+must add up to `a` exactly, with both halves non-empty. A `NOT` that swallowed its predicate would
+return 0 and pass an upper-bound check; it cannot pass this one.
+
+Three cases exist to catch the *engine* rather than the compiler:
+
+- **negation** relies on the optimiser handling an inverted-index scan under `NOT`, which is not
+  something `match()` pushdown obviously respects;
+- **literal `%`** depends on Databend honouring backslash escapes inside string literals;
+- **the time-of-day bound** depends on the engine *not* quietly accepting a truncated timestamp
+  literal, which it does — `'2026-08-18T22'` is read as 22:00:00 with no diagnostic, so the
+  assertion is a strict inequality against a bound an hour earlier rather than an upper bound.
+
+There are two fixtures, because a suite has to know the schema it was written against.
+[`testdata/conformance.json`](testdata/conformance.json) names `"preset": "k8s-logs"` and its 86
+cases run against the live table; many of them pin a bare term against an explicit `msg:` baseline,
+so under a schema whose default field is a different column the two sides measure different columns
+and the assertion stops meaning anything.
+[`testdata/conformance-line.json`](testdata/conformance-line.json) is the derived-surface suite, 25
+cases over a frozen copy carrying the STORED column and the widened index group.
+
+All 86 cases in the first suite were re-run against the live warehouse (Databend v0.34.0, 975,927
+rows) and pass, and all 25 in the second against the 967,912-row frozen copy. The earlier figures
+below were measured on the same table at ~603k rows.
+Every partition identity holds to the row — 19,962 + 5,717 = 25,679 inside one `query()`,
+20,309 + 5,370 = 25,679 for the De Morgan fold, 594,705 + 8,277 = 602,982 for a negated bag key,
+504,803 + 98,179 = 602,982 for a full-text exclusion, and 305,406 + 297,576 = 602,982 for a
+bracket range — so negation is **exact** here, not approximate. (Counts drift between runs only
+because the table gains about a thousand rows a minute; each identity is one statement, so each
+balances against its own snapshot.)
+
+Three of those are worth reading twice. The bag-key one only balances because negation on a
+column is compiled as `COALESCE(NOT (…), TRUE)`: `NOT (col = 'x')` is NULL — and therefore
+excluded — wherever the key is absent, which is 97% of rows for most keys. The full-text one only
+balances because the exclusion is an anti-join rather than a bare `NOT`. And a partition whose
+three counts straddle the search-function boundary cannot be asserted at all, because a search
+function sees only the blocks the index scan has reached — which is why the De Morgan case is
+scoped under a third term that keeps all three of its counts inside one `query()` call.
+
+Note also that a co-occurrence pair has to be chosen against real data, and chosen for abundance
+rather than for mere existence:
+`snapshot` and `peer` never appear in the same line in that table, so an intersection case built on
+them is vacuous — but a pair meeting in five rows out of half a million is barely better, because it
+fails the day those rows age out or the process that wrote them stops running, and the failure looks
+exactly like a compiler bug.
+
+## Grafana
+
+[`docs/grafana-macro.md`](docs/grafana-macro.md) has a `$__search(col, '$q')` macro for
+[`databendlabs/grafana-databend-datasource`](https://github.com/databendlabs/grafana-databend-datasource).
+It is an additive change to the plugin's backend macro registry — one new file and two map entries —
+and it retires the hidden predicate-generating dashboard variable entirely.
+
+[`dashboards/`](dashboards/) generates a Grafana dashboard built on the macro: Lucene search box,
+component / level / log-format / machine / exclude-machine variables, event deltas, field facets, and
+a BM25 relevance panel.
+
+Two Grafana traps worth knowing before you wire this up yourself:
+
+- **Template-variable queries never reach the datasource backend**, so `$__timeFilter` and
+  `$__search` do not expand in them. Variable queries have to be plain SQL.
+- **A raw-SQL logs panel carries no column hints** — the plugin only attaches them to
+  visual-builder queries — so Grafana falls back to "first time field, first string field" to pick
+  the log line. With `SELECT ts, level, msg, …` that is `level`, and every line renders as `INFO`.
+  Alias to the logs-frame names: `ts AS timestamp, msg AS body, level AS severity, kv AS attributes`.
+
+## score() and the empty search box
+
+`score()` is rejected unless a search function exists **anywhere in the statement**:
+`[1065] [SQL-BINDER] Score function must be used together with match or query function`. Because the
+`score()` call sits in the select list, **no predicate can rescue it** — `SELECT score() … WHERE 1=0`
+still fails. That was verified live, and it rules out the obvious workaround.
+
+`CompileScore` therefore emits a search function that matches nothing:
+
+```sql
+SELECT msg, score() FROM logs.k8s_logs WHERE match(msg, 'zzqqnolakesearchmatchqqzz')
+```
+
+The binder is satisfied, the panel returns zero rows, and the user sees an empty relevance panel
+rather than a red error.
+
+## Notes on proximity
+
+`"a b"~N` is genuine phrase proximity here — `N` is an edit distance, not an on/off switch — and it
+is easy to measure otherwise. The full ladder, frozen:
+
+| query | rows | | query | rows |
+| --- | ---: | --- | --- | ---: |
+| `"region peer"` | 654 | | `"peer status"` | 88,441 |
+| `"region peer"~1` | 654 | | `"status peer"` | 0 |
+| `"region peer"~2` | 4,593 | | `"status peer"~1` | 0 |
+| `"region peer"~3` | 4,593 | | `"status peer"~2` | 88,441 |
+| `"region peer"~10` | 4,853 | | | |
+| `region peer` (AND) | 4,853 | | | |
+
+Strictly monotone, converging on the unordered AND from below, and the reversed phrase first
+matches at exactly `~2` — a transposition costs two, which is textbook Lucene. Sample only the
+exact phrase and a large `N` and both land on plateaus, which reads as "`N` is ignored"; an earlier
+revision of this library rejected the marker at compile time on precisely that mistake.
+
+## Notes on fuzziness
+
+Edit distance is measured against the **stem**, not the word typed. With the `english_stemmer`
+filter, `unreachable` is indexed as `unreach`, so `unreachble` is two edits from the stored token
+rather than one and needs `~2`. Any UI exposing fuzziness should say so, or users will see it behave
+inconsistently between words the stemmer alters and words it leaves alone.
+
+## Schema
+
+A schema is **data**. It names the table, its columns, their kinds and its indexes, so pointing
+lake-search at your own log table is a file rather than a patch:
+
+```
+lake-search sql -schema my-logs.json 'level:error latency_ms:>250 timeout'
+lake-search sql -preset k8s-logs-line '...'      # a built-in
+export LAKE_SEARCH_SCHEMA=my-logs.json           # or set it once
+lake-search schema -schema my-logs.json          # validate and describe it
+```
+
+[`testdata/schema-app-logs.json`](testdata/schema-app-logs.json) is a complete worked example over a
+table with nothing in common with the built-in one — a different name, expressions rather than column
+names for the time and severity roles, two attribute bags one of which is prefixed, and typed bag
+keys. The shape:
+
+```json
+{
+  "table": "app.request_log",
+  "default": "line",
+  "time": "ts", "severity": "sev",
+  "display": ["ts", "sev", "service", "route", "status", "line"],
+  "indexes": [
+    {"name": "idx_text", "kind": "inverted", "columns": ["line", "message", "attrs"],
+     "tokenizer": "english", "filters": ["english_stop", "english_stemmer"]},
+    {"name": "idx_text_ng", "kind": "ngram", "columns": ["line", "message"]}
+  ],
+  "bags": [
+    {"column": "resource_attrs", "prefix": "resource"},
+    {"column": "attrs", "keys": {"latency_ms": "number"}}
+  ],
+  "fields": [
+    {"name": "line", "kind": "text", "aliases": ["body"]},
+    {"name": "message", "kind": "text", "aliases": ["msg"]},
+    {"name": "ts", "column": "from_unixtime(ts_micros / 1000000)", "kind": "timestamp"},
+    {"name": "sev", "column": "upper(severity_text)", "kind": "string", "aliases": ["level"]},
+    {"name": "status", "kind": "number"}
+  ]
+}
+```
+
+Five things about that file are load-bearing rather than decorative.
+
+**Indexes are declared, and the per-field flags are derived from them.** Nothing restates "this
+column has an NGRAM index" or "this column's index deletes stopwords" — those are read off the index
+declaration, which is what you can copy straight out of `SHOW CREATE TABLE`. That removes the
+failure the old Go-literal shape invited: claiming `english_stop` on a column whose index has no such
+filter routes 33 ordinary words onto needless full scans, and claiming it is absent when it is
+present makes those 33 searches return zero rows silently.
+
+**All the searchable surfaces must sit in one index group, and that is checked when the file loads.**
+A single `query()` call reaches only the columns of one index. Measured, a table carrying separate
+`idx_line(line)` and `idx_line2(line2)` answers each column alone and fails
+`[1065] columns line2, line don't have inverted index` for a query naming both — so a schema spread
+across two groups describes a table where ordinary queries cannot run, and the right time to say so
+is at load.
+
+**A field may be an expression, not just a column name.** `from_unixtime(ts_micros / 1000000)` is a
+perfectly good time role. Expressions are aliased to the typed name in a select list, so callers get
+something they can address.
+
+**Roles replace hardcoded column names.** `time`, `severity`, `source_file` and `display` are how the
+CLI and the dashboard generator build a statement without knowing this deployment's spelling; `SELECT ts, level,
+component, pod, msg` used to be a literal in both, and the dashboard used to write eleven panels'
+worth of column names into its SQL with no check that the table had them — pointing it at another
+table emitted 129 references to columns that did not exist. It now refuses the panels a schema has
+not earned and says which role was missing.
+
+**Optional roles are optional, and their absence is announced.** A table with no attribute bag and no
+severity column is a real shape, not a broken one — but a bagless schema turns `store_id:7` into a
+compile error and a severity-less one leaves a log panel unable to colour anything, and neither fact
+is visible at query time. Loading prints them:
+
+```
+schema my-logs.json: no attribute bag: a field name that is not declared here is a compile error
+  rather than a bag lookup, so `store_id:7` will be refused instead of read from a VARIANT
+schema my-logs.json: no severity field: a log view over this schema cannot colour or count by level
+```
+
+`source_file` is the one optional role whose absence is *not* announced, and deliberately: it is the
+state every deployment starts in, and it changes nothing a reader could otherwise see — a schema
+without it compiles every query exactly as it did before the role existed. See
+[The file position](#the-file-position).
+
+### The attribute bag
+
+Fields not declared in the schema are read from a bag, which is what makes an open-ended log schema
+searchable: the unified TiDB/TiKV/PD/TiCDC log format carries arbitrary `[k=v]` pairs whose names
+differ between components, so no fixed column list can cover them. A bag with a `prefix` is addressed
+explicitly (`resource.pod`); bags without one are catch-alls, tried in declaration order.
+
+**A bag in the index group is searched through the index.** An inverted index covers a VARIANT column
+by JSON path, so `err:RemoteStopped` compiles to `query('kv.err:RemoteStopped')` — index-backed, with
+no per-key DDL and no per-key declaration, including keys that first appear after the index was
+built. It keeps the equality beside it, because the index is *wider* than the equality it
+accelerates: `query('kv.request:command')` returns 501 rows whose value is `batch_commands`, where
+the equality returns 0. A value the index deletes cannot go through it at all — a row with
+`kv = {"verb":"the"}` is found by the equality and not by `query('kv.verb:the')` — so a stopword
+value skips the index, and so does a key with a space in it, which the query language cannot spell.
+
+**Bag key types are resolved at emission, and declaring one is an override.** This engine does not
+need static per-key types the way a fixed-type map does: a VARIANT is self-describing per value and
+the index covers it by path. A numeric bound converts with `TRY_CAST`, and that choice is
+load-bearing rather than stylistic — a plain cast does not mis-sort, it *kills the statement* on the
+first value that is not a number:
+
+| | rows |
+| --- | --- |
+| `kv['store_id']::VARCHAR::DOUBLE > 100` | `[1006] invalid float literal ... to_float64('Some(25)')` |
+| `TRY_CAST(kv['store_id']::VARCHAR AS DOUBLE) > 100` | 39,140 |
+| `component::DOUBLE > 5` (a plain column, same failure) | `[1006] ... to_float64('other')` |
+| `TRY_CAST(component AS DOUBLE) > 5` | 0 |
+
+1,243 of that key's 40,516 rows hold a `Some(25)`-style debug rendering, which is enough to lose the
+other 39,140. The decomposition, so the figure is checkable rather than quoted: 40,516 rows hold the
+key, **39,273** cast, 39,140 of those exceed 100 and 133 do not, and 40,516 − 39,273 = **1,243** do
+not cast at all. Where a cast survives, the two agree exactly — both 32,929 for `kv['term'] > 40`.
+
+**What TRY_CAST costs, stated rather than buried.** Those 1,243 rows are *silently excluded* from any
+bound on that key, and store_id is the mild case. Rows that hold the key but whose value does not
+cast, same window:
+
+| kv key | rows with key | silently dropped | |
+| --- | --- | --- | --- |
+| `store` | 16,154 | 15,784 | 97.7% |
+| `to` | 6,604 | 5,681 | 86.0% |
+| `observe_id` | 3,369 | 3,369 | 100% |
+| `vote` | 4,952 | 2,171 | 43.8% |
+| `duration` | 1,945 | 1,943 | 99.9% |
+| `store_id` | 40,516 | 1,243 | 3.1% |
+| `from` | 9,937 | 360 | 3.6% |
+| `id`, `tableID` | 5,059 / 231,986 | 5 / 3 | — |
+
+30,559 rows across nine keys, and the distribution is the problem more than the total: the keys a
+human puts a bound on are the worst ones. Every one of `duration`'s 1,945 values is a Go duration —
+`47.823614ms` — so `duration:>100`, the most natural latency query there is, returns **0 of 1,945**.
+That is true whatever the descriptor says; see [Bootstrapping a descriptor](#why-it-looks-at-the-data)
+for what a value profile can and cannot do about it.
+
+So every numeric conversion emits a warning that names the field, says the rows are excluded rather
+than counted, and hands over the predicate that counts them
+(`count_if(kv['duration'] IS NOT NULL AND TRY_CAST(…) IS NULL)`). **Be aware that in Grafana that
+warning is invisible today** — the frame-notice channel is not in the deployed plugin, so warnings
+reach only the SQL comment in the query inspector (see
+[`docs/grafana-macro.md`](docs/grafana-macro.md)). That is a gap in the plugin rather than in the
+compiler, and until it closes a bound on a bag key is a query to check by hand.
+
+Comparing as text instead is the other wrong answer and it is silent: on the 33,300 rows carrying
+`kv['term']`, `term:>40` is 30,584 as text against 32,929 as a number, and `term:<9` answers **32,961
+rows where the truth is 0**, because every value from 10 to 99 is textually less than `"9"`.
+
+### The derived text surface
+
+The collector lifts `k=v` pairs out of the message, so text a reader can see in the line is not in
+`msg` any more. A field declared with a `derived` expression is a STORED computed column that puts it
+back — the message concatenated with the bag's values — carrying the same inverted index, so a bare
+word finds it:
+
+| | rows |
+| --- | --- |
+| `query('msg:RemoteStopped')` | 0 |
+| `query('line:RemoteStopped')` | 605 |
+| `query('line:RemoteStopped AND msg:rpc')` | 585 — two columns, one `query()` call |
+
+It exists **only** for the bare word. There is no all-fields search in this query language: `query()`
+with no field is an error and so is `kv.*:x`, and a compiler cannot write an explicit cross-field OR
+over keys it does not know. Field-scoped bag search does not need it.
+
+It concatenates the bag's *values*, not its `key=value` pairs, and that is a trade-off in both
+directions: values-only means a key name is reachable only as field syntax, while the pair form would
+make a bare `err` match every row that merely *has* an `err` key. Since the bag is separately
+searchable by key, the noise is not worth buying.
+
+**Making it the default field widens existing searches.** That is the intent, and it is still a
+behaviour change every saved link will notice: `query('msg:snapshot')` is 17,649 rows and
+`query('line:snapshot')` is 25,488 — 7,839 rows, +44%, that carry the term only in bag values.
+`msg:` typed explicitly still means exactly what it always did. This is also why it is a separate
+preset (`k8s-logs-line`) rather than a change to `k8s-logs`: the migration is a deployment decision,
+and pointing a schema at a column the table does not have is `[1065]` on the first query.
+
+### The file position
+
+Every unified TiDB/TiKV/PD/TiCDC line carries its call site in brackets, so a reader can see it and
+therefore types it:
+
+```
+[2026/08/20 16:20:59.070 +00:00] [INFO] [compaction_runner.rs:360] ["collected 0 compaction candidates"]
+```
+
+Both ways of typing it used to answer **zero**. The collector parses the call site into its own column
+and the derived surface is the message plus the bag's *values*, so a bare `compaction_runner.rs`
+reached no surface that holds it; and `compaction_runner.rs:360` parses as the field
+`compaction_runner.rs` with the value `360`, which is not a column, so it took the VARIANT path and
+compiled to a lookup for a bag key nothing writes. It warned — and in Grafana a warning is a SQL
+comment nobody sees.
+
+A schema that declares the **`source_file` role** gets both spellings compiled against the field that
+holds a call site. `name.ext` is a file name, `name.ext:digits` is a file position, and each is
+searched in the default surface **and** in that field — one `query()` call that PRUNES the scan, with
+a literal comparison ANDed on top that makes the answer EXACT:
+
+```sql
+query('(line:"manager.go:124") OR (source_file:"manager.go:124")')
+  AND (lower(source_file) = lower('manager.go:124')
+       OR lower(source_file) LIKE lower('%/manager.go:124')
+       OR lower(line) LIKE lower('%manager.go:124%'))
+```
+
+Both halves are load-bearing. `source_file:` is a **token** search and this analyzer splits on `_` as
+well as `.`, so the search function alone answers for every file whose name *ends* with the one you
+typed: over `ts < '2026-08-20 16:25:00'` (1,292,338 rows) `query('source_file:manager.go')` is
+**513,055** rows — 40% of the table — of which 199 are that file and 512,856 are `*_manager.go`
+(199 + 512,856 = 513,055 exactly). The literal comparison cannot prune, and the search function
+cannot anchor; together they land on the oracle. Measured against a SQL truth computed with no
+compiler in the loop:
+
+| bare term | search function alone | this compiler | SQL oracle |
+| --- | --- | --- | --- |
+| `manager.go` | 514,446 | **1,590** | 1,590 |
+| `client.go` | 41,086 | **17,487** | 17,487 |
+| `compaction_runner.rs` | 3,790 | **3,790** | 3,790 |
+| `compaction_runner.rs:360` | 1,571 | **1,571** | 1,571 |
+| `server.go:342` | 1,720 | **1,720** | 1,720 |
+| `tidb_monitor_controller.go:101` | 7,752 | **7,752** | 7,752 |
+
+Eleven terms were checked on both presets, 22 of 22 exact. The refinement roughly doubles a
+sub-second query and the search function still earns its place: for `compaction_runner.rs`, 0.12s for
+the search function alone (wrong), **0.24s** for search-plus-filter, 0.39s for the filter with no
+search function, best of three over the same window. On the plain-column preset exactness is free —
+0.15s before, 0.16s after — because there was no search function to keep.
+
+The `%/X` disjuncts are what keep this honest on a deployment whose collector stores a path
+(`components/raftstore/src/peer.rs:100`): the role promises a call site, not a basename. And
+`LIKE 'X%'` rather than `LIKE 'X:%'` assumes nothing about the separator, so `file.rs:360`,
+`file.rs 360` and a bare `file.rs` all match.
+
+**It is a union rather than a redirect, and this table is what refuses the redirect.** Three log
+formats arrive here and they do not agree on where the call site ends up. Measured over the closed
+window `[2026-08-20 16:00:00, 16:25:00)` — 8,142 rows:
+
+| term | `line:` | `source_file:` | union | a redirect would give |
+| --- | --- | --- | --- | --- |
+| `compaction_runner.rs` (tikv, bracket format) | 0 | 30 | 30 | 30 |
+| `compaction_runner.rs:360` | 0 | 15 | 15 | 15 |
+| `reflector.go` (csi-driver, klog) | 0 | 69 | 69 | 69 |
+| `factory.go` (named in a klog message) | 69 | 0 | 69 | **0** |
+| `warnings.go:110` (controller, logfmt `caller=`) | 32 | 0 | 32 | **0** |
+
+The bracket format has its position parsed out, so only `source_file` holds it. A logfmt line —
+`caller=…/rest/warnings.go:110`, `source=compact.go:565` — has no bracket to parse, so `source_file`
+is empty and the position survives in the bag and therefore in `line`. 143 of those 8,142 rows carry
+a `.rs`/`.go` file-shaped token in `line`, so this is not a corner; over the wider closed window
+`[2026-08-20 00:00:00, 16:00:00)` (286,604 rows) `factory.go` is 2,559 in the text against 0 in the
+column and `warnings.go` splits 1,280 against 128, the two sides disjoint wherever both are non-zero
+— 1,280 + 128 = 1,408 and 19 + 16 = 35, measured.
+
+The text half is therefore never *absent*, but it is no longer a strict superset of what a bare term
+answered before: the literal comparison described below narrows it, deliberately and in one measured
+family. What is pinned structurally is presence, not size — see
+`TestSourceFileKeepsTheTextSurface`.
+
+**The shape rule is structural, not a list of known extensions.** `name.ext` needs name segments of
+file-name characters and an **all-letters** extension, so `10.0.0.1`, `192.168.176.28` and `v8.5.7`
+are ordinary text — their last segment is digits. It is *not* keyed on `{go, rs}`, and that is a
+deliberate refusal: this warehouse's `source_file` holds 972 distinct values and only those two
+extensions occur in any of them, so a rule keyed on them would pass every test this data can pose and
+fail silently the first time a C++ or Python component logs into the table. `handler.py:88` and
+`db_impl_compaction_flush.cc:1042` therefore behave exactly like `.rs`, with no code change.
+
+The price is that `foo.bar`, `example.com` and `k8s_logs.ts` (a column reference in a logged
+statement) are read as files too. That is affordable *because* the rule expands rather than
+redirects: the extra disjunct is on a column holding no such token, so it contributes nothing and
+removes nothing. Under a redirect the same false positive would have thrown the answer away.
+
+A **declared** name always outranks the shape: a field or alias spelled `parser.go`, a bag addressed
+by column or prefix (`kv.compaction_runner.rs:360` is the bag), or a bag key declared under exactly
+that spelling. Quotes narrow the search back to the text surface, which is what makes them the escape
+hatch — `"compaction_runner.rs:360"` is the message and nothing else — and so does naming a field.
+
+**The text half is an intersection, and that is the point.** The prose disjunct is
+`line LIKE '%X%'` ANDed with the analyzed match beside it, because neither test is right alone and
+their blind spots are opposite. The **analyzer** splits on `-` and `.` alike, so it cannot tell the Go
+module `client-go` from the file `client.go`: `query('line:client.go')` is 16,501 rows and the literal
+11,769, and all 4,732 it drops carry `client-go` — `/go/pkg/mod/k8s.io/client-go` (3,548),
+`github.com/tikv/client-go/v2/tikv.` (852), `pkg/mod/k8s.io/client-go` (230),
+`k8s.io/client-go/informers/factory.go` (79), `/gomodcache/k8s.io/client-go` (23), summing to 4,732
+exactly. The **literal** has no word boundaries, so it cannot tell `grpcutil.go` from `util.go`,
+`leaderelection.go` from `election.go`, `sysinfo.go` from `info.go`, `terror.go` from `error.go`,
+`runtime.goexit` from `runtime.go`, or `main.go:1542` from `main.go:154`. Together they reject both
+families.
+
+Which is why the exactness claim is checked against every value the table has, not a handful:
+compiled and executed for all **971** distinct `source_file` values and all **262** distinct
+basenames over `ts < '2026-08-20 16:25:00'`, the answer equals
+`source_file LIKE 'X%' OR line LIKE '%X%'` for **963** and **250** of them, with **zero**
+over-matches — and every one of the 20 differences is that oracle being wrong (13 substring artifacts
+from the list above; the other 7 are the two holes recorded below). ANDing a filter onto a search
+function is only safe if the search function covers it, so that was checked too: for all 1,233 values,
+`count(anchored)` equals `count(anchored AND query(…))` — the file half loses nothing.
+
+**The explicitly-scoped spellings are untouched.** `source_file:manager.go` typed by hand is still a
+token search and still 513,055 rows; only the spelling this rule owns is made exact. The warning says
+so, so nobody concludes the scoped form is a narrower way to ask.
+
+**Every expansion says so**, because searching a column the user did not name is exactly the class of
+thing this compiler warns about. In Grafana that warning is still a SQL comment
+([`docs/grafana-macro.md`](docs/grafana-macro.md)).
+
+**A plain column is served too, and told to expect a scan.** The role accepts `text` and `string`. A
+text field is in the index group, so the position joins the one `query()` call. A plain column has no
+tokens, and an equality is the wrong reading of both spellings — the stored value is the whole call
+site, so `source_file = 'compaction_runner.rs'` is 0 rows for all 36 of that file's lines — so it is
+matched as a literal substring instead. Measured on the `k8s-logs` preset, whose `source_file` is a
+plain VARCHAR: `lower(source_file) LIKE lower('%compaction\_runner.rs:360%')` is the same 18, and
+`…rs%'` the same 36. A `number` or `timestamp` role is refused at load.
+
+Fuzziness is dropped on a file **position** and kept on a file **name**, and the difference is the
+colon: fuzziness reaches this engine only through `match()`, whose query text is parsed as
+`field:value`, so `match(source_file, 'compaction_runner.rs:360', 'fuzziness=2')` is
+`[1903] Field does not exist: 'compaction_runner.rs'` where `match(source_file,
+'compaction_runner.rs', 'fuzziness=1')` is 36.
+
+**A deployment that declares no role keeps today's behaviour exactly** — the rule is off, both
+spellings compile as they did before it existed, and both shipped conformance suites emit
+byte-identical SQL either way.
+
+## Why a schema declares a row key
+
+`row_key` names a column identifying a row uniquely — `_row_id` on this engine. It exists for one
+reason, and it is the most severe thing measured in this project.
+
+**A search function inside a disjunction prunes the scan for the whole predicate.** The index scan
+visits only the blocks the index says contain matches, and every other branch of the `OR` is evaluated
+only in those blocks. So what is lost is the other branch's rows in the blocks the text term never
+touched. Measured on the 5-block frozen copy, with `level=ERROR` spread across all five:
+
+| text term | blocks touched | emitted | truth | lost |
+| --- | --- | --- | --- | --- |
+| `peer`, `snapshot` | 5 of 5 | 364,945 | 364,945 | none |
+| `rejections` | 4 of 5 | 276,648 | 345,850 | **20.0%** |
+| `RemoteStopped` | 4 of 5 | 253,587 | 343,695 | **26.2%** |
+| `the` (a stopword, 0 matches) | 0 of 5 | 0 | 343,090 | **100%** |
+
+So `RemoteStopped OR level:ERROR` — an ordinary query, not a typo — silently lost a quarter of the
+error rows. Branch order makes no difference, and the loss scales with the number of branches: a
+three-way disjunction lost two of them.
+
+The fix is to put the search function in a subquery and test row membership in the outer scan, which
+is an ordinary comparison no optimiser rewrites:
+
+```sql
+_row_id IN (SELECT _row_id FROM logs.k8s_logs WHERE query('line:snapshot'))
+  OR lower(level) = lower('ERROR')
+```
+
+Exact in both cases — 424,841 with a matching term and 402,974 with one that matches nothing, each
+equal to its independently computed truth.
+
+**The repo already contained half of this.** A *negated* branch under `OR` was always correct, because
+a negation compiles to an anti-join and its search function therefore already sat in a subquery:
+`-zzzznosuchtoken OR level:ERROR` returns the whole table. The fix is the same move at the opposite
+polarity, so both are built from one constructor — `IN` for a positive branch, `NOT IN` for a negated
+one.
+
+**A search function ANDed with something else and then ORed is the same bug.** `level:WARN OR
+(level:ERROR RemoteStopped)` returned **27,502 where the truth is 60,727** — 54.7% lost — because the
+conjunction collapses its text child into ordinary SQL, so nothing downstream could see that a search
+function was inside that branch. The whole branch is now hoisted into the subquery, and the fragment
+carries a count of the search functions in it rather than the compiler inspecting its own output.
+
+That shape also used to be *refused* in another form: `(peer level:error) OR (status level:warn)` needed
+two search functions in one statement. Each branch now gets its own subquery, which is its own scan, so
+it compiles — verified live at 368,007, matching 368,002 + 5 computed from the branches independently.
+
+**With no row key declared, each shape falls back to the strongest option that is still exact.** A plain
+full-text term and a negation are keyed on their own text column, and that is exact rather than
+approximate: the subquery's predicate is a function of that one column, so rows sharing a value match or
+miss together. Measured — `query('line:region')` is 228,209 and `line IN (SELECT line WHERE
+query('line:region'))` is also 228,209, and the disjunction is exact for every term tried.
+
+Only the **composite** branch is refused, because there the text key is genuinely unsound: the branch
+constrains other columns too: two rows sharing a text value can differ in `level`, and expanding by
+shared text then pulls in a row the branch excluded. Measured on the live table, where exactly two
+`msg` values out of 160,802 occur at more than one level, `level:ERROR tso` is **1,728** rows
+row-keyed and **1,884** msg-keyed — 156 over. The magnitude is a property of the data rather than a
+ratio worth quoting. The row key is preferred everywhere anyway, for cost:
+comparing an 18-byte identifier beats comparing a log line that can run to 29KB.
+
+The AND path is untouched: a conjunction pruned to nothing is the *right* answer, so it keeps a bare
+`query()` and buys no second scan.
+
+`_row_id` is stable enough to key a subquery on a table taking thousands of rows a minute — one
+statement over a closed bound is one snapshot, and `_row_id IN (SELECT _row_id FROM t)` is the whole
+table while `NOT IN` of the same is 0. It is unique and never NULL over both the 1,063,259-row live
+table and the 967,912-row copy. It is schema data rather than a constant because it is engine-specific:
+`_block_name` and `_segment_name` exist here but identify a file, and `_row_number` does not exist at
+all.
+
+## Bootstrapping a descriptor
+
+Writing a descriptor for a table you did not build is a lot of guessing. `introspect` does the
+guessing from evidence, and records which parts were guesses.
+
+```
+lake-search introspect probe   -table logs.k8s_logs                       # 1. print SQL
+lake-search introspect profile -table logs.k8s_logs -shape shape.txt      # 2. print more SQL
+lake-search introspect build   -shape shape.txt -profile prof.txt -o s.json
+lake-search introspect verify  -schema s.json                             # later: drift check
+lake-search introspect verify  -schema s.json -shape verify.txt
+```
+
+**It never connects to anything.** Each step prints SQL for you to run through the client that
+already holds your credentials, and the next step reads what came back. That keeps the module
+dependency-free — the property that lets the compiler be vendored into a Grafana datasource plugin —
+and it means introspection works against warehouses this tool could not reach at all: SSO-only,
+air-gapped, or reachable only through a datasource that holds the credentials already. Nothing to
+grant, nothing to leak, and the SQL is auditable before you run it.
+
+It is three steps rather than two, and the third is forced. The value profile cannot be written
+until the shape is known: its window needs the timestamp column, its bag-key branches need to know
+which columns are `VARIANT`, and its casts have to go through `::VARCHAR` because
+`TRY_CAST(ts AS DOUBLE)` is not a NULL but `[1006] unable to cast type Timestamp to type Float64`,
+which fails the whole statement.
+
+### Why it looks at the data
+
+This is the part that earns the tool. A declared type does not tell you whether a column's values
+suit a role, and the failure is silent. Measured on the live table over
+`ts < '2026-08-20 00:00:00'` (997,592 rows):
+
+| bag key | rows | cast to a number | inferred |
+| --- | --- | --- | --- |
+| `kv.term` | 33,300 | 33,300 | numeric — safe |
+| `kv.tableID` | 250,036 | 250,033 | **refused**, 3 rows would vanish |
+| `kv.store_id` | 43,546 | 42,303 | **refused**, 1,243 rows would vanish |
+| `kv.to` | 6,604 | 923 | **refused**, 5,681 rows would vanish |
+| `kv.duration` | 2,046 | 2 | **refused** — every value is a Go duration, `47.823614ms` |
+
+`duration:>100` answers **0 of those 2,046 rows**. Be precise about what the profile does and does
+not do about that, because the obvious claim is wrong: **it does not change the SQL.** A numeric bound
+on a bag key compiles to `TRY_CAST(kv['duration']::VARCHAR AS DOUBLE) > 100` with a profile, without
+one, and with `-bag-numeric` — byte for byte, verified — and the
+[numeric-conversion warning](#the-attribute-bag) fires in all three. Nothing in this tool types that
+key as a number at any flag setting.
+
+What the profile buys is **knowing**. It is the only thing that can say the ratio is 2 of 2,046
+rather than 2,046 of 2,046, and it puts the key in `refused` so a human reads it before writing the
+query instead of after reading a zero. It also buys three decisions that are otherwise unavailable:
+`-bag-numeric` has nothing to act on without it, a mostly-empty column cannot be kept out of
+`display`, and a VARCHAR holding instants cannot be recognised as a time column. That is a smaller
+claim than "it stops the silent drop", and it is the true one.
+
+### What content evidence may and may not decide
+
+Content can **demote** a type but never silently promote a column's declared one: a VARCHAR stays a
+string even if every value casts, because `Number` changes how equality is emitted and the declared
+type is the only thing the engine itself guarantees.
+
+There are **two** promotions, not one, and the second is the more consequential:
+
+- a **bag key** to `Number` — under `-bag-numeric` only, because a bag key has no declared type at
+  all, which is exactly why the duration trap lives there;
+- a **VARCHAR column** to `Timestamp`, read through `TRY_CAST`, when every sampled value casts *and*
+  the name is a time candidate. Both halves are required: content alone promotes any stringified
+  date, the name alone is the guess that types a free-text field as time.
+
+The timestamp promotion is gated harder than the numeric one, because it is worse when wrong. A
+numeric cast drops rows from one filter; the time role gates **every** time-bounded query — every
+panel, every `$__timeFilter`, every conformance window — so a value that fails to cast removes its
+row from all of them at once. Measured on a 3-row probe holding two ISO timestamps and the string
+`yesterday`, `event_time:>2026-08-01T00:00:00Z` returns 2 of 3 and says nothing.
+
+So: it needs at least **1,000** non-null sampled values (`-min-sample`). Below that the candidate is
+recorded and the role is left **empty**, which is loud — the descriptor still loads (a table with no
+time column is legal) but says so in a note, the dashboard generator refuses to emit any panel, and
+`introspect build` exits non-zero. Confirm it with `-time-column NAME` and it is applied. Either way
+the field carries `"conversion"`, which makes the compiler warn on **every** use:
+
+```
+$ lake-search compile -schema awkward.json 'event_time:>2026-08-20T01:00:03Z'
+warning: "event_time" is not stored as timestamp — it is read through a cast (the column is VARCHAR,
+read as an instant), and a value that does not cast becomes NULL, so that row is EXCLUDED from the
+comparison rather than raising an error. On the time field that removes the row from EVERY
+time-bounded query, not just this one. Count them with
+count_if(event_time IS NOT NULL AND TRY_CAST(event_time AS TIMESTAMP) IS NULL)
+```
+
+A real `TIMESTAMP` column declares no conversion and warns about nothing, so the advisory stays
+signal.
+
+### Provenance
+
+Every field records how it was decided, and the descriptor carries a block saying what was
+considered and rejected:
+
+```json
+"introspect": {
+  "profiled": true, "window": ".. 2026-08-20 00:00:00",
+  "columns_digest": "fnv1a64:…",
+  "roles": {
+    "default": "derived-text-surface (line is a STORED column reading msg and the kv bag, and
+                index idx_msg covers it, so a bare word reaches text the collector moved out of msg)",
+    "severity": "canonical-name (level, rank 1 of level,severity,…) — content-sample agrees: ~5 distinct values"
+  },
+  "refused": ["bag key \"kv.duration\" is NOT typed as a number: 2 of its 2,046 values cast (0.1%) …"]
+}
+```
+
+A guess laundered into configuration reads as fact to the next person, which is worse than no guess.
+`refused` is the most important field in the block: it is the only record that a plausible inference
+was deliberately *not* made.
+
+### What it refuses to guess
+
+Roles are decided by a type gate, then a ranked case-insensitive name match, and — **for bag roles
+only** — a lone-compatible-column fallback. A lone `String` column is deliberately not guessed as the
+log body: getting the bag wrong costs a lookup, getting the body wrong points every free-text search
+in the deployment at the wrong column and looks like it works. The timestamp role is the exception
+that uses no name list at all: a timestamp-typed column, preferring one in the cluster key, else left
+empty. Unmatched roles stay blank and are refused by the load-time validation rather than filled in.
+
+Two things are opt-in, both because their failure mode is silent:
+
+- `-aliases` offers the other names in a role's list (`message` for `msg`). Off by default because an
+  alias that shadows a bag key answers a question about the bag with the aliased column's value —
+  and these are real keys on this very table: `body` on 3 rows, `service` on 476,490, `labels` on 47.
+- `-bag-numeric` types a cleanly-numeric bag key as a number. Off by default because it changes only
+  the **equality**, and changes it from an index-backed lookup to a full scan: `term:40` is
+  `query('kv.term:40') AND lower(kv['term']::VARCHAR) = '40'` undeclared and
+  `TRY_CAST(…) = 40` declared. Both return the same 26 rows, and `kv['term']` has no value with a
+  leading zero or a decimal point, so the default keeps the index and loses nothing.
+
+### It has to be told about the index
+
+A text field outside the inverted-index group is not slow, it is **unusable** — one search function
+per statement, and no index means no search function. So `SHOW CREATE TABLE` is mandatory in the
+probe: it is the only form that reports an index's tokenizer and filters. If nothing indexes the
+chosen default field, the descriptor records that and *fails at load naming it*:
+
+```
+refused: no inverted index covers "content", the chosen default field. …
+this descriptor does NOT load: schema: field "content" is kind "text" but no inverted index covers
+column "content"; declare the index, or give the field kind "string" …
+```
+
+`build` exits non-zero when the descriptor does not load, so `introspect build && deploy` cannot ship
+one — the file is still written, because the fastest fix is usually to edit one line of it.
+
+### Drift
+
+A descriptor is a snapshot, and that is the honest cost of not holding a connection. `verify` is the
+answer, and it earned its place on a real defect rather than a constructed one.
+
+A plain column `raw` was added to `logs.k8s_logs` and the collector began populating it. No descriptor
+declared it, so with a bag configured `raw:hello` compiled to `kv['raw']` — and `kv['raw'] IS NOT
+NULL` was **0** against `raw IS NOT NULL` of **5,112**. The query was empty forever, and the warning
+made it worse by asserting that `raw` "is not a column".
+
+**Binding did not catch it**, which is the finding: the bind statement never mentions a column nobody
+declared, so it succeeded. Only comparing the column lists finds it:
+
+```
+$ lake-search introspect verify -preset k8s-logs-line -shape verify.txt
+logs.k8s_logs: 1 drift finding(s).
+
+  • column "raw" (VARCHAR) exists in the table and is NOT declared: it will be read from the
+    attribute bag and match nothing
+```
+
+It reports the other directions too — a column the descriptor names and the table has lost, an index
+that grew or lost its filters, a column whose declared **type** changed, a STORED expression the table
+has redefined, and a moved column digest. Against the pre-migration `k8s-logs` preset the
+same live table gives four findings, two of them index growth.
+
+#### The attribute bag
+
+`DESCRIBE` does not enumerate a `VARIANT`'s keys, so a declared bag key that vanished, changed shape
+or stopped casting used to be invisible to drift detection. That is the drift **most likely to
+happen** — log formats change without anyone touching code — and its consequence is the silent row
+drop this whole project is about. `verify` emits a third section for it.
+
+Four things, measured on `logs.a2_bagdrift`, a table built with an older era where every declared key
+is present, clean and scalar, and a recent one where the writer changed:
+
+| finding | measured |
+| --- | --- |
+| a declared key is **no longer in the data** | `kv['gone_key']` in 0 of 7 rows — its typed comparisons match nothing, silently, forever |
+| a declared numeric key **stopped casting** | `kv['latency_ms']`: only **2 of 7** values cast (28.6%) — a bound drops the other 5 |
+| a declared key **stopped being a scalar** | `kv['shape_key']` is an object on 7 of 7 — `shape_key:value` compares against rendered JSON |
+| a key **shadows a column**, either direction | `kv['latency_ms']` on 12 rows *and* `latency_ms` is an undeclared column — the shape that made `raw` answer nothing |
+
+`kv['retries']` is present, clean and scalar throughout and is reported **nothing**, which is the
+half that matters: a check that cries wolf gets turned off.
+
+**What neither window sees.** A key clean *inside* the statistics window and dirty *outside* it
+reports nothing: 500 recent rows that cast and 500 older ones that do not is "no drift", while a bound
+on that key silently drops the older half. The Limits clause discloses both directions rather than
+just absence, and names the check that does see it — the compiler's own cast advisory fires on that
+query and hands over a count predicate. Run verbatim against a table built that way, it returns
+exactly the dropped rows.
+
+**Two windows, because the questions differ.** Per-key statistics are bounded and recent — "has this
+key stopped appearing" is a question about now, and an unbounded window answers it wrongly because a
+key abandoned an hour ago is still all over the history. The name enumeration is **unbounded**,
+because existence is not a question about now and a bounded window can hide a key entirely. Both are
+measured, both directions:
+
+| | recent 24h | unbounded |
+| --- | --- | --- |
+| `kv['gone_key']` present | **0 of 7** → drift | 5 of 12 → nothing |
+| `kv['latency_ms']` casts | **2 of 7** (28.6%) | 7 of 12 (58.3%) → understated |
+| `kv['body']` on the live table | 0 over `[00:00, 02:00)` → hazard **lost** | **3 rows** → hazard found |
+
+Both windows are carried in the probe's own output and read back from it, the way the value profile
+does, so neither can be laundered by a flag that defaulted differently. Neither has an upper edge in
+the future.
+
+**The enumeration is name-directed, not top-N.** It lists only keys whose names something in the
+descriptor already claims — a column, a field, an alias, a typed key — with an exact `IN` list. That
+is *complete* for the question rather than truncated, so its output can never read as "these are all
+the keys": it never claims to be about all keys. A top-N would be more expensive and less
+conclusive, because the dangerous shadowing key is a rare one — `kv['body']` is three rows — and that
+is exactly what a top-N drops. The per-key statements are capped at 64 per bag and say so when the cap
+bites.
+
+**New keys are not drift.** A schemaless bag gains keys constantly; reporting those would be noise.
+The signal is declared keys plus the shadowing hazard.
+
+**A bag key's spelling is its identity.** On this engine `kv['tableID']` and `kv['tableid']` are
+different keys — measured on the live table, the first is present on 282,718 rows and the second on
+**0** — so a declared key is stored, looked up and subscripted under the exact spelling the descriptor
+gives it. This is not a corner case: over the settled hour `[2026-08-20 02:00, 03:00)` the bag holds
+**78 distinct keys and 26 of them carry uppercase**, and the busiest key of the hour *is* `tableID`.
+The names are ordinary Go logger output — `controllerGroup`, `reconcileID`, `TiFlash`, `needWait`,
+`safePoint`, `startKey`, `indexID`.
+
+Folding is not merely wrong, it is **inexpressible**, and that is what rules out the tempting middle
+road of folding for lookup while keeping the original for SQL. Two live keys on this table differ only
+by case:
+
+| | rows |
+| --- | --- |
+| `kv['safepoint']` | 1,740 |
+| `kv['safePoint']` | 459 |
+
+A folded declaration cannot say which one it means, so a folding schema cannot describe this table at
+all — and a case-insensitive lookup over it has *two* right answers, which makes it an error or a
+warning rather than a silent pick.
+
+That is the opposite of how *field* names work, and the difference is deliberate:
+
+| | folded? | why |
+| --- | --- | --- |
+| field names | **yes** — `Level:error` is `level:error` | a field name is a label this library chose, and users type it how they like |
+| bag keys | **no** | the key is data, and the engine treats its case as identity, so folding one into the other silently retargets the lookup |
+
+Getting that wrong is how the check first failed: a descriptor correctly declaring `tableID` — one the
+introspector had *generated* — was probed as `kv['tableid']`, found nothing, and reported the key as
+vanished. The library was making the exact mistake its own compiler advisory warns users about.
+
+A declared spelling the data does not use is now a **hazard** with its own sentence, because that is a
+different mistake from a key going away and a person can make it by hand:
+
+```
+~ declared key kv['tableid'] is absent, but the data has kv['tableID'] on 5 rows — the same name in
+  a different case. VARIANT keys are case-sensitive on this engine, so the declaration reaches
+  nothing and `tableid:value` queries a key that does not exist. Re-declare it as "tableID"
+```
+
+When more than one spelling matches it names them all and refuses to choose, because on this table
+that situation is real:
+
+```
+~ declared key kv['SAFEPOINT'] is absent, but the data has the same name in a different case:
+  kv['safePoint'] on 459 rows and kv['safepoint'] on 1743 rows. … There are 2 of them, so nothing
+  can choose for you — declare the one you mean
+```
+
+A key with no spelling in the data at all is still drift.
+
+#### Drift versus standing hazards
+
+Some findings are not changes. `kv['namespace']` exists on ~29,700 rows of the live table while the
+descriptor declares a `namespace` **column** — the field wins, which is documented precedence, so it
+is not a wrong answer, but the obvious spelling cannot see those rows. Reporting that as drift would
+make `verify` fail on every run against a correct descriptor.
+
+So they are separated. **Drift** is what changed and sets the exit status; **hazards** are standing
+ambiguities that print and do not; and **limits** say what the probe could not see, so silence is
+never mistaken for absence. Against the shipped preset the live table reports *no drift*, four
+hazards (`namespace`, `node`, `body`, `component` — all real keys), and one limit naming both windows.
+
+## Pipeline
+
+[`pipeline/`](pipeline/) holds the collector that fills the table the built-in presets describe — a
+Vector DaemonSet that parses five log formats into it. It lives here because the parser and the schema
+have to agree: `kv` is what makes an unknown field searchable, and it only holds anything because the
+transform puts it there. The same transform is why the derived text surface exists at all — lifting
+`k=v` out of the message is what takes it out of `msg`.
+
+## License
+
+Apache-2.0, matching the Grafana datasource plugin this is intended to be contributed to.
