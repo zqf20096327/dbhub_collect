@@ -1,0 +1,362 @@
+# CCUsage Web
+
+A web-based monitoring dashboard for Claude Code token usage across multiple devices.
+
+[中文文档](README_CN.md)
+
+## Features
+
+- 🌍 **Full i18n support** - Complete English and Chinese localization
+- 📊 **Real-time token usage monitoring** - Track Claude Code usage across all devices
+- 🖥️ **Multi-device support** - Agent-based reporting from multiple machines
+- 🔐 **Secure authentication** - JWT-based admin system with password management
+- 📈 **Interactive dashboard** - Beautiful charts with usage statistics and trends
+- 🔑 **API key management** - Create and manage device-specific API keys
+- ⚙️ **Settings panel** - Change password and manage account settings
+- 🚀 **Docker ready** - One-command deployment with docker-compose
+- 💾 **SQLite database** - Automatic initialization and data persistence
+- 📱 **Responsive design** - Works seamlessly on desktop and mobile devices
+
+## Tech Stack
+
+- **Frontend**: Next.js 15 (App Router), React 19, TypeScript
+- **UI**: shadcn/ui, Tailwind CSS, Recharts
+- **i18n**: next-intl for internationalization
+- **Backend**: Next.js API Routes
+- **Database**: SQLite (better-sqlite3)
+- **Authentication**: JWT with bcrypt password hashing
+- **Deployment**: Docker + docker-compose
+
+## Quick Start
+
+### Step 1: Deploy Server (For Administrators)
+
+First, set up the monitoring server:
+
+#### Option A: Docker Deployment (Recommended)
+
+1. Download deployment files:
+```bash
+mkdir ccusage-web && cd ccusage-web
+curl -sL https://raw.githubusercontent.com/jx453331958/ccusage-web/main/deploy.sh -o deploy.sh
+curl -sL https://raw.githubusercontent.com/jx453331958/ccusage-web/main/docker-compose.yml -o docker-compose.yml
+curl -sL https://raw.githubusercontent.com/jx453331958/ccusage-web/main/.env.example -o .env.example
+chmod +x deploy.sh
+```
+
+2. One-command deployment:
+```bash
+./deploy.sh deploy
+```
+
+The script will:
+- Check Docker availability
+- Create `.env` file (you'll be prompted to edit it)
+- Create data directory
+- Pull pre-built image from ghcr.io and start the container
+
+3. Access the dashboard at http://localhost:3000
+   - Login with your configured credentials
+   - The SQLite database will be stored in `./data/ccusage.db`
+
+#### Deploy Script Commands
+
+```bash
+./deploy.sh deploy   # First-time deployment
+./deploy.sh update   # Pull latest image and restart
+./deploy.sh start    # Start the service
+./deploy.sh stop     # Stop the service
+./deploy.sh restart  # Restart the service
+./deploy.sh status   # Show status and recent logs
+./deploy.sh logs     # Follow container logs
+./deploy.sh backup   # Backup the database
+./deploy.sh clean    # Remove containers and images
+```
+
+#### Manual Docker Deployment
+
+If you prefer manual setup:
+
+1. Configure environment variables:
+```bash
+cp .env.example .env
+nano .env  # Edit with your settings
+```
+
+Recommended `.env` settings:
+```bash
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=your-secure-password
+COOKIE_SECURE=false  # Set to true if using HTTPS
+```
+
+2. Start with Docker Compose:
+```bash
+docker compose pull
+docker compose up -d
+```
+
+3. Access the dashboard at http://localhost:3000
+
+#### Option B: Development Setup
+
+1. Clone and install:
+```bash
+git clone git@github.com:jx453331958/ccusage-web.git
+cd ccusage-web
+npm install
+```
+
+2. Configure environment:
+```bash
+cp .env.example .env
+nano .env  # Edit your credentials
+```
+
+3. Run development server:
+```bash
+npm run dev
+```
+
+4. Access at http://localhost:3000
+
+### Step 2: Install Agent (For End Users)
+
+After the server is running, users can install the monitoring agent:
+
+1. **Get credentials from admin:**
+   - Server URL (e.g., `http://your-server:3000`)
+   - API Key (create in dashboard → API Keys tab)
+
+2. **One-line installation (with environment variables):**
+```bash
+curl -sL https://raw.githubusercontent.com/jx453331958/ccusage-web/main/agent/setup.sh | \
+  CCUSAGE_SERVER=http://your-server:3000 CCUSAGE_API_KEY=your-key bash -s install
+```
+
+Or **download and run interactively:**
+```bash
+curl -sL https://raw.githubusercontent.com/jx453331958/ccusage-web/main/agent/setup.sh -o setup.sh
+chmod +x setup.sh
+./setup.sh install
+```
+
+The script will:
+- Auto-detect OS (macOS/Linux)
+- Install as background service (launchd/systemd/cron)
+- Start reporting usage every 5 minutes
+
+**That's it!** The agent runs in the background and reports to your server automatically.
+
+## Agent Management
+
+### Quick Install (One-liner)
+
+```bash
+curl -sL https://raw.githubusercontent.com/jx453331958/ccusage-web/main/agent/setup.sh | \
+  CCUSAGE_SERVER=http://your-server:3000 \
+  CCUSAGE_API_KEY=your-api-key \
+  REPORT_INTERVAL=5 \
+  bash -s install
+```
+
+### Check Agent Status
+
+```bash
+curl -sL https://raw.githubusercontent.com/jx453331958/ccusage-web/main/agent/setup.sh | bash -s status
+```
+
+### Update Agent
+
+```bash
+curl -sL https://raw.githubusercontent.com/jx453331958/ccusage-web/main/agent/setup.sh | bash -s update
+```
+
+### Restart Agent
+
+```bash
+curl -sL https://raw.githubusercontent.com/jx453331958/ccusage-web/main/agent/setup.sh | bash -s restart
+```
+
+### Uninstall Agent
+
+```bash
+curl -sL https://raw.githubusercontent.com/jx453331958/ccusage-web/main/agent/setup.sh | bash -s uninstall
+```
+
+### Download Script First (Recommended)
+
+If you prefer to download once and run multiple times:
+
+```bash
+curl -sL https://raw.githubusercontent.com/jx453331958/ccusage-web/main/agent/setup.sh -o setup.sh
+chmod +x setup.sh
+./setup.sh install    # Install agent
+./setup.sh status     # Check status
+./setup.sh update     # Update to latest version
+./setup.sh restart    # Restart the service
+./setup.sh reset      # Clear local state, re-report all data
+./setup.sh config     # Edit configuration file
+./setup.sh run        # Test run once
+./setup.sh uninstall  # Remove agent
+```
+
+### Configuration File
+
+The agent stores configuration in `~/.ccusage-agent.conf`:
+
+```bash
+# Edit configuration
+./setup.sh config
+
+# Then restart to apply changes
+./setup.sh restart
+```
+
+See [agent/README.md](agent/README.md) for manual setup and advanced configuration.
+
+## API Documentation
+
+### Authentication
+
+All admin endpoints require a JWT token set as an HTTP-only cookie.
+
+**Login**
+```http
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+```
+
+**Logout**
+```http
+POST /api/auth/logout
+```
+
+**Change Password**
+```http
+POST /api/auth/change-password
+Cookie: auth_token=JWT_TOKEN
+Content-Type: application/json
+
+{
+  "currentPassword": "admin123",
+  "newPassword": "newpassword123"
+}
+```
+
+### Usage Reporting (Agent API)
+
+**Report Usage**
+```http
+POST /api/usage/report
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+
+{
+  "records": [
+    {
+      "input_tokens": 1000,
+      "output_tokens": 500,
+      "cache_write_tokens": 200,
+      "cache_read_tokens": 800,
+      "total_tokens": 2500,
+      "session_id": "optional-session-id",
+      "timestamp": 1234567890
+    }
+  ]
+}
+```
+
+### Statistics
+
+**Get Usage Stats**
+```http
+GET /api/usage/stats?range=7d
+Cookie: auth_token=JWT_TOKEN
+```
+
+Query parameters:
+- `range`: `1d`, `7d`, `30d`, or `all`
+
+### API Keys Management
+
+**List API Keys**
+```http
+GET /api/api-keys
+Cookie: auth_token=JWT_TOKEN
+```
+
+**Create API Key**
+```http
+POST /api/api-keys
+Cookie: auth_token=JWT_TOKEN
+Content-Type: application/json
+
+{
+  "device_name": "MacBook Pro"
+}
+```
+
+**Delete API Key**
+```http
+DELETE /api/api-keys/:id
+Cookie: auth_token=JWT_TOKEN
+```
+
+## Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `DATABASE_PATH` | Path to SQLite database | `./data/ccusage.db` |
+| `ADMIN_USERNAME` | Default admin username | `admin` |
+| `ADMIN_PASSWORD` | Default admin password | `admin123` |
+| `COOKIE_SECURE` | Enable secure cookies (HTTPS) | `false` |
+| `PORT` | Server port | `3000` |
+
+## Project Structure
+
+```
+ccusage-web/
+├── src/
+│   ├── app/                 # Next.js App Router pages
+│   │   ├── api/            # API routes
+│   │   ├── dashboard/      # Dashboard page
+│   │   └── login/          # Login page
+│   ├── components/         # UI components
+│   │   ├── ui/            # shadcn/ui components
+│   │   └── dashboard/     # Dashboard-specific components
+│   └── lib/               # Utility libraries
+│       ├── db.ts          # Database setup
+│       ├── auth.ts        # Authentication
+│       └── utils.ts       # Helpers
+├── agent/                 # Agent script for monitoring
+├── data/                  # SQLite database (auto-created)
+├── Dockerfile            # Docker configuration
+└── docker-compose.yml    # Docker Compose setup
+```
+
+## Screenshots
+
+### Dashboard Overview
+![Dashboard](screenshots/dashboard.png)
+
+### Usage Trend by Model
+![Model Trend](screenshots/model-trend.png)
+
+### Multi-Device Support
+![Devices](screenshots/devices.png)
+
+### API Key Management
+![API Keys](screenshots/api-keys.png)
+
+### One-Click Agent Installation
+![One-Click Install](screenshots/one-click-install.png)
+
+## License
+
+MIT License

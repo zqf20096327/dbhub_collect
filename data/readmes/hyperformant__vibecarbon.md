@@ -1,0 +1,332 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/hyperformant/vibecarbon/main/docs/assets/banner-dark.svg">
+    <img src="https://raw.githubusercontent.com/hyperformant/vibecarbon/main/docs/assets/banner-light.svg" alt="Vibecarbon" width="200" />
+  </picture>
+</p>
+
+<p align="center"><strong>Build the next big thing.</strong></p>
+
+<p align="center">Launch full-stack apps in minutes on the VPS provider of your choice. Auth, billing, and AI-guardrails built-in. Automated backup, restore, scale, replication, and failover.</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/vibecarbon"><img src="https://img.shields.io/npm/v/vibecarbon?color=0a7ea4&label=npm" alt="npm version" /></a>
+  <a href="https://www.npmjs.com/package/vibecarbon"><img src="https://img.shields.io/badge/npm-provenance%20attested-0a7ea4" alt="npm provenance attested (SLSA build provenance via Trusted Publishing)" /></a>
+  <a href="https://scorecard.dev/viewer/?uri=github.com/hyperformant/vibecarbon"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.scorecard.dev%2Fprojects%2Fgithub.com%2Fhyperformant%2Fvibecarbon&query=%24.score&label=openssf%20scorecard&color=informational" alt="OpenSSF Scorecard" /></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/license-FSL--1.1--MIT-blue" alt="License: FSL-1.1-MIT" /></a>
+  <a href="https://discord.gg/up8Z9sX6M6"><img src="https://img.shields.io/badge/discord-join%20the%20community-5865F2" alt="Join the vibecarbon Discord" /></a>
+</p>
+
+<p align="center">
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#commands">Commands</a> ·
+  <a href="#key-benefits">Benefits</a> ·
+  <a href="#performance">Performance</a> ·
+  <a href="#license--terms">License</a>
+</p>
+
+---
+
+Vibecarbon is a full-stack SaaS starter that combines React 19, Vite, Tailwind v4, Hono, and self-hosted Supabase, with automated DevOps built in.
+
+Skip the choice between vendor lock-in and DIY infrastructure. Ship an application with authentication, billing, teams, email, blog, docs, and i18n already wired up, then put it in production without a dedicated DevOps engineer.
+
+It's built for the way software gets written now: AI agents work inside mandatory guardrails (row-level security on every table, secret scanning before anything is committed, confirmation gates on destructive operations), so building fast never has to mean shipping leaks.
+
+Vibecarbon handles Docker Compose and Kubernetes, high availability with one-command failover, worker scaling, and automated backups. The complete stack stays self-contained under one flag you chose, yours to keep, move, or delete. Choose the provider underneath, and choose again whenever you want: your infrastructure choice stays reversible.
+
+---
+
+## Four Commitments, Enforced by Design
+
+<table>
+  <tr>
+    <td width="112" align="center">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/hyperformant/vibecarbon/main/docs/assets/pillars/sovereign-dark.svg">
+        <img src="https://raw.githubusercontent.com/hyperformant/vibecarbon/main/docs/assets/pillars/sovereign-light.svg" alt="Sovereign" width="88" height="88" />
+      </picture>
+    </td>
+    <td><strong>Sovereign</strong> · <em>Privacy within borders</em><br />Full-stack self-contained. Infrastructure, code, data, and integrations under your complete control.</td>
+  </tr>
+  <tr>
+    <td width="112" align="center">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/hyperformant/vibecarbon/main/docs/assets/pillars/agnostic-dark.svg">
+        <img src="https://raw.githubusercontent.com/hyperformant/vibecarbon/main/docs/assets/pillars/agnostic-light.svg" alt="Agnostic" width="88" height="88" />
+      </picture>
+    </td>
+    <td><strong>Agnostic</strong> · <em>Modular and portable</em><br />Swap components, move hosting providers. All the batteries included, but easily changed.</td>
+  </tr>
+  <tr>
+    <td width="112" align="center">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/hyperformant/vibecarbon/main/docs/assets/pillars/grounded-dark.svg">
+        <img src="https://raw.githubusercontent.com/hyperformant/vibecarbon/main/docs/assets/pillars/grounded-light.svg" alt="Grounded" width="88" height="88" />
+      </picture>
+    </td>
+    <td><strong>Grounded</strong> · <em>Rooted in transparency</em><br />Fair Source CLI, Open Source Templates. Everything transparent all the way down.</td>
+  </tr>
+  <tr>
+    <td width="112" align="center">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/hyperformant/vibecarbon/main/docs/assets/pillars/agentic-dark.svg">
+        <img src="https://raw.githubusercontent.com/hyperformant/vibecarbon/main/docs/assets/pillars/agentic-light.svg" alt="Agentic" width="88" height="88" />
+      </picture>
+    </td>
+    <td><strong>Agentic</strong> · <em>AI-native guardrails</em><br />Security and governance built in. Architected for software built by agents.</td>
+  </tr>
+</table>
+
+---
+
+## Quick Start
+
+**Prerequisites**
+
+- **Node.js 24.15+** and **Docker** for `create` and local development (`up`).
+- **[Pulumi CLI](https://www.pulumi.com/docs/install/)** is required for any cloud deploy (`curl -fsSL https://get.pulumi.com | sh`). It is not bundled.
+- **`kubectl` + `helm`** additionally for the `k8s` / `k8s-ha` modes.
+- **Linux, macOS, or Windows via [WSL2](https://learn.microsoft.com/en-us/windows/wsl/install)**. Native Windows is not supported.
+
+**Zero → production in five commands:**
+
+```bash
+# 1. Install the CLI globally
+npm install -g vibecarbon
+
+# 2. Create a new project
+vibecarbon create my-app
+
+# Lost at any point? Run vibecarbon ? (vibecarbon next on zsh)
+
+# 3. Start local development
+cd my-app
+vibecarbon up
+
+# 4. Deploy an environment
+vibecarbon deploy
+
+# 5. Tear down an environment
+vibecarbon destroy
+```
+
+> [!TIP]
+> Every command takes `-h` for detailed usage: try `vibecarbon deploy -h`.
+
+---
+
+## Commands
+
+```bash
+vibecarbon <command> [options]
+```
+
+### Dev: create, run, and evolve your project
+
+| Command | What it does |
+| :------ | :----------- |
+| **`?`** / **`next`** | Tell me what to do next, and offer to run it |
+| **`create <project-name>`** | Create a new Vibecarbon project |
+| **`up`** | Start the local development environment |
+| **`down`** | Stop the local development environment |
+| **`status`** | Show project and deployment status |
+| **`reset`** | Reset the local environment (**removes all data**) |
+| **`configure`** | Configure external services and settings: billing, OAuth, SMTP, CI/CD, globalization, and more |
+| **`add <feature>`** | Add features (observability, redis) |
+| **`remove <feature>`** | Remove features from a project |
+| **`upgrade`** | Upgrade infrastructure files to the latest template |
+
+### Deploy: take an environment to the cloud (and back)
+
+| Command | What it does |
+| :------ | :----------- |
+| **`deploy [environment]`** | Deploy an environment (interactive picker for mode and region) |
+| **`destroy [environment]`** | Tear down a cloud environment |
+| **`backup [environment]`** | Create, list, or download database backups |
+| **`restore [environment]`** | Restore the database from a backup |
+| **`failover [environment]`** | Initiate failover to the standby region |
+| **`scale [environment]`** | Scale worker nodes and instance sizes |
+
+### License: unlock HA + Kubernetes
+
+| Command | What it does |
+| :------ | :----------- |
+| **`activate [key]`** | Bind a Graphene or Fullerene key to this project (unlocks Kubernetes and HA deploys). Run inside the project. |
+| **`deactivate [key]`** | Release the key from this project; confirmed by a link emailed to the buyer. `-rm` removes only the local file |
+
+### Debug: look under the hood
+
+| Command | What it does |
+| :------ | :----------- |
+| **`shell [environment]`** | Interactive bash with `KUBECONFIG` + cloud creds exported |
+| **`diagnose [environment]`** | Dump full cluster state to `~/.vibecarbon/diag-*` |
+| **`console <node>`** | Open Hetzner's web VNC console for a node |
+| **`access [subcommand]`** | Manage the SSH + k8s-API operator-CIDR allowlist |
+
+> [!WARNING]
+> `reset` and `destroy` are destructive. Both are confirmation-gated, but read the prompt before you say yes.
+
+---
+
+## Who It's For
+
+**Indie Hackers & Solopreneurs**
+Ship fast and control the whole stack. Launch a production-grade MVP this weekend.
+
+**Startup Founders & Small Teams**
+Multi-tenant organizations, auto-scaling, and high availability when you need it, without a dedicated DevOps engineer.
+
+**Agencies & Consultancies**
+One stack for every client project. Consistent, production-ready foundation with easy handoff.
+
+---
+
+## Where Vibecarbon Fits
+
+If you already self-host with tools like [Coolify](https://coolify.io) or [Dokploy](https://dokploy.com), Vibecarbon lives in the same world: the stack, the state, and the data are yours, with no platform lock-in. The difference is where it starts.
+
+| | You bring | You get |
+|---|---|---|
+| **Coolify / Dokploy** | An app you've already built | A self-hosted PaaS dashboard that deploys it |
+| **Vibecarbon** | An idea | The SaaS codebase itself (auth, billing, teams, admin) plus a CLI that deploys and operates it across Hetzner, DigitalOcean, Linode, Vultr, or Scaleway, from a single Docker Compose server to Kubernetes with one-command failover (mode support varies by provider; see [Architecture](#architecture)), switchable per environment |
+
+Same family, different starting point. If your app already exists, those tools are great homes for it. If you're starting a SaaS from zero, Vibecarbon hands you the application *and* the infrastructure.
+
+---
+
+## Key Benefits
+
+### Application Layer
+- Auth (email, OAuth, magic links, MFA) + brute force protection
+- Multi-provider billing (Stripe, Paddle, Polar) with subscriptions, checkout, and plan gating
+- Multi-tenant organizations with RBAC
+- Admin panel with user impersonation, notifications, jobs, contact, newsletter, and infrastructure dashboard
+- MDX blog, changelog, documentation, and legal pages (privacy policy, terms of service)
+- Internationalization (i18n) with language switcher
+- Background jobs via pg_cron (zero extra infrastructure)
+
+<details>
+<summary><strong>…and 8 more</strong>: onboarding, uploads, email, newsletter, search, analytics, SEO</summary>
+
+- Guided onboarding flow
+- Contact form with admin panel and email notifications
+- Newsletter with double opt-in, admin compose/send, and CSV export
+- File uploads via S3-compatible object storage (Hetzner Object Storage, DigitalOcean Spaces)
+- Transactional email (SMTP)
+- Client-side docs search with Cmd+K shortcut
+- Product analytics (Plausible, cookie-free and privacy-focused)
+- SEO (meta tags, sitemap, RSS feed)
+
+</details>
+
+### Infrastructure
+- New environments in minutes, and warm redeploys in seconds (<!-- perf:warm-deploy:hetzner/k8s -->8.6s<!-- /perf --> k8s / <!-- perf:warm-deploy:hetzner/compose -->19.2s<!-- /perf --> compose, [measured](#performance))
+- Security hardened from day one, with automatic operator CIDR firewalling
+- Automated deployments via CI/CD
+- Auto-scaling (2-10+ replicas)
+- Multi-region high availability with one-command failover
+- VPS-native, with root access on every machine and no hidden control plane
+- Privacy within borders: you pick the region, backups included
+- Continuous S3 WAL-G backup & point-in-time restore
+- Optional monitoring dashboards (Grafana, Prometheus, Loki) via the observability add-on
+- Modular and portable, so you can change providers without a rewrite
+
+### Developer Experience
+- Agent rules for Claude Code, Cursor, Windsurf, and Copilot
+- AI-native guardrails: security rules in `AGENTS.md`, confirmation-gated destroys
+- 50+ Shadcn UI components
+- Full TypeScript across client and server
+- Biome linting/formatting, Vitest test suite
+
+---
+
+## Architecture
+
+One CLI, three deploy modes, picked per environment. Every mode includes automated SSL and backups; monitoring dashboards are an optional add-on. Compose HA gives the same high-availability architecture as Kubernetes HA without needing a Kubernetes cluster, so it runs on every provider, including ones with no Kubernetes support at all; select it explicitly with `-mode compose-ha`.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/hyperformant/vibecarbon/main/docs/assets/architecture.svg" alt="vibecarbon deploy fans out to three scenarios: compose (one server), k8s (k3s cluster, autoscaling workers), and k8s-ha (multi-region, one-command failover), all landing on Hetzner, DigitalOcean, Linode, Vultr, or Scaleway" width="880" />
+</p>
+
+---
+
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Technical Guide](./docs/technical.md) | Architecture, code examples, API patterns, scripts |
+| [Design Guide](./docs/design.md) | Brand identity, visual design, UX principles |
+| [Test Suite](./docs/tests.md) | Test types, coverage, and how to run them |
+
+### Deployment Guides
+
+| Guide | Best For |
+|-------|----------|
+| [Hetzner Cloud](./docs/deploy-hetzner.md) | Cloud servers and Object Storage, with European (EU data residency) and US regions |
+| [DigitalOcean](./docs/deploy-digitalocean.md) | Droplets and Spaces, with Americas, Europe, and Asia-Pacific regions |
+| [Kubernetes README](./carbon/k8s/README.md) | K8s autoscaling, worker bounds configuration, HA cluster setup |
+
+DigitalOcean is fully supported for `compose`, `k8s`, and `k8s-ha` with the same CLI, the same lifecycle, and the same e2e gate as Hetzner. Linode, Vultr, and Scaleway are supported for `compose`, with the same CLI and e2e gate. The remaining tiers aren't built for them yet, though Compose HA is available on every provider regardless (see Architecture above).
+
+### Integration Guides
+
+| Guide | Description |
+|-------|-------------|
+| [Observability](./docs/integrations/observability.md) | Prometheus, Grafana, Loki |
+
+---
+
+## Performance
+
+Real numbers, not estimates. Every cell is wall-clock time for the CLI command it names, from the latest fully-green CI run of that provider against real cloud infrastructure. Measured from GitHub-hosted runners; methodology in [docs/tests.md](./docs/tests.md).
+
+The rows are every provider and deploy scenario the CLI supports. An absent row means that scenario is not offered on that provider yet; _pending_ means it ships but has no measured CI baseline yet. The numbers refresh automatically from each provider's next green CI run.
+
+<!-- BEGIN:perf-table -->
+| Provider | Scenario | Cold `deploy` | Warm `deploy` | `backup` | `restore` | `scale` | `destroy` | `failover` |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| Hetzner Cloud | `compose` | 5m 43s | 19.2s | 3.6s | 6m 29s | 3m 31s | 30.4s | — |
+| | `compose-ha` | 7m 18s | 2m 7s | 3.5s | 8m 2s | 4m 48s | 36.7s | 38.4s |
+| | `k8s` | 9m 5s | 8.6s | 20.7s | 8m 11s | 1m 52s | 1m 38s | — |
+| | `k8s-ha` | 8m 25s | 51.8s | 18.4s | 9m 13s | 4m 11s | 2m 7s | 3m 6s |
+| DigitalOcean | `compose` | 10m 50s | 24.1s | 5.4s | 9m 12s | 9m 28s | 38.8s | — |
+| | `compose-ha` | 12m 18s | 1m 6s | 5.6s | 18m 31s | 9m 51s | 44.2s | 2m 54s |
+| | `k8s` | 8m 9s | 6.4s | 34.8s | 7m 28s | 4m 26s | 1m 51s | — |
+| | `k8s-ha` | 9m 22s | 1m 4s | 27.7s | 12m 29s | 10m 49s | 2m 5s | 7m 41s |
+| Linode | `compose` | 7m 21s | 13.1s | 3.6s | 7m 36s | 6m 44s | 28.0s | — |
+| | `compose-ha` | 9m 37s | 49.2s | 3.6s | 9m 46s | 6m 28s | 30.0s | 50.1s |
+| Vultr | `compose` | 6m 52s | 20.9s | 5.2s | 7m 50s | 7m 42s | 45.4s | — |
+| | `compose-ha` | 14m 48s | 1m 58s | 4.6s | 11m 52s | 8m 36s | 48.8s | 1m 51s |
+| Scaleway | `compose` | 6m 30s | 27.1s | 2.9s | 6m 48s | 4m 13s | 41.1s | — |
+| | `compose-ha` | 9m 23s | 2m 20s | 6.0s | 9m 29s | 5m 5s | 1m 0s | 1m 1s |
+
+_Latest green CI runs: Hetzner Cloud `2ed8109` (2026-09-22) · DigitalOcean `48e8713` (2026-09-02) · Linode `e3a088c` (2026-09-03) · Vultr `7471b45` (2026-09-03) · Scaleway `f61829b` (2026-09-03) · GitHub-hosted runner · methodology: [docs/tests.md](./docs/tests.md)._
+<!-- END:perf-table -->
+
+`k8s-ha` (pilot-light multi-region with one-command failover) runs on Hetzner and DigitalOcean today.
+
+---
+
+## License & Terms
+
+The CLI is Fair Source under the [Functional Source License 1.1 with MIT future license](./LICENSE). **Building from source is free for any non-competing use, and every release converts to the MIT license two years after publication.**
+
+Using the distributed `vibecarbon` package is a per-project subscription:
+
+| Tier | Tagline | What it is for | Price | Deploy mode |
+|------|---------|-----------------|-------|--------------|
+| **Graphite** | Go live. | Local dev, all add-ons, GitHub Actions CI/CD, single-server production, and `upgrade` (free on every tier) | Free, no key | Compose |
+| **Graphene** | Scale on demand. | Production that needs to scale | $19 per project per month ($190 per year) | Kubernetes |
+| **Fullerene** | Enterprise resiliency. | Production that must survive a region failure | $39 per project per month ($390 per year) | Kubernetes HA |
+
+The subscription is checked on every deploy to a Kubernetes or HA environment. A lapsed subscription keeps deploying for 30 days with a warning, then pauses those deploys until renewed. Backup, restore, failover, and scale never require a subscription. Run `vibecarbon activate <key>` inside the project; it binds the key to that project on vibecarbon.com and writes `.vibecarbon.license`, which should be committed and shared with your team. A key is bound to one project at a time: `vibecarbon deactivate` emails the buyer a release link, after which the key can be activated elsewhere. Every bind and release is announced to the buyer by email. See [TERMS.md](./TERMS.md) for full usage terms. Generated project code is [MIT](./carbon/LICENSE), so you own your app outright.
+
+---
+
+## Support
+
+- Discord: [join the community](https://discord.gg/up8Z9sX6M6) for help, showcase, and announcements
+- GitHub Issues: [Report bugs or request features](https://github.com/hyperformant/vibecarbon/issues)
+- GitHub: [github.com/hyperformant/vibecarbon](https://github.com/hyperformant/vibecarbon)
+

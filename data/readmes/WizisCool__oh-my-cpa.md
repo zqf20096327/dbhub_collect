@@ -1,0 +1,250 @@
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="web/src/assets/brand/omc-wordmark-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="web/src/assets/brand/omc-wordmark-light.svg">
+  <img src="web/src/assets/brand/omc-wordmark-dark.svg" alt="Oh-My-CPA Logo" width="360">
+</picture>
+
+# Oh-My-CPA
+
+### Web management console and usage observability for CLIProxyAPI.
+
+<br />
+
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/WizisCool/oh-my-cpa?style=flat&label=stars)](https://github.com/WizisCool/oh-my-cpa/stargazers)
+[![CI](https://github.com/WizisCool/oh-my-cpa/actions/workflows/ci.yml/badge.svg)](https://github.com/WizisCool/oh-my-cpa/actions/workflows/ci.yml)
+[![Go](https://img.shields.io/badge/Go-1.24+-00ADD8?style=flat&logo=go&logoColor=white)](https://go.dev)
+[![SQLite](https://img.shields.io/badge/SQLite-WAL-003B57?style=flat&logo=sqlite&logoColor=white)](https://www.sqlite.org)
+
+<br />
+
+**English** · [简体中文](README.zh-CN.md)
+
+</div>
+
+---
+
+> [!IMPORTANT]
+> **Oh My CPA is in active development.** Core features are stable for daily proxy management and usage telemetry, while multi-instance support, container packaging, and additional management surfaces are evolving.
+
+Oh My CPA is a self-hosted control plane for [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) (CPA). This project provides a web dashboard, request browser, credential management, model pricing, and configuration editing for your AI proxy gateway, running as a single Go binary with an embedded React frontend and local SQLite storage.
+
+## Live Demo
+
+**[omc-demo.junze.dev](https://omc-demo.junze.dev)** — the console, running on sample data.
+
+No account, no key, nothing to install: open the link and the dashboard is there. It is served from a built-in sample — a year of traffic across eight providers and fourteen models — with the same routing policy the product ships: credential downloads, request logs, plugin execution and gateway configuration writes are refused.
+
+The demo shows the console; it does not run the product. The frontend is the same bundle the binary embeds, and its API is answered from a dataset generated out of the real Go handlers — so every response has the shape a self-hosted install produces, but there is no gateway, database or capture pipeline behind it, and writes are refused rather than simulated. `docs/architecture.md` §13 and [ADR 0021](docs/adr/0021-the-public-demonstration-is-generated-data-behind-the-real-console.md) record why.
+
+To run the demonstration's own data source locally — the Go binary in demo mode, which is what generates that dataset:
+
+```bash
+pnpm build
+OMCPA_DEMO_MODE=true go run ./cmd/oh-my-cpa
+```
+
+It opens at the site root rather than `/omc`, and serves the same fixture this page
+does.
+
+## Features
+
+### Gateway & Provider Management
+- **AI Providers**: Configure and monitor endpoints for Codex, Claude, Gemini, Meta Muse, xAI, Vertex AI, Gemini Interactions, DeepSeek, and OpenAI-compatible services. Each config API-key family (claude, codex, gemini, meta, xai, vertex, interactions) is managed the same way: credentials, models, priority/weight, proxy, and a gateway-level enable switch.
+- **Protocol-Level Toggling**: Enable or disable providers with real gateway exclusion (`excluded-models: ['*']`), preventing requests from routing to inactive credentials.
+- **Model Catalog Pulling**: Fetch model lists directly from upstream providers to keep available models up to date. Pulls require HTTPS except for localhost, loopback, or private IP literals; cross-origin redirects are refused.
+- **Model Playground**: Test connected models with text and images, streamed multi-turn answers, generation parameters and safe request diagnostics. Select an existing client key without exposing it to the browser; CPA handles normal routing.
+- **Agent**: A separate `/agent` workspace where a model callable through CPA answers questions and performs OMC operations through declared capabilities: usage and request analysis, providers, OAuth, quota, client keys, configuration, pricing, system state, and read-only SQL over OMC's own database (credentials, raw payloads and preferences stay hidden). The agent can ask you questions with choices or a typed answer. Read tools run directly; changes are prepared server-side and wait for one Allow or Deny in an authorization dialog, after which the run continues. Secrets, tokens, and OAuth authorization never enter the model context.
+- **Client Key Management**: Create, view, and delete gateway API keys. Assign aliases so client keys appear by name in request records and filters.
+- **OAuth Management**: One credential-centred workspace for sign-in, auth-file management, safe-field configuration, model lists, provider aliases, and quota reading/actions. Sign in from the console for Codex, Claude, Antigravity, xAI, Kimi, Devin and Meta Muse; a redirect flow whose callback your browser cannot reach is completed by pasting the final URL back, and a device-code flow shows the code to confirm. The collection keeps every auth-file entry visible and joins quota only by a unique exact auth index. The overview shows credential state and a primary quota window. Open the credential Drawer for separate Quota, Configuration and Models tabs; Quota shows every window, credit expiry, cooldown and diagnostic.
+
+### Observability & Telemetry
+- **Usage Dashboard**: Track request volume, token throughput, cache hit rates, and estimated costs across presets (15m, 1h, 6h, 24h, 7d, 30d, 90d) and custom date ranges, with a year-long contribution-style token heatmap of daily token volume, where clicking a day shows its request count and token volume, and links to that day's request list.
+- **Model-Level Usage Panels**: The token trend and model-usage ring rank the window's traffic by call point (the client-requested model alias) or by upstream model, with per-group costs and shares; the grouping choice persists as a console preference.
+- **Token Unit Style**: Switch the console-wide number abbreviation (English K/M/B or Chinese 万/亿) across the dashboard, its token activity tooltip, the request records and the detail drawer; an abbreviated value always keeps its exact count.
+- **OMC Settings Hub**: The console-wide token unit style, stored with the deployment, on one page together with the theme and the language shortcut. The theme is a mode - light, dark or follow-the-system - and each mode carries one of three registered palettes (OMC Dark/Midnight/Forest for dark, OMC Light/Porcelain/Sandstone for light) or one you colour yourself from nine tokens, with its own reset and a live contrast reading per token. The model panels' own grouping stays on the panels that plot it.
+- **Faceted Request Browser**: Filter requests by model, provider, client key alias, status, cost, and latency using multi-select facets and full-text search.
+- **Request Detail & Waterfall**: Inspect duration, time-to-first-token (TTFT), token breakdowns, and download raw per-request logs.
+- **Streaming & Pull Ingestion**: Collects usage events via background RESP stream or polling, with automatic backoff during idle periods.
+- **Logs & Audit Trail**: Tail the gateway's log and download its error log files, and read Oh My CPA's own recent service log without shell access. The operator audit trail has its own page: a readable list of operations with outcome counts, a detail drawer per entry, category, outcome, text and time-range filters kept in the URL, and JSON export.
+
+### Model Pricing & Cost Accounting
+- **Request-Time Snapshots**: Each request locks its cost at completion using immutable price versions, ensuring historical numbers never drift when rates are updated.
+- **OpenRouter Price Book**: Prices every model the gateway serves from OpenRouter's public model list (`openrouter.ai`, no key) with deterministic matching, including long-context and time-of-day tiers; models are grouped by their configured providers with shared aliases/icons, priority and natural-name ordering, 20-row pagination, and one-click suggestions for unmatched names.
+- **Linked and Custom Prices**: Pin a model to a chosen OpenRouter model, or set your own rates and tiers per model — from the price book or in place from the request list, the request detail and the dashboard.
+- **Channel Multipliers**: Scale every request one CPA provider answers (e.g. a relay at 30% of list), locked per request like prices; each request's detail explains its cost bucket by bucket.
+
+### Configuration & Security
+- **Dual-Mode Config Editor**: Modify gateway settings through structured visual forms or directly in an embedded Monaco YAML editor with comment preservation.
+- **Plugin Management**: One page with three tabs — installed plugins (state, enable switch, settings, uninstall), the plugin store as cards (icon, author, tags, description, GitHub and homepage links, official/third-party marking, install or update to a chosen version), and the plugin system's own settings (the global switch, third-party store sources and store authentication rules). A plugin's declared settings are edited as typed form fields, with a JSON view of the same document.
+- **Encrypted Storage**: Sensitive credentials and raw inbox messages are encrypted at rest using AES-GCM.
+- **Audit Logging**: Sensitive operations (downloading auth files, exporting logs, viewing or editing YAML, and revealing stored client or provider keys) are written to an append-only audit log; a failed audit write refuses the operation.
+- **Offline Operation**: Frontend assets are bundled into the binary; no runtime CDN requests or external database servers required. A plugin logo a plugin publishes elsewhere is fetched by the server and inlined, so the browser still loads only what the binary serves — in an air-gapped deployment that fetch fails and the console draws its own bundled brand mark instead.
+
+## Architecture
+
+```text
+Browser ──▶ Reverse Proxy (Caddy / Nginx) ──▶ Oh My CPA (:8080)
+                                                 ├─ Embedded React SPA (/omc/)
+                                                 ├─ Local SQLite WAL (/data)
+                                                 └─ Background Collector ──▶ CLIProxyAPI (:8317)
+```
+
+- **Single Binary**: The React SPA is embedded into the Go executable (`internal/web/dist`).
+- **Single Replica**: Uses SQLite in WAL mode with a single connection pool. Must run as one instance per data directory.
+- **Sub-Path Native**: Mounts under `/omc` by default (configurable via `OMCPA_BASE_PATH`).
+
+## Getting Started
+
+### Prerequisites
+
+- Running [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) **v8.0.0 or later** with its plaintext management key (`remote-management.secret-key`, or `management.secret-key` in a CPA v8-layout file)
+- Go 1.25+ (build toolchain pins `1.27.1`)
+- Node.js 22+ & pnpm 11+
+
+### Run from Source
+
+1. **Clone the repository and install dependencies**:
+   ```bash
+   git clone https://github.com/WizisCool/oh-my-cpa.git
+   cd oh-my-cpa
+   pnpm install --frozen-lockfile
+   ```
+
+2. **Configure environment**:
+   ```bash
+   cp .env.example .env
+   ```
+   Set `OMCPA_MASTER_KEY` (32 random bytes in hex, e.g. `openssl rand -hex 32`) and `OMCPA_CPA_MANAGEMENT_KEY` (your CPA secret key). If CPA runs on another host, update `OMCPA_CPA_BASE_URL` and `OMCPA_CPA_USAGE_ADDR`.
+
+3. **Build and start**:
+   ```bash
+   pnpm build
+   go run ./cmd/oh-my-cpa
+   ```
+
+4. **Access the console**:
+   Open **`http://127.0.0.1:8080/omc/`** and log in with your CPA management key.
+
+<details>
+<summary><strong>Development with Hot Reload</strong></summary>
+
+<br />
+
+Install [Air](https://github.com/air-verse/air) for Go automatic reloading:
+```bash
+go install github.com/air-verse/air@latest
+pnpm dev
+```
+Open **`http://127.0.0.1:5173/omc/`**. Vite serves the UI with HMR and proxies `/omc/api/*` to the Go backend on `:8080`.
+
+</details>
+
+## Deployment
+
+### Online Demo (Cloudflare Workers)
+
+The public demo is the same console as static assets with its API answered by a Worker, and pushing to `master` updates it once the Worker is connected to this repository. It deploys through Cloudflare's Git integration, which manages its own build token, so the repository holds no deployment secret. The Worker's configuration is `deploy/cloudflare/wrangler.jsonc`, and `docs/ops/cloudflare-demo.md` is the runbook — including the one-time console steps.
+
+The API's data is generated from the real Go handlers rather than hand-written, so the served responses carry the shapes the product emits. `pnpm demo:generate` refreshes it, `pnpm check:demo` fails when it has fallen behind the code, and `pnpm verify:demo` drives every console route in a browser against a running deployment.
+
+### Docker (In Progress)
+
+> Docker packaging and automated image releases (`ghcr.io` / Docker Hub) are currently in progress.
+>
+> Running from source or compiling the standalone binary is recommended for now. Preview compose templates are available in the repository:
+> - [`deploy/compose.full.yml`](deploy/compose.full.yml): Stack co-deploying CPA, Oh My CPA, and Caddy.
+> - [`deploy/compose.omc.yml`](deploy/compose.omc.yml): Standalone Oh My CPA connecting to an existing CPA instance.
+>
+> The full stack pins CPA `v8.0.2` by default; override `CPA_IMAGE` when connecting the stack to a different compatible release. The console requires CPA v8.0.0 or later and speaks its v8 Management API; a gateway older than v8 is refused and every page shows upgrade guidance instead. CPA v8 reads an existing v7 `config.yaml` unchanged, so upgrading CPA needs no configuration change. The console's first configuration save converts such a file to the v8 layout, after keeping an encrypted copy of the original that the configuration page offers for download (see `docs/cpa-v8-compat.md`). Its Caddy routes the console under `OMCPA_BASE_PATH` (default `/omc`) and everything else to CPA, so a non-default value is accepted in any of the forms the server normalises (`omc`, `/omc/`, `/omc`) and `/` makes the console take the whole host with CPA no longer reachable through the proxy.
+
+## Operational Notes
+
+- **Single Collector**: The CPA usage queue is destructive. Only one collector may read from a CPA instance. If another service collects usage, set `OMCPA_USAGE_INGEST_MODE=off`.
+- **Single Replica**: SQLite WAL requires exclusive single-process access. Run one replica mounting the data directory; do not mount over network filesystems (NFS/CIFS).
+- **Master Key**: `OMCPA_MASTER_KEY` is required to decrypt stored credentials and payloads. Back it up securely.
+- **Network Security**: Keep CPA on a private network or loopback interface, and serve Oh My CPA over HTTPS.
+- **Reverse Proxy Headers**: Set `OMCPA_TRUSTED_PROXY_CIDRS` to the comma-separated CIDRs of reverse proxies whose forwarding headers may be trusted (the bundled Compose file trusts Docker's `172.16.0.0/12` network). Leave it unset when clients connect directly; never trust a public range.
+- **Demo Mode**: `OMCPA_DEMO_MODE` (default `false`) serves the console from a built-in fixture instead of a CPA, so it needs no management key and no provider credential. Its storage is not durable — the database is deleted and rebuilt on every boot — and the server refuses sign-in flows, credential movement, plugin execution, gateway configuration writes and anything that would leave the process. It is what generates the public demonstration's dataset, so it stays in use even though the public deployment no longer runs it; `OMCPA_PUBLIC_URL` states that deployment's origin, because nothing announces it any more.
+- **Agent & MCP**: `/agent` sends the conversation and capability results to the CPA model selected on the page and its upstream provider; the page states this beneath the message box, and the choice of key, model and reasoning effort is remembered as a server-side preference. External agents connect through `oh-my-cpa mcp`, a stdio MCP server over the same capability registry. It reads `OMCPA_SERVER_URL` (the console URL, including any base path) and `OMCPA_CPA_MANAGEMENT_KEY` (the same management key that signs into the console); plain HTTP is accepted only for loopback addresses, redirects are refused, and the bridge itself opens no data directory. There is no separate external credential: holding the management key is administrator-equivalent, so an external agent can prepare an operation and read its status but cannot approve it, submit secrets, or complete OAuth. The read-only database queries and `ask_question` are offered to the built-in Agent only. See `docs/agent-capabilities.md`.
+- **Update Checks**: The System Information page reports the running and published versions of both Oh My CPA and your gateway. It reads release metadata from `api.github.com` only — fixed host, no operator-supplied URL — following `HTTP_PROXY`/`HTTPS_PROXY` like the price sync does. A sweep runs every six hours; opening the page and the **Check for updates** button also check, subject to a fifteen-minute floor per product — inside it the answer comes from the stored index and the message says so, because the feed is one shared per-address budget. Two switches, because they answer different questions. `OMCPA_UPDATE_CHECK_ENABLED=false` stops the sweep on an offline deployment; the page then keeps working from the last answer it stored, and a check that fails is reported with its reason and the time it was attempted. `OMCPA_UPDATE_CHECK_ON_PAGE_LOAD=false` additionally stops the check the page performs when it is opened, which is what an air-gapped or test deployment wants, since a page visit is not an operator asking a question. The **Check for updates** button works either way. `OMCPA_OMC_REPO` and `OMCPA_CPA_REPO` (`owner/name`) point the check at a fork. GitHub's unauthenticated budget is 60 requests per hour for the address making them, and the page says so when a check is refused for that reason. Release notes are held in memory rather than stored, so after a restart the page names the versions and links to the source while the notes themselves are unavailable — see `docs/architecture.md` §10.
+- **Database Maintenance**: The same page can truncate the WAL or rebuild the database, and refuses the second while the first runs. Both wait for in-flight writes rather than interrupting them, and a rebuild is declined up front when the filesystem lacks the free space SQLite documents needing (up to twice the database file). A job cannot outlive a restart. `docs/ops/sqlite-operations.md` §6 covers the same operations from the host.
+
+### Model playground operations
+
+Open **Operate → Playground** under the configured base path. Select an existing client
+key and a call point from the live `/v1/models` directory; if no key exists, create one in
+Key management first. The page reads
+`GET <base>/api/v1/playground/models` and sends explicit turns through
+`POST <base>/api/v1/playground/chat`; both require the normal administrator session.
+No additional environment variable or database migration is required.
+
+Real requests consume quota under the selected key. Stop cancels the connection but does
+not guarantee a refund. The single latest conversation, its parameters and its attached
+images are stored as a server-side preference so a reload resumes where you left off;
+starting a new conversation discards the stored turns, and image payloads too large to store
+are redacted rather than saved. The stored target is the key's usage fingerprint, never the key
+itself, and a key or call point that no longer exists is not reselected. CPA and upstream logging
+policies still apply.
+PNG/JPEG/WebP inputs allow four images per turn, 5 MiB and 40 megapixels per image, and a
+32 MiB request including history. Capability is not guessed from the model name.
+
+The parameter panel takes a system prompt, reasoning effort, temperature, top-p, maximum
+output tokens, a User-Agent, and a custom JSON request body. The User-Agent defaults to this
+build's own version and is sent as a header, so an upstream sees which build called it. The
+custom request body has the highest priority: its keys override the panel's parameters and
+any parameter the panel does not model passes through unchanged, but the resulting request is
+validated before it is sent, so an override cannot bypass the image and parameter limits. A
+non-streaming body is rejected, as this page reads a streamed answer.
+
+Keep reverse-proxy streaming unbuffered and its read timeout above the 15-second heartbeat
+interval. The dedicated stream can last ten minutes, with a 120-second upstream first-response
+or idle timeout. Ordinary API timeouts are unchanged. Request diagnostics never return
+credentials; copied cURL needs CPA_BASE_URL, CPA_API_KEY and replacement image data URLs.
+The public demonstration shows the page and model directory but refuses inference.
+
+## Developer Commands
+
+| Command | Description |
+| --- | --- |
+| `pnpm dev` | Start Air + Vite development environment |
+| `pnpm build` | Build frontend SPA and sync to `internal/web/dist` |
+| `pnpm test:fast` | Run affected checks relative to `HEAD`; `--base <ref>` includes committed changes, `--plan` previews selection |
+| `pnpm test:self` | Run repository and Worker self-tests with bounded concurrency, plus demo freshness |
+| `pnpm check:bundle` | Validate all chunk and aggregate budgets against the existing production build |
+| `pnpm check:ui` | The browser scenarios your change can reach, against the dev server with mocked APIs (`--plan` explains the selection) |
+| `pnpm verify` | Static gate: toolchain check, static analysis, and secret scan; with `check:ui`, what to run before pushing |
+| `pnpm verify:full` | Everything CI runs, locally: build, bundle budgets, browser acceptance, the whole probe catalog, demo |
+| `pnpm verify:demo` | Browser acceptance for the demo: every console route renders (`OMCPA_DEMO_URL` to check a deployment) |
+| `pnpm demo:generate` | Regenerate the demo's dataset from the real handlers (`--check` to verify instead) |
+| `pnpm check:demo` | The demo's maintenance contract: coverage, freshness and privacy |
+| `pnpm dev:demo` | Serve the demo locally with Wrangler (after `pnpm build:demo`) |
+
+## Contributing & Security
+
+- **Contributing**: Please review [`CONTRIBUTING.md`](CONTRIBUTING.md) for development setup, verification workflows, and coding standards.
+- **Security**: For vulnerability reporting and security boundaries, please refer to [`SECURITY.md`](SECURITY.md).
+
+## Documentation
+
+- [`CONTEXT.md`](CONTEXT.md) — Domain model, time windows, and price snapshot rules
+- [`docs/architecture.md`](docs/architecture.md) — Module boundaries, data flows, and invariants
+- [`docs/design.md`](docs/design.md) — Visual design system and theme tokens
+- [`docs/agent-capabilities.md`](docs/agent-capabilities.md) — Agent capability contract, permissions, confirmation and the MCP bridge
+- [`docs/ops/sqlite-operations.md`](docs/ops/sqlite-operations.md) — SQLite operations, backup, and restore runbook
+- [`docs/ops/cloudflare-demo.md`](docs/ops/cloudflare-demo.md) — deployment runbook for the online demo
+- [`docs/cpamc-parity.md`](docs/cpamc-parity.md) — Feature parity matrix with official CPAMC
+- [`docs/cpa-v8-compat.md`](docs/cpa-v8-compat.md) — CPA v8 baseline: routes, configuration relocation table, detection, and measurements
+- [`AGENTS.md`](AGENTS.md) — Development conventions and code/doc sync contract
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+### Time zone
+
+Set `TZ=Asia/Kuala_Lumpur` (or another IANA timezone) in the deployment environment to choose the server calendar. The supplied Compose files pass `TZ` to both OMC and CPA and default to `UTC`. For a standalone container, pass `-e TZ=Asia/Kuala_Lumpur`. Native deployments otherwise use the operating system timezone.
+
+In **OMC Settings → Time zone**, the server zone is selected automatically and marked **Server time zone**. Every option includes its current UTC offset. A manual choice is persisted for the deployment; selecting the server zone restores the deployment default. Timestamp displays, calendar selections, daily totals and OMC service logs use this setting without rewriting stored instants. Keep CPA and OMC deployment timezones equal: CPA log lines without an offset are interpreted in that shared timezone. Raw log downloads and explicit UTC pricing-tier rules retain their source semantics.

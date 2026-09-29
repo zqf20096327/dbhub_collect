@@ -1,0 +1,63 @@
+<div align="center">
+  <img src="frontend/public/MoedeiroIcon.svg" alt="Moedeiro logo" width="112">
+  <h1>Moedeiro</h1>
+  <p><strong>Personal finance records, under your control.</strong></p>
+</div>
+
+Moedeiro turns everyday financial records into a clear view of your financial life. Track accounts in multiple currencies, organize every movement, set budgets, and understand where your money goes.
+
+Built for people who want the polish of a modern finance app with the control of self hosting.
+
+![Moedeiro dashboard showing balances, income, expenses, budgets and recent activity](docs/prints/home.png)
+
+## Activity
+
+![Moedeiro activity view with categorized financial events](docs/prints/activity.png)
+
+Record simple entries, itemized shopping lists and transfers between accounts. Powerful filters make it easy to find any movement by period, account, category or description.
+
+## Budgets
+
+![Moedeiro budget cards showing progress and status](docs/prints/budgets.png)
+
+Moedeiro follows real spending across category trees, highlights budgets that need attention and keeps completed periods available for comparison.
+
+## Cash flow
+
+![Moedeiro Sankey chart showing income and expense flows](docs/prints/sankey_chart.png)
+
+The interactive flow view transforms income and expenses into a visual map. Understand which categories shape your month and see the surplus left after spending.
+
+## Features
+
+* Multiple independent ledgers, accounts, and currencies
+* Hierarchical categories with custom icons and colors
+* Simple transactions, detailed shopping lists and account transfers
+* Custom period budgets
+* Balance history, cash flow analysis and Sankey visualization
+* Multilingual interface in Portuguese and English
+* Light and dark themes
+* Invitation-only registration, server-side sessions, and optional TOTP protection
+* Ledger-scoped external API access through Bearer tokens
+* Administrative CLI for invitations, users, ledger grants, external accesses, and cleanup
+* Automatic SQLite schema migrations with backups
+
+## Get started
+
+Start with the [installation guide](docs/installation.md). The remaining documentation covers everything needed to operate and understand the service:
+
+* [Environment variables](docs/environment.md)
+* [Reverse proxy](docs/reverse-proxy.md)
+* [Administrative CLI](docs/cli.md)
+* [Security and concurrency](docs/security.md)
+* [Domain model](docs/domain.md)
+
+> HTTPS is recommended when credentials cross an untrusted network. HTTP can be acceptable on a trusted local network, but anyone able to observe that network can read the credentials. For remotely reachable installations, terminate HTTPS in front of Moedeiro as described in the [reverse-proxy guide](docs/reverse-proxy.md).
+
+## Contributing
+
+Bug fixes, tests, documentation, and new translations are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, testing commands, and pull request guidance.
+
+## Third party assets
+
+Language flag graphics are provided by [Twemoji](https://github.com/jdecked/twemoji), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

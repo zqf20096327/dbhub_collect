@@ -1,0 +1,209 @@
+<p align="center">
+  <img src="assets/logo.png" style="max-width: 100%; height: auto;" alt="Entropix logo">
+</p>
+
+<h1 align="center">Entropix</h1>
+<p align="center">Real-time chaos tracking for your Discord server 🌀</p>
+
+<p align="center">
+  <img alt="License" src="https://img.shields.io/badge/license-MIT%20OR%20Apache--2.0-blue.svg">
+  <img alt="Rust" src="https://img.shields.io/badge/rust-2024-orange.svg">
+  <img alt="Status" src="https://img.shields.io/badge/status-pre--deploy-yellow.svg">
+  <img alt="Release Build" src="https://github.com/Devoid-Kun/Entropix/actions/workflows/build.yml/badge.svg">
+</p>
+
+---
+
+**Entropix** watches a text channel, computes a live "chaos index" from message
+velocity, punctuation spam, and caps usage, and renames the channel to reflect
+the current mood — then wraps it up with a daily digest of who talked the
+most, when things peaked, and who stayed silent.
+
+## 📖 Table of Contents
+
+- [How it works](#-how-it-works)
+- [Features](#-features)
+- [Tech stack](#-tech-stack)
+- [Getting started](#-getting-started)
+- [Configuration](#-configuration)
+- [Discord permissions](#-discord-permissions)
+- [Commands](#-commands)
+- [Database schema](#-database-schema)
+- [Project status](#-project-status)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+## ⚙️ How it works
+
+Every message in the target channel is scored on three signals — caps ratio,
+punctuation-spam density, and messages-per-minute velocity — and combined
+into a 0–100 chaos index. Crossing a stage boundary (calm / active /
+chaotic) triggers a channel rename, throttled by a 5-minute cooldown to stay
+well under Discord's own rate limit of two renames per ten minutes.
+
+<details>
+<summary>Chaos stages (default thresholds)</summary>
+
+| Stage | Range | Default name |
+|---|---|---|
+| 1 — Calm | 0–30 | `#🍵-calm` |
+| 2 — Active | 31–70 | `#⚡-active-discussion` |
+| 3 — Chaotic | 71–100 | `#💥-absolute-chaos` |
+
+Names are fully customizable per server via `/set_names`.
+</details>
+
+## ✨ Features
+
+- 🌀 Live chaos index, recalculated as messages arrive
+- 🔁 Automatic channel renaming with built-in cooldown protection
+- 📊 Daily digest — top chatters, peak activity hour, and a list of lurkers
+- 🌍 Localization — English and Russian out of the box
+- 🎛️ Per-server configuration, fully ephemeral slash commands (no chat clutter)
+
+## 🧱 Tech stack
+
+| Layer | Choice |
+|---|---|
+| Language | Rust (2024 edition) |
+| Discord API | [`serenity`](https://github.com/serenity-rs/serenity) + [`poise`](https://github.com/serenity-rs/poise) |
+| Async runtime | `tokio` |
+| Database | SQLite via `sqlx` |
+| Config / locales | `serde`, `serde_json` |
+
+## 🚀 Getting started
+
+```bash
+git clone https://github.com/Devoid-Kun/Entropix.git
+cd Entropix
+cp .env.example .env
+cargo run
+```
+>[!NOTE]
+>*On first startup, Entropix automatically creates bot.db and applies all
+pending migrations.*
+
+### Database development
+
+```bash
+cargo install sqlx-cli --no-default-features --features sqlite
+export DATABASE_URL="sqlite://bot.db"
+
+sqlx database create
+sqlx migrate run
+```
+>[!NOTE]
+>*DATABASE_URL is used by SQLx CLI to select the local database.*
+
+### Run the test suite and linter before pushing:
+
+```bash
+cargo test
+cargo clippy --all-targets -- -D warnings
+```
+
+## ⚙️ Configuration
+
+Entropix currently requires the following environment variable:
+
+| Variable | Required | Description |
+|---|---|---|
+| `DISCORD_TOKEN` | Yes | Discord bot token |
+
+The SQLite database is automatically created locally as `bot.db` if it does not already exist.
+
+## 🔐 Discord permissions
+
+Entropix requires the following Discord permissions:
+
+- View Channels
+- Send Messages
+- Embed Links
+- Manage Channels
+
+The bot needs `Manage Channels` to rename the monitored channel and
+`Send Messages` + `Embed Links` to deliver daily digests.
+
+### Required intents
+
+The following Gateway Intents must be enabled for the bot:
+
+- `GUILD_MESSAGES`
+- `MESSAGE_CONTENT`
+- `GUILD_MEMBERS`
+- `GUILDS`
+
+`MESSAGE_CONTENT` and `GUILD_MEMBERS` are privileged intents and must be
+enabled in the Discord Developer Portal.
+
+## 🎮 Commands
+
+| Command | Description |
+|---|---|
+| `/setup_target <channel>` | Set the channel Entropix monitors and renames |
+| `/setup_admin <channel>` | Set the channel that receives the daily digest |
+| `/set_language <en\|ru>` | Switch the bot's response language |
+| `/set_names <level> <name>` | Customize the channel name for a chaos stage (1–3) |
+| `/set_timezone <offset_hours>` | Set the UTC offset (e.g. `9` or `-5`) for this server's daily digest timing |
+| `/status` | Check the current chaos index |
+
+All commands reply **ephemerally** — only the person who ran them sees the response.
+
+## 🗄️ Database schema
+
+<details>
+<summary>guild_settings</summary>
+
+| Column | Type | Notes |
+|---|---|---|
+| `guild_id` | INTEGER PK | Discord snowflake |
+| `target_channel_id` | INTEGER | Monitored channel |
+| `admin_channel_id` | INTEGER | Digest destination |
+| `language` | TEXT | `en` / `ru` |
+| `custom_names_json` | TEXT | Per-stage name overrides |
+| `current_stage` | INTEGER | Last known chaos stage |
+| `last_renamed_at` | INTEGER | Unix timestamp, backs the rename cooldown |
+| `utc_offset_minutes` | INTEGER | UTC offset for this guild's local midnight, in minutes |
+| `last_digest_at` | INTEGER | Unix timestamp of the last sent digest, prevents duplicate sends |
+</details>
+
+<details>
+<summary>daily_stats</summary>
+
+| Column | Type | Notes |
+|---|---|---|
+| `id` | INTEGER PK | Autoincrement |
+| `guild_id` | INTEGER | FK → guild_settings |
+| `user_id` | INTEGER | Message author |
+| `message_time` | INTEGER | Unix timestamp |
+
+Purged automatically after each daily digest — Entropix never stores message
+content, only aggregate activity metadata.
+</details>
+
+## 🛣️ Project status
+
+- [x] Database schema & connection pool
+- [x] Guild configuration layer
+- [x] Localization (en/ru)
+- [x] Chaos index algorithm + unit tests
+- [x] Slash command scaffolding
+- [x] Wire commands + data into `main.rs`
+- [x] In-memory message buffer for live scoring
+- [x] Daily digest embed generation (top chatters, peak hour)
+- [x] Lurkers list in daily digest
+- [ ] Deployment
+
+## 🤝 Contributing
+
+This project is built collaboratively — see commit history for
+`Co-authored-by` credits. Pull requests target the `dev` branch.
+
+## 📄 License
+
+Licensed under either of
+
+- [MIT License](LICENSE-MIT)
+- [Apache License, Version 2.0](LICENSE-APACHE)
+
+at your option.

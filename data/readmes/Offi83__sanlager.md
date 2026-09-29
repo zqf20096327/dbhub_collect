@@ -1,0 +1,221 @@
+# SanLager
+
+[![Tests](https://github.com/Offi83/sanlager/actions/workflows/tests.yml/badge.svg)](https://github.com/Offi83/sanlager/actions/workflows/tests.yml)
+
+## Digitale Lagerverwaltung für Sanitätsmaterial
+
+**SanLager** ist eine schlanke Webanwendung zur Verwaltung von Sanitätsmaterial, z. B. bei einer HiOrg.
+
+Die Anwendung wurde speziell für den praktischen Einsatz im Sanitätslager entwickelt. Im Mittelpunkt stehen eine **einfache Bedienung**, eine **schnelle Bestandsübersicht** und die **Verwaltung von Mindesthaltbarkeitsdaten**.
+
+Das System soll jederzeit einen schnellen Überblick über den aktuellen Bestand ermöglichen. Hierzu wird das Material in Kisten gelagert, die mit einem QR-Code-Etikett beschriftet sind. Das Etikett lässt sich in der App erzeugen.
+
+![SanLager Schema](images/schema_lager.png)
+
+Es gibt eine an 800×480 px angepasste Ansicht für den Raspberry-Pi-Touchscreen.
+
+---
+
+## Funktionen
+
+**Buchen**
+* Scannen per Kamera, Hand-Scanner oder Tastatur
+* Ausbuchen oder Umbuchen in einen anderen Lagerort, dabei wird immer das älteste MHD zuerst genommen
+* Einlagern per Scan mit MHD, das für die folgenden Scans stehen bleibt
+* Menge vor dem Scan wählbar (z. B. 3 Packungen auf einmal), danach wieder 1
+* Orangefarbener Hinweis, wenn die gebuchte Charge bald abläuft
+* Alarm, wenn dabei abgelaufene Ware gebucht wurde: „Aussortieren“ nimmt die Buchung zurück und entsorgt die ganze abgelaufene Charge am Lagerort
+* Ton und Vibration (Android) als Rückmeldung beim Scannen, Ton je Gerät abschaltbar
+
+**Heute**
+* Ausbuchungen, Entsorgungen, Umbuchungen (nach Richtung gruppiert) und Einlagerungen des Tages in eigenen Abschnitten, oben jeweils die Anzahl
+* Fehlbuchungen können rückgängig gemacht werden – auch eine Einlagerung mit falschem MHD
+
+**Kontrolle**
+* Abgelaufenes und bald Ablaufendes je Lagerort und Kategorie, mit „Entsorgen“-Funktion
+* Auffüllliste: was je Lagerort unter dem Mindestbestand liegt – mit „Aus Hauptlager umbuchen“ bzw. beim Hauptlager „Einlagern“
+
+**Verwaltung**
+* Artikel mit Bestand, Mindestbestand, QR-Code und Etikettendruck; die Artikelliste zeigt je Artikel, ob er ein MHD hat
+* Sammeletiketten: mehrere Artikel oder eine ganze Kategorie auf A4-Bögen (2 × 4), mit „alle 1×“ je Kategorie oder für alle Artikel; die Etiketten sehen aus wie die vom Etikettendrucker (roter Kategorie-Balken, Name, Artikelnummer, QR-Code); gedruckt wird ein PDF, damit nichts verrutscht
+* Etikettendrucker (optional): Brother QL-Serie per WLAN oder USB, auch rot/schwarz, Rollenbreite und Etikettenlänge einstellbar – noch nicht mit echtem Gerät getestet (siehe [Etikettendrucker](docs/09-etikettendrucker.md))
+* MHD je Artikel abschaltbar, z. B. für Mullbinden – dann entfallen die MHD-Felder
+* Kategorien, Einheiten und Lagerorte anlegen und sortieren – Einheiten mit Einzahl und Mehrzahl („1 Rolle“, „5 Rollen“)
+* Je Lagerort eine Packliste zum Ausdrucken (Soll, Ist je MHD, Kästchen zum Abhaken) und eine Inventur: gezählte Mengen eintragen, Abweichungen werden als Korrektur gebucht
+
+**Außerdem**
+* Wöchentlicher Bericht per E-Mail
+* Touch-Bedienung, angepasst an das Raspberry-Pi-Display (800×480)
+* Läuft ohne Internet, die Daten liegen in einer lokalen SQLite-Datenbank
+* Unten auf jeder Seite die laufende Version (letztes GitHub-Release, bei späteren Pushs mit Datum und Uhrzeit)
+
+## ToDo
+
+* Etikettendrucker mit echtem Gerät testen (Brother QL-810Wc, rot/schwarz)
+* Test mit QR-Code-Scanner
+
+---
+
+## Screenshots
+
+Die Screenshots zeigen Beispieldaten im Format des Raspberry-Pi-Displays (800×480). Sie werden mit `./script/screenshots.sh` erzeugt (siehe [Entwicklung](docs/11-entwicklung.md#screenshots-aktualisieren)).
+
+Dieselben Beispieldaten liegen als fertige Datenbank unter [`beispieldaten/beispieldaten.sqlite`](beispieldaten/beispieldaten.sqlite) – zum Ausprobieren, ohne eigene Daten anzulegen (siehe [Beispieldatenbank](docs/11-entwicklung.md#beispieldatenbank)).
+
+*Buchen – hier eine Umbuchung vom Hauptlager in einen Rucksack. Auf Geräten mit Kamera erscheint zusätzlich „Scanner starten“.*
+![Buchen](images/buchen.png)
+
+*Heute – Ausbuchungen, Entsorgungen, Umbuchungen und Einlagerungen des Tages*
+![Heute](images/ausgebucht.png)
+
+*MHD-Übersicht – abgelaufenes und bald ablaufendes Material je Lagerort*
+![MHD-Übersicht](images/mhd.png)
+
+*Auffüllen – was je Lagerort unter dem Mindestbestand liegt und wie viel davon im Hauptlager vorhanden ist*
+![Auffüllen](images/auffuellen.png)
+
+*Artikelübersicht – rot: unter Mindestbestand*
+![Artikelübersicht](images/artikel.png)
+
+*Artikel mit QR-Code, Bestand und Mindestbestand je Lagerort*
+![Artikeldetail](images/artikel-detail.png)
+
+*Kategorien anlegen, sortieren und anpassen*
+![Kategorien](images/kategorien.png)
+
+*Lagerorte anlegen, sortieren und deaktivieren*
+![Lagerorte](images/lagerorte.png)
+
+*Inventur je Lagerort – gezählte Mengen eintragen, Abweichungen werden als Korrektur gebucht*
+![Inventur](images/inventur.png)
+
+*Packliste zum Ausdrucken – Soll, Ist je MHD und Kästchen zum Abhaken*
+![Packliste](images/packliste.png)
+
+*Sammeletiketten auf A4-Bögen (2 × 4), hier eine ganze Kategorie*
+![Etiketten](images/etiketten.png)
+
+*Mit Etikettendrucker (optional): Vorschau des Etiketts (rot/schwarz, 62 × 105 mm) und Druck ohne Druckdialog*
+![Etikettendrucker](images/etikettendrucker.png)
+
+*Wochenbericht per E-Mail*
+![Wochenbericht](images/wochenbericht.png)
+
+---
+
+## Aufbau
+
+SanLager besteht aus einer webbasierten Anwendung und optional einem fest installierten Lagerterminal.
+
+```text
+┌──────────────────────────────┐
+│          SanLager            │
+│        Webanwendung          │
+│                              │
+│        PHP / SQLite          │
+└──────────────┬───────────────┘
+               │
+               │ HTTPS
+               │
+┌──────────────▼───────────────┐
+│       Raspberry Pi           │
+│                              │
+│       7" Touchscreen         │
+│       Chromium Kiosk         │
+│                              │
+│      SanLager Terminal       │
+└──────────────────────────────┘
+```
+
+---
+
+## Dokumentation
+
+Die Dokumentation ist in einzelne Bereiche aufgeteilt – zuerst Einrichtung und Betrieb, dann die technischen Details.
+
+### 📖 Projekt
+
+Vorstellung, Funktionen und Aufbau stehen in diesem README: [Funktionen](#funktionen), [Aufbau](#aufbau), [Technologie](#technologie), [Ziel](#ziel).
+
+### 🛠️ Installation
+
+Schritt für Schritt: Pakete, Code und `.env`, Rechte, Apache, erster Aufruf und Aktualisieren per `script/pull.sh`:
+
+➡️ **[Installation](docs/05-installation.md)**
+
+### 💾 Datensicherung
+
+Tägliche, geprüfte Sicherung der Datenbank per Cron, Aufbewahrung und Wiederherstellung:
+
+➡️ **[Datensicherung einrichten](docs/06-datensicherung.md)**
+
+### 📧 Wochenbericht
+
+Einrichtung des wöchentlichen Berichts per E-Mail (SMTP-Zugang, Empfänger, Cron-Job):
+
+➡️ **[Wochenbericht einrichten](docs/07-wochenbericht.md)**
+
+### 🖥️ Raspberry Pi
+
+Raspberry Pi mit 7"-Touchdisplay als festes Buchungsterminal: Chromium im Kiosk-Modus mit automatischer Anmeldung und Autostart:
+
+➡️ **[Raspberry-Pi-Terminal einrichten](docs/08-raspberry-pi.md)**
+
+### 🏷️ Etikettendrucker
+
+Optional: Brother QL per WLAN oder USB, auch rot/schwarz – Installation von `brother_ql`, Anschluss, Rollen und Einstellungen:
+
+➡️ **[Etikettendrucker einrichten](docs/09-etikettendrucker.md)**
+
+### 🗄️ Datenbank
+
+Tabellen, Bewegungsarten und Migrationen:
+
+➡️ **[Datenbank](docs/10-datenbank.md)**
+
+### 🔧 Entwicklung
+
+Projektstruktur, Tests, Screenshots, Beispieldatenbank sowie `push.sh`/`pull.sh`:
+
+➡️ **[Entwicklung](docs/11-entwicklung.md)**
+
+---
+
+## Technologie
+
+SanLager verwendet bewusst einfache und robuste Technologien:
+
+* **PHP**
+* **SQLite**
+* **HTML / CSS**
+* **JavaScript**
+* **Raspberry Pi OS**
+* **Chromium**
+* **Git / GitHub**
+
+---
+
+## Lizenz
+
+SanLager ist freie Software unter der **GNU General Public License v3.0** (GPL-3.0-only), siehe [LICENSE](LICENSE).
+
+Mitgelieferte und verwendete Fremdbestandteile (u. a. der QR-Code-Scanner html5-qrcode unter Apache-2.0 und Symbole aus Lucide unter ISC) sind mit ihren Lizenzen in [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) aufgeführt; die Lizenztexte liegen unter [licenses/](licenses/).
+
+---
+
+## Ziel
+
+SanLager soll keine komplexe Warenwirtschaft sein.
+
+Die Anwendung konzentriert sich auf das, was im Sanitätslager tatsächlich benötigt wird:
+
+> **Was ist vorhanden, was läuft ab und was muss nachbeschafft werden?**
+
+Die Bedienung soll dabei so einfach sein, dass sie auch direkt im Lager über einen Touchscreen genutzt werden kann.
+
+---
+
+## Status
+
+SanLager befindet sich in der laufenden Entwicklung und wird schrittweise um weitere Funktionen ergänzt.
+

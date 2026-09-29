@@ -1,0 +1,953 @@
+# AWAH
+
+**WhatsApp gateway with a durable queue, a risk engine and clustered sessions.**
+
+*[Português](README.pt-BR.md)*
+
+[![CI](https://github.com/leoberchielli/awah/actions/workflows/ci.yml/badge.svg)](https://github.com/leoberchielli/awah/actions/workflows/ci.yml)
+[![Image](https://github.com/leoberchielli/awah/actions/workflows/image.yml/badge.svg)](https://github.com/leoberchielli/awah/actions/workflows/image.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/tests-419%20passing-brightgreen.svg)](#measured-not-asserted)
+[![Verified](https://img.shields.io/badge/verification-45%20checks-brightgreen.svg)](docs/VERIFICATION.md)
+[![Site](https://img.shields.io/badge/site-awah.99ia.com.br-5B5BD6.svg)](https://awah.99ia.com.br)
+[![Demo](https://img.shields.io/badge/demo-live-22a06b.svg)](https://awah-demo.99ia.com.br)
+
+**[Live demo](https://awah-demo.99ia.com.br)** — `admin@awah.demo` / `admin`, no
+sign-up. A running instance with a month of traffic in it: the real queue, the
+real risk engine, the real webhooks, and a simulator where the phone would be.
+[What is real and what is not](docs/demo.md).
+
+**[awah.99ia.com.br](https://awah.99ia.com.br)** — the same thing on one page, for anyone who has not decided to read a README yet.
+
+Most gateways answer *"how do I send a message"*. AWAH exists for the second
+question: **"how do I send ten thousand without losing any of them, and without
+losing the number"**.
+
+```bash
+curl -O https://raw.githubusercontent.com/leoberchielli/awah/main/docker-compose.yml
+docker compose up -d
+```
+
+Then open `http://localhost:2900`. There is no configuration file to write and
+no curl to run: the dashboard walks you through the first organization, the
+first number and the first integration.
+
+![The AWAH dashboard: delivery funnel, throughput, risk engine decisions, and a
+session's risk panel — ending with the whole interface switching language](docs/img/dashboard.gif)
+
+*Recorded against a live instance. The last few seconds are the panel changing
+language: it ships in ten, and the reasons a session dropped are translated too,
+not left in English inside a translated screen.*
+
+---
+
+## What happens to a message
+
+The part that separates this from a send button. Nothing is discarded — what
+does not pass now, waits, and says why.
+
+```mermaid
+flowchart LR
+    A["POST /messages"] --> B[("outbox<br/>Postgres")]
+    B -->|"202 accepted"| A
+
+    B --> C{"budget<br/>has a slot?"}
+    C -->|"no"| H["held<br/><i>with the reason<br/>and an ETA</i>"]
+    H -.->|"when the window opens"| C
+
+    C -->|"yes, reserved"| D{"score<br/>0–100"}
+    D --> E["human jitter<br/><i>typing, then a pause</i>"]
+    E --> F["engine"]
+
+    F -->|"refused"| G["retry with backoff"]
+    G --> B
+    G -->|"attempts exhausted"| I["dead letter<br/><i>queryable, replayable</i>"]
+
+    F -->|"sent"| J["ACK reconciliation<br/>sent → delivered → read"]
+    J --> K["signed webhook"]
+```
+
+The queue is the product. The API answers `202` the moment the row is durable,
+before any network I/O — so a process that dies loses nothing, which is
+[measured by killing one](docs/VERIFICATION.md).
+
+## Why the risk engine exists
+
+Unofficial engines get numbers banned. Every other guarantee here is worth
+nothing if the number stops existing on a Tuesday.
+
+The engine paces sending the way a person would, and the pace is not a constant
+— it opens as the number ages:
+
+```mermaid
+flowchart TD
+    subgraph W["Warm-up: the ceiling grows with the number's age"]
+        direction LR
+        D0["day 0<br/><b>5%</b><br/>1/min"] --> D3["day 3<br/><b>20%</b><br/>2/min"]
+        D3 --> D7["day 7<br/><b>40%</b>"]
+        D7 --> D14["day 14<br/><b>70%</b>"]
+        D14 --> D30["day 30<br/><b>100%</b><br/>12/min"]
+    end
+```
+
+A freshly paired number that sends a thousand messages on day one is the most
+obvious throwaway-account pattern there is. Those rates are
+[observed, not claimed](docs/BENCHMARK.md#the-warm-up-curve): three sessions
+identical except for their pairing date, given the same backlog.
+
+## How it is put together
+
+```mermaid
+flowchart TB
+    subgraph CLIENT["Your system"]
+        SDK["TypeScript SDK<br/><i>or plain HTTP</i>"]
+    end
+
+    subgraph AWAH["AWAH — N replicas behind a load balancer"]
+        API["REST API + dashboard<br/><i>same origin, same port</i>"]
+        RISK["risk engine"]
+        SCHED["scheduler<br/><i>FIFO per conversation</i>"]
+        WH["webhook dispatcher<br/><i>HMAC, retry, DLQ</i>"]
+    end
+
+    subgraph STATE["State"]
+        PG[("Postgres<br/><i>outbox, messages,<br/>encrypted auth state</i>")]
+        RD[("Redis<br/><i>leases, budget windows</i>")]
+    end
+
+    subgraph ENGINES["Engines, one contract"]
+        BAI["Baileys<br/><i>unofficial, free</i>"]
+        CLOUD["Cloud API<br/><i>official, billed</i>"]
+        SIM["simulator<br/><i>for testing</i>"]
+    end
+
+    SDK --> API
+    API --> PG
+    SCHED --> RISK
+    RISK --> RD
+    SCHED --> PG
+    SCHED --> BAI & CLOUD & SIM
+    BAI & CLOUD & SIM --> WH
+    WH --> SDK
+    API -.->|"ownership lease"| RD
+```
+
+A session belongs to one replica at a time, through a lease in Redis. When that
+replica dies, another notices and takes it over — which is also
+[checked by killing one](docs/VERIFICATION.md#killing-things).
+
+---
+
+> [!WARNING]
+> **Read this before using it.** Unofficial engines (Baileys, whatsapp-web.js,
+> whatsmeow) work by reverse-engineering the protocol and **violate WhatsApp's
+> terms of service**. There is a real and permanent risk of the account being
+> banned.
+>
+> - Use a dedicated number. Never your personal one, never the company's
+>   critical number.
+> - The risk engine lowers the odds of a ban. It **guarantees nothing**.
+> - For serious commercial load, use the `cloud_api` engine — Meta's official
+>   one, no ban risk, billed per conversation.
+>
+> This project is not affiliated with, associated with, or endorsed by WhatsApp
+> or Meta.
+
+---
+
+## Status
+
+**Waves 0 through 12 are done.** The session connects and pairs, sending goes
+through a durable queue with ordering guaranteed per conversation, the risk
+engine paces sending to protect the number, events go out over signed webhooks,
+the gateway runs across several replicas with automatic failover, the operation
+is measurable from a dashboard served by the API itself, and Meta's official
+engine runs behind the same contract as Baileys. Wave 8 closed the set with the
+SDK, the documentation and configuration hardening. **What is missing for v1.0
+is not code: it is use at scale.**
+
+| Wave | Delivered | Status |
+| --- | --- | --- |
+| 0 | Schema, migrations, authentication, RBAC, CI, Docker | ✅ |
+| 1 | Baileys adapter, session lifecycle, auth state in Postgres | ✅ |
+| 2 | Outbox, scheduler, webhooks, retry, DLQ | ✅ |
+| 3 | Risk engine: budgets, warm-up, adaptive throttle | ✅ |
+| 4 | Cluster: leases, command routing, failover | ✅ |
+| 5 | Telemetry, hourly aggregates, `/metrics`, tracing | ✅ |
+| 6 | React dashboard: operations, business and sessions | ✅ |
+| 7 | Cloud API adapter behind the same contract | ✅ |
+| 8 | Documentation, TypeScript SDK, hardening | ✅ |
+| 9 | Native Chatwoot and Typebot connectors | ✅ |
+| 10 | Adoption without curl: dashboard setup and connection wizards | ✅ |
+| 11 | HTTP connector: plug in any platform without a new connector | ✅ |
+| 12 | Published image, multi-architecture, with provenance | ✅ |
+
+> **This has now run against real numbers.** Four of them, roughly 3,700
+> messages through the Baileys engine, with signed webhooks running throughout
+> and the risk engine pacing the sending. No number was blocked.
+>
+> Everything upstream of the last hop is measured separately, against a
+> `simulator` engine that sits behind the same contract as Baileys — the queue,
+> the per-conversation ordering, the retry path and the risk engine under
+> concurrency. See **[the benchmark](docs/BENCHMARK.md)**, which is generated by
+> a script in this repository and which you can re-run yourself.
+>
+> **What is still missing is scale and time.** Four numbers and a few thousand
+> messages say the path works; they do not say it holds at ten times the volume,
+> and nothing here can yet tell you how WhatsApp treats a number over months.
+> The mechanics are covered by 419 tests, and a test is still a test.
+
+## Measured, not asserted
+
+Four of the claims on this page are cheap to write and expensive to verify, so
+there is a script that verifies them and writes down what it found:
+
+```bash
+node scripts/benchmark.mjs --url http://localhost:2900 --key "$AWAH_KEY"
+```
+
+It produces **[docs/BENCHMARK.md](docs/BENCHMARK.md)**. From the last run:
+
+| | |
+|---|---|
+| Out-of-order sends within a conversation, first attempt | **0** of 192 pairs |
+| Refused sends recovered by the retry path | **all of them**, none reached the DLQ |
+| Ingest through `POST /v1/sessions/:id/messages` | **~450 sends/s** |
+| Warm-up: day 0 · day 3 · day 30 | **1.2 · 2.4 · 14.4** sends/min, against ceilings of 1 · 2 · 12 |
+
+The last row is the one worth reading twice. Three sessions identical except
+for their pairing date, given the same backlog: the curve holds each of them to
+its own ceiling. That is the difference between a risk engine and a rate limit
+in a README.
+
+Every number comes from the `simulator` engine, which stands in for the last
+hop only. They describe the gateway; they do not describe WhatsApp. The report
+says so at the top and explains what is still unmeasured.
+
+### And the ones that are not about speed
+
+A second script asks whether the guarantees hold at all, and records what it
+saw rather than only whether it was happy:
+
+```bash
+node scripts/verify.mjs --url http://localhost:2900 --key "$AWAH_KEY" \
+  --email you@example.com --password ...
+node scripts/verify-cluster.mjs --key "$AWAH_KEY"   # needs the cluster profile
+```
+
+**[docs/VERIFICATION.md](docs/VERIFICATION.md)** — 45 checks over ten groups,
+each with its evidence: a viewer key refused a session, a scoped key answered
+404 rather than 403 for a session outside its scope, a webhook signature
+recomputed from the body and the secret, a delivery refused twice and landed on
+the third attempt, another that never landed and ended in the dead queue where
+a replay brought it back, sixty messages surviving `docker kill` mid-drain with none
+stuck and none lost, and a session taken over by the surviving replica after
+its owner was killed.
+
+The second script drives Docker, because durability and failover cannot be
+checked without stopping a process — and a graceful stop is the easy case, so
+it uses SIGKILL.
+
+## Documentation
+
+| Document | About |
+| --- | --- |
+| [docs/demo.md](docs/demo.md) | The public demo: what is real in it, what is simulated, and how to run one |
+| [docs/getting-started.md](docs/getting-started.md) | From zero to a conversation in Chatwoot, with no curl at all |
+| This README | What the project does and how to use each part |
+| [docs/BENCHMARK.md](docs/BENCHMARK.md) | Ordering, retries, throughput and the warm-up curve, measured |
+| [docs/VERIFICATION.md](docs/VERIFICATION.md) | 45 checks against a live instance, each with its evidence |
+| [docs/integrations.md](docs/integrations.md) | Wiring up Chatwoot and Typebot, and what the gateway adds to them |
+| [docs/any-platform.md](docs/any-platform.md) | The HTTP connector: n8n, Make, serverless, your own system |
+| [docs/production.md](docs/production.md) | Ship it and don't regret it: TLS, backup, replicas, monitoring |
+| [docs/troubleshooting.md](docs/troubleshooting.md) | The symptoms that actually show up, and what each one usually is |
+| [packages/sdk](packages/sdk/README.md) | TypeScript client, no dependencies |
+| [SECURITY.md](SECURITY.md) | Threat model and how to report a vulnerability |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How to help, and what helps most right now |
+| [site/](site/README.md) | The landing page at awah.99ia.com.br, and how to publish it |
+
+With the instance up, `/docs` carries the interactive reference for every route.
+
+## Bringing it up
+
+Before installing anything, the demo answers most of what a README cannot:
+**[awah-demo.99ia.com.br](https://awah-demo.99ia.com.br)**, signing in with
+`admin@awah.demo` / `admin`. It also runs locally, and it is a real instance —
+only the engine is simulated:
+
+```bash
+curl -O https://raw.githubusercontent.com/leoberchielli/awah/main/docker-compose.demo.yml
+docker compose -f docker-compose.demo.yml up -d
+```
+
+For a gateway of your own, without cloning anything:
+
+```bash
+curl -O https://raw.githubusercontent.com/leoberchielli/awah/main/docker-compose.yml
+```
+
+```bash
+docker compose up -d
+```
+
+The image comes ready from the registry — multi-architecture, amd64 and arm64,
+so it runs the same on a cheap VPS, on an Apple Silicon Mac or on a Raspberry
+Pi.
+
+That brings up Postgres and Redis, applies the migrations and starts the API on
+`http://localhost:2900`. Open it in the browser: the first time it shows the
+setup screen, where you create the organization and your user. It closes itself
+after that, and new users come in by invitation from then on.
+
+From there it is three steps, all in the dashboard: pair the number in the
+**Sessions** tab, connect the tool in the **Integrations** tab, and follow it in
+**Operations**. The full walkthrough is in
+[docs/getting-started.md](docs/getting-started.md); the interactive API
+documentation, at `/docs`.
+
+## Development
+
+```bash
+pnpm install
+```
+
+Bring up only the dependencies and run the API on the host, with hot reload:
+
+```bash
+docker compose up -d postgres redis
+```
+
+```bash
+cp .env.example .env
+```
+
+Generate the two secrets and put them in `.env`:
+
+```bash
+openssl rand -base64 32
+```
+
+```bash
+openssl rand -base64 48
+```
+
+Apply the migrations and start:
+
+```bash
+pnpm db:migrate && pnpm dev
+```
+
+### Running from source
+
+`docker-compose.yml` pulls the published image, which is the path for anyone who
+just wants to try it out. To build your own, add the override:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+```
+
+Or put `COMPOSE_FILE=docker-compose.yml:docker-compose.dev.yml` in your `.env`
+and go back to plain `docker compose up -d`.
+
+### Commands
+
+| Command | What it does |
+| --- | --- |
+| `pnpm dev` | API with hot reload |
+| `pnpm dev:web` | Dashboard on `:2891`, proxying to the API |
+| `pnpm test` | Unit tests |
+| `pnpm typecheck` | Type checking |
+| `pnpm lint` | Lint and formatting (Biome) |
+| `pnpm db:generate` | Generates a migration from the schema |
+| `pnpm db:migrate` | Applies pending migrations |
+| `pnpm db:studio` | Opens Drizzle Studio |
+| `pnpm build` | Builds API, dashboard and SDK |
+
+## Connecting a number
+
+The dashboard does it without curl: create the session, start it, and the
+pairing panel opens with the code and the four steps to follow on the phone.
+
+![Pairing a number: the QR code beside the four steps, and the session showing
+as Pairing until the phone accepts](docs/img/pairing.gif)
+
+The code refreshes on its own and the panel closes itself the moment the phone
+accepts. The QR above is long dead — that session was deleted right after the
+recording.
+
+If you would rather do it from a terminal, the QR rotates every few seconds, so
+fetch it after the START:
+
+```bash
+curl -X POST http://localhost:2900/v1/sessions -H "Authorization: Bearer $AWAH_KEY" -H 'content-type: application/json' -d '{"name":"support"}'
+```
+
+```bash
+curl -X POST http://localhost:2900/v1/sessions/$ID/start -H "Authorization: Bearer $AWAH_KEY"
+```
+
+```bash
+curl http://localhost:2900/v1/sessions/$ID/qr -H "Authorization: Bearer $AWAH_KEY"
+```
+
+The response carries the QR as raw text and as a PNG in a `data:` URI, ready for
+an `<img>` tag. If you would rather have a code than a QR, use
+`POST /v1/sessions/$ID/pairing-code` with the number in digits.
+
+| Route | What it does |
+| --- | --- |
+| `POST /v1/sessions` | Creates the session record |
+| `POST /v1/sessions/:id/start` | Opens the connection |
+| `POST /v1/sessions/:id/stop` | Disconnects, preserving credentials |
+| `POST /v1/sessions/:id/logout` | Removes the device from the handset and wipes credentials |
+| `GET /v1/sessions/:id/qr` | QR for the pairing in progress |
+| `POST /v1/sessions/:id/pairing-code` | 8-digit code, an alternative to the QR |
+| `GET /v1/sessions/:id/events` | Connection and drop timeline, with a plain-language cause |
+| `GET /v1/engines` | Capability matrix per engine |
+
+### When a session drops
+
+`GET /v1/sessions/:id/events` returns the raw protocol code next to the cause in
+plain language. The difference matters: `428` is a socket drop that recovers on
+its own, `440` means the credential was opened somewhere else and insisting
+makes it worse, and `401` means the handset unlinked the device and only a new
+pairing fixes it. The gateway reconnects on its own only in the cases where
+reconnecting helps — with exponential backoff and jitter, so that ten sessions
+dropping together do not all come back in the same millisecond.
+
+A session that will not pair: set `ENGINE_LOG_LEVEL=debug` and restart.
+
+## Sending a message
+
+```bash
+curl -X POST http://localhost:2900/v1/sessions/$ID/messages -H "Authorization: Bearer $AWAH_KEY" -H 'content-type: application/json' -d '{"chatId":"5511987654321","text":"olá","clientMessageId":"pedido-4821"}'
+```
+
+It answers **202, not 200** — and the difference is the project's thesis. The
+message was persisted, not delivered. Promising delivery in a synchronous
+response would be a lie: WhatsApp may be down, the session may have dropped, and
+since wave 3 the risk engine may hold the send on purpose. The real state lives
+in `GET /v1/outbox/:id` and in the webhooks.
+
+**`clientMessageId` is your idempotency key.** Sending the same value again
+returns the original send with `duplicate: true` and produces no second message
+— a retry on your side, after a network timeout, is safe by construction. If you
+omit it, AWAH generates one.
+
+`chatId` accepts the number with country code, or the full JID.
+
+### What the queue guarantees
+
+- **Ordering per conversation.** Within a chat, messages leave in the order they
+  came in, and there are never two simultaneous sends to the same recipient.
+  Different chats run in parallel. The one exception is a send the engine
+  refuses: it goes back to the queue with a backoff and the next message in that
+  conversation takes the head, rather than stalling the whole conversation for
+  the hour its attempts take to run out. The
+  [benchmark](docs/BENCHMARK.md#ordering-within-a-conversation) measures both
+  the guarantee and that exception.
+- **Nothing is lost.** The row exists in the database before any network I/O. If
+  the process dies midway, the message goes out later.
+- **Unavailability is not failure.** A session that dropped, or is still
+  pairing, returns the send to the queue without consuming an attempt. Only a
+  real delivery error counts.
+- **Nothing is discarded.** Once the attempts run out, the message goes to the
+  DLQ and stays queryable at `GET /v1/outbox?status=dead`, with replay via
+  `POST /v1/outbox/:id/retry`.
+
+## Risk engine
+
+It is the reason the project exists. Every send passes through it, between the
+reservation in the queue and the engine call.
+
+**It never discards a message.** When the budget is spent, the send goes back to
+the queue carrying the time the window opens — and that time is real, computed
+from the oldest send still inside the window. When the behavior starts to look
+like a mass blast, the pace drops. Refusing is not one of the options.
+
+### Budget
+
+Sliding windows per session — minute, hour, day — plus a separate cap on **new
+contacts per day**, which is the strongest spam signal WhatsApp reads. A sliding
+window and not a fixed-hour bucket: a bucket would let you send the whole cap at
+13:59 and the whole cap again at 14:00.
+
+### Number warm-up
+
+A freshly paired number starts at **5% of the cap** and reaches 100% over thirty
+days, on an interpolated ramp. The limits you configure are the target, not
+today's value:
+
+```bash
+curl -X PUT http://localhost:2900/v1/sessions/$ID/risk/limits -H "Authorization: Bearer $AWAH_KEY" -H 'content-type: application/json' -d '{"perMinute":30,"perDay":5000}'
+```
+
+Setting 5000 per day on a session paired today gives you 250 in practice. That
+is deliberate.
+
+### Score 0–100
+
+Four signals, each with its own weight and its own reason:
+
+| Signal | Weight | Why |
+| --- | --- | --- |
+| One-sided conversation | 35 | People talk in both directions; a bot only talks |
+| New contacts | 25 | Talking to a lot of strangers is what gets you reported |
+| Delivery failure | 25 | Points to a bought or stale list |
+| Speed | 15 | Reacts before the cap is hit |
+
+Above 40 the pace starts to drop; above 90 it goes to 10% of throughput. It
+never reaches zero — stopping on its own would be indistinguishable from a bug.
+
+```bash
+curl http://localhost:2900/v1/sessions/$ID/risk -H "Authorization: Bearer $AWAH_KEY"
+```
+
+The response carries the score with each factor's contribution, the consumption
+of the windows and the limits in force. `GET /v1/risk/events` keeps every
+decision with a snapshot of the budget at that instant — it answers why one
+specific send was late, months later.
+
+### Human behavior
+
+A log-normal interval between sends (most of them near the median, with the
+occasional long pause) and a typing presence proportional to the text before
+each message. A uniform interval produces a regular pattern, which is exactly
+what is being avoided.
+
+### Override
+
+```bash
+curl -X POST .../messages -H 'x-awah-bypass-risk: true' ...
+```
+
+Cuts the line, on the caller's own responsibility. It is recorded in
+`risk_events` like any other decision.
+
+`RISK_ENGINE_ENABLED=false` turns everything off. Only use it with a disposable
+number.
+
+## SDK
+
+```bash
+npm install @awah/sdk
+```
+
+```ts
+import { Awah } from '@awah/sdk'
+
+const awah = new Awah({ baseUrl: 'https://awah.yourcompany.com', apiKey: process.env.AWAH_KEY! })
+
+await awah.messages.sendText(sessionId, {
+  chatId: '5511987654321',
+  text: 'olá',
+  clientMessageId: 'pedido-4821',
+})
+```
+
+No dependencies, built on `fetch` and WebCrypto — it runs on Node, Deno, Bun,
+Cloudflare Workers and in the browser. It retries `408`, `429`, `5xx` and
+network failures on its own, and does not retry the other `4xx`, because sending
+again produces the same rejection.
+
+**It generates the `clientMessageId` when you do not pass one**, and that is
+what makes the automatic retry safe: without an idempotency key, repeating a
+POST after a network timeout would send the same message twice to the end
+customer.
+
+It also carries webhook signature verification, which is the piece that most
+often goes wrong when implemented by hand. Details in
+[packages/sdk](packages/sdk/README.md).
+
+## Webhooks
+
+```bash
+curl -X POST http://localhost:2900/v1/webhooks -H "Authorization: Bearer $AWAH_KEY" -H 'content-type: application/json' -d '{"url":"https://seu-sistema/hook","events":["*"]}'
+```
+
+Events: `message.received`, `message.sent`, `message.status`, `message.failed`,
+`session.status`. The secret appears **exactly once**, in the creation response.
+
+Every delivery carries `x-awah-signature` (`sha256=…`) and `x-awah-timestamp`.
+The signature covers `timestamp.body`, not just the body — so a captured
+delivery cannot be replayed later: changing the timestamp to escape the window
+invalidates the signature.
+
+```js
+const expected = 'sha256=' + createHmac('sha256', secret).update(`${timestamp}.${body}`).digest('hex')
+```
+
+Deliveries have exponential backoff and a dead-letter queue of their own,
+queryable at `GET /v1/webhooks/deliveries?status=dead` and reprocessable at
+`POST /v1/webhooks/deliveries/replay`. A 4xx response that is not 408 or 429
+goes straight to the dead-letter queue — retrying does not fix a rejected
+payload.
+
+## Dashboard
+
+The dashboard is served by the API itself, on the same origin. This is not a
+packaging detail: it is what lets the dashboard credential be an `httpOnly`
+cookie instead of a token kept in `localStorage`. On separate origins the
+browser would require `SameSite=None`, and the cookie would start traveling on
+third-party requests — exactly what it is supposed to prevent.
+
+Sign in at `http://localhost:2900` with the user created at `register`. An API
+key does not get you in here, and that is deliberate: a key pasted into the
+browser is within reach of every installed extension.
+
+| Tab | What it answers |
+| --- | --- |
+| **Operations** | Is everything up? Are messages going out? Is risk holding anything back? |
+| **Business** | How much conversation there is, how much gets answered, and how fast |
+| **Sessions** | Pair, start, stop, and see the risk and drop history of each number |
+| **Integrations** | Connect Chatwoot, Typebot or any HTTP endpoint, and test it before trusting it |
+| **Keys** | Issue an API key, scope it to specific sessions, revoke it |
+| **Users** | Add people, change roles, remove access |
+
+The time window and the session filter live in the **URL**. An operator who sees
+something odd sends the link to a colleague and the colleague opens exactly the
+same screen, instead of "click 7 days, then filter by...".
+
+The dashboard highlights one specific divergence: a session with
+`desired_state=running` that is not running. That is the state that costs money
+in silence — the queue keeps accepting messages and nothing goes out.
+
+### On visual legibility
+
+State is shape **and** color: every pill carries a dot on top of its hue,
+because color blindness is common and a dashboard that speaks only in color
+shuts out part of the people operating it. Every number is in a monospaced font
+with tabular digits — a column that does not dance when the value changes. Light
+theme, dark theme, and "the system one", which is the default.
+
+### Seeing the dashboard with data
+
+A fresh instance shows an empty dashboard, which is correct and not very
+informative. To check the charts before you have real traffic:
+
+```bash
+docker compose exec -T postgres psql -U awah -d awah -f /dev/stdin < apps/api/scripts/seed-demo-metrics.sql
+```
+
+This is **synthetic data**, written only into `metrics_hourly`. The same file
+carries the `DELETE` that removes it.
+
+### Serving it from somewhere else
+
+The API looks for the build in `public`, `apps/api/public`, `../web/dist` and
+`apps/web/dist`, in that order, and starts without a dashboard if it finds none
+— the API is useful on its own. `DASHBOARD_DIR` points at an explicit directory
+and beats all of them.
+
+## Meta's official engine
+
+The point of the `cloud_api` adapter is not the Cloud API itself — it is that it
+fits into the same `EngineAdapter` as Baileys. With both behind the same
+contract, whoever integrates writes the code once and moves from the unofficial
+to the official one by changing a single line: start cheap and exposed to bans,
+end up expensive and shielded, without rewriting anything.
+
+```bash
+curl -X POST http://localhost:2900/v1/sessions -H "Authorization: Bearer $AWAH_KEY" -H 'content-type: application/json' -d '{"name":"oficial","engine":"cloud_api"}'
+```
+
+```bash
+curl -X PUT http://localhost:2900/v1/sessions/$ID/credentials -H "Authorization: Bearer $AWAH_KEY" -H 'content-type: application/json' -d '{"phoneNumberId":"1098...","accessToken":"EAAG...","verifyToken":"a-secret-of-your-own","appSecret":"the-meta-app-secret"}'
+```
+
+The response returns the URL to register in the Meta app. The credentials are
+encrypted in the same table as the Baileys auth state, and not in
+`sessions.config`: the token allows sending messages on the company's behalf and
+reading its conversations — it is a credential, not configuration. No API read
+ever returns the token.
+
+**There is no pairing and no socket.** "Connecting" means confirming that the
+token reaches the number, and failing right there is the point: without that
+check, a wrong credential would only surface on the first message, already
+inside the queue and counting as a delivery failure. Messages arrive by webhook,
+at the `/webhooks/meta/:id` endpoint.
+
+### What changes when you switch engines
+
+`GET /v1/engines` publishes the matrix. The summary:
+
+| | `baileys` | `cloud_api` |
+| --- | --- | --- |
+| QR pairing | yes | no — it is a token |
+| Groups | yes | no |
+| Typing presence | yes | does not exist in the API |
+| Free-form conversation | always | only inside the 24 h window |
+| Ban risk | real | none |
+| Cost | zero | per conversation, billed by Meta |
+
+Outside the 24 h window the Cloud API only accepts an approved template. Meta's
+`131047` error is translated into that sentence instead of leaking the code —
+without the translation, whoever integrates sees a number and concludes the
+credential broke.
+
+### Webhook security
+
+Meta's callback is the system's **only public endpoint**: the caller is their
+infrastructure, with no API key. The whole defense is in the signature, which is
+why `appSecret` is mandatory — without it there would be an anonymous path for
+injecting fake messages into any customer's account. The check is an HMAC over
+the **raw bytes** of the body, not over re-serialized JSON: re-serializing
+produces similar bytes, not identical ones, and the HMAC would fail
+intermittently and inexplicably.
+
+## Integrations
+
+AWAH has no inbox and no flow builder, and that is a decision, not a gap.
+Chatwoot already solves human support; Typebot already solves flows; any other
+platform comes in through the HTTP connector. What all of them lack is precisely
+what the gateway has:
+
+| | Wired straight to Meta | With AWAH underneath |
+| --- | --- | --- |
+| Ordering per conversation | no guarantee | FIFO per chat, chats in parallel |
+| Lost message | fire and forget | durable queue, retry, DLQ with replay |
+| Send pace | whatever the tool decides | budget, warm-up and adaptive brake |
+| Duplicate redelivery | sends it again | idempotency by key |
+| Delivery state | "I sent it" | sent → delivered → read funnel |
+
+Connecting takes two fields: the Chatwoot address and an access token. The
+gateway discovers the rest — the account, the inboxes that exist — and **creates
+the API inbox with the webhook already pointed at itself**. Digging the
+`accountId` out of the URL, digging the `inboxId` out of the URL and going back
+there to paste the webhook were the three steps that made most people give up;
+none of them exist anymore.
+
+The connection is tested before it is saved: a wrong credential stored in
+silence would only surface on a real customer's first message.
+
+Typebot asks only for the flow's **share link** — the address and the id come
+out of it.
+
+```bash
+curl -X PUT http://localhost:2900/v1/sessions/$ID/integrations/typebot -H "Authorization: Bearer $AWAH_KEY" -H 'content-type: application/json' -d '{"shareUrl":"https://typebot.io/meu-fluxo"}'
+```
+
+### Any other platform
+
+The two connectors above exist because they are the most common cases. For the
+rest there is the **HTTP connector**: the gateway posts every received message
+to your URL and sends back whatever the response carries.
+
+```bash
+curl -X PUT http://localhost:2900/v1/sessions/$ID/integrations/http -H "Authorization: Bearer $AWAH_KEY" -H 'content-type: application/json' -d '{"url":"https://n8n.example.com/webhook/support","secret":"a-good-and-long-secret"}'
+```
+
+Answer `{"reply":"texto"}` and the message goes out. Answer empty and nothing
+goes out — valid for anyone who only wants to log. With that, n8n, Make, a
+serverless function or the in-house system become the bot, without anyone
+writing a new connector in here.
+
+**This is not the same as a webhook.** A webhook notifies and forgets: its
+response is ignored. The connector asks and gets an answer, and what comes back
+enters through the same queue as any other send — with ordering per
+conversation, risk engine and redelivery. An n8n flow wired straight to Meta has
+none of that.
+
+The dashboard has a **Test** button that sends a sample event and shows the
+status, the timing, the raw body and — when the response does not turn into a
+message — the reason. Recipes for each platform in
+[docs/any-platform.md](docs/any-platform.md).
+
+The two coexist in the same session, which is the most useful arrangement:
+Typebot answers first, and when the customer types **atendente** the flow goes
+quiet and the agent takes over a conversation that already has the whole
+history.
+
+Details, including what is not redelivered and why, in
+[docs/integrations.md](docs/integrations.md).
+
+## Metrics
+
+Four families, one route each. All of them read from the hourly aggregates,
+never from the raw tables — that is what keeps the dashboard fast as the
+database grows.
+
+| Route | Answers |
+| --- | --- |
+| `GET /v1/kpi/sessions` | Uptime, drops with a plain-language cause, MTBF per session |
+| `GET /v1/kpi/delivery` | sent→delivered→read funnel, p50/p95/p99 latency, queue, DLQ |
+| `GET /v1/kpi/risk` | Engine decisions, new contacts, score series |
+| `GET /v1/kpi/business` | Volume per hour, active conversations, time to first response, top contacts |
+
+They accept `?hours=` (default 24, up to 720) and `?sessionId=`.
+
+**Latency by percentile, not by average.** The distribution has a long tail:
+most messages arrive in seconds and some take minutes because the recipient had
+no network. The average makes that behavior disappear; the p95 shows it.
+
+### Prometheus
+
+```bash
+curl http://localhost:2900/metrics -H "Authorization: Bearer $METRICS_TOKEN"
+```
+
+Business series (`awah_messages_sent_total`, `awah_outbox_depth`,
+`awah_risk_decisions_total`, `awah_send_duration_seconds`) and process series
+(heap, GC, event loop lag). Every series carries the `node` label, to tell
+replicas apart within the same scrape.
+
+Set `METRICS_TOKEN`: without it, the URL hands message volume, session count and
+the health of the operation to anyone who can reach the port.
+
+### Tracing
+
+The code is instrumented with **the OpenTelemetry API only** — a few kilobytes,
+and with no SDK registered every call becomes a no-op. Bundling the full SDK
+would charge everyone tens of megabytes, including people who will never look at
+a trace. Anyone who wants it plugs it in at boot:
+
+```bash
+node --require ./otel.js apps/api/dist/index.js
+```
+
+## The image
+
+`ghcr.io/leoberchielli/awah` — multi-architecture (amd64 and arm64), published
+by CI on every push.
+
+| Tag | What it is |
+| --- | --- |
+| `latest` | The latest tagged release. This is the one you want. |
+| `edge` | Tip of the main branch. It can break. |
+| `1.2.3`, `1.2`, `1` | The exact version and its ranges |
+| `sha-abc1234` | A specific commit, to pin without ambiguity |
+
+Every publish carries a signed **provenance attestation**, verifiable with `gh`:
+
+```bash
+gh attestation verify oci://ghcr.io/leoberchielli/awah:latest --owner leoberchielli
+```
+
+This is not ceremony: whoever runs a WhatsApp gateway has their own customers'
+credentials inside it, and checking where the binary came from before bringing
+it up is the bare minimum.
+
+`GET /health` returns the image's version and commit — the first question in any
+support conversation, answered without opening the container.
+
+## Cluster
+
+Bring up as many replicas as you want, all pointing at the same Postgres and
+Redis. There is no primary node, no coordinator and no election — they all run
+the same code.
+
+```bash
+docker compose --profile cluster up -d
+```
+
+**Ownership by lease.** Each session belongs to one node at a time, through a
+Redis key with a 15 s TTL renewed every 5 s. This is not an optimization: two
+replicas with the same auth state open two sockets to the same number, and
+WhatsApp drops both of them alternately with 440 — the most confusing symptom in
+the protocol.
+
+**Automatic failover.** If the owning node dies, nobody renews, the lease
+expires and another replica takes over. Measured in a test with `SIGKILL`:
+**~20 seconds** until the session is back up, with no intervention.
+
+What makes this possible is the wave 1 decision — the Baileys auth state lives
+in Postgres, encrypted. While the credentials sit on one node's disk, no other
+replica can take over anything.
+
+**Intent separated from state.** `desired_state` holds where the operator wants
+the session; `status` holds where it actually is. Failover only revives what is
+`running` — a session you stopped stays stopped.
+
+**Routed commands.** Stopping, logging out and asking for a pairing code all
+require a live socket. Arriving at the wrong replica, the command travels to the
+owner over pub/sub and comes back with the result. Without this, those
+operations would work or not depending on which node the load balancer picked.
+
+**Shared QR.** Published to Redis by the owner, read by any replica.
+
+| Variable | Default | What it does |
+| --- | --- | --- |
+| `NODE_ID` | hostname | The replica's identity in the cluster |
+| `LEASE_TTL_MS` | 15000 | How long ownership survives without renewal |
+| `LEASE_RENEW_MS` | 5000 | Renewal interval |
+| `FAILOVER_SCAN_MS` | 10000 | Sweep for orphaned sessions |
+| `COMMAND_TIMEOUT_MS` | 10000 | Wait for a response from another node |
+
+## Architecture
+
+```
+apps/api
+  auth/           credentials, RBAC, permission guard
+  cluster/        lease, command routing, failover
+  dashboard/      dashboard static files and client-route fallback
+  engines/        EngineAdapter contract + Baileys and Cloud API
+  integrations/   Chatwoot, Typebot and generic HTTP connectors
+  sessions/       lifecycle, reconnection, per-node ownership
+  messaging/      outbox, scheduler, persistence, retention
+  risk/           budget, warm-up, score, jitter
+  telemetry/      hourly aggregates, Prometheus, tracing
+  webhooks/       signing, delivery, dead-letter queue
+  workers/        background processes
+  repos/          data access scoped by tenant
+  modules/        HTTP routes
+apps/web          React dashboard, built into the API image
+packages/db       Drizzle: schema, migrations, client
+packages/sdk      published TypeScript client, no dependencies
+```
+
+### Session credentials
+
+The Baileys auth state lives in Postgres, encrypted with AES-256-GCM, not in a
+file. That is what makes failover possible: while the credentials sit on one
+node's disk, no other replica can take the session over. The signal keys go in a
+table of their own, one row per key — keeping them in a single blob would make
+every received message rewrite megabytes.
+
+Postgres and Redis are mandatory — there is no SQLite mode. This is deliberate:
+one path only, no parity between modes to maintain, and a cluster that works
+from day one.
+
+### Authentication
+
+Two credentials, with deliberately different powers:
+
+- **User session** — a signed httpOnly cookie, for the dashboard. Password in
+  argon2id, session revocable in the database.
+- **API key** — `Authorization: Bearer awah_<prefix>_<secret>`, for
+  integration. The secret is stored only as a hash.
+
+API keys **never** administer identity: they do not create other keys, do not
+promote members, do not change the organization. A key leaks into logs, into
+shell history and into third-party systems — when that happens, the damage
+should be "someone sent messages in my name", not account takeover.
+
+### Roles
+
+| Role | Reach |
+| --- | --- |
+| `viewer` | Reading sessions, messages and metrics |
+| `operator` | What viewer does, plus sending messages and operating sessions |
+| `admin` | What operator does, plus managing sessions, keys, webhooks and members |
+| `owner` | Everything, including promoting another owner and deleting the organization |
+
+The organization always keeps at least one owner — the API refuses to demote or
+remove the last one.
+
+### Retention
+
+`retentionDays` on the organization controls how long message bodies are kept.
+Default 30 days; `0` never persists content, `-1` keeps it forever. Once the
+deadline passes, the row degrades to metadata and the volume and latency KPIs
+keep working.
+
+## Contributing
+
+The project is under active construction toward v1.0 and has no release yet.
+Issues that report a real use case are especially welcome at this stage — the
+architecture decisions are still malleable. See
+[CONTRIBUTING.md](CONTRIBUTING.md) for what helps most right now, and
+[SECURITY.md](SECURITY.md) before exposing an instance.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
