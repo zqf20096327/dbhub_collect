@@ -1,7 +1,12 @@
 # dbhub_collect — 数据库生态采集仓库
 
-只包含**采集功能**和**采集数据**：候选池采集、README 扫描、信号富集、多机状态合并。
-解读（interpret）/ 分类（classify）/ 渲染（render）等产品侧代码在主项目 dbhub_v2，不在本仓库。
+包含**采集 + 解读（interpret）**与采集数据：候选池采集、README 扫描、信号富集、
+README 结构化解读、多机状态合并。分类（classify）/ 渲染（render）等产品侧代码
+仍在主项目 dbhub_v2。
+
+> 主线约定（2026-09-29 起）：**采集层与 interpret 层以本仓库为唯一开发主线**。
+> 主项目里的采集层副本已过时，`tools/sync_from_main.py` 只用于从主项目搬
+> interpret 层，绝不反向同步采集层（会回滚修复）。
 
 ## 目录结构
 
@@ -11,11 +16,13 @@ collect/   collect_intl.py（国际池采集：stars>=10 + 新项目窗口）★
            pool_core.py（两入口共享核心：拆档/截断修复/merge 并集）
            readme_sweep.py（README：init 全量 / weekly 周增 / monthly 月全量，ETag 304）
 enrich/    enrich.py（富集：五维分层增量 + push/时间维度二分 + 国产 floor=mid）
+interpret/ interpret.py（README 结构化解读，sha 键控缓存）+ agent_batch/
+           check_shard/shard_flow（分片批量工具）
 config/    db_profiles.py（档案 + sections 分策策略） + strategy.py（通道派生+一致性校验）
 lib/       gh.py（GitHub 客户端/预算/限流） + merge_states.py（多机键控并集合并）
 data/      snapshot_YYYYMMDD/ 采集数据（见下）
 state/     断点状态（任何机器克隆即可续采增量）
-tools/     sync_from_main.py（从主项目同步采集代码） + gc_states.py（state 残渣 GC）
+tools/     sync_from_main.py（只从主项目搬 interpret 层） + gc_states.py（state 残渣 GC）
 ```
 
 ## 分策采集（国际 / 国产）
@@ -88,9 +95,12 @@ python lib/merge_states.py --help
 
 ## 代码同步
 
-采集层代码以主项目 dbhub_v2 为开发主线，改动后运行：
+本仓库是采集层与 interpret 层的开发主线。interpret 层若有改动落在主项目侧，
+用工具单向搬入：
 
 ```bash
-python tools/sync_from_main.py            # 默认从 ../dbhub_v2 同步
-python tools/sync_from_main.py --src D:/dbhub_v2 --with-snapshots
+python tools/sync_from_main.py --code-only   # 只搬 interpret 代码（默认 ../dbhub_v2）
+python tools/sync_from_main.py               # 连同 interpret 进度 state 一起搬
 ```
+
+注意：该工具**不会**（也不允许）同步采集层——主项目里的采集层是过时副本。
