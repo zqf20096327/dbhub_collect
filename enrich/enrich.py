@@ -296,7 +296,7 @@ def run(args):
                 atomic_write_json(STATE, st)
                 atomic_write_json(CACHE, cache)
                 log.info("进度 %d/%d · %s", i + 1, len(targets), counts)
-    except BudgetOut as e:
+    except (BudgetOut, QuotaPatienceOut) as e:
         stop_reason = str(e)
     finally:
         atomic_write_json(STATE, st)
