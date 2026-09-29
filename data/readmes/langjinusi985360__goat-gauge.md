@@ -1,0 +1,245 @@
+# GOAT Gauge
+
+GOAT Gauge is a local-first usage dashboard for Command Code GOAT.
+
+## Screenshots
+
+| Dashboard (light) | Dashboard (dark) |
+|:---:|:---:|
+| ![Dashboard light](docs/screenshots/dashboard-light.png) | ![Dashboard dark](docs/screenshots/dashboard-dark.png) |
+
+| Model usage by cost | Usage records |
+|:---:|:---:|
+| ![Model usage](docs/screenshots/models-cost.png) | ![Usage records](docs/screenshots/records.png) |
+
+---
+
+It reads the same account and billing endpoints used by the Command Code CLI:
+
+- `GET /alpha/whoami`
+- `GET /alpha/billing/credits`
+- `GET /alpha/billing/subscriptions`
+- `GET /alpha/usage/summary`
+
+The dashboard shows the rolling 5-hour, weekly, and monthly quota, reset
+countdowns, credit balances, billing-period statistics, and a locally recorded
+usage trend. It runs on `127.0.0.1`, stores history in SQLite, and stores a
+saved API key with Windows DPAPI encryption.
+
+It mirrors the GoGauge layout: quota rings, a time-range switch
+(today / 7 days / 30 days / all), overview KPIs, a model-usage donut, a daily
+trend chart, a paged usage-record table with per-request cost, plus cache hit
+rate, cache read/write volume, and per-model hit rate.
+
+## Run
+
+Double-click `start_chrome.bat`, or run:
+
+```powershell
+python entry.py --chrome
+```
+
+The first run opens a dedicated Chrome profile at the Command Code sign-in
+page. Sign in once in that window. GOAT Gauge then captures the authenticated
+browser session through Chrome DevTools, saves it encrypted on disk, and starts
+refreshing the dashboard automatically. The dashboard opens in the same Chrome
+profile.
+
+If you prefer not to use browser sign-in, the onboarding screen also accepts a
+Command Code API key.
+
+To run only the local server:
+
+```powershell
+python -m pip install -r requirements.txt
+python entry.py --serve --port 18927
+```
+
+Then open `http://127.0.0.1:18927`.
+
+Use `--demo` to preview the UI without an API key:
+
+```powershell
+python entry.py --chrome --demo
+```
+
+## Desktop shortcut
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\tools\make-shortcut.ps1
+# 可选: 同时注册「登录后静默启动本地服务」
+powershell -ExecutionPolicy Bypass -File .\tools\make-shortcut.ps1 -Startup
+```
+
+This creates a **GOAT Gauge (Chrome)** shortcut on the desktop together with
+`assets/goat-gauge.ico`.
+
+The shortcut targets a hidden `powershell.exe` running `launch.ps1` rather than
+`cmd.exe`, which is what makes it behave well on the taskbar: no black console
+flash on launch, and the shortcut keeps its own icon when pinned.
+
+`launch.ps1` starts or reuses the local server, waits for it to become ready,
+and then opens the installed PWA through its Chrome app identity. If the PWA is
+not installed yet, it falls back to a regular Chrome app window. This ordering
+prevents the taskbar shortcut from opening the dashboard before the local
+server is available.
+
+In `-ServerOnly` mode, the same launcher starts only the local server and never
+opens a browser window. This is the mode used by the optional login startup
+entry.
+
+The normal launcher is also self-healing. It opens the PWA first so the
+dedicated Chrome profile exposes its authenticated session through DevTools,
+then waits briefly for the dashboard session to recover. If the running server
+is still stuck unauthenticated, the launcher exits that server cleanly, starts
+a fresh one, and retries once.
+
+To pin it: right-click the desktop shortcut, then **Pin to taskbar**
+(on Windows 11 choose *Show more options* first).
+
+### Why the Chrome window pins as "Google Chrome"
+
+Chrome's `--app=` windows inherit Chrome's own taskbar identity, so pinning a
+running window produces a **Google Chrome** entry. GOAT Gauge therefore ships a
+web app manifest and service worker, which lets Chrome install it as a real
+standalone app with its own name and icon.
+
+In the dashboard, open **设置 → 安装为桌面应用**. Once installed, GOAT Gauge
+appears in the Start menu and can be pinned to the taskbar with the purple icon
+and its own window identity.
+
+Because the installed app talks to `http://127.0.0.1:18927`, register the server
+to start at login (`-Startup` above) if you want the pinned app to work right
+after a reboot. The pinned app itself needs the local server running.
+
+## Credential lookup
+
+GOAT Gauge uses either a signed-in Chrome session or an API key. For a browser
+session, the key is never handled manually. For API-key mode, it checks:
+
+1. `COMMAND_CODE_API_KEY`
+2. `COMMANDCODE_API_KEY`
+3. The encrypted key saved by GOAT Gauge
+4. Known values in `%USERPROFILE%\.commandcode\auth.json` or
+   `%USERPROFILE%\.commandcode\config.json`
+5. The Command Code provider stored by
+   [CC Switch](https://github.com/farion1231/cc-switch) in
+   `%USERPROFILE%\.cc-switch\cc-switch.db`
+
+Step 5 only reads providers that actually point at Command Code, so keys that
+belong to other vendors in the same database are never used.
+
+If no key or browser session is available, the interface asks for an API key.
+It is validated before being saved. The key is never returned to the browser.
+
+### Staying signed in
+
+Auto-login used to depend on Chrome handing over a live cookie on every launch,
+so an expired or renamed cookie silently logged the dashboard out. GOAT Gauge
+now:
+
+- reuses a Command Code API key from CC Switch when one exists, which never
+  expires the way a browser session does;
+- stores the captured browser session in `browser-session.bin`, encrypted with
+  Windows DPAPI, and restores it at startup without needing Chrome;
+- captures every `commandcode.ai` cookie instead of a fixed list of cookie
+  names, so a renamed sign-in cookie no longer breaks detection;
+- keeps session cookies across Chrome restarts by enabling `Continue where you
+  left off` in the dedicated profile;
+- clears a rejected session and reopens the Command Code sign-in page when the
+  upstream API answers `401`/`403`.
+
+Run the settings drawer's **自动检测** button to re-scan for a key.
+
+### API key plus browser session
+
+Command Code only exposes per-request usage records to a signed-in browser, so
+the two credentials cover different things:
+
+- The **API key** drives quota, credits, plan, and summary numbers. It does not
+  expire the way a browser session does, so the dashboard always has live data.
+- The **browser session** powers per-request records, per-model breakdown,
+  cache hit rate, and the wider local ranges.
+
+When a key is available it stays the primary credential and the captured
+browser session is attached alongside it for the detail endpoints. If the
+browser session is missing, the dashboard still shows live quota and adds a
+note with a **登录 Chrome** button.
+
+## Data
+
+Runtime data defaults to `%LOCALAPPDATA%\GOATGauge`.
+
+Set `GOATGAUGE_DATA` to use a portable data directory.
+
+### Currency
+
+The settings drawer can show costs in `USD` (default) or `CNY`. Costs are
+always fetched and stored in USD, so switching currency only changes how they
+are displayed. In CNY mode an editable rate field controls the conversion
+(default `1 USD = 7.2 CNY`), which keeps the app working offline instead of
+depending on a live exchange-rate API.
+
+Currency conversion applies to real cost fields only (`cost_total`,
+`cost_input`, `cost_output`, `cost_cache`, and average cost). Quota and credit
+figures such as `monthly_remaining` or window usage are Command Code credits,
+not dollars, and are never converted.
+
+### Proxy support
+
+Upstream requests follow the `*_proxy` environment variables and the Windows
+system proxy. The opener is rebuilt on every request, so a proxy client such as
+Clash or mihomo may start, stop, or change ports while GOAT Gauge keeps
+running; the dashboard picks the change up without a restart. When a proxy is
+configured but unreachable, the request is retried once over a direct
+connection, and loopback traffic to the DevTools port always bypasses the
+proxy.
+
+This matters on machines where DNS resolves upstream hosts to a proxy-only
+fake IP range such as `198.18.0.0/15`: direct connections there time out, and a
+dashboard that cached the "no proxy" decision at start-up would freeze until it
+was restarted.
+
+### Upstream limits
+
+Command Code's usage endpoint only exposes the newest bounded window
+(currently 1 day / 100 entries) and ignores range query parameters. GOAT Gauge
+therefore keeps every record it has seen in local SQLite, and the
+7-day / 30-day / all views are assembled from that local history. Those wider
+ranges fill in as the app runs.
+
+The same endpoint returns no session identifier, so per-session cost is not
+available and is intentionally omitted rather than guessed.
+
+Per-request records and cache buckets come from the `/internal/*` endpoints,
+which only answer for a signed-in browser session. When that session is missing
+the overview falls back to the billing-period aggregate that the API key can
+still read (`/alpha/usage/summary`) and labels those cards "本计费周期上游汇总"
+so period totals are never mistaken for the selected range.
+
+### Cache metrics
+
+Cache tokens come from `/internal/usage/charts`, which accepts an explicit
+`from`/`to` window (roughly one day) and reports `cacheReadInputTokens` /
+`cacheCreationInputTokens` per model and time bucket. GOAT Gauge stores those
+buckets locally and computes:
+
+- hit rate = cache read tokens / input tokens
+- miss tokens = input tokens - cache read tokens
+
+Aggregate KPIs prefer these upstream buckets because they cover the full
+upstream window; the record table is a narrower sample (the newest ~100
+entries), and the dashboard labels the difference.
+
+GOAT Gauge uses Chrome DevTools port `9333` by default, so it can run
+alongside other local tools that use port `9222`. Override it with
+`GOATGAUGE_CHROME_CDP_PORT` if needed.
+
+## Tests
+
+```powershell
+python -m unittest discover -s tests -v
+```
+
+This is an unofficial community project and is not affiliated with Command
+Code or its operators.

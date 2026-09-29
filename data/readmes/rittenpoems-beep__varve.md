@@ -1,0 +1,208 @@
+# Varve
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+[English](README.en.md) | **简体中文**
+
+**给 AI 编码助手（Codex 及后续框架）的跨会话记忆层**——三层结构（环境 / 状态 / 历史）、**只追加的注入**（不破坏 prompt 缓存）、**SQLite 全文检索**、**全局状态卡**（跨工作区 / 跨框架，只增不减的快照流）。
+
+零 LLM 调用、零第三方依赖（Python 标准库 + PowerShell 7）。
+
+> 名字来自地质学：**varve**（纹泥）是冰川湖底的年层沉积——一层记录一年，层层叠加、永不重写、可回溯到任意一层。这正是它的三条原则：**只追加、可重建、可定位**。
+
+> 状态：早期可用（v0.2）。已在真实项目上连续使用，索引层带审计（`audit.py`）与**可执行**的回归用例（`scripts/regression_test.py`，清单见 [FIXES.md](FIXES.md)）。
+
+## 目录
+
+- [它解决什么](#它解决什么)
+- [快速开始](#快速开始)
+- [工具一览](#工具一览)
+- [工作原理](#工作原理)
+- [数据与隐私](#数据与隐私)
+- [已知限制](#已知限制)
+- [反馈与贡献](#反馈与贡献)
+- [许可](#许可)
+
+## 它解决什么
+
+| 问题 | 常见做法 | 这里怎么做 |
+|---|---|---|
+| 新会话 = 失忆 | 手动贴上下文 | 三层记忆自动可用：环境 / 状态 / 历史 |
+| 把历史全塞进上下文 | 一次灌几十万 token | 只注入**最新一条**状态快照，细节按需检索 |
+| 注入把 prompt 缓存打碎 | 无感知，成本暴涨 | **状态注入只追加在请求尾部**，不碰固定前缀 |
+| 找历史靠记关键词 | `rg` 硬搜 | SQLite FTS5 全文索引 + 多变体检索 + **可回溯到原文行号** |
+| 多会话并发写文件 | 整文件重写 → 丢更新 | staging 三段式：提案 → 裁决 → 原子提交 |
+| 换目录 / 换框架就失忆 | 每个项目各装一套 | **全局卡**：任何目录共用一张状态卡，机制层不依赖"项目"定义 |
+
+## 实测规模
+
+下面不是示意数据——作者在自己的开发环境里连续使用的真实量级（索引规模、库大小、审计结果于 2026-09-26 复测；这套数据仍在随使用增长）：
+
+| 指标 | 值 |
+|---|---|
+| 会话请求 | 4,539 次 |
+| 累计输入 token | ≈ 14 亿 |
+| 缓存命中率 | 96%（尾部追加注入的直接受益者） |
+| 索引规模 | 630 轮对话 · 23,988 条轨迹记录 |
+| 库大小 | 97.6 MB（本地 SQLite，可随时重建） |
+| 审计结果 | `audit.py` 全项 PASS（0 孤儿 · 0 重复入库 · 触发器 6/6 · 令牌级完整性 ok） |
+
+对应的工作方式正是本项目的目标场景：一个人同时推进多个项目、每天上百轮 agent 对话。
+
+## 兼容性
+
+### 适配的是什么
+
+Varve 按**能力**适配，不按产品适配。它要求宿主提供两样东西：
+
+| 能力 | 具体是什么 | 用途 |
+|---|---|---|
+| **会话事件** | 会话启动 / 恢复 / 清空 / 压缩时触发一个脚本，脚本能拿到 `cwd`、会话 ID、触发来源 | 判定这个会话该不该注入状态卡 |
+| **尾部追加注入** | 在**用户消息之后**追加一段文本进上下文（不是改系统提示） | 把状态卡送到模型面前，且**不破坏 prompt 缓存** |
+
+第二条是整个设计的命脉：注入落在消息尾部 → 固定前缀不变 → 缓存不碎。只能改前缀的框架，Varve 的核心价值不成立，我们不支持。
+
+### 哪些框架具备
+
+| 框架 | 会话事件 | 尾部追加注入 | 状态 |
+|---|---|---|---|
+| **Codex** | ✅ `SessionStart` | ✅ `UserPromptSubmit` | 已适配 · 端到端实测 |
+| **Claude Code** | ✅ `SessionStart` | ✅ `UserPromptSubmit` | 已适配 · 脚本层验证 |
+| 只有前缀注入的框架 | ✅ | ❌ | 不支持（缓存安全不成立） |
+| 无 hook 通道的框架 | ❌ | ❌ | 不支持 |
+
+两家的 hook 契约**高度一致**——事件名、stdin payload 字段（`session_id` / `cwd` / `source` / `prompt`）、注入字段（`hookSpecificOutput.additionalContext`）几乎逐字相同，注入位置也都是「用户消息之后」。因此跑的是**同一对脚本**，Claude Code 侧只差一个输出形态开关（`--json-output`）。
+
+**未适配的类别与原因**：
+
+- IDE 类（Cursor / Trae / Qoder）：没有「尾部追加注入」通道
+- 办公类（WorkBuddy 等）：同上，且非编码场景
+- 库类（LangChain / CrewAI 等）：没有 hook 概念，需要宿主自己实现循环
+
+### 各框架要准备什么
+
+**Codex**
+
+- 依赖：Windows + PowerShell 7 + Python 3.10+（stdlib 含 SQLite FTS5）
+- 安装：`pwsh -NoProfile -File scripts\install.ps1`（默认**用户级** `~/.codex/hooks.json`，对所有工作区生效；只装单个项目加 `-Scope project -Project <目录>`）
+- 手动步骤：在 Codex UI 里点一次 hooks 信任
+
+**Claude Code**
+
+- 依赖：Python 3.10+
+- 安装：`pwsh -NoProfile -File scripts\install-claude.ps1`（默认用户级 `~/.claude/settings.json`；`-Scope project -Project <目录>` 装到单项目）
+- 手动步骤：无（settings.json 不需要信任流程）
+- 上限：`additionalContext` 10,000 字符（注入的是**最后一条**快照，受 3,500 字符护栏约束，`audit.py` 会检查）
+- ⚠️ 现状：状态卡注入已实现并用模拟 payload 验证；**历史检索暂不支持**——Claude Code 的 transcript 格式未验证，先在有 Claude Code 的机器上跑 `python -X utf8 scripts\probe-claude-transcript.py` 采样，再据此补索引适配
+
+## 快速开始（3 步）
+
+**环境要求**：Windows + PowerShell 7 + Python 3.10+（标准库含 SQLite FTS5）。
+
+```powershell
+# ① 安装：检查环境 → 建数据目录 → 生成 .codex/hooks.json → 装 Skill（默认用户级）
+pwsh -NoProfile -File scripts\install.ps1
+
+# ② 在 Codex 里点一次 hooks 信任（New hook - review required，唯一手动步骤）
+
+# ③ 验证（体检全部通过则 exit 0；要连项目级 hooks 一起查就加 -Project <目录>）
+pwsh -NoProfile -File scripts\doctor.ps1
+```
+
+装上后，每次会话启动会自动：**读取工程状态 → 校准检索索引**（触发器模式下写入即入索引，无需重建）；你问"上次/之前/那个坑"这类问题时，会收到一行检索提醒。
+
+**不想装 hook 也能用**：
+
+```powershell
+python -X utf8 scripts\session-digest.py          # 会话日志 -> SQLite
+python -X utf8 scripts\build-search-index.py      # 建 FTS5 索引
+python -X utf8 scripts\recall.py "关键词1" "关键词2"   # 检索（由粗到细）
+python -X utf8 scripts\recall.py --topic "快照流"     # 主题时间线（演化型：三源合并，按时间排开）
+python -X utf8 scripts\recall.py --timeline --since 14d
+python -X utf8 scripts\recall.py "报错内容" --deep     # 加搜工具调用/输出层
+python -X utf8 scripts\recall.py "a OR b" --raw       # --raw：整串按 FTS5 原生语法（AND/OR/NEAR/引号）
+python -X utf8 scripts\regression_test.py             # 回归用例（临时目录自建自清，不碰真实数据）
+```
+
+## 工具一览
+
+| 内容 | 说明 |
+|---|---|
+| `install.ps1` | 安装：环境检查 / 数据目录 / hooks.json / Skill（幂等） |
+| `doctor.ps1` | 环境体检（只读；全部通过则 exit 0） |
+| `check-env.py` | 探测 Python / SQLite / FTS5 / trigram |
+| `session-digest.py` | 会话日志 → SQLite（对话历史 + 轨迹历史）；跨进程互斥，拿不到锁就跳过本轮 |
+| `build-search-index.py` | 建 FTS5 索引（触发器模式下写入即入索引，正常无需重建；`--force` 强制重建） |
+| `recall.py` | 检索 CLI：records → 对话历史 → 轨迹层（`--deep`）；`--topic` = 主题时间线；`--raw` = FTS5 原生语法；输出末尾带【覆盖】行 |
+| `audit.py` | 记忆库审计：一致性 / 重复入库 / 索引一致性（含 `--fix` 自动修复）/ 检索自检 / 体量。`--fix` 按 `--sessions` 重灌内容，**必须与建库时的目录一致**（`session-digest.py` 会把它记进库内 `meta.sessions_root`）；指错目录一律拒绝执行。`--fix` 内部带 `--keep-orphans`（宁可留着旧行，也不冒"目录不在 = 删库"的险），会话日志已搬走时它只重建索引并明说"内容未被重灌" |
+| `regression_test.py` | 回归用例：FIXES.md 每条"复发检查"的可执行版（临时目录自建自清） |
+| `env-scan.py` | 环境扫描：只记 harness 不注入的项，刷新 `ENVIRONMENT.md` 的自动探测区 |
+| `hook-session-start.py` | 会话启动：标记待注入（零输出） |
+| `hook-user-prompt.py` | 用户消息：追加注入状态 + 历史信号词提醒 |
+| `hook-build-index.py` | 静默重建索引（hook 包装） |
+| `varve_hooks_common.py` | hook 共享逻辑 |
+| `init.ps1` / `sync-projects.ps1` / `build-docs-index.ps1` | 初始化 / 工作区发现 / 文档索引 |
+| `staging/` | 并发写入：提案 → 裁决 → 原子提交（含压测脚本） |
+| `templates/` | 状态卡模板 / 记录模板 / Skill 模板 / AGENTS 规则句 |
+| `FIXES.md` | 已修复清单（每条含"复发检查"方法，供回归对照） |
+
+> 命名约定：可执行脚本用连字符（`hook-user-prompt.py`），可导入的 Python 模块用下划线（`varve_hooks_common.py`）。
+
+## 工作原理（简版）
+
+```text
+会话日志（只读）
+   │  SessionStart 触发
+   ▼
+SQLite 单库 ── turns（对话历史：每轮问答）
+              traces（轨迹历史：工具调用/输出/推理）
+              + FTS5 全文索引（external content：内容只存一份）
+   │  需要时检索
+   ▼
+三段漏斗：records（已提炼的推进记录）→ 对话历史 → 轨迹层
+```
+
+**两条硬规则**：
+
+1. **注入只追加**——状态注入落在请求尾部，永不触碰固定前缀（SessionStart 只做标记，UserPromptSubmit 才追加）；
+2. **降级永远可用**——任何环节失效都有退路，最差情况 = 文件 + 规则句。
+
+**全局卡（2026-09-24 起）**：状态卡只有一张 —— `<VARVE_DATA>\STATUS.md`。不按项目定义、不依赖目录结构，
+任何框架 / 任何目录的会话都注入同一张（归属用条目里的【项目】前缀表达）。取舍见下方「已知限制」。
+
+**快照流（2026-09-25 起）**：全局卡是**只增不减的完整快照序列**——每次更新在末尾追加一条自洽的快照，
+注入只读**最后一条**，所以上下文占用恒定、与历史长度无关；旧快照永不修改，任何时点的状态都能回溯。
+单条快照贴住 3500 字符护栏（`audit.py` 检查）；旧格式的卡自动降级兼容，可用 `scripts/migrate-status-snapshots.py` 迁移。
+
+**索引的一致性**：`turns` / `traces` 使用**顺序稳定 id**（写入即定，删除重插不变），并通过 SQLite 触发器与 FTS5 索引**实时同步**——
+不存在"内容已更新但索引还是旧的"的中间窗口，也不需要每次全量重建。
+
+## 数据与隐私
+
+- 数据全部落在本机：会话日志（`~/.codex/sessions/`）**只读**，派生的 SQLite 库与状态卡都在 `<VARVE_DATA>` 下，**不上传任何地方**。
+- 库是**可重建**的：删掉 `<VARVE_DATA>/index/` 后跑一次 `session-digest.py` + `build-search-index.py` 即可从原始日志重算。
+- 检索是**本地全文匹配**（SQLite FTS5），没有 embedding、没有外部 API 调用。
+- ⚠️ **库里是会话原文的明文副本**——提问、回答、工具调用与输出都会原样入库，其中若出现过密钥 / token / 隐私内容，它们同样躺在库里，**没有任何脱敏**。别把库或状态卡同步到网盘 / 公开仓库。
+- 若要把本项目用于团队共享，注意 `<VARVE_DATA>/STATUS.md` 会包含你的任务状态——建议放进 `.gitignore` 或单独的私有目录。
+
+## 已知限制（诚实标注）
+
+- **框架适配进度不一**：Codex 端到端实测（`.codex/hooks.json` + 两个 hook）；Claude Code 的状态注入已用脚本层验证（见上），但**历史检索尚未适配**（transcript 格式未采样）。其他框架没有适配实现。
+- 依赖 Codex 的会话日志格式（`~/.codex/sessions/**/*.jsonl`）。
+- Windows / PowerShell 优先；Python 部分跨平台。
+- **状态卡是全局的**：不按项目隔离，多项目任务状态混在一张卡里（用【项目】前缀区分）——为跨框架可用性做的主动取舍。
+- **全局 hooks 需手动点一次信任**：`~/.codex/hooks.json` 内容变更后，Codex 会要求重新信任才生效。
+- **线索拼装只解决了一部分（2026-09-25 诚实标注）**：`--topic` 与关键词检索都是**逐字匹配**——两条线索若**没有共同词**
+  （例：一处说"在北京"、另一处说"在上海吃饭"），系统**捞不到一起**，也就无从发现冲突。
+  语义索引（阶段 2）/ 实体锚是候选方向，但在本系统体量下作者仍在权衡成本与收益：
+  **当前"锚优先 + 覆盖自述"是权宜解法，不是终解。**
+
+## 反馈与贡献
+
+- 发现 bug 或行为不符：请附上 `python -X utf8 scripts/audit.py` 的输出，多数问题能据此定位。
+- 提交修复后请顺带更新 [FIXES.md](FIXES.md)（问题 / 修复点 / 复发检查三段式）。
+- 已知问题与修复历史集中在 [FIXES.md](FIXES.md)，设计文档不在本仓库（公开版只含成品）。
+
+## License
+
+[MIT](LICENSE)

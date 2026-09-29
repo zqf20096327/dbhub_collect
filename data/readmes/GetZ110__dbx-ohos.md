@@ -1,0 +1,166 @@
+# dbx-ohos
+
+DBX 数据库客户端在 HarmonyOS 上的移植工程。
+
+- 上游项目：[https://github.com/t8y2/dbx](https://github.com/t8y2/dbx)
+- 本工程仓库：`git@github.com:GetZ110/dbx-ohos.git`（开发分支：`main`）
+- 上游 fork（submodule）：`git@github.com:GetZ110/dbx.git`（移植分支：`harmonyos-port`）
+
+## 仓库结构
+
+```
+dbx-ohos/                     # 父仓库，只有 main 一个分支，直接在 main 上开发
+├── upstream/
+│   └── dbx/            # 上游 dbx 源码（submodule，指向 harmonyos-port 分支）
+├── harmony/
+│   └── dbxohos/        # HarmonyOS HAP 工程（ArkTS Web + Rust NAPI .so）
+└── README.md
+```
+
+> 分支说明：父仓库只需要 `main`（桌面模式分支 `feat/harmony-desktop-mode` 已合并进 `main` 并删除）；submodule 侧固定使用 `harmonyos-port`。
+
+## 快速开始
+
+```bash
+# 克隆仓库（包含 submodule）
+git clone --recurse-submodules git@github.com:GetZ110/dbx-ohos.git
+cd dbx-ohos
+
+# 如果已经克隆但没拉 submodule
+git submodule update --init --recursive
+```
+
+### 构建原生 `.so`
+
+```bash
+cd upstream/dbx
+OHOS_NDK_HOME=/path/to/ohos-sdk/native cargo build --release -p dbx-ohos
+cp target/release/libdbx_ohos.so \
+  ../../harmony/dbxohos/entry/libs/arm64-v8a/libdbx_ohos.so
+```
+
+### 构建内置驱动 agent（Oracle）
+
+Oracle 等 agent 类驱动在 HarmonyOS 上不能 `execve` 沙箱里的 ELF（BinSec 拒绝），
+因此以 **native child process** 方式运行：agent 编译成随 HAP 安装的 `.so`，由
+appspawn `dlopen` 并调用其导出入口。**不构建这一步，HAP 里的 Oracle 驱动会起不来。**
+
+```bash
+# 产物直接落到 entry/libs/arm64-v8a/（含 musl 运行时补丁，见脚本注释）
+./harmony/tools/build_agent_cshared.sh oracle-go libdbx_agent_oracle.so
+```
+
+构建 HAP 时会一并打包 `entry/libs/arm64-v8a/` 下的 `libdbx_ohos.so` 与 `libdbx_agent_*.so`。
+
+### 构建 HAP
+
+用 DevEco Studio 打开 `harmony/dbxohos`，构建运行即可。命令行方式见 `AGENTS.md`。
+
+## 驱动支持情况（HarmonyOS）
+
+| 类别 | 状态 | 说明 |
+|---|---|---|
+| 进程内 Rust 驱动 | ✅ | MySQL / PostgreSQL / SQLite / MongoDB / Redis / ClickHouse 等，不 fork 子进程，与桌面一致 |
+| **Oracle** | ✅ **已内置** | Go agent 编成 `libdbx_agent_oracle.so`，走 native child process；无需下载驱动、无需签名/HNP |
+| 其他 agent 类驱动 | ⚠️ 未内置 | Cassandra / Neo4j / Hive / etcd / 达梦 … 机制相同，但每个都需编一份 `.so` 进包（HAP 开启 native 库压缩后每个约 **+5.2MB**）。配方见 `docs/ohos-oracle-driver-report.md` §10 |
+| JDBC / JRE 类驱动 | ❌ 不可行 | 需要 JVM：沙箱 `.so` 无法 `dlopen`、官方 JRE 是 glibc（OHOS 只有 musl）。详见 `docs/ohos-agent-exec-denied.md` §15 |
+
+已内置的驱动在「驱动管理」里显示为**已安装**且不可卸载（随应用分发）；未内置的驱动
+点连接会得到 `Permission denied`，属已知限制。
+
+## 已完成
+
+- [x] 上游 `dbx` 源码以 submodule 方式纳入，移植分支 `harmonyos-port`
+- [x] Rust NAPI 集成：`crates/dbx-ohos` 导出 `startServer` / `stopServer` / MCP 相关方法
+- [x] 原生 MCP Server：`dbx-web` 通过 Streamable HTTP 提供 `/mcp`
+- [x] 原生 `/api/health` 就绪路由，启动时等待服务就绪后再加载 Web
+- [x] 冷启动防重入：避免 `onWindowStageCreate` / `onForeground` 竞态产生双 Web 实例
+- [x] 前后台切换：后台停止本地服务，前台恢复并只触发 Web reload，不重建页面
+- [x] 主题/外观偏好持久化：原生 Preferences + `javaScriptOnDocumentStart` 注入恢复
+- [x] 启动优化：MCP 复用 `AppState`，避免二次打开 SQLite 导致冷启动变慢
+- [x] 一键启动脚本 `start-dbx.sh`（宿主机开发用）
+- [x] HarmonyOS 构建/移植文档
+- [x] 2in1 沉浸式工具栏：隐藏系统标题栏，Web 工具栏作为标题栏，原生窗口按钮保留
+- [x] 窗口按钮主题跟随：通过 `setDecorButtonStyle()` 随应用/系统亮暗切换颜色
+- [x] 窗口按钮动态避让：通过 `getTitleButtonRect()` 动态计算工具栏右侧预留宽度
+- [x] 窗口顶部拖拽/双击最大化：`setWindowTitleMoveEnabled` + JS `startMoving()`
+- [x] 加载页/启动主题：读取软件设置主题，`system` 模式跟随系统真实亮暗
+- [x] Web 组件 `darkMode(Auto)`：`prefers-color-scheme` 跟随系统
+- [x] 加载页防白闪：首次内容绘制（`onFirstContentfulPaint`）后再隐藏加载层
+- [x] 系统任务栏/Dock 颜色结论：窗口外的系统任务栏/Dock 属系统级外观，应用侧无法控制（`setColorMode` / `setWindowSystemBarProperties` 只能影响应用窗口自身的状态栏与导航栏区域）。已确认为平台行为，不再作为待办
+- [x] **Oracle 驱动支持（native child process）**：agent 编成 `libdbx_agent_oracle.so` 随 HAP 分发，由 appspawn `dlopen` 运行，复用原有 stdin/stdout JSON-RPC；不需要执行位、不需要华为签名/HNP。驱动列表把它显示为「已安装（内置）」且不可卸载，无需下载驱动即可连接。详见 `docs/ohos-oracle-driver-report.md`
+- [x] **HAP 内 native 库压缩**：`hvigor-config.json5` 里 `properties.ohos.pack.compressLevel = "standard"`，HAP 从 **89.5MB 降到 49.0MB**（`libdbx_ohos.so` 54%、`libdbx_agent_oracle.so` 75% 压缩率）；实测启动与驱动运行无差异，代价是安装时多一次解压
+
+## 待办
+
+- [ ] P1：按需内置更多 agent 类驱动（Cassandra / Neo4j / Hive / etcd …）。机制已通，配方见 `docs/ohos-oracle-driver-report.md` §10；HAP 开启 native 库压缩后每个驱动约 +5.2MB，量大时仍需考虑 feature HAP / 按需下发
+- [ ] P2：PC/平板 UX 优化（触摸适配、原生侧边栏、按窗口类型布局）
+- [ ] P2：查询表格 **Canvas 渲染模式流畅度优化**（当前 Canvas 自绘网格为每帧全量重绘：可见格 × `fillText` + `measureText`，且背板 = `dpr² × uiScale`，大数据量滚动在 ArkWeb 上一帧画不完导致丢帧。计划改增量绘制：行块纹理离屏缓存 + 平移贴图 + DPR 降级；优化落地前，UI 已支持「视图选项 → 渲染模式切 DOM」作为流畅兜底）
+- [ ] P3：沙箱数据备份/导出/导入、连接加密确认、云同步验证
+- [ ] P5：原生 ArkUI 替换连接管理 / SQL 编辑器（长期）
+- [ ] P6：构建脚本、patch 文档、ohosTest 单元测试
+- [ ] 可选：MCP 拆分到独立端口（当前与 Web 共用 `4224/mcp`）
+
+## 桌面窗口方案（PC / 2in1）
+
+当前主线采用“沉浸式 + Web 工具栏作为标题栏”的方案：
+
+- `EntryAbility` 隐藏系统标题栏，进入全屏沉浸布局；
+- 保留系统原生窗口按钮（最小化 / 最大化 / 关闭），并让按钮颜色随应用/系统主题切换；
+- Web 端注入脚本把窗口动作桥接到原生 `WindowBridge`：
+  - 最小化 / 最大化 / 关闭
+  - 工具栏空白区域拖拽窗口
+  - 双击最大化 / 还原
+- 工具栏右侧通过 `getTitleButtonRect()` 动态预留系统按钮区域，避免与 Web 工具按钮重叠；
+- 主题链路：Web `localStorage` → `WebPrefsBridge.savePref` → `WindowBridge.setThemeMode` → 原生 `setDecorButtonStyle` / `AppStorage`；
+- 加载页读取软件设置主题；`system` 模式时读取系统真实亮暗；Web 使用 `darkMode(Auto)` 让 `prefers-color-scheme` 跟随系统；
+- 加载页在 `onFirstContentfulPaint` 后再隐藏，避免 ArkWeb 白色首帧闪烁。
+
+## 运行模式方案（采用方案 B）
+
+在鸿蒙壳与上游 Web 的协作方式上，讨论过三条路线：
+
+| 方案 | 思路 | 成本 / 风险 |
+|---|---|---|
+| A：完整 Tauri 兼容桥 | 在鸿蒙壳实现 `__TAURI_INTERNALS__` / `__TAURI__`，让 `isTauriRuntime()` 为 true | 最彻底，但要覆盖大量 Tauri API，遗漏会 silent fail，维护成本高 |
+| B：显式鸿蒙桌面模式 | 注入 `window.__HARMONY_DESKTOP__ = true`，上游通过 `isHarmonyDesktopRuntime()` 识别并走鸿蒙桥 | 只按 DBX 实际能力做桥；需维护上游源码差异并重建 dist |
+| C：浏览器模式 + 零散桥 | 不统一运行模式，继续用 `dbxNativeWindow` / `dbxNativePrefs` 零散补丁 | 改动小，但桌面体验不完整、补丁脆弱，上游同步易回归 |
+
+**当前主线采用方案 B。**
+
+实现要点：
+
+```ts
+// 鸿蒙壳 document-start 注入
+window.__HARMONY_DESKTOP__ = true;
+```
+
+```ts
+// 上游 tauriRuntime.ts / dist 中识别鸿蒙桌面模式
+isHarmonyDesktopRuntime(): boolean {
+  return !!(globalThis as ...).__HARMONY_DESKTOP__;
+}
+```
+
+- 不假装自己是 Tauri，不依赖 `__TAURI_INTERNALS__`；
+- 上游仍可按 `isDesktopRuntime()` 进入桌面模式，但桌面 API 调用点改为走 `dbxNativeWindow` / `dbxNativePrefs`；
+- 当前桥接面覆盖：窗口控制（最小化 / 最大化 / 关闭 / 拖拽）、窗口按钮主题、偏好持久化、安全区避让等；
+- 后续新增桌面能力（文件对话框、剪贴板、系统对话框等）时，按需扩展现有桥，不要引入完整 Tauri 兼容层。
+
+### 后续开发注意事项
+
+1. 同步上游 `t8y2/dbx` 后，必须保留 `tauriRuntime.ts` 中 `isHarmonyDesktopRuntime()` 的识别逻辑；
+2. 上游新增桌面 API 时，优先在 `isHarmonyDesktopRuntime()` 分支接 `dbxNativeWindow` / `dbxNativePrefs`，不要直接调用 Tauri API；
+3. 修改上游 Web 源码后，需要重新构建 `dbx-dist` 并替换 `harmony/dbxohos/entry/src/main/resources/rawfile/dbx-dist/`；
+4. Rust `.so` 与前端 `dist` 都属于 HAP 内置产物，替换后需验证 `index.html` 资源哈希变化。
+
+## 移植说明
+
+- 子模块 fork：`git@github.com:GetZ110/dbx.git`，移植分支 `harmonyos-port`
+- Rust 侧新增 `crates/dbx-ohos`（NAPI 导出 `startServer` / `stopServer` / MCP）
+- `dbx-web` 新增 `/api/health` 就绪路由，并复用 `AppState` 避免二次打开 SQLite
+- 鸿蒙壳使用 ArkWeb 加载本地 `dbx-web` 服务；主题/外观偏好通过原生 Preferences 持久化
+
+## License
+
+本项目使用 **Apache-2.0** 许可证。

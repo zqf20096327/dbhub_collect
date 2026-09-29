@@ -1,0 +1,348 @@
+<p align="center">
+  <a href="./README.md"><img src="https://img.shields.io/badge/lang-English-blue.svg" alt="English"></a>
+  <a href="./README.fa.md"><img src="https://img.shields.io/badge/lang-persian-green.svg" alt="persian"></a>
+</p>
+
+# Mitra
+
+A **project-centric** work management and communication system: the deployment is single-tenant (no organizations/tenants), projects have members and tasks, and tasks are assigned to users.
+
+Backend: Go (Gin) · sqlc · PostgreSQL — Frontend: React + TypeScript (Vite)
+
+> **Single-tenant model:** there is no self-serve sign-up or multi-tenant concept — the app was built for one deployment only. The first owner account is created by a seed step (see [Local Setup](#local-setup)); from there the owner adds users through the API/UI. There is currently no `/auth/register` endpoint.
+
+This is a Phase 1 / MVP snapshot — see [Known Limitations](#known-limitations-phase-1) for what's intentionally not built yet, and [`MITRA.md`](./MITRA.md) for the full architecture proposal and roadmap (in Persian).
+
+---
+
+## Table of Contents
+
+- [Mitra](#mitra)
+  - [Table of Contents](#table-of-contents)
+  - [Hierarchical Structure](#hierarchical-structure)
+  - [Tech Stack](#tech-stack)
+  - [Repository Layout](#repository-layout)
+  - [Prerequisites](#prerequisites)
+  - [Environment Variables](#environment-variables)
+  - [Local Setup](#local-setup)
+    - [Option A — Docker (all services)](#option-a--docker-all-services)
+    - [Option B — Manual (Backend)](#option-b--manual-backend)
+      - [Frontend is embedded](#frontend-is-embedded)
+    - [Manual (Frontend)](#manual-frontend)
+  - [API (Currently Implemented)](#api-currently-implemented)
+    - [Health](#health)
+    - [Auth](#auth)
+    - [Users *(requires Authorization: Bearer)*](#users-requires-authorization-bearer)
+    - [Projects](#projects)
+    - [Tasks](#tasks)
+    - [Comments](#comments)
+    - [Requested by the frontend but not yet implemented on the backend](#requested-by-the-frontend-but-not-yet-implemented-on-the-backend)
+  - [Frontend Overview](#frontend-overview)
+  - [Roles \& Permissions](#roles--permissions)
+  - [Known Limitations (Phase 1)](#known-limitations-phase-1)
+  - [Roadmap](#roadmap)
+  - [License](#license)
+
+---
+
+## Hierarchical Structure
+
+```
+User (global role: owner / admin / member / viewer)
+
+Project
+  ├── belongs directly to the deployment (single-tenant, no Organization level)
+  ├── ProjectMember (project-level role: owner / admin / member / viewer)
+  └── Task
+        ├── assigned to a single User (not a Team — this system has no Team concept)
+        ├── status: todo / in_progress / review / done
+        ├── priority: low / medium / high / urgent
+        └── Comment
+```
+
+> This project is intentionally designed without a "Team" or "Organization" level; RBAC is defined only at the `user` (global) and `project` levels — a user can be an admin on one project and a plain member on another, on top of their global role.
+
+---
+
+## Tech Stack
+
+| Layer       | Technology                                                                                                  |
+| ----------- | ----------------------------------------------------------------------------------------------------------- |
+| Backend     | Go 1.27 + [Gin](https://gin-gonic.com/)                                                                     |
+| Data Access | [sqlc](https://sqlc.dev/) (no ORM) on top of [pgx/v5](https://github.com/jackc/pgx)                         |
+| Migrations  | [golang-migrate](https://github.com/golang-migrate/migrate)                                                 |
+| Auth        | JWT (access + refresh) via [golang-jwt/v5](https://github.com/golang-jwt/jwt), passwords hashed with bcrypt |
+| Database    | PostgreSQL 16                                                                                                |
+| Frontend    | React 19 + TypeScript + Vite 8, Tailwind CSS 4                                                              |
+| Frontend state | Zustand (per-domain stores), React Router 7                                                              |
+| i18n        | Custom context-based i18n, Persian (`fa`) and English (`en`), RTL-aware UI                                  |
+
+**Current architectural decisions (cost control in Phase 1):**
+Redis and NATS/JetStream have been removed from the stack for now. Details and the criteria for bringing them back are documented in [`MITRA.md`](./MITRA.md).
+
+---
+
+## Repository Layout
+
+```
+mitra/
+├── main.go             # Single entrypoint — delegates to cmd.Execute()
+├── cmd/                # Cobra CLI: `mitra serve` (API server), `mitra migrate` (up/down/steps/force/version), `mitra seed`
+├── internal/
+│   ├── auth/           # Login, change-password, JWT issuing/parsing, password hashing
+│   ├── users/          # User directory (list/create/delete), profile (me/update-me)
+│   ├── project/        # Project CRUD + project-member handlers
+│   ├── task/           # Task CRUD, status, assignment
+│   ├── comment/        # Task comments
+│   ├── rbac/           # Scope-aware role checks (global user role / project owner|admin)
+│   ├── middleware/     # Auth middleware (Bearer token → user context)
+│   ├── config/         # Env loading (caarlos0/env + godotenv)
+│   ├── convert/        # Shared helpers (e.g. flexible date parsing)
+│   └── db/
+│       ├── migrations/ # golang-migrate SQL migrations (001–007), embedded into the binary
+│       ├── migrator/    # golang-migrate wrapper used by both `mitra serve` (auto-migrate) and `mitra migrate`
+│       ├── queries/    # Hand-written SQL used by sqlc
+│       └── sqlc/       # Generated, type-safe Go from sqlc.yaml
+├── web/                # React + TypeScript frontend (see Frontend Overview) + embed.go, which embeds web/dist into the mitra binary
+├── docker-compose.yaml # postgres + api (builds the frontend and embeds it; no separate web service/port)
+├── Dockerfile          # Multi-stage: builds web/dist, then embeds it into the single `mitra` binary (serve/migrate/seed all included)
+├── sqlc.yaml
+├── MITRA.md            # Full architecture proposal & phased roadmap (Persian)
+├── README.md / README.fa.md
+└── .env.example
+```
+
+---
+
+## Prerequisites
+
+- Docker + Docker Compose — for the all-in-one setup, or just to run PostgreSQL locally
+- Go 1.27+ — only needed for the manual (non-Docker) backend setup; migrations and seeding are both subcommands of the same `mitra` binary now, so there's nothing extra to install for them
+- Node.js 20+ — needed for frontend dev (`npm run dev`), and at least once for any local (non-Docker) `go run . serve`/`go build`, since it embeds `web/dist` (see [Frontend is embedded](#frontend-is-embedded))
+
+---
+
+## Environment Variables
+
+All variables live in `.env` (copy from `.env.example`). Every `mitra` subcommand (`serve`, `migrate`, `seed`) reads this file via `internal/config`.
+
+| Variable                | Used by      | Description                                                                 |
+| ------------------------ | ------------ | ----------------------------------------------------------------------------- |
+| `APP_ENV`                | serve        | `development`, `production`, or `test` — controls Gin's mode                  |
+| `APP_PORT`               | serve        | Port the API listens on (default `8080`)                                      |
+| `DATABASE_URL`           | serve, migrate, seed | Full Postgres connection string; takes priority when set              |
+| `DB_HOST` / `DB_PORT` / `DB_USER` / `DB_PASSWORD` / `DB_NAME` / `DB_SSLMODE` | serve, migrate, seed, docker-compose | Used to build the connection string / to configure the `postgres` container |
+| `AUTO_MIGRATE`           | serve        | Default `true` — `mitra serve` applies pending migrations itself on startup before accepting requests. Set to `false` to manage migrations only via `mitra migrate` |
+| `JWT_SECRET`             | serve        | **Required** — the API refuses to start if this is empty                      |
+| `JWT_ACCESS_TOKEN_TTL`   | serve        | Access token lifetime (e.g. `15m`)                                            |
+| `JWT_REFRESH_TOKEN_TTL`  | serve        | Refresh token lifetime (e.g. `720h`) — issued today, but there's no `/auth/refresh` route yet to redeem it |
+| `OWNER_EMAIL`            | seed         | Login email for the seeded owner account                                      |
+| `OWNER_NAME`             | seed         | Full name for the seeded owner account                                        |
+| `OWNER_PASSWORD`         | seed         | Initial password for the seeded owner account — change it after first login   |
+
+> `mitra seed` fails fast if `OWNER_EMAIL`, `OWNER_NAME`, or `OWNER_PASSWORD` are empty. It's a no-op (prints a message and exits 0) if a user already exists, so it's safe to re-run.
+
+---
+
+## Local Setup
+
+### Option A — Docker (all services)
+
+```bash
+cp .env.example .env
+# JWT_SECRET is required — the api will fail to start if it's empty.
+# The placeholder value in .env.example works for localhost only;
+# replace it with a real random secret for anything beyond that.
+# OWNER_EMAIL / OWNER_NAME / OWNER_PASSWORD are used by the seed step below.
+
+docker compose up --build
+```
+
+This starts everything: `postgres` → `api` runs pending migrations itself on startup (see `AUTO_MIGRATE`), builds the frontend, and serves both the API and the UI from `http://localhost:8080`.
+
+> The frontend is embedded into the `mitra` binary at build time (see `web/embed.go`) and served by the same process that serves the API — there's no separate frontend container or port anymore. `web/Dockerfile` and `web/nginx.conf` still exist for the rare case you'd want to host the frontend standalone (e.g. behind a CDN), but the default Docker flow above doesn't use them.
+
+**Seed the owner account** (one-time, required before you can log in). Since `seed` is just a subcommand of the same binary as `api`, run it against the running container — no separate `go` install needed:
+
+```bash
+docker compose run --rm api ./mitra seed
+```
+
+This reads `OWNER_EMAIL`, `OWNER_NAME`, and `OWNER_PASSWORD` from `.env` and creates the owner account. Every value can also be passed as a flag instead (`--owner-email`, `--owner-name`, `--owner-password`), which takes priority over the env var when given — handy for scripting/CI without touching `.env`. Prefer the env var for the password where you can, since flag values are visible in shell history and `ps`.
+
+### Option B — Manual (Backend)
+
+```bash
+# 1. Start the database only
+docker compose up -d postgres
+
+# 2. Configure env
+cp .env.example .env
+# Make sure to replace JWT_SECRET with a secure, random value
+
+# 3. Run migrations
+export DATABASE_URL="postgres://mitra:mitra@localhost:5432/mitra?sslmode=disable"
+go run . migrate up
+
+# 4. Seed the owner account (one-time, required before you can log in)
+go run . seed
+
+# 5. Build the frontend — required at least once, since `go run . serve`
+# embeds whatever is currently in web/dist (see "Frontend is embedded" below)
+cd web && npm install && npm run build && cd ..
+
+# 6. Run the server
+go run . serve
+# UI: http://localhost:8080  ·  health check: curl http://localhost:8080/health
+```
+
+> `go run . migrate up` is optional here — by default `mitra serve` (step 6) applies pending migrations itself on startup. Run it explicitly if you'd rather control migrations separately (set `AUTO_MIGRATE=false` in that case). Other migration subcommands: `go run . migrate down`, `migrate steps <n>`, `migrate force <version>`, `migrate version`.
+
+#### Frontend is embedded
+
+`web/embed.go` embeds `web/dist` into the `mitra` binary via `go:embed`, and `mitra serve` serves it directly — that's how `docker compose up` gives you both API and UI on one port. This has one consequence for local (non-Docker) development: **`web/dist` has to contain a real build before `go build`/`go run` in this module serves real UI files.** `web/dist` is git-ignored (only a `.gitkeep` placeholder is tracked), so on a fresh clone the package still compiles fine, it just has nothing real to serve until you run step 5 above. Re-run `npm run build` any time you change the frontend and want `go run . serve` to reflect it — there's no live-reload here, that's what `npm run dev` below is for.
+
+### Manual (Frontend)
+
+For active frontend development, run Vite's dev server instead of rebuilding on every change:
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+This proxies `/api` to `http://localhost:8080` (see `vite.config.ts`) and gives you hot reload — it doesn't touch `web/dist` or the embedded build.
+
+---
+
+## API (Currently Implemented)
+
+Base path: `/api/v1` (except `/health`, which is unversioned)
+
+### Health
+| Method | Path      | Description            |
+| ------ | --------- | ----------------------- |
+| GET    | `/health` | Liveness/health check   |
+
+### Auth
+| Method | Path                     | Description                                            |
+| ------ | ------------------------ | -------------------------------------------------------- |
+| POST   | `/auth/login`            | Login                                                    |
+| POST   | `/auth/change-password`  | Change own password *(requires Authorization: Bearer)*  |
+
+> There is no `/auth/register`. Accounts are created either by the seed step (the first owner) or by an owner/admin adding a user — see [Users](#users-requires-authorization-bearer). Login responses include `must_change_password`; the frontend routes users with that flag set to a forced password-change screen before letting them in.
+
+### Users *(requires Authorization: Bearer)*
+| Method | Path         | Description                                                   |
+| ------ | ------------ | --------------------------------------------------------------- |
+| GET    | `/users/me`  | Get your own profile                                            |
+| PATCH  | `/users/me`  | Update your own profile (`full_name`)                           |
+| GET    | `/users`     | List all users                                                  |
+| POST   | `/users`     | Create a user (owner/admin only; only an owner can create another owner) — returns a `temp_password` |
+| DELETE | `/users/:id` | Remove (soft-delete) a user (owner/admin only; can't remove yourself; only an owner can remove another owner) |
+
+> There's no separate "organization" resource — the deployment is single-tenant, so this list is simply every user account. Global role (`owner`/`admin`/`member`/`viewer`) lives directly on `users.role`.
+
+### Projects
+| Method | Path                              | Description             |
+| ------ | ---------------------------------- | ------------------------ |
+| POST   | `/projects`                       | Create project (owner/admin only) |
+| GET    | `/projects`                       | List all projects        |
+| GET    | `/projects/:id`                   | Project details          |
+| PUT    | `/projects/:id`                   | Edit project              |
+| DELETE | `/projects/:id`                   | Delete (soft) project     |
+| GET    | `/projects/:id/members`           | List project members     |
+| POST   | `/projects/:id/members`           | Add member                |
+| DELETE | `/projects/:id/members/:user_id`  | Remove member             |
+| POST   | `/projects/:id/tasks`             | Create task in project    |
+| GET    | `/projects/:id/tasks`             | List project's tasks      |
+
+### Tasks
+| Method | Path                      | Description           |
+| ------ | -------------------------- | ---------------------- |
+| GET    | `/tasks/assigned-to-me`   | Tasks assigned to me   |
+| GET    | `/tasks/:id`              | Task details            |
+| PUT    | `/tasks/:id`              | Edit task                |
+| PATCH  | `/tasks/:id/status`       | Change status            |
+| POST   | `/tasks/:id/assign/user`  | Assign to a user         |
+| POST   | `/tasks/:id/unassign`     | Unassign                  |
+| DELETE | `/tasks/:id`              | Delete (soft)            |
+| GET    | `/tasks/:id/comments`     | List task comments       |
+| POST   | `/tasks/:id/comments`     | Add comment               |
+
+### Comments
+| Method | Path            | Description    |
+| ------ | --------------- | -------------- |
+| PUT    | `/comments/:id` | Edit comment   |
+| DELETE | `/comments/:id` | Delete comment |
+
+### Requested by the frontend but not yet implemented on the backend
+The web client already has API/store/hook code for these — they currently 404 against this backend:
+
+| Method | Path                          | Used by (frontend)                          |
+| ------ | ------------------------------ | ---------------------------------------------- |
+| GET    | `/v1/notifications`           | `api/notifications.ts`, notifications store    |
+| PATCH  | `/v1/notifications/:id/read`  | `api/notifications.ts`                         |
+| PATCH  | `/v1/notifications/read-all`  | `api/notifications.ts`                         |
+| WS     | (a websocket endpoint)        | `hooks/use-websocket.ts`, chat page            |
+
+None of these have a corresponding Go handler yet — see [Known Limitations](#known-limitations-phase-1).
+
+---
+
+## Frontend Overview
+
+React 19 + TypeScript app in `web/`, built with Vite and styled with Tailwind CSS 4. In production it's embedded into the `mitra` Go binary and served by the same process as the API (see [Frontend is embedded](#frontend-is-embedded)) — there's no separate frontend server/container to run.
+
+- **Routing** (`src/router.tsx`): auth pages (`login`, forced password change), dashboard, project list/detail with a task board, task detail, team (user directory/management, at `/team`), profile, chat, and notifications. `components/guards/RouteGuards.tsx` gates routes on auth state.
+- **State** (`src/stores/`): one Zustand store per domain — `auth`, `users`, `project`, `task`, `notification`, `toast`, `ui`.
+- **API layer** (`src/api/`): a thin axios client (`client.ts`) plus one module per resource (`auth`, `projects`, `tasks`, `comments`, `notifications`, `users`). The `notifications` module calls endpoints the backend doesn't expose yet (see the table above).
+- **Realtime**: `hooks/use-websocket.ts` is a generic reconnecting-WebSocket hook, used by the chat page — there's no WebSocket server on the backend yet (Phase 2, see [`MITRA.md`](./MITRA.md)).
+- **i18n**: `src/i18n/` provides Persian (`fa.ts`) and English (`en.ts`) dictionaries behind a React context, with RTL-aware components (`DirectionalIcon`, `LanguageSwitcher`) and a Vazirmatn variable font for Persian.
+- **UI kit**: a small local component library in `src/components/ui/` (Button, Card, Modal, Toaster, DonutChart, StatCard, etc.) rather than a third-party design system.
+- **Permissions**: `src/lib/permissions.ts` mirrors the backend's global-role/project owner-or-admin checks (`canManageUsers`, `canRemoveUser`, `canManageProject`) so the UI can hide actions the API would reject.
+
+---
+
+## Roles & Permissions
+
+Roles are free-form `VARCHAR` values (no DB-level enum), but the app treats these as the valid set at both scopes:
+
+| Role     | Global scope (`users.role`)                 | Project scope                          |
+| -------- | --------------------------------------------- | ----------------------------------------- |
+| `owner`  | Full control; set once by the seed step       | Full control over that project            |
+| `admin`  | Manage users/projects, same as owner for most checks | Manage members/tasks, same as project owner for most checks |
+| `member` | Default role for anyone added by an owner/admin | Default role for anyone added to a project |
+| `viewer` | Read-only (per the hierarchy diagram)         | Read-only (per the hierarchy diagram)     |
+
+`internal/rbac/policy.go` implements the checks actually enforced today: `GetUserRole`/`IsOwnerOrAdmin` (global role, read straight off `users.role` — no separate membership table anymore), `IsProjectMember`, `IsProjectOwnerOrAdmin` — i.e. most write actions currently just require "member" or "owner/admin", not a fully granular per-permission model yet (that's Phase 3 in `MITRA.md`).
+
+---
+
+## Known Limitations (Phase 1)
+
+- **No `/auth/refresh` endpoint yet** — the frontend's axios client already has retry logic wired up to call it on a 401, but the backend doesn't implement this route yet, so an expired access token currently just logs the user out and requires a fresh login.
+- **No self-serve registration** — by design for now, single-tenant deployment; see the note under [Users](#users-requires-authorization-bearer).
+- **Seeding requires a manual step** — `mitra seed` has to be run once explicitly (via `docker compose run --rm api ./mitra seed` or `go run . seed`); it's not triggered automatically since it depends on the `OWNER_*` env vars you set per-deployment.
+- **Frontend/backend gap** — the web app already has UI, stores, and API calls for a user profile endpoint, notifications, and a WebSocket connection (chat), none of which exist on the backend yet. See the table in [API](#api-currently-implemented).
+- **Presence/Realtime/Push notifications** are not yet implemented (Phase 2).
+- **No Redis/NATS** — removed for cost control in Phase 1; rationale and temporary in-process workaround documented in `MITRA.md`.
+- **No automated tests** in this snapshot (`internal/`, `web/`) — sqlc queries and handlers are not yet covered by integration tests.
+
+---
+
+## Roadmap
+
+Summarized from [`MITRA.md`](./MITRA.md) (full detail and rationale there, in Persian):
+
+1. **Phase 1 — Core MVP** *(current)*: auth, user/project/task CRUD, task comments, basic dashboard, scope-aware RBAC. ✅ mostly done, gaps listed above.
+2. **Phase 2 — Communication & Realtime**: in-app chat over WebSocket (in-process hub, no NATS yet), push notifications (direct FCM calls, no queue yet), live task-status updates.
+3. **Phase 3 — Advanced access & reporting**: full RBAC with project-level overrides, activity-log-based reporting, advanced filtering/search.
+4. **Phase 4 — Desktop & optimization**: Tauri desktop packaging around the same React codebase, full offline mode for the (planned) Flutter mobile app, revisit bringing Redis/NATS back if horizontal scaling is actually needed.
+
+---
+
+## License
+
+MIT — see [`LICENSE`](./LICENSE).

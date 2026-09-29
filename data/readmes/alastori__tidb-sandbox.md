@@ -1,0 +1,93 @@
+# TiDB Sandbox
+
+Reproducible experiments exploring TiDB ecosystem behavior, compatibility gaps,
+and troubleshooting patterns.
+
+## Lab Index
+
+### Data Migration (DM)
+
+| Lab | Description | Type |
+|-----|-------------|------|
+| [lab-00](labs/dm/lab-00-build-dm-from-source) | Build DM Docker images from tiflow source (branch, PR, multi-PR) | Scripted |
+| [lab-01](labs/dm/lab-01-mariadb10613-privileges) | MariaDB 10.6.13 privilege fix & workarounds | Manual |
+| [lab-02](labs/dm/lab-02-mariadb-legacy-migration) | Legacy MariaDB full-load precheck & target fixups | Manual |
+| [lab-03](labs/dm/lab-03-foreign-key-safe-mode) | Foreign keys and safe mode (short-term workaround) | Manual |
+| [lab-04](labs/dm/lab-04-binlog-format) | Binlog format requirements (ROW / STATEMENT / MIXED) | Scripted |
+| [lab-05](labs/dm/lab-05-sharded-mysql-dm-migration) | Shard merge migration (3 MySQL shards → TiDB, pessimistic mode) | Scripted |
+| [lab-06](labs/dm/lab-06-lock-tables-privilege) | LOCK TABLES privilege and consistency modes (vanilla MySQL vs RDS) | Scripted |
+| [lab-07](labs/dm/lab-07-fk-v856-validation) | Foreign key v8.5.6 fix validation (13 scenarios, 3 PRs) | Scripted |
+| [lab-08](labs/dm/lab-08-column-desensitization) | Column-level desensitization workarounds (source-side trigger, masking view) | Scripted |
+| [lab-09](labs/dm/lab-09-dm-mysql84-compat) | MySQL 8.4 compatibility: full-load + incremental validation + Dumpling workaround | Scripted |
+
+### Dumpling
+
+| Lab | Description | Type |
+|-----|-------------|------|
+| [lab-01](labs/dumpling/lab-01-view-dependencies) | View dependencies (ordering + restore correctness) | Scripted |
+| [lab-02](labs/dumpling/lab-02-partitioned-export-performance) | Partitioned export performance (ORDER BY + composite key) | Investigation |
+
+### Import Into
+
+| Lab | Description | Type |
+|-----|-------------|------|
+| [lab-01](labs/import-into/lab-01-base64-decoding) | Base64 decoding with IMPORT INTO ... SET | Manual |
+
+### TiDB Lightning
+
+| Lab | Description | Type |
+|-----|-------------|------|
+| [lab-01](labs/lightning/lab-01-create-view-privilege) | CREATE VIEW privilege required by Lightning conflict_view (logical + physical modes, 8 scenarios) | Manual |
+
+### Sync Diff Inspector
+
+| Lab | Description | Type |
+|-----|-------------|------|
+| [lab-00](labs/sync-diff-inspector/lab-00-build-from-source) | Build traceable Linux binaries from a TiFlow PR or branch | Scripted |
+| [lab-01](labs/sync-diff-inspector/lab-01-data-types-validation) | Data type validation: MySQL vs TiDB | Scripted |
+| [lab-02](labs/sync-diff-inspector/lab-02-ticdc-syncpoint-validation) | TiCDC syncpoint + sync-diff-inspector validation | Scripted |
+
+### TiDB
+
+| Lab | Description | Type |
+|-----|-------------|------|
+| [lab-01](labs/tidb/lab-01-syntax-select-for-update-of) | SELECT ... FOR UPDATE OF: base table vs alias | Manual |
+| [lab-02](labs/tidb/lab-02-syntax-create-table-default-generated) | CREATE TABLE constraints and generated columns | Manual |
+| [lab-03](labs/tidb/lab-03-vector-store-basics) | Vector store basics: VECTOR columns, TiFlash, HNSW indexes | Project |
+| [lab-04](labs/tidb/lab-04-fk-index-comparison) | FK and supporting index: MySQL 8.4 vs TiDB 8.5+ | Manual |
+| [lab-05](labs/tidb/lab-05-hibernate-tidb-ci) | Hibernate ORM TiDB CI | Project |
+| [lab-06](labs/tidb/lab-06-recursive-cte-fanout) | Recursive CTE fan-out: MySQL vs PostgreSQL | Manual |
+| [lab-07](labs/tidb/lab-07-varchar-length-enforcement) | VARCHAR length enforcement in non-strict SQL mode | Investigation |
+| [lab-08](labs/tidb/lab-08-sqlproxy-switchover) | SQL proxy switchover: TiProxy vs HAProxy vs ProxySQL | Scripted |
+| [lab-09](labs/tidb/lab-09-dns-failover) | DNS failover: client behavior during endpoint resolution changes | Scripted |
+| [lab-10](labs/tidb/lab-10-cloud-dns-failover) | Cloud DNS failover: Dedicated ↔ Essential via CoreDNS CNAME | Scripted |
+| [lab-11](labs/tidb/lab-11-cloud-proxy-failover) | Cloud proxy failover: HAProxy (L4) vs ProxySQL (L7) on EC2 | Scripted |
+| [lab-13](labs/tidb/lab-13-inline-fk-syntax) | Inline FK syntax: silent accept-and-ignore across 8 engines | Manual |
+| [lab-14](labs/tidb/lab-14-admin-endpoint-binding-defaults) | TiDB / TiKV / PD admin-endpoint binding defaults (flag inventory, bind audit, network reach) | Investigation |
+| [lab-15](labs/tidb/lab-15-tidb-startup-tls) | TiDB cluster startup behavior with and without inter-component TLS (TLS-off vs TLS-on across bare process, multi-container deploy, and TiDB Operator; tiup playground baseline only) | Investigation |
+
+## Lab Types
+
+| Type | Description | Example |
+|------|-------------|---------|
+| Scripted | Full automation with `run-all.sh` | [sync-diff/lab-01](labs/sync-diff-inspector/lab-01-data-types-validation) |
+| Manual | Guided SQL exploration | [tidb/lab-01](labs/tidb/lab-01-syntax-select-for-update-of) |
+| Project | Python/Java test harness | [tidb/lab-05](labs/tidb/lab-05-hibernate-tidb-ci) |
+| Investigation | Multi-phase root-cause analysis | [tidb/lab-07](labs/tidb/lab-07-varchar-length-enforcement) |
+
+## Getting Started
+
+**Prerequisites:** Docker, mysql client, TiUP (optional).
+
+Pick a lab from the index. Each lab's primary `.md` file has a "Tested
+Environment" section and either a How to Run section or step-by-step
+instructions.
+
+## Creating a New Lab
+
+See [LAB_AUTHORING_GUIDE.md](LAB_AUTHORING_GUIDE.md). Templates are in
+[labs/_templates/](labs/_templates/).
+
+## License
+
+MIT

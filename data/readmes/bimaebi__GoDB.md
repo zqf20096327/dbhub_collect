@@ -1,0 +1,1 @@
+GoDB is currently in the early development stage. Version v1.0 focuses on the database and table management foundation and will gradually evolve into a fully functional SQL database engine.

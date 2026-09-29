@@ -1,0 +1,526 @@
+# HOM-AIMOS
+
+**A local-first security and long-term memory backend for AI agents.**
+
+[![CI](https://github.com/wallidsaydi-creator/HOM-AIMOS/actions/workflows/ci.yml/badge.svg)](https://github.com/wallidsaydi-creator/HOM-AIMOS/actions/workflows/ci.yml)
+
+Agents become more useful when they remember—and more dangerous when nobody can
+explain who wrote a memory, where it came from, why it changed, or what it later
+caused. HOM-AIMOS makes those questions part of the memory system itself.
+
+It gives an agent one governed path to remember, one governed path to recall,
+and a cryptographic trail across identity, origin, provenance, mutation, tool
+use, and durable outcomes. It runs on the user's Mac, keeps its canonical brain
+in PostgreSQL, and does not require a hosted HOM-AIMOS account or control plane.
+
+**Current release:** `v1.0.5` · macOS 14+ · Node.js 20/24/26 · PostgreSQL 18 ·
+AGPL-3.0-or-later
+
+## What HOM-AIMOS gives your agent
+
+| Need | What the system provides |
+|---|---|
+| Memory that survives sessions and restarts | Persistent sessions, canonical SAVE, native hybrid/graph RECALL, and signed terminal outcomes. |
+| Evidence about where memory came from | Native Origin Binding derives and commits source, family, principal, and action evidence with the memory. |
+| Protection against unsafe recalled context | Provenance verification, epistemic classification, Canary traversal controls, disclosure policy, and signed recall receipts. |
+| Learning without silent rewriting | Content remains immutable while governed retrieval weight can change through signed, bounded, reversible transitions. |
+| Autonomous upkeep without impersonating the user | A separate Housekeeper identity owns maintenance, scheduling, dreams, and authorized mutation. |
+| A history that can be inspected later | Append-only ledgers retain attempts, denials, failures, supersession, and successful durable effects. |
+| A clean reset when a project truly ends | One explicit, offline, all-or-nothing brain purge; no selective forgetting disguised as maintenance. |
+
+## Why it is different
+
+- **Security is inside memory, not bolted on afterward.** Identity, origin,
+  authorization, retention, provenance, and terminal evidence participate in
+  the same SAVE and RECALL lifecycles.
+- **One memory system means one authority path.** HTTP, MCP, sessions,
+  autonomous work, and tool results converge on canonical owners instead of
+  maintaining parallel stores or privileged shortcuts.
+- **Full retention is structural.** Suspicious, contradicted, or superseded
+  observations remain auditable. Policy may change how evidence is used; it
+  cannot quietly erase history.
+- **Agent identity is not a model subscription.** Provider/model choice is an
+  optional signed policy. An enrolled identity remains independent of the
+  provider used for a particular task.
+- **Claims are bounded honestly.** HOM-AIMOS can prove that retained bytes,
+  authority, ordering, and transitions verify. It cannot prove that an
+  authorized source told the truth.
+
+## Start locally
+
+Clone the repository on a supported Mac, inspect the prerequisites, and run the
+single public installer:
+
+```sh
+git clone https://github.com/wallidsaydi-creator/HOM-AIMOS.git
+cd HOM-AIMOS
+./install-macos.sh --check
+./install-macos.sh
+```
+
+First launch creates the database, restricted runtime role, autonomous
+Housekeeper, signed Guide corpus, operator root, and one ordinary agent selected
+by the user. It then installs HOM-AIMOS as a persistent user service. The
+operator enters one passphrase for the complete onboarding flow.
+
+Confirm that it is running:
+
+```sh
+npm run service:status
+curl --fail http://127.0.0.1:9100/healthz
+```
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for the exact signed SAVE/RECALL workflow,
+additional agent enrollment, upgrades, recovery, and the whole-brain purge
+boundary.
+
+## The product boundary
+
+This repository is the HOM-AIMOS backend and developer integration surface. It
+is not a hosted model, a model provider, or a graphical agent application. It
+exposes signed local HTTP and MCP surfaces so an agent or application can use
+the same memory and security owners without direct database access.
+
+```text
+Agent or application
+        │ signed certificate envelope
+        ▼
+HOM-AIMOS :9100
+  ├── identity and capability authority
+  ├── canonical sessions, SAVE and RECALL
+  ├── origin, provenance and event ledgers
+  ├── tool approval and execution evidence
+  └── Housekeeper-owned maintenance and mutation
+        │
+        ▼
+PostgreSQL + pgvector (one canonical brain)
+```
+
+Useful entry points:
+
+- [Architecture map](ARCHITECTURE-MAP.md)
+- [Agent and tool connection guide](Guide/AGENTS.md)
+- [Security model](SECURITY.md)
+- [Threat model](THREAT-MODEL.md)
+- [Release verification](RELEASE.md)
+
+## Under the hood: the retrieval-memory substrate
+
+HOM-AIMOS is a complete persistent-memory backend, not a provenance layer
+attached to a vector store. Its source-derived architecture binds a
+current 295-service census and declares six critical pipelines containing 115
+service connections. SAVE exposes one fixed 15-stage owner; RECALL exposes its
+eight principal native execution boundaries.
+
+### SAVE — 15 fixed stages
+
+`services/write/canonical-save-owner.js` owns:
+
+```text
+AUTH → RECEIPT → CANARY → SE → ALADDIN → VALIDATOR → QUALITY
+→ SECRET_BOUNDARY → EMBEDDING → PERSISTENCE → PROVENANCE → LINEAGE
+→ GRAPH → EPISTEMIC → TERMINAL
+```
+
+The signed terminal is inserted in the same restricted transaction as a
+successful memory/provenance/lineage/graph/epistemic commit. Failed or rejected
+operations retain a non-success terminal and cannot return success.
+External transports preserve their verified request or tool authority.
+Autonomous services call a separate typed entrypoint that first appends a
+Housekeeper-signed action commitment over the exact SAVE projection. A bare
+`housekeeper` field is not authority, and public routes cannot mint autonomous
+Housekeeper actions.
+
+### Recall — 8 stages
+
+| # | Stage | Native owner |
+|---:|---|---|
+| 1 | Query understanding and path selection | `services/retrieval/native-recall-pipeline.js` |
+| 2 | Embedding and candidate opening | `services/core/embeddings.js` |
+| 3 | Similarity statistics | `services/retrieval/similarity-stats.js` |
+| 4 | Trust scoring | `services/learning/trust-score.js` |
+| 5 | Permanent dense, sparse, temporal, entity, QuIM, internal QMD candidates, HyDE, and concept gears plus one bounded Reconstructed-Graph G2 family channel with central deterministic RRF | `services/retrieval/native-recall-pipeline.js`, `services/retrieval/native-retrieval-fusion.js`, `services/retrieval/reconstructed-graph-native-candidate.js` |
+| 6 | Verified epistemic projection and selection | `services/retrieval/epistemic-trust-retrieval.js` |
+| 7 | Pre-disclosure calibration | `services/retrieval/recall-calibrator.js` |
+| 8 | Bounded evidence and signed receipt | `services/retrieval/native-recall.js` |
+
+### Native retrieval gearbox
+
+Recall is a cooperative gearbox, not a competition in which one retriever
+replaces the memory system. The native fusion owner combines vector, BM25,
+lexical, temporal, QuIM, QMD, HyDE, entity, Concept/PPR, and one bounded graph
+family channel. Every outer channel has one vote in deterministic reciprocal
+rank fusion; a graph subgear cannot multiply its voting mass or remove the
+admitted baseline.
+
+QMD is internal candidate logic under canonical recall authority. Its former
+standalone route, MCP tool, parser, and planner were removed after live proof
+showed that the separate surface could disclose memory without the canonical
+origin-aware recall receipt. Historical plans and audits retain that record.
+
+MAGMA is retained as dormant research. Its paper adaptation, principal-scoped
+reader, pure kernel, tests, and signed historical artifacts remain reviewable,
+but canonical recall does not call it, accept its discoveries, or give it a
+rank vote. This boundary follows a current-stack utility/latency failure and is
+represented explicitly in recall metadata rather than hidden behind a flag.
+
+Reconstructed Graph G2 is the sole bounded subgear in the live family channel.
+Additional graph candidates are evaluated one at a time as marginal additions
+to the complete gearbox; they are not advertised as active merely because a
+service or isolated test exists.
+
+### Cognitive mutation — retained, bounded, reversible
+
+HOM-AIMOS does not treat memory as static after admission. It keeps canonical
+content immutable while allowing its retrieval weight to move bidirectionally
+within `[0.1, 3.0]` as signed evidence changes. A low weight means lower
+retrieval frequency, never deletion or ineligibility.
+
+Three native mutation lanes converge on one certified database writer:
+
+- outcome adaptation appends signed positive or negative evidence to
+  `services/governance/valence-ledger.js`, computes an age-neutral cumulative
+  valence through `services/governance/valence-judge.js`, and applies the
+  bounded reference-point update in `services/learning/stdp-kernel.js`;
+- SPICED consolidation may strengthen eligible retained memories through
+  `services/dream/spiced-consolidator.js`; and
+- optional Hebbian consensus may elevate supported hubs or attenuate divergent
+  evidence through `services/dream/hebbian-consensus.js`. This lane is
+  shadow-first and disabled until its signed governor flag is enabled.
+
+Every changed target passes through
+`services/governance/governor-provenance.js`, which appends a housekeeper-signed
+`REWEIGHT` node and creates a distinct fixed-width transition signature. The
+`apply_signed_cognitive_reweight` function in migration 091 verifies the exact
+tenant, memory, signer epoch, old and new milliscaled weights, provenance hash,
+continuity, and no-fork predecessor before it atomically appends the projection
+and updates only `retrieval_weight`. A quantized no-op retains its signed
+outcome evidence without inventing a transition.
+
+`verify_cognitive_weight_chain()` and `verify_all_cognitive_weight_chains()`
+replay the database evidence, while
+`services/security/cognitive-weight-verifier.js` independently verifies the
+same baseline, provenance, signature, continuity, terminal-state, and corpus
+proof-root contracts. The normative byte layout and invariants are published
+in [`docs/security/cognitive-weight-chain-SPEC.md`](docs/security/cognitive-weight-chain-SPEC.md).
+
+The save manifest declares 15 critical service connections; recall declares
+34 spanning exact-identifier, semantic, temporal, graph, procedural, and
+lineage paths. The service census contains retrieval 61, orchestration 43,
+security 51, temporal 22, learning 23, observe 22, core 15, write 15, context
+9, integrations 9, governance 7, dream 5, ingestion 4, shared 4, answering 2,
+runtime 2, and caching 1.
+
+`services/pipeline-manifest.js` is the source of truth for the six critical
+connection maps. Its validator dynamically imports all 115 declarations and
+checks their named exports; architecture tests and the release-source gate fail
+when the declared topology and public documentation diverge.
+
+## Security is the architecture
+
+The save and recall paths are a working memory system on their own. The
+cryptographic layer enters at explicit boundaries:
+
+- SAVE stage 14 assigns each retained memory a signed, reversible epistemic
+  label bound to its live content hash.
+- Recall stages 6–8 verify and consume the epistemic projection, apply a
+  verified calibration snapshot, and return bounded evidence under an
+  RFC 6962-style domain-separated Merkle receipt.
+- Cognitive mutation changes retrieval weight within a constitutional interval
+  only through housekeeper-authorized signed transitions. Each transition binds
+  the terminal provenance node, signer epoch, quantized old and new weights,
+  and no-fork predecessor.
+- Ed25519 verification runs in the database mutation boundary and in an
+  independent portable verifier.
+
+Security is not a filter placed after retrieval. It is composed into identity,
+save, recall, mutation, tools, graph selection, and evidence output:
+
+- **Signed authority:** protected requests bind the certificate identity,
+  method, path, body, nonce, and timestamp. Runtime policy comes from verified,
+  append-only configuration—not request fields or environment variables.
+- **Native Origin Binding:** the server derives each SAVE origin and typed
+  classification family from verified ingress, retained inputs, and action
+  evidence. The binding commits atomically with memory, propagates
+  conservatively through derived values, appears in signed RECALL evidence,
+  and is consumed before consequential tool execution. A caller, model, or
+  Housekeeper signature cannot silently upgrade input integrity.
+- **Retention-preserving poison evidence:** potentially poisoned content is
+  retained and receives a signed, reversible epistemic label. Recall consumes
+  that label before active-context disclosure.
+- **Canary traversal controls:** explicit generated markers are inspected at
+  `PERSISTED`, `RELAYED`, `EXECUTED`, and `EXPOSED` boundaries. Marked memory is
+  retained under quarantine; marked relay, tool input, or tool output is kept
+  out of the downstream execution context. Canary detects its explicit marker
+  family, not arbitrary unmarked poisoning.
+- **Governed graph retrieval:** the source-bound Reconstructed Graph G2
+  adaptation is the sole live subgear inside one structural family channel,
+  fused with dense, sparse, temporal, entity, QuIM, QMD, HyDE, and concept
+  evidence. It cannot replace the admitted baseline. MAGMA is retained dormant
+  with zero runtime execution or rank contribution. The caller's
+  verified identity/grant scopes its reads; provenance, epistemic, Canary,
+  Aladdin-retention, and signed-recall owners retain final disclosure authority.
+- **Signed self-red-teaming:** the SABER-inspired operational harness commits a
+  fixed manifest, one native signed decision per case, and signed terminal or
+  failed campaign evidence. Validation and reports reconstruct from verified
+  event IDs; callers cannot submit their own security aggregate.
+
+Canonical memory is never selectively removed, decayed, expired, suppressed,
+or deactivated. The sole erasure path is an offline, master-signed,
+all-or-nothing whole-brain purge that emits a signed terminal receipt.
+
+## Published benchmark snapshot (historical)
+
+The following values are the retained MutMem V2 publication snapshot. They are
+preserved for reproducibility and comparison, not used as a version lock or a
+release gate for the evolving system.
+
+| Result | Value |
+|---|---:|
+| LongMemEval, LLM-judged | 459/500 — 91.8% |
+| LoCoMo, LLM-judged | 1472/1986 — 74.12% |
+| LoCoMo, separate upstream-compatible token F1 | 58.20 |
+| PoisonedRAG N=100, poison in attacked top-5 disclosures | 0/100 |
+| Same target set, epistemic policy bypassed | 94/100 |
+| Mutation authorization rejection cases | 7/7 |
+| Cognitive tamper cases detected | 4/4 |
+| SQL/portable cognitive verifier parity | 9/9 records |
+| Signed cognitive-transition latency, median | 4.865 ms |
+| MAGMA retained research proof (historical) | 20/20 signed recalls; 8/20 graph-discovery observations; candidate p95 218.941 ms under its fixed 250 ms gate |
+| MAGMA current-stack ruling | Dormant: later Gate50 evidence recall −0.028 and judged accuracy −0.04, candidate p95 430.081 ms; no canonical recall caller or rank vote |
+| Reconstructed Graph G2 additive proof | 840/840 exact fixed-corpus rows; multi-hop nDCG@20 +0.012325; evidence recall@20 +0.021237 |
+| Reconstructed Graph G2 canonical live proof | 20/20 signed recalls; incremental p95 27.023 ms under its unchanged 50 ms gate; canonical roots unchanged |
+| SABER-inspired live operational campaign | 27/27 attacks blocked or retained-quarantined; 0/28 benign false positives; 0 indeterminate |
+
+These are distinct protocols and are not averaged. The utility, poisoning, and
+mutation figures regenerate from the sanitized, self-hashed aggregate in
+[`eval/publication/verified-benchmark-results.json`](eval/publication/verified-benchmark-results.json),
+which binds the promoted publication runs by SHA-256. MAGMA's retained
+historical artifacts and the operational red-team campaign are separate from
+that aggregate; dormant MAGMA evidence is not presented as current runtime
+performance.
+
+The central security distinction is **integrity, not omniscience**. AIMOS can
+prove that an authorized identity asserted a specific memory at a particular
+ledger position and that the retained evidence has not been silently rewritten.
+It cannot prove that the asserted content is factually true. The threat model
+names this failure class **Authenticated-But-False (ABF)**.
+
+## Release and research lineage
+
+This repository contains the HOM-AIMOS 1.0.5 source release. It advances the
+system beyond the published MutMem V2 snapshot with complete native Origin
+Binding: typed family classification, atomic SAVE binding, conservative
+producer propagation, origin-bearing RECALL evidence, and exact
+consequential-action authority. Current releases are qualified against current
+runtime, security, installer, dependency, and clean-Genesis behavior. Historical
+paper artifacts and benchmark aggregates remain available as dated research
+records but do not constrain current source bytes.
+
+The architecture manifest mechanically binds the current 295-service census.
+That number is an inventory fact, not a performance claim.
+
+## Security and retention invariants
+
+- External save, recall, credential, authorization, and mutation actions are
+  bound to signed certificate envelopes.
+- Secrets and identity keys use macOS Keychain custody. `.env` files and
+  environment-owned credentials are rejected as runtime authority.
+- Canonical memory is never selectively deleted, decayed, expired, suppressed,
+  or deactivated. Contradictions and corrections are retained through signed
+  supersession and cognitive transitions.
+- The sole erasure mechanism is an offline, master-signed, all-or-nothing
+  whole-brain purge that emits a signed receipt.
+- Security quarantine remains retained and recallable under its enforced
+  clearance and cognitive policy.
+- Retained reference memories carry a separate, signed, reversible epistemic
+  label. Poison suspicion changes evidence handling without rewriting or
+  deleting the underlying observation; later evidence may refute the label.
+- Explicit Canary markers are tracked across persistence, relay, tool-input,
+  and tool-output boundaries without being represented as a universal poison
+  detector.
+- SABER-inspired campaign evidence is diagnostic and evaluation-only. It has
+  no runtime save, recall, ranking, quarantine, or disclosure authority and is
+  not a DARPA certification claim.
+- Native implementation only: no placeholder services, fake controls, runtime
+  wrappers, or bypass hooks.
+
+See [the agent-security architecture](docs/security/agent-security-architecture.md),
+[the SABER operational evidence](docs/security/saber-operational-evidence.md),
+[SECURITY.md](SECURITY.md), and [THREAT-MODEL.md](THREAT-MODEL.md) before
+deploying or integrating AIMOS.
+
+## Platform and prerequisites
+
+The AIMOS 1.0.5 source release supports Intel and Apple silicon Macs running
+macOS 14 or later. A clean installation requires:
+
+- Apple Command Line Tools (`xcode-select --install`), including `git`, `curl`,
+  a compiler, and `make`;
+- Node.js 20, 24, or 26 with `npm`; the clean installer prefers Node 26;
+- PostgreSQL 18;
+- pgvector built for the selected PostgreSQL 18 server;
+- libsodium and `pkg-config`/pkgconf; and
+- macOS Keychain access.
+
+Homebrew is the supported dependency provisioner for a clean source install,
+but it is not AIMOS runtime authority and is not required when compatible
+dependencies already exist. GPG is not required to install or run AIMOS. The
+Genesis installer verifies or builds the checksum-locked pgsodium 3.1.11 source
+and artifacts before database creation. Other operating systems and PostgreSQL
+majors are not claimed as supported by this release.
+
+## Install and start
+
+Do not create the AIMOS database manually. Genesis owns database creation,
+migrations, restricted-role custody, housekeeper enrollment, and signed Guide
+ingestion.
+
+Download the release source archive or clone the repository, then run from its
+root:
+
+```sh
+cd HOM-AIMOS
+./install-macos.sh --check
+./install-macos.sh
+```
+
+The installer displays its plan and asks before Homebrew or Genesis changes
+machine state. It uses the repository `Brewfile`, installs the locked npm graph,
+hands control to native Genesis, and then performs generic first-launch
+onboarding. Genesis creates the autonomous Housekeeper and Guide corpus first;
+onboarding then asks you to choose an ordinary agent identity and one operator
+passphrase. You may optionally select a provider/model or leave that policy
+unset for later. No benchmark identity or workload is installed. The installer
+does not download or execute the Homebrew installer itself.
+
+For an explicit manual dependency path:
+
+```sh
+xcode-select --install              # only when Command Line Tools are absent
+# Install Homebrew from https://brew.sh when no compatible toolchain exists.
+brew bundle --file Brewfile
+brew services start postgresql@18
+npm ci
+npm run genesis:install -- --aimos-db aimos --aimos-port 9100
+node scripts/identity/onboard-agent.mjs --aimos-db aimos --aimos-port 9100
+```
+
+The installer completes Genesis, generic agent onboarding, and persistent user
+service installation.
+Check it with:
+
+```sh
+npm run service:status
+```
+
+Verify the live service:
+
+```sh
+curl --fail http://127.0.0.1:9100/healthz
+```
+
+AIMOS owns port 9100. Other runtimes are outside this repository's supported
+deployment boundary.
+
+The complete enrollment, signed save/recall proof, upgrade, and purge ceremonies
+are documented in [DEPLOYMENT.md](DEPLOYMENT.md).
+
+Release packages include SHA-256 checksums, a CycloneDX SBOM, and GitHub keyless
+build provenance. GPG is not required. See [RELEASE.md](RELEASE.md) for online
+and offline verification boundaries.
+
+## Reproducibility has two layers
+
+The **source-install layer** starts from a clean checkout. `install-macos.sh`
+checks the supported toolchain, and Genesis creates the database, applies the
+migrations, provisions the restricted runtime role and autonomous housekeeper,
+generates machine-local authority, and ingests the manifest-bound Guide corpus
+through the real signed save path. This proves that the released source can
+construct the declared architecture without a pre-existing brain.
+
+The **operator-ceremony layer** proves live security behavior without sharing
+private keys. The installer has already created the operator root and first
+ordinary agent. An operator may enroll an additional audit agent, append its
+master-signed read/write grant, exercise signed save and recall, and run the
+disposable security ceremony:
+
+```sh
+node scripts/identity/enroll-agent.js <audit-agent-id> --validity-days=30
+node scripts/identity/authorize-recall.js <audit-agent-id> \
+  --clearance=10 \
+  --data-class=confidential \
+  --reason="Local reproducibility ceremony" \
+  --write
+npm run test:security:isolated
+```
+
+Reproduction creates new signer epochs, nonces, event identifiers, and artifact
+hashes; it verifies the protocol and invariants rather than attempting to copy
+the original operator's signatures. Source-only and isolated tests remain
+separate from deliberately authorized live ceremonies. Exact signed-envelope
+examples and the whole-brain purge boundary are in
+[DEPLOYMENT.md](DEPLOYMENT.md) and
+[Guide/connect-to-aimos-cert-envelope.md](Guide/connect-to-aimos-cert-envelope.md).
+
+## Architecture and agent guidance
+
+- [ARCHITECTURE-MAP.md](ARCHITECTURE-MAP.md) describes the implemented runtime.
+- [hom-architecture-manifest.json](hom-architecture-manifest.json) is the
+  mechanically verified service inventory.
+- [architecture-authority.template.json](architecture-authority.template.json)
+  is the portable authority used to generate machine-local runtime authority.
+- [Guide/AGENTS.md](Guide/AGENTS.md) is the LLM-agnostic boot and truth-hierarchy
+  index. `Guide/` is also the cryptographically manifest-bound Genesis corpus.
+
+## Verification
+
+The ordinary source suite never touches a live database:
+
+```sh
+npm test
+npm run lint
+npm audit --omit=dev --audit-level=high
+```
+
+Benchmark contract tests require the public datasets, which are downloaded from
+immutable upstream revisions and verified by SHA-256:
+
+```sh
+bash eval/data/download.sh
+node eval/prepare-canonical-corpus.mjs
+npm run test:benchmark:contracts
+```
+
+The complete release-source gate is:
+
+```sh
+npm run test:release:source
+```
+
+The isolated Genesis and signed live-fire ceremony uses a disposable database
+and must be run with AIMOS 9100 stopped because it temporarily exercises the
+machine-local housekeeper certificate cache:
+
+```sh
+npm run test:security:isolated
+```
+
+## Benchmark boundary
+
+Benchmark data is never distributed under the AIMOS source license and is
+never ingested into the canonical user brain. The isolated runner creates a
+fresh Genesis-installed scratch brain and preserves signed save, session,
+recall, model, judgment, and purge evidence separately.
+
+Retrieval metrics and judged answer accuracy are reported independently. A
+retrieval hit is not presented as a correct answer.
+
+## License and contributions
+
+Source code is licensed under AGPL-3.0-or-later. A separate commercial license
+may be available for deployments that cannot comply with AGPL; see
+[COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md). Downloaded benchmark datasets
+retain their upstream licenses.
+
+Contribution requirements are in [CONTRIBUTING.md](CONTRIBUTING.md).

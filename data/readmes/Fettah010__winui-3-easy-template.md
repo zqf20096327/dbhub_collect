@@ -1,0 +1,153 @@
+# DevTem WinUI 3 starter
+
+<p align="center">
+  <img src="Assets/Logo.png" alt="DevTem logo" width="120" />
+</p>
+
+<p align="center">
+  <a href="https://github.com/Fettah010/winui-3-easy-template/stargazers"><img src="https://img.shields.io/github/stars/Fettah010/winui-3-easy-template?style=for-the-badge" alt="GitHub Repo stars" /></a>
+  <a href="https://www.nuget.org/packages/DevTem.Templates"><img src="https://img.shields.io/nuget/v/DevTem.Templates?style=for-the-badge&label=NuGet" alt="NuGet package version" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-67ac09?style=for-the-badge" alt="MIT license" /></a>
+</p>
+
+Production-ready **WinUI 3 starter template** for Windows desktop apps: a real app shell with updates, settings, diagnostics, and release automation already wired up.
+
+It is built for teams that want a real app shell instead of a blank canvas: **MVVM**, **Mica window**, **system tray**, **Velopack auto-updates**, **localization**, **logging**, **SQLite**, **typed HTTP client**, and a **release pipeline** already wired up.
+
+![Home page — welcome card, status, and feature overview](docs/screenshots/home.png)
+
+## Install the template
+
+```powershell
+dotnet new install DevTem.Templates
+```
+
+Scaffold a full app:
+
+```powershell
+dotnet new devtem-winui -n AcmeDesk --displayName "Acme Desk" --company "Acme" --repo "acme/desk-app" --scheme "acme://"
+```
+
+Or add a page to an existing app:
+
+```powershell
+dotnet new devtem-page -n Orders
+```
+
+## Why DevTem
+
+### DevTem vs. the official blank templates
+
+| Option | Best for | What is missing | DevTem tradeoff |
+| --- | --- | --- | --- |
+| Official `dotnet new` WinUI blank | Learning WinUI basics | App shell, updates, tray, settings, diagnostics, release automation | Not a production starter |
+| Template Studio | Visual scaffolding | Opinionated desktop app starter, release workflow, ready-made working patterns | More wizard-driven, less code-first |
+| DevTem | Real-world desktop app starter | Some flexibility in favor of a working baseline | Curated defaults; composable at scaffold time |
+
+DevTem is not trying to compete with the official blank app as a minimal "hello world." It is the production-ready WinUI 3 starter for the workloads that blank templates leave out on purpose.
+
+## What ships out of the box
+
+- WinUI 3 / Windows App SDK on .NET 10
+- Mica-based desktop shell with native title bar behavior
+- System tray support with single-instance activation
+- Auto-updates (Velopack installer + deltas by default; zero-dependency checker or none at scaffold time; native AppInstaller / Store updates for packaged MSIX)
+- First-run welcome (installers own setup choices; wizard page available but never auto-opens)
+- Packaged MSIX distribution with runtime-adaptive paths, autostart, and protocol (`--distribution msix`)
+- 3-language runtime localization (en-US, es-ES, fr-FR; English-only at scaffold time)
+- Logging through one facade (Serilog console + file by default; MEL or none at scaffold time)
+- Optional Sentry crash reporting (DSN-gated; SDK droppable at scaffold time)
+- SQLite data layer and typed HTTP client (each droppable at scaffold time)
+- MVVM pattern with CommunityToolkit.Mvvm
+- GitHub Actions release pipeline and version tag flow
+
+Every bullet above except MVVM/Mica is a scaffold-time choice: the repo
+app shows the all-on reference, `dotnet new devtem-winui --help` lists
+the flags, and each scaffold records its picks in a generated
+`docs/FEATURES.md` (see `docs/template-features.json` for the schema).
+
+![Settings page — theme, language, update channel, test toast, tray](docs/screenshots/settings.png)
+
+## What's new in 0.0.27-beta
+
+- Clean-scaffold pass from real-app pain: `remove-sample-content.ps1`
+  (inverse of `add-page.ps1`), neutral default strings, per-update-mode
+  first-run notes, runtime-resolved repo/license links
+- `add-page.ps1` heals itself: temp-copy activation for the dormant
+  nested template, `--route` probe with remediation, nav-anchor fallback
+  for restyled shells (plus a parity hole closed: dormant config is now
+  content-compared)
+- Runtime hardening kit: dialog uncollapse pattern, 60s picker timeout,
+  XAML symbol audit, unit-conversion/change-epoch helpers, DI gate test,
+  build-commit surfacing
+
+Earlier releases: full notes in [CHANGELOG.md](CHANGELOG.md).
+
+## Run this repo locally
+
+```powershell
+dotnet build -c Debug -p:Platform=x64
+dotnet run -c Debug -p:Platform=x64
+```
+
+## Quick demo
+
+This repo is both a full sample app and the source of the project template. It demonstrates a working desktop app model that you can customize rather than build from a bare shell.
+
+```text
+App shell
+├── Home page
+├── Settings page
+├── Toasts + native update dialogs (check → download → restart)
+├── First-run welcome (installers own setup)
+├── Tray + toast behavior
+├── Update checks + restart prompt
+├── Localization + theme persistence
+└── Release pipeline ready to use
+```
+
+## FAQ
+
+### Why does Check for updates say "only available for installed apps"?
+
+That message is correct when the app runs unpackaged (`dotnet run` or a
+loose exe): Velopack can only apply updates to an installed app. Run the
+installed build (Start menu entry or `setup.exe` install) for real update
+checks. If an *installed* build says it, check
+`%LocalAppData%\DevTemWinUi3\Logs` — every check stage is logged there.
+
+### Is this a good WinUI 3 starter template?
+
+Yes. DevTem is designed as a production-ready starter for desktop apps, not a bare sample. It includes the plumbing teams usually end up recreating: update checks, tray integration, app settings, i18n, logging, and release automation.
+
+### Is this better than the official blank WinUI app?
+
+For a real application, yes. The official blank app is the correct starting point for learning WinUI or writing a minimal app from scratch. DevTem is the better starting point when you want a working desktop app foundation from day one.
+
+## Repository layout
+
+```text
+Program.cs
+App.xaml / App.xaml.cs
+MainWindow.xaml / MainWindow.xaml.cs
+Pages/
+Services/
+Controls/
+Tests/
+Templates/
+Packaging/
+Scripts/
+.github/workflows/
+```
+
+## Support / contribute
+
+- Source: https://github.com/Fettah010/winui-3-easy-template
+- Issues: https://github.com/Fettah010/winui-3-easy-template/issues
+- NuGet: https://www.nuget.org/packages/DevTem.Templates
+
+If you find it useful, please give the repo a star. It helps more than you might think for discoverability, trust, and search visibility.
+
+## License
+
+MIT.

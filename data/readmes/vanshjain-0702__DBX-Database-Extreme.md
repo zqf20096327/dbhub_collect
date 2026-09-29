@@ -1,0 +1,587 @@
+<p align="center">
+  <img src="website/assets/readme-banner.png" alt="DBX — per-tenant memory engine" />
+</p>
+
+<p align="center">
+  <strong>The isolated, per-tenant memory engine for AI products.</strong>
+  <br />
+  One isolated store per customer, holding their working state <em>and</em> their vector memory.
+  <br />
+  <a href="https://dbxdb.co.in/"><strong>Open the site</strong></a>
+  ·
+  <a href="https://dbxdb.co.in/demo.html"><strong>Show demo video</strong></a>
+  ·
+  <a href="docs/architecture.md">Architecture</a>
+  ·
+  <a href="docs/api-reference.md">API</a>
+  ·
+  <a href="docs/positioning.md">Positioning</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/vanshjain-0702/DBX-Database-Extreme/actions/workflows/build-and-test.yml"><img src="https://github.com/vanshjain-0702/DBX-Database-Extreme/actions/workflows/build-and-test.yml/badge.svg?branch=main&event=push" alt="Build Status" /></a>
+  <a href="https://dbxdb.co.in/"><img src="https://img.shields.io/badge/site-dbxdb.co.in-0a66c2" alt="Live site" /></a>
+  <a href="https://dbxdb.co.in/demo.html"><img src="https://img.shields.io/badge/demo-watch%20video-0a66c2" alt="Show demo video" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-BSL%201.1-orange.svg" alt="License" /></a>
+  <a href="https://github.com/vanshjain-0702/DBX-Database-Extreme/releases"><img src="https://img.shields.io/github/v/release/vanshjain-0702/DBX-Database-Extreme" alt="Release" /></a>
+  <img src="https://img.shields.io/badge/version-1.2.0-0a66c2" alt="Version 1.2.0" />
+  <img src="https://img.shields.io/badge/go-1.25+-blue.svg" alt="Go Version" />
+</p>
+
+---
+
+## Show demo video
+
+Tenant recall (Semantic / Similar-to-id / Multimodal) on a live engine, then the full 5 min 18 s product tour: public site, operator dashboard, console, explorer, keys, runtime. Isolation bench in the recording is a browser sketch, not a live node. Embeddings stay with the caller — DBX does not run CLIP or MiniLM.
+
+<p align="center">
+  <a href="https://dbxdb.co.in/demo.html">
+    <img src="website/assets/og-image.jpg" alt="Show demo video — DBX product walkthrough" width="720" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://dbxdb.co.in/demo.html"><strong>▶ Show demo video</strong></a>
+  ·
+  <a href="https://dbxdb.co.in/assets/vector-search.mp4">Recall MP4</a>
+  ·
+  <a href="https://dbxdb.co.in/assets/demo.mp4">Product tour MP4</a>
+  ·
+  <a href="website/demo.html">Walkthrough page</a>
+</p>
+
+---
+
+## Release status
+
+**DBX v1.2.0 is the recall cut** on the same single-node production profile as
+v1.1.0: 100 tenants/node, 100k vectors/tenant, durable strings + vectors.
+Isolation Kernel (`strict` idle RSS ~14–17 MiB/worker) is unchanged. Certified
+ANN p50 is still 2.304 ms. What is new: `VSEARCH` `MIN_SCORE` / `EF` / `SPACE`,
+`VSIM` (neighbors of a stored id), `VFUSE` (weighted cosine sum, not a
+multimodal model), Python helpers, playground tabs, and the public site that
+demonstrates them. This is a better product an agent can call, not a faster
+kernel.
+
+Linux CI enforces race detection, coverage floors, noisy-neighbor isolation, and
+the 100k-vector harness. Optional async WAL replicas can be provisioned without
+putting writes through Raft; cluster/sharding, tiering, and non-string RESP
+mutation families still fail closed. See the
+[measured certification matrix](scripts/benchmarks/performance_analysis.md).
+
+Before you put a customer on a node: enable control-plane TLS (do not ship with
+`-insecure-http`), set `DBX_KEK` and `DBX_ISOLATION_MODE=strict` on Linux (the
+Docker image defaults to this), mint per-tenant keys (a **reader** cannot `SET` or `VADD`),
+scrape `GET /metrics` with a Bearer JWT or `DBX_INTERNAL_API_TOKEN`, and run
+`make soak` on that hardware. Certification numbers are Windows-only; Linux is
+the CI gate, not that host. Isolation details: [docs/isolation.md](docs/isolation.md).
+
+The WAL/checkpoint format is intentionally incompatible with pre-hardening data. For an
+offline reset that preserves the old directory, run
+`go run ./cmd/dbx-v1-reset -data-dir <tenant-dir> -confirm-reset`.
+
+### Operational upgrades: migrate live, inspect history
+
+DBX includes two vector-memory upgrades for teams whose embeddings change over time:
+
+- **Shadow migration:** `VMIGRATE START <index> <dimension> [encoding]`, repeated
+  `VMIGRATE ADD <index> <id> <values...>`, then `VMIGRATE SWAP <index>` builds and
+  promotes a complete shadow index while the existing index remains searchable. An empty
+  migration is rejected; `VMIGRATE CANCEL <index>` leaves the live index untouched.
+- **Time-travel search:** `VSEARCH <index> <query...> <k> AS_OF <unix-nanoseconds>`
+  replays retained vector WAL history into a temporary index, allowing an audit or RAG
+  incident to reproduce an earlier retrieval state.
+
+These features are per-tenant and tested under overwrite, delete, cancellation, concurrent
+workloads, and load. Shadow migration still requires the caller to re-embed and stream the
+target corpus. `VMIGRATE` START/ADD/SWAP/CANCEL are written to the tenant WAL and replayed
+on crash recovery (and on async WAL replicas). Time-travel is bounded by WAL retention and
+is slower than current-state search.
+
+---
+
+## Performance & Benchmarks
+
+At DBX, we believe in **100% transparent and reproducible** benchmarks. We prioritize strict per-tenant isolation, but we absolutely refuse to sacrifice throughput to get there.
+
+By testing against DBX's plaintext port (`6380`) with the industry-standard `redis-benchmark` tool (64 clients, pipeline size 64), the engine achieves:
+- **SET (string):** ~75,583 ops/sec
+- **GET (string):** ~77,458 ops/sec
+
+Don't take our word for it. You can run these tools yourself to verify.
+**[Read the full methodology and get the verifiable benchmark script here](docs/BENCHMARKS.md).**
+
+Local tip: `configs/local.yaml` ships with `auth.enabled: false` so plaintext RESP tools can connect without AUTH. Production and orchestrator tenants still require scoped keys.
+
+---
+
+## The problem DBX exists to solve
+
+You are building a product where **every one of your customers needs their own memory**: an
+agent platform, a copilot, a vertical AI SaaS, an on-prem deployment per client.
+
+The stores you can buy today are built around one large shared cluster. Tenancy is something
+you bolt on yourself:
+
+- You prefix every key with `tenant:{id}:` and pray no query forgets the prefix.
+- You keep session state in one system and embeddings in another, then write to both and
+  hope they don't drift.
+- You cannot back up, export, delete, or move *one customer* — only the whole cluster.
+- A noisy tenant's working set evicts a quiet tenant's cache.
+- "Delete my data" from a customer becomes an engineering project instead of an API call.
+
+**DBX makes the tenant the unit of the database.** One API call gives you an isolated engine
+with its own data directory, its own write-ahead log, its own HNSW vector index, and its own
+snapshot lineage. Isolation is structural, not a naming convention.
+
+Two profiles, pick one. Do not claim both at once:
+
+| Profile | When | What you get | Cost |
+|---|---|---|---|
+| `inprocess` | `make run-dev`, CI, density soak | Directory + ACL + quotas | Shared Go runtime; 100 tenants/node path |
+| `strict` | Linux production (Compose/Helm default) | Process + Landlock + encrypted WAL/meta/graph + `SO_PEERCRED` | ~15 MiB RSS per idle tenant |
+
+Production (TLS, or `DBX_PRODUCTION=1`) **refuses `inprocess`** unless you set
+`DBX_ALLOW_INPROCESS=1`. See [docs/isolation.md](docs/isolation.md).
+
+---
+
+## What makes DBX different
+
+### 1. A tenant is a first-class object
+`POST /tenants` returns a live, isolated engine in milliseconds. Its keys, vectors, WAL, and
+snapshots live in their own directory. Deleting a tenant deletes their data — no scan, no
+prefix sweep, no cross-customer blast radius. Per-customer export and restore are file
+operations, not migrations.
+
+### 2. Working state and vector memory in one engine
+An agent's session, its scratchpad, its rate counters (KV with TTL) and its semantic
+recall (HNSW vectors) live in the same process, behind the same connection, in the same data
+directory, and inside the same backup archive. There is no dual-write path between a cache and
+a separate vector service to reconcile.
+
+The periodic `.rdb` checkpoint covers KV; vectors are durable through checksummed metadata,
+their mmap rows, and the WAL. A per-tenant backup takes a mutation maintenance lock and writes
+a versioned manifest with SHA-256 checksums for both surfaces.
+
+### 3. Quantized by default, so idle tenants are nearly free
+Vectors are stored as 8-bit scalar-quantized rows in an mmap'd file with asymmetric distance
+computation at query time. Payload is roughly a quarter the size of float32, and a tenant
+nobody has queried today lives in page cache instead of resident RAM. Your cost scales with
+*active* tenants, not with the count of tenants you've signed.
+
+### 4. Self-hosted, single binary, with the operator UI included
+Embeddings never leave your VPC. The admin dashboard, interactive console, data explorer, and
+vector playground are compiled into the same binary you deploy. No sidecar, no separate
+control-plane service to run.
+
+### 5. Isolation Kernel (Linux `strict`)
+A tenant is its own `dbx-server` process. The kernel stops it opening a neighbour's
+files. WAL, snapshots, vector ids, and the HNSW graph are sealed with a per-tenant
+key you can shred. This is the security USP. It is not free, and `.vec` rows stay
+mmap'd (put the volume on LUKS/fscrypt if embeddings must be ciphertext).
+`inprocess` is a density profile, not this claim.
+
+### 6. Your existing clients already work
+DBX speaks RESP, so `redis-py`, `ioredis`, and `go-redis` connect without a custom driver.
+This is an adoption on-ramp — you don't have to learn a new protocol to try DBX — not a claim
+that DBX is a substitute for a tuned Redis cluster. The product API is
+`TenantMemory.remember` / `recall` / `forget` in the Python SDK.
+
+---
+
+## What DBX is deliberately not
+
+We would rather be the obvious choice for one job than a mediocre option for five. DBX is
+**not** competing on these axes, and you should use the right tool instead:
+
+| If you need… | Use | Why not DBX |
+|---|---|---|
+| Maximum single-instance KV throughput for one huge shared workload | Redis / Dragonfly | Their whole design target; DBX spends cycles on per-tenant isolation |
+| Billion-vector ANN with sharding, replicas, and payload filtering at scale | Qdrant / Milvus | DBX indexes are sized for per-tenant working sets, not one giant corpus |
+| A fully managed vector service with no infrastructure | Pinecone | DBX is software you run; that is the point |
+| Relational queries, joins, transactions across entities | Postgres (+ pgvector) | DBX is a memory engine, not a system of record |
+
+DBX is the layer *between* those: fast, isolated, per-customer memory that sits in front of
+your system of record.
+
+---
+
+## Who it is for
+
+- **AI agent platforms** — each end-customer's agent gets its own memory namespace with real isolation.
+- **Vertical AI SaaS** — per-client RAG corpora that must be separately backed up, exported, and deleted.
+- **On-prem and regulated deployments** — the whole stack is one binary inside the customer's network.
+- **Teams tired of running two systems** — a cache and a vector DB collapsed into one operational surface.
+
+If you have one workload and one tenant, you probably don't need DBX. If you have five hundred
+customers who each need memory, DBX is built for exactly that shape.
+
+---
+
+## Quickstart
+
+The Docker image (`deploy/Dockerfile`) embeds the dashboard, puts `dbx-orchestrator`
+and `dbx-server` on `PATH`, and **defaults to `DBX_ISOLATION_MODE=strict`**.
+Missing `DBX_KEK` (64 hex characters) is a boot failure, not plaintext fallback.
+Product version is **1.2.0**, published as
+`ghcr.io/vanshjain-0702/dbx-orchestrator` (`:v1.2.0` and `:latest` track GitHub
+Releases, not every push). Isolation details:
+[docs/isolation.md](docs/isolation.md).
+
+### Option 1: Docker (published image)
+
+```bash
+# 64-hex wrapping key. openssl rand -hex 32 also works.
+export DBX_KEK="$(python -c "import secrets; print(secrets.token_hex(32))")"
+
+docker run --rm -p 8000:8000 -p 6380:6380 \
+  -e DBX_ADMIN_PASSWORD='replace-with-12-plus-characters' \
+  -e DBX_JWT_SECRET='replace-with-at-least-32-random-characters' \
+  -e DBX_INTERNAL_API_TOKEN='replace-with-a-random-service-token' \
+  -e DBX_KEK \
+  -e DBX_NODE_MEMORY_BUDGET=8gb \
+  ghcr.io/vanshjain-0702/dbx-orchestrator:v1.2.0
+```
+
+Open **http://localhost:8000** and log in with `admin` / the password you set.
+Mint a **writer** key on **Tenant keys**.
+
+For a laptop try that skips envelope encryption (directory isolation only, not
+the security USP), add `-e DBX_ISOLATION_MODE=inprocess` and omit `DBX_KEK`.
+The image still starts with `-insecure-http`; do not ship that.
+
+To build the same Dockerfile locally:
+
+```bash
+git clone https://github.com/vanshjain-0702/DBX-Database-Extreme.git
+cd DBX-Database-Extreme
+docker build -t dbx:dev -f deploy/Dockerfile .
+docker run --rm -p 8000:8000 -p 6380:6380 \
+  -e DBX_ADMIN_PASSWORD='replace-with-12-plus-characters' \
+  -e DBX_JWT_SECRET='replace-with-at-least-32-random-characters' \
+  -e DBX_INTERNAL_API_TOKEN='replace-with-a-random-service-token' \
+  -e DBX_KEK \
+  -e DBX_NODE_MEMORY_BUDGET=8gb \
+  dbx:dev
+```
+
+### Option 2: Build from source
+
+**Prerequisites:** Go 1.25+, Node.js 20+, and **GNU Make** (`make` is not
+installed on Windows by default — use Git Bash, WSL, or Chocolatey/Scoop
+`make`). A fresh clone has no dashboard UI until you build it (`dashboard/dist`
+is only a `.gitkeep`; `make run-dev` / `make build` run `npm ci && npm run build`
+when `dashboard/dist/index.html` is missing).
+
+```bash
+git clone https://github.com/vanshjain-0702/DBX-Database-Extreme.git
+cd DBX-Database-Extreme
+
+make build      # dbx-server + dashboard embed + dbx-orchestrator
+make run-dev    # http://127.0.0.1:8000  (admin / adminadminadmin)
+```
+
+Without Make (PowerShell), after `cd dashboard; npm ci; npm run build`:
+
+```powershell
+$env:DBX_ADMIN_PASSWORD="adminadminadmin"
+$env:DBX_JWT_SECRET="supersecretjwtsecret1234567890123456"
+$env:DBX_INTERNAL_API_TOKEN="internalapitoken1234567890123456"
+$env:DBX_DEFAULT_PASSWORD="adminadminadmin"
+$env:DBX_DATA_DIR="./data"
+$env:DBX_NODE_MEMORY_BUDGET="8gb"
+go run ./cmd/dbx-orchestrator -insecure-http=true
+```
+
+### Option 3: Docker Compose
+
+[`deploy/docker-compose.yml`](deploy/docker-compose.yml) lives in `deploy/`, so
+Compose will **not** auto-load a repo-root `.env`. Pass `--env-file .env` (or
+use `make docker-up`). It also requires `DBX_KEK` and defaults to
+`DBX_ISOLATION_MODE=strict` plus `DBX_PRODUCTION=1`.
+
+```bash
+git clone https://github.com/vanshjain-0702/DBX-Database-Extreme.git
+cd DBX-Database-Extreme
+cp .env.example .env
+# set DBX_ADMIN_PASSWORD, DBX_JWT_SECRET, DBX_INTERNAL_API_TOKEN
+# set DBX_KEK to 64 hex chars (see comments in .env.example)
+
+make docker-up
+# same without Make:
+# docker compose --env-file .env -f deploy/docker-compose.yml up --build
+```
+
+The root [`docker-compose.yml`](docker-compose.yml) builds the same image and
+needs the same secrets.
+
+---
+
+## The tenant lifecycle
+
+This is the API that defines the product. Everything else is a data-plane detail.
+
+```bash
+# JWT for the following calls
+curl -s -X POST http://localhost:8000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"YOUR_ADMIN_PASSWORD"}'
+# Response: {"token":"..."}  — export it as DBX_TOKEN
+
+# Provision an isolated engine for a customer
+curl -X POST http://localhost:8000/api/provision \
+  -H "Authorization: Bearer $DBX_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"id": "acme-corp", "name": "Acme Corp"}'
+
+# Talk to that tenant, and only that tenant
+curl -X POST http://localhost:8000/t/acme-corp/query \
+  -H "Authorization: Bearer $DBX_TOKEN" \
+  -d '{"command": "SET session:42 active"}'
+
+# Back up one customer, not the whole cluster
+curl -X POST http://localhost:8000/api/tenants/backup \
+  -H "Authorization: Bearer $DBX_TOKEN" \
+  -d '{"id": "acme-corp"}'
+
+# Restore that checksummed archive into the same tenant
+curl -X POST http://localhost:8000/api/tenants/restore \
+  -H "Authorization: Bearer $DBX_TOKEN" \
+  -d '{"id": "acme-corp", "path": "data/backups/backup_acme-corp_....dbx.zip"}'
+
+# Off-boarding is one call, not a data-deletion project.
+# purge=true erases that tenant's directory and nothing else.
+curl -X POST http://localhost:8000/api/tenants/delete \
+  -H "Authorization: Bearer $DBX_TOKEN" \
+  -d '{"id": "acme-corp", "purge": true}'
+```
+
+---
+
+## Connect your application
+
+Mint a **writer** key after you provision: dashboard **Tenant keys**
+(`/cluster/{tenant}/keys`) or `POST /api/v1/tenants/{id}/keys`. The secret is shown
+once. A **reader** key can `GET`, `VSEARCH`, `VSIM`, and `VFUSE` and cannot `SET`, `SETEX`, `VADD`, or
+`VDEL`. Orchestrator tenants have no default superuser — loopback `AUTH default`
+is rejected.
+
+Worked examples: [`examples/quickstart.py`](examples/quickstart.py) (15-minute path),
+[`examples/langchain-rag`](examples/langchain-rag) (session KV + vectors, no OpenAI key),
+[`examples/nextjs-cache`](examples/nextjs-cache) (`SETEX` / node-redis `setEx`).
+
+### Python (AI / LangChain / LlamaIndex)
+
+```python
+from dbx import DBXClient
+
+db = DBXClient(
+    host="localhost",
+    port=6380,
+    tenant="acme-corp",
+    key_id="key-id",          # from dashboard Tenant keys, not a dummy
+    secret="one-time-key-secret",
+)
+
+# Working state for this customer's agent
+db.set("session:42", '{"thread": "onboarding", "step": 3}')
+
+# Semantic memory for the same customer, same engine, same backup
+db.vadd("memories", "doc:1", [0.1, 0.2, 0.9])
+results = db.vsearch("memories", [0.1, 0.2, 0.8], top_k=5)
+```
+
+**LangChain — one-line swap from Pinecone:**
+```python
+# Before:  from langchain_pinecone import PineconeVectorStore as VectorStore
+from langchain_dbx import DBXVectorStore as VectorStore   # ← only change
+
+store = VectorStore.from_texts(texts, embeddings, client=db, index_name="idx")
+docs  = store.similarity_search("query", k=4)
+chain = store.as_retriever() | llm   # works in LCEL chains
+```
+
+**LlamaIndex — one-line swap from Pinecone:**
+```python
+# Before:  from llama_index.vector_stores.pinecone import PineconeVectorStore as VectorStore
+from llamaindex_dbx import DBXVectorStore as VectorStore   # ← only change
+
+vector_store = VectorStore(client=db)
+storage_ctx  = StorageContext.from_defaults(vector_store=vector_store)
+index        = VectorStoreIndex.from_documents(docs, storage_context=storage_ctx)
+response     = index.as_query_engine().query("What is DBX?")
+```
+
+Install the SDK from this tree:
+```bash
+pip install -e "sdk/python"                  # core only
+pip install -e "sdk/python[langchain]"       # + LangChain adapter
+pip install -e "sdk/python[llamaindex]"      # + LlamaIndex adapter
+pip install -e "sdk/python[all]"             # everything
+```
+
+Control-plane helpers live on `ControlPlane`. Per-tenant cost is
+`GET /api/v1/tenants/{id}/usage`. Prometheus is `GET /metrics` on the
+orchestrator (Bearer JWT or `DBX_INTERNAL_API_TOKEN` unless you passed
+`-insecure-http`). Full integration docs in
+[docs/api-reference.md](docs/api-reference.md#framework-integrations).
+
+Python unit tests do not need a running node:
+
+```bash
+make python-check   # flake8, black, pytest (live AUTH tests skip without env)
+```
+
+### Node.js / TypeScript
+
+```typescript
+import { createClient } from 'redis'; // DBX speaks RESP, so existing clients work
+
+const client = createClient({ url: 'redis://localhost:6380' });
+await client.connect();
+await client.sendCommand(['AUTH', 'acme-corp:key-id', 'one-time-key-secret']);
+await client.set('session:abc', JSON.stringify({ userId: 42 }));
+```
+
+---
+
+## Architecture
+
+[**View the full Interactive Architecture Diagram**](https://basaltarch.io/view/7d07f83a-fa03-4c06-8204-19068c71687f)
+
+<a href="https://basaltarch.io/view/7d07f83a-fa03-4c06-8204-19068c71687f">
+  <picture>
+    <img src="website/assets/architecture.png" alt="DBX Architecture Diagram" width="100%" />
+  </picture>
+</a>
+
+*Click the image to view the interactive architecture diagram on BasaltArch.*
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      AWS EKS / Kubernetes                       │
+│ ┌─────────────────────────────────────────────────────────────┐ │
+│ │                    DBX Orchestrator (Go)                    │ │
+│ │                                                             │ │
+│ │  [Embedded UI]         [HTTP :8000]           [RESP :6380]  │ │
+│ │  React Dashboard       Control Plane          Data Ingress  │ │
+│ │                                                             │ │
+│ ├─────────────────────────────────────────────────────────────┤ │
+│ │   Isolated Tenant Processes (Linux Landlock & cgroups v2)   │ │
+│ │                                                             │ │
+│ │  Tenant A               │  Tenant B               │  ...    │ │
+│ │  ┌──────────────────┐   │  ┌──────────────────┐   │         │ │
+│ │  │  KV Engine       │   │  │  KV Engine       │   │         │ │
+│ │  │  HNSW Vectors    │   │  │  HNSW Vectors    │   │         │ │
+│ │  │  (SQ8, mmap)     │   │  │  (SQ8, mmap)     │   │         │ │
+│ │  │  Own WAL         │   │  │  Own WAL         │   │         │ │
+│ │  │  Own snapshots   │   │  │  Own snapshots   │   │         │ │
+│ │  └──────────────────┘   │  └──────────────────┘   │         │ │
+│ └─────────────────────────────────────────────────────────────┘ │
+│                                                                 │
+│ ┌───────────────────────┐             ┌───────────────────────┐ │
+│ │  PVC (Tenant Data)    │             │  S3 (Tenant Backups)  │ │
+│ └───────────────────────┘             └───────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+Each tenant is an isolated engine with its own durability chain. The orchestrator owns
+provisioning, authentication, and routing.
+
+For the deep dive, read the [Architecture Document](docs/architecture.md). For the product
+thesis and where we will and will not compete, read [Positioning](docs/positioning.md).
+HTTP and RESP surfaces are in the [API reference](docs/api-reference.md).
+
+## Documentation and website
+
+| What | Where |
+|---|---|
+| Public site | [dbxdb.co.in](https://dbxdb.co.in/) — source in [`website/`](website/). Local preview: `make site`. DNS steps: [`website/README.md`](website/README.md). |
+| Show demo video | [Walkthrough](https://dbxdb.co.in/demo.html) — narrated recall clip (`VSEARCH` / `VSIM` / `VFUSE`) plus the 5 min 18 s product tour. Files: [vector-search.mp4](https://dbxdb.co.in/assets/vector-search.mp4), [demo.mp4](https://dbxdb.co.in/assets/demo.mp4). |
+| Updates | [posts.html](https://dbxdb.co.in/posts.html) — latest engine notes; header badge until you open the page. RSS: [posts.xml](https://dbxdb.co.in/posts.xml). |
+| Incubation pitch | [pitch.html](https://dbxdb.co.in/pitch.html) — live 20-slide 16:9 deck. How to present: [`website/PITCH.md`](website/PITCH.md). |
+| Architecture, API, positioning | [`docs/`](docs/) |
+| Changelog | [`website/changelog.html`](https://dbxdb.co.in/changelog.html) |
+| LLM-readable summary | [`website/llms.txt`](https://dbxdb.co.in/llms.txt) |
+| Operator UI | [`dashboard/`](dashboard/) — Tenant keys, console, explorer, vector playground. Embedded in the orchestrator binary. |
+
+---
+
+## Project structure
+
+```
+dbx/
+├── cmd/
+│   ├── dbx-server/         # Storage node entry point
+│   ├── dbx-orchestrator/   # Control plane entry point
+│   └── dbx-soak/           # Operator density drill (`make soak`)
+├── internal/
+│   ├── engine/             # KV engine + HNSW vector index (SQ8, mmap)
+│   ├── orchestrator/       # Tenant lifecycle, usage, hibernate, routing
+│   ├── protocol/           # RESP parser and writer
+│   ├── persistence/        # WAL, snapshots, checksummed backup
+│   ├── security/           # ACL, rate limiting, encryption
+│   └── api/                # HTTP API handlers
+├── dashboard/              # React + Vite admin UI (embedded; Tenant keys at /cluster/:id/keys)
+├── sdk/python/             # Official Python SDK + LangChain adapter
+├── examples/               # 15-minute path, LangChain, Next.js session
+├── website/                # Public site (GitHub Pages)
+├── deploy/                 # Canonical Dockerfile, Compose, Helm
+└── docs/                   # Architecture, API reference, positioning
+```
+
+---
+
+## Performance
+
+Numbers from a local single-node run. They exist to show that per-tenant isolation does not
+cost you an order of magnitude — not to rank DBX against a tuned cluster of something else.
+Measure on your own hardware before you rely on any of this.
+
+| Operation | Single node, local | Measured with |
+|---|---|---|
+| SET (string) | 186,147 ops/sec | RESP, 64 connections, pipeline 64, WAL `everysec` |
+| GET (string) | 284,785 ops/sec | Same run, 128k operations |
+| Vector ingest | 7,233 vectors/sec | 100k × 128-dim, batches of 1,000, 8-way sharded HNSW |
+| ANN search | p50 2.304 / p95 3.132 / p99 3.730 ms | 100k vectors, 128-dim, efSearch=80, 50 queries |
+| Recall@10 | mean 0.920 / p05 0.800 | SQ8 HNSW vs float32 brute force |
+| Vector payload | ~4× smaller than float32 | SQ8 quantization |
+
+Methodology and the honest caveats are in
+[scripts/benchmarks/performance_analysis.md](scripts/benchmarks/performance_analysis.md).
+
+---
+
+## Roadmap
+
+CI runs a scaled density soak (12 idle / 4 active) plus backup/restore and hibernate
+tests. Operators run the certified 100 idle / 25 active profile with `make soak`.
+Per-tenant cost is `GET /api/v1/tenants/{id}/usage`. Hibernate/wake evicts a cold
+engine without deleting it. The 15-minute path is
+[`examples/quickstart.py`](examples/quickstart.py). Detail in [ROADMAP.md](ROADMAP.md).
+
+---
+
+## License
+
+DBX is licensed under the [Business Source License 1.1 (BSL 1.1)](LICENSE).
+
+- ✅ **Free to use** for production, personal, and commercial applications.
+- ✅ **Free to self-host** for any purpose, including inside your own SaaS.
+- ❌ **Cannot** be offered as a managed DBX service to third parties without a commercial agreement.
+
+The license converts to Apache 2.0 after 4 years. If you want to run DBX as a managed
+service, talk to us at `hello@dbxdb.io`.
+
+---
+
+## Contributing
+
+We welcome contributions. Please read [CONTRIBUTING.md](CONTRIBUTING.md) and open an issue or
+pull request. Go tests: `make test`. Python lint and SDK tests: `make python-check`.
+Site copy lives in `website/` so the Pages deploy and this README stay aligned.
+
+---
+
+<p align="center">Built with ❤️ by the DBX team.</p>

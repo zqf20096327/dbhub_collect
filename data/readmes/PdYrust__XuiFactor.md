@@ -1,0 +1,176 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo/xui-factor-icon-white.svg">
+    <img src="assets/logo/xui-factor-icon.svg" alt="XuiFactor logo" width="96" height="96">
+  </picture>
+</p>
+
+<h1 align="center">XuiFactor</h1>
+
+<p align="center">Traffic factor sidecar for 3x-ui on Linux.</p>
+
+<p align="center">
+  <a href="LICENSE"><img alt="License: AGPL-3.0" src="https://img.shields.io/badge/license-AGPL--3.0-111111"></a>
+  <img alt="Go 1.22+" src="https://img.shields.io/badge/go-1.22%2B-00ADD8">
+  <img alt="Status: stable" src="https://img.shields.io/badge/status-stable-111111">
+  <a href="https://t.me/PdYrust"><img alt="Telegram channel" src="https://img.shields.io/badge/Telegram-%40PdYrust-229ED9?logo=telegram&logoColor=white"></a>
+</p>
+
+XuiFactor applies temporary traffic factors to 3x-ui client counters as a sidecar. It does not modify 3x-ui source code. Rule metadata is stored in the same SQLite database using `xui_factor_*` metadata tables.
+
+Disabling a rule keeps previously factored traffic results. Future traffic after disabling is counted normally.
+
+For server operation workflows, see [docs/OPERATIONS.md](docs/OPERATIONS.md).
+
+## Install
+
+Install from a release package:
+
+```sh
+tar -xzf xui-factor_v0.4.0_linux_amd64.tar.gz
+cd xui-factor_v0.4.0_linux_amd64
+sudo ./scripts/install.sh
+```
+
+Use the matching `linux_arm64` package on ARM64 hosts.
+
+On systemd hosts, install enables and starts `xui-factor.service` by default. Use `--no-start` or `--no-enable` only when another init workflow will run the daemon.
+
+Install from a local checkout:
+
+```sh
+make build
+sudo ./scripts/install.sh
+```
+
+Defaults:
+
+```text
+config: /etc/xui-factor/config.json
+database: /etc/x-ui/x-ui.db
+service: xui-factor.service
+```
+
+## Common Commands
+
+```sh
+xui-factor --help
+xui-factor doctor
+xui-factor backup
+xui-factor enable --email User --inbound-id 1 --factor 1.2
+xui-factor enable-all --factor 1.2
+xui-factor enable-all --factor 1.2 --limited-only
+xui-factor enable-all --factor 1.2 --once
+xui-factor exclude --email User --inbound-id 1
+xui-factor excludes
+xui-factor unexclude --email User --inbound-id 1
+xui-factor override --email User --inbound-id 1 --factor 1.2
+xui-factor overrides
+xui-factor remove-override --email User --inbound-id 1
+xui-factor explain --email User --inbound-id 1
+xui-factor status --effective
+xui-factor status --clients --inbound-id 1
+xui-factor report
+xui-factor audit --event override_enabled --limit 20
+xui-factor audit --since 24h
+xui-factor disable --email User --inbound-id 1
+xui-factor disable-all
+xui-factor reconcile --dry-run
+xui-factor cleanup --dry-run
+xui-factor status
+xui-factor audit --email User --inbound-id 1
+xui-factor tick
+sudo systemctl enable --now xui-factor.service
+sudo systemctl status xui-factor.service --no-pager
+```
+
+## Operation Examples
+
+Apply a factor to one client:
+
+```sh
+xui-factor enable --email user@example.com --inbound-id 1 --factor 1.2
+xui-factor status
+```
+
+Apply a factor to enabled clients. By default, `enable-all` creates a persistent scope, so future matching clients are enrolled automatically from their current counters:
+
+```sh
+xui-factor enable-all --factor 1.2
+```
+
+When possible, persistent `enable-all` also consolidates compatible active single-user rules into the scope while preserving their baselines.
+
+Use `xui-factor reconcile` to repair older metadata after upgrades. Normal status shows only effective active or paused rules; reconciled legacy rules are available through `status --all` until cleanup prunes them after retention.
+
+Apply a factor only to limited clients:
+
+```sh
+xui-factor enable-all --factor 1.2 --limited-only
+```
+
+Use snapshot mode when only current clients should be targeted:
+
+```sh
+xui-factor enable-all --factor 1.2 --once
+```
+
+Stop applying factors:
+
+```sh
+xui-factor disable --email user@example.com --inbound-id 1
+xui-factor disable-all
+```
+
+## Factor Behavior
+
+`factor 1.2` means new traffic is counted as 120%. `factor 5` means new traffic is counted as 500%.
+
+Disabling a rule does not revert previously factored traffic. Traffic recorded after disabling is counted normally by 3x-ui.
+
+## Policy Behavior
+
+XuiFactor evaluates one effective decision per client before applying traffic deltas. Excludes win first, then user overrides, then single-user rules, inbound scopes, and global scopes. Overlapping metadata does not double-apply factors.
+
+Use `xui-factor exclude --email User --inbound-id 1` to keep one client out of matching rules and scopes. Previously factored traffic remains unchanged. `xui-factor unexclude --email User --inbound-id 1` resumes normal policy matching from the current counters, without retroactively factoring traffic from the excluded period.
+
+Use `xui-factor override --email User --inbound-id 1 --factor 1.2` to give one exact client a specific future factor while broader scopes remain active. Overrides do not stack with scope factors. `xui-factor remove-override --email User --inbound-id 1` returns the client to matching rules and scopes from the current counters.
+
+Use `xui-factor explain --email User --inbound-id 1` to inspect the final effective decision for one client. Use `xui-factor status --effective` for grouped policy totals and `xui-factor status --clients --inbound-id 1` for client-level effective factors.
+
+Use `xui-factor report` for a concise policy, effective client, service, and traffic impact summary. Use audit filters such as `xui-factor audit --event override_enabled --limit 20` or `xui-factor audit --since 24h` to inspect recent lifecycle events without noisy output.
+
+## Metadata Cleanup
+
+XuiFactor keeps its own metadata bounded with automatic cleanup enabled by default. Missing client tracking is pruned after 30 seconds, disabled rules after 7 days, and audit events after 30 days.
+
+Use `xui-factor cleanup --dry-run` before manual cleanup on production servers. Cleanup only prunes XuiFactor metadata, including orphaned legacy rules after retention, and never modifies 3x-ui counters. SQLite `VACUUM` runs only when explicitly requested with `xui-factor cleanup --vacuum`.
+
+## Safety Notes
+
+Run a backup before broad changes:
+
+```sh
+xui-factor backup
+```
+
+Test single-user rules before bulk rules on production servers.
+
+## Uninstall
+
+```sh
+sudo ./scripts/uninstall.sh
+sudo ./scripts/uninstall.sh --purge
+```
+
+Uninstall does not remove `/etc/x-ui/x-ui.db`.
+
+## Project
+
+Creator: YrustPd  
+Repository: https://github.com/PdYrust/XuiFactor  
+Channel: https://t.me/PdYrust
+
+## License
+
+XuiFactor is licensed under the GNU Affero General Public License v3.0. See [LICENSE](LICENSE).

@@ -1,0 +1,128 @@
+<img src="docs/assets/mira-wordmark.svg" alt="Mira" height="64">
+
+[![CI](https://github.com/TrianaLab/mira/actions/workflows/ci.yml/badge.svg)](https://github.com/TrianaLab/mira/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/TrianaLab/mira?label=release&color=2D4857)](https://github.com/TrianaLab/mira/releases/latest)
+[![crates.io](https://img.shields.io/crates/v/miradb?label=crates.io&color=2D4857)](https://crates.io/crates/miradb)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/mira)](https://artifacthub.io/packages/search?repo=mira)
+[![Coverage](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmiradb.dev%2Fcoverage.json&query=%24.line&suffix=%25&label=coverage&color=brightgreen)](docs/internals/testing.md)
+[![Rust](https://img.shields.io/badge/rust-1.88%2B-orange)](https://github.com/TrianaLab/mira/blob/main/Cargo.toml)
+[![Licence](https://img.shields.io/badge/licence-Apache--2.0-blue)](LICENSE)
+
+**Logs, traces and metrics in. A web UI, a terminal UI and an MCP server out.
+One binary, no cluster, no sidecar, no database beside it.**
+
+```sh
+curl -fsSL https://miradb.dev/install.sh | bash
+mira --data-dir ./data
+```
+
+Point any OTLP exporter at gRPC `4317` or HTTP `4318`, open
+`http://localhost:4318/`, or point an agent at `POST /mcp`. The block directory
+is the only state there is.
+
+<img src="docs/assets/tui/investigation.gif" alt="A recording of Mira's terminal UI. The log list over the last hour; a filter typed live, severity_text=ERROR, narrowing 14,371 records to 824 in 7.3ms; the service map, where errors propagate frontend to checkout to payments while inventory stays clean; then the trace under the failure — eight spans over 76.08ms, with a retry and an exception marked on the timeline.">
+
+`mira mira`, recorded against a running node. Not a mock-up: the footers are
+that run's own query plans and wall clocks.
+
+## The numbers
+
+| | |
+| --- | --- |
+| **1,537,875 records/s** | ingest, on **2.23 of 12 cores** — 886k/s/core at one connection |
+| **2.6 ms** | to prove a value is in **none** of 137 blocks, zero blocks opened |
+| **4.7 ms** | every span of one trace, out of 27.1M spans on disk |
+| **7 µs** | the durable log append inside an acknowledgement |
+| **0.14** | bytes on disk per byte on the wire, once compacted |
+| **6.20 MiB stripped, 149 crates** | `zstd-sys` is the only C dependency, and it vendors its source |
+
+Apple M3 Pro, one process, reproducible with the load harness in this repository.
+What each number measures — the numerator, the denominator, and what is outside
+the measurement — is **[the measurement contract](docs/internals/measurement.md)**,
+which also carries every published figure in one generated table. The full sweep:
+**[end-to-end testing](docs/internals/e2e.md)**. Why they land there:
+**[architecture section 11](docs/architecture/performance.md)**. How
+they read against the market, including where Mira is behind:
+**[docs/market.md](docs/market.md)**.
+
+## Four surfaces, one read path
+
+Same data, same filter grammar, same code underneath. Nothing to deploy for any
+of them.
+
+| | | |
+| --- | --- | --- |
+| **Browser** | `http://localhost:4318/` | Served out of `include_bytes!`; the whole view lives in the URL, so an alert webhook links straight back into it. |
+| **Terminal** | `mira mira` | The same views over a running replica — or over a block directory **with no server at all**. |
+| **MCP** | `POST /mcp` | Nine tools, no session id, so any replica answers any call. The ninth writes the RCA. |
+| **HTTP** | `/api/v1/…` | `query`, `correlate`, `map`, `entities`, `metrics`, `alerts`. |
+
+The ninth tool is the one to look at. An agent hands over its findings and gets
+back a root-cause document — but `render_rca` re-runs every citation against the
+store first, so a claim it cannot re-prove fails the call by name and nothing is
+written:
+
+<img src="docs/assets/tui/write-up.gif" alt="A recorded terminal session. An agent's three claims are listed, then render_rca refuses them: nothing was rendered and nothing was stored, 1 of 3 citations do not hold against this store, naming the claim and the filter that matched no records. The claim is corrected and the call returns a 59-line document whose evidence section carries the record count beside every claim — 229, 229, and 8 for the trace. A last query finds the write-up itself stored as a log record.">
+
+There is no incident store: `emit` writes the document back as an ordinary log
+record, so it is searchable by the same query path and expires with the
+telemetry it describes. The worked investigation behind it is in
+**[docs/agents.md](docs/agents.md)**.
+
+## See it
+
+**[miradb.dev/demo](https://miradb.dev/demo/)** — one command, then six screens
+of both UIs, from data you generated a minute earlier.
+
+<img src="docs/assets/ui/trace.png" alt="The same trace in Mira's web UI: eight nested spans over 76.08ms across frontend, inventory, checkout and payments, the five failed ones in red, with the query cost in the header — 8 matched of 30,720 scanned, 1 block, 47.5ms.">
+
+```sh
+docker run -p 4317:4317 -p 4318:4318 -v mira-data:/data ghcr.io/trianalab/mira:latest
+helm install mira-operator oci://ghcr.io/trianalab/charts/mira-operator \
+  --namespace mira-system --create-namespace   # then: kubectl apply a MiraCluster
+```
+
+Linux glibc >= 2.34 and macOS, x86_64 and arm64. `--version v0.4.2` pins the
+installer to a release; every one of them ships a CycloneDX SBOM, `SHA256SUMS`,
+a cosign signature and a SLSA provenance attestation.
+
+## Where to go next
+
+| | |
+| --- | --- |
+| Install it properly, on Kubernetes or otherwise | **[docs/install.md](docs/install.md)** |
+| First query, and what the `stats` object tells you | **[docs/quickstart.md](docs/quickstart.md)** |
+| Connect an agent, and a worked investigation | **[docs/agents.md](docs/agents.md)** |
+| Every flag and config key | **[docs/config.md](docs/config.md)** · **[CLI](docs/reference/cli.md)** |
+| How it works, and why it is shaped this way | **[docs/architecture/index.md](docs/architecture/index.md)** |
+| Why it exists at all | **[MANIFESTO.md](MANIFESTO.md)** |
+
+## Scope
+
+Mira is pre-1.0 and says so. Ingestion is allocation-lean rather than zero-copy
+(*queries* are zero-copy); a storage node answers only from its own blocks, and
+the cross-replica merge lives in `mira proxy` rather than in the node, which
+merges record search and refuses correlate, map, metrics and entities; there is
+no entity predicate and no block cache. The full list, with the reasoning, is
+[architecture section 0.1](docs/architecture/corrections.md#01-what-is-not-true-yet).
+
+## Contributing
+
+Every gate CI runs is a target in the [`Makefile`](Makefile), and CI calls
+nothing else:
+
+```sh
+make            # the target list
+make check      # fmt, clippy, tests, rustdoc, UI, supply chain, drift, docs, coverage
+```
+
+Read [architecture section 0](docs/architecture/corrections.md)
+first if the change is structural — it lists the mechanisms that do not survive
+contact with the formats. [CONTRIBUTING.md](CONTRIBUTING.md) is the walkthrough,
+with [the test levels](docs/internals/testing.md) and
+[how a release is cut](docs/internals/releases.md) behind it. Vulnerabilities go
+to [SECURITY.md](SECURITY.md), not to an issue.
+
+## Licence
+
+Apache-2.0.

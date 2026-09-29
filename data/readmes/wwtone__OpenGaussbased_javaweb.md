@@ -1,0 +1,3 @@
+# OpenGaussbased_javaweb
+教务管理系统
+需要修改BaseDao中的数据库连接，部分查询函数可在相关页面中增加更多条件字段。

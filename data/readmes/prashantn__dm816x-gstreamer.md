@@ -1,0 +1,64 @@
+Prerequisites
+=============
+- The EZSDK 5.01.01.80 is installed on the Linux host. The EZSDK can be downloaded from http://software-dl.ti.com/dsps/dsps_public_sw/ezsdk/latest/index_FDS.html
+
+BUILDING
+========
+
+1) Run this command on host machine to fix libz.la file provided with EZSDK
+% sed -i 's/installed=no/installed=yes/' <path_to_your_ezsdk_installation>/linux-devkit/arm-none-linux-gnueabi/usr/lib/libz.la
+
+2) Change to the top level "gstreamer_ti" directory, and open the file named "Makefile.common" in your favorite editor (vi, emacs, etc.).
+   Set the following variables at the top of the file:
+
+    DVSDK_INSTALL_DIR:  Location of your EZSDK installation directory
+    TARGET_ROOT_DIR:    Location of the target filesystem's root directory
+                        on the Linux host machine.
+    CROSS_COMPILER:     Cross compiler being used.  A default is chosen based
+                        on the platform you are building for, but you can set
+                        it explicitly to one of these values:
+                            CS_2009Q1:  CodeSourcery v2009q1
+    GST_TI_PLATFORM:    Set the platform variable (**)
+
+** For DM816x/DM814x set GST_TI_PLATFORM=dm816x 
+
+3) Export cross compiler location in your environment
+% export PATH=<path_to_cs_installation>/arm-2009q1/bin:$PATH
+
+4) Use OMX package from git://github.com/bksingh/ezsdk-omx.git
+% git clone git://github.com/bksingh/ezsdk-omx.git
+
+5) Update OMX_INSTALL_DIR variable in EZSDK Rules.make to point to above OMX package installation directory.
+
+6) Build the EZSDK components using the above OMX package.
+% cd <path_to_your_ezsdk_installation>
+% make clean
+% make all
+
+7) Execute this command from the top-level "gstreamer_ti" directory to build gstreamer packages:
+% make all install VERBOSE=true
+
+8) Copy libOMX_Core.so from gstreamer_ti/ti_build/gst-openmax/ext/lib to /lib directory on target root filesystem.
+
+9) Copy dm816xbm_m3video.xem3 and dm816xbm_m3vpss.xem3 firmware binaries from OMX package to /usr/share/ti/ti-media-controller-utils  directory on target root filesystem.
+
+If you want less output during the build, you can omit the "VERBOSE=true"
+above.
+
+By default, the GStreamer binaries will be installed to "/opt/gstreamer" on
+the target, and some demonstration scripts will be installed to
+"/opt/gstreamer_demo".
+
+RUNNING
+=======
+
+NOTES:
+
+ 1) For the first time, after target bootup login as a root on target and "ldconfig" command
+   target# ldconfig 
+
+ 2) Stop the matrix application launcher before running any gstreamer pipeline using the below command
+   target# /etc/init.d/matrix-gui-e stop
+
+There are some example pipelines present in /opt/gstreamer_demo/dm816x/example_pipeline.sh file. Also /usr/share/ti/data/videos contains some demo clips.
+

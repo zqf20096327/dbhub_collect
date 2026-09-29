@@ -1,0 +1,71 @@
+# Tidbits
+
+This repository contains a history of musings,
+[toy software](https://blog.jsbarretto.com/post/software-is-joy), and other notes.
+Since moving  everything into year-by-year folders, the bibliography may have broken 
+temporarily. 
+
+## Backlog of ideas
+
+### [Bevy](https://bevy.org/): game engine
+
+Learn Rust and video game development at the same time.
+
+### LangChain interpreters
+
+Alternative to gVisor / Monty:
+[docs](https://docs.langchain.com/oss/python/deepagents/interpreters),
+[blog](https://www.langchain.com/blog/give-your-agents-an-interpreter)
+
+### [Opik](https://github.com/comet-ml/opik) UI
+
+Self-hosted GenAI observability. Use Ptah like below.
+
+Alternative: [Traceway](https://docs.tracewayapp.com/server/all-in-one).
+
+### [Langfuse](https://langfuse.com/self-hosting) UI
+
+Especially self-hosted. Use [Ptah](http://ptah.readthedocs.io/).
+
+### [LLM Gateway](https://docs.llmgateway.io/self-host/docker)
+
+Route between LLMs hosted by multiple providers.
+
+### [gVisor](https://gvisor.dev/docs/)
+
+It _should_ be possible to run sandboxed code inside a Kubernetes + Docker context.
+
+### [Mirrord](https://metalbear.com/mirrord/)
+
+Run local code in remote Kubernetes context. Another way of doing what
+[Ptah's `sync`](https://ptah.readthedocs.io/) command tries to do.
+
+### [Monty](https://pydantic.dev/articles/pydantic-monty)
+
+Sandboxed execution of a subset of the Python standard library, excellent for agentic
+apps. Explore using it with agentic applications; where the agent can write code to
+call tools instead of just calling them directly:
+[Executable Code Actions Elicit Better LLM Agents](https://arxiv.org/pdf/2402.01030).
+
+### [PyO3](https://github.com/pyo3/pyo3)
+
+Easy Rust with Python bindings.
+
+### [Polars: compile Python lambda &mapsto; expression](./2026/greedy-santa/README.md)
+
+Conceptually: "PyTorch-style approach for Polars". Allow syntax like
+
+``` python
+df.apply_compiled(lambda row: row["a"] * row["b"] + 1)
+```
+
+... where under the hood the lambda gets "traced" (kind of like TorchScript) then
+compiled to the appropriate Polars expression.
+
+### Sandboxed Python code via Web Assembly
+
+[Pyodide only supports browsers and Node.js](https://github.com/pyodide/pyodide/discussions/5145),
+so one option would be that Python calls Node.js (via the CLI) which runs Pyodide.
+Another would be the version of Python compiled for
+[wasmer-python](https://github.com/wasmerio/wasmer-python). Ideally, [Monty](#monty)-style
+APIs, slower execution, but more comprehensive Python language and package ecosystem support.
