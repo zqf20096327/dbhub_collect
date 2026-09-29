@@ -203,9 +203,15 @@ class GitHubClient:
         return len(body) if isinstance(body, list) else None
 
     def commits_count(self, full_name: str, since_iso: str) -> int | None:
-        """since 之后的 commit 数（Link 计数）。空结果返回 0。"""
-        r = self._request("GET", f"{self.API}/repos/{full_name}/commits",
-                          params={"per_page": 1, "since": since_iso})
+        """since 之后的 commit 数（Link 计数）。空结果返回 0；空仓库 409 视为 0
+        （国产无星通道会捞到空仓，409 未处理曾炸掉整个富集 step）。"""
+        try:
+            r = self._request("GET", f"{self.API}/repos/{full_name}/commits",
+                              params={"per_page": 1, "since": since_iso})
+        except requests.HTTPError as e:
+            if getattr(e.response, "status_code", None) == 409:   # Git Repository is empty
+                return 0
+            raise
         return self._link_last_count(r) or 0
 
     def releases(self, full_name: str, per_page: int = 12) -> list[dict]:
