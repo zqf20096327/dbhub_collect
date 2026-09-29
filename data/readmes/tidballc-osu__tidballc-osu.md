@@ -1,0 +1,5 @@
+- 👋 Hi, I’m Chris!
+- 👀 I’m interested in ML and security
+- 🌱 I’m currently learning CS from the ground up
+- 💞️ I’m looking to collaborate on anything that I can be a positive impact on
+- 📫 How to reach me: my OSU email address

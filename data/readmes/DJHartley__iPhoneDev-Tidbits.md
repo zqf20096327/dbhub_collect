@@ -1,0 +1,1 @@
+This git repository holds some bash scripts that I thought the community would benefit from having access to. I wrote every single one of these, and I even use some of them. My favorite is SDify. It's saved me tons of times. Oh, most theming scripts require imagemagick. Sorry, easiest way:p

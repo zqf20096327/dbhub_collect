@@ -1,0 +1,129 @@
+# Terraform Provider TiDB
+
+Terraform provider for managing TiDB users, grants, roles, and related access objects.
+
+This repository is based on the [`petoju/terraform-provider-mysql`](https://github.com/petoju/terraform-provider-mysql) fork and is being adapted for reliable TiDB lifecycle management.
+
+## Why this fork exists
+
+We use Terraform to manage a large number of database users in TiDB.
+
+The upstream MySQL-compatible provider is a strong base, but we hit TiDB-specific issues around role lifecycle management, especially for:
+
+- `GRANT role TO user`
+- `REVOKE role FROM user`
+- default roles
+- role identifiers stored in mixed formats such as:
+  - `teleport_reader`
+  - `teleport_reader@%`
+  - `'teleport_reader'@'%'`
+
+This fork exists so we can make TiDB behavior explicit and predictable instead of relying on MySQL-oriented quoting/parsing assumptions.
+
+## Current focus
+
+The provider is being adapted to support TiDB user management as a first-class Terraform workflow, with emphasis on:
+
+- certificate-based users for Teleport
+- declarative role membership
+- stable read/plan/apply behavior
+- compatibility with existing legacy state formats
+
+## What has already been fixed
+
+The first TiDB-specific patch in this fork fixes role identifier normalization for:
+
+- `mysql_grant`
+- `mysql_default_roles`
+- `mysql_role`
+
+The provider now canonicalizes role identifiers before generating SQL, so mixed role formats are converted into a single stable form before `GRANT`, `REVOKE`, `ALTER USER ... DEFAULT ROLE`, and role operations are executed.
+
+## Planned direction
+
+Short-term goal:
+
+- make TiDB user and role lifecycle reliable in existing modules
+
+Mid-term goal:
+
+- provide a clean Terraform-native way to manage TiDB users in the same desired-state style we already use for ClickHouse
+
+Possible future direction:
+
+- introduce explicitly TiDB-oriented resources if MySQL compatibility becomes a blocker for clean semantics
+
+## Requirements
+
+- [Terraform](https://developer.hashicorp.com/terraform/downloads) or OpenTofu
+- [Go](https://go.dev/doc/install)
+
+## Local development
+
+### Build
+
+```bash
+go build ./...
+```
+
+### Run targeted tests
+
+```bash
+go test ./mysql -run 'TestNormalizeRoleIdentifier|TestRoleIdentifierSQL|TestRoleGrantSQLStatements'
+```
+
+### Format
+
+```bash
+gofmt -w .
+```
+
+## Releasing
+
+Releases are published from Git tags matching `v*` using GitHub Actions and GoReleaser.
+
+Before the first release, configure these GitHub Actions secrets:
+
+- `GPG_PRIVATE_KEY`
+- `GPG_PASSPHRASE`
+- `GPG_FINGERPRINT`
+
+Then create and push a tag:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The release workflow will build provider artifacts, sign checksums, and create a GitHub Release suitable for Terraform Registry ingestion.
+
+## Using the provider
+
+Until the provider is published to Terraform Registry, local development can use a local build or override installation.
+
+After publication, the intended usage will look like:
+
+```hcl
+terraform {
+  required_providers {
+    tidb = {
+      source  = "Satan1an/tidb"
+      version = "~> 0.1"
+    }
+  }
+}
+```
+
+## Upstream relationship
+
+- this repository is a fork of `petoju/terraform-provider-mysql`
+- upstream is kept as a Git remote for easier rebasing/cherry-picking
+- TiDB-specific behavior is implemented here intentionally rather than patched ad hoc in Terraform modules
+
+## Repository goals
+
+This repository should become:
+
+- the public home of the TiDB provider
+- the source of truth for TiDB-specific provider fixes
+- the provider used by our Terraform modules instead of generic MySQL behavior where TiDB semantics differ

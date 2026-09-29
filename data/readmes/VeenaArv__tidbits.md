@@ -1,0 +1,2 @@
+# tidbits
+repo for notes

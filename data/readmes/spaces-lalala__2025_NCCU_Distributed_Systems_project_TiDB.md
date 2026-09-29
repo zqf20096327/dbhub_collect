@@ -1,0 +1,2 @@
+# 2025_NCCU_Distributed_Systems_project_TiDB
+後端的人請務必要看一下 .env.template內容
