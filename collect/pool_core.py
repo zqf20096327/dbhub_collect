@@ -380,11 +380,27 @@ def _merge_parts(parts: Path) -> dict:
 
 
 def _merge_step(snap: Path, section: str) -> None:
-    """写本 section 完成标记 pool_{section}.json；另一侧标记也在时才写并集 pool.json
-    （单侧跑完/另一侧预算截断 → pool.json 不更新，下游回退昨池）。"""
-    merged = _merge_parts(snap / f"parts_{section}")
-    merged_list = sorted(merged.values(), key=lambda x: -(x.get("stars") or 0))
-    atomic_write_json(snap / f"pool_{section}.json", merged_list)
+    """写本 section 完成标记 pool_{section}.json；另一侧标记也在时才写并集 pool.json。
+
+    parts_* 不入库（gitignore）——CI/换机续跑时只有 state（记录"已完成"）而没有 parts，
+    此时绝不能从空 parts 重写池（2026-09-29 实发事故：CI 把 3.4 万项的池写成 []），
+    应保留既有 pool_{section}.json 直接参与并集。
+    """
+    parts = snap / f"parts_{section}"
+    own_pool = snap / f"pool_{section}.json"
+    if parts.is_dir() and any(parts.glob("*.json")):
+        merged_list = sorted(_merge_parts(parts).values(),
+                             key=lambda x: -(x.get("stars") or 0))
+        if merged_list or not own_pool.is_file():   # 空结果不覆盖既有好池
+            atomic_write_json(own_pool, merged_list)
+        else:
+            log.warning("parts_%s 合并结果为空，保留既有 pool_%s.json", section, section)
+    elif own_pool.is_file():
+        n = len(json.loads(own_pool.read_text(encoding="utf-8")))
+        log.warning("parts_%s 不在本机（CI/换机续跑）——保留既有 pool_%s.json（%d 项）",
+                    section, section, n)
+    else:
+        log.warning("既无 parts_%s 也无 pool_%s.json，本 section 无产物可合并", section, section)
     other = "cn" if section == "intl" else "intl"
     if not (snap / f"pool_{other}.json").is_file():
         log.warning("pool_%s.json 未生成（未跑或预算截断），pool.json 暂不更新（下游回退昨池）",
@@ -393,8 +409,7 @@ def _merge_step(snap: Path, section: str) -> None:
     union = _union_pools(snap)
     atomic_write_json(snap / "pool.json",
                       sorted(union.values(), key=lambda x: -(x.get("stars") or 0)))
-    log.info("合并：pool_%s.json %d 项 → pool.json 并集 %d 项",
-             section, len(merged_list), len(union))
+    log.info("合并：pool_%s → pool.json 并集 %d 项", section, len(union))
 
 
 def _union_pools(snap: Path) -> dict:
