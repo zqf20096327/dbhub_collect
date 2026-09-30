@@ -99,8 +99,10 @@ What works today, verified against a live instance:
   on the way there, the brands it named with their ranks, and every source it
   cited.
 - **MCP.** `limelit mcp` over stdio, or streamable HTTP with a bearer token.
-  Twelve tools on Limelit Cloud's names, so a conversation written against this
-  server keeps working after an upgrade.
+  Fourteen read tools on Limelit Cloud's names, so a conversation written
+  against this server keeps working after an upgrade. The first one an
+  assistant calls says where the instance stands (not set up, never run,
+  ready) and what to do next, so a new user is never handed a 0%.
 - **Scheduling.** Daily or hourly inside `limelit serve`, or `limelit run` for
   one pass on demand, with a hard `runs_per_day` ceiling checked before any
   spend.
@@ -197,33 +199,34 @@ Limelit Open takes the other side of it:
 
 ## Quick start
 
-Ten minutes from nothing to a first number, in four steps. You need Go 1.25
-or newer, or Docker; nothing else.
+Ten minutes from nothing to a first number, in four steps, on macOS or
+Linux. Nothing to install first.
 
-### 1. Install and start
-
-With Go:
+### 1. Download and start
 
 ```bash
+mkdir -p ~/limelit && cd ~/limelit
+curl -fsSL https://github.com/limelit-co/open/releases/latest/download/limelit_$(uname -s | tr A-Z a-z)_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz | tar xz limelit
+./limelit serve
+```
+
+Then open <http://localhost:1515>. The download is the newest build for your
+system, one file, `limelit`, in `~/limelit`. On start it prints every way to
+connect: the browser address, and lines for Claude Code, Claude Desktop and
+any other MCP client with your paths already filled in. The database is one
+SQLite file in `~/limelit/data`; back it up by copying it. Every build and its
+checksums are on the [releases page](https://github.com/limelit-co/open/releases).
+
+The same binary two other ways:
+
+```bash
+# With Go 1.25 or newer
 go install github.com/limelit-co/open/cmd/limelit@latest
 limelit serve
+
+# With Docker; the database lives in the limelit volume
+docker run -p 1515:1515 -v limelit:/data ghcr.io/limelit-co/open
 ```
-
-Or as a container, built from this repository (the same binary, with
-Litestream for durable storage on hosts that replace containers):
-
-```bash
-git clone https://github.com/limelit-co/open && cd open
-docker build -t limelit-open .
-docker run -p 1515:8080 -v limelit:/data limelit-open
-```
-
-Then open <http://localhost:1515>. The database is one SQLite file in
-`./data` (or the `limelit` volume); back it up by copying it.
-
-> Prebuilt binaries and a published image are tracked in
-> [#35](https://github.com/limelit-co/open/issues/35) and land with v0.1.
-> Until then, the two commands above are the install.
 
 ### 2. Set up in the browser
 
@@ -241,19 +244,36 @@ Overview as each engine replies, usually inside a minute. Every number shows
 
 ### 4. Connect Claude
 
-Add this to Claude Desktop's or Claude Code's MCP configuration:
+Claude Code:
+
+```bash
+claude mcp add limelit -s user -- sh -c 'cd ~/limelit && exec ./limelit mcp'
+```
+
+Claude Desktop, in `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
-    "limelit": { "command": "limelit", "args": ["mcp"] }
+    "limelit": {
+      "command": "sh",
+      "args": ["-c", "cd ~/limelit && exec ./limelit mcp"]
+    }
   }
 }
 ```
 
-Then ask: "How visible is my brand across AI engines this week, and which
-prompts am I losing?" The tools are the same ones the dashboard reads, so the
-assistant's number is the screen's number.
+`~/limelit` is where step 1 put `limelit`. Claude starts `limelit mcp` in that
+directory so it reads the same `data` folder as the dashboard. If you put
+`limelit` somewhere else, change `~/limelit` to that directory, or copy the
+lines `limelit serve` prints, which carry your exact paths.
+
+Then ask: "Get started with Limelit". You never need a tool name: the
+assistant checks where your instance stands, tells you the next step if setup
+or a first run is missing, and otherwise answers with your numbers and
+questions to ask next. Or go straight to "How visible is my brand in AI
+answers, and which prompts am I losing?" The tools are the same ones the
+dashboard reads, so the assistant's number is the screen's number.
 
 From here, [Configuration](#configuration) covers the file and the
 environment, [Connect Claude (MCP)](#connect-claude-mcp) the remote endpoint
@@ -276,15 +296,11 @@ limelit version   version and build info
 Limelit Open is MCP-first. The dashboard shows you the numbers; the MCP server
 lets an assistant read them, cross-reference them and quote the evidence.
 
-Claude Desktop or Claude Code:
-
-```json
-{
-  "mcpServers": {
-    "limelit": { "command": "limelit", "args": ["mcp"] }
-  }
-}
-```
+Claude Desktop or Claude Code, over stdio, set up as in
+[step 4 of the quick start](#4-connect-claude). `limelit mcp` reads `./data`
+in the directory it starts in, so it has to start where `limelit serve` runs,
+or be told the directory with `LIMELIT_DATA_DIR`. Started anywhere else it
+opens an empty database, not your instance.
 
 Remote clients point at `limelit serve` and its streamable HTTP endpoint at
 `/mcp`, sending a bearer token as `Authorization: Bearer <token>`. Generate
@@ -296,6 +312,7 @@ can reach the port every answer you have stored.
 
 Then ask things like:
 
+- "Get started with Limelit"
 - "How is Acme doing across AI engines this week?"
 - "Which prompts are we losing to Globex, and what do those answers cite instead of us?"
 - "Show me the answers behind our visibility drop, with the exact quotes."

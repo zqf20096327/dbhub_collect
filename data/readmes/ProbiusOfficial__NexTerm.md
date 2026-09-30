@@ -9,7 +9,7 @@
 本地优先、AI 原生的桌面终端工作台。凭据加密存储，AI 全程在权限护栏内执行。
 
 [![Website](https://img.shields.io/badge/%E5%AE%98%E7%BD%91-online-516cd6)](https://probiusofficial.github.io/NexTerm/)
-![Platform](https://img.shields.io/badge/platform-Windows-blue)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-blue)
 ![Rust](https://img.shields.io/badge/Rust-stable-orange)
 ![Tauri](https://img.shields.io/badge/Tauri-2-24C8D8)
 ![React](https://img.shields.io/badge/React-19-61DAFB)
@@ -28,10 +28,11 @@
 | 模块 | 能力 |
 |---|---|
 | 终端 | SSH 真 PTY、本地 ConPTY、WinRM；多标签与分屏、搜索、会话录制，支持 UTF-8 / GBK / GB18030 / Big5 编码切换 |
-| 会话 | 一台资产一条连接复用，关标签不断连；指数退避自动重连 |
+| 会话 | 一台资产一条连接复用，关标签不断连；SSH / WinRM 指数退避自动重连（本机会话没有"重连"这件事，不会假装在重连） |
+| 资产 | 内置「当前设备」本地资产 —— 装好即有一台机器（本机终端 / 文件树 / 容器面板都落在它上面），不可删除、可改名、可配默认 Shell 与起始目录；另有 SSH / WinRM / Docker / MySQL / Redis 资产，支持分组、搜索、拖拽归类 |
 | 文件 | SFTP 浏览与虚拟滚动、带进度与断点续传的传输；内置编辑器支持查找替换、LF/CRLF 转换与编码切换；MD5 / SHA256 校验 |
-| 挂载 | Windows `net use` 映射盘、Linux sshfs |
-| Docker | 容器列表、日志 follow、容器终端、启停删、镜像管理、容器文件浏览 |
+| 挂载 | Windows `net use` 映射盘、Linux sshfs（本机文件直接看文件树，不需要挂载） |
+| Docker | 容器列表、日志 follow、容器终端、启停删、镜像管理、容器文件浏览；SSH 主机与本机都可用 |
 | 数据库 | MySQL 库表浏览与 SQL 工作台；Redis SCAN 分页、类型感知查看与命令台 |
 | 端口转发 | SSH 本地转发，复用已有会话打通内网数据库 |
 | AI 助手 | OpenAI 兼容多模型、工具调用、权限护栏、终端接管、文件变更 diff、计划模式、上下文用量与缓存命中统计 |
@@ -46,7 +47,7 @@ AI 不是贴在旁边的聊天框，而是接进了内核。
 
 ![AI 权限面板](docs/images/ai-permission.png)
 
-- **文件变更可审** —— 每次写文件生成修改前后 diff，改动一目了然。
+- **文件变更可审** —— `write_file` / `edit_file` 在**确认卡片上先给出逐行 diff**（新建文件整份标为新增），执行后再落一张「变更记录」卡片。改动一目了然，而且是**批准之前**就一目了然。
 
 ![文件变更 diff](docs/images/ai-file-changes.png)
 
@@ -65,18 +66,49 @@ AI 不是贴在旁边的聊天框，而是接进了内核。
 
 ![端口转发](docs/images/port-forward.png)
 
-## 快速开始
+## 下载安装
 
-当前目标平台为 Windows，从源码构建：
+到 [Releases](https://github.com/ProbiusOfficial/NexTerm/releases/latest) 下载：
+
+| 平台 | 文件 |
+|---|---|
+| Windows 10/11 x64 | `NexTerm_x.y.z_x64-setup.exe`（NSIS 安装器，双击即装） |
+| macOS（Apple Silicon） | `NexTerm_x.y.z_aarch64.dmg`（拖入「应用程序」） |
+
+### macOS 首次打开被拦下怎么办
+
+安装包是 **ad-hoc 签名、未公证**的（没有 Apple Developer 证书），所以首次打开会被 Gatekeeper 拦一次。
+这是预期行为，不是文件损坏：
+
+1. 双击应用，看到「无法验证开发者 / 无法检查是否包含恶意软件」的提示 → 点**完成**
+2. 打开 **系统设置 → 隐私与安全性**，下拉到「安全性」，点 **「仍要打开」**
+3. 之后正常双击即可
+
+若提示的是**「已损坏，无法打开」**（而不是"无法验证开发者"），那是签名问题，用命令行一次修掉：
 
 ```bash
-# 依赖：Rust stable MSVC、Node 22+、pnpm 9+
+xattr -dr com.apple.quarantine /Applications/NexTerm.app
+```
+
+> 只有 Intel Mac？目前只发 Apple Silicon 包，可用 Rosetta 或从源码构建
+> （`pnpm tauri build --target x86_64-apple-darwin`）。
+
+## 快速开始（从源码）
+
+支持 Windows 与 macOS，从源码构建：
+
+```bash
+# 依赖：Rust stable（≥1.98）、Node 22+、pnpm 11+
+#   Windows：MSVC 工具链；macOS：Xcode Command Line Tools
 git clone https://github.com/ProbiusOfficial/NexTerm.git
 cd NexTerm
 pnpm install
 pnpm tauri dev      # 开发窗口
-pnpm tauri build    # NSIS 安装器
+pnpm tauri build    # Windows 出 NSIS 安装器；macOS 出 .app + .dmg
 ```
+
+双平台 CI（Windows + macOS 各跑 fmt / clippy / test / typecheck / lint）在每次 push 时把关；
+打 `v*` tag 由 `release.yml` 自动出两个平台的安装包并挂到 Release。
 
 ### 浏览器演示
 

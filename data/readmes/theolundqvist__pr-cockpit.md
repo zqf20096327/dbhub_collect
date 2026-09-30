@@ -8,7 +8,7 @@ PR Cockpit is a desktop app for GitHub pull requests on **macOS and Linux**. A l
 
 ![PR Cockpit showing the review queue for microsoft/vscode, grouped into ready to merge and waiting](docs/screenshots/landing-inbox.png)
 
-The queue separates **ready to merge**, **your move**, and **waiting**. Checks, conflicts, unresolved threads, and review state give you the context to decide what to open next. Stacked pull requests stay together.
+The queue separates **ready to merge**, **your move**, and **waiting**. Failed merge attempts appear under **FAILED TO MERGE** above pinned PRs in every grouping mode, until retried, dismissed, merged, or closed. Checks, conflicts, unresolved threads, and review state give you the context to decide what to open next. Stacked pull requests stay together.
 
 ## Install
 
@@ -47,7 +47,7 @@ Diffs, threads, checks, and file history live in the same review workspace. Pres
 
 ![Folding five regression-test diffs in graphql/graphql-js#4692 to isolate the one-line implementation change](docs/screenshots/landing-hide-tests.gif)
 
-When the review needs a change, stay in context: <kbd>e</kbd> edits the open file and commits the patch to the PR; <kbd>p</kbd> opens the PR in your configured coding agent with review context. You can also revert a focused hunk or press <kbd>h</kbd> to inspect file history.
+When the review needs a change, stay in context: <kbd>e</kbd> edits the open file and commits the patch to the PR; <kbd>p</kbd> opens the PR in your configured coding agent with review context. You can also revert a focused hunk or press <kbd>h</kbd> to inspect file history. A failed merge immediately requests fresh PR details to reveal conflicts or other blockers, while keeping the original error available to retry or dismiss.
 
 Reviewer badges show scores explicitly posted in reviews or comments, parsed without launching a scoring agent.
 
@@ -72,6 +72,14 @@ Desktop notifications are off by default. In **Settings → Notifications**, cho
 | <kbd>?</kbd> | Full shortcut guide |
 
 </details>
+
+### Keep personal review context on a whiteboard
+
+Enable **Whiteboard (Experimental)** in **Settings → Workspace** to add the final review-queue tab. It is off by default. One personal canvas is saved in this installation's SQLite database; disabling the setting keeps it and stops board activity in every connected window. Unsaved work stays protected in its window with a visible export/re-enable banner; keep that window open until recovered. Board actions never change GitHub, manual queue groups, or queue order.
+
+Open PRs, including drafts, start in sections based on your queue grouping, arranged to fit the canvas proportions. **Arrange** refreshes inbox-generated groups from the current queue, removes empty sections, and reflows the board; Undo restores the previous grouping and positions. Custom sections and their cards stay personal. Rename a generated section to make it personal. Cards outside the current queue remain under **On this board**. Ordinary refreshes and window resizing preserve your layout. Drag cards on the 16 px grid, Shift-click or drag empty space to select several objects, and move a section to carry its contents. Add personal notes, pen strokes and connectors with the toolbar. Double-click a card to open its real PR; returning keeps your location and selection. New PRs arrive below existing objects without rearranging them. New commits flag cards for another look; missing cached PRs keep clearly marked last-known metadata. Live metadata refreshes do not create personal saves. Clean windows adopt newer saved boards; unsaved edits require explicit conflict resolution.
+
+**Scroll** zooms at the pointer; hold **Space** and drag to pan. Tool shortcuts are **V** select, **H** pan, **F** section, **P** pen, **T** note, and **C** connector, also shown beside each tool. **1** fits the board, **0** restores 100%, and **/** finds and locates objects. Arrows nudge the selection; **Delete** removes only board objects. **Ctrl/⌘ Z** and **Shift Ctrl/⌘ Z** undo/redo within the current session, without rolling back live PR metadata. Text editors retain their native text shortcuts. **Clear completed** removes closed/merged cards from the board only; it is undoable and those cards stay excluded on refresh. **Export** downloads a board backup. Failed saves and conflicting windows keep local edits and offer explicit retry/recovery controls.
 
 ## The same PR context in your terminal
 
@@ -102,6 +110,14 @@ pr-cockpit listen owner/repo#123
 
 The CLI also supports comments, reviews, thread resolution, edits, and merges through Cockpit's mutation queue. Run **`pr-cockpit --help`** for commands and options, including `--body-file` for exact multiline text and `--json` for machine-readable status. The installer separately asks before adding Cockpit instructions to supported coding assistants.
 
+Built-in agents launch from Cockpit's cached PR brief without spending GitHub API quota, and clone through Git rather than GitHub's API. They use `pr-cockpit` for PR reads and mutations; remote API operations still need available quota. With OMP, Opus uses the `opus` alias and Sonnet uses `anthropic/claude-sonnet-5-5`.
+
+Arming auto-merge approves the feature and delegates safely landing it to the merger. It follows your global and repository instructions, addressing comments, conflicts, and CI failures caused by the PR; known unrelated failures need no rerun or post-merge proof. OMP loads global instructions automatically, and the agent reads repository instructions after cloning. A direct prompt can also authorize merging explicitly. In either case, Cockpit refreshes the PR and merges only the head the agent checked. Bypassing required GitHub checks or approvals still needs the repository's force-merge opt-in; conflicts, unresolved threads, and changes-requested reviews remain blockers.
+
+The Agents tab renders Markdown answers, groups tool activity into expandable details, and shows an identical final-answer echo only once. Full tool inputs, errors, and raw logs remain available.
+
+**Settings → Usage** shows REST core and GraphQL quota separately, including exhausted balances and reset times. Reading quota status remains available when the primary REST limit is exhausted; GitHub's secondary cooldowns still apply.
+
 ## Local reads. GitHub authority.
 
 Cockpit is a client for your existing GitHub workflow, not a second place to maintain pull requests.
@@ -109,7 +125,7 @@ Cockpit is a client for your existing GitHub workflow, not a second place to mai
 - **On your machine:** a Bun server maintains a SQLite cache of PR state and serves the desktop UI and CLI. Diffs, threads, checks, and images are cached locally.
 - **Mirror storage:** Git mirrors compact automatically and evict the oldest unprotected caches toward a 20 GiB target. Active reads, recent use, and linked worktrees are protected, so the target is not a hard limit.
 - **Back to GitHub:** comments, reviews, file edits, thread resolution, and merges use your GitHub CLI authentication. GitHub remains authoritative.
-- **Keeping it current:** the hosted relay is enabled by default. It receives GitHub webhooks and delivers compact change markers and Actions run/job state, including runner assignment—not full PR contents or job logs—to Cockpit. Targeted refreshes update the cache; a direct GitHub poller repairs missed events.
+- **Keeping it current:** the hosted relay is enabled by default. It receives GitHub webhooks and delivers compact change markers and Actions run/job state, including runner assignment—not full PR contents or job logs—to Cockpit. Branch pushes refresh open PRs whose head or base matches, including recently viewed PRs outside the inbox. A direct GitHub poller repairs missed events.
 - **Your relay, if you prefer:** you can configure a different relay URL. See [Self-hosting](docs/self-host-relay.md) for deployment and connection instructions.
 
 Local caching does **not** mean the app makes no external connections. Besides GitHub and the relay, the backend has [Sentry error reporting enabled by default](server/sentry.ts).
@@ -118,6 +134,8 @@ Local caching does **not** mean the app makes no external connections. Besides G
 <summary><strong>Updates, diagnostics, and configuration</strong></summary>
 
 In **Settings → Workspace → Developer**, choose **Check for updates** to fetch the latest `main` revision from GitHub. If an update is available, **Install update** runs the existing updater; the page reloads when the server reports the new revision. Installations with updates disabled reject both actions.
+
+If the installed backend cannot start, the desktop launcher automatically tries an update before opening the app. Recovery is limited to once every five minutes, respects disabled updates, and leaves local edits and non-`main` branches untouched. It restarts only the backend, never an already-running desktop window. If no working update is available, startup reports the failure.
 
 ```sh
 pr-cockpit update  # update and reconcile the installed app

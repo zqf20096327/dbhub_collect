@@ -18,7 +18,9 @@ Unlike HubSpot or Salesforce, this runs entirely on your own infrastructure with
 
 - **Three entities** — contacts, companies, and deals with foreign-key relationships (UUID keys, not enumerable ids)
 - **Activity timeline** — every contact/company/deal has a feed; emails, meetings, notes, and deal-won events all log to it
-- **Integrations (Clawnify connections)** — email a contact via Gmail, schedule a Google Calendar meeting, and post to Slack when a deal is won — all through the org's Clawnify connections, no keys in the app
+- **Integrations (Clawnify connections)** — email a contact via Gmail, schedule a Google Calendar meeting, and post to Slack when a deal is won — all through the org's Clawnify connections, no keys in the app. A Google Workspace connection stands in for Gmail or Calendar when either isn't connected on its own
+- **AI columns**: hover a column (Industry, Title, your own attributes) and click the spark to have AI fill its empty cells from the rest of each record, with your instructions. Quote the company's domain in them and it reads that website too. It fills 20 rows at a time, so a wrong prompt costs little, and it never overwrites what someone typed. Calls go through Clawnify and are charged to the workspace's credits
+- **Gmail sync** (Settings → Email): see when you last emailed each contact and their emails on their page. You choose what it imports (all mail or some labels, and how far back), what the team sees (metadata, subjects, or everything), and whether people you email become contacts. Group and personal addresses and a blocklist are skipped. Bodies stay in Gmail: the CRM stores who wrote to whom and when, the subject only if you share it, and turning sync off deletes what it stored
 - **CSV / XLSX import** — upload a spreadsheet, map columns to fields (exact-match auto-mapping), preview, import; company names resolve to existing companies or are created
 - **Deal pipeline** — a board tracking deals through stages (prospect → qualified → proposal → negotiation → won/lost) with per-column totals
 - **Path routing** — deep-linkable views and records: a row opens in a side panel beside the list (`/contacts?record=:id`), and expands to its full page (`/contacts/:id`)
@@ -192,6 +194,18 @@ List endpoints take `filters`: a JSON list, ANDed, of rules `{field, op, value}`
 | GET | `/api/records?entity=&search=` | Records by name for a relation picker (or `ids=a,b` to name given ids) |
 | GET | `/api/values?entity=&field=` | The values a column already holds (case-insensitive, up to 200), for a picker that offers them |
 | GET | `/api/contacts/aggregates`, `/api/companies/aggregates` | Column totals over the filtered list (`ops=[{key, op}]` plus the list's `search`/`filters`) |
+| GET | `/api/contacts/:id/emails` | A contact's synced emails, newest first; the subject only if the mailbox shares subjects |
+| GET | `/api/emails/:mailbox/:id` | One email's text, read live from Gmail; only when the mailbox shares everything |
+| GET | `/api/email-sync` | Gmail sync settings and progress (`?check=1` also asks which account the connection signs in as) |
+| PUT | `/api/email-sync` | Change sync settings, or turn sync on or off (signed-in people only; turning off deletes what was synced) |
+| GET | `/api/email-sync/labels` | The mailbox's own Gmail labels, for importing only some |
+| GET | `/api/ai-columns?entity_type=` | The fields AI can fill, the AI columns and their instructions, and cells being filled |
+| PUT / DELETE | `/api/ai-columns/:entity/:field` | Turn AI on for a column (with instructions) or off; its values stay |
+| POST | `/api/ai-columns/:entity/:field/fill` | Fill the empty cells among the given rows, 20 at most |
+| POST | `/api/ai-columns/:entity/:field/cells/:id` | Write one cell again with AI |
+| POST | `/api/ai-columns/run` | Fill queued cells. Also the platform queue's target |
+| POST | `/api/email-sync/sync-now` | Run a sync now (signed-in people, API callers and agents) |
+| POST | `/api/email-sync/run` | The platform queue's target, which chains runs until the first import is done. A public route, so a browser's request reaches it without identity: people use `sync-now` |
 
 ## Community & Contributions
 

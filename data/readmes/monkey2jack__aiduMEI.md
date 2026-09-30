@@ -9,7 +9,7 @@
 > 让你的 AI Agent **真正记住你**：混合检索 + 认知治理 + 可视化控制台 + 双引擎自动挡，**单机自托管**，MIT。
 > 宿主（Hermes / Claude Code / Cursor / 任何 MCP 客户端）管短期对话，aiduMEI 管长期记忆。
 
-> **当前公开版本 f0.2。**
+> **当前公开版本 f0.3。**
 >
 > **关于 `f`**：这是一个新的纪元，不是旧版本号的续写。`f` 取 **future / fantasy / forever** ——
 > 我们想做的不是一个更大的缓存，而是一份能陪人走很久的记忆。版本号形态 `f<主>.<次>`，
@@ -110,8 +110,10 @@
 > 这是我们自己在生产上吃过的亏（读线挂了一个月、写线从没挂过、所有探针全绿）。所以现在：`/health` 有 `ingest_liveness_ok` 探针盯着「在读却不在写」，并且真实用过几轮后请跑一次
 >
 > ```bash
-> python3 scripts/check_ingest_wiring.py --token "$AIDUMEM_API_TOKEN"   # 退出码 0 才算接线成功
+> python3 scripts/check_ingest_wiring.py   # 凭据取自环境变量 AIDUMEM_API_TOKEN（或仓库根 .env）；退出码 0 才算接线成功
 > ```
+>
+> 凭据请走环境变量或 `.env`，别写成 `--token "$AIDUMEM_API_TOKEN"`：命令行参数对本机其他用户 `ps` 可见。
 >
 > **三条线各有现成脚本，拷过去注册上即可**（别自己写）：
 >
@@ -172,6 +174,18 @@ python scripts/e2e_smoke.py --json                                              
 
 容器化部署见 [docs/DEPLOY_DOCKHOLD.md](docs/DEPLOY_DOCKHOLD.md)；Agent 侧的完整作业说明（验收探针、备份、维护）在 [AGENTS.md](AGENTS.md)。
 
+### 容器部署（Docker Compose）
+
+`docker compose up -d` 之前**三件事缺一不可**——缺一件，要么起不来，要么起来了却写不进、带着绿灯失能：
+
+1. **凭据**：在 `docker-compose.yml` 旁的 `.env` 里写 `AIDUMEM_API_TOKEN=<随机长串>`（`AIDUMEM_UI_PASSWORD` 可选）。容器内服务绑定 `0.0.0.0`（宿主端口映射才进得来），而无凭据的非回环绑定会被安全门禁拒绝启动；compose 引用的是 `${AIDUMEM_API_TOKEN:?…}`，缺 token 时 `docker compose up` 当场报错，而不是容器反复崩溃重启。compose 只拿 `.env` 做插值，里面其余的键不会自动进容器。
+2. **目录属主**：`mkdir -p data logs && sudo chown -R 10001:10001 data logs`。容器以 uid 10001 运行，bind mount 不做 uid 映射；漏了这一步的症状是 `/health` 能答、第一次写记忆才报 `unable to open database file`。
+3. **模型配置放进数据目录**：`cp mem0_config_local.json.example data/mem0_config_local.json` 后填 Key。容器读写的是 `/app/data/mem0_config_local.json`（`AIDUMEM_CONFIG_FILE`），控制台保存配置与 `PUT /config/*` 这才写得进；`/app` 是只读代码目录。从旧版 compose 升级：把仓库根的 `mem0_config_local.json` 移进 `data/`。
+
+**向量后端**：compose 不单起 Qdrant 服务，用的是嵌入式（本地模式）Qdrant，数据落在配置的 `vector_store.config.path` 下——样例的 `./data/qdrant` 在容器里即 `/app/data/qdrant`，随 `./data` 持久化；改到数据目录以外，容器一重建就丢。嵌入式 Qdrant 持有目录锁，只能单进程。
+
+起来之后 `docker compose ps` 应为 `healthy`（探针在容器内用 python 打免鉴权的 `/livez`）；再用 `docker compose exec aidumem python scripts/e2e_smoke.py --json` 做真实写入/召回验证。托管平台（Dockhold 等）见 [docs/DEPLOY_DOCKHOLD.md](docs/DEPLOY_DOCKHOLD.md)。
+
 ## 📦 负荷与消耗——两种体量，实测全摆在这里
 
 > 这套东西部署起来重不重？**取决于你选哪个挡位。**（2 核 3.5G 云主机 · 2026-08-27 实测）
@@ -213,7 +227,7 @@ python scripts/e2e_smoke.py --json                                              
 
 ## MCP Server（41 工具 · 默认端口 8766）
 
-MCP 与 REST 同进程双栈：REST 在 :8767，MCP 在 :8766（stdio/HTTP 双传输）。**鉴权纪律**：非回环绑定必须配置 `AIDUMEM_API_TOKEN`，否则拒绝启动；确有公网暴露需求才显式设置 `AIDUMEM_ALLOW_INSECURE_PUBLIC=1`（默认关闭，开启会打 critical 日志）。工具分组与调用示例见 [docs/AGENT_INTEGRATION.md](docs/AGENT_INTEGRATION.md)。
+MCP 与 REST 同进程双栈：REST 在 :8767，MCP 在 :8766（stdio/HTTP 双传输）。**鉴权纪律**：非回环绑定必须配置 `AIDUMEM_API_TOKEN`，否则拒绝启动；确有无凭据公网暴露需求才显式设置 `AIDUMEM_ALLOW_INSECURE_PUBLIC=1`（默认关闭，开启会打 critical 日志）——REST 与 MCP SSE 都还须同时设 `AIDUMEI_I_CONFIRM_PUBLIC_NO_AUTH=<监听地址>`（值必须逐字等于实际监听地址，`1`/`true` 不算），否则照样拒绝启动。工具分组与调用示例见 [docs/AGENT_INTEGRATION.md](docs/AGENT_INTEGRATION.md)。
 
 ## 🔐 安全模型
 
@@ -228,6 +242,7 @@ Bearer 令牌（`AIDUMEM_API_TOKEN`）+ 控制台口令（PBKDF2）+ 注入防�
 | `AIDUMEM_DATA_DIR` | 数据目录 | `~/.aidumem` |
 | `AIDUMEI_ENGINE_MODE` | 引擎挡位 cloud/auto/local | auto |
 | `AIDUMEM_CONFIG_READONLY` | 控制台配置只读演示模式 | 0 |
+| `AIDUMEM_PERSONA_ENABLED` · `AIDUMEI_CRYSTALS_ENABLED` · `AIDUMEI_CODE_GRAPH_ENABLED` · `AIDUMEI_EVOLVE_ADMIN_ENABLED` · `AIDUMEI_SKILL_DRAFTS_ENABLED` | 系统级端点族（人格基座 / 技能结晶 / 代码图谱 / 进化报告与循环 / 技能草稿）：全实例共享的派生数据、**不在租户轴上**，未开启时回 404 `feature_disabled`；`/evolve/feedback` 不受影响 | false |
 | `AIDUMEI_INJECT_DATE` | 召回注入带不带时间：`day`/`minute`/`off`（钩子侧） | day |
 
 全量环境变量登记册见 `ducky/env_registry.py`（代码即真相源，错拼会启动告警）。
@@ -239,12 +254,46 @@ Bearer 令牌（`AIDUMEM_API_TOKEN`）+ 控制台口令（PBKDF2）+ 注入防�
 
 | 层 | 能力 |
 |---|---|
-| 检索 | bge-m3 向量 + FTS5 中文 BM25/trigram + cross-encoder 真重排（**需配 reranker key 才生效，默认不开**，见 `.env.example` 的 `AIDUMEI_RERANKER_API_KEY`）；相关性闸门（闲聊不检索，省 token） |
+| 检索 | bge-m3 向量 + FTS5 中文 BM25/trigram + cross-encoder 真重排（**通道配置一次，之后检索自动重排**；未配置不调用，见下方说明）；相关性闸门（闲聊不检索，省 token） |
 | 记忆语义 | 三轨遗忘（身份永不衰减/情感加速/标准曲线）· 双时间轴（记忆**过期**而非删除）· 六型分类 |
-| 治理 | 写入双审 + 冲突消解 + 注入防护；事件账本全路径留痕；密码学谱系（可检测篡改） |
+| 治理 | 写入双审 + 冲突消解 + 注入防护；事件账本全路径留痕；谱系一致性校验链（无密钥 SHA-256 串链：查得出意外损坏与只改一处的编辑，挡不住能改写整个数据库的人） |
 | 进化 | 反思（主动/定时）· 本能升格技能（人工审批闸门）· 检索自进化反馈环 |
 | 协作 | 联邦：多 Agent 共享一套记忆（MoE 门控 + 细粒度授权 grants）· 多 bot / 多 profile 各据一域，记忆人格独立、跨域默认隔离 |
 | 周边 | 多模态视觉记忆 · 代码图谱 · 原文保真抽屉 · Obsidian 双链 |
+
+### Reranker：配置一次，检索时自动使用
+
+在控制台的模型配置中填好 reranker 的 provider、模型、服务地址和 API Key，并开启 `enabled`；也可编辑 `mem0_config_local.json` 的 `rerank` 段。之后无需用户逐次手动开启、发送指令或传搜索开关。有候选结果、走正常评分链路且引擎允许云调用（`auto` / `cloud`）时，系统自动重排。
+
+- `enabled: true` 开启；`false` 停止调用；旧配置没有该字段时保持自动使用。只有开关、没有可用通道配置，也不会调用。修改模型或密钥时会保留原有开关。
+- 控制台保存成功后，**下一次符合条件的检索就读取新配置，无需 `/reload` 或重启**；直接修改配置文件建议原子替换。在途请求可能使用已经读取的旧配置。密钥也可通过 `AIDUMEI_RERANKER_API_KEY` 提供（优先于文件）；修改服务环境变量须重启进程才能继承新值。
+- Workspace 热缓存命中、没有候选、显式 `local` 模式或降级检索绕过评分链路时，不调用云重排。通道异常会保留原排序，并在遥测中报告失败。
+- `/health` 的 `probes.rerank_enabled` 表示开关，`rerank_configured` 表示通道配置齐备；某次检索是否真的重排，以 `/search` 返回的 `_rerank.status: "ok"` 和 `_rerank.applied: true` 为准。健康探针不试调用付费模型。
+- 重排提高相关性，**与记忆数量告警线无关**。数量越过配置的告警线仍会报警；reranker 不删除记忆，也不充当容量缓冲。
+
+嵌入配置文件的示例（替换为自己的服务信息；不要把密钥提交到 Git）：
+
+```json
+"rerank": {
+  "enabled": true,
+  "provider": "openai_compatible",
+  "config": {
+    "model": "your-rerank-model",
+    "api_key": "",
+    "openai_base_url": "https://rerank.example.com/v1"
+  }
+}
+```
+
+### 检索体验与核心记忆维护（f0.3 commits）
+
+- **换词检索**：低原始分候选只有本次重排分达到独立门槛、融合分也过底线才可保留。`_recall_strength.rerank_rescued` 记录数量，`decision_score` 用于判语，原始 `top_score` 保留。`AIDUMEI_RERANK_RESCUE_THRESHOLD` 默认0.9，需按模型的正负样本校准；它不是概率。所有候选统一重排，缓存与失败调用不复用旧重排分。
+- **无关结果拒绝**：本次成功重排的分数低于 `AIDUMEI_RERANK_MIN_RELEVANCE` 时，在截断前过滤；默认0.1，部署须用本模型的正负样本校准（不是概率）。缺分、重复索引、非法分数和服务故障不当作零分；覆盖范围见 `_gate.rerank_relevance`。后补原文有可用名额时也会重排后再分配配额，其独立耗时、过滤数见 `_rerank.verbatim`；这可能增加一次模型调用。工作区只接收最终过滤后的结果。
+- **验收边界**：`found` 表示有相关候选，不证明候选能完整回答问题。测试报告、引用和原始事实可能都高度相关，宿主仍需核对内容与来源；不能只看类型标签或高分宣称答案准确。
+- **实体别名**：自动读取同一 user/bank 已登记的 `entities.aliases`，或 `category=entity_alias` 的已确认事实（`fact_key` 为正式名称，`fact_value` 为 JSON 别名数组，`epistemic_mode=user_provided`，置信度至少90，未归档或失效）。未知与歧义映射不猜测，个人姓名不写进公共代码。
+- **事实与原话**：事实/决策问法保留已通过检查的主干结果，原文补足剩余位置；明确问原话、对话或日记时仍保留原文配额，不删除源记录。
+- **核心项目状态**：宿主确认完整项目状态后，通过既有事实接口记录 `category=core_memory`、`fact_key=core_current_project`、`fact_value=完整状态`。既有后台维护周期自动采用同域、`user_provided`、置信度至少90、未归档/取代/过期的新证据；推断、零散日记与冲突状态不覆盖核心块，不盲刷时间。旧版和证据同事务留档，防止并发覆盖；清空该域记忆时同时删除历史正文。
+- `POST /api/core-memory/core_current_project/refresh` 可提前处理已确认状态，`GET /api/core-memory/{block_key}/history` 查看历史。两接口遵循调用方及记忆域权限。缺少确认时陈旧告警保留，直到内容被真正核验。
 
 ## 测试与质量
 
@@ -253,8 +302,8 @@ Bearer 令牌（`AIDUMEM_API_TOKEN`）+ 控制台口令（PBKDF2）+ 注入防�
 
 | 维度 | 现状 |
 |------|------|
-| 用例总数 | **2243**（`pytest --collect-only` 实测，2026-09-28，f0.2 本树）＝ **行为用例 2037（产品代码直测）+ 脚本/钩子行为 70 + 守卫用例 136（文档/口径/结构）**。三桶口径与名单见 `scripts/count_test_kinds.py`，可一键复算——头条不用混合数 |
-| 独立开发机 | 2231 通过 · **12 跳过** —— **2026-09-28 收集口径**（f0.2 本树，Python 3.12；完整 extras + 模型缓存，只缺 Hermes 宿主） |
+| 用例总数 | **2937**（`pytest --collect-only` 实测，2026-09-30，f0.3 树）＝ **行为用例 2463（产品代码直测）+ 脚本/钩子行为 328 + 守卫用例 146（文档/口径/结构）**。三桶口径与名单见 `scripts/count_test_kinds.py`，可一键复算——头条不用混合数 |
+| 独立开发机 | 2925 通过 · **12 跳过** —— **2026-09-30 收集口径**（f0.3 树，Python 3.12；完整 extras + 模型缓存，只缺 Hermes 宿主） |
 | 基础安装路径 | 1821 通过 · **25 跳过** —— 只装 `requirements.txt` + `requirements-dev.txt`（**2026-09-09 生产机干净 venv 实测**，Python 3.12） |
 | 生产机沙箱 | 1967 通过 · **26 跳过** —— **2026-09-11 生产机实测**（本树 `de09794`，独立沙箱 venv：宿主源码在场、不带 `.env`、无 ruff/mcp/fastembed 等）；生产实机部署后 1983 通过 · 10 跳过（同树，宿主轴齐备） |
 | 全轴齐备 | 1844 通过 · **1 跳过** —— **2026-09-09 生产机实测**（独立全轴 venv：工具、extras、宿主源码、模型缓存与公开 LoCoMo 数据集齐备；那 1 跳过为本树新增用例的条件轴） |
@@ -270,7 +319,7 @@ pytest tests/
 python -m compileall ducky api_server.py mcp_server.py
 ```
 
-> **为什么要把 2231 和 1967 都写出来**：2231 是本树开发环境 2026-09-23 的收集口径（缺宿主 ×12）；1967 是生产机独立沙箱 2026-09-11 实测（`de09794`，宿主在场但沙箱缺多项可选轴）——两者的跳过轴不同，数字必须与环境、日期和测试树一起读。
+> **为什么要把 2925 和 1967 都写出来**：2925 是本树开发环境 2026-09-30 的收集口径（缺宿主 ×12）；1967 是生产机独立沙箱 2026-09-11 实测（`de09794`，宿主在场但沙箱缺多项可选轴）——两者的跳过轴不同，数字必须与环境、日期和测试树一起读。
 
 > **这 12 条不是玄学，自己就能验**：十三条跳过轴（宿主、工具、可选依赖、模型文件）全部登记在册（[docs/TESTING.md](docs/TESTING.md)），`HERMES_SRC` 三态可控、两个方向都能复现：
 >
@@ -279,12 +328,12 @@ python -m compileall ducky api_server.py mcp_server.py
 > pip install -r requirements.txt -r requirements-dev.txt
 > pip install "mcp>=1.0.0,<2" ruff nltk regex numpy fastembed
 > python scripts/fetch_local_embed_model.py
-> pytest tests/ -q -rs | tail -1                                 # 无宿主：2231 passed, 12 skipped
-> HERMES_SRC=/path/to/hermes-agent pytest tests/ -q | tail -1    # 有宿主：2243 passed
-> HERMES_SRC=none pytest tests/ -q -rs | tail -1                 # 装了宿主也强制关掉，照旧 2231 passed, 12 skipped
+> pytest tests/ -q -rs | tail -1                                 # 无宿主：2925 passed, 12 skipped
+> HERMES_SRC=/path/to/hermes-agent pytest tests/ -q | tail -1    # 有宿主：2937 passed
+> HERMES_SRC=none pytest tests/ -q -rs | tail -1                 # 装了宿主也强制关掉，照旧 2925 passed, 12 skipped
 > ```
 >
-> 上面代码块里的 `有宿主：2243 passed` 要**十三条轴同时齐备**才拿得到，宿主只是其中一条 —— 别把「装上宿主」当成「全绿」。
+> 上面代码块里的 `有宿主：2937 passed` 要**十三条轴同时齐备**才拿得到，宿主只是其中一条 —— 别把「装上宿主」当成「全绿」。
 
 > **跳过轴全量登记**（门控条数与实测逐行对账，改一条这里就红）：
 >
@@ -302,7 +351,7 @@ python -m compileall ducky api_server.py mcp_server.py
 > | `mem0ai` 已安装 | 20 | `tests/test_v20_mem0_patch_layer.py` 整份（补丁层疗法要真实基座在场；此前缺 mem0 是 20 条 ERROR 冒充真缺陷，现在诚实跳过） |
 > | `fastembed` 已安装 | 1 | `tests/test_v20_2_autoshift.py`（自动挡备胎真模型测试；缺依赖诚实跳过，模型未部署时用例内二次跳过） |
 > | `ruff` 已安装 | 3 | 静态规则守卫：F821/F811/F841；缺依赖时跳过，发布门禁仍会拦截 |
-> | `mcp` extra 已安装 | 8 | MCP 导入面守卫 + 鉴权行为 + SSE 传输用例 + 检索 session 透传 |
+> | `mcp` extra 已安装 | 9 | MCP 导入面守卫 + 鉴权行为 + SSE 传输用例 + 检索 session 透传 |
 >
 > 生产机独立沙箱裸跑（宿主源码在场、不带 `.env`），实测跑出来是 1967 passed、26 skipped（2026-09-11，本树 `de09794`）——跳过轴不同，数字必须与环境、日期和测试树一起读。
 

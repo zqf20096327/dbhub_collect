@@ -1,0 +1,243 @@
+# SQL-CLI
+
+[![Java](https://img.shields.io/badge/Java-21-blue.svg)](https://openjdk.org/projects/jdk/21/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub Release](https://img.shields.io/github/v/release/xianyuchen-king/sql-cli?include_prereleases&display_name=tag)](https://github.com/xianyuchen-king/sql-cli/releases)
+[![npm version](https://img.shields.io/npm/v/@black-cyq/sql-cli.svg)](https://www.npmjs.com/package/@black-cyq/sql-cli)
+![Status](https://img.shields.io/badge/Status-Beta-orange.svg)
+
+一个用于连接关系型数据库的 CLI 工具，通过 JDBC 驱动支持 MySQL、Oracle、PostgreSQL、SQLite、达梦等数据库。专为 AI 编程助手（如 Claude Code）设计。
+
+> **Beta 测试阶段** — 本项目正在积极开发中，欢迎试用并[提出反馈](https://github.com/xianyuchen-king/sql-cli/issues/new?template=bug_report.yml)或[功能建议](https://github.com/xianyuchen-king/sql-cli/issues/new?template=feature_request.yml)！
+
+[English](README_EN.md) | 中文
+
+## 特性
+
+- **多数据库支持** — MySQL、Oracle、PostgreSQL、SQL Server、SQLite、达梦等，可通过自定义驱动扩展
+- **交互式 Shell** — REPL 模式支持连接复用、SQL 历史记录、快捷命令
+- **安全保护** — 密码 AES-256-GCM 加密存储、安全级别控制（严格/正常/无）
+- **数据导入导出** — CSV、JSON、SQL INSERT/UPDATE 格式
+- **连接管理** — 保存连接配置，支持分组和标签
+- **元数据浏览** — 查看数据库、表、列、索引信息，`meta describe` 综合表结构
+- **查询增强** — 查询计时、超时控制、结果输出到文件
+- **AI 友好** — 默认 Markdown 表格输出，专为 AI 助手优化
+
+## 安装
+
+### 前置要求
+
+- Java 21+ 已安装并在 PATH 中
+- Node.js 16+（仅 npm 安装方式需要）
+
+### 方式一：npm 安装（推荐）
+
+```bash
+npm install -g @black-cyq/sql-cli
+```
+
+安装完成后即可使用 `sql-cli` 命令。
+
+### 方式二：从源码构建
+
+```bash
+git clone https://github.com/xianyuchen-king/sql-cli.git
+cd sql-cli
+./gradlew shadowJar
+```
+
+构建完成后，jar 文件位于 `build/libs/sql-cli.jar`。
+
+```bash
+# 直接运行
+java -jar build/libs/sql-cli.jar --help
+
+# 或创建启动脚本
+sudo tee /usr/local/bin/sql-cli << 'EOF'
+#!/bin/bash
+java -jar /path/to/sql-cli/build/libs/sql-cli.jar "$@"
+EOF
+sudo chmod +x /usr/local/bin/sql-cli
+```
+
+### 方式三：下载预编译版本
+
+前往 [Releases](https://github.com/xianyuchen-king/sql-cli/releases) 页面下载最新 jar 文件。
+
+```bash
+java -jar sql-cli.jar --help
+```
+
+## 快速开始
+
+```bash
+# 1. 初始化配置
+sql-cli init
+
+# 2. 安装数据库驱动
+sql-cli driver install mysql
+
+# 3. 添加连接
+sql-cli conn add --name mydb --type mysql --host localhost --port 3306 \
+  --user root --password xxx --db testdb
+
+# 4. 测试连接
+sql-cli conn test mydb -v
+
+# 5. 执行查询
+sql-cli query "SELECT * FROM users LIMIT 10" -c mydb
+
+# 6. 查询结果保存到文件
+sql-cli query "SELECT * FROM users" -c mydb -f csv -o /tmp/result.csv
+
+# 7. 查看表结构
+sql-cli meta describe -t users -c mydb
+
+# 8. 导出数据
+sql-cli export -t users -c mydb -f csv -o /tmp/users.csv
+```
+
+## 交互式 Shell（REPL）
+
+对于频繁查询的场景，使用交互式 Shell 模式可复用连接，大幅提升响应速度：
+
+```bash
+# 进入交互式 Shell
+sql-cli shell -c mydb
+
+# 或使用内联参数直接连接
+sql-cli shell --type mysql --host localhost --port 3306 \
+  --user root --password xxx --db testdb
+```
+
+在 Shell 中：
+
+```
+mydb> SELECT * FROM users LIMIT 5;
+| id | name  | email             |
+|----|-------|-------------------|
+| 1  | Alice | alice@example.com |
+...
+
+mydb> \dt                    # 列出所有表
+mydb> \d users               # 查看表结构
+mydb> \format json           # 切换输出格式
+mydb> \c otherdb             # 切换到其他连接
+mydb> exit                   # 退出 Shell
+```
+
+**快捷命令：**
+
+| 命令 | 说明 |
+|------|------|
+| `\dt`, `\tables` | 列出所有表 |
+| `\d <表名>` | 查看表结构 |
+| `\db`, `\databases` | 列出所有数据库 |
+| `\dv`, `\views` | 列出所有视图 |
+| `\c <连接名>` | 切换到其他连接 |
+| `\format [markdown|json|csv]` | 设置输出格式 |
+| `\limit <n>` | 设置行数限制 |
+| `\nolimit` | 取消行数限制 |
+| `\timeout <n>` | 设置查询超时 |
+| `\status` | 显示当前设置 |
+| `\help` | 显示帮助 |
+| `exit`, `quit` | 退出 Shell |
+
+## 使用示例
+
+```
+$ sql-cli query "SELECT id, name, email FROM users LIMIT 5" -c mydb
+
+| id | name     | email              |
+|----|----------|--------------------|
+| 1  | Alice    | alice@example.com  |
+| 2  | Bob      | bob@example.com    |
+| 3  | Charlie  | charlie@example.com |
+
+5 rows in set (0.03s)
+```
+
+更多用法详见 [完整文档](skill/sql-cli-skill.md)。
+
+## AI 编程助手集成
+
+sql-cli 提供了 AI Skill，可让 Claude Code、Cursor、GitHub Copilot 等 AI 编程助手直接使用 sql-cli 操作数据库。
+
+### 安全边界
+
+`strict`、`normal`、`none` 这三个 safety level 只控制 `sql-cli` 内部的 SQL 执行策略，不是 AI agent 的沙箱，也不会控制文件系统、shell、网络或操作系统权限。
+
+- `strict`：只允许 `SELECT` 和元数据查询
+- `normal`：拦截 `DROP DATABASE`、不带 `WHERE` 的 `DELETE/UPDATE` 等不安全语句，并对 `DROP TABLE` 等高风险操作要求确认
+- `none`：关闭 `sql-cli` 内部的 SQL 拦截/确认规则，但不等于移除宿主工具提供的其他执行保护
+
+当 AI agent 调用 `sql-cli` 时，agent 级别的 sandbox 和命令、文件、网络审批仍然必须由宿主 agent/runtime 负责。`sql-cli` 自身仍可能通过 `--confirm` 或交互式 shell 提示来执行 SQL 级确认，但这不属于 agent 权限治理。
+
+### 安装 Skill
+
+```bash
+# 全局安装（推荐，自动适配已安装的 AI 工具）
+npx skills add xianyuchen-king/sql-cli -g
+
+# 自动确认，无需交互
+npx skills add xianyuchen-king/sql-cli -g -y
+```
+
+### 支持的 AI 工具
+
+安装后自动适配以下 AI 编程助手：
+
+| AI 工具 | 支持方式 |
+|---------|---------|
+| Claude Code | 自动 |
+| Cursor | 自动 |
+| GitHub Copilot | 自动 |
+| Codex | 自动 |
+| Gemini CLI | 自动 |
+| Cline | 自动 |
+| Windsurf / Amp / Trae 等 | 自动 |
+
+完整列表请运行 `npx skills add xianyuchen-king/sql-cli -g` 查看。
+
+## 新功能 (v1.0.4)
+
+| 功能 | 命令 |
+|------|------|
+| 交互式 Shell | `sql-cli shell -c mydb` — REPL 模式，连接复用 |
+| 查询计时 | `sql-cli query "SELECT ..." -c mydb` 自动显示耗时 |
+| 查询超时 | `sql-cli query "SELECT ..." -c mydb --timeout 30` |
+| 输出到文件 | `sql-cli query "SELECT ..." -c mydb -o result.csv` |
+| 表结构总览 | `sql-cli meta describe -t users -c mydb` |
+| SQL Server | `sql-cli conn add --name mssqldb --type mssql ...` |
+| 版本检查 | `sql-cli update check` |
+| 自动更新 | `sql-cli update` |
+
+## 支持的数据库
+
+| 数据库      | 类型标识       | 默认端口 |
+|------------|---------------|---------|
+| MySQL      | `mysql`       | 3306    |
+| Oracle     | `oracle`      | 1521    |
+| PostgreSQL | `postgresql`  | 5432    |
+| SQL Server | `mssql`       | 1433    |
+| SQLite     | `sqlite`      | -       |
+| 达梦        | `dm`（自定义） | 5236    |
+| 其他        | `generic`     | -       |
+
+## 技术栈
+
+- Java 21、Gradle、Picocli（CLI 框架）、SnakeYAML（YAML 处理）、JDBC
+
+## 贡献
+
+欢迎贡献代码、报告 Bug 或提出建议！请阅读 [贡献指南](CONTRIBUTING.md)。
+
+## 反馈与建议
+
+- [报告 Bug](https://github.com/xianyuchen-king/sql-cli/issues/new?template=bug_report.yml)
+- [功能建议](https://github.com/xianyuchen-king/sql-cli/issues/new?template=feature_request.yml)
+- [讨论区](https://github.com/xianyuchen-king/sql-cli/discussions)
+
+## License
+
+[MIT](LICENSE)

@@ -44,7 +44,7 @@ What's Included
 
 - **Collapsible sidebar** - Nested navigation groups with smooth expand/collapse animations
 - **Dark mode** - Theme toggle with localStorage persistence, auto-detects system preference
-- **Tabler Icons** - 5000+ icons via CDN, no build step
+- **Tabler Icons** - 5000+ icons, vendored, no build step
 - **Ember color palette** - Fire-inspired theme matching the Enferno brand
 - **Polish included** - Card hover effects, smooth scrollbars, styled data tables
 
@@ -52,7 +52,8 @@ Requirements: Python 3.11+ and [uv](https://docs.astral.sh/uv/)
 
 ### Background Tasks
 
-When you need Celery for async jobs:
+For a new installation with Redis sessions and Celery, run `./setup.sh --full`.
+For an existing installation, preserve `.env` and enable them manually:
 
 ```bash
 uv sync --extra full        # Adds Redis + Celery
@@ -76,7 +77,7 @@ automatically. Databases created before migrations existed: run
 
 ### Sanity Checks
 
-No pytest ceremony - just real code paths:
+Real code paths against your configured database, run after `create-db`:
 
 ```bash
 uv run python checks.py     # Run before deploying
@@ -84,11 +85,16 @@ uv run python checks.py     # Run before deploying
 
 ### Docker
 
-Full production stack with one command:
+Configure a new installation, then start the full production stack:
 
 ```bash
+./setup.sh                  # Select Docker for a new installation
 docker compose up --build   # Redis, PostgreSQL, Nginx, Celery
 ```
+
+Compose requires `DB_PASSWORD` and `REDIS_PASSWORD`. For an existing installation,
+use the credentials already configured in its database and Redis; do not regenerate
+them with setup. Database and Redis ports are internal to the Compose network.
 
 ### VPS Deploy
 

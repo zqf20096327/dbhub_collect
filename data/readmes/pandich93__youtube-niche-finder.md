@@ -10,7 +10,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)](backend/interfaces/http/api.py)
 [![PostgreSQL 16](https://img.shields.io/badge/postgres-16-336791?style=flat-square&logo=postgresql&logoColor=white)](docker-compose.yml)
 [![Docker Compose](https://img.shields.io/badge/docker-compose-2496ED?style=flat-square&logo=docker&logoColor=white)](docker-compose.yml)
-[![MCP](https://img.shields.io/badge/MCP-63%20tools-8A2BE2?style=flat-square)](backend/interfaces/mcp/server.py)
+[![MCP](https://img.shields.io/badge/MCP-80%20tools-8A2BE2?style=flat-square)](backend/interfaces/mcp/server.py)
 [![Last commit](https://img.shields.io/github/last-commit/pandich93/youtube-niche-finder?style=flat-square)](https://github.com/pandich93/youtube-niche-finder/commits/main)
 [![Open issues](https://img.shields.io/github/issues/pandich93/youtube-niche-finder?style=flat-square)](https://github.com/pandich93/youtube-niche-finder/issues)
 [![Open PRs](https://img.shields.io/github/issues-pr/pandich93/youtube-niche-finder?style=flat-square)](https://github.com/pandich93/youtube-niche-finder/pulls)
@@ -26,7 +26,7 @@ topic" is done by the model calling these tools, not the server.
 
 The project has three parts that together make up the "product":
 
-- **`backend/`** — Python: an MCP server (63 tools for Claude), an HTTP API
+- **`backend/`** — Python: an MCP server (80 tools for Claude), an HTTP API
   for the dashboard, and a background worker that logs view/subscriber
   history on a schedule (without this, "growth rate over 24 hours" doesn't
   exist — the YouTube API only ever returns "right now").
@@ -51,20 +51,79 @@ database.
 - Repackaging: title and thumbnail swaps after publishing, before/after
   side by side and views per hour around the swap (thumbnails are
   fingerprinted from the image itself — the API URL never changes)
+- Hook score: rates the text of a video's first ~30 seconds (a pasted transcript, or your
+  own draft intro) 0-100 from a question to the viewer, a concrete number, a promised
+  payoff, intrigue, "you" and pace, minus filler like "welcome back" or "subscribe",
+  in English and Russian; compares outliers' hooks with ordinary videos in a niche
+  (needs 10+ transcripts per group). Text only, not visuals; zero quota, no LLM needed
+- RPM as a range, not one number: every niche RPM and niche-model revenue
+  estimate ships as low–high (half to double the NexLev-style middle), because
+  public RPM estimates for one niche disagree by up to 7x and YouTube publishes
+  none; revenue estimates are ads only, sponsorships are not counted — on the
+  dashboard and in the extension
+- Sponsor map: which brands pay creators in a niche or on a channel, read from
+  the video descriptions already in the database — "sponsored by", promo codes
+  and affiliate links (Amazon etc.) kept apart; a lower bound, only what is
+  written in a description; zero quota
 - The exact same calculation in Claude Desktop (via MCP) and on the web
   dashboard — one shared codebase, not two implementations
+- Template-risk check: how much a channel's (or a whole niche's) recent uploads
+  look like one template repeated — the pattern behind YouTube's "inauthentic
+  content" demonetisations — from title similarity, shared title openings,
+  uniform lengths and a metronome upload rhythm (a heuristic, not a verdict)
 - Niche clusters (k-means over channel embeddings) and a niche map;
   semantic similarity of channels and videos via pgvector
+- Niche trend: growing / holding / cooling / saturated, from the last 30 days
+  against the 90 before — how many videos come out, how the new ones are
+  watched (projected to day 30), how many channels were created and whether
+  newcomers break out; "not enough data" under 20 videos per window, and a
+  "low confidence" mark when most videos were not seen young
 - Idea checker, title scoring and title suggestions, SEO review of a
   draft's title/description/tags, drafts linked to published videos
+- Outlier to brief: one call turns a video that beat its channel into a
+  working brief for your own video — its hook, niche title patterns, whether
+  the topic is already covered, title candidates and thumbnail references —
+  saved as a draft linked back to the source; parts that need an LLM are
+  named as skipped instead of faked
 - "Why viral" explanations for outlier videos and comment insights per
   video or niche
+- Content gaps: questions and requests from the comments of a niche's top
+  videos that no collected video or pasted transcript answers yet, ranked by
+  demand (askers, likes, how many videos they asked under), with the nearest
+  existing video and a "to brief" link; works without an LLM (rules, English
+  and Russian, noisier) and with one; comments are read only on click,
+  1 quota unit per video, then cached
 - Transcripts: a queue, manual paste, hybrid (keyword + semantic) search
 - Alerts (new outliers, view acceleration, title changes, a channel
   breaking its silence, a tracked channel or an alerted outlier video that
   disappeared from YouTube), delivered to Telegram or a webhook one by one
-  or as one morning digest; a swipe file for saved videos and channels
+  or as one morning digest, and listed on the dashboard's "Алерты" screen with
+  a filter by type; a vanished channel is also marked on its channel screen;
+  a swipe file for saved videos and channels
 - Export a niche's videos to TSV/CSV
+- Similar thumbnails: CLIP image vectors (local, ONNX on CPU) find videos whose
+  thumbnail looks like an outlier's, thumbnails matching a text description
+  ("red arrow, shocked face"), and a niche's thumbnail styles with how each
+  performs. Opt-in (`WORKER_THUMB_EMBED=1` or a button on the niche screen):
+  the models take ~0.6 GB of disk in the models volume, the process peaks at
+  ~0.7 GB of RAM while embedding, ~60 ms of CPU per thumbnail (about a second
+  with the polite download pace); only the
+  vector is kept, and search takes milliseconds with pgvector
+- Your own channels: connect them through Google OAuth (your own client, read-only)
+  and see their real YouTube Analytics numbers — views, retention, revenue, CPM,
+  RPM — next to a niche, and your real RPM against niche-finder's estimate; the
+  refresh token is stored encrypted and the worker syncs daily. Thumbnail CTR is
+  not in the Analytics API, so it is not shown
+- YPP thresholds: which YouTube Partner Program bars a channel visibly meets
+  (subscribers, uploads and Shorts views in 90 days), on the channel screen and
+  in the extension, and a filter that keeps only channels past them in outlier
+  search and outlier channels — deliberately not a "monetized" badge, since
+  YouTube does not publish that and the page signals for it proved unreliable
+- Seven ready-made scenarios for Claude (MCP prompts, under "+" in Claude
+  Desktop): find a niche, analyse a competitor, validate an idea, outlier to
+  your own video, weekly review, content gaps, niche health — each names the
+  tools in order, states its quota cost and checks the remaining quota before
+  collecting anything
 - Only the free YouTube Data API v3 and local PostgreSQL — no paid
   subscriptions and no LLM key required. An LLM (via OpenRouter or a local
   Ollama) is opt-in and off by default — see [Privacy](#privacy)
@@ -192,6 +251,18 @@ issue first to agree on the shape. See
 [CONTRIBUTING.md](CONTRIBUTING.md) for how to set up a dev environment and
 run the test suite.
 
+## Multi-user mode (experimental)
+
+Off by default: niche-finder is a single-user tool on your own machine.
+`NF_MULTI_USER=1` adds sign-in with invited accounts (`cli.py create-user`), and
+each user gets their own watchlist, swipe file, drafts, transcript queue,
+alerts and a daily share of the YouTube quota; the extension and MCP over HTTP
+sign in with personal tokens, each user sets up their own Telegram or webhook
+alerts, and the LLM budget and rate limit count per user. Details: [backend/README.md](backend/README.md#multi-user-mode-plan-15-experimental-off-by-default).
+Before you give anyone an account, go through [SECURITY.md](SECURITY.md) —
+HTTPS, `NF_COOKIE_SECURE`, `OWN_TOKENS_KEY`, backups, and YouTube's 30-day data
+storage rule for services other people use.
+
 ## Privacy
 
 Self-hosted, no telemetry, no account: everything stays in your own Postgres,
@@ -215,7 +286,8 @@ See [CHANGELOG.md](CHANGELOG.md) for a history of notable changes, in
 
 ## Read next
 
-- [backend/README.md](backend/README.md) — YouTube API quotas, all 63 tools
+- [SECURITY.md](SECURITY.md) — reporting a problem, what protects each mode, the checklist before multi-user
+- [backend/README.md](backend/README.md) — YouTube API quotas, all 80 tools
   with descriptions, how to read `period_by`, running with and without
   Docker, the DDD layer structure.
 - [frontend/README.md](frontend/README.md) — dashboard screens, where the

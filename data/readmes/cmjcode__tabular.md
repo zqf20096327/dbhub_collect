@@ -31,7 +31,7 @@ Tabular is a lightweight, native database client built with the `eframe`/`egui` 
 - **Integrated HTTP Client**: REST API tester supporting JSON, form-data, custom auth, headers, and code export
 - **Smart Sidebar Tree Search**: Case-insensitive instant filtering across Connections, Queries, History, and HTTP Collections. When searching for a folder name, the folder and all of its contents (connections, queries, history entries, subfolders) remain fully displayed and automatically expanded.
 - **MCP Server for AI Agents (`tabular mcp`)**: Built-in Model Context Protocol server so Claude Code, Cursor, Codex and other agent harnesses can list connections, describe schemas (relevance-ranked), run read-only queries, get EXPLAIN plans and lint SQL. Credentials never leave Tabular, writes are refused, every agent query is audited in history. See [docs/MCP.md](docs/MCP.md).
-- **AI Assistant (`Cmd+Shift+A`)**: Schema-aware SQL completion with OpenAI, Anthropic Claude, Groq, GitHub Copilot, or custom endpoints
+- **AI Assistant (`Cmd+Shift+A`)**: Schema-aware SQL completion with OpenAI, Anthropic Claude, Google Gemini, xAI, Groq, OpenRouter, GitHub Copilot, local models (Ollama, llama.cpp, MLX), or custom endpoints
 - **Editor Tab Drag & Drop Reordering & Pin Tab**: Group and reorder tabs via intuitive horizontal drag-and-drop, pin important queries/tables with 📌, prevent accidental closures, and manage tabs with full context menus
 - **Modern Developer SQL Editor**: Context-aware alias resolution (`u.`), Foreign Key auto-join completions, statement-level execution (`Ctrl+Enter`), quick query formatting (`Ctrl+Shift+F`), line comments (`Ctrl+/`), line duplication & moving (`Alt+Up/Down`), active line highlight, and multi-format result clipboard exports (Markdown, JSON, CSV, SQL INSERTs).
 
@@ -136,7 +136,7 @@ Extend Tabular with lightweight sandboxed Wasm modules (`wasmi` engine).
 ### AI Assistant (Cmd+Shift+A)
 Context‑aware AI chat integrated directly into the query editor.
 - **Multiple CLI Agents & HTTP APIs simultaneously** (Settings → AI Assistant):
-  - **HTTP API** with your own key: **OpenAI (ChatGPT)**, **Anthropic (Claude)**, **Groq**, **GitHub Copilot/Models**, or any **OpenAI‑compatible** endpoint.
+  - **HTTP API** with your own key: **OpenAI (ChatGPT)**, **Anthropic (Claude)**, **Google Gemini**, **xAI (Grok)**, **Groq**, **OpenRouter**, **GitHub Copilot/Models**, or any **OpenAI‑compatible** endpoint. Local servers (**Ollama**, **llama.cpp**, **MLX**) work without a key.
   - **CLI coding agents** — configure multiple agents on the same machine (**Antigravity (`agy`)**, **Claude Code (`claude`)**, **Gemini CLI (`gemini`)**, and custom commands) with per-agent model, reasoning effort, extra arguments, and enabled status.
 - **Chat Target Picker**: When multiple agents or API are enabled, pick the active agent directly in the chat panel header. Chat history is preserved seamlessly when switching agents.
 - **Agent Attribution**: Responses in chat bubbles and Markdown exports are tagged with the answering agent label (e.g. `Assistant (agy · gemini-3.8-flash-low)`).
@@ -352,6 +352,7 @@ Contributions are welcome (bug fixes, new drivers, UI, performance). Suggested w
 ## 11. Roadmap (High level)
 
 ### Recently Shipped ✅
+- **Result Charts, Map View & EXPLAIN Compare**: Bar/line/area/scatter charts over any result with X/Y picking and Sum/Avg/Count/Min/Max aggregation; a map for PostGIS/MySQL geometry, WKT and GeoJSON columns (OpenStreetMap basemap, toggleable); EXPLAIN self-cost/self-time/rows bar chart; plan history per query with pinning and per-node cost/time deltas
 - **Modern Developer SQL Editor & IntelliSense 2.0**: Context-aware alias resolution (`u.`), Foreign Key auto-join completions, statement-level execution (`Ctrl+Enter`), quick query formatting (`Ctrl+Shift+F`), line comments (`Ctrl+/`), line duplication & moving (`Alt+Up/Down`), active line highlight, and multi-format result clipboard exports (Markdown, JSON, CSV, SQL INSERTs) (v0.17)
 - **Editor Tab Drag & Drop & Tab Pinning**: Interactive tab reordering, 📌 pinned tabs with accidental close prevention, smart boundary synchronization, and full context menus (v0.15)
 - **Smart Sidebar Tree Search & Folder Content Preservation**: Case-insensitive filtering across Connections, Queries, History, and Collections while preserving parent hierarchies and expanding folders (v0.14)
@@ -373,7 +374,6 @@ Contributions are welcome (bug fixes, new drivers, UI, performance). Suggested w
 
 ### Upcoming
 - Automated Database Diagram / ERD interactive editor
-- Query result chart & data visualization widgets
 - Step-by-step Stored Procedure & PL/pgSQL visual debugger
 - Native iPadOS touch-optimized UI layout
 - Windows signed installer package (MSI / AppX)
@@ -454,7 +454,7 @@ This project is dual‑licensed:
 - **Redis Cluster Support**: Auto-detects standalone vs cluster mode; scans master nodes automatically.
 
 ### v0.6.x
-- **AI Assistant (`Cmd+Shift+A`)**: Schema-aware SQL generation powered by OpenAI, Claude, Groq, Copilot, or custom endpoints.
+- **AI Assistant (`Cmd+Shift+A`)**: Schema-aware SQL generation powered by OpenAI, Claude, Gemini, xAI, Groq, OpenRouter, Copilot, local models (Ollama, llama.cpp, MLX), or custom endpoints.
 - Primary key detection fallback chain improvements.
 
 ### v0.5.x

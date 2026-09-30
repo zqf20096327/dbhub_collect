@@ -52,7 +52,11 @@ The `StudioMCP` executable provides a newline-framed JSON-RPC stdio server for C
 "/Applications/SQLiteGraphStudio.app/Contents/MacOS/StudioMCP" setup all
 ```
 
-This packaged helper path is the stable setup route: it does not depend on a repository checkout or a SwiftPM build directory. From Graph Studio, choose **Coding Agents → Install local MCP and skills…**. The review defaults to user-wide setup and also offers a project folder. Project setup writes Codex MCP configuration to that project's `.codex/config.toml` and asks Claude Code to merge its project server into `.mcp.json`; it installs skills under that project's `.agents/skills` or `.claude/skills`. Codex loads project configuration only after you trust the project. Project setup refuses symlinked configuration and skill destinations. Run setup after placing the app at its final path because each client stores the helper's absolute executable path. Existing entries named `sqlite-graph-studio` are left unchanged when they point elsewhere, and unrelated configuration is kept. A skill file is updated only when it matches a released Graph Studio managed version; customized files are reported and left intact. The retired `story-flows` skill is removed only when its file exactly matches a known released copy. After writing a client entry, setup reads it back and starts the bundled helper for an MCP handshake, tool discovery, and a read-only `studio_status` call. This checks the helper and bridge status; it does not claim that a running coding-agent session has loaded the server. Restart or reload the client, then call `studio_status` from that client to confirm its live connection.
+This packaged helper path is the stable setup route: it does not depend on a repository checkout or a SwiftPM build directory. On first normal launch after installation, Graph Studio checks for available coding-agent clients and opens a read-only setup review when registration, managed skills, or an existing name conflict needs attention. The review selects user-wide setup by default; nothing is installed until you choose **Install reviewed changes**. Dismissing the review does not repeat the prompt for that client on every launch. If a coding-agent CLI is installed later, Graph Studio offers its setup review on a subsequent launch. You can reopen the review any time with **Coding Agents → Install local MCP and skills…**.
+
+The review also offers a project folder. Project setup writes Codex MCP configuration to that project's `.codex/config.toml` and asks Claude Code to merge its project server into `.mcp.json`; it installs skills under that project's `.agents/skills` or `.claude/skills`. Codex loads project configuration only after you trust the project. Project setup refuses symlinked configuration and skill destinations. User-wide setup supports a linked skills root when it points directly to an existing, user-owned directory inside your home folder that is not writable by other users; the review shows its resolved location. The link itself, customized files, and links inside individual skill folders are preserved. Run setup after placing the app at its final path because each client stores the helper's absolute executable path. Existing entries named `sqlite-graph-studio` are left unchanged when they point elsewhere, and unrelated configuration is kept. A skill file is updated only when it matches a released Graph Studio managed version; customized files are reported and left intact. The retired `story-flows` skill is removed only when its file exactly matches a known released copy. After writing a client entry, setup reads it back and starts the bundled helper for an MCP handshake, tool discovery, and a read-only `studio_status` call. This checks the helper and bridge status; it does not claim that a running coding-agent session has loaded the server. Restart or reload the client, then call `studio_status` from that client to confirm its live connection.
+
+User-wide setup also turns on Codex's `enable_mcp_apps` feature, which Codex needs to show MCP App views such as the inline schema review. The review lists this change, and nothing changes until you install. Setup uses the Codex app's own CLI when it is present, because an older `codex` on your PATH may not know the feature. It keeps the feature off when your Codex config turns it off, and skips it when your Codex doesn't offer it. The feature is still under development in Codex, which warns about that when it starts; restart Codex to apply it. Project setup leaves this global setting alone.
 
 `studio_status` never launches Graph Studio. When a user asks to see a visualization, `studio_launch` opens the app and waits for its private local bridge to become ready. App-bound tools require Graph Studio to be running; tools without an app-side handler return a structured `TOOL_UNAVAILABLE` error. The bridge is local to the same macOS user and does not expose database write operations.
 
@@ -65,20 +69,29 @@ and save the `.sgreview` comparison. SQLite files, PostgreSQL connection documen
 and custom-format backups are supported; both versions must use the same engine.
 Capture reads schema metadata only. Opening a saved comparison is fully offline.
 
-The graph preserves group colours on the outer border. A separate inner border
-uses solid blue for additions/changes and dashed red for removals, with explicit
-`+`, `−`, and `~` field counts. New tables have a **New** badge; removed tables stay
-visible and faded with **Removed**. Edited foreign keys show both old and new
-links. The table list carries the same badges, and table details compare field
+Unselected tables keep one quiet border. Selecting a changed table colours that
+border green for an addition, blue for an edit, or dashed red for a removal.
+Explicit `+`, `−`, and `~` field counts remain visible without a selection.
+New tables have a **New** badge; removed tables stay visible and faded with
+**Removed**. Edited foreign keys show both old and new links. The table list
+carries the same badges, and table details compare field
 definitions, relations, and available constraints/indexes/triggers. Row data,
 permissions, RLS, routines, and deployment effects still need normal code review.
 
-A comparison opens on every change at once. Changed tables are named at a readable
-size even with the whole catalog in view, and relations that did not change stay
+A comparison frames its first connected set without selecting any table. Changed
+tables are named at a readable size, and relations that did not change stay
 hidden until you zoom in. Choose a table in the list or the graph to see only its
 changes — the relations it gained or lost and the tables they reach — while the
 rest fade; choose it again, or click empty canvas, to return. ⌥⌘↓ and ⌥⌘↑ step
-through changes and bring each one into view.
+through changes and bring each one into view. View 1 is the default; Previous
+from there opens **View 0**, the complete model after the changes. View 0 omits
+removed objects, keeps tables at uniform size and opacity, and uses colour alone
+to mark additions and edits. Table cards appear at a lower zoom in all review views.
+
+In the embedded viewer, **Changes in this view** can contain assistant-written
+explanations with clickable table, field, and relation names. Its expanded or
+collapsed state carries between views. Table details have a **Close ×** button
+and support **Escape**; closing either panel releases its space in the embed.
 
 The [database-diff skill](Skills/database-diff/SKILL.md) documents command-line
 snapshot and comparison creation for hooks. Bind generated reviews to immutable
