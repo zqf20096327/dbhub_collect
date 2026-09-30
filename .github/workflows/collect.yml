@@ -54,9 +54,10 @@ jobs:
         run: |
           python enrich/enrich.py --tier all --pool data/snapshot_latest/pool.json --max-calls 5000 --max-minutes 220
 
-      # --wait-windows 10：Core 触保底线睡到下一小时窗再续，最多 10 次；
-      # 总时长用 job 剩余时间动态计算（360min - 已用 - 留 10 分钟给提交），
-      # 保证提交步骤必定执行、当晚数据不因 README 拖死而丢
+      # --wait-windows 10：Core 触保底线按失败响应的 X-RateLimit-Reset 睡到
+      # 配额恢复再续，最多 10 次（勿用 /rate_limit 判断——Actions token 上它
+      # 与真实调用不同桶，09-30 实测）；总时长用 job 剩余时间动态计算
+      # （360min - 已用 - 留 10 分钟给提交），保证提交步骤必定执行、当晚数据不丢
       - name: README 增量（每月 1 号自动转月度全量校准）
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
