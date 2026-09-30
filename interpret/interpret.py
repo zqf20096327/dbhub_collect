@@ -131,11 +131,24 @@ official.of 只在 flag=true 时填一个库名（也必须来自 dbs_enum）。
 PROMPT_TMPL = """你是数据库开源生态的编目员，为周报项目库做中立的结构化编目。
 {contract}
 {schema}
+
+【范例（照此口径输出，注意 verdict 的 rel 判定与 dbs 组装规则）】
+范例1（工具·明确适配）flyway：schema 迁移工具，候选 MySQL「Flyway supports MySQL, PostgreSQL…」→
+  "eco":"tool","cat":"迁移","db_verdicts":[{{"db":"MySQL","quote":"Flyway supports MySQL","rel":"support"}},
+  {{"db":"PostgreSQL","quote":"Flyway supports PostgreSQL","rel":"support"}}],"dbs":[]
+范例2（纯应用）mall：电商系统（用 MySQL 存数据）→
+  "eco":"app","cat":"应用","db_verdicts":[{{"db":"MySQL","quote":"基于 MySQL 的电商系统","rel":"support"}}],"dbs":[]
+范例3（通用工具·候选≠支持）netdata：通用基础设施监控，候选 PostgreSQL 的上下文是打包应用列表（只是提及）→
+  "eco":"tool","cat":"监控","db_verdicts":[{{"db":"PostgreSQL","quote":"packaged applications: nginx, postgres…","rel":"mention"}}],"dbs":[]
+范例4（协议兼容不算）某客户端宣称『MySQL compatible』→ MySQL 的 rel 应为 "compat"，dbs 为空（除非另有明确适配证据）。
+
 {dbcands}
 
 仓库：{fn}
 描述：{desc}
 主题标签：{topics}
+采集归属：{chan}（仅提示，可推翻）
+类别关键词提示：{hint}（规则通道的关键词命中，仅供参考，可推翻）
 --- README 开始 ---
 {readme}
 --- README 结束 ---"""
@@ -149,7 +162,9 @@ audit(confidence,evidence 填简介原句) 字段，JSON 格式，参照：
 
 仓库：{fn}
 描述：{desc}
-主题标签：{topics}"""
+主题标签：{topics}
+采集归属：{chan}（仅提示，可推翻）
+类别关键词提示：{hint}（规则通道的关键词命中，仅供参考，可推翻）"""
 
 
 # ---------------- AI 客户端（OpenAI 兼容 / DeepSeek 协议同旧管道） ----------------
@@ -167,10 +182,12 @@ class AIClient:
             raise SystemExit("AI_API_KEY 未配置：写入本仓库 .env（dbhub_collect/.env）")
 
     def chat(self, prompt: str, timeout: int = 300) -> dict:
-        """返回 {content, reasoning, finish}。思考默认关闭（编目任务无需深度推理，
-        外有三层校验兜底质量；单条耗时 ~2min → ~30-60s）。
-        如需恢复思考：.env 加 AI_THINKING=enabled。"""
-        thinking = os.environ.get("AI_THINKING", "disabled")
+        """返回 {content, reasoning, finish}。思考三档由 AI_THINKING 控制：
+        disabled=关（默认，最快）/ 数字=budget_tokens 中档 / enabled=不限（最慢）。
+        如 .env 加 AI_THINKING=400 即中档思考。"""
+        tk = os.environ.get("AI_THINKING", "disabled")
+        thinking = ({"type": "enabled", "budget_tokens": int(tk)} if tk.isdigit()
+                    else {"type": tk})
         attempt = 0
         quota_waits = 0                                     # 额度耗尽：10 分钟/次探测，最多 5.5h（套餐窗口重置）
         while True:
@@ -180,7 +197,9 @@ class AIClient:
                     headers={"Authorization": f"Bearer {self.key}"},
                     json={"model": self.model,
                           "messages": [{"role": "user", "content": prompt}],
-                          "thinking": {"type": thinking},
+                          "thinking": thinking,
+                          # 强制 JSON 输出：消灭空输出/字段全 None 型拒收
+                          "response_format": {"type": "json_object"},
                           # 思考型模型的推理过程也计入 max_tokens：4000 会被
                           # 长思考烧尽导致正文（JSON）为空——此前 944 条拒收的根因
                           "temperature": 0.1, "max_tokens": 8000},
@@ -206,6 +225,8 @@ class AIClient:
                 time.sleep(min(2 ** attempt * 3, 60))
                 attempt += 1
                 continue
+            if r.status_code == 400:                # 带响应体抛出（端点偶发 400 需可确诊）
+                raise RuntimeError(f"400: {r.text[:150]}")
             r.raise_for_status()
             ch = r.json()["choices"][0]
             msg = ch.get("message") or {}
@@ -278,6 +299,36 @@ def _norm_txt(s: str) -> str:
                                    "”": '"', "–": "-", "—": "-", "…": "..."}))
     s = re.sub(r"[\s`*_>#]+", " ", s)
     return re.sub(r"\s+([.,;:!?])", r"\1", s).strip().lower()
+
+
+_CAT_HINT_RULES = [
+    ("备份", r"backup|mysqldump|xtrabackup|pgbackrest|barman|dump|pitr"),
+    ("监控", r"exporter|prometheus|grafana|monitor|observab|zabbix|metric|alert"),
+    ("安全/审计", r"audit|security|脱敏|mask(ing)?|encrypt|sql-?injection|firewall|vault"),
+    ("迁移", r"migrat|cdc\b|canal\b|otter\b|data-?sync|flyway|liquibase|etl|dts\b"),
+    ("高可用", r"patroni|keepalived|failover|high-?availab|haproxy|switchover"),
+    ("连接/代理", r"proxy|pooler|pgbouncer|shard(ing)?|mycat|vitess|gateway|load.?balanc"),
+    ("开发库", r"\borm\b|driver|jdbc|odbc|connector|sqlalchemy|gorm\b|mybatis|hibernate|"
+            r"prisma|typeorm|psycopg|pymysql|go-sql-driver|query.?builder"),
+    ("建模/设计", r"er.?diagram|\berd\b|schema.?design|dbml|data.?model|建模|数据库设计"),
+    ("测试/质量", r"fuzz|benchmark|sysbench|jepsen|tpc-?[ch]|stress.?test|性能测试"),
+    ("管理", r"\bgui\b|admin|dashboard|studio|console|phpmyadmin|dbeaver|chat2db|web.?client"),
+    ("平台", r"dbpaas|db-?ops|一体化平台|one-?stop|database platform"),
+]
+
+def cat_hint(item) -> str:
+    """规则关键词提示（锚定用，模型可推翻）：从 名字+描述+topics 取前两个命中。"""
+    text = " ".join([item.get("full_name") or "",
+                     item.get("description") or "",
+                     " ".join(item.get("topics") or [])]).lower()
+    out = []
+    for cat, pat in _CAT_HINT_RULES:
+        m = re.search(pat, text)
+        if m:
+            out.append(f"{cat}({m.group(0)})")
+        if len(out) >= 2:
+            break
+    return "、".join(out) or "无"
 
 
 def check_verdicts(obj, cands: dict) -> list[str]:
@@ -454,15 +505,20 @@ def run(args):
             dbcands = ("\n候选库清单（程序扫描 README 全文所得，db_verdicts 只能对下列出的库表态）：\n"
                        + "\n".join(cand_lines)) if cand_lines \
                       else "\n候选库清单：无（全文未出现任何目标库名，db_verdicts 应为空数组，dbs 即空）"
+            chan = (f"{it.get('source') or '?'} 通道 {it.get('source_topic') or ''}".strip()
+                    if (it.get("source") or it.get("source_topic")) else "未知")
+            hint = cat_hint(it)
             if degraded:
                 prompt = PROMPT_DESC.format(contract=NEUTRALITY_CONTRACT, schema=schema,
-                                            dbcands=dbcands, fn=fn, desc=desc, topics=topics)
+                                            dbcands=dbcands, chan=chan, hint=hint,
+                                            fn=fn, desc=desc, topics=topics)
                 readme_norm = desc.lower()
             else:
                 path = HERE / "data" / "readmes" / (fn.replace("/", "__") + ".md")
                 text = path.read_text(encoding="utf-8", errors="ignore")[:10000] if path.is_file() else ""
                 prompt = PROMPT_TMPL.format(contract=NEUTRALITY_CONTRACT, schema=schema,
-                                            dbcands=dbcands, fn=fn, desc=desc, topics=topics,
+                                            dbcands=dbcands, chan=chan, hint=hint,
+                                            fn=fn, desc=desc, topics=topics,
                                             readme=text or "（无 README 正文）")
                 readme_norm = text.lower()
             violations: list[str] = []
