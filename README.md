@@ -81,11 +81,18 @@ python lib/merge_states.py --help
 
 ## 自动采集（GitHub Actions，主采集器）
 
-`.github/workflows/collect.yml`：每晚北京 00:00 自动跑 **池采集·国际（800 调用）→
-池采集·国产（1000 调用）→ README 增量（每月 1 号自动转月度校准）→ 富集（分层增量）
-→ 每月 1 号 state 残渣 GC**，数据直接 commit + push 回本仓库。
+`.github/workflows/collect.yml`：**每天两窗定时**（北京 00:00 与 06:00；GitHub 单 job
+平台上限 6h，两窗拼接 ≈12h/天，第二窗靠断点续采接力），流程为
+**池采集·国际（800 调用）→ 池采集·国产（1000 调用）→ 富集（分层增量）→
+README 增量（每月 1 号自动转月度校准；跨小时窗续跑）→
+每月 1 号 state 残渣 GC**，数据直接 commit + push 回本仓库。
 用内置 `GITHUB_TOKEN`（独立 1000 次/时配额桶，不占用个人 PAT 的 5000/时），
-触线由 `--max-calls` 预算优雅收尾、次晚续采。也支持在 Actions 页面手动触发。
+触线由 `--max-calls` 预算优雅收尾、次窗续采。
+
+README 扫描支持**跨小时窗续跑**（`--wait-windows N`）：Core 配额触保底线时
+先免费探测 `/rate_limit`，睡到本小时窗 reset 再续断点，最多 N 次（CI 用 10）；
+总墙钟由 `--max-total-minutes` 兜底（CI 按 job 剩余时间动态传入，保证提交
+步骤必定执行）。也支持在 Actions 页面手动触发。
 
 ## 多机协作
 
