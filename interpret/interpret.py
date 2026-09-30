@@ -106,7 +106,7 @@ SCHEMA_DESC = """输出一个 JSON 对象（只输出 JSON，不要其他文字�
  }},
  "classification": {{
    "cat": "备份|监控|高可用|迁移|连接/代理|管理|平台|开发库|安全/审计|测试/质量|建模/设计|内核/引擎|应用|其他 之一",
-   "dbs": ["适用库，只能从这些里选：{dbs_enum}"],
+   "db_verdicts": [{{"db": "候选库名（只能取候选清单列出的）", "quote": "支撑原文（从候选上下文逐字引用）", "rel": "support|compat|mention"}}],
    "eco": "tool=为数据库生态服务的工具/组件 | app=只是使用数据库的应用 | unclear=证据不足",
    "eco_why": "生态位判断依据（一句话，事实性）",
    "ai": {{"flag": false, "kind": []}},
@@ -124,12 +124,14 @@ SCHEMA_DESC = """输出一个 JSON 对象（只输出 JSON，不要其他文字�
  }}
 }}
 cat 裁决规则：{cat_rule}
+db_verdicts 只对候选清单里的库逐个表态（db 只能取候选名；无候选时输出空数组）。rel 三选一：support=明确适配（专门的驱动/采集器/连接器/官方文档说明）；compat=仅协议兼容（如『兼容 MySQL 协议』不算适配 MySQL 本身）；mention=仅提及/对比/迁移对象（不算）。dbs 留空数组 []，由程序从 verdicts 组装。
 ai.kind 只在 flag=true 时填，从 ["text2sql","mcp","dba-agent","rag","other"] 里选。
 official.of 只在 flag=true 时填一个库名（也必须来自 dbs_enum）。"""
 
 PROMPT_TMPL = """你是数据库开源生态的编目员，为周报项目库做中立的结构化编目。
 {contract}
 {schema}
+{dbcands}
 
 仓库：{fn}
 描述：{desc}
@@ -140,9 +142,10 @@ PROMPT_TMPL = """你是数据库开源生态的编目员，为周报项目库做
 
 PROMPT_DESC = """你是数据库开源生态的编目员。该仓库无 README，仅基于以下简介做保守编目（confidence 最高给 mid）。
 {contract}
-只输出 identity.one_liner / identity.review（标注基于简介）/ classification(cat,dbs,eco,eco_why,ai,persona) /
+只输出 identity.one_liner / identity.review（标注基于简介）/ classification(cat,db_verdicts,eco,eco_why,ai,persona) /
 audit(confidence,evidence 填简介原句) 字段，JSON 格式，参照：
 {schema}
+{dbcands}
 
 仓库：{fn}
 描述：{desc}
@@ -163,7 +166,9 @@ class AIClient:
         if not self.key:
             raise SystemExit("AI_API_KEY 未配置：写入本仓库 .env（dbhub_collect/.env）")
 
-    def chat(self, prompt: str, timeout: int = 180) -> str:
+    def chat(self, prompt: str, timeout: int = 180) -> dict:
+        """返回 {content, reasoning, finish}。reasoning 兜底思考型模型
+        （GLM/DeepSeek 把推理放 reasoning_content，content 可能为空）。"""
         attempt = 0
         quota_waits = 0                                     # 额度耗尽：10 分钟/次探测，最多 5.5h（套餐窗口重置）
         while True:
@@ -173,7 +178,9 @@ class AIClient:
                     headers={"Authorization": f"Bearer {self.key}"},
                     json={"model": self.model,
                           "messages": [{"role": "user", "content": prompt}],
-                          "temperature": 0.1, "max_tokens": 4000},
+                          # 思考型模型的推理过程也计入 max_tokens：4000 会被
+                          # 长思考烧尽导致正文（JSON）为空——此前 944 条拒收的根因
+                          "temperature": 0.1, "max_tokens": 8000},
                     timeout=timeout)
             except requests.exceptions.Timeout:             # 思考模型偶发 >90s：超时重试最多 2 次
                 if attempt >= 2:
@@ -197,7 +204,11 @@ class AIClient:
                 attempt += 1
                 continue
             r.raise_for_status()
-            return r.json()["choices"][0]["message"]["content"]
+            ch = r.json()["choices"][0]
+            msg = ch.get("message") or {}
+            return {"content": msg.get("content") or "",
+                    "reasoning": msg.get("reasoning_content") or "",
+                    "finish": ch.get("finish_reason") or ""}
 
 
 # ---------------- 解析与校验 ----------------
@@ -215,7 +226,17 @@ _INSTALL = {"npm", "pypi", "docker", "binary", "source", "helm"}
 
 
 def extract_json(raw: str) -> dict | None:
-    m = re.search(r"\{.*\}", raw, re.S)
+    if not raw:
+        return None
+    txt = raw.strip()
+    # 优先取 ```json 围栏内的对象（围栏里可能是非贪婪提前收尾，失败再走贪婪全文）
+    m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", txt, re.S)
+    if m:
+        try:
+            return json.loads(m.group(1))
+        except json.JSONDecodeError:
+            pass
+    m = re.search(r"\{.*\}", txt, re.S)
     if not m:
         return None
     try:
@@ -254,6 +275,48 @@ def _norm_txt(s: str) -> str:
                                    "”": '"', "–": "-", "—": "-", "…": "..."}))
     s = re.sub(r"[\s`*_>#]+", " ", s)
     return re.sub(r"\s+([.,;:!?])", r"\1", s).strip().lower()
+
+
+def check_verdicts(obj, cands: dict) -> list[str]:
+    """db_verdicts 清洗 + 程序组装 dbs（只取 rel=support）。
+    返回违规列表（空 = 合规）。超集违规在构造上不可能：db 必须在候选内。"""
+    if not isinstance(obj, dict):
+        return []
+    cls = obj.get("classification")
+    if cls is None:                      # 注意不能用 `or {}`：空字典会被替换成新对象
+        cls = {}
+        obj["classification"] = cls
+    verdicts = cls.get("db_verdicts")
+    errs = []
+    if verdicts is None:
+        verdicts, errs = [], ["db_verdicts 缺失（无候选时应输出空数组）"]
+    if not isinstance(verdicts, list):
+        verdicts, errs = [], errs + ["db_verdicts 非数组"]
+    ctx = _norm_txt(" ".join(q for qs in cands.values() for q in qs))
+    keep, dbs = [], []
+    for v in verdicts:
+        if not isinstance(v, dict):
+            errs.append("verdict 项非对象")
+            continue
+        db, rel, q = v.get("db"), v.get("rel"), (v.get("quote") or "").strip()
+        if db not in cands:
+            errs.append(f"verdict 库不在候选: {db}")
+            continue
+        if rel not in ("support", "compat", "mention"):
+            errs.append(f"rel 非法（{db}）: {rel}")
+            continue
+        if not q:
+            errs.append(f"{db} 的 verdict 缺 quote")
+            continue
+        if ctx and _norm_txt(q) not in ctx:
+            errs.append(f"{db} 的 quote 不是候选上下文原文")
+            continue
+        keep.append({"db": db, "rel": rel, "quote": q})
+        if rel == "support":
+            dbs.append(db)
+    cls["db_verdicts"] = keep
+    cls["dbs"] = dbs                     # 组装结果：只有 support 计入归属
+    return errs
 
 
 def validate(obj: dict, gen, readme_norm: str, desc: str) -> tuple[dict | None, list[str]]:
@@ -331,6 +394,9 @@ def run(args):
     cache = json.loads(CACHE.read_text(encoding="utf-8")) if CACHE.is_file() else {}
     rstate_p = HERE / "state" / "readme_state.json"
     rstate = json.loads(rstate_p.read_text(encoding="utf-8")) if rstate_p.is_file() else {"items": {}}
+    dbscan_p = HERE / "state" / "db_scan.json"
+    dbscan = json.loads(dbscan_p.read_text(encoding="utf-8")) if dbscan_p.is_file() else {}
+    log.info("db_scan 候选库清单：%d 项（缺失时先跑 interpret/db_scan.py）", len(dbscan))
     pool_path = Path(args.pool) if args.pool else latest_pool()
     pool = {it["full_name"]: it for it in json.loads(pool_path.read_text(encoding="utf-8"))}
 
@@ -348,7 +414,8 @@ def run(args):
         sha = rec.get("sha")
         prev = st["items"].get(fn) or {}
         if rec.get("status") in ("done", "oversized") and sha and sha not in cache:
-            if prev.get("status") == "rejected" and prev.get("sha") == sha:
+            if prev.get("status") == "rejected" and prev.get("sha") == sha \
+                    and not args.retry_rejected:
                 n_skip["rejected_same_sha"] += 1
                 continue
             todo.append((fn, sha, False))
@@ -377,35 +444,55 @@ def run(args):
             it = pool.get(fn) or {}
             desc = (it.get("description") or "")[:300]
             topics = ",".join((it.get("topics") or [])[:12])
+            cands = (dbscan.get(fn) or {}).get("cands") or {}
+            cand_lines = [f"- {db}：" + " ／ ".join(f"「{q}」" for q in qs[:2])
+                          for db, qs in cands.items()]
+            dbcands = ("\n候选库清单（程序扫描 README 全文所得，db_verdicts 只能对下列出的库表态）：\n"
+                       + "\n".join(cand_lines)) if cand_lines \
+                      else "\n候选库清单：无（全文未出现任何目标库名，db_verdicts 应为空数组，dbs 即空）"
             if degraded:
                 prompt = PROMPT_DESC.format(contract=NEUTRALITY_CONTRACT, schema=schema,
-                                            fn=fn, desc=desc, topics=topics)
+                                            dbcands=dbcands, fn=fn, desc=desc, topics=topics)
                 readme_norm = desc.lower()
             else:
                 path = HERE / "data" / "readmes" / (fn.replace("/", "__") + ".md")
                 text = path.read_text(encoding="utf-8", errors="ignore")[:10000] if path.is_file() else ""
                 prompt = PROMPT_TMPL.format(contract=NEUTRALITY_CONTRACT, schema=schema,
-                                            fn=fn, desc=desc, topics=topics,
+                                            dbcands=dbcands, fn=fn, desc=desc, topics=topics,
                                             readme=text or "（无 README 正文）")
                 readme_norm = text.lower()
             violations: list[str] = []
             obj = None
+            raw_head = ""
             for attempt in (1, 2):                     # 违规带原因重试一次
                 try:
-                    raw = ai.chat(prompt + ("" if attempt == 1 else
+                    out = ai.chat(prompt + ("" if attempt == 1 else
                                   f"\n\n【上次输出被拒收，原因：{'；'.join(violations)}。请修正后重新输出合规 JSON。】"))
                 except Exception as e:                 # noqa: BLE001
                     return {"kind": "failed", "fn": fn, "sha": sha, "error": str(e)[:150]}
-                obj, violations = validate(extract_json(raw) or {}, gen, readme_norm, desc)
+                raw_head = (out["content"] or out["reasoning"] or "")[:120]
+                obj = extract_json(out["content"])
+                if obj is None and out["reasoning"]:
+                    obj = extract_json(out["reasoning"])   # 思考型模型：正文空时从推理流兜底
+                verr = check_verdicts(obj or {}, cands)    # 程序裁决层：清洗 verdicts + 组装 dbs
+                obj, violations = validate(obj or {}, gen, readme_norm, desc)
+                if obj is not None and verr:
+                    obj, violations = None, verr
+                elif obj is None:
+                    violations = list(violations) + verr
+                if obj is None and out["finish"] == "length":
+                    violations = ["输出被 max_tokens 截断（思考耗尽预算，无 JSON）"] + violations
                 if obj is not None:
                     break
             if obj is None:
-                return {"kind": "rejected", "fn": fn, "sha": sha, "violations": violations[:5]}
+                return {"kind": "rejected", "fn": fn, "sha": sha,
+                        "violations": violations[:5], "raw": raw_head}
             review = (obj["identity"].get("review") or "")
             if not degraded and not info_gain(review, desc):
                 obj["identity"]["review"] = ""          # 无增量则空置，不展示
             obj.update({"fn": fn, "sha": sha, "source": "desc" if degraded else "readme",
-                        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d")})
+                        "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                        "ver": 2})          # v2 = db_verdicts 架构（程序提名+逐候选裁决），与旧存量区分
             return {"kind": "done", "fn": fn, "sha": sha, "obj": obj}
         except Exception as e:                         # noqa: BLE001 worker 全身防御
             return {"kind": "failed", "fn": fn, "sha": sha, "error": str(e)[:150]}
@@ -428,7 +515,8 @@ def run(args):
                     done += 1
                 elif r["kind"] == "rejected":
                     st["items"][r["fn"]] = {"sha": r["sha"], "status": "rejected",
-                                            "violations": r["violations"]}
+                                            "violations": r["violations"],
+                                            "raw": r.get("raw", "")}   # 原始输出片段，便于确诊
                     rejected.append({"fn": r["fn"], "why": r["violations"][:3]})
                 else:
                     st["items"][r["fn"]] = {"sha": r["sha"], "status": "failed",
@@ -451,9 +539,11 @@ def run(args):
 def main():
     ap = argparse.ArgumentParser(description="AI 结构化解读（中立版）")
     ap.add_argument("--pool", default=None, help="池路径（默认取最新 snapshot_20*/pool.json）")
-    ap.add_argument("--concurrency", type=int, default=1)
+    ap.add_argument("--concurrency", type=int, default=3)
     ap.add_argument("--max-items", type=int, default=800)
     ap.add_argument("--max-minutes", type=float, default=90.0)
+    ap.add_argument("--retry-rejected", action="store_true",
+                    help="重试历史拒收项（同 sha 也重跑：用于解析修复后捞回 944 条）")
     ap.add_argument("-v", action="store_true")
     args = ap.parse_args()
     logging.basicConfig(level=logging.DEBUG if args.v else logging.INFO,

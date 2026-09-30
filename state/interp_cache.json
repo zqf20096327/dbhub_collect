@@ -173042,5 +173042,256 @@
   "sha": "1e6feabef23a",
   "source": "readme",
   "generated_at": "2026-09-29"
+ },
+ "a812334a825e": {
+  "identity": {
+   "one_liner": "浏览器端数据库 ER 图编辑器与 SQL 生成器",
+   "review": "在浏览器中绘制数据库实体关系图（ERD）并生成 SQL 的设计工具，支持 SQL 脚本导入导出与迁移生成，无需创建账号，本地数据存于 IndexedDB；可通过 npm 或 Docker 部署，文件分享功能需另配独立的 drawdb-server 后端。",
+   "highlights": [
+    "浏览器内 ERD 编辑，无需创建账号即可使用",
+    "支持导出与导入 SQL 脚本，并生成迁移",
+    "提供 Docker 镜像部署方式，分享功能可通过可选的独立 server 启用"
+   ],
+   "use_cases": [
+    "数据库 schema 的可视化设计与评审",
+    "由 ER 图生成建表 SQL 或迁移脚本",
+    "导入 SQL 脚本生成对应的图表"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "项目为数据库 schema 设计与 SQL 生成提供编辑器工具，本身不连接或运行具体数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DrawDB is a robust and user-friendly database entity relationship diagram (ERD) editor right in your browser."
+  },
+  "fn": "drawdb-io/drawdb",
+  "sha": "a812334a825e",
+  "source": "readme",
+  "generated_at": "2026-09-30",
+  "ver": 2
+ },
+ "ebf46545f04b": {
+  "identity": {
+   "one_liner": "AI代理跨会话记忆系统，压缩会话并存入SQLite供检索注入",
+   "review": "面向 Claude Code、OpenCode 等 AI 编码代理的持久记忆插件：通过钩子捕获会话中的工具使用观察，AI 压缩为语义摘要后写入 SQLite（含 FTS5 检索），由 Bun 管理的 worker 服务提供 HTTP API 与搜索端点。经 npx 安装器或插件市场安装，需 Node ≥20；托管记忆服务含 14 天免费试用，之后回落至自有模型密钥。",
+   "highlights": [
+    "通过钩子自动捕获会话中的工具使用观察并生成语义摘要",
+    "会话、观察与摘要存储于 SQLite，支持 FTS5 全文检索与混合搜索",
+    "提供 mem-search 自然语言查询技能、Web 查看界面，支持 <private> 标签排除敏感内容"
+   ],
+   "use_cases": [
+    "为 Claude Code 等编码代理跨会话保留项目上下文",
+    "以自然语言检索项目历史会话与过往观察记录",
+    "在 OpenClaw 网关上以插件形式部署持久记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "4. **SQLite Database** - Stores sessions, observations, summaries"
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其存储会话数据的内嵌组件，项目本身为 AI 代理记忆工具，不面向数据库生态提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Persistent memory compression system built for Claude Code."
+  },
+  "fn": "thedotmack/claude-mem",
+  "sha": "ebf46545f04b",
+  "source": "readme",
+  "generated_at": "2026-09-30",
+  "ver": 2
+ },
+ "c11de834de9d": {
+  "identity": {
+   "one_liner": "轻量跨平台数据库客户端，内置驱动支持100+数据库",
+   "review": "面向跨库操作的开发者与DBA，通过原生驱动统一连接MySQL、达梦等百余种数据源，覆盖etcd、ZooKeeper等KV服务；以Rust实现，提供桌面端、Docker、CLI与MCP Server，内置AI助手。",
+   "highlights": [
+    "单个约25MB客户端支持100+数据库，覆盖MySQL、PostgreSQL、达梦、GBase、YashanDB、GoldenDB等数据源",
+    "原生与agent驱动额外覆盖Databricks、SAP HANA、etcd、ZooKeeper、Consul KV、IoTDB等数据源",
+    "内置AI助手与MCP Server，提供桌面端、Docker、CLI三种运行方式"
+   ],
+   "use_cases": [
+    "在统一客户端中管理关系型、NoSQL、搜索引擎、时序等多种异构数据源",
+    "通过MCP Server将数据库能力接入支持MCP的AI工具链",
+    "使用CLI在脚本与自动化流程中执行数据库操作"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "database client for 100+ databases, including MySQL, PostgreSQL, SQLite, Redis, MongoDB, DuckDB, SQL Server, and Dameng"
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "database client for 100+ databases, including MySQL, PostgreSQL, SQLite, Redis, MongoDB, DuckDB, SQL Server, and Dameng"
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "MySQL, PostgreSQL, SQLite, Cloudflare D1, Redis, MongoDB, DuckDB, ClickHouse, SQL Server, Oracle, Elasticsearch, Easysearch, Meilisearch"
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "database client for 100+ databases, including MySQL, PostgreSQL, SQLite, Redis, MongoDB, DuckDB, SQL Server, and Dameng"
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Redis, MongoDB, DuckDB, ClickHouse, SQL Server, Oracle, Elasticsearch, Easysearch, Meilisearch, Qdrant, Milvus, Weaviate, MariaDB"
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Redis, MongoDB, DuckDB, ClickHouse, SQL Server, Oracle, Elasticsearch, Easysearch, Meilisearch, Qdrant, Milvus, Weaviate, MariaDB"
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Meilisearch, Qdrant, Milvus, Weaviate, MariaDB, TiDB, OceanBase, openGauss, GaussDB, KWDB, KingbaseES, Vastbase, GoldenDB"
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "Meilisearch, Qdrant, Milvus, Weaviate, MariaDB, TiDB, OceanBase, openGauss, GaussDB, KWDB, KingbaseES, Vastbase, GoldenDB"
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "Meilisearch, Qdrant, Milvus, Weaviate, MariaDB, TiDB, OceanBase, openGauss, GaussDB, KWDB, KingbaseES, Vastbase, GoldenDB"
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "including MySQL, PostgreSQL, SQLite, Redis, MongoDB, DuckDB, SQL Server, and Dameng. Built-in AI, MCP Server, CLI, desktop and Docker"
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "Meilisearch, Qdrant, Milvus, Weaviate, MariaDB, TiDB, OceanBase, openGauss, GaussDB, KWDB, KingbaseES, Vastbase, GoldenDB"
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "Meilisearch, Qdrant, Milvus, Weaviate, MariaDB, TiDB, OceanBase, openGauss, GaussDB, KWDB, KingbaseES, Vastbase, GoldenDB"
+    },
+    {
+     "db": "GBase",
+     "rel": "support",
+     "quote": "New native and agent-driven drivers also cover Databricks, SAP HANA, Teradata, Vertica, Firebird, Exasol, YashanDB, GBase 8a/8s, Databend"
+    },
+    {
+     "db": "YashanDB",
+     "rel": "support",
+     "quote": "New native and agent-driven drivers also cover Databricks, SAP HANA, Teradata, Vertica, Firebird, Exasol, YashanDB, GBase 8a/8s, Databend"
+    },
+    {
+     "db": "GoldenDB",
+     "rel": "support",
+     "quote": "MariaDB, TiDB, OceanBase, openGauss, GaussDB, KWDB, KingbaseES, Vastbase, GoldenDB, Doris, SelectDB, StarRocks, Manticore Search, Redshift, DM"
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目本身不存储数据，用于连接和管理上百种数据库，属数据库生态的客户端工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB",
+    "OceanBase",
+    "Dameng",
+    "openGauss",
+    "GaussDB",
+    "GBase",
+    "YashanDB",
+    "GoldenDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "100+ databases in 25 MB. Desktop, Docker, CLI, built-in AI assistant, and MCP Server."
+  },
+  "fn": "t8y2/dbx",
+  "sha": "c11de834de9d",
+  "source": "readme",
+  "generated_at": "2026-09-30",
+  "ver": 2
  }
 }
