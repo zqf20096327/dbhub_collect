@@ -1,0 +1,67 @@
+name: nightly-interpret
+on:
+  schedule:
+    - cron: '30 4 * * *'      # UTC 04:30 = 北京 12:30；错开采集双窗
+                              # （collect 16:00/22:00 UTC 各 6h，第二窗 04:00 收尾）
+  workflow_dispatch:           # 手动触发（可勾选重试拒收 / 调批量）
+    inputs:
+      retry_rejected:
+        description: '同时重试历史拒收项（捞回 944 条用）'
+        type: boolean
+        default: false
+      max_items:
+        description: '本次最多解读条数'
+        type: number
+        default: 400
+permissions:
+  contents: write
+concurrency:
+  group: nightly-interpret     # 与采集互不干扰；自身重跑排队不互杀
+  cancel-in-progress: false
+jobs:
+  interpret:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355       # 单 job 上限 6h，留 5 分钟给提交
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 记录 job 起点（算剩余时间预算）
+        run: echo "JOB_T0=$(date +%s)" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install requests
+
+      # 库名候选提名（README 更新后刷新；全文扫描，无 API 成本）
+      - name: db_scan（刷新候选库清单）
+        run: python interpret/db_scan.py
+
+      # 断点续跑：sha 缓存命中自动跳过；额度耗尽（1113）脚本自带窗口等待；
+      # 墙钟预算 = job 剩余时间 - 10 分钟提交缓冲，单窗吃满
+      - name: AI 解读（v2：程序提名 + 逐候选裁决）
+        env:
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_BASE_URL: https://open.bigmodel.cn/api/coding/paas/v4
+          AI_MODEL: glm-5.3-flash
+        run: |
+          EXTRA=""
+          [ "${{ github.event.inputs.retry_rejected }}" = "true" ] && EXTRA="--retry-rejected"
+          REM=$(( 355*60 - ($(date +%s) - JOB_T0) - 600 ))
+          [ "$REM" -lt 600 ] && REM=600
+          echo "本窗解读预算 $(( REM / 60 )) 分钟 · 上限 ${{ github.event.inputs.max_items || 400 }} 条"
+          python interpret/interpret.py --concurrency 3 \
+            --max-items "${{ github.event.inputs.max_items || 400 }}" \
+            --max-minutes $(( REM / 60 )) $EXTRA
+
+      - name: 提交并推送状态
+        run: |
+          git config user.name "zqf20096327"
+          git config user.email "zqf20096327@users.noreply.github.com"
+          git add state/interp_cache.json state/interp_state.json \
+                  state/db_scan.json state/manual_review.json 2>/dev/null || git add -A
+          git commit -m "解读 $(date -u +%F) · 缓存 $(python -c "import json;print(len(json.load(open('state/interp_cache.json'))))") 条" \
+            || { echo "无变更"; exit 0; }
+          git pull --rebase --autostash || true
+          git push
