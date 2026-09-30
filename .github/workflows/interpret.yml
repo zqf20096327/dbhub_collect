@@ -58,7 +58,7 @@ jobs:
             BUDGET=$(( REM / 60 )); LIMIT="${{ github.event.inputs.max_items || 50000 }}"
           fi
           echo "本窗解读预算 ${BUDGET} 分钟 · 上限 ${LIMIT} 条"
-          python interpret/interpret.py --concurrency 3 \
+          python interpret/interpret.py --concurrency 4 \
             --max-items "$LIMIT" --max-minutes "$BUDGET" $EXTRA
 
       # 与采集并行时推送可能撞车：重试 + 变基，最多 5 轮
