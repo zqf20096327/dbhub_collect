@@ -6,8 +6,8 @@
   → 解读层由 interpret.py 消费（sha 键控）
 状态机：pending → done / no_readme / oversized / failed（三振隔离）
 预算：--max-calls / --max-minutes / --reserve 三重停止线 + 睡等上限（gh.py 内置）
-跨窗：--wait-windows N——Core 触保底线时睡到下一小时窗（/rate_limit 的 reset）
-      续跑断点，最多 N 次；--max-total-minutes 管住整次调用（含等待）的墙钟。
+跨窗：--wait-windows N——Core 触保底线时按失败响应的 X-RateLimit-Reset 睡到
+      配额恢复再续断点，最多 N 次；--max-total-minutes 管住整次调用（含等待）的墙钟。
 
 用法：
   python readme_sweep.py --mode init [--pool data/snapshot_YYYYMMDD/pool.json]
@@ -34,8 +34,8 @@ for _d in (ROOT, ROOT / "lib", ROOT / "config"):
 HERE = ROOT                      # 历史引用兼容：统一指向项目根
 import requests
 
-from gh import (Budget, BudgetOut, GitHubClient, QuotaPatienceOut,  # noqa: E402
-                atomic_write_json)
+from gh import (Budget, BudgetOut, CoreReserveOut, GitHubClient,  # noqa: E402
+                QuotaPatienceOut, atomic_write_json)
 
 log = logging.getLogger("readme")
 STATE = HERE / "state" / "readme_state.json"
@@ -131,7 +131,9 @@ def run(args):
         if deadline and time.time() >= deadline:
             stop_reason = f"总时长达上限 {args.max_total_minutes} 分钟"
             break
-        # 窗口预检（/rate_limit 免费不计配额）：触保底线则睡到下一小时窗再续
+        # 窗口预检（/rate_limit 免费不计配额）：仅本地 PAT 场景有效——Actions
+        # GITHUB_TOKEN 上探测与真实调用分属不同桶（09-30 实测探测 5000/调用头
+        # 800），CI 的等待由 CoreReserveOut.reset 驱动（见下方 except 分支）
         rl = client.core_rate_limit()
         rem = (rl or {}).get("remaining")
         if rem is not None and rem <= reserve:
@@ -156,6 +158,7 @@ def run(args):
         windows += 1
         done0 = sum(counts.values())
         round_stop = None
+        round_exc: Exception | None = None
         log.info("第 %d 窗：目标 %d 项 · Core 剩余 %s", windows, len(targets),
                  rem if rem is not None else "?")
         try:
@@ -218,8 +221,12 @@ def run(args):
                 if (i + 1) % 200 == 0:
                     save_state(st)
                     log.info("进度 %d/%d · %s", i + 1, len(targets), counts)
-        except (BudgetOut, QuotaPatienceOut) as e:
-            round_stop = str(e)
+        except CoreReserveOut as e:
+            round_stop, round_exc = str(e), e
+        except QuotaPatienceOut as e:
+            round_stop, round_exc = str(e), e
+        except BudgetOut as e:
+            round_stop, round_exc = str(e), e
         finally:
             save_state(st)
         total_calls += client.budget.calls
@@ -235,10 +242,29 @@ def run(args):
         if args.wait_windows <= 0:
             stop_reason = round_stop
             break
+        if isinstance(round_exc, (CoreReserveOut, QuotaPatienceOut)):
+            # 真实配额触线——睡到失败响应自带的 reset 再续。等待决策必须走
+            # 这条路而非窗口预检：Actions GITHUB_TOKEN 的 /rate_limit 与真实
+            # 调用分属不同桶（09-30 实测探测 5000 / 调用头 800）
+            if waits >= args.wait_windows:
+                stop_reason = f"{round_stop}，跨窗等待 {args.wait_windows} 次已用尽"
+                break
+            reset = getattr(round_exc, "reset", None)
+            wait_sec = max(5.0, reset - time.time() + 5) if reset else 600.0
+            if deadline and time.time() + wait_sec > deadline:
+                stop_reason = (f"{round_stop}，等下一窗需 {wait_sec / 60:.0f} 分钟"
+                               f"将超总时长上限")
+                break
+            waits += 1
+            log.warning("配额触线——睡 %.0f 分钟到下一窗再续（等待 %d/%d）",
+                        wait_sec / 60, waits, args.wait_windows)
+            time.sleep(wait_sec)
+            targets = pick_targets(args, pool, items)
+            continue
         if stuck_rounds >= 2:
             stop_reason = f"{round_stop}（连续 {stuck_rounds} 轮无进展，收尾防空转）"
             break
-        log.info("本窗停止：%s（断点已存，跨窗续跑）", round_stop)
+        log.info("本窗停止：%s（断点已存，续跑）", round_stop)
         targets = pick_targets(args, pool, items)
 
     summary = {"mode": args.mode, "targets": targets0, "counts": counts,

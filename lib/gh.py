@@ -27,11 +27,28 @@ MAX_RETRY = 2                # 5xx/网络错误重试次数
 
 
 class QuotaPatienceOut(Exception):
-    """需睡等超过上限——调用方应立即收尾退出。"""
+    """需睡等超过上限——调用方应立即收尾。reset=配额恢复时间戳（若有）。"""
+
+    def __init__(self, msg: str, reset: int | None = None):
+        super().__init__(msg)
+        self.reset = reset
 
 
 class BudgetOut(Exception):
     """外部预算（调用数/墙钟/配额保底）先到——优雅收尾。"""
+
+
+class CoreReserveOut(BudgetOut):
+    """Core 剩余配额触保底线。reset=失败响应的 X-RateLimit-Reset（跨窗续跑睡到那）。
+
+    注意：Actions GITHUB_TOKEN 上 /rate_limit 探测与真实调用分属不同桶
+    （09-30 实测探测 5000 / 调用头 800），等待决策必须以本异常携带的
+    响应头 reset 为准，不能信探测。
+    """
+
+    def __init__(self, msg: str, reset: int | None = None):
+        super().__init__(msg)
+        self.reset = reset
 
 
 def load_env() -> None:
@@ -107,7 +124,9 @@ class GitHubClient:
         resource = resp.headers.get("X-RateLimit-Resource", "core")
         rem = resp.headers.get("X-RateLimit-Remaining")
         if resource == "core" and rem is not None and int(rem) <= self.budget.reserve_remaining:
-            raise BudgetOut(f"Core 剩余配额触保底线（remaining={rem}）")
+            reset = resp.headers.get("X-RateLimit-Reset")
+            raise CoreReserveOut(f"Core 剩余配额触保底线（remaining={rem}）",
+                                 int(reset) if reset and reset.isdigit() else None)
         if resp.status_code == 304:
             return resp
         if resp.status_code in (403, 429):
@@ -123,12 +142,14 @@ class GitHubClient:
         """403/429：优先 Retry-After，否则睡到 Reset；超过睡等上限抛 QuotaPatienceOut。"""
         ra = resp.headers.get("Retry-After")
         wait = int(ra) if ra and ra.isdigit() else 0
+        reset_ts = None
         if not wait:
             reset = resp.headers.get("X-RateLimit-Reset")
             if reset and reset.isdigit():
-                wait = max(0, int(reset) - int(time.time()) + 2)
+                reset_ts = int(reset)
+                wait = max(0, reset_ts - int(time.time()) + 2)
         if wait > SLEEP_CAP_SEC:
-            raise QuotaPatienceOut(f"需睡等 {wait}s > 上限 {SLEEP_CAP_SEC}s，本次收尾")
+            raise QuotaPatienceOut(f"需睡等 {wait}s > 上限 {SLEEP_CAP_SEC}s，本次收尾", reset_ts)
         if wait > 0:
             log.warning("限流：睡 %ss（上限内）", wait)
             time.sleep(wait)
@@ -248,8 +269,10 @@ class GitHubClient:
     def core_rate_limit(self) -> dict | None:
         """GET /rate_limit：官方明确不计入配额。返回 core 域 {remaining, reset}。
 
-        供调用方在每轮采集前做窗口预检（触保底线就睡到 reset 再开工），
-        不走 _request 计数。探测失败返回 None（按不限流处理，fail-open）。
+        ⚠ Actions GITHUB_TOKEN 上此端点与真实调用分属不同配额桶
+        （09-30 实测：探测 remaining=5000 的同一秒，调用响应头 remaining=800），
+        只能作本地 PAT 场景的预检参考；CI 的跨窗等待决策走 CoreReserveOut.reset。
+        探测失败返回 None（按不限流处理，fail-open）。
         """
         try:
             r = self.s.get(f"{self.API}/rate_limit", timeout=REQUEST_TIMEOUT)
