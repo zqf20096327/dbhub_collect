@@ -2,18 +2,23 @@ name: nightly-collect
 on:
   schedule:
     - cron: '0 16 * * *'      # UTC 16:00 = 北京 00:00，每晚
+    - cron: '0 22 * * *'      # UTC 22:00 = 北京 06:00，接力第二窗（GitHub 单 job
+                              # 平台上限 6h，两窗拼接 ≈12h/天；第二窗靠断点续采接力）
   workflow_dispatch: {}        # 支持手动触发
 permissions:
   contents: write
 concurrency:
-  group: nightly-collect
+  group: nightly-collect       # 两窗若重叠则排队不互杀（cancel-in-progress: false）
   cancel-in-progress: false
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 360
+    timeout-minutes: 360       # 平台单 job 上限即 6h，12h/天靠两次定时接力
     steps:
       - uses: actions/checkout@v4
+
+      - name: 记录 job 起点（供 README 步骤算剩余时间预算）
+        run: echo "JOB_T0=$(date +%s)" >> "$GITHUB_ENV"
 
       - uses: actions/setup-python@v5
         with:
@@ -41,20 +46,28 @@ jobs:
           cp "$POOL" data/snapshot_latest/pool.json
 
       # 顺序即配额策略：富集慢节奏(~1000/时)先行，各自吃满滚动小时窗；
-      # README 是 45 分钟 3000 次的爆发(~4200/时)，放最后独占一个新小时窗，
-      # 否则紧跟 README 之后会让富集立刻触到 Core 小时配额保底线（09-29 实测）
+      # README 放最后：若富集已把本小时窗 Core 用到保底线，readme_sweep 会
+      # 睡到下一小时窗再续（--wait-windows，09-30 加），不再被挤成 0 完成
       - name: 富集（分层增量：未到期零调用，到期才采）
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python enrich/enrich.py --tier all --pool data/snapshot_latest/pool.json --max-calls 5000 --max-minutes 220
 
+      # --wait-windows 10：Core 触保底线睡到下一小时窗再续，最多 10 次；
+      # 总时长用 job 剩余时间动态计算（360min - 已用 - 留 10 分钟给提交），
+      # 保证提交步骤必定执行、当晚数据不因 README 拖死而丢
       - name: README 增量（每月 1 号自动转月度全量校准）
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           MODE=weekly; [ "$(date -u +%d)" = "01" ] && MODE=monthly
-          python collect/readme_sweep.py --mode "$MODE" --pool data/snapshot_latest/pool.json --max-calls 3000 --max-minutes 60
+          REM=$(( 360*60 - ($(date +%s) - JOB_T0) - 600 ))
+          [ "$REM" -lt 300 ] && REM=300
+          echo "README 本窗总预算 $(( REM / 60 )) 分钟"
+          python collect/readme_sweep.py --mode "$MODE" --pool data/snapshot_latest/pool.json \
+            --max-calls 3000 --max-minutes 60 \
+            --wait-windows 10 --max-total-minutes $(( REM / 60 ))
 
       - name: state 残渣 GC（每月 1 号）
         run: |

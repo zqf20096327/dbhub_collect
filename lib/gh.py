@@ -245,6 +245,21 @@ class GitHubClient:
                 time.sleep(5)
         return None
 
+    def core_rate_limit(self) -> dict | None:
+        """GET /rate_limit：官方明确不计入配额。返回 core 域 {remaining, reset}。
+
+        供调用方在每轮采集前做窗口预检（触保底线就睡到 reset 再开工），
+        不走 _request 计数。探测失败返回 None（按不限流处理，fail-open）。
+        """
+        try:
+            r = self.s.get(f"{self.API}/rate_limit", timeout=REQUEST_TIMEOUT)
+            r.raise_for_status()
+            core = ((r.json() or {}).get("resources") or {}).get("core") or {}
+            return {"remaining": core.get("remaining"), "reset": core.get("reset")}
+        except (requests.RequestException, ValueError) as e:
+            log.warning("/rate_limit 探测失败（按不限流处理）：%s", e)
+            return None
+
     def stats_summary(self) -> dict:
         return {"calls": self.budget.calls,
                 "elapsed_min": round((time.time() - self.budget.started) / 60, 1)}
