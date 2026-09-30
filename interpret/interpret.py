@@ -166,9 +166,11 @@ class AIClient:
         if not self.key:
             raise SystemExit("AI_API_KEY 未配置：写入本仓库 .env（dbhub_collect/.env）")
 
-    def chat(self, prompt: str, timeout: int = 180) -> dict:
-        """返回 {content, reasoning, finish}。reasoning 兜底思考型模型
-        （GLM/DeepSeek 把推理放 reasoning_content，content 可能为空）。"""
+    def chat(self, prompt: str, timeout: int = 300) -> dict:
+        """返回 {content, reasoning, finish}。思考默认关闭（编目任务无需深度推理，
+        外有三层校验兜底质量；单条耗时 ~2min → ~30-60s）。
+        如需恢复思考：.env 加 AI_THINKING=enabled。"""
+        thinking = os.environ.get("AI_THINKING", "disabled")
         attempt = 0
         quota_waits = 0                                     # 额度耗尽：10 分钟/次探测，最多 5.5h（套餐窗口重置）
         while True:
@@ -178,6 +180,7 @@ class AIClient:
                     headers={"Authorization": f"Bearer {self.key}"},
                     json={"model": self.model,
                           "messages": [{"role": "user", "content": prompt}],
+                          "thinking": {"type": thinking},
                           # 思考型模型的推理过程也计入 max_tokens：4000 会被
                           # 长思考烧尽导致正文（JSON）为空——此前 944 条拒收的根因
                           "temperature": 0.1, "max_tokens": 8000},
