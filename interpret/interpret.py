@@ -435,7 +435,7 @@ def run(args):
 
     t0 = time.time()
     ai = AIClient(deadline=t0 + args.max_minutes * 60)
-    done, low_conf, rejected = 0, [], []
+    done, low_conf, rejected, failed_n = 0, [], [], 0
 
     def work(job) -> dict:
         """worker 线程只读共享结构、只返回结果——落账一律在主线程（防 dict 竞态）。"""
@@ -521,10 +521,15 @@ def run(args):
                 else:
                     st["items"][r["fn"]] = {"sha": r["sha"], "status": "failed",
                                             "error": r["error"]}
+                    failed_n += 1
                 chunk_done += 1
             if chunk_done:                      # 按 chunk 落盘（每条全量重写是 O(n²) I/O）
                 atomic_write_json(CACHE, cache)
                 atomic_write_json(ISTATE, st)
+                # 心跳：每个 chunk（并发×4 条）一行，长窗不再"静默干活"
+                log.info("进度 %d/%d · 成功 %d · 拒收 %d · 失败 %d · 缓存 %d · 已用 %.0f 分钟",
+                         min(i + chunk_done, len(todo)), len(todo),
+                         done, len(rejected), failed_n, len(cache), (time.time() - t0) / 60)
     # 收尾必落 + 人工队列累积合并
     atomic_write_json(CACHE, cache)
     atomic_write_json(ISTATE, st)
