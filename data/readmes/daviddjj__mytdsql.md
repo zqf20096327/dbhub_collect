@@ -1,0 +1,2 @@
+# mytdsql
+tdsql  management

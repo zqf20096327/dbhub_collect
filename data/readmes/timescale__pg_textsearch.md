@@ -31,12 +31,27 @@ Available for Linux on amd64 and arm64.
 
 ### Build from Source
 
+#### Linux and Mac
+
 ```sh
 cd /tmp
 git clone https://github.com/timescale/pg_textsearch
 cd pg_textsearch
 make
 make install # may need sudo
+```
+
+#### Windows
+
+Ensure you have a working MSVC environment on your path (`cl.exe` and `nmake`).
+
+```cmd
+set "PGROOT=C:\Program Files\PostgreSQL\18"
+cd %TEMP%
+git clone https://github.com/timescale/pg_textsearch
+cd pgvector
+nmake /F Makefile.win
+nmake /F Makefile.win install
 ```
 
 ## Getting Started
@@ -129,9 +144,10 @@ generic plan, `DEALLOCATE` and prepare the statement again. A newly planned
 query can choose the correct sequential fallback, while the cached plan is
 rejected to avoid incorrect index results.
 
-Boolean filtering and BM25 ranking are separate scan modes. A query combining
-`WHERE content @@ ...` with `ORDER BY content <@> ...` cannot use one BM25
-index scan for both operations.
+Combining Boolean filtering with BM25 ranking is supported, but is not yet
+optimized as a single index scan. PostgreSQL currently evaluates the filter,
+calculates standalone scores for the matching rows, and then sorts them. This
+is most effective when the Boolean filter matches relatively few rows.
 
 ### Verifying Index Usage
 
@@ -173,8 +189,7 @@ LIMIT 10;
 ```
 
 Post-filtered scans automatically grow their internal scoring batch until the
-`LIMIT` is filled, matches are exhausted, or the 100,000-result scan cap is
-reached.
+`LIMIT` is filled or matches are exhausted.
 
 ## Indexing
 
@@ -508,6 +523,10 @@ signal or the cron backstop execute in pg_durable connections authenticated as
 the index owner, not as the DML writer; pg_durable's worker role provides only
 the orchestration infrastructure.
 
+pg_durable must be installed in the same database as the BM25 index.
+Use `manual` compaction for indexes outside `pg_durable.database`.
+This restriction is expected to be lifted in a future version of pg_durable.
+
 ```sql
 CREATE INDEX documents_bm25 ON documents USING bm25(content)
 WITH (
@@ -560,6 +579,11 @@ SELECT * FROM documents
 ORDER BY content <@> to_bm25query('search terms', 'docs_idx')
 LIMIT 10;
 ```
+
+### Two-Phase Commit
+
+`PREPARE TRANSACTION` is not supported after creating a BM25 index or while
+BM25 index-drop cleanup is pending. Commit or roll back that DDL first.
 
 ## Troubleshooting
 

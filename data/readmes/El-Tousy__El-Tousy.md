@@ -1,8 +1,8 @@
 <div align="center">
-<p align="center">بسم الله الرحمن الرحيم</p>   
+<p align="center">بسم الله الرحمن الرحيم</p>    
     
 # 𝑺𝒊𝒍𝒗𝒂𝒙𝒔     
- 
+  
 ### Junior Software Developer · Python & Web Development · IT Systems    
    
 I build practical, real-world software — from debugging and testing to full applications — and I keep learning how software and IT systems fit together.
@@ -16,10 +16,10 @@ Morocco 🇲🇦 · freelance and junior roles · Python · SQL · Web Developme
   
 </div>
 
----
- 
+--- 
+  
 <table>   
-<tr>        
+<tr>         
 <td width="70%"> 
             
 <div align="center">

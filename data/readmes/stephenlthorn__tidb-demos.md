@@ -28,17 +28,26 @@ A collection of TiDB demo repositories showcasing various use cases and applicat
 
 | # | Demo | What it proves | Runs on | Replay |
 |---|---|---|---|---|
-| 01 | [AWS DMS](integrations/demos/aws-dms/) | Full load, live CDC and a measured cutover from Aurora PostgreSQL to TiDB | AWS + TiDB Cloud | pending |
+| 01 | [AWS DMS](integrations/demos/aws-dms/) | Full load, live CDC and a measured cutover from Aurora PostgreSQL to TiDB | AWS + TiDB Cloud | recorded |
 | 02 | [Kafka](integrations/demos/kafka/) | Payments through Kafka into TiDB, every change back out through TiCDC, no loss or duplicates | Local | recorded |
-| 03 | [Debezium](integrations/demos/debezium/) | Stock Debezium and Kafka Connect replicate into TiDB, and TiCDC speaks Debezium format back out | Local | pending |
-| 04 | [Redis](integrations/demos/redis/) | TiCDC-driven cache invalidation vs TTLs, with a measured stale read rate | Local | pending |
-| 05 | [Okta](integrations/demos/okta/) | Okta group membership drives TiDB grants, including a revoke | Local + Okta developer org | pending |
-| 06 | [Databricks](integrations/demos/databricks/) | TiDB serves live features while Databricks trains and scores on the same fresh data | Databricks Free Edition + TiDB Cloud Starter | pending |
-| 07 | [Chalk](integrations/demos/chalk/) | Chalk resolvers read fresh TiDB aggregates for online fraud features, checked against direct SQL | Local + Chalk account | pending |
-| 08 | [Prometheus / Grafana](integrations/demos/prometheus-grafana/) | TiDB metrics detect injected faults, with measured time to detect | Local | pending |
-| 09 | [Datadog](integrations/demos/datadog/) | TiDB metrics, APM traces to a SQL digest, and Monitors that fire and resolve | Local + Datadog account | pending |
-| 10 | [Terraform / EKS](integrations/demos/terraform-eks/) | TiDB Cloud, EKS and an app provisioned in one `terraform apply` | AWS + TiDB Cloud | pending |
-| 11 | [Power BI](integrations/demos/power-bi/) | One TiDB cluster serves the order pipeline and a live Power BI report, with no ETL | TiDB Cloud Starter + Power BI | pending |
-| 12 | [Call copilot](integrations/demos/call-copilot/) | Live retrieval-grounded suggestions during a call, on TiDB hybrid search | TiDB Cloud Starter + LLM and speech APIs | pending |
+| 03 | [Debezium](integrations/demos/debezium/) | Stock Debezium and Kafka Connect replicate into TiDB, and TiCDC speaks Debezium format back out | Local | recorded |
+| 04 | [Redis](integrations/demos/redis/) | TiCDC-driven cache invalidation vs TTLs, with a measured stale read rate | Local | recorded |
+| 05 | [Okta](integrations/demos/okta/) | Okta group membership drives TiDB grants, including a revoke | Local + Okta developer org | recorded |
+| 06 | [Databricks](integrations/demos/databricks/) | TiDB serves live features while Databricks trains and scores on the same fresh data | Databricks Free Edition + TiDB Cloud Starter | recorded |
+| 08 | [Prometheus / Grafana](integrations/demos/prometheus-grafana/) | TiDB metrics detect injected faults, with measured time to detect | Local | recorded |
+| 09 | [Datadog](integrations/demos/datadog/) | TiDB metrics, APM traces to a SQL digest, and Monitors that fire and resolve | Local + Datadog account | recorded |
+| 10 | [Terraform / EKS](integrations/demos/terraform-eks/) | TiDB Cloud, EKS and an app provisioned in one `terraform apply` | AWS + TiDB Cloud | recorded |
+| 11 | [Power BI](integrations/demos/power-bi/) | One TiDB cluster serves the order pipeline and a live Power BI report, with no ETL | TiDB Cloud Starter + Power BI | recorded |
 
-All code is built and tested. "Pending" means the demo has not been run live and recorded yet. Plans, one per demo, are in [integrations/docs/plans/](integrations/docs/plans/).
+Every demo has been run live and recorded; each replay carries the environment it was recorded in.
+
+To watch the replays on your machine (Node.js 22+ and pnpm 10+, no database needed):
+
+```bash
+git clone https://github.com/stephenlthorn/tidb-demos.git
+cd tidb-demos/integrations
+pnpm install
+pnpm dev
+```
+
+See [integrations/README.md](integrations/README.md) for running a demo live and recording your own replay. Plans, one per demo, are in [integrations/docs/plans/](integrations/docs/plans/).
