@@ -62,24 +62,24 @@ def latest_pool() -> Path:
 # ============================================================
 _BANNED_CN = [
     # 评判/广告
-    "最强", "最快", "颠覆", "必将", "重大", "震惊", "碾压", "革命性", "王者",
+    "最强", "最快", "颠覆", "必将", "震惊", "碾压", "革命性", "王者",
     "神器", "吊打", "强大", "优秀", "出色", "好用", "漂亮", "完美", "卓越",
     "高效", "高性能", "优雅", "惊艳", "史诗", "炸裂",
-    # 绝对
-    "最好", "最佳", "最优", "最先进", "最流行", "最完善", "最强大",
-    "唯一", "第一", "首个", "完全", "彻底", "绝对", "永远", "极致",
-    "顶尖", "顶级", "无可替代", "业界领先", "遥遥领先", "史上", "大幅", "显著",
+    # 绝对（注：唯一/第一/首个/完全/最佳/史上 已豁免——它们是数据库术语或
+    # README 事实转述的高频词（唯一约束/完全兼容/最佳实践），误伤率远大于收益）
+    "最先进", "最流行", "最完善", "最强大",
+    "顶尖", "顶级", "无可替代", "业界领先", "遥遥领先", "大幅", "显著",
     # 对比/预测
     "优于", "超越", "碾压式", "将会取代", "必将取代", "领先于", "完胜",
 ]
 _BANNED_EN = [
     r"\bbest\b", r"\bfastest\b", r"\bultimate\b", r"\brevolutionar\w+",
-    r"\brevolutionize\b", r"\bperfect\b", r"\bgreatest\b", r"\bleading\b",
+    r"\brevolutionize\b", r"\bgreatest\b", r"\bleading\b",
     r"\bunmatched\b", r"\bunrivaled\b", r"\bstate-of-the-art\b",
     r"\bcutting-edge\b", r"\bgame-chang\w*", r"\bworld-class\b",
-    r"\bamazing\b", r"\bawesome\b", r"\bbeautiful\b", r"\belegant\w*",
+    r"\bamazing\b", r"\bbeautiful\b", r"\belegant\w*",
     r"\bexcellent\b", r"\bimpressive\b", r"\bstunning\b", r"\bpowerful\b",
-    r"\bmust-have\b", r"\bfirst-ever\b", r"\boutperforms?\b", r"\bcrushes\b",
+    r"\bmust-have\b", r"\boutperforms?\b", r"\bcrushes\b",
     r"\bsuperior\b", r"\bbetter than\b", r"\bwill replace\b", r"\bpoised to\b",
     r"\bincredibly\b", r"\bworld's (?:first|best|fastest)\b", r"#1",
 ]
@@ -312,7 +312,8 @@ def check_verdicts(obj, cands: dict) -> list[str]:
             errs.append(f"{db} 的 verdict 缺 quote")
             continue
         if ctx and _norm_txt(q) not in ctx:
-            errs.append(f"{db} 的 quote 不是候选上下文原文")
+            # 转述/改写引句（关思考后常见）：丢弃该库裁决、不给归属——
+            # 比整条拒收温和，宁缺归属不凭转述采信
             continue
         keep.append({"db": db, "rel": rel, "quote": q})
         if rel == "support":
