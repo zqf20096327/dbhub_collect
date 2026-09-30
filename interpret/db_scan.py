@@ -26,6 +26,7 @@ for _d in (ROOT, ROOT / "lib"):
     if str(_d) not in sys.path:
         sys.path.insert(0, str(_d))
 from gh import atomic_write_json   # noqa: E402
+from rm_clean import clean_readme   # noqa: E402
 
 OUT = ROOT / "state" / "db_scan.json"
 READMES = ROOT / "data" / "readmes"
@@ -103,7 +104,7 @@ def main():
         p = READMES / (fn.replace("/", "__") + ".md")
         if p.is_file():
             try:
-                parts.append(p.read_text(encoding="utf-8", errors="ignore"))
+                parts.append(clean_readme(p.read_text(encoding="utf-8", errors="ignore")))
             except OSError:
                 pass
         cands = scan_text("\n".join(parts))
