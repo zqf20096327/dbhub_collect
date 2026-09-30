@@ -42,6 +42,7 @@ for _d in (ROOT, ROOT / "lib", ROOT / "config"):
 HERE = ROOT                      # 历史引用兼容：统一指向项目根
 import strategy                    # noqa: E402
 from gh import atomic_write_json, load_env  # noqa: E402
+from rm_clean import clean_readme   # noqa: E402
 
 log = logging.getLogger("interpret")
 
@@ -515,7 +516,7 @@ def run(args):
                 readme_norm = desc.lower()
             else:
                 path = HERE / "data" / "readmes" / (fn.replace("/", "__") + ".md")
-                text = path.read_text(encoding="utf-8", errors="ignore")[:10000] if path.is_file() else ""
+                text = clean_readme(path.read_text(encoding="utf-8", errors="ignore"))[:10000] if path.is_file() else ""
                 prompt = PROMPT_TMPL.format(contract=NEUTRALITY_CONTRACT, schema=schema,
                                             dbcands=dbcands, chan=chan, hint=hint,
                                             fn=fn, desc=desc, topics=topics,
