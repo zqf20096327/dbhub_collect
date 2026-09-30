@@ -1,9 +1,11 @@
 name: nightly-interpret
 on:
   schedule:
-    - cron: '30 4 * * *'      # UTC 04:30 = 北京 12:30；错开采集双窗
-                              # （collect 16:00/22:00 UTC 各 6h，第二窗 04:00 收尾）
-  workflow_dispatch:           # 手动触发（可勾选重试拒收 / 调批量）
+    - cron: '0 */2 * * *'      # 每 2 小时一窗（12 窗/天 × ~100min ≈ 22h/天在跑）。
+                              # 单 job 6h 是平台硬限，长跑靠多窗接力（同 collect 套路）；
+                              # 与采集并行不冲突（不同 API、不同 concurrency 组），
+                              # 推送撞车由提交步骤的重试兜住。语料跑空后每窗 1 分钟即结束。
+  workflow_dispatch:           # 手动触发（可勾选重试拒收 / 调批量，吃满单窗 6h）
     inputs:
       retry_rejected:
         description: '同时重试历史拒收项（捞回 944 条用）'
@@ -12,7 +14,7 @@ on:
       max_items:
         description: '本次最多解读条数'
         type: number
-        default: 400
+        default: 50000
 permissions:
   contents: write
 concurrency:
@@ -38,8 +40,8 @@ jobs:
       - name: db_scan（刷新候选库清单）
         run: python interpret/db_scan.py
 
-      # 断点续跑：sha 缓存命中自动跳过；额度耗尽（1113）脚本自带窗口等待；
-      # 墙钟预算 = job 剩余时间 - 10 分钟提交缓冲，单窗吃满
+      # 断点续跑：sha 缓存命中自动跳过；额度耗尽（1113）脚本自带窗口等待。
+      # 定时窗预算 100min（给 db_scan 和提交留余量）；手动触发吃满 6h
       - name: AI 解读（v2：程序提名 + 逐候选裁决）
         env:
           AI_API_KEY: ${{ secrets.AI_API_KEY }}
@@ -48,20 +50,29 @@ jobs:
         run: |
           EXTRA=""
           [ "${{ github.event.inputs.retry_rejected }}" = "true" ] && EXTRA="--retry-rejected"
-          REM=$(( 355*60 - ($(date +%s) - JOB_T0) - 600 ))
-          [ "$REM" -lt 600 ] && REM=600
-          echo "本窗解读预算 $(( REM / 60 )) 分钟 · 上限 ${{ github.event.inputs.max_items || 400 }} 条"
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            BUDGET=100; LIMIT=500
+          else
+            REM=$(( 355*60 - ($(date +%s) - JOB_T0) - 600 ))
+            [ "$REM" -lt 600 ] && REM=600
+            BUDGET=$(( REM / 60 )); LIMIT="${{ github.event.inputs.max_items || 50000 }}"
+          fi
+          echo "本窗解读预算 ${BUDGET} 分钟 · 上限 ${LIMIT} 条"
           python interpret/interpret.py --concurrency 3 \
-            --max-items "${{ github.event.inputs.max_items || 400 }}" \
-            --max-minutes $(( REM / 60 )) $EXTRA
+            --max-items "$LIMIT" --max-minutes "$BUDGET" $EXTRA
 
+      # 与采集并行时推送可能撞车：重试 + 变基，最多 5 轮
       - name: 提交并推送状态
         run: |
           git config user.name "zqf20096327"
           git config user.email "zqf20096327@users.noreply.github.com"
           git add state/interp_cache.json state/interp_state.json \
-                  state/db_scan.json state/manual_review.json 2>/dev/null || git add -A
-          git commit -m "解读 $(date -u +%F) · 缓存 $(python -c "import json;print(len(json.load(open('state/interp_cache.json'))))") 条" \
-            || { echo "无变更"; exit 0; }
-          git pull --rebase --autostash || true
-          git push
+                  state/db_scan.json state/manual_review.json 2>/dev/null
+          git diff --cached --quiet && { echo "无变更"; exit 0; }
+          git commit -m "解读 $(date -u +%F\ %H:%M) · 缓存 $(python -c "import json;print(len(json.load(open('state/interp_cache.json'))))") 条" -q
+          for i in 1 2 3 4 5; do
+            git pull --rebase --autostash >/dev/null 2>&1 || true
+            git push && { echo "已推送"; exit 0; }
+            echo "推送撞车，40s 后重试（$i/5）"; sleep 40
+          done
+          echo "::warning::推送 5 次未成功，本窗结果丢失（sha 未入库，下窗自动重解读）"
