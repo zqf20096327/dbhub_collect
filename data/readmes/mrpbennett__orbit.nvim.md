@@ -669,14 +669,14 @@ From a workspace query buffer, `/` focuses the workspace filter. Elsewhere, `/` 
 | `:OrbitSelectProfile`  | Alias for `:OrbitProfile`.                                                   |
 | `:OrbitExecute`        | Execute the single unambiguous statement in the current buffer.              |
 | `:'<,'>OrbitExecute`   | Execute the selected line range.                                             |
-| `:OrbitCancel`         | Cancel the statement running in the current buffer.                          |
+| `:OrbitCancel`         | Cancel the statement running in the current buffer, else the Workspace's running schema action. |
 | `:OrbitDisconnect`     | Close the connection for the current buffer's profile.                       |
 | `:OrbitDoctor [kind]`  | Diagnose profiles, executable selection, and versions without connecting.    |
 | `:OrbitStructure`      | Toggle the current query buffer's Structure panel.                           |
 | `:OrbitSave`           | Save a Workspace query buffer into a saved query location.                   |
 | `:OrbitWorkspace`      | Toggle the Orbit workspace tabpage.                                          |
 
-Whole-buffer execution rejects ambiguous multi-statement content. Select the exact statement in Visual mode, then run `:OrbitExecute` or `<leader>E`.
+Whole-buffer execution rejects ambiguous multi-statement content. Select the exact statement in Visual mode, then run `:OrbitExecute` or `<leader>E`. Statement boundaries are found with Orbit's SQL tokenizer, so semicolons inside string literals, quoted identifiers, comments, and PostgreSQL dollar-quoted bodies never count as separators, and a single recognized `CREATE FUNCTION`, `CREATE PROCEDURE`, `CREATE TRIGGER`, or `BEGIN ATOMIC` body is one statement even though it contains semicolons. The Structure panel uses the same boundaries.
 
 With no argument, `:OrbitDoctor` diagnoses every Connector. Supply `sqlserver`, `mysql`, `postgres`, `redis`, `sqlite`, `trino`, or `vertica` to restrict the report. For default SQL Server profiles, `:OrbitDoctor sqlserver` preserves the existing `sqlcmd` checks: it validates the profile file, reports the user-installed executable selected from an override or `PATH`, invokes only `--version`, and checks `password_env` presence. For JDBC profiles, it checks the password source, Java executable, readable jTDS JAR, Java 11+ source-file execution, and exact jTDS 1.3.1 class loading through the helper's doctor mode. It does not install anything, execute SQL, or open a database session, and it redacts known profile secrets from diagnostic output.
 
@@ -694,9 +694,10 @@ Orbit installs the following defaults:
 | Normal, Structure panel | `<leader>E` | Execute the highlighted Structure element.               |
 | Normal, SQL buffer      | `<leader>P` | Select a connection profile.                             |
 | Normal, SQL buffer      | `<leader>X` | Cancel the running statement.                            |
+| Normal, Workspace sidebar | `<leader>X` | Cancel the running schema action.                      |
 | Normal, SQL buffer      | Disabled    | Toggle the Structure panel (`structure = false`).        |
 
-Configure action mappings through `keymaps`. `execute` also applies in the Structure panel; `cancel`, `select_profile`, and the disabled-by-default `structure` action are buffer-local in SQL buffers, while `workspace` is global. Set an action to `false` to disable it.
+Configure action mappings through `keymaps`. `execute` also applies in the Structure panel; `cancel`, `select_profile`, and the disabled-by-default `structure` action are buffer-local in SQL buffers, `cancel` also applies in the Workspace sidebar, while `workspace` is global. Set an action to `false` to disable it.
 
 ```lua
 require("orbit").setup({
@@ -877,9 +878,9 @@ Set `completion = false` in Orbit's `setup()` to disable the blink source's `ena
 
 Orbit runs statements asynchronously through the selected profile's Connector client. For SQL Server, SQLite, PostgreSQL, MySQL, and Vertica, schema work and statements share one retained process and execute one at a time. SQL Server keeps either one interactive Go `sqlcmd` process or one Java helper and JDBC connection per connection profile, so transactions, temporary tables, and other session state can persist until disconnect, cancellation, connection failure, malformed helper protocol, profile change, or exit. An ordinary JDBC SQL error is request-scoped and preserves the retained connection. Trino and Redis statements each run their own CLI invocation.
 
-One running statement is allowed per query buffer. `:OrbitCancel` terminates an active retained process, fails work queued on that process, and starts a fresh session only when the next Statement is requested. Cancelling work that has not started removes only that queued request. Orbit reports cancellation as cancellation rather than opening diagnostics; server-side completion timing is not asserted after the CLI is terminated.
+One running statement is allowed per query buffer, and one schema action per Workspace; a second request is refused until the first result is shown. `:OrbitCancel` terminates an active retained process, fails work queued on that process, and starts a fresh session only when the next Statement is requested. Cancelling work that has not started removes only that queued request. Orbit reports cancellation as cancellation rather than opening diagnostics; server-side completion timing is not asserted after the CLI is terminated.
 
-Potentially mutating statements require confirmation by default. A single `SELECT`, `SHOW`, `DESCRIBE`, `EXPLAIN`, `USE`, or `VALUES` statement runs without confirmation; everything else requires it. This is a convenience guardrail, not a security boundary.
+Potentially mutating statements require confirmation by default. A single `SELECT`, `SHOW`, `DESCRIBE`, `EXPLAIN`, `USE`, or `VALUES` statement runs without confirmation; everything else requires it. Comments and semicolons inside literals are ignored when deciding, so `SELECT 1; -- note` counts as one read-only statement. This is a convenience guardrail, not a security boundary.
 
 The SQL Server Connector uses a stricter T-SQL classifier: only a single `SELECT` without top-level `INTO` runs without confirmation. Data mutations, DDL, `SELECT INTO`, `EXEC`, CTEs whose effective operation mutates, and ambiguous or multiple statements require confirmation; an `OUTPUT` clause does not make a mutation read-only. Standalone `GO` batch separators are rejected rather than split.
 

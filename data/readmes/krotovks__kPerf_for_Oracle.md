@@ -5,7 +5,6 @@ In the current implementation, statistics are collected at **the instance level*
 kPerf is free to use but protected by Pyarmor with an integrated license, check the [Info](#Info).
 The license will be updated in the next release.
 kPerf is designed for monitoring Oracle in a specific way, focusing on performance rather than just sending warning emails. 
-
 - [Short Demo](https://youtu.be/gw2DuXm1W5Y) 
 - In version 2.5.1, SQLTEXT was added, along with the ability to connect to the database using a TNS alias.
 
@@ -36,9 +35,10 @@ kPerf is designed for monitoring Oracle in a specific way, focusing on performan
 3. [Permissions](#permissions)
 4. [Installation](#installation)
 5. [Support Oracle Database Version](#support-oracle-database-version)
-6. [BUG](#BUG)
-7. [Info](#Info)
-8. [Contact](#contact)
+6. [Documentation](#documentation)
+7. [BUG](#BUG)
+8. [Info](#Info)
+9. [Contact](#contact)
 
 ***
 
@@ -263,7 +263,6 @@ and there's more to come.
     
     
 ### Important:
-
 	To use link and logic in Dashboards use configure job names in Prometeus as:
 	1. - For Module: InstanceWaitStat&SQL(parameter HTTPPORT):  %Kperf-Monitor%
     2. - For Module: SESSION (parameter HTTPPORTSESS): %Kperf-Session%
@@ -275,13 +274,16 @@ and there's more to come.
  - Oracle 19c
  - Oracle 12c
 
+ ## Documentation
+ - [RU](/Doc/kPerfForOracle_v2.5.0_RU.docx)
+ - [ENG](/Doc/kPerfForOracle_v2.5.0_EN.docx)
+
  ## BUG
  - If you experience performance issues related to SQL ID 10jxs82gsnsbs, please use the provided script [sqlpatch_kperf_2.5.1.sql](SQLBUG/sqlpatch_kperf_2.5.1.sql)
- - Lack of documentation. The documentation is under development and will be released soon.
 
  ## Info
  - Current Version 2.5.1. 
- - License has been extended until 2026-12-01 (yyyy.mm.dd).
+ - License has been extended until 2027-12-01 (yyyy.mm.dd).
 
 ## Contact
  If you have any questions, feel free to contact me via: 

@@ -11,7 +11,7 @@
 [![Databases](https://img.shields.io/badge/DB-Postgres%20%C2%B7%20Mongo%20%C2%B7%20SQLite%20%C2%B7%20MySQL-6366F1?labelColor=0F1117)](#)
 [![License](https://img.shields.io/badge/license-MIT-6366F1?labelColor=0F1117)](LICENSE)
 
-**[Website & docs →](https://claude.ai/artifact/UPdyAiYgXNuHjc8zCfCy7C)**
+**[Website & docs →](https://parthkomalwad.dev/projects/archon/)**
 
 </div>
 
@@ -19,7 +19,7 @@
 
 Archon runs beside your app as one container. It reads one YAML file, then dumps, encrypts (AES-256-CBC), checksums (SHA-256), stores (local, S3, Azure) and rotates backups for PostgreSQL, MongoDB, MySQL and SQLite. Restores verify the checksum before anything touches your database.
 
-The [website](https://claude.ai/artifact/UPdyAiYgXNuHjc8zCfCy7C) covers how it works, the full API, configuration and comparisons.
+The [website](https://parthkomalwad.dev/projects/archon/) covers how it works, the full API, configuration and comparisons.
 
 ## Quickstart
 

@@ -6,13 +6,12 @@
   Embedded world storage built for fast chunk saves and reads.
 </p>
 
-ZigriteDB is an embedded storage engine for Minecraft Bedrock worlds, written
-in Zig and built for [Quark](https://github.com/Bedrock-Phanatics/Quark).
-Append-only writes, batched saves, indexed reads, and LZ4 compression keep
-storage focused on individual chunk components.
+ZigriteDB is an embedded Minecraft Bedrock world storage engine written in Zig
+for [Quark](https://github.com/Bedrock-Phanatics/Quark). It uses append-only
+writes, batched saves, indexed reads, and LZ4 compression for chunk components.
 
-**In development.** The API and file format may change. Not yet recommended
-for production worlds.
+> **In development:** The API and file format may change. Do not use it for
+> production worlds yet.
 
 ## Build
 
@@ -79,28 +78,49 @@ pub fn main() !void {
 ```
 
 Batches are atomic within one 32×32 chunk region and use increasing IDs.
-Writes sync by default; buffered writes require a successful flush for durability.
-Call `close` to flush and report errors; `deinit` only releases resources.
-See [World](src/world/world.zig) for the full Zig API.
+Writes are buffered by default; call `flush` at save barriers or `close` at
+shutdown for durability. For synchronous writes, set
+`.shard.durability = .sync`. `deinit` only releases resources. See
+[World](src/world/world.zig) for the full Zig API.
 
-For other languages, link against `libzigritedb_native` and use
-[zigritedb.h](include/zigritedb.h). Libraries and headers are installed under
-`zig-out/lib` and `zig-out/include`.
+## C API
 
-The C ABI is versioned by `ZG_ABI_VERSION`, which must equal `zg_abi_version()`.
-v0.3.0 is ABI 2: `zg_options` grew, so programs built against an ABI 1 header must be
-rebuilt. On Linux the soname is `libzigritedb_native.so.2`, so ABI 1 binaries will not
-load it, and `zg_open` rejects a mismatched `version`/`struct_size` before reading the rest.
+For other languages, link `libzigritedb_native` and include
+[zigritedb.h](include/zigritedb.h). The library and header install to
+`zig-out/lib` and `zig-out/include`. The current C ABI is version 2; clients
+built against version 1 must be rebuilt.
 
 ## Benchmarks
 
-```sh
-zig build bench -Doptimize=ReleaseSafe
-python3 tests/bench/run.py --directory /path/to/benchmark/filesystem
-```
+Three-run medians for 1,024 saves across 64 chunks, using identical payloads
+and save order. Full saves contain four 16 KiB subchunks, biomes, block
+entities, and entities; the workload also includes two-component updates.
 
-Outputs synthetic latency, memory, and storage measurements as JSON.
-Compare equivalent workloads and durability settings.
+| Workload | ZigriteDB | PMMP LevelDB fork |
+| --- | ---: | ---: |
+| Buffered chunk saves | 3,427 saves/s | 4,265 saves/s |
+| Synchronous chunk saves | 203 saves/s | 208 saves/s |
+| Durable groups of 16 saves | 1,617 saves/s | 2,320 saves/s |
+| Seven-component reads, first pass | 11,397 reads/s | 8,529 reads/s |
+| Seven-component reads, repeated | 11,407 reads/s | 34,316 reads/s |
+
+**Native code only.** This compares ZigriteDB's C API with the
+[C++ LevelDB fork](https://github.com/pmmp/leveldb) used by
+[PMMP's PHP extension](https://github.com/pmmp/php-leveldb). PHP calls, NBT
+serialization, and the full world provider are excluded. PHP adds overhead,
+so these figures are not PMMP server throughput and performance through PHP
+will be slower.
+
+Both engines use matching durability modes. PMMP uses its
+[raw zlib and 64 KiB block settings](https://github.com/pmmp/PocketMine-MP/blob/stable/src/world/format/io/leveldb/LevelDB.php)
+and default 8 MiB block cache; ZigriteDB uses its default 0 MiB value cache.
+Buffered saves/s excludes the final durability barrier; grouped saves/s
+includes one after every 16 saves. Compression and compaction differ.
+
+Measured on a Ryzen 5 5500 under WSL2 (Linux 6.6, ext4), with Zig 0.16.0
+ReleaseSafe. Detailed latencies and memory use are in the
+[raw results](tests/bench/results); see the [build script](tests/bench/build_pmmp_native.sh)
+and [runner](tests/bench/run_pmmp_native.py) to reproduce the comparison.
 
 ## Testing
 

@@ -310,6 +310,9 @@ chroncal calendar create "Work" --color "#3B82F6"
 # Add an event
 chroncal event add "Team standup" --date 2026-04-01 --time 09:00 --duration 30m --calendar Work
 
+# Add an event with a relative date (today, tomorrow, a weekday, or +7d)
+chroncal event add "Birthday party" --date tomorrow --time 17:00 --calendar "Personal"
+
 # Add a recurring event
 chroncal event add "Weekly review" --date 2026-04-04 --time 14:00 --duration 1h --rrule "FREQ=WEEKLY;BYDAY=FR"
 
@@ -321,6 +324,9 @@ chroncal journal add "Weekly notes" --date 2026-04-04 --calendar Work
 
 # List upcoming events
 chroncal event list --from 2026-04-01 --to 2026-04-30
+
+# List this week with relative dates
+chroncal event list --from today --to +7d
 
 # Search
 chroncal event search "standup"
@@ -468,6 +474,10 @@ allow_plaintext = true
 `--allow-plaintext` and `CHRONCAL_SECURITY_ALLOW_PLAINTEXT=true` do the same for one run. Both apply to the TUI: start it with `chroncal --allow-plaintext`. Prefer the config key. It holds for every run, and a TUI session that already runs cannot take a flag.
 
 > **Read the trade-off first.** The 0600 mode blocks a casual `cat`. It does not block backups, filesystem snapshots, or sync tools (Dropbox, iCloud, rsync) that ignore Unix permissions. A password command keeps the secret out of the file, so prefer option 1 when your password manager supports it.
+
+`CHRONCAL_SECURITY_DISABLE_KEYRING=1` turns the OS keyring off for the process that has it in its environment. Chroncal then behaves as if no keyring exists: it falls back to the file store under the same `allow_plaintext` rule. Set it on a host where the keyring is locked or absent but the session still runs, for example over SSH. The test suite sets it too, so tests never read or write the real keyring. It is an environment variable only. No config key has the same function.
+
+> **Use the switch for all runs or for no runs.** With the switch, chroncal does not read the credentials that the keyring holds. An account with a keyring credential then fails to sync. A new or refreshed credential goes to the file store, and a run without the switch does not read it. `account remove` with the switch leaves the keyring entry in place.
 
 What needs the opt-in, and what does not:
 
@@ -634,10 +644,10 @@ Google limitations:
 ### Free/busy
 
 ```
-chroncal freebusy --calendar NAME --from DATE_OR_RFC3339 --to DATE_OR_RFC3339 [--remote] [--format {text,ical}]
+chroncal freebusy --calendar NAME --from DATE --to DATE [--remote] [--format {text,ical}]
 ```
 
-Without `--remote`, `freebusy` computes busy time from local recurring data. With `--remote`, it sends a CalDAV free-busy report to the linked remote calendar.
+Each bound accepts `YYYY-MM-DD`, an RFC 3339 timestamp, or a relative date word. Without `--remote`, `freebusy` computes busy time from local recurring data. With `--remote`, it sends a CalDAV free-busy report to the linked remote calendar.
 
 ### Alarms
 
@@ -705,7 +715,7 @@ Set `sync.interval` in `config.toml` to change the default for later installs. P
 
 All commands accept `-o, --output {text,json}` (default: text).
 
-The bare `chroncal` launch command also accepts `--event <id|uid>`, `--at <RFC3339 or YYYY-MM-DD>`, and `--recurrence-id <RFC3339>`. These flags open the TUI on an event. See [TUI](#tui).
+The bare `chroncal` launch command also accepts `--event <id|uid>`, `--at <RFC3339, YYYY-MM-DD, or a relative date>`, and `--recurrence-id <RFC3339>`. These flags open the TUI on an event. See [TUI](#tui).
 
 ### Scripts and LLM use
 
@@ -723,7 +733,14 @@ The CLI is for shells and language models, not only for hand input. The agent-fr
 
   Codes are `not_found`, `invalid_input`, `aborted`, or `error` (catch-all). The `error` field is the user-facing message. The output strips internal call-chain prefixes (for example `get event:`). Dispatch on `code` and show `error` directly.
 - References accept either the numeric `id` or the string `uid`. Commands take `--recurrence-id <RFC3339>` to address one instance of a recurring series. On `event delete`, the flag deletes that occurrence.
-- Dates are `YYYY-MM-DD`. Times are `HH:MM` local unless a command accepts `--timezone`. Durations are Go-style (`30m`, `1h30m`). Some flags also accept RFC 5545 (`PT1H30M`).
+- Dates are `YYYY-MM-DD`. These date flags also accept a relative date word:
+  - `event add` and `event update`: `--date`, `--end-date`
+  - `todo add` and `todo update`: `--due`, `--start`
+  - `journal add` and `journal update`: `--date`
+  - `event list`, `event search`, `ical export`, `todo list`, `journal list`, and `freebusy`: `--from`, `--to`
+  - the root command: `--at`
+
+  The words are `today`, `now`, `tomorrow`, `yesterday`, a weekday name (next occurrence, today counts), `next <weekday>` (first occurrence after today, as in GNU `date`), or a signed offset `+Nd`, `-Nw`, `+Nm` (days, weeks, months). A relative date must resolve to a year from 0000 to 9999. `--exception-date-times` and `--recurrence-date-times` (`--exdate`, `--rdate`) do not accept relative words. They stay strict because they write RFC 5545 data. `YYYY-MM-DD` stays the canonical stored form, so scripts that pass explicit dates are unaffected. Times are `HH:MM` local unless a command accepts `--timezone`. Durations are Go-style (`30m`, `1h30m`). Some flags also accept RFC 5545 (`PT1H30M`).
 - If you want plain text (no JSON), pass `--compact` for a fixed-column table with a header row: ID, date, time, categories, and summary. The table colors itself on a terminal and stays plain when you pipe it. Skip the header with `--no-header`; after that, the output works with `grep` and `awk`. The form is available on `event list`, `event search`, `todo list`, `journal list`, and `calendar list`.
 
 ```bash
@@ -773,7 +790,7 @@ chroncal --event 42
 chroncal --event standup-uid --at 2026-04-17T14:00:00Z
 ```
 
-`--at` accepts an RFC 3339 timestamp or `YYYY-MM-DD`. It selects a generated occurrence of a recurring series. The details show the times of that occurrence, not the series start. Stored overrides take `--recurrence-id` with the series UID. `--at` requires `--event` and excludes `--recurrence-id`.
+`--at` accepts an RFC 3339 timestamp, `YYYY-MM-DD`, or a relative date word such as `tomorrow`. It selects a generated occurrence of a recurring series. The details show the times of that occurrence, not the series start. Stored overrides take `--recurrence-id` with the series UID. `--at` requires `--event` and excludes `--recurrence-id`.
 
 **Views**: month, week, day, agenda. Switch with `m`, `w`, `d`, `a`. Press `W` to switch the first day of the week between Sunday and Monday. The TUI stores the choice, the same way it stores the view. `ui.week_start` in `config.toml` sets the default before a stored choice exists.
 
