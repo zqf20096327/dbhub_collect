@@ -40,10 +40,12 @@ Gestionale **open source** (`opentax-it`) per partite IVA italiane in **regime f
 - **Soglie 85.000 / 100.000 €** in dashboard e all'emissione, con proiezione sulle fatture da incassare e un limite personale che chiede conferma prima di emettere.
 
 **Imposte e contributi** (`/taxes`)
-- Reddito, imposta sostitutiva, contributo **INPS Gestione Separata** (in euro interi sul rigo LM34), acconti 40/60 o 50/50 per i soggetti ISA; sopra 100.000 € il calcolo forfettario si ferma.
+- Reddito, imposta sostitutiva, acconti 40/60 o 50/50 per i soggetti ISA; sopra 100.000 € il calcolo forfettario si ferma.
+- Contributi INPS secondo la gestione scelta nel profilo: **Gestione Separata** (in euro interi sul rigo LM34) oppure **Artigiani e Commercianti** (contributi fissi in quattro rate, contributi oltre il minimale con saldo e acconti, riduzione del 35% del regime agevolato).
 
 **F24** (`/f24`, `/credits`)
 - Piano di versamento: saldo e acconti in unica soluzione o a **rate mensili** fino al 16 dicembre, con interessi e, in caso di differimento, maggiorazione (per l'INPS nella riga DPPI).
+- Deleghe per i contributi: rate fisse di Artigiani e Commercianti create con un clic, righe INPS e "Altri enti previdenziali" inserite a mano con il controllo di causali e codici.
 - **Crediti e compensazioni**: registro dei crediti (credito da dichiarazione → F24 che lo usano → residuo) e modello a saldo zero.
 - Stampa sul **modello ufficiale AdE**, stato delle deleghe e date per l'addebito programmato (**I24**) con F24 web.
 
@@ -54,8 +56,13 @@ Gestionale **open source** (`opentax-it`) per partite IVA italiane in **regime f
 - **Regole fiscali versionate per anno** (`FiscalRuleSet`): niente valori scritti nel codice, ogni nuovo set si attiva a mano, dopo aver visto cosa cambia rispetto a quello attivo; consultabili per sezione, ogni valore con la sua fonte e la citazione esatta.
 - **Registro delle fonti ufficiali** con la copia archiviata di ogni documento; i test verificano che ogni citazione compaia nel documento archiviato.
 
+**Account** (`/login`, `/register`)
+- Login con sessione, **più partite IVA per utente** e ruoli; solo un amministratore carica e attiva le regole fiscali.
+
 **In arrivo** (dettagli in [TODO.md](TODO.md))
-- Autenticazione, con più partite IVA per utente (lo schema è **multi-tenant** fin dall'inizio).
+- **Casse professionali**, una alla volta, a partire da quelle che si pagano con F24 (Cassa Forense, Inarcassa, ENPAP).
+- **Fatture ricevute** (acquisti), importate dal portale Fatture e Corrispettivi.
+- Prospetto dei righi **LM e RR** della dichiarazione dei redditi.
 - Registro degli **avvisi/comunicazioni** (CIVIS) e delle relative rate.
 - Controllo periodico delle fonti ufficiali (AdE, INPS, GU/Normattiva, ADM) con proposta delle modifiche alle regole.
 

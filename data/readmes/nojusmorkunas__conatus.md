@@ -1,8 +1,9 @@
-<p align="center">
-  <img src="./public/conatus-logo.png" alt="Conatus laurel logo" width="150">
-</p>
-
-<h1 align="center">Conatus</h1>
+<h1 align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./public/conatus-logo-dark.svg">
+    <img src="./public/conatus-logo.svg" alt="Conatus" width="320">
+  </picture>
+</h1>
 
 <p align="center"><em>Every goal starts with a next step.</em></p>
 
@@ -50,7 +51,7 @@ Open `.env` and set these values:
 
 ```env
 # Use latest for the current stable release, or pin an exact version such as
-# 1.0.0 when reproducible upgrades matter.
+# 1.1.0 when reproducible upgrades matter.
 CONATUS_VERSION=latest
 CONATUS_PORT=4399
 

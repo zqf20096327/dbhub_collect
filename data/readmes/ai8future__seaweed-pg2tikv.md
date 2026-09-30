@@ -1,0 +1,671 @@
+# seaweed-pg2tikv
+
+Fast, parallel migration tool for SeaweedFS filer metadata from PostgreSQL to TiKV.
+
+## Overview
+
+When migrating SeaweedFS from PostgreSQL to TiKV, the built-in `weed filer.meta.backup` command can be extremely slow for large datasets (billions of rows). It uses a single-threaded BFS traversal with only 5 workers.
+
+**seaweed-pg2tikv** reads directly from PostgreSQL and writes to TiKV in parallel, achieving 10-100x faster migration speeds.
+
+## Tools Included
+
+| Tool | Purpose |
+|------|---------|
+| `seaweed-pg2tikv` | Migrate filer metadata from Postgres to TiKV |
+| `seaweed-pg2tikv-audit` | Verify migration by comparing Postgres to TiKV (byte-level + protobuf field diffs) |
+| `seaweed-count-keys` | Count (or bulk-delete) keys in TiKV with a given prefix |
+| `seaweed-cleanup` | Post-migration cleanup of duplicate/orphan root-level filer entries (in `seaweed-cleanup-go/`) |
+
+The first three tools share the root Go module (`module seaweed-pg2tikv`). `seaweed-cleanup` is a
+separate Go module under `seaweed-cleanup-go/` that talks to a live SeaweedFS filer over HTTP and gRPC.
+
+## Performance
+
+| Dataset Size | filer.meta.backup | seaweed-pg2tikv |
+|--------------|-------------------|-----------------|
+| 1M rows | ~30 minutes | ~2 seconds |
+| 100M rows | ~50 hours | ~30 minutes |
+| 1B rows | ~3 weeks | ~5 hours |
+
+## Installation
+
+### Pre-built Binaries
+
+Download from your build machine:
+```bash
+scp seaweed-pg2tikv-linux-amd64 user@server:~/
+scp seaweed-pg2tikv-audit-linux-amd64 user@server:~/
+scp seaweed-count-keys-linux-amd64 user@server:~/
+chmod +x seaweed-pg2tikv-linux-amd64 seaweed-pg2tikv-audit-linux-amd64 seaweed-count-keys-linux-amd64
+```
+
+### Build from Source
+
+Requires Go 1.21+:
+
+```bash
+git clone <repo>
+cd seaweed-pg2tikv
+
+# Install dependencies
+go mod tidy
+
+# Build for Linux
+GOOS=linux GOARCH=amd64 go build -o seaweed-pg2tikv-linux-amd64 main.go
+GOOS=linux GOARCH=amd64 go build -o seaweed-pg2tikv-audit-linux-amd64 audit.go
+GOOS=linux GOARCH=amd64 go build -o seaweed-count-keys-linux-amd64 count_keys.go
+
+# Build for current platform
+go build -o seaweed-pg2tikv main.go
+go build -o seaweed-pg2tikv-audit audit.go
+go build -o seaweed-count-keys count_keys.go
+```
+
+## Configuration
+
+seaweed-pg2tikv reads standard SeaweedFS filer.toml configuration files.
+
+### PostgreSQL Configuration
+
+```toml
+# postgres_filer.toml
+[postgres2]
+enabled = true
+hostname = "192.168.8.201"
+port = 5432
+username = "seaweedfs"
+password = "secret"
+database = "filer"
+sslmode = "disable"
+# Optional SSL settings:
+# sslcert = "/path/to/client.crt"
+# sslkey = "/path/to/client.key"
+# sslrootcert = "/path/to/ca.crt"
+```
+
+### TiKV Configuration
+
+```toml
+# tikv_filer.toml
+[tikv]
+enabled = true
+pdaddrs = "192.168.8.131:2379,192.168.8.137:2379,192.168.8.142:2379"
+keyPrefix = "seaweedfs"
+enable_1pc = false
+# Optional TLS settings:
+# ca_path = "/path/to/ca.pem"
+# cert_path = "/path/to/client.pem"
+# key_path = "/path/to/client-key.pem"
+```
+
+You can use a single file with both sections or separate files.
+
+---
+
+## seaweed-pg2tikv - Migration Tool
+
+### Basic Usage
+
+```bash
+./seaweed-pg2tikv-linux-amd64 \
+  --pg-config=/etc/seaweedfs/filer.toml \
+  --tikv-config=/path/to/tikv_filer.toml \
+  --table="filemeta"
+```
+
+### Options
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--pg-config` | (required) | Path to PostgreSQL filer.toml |
+| `--tikv-config` | (required) | Path to TiKV filer.toml |
+| `--table` | `filemeta` | PostgreSQL table name |
+| `--workers` | `10` | Parallel TiKV write workers |
+| `--batch` | `1000` | Entries per TiKV transaction |
+| `--state` | `migrate_state_{table}.json` | Progress state file |
+| `--partition-mod` | `1` | Total partitions for parallel instances |
+| `--partition-id` | `0` | This instance's partition (0 to mod-1) |
+| `--path-prefix` | (empty) | Path prefix for per-bucket tables (e.g., `/buckets/my-bucket`) |
+| `--max-retries` | `15` | Maximum retries per batch on TiKV conflicts |
+| `--retry-base-ms` | `500` | Base retry delay in milliseconds (exponential backoff) |
+| `--dry-run` | `false` | Parse configs and exit without migrating |
+| `--version` | | Show version and exit |
+
+### Examples
+
+**Single table migration:**
+```bash
+./seaweed-pg2tikv-linux-amd64 \
+  --pg-config=/etc/seaweedfs/filer.toml \
+  --tikv-config=./backup_filer.toml \
+  --table="filemeta" \
+  --workers=10 \
+  --batch=1000
+```
+
+**Bucket-specific table (postgres2 with SupportBucketTable=true):**
+
+> **IMPORTANT:** Per-bucket tables in PostgreSQL store paths relative to the bucket root.
+> You MUST use `--path-prefix` to reconstruct the full path for TiKV, otherwise entries
+> will be written to the wrong location and your filer data will appear corrupted.
+
+```bash
+./seaweed-pg2tikv-linux-amd64 \
+  --pg-config=/etc/seaweedfs/filer.toml \
+  --tikv-config=./backup_filer.toml \
+  --table="my-bucket-name" \
+  --path-prefix="/buckets/my-bucket-name"
+```
+
+**Parallel migration with 5 instances:**
+```bash
+# Run on 5 different terminals or machines
+./seaweed-pg2tikv-linux-amd64 --table="big-table" --partition-mod=5 --partition-id=0 &
+./seaweed-pg2tikv-linux-amd64 --table="big-table" --partition-mod=5 --partition-id=1 &
+./seaweed-pg2tikv-linux-amd64 --table="big-table" --partition-mod=5 --partition-id=2 &
+./seaweed-pg2tikv-linux-amd64 --table="big-table" --partition-mod=5 --partition-id=3 &
+./seaweed-pg2tikv-linux-amd64 --table="big-table" --partition-mod=5 --partition-id=4 &
+wait
+```
+
+**Parallel migration script:**
+```bash
+#!/bin/bash
+# migrate_parallel.sh
+
+TABLE="rootseek-heic"
+PARTITIONS=5
+WORKERS=10
+BATCH=1000
+
+PG_CONFIG="/etc/seaweedfs/filer.toml"
+TIKV_CONFIG="./backup_filer.toml"
+
+for i in $(seq 0 $((PARTITIONS - 1))); do
+  echo "Starting partition $i of $PARTITIONS..."
+  ./seaweed-pg2tikv-linux-amd64 \
+    --pg-config="$PG_CONFIG" \
+    --tikv-config="$TIKV_CONFIG" \
+    --table="$TABLE" \
+    --partition-mod=$PARTITIONS \
+    --partition-id=$i \
+    --state="state_${TABLE}_${i}.json" \
+    --workers=$WORKERS \
+    --batch=$BATCH &
+done
+
+echo "All $PARTITIONS partitions started. Waiting..."
+wait
+echo "Migration complete."
+```
+
+### Output
+
+```
+2026/01/28 12:00:00 seaweed-pg2tikv version 1.2.0
+2026/01/28 12:00:00 === Configuration ===
+2026/01/28 12:00:00 Postgres: seaweedfs@192.168.8.201:5432/filer (table: rootseek-ocr)
+2026/01/28 12:00:00 TiKV PD:  192.168.8.131:2379 (prefix: "seaweedfs", 1PC: false)
+2026/01/28 12:00:00 Workers:  10, Batch: 1000, Partition: 0/1
+2026/01/28 12:00:00 Retries:  max=15, base_delay=500ms
+2026/01/28 12:00:00 State file: migrate_state_rootseek-ocr.json
+2026/01/28 12:00:00 Connected to Postgres
+2026/01/28 12:00:00 Connected to TiKV
+2026/01/28 12:00:00 Starting from dirhash=-9223372036854775808 name="" (page size: 20000)
+2026/01/28 12:00:10 Progress: 50000 OK, 0 FAILED (5000/sec) | elapsed: 10s | dirhash: 12345
+...
+2026/01/28 12:30:00 All 440457397 rows read from Postgres, waiting for workers...
+2026/01/28 12:30:05 === Migration Complete ===
+2026/01/28 12:30:05 Rows read from Postgres: 440457397
+2026/01/28 12:30:05 Successfully written to TiKV: 440457397
+2026/01/28 12:30:05 Failed to write: 0
+2026/01/28 12:30:05 State saved to: migrate_state_rootseek-ocr.json
+2026/01/28 12:30:05 seaweed-pg2tikv version 1.2.0
+```
+
+### Resume After Interruption
+
+seaweed-pg2tikv saves progress to a state file. If interrupted, simply run the same command again - it will resume from where it left off.
+
+```bash
+# First run (interrupted)
+./seaweed-pg2tikv-linux-amd64 --table="big-table" ...
+# ^C
+
+# Resume
+./seaweed-pg2tikv-linux-amd64 --table="big-table" ...
+# Continues from last position
+```
+
+To start fresh, delete the state file:
+```bash
+rm migrate_state_big-table.json
+./seaweed-pg2tikv-linux-amd64 --table="big-table" ...
+```
+
+---
+
+## seaweed-pg2tikv-audit - Verification Tool
+
+Verify that migration completed successfully by comparing Postgres data to TiKV.
+
+### Basic Usage
+
+```bash
+./seaweed-pg2tikv-audit-linux-amd64 \
+  --pg-config=/etc/seaweedfs/filer.toml \
+  --tikv-config=./backup_filer.toml \
+  --table="filemeta"
+```
+
+### Options
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--pg-config` | (required) | Path to PostgreSQL filer.toml |
+| `--tikv-config` | (required) | Path to TiKV filer.toml |
+| `--table` | `filemeta` | PostgreSQL table name |
+| `--mode` | `sample` | `sample` (random) or `complete` (full scan) |
+| `--sample-size` | `10000` | Rows to check in sample mode |
+| `--workers` | `10` | Parallel verification workers |
+| `--show-missing` | `false` | Print details of missing/mismatched entries |
+| `--max-mismatches` | `100` | Stop reporting after this many mismatches (`0` = unlimited) |
+| `--verbose` | `false` | Show detailed field-level value comparison for mismatches |
+| `--path-prefix` | (empty) | Path prefix for per-bucket tables (e.g., `/buckets/my-bucket`) |
+| `--version` | | Show version and exit |
+
+### Examples
+
+**Quick random sample (recommended first):**
+```bash
+./seaweed-pg2tikv-audit-linux-amd64 \
+  --pg-config=/etc/seaweedfs/filer.toml \
+  --tikv-config=./backup_filer.toml \
+  --table="rootseek-ocr" \
+  --mode=sample \
+  --sample-size=10000
+```
+
+**Full verification (thorough but slow):**
+```bash
+./seaweed-pg2tikv-audit-linux-amd64 \
+  --pg-config=/etc/seaweedfs/filer.toml \
+  --tikv-config=./backup_filer.toml \
+  --table="rootseek-ocr" \
+  --mode=complete
+```
+
+**Show missing entries:**
+```bash
+./seaweed-pg2tikv-audit-linux-amd64 \
+  --pg-config=/etc/seaweedfs/filer.toml \
+  --tikv-config=./backup_filer.toml \
+  --table="rootseek-ocr" \
+  --mode=sample \
+  --show-missing
+```
+
+### Output
+
+```
+2026/01/28 13:00:00 seaweed-pg2tikv-audit version 1.2.2
+2026/01/28 13:00:00 === Configuration ===
+2026/01/28 13:00:00 Postgres: seaweedfs@192.168.8.201:5432/filer (table: rootseek-ocr)
+2026/01/28 13:00:00 TiKV PD:  192.168.8.131:2379 (prefix: "seaweedfs")
+2026/01/28 13:00:00 Mode: sample, Workers: 10
+2026/01/28 13:00:00 Sample size: 10000
+2026/01/28 13:00:00 Connected to Postgres
+2026/01/28 13:00:00 Total rows in Postgres: 440457397
+2026/01/28 13:00:00 Connected to TiKV
+2026/01/28 13:00:00 Running random sample of 10000 rows...
+2026/01/28 13:00:05 Progress: 10000 checked, 10000 found, 10000 matched, 0 missing, 0 mismatched (2000/sec)
+
+=== Audit Complete ===
+Mode: sample
+Postgres rows: 440457397
+Rows checked: 10000
+Found in TiKV: 10000 (100.00%)
+Matched exactly: 10000 (100.00%)
+Missing from TiKV: 0 (0.00%)
+Mismatched data: 0 (0.00%)
+Time: 5s
+
+AUDIT PASSED - All checked rows found and matched
+```
+
+When mismatches are found, the audit prints a `=== Mismatch Analysis ===` section that decodes the
+SeaweedFS Entry protobuf and reports exactly which fields differ and how often (e.g.
+`attributes.mtime`, `chunks[0].fid.volume_id`, `extended["Seaweed-X-Amz-Implicit-Dir"]`). This helps
+distinguish benign drift (a live filer updating metadata between migration and audit) from real
+corruption. Use `--verbose` to also print the actual before/after values, with timestamps rendered
+in ISO 8601.
+
+### Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | All checked rows found and matched (`AUDIT PASSED`) |
+| `1` | Missing or mismatched data detected (`AUDIT FAILED`) |
+
+---
+
+## seaweed-count-keys - TiKV Key Counter / Bulk Delete
+
+Count keys in TiKV with a given prefix to verify total migrated entries, or bulk-delete all keys
+under a prefix to recover from a bad migration.
+
+### Usage
+
+```bash
+# Count keys
+./seaweed-count-keys-linux-amd64 \
+  --pd="192.168.8.131:2379,192.168.8.137:2379,192.168.8.142:2379" \
+  --prefix="seaweedfs"
+
+# Bulk delete all keys under a prefix (server-side DeleteRange)
+./seaweed-count-keys-linux-amd64 \
+  --pd="192.168.8.131:2379" \
+  --prefix="seaweedfs" \
+  --delete
+```
+
+### Options
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--pd` | `localhost:2379` | PD addresses (comma-separated) |
+| `--prefix` | (required) | Key prefix to count or delete |
+| `--delete` | `false` | Delete all keys with the given prefix via server-side `DeleteRange` |
+| `--ca` | | CA certificate path (for TLS) |
+| `--cert` | | Client certificate path (for TLS) |
+| `--key` | | Client key path (for TLS) |
+| `--version` | | Show version and exit |
+
+> **WARNING:** `--delete` performs an irreversible server-side `DeleteRange` over the entire key
+> range for the prefix. It is intended for wiping a corrupted migration before re-running. Double-check
+> the `--prefix` and target cluster before using it.
+
+### Output
+
+```
+2026/01/28 14:00:00 Connected to TiKV at 192.168.8.131:2379
+2026/01/28 14:00:00 Counting keys with prefix: "seaweedfs"
+2026/01/28 14:00:05 Counted 100000000 keys (20000000/sec)...
+2026/01/28 14:00:10 Counted 200000000 keys (20000000/sec)...
+...
+2026/01/28 14:05:00 === Count Complete ===
+2026/01/28 14:05:00 Prefix: "seaweedfs"
+2026/01/28 14:05:00 Total keys: 440457397
+2026/01/28 14:05:00 Time: 5m0s
+```
+
+---
+
+## seaweed-cleanup - Post-Migration Filer Cleanup
+
+Lives in `seaweed-cleanup-go/` as a **separate Go module** (`module seaweed-cleanup`, Go 1.24+). Unlike
+the migration tools, it does not touch Postgres or TiKV directly — it talks to a **live SeaweedFS filer**
+over HTTP and gRPC to clean up duplicate and orphaned root-level metadata entries that accumulate when a
+cluster has been operated with S3-style bucket tables.
+
+For each top-level directory under filer root (skipping `buckets`, `etc`, `topics`) it:
+
+- **Detects duplicates** — root-level entries whose files have identical chunk references to a copy
+  already in one of the candidate buckets. Confirmed duplicates can be deleted with `--delete`, removing
+  only the redundant root metadata pointer (`skipChunkDeletion=true`); the underlying data chunks stay
+  reachable through the bucket path.
+- **Migrates orphans** — root-level entries that do NOT exist in any bucket. With `--migrate`, it looks
+  up each file's metadata via the filer gRPC `CreateEntry` API, recreates it at the correct bucket path,
+  then deletes the root metadata. The destination bucket is chosen by file extension:
+
+  | Extension | Destination bucket |
+  |-----------|--------------------|
+  | `.heic` | `/buckets/rootseek-heic` |
+  | `.json.gz` | `/buckets/rootseek-ocr` |
+  | `.lp_newspaper` | `/buckets/rootseek-newspaper` |
+  | `.jp2` | `/buckets/rootseek-jp2` |
+  | `.parquet` | `/buckets/rootseek-fast-parquet` |
+
+- **Runs a pre-flight safety check** before any destructive operation: it performs the delete/migrate on a
+  single test entry and verifies the bucket copy remains readable, aborting if anything looks unsafe.
+
+### Build
+
+```bash
+cd seaweed-cleanup-go
+go build -o seaweed-cleanup main.go
+```
+
+### Usage
+
+```bash
+# Dry run (default when neither --delete nor --migrate is given)
+./seaweed-cleanup --filer=http://localhost:8888
+
+# Delete confirmed duplicates and migrate orphans in one pass
+./seaweed-cleanup --filer=http://localhost:8888 --delete --migrate
+
+# Parallel across 3 machines using deterministic sharding
+./seaweed-cleanup --filer=http://localhost:8888 --delete --migrate --shard 0/3
+./seaweed-cleanup --filer=http://localhost:8888 --delete --migrate --shard 1/3
+./seaweed-cleanup --filer=http://localhost:8888 --delete --migrate --shard 2/3
+```
+
+### Options
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--filer` | (required) | Filer HTTP URL, e.g. `http://localhost:8888` |
+| `--filer-grpc` | (derived) | Filer gRPC address (default: filer host with `port+10000`) |
+| `--delete` | `false` | Delete confirmed duplicate root metadata |
+| `--migrate` | `false` | Migrate orphan entries into the correct buckets via gRPC |
+| `--dry-run` | auto | Report only; forced on when neither `--delete` nor `--migrate` is set |
+| `--batch-size` | `1000` | Entries per filer listing page |
+| `--start-after` | (empty) | Resume from this directory name (sequential mode) |
+| `--limit` | `0` | Stop after this many entries (`0` = unlimited) |
+| `--workers` | `1` | Number of parallel workers |
+| `--random` | `false` | Shuffle directory order (for running multiple instances in parallel) |
+| `--shard` | (empty) | Shard spec `N/M` (e.g. `0/3`) — FNV-hash partitioning for non-overlapping runs |
+| `--version` | | Print version and exit |
+
+In sequential mode the run prints a resume cursor at the end; pass it back via `--start-after` to
+continue where you left off.
+
+---
+
+## Migration Workflow
+
+### Step 1: List Tables to Migrate
+
+```sql
+-- Connect to Postgres
+psql -h 192.168.8.201 -U seaweedfs -d filer
+
+-- List all tables
+SELECT tablename FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename;
+
+-- Count rows per table
+SELECT 'filemeta' as table_name, COUNT(*) FROM filemeta
+UNION ALL
+SELECT 'my-bucket', COUNT(*) FROM "my-bucket";
+```
+
+### Step 2: Migrate Each Table
+
+```bash
+# Main filemeta table (no --path-prefix needed)
+./seaweed-pg2tikv-linux-amd64 --table="filemeta" ...
+
+# Each bucket table (MUST use --path-prefix)
+./seaweed-pg2tikv-linux-amd64 --table="bucket-a" --path-prefix="/buckets/bucket-a" ...
+./seaweed-pg2tikv-linux-amd64 --table="bucket-b" --path-prefix="/buckets/bucket-b" ...
+```
+
+### Step 3: Verify Migration
+
+```bash
+# Quick sample check
+./seaweed-pg2tikv-audit-linux-amd64 --table="filemeta" --mode=sample
+
+# Count total keys
+./seaweed-count-keys-linux-amd64 --prefix="seaweedfs"
+
+# Compare to Postgres total
+psql -c "SELECT SUM(c) FROM (SELECT COUNT(*) c FROM filemeta UNION ALL SELECT COUNT(*) FROM \"bucket-a\") t"
+```
+
+### Step 4: Cutover
+
+1. Stop writes to filer
+2. Run final migration pass (idempotent)
+3. Run audit verification
+4. Update filer.toml to use TiKV
+5. Restart filers
+
+### Step 5: Post-Migration Cleanup (optional)
+
+If your cluster has accumulated duplicate or orphaned root-level metadata entries from S3-bucket
+operations, run `seaweed-cleanup` against the live filer to resolve them:
+
+```bash
+cd seaweed-cleanup-go
+./seaweed-cleanup --filer=http://localhost:8888                  # dry run first
+./seaweed-cleanup --filer=http://localhost:8888 --delete --migrate
+```
+
+---
+
+## Troubleshooting
+
+### Corrupted Data / Missing Root Directories After Migration
+
+If root directories disappeared and subdirectories appear at the wrong level, you likely migrated per-bucket PostgreSQL tables without `--path-prefix`. SeaweedFS's postgres2 store strips the bucket path before storing to per-bucket tables, so entries have paths relative to the bucket root. Without `--path-prefix`, these relative paths get written directly to TiKV, placing entries under `/` instead of `/buckets/<name>/`.
+
+**Fix:**
+1. Wipe the corrupted TiKV data (or delete keys with the seaweedfs prefix)
+2. Re-run migration with `--path-prefix` for each bucket table:
+```bash
+./seaweed-pg2tikv-linux-amd64 --table="filemeta" ...
+./seaweed-pg2tikv-linux-amd64 --table="my-bucket" --path-prefix="/buckets/my-bucket" ...
+```
+
+### "prewrite encounters lock" Errors
+
+TiKV transaction conflicts. The tool retries automatically (15 attempts). If too many failures:
+- Reduce `--workers` (try 5)
+- Reduce `--batch` (try 500)
+- Reduce parallel partitions
+
+### Migration Only Gets Half the Rows
+
+Older versions (< 1.0.2) started from `dirhash=0`, skipping negative values. Update to v1.0.2+ and delete the state file:
+```bash
+rm migrate_state_*.json
+./seaweed-pg2tikv-linux-amd64 --version  # Should show 1.0.2 or higher
+```
+
+### "0 rows read from Postgres"
+
+State file thinks migration is complete. Delete it:
+```bash
+rm migrate_state_mytable.json
+```
+
+### Connection Refused to TiKV
+
+Check PD addresses and ensure TiKV cluster is running:
+```bash
+tiup cluster display tikv-prod
+```
+
+### Slow Performance
+
+- Increase `--workers` (up to 50)
+- Increase `--batch` (up to 5000)
+- Run multiple partitions in parallel
+- Check network latency between Postgres, migration host, and TiKV
+
+---
+
+## Key Format
+
+### PostgreSQL Schema
+
+```sql
+CREATE TABLE filemeta (
+  dirhash   BIGINT,           -- MD5(directory)[0:8] as int64
+  name      VARCHAR(65535),   -- filename
+  directory VARCHAR(65535),   -- parent directory path
+  meta      bytea,            -- protobuf-encoded metadata
+  PRIMARY KEY (dirhash, name)
+);
+```
+
+### TiKV Key Format
+
+```
+[keyPrefix] + SHA1(directory) + filename
+```
+
+- `keyPrefix`: From config (e.g., "seaweedfs")
+- `SHA1(directory)`: 20-byte hash of parent directory
+- `filename`: Raw filename bytes
+
+### Value Format
+
+Both Postgres and TiKV store the same protobuf-encoded metadata blob.
+
+---
+
+## Project Structure
+
+```
+seaweed-pg2tikv/
+├── main.go              # seaweed-pg2tikv         (migration engine)
+├── audit.go             # seaweed-pg2tikv-audit   (verification + protobuf diff)
+├── count_keys.go        # seaweed-count-keys      (count / bulk-delete TiKV keys)
+├── *_test.go            # unit tests for all three binaries
+├── go.mod / go.sum      # root module: seaweed-pg2tikv (Go 1.21)
+├── seaweed-cleanup-go/  # separate module: seaweed-cleanup (live-filer cleanup, Go 1.24)
+│   ├── main.go
+│   └── pb/              # generated SeaweedFS filer gRPC stubs
+├── *-linux-amd64        # pre-built Linux binaries (gitignored)
+├── VERSION              # current version
+├── CHANGELOG.md
+└── AGENTS.md            # contributor / agent conventions
+```
+
+The three root tools share one Go module and the same config structs, key-generation logic, and
+`--path-prefix` handling. `seaweed-cleanup-go` is intentionally a separate module because it depends on
+a newer Go toolchain and a different dependency set (gRPC + filer protobufs) and operates against a
+running filer rather than the raw databases.
+
+## How It Fits the Storage Suite
+
+This repo is part of the SeaweedFS-focused `storage_suite`, alongside sibling tools such as
+`seaweed-integrity`, `seaweed-sync`, and `seaweed-verify`. Within that suite, **seaweed-pg2tikv owns the
+PostgreSQL→TiKV filer-metadata migration path** and its immediate verification and cleanup steps. It is a
+standalone operational toolkit: it speaks SeaweedFS's native `filer.toml` config and on-disk key formats
+but does not depend on the other suite repos at build time.
+
+## Version History
+
+See [CHANGELOG.md](CHANGELOG.md) for the full history. Highlights:
+
+| Version | Changes |
+|---------|---------|
+| 1.2.7 | Unit tests added for all three binaries (key gen, path prefix, SQL-injection guard, state, ProgressTracker, protobuf diff) |
+| 1.2.3–1.2.6 | seaweed-cleanup: gRPC orphan migration (`--migrate`), `--version` banner, `--random` and `--shard N/M` parallelism |
+| 1.2.1–1.2.2 | Audit deep protobuf mismatch analysis (attributes, chunks, extended map, FileId sub-fields) |
+| 1.2.0 | **CRITICAL:** `--path-prefix` for per-bucket tables; `--delete` added to seaweed-count-keys |
+| 1.1.5 | Skip `mod(abs(dirhash), N)` clause for single-instance runs so Postgres uses the PK index |
+| 1.0.4–1.0.5 | SQL-injection guard, TLS path validation, contiguous-batch progress tracking, audit div-by-zero fix |
+| 1.0.2 | Fix: start from minimum int64 to include negative dirhash values |
+| 1.0.0–1.0.3 | Initial release, retry logic, OK/FAILED tracking, auto state filename |
+
+---
+
+## License
+
+MIT License - See SeaweedFS project for details.

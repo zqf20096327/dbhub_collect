@@ -1,0 +1,77 @@
+# DmRails
+
+此目录文件为适配ruby on rails框架，支持5.1与6.0版本。
+
+
+
+## 主要功能
+
+支持的功能包括连接数据库，执行语句，绑定参数执行语句以及获取结果集等功能。
+
+
+
+## 使用方法
+
+使用时需要在已经安装了ruby on rails框架的ruby目录下将此目录中文件移动到对应文件至对应位置并修改部分代码，步骤如下：
+  1、将activerecord目录下的 dm目录 以及 dm_adapter.rb文件 复制至 activerecord-*.*.*.*/lib/active_record/connection_adapters目录 下
+
+  2、将activerecord目录下的 dm_database_tasks.rb文件 复制至 activerecord-*.*.*.*/lib/active_record/tasks目录 下
+
+  3、修改关于迁移task部分代码：
+
+​	1）activerecord-*.*.*.*/lib/active_record/tasks/database_tasks.rb文件
+
+​	如果为5.1版本找到
+​			register_task(/mysql/,        ActiveRecord::Tasks::MySQLDatabaseTasks)
+​			register_task(/postgresql/,   ActiveRecord::Tasks::PostgreSQLDatabaseTasks)
+​			register_task(/sqlite/,       ActiveRecord::Tasks::SQLiteDatabaseTasks)
+​	在此部分代码下添加一行 register_task(/dm/,           ActiveRecord::Tasks::DmDatabaseTasks)
+​	
+
+```ruby
+如果为6.0版本找到
+		register_task(/mysql/,        "ActiveRecord::Tasks::MySQLDatabaseTasks")
+		register_task(/postgresql/,   "ActiveRecord::Tasks::PostgreSQLDatabaseTasks")
+		register_task(/sqlite/,       "ActiveRecord::Tasks::SQLiteDatabaseTasks")
+在此部分代码下添加一行 register_task(/dm/,           "ActiveRecord::Tasks::DmDatabaseTasks")
+格式保持一致即可
+```
+
+​	2）activerecord-*.*.*.*/lib/active_record.rb文件
+
+```ruby
+如果为6.0版本找到
+  module Tasks
+    extend ActiveSupport::Autoload
+
+    autoload :DatabaseTasks
+    autoload :SQLiteDatabaseTasks, "active_record/tasks/sqlite_database_tasks"
+    autoload :MySQLDatabaseTasks,  "active_record/tasks/mysql_database_tasks"
+    autoload :PostgreSQLDatabaseTasks,
+      "active_record/tasks/postgresql_database_tasks"
+  end
+在此module定义中添加    autoload :DmDatabaseTasks,  "active_record/tasks/dm_database_tasks" 格式保持一致即可
+```
+  4、将activerecord/arel目录下的dm.rb文件复制至 activerecord-*.*.*.*/lib/arel/visitors目录下
+
+  5、修改 activerecord-*.*.*.*/lib/arel目录下的visitors.rb文件： 添加 require "arel/visitors/dm" 至文件中
+
+  6、如果存在apartment，将apartment目录下的 dm_adapter.rb文件 复制至 apartment-*.*.*/lib/apartment/adapters目录 下
+
+  7、如果使用了ruby的migration_comments库，测试中使用版本为0.4.1版本，请将migration_comments目录下的 dm_adapter.rb文件 复制至migration_comments-0.4.1/lib/migration_comments/active_record/connection_adapters目录下，
+        同时修改migration_comments-0.4.1/lib目录下的migration_comments.rb文件，在self.setup中找到adapters = %w(PostgreSQL Mysql2 SQLite)，将其改为adapters = %w(PostgreSQL Mysql2 SQLite Dm)即可
+
+8、如果期望使用ruby on rails中的rails dbconsole功能，则需要在railties库中railties/lib/rails/commands/dbconsole目录下的dbconsole_command.rb文件中，Rails::DBConsole类所属start函数中添加以下代码至case判断中，同时需要当前系统中存在disql，将disql所在目录增加至PATH环境变量中
+
+```ruby
+  when "dm"
+    logon = ""
+
+    if config["username"]
+      logon = config["username"].dup
+      logon << "/#{config['password']}" if config["password"] && @options["include_password"]
+      logon << "@#{config['server']}" if config["server"]
+    end
+
+    find_cmd_and_exec("disql", logon)
+```

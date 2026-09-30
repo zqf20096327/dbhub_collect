@@ -537,6 +537,26 @@ if __name__ == "__main__":
 
 > **Testing locally?** Use a tunnel like [ngrok](https://ngrok.com) (`ngrok http 8000`) or Cloudflare Tunnels to provide Meta with a public HTTPS URL (`https://your-domain.ngrok-free.app/webhook`).
 
+> [!NOTE]
+> **API Documentation in Development:** For security, FastAPI interactive documentation (`/docs`, `/redoc`, and `/openapi.json`) is disabled by default in production. To enable Swagger UI and OpenAPI schemas during local development or debugging, pass `enable_docs=True` when instantiating `WhatsAppChannel`:
+> ```python
+> channel = WhatsAppChannel(
+>     ...,
+>     enable_docs=True,  # Enables /docs, /redoc, and /openapi.json for local development
+> )
+> ```
+
+> [!TIP]
+> **Production Rate Limiting & Reverse Proxy:** To protect `/webhook` and `/health` endpoints against flood attacks, denial of service (DoS), and CPU exhaustion from unauthenticated requests without risking dropping legitimate Meta webhook bursts at the application level, always place Uvicorn behind a reverse proxy in production (such as Nginx with `limit_req_zone` or Cloudflare Rate Limiting):
+> ```nginx
+> limit_req_zone $binary_remote_addr zone=whatsapp_limit:10m rate=10r/s;
+> location /webhook {
+>     limit_req zone=whatsapp_limit burst=20 nodelay;
+>     proxy_pass http://127.0.0.1:8000;
+>     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+> }
+> ```
+
 ---
 
 #### Telegram Channel
@@ -1150,6 +1170,26 @@ if __name__ == "__main__":
 ```
 
 > **¿Probando localmente?** Usa un tunel como [ngrok](https://ngrok.com) (`ngrok http 8000`) o Cloudflare Tunnels para brindarle a Meta la URL publica HTTPS (`https://tu-dominio.ngrok-free.app/webhook`).
+
+> [!NOTE]
+> **Documentación interactiva en desarrollo:** Por motivos de seguridad, la documentación interactiva de FastAPI (`/docs`, `/redoc` y `/openapi.json`) está deshabilitada por defecto en producción. Para habilitar Swagger UI y los esquemas OpenAPI durante el desarrollo local o debugging, pasa `enable_docs=True` al instanciar `WhatsAppChannel`:
+> ```python
+> canal_whatsapp = WhatsAppChannel(
+>     ...,
+>     enable_docs=True,  # Habilita /docs, /redoc y /openapi.json para desarrollo local
+> )
+> ```
+
+> [!TIP]
+> **Rate Limiting y Reverse Proxy en Producción:** Para proteger los endpoints `/webhook` y `/health` contra ataques de inundación, denegación de servicio (DoS) y agotamiento de CPU por peticiones no autenticadas sin riesgo de descartar ráfagas legítimas de webhooks de Meta a nivel aplicación, ubica siempre Uvicorn detrás de un reverse proxy en producción (como Nginx con `limit_req_zone` o Cloudflare Rate Limiting):
+> ```nginx
+> limit_req_zone $binary_remote_addr zone=whatsapp_limit:10m rate=10r/s;
+> location /webhook {
+>     limit_req zone=whatsapp_limit burst=20 nodelay;
+>     proxy_pass http://127.0.0.1:8000;
+>     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+> }
+> ```
 
 ---
 

@@ -478,6 +478,15 @@ Three things worth knowing:
 `quorum` (Patroni's quorum-based commit, where any N of the standbys may
 confirm) is accepted wherever `sync` is.
 
+### When zodan reports less than 100%
+
+zodan tallies its subscriptions the instant it finishes, so the reverse one it
+created seconds earlier is often still `initializing` — a two-node join
+routinely ends at `Success rate: %50.0` with `With errors/issues: 0`. That is
+not a failure, and the deployment no longer treats it as one: it reads zodan's
+own error count, then waits for every subscription on both nodes to report
+`replicating`, and fails only if one never does or zodan counted a real error.
+
 ---
 
 ## Growing a running cluster
@@ -523,10 +532,16 @@ compile — defaulting to the branch that major is developed on (`v5_STABLE` for
 spock50, `main` for spock60), or to the branch the cluster itself was built from
 when the major is unchanged — useful for trying a fix or a release candidate on one node.
 
-The zodan procedures come from the same branch as the node's Spock:
+The zodan procedures come from the same branch **or tag** as the node's Spock —
+build from `v5.0.5` and you get `v5.0.5`'s zodan, whose version floor matches
+that release rather than a later one's:
 `samples/Z0DAN/zodan.sql` out of the source checkout when there is one, else
 fetched from that branch on GitHub, else the copy bundled in
-`configuration/spock` so an air-gapped host still works. A spock60 node
+`configuration/spock` so an air-gapped host still works. The name in
+`configuration/config<major>.env` is that fallback, not an override: it is set
+for every install, so letting it outrank the ref you built from would hand a
+5.0.5 cluster a script that requires 5.0.9. Naming your own file with
+`--zodan-sql` still wins outright. A spock60 node
 therefore loads zodan from `main` and a spock50 node from `v5_STABLE`, matching
 the replication API those procedures call.
 

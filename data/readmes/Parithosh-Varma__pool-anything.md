@@ -45,6 +45,8 @@ That's it — an interactive assistant shell opens (`pool-anything >`). Type pla
 ```bash
 pool-anything serve --port 4000 --open   # web UI + API on :4000, open the browser
 pool-anything "list pools"               # run one command without the shell
+pool-anything "update"                   # upgrade to the latest version (also an Update pill in the web UI header)
+pool-anything "uninstall"                # remove the global CLI (shell only, asks to confirm)
 echo "gsk_abc" | pool-anything -e "add keys to groq"   # pipe keys in
 pool-anything --help                     # all options (serve, -e/--exec, -p/--port, -H/--host, --db, --data-dir, --open)
 ```
@@ -62,6 +64,8 @@ No subcommands to memorize — just say what you want:
 | `watch groq` | Live usage, 2s refresh (`q` exits) |
 | `next for groq` / `consume 100 on groq` | Rotate / record usage |
 | `serve` | Start the web UI + API from inside the shell |
+| `update` (or `/update`) | Check npm and upgrade to the latest version |
+| `uninstall` (or `/uninstall`, CLI only) | Remove the global CLI (asks to confirm; pools/keys in SQLite stay) |
 
 Keys always print masked (`gsk_…ab`); misunderstood input gets a "Did you mean …?" nudge. The shell is a rich terminal UI (colors, bordered panels, live `watch` view, `↑`/`↓` history) with a plain-text fallback when Ink can't initialize.
 
@@ -185,6 +189,15 @@ The response reports which key was used and the upstream status:
 | `GET` | `/api/db/ping` | SQLite reachability → `{ ok: true }` |
 | `GET` | `/api/analytics` | Totals + 7-day deltas + 14-day daily series (drives the dashboard) |
 
+### Version, update & crawler files
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/api/version` | Current vs latest npm version + `updateAvailable` (drives the header Update pill) |
+| `POST` | `/api/update` | Self-update via `npm install -g pool-anything@latest` (needs `POOL_API_TOKEN` bearer when auth is on) |
+| `GET` | `/robots.txt` | Allows all crawlers, points at the sitemap |
+| `GET` | `/sitemap.xml` | XML sitemap: static routes + one `/provider/:id/` entry per provider |
+
 ## Web UI
 
 | Route | Page |
@@ -195,6 +208,7 @@ The response reports which key was used and the upstream status:
 | `/keys` | API key manager — add, view, edit, remove keys |
 | `/playground` | Chat + image playground against a pooled key |
 | `/analytics` | Analytics dashboard (totals, 7-day deltas, 14-day charts) |
+| `/history` | Upstream call history — status, tokens, generated media |
 | `/docs` | Redirect → canonical docs on Cloudflare Pages |
 
 The home page also shows an Analytics dashboard driven by `GET /api/analytics`; the same dashboard lives on its own `/analytics` page.
@@ -234,30 +248,44 @@ Providers are defined in [`data/providers.json`](data/providers.json). See [CONT
 src/
   server.ts          Thin HTTP front door (delegates to router/admin/observability)
   cli.ts             Entry dispatch: assistant shell (default) vs `serve` vs one-shot
+  version.ts         Version check, self-update, uninstall (shared by CLI + web UI)
   cli/               Interactive shell — commands.ts (presentation-free core), nl.ts (parser), ui.ts (text rendering), repl.ts (plain fallback + one-shot), tui.tsx (Ink shell)
+  admin/             Web UI — pages.ts, components.ts, shell.ts (nav/CSS/JS), branding.ts, seo.ts (robots/sitemap), tokens.ts (design tokens)
   router/api.ts      Route matchers + abuse caps (MAX_POOLS / MAX_KEYS_PER_POOL)
-  admin/branding.ts  Logo version, docs URL, sidebar icons
-  admin/shell.ts     Shared shell CSS/nav/JS
-  admin/pages.ts     Web UI pages (search, pools, keys, playground, analytics)
   middleware/auth.ts Bearer auth for raw keys, writes, rotation, proxy (POOL_API_TOKEN)
   common/http.ts     JSON body + hardened JSON responses
-  observability/health.ts  /health, /api/db/ping, /api/analytics handlers
+  config/            env.ts (PORT, HOST, POOL_API_TOKEN, DB path, timeouts) + paths.ts (package root, data dirs)
+  db/                SQLite helpers + init script
   pool/index.ts      Providers, quotas (monthly + daily), usage, analytics (SQLite)
   pool/rotation.ts   Round-robin rotation, cooldown, multi-window quota enforcement
   proxy/forward.ts   Upstream forwarding + literal-IP SSRF guard + failover cap
   proxy/dns.ts       DNS rebinding guard (resolve + reject private IPs)
   upstream/index.ts  Per-key auth injection (single + multi-field credentials)
-  config/env.ts      PORT, HOST, POOL_API_TOKEN, DB path, timeouts
-  db/                SQLite helpers + init script
+  playground/adapters.ts  Playground provider adapters (paths, body shapes, output parsing)
+  media/capabilities.ts   Multimodal capability map + provider message builders
+  observability/health.ts  /health, /api/db/ping, /api/analytics handlers
 scripts/
   export-tools-ui.ts Static export of the admin UI for Cloudflare Pages
   tools-api-base.js  Backend shim (configurable API base + token)
   tools-watch.ts     Watch daemon: re-export + redeploy on save
+  check-tokens.ts    Verify src/admin/tokens.ts matches design-tokens.json
+  copy-assets.mjs    Build step: copy non-TS assets into dist/
+  smoke.sh           Local smoke test against a running server
+tests/
+  unit/              11 files — rotation, quota, analytics, calls, env, upstream, CLI
+  integration/       6 files — proxy, pages, home, adapters, multimodal (89 tests total, `npm test`)
 data/
   providers.json     36 preconfigured providers
   pool-anything.db   SQLite database (git-ignored)
 public/logos/        Provider logos
+design-tokens.json   Canonical token values (checked by scripts/check-tokens.ts)
 ```
+
+A few more things worth knowing about:
+
+- [`examples/proxy-groq-models.sh`](examples/proxy-groq-models.sh) — list Groq models through a pool from a shell script.
+- [`docs/adr/0001-pool-proxy.md`](docs/adr/0001-pool-proxy.md) — design record for rotation, failover, and quota enforcement.
+- [`design-system.md`](design-system.md) — the token/component rules the web UI follows.
 
 ## Development
 
@@ -267,7 +295,9 @@ npm run typecheck    # tsc --noEmit
 npm run build        # compile to dist/
 npm run start:dist   # run the compiled output
 npm run db:init      # initialize the local database
-npm test             # run the test suite
+npm test             # unit + integration suites (tests/unit, tests/integration)
+npx tsx scripts/check-tokens.ts  # verify src/admin/tokens.ts against design-tokens.json
+./scripts/smoke.sh   # smoke test against a running server (base URL as $1)
 ```
 
 ## Security notes
@@ -276,6 +306,12 @@ npm test             # run the test suite
 - List endpoints return **masked** keys (`gsk_…ab`); raw keys are only returned by the single-key `GET`.
 - The server binds `127.0.0.1` by default; set `HOST` to another interface only behind your own auth layer.
 - Without `POOL_API_TOKEN` there is **no authentication** — run it locally or behind your own auth layer, and don't expose it publicly with real keys inside.
+
+## Contributing
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a PR, [SECURITY.md](SECURITY.md) to report a vulnerability, and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community norms.
+
+Questions? Ask in [GitHub Discussions](https://github.com/Parithosh-Varma/pool-anything/discussions).
 
 ## License
 

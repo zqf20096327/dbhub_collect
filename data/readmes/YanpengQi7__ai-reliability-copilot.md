@@ -9,8 +9,12 @@ Paste a production incident — logs, metrics, on-call notes. The copilot stream
 But the real story isn't the prompt. It's the **eval pipeline** — a 5-dimension rubric, a 5-scenario regression suite, and an LLM-as-judge that scores every change, so prompt iteration is measured instead of vibes-based.
 
 **Live demo:** [ai-reliability-copilot.vercel.app](https://ai-reliability-copilot.vercel.app)
-**📖 Usage guide (中文):** [USAGE.md](./USAGE.md) — how to actually use it, end-to-end
+**📖 Usage guide (Chinese):** [USAGE.md](./USAGE.md) — how to actually use it, end-to-end
 **Methodology deep-dive:** [EVALUATION.md](./EVALUATION.md)
+
+**Evidence-first evaluation v2:** [EVAL-V2.md](./EVAL-V2.md) — frozen trial artifacts, blinded same-judge comparisons, fixed-answer calibration, failure accounting, and paired incident-family intervals. Includes 30 synthetic candidate cases awaiting independent review. Public pipeline demo: `/evals/benchmark`. Historical results below are legacy findings, not v2 quality claims.
+
+The `/investigate` product and new v2 agentic runs share one planning and diagnosis engine. The UI exposes diagnosis status and claim citations, including unknown severity when evidence is insufficient. Saved default agentic trials can be replayed through the production entry point with `npm run agent:replay`; CI verifies this agreement. Historical experimental results retain their original engine identity. See [the shared-engine and replay guide](./EVAL-V2.md#shared-production-engine-and-offline-replay).
 
 ---
 
@@ -83,7 +87,7 @@ Reported as **mean ± std** over 3 repeats — because that's the whole point. B
 
 **The real finding (and the actual portfolio point): the prompt-version gaps were noise.** Single-shot runs #1 and #2 each produced a clean ranking — v2 "regressed" 0.2, v3 "recovered" to the top. Run #3 with 3 repeats per cell shows the within-cell std (0.2–0.46) is *larger* than every between-version delta (0.02–0.13). For these 5 scenarios and this 1–5 rubric, **all three prompts are statistically tied on overall score.** Claiming "v3 improved quality 4.36 → 4.52" would have been overfitting to sampling noise — and I'd have done exactly that off run #2 if I hadn't added repeats.
 
-**What survives the error bars:** two consistent orderings. (1) **v2 is weakest in every run** — each delta in-noise, but the ordering reproduces across 3 independent runs, enough to say "don't default to v2." (2) **Chinese scores below English in nearly every cell** (en 4.64 ± 0.25 vs zh 4.49 ± 0.29) — the most reproducible effect in the dataset, and where future prompt work has the clearest signal. The default is now **v3** — chosen because it's tied with v1 on quality and strictly better-maintained for the bilingual case (its zh brevity guard makes v3·zh ≥ v2·zh in every scenario), *not* because it scored higher. See [`notes/eval-run-3.md`](./notes/eval-run-3.md).
+**What survives the error bars:** two consistent orderings. (1) **v2 is weakest in every run** — each delta in-noise, but the ordering reproduces across 3 independent runs, enough to say "don't default to v2." (2) **Chinese scores below English in nearly every cell** (en 4.64 ± 0.25 vs zh 4.49 ± 0.29) — the most reproducible effect in the dataset, and where future prompt work has the clearest signal. The default is now **v3** — chosen because it's tied with v1 on quality and strictly better-maintained for the bilingual case (its zh brevity guard makes v3·zh ≥ v2·zh in every scenario), *not* because it scored higher. See [`notes/reports/eval-run-3.md`](./notes/reports/eval-run-3.md).
 
 See [EVALUATION.md](./EVALUATION.md) for the full methodology, including limitations and roadmap.
 
@@ -188,9 +192,19 @@ Vercel production deployments fail closed for MCP and webhook traffic when
 these tokens are missing. Set `ALLOW_PUBLIC_MACHINE_API=true` only for an
 intentionally public deployment.
 
+Vercel-provided client IP headers are used for rate limiting. Self-hosted
+deployments ignore forwarded IP headers by default; set
+`TRUST_PROXY_HEADERS=true` only when a trusted reverse proxy overwrites
+`X-Forwarded-For` before traffic reaches the app.
+
+Health endpoints: `/api/livez` is a dependency-free liveness probe;
+`/api/healthz` is readiness and verifies required configuration plus Supabase.
+Hosted deployments expose only status/version publicly; set `HEALTHCHECK_TOKEN`
+and send it as a Bearer token to retrieve detailed dependency diagnostics.
+
 ## Known limitations
 
-- **In-memory rate limiter** (`src/lib/rateLimit.ts`) — resets on cold start. Production swap: Upstash Redis.
+- **Distributed rate limiting is optional** (`src/lib/rateLimit.ts`) — configure Upstash REST credentials in production; without them the app deliberately falls back to per-instance memory counters and reports the capability as disabled in `/api/healthz`.
 - **Judge ≠ ground truth** — same model family judges the analyzer. I guessed "~10–20% optimistic bias"; then I measured it. `npm run evals:crossjudge` holds each analysis fixed and re-scores it with an independent vendor (Claude Sonnet 4.6). Result over 20 analyses: the same-family judge scores **+0.24 higher on overall** (4.48 vs 4.24, ~5% — the guess was an overestimate), worst on `actionability`/`completeness` (−0.40 each), zero bias on `safety` (90% exact agreement). Pearson r 0.59, 70% within ±0.5. So: the bias is real but ~5%, not 10–20%, and it's concentrated, not uniform. Mitigation remains periodic human review (see [EVALUATION.md](./EVALUATION.md)).
 - **Limited repeats** — the default eval batch uses 3 repeats per cell, but this is still too small for narrow confidence intervals.
 - **5 scenarios is narrow** — real production has long tails.
