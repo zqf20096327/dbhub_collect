@@ -52,7 +52,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python enrich/enrich.py --tier all --pool data/snapshot_latest/pool.json --max-calls 5000 --max-minutes 220
+          # 跨小时等待：触保底线按响应头 reset 睡到下一小时窗再续（预算按窗发新，
+          # 吃满 220 分钟——旧行为触线即停，49.9 分钟就收工浪费 3/4 预算）。
+          # 每月 1 号（UTC）让路 EW=0：当夜 README 月度全量校准需要整个时间窗
+          EW=8; [ "$(date -u +%d)" = "01" ] && EW=0
+          echo "enrich 跨窗等待: $EW 次"
+          python enrich/enrich.py --tier all --pool data/snapshot_latest/pool.json --max-calls 5000 --max-minutes 220 --wait-windows $EW
 
       # --wait-windows 10：Core 触保底线按失败响应的 X-RateLimit-Reset 睡到
       # 配额恢复再续，最多 10 次（勿用 /rate_limit 判断——Actions token 上它
