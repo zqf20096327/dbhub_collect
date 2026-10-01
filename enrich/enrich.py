@@ -40,7 +40,7 @@ HERE = ROOT                      # 历史引用兼容：统一指向项目根
 import requests  # noqa: E402
 
 import strategy                  # noqa: E402
-from gh import Budget, BudgetOut, GitHubClient, QuotaPatienceOut, atomic_write_json  # noqa: E402
+from gh import Budget, BudgetOut, CoreReserveOut, GitHubClient, QuotaPatienceOut, atomic_write_json  # noqa: E402
 
 log = logging.getLogger("enrich")
 STATE = HERE / "state" / "enrich_state.json"
@@ -222,100 +222,148 @@ def run(args):
 
     tiers = ["head", "mid", "tail"] if args.tier == "all" else [args.tier]
     want_dims = [args.only] if args.only else None
-    # 目标：star 降序；已新鲜（无到期维度——含长尾死仓 pushed_at 未变）排除
-    targets = []
-    n_cn = 0
-    for it in sorted(pool, key=lambda x: -(x.get("stars") or 0)):
-        cn = is_cn_item(it)
-        tier = tier_of(it.get("stars") or 0, cn=cn)
-        if cn and tier_of(it.get("stars") or 0) == "tail":
-            n_cn += 1                      # 只计星层 tail、被 floor 提到 mid 的国产仓
-        if tier not in tiers:
-            continue
-        fn = it["full_name"]
-        rec = items.get(fn) or {}
-        if rec.get("status") == "failed" and rec.get("fail_count", 0) >= THREE_STRIKES:
-            continue
-        pushed = it.get("pushed_at") or ""
-        changed = pushed != rec.get("pushed_checked")
-        due = due_dims(rec, tier, changed)
-        if want_dims:
-            due = [d for d in due if d in want_dims]
-        if due:
-            targets.append(fn)
-    log.info("层 %s · 维度 %s · 目标 %d 项（池 %d · 国产 floor=mid 命中 %d）",
-             tiers, want_dims or "按层", len(targets), len(pool), n_cn)
+
+    def pick_due() -> list:
+        """到期目标：star 降序；已新鲜（无到期维度——含长尾死仓 pushed_at 未变）排除。
+        跨窗重取：上一窗盖过时间戳的维度自动退出目标集（天然断点续采）。"""
+        out = []
+        for it in sorted(pool, key=lambda x: -(x.get("stars") or 0)):
+            fn = it["full_name"]
+            rec = items.get(fn) or {}
+            if rec.get("status") in ("failed", "gone"):
+                continue
+            tier = tier_of(it.get("stars") or 0, cn=is_cn_item(it))
+            if tier not in tiers:
+                continue
+            changed = (it.get("pushed_at") or "") != rec.get("pushed_checked")
+            due = due_dims(rec, tier, changed)
+            if want_dims:
+                due = [d for d in due if d in want_dims]
+            if due:
+                out.append(fn)
+        return out
+
+    # 星层 tail、被 floor 提到 mid 的国产仓（日志口径）
+    n_cn = sum(1 for it in pool
+               if is_cn_item(it) and tier_of(it.get("stars") or 0) == "tail")
 
     client = GitHubClient(Budget(max_calls=args.max_calls, max_minutes=args.max_minutes))
     t0 = time.time()
+    deadline = t0 + args.max_minutes * 60
     counts = {"done": 0, "failed": 0}
     quarantined = []
     stop_reason = None
+    windows = waits = stuck_rounds = 0
 
     by_fn = {it["full_name"]: it for it in pool}
+    targets: list = []                             # deadline 先触发时 summary 不炸
+    log.info("层 %s · 维度 %s · 跨窗等待上限 %d 次 · 总时长 %s 分钟",
+             tiers, want_dims or "按层", args.wait_windows, args.max_minutes)
 
-    try:
-        for i, fn in enumerate(targets):
-            it = by_fn.get(fn, {})
-            tier = tier_of(it.get("stars") or 0, cn=is_cn_item(it))
-            rec = items.setdefault(fn, {"dims": {}, "fail_count": 0})
-            changed = (it.get("pushed_at") or "") != rec.get("pushed_checked")
-            dims = due_dims(rec, tier, changed)
-            if want_dims:
-                dims = [d for d in dims if d in want_dims]
-            if not dims:
-                continue
-            try:
-                collect_dims(client, fn, cache, tuple(dims), changed)
-                today = datetime.now(timezone.utc).strftime("%Y%m%d")
-                for d in dims:                 # 只给真正采到的维度盖时间戳
-                    rec["dims"][d] = today
-                rec["pushed_checked"] = it.get("pushed_at") or ""
-                rec["fail_count"] = 0
-                rec.pop("last_error", None)
-                counts["done"] += 1
-            except requests.HTTPError as e:
-                code = getattr(e.response, "status_code", None)
-                if code in (404, 410):          # 仓库已删/私有：标记并隔离
-                    rec.update({"status": "gone", "last_error": f"HTTP {code}"})
-                    counts["failed"] += 1
+    while True:
+        if time.time() >= deadline:
+            stop_reason = f"总时长达上限 {args.max_minutes} 分钟"
+            break
+        targets = pick_due()
+        if not targets:
+            break
+        # 预算按窗发新的（跨窗续跑时每窗各得一份 max_calls/max_minutes，同 readme）
+        client.budget = Budget(max_calls=args.max_calls, max_minutes=args.max_minutes)
+        windows += 1
+        done0 = counts["done"] + counts["failed"]
+        log.info("第 %d 窗：到期目标 %d 项（池 %d · 国产 floor=mid 命中 %d）",
+                 windows, len(targets), len(pool), n_cn)
+        try:
+            for i, fn in enumerate(targets):
+                it = by_fn.get(fn, {})
+                tier = tier_of(it.get("stars") or 0, cn=is_cn_item(it))
+                rec = items.setdefault(fn, {"dims": {}, "fail_count": 0})
+                changed = (it.get("pushed_at") or "") != rec.get("pushed_checked")
+                dims = due_dims(rec, tier, changed)
+                if want_dims:
+                    dims = [d for d in dims if d in want_dims]
+                if not dims:
                     continue
-                # 其余 HTTP 状态（409 空仓类/5xx 重试耗尽）按仓记振继续——
-                # 绝不 raise：毒仓会每晚卡死在同一位置，阻断其后全部目标
-                rec["fail_count"] += 1
-                rec["last_error"] = f"HTTP {code}"[:200]
-                if rec["fail_count"] >= THREE_STRIKES:
-                    rec["status"] = "failed"
-                    quarantined.append(fn)
-                counts["failed"] += 1
-                log.warning("%s HTTP %s(%d)：%s", fn, code, rec["fail_count"], str(e)[:60])
-                continue
-            except (BudgetOut, QuotaPatienceOut):
-                raise                            # 预算/配额停止不算仓库失败
-            except Exception as e:               # noqa: BLE001
-                rec["fail_count"] += 1
-                rec["last_error"] = str(e)[:200]
-                if rec["fail_count"] >= THREE_STRIKES:
-                    rec["status"] = "failed"
-                    quarantined.append(fn)
-                counts["failed"] += 1
-                log.warning("%s 失败(%d)：%s", fn, rec["fail_count"], str(e)[:80])
-                continue
-            if (i + 1) % 50 == 0:
-                atomic_write_json(STATE, st)
-                atomic_write_json(CACHE, cache)
-                log.info("进度 %d/%d · %s", i + 1, len(targets), counts)
-    except (BudgetOut, QuotaPatienceOut) as e:
-        stop_reason = str(e)
-    finally:
-        atomic_write_json(STATE, st)
-        atomic_write_json(CACHE, cache)
+                try:
+                    collect_dims(client, fn, cache, tuple(dims), changed)
+                    today = datetime.now(timezone.utc).strftime("%Y%m%d")
+                    for d in dims:                 # 只给真正采到的维度盖时间戳
+                        rec["dims"][d] = today
+                    rec["pushed_checked"] = it.get("pushed_at") or ""
+                    rec["fail_count"] = 0
+                    rec.pop("last_error", None)
+                    counts["done"] += 1
+                except requests.HTTPError as e:
+                    code = getattr(e.response, "status_code", None)
+                    if code in (404, 410):          # 仓库已删/私有：标记并隔离
+                        rec.update({"status": "gone", "last_error": f"HTTP {code}"})
+                        counts["failed"] += 1
+                        continue
+                    # 其余 HTTP 状态（409 空仓类/5xx 重试耗尽）按仓记振继续——
+                    # 绝不 raise：毒仓会每晚卡死在同一位置，阻断其后全部目标
+                    rec["fail_count"] += 1
+                    rec["last_error"] = f"HTTP {code}"[:200]
+                    if rec["fail_count"] >= THREE_STRIKES:
+                        rec["status"] = "failed"
+                        quarantined.append(fn)
+                    counts["failed"] += 1
+                    log.warning("%s HTTP %s(%d)：%s", fn, code, rec["fail_count"], str(e)[:60])
+                    continue
+                except (BudgetOut, QuotaPatienceOut):
+                    raise                            # 预算/配额停止不算仓库失败
+                except Exception as e:               # noqa: BLE001
+                    rec["fail_count"] += 1
+                    rec["last_error"] = str(e)[:200]
+                    if rec["fail_count"] >= THREE_STRIKES:
+                        rec["status"] = "failed"
+                        quarantined.append(fn)
+                    counts["failed"] += 1
+                    log.warning("%s 失败(%d)：%s", fn, rec["fail_count"], str(e)[:80])
+                    continue
+                if (i + 1) % 50 == 0:
+                    atomic_write_json(STATE, st)
+                    atomic_write_json(CACHE, cache)
+                    log.info("进度 %d/%d · %s", i + 1, len(targets), counts)
+            break                                  # 本窗自然扫完且无剩余到期项 → 收尾
+        except CoreReserveOut as e:
+            # Core 触保底线：按响应头 reset 睡到下一小时窗再续（跨窗推进的关键，
+            # 否则 220 分钟预算只跑 ~50 分钟就收工——10-01 实测 4200 调/49.9 分）
+            if args.wait_windows <= 0 or waits >= args.wait_windows:
+                stop_reason = str(e)
+                break
+            reset = getattr(e, "reset", None)
+            wait_sec = max(5.0, reset - time.time() + 5) if reset else 600.0
+            if time.time() + wait_sec > deadline:
+                stop_reason = f"{e}，等下一窗需 {wait_sec / 60:.0f} 分钟将超总时长上限"
+                break
+            waits += 1
+            log.warning("Core 触保底线——睡 %.0f 分钟到下一小时窗再续（等待 %d/%d）",
+                        wait_sec / 60, waits, args.wait_windows)
+            time.sleep(wait_sec)
+            continue
+        except (BudgetOut, QuotaPatienceOut) as e:
+            # 调用数达上限：有进展且允许跨窗 → 发新预算续跑；连续无进展收尾防空转
+            progressed = (counts["done"] + counts["failed"]) > done0
+            stuck_rounds = 0 if progressed else stuck_rounds + 1
+            if args.wait_windows <= 0 or stuck_rounds >= 2:
+                stop_reason = str(e) + ("（连续无进展，收尾防空转）"
+                                        if stuck_rounds >= 2 else "")
+                break
+            if time.time() >= deadline:
+                stop_reason = f"{e}，已达总时长上限"
+                break
+            log.info("本窗停止：%s（断点已存，续跑）", e)
+            continue
+        finally:
+            atomic_write_json(STATE, st)
+            atomic_write_json(CACHE, cache)
 
     summary = {"tiers": tiers, "dims": want_dims or "per-tier", "targets": len(targets),
                "cn_floor_mid": n_cn,
                "counts": counts,
                "api_calls": client.stats_summary()["calls"],
                "elapsed_min": round((time.time() - t0) / 60, 1),
+               "windows": windows, "waits": waits,
                "stop_reason": stop_reason, "quarantined": quarantined[:20]}
     atomic_write_json(HERE / "state" / "enrich_summary.json", summary)
     log.info("==== enrich 完成：%s · API %d 次 · %s 分钟 ====", counts,
@@ -333,6 +381,9 @@ def main():
     ap.add_argument("--only", choices=DIMS, help="只跑单维度")
     ap.add_argument("--max-calls", type=int, default=4000)
     ap.add_argument("--max-minutes", type=float, default=90.0)
+    ap.add_argument("--wait-windows", type=int, default=0,
+                    help="Core 触保底线后按响应头 reset 睡到下一小时窗续跑的最多次数"
+                         "（0=触线即收尾，旧行为）")
     ap.add_argument("-v", action="store_true")
     args = ap.parse_args()
     logging.basicConfig(level=logging.DEBUG if args.v else logging.INFO,
