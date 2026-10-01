@@ -1,9 +1,11 @@
 name: nightly-collect
 on:
   schedule:
-    - cron: '0 16 * * *'      # UTC 16:00 = 北京 00:00，每晚
-    - cron: '0 22 * * *'      # UTC 22:00 = 北京 06:00，接力第二窗（GitHub 单 job
-                              # 平台上限 6h，两窗拼接 ≈12h/天；第二窗靠断点续采接力）
+    - cron: '0 */4 * * *'     # 每 4 小时一窗 ×6/天（北京 08/12/16/20/00/04），24h 覆盖。
+                              # 单 job 上限 6h、窗内自计时：忙时经 concurrency 组背靠背
+                              # 接力（≈24h/天满转），闲时提前收工留空档（无活可干）。
+                              # 同组新排队自动替换旧排队（GitHub 语义，不堆积），
+                              # 被替换的窗靠断点续采兜底不丢数据。
   workflow_dispatch: {}        # 支持手动触发
 permissions:
   contents: write
@@ -13,7 +15,7 @@ concurrency:
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 360       # 平台单 job 上限即 6h，12h/天靠两次定时接力
+    timeout-minutes: 360       # 平台单 job 上限即 6h；6 窗/天忙时背靠背接力
     steps:
       - uses: actions/checkout@v4
 
@@ -52,7 +54,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          python enrich/enrich.py --tier all --pool data/snapshot_latest/pool.json --max-calls 5000 --max-minutes 220
+          # 跨小时等待：触保底线按响应头 reset 睡到下一小时窗再续（预算按窗发新，
+          # 吃满 220 分钟——旧行为触线即停，49.9 分钟就收工浪费 3/4 预算）。
+          # 每窗 6 个，月度校准日 README 靠 REM 公式自动分得剩余时间，无需让路
+          python enrich/enrich.py --tier all --pool data/snapshot_latest/pool.json --max-calls 5000 --max-minutes 220 --wait-windows 8
 
       # --wait-windows 10：Core 触保底线按失败响应的 X-RateLimit-Reset 睡到
       # 配额恢复再续，最多 10 次（勿用 /rate_limit 判断——Actions token 上它
@@ -88,6 +93,11 @@ jobs:
           git config user.name "zqf20096327"
           git config user.email "zqf20096327@users.noreply.github.com"
           git add -A
-          git commit -m "采集 $(date -u +%F)" || { echo "无变更"; exit 0; }
-          git pull --rebase --autostash || true
-          git push
+          git commit -m "采集 $(date -u +%F\ %H:%M)" || { echo "无变更"; exit 0; }
+          # 6 窗/天后与 interpret(每 2h)推送撞车概率大增：重试+变基，最多 5 轮
+          for i in 1 2 3 4 5; do
+            git pull --rebase --autostash >/dev/null 2>&1 || true
+            git push && { echo "已推送"; exit 0; }
+            echo "推送撞车，40s 后重试（$i/5）"; sleep 40
+          done
+          echo "::warning::推送 5 次未成功，本窗数据丢失（断点续采下窗重做）"
