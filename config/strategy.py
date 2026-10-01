@@ -55,6 +55,7 @@ def search_words(p) -> list[str]:
 def derive_sections() -> dict:
     """按 section 生成通道包：查询词带各自星线（cn 不带）。"""
     secs = {}
+    gbl = dp.GLOBAL.get("exclude_repos") or []
     for sec_name in ("intl", "cn"):
         pol = dp.GLOBAL["sections"][sec_name]
         star = pol.get("star_min") or 0
@@ -68,7 +69,7 @@ def derive_sections() -> dict:
                 q = f"{w} fork:false"
                 if star:
                     q += f" stars:>={star}"
-                for ex in p.get("exclude_repos") or []:
+                for ex in gbl + (p.get("exclude_repos") or []):
                     q += f" -repo:{ex}"
                 queries[w] = q
             watch += p.get("watch") or []
@@ -83,6 +84,7 @@ def derive_sections() -> dict:
             "orgs": orgs,
             "queries": queries,
             "watch": sorted(set(watch)),
+            "blacklist": gbl,
         }
     return secs
 
@@ -108,6 +110,9 @@ def derive() -> dict:
         "KEYWORD_SEARCH_QUERIES": {w: q for s in secs.values()
                                    for w, q in s["queries"].items()},
         "WHITELIST_REPOS": sorted({w for s in secs.values() for w in s["watch"]}),
+        "BLACKLIST_REPOS": sorted({ex for s in secs.values() for ex in s["blacklist"]}
+                                  | {ex for p in dp.PROFILES if p.get("enabled", True)
+                                     for ex in (p.get("exclude_repos") or [])}),
         "CANON_PATTERNS": canon, "SCOPE_INTL": intl, "SCOPE_CN": cn,
         "BRAND_INFER": brand, "COLLISION_RULES": collide, "KNOWN_EMPTY_DBS": empty,
         "OUT_OF_SCOPE_DBS": dp.GLOBAL["out_of_scope_dbs"],
@@ -148,6 +153,8 @@ def validate(gen) -> list[str]:
                 problems.append(f"⑥org class 非法：{p['name']}/{o}")
             if p["section"] == "cn" and not isinstance(o, dict):
                 problems.append(f"⑥国产 org 必须 dict+class：{p['name']}/{o}")
+    if clash := set(gen["WHITELIST_REPOS"]) & set(gen["BLACKLIST_REPOS"]):
+        problems.append(f"⑦黑白冲突：{clash} 同时在 watch 白名单与黑名单")
     return problems
 
 

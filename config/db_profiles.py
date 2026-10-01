@@ -36,6 +36,11 @@ GLOBAL = {
     "discovery_topics": ["database"],
     "big_four": ["database", "mysql", "postgresql", "oracle"],
     "watch_insurance": ["OtterMind/Chat2DB"],
+    # 仓库黑名单（人工拉黑）：与 DB 生态无关的误捞仓。全通道生效，双保险接线——
+    # strategy 把它拼进全部搜索查询的 -repo:（keyword/topic 检索不再捞）
+    # + pool_core 合并/并集时过滤兜底（org 列表 API 与历史池残留靠这层挡）
+    # 加一条 = 往此列表加一项 "owner/repo"；与 watch 白名单互斥（validate ⑦ 检查）
+    "exclude_repos": [],             # 当前为空；误捞仓优先加 config/exclude_users.txt（按整用户屏蔽）
     "tier_rules": {"empty": 0, "micro": 100, "small": 1000},
     # 范围外库（与任何库别名冲突时 strategy.validate 直接 FAIL）
     "out_of_scope_dbs": [
