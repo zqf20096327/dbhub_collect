@@ -112,6 +112,58 @@ Set `DBDIFF_PG_DUMP_RENDERER=off` to pin a run to the built-in renderer — usef
 when you need byte-identical output across machines regardless of what is
 installed. `DBDIFF_PG_DUMP` and `DBDIFF_PG_RESTORE` override the binary paths.
 
+#### Migrations that run, not just SQL that parses
+
+Every PostgreSQL migration DBDiff generates is meant to apply as written and
+leave the target identical to the source — and to revert cleanly with the
+DOWN. The cases where that takes more than one statement:
+
+- **Changing a column's type.** PostgreSQL refuses `ALTER COLUMN ... TYPE`
+  while a view, materialized view, policy, trigger condition or stored
+  generated column reads the column. Those are dropped and put back around the
+  change — views in any schema, and through any partition — with their options
+  (`security_invoker` included), grants, comments, `INSTEAD OF` triggers and
+  indexes. Grants come back exactly: where default privileges would widen a
+  recreated view, they are revoked first. A generated column is recomputed from
+  its expression, so no data is lost. A change that is not a type change — a
+  default, nullability — leaves them alone.
+- **String to non-string types** (`text` → `uuid`, `varchar` → `integer`) get
+  `USING column::type`, which parses each value and fails loudly on one it
+  cannot read. Never towards a string type, where an explicit cast would
+  truncate silently.
+- **Partitions and inheritance.** A column a table inherits takes its type from
+  the parent, so its type changes once, on the parent.
+- **Generated columns** whose expression changes are dropped and re-added with
+  the new expression, together with their indexes, constraints, comments and
+  grants.
+- **Enums.** Adding a label is `ALTER TYPE ... ADD VALUE ... BEFORE/AFTER`,
+  positioned where the source has it. A label added this way cannot be *used*
+  in the same transaction until it commits (`unsafe use of new value`), so a
+  runner that applies a whole migration in one transaction should apply label
+  additions first.
+- **Storage.** `UNLOGGED` / `LOGGED` is compared and ordered by foreign keys,
+  and storage parameters (`fillfactor`, `autovacuum_*`) are compared regardless
+  of the order they were set in or how a boolean was spelled.
+
+What is deliberately **not** reported as a difference:
+
+- A materialized view's population state — `REFRESH` changes it, no DDL does,
+  and every dump-based copy starts unpopulated.
+- The same expression rendered two ways. `status IN ('draft', 'active')` on a
+  `varchar` column renders differently once recreated from its own rendering, as
+  a dump or a migration does. CHECK constraints, partial indexes, policies,
+  views and trigger conditions are compared by what PostgreSQL makes of them,
+  not by their text.
+
+Known limitations:
+
+- Removing or reordering enum labels replaces the type, which PostgreSQL
+  refuses while a column uses it; the migration says so in a comment.
+- Changing an identity column's identity drops and re-adds it, which restarts
+  its sequence.
+- Column `STORAGE` and `COMPRESSION` are not yet compared for a table that
+  exists on both sides (#225).
+
 ### SQLite
 
 Use `--driver=sqlite`. The file path is passed as the database name:
@@ -365,7 +417,7 @@ _Flags always override settings in `.dbdiff`._
 | `--include=up\|down\|both` | Directions to include. Defaults to `up`. (`all` is accepted as an alias for `both`.) |
 | `--nocomments` | Strip comment headers from output. |
 | `--config=<file>` | Config file path. Defaults to `.dbdiff`. |
-| `--output=<path>` | Output file path. Defaults to `migration.sql`. |
+| `--output=<path>` | Where to write. A **file path** for `native`, `liquibase-xml` and `liquibase-yaml`; a **directory** for `flyway` and `laravel`, which name their own files. Defaults to `migration.sql` in the current directory. |
 | `--memory-limit=<value>` | PHP memory limit for this run (e.g. `512M`, `1G`, `2G`, `-1` for unlimited). Overrides the 1G default and any `memory_limit` setting in your config file. |
 | `--tables=<list>` | Comma-separated table include list (supports globs: `*`, `?`). Only these tables are diffed. Example: `--tables=users,orders,wp_*` |
 | `--ignore-tables=<list>` | Comma-separated table exclude list (supports globs: `*`, `?`). Example: `--ignore-tables=cache_*,temp_*` |
@@ -693,6 +745,14 @@ Comparisons run in this order:
 ### Schema
 - Detects differences in column count, name, type, collation or attributes
 - New columns in the source are added to the target
+- A table's **durability** (`LOGGED` / `UNLOGGED`) and its **storage
+  parameters** (`fillfactor`, autovacuum settings and the rest of `reloptions`)
+  are compared and altered in place — `ALTER TABLE ... SET UNLOGGED`,
+  `ALTER TABLE ... SET (...)` / `RESET (...)`
+- A column whose type changes takes the views reading it with it: PostgreSQL
+  refuses `ALTER COLUMN ... TYPE` while a view selects the column, so the
+  dependent views are dropped in dependency order, the column altered, and each
+  view recreated from its stored definition — with its own indexes
 
 ### Views
 - Detects created, dropped, and altered views across source and target
@@ -709,7 +769,12 @@ Comparisons run in this order:
 
 ### Enum Types (PostgreSQL)
 - Detects created, dropped, and altered `CREATE TYPE ... AS ENUM` definitions
-- ALTER = DROP TYPE IF EXISTS + CREATE TYPE with the new labels
+- Adding labels uses `ALTER TYPE ... ADD VALUE`, positioned with `BEFORE` /
+  `AFTER` so the new label lands where the source has it. Replacing the type
+  instead could not be applied at all: `DROP TYPE` fails while any column is
+  typed by it, which is every reason the type exists
+- Removing or reordering a label falls back to DROP + CREATE, since `ADD VALUE`
+  cannot express either
 - Enum diffs are ordered before table diffs (tables may reference enum types)
 - MySQL and SQLite do not have standalone enum types — skipped automatically
 
@@ -727,8 +792,13 @@ Comparisons run in this order:
 - Detects created, dropped, and altered materialized views
 - A materialized view's indexes are carried with it, so a unique index on one
   is part of the diff
-- `WITH NO DATA` is preserved — an unpopulated matview is not recreated as a
-  populated one
+- Population state is **not** compared. Whether a matview holds its rows yet is
+  a fact about the data — a `REFRESH` changes it and no DDL does — and `pg_dump`
+  restores every matview unpopulated. Comparing it made the same view on two
+  sides differ whenever one had been refreshed and the other had not, so every
+  `pg_dump`-based copy reported drift against the database it was copied from,
+  offering `DROP MATERIALIZED VIEW` as the fix. `WITH NO DATA` is no longer
+  emitted either: run `REFRESH MATERIALIZED VIEW` when you want the rows
 - ALTER = DROP + CREATE; PostgreSQL has no `CREATE OR REPLACE` for them
 - Ordered after views, since a matview may select from one
 

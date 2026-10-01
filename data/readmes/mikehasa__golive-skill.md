@@ -13,7 +13,7 @@ created, re-checks it for drift on demand, and can remove it again.
 Automate the parts providers expose. Guide you through the parts that need a human. Verify what
 can be observed, and make unfinished work clear. No GoLive account, hosted backend or product telemetry.
 
-> **Early alpha · 0.1.0-alpha.5**
+> **Early alpha · 0.1.0-alpha.7**
 > Disposable live tests now cover six journeys: **hosting** (Vercel, Netlify), **database**
 > (Supabase, Neon), **custom-domain DNS** (Porkbun, GoDaddy), **transactional email** (Resend),
 > **test-mode payments** (Stripe) and **Supabase authentication**, plus the `teardown` uninstall
@@ -111,7 +111,7 @@ noninteractive agent flags, runtime verification and the optional own installer.
 
 ### Install from npm
 
-The same skill is published to npm as `golive@0.1.0-alpha.5` (dist-tags `alpha` and `latest`), which
+The same skill is published to npm as `golive@0.1.0-alpha.7` (dist-tags `alpha` and `latest`), which
 installs it offline, with no Git or Skills CLI involved:
 
 ```bash
@@ -138,6 +138,22 @@ confirmation), plus the installer commands `install`, `install-status`, `update`
 `update-policy` and `recover-lock` for the copies it owns.
 See [installation and updates](docs/DISTRIBUTION.md#alternative-installation-the-npm-package) for
 the channel's exact limits.
+
+### Install from ClawHub (OpenClaw)
+
+If you use [OpenClaw](https://docs.openclaw.ai), the same skill is listed on
+[ClawHub](https://clawhub.ai/mikehasa/skills/golive), its public registry:
+
+```bash
+npx clawhub@latest install golive     # into ./skills, recorded in .clawhub/lock.json
+npx clawhub@latest update golive      # later updates stay with ClawHub
+```
+
+ClawHub installs into the current directory's `skills/` folder rather than an agent's global skills
+directory, so it suits an OpenClaw workspace; Codex and Claude Code are the clients this project
+verifies, through the two channels above. The registry keeps its own metadata (`_meta.json`,
+`skill-card.md`, `.clawhub/`) beside the bundle, which golive's own integrity check ignores. See
+[installation and updates](docs/DISTRIBUTION.md#clawhub-openclaw-registry) for the channel's limits.
 
 ## Use GoLive
 
@@ -393,8 +409,13 @@ live-tested milestones**, not a finished category or a completed checklist for y
 - [ ] 🗺️ **Monitoring and alerts:** error tracking, logs, uptime and actionable alerts.
   Provider suggestions are guided today; verified setup is planned. On-demand drift checks exist
   (`golive status`, below) — continuous monitoring and alerting do not.
-- [ ] 🗺️ **Product analytics:** event validation and consent/data settings, beyond today's guided
-  provider suggestions.
+- [ ] 🚧 **Product analytics:** event validation and consent/data settings, beyond today's guided
+  provider suggestions. PostHog analytics is wired through an approved plan — the app's analytics
+  project is adopted or selected (a create is planned when nothing matches), and the `posthog-ingest`
+  check proves ingest by sending one synthetic event and reading it back through PostHog's own query
+  API — live-validated on a disposable project (2026-09-30). Host env writing, consent settings and
+  the app's own event flows stay open; the create/delete path of a golive-created project is
+  mock-covered only.
 - [ ] 🚧 **CI/CD and safe releases:** previews, release checks, promotion, rollback and drift
   detection, building on today's approved CLI deployments. **Deployment identity — implemented, not
   live-validated:** each successful deploy records the provider's own identity for the deployment it
