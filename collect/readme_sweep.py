@@ -77,8 +77,14 @@ def save_state(st: dict) -> None:
 
 # ---------------- 主流程 ----------------
 
+# 月度校准标记：本进程 UTC 日。304/200/404 校验过的仓打上，pick_targets(monthly)
+# 据此排除——否则每窗从池头重新枚举，3000/窗的预算全花在对同一批仓重复发 304 条件
+# 请求上，后面的仓永远轮不到（2026-10-01 首次 monthly 实发：连开 6 窗只扫到前 3000）。
+CAL_DATE = datetime.now(timezone.utc).strftime("%Y%m%d")
+
+
 def pick_targets(args, pool: list, items: dict) -> list:
-    """按模式取待扫目标（failed=三振隔离，剔除防跨窗轮空转；monthly 除外）。"""
+    """按模式取待扫目标（failed=三振隔离，剔除防跨窗轮空转；monthly 排除当日已校准项）。"""
     if args.mode == "init":
         # 按 star 降序铺，先高价值；--layer1 只铺分类层对象（canon 命中者由 classify 产出）
         targets = [it["full_name"] for it in
@@ -99,7 +105,9 @@ def pick_targets(args, pool: list, items: dict) -> list:
         return [it["full_name"] for it in pool
                 if (it.get("pushed_at") or "") > (items.get(it["full_name"]) or {}).get("checked_pushed", "")
                 and (items.get(it["full_name"]) or {}).get("status") not in ("no_readme", "failed")]
-    return [it["full_name"] for it in pool]
+    # monthly：全量校准但排除本 UTC 日已校验过的（跨窗推进；无此排除会每窗从头重扫）
+    return [it["full_name"] for it in pool
+            if (items.get(it["full_name"]) or {}).get("calibrated") != CAL_DATE]
 
 
 def run(args):
@@ -176,7 +184,7 @@ def run(args):
                     code = getattr(e.response, "status_code", None)
                     if code == 404:
                         rec.update({"status": "no_readme", "etag": None, "fail_count": 0,
-                                    "last_error": ""})
+                                    "last_error": "", "calibrated": CAL_DATE})
                         counts["no_readme"] += 1
                         continue
                     # 其余 HTTP 状态按仓记振继续（毒仓不得阻断循环，与 enrich 同策略）
@@ -205,9 +213,11 @@ def run(args):
                 if status == 304:
                     counts["unchanged"] += 1
                     rec["checked_pushed"] = by_fn.get(fn, {}).get("pushed_at", "")
+                    rec["calibrated"] = CAL_DATE
                     continue
                 if text is None or not text.strip():
-                    rec.update({"status": "no_readme", "etag": None, "fail_count": 0})
+                    rec.update({"status": "no_readme", "etag": None, "fail_count": 0,
+                                "calibrated": CAL_DATE})
                     counts["no_readme"] += 1
                     continue
                 fn_to_file(fn).write_text(text, encoding="utf-8")
@@ -216,7 +226,8 @@ def run(args):
                             "etag": new_etag, "sha": nsha,
                             "updated": datetime.now(timezone.utc).strftime("%Y%m%d"),
                             "checked_pushed": by_fn.get(fn, {}).get("pushed_at", ""),
-                            "fail_count": 0, "last_error": ""})
+                            "fail_count": 0, "last_error": "",
+                            "calibrated": CAL_DATE})
                 counts["oversized" if truncated else "done"] += 1
                 if (i + 1) % 200 == 0:
                     save_state(st)
