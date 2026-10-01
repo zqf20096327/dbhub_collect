@@ -58,6 +58,10 @@ jobs:
       # 配额恢复再续，最多 10 次（勿用 /rate_limit 判断——Actions token 上它
       # 与真实调用不同桶，09-30 实测）；总时长用 job 剩余时间动态计算
       # （360min - 已用 - 留 10 分钟给提交），保证提交步骤必定执行、当晚数据不丢
+      # --max-calls 4200 = 5000 小时帽 − 800 保底线：富集串行先跑完，README 是本小时
+      # Core 唯一消费者（仅首窗可能继承富集的残小时，由响应头保底线兜底睡等），
+      # 实测节奏 ~77 调/分 → 4200 ≈ 54 分钟，与 --max-minutes 60 匹配。旧值 3000
+      # 会浪费 ~1200/时容量，且 34275 仓月度校准两窗跑不完（10-01 实算）
       - name: README 增量（每月 1 号自动转月度全量校准）
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -67,7 +71,7 @@ jobs:
           [ "$REM" -lt 300 ] && REM=300
           echo "README 本窗总预算 $(( REM / 60 )) 分钟"
           python collect/readme_sweep.py --mode "$MODE" --pool data/snapshot_latest/pool.json \
-            --max-calls 3000 --max-minutes 60 \
+            --max-calls 4200 --max-minutes 60 \
             --wait-windows 10 --max-total-minutes $(( REM / 60 ))
 
       - name: state 残渣 GC（每月 1 号）
