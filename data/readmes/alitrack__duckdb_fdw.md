@@ -64,6 +64,7 @@ sudo make install
 ### Requirements
 * PostgreSQL 13 - 18 (headers required)
 * DuckDB library (`libduckdb.so` or `libduckdb.dylib`) with repo-pinned bootstrap default `1.5.1`
+* Tested with libduckdb 1.5.x (FDW asserts version range [1.5, 1.6) on first connection and fails startup with a clear error outside it)
 * GCC or Clang with C11/C++11 support
 
 ## 🛠️ Usage
@@ -78,6 +79,8 @@ OPTIONS (database '/tmp/duckdb_fdw_demo.db');
 ```
 
 `database ':memory:'` is a connection-scoped temporary database. `duckdb_fdw` now refreshes cached connections at transaction end, so if you create tables or views with `duckdb_execute(...)` and then read them through foreign tables in later SQL statements, use a file-backed DuckDB database by default. If you intentionally want `:memory:`, wrap the entire modeling and query sequence in the same explicit transaction.
+
+Connection reuse across transactions: `SET duckdb_fdw.keep_connection = on` (off by default, session-scoped) makes the transaction-end callback *retain* cached DuckDB connections after `COMMIT` (the remote transaction is settled first) and tear them down only on `ABORT`, so the next transaction reuses the connection instead of re-opening the database, re-installing extensions and re-`ATTACH`ing catalogs — at the cost of keeping a file-backed DuckDB database's file write lock held across transactions, so enable it per session where reuse wins over exclusive lock holding (the gain is largest for quack/remote mode).
 
 ### 2. `pg_duckdb` Coexistence Policy
 

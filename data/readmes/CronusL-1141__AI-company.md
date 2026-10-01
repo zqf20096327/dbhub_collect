@@ -13,7 +13,7 @@ AI Team OS is a shared operating layer for **Claude Code and Codex**. Keep tasks
 
 <!-- Keep the Codex compatibility note above across releases. For each release, replace the current-release announcement with that version's verified summary. Keep historical details in CHANGELOG.md. -->
 
-> ⚡ **v1.14.0 - Codex plan usage and reliable upgrades.** Track local account allowance and API-equivalent workload estimates, preserve history across account switches, and install or update the independent Codex adapter with recoverable MCP startup. New-install and published-version migration checks now run with release preflight. See the changelog for validation and upgrade boundaries.
+> ⚡ **v1.15.0 - One notice channel, sturdier hooks.** Things OS needs you to know or do now come from one bilingual ledger, shown at session start, on your next message or when a turn ends, and each host hears only about its own install. Failed hook deliveries are counted and resent by later hooks, text meant for other agents is checked when it is written, and one shared digest leads the task wall. Codex users need to update the adapter once by hand; see the changelog.
 >
 > Full version history: [CHANGELOG.md](CHANGELOG.md)
 
@@ -24,7 +24,7 @@ AI Team OS is a shared operating layer for **Claude Code and Codex**. Keep tasks
 [![MCP](https://img.shields.io/badge/MCP-Protocol-orange)](https://modelcontextprotocol.io)
 [![Stars](https://img.shields.io/github/stars/CronusL-1141/AI-company?style=flat)](https://github.com/CronusL-1141/AI-company)
 
-**116** MCP tools · **222** REST endpoints · **24** dashboard pages · **25** agent templates · **42** ecosystem research tools · **21** machine-checked invariants
+**116** MCP tools · **232** REST endpoints · **24** dashboard pages · **25** agent templates · **42** ecosystem research tools · **25** machine-checked invariants
 
 ---
 
@@ -85,9 +85,9 @@ Surfaces: MCP `memory_add` / `memory_list` / `memory_invalidate` / `memory_searc
 Choose the MCP surface for each client instead of loading every capability into every session.
 
 - **alwaysLoad dynamic rotation**: at session start a single SQL recomputes the hot-tool whitelist by **7-day real call frequency** (>=2-day span gate against bursty spikes + 20% hysteresis, hard cap <=5), and CC skips ToolSearch for them. Not additive, not hand-tuned; any stats failure silently degrades to all-defer, and every whitelist is logged for audit.
-- **`AITEAM_TOOLSETS` group switch**: 16 capability-domain toolsets; a startup env var decides which modules register. `default` core profile = task/team/memory/infra/reports (29 tools, hard cap <=50), with incremental `default,ecosystem` — fits non-CC clients that cap tool counts.
+- **`AITEAM_TOOLSETS` group switch**: 17 capability-domain toolsets; a startup env var decides which modules register. `default` core profile = task/team/memory/infra/reports/notices (29 tools, hard cap <=50), with incremental `default,ecosystem` - fits non-CC clients that cap tool counts.
 - **`AITEAM_READONLY` read-only profile**: an orthogonal overlay that strips every write tool by explicit allowlist and keeps only read tools — ideal for audit / observer sessions.
-- **5 Claude Code templates declare least privilege**: meeting-facilitator / debate advocate & critic / technical-writer / project-manager carry `disallowedTools` entries for destructive OS tools (delete project, delete team, restart API). These are declarations in the template; whether the host enforces them depends on the Claude Code version and permission mode. Codex uses its own native permission controls rather than interpreting CC template fields.
+- **6 Claude Code templates declare least privilege**: meeting-facilitator / debate advocate & critic / technical-writer / project-manager / tech-lead carry `disallowedTools` entries for destructive OS tools (delete project, delete team, restart API). Claude Code 2.1.281 enforces them for both project- and user-level definitions (verified 2026-09-25); older versions may treat them as declarations only. Codex uses its own native permission controls rather than interpreting CC template fields.
 
 ### 4. Claude Code Workflow / ultracode Observability (v1.7.0)
 
@@ -170,7 +170,6 @@ Coordinate native agents and peer Leaders without flattening their identities:
 - **Cross-host messaging**: sending, reading and acknowledging use shared channels with distinct reader identities. Prompt-time unread hints have been measured on Claude Code and on Codex CLI/Desktop; the Codex hint uses structured `additionalContext`, not plain hook stdout.
 - **Explicit waiting**: `channel_wait` holds a call open and identifies initial replay, event-triggered read or final timeout read in `delivery_source`. It is separate from acknowledgement and from Claude Code's optional session watcher; it does not wake an idle Codex session after a turn ends.
 - **Debate mode**: 4-round structured debate (Advocate→Critic→Response→Judge) via `debate_start` / `debate_code_review`
-- **Cross-agent lessons**: `failure_analysis` records root causes in project memory for later sessions to retrieve. Automatic injection follows the installed host integration, not a shared assumption about both runtimes.
 
 ### 12. Full Transparency
 
@@ -186,8 +185,8 @@ OS checks complement each host's native approvals and isolation controls. Instal
 
 - **Guardrails L1**: 7 dangerous pattern detections + PII warnings + `InputGuardrailMiddleware`
 - **Claude Code dispatch checks**: CC-specific hook and template rules validate its agent-dispatch fields; they are not Codex's native agent schema
-- **S1 safety rules**: regex-based scan catches destructive commands (rm -rf, force push, hardcoded secrets) including uppercase flags and heredoc patterns
-- **4-layer defense rule system**: 48+ rules covering workflow, delegation, session, and safety layers
+- **Root and home directory deletion**: left to Claude Code's native dangerous-removal protection
+- **4-layer defense rule system**: 37 rules covering workflow, delegation, session, and safety layers
 - **Concurrent-edit warnings**: hooks flag a file two agents touched in quick succession, read straight from recent edit events (the cooperative file-lock tools were retired in v1.10.3 — the lock file was empty in every real run)
 - **Agent Watchdog**: on-demand `POST /api/teams/{id}/watchdog/check` plus the background patrol — flags BUSY-timeout agents, long-pending tasks and unblockable dependencies
 - **Self-patrol**: watchdog lease patrol + reaper reconciliation backstop + identity verification before any kill — the OS keeps eyes on itself, not just on your agents
@@ -206,7 +205,7 @@ The OS does not require its own hosted model service:
 
 ### More Capabilities (legacy & secondary — still running, queryable on demand)
 
-- **Failure Alchemy**: `failure_analysis` still runs as part of the loop subsystem — every failed task extracts root cause and produces *Antibody* (stored in team memory to prevent repeats) / *Vaccine* (high-frequency failures become pre-task warnings) / *Catalyst* (analysis injected into future Agent system prompts). No longer the headline, but defensive rules keep accruing.
+- **Failure analysis (frozen)**: `failure_analysis`, `diagnose_task_failure` and `prompt_effectiveness` stay callable but are frozen and no longer developed.
 - **AWARE loop memory · `find_skill` 3-layer discovery (skills + integration recipes) · Prompt Registry**: see the full tool table below. The scheduler and the loop state machine were retired in favour of CC-native `Cron*` and on-demand tools (CC-is-not-always-on principle); the `wake_agent` schedule kind survives for the fleet wake subsystem.
 
 ---
@@ -251,11 +250,10 @@ The same task wall, reports and observations used in development are available f
 | **Tool-Loading Governance** | alwaysLoad rotation + group switch + read-only profile + template least-privilege | None | None | None | None |
 | **Autonomous Operation** | Durable task coordination; execution depends on the host | Task-by-task | Task-by-task | Workflow-driven | Limited |
 | **Meeting System** | 8 structured templates with auto-select | None | Limited | None | None |
-| **Failure Learning** | Failure Alchemy (Antibody/Vaccine/Catalyst) | None | None | None | Limited |
 | **Decision Transparency** | Decision Cockpit + Timeline | None | Limited | Limited | Black box |
 | **Workflow Observability** | Swimlane timeline + per-agent telemetry + offline reconcile over CC Workflow | None | None | Graph state only | None |
 | **State Source** | Host-native metadata + persisted observations and journals | Agent self-report | Agent self-report | In-process state | Black box |
-| **Rule System** | 4-layer defense (48+ rules) + behavioral enforcement | Limited | Limited | None | Limited |
+| **Rule System** | 4-layer defense (37 rules) + behavioral enforcement | Limited | Limited | None | Limited |
 | **Agent Templates** | 25 Claude Code templates + shared role recommendations | Built-in roles | Built-in roles | None | None |
 | **Dashboard** | React 19 visualization | Commercial tier | None | None | Yes |
 | **Open Source** | MIT | Apache 2.0 | MIT | MIT | No |
@@ -289,28 +287,32 @@ Layer 1: Storage          — SQLite (WAL journaling) · PostgreSQL support on t
 
 Claude Code's plugin and Codex's adapter feed the same OS through separate installation and trust surfaces. The Codex adapter lives in `plugin/harness/codex/`; its observation entry and matching helper modules must be installed together. The following event map describes the Claude Code adapter only.
 
-### Hook System (13 scripts across 15 Lifecycle Events - Claude Code Adapter)
+### Hook System (11 scripts across 16 Lifecycle Events - Claude Code Adapter)
 
 ```
 SessionStart     → auto_install.py, session_bootstrap.py, send_event.py
-                   — Auto-install deps + inject Leader briefing / core rules / team state
-SubagentStart    → inject_subagent_context.py, send_event.py   — Inject sub-Agent OS rules (2-Action etc.)
-SubagentStop     → send_event.py                 — Record sub-Agent lifecycle event
+                   - Auto-install deps + inject Leader briefing / core rules / team state
+                 → session_bootstrap.py resume-tick (resume/fork only)
+                   - A stamp that differs on every start, so Claude Code keeps the notice line
+SubagentStart    → inject_subagent_context.py, send_event.py   - Inject sub-Agent OS rules (2-Action etc.)
+SubagentStop     → send_event.py                 - Record sub-Agent lifecycle event
 PreToolUse       → workflow_reminder.py, send_event.py
-                   — Workflow tracking reminders + event forwarding
-PostToolUse      → workflow_reminder.py, deep_review_link.py,
-                   meeting_ecosystem_writeback.py, send_event.py
-TaskCompleted    → cc_task_bridge.py             — Mirror finished CC tasks onto the OS wall (owned or dependency-linked ones only)
-TeammateIdle     → send_event.py                 — CC's own teammate-idle signal, recorded alongside the OS liveness track (observation only, changes no status)
-UserPromptSubmit → context_tracker.py            — Track context usage
-                 → channel_unread.py             — Unread channel badge
-                 → turn_end_guard.py             — Standby reminder (user-prompt mode)
-SessionEnd       → send_event.py                 — Record session end event
-Stop             → send_event.py                 — Record stop event
-PermissionDenied → permission_denied_recovery.py — Permission-denied self-recovery
-PreCompact       → pre_compact_save.py           — Freeze the OS-side battle state (in-flight agents / open tasks / pending decisions) into a checkpoint
-PostCompact      → send_event.py                 — Confirm the compaction actually happened (a triggered compaction can still be cancelled)
-WorktreeRemove   → send_event.py                 — An isolated worktree is gone
+                   - Workflow tracking reminders + event forwarding
+PostToolUse      → deep_review_link.py, send_event.py
+PostToolUseFailure → send_event.py               - Close the activity of a failed or interrupted tool call (status error)
+TaskCompleted    → send_event.py                 - Record a CC task completion (observation only)
+TaskCreated      → send_event.py                 - Record a CC task creation (observation only)
+TeammateIdle     → send_event.py                 - CC's own teammate-idle signal, recorded alongside the OS liveness track (observation only, changes no status)
+UserPromptSubmit → context_tracker.py            - Track context usage
+                 → channel_unread.py             - Unread channel badge
+                 → turn_end_guard.py             - Mark the user as present (user-prompt mode)
+SessionEnd       → send_event.py                 - Record session end event
+Stop             → send_event.py                 - Record stop event
+                 → turn_end_guard.py             - Keep the turn going while work runs with no watcher armed
+PermissionDenied → permission_denied_recovery.py - Permission-denied self-recovery
+PreCompact       → pre_compact_save.py           - Freeze the OS-side battle state (in-flight agents / open tasks / pending decisions) into a checkpoint
+PostCompact      → send_event.py                 - Confirm the compaction actually happened (a triggered compaction can still be cancelled)
+WorktreeRemove   → send_event.py                 - An isolated worktree is gone
 ```
 
 ---
@@ -353,7 +355,9 @@ claude plugin install ai-team-os
 
 # Restart Claude Code after installation; the first launch configures dependencies
 
-# Update to latest version anytime
+# Update to latest version anytime: refresh the marketplace first
+# (plugin update alone reports the installed version as the latest)
+claude plugin marketplace update ai-team-os
 claude plugin update ai-team-os@ai-team-os
 ```
 
@@ -439,16 +443,16 @@ The MCP server can expose the full tool inventory or a smaller set for each clie
 
 **`AITEAM_READONLY=1`** - orthogonal overlay that strips every write tool (create/update/delete/apply/send/... plus `os_restart_api`) after registration, keeping only read tools. Handy for audit/observer sessions.
 
-The 16 groups (default groups marked *):
+The 17 groups (default groups marked *):
 
 | Group | Tools | Group | Tools | Group | Tools |
 |---|---|---|---|---|---|
 | task * | 8 | project | 6 | links | 3 |
-| team * | 5 | agent | 7 | channels | 3 |
+| team * | 2 | agent | 7 | channels | 6 |
 | memory * | 6 | meeting | 10 | task_analysis | 2 |
-| infra * | 7 | briefing | 4 | watchdog | 1 |
-| reports * | 3 | analytics | 2 | workflows | 3 |
-| ecosystem | 42 | | | | |
+| infra * | 8 | briefing | 4 | watchdog | 1 |
+| reports * | 3 | analytics | 3 | workflows | 3 |
+| notices * | 2 | ecosystem | 42 | | |
 
 ```bash
 # Example: lean core + ecosystem, read-only
@@ -463,9 +467,10 @@ claude plugin uninstall ai-team-os
 
 # Preview the Claude Code source uninstaller before deciding what to remove:
 python scripts/uninstall.py --dry-run
+python scripts/uninstall.py   # keeps ~/.claude/data/ai-team-os (aiteam.db); add --purge-data to delete it too
 ```
 
-For Codex, remove only its own MCP/hook registrations and independently copied adapter files. Before removing shared OS data or running a full source uninstall, inspect the plan, back up the records and confirm no other host still uses the backend. Removing one host's integration is not permission to delete the shared database.
+For Codex, remove only its own MCP/hook registrations and independently copied adapter files. Before removing shared OS data or passing --purge-data to the source uninstaller, inspect the plan, back up the records and confirm no other host still uses the backend. Removing one host's integration is not permission to delete the shared database.
 
 ### Start the Dashboard (optional)
 
@@ -584,12 +589,16 @@ The OS only displays evidence it can attribute. Missing native metadata stays un
 
 The running API, built Dashboard, installed adapter files and host hook trust are separate layers. Update compatible pieces together and verify an actual event through the chain; reloading MCP alone does not replace them all.
 
+### Will a terminal session tell me about OS updates?
+
+With the updated API and SessionStart hooks installed, Codex and Claude Code can emit a short update command for the user and separate release details for the assistant when a newer public stable Release is available. Dashboard language choices are saved by the API and take precedence. In follow mode, Claude Code uses its language setting, while Codex uses the system language; unsupported languages fall back to English. The same session does not repeat the notice on resume or compact. Release checks are cached for six hours, and network failures do not block startup. Notices do not run Git, install packages or restart services. Update commands depend on the installation method; release links and the complete procedure go to the assistant context. An older installation must first receive these hooks; reloading MCP alone does not install them. Claude Code CLI visibility has been checked separately; Codex CLI and desktop rendering still require native UI acceptance.
+
 ---
 
 ## MCP Tools
 
 <details>
-<summary>Expand to see the tool map (116 MCP tools across 16 modules)</summary>
+<summary>Expand to see the tool map (116 MCP tools across 17 modules)</summary>
 
 > The tables below are a curated selection — the full inventory lives in `src/aiteam/mcp/tools/` and is machine-counted by `scripts/check_readme_numbers.sh`.
 
@@ -599,7 +608,6 @@ The running API, built Dashboard, installed adapter files and host hook trust ar
 |------|-------------|
 | `team_status` | Get team details and member status |
 | `team_list` | List all teams |
-| `team_briefing` | Get a full team panorama in one call (members + events + meetings + todos) |
 
 ### Agent Management
 
@@ -684,7 +692,7 @@ Error responses do not claim a delivery source.
 
 | Tool | Description |
 |------|-------------|
-| `failure_analysis` | Failure Alchemy — analyze root causes, generate antibody/vaccine/catalyst |
+| `failure_analysis` | Frozen: record a failed task's root cause |
 | `decision_log` | Log a decision to the cockpit timeline |
 | `context_resolve` | Resolve current context and retrieve relevant background information |
 
@@ -693,11 +701,11 @@ Error responses do not claim a delivery source.
 | Tool | Description |
 |------|-------------|
 | `memory_search` | Search team memory — recency-window recall within scope + pure-Python BM25 rerank (Chinese bigram, no embeddings) |
-| `memory_add` | Write a direction-layer memory (preference/correction/design intent, 4 kinds; bucket quotas 1200/1500/300 chars, <=400 chars per entry, supersedes swap) |
-| `memory_invalidate` | Explicitly invalidate a direction-layer memory (by id or unique substring; invalidate, never delete — auditable) |
+| `memory_add` | Write a direction-layer memory (preference/correction/design intent, 4 kinds; bucket quotas 1200/1500/300 chars, <=400 chars per entry, supersedes swap; swapping a global/user entry needs `confirm_shared_scope=true`) |
+| `memory_invalidate` | Explicitly invalidate a direction-layer memory (by id or unique substring; invalidate, never delete — auditable); global/user entries, which every project inherits, and legacy team/agent entries need `confirm_shared_scope=true` |
 | `memory_list` | List shared direction-layer entries, optionally filtered by kind |
-| `memory_reconcile_candidates` | On-demand reconcile coarse pass (zero-LLM): BM25-paired candidate groups + direction-layer inventory + promotion material + operation guide |
-| `memory_reconcile_apply` | Apply agent-confirmed reconcile operations (merge / invalidate / score / promote); idempotent, size guardrails enforced on promote |
+| `memory_reconcile_candidates` | On-demand reconcile coarse pass (zero-LLM): BM25-paired candidate groups + direction-layer inventory + promotion material + operation guide; takes the project's reconcile lease (`peek=true` only looks) |
+| `memory_reconcile_apply` | Apply agent-confirmed reconcile operations (merge / invalidate / score / promote); idempotent, size guardrails enforced on promote; runs only for the lease holder and only on the current project's memos |
 
 ### Knowledge Layer (v1.8.0)
 
@@ -725,7 +733,7 @@ Error responses do not claim a delivery source.
 | Tool | Description |
 |------|-------------|
 | `task_execution_trace` | Get unified execution timeline for a task |
-| `diagnose_task_failure` | Auto-diagnose why a task failed |
+| `diagnose_task_failure` | Frozen: diagnose why a task failed |
 
 ### Briefing System
 
@@ -735,6 +743,13 @@ Error responses do not claim a delivery source.
 | `briefing_list` | List pending briefing items |
 | `briefing_resolve` | Resolve a briefing item with a decision |
 | `briefing_dismiss` | Dismiss a briefing item |
+
+### User Notices
+
+| Tool | Description |
+|------|-------------|
+| `notice_list` | List the notices OS shows the user (summary rows; pass `key` for one notice in full) |
+| `notice_dismiss` | Dismiss a notice for good, or snooze it for some hours |
 
 ### Reports (Database-backed)
 
@@ -764,7 +779,7 @@ The single largest tool family — the full research funnel from scan to integra
 
 | Tool | Description |
 |------|-------------|
-| `prompt_effectiveness` | View template effectiveness metrics |
+| `prompt_effectiveness` | Frozen: view template effectiveness metrics |
 
 ### Project Management
 
@@ -782,11 +797,10 @@ The single largest tool family — the full research funnel from scan to integra
 |------|-------------|
 | `os_health_check` | Health check with on-demand reconciliation of the verified local API PID |
 | `os_restart_api` | Restart safely; `dry_run=true` previews imports and `source_root` selects the checkout |
+| `os_config_change` | Change the user's installation only after a previewed consent: preview with sha256 per file and a 10-minute token, then apply with the user's words; backs up first and records a decision event |
 | `event_list` | View the system event stream |
 | `agent_activity_query` | Query agent activity history and statistics |
 | `find_skill` | 3-layer progressive skill discovery (quick recommend / category browse / full detail) |
-| `team_close` | Close a team and cascade-close its active meetings |
-| `team_delete` | Delete a team |
 
 Development restarts can first use `os_restart_api(source_root="/absolute/repo", dry_run=true)`
 to verify imports without stopping the service. An actual restart preserves the database target
@@ -874,16 +888,16 @@ events; the total limit remains five.
 ### Shipped and Historical Milestones
 
 - [x] Core Task Wall + Watchdog + Review (the loop state machine was retired in v1.10.x; scoring and the wall live on in `loop/task_wall_engine.py`)
-- [x] Failure Alchemy (Antibody + Vaccine + Catalyst)
+- [x] Failure analysis tools, frozen in 2026-09: still callable, no further development
 - [x] Decision Cockpit (Event stream + Timeline + Intent inspection)
 - [x] Event-driven Task Wall 2.0 (Real-time push + Intelligent matching)
 - [x] Living Team Memory (Knowledge query + Experience sharing)
 - [x] What-If Analyzer (Multi-option comparison)
 - [x] 8 structured meeting templates with keyword auto-select
 - [x] 25 professional Agent templates (23 base + 2 debate roles) with recommendation engine
-- [x] 4-layer defense rule system (48+ rules) + behavioral enforcement
+- [x] 4-layer defense rule system (37 rules) + behavioral enforcement
 - [x] Dashboard Command Center (React 19) — 24 pages including the `/workflows` swimlane, Workflow detail, the Ecosystem suite, `/usage` token attribution, `/usage/accounts` plan capacity, and Settings with model governance
-- [x] 116 MCP tools across 16 modules
+- [x] 116 MCP tools across 17 modules
 - [x] CC Workflow observability layer (auto-tracking + /workflows dashboard + workflow_list / workflow_get / workflow_reconcile)
 - [x] Knowledge layer — zero-LLM reference graph + unified 3-arm RRF search (v1.8.0)
 - [x] Claude Code model governance - transcript-based discovery and startup defaults (v1.8.1)
@@ -935,22 +949,22 @@ events; the total limit remains five.
 ```
 ai-team-os/
 ├── src/aiteam/
-│   ├── api/           — FastAPI REST endpoints (222 routes)
+│   ├── api/           - FastAPI REST endpoints (232 routes)
 │   ├── mcp/
 │   │   ├── server.py  — MCP server entry point
-│   │   └── tools/     — 16 tool modules (116 MCP tools)
+│   │   └── tools/     - 17 tool modules (116 MCP tools)
 │   │       ├── agent.py, analytics.py, briefing.py, channels.py,
 │   │       ├── ecosystem.py, infra.py, links.py, meeting.py,
-│   │       ├── memory.py, project.py, reports.py, task.py,
+│   │       ├── memory.py, notices.py, project.py, reports.py, task.py,
 │   │       ├── task_analysis.py, team.py, watchdog.py, workflows.py
 │   │       └── __init__.py  — Toolset registration entry
-│   ├── loop/          — Task wall engine + watchdog + failure alchemy
+│   ├── loop/          - Task wall engine + watchdog + frozen failure analysis
 │   ├── meeting/       — Meeting system
 │   ├── memory/        — Team memory
 │   ├── orchestrator/  — Team orchestrator
 │   ├── storage/       — Storage layer (SQLite, WAL journaling)
 │   ├── templates/     — Agent template base classes
-│   ├── hooks/         — CC Hook scripts (15 lifecycle events)
+│   ├── hooks/         — CC Hook scripts (16 lifecycle events)
 │   └── types.py       — Shared type definitions
 ├── plugin/
 │   ├── agents/        - 25 Claude Code Agent templates (.md)
