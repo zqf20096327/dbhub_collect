@@ -47,6 +47,24 @@ YEAR0 = 2008
 YEAR1 = datetime.now(timezone.utc).year
 STAGES = ("new", "topic", "keyword", "org", "whitelist", "merge")
 MERGE_STAGES = ("topic", "keyword", "org", "whitelist")   # 通道优先级：whitelist > org > keyword > topic
+# 仓库黑名单（GLOBAL.exclude_repos + 各库档案 exclude_repos 并集）：
+# 检索查询带 -repo: 挡 search API，merge/union 过滤兜底（org 列表 API 与旧池残留）
+BLACKLIST = set(dp.GLOBAL.get("exclude_repos") or []) \
+    | {ex for p in dp.PROFILES for ex in (p.get("exclude_repos") or [])}
+_REPO_EXCL = "".join(f" -repo:{ex}" for ex in sorted(BLACKLIST))
+# 用户级黑名单（整 owner 屏蔽）：名单在 config/exclude_users.txt，一行一个 login。
+# 不能拼 -user: 进查询——GitHub Search 查询 256 字符上限，大名单会让查询整条失效；
+# 改为结果落地即丢：_slim_many 挡全部检索通道，merge/union 兜底挡 org/白名单/旧池残留
+_USER_FILE = ROOT / "config" / "exclude_users.txt"
+USER_BLACKLIST = {u.lower() for u in dp.GLOBAL.get("exclude_users") or []}
+if _USER_FILE.is_file():
+    # utf-8-sig：兼容 Windows 记事本 BOM（裸 utf-8 会把首行读成 \ufeffxxx 匹配不上）
+    USER_BLACKLIST |= {ln.strip().lower() for ln in
+                       _USER_FILE.read_text(encoding="utf-8-sig").splitlines()
+                       if ln.strip() and not ln.startswith("#")}
+else:
+    log.warning("config/exclude_users.txt 不存在")
+log.info("用户黑名单：%d 人", len(USER_BLACKLIST))
 
 
 # ---------------- 条目归一 ----------------
@@ -79,7 +97,9 @@ def slim(it: dict, source: str, source_topic: str = "") -> dict:
 
 
 def _slim_many(items, source: str, label: str) -> dict:
-    return {it["full_name"]: slim(it, source, label) for it in items}
+    return {it["full_name"]: slim(it, source, label) for it in items
+            if (it.get("full_name") or "").split("/", 1)[0].lower()
+            not in USER_BLACKLIST}
 
 
 # ---------------- 抓取（含截断修复 + 分 section 拆档） ----------------
@@ -185,7 +205,8 @@ def run(section: str, args) -> None:
         print(f"[dry-run] section={section} star_min={star}"
               + (f"（--only {only}：仅执行该阶段，以下为该 section 全部查询预览）" if only else ""))
         for t in sec["topics"]:
-            base = discovery_base(big_four_excl) if t == disc else f"topic:{t} fork:false"
+            base = (discovery_base(big_four_excl) if t == disc
+                    else f"topic:{t} fork:false") + _REPO_EXCL
             print(f"  topic: {base}" + (f" stars:>={star}" if star else "")
                   + ("（大topic自动分档）" if star else "（超1000按创建期拆）"))
         for w, q in sec["queries"].items():
@@ -198,7 +219,8 @@ def run(section: str, args) -> None:
             ns = sec["new_star_min"]
             print(f"[dry-run] 新项目窗口 stars:>={ns} created:>={cutoff}：")
             for t in sec["topics"]:
-                base = discovery_base(big_four_excl) if t == disc else f"topic:{t} fork:false"
+                base = (discovery_base(big_four_excl) if t == disc
+                    else f"topic:{t} fork:false") + _REPO_EXCL
                 print(f"  new: {base} stars:>={ns} created:>={cutoff}")
             for w in sec["queries"]:
                 print(f"  new: {w} fork:false stars:>={ns} created:>={cutoff}")
@@ -218,15 +240,17 @@ def run(section: str, args) -> None:
                 pool_t = _load_parts(parts, "topic")
                 pool_k = _load_parts(parts, "keyword")
                 for t in sec["topics"]:
-                    base = discovery_base(big_four_excl) if t == disc else f"topic:{t} fork:false"
+                    base = (discovery_base(big_four_excl) if t == disc
+                    else f"topic:{t} fork:false") + _REPO_EXCL
                     items, total = fetch_all(client, f"{base} stars:>={ns} created:>={cutoff}",
                                              "topic", t)
                     for fn, r in items.items():
                         pool_t.setdefault(fn, r)
                     totals[f"new:topic:{t}"] = total
                 for w in sec["queries"]:
-                    items, total = fetch_all(client, f"{w} fork:false stars:>={ns} created:>={cutoff}",
-                                             "keyword", w)
+                    items, total = fetch_all(
+                        client, f"{w} fork:false stars:>={ns} created:>={cutoff}{_REPO_EXCL}",
+                        "keyword", w)
                     for fn, r in items.items():
                         pool_k.setdefault(fn, r)
                     totals[f"new:kw:{w}"] = total
@@ -243,7 +267,8 @@ def run(section: str, args) -> None:
             for t in sec["topics"]:
                 if f"topic:{t}" in state["done"]:
                     continue
-                base = discovery_base(big_four_excl) if t == disc else f"topic:{t} fork:false"
+                base = (discovery_base(big_four_excl) if t == disc
+                    else f"topic:{t} fork:false") + _REPO_EXCL
                 items, total = fetch_topic(client, base, star, t)
                 totals[f"topic:{t}"] = total
                 if total == 0:
@@ -366,9 +391,13 @@ def _load_parts(parts: Path, stage: str) -> dict:
 def _merge_parts(parts: Path) -> dict:
     """单 section 内四通道合并去重（先 topic 后 keyword/org/whitelist，first-writer 为主记录）。"""
     merged: dict[str, dict] = {}
+    dropped = 0
     for stage in MERGE_STAGES:
         for it in _load_parts(parts, stage).values():
             fn = it["full_name"]
+            if fn in BLACKLIST or fn.split("/", 1)[0].lower() in USER_BLACKLIST:
+                dropped += 1
+                continue
             if fn not in merged:
                 it.setdefault("all_sources", [])
                 merged[fn] = it
@@ -376,6 +405,8 @@ def _merge_parts(parts: Path) -> dict:
                 srcs = merged[fn].setdefault("all_sources", [])
                 if it["source"] not in srcs and it["source"] != merged[fn]["source"]:
                     srcs.append(it["source"])
+    if dropped:
+        log.info("黑名单过滤：merge 丢弃 %d 条（parts_%s）", dropped, parts.name)
     return merged
 
 
@@ -415,12 +446,16 @@ def _merge_step(snap: Path, section: str) -> None:
 def _union_pools(snap: Path) -> dict:
     """跨 section 并集：只读两侧完成标记 pool_{sec}.json，固定 intl→cn 顺序，与执行顺序无关。"""
     union: dict[str, dict] = {}
+    dropped = 0
     for sec_name in ("intl", "cn"):
         p = snap / f"pool_{sec_name}.json"
         if not p.is_file():
             continue
         for it in json.loads(p.read_text(encoding="utf-8")):
             fn = it["full_name"]
+            if fn in BLACKLIST or fn.split("/", 1)[0].lower() in USER_BLACKLIST:
+                dropped += 1
+                continue
             if fn not in union:
                 it.setdefault("all_sources", [])
                 union[fn] = it
@@ -428,6 +463,8 @@ def _union_pools(snap: Path) -> dict:
                 srcs = union[fn].setdefault("all_sources", [])
                 if it["source"] not in srcs and it["source"] != union[fn]["source"]:
                     srcs.append(it["source"])
+    if dropped:
+        log.info("黑名单过滤：union 丢弃 %d 条", dropped)
     return union
 
 
