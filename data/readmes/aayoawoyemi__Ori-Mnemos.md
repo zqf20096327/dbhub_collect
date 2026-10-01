@@ -43,7 +43,7 @@ for (const hit of res.data.results) console.log(hit.title, hit.score);
 vectors, graph metrics and a config; `recall` does that assembly for you.
 
 The export surface is deliberately small and is a semver contract; the rest of
-`src/core` is internal. Versions before 0.7.1 shipped no `main` and no
+`src/core` is internal. Versions before 0.8.0 shipped no `main` and no
 `exports`, so a bare import threw and the library path did not exist — but the
 CLI and MCP paths always worked, and existing users were unaffected.
 
@@ -319,7 +319,7 @@ ori bridge codex --vault ~/brain                       # ~/.codex/config.toml
 ori bridge generic --vault ~/brain                     # prints config for manual setup
 ```
 
-Claude Code, Hermes Agent, and OpenCode get full lifecycle integration — the agent orients at session start, captures insights at session end, and validates notes on write. Cursor, Codex, and other MCP clients get access to all 15 tools but manage their own session lifecycle.
+Claude Code, Hermes Agent, and OpenCode get full lifecycle integration — the agent orients at session start, captures insights at session end, and validates notes on write. Cursor, Codex, and other MCP clients get access to all 16 tools but manage their own session lifecycle.
 
 Manual MCP config (works with any client that speaks MCP):
 
@@ -418,7 +418,7 @@ Notes earn Q-values from session outcomes via exponential moving average updates
 | Update after retrieval | +0.5 | You edit a note you just retrieved |
 | Within-session re-recall | +0.4 | Same note surfaces across different queries |
 
-After RRF fusion, Phase B reranks the candidate set with a lambda blend of similarity score and learned Q-value, plus a UCB-Tuned exploration bonus that ensures under-retrieved notes still get discovered. A cumulative bias cap (MAX=3.0, compression=0.3) prevents runaway score inflation.
+After RRF fusion, Phase B reranks the candidate set with a lambda blend of similarity score and learned Q-value, plus an exploration bonus that ensures under-retrieved notes still get discovered. The bonus shrinks as a note is shown without ever being used; once a note has been credited it keeps the full bonus, so being used never ranks a note below an equally relevant note nobody has seen. A cumulative bias cap (MAX=3.0, compression=0.3) prevents runaway score inflation.
 
 ### Layer 2 — Co-Occurrence Edges
 
@@ -430,9 +430,9 @@ The combined wiki-link + co-occurrence graph feeds a Personalized PageRank walk 
 
 ### Layer 3 — Stage Meta-Learning
 
-Each pipeline stage (BM25, PageRank, warmth, hub dampening, Q-reranking, co-occurrence PPR) is wrapped in a LinUCB contextual bandit with an 8-dimensional query feature vector. The system learns which stages help for which query types and auto-skips stages that consistently hurt.
+Each optional pipeline stage (PageRank, warmth, hub dampening, co-occurrence PPR) is wrapped in a LinUCB contextual bandit with an 8-dimensional query feature vector. The system learns which stages help for which query types and auto-skips stages that consistently hurt.
 
-Three-way decisions per stage: **run** / **skip** / **abstain** (stop the pipeline early). Cost-sensitive thresholds ensure expensive stages face a higher bar. Essential stages (semantic search, RRF fusion) never skip. An ACQO two-phase curriculum runs all stages during exploration (first 50 samples), then optimizes.
+Three-way decisions per stage: **run** / **skip** / **abstain** (stop the pipeline early). Cost-sensitive thresholds ensure expensive stages face a higher bar. Essential stages (semantic search, BM25, RRF fusion, Q-reranking) never skip. Q-reranking is essential because the bandit's reward measures result shape and term recall, which cannot see whether a note was used. An ACQO two-phase curriculum runs all stages during exploration (first 50 samples), then optimizes.
 
 ### Session Learning Loop
 
@@ -451,7 +451,7 @@ All updates happen in a single SQLite transaction at session end, in order: co-o
 ## The Stack
 
 ```
-Layer 6: MCP Server                    15 tools, 5 resources — any agent talks to this
+Layer 6: MCP Server                    16 tools, 5 resources — any agent talks to this
 Layer 5: Recursive Exploration         PPR graph traversal, sub-question decomposition, convergence detection
 Layer 4: Retrieval Intelligence        Q-value reranking, co-occurrence learning, stage meta-optimization
 Layer 3: Dampening Pipeline            gravity, hub, resolution — ablation-validated
@@ -460,7 +460,7 @@ Layer 1: Knowledge Graph + Vitality    wiki-links, ACT-R decay, spreading activa
 Layer 0: Markdown files on disk        git-friendly, human-readable, portable
 ```
 
-15 MCP tools · 5 resources · 19 CLI commands · 874 tests
+16 MCP tools · 5 resources · 20 CLI commands · 874 tests
 
 ---
 
@@ -530,6 +530,7 @@ A typical session costs **~$0.10** with Ori. Without it: **~$6.00+**.
 | `ori_wake` | Session boot: bounded briefing, plus onboarding on a fresh vault |
 | `ori_update` | Write to identity, goals, methodology, daily, or reminders |
 | `ori_update_decision` | Record the user's answer to an update notice |
+| `ori_whats_new` | Release notes for the installed version, or any version |
 | `memory_sql` | Read-only SQL over the index — anything the ranking tools cannot express |
 | `ori_health` | Full diagnostics |
 | `ori_add` | Capture to inbox |
@@ -570,6 +571,7 @@ and `ori explore-conclude`.
 ori init [dir]                    # Scaffold a new vault
 ori status                        # Vault overview
 ori health                        # Full diagnostics
+ori whats-new [version]           # Release notes
 
 # Note lifecycle
 ori add <title> [--type <type>]   # Capture to inbox
@@ -760,10 +762,12 @@ ori --version
 ```
 
 ```bash
-npm test              # 579+ tests
+npm test              # 860+ tests
 npm run lint          # Type check
 npm run dev           # Watch mode
 ```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) before opening a PR.
 
 Thanks to [@maichler](https://github.com/maichler) and the rest of the Ori community for their PRs and additions.
 
