@@ -26,6 +26,7 @@ mcp-name: io.github.Ikalus1988/misakanet
   <a href="https://github.com/Ikalus1988/MisakaNet/actions/workflows/pr-quality-gate.yml"><img src="https://github.com/Ikalus1988/MisakaNet/actions/workflows/pr-quality-gate.yml/badge.svg" alt="CI"></a>
   <a href="https://github.com/Ikalus1988/MisakaNet/tree/main/lessons"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Ikalus1988/MisakaNet/data/badges/lessons.json" alt="Lessons"></a>
   <a href="https://github.com/Ikalus1988/MisakaNet/blob/main/scripts/mcp_server.py"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Ikalus1988/MisakaNet/data/badges/tools.json" alt="MCP Tools"></a>
+  <a href="https://misakanet.org/api/search-index"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Ikalus1988/MisakaNet/data/badges/retrieval.json" alt="Retrieval backend (today)"></a>
   <a href="https://github.com/Ikalus1988/MisakaNet/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Ikalus1988/MisakaNet?color=blueviolet" alt="License"></a>
   <a href="https://github.com/Ikalus1988/MisakaNet/stargazers"><img src="https://img.shields.io/github/stars/Ikalus1988/MisakaNet?style=social" alt="Stars"></a>
 </p>
@@ -36,6 +37,7 @@ mcp-name: io.github.Ikalus1988/misakanet
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.10+-blue" alt="Python"></a>
   <a href="https://pypi.org/project/misakanet/"><img src="https://img.shields.io/pypi/v/misakanet" alt="PyPI"></a>
   <a href="https://www.npmjs.com/package/misakanet"><img src="https://img.shields.io/npm/v/misakanet" alt="npm"></a>
+  <a href="https://github.com/marketplace/actions/misakanet-intake-bot"><img src="https://img.shields.io/badge/Marketplace-MisakaNet%20Intake%20Bot-blue?logo=github" alt="GitHub Marketplace"></a>
   <a href="https://dsh-plugin.org/plugins/ikalus1988/misakanet"><img src="https://dsh-plugin.org/badges/listed.svg" alt="Listed on dsh-plugin.org"></a>
   <a href="https://dsh.directory/plugins/ikalus1988/misakanet"><img src="https://dsh.directory/badges/listed.svg" alt="Listed on DSH Directory"></a>
   <a href="https://www.dsh.so/artifact/misakanet/"><img src="https://www.dsh.so/badge/install/misakanet.svg" alt="dsh.so install"></a>
@@ -61,6 +63,56 @@ mcp-name: io.github.Ikalus1988/misakanet
 
 ---
 
+## Install (30 seconds)
+
+| Your host | Command |
+|---|---|
+| **DeepSeek Harness** | `dsh plugin --profile web add misakanet` — or type `misakanet` in the host's **Add plugin** dialog |
+| **Claude Code** | `/plugin marketplace add Ikalus1988/MisakaNet` then `/plugin install misakanet@misakanet` |
+| **Codex, Cursor, Gemini CLI, Copilot CLI, OpenCode, …** | `npx @misaka-net/misakanet-setup` — writes the MCP row into each host's own config |
+| **Any other MCP client** | point it at `https://misakanet.org/mcp` — the endpoint is public and reads are anonymous |
+| **Your own code** | `pip install misakanet-core` (library) · `pip install misakanet` (stdio server) |
+
+<p align="center">
+  <img src="docs/assets/dsh-plugin-add.png" width="760" alt="DeepSeek Harness plugin page: (1) the plugin icon in the sidebar, (2) the 添加插件 (Add plugin) button, (3) the Add-plugin dialog with the package name misakanet typed in"/>
+</p>
+
+<p align="center"><em>DeepSeek Harness: sidebar <b>插件</b> (1) → <b>添加插件</b> (2) → type <code>misakanet</code> (3) → <b>安装</b>.<br/>The dialog takes the same package name the CLI command above uses (its own hint: a package name, a GitHub URL, or a local path).</em></p>
+
+Updates: `dsh plugin --profile web update misakanet@latest`.
+Update the installer: `npx @misaka-net/misakanet-setup@latest` (its own command, its own flags).
+
+No account, no token, no Python needed for the plugin path: the npm bundle mounts the hosted endpoint.
+Declared hosts and what was measured: [compatibility](docs/compatibility.md). Every channel, the
+prerequisites, and the two-package trap that costs people an install: [How to use it](#how-to-use-it).
+
+## What the DeepSeek Harness plugin adds
+
+Version 2.40.0 ships the browser half. It is not a dialog: it puts MisakaNet where the session already is.
+
+<p align="center">
+  <img src="docs/assets/dsh-client-left-column.png" width="820" alt="DeepSeek Harness: a permanent MisakaNet entry in the left column under Plugins, and the full page it opens"/>
+</p>
+
+| Where | What you get |
+| --- | --- |
+| **Left column** | A permanent `MisakaNet` entry directly under `Plugins`. It is a shortcut, not the panel: clicking it opens a full page in the main column. Root scope — it does not come and go with a session. |
+| **Conversation tab** | A `MisakaNet` tab beside Chat and Trajectory: what this session asked, what came back, and what you filed, rebuilt from the conversation's own rows. |
+| **Right column** | The same panel as a pane, so it can sit next to the file tree, a terminal, or a document. |
+| **Tool call rows** | Every `misakanet_search` and `misakanet_submit_intake` call gets its own row on the tool card: the query as it was sent, whether a lesson came back, and one reuse vote per lesson. |
+| **Assistant action row** | 👍 / 👎 on the answer that used a lesson. Those two are the only things the page ever sends — counters live in the browser, not on a server. |
+| **`/misakanet` in the composer** | Type `/misakanet pip install timeout` and press Enter: the lessons come back in a card inside the composer, with no agent in the loop. The query is the only thing it sends. |
+| **Plugin page** | The MCP row's effective configuration — endpoint, transport, timeout — shown read-only, next to where it is edited (the profile's `cordis.patch.yml`). |
+| **Voice** | An off-by-default switch that explains both mechanisms: the cue the server names on the next search, and the local hook a page cannot read. |
+
+<p align="center">
+  <img src="docs/assets/dsh-client-right-panel.png" width="820" alt="The MisakaNet pane in the right column of a DeepSeek Harness session"/>
+</p>
+
+Which seats the half occupies and why they are `root` or `session` scope, with the host's own contract text
+quoted: [compatibility](docs/compatibility.md). Running a host of your own and want a check that cannot
+touch your profile: `python3 scripts/install_smoke.py dsh-client --serve`.
+
 ## What is MisakaNet?
 
 **Git-backed failure memory for AI coding agents.** An error shows up → the agent searches the lessons →
@@ -84,7 +136,7 @@ how much a lesson has been proven.
 |------------------|-------------------|
 | ❌ A general-purpose memory system | ✅ Failure-recovery knowledge layer |
 | ❌ An Agent runtime or framework | ✅ Searchable lesson database |
-| ❌ A vector database or RAG system | ✅ BM25 keyword search (zero deps) |
+| ❌ A vector database or RAG system | ✅ BM25 keyword search — **stdlib only**, no third-party packages, but a **Python ≥ 3.10 interpreter is still required** |
 | ❌ A cloud service requiring signup | ✅ `git clone` → search locally |
 | ❌ A skill marketplace | ✅ Debugging knowledge from real sessions |
 
@@ -139,7 +191,7 @@ Three deliberate engineering choices, each of which trades something:
 
 * **Git is the source of truth.** A lesson is a file, so it diffs, reverts, forks and reviews like code.
   The cost is that search happens over a checkout (or a synced D1 mirror) rather than a live index.
-* **Zero dependencies by default.** The retriever is BM25 over the standard library, so the offline path
+* **No third-party packages by default.** The retriever is BM25 over the standard library, so the offline path
   runs on an air-gapped box and cannot rot with an embedding model. The cost is recall on paraphrases.
 * **Evidence is graded, not asserted.** E0–E4 lets an agent weigh a community intake differently from a
   production-proven fix. The cost is bookkeeping, and most lessons sit at E0–E2.
@@ -158,11 +210,12 @@ Supported agents — and what "supported" means per group (evidence levels in
 | MCP by hand | Cursor · Gemini CLI · Windsurf · OpenCode · Copilot · DeepSeek Harness | the endpoint is standard MCP over HTTP; add the URL in that client's own config. Cursor also has a rules-file mode |
 | Anything else that speaks MCP over HTTP | — | the endpoint is public, reads are anonymous and unmetered |
 
-Pick one channel — they are independent, and none of them needs an account:
+Pick one channel — they are independent, and none of them needs an account (the Claude Code row needs a Claude Code version with plugin support):
 
 | I want… | Command | What it touches |
 |---|---|---|
 | my assistant to search the lessons | `npx @misaka-net/misakanet-setup` | writes the MCP endpoint into each assistant's own config; optionally a rules block and a hook |
+| my **Claude Code** assistant to search the lessons, as a plugin | `/plugin marketplace add Ikalus1988/MisakaNet` then `/plugin install misakanet@misakanet` | adds the hosted MCP tools to Claude Code from this repository — no installer, no local process |
 | to call the endpoint myself | the `curl` below | nothing to install |
 | the library in my own code | `pip install misakanet-core` | nothing |
 
@@ -172,8 +225,9 @@ Pick one channel — they are independent, and none of them needs an account:
 |---|---|---|
 | `@misaka-net/misakanet-setup` (npm) | the **installer** — has `bin`, no plugin entry | teaching your assistant to search |
 | `misakanet` (npm) | the **DSH / Codex plugin** (`index.js`, `SKILL.md`) | `dsh plugin --profile web add misakanet` |
+| this repository (git) | also a **Claude Code plugin marketplace** (`.claude-plugin/`) | `/plugin marketplace add Ikalus1988/MisakaNet` — the Claude channel is repo-based on purpose: a marketplace resolves the plugin from the repository, so the npm bundle stays the DSH/Codex artifact |
 | `misakanet` (PyPI) | ships the stdio **MCP server** | `python3 -m misakanet.server` |
-| `misakanet-core` (PyPI) | the **library** (zero-dep BM25) | `from misakanet.search import search_lessons` |
+| `misakanet-core` (PyPI) | the **library** (stdlib-only BM25 — Python ≥ 3.10 required, no third-party packages) | `from misakanet.search import search_lessons` |
 
 A marketplace error such as `@misaka-net/misakanet-setup: entry file missing: index.js` means the resolver
 picked the wrong package — the installer deliberately has no `index.js`.
@@ -241,7 +295,7 @@ jobs:
 |---|---|
 | 🔴 Debugging a real failure | [Search existing lessons](https://ikalus1988.github.io/MisakaNet/search/) before retrying |
 | 🤖 Building an AI agent / tool | Use lessons as [failure-memory](docs/mcp-quickstart.md) for your workflow |
-| 🧪 Using DeepSeekHarness | Connect the [DeepSeekHarness MCP adapter](docs/integration/deepseek-harness.md) as a recovery-memory plugin |
+| 🧪 Using DeepSeek Harness | `dsh plugin --profile web add misakanet`, then [what it registers](docs/integration/deepseek-harness.md) — skill + `mcp__misakanet__*` tools, no local Python |
 | 🔧 Contributing a fix | Read [CONTRIBUTING.md](CONTRIBUTING.md) for code style + PR checklist, check [related lessons](https://ikalus1988.github.io/MisakaNet/search/), then open a small PR |
 | 📝 Sharing a failure case | Submit a [5-line failure note](https://github.com/Ikalus1988/MisakaNet/issues/new?template=lesson-feedback.yml) — no polished PR required |
 | 📊 Evaluating agent learning | Run the [benchmarks](scripts/retrieval_noisebench.py) and compare reuse behavior |

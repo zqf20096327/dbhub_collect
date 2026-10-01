@@ -273,7 +273,7 @@ associated database, scheme / build tag, and scheme aliases:
 | Couchbase            | `couchbase`     | `n1`, `n1ql`                                  | [github.com/xo/dbimp/couchbase][d-couchbase]                                                |
 | CSVQ                 | `csvq`          | `cs`, `csv`, `tsv`, `json`                    | [github.com/mithrandie/csvq-driver][d-csvq] <sup>[§][f-embedded]</sup>                      |
 | Cznic QL             | `ql`            | `cznic`, `cznicql`                            | [modernc.org/ql][d-ql] <sup>[§][f-embedded]</sup>                                           |
-| Databend             | `databend`      | `dd`, `bend`                                  | [github.com/datafuselabs/databend-go][d-databend]                                           |
+| Databend             | `databend`      | `dd`, `bend`                                  | [github.com/xo/dbimp/databend][d-databend]                                                  |
 | Databricks           | `databricks`    | `br`, `brick`, `bricks`, `databrick`          | [github.com/databricks/databricks-sql-go][d-databricks] <sup>[¶][f-hosted]</sup>            |
 | DynamoDb             | `dynamodb`      | `dy`, `dyn`, `dynamo`, `godynamo`             | [github.com/btnguyen2k/godynamo][d-dynamodb] <sup>[¶][f-hosted]</sup>                       |
 | Exasol               | `exasol`        | `ex`, `exa`                                   | [github.com/exasol/exasol-driver-go][d-exasol]                                              |
@@ -285,7 +285,6 @@ associated database, scheme / build tag, and scheme aliases:
 | InfluxDB InfluxQL    | `influxql`      | `iq`                                          | [github.com/xo/dbimp/influxdb][d-influxql]                                                  |
 | ModernC SQLite3      | `moderncsqlite` | `mq`, `modernsqlite`                          | [modernc.org/sqlite][d-moderncsqlite] <sup>[§][f-embedded]</sup>                            |
 | Neo4j                | `neo4j`         | `nj`, `neo`, `n4j`                            | [github.com/xo/dbimp/neo4j][d-neo4j]                                                        |
-| Netezza              | `netezza`       | `nz`, `nzgo`                                  | [github.com/IBM/nzgo/v12][d-netezza]                                                        |
 | PostgreSQL lib/pq    | `libpq`         | `pq`                                          | [github.com/lib/pq][d-libpq]                                                                |
 | Presto               | `presto`        | `pr`, `prestodb`                              | [github.com/prestodb/presto-go-client/v2][d-presto]                                         |
 | QuestDB              | `questdb`       | `qs`                                          | [github.com/jackc/pgx/v5/stdlib][d-questdb]                                                 |
@@ -321,7 +320,7 @@ associated database, scheme / build tag, and scheme aliases:
 [d-couchbase]: https://github.com/xo/dbimp
 [d-cratedb]: https://github.com/jackc/pgx
 [d-csvq]: https://github.com/mithrandie/csvq-driver
-[d-databend]: https://github.com/datafuselabs/databend-go
+[d-databend]: https://github.com/xo/dbimp
 [d-databricks]: https://github.com/databricks/databricks-sql-go
 [d-duckdb]: https://github.com/duckdb/duckdb-go
 [d-dynamodb]: https://github.com/btnguyen2k/godynamo
@@ -341,7 +340,6 @@ associated database, scheme / build tag, and scheme aliases:
 [d-moderncsqlite]: https://gitlab.com/cznic/sqlite
 [d-mysql]: https://github.com/go-sql-driver/mysql
 [d-neo4j]: https://github.com/xo/dbimp
-[d-netezza]: https://github.com/IBM/nzgo
 [d-odbc]: https://github.com/alexbrainman/odbc
 [d-oracle]: https://github.com/sijms/go-ora
 [d-ots]: https://github.com/aliyun/aliyun-tablestore-go-sql-driver
@@ -615,12 +613,6 @@ $ usql my_named_connection
 
 # connect with ODBC driver (requires building with odbc tag)
 $ cat /etc/odbcinst.ini
-[DB2]
-Description=DB2 driver
-Driver=/opt/db2/clidriver/lib/libdb2.so
-FileUsage = 1
-DontDLClose = 1
-
 [PostgreSQL ANSI]
 Description=PostgreSQL ODBC driver (ANSI version)
 Driver=psqlodbca.so
@@ -629,8 +621,7 @@ Debug=0
 CommLog=1
 UsageCount=1
 
-# connect to db2, postgres databases using odbc config above
-$ usql odbc+DB2://user:pass@localhost/dbname
+# connect to a postgres database using the odbc config above
 $ usql odbc+PostgreSQL+ANSI://user:pass@localhost/dbname?TraceFile=/path/to/trace.log
 ```
 
