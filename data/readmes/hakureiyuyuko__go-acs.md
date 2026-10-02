@@ -23,17 +23,23 @@
   探不通才判离线（设备断电时 TR-069 不会通知 ACS，只能这样确认）
 - **可运维**：任务队列持久化、一键唤醒设备、重启 / 删除设备、面板独立登录页（会话 cookie、可退出）、
   任务与上报记录的保留上限
+- **改完监听端口不用回命令行**：设置页里改完地址，点「立即重启服务」就换进程生效
+  （没变的端口把 socket 交给新进程，设备上报不断；新端口起不来当场回滚）
+- **厂商私有参数有映射表**：各家光猫的光功率/温度等参数名、位置、单位都不一样（还有按光模块
+  寄存器编码的原始值），这些映射存在库里（`param_aliases`）—— 支持一台新光猫就是加几行数据
+  （`acs alias add`），没登记的机型按叶子名启发式显示，不会空着也不编数字
 
 ## 截图
 
 > 数据来自仓库自带的 CPE 模拟器，不含任何真实设备信息。
 
 概览：设备列表（在线状态、序列号、软件版本、数据模型、最后上报时间、已采集参数条数、无线终端数，
-可按在线 / 离线筛选，状态分「在线 / 探测中 / 离线」三态，右上角可开 5 秒自动刷新）+ 无线概况
+有设备上报光功率时会多出「收光 / 发光」两列，可按在线 / 离线筛选，状态分「在线 / 探测中 / 离线」三态，
+右上角可开 5 秒自动刷新）+ 无线概况
 
 ![概览](docs/images/overview.png)
 
-基本信息、WAN 连接、操作（唤醒 / 重启 / 删除）、备注；右上角同样有 5 秒自动刷新开关（与列表页共享）
+基本信息（含光模块读数：收光 / 发光 / 光模块温度 / 电压 / 偏流）、WAN 连接、操作（唤醒 / 重启 / 删除）、备注；右上角同样有 5 秒自动刷新开关（与列表页共享）
 
 ![设备详情](docs/images/device.png)
 
@@ -45,7 +51,8 @@ FTTR 子设备与网络诊断：子设备的型号、组网模式、光功率与
 
 ![终端列表](docs/images/clients.png)
 
-设置：ACS 与面板各自的监听地址、面板登录账号密码（端口改动重启生效，账号密码立即生效）
+设置：ACS 与面板各自的监听地址、面板登录账号密码（端口改动重启生效，账号密码立即生效）；
+改完地址可以点「立即重启服务」，不用再去命令行
 
 ![设置](docs/images/settings.png)
 
@@ -54,7 +61,7 @@ FTTR 子设备与网络诊断：子设备的型号、组网模式、光功率与
 从 [Releases](https://github.com/hakureiyuyuko/go-acs/releases) 下对应架构的包，解压后一条命令装成 systemd 服务：
 
 ```bash
-VERSION=1.2.2                                   # 换成你下载的那个版本
+VERSION=1.2.3                                   # 换成你下载的那个版本
 tar xzf acs-$VERSION-linux-amd64.tar.gz
 cd acs-$VERSION-linux-amd64
 sudo ./install.sh                                                # 默认 CWMP 与面板都走 :7547
@@ -81,7 +88,7 @@ go build -o acs ./cmd/acs        # Go 1.27+；CGO_ENABLED=0 可得到静态二�
 打发布包：
 
 ```bash
-scripts/build-release.sh v1.2.2   # 产物在 dist/：amd64 + arm64 的 tar.gz 与 SHA256SUMS
+scripts/build-release.sh v1.2.3   # 产物在 dist/：amd64 + arm64 的 tar.gz 与 SHA256SUMS
 ```
 
 设备侧的 ACS URL 填 `http://<IP>:9090/acs`；真机里也见过配成根路径 `/` 的，所以两者都收。
@@ -151,7 +158,7 @@ go build -o cpesim ./test/cpesim
 
 ```bash
 go test ./...                   # 单元测试：协议解析 / 存储 / Web
-bash scripts/verify-s1.sh       # 端到端 353 项：模拟器打真实 HTTP + SOAP，逐条断言
+bash scripts/verify-s1.sh       # 端到端 368 项：模拟器打真实 HTTP + SOAP，逐条断言
 bash scripts/verify-interop.sh  # 与 GenieACS 官方 JS 模拟器互通 8 项
 ```
 

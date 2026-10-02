@@ -30,7 +30,7 @@ Main Developer: **Aldrin Kyle Delfin**
 | Containerization | Docker & Docker Compose |
 | Build Tool | Maven 3.x |
 | Code Generation | Lombok 1.18.46 |
-| Testing | JUnit 5, Mockito, JaCoCo |
+| Testing | JUnit 5, Mockito, Testcontainers, JaCoCo |
 | Serialization | Jackson (JSON) |
 | Validation | Jakarta Bean Validation |
 | Logging | SLF4J via Lombok `@Slf4j` |
@@ -62,8 +62,9 @@ This README is the project's main portfolio entry point. The development reflect
 2. [Institutional Context](docs/institutional-context.md) describes the ASU-CCS academic model and existing MIS assumptions behind the user domain.
 3. [Domain Decisions](docs/domain-decisions.md) explains why a `Book` represents one physical copy and what that means for future loan features.
 4. [API Documentation Guideline](docs/api-documentation-guideline.md) sets the standard for accurate OpenAPI and Swagger documentation without unnecessary annotation boilerplate.
-5. [Agent and Contributor Guide](AGENTS.md) records the architecture, layer contracts, coding rules, testing expectations, and definition of done. It stays at the repository root so coding agents can discover it automatically.
-6. [Development TODO](internal-docs/TODO.md) tracks completed user-domain work and remaining authentication, loan, testing, and documentation tasks. It is a working roadmap, not part of the public API contract.
+5. [Implementation Plan: Remaining Quality Improvements](docs/implementation-plan-quality-improvements.md) tracks the completed paginated query change and the remaining documentation and OpenAPI maintainability work.
+6. [Agent and Contributor Guide](AGENTS.md) records the architecture, layer contracts, coding rules, testing expectations, and definition of done. It stays at the repository root so coding agents can discover it automatically.
+7. [Development TODO](internal-docs/TODO.md) tracks completed user-domain work and remaining authentication, loan, testing, and documentation tasks. It is a working roadmap, not part of the public API contract.
 
 ## Architecture Overview
 
@@ -122,6 +123,7 @@ docs/
   development-problems-solved.md
   domain-decisions.md
   institutional-context.md
+  implementation-plan-quality-improvements.md
 internal-docs/
   TODO.md
 
@@ -188,12 +190,23 @@ src/main/resources/
 
 src/test/java/
   unit/
-    BookApiMvcTest.java
-    BookMapperTest.java
-    BookTest.java
-    BookServiceTest.java
-    GlobalExceptionHandlerTest.java
-    UserServiceTest.java
+    book/
+      BookApiMvcTest.java
+      BookMapperTest.java
+      BookTest.java
+      BookServiceTest.java
+    user/
+      UserApiMvcTest.java
+      UserServiceTest.java
+    global/
+      GlobalExceptionHandlerTest.java
+      OpenApiMvcTest.java
+  integration/
+    PostgresTestConfig.java
+    book/
+      BookPersistenceIT.java
+    user/
+      UserPersistenceIT.java
 
 src/test/resources/
   junit-platform.properties
@@ -255,7 +268,7 @@ public ResponseEntity<ApiResponse<BookResponseDTO>> addBook(@Valid @RequestBody 
 
 - CRUD operations for books.
 - Each `Book` represents one physical borrowable copy. Duplicate titles and authors are allowed because separate copies have separate generated IDs; the model does not yet include an ISBN or edition key.
-- Pagination and sorting through `GET /app/books/all` and `GET /app/books/sorted`.
+- Pagination and sorting through `GET /app/books/all` and paginated filtering through `GET /app/books/query`.
 - Advanced search by title, author, genre, or price.
 - Price range filtering through `GET /app/books/price`.
 - Budget filtering through `GET /app/books/budget`.
@@ -353,6 +366,7 @@ public LibraryStatisticsDTO getLibraryStatistics() {
 | --- | --- | --- | --- | --- |
 | `GET` | `/app/books/health` | Health check for the API | `GET /app/books/health` | `{"success":true,"message":"Health check","data":{"api":true,"database":true},"timestamp":172...}` |
 | `GET` | `/app/books/all` | Returns a paginated list of books | `GET /app/books/all?page=0&size=12&sort=id,asc` | `{"content":[{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","price":19.99}],"pageable":{...}}` |
+| `GET` | `/app/books/query` | Paginates books with optional title, author, genre, and inclusive price filters | `GET /app/books/query?author=orwell&minPrice=10&sort=price,desc&page=0&size=12` | `{"content":[{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","price":19.99}],"totalElements":1,"totalPages":1,...}` |
 | `GET` | `/app/books/{id}` | Fetches a single book by ID | `GET /app/books/1` | `{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","price":19.99}` |
 | `POST` | `/app/books/add` | Creates a new book using `BookRequestDTO` validation | `POST /app/books/add` with `{"title":"1984","author":"George Orwell","genre":"Dystopian","price":19.99}` | `{"success":true,"message":"Book Added Successfully","data":{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","price":19.99},"timestamp":172...}` |
 | `PATCH` | `/app/books/{id}` | Partially updates a book | `PATCH /app/books/1` with `{"price":15.99}` | `{"success":true,"message":"Book updated successfully","data":{"id":1,"title":"1984","author":"George Orwell","genre":"Dystopian","price":15.99},"timestamp":172...}` |
@@ -366,6 +380,7 @@ public LibraryStatisticsDTO getLibraryStatistics() {
 | `GET` | `/app/books/stats` | Returns total books, total value, and the most expensive book | `GET /app/books/stats` | `{"totalBooks":6,"totalValue":123.45,"mostExpensiveBook":{"id":4,"title":"...","author":"...","genre":"...","price":49.99}}` |
 | `GET` | `/app/books/stats/average-price` | Returns the average price of all books | `GET /app/books/stats/average-price` | `{"success":true,"message":"Average Price of Collection: ","data":20.50,"timestamp":172...}` |
 | `GET` | `/app/books/stats/count` | Returns the total number of books | `GET /app/books/stats/count` | `{"success":true,"message":"Book Collection Count","data":6,"timestamp":172...}` |
+
 | `GET` | `/app/users` | Lists users with pagination | `GET /app/users?page=0&size=12` | Spring `Page<UserResponseDTO>` |
 | `GET` | `/app/users/{universityId}` | Gets one user by university ID | `GET /app/users/2025-4321` | `UserResponseDTO` |
 | `POST` | `/app/users` | Creates a user | `POST /app/users` with `UserCreateRequestDTO` | `ApiResponse<UserResponseDTO>`, HTTP 201 |
@@ -373,6 +388,8 @@ public LibraryStatisticsDTO getLibraryStatistics() {
 | `PUT` | `/app/users/{universityId}` | Replaces profile fields | `PUT /app/users/2025-4321` with `UserReplaceRequest` | `ApiResponse<UserResponseDTO>` |
 | `PUT` | `/app/users/{universityId}/password` | Changes password after current-password verification | `PUT /app/users/2025-4321/password` with `ChangePasswordDTO` | `ApiResponse<Void>` |
 | `DELETE` | `/app/users/{universityId}` | Deletes a user | `DELETE /app/users/2025-4321` | `ApiResponse<Void>` |
+
+`/app/books/query` combines supplied filters with AND. Text matching is case-insensitive literal substring matching; `minPrice` and `maxPrice` are inclusive and either may be used alone. Without filters, it returns all books as a page. Pages start at 0, default to size 12 and `id` ascending, and are capped at size 100. Sort with `sort=property,direction` using `id`, `title`, `author`, `genre`, or `price`; invalid ranges, decimals, or sort fields return HTTP 400. Existing list routes retain their response shapes.
 
 ### User API
 
@@ -461,35 +478,48 @@ The complete diagnosis, pre-release reset procedure, clean-install behavior, and
 - `BookMapper` centralizes conversion between entities and DTOs.
 - `UserService` normalizes identity values, checks duplicates, enforces academic rules, validates create requests with Jakarta Validator, bounds passwords to 8–72 characters before BCrypt processing, and persists only BCrypt-hashed passwords.
 - `UserMapper` keeps password fields out of `UserResponseDTO`.
-- `UserAPI` delegates user operations to `UserService` and returns DTOs rather than entities. User API serialization and routing still need MVC integration coverage.
+- `UserAPI` delegates user operations to `UserService` and returns DTOs rather than entities. Its routing and serialization have MVC-slice coverage.
 
 ## Testing
 
-The project uses JUnit 5, Mockito, AssertJ, Jakarta Validator, and JaCoCo. Its existing suite includes fast MVC-slice coverage for the book HTTP contract plus unit coverage for the book and user service behavior, book entity and DTO, typed statistics and genre-distribution projections, mapper behavior, and global REST exception translation. User controller, JPA, Flyway, and PostgreSQL integration tests are not yet present.
+The project uses JUnit 5, Mockito, AssertJ, Jakarta Validator, Testcontainers, and JaCoCo. The default Docker-free suite covers book and user MVC contracts, generated OpenAPI security-sensitive schemas, services, DTOs, mappings, and exception handling. The opt-in PostgreSQL profile checks Flyway startup, Hibernate schema validation, repository queries/projections, transaction dirty checking, and database constraints. PostgreSQL integration execution requires Docker.
+
+Tests are grouped by test scope and domain: `src/test/java/unit/book`, `src/test/java/unit/user`, and `src/test/java/unit/global`; PostgreSQL integration tests live under `src/test/java/integration/book` and `src/test/java/integration/user`. Keep new tests with the domain they exercise. Shared PostgreSQL test configuration lives directly under `integration` so both integration classes use one Spring context and container.
 
 - `BookTest` verifies book construction and request DTO constraints.
 - `BookApiMvcTest` verifies routes, status codes, JSON response shapes, invalid request payloads, pagination/query binding, and global exception responses without starting JPA or PostgreSQL.
 - `BookMapperTest` verifies field mapping, null handling, list mapping, empty-list handling, and that `createdAt` is omitted from response JSON.
 - `BookServiceTest` verifies service rules, repository interaction, search, sorting, pricing, typed statistics projections, genre-distribution mapping, and dirty-checking expectations.
-- `GlobalExceptionHandlerTest` directly invokes each of the 14 exception handlers and verifies HTTP status, public error fields, validation-message aggregation, and protection against leaking parser, database, constraint, or fallback exception details.
-- `UserServiceTest` verifies partial-update normalization, DTO and business validation, password verification and encoding, unchanged-email handling, duplicate-email rejection, and dirty-checking expectations. Academic combinations, duplicate checks during creation, and controller behavior still need coverage.
+- `UserApiMvcTest` verifies all user routes, request binding and validation, paging defaults, direct DTO versus envelope response shapes, 404/409 error responses, and that public responses do not expose password fields. It mocks `UserService` and does not start JPA or PostgreSQL.
+- `OpenApiMvcTest` generates `/v3/api-docs` in an MVC slice and checks representative routes, response codes, write-only password inputs, and absence of password fields in public responses without Docker.
+- `GlobalExceptionHandlerTest` directly invokes the exception handlers and verifies HTTP status, public error fields, validation-message aggregation, and protection against leaking parser, database, constraint, or fallback exception details.
+- `UserServiceTest` verifies partial-update normalization, DTO and business validation, password verification and encoding, unchanged-email handling, duplicate-email rejection, and dirty-checking expectations. Academic combinations still need focused coverage; `UserPersistenceIT` covers selected real-database paths.
+- `BookPersistenceIT` runs only with the `integration` profile and Docker. It checks migrations/schema validation, PostgreSQL book queries and projections, and committed PATCH/PUT updates.
+- `UserPersistenceIT` checks normalized user creation, stored password hashes, committed profile/password changes, and PostgreSQL uniqueness and ID-format constraints. Both integration classes share a PostgreSQL 18 container and serialize access to it; their runtime verification still depends on a working Docker daemon.
 
 ### Unit-test performance
 
 The suite is configured for fast, deterministic feedback:
 
 - Test classes run concurrently through `junit-platform.properties`, while methods inside each class remain sequential to protect shared fixtures.
+- PostgreSQL integration classes use a shared JUnit resource lock so their shared container state cannot race across classes. Read-only schema checks do no cleanup; repository query fixtures roll back, and write tests clean up their rows.
 - `BookServiceTest` creates its repository mock and service once, resets the mock before each scenario, and uses the real stateless `BookMapper`.
 - `BookTest` creates one Jakarta `ValidatorFactory` for the class and closes it after all validation tests.
 - `GlobalExceptionHandlerTest` uses one stateless handler and real Spring exception objects instead of unnecessary mocks.
 - `logback-test.xml` disables application logs during tests so expected exception scenarios do not spend time printing stack traces.
 
-The suite currently contains 101 tests. Build timings are environment-dependent; first-time dependency downloads, Mockito/Byte Buddy agent startup, and machine resources can change the total. Use `mvn test` for incremental feedback and `mvn clean verify` for the full verification lifecycle.
+Build timings are environment-dependent; first-time dependency downloads, Mockito/Byte Buddy agent startup, and machine resources can change the total. Use `mvn test` for incremental feedback and `mvn clean verify` for the default verification lifecycle. On this Windows/JDK 25 workspace, `mvn clean test -q` took about 27 seconds after these changes; the earlier incremental `mvn test -q` took about 30 seconds, so these runs do not establish a like-for-like speed improvement.
 
 Run all unit tests:
 
 ```powershell
 mvn clean test
+```
+
+Run PostgreSQL integration tests (requires Docker):
+
+```powershell
+mvn -Pintegration verify
 ```
 
 Run only the global exception-handler tests:
@@ -498,13 +528,25 @@ Run only the global exception-handler tests:
 mvn -Dtest=GlobalExceptionHandlerTest test
 ```
 
+Run only the user API MVC contract tests:
+
+```powershell
+mvn -Dtest=UserApiMvcTest test
+```
+
+Run only book unit/MVC tests:
+
+```powershell
+mvn -Dtest=BookApiMvcTest,BookMapperTest,BookServiceTest,BookTest test
+```
+
 Generate the JaCoCo report at `target/site/jacoco/index.html`:
 
 ```powershell
 mvn clean verify
 ```
 
-These are isolated unit tests. Controller routing and serialization, repository queries, Flyway migrations, PostgreSQL behavior, security rules, and real JPA transaction behavior still require integration-test coverage.
+The default suite includes plain unit tests and MVC slices. It proves HTTP binding and generated OpenAPI contracts, while real JPA transactions, Flyway migrations, and PostgreSQL constraints require the Docker-backed integration profile. Authentication and authorization behavior awaits the selected security model.
 
 Validation failures retain the `error`, `details`, `timestamp`, and `statusCode` fields and additionally return a structured map:
 
@@ -532,7 +574,7 @@ The detailed, interview-ready account of the development problems I identified a
 - Implement and test endpoint-specific authorization before exposing user endpoints; the current `permitAll()` configuration leaves every route public.
 - Add repository and MVC controller coverage for the user domain; implement endpoint authorization and safe role assignment before deployment.
 - Implement the loan domain with active-loan constraints and overdue/history queries, using the authenticated identity for borrower operations; document its API when routes are added.
-- Add JPA, Flyway, and PostgreSQL integration tests alongside the existing unit and MVC-slice tests.
+- Run `mvn -Pintegration verify` on a Docker-enabled machine to execute the PostgreSQL integration tests; add them to CI when a CI workflow is introduced.
 - Expand search capabilities with more flexible filtering and sorting combinations.
 
 ## License

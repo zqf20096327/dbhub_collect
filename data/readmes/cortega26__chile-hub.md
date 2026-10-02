@@ -20,6 +20,7 @@
 [![Data](https://img.shields.io/endpoint?url=https://tooltician.com/chile-hub/data/normalized/freshness_badge.json)](https://tooltician.com/chile-hub/data/normalized/hub_health.json)
 [![License: MIT](https://img.shields.io/badge/Code%20License-MIT-blue.svg)](LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22968698.svg)](https://doi.org/10.5281/zenodo.22968698)
+[![ORCID](https://img.shields.io/badge/ORCID-0009--0000--3470--6181-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0000-3470-6181)
 <!-- START_PYTHON_BADGE -->
 [![Python](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-3776AB.svg?style=flat&logo=python&logoColor=white)]()
 <!-- END_PYTHON_BADGE -->
@@ -130,7 +131,7 @@ chile-hub cache clear      # Liberar espacio
 > **Versionado:** Para entornos productivos, fija la versión exacta en `requirements.txt`
 > (revisa el badge de PyPI al inicio de este README para la versión más reciente):
 > ```
-> chile-hub==1.47.0
+> chile-hub==1.47.1
 > ```
 > El bundle de datos se publica con cada release. La API del módulo `ChileHub` sigue
 > versionado semántico: cambios de interfaz pública solo en _major releases_.
@@ -623,6 +624,8 @@ Si usas chile-hub en un paper, tesis, curso o informe, cita el software y
 atribuye la fuente de cada capa. GitHub muestra el botón **"Cite this
 repository"** a partir de [`CITATION.cff`](CITATION.cff); las recetas BibTeX/APA
 y la ruta para un DOI Zenodo están en [`docs/citation.md`](docs/citation.md).
+
+Autor y mantenedor: **Carlos Ortega** — ORCID [0009-0000-3470-6181](https://orcid.org/0009-0000-3470-6181).
 
 ---
 

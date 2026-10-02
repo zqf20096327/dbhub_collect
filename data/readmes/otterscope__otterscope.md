@@ -1,0 +1,101 @@
+# Otterscope
+
+**Lightweight, self-hosted observability and evals for AI agents.**
+
+One static binary. One SQLite file. No ClickHouse, no Redis, no S3, no seat fees, no trace metering. Point your agent's OpenTelemetry exporter at Otterscope and get an agent-run-first view of everything it did — LLM calls, tool calls, loops, errors, latency, and cost — plus assertions and LLM-as-judge evals scored onto your real production runs. All on your own disk, with unlimited retention.
+
+> Think *Plausible Analytics, but for AI agents*.
+
+![Runs list — live-tailing agent runs with status, duration, models, tokens, and cost](docs/screenshots/runs-list.png)
+
+## Quick start
+
+```sh
+# grab a binary from Releases, then:
+./otterscope serve
+```
+
+By default the UI and ingest bind to **loopback** (`127.0.0.1`) — safe on a
+shared machine. To expose them on your network, pass `-listen :8317 -otlp :4318`
+(and consider `-read-auth` and `-ingest-rate` to protect an exposed instance).
+For reproducible deployments, put it all in a config file — `serve -config otterscope.json`
+(see [docs/otterscope.example.json](docs/otterscope.example.json)) — or `OTTERSCOPE_*`
+env vars; flags override env override the file.
+
+or with Docker (the container binds all interfaces inside its namespace; you
+control exposure with `-p`):
+
+```sh
+docker run -p 8317:8317 -p 4318:4318 -v otterscope:/data ghcr.io/otterscope/otterscope
+```
+
+Point any OTel-instrumented agent at it:
+
+```sh
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
+```
+
+Open **http://localhost:8317**. No account, no config file, no other services.
+
+Want to poke around before wiring an agent? `./otterscope sample` seeds realistic demo runs.
+
+Want your agent to inspect *itself*? Otterscope ships an [MCP server](docs/mcp.md), so Claude Code and other MCP clients can query your runs, cost, and stats:
+
+```sh
+claude mcp add otterscope --transport http http://localhost:8317/mcp
+```
+
+## What you get
+
+- **Runs, not span soup** — every trace becomes an agent run: steps, tool loops, per-run tokens and cost, error surfacing, live-tailing list with filters (status, model, service, project, time) and full-text search over message and tool content — all URL-shareable, and saveable as named views ("prod errors 24h") you can pin and reapply.
+- **Run inspector** — step timeline with proportional duration bars; click any LLM call to read the actual messages in/out, token breakdowns (cache reads, reasoning), and cost; tool calls show arguments and results. Share any run as a public read-only link (opt-in per run, revocable) to hand a teammate a broken run without giving them your whole instance.
+
+  ![Run detail — step timeline, assertion chips, and message inspector](docs/screenshots/run-detail.png)
+- **Cost tracking** — maintained pricing table for major providers (override or extend with `serve -pricing yours.json`); unknown models show tokens, never fabricated costs.
+- **Evals fused into the trace store** — assertions (`contains`, `regex`, `is_json`, latency/cost thresholds) and **LLM-as-judge** scored onto real runs at ingest or backfilled on demand. The judge endpoint and key are server config (`-judge-url`, `OTTERSCOPE_JUDGE_KEY`), never per-assertion — so assertions can't name secrets to read. No second product.
+- **Compare view** — error rate, p50/p95 latency, cost, and assertion pass rates side-by-side across any two filters: this week vs last, model A vs model B, or **prompt version v2 vs v3** (captured from `gen_ai.prompt.name`/`version`). *"Did my prompt change make things worse?"* is one URL.
+- **Alerting** — rules on error rate, cost, p95 latency, or an assertion's fail rate over a window; Otterscope POSTs a JSON notification to your webhook (Slack/Discord/…) when a rule starts firing and again when it resolves. A settle time (default 5 minutes) requires the condition to hold before either notification, so a value sitting on the threshold can't page you twice a minute.
+
+  ![Alerts — rules on error rate, cost, latency, or assertion failures firing to a webhook](docs/screenshots/alerts.png)
+
+  ![Compare — two models side by side: error rate, latency percentiles, cost, assertion pass rates](docs/screenshots/compare.png)
+- **Drop-in OTel compatibility** — normalizes the OTel GenAI conventions (both current dialects), OpenInference (OpenAI Agents SDK, CrewAI, LangChain), and the Vercel AI SDK. Raw payloads are retained, so old data benefits from future normalizer improvements.
+- **Ask your agent about itself** — a built-in [MCP server](docs/mcp.md) (`POST /mcp`) lets Claude Code and other MCP clients query your runs, steps, cost, and stats. `claude mcp add otterscope --transport http http://localhost:8317/mcp`.
+- **Projects + ingest keys** for isolating multiple agents; **read API tokens** (`otterscope token add`) to script against your data or build external dashboards — enforce them with `serve -read-auth` when you expose the instance; optional retention sweep (`-retention 720h`) if you *want* to delete data.
+- **Backups you can trust** — `otterscope backup -o snapshot.db` for a consistent copy, and Otterscope auto-snapshots before applying any schema migration, so an upgrade can never leave you stranded.
+- **Prometheus metrics** at `/metrics` (runs, statuses, steps, DB size, firing alerts) — the observability tool is itself observable.
+- **Export your data** — download the current filtered run set as CSV, or script the read API with a token. No lock-in.
+- **Audit log** — every create/delete of assertions, alerts, projects, tokens, views, and shares, from the UI, API, or CLI.
+
+  ![Audit log](docs/screenshots/audit.png)
+
+## Connecting your framework
+
+Guides for [Pydantic AI](docs/frameworks/pydantic-ai.md), [OpenAI Agents SDK](docs/frameworks/openai-agents.md), [Vercel AI SDK](docs/frameworks/vercel-ai-sdk.md), [LangGraph](docs/frameworks/langgraph.md), [Claude Agent SDK / Claude Code](docs/frameworks/claude-agent-sdk.md), and [anything else that speaks OTLP](docs/frameworks/generic-otlp.md).
+
+## Why not Langfuse / LangSmith / Phoenix?
+
+They're good products aimed at a different deployment reality:
+
+- **Langfuse** self-hosting requires Postgres + ClickHouse + Redis + S3 — six containers to log a few thousand LLM calls a day.
+- **LangSmith** and **Braintrust** gate self-hosting behind enterprise contracts.
+- **Phoenix** is ELv2-licensed with an upsell funnel.
+
+Otterscope is Apache-2.0, installs in one command, and is built for individuals and small teams whose traces contain customer data they'd rather keep on their own disk. There is no paid tier, no hosted version, no metering and no seat fees — every feature is in the binary you just downloaded ([ADR-0005](docs/adr/0005-no-hosted-or-paid-offering.md)).
+
+## Install
+
+- **Binaries** — [Releases](https://github.com/otterscope/otterscope/releases) (Linux amd64/arm64, macOS, Windows) + `.deb`/`.rpm`
+- **Homebrew** — `brew install otterscope/tap/otterscope`
+- **Docker** — `ghcr.io/otterscope/otterscope`
+- **Go** — `go install github.com/otterscope/otterscope/cmd/otterscope@latest`
+
+## Development
+
+Go backend, embedded React UI. `go build ./...` works without building the frontend; `cd web && npm run build` embeds the real UI. See [CLAUDE.md](CLAUDE.md) for architecture and [docs/WORKFLOW.md](docs/WORKFLOW.md) for the contribution process.
+
+Contributions are welcome and there's nothing to sign — no CLA, no copyright assignment. Issues tagged [good first issue](https://github.com/otterscope/otterscope/labels/good%20first%20issue) are scoped small on purpose: each one names the file and line, what's wrong, and what "done" looks like.
+
+## License
+
+[Apache-2.0](LICENSE)

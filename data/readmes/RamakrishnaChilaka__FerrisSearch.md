@@ -78,6 +78,21 @@ Any HTTP node can accept a request. FerrisSearch forwards leader-only metadata
 mutations and shard-owned operations internally, so clients do not have to
 discover the Raft leader or shard primary.
 
+Forwarded operations validate local metadata first. A target waits up to five
+seconds only when the coordinator has applied newer metadata and the target's
+index, UUID, shard routing, allocation, or primary term doesn't match the
+request yet. Explicit metadata-acknowledgement floors are scoped to the index,
+so unrelated changes do not stall valid reads. A coordinator's floor covers
+only the changes acknowledged through it. After a settings or mapping change
+acknowledged through another coordinator, a lagging target can still serve
+requests with the older settings or mappings. If a metadata wait expires, the
+operation returns a retryable `503 shard_not_available_exception` with the
+cause; bulk reports the 503 per item. Once index creation commits, it returns
+`acknowledged: true`. Primary opening has a separate 20-second budget, plus
+up to five seconds for remote metadata catch-up. Slow or failed opening returns
+`shards_acknowledged: false`, not a failed create. Creation does not wait for
+replicas or for every node to apply the state.
+
 ### Two useful execution paths—and one intended future
 
 | Engine | What exists now | Write path | Query path |
@@ -143,6 +158,12 @@ curl -sS -X PUT 'http://localhost:9200/movies' \
 JSON
 ```
 
+Every index also has a built-in `body` text field. It collects the text values
+of each document for `?q=` search. You can omit it from `properties`, even in
+strict indices; an explicit `body` mapping must be exactly `{"type": "text"}`.
+Top-level document keys that name metadata fields, such as `_id`, `_source`,
+`_seq_no`, and `_primary_term`, are rejected with `400 mapper_parsing_exception`.
+
 ### 3. Index a small batch
 
 ```bash
@@ -172,6 +193,63 @@ curl -sS -X POST 'http://localhost:9200/movies/_search?pretty' \
     }
   }'
 ```
+
+#### Query-string search
+
+Use `GET /{index}/_search?q=...` or a `query_string` DSL clause for the
+Tantivy-backed query-string subset:
+
+```bash
+curl -sS --get 'http://localhost:9200/movies/_search' \
+  --data-urlencode 'q=*:*'
+curl -sS -X POST 'http://localhost:9200/movies/_search' \
+  -H 'Content-Type: application/json' \
+  -d '{"query":{"query_string":{"query":"genre:documentary"}}}'
+```
+
+| Query | Behavior |
+|---|---|
+| No `q` parameter, or standalone `*:*` | Match all documents, including documents with no indexed text. |
+| `rust` or `genre:documentary` | Parse terms with Tantivy's query parser. Unqualified terms use the built-in `body` field. |
+| Standalone `*`, without `df` or `default_field` | Match all documents, including empty, null-only, nested-only, array-only, and analyzer-empty documents. |
+| Standalone `*`, with `df` or `default_field` | Match documents with an indexed value in the explicitly selected field. |
+| Standalone `genre:*` | Match documents with an indexed value in the named field. Unknown fields match no documents. |
+
+Select an explicit field with URI parameter `df` or DSL option `default_field`.
+Both options are optional. Unqualified terms still search the built-in `body`
+field when neither option is set. The DSL accepts only `query` and
+`default_field`. Keyword fields include empty
+strings; numeric fields include zero. Text presence means at least one indexed
+token, so empty or analyzer-empty text does not match `*`. This differs from
+OpenSearch's text-field existence semantics.
+
+Explicit text presence uses field norms when available, scanning document
+lengths rather than the term dictionary. Text fields without field norms fall
+back to an all-terms query; that cost grows with vocabulary and postings.
+Fast-field presence uses Tantivy's `ExistsQuery`. Bare `*` without an explicit
+field uses `AllQuery` and does not enumerate terms.
+
+These wildcard rewrites apply only to standalone expressions. Other expressions
+use Tantivy syntax, not the full Lucene query language. Unsupported syntax returns
+an error that names the query and preserves the parser's cause. Partial results
+remain enabled; `allow_partial_search_results=false` is not implemented.
+
+When every shard fails, search returns `search_phase_execution_exception` with
+per-shard reasons: HTTP 400 for client parse or validation errors, 503 for
+unavailable shards, and 500 for other engine failures. Partial failures remain
+HTTP 200 and report `_shards.failed` and `_shards.failures`. These rules also apply
+to query-body `_count`. SQL paths that share distributed search also reject an
+all-failed shard set. Metadata-only `_count` and SQL `count(*)` reject an entirely
+unavailable shard set.
+`_count?q=...` and `_msearch` are not supported.
+Empty remote-store indices also validate query strings against the index mappings
+and return HTTP 400 with a parser cause instead of hiding invalid queries behind
+an empty result.
+
+Search clamps each shard's collector window to its live document count.
+Oversized `size` values cannot allocate more hit slots than the shard can return.
+If `from + size` overflows, URI and query-body search return HTTP 400 with a
+pagination reason before dispatching work.
 
 ### 5. Analyze the matched set
 
@@ -221,7 +299,7 @@ docker run --rm -p 9200:9200 -p 9300:9300 ferrissearch
 ### Search and analytics
 
 - Query DSL: `match`, `term`, `bool`, `range`, `wildcard`, `prefix`, `fuzzy`,
-  and `match_all`
+  `match_all`, and the [query-string subset](#query-string-search)
 - Numeric/date sorting and `search_after` cursor pagination, with documented
   tie limitations
 - Terms, stats, min, max, average, sum, value-count, and histogram aggregations;
@@ -262,11 +340,16 @@ coordinator-side merge semantics are required.
 - Primary/replica shard routing over gRPC
 - Generation-based binary translog with request or asynchronous durability
 - Primary write receipts propagated to REST `_seq_no` responses, including bulk
-  ranges, with replica WAL sequence preservation
-- Monotonic sequence high-watermark tracking
+  ranges and `_primary_term`, with replica WAL operation identity preservation
+- Realtime document GET, primary-side conditional index/delete and create,
+  and conflict-checked partial updates
+- Gap-aware processed and persisted checkpoints, with explicit `None` distinct
+  from sequence zero and persisted-prefix global checkpoint calculation
 - Bounded file-based peer recovery for initial, later-added, and rejoining replicas:
-  committed Tantivy files, pinned WAL suffix, final write barrier, and
-  allocation-bound conditional in-sync admission
+  gap-free committed-boundary installation, pinned physical-order WAL streaming
+  that pauses at source-unapplied frames, processed-checkpoint finalization, a
+  final replaying write barrier, and allocation-bound conditional in-sync
+  admission
 - Raft-owned shard-copy allocation IDs, durable local copy identity, and
   replica primary-term fencing before WAL mutation
 - Fail-closed copy startup with immediate corruption reporting, bounded
@@ -334,18 +417,19 @@ allocation can currently choose the same faulty node again; a
 MaxRetryAllocationDecider-style exclusion policy and
 `index.allocation.max_retries` setting are deferred.
 
-This pre-1.0 protocol does not adopt legacy shard directories or routing
-snapshots that lack allocation identity. Clusters created before this change
-must be recreated or reindexed; there is no rolling compatibility path.
+FerrisSearch pre-1.0 does not migrate data or metadata from earlier builds.
+Existing indices, shard directories, WALs, manifests, copy identities, Raft
+logs/snapshots, and incompatible peer wire formats fail closed. Recreate
+incompatible indices and reindex their source data. For incompatible Raft logs
+or snapshots, wipe the node data directories and recreate the cluster. There is
+no rolling mixed-version compatibility path.
 
 For `local_shards`, each encoded WAL operation is limited to 32 MiB, including
 the frame header and internal `_doc_id` / `_source` wrapper. The maximum usable
 JSON document body is therefore slightly smaller and varies with the document
 ID and serialized shape. Oversized single or bulk items are rejected before
-WAL mutation. Restart and replay retain bounded upgrade compatibility for
-complete legacy frames up to 65 MiB; peer recovery may skip those frames when
-they are already represented by the file snapshot, but transferred operations
-remain limited to 32 MiB.
+WAL mutation. Restart, replay, and peer recovery enforce the same 32 MiB frame
+limit.
 
 Force merge keeps its asynchronous `202 Accepted` task lifecycle. A valid
 `max_num_segments` is at least 1; each shard drains already-scheduled automatic
@@ -440,12 +524,30 @@ production ready**. The most important limits are:
 - At the `8f17172` main baseline, startup replay resurrected acknowledged
   deletes and one transient Tantivy commit failure could lose later
   acknowledged writes. Both defects are fixed on this branch.
-- `_seq_no` now reports the primary WAL assignment, but `_version` and
-  `_primary_term` compatibility fields remain placeholders. Gap-aware
-  checkpoints, primary epochs, idempotent retries, `if_seq_no` /
-  `if_primary_term`, and complete optimistic concurrency control are still
-  missing.
-- Replica bootstrap needs snapshot-plus-streamed-WAL recovery.
+- For `local_shards`, GET by ID is realtime by default; `realtime=false`
+  reads the last refreshed searcher. `_update` reads the primary's latest
+  source and uses a conditional write, so concurrent changes either apply
+  or return 409. GET returns `_index_uuid`; update pins it across retries and
+  returns `404 index_not_found_exception` if the index is deleted or replaced.
+  `retry_on_conflict` defaults to 0; `detect_noop` defaults
+  to true. Upsert is create-only, and scripts are rejected.
+- Index/delete support paired `if_seq_no`/`if_primary_term`; create is
+  available through `op_type=create` and `PUT`/`POST /{index}/_create/{id}`.
+  Single and bulk writes return real sequence/term identities and omit
+  `_version`. Client retry tokens and external versioning remain missing.
+- Document writes, bulk, and index creation reject unsupported safety
+  parameters with `400 illegal_argument_exception`, including `routing`, `pipeline`,
+  `version`, `version_type`, `require_alias`, and `dynamic_templates`.
+  Bulk action metadata rejection fails the whole request before any writes.
+  `wait_for_active_shards` accepts only absent or `1`, not `all`.
+  Document and bulk URLs accept `refresh=true`, an empty value, and
+  `refresh=false`; refresh affects only copies on the coordinating node.
+  `refresh=wait_for` and invalid refresh values are rejected. See
+  [ADR 0001, D13](docs/adr/0001-write-consistency-and-retry-contract.md#d13-unimplemented-parameters-fail-loudly)
+  for endpoint-specific conditions and unsupported aliases.
+- Replica bootstrap uses file snapshot plus physical-order WAL streaming, but
+  source sessions and retention pins remain process-local and general D10
+  rollback/resync is not implemented.
 - Remote manifest publication is serialized only inside one process; there is
   no cross-process compare-and-set or writer fencing.
 - Remote-store ingest is manual, not near-real-time, and there is no unified
@@ -467,7 +569,7 @@ FerrisSearch intentionally exposes an OpenSearch-style REST API **subset**.
 | Area | Representative endpoints |
 |---|---|
 | Index | `PUT /{index}`, `DELETE /{index}`, `GET/PUT /{index}/_settings` |
-| Documents | `POST/PUT /{index}/_doc`, `GET/DELETE /{index}/_doc/{id}`, `POST /{index}/_update/{id}` |
+| Documents | `POST /{index}/_doc`, `POST/PUT /{index}/_doc/{id}`, `GET/DELETE /{index}/_doc/{id}`, `POST /{index}/_update/{id}`, `POST/PUT /{index}/_create/{id}` |
 | Bulk | `POST /_bulk`, `POST /{index}/_bulk` |
 | Search | `GET/POST /{index}/_search`, `GET/POST /{index}/_count` |
 | SQL | `POST /{index}/_sql`, `/_sql`, `/{index}/_sql/stream`, `/_sql/stream`, `/{index}/_sql/explain` |

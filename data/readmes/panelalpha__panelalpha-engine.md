@@ -9,7 +9,7 @@ Open source. Self-hosted. Easy for anyone, not just sysadmins.
 </h3>
 
 <h3>
-<a href="#three-simple-steps-to-set-it-up"><b>Get started</b></a> ·
+<a href="#get-your-project-running"><b>Get started</b></a> ·
 <a href="https://www.panelalpha.com/documentation/panelalpha-engine/"><b>Documentation</b></a> ·
 <a href="#talk-to-us-on-discord"><b>Discord</b></a>
 </h3>
@@ -38,7 +38,7 @@ Open source. Self-hosted. Easy for anyone, not just sysadmins.
 <p>
 <a href="#step-1-install-engine-on-your-vps"><img src="https://img.shields.io/badge/install-one--liner-2f8f46" alt="One-line install"></a>
 <a href="#step-1-install-engine-on-your-vps"><img src="https://img.shields.io/badge/Debian_12%2F13-Ubuntu_22.04%2F24.04%2F26.04-a80030" alt="Supported OS"></a>
-<a href="docs/04-connecting-your-ai/your-assistant.md"><img src="https://img.shields.io/badge/MCP-199_tools-6f42c1" alt="199 MCP tools"></a>
+<a href="docs/04-connecting-your-ai/your-assistant.md"><img src="https://img.shields.io/badge/MCP-197_tools-6f42c1" alt="197 MCP tools"></a>
 <a href="#license"><img src="https://img.shields.io/badge/license-Apache_2.0-0b7285" alt="Apache 2.0"></a>
 <a href="https://discord.gg/9twHWR7xGX"><img src="https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white" alt="Join Discord"></a>
 </p>
@@ -67,6 +67,10 @@ Out of the box, PanelAlpha Engine gives you and your AI everything you need to r
 - Domains, SSL, cron, FTP/SFTP, Databases, logs
 - Easy Cloudflare integration for DNS, Tunnels and caching
 
+## How it works
+
+<p align="center"><img src="docs/assets/architecture.gif" alt="PanelAlpha Engine architecture: your AI agent, Git host, REST API clients and SSH reach the engine API on port 2011; core runs every operation and manages databases, files and isolated project containers; visitors reach projects through nginx-proxy on ports 80 and 443; backups go to an external store and Cloudflare tunnels connect into projects" width="880"></p>
+
 ## Why this needs to exist
 
 AI has broken software creation out of its old limits. More people can turn ideas into working products, small teams can build much more than before, and open source is booming with projects worth making your own. What has not changed nearly as much is the work required to run it yourself. Most self-hosted tools still expect you to understand and manage Docker, a webserver, certificates, databases, backups, a firewall, and the updates that follow.
@@ -81,17 +85,29 @@ AI has broken software creation out of its old limits. More people can turn idea
 
 ---
 
-## Three simple steps to set it up
+## Get your project running
 
 ### Step 1: Install Engine on your VPS
 
-You need a **fresh** server running Debian 12/13 or Ubuntu 22.04/24.04/26.04, with at least 2 GB RAM and 1 CPU, and you log in as `root` over SSH:
+You need a **fresh** server running Debian 12/13 or Ubuntu 22.04/24.04/26.04, with at least 2 GB RAM and 1 CPU, and you log in as `root` over SSH.
+
+**One-line app installation command** is the fastest way to get started. Just add the Git repository you want to use after `--repo`, and the installer immediately starts setting up engine and getting your application online in one go.
+
+For example, if you want to install the engine and deploy n8n at the same time, this is all you need:
+
+```bash
+curl -fsSL https://get.panelalpha.com/engine | sh -s -- --repo https://github.com/n8n-io/n8n
+```
+
+When it finishes, it prints the address of your new site and, unless you pass `--no-password`, the password that opens it. For private repositories, your own password, or running an app on a server that already has the engine, see: [One-line app installation command](docs/02-getting-started/install.md#one-line-app-installation-command).
+
+Prefer to do the two steps separately? Use the command below to install only the engine, and deploy your application later from your assistant (see Step 2):
 
 ```bash
 curl -fsSL https://get.panelalpha.com/engine | sh
 ```
 
-That is it. Your server is ready. Custom name, your own TLS certificate, or a server behind NAT: [Install options](docs/02-getting-started/install.md).
+That is it. Your server is ready. For custom name, your own TLS certificate, or a server behind NAT, see: [Install options](docs/02-getting-started/install.md).
 
 ### Step 2: Connect your AI agent
 
@@ -158,7 +174,7 @@ No commands to learn, and no magic phrases either. These are examples of the lev
 | `Set up a Cloudflare tunnel for n8n.mydomain.com.` | DNS and the tunnel configured, which is also how you serve a site from a server behind NAT. |
 | `How much traffic did we get last week?` | Usage, logs and limits for that project, and the server as a whole. |
 
-More worked examples: [what to ask](docs/04-connecting-your-ai/your-assistant.md#what-to-ask). The complete list of what your assistant can reach: [199 tools](docs/04-connecting-your-ai/your-assistant.md).
+More worked examples: [what to ask](docs/04-connecting-your-ai/your-assistant.md#what-to-ask). The complete list of what your assistant can reach: [197 tools](docs/04-connecting-your-ai/your-assistant.md).
 
 ---
 

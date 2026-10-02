@@ -2,21 +2,45 @@
 名称 | 值
 ---- | -----
 CPU	| X86
-操作系统	| CentOS Linux release 7.9.2009 (Core)
+操作系统	| CentOS Linux release 8.5.2111
 内存	| 5G
 逻辑核数	| 6
-HappySunshine版本|V1.9
+HappySunshine版本|V1.10
 Kettle版本|pdi-ce-9.5.0.1-261
 Gbase8a版本|8.6.2-R43.34.27468a27
-Pg版本|PostgreSQL 14.5
-DM版本|1          DM Database Server 64 V8<br>2          DB Version: 0x7000c<br>3          03134284194-20240703-234060-20108<br>4          Msg Version: 12<br>5          Gsu level(5) cnt: 0
+Pg版本|PostgreSQL 14.5、14.24
+DM版本|V8、V9
 
 # 二、简述
 ![HS Logo](https://github.com/lxgczg/HappySunshine/blob/main/Photo/HappySunshine.png)
 <br>HappySunshine数据库迁移工具是由C语言编写的多进程多线程程序，支持多种数据库之间的高效数据同步、数据离线（数据库宕机）抽取等，安装简便、简单配置即可使用，功能还在逐步完善中（其实是还在陆续补充新知识），有什么好的建议，大家可以在评论或私信告知。
 
 # 三、架构图
-## 1、在线迁移
+## 1、离线（数据库宕机）抽取
+![HS](https://github.com/lxgczg/HappySunshine/blob/main/Photo/HsPgUnload1.png)
+PG数据离线抽取功能是一个多线程程序，解析流程如下：
+
+1、读取 pg_filenode.map
+
+2、解析 pg_type
+
+3、解析 pg_class
+
+4、解析 pg_namespace
+
+5、解析 pg_attribute
+
+6、解析 pg_enum
+
+7、解析 pg_attrdef
+
+8、解析 pg_sequence
+
+9、并行解析用户表
+
+10、数据落地成 CSV文件，并生成序列定义、表定义、COPY语句
+
+## 2、在线迁移
 ![HS](https://i-blog.csdnimg.cn/blog_migrate/69fb8c4716412dde87e34b76eadb2bb8.png)
 
 画图水平感觉还不错，给自己点个赞。
@@ -59,61 +83,36 @@ HappySunshine数据库迁移工具由一个管理者进程和N个执行者进程
 
 18、管理者进程等待所有执行者进程结束后，回收进程资源，释放自身所占用资源，结束退出。
 
-## 2、离线抽取
-![HS](https://github.com/lxgczg/HappySunshine/blob/main/Photo/HsPgUnload1.png)
-PG数据离线抽取功能是一个多线程程序，解析流程如下：
-
-1、读取 pg_filenode.map
-
-2、解析 pg_type
-
-3、解析 pg_class
-
-4、解析 pg_namespace
-
-5、解析 pg_attribute
-
-6、解析 pg_enum
-
-7、解析 pg_attrdef
-
-8、解析 pg_sequence
-
-9、并行解析用户表
-
-10、数据落地成 CSV文件，并生成序列定义、表定义、COPY语句
-
 # 四、升级点
 序号|名称|备注
 -- | ----- | ------ 
-1	|坏页场景下，程序健壮性大幅度提升。	                    |PG数据离线抽取功能。
-2	|0字节数据文件处理优化。	                            |PG数据离线抽取功能。
-3	|B树全扫，部分场景下未定位数据BUG修复。	                |
-4	|B树并行查询性能提升。	                                |
-5	|坏页+并行场景下，已解析TUPLE未落地BUG修复。	        |PG数据离线抽取功能。
-6	|块号显示有误BUG修复。	                                |PG数据离线抽取功能。
-7	|删除字段在B树叶子结点最右侧时，表定义生成报错BUG修复。	|PG数据离线抽取功能。
-8	|坏页场景下，遇到损坏TUP跳过，继续处理此页的剩余TUP。	|PG数据离线抽取功能。
-9	|坏页场景下，TUP的状态计数有误BUG修复。	                |PG数据离线抽取功能。
-10	|普通表加列场景下，解析数据越界BUG修复。	            |PG数据离线抽取功能。
-11	|字典表数据落地。	                                    |PG数据离线抽取功能。
-
+1	|支持表数据非易失默认值。	                            |PG数据离线抽取功能。
+2	|支持pg_attrdef字典表解析。	                            |PG数据离线抽取功能。
+3	|单库、模式级别，部分场景下表漏扫BUG修复。	            |PG数据离线抽取功能。
+4	|支持pg_sequence字典表解析。	                        |PG数据离线抽取功能。
+5	|支持序列定义的语句生成。	                            |PG数据离线抽取功能。
+6	|字符串数据包含字段分隔符时，数据加载报错BUG修复。	    |PG数据离线抽取功能。
+7	|支持 glibc 2.22 及以上版本的 x86_64 Linux 操作系统。	|PG数据离线抽取功能。
+8	|支持序列当前值设置语句生成。	                        |PG数据离线抽取功能。
+9	|插入大字段到达梦时，内存泄漏BUG修复。	                |在线迁移功能。
+10	|PG主键切分字段名解析错误BUG修复	                    |在线迁移功能。
+11	|PG->DM映射类型添加。	                                |在线迁移功能。
 
 # 五、支持功能
 ## 1、支持功能
 | 序号 | 类别 | 功能模块 | 说明/备注 |
 |------|------|----------|-----------|
 | 1 | 在线迁移 | Gbase8a 到 8a 数据迁移 | INSERT、LOAD 方式迁移，表定义及其他暂不支持。 |
-| 2 | | PG 到 Gbase8a 数据迁移 | INSERT 方式迁移，表定义及其他暂不支持。 |
-| 3 | | PG 到 DM 数据迁移 | INSERT 方式迁移，表定义及其他暂不支持。 |
-| 4 | | 多线程并发加载单表数据 | |
-| 5 | | 多进程并发加载单表数据 | 源端库为 PG，迁移表包含单一整型主键，进程数设置大于 1 时，支持此项。 |
+| 2 |          | PG 到 Gbase8a 数据迁移 | INSERT 方式迁移，表定义及其他暂不支持。 |
+| 3 |          | PG 到 DM 数据迁移 | INSERT 方式迁移，表定义及其他暂不支持。 |
+| 4 |          | 多线程并发加载单表数据 | |
+| 5 |          | 多进程并发加载单表数据 | 源端库为 PG，迁移表包含单一整型主键，进程数设置大于 1 时，支持此项。 |
 | 6 | 离线抽取 | PG 数据离线抽取支持表、模式、单库级 | 抽取底层数据文件数据落地为 COPY 文本。 |
-| 7 | | PG 47 种数据类型支持离线抽取 | 具体类型见下文的支持列表。 |
-| 8 | | PG 普通表定义抽取 | |
-| 9 | | PG 普通表单表并行解析 | |
-| 10 | | PG COPY 语句自动生成 | |
-| 11 | | PG 支持版本 14 | 验证版本为 14.5，PG 大版本一致情况下，小版本间底层存储无改动。 |
+| 7  |         | PG 47种数据类型离线抽取             | 47种数据类型、非易失默认值。具体类型见下文的支持列表。             |
+| 8  |         | PG 普通表定义抽取                   | 47种数据类型、非空、非易失默认值。     |
+| 9  |         | PG 普通表单表并行解析               |                                        |
+| 10 |         | PG COPY 语句自动生成                |                                        |
+| 11 |         | PG 支持版本 14                      | 验证版本为14.5、14.24，PG大版本一致情况下，小版本间底层存储无改动。 |
 
 ## 2、离线抽取支持类型
 ### （1）数字类型
@@ -296,20 +295,8 @@ pg_lsn
 [lzl@czg0 ~]$ unzip HappySunshine_V1.5_X86_Centos7.9_Release_日期.zip
 ```
 ## 3、环境变量配置
+vim /home/lzl/.bashrc 添加如下内容：
 ```
-[root@czg0 ~]# cat /home/lzl/.bashrc 
-# .bashrc
-
-# Source global definitions
-if [ -f /etc/bashrc ]; then
-        . /etc/bashrc
-fi
-
-# Uncomment the following line if you don't like systemctl's auto-paging feature:
-# export SYSTEMD_PAGER=
-
-# User specific aliases and functions
-
 export HAPPY_SUNSHINE_HOME=/home/lzl/HappySunshine
 export LD_LIBRARY_PATH=$HAPPY_SUNSHINE_HOME/Libs:$LD_LIBRARY_PATH
 ```
@@ -321,178 +308,22 @@ export LD_LIBRARY_PATH=$HAPPY_SUNSHINE_HOME/Libs:$LD_LIBRARY_PATH
 ### （1）HsManager 
 ```
 [lzl@czg0 ~]$ ldd HappySunshine/Exec/HsManager 
-        linux-vdso.so.1 =>  (0x00007ffc3a9fa000)
-        libPublic.so => /home/lzl/HappySunshine/Libs/libPublic.so (0x00007f094f383000)
-        libLog.so => /home/lzl/HappySunshine/Libs/libLog.so (0x00007f094f17e000)
-        libSqQueue.so => /home/lzl/HappySunshine/Libs/libSqQueue.so (0x00007f094ef78000)
-        libPthread.so => /home/lzl/HappySunshine/Libs/libPthread.so (0x00007f094ed6b000)
-        libFileOperate.so => /home/lzl/HappySunshine/Libs/libFileOperate.so (0x00007f094eb65000)
-        libDataConvertion.so => /home/lzl/HappySunshine/Libs/libDataConvertion.so (0x00007f094e960000)
-        libProcess.so => /home/lzl/HappySunshine/Libs/libProcess.so (0x00007f094e757000)
-        libGbase8aDb.so => /home/lzl/HappySunshine/Libs/libGbase8aDb.so (0x00007f094e550000)
-        libgbase.so.16 => /home/lzl/HappySunshine/Libs/libgbase.so.16 (0x00007f094e090000)
-        libHashTable.so => /home/lzl/HappySunshine/Libs/libHashTable.so (0x00007f094de8c000)
-        libPgDb.so => /home/lzl/HappySunshine/Libs/libPgDb.so (0x00007f094dc83000)
-        libpq.so.5 => /home/lzl/HappySunshine/Libs/libpq.so.5 (0x00007f094da2d000)
-        libHsPublic.so => /home/lzl/HappySunshine/Libs/libHsPublic.so (0x00007f094d82a000)
-        libc.so.6 => /lib64/libc.so.6 (0x00007f094d45c000)
-        libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f094d240000)
-        libdl.so.2 => /lib64/libdl.so.2 (0x00007f094d03c000)
-        libm.so.6 => /lib64/libm.so.6 (0x00007f094cd3a000)
-        /lib64/ld-linux-x86-64.so.2 (0x00007f094f586000)
 ```
 ### （2）G8aExecutor 
 ```
 [lzl@czg0 ~]$ ldd HappySunshine/Exec/G8aExecutor 
-        linux-vdso.so.1 =>  (0x00007ffecf9fd000)
-        libPublic.so => /home/lzl/HappySunshine/Libs/libPublic.so (0x00007faca38b8000)
-        libLog.so => /home/lzl/HappySunshine/Libs/libLog.so (0x00007faca36b3000)
-        libSqQueue.so => /home/lzl/HappySunshine/Libs/libSqQueue.so (0x00007faca34ad000)
-        libPthread.so => /home/lzl/HappySunshine/Libs/libPthread.so (0x00007faca32a0000)
-        libFileOperate.so => /home/lzl/HappySunshine/Libs/libFileOperate.so (0x00007faca309a000)
-        libDataConvertion.so => /home/lzl/HappySunshine/Libs/libDataConvertion.so (0x00007faca2e95000)
-        libProcess.so => /home/lzl/HappySunshine/Libs/libProcess.so (0x00007faca2c8c000)
-        libGbase8aDb.so => /home/lzl/HappySunshine/Libs/libGbase8aDb.so (0x00007faca2a85000)
-        libgbase.so.16 => /home/lzl/HappySunshine/Libs/libgbase.so.16 (0x00007faca25c5000)
-        libMyPool.so => /home/lzl/HappySunshine/Libs/libMyPool.so (0x00007faca23c2000)
-        libHashTable.so => /home/lzl/HappySunshine/Libs/libHashTable.so (0x00007faca21be000)
-        libHsPublic.so => /home/lzl/HappySunshine/Libs/libHsPublic.so (0x00007faca1fbb000)
-        libc.so.6 => /lib64/libc.so.6 (0x00007faca1bed000)
-        libpthread.so.0 => /lib64/libpthread.so.0 (0x00007faca19d1000)
-        libdl.so.2 => /lib64/libdl.so.2 (0x00007faca17cd000)
-        libm.so.6 => /lib64/libm.so.6 (0x00007faca14cb000)
-        /lib64/ld-linux-x86-64.so.2 (0x00007faca3abb000)
 ```
 ### （3）Pg2G8aExecutor
 ```
 [lzl@czg0 ~]$ ldd HappySunshine/Exec/Pg2G8aExecutor 
-        linux-vdso.so.1 =>  (0x00007ffdea9d0000)
-        libPublic.so => /home/lzl/HappySunshine/Libs/libPublic.so (0x00007f2c7a38f000)
-        libLog.so => /home/lzl/HappySunshine/Libs/libLog.so (0x00007f2c7a18a000)
-        libSqQueue.so => /home/lzl/HappySunshine/Libs/libSqQueue.so (0x00007f2c79f84000)
-        libPthread.so => /home/lzl/HappySunshine/Libs/libPthread.so (0x00007f2c79d77000)
-        libFileOperate.so => /home/lzl/HappySunshine/Libs/libFileOperate.so (0x00007f2c79b71000)
-        libDataConvertion.so => /home/lzl/HappySunshine/Libs/libDataConvertion.so (0x00007f2c7996c000)
-        libProcess.so => /home/lzl/HappySunshine/Libs/libProcess.so (0x00007f2c79763000)
-        libGbase8aDb.so => /home/lzl/HappySunshine/Libs/libGbase8aDb.so (0x00007f2c7955c000)
-        libgbase.so.16 => /home/lzl/HappySunshine/Libs/libgbase.so.16 (0x00007f2c7909c000)
-        libMyPool.so => /home/lzl/HappySunshine/Libs/libMyPool.so (0x00007f2c78e99000)
-        libPgDb.so => /home/lzl/HappySunshine/Libs/libPgDb.so (0x00007f2c78c90000)
-        libpq.so.5 => /home/lzl/HappySunshine/Libs/libpq.so.5 (0x00007f2c78a3a000)
-        libHashTable.so => /home/lzl/HappySunshine/Libs/libHashTable.so (0x00007f2c78836000)
-        libHsPublic.so => /home/lzl/HappySunshine/Libs/libHsPublic.so (0x00007f2c78633000)
-        libc.so.6 => /lib64/libc.so.6 (0x00007f2c78265000)
-        libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f2c78049000)
-        libdl.so.2 => /lib64/libdl.so.2 (0x00007f2c77e45000)
-        libm.so.6 => /lib64/libm.so.6 (0x00007f2c77b43000)
-        /lib64/ld-linux-x86-64.so.2 (0x00007f2c7a592000)
 ```
 ### （4）Pg2DmExecutor 
 ```
 [lzl@czg0 ~]$ ldd HappySunshine/Exec/Pg2DmExecutor 
-        linux-vdso.so.1 =>  (0x00007ffd4eb65000)
-        libPublic.so => /home/lzl/HappySunshine/Libs/libPublic.so (0x00007f81c49f0000)
-        libLog.so => /home/lzl/HappySunshine/Libs/libLog.so (0x00007f81c47eb000)
-        libSqQueue.so => /home/lzl/HappySunshine/Libs/libSqQueue.so (0x00007f81c45e5000)
-        libPthread.so => /home/lzl/HappySunshine/Libs/libPthread.so (0x00007f81c43d8000)
-        libFileOperate.so => /home/lzl/HappySunshine/Libs/libFileOperate.so (0x00007f81c41d2000)
-        libDataConvertion.so => /home/lzl/HappySunshine/Libs/libDataConvertion.so (0x00007f81c3fcd000)
-        libProcess.so => /home/lzl/HappySunshine/Libs/libProcess.so (0x00007f81c3dc4000)
-        libMyPool.so => /home/lzl/HappySunshine/Libs/libMyPool.so (0x00007f81c3bc1000)
-        libLinkList.so => /home/lzl/HappySunshine/Libs/libLinkList.so (0x00007f81c39bd000)
-        libPgDb.so => /home/lzl/HappySunshine/Libs/libPgDb.so (0x00007f81c37b4000)
-        libpq.so.5 => /home/lzl/HappySunshine/Libs/libpq.so.5 (0x00007f81c355e000)
-        libDmDb.so => /home/lzl/HappySunshine/Libs/libDmDb.so (0x00007f81c333f000)
-        libdmdpi.so => /home/lzl/HappySunshine/Libs/libdmdpi.so (0x00007f81c2485000)
-        libdmcpt.so => /home/lzl/HappySunshine/Libs/libdmcpt.so (0x00007f81c2252000)
-        libdmlogmnr_client.so => /home/lzl/HappySunshine/Libs/libdmlogmnr_client.so (0x00007f81c0595000)
-        libHashTable.so => /home/lzl/HappySunshine/Libs/libHashTable.so (0x00007f81c0391000)
-        libHsPublic.so => /home/lzl/HappySunshine/Libs/libHsPublic.so (0x00007f81c018e000)
-        libc.so.6 => /lib64/libc.so.6 (0x00007f81bfdc0000)
-        libm.so.6 => /lib64/libm.so.6 (0x00007f81bfabe000)
-        libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f81bf8a2000)
-        librt.so.1 => /lib64/librt.so.1 (0x00007f81bf69a000)
-        libdl.so.2 => /lib64/libdl.so.2 (0x00007f81bf496000)
-        libstdc++.so.6 => /lib64/libstdc++.so.6 (0x00007f81bf18e000)
-        libgcc_s.so.1 => /lib64/libgcc_s.so.1 (0x00007f81bef78000)
-        libdmcfg.so => /home/lzl/HappySunshine/Libs/libdmcfg.so (0x00007f81beb1a000)
-        libdmclientlex.so => /home/lzl/HappySunshine/Libs/libdmclientlex.so (0x00007f81be8e5000)
-        libdmcomm.so => /home/lzl/HappySunshine/Libs/libdmcomm.so (0x00007f81be6b2000)
-        libdmcvt.so => /home/lzl/HappySunshine/Libs/libdmcvt.so (0x00007f81bdf34000)
-        libdmcpr.so => /home/lzl/HappySunshine/Libs/libdmcpr.so (0x00007f81bdd30000)
-        libdmelog.so => /home/lzl/HappySunshine/Libs/libdmelog.so (0x00007f81bdac1000)
-        libdmmsg.so => /home/lzl/HappySunshine/Libs/libdmmsg.so (0x00007f81bd8b1000)
-        libdmcalc.so => /home/lzl/HappySunshine/Libs/libdmcalc.so (0x00007f81bd618000)
-        libdmcyt.so => /home/lzl/HappySunshine/Libs/libdmcyt.so (0x00007f81bd3f3000)
-        libdmos.so => /home/lzl/HappySunshine/Libs/libdmos.so (0x00007f81bd1be000)
-        libdmutl.so => /home/lzl/HappySunshine/Libs/libdmutl.so (0x00007f81bcfa3000)
-        libdmmem.so => /home/lzl/HappySunshine/Libs/libdmmem.so (0x00007f81bcd90000)
-        libdmbtr.so => /home/lzl/HappySunshine/Libs/libdmbtr.so (0x00007f81bcb5c000)
-        libdmtrx.so => /home/lzl/HappySunshine/Libs/libdmtrx.so (0x00007f81bc7b5000)
-        libdmstrt.so => /home/lzl/HappySunshine/Libs/libdmstrt.so (0x00007f81bc5a6000)
-        libdmknl.so => /home/lzl/HappySunshine/Libs/libdmknl.so (0x00007f81bc343000)
-        libdmstg.so => /home/lzl/HappySunshine/Libs/libdmstg.so (0x00007f81bc0f4000)
-        libdmblb.so => /home/lzl/HappySunshine/Libs/libdmblb.so (0x00007f81bbeb8000)
-        libdmnsort.so => /home/lzl/HappySunshine/Libs/libdmnsort.so (0x00007f81bbb9b000)
-        libdmllog.so => /home/lzl/HappySunshine/Libs/libdmllog.so (0x00007f81bb974000)
-        libdmrs.so => /home/lzl/HappySunshine/Libs/libdmrs.so (0x00007f81bb76f000)
-        libdmsys.so => /home/lzl/HappySunshine/Libs/libdmsys.so (0x00007f81bb568000)
-        libdmrarch.so => /home/lzl/HappySunshine/Libs/libdmrarch.so (0x00007f81bb313000)
-        libdmtrv.so => /home/lzl/HappySunshine/Libs/libdmtrv.so (0x00007f81bb0d9000)
-        libdmtimer.so => /home/lzl/HappySunshine/Libs/libdmtimer.so (0x00007f81baed3000)
-        libdmmout.so => /home/lzl/HappySunshine/Libs/libdmmout.so (0x00007f81babfe000)
-        /lib64/ld-linux-x86-64.so.2 (0x00007f81c4bf3000)
-        libdmdcrm.so => /home/lzl/HappySunshine/Libs/libdmdcrm.so (0x00007f81ba9f1000)
-        libdmshm.so => /home/lzl/HappySunshine/Libs/libdmshm.so (0x00007f81ba7ec000)
-        libdmshmm.so => /home/lzl/HappySunshine/Libs/libdmshmm.so (0x00007f81ba5e6000)
-        libdmckpt.so => /home/lzl/HappySunshine/Libs/libdmckpt.so (0x00007f81ba3ca000)
-        libdmfil.so => /home/lzl/HappySunshine/Libs/libdmfil.so (0x00007f81ba1a5000)
-        libdmdta.so => /home/lzl/HappySunshine/Libs/libdmdta.so (0x00007f81b9eb8000)
-        libdmrlog.so => /home/lzl/HappySunshine/Libs/libdmrlog.so (0x00007f81b9bf8000)
-        libdmmal.so => /home/lzl/HappySunshine/Libs/libdmmal.so (0x00007f81b99b8000)
-        libdmuthr.so => /home/lzl/HappySunshine/Libs/libdmuthr.so (0x00007f81b97a5000)
-        libdmtlog.so => /home/lzl/HappySunshine/Libs/libdmtlog.so (0x00007f81b959b000)
-        libdmdct.so => /home/lzl/HappySunshine/Libs/libdmdct.so (0x00007f81b8edb000)
-        libdmregex.so => /home/lzl/HappySunshine/Libs/libdmregex.so (0x00007f81b8cd4000)
-        libdmtbl.so => /home/lzl/HappySunshine/Libs/libdmtbl.so (0x00007f81b8ace000)
-        libdmhfs.so => /home/lzl/HappySunshine/Libs/libdmhfs.so (0x00007f81b8835000)
-        libdmlic.so => /home/lzl/HappySunshine/Libs/libdmlic.so (0x00007f81b8629000)
-        libdmlnk.so => /home/lzl/HappySunshine/Libs/libdmlnk.so (0x00007f81b83f8000)
-        libdmredo.so => /home/lzl/HappySunshine/Libs/libdmredo.so (0x00007f81b8143000)
-        libdmrtree.so => /home/lzl/HappySunshine/Libs/libdmrtree.so (0x00007f81b7f31000)
-        libdmenet.so => /home/lzl/HappySunshine/Libs/libdmenet.so (0x00007f81b7d0b000)
-        libdmxmal.so => /home/lzl/HappySunshine/Libs/libdmxmal.so (0x00007f81b7af1000)
-        libdmsbtree.so => /home/lzl/HappySunshine/Libs/libdmsbtree.so (0x00007f81b78ed000)
-        libdmbcast.so => /home/lzl/HappySunshine/Libs/libdmbcast.so (0x00007f81b766f000)
-        libdmscp.so => /home/lzl/HappySunshine/Libs/libdmscp.so (0x00007f81b7457000)
-        libdmjson.so => /home/lzl/HappySunshine/Libs/libdmjson.so (0x00007f81b722e000)
-        libdmspatial.so => /home/lzl/HappySunshine/Libs/libdmspatial.so (0x00007f81b6f55000)
-        libdmvtdskm.so => /home/lzl/HappySunshine/Libs/libdmvtdskm.so (0x00007f81b6d44000)
-        libdmdcr.so => /home/lzl/HappySunshine/Libs/libdmdcr.so (0x00007f81b6b3c000)
-        libdmasmapi.so => /home/lzl/HappySunshine/Libs/libdmasmapi.so (0x00007f81b6915000)
-        libdmasmapim.so => /home/lzl/HappySunshine/Libs/libdmasmapim.so (0x00007f81b66c0000)
-        libdmdfi.so => /home/lzl/HappySunshine/Libs/libdmdfi.so (0x00007f81b64aa000)
-        libdmvtdsk.so => /home/lzl/HappySunshine/Libs/libdmvtdsk.so (0x00007f81b62a3000)
-        libdmasm.so => /home/lzl/HappySunshine/Libs/libdmasm.so (0x00007f81b6074000)
-        libdmasmm.so => /home/lzl/HappySunshine/Libs/libdmasmm.so (0x00007f81b5db8000)
-        libdmdfs.so => /home/lzl/HappySunshine/Libs/libdmdfs.so (0x00007f81b5b92000)
 ```
 ### （5）HsPgUnload
 ```
-[root@dw01:/opt/Developer/ComputerLanguageStudy/C/DataStructureTestSrc/PublicFunction/PgReadData/Exec]# ldd HsPgUnload 
-        linux-vdso.so.1 =>  (0x00007ffd0114b000)
-        libPublic.so => /opt/Developer/ComputerLanguageStudy/C/DataStructureTestSrc/PublicFunction/Cmake/Libs/libPublic.so (0x00007f6ca9f69000)
-        libLog.so => /opt/Developer/ComputerLanguageStudy/C/DataStructureTestSrc/PublicFunction/Cmake/Libs/libLog.so (0x00007f6ca9d63000)
-        libPthread.so => /opt/Developer/ComputerLanguageStudy/C/DataStructureTestSrc/PublicFunction/Cmake/Libs/libPthread.so (0x00007f6ca9b58000)
-        libPgReadData.so => /opt/Developer/ComputerLanguageStudy/C/DataStructureTestSrc/PublicFunction/Cmake/Libs/libPgReadData.so (0x00007f6ca9921000)
-        libpthread.so.0 => /lib64/libpthread.so.0 (0x00007f6ca9705000)
-        libDataConvertion.so => /opt/Developer/ComputerLanguageStudy/C/DataStructureTestSrc/PublicFunction/Cmake/Libs/libDataConvertion.so (0x00007f6ca9500000)
-        libFileOperate.so => /opt/Developer/ComputerLanguageStudy/C/DataStructureTestSrc/PublicFunction/Cmake/Libs/libFileOperate.so (0x00007f6ca92f7000)
-        libHashTable.so => /opt/Developer/ComputerLanguageStudy/C/DataStructureTestSrc/PublicFunction/Cmake/Libs/libHashTable.so (0x00007f6ca90f0000)
-        libTree.so => /opt/Developer/ComputerLanguageStudy/C/DataStructureTestSrc/PublicFunction/Cmake/Libs/libTree.so (0x00007f6ca8edf000)
-        libLinkList.so => /opt/Developer/ComputerLanguageStudy/C/DataStructureTestSrc/PublicFunction/Cmake/Libs/libLinkList.so (0x00007f6ca8cd4000)
-        libc.so.6 => /lib64/libc.so.6 (0x00007f6ca8906000)
-        /lib64/ld-linux-x86-64.so.2 (0x00007f6caa16c000)
+[lzl@czg0 ~]$ ldd HappySunshine/Exec/HsPgUnload 
 ```
 如果有动态库没有找到，就要看看环境变量是否配置正确或是否生效。
 
@@ -874,7 +705,14 @@ LOAD
 [root@dw01:/opt/Developer/ComputerLanguageStudy/C/DataStructureTestSrc/PublicFunction/PgReadData/Exec]# ./HsPgUnload /opt/Pg14-5/Data/base/13892/ /home/czg/TestPgData/ 8192 'public' 'blue' 3 2
 ```
 
-### （4）COPY语句展示
+### （4）恢复数据示例
+```
+psql -d sun -f /home/sun/TestPgData/PG_SEQ_DDL.txt
+psql -d sun -f /home/sun/TestPgData/PG_TAB_DDL.txt
+psql -d sun -f /home/sun/TestPgData/PG_COPY.txt
+```
+
+### （5）COPY语句展示
 ```
 [root@dw01:/opt/Developer/ComputerLanguageStudy/C/DataStructureTestSrc/PublicFunction/PgReadData/Exec]# head /home/czg/TestPgData/PG_COPY.txt 
 
@@ -888,7 +726,7 @@ COPY public.actor
         ESCAPE    '\');
 ```
 
-### （5）抽取的表定义展示
+### （6）生成的表定义展示
 ```
 
 [root@dw01:/opt/Developer/ComputerLanguageStudy/C/DataStructureTestSrc/PublicFunction/PgReadData/Exec]# cat /home/czg/TestPgData/PG_DDL.txt
@@ -901,37 +739,63 @@ CREATE TABLE public.pgbench_accounts
 );
 ```
 
-### （6）抽取的数据展示
+### （7）生成的数据展示
 ```
-[root@dw01:/opt/Developer/ComputerLanguageStudy/C/DataStructureTestSrc/PublicFunction/PgReadData/Exec]# tail -10f /home/czg/TestPgData/public_pgbench_accounts/public_pgbench_accounts.txt_0
-999991|10|0|                                                                                    
-999992|10|0|                                                                                    
-999993|10|0|                                                                                    
-999994|10|0|                                                                                    
-999995|10|0|                                                                                    
-999996|10|0|                                                                                    
-999997|10|0|                                                                                    
-999998|10|0|                                                                                    
-999999|10|0|                                                                                    
-1000000|10|0|
+[root@localhost ~]# tail -n 10 /home/sun/TestPgData/PgUserData/public_pgbench_accounts/public_pgbench_accounts.txt_0 | sort -t'|' -k2,2n
+95560|1|3374|                                                                                    
+252675|3|-3984|                                                                                    
+411875|5|-2409|                                                                                    
+485119|5|-2401|                                                                                    
+719962|8|-855|                                                                                    
+765817|8|3318|                                                                                    
+789713|8|895|                                                                                    
+867879|9|1560|                                                                                    
+870042|9|-4308|                                                                                    
+970012|10|3886| 
 ```
 
-### （7）库内查询展示
+### （8）库内查询展示对比
 ```
-postgres=# SELECT * FROM pgbench_accounts WHERE AID >= 999991 ORDER BY AID LIMIT 10;
-   aid   | bid | abalance |                                        filler                                        
----------+-----+----------+--------------------------------------------------------------------------------------
-  999991 |  10 |        0 |                                                                                     
-  999992 |  10 |        0 |                                                                                     
-  999993 |  10 |        0 |                                                                                     
-  999994 |  10 |        0 |                                                                                     
-  999995 |  10 |        0 |                                                                                     
-  999996 |  10 |        0 |                                                                                     
-  999997 |  10 |        0 |                                                                                     
-  999998 |  10 |        0 |                                                                                     
-  999999 |  10 |        0 |                                                                                     
- 1000000 |  10 |        0 |                                                                                     
+postgres=# select * from pgbench_accounts where aid in (970012,867879,252675,485119,411875,789713,95560,719962,765817,870042);
+  aid   | bid | abalance |                                        filler                                        
+--------+-----+----------+--------------------------------------------------------------------------------------
+  95560 |   1 |     3374 |                                                                                     
+ 252675 |   3 |    -3984 |                                                                                     
+ 411875 |   5 |    -2409 |                                                                                     
+ 485119 |   5 |    -2401 |                                                                                     
+ 719962 |   8 |     -855 |                                                                                     
+ 765817 |   8 |     3318 |                                                                                     
+ 789713 |   8 |      895 |                                                                                     
+ 867879 |   9 |     1560 |                                                                                     
+ 870042 |   9 |    -4308 |                                                                                     
+ 970012 |  10 |     3886 |                                                                                     
 (10 rows)
+```
+
+### （9）生成的序列展示
+```
+[root@localhost Exec]# head -25 /home/sun/TestPgData/PG_SEQ_DDL.txt 
+CREATE SEQUENCE "public"."actor_actor_id_seq" 
+AS BIGINT
+INCREMENT BY 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START WITH 1
+CACHE 1
+NO CYCLE;
+
+SELECT SETVAL('public.actor_actor_id_seq', 200, 'T');
+
+CREATE SEQUENCE "public"."address_address_id_seq" 
+AS BIGINT
+INCREMENT BY 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START WITH 1
+CACHE 1
+NO CYCLE;
+
+SELECT SETVAL('public.address_address_id_seq', 10, 'T');
 ```
 
 ## 2、性能展示

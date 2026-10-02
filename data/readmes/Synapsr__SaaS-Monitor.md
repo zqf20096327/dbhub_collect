@@ -46,9 +46,11 @@ when a payment lands, and confetti flies when you cross $10K MRR.
   its horizon.
 - **Sounds for every event**: payments, new customers, MRR up, MRR down and milestones, in three
   packs (cash register, chime, arcade) synthesized in the browser.
-- **A voice that announces them**: "New subscriber!", in five languages, each announcement on its
-  own switch. With a [Gradium](https://gradium.ai) key, in your own words, with the customer's
-  name, the amount and the plan.
+- **A voice that announces them**: "New subscriber!", in five languages. With a
+  [Gradium](https://gradium.ai) key, in your own words, with the customer's name, the amount and
+  the plan.
+- **Every event your way**: for each kind of event, choose whether it is listed in the feed, shown
+  as a card, heard and said out loud.
 - **Celebrations and goals**: confetti, a full-screen moment for each milestone ($1K, $10K MRR…,
   $1M ARR) or your own goal, with the date you'll reach it at your current pace.
 - **Made for the wall**: scales from a 720p monitor to a 4K TV and portrait screens, never sleeps,
@@ -64,7 +66,7 @@ when a payment lands, and confetti flies when you cross $10K MRR.
 - **Honest numbers**: MRR follows [Stripe's own definition](docs/stripe.md#how-mrr-is-computed), so
   the TV matches your Stripe Dashboard.
 - **Private and secure**: read-only restricted keys encrypted at rest, unguessable screen links
-  with an optional password, customer names hidden unless you allow them.
+  with an optional password, customer names and emails hidden unless you allow them.
 - **Real time within Stripe's limits**: webhooks for instant updates, and polling that respects
   Stripe's API read allowance when webhooks aren't available.
 

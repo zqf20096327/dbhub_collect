@@ -27,7 +27,7 @@ A macOS app for browsing SQLite databases and connecting to PostgreSQL in a stri
 - Schema notes from a sidecar file — table and column descriptions in `<database>.studio.json` show up as hover tooltips on graph nodes, table grids, and query result headers (see the [schema-descriptions](.claude/skills/schema-descriptions/SKILL.md) skill for AI-assisted authoring)
 - AI-authored cluster hints — let an agent group related tables by a chosen lens, defaulting to domain areas but supporting concepts like people, artifacts, departments, workflows, or ownership (via the [graph-clusters](.claude/skills/graph-clusters/SKILL.md) skill)
 - Local MCP bridge — Codex and Claude Code can inspect the active task's source context and request supported schema views through Graph Studio. The bridge reports status without opening the app; launching is an explicit tool action.
-- Workspace tabs — each tab keeps its own graph/data split, camera, filters and query drafts; restorable browsing state returns after relaunch without running saved drafts or restarting speech.
+- Workspace tabs — each tab keeps its own graph/data split, camera, filters and query drafts. A normal launch starts at the welcome screen; choose a file or use Open Recent to reopen a source.
 - Guided explanations — an agent can show a small set of tables, inspect rows or a read-only result, and add short captioned points with local streamed macOS narration and immediate playback controls.
 
 ## AI Skills
@@ -86,18 +86,24 @@ rest fade; choose it again, or click empty canvas, to return. ⌥⌘↓ and ⌥�
 through changes and bring each one into view. View 1 is the default; Previous
 from there opens **View 0**, the complete model after the changes. View 0 omits
 removed objects, keeps tables at uniform size and opacity, and uses colour alone
-to mark additions and edits. Table cards appear at a lower zoom in all review views.
+to mark additions and edits. Table cards show their full contents from 10% zoom
+in all review views. Drag the divider between the graph and table list to resize
+the panes in the app.
 
 In the embedded viewer, **Changes in this view** can contain assistant-written
 explanations with clickable table, field, and relation names. Its expanded or
 collapsed state carries between views. Table details have a **Close ×** button
 and support **Escape**; closing either panel releases its space in the embed.
+Dragging and zooming move the current frame immediately; after a short pause,
+the viewer requests a fresh native frame to sharpen the graph.
 
 The [database-diff skill](Skills/database-diff/SKILL.md) documents command-line
 snapshot and comparison creation for hooks. Bind generated reviews to immutable
 base/head revisions and run them after the existing code-review rounds. An agent
-may add `--agent` and `--session` so the review header names the tool and session
-that produced it, such as **Claude · Table diff visualization clarity**. Git does
+passes `--agent` and includes the actual current chat title with `--session`
+whenever its host provides it. That title leads the review header beside the
+tool's mark, with full provenance in the tooltip. If the host cannot supply the
+title, the header falls back to the tool name. Git does
 not run pre-merge-commit on fast-forward merges, so that workflow needs an explicit
 final schema-review step as well.
 
@@ -155,7 +161,7 @@ A migration set is replayed, not executed, so what a parser cannot interpret is 
 
 ## PostgreSQL connections
 
-Choose **Choose file/folder…** from the File menu (⌘O), or **Choose file/folder** on the welcome screen. Select one or more supported files to open them in new workspaces, or select one project folder by itself to search for databases and migration sources. The picker does not display a file-extension list; supported extensions appear below the welcome-screen button. These files also work through Finder, launch arguments and Open Recent.
+Choose **Choose file/folder…** from the File menu (⌘O), or **Choose file/folder** on the welcome screen. Select one or more supported files to open them in new workspaces, or select one project folder by itself to search for databases and migration sources. The picker does not display a file-extension list; click **Supported formats** below the welcome-screen button to see supported extensions. These files also work through Finder, launch arguments and Open Recent.
 
 A backup opens without connection details or a login. Graph Studio copies it into a private temporary workspace, restores it using local PostgreSQL, and opens the schema, rows, record explorer and SQL editor in read-only mode. Progress and Cancel are shown during preparation. The source backup is never modified. Closing the workspace or quitting stops its server and removes the temporary copy; reopening restores a fresh copy. A private Unix socket is used, with no TCP listener. Restore tools and the server run under a filesystem/network sandbox. Restoration is the only write phase and only affects the private copy; browsing uses a separate reader with existing read-only query restrictions.
 
@@ -208,6 +214,8 @@ At full-model zoom, authored group titles and a few optional `overviewTables` ca
 - **Graph options (…) → Expand all tables** uses the same size-aware layout and refits large views. Return to all groups to recover the overview; ordinary panning and hovering do not rerun layout.
 
 Canvas interaction reuses relationship indexes, group connections and table sizes while the camera moves. Only visible detailed cards prepare column rows; overview marks use a spatial hit index. Camera updates keep the minimap moving during continuous gestures, and the active drag stays mounted at the viewport edge. The minimap batches its table and relationship drawing. These limits apply equally to PostgreSQL and SQLite.
+
+The minimap is an informational overview and passes clicks through to workspace controls. Metadata issues appear in a collapsible panel; use its **×** button to dismiss it. Scrolling over the panel scrolls its issues without moving or zooming the graph. The panel returns when the source or its diagnostics change.
 
 See [dump and native UI verification](docs/dump-ui-verification.md) for archive, crash, scrolling and filter checks. See [verification evidence](docs/postgres-parity-scale-verification.md) for measured layout and canvas preparation work, test coverage and the limits of the native interaction checks.
 

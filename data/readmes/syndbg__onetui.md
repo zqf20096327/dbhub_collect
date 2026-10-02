@@ -9,7 +9,7 @@
 <p align="center">
   <a href="https://github.com/syndbg/onetui/actions/workflows/main.yaml"><img src="https://img.shields.io/badge/CI-GitHub_Actions-2088FF" alt="CI: GitHub Actions"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="License: Apache-2.0"></a>
-  <a href="Cargo.toml"><img src="https://img.shields.io/badge/source-0.2.0-green" alt="Source version: 0.2.0"></a>
+  <a href="Cargo.toml"><img src="https://img.shields.io/badge/source-0.2.2-green" alt="Source version: 0.2.2"></a>
   <a href="rust-toolchain.toml"><img src="https://img.shields.io/badge/Rust-1.98.1-orange" alt="Rust 1.98.1"></a>
 </p>
 
@@ -32,7 +32,22 @@ OneTUI is a keyboard-driven terminal browser for databases and message streams, 
 
 Download an archive or Linux package from [Releases](https://github.com/syndbg/onetui/releases).
 
-Install a package with `sudo apt install ./onetui-*.deb` or `sudo dnf install ./onetui-*.rpm`.
+Install a package with `sudo apt install ./onetui-*.deb` or `sudo dnf install ./onetui-*.rpm`. The `.deb` supports Debian 12+ and Ubuntu 22.04+. The `.rpm` supports Fedora and EL 9+. The `.tar.gz` links Debian/Ubuntu libraries, so use a package on other distros.
+
+### Arch Linux
+
+Install the prebuilt `.pkg.tar.zst` from [Releases](https://github.com/syndbg/onetui/releases):
+
+```sh
+sudo pacman -U ./onetui-*.pkg.tar.zst
+```
+
+Or build from source with the [PKGBUILD](packaging/arch/PKGBUILD):
+
+```sh
+curl -fsSLO https://raw.githubusercontent.com/syndbg/onetui/main/packaging/arch/PKGBUILD
+makepkg -si
+```
 
 ### Homebrew
 

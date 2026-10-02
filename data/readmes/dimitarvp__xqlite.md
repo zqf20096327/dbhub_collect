@@ -18,7 +18,7 @@ Xqlite is inspired by [exqlite](https://github.com/elixir-sqlite/exqlite), which
 
 ## Why Xqlite?
 
-- **Bundled SQLite.** No need to have SQLite already installed on your machine. No version differences between dev, CI, and production. The precompiled NIFs cover macOS, Linux, Windows, including ARM and RISC-V.
+- **Bundled SQLite.** No need to have SQLite already installed on your machine. No version differences between dev, CI, and production. The precompiled NIFs cover macOS (ARM and x86_64), Linux (ARM and x86_64 on glibc and musl, RISC-V on glibc) and Windows (x86_64).
 - **Per-operation cancellation.** Any process can abort an in-progress query by sending `cancel_operation/1` to a cancel token (that you create yourself beforehand) -- no need to hold the connection handle. Progress-handler-based, fine-grained, and mostly deterministic (fine-tuning it is really difficult and it's an ongoing work in finding the ideal tradeoff between raw speed and ability to cancel early).
 - **Structured errors with parsed details.** Constraint violation error values contain the table, columns, index name, and constraint name as structured fields -- I tried very hard to avoid parsing textual errors with regexes and mostly succeeded.
 - **Bidirectional type extensions.** Elixir<->SQLite type conversion: `DateTime` (the offset is written, values read back as UTC), `Date`, `Time`, `NaiveDateTime`, `JSON` (maps/lists), `UUID` (compact 16-byte storage), `Instant` and `Duration` (int64 nanoseconds, encode-only), and `Decimal` (encode-only, optional dep) — all built in and usable on the query, execute, and stream paths. The Ecto layer's schema-driven counterparts live in [xqlite_ecto3](https://github.com/dimitarvp/xqlite_ecto3).
@@ -28,7 +28,7 @@ Xqlite is inspired by [exqlite](https://github.com/elixir-sqlite/exqlite), which
 - **Incremental blob I/O.** Read and write multi-GB column values without loading them into memory.
 - **Online backup with progress and cancellation.** Single-call backup API to a file path, progress messages to a PID, canceling respected even mid-backup.
 - **Structured schema introspection.** `PRAGMA table_list`, `table_xinfo`, `index_list`, `index_xinfo`, `foreign_key_list`, and others are all converted and returned as struct-shaped data -- generated columns, STRICT/WITHOUT ROWID markers, collation per index column, FK match clauses all included. Column defaults arrive classified into typed Elixir values (`{:literal, 42}`, `{:blob, ...}`, `{:current, :timestamp}`, `{:expr, "datetime('now')"}`) instead of raw SQL text.
-- **57 typed PRAGMAs** with validated get/set; 34 of them are writable.
+- **53 typed PRAGMAs** with validated get/set; 34 of them are writable.
 - **Deep observability.** Multi-subscriber hooks for every SQLite-visible lifecycle event (update / commit / rollback / WAL / progress ticks / busy retries / global log), transaction-state and per-connection counters, a structured `wal_checkpoint` wrapper -- plus opt-in, compile-time-eliminated `:telemetry` instrumentation across the whole API. I hate black boxes with a passion; this library lets you poke into the guts of your SQLite databases without introducing quantum uncertainty or cryptic crashes.
 
 ## Installation
@@ -43,7 +43,7 @@ end
 
 Compatibility: the Ecto adapter (`xqlite_ecto3`) pins exactly one xqlite minor series per adapter release, because xqlite is pre-1.0 and its minor is the break slot. The current pairing is xqlite `~> 0.12.0`; the adapter's README states its own pairing.
 
-Precompiled NIF binaries are included for macOS, Linux (glibc and musl, including ARM and RISC-V), and Windows -- no Rust toolchain needed for them. They are built for NIF API 2.17, so the runtime floor is OTP 26 with Elixir 1.17 -- the oldest pair CI actually runs. CI covers 10 of the 16 combinations of Elixir 1.17-1.20 with OTP 26-29, on Linux, macOS and Windows: Elixir 1.17 and 1.18 on OTP 26-27, Elixir 1.19 on OTP 26-28, Elixir 1.20 on OTP 27-29. A source build -- forced with `XQLITE_BUILD=true`, or unavoidable on a platform without a binary -- needs Rust 1.91 or newer, the floor that rustler 0.38 declares. To force source compilation:
+Precompiled NIF binaries are included for macOS (ARM and x86_64), Linux (ARM and x86_64 on glibc and musl, RISC-V on glibc) and Windows (x86_64) -- no Rust toolchain needed for them. They are built for NIF API 2.17, so the runtime floor is OTP 26 with Elixir 1.17 -- the oldest pair CI actually runs. CI covers 10 of the 16 combinations of Elixir 1.17-1.20 with OTP 26-29, on Linux, macOS and Windows: Elixir 1.17 and 1.18 on OTP 26-27, Elixir 1.19 on OTP 26-28, Elixir 1.20 on OTP 27-29. A source build -- forced with `XQLITE_BUILD=true`, or unavoidable on a platform without a binary -- needs Rust 1.91 or newer, the floor that rustler 0.38 declares. To force source compilation:
 
 ```bash
 XQLITE_BUILD=true mix deps.compile xqlite
@@ -64,26 +64,26 @@ XQLITE_BUILD=true mix deps.compile xqlite
 
 Two modules: `Xqlite` for high-level helpers, `XqliteNIF` for direct NIF access. See [hexdocs](https://hexdocs.pm/xqlite) for the full API.
 
-- **Queries & execution:** `query/4`, `query_cancellable/5`, `query_with_changes/3`, `execute/4`, `execute_batch/2` and cancellable variants; every function that takes parameters takes optional `:type_extensions`
+- **Queries & execution:** `query/4`, `execute/4` and `execute_batch/3`, each cancellable through its `:cancel_tokens` option; every function that takes parameters takes optional `:type_extensions`
 - **Streaming:** `Xqlite.stream/4` (with optional `:type_extensions`) and the lower-level `stream_open/fetch/close`
 - **Transactions:** `:deferred`/`:immediate`/`:exclusive` modes, savepoints with release and rollback-to
 - **Cancellation:** per-operation, progress-handler-based, any process can cancel
 - **Schema introspection:** `schema_databases/1`, `schema_list_objects/2`, `schema_columns/2`, `schema_foreign_keys/2`, `schema_indexes/2`, `schema_index_columns/2`, `get_create_sql/2`
-- **PRAGMAs:** `Xqlite.Pragma` -- typed schema with validation for 57 PRAGMAs, 34 of them writable. `Xqlite.set_pragma/3`, `Xqlite.Pragma.put/4` and the connection options of `open/2` share one value check, so a value a PRAGMA cannot take is refused rather than quietly replaced by SQLite's fallback
-- **Type extensions:** bidirectional encode/decode; nine built in -- `DateTime`, `Date`, `Time`, `NaiveDateTime`, `JSON` (plain maps/lists), `UUID` (canonical text to a compact 16-byte blob), `Instant` and `Duration` (int64 nanoseconds, encode-only), and `Decimal` (encode-only, needs the optional `:decimal` dep). The chain runs on `query/4`, `execute/4`, `stream/4`, `bind/3`, `explain_analyze/4`, `query_cancellable/5`, `execute_cancellable/5` and `query_with_changes_cancellable/5`. An extension that claims a value but cannot store it -- a `Decimal` that is `NaN` or `Infinity`, a map holding bytes that are not valid UTF-8 -- fails the call with `{:error, {:type_extension_refused, %{position: n, extension: mod, reason: why}}}` instead of writing a word or a wrong value
+- **PRAGMAs:** `Xqlite.Pragma` -- typed schema with validation for 53 PRAGMAs, 34 of them writable. `Xqlite.Pragma.put/4` and the connection options of `open/2` share one value check (one exception: `open/2` also takes `busy_timeout: :infinity`, stored as 2_147_483_647 ms), so a value a PRAGMA cannot take is rejected rather than quietly replaced by SQLite's fallback, and a write SQLite answers with another value is `{:error, {:pragma_not_applied, _}}`; the PRAGMAs that act are functions: `optimize/1`, `shrink_memory/1`, `wal_checkpoint/3`
+- **Type extensions:** bidirectional encode/decode; nine built in -- `DateTime`, `Date`, `Time`, `NaiveDateTime`, `JSON` (plain maps/lists), `UUID` (canonical text to a compact 16-byte blob), `Instant` and `Duration` (int64 nanoseconds, encode-only), and `Decimal` (encode-only, needs the optional `:decimal` dep). The chain runs on `query/4`, `execute/4`, `stream/4`, `bind/3` and `explain_analyze/4`. An extension that claims a value but cannot store it -- a `Decimal` that is `NaN` or `Infinity`, a map holding bytes that are not valid UTF-8 -- fails the call with `{:error, {:type_extension_refused, %{position: n, extension: mod, reason: why}}}` instead of writing a word or a wrong value
 - **Hooks (all multi-subscriber):** update (`{:xqlite_update, action, db, table, rowid}`), commit, rollback, WAL (`{:xqlite_wal, db_name, pages}`), progress ticks with per-subscriber decimation, global SQLite log hook; single-slot busy retry policy (`set_busy_policy/2`) plus any number of busy observers receiving `{:xqlite_busy, ...}`
 - **Authorizer:** single-slot deny-list via `set_authorizer/2` / `remove_authorizer/1` -- rejects chosen action kinds (`:select`, `:delete`, `:pragma`, `:create_table`, ...) at statement-prepare time; denials surface as `{:authorization_denied, extended_code, msg}`. xqlite shares the slot: while the busy slot is held it adds two rules of its own, so a `busy_timeout` write is rejected as `{:busy_timeout_write_refused, %{policy: _, observers: _}}` and its own `PRAGMA busy_timeout` read passes a `:pragma` deny
 - **Manual statement lifecycle:** `prepare/2`, `bind/3` (positional or named), `step/1`, `multi_step/2`, `reset/1`, `clear_bindings/1`, `column_names/1`, `finalize/1` -- prepare once, rebind in a loop, consume partially; GC finalizes abandoned statements
 - **Telemetry (opt-in):** compile-time-flagged `:telemetry` events for every operation (spans with nanosecond timings), cancellation lifecycle events, and a bridge that re-emits hook fan-outs as `[:xqlite, :hook, :*]` -- see the "Wiring xqlite telemetry" guide
 - **Serialize / deserialize:** atomic in-memory snapshots to/from binary
-- **Extensions:** opt-in `load_extension/2` and `load_extension/3`
+- **Extensions:** opt-in `load_extension/3`, switched by `enable_load_extension/1` and `disable_load_extension/1`
 - **Backup / restore:** one-shot to/from file path; incremental with progress messages and cancellation
 - **Sessions:** session extension -- changeset capture, apply with conflict strategies, invert, concat
 - **Blob I/O:** `blob_open/read/write/close` for incremental access
 - **Diagnostics & connection state:** `compile_options/1`, `sqlite_version/0`, `connection_stats/1` (per-connection `sqlite3_db_status` counters), `autocommit/1`, `txn_state/2`, structured `wal_checkpoint/3`
 - **Result integration:** `Xqlite.Result` implements `Table.Reader` (works with Explorer, Kino, VegaLite)
 
-Errors are structured tuples: `{:error, {:constraint_violation, :constraint_unique, %{table: ..., columns: [...], ...}}}`, `{:error, {:read_only_database, code, message}}`, etc. 83 typed reason variants, including twelve SQLite constraint subtypes plus a generic fallback.
+Errors are structured tuples: `{:error, {:constraint_violation, :constraint_unique, %{table: ..., columns: [...], ...}}}`, `{:error, {:read_only_database, code, message}}`, etc. 90 typed reason variants, including twelve SQLite constraint subtypes plus a generic fallback.
 
 ## Focused examples
 
@@ -106,7 +106,7 @@ Xqlite.stream(conn, "SELECT ts, day FROM events", [],
 
 ```elixir
 {:ok, token} = Xqlite.create_cancel_token()
-task = Task.async(fn -> Xqlite.query_cancellable(conn, slow_sql, [], token) end)
+task = Task.async(fn -> Xqlite.query(conn, slow_sql, [], cancel_tokens: token) end)
 :ok = Xqlite.cancel_operation(token)
 {:error, :operation_cancelled} = Task.await(task)
 ```
@@ -138,7 +138,7 @@ affects the others.
 
 ```elixir
 {:ok, c_h} = XqliteNIF.register_commit_hook(conn, self())     # {:xqlite_commit} before each commit
-{:ok, r_h} = XqliteNIF.register_rollback_hook(conn, self())   # {:xqlite_rollback} after each rollback
+{:ok, r_h} = XqliteNIF.register_rollback_hook(conn, self())   # {:xqlite_rollback} after each rollback, except close/1's
 {:ok, w_h} = XqliteNIF.register_wal_hook(conn, self())        # {:xqlite_wal, db_name, pages} after WAL commits
 # ...later, unregister specific subscribers by their handles:
 :ok = XqliteNIF.unregister_commit_hook(conn, c_h)
@@ -155,7 +155,7 @@ WAL subscribers coexist with automatic checkpointing: SQLite's
 wal_hook slot and its built-in autocheckpoint are mutually exclusive
 at the C level, so xqlite's master callback emulates the checkpoint
 itself at the configured `wal_autocheckpoint` threshold. Set that
-PRAGMA through `set_pragma/3` (raw-SQL `PRAGMA wal_autocheckpoint`
+PRAGMA through `Xqlite.Pragma.put/3` (raw-SQL `PRAGMA wal_autocheckpoint`
 bypasses the repair and silently steals the hook slot).
 
 ### Busy contention -- a retry policy, plus any number of observers
@@ -194,10 +194,10 @@ observation is fan-out, and the telemetry bridge re-emits it as
 ### Online backup with progress and cancellation
 
 ```elixir
-{:ok, token} = XqliteNIF.create_cancel_token()
-:ok = XqliteNIF.backup_with_progress(conn, "main", "/path/to/backup.db", self(), 10, [token])
+{:ok, token} = Xqlite.create_cancel_token()
+:ok = Xqlite.backup_with_progress(conn, "/path/to/backup.db", self(), pages_per_step: 10, cancel_tokens: token)
 # receive {:xqlite_backup_progress, %{remaining: r, total: t, status: :copied | :busy}} messages
-# cancel from any process: XqliteNIF.cancel_operation(token)
+# cancel from any process: Xqlite.cancel_operation(token)
 ```
 
 ### Session extension -- capture, apply, invert
@@ -224,13 +224,13 @@ observation is fan-out, and the telemetry bridge re-emits it as
 :ok = XqliteNIF.blob_close(blob)
 ```
 
-A read is a window over the bytes that are there: `blob_read/3` answers up to `length` bytes, fewer when the blob ends first and `{:ok, ""}` at or past the end, so a short answer means the blob ended rather than the read failing. A write is not: `blob_write/3` refuses a write that would run past the end instead of writing the part that fits.
+A read is a window over the bytes that are there: `blob_read/3` answers up to `length` bytes, fewer when the blob ends first and `{:ok, ""}` at or past the end, so a short answer means the blob ended rather than the read failing. A write is not: `blob_write/3` rejects a write that would run past the end instead of writing the part that fits.
 
 ### Serialize / deserialize -- atomic in-memory snapshots
 
-`serialize/1` captures the entire live database as a single self-contained binary: every page the connection reads, including what a WAL database still holds in its WAL file and not yet in its main file. Write it with `File.write/2` and it is a valid SQLite file you can open from any other SQLite tool. `deserialize/2` loads that binary, or a database file's bytes, into a connection where it behaves as a normal in-memory DB (read, write, indexes, everything); a UTF-16 database loads only into an attached schema of a connection with the same encoding; bytes SQLite cannot read, or an image in an encoding the target does not take, return `{:error, {:invalid_image, _}}` and replace nothing.
+`serialize/1` captures the entire live database as a single self-contained binary: every page the connection reads, including what a WAL database still holds in its WAL file and not yet in its main file; for a database `deserialize/2` loaded, the last committed state, whatever transaction is open. Write it with `File.write/2` and it is a valid SQLite file you can open from any other SQLite tool. `deserialize/2` loads that binary into a connection where it behaves as a normal in-memory DB (read, write, indexes, everything). A database file's bytes load the same way only while no connection has the database open and no `-wal` or `-journal` file lies beside it: a copy read beside a writer can hold a state no commit produced, and loading does not catch it. Statements and streams prepared before a load run against the loaded database, and TEMP triggers on its tables fire on the loaded ones; a statement or stream still running on any schema of the connection, or a blob open on one, makes the load answer `{:error, {:database_busy_or_locked, 5, _}}` and replace nothing, and `restore/3` answers the same while one runs. A UTF-16 database loads only into an attached schema of a connection with the same encoding; bytes SQLite cannot read, an image in an encoding the target does not take, or a writable load of an image SQLite opens only read-only return `{:error, {:invalid_image, _}}` and replace nothing.
 
-Different from `backup_with_progress/6`, which streams page by page while the source is live, and from sessions, which capture _changes_ since a point in time. Serialize is a one-shot atomic snapshot of the _whole_ database into a BEAM binary, useful for shipping DB state between nodes/processes, cloning a DB without disk I/O, or handing off to a Task without worrying about file locks.
+Different from `backup_with_progress/4`, which streams page by page while the source is live, and from sessions, which capture _changes_ since a point in time. Serialize is a one-shot atomic snapshot of the _whole_ database into a BEAM binary, useful for shipping DB state between nodes/processes, cloning a DB without disk I/O, or handing off to a Task without worrying about file locks.
 
 ```elixir
 {:ok, binary} = Xqlite.serialize(conn)
@@ -241,9 +241,9 @@ Different from `backup_with_progress/6`, which streams page by page while the so
 ## FAQ
 
 **Why Rust and not C?**
-For me the choice came down to _not panicking_ and never bringing down the BEAM VM. Rust's exhaustive pattern matching on tagged unions (`enum`s) means the compiler will not let me forget a case -- all twelve SQLite constraint subtypes, every error variant, and every storage class get a dedicated code branch. The code refuses to compile if one is missing. C gives me none of that, and I don't trust myself (or decades of accreted C and `sqlite3_*` idioms) to avoid footguns when every NULL check and every `free` is a decision I make by hand.
+For me the choice came down to _not panicking_ and never bringing down the BEAM VM. Rust's exhaustive pattern matching on tagged unions (`enum`s) means the compiler will not let me forget a case -- all twelve SQLite constraint subtypes, every error variant, and every storage class get a dedicated code branch. The code does not compile if one is missing. C gives me none of that, and I don't trust myself (or decades of accreted C and `sqlite3_*` idioms) to avoid footguns when every NULL check and every `free` is a decision I make by hand.
 
-The cost is of course real: the stack is C -> `libsqlite3-sys` -> `rusqlite` -> `rustler` -> Elixir, and architecturally I don't like it. In practice, every benchmark I've run shows the overhead is anywhere from minuscule to invisible. In return I get a pure-Rust error list/taxonomy, `ResourceArc` + `Mutex<Connection>` + `Drop` as first-class citizens rather than convention-driven discipline (no resource leaks due to human forgetfulness), and the exhaustiveness guarantee mentioned above. The tradeoff has been worth it so far. I am very happy with the Rust code, even its ugly parts -- they are needed to get the job done and fulfill the promises that this library makes.
+The cost is of course real: the stack is C -> `libsqlite3-sys` -> `rusqlite` -> `rustler` -> Elixir, and architecturally I don't like it. In practice, every benchmark I've run shows the overhead is anywhere from minuscule to invisible. In return I get a pure-Rust error list/taxonomy, `ResourceArc` + `Mutex<Connection>` + `Drop` as first-class citizens rather than convention-driven discipline (no resource leaks due to human forgetfulness, save the one the gotchas guide names: a session still referenced when its connection closes), and the exhaustiveness guarantee mentioned above. The tradeoff has been worth it so far. I am very happy with the Rust code, even its ugly parts -- they are needed to get the job done and fulfill the promises that this library makes.
 
 **What SQLite version is bundled?**
 Currently: SQLite 3.53.2. The exact version is also available at runtime via `XqliteNIF.sqlite_version/0`.
@@ -268,9 +268,11 @@ SQLite is opened with `SQLITE_OPEN_NO_MUTEX` (rusqlite's default) -- serializati
 
 ## Known limitations
 
+The [Known limitations](guides/known_limitations.md) guide lists every limitation the library documents, with what to do instead.
+
 Xqlite-specific:
 
-- **Generated column `default_value`** in `schema_columns/2` is `nil`. Use `get_create_sql/2` to recover the expression.
+- **Generated column `default_value`** in `schema_columns/2` is `:none`. Use `get_create_sql/2` to recover the expression.
 - **User-Defined Functions** -- not planned due to implementation complexity across NIF boundaries. Might reconsider when the library matures enough, but it's one of the lowest priorities for me as a maintainer.
 
 Architectural limits SQLite imposes (not Xqlite choices):
@@ -297,9 +299,9 @@ Rusqlite opens connections with `SQLITE_OPEN_NO_MUTEX` (disabling SQLite's own m
 
 ### Backup API: single call, not resource handle
 
-Xqlite provides two backup interfaces: one-shot (`backup/2`, `restore/2`) and incremental with progress (`backup_with_progress/6`).
+Xqlite provides two backup interfaces: one-shot (`backup/2`, `restore/2`) and incremental with progress (`backup_with_progress/4`).
 
-The incremental variant runs the entire backup inside a single NIF call on a dirty I/O scheduler, sending `{:xqlite_backup_progress, %{remaining: r, total: t, status: s}}` after each step, `status` being `:busy` when a lock blocked the step. A cancel token -- the same one used for `query_cancellable/4` -- allows another process to abort the backup at any time.
+The incremental variant runs the entire backup inside a single NIF call on a dirty I/O scheduler, sending `{:xqlite_backup_progress, %{remaining: r, total: t, status: s}}` after each step, `status` being `:busy` when a lock blocked the step. A cancel token -- the kind `query/4` takes through `:cancel_tokens` -- allows another process to abort the backup at any time.
 
 I chose this single-call design over exposing a step-by-step `Backup` resource handle because:
 
@@ -317,7 +319,7 @@ To get the actual affected row count after DML, call `changes/1` immediately aft
 
 **Important SQLite behavior:** `sqlite3_changes()` is sticky -- per [the official docs](https://www.sqlite.org/c3ref/changes.html), "executing any other type of SQL statement does not modify the value returned by these functions." This means `changes/1` after a `SELECT` returns the _previous_ DML's count, not 0. It never resets on its own.
 
-`query_with_changes/3` solves this by capturing `sqlite3_changes()` inside the same `Mutex` hold as the query execution, and reporting it only when `sqlite3_total_changes()` moved across the statement -- 0 otherwise. So DML reports its real count (with or without `RETURNING`), while SELECT, DDL, and PRAGMA report 0 instead of the previous DML's sticky count. Result columns play no part in the decision: `RETURNING` DML has columns yet changes rows, and DDL has none yet must not leak a stale count. This is the recommended function for callers who need reliable affected row counts -- including the `xqlite_ecto3` adapter.
+`query_with_changes/3` solves this by capturing `sqlite3_changes()` inside the same `Mutex` hold as the query execution, and reporting it only when `sqlite3_total_changes()` moved across the statement -- 0 otherwise. So DML reports its real count (with or without `RETURNING`), while SELECT, DDL, and PRAGMA report 0 instead of the previous DML's sticky count. Two kinds of DDL are exceptions: a `DROP TABLE` that SQLite precedes with a `DELETE` (of a table a foreign key references, or of a table with a deferred foreign key of its own while a deferred violation is pending), with `foreign_keys` on, counts the rows of the `DELETE` SQLite runs first, and `CREATE VIRTUAL TABLE` with a module that writes rows into tables of its own while it creates them (`rtree`, `fts5`) reports 1. Result columns play no part in the decision: `RETURNING` DML has columns yet changes rows, and DDL has none yet must not leak a stale count. This is the recommended function for callers who need reliable affected row counts -- including the `xqlite_ecto3` adapter.
 
 ## Roadmap
 

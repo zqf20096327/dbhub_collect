@@ -254,6 +254,29 @@ Available backends:
 - `postgres` or `postgresql`: Remote PostgreSQL storage using one SQL table per database collection.
 - `mysql` or `mariadb`: Remote MariaDB/MySQL storage using one SQL table per database collection.
 
+JSON storage caches decoded tables and their serialized text per open database.
+Opening an existing file also retains eligible JSON table text so the first write
+can reuse untouched tables, including canonical ObjectId and datetime tags.
+The first change to an eligible table parses its retained text once to reuse
+unchanged document text, avoiding serialization of the resident payload.
+Other BSON tags and legacy values that need write normalization use the codec
+path instead. Retaining text uses additional
+memory even for read-only database handles.
+Warm collection operations copy only the selected table and reuse serialized
+text for unchanged documents, comparing their exact storage representations
+(including BSON types and field order). External file changes invalidate the
+cache, and closing the database releases it. Writes
+still atomically replace and sync the complete JSON file, so large databases
+retain whole-file I/O costs and the cache requires additional memory. The file
+format is unchanged.
+
+Native memory single inserts cache identity and unique-token owners for
+single-field indexes, including sparse and multikey indexes. After the first
+scan, validation visits matching conflict candidates instead of every resident
+row. The cache uses additional memory proportional to index entries and is
+rebuilt after general writes or catalog changes. Compound and partial indexes,
+custom storage hooks, and legacy row shapes retain full validation.
+
 Install only the drivers you need:
 
 ```bash
