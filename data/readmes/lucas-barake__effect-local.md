@@ -5,7 +5,7 @@ local SQLite, works while offline, and reconciles with an authoritative server a
 returns. Effect Schema defines every domain, durable, and wire contract. Effect services, Layers, scopes, streams,
 and Atom own the runtime.
 
-The library targets Effect `4.0.0-rc.117`. It has not published a stable release. Durable and public contracts may
+The library targets Effect `4.0.0-rc.118`. It has not published a stable release. Durable and public contracts may
 change before v1.
 
 ## Architecture
@@ -77,7 +77,7 @@ import * as Effect from "effect/Effect"
 import * as Layer from "effect/Layer"
 import * as Option from "effect/Option"
 import * as Schema from "effect/Schema"
-import * as SqlSchema from "effect/unstable/sql/SqlSchema"
+import * as SqlSchema from "effect/sql/SqlSchema"
 
 export const Task = Model.make("Task", {
   version: 1,
@@ -205,7 +205,10 @@ their own entity. `Query.make` has no static dependency list because the runtime
 ## SQLite replica
 
 `SqlReplica.layer` assembles one public `Replica` that owns one SQLite database, one synchronization transport, and
-any number of joined spaces. Supply the domain handlers, a `SqlClient`, `Crypto`, and a `SyncEngine`:
+any number of joined spaces. Supply the domain handlers, a `SqlClient`, `Crypto`, and a `SyncEngine`. The replica
+mints its client identity the first time it opens a database and keeps it there, so the identity lives exactly as long
+as the local data. Pass `clientId` only when the identity is managed elsewhere; opening a database with a different
+identity fails with `ReplicaIdentityMismatch`.
 
 ```ts
 import { NodeCrypto } from "@effect/platform-node"
@@ -219,7 +222,6 @@ import * as Layer from "effect/Layer"
 import { definition, layerDomain, ListTasks, PutTask, Task } from "./domain.js"
 
 const spaceId = Identity.SpaceId.make("spc_00000000-0000-4000-8000-000000000001")
-const clientId = Identity.ClientId.make("cli_00000000-0000-4000-8000-000000000001")
 const scope = Protocol.ReplicationScope.make({ models: [Task.name] })
 
 const layerDatabase = Layer.mergeAll(
@@ -229,7 +231,6 @@ const layerDatabase = Layer.mergeAll(
 
 export const layerReplica = SqlReplica.layer({
   definition,
-  clientId,
   defaultScope: scope,
   initialSpaces: [spaceId]
 }).pipe(
@@ -423,32 +424,33 @@ singleton. Every limit has a documented default.
 import * as Authentication from "@lucas-barake/effect-local-rpc/Authentication"
 import * as SyncRpc from "@lucas-barake/effect-local-rpc/SyncRpc"
 import * as SyncServer from "@lucas-barake/effect-local-rpc/SyncServer"
+import * as SingleRunner from "effect/cluster/SingleRunner"
+import * as HttpRouter from "effect/http/HttpRouter"
 import * as Layer from "effect/Layer"
-import * as SingleRunner from "effect/unstable/cluster/SingleRunner"
-import * as HttpRouter from "effect/unstable/http/HttpRouter"
 
-const layerProtocol = SyncServer.layerProtocolWebSocket({ path: "/sync" }).pipe(Layer.provide(HttpRouter.layer))
-
-export const layerServer = SyncServer.layer({
+const layerSync = SyncServer.layer({
   definition,
   authorizeAccess,
   authorizeMutation,
   authorizeRead,
   authorizeEphemeral
-}).pipe(
-  Layer.provideMerge(layerProtocol),
+}).pipe(Layer.provideMerge(SyncServer.layerProtocolWebSocket({ path: "/sync" })))
+
+export const layerServer = HttpRouter.serve(layerSync).pipe(
   Layer.provide(Authentication.layerServer.pipe(Layer.provide(layerAuthenticator))),
   Layer.provide(SingleRunner.layer({ runnerStorage: "memory" })),
   Layer.provide(layerDomain),
   Layer.provide(layerDatabase),
-  Layer.provide(HttpRouter.serve(layerProtocol)),
   Layer.provide([layerHttpServer, SyncRpc.layerJson()])
 )
 ```
 
+`HttpRouter.serve` serves only the routes registered by the layer passed to it, so the WebSocket protocol belongs
+inside that layer. Add other routes, such as a login endpoint, to the same layer.
+
 Replace `SingleRunner.layer` with Effect Cluster's runner transport and SQL runner and message storage to run the same
 layer on several processes, and pass one `assertionSecret` to all of them. Use NDJSON runner serialization, for
-example `NodeClusterSocket.layer({ serialization: "ndjson" })`: in Effect `4.0.0-rc.117` the default SchemaBinary
+example `NodeClusterSocket.layer({ serialization: "ndjson" })`: in Effect `4.0.0-rc.118` the default SchemaBinary
 runner serialization breaks volatile streaming entity calls between runners after their first element.
 
 ### PostgreSQL server storage
@@ -522,10 +524,8 @@ benchmark at `packages/local-rpc/bench/Fanout.bench.ts` exercises 64, 256, and 1
 ```ts
 import * as BrowserReplica from "@lucas-barake/effect-local-browser/BrowserReplica"
 import * as BrowserSqlite from "@lucas-barake/effect-local-browser/BrowserSqlite"
-import * as ReplicaAtom from "@lucas-barake/effect-local-browser/ReplicaAtom"
+import * as ReplicaAtom from "@lucas-barake/effect-local-rpc/ReplicaAtom"
 import * as Ephemeral from "@lucas-barake/effect-local/Ephemeral"
-import * as Identity from "@lucas-barake/effect-local/Identity"
-import * as Protocol from "@lucas-barake/effect-local/Protocol"
 import * as Layer from "effect/Layer"
 import * as Schema from "effect/Schema"
 
@@ -544,15 +544,13 @@ const Presence = Ephemeral.member({ status: Schema.String })
 const ephemerals = [Typing, ReadPosition]
 
 export const graph = ReplicaAtom.make(
-  BrowserReplica.layer({
-    name: "tasks",
-    definition,
-    layerDatabase: BrowserSqlite.layerWorker(() => new Worker(new URL("./sqlite.worker.ts", import.meta.url))),
-    layerSync,
-    spaces: [spaceId],
-    ephemerals,
-    profiles: { presence: Presence }
-  }).pipe(Layer.provide(layerDomain))
+  BrowserReplica.layer(
+    Layer.merge(
+      BrowserSqlite.layerWorker(() => new Worker(new URL("./sqlite.worker.ts", import.meta.url))),
+      layerSync
+    ),
+    { name: "tasks", definition, spaces: [spaceId], ephemerals, profiles: { presence: Presence } }
+  ).pipe(Layer.provide(layerDomain), Layer.provide(BrowserReplica.layerPlatformBrowser))
 )
 
 export const taskAtom = graph.entity(spaceId, Task)("task-1")
@@ -571,21 +569,15 @@ export const spacesAtom = graph.spaces
 export const joinAtom = graph.join
 export const leaveAtom = graph.leave
 
-const member = Protocol.EphemeralMember.make({
-  clientId,
-  membershipIncarnation: Identity.MembershipIncarnation.make("inc_00000000-0000-4000-8000-000000000001")
-})
-
 export const sessionAtom = graph.ephemeral(Presence, {
   spaceId,
-  member,
   value: { status: "online" },
   ttl: "30 seconds"
 })
 export const typingAtom = graph.ephemeralEvents(sessionAtom, Typing)
 export const positionsAtom = graph.ephemeralState(sessionAtom, ReadPosition)
 export const rosterAtom = graph.ephemeralMembers(sessionAtom)
-export const publishTypingAtom = graph.publishEphemeral(Typing, { spaceId, member })
+export const publishTypingAtom = graph.publishEphemeral(Typing, { spaceId })
 ```
 
 The graph defaults to Effect's shared `Atom.runtime`, so every graph participates in one application memo map. Entity
@@ -601,7 +593,9 @@ and lifecycle command atoms are concurrent and preserve their typed result. Ephe
 projections for one member share the session atom's single joined stream: events are live only, state and the roster
 replay their current decoded view to late subscribers, and a malformed remote value fails only the projection for its
 own definition with a typed decode error. Set `publishTypingAtom` with `{ payload, ttl }` and observe the command's
-`AsyncResult`. Pass an application factory with `options.factory` when the application already owns a deliberate
+`AsyncResult`. Every ephemeral session and publish target speaks for `graph.member`, one member identity the graph
+mints from the layer's `Crypto` when an ephemeral atom first needs it and keeps while ephemeral atoms that use it stay
+mounted, so an idle graph still releases its replica; pass `member` explicitly only to act as a different member. Pass an application factory with `options.factory` when the application already owns a deliberate
 custom runtime.
 
 ### Infinite scroll

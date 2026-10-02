@@ -13,6 +13,8 @@
 
 **Background jobs for .NET. Predictable. Observable. No magic.**
 
+📖 **Documentation: [oluciano.github.io/NexJob](https://oluciano.github.io/NexJob/)**
+
 [![NuGet](https://img.shields.io/nuget/v/NexJob.svg?style=flat-square&color=512bd4&label=nuget)](https://www.nuget.org/packages/NexJob)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/NexJob?style=flat-square&color=512bd4)](https://www.nuget.org/packages/NexJob)
 [![Build](https://img.shields.io/github/actions/workflow/status/oluciano/NexJob/ci.yml?style=flat-square)](https://github.com/oluciano/NexJob/actions)
@@ -97,12 +99,12 @@ The job expires if not started within 5 minutes — no silent failures, no zombi
 ## Core Features
 
 - **`IJob` / `IJob<T>`** — simple and structured job interfaces
-- **Predictable retries** — exponential backoff with configurable policies, global + per-job `[Retry]`
+- **Predictable retries** — a configurable global delay policy plus per-job `[Retry]` with exponential backoff
 - **Deadline enforcement** — jobs expire if not executed in time (`deadlineAfter`)
 - **Dead-letter handlers** — automatic fallback when all retries are exhausted
 - **Multi-service safe deferral** — foreign jobs from other microservices are automatically deferred without penalizing attempts or dead-lettering
 - **Concurrency throttling** — `[Throttle]` attribute for per-resource limits
-- **Distributed throttling** — `UseDistributedThrottle()` enforces global cluster-wide rate limits via Redis
+- **Distributed throttling** — `AddNexJobDistributedThrottle()` enforces global cluster-wide rate limits via Redis
 - **Job continuations** — chain jobs with parent/child relationships
 - **Idempotency** — `DuplicatePolicy` controls re-enqueue behavior
 - **Recurring jobs** — via code or `appsettings.json`
@@ -133,16 +135,16 @@ All providers implement `IRuntimeSettingsStore` — runtime configuration persis
 
 | Package | NuGet | Description |
 |---|---|---|
-| `NexJob.Dashboard` | [![NuGet](https://img.shields.io/badge/nuget-v5.5.0-blue)](https://www.nuget.org/packages/NexJob.Dashboard) | Embedded ASP.NET Core dashboard middleware |
-| `NexJob.Dashboard.Standalone` | [![NuGet](https://img.shields.io/badge/nuget-v5.5.0-blue)](https://www.nuget.org/packages/NexJob.Dashboard.Standalone) | Embedded HTTP dashboard server for Worker Services |
-| `NexJob.OpenTelemetry` | [![NuGet](https://img.shields.io/badge/nuget-v5.5.0-blue)](https://www.nuget.org/packages/NexJob.OpenTelemetry) | OTel SDK instrumentation |
-| `NexJob.Trigger.AzureServiceBus` | [![NuGet](https://img.shields.io/badge/nuget-v5.5.0-blue)](https://www.nuget.org/packages/NexJob.Trigger.AzureServiceBus) | Azure Service Bus trigger |
-| `NexJob.Trigger.AwsSqs` | [![NuGet](https://img.shields.io/badge/nuget-v5.5.0-blue)](https://www.nuget.org/packages/NexJob.Trigger.AwsSqs) | AWS SQS trigger |
-| `NexJob.RabbitMQ` | [![NuGet](https://img.shields.io/badge/nuget-v5.5.0-blue)](https://www.nuget.org/packages/NexJob.RabbitMQ) | RabbitMQ trigger & resilient outbox producer |
-| `NexJob.Kafka` | [![NuGet](https://img.shields.io/badge/nuget-v5.5.0-blue)](https://www.nuget.org/packages/NexJob.Kafka) | Apache Kafka trigger & resilient outbox producer |
-| `NexJob.Trigger.GooglePubSub` | [![NuGet](https://img.shields.io/badge/nuget-v5.5.0-blue)](https://www.nuget.org/packages/NexJob.Trigger.GooglePubSub) | Google Cloud Pub/Sub trigger |
-| `NexJob.Trigger.Salesforce` | [![NuGet](https://img.shields.io/badge/nuget-v5.5.0-blue)](https://www.nuget.org/packages/NexJob.Trigger.Salesforce) | Salesforce Pub/Sub API trigger (gRPC & Avro) |
-| `NexJob.Trigger.SalesforceStreaming` | [![NuGet](https://img.shields.io/badge/nuget-v5.5.0-blue)](https://www.nuget.org/packages/NexJob.Trigger.SalesforceStreaming) | Salesforce Streaming API trigger (CometD & Bayeux) |
+| `NexJob.Dashboard` | [![NuGet](https://img.shields.io/badge/nuget-v5.7.0-blue)](https://www.nuget.org/packages/NexJob.Dashboard) | Embedded ASP.NET Core dashboard middleware |
+| `NexJob.Dashboard.Standalone` | [![NuGet](https://img.shields.io/badge/nuget-v5.7.0-blue)](https://www.nuget.org/packages/NexJob.Dashboard.Standalone) | Embedded HTTP dashboard server for Worker Services |
+| `NexJob.OpenTelemetry` | [![NuGet](https://img.shields.io/badge/nuget-v5.7.0-blue)](https://www.nuget.org/packages/NexJob.OpenTelemetry) | OTel SDK instrumentation |
+| `NexJob.Trigger.AzureServiceBus` | [![NuGet](https://img.shields.io/badge/nuget-v5.7.0-blue)](https://www.nuget.org/packages/NexJob.Trigger.AzureServiceBus) | Azure Service Bus trigger |
+| `NexJob.Trigger.AwsSqs` | [![NuGet](https://img.shields.io/badge/nuget-v5.7.0-blue)](https://www.nuget.org/packages/NexJob.Trigger.AwsSqs) | AWS SQS trigger |
+| `NexJob.RabbitMQ` | [![NuGet](https://img.shields.io/badge/nuget-v5.7.0-blue)](https://www.nuget.org/packages/NexJob.RabbitMQ) | RabbitMQ trigger & resilient outbox producer |
+| `NexJob.Kafka` | [![NuGet](https://img.shields.io/badge/nuget-v5.7.0-blue)](https://www.nuget.org/packages/NexJob.Kafka) | Apache Kafka trigger & resilient outbox producer |
+| `NexJob.Trigger.GooglePubSub` | [![NuGet](https://img.shields.io/badge/nuget-v5.7.0-blue)](https://www.nuget.org/packages/NexJob.Trigger.GooglePubSub) | Google Cloud Pub/Sub trigger |
+| `NexJob.Trigger.Salesforce` | [![NuGet](https://img.shields.io/badge/nuget-v5.7.0-blue)](https://www.nuget.org/packages/NexJob.Trigger.Salesforce) | Salesforce Pub/Sub API trigger (gRPC & Avro) |
+| `NexJob.Trigger.SalesforceStreaming` | [![NuGet](https://img.shields.io/badge/nuget-v5.7.0-blue)](https://www.nuget.org/packages/NexJob.Trigger.SalesforceStreaming) | Salesforce Streaming API trigger (CometD & Bayeux) |
 
 ---
 
@@ -225,11 +227,11 @@ The [`samples/`](samples/) directory provides comprehensive, runnable reference 
 |---|---|---|---|
 | [`NexJob.Sample.MinimalApi`](samples/NexJob.Sample.MinimalApi) | ASP.NET Core Minimal API | `5001` | Segregated `IDashboardStorage`, dead-letter handler, deadline enforcement |
 | [`NexJob.Sample.WebApi`](samples/NexJob.Sample.WebApi) | ASP.NET Core Web API | `5002` | Dual-storage (InMemory / PostgreSQL), REST endpoints, `.http` file |
-| [`NexJob.Sample.WorkerService`](samples/NexJob.Sample.WorkerService) | Headless Console Worker | `5003` | Standalone embedded HTTP dashboard server, graceful shutdown |
+| [`NexJob.Sample.WorkerService`](samples/NexJob.Sample.WorkerService) | Headless Console Worker | `5005` (dashboard) | Standalone embedded HTTP dashboard server, graceful shutdown |
 | [`NexJob.Sample.ConfiguredRecurring`](samples/NexJob.Sample.ConfiguredRecurring) | Declarative Recurring | `5004` | Zero-code recurring job registration via `appsettings.json` with timezones |
-| [`NexJob.Sample.RabbitMQ`](samples/NexJob.Sample.RabbitMQ) | Broker Integration | `5005` | Outbox producer + trigger consumer with 5 trigger guarantees |
-| [`NexJob.Sample.Kafka`](samples/NexJob.Sample.Kafka) | Streaming Broker | `5006` | Partitioned Outbox event publishing + consumer trigger with offset tracking |
-| [`NexJob.Sample.Storage`](samples/NexJob.Sample.Storage) | Enterprise Topology | `5007` | PostgreSQL primary + read replica (`UseDashboardReadReplica`), Redis throttle (`UseDistributedThrottle`), OTel |
+| [`NexJob.Sample.RabbitMQ`](samples/NexJob.Sample.RabbitMQ) | Broker Integration | `5009` | Outbox producer + trigger consumer with 5 trigger guarantees |
+| [`NexJob.Sample.Kafka`](samples/NexJob.Sample.Kafka) | Streaming Broker | `5010` | Partitioned Outbox event publishing + consumer trigger with offset tracking |
+| [`NexJob.Sample.Storage`](samples/NexJob.Sample.Storage) | Enterprise Topology | `5007` | PostgreSQL primary + read replica (`UseDashboardReadReplica`), Redis throttle (`AddNexJobDistributedThrottle`), OTel |
 | [`NexJob.Sample.CloudTriggers`](samples/NexJob.Sample.CloudTriggers) | Unified Cloud Consumers | `5008` | AWS SQS, Azure Service Bus, GCP Pub/Sub, Salesforce gRPC & CometD with `/simulate/*` endpoints |
 
 A full local test stack (PostgreSQL 16, Redis 7, RabbitMQ 3.13, and Kafka KRaft) is provided in [`samples/docker-compose.yml`](samples/docker-compose.yml).
@@ -271,7 +273,7 @@ v1.0.0  ✅ API freeze, production hardened
 v2.0.0  ✅ External triggers, OpenTelemetry, metrics cache
 v3.0.0  ✅ Storage segregation (IJobStorage / IRecurringStorage / IDashboardStorage),
            JobExecutor pipeline, IJobExecutionFilter, IJobControlService,
-           UseDashboardReadReplica(), UseDistributedThrottle()
+           UseDashboardReadReplica(), AddNexJobDistributedThrottle()
 v4.0.0  ✅ Reliability hardening, crash recovery, orphaned job watcher, fault injection
 v5.0.0  ✅ Resilient Outbox producers & triggers for RabbitMQ and Apache Kafka
 v5.1.0  ✅ Salesforce triggers (gRPC Pub/Sub API + CometD Bayeux Streaming API)
@@ -280,6 +282,18 @@ v5.3.0  ✅ Kafka security delegates (ConfigureConsumer, ConfigureProducer, SASL
 v5.4.0  ✅ Dashboard Maxton layout (5 themes), Cluster Topology, SSE log stream & Event Listeners
 v5.4.1  ✅ Full IListenerRegistry integration across all external triggers (Salesforce, ASB, SQS, Pub/Sub)
 v5.5.0  ✅ High-throughput batch fetching & batch acknowledgment across all storage providers
+v5.6.0  ✅ Queue circuit breaker, job progress checkpoints, anti-bloat retention, structured log scope,
+           dashboard job catalog / multi-cluster federation / ops-host mode, graceful-shutdown and
+           storage-error hardening, Redis job index & crash-safe distributed throttle, trigger idempotency and
+           transient-failure fixes
+v5.6.1  ✅ Broker triggers deliver the message body to `IJob<string>` verbatim as text (fixes non-JSON bodies on every
+           trigger and the PostgreSQL `jsonb` enqueue failure)
+v5.6.2  ✅ Standalone dashboard warns when it is reachable from the network, valid empty-state icons, throttling and
+           sample documentation aligned with the code, documentation site on GitHub Pages
+v5.7.0  ✅ Standalone dashboard is loopback-only by default and enforces `IDashboardAuthorizationHandler`, the Workers control
+           is gone from the dashboard, Postgres `NpgsqlDataSource` registration no longer crashes the host, SQL Server
+           deadlocks under concurrent workers fixed, Redis job index reconciled hourly under a lock, database connection
+           pool guidance and startup advisory
 ```
 
 ---

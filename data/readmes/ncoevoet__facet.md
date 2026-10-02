@@ -39,6 +39,7 @@ Hover over any photo for a tooltip with the score breakdown and EXIF data.
 - **Similarity groups** — finds visually similar photos across the library, regardless of when they were taken
 - **Scenes** — groups a shoot into chronological "scenes" by capture-time gaps, so you cull in story order; tap to mark and confirm to reject
 - **Auto-cull** — one button culls a whole scope (all groups, or bursts / similars / scenes only, optionally narrowed to an album or date window) with a dry-run preview, a keeper budget, and an optional Highlights album
+- **Auto-cull from the terminal** — `python facet.py --auto-cull [PATH]` previews the cull as a dry run, `--apply` writes it and `--copy-keepers DIR` copies the survivors (see [docs/COMMANDS.md](docs/COMMANDS.md#culling))
 - **Genre profiles** — sports / wedding / concert / wildlife presets bundle strictness, keeper budget, similarity threshold and face gates in a single pick
 - **Edited-look preview** `[Edition]` — render a photo through a named darktable style inside the culling darkroom, so you cull on the developed look instead of the flat RAW preview
 - **Subject close-ups** — no-face groups (wildlife, macro, product) compare by an auto-cropped subject strip with group-normalized sharpness badges
@@ -105,7 +106,7 @@ Hover over any photo for a tooltip with the score breakdown and EXIF data.
 - **Learning from labels** — culling decisions, star ratings, favorites, and rejections feed the weight optimizer (`--sync-label-comparisons`, `--mine-insights`)
 - **Snapshots** — save, restore, and compare weight configurations
 - **Histogram** — RGB/luminance histogram with clipping indicators, in the photo tooltip and detail view
-- **AI captions** `[GPU]` `[16gb/24gb]` — text descriptions, editable `[Edition]` and translatable to 5 languages (generation and viewing are open)
+- **AI captions** `[GPU]` `[16gb/24gb]` — text descriptions, editable `[Edition]` and translatable to 5 languages (viewing is open; generation and editing need edition)
 
 <table><tr>
 <td><img src="docs/screenshots/stats-gear.jpg" alt="Equipment statistics" width="100%"></td>
@@ -148,7 +149,7 @@ Hover over any photo for a tooltip with the score breakdown and EXIF data.
 - **7 UI languages** — the viewer ships in English, French, German, Spanish, Italian, Brazilian Portuguese, and Simplified Chinese (简体中文); documentation is available in all seven
 - **Multi-user** — per-user directories, ratings, and role-based access
 - **Plugins & webhooks** — custom actions triggered on scoring events
-- **Scan from web UI** — trigger scans from the browser (superadmin role)
+- **Scan from web UI** — trigger scans from the browser (superadmin in multi-user mode; edition access on a single-user install with an edition password)
 
 <table><tr>
 <td width="33%"><img src="docs/screenshots/mobile-gallery.jpg" alt="Mobile gallery" width="100%"></td>
@@ -158,7 +159,7 @@ Hover over any photo for a tooltip with the score breakdown and EXIF data.
 
 ## What you need
 
-Most of Facet runs on **any machine (CPU)** — scoring, face detection, culling, the gallery, search, albums and metadata export all work without a GPU. On **Apple Silicon**, Facet automatically uses PyTorch's Metal (`mps`) backend for Torch models, and the `auto` profile is sized from your total unified memory — a 32 GB Mac reaches the `16gb` profile, a 48 GB one the `24gb` profile; InsightFace remains on ONNX Runtime's CPU provider. An **NVIDIA GPU** (with the `16gb` or `24gb` profile) unlocks the strongest models: TOPIQ aesthetic scoring, SigLIP 2 embeddings, VLM tagging, AI captions and critique, and subject saliency. No local GPU? Point the VLM tagging/captions/critique at a remote **Ollama** or **OpenAI-compatible** server via `vlm_backend` in `scoring_config.json` — those features then work on the CPU `legacy`/`8gb` profiles too. In the viewer, editing actions (ratings, faces, culling) need the **edition password**, and triggering scans needs the **superadmin** role.
+Most of Facet runs on **any machine (CPU)** — scoring, face detection, culling, the gallery, search, albums and metadata export all work without a GPU. On **Apple Silicon**, Facet automatically uses PyTorch's Metal (`mps`) backend for Torch models, and the `auto` profile is sized from your total unified memory — a 32 GB Mac reaches the `16gb` profile, a 48 GB one the `24gb` profile; InsightFace remains on ONNX Runtime's CPU provider. An **NVIDIA GPU** (with the `16gb` or `24gb` profile) unlocks the strongest models: TOPIQ aesthetic scoring, SigLIP 2 embeddings, VLM tagging, AI captions and critique, and subject saliency. No local GPU? Point the VLM tagging/captions/critique at a remote **Ollama** or **OpenAI-compatible** server via `vlm_backend` in `scoring_config.json` — those features then work on the CPU `legacy`/`8gb` profiles too. In the viewer, editing actions (ratings, faces, culling) need the **edition password**, and triggering scans needs `viewer.features.show_scan_button: true` plus the **superadmin** role in multi-user mode, or edition access on a single-user install.
 
 → Full per-feature requirements (GPU, VRAM profile, optional packages, auth): **[Installation › Feature requirements](docs/INSTALLATION.md#feature-requirements)**.
 
@@ -217,11 +218,14 @@ Full guide: **[Installation](docs/INSTALLATION.md)** — per-hardware setup, fir
 downloads, and [dependency troubleshooting](docs/INSTALLATION.md#troubleshooting-dependency-conflicts).
 Run `python facet.py --doctor` to diagnose GPU issues.
 
+First time here? Follow the **[Getting Started](docs/GETTING_STARTED.md)** walkthrough: scan, review, teach, discard, tag and export.
+
 ## Documentation
 
 | Document | Description |
 |----------|-------------|
 | [Installation](docs/INSTALLATION.md) | Requirements, GPU setup, VRAM profiles, dependencies |
+| [Getting Started](docs/GETTING_STARTED.md) | First-run walkthrough: install to scan, review, teach, discard, tag and export |
 | [Commands](docs/COMMANDS.md) | All CLI commands reference |
 | [Configuration](docs/CONFIGURATION.md) | Full `scoring_config.json` reference |
 | [Scoring](docs/SCORING.md) | Categories, weights, tuning guide |

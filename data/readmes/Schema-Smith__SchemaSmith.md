@@ -2,7 +2,7 @@
 
 *Terraform for SQL Server, Postgres, MySQL, and MariaDB databases*
 
-> **SchemaSmith v2.6.0 released.** Memory-optimized, ledger and graph tables on SQL Server; PostgreSQL enum types, sequences and domain types plus MySQL and MariaDB scheduled events become declarable instead of scripted — closing a silent no-op; MariaDB temporal tables round-trip; and tables can now be rebuilt instead of altered column by column. 37 additions and 19 fixes. [Read the v2.6.0 announcement](https://github.com/Schema-Smith/SchemaSmith/discussions/414) · [Release notes](https://github.com/Schema-Smith/SchemaSmith/releases/tag/v2.6.0)
+> **SchemaSmith v2.7.1 released.** SQL Server table features now actually apply in a SchemaQuench deploy (CDC, Change Tracking, FILESTREAM columns, and the `UnsupportedFeaturePolicy` degrade/`fail` check), and CDC net changes can be declared. [Release notes](https://github.com/Schema-Smith/SchemaSmith/releases/tag/v2.7.1) · [CHANGELOG](https://github.com/Schema-Smith/SchemaSmith/blob/main/CHANGELOG.md)
 
 ![Build](https://github.com/Schema-Smith/SchemaSmith/actions/workflows/continuous-integration.yml/badge.svg)
 [![Latest Release](https://img.shields.io/github/v/release/Schema-Smith/SchemaSmith)](https://github.com/Schema-Smith/SchemaSmith/releases/latest)
@@ -228,6 +228,8 @@ security-review questions, see [SECURITY-POSTURE.md](SECURITY-POSTURE.md).
 SchemaSmith Community Edition is licensed under [SSCL v2.0](LICENSE). Use it freely to manage databases for your own products and services — SQL Server, PostgreSQL, MySQL, or MariaDB — with no restrictions on organization size, revenue, database size, or environment count. Not permitted: redistributing SchemaSmith as a standalone product, bundling it as a component of another product marketed to third parties, or offering it as a hosted or managed service. See the [LICENSE](LICENSE) for the full terms.
 
 For SBOM and license-scanning tools, SSCL v2.0 is declared as the SPDX custom identifier `LicenseRef-SSCL-2.0` (SSCL is not on the SPDX License List).
+
+Questions from a security, procurement, or legal review — source-available status, what counts as redistribution, patents, warranty, governing law — are answered in the [License FAQ](LICENSE-FAQ.md).
 
 ## Contributors
 

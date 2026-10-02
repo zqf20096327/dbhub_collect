@@ -1,7 +1,7 @@
 # Meridian - policy, business & markets
 
 **A daily intelligence brief for India.** Meridian ingests ~95 government,
-regulator and newsroom feeds three times a day, sorts every story into eight
+regulator and newsroom feeds twice a day, sorts every story into eight
 sections and twenty-five sectors, and presents the result as something you read
 rather than something you monitor - a scored lead, a machine-written wrap of the
 last 24 hours, per-sector coverage momentum, and six "reader desks" that re-rank
@@ -230,15 +230,26 @@ curl http://localhost:3000/api/cron/brief
 
 ## The schedule
 
-Ingestion runs **three times a day, at 09:00, 15:00 and 21:00 IST**, from
+Ingestion runs **twice a day, at 07:47 and 19:47 IST**, so the site is fresh by
+08:00 and 20:00, from
 `.github/workflows/ingest.yml`. It runs `npm run ingest`, then `npm run jobs`,
 then `npm run brief` on a GitHub runner, talking to the database directly.
+
+Two runs rather than four is deliberate: every sweep wakes the Neon compute and
+spends its monthly allowance, and exhausting it took the whole site down. The
+odd minute is deliberate too. GitHub's scheduler queues rather than fires, and
+`:00`/`:30` (08:00 and 20:00 IST are 02:30 and 14:30 UTC) are when every cron on the platform asks
+at once - on that slot runs were landing 35 minutes late on a good day and
+being dropped outright on a bad one. GitHub never makes up a dropped schedule,
+so if a run is missed, start one by hand from the Actions tab. The job-board step is
+`continue-on-error` so a board outage cannot stop the daily wrap that follows
+it: the news looking stale because a *job board* failed is precisely backwards.
 
 It is not a Vercel cron, and `vercel.json` no longer exists. A full sweep is
 ~95 feeds and takes minutes; a Vercel function is capped at 60 seconds, so the
 cron that used to live there was killed part-way through every run and the
 archive quietly stopped growing. Vercel's Hobby plan also caps crons at
-once/day, which cannot express "three times". A runner has neither limit, needs no
+once/day, which is enough for the schedule but not for the run time. A runner has neither limit, needs no
 deployment to exist, and is what `scripts/ingest.ts` was written for in the
 first place.
 

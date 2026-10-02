@@ -167,10 +167,12 @@ awkward trade for a metric you are going to put in a board deck.
 Limelit Open takes the other side of it:
 
 - **Your infrastructure.** Prompts, competitors and every answer live in a
-  SQLite file you own. Nothing leaves the box except the calls to the engines.
+  SQLite file you own. Nothing leaves the box except the calls to the engines
+  (made through Limelit Cloud when you use the free allowance).
 - **Your keys, your bill.** Bring your own provider keys. There is no pricing,
   no credits and no markup anywhere in this project, and no per-seat tax on
-  looking at your own data.
+  looking at your own data. To try it first without buying any key, a free
+  Limelit Cloud account gives a monthly allowance (see below).
 - **Auditable by construction.** Mentions are found by text search, not by a
   model deciding what it saw. Every metric is derived from stored rows and
   can be recomputed. The formulas are below and the code is right here.
@@ -230,11 +232,29 @@ docker run -p 1515:1515 -v limelit:/data ghcr.io/limelit-co/open
 
 ### 2. Set up in the browser
 
-The setup wizard asks for your brand name, domain, category and up to five
-competitors, fills a starter set of prompts, and takes one provider key. The
-quickest key is OpenAI's, which reaches ChatGPT; Settings lists every other
-provider with a link to where its key comes from. Nothing is spent before you
-press Run.
+The setup wizard asks for your domain and reads your brand's name from your
+own site (answers write "Kindle to PDF", not "kindletopdf.com"), then your
+category and up to five competitors, fills a starter set of prompts, and takes
+one key. Two ways:
+
+- **Free:** open <https://limelit.co/settings/open-key>, sign in with Google,
+  press Create my key and paste it into the wizard. Or, in a second terminal,
+  run `limelit login` (from the same folder as `limelit serve`), which opens
+  that page and saves the key for you. It reaches ChatGPT, Gemini, Perplexity
+  and Google's AI Overviews and AI Mode inside a free monthly allowance. Your
+  prompts pass through Limelit Cloud to reach the engines; the answers are
+  stored here.
+- **Your own keys:** the quickest is OpenAI's, which reaches ChatGPT. Settings
+  lists every other provider with a link to where its key comes from. You pay
+  them directly, with no limit from us.
+
+If you already track this brand on Limelit Cloud, the prompts step offers to
+import your Cloud prompts and competitors instead of the starter set (the
+Prompts page has the same button later). After a run, the Competitors page
+suggests the sites your answers cite most.
+
+Nothing is spent before you press Run. When the free allowance runs out, the
+failed answers say so; add your own key to keep going.
 
 ### 3. Press Run
 
@@ -287,6 +307,7 @@ limelit serve     dashboard, JSON API, MCP over HTTP, and the scheduler
 limelit mcp       MCP over stdio, for Claude Desktop and Claude Code
 limelit run       one evaluation pass, then exit
 limelit export    write everything this instance knows to stdout
+limelit login     get a free Limelit Cloud key and save it here
 limelit upgrade   move this instance to Limelit Cloud
 limelit version   version and build info
 ```
@@ -294,7 +315,9 @@ limelit version   version and build info
 ## Connect Claude (MCP)
 
 Limelit Open is MCP-first. The dashboard shows you the numbers; the MCP server
-lets an assistant read them, cross-reference them and quote the evidence.
+lets an assistant read them, cross-reference them and quote the evidence. It
+can also start a run: it shows you the plan first, and runs only after you say
+yes.
 
 Claude Desktop or Claude Code, over stdio, set up as in
 [step 4 of the quick start](#4-connect-claude). `limelit mcp` reads `./data`

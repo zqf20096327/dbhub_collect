@@ -13,11 +13,36 @@ passages are sent to the configured Jev and answer-model providers.
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-3776ab)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-17624f)](LICENSE)
 
-[简体中文](README.zh-CN.md) · [Seven-pipeline field report](docs/JEV_RAG_SEVEN_PIPELINES.md) · [Architecture](docs/ARCHITECTURE.md) · [AI search discoverability](docs/AI_DISCOVERABILITY.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
+[简体中文](README.zh-CN.md) · [Seven-pipeline field report](docs/JEV_RAG_SEVEN_PIPELINES.md) · [Architecture](docs/ARCHITECTURE.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
 **[Project website and interactive benchmark →](https://aifabrice.github.io/jev-rag/)**
+· [How to use Jev for RAG](https://aifabrice.github.io/jev-rag/how-to-use-jev-for-rag.html)
+· [Project identity](https://aifabrice.github.io/jev-rag/jevrag.html)
 · [Evidence-backed FAQ](https://aifabrice.github.io/jev-rag/faq.html)
 · [Machine-readable project facts](https://aifabrice.github.io/jev-rag/llms.txt)
+
+![Jev RAG local web interface](docs/assets/demo-ui.png)
+
+## Run it locally
+
+```bash
+git clone https://github.com/aifabrice/jev-rag.git
+cd jev-rag
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e '.[documents]'
+cp .env.example .env  # add OPENROUTER_API_KEY
+jev-rag serve
+```
+
+Open <http://127.0.0.1:8765>. Jev RAG discovers `~/Documents` by default,
+builds the local BM25 index, and opens the English/Chinese search interface.
+Use `--documents /absolute/path` to point it at another folder.
+
+**Why try it:** the default path needs no embeddings or vector database; all
+seven retrieval pipelines are selectable in the same UI; and the repository
+publishes quality, latency, cost, and negative benchmark results instead of a
+single best score.
 
 ## Public benchmark
 
@@ -25,19 +50,26 @@ Complete BEIR NFCorpus test split: 3,633 documents and 323 queries. All rows
 use the same corpus, queries, qrels, and metric implementation; candidate-pool
 sizes and remote stages are shown explicitly.
 
-| Pipeline | nDCG@10 | MRR@10 | Recall@10 |
-| --- | ---: | ---: | ---: |
-| BM25 top 30 | 0.305654 | 0.512697 | 0.147309 |
-| BM25 top 30 + Jev | 0.353235 | 0.585817 | 0.158667 |
-| BM25 top 50 + Jev | 0.362468 | 0.593023 | 0.164474 |
-| Two-level Jev Line Search (60 finalists) | 0.366280 | **0.657660** | 0.169397 |
-| Hybrid top 50 + Unified Passage Gate | 0.376298 | 0.618043 | 0.166977 |
-| Agentic lexical top 50 | 0.380168 | 0.597940 | 0.185464 |
-| BM25 top 50 + Embedding top 50 + RRF | 0.396712 | 0.632089 | 0.193977 |
-| Multi-round Agentic Hybrid top 50 | 0.424145 | 0.637722 | 0.206303 |
-| **Agentic lexical top 50 + Jev** | **0.430969** | **0.644041** | **0.204138** |
-| Hybrid top 50 + Jev | 0.444327 | **0.654583** | 0.214907 |
-| **Agentic Hybrid + Jev/retrieval rank fusion** | **0.450750** | **0.652606** | **0.220885** |
+| Pipeline | nDCG@10 | MRR@10 | Recall@10 | Median latency | p95 latency |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| BM25 top 30 | 0.305654 | 0.512697 | 0.147309 | 1.92 ms | 6.60 ms |
+| BM25 top 30 + Jev | 0.353235 | 0.585817 | 0.158667 | 1.08 s | 16.95 s |
+| BM25 top 50 + Jev | 0.362468 | 0.593023 | 0.164474 | 1.92 s | 17.84 s |
+| Two-level Jev Line Search (60 finalists) | 0.366280 | **0.657660** | 0.169397 | 11.74 s | 35.75 s |
+| Hybrid top 50 + Unified Passage Gate | 0.376298 | 0.618043 | 0.166977 | 1.56 s | 17.47 s |
+| Agentic lexical top 50 | 0.380168 | 0.597940 | 0.185464 | 6.99 s | 24.39 s |
+| BM25 top 50 + Embedding top 50 + RRF | 0.396712 | 0.632089 | 0.193977 | 1.38 s | 1.49 s |
+| Multi-round Agentic Hybrid top 50 | 0.424145 | 0.637722 | 0.206303 | 6.99 s | 24.39 s |
+| **Agentic lexical top 50 + Jev** | **0.430969** | **0.644041** | **0.204138** | 7.52 s | 26.35 s |
+| Hybrid top 50 + Jev | 0.444327 | **0.654583** | 0.214907 | 3.17 s | 17.99 s |
+| **Agentic Hybrid + Jev/retrieval rank fusion** | **0.450750** | **0.652606** | **0.220885** | 9.24 s | 38.72 s |
+
+Latency covers retrieval and reranking, not one-time corpus indexing or final
+answer generation. Some rows are full-run observations while the expensive
+remote pipelines use cold pilots or serial estimates composed from recorded
+per-query stages; see
+[`nfcorpus-pipeline-latency.json`](benchmarks/nfcorpus-pipeline-latency.json)
+for the basis of every row. Provider latency can change substantially over time.
 
 Line Search achieved the strongest first-hit behavior (`nDCG@1=0.554180`),
 but lower multi-document ranking quality and recall than Agentic or Hybrid.
@@ -75,22 +107,21 @@ configuration was evaluated on the same test set.
 · [Machine-readable Taxonomy summary](benchmarks/nfcorpus-taxonomy-summary.json)
 · [Machine-readable Agentic Hybrid summary](benchmarks/nfcorpus-agentic-hybrid-summary.json)
 
-![Jev RAG local web interface](docs/assets/demo-ui.png)
-
 ```text
 default: local files -> SQLite BM25 ----------------------> Jev -> MiniMax
 agentic: local files -> MiniMax plans -> multi-BM25/RRF --> Jev -> MiniMax
 hybrid:  local files -> BM25 + OpenRouter embeddings/RRF -> Jev -> MiniMax
-agentic-hybrid: two-round plans -> multi-BM25 + embedding/RRF -> Jev + retrieval prior -> MiniMax
+agentic-hybrid: multi-round plans -> multi-BM25 + embedding/RRF -> Jev + retrieval prior -> MiniMax
 taxonomy: local files -> corpus taxonomy -> Hybrid top 50 + routed extras -> Jev -> MiniMax
 gate:    local files -> BM25 + embeddings/RRF -> unified Jev Gate -> MiniMax
 line:    local files -> parallel Jev Choice windows -> global Choice -> MiniMax
 ```
 
 Jev RAG indexes a local folder and defaults to vector-free SQLite FTS5/BM25.
-The web UI and CLI expose seven modes. Agentic mode runs two rounds of
-model-planned local lexical searches and fuses them before Jev, without an
-embedding index. Hybrid mode fuses BM25 and embedding rankings before Jev. No
+The web UI and CLI expose seven modes. Agentic mode defaults to two rounds of
+model-planned local lexical searches, accepts any positive round count, and
+fuses every round before Jev without an embedding index. Hybrid mode fuses BM25
+and embedding rankings before Jev. No
 vector database is required: the optional normalized embedding matrix is cached
 locally. Passage Gate replaces ordinary reranking with four simultaneous Jev
 judgments per candidate and routes evidence into include, conflicting, or
@@ -116,9 +147,9 @@ used.
 ## Why this project
 
 - Vector-free BM25 + Jev remains the default; no embedding setup is required.
-- Optional two-round Agentic Search + Jev improves lexical recall without building embeddings.
+- Optional multi-round Agentic Search + Jev improves lexical recall without building embeddings.
 - Optional BM25 + Embedding reciprocal-rank fusion before the same Jev stage.
-- Optional two-round Agentic BM25 + original-query embedding fusion before Jev.
+- Optional multi-round Agentic BM25 + original-query embedding fusion before Jev.
   A dev-selected local Jev/retrieval rank fusion improves the measured final
   order without another provider call, but planning still adds substantial
   latency.
@@ -311,7 +342,7 @@ jev-rag search 'query' --retrieval-mode hybrid-gate
 # Agent-planned local lexical searches followed by Jev; no vector index.
 jev-rag search 'query' --retrieval-mode agentic
 
-# Two-round Agentic BM25 plus parallel original-query embedding, then Jev.
+# Multi-round Agentic BM25 plus parallel original-query embedding, then Jev.
 jev-rag search 'query' --retrieval-mode agentic-hybrid
 
 # Search every indexed passage with parallel Jev windows, then globally rank finalists.
@@ -355,6 +386,7 @@ Scanned or image-only PDFs require OCR before indexing. PDF extraction prefers `
 - Indexes, caches, and answer histories are stored under `.knowledge/` by default.
 - BM25 indexing and retrieval stay local.
 - Default discovery indexes supported text documents; it does not upload the folder itself.
+- File symlinks that resolve outside the selected document root are ignored.
 - Hybrid mode sends passage text once for corpus embeddings and sends each query for query embedding; vectors are cached locally.
 - Hybrid Gate additionally sends the fused top 50 excerpts to Jev for four
   judgments per passage. Injection filtering is probabilistic, not a complete security boundary.

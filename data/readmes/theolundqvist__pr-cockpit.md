@@ -43,7 +43,7 @@ Press <kbd>⌥⌘K</kbd> on macOS or <kbd>Super+Alt+K</kbd> on Linux X11 to sear
 
 ### Read the change, then follow the details
 
-Diffs, threads, checks, and file history live in the same review workspace. Press <kbd>x</kbd> to fold test files when you want to see the implementation first; press it again to bring the tests back.
+Diffs, threads, checks, and file history live in the same review workspace. The PR check summary uses the latest workflow run and job attempt; earlier runs remain in Actions history. Press <kbd>x</kbd> to fold test files when you want to see the implementation first; press it again to bring the tests back.
 
 ![Folding five regression-test diffs in graphql/graphql-js#4692 to isolate the one-line implementation change](docs/screenshots/landing-hide-tests.gif)
 
@@ -52,6 +52,14 @@ When the review needs a change, stay in context: <kbd>e</kbd> edits the open fil
 Reviewer badges show scores explicitly posted in reviews or comments, parsed without launching a scoring agent.
 
 Enable **Pending reviews** in **Settings → Workspace** to save inline comments as a native GitHub draft and submit them together as one review. Drafts survive reloads and remain editable; if the PR head changes, submission stops until the stale draft is discarded. **Comment now** still posts a single comment immediately.
+
+Enable **Mark changed descriptions** in **Settings → Workspace** to show a small blue dot to the left of the avatar, vertically centered on it, when the PR description differs from the one you last read. It is off by default. A description counts as read while it is on screen in the Conversation tab of a foreground window; PRs you have never read stay unmarked, and a description reverted to the version you read clears the dot.
+
+Enable **Approve PRs for safe merge** in **Settings → Workspace**, then right-click a PR and choose **Approve for safe merge**. It appears above ordinary pins, below failed merges, without launching an agent. Approval covers that PR through fixes and base updates until revoked; closing it or disabling the feature clears approval. Ordinary pins remain bookmarks.
+
+Enable **Rename and move PRs between groups** in **Settings → Workspace** to rename a PR from its right-click menu or move it onto another section or row. Rename edits the title inline: Enter saves and Escape cancels. Type grouping changes the title's conventional-commit type; feature grouping changes its scope; manual grouping changes only your assignment. Dragging preserves the summary, draft prefix, and breaking-change marker. Status sections remain read-only. Dropping into **Approved for safe merge** grants approval; dropping out revokes it.
+
+Press **⌘Z** (Ctrl+Z on Windows/Linux) to undo a title change from Rename or a group move, including while it is saving. Undo restores the exact previous title on GitHub, not revoked merge approval. Title changes and Set Aside share undo order; text fields and the whiteboard keep their own undo.
 
 Desktop notifications are off by default. In **Settings → Notifications**, choose events and combine rules for human or bot authors, comment text, repositories, and review requests. GitHub bot accounts and configured review bots count as bots; unknown authors match neither human nor bot filters.
 
@@ -69,6 +77,7 @@ Desktop notifications are off by default. In **Settings → Notifications**, cho
 | <kbd>x</kbd> | Hide / show test files |
 | <kbd>h</kbd> | File history |
 | <kbd>m</kbd> | Merge |
+| <kbd>⌘</kbd><kbd>z</kbd> / <kbd>Ctrl</kbd><kbd>z</kbd> | Undo a group-move rename or Set Aside action |
 | <kbd>?</kbd> | Full shortcut guide |
 
 </details>
@@ -113,6 +122,8 @@ The CLI also supports comments, reviews, thread resolution, edits, and merges th
 Built-in agents launch from Cockpit's cached PR brief without spending GitHub API quota, and clone through Git rather than GitHub's API. They use `pr-cockpit` for PR reads and mutations; remote API operations still need available quota. With OMP, Opus uses the `opus` alias and Sonnet uses `anthropic/claude-sonnet-5-5`.
 
 Arming auto-merge approves the feature and delegates safely landing it to the merger. It follows your global and repository instructions, addressing comments, conflicts, and CI failures caused by the PR; known unrelated failures need no rerun or post-merge proof. OMP loads global instructions automatically, and the agent reads repository instructions after cloning. A direct prompt can also authorize merging explicitly. In either case, Cockpit refreshes the PR and merges only the head the agent checked. Bypassing required GitHub checks or approvals still needs the repository's force-merge opt-in; conflicts, unresolved threads, and changes-requested reviews remain blockers.
+
+Safe-merge approval is also visible in CLI output and as `approvedForSafeMerge` in `--json`; `listen` wakes when it changes. Agents must re-read approval immediately before merging and still satisfy the safety checks above. Approval is granted or revoked in the app, never by an agent approving itself.
 
 The Agents tab renders Markdown answers, groups tool activity into expandable details, and shows an identical final-answer echo only once. Full tool inputs, errors, and raw logs remain available.
 

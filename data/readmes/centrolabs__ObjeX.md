@@ -8,14 +8,14 @@ Self-hosted object storage with an S3-compatible API and a web UI. One container
 [![Release](https://img.shields.io/github/v/release/centrolabs/ObjeX)](https://github.com/centrolabs/ObjeX/releases)
 [![License](https://img.shields.io/github/license/centrolabs/ObjeX)](LICENSE)
 
-<img width="800" alt="ObjeX web UI" src="https://github.com/user-attachments/assets/8cadcd71-de33-4554-a5a0-320362b35e68" />
+<img width="800" alt="ObjeX web UI" src="https://github.com/user-attachments/assets/2c8f056d-b11f-4bdd-8f93-2ff4f520f64c" />
 
 ## Features
 
 - **S3 API** — AWS Signature V4, multipart upload, presigned GET and POST, copy, batch delete, range requests
 - **Web UI** — folders, file previews, search, ZIP download, share links
 - **Users** — Admin, Manager and User roles, storage quotas, audit log
-- **Operations** — health checks, Prometheus metrics, weekly integrity and cleanup jobs
+- **Operations** — health checks, Prometheus metrics, integrity and cleanup jobs with schedules you set on the Jobs page
 - **Deployment** — multi-arch Docker image (amd64, arm64), Docker Compose, Helm chart
 
 Built for homelabs, internal tools and dev/test. ObjeX runs on a single node: no replication, no high availability.
@@ -70,6 +70,7 @@ All settings: [docs/configuration.md](docs/configuration.md).
 - [Configuration](docs/configuration.md)
 - [API](docs/api.md)
 - [Architecture](docs/architecture.md)
+- [S3 conformance](tests/s3-conformance/README.md)
 - [Contributing](.github/CONTRIBUTING.md)
 - [Security policy](.github/SECURITY.md)
 

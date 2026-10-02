@@ -1,8 +1,8 @@
 <p align="center">
     <a href="https://github.com/timescale/rsigma">
         <picture>
-            <source media="(prefers-color-scheme: dark)" srcset="https://github.com/timescale/rsigma/blob/main/assets/rsigma-logotype-dark.png" />
-            <img src="https://github.com/timescale/rsigma/blob/main/assets/rsigma-logotype.png" alt="RSigma logotype" width="200"/>
+            <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/timescale/rsigma/main/assets/rsigma-logotype-dark.svg" />
+            <img src="https://raw.githubusercontent.com/timescale/rsigma/main/assets/rsigma-logotype.svg" alt="RSigma logotype" width="200"/>
         </picture>
     </a>
     <p align="center">A complete Sigma detection engineering toolkit</p>
@@ -208,7 +208,7 @@ cat events.ndjson | rsigma engine classify --output-format table
 rsigma engine eval -r rules/ -e @events.ndjson --output-format csv > matches.csv
 
 # Run as a daemon with hot-reload and Prometheus metrics
-rsigma engine daemon -r rules/ -p ecs.yml --api-addr 0.0.0.0:9090
+rsigma engine daemon -r rules/ -p ecs.yml --api-addr 127.0.0.1:9090
 
 # Accept events via HTTP POST
 rsigma engine daemon -r rules/ --input http
@@ -296,11 +296,11 @@ assert_eq!(matches[0].rule_title, "Detect Whoami");
 
 ## Architecture
 
-![rsigma streaming detection architecture](assets/architecture.svg)
+![RSigma streaming detection architecture](assets/architecture.svg)
 
 A Sigma rule is parsed into a strongly-typed AST (`rsigma-parser`), lowered into a shared intermediate representation (`rsigma-ir`), then compiled and evaluated against live events (`rsigma-eval` inside `rsigma-runtime`), converted into backend-native queries (`rsigma-convert`), or served to editors and AI agents (`rsigma-lsp`, `rsigma-mcp`). The evaluation library also powers exemplar-driven rule drafting and verified filter tuning through the CLI and MCP. The full walkthrough, covering every module and all four execution shapes, lives in the [Architecture reference](https://rsigma.io/reference/architecture/).
 
-![rsigma internal architecture](assets/internal_architecture.svg)
+![RSigma crate dependency graph](assets/internal_architecture.svg)
 
 ## Performance
 

@@ -18,7 +18,6 @@
 [![GitHub Stars](https://img.shields.io/github/stars/fiyo/DBCheck?style=flat-square\&label=Stars)](https://github.com/fiyo/DBCheck/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/fiyo/DBCheck?style=flat-square\&label=Forks)](https://github.com/fiyo/DBCheck/network/members)
 
-> 🐳 **25,000+ Docker image pulls**
 > 🗄️ **21+ database types**
 > 🔍 **330+ inspection rules**
 > 🤖 **AI-assisted diagnostics**
@@ -95,9 +94,9 @@ RaccoonX started as **DBCheck** and has evolved through continuous development a
 
 | Milestone          |         Status |
 | ------------------ | -------------: |
-| Docker image pulls |    **25,000+** |
-| GitHub Stars       |       **166+** |
-| GitHub Forks       |        **57+** |
+| Docker image pulls |    **28,000+** |
+| GitHub Stars       |       **171+** |
+| GitHub Forks       |        **58+** |
 | Database types     |        **21+** |
 | Inspection rules   |       **330+** |
 | Languages          |          **9** |
@@ -112,7 +111,7 @@ If you have used RaccoonX, tested it, learned from it, or simply find the projec
 **Give it a Star.**
 
 ```text
-25,000+ Docker Pulls
+28,000+ Docker Pulls
         ↓
    Keep Building
         ↓
