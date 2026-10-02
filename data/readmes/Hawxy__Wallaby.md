@@ -1,0 +1,96 @@
+# Wallaby
+
+[![NuGet](https://img.shields.io/nuget/v/Wallaby.svg?logo=nuget&label=nuget)](https://www.nuget.org/packages/Wallaby)
+[![Downloads](https://img.shields.io/nuget/dt/Wallaby.svg?logo=nuget&label=downloads)](https://www.nuget.org/packages/Wallaby)
+[![Build](https://github.com/Hawxy/Wallaby/actions/workflows/Build_%26_Test.yml/badge.svg)](https://github.com/Hawxy/Wallaby/actions/workflows/Build_%26_Test.yml)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+
+Postgres Change Data Capture for .NET, driven by your **EF Core model, Marten documents or plain tables**.
+
+Keep **Meilisearch**, **Elasticsearch**, **OpenSearch**, **Kafka**, **pgvector** or any **HTTP/webhook**
+endpoint in sync with Postgres, with no dual writes, no outbox table, no Debezium and no Kafka Connect.
+Contributions for additional sinks are welcome.
+
+Wallaby streams row changes from Postgres logical replication, materializes them into your mapped
+EF Core entities, Marten documents or annotated POCOs, lets you **transform/enrich** them, and routes the resulting
+documents to pluggable **destinations** (sinks) with at-least-once delivery. It **self-configures**
+the publication and replication slot from your model, supports **versioned backfill** (initial
+snapshots and shape-change reindexes), and is **cluster-safe** via leader election.
+
+Requires Postgres 15+ and .NET 10+.
+
+📖 **Full documentation: [wallabycdc.net](https://wallabycdc.net/)**
+
+## Packages
+
+| Project                                 | Purpose                                                                               |
+|-----------------------------------------|---------------------------------------------------------------------------------------|
+| `Wallaby`                               | Core package (provider-agnostic).                                                     |
+| `Wallaby.Providers.EntityFrameworkCore` | EF Core storage provider.                                                             |
+| `Wallaby.Providers.Marten`              | Marten storage provider.                                                              |
+| `Wallaby.Providers.Tables`              | Plain-table storage provider: annotated POCOs, no ORM.                                |
+| `Wallaby.Sinks.Http`                    | HTTP/webhook destination sink.                                                        |
+| `Wallaby.Sinks.Elasticsearch`           | Elasticsearch destination sink.                                                       |
+| `Wallaby.Sinks.Kafka`                   | Kafka destination sink (keyed messages, tombstone deletes).                           |
+| `Wallaby.Sinks.Meilisearch`             | Meilisearch destination sink.                                                         |
+| `Wallaby.Sinks.OpenSearch`              | OpenSearch destination sink.                                                          |
+| `Wallaby.Sinks.Pgvector`                | Postgres pgvector destination sink, with optional sink-side embedding.                |
+| `Wallaby.Client`                        | Standalone remote control plane (suspend/resume, backfills, inspection) via Postgres. |
+| `Wallaby.Testing`                       | End-to-end pipeline test harness with real logical replication.                       |
+| `Wallaby.AspNetCore.HealthChecks`       | ASP.NET Core liveness health check for Wallaby nodes.                                 |
+
+## Quick start
+
+```csharp
+builder.Services.AddDbContextFactory<AppDbContext>(o => o.UseNpgsql(conn));
+
+builder.Services.AddWallaby(cdc =>
+{
+    cdc.UseEntityFrameworkCore<AppDbContext>()
+       .UseConnectionString(conn)
+       .ConfigureOptions(o => { o.SlotName = "app_cdc"; o.PublicationName = "app_cdc_pub"; })
+       .AddMeilisearchSink("meili", m => { m.Endpoint = "http://localhost:7700"; m.ApiKey = key; })
+
+       // Mapping = routing only. The transform does the data shaping.
+       .WithMappings(sink => sink
+            .Map<Product>()
+            .ToDestination("products")
+            .WithBackfillVersion("v1")           // bump to force a reindex/backfill
+            .UsingTransform((db, changes, ct) =>
+            {
+                var docs = new Dictionary<DocumentKey, WallabyDocument?>();
+                foreach (var c in changes)
+                    docs[c.Key] = new WallabyDocument { ["name"] = c.Entity!.Name };
+                return Task.FromResult<IReadOnlyDictionary<DocumentKey, WallabyDocument?>>(docs);
+            }));
+});
+```
+
+## Contributing
+
+### Tests
+
+Each package has one test project under `tests/` (`Wallaby.Tests`, `Wallaby.Providers.*.Tests`,
+`Wallaby.Sinks.*.Tests`) with `Unit/` and `Integration/` folders inside; namespaces follow the folders.
+All test projects use [TUnit](https://tunit.dev/); shared fixtures (e.g. the Postgres container) live in
+`tests/Wallaby.TestInfrastructure`.
+
+- Everything: `dotnet test` or `.\build.ps1 Test`
+- One package: `dotnet run -c Release --project tests/Wallaby.Providers.EntityFrameworkCore.Tests`
+- Unit tests only (no Docker): append `-- --treenode-filter "/*/*.Unit*/*/*"`
+
+### Viewing traces
+
+`tests/Wallaby.TraceDemo` runs a curated CDC scenario, live
+changes with a sink retry, dependent fan-out, whole-table backfill, and exports the resulting traces
+and metrics to a local [Aspire Dashboard](https://learn.microsoft.com/dotnet/aspire/fundamentals/dashboard/standalone)
+container:
+
+```
+dotnet run --project tests/Wallaby.TraceDemo
+# then open http://localhost:18888/traces
+```
+
+The dashboard keeps running (and accumulates traces across runs); remove it with
+`docker rm -f wallaby-trace-dashboard`.
+

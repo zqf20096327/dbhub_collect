@@ -105,7 +105,7 @@ Three steps:
 
 1. **Install the driver** — e.g. `pip install oracledb` for Oracle
 2. **Use the SQLAlchemy URL** — e.g. `url="oracle+oracledb://user:pass@host/db"`
-3. **Pass engine options if needed** — use `engine_kwargs` for driver-specific settings
+3. **Pass engine options if needed** — set `engine_kwargs` / `connect_args` on a `DbConfig`, build an `EngineProvider` from it, and pass it as `engine_provider=...`
 
 ```python
 from azure_functions_db import DbBindings
@@ -626,8 +626,6 @@ Part of the **Azure Functions Python DX Toolkit**:
 | [azure-functions-scaffold-python](https://github.com/yeongseon/azure-functions-scaffold-python) | Project scaffolding CLI |
 | [azure-functions-logging-python](https://github.com/yeongseon/azure-functions-logging-python) | Structured logging and observability |
 | [azure-functions-doctor-python](https://github.com/yeongseon/azure-functions-doctor-python) | Pre-deploy diagnostic CLI |
-| [azure-functions-durable-graph-python](https://github.com/yeongseon/azure-functions-durable-graph-python) | Manifest-first graph runtime with Durable Functions *(experimental)* |
-| [azure-functions-knowledge-python](https://github.com/yeongseon/azure-functions-knowledge-python) | Knowledge retrieval (RAG) decorators |
 | [azure-functions-cookbook-python](https://github.com/yeongseon/azure-functions-cookbook-python) | Dogfood examples — runnable recipes that exercise the full toolkit |
 
 ## For AI Coding Assistants

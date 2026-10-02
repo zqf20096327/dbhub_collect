@@ -103,7 +103,7 @@ is not test coverage, and a good health score is not permission to merge.
 ## Core commands
 
 <!-- BEGIN auto-count:readme-canonical-mention -->
-**Start with these five commands.** Use `understand`, `context`, `retrieve`, `preflight`, and `critique` for everyday exploration and change review. You can discover the rest as you need them: **287 commands (280 canonical + 7 aliases) organised into 7 categories**. An alias is another name for the same command; you do not need to memorize them. Explore the remaining 282 commands when you need more detail.
+**Start with these five commands.** Use `understand`, `context`, `retrieve`, `preflight`, and `critique` for everyday exploration and change review. You can discover the rest as you need them: **287 commands (280 canonical + 7 aliases) organised into 7 categories**. An alias is another name for the same command; you do not need to memorize them. The remaining ~282 commands beyond those five are detail surface for specialised workflows — they are called by agents on demand, not memorised.
 <!-- END auto-count:readme-canonical-mention -->
 
 | Verb | What it does |

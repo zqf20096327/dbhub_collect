@@ -3,6 +3,7 @@
 [![CI](https://github.com/wangke-112/agent-safe-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/wangke-112/agent-safe-tools/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![M8ven Score](https://m8ven.ai/badge/mcp/wangke-112/agent-safe-tools)](https://m8ven.ai/mcp/wangke-112/agent-safe-tools?src=readme)
 
 Ask your AI coding agent, in natural language, to search production logs or
 inspect a database — safely. Works with any MCP-capable host (Codex, Claude

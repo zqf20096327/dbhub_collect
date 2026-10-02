@@ -209,7 +209,7 @@ The current dashboard keeps related work together:
 | **Team** | Additional users and permissions |
 | **Account** | Password and two-factor authentication |
 
-The visual editor changes URL with the active section: <code>/dashboard/editor/page</code>, <code>/dashboard/editor/content</code>, <code>/dashboard/editor/menu</code>, <code>/dashboard/editor/shop</code>, and <code>/dashboard/editor/pages</code>. Classic dashboard routes include <code>/dashboard/profile</code>, <code>/dashboard/content/link</code>, <code>/dashboard/content/menu</code>, <code>/dashboard/content/shop</code>, and <code>/dashboard/content/pages</code>. Dashboard URLs include the interface language, for example <code>/it-IT/dashboard/account</code>. Public pages use the installation root; menus, legal pages, newsletters, and subpages have no language prefix. Older localized and page-slug public URLs remain redirect aliases.
+The visual editor changes URL with the active section: <code>/dashboard/editor/page</code>, <code>/dashboard/editor/content</code>, <code>/dashboard/editor/menu/content</code>, <code>/dashboard/editor/shop/products</code>, and <code>/dashboard/editor/pages</code>. Classic dashboard routes include <code>/dashboard/profile</code>, <code>/dashboard/content/link</code>, <code>/dashboard/content/menu</code>, <code>/dashboard/content/shop</code>, and <code>/dashboard/content/pages</code>. Dashboard URLs include the interface language, for example <code>/it-IT/dashboard/account/general</code>. Public pages use the installation root; menus, legal pages, newsletters, and subpages have no language prefix. Older localized and page-slug public URLs remain redirect aliases.
 
 Read the [dashboard guide](./docs/user-guide/dashboard.md) for the complete route map and editing workflow.
 
@@ -328,7 +328,11 @@ See [Development](./docs/wiki/Development.md) and [CONTRIBUTING.md](./CONTRIBUTI
 
 ## Documentation
 
-Start from the task-oriented [documentation index](./docs/README.md).
+Start from the task-oriented [documentation index](./docs/README.md). The
+[product requirements](./docs/product-requirements.md),
+[design system](./docs/design-system.md) and
+[architecture](./docs/architecture.md) describe the shared OSS product;
+repository-wide agent instructions remain in [AGENTS.md](./AGENTS.md).
 
 | Task | Guide |
 | --- | --- |

@@ -4,6 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Rust](https://img.shields.io/badge/rust-1.88%2B-orange.svg)](https://www.rust-lang.org/)
 [![Version](https://img.shields.io/github/v/release/balaianu/CogZ)](https://github.com/balaianu/CogZ/releases)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/balaianu/CogZ/badge)](https://scorecard.dev/viewer/?uri=github.com/balaianu/CogZ)
 [![Buy Me A Coffee](https://img.shields.io/badge/☕-Buy%20Me%20A%20Coffee-yellow)](https://buymeacoffee.com/balaianu)
 
 Local-first, code-aware engineering cognition for AI coding agents.
@@ -20,45 +21,49 @@ Real output from CogZ running on its own codebase:
 $ cogz context --mode task "token budget estimation and context pack compression"
 
 Context pack (mode: task)
+Query: token budget estimation and context pack compression
 Search mode: hybrid
-Sections: 50
-Token estimate: 5545
+Sections: 91
+Token estimate: 8188
+
+Dropped: 6 sections over token budget
 
 ---
 
-## 1. [function] get_context (relevance: 0.5000)
+## 1. [rule] New expansion channels: emit early, filter before seen-mark, sort deterministically, never displace directs (relevance: 0.5148)
 
-pub async fn get_context(
-    server: &CogzServer,
-    Parameters(params): Parameters<GetContextParams>,
-) -> Result<CallToolResult, McpError> {
-    let mode = parse_context_mode(mode_str, params.query.as_deref())?;
-    ...
-}
+Conventions proven across the sibling and co-change channels:
 
-## 2. [observation] Token budget truncation must account for title token cost (relevance: 0.5000)
+1. Emit before the generic expansion loops — candidates emitted
+   later get claimed-and-floored by graph traversal …
+2. Apply entity-type/test filters BEFORE `seen.insert` …
+…
 
-The initial `fit_budget` implementation truncated content to
-the remaining token budget without accounting for the title's
-token cost. A section with a long title could exceed the budget
-by `title_tokens` tokens.
+## 2. [rule] cfg-gated code must be typechecked per-target before release (relevance: 0.4690)
 
-Fix: subtract `estimate_tokens(&section.title)` from the
-remaining budget before calculating the content truncation.
+Code behind #[cfg(unix)]/cfg(target_os = ...) is invisible to host
+builds, tests, and clippy — a compile error in a cfg'd branch ships
+silently until a real target build sees it. The v0.5.0 Windows leg
+failure is the canonical example.
 
-## 3. [knowledge] Context assembly pipeline (relevance: 0.4633)
+## 3. [rule] Degradation must be loud, never silent (relevance: 0.3680)
 
-The context assembly layer sits on top of search and produces
-ContextPack — the primary output of CogZ for agent consumption.
+Every degraded or failed code path must surface a signal …
 
-Modules: context/mod.rs (types), context/modes.rs (cold_start,
-task, escalation), context/assemble.rs (orchestrator),
-context/compress.rs (token estimation, priority sorting, budget).
+## 4. [identity] CogZ (relevance: —)
 
-… 47 more sections …
+Project: CogZ
+
+## 5. [file] assemble.rs (relevance: 0.6993)
+
+//! Context pack assembly — the tiered-push pipeline.
+//! Tier 0 (baseline: identity + top rules) always ships for task and
+//! escalation packs …
+
+… 86 more sections …
 ```
 
-That's not a text chunk from a vector search. It's the actual function, a bug that was found and fixed during development, and the architecture that ties them together — ranked, traceable through the code graph.
+That's not a text chunk from a vector search. The pack leads with validated rules — one learned from a release failure on this very project — plus the identity baseline and the actual source file, all ranked, traceable, and budgeted.
 
 This repository already contains real dogfooding knowledge — CogZ has been used on its own codebase throughout development. You can clone it, install CogZ, and try the commands above against it directly.
 
@@ -91,7 +96,7 @@ CogZ periodically consolidates what has been learned: deduplicates entries, dete
 # Install
 curl -fsSL https://raw.githubusercontent.com/balaianu/CogZ/master/install.sh | bash
 
-# Initialize in a repo
+# Initialize in a repo (add --configure auto to wire MCP + hooks for detected agents)
 cd ~/your-project
 cogz init
 
@@ -130,9 +135,9 @@ CogZ runs as a stateless MCP server over stdio. Every tool call specifies which 
 }
 ```
 
-The server exposes 14 tools: `create_entity`, `update_knowledge`, `verify_knowledge`, `query_entities`, `search`, `get_context`, `get_status`, `list_entities`, `consolidate`, `capture_event`, `get_callers`, `get_impact`, `find_orphans`, `suggest_observations`.
+The server exposes 15 tools: `create_entity`, `update_knowledge`, `verify_knowledge`, `reject_entity`, `query_entities`, `search`, `get_context`, `get_status`, `list_entities`, `consolidate`, `capture_event`, `get_callers`, `get_impact`, `find_orphans`, `suggest_observations`.
 
-See [MCP Tools](docs/integration/mcp-tools.md) for full parameter reference and example responses. See [Agent Setup](docs/integration/agent-setup.md) for configuration examples for Claude Code, Cursor, Devin, and other agents.
+See [MCP Tools](docs/integration/mcp-tools.md) for full parameter reference and example responses. See [Agent Setup](docs/integration/agent-setup.md) for per-agent config files, hook formats, and verified capability notes for all six supported agents — or just run `cogz configure auto`.
 
 ## Hook integration
 
@@ -162,6 +167,7 @@ Normal operation is automatic: hooks fire on lifecycle events, the agent drives 
 | Command | Description |
 |---|---|
 | `cogz init` | Initialize `.cogz/` in a repository |
+| `cogz configure <harnesses>` | Write agent MCP + hook config (`auto` detects installed agents) |
 | `cogz index [--no-download]` | Sync files to DB + index source code |
 | `cogz reindex` | Incremental reindex (changed files only) |
 | `cogz search <query>` | Hybrid FTS + vector + graph search |
@@ -170,6 +176,7 @@ Normal operation is automatic: hooks fire on lifecycle events, the agent drives 
 | `cogz consolidate [--dry-run]` | Run promotion and merge |
 | `cogz suggest [--days N]` | List mined observation candidates |
 | `cogz verify <entity-id>` | Re-stamp a drifted entity's provenance |
+| `cogz reject <entity-id>` | Mark an entity rejected (`--reason` stored) |
 | `cogz capture-event <type>` | Capture lifecycle event from hooks |
 | `cogz models <download\|list\|clean>` | Model management |
 | `cogz doctor [--prune-observations]` | Health check, policy violations, usage metrics |
@@ -207,11 +214,15 @@ CogZ ships a self-contained retrieval benchmark (`benchmark/`) run against this 
 
 | Variant | MRR | Recall@20 |
 |---|---|---|
-| Hybrid (FTS + vector + graph) | 0.336 | 0.659 |
-| FTS-only (degraded mode) | 0.204 | 0.634 |
-| Hybrid, no graph expansion | 0.336 | 0.506 |
+| Hybrid (FTS + vector + graph) | 0.298 | 0.653 |
+| FTS-only (degraded mode) | 0.184 | 0.600 |
+| Hybrid, no graph expansion | 0.298 | 0.509 |
 
-The vector channel roughly doubles MRR over FTS alone; graph expansion adds +0.15 recall@20. Context packs reach 0.816 expected-entity recall at ~8K average tokens. Methodology, per-intent breakdowns, and the tuning sweep history are in [benchmark/README.md](benchmark/README.md).
+The vector channel lifts MRR ~60% over FTS alone; graph expansion adds +0.14 recall@20. Context packs reach 0.67 expected-entity recall at ~8K average tokens. Methodology, per-intent breakdowns, and the tuning sweep history are in [benchmark/README.md](benchmark/README.md).
+
+**What using it buys (measured):** in a 14-task agent replay, the seeded-knowledge arm finished ~2x faster than bare (871s vs 1748s average) and completed more runs (14/14 vs 10/14) at equal correctness. On unseen external corpora (httpx, cobra, clap; 768 to 4664 entities) seeded-knowledge recall@20 holds at 0.77 to 0.97, so the pipeline generalizes beyond its own repo. Consolidation machinery is precise: dedup precision/recall 1.0, NLI contradiction detection 4/4 with zero false alarms, drift marking exact.
+
+**Honest limits:** top-5 knowledge precision is weak on mixed corpora (P@5 <= 0.20; code entities outrank knowledge at the top of the ranking), commit-intent queries reach ~0.5 recall@20, and at n=14 tasks there is no measurable task-correctness lift yet. Full methodology, confidence intervals, and raw numbers: [version report card](benchmark/results/report-card.md) and [external corpus suite](benchmark/results/suite/REPORT.md).
 
 ## Architecture
 
@@ -247,9 +258,9 @@ Cross-platform team collaboration is supported: code entity UUIDs use forward-sl
 - [CLI Reference](docs/cli-reference.md) — every command and flag
 
 **Integration:**
-- [MCP Tools](docs/integration/mcp-tools.md) — 17 tool parameters and responses
+- [MCP Tools](docs/integration/mcp-tools.md) — all 15 tool signatures and response shapes
 - [Hooks](docs/integration/hooks.md) — lifecycle events and output format
-- [Agent Setup](docs/integration/agent-setup.md) — Claude Code, Cursor, Devin, generic MCP
+- [Agent Setup](docs/integration/agent-setup.md) — all six agents + generic MCP, with per-agent effect coverage
 
 **Design:**
 - [Architecture](docs/design/architecture.md) — system overview and module map

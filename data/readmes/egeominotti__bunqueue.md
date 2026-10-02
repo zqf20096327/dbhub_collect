@@ -20,6 +20,7 @@
 <p align="center">
   <a href="https://bunqueue.dev/">Documentation</a> &middot;
   <a href="https://bunqueue.dev/guide/quickstart/">Quick Start</a> &middot;
+  <a href="https://bunqueue.dev/academy/">Video course</a> &middot;
   <a href="https://bunqueue.dev/guide/benchmarks/">Benchmarks</a> &middot;
   <a href="https://www.npmjs.com/package/bunqueue">npm</a>
 </p>
@@ -100,10 +101,10 @@ Choose a Linux distribution with the same tags on either registry:
 
 | Variant | Version tag | Moving tag | Runtime base |
 |---|---|---|---|
-| Alpine (default) | `2.9.6-alpine` | `alpine`, `latest` | Alpine 3.22, musl |
-| Debian | `2.9.6-debian` | `debian` | Debian 13 |
-| Debian slim | `2.9.6-slim` | `slim` | Debian 13 slim |
-| Distroless | `2.9.6-distroless` | `distroless` | Debian 13, no shell or package manager |
+| Alpine (default) | `2.9.7-alpine` | `alpine`, `latest` | Alpine 3.22, musl |
+| Debian | `2.9.7-debian` | `debian` | Debian 13 |
+| Debian slim | `2.9.7-slim` | `slim` | Debian 13 slim |
+| Distroless | `2.9.7-distroless` | `distroless` | Debian 13, no shell or package manager |
 
 **Which variant should I use?**
 
@@ -129,18 +130,18 @@ user permission to install packages at runtime.
 docker run -d --name bunqueue --restart unless-stopped \
   -p 127.0.0.1:6789:6789 -p 127.0.0.1:6790:6790 \
   -v bunqueue-data:/app/data \
-  egeominotti/bunqueue:2.9.6-alpine
+  egeominotti/bunqueue:2.9.7-alpine
 
 curl --fail http://127.0.0.1:6790/health
 ```
 
-This example exposes the APIs only on your machine. Replace `2.9.6-alpine` with
-`2.9.6-debian`, `2.9.6-slim`, or `2.9.6-distroless` to choose another base.
+This example exposes the APIs only on your machine. Replace `2.9.7-alpine` with
+`2.9.7-debian`, `2.9.7-slim`, or `2.9.7-distroless` to choose another base.
 Moving tags such as `alpine` follow newer releases; version tags identify a
 release, while a digest pins the exact image even across base-image rebuilds.
 
 Every variant supports both architectures, runs as UID/GID `1001:1001`, and
-stores SQLite data in `/app/data`. Unsuffixed tags such as `2.9.6` stay on Alpine.
+stores SQLite data in `/app/data`. Unsuffixed tags such as `2.9.7` stay on Alpine.
 Production images contain the compiled server and required system libraries;
 development dependencies and a separate Bun installation stay out of the image.
 The built-in health check uses `/app/bunqueue healthcheck`, including on distroless.
@@ -189,6 +190,33 @@ Python, PHP, Go, Rust and Elixir clients speak the same protocol — see
 > [bun.sh](https://bun.sh)); producers and workers can run anywhere.
 
 [Quick Start guide →](https://bunqueue.dev/guide/quickstart/)
+
+## Learn with bunqueue Academy
+
+A free video course on YouTube, from your first queue to production. Each
+episode follows a guide on bunqueue.dev, with chapters and English subtitles.
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=fWrZLzElXtA&list=PLAwZF6aEnSiM">
+    <img src="https://img.youtube.com/vi/fWrZLzElXtA/maxresdefault.jpg" alt="Watch the 60-second bunqueue overview on YouTube" width="640" />
+  </a>
+</p>
+
+| # | Episode | Length | Guide |
+|---|---|---:|---|
+| 00 | [Introducing bunqueue](https://www.youtube.com/watch?v=fWrZLzElXtA&list=PLAwZF6aEnSiM) | 1:01 | [Introduction](https://bunqueue.dev/guide/introduction/) |
+| 01 | [Quickstart: build your first job queue](https://www.youtube.com/watch?v=7ZyJq-ilGv0&list=PLAwZF6aEnSiM) | 19:14 | [Quick Start](https://bunqueue.dev/guide/quickstart/) |
+| 02 | [Queue: add, deduplicate and control jobs](https://www.youtube.com/watch?v=zB16HOrnAUY&list=PLAwZF6aEnSiM) | 25:37 | [Queue](https://bunqueue.dev/guide/queue/) |
+| 03 | [Workers: concurrency, leases and retries](https://www.youtube.com/watch?v=VIdCsEMurNY&list=PLAwZF6aEnSiM) | 24:46 | [Worker](https://bunqueue.dev/guide/worker/) |
+| 04 | [Cron and scheduling that survive restarts](https://www.youtube.com/watch?v=bC1bxvOcr_I&list=PLAwZF6aEnSiM) | 19:44 | [Cron](https://bunqueue.dev/guide/cron/) |
+| 05 | [Dead letter queue: retries, backoff and failed jobs](https://www.youtube.com/watch?v=Z7C5fv3nk_w&list=PLAwZF6aEnSiM) | 21:12 | [Dead Letter Queue](https://bunqueue.dev/guide/dlq/) |
+| 06 | [FlowProducer: parent and child job dependencies](https://www.youtube.com/watch?v=kUaBOsXzQ-o&list=PLAwZF6aEnSiM) | 18:56 | [Flow Producer](https://bunqueue.dev/guide/flow/) |
+
+Coming next: 07 Workflow Engine · 08 SDKs, CLI & MCP · 09 Production · 10
+Framework Integrations.
+
+[Full playlist →](https://www.youtube.com/playlist?list=PLAwZF6aEnSiM) ·
+[All episodes on bunqueue.dev →](https://bunqueue.dev/academy/)
 
 ## Why bunqueue?
 
@@ -548,6 +576,7 @@ bunx bunqueue-dashboard
 
 https://github.com/user-attachments/assets/e8a8d38e-b4a6-4dc8-8360-876c0f24d116
 
+[8-minute tour on YouTube](https://www.youtube.com/watch?v=1bQRFXGClcc) ·
 [Live demo](https://egeominotti.github.io/bunqueue-dashboard/) ·
 [Dashboard guide](https://bunqueue.dev/guide/dashboard/) ·
 [User guide](https://egeominotti.github.io/bunqueue-dashboard/docs/user-guide) ·
@@ -576,6 +605,7 @@ SQLite or public-API claim. Run `bun run bench`, `bun run bench:tcp`, or
 **[bunqueue.dev →](https://bunqueue.dev/)**
 
 - [Quick Start](https://bunqueue.dev/guide/quickstart/) — install to working queue in under a minute
+- [bunqueue Academy](https://bunqueue.dev/academy/) — free video course, one episode per guide
 - [Queue API](https://bunqueue.dev/guide/queue/) · [Worker API](https://bunqueue.dev/guide/worker/) — every option explained
 - [Simple Mode](https://bunqueue.dev/guide/simple-mode/) — routes, middleware, triggers, TTL, dedup
 - [Workflow Engine](https://bunqueue.dev/guide/workflow/) — sagas, branching, signals

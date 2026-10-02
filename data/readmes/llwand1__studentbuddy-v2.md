@@ -3,10 +3,10 @@
 [![CI](https://github.com/llwand1/studentbuddy-v2/actions/workflows/ci.yml/badge.svg)](https://github.com/llwand1/studentbuddy-v2/actions/workflows/ci.yml)
 ![release](https://img.shields.io/github/v/release/llwand1/studentbuddy-v2)
 ![node](https://img.shields.io/badge/node-%E2%89%A522.11-blue)
-![version](https://img.shields.io/badge/version-0.2.153-orange)
-![tests](https://img.shields.io/badge/tests-344%20files%20%2F%204085%20cases-brightgreen)
-![api](https://img.shields.io/badge/REST%20routes-165-0ea5e9)
-![contracts](https://img.shields.io/badge/shared%20contracts-233%20types-8a63f6)
+![version](https://img.shields.io/badge/version-0.2.156-orange)
+![tests](https://img.shields.io/badge/tests-352%20files%20%2F%204099%20cases-brightgreen)
+![api](https://img.shields.io/badge/REST%20routes-170-0ea5e9)
+![contracts](https://img.shields.io/badge/shared%20contracts-242%20types-8a63f6)
 ![deps](https://img.shields.io/badge/external%20runtime%20deps-6-blue)
 ![stack](https://img.shields.io/badge/stack-React%2018%20%C2%B7%20Express%20%C2%B7%20SQLite-8a63f6)
 
@@ -49,7 +49,7 @@
 - **数据归你**：SQLite 单文件、可自托管、开源。
 - **前端依赖极少**：`@sb/web` 运行时依赖只有 react / react-dom；Markdown / SVG 净化 / 图表自绘，不可信内容的渲染契约见 [`docs/UNTRUSTED-RENDER-SPEC.md`](docs/UNTRUSTED-RENDER-SPEC.md)。
 
-- **在线体验**：<https://11wand.com>（**已上线到 v0.2.153**）。首页「免注册，直接体验」直连公用体验账号；⚠️ 公用池全站共享、访客彼此可见，别放个人信息。
+- **在线体验**：<https://11wand.com>（**已上线到 v0.2.156**）。首页「免注册，直接体验」直连公用体验账号；⚠️ 公用池全站共享、访客彼此可见，别放个人信息。
 - **不想点网页？** clone 后 `npm run demo:e2e` 跑完确定性全栈演示（用户 → API → 假 LLM → SSE → 落库 → 杀进程重启后逐字仍在；零 API key、零真实外呼）。
 - v2 是全新重写仓（v1 [`llwand1/studentbuddy`](https://github.com/llwand1/studentbuddy) 已冻结）。每个功能为什么这么做、产品为什么砍功能转游戏化，见 [`docs/FEATURES.md`](docs/FEATURES.md)。
 
@@ -81,7 +81,27 @@ npm run dev          # 一条命令并行拉起 api :18791 + web :5173（Ctrl+C 
 | `npm run demo:e2e` | **确定性全栈**：注册 → 假 LLM → SSE → 落库 → **杀进程重启后逐字仍在**，34 条断言全过，零 API key、零真实外呼 |
 | `node tools/metrics.mjs --tests --check` | 本文与首屏的**每个可核对数字**对代码实测对账，漂移即退出码 1（CI 跑的就是这条） |
 
-当前测试基线 **344 文件 / 4085 例**，全绿（4083 passed / 2 skipped；本机全量实跑）。逐文件不变量见 [`docs/TEST-PLAN.md`](docs/TEST-PLAN.md) §3；三套离线评测（`npm run eval` / `eval:models` / `eval:agent`）见 [`docs/FEATURES.md`](docs/FEATURES.md#测评怎么证明上面每句话)。
+当前测试基线 **352 文件 / 4099 例**，全绿（4097 passed / 2 skipped；本机全量实跑）。逐文件不变量见 [`docs/TEST-PLAN.md`](docs/TEST-PLAN.md) §3；三套离线评测（`npm run eval` / `eval:models` / `eval:agent`）见 [`docs/FEATURES.md`](docs/FEATURES.md#测评怎么证明上面每句话)。
+### 为什么有四千条测试——它们不是数字游戏
+
+一个常见的第一印象是「4000 例太多了，多半是凑数」。2026-10-02 我们按**风险驱动测试**的口径把全部用例逐条过了一遍（方法与局限见 [`docs/TEST-AUDIT.md`](docs/TEST-AUDIT.md)，逐例明细 [`docs/test-audit-cases.csv`](docs/test-audit-cases.csv)），每条用例回答三问：**挡住什么失败？别处（tsc / eslint / 门禁 / 其他测试）能不能挡？代价多大？** 结果：
+
+| 档 | 定义 | 例数 | 占比 |
+|---|---|---:|---:|
+| **必须** | 挡住用户可见 / 数据 / 安全层面的失败，且别处挡不住：supertest 真库集成链、归属与安全边界（403/404、消毒、租户）、事故回归锁、迁移与库形状、错误路径、UI 交互→处理器 | 2975 | 73% |
+| **保底** | 挡住真实失败，但影响面小或与「必须」部分重叠：纯函数单点边界、渲染细节、双语完整性、像素资产一致性、公开页形状 | 992 | 24% |
+| **建议删除** | 不产生独立判定：常量＝常量、文案逐字相等、营销演示内容的形状、只验「能渲染不炸」 | 71 | 1% |
+
+第三档已全部删除（审计时的基线是 342 个文件、4038 例；并入时 main 已长到 344 / 4085，删掉这 71 例后即上面的现基线），**第二档刻意没按比例砍**：它们每条都对应一个真实失败模式，删掉换来的只是数字好看。
+
+数量大的真正原因是**粒度**，不是冗余：
+
+- **一条用例锁一个失败模式。** 一条 supertest 用例平均只有 1–2 个断言；红了能直接指到哪条口径坏了，而不是「某个 20 断言的大用例挂了，自己去翻」。
+- **文件头与用例标题写的是「为什么」。** 标题形如「跨用户访问一律 404 不回 403（403 等于承认 id 存在）」——判断标准本身就是文档，`docs/TEST-PLAN.md` §3 的不变量列是它的索引。
+- **门禁反过来守测试。** 每个测试文件必须在台账成行（幽灵行也红）；`node tools/guard-audit.mjs` 会把每条守门逐个改坏、证明它真的会红。
+- **三类锁必须多，因为出事成本高**：多租户归属（串台就是泄露）、流式不丢字不重字（断线重连）、AI 内容安全（CSP 沙箱、SVG 消毒、逐字锚点）。
+
+审计也如实记了测试体系自己的问题：台账的行级例数有 22 行与实测漂移（门禁不查数字）；20 个文件适合并成表驱动；一条用例在全量并行下偶发。这些在 `TEST-AUDIT.md` §4 登记，处置方式是改台账与合并，不是删锁。
 
 另有几件不进 `check`、按需跑的仪器：`node tools/loadtest/sse-load.mjs`（单进程 SSE 容量探针，读数在 [`docs/SCALING.md`](docs/SCALING.md)）、`node tools/retention-report.mjs --db …`（只读留存报表，口径在 [`docs/RETENTION-SPEC.md`](docs/RETENTION-SPEC.md)）、`node tools/guard-audit.mjs`（把守门故意改坏，证明它们真的会红）。
 
@@ -121,7 +141,7 @@ npm run dev          # 一条命令并行拉起 api :18791 + web :5173（Ctrl+C 
 - **容器化：本机已跑通，线上确定不切**（2026-09-29 决策，理由与前置清单见 [`DEPLOY.md`](DEPLOY.md) §11）。
 - **文档模式是词法检索，不是语义检索**：没有 embedding；用户不用资料里的原词改写提问时，70 万字规模下召回约 62%。
 - **渲染层覆盖不完整**：jsdom 交互测试只覆盖最高频几页；布局与观感类症状只能靠真机探针 + 人工目检。
-- **行内公式不渲染**（`$…$` 按原文显示）、`mermaid` / `echarts` 围栏降级代码块——刻意不引库以保住 `@sb/web` 零第三方依赖。
+- **行内公式不渲染**（`$… 按原文显示）、`mermaid` / `echarts` 围栏降级代码块——刻意不引库以保住 `@sb/web` 零第三方依赖。
 - **预览页只活内存**：服务重启即失效、无分享链接。
 - **中英切换只到壳层**：功能页正文与服务端消息尚未双语。
 - **引路灯的 AI 推荐花模型额度**：只在点开 / 悬停 0.4 秒 / 聚焦时才请求、同一现场缓存 10 分钟，亮灯本身不调模型；它只在应用壳里（落地页与对战页没有），窄屏与知识大陆页要在主区左侧让出 56px 的灯笼轨。
