@@ -23,7 +23,7 @@ Gestionale **open source** (`opentax-it`) per partite IVA italiane in **regime f
 - Fatture e note di credito in formato **FatturaPA** (XML validato sullo schema ufficiale), con numerazione progressiva assegnata all'emissione e bozze illimitate e modificabili.
 - **Clienti italiani, UE ed extra UE**, aziende o privati, con natura IVA e diciture corrette (art. 7-ter e 7-septies DPR 633/72); data mai nel futuro (errore SDI 00403).
 - Fatture in **valuta** con il cambio di riferimento della Banca d'Italia precompilato.
-- Modalità di pagamento scelta sulla fattura (bonifico, carta, SEPA Direct Debit, contanti), con il conto di accredito quando serve.
+- Modalità di pagamento scelta sulla fattura (bonifico, ricevuta bancaria, carta, SEPA Direct Debit, contanti), con il conto di accredito quando serve; profili di scadenza con **più rate** (es. 30/60/90 giorni) e **fine mese**, scritti in fattura come pagamento a rate e riportati nella copia PDF.
 - Copia di cortesia in PDF, download dell'XML, **import** di fatture e ricevute SDI da XML e archivi ZIP (anche quelli del portale Fatture e Corrispettivi), con anteprima prima di importare.
 
 **Invio allo SDI** (`/setup`, pagina della fattura)
@@ -43,11 +43,16 @@ Gestionale **open source** (`opentax-it`) per partite IVA italiane in **regime f
 - Reddito, imposta sostitutiva, acconti 40/60 o 50/50 per i soggetti ISA; sopra 100.000 € il calcolo forfettario si ferma.
 - Contributi INPS secondo la gestione scelta nel profilo: **Gestione Separata** (in euro interi sul rigo LM34) oppure **Artigiani e Commercianti** (contributi fissi in quattro rate, contributi oltre il minimale con saldo e acconti, riduzione del 35% del regime agevolato).
 
+**Dichiarazione dei redditi** (`/taxes/return`)
+- Guida alla precompilata **Redditi PF** (il 730 non vale per chi ha la partita IVA): quadri LM, RR e RX31 rigo per rigo con i valori dell'app e cosa fare in ogni rigo; i contributi versati (LM35, che la precompilata non compila), il reddito oltre il minimale di Artigiani e Commercianti e le fatture che spiegano la differenza tra i ricavi proposti per data di emissione e quelli incassati.
+- Dichiarazione segnata come presentata: i crediti d'imposta sostitutiva e della Gestione Separata entrano da soli nel registro dei crediti per gli F24.
+
 **F24** (`/f24`, `/credits`)
 - Piano di versamento: saldo e acconti in unica soluzione o a **rate mensili** fino al 16 dicembre, con interessi e, in caso di differimento, maggiorazione (per l'INPS nella riga DPPI).
 - Deleghe per i contributi: rate fisse di Artigiani e Commercianti create con un clic, righe INPS e "Altri enti previdenziali" inserite a mano con il controllo di causali e codici.
 - **Crediti e compensazioni**: registro dei crediti (credito da dichiarazione → F24 che lo usano → residuo) e modello a saldo zero.
-- Stampa sul **modello ufficiale AdE**, stato delle deleghe e date per l'addebito programmato (**I24**) con F24 web.
+- **Bollo sulle fatture** (`/stamp-duty`): per ogni trimestre la stima dalle fatture, la data limite per controllare l'elenco B, l'importo dell'Agenzia e il pagamento, con un F24 (codici 2521-2524) o dal portale Fatture e Corrispettivi.
+- Stampa sul **modello ufficiale AdE** e **file per File Internet** (specifiche tecniche AdE): gli F24 di una data si inviano all'Agenzia senza ricopiarli in F24 web. Le deleghe si segnano come pagate con la data e una nota su come sono state pagate.
 
 **Scadenze** (`/deadlines`, `/dashboard`)
 - Scadenzario di saldo e acconti (imposta e INPS), imposta di bollo trimestrale, Intrastat e dichiarazione, con le festività nazionali calcolate per ogni anno; in dashboard la prossima cosa da pagare (rata F24 o scadenza), i documenti da inviare e le soglie.
@@ -62,7 +67,7 @@ Gestionale **open source** (`opentax-it`) per partite IVA italiane in **regime f
 **In arrivo** (dettagli in [TODO.md](TODO.md))
 - **Casse professionali**, una alla volta, a partire da quelle che si pagano con F24 (Cassa Forense, Inarcassa, ENPAP).
 - **Fatture ricevute** (acquisti), importate dal portale Fatture e Corrispettivi.
-- Prospetto dei righi **LM e RR** della dichiarazione dei redditi.
+- Crediti di Artigiani e Commercianti dalla dichiarazione registrati da soli (serve il codice INPS sulle righe di credito).
 - Registro degli **avvisi/comunicazioni** (CIVIS) e delle relative rate.
 - Controllo periodico delle fonti ufficiali (AdE, INPS, GU/Normattiva, ADM) con proposta delle modifiche alle regole.
 

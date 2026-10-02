@@ -24,7 +24,7 @@
 
 ---
 
-> **v1.3.0.** Plembfin writes watched state and playback progress to connected media
+> **v1.3.1.** Plembfin writes watched state and playback progress to connected media
 > servers, so **back up first** (Settings → Backup → Local). Report
 > issues on the [issue tracker](https://github.com/Lasikiewicz/plembfin/issues).
 
@@ -55,7 +55,7 @@ None of these talk to each other - they all talk to Plembfin.
 - **Instant state restoration** - Automatically synchronizes watch history to newly added media and rebuilt server libraries
 - **Cross-platform resume** - Pause playback on one server and pick up right where you left off on another
 - **Rewatch tracking** - Full multi-watch history logging with smart deduplication that preserves authentic repeat viewings
-- **Now Playing dashboard** - Real-time playback monitoring, optional Plembfin-authoritative Up Next sync that queues a coalesced provider push whenever the queue changes (to Plex/Emby Continue Watching and Jellyfin Next Up), show-level Up Next dismissals, media-type-aware Watch History, weekly watch activity trends, and recent history
+- **Now Playing dashboard** - Real-time playback monitoring with a panel that features part watched and Up Next items around live sessions (configurable from its cog), optional Plembfin-authoritative Up Next sync that queues a coalesced provider push whenever the queue changes (to Plex/Emby Continue Watching and Jellyfin Next Up), show-level Up Next dismissals, media-type-aware Watch History, weekly watch activity trends, and recent history
 - **Sync Activity hub** - Live grouped activity by movie/show, with all resume checkpoints and destination results preserved behind each row, unresolved cross-platform matches with per-item Fix match actions, targeted retry for actual failed destinations (only the newest unresolved result per movie/episode is retried, individually or all at once as a background job that survives closing the tab; expected missing-library skips are excluded), show-wide Fix Match and retry-all controls for Trakt mismatches, dismiss controls for shows Trakt does not contain, blocked-restore repair grouped by show with Fix Match and skip controls, and downloadable group logs
 - **Rich analytics & stats** - In-depth all-time and period reports, top shows, and platform playback distribution
 - **Personal media organization** - Save movies, shows, and episodes to a watch list or playlists (optionally synced two ways to Plex, Emby, and Jellyfin, or filled automatically from genre, original language, year, and watched rules, with TV playlists holding the next episode of each show, and watched items removed if you choose), and rate them from their media pages; episode ratings use one canonical show/season/episode identity everywhere
@@ -168,6 +168,10 @@ Each channel shows its own version in the sidebar and **About**. Develop builds
 include the current release version and cycle number (for example, `0.16.0 Build 1`). See
 [`CHANGELOG.md`](CHANGELOG.md) for numbered releases, and
 [`docs/development.md`](docs/development.md) for how the three channels relate.
+
+Tagged releases are also on Docker Hub as `plembfin/plembfin:latest` (and
+`plembfin/plembfin:<version>`), the same image as the GHCR `:latest`. The `alpha` and
+`develop` channels are published to GHCR only.
 
 To run a different channel, swap the `image:` tag in the Docker Compose example below -
 everything else about setup is identical.

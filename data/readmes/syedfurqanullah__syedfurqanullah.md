@@ -25,7 +25,7 @@ Continuously learning new technologies, exploring modern web development practic
 
 ### 📌 Featured Projects
 
-**🚀 Nova AI Automation SaaS Landing page**
+**🚀 Nova AI Automation SaaS Landing Page**
 
 A modern and fully responsive AI SaaS landing page built with HTML5, Modern CSS3,
 and JavaScript (ES6+).

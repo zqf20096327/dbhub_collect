@@ -4,6 +4,10 @@ image:https://github.com/dbunit/dbunit-extension/actions/workflows/build-any-bra
 image:https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/jvm-repo-rebuild/reproducible-central/master/content/org/dbunit/badge.json["Reproducible Builds", link="https://github.com/jvm-repo-rebuild/reproducible-central/blob/master/content/org/dbunit/README.md"]
 image:https://api.scarf.sh/v2/packages/Dbunit/8fb62e30-d923-4676-bfd0-f57445d56578/downloads-badge["Maven Central downloads", link="https://central.sonatype.com/artifact/org.dbunit/dbunit"]
 image:https://img.shields.io/badge/Dependents-15K-blue?style=flat&logo=github["Dependents", link="https://github.com/dbunit/dbunit-extension/network/dependents"]
+image:https://img.shields.io/maven-central/v/org.dbunit/dbunit["Maven Central", link="https://central.sonatype.com/artifact/org.dbunit/dbunit"]
+image:https://img.shields.io/badge/License-LGPL%20v2.1-blue.svg["License: LGPL v2.1", link="https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html"]
+image:https://img.shields.io/badge/Java-8%2B-orange["Java 8+"]
+image:https://img.shields.io/github/issues/dbunit/dbunit-extension["Open Issues", link="https://github.com/dbunit/dbunit-extension/issues"]
 
 DbUnit is a mature, proven JUnit extension, founded in 2002,
 targeted at database-driven projects that, among other things,
@@ -29,17 +33,12 @@ https://dbunit.github.io/dbunit-extension/fiveminutes.html[dbUnit in 5 Minutes] 
 The full documentation site, including guides, reference pages, and the FAQ, is at
 https://dbunit.github.io/dbunit-extension/.
 
-== Using dbUnit
-
-DbUnit is published to Maven Central under `org.dbunit:dbunit`.
-See https://dbunit.github.io/dbunit-extension/repos.html[Maven Repositories] for the dependency snippet and snapshot repository setup.
-
 == Getting Help
 
-If you found a bug or have an enhancement request, create an issue at
+Report bugs and request enhancements at
 https://github.com/dbunit/dbunit-extension/issues.
 
-If you have questions, ideas, or want to get involved, start a discussion at
+For questions, ideas, or want to get involved, start a discussion at
 https://github.com/dbunit/dbunit-extension/discussions.
 
 We are a small team working on improvements and issues along the way and need more help — we will gladly help you as needed with your ideas and contributions and look to add you as a committer when ready.

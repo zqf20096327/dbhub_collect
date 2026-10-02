@@ -22,7 +22,7 @@ curl -fsSL https://raw.githubusercontent.com/guangl/dameng-cli/main/scripts/inst
 指定版本或安装目录：
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/guangl/dameng-cli/main/scripts/install.sh | DM_INSTALL_DIR="$HOME/bin" sh -s -- v0.2.0
+curl -fsSL https://raw.githubusercontent.com/guangl/dameng-cli/main/scripts/install.sh | DM_INSTALL_DIR="$HOME/bin" sh -s -- v0.3.0
 ```
 
 已下载源码时，使用本地安装脚本（需要当前稳定版 Rust / Cargo）：
@@ -33,7 +33,7 @@ curl -fsSL https://raw.githubusercontent.com/guangl/dameng-cli/main/scripts/inst
 
 两个脚本默认安装到 `$HOME/.local/bin/dm`，可通过 `DM_INSTALL_DIR` 修改。远程脚本会下载与 Release 一起发布的 SHA-256 文件并在安装前校验。Windows 请下载 Release 中的 zip，或执行 `cargo install --path . --locked`。
 
-官方安装脚本还会一并安装**内置插件**（默认插件）：远程脚本按 Release 资产 `dm-plugins-<tag>-<target>.txt` 安装本次发布的插件，该资产缺失时回退到脚本内置名单 `ssh db`；`install-local.sh` 固定构建并安装 `ssh` 与 `db`。它们与自己 `dm install` 的插件完全等价，`dm list` 可见、`dm uninstall <name>` 可删除。远程脚本的安装来源是解包用的临时目录，因此 `dm update` 无法升级它们（报 `Plugin source is not updateable`，`dm outdated` 会把它们报告成 `unknown`），升级请重新运行安装脚本；本地脚本从检出目录安装，可直接 `dm update ssh`、`dm update db`。`dm self-update` 只替换宿主程序，不安装也不更新插件；用 `cargo install --path .` 或 Windows zip 安装的宿主不带任何插件。详见 [CLI 参考](docs/cli.md)的「默认插件」。
+官方安装脚本会一并安装内置插件：远程脚本按 Release 插件清单安装并记录持久的发布来源，因此 `dm update ssh`、`dm update db` 可直接检查和升级；本地脚本从检出目录安装，也可直接更新。此前由旧脚本从临时目录安装的插件需重新运行新版安装脚本一次，以刷新更新来源。`dm self-update` 只更新宿主；`cargo install --path .` 或 Windows zip 安装的宿主不带插件。详见 [CLI 参考](docs/cli.md)。
 
 ### 安装插件
 
@@ -47,7 +47,7 @@ dm install "$package"
 dm list
 dm hello --help
 dm hello "hello dameng"
-dm verify hello
+dm doctor
 dm uninstall hello
 ```
 
@@ -63,21 +63,24 @@ dm uninstall hello
 | `dm info <name> [--json]` | 查看来源、revision、校验和，以及该插件自己的 config/data/cache 目录 |
 | `dm <name> [args...]` | 执行插件，原样转发后续参数，包括 `--help` |
 | `dm update <name>` / `dm update --all` | 下载、校验并原子替换插件，失败时保留旧版本 |
-| `dm outdated [--json]` | 并行检查插件是否有新版本 |
-| `dm verify [name]` | 校验已安装清单与二进制 SHA-256 |
+| `dm update [--json]` | 并行检查插件是否有新版本 |
 | `dm doctor [--repair]` | 检查或修复 SQLite、插件目录、残留事务与孤立配置/数据/缓存目录 |
-| `dm uninstall <name>` | 删除插件及其 config/data/cache 隔离目录 |
-| `dm ssh add/list/remove/test/ssh` | 由 `plugins/ssh` 插件提供的 SSH 服务器管理；配置写入插件自身的 `data/ssh/servers.sqlite3`，`add` 在终端下省略任意字段时逐项交互式输入，密码/口令隐藏回显；`list [--json]` 输出带边框表格或 JSON，从不回显秘密；插件自己的默认值写在 `config/ssh/config.toml`（`[defaults]`、`[test]`）。密码认证的 `test`/`ssh` 需要系统安装 `sshpass`，密钥认证只需本机 `ssh` 与本机上的私钥（远端只需对应公钥） |
+| `dm uninstall <name> [--purge] [--yes]` | 默认保留配置、连接与缓存；`--purge` 清空数据，需确认或显式 `--yes` |
+| `dm ssh add/edit/list/remove/test/connect` | 由 `plugins/ssh` 插件提供的 SSH 服务器管理；配置写入插件自身的 `data/ssh/servers.sqlite3`，`add` 在终端下省略任意字段时逐项交互式输入，密码/口令隐藏回显；`list [--json]` 输出带边框表格或 JSON，从不回显秘密；插件自己的默认值写在 `config/ssh/config.toml`（`[defaults]`、`[test]`）。密码认证或使用已保存私钥口令的 `test`/`connect` 需要系统安装 `sshpass`；未保存口令的密钥连接直接使用本机 `ssh` 与私钥（远端只需对应公钥） |
 | `dm ssh export/import` | 导出或迁移 SSH 服务器配置；普通导出不带密码与私钥口令，需要携带时使用口令加密导出 |
-| `dm db add/list/remove/test/exec` | 由 `plugins/db` 插件提供的达梦数据库连接管理；连接写入插件自身的 `data/db/connections.sqlite3`，密码用本机 AES-GCM 密钥加密，`add` 在终端下省略任意字段时逐项交互式输入，`list [--json]` 输出带边框表格或 JSON；插件自己的默认值写在 `config/db/config.toml`（`[defaults]` 的 port/username/driver/schema 与 `[connect]` 的 timeout/probe）。`test`（探测语句）与 `exec`（输出制表符分隔的结果集）的命令与接口已就位，但驱动仍是占位实现，当前会明确报错 |
+| `dm db add/edit/list/remove/test/exec` | 由 `plugins/db` 插件提供的达梦数据库连接管理；连接写入插件自身的 `data/db/connections.sqlite3`，密码用本机 AES-GCM 密钥加密，`add` 在终端下省略任意字段时逐项交互式输入，`list [--json]` 输出带边框表格或 JSON；插件自己的默认值写在 `config/db/config.toml`（`[defaults]` 的 port/username/driver/schema 与 `[connect]` 的 timeout/probe）。`test`（探测语句）与 `exec`（输出制表符分隔的结果集）的命令与接口已就位，但驱动仍是占位实现，当前会明确报错 |
 | `dm db export/import` | 导出或迁移连接配置；普通导出不带密码，需要携带密码时使用口令加密导出 |
 | `dm self-update [--check] [--version X.Y.Z] [--force] [--target TARGET]` | 校验 GitHub Release SHA-256 后原子升级宿主；`--force` 允许重装或降级，`--target` 覆盖产物目标 |
-| `dm completions <shell>` | 生成 shell completion |
+| `dm completions <shell>` | 动态补全宿主、已安装插件、插件子命令、选项、文件路径和连接名称 |
+| `dm config init/show/path` | 创建配置示例、查看有效值与来源、定位配置文件 |
+| `dm doctor <plugin> [--json]` | 检查插件环境；内置插件也支持 `dm ssh doctor`、`dm db doctor` |
 | `dm --help` / `dm --version` | 宿主帮助和版本 |
+
+`dm update` 默认只检查可用版本，`dm update --json` 输出机器可读结果；指定插件名或 `--all` 才执行升级。安装时自动完成清单、可执行文件和下载校验，无需单独运行校验命令。
 
 完整参数、JSON 输出、环境变量和退出行为见 [CLI 参考](docs/cli.md)。
 
-同名插件默认拒绝直接覆盖：`dm update <name>` 按已记录来源原子升级，`dm install <source> --replace` 用当前包替换同名插件，两者都保留插件的 config/data/cache。`dm uninstall` 会一并删除 `config/<name>`、`data/<name>`、`cache/<name>`，`dm doctor --repair` 也会清理这些目录中的孤立残留。
+同名插件默认拒绝直接覆盖：`dm update <name>` 按已记录来源原子升级，`dm install <source> --replace` 用当前包替换同名插件，两者都保留插件的 config/data/cache。`dm uninstall` 默认保留这些目录并登记保留状态，`dm doctor --repair` 不会清除主动保留的数据；`dm uninstall <name> --purge` 才彻底清空。插件自己的 `add` 遇到同名连接也默认拒绝覆盖，修改使用 `edit`，重新录入使用 `add --replace`。
 
 插件可以在 `dm-plugin.toml` 的 `[hooks]` 中声明 `pre_install`、`post_install`、`pre_uninstall` 和 `post_uninstall`。hook 必须是插件根目录内的相对可执行文件，并以对应的包目录或安装目录作为工作目录运行；它们与插件进程一样拥有当前用户权限，只应安装可信来源的插件。异常中断留下的安装或卸载事务可由 `dm doctor --repair` 协调恢复。
 
@@ -89,7 +92,7 @@ dm uninstall hello
 - Windows：`%LOCALAPPDATA%\dm`。
 - Linux / macOS：`$HOME/.config/dm`。
 
-该目录内的 `store.sqlite3` 保存插件清单、来源、Git revision 和 SHA-256。可选的 `config.toml` 只保存**宿主**设置，按用途分成 `[log]`、`[update]`、`[output]`、`[plugin]` 四张表，分别对应日志级别、自更新仓库与产物目标、进度条开关、额外继承给插件的环境变量；优先级为 命令行 > 环境变量 > 配置文件 > 默认值。**插件由各自的目录配置**：`config/<name>/config.toml`（插件自定义格式，宿主不读写），路径可用 `dm info <name>` 查看。模板见 [examples/config.toml](examples/config.toml)，复制到该目录即可生效。`plugins/` 保存可执行文件；`config/<name>`、`data/<name>`、`cache/<name>` 是每个插件的隔离目录。诊断日志写入该目录下的 `dm.log`（超过 5 MiB 时在下次启动轮转为 `dm.log.1`），可用 `DM_LOG` 调整级别（`off`/`error`/`warn`/`info`/`debug`/`trace`，默认 `info`；设为 `off` 时不创建日志文件）；stdout 始终保留给命令结果与 JSON，stderr 只保留进度条、插件输出和用户可见的 `错误`/`详情`/`提示`。使用自己的真实插件仓库地址：
+该目录内的 `store.sqlite3` 保存插件清单、来源、Git revision 和 SHA-256。可选的 `config.toml` 只保存**宿主**设置，按用途分成 `[log]`、`[update]`、`[output]`、`[plugin]` 四张表，分别对应日志级别、目录与每日大小上限，自更新仓库与产物目标、进度条开关、额外继承给插件的环境变量；优先级为 命令行 > 环境变量 > 配置文件 > 默认值。**插件由各自的目录配置**：`config/<name>/config.toml`（插件自定义格式，宿主不读写），路径可用 `dm info <name>` 查看。模板见 [examples/config.toml](examples/config.toml)，复制到该目录即可生效。`plugins/` 保存可执行文件；`config/<name>`、`data/<name>`、`cache/<name>` 是每个插件的隔离目录。诊断日志按本机日期写入 `logs/dm-YYYY-MM-DD.log`，保留当天及前 29 天；每个文件默认不超过 5 MiB，满额时淘汰旧内容并保留新日志。`[log] directory` / `DM_LOG_DIR` 设置目录，`[log] max_size_mb` / `DM_LOG_MAX_SIZE_MB` 设置大小上限，可用 `DM_LOG` 调整级别（`off`/`error`/`warn`/`info`/`debug`/`trace`，默认 `info`；设为 `off` 时不创建日志文件）；写入失败时静默跳过诊断日志，不回退到终端。stdout 始终保留给命令结果与 JSON，stderr 只保留进度条、插件输出和用户可见的 `错误`/`详情`/`提示`。使用自己的真实插件仓库地址：
 
 ```sh
 dm install https://github.com/YOUR_ORG/dm-backup.git --rev v1.2.0
@@ -123,7 +126,18 @@ fn main() {
 
 ## 开发与仓库维护
 
-源码按职责组织：`src/plugin/` 保存插件清单，`src/infrastructure/` 保存 SQLite 存储和宿主自更新，`src/cli/` 只负责命令解析与调度（属于库，便于测试直接调用）。每个 `.rs` 文件不超过 200 行，测试全部位于 `tests/` 下：`tests/unit/` 放库级用例，`tests/integration/` 放端到端场景，各自按主题拆成多个模块，避免实现模块与端到端场景混在一起。
+从要修改的功能找到代码：
+
+| 任务 | 位置 |
+| --- | --- |
+| 宿主命令与提示 | `src/cli/` |
+| 插件安装、更新、恢复 | `src/infrastructure/store/` |
+| 宿主设置、自更新 | `src/infrastructure/config/`、`self_update/` |
+| 插件协议与清单 | `crates/dm-plugin-sdk/`、`src/plugin/` |
+| 数据库、SSH 功能 | `plugins/db/`、`plugins/ssh/` |
+| 内置插件共用工具 | `crates/dm-plugin-support/` |
+
+两个插件使用相同的源码目录：`cli/` 处理命令，`domain/` 放业务行为，`storage/` 保存设置与记录，`transfer/` 处理导入导出，`ui/` 管理提示和渲染。现有公开 Rust 接口、配置文件和数据格式保持兼容。详细边界见[架构说明](docs/architecture.md)。每个 `.rs` 文件不超过 200 行，测试全部放在各 crate 的 `tests/` 下。
 
 ```sh
 cargo fmt --all -- --check
@@ -145,3 +159,19 @@ GitHub CI 覆盖 Linux、macOS、Windows 和最低 Rust 版本。版本标签触
 ## License
 
 [MIT](LICENSE)。插件可以独立选择许可证；分发者需自行满足各自依赖的许可要求。
+
+## 日常使用与补全
+
+```sh
+dm ssh add prod                     # 逐项输入，保存前确认
+dm ssh edit prod --port 2222        # 仅改端口，保留认证秘密
+dm ssh connect                     # 一个连接直接使用；多个连接可搜索选择
+dm ssh doctor                      # 本机工具、配置和私钥诊断
+dm db edit prod --clear-schema      # 显式清除 schema
+dm db config init                   # 创建插件配置示例，不覆盖已有文件
+dm config show --json               # 有效设置及 config/default/env 来源
+```
+
+Bash：`source <(dm completions bash)`；Zsh：先运行 `autoload -Uz compinit; compinit`，再 `source <(dm completions zsh)`。第三方插件补全协议见 [使用体验与自动补全](docs/usability.md)。补全查询不创建日志、连接存储或机器密钥，不访问网络；旧插件未启用补全时不会被执行。
+
+更新检查默认最多并发 4 个任务，可通过 `[update] check_concurrency` / `DM_UPDATE_CHECK_CONCURRENCY` 调整为 1..16。Release 校验使用固定缓冲，配置、导入与 SQL 输入有大小上限，Git/下载辅助进程有输出限制和超时。详细边界见 [CLI 文档](docs/cli.md#内存与运行开销)。

@@ -138,7 +138,7 @@ physical device. Where something is unproven, it says so.
 
 **Apple platform specifics**
 - [Apple Foundation Models](Docs/Engineering/APPLE_MODELS.md) — token budgets, guided generation
-- [Apple Document Intelligence](Docs/Engineering/APPLE_DOCUMENT_INTELLIGENCE.md) — Vision, PDFKit, Speech
+- [Document Intelligence and OCR sources](Docs/Research/DOCUMENT_INTELLIGENCE_AND_OCR.md) — Apple's Vision and PDFKit documentation, as researched
 - [Private Cloud Compute](Docs/Engineering/PRIVATE_CLOUD_COMPUTE.md) — enclave constraints, native integration
 
 **Honest limits**
@@ -203,8 +203,8 @@ of starting over.
 
 ## Status
 
-Shipping on the App Store for iPhone, iPad, and Mac. **5.4 is live on both platforms**, released
-2026-09-24 from build 478. Developed against a
+Shipping on the App Store for iPhone, iPad, and Mac. **5.5 is live on both platforms**, released
+2026-09-30 from build 483. Developed against a
 [public roadmap](https://gunzino.notion.site/OpenIntelligence-Public-Roadmap-e4446012bb8940e6b78a745aee688075)
 synced from the same database the work is planned in.
 

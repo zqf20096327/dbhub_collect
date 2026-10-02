@@ -2,7 +2,7 @@
 
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
 
-A curated list of awesome big data frameworks, resources and other awesomeness. Inspired by <b><code>&nbsp;32716⭐</code></b> <b><code>&nbsp;&nbsp;5140🍴</code></b> [awesome-php](https://github.com/ziadoz/awesome-php)), <b><code>323711⭐</code></b> <b><code>&nbsp;28818🍴</code></b> [awesome-python](https://github.com/vinta/awesome-python)), <b><code>&nbsp;&nbsp;1265⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;174🍴</code></b> [awesome-ruby](https://github.com/Sdogruyol/awesome-ruby)), [hadoopecosystemtable](http://hadoopecosystemtable.github.io/) & [big-data](http://usefulstuff.io/big-data/).
+A curated list of awesome big data frameworks, resources and other awesomeness. Inspired by <b><code>&nbsp;32716⭐</code></b> <b><code>&nbsp;&nbsp;5140🍴</code></b> [awesome-php](https://github.com/ziadoz/awesome-php)), <b><code>324226⭐</code></b> <b><code>&nbsp;28831🍴</code></b> [awesome-python](https://github.com/vinta/awesome-python)), <b><code>&nbsp;&nbsp;1265⭐</code></b> <b><code>&nbsp;&nbsp;&nbsp;174🍴</code></b> [awesome-ruby](https://github.com/Sdogruyol/awesome-ruby)), [hadoopecosystemtable](http://hadoopecosystemtable.github.io/) & [big-data](http://usefulstuff.io/big-data/).
 
 Your contributions are always welcome!
 

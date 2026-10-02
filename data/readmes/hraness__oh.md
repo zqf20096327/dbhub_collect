@@ -12,8 +12,14 @@ hosted model, and its search indexes can be deleted and rebuilt.
 [Website](https://oh.computer) · [Versioned specification](spec/README.md) ·
 [Agent Skill](skills/oh/SKILL.md)
 
-Latest release: [v0.13.3](https://github.com/hraness/oh/releases/tag/v0.13.3)
+Latest release: [v0.14.1](https://github.com/hraness/oh/releases/tag/v0.14.1)
 on [npm](https://www.npmjs.com/package/@hraness/oh), free and MIT licensed.
+
+## CLI updates
+
+Oh 0.14.1 and newer support automatic updates for Bun and npm globals
+on macOS and Linux. Use `oh update disable` to keep a version. See
+[update controls and supported installations](docs/cli-updates.md).
 
 ## Why Oh
 
@@ -52,8 +58,8 @@ follows this design across the projects, and the
 
 ## Install and first run
 
-The installation instructions below use `0.13.3`, the
-[verified public release](https://github.com/hraness/oh/actions/runs/36593404095).
+The archive below is `0.14.1`, the
+[verified public release](https://github.com/hraness/oh/actions/runs/36816606531).
 
 [Bun 1.3.14 or newer](https://bun.sh/docs/installation) is required for the
 CLI, the SDK, and the SQLite store. The runtime-neutral store interfaces and the
@@ -61,15 +67,15 @@ direct libSQL store also run on Node 24 and in serverless functions. Install
 the release from npm:
 
 ```sh
-bun add --global @hraness/oh@0.13.3
+bun add --global @hraness/oh@latest
 oh --help
 ```
 
 The same package bytes and their checksum are attached to the
-[immutable GitHub Release](https://github.com/hraness/oh/releases/tag/v0.13.3):
-[`hraness-oh-0.13.3.tgz`](https://github.com/hraness/oh/releases/download/v0.13.3/hraness-oh-0.13.3.tgz)
+[immutable GitHub Release](https://github.com/hraness/oh/releases/tag/v0.14.1):
+[`hraness-oh-0.14.1.tgz`](https://github.com/hraness/oh/releases/download/v0.14.1/hraness-oh-0.14.1.tgz)
 and
-[`SHA256SUMS`](https://github.com/hraness/oh/releases/download/v0.13.3/SHA256SUMS).
+[`SHA256SUMS`](https://github.com/hraness/oh/releases/download/v0.14.1/SHA256SUMS).
 
 The package runs wherever Bun runs. Its native SQLite snapshot helper
 (`@hraness/oh/sqlite-snapshot`) is prebuilt for macOS on Apple silicon and
@@ -203,7 +209,7 @@ For a project dependency, pin the same immutable release in `package.json`:
 ```json
 {
   "dependencies": {
-    "@hraness/oh": "0.13.3"
+    "@hraness/oh": "0.14.1"
   }
 }
 ```
@@ -271,9 +277,9 @@ replay, and sync only where you tell it to.
 You can also give an agent this prompt:
 
 ```text
-Install @hraness/oh@0.13.3 from npm and use its packaged Oh Agent Skill. The
-exact npm tarball and SHA256SUMS are mirrored by the immutable v0.13.3 Release at
-https://github.com/hraness/oh/releases/tag/v0.13.3. Verify the CLI with
+Install @hraness/oh@0.14.1 from npm and use its packaged Oh Agent Skill. The
+exact npm tarball and SHA256SUMS are mirrored by the immutable v0.14.1 Release at
+https://github.com/hraness/oh/releases/tag/v0.14.1. Verify the CLI with
 `oh --help` and `oh version`.
 Do not create or modify an Oh database until I name its path and ask you to.
 ```

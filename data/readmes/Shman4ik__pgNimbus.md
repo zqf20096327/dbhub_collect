@@ -65,14 +65,14 @@ Where it sits among the alternatives: pgAdmin and DBeaver are powerful but heavy
 | Platform | How |
 | --- | --- |
 | Windows (recommended) | **[Microsoft Store](https://apps.microsoft.com/detail/9N6SZT42XJ24)**, signed and self-updating, or `winget install pgNimbus --source msstore` |
-| Windows (direct) | `pgNimbus-<version>-win-x64.msi` from [Releases](https://github.com/Shman4ik/pgNimbus/releases). Per-user, no admin rights. Unsigned, so SmartScreen warns on first run. |
+| Windows (portable) | `pgNimbus-<version>-win-x64.zip` from [Releases](https://github.com/Shman4ik/pgNimbus/releases). Unzip anywhere and run `PgNimbus.App.exe`; no installer, no admin rights. Unsigned, so SmartScreen warns on first run. |
 | macOS (beta) | `pgNimbus-<version>-macos-arm64.dmg`, Apple Silicon only, macOS 12 or later. Ad-hoc signed and not notarized: the first launch needs **Open Anyway**, and an update can leave saved passwords unreadable until you delete the old `pgNimbus` Keychain items (see the installation guide). |
 | Linux (beta) | AppImage, `.deb` or `.tar.gz` for x64 and arm64 from [Releases](https://github.com/Shman4ik/pgNimbus/releases). |
 
 The [installation guide](https://shman4ik.github.io/pgNimbus/docs/getting-started/installation/) has the step-by-step for each platform, the macOS Gatekeeper dialogs, and where pgNimbus keeps its files. Every release asset carries signed build provenance, so you can check where a download came from. Pass `--signer-workflow` and `--source-ref`, or the check also accepts an attestation from any other workflow or ref in the repo:
 
 ```bash
-gh attestation verify pgNimbus-<version>-win-x64.msi --repo Shman4ik/pgNimbus \
+gh attestation verify pgNimbus-<version>-win-x64.zip --repo Shman4ik/pgNimbus \
   --signer-workflow Shman4ik/pgNimbus/.github/workflows/release.yml \
   --source-ref refs/tags/v<version>
 ```
@@ -162,8 +162,8 @@ Requires the [.NET 10 SDK](https://dotnet.microsoft.com/download).
 
 ```bash
 dotnet build
-dotnet run --project PgNimbus.App
-dotnet test --project PgNimbus.Core.Tests
+dotnet run --project src/PgNimbus.App
+dotnet test --project tests/PgNimbus.Core.Tests
 ```
 
 `PgNimbus.Core` is the engine: a plain class library over Npgsql with no UI dependencies, streaming results as `IAsyncEnumerable<RowBatch>` with real mid-flight cancellation. `PgNimbus.App` is the Avalonia front end. To skip the connection dialog while developing, set `PGNIMBUS_CONN` to any connection string the paste box accepts.
@@ -171,8 +171,8 @@ dotnet test --project PgNimbus.Core.Tests
 A NativeAOT build:
 
 ```bash
-dotnet publish PgNimbus.App -c Release -r win-x64 -p:PublishAot=true    # Windows
-dotnet publish PgNimbus.App -c Release -r linux-x64 -p:PublishAot=true  # Linux (needs clang + zlib1g-dev)
+dotnet publish src/PgNimbus.App -c Release -r win-x64 -p:PublishAot=true    # Windows
+dotnet publish src/PgNimbus.App -c Release -r linux-x64 -p:PublishAot=true  # Linux (needs clang + zlib1g-dev)
 ```
 
 The docs site is MkDocs Material: `pip install -r docs/requirements.txt && mkdocs serve`.

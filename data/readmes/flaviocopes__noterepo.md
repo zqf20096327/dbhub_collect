@@ -11,9 +11,13 @@ Read the announcement on my blog: [I built NoteRepo, a quiet daily notes app for
 
 [![Watch the 30-second NoteRepo demo](docs/showreel-poster.jpg)](https://github.com/flaviocopes/noterepo/raw/main/docs/showreel.mp4)
 
+NoteRepo is a native Mac app written in Swift. The [changelog](CHANGELOG.md) lists what changed in each release.
+
 ## Download
 
-Get `NoteRepo-1.1.0-arm64.zip` from the [latest release](https://github.com/flaviocopes/noterepo/releases/latest), unzip it, and drag NoteRepo to your Applications folder. The build runs on Apple silicon Macs. On an Intel Mac, [build it from source](#run-it-from-source).
+Get `NoteRepo-2.1.0.zip` from the [latest release](https://github.com/flaviocopes/noterepo/releases/latest), unzip it, and drag NoteRepo to your Applications folder. It runs on Apple silicon and Intel Macs with macOS 14 or later.
+
+Coming from 1.x? Replace the old app with the new one. Your notes stay where they are.
 
 ### Opening it the first time
 
@@ -31,23 +35,34 @@ The same command fixes a message saying NoteRepo is damaged. You don't need to t
 
 On a work laptop you might not be able to install apps in `/Applications`. You can keep NoteRepo in the `Applications` folder inside your home folder, and run the command on `~/Applications/NoteRepo.app`. If your company blocks apps that aren't notarized, ask your IT team.
 
+### Updates
+
+Once a day, NoteRepo asks GitHub whether there's a newer version. When there is, it shows what's new, and **Install and Relaunch** puts it in place of the old one. **NoteRepo → Check for Updates…** checks right away.
+
+To turn off the daily check, run this in Terminal:
+
+```sh
+defaults write com.flaviocopes.noterepo AppUpdaterAutomaticChecks -bool false
+```
+
 ## Features
 
 - Today is always ready to write in, starting with a bullet
 - Continuous scrolling back through the days that have notes
 - Bulleted and numbered lists started with `-` or `1.`
 - Nested list items with `Tab` and `Shift+Tab`
+- Several lines in one item with `⌥Return`
 - Automatic saving
 - Fast text search
 - Pasted URLs become links showing the page title and domain, and a link pasted on its own starts a new bullet
 - Reddit links show the post title, and links to a comment read "Comment to" followed by the post title
+- YouTube links show the video title, including Shorts, `youtu.be` and embed links
 - Pasted text is cleaned of stray blank lines, trailing spaces, and invisible characters
 - Rich previews for X and Twitter links pasted on their own line
 - Images added by dragging a file into a day or pasting from the clipboard
-- Image items you can select and delete, drag within a day, or move to another day
-- A date picker that jumps to the closest day with notes
+- Image items you can select and delete, or cut and paste into another day
 - Light and dark appearance following the macOS setting
-- A `noterepo` command-line tool that coding agents use to read and write your notes
+- A [`noterepo` command-line tool](#use-it-from-the-command-line) that coding agents use to read and write your notes
 
 ![NoteRepo showing today's note with titled links and an X post preview](docs/screenshot.png)
 
@@ -56,22 +71,24 @@ On a work laptop you might not be able to install apps in `/Applications`. You c
 | Shortcut | Action |
 | --- | --- |
 | `⌘D` | Go back to today and start writing |
-| `⌘K` | Search your notes |
+| `⌘F` / `⌘K` | Search your notes |
 | `⌥↑` / `⌥↓` | Move to the previous or next day |
 | `Tab` / `Shift+Tab` | Indent or outdent a list item |
+| `⌥Return` | Start a new line in the same item |
 
 ## Privacy
 
-NoteRepo goes online in only two cases, and neither one sends your notes anywhere:
+NoteRepo goes online in only three cases, and none of them sends your notes anywhere:
 
-- When you paste a link, it downloads that page to read its title. For a Reddit link, it asks Reddit's embed service for the post title instead.
-- When a note contains an X post, it loads the preview from `platform.twitter.com`.
+- When you paste a link, it downloads that page to read its title. For a Reddit or YouTube link, it asks that site's embed service for the title instead.
+- When a note contains an X post, it asks X's public embed service for the post's author, text and photo, and draws the preview itself.
+- Once a day, it asks GitHub for the latest NoteRepo release, to check for an update. The request carries the app's name and version.
 
-## Use it from an agent
+## Use it from the command line
 
-NoteRepo comes with `noterepo`, a command-line tool for coding agents. An agent can read your days, add items, links and images, move things around, and back up the notebook. Every command prints JSON.
+NoteRepo comes with `noterepo`, a command-line tool. I built it for coding agents, but you can use it too. It reads your days, adds items, links and images, moves things around, and backs up the notebook. Every command prints JSON.
 
-The tool writes to the same SQLite file as the app. The app notices within a second and updates the open window, so you see the agent's edits as they happen. If you're typing in the same day at that moment, your edits and the agent's are merged instead of one overwriting the other.
+The tool writes to the same SQLite file as the app. The app notices within a second and updates the open window, so you see the changes as they happen. If you're typing in the same day at that moment, your edits and the tool's are merged instead of one overwriting the other.
 
 ### Install it
 
@@ -82,21 +99,124 @@ mkdir -p ~/.local/bin
 ln -s /Applications/NoteRepo.app/Contents/Resources/bin/noterepo ~/.local/bin/noterepo
 ```
 
-It runs on the Node.js runtime inside the app, so you don't need Node installed. From a source checkout, run `npm link` instead.
+It's a native program, so you don't need anything else installed. From a source checkout, build the app with `scripts/build.sh` and link `build/NoteRepo.app/Contents/Resources/bin/noterepo` instead.
 
-### Try it
+### Read a day
+
+`show` prints today's items:
 
 ```sh
 noterepo show
-noterepo add "Call the bank"
-noterepo add "https://news.ycombinator.com/item?id=49854875"
-noterepo add "Write the post" --after 1 --level 1 --numbered
-noterepo days --limit 5
 ```
 
-`show` lists every item of a day with a number, and `edit`, `remove` and `move` use those numbers. A link on its own gets its page title, like when you paste it. X posts stay as URLs, so the app shows the preview.
+```json
+{
+  "date": "2026-09-30",
+  "title": "Wed, September 30th, 2026",
+  "updatedAt": "2026-09-30T06:09:39.953Z",
+  "items": [
+    { "n": 1, "level": 0, "list": "bullet", "kind": "text", "text": "Call the bank" },
+    { "n": 2, "level": 1, "list": "numbered", "number": 1, "kind": "text", "text": "Write the post" },
+    {
+      "n": 3,
+      "level": 0,
+      "list": "bullet",
+      "kind": "link",
+      "text": "[Write-Ahead Logging](https://sqlite.org/wal.html) (sqlite.org)",
+      "links": [{ "title": "Write-Ahead Logging", "url": "https://sqlite.org/wal.html" }]
+    }
+  ],
+  "content": "- Call the bank\n  1. Write the post\n- [Write-Ahead Logging](https://sqlite.org/wal.html) (sqlite.org)"
+}
+```
 
-To fill several days at once, pass a JSON object:
+Each item has a number `n` and a `level`, where 0 is the top level and 1 is nested under the item before it. `kind` is `text`, `link`, `image`, or `post` for an X post. `content` is the day as NoteRepo stores it.
+
+For another day, pass a date as `YYYY-MM-DD`, `today` or `yesterday`:
+
+```sh
+noterepo show yesterday
+noterepo show 2026-09-28
+```
+
+`days` lists the days with notes, newest first, with a preview of each. `search` finds every item containing some text, grouped by day:
+
+```sh
+noterepo days --limit 5
+noterepo days --from 2026-09-01 --to 2026-09-30
+noterepo search bank
+```
+
+`noterepo info` shows the data folder, whether the app is running, and how many days and images you have.
+
+### Add items
+
+`add` puts an item at the end of today:
+
+```sh
+noterepo add "Call the bank"
+```
+
+Use `--date` for another day. `--after` and `--before` take an item number to place it. `--level 1` nests it under the item before it, and `--numbered` makes it a numbered item:
+
+```sh
+noterepo add "Pick up the parcel" --date yesterday
+noterepo add "Write the post" --after 1 --level 1 --numbered
+```
+
+`<br>` is a line break inside an item, the same as `⌥Return` in the app:
+
+```sh
+noterepo add "Groceries<br>milk, eggs"
+```
+
+A URL on its own gets its page title, the same as pasting it in the app:
+
+```sh
+noterepo add https://sqlite.org/wal.html
+```
+
+It's saved as `[Write-Ahead Logging](https://sqlite.org/wal.html) (sqlite.org)`. Reddit links get the post title, and links to a comment read "Comment to" followed by the post title. YouTube links get the video title. X posts stay as URLs, so the app shows the preview. Add `--raw` to keep any URL as it is.
+
+To check the title without writing anything, use `title`:
+
+```sh
+noterepo title https://sqlite.org/wal.html
+```
+
+`image` adds a PNG, JPEG, GIF, WebP or SVG file:
+
+```sh
+noterepo image ~/Desktop/receipt.png --date yesterday
+```
+
+### Change items
+
+`edit`, `move` and `remove` use the item numbers from `show`. Every command that writes prints the updated day, so you always have the new numbers.
+
+```sh
+noterepo edit 1 "Call the bank about the card"
+noterepo edit 3 --level 0
+noterepo move 2 --before 1
+noterepo move 4 --to yesterday
+noterepo remove 3 4
+```
+
+`edit` changes the text, the level, or the list type with `--numbered` and `--bullet`. `move` works inside a day, or across days with `--to`. When you move or remove an item, its nested items go with it.
+
+### Write whole days
+
+`write` replaces a day with list lines from `--content` or stdin. Nest items with two spaces per level:
+
+```sh
+noterepo write yesterday <<'EOF'
+- Shipped NoteRepo 1.1
+  - Wrote the release notes
+- https://sqlite.org/wal.html
+EOF
+```
+
+Add `--append` to add the lines at the end of the day instead. To fill several days at once, pass a JSON object with `--json`:
 
 ```sh
 noterepo write --json --content '{
@@ -105,9 +225,31 @@ noterepo write --json --content '{
 }'
 ```
 
-### Prepare a demo
+`clear` deletes everything written on a day:
 
-Before recording a demo, start from an empty notebook:
+```sh
+noterepo clear 2026-09-28
+```
+
+NoteRepo has no future days, so the commands that write only accept today and earlier days.
+
+### Open the app on a day
+
+`open` brings NoteRepo to the front and scrolls to a day. It starts the app if it isn't running:
+
+```sh
+noterepo open yesterday
+```
+
+### Back up and restore
+
+`backup` saves a copy of every note and image in `~/Library/Application Support/NoteRepo/backups`:
+
+```sh
+noterepo backup
+```
+
+Before recording a demo, you can start from an empty notebook:
 
 ```sh
 noterepo reset --yes
@@ -121,33 +263,30 @@ noterepo restore ~/Library/Application\ Support/NoteRepo/backups/2026-09-29-2137
 
 `restore` backs up the demo notes too, so nothing gets lost. Both commands work while the app is open.
 
-Run `noterepo help` for everything else: `info`, `search`, `title`, `image`, `clear`, `open`, and `backup`. Add `--data-dir` to work on another data folder, the same one you pass to the app with `--user-data-dir`.
+### Errors and other data folders
 
-## Run it from source
+When a command fails, it prints `{"error": "..."}` to stderr and exits with 1. A wrong command or option exits with 2.
 
-You need macOS and [Node.js](https://nodejs.org) 22.13 or later.
-
-Install the dependencies:
+`--data-dir` points the tool at another data folder, the same one you pass to the app with `--user-data-dir`. Use it to try things without touching your real notes:
 
 ```sh
-npm install
+noterepo show --data-dir /tmp/noterepo-demo
 ```
 
-Build the interface and open the app:
+Run `noterepo help` for every command and option.
+
+## Build it from source
+
+You need macOS 14 or later and Xcode 16 or later, or its command line tools.
 
 ```sh
-npm run dev
+scripts/build.sh
+open build/NoteRepo.app
 ```
 
-## Build the macOS app
+The script builds `build/NoteRepo.app` for Apple silicon and Intel, with the `noterepo` tool inside, and signs it ad hoc. Drag it to your Applications folder.
 
-```sh
-npm run package:mac
-```
-
-The app appears in `release/mac-arm64/NoteRepo.app` on Apple silicon Macs. Drag it to your Applications folder.
-
-The build is ad-hoc signed and not notarized. A copy you build yourself opens without a warning. If you send it to another Mac, it can get the same warning as the download, so follow [Opening it the first time](#opening-it-the-first-time).
+A copy you build yourself opens without a warning. If you send it to another Mac, it can get the same warning as the download, so follow [Opening it the first time](#opening-it-the-first-time).
 
 ## Where your notes live
 
@@ -157,77 +296,38 @@ Notes and images are stored in one SQLite database:
 ~/Library/Application Support/NoteRepo/notes.sqlite3
 ```
 
-The development and packaged apps share this file, so back it up like any other document.
+Every copy of NoteRepo on your Mac uses this file, so back it up like any other document, or run `noterepo backup`.
 
 NoteRepo accepts PNG, JPEG, GIF, WebP, and safe SVG images up to 15 MB each. Identical images are stored only once.
 
-## Import from Reflect
-
-If you're coming from [Reflect](https://reflect.app), export your notes as JSON and import the daily notes.
-
-Quit NoteRepo first, then preview what would change:
-
-```sh
-node scripts/import-reflect.cjs \
-  --source ~/Downloads/reflect-export.json \
-  --database ~/Library/Application\ Support/NoteRepo/notes.sqlite3 \
-  --dry-run
-```
-
-Run the same command without `--dry-run` to import. The script backs up your database next to it first, downloads your Reflect images into NoteRepo, and appends Reflect notes to days that already have notes. Running it twice doesn't duplicate anything.
-
 ## Development
 
-Run the type check, the build, and the unit tests:
+Run the unit tests. They cover the notes model, link titles and every `noterepo` command:
 
 ```sh
-npm run check
+swift test
 ```
 
-The `test/electron-*-check.cjs` scripts drive the running app through the Chrome DevTools Protocol. Start the packaged app with remote debugging turned on:
+The app has three switches for checking changes. Each one needs `--user-data-dir` with a temporary folder, so your real notes stay out of it:
+
+- `--self-test` types, pastes and undoes in a real editor, then checks what gets saved and merged. It prints one line per check and quits.
+- `--round-trip` opens every day and checks that saving it gives back the same text, without writing anything. Run it on a copy made with `noterepo backup`.
+- `--automation` lets `scripts/send.swift` save a snapshot of the window, or run commands like `jump 2026-09-28` and `dark`.
 
 ```sh
-open -a release/mac-arm64/NoteRepo.app --args --remote-debugging-port=9333
+open -W --stdout /tmp/noterepo-check.log build/NoteRepo.app --args --user-data-dir /tmp/noterepo-check --self-test
+cat /tmp/noterepo-check.log
 ```
 
-Copy the page's `webSocketDebuggerUrl` from `http://127.0.0.1:9333/json` and pass it to each check:
-
-```sh
-node test/electron-cdp-check.cjs ws://127.0.0.1:9333/devtools/page/<id>
-node test/electron-feed-check.cjs ws://127.0.0.1:9333/devtools/page/<id>
-node test/electron-import-check.cjs ws://127.0.0.1:9333/devtools/page/<id> 2026-09-05
-```
-
-The import check also needs a date whose note contains an image.
-
-Be careful: these checks use your real notes database. They edit today's note and restore it afterwards, and they write to a few days in December 1999. Keep the NoteRepo window visible while they run, because macOS pauses hidden windows.
-
-The CLI check drives the app with the packaged `noterepo` tool and resets its notebook, so it refuses to run on your real notes. Launch the app on an empty folder and pass that folder to the check:
-
-```sh
-open -a release/mac-arm64/NoteRepo.app --args --remote-debugging-port=9333 --user-data-dir=/tmp/noterepo-check
-node test/electron-cli-check.cjs ws://127.0.0.1:9333/devtools/page/<id> /tmp/noterepo-check
-```
-
-The app icon lives in `resources/AppIcon.svg`. After editing it, regenerate the PNGs used by the build:
-
-```sh
-npm run icon
-```
-
-The README banner is `docs/banner.html`, styled with the app's own stylesheet. Regenerate the light and dark PNGs with:
-
-```sh
-npm run banner
-```
+The app icon lives in `resources/AppIcon.svg`, and the build uses `resources/AppIcon.png`.
 
 ## How it works
 
-Astro builds the interface. HTMX loads earlier days as you scroll up. Alpine.js tracks the active day, grows each editor, and saves your writing.
+SwiftUI draws the window, the sidebar and search. Each day is an AppKit text view, because SwiftUI's own rich text editor needs macOS 26. The editor draws the bullets and numbers in the margin, shows links by their titles, and puts images and X posts inside the text as attachments. When you save, it turns the day back into Markdown list lines. A line break inside an item is saved as `<br>`, so every item stays on one line.
 
-Electron runs a small server bound to `127.0.0.1`. It stores notes and images in SQLite through Node's built-in `node:sqlite` module, fetches the titles of pasted links, and opens web links in your default browser. The renderer is sandboxed and has no direct access to Node.js.
+Notes and images go into SQLite through the `sqlite3` library that comes with macOS. `NoteRepoCore` holds the parts the app and the `noterepo` tool share: the notes model, the database, and the code that fetches link titles.
 
-The `noterepo` tool opens the same database. The app checks SQLite's `data_version` every half second, and when another process changed something, it reloads the days that changed. Every save from the editor carries the text it started from. When that text no longer matches the database, the server merges the two versions line by line instead of overwriting the other change.
+The app checks SQLite's `data_version` every half second. When another process changed something, like the `noterepo` tool, it reloads the days that changed. Every save carries the text the editor started from. When that text no longer matches the database, NoteRepo merges the two versions line by line instead of overwriting the other change.
 
 ## License
 

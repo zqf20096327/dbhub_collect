@@ -52,20 +52,19 @@ Tailscale peers:
 
 ## Why Wintermolt?
 
-Most AI coding tools ship hundreds of megabytes of Electron or Node.js runtime just to send API calls and edit files. Wintermolt compiles to a **single native binary** — 1 MB on macOS Apple Silicon, 7 MB on Linux ARM, 12 MB on Windows (statically-linked HTTP/3 stack) — and cross-compiles to any platform Zig supports, including ARM boards like Jetson and Raspberry Pi.
+Most AI coding tools ship hundreds of megabytes of Electron or Node.js runtime just to send API calls and edit files. Wintermolt compiles to a **single native binary** — about 6 MB on macOS Apple Silicon, 11 MB on Linux, 14 MB on Windows (statically-linked HTTP/3 stack) — and builds natively on macOS, Linux and Windows, including ARM boards like Jetson and Raspberry Pi.
 
 | | Wintermolt | Claude Code | Cursor | Aider |
 |---|:---:|:---:|:---:|:---:|
-| **Binary size** | **1–12 MB** | ~200 MB | ~500 MB | ~50 MB |
+| **Binary size** | **6–14 MB** | ~200 MB | ~500 MB | ~50 MB |
 | **Runtime** | **None** | Node.js 18+ | Electron | Python 3.8+ |
-| **Cross-compile** | **One command** | N/A | N/A | N/A |
 | **Runs on Jetson/Pi** | **Yes** | Barely | No | Slow |
 | **Runs on Windows** | **Yes (v0.4+)** | Via WSL | Yes | Yes |
-| **AI backends** | **7** | 1 | Multiple | Multiple |
+| **AI backends** | **8** | 1 | Multiple | Multiple |
 | **Camera + vision** | **Built-in** | No | No | No |
 | **Browser automation** | **Built-in** | No | No | No |
 | **MCP client + server** | **Both** | Client only | Client only | No |
-| **Chat bridges** | **4 platforms** | No | No | No |
+| **Chat bridges** | **18 platforms** | No | No | No |
 | **Cron scheduler** | **Built-in** | No | No | No |
 | **Mesh networking** | **Tailscale** | No | No | No |
 | **Menu bar app** | **macOS native** | No | No | No |
@@ -87,7 +86,7 @@ directory.
 **macOS (Apple Silicon — M1/M2/M3/M4):**
 
 ```bash
-curl -L -o wintermolt https://github.com/lupin4/wintermolt/raw/main/prebuilt/wintermolt-darwin-arm64 \
+curl -L -o wintermolt https://github.com/lupin4/wintermolt/raw/main/prebuilt/wintermolt-macos \
   && chmod +x wintermolt
 ```
 
@@ -106,8 +105,12 @@ Invoke-WebRequest `
   -OutFile wintermolt.exe
 ```
 
-**Linux (x86_64 — servers, cloud VMs):** prebuilt binary not yet
-shipped — [build from source](#build-from-source) (one Zig command).
+**Linux (x86_64 — servers, cloud VMs):**
+
+```bash
+curl -L -o wintermolt https://github.com/lupin4/wintermolt/raw/main/prebuilt/wintermolt-linux-x86_64 \
+  && chmod +x wintermolt
+```
 
 ### Step 2 — Install Ollama (optional but recommended)
 
@@ -143,16 +146,16 @@ That's it. You're running.
 
 | Platform | Binary | Size | Notes |
 |:---|:---|---:|:---|
-| macOS arm64 | [`wintermolt-darwin-arm64`](prebuilt/wintermolt-darwin-arm64) | 1.1 MB | Mach-O, dynamic libcurl + sqlite3 |
-| Linux arm64 | [`wintermolt-linux-arm64`](prebuilt/wintermolt-linux-arm64) | 7 MB | ELF aarch64, dynamic |
-| Windows x86_64 | [`wintermolt-windows-x86_64.exe`](prebuilt/wintermolt-windows-x86_64.exe) | 12 MB | PE32+, static HTTP/3 + crypto. **Runtime needs MSYS2 UCRT64 DLLs on `PATH`** — install via [MSYS2](https://www.msys2.org/) once, then `pacman -S mingw-w64-ucrt-x86_64-curl mingw-w64-ucrt-x86_64-sqlite3`. |
-| Linux x86_64 | _build from source_ | — | `zig build -Dtarget=x86_64-linux-gnu` |
+| macOS arm64 | [`wintermolt-macos`](prebuilt/wintermolt-macos) | 6.2 MB | Mach-O, dynamic libcurl + sqlite3 |
+| Linux arm64 | [`wintermolt-linux-arm64`](prebuilt/wintermolt-linux-arm64) | 10.6 MB | ELF aarch64, dynamic libcurl + sqlite3 |
+| Linux x86_64 | [`wintermolt-linux-x86_64`](prebuilt/wintermolt-linux-x86_64) | 11 MB | ELF x86-64, dynamic libcurl + sqlite3. glibc 2.34+ (Ubuntu 22.04, Debian 12, RHEL 9 and later). x86-64-v3 CPU (Intel Haswell, AMD Zen or newer). |
+| Windows x86_64 | [`wintermolt-windows-x86_64.exe`](prebuilt/wintermolt-windows-x86_64.exe) | 14 MB | PE32+, HTTP/3 and crypto linked in statically. Imports only Windows system DLLs: nothing else to install. x86-64-v3 CPU (Intel Haswell, AMD Zen or newer). |
 
 ---
 
 ## Build from source
 
-If you want to compile yourself (also required for Linux x86_64 today).
+If you want to compile yourself.
 
 ### Prerequisites
 
@@ -172,13 +175,16 @@ zig build -Doptimize=ReleaseSmall
 ./zig-out/bin/wintermolt
 ```
 
-### Cross-Compile (one command)
+### Release Builds
+
+Build each platform on a machine of that platform. `-Dtarget=` makes Zig treat
+the build as a cross-compile, and it then stops finding the system libcurl and
+sqlite3 (and, for Windows, the MSYS2 UCRT64 libraries). Set a CPU floor with
+`-Dcpu=` instead, so the binary runs on more than the machine that built it:
 
 ```bash
-zig build -Dtarget=aarch64-linux-gnu   # Linux ARM — Jetson, Pi 5
-zig build -Dtarget=x86_64-linux-gnu    # Linux x86_64 — servers, VMs
-zig build -Dtarget=aarch64-macos-none  # macOS Apple Silicon
-zig build -Dtarget=x86_64-windows-gnu  # Windows (needs MSYS2 UCRT64 on the build host)
+zig build -Doptimize=ReleaseFast -Dcpu=baseline    # aarch64 — Apple Silicon, Jetson, Pi 5, Graviton
+zig build -Doptimize=ReleaseFast -Dcpu=x86_64_v3   # x86_64 — Linux, Windows (MSYS2 UCRT64)
 ```
 
 ---
@@ -221,9 +227,9 @@ All backends support **streaming**. Ollama runs 100% local, air-gapped, no API k
 
 - **Local GGUF inference in-process** (`/model kernel` today on Apple Silicon; `/model forai` on forMetal/forCUDA across macOS/Linux/Windows as engine deliveries land). Unsloth-trained GGUF exports run as-is.
 
-### 79 Model-Agnostic Skills
+### 70 Domain Skills
 
-Wintermolt ships with 79 skill definitions across 11 domains. Each skill defines a specialized agent role with a preferred model — but any skill can run on any backend.
+Wintermolt ships with 70 skill definitions across 11 domains: the house rules and domain knowledge of the forKernels / Zortran stack, written as instructions the model loads when it works in that area.
 
 | Domain | Skills | Default Model |
 |--------|:------:|---------------|
@@ -237,11 +243,11 @@ Wintermolt ships with 79 skill definitions across 11 domains. Each skill defines
 | Agent Architecture | 6 | qwen3:8b |
 | Audio / Music | 8 | qwen3:8b |
 | 3D / VFX | 9 | qwen3:8b |
-| Engineering (general) | 14 | qwen3:8b |
+| Engineering (kernels, release) | 5 | qwen3:30b (devops: 8b) |
 
-Skills live in `skills/` as `skill.json` manifests. Each specifies `backend`, `model`, and `role_prompt` — swap to Claude, GPT, or any Ollama model by editing one field. Subagents automatically switch to the skill's preferred backend when spawned.
+Skills live in `skills/` as `skill.json` manifests and load at startup. The model lists them with the `skills` tool and loads one with `operation='use'`, which puts the skill's `role_prompt` into the conversation on whatever backend is running. The manifests' `backend` and `model` fields are recorded but not used. See [docs/SKILLS.md](docs/SKILLS.md).
 
-### 16 Built-in Tools
+### 20 Built-in Tools
 
 The AI invokes these autonomously. No plugins needed.
 
@@ -262,7 +268,11 @@ The AI invokes these autonomously. No plugins needed.
 | `schedule` | Cron jobs — schedule recurring commands |
 | `tailscale` | Mesh VPN — query peers, devices, connectivity |
 | `canvas_update` | A2UI — render rich UI surfaces in terminal or web |
-| `harness_create` | Generate CLI-Anything harness for any software |
+| `skills` | List skills and the built-in tool catalog |
+| `text_to_speech` | Speech via OpenAI, ElevenLabs or Edge TTS |
+| `image_generate` | DALL-E 3 image generation |
+| `google_workspace` | Gmail, Calendar and Drive via Google APIs |
+| `spawn_agent` | Run a subtask in a child agent with its own context |
 
 ### Cron Scheduler
 
@@ -572,7 +582,7 @@ full-screen view use `/keys list`, or run `wintermolt --keys`.
 
 | Page | Covers |
 | :--- | :--- |
-| [docs/BACKENDS.md](docs/BACKENDS.md) | All 7 backends, default models, env vars, `--keys` flow. |
+| [docs/BACKENDS.md](docs/BACKENDS.md) | All 8 backends, default models, env vars, `--keys` flow. |
 | [docs/TOOLS.md](docs/TOOLS.md) | The 20 built-in tools (9 core + 11 extended), triggers, safety. |
 | [docs/SKILLS.md](docs/SKILLS.md) | Skill manifest format, built-in catalog, custom skills. |
 | [docs/MCP.md](docs/MCP.md) | MCP client + server, `~/.wintermolt/mcp.json`, Claude Desktop / Zed wiring. |
@@ -583,7 +593,7 @@ full-screen view use `/keys list`, or run `wintermolt --keys`.
 ## Architecture
 
 ```
-wintermolt (3 MB arm64 binary)
+wintermolt (one native binary, 6–14 MB)
 │
 ├── src/main.zig                 Entry point — REPL, CLI, mode dispatch
 ├── src/setup.zig                OOBE setup wizard
@@ -638,8 +648,9 @@ wintermolt (3 MB arm64 binary)
 ├── src/web/bridge.zig           Web UI bridge (WebSocket + JSON lines)
 │
 ├── prebuilt/                    Prebuilt executables (committed to repo)
-│   ├── wintermolt-darwin-arm64        macOS Apple Silicon
+│   ├── wintermolt-macos               macOS Apple Silicon
 │   ├── wintermolt-linux-arm64         Linux ARM64 (Jetson, Pi 5)
+│   ├── wintermolt-linux-x86_64        Linux x86_64
 │   └── wintermolt-windows-x86_64.exe  Windows x86_64
 │
 └── menubar/                     macOS menu bar Swift sidecar
