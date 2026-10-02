@@ -1,21 +1,27 @@
 # Harness CD — Environment & Infrastructure Setup
 
-Set up the **"where"** of a Harness deployment: an **Environment** (Dev/QA) with a **Kubernetes Infrastructure Definition** bound to it. Every CD pipeline needs this pair before it can deploy anything.
+This tidbit is about the **Environment**: the logical *where* of a Harness deployment. Dev, QA, Staging, and Prod are environments. The cluster and namespace sit one level down, on an Infrastructure Definition.
+
+An environment names the destination, holds variables that apply to every deployment into it, and owns one or more **Infrastructure Definitions**. A pipeline stage points at an environment, then at an infrastructure definition inside it.
 
 ---
 
 ## How the pieces fit together
 
 ```
-Environment  (type: PreProduction)
- └── Infrastructure Definition  (type: KubernetesDirect)
-        ├── connectorRef  →  which cluster
-        ├── namespace     →  where in the cluster
-        └── releaseName   →  unique ID per release (auto-generated)
+Pipeline stage
+ ├── Service                     →  what you deploy
+ └── Environment                 →  where you deploy (logical)
+      └── Infrastructure Definition
+             ├── connectorRef   →  which cluster
+             ├── namespace      →  where in the cluster
+             └── releaseName    →  unique ID per release (auto-generated)
 ```
 
-- One Environment can hold **many** Infrastructure Definitions (e.g. two clusters for the same QA env).
-- One Infrastructure Definition belongs to **exactly one** Environment.
+- One Environment can hold **many** Infrastructure Definitions (two clusters for the same QA environment, for example).
+- One Infrastructure Definition belongs to **exactly one** Environment. Its `environmentRef` must match that environment's `identifier`.
+- The Service is chosen separately. The same service can deploy into many environments.
+- `type` is `PreProduction` or `Production`. Production is the type that stricter RBAC and deployment freeze windows check.
 
 ---
 
@@ -23,11 +29,12 @@ Environment  (type: PreProduction)
 
 | Concept | What it is |
 |---|---|
-| **Environment** | A logical target — Dev, QA, Staging, Prod. Holds variables and infrastructure. |
-| **Environment type** | `PreProduction` (non-prod) or `Production`. Controls RBAC and freeze windows. |
-| **Infrastructure Definition** | The concrete cluster + namespace inside an environment. |
-| **K8s Direct** | Connection type using a Harness Kubernetes Cluster connector. |
-| **connectorRef** | Reference to a pre-created Kubernetes Cluster connector. |
+| **Environment** | A named destination — Dev, QA, Staging, Prod. Holds variables and infrastructure. |
+| **Environment type** | `PreProduction` or `Production`. Production is checked by RBAC and freeze windows. |
+| **Identifier** | Immutable after save. Infrastructure and pipelines reference it via `environmentRef`. |
+| **Infrastructure Definition** | The concrete cluster + namespace inside one environment. |
+| **K8s Direct** | Connection type that uses a Harness Kubernetes Cluster connector. Harness applies manifests itself. |
+| **connectorRef** | Reference to a Kubernetes Cluster connector that already exists (`account.<id>`, `org.<id>`, or a project-scoped id). |
 
 ---
 
@@ -37,7 +44,7 @@ Environment  (type: PreProduction)
 - A **Kubernetes Cluster connector** already created (`account.<id>`, `org.<id>`, or project-scoped)
 - An **existing namespace** in your cluster — `kubectl create namespace <name>`
 
-> No connector yet? See [Kubernetes Cluster connector settings](https://developer.harness.io/docs/platform/connectors/cloud-providers/ref-cloud-providers/kubernetes-cluster-connector-settings-reference/).
+> No connector yet? See [Kubernetes cluster connector settings](https://developer.harness.io/harness-platform/use-harness-platform/connectors/cloud-providers/add-a-kubernetes-cluster-connector/kubernetes-cluster-connector-settings-reference).
 
 ---
 
@@ -45,10 +52,12 @@ Environment  (type: PreProduction)
 
 | File | What it does |
 |---|---|
-| `.harness/environment.yaml` | Environment definition (Dev/QA, Pre-Production) |
-| `.harness/infrastructure.yaml` | K8s Direct Infrastructure Definition bound to that environment |
+| `.harness/environment.yaml` | The environment (Dev/QA, `PreProduction`) |
+| `.harness/infrastructure.yaml` | K8s Direct infrastructure bound to that environment |
+| `.harness/service.yaml` | The workload deployed into the environment (nginx + Kubernetes manifests) |
+| `.harness/pipeline.yaml` | One rolling deploy stage that references the service, environment, and infrastructure |
 
-Every value you must change is marked `# REPLACE:`.
+Values to fill in are marked `# REPLACE:` in the environment and infrastructure files, and as `<YOUR_…>` placeholders in the service and pipeline.
 
 ---
 
@@ -76,9 +85,25 @@ Every value you must change is marked `# REPLACE:`.
 
 ### Option B — YAML
 
-1. Edit the `# REPLACE:` lines in both `.harness/*.yaml`.
+1. Edit the `# REPLACE:` lines in `.harness/environment.yaml` and `.harness/infrastructure.yaml`.
 2. Import via **Environments → New Environment → YAML** (paste and save).
 3. Repeat for the Infrastructure Definition inside the environment.
+
+Create the environment before the infrastructure. `environmentRef` is checked against an environment that already exists.
+
+---
+
+## Also in this tidbit
+
+These two files complete the deployment. They are here so the environment has something to receive and a stage that targets it. Fill in the `<YOUR_…>` placeholders before importing.
+
+**`.harness/service.yaml`** — the *what*. A Kubernetes service whose primary artifact is `library/nginx` (`stable`) from a Docker registry connector. Manifests (`k8s/namespace.yaml`, `k8s/deployment.yaml`, `k8s/service.yaml`, and `k8s/values.yaml`) are read from a GitHub repo on `main`. `gitOpsEnabled` is `false`, so Harness applies the manifests.
+
+Import: Deployments → **Services** → **New Service** → YAML.
+
+**`.harness/pipeline.yaml`** — the *how*. One Deployment stage (`Deploy to Dev`) using the Rolling strategy. It sets `serviceRef`, `environmentRef`, and a single infrastructure identifier (`deployToAll: false`). The stage runs `K8sRollingDeploy` (dry run on, pruning off) and, on any error, rolls the stage back with `K8sRollingRollback`.
+
+Import: Deployments → **Pipelines** → **Create a Pipeline** → Inline → YAML.
 
 ---
 
@@ -86,7 +111,8 @@ Every value you must change is marked `# REPLACE:`.
 
 - One **Pre-Production** environment under Deployments → Environments
 - One **Kubernetes (Direct)** infrastructure definition listed inside it
-- Nothing is deployed — this is just the deployment target, ready to be referenced by a pipeline
+- Optionally, a Kubernetes service and a one-stage rolling pipeline that target that pair
+- The environment is the deployment target; a deploy happens when that pipeline is run
 
 ---
 
@@ -103,41 +129,30 @@ Every value you must change is marked `# REPLACE:`.
 
 ## Reference
 
-- [Environments overview](https://developer.harness.io/docs/continuous-delivery/x-platform-cd-features/environments/environment-overview)
-- [Create environments](https://developer.harness.io/docs/continuous-delivery/x-platform-cd-features/environments/create-environments)
-- [Define Kubernetes target infrastructure](https://developer.harness.io/docs/continuous-delivery/deploy-srv-diff-platforms/kubernetes/define-your-kubernetes-target-infrastructure/)
+**Environment and infrastructure**
 
----
+- [Environments overview](https://developer.harness.io/continuous-delivery/use-continuous-delivery/cd-building-blocks/environments/environment-overview)
+- [Create environments](https://developer.harness.io/continuous-delivery/use-continuous-delivery/cd-building-blocks/environments/create-environments)
+- [Define Kubernetes target infrastructure](https://developer.harness.io/continuous-delivery/use-continuous-delivery/deploy-services-on-different-platforms/kubernetes/define-your-kubernetes-target-infrastructure)
 
-## Video Script
+**Service**
 
-> Quick to read aloud. ~90 seconds at a comfortable pace.
+- [Services overview](https://developer.harness.io/continuous-delivery/use-continuous-delivery/cd-building-blocks/services/services-overview)
+- [Kubernetes services](https://developer.harness.io/continuous-delivery/use-continuous-delivery/deploy-services-on-different-platforms/kubernetes/kubernetes-services)
+- [Add Kubernetes manifests](https://developer.harness.io/continuous-delivery/use-continuous-delivery/deploy-services-on-different-platforms/kubernetes/cd-kubernetes-category/define-kubernetes-manifests)
+- [Add container image artifacts](https://developer.harness.io/continuous-delivery/use-continuous-delivery/deploy-services-on-different-platforms/kubernetes/cd-kubernetes-category/add-artifacts-for-kubernetes-deployments)
 
----
+**Connectors**
 
-**[INTRO]**
-In this video, we're setting up the "where" of a Harness deployment — an Environment and an Infrastructure Definition.
+- [Connectors overview](https://developer.harness.io/harness-ai/use-harness-platform/connectors)
+- [Add a Kubernetes cluster connector](https://developer.harness.io/harness-ai/use-harness-platform/connectors/cloud-providers/add-a-kubernetes-cluster-connector)
+- [Kubernetes cluster connector settings](https://developer.harness.io/harness-platform/use-harness-platform/connectors/cloud-providers/add-a-kubernetes-cluster-connector/kubernetes-cluster-connector-settings-reference)
+- [Docker Registry connector settings](https://developer.harness.io/harness-platform/use-harness-platform/connectors/artifact-repositories/ref-artifact-repositories/docker-registry-connector-settings-reference)
+- [Connect to a code repository](https://developer.harness.io/harness-ai/use-harness-platform/connectors/code-repositories/connect-to-code-repo)
+- [Git connector settings](https://developer.harness.io/harness-ai/use-harness-platform/connectors/code-repositories/ref-source-repo-provider/git-connector-settings-reference)
 
-**[WHAT IS AN ENVIRONMENT?]**
-An Environment is a logical target — Dev, QA, Staging, or Prod. It has a type: PreProduction for anything non-prod, Production for prod. That type controls who can deploy and when, through RBAC and freeze windows.
+**Pipeline**
 
-**[WHAT IS AN INFRASTRUCTURE DEFINITION?]**
-Inside an Environment, you attach one or more Infrastructure Definitions. Each one points at a real cluster and a real namespace. Together, the Environment and the Infrastructure Definition tell Harness exactly where to drop your service.
-
-**[THE RELATIONSHIP]**
-Think of it this way — the Environment is the city. The Infrastructure Definition is the exact street address. Any CD pipeline that wants to deploy needs both.
-
-**[PREREQUISITES]**
-Before we start: make sure you have a Harness project with CD enabled, a Kubernetes Cluster connector already set up, and a namespace ready in your cluster.
-
-**[STEP 1 — CREATE THE ENVIRONMENT]**
-Go to Deployments, then Environments, then New Environment. Give it a name like "Dev", set the type to Pre-Production, and save. Or switch to YAML mode and paste the environment file from this repo.
-
-**[STEP 2 — ADD THE INFRASTRUCTURE DEFINITION]**
-Open that environment, click Infrastructure Definitions, then New Infrastructure Definition. Choose Kubernetes as the deployment type, Direct Connection as the type, pick your connector, enter your namespace, and save. Leave the release name expression as-is — Harness auto-generates a safe name.
-
-**[VERIFY]**
-You should now see your environment with one infrastructure definition listed inside it. That's your deployment target, ready to go.
-
-**[WRAP UP]**
-That's it. No pipeline, no service — just a clean, reusable deployment target that any CD stage can point at. Next, we'll attach a service and kick off an actual deployment.
+- [Create a Kubernetes rolling deployment](https://developer.harness.io/continuous-delivery/use-continuous-delivery/deploy-services-on-different-platforms/kubernetes/kubernetes-executions/create-a-kubernetes-rolling-deployment)
+- [Kubernetes rollback](https://developer.harness.io/continuous-delivery/use-continuous-delivery/deploy-services-on-different-platforms/kubernetes/cd-k8s-ref/kubernetes-rollback)
+- [Failure strategies](https://developer.harness.io/harness-ai/use-harness-platform/pipelines/failure-handling/define-a-failure-strategy-on-stages-and-steps)

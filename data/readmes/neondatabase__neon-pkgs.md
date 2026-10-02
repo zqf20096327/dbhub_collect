@@ -27,6 +27,7 @@ If you're looking for a single package's docs, see its own `README.md` under `pa
 | --- | --- |
 | `@neon/sdk` | The official TypeScript SDK for the Neon API — a modern, Fetch-based client generated from Neon's OpenAPI spec (successor to `@neondatabase/api-client`). |
 | `@neon/tools` | Type-safe agent tools for the `@neon/sdk` ergonomic client, with MCP, Eve, and Mastra adapters. |
+| `@neon/effect` | Effect v4 bindings for the `@neon/sdk` ergonomic client: Effects, paginated Streams, tagged errors and request cancellation on interruption. |
 | `@neon/functions` | Runtime helpers for Neon Functions: `waitUntil`, `upgradeWebSocket` (fetch handler or Hono route via `@neon/functions/hono`), `attachDatabasePool`, and `parseTriggerInvocation` (`@neon/functions/triggers`). |
 | `@neon/ai-sdk-provider` | Community [Vercel AI SDK](https://ai-sdk.dev) provider for the Neon AI Gateway. |
 
@@ -38,6 +39,7 @@ If you're looking for a single package's docs, see its own `README.md` under `pa
 | `@neon/live-react` | React provider and hook for Neon Live subscriptions. |
 | `@neon/live-tanstack` | TanStack DB collection integration for Neon Live subscriptions. |
 | `@neon/live-drizzle` | Drizzle adapter for type-safe Neon Live queries. |
+| `@neon/live-kysely` | Kysely adapter for type-safe Neon Live queries. |
 
 `neon-new` and `vite-plugin-neon-new` are **deprecated**. Use Claimable Neon in the Neon CLI: `npx neon@latest claim create`. The old alias packages (`get-db`, `neondb`, `vite-plugin-db`, `@neondatabase/vite-plugin-postgres`) still re-export them.
 

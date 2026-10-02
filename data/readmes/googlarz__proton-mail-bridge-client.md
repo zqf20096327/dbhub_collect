@@ -26,7 +26,25 @@
 
 Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mail inbox: read, search, send, draft, triage threads, manage folders, save attachments, and more — 96 MCP tools in total. Most of the same capabilities are also available as a full CLI for scripting, cron, and piped automation — no Claude required.
 
+> **Using Proton Drive too?** See [**proton-drive-mcp**](https://github.com/googlarz/proton-drive-mcp), the companion MCP server and CLI for Proton Drive (upload, download, share and manage your encrypted files from Claude). Run both side by side to handle mail and files in one conversation, for example save an attachment from here, then upload it to Drive. More in [Related projects](#related-projects).
+
 > **Battle-tested at scale (v2.0.0):** full mailbox backfill validated end-to-end against a real account with 57,000+ indexed messages across 62 folders/labels — including a 22,800-message Archive folder backfilled from scratch, UID-window by UID-window, with zero data loss across restarts, transient IMAP disconnects, and connection timeouts.
+
+## Quick start (2 minutes)
+
+1. **Install and sign in to [Proton Mail Bridge](https://proton.me/mail/bridge)**, and leave it running. In the Bridge app, open your account and copy the **Bridge password** (it is not your Proton password).
+2. **Connect Claude Desktop**, either way:
+   - **Bundle:** download the `proton-mail-bridge-client-<your-os>.mcpb` for macOS (`darwin-arm64`), Linux (`linux-x64`) or Windows (`win32-x64`) from the [latest release](https://github.com/googlarz/proton-mail-bridge-client/releases/latest) and open it. Claude Desktop asks for your Proton address and the Bridge password.
+   - **npm:** `npm install -g proton-mail-bridge-client`, then `proton-mail-bridge-client setup-claude-desktop` (it checks your Bridge ports and writes the config). Fully quit and reopen Claude Desktop afterwards.
+3. **Check it works:** run `proton-mail-bridge-client doctor`, or ask Claude "run the Proton Mail doctor".
+4. **Try these prompts:**
+   - "Give me a digest of my inbox and flag anything that needs a reply today."
+   - "Find the last email from `alice@example.com` and draft a reply for me to review." (nothing is sent until you say so)
+   - "Which of my emails have attachments from this month?"
+   - "Show me my drafts and tighten the oldest one."
+5. **Optional:** `PROTONMAIL_READ_ONLY=true` to browse without being able to change anything, `PROTONMAIL_TOOL_TIER=core` for a smaller tool set (25 instead of 96), and more accounts under [Multi-account support](#multi-account-support-v210). More recipes below in [Try it](#try-it-example-claude-prompts).
+
+---
 
 ## What you get
 
@@ -484,6 +502,10 @@ PROTONMAIL_CLAUDE_RUNTIME_DIR=''      # where the Claude Desktop installer puts 
 ```
 
 ---
+
+## Ask before sending: address and signature (optional skill)
+
+With several accounts or a signature, the server sends from whichever `from` the caller passes and cannot know which one you meant. [`skills/send-with-identity`](skills/send-with-identity/SKILL.md) is a Claude skill that makes the agent ask "from which address, and with which signature?" before every send, reply, forward or schedule, then pass `from` and its own signature with `appendSignature: false` so nothing is doubled. It does not replace your explicit approval to send. Copy the folder to `~/.claude/skills/send-with-identity`, and fill in your addresses and signatures there (keep that copy private).
 
 ## Compared with Claude's native Gmail connector
 

@@ -35,6 +35,8 @@ Sources for the cells above, each checked against the project's own code or anno
 
 Recall benchmarks (LOCOMO, LongMemEval, DMR) measure what an agent remembers. **None of them scores a memory system on provenance, invalidation or portability.** This library is built for that axis, and the conformance scorer below is one attempt at measuring it. The table is our reading of each project's own code and public docs, dated above; if we have a cell wrong, a PR with a link fixes it.
 
+We run LongMemEval anyway, so a recall number people recognise sits beside the conformance score rather than in place of it, along with a small benchmark of our own for the part recall benchmarks skip: when a fact changes, does recall return the value that is true now? See [Benchmarks](#benchmarks).
+
 ## Start here
 
 An empty memory gives an assistant nothing to stand on. [docs/STARTER.md](docs/STARTER.md) seeds
@@ -50,7 +52,7 @@ entry before you upgrade.
 
 - `MemoryStore`: a storage-agnostic interface; `SqliteMemoryStore` and `InMemoryStore` ship, with a **conformance suite** any backend can run against itself.
 - `ProjectMemory`: one brain scoped by project or person, each in its own SQLite file.
-- `HybridRetriever`: lexical + semantic recall with decay-aware confidence; embeddings on-device via transformers.js (no API key). Recall can be scoped (memory type, tags, minimum confidence, privacy and retention tiers), and the scope applies to the keyword and the vector side alike.
+- `HybridRetriever`: lexical + semantic recall with decay-aware confidence; embeddings on-device via transformers.js (no API key). Recall can be scoped (memory type, tags, minimum confidence, privacy and retention tiers), and the scope applies to the keyword and the vector side alike. Two opt-in aids for questions whose answer is spread across conversations, both computed at read time and never stored: a `reranker` (`LocalReranker`, an on-device cross-encoder) that rereads the question with each candidate and reorders them, and `expand`, which reads a question's time and counting cues (`analyzeQuery`: "in April", "the past two weeks", "how many", "A and B") and recalls for each.
 - `exportPortable` / `importPortable`: the lossless interchange format, versioned, with a [JSON Schema](docs/portable-format.schema.json).
 - `PinnedBlocks`: a size-capped tier of facts that belong in every prompt, editable by the agent itself, on top of the governed store.
 - `consolidate`: a sleep-time pass that reads recent raw memory and writes **new** derived facts with provenance edges back to their sources; the raw is never rewritten and nothing is summarised away.
@@ -302,6 +304,47 @@ written against export *shapes*, not vendors. If a system starts recording prove
 score goes up — that is the point. Add an adapter for your shape and open a PR; if you
 think we declared a trait wrongly for yours, that is a one-line PR too.
 
+## Benchmarks
+
+The conformance score measures what recall benchmarks leave out; it does not replace them. Two
+harnesses in [bench/](bench/README.md) put numbers beside it, each with its result file, commit and
+settings in [bench/results/](bench/results/):
+
+- **[LongMemEval](bench/longmemeval/README.md)**, the public recall benchmark: 500 questions over
+  chat histories of about 50 sessions each. Every question gets a fresh store holding its history,
+  one memory per message through the public API, nothing extracted or summarised; recall chooses
+  what the reader sees. The reader and judge prompts, the yes/no rule and the retrieval metrics are
+  the official ones, held to the official code by tests. The reader and judge are Claude, run
+  through the Claude Code CLI on a subscription, so a run spends no metered API money — and the
+  judge is therefore not the official gpt-4o, which is why every result ships its answers in the
+  official format for anyone to re-judge. `node bench/longmemeval/run.mjs --limit 50` is a smoke run.
+- **[Stale facts](bench/README.md#stale-facts)**, our own: things about a person that change over
+  time, told to the same store three ways — append-only, append-only recalled with freshness, and
+  through `recordState`, where a newer state closes the old one. It asks whether recall returns the
+  value true now, and the value true at a past instant. No model is called; it is deterministic.
+
+Stale facts, as measured ([result](bench/results/2026-09-29-stale-facts.json); 24 questions about
+now, 11 about a past instant; keyword recall, no embedder; first 5 results):
+
+| | append-only | append-only + freshness | recordState |
+|---|---|---|---|
+| Now: an outdated value comes first | 50.0% | 4.2% | 0.0% |
+| Now: an outdated value in the first 5 | 87.5% | 37.5% | 0.0% |
+| Now: the current value comes first | 16.7% | 25.0% | 33.3% |
+| Then: a value not true then in the first 5 | 27.3% | 27.3% | 18.2% |
+| Then: the value true then comes first | 27.3% | 9.1% | 27.3% |
+
+Read it for what it is. Invalidation is what takes the outdated answer off the table: half the
+"where do things stand" questions put an old value first in an append-only store. Freshness hides
+that without removing it — the old value is still in the first five more than a third of the time —
+and it mistakes an old fact mentioned late for a new one: asked what car I drive, it answers with
+the 2019 Civic mentioned last. The current value coming first a third of the time at best is keyword
+recall, for every strategy alike: short questions ("what phone do I have?") match rare words in
+unrelated facts, and "I accepted an offer from Cobalt Robotics" shares only "I" with "where do I
+work?". The two past-instant questions where `recordState` still shows a wrong value are a gap this
+benchmark found: a state learned late is closed at the next state still live, not the next state in
+time, so a 2018 home mentioned after the 2025 one reads as valid alongside the homes in between.
+
 ## The governance MCP server
 
 Most memory MCP servers hand the agent a fact.
@@ -315,12 +358,12 @@ transaction as the fact.
 
 ```json
 { "mcpServers": { "memory": { "command": "npx",
-    "args": ["-y", "--package=al-buddy-memory@0.8.3", "al-buddy-memory-mcp"] } } }
+    "args": ["-y", "--package=al-buddy-memory@0.9.0", "al-buddy-memory-mcp"] } } }
 ```
 
 `al-buddy-memory-mcp` is an executable *inside* the `al-buddy-memory` package, not a
 package of its own, so `--package=` is what tells npx where to find it — `npx
-al-buddy-memory-mcp` looks for a package by that name and gets a 404. Drop the `@0.8.3`
+al-buddy-memory-mcp` looks for a package by that name and gets a 404. Drop the `@0.9.0`
 to track the latest release instead of the one you tested.
 
 > **Releasing?** This pin is a documented version and goes stale the moment a new one
@@ -383,6 +426,25 @@ Sensitive and no assistant could see it. `invalidate`'s `replacedBy` must name a
 caller can see. SQLite on disk, no service, no key. The tool bodies are
 a plain function over a `MemoryStore` (`governanceTools(...)`, exported from
 `al-buddy-memory/mcp`), so they run against any backend and test without a transport.
+
+### As a remote connector in Claude and ChatGPT
+
+`al-buddy-memory-http` serves the same tools over Streamable HTTP for one owner, signed in
+with OAuth 2.1 (PKCE S256, dynamic client registration, rotating refresh tokens). Each tool
+declares `title`, `readOnlyHint`, `destructiveHint` and `openWorldHint`, the annotations both
+assistant directories ask for. It listens on 127.0.0.1; put a tunnel in front (e.g.
+`tailscale funnel --bg --https=8443 http://127.0.0.1:8787`) and give the apps its URL:
+
+```sh
+echo 'a long passphrase' | al-buddy-memory-http --set-passphrase   # stores a scrypt hash, 0600
+AL_BUDDY_MEMORY_PUBLIC_URL=https://you.example.ts.net:8443 al-buddy-memory-http
+```
+
+In Claude: *Customize → Connectors → Add custom connector*, URL `https://…:8443/mcp`. In
+ChatGPT: *Settings → Security and login → Developer mode*, then add the same URL. Each app
+opens a consent page once; the passphrase allows it. Only hashes of codes and tokens are
+kept on disk, and five wrong passphrases lock the page for 15 minutes. Facts an app writes
+carry its name in the audit trail, as over stdio.
 
 ## Roadmap
 

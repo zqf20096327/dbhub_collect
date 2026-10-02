@@ -22,17 +22,8 @@ We use the following naming convention:
 
 | Database version | Latest image tag | Specific release image tag | Supported Arch |
 |------------------|------------------|----------------------------|---------------------|
-| 26ai | latest-26ai | 26.2.4.2-26ai | linux/arm64 and linux/amd64 |
-| 23ai | latest-23ai      | 25.9.3.2-23ai              |  linux/arm64 and linux/amd64   |
-| 19c | latest           | 26.2.4.2                   |   linux/amd64                   |
-
-> [!NOTE]
-> ADBS-25.9.3.2-23ai was the last 23ai release version. We now publish only 26ai and 19c adb-free images.
-
-> [!NOTE]
-> Often, images will have an additional "important feature" tag alongside release version tags.
-> For e.g. `adb-free:select_ai_agent`
-
+| 26ai | latest-26ai | 26.9.4.1-26ai | linux/arm64 and linux/amd64 |
+| 19c | latest           | 26.9.4.2                   |   linux/amd64                   |
 
 ### Container CPU/memory requirements
 
@@ -40,10 +31,10 @@ Oracle Autonomous AI Database Free container needs 4 CPUs and 8 GiB memory
 
 ### Install podman
 
-Please refer the official documentation to install podman on [Linux](https://podman.io/docs/installation#installing-on-linux), [Windows](https://podman.io/docs/installation#windows) or [Mac](https://podman.io/docs/installation#macos)
+Please refer to the official documentation to install podman on [Linux](https://podman.io/docs/installation#installing-on-linux), [Windows](https://podman.io/docs/installation#windows) or [macOS](https://podman.io/docs/installation#macos)
 
 
-### Start podman machine on MacOS or Windows
+### Start podman machine on macOS or Windows
 
 Containers need the Linux kernel. Run following commands to start a podman virtual machine
 
@@ -56,7 +47,7 @@ podman machine start
 > [!NOTE]
 > 26ai images are multi-arch i.e. images are natively built for ARM64 and AMD64 platforms.
 > 19c image is natively built for linux/amd64 platform only. To run a 19c adb-free container on ARM machines you will need colima emulation
-> Read [FAQ](#faq) for instructions on how to setup Colima VMs
+> Read [FAQ](#faq) for instructions on how to set up Colima VMs
 
 ### Starting an ADB Free container
 
@@ -282,9 +273,9 @@ sudo cp adb_container.cert /etc/pki/ca-trust/source/anchors
 sudo update-ca-trust
 ```
 
-##### MacOS system trustsore
+##### macOS system truststore
 
-For MacOS, please refer the [support guide](https://support.apple.com/guide/keychain-access/add-certificates-to-a-keychain-kyca2431/mac) to add certificate to keychain
+For macOS, please refer to the [support guide](https://support.apple.com/guide/keychain-access/add-certificates-to-a-keychain-kyca2431/mac) to add certificate to keychain
 
 ##### JDK truststore
 
@@ -296,7 +287,7 @@ Linux example:
 sudo keytool -import -alias adb_container_certificate -keystore $JAVA_HOME/lib/security/cacerts -file adb_container.cert
 ```
 
-MacOS example:
+macOS example:
 ```bash
 sudo keytool -import -alias adb_container_certificate -file adb_container.cert -keystore  /Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib/security/cacerts
 ```
@@ -427,36 +418,37 @@ ALTER USER MPACK_OEE IDENTIFIED BY <PASSWORD>
 
 5. On the application home page, click "Run Application" to open the OEE app in a new browser tab.
 
-## F.A.Q
+## FAQ
 
-### How can I run 19c Oracle Autonomous AI Database Free container on ARM64 arch i.e. machines with M1/M2 chips ?
+### How can I run the 19c Oracle Autonomous AI Database Free container on ARM64 architecture, for example on M1/M2 Macs?
 > [!IMPORTANT]
-> 23ai images are multi-arch and natively built for both linux/arm64 and linux/amd64 CPU architectures
+> 19c images are built for `linux/amd64` only. On ARM64 machines, use Colima with Docker to emulate `x86_64`.
 
-Use colima + docker to emulate x86_64 arch. Replace podman with docker in all commands.
+Use Colima with Docker to emulate `x86_64`. Replace `podman` with `docker` in the container commands.
 
-### How can I install colima and docker on machines with M1/M2 chips ?
+### How can I install Colima and Docker on Apple silicon Macs?
 ```bash
 brew install docker
 brew install docker-compose
 brew install colima
-brew reinstall qemu
+brew install qemu
 ```
 
-### How can I start Colima x86_64 Virtual Machine with minimum memory/cpu requirements for 19c ?
+### How can I start a Colima x86_64 virtual machine with minimum memory and CPU requirements for 19c?
 
 > [!IMPORTANT]
-> Running x86_64 arch containers can have issues translating instructions for ARM. We give higher memory to the VM to avoid such issues
+> Running x86_64 containers on ARM can have translation issues. The VM is given more memory to improve stability.
 
 ```bash
 colima start --cpu 4 --memory 10 --arch x86_64
 ```
 
-### How can I start Colima x86_64 Virtual Machine using Apple's new virtualization framework - Rosetta for 19c ?
+### How can I start a Colima x86_64 virtual machine using Apple’s Virtualization Framework with Rosetta for 19c?
 
 > [!IMPORTANT]
-> Running x86_64 arch containers can have issues translating instructions for ARM. We give higher memory to the VM to avoid such issues
+> Rosetta provides x86_64 translation for ARM. This profile uses Apple’s Virtualization Framework and more memory to improve stability.
 
+> **Warning:** `colima delete` removes the current Colima VM/profile. Back up any data stored inside it before running these commands.
 
 ```bash
 softwareupdate --install-rosetta
@@ -469,7 +461,7 @@ docker context ls
 colima status
 ```
 
-### How can I start podman VM on Mac with minimum memory/cpu requirements ?
+### How can I start a Podman VM on macOS with minimum memory and CPU requirements?
 ```bash
 podman machine init
 podman machine set --cpus 4 --memory 8192
