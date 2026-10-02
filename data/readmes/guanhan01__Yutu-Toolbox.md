@@ -31,14 +31,20 @@ Yutu Agt 把这些能力做成**模型可调用的工具**，于是它们可以�
 | 模型管理 | 从服务商拉取可用模型列表、手工添加、设置上下文窗口、标注是否支持思考 |
 | 流式与推理 | 流式输出；支持思考档位（Off → Max 八档，滑杆调节），推理内容折叠展示 |
 | 多模态 | 图片作为缩略图附件送入；文件 / 文件夹 / 路径作为文本上下文 |
-| 工具调用 | 103 个工具经 function calling 接入，调用过程实时显示为可展开的步骤卡片 |
+| 工具调用 | 115 个内置工具经 function calling 接入，调用过程实时显示为可展开的步骤卡片 |
 | 上下文管理 | 用量比例显示、超阈值自动压缩（旧对话转摘要，原文保留可撤销） |
 | 记忆 | 核心记忆（每轮注入）+ 子记忆（模型按需创建），token 用量受模型窗口约束 |
 | 计划模式 | 先出总计划与子任务，再逐步执行，进度条常驻 |
-| Skill | 导入 Markdown / ZIP / 文件夹 / URL / JSON / 剪贴板六种来源的自定义 Skill，以「名称 + 描述」注入系统提示词，正文按需读取 |
+| Skill | 内置 `cognitive-engine`（首次启动自动预置）；也可导入 Markdown / ZIP / 文件夹 / URL / JSON / 剪贴板六种来源的自定义 Skill。以「名称 + 描述」注入系统提示词，正文按需读取 |
 | 会话 | 多会话本地保存，支持重命名、删除、消息级复制 / 重说 / 编辑 |
 
-## 内置 MCP 工具（103 个）
+## 内置 MCP 工具（103 个 + 12 个按需注入）
+
+下表是 `feature:mcp` 里的 **103** 个。另有 **12** 个由 `app` 模块在启动时注入
+（`LinuxMcpTools` 9 个 `linux.*`、`AgentStateTools` 3 个 `memory.*` / `plan.*`），
+它们同样是模型可调用的内置工具，故**模型实际可用 115 个**。这些工具没有列在表里，
+是因为它们依赖 `app` 模块的运行时（Linux 环境、会话数据层），放在 `feature:mcp`
+会形成反向依赖。
 
 | 分组 | 主要工具 |
 |---|---|
@@ -52,9 +58,9 @@ Yutu Agt 把这些能力做成**模型可调用的工具**，于是它们可以�
 | 界面操作 | `ui.tap/swipe/text/key/tree/current/screenshot` |
 | 其它 | `shell.exec` `clipboard.get/set` `keystore.manage` `skill.list/read` `artifact.list` |
 
-**外部 MCP 暴露面是收窄的。** 内置 Server 只对外放出 31 个只读或低风险工具（白名单硬上限），
-`file.delete`、`app.uninstall`、`shell.exec`、`ui.tap` 这类改写与提权工具即使被猜到名字，
-`tools/call` 也会直接拒绝。模型可用的工具集与外部客户端可用的工具集是两套。
+**外部 MCP 是收窄接入的。** 外部 Server 的工具默认不对模型开放，需要在 MCP 页面
+逐个打开「接入 AI 对话」，且只有已连接的 Server 才能开启；单个 Server 最多注入
+40 个工具，避免一个巨型 Server 吃掉上下文窗口。
 
 ## 工具箱
 
@@ -94,7 +100,7 @@ Yutu Agt 把这些能力做成**模型可调用的工具**，于是它们可以�
 | SSH | sshd、ssh-keygen、ssh-agent |
 | APK 分析 | JADX、Apktool、smali、baksmali（含 OpenJDK 前置依赖） |
 | OpenJDK | 可单独安装，也是「APK 分析」的依赖 |
-| Git / Codex CLI / Claude Code | 命令行工具与两个 AI CLI（后两者需 Node.js） |
+| Git | git 命令行工具 |
 
 下载支持多镜像并发测速选源、断点续传（严格校验 `Content-Range` 总长）、zip 中央目录完整性校验，
 中断后可续装。rootfs 全程不随应用打包。
@@ -187,7 +193,7 @@ feature/network/          网络工具
 feature/database/         SQLite 查看器与编辑器
 feature/decompile/        反编译引擎 + 任务中心
 feature/capture/          抓包：VPN 引擎、TLS 中间人、CA 管理、导出
-feature/mcp/              MCP 客户端 / 内置 Server / 103 个工具 / Skill 管理 / 产物目录
+feature/mcp/              MCP 客户端 / 103 个内置工具（另 12 个由 app 注入）/ Skill 管理 / 产物目录
 ```
 
 设计规范见 [DESIGN.md](DESIGN.md)，版本变更见 [CHANGELOG.md](CHANGELOG.md)，

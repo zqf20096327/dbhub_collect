@@ -65,7 +65,7 @@ Clutch stages `UPDATE` and `DELETE` only when it can identify a stable source ro
 | Oracle JDBC | Non-null unique keys, then `ROWID` for confirmed base tables |
 | Other JDBC backends | Non-null unique keys only |
 
-Joined, grouped, derived, or otherwise ambiguous result sets remain read-only unless Clutch can identify one source table and a matching row identity. Schema-qualified JDBC sources retain their schema for identity lookup and staged mutations; Oracle views and synonyms, including dictionary relations such as `USER_TABLES`, remain read-only and skip unsafe identity probes.
+Joined, grouped, derived, or otherwise ambiguous result sets remain read-only unless Clutch can identify one source table and a matching row identity. A simple query of CTEs that read one table edits that table: Clutch carries the table's row identity out through each CTE and maps column aliases and CTE column lists back to the table's columns. Schema-qualified JDBC sources retain their schema for identity lookup and staged mutations; Oracle views and synonyms, including dictionary relations such as `USER_TABLES`, remain read-only and skip unsafe identity probes.
 
 ## Backend Support
 
@@ -97,7 +97,7 @@ The SQLite Quick Start has no optional dependency. For other backends, install o
 
 If a configured native backend package is missing, Clutch reports it when connecting. Install that package with your package manager, ensure it is on `load-path`, and reconnect.
 
-JDBC support ships with Clutch, but its runtime requires Java 17+, `clutch-jdbc-agent.jar`, and a database driver jar where applicable. Clutch pins agent 0.2.25, which preserves structured BLOB whitespace, keeps CLOB previews at complete Unicode character boundaries, bounds per-connection lock retention, and runs Oracle schema-wide listings on their own session so they cannot delay a query's metadata lookups. On first connection, Clutch can prompt to download the agent and supported drivers; it verifies the configured agent jar against its SHA-256 before startup. See the [JDBC backend guide](docs/jdbc-backend.org) for setup, supported drivers, connection examples, and transaction behavior.
+JDBC support ships with Clutch, but its runtime requires Java 17+, `clutch-jdbc-agent.jar`, and a database driver jar where applicable. Clutch pins agent 0.2.26, which preserves structured BLOB whitespace, keeps CLOB previews at complete Unicode character boundaries, bounds per-connection lock retention, runs Oracle schema-wide listings on their own session so they cannot delay a query's metadata lookups, and lets a statement run without a time limit when none is configured. On first connection, Clutch can prompt to download the agent and supported drivers; it verifies the configured agent jar against its SHA-256 before startup. See the [JDBC backend guide](docs/jdbc-backend.org) for setup, supported drivers, connection examples, and transaction behavior.
 
 For source checkouts, add Clutch and each native protocol checkout you use to `load-path`:
 
@@ -218,7 +218,7 @@ SELECT * FROM users LIMIT 10;
 
 Press `C-c C-c` to execute. If a region is selected, the selected SQL runs; otherwise the statement at point runs. Select a region first when exact execution boundaries matter. Results appear in a split result buffer below.
 
-By default, `TRUNCATE` and `UPDATE` or `DELETE` without an effective `WHERE` require entering the exact token `YES`. Customize `clutch-high-risk-query-confirmation` to use an ordinary `yes-or-no` prompt or to disable this high-risk confirmation. Other destructive SQL keeps its ordinary confirmation prompt, and each statement asks at most once.
+By default, `TRUNCATE` and `UPDATE` or `DELETE` without an effective `WHERE`, including one in a PostgreSQL `WITH` clause or a DB2 data change table, require entering the exact token `YES`. Customize `clutch-high-risk-query-confirmation` to use an ordinary `yes-or-no` prompt or to disable this high-risk confirmation. Other destructive SQL keeps its ordinary confirmation prompt, and each statement asks at most once.
 
 #### 4. Control transactions
 
@@ -382,7 +382,7 @@ Common entry points:
 - Stateful transient entries highlight their current choice; unavailable actions stay visible but inapt when their surrounding context is still useful
 - `C-c C-j` starts the object workflow
 - `RET` opens record view from a result row
-- Pressing `s` cycles sorting for the result column at point; simple table results use server-side `ORDER BY`, while UNION, grouped, derived, and other non-rewritable results sort the current page locally. Use `C` to jump to another visible column first, or click a result header to cycle it
+- Pressing `s` cycles sorting for the result column at point; simple table results, including a simple query of a CTE, use server-side `ORDER BY`, while UNION, grouped, derived, and other non-rewritable results sort the current page locally. Use `C` to jump to another visible column first, or click a result header to cycle it
 - `i`, `d`, and `C-c C-c` stage and submit row changes in result buffers
 - The result footer keeps transaction state and staged-change counts ahead of row statistics and sorting. Long sort/filter labels are shortened; their full text remains available on hover and through the existing sort/filter commands.
 - `/` filters only the loaded page. The footer keeps the original page range and reports a separate matching-row fraction; an empty filtered page shows how to change or clear the filter. Clearing it restores the page without querying the database.
@@ -391,6 +391,7 @@ Common entry points:
 - JDBC CLOBs longer than the returned preview remain explicitly marked as incomplete. They can be viewed, but editing, cloning a copied incomplete field, and exporting that value are blocked to prevent data loss. Complete short CLOBs, including emoji and empty text, remain usable as ordinary text.
 - CSV, TSV, INSERT and UPDATE file exports write in batches and replace the destination only after the export succeeds. Symbolic links are preserved and their final target receives the output; the selected filename determines transformations such as `.gz` compression, even if the link target has a different extension. These transformations run on the complete encoded output and may hold it in memory. A failed or cancelled export preserves the existing file. CSV/TSV default to UTF-8 with one BOM for Excel; custom UTF-16 exports retain their byte order and line endings without adding BOMs between batches. Clipboard exports and native document `insertMany` helpers retain their complete output in memory; backends may also materialize a bounded or nonpageable query before formatting begins.
 - Explicit SQL row limits (`LIMIT`, `OFFSET`, `TOP`, `FETCH`) remain part of the query during pagination and export. Ordinary column, table and alias names such as `top` or `fetch` do not disable pagination.
+- A statement that writes is not paginated, even when it returns rows. `SELECT ... INTO` runs as written and copies every row; `INSERT ... RETURNING`, a PostgreSQL `SELECT` whose `WITH` clause modifies data, and a DB2 or H2 `SELECT` over a data change table such as `FINAL TABLE (INSERT ...)` run once, and all their rows show on one page.
 - `C-c '` edits the current result cell or record-view field; JSON columns and text values containing JSON objects or arrays open in a JSON editor, and `C-c C-c` stages or `C-c C-k` cancels the edit directly when that JSON editor opened automatically. In ordinary edit buffers, nullable columns offer `C-c C-n` for database `NULL`, while columns with a usable default offer `C-c C-d` for database `DEFAULT`
 - `C-c C-k` discards the staged change at point from a result cell or record-view field
 - `M-x clutch-copy-context-for-agent` copies SQL, table metadata, and the latest matching visible result sample as Markdown for an external agent; the same command is available as `k` in the main and result transients. Table metadata reuses the existing object describe path.
@@ -423,7 +424,7 @@ Local SQLite filenames are resolved against the command's source directory durin
 
 ### Timeouts, Interrupts, and Customization
 
-Timeouts can be configured globally or per connection, and long-running queries can be interrupted with `C-g`. Backend-specific cancel behavior, debug workflow, result displayers, schema warmup, CSV/TSV encoding, and completion customization are documented in [Query Timeout and Interrupt](docs/interactive-client.org#query-timeout-and-interrupt).
+Timeouts can be configured globally or per connection. On native MySQL and PostgreSQL connections and on JDBC connections a statement runs without blocking Emacs, and `C-g` in the console, REPL or result buffer cancels it; on other backends the statement blocks and `C-g` interrupts it. Backend-specific cancel behavior, debug workflow, result displayers, schema warmup, CSV/TSV encoding, and completion customization are documented in [Query Timeout and Interrupt](docs/interactive-client.org#query-timeout-and-interrupt).
 
 ## Testing
 

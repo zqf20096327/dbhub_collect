@@ -96,6 +96,7 @@ duolingo-clone/
   |- .env.example
   |- .env/.env.local
   |- .gitignore
+  |- .prettierignore
   |- .prettierrc.json
   |- components.json
   |- constants.ts
@@ -120,14 +121,16 @@ duolingo-clone/
 
 1. Make sure **Git** and **NodeJS** is installed.
 2. Clone this repository to your local computer.
-3. Create `.env` file in **root** directory.
-4. Contents of `.env`:
+3. Create `.env.local` file in **root** directory.
+4. Contents of `.env.local`:
 
 ```env
-# .env
+# .env.local
 
-# disabled next.js telemetry
-NEXT_TELEMETRY_DISABLED=1
+# disabled telemetry
+DO_NOT_TRACK="1"
+NEXT_TELEMETRY_DISABLED="1"
+CLERK_TELEMETRY_DISABLED="1"
 
 # clerk auth keys
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -186,7 +189,7 @@ CLERK_ADMIN_IDS="user_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
       - Copy the user IDs provided, ensuring they are separated by commas and spaces.
 
 10. Save and Secure:
-    - Save the changes to the `.env` file.
+    - Save the changes to the `.env.local` file.
 
 11. Install Project Dependencies using `pnpm install`.
 

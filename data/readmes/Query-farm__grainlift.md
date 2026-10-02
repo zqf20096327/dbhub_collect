@@ -16,14 +16,18 @@
 -->
 
 <p align="center">
-  <img src=".github/assets/grainlift-grain-elevator-logo.svg" alt="Grainlift" width="620">
+  <a href="https://query.farm/products/grainlift/"><img src="https://query.farm/grainlift/grainlift-mark.svg" alt="Grainlift" width="96" height="96"></a>
 </p>
+
+# Grainlift
 
 <p align="center">
   <strong>One ADBC driver on the client. Any authorized ADBC driver on the server.</strong>
 </p>
 
 <p align="center">
+  <a href="https://pypi.org/project/grainlift-adbc-gateway/"><img src="https://img.shields.io/pypi/v/grainlift-adbc-gateway" alt="PyPI version"></a>
+  <a href="https://pypi.org/project/grainlift-adbc-gateway/"><img src="https://img.shields.io/pypi/pyversions/grainlift-adbc-gateway" alt="Python versions"></a>
   <a href="https://github.com/Query-farm/grainlift/actions/workflows/ci.yml"><img src="https://github.com/Query-farm/grainlift/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
   <a href="https://arrow.apache.org/adbc/current/"><img src="https://img.shields.io/badge/Apache%20Arrow-ADBC-00A4E4?logo=apachearrow&amp;logoColor=white" alt="Apache Arrow ADBC"></a>
   <a href="https://www.rust-lang.org/"><img src="https://img.shields.io/badge/Rust-1.97%2B-000000?logo=rust&amp;logoColor=white" alt="Rust 1.97 or newer"></a>
@@ -415,6 +419,41 @@ For Iroh, the page owns one browser Iroh node (relay only) in an adapter Worker
 from `@query-farm/vgi-rpc-iroh-browser`; map that node's endpoint ID to a
 principal in `iroh.principals` like any other client.
 
+### Large requests and results: object storage
+
+Over HTTP, a request is limited to `server.max_request_body_bytes` and the
+driver splits parameter uploads to fit, so one row larger than the limit cannot
+be sent. With `[external_storage]` the gateway uses an S3-compatible bucket
+(AWS S3, Cloudflare R2, MinIO) for
+[VGI-RPC external locations](https://vgi-rpc.query.farm/):
+
+- A client whose request is over the limit asks the gateway for an upload URL
+  (`POST /__upload_url__/init`), PUTs the request to the bucket, and sends only
+  a pointer, up to `max_upload_bytes`.
+- A result batch of at least `threshold_bytes` is stored in the bucket and the
+  client is sent a URL to fetch it.
+
+The gateway presigns the URLs itself (AWS Signature Version 4), so clients
+need no storage credentials, and it fetches only objects in its own bucket.
+tcp and Iroh are unaffected: they have no request limit.
+
+```toml
+[external_storage]
+endpoint = "https://<account-id>.r2.cloudflarestorage.com"  # or https://s3.<region>.amazonaws.com
+bucket = "grainlift-exchange"
+region = "auto"              # the signing region; "auto" for R2
+prefix = "grainlift/"
+# access_key_id / secret_access_key, or AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY
+url_ttl_seconds = 900
+threshold_bytes = 1048576
+max_upload_bytes = 268435456
+```
+
+The gateway never deletes objects; give the bucket a lifecycle rule that
+expires them (a day is plenty). Browser clients PUT and GET the bucket
+directly, so the bucket also needs a CORS rule allowing `PUT` and `GET` (with
+the `Content-Type` and `Content-Encoding` headers) from the page's origin.
+
 ### Embedding the driver
 
 The driver crate also builds as a `staticlib` for hosts that cannot load an
@@ -452,6 +491,15 @@ as a separate anonymous principal, while a wrong token is rejected rather than
 downgraded. See
 [grainlift-rust-hello-world](https://github.com/Query-farm/grainlift-rust-hello-world)
 for a complete example.
+
+Large requests and results can go through object storage here too
+([see above](#large-requests-and-results-object-storage)): pass
+`--storage-endpoint` and `--storage-bucket` (with `--storage-region` and
+`--storage-prefix`, credentials from `AWS_ACCESS_KEY_ID` and
+`AWS_SECRET_ACCESS_KEY`), or call
+`dev::Service::with_external_storage(&config::ExternalStorageConfig::new(endpoint, bucket, region, prefix))`
+when hosting the `Service` yourself. `Service::with_max_request_bytes` sets the
+HTTP request limit above which clients upload.
 
 ## Stateful sessions and deployment
 

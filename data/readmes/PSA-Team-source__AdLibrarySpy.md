@@ -9,6 +9,12 @@
 Find the stores that are winning, see the ads they run, and track your competitors.
 Every number comes from a real measurement with its source attached. Nothing is estimated.
 
+**Use it with your own AI.** Paste this into Claude, ChatGPT, Cursor or whichever AI you use:
+
+```
+Read https://adlibraryspy.com/SKILL.md and follow it to research my competitors' Shopify stores and Meta ads.
+```
+
 [**Open the app →**](https://adlibraryspy.com/?ref=gh:readme) · [Run it yourself](#run-it-yourself) · [Use it from Claude or ChatGPT](#ask-your-ai) · [This week's breakouts](#this-weeks-shopify-breakouts)
 
 [![CI](https://github.com/PSA-Team-source/AdLibrarySpy/actions/workflows/ci.yml/badge.svg)](https://github.com/PSA-Team-source/AdLibrarySpy/actions/workflows/ci.yml)
@@ -35,7 +41,11 @@ this repository is the code that runs [adlibraryspy.com](https://adlibraryspy.co
 ### Shops: find the stores that are winning
 
 - Filter by platform (Shopify, WooCommerce, Shopline, Shoplazza and others), category, traffic,
-  traffic growth, product count, store origin, visitor country, creation date, technology and pixels
+  traffic growth, product count, store origin, visitor country, creation date, technology and pixels,
+  plus language, currency, theme, apps and socials once a store's details are indexed
+- **Preset views** for one-click lists, and rows that show the homepage screenshot, country flag, visitor
+  countries, live-ads trend, targeted countries, latest ad thumbnails and store launch date
+- **Picked for you**: stores suggested from the niches you open. Skip one and the next slides in
 - SimilarWeb visits and month-over-month growth for the exact store, with a trend line
 - AOV, live Meta ads, 7-day ad peak, top products and launch year on every row
 - Hide stores you've already seen, and save stores to shared folders
@@ -47,10 +57,20 @@ this repository is the code that runs [adlibraryspy.com](https://adlibraryspy.co
 
 - Search ad copy, brands and landing pages, then filter by creation date, media type, format, placement,
   country and niche
-- Run dates and placements for each ad, with video playback in the grid
+- **VSL filter** for long video sales letters (2+ minutes), and one-tap date presets (7, 30, 90 days, this year)
+- Ads show online stores by default. Run dates and placements for each ad, with video playback in the grid
 - **AI creative labels**: hook, angle, funnel stage, offer and urgency, each with the model's confidence
 - Save ads to folders and share them with your team. The **Advertisers** screen ranks brands by creative count
 - **Export CSV** of the current search: ad and page ids, run dates, status, format, placements, copy, landing and media URLs
+
+### Products and landing pages: what the ads point at
+
+<img src="public/landing/landing-pages.webp" alt="Landing pages explorer: advertorials, listicles, quizzes and homepages ranked by active Meta ads" width="820">
+
+- **Products**: winning products, the products Meta ads send people to, with active and new ads, advertisers, price and when ads started
+- **Landing pages**: every advertorial, listicle, quiz, collection and homepage that ads send traffic to,
+  ranked by active ads, with new ads in the last 14 days, advertisers, first and last seen, ad countries
+  and the store's traffic
 
 ### Store dossier: everything about one store
 
@@ -73,11 +93,14 @@ this repository is the code that runs [adlibraryspy.com](https://adlibraryspy.co
 
 ### Trends and the Monday report
 
-<img src="public/landing/weekly.webp" alt="Weekly report" width="820">
+<img src="public/landing/trends.webp" alt="Trends: new Meta ads this week, ad formats and niches gaining share" width="820">
 
-- **Trends**: niches, stores and products whose measured traffic is breaking out
+- **Trends**: what advertisers launched on Meta this week vs last — products getting the most new ads,
+  stores launching the most ads, brand-new advertisers, niches and ad formats gaining share — plus the
+  niches and stores whose measured traffic is breaking out this month
 - **The weekly report**: stores scaling their ads, the fastest traffic growth, ad peaks and the newest
   winners, published every Monday at [/weekly](https://adlibraryspy.com/weekly) and sent by email if you opt in
+- **Growing with no ads**: fast-growing stores with no Meta ads, so you can tell paid growth from organic
 - Public, shareable pages for every store (`/store/{domain}`), a store directory by niche, country and
   tech, and [/trending](https://adlibraryspy.com/trending)
 
@@ -93,6 +116,7 @@ Any other agent: paste *"Read https://adlibraryspy.com/SKILL.md and follow it to
 
 - Free team workspaces with roles, invites, shared saves and an activity log. Sign-in is passwordless (an emailed 6-digit code or magic link, or Sign in with Google)
 - API keys for the MCP endpoint (Settings → API)
+- Installable as an app on your phone or desktop
 - In-app feedback (sidebar → Feedback): stored in the `feedback` table and emailed to `FEEDBACK_EMAIL`, with Reply-To set to the sender (10 messages an hour per user; `FAIR_USE.feedback`). Rate limits for agents: [/SKILL.md](https://adlibraryspy.com/SKILL.md#rate-limits)
 - A [Chrome extension](extension/) that shows any Shopify store's traffic, ads, products and apps in one click
 
