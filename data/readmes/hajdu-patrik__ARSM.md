@@ -119,7 +119,8 @@ dotnet user-secrets set "Parameters:minio-password" "<local-minio-password>"
 ```
 
 Hosted environments point `ObjectStorage__ServiceUrl` at the real S3-compatible endpoint instead,
-keep `ObjectStorage:AutoCreateBucket` disabled, and provision the private bucket up front.
+keep `ObjectStorage:AutoCreateBucket` disabled, and provision the private bucket up front. Azure Blob
+Storage is supported as well (`ObjectStorage__Provider=AzureBlob` with a connection string).
 
 Cloudflare R2 additionally needs `ObjectStorage:DisablePayloadSigning` and
 `ObjectStorage:DisableDefaultChecksumValidation` set to `true`: R2 does not support the streaming
@@ -138,7 +139,7 @@ without them. RustFS (like MinIO before it) keeps both `false`.
 
 NuGet restore is lock-file based: `app/Directory.Build.props` enables locked restores, AppHost keeps RID-specific lock files for Aspire Dashboard/DCP packages on Linux and macOS, and CI runs `dotnet restore --locked-mode`.
 
-GitHub Actions: `.github/workflows/dotnet.yml` builds and checks backend and frontend on Linux, Windows and macOS; `.github/workflows/tests.yml` runs the Playwright suite against the mocked API and the HTTP and SQL suites against PostgreSQL and RustFS containers with per-run generated credentials; `.github/workflows/publish-images.yml` pushes the deploy images to GHCR after a green `Tests` run on `main`.
+GitHub Actions: `.github/workflows/dotnet.yml` builds and checks backend and frontend on Linux, Windows and macOS; `.github/workflows/tests.yml` runs the Playwright suite against the mocked API and the HTTP and SQL suites against PostgreSQL and RustFS containers with per-run generated credentials.
 
 Local GitHub Actions smoke checks use [.actrc](.actrc), which maps `ubuntu-latest`, `windows-latest`, and `macos-latest` to the Linux act container so `act -j backend-build` and `act -j frontend-build` exercise every matrix row locally. GitHub-hosted runners remain authoritative for real Windows and macOS behavior.
 
@@ -201,9 +202,7 @@ Then inspect `tests/.artifacts/test-suite-summary.json` and act in the matching 
 - Production API hosting must configure `AllowedHosts` and `Cors:AllowedOrigins` with real non-localhost hosts. Non-Development startup rejects wildcard, localhost, non-HTTPS, malformed, or path-bearing WebUI origins.
 - Auth login/refresh rate limits and login bans are process-local. Non-Development deployments must set `Deployment:RateLimiterTopology=SingleInstance` only when exactly one ApiService instance is running; use a distributed limiter before scaling out.
 - The production WebUI static host or reverse proxy must enforce security headers because Vite is not the release server. Required headers include `Content-Security-Policy`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors` or equivalent frame protection, and `Strict-Transport-Security` when TLS terminates there.
-- The production WebUI static host should also enforce cache headers: `index.html` is not cached, Vite `assets/` files are cached for 30 days with `immutable`, public images/icons are cached for 30 days with ETag revalidation, and manifest/sitemap/robots-style files use a shorter one-day cache.
-- See [`docs/deployment-security-checklist.md`](docs/deployment-security-checklist.md) for the exact copy-ready header values, required configuration keys, and post-deployment verification commands.
-- [`docs/deployment-azure.md`](docs/deployment-azure.md) walks through the Azure Container Apps deployment (images in `deploy/`, Bicep template, account and credit setup).
+- The production WebUI static host should also enforce cache headers: `index.html` is not cached, Vite `assets/` files (content-hashed) are cached for one year with `immutable`, public images/icons are cached for 30 days with ETag revalidation, and the manifest and `robots.txt` use a shorter one-day cache.
 
 ## Contributor Notes (AI Workflow)
 

@@ -5,7 +5,7 @@
 ![GitHub License](https://img.shields.io/github/license/smyrgeorge/ktkit)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/smyrgeorge/ktkit)
 ![GitHub issues](https://img.shields.io/github/issues/smyrgeorge/ktkit)
-[![Kotlin](https://img.shields.io/badge/kotlin-2.4.10-blue.svg?logo=kotlin)](http://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.4.20-blue.svg?logo=kotlin)](http://kotlinlang.org)
 
 ![](https://img.shields.io/static/v1?label=&message=Platforms&color=grey)
 ![](https://img.shields.io/static/v1?label=&message=Jvm&color=blue)
@@ -15,11 +15,15 @@
 
 A comprehensive Kotlin multiplatform toolkit for building server applications with Ktor.
 
+<p align="center"><img src="banner.svg" alt="ktkit" width="100%"></p>
+
+---
+
 📖 [Documentation](https://smyrgeorge.github.io/ktkit/)
 
 🏠 [Homepage](https://smyrgeorge.github.io/) (under construction)
 
-## Table of Contents
+## Features
 
 - [Overview](#overview)
 - [Usage](#usage)

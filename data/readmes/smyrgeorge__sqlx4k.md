@@ -5,7 +5,7 @@
 ![GitHub License](https://img.shields.io/github/license/smyrgeorge/sqlx4k)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/smyrgeorge/sqlx4k)
 ![GitHub issues](https://img.shields.io/github/issues/smyrgeorge/sqlx4k)
-[![Kotlin](https://img.shields.io/badge/kotlin-2.4.10-blue.svg?logo=kotlin)](http://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.4.20-blue.svg?logo=kotlin)](http://kotlinlang.org)
 
 ![](https://img.shields.io/static/v1?label=&message=Platforms&color=grey)
 ![](https://img.shields.io/static/v1?label=&message=Jvm&color=blue)
@@ -17,6 +17,8 @@
 
 A coroutine-first SQL toolkit with compile-time query validations for Kotlin Multiplatform. PostgreSQL, MySQL/MariaDB,
 and SQLite are supported.
+
+<p align="center"><img src="banner.svg" alt="sqlx4k" width="100%"></p>
 
 ---
 
@@ -54,7 +56,9 @@ Short deep‑dive posts covering Kotlin/Native, FFI, and Rust ↔ Kotlin interop
 - [Prepared statements (named and positional parameters)](#prepared-statements)
 - [Row mappers](#rowmapper-s)
 - [Custom Value Converters](#custom-value-converters)
-- [Transactions and coroutine TransactionContext](#transactions) · [Savepoints](#savepoints) · [TransactionContext (coroutines)](#transactioncontext-coroutines)
+- [Transactions](#transactions)
+    - [Savepoints](#savepoints)
+    - [TransactionContext (coroutines)](#transactioncontext-coroutines)
 - [Code generation: CRUD and @Repository implementations](#code-generation-crud-and-repository-implementations)
     - [Customizing columns with @Column](#customizing-columns-with-column)
     - [Excluding properties with @Transient](#excluding-properties-with-transient)
@@ -85,14 +89,13 @@ Short deep‑dive posts covering Kotlin/Native, FFI, and Rust ↔ Kotlin interop
 - Postgres COPY. COPY FROM STDIN is an order of magnitude faster than multi-row INSERT for bulk loads.
 - `kotlinx.serialization` module. JSON and JSONB columns to and from @Serializable classes, and a generic @Converter for
   any serializable type.
-- MariaDB dialect. MariaDB supports RETURNING on INSERT and DELETE since 10.5, so batch operations can be enabled.
 - Type coverage, NUMERIC/decimal, Duration or interval, enum or composite types.
 - WASM support (?).
 
 ### Supported Databases
 
-- ![MySQL](https://img.shields.io/badge/MySQL-00758F?logo=mysql&logoColor=white)
 - ![MariaDB](https://img.shields.io/badge/MariaDB-003545?logo=mariadb&logoColor=white)
+- ![MySQL](https://img.shields.io/badge/MySQL-00758F?logo=mysql&logoColor=white)
 - ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?logo=postgresql&logoColor=white)
 - ![SQLite](https://img.shields.io/badge/SQLite-003B57?logo=sqlite&logoColor=white)
 - ![SQLCipher](https://img.shields.io/badge/SQLCipher-003B57?logo=sqlite&logoColor=white) (encrypted SQLite —
@@ -368,17 +371,24 @@ db.transaction {
 
 #### Savepoints
 
-A transaction can also create SQL savepoints. A savepoint marks a point inside an open transaction that you can later
-return to: `savepoint(name)` creates one, `rollbackToSavepoint(name)` undoes everything executed after it while the
-transaction itself stays open, and `releaseSavepoint(name)` discards it while keeping the work. This lets you undo a
-single failed step (for example an optional insert) without losing the rest of the transaction, and on PostgreSQL it is
-the way to keep using a transaction after a statement has failed. Savepoints can be nested, and committing or rolling
-back the transaction discards all of them. The block form `savepoint(name) { ... }` (and `savepointCatching`) mirrors
-`transaction { ... }`: it creates the savepoint, releases it when the block succeeds, and rolls back to it when the block
-throws or returns a failed `Result`. The Android platform SQLite driver does not support savepoints; the SQLCipher
-driver does.
+A savepoint lets you roll back part of a transaction without ending it. The block form releases the savepoint on
+success and rolls back to it on failure. Either way it returns a `Result` and never propagates the error.
 
-### TransactionContext (coroutines)
+```kotlin
+db.transaction {
+    execute("insert into orders (id, status) values (1, 'new');").getOrThrow()
+
+    // If this fails, only the audit insert is undone.
+    val audit: Result<Long> = savepoint {
+        execute("insert into audit_log (order_id, event) values (1, 'created');").getOrThrow()
+    }
+    if (audit.isFailure) println("Audit insert skipped.")
+}
+```
+
+You can also call `savepoint(name)`, `rollbackToSavepoint(name)` and `releaseSavepoint(name)` directly.
+
+#### TransactionContext (coroutines)
 
 When using coroutines, you can propagate a transaction through the coroutine context using `TransactionContext`. This
 allows you to write small, composable suspend functions that either:
@@ -441,6 +451,7 @@ ksp {
     // Optional: pick the SQL dialect for CRUD generation from @Table classes.
     // Supported dialects:
     // arg("dialect", "mysql")
+    // arg("dialect", "mariadb")
     // arg("dialect", "postgresql")
     // arg("dialect", "sqlite")
 
@@ -507,7 +518,7 @@ Then in your code you can use it like:
 val record = Sqlx4k(id = 1, test = "test")
 val res: Sqlx4k = Sqlx4kRepositoryImpl.insert(db, record).getOrThrow()
 // Execute a generated query.
-val res: List<Sqlx4k> = Sqlx4kRepositoryImpl.selectAll(db).getOrThrow()
+val res: List<Sqlx4k> = Sqlx4kRepositoryImpl.findAll(db).getOrThrow()
 ```
 
 For more details, take a look at the [examples](./examples).
@@ -516,7 +527,7 @@ For more details, take a look at the [examples](./examples).
 
 You can use the `@Column` annotation to override the column name a property is mapped to, and to control how the
 property participates in the generated `INSERT` and `UPDATE` statements. The latter is useful for database-generated or
-read-only columns that should be excluded from write operations but still retrieved afterwards (via the `RETURNING`
+read-only columns that should be excluded from write operations but still retrieved afterward (via the `RETURNING`
 clause).
 
 | Property         | Effect                                                                            |
@@ -636,6 +647,7 @@ ksp {
 Supported dialects:
 
 - `"mysql"` - Adjusts CRUD query generation for MySQL compatibility
+- `"mariadb"` - Like `"mysql"`, but uses `INSERT ... RETURNING` (MariaDB 10.5+), which enables `batchInsert`
 - `"postgresql"` - Enables PostgreSQL-specific extensions (array types)
 - `"sqlite"` - Adjusts CRUD query generation for SQLite compatibility
 - Default (or `"generic"`) - Uses standard SQL with builtin decoders
@@ -672,16 +684,18 @@ val result: Result<List<User>> = userRepository.batchUpdate(db, updatedUsers)
 
 **Database Support:**
 
-| Operation     | PostgreSQL | SQLite | MySQL | Generic |
-|---------------|:----------:|:------:|:-----:|:-------:|
-| `batchInsert` |     ✅     |   ✅   |  ❌   |   ✅    |
-| `batchUpdate` |     ✅     |   ✅   |  ❌   |   ✅    |
+| Operation     | PostgreSQL | SQLite | MySQL | MariaDB | Generic |
+|---------------|:----------:|:------:|:-----:|:-------:|:-------:|
+| `batchInsert` |     ✅     |   ✅   |  ❌   |   ✅    |   ✅    |
+| `batchUpdate` |     ✅     |   ✅   |  ❌   |   ❌    |   ✅    |
 
 - **PostgreSQL**: Full support for both batch operations using multi-row `INSERT ... RETURNING` and
   `UPDATE ... FROM (VALUES ...) ... RETURNING` syntax.
 - **SQLite**: Full support for both batch operations using multi-row `INSERT ... RETURNING` and
   `WITH ... UPDATE ... FROM ... RETURNING` syntax (CTE-based approach).
 - **MySQL**: Neither batch operation is supported because MySQL lacks `RETURNING` clause support.
+- **MariaDB**: `batchInsert` is supported using multi-row `INSERT ... RETURNING` (MariaDB 10.5+). `batchUpdate` is not
+  supported because MariaDB has no `UPDATE ... RETURNING` (nor `UPDATE ... FROM (VALUES ...)`).
 - **Generic**: Generates code for both operations, but actual support depends on the underlying database.
 
 > [!NOTE]
@@ -743,9 +757,10 @@ require an ambient QueryExecutor provided via a context-parameter.
 To enable this mode:
 
 - Make your repository interface extend ContextCrudRepository<T> instead of CrudRepository<T>.
-- Declare your @Query methods with a context (context: QueryExecutor) receiver instead of an explicit context parameter.
+- Declare your @Query methods with a `context(context: QueryExecutor)` context parameter instead of an explicit
+  `context` argument.
 
-Repository interface example with context receivers:
+Repository interface example with context parameters:
 
 ```kotlin
 @Repository
@@ -770,8 +785,8 @@ with(db) {
 }
 ```
 
-If you prefer the explicit-parameter style, keep CrudRepository<T> and do not set enable-context-parameters. In that
-case, each generated method takes a QueryExecutor (e.g., db or transaction) as the first argument.
+If you prefer the explicit-parameter style, extend CrudRepository<T> instead. In that case, each generated method takes
+a QueryExecutor (e.g., db or transaction) as the first argument.
 
 #### Repository Hooks
 
@@ -1108,6 +1123,7 @@ SQLDelight integration for type-safe SQL queries with sqlx4k.
 ## Supported Targets
 
 - jvm
+- android (`sqlx4k-sqlite` and `sqlx4k-sqlite-cipher` only, minSdk 26)
 - iosArm64
 - iosSimulatorArm64
 - androidNativeX64
@@ -1197,7 +1213,7 @@ And then run the examples.
 ./examples/postgres/build/bin/macosArm64/releaseExecutable/postgres.kexe
 ./examples/mysql/build/bin/macosArm64/releaseExecutable/mysql.kexe
 ./examples/sqlite/build/bin/macosArm64/releaseExecutable/sqlite.kexe
-# If you run in another platform consider running the correct tartge.
+# If you run in another platform consider running the correct target.
 ```
 
 ## Examples
@@ -1236,8 +1252,9 @@ leaks -atExit -- ./bench/postgres-sqlx4k/build/bin/macosArm64/releaseExecutable/
 sqlx4k stands on the shoulders of excellent open-source projects:
 
 - Data access engines
-    - Native targets (Kotlin/Native): sqlx (Rust)
-        - https://github.com/launchbadge/sqlx
+    - Native targets (Kotlin/Native):
+        - sqlx (Rust)
+            - https://github.com/launchbadge/sqlx
     - JVM targets:
         - PostgreSQL: r2dbc-postgresql
             - https://github.com/pgjdbc/r2dbc-postgresql

@@ -25,7 +25,7 @@
   ·
   <a href="https://wiki.postgresql.org/wiki/PostgreSQL_Clients#LibreDB_Studio">PostgreSQL Clients</a>
   ·
-  <a href="https://www.postgresql.org/download/products/1/">Software Catalogue</a>
+  <a href="https://www.postgresql.org/download/products/1/#:~:text=LibreDB%20Studio">Software Catalogue</a>
   ·
   <a href="https://wiki.postgresql.org/wiki/Community_Guide_to_PostgreSQL_GUI_Tools#LibreDB_Studio">Community Guide to GUI Tools</a>
 </p>
@@ -38,10 +38,13 @@
   <a href="https://cloudberry.apache.org/docs/ecosystem/sql-clients/libredb-studio/">Apache Cloudberry</a>,
   <a href="https://docs.yugabyte.com/stable/integrations/tools/libredb-studio/">YugabyteDB</a>,
   <a href="https://www.dragonflydb.io/docs/integrations/libredb-studio">DragonflyDB</a>,
-  <a href="https://opensearch.org/community-projects/">OpenSearch</a>,
-  <a href="https://duckdb.org/docs/preview/guides/sql_editors/libredb_studio">DuckDB</a>
+  <a href="https://opensearch.org/community-projects/#:~:text=LibreDB%20Studio">OpenSearch</a>,
+  <a href="https://duckdb.org/docs/preview/guides/sql_editors/libredb_studio">DuckDB</a>,
+  <a href="https://docs.starrocks.io/docs/integrations/IDE_integrations/LibreDB_Studio/">StarRocks</a>,
+  <a href="https://aiven.io/docs/products/postgresql/howto/connect-libredb-studio">Aiven for PostgreSQL</a>,
+  <a href="https://aiven.io/docs/products/mysql/howto/connect-libredb-studio">Aiven for MySQL</a>
   and
-  <a href="https://docs.starrocks.io/docs/integrations/IDE_integrations/LibreDB_Studio/">StarRocks</a>
+  <a href="https://druid.apache.org/libraries/#:~:text=LibreDB%20Studio">Apache Druid</a>
   docs
 </p>
 
@@ -54,7 +57,7 @@
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
   <a href="https://sonarcloud.io/project/overview?id=libredb_libredb-studio"><img src="https://sonarcloud.io/api/project_badges/measure?project=libredb_libredb-studio&metric=alert_status" alt="Quality Gate"></a>
   <a href="https://codecov.io/github/libredb/libredb-studio"><img src="https://codecov.io/github/libredb/libredb-studio/graph/badge.svg?token=VA6CO9R7IH" alt="Coverage"></a>
-  <a href="https://deepwiki.com/libredb/libredb-studio"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
+  <a href="https://deepwiki.com/libredb/libredb-studio"><img src=".github/assets/deepwiki-badge.svg" alt="Ask DeepWiki"></a>
   <a href="https://artifacthub.io/packages/helm/libredb-studio/libredb-studio"><img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/libredb-studio" alt="Artifact Hub"></a>
 </p>
 
@@ -133,7 +136,7 @@ And nothing is held back. Single sign-on, ER diagrams, the AI features and the N
 
 ---
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/libredb/libredb-studio)
+[![Ask DeepWiki](.github/assets/deepwiki-badge.svg)](https://deepwiki.com/libredb/libredb-studio)
 
 ---
 
@@ -346,12 +349,13 @@ Standalone application only: the embedded `@libredb/studio` package carries no a
   | **Snap** | `sudo snap install libredb-studio` | Zero-config: the admin password is printed to `sudo snap logs libredb-studio` on first run — [Snap Store listing](https://snapcraft.io/libredb-studio) |
   | **winget (Windows)** | `winget install LibreDB.Studio` | Portable zip with a bundled Node.js runtime; run `libredb-studio` — [listed in the winget community repository](https://github.com/microsoft/winget-pkgs/tree/master/manifests/l/LibreDB/Studio) |
   | **Chocolatey (Windows)** | `choco install libredb-studio` | Same standalone zip — [listed in the Chocolatey community repository](https://community.chocolatey.org/packages/libredb-studio); the first push (0.9.59) cleared moderation on 2026-08-24, and every release publishes automatically since ([#114](https://github.com/libredb/libredb-studio/issues/114)) |
+  | **Scoop (Windows)** | `scoop bucket add extras`<br>`scoop install extras/libredb-studio` | Same standalone zip, [listed in the Scoop Extras bucket](https://github.com/ScoopInstaller/Extras/blob/master/bucket/libredb-studio.json); the bucket updates itself from each release |
   | **Portable zip (Windows)** | `.\libredb-studio.exe` | Download from [GitHub Releases](https://github.com/libredb/libredb-studio/releases); bundled Node runtime, no package manager needed |
   | **Desktop app (Linux, AppImage)** | `chmod +x libredb-studio-desktop-<version>-linux-x64.AppImage && ./libredb-studio-desktop-<version>-linux-x64.AppImage` | Native window, no browser tab and no login prompt; the server runs as a local sidecar. For a sandboxed build, use the Flatpak row below ([#232](https://github.com/libredb/libredb-studio/issues/232)) |
   | **Desktop app (Debian/Ubuntu)** | `sudo apt install ./libredb-studio-desktop-<version>_amd64.deb` | Same desktop app, installed into the menu; needs no FUSE and takes WebKitGTK from the distribution. Not the server package — that one is `libredb-studio_<version>_<arch>.deb` |
   | **Desktop app (Flatpak)** | `flatpak --user remote-add --if-not-exists flatpark https://dl.flatpark.org/flatpark.flatpakrepo`<br>`flatpak --user install flatpark org.libredb.Studio` | Sandboxed desktop app from the [FlatPark](https://flatpark.org/) remote — no filesystem access at all; databases are reached over TCP. Developer-approved listing ([#241](https://github.com/libredb/libredb-studio/issues/241)) |
 
-  > Homebrew, deb/rpm, Snap, the Windows portable zip, winget/Chocolatey, the desktop AppImage and Debian package, and the npx launcher consume standalone artifacts attached to each GitHub release. Full per-channel guide — commands, configuration, systemd usage, and the Docker image tag model — in [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md). Channel coverage scorecard (live / pending, by platform and category) — [`docs/CHANNELS.md`](docs/CHANNELS.md).
+  > Homebrew, deb/rpm, Snap, the Windows portable zip, winget/Chocolatey/Scoop, the desktop AppImage and Debian package, and the npx launcher consume standalone artifacts attached to each GitHub release. Full per-channel guide — commands, configuration, systemd usage, and the Docker image tag model — in [`docs/DISTRIBUTION.md`](docs/DISTRIBUTION.md). Channel coverage scorecard (live / pending, by platform and category) — [`docs/CHANNELS.md`](docs/CHANNELS.md).
 
   ### Quick Start (Docker)
 

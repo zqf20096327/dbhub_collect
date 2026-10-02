@@ -31,6 +31,7 @@ Table of contents:
       * [Using a proxy server](#using-a-proxy-server)
       * [Using session parameters](#using-session-parameters)
     * [Opening and Closing Connection](#opening-and-closing-connection)
+    * [Transactions](#transactions)
     * [Auto-increment Behavior](#auto-increment-behavior)
     * [Object Name Case Handling](#object-name-case-handling)
     * [Index Support](#index-support)
@@ -46,12 +47,12 @@ Table of contents:
     * [Cache Column Metadata](#cache-column-metadata)
     * [Cross-Database Reflection](#cross-database-reflection)
     * [Reflecting Large Schemas (10,000+ objects)](#reflecting-large-schemas-10000-objects)
-    * [VARIANT, ARRAY and OBJECT Support](#variant-array-and-object-support)
-    * [Struct
+    * [VARIANT, ARRAY and OBJECT Support](#variant-arr
 
 [...截断...]
 
-ured Data Types Support](#structured-data-types-support)
+ay-and-object-support)
+    * [Structured Data Types Support](#structured-data-types-support)
       * [MAP](#map)
       * [OBJECT](#object)
       * [ARRAY](#array)
@@ -134,6 +135,4 @@ pip install --upgrade snowflake-sqlalchemy
 
 > **Note:** Async support requires `snowflake-connector-python` 5.x,
 > currently a pre-release (`5.0.0rc3`). APIs may change before the connector's final
-> 5.0.0 release. Please report issues against this repo.
-
-Snowflake SQLAlchemy 
+> 5.0.0 release. Please report issues again

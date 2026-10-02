@@ -29,7 +29,7 @@
 | ⚙️ **治理写作运行时是主干** | WritingContract → ExecutablePlan → typed Artifact → 质量门（Candidate/Accepted/Verified），fail-closed；REST 命令 + SSE 运行事件，断线可续传；off/shadow/allowlist 灰度与检查点恢复。Harness 执行核与编辑部角色作为受治理 Executor 接入，不构成平行事实源 |
 | 📚 **自托管 RAG，零外部向量库** | PostgreSQL 单库内完成 BM25（ParadeDB）+ 向量（pgvector）+ RRF 融合 + GraphRAG；上传素材永远是你的最高优先级（P0），检索结果不得覆盖用户原始表达 |
 | 🧪 **评测是一等公民** | WABench 契约驱动的盲评/发布流水线 + 红队评估集；分段反馈回流记忆，好坏都有去处 |
-| 🔌 **模型无关** | OpenAI 兼容协议（DeepSeek / SenseNova 已验证）；Admin 后台热切换模型与密钥（加密入库），换 Key 不改文件 |
+| 🔌 **模型无关 + BYOK** | OpenAI 兼容协议（DeepSeek / Qwen / Kimi 等）；用户在个人中心自带 API 密钥（加密入库、连通测试、设默认），写作优先用你的配置；未配置时回退实例默认，管理员热切换不改文件 |
 
 ## 🗺 架构一览
 
@@ -101,6 +101,12 @@ docker compose -f docker-compose.quickstart.yml up -d
 
 打开 `http://localhost:3002`，注册即用。镜像发布自 GitHub Packages
 （`ghcr.io/echo-smith/luminbuddy-v2-*`），也可 `docker compose build` 本地构建。
+
+注册后在 **个人中心 → 模型服务** 配置你自己的模型 API Key（BYOK，加密存储、
+连通测试、设默认）：写作时优先使用你的密钥与额度，未配置的模型自动回退到
+实例默认（`DEEPSEEK_API_KEY`）。个人/单用户部署可将 `DISABLE_REGISTRATION=true`
+关闭自助注册，只保留自己的账号。用量统计（写作次数 / token 消耗）见
+**个人中心 → 用量统计**，详见 [docs/30](docs/30-byok-personal-models.md)。
 
 <details>
 <summary>方式二：主 Compose（自构建）· 方式三：本地开发 · 验证 · 生产部署</summary>
@@ -264,6 +270,7 @@ r7 消融结论（WP6 后重跑）：D 变体硬失败 1.4%、工具调用循环
 - [x] 历史 SoT 迁移（governed documents/runs 为主，`agent_traces` 只读）
 - [x] 四大核心写作流程选择 UI（长文创作 / 多材料综合 / 忠实改写 / 深度研究）
 - [x] 210 用例消融基准 v2（多轮一致性子集 + 真实记忆端口接入）
+- [x] BYOK 个人模型服务（个人中心自带 API Key 优先、全局回退；per-user 用量统计；`DISABLE_REGISTRATION` 单用户开关，[docs/30](docs/30-byok-personal-models.md)）
 - [ ] allowlist 晋升资格链线上验证（policy → evidence → approval → gate）
 - [ ] 编辑部 DAG 生命周期进一步接入统一记忆契约（按角色分槽注入）
 - [ ] 搜索源适配器社区共建（Tavily 等完整实现）
