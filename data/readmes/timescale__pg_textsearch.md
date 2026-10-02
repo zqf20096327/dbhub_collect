@@ -341,9 +341,13 @@ SET max_parallel_maintenance_workers = 4;
 SET maintenance_work_mem = '256MB';
 ```
 
-Each parallel worker receives at least a 64MB internal build budget, so size
-memory for the worker count. Partitioned tables build each partition
-separately.
+`maintenance_work_mem` sets the total batch budget shared by parallel workers.
+Lower it to spill batches to disk earlier. Leave memory headroom beyond this
+budget and `shared_buffers` for other server activity;
+`pg_textsearch.memory_limit` controls the memtable cache, not index builds.
+
+Partitioned tables build each partition separately. See
+[build-memory benchmarking](benchmarks/README.md#build-memory) for details.
 
 ### Query Performance
 
@@ -485,26 +489,6 @@ analogous to [Elastic's security limitation](https://www.elastic.co/docs/deploy-
 reject creating or rebuilding BM25 indexes on RLS-protected tables and
 enabling RLS where BM25 indexes already exist. This does not disable
 combinations that already exist when the setting is changed.
-
-### Phrase Queries
-
-<!-- TODO: Revisit this workaround after https://github.com/timescale/pg_textsearch/pull/480 merges. -->
-
-The BM25 index stores term frequencies but not term positions, so it cannot
-evaluate phrases directly. Over-fetch ranked candidates and apply a
-post-filter:
-
-```sql
-SELECT * FROM (
-    SELECT *, content <@> 'database system' AS score
-    FROM documents
-    ORDER BY score
-    LIMIT 100  -- over-fetch
-) sub
-WHERE content ILIKE '%database system%'
-ORDER BY score
-LIMIT 10;
-```
 
 ### Background Compaction
 
@@ -652,6 +636,7 @@ encounter a conflict,
 
 Version | Highlights
 --- | ---
+[`v1.5.0`](https://github.com/timescale/pg_textsearch/releases/tag/v1.5.0) | Background compaction, Boolean and phrase queries, and faster builds and scans
 [`v1.4.0`](https://github.com/timescale/pg_textsearch/releases/tag/v1.4.0) | Faster filtered top-k queries, Chinese search, and large-corpus improvements
 [`v1.3.1`](https://github.com/timescale/pg_textsearch/releases/tag/v1.3.1) | Standby-safe page reclaim and concurrency, VACUUM, and parallel-build fixes
 [`v1.3.0`](https://github.com/timescale/pg_textsearch/releases/tag/v1.3.0) | On-disk memtable with a shared-memory read cache and stateless WAL replay

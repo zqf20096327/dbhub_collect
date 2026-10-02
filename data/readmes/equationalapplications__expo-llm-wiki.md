@@ -627,6 +627,15 @@ const { nodesWritten, edgesWritten, superseded } = await wiki.upsertGraph('entit
 
 `upsertGraph` is "the tail of `ingestDocument` with the middle (LLM extraction) step removed" — it accepts caller-supplied nodes (`{ id, type, title, body? }`) and edges (`{ type, sourceId, targetId, id? }`) and writes them under the same `(sourceRef, sourceHash)` semantics. If a *different* live `sourceRef` already holds the same `sourceHash`, it throws `WikiSourceRefHashCollision`; re-writing the identical `(sourceRef, sourceHash)` is a no-op returning zero counts. The adapter parameter is required so writes participate in the caller's transaction.
 
+Core never sees your transaction commit, so it can't index the new nodes itself. Until you tell it, they won't show up in keyword or hybrid `read()` results on the same instance. Call `syncSearchIndex` **after** the commit, not inside the transaction:
+
+```typescript
+await db.withTransactionAsync((tx) => wiki.upsertGraph('entity-123', params, tx));
+await wiki.syncSearchIndex('entity-123'); // or syncSearchIndex() for every entity written
+```
+
+It is cheap on an entity that is already current, runs in order with core's own index syncs, and never rejects for a valid `entityId` (an empty or non-string id throws `TypeError`). It does not compute embeddings; those still come from the maintenance sweep.
+
 ### Background Maintenance
 
 ```typescript
@@ -1156,6 +1165,11 @@ flowchart TD
 1. **Wrap app** with `<WikiProvider wiki={wiki}>` — provides wiki context
 2. **Read operations** auto-refetch when `entityId`, `query`, `wiki`, or `ReadOptions` values change; call `refetch()` to refresh manually
 3. **Write operations** (write, ingest, forget, maintenance) do not automatically re-trigger `useMemoryRead`; call `refetch()` after a write to refresh read results
+
+## Documentation
+
+- [SynapseTree integration guide](docs/synapsetree-integration.md) — recommended configuration, request lifecycle, where maintenance runs, single-writer requirement, `entity_id` scheme, MCP surface, and costs for tenant-aware hosts (e.g. SaaS with per-tenant SQLite files in object storage).
+- [Benchmarks](docs/benchmarks.md) — supersession results and run-level token totals for the 7.8.0 release versus the legacy baseline. LongMemEval accuracy, tokens per answer, and ingestion tokens are not measured yet (issue #247).
 
 ---
 

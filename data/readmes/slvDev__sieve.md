@@ -1,4 +1,6 @@
-<h1 align="center">Sieve</h1>
+<p align="center">
+  <img src="assets/sieve-hero.webp" alt="Sieve: blocks stream through a filter and only your events are kept" width="100%">
+</p>
 
 <p align="center">
   <strong>Self-hosted indexer for Ethereum and the OP-Stack. Connects straight to the P2P network, no RPC provider.</strong><br>
@@ -23,7 +25,7 @@ Sieve fetches the ABI, creates your tables, syncs the chain over P2P, and serves
 
 |                 | Other indexers                     | Sieve                     |
 | --------------- | ---------------------------------- | ------------------------- |
-| **Data source** | RPC provider ($225-$900/mo)        | P2P network ($0)          |
+| **Data source** | RPC provider ($225-$900/mo)        | P2P network, Base archives ($0) |
 | **Speed**       | Provider's rate limit              | ~1000 blocks/sec (mainnet) |
 | **Setup**       | API keys, accounts, billing        | One-line install          |
 | **Config**      | TypeScript / YAML / AssemblyScript | One TOML file             |
@@ -132,6 +134,7 @@ Sieve fetches blocks from anonymous P2P peers, so it never trusts any single one
 - **Contiguous commits.** Blocks are written in strict order and the checkpoint always equals the highest committed block, so a crash or kill never leaves holes or half-written ranges.
 - **Chain-bound database.** A database is pinned to its chain on first run; reusing it for a different chain is refused.
 - **Quorum-authorized reorgs.** Reorgs (up to 64 blocks) roll back only when a peer quorum agrees on the new canonical tip.
+- **Archive-sourced blocks (Base).** Blocks imported from snapshot archives are authenticated by the pinned manifest digest, file checksums, and a header chain that links to the trusted `checkpoint_hash` you supply. Each committed block records whether it came from a peer quorum or an archive.
 
 No quorum, no commit. Sieve stops rather than write unverified data.
 
@@ -143,11 +146,11 @@ Sieve indexes Ethereum mainnet by default, plus four OP-Stack chains:
 
 | Chain      | ID   | `chain =`               | Discovery            |
 | ---------- | ---- | ----------------------- | -------------------- |
-| Ethereum   | 1    | `"mainnet"` (default)   | discv4 / discv5      |
+| Ethereum   | 1    | `"mainnet"` / `"ethereum"` (default) | discv4 / discv5 |
 | Base       | 8453 | `"base"`                | `basev0` discv5      |
 | OP Mainnet | 10   | `"optimism"` / `"op"`   | discv4 + discv5      |
 | Unichain   | 130  | `"unichain"` / `"uni"`  | discv4 + discv5      |
-| World Chain| 480  | `"world"`               | discv4 + discv5      |
+| World Chain| 480  | `"world"` / `"worldchain"` | discv4 + discv5   |
 
 ```toml
 chain = "base"   # default: "mainnet"
@@ -171,7 +174,8 @@ OP-stack notes (Base, OP mainnet, Unichain, and World Chain):
   address). The per-block L1-attributes deposit carries no value and is
   skipped by transfer indexing.
 - Peer sets on OP-Stack chains are thinner than mainnet, and many public nodes
-  prune receipts (on Base, to roughly a month). For historical backfills, pin
+  prune receipts (on Base, to roughly a month). For older Base history, use
+  [Base Archive Bootstrap](#base-archive-bootstrap). On the other chains, pin
   archive/serving nodes via `trusted_peers` (below). Sieve automatically avoids
   asking peers for history they advertise as pruned.
 - Test connectivity without a config: `sieve peers --chain base` /
@@ -188,6 +192,62 @@ OP-stack notes (Base, OP mainnet, Unichain, and World Chain):
 # Always-connected peers (e.g. an archive node for deep backfills):
 trusted_peers = ["enode://<pubkey>@<ip>:<port>"]
 ```
+
+### Base Archive Bootstrap
+
+Inspect a pinned Base V2 snapshot before planning a historical archive import:
+
+```bash
+sieve archive-plan --manifest base-manifest.json \
+  --manifest-sha256 <64-hex-digit-digest> \
+  --start-block 500123 --end-block 1000010
+```
+
+This offline command prints the selected archives, decode dependencies, disk
+estimates, and trust requirements without connecting to a database or peers.
+
+To import the selected Base V2 archives, add an `[archive]` section to your Base
+configuration. Paths are relative to the root configuration file:
+
+```toml
+[archive]
+manifest = "base-manifest.json"
+manifest_sha256 = "<64-hex-digit-digest>"
+end_block = 500999
+checkpoint_hash = "0x<trusted-end-block-hash>"
+staging_dir = "archive-stage"
+max_staging_bytes = 8000000000
+max_download_bytes = 300000000
+handoff = false
+```
+
+Obtain the manifest digest and endpoint hash independently. Run `archive-plan`
+on your exact range before choosing budgets; the example values cover only small
+early groups. The reader accepts Base V2 aligned static files from producers
+`2.5.2-dev (76a8261)` and `2.5.2-dev (5877708)`. Checksums and header links do not
+prove OP derivation or L1 finality.
+
+```bash
+sieve --config sieve.toml --start-block 499000 --end-block 500999
+```
+
+Imports resume from committed progress and release each group's transaction and
+receipt files after indexing, while retaining authenticated headers. With
+`handoff = true`, omit `--end-block` to continue from a recent archive endpoint
+through ordinary Base peer history into live follow. An explicit end above the
+archive endpoint bounds the peer tail; an equal end performs only the import.
+Missing peer history is retried without skipping blocks.
+
+Recent archive groups are large (the group covering blocks 51.5M to 52M is
+about 25 GB compressed), and staging is released after each group. `archive-plan`
+reports the exact download and staging needs for your range.
+
+Measured on Base mainnet with a Uniswap v3 WETH/AAVE pool: 7 days imported from
+the archive (302,400 blocks), 31,336 blocks caught up from peers, then live
+follow. That is 333,736 consecutive blocks with every parent hash linked across
+the archive/peer seam (block 51,968,527 to 51,968,528) and 9,588 pool events
+collected. The archive anchor, the first peer block, and the decoded pool events
+around the seam were checked against an independent RPC.
 
 ### Running Several Instances on One Host
 
@@ -332,8 +392,8 @@ project/
     pool.json
 ```
 
-- **Globals live in the root only.** `chain`, `[api]`, `[p2p]`, `[sync]`, and
-  `[[streams]]` may appear only in the root config. A protocol fragment may
+- **Globals live in the root only.** `chain`, `[api]`, `[p2p]`, `[sync]`,
+  `[archive]`, and `[[streams]]` may appear only in the root config. A protocol fragment may
   contain only `[[contracts]]` and `[[transfers]]`. Any global key in a
   fragment is a startup error.
 - **The root may still hold contracts.** A single-file `sieve.toml` keeps
@@ -439,7 +499,7 @@ Both webhook and RabbitMQ streams can run simultaneously. Both are best-effort -
 
 Auto-generated from your TOML config. Every table gets:
 
-- **Filter operators** -- `_eq`, `_ne`, `_gt`, `_gte`, `_lt`, `_lte`, `_in`, `_not_in`, `_contains`, `_starts_with`
+- **Filter operators** -- exact match (`field: value`), `_ne`, `_gt`, `_gte`, `_lt`, `_lte`, `_in`, `_not_in`, plus `_contains` and `_starts_with` on text columns
 - **Composition** -- `AND` / `OR` for complex filter logic
 - **Pagination** -- cursor-based (`first`/`after`) and offset-based (`first`/`skip`)
 - **Sorting** -- `orderBy` + `orderDirection`
@@ -448,6 +508,7 @@ Auto-generated from your TOML config. Every table gets:
 
 ```
 sieve [OPTIONS]                Run the indexer
+sieve archive-plan [OPTIONS]   Plan a Base archive import offline (no DB or peers)
 sieve init                     Scaffold a new project (sieve.toml, .env, abis/)
 sieve init --docker            Same + docker-compose.yml with PostgreSQL
 sieve schema                   Print generated SQL DDL
@@ -532,6 +593,11 @@ docker compose up -d              # starts PostgreSQL + Sieve
 
 Starts PostgreSQL and Sieve with GraphQL API on port 4000. Credentials come from `.env` (auto-loaded by Docker Compose). Edit `sieve.toml` for your contracts, or use the default USDC Transfer config.
 
+### Prebuilt image
+
+Release builds are published to `ghcr.io/slvdev/sieve:latest` (used by the
+generated `docker-compose.yml`).
+
 ### Manual build
 
 ```bash
@@ -558,7 +624,7 @@ Config and ABIs are mounted as volumes, not baked into the image. One image work
 ## How It Works
 
 ```
-Ethereum P2P Network
+devp2p network (+ Base snapshot archives)
        |
        v
   Sync Engine (parallel workers, bloom filter pre-screening)
@@ -579,12 +645,12 @@ Ethereum P2P Network
                    GraphQL API
 ```
 
-Sieve syncs block headers and receipts over the chain's devp2p protocol, filters logs against your TOML config at sync time, decodes matched events, and writes to PostgreSQL. Unmatched log and payload data is discarded. You store the events you asked for, plus the block hashes and checkpoints Sieve keeps to verify the chain and resume cleanly.
+Sieve syncs block headers and receipts over the chain's devp2p protocol (on Base it can first import history from snapshot archives), filters logs against your TOML config at sync time, decodes matched events, and writes to PostgreSQL. Unmatched log and payload data is discarded. You store the events you asked for, plus the block hashes and checkpoints Sieve keeps to verify the chain and resume cleanly.
 
 - **One command:** backfill, catch-up, and live head-following, no separate modes
 - **Checkpoint/resume:** restarts exactly where it left off (see [Integrity](#integrity))
 - **Follow mode:** after historical sync, follows the chain head in real-time
-- **Graceful shutdown:** Ctrl+C stops cleanly, progress is saved
+- **Graceful shutdown:** Ctrl+C or SIGTERM (including `docker stop`) drains pending work and saves progress. A second signal forces exit. Allow enough Docker stop time for the drain to finish.
 
 ## FAQ
 
@@ -598,7 +664,7 @@ No collision. Topic0 is the keccak256 hash of the full event signature including
 
 **Can I run multiple Sieve instances on the same machine?**
 
-Yes. Each instance needs its own P2P port, database, and config. Use `--p2p-port` or `[p2p] port` in TOML to avoid port conflicts. Speed is not affected; Sieve discovers peers outbound.
+Yes. Each instance needs its own P2P port, database, and config. Use `--p2p-port` or `[p2p] port` in TOML to avoid port conflicts. Speed is not affected; Sieve discovers peers outbound. Only one Sieve process can write to a database; a second one pointed at the same database exits at startup.
 
 ## Acknowledgments
 

@@ -7,42 +7,48 @@ schema and migrations in Dart. SQLite, PostgreSQL, MySQL and MariaDB share a typ
 query API, with explicit database capabilities and transaction boundaries.
 
 [Get started](#get-started) · [Guides](https://github.com/medz/dart-orm/blob/main/doc/README.md) ·
-[API reference](https://pub.dev/documentation/orm/6.0.0-beta.4/) ·
-[Examples](https://github.com/medz/dart-orm/tree/main/example) · [pub.dev](https://pub.dev/packages/orm/versions/6.0.0-beta.4)
+[API reference](https://pub.dev/documentation/orm/6.0.0-beta.5/) ·
+[Examples](https://github.com/medz/dart-orm/tree/main/example) · [pub.dev](https://pub.dev/packages/orm/versions/6.0.0-beta.5)
 
 > **6.0 beta:** a new implementation requiring Dart 3.13+. This is a breaking
 > replacement for the Prisma-based 5.x client. Read the [release notes](https://github.com/medz/dart-orm/blob/main/CHANGELOG.md)
 > before upgrading an existing application.
 
-These `main`-branch examples use the unreleased filter API. Regenerate clients
-and follow the [filter migration notes](https://github.com/medz/dart-orm/blob/main/CHANGELOG.md#unreleased).
-For the published 6.0.0-beta.4 package, use its
-[tagged guide](https://github.com/medz/dart-orm/blob/orm-v6.0.0-beta.4/README.md).
+These examples target `6.0.0-beta.5`, including its annotated model and filter APIs.
+Regenerate clients and review the [migration notes](https://github.com/medz/dart-orm/blob/main/CHANGELOG.md#600-beta5).
+Use the [tagged guide](https://github.com/medz/dart-orm/blob/orm-v6.0.0-beta.5/README.md)
+for this release's exact behavior.
 
-## Record schemas
+## Annotated Dart models
 
-Record schemas define each model and table together, without annotations:
+Keep your model as an ordinary Dart class and declare storage with annotations:
 
 ```dart
-final task = model('tasks', (
-  id: identity(),
-  title: text(),
-  done: boolean(defaultValue: false),
-));
+import 'package:orm/schema.dart';
+
+@Model(table: 'tasks')
+final class Task({
+  @Id(generated: true) required final int id,
+  required final String title,
+  @DatabaseDefault(false) final bool done = false,
+});
 ```
 
-Import `package:orm/schema.dart` in the definition. Generation produces the `Task`
-row, `db.task` and a standalone migration snapshot. See [authoring](https://github.com/medz/dart-orm/blob/main/doc/authoring.md)
-and the [complete company example](https://github.com/medz/dart-orm/blob/main/example/company/README.md).
+Generation produces `db.task`, typed fields and a standalone migration snapshot.
+Full reads return your original `Task`, preserving its methods and interfaces.
+`@Model()` defaults to the exact class name as the table name; physical names and
+PostgreSQL namespaces are independent of source folders. See
+[authoring](https://github.com/medz/dart-orm/blob/main/doc/authoring.md) and the
+[complete company example](https://github.com/medz/dart-orm/blob/main/example/company/README.md).
 
 ## Get started
 
-Create a Dart application and use the repository version for these examples:
+Create a Dart application and install this release:
 
 ```sh
 dart create -t console my_app
 cd my_app
-dart pub add "orm@{git:{url: https://github.com/medz/dart-orm, ref: main}}"
+dart pub add orm:6.0.0-beta.5
 ```
 
 This is an application, so add a top-level entry to its `pubspec.yaml`:
@@ -56,16 +62,17 @@ dart run orm init --database sqlite
 ```
 
 The CLI creates `orm.config.dart`, a model, its generated client, and a migration
-registry. The starter model in `lib/schema.dart` is ordinary Dart:
+registry. The starter model in `lib/models.dart` is ordinary Dart:
 
 ```dart
 import 'package:orm/schema.dart';
 
-final task = model('tasks', (
-  id: identity(),
-  title: text(),
-  done: boolean(defaultValue: false),
-));
+@Model(table: 'tasks')
+final class Task({
+  @Id(generated: true) required final int id,
+  required final String title,
+  @DatabaseDefault(false) final bool done = false,
+});
 ```
 
 Create and review the first migration, then apply it:
@@ -79,7 +86,7 @@ dart run orm migrate apply
 Replace `bin/my_app.dart` with:
 
 ```dart
-import 'package:my_app/schema.orm.dart';
+import 'package:my_app/models.orm.dart';
 import 'package:orm/sqlite.dart';
 
 Future<void> main() async {

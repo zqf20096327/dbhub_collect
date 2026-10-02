@@ -55,11 +55,11 @@ A nested relation filter, three posts **per user**, and a relation count - typed
 No codegen. No client process. No new schema language. It is still your Drizzle client underneath, and you can drop back to it at any line.
 
 ```bash
-npm install better-drizzle drizzle-orm@^1.0.0-rc.4
+npm install better-drizzle drizzle-orm@1.0.0-rc.4
 ```
 
 > [!IMPORTANT]
-> better-drizzle supports **only Drizzle ORM 1.x** (`drizzle-orm@^1.0.0-rc.4`, including the 1.0 release candidates) and its `defineRelations(...)` API. **`drizzle-orm` 0.x is not supported** - projects on 0.x must stay on better-drizzle `0.2.x`. Install `drizzle-orm` with the explicit range: until Drizzle 1.0 is tagged `latest`, a plain install resolves to 0.x. See [upgrading](https://better-drizzle.com/docs/guides/upgrading#moving-to-drizzle-orm-1x).
+> better-drizzle supports **only Drizzle ORM 1.x** (`drizzle-orm` `>=1.0.0-rc.4 <1.0.0-rc.5`; later release candidates are not supported yet) and its `defineRelations(...)` API. **`drizzle-orm` 0.x is not supported** - projects on 0.x must stay on better-drizzle `0.2.x`. Install `drizzle-orm` with the explicit version: until Drizzle 1.0 is tagged `latest`, a plain install resolves to 0.x. See [upgrading](https://better-drizzle.com/docs/guides/upgrading#moving-to-drizzle-orm-1x).
 
 ## Setup
 
@@ -171,6 +171,23 @@ const user = await client.users.findUnique({ where: { id } }).throw();
 //    ^? User
 ```
 
+## Prepared statements that keep the types
+
+Define the read once with `param()`, then execute it with new values. Each param takes its type from the column or option it stands in for, and the result keeps the read's shape.
+
+```ts
+import { param } from 'better-drizzle';
+
+const findUserByEmail = client.users
+	.findUnique({ where: { email: param('email') } })
+	.prepare('users.by-email');
+
+const user = await findUserByEmail.execute({ email: 'user@example.com' });
+//    ^? User | null       execute({ email: 1 }) is a type error
+```
+
+Every read can be prepared, including `paginate()` and `cursor()`. Plugin transforms, before hooks, and `beforeQuery` run once at prepare time; `afterQuery`, intercepts (including the cache plugin), and plugin after hooks run on every execution. See [prepared statements](https://better-drizzle.com/docs/querying/prepared-statements).
+
 ## JSONB that the compiler understands
 
 Declare the shape with Drizzle's `$type<T>()` and every scalar leaf becomes a typed dot path. PostgreSQL.
@@ -195,6 +212,17 @@ await client.accounts.update({
 ```
 
 On typed JSONB columns, dotted paths and the `{ json: ... }` wrapper both check paths and values against `$type<T>()`; use the wrapper for single-level keys. Path updates create missing object ancestors, treat SQL `NULL` and non-object JSONB roots as `{}`, and preserve existing object ancestors and unrelated keys. A scalar, array, or JSON `null` at an intermediate path is replaced with `{}`. Duplicate or ancestor/descendant paths are rejected, as are values containing nested `undefined`. Untyped JSONB columns keep open path names and JSON-encodable values.
+
+## Your filters, inside raw Drizzle
+
+```ts
+const rows = await db
+	.select()
+	.from(users)
+	.where(client.users.$where({ age: { gte: 18 }, posts: { some: { published: true } } }));
+```
+
+`$where()` compiles the same typed `where` as `findMany` into a Drizzle `SQL` condition (`undefined` when empty), for joins, subqueries, and hand-written queries. It is pure compilation: plugin filters such as soft-delete visibility are not applied.
 
 ## Row locks with guardrails
 
@@ -245,6 +273,9 @@ That gets you runtime guardrails, automatic timestamps, soft deletes with `resto
 
 Pair `better-drizzle/eslint` with the runtime rules to catch the statically-checkable subset in your editor.
 
+> [!WARNING]
+> `better-drizzle/cache` is experimental in `0.3.x`: its options, `$cache` API, store interface, and entry format can change in a patch release.
+
 `better-drizzle/cache` caches the reads you opt into, and `better-drizzle/cache/redis` stores them in the Redis client you already have. Observed writes invalidate declared dependencies after they commit, including included relations and declared foreign-key cascades. Commit and invalidation are separate operations; concurrent reads and store failures can leave stale results cached, so use database reads when consistency must be exact. No Redis key is ever scanned. Raw Drizzle writes still need a manual `$cache.invalidate()`.
 
 ```ts
@@ -264,6 +295,7 @@ Measured against raw Drizzle doing the same work and returning the same shape - 
 
 - **9.1× faster relation loading** (10.24 ms → 1.12 ms), and the gap widens with the number of parent rows
 - every other read within **~9%**, writes within **~5%**
+- **prepared reads within ~4%** of Drizzle's own prepared statements, and 1.5–3.1× faster than the same read unprepared
 - **zero runtime dependencies**
 
 Relation loading wins because the batched loader issues one query per relation node instead of the per-row work the equivalent hand-written code ends up doing. Numbers are SQLite in-memory to isolate wrapper overhead from I/O; reproduce them with `bun run bench:report`.

@@ -149,8 +149,11 @@ docker compose exec api dotnet ef database update \
 Web `:3000` · Admin `:4200` · API + Swagger `:5001` · MinIO console `:9001`. `VITE_*` values are baked
 in at build time — rebuild the frontend images after changing them.
 
-**AWS** — `./deploy.sh` provisions ECS Fargate behind an ALB, S3 + CloudFront for the `web` and
-`admin` builds, and points the API at Supabase. No RDS, no ElastiCache.
+**AWS** — the API runs as one Docker container on a Lightsail instance behind CloudFront, the `web`
+and `admin` builds are served from S3 + CloudFront, and the database is Supabase. No RDS, no
+ElastiCache, no load balancer. `./deploy.sh` builds and ships everything but does not create the
+Lightsail instance: set that up once with `scripts/lightsail-provision.sh` (DEPLOYMENT.md §4c).
+One box means a deploy is a short outage and there is no second availability zone.
 [DEPLOYMENT.md](DEPLOYMENT.md) is the full runbook.
 
 ---
