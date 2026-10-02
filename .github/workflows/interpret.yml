@@ -51,7 +51,7 @@ jobs:
           EXTRA=""
           [ "${{ github.event.inputs.retry_rejected }}" = "true" ] && EXTRA="--retry-rejected"
           if [ "${{ github.event_name }}" = "schedule" ]; then
-            BUDGET=100; LIMIT=500
+            BUDGET=100; LIMIT=1200
           else
             REM=$(( 355*60 - ($(date +%s) - JOB_T0) - 600 ))
             [ "$REM" -lt 600 ] && REM=600
