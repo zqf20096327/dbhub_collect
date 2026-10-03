@@ -262,7 +262,7 @@ Useful resources and dependencies that are used in Genius.
 
 - Thanks to CodeWithAntonio: https://codewithantonio.com/
 <!--- DEPENDENCIES_START --->
-- [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^7.9.4
+- [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^7.9.7
 - [@hookform/resolvers](https://www.npmjs.com/package/@hookform/resolvers): ^5.9.1
 - [@prisma/adapter-mariadb](https://www.npmjs.com/package/@prisma/adapter-mariadb): ^7.10.0
 - [@prisma/client](https://www.npmjs.com/package/@prisma/client): ^7.10.0
@@ -281,17 +281,17 @@ Useful resources and dependencies that are used in Genius.
 - [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.1
 - [crisp-sdk-web](https://www.npmjs.com/package/crisp-sdk-web): ^1.2.1
-- [dotenv](https://www.npmjs.com/package/dotenv): ^18.0.2
+- [dotenv](https://www.npmjs.com/package/dotenv): ^18.0.4
 - [eslint](https://www.npmjs.com/package/eslint): 9.39.5
-- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.3.5
+- [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.3.7
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.47.0
-- [next](https://www.npmjs.com/package/next): 16.3.5
+- [next](https://www.npmjs.com/package/next): 16.3.7
 - [openai](https://www.npmjs.com/package/openai): ^7.8.0
 - [postcss](https://www.npmjs.com/package/postcss): ^8
 - [prisma](https://www.npmjs.com/package/prisma): ^7.10.0
 - [react](https://www.npmjs.com/package/react): 19.3.0
 - [react-dom](https://www.npmjs.com/package/react-dom): 19.3.0
-- [react-hook-form](https://www.npmjs.com/package/react-hook-form): ^7.88.0
+- [react-hook-form](https://www.npmjs.com/package/react-hook-form): ^7.89.0
 - [react-markdown](https://www.npmjs.com/package/react-markdown): ^10.1.0
 - [replicate](https://www.npmjs.com/package/replicate): ^1.4.0
 - [sonner](https://www.npmjs.com/package/sonner): ^2.0.7

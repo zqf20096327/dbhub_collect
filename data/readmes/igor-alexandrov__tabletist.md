@@ -28,7 +28,8 @@ Linux (Omarchy and Hyprland first), macOS and Windows.
 
 - Saved connections grouped in a picker, each tagged with its environment
   (dev, staging, production) and when it was last used.
-  Open more than one and they share a tab bar.
+  Open more than one and each is a chip in the window's header: click one
+  to switch.
 - Direct connections, TLS (libpq's `sslmode` values, with `allow` read as
   `prefer`; `verify-ca` needs a CA file, and MySQL has no `verify-ca` yet),
   and SSH tunnels (password, key file or agent) with host keys trusted on
@@ -52,7 +53,9 @@ Linux (Omarchy and Hyprland first), macOS and Windows.
   Every run happens in a read-only transaction that is rolled back, and
   statements that would leave it are refused. Format (Cmd/Ctrl+Shift+F)
   lays queries out in river style and uppercases reserved words, in the
-  selection's statements or the whole script.
+  selection's statements or the whole script. Keywords, schemas, tables,
+  views and the columns of a statement's tables are completed while typing
+  (Ctrl+Space or Cmd/Ctrl+I asks for the list anywhere).
 - Quick open (Cmd/Ctrl+P) and a full keyboard map: press `?` in the app.
 - Looks native on each platform: a macOS look in IBM Plex, and on Linux the
   Omarchy look (square, keyboard first, vim keys, the desktop's monospace
@@ -61,8 +64,9 @@ Linux (Omarchy and Hyprland first), macOS and Windows.
 
 ## Install
 
-- **Arch Linux / Omarchy:** `yay -S tabletist-bin` (release binary) or
-  `yay -S tabletist` (built from source).
+- **Arch Linux / Omarchy:** the AUR packages (`tabletist-bin` and
+  `tabletist`) are not published yet. Until they are, use the release
+  `.tar.gz` (see Other Linux below).
 - **macOS:** download `tabletist-v<version>-macos-universal.dmg` from the
   [releases](https://github.com/igor-alexandrov/tabletist/releases) and drag
   Tabletist to Applications. Releases are signed and notarized only when
@@ -75,11 +79,9 @@ Linux (Omarchy and Hyprland first), macOS and Windows.
 - **Other Linux:** the release `.tar.gz` holds the binary, a `.desktop` file
   and the icon.
 
-The Linux release binaries, in the `.tar.gz` and in `tabletist-bin`, are
-built on Ubuntu 24.04 and need glibc 2.39 or newer (Ubuntu 24.04, Debian 13,
-Fedora 40 or later). On an older system, [build from
-source](#build-from-source); on an Arch-based one, `yay -S tabletist` does
-that for you.
+The Linux release binaries are built on Ubuntu 24.04 and need glibc 2.39 or
+newer (Ubuntu 24.04, Debian 13, Fedora 40 or later). On an older system,
+[build from source](#build-from-source).
 
 ## Build from source
 

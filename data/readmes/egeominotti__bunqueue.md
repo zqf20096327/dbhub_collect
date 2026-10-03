@@ -101,10 +101,10 @@ Choose a Linux distribution with the same tags on either registry:
 
 | Variant | Version tag | Moving tag | Runtime base |
 |---|---|---|---|
-| Alpine (default) | `2.9.7-alpine` | `alpine`, `latest` | Alpine 3.22, musl |
-| Debian | `2.9.7-debian` | `debian` | Debian 13 |
-| Debian slim | `2.9.7-slim` | `slim` | Debian 13 slim |
-| Distroless | `2.9.7-distroless` | `distroless` | Debian 13, no shell or package manager |
+| Alpine (default) | `2.9.8-alpine` | `alpine`, `latest` | Alpine 3.22, musl |
+| Debian | `2.9.8-debian` | `debian` | Debian 13 |
+| Debian slim | `2.9.8-slim` | `slim` | Debian 13 slim |
+| Distroless | `2.9.8-distroless` | `distroless` | Debian 13, no shell or package manager |
 
 **Which variant should I use?**
 
@@ -130,18 +130,18 @@ user permission to install packages at runtime.
 docker run -d --name bunqueue --restart unless-stopped \
   -p 127.0.0.1:6789:6789 -p 127.0.0.1:6790:6790 \
   -v bunqueue-data:/app/data \
-  egeominotti/bunqueue:2.9.7-alpine
+  egeominotti/bunqueue:2.9.8-alpine
 
 curl --fail http://127.0.0.1:6790/health
 ```
 
-This example exposes the APIs only on your machine. Replace `2.9.7-alpine` with
-`2.9.7-debian`, `2.9.7-slim`, or `2.9.7-distroless` to choose another base.
+This example exposes the APIs only on your machine. Replace `2.9.8-alpine` with
+`2.9.8-debian`, `2.9.8-slim`, or `2.9.8-distroless` to choose another base.
 Moving tags such as `alpine` follow newer releases; version tags identify a
 release, while a digest pins the exact image even across base-image rebuilds.
 
 Every variant supports both architectures, runs as UID/GID `1001:1001`, and
-stores SQLite data in `/app/data`. Unsuffixed tags such as `2.9.7` stay on Alpine.
+stores SQLite data in `/app/data`. Unsuffixed tags such as `2.9.8` stay on Alpine.
 Production images contain the compiled server and required system libraries;
 development dependencies and a separate Bun installation stay out of the image.
 The built-in health check uses `/app/bunqueue healthcheck`, including on distroless.
@@ -237,7 +237,7 @@ Framework Integrations.
   `QueueEvents`, `FlowProducer`, plus `QueuePro`/`WorkerPro` aliases, fair job
   groups, native processor batches, cooperative cancellation, and Observable
   results; [migrating takes minutes](https://bunqueue.dev/guide/migration/)
-- **MCP server included** — 73 tools; AI agents get full queue control out of the box
+- **MCP server included** — 75 tools; AI agents get full queue control out of the box
 - **Everything server-side** — retries with backoff, priorities, cron, rate limits, dead letter queue
 - **Measured, operation-specific performance** — 729K jobs/sec internal
   in-memory batch push, 186K jobs/sec public on-disk Embedded `addBulk`, and
@@ -537,10 +537,11 @@ step timeouts, typed events, SQLite-persisted execution state.
 
 ## Built for AI Agents (MCP Server)
 
-bunqueue ships a native MCP server: 73 tools, 5 resources, 3 prompts. Agents
+bunqueue ships a native MCP server: 75 tools, 5 resources, 3 prompts. Agents
 schedule cron jobs, push and process jobs, retry failures, set rate limits,
 and read stats — no glue code. HTTP handlers let an agent register a URL and
-have an embedded worker call it for every job.
+have a worker call it for every job. Run it over stdio or Streamable HTTP, and
+opt in to toolsets, confirmation of destructive calls and workflow approvals.
 
 ```bash
 bun add bunqueue @modelcontextprotocol/sdk   # the MCP SDK is an optional peer

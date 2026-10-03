@@ -191,7 +191,7 @@ check cannot decide (the server refused it, gave no count, or the padding itself
 ratio is past 12 characters a token, far above anything measured (at most 4.5 over 612 real prompts, 6.2
 for deliberately repetitive rows); then it refuses all the same. Set `OLLAMA_CONTEXT_LENGTH` (or the model's `num_ctx`) to
 cover the largest prompt plus the reply, with headroom: a modest cut to a window that is not a multiple
-of 1,024 tokens can still slip by. `MNEMIQ_LLM_PROMPT_CUT_CHECK=0` turns the check off, for a server or
+of 1,024 tokens can still slip by. At startup mnemiq also measures, for each role in the access policy and from only what that role is shown, the largest prompt its store can produce (the tables that bring the most into it: card, definitions and examples) plus the generator's 4,000-token reply, against the window, and logs a warning when it does not fit: vLLM counts it and reports its window itself; for Ollama, set `MNEMIQ_LLM_CONTEXT_WINDOW` to the window you configured and mnemiq estimates, erring long (`MNEMIQ_LLM_WINDOW_CHECK=0` skips the measurement). `MNEMIQ_LLM_PROMPT_CUT_CHECK=0` turns the cut check off, for a server or
 proxy whose `prompt_tokens` leaves out tokens it reused from a cache (Ollama 0.5.4 counts them: measured).
 
 Set `MNEMIQ_LOCAL_ONLY=1` to make that verification the `mnemiq` command's job instead of yours
@@ -210,6 +210,21 @@ DuckDB's `vss` and `fts` extensions from `extensions.duckdb.org` on first use, a
 Postgres or SQLite source fetches DuckDB's matching `postgres`/`sqlite` extension the same way —
 pre-seed DuckDB's extension cache, or vendor the extensions your source and store need, ahead of
 time.
+
+**A local server samples unless told not to.** vLLM answers a request that names no temperature with the
+model's own defaults: Qwen2.5-Coder-32B ships temperature 0.7, and five identical requests came back five
+different ways (one way at temperature 0, measured on vLLM 0.9). So mnemiq sends temperature 0 for the two
+calls that decide what you are shown: the judge that scores whether a result answers the question, and the
+selector that picks among deep mode's candidates. That makes their verdicts far more consistent; it is not a
+guarantee, since a server batching concurrent requests can still vary at temperature 0. Every other call
+samples at the server's default: SQL generation and its corrector, the answer's wording, and enrichment,
+whose descriptions, facts and examples are stored and read by later questions. **Leave the server's default
+temperature above 0 if you use deep mode:** its five candidates cycle through three prompt strategies, so the
+fourth and fifth repeat a prompt and differ only by the sample; at temperature 0 they come back identical and
+inflate the agreement deep mode's confidence gate counts. `MNEMIQ_LLM_SEED` is safe there: mnemiq adds each
+candidate's index to it. Reasoning models that
+refuse any temperature but their own (GPT-5, o1, o3, o4, also behind a gateway prefix such as `openai/o3`) are
+sent none.
 
 ## Use it from a browser (workbench)
 
@@ -244,6 +259,20 @@ connection stays open. With a `uv sync` installation, launch from the repository
 Postgres, SQLite, DuckDB, Oracle, Snowflake and Databricks, with DuckDB as the universal executor.
 The semantic model (`mnemiq-contract`) is open, and dbt-semantic-interfaces import/export ships
 with it.
+
+**Enrich only the tables you name.** A source in the manifest at `MNEMIQ_SOURCES_PATH` may carry a
+`tables` list, exact names or shell patterns, matched without regard to case:
+
+```json
+[{"id": "plant", "kind": "oracle", "target": "db.example:1521/PLANT", "catalog": "src",
+  "schema": "MES", "tables": ["WIP_LOT", "WIP_LOT_HIST", "EQP_*"]}]
+```
+
+Enrichment then sees only those tables -- introspection, profiling, cards and descriptions alike,
+foreign keys only between two of them -- so you can point it at a production schema of thousands
+of tables instead of copying the few you need. A name or pattern that matches nothing stops
+`mnemiq enrich` with a message saying which, so a typo cannot shrink the model unnoticed. Without
+`tables`, every table the source reports is enriched, as before.
 
 ### Deploying against Oracle
 

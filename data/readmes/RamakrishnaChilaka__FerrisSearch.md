@@ -242,14 +242,34 @@ to query-body `_count`. SQL paths that share distributed search also reject an
 all-failed shard set. Metadata-only `_count` and SQL `count(*)` reject an entirely
 unavailable shard set.
 `_count?q=...` and `_msearch` are not supported.
-Empty remote-store indices also validate query strings against the index mappings
+Malformed or out-of-range numeric/date range, term, terms, SQL predicate,
+kNN filter, and cursor values return HTTP 400 with the offending field/value
+and parse cause rather than silently matching nothing. On integer fields, fractional `term` values
+match no documents, `terms` drops fractional values, and ranges round lower
+bounds upward and upper bounds downward, including negative bounds. These
+rules also apply to pushed-down SQL predicates. Fractional date epoch
+milliseconds are accepted and truncated to whole milliseconds. Residual SQL
+keeps DataFusion's numeric coercion and SQL-style timestamp parsing.
+Empty ranges and kNN dimension mismatches (including empty query vectors)
+are client errors: HTTP 400 when every shard fails. Empty remote-store indices
+also validate query strings and typed values against the index mappings
 and return HTTP 400 with a parser cause instead of hiding invalid queries behind
 an empty result.
 
-Search clamps each shard's collector window to its live document count.
-Oversized `size` values cannot allocate more hit slots than the shard can return.
+Search and SQL clamp each shard's hit-collector limit to its live document
+count; kNN limits and candidate buffers are bounded by indexed vectors.
+Huge valid SQL LIMIT values return the available rows, including on sorted
+and materialized paths. This is not a `max_result_window` policy.
 If `from + size` overflows, URI and query-body search return HTTP 400 with a
 pagination reason before dispatching work.
+Sort lists (including explicit SQL ORDER BY lists) support up to 64 fields;
+wider lists return HTTP 400 before cursor expansion or sort-value allocation.
+
+Unwinding search-worker panics become diagnosable shard failures without
+terminating the node or its search pool. Write-worker panics remain explicitly
+fail-stop: the operation and panic are logged before abort, because a panic
+can leave partially mutated shard state. Allocator OOM aborts are not caught;
+these bounds are not a total query-memory or admission-control budget.
 
 ### 5. Analyze the matched set
 
@@ -541,8 +561,17 @@ production ready**. The most important limits are:
   Bulk action metadata rejection fails the whole request before any writes.
   `wait_for_active_shards` accepts only absent or `1`, not `all`.
   Document and bulk URLs accept `refresh=true`, an empty value, and
-  `refresh=false`; refresh affects only copies on the coordinating node.
-  `refresh=wait_for` and invalid refresh values are rejected. See
+  `refresh=false`. Explicit refresh uses a bounded primary-owned round for
+  the primary and every authoritative in-sync replica, whichever node
+  coordinates. Bulk pays one round per touched shard after its items finish,
+  not one per item. Reported refresh failures keep the acknowledged status
+  and receipt; inspect `_shards.failed` and `_shards.failures` even on a
+  successful write. `forced_refresh: true` is emitted only after successful
+  primary publication. Data-phase timeouts and transport disconnects can
+  still leave an indeterminate write outcome. No refresh or `refresh=false`
+  adds no refresh RPCs. `refresh=wait_for` and invalid values are rejected. See
+  [ADR 0001, D8](docs/adr/0001-write-consistency-and-retry-contract.md#d8-visibility)
+  for visibility and refresh-failure semantics and
   [ADR 0001, D13](docs/adr/0001-write-consistency-and-retry-contract.md#d13-unimplemented-parameters-fail-loudly)
   for endpoint-specific conditions and unsupported aliases.
 - Replica bootstrap uses file snapshot plus physical-order WAL streaming, but
