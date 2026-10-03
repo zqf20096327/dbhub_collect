@@ -292,6 +292,13 @@ Linux distributions may vary):
 * (optional) `tetex-latex` / `texlive-latex-recommended`
 * (optional) `rpm-build`
 
+The GitHub Actions workflow uses `ubuntu-latest` (Ubuntu 24.04). Its Ubuntu
+packages currently provide Abseil C++ (`libabsl-dev`) version
+`20220623.1-3.1ubuntu3.2` and Protobuf (`libprotobuf-dev` and
+`protobuf-compiler`) version `3.21.12-8.2ubuntu0.3`. `libabsl-dev` is installed
+as a dependency of `libprotobuf-dev`; these versions come from Ubuntu and may
+change as the runner image and package updates change.
+
 For instance, the following subsections show respective installation commands
 for a few famous Linux distributions.
 
@@ -610,7 +617,7 @@ To customize OpenTREP to your environment, you can alter
 the installation directory:
 ```bash
 export INSTALL_BASEDIR="${HOME}/dev/deliveries"
-export TREP_VER="0.08.02"
+export TREP_VER="0.09.01"
 ```
 
 Then, as usual:

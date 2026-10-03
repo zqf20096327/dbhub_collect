@@ -25,15 +25,35 @@ is at [nextrmnl.nexapps.dev](https://nextrmnl.nexapps.dev).
 
 - **Terminal in the browser** (xterm.js) over a WebSocket to the nextrmnl server, which speaks SSH to your
   machines. Full-screen, tabs for open sessions, jump hosts, a command to run after sign-in, keepalives.
+- **Sessions that survive the browser**: a reload, a closed tab or a dropped network does not end the shell. It
+  keeps running for a few minutes (5 by default, set by the operator, 0 turns it off) and comes back with its last
+  screen; after a short drop only what was missed is sent again. Another device of the same account can take it
+  over. Closing the tab on purpose ends it at once, and the browser asks before leaving a page with an open shell,
+  so Ctrl+W in nano does not cost the session.
+- **Split view**: two terminals side by side, above each other, or four; each field picks its session. **Type
+  into all** sends the keyboard to every field at once, with red frames as long as it is on.
+- **Commands** kept per account and typed into the terminal with a click, never run: Enter is yours.
+- **Import** from `~/.ssh/config` (hosts, users, ports, ProxyJump) or a PuTTY registry export. Keys and passwords
+  stay where they are.
+- **On a phone**: a key bar with Esc, Tab, Ctrl, Alt and the arrows, and nextrmnl installs as an app.
+- **Direct links** to a connection (`/connect/<id>`) for bookmarks and dashboards; opening one asks before it
+  connects.
+- **Search in the terminal** with Ctrl+Shift+F, all matches marked. **Color schemes** (Dracula, Nord, Solarized,
+  Gruvbox, One Dark, Tokyo Night, or the nex colors that follow light and dark) and **any installed font**, Nerd
+  Fonts included; changes apply to open terminals right away.
 - **SFTP next to the terminal**: browse, upload with drag and drop, download, rename, delete, all through the
   same SSH connection.
 - **Copy and paste like PuTTY**: selecting copies, Ctrl+Shift+C, Ctrl+Insert, Ctrl+C with a selection; paste with
   Ctrl+V, Ctrl+Shift+V, Shift+Insert or a right click. Several lines are shown before they run.
 - **Accounts**: the first account is the operator, others come by invitation link or through OpenID Connect.
   Connections can be shared; sharing passes name, address and settings, never access.
-- **Second factor**: a code from an authenticator app on top of the password (TOTP), with recovery codes for
-  the day the phone is gone. The operator can require it for every password account; whoever locks themselves
-  out gets it reset by the operator.
+- **Second factor**: a code from an authenticator app on top of the password (TOTP), a **passkey** or a security
+  key such as a YubiKey (WebAuthn, on HTTPS), with recovery codes for the day the phone or the key is gone. The
+  operator can require it for every password account; whoever locks themselves out gets it reset by the operator.
+- **Guest accounts and shares with an end**: an invitation can make an account that ends on a day, and a share
+  can end on a day too. Then sign-in, connection and open terminals end with it.
+- **Notifications** to [nexsift](https://github.com/DerKezorm/nexsift), Gotify, ntfy or a webhook: locked
+  accounts, changed host keys, sign-ins, opened sessions, failed backups, each group on or off. Off by default.
 - **A vault per account** for private keys and stored passwords, encrypted with a key that only the account's
   password unwraps. Not the operator, not a backup, not a database dump can read it. Generate Ed25519 or RSA
   keys, or paste existing ones. Download the vault as an encrypted file and restore it, here or on another nextrmnl.
@@ -50,7 +70,8 @@ is at [nextrmnl.nexapps.dev](https://nextrmnl.nexapps.dev).
   error message, downloadable. Never with terminal content, keystrokes, passwords, keys or tokens.
 - **Read-only API keys** for dashboards such as [nexdeck](https://nexdeck.nexapps.dev): four endpoints under
   `/api/v1` (`status`, `sessions`, `history`, `connections`) with the key as `Authorization: Bearer`. Off by
-  default; the operator switches them on and creates them under Settings, Security.
+  default; the operator switches them on and creates them under Settings, Security. Each connection carries its
+  direct link.
 - German and English; another language is one JSON file.
 
 ## Start
@@ -115,6 +136,16 @@ open with the account's password only. Both go into the backup archive.
 - Every changing request needs the header `X-Requested-By: nextrmnl`; WebSockets must come from the same origin.
 - Every password check while signed in (opening the vault, exporting it, changing the password, the second
   factor) counts like a sign-in: wrong answers lock the account. Terminals end with the sign-in they came with.
+- A shell waiting for its browser can only be taken back by the account that opened it, not even by the operator.
+  Its last screen (at most 256 KB) stays in the server's memory only, never on disk, in the log or in a backup, and
+  is gone with the session. Signing out ends waiting shells too.
+- A passkey is a second factor, never a replacement for the password: the vault opens with the password alone.
+  Only the public key is stored; a key whose counter goes backwards (a copy) is refused.
+- Notifications are another way out and closed until the operator opens them. Their token is stored encrypted and
+  never shown again; redirects are not followed; a message never carries terminal content, passwords or keys.
+- A direct link never opens a shell by itself: it shows the connection and waits for a click, and only to an
+  account that sees that connection. Commands are text without control characters, so a stored command cannot
+  smuggle in a Ctrl+C or an escape sequence.
 - A member of a shared connection signs in with their own user, key or password, and only their own start
   command runs in their shell; a stored password stays with the host, port and user it was given for.
 - Responses carry a Content Security Policy, `X-Frame-Options: DENY` and friends.

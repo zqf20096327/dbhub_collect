@@ -49,7 +49,7 @@ constraints, off-site backups, and operational configuration, see the
 [integration guide](docs/INTEGRATIONS.md), [installation guide](docs/INSTALLATION.md),
 [operations runbook](docs/OPERATIONS.md), and [customer workflows](docs/CUSTOMER_WORKFLOWS.md).
 
-> **Status:** StePanel supports single-host operation with tenant-scoped account provisioning (TOTP MFA, assigned-site limits, delegated roles, scoped access, resource profiles, and a customer plan/usage panel). Multi-tenant production deployment is NOT RECOMMENDED yet: provider-wide audit segregation, HA datastore/failover, and cross-host durable job routing remain open platform requirements. See [PRODUCTION_READINESS.md](docs/PRODUCTION_READINESS.md) for detailed capability status. Administrators can inspect verified local restore dependencies through the authenticated `/api/capabilities` endpoint; remote backup access and each artifact's integrity are checked when an operation runs. Always run behind authenticated HTTPS and test restores against a disposable server before using production data.
+> **Status:** StePanel supports single-host operation with tenant-scoped account provisioning (TOTP MFA, assigned-site limits, delegated roles, scoped access, resource profiles, and a customer plan/usage panel). Tenants are separated in the control plane and by Unix user and cgroup on the host, but sites share one kernel and network, so StePanel is not a security boundary between hostile customers; see [what tenant isolation covers](SECURITY.md#what-tenant-isolation-does-and-does-not-mean). Multi-tenant production deployment is NOT RECOMMENDED yet: provider-wide audit segregation, HA datastore/failover, and cross-host durable job routing remain open platform requirements. See [PRODUCTION_READINESS.md](docs/PRODUCTION_READINESS.md) for detailed capability status. Administrators can inspect verified local restore dependencies through the authenticated `/api/capabilities` endpoint; remote backup access and each artifact's integrity are checked when an operation runs. Always run behind authenticated HTTPS and test restores against a disposable server before using production data.
 
 ## Architecture at a glance
 
@@ -137,12 +137,20 @@ curl -fsSLO "https://github.com/cyberducttape/StePanel/releases/download/${relea
 curl -fsSLO "https://github.com/cyberducttape/StePanel/releases/download/${release}/SHA256SUMS"
 grep "stepanel_${release#v}_linux_${arch}.tar.gz" SHA256SUMS | sha256sum -c -
 tar -xzf "stepanel_${release#v}_linux_${arch}.tar.gz"
-sudo STEPANEL_ADMIN_PASSWORD='use-a-password-manager' \
-  STEPANEL_PANEL_HOSTNAME=panel.example.com \
-  STEPANEL_DB_ENGINE=mariadb \
-  STEPANEL_BACKUP_ENCRYPTION_KEY="$(openssl rand -hex 32)" \
-  STEPANEL_DB_VERSION=default ./install.sh
+sudo ./install.sh --guided
 ```
+
+> **Availability:** `--guided` is on `main` and ships in the first release
+> after v0.7.0. The v0.7.0 installer takes its settings from environment
+> variables instead; see the [installation guide](docs/INSTALLATION.md#build-and-install).
+
+The guided install asks seven questions (panel address, web server, database,
+administrator, authenticator app, offsite backup location, optional features),
+checks each answer as you go, generates every key, shows exactly what will
+change on the server, and installs only after you confirm. Before starting,
+install rclone and add a storage remote with `sudo rclone config`; the guide
+tests that remote before continuing. For unattended installs, see the
+[installation guide](docs/INSTALLATION.md).
 
 The installer records the selected database engine/version, creates a restricted `stepanel` service account, writes the requested panel hostname into the selected webserver, and binds the control plane to `127.0.0.1:8090`. Caddy provisions HTTPS automatically; Apache installations must complete TLS termination before signing in.
 

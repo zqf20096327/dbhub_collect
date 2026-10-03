@@ -44,8 +44,71 @@ The server signs client IDs and topic keys with a key only it knows, and refuses
 
 Up to v0.3 the sample `unitdb.conf` shipped with a key, which the server now refuses: it is public, so anyone could sign client IDs and topic keys with it. A deployment that ran with it needs a new key, and its clients new client IDs and topic keys.
 
+### Keyring and key rotation
+The single key is a keyring of one key. To rotate keys, give the server a keyring instead, in the `UNITDB_KEYRING` environment variable or in a file named by `encryption_config`'s `keyring_file`: a JSON list of keys, each with an id from 0 to 255, 32 random bytes in base64 (`openssl rand -base64 32`), and a use, `issue` for the one key the server issues with or `read` for keys it only reads with. The keyring takes the place of the single key, and every node of a cluster needs the same one:
+
+```
+> export UNITDB_KEYRING='[{"id": 1, "key": "<openssl rand -base64 32>", "use": "issue"},
+                          {"id": 0, "key": "<the old key, base64>", "use": "read"}]'
+```
+
+The single key is key 0, used as its 32 characters are: in a keyring it is `printf %s "$UNITDB_ENCRYPTION_KEY" | base64`. To rotate:
+
+1. Add a new key as the issue key, and keep the old one as a `read` key. Restart every node with the keyring. Client IDs and topic keys of the old key keep working; new ones are issued with the new key.
+2. Hand out new client IDs and topic keys. A client that connects with a v2 client ID of the old key, or with a v1 one, is sent the same ID sealed with the new key on `unitdb/clientid/` (see below); topic keys are requested again with `unitdb/keygen`. Service IDs are sealed again with `mintid -from <id>`.
+3. Remove the old key. What it issued is refused from then on.
+
+The server derives a subkey of each key for each use (HKDF-SHA256): one seals client IDs, another signs topic keys, a third seals stored records (below).
+
+### Encryption at rest
+With `"encrypt_at_rest": true` in `unitdb.conf`, every record the server stores is sealed before the storage engine sees it: messages and their replicas, hints for other nodes, the ids of replicated messages, the topic index, sessions and their logs, and subscriptions. It is off by default in this version.
+
+- A record is sealed with XChaCha20-Poly1305 under a random 24-byte nonce, with the store subkey of the keyring's issue key, and with its contract (or its key, for sessions and logs) as associated data, so a record moved elsewhere in the store fails to open. A sealed record is `magic (4) | key id (1) | nonce (24) | sealed record | tag (16)`: 45 bytes more than the record.
+- Records are opened with the key they name, whether `encrypt_at_rest` is on or off. During a rotation, records sealed with the old key open with it as a `read` key. Once a key is removed from the keyring, the records it sealed are refused: they are skipped, and logged as sealed with a key that is not in the keyring, rather than read as garbage. Messages expire, but sessions and subscriptions are only sealed again when they are written again, so keep an old key as a `read` key while the store may hold records it sealed.
+- Turning it on for an existing store leaves the records already stored as they are, readable; new ones are sealed. Turning it off again stores new records plain, and keeps reading the sealed ones while their key is in the keyring. The server doesn't seal or unseal what it stored before.
+- Topics, keys and ids are not sealed, nor are record sizes and times: only what is stored under them. Records stored before it was turned on stay plain until they expire or are written again.
+- Don't roll a server back to a version without `encrypt_at_rest` once it has sealed records: such a version reads them as they are, sealed.
+- In a cluster, nodes send each other records opened, and each node seals what it stores as it is set to, so nodes can be turned on one at a time, and a cluster can mix nodes with it on, off, or of an earlier version. Every node needs the same keyring already. Traffic between nodes is not encrypted by this.
+- Cost: sealing a record takes about 0.7 µs for 64 bytes and 1.8 µs for 1 KB on one core of an Apple M-series CPU, opening it a little less, and large records go at about 0.9 GB/s (`go test ./server/internal/store -bench Seal`).
+
+The server doesn't use the storage engine's own encryption (`unitdb.WithEncryption`): its nonce is derived from the plaintext, and repeats at message volumes.
+
+### Client IDs and topic keys
+The server issues v2 client IDs and topic keys, and still takes the v1 ones of earlier versions. Both are opaque strings to clients:
+
+- A **v2 client ID** is 94 characters of base64url (`A-Z a-z 0-9 - _`), where a v1 one is 52 of base32. It is sealed with XChaCha20-Poly1305 under a random nonce, and holds the key id that sealed it, the contract, the permissions, a random uuid, and when it was issued and expires. `client_id_ttl` sets how long the IDs the server issues last (`unitdb/clientid`), and `primary_id_ttl` primary ones; they never expire by default. A client that connects with a v1 ID, with an ID of a key being retired, or past 80% of its ID's lifetime is sent a new v2 ID on `unitdb/clientid/`: the same ID, so the same contract and sessions. An expired ID is refused with return code 0x02, and is not replaced: its client needs a new one from its primary client.
+- A **v2 topic key** is 48 characters of base64url, where a v1 signed key is 26 and an unsigned one 13. Its 128-bit tag covers the whole topic and the contract, so it opens exactly the topic it was issued for (a key for `...` reads every topic of the contract, as in v1); it holds the key id, a uuid, and when it was issued and expires. A keygen request's `ttl`, such as `{"topic": "teams.alpha", "type": "rw", "ttl": "24h"}`, sets how long the key lasts; `topic_key_ttl` is the default, and keys never expire without either.
+
+Since v2 client IDs carry a uuid, two secondary IDs of a contract issued in the same second are different IDs with sessions of their own; v1 ones were the same ID.
+
+In a cluster, the server issues v2 IDs and keys once every node runs a version that reads them, and v1 ones until then (see [rolling deploys](docs/rolling-deploys.md)).
+
+### Revocation
+A contract's primary client (a service ID from `mintid -service` is one) revokes its contract's client IDs and topic keys by publishing to `unitdb/revoke`:
+
+- `{"uuid": "<uuid>"}` revokes the v2 client ID or topic key with that uuid, which `unitdb/clientid` and `unitdb/keygen` answer with (`"uuid"`, in decimal); `"until": <unix seconds>` ends the revocation then, for a key or ID that expires anyway.
+- `{"all": true}` revokes everything the contract issued before now, and every v1 ID and key of the contract, which carry no issue time. Issue times are whole seconds, so what is issued in the same second as the request is still taken, and the nodes' clocks should agree.
+
+The server answers `{"status": 200}`, 403 to a client that isn't primary (a connection a service vouched for included), and 400 to a request with nothing to revoke. A revoked or not-before ID is refused at CONNECT with return code 0x02, without a new ID, and on `unitdb/service`; a revoked key is refused with status 401. Connections and subscriptions already open stay until they reconnect or subscribe again. v1 IDs and keys have no uuid: they are revoked only by `"all"`, which a cluster refuses, with status 503, while it still issues v1 ones.
+
+What was revoked is kept in each node's store, and every node of a cluster holds all of it: see [cluster data sync](docs/cluster-data-sync.md#security-state-revocation). A store reset (`"reset": true`) forgets it on that node, which takes it back from the other nodes when it joins them.
+
+Clients publish and subscribe with topic keys, which a primary client generates with a `unitdb/keygen` request. The insecure flag of a client's CONNECT, which skips topic key checks, is refused unless the server's config sets `"allow_insecure": true`, which is for development only and which a cluster node refuses to start with.
+
+A trusted backend, such as an API server acting for its users, needs no topic keys either: give it a service client ID, which only the `mintid` command issues, with the same key as the server:
+
+```
+> go run ./server/cmd/mintid -config server/unitdb.conf -contract 123456789 -service
+```
+
+`mintid` reads the keyring as the server does, and mints a v2 ID. Without `-contract`, it mints a primary client ID of a new contract; `-service` marks the ID as a trusted service's; `-ttl 720h` makes the ID expire; `-from <id>` seals an ID of any key of the keyring, v1 or v2, again as v2 with the issue key, with the same contract, permissions and sessions; `-v1` mints a v1 ID, for a cluster with nodes that don't read v2 ones. A service's connections skip topic key checks, in a cluster too. A connection the service opens for a user, with the user's client ID, skips them once the service vouches for it, by publishing `{"client_id": "<the service's client ID>"}` to `unitdb/service` on that connection; a connection trusted this way may also generate keys. Keep service IDs on servers, never on clients or devices.
+
+Topics whose first part starts with `$` are reserved for the server: no client may publish, subscribe, relay or generate keys for them, a service or an insecure client included.
+
+A session belongs to the client ID that started it: a client of the same contract that sends another client's session key gets a session of its own.
+
 ## Clustering
-To bring up the Unitdb cluster start 2 or more nodes. For fault tolerance 3 nodes or more are recommended. Every node needs the same encryption key.
+To bring up the Unitdb cluster start 2 or more nodes. For fault tolerance 3 nodes or more are recommended. Every node needs the same encryption key, or keyring.
 
 ```
 > ./bin/unitdb -listen=:6060 -grpc_listen=:6080 -cluster_self=one -db_path=/tmp/unitdb/node1
@@ -53,6 +116,18 @@ To bring up the Unitdb cluster start 2 or more nodes. For fault tolerance 3 node
 ```
 
 Above example shows each Unitdb node running on the same host, so each node must listen on different ports. This would not be necessary if each node ran on a different host.
+
+Nodes talk over mutual TLS when `cluster_config.tls` names the cluster's CA and the node's certificate and key: each node needs a certificate signed by the CA, with its node name as a DNS name and for both server and client use, and a `tls_addr` beside its `addr` in `cluster_config.nodes`. A node takes a cluster connection only from a certificate naming another configured node, and refuses a call on it that names another node as its sender. It still listens on its plain `addr` too, so that a cluster can move to TLS node by node ([docs/rolling-deploys.md](docs/rolling-deploys.md#moving-a-cluster-to-tls)); set `"require": true` once every node is on TLS to close it. Until then, firewall the plain cluster ports to the other nodes.
+
+```
+"cluster_config": {
+	"nodes": [
+		{"name": "one", "addr": "10.0.0.1:12001", "tls_addr": "10.0.0.1:12011"},
+		{"name": "two", "addr": "10.0.0.2:12001", "tls_addr": "10.0.0.2:12011"}
+	],
+	"tls": {"ca_file": "/etc/unitdb/cluster-ca.crt", "cert_file": "/etc/unitdb/one.crt", "key_file": "/etc/unitdb/one.key", "require": true}
+}
+```
 
 ## Client Libraries
 Make use of officially supported client libraries to connect to unitdb server running on single node or running on a cluster.

@@ -5,7 +5,7 @@ local SQLite, works while offline, and reconciles with an authoritative server a
 returns. Effect Schema defines every domain, durable, and wire contract. Effect services, Layers, scopes, streams,
 and Atom own the runtime.
 
-The library targets Effect `4.0.0-rc.118`. It has not published a stable release. Durable and public contracts may
+The library targets Effect `4.0.x`. It has not published a stable release. Durable and public contracts may
 change before v1.
 
 ## Architecture
@@ -118,7 +118,7 @@ export const ToggleTask = Mutation.make("ToggleTask", {
 })
 
 export const ListTasks = Query.make("ListTasks", {
-  payload: { completed: Schema.Boolean, titleFrom: Schema.optional(Schema.NonEmptyString) },
+  payload: { completed: Schema.Boolean, titleFrom: Schema.optionalKey(Schema.NonEmptyString) },
   success: Schema.Array(Task.schema)
 })
 
@@ -176,7 +176,7 @@ and one column per top-level field of the model schema extracted from the JSON. 
 keeps only the entity columns and stays reachable through `value`.
 
 ```ts
-const rows = yield * query.sql([Task], (sql) =>
+const repeatedTitles = query.sql([Task], (sql) =>
   sql`SELECT "title", COUNT(*) AS repeats FROM "Task"
     WHERE "completed" = 0
     GROUP BY "title" HAVING repeats > 1
@@ -205,7 +205,7 @@ their own entity. `Query.make` has no static dependency list because the runtime
 ## SQLite replica
 
 `SqlReplica.layer` assembles one public `Replica` that owns one SQLite database, one synchronization transport, and
-any number of joined spaces. Supply the domain handlers, a `SqlClient`, `Crypto`, and a `SyncEngine`. The replica
+any number of joined spaces. Supply the domain handlers, a `SqlClient`, `Crypto`, `Reactivity`, and a `SyncEngine`. The replica
 mints its client identity the first time it opens a database and keeps it there, so the identity lives exactly as long
 as the local data. Pass `clientId` only when the identity is managed elsewhere; opening a database with a different
 identity fails with `ReplicaIdentityMismatch`.
@@ -219,6 +219,7 @@ import * as Protocol from "@lucas-barake/effect-local/Protocol"
 import * as Replica from "@lucas-barake/effect-local/Replica"
 import * as Effect from "effect/Effect"
 import * as Layer from "effect/Layer"
+import * as Reactivity from "effect/reactivity/Reactivity"
 import { definition, layerDomain, ListTasks, PutTask, Task } from "./domain.js"
 
 const spaceId = Identity.SpaceId.make("spc_00000000-0000-4000-8000-000000000001")
@@ -226,7 +227,8 @@ const scope = Protocol.ReplicationScope.make({ models: [Task.name] })
 
 const layerDatabase = Layer.mergeAll(
   SqliteClient.layer({ filename: "tasks.sqlite" }),
-  NodeCrypto.layer
+  NodeCrypto.layer,
+  Reactivity.layer
 )
 
 export const layerReplica = SqlReplica.layer({
@@ -366,14 +368,10 @@ services. Those requirements propagate to `ServerStore.layer`, where normal Laye
 ```ts
 import * as ServerStore from "@lucas-barake/effect-local-sql/ServerStore"
 import * as Context from "effect/Context"
-import * as Effect from "effect/Effect"
 import * as Layer from "effect/Layer"
-import * as Schema from "effect/Schema"
 
 class ReadPolicy extends Context.Service<ReadPolicy, {
-  readonly authorize: (
-    input: ServerStore.ReadAuthorizationInput
-  ) => Effect.Effect<void, typeof Schema.Json.Type>
+  readonly authorize: ServerStore.Options["authorizeRead"]
 }>()("app/ReadPolicy") {}
 
 const layerStore = ServerStore.layer({
@@ -450,7 +448,7 @@ inside that layer. Add other routes, such as a login endpoint, to the same layer
 
 Replace `SingleRunner.layer` with Effect Cluster's runner transport and SQL runner and message storage to run the same
 layer on several processes, and pass one `assertionSecret` to all of them. Use NDJSON runner serialization, for
-example `NodeClusterSocket.layer({ serialization: "ndjson" })`: in Effect `4.0.0-rc.118` the default SchemaBinary
+example `NodeClusterSocket.layer({ serialization: "ndjson" })`: in Effect `4.0.0` the default SchemaBinary
 runner serialization breaks volatile streaming entity calls between runners after their first element.
 
 ### PostgreSQL server storage
@@ -467,7 +465,9 @@ const layerDatabase = PgClient.layerConfig({ url: Config.Redacted("DATABASE_URL"
 ```
 
 `Migrations.server` picks the PostgreSQL catalog from the client's dialect and fails with `InvalidConfiguration` for
-any other dialect. Pass the client without `transformResultNames` or `transformQueryNames`, because server rows are
+any other dialect. When the server may not run DDL, `Migrations.renderServer` writes the pending schema as a script for
+a DBA and `store: { migration: { mode: "verify" } }` refuses to serve until it is applied. See
+[migrations applied by a DBA](packages/local-sql/README.md#migrations-applied-by-a-dba). Pass the client without `transformResultNames` or `transformQueryNames`, because server rows are
 decoded by their snake case column names. See the
 [`effect-local-sql` guide](packages/local-sql/README.md#postgresql-server-storage) for the storage and locking details.
 
@@ -520,6 +520,9 @@ depth. Labels use bounded categories and never include space or principal identi
 benchmark at `packages/local-rpc/bench/Fanout.bench.ts` exercises 64, 256, and 1,024 watchers.
 
 ## Effect Atom
+
+`BrowserReplica.layer` takes one Layer that provides the worker `SqlClient`, the `SyncEngine`, and the
+`EphemeralClient`. The RPC client Layer, `SyncClient.layerWebSocket`, provides both network services.
 
 ```ts
 import * as BrowserReplica from "@lucas-barake/effect-local-browser/BrowserReplica"
@@ -647,7 +650,7 @@ re-runs on a write anyway; one window query keeps that refresh a single consiste
 ```ts
 import * as Field from "@lucas-barake/effect-local/Field"
 
-const next = yield* transaction.applyField(Field.counter, currentCount, {
+const incremented = transaction.applyField(Field.counter, currentCount, {
   _tag: "Increment",
   delta: 1
 })

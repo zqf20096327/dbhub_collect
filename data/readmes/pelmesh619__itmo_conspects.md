@@ -33,21 +33,23 @@
 
 * Разработка нагруженных систем (лектор Суховицкий А. А.)
 
-    Лекций по этому предмету не будет, но возможно тут появится конспект теории
+    Лекций по этому предмету нет, но возможно тут появится конспект теории
 
 * Тестирование ПО
 
     * Трек от Яндекса (лектор Гилёва В. С.)
 
+        [**Весь курс**](https://pelmesh619.github.io/itmo_conspects/funcprog/funcprog-holopov/funcprog-holopov_superconspect.html)
+
         * [Лекция №1](https://pelmesh619.github.io/itmo_conspects/softwareqa/softwareqa-yandex/softwareqa-yandex_2026_09_04.html)
-        * Лекция №2 - в разработке
+        * [Лекция №2](https://pelmesh619.github.io/itmo_conspects/softwareqa/softwareqa-yandex/softwareqa-yandex_2026_09_11.html)
         * Лекция №3 - в разработке
         * Лекция №4 - в разработке
         * Лекция №5 - в разработке
 
 * Введение в технологическое предпринимательство (лектор Волхонцев А. А.)
 
-    * Лекция №1 - в разработке
+    * [Лекция №1](https://pelmesh619.github.io/itmo_conspects/techentrep/techentrep_2026_09_05.html)
     * Лекция №3 - в разработке
 
 * Администрирование в ОС Windows (лектор Береснев А. Д.)
