@@ -1,0 +1,68 @@
+name: retro-audit
+on:
+  workflow_dispatch:            # 手动触发：解读缓存重审（覆盖度判据，见 interpret/retro_audit.py）
+    inputs:
+      max_items:
+        description: '本轮最多重审条数（0=全量目标）'
+        type: number
+        default: 0
+      concurrency:
+        description: 'AI 并发（4=生产实测无 429 档）'
+        type: number
+        default: 4
+      dry_run:
+        description: '只读预演（不写任何文件、不调 API）'
+        type: boolean
+        default: false
+permissions:
+  contents: write
+concurrency:
+  group: retro-audit            # 独立组：不与 nightly-interpret 互杀（活动期间建议手动停用其 schedule）
+  cancel-in-progress: false
+jobs:
+  retro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120        # 90min 解读预算 + db_scan + 对账提交余量
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install requests
+
+      # 与 nightly-interpret 同步：先刷新候选（无 API 成本，~1 分钟）
+      - name: db_scan（刷新候选库清单）
+        run: python interpret/db_scan.py
+
+      - name: 重审（基线→剪缓存→interpret.py 重跑→对账还原→报告）
+        env:
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_BASE_URL: https://open.bigmodel.cn/api/coding/paas/v4
+          AI_MODEL: glm-5.3-flash
+        run: |
+          EXTRA=""
+          [ "${{ github.event.inputs.dry_run }}" = "true" ] && EXTRA="--dry-run"
+          python interpret/retro_audit.py \
+            --concurrency "${{ github.event.inputs.concurrency || 4 }}" \
+            --max-items "${{ github.event.inputs.max_items || 0 }}" \
+            --max-minutes 90 $EXTRA
+
+      # 与 nightly-interpret 同款提交套路：撞车重试 5 轮
+      - name: 提交并推送状态
+        run: |
+          git config user.name "zqf20096327"
+          git config user.email "zqf20096327@users.noreply.github.com"
+          git add state/interp_cache.json state/interp_state.json \
+                  state/db_scan.json state/manual_review.json \
+                  state/retro_audit_baseline.json \
+                  state/retro_audit_report.md state/retro_audit_report.jsonl 2>/dev/null
+          git diff --cached --quiet && { echo "无变更"; exit 0; }
+          git commit -m "重审 $(date -u +%F\ %H:%M) · 基线 $(python -c "import json;print(len(json.load(open('state/retro_audit_baseline.json'))))" 2>/dev/null || echo 0) 条" -q
+          for i in 1 2 3 4 5; do
+            git pull --rebase --autostash >/dev/null 2>&1 || true
+            git push && { echo "已推送"; exit 0; }
+            echo "推送撞车，40s 后重试（$i/5）"; sleep 40
+          done
+          echo "::warning::推送 5 次未成功——本地结果已在日志，重跑脚本会自动对账还原"
