@@ -1,11 +1,9 @@
 name: nightly-collect
 on:
   schedule:
-    - cron: '0 */4 * * *'     # 每 4 小时一窗 ×6/天（北京 08/12/16/20/00/04），24h 覆盖。
-                              # 单 job 上限 6h、窗内自计时：忙时经 concurrency 组背靠背
-                              # 接力（≈24h/天满转），闲时提前收工留空档（无活可干）。
-                              # 同组新排队自动替换旧排队（GitHub 语义，不堆积），
-                              # 被替换的窗靠断点续采兜底不丢数据。
+    - cron: '0 16 * * *'      # 每天一窗（UTC 16 = 北京 00:00）。采集已稳定，
+                              # 单 job 上限 6h、窗内自计时，跑完即收工；当窗
+                              # 未跑完的量靠断点续采次日继续，不丢数据。
   workflow_dispatch: {}        # 支持手动触发
 permissions:
   contents: write
@@ -15,7 +13,7 @@ concurrency:
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 360       # 平台单 job 上限即 6h；6 窗/天忙时背靠背接力
+    timeout-minutes: 360       # 平台单 job 上限即 6h，窗内预算按此自计时
     steps:
       - uses: actions/checkout@v4
 
@@ -94,7 +92,7 @@ jobs:
           git config user.email "zqf20096327@users.noreply.github.com"
           git add -A
           git commit -m "采集 $(date -u +%F\ %H:%M)" || { echo "无变更"; exit 0; }
-          # 6 窗/天后与 interpret(每 2h)推送撞车概率大增：重试+变基，最多 5 轮
+          # 与 interpret(每 2h)推送可能撞车：重试+变基，最多 5 轮
           for i in 1 2 3 4 5; do
             git pull --rebase --autostash >/dev/null 2>&1 || true
             git push && { echo "已推送"; exit 0; }
