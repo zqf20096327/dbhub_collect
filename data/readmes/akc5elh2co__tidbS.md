@@ -1,2 +1,0 @@
-# tidbS
-customer publishing repository
