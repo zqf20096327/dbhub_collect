@@ -1,17 +1,17 @@
 # unattr_judge 判定报告
-生成：2026-10-04 08:36 · 台账 401 条 · 圈外未解读 276 条（留给夜间队列）
+生成：2026-10-04 08:38 · 台账 487 条 · 圈外未解读 276 条（留给夜间队列）
 
 ## 状态分布
-- no_evidence: 155
-- oos: 129
-- judged_no_support: 51
-- edu: 32
-- draft: 17
-- recheck: 11
-- gated_app_cat: 4
+- no_evidence: 197
+- oos: 153
+- judged_no_support: 62
+- edu: 35
+- draft: 21
+- recheck: 12
+- gated_app_cat: 5
 - desc_pending: 2
 
-## 归属草案（draft 17 条，人工签发进 overrides.json；Top 30）
+## 归属草案（draft 21 条，人工签发进 overrides.json；Top 30）
 
 -  38587★ sqlmapproject/sqlmap → PostgreSQL,MySQL,Oracle,SQLite,SQL Server,ClickHouse｜路径 plugins/dbms/clickhouse
 -  23811★ sinaptik-ai/pandas-ai → PostgreSQL,MySQL,Oracle,SQL Server｜路径 extensions/ee/connectors/oracle
@@ -30,6 +30,10 @@
 -    733★ kubedb/cli → MySQL｜路径 vendor/github.com/go-sql-driver/mysql
 -    664★ qustavo/sqlhooks → PostgreSQL,MySQL,SQLite｜依赖 lib/pq ∈ go.mod
 -    651★ datacleaner/DataCleaner → PostgreSQL｜依赖 postgresql ∈ pom.xml
+-    632★ apache/arrow-adbc → PostgreSQL,SQLite,SQL Server｜路径 c/driver/postgresql
+-    591★ aiidateam/aiida-core → PostgreSQL,MySQL｜依赖 psycopg ∈ pyproject.toml
+-    567★ auraphp/Aura.Sql → PostgreSQL｜依赖 postgresql ∈ composer.json
+-    546★ mwarkentin/django-watchman → MySQL,SQL Server｜依赖 mysqlclient ∈ pyproject.toml
 
 ## 待复核（recheck：弱证据 / 独立库依赖模式）
 
@@ -44,6 +48,7 @@
 -    895★ sourcenetwork/defradb → PostgreSQL（dep_only）｜依赖 lib/pq ∈ go.mod
 -    871★ hyrise/hyrise → PostgreSQL,SQLite（dep_only）｜依赖 sqlite3 ∈ CMakeLists.txt
 -    838★ akumuli/Akumuli → SQLite（dep_only）｜依赖 sqlite3 ∈ CMakeLists.txt
+-    569★ tidesdb/tidesdb → MariaDB（dep_only）｜依赖 mariadb ∈ CMakeLists.txt
 
 ## 范围外命中抽检（防词表误伤，人工瞄一眼 Top 20）
 
@@ -68,4 +73,4 @@
 -  17809★ VictoriaMetrics/VictoriaMetrics
 -  17619★ apache/pouchdb
 
-## 分层小结：desc_pending 2 · judged_no_support 51 · no_evidence 155 · api_error/partial 0（--retry-errors 补扫）
+## 分层小结：desc_pending 2 · judged_no_support 62 · no_evidence 197 · api_error/partial 0（--retry-errors 补扫）
