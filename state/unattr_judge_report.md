@@ -1,17 +1,17 @@
 # unattr_judge 判定报告
-生成：2026-10-04 08:45 · 台账 637 条 · 圈外未解读 276 条（留给夜间队列）
+生成：2026-10-04 09:27 · 台账 677 条 · 圈外未解读 276 条（留给夜间队列）
 
 ## 状态分布
-- no_evidence: 268
-- oos: 194
-- judged_no_support: 83
-- edu: 43
-- draft: 28
-- recheck: 13
-- gated_app_cat: 5
+- no_evidence: 289
+- oos: 203
+- judged_no_support: 89
+- edu: 44
+- draft: 29
+- recheck: 14
+- gated_app_cat: 6
 - desc_pending: 3
 
-## 归属草案（draft 28 条，人工签发进 overrides.json；Top 30）
+## 归属草案（draft 29 条，人工签发进 overrides.json；Top 30）
 
 -  38587★ sqlmapproject/sqlmap → PostgreSQL,MySQL,Oracle,SQLite,SQL Server,ClickHouse｜路径 plugins/dbms/clickhouse
 -  23811★ sinaptik-ai/pandas-ai → PostgreSQL,MySQL,Oracle,SQL Server｜路径 extensions/ee/connectors/oracle
@@ -41,6 +41,7 @@
 -    345★ apache/cayenne → PostgreSQL,MySQL,Oracle,SQLite,SQL Server,MariaDB｜依赖 postgresql ∈ pom.xml
 -    343★ r2dbc/r2dbc-client → PostgreSQL,MySQL,SQL Server｜依赖 postgresql ∈ pom.xml
 -    301★ hellofresh/klepto → PostgreSQL,MySQL｜依赖 lib/pq ∈ go.mod
+-    278★ dao-xyz/peerbit → SQLite｜依赖 better-sqlite3 ∈ package.json
 
 ## 待复核（recheck：弱证据 / 独立库依赖模式）
 
@@ -57,6 +58,7 @@
 -    838★ akumuli/Akumuli → SQLite（dep_only）｜依赖 sqlite3 ∈ CMakeLists.txt
 -    569★ tidesdb/tidesdb → MariaDB（dep_only）｜依赖 mariadb ∈ CMakeLists.txt
 -    363★ apache/jackrabbit → MySQL,Oracle（dep_only）｜依赖 mysql-connector ∈ jackrabbit-core/pom.xml
+-    283★ khonsulabs/nebari → SQLite（weak）｜依赖 rusqlite ∈ benchmarks/Cargo.toml
 
 ## 范围外命中抽检（防词表误伤，人工瞄一眼 Top 20）
 
@@ -81,4 +83,4 @@
 -  17809★ VictoriaMetrics/VictoriaMetrics
 -  17619★ apache/pouchdb
 
-## 分层小结：desc_pending 3 · judged_no_support 83 · no_evidence 268 · api_error/partial 0（--retry-errors 补扫）
+## 分层小结：desc_pending 3 · judged_no_support 89 · no_evidence 289 · api_error/partial 0（--retry-errors 补扫）
