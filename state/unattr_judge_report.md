@@ -1,17 +1,17 @@
 # unattr_judge 判定报告
-生成：2026-10-04 09:27 · 台账 677 条 · 圈外未解读 276 条（留给夜间队列）
+生成：2026-10-04 10:09 · 台账 1077 条 · 圈外未解读 276 条（留给夜间队列）
 
 ## 状态分布
-- no_evidence: 289
-- oos: 203
-- judged_no_support: 89
-- edu: 44
-- draft: 29
-- recheck: 14
-- gated_app_cat: 6
-- desc_pending: 3
+- no_evidence: 506
+- oos: 298
+- judged_no_support: 137
+- edu: 61
+- draft: 43
+- recheck: 17
+- gated_app_cat: 10
+- desc_pending: 5
 
-## 归属草案（draft 29 条，人工签发进 overrides.json；Top 30）
+## 归属草案（draft 43 条，人工签发进 overrides.json；Top 30）
 
 -  38587★ sqlmapproject/sqlmap → PostgreSQL,MySQL,Oracle,SQLite,SQL Server,ClickHouse｜路径 plugins/dbms/clickhouse
 -  23811★ sinaptik-ai/pandas-ai → PostgreSQL,MySQL,Oracle,SQL Server｜路径 extensions/ee/connectors/oracle
@@ -42,6 +42,7 @@
 -    343★ r2dbc/r2dbc-client → PostgreSQL,MySQL,SQL Server｜依赖 postgresql ∈ pom.xml
 -    301★ hellofresh/klepto → PostgreSQL,MySQL｜依赖 lib/pq ∈ go.mod
 -    278★ dao-xyz/peerbit → SQLite｜依赖 better-sqlite3 ∈ package.json
+-    257★ fuma-nama/fumadb → MySQL,SQLite,MariaDB｜依赖 mysql2 ∈ packages/fumadb/package.json
 
 ## 待复核（recheck：弱证据 / 独立库依赖模式）
 
@@ -59,6 +60,9 @@
 -    569★ tidesdb/tidesdb → MariaDB（dep_only）｜依赖 mariadb ∈ CMakeLists.txt
 -    363★ apache/jackrabbit → MySQL,Oracle（dep_only）｜依赖 mysql-connector ∈ jackrabbit-core/pom.xml
 -    283★ khonsulabs/nebari → SQLite（weak）｜依赖 rusqlite ∈ benchmarks/Cargo.toml
+-    225★ orbisgis/h2gis → PostgreSQL（dep_only）｜依赖 postgresql ∈ pom.xml
+-    189★ johnmai-dev/go-orm-helper → MySQL（weak）｜依赖 go-sql-driver/mysql ∈ example/gorm/go.mod
+-    181★ dialog-db/dialog-db → SQLite（dep_only）｜依赖 rusqlite ∈ Cargo.toml
 
 ## 范围外命中抽检（防词表误伤，人工瞄一眼 Top 20）
 
@@ -83,4 +87,4 @@
 -  17809★ VictoriaMetrics/VictoriaMetrics
 -  17619★ apache/pouchdb
 
-## 分层小结：desc_pending 3 · judged_no_support 89 · no_evidence 289 · api_error/partial 0（--retry-errors 补扫）
+## 分层小结：desc_pending 5 · judged_no_support 137 · no_evidence 506 · api_error/partial 0（--retry-errors 补扫）
