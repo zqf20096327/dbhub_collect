@@ -65,7 +65,9 @@ entry before you upgrade.
 - `buildSourceProvenance` / `readSourceProvenance`, `renderMemoryBlock`, `exportMemoryMarkdown`, decay helpers.
 - Integrations: `al-buddy-memory/ai-sdk` (Vercel AI SDK tools + middleware), `al-buddy-memory/langchain` (a LangGraph long-term memory store + LangChain tools), `al-buddy-memory/mastra` (an input processor + tools). The frameworks are optional peer dependencies; every write is governed and records which agent made it. Guides in [docs/integrations](docs/integrations/).
 
-Node ≥ 20. One runtime dependency (`better-sqlite3`); transformers.js is optional.
+Node ≥ 20. One runtime dependency (`better-sqlite3`, with prebuilt binaries for Node 22, 24, 25
+and 26 on macOS, Linux and Windows; on Node 20 it compiles from source, which needs Python and a
+C++ toolchain); transformers.js is optional.
 
 Prior art: the Letta project published the idea of a pinned memory tier and a background pass over memory (memory blocks; sleep-time agents). What is different here: every derived fact must cite the raw it rests on or it is refused, the raw is never rewritten, and a whole pass can be reviewed and undone, with the undo and its reason kept on record.
 
@@ -363,12 +365,12 @@ transaction as the fact.
 
 ```json
 { "mcpServers": { "memory": { "command": "npx",
-    "args": ["-y", "--package=al-buddy-memory@0.9.0", "al-buddy-memory-mcp"] } } }
+    "args": ["-y", "--package=al-buddy-memory@0.10.1", "al-buddy-memory-mcp"] } } }
 ```
 
 `al-buddy-memory-mcp` is an executable *inside* the `al-buddy-memory` package, not a
 package of its own, so `--package=` is what tells npx where to find it — `npx
-al-buddy-memory-mcp` looks for a package by that name and gets a 404. Drop the `@0.9.0`
+al-buddy-memory-mcp` looks for a package by that name and gets a 404. Drop the `@0.10.1`
 to track the latest release instead of the one you tested.
 
 > **Releasing?** This pin is a documented version and goes stale the moment a new one
@@ -422,7 +424,7 @@ The **first** `recall` of a connection also returns the pinned tier — the pers
 rules — as a second content block, so the tier that claims to be in every prompt gets there
 without spending any of the 512-character handshake.
 
-Tools: `remember`, `recall`, `history`, `explain`, `invalidate`, `pin`, `unpin`, `pinned`, `mental_model`, `define_mental_model`. `mental_model` reads a standing question's pre-written answer with its freshness and evidence (the host refreshes answers on its own schedule). `explain` answers why a
+Tools: `remember`, `recall`, `history`, `explain`, `invalidate`, `pin`, `unpin`, `pinned`, `mental_model`, `define_mental_model`, `export`. `mental_model` reads a standing question's pre-written answer with its freshness and evidence (the host refreshes answers on its own schedule). `explain` answers why a
 fact is believed: who asserted it, when it was true, what ended it, and for a conclusion the exact
 words it rests on, each checked now. `remember` takes at
 most 4,000 characters and `pin` 500; a `recall` query 1,000, an `invalidate` reason 500, and
@@ -431,6 +433,35 @@ Sensitive and no assistant could see it. `invalidate`'s `replacedBy` must name a
 caller can see. SQLite on disk, no service, no key. The tool bodies are
 a plain function over a `MemoryStore` (`governanceTools(...)`, exported from
 `al-buddy-memory/mcp`), so they run against any backend and test without a transport.
+
+**Recall is hybrid** — keyword and meaning, with the query's time and counting cues read
+(`expand`), the setting the LongMemEval result was measured with. The server starts at once on
+keyword recall and loads the on-device embedding model beside it; from the call after it loads,
+recall uses both. The model (all-MiniLM-L6-v2, about 90 MB) is downloaded once from the Hugging
+Face hub to `~/.al-buddy-memory/models` (`AL_BUDDY_MEMORY_MODEL_CACHE` moves it) and then runs
+offline; facts stored before it was there are embedded in the background, up to 5,000 per start
+(`AL_BUDDY_MEMORY_INDEX_LIMIT`). Where it cannot load — `@huggingface/transformers` not installed,
+no onnxruntime binary for the platform (Intel Macs, for one), no network on first run — recall
+stays keyword-only and the server says so once on stderr. The model loads and runs in a worker
+thread, and the background pass gives the event loop back every 20 ms, so the server keeps
+answering while it indexes. `AL_BUDDY_MEMORY_SEMANTIC=off` never
+loads it. The cross-encoder reranker is not switched on: on the full LongMemEval run it moved the
+overall score by nothing (92.6% with and without) and costs a second model.
+
+**Export.** The `export` tool returns the memory in the [portable format](docs/portable-format.schema.json)
+— inline when it is under 50 KB, otherwise written to an absolute `.json` path you name that does
+not exist yet (it never overwrites). It exports what the assistant could recall: the policy keeps
+Sensitive and Sealed facts out. Your complete backup, every fact included, is the command line's,
+and import restores one:
+
+```sh
+al-buddy-memory export --out ~/memory-backup.json        # or --format markdown for a readable mirror
+al-buddy-memory import ~/memory-backup.json              # checks the whole file first; safe to re-run
+```
+
+Both read `AL_BUDDY_MEMORY_DB` (or `--db`) like the server. `al-buddy-memory context` prints the
+short briefing the Claude Code plugin shows at session start, and `al-buddy-memory status` the
+counts, the database path, the last write and whether semantic search is available.
 
 ### As a remote connector in Claude and ChatGPT
 
@@ -450,6 +481,65 @@ ChatGPT: *Settings → Security and login → Developer mode*, then add the same
 opens a consent page once; the passphrase allows it. Only hashes of codes and tokens are
 kept on disk, and five wrong passphrases lock the page for 15 minutes. Facts an app writes
 carry its name in the audit trail, as over stdio.
+
+## Use it as a Claude Code plugin
+
+The repository is also a Claude Code plugin marketplace. In Claude Code:
+
+```text
+/plugin marketplace add flytomoon/al-buddy-memory
+/plugin install al-buddy@al-buddy
+```
+
+or from a shell, `claude plugin marketplace add flytomoon/al-buddy-memory` and
+`claude plugin install al-buddy@al-buddy`. There is nothing to configure. Getting started,
+commands and troubleshooting: [docs/claude-plugin.md](docs/claude-plugin.md) (and
+[albuddy.com/claude.html](https://albuddy.com/claude.html)); privacy: [docs/PRIVACY.md](docs/PRIVACY.md).
+
+Commands, all under the plugin's `al-buddy:` namespace: `/al-buddy:recall <question>`,
+`/al-buddy:remember <fact>`, `/al-buddy:forget <fact>` (retire it; kept in history),
+`/al-buddy:status`, `/al-buddy:export [file]`, `/al-buddy:import <file>` and `/al-buddy:help`.
+
+The plugin ([plugin/](plugin/README.md)) brings:
+
+- the governance MCP server above, started with `npx` and pinned to an exact version — the first
+  start downloads the package (about 500 MB installed, most of it the optional model runtime);
+- two skills: `recall` (search memory before answering about past work, decisions, people or
+  preferences) and `remember` (store durable facts — never secrets, credentials or small talk);
+- a SessionStart hook that adds a briefing of at most 2,000 characters when a session starts, is
+  cleared or is compacted: your pinned rules, facts mentioning the project folder's name, and the
+  most recently learned facts, as the assistant is allowed to see them. It never installs anything
+  itself, so the very first session — while the server's first install runs — gets no briefing.
+
+**Where the data lives.** `~/.al-buddy-memory/brain.db`, created when the server first starts; set
+`AL_BUDDY_MEMORY_DB` to an absolute path in the environment Claude Code starts from to keep it
+elsewhere. The embedding model sits beside it in `~/.al-buddy-memory/models`. Nothing leaves the
+machine except the two one-time downloads (the npm package and the model).
+
+**Export, back up, remove.** Ask Claude to export your memory (the `export` tool), or run
+`al-buddy-memory export --out <file>.json` for the complete owner backup. Uninstalling the plugin
+(`/plugin uninstall al-buddy@al-buddy`) leaves your memory in place; delete
+`~/.al-buddy-memory/` to remove it, after exporting it if you want to keep it.
+
+**The Claude desktop app.** A one-click extension, `al-buddy-memory.mcpb` (macOS), is attached to
+each [GitHub release](https://github.com/flytomoon/al-buddy-memory/releases/latest) from the next
+one on, built by `npm run build:mcpb`. It carries the server and its dependencies, including the
+SQLite engine compiled for the Node.js built into Claude Desktop, and it uses the same
+`~/.al-buddy-memory/brain.db` as the plugin, so the two apps share one memory. Steps in
+[docs/claude-plugin.md](docs/claude-plugin.md#the-claude-desktop-app).
+
+**Hosts other than Claude Code.** The plugin is the same server: any MCP client can use the
+`npx` configuration in [The governance MCP server](#the-governance-mcp-server). Codex and the
+ChatGPT desktop app share one configuration; from a shell,
+`codex mcp add al-buddy-memory -- npx -y al-buddy-memory mcp`, or in the desktop app *Settings → MCP
+servers → Add server → STDIO* with that command. Details in
+[docs/claude-plugin.md](docs/claude-plugin.md#codex-and-the-chatgpt-desktop-app).
+
+`al-buddy-memory status` prints how many facts are current, retired and pinned, where the database
+is, when it was last written, and whether semantic search can run on this machine (counts only).
+
+Needs Node.js 22 or later on the `PATH`; Node 20 works only where `better-sqlite3` can compile
+from source (it ships no Node 20 binary).
 
 ## Roadmap
 

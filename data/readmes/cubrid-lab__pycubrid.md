@@ -17,7 +17,7 @@
 
 ---
 
-> **Status: Stable (1.x).** The public API follows [semantic versioning](RELEASE_POLICY.md): minor releases add backward-compatible features and patch releases ship bug fixes; breaking changes are reserved for the next major version (2.0+) and gated by an automated `compat-check` CI job against [`api-baseline.json`](api-baseline.json). Active development continues — see [`RELEASE_POLICY.md`](RELEASE_POLICY.md) for the full contract.
+> **Status: Stable (1.x).** The public API follows [semantic versioning](RELEASE_POLICY.md): minor releases add backward-compatible features and patch releases ship bug fixes; breaking changes are reserved for the next major version (2.0+) and gated by an automated `compat-check` CI job against [`api-baseline.json`](api-baseline.json). The one exception is the opt-in `pycubrid.compat` namespaces: names first released in 1.9.0 or later are provisional and may change in a minor release, announced in the changelog. Active development continues — see [`RELEASE_POLICY.md`](RELEASE_POLICY.md) for the full contract.
 
 ## Why pycubrid?
 
@@ -29,7 +29,7 @@ Korean public-sector and enterprise applications. The existing C-extension drive
 
 - **Pure Python implementation** — no C build dependencies, install with `pip install` only
 - **Implements PEP 249 (DB-API 2.0)** — standard exception hierarchy, type objects, cursor interface
-- **800+ offline tests** with **97%+ code coverage** — most tests run without a database
+- **Offline regression suite** with a **95% coverage floor on full coverage runs** — see [measured coverage](https://codecov.io/gh/cubrid-lab/pycubrid) and the [CI execution policy](docs/CI_POLICY.md); routine PR smoke does not measure coverage
 - **TLS/SSL for sync and async connections** — opt-in `ssl=True` (verified context, TLS 1.2 minimum) or custom `ssl.SSLContext` on `connect()` and `pycubrid.aio.connect()`. On Python 3.10 the async path automatically runs a preflight TLS verification probe to work around a known CPython asyncio bug (fixed in 3.13/3.14) where `loop.start_tls()` would otherwise hang on cert-verify failures — see [Troubleshooting](docs/TROUBLESHOOTING.md#async-tls-handshake-hangs-on-python-310) and [#156](https://github.com/cubrid-lab/pycubrid/issues/156).
 - **Native asyncio support** — async/await API via `pycubrid.aio` for high-concurrency applications
 - **PEP 561 typed package** — `py.typed` marker for modern IDE and static analysis support
@@ -37,6 +37,15 @@ Korean public-sector and enterprise applications. The existing C-extension drive
 - **LOB (CLOB/BLOB) support** — handle large text and binary data
 
 ## Requirements
+
+**Python 3.10 support retirement:** Python 3.10 reached upstream end of life on
+2026-10-01 ([PEP 619](https://peps.python.org/pep-0619/#310-lifespan)).
+The current 1.8.x line and the upcoming 1.9.x advance-notice release retain Python
+3.10 support. The following minor release (planned 1.10.0) will require Python
+3.11 or newer, after the 1.9.0 notice has shipped. Upgrade your interpreter,
+recreate your virtual environment and validate your application before upgrading
+to that release. This notice does not change the current installation requirement
+or add a runtime warning.
 
 - Python 3.10+
 - CUBRID database server 10.2+ (CI validates 10.2, 11.0, 11.2, 11.4)
@@ -107,28 +116,69 @@ async def main():
 asyncio.run(main())
 ```
 
-### Parameter Binding
+### Practical Examples
+
+Run the setup, the three examples and cleanup **in order in the same Python session** against a scratch database. Adjust the connection settings for your server. The dedicated table must not already exist: setup deliberately fails rather than reusing or deleting an existing table. Manual commit mode and the initial DDL commit keep rollback focused on the DML below.
+
+#### Setup
 
 ```python
-# qmark style (question marks)
-cur.execute("SELECT * FROM users WHERE name = ? AND age > ?", ("Alice", 25))
+import pycubrid
 
-# Batch insert with executemany
-data = [("Alice", 30), ("Bob", 25), ("Charlie", 35)]
-cur.executemany("INSERT INTO users (name, age) VALUES (?, ?)", data)
+conn = pycubrid.connect(host="localhost", port=33000, database="testdb", user="dba")
+conn.autocommit = False
+cur = conn.cursor()
+cur.execute("CREATE TABLE pycubrid_quickstart_327 (id INT PRIMARY KEY, name VARCHAR(100))")
 conn.commit()
 ```
 
-### Parameterized Queries
+#### Basic CRUD
 
 ```python
-sql = "SELECT * FROM users WHERE department = ?"
+cur.execute("INSERT INTO pycubrid_quickstart_327 (id, name) VALUES (?, ?)", (1, "Alice"))
+cur.execute("SELECT name FROM pycubrid_quickstart_327 WHERE id = ?", (1,))
+print(cur.fetchone())  # ('Alice',)
+cur.execute("UPDATE pycubrid_quickstart_327 SET name = ? WHERE id = ?", ("Alicia", 1))
+cur.execute("SELECT name FROM pycubrid_quickstart_327 WHERE id = ?", (1,))
+print(cur.fetchone())  # ('Alicia',)
+cur.execute("DELETE FROM pycubrid_quickstart_327 WHERE id = ?", (1,))
+conn.commit()
+```
 
-cur.execute(sql, ("Engineering",))
-engineers = cur.fetchall()
+#### Transactions: commit and rollback
 
-cur.execute(sql, ("Marketing",))
-marketers = cur.fetchall()
+```python
+cur.execute("INSERT INTO pycubrid_quickstart_327 (id, name) VALUES (?, ?)", (2, "Bob"))
+conn.commit()
+cur.execute("UPDATE pycubrid_quickstart_327 SET name = ? WHERE id = ?", ("Temporary", 2))
+conn.rollback()
+cur.execute("SELECT name FROM pycubrid_quickstart_327 WHERE id = ?", (2,))
+print(cur.fetchone())  # ('Bob',)
+conn.rollback()
+```
+
+#### Error handling
+
+```python
+from pycubrid.exceptions import ProgrammingError
+
+try:
+    cur.execute("SELECT missing_column FROM pycubrid_quickstart_327 WHERE id = ?", (2,))
+except ProgrammingError as exc:
+    conn.rollback()
+    print(f"Query failed: {exc}")
+```
+
+#### Cleanup
+
+After setup succeeds, run this cleanup even if an example fails; it removes only the table created above. For more examples, see [EXAMPLES.md](docs/EXAMPLES.md).
+
+```python
+conn.rollback()
+cur.execute("DROP TABLE pycubrid_quickstart_327")
+conn.commit()
+cur.close()
+conn.close()
 ```
 
 ## PEP 249 Compliance
@@ -203,17 +253,11 @@ SQLAlchemy features (ORM, Core, Alembic migrations, schema reflection) are acces
 
 ## Compatibility
 
-| | Python 3.10 | Python 3.11 | Python 3.12 | Python 3.13 | Python 3.14 |
-|---|:---:|:---:|:---:|:---:|:---:|
-| **Offline Tests** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **CUBRID 11.4** | ✅ | -- | -- | -- | ✅ |
-| **CUBRID 11.2** | ✅ | -- | -- | -- | ✅ |
-| **CUBRID 11.0** | ✅ | -- | -- | -- | ✅ |
-| **CUBRID 10.2** | ✅ | -- | -- | -- | ✅ |
-> **Legend**: `✅` = executed and passing in PR CI. `--` = not executed in PR CI; verified in the nightly / release full matrix (Python 3.10–3.14 × CUBRID 10.2–11.4).
-
-CI runs the matrix above on every PR/push (Python 3.10 + 3.14 anchors × all CUBRID versions).
-The full **5 × 4** Python × CUBRID matrix runs nightly, on tagged releases, and on demand via `workflow_dispatch`.
+Supported: Python 3.10–3.14 and CUBRID 10.2, 11.0, 11.2, 11.4.
+Ordinary PRs use one Ubuntu/Python 3.12 offline smoke lane; high-risk changes add
+Python 3.14/CUBRID 11.4. Main/changed-weekly validation uses oldest/newest live
+endpoints. The full 5 × 4 live matrix runs on explicit dispatch and every release.
+See [CI execution policy](docs/CI_POLICY.md) and [support matrix](docs/SUPPORT_MATRIX.md).
 
 ## Architecture
 

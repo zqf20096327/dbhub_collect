@@ -26,6 +26,7 @@
 </p>
 
 <p align="center">
+  <a href="#for-agents">For agents</a> ·
   <a href="#quickstart">Quickstart</a> ·
   <a href="#how-weave-compares">Comparison</a> ·
   <a href="#agents-mcp-rest-and-cli">Agents &amp; MCP</a> ·
@@ -38,6 +39,19 @@
 </p>
 
 ---
+
+## For agents
+
+weave stores structured work (tables, rows, relations, documents) in one SQLite
+file, and an agent drives it over MCP, REST or the CLI.
+
+- Connect over MCP: `node bin/weave.js mcp --data <file.db>`, the same as
+  `weave mcp --data <file>`. In Claude Code:
+  `claude mcp add weave -- node /path/to/weave/bin/weave.js mcp --data /path/to/workspace.db`
+- Or build from a file: `weave build <spec.json> --dry-run`, then again without
+  `--dry-run`.
+- Read [AGENTS.md › Using weave](AGENTS.md#using-weave) first: the primer,
+  every tool by job, plans with turn budgets, and common errors with their fixes.
 
 ## What weave is
 
@@ -55,7 +69,7 @@ The difference from every other tool in this category is the second audience.
 Work-management tools are built for humans first and APIs second. weave is built
 for **humans and agents as equals**: everything the web UI can do, the REST API,
 the CLI, and the built-in **MCP server** can do too — same engine, same data
-file on your disk. No accounts, no cloud, no telemetry.
+file on your disk. No signup, no cloud, no telemetry.
 
 - **Local-first** — your workspace is one SQLite file next to your project.
 - **Yours to host** — one Node process and one file; run it on a laptop or a
@@ -109,9 +123,22 @@ Or add it to Claude Code in one line:
 claude mcp add weave -- node /path/to/weave/bin/weave.js mcp --data /path/to/my-workspace.db
 ```
 
-Fifteen tools by default, the ones a workspace build uses, plus `weave_call`,
+A hosted instance with a sign-in provider (Door C) is one line too. The first
+call opens the provider's sign-in in your browser; no token to paste:
+
+```bash
+claude mcp add --scope user --transport http weave https://weave.example.com/mcp
+```
+
+`/w/<name>/mcp` serves another workspace. Your account has to be linked to
+your provider sign-in first (open the invite `weave account link <name>`
+prints, once, in a browser), and it needs the Architect role, since MCP
+carries the schema tools.
+
+Sixteen tools by default, the ones a workspace build uses, `weave_build` among
+them, plus `weave_call`,
 which reaches the other forty-two. `weave mcp --tools all` (or
-`WEAVE_MCP_TOOLS=all`) lists all 57. The same undo the UI has, and
+`WEAVE_MCP_TOOLS=all`) lists all 58. The same undo the UI has, and
 `weave_vocabulary` so an agent reads the allowed values instead of guessing. Full map:
 [Agents: MCP, REST, and CLI](#agents-mcp-rest-and-cli).
 
@@ -191,17 +218,18 @@ servers, so one config block works in each of them:
 }
 ```
 
-It exposes the whole platform as 57 tools. `tools/list` names the core build
+It exposes the whole platform as 58 tools. `tools/list` names the core build
 set (`weave_schema`, `weave_query`, `weave_get_entity`, `weave_create_entity`,
 `weave_update_entity`, `weave_create_space`, `weave_create_table`,
 `weave_add_field`, `weave_update_field`, `weave_add_relation`,
-`weave_import_csv`, `weave_vocabulary`, `weave_workspace`, `weave_search`) and
+`weave_import_csv`, `weave_vocabulary`, `weave_workspace`, `weave_search`,
+`weave_build` for spaces, tables, fields, relations and rows in one call) and
 `weave_call`, whose description lists every other tool (`weave_set_doc`,
 `weave_link`, `weave_set_state`, `weave_update_table`, `weave_apply_schema`,
 `weave_views`, `weave_automations`, `weave_activity` and the rest) in one line
 each; `weave_call {name: "help", args: {tool}}` returns a tool's full schema.
 Add `--tools all` to the `mcp` args, or set `WEAVE_MCP_TOOLS=all`, to list all
-57 directly. An agent designs a schema,
+58 directly. An agent designs a schema,
 fills it, and configures how it reads — icons, option colors, column widths and
 order, hidden columns, saved views — without a human opening the UI.
 
@@ -247,8 +275,9 @@ on any instance, including the one you just started):
 - **Door A: an edge gate** — Cloudflare Access, Tailscale, Caddy, oauth2-proxy,
   Authelia: one config block and one check each.
 - **Door C: sign in with a provider**: one OpenID Connect provider (Clerk,
-  Auth0, Keycloak, Authentik, Google). `weave account link <name> --email
-  <address>` opens an account to it; signing in creates none. `WEAVE_ORIGIN`
+  Auth0, Keycloak, Authentik, Google). `weave account link <name>` mints a
+  one-time invite link that opens an account to it; signing in creates none,
+  and weave stores no email. `WEAVE_ORIGIN`
   names the origin the provider sends people back to. Agents keep `wv_` tokens.
 - **Deploy: Railway** — project from GitHub, volume at `/data`, variables,
   custom domain, one replica.
@@ -273,8 +302,14 @@ anywhere but your own machine.
 
 Stated plainly, so you can rule it out fast:
 
-- **Not multi-tenant.** There is no authentication and no per-user permission
-  model. Anyone who can reach the port is an admin of every workspace.
+- **No fine-grained permissions.** Each account holds one of three roles in a
+  workspace: an observer reads and comments, an editor writes rows, an architect
+  also changes structure, accounts and keys. Nothing narrows access to one
+  space, row or field.
+- **Auth is off until you turn it on.** Agents carry `wv_` tokens and people
+  sign in through one OpenID Connect provider, but only after
+  `weave workspace require-auth`. Until then, anyone who reaches the port can do
+  everything an architect can.
 - **Not a hosted product.** There is no cloud tier, no signup, and no support
   contract. You run it.
 - **Not a plugin ecosystem.** No marketplace, no extensions, no third-party apps.
@@ -300,9 +335,9 @@ graph — is the model weave implements, in a single file you own. See
 [docs/PARITY.md](docs/PARITY.md) for the feature-by-feature matrix.
 
 **Can AI agents use it?**
-That is the point. The MCP server exposes 57 tools covering schema design,
+That is the point. The MCP server exposes 58 tools covering schema design,
 CRUD, documents, relations, workflow states, search, automations, and CSV
-import/export, fifteen of them listed by default and the rest one `weave_call`
+import/export, sixteen of them listed by default and the rest one `weave_call`
 away. Agents can build the schema, not just fill it in.
 
 **Do I need Docker, Postgres, or npm install?**
@@ -316,8 +351,11 @@ attachments. Open it with `sqlite3`, back it up with `cp`, commit it if you
 like. `node bin/weave.js export` dumps the whole thing as readable JSON.
 
 **Can multiple people use one instance?**
-Yes, over a shared front door — but everyone shares one identity and full
-access. Per-user accounts and an audit log are on the roadmap, not in the build.
+Yes. Give each person an account at a role (observer, editor or architect),
+run `weave workspace require-auth`, and let them sign in through your OpenID
+Connect provider. Every change lands in the audit log under the name of the
+account that made it. Permissions stop at the workspace: no rule narrows access
+to one space, row or field.
 
 **How do I migrate off it?**
 `node bin/weave.js export --data <file>` writes the entire workspace as JSON,
@@ -345,11 +383,18 @@ README screenshots are regenerated with `node scripts/screenshots.mjs`.
 
 ## Security
 
-weave has **no built-in authentication and no per-user permissions** — anyone who
-can reach the port can read and write every workspace. The server binds
-`127.0.0.1`, so a local install stays private to your machine; a self-hosted
-install must sit behind a proxy or private network that does the authenticating
-(see [Self-hosting](#self-hosting)). Never expose the port directly.
+weave ships with authentication off. Until a workspace runs
+`weave workspace require-auth`, anyone who reaches the port can do everything
+an architect can in it. The server binds `127.0.0.1`, so a local install stays
+private to your machine.
+
+Before anyone else can reach a self-hosted install, put a door in front of it
+(see [Self-hosting](#self-hosting)) and turn on `require-auth`. Every page and
+API route then refuses a caller without a `wv_` token or a signed-in session.
+Never expose the port directly.
+
+Roles stop at the workspace. An observer reads and comments, an editor writes
+rows, and an architect changes structure, accounts and keys.
 
 Documents may contain raw HTML, which renders same-origin — treat access to a
 shared workspace the way you'd treat write access to a repo.

@@ -27,6 +27,7 @@ Works with 6 database engines. No account required. Open source, free for person
 - **Visual query builder** — Drag-and-drop canvas for building queries without SQL
 - **AI assistant** — Get help writing and understanding SQL queries
 - **MCP server** — Let Claude Desktop, Claude Code or another MCP host read your schemas and run read-only queries (desktop)
+- **Terminal UI** — Browse, edit and query your saved connections from a terminal with `seaquel-tui`
 - **SQL learning sandbox** — Interactive challenges to practice SQL
 
 ### Explore & Visualize
@@ -143,17 +144,27 @@ when the default doesn't fit your deployment.
 | `SEAQUEL_COOKIE_DOMAIN`   | Sharing sessions across subdomains, e.g. `.example.com`.                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | `SEAQUEL_TRUSTED_PROXIES` | Running behind a reverse proxy or load balancer. Comma-separated proxy IPs/CIDRs (e.g. `10.0.0.0/8`). Without it, sign-in rate limits key on the socket address and `X-Forwarded-For` is ignored, so every client behind the proxy shares one limit.                                                                                                                                                                                                                          |
 | `SEAQUEL_CONTROL_URL`     | Pointing at a staging control plane, or `http://127.0.0.1:1` to test offline mode. Default `https://seaquel.app`.                                                                                                                                                                                                                                                                                                                                                             |
+| `SEAQUEL_AI_EGRESS`       | Changing where the AI assistant's model calls may go. The server calls the provider with the key the browser sends for that call. `public` (default): public addresses over `https` only, redirects never followed. `any`: private networks and `http:` too, for a model server next to Seaquel (Ollama, vLLM). `off`: every model call is refused, for air-gapped installs. Any other value stops the server at startup. See the proxy note below.                           |
 | `PORT` / `DATA_DIR`       | Overriding `8787` / `/data`.                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 Internal tuning knobs (`SEAQUEL_LICENSE_SOFT_TTL`, `SEAQUEL_LICENSE_GRACE_TTL`,
 `SEAQUEL_BUNDLE_TRUSTED_PUBKEY`) have sensible defaults documented inline
 in the source; set them only when you need to.
 
-**Outbound proxies and TLS inspection.** License calls to seaquel.app come
-from the Rust service. They go through `HTTPS_PROXY`/`HTTP_PROXY` (and skip
-hosts in `NO_PROXY`) when those are set in the container's environment. If
-a proxy re-signs TLS, point `NODE_EXTRA_CA_CERTS` at a PEM file with its CA
-certificate; `SSL_CERT_FILE` and `SSL_CERT_DIR` work too.
+**Outbound proxies and TLS inspection.** License calls to seaquel.app and
+the AI assistant's model calls come from the Rust service. They go through
+`HTTPS_PROXY`/`HTTP_PROXY`/`ALL_PROXY` (and skip hosts in `NO_PROXY`) when
+those are set in the container's environment. If a proxy re-signs TLS,
+point `NODE_EXTRA_CA_CERTS` at a PEM file with its CA certificate;
+`SSL_CERT_FILE` and `SSL_CERT_DIR` work too.
+
+Behind a proxy, `SEAQUEL_AI_EGRESS=public` still refuses a provider URL
+whose host is a private or local IP address, and a name whose answers from
+the server's own DNS are all private or local. A name the server can't
+resolve itself goes to the proxy, which then decides what it may reach, so
+restrict private destinations on the proxy too. The proxy's own host is
+trusted as configured, and a provider URL naming the proxy's host is
+refused.
 
 **What reaches the Rust service.** It gets only the variables it needs:
 the ones above, `DATA_DIR`, the proxy and CA variables, `PATH`, `TZ`,
@@ -516,14 +527,17 @@ the server may use, then copy one of the snippets it builds:
   the file already has one, and restart Claude Desktop.
 - **Claude Code:** run the `claude mcp add seaquel -- …` line in a terminal.
 
-On macOS the snippets point at the tool inside the app,
-`/Applications/Seaquel.app/Contents/MacOS/seaquel-cli`. deb and rpm installs
-put it in `/usr/bin/seaquel-cli`. On Windows the panel shows its full path in
-the install folder; the installer doesn't add it to `PATH`. To type
-`seaquel-cli` in a terminal on macOS or in the Linux AppImage, use **Install
-Command Line Tool…** in the app menu (or the button in the panel). It links
-`/usr/local/bin/seaquel-cli` on macOS (asking for your password if needed) and
-`~/.local/bin/seaquel-cli` for the AppImage.
+The app doesn't come with `seaquel-cli`; it downloads it when you ask. Use
+**Install Command Line Tool…** in the app menu, or the button in the panel. The
+app fetches the build that matches its own version from the GitHub release,
+checks its size and SHA-256, and keeps it in its data folder
+(`~/Library/Application Support/app.seaquel.desktop/bin` on macOS,
+`~/.local/share/app.seaquel.desktop/bin` on Linux,
+`%LOCALAPPDATA%\app.seaquel.desktop\bin` on Windows). The snippets point at
+that file. On macOS it also links `/usr/local/bin/seaquel-cli` (asking for
+your password if needed), and on Linux `~/.local/bin/seaquel-cli`, so you can
+type `seaquel-cli` in a terminal. On Windows it doesn't change `PATH`. After
+the app updates, install again to get the matching CLI.
 
 Open the app once after installing or updating it before you start the
 server. The server never changes the app's data file, so if a new version has
@@ -569,6 +583,12 @@ installing or loading extensions are refused, so a view over a CSV or Parquet
 file fails too. JSON functions work. There is no time zone support, so
 functions that need a time zone and arithmetic on `TIMESTAMPTZ` values fail.
 
+`seaquel-cli` runs DuckDB in a separate helper, a download of its own (see
+[DuckDB in the terminal](#duckdb-in-the-terminal)). **Install Command Line
+Tool…** fetches it along with the CLI. If it's missing, a DuckDB tool call
+fails with a message saying to run `seaquel-cli duckdb install`, and the
+server prints the same on stderr when it starts.
+
 ### Passwords and the macOS keychain
 
 The server reads saved passwords from the same keychain entries as the app.
@@ -581,6 +601,200 @@ be used: save it in the app first.
 
 SSH tunnels work for hosts the app already trusts. The server never adds a
 host key, so for a new bastion, connect once in the app and accept its key.
+
+## Terminal UI
+
+`seaquel-tui` is Seaquel in a terminal, laid out like lazygit: numbered panels
+for the connection, its tables and views, saved queries and history, and the
+changes you've staged, with the table or query editor beside them. It uses the
+app's saved connections, passwords, SSH settings and saved queries. Browse a
+table, edit cells, stage inserts and deletes, review them as a diff and commit
+them in one transaction. Write SQL with completion, run it, page through the
+results, look at an `EXPLAIN ANALYZE` tree, and ask the AI assistant for a
+query.
+
+It runs beside the app on the same data. A query you save in the TUI shows up
+in the app within a second or two, and the other way round. Nothing in it
+checks for a license; the [pricing terms](https://seaquel.app/pricing) apply
+as they do to the app.
+
+### Install
+
+The app doesn't install `seaquel-tui` for you yet. Download it from the
+[GitHub release](https://github.com/webstonehq/seaquel/releases) that matches
+your app's version, one file per platform:
+
+| Platform             | Asset                                     |
+| -------------------- | ----------------------------------------- |
+| macOS, Apple Silicon | `seaquel-tui-aarch64-apple-darwin`        |
+| macOS, Intel         | `seaquel-tui-x86_64-apple-darwin`         |
+| Linux, x86_64        | `seaquel-tui-x86_64-unknown-linux-gnu`    |
+| Linux, ARM64         | `seaquel-tui-aarch64-unknown-linux-gnu`   |
+| Windows, x86_64      | `seaquel-tui-x86_64-pc-windows-msvc.exe`  |
+| Windows, ARM64       | `seaquel-tui-aarch64-pc-windows-msvc.exe` |
+
+On macOS or Linux, with your app's version in place of `2026.10.0`:
+
+```bash
+VERSION=2026.10.0
+ASSET=seaquel-tui-aarch64-apple-darwin   # from the table
+mkdir -p ~/.local/bin
+curl -fL -o ~/.local/bin/seaquel-tui \
+  "https://github.com/webstonehq/seaquel/releases/download/v$VERSION/$ASSET"
+chmod +x ~/.local/bin/seaquel-tui
+seaquel-tui --version
+```
+
+`~/.local/bin` has to be on your `PATH`; any folder that is will do.
+
+The binaries are signed but not notarized. A file fetched with `curl` starts
+as is, but macOS refuses to run one downloaded with a browser until you clear
+the quarantine flag:
+
+```bash
+xattr -d com.apple.quarantine ~/.local/bin/seaquel-tui
+```
+
+On Windows, download the `.exe` and run it from Windows Terminal. The Windows
+builds come from the same release job but haven't been tested yet.
+
+Open the app once after installing or updating it. Like the MCP server,
+`seaquel-tui` doesn't upgrade the app's data file; if the file needs an
+update, it stops and names the app version to open. A TUI newer than your app
+asks for the newer app.
+
+### DuckDB in the terminal
+
+`seaquel-tui` and `seaquel-cli` don't contain DuckDB, which would triple their
+size. DuckDB runs in a small helper program, `seaquel-duckdb`, fetched the
+first time you need it. Each DuckDB connection gets its own helper process,
+which exits when the connection closes.
+
+- **In the TUI**, the first time you connect to a DuckDB database it says
+  that DuckDB support is a separate download (about 12 MB) and asks. Press
+  Enter to download it; a progress bar follows, then the connection opens.
+  Esc cancels and leaves nothing behind.
+- **From the command line:**
+
+  ```bash
+  seaquel-cli duckdb status    # installed <path>, missing, outdated or unsafe
+  seaquel-cli duckdb install
+  ```
+
+  The app's **Install Command Line Tool…** also installs it for the CLI.
+
+The helper is downloaded from the GitHub release that matches the program's
+version (it refuses a helper of any other version), and its size and SHA-256
+are checked against the release before it's put in place. Proxies set with
+`HTTPS_PROXY` and extra certificates in `NODE_EXTRA_CA_CERTS` are used.
+
+**Without a network**, download `seaquel-duckdb-<platform>.gz` for your
+version from the [releases page](https://github.com/webstonehq/seaquel/releases)
+on another machine (the platform names are those in the table above, with
+`.exe.gz` on Windows), note the SHA-256 the page shows for it, copy the file
+over and run:
+
+```bash
+seaquel-cli duckdb install --from seaquel-duckdb-aarch64-apple-darwin.gz \
+  --sha256 <the 64-character SHA-256 from the release page>
+```
+
+The CLI installs the helper for its own version, which is the one the TUI of
+the same version uses.
+
+**Where it lives:** in the app's local data folder, one folder per version:
+
+| Platform | Folder                                                                    |
+| -------- | ------------------------------------------------------------------------- |
+| macOS    | `~/Library/Application Support/app.seaquel.desktop/bin/duckdb/<version>/` |
+| Linux    | `~/.local/share/app.seaquel.desktop/bin/duckdb/<version>/`                |
+| Windows  | `%LOCALAPPDATA%\app.seaquel.desktop\bin\duckdb\<version>\`                |
+
+With `SEAQUEL_DATA_DIR` set, it's `$SEAQUEL_DATA_DIR/bin/duckdb/<version>/`.
+The folders and the file are readable only by you, and a helper in a folder
+others can write to isn't started (`status` says `unsafe`; installing again
+fixes the folder). Installing keeps the two newest versions and removes
+older ones, so after a newer TUI or CLI has installed its helper, an older
+one may ask to download again. To remove DuckDB support, delete the
+`bin/duckdb` folder; nothing else refers to it.
+
+### Using it
+
+```bash
+seaquel-tui                                # pick a project and a connection
+seaquel-tui --connection <id or name>      # straight to a saved connection
+seaquel-tui --project <id or name> --theme light --no-mouse --page-size 200
+```
+
+Press `?` for every key. The bar at the bottom shows the ones that work where
+you are. The main ones:
+
+| Keys                    | What they do                                                    |
+| ----------------------- | --------------------------------------------------------------- |
+| `1` `2` `3` `4`, `0`    | focus a panel, or the main view; `Tab` cycles                   |
+| `j` `k`, `Enter`, `Esc` | move, open, go back                                             |
+| `[` `]`                 | switch the focused box's tab                                    |
+| `e`, `d`, `a`, `D`      | in a table: edit a cell, stage a delete, an insert, Set default |
+| `/`, `F`, `s`           | filter the loaded rows, filter the table, sort                  |
+| `u`, `c`                | undo the last staged change, commit the staged changes          |
+| `Q`, `+`                | the query editor, a new query tab                               |
+| `Ctrl+R`, `Ctrl+E`      | run the whole text, run the statement at the cursor             |
+| `Ctrl+X`, `:analyze`    | `EXPLAIN`, `EXPLAIN ANALYZE` of the statement at the cursor     |
+| `Ctrl+K`                | ask the AI assistant for SQL                                    |
+| `Ctrl+S`, `Ctrl+O`      | save the query, edit it in `$VISUAL` or `$EDITOR`               |
+| `Ctrl+C`, `q`           | stop a running statement, quit                                  |
+
+The editor starts in insert mode; `Esc` switches to a small set of vim keys
+(`hjkl`, `w b e`, `dd`, `yy`, `p`, `u`, `:w`). Committing on a connection with
+the **prod** label asks you to type `prod`. Ask AI only inserts what the model
+writes; `Ctrl+R` in its box also runs the answer, but only when it's a single
+statement that passes the same read-only check the assistant uses. That check
+looks at the SQL text; the statement then runs with the connection's own
+rights.
+
+Open query tabs, unsaved SQL included, are kept between runs in
+`tui/state.json` in the app's data folder (readable only by you; a tab over
+1 MB isn't kept). The log is `logs/tui.log` in the same folder, at `warn`
+unless you pass `--log-level`. It never holds SQL, values, passwords or
+connection names.
+
+### Passwords and the keychain
+
+The TUI reads passwords the app saved from the system keychain. On macOS the
+first read of each one shows a dialog asking whether `seaquel-tui` may use it,
+sometimes behind the terminal window; the TUI says it's waiting. Choose
+**Always Allow** and it won't ask again for that item. A connection without a
+saved password asks for it when you connect. Tick **Save password** and the
+TUI stores it once the connection works. The app then asks once, the first
+time it reads that password; choose **Always Allow** there too.
+
+On a machine with no keyring to talk to, such as a Linux server reached over
+SSH without a Secret Service, the TUI asks for a saved connection's password
+each session and can't save it.
+
+An SSH bastion the TUI hasn't seen before shows its host key's fingerprint.
+Trusting it adds the key to `~/.ssh/known_hosts`, the same as the app does. A
+changed key is refused.
+
+### Terminals
+
+- **tmux:** add `set -sg escape-time 10` to `~/.tmux.conf`. With tmux's
+  default (500 ms), `Esc` followed quickly by another key reaches the TUI as
+  one Alt-key. The TUI splits most of those back into the two keys, but `Esc`
+  then `r` arrives as Alt+R and runs the statement, and `Esc` then `x` as
+  Alt+X, which explains it with `ANALYZE` (asking first unless it's a plain
+  `SELECT`).
+- **Option on macOS:** Terminal.app and iTerm2 type characters such as `®`
+  for Option+R unless Option sends Meta (Terminal.app: Settings → Profiles →
+  Keyboard → "Use Option as Meta key"; iTerm2: Profiles → Keys → Left Option
+  key: Esc+). The keys the bar shows don't need it.
+- **Mouse:** clicks select panels, rows, cells and tabs, and the wheel
+  scrolls. To select text, hold Shift while dragging (Option in iTerm2, Fn in
+  Terminal.app), or start with `--no-mouse`.
+- **Colours:** truecolor when `COLORTERM` says so, 256 colours otherwise.
+  `--theme light` suits a light background, and `NO_COLOR=1` turns colour off
+  (bold, underline and reverse video mark focus and changes instead).
+- **Size:** at least 80×24.
 
 ## Community
 

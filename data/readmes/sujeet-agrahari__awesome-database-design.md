@@ -226,6 +226,7 @@ Over time, this collection has grown to include bookmarks, posts, courses, and l
 
 - [SQL Style Guide](https://www.sqlstyle.guide/) - Writing readable SQL
 - [SQL Anti-patterns](https://pragprog.com/titles/bksqla/sql-antipatterns/) - Common mistakes to avoid
+- [SQL Traps](https://github.com/christianvadillo/sql-traps) - 15 silent SQL mistakes (NOT IN with NULLs, LEFT JOIN turned INNER, fan-out joins...), each with the fix and a DuckDB check
 - [Parameterized Queries](https://cheatsheetseries.owasp.org/cheatsheets/Query_Parameterization_Cheat_Sheet.html) - Preventing SQL injection
 - [Transaction Best Practices](https://www.red-gate.com/simple-talk/databases/sql-server/t-sql-programming-sql-server/sql-server-transactions-and-error-handling/) - Managing transactions
 
@@ -302,6 +303,7 @@ Over time, this collection has grown to include bookmarks, posts, courses, and l
 - [MySQL Server Blog](https://mysqlserverteam.com/) - Official MySQL blog
 - [High Scalability](http://highscalability.com/) - Scalability case studies
 - [Database Trends and Applications](https://www.dbta.com/) - Industry news
+- [Postgres as Your Platform: Building Event-Driven Systems with Schema Changes](https://neon.com/blog/postgres-as-your-platform) - Event triggers, LISTEN/NOTIFY, transactional DDL, and the outbox pattern as design building blocks
 
 ## Tools & Software
 
@@ -323,6 +325,8 @@ Over time, this collection has grown to include bookmarks, posts, courses, and l
 - [ArchiMate Tool](https://www.archimatetool.com/) - Enterprise architecture modeling
 - [Vertabelo](https://www.vertabelo.com/) - Online database modeler
 - [QuickDBD](https://www.quickdatabasediagrams.com/) - Quick database diagrams
+- [Schema3D](https://github.com/shane-jacobeen/schema3d) - Open-source 3D browser schema visualizer
+- [mcdview](https://mcdview.dev) - Generate shareable HTML ER diagrams from SQL or ORM schemas
 
 ### Migration Tools
 
@@ -332,6 +336,7 @@ Over time, this collection has grown to include bookmarks, posts, courses, and l
 - [Prisma Migrate](https://www.prisma.io/migrate) - Modern migration tool
 - [Sqitch](https://sqitch.org/) - Database change management
 - [Bytebase](https://www.bytebase.com/) - Database governance platform: UI-driven or GitOps workflow (versioned or declarative), SQL review, approval, and a full API
+- [SQL Migration Safety Checker](https://github.com/edilec/sql-migration-safety-checker) - Offline static review of SQL migration files under PostgreSQL 11+ assumptions; flags destructive statements, lock-heavy operations, and ordering risks.
 
 ### Monitoring & Profiling
 

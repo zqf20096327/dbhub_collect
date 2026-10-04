@@ -24,7 +24,9 @@ Joltrin (formerly SOP) is an ACID-compliant B-Tree storage engine that runs insi
 **Why it matters.** An agent that can call tools needs more than a good prompt. It needs state that survives a failure and a check that runs before the action, not after. Joltrin puts both in the same process and the same transaction boundary, so there is no network hop and no separate service to operate.
 
 <p align="center">
-  <img src="docs/assets/joltrin-demo.gif" alt="Joltrin demo: in-process ACID transactions, the Arena simulation, and the agent verification barrier" width="760" />
+  <a href="https://youtu.be/F0jYkBHJluI">
+    <img src="docs/assets/joltrin-demo.gif" alt="Joltrin demo. Click to watch the video." width="760" />
+  </a>
 </p>
 
 ## Try it in five minutes
@@ -34,6 +36,7 @@ git clone https://github.com/sharedcode/joltrin.git && cd joltrin
 go run ./examples/quickstart      # ordered B-Tree with point, range, and descending scans
 ./scripts/demo.sh --barrier       # the barrier blocks a database drop until a backup is validated
 ./scripts/demo.sh --memory        # an agent crashes mid-task and a peer resumes from the B-Tree
+./scripts/demo.sh --team          # Jira, Grafana, AWS, and PagerDuty agents finish tasks behind the barrier
 ```
 
 Or skip the install. These run entirely in your browser with no backend:
@@ -43,6 +46,74 @@ Or skip the install. These run entirely in your browser with no backend:
 | [Technical demo](https://joltrinhq.com/) | Run ACID transactions, vector search, and an agent checkpoint resume on the WASM build of the engine. |
 | [Agent barrier](https://joltrinhq.com/agents/) | Try to drop a database before the backup is validated and watch the barrier refuse. |
 | [Arena](https://joltrinhq.com/arena/) | Crash storage nodes and spike load in a cluster simulation. It illustrates the concepts, it is not a live cluster. |
+
+## Test it with your own AI agent
+
+Any agent that supports MCP can use the barrier. Two commands:
+
+```bash
+go install github.com/sharedcode/joltrin/v5/cmd/sop-mcp-server@latest
+"$(go env GOPATH)/bin/sop-mcp-server" setup --apply
+```
+
+`setup --apply` registers the server with Claude Code, Codex, and the Gemini CLI, whichever are installed, using the binary's full path. That avoids the "Executable not found" failure you get when Go's bin folder is not on your `PATH`. Run `setup` without `--apply` to see the commands first.
+
+The first install downloads the Go modules. If your Go is older than 1.26.8, Go also downloads that toolchain once, about 240 MB, so the first run takes a few minutes. Later installs are quick.
+
+Then tell your agent: "Use the joltrin tools to run `drop_prod_db` on workflow `db-maintenance` with trace id `t1`." The server refuses until `take_backup` and `validate_backup` have run in that trace, whatever the agent claims. The command uses the full path, so it works even when `$(go env GOPATH)/bin` is not on your `PATH`. A bare `sop-mcp-server` fails with "Executable not found" in that case. A recorded run with real agents, and what it does not prove, is in [docs/AGENT_BARRIER_TESTS.md](docs/AGENT_BARRIER_TESTS.md).
+
+Two limits to know. The `trace_id` names a run and the caller chooses it, so issue one per run in your integration. And the barrier only answers: whatever performs the real action has to wait for that answer, or an agent can skip it.
+
+### Let the server remember what blocked
+
+Register it with `--lessons` (it sets `SOP_LESSONS_DIR`, which Claude Code and Codex support; for the Gemini CLI set that variable in its settings file) and the server records each block once per run and tells the next agent when it connects. It also keeps a short `LESSONS.md` there that you can add to a `CLAUDE.md` (`@~/.joltrin/LESSONS.md`) or point an `AGENTS.md` at.
+
+```bash
+"$(go env GOPATH)/bin/sop-mcp-server" setup --apply --lessons "$HOME/.joltrin"
+```
+
+Agents can also ask for the same list with the `read_lessons` tool, which exists only while memory is on. That helps with clients that do not show a server's startup instructions to the model, which the Gemini CLI did not in my test.
+
+`read_lessons` also reports, per runbook, how many runs called `execute_step` and, for each rule, how many runs it blocked and how many of those went on to run every step it had blocked. A rule that blocks many runs and is usually recovered from is being hit early and then followed. A rule that blocks runs that rarely recover is stopping runs that never finished the step. The numbers show how often a rule trips and whether agents get past it, not whether the rule is right.
+
+It is off by default and advice only: the barrier still checks every call, so history never unlocks a step. Lessons name only steps and states from your runbook, and they expire after 30 days or when the runbook changes. Use one server process per folder.
+
+### Use your own runbooks
+
+The built-in `db-maintenance` runbook is only an example. Describe your own steps in a JSON file and the barrier enforces them. A step requires states that other steps establish, and a safety rule forbids a state unless another one already holds:
+
+```json
+{
+  "workflows": {
+    "deploy": {
+      "steps": [
+        {"id": "run_tests",    "establishes": ["tests_passed"]},
+        {"id": "get_approval", "requires": ["tests_passed"], "establishes": ["approved"]},
+        {"id": "deploy_prod",  "requires": ["tests_passed", "approved"], "establishes": ["deployed"]}
+      ],
+      "safety": [{"name": "no-deploy-without-approval", "forbidden": "deployed", "requires": "approved"}]
+    }
+  }
+}
+```
+
+```bash
+"$(go env GOPATH)/bin/sop-mcp-server" setup --apply --runbooks "$PWD/runbooks.json"
+```
+
+With a file, the server serves exactly those runbooks. It refuses a file with a typo, such as an unknown field or a state that no step establishes, instead of quietly never blocking anything.
+
+What this catches: an agent that skips a required step, breaks a safety rule, or names a step that does not exist. What it does not do: judge whether an agent's own claim is true. That needs evidence from a tool the agent cannot fake, so it is not something a runbook file can add.
+
+## Agents that hand off work
+
+Jira, Grafana, AWS, and PagerDuty agents hand off work, and every call passes three checks first: the tool is on that agent's allowlist, any claim matches evidence a tool returned, and the steps it depends on have committed (`verify`).
+
+<p align="center">
+  <img src="docs/assets/agent-team-pagerduty.gif" alt="Terminal recording: PagerDuty, Grafana, and AWS agents resolve an incident while the barrier blocks a skipped step, a made-up number, and out-of-scope calls" width="900" />
+</p>
+
+Run it with `./scripts/demo.sh --team`, or watch it replay on [joltrinhq.com](https://joltrinhq.com/#agent-team). When a step is blocked on order, the output includes a `result:` line: the structured block an MCP agent gets back from `execute_step`, with the rule, the missing state, and the steps that would establish it. The tools are stubs and the checks are real. Source: [examples/agent_team](examples/agent_team/main.go).
 
 ## What is verified
 
@@ -99,7 +170,7 @@ Tier details and the Stripe setup are in [docs/MONETIZATION_AND_TIERS.md](docs/M
 
 ## Contributing
 
-Run `go test ./...` and `gofmt` before opening a pull request, and include tests with your change. See [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md). Questions and ideas go to [GitHub Discussions](https://github.com/SharedCode/joltrin/discussions).
+Run `go test ./...` and `gofmt` before opening a pull request, and include tests with your change. See [CONTRIBUTING.md](.github/CONTRIBUTING.md) and [SECURITY.md](.github/SECURITY.md). Questions and ideas go to [GitHub Discussions](https://github.com/SharedCode/joltrin/discussions).
 
 ## Kubernetes and GitOps
 

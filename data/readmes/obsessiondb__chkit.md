@@ -25,6 +25,22 @@ New to chkit? Scaffold the small [hello example](examples/hello) with `bun creat
 - **Check schema drift in CI.** Detect pending migrations, checksum mismatches, and live schema differences with `chkit check`.
 - **Generate types and backfill data.** Plugins generate TypeScript types and Zod schemas or run SQL backfills. Agent skills guide schema and source authoring.
 
+## Apps & integrations
+
+Install editable ClickHouse schemas and API readers from the [app registry](https://chkit.obsessiondb.com/integrations/):
+
+```sh
+bunx chkit registry list
+bunx chkit registry inspect attio
+bunx chkit add attio
+bunx chkit registry inspect slack
+bunx chkit add slack
+```
+
+[Integrating ClickHouse with Attio](https://chkit.obsessiondb.com/integrations/attio/) covers credentials, migrations, all nine synced resources, query views, and full-read behavior. Configure credentials and review schema migrations before running ingestion.
+
+[Integrating ClickHouse with Slack](https://chkit.obsessiondb.com/integrations/slack/) covers conversation metadata, users, retained message history, and thread replies in three raw tables, with token scopes, rate limits, and full-read behavior.
+
 ## From a schema to a working sync
 
 Start with a table, load 100 demo API records, then query posts per author. Change the view later using the data already stored in ClickHouse. This walkthrough uses TypeScript and the ingestion plugin. For a project using only `chkit` and `@chkit/core`, follow the [schema tutorial](https://chkit.obsessiondb.com/tutorials/first-schema/).

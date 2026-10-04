@@ -17,7 +17,7 @@ provenance.
 | :---: | :---: | :---: | :---: | :---: |
 | Paste one line into Claude Code, Codex, or Cursor | | It installs Foremerge and wires itself up | | Every agent sees what the others are about to change, even in separate worktrees |
 
-> **Status:** Foremerge `0.5.0` is a pre-1.0, local-first MVP. The CLI, JSON API,
+> **Status:** Foremerge `0.5.1` is a pre-1.0, local-first MVP. The CLI, JSON API,
 > MCP server, SQLite store, deterministic conflict detector, and
 > verification-gated lifecycle are implemented. Public schemas may still
 > change. Published benchmark results do not yet exist, and coordination
@@ -131,6 +131,16 @@ curl -fsSL https://foremerge.com/install.sh | sh
 > **Two commands, one program.** This installs `foremerge` and `fmg`, the same
 > binary under a shorter name, so `fmg status` and `foremerge status` do the
 > same thing. Examples below spell out `foremerge`; type whichever you prefer.
+
+Or install from npm on macOS or Linux with glibc. The package carries the
+same release binaries, so nothing is compiled or downloaded at install time:
+
+```sh
+npm install -g foremerge
+```
+
+The Windows npm package is not published yet; on Windows, use the releases
+page.
 
 Or build from source with Rust 1.85+: `cargo install --locked --git
 https://github.com/naw103/foremerge foremerge`, or `cargo install --locked

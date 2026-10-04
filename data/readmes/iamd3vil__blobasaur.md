@@ -36,6 +36,7 @@ Blobasaur is a high-performance, sharded blob storage server written in Rust. It
   - [Migration Process](#migration-process)
   - [Best Practices](#best-practices)
 - [Vacuum Maintenance](#vacuum-maintenance)
+- [Shutdown](#shutdown)
 - [Performance Features](#performance-features)
   - [Write Batching](#write-batching)
   - [Asynchronous Writes](#asynchronous-writes)
@@ -72,9 +73,9 @@ You can download pre-compiled binaries for Linux from the [GitHub Releases page]
 
 1.  **Download the latest release:**
 
-    For example, to download version `v0.5.0`:
+    For example, to download version `v0.6.1`:
     ```bash
-    wget https://github.com/iamd3vil/blobasaur/releases/download/v0.5.0/blobasaur-Linux-musl-x86_64.tar.gz
+    wget https://github.com/iamd3vil/blobasaur/releases/download/v0.6.1/blobasaur-Linux-musl-x86_64.tar.gz
     ```
 
 2.  **Extract the archive:**
@@ -109,7 +110,7 @@ docker run -d \
 
 Available tags:
 - `latest` - Latest stable release
-- `x.y.z` - Specific version (e.g., `0.5.0`)
+- `x.y.z` - Specific version (e.g., `0.6.1`)
 - `x.y` - Latest patch for minor version (e.g., `0.2`)
 - `main` - Latest build from main branch
 
@@ -257,6 +258,7 @@ addr = "0.0.0.0:6379"              # Server bind address
 async_write = false                 # Enable async writes
 batch_size = 1                      # Write batch size
 batch_timeout_ms = 0               # Batch timeout in milliseconds
+shutdown_timeout_secs = 30          # Max time to drain writes on shutdown
 ```
 
 ### Storage Compression
@@ -514,6 +516,20 @@ blobasaur shard vacuum --all-shards --mode full
 Blobasaur also automatically upgrades legacy shard databases to `PRAGMA auto_vacuum = INCREMENTAL` on startup, ensuring new freelist pages are always reclaimable.
 
 📖 **For full documentation** — modes, budget tuning, CLI options, server admin commands, example output, startup upgrade flow, and operational recommendations — see **[VACUUM.md](VACUUM.md)**.
+
+## Shutdown
+
+Blobasaur shuts down gracefully on `SIGINT` or `SIGTERM`:
+
+1. It stops accepting connections and stops reading new commands. A command that is already running finishes and gets its reply.
+2. Each shard writer commits everything still queued, without waiting for `batch_timeout_ms`.
+3. Background tasks stop, the WAL is checkpointed and the databases are closed. The process exits with code `0`.
+
+Every write that was acknowledged with `OK`, including `async_write` writes still in the queue, is on disk before the process exits. A write that arrives during shutdown is either persisted or rejected with an error or a closed connection. It is never acknowledged and then dropped.
+
+The drain is bounded by `shutdown_timeout_secs` (default `30`). If the writers have not finished by then, Blobasaur logs how many acknowledged ops were not persisted and exits with a non-zero code. A second signal during shutdown exits immediately.
+
+Give the process enough time to drain before your orchestrator sends `SIGKILL`. For Nomad, set `kill_timeout` to at least `shutdown_timeout_secs`. For Kubernetes, use `terminationGracePeriodSeconds`. For systemd, use `TimeoutStopSec`.
 
 ## Performance Features
 

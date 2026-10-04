@@ -8,6 +8,8 @@
 
 Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than ranked low. Works with LangChain, MCP, or any SQL agent, on Postgres, Oracle, MySQL, SQL Server and SQLite.
 
+![An analyst asks "salary by employee": hr_compensation is absent from the shortlist. Grant the payroll role and it becomes the top match.](https://raw.githubusercontent.com/ashishsinha1602/schemagate/main/docs/media/schemagate-demo.gif)
+
 With row-level security alone the failure is quiet: the model writes valid SQL against a table the caller cannot read, RLS strips every row, and the user is told "no records found" — indistinguishable from "this data does not exist."
 
 [Demo](https://ashishsinha1602.github.io/schemagate/) · [Install](https://ashishsinha1602.github.io/schemagate/install/) · [Benchmarks](https://ashishsinha1602.github.io/schemagate/benchmarks/) · [Local models](https://ashishsinha1602.github.io/schemagate/local-models/) · [What it costs](https://ashishsinha1602.github.io/schemagate/cost/) · [Coming from Vanna](https://ashishsinha1602.github.io/schemagate/vanna-alternative/)
@@ -22,8 +24,6 @@ schemagate demo "salary by employee" --principal okta:hr --role payroll  # now i
 Absent, not ranked low. A table the caller may not read never enters the
 prompt, so no rewording of the question reaches it and there is nothing to
 filter out of the answer afterwards.
-
-![Same question, two callers. Without the payroll role hr_compensation is absent from the prompt; with it, it is the first table.](docs/media/before-after.png)
 
 *[Try it in the browser](https://ashishsinha1602.github.io/schemagate/) — no
 install, no database, no model call.*
@@ -625,6 +625,94 @@ provider = OpenAIProvider(model="gpt-4.1-mini",
                           embed_model="text-embedding-3-small")
 cat = Catalog(embedder=APIEmbedder(provider, dim=1536))
 ```
+
+### Your organisation's words: a glossary
+
+Some questions share nothing with any identifier, and no description or model
+reliably bridges them: "money we gave back to shoppers" is `billing_credit_note`.
+State it once, in the same `catalog.json` as your access rules:
+
+```json
+{"terms": {"gave back": "billing_credit_note",
+           "revenue": ["billing_invoice", "v_monthly_revenue"]}}
+```
+
+or `cat.term("gave back", "billing_credit_note")` in Python. A term matches as a
+phrase, plurals folded, and only the most specific term counts ("take things
+offline" beats "offline"). It is applied when the question is asked, so nothing
+is re-indexed, and it never widens access: a term for a table the caller may
+not read does nothing for that caller. A term naming an object that does not
+exist is an error, not a silent no-op.
+
+What it is for, measured on the 58 business-language questions across the six
+bundled schemas (`tests/run_terms_repair.py`): every question that missed was
+fixed by adding **one** short term taken from it, and no other question broke --
+23 of 23 on the base embedder, 11 of 11 with MiniLM. What it is not: a glossary
+written in advance, from table names alone, barely moved the held-out questions
+(18/26 to 19/26 on the base embedder, 21/26 unchanged with MiniLM;
+`tests/run_terms_eval.py`), because people's words are hard to guess. Add terms
+for the questions you see missing.
+
+### The full ontology: concepts, rules, a hierarchy
+
+A glossary term is the simplest concept. The full form says what a word means,
+precisely, so the model writes the right SQL rather than a plausible one:
+
+```json
+{"ontology": {"concepts": {
+  "revenue":  {"synonyms": ["turnover", "sales"],
+               "maps": ["billing_invoice.total_net"],
+               "filter": "billing_invoice.status = 'issued'",
+               "definition": "Issued invoices only; drafts and void excluded.",
+               "broader": ["money in"]},
+  "money in": {"maps": ["v_monthly_revenue"]}}}}
+```
+
+A question that uses a concept's name or a synonym brings its objects in, and
+its meaning is written above the DDL:
+
+```
+-- What the business terms in this question mean:
+-- revenue (also: turnover, sales): main.billing_invoice.total_net; only where billing_invoice.status = 'issued'. ...
+```
+
+Concepts one step away (`broader`, or narrower) add a weaker signal. A meaning
+line is left out for any caller who may not see everything it names -- the mapped
+table and column, and any table or column its rule or definition mentions -- so a
+concept never puts a withheld name back into the prompt.
+
+Where a vocabulary comes from:
+
+```bash
+schemagate ontology import semantic_manifest.json --from dbt       --url ... --config catalog.json --save
+schemagate ontology import model.yaml            --from snowflake --url ... --config catalog.json --save
+schemagate ontology import glossary.csv          --from csv       --url ... --config catalog.json --save
+schemagate ontology suggest history.jsonl        --url ... --config catalog.json         # review, then --save
+schemagate ontology check                        --url ... --config catalog.json
+```
+
+`suggest` learns concepts from questions people asked and the SQL that answered
+them (`--memory` reads schemagate's own query memory). CSV headers from Collibra
+and Microsoft Purview exports work as they are.
+
+**What it does to accuracy, measured.**
+
+| | setting | without | with |
+|---|---|---|---|
+| Concepts learned from history (`benchmarks/learn_concepts.py`) | Spider dev, 166 databases pooled (876 tables), learned from half of each database's questions, scored on the other half: all gold tables in the top 5 | 73.3% | **82.8%** (+49 / −0, p<0.0001; MiniLM 79.1% → 85.9%) |
+| A complete glossary (`benchmarks/bird_ontology.py`, arm D) | BIRD dev, 201 held-out questions asked **without** their evidence, execution accuracy, Claude Sonnet 5 | 44.8% | **54.7%** (+28 / −8, p=0.001) |
+
+For scale on BIRD: pasting each question's own evidence into it (BIRD's usual
+setting) scores 61.2%, so the ontology delivers about 60% of that gain with no
+evidence typed per question; two identical runs without it differ by 18 answers.
+One result did not hold: concepts built from *other* questions' evidence gave
+46.8% against 44.8% -- inside that noise -- because BIRD's evidence is mostly
+one-off formulas that rarely recur. An ontology helps with the definitions it
+actually holds.
+
+Join-path completion through the schema graph was measured and not built:
+on Spider only 2 of 266 misses at top_k=5 are a missing bridge table, because
+foreign-key expansion already brings bridges in (`benchmarks/join_paths.py`).
 
 ## Connecting to what you actually have
 

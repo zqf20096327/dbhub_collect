@@ -40,7 +40,7 @@ actively maintained SQLAlchemy dialect that supports the modern 2.0–2.1 API.
 
 - **Status**: Production/Stable [![PyPI version](https://img.shields.io/pypi/v/sqlalchemy-cubrid)](https://pypi.org/project/sqlalchemy-cubrid)
 - Supported matrix: SQLAlchemy `>=2.0,<2.3`, CUBRID `10.2`, `11.0`, `11.2`, `11.4`, Python `3.10`–`3.14`
-- Integration CI runs a reduced matrix on every PR — Python 3.14 × CUBRID 11.4 (newest) and Python 3.10 × CUBRID 10.2 (oldest); the full Python 3.10–3.14 × CUBRID 10.2–11.4 matrix runs nightly, on demand, and as the release gate ([integration-full.yml](.github/workflows/integration-full.yml)). Intermediate Python versions (3.11–3.13) are supported and validated via the offline test suite on every PR
+- Ordinary PRs run one Ubuntu/Python 3.12 offline smoke lane; high-risk changes add newest live integration. Main/changed-weekly runs use oldest/newest endpoints. The full supported integration matrix remains manual and release-gated. See [CI execution policy](docs/CI_POLICY.md).
 - SQLAlchemy 2.1 pre-releases are exercised by a non-gating `--pre` canary CI job
 - See [Known Limitations](#known-limitations) for behavior boundaries and unsupported features
 
@@ -64,6 +64,15 @@ flowchart TD
 ```
 
 ## Requirements
+
+**Python 3.10 support retirement:** Python 3.10 reached upstream end of life on
+2026-10-01 ([PEP 619](https://peps.python.org/pep-0619/#310-lifespan)).
+The current 1.8.x line and the upcoming 1.9.x advance-notice release retain Python
+3.10 support. The following minor release (planned 1.10.0) will require Python
+3.11 or newer, after the 1.9.0 notice has shipped. Upgrade your interpreter,
+recreate your virtual environment and validate your application before upgrading
+to that release. This notice does not change the current installation requirement
+or add a runtime warning.
 
 - Python 3.10+
 - SQLAlchemy 2.0 – 2.1

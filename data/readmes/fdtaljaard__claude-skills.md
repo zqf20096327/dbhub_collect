@@ -1,12 +1,13 @@
-<img src="assets/logo.svg" alt="claude-skills logo" width="88" align="right" />
 
-# claude-skills for business
+# ERP agent skills
+
+`Reference-backed ERP knowledge for AI agents. No guessing.`
 
 [![License: MIT](https://img.shields.io/github/license/fdtaljaard/claude-skills)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/fdtaljaard/claude-skills)](https://github.com/fdtaljaard/claude-skills/releases)
 [![Claude Code plugin marketplace](https://img.shields.io/badge/Claude%20Code-plugin%20marketplace-5A4FE5)](#installing-a-skill)
 
-A public collection of [Agent Skills](https://agentskills.io/specification) for Claude, by Francois Taljaard — reference-backed assistants for ERP consultants and integrators (Sage 300, Sage 200 Evolution, Sage X3, SAP Business One).
+A public collection of [Agent Skills](https://agentskills.io/specification) for Claude, by Francois Taljaard — reference-backed assistants for ERP consultants and integrators (Sage 300, Sage 200 Evolution, Sage X3, SAP Business One, Acumatica).
 
 > **The point of these skills: no guessing.** Every material claim — a table or field, an enum value, a version requirement, an SDK class or method — comes from a **bundled reference** (data dictionaries, release notes, SDK class/enum references extracted from the vendors' own files) or a fresh fetch of the vendor's official docs, and is **cited**. Field names, enum values and version facts are exactly what a language model otherwise guesses plausibly and wrongly, so each skill is built to look them up and show its source.
 
@@ -14,10 +15,12 @@ A public collection of [Agent Skills](https://agentskills.io/specification) for 
 
 | Skill | What it does |
 |---|---|
+| [`sageintacct-assistant`](skills/sageintacct-assistant) | Sage Intacct Coming soon... |
 | [`sage300-assistant`](skills/sage300-assistant) | Sage 300 (Accpac) ERP assistant for consultants and integrators: verified T-SQL views/queries from bundled AOM data dictionaries, version/upgrade guidance and release notes, and C# against the `ACCPAC.Advantage` .NET library. |
 | [`sage200-assistant`](skills/sage200-assistant) | Sage 200 Evolution (Pastel Evolution) ERP assistant for consultants and integrators: C# development against the `Pastel.Evolution` .NET SDK — connecting via `DatabaseContext`, the record load/set/`Save()` pattern, posting transactions, and generating correct code from a bundled class and enum reference (152 types, 41 enums) extracted from the shipped SDK CHM. More capabilities to follow. |
-| [`sapb1-assistant`](skills/sapb1-assistant) | SAP Business One ERP assistant for consultants and integrators: object type number, table and primary key lookup from a bundled list of all B1 object types, verified SQL views/queries from bundled B1 10.0 and 9.3 data dictionaries (tables, columns, indexes, valid values, parent-table links), C# development against the DI API (`SAPbobsCOM`) from a bundled DI API 10.0 class and enum reference, and Service Layer (REST / OData v4) integration guidance (session handling, query options, ETags, batch, SQLQueries, FP 2602 webhooks) summarised from SAP's documentation. More capabilities to follow. |
 | [`sagex3-assistant`](skills/sagex3-assistant) | Sage X3 ERP assistant for consultants and integrators: verified SQL views/queries and table/field lookup from a bundled Sage X3 **V11** table dictionary (every table with abbreviation, keys/indexes, columns, data types, dimensions, local-menu enum values and foreign-key link expressions) compiled from Sage's online help; versions and upgrades — V12 release/patch naming and lifecycle, platform prerequisites per release, upgrade paths and procedures, and per-release notes 2023 R2 → 2026 R1 with the tables whose definition changed. More capabilities to follow. |
+| [`sapb1-assistant`](skills/sapb1-assistant) | SAP Business One ERP assistant for consultants and integrators: object type number, table and primary key lookup from a bundled list of all B1 object types, verified SQL views/queries from bundled B1 10.0 and 9.3 data dictionaries (tables, columns, indexes, valid values, parent-table links), C# development against the DI API (`SAPbobsCOM`) from a bundled DI API 10.0 class and enum reference, and Service Layer (REST / OData v4) integration guidance (session handling, query options, ETags, batch, SQLQueries, FP 2602 webhooks) summarised from SAP's documentation. More capabilities to follow. |
+| [`acumatica-assistant`](skills/acumatica-assistant) | Acumatica ERP assistant for consultants and integrators: REST integration development against the contract-based REST API from a bundled extraction of Acumatica's Integration Development Guide (**2026 R2**): cookie sign-in and OAuth 2.0 / OIDC, endpoint and contract versions (Contract Version 4 vs 5), the JSON record shape, `$filter` / `$expand` / `$select` per contract version, CRUD rules, actions and long-running operations, processing forms, generic inquiries, reports, custom and user-defined fields, attachments, license limits, push notifications and webhooks, plus a catalogue of the 187 example requests the guide documents and a common-mistakes checklist for code reviews. More capabilities to follow. |
 
 ## Installing a skill
 
@@ -38,9 +41,10 @@ This just tells Claude where to find the skills. You only ever do it once.
 /plugin install sage200-assistant@fdtaljaard-skills
 /plugin install sapb1-assistant@fdtaljaard-skills
 /plugin install sagex3-assistant@fdtaljaard-skills
+/plugin install acumatica-assistant@fdtaljaard-skills
 ```
 
-(Pick the one for the system you work with — Sage 300, Sage 200 Evolution, SAP Business One, or Sage X3.)
+(Pick the one for the system you work with — Sage 300, Sage 200 Evolution, SAP Business One, Sage X3, or Acumatica.)
 
 **Step 3 — Just ask your question in plain English.** There's no special command to "turn it on" — the skill switches itself on whenever your question is about that product. For example: *"I need a Sage 300 view of open sales orders with the customer name and total."* Claude looks the answer up in the bundled reference and shows its working.
 
@@ -93,3 +97,5 @@ Sage 200 Evolution and Pastel Evolution are trademarks of their respective owner
 Sage X3 is a trademark of its respective owner. `sagex3-assistant` is independent and not affiliated with or endorsed by Sage. Its table dictionary is a compact extraction of facts (table and column names, types, keys, local-menu values, link expressions) from the "Table dictionary" pages of Sage's public online help for **Sage X3 V11 only** (`online-help.sagex3.com/erp/11/`), not a copy of those pages; Sage's own terms apply to that material. Other versions (V12 and later, V9/V10 patches), folder-specific customizations, activity-code-dependent columns and local-menu changes are not included. Confirm against Sage's own documentation, and on the client's folder, before relying on any of it.
 
 SAP and SAP Business One are trademarks of SAP SE. `sapb1-assistant` is independent and not affiliated with or endorsed by SAP. Its object type list is compiled from community websites, its B1 10.0 schema dictionary and DI API reference are compiled from SAP's own SDK help (`REFDB.chm`, `REFDI.chm`) and SAP's terms apply to them, its 9.3 schema dictionary comes from erpref.com (a third party; the schema IP belongs to SAP), and its Service Layer references are prose summaries of SAP Help Portal pages (sources and caveats are in `skills/sapb1-assistant/references/objects/INDEX.md`, `skills/sapb1-assistant/references/dictionary/INDEX.md`, `skills/sapb1-assistant/references/diapi/INDEX.md` and `skills/sapb1-assistant/references/servicelayer/INDEX.md`). The schema dictionaries cover SAP Business One **10.0 and 9.3 only**; other releases (including later feature packs) and client-specific user-defined tables and fields are not included. Confirm against SAP's own documentation, and on the client's database, before relying on any of it.
+
+Acumatica is a trademark of Acumatica, Inc. `acumatica-assistant` is independent and not affiliated with or endorsed by Acumatica. Its references are a compact extraction of facts (URL patterns, parameters, headers, status codes, JSON shapes, rules) from the **2026 R2** edition of Acumatica's publicly available Integration Development Guide on beacon.acumatica.com, not a copy of those pages, and Acumatica's own terms apply to that material (sources and caveats are in `skills/acumatica-assistant/references/rest/INDEX.md`). Entity, field and action contracts are not bundled, and earlier releases can differ. Confirm against Acumatica's own documentation, and on the client's instance, before relying on any of it.

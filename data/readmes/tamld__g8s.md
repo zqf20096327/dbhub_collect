@@ -4,7 +4,7 @@
 
 # g8s (The Gatekeepers)
 
-> **A lightweight, zero-trust process execution and capability harness for AI agent CLI workers.**
+> **Single-binary zero-trust process execution harness (<25MB static pure-Go binary) for AI agent CLI workers.**
 > *"k8s orchestrates your compute containers; g8s orchestrates your AI subagents."*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -20,7 +20,7 @@
 
 ## What g8s is
 
-g8s is a single static binary (pure Go, zero CGO) that lets a high-tier orchestrator ("Brain": Claude, GPT, Codex) delegate mechanical work to fast CLI workers (Antigravity `agy`, Claude Code, Gemini CLI, Ollama) **without giving them the keys to your machine**. The model layer cannot be trusted with authority; g8s enforces it in process terms:
+g8s is a single static binary (pure Go, zero CGO) that lets a high-tier orchestrator ("Brain": Claude, GPT, Codex) delegate mechanical work to external CLI worker processes (agy, Claude, Gemini, Ollama) **without giving them the keys to your machine**. The model layer cannot be trusted with authority; g8s enforces it in process terms:
 
 - **Durable task queue**: SQLite WAL, atomic CAS leases, idempotency keys, parent-child lineage. Tasks survive session death; the queue is the memory.
 - **Capability receipts**: a worker cannot write the filesystem without a single-use, time-limited, path-scoped receipt issued by the Brain.
@@ -51,19 +51,19 @@ g8s is a single static binary (pure Go, zero CGO) that lets a high-tier orchestr
 └──────────────────────────────┬──────────────────────────────┘
                                │  Isolated Process Group & Sandbox
                                ▼
-┌─────────────────────────────────────────────────────────────┐
-│               WORKER TIER (Muscle: Flash / Haiku / Local)   │
-│  • Bounded file inventory & code extraction                 │
-│  • Fast test generation & log digestion                     │
-│  • Zero access to credentials / shared session state        │
-└─────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────┐
+│               WORKER TIER (Muscle: Flash / Haiku / Local)              │
+│  • Bounded file inventory & code extraction                            │
+│  • Bounded-time test generation and log digestion (<60s per attempt)   │
+│  • Zero access to credentials / shared session state                   │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
-## Shipped in v0.13.0
+## Shipped in v0.14.0
 
 - **Event-driven supervision**: terminal transitions append to `<state_dir>/signals/tasks.jsonl`; `g8s watch --failed` wakes the supervisor with one sleeping process. Polling is the fallback, never the primary.
 - **Multi-provider queue**: `providers.json` is the manifest; per-provider claim affinity, `--provider` on submit and worker, no silent fallback.
-- **Budgeted retry (landing)**: failed tasks auto-resubmit under caps: 2 per task, 10/hour per state dir, exponential backoff, feature flag default OFF. Receipt-free tasks only for unattended ticks.
+- **Budgeted retry**: failed tasks auto-resubmit under caps: 2 per task, 10/hour per state dir, exponential backoff, feature flag default OFF. Receipt-free tasks only for unattended ticks.
 - **Concurrent dispatch**: `g8s worker --concurrency N` drains through N isolated attempts with per-attempt worktrees.
 - **Adversarial eval harness**: probe suite with semantic-class scoring and a Provider Reliability Index; mock providers make it CI-runnable.
 - **Fuzzed inputs, measured baseline**: four native fuzz targets over the external-input parsers; queue operation latencies recorded in [docs/user-guide/performance.md](docs/user-guide/performance.md).
@@ -177,7 +177,7 @@ Tool reference: [docs/user-guide/mcp-tools.md](docs/user-guide/mcp-tools.md).
 | Requirements & acceptance | [docs/PRD.md](docs/PRD.md), [docs/SRS.md](docs/SRS.md), [docs/DOD_DOR.md](docs/DOD_DOR.md) |
 | Governing rules | [spec/constitution.md](spec/constitution.md): Zero-CGO, two-tier governance, process containment |
 | Technical deltas | [spec/openspec/](spec/openspec/): DELTA-01..22 with lifecycle status |
-| Architecture decisions | [docs/decisions/](docs/decisions/): ADR-0001…0030 |
+| Architecture decisions | [docs/decisions/](docs/decisions/): ADR-0001…0032 |
 | Campaign ledgers & history | [plans/](plans/), [docs/history/](docs/history/) |
 | Release history | [CHANGELOG.md](CHANGELOG.md) |
 
@@ -193,8 +193,9 @@ Every commit passes **dual-pass CI**: `CGO_ENABLED=0` (pure-Go vet + tests) and 
 |--------|-----------|:---:|
 | v0.12.0 (2026-09-27) | Concurrent dispatch, sessions isolation, memory promotion gate, Context Broker, live eval | **Done** |
 | v0.13.0 (2026-09-30) | Multi-provider queue, hardening waves B–E, event-driven signals (signals/tasks.jsonl + `watch --failed`), release gates 7–8 | **Done** |
-| v0.14.0 (target) | AI-factory loop, stage 1: budgeted auto-retry ✅ (#501/#502), router in user hands — [#513](https://github.com/tamld/g8s/issues/513), lane router — [#514](https://github.com/tamld/g8s/issues/514), verifier registry — [#515](https://github.com/tamld/g8s/issues/515), first unattended closed round — [#516](https://github.com/tamld/g8s/issues/516); cut = [#517](https://github.com/tamld/g8s/issues/517) · [SCORECARD](plans/261002-factory/SCORECARD.md) | **In progress** |
+| v0.14.0 (2026-10-03) | AI-factory loop, stage 1: budgeted auto-retry ✅ (#501/#502), router in user hands — [#513](https://github.com/tamld/g8s/issues/513), lane router — [#514](https://github.com/tamld/g8s/issues/514), verifier registry — [#515](https://github.com/tamld/g8s/issues/515), first unattended closed round — [#516](https://github.com/tamld/g8s/issues/516); cut = [#517](https://github.com/tamld/g8s/issues/517) · [SCORECARD](plans/261002-factory/SCORECARD.md) | **Done** |
 | v0.15.0 (target) | Retrospective-as-task — the self-maturity organ — [#519](https://github.com/tamld/g8s/issues/519) | Planned |
+| v0.16.0 (target) | Effort optimization: provider-neutral effort manifest (named/budget/baked-name adapters), task-class→effort mapping, per-class cost telemetry — [#550](https://github.com/tamld/g8s/issues/550), plans/261004-effort-optimization | Planned |
 | v1.0.0 (2026-12-15) | GA: 6-month homelab stability, enterprise security signoff, distributed fleet mTLS | Planned |
 
 ## Project Structure
@@ -224,6 +225,7 @@ g8s/
 │   ├── hooks/ — provides lifecycle hook implementations for g8s orchestrator workers
 │   ├── initwiz/ — provides interactive and headless onboarding wizards for g8s,
 │   ├── lane/ — implements ALDC Layer 1 gate-lane routing and Layer 2 Jev-assisted
+│   ├── lessons/ — implements schema, append-only ledger, and fail-closed machine checks for retrospective lessons
 │   ├── lockfile/ — provides non-blocking exclusive advisory file locks used
 │   ├── mcp/ — implements the g8s Model Context Protocol (MCP) server over
 │   ├── memory/ — provides a unified memory facade across working, episodic, semantic, and capability storage tiers
@@ -246,6 +248,7 @@ g8s/
 │   ├── supervisor/ — coordinates the fix loop across planning, role enforcement, worker execution, review, and RCA
 │   ├── telemetry/ — ingests execution trace events, distills failure patterns, and provides preflight context injection
 │   ├── vault/ — implements a Zero-CGO, decoupled Knowledge Vault for g8s
+│   ├── verifier/ — implements verifier-class registry and acceptance verification (issue #515, SCORECARD S-7)
 │   ├── watch/ — implements the blocking watch primitive (#371): poll a
 │   ├── worker/ — provides worker lifecycle supervision, execution containment,
 │   └── ...                 # supporting packages

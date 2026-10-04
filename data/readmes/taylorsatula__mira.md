@@ -68,7 +68,6 @@ MIRA ships with
 - Punchclock
 - Reminder
 - Sidebar agents
-- Square
 - Weather
 - Web Search
 - While The Cat's Away
@@ -120,9 +119,16 @@ This project would not be possible without the hard work and dedication of peopl
 
 ## Install MIRA local machine
 ```bash
-curl -fsSL https://raw.githubusercontent.com/taylorsatula/mira-OSS/refs/heads/main/deploy/deploy.sh -o deploy.sh && chmod +x deploy.sh && ./deploy.sh
+curl -fsSL https://raw.githubusercontent.com/taylorsatula/mira/main/install.sh | bash
 ```
-That's it. Answer the configuration questions onscreen and provide the provider credentials or local-provider settings you want MIRA to use.
+That's it. The installer resolves the newest published release and runs that release's installer. Answer the configuration questions onscreen and provide the provider credentials or local-provider settings you want MIRA to use.
+
+The first questions choose where MIRA's model calls go. The recommended path is **LunaRoute** — unlimited API usage for a flat fee, one key for everything ([lunaroute.com](https://lunaroute.com)) — which prefills chat, memory, embeddings, and the injection screen and asks only for that key. Choose "no" and the installer falls through to the full granular provider interview; choose local (llama-server) for an air-gapped install.
+
+Options are passed through to the installer; to run non-interactively from a config file:
+```bash
+curl -fsSL https://raw.githubusercontent.com/taylorsatula/mira/main/install.sh | bash -s -- --config deploy-config.yml --loud
+```
 
 The script handles:
 1. Platform detection (macOS/Linux)
@@ -135,11 +141,29 @@ The script handles:
 8. Service verification (PostgreSQL, Valkey, Vault running and accessible)
 9. A litany of other configuration steps
 
-Existing installations can use the migration path:
+There is no in-place upgrade path: 2.0 installs the greenfield schema into an empty database. To salvage data from an older install, take a `pg_dump` first and restore it manually.
+
+## Injection Screen (optional)
+
+The installer asks whether to enable the injection screen — the System One
+model that judges external content (fetched pages, email, uploaded files)
+before it reaches MIRA's context. Enabled by default on hosted installs
+(defaults to the lunaroute `djev` gateway; the same lunaroute key as
+`chat_api_key` works, stored in Vault as `systemone_key`); off by default for
+offline installs and in Docker, where the container cannot provision the
+Vault key. Operators can also set it directly:
 
 ```bash
-./deploy/deploy.sh --migrate
+MIRA_INJECTION_SCREEN_ENABLED=1        # 0 disables (external content is still wrapped, never raw)
+MIRA_SYSTEMONE_PROVIDER=remote         # remote = hosted gateway, local = self-hosted, unkeyed
+MIRA_SYSTEMONE_ENDPOINT=https://gw.lunaroute.com/v1/systemone
+MIRA_SYSTEMONE_MODEL=djev
 ```
+
+The bare-metal installer writes these to `/opt/mira/systemone.env`, which the
+systemd unit (`EnvironmentFile=`), the `run.sh` launcher, and the container's
+start script all read. Secrets never travel by env — the bearer token lives
+only in Vault (`secret/mira/api_keys` `systemone_key`).
 
 ## Install MIRA via Docker
 Build the base image first (heavy, rarely changes), then the thin app layer:
@@ -153,13 +177,34 @@ Run interactively (setup wizard) or headless with environment variables:
 
 ```bash
 # Interactive setup
-docker run -it -v mira-data:/opt/vault -p 1993:1993 mira:latest
+docker run -it -v mira-data:/opt/vault -v mira-userdata:/opt/mira/app/data -v mira-pgdata:/var/lib/postgresql/17/main -v mira-valkey:/var/lib/valkey -p 1993:1993 mira:latest
 
 # Headless (non-interactive)
-docker run -e MIRA_ANTHROPIC_KEY=sk-ant-xxx -e MIRA_PROVIDER_KEY=gsk_xxx -v mira-data:/opt/vault -p 1993:1993 mira:latest
+docker run -e MIRA_ANTHROPIC_KEY=sk-ant-xxx -e MIRA_PROVIDER_KEY=gsk_xxx -v mira-data:/opt/vault -v mira-userdata:/opt/mira/app/data -v mira-pgdata:/var/lib/postgresql/17/main -v mira-valkey:/var/lib/valkey -p 1993:1993 mira:latest
 ```
 
-Vault data persists in the `mira-data` volume. PostgreSQL and Valkey data persist in container volumes.
+Vault data persists in the `mira-data` volume. User data (uploaded and generated files, per-user tool data) persists in the `mira-userdata` volume, conversations in the `mira-pgdata` volume, and Valkey state in the `mira-valkey` volume. Always re-create the container with the same named volumes — without them, recreating the container attaches fresh empty volumes and loses those files and every conversation.
+
+## Chatting with MIRA in your terminal
+
+The terminal client (`tui/`) is the chat interface for a local install. Its
+dependencies are separate from the server's — install them once, then log in:
+
+```bash
+pip install -r tui/requirements.txt
+python3 -m tui --login
+```
+
+`--login` mints an API token against your MIRA instance over its auth API
+(zero prompts on single-user instances; an emailed magic-link token on
+multi-user) and stores it in the 0600 endpoint store
+(`~/.config/mira-tui/config.json`). Then start chatting:
+
+```bash
+python3 -m tui
+```
+
+`/exit` quits.
 
 ## Trying MIRA without installing anything
 I run a hosted copy of MIRA on [miraos.org](https://miraos.org/). It has a macOS app that can be downloaded [here](https://miraos.org/assets/MIRA-for-Mac.dmg).

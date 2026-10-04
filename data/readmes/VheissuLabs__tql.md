@@ -20,9 +20,9 @@ tends not to do:
   produced what is on screen. Click a header to sort and the `order by` appears.
   Filter a column and the `where` appears, with its value bound, never glued in.
   You learn the language by using the tool.
-- **It is the same engine for you and for an agent.** The MCP server and the
-  interface both call one `QueryRunner`, so what your agent can see is what you
-  can see. The agent's side only reads, and every statement either of you runs
+- **It is the same engine for you and for an agent.** The `tql query`
+  commands, the MCP server and the interface all call one `QueryRunner`, so
+  what your agent can see is what you can see. The agent's side only reads, and every statement either of you runs
   lands in one shared history.
 - **It makes production look like production.** A connection carries a tag and
   the tag carries a color, so the screen tells you where you are before you
@@ -39,7 +39,7 @@ as happily as a Postgres server behind an SSH tunnel.
 | **MySQL** and **MariaDB** | built in |
 | **PostgreSQL** | built in |
 | **SQLite** | built in — any `.sqlite`, `.sqlite3` or `.db` file |
-| **SQL Server** | from `tql.phar`, on a PHP with `pdo_sqlsrv` and Microsoft's ODBC driver; not in the standalone binary yet |
+| **SQL Server** | built into the macOS binary, with Microsoft's ODBC driver installed once — [below](#sql-server-on-macos); on Linux, from `tql.phar` on a PHP with `pdo_sqlsrv` |
 
 A hosted database that speaks the MySQL or PostgreSQL protocol connects the same
 way, with a connection string or the connection form, over [TLS](#tls) and, if
@@ -54,6 +54,28 @@ tql is developed against MySQL 9 locally and MySQL 8.4 on Laravel Cloud. The
 rest speak the same protocol and should behave the same; if one does not — some report their schema a
 little differently — [open an issue](https://github.com/VheissuLabs/tql/issues)
 and say which.
+
+### SQL Server on macOS
+
+SQL Server goes through Microsoft's ODBC driver, which tql cannot bundle.
+Install it, and OpenSSL 3 beside it, once:
+
+```bash
+brew tap microsoft/mssql-release
+brew trust microsoft/mssql-release      # newer Homebrew asks for this first
+HOMEBREW_ACCEPT_EULA=Y brew install msodbcsql18 openssl@3
+```
+
+The `HOMEBREW_ACCEPT_EULA=Y` accepts Microsoft's licence for the driver.
+Microsoft's driver only works with OpenSSL 1.0 to 3, and Homebrew now defaults
+to OpenSSL 4, so tql points the driver at OpenSSL 3 by itself when it is there.
+
+A connection is encrypted by default without checking the server's certificate,
+which is what a local or self-signed SQL Server needs; `ssl_mode` `verify-ca` or
+`verify-full` checks it, and `disable` turns encryption off.
+
+The Linux binary is fully static, and a static binary cannot load Microsoft's
+driver, so on Linux SQL Server needs `tql.phar` on a PHP with `pdo_sqlsrv`.
 
 ## Installing
 
@@ -195,6 +217,10 @@ interface is the wrong shape for.
 | `tql open <path-or-dsn>` | open a database by path or connection string, saving it |
 | `tql export [connection] [table]` | write rows out as re-importable SQL |
 | `tql config` | where the config file is; `--tidy` puts it back in order |
+| `tql connections` | list the saved connections |
+| `tql tables <connection>` | list a connection's tables |
+| `tql describe <connection> <table>` | a table's columns, types and primary key |
+| `tql query <connection> "select …"` | run a read-only query; `-` reads it from stdin |
 | `tql mcp:start tql` | run the MCP server on stdio, for an agent |
 | `tql update` | update to the latest release now; see [`[updates]`](#updates) |
 
@@ -276,7 +302,6 @@ your terminal is already themed with.
 | `border` | `"dim"` | a pane border that is not focused |
 | `focus_border` | `"cyan"` | the border of the pane you are in |
 | `focus_title` | `"cyan"` | its title |
-| `grid` | `"dim"` | column separators and the rule under the header |
 | `cursor` | `"default"` | the block you are on |
 | `selection` | `"default"` | highlighted but not where you are |
 | `edited` | `"yellow"` | a row you have changed, before `:w` |
@@ -286,8 +311,9 @@ your terminal is already themed with.
 | `modal_title` | `"white"` | modal titles |
 | `modal_focus_title` | `"cyan"` | the same when focused |
 
-`grid = "inherit"` ties the grid to the pane border, so a focused table tints
-all the way through instead of growing a colored outline.
+A table's column separators and the rule under its header are drawn in the
+pane's border color, so a whole frame is one color: `focus_border` when you are
+in it, `border` when you are not.
 
 ### `[icons]`
 
@@ -320,9 +346,12 @@ says nothing. What happens next depends on how you installed it:
 
 - **The install script, or the binary by hand:** with `automatic` on, tql
   downloads the new binary, checks it against the release's `SHA256SUMS`, makes
-  sure it runs, and swaps it in. The connection list says *tql 0.8.0 is ready ·
-  restart to use it*, and the next start is the new one. A download that does
-  not match its checksum is never installed.
+  sure it runs, and keeps it in a `.tql-versions` folder beside `tql`. The
+  connection list says *tql 0.8.0 is ready · restart to use it*, and the next
+  start switches `tql` to it — a symlink into that folder, so a tql that is
+  already running, an MCP server included, keeps its own file and carries on.
+  The last three versions are kept. A download that does not match its checksum
+  is never installed.
 - **Homebrew, or a `.deb`, `.rpm` or `PKGBUILD`:** tql never replaces a file a
   package manager owns. The connection list says what to run instead, such as
   *tql 0.8.0 is out · brew upgrade tql*.
@@ -759,7 +788,7 @@ through — open a table to edit.
 
 `H` from the grid, or `alt+h` from the editor, opens the history: every
 statement you have run from the editor on this connection, and every one your
-agent ran over MCP, newest first and once each. Type to narrow it; `↵` puts the
+agent ran with `tql query` or over MCP, newest first and once each. Type to narrow it; `↵` puts the
 statement back in the editor, ready to change or run. What tql runs by itself —
 paging the grid, the updates behind `:w` — is not in it.
 
@@ -1047,25 +1076,48 @@ for — press `:q` again to leave.
 A table with no single-column primary key cannot be deleted from, because there
 is no safe way to name the row; it says so rather than guessing.
 
-## MCP
+## For agents
 
-The MCP server is registered as a local (stdio) server named `tql`:
+An agent can reach your databases two ways, and both use the same engine, the
+same connections and the same rules as you.
 
-```bash
-php tql mcp:start tql
-```
-
-To use it from Claude Code:
+**Plain commands**, which any agent that can run a shell already knows how to
+use:
 
 ```bash
-claude mcp add tql -- php /absolute/path/to/tql mcp:start tql
+tql connections                          # what is saved
+tql tables prod                          # its tables; --database= for another one on the server
+tql describe prod orders                 # columns, types, primary key
+tql query prod "select count(*) from orders where placed_at > now() - interval 1 day"
+echo "select 1" | tql query prod -       # or pipe the statement in
 ```
 
-Tools: list connections, list tables, describe a table, and run a query.
-Queries through MCP are **read-only** — only `select`, `show`, `explain`,
-`describe`, `pragma` and `with` are accepted, and statements containing a
-second statement are rejected. Writes happen in the interface, not through
-an agent.
+They never prompt or draw a screen. In a terminal they print a table; piped or
+captured, which is how an agent runs them, they print JSON — `--table` and
+`--json` choose either way. A refusal or a database error goes to stderr with a
+non-zero exit code. A query returns at most 200 rows unless you pass `--limit`,
+and says when it stopped short.
+
+A line in a project's `CLAUDE.md` (or `AGENTS.md`) is enough for an agent to
+find them:
+
+```markdown
+Query the database read-only with `tql query <connection> "<sql>"`; `tql tables` and `tql describe` show the schema.
+```
+
+**An MCP server**, for agents that prefer one:
+
+```bash
+claude mcp add --scope user tql -- tql mcp:start tql
+```
+
+Its tools — list connections, list tables, describe a table, run a query — give
+the same answers as the commands.
+
+Either way it is **read-only**: only `select`, `show`, `explain`, `describe`,
+`pragma` and `with` are accepted, one statement at a time. Writes happen in the
+interface, not through an agent. Everything an agent runs lands in the same
+history as your own statements, marked `cli` or `mcp`.
 
 ## Developing
 
