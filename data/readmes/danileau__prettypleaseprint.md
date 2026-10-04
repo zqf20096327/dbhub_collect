@@ -41,10 +41,19 @@ that: there is no multi-tenancy, no billing, and no queue theory.
   is Requested, Accepted or Declined, but not once it is Printing. The ticket,
   the conversation and the uploaded file go with it. Plans change; unwanted
   prints waste filament.
-- **Print an old request again** — re-queue any past ticket of yours (a test
-  print that worked, a declined one you have fixed) as a fresh request, without
-  hunting down and re-uploading the file. The model is copied server-side, so
-  the two tickets own independent files.
+- **Print an old request again, differently if you like** — re-queue any past
+  ticket of yours (a test print that worked, a declined one you have fixed) as
+  a fresh request, without hunting down and re-uploading the file. It opens the
+  request form filled in with what you asked for last time, so the material,
+  colour, quantity and print settings can change before it is sent. The model
+  is copied server-side, so the two tickets own independent files.
+- **See what each person has sent** — the printer owner picks one person or
+  several at `/admin/prints` and gets everything they have uploaded, in any
+  state. Each member on the guest list links straight to theirs.
+- **Say how much it matters** — a request carries a priority (low, medium,
+  high). The printer owner's queue lists the urgent ones first, and the
+  requester or the owner can change it on the ticket while it is still on the
+  rail. It orders the queue; it does not book the printer.
 - **Note print settings** — an optional free-text field on a request for the
   slicer specifics that come with some files (layer height, infill, supports,
   temperatures). The printer owner sees them on the ticket, so they do not
@@ -59,6 +68,11 @@ that: there is no multi-tenancy, no billing, and no queue theory.
   owner's to define at `/admin/benefits`, and the ones they mark *preferred* are
   starred on the upload form so people know what the owner actually wants. Editing
   or retiring a benefit never rewrites a past request's tip.
+- **Owner-managed materials and colours** — the printer owner decides what is
+  currently on the shelf at `/admin/catalog`, including display order, solid
+  or gradient swatches, and a rainbow “whatever” option. Turning off, renaming,
+  or removing an entry changes future requests without rewriting old tickets.
+  See **[Materials and colours](docs/material-catalog.md)**.
 - **Revoke access when someone leaves** — suspends the account, signs them out
   everywhere and refuses new sign-ins, while keeping their tickets, comments
   and history. Reversible, and audited.
@@ -165,7 +179,7 @@ with commentary is [`.env.docker.example`](.env.docker.example).
 | `TRUST_PROXY_HEADERS` | | Which header carries the client address: `false` (trust nothing, the default), `true` (left-most `X-Forwarded-For`), or `cloudflare` (`CF-Connecting-IP`). See [the reasoning](docs/deployment.md#why-trust_proxy_headers-is-a-separate-switch). |
 | `HIBP_DISABLED` | | `true` disables the breach check. Only for a host with no outbound internet — it fails closed, so without it nobody could register. |
 | `SOURCE_URL` | | Where this instance's source lives, shown in the footer. **Change it if you modify the code** — see [Licence](#licence). Defaults to the upstream repository. |
-| `PPP_REGISTRY` / `PPP_TAG` | | Which published image to run. Pin `PPP_TAG` to a release (`v0.1.0`) or a commit SHA; either is also how you roll back. |
+| `PPP_REGISTRY` / `PPP_TAG` | | Which published image to run. Pin `PPP_TAG` to a release (`v0.3.0`) or a commit SHA; either is also how you roll back. |
 | `CF_TUNNEL_TOKEN` | | Connector token for `docker-compose.tunnel.yml`, from Cloudflare Zero Trust. A credential: anything holding it can serve the hostnames routed to that tunnel. See [Deploying behind a Cloudflare Tunnel](docs/deployment.md#deploying-behind-a-cloudflare-tunnel). |
 
 ## Deploying
@@ -206,9 +220,16 @@ That token is optional, is never stored, and is only needed because GitHub
 gates the package *listing* API even for public packages.
 
 `scripts/deploy-wizard.sh` is the way to move between versions: it lists what is
-published, cosign-verifies before swapping, health-checks after, and rolls back
-on its own if the new image does not come good. See
-**[docs/deployment.md](docs/deployment.md)**.
+published, shows the upgrade notes of every release you are about to cross and
+asks whether you have read them, cosign-verifies before swapping, health-checks
+after, and rolls back on its own if the new image does not come good. It is a
+single file you copy onto the host — copy it again when you upgrade, since it
+does not update itself. See **[docs/deployment.md](docs/deployment.md)**.
+
+Releases themselves are cut with `scripts/release-wizard.sh`, from a checkout:
+changelog, version, full local test, pull request, tag, images, GitHub release,
+with a question before each step that cannot be undone. See
+**[Cutting a release](docs/development.md#cutting-a-release)**.
 
 ## Backup and restore
 
@@ -323,7 +344,7 @@ The published images are public, so this should not happen — check the tag
 exists before assuming it is an auth problem:
 
 ```bash
-docker manifest inspect ghcr.io/danileau/ppp-app:v0.1.0
+docker manifest inspect ghcr.io/danileau/ppp-app:v0.3.0
 ```
 
 On a **fork** with private packages you do need a credential, and it must be a
@@ -389,13 +410,14 @@ has no outbound internet, set `HIBP_DISABLED=true` — and only then.
 | **[Authentication](docs/authentication.md)** | invite-only registration, passwords, passkeys, resets, and why each decision went the way it did |
 | **[Architecture](docs/architecture.md)** | the viewer, upload validation, decisions taken against the design handoff, and the file layout |
 | **[Deployment](docs/deployment.md)** | containers, reverse proxies, the deploy wizard, TLS, first run |
+| **[Materials and colours](docs/material-catalog.md)** | the owner-managed catalogue behind the request form |
 | **[Feature requests](docs/feature-requests.md)** | the `/frr` track — file a request, triage it exactly like the print backlog |
 | **[The API](docs/api.md)** | the JSON surface, bearer tokens, the OpenAPI document and the console at `/docs` |
 | **[Open in PrusaSlicer](docs/prusaslicer.md)** | the one-click "send to the slicer" bridge, the helper, and why the deep link cannot be used |
-| **[Development](docs/development.md)** | stack, local setup, the verification suites, CI |
+| **[Development](docs/development.md)** | stack, local setup, the verification suites, the full local run, CI, cutting a release |
 | **[Security audit](docs/security-audit.md)** | the OWASP Top 10 assessment, findings, and residual risk accepted |
 | **[Security policy](SECURITY.md)** | how to report a vulnerability |
-| **[Contributing](CONTRIBUTING.md)** | the nine suites are the contract; what a good change looks like |
+| **[Contributing](CONTRIBUTING.md)** | the ten suites are the contract; what a good change looks like |
 | **[Changelog](CHANGELOG.md)** | what changed in each release |
 
 ## Security
@@ -426,10 +448,10 @@ something, see [SECURITY.md](SECURITY.md).
 
 ## Contributing
 
-Issues and pull requests are welcome. The nine verification suites in
+Issues and pull requests are welcome. The ten verification suites in
 `scripts/` are the contract — `verify:models`, `verify:auth`, `verify:upload`,
-`verify:queue`, `verify:frr`, `verify:benefits`, `verify:api`, `verify:passkey`
-and `probe:security`. All but `verify:models` run in CI against the built
+`verify:queue`, `verify:frr`, `verify:benefits`, `verify:catalog`, `verify:api`,
+`verify:passkey` and `probe:security`. All but `verify:models` run in CI against the built
 container image rather than a dev server. If a change makes one fail, that is the
 change talking.
 

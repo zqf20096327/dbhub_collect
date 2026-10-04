@@ -13,7 +13,7 @@ created, re-checks it for drift on demand, and can remove it again.
 Automate the parts providers expose. Guide you through the parts that need a human. Verify what
 can be observed, and make unfinished work clear. No GoLive account, hosted backend or product telemetry.
 
-> **Early alpha · 0.1.0-alpha.7**
+> **Early alpha · 0.1.0-alpha.8**
 > Disposable live tests now cover six journeys: **hosting** (Vercel, Netlify), **database**
 > (Supabase, Neon), **custom-domain DNS** (Porkbun, GoDaddy), **transactional email** (Resend),
 > **test-mode payments** (Stripe) and **Supabase authentication**, plus the `teardown` uninstall
@@ -111,7 +111,7 @@ noninteractive agent flags, runtime verification and the optional own installer.
 
 ### Install from npm
 
-The same skill is published to npm as `golive@0.1.0-alpha.7` (dist-tags `alpha` and `latest`), which
+The same skill is published to npm as `golive@0.1.0-alpha.8` (dist-tags `alpha` and `latest`), which
 installs it offline, with no Git or Skills CLI involved:
 
 ```bash
@@ -374,8 +374,11 @@ live-tested milestones**, not a finished category or a completed checklist for y
 - [ ] 🗺️ **OAuth / social login / SSO:** client registration, consent screens, scopes, callback
   URLs and provider reviews. Current auth-provider setup is guided.
 - [x] ✅ **Payments and subscriptions:** ~~Prove test-mode checkout and webhook acceptance with Stripe.~~
-  A real test-card payment delivered a signature-verified `checkout.session.completed` event. Live-mode
-  readiness, entitlements, refunds and subscription events still need validation.
+  A real test-card payment delivered a signature-verified `checkout.session.completed` event. A new
+  read-only `stripe-live-payment` check reads the most recent succeeded live PaymentIntent, the live
+  webhook endpoint that would receive it and the matching delivery event, and reports any refund; it
+  is implemented and mock-covered but not live-validated yet. Live-mode readiness, entitlements,
+  refunds and subscription events still need validation.
 - [x] ✅ **Transactional email:** ~~Prove sending-domain setup, verification and real delivery with Resend.~~
   A send through the app's own environment key was delivered (to spam on a fresh subdomain, no DMARC yet).
   With `auth.smtp: resend` the `auth:smtp` step also writes the auth project's custom SMTP — Resend's
@@ -408,7 +411,9 @@ live-tested milestones**, not a finished category or a completed checklist for y
   rate limits and bot protection. Scoped RLS/advisor and credential-pattern checks exist today.
 - [ ] 🗺️ **Monitoring and alerts:** error tracking, logs, uptime and actionable alerts.
   Provider suggestions are guided today; verified setup is planned. On-demand drift checks exist
-  (`golive status`, below) — continuous monitoring and alerting do not.
+  (`golive status`, below) — continuous monitoring and alerting do not. Sentry is implemented as an
+  automated monitoring provider — adapter, host env wiring and the `sentry-ingest` check,
+  mock-covered with no live run yet.
 - [ ] 🚧 **Product analytics:** event validation and consent/data settings, beyond today's guided
   provider suggestions. PostHog analytics is wired through an approved plan — the app's analytics
   project is adopted or selected (a create is planned when nothing matches), and the `posthog-ingest`
@@ -470,8 +475,13 @@ live-tested milestones**, not a finished category or a completed checklist for y
   offers no read to confirm it.
 - [ ] 🗺️ **Costs and quotas:** plan choices, budgets, alerts and capacity checks.
   Scoped Free-plan guards exist today; ongoing cost management is planned.
-- [ ] 🗺️ **Launch essentials:** metadata, share previews, indexing, accessibility, support links
-  and owner-reviewed policy pages.
+- [ ] 🚧 **Launch essentials:** metadata, share previews, indexing, accessibility, support links
+  and owner-reviewed policy pages. The read-only `site-metadata` check reads the production page's
+  own `<head>` once and reports its title, description, canonical link and Open Graph/Twitter share
+  tags (a missing title, description or share tag — or an `og:image`/`og:url` that is not absolute —
+  warns, never fails; golive does not edit app code, so the fix is a change in your repo). It is
+  mock-covered with no live run yet; share previews, indexing, accessibility, support links and
+  policy pages stay planned.
 - [ ] 🚧 **Ownership and handover:** accounts, resources, access, renewal responsibilities and
   maintenance instructions. `golive handoff --write` records the login route, ownership proofs,
   recurring jobs and removal gates in `GOLIVE_HANDOVER.md`, tagging every row as verified, recorded,

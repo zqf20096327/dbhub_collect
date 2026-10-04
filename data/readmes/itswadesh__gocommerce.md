@@ -126,7 +126,8 @@ Every gateway and carrier module installs idle: `-gateways` and `-carriers` put 
 | `invoices` | Numbered, gapless invoices on payment |
 | `cms` | Content pages, per language |
 | `translations` | Catalogue content in the language a shopper asked for |
-| `identity` | Shopper accounts: sessions, saved addresses, order history, password reset |
+| `identity` | Shopper accounts: sessions, saved addresses, order history, password reset, confirmed email addresses |
+| `b2b` | Companies and their buyers in roles, orders on account against a credit limit and net terms, purchase-order numbers, approval over a limit, and quotes priced for one buyer |
 | `cart-recovery` | Chases an abandoned basket with a link back to it |
 | `import-amazon` | A product, its variations and pictures from an Amazon URL, through a real Chrome; copy rewritten by Claude |
 | `mcp` | The store as tools for an AI agent, with an audit trail |
@@ -147,6 +148,13 @@ navigation; leave it out and it does not.
 
 Cash on delivery and manual fulfillment are built in, because they need no
 third party — a store can sell and ship before it has integrated anything.
+
+**Many stores from one install.** `gocommerce platform` serves any number of
+stores from one process and one PostgreSQL database — a supplier's dealers, an
+agency's clients — each an ordinary store in a schema of its own, with its own
+operators and admin panel, reached at `<slug>.<base domain>` or its own domain.
+A platform API, with credentials of its own, creates, suspends and deletes them
+([platform mode](skills/infrastructure.md#running-many-stores-platform-mode)).
 
 ## API
 
@@ -193,11 +201,11 @@ contract cannot quietly drift from the code.
 
 The API is the only thing a storefront needs, and anything that speaks HTTP will
 do. For [Svelte Commerce](https://github.com/itswadesh/svelte-commerce) there is
-a connector in this repository —
-[`connectors/svelte-commerce`](connectors/svelte-commerce) — which maps the
-storefront's expectations onto these routes: catalog, carts, checkout and order
-lookup. It is deliberately loud about what this engine does not have (accounts,
-blogs, wishlists, a search index) rather than answering those with empty lists.
+a connector, [`@misiki/gocommerce-connector`](https://github.com/misiki-in/gocommerce-connector),
+kept in a repository of its own like every connector in that family. It maps the
+storefront's service surface onto these routes and the storefront modules —
+catalogue, bag, checkout, orders, accounts, addresses, wishlists, reviews, pages,
+menus and FAQ — and says plainly where the two do not meet yet.
 
 ## Quick start
 

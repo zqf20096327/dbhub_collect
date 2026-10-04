@@ -1,6 +1,6 @@
 # rosetta
 
-MCP server that gives AI assistants searchable access to MikroTik RouterOS documentation — 363 pages extracted live from MikroTik's official Docusaurus manual (<https://manual.mikrotik.com>), 4,587 properties, a 40,000-entry command tree, hardware specs for 156 current products (part of a wider 255-device overlay also covering legacy/EOL gear and accessories), 722 YouTube video transcripts, and direct links to source docs.
+MCP server that gives AI assistants searchable access to MikroTik RouterOS documentation — 363 pages extracted live from MikroTik's official Docusaurus manual (<https://manual.mikrotik.com>), 4,587 properties, a 40,000-entry command tree, hardware specs for 156 current products (part of a wider 255-device overlay also covering legacy/EOL gear and accessories), 746 YouTube video transcripts, and direct links to source docs.
 
 If you need MikroTik docs, you likely have a MikroTik. Install rosetta once as a container on your router using [RouterOS /app](#install-on-mikrotik-app), and any AI assistant on the network can use it. Or [run it locally](#install-locally-with-bun) on your workstation. **No AI required** — rosetta includes a [terminal browser](#browse-without-ai) for searching the database directly.
 
@@ -19,7 +19,7 @@ Instead of vector embeddings, rosetta uses **SQLite [FTS5](https://www.sqlite.or
 | Hardware products | 156 current matrix devices — specs, pricing, block diagrams |
 | Hardware overlay | 255 devices (matrix + legacy/EOL + accessories), resolved via ~750 curated alias mappings for cross-source device lookup |
 | Performance benchmarks | 2,874 tests across 125 devices (ethernet + IPSec) |
-| YouTube transcripts | 722 videos, ~2,316 transcript segments |
+| YouTube transcripts | 746 videos, ~2,374 transcript segments |
 | Callout blocks | 943 warnings, notes, and tips |
 
 Documentation covers RouterOS **v7 only**, tracking the current long-term release (~7.22). Prose is extracted live from <https://manual.mikrotik.com> on each release build — no more stale export to keep in sync. The site's Docusaurus CLI Reference (`/console/inspect`-derived command menus) isn't ingested yet; the command tree instead comes directly from inspect.json (see `DESIGN.md`).
@@ -127,20 +127,17 @@ For a pinned or prerelease install, use your original package version and
 `--db` / `DB_PATH` destination with `--refresh`. Refreshing an existing DB requires
 stopping its owners, including other clients on the same exact version.
 
-### Prerelease channels (optional)
+### Prerelease channel (optional)
 
-New corpus builds sometimes ship first under a non-default npm dist-tag so testers can opt in without moving what everyone else gets by default:
+New builds sometimes ship first as a prerelease (`X.Y.Z-next.N`) so testers can opt in without moving what everyone else gets by default:
 
 ```sh
-bunx @tikoci/rosetta@next     # newest prerelease of any stage (alpha/beta/rc)
-bunx @tikoci/rosetta@alpha    # pinned to the alpha stage's latest
-bunx @tikoci/rosetta@beta     # pinned to the beta stage's latest
-bunx @tikoci/rosetta@rc       # pinned to the rc stage's latest
+bunx @tikoci/rosetta@next     # newest build: a prerelease, or latest when none is newer
 ```
 
-`bunx @tikoci/rosetta` (no tag) and `bunx @tikoci/rosetta@latest` always resolve to the default, non-prerelease channel — publishing a prerelease never moves `latest`.
+`@next` is never behind `latest`: each stable release also moves `next` unless a newer prerelease is already there, so it is safe to leave `@next` in an MCP config. `bunx @tikoci/rosetta` (no tag) and `bunx @tikoci/rosetta@latest` always resolve to the default, non-prerelease channel — publishing a prerelease never moves `latest`.
 
-> **Dist-tags, not semver ranges.** A version range like `^0.11.0-alpha` is **not** equivalent to a dist-tag. npm's prerelease range matching only spans the exact `[major,minor,patch]` tuple written in the range, so it stops tracking new prereleases the moment a patch/minor bump happens. `@next`/`@alpha`/`@beta`/`@rc` are the actual "follow forever" mechanism — use those, not a range, to stay on a moving prerelease channel.
+> **Dist-tags, not semver ranges.** A version range like `^0.11.3-next` is **not** equivalent to a dist-tag. npm's prerelease range matching only spans the exact `[major,minor,patch]` tuple written in the range, so it stops tracking new prereleases the moment a patch/minor bump happens. `@next` is the "follow forever" mechanism. The older `@alpha` / `@beta` / `@rc` tags are retired and no longer receive updates — switch any config using them to `@next`.
 
 ### Configure your MCP client
 
@@ -248,7 +245,7 @@ curl -fsSL https://bun.sh/install | bash
 powershell -c "irm bun.sh/install.ps1 | iex"
 ```
 
-> **Auto-update:** `bunx` checks the npm registry each session and uses the latest published version automatically. Each exact package version uses `~/.rosetta/ros-help-<version>.db` (including the full prerelease counter). Different versions can run together; clients on the same version share that file. Updates download an additional DB copy (hundreds of MB, depending on the release). Older files, including the legacy `ros-help.db`, are retained; remove them manually after their clients stop. `DB_PATH` and `--db` remain explicit overrides; use absolute paths in MCP environment settings because `~` is not shell-expanded.
+> **Auto-update:** `bunx` checks the npm registry each session and uses the latest published version automatically. Each exact package version uses its own `~/.rosetta/ros-help-<version>.db`, so different versions can run side by side. Rosetta cleans up after itself: on startup it keeps the versions currently in use plus the most recently used idle one, and deletes older copies. The pre-0.11.3 shared `ros-help.db` is never deleted automatically, because a long-running older client may still be using it. Once it looks unused, rosetta logs a hint: stop any rosetta ≤0.11.2 clients first, then delete `~/.rosetta/ros-help.db*` by hand. `DB_PATH` and `--db` remain explicit, caller-managed overrides; use absolute paths in MCP environment settings because `~` is not shell-expanded.
 
 ---
 

@@ -22,7 +22,7 @@ npm install -g hippo-memory && hippo init
 
 Setting up every git repo under a folder in one go is a second step. The [Quick start](#quick-start) says what it changes, then gives the command.
 
-Package installation alone does not enable automatic preservation on every agent. Complete the documented setup and required host trust; capture and compaction coverage depend on the integration. See [automatic-save coverage](#does-installation-automatically-save-before-compaction).
+Package installation alone does not enable automatic preservation on every agent. Complete the documented setup and required host trust; capture and compaction coverage depend on the integration.
 
 Having an AI agent install it? Point it at [llms-install.md](llms-install.md): it installs, wires hippo into the agents it finds, and verifies with `hippo doctor`.
 
@@ -118,7 +118,7 @@ Run `hippo init` inside one project. This is everything it writes, in the projec
 - **Instruction files.** A block between `<!-- hippo:start -->` and `<!-- hippo:end -->` in the project's `CLAUDE.md` or `AGENTS.md`, only if that file already exists. Codex, Cursor, OpenClaw, OpenCode and Pi read `AGENTS.md`.
 - **Claude Code,** when the project has `CLAUDE.md` or `.claude/settings.json`: 7 hook entries in `~/.claude/settings.json`, one each on SessionEnd, UserPromptSubmit, PreCompact, PostCompact and PostToolUseFailure and two on SessionStart. [Framework Integrations](#framework-integrations) says what each one runs.
 - **OpenCode,** when the project has `.opencode/` or `opencode.json`: a plugin at `~/.config/opencode/plugins/hippo.ts`.
-- **Codex,** when the project has `AGENTS.md` or `.codex` and Codex is installed (`$CODEX_HOME`, else `~/.codex`, exists): 2 hook entries in Codex's `hooks.json`, one on UserPromptSubmit that sends your pinned memories plus the five most recent ones with every prompt and one on SessionStart after a compaction. **Codex runs them only after you trust them once in `/hooks`.** Init also prints `hippo hook install codex`, the opt-in that wraps the Codex launcher to capture sessions; `hippo hook uninstall codex` removes hippo's hooks and the wrapper.
+- **Codex,** when the project has `AGENTS.md` or `.codex` and Codex is installed (`$CODEX_HOME`, else `~/.codex`, exists): 2 hook entries in Codex's `hooks.json`, one on UserPromptSubmit that sends your pinned memories plus up to 5 that match the prompt with every prompt and one on SessionStart after a compaction. **Codex runs them only after you trust them once in `/hooks`.** Init also prints `hippo hook install codex`, the opt-in that wraps the Codex launcher to capture sessions; `hippo hook uninstall codex` removes hippo's hooks and the wrapper.
 - **A daily run at 6:15am,** one per machine: a crontab line on Linux and macOS, a scheduled task named `hippo-daily-runner` on Windows. It runs `hippo learn --git --days 1` and then `hippo sleep` in every project listed in `~/.hippo/workspaces.json`, and init adds this project to that list.
 - **Agent memories.** On every run, the notes your coding agents keep about this project go into its store, and the ones about you go into the global store. [Agent memories](#agent-memories) lists what is read.
 
@@ -535,6 +535,27 @@ removes pinned memories, raw receipts (Slack, GitHub, vault imports) or the memo
 Claude Code compaction saved either way, and duplicate removal and junk cleanup still
 delete other memories. `hippo forget` still deletes a compaction memory.
 
+**Clean up project names left by older versions.** Older versions tagged memories saved in
+a git worktree with the worktree's folder name, and older sleep saved merged memories as
+user-global, so every project could see them. Upgrading stops new damage; these commands
+repair old rows. Each is a dry run until you add `--apply`. With `--apply`, it backs up the
+database to `.hippo/backups/` first and logs every id it touched in the audit log:
+
+```bash
+hippo projects --global                        # names, counts, live worktrees of this repo
+hippo projects merge hippo-wt-fix hippo --global   # fold an old worktree name into its repo
+hippo projects repair --global                 # set aside note copies, fold old worktree names, re-tag merges
+```
+
+A project's name is the `id` in a committed `.hippo-project.json`, else its `origin` remote
+(`github.com/acme/api`), else its folder name. So two repos both called `api` no longer share
+memories in the global store. Rows saved under the old folder name stay visible to the
+project, and `hippo projects repair` folds that name into the id unless two projects claim it.
+`hippo sleep` runs that repair once per store after an upgrade, with a backup; in the global store
+it leaves the name folds to you, since only `hippo projects repair --global` lists them for review.
+Set `{"projectIdentity":{"remote":false}}` in the global `config.json` to keep folder names.
+A long-running MCP or HTTP server reads a new project file or remote after a restart.
+
 **See what memory costs in tokens.** Every block of memory text hippo hands an agent (the
 per-prompt hook, the block `hippo compact-resume` restores after compaction, `hippo context`,
 `hippo recall`, the MCP tools, the HTTP API) is recorded in a token ledger: counts, surface
@@ -547,6 +568,28 @@ totals for the last 30 days (`--days`, `--json`). A session that is still open, 
 crashed, shows what was sent only. Re-reads usually bill at the provider's cached-input rate,
 a fraction of the full input price. Counts are estimates (characters / 4), the same estimate
 every budget uses. Rows older than 90 days are pruned.
+
+**See why a memory did or did not reach the agent.** Turn on the delivery ledger with
+`{"deliveryLedger":{"enabled":true}}` in `.hippo/config.json` (off by default). The flag is
+read from the store the token ledger writes to: the project's local store when it has one,
+else the global store. Each per-prompt hook call then records one event (session, turn
+number, whether the block was sent, reused, empty or disabled, counts and token totals) and
+one row per candidate memory: emitted, reused or rejected, with the stage and the
+reason it was dropped. With prompt recall on, recent memories dropped by the quality filter
+are not recorded yet. It holds ids, hashes, counts and reasons only, never prompt or memory
+text; the prompt hash is unsalted, so a very short prompt can be guessed. A ledger failure prints one stderr line and never changes what the hook prints. Rows
+older than 90 days are pruned; at a heavy 300 prompts a day that is about 190 MB per store.
+
+**Run a pilot with a holdout group.** Set `{"pilot":{"holdoutRateBp":2000}}` in `.hippo/config.json`
+to hold back memories from about 20% of sessions. The rate is in basis points, 0 to 10000, and 0
+is off (the default). The setting is read from the store the token ledger writes to. A session
+lands in its arm by a hash of its id, and the first hook call writes one row to the token ledger.
+A holdout session gets no memories from the per-prompt hook, the SessionStart hook or compact-resume.
+The agent's own `hippo context` pull is gated in Claude Code only, so a Codex holdout session still
+gets memories from it. Capture still runs. `hippo recall`, the HTTP API and the MCP tools are not gated
+and write no arm row. Agents are told to call the MCP context tool at session start, and those calls
+are not recorded. Set the rate to 0 only after the pilot window closes, because 0 ends every holdout at once.
+`hippo doctor` shows the pilot when it is on.
 
 ---
 
@@ -735,7 +778,7 @@ hippo watch "npm run build"
 | `hippo wm read --scope <s>` | Read working memory entries |
 | `hippo wm clear --scope <s>` | Clear working memory |
 | `hippo wm flush --scope <s>` | Flush working memory (session end) |
-| `hippo dashboard` | Open web dashboard at localhost:3333 (memory map and card board) |
+| `hippo dashboard` | Open web dashboard at localhost:3333 (memory health by project, and the card board); open the printed URL, which carries a per-start access token |
 | `hippo dashboard --port <n>` | Use custom port |
 | `hippo mcp` | Start MCP server (stdio transport) |
 
@@ -783,7 +826,7 @@ The block asks for nothing a hook already does, because each extra tool call re-
 For Claude Code, it also adds 7 hook entries to `~/.claude/settings.json`:
 - a `SessionEnd` hook that runs `hippo sleep` and then `hippo capture` when the session exits. Capture matches the last 20 user and 10 assistant messages of the transcript against word patterns for decisions, rules, errors and preferences. It uses no model and does not read earlier turns, so record lessons with `hippo remember` as you go.
 - a `SessionStart` hook that prints the previous session's consolidation output
-- a `UserPromptSubmit` hook that runs `hippo context --pinned-only --include-recent 5 --format additional-context` every turn. It re-injects pinned memories (`hippo remember <text> --pin`) plus the 5 newest memories in the store, so fresh same-session lessons appear on the next prompt before you pin them. It does not read your prompt unless you set `{"pinnedInject":{"promptRecall":true}}`, which swaps the 5 newest for memories that match the prompt. The block is rendered without live strength percentages, so it stays byte-identical while its memories do not change, and it is sent only when it changed since the session's last prompt: an unchanged block is skipped, resent every 10 skips (`pinnedInject.refreshTurns`, `0` never resends) and resent after compaction. `{"pinnedInject":{"skipUnchanged":false}}` sends it every turn as before. Opt out entirely with `{"pinnedInject":{"enabled":false}}` in `.hippo/config.json`.
+- a `UserPromptSubmit` hook that runs `hippo context --pinned-only --include-recent 5 --format additional-context` every turn. It re-injects pinned memories (`hippo remember <text> --pin`) plus up to 5 memories that share words with your prompt. When nothing matches, it adds only the pinned ones. Since 1.55.0 this replaces the 5 newest memories, which cut the median block from 847 to 533 tokens in our eval. `{"pinnedInject":{"promptRecall":false}}` brings back the 5 newest, so fresh same-session lessons appear on the next prompt whatever you ask. The block is rendered without live strength percentages, so it stays byte-identical while its memories do not change, and it is sent only when it changed since the session's last prompt: an unchanged block is skipped, resent every 10 skips (`pinnedInject.refreshTurns`, `0` never resends) and resent after compaction. The prompt-matched memories go in a separate block that is never skipped, so they are sent on every prompt they match. `{"pinnedInject":{"skipUnchanged":false}}` sends the pinned block every turn as before. Opt out entirely with `{"pinnedInject":{"enabled":false}}` in `.hippo/config.json`.
 - a `PreCompact` hook that runs `hippo pre-compact` before the transcript gets summarized. It records the compaction in the store, saves a working-state snapshot (task/summary/next step) so mid-session compaction can't drop it, and asks the summariser to end its summary with a "Memories for hippo" list: the lessons, decisions and corrections from the session that should outlive it. The `SessionEnd` hook still owns extracting durable memories from the transcript.
 - a second `SessionStart` hook (matcher `compact`) that runs `hippo compact-resume`, printing that snapshot back into context right after compaction, if it is under 15 minutes old.
 - a `PostCompact` hook that runs `hippo post-compact`. It keeps the summary in the store with secrets scrubbed, and saves each item of that list as a memory that sleep never deletes: at most 10 per compaction, skipping an item an earlier compaction already saved and any item that looks like a secret. An item over 500 characters stays in the compaction's record only. It then prints one line, such as "Hippo saved 3 memories from this compaction and restored your task snapshot." If the store is busy, the summary waits in the store's `compactions-spool/` folder and `hippo sleep` finishes the save; `hippo doctor` names any compaction left unfinished for over 10 minutes. The session that compacted does not have those memories injected back into its own prompts, since it just read them in the summary; `hippo recall` still finds them. The hook prints nothing when there is no store to save to.
@@ -794,7 +837,7 @@ Only Claude Code saves memories at a compaction: hippo installs no `PreCompact` 
 To remove: `hippo hook uninstall claude-code`
 
 For Codex, it adds two hooks to `$CODEX_HOME/hooks.json` (else `~/.codex/hooks.json`) and keeps every hook already there:
-- a `UserPromptSubmit` hook that runs the same `hippo context --pinned-only` command as Claude Code's, so your pinned memories plus the five most recent ones reach every prompt as developer context
+- a `UserPromptSubmit` hook that runs the same `hippo context --pinned-only` command as Claude Code's, so your pinned memories plus up to 5 that match the prompt reach every prompt as developer context
 - a `SessionStart` hook (matcher `compact`) that runs `hippo compact-resume` after a compaction, so the next prompt sends that block again. Codex gets no `PreCompact` hook from hippo, so it restores a task snapshot only if one was saved with `hippo snapshot save` in the last 15 minutes
 
 **Codex runs a new or changed hook only after you trust it, so open `/hooks` in Codex once and trust both;** `hippo doctor` reminds you. The per-prompt hook was checked against a real Codex request; the compaction hook follows Codex's documented `compact` start source and has not been watched end to end in Codex. Each hook also carries a `commandWindows` form (`hippo.cmd ...`), because Codex runs hooks through PowerShell on Windows, where the execution policy can block npm's `hippo.ps1`. hippo only ever appends these two entries and never rewrites one, since Codex treats a changed command as a new hook to trust. To remove: `hippo hook uninstall codex`, which takes out only hippo's exact commands and leaves every other hook, including one of yours that runs hippo.
@@ -902,53 +945,36 @@ For how these mechanisms connect to LLM training, continual learning, and open r
 
 ## Comparison
 
-Two tables. The first is plain facts: where the data lives, what each tool needs and runs on, and what it has published. Several rows favour the other tools: a managed multi-user service, a native Python library, a full knowledge graph. The second lists design bets, choices a tool made rather than results it measured; what hippo has measured is under [Benchmarks](#benchmarks). Graph-first systems ([gbrain](https://hermesatlas.com/projects/garrytan/gbrain), [Zep](https://www.getzep.com/), [Cognee](https://www.cognee.ai/)), agent-managed systems ([Letta](https://github.com/letta-ai/letta-code)), and version-control or skill-distillation takes ([Memoria](https://github.com/matrixorigin/Memoria), [EverMind](https://evermind.ai/)) solve adjacent problems with different mechanics.
-
-### What each tool is
-
-The rows from where the data lives to the graph were checked against each tool's own pages on 2026-09-28.
+The AI-memory category matured fast in 2026. Hippo's specific take (bio-decay, strengthen-on-use, outcome-weighted half-lives) is one stance among several. The table below is a feature snapshot, not a verdict: graph-first systems ([gbrain](https://hermesatlas.com/projects/garrytan/gbrain), [Zep](https://www.getzep.com/), [Cognee](https://www.cognee.ai/)), agent-managed systems ([Letta](https://github.com/letta-ai/letta-code)), and version-control / skill-distillation takes ([Memoria](https://github.com/matrixorigin/Memoria), [EverMind](https://evermind.ai/)) all solve adjacent problems with different mechanics.
 
 | Feature | Hippo | [MemPalace](https://github.com/milla-jovovich/mempalace) | [Mem0](https://github.com/mem0ai/mem0) | [Basic Memory](https://github.com/basicmachines-co/basic-memory) | [gbrain](https://hermesatlas.com/projects/garrytan/gbrain) | [Zep](https://www.getzep.com/) | [Letta](https://github.com/letta-ai/letta-code) | [Cognee](https://www.cognee.ai/) | [Memoria](https://github.com/matrixorigin/Memoria) | [EverMind](https://evermind.ai/) |
-|---------|-------|-----------|------|-------------|--------|-----|-------|--------|---------|----------|
-| Where your data lives | Your machine or your server (SQLite) | Your machine (ChromaDB by default) | Where you run it, or Mem0's cloud | Your machine (Markdown files); cloud optional | Your machine (PGLite) or your Postgres | Zep's cloud (your own cloud on Enterprise) | Your machine; cloud backup with /login | Your machine by default; Cognee Cloud optional | Memoria Cloud, or self-hosted (Docker or embedded) | Your machine by default; EverOS Cloud optional |
-| Managed multi-user service | No (self-hosted, with tenants and API keys; hosted SaaS is planned for the commercial edition) | ? | Yes (hosted platform) | Yes (Teams) | ? (self-hosted server with OAuth) | Yes (Zep Cloud) | ? (cloud backup with /login) | Yes (Cognee Cloud) | ? (Memoria Cloud) | Yes (EverOS Cloud) |
-| Needs an account or model key | No | No (core path) | Yes (model key; account for the platform) | No (account for the cloud) | No (keyless mode) | Yes (Zep account; Graphiti needs a model key) | Yes (your own model keys) | No (local) | ? (account for Memoria Cloud) | Yes (an LLM key, OpenRouter) |
-| License | MIT | MIT | Apache-2.0 | AGPL-3.0 | MIT | Proprietary cloud (Graphiti: Apache-2.0) | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 (EverOS) + cloud |
-| Runtime | Node.js 22.16+, no runtime deps | Python 3.9+ (ChromaDB by default) | Python or Node.js (server: Postgres + pgvector) | Python (SQLite by default) | Bun (PGLite or Postgres + pgvector) | Managed service (Graphiti: Python + a graph database) | Node.js (npm) | Python (graph and vector stores, or Postgres) | A CLI binary + a MatrixOne database | Python (SQLite + LanceDB) |
-| SDKs and APIs | CLI, HTTP API, Python SDK over HTTP | Python library, CLI | Python and Node.js libraries, a self-hosted server | CLI, cloud app | CLI, HTTP API | Python, TypeScript and Go SDKs | TypeScript SDK, CLI | Python and TypeScript SDKs, REST API, CLI | Python client, REST API, CLI | Python library, HTTP API, CLI |
-| Native Python library | No (the Python SDK calls hippo serve over HTTP) | Yes (mempalace) | Yes (mem0ai) | Yes (basic-memory) | No (installs with Bun) | Yes (Graphiti: graphiti-core) | ? (Letta Code ships on npm) | Yes (cognee) | ? (memoria-client) | Yes (everos) |
-| Graph or entity relations | Partial (entities from decisions and policies; recall --hops, off by default) | Yes (temporal entity graph) | Partial (entity linking; graph memory on Pro) | Yes (wikilinks and observations) | Yes (typed knowledge graph) | Yes (temporal knowledge graph) | No | Yes (knowledge graph) | No (typed claims) | ? (graph view in progress) |
-| Hybrid search (BM25 + embeddings) | Yes (BM25 by default; embeddings are an optional install) | Embeddings + spatial | Yes (semantic + BM25 + entity) | No | Yes (vec + rerank + graph) | Yes (graph + vec) | ? | Yes (GraphRAG) | Yes (vector + full-text) | Yes (mRAG, multi-modal) |
-| MCP server | Yes | Yes | Yes (hosted, needs an account) | Yes | Yes (stdio + HTTP/OAuth) | Yes (hosted, needs an account) | Yes (hosted, needs an API key) | Yes (first-party Claude/LangGraph) | Yes | ? |
-| Multi-agent shared memory | Yes | No | No | No | Yes (brain repo, team mounts) | Yes | Yes (shared memory blocks) | Yes | Yes (branch/merge across sessions) | Yes (multi-agent coordination) |
-| Auto-hook install | Yes (Claude Code hooks, OpenCode plugin) | No | No | No | No | No | No | No | No | No |
-| Cross-tool import (ChatGPT/Claude/Cursor) | Yes | No | No | No | Partial (data sources) | ? | No | Partial (28 data sources) | No (Git ops) | Partial (mRAG: PDFs/images/URLs) |
-| Git-friendly | Yes | No | No | Yes | Yes | No | Yes (memory tracked in git) | No | Yes (Git is the model) | ? |
-| Framework agnostic | Yes | Yes | Partial | Yes | Yes | Yes | Yes | Yes | Yes | Yes |
-| LongMemEval (published) | 85.6% R@5 from hippo recall, 96.8% with the budget lifted (4,000-token default budget; the benchmark scripts' best of five settings: 98.0% local / 99.8% voyage any-evidence, 88.5% local all-evidence; s_cleaned, per-haystack)\* | 96.6% raw / 100% reranked R@5 | 94.4 (hosted platform)\*\* | N/A | 95.53% all-evidence R@5 reranked, 93.19% without (s_cleaned\*) | 90.2% accuracy\*\* (LoCoMo 94.7%) | N/A | N/A | 88.78% overall accuracy w/ reader\*\* | 83.00% overall\*\* (LoCoMo 93.05%, HaluMem 93.04%) |
-
-\* Hippo's figures are on `longmemeval_s_cleaned` with a per-question haystack. On a default install, `hippo recall` puts an answer session in its top 5 for 85.6% of the 500 questions inside its default 4,000-token budget. With the budget lifted it scores 96.8%, but then it returns every candidate, so that figure measures the ranking ([result](docs/evals/2026-09-28-recall-cli-longmemeval-result.md)). The 98.0% and 99.8% are the benchmark scripts' retrieval, each the best of five settings, not `hippo recall`. Any-evidence R@5 counts a hit when any answer session is in the top 5, over all 500 questions: 98.0% with the free local MiniLM embedder (an optional install) and 99.8% with voyage-3-large (measured 2026-06-09, not re-run). All-evidence R@5 counts a hit only when every answer session is in the top 5, over the 470 questions that have an answer: 86.8 to 88.5% with MiniLM. gbrain first published 97.6%, an any-evidence score over all 500; its [report](https://github.com/garrytan/gbrain-evals/blob/main/docs/benchmarks/2026-05-07-longmemeval-s.md) now leads with all-evidence, 95.53% (449 of 470) with the paid Voyage rerank-2.5 reranker and 93.19% without it. On all-evidence recall gbrain is ahead. The June 2026 build scored 98.6 any-evidence; [`docs/evals/2026-09-23-longmemeval-reproduction.md`](docs/evals/2026-09-23-longmemeval-reproduction.md) has both runs. An older hippo number, 86.8% R@5 on `longmemeval_oracle` under pooled (non-per-haystack) retrieval, is not comparable to per-haystack figures.
-
-\*\* Different metric: these are end-to-end answer scores, not retrieval R@5. Mem0's 94.4 comes from its hosted platform, which its README says includes optimizations the open-source SDK lacks. Zep's 90.2% and 94.7% are accuracy figures from its homepage. Memoria's 88.78% and EverMind's 83% are overall accuracy with a reader LLM. Higher denominator + LLM helps. Not directly comparable to retrieval-only R@5 numbers above. The Mem0, Zep and Letta columns were last checked against each vendor's own pages on 2026-09-28.
-
-### Design bets
-
-A Yes means the tool made that choice, not that the choice was shown to help. What hippo has measured about its own bets is under [Benchmarks](#benchmarks); decay, for one, tied with decay switched off. Spatial organization and lossless compression are MemPalace's bets.
-
-| Design bet | Hippo | [MemPalace](https://github.com/milla-jovovich/mempalace) | [Mem0](https://github.com/mem0ai/mem0) | [Basic Memory](https://github.com/basicmachines-co/basic-memory) | [gbrain](https://hermesatlas.com/projects/garrytan/gbrain) | [Zep](https://www.getzep.com/) | [Letta](https://github.com/letta-ai/letta-code) | [Cognee](https://www.cognee.ai/) | [Memoria](https://github.com/matrixorigin/Memoria) | [EverMind](https://evermind.ai/) |
 |---------|-------|-----------|------|-------------|--------|-----|-------|--------|---------|----------|
 | Decay by default | Yes | No | No | No | No | No | No | No | No | No |
 | Retrieval strengthening | Yes | No | No | No | No | No | No | Partial (recall tuning) | No | Partial (Skill Memory distills patterns) |
 | Reward-proportional decay | Yes | No | No | No | No | No | No | No | No | No |
-| Outcome tracking | Yes | No | No | No | No | No | No | No | No | Partial (Cases: agent trajectories) |
+| Hybrid search (BM25 + embeddings) | Yes | Embeddings + spatial | Yes (semantic + BM25 + entity) | No | Yes (vec + rerank + graph) | Yes (graph + vec) | ? | Yes (GraphRAG) | Yes (vector + full-text) | Yes (mRAG, multi-modal) |
+| Schema acceleration / knowledge graph | Yes (schema) | No | Partial (entity linking; graph memory on Pro) | No | Yes (typed KG, self-wiring) | Yes (temporal KG) | No | Yes (auto-ontologies) | No (typed claims) | Yes (hierarchical: user/group/agent) |
 | Conflict detection + resolution | Yes | No | Partial (hosted platform marks superseded facts) | No | Yes (eval-surfaced) | Yes (auto-invalidate stale facts) | No | No | Yes (auto-detect + quarantine) | Partial (temporal tracking) |
+| Multi-agent shared memory | Yes | No | No | No | Yes (brain repo, team mounts) | Yes | Yes (shared memory blocks) | Yes | Yes (branch/merge across sessions) | Yes (multi-agent coordination) |
 | Transfer scoring | Yes | No | No | No | No | No | No | No | No | No |
+| Outcome tracking | Yes | No | No | No | No | No | No | No | No | Partial (Cases: agent trajectories) |
 | Confidence tiers | Yes | No | No | No | No (typed facts) | No | No | No | No | No |
-| Schema acceleration | Yes | No | No | No | No | No | No | No | No | No |
 | Spatial organization | No | Yes (wings/halls/rooms) | No | No | No | No | No | No | No | No |
 | Lossless compression | No | Yes (AAAK, 30x) | No | No | No | No | No | No | No | No |
+| Cross-tool import (ChatGPT/Claude/Cursor) | Yes | No | No | No | Partial (data sources) | ? | No | Partial (28 data sources) | No (Git ops) | Partial (mRAG: PDFs/images/URLs) |
+| Auto-hook install | Yes | No | No | No | No | No | No | No | No | No |
+| MCP server | Yes | Yes | Yes (hosted, needs an account) | Yes | Yes (stdio + HTTP/OAuth) | Yes (hosted, needs an account) | Yes (hosted, needs an API key) | Yes (first-party Claude/LangGraph) | Yes | ? |
+| Zero runtime deps | Yes | No (ChromaDB) | No | No | No (PGLite or PG+pgvector) | No (managed service) | No (npm deps) | No (Python deps) | Yes (single Rust binary) | No (managed + OSS) |
+| LongMemEval (best published) | 98.0% local / 99.8% voyage any-evidence R@5; 88.5% local all-evidence R@5 (s_cleaned, per-haystack)\* | 96.6% raw / 100% reranked R@5 | 94.4 (hosted platform)\*\* | N/A | 95.53% all-evidence R@5 reranked, 93.19% without (s_cleaned\*) | 90.2% accuracy\*\* (LoCoMo 94.7%) | N/A | N/A | 88.78% overall accuracy w/ reader\*\* | 83.00% overall\*\* (LoCoMo 93.05%, HaluMem 93.04%) |
+| Git-friendly | Yes | No | No | Yes | Yes | No | Yes (memory tracked in git) | No | Yes (Git is the model) | ? |
+| Framework agnostic | Yes | Yes | Partial | Yes | Yes | Yes | Yes | Yes | Yes | Yes |
+| License | MIT | (open) | Apache-2.0 | (open) | MIT | Proprietary cloud (Graphiti: Apache-2.0) | Apache-2.0 | MIT (core) | Apache-2.0 | Apache-2.0 (OSS) + cloud |
 
-Different tools answer different questions. Mem0 and Basic Memory implement "save everything, search later." MemPalace implements "store everything, organize spatially for retrieval." gbrain, Zep, and Cognee implement "extract typed entities and relationships into a knowledge graph." Letta implements "the agent edits its own memory blocks." Memoria implements "Git-style version control over the memory state itself." EverMind implements "self-evolving Skill Memory + multi-modal retrieval over hierarchical scopes." Hippo implements "learn what is wrong and rank it down." These are complementary takes, not a single-axis ranking: memory lifecycle (Hippo) + GraphRAG (gbrain/Cognee/Zep) + agent-self-edit (Letta) + memory-VCS (Memoria) + skill-distillation (EverMind) cover different parts of the same problem.
+\* Hippo's figures are on `longmemeval_s_cleaned` with a per-question haystack, each the best of five retrieval settings in the benchmark scripts, not `hippo recall`. Any-evidence R@5 counts a hit when any answer session is in the top 5, over all 500 questions: 98.0% with the free local MiniLM embedder (an optional install) and 99.8% with voyage-3-large (measured 2026-06-09, not re-run). All-evidence R@5 counts a hit only when every answer session is in the top 5, over the 470 questions that have an answer: 86.8 to 88.5% with MiniLM. gbrain first published 97.6%, an any-evidence score over all 500; its [report](https://github.com/garrytan/gbrain-evals/blob/main/docs/benchmarks/2026-05-07-longmemeval-s.md) now leads with all-evidence, 95.53% (449 of 470) with the paid Voyage rerank-2.5 reranker and 93.19% without it. On all-evidence recall gbrain is ahead. The June 2026 build scored 98.6 any-evidence; [`docs/evals/2026-09-23-longmemeval-reproduction.md`](docs/evals/2026-09-23-longmemeval-reproduction.md) has both runs. An older hippo number, 86.8% R@5 on `longmemeval_oracle` under pooled (non-per-haystack) retrieval, is not comparable to per-haystack figures.
+
+\*\* Different metric: these are end-to-end answer scores, not retrieval R@5. Mem0's 94.4 comes from its hosted platform, which its README says includes optimizations the open-source SDK lacks. Zep's 90.2% and 94.7% are accuracy figures from its homepage. Memoria's 88.78% and EverMind's 83% are overall accuracy with a reader LLM. Higher denominator + LLM helps. Not directly comparable to retrieval-only R@5 numbers above. The Mem0, Zep and Letta columns were last checked against each vendor's own pages on 2026-09-28.
+
+Different tools answer different questions. Mem0 and Basic Memory implement "save everything, search later." MemPalace implements "store everything, organize spatially for retrieval." gbrain, Zep, and Cognee implement "extract typed entities and relationships into a knowledge graph." Letta implements "the agent edits its own memory blocks." Memoria implements "Git-style version control over the memory state itself." EverMind implements "self-evolving Skill Memory + multi-modal retrieval over hierarchical scopes." Hippo implements "learn what is wrong and stop repeating it." These are complementary takes, not a single-axis ranking: bio-lifecycle (Hippo) + GraphRAG (gbrain/Cognee/Zep) + agent-self-edit (Letta) + memory-VCS (Memoria) + skill-distillation (EverMind) cover different parts of the same problem.
 
 ---
 
@@ -1056,7 +1082,7 @@ node run.mjs --adapter all
 
 ### How do I give Claude Code memory between sessions?
 
-Run `npm install -g hippo-memory`, then `hippo init` in the project. If the project has a `CLAUDE.md`, init adds a short block telling Claude to run `hippo context --auto` when a session starts. It also adds 7 hook entries to Claude Code's settings that keep your pinned memories plus the five most recent ones in context, save a task snapshot and the memories a compaction summary lists, store failed tool calls as lessons, and run `hippo sleep` when the session ends, and it sets up a daily 6:15am run. [What hippo init changes](#what-hippo-init-changes) lists everything. The [Claude Code plugin](https://github.com/kitfunso/hippo-memory/tree/master/extensions/claude-code-plugin) is the alternative to these hooks; use one, not both. To set up every git repo up to three folders below your home directory at once, know what the scan changes first: each repo gets its own store, seeded from a year of its git history, the same hooks go in when one of those repos uses Claude Code, and the daily run is set up, but no block goes into any repo's `CLAUDE.md`. The command is `hippo init --scan ~`; run `hippo init` in the projects where you want the block.
+Run `npm install -g hippo-memory`, then `hippo init` in the project. If the project has a `CLAUDE.md`, init adds a short block telling Claude to run `hippo context --auto` when a session starts. It also adds hooks to Claude Code's settings that keep your pinned memories in context, save a task snapshot before compaction, and run `hippo sleep` when the session ends. `hippo init --scan ~` gives every git repo under your home folder a store and installs the same hooks, but adds no block to any `CLAUDE.md`. The [Claude Code plugin](https://github.com/kitfunso/hippo-memory/tree/master/extensions/claude-code-plugin) is the alternative to these hooks; use one, not both.
 
 ### How do I give Cursor memory between sessions?
 
@@ -1064,19 +1090,11 @@ Run `npm install -g hippo-memory`, then `hippo init` in the project. If the proj
 
 ### How do I give Codex memory across sessions?
 
-`hippo init` adds its instructions to your `AGENTS.md`, which Codex reads before it starts work. When Codex is installed, init also adds two hooks to Codex's `hooks.json`: one puts your pinned memories plus the five most recent ones into every prompt, the other makes the next prompt send them again after a compaction. Codex asks you to trust each new hook once in `/hooks`, and skips it until you do. Capturing Codex sessions is opt-in: `hippo hook install codex` wraps the Codex launcher, and `hippo hook uninstall codex` removes the wrapper and the hooks.
+`hippo init` adds its instructions to your `AGENTS.md`, which Codex reads before it starts work. Capturing Codex sessions is opt-in: `hippo hook install codex` wraps the Codex launcher, and `hippo hook uninstall codex` removes the wrapper.
 
 ### Which agents does hippo work with?
 
-`hippo init` detects Claude Code, Codex, Cursor, OpenClaw, OpenCode and Pi. It installs hooks for Claude Code and OpenCode, adds 2 hooks to Codex's `hooks.json` when Codex is installed (Codex runs them once you trust them in `/hooks`), and adds instructions to an existing `AGENTS.md` for Codex, Cursor, OpenClaw and Pi. It only patches instruction files that already exist. Any MCP client can use the [MCP server](#mcp-server), and other tools can call the CLI or the HTTP API that `hippo serve` starts.
-
-### Does installation automatically save before compaction?
-
-Package installation alone does not enable automatic preservation on every agent. Complete the documented setup and required host trust; capture and compaction coverage depend on the integration.
-
-With the Claude Code hooks or native plugin configured, PreCompact saves a derivable working-state snapshot and a compaction record; PostCompact extracts the lessons listed in the compaction summary. A snapshot, a compaction record and a useful memory are different outputs, and post-compaction extraction is not a guarantee that every earlier lesson was saved before loss. Hippo's Codex hooks currently provide prompt delivery and post-compaction re-injection, with one-time trust in `/hooks`; they install no PreCompact save hook. Codex session-end capture requires the opt-in wrapper. MCP tool access and instruction files alone do not provide automatic lifecycle capture.
-
-Follow the [integration recipes](https://github.com/kitfunso/hippo-memory/tree/master/integrations) for the exact agent and mode. Automatic pre-loss preservation across all supported agents is planned under AZ4-AZ6 in the [roadmap](https://github.com/kitfunso/hippo-memory/blob/master/ROADMAP.md#current-execution-index); it is not a universal install-only capability today.
+`hippo init` detects Claude Code, Codex, Cursor, OpenClaw, OpenCode and Pi, and wires itself into each one's instruction file, hooks or plugin. It only patches instruction files that already exist. Any MCP client can use the [MCP server](#mcp-server), and other tools can call the CLI or the HTTP API that `hippo serve` starts.
 
 ### Can I use hippo as an MCP memory server?
 
@@ -1084,7 +1102,7 @@ Yes. `hippo mcp` runs the server over stdio, and `npx -y hippo-memory mcp` runs 
 
 ### How is hippo different from mem0?
 
-mem0 uses a language model to extract memories, OpenAI by default in its open-source library, and memories stored through its hosted MCP server live in your Mem0 account ([mem0 docs](https://docs.mem0.ai/platform/mem0-mcp), checked 2026-09-28). Hippo stores memories in SQLite on your machine, needs no account and no model, and `hippo init` wires it into the coding agents it finds. mem0's platform marks an older fact superseded when a newer one replaces it; in hippo you run `hippo supersede` yourself. Hippo also lets you mark a recalled memory wrong with `hippo outcome --bad`, and it drops out of the top results.
+mem0 uses a language model to extract memories, OpenAI by default in its open-source library, and memories stored through its hosted MCP server live in your Mem0 account ([mem0 docs](https://docs.mem0.ai/platform/mem0-mcp), checked 2026-09-28). Hippo stores memories in SQLite on your machine, needs no account and no model, and `hippo init` wires it into the coding agents it finds. mem0's platform and hippo both mark an older fact superseded when a newer one replaces it. Hippo also lets you mark a recalled memory wrong with `hippo outcome --bad`, and it drops out of the top results.
 
 ### Is this just RAG?
 
@@ -1092,7 +1110,7 @@ No. RAG searches a fixed corpus. Hippo's store changes as your agent works: a me
 
 ### Does it need embeddings?
 
-No. Recall runs on BM25 out of the box, with no model and no network call, and a default install has no embedder. Embeddings are an optional install for hybrid search. On LongMemEval-S, where each question gets its own haystack, `hippo recall` on a default install puts an answer session in its top five for 85.6% of questions inside its 4,000-token budget, and 87.6% with the free local MiniLM embedder; the budget, not the embedder, is most of the gap to the benchmark scripts. Those scripts, which are not `hippo recall`, fuse BM25 with MiniLM and reach 98.0% recall@5 at their best of five settings, counting a hit when any answer session is in the top five. On LongMemEval's oracle split with one pooled store, BM25 alone scored 74.0% recall@5 in v0.11. These runs use different setups, so they are not a before and after.
+No. Recall runs on BM25 out of the box, with no model and no network call, and a default install has no embedder. Embeddings are an optional install for hybrid search. On LongMemEval-S, where each question gets its own haystack, the benchmark scripts (not `hippo recall`) fuse BM25 with the free local MiniLM embedder and reach 98.0% recall@5, counting a hit when any answer session is in the top five. On LongMemEval's oracle split with one pooled store, BM25 alone scored 74.0% recall@5 in v0.11. The two runs use different setups, so they are not a before and after.
 
 ### Do I still need CLAUDE.md?
 
@@ -1108,7 +1126,7 @@ On your machine, in SQLite: `.hippo/hippo.db` in each project, plus a global sto
 
 ### What does hippo cost?
 
-Nothing. Hippo is MIT-licensed and needs no account or API key. Optional features that call an outside provider bill through it: the Jev reranker costs about 0.0004 USD a recall, and API embedders and sleep's fact extraction bill your own keys. Memory text handed to your agent uses context tokens when it is sent, and again, usually at the cheaper cached-input rate, on each later model call until the host compacts. `hippo tokens` shows both for the hook and compact-resume blocks, and the sent tokens for the rest.
+Nothing. Hippo is MIT-licensed and needs no account or API key. Optional features that call an outside provider bill through it: the Jev reranker costs about 0.0004 USD a recall, and API embedders and sleep's fact extraction bill your own keys. Memory text handed to your agent uses context tokens, and `hippo tokens` shows how many.
 
 ### Is it production-ready?
 
@@ -1116,7 +1134,7 @@ Judge it by what is tested. 3,500+ tests run against a real database, with no mo
 
 ### Has hippo been shown to make agents better at their work?
 
-No. The published numbers measure retrieval: whether the right memory comes back, and whether a memory marked wrong stays out of the results. Decay and sleep are design choices, not measured wins. In the [mechanism audit](https://github.com/kitfunso/hippo-memory/blob/master/docs/evals/2026-09-23-mechanism-audit-round2-result.md), decay had no measurable effect against decay switched off (-0.7 points [-1.4, 0.1] on a 20-session synthetic test, too short for a 365-day half-life to act), and sleep lowered LongMemEval hit@5 by 3.6 points [-5.8, -1.4] under the audit's declared scorer; no scorer there showed sleep helping recall. Every measurement, including failed runs and one retracted claim, is indexed in [docs/evals](https://github.com/kitfunso/hippo-memory/blob/master/docs/evals/README.md).
+Not yet. The published numbers measure retrieval: whether the right memory comes back, and whether a memory marked wrong stays out of the results. A paired test that runs real agent sessions with and without hippo is under way. Every measurement, including failed runs and one retracted claim, is indexed in [docs/evals](https://github.com/kitfunso/hippo-memory/blob/master/docs/evals/README.md).
 
 ---
 

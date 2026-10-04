@@ -9,12 +9,13 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A Telegram bot that runs appointment booking for a small service business — a barber,
-a nail studio, a private tutor. Clients leave a short contact profile once, pick a
-service, see only the times that actually fit it, and book in a few taps. The
-master manages services, schedule (weekly hours or monthly open days, chosen at
-deploy) and time off, sees the client's name and phone on every card, and confirms
-or declines either from the **Bookings** screen or straight from the new-booking
-notification. Both sides get notified on every status change.
+a nail studio, a private tutor. Clients agree to personal-data processing, leave a
+short contact profile once, pick a service, see only the times that actually fit it,
+and book in a few taps. The master manages services, schedule (weekly hours or
+monthly open days, chosen at deploy) and time off, sees the client's name and phone
+on every card, and confirms or declines either from the **Bookings** screen or
+straight from the new-booking notification. Both sides get notified on every status
+change, plus evening-before and hour-ahead reminders for confirmed appointments.
 
 Navigation is a sticky inline hub: `/start` refreshes it in place, `/menu` posts a
 fresh hub message (useful after clearing the chat). Built on a layered architecture
@@ -77,19 +78,28 @@ failure halfway through a booking cannot leave a half-written appointment behind
 
 ### For clients
 
-- **Contact profile** — first name, last name and phone collected once before the
-  first booking, via a share-contact button or manual input; editable later from
-  **Profile**
-- **Guided booking** — **Book**: service → day → time → confirmation
+- **Contact profile** — before the first booking (or when consent is missing /
+  outdated), the client sees a short personal-data notice (operator name and
+  contacts from `.env`), then first name, last name and phone via a share-contact
+  button or manual input; after that **Book** continues to services. Editable later
+  from **Profile** (consent is asked again only if the stored version no longer
+  matches `PDN_CONSENT_VERSION`)
+- **Guided booking** — **Book**: service → month (only months with open days and
+  free slots) → day on a month calendar (only bookable days are tappable) → time →
+  confirmation
 - **Services catalog** — browse active services with description and photo (separate
   from booking; card opens as a new message)
 - **Only bookable times are shown** — windows outside the master's open schedule
   (weekly hours or monthly open days), blocked by time off, already taken, or in
-  the past are filtered out before the client sees them
+  the past are filtered out before the client sees them; month and day pickers
+  respect the same filters within `booking_horizon_days`
 - **My bookings** — sticky list of upcoming appointments; open a card to cancel
 - **Self-service cancellation** — cancel your own booking; the master is notified
 - **Status notifications** — a message arrives when the master confirms or declines
   (dismiss with **OK**)
+- **Appointment reminders** — for each **confirmed** visit, an evening-before push
+  (local window from `.env`) and an hour-ahead push; **OK** dismisses, **Cancel
+  appointment** asks for confirm then an optional short reason (or skip)
 
 ### For the master
 
@@ -99,11 +109,15 @@ failure halfway through a booking cannot leave a half-written appointment behind
 - **One-tap confirm / decline** — from a booking card or directly from the new-booking
   push; past slots are read-only (no action buttons), and a stale button is rejected
   server-side
+- **Appointment reminders** — same evening-before and hour-ahead pushes as the client
+  (with the client's name and phone); cancel from the reminder notifies the client,
+  optionally with a reason
 - **Services** — catalogue with title, duration, price, description and photo; add,
   edit (including description/photo from the card) and soft deactivate
 - **Schedule → Working hours** *(when `SCHEDULE_MODE=weekly`)* — view / edit
   repeating weekly intervals
-- **Schedule → Work days** *(when `SCHEDULE_MODE=monthly`)* — pick open days on a
+- **Schedule → Work days** *(when `SCHEDULE_MODE=monthly`)* — choose a month from
+  the next 12 (compact labels in two columns, e.g. `сен 26`), pick open days on a
   month calendar, set hours for newly selected days (other days keep their hours),
   close days with an optional warn if bookings exist; **Show current schedule**
   lists saved days and hours
@@ -136,8 +150,9 @@ failure halfway through a booking cannot leave a half-written appointment behind
 - **Bilingual interface** — Russian and English, switchable at runtime under
   **Settings → Language**
 - **Language resolution chain** — explicit choice → Telegram client language → default
-- **Profile gate** — **Book** asks for the contact profile first; everything else stays
-  available without it
+- **Profile gate** — **Book** requires personal-data consent (current version) and a
+  complete contact profile first, then resumes the booking flow on the sticky hub;
+  everything else stays available without them
 - **Inline Cancel** — multi-step flows (booking, profile, services, schedule, time off,
   gap, min lead, slot step, admin) abort with a button, not a slash command
 - **Username sync** — a changed Telegram `@username` is picked up automatically, so
@@ -145,6 +160,8 @@ failure halfway through a booking cannot leave a half-written appointment behind
 - **Concurrency safety** — a database exclusion constraint, not an application check,
   guarantees two clients can never book overlapping times for the same master
 - **UTC everywhere** — all timestamps stored as `TIMESTAMPTZ`
+- **Background reminder worker** — an asyncio task started with the bot polls due
+  confirmed appointments and sends each reminder once (tracked per kind on the row)
 - **Structured logging** with a configurable level and rotating Docker log files
 
 ## Navigation
@@ -153,25 +170,25 @@ The Telegram ☰ menu exposes **`/start`** (start / refresh the sticky hub) and
 **`/menu`** (new hub message — e.g. after the chat was cleared). Everything else
 is inline buttons on the sticky hub message.
 
-| Hub path                                   | Role     | What it does                                               |
-|--------------------------------------------|----------|------------------------------------------------------------|
-| **Book**                                   | client   | Book an appointment (asks for the profile first if empty)  |
-| **Services**                               | client   | Browse active services (description / photo)               |
-| **My bookings**                            | client   | Upcoming appointments (open / cancel)                      |
-| **Profile → Show / Edit**                  | client   | View or update name and phone                              |
-| **Bookings**                               | master   | Week → day → card (confirm / cancel)                       |
-| **Services**                               | master   | List, add, edit, description/photo, deactivate             |
-| **Schedule → Working hours**               | master   | Weekly mode: view / edit repeating intervals               |
-| **Schedule → Work days**                   | master   | Monthly mode: calendar open days, hours, schedule summary  |
-| **Schedule → Time off**                    | master   | View / edit upcoming absences (full days or hours)         |
-| **Schedule → Break between appointments**  | master   | Set pause after each visit (`gap_minutes`)                 |
-| **Schedule → Minimum lead time**           | master   | Set how soon clients may book (`min_lead_minutes`)         |
-| **Schedule → Slot grid step**              | master   | Set start-time grid (`slot_step_minutes`; NULL = duration) |
-| **User card / Set role / Ban / Unban**     | admin    | Moderation flows (id or `@username`)                       |
-| **Settings → Language**                    | everyone | Switch RU / EN                                             |
-| **Settings → Help**                        | everyone | Short role-specific help                                   |
-| **← Back** / **⌂ Menu**                    | everyone | Hub navigation                                             |
-| **OK**                                     | everyone | Dismiss a result / status notice                           |
+| Hub path                                   | Role     | What it does                                                             |
+|--------------------------------------------|----------|--------------------------------------------------------------------------|
+| **Book**                                   | client   | Consent (if needed) → profile (if needed) → service → month → day → time |
+| **Services**                               | client   | Browse active services (description / photo)                             |
+| **My bookings**                            | client   | Upcoming appointments (open / cancel)                                    |
+| **Profile → Show / Edit**                  | client   | View or update name and phone (consent first if missing / outdated)      |
+| **Bookings**                               | master   | Week → day → card (confirm / cancel)                                     |
+| **Services**                               | master   | List, add, edit, description/photo, deactivate                           |
+| **Schedule → Working hours**               | master   | Weekly mode: view / edit repeating intervals                             |
+| **Schedule → Work days**                   | master   | Monthly mode: 12 months ahead → calendar days, hours, summary            |
+| **Schedule → Time off**                    | master   | View / edit upcoming absences (full days or hours)                       |
+| **Schedule → Break between appointments**  | master   | Set pause after each visit (`gap_minutes`)                               |
+| **Schedule → Minimum lead time**           | master   | Set how soon clients may book (`min_lead_minutes`)                       |
+| **Schedule → Slot grid step**              | master   | Set start-time grid (`slot_step_minutes`; NULL = duration)               |
+| **User card / Set role / Ban / Unban**     | admin    | Moderation flows (id or `@username`)                                     |
+| **Settings → Language**                    | everyone | Switch RU / EN                                                           |
+| **Settings → Help**                        | everyone | Short role-specific help                                                 |
+| **← Back** / **⌂ Menu**                    | everyone | Hub navigation                                                           |
+| **OK**                                     | everyone | Dismiss a result / status notice                                         |
 
 ## Roles
 
@@ -179,7 +196,7 @@ Three roles, all stored in the database — nothing is hardcoded in the source.
 
 | Role      | Gets                                                                                                       |
 |-----------|------------------------------------------------------------------------------------------------------------|
-| `client`  | Contact profile, booking, and managing their own appointments. Default for new users.                      |
+| `client`  | Consent + contact profile, booking, and managing their own appointments. Default for new users.            |
 | `master`  | Service catalogue, schedule (weekly or monthly by deploy mode), time off, and the weekly appointment list. |
 | `admin`   | User moderation only (lookup, roles, ban / unban) — no client booking features.                            |
 
@@ -272,21 +289,39 @@ Keep `POSTGRES_HOST=localhost` and `REDIS_HOST=localhost` in `.env` for this mod
 
 All settings come from `.env`. Start from `.env.example`.
 
-| Variable                                                              | Description                                                                                     |
-|-----------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
-| `BOT_TOKEN`                                                           | Telegram bot token from [@BotFather](https://t.me/BotFather)                                    |
-| `ADMIN_IDS`                                                           | Comma-separated Telegram ids granted the admin role on first `/start`                           |
-| `MASTER_USER_ID`                                                      | Telegram id of the master whose services clients can book                                       |
-| `TIMEZONE`                                                            | IANA timezone for display and local schedule input (default `Europe/Moscow`); storage stays UTC |
-| `SCHEDULE_MODE`                                                       | `weekly` or `monthly` — schedule shape for this deploy (pick once; switching is not supported)  |
-| `LOG_LEVEL`                                                           | `DEBUG` for development, `INFO` for production                                                  |
-| `LOG_FORMAT`                                                          | Python logging format string                                                                    |
-| `POSTGRES_DB` / `POSTGRES_USER` / `POSTGRES_PASSWORD`                 | Database credentials                                                                            |
-| `POSTGRES_HOST` / `POSTGRES_PORT`                                     | `postgres` / `5432` inside Compose                                                              |
-| `REDIS_HOST` / `REDIS_PORT` / `REDIS_DATABASE`                        | Redis connection for FSM storage                                                                |
-| `REDIS_USERNAME` / `REDIS_PASSWORD`                                   | Redis credentials                                                                               |
-| `PGADMIN_DEFAULT_EMAIL` / `PGADMIN_DEFAULT_PASSWORD` / `PGADMIN_PORT` | pgAdmin access                                                                                  |
-| `PROXY_*`                                                             | Optional proxy, disabled by default — see below                                                 |
+| Variable                                                              | Description                                                                                        |
+|-----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------|
+| `BOT_TOKEN`                                                           | Telegram bot token from [@BotFather](https://t.me/BotFather)                                       |
+| `ADMIN_IDS`                                                           | Comma-separated Telegram ids granted the admin role on first `/start`                              |
+| `MASTER_USER_ID`                                                      | Telegram id of the master whose services clients can book                                          |
+| `TIMEZONE`                                                            | IANA timezone for display and local schedule input (default `Europe/Moscow`); storage stays UTC    |
+| `SCHEDULE_MODE`                                                       | `weekly` or `monthly` — schedule shape for this deploy (pick once; switching is not supported)     |
+| `PDN_CONSENT_VERSION`                                                 | Version label stored with consent (default `v1`); bump to re-ask all clients                       |
+| `PDN_OPERATOR_NAME`                                                   | Operator name shown on the short consent screen (empty → locale fallback)                          |
+| `PDN_OPERATOR_CONTACTS`                                               | Operator contacts on the consent screen (empty → locale fallback)                                  |
+| `PDN_POLICY_URL`                                                      | Optional `http(s)://…` link for **Full terms** (hidden when empty)                                 |
+| `REMINDER_LEAD_MINUTES`                                               | Hour-ahead reminder: send when `starts_at` is within this many minutes (default `60`)              |
+| `REMINDER_EVENING_HOUR_START` / `REMINDER_EVENING_HOUR_END`           | Evening reminder: half-open local hour window `[START, END)` on the day before (default `20`/`22`) |
+| `LOG_LEVEL`                                                           | `DEBUG` for development, `INFO` for production                                                     |
+| `LOG_FORMAT`                                                          | Python logging format string                                                                       |
+| `POSTGRES_DB` / `POSTGRES_USER` / `POSTGRES_PASSWORD`                 | Database credentials                                                                               |
+| `POSTGRES_HOST` / `POSTGRES_PORT`                                     | `postgres` / `5432` inside Compose                                                                 |
+| `REDIS_HOST` / `REDIS_PORT` / `REDIS_DATABASE`                        | Redis connection for FSM storage                                                                   |
+| `REDIS_USERNAME` / `REDIS_PASSWORD`                                   | Redis credentials                                                                                  |
+| `PGADMIN_DEFAULT_EMAIL` / `PGADMIN_DEFAULT_PASSWORD` / `PGADMIN_PORT` | pgAdmin access                                                                                     |
+| `PROXY_*`                                                             | Optional proxy, disabled by default — see below                                                    |
+
+Personal-data notice text lives in locales; operator fields and the optional full-policy
+URL come from the `PDN_*` variables above. Decline / Cancel do not store consent, so the
+screen appears again on the next **Book** or **Profile** edit until the client agrees.
+Bump `PDN_CONSENT_VERSION` (and restart) when the policy changes and you need everyone
+to re-accept.
+
+Reminder times use bot `TIMEZONE`. Evening reminders fire only on the calendar day
+before a **confirmed** appointment while the local clock is in
+`[REMINDER_EVENING_HOUR_START, REMINDER_EVENING_HOUR_END)`. Hour reminders fire once
+`now` is inside `REMINDER_LEAD_MINUTES` before `starts_at` (and not after the start).
+Each of the four kinds (client/master × evening/hour) is sent at most once.
 
 ### Optional: proxy
 
@@ -310,15 +345,19 @@ Core booking tables (plus `schema_migrations`, `master_settings`, `working_hours
 Schema is applied by versioned SQL files in `migrations/versions/`, run via `python -m migrations.migrate`
 on startup.
 
-| Table              | Purpose                                                                                          |
-|--------------------|--------------------------------------------------------------------------------------------------|
-| `users`            | Telegram id, username, language, role, ban flag, contact profile (first name, last name, phone)  |
-| `services`         | Master's offerings: title, duration, price, description, photo file id, active flag              |
-| `appointments`     | Client, service, status, and concrete time range (`starts_at` / `ends_at`)                       |
-| `master_settings`  | Per-master timezone, grid step, gap, lead time and booking horizon                               |
-| `working_hours`    | Weekly mode: weekday (ISO 1=Mon…7=Sun) and local time ranges per master                          |
-| `work_dates`       | Monthly mode: concrete open dates with local `starts_time` / `ends_time` (unique per master+day) |
-| `time_off`         | Absolute blocked intervals (day off, break, vacation) per master                                 |
+| Table              | Purpose                                                                                                                 |
+|--------------------|-------------------------------------------------------------------------------------------------------------------------|
+| `users`            | Telegram id, username, language, role, ban flag, contact profile, PDN consent (`pdn_consent_at`, `pdn_consent_version`) |
+| `services`         | Master's offerings: title, duration, price, description, photo file id, active flag                                     |
+| `appointments`     | Client, service, status, time range (`starts_at` / `ends_at`), reminder sent-at columns                                 |
+| `master_settings`  | Per-master timezone, grid step, gap, lead time and booking horizon                                                      |
+| `working_hours`    | Weekly mode: weekday (ISO 1=Mon…7=Sun) and local time ranges per master                                                 |
+| `work_dates`       | Monthly mode: concrete open dates with local `starts_time` / `ends_time` (unique per master+day)                        |
+| `time_off`         | Absolute blocked intervals (day off, break, vacation) per master                                                        |
+
+`users.pdn_consent_at` / `pdn_consent_version` are written when the client taps **Agree**
+on the short notice (`migration 012`). They must match the current `PDN_CONSENT_VERSION`
+for **Book** and profile edit to skip the consent step.
 
 `services.description` (optional, up to 1000 characters) and `photo_file_id` (Telegram
 photo file id) are set from the master's service card and shown in the client
@@ -330,20 +369,30 @@ Appointments store `starts_at` / `ends_at`. Active appointments for the same mas
 cannot overlap in time: a GiST `EXCLUDE` on `tstzrange(starts_at, ends_at, '[)')`
 enforces that.
 
+Reminder delivery marks
+`client_evening_reminded_at` / `client_hour_reminded_at` /
+`master_evening_reminded_at` / `master_hour_reminded_at` when the matching push is
+sent (`migration 013`). Only **confirmed** rows are eligible; a NULL column means
+that kind has not been sent yet.
+
 Availability for **Book** is computed from the schedule for this deploy
 (`SCHEDULE_MODE`): **`weekly`** uses `working_hours` by weekday; **`monthly`** uses
 `work_dates` for concrete open days. In both modes, `time_off` and existing
 appointments are subtracted (`AvailabilityService`), using `master_settings` for
-step, gap, lead time and horizon. Switching mode does not migrate data — after a
-change you must restart and fill the matching schedule tables.
+step, gap, lead time and horizon. The client month list comes from
+`AvailabilityService.list_open_months` (open schedule months inside the horizon
+that still have free slots for the chosen service). Switching mode does not migrate
+data — after a change you must restart and fill the matching schedule tables.
 
 `master_settings.gap_minutes` defaults to `0` (back-to-back) and is editable under
 **Schedule → Break between appointments**. `min_lead_minutes` defaults to `0` and is
-editable under **Schedule → Minimum lead time**. `slot_step_minutes` is `NULL` until
-customized (editable under **Schedule → Slot grid step**, with a reset to “use service
-duration”) and means “step equals the chosen service duration” (when a candidate
-overlaps a busy block including gap, availability jumps to that block’s end so the
-next start can land on `ends_at + gap` even with a coarser step).
+editable under **Schedule → Minimum lead time**. `booking_horizon_days` defaults to
+`180` (how far ahead **Book** offers months and slots; not editable from the hub yet).
+`slot_step_minutes` is `NULL` until customized (editable under **Schedule → Slot grid
+step**, with a reset to “use service duration”) and means “step equals the chosen
+service duration” (when a candidate overlaps a busy block including gap, availability
+jumps to that block’s end so the next start can land on `ends_at + gap` even with a
+coarser step).
 Display/input timezone still comes from `.env` `TIMEZONE` until the bot reads this table.
 
 `working_hours` stores repeating weekly intervals as local wall-clock `TIME` values;
@@ -351,9 +400,10 @@ the master's timezone (settings / `.env`) interprets them when computing availab
 Used when `SCHEDULE_MODE=weekly`.
 
 `work_dates` stores concrete open calendar days with one local interval per day
-(`UNIQUE (master_user_id, work_date)`). Used when `SCHEDULE_MODE=monthly`. Saving
-hours upserts only the newly selected days; closing days deletes those rows (with a
-confirm if pending/confirmed appointments fall on them — bookings are kept).
+(`UNIQUE (master_user_id, work_date)`). Used when `SCHEDULE_MODE=monthly`. The hub
+month picker offers the next 12 months from today. Saving hours upserts only the
+newly selected days; closing days deletes those rows (with a confirm if
+pending/confirmed appointments fall on them — bookings are kept).
 
 Day-off and breaks are intentionally kept out of the weekly template — they live in
 the separate `time_off` table. In monthly mode, closing a full day is an untoggled
@@ -384,13 +434,15 @@ pytest
 ```
 
 ```
-..........................                                       [100%]
-26 passed in 0.16s
+...........................................                              [100%]
+43 passed in 0.10s
 ```
 
-The suite covers `BookingService` and `AvailabilityService`: window booking rules
-(including monthly open days), confirm and cancel transitions with permission checks,
-and client appointment listing filters.
+The suite covers `BookingService`, `AvailabilityService` and reminder due-rules:
+window booking (including monthly open days and open-month listing), confirm and
+cancel transitions with permission checks, client appointment listing filters, and
+evening / hour reminder eligibility (confirmed only, lead window, half-open evening
+hours, already-sent skip).
 
 ## Project Structure
 
@@ -405,9 +457,10 @@ booking_bot/
 │   │   ├── middlewares/    # DB transactions, user context, i18n, ban check
 │   │   ├── states/         # FSM state groups
 │   │   ├── utils/          # Notifications, hub helpers, shared formatting
+│   │   ├── reminders.py    # Background appointment-reminder worker
 │   │   ├── bot_commands.py # Telegram ☰ menu (/start, /menu)
 │   │   └── bot.py          # Dispatcher setup and startup
-│   ├── domain/             # Models, enums, exceptions, BookingService, AvailabilityService
+│   ├── domain/             # Models, enums, exceptions, booking / availability / reminders
 │   └── infrastructure/     # Connection pool and repositories
 ├── config/                 # Typed settings from .env
 ├── locales/                # ru / en message dictionaries
@@ -424,7 +477,6 @@ booking_bot/
 
 - Per-master timezone setting (currently: bot-wide `TIMEZONE` in `.env`)
 - Multi-master support, letting clients pick a master first
-- Appointment reminders ahead of the scheduled time
 - Per-language service titles set by the master
 - Fetching appointment details in a single joined query to remove N+1 reads
 

@@ -12,7 +12,7 @@
     <a href="https://github.com/timescale/rsigma/actions/workflows/ci.yml"><img src="https://github.com/timescale/rsigma/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
     <a href="https://rsigma.io"><img src="https://img.shields.io/badge/docs-website-blue" alt="Documentation" /></a>
     <a href="https://crates.io/crates/rsigma"><img src="https://img.shields.io/crates/v/rsigma.svg" alt="crates.io" /></a>
-    <a href="https://github.com/timescale/rsigma/blob/main/Cargo.toml"><img src="https://img.shields.io/badge/MSRV-1.95.0-blue" alt="MSRV" /></a>
+    <a href="https://github.com/timescale/rsigma/blob/main/Cargo.toml"><img src="https://img.shields.io/badge/MSRV-1.96.0-blue" alt="MSRV" /></a>
     <a href="https://ghcr.io/timescale/rsigma"><img src="https://img.shields.io/badge/ghcr.io-rsigma-blue?logo=docker" alt="Docker" /></a>
     <a href="https://github.com/timescale/rsigma/releases/latest"><img src="https://img.shields.io/github/v/release/timescale/rsigma" alt="GitHub Release" /></a>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT" /></a>
@@ -26,7 +26,7 @@ RSigma parses Sigma YAML rules into a strongly-typed AST, compiles them into opt
 
 You can send events in many formats, including JSON, syslog (RFC 3164/5424), logfmt, CEF, EVTX (Windows Event Log), plain text, and OTLP (OpenTelemetry Protocol), with auto-detection by default. pySigma-compatible processing pipelines handle field mapping and backend configuration. OTLP support lets any OpenTelemetry-compatible agent (Grafana Alloy, Vector, Fluent Bit, OTel Collector) forward logs to RSigma via HTTP or gRPC for detection.
 
-For rule quality and editor integration, a built-in linter validates rules against 85 checks derived from the Sigma v2.1.0 specification, and an LSP server provides real-time diagnostics, completions, hover documentation, and quick-fix code actions in any editor.
+For rule quality and editor integration, a built-in linter validates rules against 90 checks derived from the Sigma v2.1.0 specification, and an LSP server provides real-time diagnostics, completions, hover documentation, and quick-fix code actions in any editor.
 
 RSigma builds on open industry standards throughout: [Sigma](https://sigmahq.io/) for detection rules, [OpenTelemetry](https://opentelemetry.io/) for log ingestion and detection export, and [STIX](https://oasis-open.github.io/cti-documentation/stix/intro) and [TAXII](https://oasis-open.github.io/cti-documentation/taxii/intro) for threat intelligence.
 
@@ -42,7 +42,7 @@ Full documentation, including guides, CLI reference, and library API docs, lives
 * **[Array matching](https://rsigma.io/guide/array-matching/) (experimental):** Matches members of arrays in nested event data with any/all-member semantics, same-element correlation, and positional indexing, opt-in via `sigma-version: 3`
 * **[Rule drafting](https://rsigma.io/guide/rule-drafting/):** Drafts detection rules and temporal correlations from exemplar events contrasted against a baseline corpus with `rule draft`
 * **[Rule tuning](https://rsigma.io/guide/rule-tuning/):** Proposes a spec-native filter from false-positive events, verifies that every known true positive still fires, and refuses unsafe separators with `rule tune`
-* **[Built-in linter](https://rsigma.io/guide/linting-rules/):** Validates rules with 85 checks, four severity levels, suppressions, custom tag namespaces, and auto-fix for 14 safe rules
+* **[Built-in linter](https://rsigma.io/guide/linting-rules/):** Validates rules with 90 checks, four severity levels, suppressions, custom tag namespaces, and auto-fix for 14 safe rules
 * **[ADS metadata](https://rsigma.io/guide/detection-strategy/):** Documents rules with [Palantir ADS](https://github.com/palantir/alerting-detection-strategy-framework) sections under `rsigma.ads.*`, enforced by the linter and scaffolded with `rule doc`
 * **LSP server:** Provides real-time diagnostics, completions, hover documentation, document symbols, and quick-fix code actions in [VSCode](https://rsigma.io/editors/vscode/), [Neovim](https://rsigma.io/editors/neovim/), and any LSP-capable editor
 * **[MCP server](https://rsigma.io/guide/mcp-server/):** Exposes the toolchain to AI agents (Cursor, Claude Code, ...) as structured MCP tools over stdio or Streamable HTTP with `rsigma mcp serve`

@@ -5,11 +5,11 @@
   <img src="docs/brand/wordmark-light.svg" alt="quireINK" width="360">
 </picture>
 
-`2.2.16`
+`2.2.17`
 
 **A blog you host yourself, and an AI agent can run it for you.**
 No algorithm, no ads, no platform standing between you and your readers.
-One process. Two SQLite files. No cloud account anywhere in the path. Your name on it, not ours.
+One process. Two SQLite files. No cloud account needed, and Cloudflare if you want one. Your name on it, not ours.
 
 <br/>
 
@@ -18,6 +18,8 @@ One process. Two SQLite files. No cloud account anywhere in the path. Your name 
 **English** · [Tiếng Việt](./README.vi.md)
 
 [**quireink.com**](https://quireink.com) · [**Try it**](https://demo.quireink.com) · [**Install**](#install) · [**Docs**](#where-to-go-next) · [**In full**](./docs/overview.md) · [**Changelog**](./CHANGELOG.md) · [**License**](#license)
+
+<a href="https://deploy.workers.cloudflare.com/?url=https://github.com/joiha-steven/quireink/tree/release"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/brand/button-cloudflare-dark.svg"><img src="docs/brand/button-cloudflare-light.svg" alt="Deploy to Cloudflare" height="48"></picture></a>&nbsp;&nbsp;<a href="#install"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/brand/button-server-dark.svg"><img src="docs/brand/button-server-light.svg" alt="Install on a server" height="48"></picture></a>
 
 <br/>
 
@@ -43,7 +45,7 @@ Colour, type, the shape of the front page and the menu are all settings in the a
 - **Analytics without cookies**, per post and per site, and a newsletter on your own mail server.
 - **Moving in and out**: WordPress, Ghost, Substack or Medium in; a ZIP of Markdown out.
 - **An AI agent can run it.** A built-in MCP server lets an assistant draft, publish, read your numbers and tidy up, through the same rules the admin follows.
-- **Fast on a small box.** One Bun process, two SQLite files, no database server, no cloud account in the path.
+- **Fast on a small box.** One Bun process, two SQLite files, no database server, no cloud account needed.
 - **Eleven languages**, in the admin and on the site.
 
 Every part, in detail and against the alternatives: [**Quire Ink, in full**](./docs/overview.md).
@@ -80,17 +82,46 @@ Every part, in detail and against the alternatives: [**Quire Ink, in full**](./d
 
 ## Install
 
-You need a domain and a machine you can point it at; the cheapest VPS tier is enough. On a VPS with [Bun](https://bun.sh) 1.3 or newer, one command clones, builds and starts it:
+**Try it first, nothing to install:** [demo.quireink.com](https://demo.quireink.com), or your own throwaway blog at [try.quireink.com](https://try.quireink.com), wiped twice an hour.
+
+Then pick the way that matches what you have. All of them end at the same blog.
+
+### No server: on Cloudflare <sup>beta</sup>
+
+About five minutes, and **$5 a month** for Cloudflare's Workers Paid plan, which covers every blog in the account. The Free plan is not enough: it stops a blog at 100,000 requests a day ([why](./docs/self-host-cloudflare.md)).
+
+<a href="https://deploy.workers.cloudflare.com/?url=https://github.com/joiha-steven/quireink/tree/release"><picture><source media="(prefers-color-scheme: dark)" srcset="docs/brand/button-cloudflare-dark.svg"><img src="docs/brand/button-cloudflare-light.svg" alt="Deploy to Cloudflare" height="48"></picture></a>
+
+1. Press the button and sign in to Cloudflare and GitHub. Cloudflare copies Quire Ink into your GitHub and builds it.
+2. When the form asks for a **setup code**, make one up: twelve characters or more.
+3. Open your blog's address with `/setup` on the end, type the code, and answer seven short screens.
+
+**Updating:** once, in **Settings → Server → Cloudflare**, add the update workflow to your copy (one click, then *Commit*). After that, each update is one click in your copy's **Actions** tab.
+
+**Already running Quire Ink on a server?** In its admin, **Settings → Server → Run on Cloudflare** moves it there, posts and pictures included. Everything else is in [the Cloudflare guide](./docs/self-host-cloudflare.md).
+
+### A rented server (VPS): one command
+
+Ubuntu or Debian (the cheapest tier is enough) and a domain pointed at it. About ten minutes:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/joiha-steven/quireink/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/joiha-steven/quireink/main/server.sh \
+  | sudo bash -s -- --domain blog.example.com --setup-code 'twelve-or-more-characters'
 ```
 
-It never uses `sudo` and refuses to run as root; running it again updates the install. It runs the blog in the foreground, so closing the terminal stops it: on a server, make it a service ([self-host guide](./docs/self-host.md) §4, or Docker). Then [`deploy/caddy/setup.sh`](./deploy/caddy/setup.sh) adds the HTTPS certificate. The log prints a one-time `/setup` link: open it, and a short setup — account, authenticator, the look — ends in the editor.
+[`server.sh`](./server.sh) installs Docker, runs the newest release with a free HTTPS certificate, and refuses a machine that already serves something. Then open `https://blog.example.com/setup` and type the code. **Updating:** `docker compose pull && docker compose up -d` in `/opt/quireink`.
 
-**Would rather use Docker?** Pull `quireink/quireink` (`amd64` and `arm64`); with HTTPS that is [`docker-compose.image.yml`](./docker-compose.image.yml) plus the [`Caddyfile`](./Caddyfile).
+### Something else
 
-It also runs on a DigitalOcean droplet from [one pasted file](./deploy/digitalocean/README.md), on a NAS (Unraid, Synology, QNAP — [step by step](./docs/self-host-docker.md#on-a-nas-or-a-home-server)) and on Kubernetes ([the manifests](./deploy/kubernetes/README.md)). By hand, with systemd and nginx: [self-hosting](./docs/self-host.md).
+| You have | How | Updating |
+|:--|:--|:--|
+| **A NAS** (Unraid, Synology, QNAP, Runtipi) | Unraid: **Apps → `QuireInk`**. The others: paste one compose file ([step by step](./docs/self-host-docker.md#on-a-nas-or-a-home-server)) | The container app's **Update** |
+| **Docker already**, and a domain | [`docker-compose.image.yml`](./docker-compose.image.yml) + the [`Caddyfile`](./Caddyfile) ([how](./docs/self-host-docker.md)) | `docker compose pull && docker compose up -d` |
+| **A server you look after yourself**, with Bun 1.3+ | [`install.sh`](./install.sh), then systemd and nginx ([self-hosting](./docs/self-host.md)) | `bun run upgrade` |
+| **Kubernetes** | [The manifests](./deploy/kubernetes/README.md) | Change the image tag |
+| **A DigitalOcean droplet** | [One pasted file](./deploy/digitalocean/README.md) | As the VPS above |
+
+Every way installs a published release, tried on each of these paths before it ships ([how](./docs/install.md)). Images exist for `amd64` and `arm64`. **Rather not do it yourself?** Hand the server to an AI agent: the [`quireink-install`](./.claude/skills/quireink-install/SKILL.md) skill walks it through, checks included.
 
 ## Let an AI agent write for you
 
@@ -119,7 +150,7 @@ bun run dev                         # http://localhost:3000
 # the log prints a /setup link to claim it; or: bun run user create --username me --email me@example.com
 ```
 
-Nothing is finished until `bun run check:all` passes: a typecheck, fourteen static guards and the tests, all offline, with no credentials and no services. `bun run tour` then drives every screen in a real browser and opens the backup it built. Start at [`CONTRIBUTING.md`](./CONTRIBUTING.md), which points to the house rules in [`CLAUDE.md`](./CLAUDE.md).
+Nothing is finished until `bun run check:all` passes: two typechecks, seventeen static guards and the tests, all offline, with no credentials and no services. `bun run tour` then drives every screen in a real browser and opens the backup it built. Start at [`CONTRIBUTING.md`](./CONTRIBUTING.md), which points to the house rules in [`CLAUDE.md`](./CLAUDE.md).
 
 <details>
 <summary><b>Where things live</b></summary>

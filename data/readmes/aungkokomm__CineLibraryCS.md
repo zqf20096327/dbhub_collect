@@ -11,7 +11,9 @@ Browse, search, and play across any number of external drives — offline, porta
 ![GitHub all releases](https://img.shields.io/github/downloads/aungkokomm/CineLibraryCS/total?style=for-the-badge)
 ![License](https://img.shields.io/github/license/aungkokomm/CineLibraryCS?style=for-the-badge)
 
-<img width="959" height="510" alt="image" src="https://github.com/user-attachments/assets/b6186df8-226a-4b24-9e5f-6a33214023ba" />
+<img width="1898" height="1018" alt="image" src="https://github.com/user-attachments/assets/93a1e34d-aff6-4aee-8a03-ebeb6d7d62cf" />
+
+
 
 
 
@@ -37,6 +39,10 @@ CineLibrary is a **reader, not a scraper**: it expects folders that already carr
 ---
 
 ## 📸 Screenshots
+
+Your whole collection at a glance: the sidebar, the search, and every filter and sort on one tidy row.
+
+<img width="960" alt="CineLibrary in dark theme: the All Movies poster grid, the sidebar and the title-bar search" src="docs/images/cinelibrary-library.png" />
 
 ✨ **Richer, deeper movie details than ever before** — discover the stories behind your collection in a whole new way.
 

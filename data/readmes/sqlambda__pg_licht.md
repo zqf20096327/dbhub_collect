@@ -1,0 +1,517 @@
+# pg-licht
+
+A read-only PostgreSQL MCP (Model Context Protocol) server: it lets an AI assistant read a
+database's schema, statistics, plans, locks, replication and PgBouncer pools from the
+catalog. It never writes, and never returns rows from your tables.
+
+Why another PostgreSQL MCP:
+
+- It reads the catalog and the statistics views, not your data, so there is far less to
+  leak: the model sees structure, sizes, plans and counters.
+- Read-only is enforced, not promised: every call runs in its own `READ ONLY` transaction
+  with a statement timeout, and no SQL is built from arguments.
+- One process serves the whole fleet. Any number of connections live in one file, and a
+  question can be put to every database of an instance, a replication group or a label at
+  once.
+- It answers what an operator asks — why is this slow, what is blocked, is the replica
+  keeping up, does the pool keep up — and returns the evidence as PostgreSQL reports it.
+
+## Safety
+
+Every catalog query is parameterized — no schema, table, or search-term argument is ever
+concatenated into SQL text. Every call to a database runs inside its own `READ ONLY`
+transaction, so even a bug that let a query attempt a write would fail rather than succeed
+silently. The pooler tools send a PgBouncer console only fixed `SHOW` commands, as the user
+you configure — one from its `stats_users`, which PgBouncer allows to run `SHOW` and nothing
+else.
+That guard is transaction-scoped rather than session-scoped, which is what makes it hold
+behind a connection pooler in transaction mode.
+
+The same transaction sets `statement_timeout`, so no call can occupy a backend
+indefinitely. It defaults to two minutes and is per connection:
+
+```ini
+[billing_prod]
+service              = billing-prod
+statement_timeout_ms = 600000      ; 0 removes the ceiling
+```
+
+Most operations are catalog reads that never approach it. The ones that can are
+those whose cost scales with the server rather than with the query —
+`tableBloat` with `exact: true`, `indexBloat` on a btree or hash index,
+`bufferCacheContents`, and `listTableSizes` on a wide schema — so raise it for a
+connection where such a scan is the point of the call. Reaching it is reported as the ceiling being reached, naming
+the value and the key to change, rather than as an error.
+
+pg_licht never writes and never returns rows from your tables. Values from your data can
+still reach the caller in a few named places: live and recorded statement text
+(`currentActivity`, `currentLocks`, `statementStats`), column statistics (`tableStats`,
+`columnHistogram`), plans that repeat a statement's literals, definitions as written, and
+settings such as a standby's `primary_conninfo`. No password pg_licht itself holds is ever
+returned. Connect as the narrowest role that answers the question; `checkPrivileges`
+reports what it can reach.
+
+Full rationale, including the guarded exception for `explainQuery` and the complete list of
+what reaches the caller, is in the SECURITY CONSIDERATIONS section of `man pg_licht_mcp`;
+[SECURITY.md](SECURITY.md) summarises it and says how to report a vulnerability.
+
+## Quick start
+
+```bash
+brew tap sqlambda/pg-licht && brew install pg-licht
+
+claude mcp add --transport stdio pg-licht \
+  -e DATABASE_URL="postgresql://user:pass@host/dbname" \
+  -- /usr/local/bin/pg_licht_mcp
+
+man pg_licht_mcp
+```
+
+Other install channels — deb, rpm, tarball, source — are in [INSTALL.md](INSTALL.md).
+
+## Remote databases
+
+A tool call opens no connection of its own beyond the first: connections are
+held between calls and closed after 60 seconds idle, one per configured
+connection and at most 32 at a time. Startup opens none at all — the registry is
+validated without touching the network, so one unreachable database no longer
+prevents the server from starting.
+
+The ceiling matters only above 32 configured databases, where the least recently
+used connection is dropped to make room and the next call to that database
+reconnects. It exists so a single wide sweep cannot hold one socket per member
+for a minute and exhaust a file-descriptor limit — macOS defaults to 256.
+
+Fan-out sweeps visit up to 16 members concurrently, one connection per server.
+A thirteen-member replication group that took 449 ms sequentially takes 91 ms.
+The payload stays in configuration order regardless of which member answers
+first.
+
+For databases across a WAN, a connection pooler in front of pg_licht is still
+worth running — it amortises the TLS handshake across restarts, and
+`server_idle_timeout` gives you the same idle policy at the pooler. Point every
+`connections.ini` entry at the local pooler and let its `[databases]` section
+carry the real hosts. Note that PgBouncer reads neither `.pgpass` nor
+`service=`, so that section has to be generated rather than shared, and in
+transaction mode it does not run `server_reset_query` at all by default.
+
+## Output format
+
+A client that negotiates MCP revision `2025-06-18` or later receives
+`structuredContent`; every client receives the text block as well.
+
+Both are sent by default, because a client can advertise a revision it does not
+fully implement and this server cannot tell. Set `PG_LICHT_STRUCTURED_ONLY=1`
+to send only the structured payload once you have confirmed your client reads
+it, or `PG_LICHT_MAX_PROTOCOL=2025-03-26` to refuse to negotiate anything
+newer.
+
+Every tool declares an `outputSchema` to clients that can use it. The schemas
+describe but never reject: payloads here are version-conditional, and any tool
+may answer `{error, hint}` when an extension is absent.
+
+Results that the protocol marks cacheable carry `ttlMs` and `cacheScope`.
+`tools/list` is about 93 kB and entirely static, so it is hinted at one hour
+and scoped `private` — it varies by negotiated revision and names the
+configured default connection, so it must not be served to another caller from
+a shared cache. Catalog-derived results are hinted at one minute.
+
+List operations accept an opaque `cursor` and return `nextCursor`. The page
+size is larger than anything this server lists today, so a client that ignores
+cursors still sees every tool; `resources/list` is the one that grows, being
+connections × schemas.
+
+## Resources and prompts
+
+Structure is also served as **resources** — documents a client can browse and
+pin into context without a tool call:
+
+```
+pglicht://{conn}/schemas
+pglicht://{conn}/schema/{schema}
+pglicht://{conn}/schema/{schema}/table/{table}
+pglicht://{conn}/schema/{schema}/{functions,enums,types}
+pglicht://{conn}/server/{roles,extensions,settings}
+```
+
+Readings stay tools, because the model has to decide *when* to take them.
+`resources/list` enumerates connections and schemas and reaches tables through
+a template, so a 10 000-table database does not produce a 10 000-entry
+response.
+
+Twelve **prompts** encode an order of investigation that is easy to get wrong:
+`diagnose-slow-query`, `triage-lock-contention`, `diagnose-deadlock`,
+`triage-active-sessions`, `triage-disk-space`, `bloat-and-vacuum-review`,
+`buffer-cache-review`, `capacity-check`, `replication-slot-review`,
+`plan-schema-change`, `check-role-access` and `explain-and-fix`. The `triage-`
+ones are written for a page rather than an investigation: they establish how
+long there is before they propose anything. They are static text and touch no
+database until the model acts on them, and each one whose tools are
+privilege-gated opens by calling `checkPrivileges`.
+
+`triage-disk-space` is the one that arrives at night, and `diskUsage` is what
+makes it answerable without a shell on the server: WAL size, the archive
+backlog, temp files on disk now, the log directory, and sizes per tablespace and
+per database. Only the headroom is unreachable — PostgreSQL exposes no function
+for free space. The prompt leads with what makes the obvious response wrong:
+`VACUUM FULL` needs free space equal to the table and its indexes *before* it
+releases any, so it is not a disk-full action.
+
+Counts: 59 of 72 database operations for a bare login role, 67 with `pg_monitor` — the
+`pg_ls_*` directory reads `diskUsage` uses are part of what that role grants.
+
+`triage-active-sessions` is for a server running more sessions at once than it
+has cores. Its first move is to stop trusting the word *active*: a backend
+waiting on a lock or a disk read is executing a statement, so only the ones with
+no wait event are competing for CPU, and parallel workers collapse into their
+leaders before anything is counted. Its second is that concurrency is arrival
+rate times duration — so it rises when statements get slower even though the
+load did not change, and more cores treat the symptom.
+
+`check-role-access` answers whether a role can use a table, view, function or
+procedure — walking the gates in order, since the one people forget is `USAGE`
+on the schema and the resulting error names the table. It treats row-level
+security as a second gate that opens after the grants already said yes: RLS
+enabled with no applicable permissive policy is deny-all, so every grant checks
+out and the table returns nothing.
+
+`diagnose-slow-query` is the hub — a slow statement can end in a plan fix, a
+vacuum change, an index, or a schema change, and it routes to the others
+accordingly. `plan-schema-change` answers "how should I apply this DDL
+here?" by measuring the table rather than prescribing a method — it carries no
+DDL recipes, because the same statement that is instant on an empty table is an
+outage at a billion rows, and only the row count, measured size, existing
+indexes and current lock waits can tell the two apart. **Completions** are offered for the `conn`,
+`schema` and `table` variables.
+
+## Tools
+
+75 read-only operations, grouped as schema exploration, catalog search, cluster-wide
+objects, extensibility and text search, foreign data and replication, monitoring and
+statistics, diagnostics and query planning, topology, connections, and connection poolers. Highlights include
+`tableDetails` (columns, indexes, constraints, foreign keys in both directions, triggers,
+policies), `searchTables` (full-text search across names, descriptions, and enum values),
+and `explainQuery` (recover a slow statement from `pg_stat_statements` by `queryid` and get
+its `EXPLAIN` plan).
+
+Two arguments narrow an answer by a string, and they match differently:
+
+| argument | how it matches | taken by |
+|---|---|---|
+| `pattern` | a literal, case-insensitive substring of a name — `_` and `%` match themselves, nothing is stemmed, so `user_` finds `user_x` and not `users` | `listSchemas`, `listTables`, `listTableStats`, `listTableSizes`, `listFunctions`, `listSequences`, `listRoles`, `serverSettings`, `poolerConfig`, `listConnections`, `listTopology` |
+| `web_search` | full-text search (`websearch_to_tsquery`, English) — words are stemmed, names are split into words at `_` and capitals, `"a phrase"`, `or` and `-word` work, and a fragment of a word matches nothing | `searchTables`, `searchFunctions`, `searchEnums` |
+
+To find part of a name, use a listing's `pattern`; to find a word anywhere in names, comments
+or source, use a search.
+
+`checkPrivileges` reports which of them the current role can actually use on a given
+connection. Most work for any role that can connect, since the catalog is world-readable:
+measured on PostgreSQL 18 with every extension present, a bare login role runs 59 of the 72
+database operations at full fidelity, the monitoring role 67. What remains for the monitoring role reads row data or
+plans against it, apart from replication origin progress, which only the superuser can read. Worth calling first
+against an unfamiliar connection — a privilege-filtered answer is easy to mistake for an
+empty one, since `tableStats` on a role without `SELECT` returns columns with null
+statistics, exactly like a table that was never analyzed.
+
+`evaluateIndex` plans a statement as if the indexes were different, using
+[hypopg](https://github.com/HypoPG/hypopg): `create` tests a candidate index without
+building it, `hide` plans without an existing one — which is how to ask whether an index is
+safe to drop. Nothing is built, nothing is locked, and the statement is never executed. It
+reports whether the planner actually *used* each index, which is the answer a cost figure
+hides.
+
+Three tools read PgBouncer, the pooler in front of the database, rather than the database
+behind it. `poolerStatus` answers whether the pools can keep up — clients waiting for a
+server, the longest wait, servers in use against each database's `pool_size` —
+`poolerConnections` lists the clients and server connections, and `poolerConfig` the
+settings that differ from PgBouncer's defaults. They connect to PgBouncer's admin console,
+declared as its own section:
+
+```ini
+[pooler_prod]
+kind  = pgbouncer
+host  = pooler01
+port  = 6432
+user  = pglicht_stats   ; in PgBouncer's stats_users
+group = poolers
+```
+
+The console refuses transactions, so these send only fixed `SHOW` commands, and the user
+should be one from `stats_users`, which PgBouncer allows to run `SHOW` and nothing else —
+pg_licht cannot check which list a user is in, so that second guard is yours to set up.
+`statement_timeout_ms` in the section bounds each `SHOW`, cancelled from this side, and a
+command an older PgBouncer does not know is named under `unavailable` while the rest is
+answered. Database tools refuse a pooler section and pooler tools refuse a database; a group
+holding both is swept by each kind of tool over its own members. A database tool called
+with no connection goes to the first section that is not a pooler; a pooler tool, to the
+only console configured, and with several it must be told which.
+
+A database reached through a console says so with `pooler = <section>`, since nothing else
+can: through PgBouncer the server's address is the pooler's own hop. `verifyTopology` then
+checks it against the console's routing and names the direct connection that is the same
+database; the pooler tools accept the database's name and answer about its pool; and a
+per-database sweep answers that database once, skipping the pooled twin only when the
+console confirms it is the same database, reached as the same user.
+
+```ini
+[orders_pooled]
+host   = pooler01
+port   = 6432
+dbname = orders
+pooler = pooler_prod
+```
+
+Editing the connections file (or the `budgets.ini` in use at startup) needs no restart: the
+change is picked up at the next request, and `SIGHUP` forces it. A budgets file created after
+startup is read at the next start. A file that fails to load leaves the running
+configuration in place and says so under `reload_error` in `listConnections`; the client is
+sent `list_changed` notifications, since the tool and resource lists name connections.
+
+A section that does not validate — an unknown `kind`, a console given an `instance` — is
+skipped with a warning instead of stopping the server: the other connections keep working,
+`listConnections` and `verifyTopology` list it under `invalid` with the reason, and a call
+naming it gets the reason back. A skipped `[default]` stays the default, so a call naming no
+connection gets its reason instead of going to another database. What still stops startup is
+what is not one section's: an unreadable or group-accessible file, a malformed line, a
+duplicate header, a name used on two topology axes, an unclaimed `[instance:…]` section, or a
+file with no usable section.
+
+**Citus.** On a Citus worker the shards are ordinary tables that Citus hides from any client
+whose `application_name` does not match `citus.show_shards_for_app_name_prefixes`, so
+pg_licht sees only the empty distributed shells there, and the size and statistics tools
+report a worker holding gigabytes as holding nothing. pg_licht cannot set this for itself: it
+is a superuser setting. On the workers, for the role pg_licht connects as:
+
+```sql
+ALTER ROLE pglicht_ro SET citus.show_shards_for_app_name_prefixes = 'pg-licht';
+```
+
+Three optional extensions that keep their counters in shared memory, all keyed by the same
+`query_id` as `statementStats`, each get a tool. `waitEventProfile` reads
+[pg_wait_sampling](https://github.com/postgrespro/pg_wait_sampling): what the instance has
+spent its time waiting on, which a single `currentActivity` sample cannot say.
+`statementKernelStats` reads [pg_stat_kcache](https://github.com/powa-team/pg_stat_kcache):
+the CPU time and the bytes actually read from storage per statement, which is how a page
+cache hit and a device read stop looking alike. `predicateStats` and `suggestIndexes` read
+[pg_qualstats](https://github.com/powa-team/pg_qualstats): which predicates filter the most
+rows, and the extension's own index advisor, whose `CREATE INDEX` suggestions go straight into
+`evaluateIndex`. pg_qualstats records the literal of every predicate it samples; neither tool
+ever returns one. All three need `shared_preload_libraries`, and the tools say so rather than
+answer empty when a library is installed without it.
+
+Tables are covered by three tools rather than one, split by what the answer costs and how
+fast it goes stale:
+
+| | tools | reads |
+|---|---|---|
+| **structure** — changes only on DDL | `tableDetails`, `listTables`, `searchTables` | catalog |
+| **statistics** — changes continuously, free to ask | `tableStats`, `listTableStats` | catalog and the statistics collector |
+| **measured size** — changes continuously, costs a lock | `tableSize`, `listTableSizes` | `stat()` per segment, under `AccessShareLock` |
+
+The structure tools return no sample column values and no counters, so the payload an agent
+reads most often to understand a schema carries neither row data nor anything that moves
+under it. `tableStats` carries the `pg_stats` histograms — including `most_common_vals`,
+which is literal values sampled from the column — and a free `size_estimate` from
+`relpages`, dated by `estimated_from` so its staleness is visible. Reach for `tableSize`
+only when that estimate is too stale to act on: it opens each relation with
+`AccessShareLock`, so during a rewrite it waits behind the `ALTER TABLE`.
+
+For operational triage there are `wraparoundStatus` (XID and multixact headroom, per
+database and per table, TOAST tables included), `checkpointStats` (timed against requested
+checkpoints, backend-written buffers, WAL volume — normalized across the PostgreSQL 17
+`pg_stat_checkpointer` split), `progressStats` (every running VACUUM, CREATE INDEX, COPY…
+with a completion percentage), `ioStats` (`pg_stat_io` per backend type and context, 16+),
+`tableIOStats` (cache hit ratio per table and per index), `duplicateIndexes` (identical and
+prefix-redundant indexes, compared by column expression, opclass, collation and sort order),
+`indexBloat` (per-index physical statistics, dispatched on the access method — btree leaf
+density and fragmentation, GIN pending list against the `fastupdate` settings that bound it,
+hash bucket and overflow pages), and `hostCapacity` (memory settings against the host's
+actual RAM and vCPU count — see below).
+
+`bufferCacheSummary` and `bufferCacheContents` read `pg_buffercache`. The summary needs
+extension version 1.4, which ships with PostgreSQL 16; on 14 and 15 it says so and points
+at `bufferCacheContents`, which reads the view and works everywhere. `tableIOStats` counts
+only what `shared_buffers` served, so a miss there may still have come from the OS page
+cache at RAM speed; these are the only in-core view of that split. Read the usage-count
+histogram rather than a hit ratio: mass at 2–5 is a stable working set, everything at 0–1
+with no unused buffers is clock-sweep churn, and those are the same ratio with opposite
+diagnoses. `bufferCacheContents` aggregates per relation and fork, never raw per-buffer
+rows.
+
+`listTopology` and `verifyTopology` cover the connection topology — see below.
+
+The monitoring tools take optional `pid` and `query_id` filters, so a symptom can be
+followed to its cause rather than read out of a full dump:
+
+```
+statementStats → query_id → currentActivity(query_id) → pid → currentLocks(pid)
+                                                            → progressStats(pid)
+                                                            → ioStats(pid)
+                                                            → explainQuery(query_id)
+```
+
+`currentLocks(pid)` resolves the transitive blocking chain and tags each row with
+`chain_depth`, so the backend at the root of a pile-up is the one with the highest depth.
+
+Each one is documented, with its arguments, in `man pg_licht_mcp` under OPERATIONS. Every
+operation also accepts an optional `connection` argument to select one of several
+configured databases, and most accept `instance`, `replication_group` or `group` to run
+across several at once — see below.
+
+## Topology
+
+With more than one database configured, three labels say how they relate. They are
+deliberately separate, because only the first two license a conclusion:
+
+```ini
+[billing_prod]
+service           = billing-prod
+instance          = pg-prod-01      # one postmaster
+replication_group = billing-ha      # a primary and its replicas
+group             = prod, billing   # an operator label
+
+[billing_ro]
+service           = billing-replica
+instance          = pg-prod-02
+replication_group = billing-ha
+group             = prod, billing, reporting
+```
+
+- **`instance`** — one postmaster. Its databases share `shared_buffers`, WAL, autovacuum
+  workers, `max_connections` and disk, so one database's checkpoint storm really is
+  another's latency. PostgreSQL's own glossary calls this a *database cluster*.
+- **`replication_group`** — a primary and its replicas: the same data on different
+  servers, each keeping its own statistics counters.
+- **`group`** — an arbitrary label. Implies nothing, which is the point: it is how an
+  agent asks about "dev" without knowing any connection name.
+
+There is no `cluster` key. PostgreSQL uses that word for the first sense and RDS/Aurora
+for the second, so it means opposite things to the two people most likely to read the
+file. There is no `role` key either: primary or replica is observed on every connection
+via `pg_is_in_recovery()` and never cached, because failover swaps it and failover is
+exactly when this server gets used.
+
+An `instance` is inferred when two connections share a host **and** port, and reported as
+`inferred` rather than `declared` — behind a pooler one endpoint can front several
+instances, so it groups output without licensing a contention claim. `verifyTopology`
+settles it, by connecting to each server and reading its system identifier: same
+identifier on the same endpoint is one instance, the same identifier on different hosts is
+a replication lineage, and a disagreement means the config is wrong.
+
+Passing `instance`, `replication_group` or `group` instead of `connection` runs the tool
+once per member and returns one result per member, in config file order. A member that
+cannot be reached is reported in place rather than failing the sweep. Which of the three a
+tool accepts depends on where its answer actually varies, and its input schema says which:
+
+| | varies across the databases of one instance | varies across members of a replication group |
+|---|---|---|
+| catalogs, `tableBloat`, the structure and size tools | yes | no — a physical replica is byte-identical |
+| `duplicateIndexes`, `indexBloat`, `tableIOStats`, `tableStats`, `listTableStats`, `partitionDetails`, `subscriptionStats`, `predicateStats`, `suggestIndexes` | yes | **yes** — they carry `idx_scan`, vacuum counters, a worker of their own, or predicates each server sampled from its own queries |
+| `currentActivity`, `currentLocks`, `statementStats`, `statementKernelStats`, `waitEventProfile`, `replicationStats`, buffer cache | no — instance-wide | yes |
+
+That middle row is the one worth knowing: an index that reads as unused on the primary may
+be carrying a replica's entire reporting workload, and only that replica's `idx_scan`
+shows it. `role: "primary"` or `role: "replica"` narrows a sweep to one side.
+
+Sweeps are sequential — the server is a single-threaded loop — so width costs wall clock.
+Call `listTopology` first; it reads the config file and opens no connection.
+
+A worked example covering all of this is in
+[cpp/test/connections.example.ini](cpp/test/connections.example.ini).
+
+## Host capacity
+
+Total RAM and vCPU count live outside the catalog, so `hostCapacity` cannot read them and
+will not guess. Inject them per connection in the connections file:
+
+```ini
+[prod]
+service      = db01_ro
+host_ram_mb  = 65536
+host_vcpus   = 16
+```
+
+With several databases on one postmaster, declare it once for the instance instead and the
+members inherit it; an explicit per-connection value still wins:
+
+```ini
+[instance:pg-prod-01]
+host_ram_mb  = 65536
+host_vcpus   = 16
+```
+
+Inheritance follows `instance` only, never `replication_group`: replicas routinely run on
+smaller machines, and inheriting the primary's RAM would give every replica a confidently
+wrong `shared_buffers` ratio.
+
+Or, with a single `DATABASE_URL`, via `PG_LICHT_HOST_RAM_MB` and `PG_LICHT_HOST_VCPUS`. An
+agent that inspects the host at run time can instead pass `ram_mb` and `vcpus` straight to
+the tool, which takes precedence over both.
+
+The declared figures also bound one thing that executes. `explainQuery` with `analyze` and
+explicit `settings` runs the statement under those settings only if the plan's worst-case
+memory fits in a tenth of `host_ram_mb` and it uses at most one parallel worker per four
+`host_vcpus`. With no declared capacity it runs under no settings change at all and returns
+the plan unexecuted. Both ratios can be changed in a `budgets.ini`:
+
+```ini
+[analyze]
+memory_percent   = 10   ; worst-case plan memory, % of host_ram_mb
+vcpus_per_worker = 4    ; one parallel worker per this many host_vcpus
+```
+
+It is read from `$PG_LICHT_BUDGETS`, from beside the connections file, or from
+`~/.config/pg_licht/budgets.ini`, in that order, and must not be writable by other users.
+An example is in [cpp/test/budgets.example.ini](cpp/test/budgets.example.ini). The read-only guard and the timeout do not bound memory, and one
+out-of-memory kill restarts every connection on the instance. The per-call `ram_mb` and
+`vcpus` arguments do not count here: a caller cannot raise its own limit.
+
+The same file can cap how large one answer may be. It is off by default. With `max_kb` set,
+an answer past it is refused with a hint naming the arguments that make that tool's answer
+smaller. It is a ceiling you choose, not protection against loss: Claude Code moves a tool
+result over its own limit (`MAX_MCP_OUTPUT_TOKENS`, 25,000 tokens by default) into a file
+the model reads back. The limit is in bytes, and how many bytes of these answers make a token
+has not been measured, so set it from what your client is observed to accept.
+
+```ini
+[payload]
+max_kb = 0   ; the default: off
+```
+
+Independently of the cap, the tools known to answer at hundreds of kilobytes narrow themselves now: `searchFunctions` leaves out
+PostgreSQL's own functions unless `include_system` is set, `partitionDetails` returns at most
+100 partitions — ranked with `order_by`, and always keeping the `DEFAULT` one — with
+`partition_count` and `partitions_truncated` beside them, and `listSchemas`, `listTables`,
+`listTableStats`, `listTableSizes`, `listSequences` and `listFunctions` take a `pattern`.
+What it cannot help with is one object that is simply large — a very wide table, a huge
+function body, a very large plan: with a cap set, that is refused with a hint pointing at `max_kb`.
+
+## Documentation
+
+| | |
+|---|---|
+| `man pg_licht_mcp` | configuration, connection strings, all 75 operations, MCP client setup |
+| [INSTALL.md](INSTALL.md) | Homebrew, deb, rpm, tarball, verifying, uninstalling |
+| [BUILD.md](BUILD.md) | building from source, tests, sanitizers, CI, release process |
+| [CHANGES.md](CHANGES.md) | changelog |
+| [sqlambda.github.io/pg_licht](https://sqlambda.github.io/pg_licht/) | overview, the [reference](https://sqlambda.github.io/pg_licht/reference/) with a page per tool and prompt, the manual as HTML, and [`llms.txt`](https://sqlambda.github.io/pg_licht/llms.txt) |
+
+Before installing, the manual page can be read straight from the source tree:
+
+```bash
+man --local-file cpp/man/pg_licht_mcp.1
+```
+
+## PostgreSQL version support
+
+PostgreSQL 14 and newer, verified in CI on 14–18. Every operation returns its full result
+on every supported version, apart from `ioStats`, which needs the PostgreSQL 16
+`pg_stat_io` view and says so on older servers. Individual fields are omitted where the
+underlying column does not exist, and views that changed shape upstream —
+`pg_stat_checkpointer` in 17, the `pg_stat_wal` and `pg_stat_progress_vacuum` columns in
+17 and 18 — are normalized to one set of field names. The COMPATIBILITY section of
+`man pg_licht_mcp` lists every gated field by version.
+
+## License
+
+Apache 2.0 — see [LICENSE](LICENSE).

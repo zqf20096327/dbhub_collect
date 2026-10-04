@@ -44,7 +44,7 @@ If you already run PostgreSQL, it can do double duty as your job queue. That mea
 
 ## Installation
 
-PgQueuer targets Python 3.10+ and PostgreSQL 13+:
+PgQueuer targets Python 3.10+ and PostgreSQL 14+:
 
 ```bash
 pip install pgqueuer
@@ -155,7 +155,7 @@ The in-memory adapter has no durability or multi-process coordination, so use th
 Launch the interactive dashboard to watch queue activity in real time:
 
 ```bash
-pgq dashboard --interval 10 --tail 25
+pgq dashboard --interval 10 --limit 25
 ```
 
 ```text

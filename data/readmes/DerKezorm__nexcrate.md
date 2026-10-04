@@ -39,6 +39,10 @@ and made-up releases.
   Apprise, e-mail), **Plex, Jellyfin and Emby** told about new files, **backups** with an
   encrypted download.
 - **An API for other programs** (`/api/v1`) with keys, an event feed and webhooks.
+- **Bazarr** (beta) reads nexcrate as Radarr and Sonarr, live, and the subtitles it writes move
+  with their video.
+- **Sign-in through authentik** or another OpenID Connect provider, set up with one button, and
+  a **second factor** (authenticator app plus recovery codes) for the sign-in with a password.
 
 | | |
 |---|---|
@@ -70,6 +74,30 @@ docker exec -it nexcrate python -m app.cli reset-password
 ```
 
 It asks for the new password twice without showing it, and ends every session.
+
+### Sign-in through authentik
+
+Settings › System › Account › "Set up authentik for me": enter the address of authentik and an
+API token, and nexcrate creates the signing key, the provider and the application, and binds the
+application to the token's own user, so authentik lets nobody else through. The token is used
+for this setup only and not stored. Rather without a token: download the blueprint there, apply
+it in authentik and enter client ID and secret by hand. Other providers (Authelia, Keycloak,
+Pocket ID and more) are entered by hand with the redirect address shown on the page.
+
+Then link your account: nexcrate asks for its password and sends you to the provider once. That
+one identity opens nexcrate from then on; every other identity is turned away, however the
+provider is set up. Once linked, the sign-in with a password can be switched off. If the
+provider is ever gone, start nexcrate with `NEXCRATE_PASSWORD_LOGIN=1` to open it again.
+
+### Second factor
+
+Settings › System › Account › "Second factor": after the password, nexcrate asks for a code from
+an authenticator app. Eight recovery codes are shown once. A sign-in through the provider asks
+for no code, the provider brings its own. Lost the phone and the codes?
+
+```bash
+docker exec -it nexcrate python -m app.cli reset-second-factor
+```
 
 ### The data directory
 
@@ -156,6 +184,7 @@ All optional, see `.env.example` and `docker-compose.yml`.
 | `NEXCRATE_LOG_LEVEL` | empty | Fixes the log mode: `quiet`, `normal`, `detailed`, `trace` |
 | `NEXCRATE_PORT` | `8390` | Port inside the container |
 | `NEXCRATE_URL_BASE` | empty | Serve nexcrate under a sub path such as `/nexcrate`; `/api/health` also answers at the root |
+| `NEXCRATE_PASSWORD_LOGIN` | empty | `1` opens the sign-in with a password even when it was switched off for authentik |
 
 ### Logs
 
@@ -179,6 +208,32 @@ titles, take requests back, freeze, move files into the recycle bin, ask for a s
 `operate` (retry, remove, clear and assign the files of a stuck download). A program can also
 ask to be connected (`POST /api/v1/pairing`) and collect its key once the owner confirms.
 Webhooks send the same events signed with HMAC-SHA256.
+
+### Bazarr (beta)
+
+Bazarr only knows Radarr and Sonarr, so nexcrate answers it as both. Switch it on under Settings,
+System, Bazarr, make a key with nothing but `read` under API keys, and enter nexcrate in Bazarr
+twice, under Radarr and under Sonarr, with the same address, port and key:
+
+| In Bazarr | Base URL |
+|---|---|
+| Radarr | `/bazarr/radarr` |
+| Sonarr | `/bazarr/sonarr` |
+
+With `NEXCRATE_URL_BASE` the sub path comes first, for example `/nexcrate/bazarr/radarr`. Bazarr
+keeps a live connection and hears of a new or replaced file within seconds.
+
+- **Every version is an entry of its own** in Bazarr: a movie in 1080p and in 4K shows up twice.
+  The version's name comes along as a tag, and Bazarr's tag mapping can give each version a
+  languages profile of its own.
+- **Subtitles Bazarr writes** are recorded and go where the video goes: renamed with it, into the
+  recycle folder with it on an upgrade or a removal. Switching on looks once for subtitles that
+  are already next to the files. Versions another Radarr or Sonarr still feeds are left out.
+- **Paths:** Bazarr gets the paths as nexcrate sees them. If Bazarr sees the media elsewhere, set
+  path mappings in Bazarr.
+- **Beta:** nexcrate imitates the part of Radarr's and Sonarr's API that Bazarr reads, tested
+  against Bazarr 1.6.2. A Bazarr update may break it until nexcrate catches up.
+- Bazarr sends the key in the address, as it does to Radarr; nexcrate's log masks it.
 
 ## Run from source
 

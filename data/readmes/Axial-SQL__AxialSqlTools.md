@@ -36,6 +36,8 @@ Immediately identify open transactions and clearly see when Always Encrypted is 
   
 - [**Export Grid as Temp Table**](https://github.com/Axial-SQL/AxialSqlTools/wiki/Export-grid-results-as-a-temp-table): Convert the grid result(s) into temp table with insert statements.
   
+- [**Quick Manage form for SQL Agent Job**](https://github.com/Axial-SQL/AxialSqlTools/wiki/Quick-Manage-Form-for-SQL-Agent-Job): Simplified SQL Agent job editor for quick day-to-day management and edits.
+
 - [**Quick Search**](https://github.com/Axial-SQL/AxialSqlTools/wiki/Quick-Search): Quick Search helps you find SQL text quickly across one database or across all accessible databases on a server.
  
 - [**Script Object Definition**](https://github.com/Axial-SQL/AxialSqlTools/wiki/Script-Object-Definition): Quickly generate scripts for the definition of selected objects directly from the selected query text.
@@ -80,6 +82,8 @@ After installation and an SSMS restart, the **Axial SQL Tools** toolbar will app
 ## Contributing
 
 Axial SQL Tools is maintained as an open-source project, and community participation is encouraged. Contributions can include bug reports, feature ideas, documentation improvements, query library additions, testing, and code changes.
+
+Maintainers can use the [release and gallery publishing guide](.github/RELEASING.md) to prepare signed releases and publish them to both extension galleries.
 
 ### Submitting Ideas and Bugs
 

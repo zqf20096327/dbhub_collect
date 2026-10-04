@@ -23,7 +23,7 @@
 - Supports MySQL, PostgreSQL, and SQLite via `--driver`
 - Connect via DSN URLs (`--server1-url`, `--server2-url`, `--db-url`) — works with any connection string
 - [Supabase](https://supabase.com)-ready via `--supabase` one-flag shorthand (not required when using DSN URLs)
-- Diffs tables, views, materialized views, triggers, stored procedures/functions, enum types, composite types, domains, sequences, row level security policies, and data — with deterministic, predictable output
+- Diffs tables, views, materialized views, triggers, stored procedures/functions, enum types, composite types, domains, sequences, row level security policies, comments, and data — with deterministic, predictable output
 - Up and down SQL generated in the same file
 - Built-in migration runner: `migration:up`, `down`, `status`, `validate`, `repair`, `baseline`
 - Works with [Flyway, Liquibase, Laravel Migrations, and more](#compatible-migration-tools)
@@ -64,7 +64,7 @@ Use `--driver=pgsql` (or `driver: pgsql` in your `.dbdiff` config).
 When `pg_dump` and `pg_restore` are on `PATH` and at least as new as the
 server, DBDiff uses them to render `CREATE TABLE` and everything attached to
 it — indexes, constraints, identity sequence options, collations, storage,
-compression and comments. They are PostgreSQL's own tooling, maintained in
+and compression. They are PostgreSQL's own tooling, maintained in
 lockstep with the server, so the DDL is what the server itself would produce.
 
 Measured against the 90-case corpus in
@@ -212,9 +212,15 @@ Row level security is diffed as a first-class object — policies and each table
 Supabase enforces per-row access. A policy dropped or changed between two
 environments shows up in the migration instead of passing silently.
 
-DBDiff reads the `public` schema, so policies and objects Supabase keeps in
-`auth`, `storage` and its other managed schemas are outside the diff. Those are
-managed by Supabase itself rather than by your migrations.
+DBDiff reads the `public` schema unless told otherwise, so policies and objects
+Supabase keeps in `auth`, `storage` and its other managed schemas are outside
+the diff. Those are managed by Supabase itself rather than by your migrations.
+Schemas of your own are compared with `--schemas`, or every schema but the
+managed ones with `--ignore-schemas`:
+
+```bash
+dbdiff diff --supabase --ignore-schemas='auth,storage,realtime,_realtime,_analytics,vault,net,graphql*,supabase_*,pgsodium*,pgtle,extensions' ...
+```
 
 
 ## Compatible Database Variants
@@ -447,6 +453,8 @@ _Flags always override settings in `.dbdiff`._
 | `--memory-limit=<value>` | PHP memory limit for this run (e.g. `512M`, `1G`, `2G`, `-1` for unlimited). Overrides the 1G default and any `memory_limit` setting in your config file. |
 | `--tables=<list>` | Comma-separated table include list (supports globs: `*`, `?`). Only these tables are diffed. Example: `--tables=users,orders,wp_*` |
 | `--ignore-tables=<list>` | Comma-separated table exclude list (supports globs: `*`, `?`). Example: `--ignore-tables=cache_*,temp_*` |
+| `--schemas=<list>` | PostgreSQL: the schemas to compare (supports globs). Defaults to `public`. `--schemas='*'` compares every schema but the system's own; `--schemas=public,app` compares two. Objects outside `public` are named in full in the migration, and a schema only one side has is created or dropped. |
+| `--ignore-schemas=<list>` | PostgreSQL: schemas to skip (supports globs). On its own, compares every other schema. Example: `--ignore-schemas=auth,storage,extensions` |
 | `--allow-destructive` | Generate the migration even when it contains data-losing changes. See [Destructive Change Protection](#destructive-change-protection). |
 | `--debug` | Enable verbose error output. |
 | `server1.db1:server2.db2` | Databases to compare. Or a single table: `server1.db1.table1:server2.db2.table1`. |
@@ -713,6 +721,8 @@ DBDiff offers fine-grained control over what enters the diff. All list values su
 |---|---|---|---|
 | Table include list | `tables` | `--tables` | schema + data |
 | Table exclude list | `tablesToIgnore` | `--ignore-tables` | schema + data |
+| Schema include list (PostgreSQL) | `schemas` | `--schemas` | schema + data |
+| Schema exclude list (PostgreSQL) | `schemasToIgnore` | `--ignore-schemas` | schema + data |
 | Data-only exclude | `tablesDataToIgnore` | — | data only |
 | Column exclusion | `fieldsToIgnore` | — | schema + data |
 | Row filtering | `rowsToIgnore` | — | data only |
@@ -830,6 +840,17 @@ Comparisons run in this order:
   emitted either: run `REFRESH MATERIALIZED VIEW` when you want the rows
 - ALTER = DROP + CREATE; PostgreSQL has no `CREATE OR REPLACE` for them
 - Ordered after views, since a matview may select from one
+
+### Comments (PostgreSQL)
+- `COMMENT ON` every object in the compared schemas: tables, columns, views and
+  their columns, indexes, sequences, functions and procedures, types and their
+  attributes, domains, constraints, triggers, policies and the schema itself
+- A comment added, changed or removed is one change, set after everything else
+  is made — whichever renderer made the object
+- An object another change drops and recreates (a view replaced, a function,
+  trigger, policy, index or constraint redefined) has its comment set again,
+  since the recreation takes it away
+- An extension's objects are its own, comments included, and are left alone
 
 ### Sequences (PostgreSQL)
 - Detects created, dropped, and altered standalone sequences, rendering every

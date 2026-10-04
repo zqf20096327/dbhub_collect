@@ -1,3 +1,10 @@
+<!-- zoomies-ai-context:start -->
+[![Zoomies AI Context](https://github.com/eyupio/zoomies/actions/workflows/zoomies-ai-context.yml/badge.svg)](https://github.com/eyupio/zoomies/actions/workflows/zoomies-ai-context.yml)
+
+Repomix-generated context: [`.zoomies/ai-context/`](https://github.com/eyupio/zoomies/tree/zoomies-ai-context/.zoomies/ai-context). The badge shows workflow status, not context freshness or assistant connectivity. Private repository badges require GitHub access.
+<!-- zoomies-ai-context:end -->
+
+
 <div align="center">
 
 <picture>
@@ -87,7 +94,7 @@ flowchart LR
     q --> w --> d --> s --> a --> e
 ```
 
-* **A live web UI.** Twelve pages, one job each, all updating in place from the
+* **A live web UI.** Thirteen pages, one job each, all updating in place from the
   controller's event stream — you never have to press refresh, though there is a
   button where you want to be sure. Light and dark, a command palette, and a log
   viewer built for a hundred thousand lines.
@@ -344,11 +351,11 @@ See [docs/migration.md](docs/migration.md).
 
 ## The UI
 
-Twelve pages, one job each: **Overview** (fleet health, queue depth, scaling
+Thirteen pages, one job each: **Overview** (fleet health, queue depth, scaling
 decisions in plain words, and a problems panel that is quiet when nothing is
 wrong), **Pools**, **Runners**, **Queue**, **Workflows** (one row per
 workflow run, opening to the jobs inside it), **Usage**, **Hosts**,
-**Providers**, **Installations**, **Migrate**, **Audit**, **Settings**. It is
+**Providers**, **Installations**, **Migrate**, **AI Context**, **Audit**, **Settings**. It is
 the primary way to configure and run a fleet, and the docs describe each task
 from there first; the CLI, Compose and the API are
 [the other ways in](https://zoomies.sh/#run-it-from-the-browser-reach-it-from-anywhere).
@@ -398,8 +405,9 @@ a page the product does not have. Design system in
 
 ## The CLI
 
-The CLI and the UI are both clients of the same REST API. Nothing is reachable
-from one that is not reachable from the other.
+Fleet commands and the UI share the same REST API. Local host OS checks and
+tuning use the installed native binary: health is visible in the UI, while
+changes require explicit consent in the CLI.
 
 ```sh
 zoomies status                       # the Overview, in a terminal
@@ -411,6 +419,10 @@ zoomies runners drain run_k3f9qz2m
 zoomies runners logs run_k3f9qz2m --follow
 zoomies jobs list --repo acme/widgets --since 24h
 zoomies hosts join-token create --ttl 15m
+zoomies doctor                       # readable OS health summary
+sudo zoomies doctor --interactive    # review and approve individual fixes
+sudo zoomies tune --dry-run           # exact proposed changes
+sudo zoomies tune --revert            # restore recorded host settings
 zoomies audit tail
 ```
 
@@ -418,6 +430,10 @@ zoomies audit tail
 export ZOOMIES_URL=https://zoomies.example.com
 export ZOOMIES_TOKEN=zoo_...
 ```
+
+Host health is collected by the native agent, or by a read-only native health
+service for container deployments, and updates the host badges automatically.
+Upgrades never apply tuning. See [Host health and tuning](docs/host-health.md).
 
 A coding agent gets the same fleet over the Model Context Protocol, either
 straight from the controller at `/mcp` with a token or through `zoomies mcp`

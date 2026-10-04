@@ -30,6 +30,7 @@ An independent Rust implementation of the MaxMind DB (MMDB) v2 format. It reads 
   - [Lookup API Reference](#lookup-api-reference)
   - [✍️ 2. Database Creation & Serialization](#️-2-database-creation--serialization)
   - [🔀 3. Merging Databases (Deep Merge)](#-3-merging-databases-deep-merge)
+  - [🔄 4. Hot In-Memory Database Updates](#-4-hot-in-memory-database-updates)
 - [📊 Benchmarks](#-benchmarks)
   - [⚙️ Evaluated Libraries & Reproducibility Specification](#️-evaluated-libraries--reproducibility-specification)
   - [🏁 Reader Performance Summary — p99 Tail Latency & Peak Throughput](#-reader-performance-summary--p99-tail-latency--peak-throughput)
@@ -40,6 +41,7 @@ An independent Rust implementation of the MaxMind DB (MMDB) v2 format. It reads 
 - [Code Coverage & Tests](#code-coverage--tests)
 - [Contributing](#contributing)
 - [License](#license)
+- [More examples](#more-examples)
 
 ---
 
@@ -97,7 +99,7 @@ Add `libmaxminddb-rs` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-libmaxminddb-rs = "0.2.1"
+libmaxminddb-rs = "0.3.2"
 ```
 
 ### ⚙️ Cargo Features
@@ -495,7 +497,7 @@ Configuring the writer with `MergeStrategy::DeepMerge` enables recursive hierarc
 ```rust
 use std::error::Error;
 use std::net::IpAddr;
-use libmaxminddb_rs::{MergeStrategy, MetadataBuilder, Reader, Writer};
+use libmaxminddb_rs::{MergeStrategy, MergeStrategy, MetadataBuilder, Reader, Writer};
 
 fn main() -> Result<(), Box<dyn Error>> {
     // 1. Initialize Writer configured with recursive DeepMerge strategy
@@ -584,7 +586,93 @@ Executing the lookup yields the fully unified document combining both datasets:
 | `DeepMerge` | Recursively traverses maps, concatenates arrays, and replaces conflicting scalar leaves | Multi-source enrichment (e.g. GeoIP + ASN + Threat Intelligence) |
 
 
----
+### 🔄 4. Hot In-Memory Database Updates
+
+`Editor::from_reader` shares an existing reader and stages updates or deletions.
+`finish()` returns rebuilt MMDB bytes; `write_to_file()` writes them to disk.
+With `reader` and `writer` enabled, `ReloadableReader::commit` publishes the rebuilt
+database while other threads continue reading.
+
+- ⚡ **Fast reads:** `ArcSwap` avoids a global `Mutex`/`RwLock` on the lookup path.
+  Hold one `load()` guard per query or batch; borrowed fields cannot outlive it.
+- 🧩 **Typed updates:** pass an owned `Value` or a reference to a custom
+  `MmdbEncode` struct, plus an explicit `MergeStrategy`.
+- 🔀 **Merge behavior:** `Replace` replaces values; `DeepMerge` merges maps,
+  appends arrays and replaces scalars. `Append`/`AppendUnique` append array items.
+  Updates run in order on exact prefixes exported from the MMDB tree, without
+  merging inherited parent values or more-specific children.
+- 🛡️ **Safe publication:** `commit` returns `false` for stale editors; retry with
+  a fresh snapshot. Rebuild errors leave the active reader unchanged.
+- 🗑️ **Memory:** old owned buffers are released after the last guard, snapshot
+  or editor drops. Rebuilding temporarily holds both generations; RSS may not
+  decrease immediately. Publication does not persist a file. Never overwrite
+  or truncate a mapped file while a reader still uses it.
+
+This complete example updates a custom record, preserves its country field,
+and verifies that the old database is destroyed after commit:
+
+```rust
+use std::sync::Arc;
+
+use libmaxminddb_rs::{
+    Editor, MergeStrategy, MetadataBuilder, MmdbDecode, MmdbEncode, Reader, ReloadableReader,
+    Writer,
+};
+
+#[derive(Debug, MmdbEncode, MmdbDecode)]
+struct Record<'a> {
+    country: &'a str,
+    score: u32,
+}
+
+#[derive(MmdbEncode)]
+struct Patch {
+    score: u32,
+}
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let network = "198.51.100.0/24".parse()?;
+    let ip = "198.51.100.7".parse()?;
+    let metadata = MetadataBuilder::new().ip_version(4).build()?;
+    let mut writer = Writer::with_metadata(metadata);
+    writer.insert_encoded(
+        network,
+        &Record {
+            country: "FR",
+            score: 1,
+        },
+    )?;
+
+    // Transfer ownership without retaining an extra Arc to the old database.
+    let database = ReloadableReader::new(Reader::from_vec(writer.finish()?)?);
+    {
+        let guard = database.load();
+        let record: Record<'_> = guard.lookup_borrowed(ip)?;
+        println!("Before update: {record:?}");
+    } // Borrowed fields and their guard are dropped before publication.
+
+    let mut editor = Editor::from_reader(database.snapshot());
+    // Weak observes destruction without keeping the old Reader alive.
+    let old_lifetime = Arc::downgrade(editor.source_reader());
+    editor.update_value(network, &Patch { score: 42 }, MergeStrategy::DeepMerge)?;
+
+    // Rebuild, then publish atomically. A stale editor would return false.
+    assert!(database.commit(editor)?, "Unexpected publication conflict");
+    assert!(old_lifetime.upgrade().is_none());
+    drop(old_lifetime);
+    println!("Committed: the old Reader and its owned buffers were released.");
+
+    let guard = database.load();
+    let record: Record<'_> = guard.lookup_borrowed(ip)?;
+    assert_eq!((record.country, record.score), ("FR", 42));
+    println!("After DeepMerge: {record:?}");
+    Ok(())
+}
+```
+
+Run `cargo run --example editor_merge` for this example or
+`cargo run --example concurrent_editor` for concurrent readers and a writer.
+
 ## 📊 Benchmarks
 
 Reproducible cross-library benchmark suite comparing `libmaxminddb-rs` against industry standard implementations in Rust, C, and Go.
@@ -748,3 +836,15 @@ Issues and pull requests are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING
 ## License
 
 Licensed under either [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.
+
+## More examples
+
+Explore the [examples directory](https://github.com/0x00F6/libmaxminddb-rs/tree/main/examples):
+[quickstart](https://github.com/0x00F6/libmaxminddb-rs/blob/main/examples/quickstart.rs),
+[concurrent updates](https://github.com/0x00F6/libmaxminddb-rs/blob/main/examples/concurrent_editor.rs),
+[DeepMerge and memory reclamation](https://github.com/0x00F6/libmaxminddb-rs/blob/main/examples/editor_merge.rs),
+and [custom database writing](https://github.com/0x00F6/libmaxminddb-rs/blob/main/examples/custom_database.rs).
+Run one with `cargo run --example quickstart`.
+
+See the [API documentation](https://docs.rs/libmaxminddb-rs) for all methods.
+Minimum Rust version: **1.98.1**. License: **MIT or Apache-2.0**.

@@ -1,11 +1,7 @@
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/czpython/druks/main/docs/assets/logo/web/DruksLogo_White.svg" />
-    <img src="https://raw.githubusercontent.com/czpython/druks/main/docs/assets/logo/web/DruksLogo_Black.svg" alt="Druks" width="140" />
-  </picture>
-</p>
-
-# Druks
+<h1 align="center">
+  <img src="frontend/public/brand-mark.svg" alt="Dragon head" width="72" height="72" align="middle" />
+  druks
+</h1>
 
 > [!WARNING]
 > Druks is under active development. Breaking changes and rough edges can occur
@@ -65,12 +61,13 @@ curl -fsSL https://druks.ai/install.sh | DRUKS_PROVIDER=exe bash
 ```
 
 The installer does not ask questions. The first run writes
-`~/druks/druks.toml` with generated secrets. A remote shape can require values
+`~/druks/druks.toml`, and `~/druks/.env` with generated secrets. A remote shape
+can require values
 that only you know. These values include provider credentials and identity-edge
 details.
 
 The installer prints this list and exits. Set the values in
-`druks.toml`. Then run the same command again.
+`druks.toml` and `.env`. Then run the same command again.
 
 See the [deployment runbook](https://docs.druks.ai/deployment) for
 prerequisites, access control, verification, and rollback.

@@ -241,6 +241,27 @@ Then use the in-container paths (`/host/mnt/media`, …) in the tile's drive lis
 is only needed for real host network stats — `/proc/net/*` is network-namespace scoped, so the
 tile reads pid 1's view (`/host/proc/1/net/dev`) when the PID namespace is shared.
 
+## Container update badges
+
+With a **Dockhand** or **What's Up Docker** integration configured, every link or widget tile
+whose container has a pending image update gets a small amber ↑ badge in its top-left corner
+(hover it for the container, image, host and which integration reported it). Matching is by
+tile title — case and punctuation don't matter, Compose names are understood, and a stack's
+helpers count for its app:
+
+| Tile title | Matches containers |
+|---|---|
+| `Tautulli` | `tautulli` |
+| `DVD Burner` | `dvd-burner` |
+| `CloudCmd` | `adminapps-cloudcmd-1` (Compose `<project>-<service>-<n>`) |
+| `Immich` | `immich_server`, `immich_redis`, `immich_machine_learning`, … |
+
+When a title doesn't line up with the container name (e.g. a "qBittorrent MAM" tile backed by
+`MAMqt`), set **Update badge containers** in the tile's edit dialog to the exact container
+name(s), comma-separated; `-` turns the badge off for that tile. Panel tiles (clock, weather,
+…) never get a badge. The data is whatever the update integration last reported — Dockhand
+only knows about updates after its own scheduled (or manual) update check has run.
+
 ## Writing an integration
 
 Drop a file matching `*.integration.js` into `DATA_DIR/integrations/` (e.g.
@@ -325,18 +346,26 @@ per source since there's no sane way to merge a single number or now-playing car
 throws so the tile keeps its last good data; a view that fails on its own becomes
 `{ type: 'error', error }` in its own slot instead of taking the rest down with it.
 
+A view declared with `hidden: true` is machine data for the dashboard rather than something a
+tile can show: it lands in `hidden` instead of `byView`, is left out of the catalog when you
+build `static views` with `viewCatalog(VIEWS)`, and never fails the poll on its own. The one in
+use today is `containerUpdates` (`{ type: 'containerUpdates', items: [{ name, image, environment }] }`),
+which feeds the container update badges — any integration that can list containers with a
+pending image update can publish it. When two views need the same upstream response, wrap the
+fetch in `perPoll(ctx, key, fn)` so it runs once per poll.
+
 The six `WidgetModel` shapes, and what each `items[]` entry looks like:
 
 | `type` | `items[]` shape | Used by |
 |---|---|---|
-| `stats` | `{ label, value }` | Audiobookshelf, Plex, Jellyfin, Emby, Tautulli, Bazarr, Pi-hole, AdGuard, Portainer, Traefik, NPM, Transmission, Deluge, NZBGet, Tdarr, What's Up Docker, Uptime Kuma, Gatus, Healthchecks, Grafana, Speedtest Tracker, Scrutiny, Prometheus, Navidrome, Paperless-ngx, Komga, Kavita, Miniflux, FreshRSS, Gotify, Frigate, Mastodon, RomM, Vikunja, *arr library stats |
+| `stats` | `{ label, value }` | Audiobookshelf, Plex, Jellyfin, Emby, Tautulli, Bazarr, Pi-hole, AdGuard, Portainer, Traefik, NPM, Transmission, Deluge, NZBGet, Tdarr, What's Up Docker, Dockhand, Uptime Kuma, Gatus, Healthchecks, Grafana, Speedtest Tracker, Scrutiny, Prometheus, Navidrome, Paperless-ngx, Komga, Kavita, Miniflux, FreshRSS, Gotify, Frigate, Mastodon, RomM, Vikunja, *arr library stats |
 | `nowplaying` | `{ title, subtitle?, image?, progress? }` (0-1) | Plex, Jellyfin, Emby, Tautulli (active sessions), Navidrome (active streams) |
 | `queue` | `{ title, status?, progress? }` (0-1) | qBittorrent, SABnzbd, Radarr, Sonarr, Readarr, Lidarr, Transmission, Deluge, NZBGet, Tautulli streams |
-| `list` | `{ title, subtitle?, image? }` | *arr upcoming, Bazarr wanted / history, AdGuard top-blocked, Portainer stopped/unhealthy, NPM expiring certs, Tdarr staged/errored, What's Up Docker updates, Grafana firing alerts, Prometheus down targets, Paperless-ngx inbox, Gotify / ntfy messages, Vikunja tasks due, Frigate events, Tautulli history, Bookdrop |
+| `list` | `{ title, subtitle?, image? }` | *arr upcoming, Bazarr wanted / history, AdGuard top-blocked, Portainer stopped/unhealthy, NPM expiring certs, Tdarr staged/errored, What's Up Docker / Dockhand updates, Grafana firing alerts, Prometheus down targets, Paperless-ngx inbox, Gotify / ntfy messages, Vikunja tasks due, Frigate events, Tautulli history, Bookdrop |
 | `calendar` | `{ ts, title, subtitle? }` (`ts` = epoch ms; bucketed by local day, rendered one month at a time with ‹ › navigation) | Radarr / Sonarr / Lidarr release calendar |
 | `status` | `{ label, state: 'up'\|'down'\|'warn'\|'paused', detail? }` (rendered as a colored dot per row) | Uptime Kuma / Gatus / Healthchecks monitor boards, Scrutiny drive health |
 
-Fifty-three integrations ship out of the box (`src/integrations/*.integration.js`):
+Fifty-four integrations ship out of the box (`src/integrations/*.integration.js`):
 
 - **Downloads** — qBittorrent, SABnzbd, Transmission, Deluge, NZBGet
 - **Media servers** — Plex, Jellyfin, Emby, Tautulli, Audiobookshelf
@@ -348,16 +377,16 @@ Fifty-three integrations ship out of the box (`src/integrations/*.integration.js
 - **NAS / virtualization / home automation** — Proxmox VE, TrueNAS, Home Assistant, Nextcloud, Frigate (NVR)
 - **Notifications / feeds** — Gotify, ntfy, Miniflux, FreshRSS
 - **Productivity / docs** — Paperless-ngx, Vikunja
-- **Transcoding / container hygiene** — Tdarr, What's Up Docker
+- **Transcoding / container hygiene** — Tdarr, What's Up Docker, Dockhand
 - **Other self-hosted** — Immich (photos), Mealie (recipes), Gluetun (VPN control server), Bookdrop (upcoming audiobook releases), Mastodon (instance stats), RomM (retro-game library)
 
 They were built and validated against documented API shapes plus a mock-HTTP-server test suite.
-Forty-two of the fifty-three — qBittorrent, SABnzbd, Radarr, Sonarr, Plex, Audiobookshelf, Transmission,
+Forty-three of the fifty-four — qBittorrent, SABnzbd, Radarr, Sonarr, Plex, Audiobookshelf, Transmission,
 Deluge, NZBGet, Tdarr, Lidarr, Bazarr, Jellyfin, Emby, Jellyseerr, Pi-hole, AdGuard Home,
 Portainer, Traefik, Nginx Proxy Manager, What's Up Docker, Uptime Kuma, Gatus, Healthchecks,
 Grafana, Speedtest Tracker, Scrutiny, Home Assistant, Nextcloud, UniFi Network, Navidrome,
 Paperless-ngx, Komga, Kavita, Miniflux, FreshRSS, Gotify, ntfy, Vikunja, Frigate, Prometheus,
-and RomM — have also been confirmed against live instances (spun up with `docker run`, driven
+RomM, and Dockhand — have also been confirmed against live instances (spun up with `docker run`, driven
 through real setup wizards and real data, then torn down); Mastodon's instance-stats endpoint
 was checked read-only against the live `mastodon.social` API. Proxmox VE and TrueNAS are the two
 exceptions to that process, for a structural reason rather than lack of effort: neither ships a
@@ -376,7 +405,18 @@ Several integrations had real, live-verified gotchas worth knowing about:
   real `haveagitgat/tdarr` container rather than docs: `cruddb`'s `mode` only accepts
   `getById`/`getByIndex`/`getAll`/`insert`/`update`/`removeOne`/`removeAll`/`getCount` (no
   `find`), and `TranscodeDecisionMaker` values are Title Case (`"Queued"`, `"Transcode error"`,
-  `"Transcode success"`, `"Not required"`), not lowercase.
+  `"Transcode success"`, `"Not required"`), not lowercase. The `StatisticsJSONDB` `tableNCount`
+  fields follow the web UI's status tabs (table0 Hold, table1 Transcode Queue, table2
+  Success/Not required, table3 Error/Cancelled, table4–6 Health Check queue/healthy/error), and
+  file rows are read a page at a time through `POST /api/v2/client/status-tables` — pulling
+  `FileJSONDB` with `getAll` ships the whole library on every poll.
+- **Dockhand**'s `GET /api/dashboard/stats` (one entry per environment — containers incl.
+  `pendingUpdates`, stacks, CPU/memory) is slow by design: every call lists all containers,
+  images, volumes, networks and stacks and runs a disk-usage scan, routinely ~10s, so the
+  integration gives it a 30s timeout and polls no faster than every 60s. Pending-update rows
+  come from `GET /api/containers/pending-updates?env=<id>` (the `env` param is required). Auth
+  is off on a fresh install; when on, use an API token (Profile → API tokens, sent as
+  `Bearer dh_…`) or local username/password (session cookie — accounts with MFA need a token).
 - **Deluge**'s web UI process starts out **disconnected** from the daemon (after a restart, or
   on an install that's never been opened in a browser) — `web.update_ui` doesn't error in that
   state, it just returns `torrents: null`, which would otherwise look exactly like "no torrents"
@@ -481,7 +521,7 @@ design (no per-integration process, no unbounded cache growth).
 Actively developed — see [`TESTPLAN.md`](TESTPLAN.md) for the full case-by-case catalog. Every
 change ships behind the automated suite (unit + API + a headless-browser smoke test) plus a
 manual click-through checklist for anything touching layout or interaction; nothing merges
-without both. Forty-two of the fifty-three built-in integrations have also been confirmed
+without both. Forty-three of the fifty-four built-in integrations have also been confirmed
 against live instances (see the Integrations section above for the full list and its
 live-verified gotchas) — the rest are a solid first draft built from documented API shapes, not
 yet exercised against every real-world version/config quirk.

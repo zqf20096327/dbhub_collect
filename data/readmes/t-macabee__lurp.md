@@ -88,10 +88,23 @@ lurp --mode=context --file=src/Services/OrderService.cs --line=42 --output-dir=.
 
 ## Install
 
+Supported platform: Windows. Lurp 2.x is not tested on Linux or macOS.
+
+Requires a .NET 10 runtime to run any mode; the package declares
+`RollForward=Major`, so a later major runtime (11, 12, …) also works, while an
+older runtime does not. Indexing and solution-backed status
+(`--mode=index`, `status --solution=`, MCP `lurp_index`, and MCP `lurp_status` with
+`full:true`) also require a .NET SDK that can build the target solution, and the
+solution must be restored.
+
 ```bash
 dotnet tool install --global lurp --version 2.0.0
-lurp --mode=index --solution=path/to/Your.slnx --output-dir=./out
+lurp --mode=index --solution=path/to/Your.slnx
 ```
+
+Without `--output-dir`, the database and MSBuild design-time intermediates go to
+`%LOCALAPPDATA%\lurp\<sha256-12 of the solution path>\`; pass `--output-dir=./out`
+to choose a location instead.
 
 <details>
 <summary>Build from source & environment variables</summary>
@@ -102,8 +115,8 @@ dotnet run --project src -- --mode=index --solution=path/to/Your.slnx --output-d
 ```
 
 Environment variables `LURP_SOLUTION_PATH` and `LURP_OUTPUT_DIR` are equivalent to
-`--solution=` and `--output-dir=`. Requires .NET 10 SDK 10.0.301 (pinned via
-`src/global.json` `rollForward=latestMajor`; Roslyn 5.6 requires `net10.0`).
+`--solution=` and `--output-dir=`. Requires .NET 10 SDK (pinned via the root
+`global.json` `rollForward=latestMajor`; Roslyn 5.6 requires `net10.0`).
 
 **Installing a local build as the global tool:** if you pack a local build and its
 version number matches the version already on nuget.org, `dotnet tool install
@@ -152,7 +165,8 @@ see [ARCHITECTURE.md](docs/ARCHITECTURE.md) for the ladder.
 
 ## Limitations
 
-- **Single active TFM/configuration**: one snapshot per index run.
+- **Windows only**: 2.x supports Windows; Linux and macOS are not tested.
+- **Multi-target projects are indexed as a union**: one snapshot per index run holds every target framework the solution declares. The declared TFM list is recorded per project and the per-symbol TFM set is recorded per snapshot, but CLI/MCP reads do not surface the per-symbol set, so a member present in only one target framework cannot be told apart by a consumer from one present in all of them.
 - **Source generators not executed**: `GeneratedTreesIncluded=false`; generated files under `obj/` are path-filtered out.
 - **Reflection string-literal candidates are `name_candidate`**, not `compiler_proved`.
 - **3-snapshot retention**: older snapshots and their document versions are pruned automatically, except a snapshot pinned via `pin-snapshot`, which pruning always skips.
@@ -162,7 +176,7 @@ see [ARCHITECTURE.md](docs/ARCHITECTURE.md) for the ladder.
 
 | Measurement | Value |
 |---|---|
-| eNoteV2 (402 docs) full index | ~48 s |
+| eNoteV2 (531 docs) full index | ~48 s |
 | eNoteV2 incremental (no changes) | ~11 s |
 | Capsule token estimates | `estimated_tokens` (content) vs `estimated_artifact_tokens` (delivery) |
 | Incremental↔full convergence | 5 cycles; 0 changed docs after cycle 1 |
@@ -170,13 +184,14 @@ see [ARCHITECTURE.md](docs/ARCHITECTURE.md) for the ladder.
 ## Status & roadmap
 
 Shipped as a global tool (`dotnet tool install lurp`); the published version is
-2.0.0. Schema v30, extractor
-1.6.0, CLI/MCP contract v2, output schema v5. 2.0.0 is a breaking release for
+2.0.0. Schema v32, extractor
+1.7.0, CLI/MCP contract v4, output schema v5. 2.0.0 is a breaking release for
 `impact` and the capsule topology, and an index built by 1.4.0 needs one
 `--mode=index` run before read commands accept it: see
-[RELEASE_NOTES_2.0.0.md](docs/RELEASE_NOTES_2.0.0.md). `windows-latest` CI plus a self-hosted real-parity gate on FIT-RS2-2026 +
-eNoteV2 (opt-in via `real-parity` PR label). Roadmap: multi-TFM and richer DI
-parameter-type matching are postponed by design (see
+[RELEASE_NOTES_2.0.0.md](docs/RELEASE_NOTES_2.0.0.md). `windows-latest` CI plus a manual real-parity gate on
+eNoteV2 (self-hosted runner, `workflow_dispatch`). Roadmap: surfacing the
+per-symbol TFM set in reads and richer DI parameter-type matching are postponed
+by design (see
 [DeclaredBoundaries](notes/TRUST_KERNEL.md#declared-boundaries-registry-capsule-audit-task-7)).
 
 ## Documentation & license
@@ -187,10 +202,10 @@ parameter-type matching are postponed by design (see
 - [VERSIONING.md](VERSIONING.md): what counts as a breaking CLI/MCP change.
 - MIT license, see [LICENSE](LICENSE).
 
-Also MCP: `--mode=serve` exposes 18 tools (`lurp_context`, `lurp_get_source`,
+Also MCP: `--mode=serve` exposes 16 read tools (`lurp_context`, `lurp_get_source`,
 `lurp_outline`, `lurp_navigate`, `lurp_find_symbol`, `lurp_search`, `lurp_grep`,
-`lurp_impact`, `lurp_diff`, `lurp_get_symbol`, `lurp_get_annotations`, `lurp_retract_annotation`,
-`lurp_diagnostics`, `lurp_status`, `lurp_timings`, `lurp_refresh`, `lurp_index`,
-`lurp_dead_candidates`) over stdio; all are read-only except `lurp_index` and `lurp_retract_annotation`
-(background re-index). Index first, then serve. See
-[CLI_REFERENCE.md#mcp](docs/CLI_REFERENCE.md).
+`lurp_impact`, `lurp_diff`, `lurp_get_symbol`, `lurp_get_annotations`,
+`lurp_diagnostics`, `lurp_status`, `lurp_timings`, `lurp_refresh`,
+`lurp_dead_candidates`) over stdio; `--enable-write-tools` additionally registers
+`lurp_index` and `lurp_retract_annotation` (background re-index and annotation
+retraction). Index first via CLI, then serve. See [CLI_REFERENCE.md#mcp](docs/CLI_REFERENCE.md).

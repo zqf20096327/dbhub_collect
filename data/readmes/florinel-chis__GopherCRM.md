@@ -1,0 +1,703 @@
+# GopherCRM
+
+A comprehensive Customer Relationship Management (CRM) system built with Go (backend) and React TypeScript (frontend).
+
+## Features
+
+- 🔐 **Authentication**: JWT tokens and HMAC-SHA256 API Keys with role-based access control
+- 🛡️ **Security**: Account lockout, password complexity, sort-column allowlists against SQL injection, rate limiting with trusted-proxy handling
+- 🧹 **Right to Erasure**: Deleting a person overwrites their personal data before the row is soft-deleted (GDPR Art. 17)
+- 👥 **Lead Management**: Lead tracking with conversion to customers
+- 🏢 **Customer Management**: Complete customer lifecycle management
+- 🏭 **Companies**: Organisation records that leads and customers link to, with domain de-duplication and per-company customer and lead views
+- 💼 **Deals**: Sales opportunities with a five-stage pipeline, integer money per currency, per-stage probabilities and an append-only stage history
+- 🎫 **Ticket System**: Support ticket management with assignments
+- ✅ **Task Management**: Task tracking and assignment
+- ⚙️ **Configuration Management**: System-wide settings with admin interface
+- 🔎 **Answer Engine Optimization (AEO)**: Track how often LLM answer engines mention your brand — daily runs across Anthropic, OpenAI, Gemini, Kimi, Perplexity and any OpenAI-compatible endpoint, with visibility, share-of-voice and citation reporting
+- 📝 **Forms**: Build contact, quote-request and lead-capture forms in the CRM and embed them on any website with one script tag — submissions land in the CRM, create leads, and can require double opt-in email confirmation before delivering gated content; layered spam protection (honeypot, time trap, rate limits, optional invisible reCAPTCHA v3)
+- 🎨 **Modern UI**: React TypeScript frontend with Material-UI
+- 📊 **Dashboard**: Analytics and activity overview
+- 👤 **Role-Based Access**: Admin, Sales, Support, and Customer roles
+- 🔌 **RESTful API**: Clean architecture with comprehensive endpoints
+
+![GopherCRM Dashboard](docs/img/gophercrm-dashboard.png)
+
+## ⚠️ Deletion is irreversible
+
+`DELETE` on a **user, customer or lead** is an erasure, not a recoverable soft delete. Every
+personal field on the row is overwritten in place — the email address is replaced with a random,
+non-routable placeholder in the reserved `.invalid` domain — and the row is only then soft-deleted,
+all in a single transaction. API keys and refresh tokens belonging to the account are purged with
+it. The row itself is deliberately kept so foreign keys from tickets and tasks still resolve:
+business records survive, the person does not.
+
+Two consequences:
+
+- **Nothing can be restored afterwards.** To suspend access reversibly, set `is_active = false`
+  instead; deactivation never touches personal data.
+- **The email address becomes reusable**, because the original no longer exists in the table.
+
+Tickets and tasks are unaffected — deleting one is still an ordinary soft delete.
+
+Rows soft-deleted *before* this behaviour existed still hold personal data;
+`scripts/anonymize_legacy_deleted_pii.sql` remediates them. It is manual, irreversible, and
+deliberately not wired into auto-migration.
+
+Full rationale, the cascade rules for converted leads, and the operational caveats are in
+[docs/DEVELOPMENT.md](docs/DEVELOPMENT.md#deleting-personal-data).
+
+## Tech Stack
+
+### Backend
+- **Go 1.25+** - Main backend language
+- **Gin 1.10** - HTTP web framework
+- **GORM 1.30** - ORM for database operations
+- **MySQL 8.0+** - Default database; **SQLite** is a supported alternative via
+  `DB_DRIVER` (pure-Go driver, no cgo) and is what the test suite runs on
+- **JWT** (`golang-jwt/jwt/v5`) - Authentication tokens
+- **Logrus** - Structured logging
+- **Testify** - Unit and integration test suites
+
+### Frontend
+- **React 19** - UI framework
+- **TypeScript 5.8** - Type safety
+- **Material-UI (MUI) v7** - Component library
+- **React Router 7** - Client-side routing
+- **TanStack Query 5** - Data fetching and caching
+- **React Hook Form + Zod** - Forms and validation
+- **Axios** - HTTP client
+- **Recharts** - Dashboard charts
+- **Vite 6** - Build tool and dev server
+- **Vitest 3 + Playwright** - Unit and end-to-end tests
+
+## Prerequisites
+
+### Backend
+- Go 1.25 or higher
+- MySQL 8.0 or higher — or nothing at all, if you run on SQLite
+  (`DB_DRIVER=sqlite`, see [Choosing a database](#choosing-a-database))
+- Make (optional, for using Makefile commands)
+
+### Frontend
+- Node.js 20 or newer (React Router 7 requires Node >= 20) and npm
+- Modern web browser
+
+## Quick Start with Docker
+
+The whole stack (MySQL, API, UI) can run in containers, with database data
+persisted in a named volume across restarts:
+
+```bash
+export JWT_SECRET="$(openssl rand -base64 32)"   # or put it in .env
+docker compose up -d --build
+docker compose exec backend create-admin          # first admin account
+```
+
+UI at http://localhost:3000, API at http://localhost:8080/api/v1. See
+[docs/DOCKER.md](docs/DOCKER.md) for configuration and persistence details.
+
+To run the same stack without a database server, use the SQLite flavor instead —
+`docker compose -f docker-compose.sqlite.yml up -d --build` starts two containers
+with the database in a file on a named volume ([docs/DOCKER.md](docs/DOCKER.md#sqlite-flavor-no-database-server)).
+
+## Setup Instructions
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/florinel-chis/gophercrm.git
+cd gophercrm
+```
+
+### 2. Backend Setup
+
+#### Choosing a database
+
+`DB_DRIVER` selects the backend. It defaults to `mysql`, which is the production
+dialect and the one the SQL files in `migrations/` are written for.
+
+```bash
+DB_DRIVER=mysql          # default: DB_HOST/DB_PORT/DB_NAME/DB_USER/DB_PASSWORD apply
+DB_DRIVER=sqlite         # single file, no server
+DB_PATH=gophercrm.db     # only read when DB_DRIVER=sqlite; relative to the working directory
+```
+
+On SQLite the server-connection settings — `DB_HOST`, `DB_PORT`, `DB_NAME`,
+`DB_USER`, `DB_PASSWORD` — are ignored.
+
+SQLite needs no server and no `make create-db` — the file is created on first
+start. It suits development, demos, CI and small single-instance deployments.
+Things to know before relying on it:
+
+- **Everything serializes on one connection.** SQLite takes a database-wide
+  write lock, so the pool is deliberately capped at a single connection: within
+  the backend process reads queue behind writes exactly as writes do, and there
+  is no read concurrency to be had. What WAL mode buys here is that a *separate*
+  reader — the `VACUUM INTO` snapshot below, or a `sqlite3` shell — is not
+  blocked by the backend's writes. Run only one backend process against one
+  file.
+- **The file must live on a local filesystem.** WAL mode relies on shared-memory
+  locking that NFS, SMB and similar network shares do not implement reliably;
+  putting the database on one risks corruption.
+- **The database is three files.** `gophercrm.db` plus the `-wal` and `-shm`
+  siblings. A graceful shutdown checkpoints the WAL back into the main file; a
+  process killed outright leaves it in place, which is normal and recovers on the
+  next open.
+- **Never copy a live database file.** To back it up, either stop the backend and
+  copy all three files, or take an online snapshot with
+  `sqlite3 gophercrm.db "VACUUM INTO 'backup.db'"`. A bare `cp` of `gophercrm.db`
+  on a running system produces a stale or torn copy.
+- **Back up before upgrading.** On SQLite the schema advances only through the
+  auto-migration that runs at startup — the `migrations/` SQL is MySQL-only — and
+  auto-migration is not reversible. Take the offline copy or the `VACUUM INTO`
+  snapshot above first. Upgrading from v1.2.0 rewrites `leads` and `customers`
+  in place (the driver drops and copies each table to add the company link).
+  The two rebuilds run one after the other, each in its own transaction, so the
+  first start needs free disk for a full copy of one table at a time, while the
+  WAL accumulates both rebuilds until the next checkpoint. Auto-migration runs
+  with foreign-key enforcement off, as SQLite prescribes for table rebuilds,
+  checks every foreign key afterwards and refuses to start if the check finds a
+  dangling reference. A refused start has already committed the schema change;
+  only the data violation is left. Restore the backup, or fix the offending rows
+  (the message names the tables as `child -> parent`), and start again. The
+  v1.2.0 binary still opens the upgraded file — it ignores the extra tables and
+  columns — so the binary can be rolled back even though the schema is not.
+  The deals release adds the `deals` and `deal_stage_changes` tables only: it
+  rebuilds no existing table, and the previous binary still opens the file.
+- `DB_PATH` must not contain `?`; the connector appends its own pragma query
+  string, so startup rejects a path that already carries one.
+
+Docker users get this prewired in `docker-compose.sqlite.yml`; see
+[docs/DOCKER.md](docs/DOCKER.md#sqlite-flavor-no-database-server).
+
+#### Create the Database
+
+MySQL only — skip this on SQLite, where the file is created on first start.
+
+```bash
+# Using Make (recommended)
+make create-db
+
+# Or manually with MySQL
+mysql -u root < scripts/create_database.sql
+```
+
+#### Configure Environment
+```bash
+# Create environment file
+cp .env.example .env
+
+# Edit .env file with your database credentials
+# JWT_SECRET is required and must be at least 32 characters
+```
+
+#### Install Go Dependencies
+```bash
+go mod download
+```
+
+#### Run Backend Server
+```bash
+# Using Make (recommended)
+make run
+
+# Or directly with Go
+go run cmd/main.go
+```
+
+The backend server will start on `http://localhost:8080`. Schema auto-migration runs at startup.
+
+#### Create the First Admin
+
+Self-service registration always creates a `customer` account, so the first administrator has to be
+created out of band:
+
+```bash
+make build-tools
+make create-admin
+```
+
+`create-admin` also accepts `--non-interactive --email ... --name ... --password ...` for scripted
+provisioning; that is how the E2E suite seeds its admin (`gocrm-ui/e2e/global-setup.ts`).
+
+### 3. Frontend Setup
+
+#### Navigate to Frontend Directory
+```bash
+cd gocrm-ui
+```
+
+#### Install Dependencies
+```bash
+npm install
+```
+
+#### Configure the API Base URL (optional)
+```bash
+cp .env.example .env
+# VITE_API_BASE_URL defaults to http://localhost:8080/api/v1
+```
+
+#### Start Development Server
+```bash
+npm run dev
+```
+
+The frontend will start on `http://localhost:5173`
+
+## Usage
+
+### Default Access
+1. **Open your browser** to `http://localhost:5173`
+2. **Register a new account** — self-service registration always creates a `customer` account
+3. **Login** with your credentials
+
+Elevated roles (admin, sales, support) are assignable only by an admin through `POST /users`, or by
+the `create-admin` CLI. The registration endpoint ignores any role supplied by the client.
+
+Tokens are stored in `sessionStorage` and expire with the browser tab unless you tick **Remember
+me** at login, which moves them to `localStorage`.
+
+### Admin Features
+Admin users have access to additional features:
+- User management
+- System configuration
+- All data access across the system
+
+### Configuration Management
+
+GopherCRM includes a powerful configuration management system that allows administrators to customize system behavior through a web interface.
+
+![Configuration Management](docs/img/gophercrm-config.png)
+
+#### Accessing Configuration Settings
+1. Login as an admin user
+2. Navigate to **Settings > Configuration**
+3. Browse settings by category tabs:
+   - **General**: Company information and basic settings
+   - **UI & Theme**: User interface customization
+   - **Security**: Security-related settings
+   - **Leads**: Lead management behavior
+   - **Customers**: Customer management settings
+   - **Tickets**: Support ticket configuration
+   - **Tasks**: Task management settings
+   - **Integration**: Third-party integrations
+
+#### Configuration Features
+- **Type-Safe Editing**: Different input types based on configuration type (boolean, string, array, etc.)
+- **Validation**: Built-in validation for configuration values
+- **System Protection**: System configurations are protected from deletion
+- **Read-Only Settings**: Some critical settings are read-only
+- **Default Values**: Easy reset to default values
+- **Real-Time Updates**: Changes take effect immediately
+
+#### Lead Conversion Settings
+The configuration system includes specific settings for lead conversion:
+- `leads.conversion.allowed_statuses`: Which lead statuses allow conversion to customer
+- `leads.conversion.require_notes`: Whether notes are required during conversion
+- `leads.conversion.auto_assign_owner`: Auto-assign lead owner as customer owner
+
+### Answer Engine Optimization (AEO)
+
+![AEO dashboard](docs/img/gophercrm-aeo-dashboard.png)
+
+AEO tracks how visible your brand is in the answers large language models give to buyer questions.
+You describe the brand and its competitors once, track a list of prompts, and a daily run asks every
+configured answer engine each prompt and records what came back: whether the brand was mentioned,
+how early, which competitors appeared alongside it, and which sources were cited.
+
+Available to **admin**, **sales** and **support** under **AEO** in the sidebar; `customer` cannot
+reach it. Saving the profile, managing prompts and starting a run need admin or sales; deleting a
+prompt needs admin.
+
+1. **Settings** (`/aeo/settings`) — brand name, aliases, owned domains and competitors, the provider
+   API keys (admin only; stored encrypted and never echoed back, so a chip per engine reports only
+   whether a key is present) and which engine prompt generation runs on. Save the profile before
+   anything else: a run has nothing to detect without it.
+2. **Prompts** (`/aeo/prompts`) — the questions to track (up to 100 active). Add them by hand or ask
+   the configured generation engine to suggest some. Each row shows the visibility percentage over
+   the selected window; opening a row shows the recorded answers with every brand mention
+   highlighted.
+3. **Dashboard** (`/aeo`) — overall visibility, a per-engine timeline, share of voice against the
+   competitors and their trend, over 7, 30 or 90 days.
+4. **Citations** (`/aeo/citations`) — how often each company's domains are cited, and how often a
+   citation coincides with a brand mention.
+
+![AEO answer drawer](docs/img/gophercrm-aeo-answers.png)
+
+Every recorded answer is kept verbatim — the drawer above shows one engine's answer with the brand
+mentions highlighted and a selector to walk earlier runs. The full screen-by-screen tour lives in
+[docs/SCREENSHOTS.md](docs/SCREENSHOTS.md#aeo).
+
+Provider keys come from **Settings** (`/aeo/settings`) first and fall back to the environment
+variables below when no key is stored, so a key entered in the UI takes effect from the next run
+without restarting the process. An engine with no key from either source is simply skipped. Models,
+the custom engine and the schedule are environment-only.
+
+| Engine | Key | Model override |
+|---|---|---|
+| Anthropic | `ANTHROPIC_API_KEY` | `AEO_ANTHROPIC_MODEL` |
+| OpenAI | `OPENAI_API_KEY` | `AEO_OPENAI_MODEL` |
+| Gemini | `GEMINI_API_KEY` | `AEO_GEMINI_MODEL` |
+| Kimi (Moonshot) | `MOONSHOT_API_KEY` | `AEO_KIMI_MODEL` |
+| Perplexity | `PERPLEXITY_API_KEY` | `AEO_PERPLEXITY_MODEL` |
+| Any OpenAI-compatible server (e.g. LM Studio) | `AEO_CUSTOM_BASE_URL` (+ optional `AEO_CUSTOM_API_KEY`) | `AEO_CUSTOM_MODEL`, `AEO_CUSTOM_NAME` |
+
+`AEO_SCHEDULE_ENABLED` (default `true`) and `AEO_SCHEDULE_HOUR` (default `6`, server local time)
+control the daily run. With no key set at all the module still boots; starting a run then returns
+503 instead of recording a run that could never produce an answer.
+
+Prompt generation (`POST /aeo/prompts/generate`) deliberately runs on one named engine rather than
+whatever happens to be configured, so its output keeps a consistent shape. Anthropic is the default;
+the `Settings` page selects any of Anthropic, OpenAI, Gemini, Kimi or Perplexity instead. If the
+selected engine has no key, generation answers 503 naming that engine rather than silently falling
+back to another one.
+
+**Cost.** One run is *active prompts × configured engines* API calls — 25 prompts across 5 engines
+is 125 calls a day. The 100-prompt cap exists for this reason. Only one run may be in flight at a
+time; a second request is refused with 409.
+
+`scripts/aeo_live_smoke.sh` walks the whole module against real providers for manual verification.
+It spends real credit, so it is never part of CI. Test cases: `docs/testing/11-aeo.md`.
+
+## Development
+
+### Backend Development
+
+#### Building
+```bash
+make build
+```
+
+#### Running Tests
+```bash
+# Run all tests
+make test
+
+# Run specific tests
+go test -run TestName ./path/to/package
+
+# Run integration tests (in-memory SQLite, no MySQL needed)
+go test ./test/integration/ ./tests/
+
+# Race detector
+go test -race ./internal/... ./test/... ./tests/...
+```
+
+#### Database Operations
+```bash
+# Create database
+make create-db
+```
+
+### Frontend Development
+
+#### Available Scripts
+```bash
+# Start development server
+npm run dev
+
+# Build for production (runs tsc -b first)
+npm run build
+
+# Preview production build
+npm run preview
+
+# Run unit tests
+npm run test
+
+# Run end-to-end tests (requires the backend and frontend running)
+npm run test:e2e
+
+# Run linting
+npm run lint
+```
+
+#### Development Tools
+- **Hot Reload**: Automatic browser refresh on code changes
+- **TypeScript**: Full type checking and IntelliSense
+- **ESLint**: Code linting
+- **Prettier**: Code formatting
+
+## API Documentation
+
+All application routes are mounted under `/api/v1` (configurable via `API_PREFIX`). Every endpoint
+returns the unified envelope `{ success, data, error, meta }`.
+
+`GET /health` is served outside the API prefix and needs no authentication.
+
+### Authentication (public)
+- `POST /api/v1/auth/register` - Register a new user. **Gated by the
+  `security.allow_public_registration` configuration, which ships disabled** — while off, the
+  endpoint answers `403` and the login page offers no sign-up (an administrator can turn it on
+  under Settings > Configuration). **Always creates a `customer`**; a
+  client-supplied role is ignored. Password policy: min 10 chars with upper, lower, digit and
+  special character. A duplicate email returns `409`.
+- `GET /api/v1/auth/registration` - Report whether public registration is currently open
+  (`{"enabled": bool}`), for the login/register screens; no authentication required.
+- `POST /api/v1/auth/login` - User login. Returns an access token and a rotating refresh token.
+- `POST /api/v1/auth/refresh` - Exchange a refresh token for a new token pair. Rotation is strict:
+  the presented token is revoked, replaying it returns `401`.
+- `POST /api/v1/auth/password-reset` - Request a password-reset email. Always answers `200`
+  whether or not the account exists (anti-enumeration). Delivery goes through SMTP when
+  `SMTP_HOST` is configured, otherwise a logging fallback.
+- `POST /api/v1/auth/password-reset/confirm` - Redeem a single-use reset token (1 h expiry) and set
+  a new password. Revokes all refresh tokens.
+
+All of the above sit behind the strict rate-limit tier (10/min). Two more auth endpoints require
+authentication and live on the moderate tier:
+
+- `POST /api/v1/auth/logout` - Revoke the caller's refresh tokens (all of them, or just the one in
+  the optional `{refresh_token}` body). The JWT itself stays valid until expiry.
+- `POST /api/v1/auth/change-password` - Verify the current password, set a new one (same
+  complexity policy), and revoke all refresh tokens.
+
+### Users
+- `GET /api/v1/users` - List all users *(admin)*
+- `POST /api/v1/users` - Create a user with any role *(admin)*
+- `GET /api/v1/users/me` - Get current user profile
+- `PUT /api/v1/users/me` - Update current user profile
+- `GET /api/v1/users/:id` - Get specific user *(self or admin)*
+- `PUT /api/v1/users/:id` - Update user *(self or admin; only admins may change `role` or `is_active`)*
+- `DELETE /api/v1/users/:id` - **Erase** user *(admin; cannot delete yourself)*
+
+### Leads *(entire group requires admin or sales)*
+- `GET /api/v1/leads` - List leads (`page`, `limit`, `search`, `sort_by`, `sort_order`, `classification`)
+- `POST /api/v1/leads` - Create new lead
+- `GET /api/v1/leads/:id` - Get specific lead
+- `PUT /api/v1/leads/:id` - Update lead
+- `DELETE /api/v1/leads/:id` - **Erase** lead (cascades to the customer it was converted into)
+- `POST /api/v1/leads/:id/convert` - Convert lead to customer
+- `POST /api/v1/leads/bulk/status` - Set the status of up to 100 leads at once, all-or-nothing
+  *(sales may only touch leads they own)*
+
+### Customers
+- `GET /api/v1/customers` - List customers *(admin, sales, support)*
+- `POST /api/v1/customers` - Create new customer *(admin, sales)*
+- `GET /api/v1/customers/:id` - Get specific customer *(admin, sales, support)*
+- `PUT /api/v1/customers/:id` - Update customer *(admin, sales)*
+- `DELETE /api/v1/customers/:id` - **Erase** customer *(admin; cascades to the lead it came from)*
+- `GET /api/v1/customers/:id/tickets` - List that customer's tickets *(a customer-role user may only
+  read their own)*
+- `GET /api/v1/customers/export` - Download all matching customers as CSV *(admin only — mass PII
+  egress; supports `search`, `sort_by`, `sort_order`)*
+- `POST /api/v1/customers/:id/assign` - Assign the customer to an active admin or sales user
+  *(admin, sales)*
+
+### Companies *(read: admin, sales, support; write: admin, sales; delete: admin)*
+- `GET /api/v1/companies` - List companies (`page`, `limit`, `search` over name/domain/industry/city,
+  `sort_by` in `id, name, domain, industry, created_at, updated_at` — anything else is 400, `sort_order`);
+  `data` is the array, `meta` the pagination
+- `POST /api/v1/companies` - Create a company *(domain normalised and unique among live companies → 409;
+  `owner_id` must be a live user → 400 `INVALID_REFERENCE`; sales may only own it themselves)*
+- `GET /api/v1/companies/:id` - Get a company with its owner and live `customer_count` / `lead_count`
+- `PUT /api/v1/companies/:id` - Replace a company's fields *(absent text fields are cleared; `owner_id`
+  absent keeps, `0` clears — admin only)*
+- `DELETE /api/v1/companies/:id` - Soft-delete a company and clear `company_id` on its leads and
+  customers in one transaction *(not an erasure: companies hold no personal data)*
+- `GET /api/v1/companies/:id/customers` - The company's customers, paginated
+- `GET /api/v1/companies/:id/leads` - The company's leads, paginated *(admin and sales; sales sees only
+  its own)*
+- Leads and customers accept `company_id` on create and update *(unknown → 400 `INVALID_REFERENCE`;
+  on update `0` clears, absent keeps)* and return `company_record` on their detail endpoints. The
+  free-text `company` field is independent of the link.
+- Companies also report a live `deal_count`, and `GET /api/v1/companies/:id/deals` lists their deals
+  *(admin and sales; sales sees only its own)*
+
+### Deals *(admin and sales; sales sees and edits its own deals; delete: admin)*
+- `GET /api/v1/deals` - List deals (`page`, `limit`, `search` over title/notes, `stage`, `open=true`,
+  `company_id`, `customer_id`, `owner_id` — admin only, sales is always narrowed to itself —
+  `sort_by` in `id, title, stage, amount_cents, probability, expected_close_date, closed_at, created_at,
+  updated_at`, anything else is 400, `sort_order`); `data` is the array, `meta` the pagination
+- `POST /api/v1/deals` - Create a deal *(stage defaults to `qualification`, probability to the stage's
+  10/40/70/100/0, currency to the `deals.default_currency` setting; every link must be a live row →
+  400 `INVALID_REFERENCE`; `owner_id` defaults to the caller and sales may only own it themselves;
+  the first history row is written in the same transaction)*
+- `GET /api/v1/deals/pipeline` - The live deals per stage: all five stages in pipeline order, each with
+  `count` and `totals` per currency (`amount_cents`, `weighted_cents` = round half up of
+  Σ amount × probability / 100, rounded once per stage and currency); `owner_id` (admin only; sales
+  is always narrowed to itself) and `company_id` filters
+- `GET /api/v1/deals/:id` - Get a deal with its owner, company, customer and lead
+- `PUT /api/v1/deals/:id` - Replace a deal's fields *(links: absent keeps, `0` clears; a stage change
+  goes through the same rules as the stage endpoint and records history)*
+- `POST /api/v1/deals/:id/stage` - Move a deal to a stage `{stage, probability?, lost_reason?}` *(won is
+  always 100 and lost 0; `closed_at` set on won/lost and cleared on leaving them; `lost_reason` kept
+  only on lost; the same stage again is a 200 that writes nothing)*
+- `GET /api/v1/deals/:id/history` - The stage changes, oldest first, with the user who made each
+- `DELETE /api/v1/deals/:id` - Soft-delete a deal; its history stays *(admin)*
+- `GET /api/v1/customers/:id/deals` - The customer's deals, paginated *(admin and sales; sales sees
+  only its own)*
+
+### Tickets
+- `GET /api/v1/tickets` - List tickets *(customers cannot list all tickets)*
+- `POST /api/v1/tickets` - Create new ticket *(admin, support)*
+- `GET /api/v1/tickets/my` - Get current user's tickets
+- `GET /api/v1/tickets/:id` - Get specific ticket
+- `PUT /api/v1/tickets/:id` - Update ticket *(admin any; support only their own assignments; sales
+  is read-only)*
+- `DELETE /api/v1/tickets/:id` - Delete ticket *(admin; ordinary soft delete)*
+- `POST /api/v1/tickets/bulk/status` - Set the status of up to 100 tickets, all-or-nothing *(admin
+  any; support only their assignments; a closed ticket cannot be reopened)*
+
+### Tasks
+- `GET /api/v1/tasks` - List tasks *(non-admins see their own)*
+- `POST /api/v1/tasks` - Create new task *(admin, support, sales; non-admins may only assign to themselves)*
+- `GET /api/v1/tasks/my` - Get current user's tasks
+- `GET /api/v1/tasks/upcoming` - Tasks due within `days` (1-90, default 7) *(non-admins see their
+  own assignments)*
+- `GET /api/v1/tasks/:id` - Get specific task
+- `PUT /api/v1/tasks/:id` - Update task *(only admins may reassign)*
+- `DELETE /api/v1/tasks/:id` - Delete task *(admin; ordinary soft delete)*
+- `POST /api/v1/tasks/bulk/status` - Set the status of up to 100 tasks, all-or-nothing *(non-admins
+  only their own assignments; completed tasks cannot change status)*
+
+### API Keys *(always scoped to the caller's own keys — no admin override)*
+- `GET /api/v1/api-keys` - List user's API keys
+- `POST /api/v1/api-keys` - Create new API key (optional RFC3339 `expires_at`; the plaintext key is
+  returned only in this response)
+- `GET /api/v1/api-keys/:id` - Get one key
+- `PUT /api/v1/api-keys/:id` - Rename, deactivate or reactivate a key
+- `DELETE /api/v1/api-keys/:id` - Revoke API key (marks inactive; the row is kept)
+
+Keys authenticate via `Authorization: ApiKey gcrm_xxx`. A key is rejected if it is inactive or
+expired, or if its owner has been deactivated or erased.
+
+### Configuration
+- `GET /api/v1/configurations/ui` - Get UI-safe configurations *(any authenticated user)*
+- `GET /api/v1/configurations` - List all configurations *(admin)*
+- `GET /api/v1/configurations/category/:category` - Get configurations by category *(admin)*
+- `GET /api/v1/configurations/:key` - Get specific configuration *(admin)*
+- `PUT /api/v1/configurations/:key` - Update configuration value *(admin)*
+- `POST /api/v1/configurations/:key/reset` - Reset configuration to default *(admin)*
+
+### Dashboard *(entire group requires admin, sales or support)*
+- `GET /api/v1/dashboard/stats` - Aggregate counts (total leads, customers, open tickets, pending tasks, conversion rate)
+- `GET /api/v1/dashboard/leads-by-status` / `tickets-by-priority` / `tasks-by-status` - Grouped
+  counts in a chart-friendly `{labels, datasets}` shape
+- `GET /api/v1/dashboard/sales-performance?period=week|month|quarter|year` - Lead conversions over
+  time, bucketed per period
+- `GET /api/v1/dashboard/activities` - Recent activity feed synthesized from lead/ticket/task events
+- `GET /api/v1/dashboard/upcoming-tasks` - Due-soonest tasks, including overdue *(non-admins see
+  their own)*
+- `GET /api/v1/dashboard/recent-tickets` - Newest tickets
+- `GET /api/v1/dashboard/new-leads` - Newest leads *(sales sees only their own; support gets an
+  empty list)*
+- `GET /api/v1/dashboard/pipeline` - The deal pipeline per stage (as `GET /deals/pipeline`) plus
+  `won_this_month` (count and amounts per currency of the deals won in the current calendar month,
+  UTC) *(admin sees all deals, sales its own; support and customer get 403 — no deal access)*
+
+### Not currently exposed
+
+The generic `/bulk/:resource` create/update/delete/action handlers in
+`internal/handler/bulk_handler.go` remain unrouted; only the entity-specific `bulk/status`
+endpoints listed above are reachable over HTTP.
+
+A generated Swagger 2.0 spec is checked in at `api/swagger.json` / `api/swagger.yaml`. It is built
+from swag annotations on the handlers — regenerate it with `make swagger` after changing a handler
+or route. The spec is **not** served by the application; `internal/handler/routes.go` remains the
+routing source of truth.
+
+## Project Structure
+
+```
+gophercrm/
+├── cmd/
+│   ├── main.go                  # Application entry point and DI wiring
+│   ├── create-admin/            # CLI that provisions an admin account
+│   └── migrate/                 # Migration runner
+├── internal/
+│   ├── config/                  # Environment configuration
+│   ├── models/                  # Domain models and database schemas
+│   ├── repository/              # Data access layer (incl. erasure.go, erasure_cascade.go)
+│   ├── service/                 # Business logic layer
+│   ├── handler/                 # HTTP handlers and routing
+│   ├── middleware/              # Auth, logging, CORS, rate limiting, recovery
+│   ├── errors/                  # Sentinel error types
+│   ├── mocks/                   # Generated test doubles
+│   └── utils/                   # Utility functions and helpers
+├── test/integration/            # Integration tests (SQLite in-memory)
+├── tests/                       # Further integration tests
+├── scripts/                     # create_database.sql, anonymize_legacy_deleted_pii.sql
+├── migrations/                  # SQL migrations
+├── api/                         # Generated OpenAPI (Swagger 2.0) spec — make swagger
+├── docs/                        # Project documentation (developer guide, setup, features, roadmap)
+├── gocrm-ui/                    # React TypeScript frontend
+│   ├── src/
+│   │   ├── components/          # Reusable UI components
+│   │   ├── pages/               # Application pages
+│   │   ├── api/                 # API client and endpoints
+│   │   ├── hooks/               # Custom React hooks
+│   │   ├── contexts/            # React contexts (auth, config, snackbar)
+│   │   ├── layouts/             # Shell layouts
+│   │   ├── routes/              # Route table
+│   │   ├── types/               # TypeScript type definitions
+│   │   ├── test/                # Vitest setup and helpers
+│   │   └── theme/               # Material-UI theme configuration
+│   ├── e2e/                     # Playwright suites, page objects and global setup
+│   └── public/                  # Static assets
+├── Makefile                     # Build and development commands
+├── go.mod                       # Go module definition
+├── go.sum                       # Go module checksums
+└── README.md                    # This file
+```
+
+## Documentation
+
+| Document | Contents |
+|---|---|
+| [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) | Developer guide: commands, architecture layers, key patterns, configuration, deletion semantics |
+| [docs/SETUP.md](docs/SETUP.md) | Backend and frontend setup walkthrough |
+| [docs/FEATURES.md](docs/FEATURES.md) | Feature and test-coverage matrix with known issues |
+| [docs/datamodel.md](docs/datamodel.md) | Entity model and relationships |
+| [docs/ADMIN_TESTING.md](docs/ADMIN_TESTING.md) | Admin E2E page objects and fixtures |
+| [docs/ROADMAP.md](docs/ROADMAP.md) | Ideas that are not implemented yet |
+| [CHANGELOG.md](CHANGELOG.md) | Notable changes |
+
+## Known Limitations
+
+- **Access tokens cannot be revoked before expiry.** Logout and the refresh-token rotation revoke
+  the *refresh* tokens, but an already-issued JWT stays valid until `JWT_EXPIRY_HOURS` elapses —
+  there is no token blocklist.
+- **Password-reset email needs SMTP configuration.** Without `SMTP_HOST` set, reset links go to the
+  application log (redacted) instead of a mailbox — fine for development, useless in production.
+- **CSRF middleware is not wired.** `internal/middleware/csrf.go` implements HMAC-SHA256 tokens with
+  a 24h expiry and is unit-tested, but `cmd/main.go` never installs it, so no route currently
+  requires a CSRF token.
+- **Rate limiting does not distinguish reads from writes on authenticated routes.**
+  `RateLimitModerate` (120/min, burst 30) is applied once to the whole protected group in
+  `setupDependencies` (`cmd/main.go`) and covers reads and writes alike.
+  `RateLimitStrict` (10/min, burst 5) guards the `/auth`
+  group and, via `SetupFormPublicRoutes`, the public form submit and confirm routes;
+  `RateLimitGenerous` (240/min, burst 40) is applied only to the public form *reads*
+  (`embed.js`, the definition and the hosted view). `DISABLE_RATE_LIMIT=true` bypasses the strict
+  tier alone — the check lives inside `RateLimitStrict` — so the moderate tier still applies to
+  test traffic.
+- **Bulk endpoints are unrouted** (see *Not currently exposed* above).
+- **Erasure does not reach logs or issued tokens.** Application logs record the email address on
+  login and on customer create/update, and issued JWTs embed it until they expire. Log retention
+  needs its own policy alongside database erasure.
+- **ESLint reports 40 errors and 137 warnings** in the frontend, mostly unused Playwright fixture
+  arguments and `any` types. `tsc` is clean.
+
+## Contributing
+
+Read [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) first — it documents the layering and the patterns
+the codebase enforces (unified response envelope, sentinel errors, sort allowlists, role assignment
+rules, erasure-on-delete). Then:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+GopherCRM is released under the MIT License. See [LICENSE](LICENSE).
+
+## Support
+
+For support and questions:
+- Create an issue in the GitHub repository
+- Check the documentation in the `docs/` directory
+- Review the configuration settings for system behavior customization

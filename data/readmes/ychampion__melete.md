@@ -95,6 +95,10 @@ key, and you can switch to your own model later.
 On a server, you can skip the build and pull the published images instead:
 [Using prebuilt images](docs/DEPLOYMENT.md#using-prebuilt-images).
 
+`bun run melete check`, `bun run melete doctor` and `bun run melete status` judge
+an installation and name what to do next:
+[The melete command](docs/DEPLOYMENT.md#the-melete-command).
+
 [Deployment](docs/DEPLOYMENT.md) covers version requirements, Windows, remote
 servers, HTTPS, Tailscale, backups and removal.
 
@@ -185,7 +189,7 @@ in with ChatGPT.
 - [Melete in other assistants](docs/MCP-SERVER.md): adding Melete to ChatGPT, Claude or Hermes as a connector
 - [Browser worker](docs/browser-worker.md): the browser Melete drives, and taking over from it
 - [Memory](docs/MEMORY.md) and [learning](docs/LEARNING.md)
-- [Architecture](docs/ARCHITECTURE.md) and [threat model](docs/THREAT-MODEL.md)
+- [Architecture](docs/ARCHITECTURE.md), [privacy and isolation](docs/PRIVACY-AND-ISOLATION.md) and [threat model](docs/THREAT-MODEL.md)
 - [Building a client](docs/CLIENT.md): the API and how the app uses it
 - [Problem reports](docs/FEEDBACK.md): reporting a problem from the app, and pulling one by its id to fix it
 - [Contributing](CONTRIBUTING.md): setting up, testing and sending changes

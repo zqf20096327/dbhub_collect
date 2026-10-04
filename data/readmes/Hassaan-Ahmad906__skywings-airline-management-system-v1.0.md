@@ -1,331 +1,342 @@
-# ✈️ SkyWings Airlines - Enterprise Flight Management & Booking Platform
+<p align="center">
+  <img src="frontend/images/transparent_logo_clean.PNG" alt="SkyWings logo" width="150">
+</p>
 
-SkyWings Airlines is a modern, full-stack, enterprise-grade airline booking, fleet scheduling, passenger check-in, and operations management platform structured for modular deployment across **Frontend**, **Backend**, and **Database**.
+# SkyWings Airline Management System
 
----
+A full-stack airline reservation and operations application built with Node.js, Express, MySQL and vanilla JavaScript. SkyWings brings passenger booking, administration and airport gate operations into three dedicated portals.
 
-## 🏗️ Project Architecture & Deployment Structure
+Customers can plan one-way, return and multi-city journeys, reserve cabin inventory, select seats and check in. Administrators manage flights, disruptions, reports and feedback. Airport crew handle manifests, gate controls and individual passenger boarding.
 
+**Project status:** local workflows are implemented and tested. Payment confirmation is a development simulation; live payments and airline/airport integrations remain required before operational deployment. See the [enterprise readiness audit](ENTERPRISE_READINESS_AUDIT.md).
+
+## Features
+
+| Area | Capabilities |
+| --- | --- |
+| Flight search | One-way, return and multi-city trips; up to six legs and nine passengers; cabin selection, fare/time filters and sorting |
+| Reservations | Server-calculated fares, shared journey references, atomic multi-leg reservations, retry protection and ten-minute unpaid reservation deadlines |
+| Seats and check-in | Cabin-aware availability, temporary server seat holds, check-in, individual tickets and QR boarding passes |
+| Customer portal | Saved passengers, booking history, eligible rebooking/cancellation and support messages |
+| Admin portal | Flight and aircraft management, schedule validation, disruption handling, database-backed reports and crew provisioning |
+| Feedback inbox | Search, pagination, new/reviewed/resolved filters, individual deletion to Trash and restoration |
+| Airport crew portal | Assigned-airport flight access, passenger manifests, gate assignment, boarding open/close, scanning and per-passenger boarding |
+| Audit and access | Role and airport authorization, gate audit history, transactional admin audits, token revocation and request rate limits |
+
+## Technology
+
+- **Frontend:** HTML, CSS and JavaScript, served by Express.
+- **Backend:** Node.js, Express, JWT authentication and bcrypt password hashing.
+- **Database:** MySQL 8, transactional reservations and versioned schema migrations.
+- **Boarding passes:** server-generated QR codes with individual passenger tokens.
+- **Verification:** Node.js regression tests, disposable MySQL workflows and Playwright/Chromium browser checks.
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 22 or newer and npm.
+- A running MySQL 8 server.
+- Local database credentials with permission to create the application database and tables. Integration tests additionally need permission to create and drop disposable test databases.
+
+Run the following commands from the repository root.
+
+### 1. Install dependencies
+
+```sh
+npm ci
 ```
-WEB/
-├── backend/                 # [BACKEND SERVICE] Express API & Domain Business Logic
-│   ├── config/              # Database pool & environment configuration
-│   ├── controllers/         # HTTP request controllers (bookings, holds, tickets)
-│   ├── middleware/          # JWT auth & centralized audit logging middleware
-│   ├── repositories/        # Data access layer (Repository pattern)
-│   ├── routes/              # RESTful API routes (/api/auth, /api/flights, etc.)
-│   ├── services/            # Domain logic, state machines & disruption engine
-│   ├── workers/             # Background asynchronous workers & hold cleaner
-│   └── server.js            # Express server entry point & static asset router
-├── frontend/                # [FRONTEND SERVICE] Client Web Application
-│   ├── css/                 # Glassmorphic responsive styling (style.css)
-│   ├── js/                  # Application controller (main.js) & Flight Radar (radar.js)
-│   ├── images/              # Airline logos, aircraft icons & media assets
-│   ├── index.html            # Landing page & quick flight search
-│   ├── flight-search.html   # Flight search, filtering & interactive seat map
-│   ├── about-contact.html   # Public about & contact page (scroll-restored)
-│   ├── user-about-contact.html
-│   ├── login.html           # Unified authentication
-│   ├── register.html        # Customer registration
-│   ├── check-in.html        # Online web check-in & boarding pass generator
-│   ├── my-bookings.html     # Customer booking history & e-tickets
-│   ├── user-dashboard.html  # Customer account overview
-│   ├── user-profile.html    # Profile management & travel preferences
-│   ├── admin-dashboard.html # Operations & metrics center
-│   ├── admin-management.html# Fleet, flights, bookings & airport CRUD
-│   └── admin-reports.html   # Revenue analytics & route occupancy reports
-├── database/                # [DATABASE] MySQL Schemas, Migrations & Seeds
-│   └── schema.sql           # Complete relational schema (17 tables, FKs, indexes)
-├── scripts/                 # [AUTOMATION & UTILITIES] Database Tools & Master Test Suite
-│   ├── master_test.js       # Master 1,000-Point System Verification Suite
-│   ├── setup_database.js    # DDL Runner creating all 17 tables from schema.sql
-│   ├── seed_database.js     # Seeds Admin, 20 Customers, Airports, Fleet & Flights
-│   └── reset_database.js    # One-step database wipe and re-seed utility
-├── server.js                # Root delegator to backend/server.js
-├── package.json             # NPM package manifest & test scripts
-├── .env                     # Environment variables
-└── README.md                # System documentation
+
+### 2. Configure the environment
+
+Copy [.env.example](.env.example) to `.env`:
+
+```sh
+# macOS / Linux
+cp .env.example .env
 ```
 
----
+```powershell
+# Windows PowerShell
+Copy-Item .env.example .env
+```
 
-## 🚀 Full Cloud Deployment Guide (GitHub + TiDB Cloud + Render + Vercel)
+The template contains production/cloud placeholders. Replace them with your local settings before running setup or seeding:
 
-For complete step-by-step instructions on deploying the full stack online across GitHub, TiDB Cloud Serverless, Render Web Services, and Vercel Global Edge CDN, see **[DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)**.
-
----
-
-## ⚡ Local Quick Start & Development
-
-### 1. Prerequisites
-
-* **Node.js**: v18.0.0 or higher
-* **MySQL Server**: 8.0 or higher (or TiDB Cloud)
-
-### 2. Environment Setup
-
-Create a `.env` file in the root directory:
-
-```env
+```dotenv
 PORT=3000
+NODE_ENV=development
+
 DB_HOST=localhost
 DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=your_mysql_password
+DB_USER=your_local_database_user
+DB_PASSWORD=your_local_database_password
 DB_NAME=skywings_airlines
-JWT_SECRET=your_super_secret_jwt_key
+DB_SSL=false
+DB_CONNECTION_LIMIT=10
+
+JWT_SECRET=replace_with_a_random_secret_generated_below
 JWT_EXPIRES_IN=7d
+FRONTEND_URL=http://localhost:3000
+
+PAYMENT_MODE=demo
+NOTIFICATIONS_ENABLED=false
+DISRUPTION_NOTIFICATION_WEBHOOK_URL=
+N8N_BOOKING_EMAIL_WEBHOOK_URL=
 ```
 
-### 3. Database Initialization & Seeding
+Generate a random JWT secret, then paste its output into `JWT_SECRET`:
 
-```bash
-# Option A: Create tables from schema.sql
+```sh
+node -e "console.log(require('node:crypto').randomBytes(48).toString('hex'))"
+```
+
+`.env` is private and excluded from Git. `PAYMENT_MODE=demo` enables development confirmation without collecting money or payment credentials. Use `disabled` to disable that confirmation.
+
+### 3. Set up and seed the database
+
+```sh
 npm run db:setup
-
-# Option B: Populate Admin, 20 Customer Users, Airports, Fleet & Flights
 npm run db:seed
-
-# Option C: Complete One-Step Database Reset & Seed
-npm run db:reset
 ```
 
-### 4. Start the Application
+Setup creates the schema and applies versioned migrations. Run it again when upgrading an existing installation. Seeding requires development/test mode and demo payments; it skips databases that already contain users.
 
-```bash
-# Production server
+### 4. Start the application
+
+```sh
 npm start
+```
 
-# Development with automatic restart
+Open [http://localhost:3000](http://localhost:3000). For development with automatic server reloads:
+
+```sh
 npm run dev
 ```
 
-The application will be accessible at `http://localhost:3000`.
+The API health endpoint is `GET /api/health`.
 
----
+## Portals and sample accounts
 
-## 🔑 Default Credentials
+### Isolated public demo on TiDB
 
-### Administrative & Primary Accounts
+The separate `skywings_public_demo` TiDB database contains synthetic Pakistani passengers, bookings and flights. These are its actual portal credentials:
 
-| Role                     | Name         | Email                | Password   |
-| ------------------------ | ------------ | -------------------- | ---------- |
-| **System Administrator** | System Admin | `admin@skywings.com` | `admin123` |
-| **Primary Customer**     | John Doe     | `user@skywings.com`  | `user123`  |
+| Portal | Email | Password |
+| --- | --- | --- |
+| Customer: Ali Raza | `demo.user@public-demo.example.com` | `DemoUser2026!` |
+| Administrator: Ahmed Farooq | `demo.admin@public-demo.example.com` | `DemoAdmin2026!` |
+| Airport crew: Hamza Iqbal, Karachi (`KHI`) | `demo.crew@public-demo.example.com` | `DemoCrew2026!` |
 
-### 20 Pre-Seeded Enterprise Customer Accounts (Password: `user123`)
+These accounts authenticate only in the separate demo application. The current Vercel website uses `skywings_airlines` and has different staff credentials. The demo is prepared for a separate Render service; its public URL will be added after deployment. All demo accounts are shared and all payment confirmations are simulated.
 
-|  #  | Name               | Email                             | Nationality | Passport Number |
-| :-: | ------------------ | --------------------------------- | ----------- | --------------- |
-|  1  | Emily Clark        | `emily.clark@skywings.com`        | American    | US89214710      |
-|  2  | David Miller       | `david.miller@skywings.com`       | American    | US89214711      |
-|  3  | Sarah Jenkins      | `sarah.jenkins@skywings.com`      | British     | GB78419201      |
-|  4  | Michael Brown      | `michael.brown@skywings.com`      | American    | US89214713      |
-|  5  | Jessica Taylor     | `jessica.taylor@skywings.com`     | American    | US89214714      |
-|  6  | James Anderson     | `james.anderson@skywings.com`     | Australian  | AU90381241      |
-|  7  | Olivia Martinez    | `olivia.martinez@skywings.com`    | Spanish     | ES67129034      |
-|  8  | Daniel Thomas      | `daniel.thomas@skywings.com`      | American    | US89214717      |
-|  9  | Sophia Jackson     | `sophia.jackson@skywings.com`     | French      | FR45129834      |
-|  10 | William White      | `william.white@skywings.com`      | American    | US89214719      |
-|  11 | Ava Harris         | `ava.harris@skywings.com`         | American    | US89214720      |
-|  12 | Alexander Martin   | `alexander.martin@skywings.com`   | German      | DE89234109      |
-|  13 | Mia Thompson       | `mia.thompson@skywings.com`       | American    | US89214722      |
-|  14 | Ethan Garcia       | `ethan.garcia@skywings.com`       | Emirati     | AE56129845      |
-|  15 | Charlotte Robinson | `charlotte.robinson@skywings.com` | American    | US89214724      |
-|  16 | Lucas Clark        | `lucas.clark@skywings.com`        | Japanese    | JP90412890      |
-|  17 | Amelia Rodriguez   | `amelia.rodriguez@skywings.com`   | American    | US89214726      |
-|  18 | Benjamin Lewis     | `benjamin.lewis@skywings.com`     | Singaporean | SG78129045      |
-|  19 | Harper Lee         | `harper.lee@skywings.com`         | American    | US89214728      |
-|  20 | Henry Walker       | `henry.walker@skywings.com`       | American    | US89214729      |
+To run the prepared demo locally with its private TiDB connection:
 
----
-
-## 🧪 Master 1,000-Point Test Suite
-
-Run the full end-to-end integration and stability audit:
-
-```bash
-npm test
+```sh
+npm run start:public-demo
 ```
 
----
+Open [http://localhost:3001/login.html](http://localhost:3001/login.html). A fresh installation can copy [.env.public-demo.example](.env.public-demo.example) to the private `.env.public-demo`, configure the demo database connection and set a new random JWT secret. The launcher refuses the primary database, requires a distinct signing secret, uses UTC dates and disables external notifications. The isolated sample dataset has 14 accounts, 12 airports, 4 aircraft, 288 seats, 63 flights and 19 synthetic bookings. Repeat startup preserves the demo data; an incomplete seed refuses to start.
 
-## 🛡️ Core Enterprise Features
+Deploy a **separate** service using [render.yaml](render.yaml) in Render's Blueprint flow. Provide the demo database connection in Render's private environment fields and use a database user restricted to the demo schema. The Blueprint generates an independent JWT secret and runs `npm run start:public-demo`. It serves both the frontend and API from the new service. See [Render's Blueprint documentation](https://render.com/docs/infrastructure-as-code).
 
-1. **Modular Deployment Isolation**:
+An operator can restore the shared sample data and refresh its relative flight dates with `npm run db:reset:public-demo -- --reset`. This backs up and restore-verifies the isolated demo before rebuilding it. The reset command accepts only `skywings_public_demo`; it cannot reset `skywings_airlines`.
 
-   * **Frontend** (`frontend/`), **Backend** (`backend/`), and **Database** (`database/`) can be deployed together as a monolithic full-stack app or separated into distinct micro-services / static CDNs.
+### Hosted customer samples
 
-2. **State-Machine Booking Lifecycle**:
+Sign in at the [live SkyWings login page](https://skywings-airline-management-system.vercel.app/login). These public sample accounts have customer access and synthetic Pakistani profiles:
 
-   * Strictly enforced transitions: `PENDING` → `CONFIRMED` → `CHECKED_IN` → `BOARDED` → `COMPLETED`.
-   * Guaranteed protection against illegal mutations out of terminal states (`COMPLETED`, `CANCELLED`, `EXPIRED`).
+| Name | Email | Password |
+| --- | --- | --- |
+| Ali Raza | `sample.ali.raza.2026@example.com` | `AliSample2026!` |
+| Fatima Malik | `sample.fatima.malik.2026@example.com` | `FatimaSample2026!` |
 
-3. **Unified Seat Map & Concurrency Locks**:
+Verified on **4 October 2026**: both accounts signed up, logged out and logged back in on the live website. Desktop and mobile customer dashboards were checked. These are shared public accounts; use your own registered account for personal bookings or passenger details. Hosted admin and crew passwords are private because those accounts access booking records and gate operations.
 
-   * Transactional row-level database locks ensure zero double-booking during high-traffic rushes.
-   * 10-minute temporary seat hold with automatic background TTL reclamation.
+### Hosted TiDB staff and private accounts
 
-4. **IATA Compliant E-Ticketing & Boarding Passes**:
+The following hosted portal accounts also exist in the actual TiDB database; their roles, active status and stored password matches were verified on **4 October 2026**:
 
-   * Standard 13-digit e-tickets (`789-XXXXXXXXXX`) issued automatically per passenger.
-   * Web check-in available 24 hours prior to departure with electronic barcode boarding pass generation.
+| Hosted role | Email | Password location |
+| --- | --- | --- |
+| Customer (private account) | `user@skywings.com` | Operator's private `artifacts/tidb-sample-accounts.json` |
+| Administrator | `admin@skywings.com` | Operator's private `artifacts/tidb-sample-accounts.json` |
+| Airport crew, Karachi (`KHI`) | `crew@skywings.com` | Operator's private `artifacts/tidb-sample-accounts.json` |
 
-5. **Earliest-to-Latest Chronological Flight Sorting**:
+These hosted staff accounts control the current booking and gate records. Public credentials for all roles require a separate demo deployment with isolated synthetic records. Database connection values such as `DB_USER` and `DB_PASSWORD` are separate from website account credentials and belong in private environment configuration.
 
-   * Scheduled upcoming flights in both customer search and admin management are organized chronologically from earliest to latest departure time (`ASC`).
+### Local development credentials
 
-6. **Admin Operations Center**:
+Run `npm run db:setup` and `npm run db:seed` against a fresh local development database before using these credentials:
 
-   * Comprehensive Airport Management with 3-letter IATA validation and deletion safeguards.
-   * Aircraft fleet management, flight scheduling, route profitability analytics, and revenue reports.
+| Portal | Local address | Sample email | Password |
+| --- | --- | --- | --- |
+| Customer | [Customer dashboard](http://localhost:3000/user-dashboard.html) | `user@skywings.com` | `DemoPass123!` |
+| Administrator | [Admin dashboard](http://localhost:3000/admin-dashboard.html) | `admin@skywings.com` | `DemoPass123!` |
+| Airport crew | [Gate operations](http://localhost:3000/crew-portal.html) | `crew@skywings.com` | `DemoPass123!` |
 
----
+**`DemoPass123!` works only with the local seeded accounts in this table; it does not authenticate the hosted TiDB portal accounts.** The TiDB reseed creates separate accounts with unique private passwords. Editing this README does not change database passwords; the public hosted customer samples above have been provisioned separately.
 
-## 📧 Automated Email System
+Sign in through the [login page](http://localhost:3000/login.html); the application redirects each role to its portal. The sample crew member, Hamza Iqbal, is assigned to Karachi (`KHI`). Administrators retain gate operations on their dashboard and can create crew accounts with an assigned departure airport. Public registration creates customer accounts.
 
-SkyWings Airlines includes an automated email notification system integrated with the airline booking platform.
+The Pakistani sample dataset contains **14 accounts, 12 airports, 4 aircraft, 288 seats, 63 flights and 19 bookings**. Names include Ali Raza, Ayesha Khan, Hassan Ahmed, Fatima Malik and Ahmed Farooq. Flights are scheduled relative to the time of seeding. Passenger identities, addresses and passport references are synthetic; aircraft have compact demonstration cabins.
 
-### Payment Confirmation Email Automation
+The local default credentials are for local evaluation. Production startup rejects the known local default passwords on the three portal accounts and active synthetic `.test` accounts.
 
-When a customer successfully completes a payment and the booking status becomes confirmed, the system automatically sends the booking information to the email automation workflow.
+### Login on a hosted installation
 
-The email automation workflow uses the production n8n webhook configured for the airline system.
+The public hosted customer credentials are listed above. For the private accounts created by the TiDB reseed, including hosted admin and crew, use `artifacts/tidb-sample-accounts.json` on the operator's computer. Their passwords differ from the local demo password. This private credentials file, environment file and SQL backups must remain outside Git.
 
-The production webhook URL is configured through the application's environment variables and is not hard-coded into the frontend.
+Database migrations preserve hosted users and passwords; they do not copy the local sample accounts. Use an account registered on that website or credentials provisioned for its database.
 
-### Email Automation Flow
+Login and registration support both `.html` paths and Vercel clean URLs. Redirects use the server-verified session, so a stale saved role cannot redirect a logged-out browser. Customer, admin and crew sessions each return to their own portal. Password fields include Show/Hide controls; password case and spaces are preserved exactly.
+
+When login fails, the inline message includes a support reference. An operator can search Render logs for that reference under `Authentication rejected:` or query the corresponding private `AUTH_LOGIN_FAILURE` audit record. The internal reason distinguishes `ACCOUNT_NOT_FOUND`, `PASSWORD_MISMATCH`, `PASSWORD_STORAGE_INVALID` and `ACCOUNT_INACTIVE`; the public response does not disclose these reasons for credential failures. No password or hash is logged. A missing account means the configured database needs investigation, while invalid storage can require the account recovery command below. Do not reset the whole database to troubleshoot authentication.
+
+An operator with database access can inspect or recover one existing account from an interactive terminal. Configure the database environment for the intended installation first and verify the target printed by the command:
+
+```sh
+npm run account:recover -- --check your-account@example.com
+npm run account:recover -- --reset your-account@example.com
+```
+
+Checking is read-only and reports account existence, role, status and password format without showing the password hash. Reset requires confirmation of the account and twice-entered hidden input for a unique password of at least 12 characters (up to 72 UTF-8 bytes), containing uppercase, lowercase and a number. It preserves the account's role and records, revokes existing sessions and writes a transactional audit. It does not create missing accounts or reactivate suspended ones. Do not send passwords in chat or command arguments, or reset the database to recover a login.
+
+### Resetting local sample data
+
+```sh
+npm run db:reset
+```
+
+**This replaces the local application database.** Reset is restricted to the development `skywings_airlines` database on localhost. If an existing database is present, it first saves a private SQL backup under `backups/`, restores it into an isolated database and verifies table row counts before resetting and reseeding. Backups are excluded from Git.
+
+### Reseeding TiDB while preserving history
+
+Configure the private local `.env` with the intended TiDB connection and `DB_SSL=true`. Create a consistent snapshot and verify its contents by restoring it into a temporary schema:
+
+```sh
+npm run db:backup
+```
+
+Use the private backup path printed by that command:
+
+```sh
+npm run db:seed:tidb -- --reseed skywings_airlines --backup backups/YOUR_BACKUP.sql
+```
+
+This command accepts only the named TiDB database with verified TLS and a recent, checksum-matched, restore-verified backup. It refuses unexpected schemas or records changed since the backup. The database user must have permission to create/drop the isolated restore schema.
+
+The transaction retires previous logins and revokes their sessions while preserving account IDs for historical references. It preserves bookings, recorded payments, tickets, audits and referenced flights. It removes only flights with no booking, ticket, hold, allocation, disruption or audit reference. Four active aircraft are required; capacity values are reconciled to their existing physical seats. It creates 14 Pakistani sample accounts, saved passenger profiles, sample feedback and 240 future flights over 30 days with return rotations and turnaround time. No simulated paid bookings are created. New customers start with zero spending; the admin reports retain historical paid booking value.
+
+Unique passwords are written to the private `artifacts/tidb-sample-accounts.json` file and are never printed or committed. Previous logins are inactive and use archived email identities; original email mappings remain in the private reseed audit. A failed transaction rolls back all database changes. This is an operator command, not an automatic deployment seed.
+
+## Workflow rules
+
+- Reservations begin unpaid and expire after ten minutes. Multi-leg reservation and development confirmation succeed or roll back together.
+- Check-in opens 24 hours before departure. Choosing a seat creates a server hold; assigned seats alone do not indicate completed check-in or boarding.
+- Gate scans require an administrator or airport-authorized crew member, an open gate, the correct flight, a valid issued ticket, an unused passenger token and staff identity confirmation. Boarding is permitted within 90 minutes before departure.
+- Each successful scan records one passenger and consumes that passenger's ticket. A group booking becomes boarded only after every passenger is recorded. Successful and rejected scans have separate gate audit records without raw boarding tokens.
+- Connecting journey legs require at least 60 minutes under the application's current policy. Airport-specific connection rules and interline itineraries are not implemented. Independent single-leg rebooking of linked journeys is blocked; coordinated journey changes remain future work.
+- Eligible single-flight rebooking preserves the route and resets prior check-in and seat assignments. Flight cancellation updates linked booking, seat, check-in and ticket records transactionally.
+- Dashboard/report reads do not advance booking states. Unmeasured aviation metrics display as unavailable. Real refunds require provider processing; development refunds are explicitly simulated.
+
+## Notifications
+
+Support messages are validated and stored with a reference. Admin inbox changes are audited and do not send email.
+
+External delivery is disabled by default. To enable it, set `NOTIFICATIONS_ENABLED=true` and configure the applicable endpoint:
+
+| Variable | Purpose |
+| --- | --- |
+| `N8N_BOOKING_EMAIL_WEBHOOK_URL` | Real paid booking confirmations |
+| `DISRUPTION_NOTIFICATION_WEBHOOK_URL` | Disruption notifications |
+
+Demo payments do not dispatch external booking confirmations. Notification success means gateway acceptance; final mailbox delivery is outside the application.
+
+## Dashboard and report values
+
+Dashboards and reports share the same metric definitions. Administrator cards cover all users; customer cards and profiles cover only the signed-in customer. Booking counts represent individual flight booking records, including each leg of a multi-city or return booking. Crew views cover the staff member's assigned departure airport.
+
+| Value | Definition |
+| --- | --- |
+| Total bookings | All stored booking states, including cancelled, expired and missed records |
+| Confirmed bookings | Confirmed, checked-in, boarded and completed records; exact-state filters remain separate |
+| Upcoming bookings | Future scheduled/boarding/delayed flights with active bookings or unexpired unpaid reservations |
+| Upcoming flights | Future scheduled/boarding/delayed flights assigned to active aircraft |
+| Paid booking value / customer spending | Amounts marked paid, including missed bookings and cancelled bookings awaiting a refund; unpaid and refunded records are excluded |
+| Occupancy | Paid confirmed/checked-in/boarded/completed passengers divided by aircraft capacity across non-cancelled flights, shown to two decimal places |
+| Average route fare | Recorded paid amounts divided by their passenger count, rather than today's advertised flight price |
+
+Paid booking value reflects application records; local simulated confirmation is not payment settlement or an accounting revenue ledger. On-time performance, ratings and loyalty balances show unavailable when their source data is absent. Growth shows unavailable without a previous-month baseline. Report CSV exports use the same values and preserve unavailable fields. Flight management loads all API pages before displaying its grouped totals; search results cannot be overwritten by an older delayed response.
+
+## Tests and verification
+
+Install Chromium before running browser checks:
+
+```sh
+node node_modules/playwright/cli.js install chromium --no-shell
+```
+
+Run the complete verification suite:
+
+```sh
+npm run test:all
+```
+
+| Command | Coverage |
+| --- | --- |
+| `npm test` | Independent security, authorization, inventory and workflow regressions |
+| `npm run test:schema` | Fresh schema, legacy upgrades and repeated migrations |
+| `npm run test:workflows` | Booking, holds, expiry, rebooking, boarding and support workflows |
+| `npm run test:seed` | Sample data, capacity, lifecycle, repeat-seed safety, login for all 14 accounts and portal/new-customer re-login after logout |
+| `npm run test:tidb-seed` | Optional cloud/disposable-schema check: backup drift refusal, rollback, preserved financial/ticket records, retired sessions, production-safe credentials and non-overlapping new flights |
+| `npm run test:public-demo` | Isolated TiDB demo: three-role login/logout, portal browser checks, report reconciliation, primary-token rejection and unchanged primary records |
+| `npm run test:ui` | Keyboard navigation, date controls and modal focus behavior |
+| `npm run test:enterprise` | Multi-leg ownership, retry protection, capacity, rollback, expiry, staff provisioning, account recovery and private login diagnostics |
+| `npm run test:metrics` | Dashboard/report/customer reconciliation, occupancy and recorded fares, exact-state filters, all flight pages and desktop/mobile checks in different time zones |
+| `npm run test:browser` | All 14 pages at desktop/mobile widths; signup/logout/re-login, password controls, stale session roles and HTML/clean URL redirects; complete customer, admin and crew workflows |
+
+The eight checks in `test:all` use disposable `skywings_test_*` databases rather than application records. The optional `test:public-demo` uses the isolated `skywings_public_demo` database for its authentication/browser checks and reads the primary records to verify they stay unchanged. External delivery is stubbed or disabled. Results, logs and screenshots are saved under the Git-ignored `artifacts/` directory.
+
+**Last verified: 4 October 2026.** The independent regression suite has 48 passing tests, including public-demo isolation and UTC parsing for TiDB deadlines. The earlier eight-check run passed; follow-up checks also passed for the original seed on disposable TiDB and the isolated public demo's three portal roles, browser views, report totals and token separation. Metrics checks cover 510 flights, state/payment/expiry exclusions, customer ownership and browser reconciliation in Pakistan and US time zones. Schema checks reproduce and repair the missing reservation-expiry column while preserving an existing booking. Full browser checks cover all 14 pages at 1440px and 390px. The dependency audit reported zero vulnerabilities during the feature-upgrade audit. These checks do not certify production hosting, payment settlement or airport interoperability.
+
+## Repository structure
 
 ```text
-Customer completes payment
-        ↓
-Payment confirmed
-        ↓
-Booking status becomes CONFIRMED
-        ↓
-Backend collects booking information
-        ↓
-Backend sends booking data to n8n
-        ↓
-AI generates professional booking confirmation email
-        ↓
-Gmail sends email
-        ↓
-Customer receives booking confirmation
+backend/
+  config/           Database configuration
+  middleware/       Authentication, authorization and request controls
+  repositories/     Database access
+  routes/           HTTP API endpoints
+  services/         Reservation, inventory and operations logic
+  workers/          Background processing
+database/
+  schema.sql        Canonical database schema
+  migrations/       Versioned upgrades
+frontend/
+  *.html            Customer, admin and crew pages
+  css/              Shared and operations styling
+  js/               Browser workflows
+scripts/            Setup, seeding, backups and verification
+tests/              Independent regression tests and fixtures
 ```
 
-### Booking Information Sent to Email Automation
+## Deployment and documentation
 
-The email automation uses the actual information available in the airline booking system, including:
+Read the [enterprise readiness audit](ENTERPRISE_READINESS_AUDIT.md) before planning a production launch. Outstanding work includes live payment/refund integration, airport/DCS interoperability, staff MFA and device controls, production hosting/security, load/failover testing and managed recovery verification. The QR payload currently verifies internal application tokens; it is not an implemented IATA boarding-pass or airport-reader integration.
 
-* Booking Reference
-* Booking Status
-* Passenger Name
-* Number of Passengers
-* Airline
-* Flight Number
-* Travel Class
-* Departure Airport
-* Departure Date
-* Departure Time
-* Arrival Airport
-* Arrival Date
-* Arrival Time
-* Flight Duration
-* Seat Number
-* Baggage Allowance
-* Payment Status
-* Amount Paid
-* Payment Currency
-* Payment Method
-* Check-in Information
+For Render, use Build Command `npm ci` and Start Command `npm run start:deploy` to apply database migrations before launching. Alternatively, run `npm run db:setup` in a supported pre-deploy step and start with `npm start`. The server refuses an outdated schema before listening or starting cleanup. See the [Render migration troubleshooting instructions](DEPLOYMENT_GUIDE.md#render-missing-reservation-expiry-column) for the `reservation_expires_at` error. Neither migration path resets or seeds hosted data.
 
-The email content is generated dynamically from the actual booking information.
+The core migration also handles the seat-hold generated-column dependency reported by TiDB. It skips unnecessary status changes, preserves existing enum order and recreates the generated flag and unique-seat index when an upgrade requires it. Schema tests cover existing hold records, interrupted migration retries and restored duplicate-seat protection on MySQL with TiDB-style checks. A live TiDB deployment still needs verification against its own database version.
 
-No hard-coded customer, flight, booking, seat, payment, or passenger information is used for production email notifications.
+| Document | Purpose |
+| --- | --- |
+| [Enterprise readiness audit](ENTERPRISE_READINESS_AUDIT.md) | Release decision, verification evidence and remaining production requirements |
+| [Gate boarding audit](GATE_BOARDING_AUDIT.md) | Crew/admin permissions, boarding controls and operational limits |
+| [Deployment guide](DEPLOYMENT_GUIDE.md) | Hosting configuration guidance; read alongside the readiness audit |
+| [Original review](REVIEW_REPORT.md) | Original findings and their context |
+| [Repair progress](FIX_PROGRESS.md) | Completed fixes, verification and resume checkpoint |
 
-### Email Format
+## License
 
-The generated booking confirmation email uses professional HTML formatting, including:
-
-* Structured booking sections
-* Bold important information
-* Flight information
-* Passenger information
-* Payment information
-* Baggage information
-* Check-in information
-* Professional airline messaging
-
-The email subject follows the format:
-
-```text
-Flight Booking Confirmed - {Booking Reference}
-```
-
-The recipient is the customer's actual registered email address.
-
-The sender is:
-
-```text
-SkyWings Airlines
-```
-
-### Production n8n Integration
-
-The production n8n webhook is configured through an environment variable:
-
-```env
-N8N_BOOKING_EMAIL_WEBHOOK_URL=your_production_n8n_webhook_url
-```
-
-The actual production webhook URL should be configured in the deployment environment and should not be hard-coded into the source code.
-
-### Email Trigger Rules
-
-The confirmation email is sent only when payment has been successfully confirmed.
-
-The system must not send a booking confirmation email when:
-
-* Payment is pending
-* Payment failed
-* Payment was cancelled
-* Booking was cancelled
-* Booking has not been confirmed
-
-### Security
-
-Only required booking information is sent to the email automation system.
-
-Sensitive information such as:
-
-* Card numbers
-* CVV
-* PIN
-* Passwords
-* JWT secrets
-* Database credentials
-* API keys
-* Payment gateway secrets
-
-must never be included in the email automation payload.
-
-### Reliability
-
-Failure of the email automation system must not change the successful payment or booking status.
-
-If the n8n workflow is temporarily unavailable, the booking remains confirmed and the email failure should be logged for troubleshooting.
-
-### Duplicate Protection
-
-The email automation should respect the application's payment idempotency and booking event handling so that the same successful payment does not unnecessarily generate duplicate confirmation emails.
-
-### Environment Configuration
-
-The production environment should contain:
-
-```env
-N8N_BOOKING_EMAIL_WEBHOOK_URL=your_production_n8n_webhook_url
-```
-
-The `.env` file containing actual production configuration must not be committed to GitHub.
+This repository includes the [MIT License](LICENSE).

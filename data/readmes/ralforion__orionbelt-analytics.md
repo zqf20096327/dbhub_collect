@@ -7,7 +7,7 @@
 
 <p align="center"><strong>The Ontology-based MCP server for your Text-2-SQL convenience.</strong></p>
 
-[![Version 2.0.3](https://img.shields.io/badge/version-2.0.3-purple.svg)](https://github.com/ralforion/orionbelt-analytics/releases)
+[![Version 2.1.0](https://img.shields.io/badge/version-2.1.0-purple.svg)](https://github.com/ralforion/orionbelt-analytics/releases)
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![License: BUSL-1.1](https://img.shields.io/badge/License-BUSL--1.1-orange.svg)](https://github.com/ralforion/orionbelt-analytics/blob/main/LICENSE)
 [![FastMCP](https://img.shields.io/badge/FastMCP-3.3.1+-blue)](https://github.com/jlowin/fastmcp)
@@ -47,7 +47,7 @@ Run Analytics and Semantic Layer side-by-side in Claude Desktop for schema-aware
 
 - **8 database connectors** -- PostgreSQL, MySQL, Snowflake, ClickHouse, Dremio, BigQuery, DuckDB/MotherDuck, Databricks SQL
 - **RDF/OWL ontology generation** with `oba:` namespace SQL annotations and W3C R2RML mappings
-- **GraphRAG** -- graph traversal (up to 12 hops) + ChromaDB vector embeddings for semantic schema discovery
+- **GraphRAG** -- graph traversal (up to 12 hops) + ChromaDB vector embeddings for semantic schema discovery, run locally; a [multilingual option](docs/configuration.md#embedding-model) lets questions in other languages find the schema (German *"Umsatz"* finds a column named *"Net revenue"*)
 - **SPARQL 1.1** query interface via persistent Oxigraph RDF store
 - **OBQC validation** -- deterministic SQL checks against the ontology (table/column existence, join validity, type mismatches, fan-traps)
 - **Interactive charting** -- Plotly charts with MCP-UI rendering in Claude Desktop
@@ -176,6 +176,7 @@ OrionBelt exposes 26 MCP tools. Here is a summary by category:
 | `suggest_semantic_names` | Detect abbreviations and cryptic names for business-friendly renaming |
 | `apply_semantic_names`   | Apply LLM-suggested semantic names and descriptions to ontology       |
 | `load_my_ontology`       | Load a custom `.ttl` ontology file from an import folder              |
+| `validate_relationship`  | Check a relationship against the data and record the verdict in the ontology |
 | `download_artifact`      | Download ontology or R2RML mapping as a Turtle file                   |
 
 ### Query & Visualization

@@ -3,13 +3,13 @@
 # SPDX-FileCopyrightText: 2025 DBVisor
 -->
 
-# ~SQL
+# `~SQL`
 
 <!-- MDOC !-->
 
-~SQL provides **state-of-the-art, high-performance SQL integration for Elixir**, built to handle extreme concurrency with **unmatched expressiveness and ergonomic query composition**. Write **safe, composable, parameterized queries** directly, without translating to Ecto or any ORM.
+`~SQL` provides **state-of-the-art, high-performance SQL integration for Elixir**, built to handle extreme concurrency with **unmatched expressiveness and ergonomic query composition**. Write **safe, composable, parameterized queries** directly, without translating to Ecto or any ORM.
 
-~SQL is a **foreign language integration**, letting you write SQL naturally while Elixir handles **transactions, concurrency, and query planning** for you. Unlike typical ORMs, SQL scales **diagonally on the BEAM**, fully leveraging multicore hardware under load.
+`~SQL` is a **foreign language integration**, letting you write SQL naturally while Elixir handles **transactions, concurrency, and query planning** for you. Unlike typical ORMs, SQL scales **diagonally on the BEAM**, fully leveraging multicore hardware under load.
 
 
 ### Highlights
@@ -24,9 +24,9 @@
 - **Streaming Large Datasets:** Efficiently stream millions of rows without blocking memory or reducing concurrency.
 
 ### Deterministic Queue Control & Load Shedding
-Standard connection pools often suffer from head-of-line blocking and cascading latency spikes when starved under heavy load. SQL fundamentally avoids this by structurally enforcing strict, user-configurable queue timeouts.
+Standard connection pools often suffer from head-of-line blocking and cascading latency spikes when starved under heavy load. `~SQL` fundamentally avoids this by structurally enforcing strict, user-configurable queue timeouts.
 
-Performance bounds and failure modes are entirely within your control. You can configure timeouts globally at the pool level or dynamically on a per-query basis. When the pool is exhausted, SQL respects your explicit queue limits and instantly sheds excess load exactly when instructed, protecting the BEAM node from resource exhaustion and keeping latency deterministic.
+Performance bounds and failure modes are entirely within your control. You can configure timeouts globally at the pool level or dynamically on a per-query basis. When the pool is exhausted, `~SQL` respects your explicit queue limits and instantly sheds excess load exactly when instructed, protecting the BEAM node from resource exhaustion and keeping latency deterministic.
 
 ## Examples
 
