@@ -448,17 +448,21 @@ def main():
 
     ledger = json.loads(OUT.read_text(encoding="utf-8")) if OUT.is_file() else {}
     # 幂等策略：网络产物（draft/recheck/gated/no_evidence）粘住不重扫；
-    # 信号层产物（oos/edu/desc_pending/judged）随管线/快照演变——每轮重算（多数零网络）。
+    # 信号层产物（oos/edu/desc_pending/judged）随管线/快照演变——垫后重算。
+    # 批次排序：全新条目优先（先消化积压），可重试次之，易变态重算垫后——
+    # 否则星序头部的重算会吃掉 limit，新侦查推进不动（实测批次2仅净进80条）。
     STICKY_NET = {"draft", "recheck", "gated_app_cat", "no_evidence"}
     RETRYABLE = {"api_error", "partial_scan"}
-    batch = []
+    fresh, retry, volatile = [], [], []
     for r in todo:
         st_old = (ledger.get(r[0]) or {}).get("status")
-        if args.retry_errors:
-            if st_old in RETRYABLE:
-                batch.append(r)
-        elif st_old is None or st_old in RETRYABLE or st_old not in STICKY_NET:
-            batch.append(r)
+        if st_old is None:
+            fresh.append(r)
+        elif st_old in RETRYABLE:
+            retry.append(r)
+        elif st_old not in STICKY_NET:
+            volatile.append(r)
+    batch = retry if args.retry_errors else (fresh + retry + volatile)
     batch = batch if args.limit <= 0 else batch[:args.limit]
     if not args.report_only:
         print(f"本轮联网扫描 {len(batch)} 条 · {args.threads} 线程", flush=True)
