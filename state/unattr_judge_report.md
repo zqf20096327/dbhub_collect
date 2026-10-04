@@ -1,17 +1,18 @@
 # unattr_judge 判定报告
-生成：2026-10-04 10:51 · 台账 1477 条 · 圈外未解读 276 条（留给夜间队列）
+生成：2026-10-04 11:33 · 台账 1877 条 · 圈外未解读 276 条（留给夜间队列）
 
 ## 状态分布
-- no_evidence: 737
-- oos: 390
-- judged_no_support: 179
-- edu: 73
-- draft: 55
-- recheck: 20
-- gated_app_cat: 17
+- no_evidence: 966
+- oos: 482
+- judged_no_support: 221
+- edu: 90
+- draft: 64
+- recheck: 25
+- gated_app_cat: 22
 - desc_pending: 6
+- partial_scan: 1
 
-## 归属草案（draft 55 条，人工签发进 overrides.json；Top 30）
+## 归属草案（draft 64 条，人工签发进 overrides.json；Top 30）
 
 -  38587★ sqlmapproject/sqlmap → PostgreSQL,MySQL,Oracle,SQLite,SQL Server,ClickHouse｜路径 plugins/dbms/clickhouse
 -  23811★ sinaptik-ai/pandas-ai → PostgreSQL,MySQL,Oracle,SQL Server｜路径 extensions/ee/connectors/oracle
@@ -66,6 +67,11 @@
 -    102★ zzzprojects/EntityFramework-Classic → PostgreSQL（weak）｜依赖 npgsql ∈ demo/PostgreSQL/EFClassic.Demo.Net45/EFClassic.Demo.Net45.csproj
 -     93★ vbilopav/NoOrm.Net → PostgreSQL,SQLite,SQL Server（weak）｜依赖 npgsql ∈ Tests/Net5TestProject/Net5TestProject.csproj
 -     72★ mkalus/segrada → MySQL（dep_only）｜依赖 mysql-connector ∈ pom.xml
+-     59★ stereobooster/braindb → SQLite（dep_only）｜依赖 better-sqlite3 ∈ packages/core/package.json
+-     54★ cornelldbgroup/skinnerdb → PostgreSQL（dep_only）｜依赖 postgresql ∈ pom.xml
+-     50★ swytchdb/swytch → PostgreSQL（dep_only）｜依赖 jackc/pgx ∈ go.mod
+-     45★ junjieliu2910/cmu-15-445 → SQLite（dep_only）｜依赖 sqlite3 ∈ src/CMakeLists.txt
+-     41★ tesseract-olap/tesseract → ClickHouse（dep_only）｜依赖 clickhouse-rs ∈ tesseract-clickhouse/Cargo.toml
 
 ## 范围外命中抽检（防词表误伤，人工瞄一眼 Top 20）
 
@@ -90,4 +96,4 @@
 -  17809★ VictoriaMetrics/VictoriaMetrics
 -  17619★ apache/pouchdb
 
-## 分层小结：desc_pending 6 · judged_no_support 179 · no_evidence 737 · api_error/partial 0（--retry-errors 补扫）
+## 分层小结：desc_pending 6 · judged_no_support 221 · no_evidence 966 · api_error/partial 1（--retry-errors 补扫）
