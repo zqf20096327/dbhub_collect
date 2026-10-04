@@ -1,19 +1,19 @@
 # unattr_judge 判定报告
-生成：2026-10-04 12:15 · 台账 2277 条 · 圈外未解读 276 条（留给夜间队列）
+生成：2026-10-04 12:57 · 台账 2677 条 · 圈外未解读 276 条（留给夜间队列）
 
 ## 状态分布
-- no_evidence: 1204
-- oos: 570
-- judged_no_support: 251
-- edu: 106
-- draft: 76
-- gated_app_cat: 30
-- recheck: 28
-- desc_pending: 6
+- no_evidence: 1451
+- oos: 662
+- judged_no_support: 280
+- edu: 117
+- draft: 85
+- gated_app_cat: 37
+- recheck: 31
+- desc_pending: 8
 - partial_scan: 4
 - api_error: 2
 
-## 归属草案（draft 76 条，人工签发进 overrides.json；Top 30）
+## 归属草案（draft 85 条，人工签发进 overrides.json；Top 30）
 
 -  38587★ sqlmapproject/sqlmap → PostgreSQL,MySQL,Oracle,SQLite,SQL Server,ClickHouse｜路径 plugins/dbms/clickhouse
 -  23811★ sinaptik-ai/pandas-ai → PostgreSQL,MySQL,Oracle,SQL Server｜路径 extensions/ee/connectors/oracle
@@ -76,6 +76,9 @@
 -     41★ Schema-JS/schema-js → SQLite（dep_only）｜依赖 rusqlite ∈ Cargo.toml
 -     33★ zarianw/jonoondb → SQLite（dep_only）｜依赖 sqlite3 ∈ CMakeLists.txt
 -     31★ NoKV-Lab/holt → SQLite（dep_only）｜依赖 rusqlite ∈ benches/Cargo.toml
+-     23★ arosenfeld/immunedb → MySQL（dep_only）｜依赖 pymysql ∈ requirements.txt
+-     23★ stoolap/stoolap-go → SQLite（weak）｜依赖 go-sqlite3 ∈ example/benchmark/go.mod
+-     21★ lysevi/dariadb → SQLite（dep_only）｜依赖 sqlite3 ∈ CMakeLists.txt
 
 ## 范围外命中抽检（防词表误伤，人工瞄一眼 Top 20）
 
@@ -100,4 +103,4 @@
 -  17809★ VictoriaMetrics/VictoriaMetrics
 -  17619★ apache/pouchdb
 
-## 分层小结：desc_pending 6 · judged_no_support 251 · no_evidence 1204 · api_error/partial 6（--retry-errors 补扫）
+## 分层小结：desc_pending 8 · judged_no_support 280 · no_evidence 1451 · api_error/partial 6（--retry-errors 补扫）
