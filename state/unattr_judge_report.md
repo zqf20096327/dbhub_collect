@@ -1,17 +1,17 @@
 # unattr_judge 判定报告
-生成：2026-10-04 08:38 · 台账 487 条 · 圈外未解读 276 条（留给夜间队列）
+生成：2026-10-04 08:45 · 台账 637 条 · 圈外未解读 276 条（留给夜间队列）
 
 ## 状态分布
-- no_evidence: 197
-- oos: 153
-- judged_no_support: 62
-- edu: 35
-- draft: 21
-- recheck: 12
+- no_evidence: 268
+- oos: 194
+- judged_no_support: 83
+- edu: 43
+- draft: 28
+- recheck: 13
 - gated_app_cat: 5
-- desc_pending: 2
+- desc_pending: 3
 
-## 归属草案（draft 21 条，人工签发进 overrides.json；Top 30）
+## 归属草案（draft 28 条，人工签发进 overrides.json；Top 30）
 
 -  38587★ sqlmapproject/sqlmap → PostgreSQL,MySQL,Oracle,SQLite,SQL Server,ClickHouse｜路径 plugins/dbms/clickhouse
 -  23811★ sinaptik-ai/pandas-ai → PostgreSQL,MySQL,Oracle,SQL Server｜路径 extensions/ee/connectors/oracle
@@ -34,6 +34,13 @@
 -    591★ aiidateam/aiida-core → PostgreSQL,MySQL｜依赖 psycopg ∈ pyproject.toml
 -    567★ auraphp/Aura.Sql → PostgreSQL｜依赖 postgresql ∈ composer.json
 -    546★ mwarkentin/django-watchman → MySQL,SQL Server｜依赖 mysqlclient ∈ pyproject.toml
+-    448★ hanami/model → MySQL,SQLite｜依赖 mysql2 ∈ Gemfile
+-    443★ CERT-Polska/mquery → PostgreSQL｜依赖 psycopg ∈ requirements.txt
+-    436★ top-think/think-orm → PostgreSQL,MySQL,Oracle,SQLite｜路径 src/db/connector/Mysql.php
+-    416★ oltpbenchmark/oltpbench → PostgreSQL,Oracle｜依赖 postgresql ∈ pom.xml
+-    345★ apache/cayenne → PostgreSQL,MySQL,Oracle,SQLite,SQL Server,MariaDB｜依赖 postgresql ∈ pom.xml
+-    343★ r2dbc/r2dbc-client → PostgreSQL,MySQL,SQL Server｜依赖 postgresql ∈ pom.xml
+-    301★ hellofresh/klepto → PostgreSQL,MySQL｜依赖 lib/pq ∈ go.mod
 
 ## 待复核（recheck：弱证据 / 独立库依赖模式）
 
@@ -49,6 +56,7 @@
 -    871★ hyrise/hyrise → PostgreSQL,SQLite（dep_only）｜依赖 sqlite3 ∈ CMakeLists.txt
 -    838★ akumuli/Akumuli → SQLite（dep_only）｜依赖 sqlite3 ∈ CMakeLists.txt
 -    569★ tidesdb/tidesdb → MariaDB（dep_only）｜依赖 mariadb ∈ CMakeLists.txt
+-    363★ apache/jackrabbit → MySQL,Oracle（dep_only）｜依赖 mysql-connector ∈ jackrabbit-core/pom.xml
 
 ## 范围外命中抽检（防词表误伤，人工瞄一眼 Top 20）
 
@@ -73,4 +81,4 @@
 -  17809★ VictoriaMetrics/VictoriaMetrics
 -  17619★ apache/pouchdb
 
-## 分层小结：desc_pending 2 · judged_no_support 62 · no_evidence 197 · api_error/partial 0（--retry-errors 补扫）
+## 分层小结：desc_pending 3 · judged_no_support 83 · no_evidence 268 · api_error/partial 0（--retry-errors 补扫）
