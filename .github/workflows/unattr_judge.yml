@@ -1,0 +1,63 @@
+name: unattr-judge
+on:
+  schedule:
+    - cron: '30 2 * * 1'      # 每周一 02:30 UTC——夜间解读窗整点起步后 30 分钟，错峰
+                              # （判定器只写自己的台账/报告，与 interpret 不同文件，推送撞车由重试兜底）
+  workflow_dispatch:           # 手动触发（可调批量/补扫/预演）
+    inputs:
+      limit:
+        description: '本轮扫描条数上限（0=全量）'
+        type: number
+        default: 0
+      retry_errors:
+        description: '只补扫 api_error / partial_scan'
+        type: boolean
+        default: false
+      dry_run:
+        description: '只看信号层统计，不联网不写盘'
+        type: boolean
+        default: false
+permissions:
+  contents: write
+concurrency:
+  group: unattr-judge          # 独立组：不与 nightly-interpret 互杀
+  cancel-in-progress: false
+jobs:
+  judge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 200       # 全量约 1.5-2h；配额护栏+连败收尾兜底
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install requests
+
+      # Actions 上无页面池（dbhub_page 未上 GitHub）→ --mode collect：
+      # 从本仓快照 + interp_cache + config 词表推导未归类名单（与 build_demo 口径同源镜像）
+      - name: 判定（信号层 → E1/E3 侦查 → 台账+报告）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          EXTRA=""
+          [ "${{ github.event.inputs.retry_errors }}" = "true" ] && EXTRA="--retry-errors"
+          [ "${{ github.event.inputs.dry_run }}" = "true" ] && EXTRA="$EXTRA --dry-run"
+          python interpret/unattr_judge.py --mode collect \
+            --limit "${{ github.event.inputs.limit || 0 }}" $EXTRA
+
+      # 与 nightly-interpret 同款提交套路：撞车重试 5 轮
+      - name: 提交并推送台账
+        run: |
+          git config user.name "zqf20096327"
+          git config user.email "zqf20096327@users.noreply.github.com"
+          git add state/unattr_verdicts.json state/unattr_judge_report.md 2>/dev/null
+          git diff --cached --quiet && { echo "无变更"; exit 0; }
+          git commit -m "未归类判定 $(date -u +%F\ %H:%M) · 台账 $(python -c "import json;print(len(json.load(open('state/unattr_verdicts.json'))))" 2>/dev/null || echo 0) 条" -q
+          for i in 1 2 3 4 5; do
+            git pull --rebase --autostash >/dev/null 2>&1 || true
+            git push && { echo "已推送"; exit 0; }
+            echo "推送撞车，40s 后重试（$i/5）"; sleep 40
+          done
+          echo "::warning::推送 5 次未成功——台账在本地 runner 已丢，下次运行自动重扫（幂等）"
