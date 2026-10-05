@@ -1,19 +1,19 @@
 # unattr_judge 判定报告
-生成：2026-10-04 12:57 · 台账 2677 条 · 圈外未解读 276 条（留给夜间队列）
+生成：2026-10-05 06:56 · 台账 4007 条 · 圈外未解读 28 条（留给夜间队列）
 
 ## 状态分布
-- no_evidence: 1451
-- oos: 662
-- judged_no_support: 280
-- edu: 117
-- draft: 85
-- gated_app_cat: 37
-- recheck: 31
-- desc_pending: 8
-- partial_scan: 4
-- api_error: 2
+- no_evidence: 2283
+- oos: 921
+- judged_no_support: 402
+- edu: 153
+- draft: 122
+- gated_app_cat: 50
+- recheck: 43
+- desc_pending: 24
+- partial_scan: 6
+- api_error: 3
 
-## 归属草案（draft 85 条，人工签发进 overrides.json；Top 30）
+## 归属草案（draft 122 条，人工签发进 overrides.json；Top 30）
 
 -  38587★ sqlmapproject/sqlmap → PostgreSQL,MySQL,Oracle,SQLite,SQL Server,ClickHouse｜路径 plugins/dbms/clickhouse
 -  23811★ sinaptik-ai/pandas-ai → PostgreSQL,MySQL,Oracle,SQL Server｜路径 extensions/ee/connectors/oracle
@@ -79,28 +79,40 @@
 -     23★ arosenfeld/immunedb → MySQL（dep_only）｜依赖 pymysql ∈ requirements.txt
 -     23★ stoolap/stoolap-go → SQLite（weak）｜依赖 go-sqlite3 ∈ example/benchmark/go.mod
 -     21★ lysevi/dariadb → SQLite（dep_only）｜依赖 sqlite3 ∈ CMakeLists.txt
+-     21★ pivotlake/pivot → PostgreSQL（dep_only）｜依赖 postgresql ∈ bin/Cargo.toml
+-     19★ paiml/trueno-db → SQLite（dep_only）｜依赖 rusqlite ∈ Cargo.toml
+-     15★ baxiry/zaradb → SQLite（dep_only）｜依赖 go-sqlite3 ∈ go.mod
+-     15★ exasol/exasol-personal → SQLite,ClickHouse（dep_only）｜依赖 go-sqlite3 ∈ go.mod
+-     14★ keift/peakdb → SQLite（dep_only）｜依赖 better-sqlite3 ∈ package.json
+-     13★ Bethel-nz/aurora → SQLite（dep_only）｜依赖 rusqlite ∈ Cargo.toml
+-     12★ QSmally/QDB → SQLite（dep_only）｜依赖 better-sqlite3 ∈ package.json
+-     12★ elh/bitempura → SQLite（dep_only）｜依赖 go-sqlite3 ∈ go.mod
+-     11★ UFFeScience/C-ParGRES → PostgreSQL（dep_only）｜依赖 postgresql ∈ PargresStarter/pom.xml
+-     11★ vectordb-io/vraft → SQLite（dep_only）｜依赖 sqlite3 ∈ third_party/leveldb/CMakeLists.txt
+-     10★ yizenov/compass_query_optimizer → SQLite（dep_only）｜依赖 sqlite3 ∈ mapd-core/CMakeLists.txt
+-     10★ ciusji/guinsoo → PostgreSQL（dep_only）｜依赖 postgresql ∈ pom.xml
 
 ## 范围外命中抽检（防词表误伤，人工瞄一眼 Top 20）
 
--  76574★ redis/redis
--  75097★ Asabeneh/30-Days-Of-Python
--  59471★ meilisearch/meilisearch
+-  76583★ redis/redis
+-  75222★ Asabeneh/30-Days-Of-Python
+-  59488★ meilisearch/meilisearch
 -  52323★ etcd-io/etcd
--  41875★ duckdb/duckdb
--  33094★ surrealdb/surrealdb
--  32539★ cockroachdb/cockroach
--  32154★ facebook/rocksdb
--  31759★ influxdata/influxdb
--  31737★ dragonflydb/dragonfly
--  28615★ mongodb/mongo
--  27396★ forthespada/CS-Books
--  27359★ valkey-io/valkey
--  25250★ clockworklabs/SpacetimeDB
--  25150★ taosdata/TDengine
--  22583★ typicode/lowdb
+-  41902★ duckdb/duckdb
+-  33096★ surrealdb/surrealdb
+-  32547★ cockroachdb/cockroach
+-  32163★ facebook/rocksdb
+-  31760★ influxdata/influxdb
+-  31743★ dragonflydb/dragonfly
+-  28614★ mongodb/mongo
+-  27414★ forthespada/CS-Books
+-  27369★ valkey-io/valkey
+-  25254★ clockworklabs/SpacetimeDB
+-  25151★ taosdata/TDengine
+-  22584★ typicode/lowdb
 -  21804★ dgraph-io/dgraph
--  21358★ valeriansaliou/sonic
--  17809★ VictoriaMetrics/VictoriaMetrics
--  17619★ apache/pouchdb
+-  21359★ valeriansaliou/sonic
+-  17822★ VictoriaMetrics/VictoriaMetrics
+-  17620★ apache/pouchdb
 
-## 分层小结：desc_pending 8 · judged_no_support 280 · no_evidence 1451 · api_error/partial 6（--retry-errors 补扫）
+## 分层小结：desc_pending 24 · judged_no_support 402 · no_evidence 2283 · api_error/partial 9（--retry-errors 补扫）
