@@ -14,7 +14,7 @@
 [![Rust](https://img.shields.io/badge/Rust-2021-DEA584.svg?style=flat-square&logo=rust)](https://www.rust-lang.org/)
 [![SQLite](https://img.shields.io/badge/SQLite_3-WAL_Mode-003B57.svg?style=flat-square&logo=sqlite)](https://www.sqlite.org/)
 [![Ollama](https://img.shields.io/badge/Ollama-Local_Inference-white.svg?style=flat-square&logo=ollama)](https://ollama.ai/)
-[![Vitest](https://img.shields.io/badge/Tests-141%2F141_Passed-success.svg?style=flat-square&logo=vitest)](https://vitest.dev/)
+[![Vitest](https://img.shields.io/badge/Tests-165%2F165_Passed-success.svg?style=flat-square&logo=vitest)](https://vitest.dev/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 
 [Architecture](docs/ARCHITECTURE.md) • [API Reference](docs/API.md) • [Skills Guide](docs/SKILLS_GUIDE.md) • [Slash Commands](docs/SLASH_COMMANDS.md) • [Tutorials](docs/TUTORIALS.md) • [Operations](docs/OPERATIONS.md) • [Troubleshooting](docs/TROUBLESHOOTING.md) • [Contributing](docs/CONTRIBUTING.md) • [FAQ](docs/FAQ.md) • [PRD](docs/PRD.md) • [TRD](docs/TRD.md)
@@ -58,16 +58,25 @@ Recent industry advancements have introduced persistent "always-on" agent concep
 
 ## 🚀 1-Click Quickstart (Zero Friction)
 
-Get KIN running on your machine with a single click:
+### 📦 Direct Desktop Downloads (Pre-Built Releases)
+Download pre-compiled binaries directly from [GitHub Releases v0.1.0](https://github.com/abhayzangir1/KIN/releases/tag/v0.1.0) with zero build configuration:
+- **Portable Standalone Executable**: [`KIN.exe`](https://github.com/abhayzangir1/KIN/releases/download/v0.1.0/KIN.exe) — Run immediately without installation.
+- **Windows Setup Installer**: [`KIN_Installer.exe`](https://github.com/abhayzangir1/KIN/releases/download/v0.1.0/KIN_Installer.exe) — Standard NSIS setup wizard.
+- **Enterprise Windows MSI**: [`KIN_0.1.0_x64.msi`](https://github.com/abhayzangir1/KIN/releases/download/v0.1.0/KIN_0.1.0_x64.msi) — Windows Installer package.
+- **Clean Source Archive**: [`KIN.zip`](https://github.com/abhayzangir1/KIN/releases/download/v0.1.0/KIN.zip) — Complete clean source code package (64 MB).
 
-### Windows (1-Click Launch)
+---
+
+### Source 1-Click Launch
+
+#### Windows (1-Click Launch)
 Double-click `start.bat` in the repository root, or run in PowerShell:
 ```powershell
 .\start.bat
 ```
 *Automatically verifies Node.js, installs dependencies, builds workspaces, starts Ollama if present, and launches the KIN Core daemon and UI at `http://localhost:5173`.*
 
-### macOS / Linux (1-Click Launch)
+#### macOS / Linux (1-Click Launch)
 Run the launch script in your terminal:
 ```bash
 chmod +x start.sh
@@ -106,29 +115,33 @@ Features are ordered below according to their system hierarchy and architectural
                        └── 6. Multi-Agent Coordination (Atomic Leases + Specialist Routing)
                             └── 7. Computer & Browser Automation (Persistent Profiles + Win32 Lock)
                                  └── 8. Persistent Skills Engine (SKILL.md + Dynamic Creation & Import)
-                                      └── 9. Slash Command Engine (Unified & Compound Pipelines)
-                                           └── 10. Reactive User Interface (SSE Bus + Swarm Map)
+                                      └── 9. Sentinel Security Boundary (Hierarchical Attenuation & Redaction)
+                                           └── 10. Origin-Aware Goals & Replanning (Interactive DecisionCards)
+                                                └── 11. Slash Command Engine (Unified & Compound Pipelines)
+                                                     └── 12. Reactive User Interface (SSE Bus + Swarm Map)
 ```
 
 ### 1. Authoritative State & Turn-by-Turn Checkpointing
-- **Immutable Turn Snapshots**: Every tool call and reasoning step in `agent_loop.ts` commits an atomic snapshot to the SQLite `agent_checkpoints` table.
+- **Immutable Turn Snapshots**: Every tool call and reasoning step in `agent_loop.ts` commits an atomic snapshot to the SQLite `checkpoints` table.
 - **Crash Recovery Supervisor**: Upon restart after an abnormal shutdown, KIN reconciles stale leases and presents an interactive **Docked Crash Recovery Banner** in the UI with options to **Resume All**, **Inspect State**, or **Discard**.
 
 ### 2. Hardware Resource Governors & Input Mutex
-- **RAM-Aware Process Throttling**: Queries free system memory before allocating browser contexts or shell processes. If available memory drops below 500 MB, execution tasks are queued to avoid host thrashing.
+- **RAM-Aware Process Throttling**: Evaluates free system memory before allocating browser contexts or shell processes using adaptive concurrency tiers: `low` (<2.5 GB free: 1 browser, 1 shell), `medium` (2.5–6.0 GB free: 2 browsers, 2 shells), and `high` (>6.0 GB free: 3 browsers, 4 shells). If free memory falls critically low (<300 MB), execution tasks are delayed to prevent host thrashing.
 - **Win32 `DesktopLock` Mutex**: Serializes mouse and keyboard inputs across agents through a single-flight Promise mutex, preventing conflicting inputs.
 
 ### 3. The 5-Block Context Compiler
-- Synthesizes the active workspace state into an structured prompt before every reasoning turn:
-  1. *Agent Identity*: Specialist role, system prompt, and domain authorities.
-  2. *Goal Ancestry*: `Workspace -> Project -> Goal -> Task -> Run` hierarchy.
-  3. *Project Rules & ADRs*: Invariant rules and architectural decision records.
-  4. *Long-Term Memory*: Relevant semantic memories and continuous learning experiences.
-  5. *Tool Schemas & OCC Hashes*: Tool parameters and baseline SHA-256 hashes for file integrity.
+- Synthesizes the active workspace state into a prefix-stable structured prompt before every reasoning turn:
+  1. *Agent Identity & Goal Ancestry*: Specialist role, system prompt, invariants, and `Workspace -> Project -> Goal -> Task -> Run` hierarchy.
+  2. *Tool Schemas (Cacheable Prefix)*: Tool parameters, names, and required attributes.
+  3. *Project Grounding & ADRs*: Invariant rules, coding conventions, and architectural decision records.
+  4. *Context Compaction & Long-Term Memory*: Compacted history, error repair strategies, and institutional skill recipes.
+  5. *Dynamic Turn Trajectory & Step Observations*: Active messages, tool outputs, and baseline SHA-256 OCC hashes for file integrity.
 
-### 4. Model Gateway & HTTP 429 Quota Guard
-- **Dual-Engine Inference**: Native local inference via **Ollama** (`qwen2.5-coder`, `llama3.2`) and cloud models via **OpenRouter** (Anthropic, OpenAI, DeepSeek, Google Gemini).
-- **Non-Destructive Quota Pause**: Intercepts HTTP 429 rate-limit responses, checkpoints in-flight progress, displays a live reset countdown in the UI, and enables instant failover to local Ollama with no loss of context.
+### 4. Dynamic Model Gateway, Live Discovery & Quota Guard
+- **Universal Provider Gateway**: Seamlessly routes reasoning requests to local **Ollama** models or external cloud providers (**Anthropic**, **OpenAI**, **Google Gemini**, **DeepSeek**, **Groq**, **OpenRouter**) using encrypted BYOK credentials.
+- **Dynamic Live Model Discovery**: Automatically queries provider APIs upon credential entry or on-demand (`POST /api/models/discover`), surfacing newly released models dynamically without requiring application updates.
+- **Arbitrary Model ID Assignment**: Assign any newly released or custom fine-tuned model ID (e.g. `openai/gpt-4.5-preview`, `anthropic/claude-3-7-sonnet-20250219`, `deepseek/deepseek-r1`) directly to any specialist agent.
+- **Non-Destructive Quota Pause**: Intercepts HTTP 429 rate-limit responses, checkpoints in-flight progress, displays a live reset countdown in the UI, and enables instant failover to local Ollama with zero loss of context.
 
 ### 5. Tool Gateway & Git Worktree Confinement
 - **Optimistic Concurrency Control (OCC)**: Validates SHA-256 file hashes before write operations to prevent stale-write conflicts.
@@ -149,7 +162,17 @@ Features are ordered below according to their system hierarchy and architectural
 - **Directory Bundle Import**: Easily import existing skill bundles from local folders via `POST /api/skills/import` or the `/skills import <directoryPath>` slash command.
 - **Continuous Learning Loop**: The `LearningPipeline` records successful execution traces and extracts reusable playbooks into institutional memory.
 
-### 9. Antigravity Slash Command Suite
+### 9. Sentinel Security Boundary & Hierarchical Attenuation
+- **Hierarchical Capability Attenuation**: `@Boss` holds lead platform authority (`*`), while specialist agents are strictly confined to their declared capability sets (e.g. `['fs:read', 'fs:write']`, `['web:browse']`, `['mcp:call']`). `Sentinel` enforces fail-closed authorization, rejecting unauthorized tool calls.
+- **Secret Redaction & Token Authentication**: `SecretBroker` strips and redacts sensitive credentials from action records and operator approval prompts before SQLite storage. The daemon enforces loopback token authentication via `.kin/ipc_auth.token` to guard against unauthorized local browser access.
+- **Execution Boundaries**: MCP server subprocesses receive sanitized host environments stripped of API keys, and browser controllers reject `file:` and `data:` traversal schemes without explicit administrative capability grants.
+
+### 10. Origin-Aware Goals & Interactive Replanning
+- **Enriched Goal Lifecycle**: Goals track deadlines, check-in policies, progress summaries, blocked states, and origin channels in SQLite.
+- **DM Boundary Elevation**: Cross-cutting or shared project objectives initiated in direct messages are elevated to `#general`, where `@Boss` constructs the authoritative Goal and Task DAG.
+- **Interactive DecisionCards**: When agents hit blocked states or propose architectural shifts via `proposePlanAdjustment`, KIN emits an interactive `[DECISION_CARD]` in chat. The operator selects Option A, Option B, or a Compromise, and `/decisions choose` records an authoritative ADR while updating goal progress.
+
+### 11. Antigravity Slash Command Suite
 
 | Command | Syntax / Arguments | Purpose |
 |---|---|---|
@@ -161,7 +184,7 @@ Features are ordered below according to their system hierarchy and architectural
 | `/routine` | `<interval \| cron> [prompt]` | Establish a persistent background recurring routine (e.g. `1h`, `0 9 * * 1-5`). |
 | `/btw` | `<query>` | Ask an ephemeral, non-blocking side query without creating a task in the DAG. |
 | `/grill-me` | `[topic]` | Trigger an architectural interview where the agent interrogates the human and records ADRs. |
-| `/decisions` or `/adr` | `[list \| propose]` | View or propose Architectural Decision Records. |
+| `/decisions` or `/adr` | `[list \| propose \| choose <choice>]` | View, propose, or authoritatively select Architecture Decision Records. |
 | `/skills` | `[list \| create \| import]` | Manage persistent skills. Support dynamic skill creation and directory bundle import. |
 | `/hire` | `<role> [name]` | Register and configure a new specialist agent identity. |
 
@@ -312,7 +335,7 @@ npm run build
 ### 3. Run Automated Vitest Test Suite
 ```bash
 npm test --workspace=core
-# Output: Test Files 11 passed (11) | Tests 139 passed (139)
+# Output: Test Files 13 passed (13) | Tests 161 passed (161)
 ```
 
 ### 4. Launch Core Server Daemon & Web Interface
@@ -337,9 +360,12 @@ Navigate to `http://localhost:5173` to access the workbench.
 ## 🛡️ Security, Privacy & Confinement
 
 1. **Local Data Confinement**: Project databases, task records, and execution logs remain on local storage (`kin_storage.sqlite`). No user data is transmitted to analytics or telemetry endpoints.
-2. **Filesystem Boundaries**: File tools enforce path verification against project directory roots. Path traversal sequences (`../`) are detected and rejected.
-3. **Optimistic Concurrency Control**: SHA-256 baseline hashing prevents concurrent tasks from overwriting modified files.
-4. **Governed Automation**: Potentially destructive terminal commands and sensitive browser actions require operator confirmation.
+2. **Sentinel Security Boundary & Attenuation**: Every tool execution passes through `Sentinel`. While `@Boss` retains platform authority (`*`), specialist agents are strictly confined to their declared capability sets. Unauthorized tool invocations fail closed.
+3. **Secret Vault & Payload Redaction**: Sensitive credentials in `managed_credentials` are encrypted with AES-256-GCM. Tool execution parameters and approval payloads are automatically sanitized by `SecretBroker` before database persistence.
+4. **Loopback IPC Token Authentication**: Port 54321 enforces bearer token authentication via `.kin/ipc_auth.token`, preventing unauthorized scripts or browser tabs from accessing core endpoints.
+5. **Subprocess & Browser Isolation**: Subprocesses spawned by MCP clients run in sanitized environments stripped of host API keys. Browser controllers reject `file:` and `data:` scheme traversals without explicit administrative permission.
+6. **Filesystem Boundaries & OCC**: File tools enforce path verification against project directory roots. Path traversal sequences (`../`) are blocked, and SHA-256 baseline hashing prevents concurrent overwrites.
+7. **Governed Automation & Approval Tokens**: Destructive terminal commands and sensitive browser actions require operator confirmation with single-use authorization tokens.
 
 ---
 

@@ -1,0 +1,478 @@
+<div align="center">
+
+<pre>
+ ██████╗ ██████╗  ██████╗ ███╗   ██╗██╗██╗  ██╗███████╗██████╗ ███╗   ██╗███████╗██╗     
+██╔════╝██╔═══██╗██╔════╝ ████╗  ██║██║██║ ██╔╝██╔════╝██╔══██╗████╗  ██║██╔════╝██║     
+██║     ██║   ██║██║  ███╗██╔██╗ ██║██║█████╔╝ █████╗  ██████╔╝██╔██╗ ██║█████╗  ██║     
+██║     ██║   ██║██║   ██║██║╚██╗██║██║██╔═██╗ ██╔══╝  ██╔══██╗██║╚██╗██║██╔══╝  ██║     
+╚██████╗╚██████╔╝╚██████╔╝██║ ╚████║██║██║  ██╗███████╗██║  ██║██║ ╚████║███████╗███████╗
+ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚══════╝
+</pre>
+
+# CogniKernel: persistent, structured project memory for Claude Code and Codex
+
+[![PyPI](https://img.shields.io/pypi/v/cognikernel.svg)](https://pypi.org/project/cognikernel/)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/cognikernel?period=total&units=NONE&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/cognikernel)
+[![Python](https://img.shields.io/pypi/pyversions/cognikernel.svg)](https://pypi.org/project/cognikernel/)
+[![License](https://img.shields.io/github/license/KanishkNoir/cognikernel.svg)](LICENSE)
+[![Last commit](https://img.shields.io/github/last-commit/KanishkNoir/cognikernel.svg)](https://github.com/KanishkNoir/cognikernel/commits/main)
+[![Stars](https://img.shields.io/github/stars/KanishkNoir/cognikernel.svg?style=flat)](https://github.com/KanishkNoir/cognikernel/stargazers)
+
+</div>
+
+> [!NOTE]
+> **Updates are paused.** CogniKernel updates are halted until further notice.
+> **[v0.1.3](https://pypi.org/project/cognikernel/0.1.3/)** is the current
+> version and will stay current until work resumes.
+
+**Your AI coding agent has amnesia by design.** Every session starts from zero —
+it re-reads the same files, re-derives the same architecture, and re-asks
+questions you already answered last week. CogniKernel gives the *project* a
+memory that outlives any one session, so the agent stops paying the same cost
+twice:
+
+```
+  WITHOUT MEMORY                          WITH COGNIKERNEL
+  ───────────────                          ─────────────────
+  Session 1                                Session 1
+    "explain the auth flow"                  "explain the auth flow"
+    -> reads 12 files, learns it             -> reads 12 files, learns it
+    -> session ends, all of it lost          -> session ends
+                                              -> decisions captured & stored
+
+  Session 2                                Session 2
+    "explain the auth flow"                  already knows: the auth flow,
+    -> reads 12 files again                  why Redis beat an in-process
+    -> re-derives the same thing             cache, and the approach that
+    -> session ends, nothing kept            was tried and abandoned
+                                              -> picks up where it left off
+
+  Session 3                                Session 3
+    "explain the auth flow"                  already knows everything
+    -> reads 12 files a third time           sessions 1 and 2 settled
+    -> context resets again                  -> starts from where YOU are,
+                                                 not from zero
+```
+
+No extra LLM in the loop, no API keys, no tokens billed for memory itself, and
+nothing leaves your machine.
+
+---
+
+## Quickstart
+
+**Install from [PyPI](https://pypi.org/project/cognikernel/):**
+
+```sh
+pip install "cognikernel[embedding]"   # recommended: + dense retrieval & the fine-tuned encoder runtime
+# or: pip install cognikernel          # core (lexical-only)
+```
+
+Prefer an isolated global CLI? `pipx install "cognikernel[embedding]"` or `uv tool install "cognikernel[embedding]"`.
+
+**Set up a project** — run once from the project root:
+
+```sh
+cognikernel init .            # register the project + install hooks and MCP for Claude Code and Codex
+cognikernel install-heads     # optional, recommended: fine-tuned encoder models (~270 MB, one-time, sha256-verified)
+cognikernel doctor .          # verify everything is wired up
+```
+
+Then just **start a Claude Code session in the project.** Decisions are captured
+automatically when the session ends and injected as a compact memory block at the
+next session start — nothing else to do. (`install-heads` is optional but
+recommended: without it, extraction falls back to a weaker lexical path, and
+`doctor` tells you which is active — see [Setup details](#setup-details).)
+
+---
+
+## What's new in 0.1.3
+
+- **Fresh installs get the memory tools again.** 0.1.2 accepted `mcp` 2.x, which
+  removed a module the MCP server needs, so `recall`, `find_related`, `skeleton`
+  and `get_session_state` could be missing. 0.1.3 requires `mcp<2`. On 0.1.2, run
+  `pip install "mcp<2"`.
+- **The right open work item.** The block's "Working on" line is no longer taken
+  over by Claude's step narration, an ordinary instruction, or a sentence that only
+  points at a work item, and it keeps its place when decisions pile up. A work item
+  carried over from an earlier session says which one: `(S1 · 09-12)`.
+- **Less of Claude's own chatter kept as memory.** Step narration ("Now let's run
+  the full test suite."), answer lines ("Summary: …") and narration about
+  CogniKernel itself now rank below real decisions or are no longer stored.
+- **Memory follows you into subdirectories** of the same git repository instead of
+  starting a second, empty store.
+- **Ask memory why:**
+  - `cognikernel why`: where a claim came from, why it ranks where it does, and
+    what it replaced
+  - `cognikernel show --as-of`: what memory believed at a past date or commit
+  - `cognikernel explain-recall`: why recall found what it did
+- **Cheaper by default:** new projects start with the advisory read gate. Under
+  the old strict default, 89% of refused first reads were retried at once.
+  Existing projects keep their setting.
+- **Corrected numbers:** `cognikernel telemetry` and the published benchmark
+  counted token usage once per transcript line instead of once per response, so
+  the figures `doctor` showed were inflated too.
+
+Details: [`CHANGELOG.md`](CHANGELOG.md) · [release notes](docs/release-notes-0.1.3.md).
+
+---
+
+## What CogniKernel actually is
+
+AI coding agents don't remember anything between sessions by default — the
+model's weights are frozen, so its only memory is whatever fits in that
+session's context window. Two consequences of that are common enough now to
+have names: **context rot**, where a long session's own window fills with
+stale tool output and superseded instructions until quality degrades, and
+**cold-start re-derivation**, where the moment a session ends, all of that
+understanding is gone and the next one pays the "getting up to speed" cost
+again. At scale, that repeated cost is a real reason AI coding spend has
+become something engineering orgs actively budget and worry about — this
+project is one attempt at closing that gap.
+
+CogniKernel watches a coding session through its hook surfaces, extracts the
+*decisions, constraints, and abandoned approaches* worth keeping, consolidates
+them into an event-sourced store, and injects them back as a compact context
+block the next time you work. The store is keyed on the project path, so
+memory made in one tool travels to the other.
+
+It is **not** a vector-database wrapper, and it is **not** another LLM
+summarizing your transcripts. Most memory tools work that way — send your
+session to a generative model to "summarize what mattered," which means
+another API key, per-session token cost, added latency, and your session
+content leaving the machine. CogniKernel treats extraction as *classification,
+not generation*: a deterministic sanitize → classify → consolidate pipeline,
+with two small fine-tuned encoder models (~130 MB ONNX, milliseconds on CPU)
+scoring salience and detecting when a new decision supersedes an old one. No
+API calls, no tokens billed, nothing leaves your machine. The only LLM
+involved is the coding agent you already run — CogniKernel makes it remember.
+
+**What you get, out of the box:**
+
+- **Automatic capture & recall** — decisions, constraints, and abandoned
+  approaches are extracted at session end and injected next time. You never
+  hand-write memory to `CLAUDE.md`.
+- **Cross-tool memory** — one store serves Claude Code *and* Codex working in the
+  same directory ([Cross-platform](#cross-platform-codex)).
+- **Action-time guardrails** — a prior "don't do X" surfaces at the moment you're
+  about to do X, not three files later (Claude Code).
+- **Read efficiency** — an injected AST skeleton means the agent re-reads far
+  fewer files ([What it saves you](#what-it-saves-you)).
+- **MCP tools** for targeted use: `recall` · `find_related` · `skeleton` ·
+  `get_session_state`.
+- **CLI**: `init` · `doctor` · `install-heads` · `codex-sync` · `show` · `why` ·
+  `explain-recall` · `reset` (full list under [Interfaces](#interfaces)).
+- **No LLM, no cloud, no keys** — everything runs locally; nothing leaves your
+  machine.
+
+---
+
+## The fine-tuned models
+
+Two small encoder models do the actual thinking behind CogniKernel — not a keyword
+list, not an LLM call:
+
+| Model | What it decides | Why it's an encoder, not an LLM |
+|---|---|---|
+| **`salience_v2`** | For every sentence in a session transcript: is this worth keeping, and what type — `DECISION`, `CONSTRAINT_HARD`/`SOFT`, `APPROACH_ABANDONED_DO_NOT_RETRY`, or noise? This is the model that decides *what gets remembered.* | A fine-tuned SetFit classifier (bge-small backbone, ~130 MB ONNX) runs this on CPU in milliseconds. An LLM doing the same job costs an API call and real latency on every session — CogniKernel spends neither. |
+| **`supersession_xenc`** | Does this new fact *replace* an existing one (a decision changed, a constraint was relaxed), or does it just restate what's already stored? This is the model behind latest-wins consolidation. | Same constraint: this fires on every capture. A cross-encoder scores it locally in milliseconds instead of round-tripping to a model API. |
+
+**Validated on held-out data, not vibes.** Each model is scored against a frozen
+evaluation set mined from real captured project stores that the training data never
+sees — retraining on the eval set is a standing rule violation, not a shortcut we
+occasionally allow. Because the underlying task (is this sentence a decision, or just
+description?) is itself genuinely ambiguous at the margin, we also measure how much
+*two independent human labelers* agree with each other on the same sentences, and hold
+the model to that ceiling rather than to a naive 100%. The model's minority classes
+(rare event types with few historical examples) are tracked and grown deliberately,
+because a thin eval slice can hide the exact class that most needs work.
+
+**They're optional but on by default — here's the fail-open contract.** `cognikernel init`
+writes a per-project config that already selects the fine-tuned path
+(`extractor = "v2-broad"`, `cross_encoder_supersession = true`). What's missing after
+`init` is the ~270 MB of model weights themselves — that's what
+`cognikernel install-heads` fetches. Until you run it, CogniKernel works, but degrades
+both decisions to a deterministic keyword/lexical fallback (weaker: it can miss
+decisions phrased outside its trigger vocabulary, and it can't catch a paraphrased
+correction lexical matching misses) — `cognikernel doctor` names this state explicitly
+rather than leaving it invisible (see below). Nothing breaks either way — that's
+the fail-open design — but the fine-tuned path is the better-quality one, and the
+one new projects are configured to use by default. See [Quickstart](#quickstart) to
+install them.
+
+---
+
+## The memory loop
+
+Everything CogniKernel does is one loop: **observe → extract → consolidate →
+store → retrieve → assemble → inject**. The left rail captures; the right rail
+recalls; the spine underneath keeps both honest.
+
+```
+   +========================= CLAUDE CODE SESSION =========================+
+   | working memory  -  the context window the agent reasons in            |
+   +--------------+-----------------------------------------+--------------+
+                  | Stop hook captures transcript           | inject block
+                  v                                         ^
+   +--------------+---------------+         +---------------+--------------+
+   | [1] EXTRACTION PIPELINE      |         | [6] COMPRESSION + INJECTION  |
+   |   sanitize -> classify ->    |         |   authority-weighted budget, |
+   |   salience (ONNX) ->         |         |   drop-to-fit (keep every    |
+   |   decision-key + contracts   |         |   constraint) -> block       |
+   +--------------+---------------+         +---------------+--------------+
+                  | enqueue                                 | rank + fit
+                  v                                         ^
+   +--------------+---------------+         +---------------+--------------+
+   | [2] WORKER + CONSOLIDATION   |         | [5] RETRIEVAL                |
+   |   claim -> delta-merge ->    |         |   FTS5 BM25 + dense -> RRF   |
+   |   supersede (latest-wins) -> |         |   prohibition_search (K1)    |
+   |   project   (idempotent)     |         |   skeleton graph (PageRank)  |
+   +--------------+---------------+         +---------------+--------------+
+                  | persist (atomic)                        | recall
+                  v                                         ^
+   +--------------+-----------------------------------------+--------------+
+   | [3] EVENT-SOURCED STORE   *   SQLite (WAL)                            |
+   | typed events | evidence | provenance | FTS5 | embeddings | ledger     |
+   +----------------------------------------------------------------------+
+   | [4] RELIABILITY SPINE   atomic migrations | idempotent replay |       |
+   | doctor --strict | fail-open hooks | import-linter | CI gate           |
+   +----------------------------------------------------------------------+
+```
+
+---
+
+## The four hook surfaces
+
+CogniKernel attaches to a session at four points. Each is fail-open — if memory
+is unavailable or errors, the hook logs at `WARNING`, returns cleanly, and the
+session continues. `salience_v2` and `supersession_xenc` (above) do the
+classification behind Capture and Session block; nothing here is a hardcoded
+keyword list unless the fallback path is active.
+
+```
+  SessionStart          UserPromptSubmit         PreToolUse            Stop
+  ─────────────         ─────────────────        ──────────           ──────
+  inject the block  ──▶  surface relevant    ──▶  warn before a   ──▶  extract &
+  memory picks up        memory as you type       past decision        persist what
+  where you left off     it, unasked               gets violated        this session
+                                                                         decided
+```
+
+| Surface | Hook | Authority | What it does | Why you care |
+|---|---|---|---|---|
+| **Session block** | `SessionStart` | advisory | injects the canonical decisions/constraints/skeleton block | a new session already knows what the last one decided — no "let me re-read the codebase to remember where we were" |
+| **CK-1 recall** | `UserPromptSubmit` | advisory | surfaces prompt-relevant memory, dual-evidence gated, dedup'd via render ledger | ask about a subsystem and the relevant prior decision rides in with your prompt, unasked |
+| **Read/Edit gate** | `PreToolUse` | advisory (strict opt-in) / **JIT** | read efficiency on Read/Grep: refuses re-reading a file already read this session, and refuses first reads only under `hook_policy = "strict"`; **just-in-time prohibition surfacing** on Write/Edit (K2) | the agent gets warned *at the moment it's about to violate a past decision*, not three files later when you notice |
+| **Capture** | `Stop` | side-effect | extracts and persists decisions — you never write memory to CLAUDE.md by hand | you never write down what you decided; the next session already has it |
+
+---
+
+## What gets remembered
+
+Memory is **typed**, not free-text chunks. The type drives ranking, rendering,
+and supersession:
+
+- `DECISION` — a choice that was made ("use Redis for the rate limiter")
+- `CONSTRAINT_HARD` / `CONSTRAINT_SOFT` — rules, graded by deontic force
+- `APPROACH_ABANDONED_DO_NOT_RETRY` — a dead end, kept in the **graveyard** so
+  the agent doesn't re-attempt it
+- conventions, config facts, schema decisions (canonical role keys)
+
+A **decision key** lets a later restatement *supersede* an earlier one
+(latest-wins), so the store self-consolidates instead of accumulating
+contradictions. An optional cross-encoder adds semantic supersession when the
+encoder backend is installed.
+
+---
+
+## Retrieval
+
+Lexical-primary, with dense as a fused signal — never pure vector:
+
+- **Hybrid core** — FTS5 BM25 ∪ optional dense embeddings → Reciprocal Rank Fusion
+- **prohibition_search** — a type-restricted lexical pool so a "do not do X" rule
+  can't be crowded out by topically-similar prose at the moment you're about to do X
+- **Skeleton** — an AST symbol graph ranked by PageRank; `find_related` unions
+  **semantic (embedding) neighbours** with **import-graph-adjacent** events to
+  surface what a change touches (the semantic axis needs the `embedding` extra)
+- **Golden-record consolidation at read** — latest-wins reconciliation so recall
+  returns one coherent answer, not a pile of revisions
+
+---
+
+## What it saves you
+
+Benchmarked in a three-arm comparison — CogniKernel vs flat curated notes vs no
+memory — with real agent sessions across four multi-session projects. Full
+methodology, per-project tables, and the honest caveats (including where
+CogniKernel ties or loses) are in [`docs/benchmark.md`](docs/benchmark.md):
+
+```
+  Orientation reads — reads before the first line of code, i.e. the cost of
+  working out where you are. CogniKernel vs. Claude Code native auto-memory.
+  (bar scale: 20 chars = 40%; see docs/benchmark.md §3)
+
+  project stresses…      CK / auto    reduction vs auto-memory
+
+  evolving decisions     27 / 39   ███████████████░░░░░  -30.8%
+  small, re-readable     17 / 20   ████████░░░░░░░░░░░░  -15.0%
+  quality invariants     97 / 104  ███░░░░░░░░░░░░░░░░░   -6.7%
+  self-authored API      90 / 92   █░░░░░░░░░░░░░░░░░░░   -2.2%
+```
+
+- **Orientation reads: the one win that holds everywhere.** Lower on **4 of 4**
+  projects. This is precisely what an injected block is for — the agent starts
+  already knowing the repo's shape instead of paying to rediscover it. Fewer
+  round-trips also means more of the context window left for actual work, so
+  your session runs *longer* before compaction, not just cheaper.
+- **Total reads and tokens: a split result, not a sweep.** Once you count every
+  read rather than just orientation, CogniKernel is ahead on one project of four
+  (Relay, −38.1%) and slightly behind on the rest. Against native auto-memory,
+  price-weighted cost is **−25.0% on Relay** and **−19.3% on Toolbelt**, and within
+  a few percent on Conductor (+3.0%) and Taskflow (+4.2%). Against no memory at
+  all it is not a sweep: on Relay CogniKernel costs **23% more than the no-memory
+  arm**, from round-trips its own tools add. Structured memory repays its overhead
+  on projects with several evolving decisions and several abandoned approaches; on
+  small re-readable ones it adds little. *(Corrected 2026-09-10 — earlier figures
+  double-counted token usage; see `docs/benchmark.md` §3.)*
+
+- **Recall instead of re-derivation.** Where memory earns its keep is projects
+  whose state is too large, too evolving, or too long-lived to re-derive
+  cheaply: the agent starts already knowing the decisions, constraints, and
+  dead ends, instead of spending the first quarter of the session rediscovering
+  them.
+
+---
+
+## Reliability — the spine
+
+The system is designed to degrade *legibly*, never silently:
+
+- **Atomic migrations** — each numbered migration applies its body + version bump
+  in one transaction; safe to crash mid-script
+- **Idempotent replay** — a re-run worker job can't double-count or drift decay (evidence-provenance guard)
+- **Fail-open hooks** — every surface swallows its own failure *and logs at WARNING*; silence never reads as success
+- **`cognikernel doctor --strict`** — per-subsystem health (schema, FTS5, embeddings, symbols, worker queue); non-zero exit when degraded
+- **Architecture enforcement** — `import-linter` layered contracts, guarded by a meta-test so a typo can't silently disable them
+- **CI promotion gate** — lint + full suite (incl. `tests/reliability/` failure-injection) on every PR; see [`CONTRIBUTING.md`](CONTRIBUTING.md)
+
+---
+
+## Cross-platform (Codex)
+
+The store is platform-neutral — one SQLite DB per logical project, so Claude Code
+and Codex working in the same directory share one memory. Project resolution is
+**alias-aware**: `C:\repo` and `/mnt/c/repo` resolve to the same store, so memory
+follows the checkout across Windows, WSL, and native mounts; for genuinely
+different checkout paths, an opt-in `project_identity` key in
+`.cognikernel/config.toml` pins them to one shared store. Codex reads memory through
+the registered MCP server (`get_session_state` / `recall`); the capture direction
+is **pull-based**, because Codex has no `Stop`-hook equivalent:
+
+- **`cognikernel codex-sync <project>`** scans `~/.codex/sessions` for rollouts whose
+  recorded `cwd` maps to the project and captures the delta through the *same*
+  extraction pipeline (a rollout→transcript adapter is the only Codex-specific
+  code; delta/dedup/idempotency are shared and unchanged).
+- **Automatic at the handoff** — Claude's SessionStart drains pending Codex
+  rollouts before building the block, and the MCP server's queue drainer pulls
+  new rollouts each cycle, so a live Claude session picks up Codex-side decisions
+  without waiting for the next session; on the Codex side, `init` writes an
+  `AGENTS.md` instruction + a `ck-sync` skill so Codex pulls at session start.
+- **`init` provisions both** — `.mcp.json` (Claude) and `.codex/config.toml`
+  (with the server's `cwd` + project env pinned) + `AGENTS.md` (Codex),
+  idempotently and without clobbering existing settings.
+- **`cognikernel doctor`** reports a `codex` health line (sessions dir + rollout
+  count, or "nothing to sync" — Codex is optional, so its absence is healthy).
+
+A decision made in Codex reaches the next Claude session's block, and
+vice versa. The action-point surfaces (CK-1, PreToolUse gate) are Claude-only —
+Codex has no per-prompt/per-tool hook — so on Codex the loop degrades to the shared
+block + MCP recall.
+
+---
+
+## Interfaces
+
+**MCP tools** (the session block is injected automatically; these are for targeted use):
+`recall` · `find_related` · `skeleton` · `get_session_state`
+
+**CLI:**
+- `cognikernel init <project>` — register the project and install the session hooks
+- `cognikernel doctor [--strict] <project>` — subsystem health report
+- `cognikernel codex-sync <project>` — capture Codex CLI sessions for this project
+- `cognikernel install-heads` — install the trained encoder artifacts (salience + cross-encoder ONNX bodies): downloaded from the [`heads-v1` release](https://github.com/KanishkNoir/cognikernel/releases/tag/heads-v1) and sha256-verified, or copied from a local `models/` export when present
+- `cognikernel show <project> [--as-of <date|commit>]` / `cognikernel reset <project>` — inspect stored memory (or what it believed at a past date or commit) / clear it
+- `cognikernel why <project> <#id or words>` — where a claim came from, why it ranks where it does, and what it replaced or was replaced by
+- `cognikernel explain-recall <project> <query> [--claim #id]` — why `recall` and the per-prompt push retrieved what they did, or didn't
+- `cognikernel telemetry <project>` — count Claude Code session usage (once per API response) for `doctor`'s cache and round-trip figures
+
+---
+
+## Setup details
+
+The [Quickstart](#quickstart) above is the whole flow; this expands on the two
+steps worth understanding.
+
+**`install-heads` is the easiest to skip and most worth not skipping.**
+`cognikernel init` already configured the project to use the fine-tuned path
+(`extractor = "v2-broad"`, `cross_encoder_supersession = true` in
+`.cognikernel/config.toml`) — `install-heads` is what actually supplies the model
+weights those settings call for. Skip it and CogniKernel still runs, just on the
+weaker deterministic fallback (fail-open, not a hard error). The download pulls
+from the [`heads-v1` release](https://github.com/KanishkNoir/cognikernel/releases/tag/heads-v1)
+and is sha256-verified; pass `--source <dir>` to install from a local `models/`
+export instead, or `--no-download` to rely on the fallback deliberately. The
+fine-tuned runtime (onnxruntime + tokenizers) ships with the `[embedding]` extra,
+so install with `pip install "cognikernel[embedding]"` for the full path.
+
+**`cognikernel doctor` tells you which path is active** — its subsystem-health
+block reports `salience_head` and `supersession_head` by name:
+
+```
+-- subsystem health -----------------------------------------
+  [OK] salience_head    : installed, loads from ~/.cognikernel/models/salience_v2
+  [OK] supersession_head: installed, loads from ~/.cognikernel/models/supersession_xenc
+```
+
+If you skipped `install-heads` (or installed core-only, without the `[embedding]`
+extra that provides the ONNX runtime), the same lines say `not installed` and
+name the exact command to fix it — always informational, never a `doctor
+--strict` failure, since the legacy fallback is a fully supported mode.
+
+**Working from a clone instead of PyPI?** Substitute `uv sync --extra embedding`
+for the install and prefix the commands with `uv run` (e.g. `uv run cognikernel
+init .`).
+
+---
+
+## Project layout
+
+```
+src/cognikernel/
+  integration/   hooks, CLI, MCP server, session/worker orchestration
+  extraction/    sanitize -> classify -> salience -> decision-key pipeline
+  delta/         delta-merge + supersession (latest-wins; cross-encoder optional)
+  retrieval/     hybrid BM25 + dense -> RRF
+  storage/       event-sourced SQLite, FTS5, migrations, render ledger
+  embedding/     optional dense vectors (fastembed)
+  symbols/       AST skeleton + PageRank graph
+  compression/   authority-weighted drop-to-fit budget
+  injection/     block template assembly
+  quality/       admission gate + defect detectors (a dependency-free leaf)
+  telemetry/     Claude Code usage ingest: cache and round-trip figures
+  utils/         shared helpers
+  model.py       Event — the dependency-free domain primitive
+tests/
+  unit/          per-subsystem
+  reliability/   crash-replay · worker-contention · corrupt-input injection
+```
+
+---
+
+## Status
+
+Version **0.1.3**. Schema **v22** (adds per-response telemetry and round-trip
+counts, on top of the supersession/archival timestamps and commit anchor that
+`show --as-of` and `why` read). Architecture contracts: 4 kept / 0 broken. CI
+gate: lint + full suite on Ubuntu (3.11/3.12) and Windows. See
+`CONTRIBUTING.md` for the Definition of Done that gates every change.

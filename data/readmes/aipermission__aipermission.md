@@ -238,6 +238,9 @@ Important boundaries:
   exact class-specific response and redaction contract.
 - MCP clients authenticate with scoped API tokens, not connector credentials.
 - Web mutations require the unlocked local browser session and CSRF checks.
+- Lock/session invalidation hides cached unlocked views in active same-origin
+  tabs. Focus and bounded status checks reconcile other clients; browser
+  notifications cannot unlock a database or grant authorization.
 - Connector outputs, command text, mail content, paths, and notes are untrusted
   data and may contain secrets.
 - Gateway-held credentials and correctly declared sensitive fields use a
@@ -249,6 +252,10 @@ Important boundaries:
   transcripts.
 - Always is for intentional trusted automation, not a substitute for least
   privilege.
+- Resource identifiers are exact action data, not display labels. Do not trim,
+  truncate or repair a returned name before a later operation. Connector
+  contracts reject identities that cannot cross their action boundary losslessly;
+  see the [MCP connector boundaries](docs/api/mcp-tools.md).
 - A timeout or lost reply after dispatch is not proof of failure. Preserve the
   original request and idempotency key, and reconcile `outcome_unknown` before
   another external attempt; see the

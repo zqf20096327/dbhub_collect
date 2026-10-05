@@ -71,10 +71,14 @@ a Gotify server, an ntfy server, a Discord webhook, a mail server, a syslog serv
   off. Messages are encrypted for the device; they travel through the browser maker's push service, so this way
   out is only used once you sign a device up, and can be paused for all of them. The first critical message of a subject goes out at once; more of the same are
   counted and summed up once at the end of the window. The all-clear follows quietly.
+- **An icon per source**, from the dashboard-icons and selfh.st collections or an address of your own. It shows
+  in the inbox; pushes show nexsift's logo, and a switch sends the source's along to ntfy, so a notification tells where it comes from
+  at a glance. The known senders come with their logo; a rule can give one app behind a shared source its own,
+  and an icon the sender sends itself (ntfy's `Icon` header) wins.
 - **Storm guard:** when many things fail at once, such as a power cut, the phone gets one summary instead of
   twenty pushes. A source that floods (more than 30 messages a minute by default) is counted, not stored.
 - **Rules** with conditions on title and text (whole word, contains, regular expression) and effects: level,
-  bundling key, bundle title, all-clear, push behaviour, or drop. All matching rules apply, top to bottom.
+  bundling key, bundle title, all-clear, push behaviour, icon, or drop. All matching rules apply, top to bottom.
 - **A live inbox** with search, unread, archive and keyboard shortcuts (`?` shows them).
 - **One operator account** with a password, optionally OpenID Connect; for authentik there is a one-button setup.
   The account at the provider is linked once, signed in, under Settings, Sign-in; from then on exactly that one
@@ -90,6 +94,9 @@ a Gotify server, an ntfy server, a Discord webhook, a mail server, a syslog serv
   `GET /api/v1/status` (unread, open critical, messages today, …) and `GET /api/v1/threads` (newest lines, titles
   only), with `Authorization: Bearer nxs_…`.
 - **What's new** after every update, once, with where to find each change; all of them on the About page.
+- **An About page that says what goes out:** once a day nexsift asks api.github.com whether a newer version is out
+  (can be switched off), and it fetches logos from GitHub for the picker (can be switched off too; the
+  logos of the nex apps ship with nexsift). The page names both, and what the phone loads itself.
 - **Housekeeping:** archived lines go after 30 days, all others after 90, what senders sent verbatim after 7. All
   three are settings.
 - German and English. Another language can be uploaded as one JSON file under Settings; for now it is kept in

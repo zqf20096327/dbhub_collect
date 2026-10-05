@@ -26,6 +26,7 @@ const jobTypes = defineJobTypes<{
   };
   "sync-to-crm": {
     input: { userId: number; accountId: string };
+    output: { syncedAt: string };
   };
 }>();
 ```
@@ -39,7 +40,7 @@ await withTransactionHooks(async (transactionHooks) =>
   db.transaction(async (tx) => {
     const user = await tx.users.create({ name: "Alice", email: "alice@example.com" });
 
-    await client.startChain({
+    await client.createChain({
       tx,
       transactionHooks,
       typeName: "provision-account",
@@ -63,11 +64,13 @@ const worker = await createInProcessWorker({
         attemptHandler: async ({ job, complete }) => {
           const accountId = await provisionAccount(job.input.userId);
 
-          return complete(async ({ continueWith }) =>
-            continueWith({
-              typeName: "send-welcome-email",
-              input: { userId: job.input.userId, accountId },
-              //      ↑ missing accountId would be a compile error
+          return complete(async ({ finish }) =>
+            finish({
+              continueWith: {
+                typeName: "send-welcome-email",
+                input: { userId: job.input.userId, accountId },
+                //      ↑ missing accountId would be a compile error
+              },
             }),
           );
         },
@@ -103,7 +106,7 @@ For deeper comparisons, see the [docs site](https://kvet.github.io/queuert/compa
 - **Sub-second wakeup.** `LISTEN/NOTIFY` (or Redis pub/sub, or NATS) wakes workers when a row commits — not on a polling timer.
 - **Schedule for later.** Delay a chain to a specific time or duration. Schedule retries with backoff. Future work, no extra infrastructure.
 - **Deduplication.** Pass a deduplication key on enqueue. Identical keys collapse to a single chain — at-most-once, by construction.
-- **Lean and battle-tested.** Zero runtime dependencies in every package — driver libraries are `peerDependencies` you already own. 4,000+ tests across adapters and a shared conformance suite every state and notify adapter must pass.
+- **Lean and battle-tested.** Zero runtime dependencies in every package — driver libraries are `peerDependencies` you already own. Thousands of tests across adapters and a shared conformance suite every state and notify adapter must pass.
 
 ## Installation
 
@@ -135,7 +138,7 @@ npm install @queuert/otel
 - [Job Blockers](https://kvet.github.io/queuert/guides/job-blockers/)
 - [Comparison with other libraries](https://kvet.github.io/queuert/comparison/)
 - [Benchmarks](https://kvet.github.io/queuert/benchmarks/)
-- [API Reference](https://kvet.github.io/queuert/reference/queuert/client/)
+- [API Reference](https://kvet.github.io/queuert/api/core/type-aliases/client/)
 
 ## License
 

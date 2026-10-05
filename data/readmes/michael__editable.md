@@ -375,7 +375,7 @@ page {
 	image: image         // preview image for page metadata
 	body: [prose | prose_grid | figure | captioned_figure | gallery | feature |
 	       titled_gallery | descriptive_gallery | listing | descriptive_listing |
-	       accordion | preformatted]
+	       accordion | code_block]
 	                     // supports section marks for visual grouping
 	nav: nav
 	footer: footer
@@ -422,8 +422,10 @@ heading_1_xl, heading_1 … heading_4 {
 list { layout: square | check | decimal | lower-alpha, list_items: [list_item] }
 list_item { content: text }                        // marks: strong, emphasis, code, highlight, link
 
-preformatted { content: text }                     // monospaced, preserves whitespace, no marks
+code_block { layout: plain | [language id], content: text } // monospaced, preserves whitespace, no marks
 ```
+
+Code blocks use `layout` to select a language in the toolbar variant picker. `plain` (the default) leaves highlighting off. Twinkleplop highlights selected languages in both view and edit mode. Language grammars load on demand, and the native range painter loads only when editing. View rendering awaits its grammar during server rendering and hydration; editing stays plain until the grammar loads. Editing uses native CSS highlight ranges without changing Svedit’s text DOM. Updates are batched to animation frames and pause during IME composition. Blocks exceeding 50,000 UTF-16 code units or 4,000 syntax ranges use plain text editing to keep highlighting work bounded; they still highlight in view mode. Highlighting resumes automatically when the block is shortened. Browsers without the CSS Custom Highlight API retain plain text editing. Supported language ids are listed in [src/app/code_languages.ts](src/app/code_languages.ts). Markdown imports preserve supported fence languages and common aliases such as `js`, `ts`, and `sh`. Existing preformatted nodes migrate to plain code blocks.
 
 **Media** — `image` and `video` share one shape and are interchangeable wherever media is allowed:
 
@@ -952,7 +954,7 @@ Assets are content-addressed and immutable, so they only ever need to be added, 
 
 Every push prints an undo command. To roll back:
 
-```
+```bash
 pnpm data:backups --remote # list the live site's snapshots
 pnpm data:restore <name> --remote # roll the live site back to one (name from the listing; file extension optional)
 ```
@@ -1003,7 +1005,7 @@ All automatic uploads run only in the deployed app: local development never writ
 ```sh
 pnpm data:cloud-snapshots                              # what moments can I restore to?
 pnpm data:restore-cloud                                # latest bucket state
-pnpm data:restore-cloud --at "2026-07-10T15:00:00Z" # a specific moment
+pnpm data:restore-cloud --at "2026-07-10T15:00:00Z"    # a specific moment
 ```
 
 `--at` takes the UTC timestamps exactly as `data:cloud-snapshots` shows them.
@@ -1029,7 +1031,7 @@ Then:
 ```sh
 pnpm data:cloud-snapshots                           # list restore points
 pnpm data:pull-cloud                                # latest bucket state
-pnpm data:pull-cloud --at "2026-07-10T15:00:00Z" # a specific moment
+pnpm data:pull-cloud --at "2026-07-10T15:00:00Z"    # a specific moment
 pnpm dev                                            # inspect the restored state
 ```
 
@@ -1149,13 +1151,13 @@ The generated `before` array overrides timestamp order for that relationship onl
 
 Publish your website in multiple languages.
 
-Enable translations with a comma-separated language list in `.env` or your deployment environment:
+`LANGUAGES` (optional) accepts a comma-separated list of BCP 47 language tags in `.env` or your deployment environment. Put the original language first; each tag is a separate content variant:
 
 ```dotenv
 LANGUAGES="en,de"
 ```
 
-The first language is the original and keeps unprefixed URLs. Additional languages appear in the navigation switcher and use URLs such as `/de/about` and `/de` for the homepage. Keep the original language first when changing the list.
+Tags may include a region, such as `en-US`, `en-GB`, or `de-AT`. The original keeps unprefixed URLs. Additional entries appear in the navigation switcher and use URLs such as `/de/about` and `/de` for the homepage.
 
 Choose a language before entering edit mode, edit its text or media, and save. Titles, descriptions, navigation, and footer labels can be translated; images and videos can have separate alt text and crop settings. Missing translations show the original content. Structure and layouts stay shared and are edited in the original language.
 
@@ -1206,7 +1208,7 @@ Every `##` heading starts a new visual section: the heading and everything up to
 
 An unordered list where every item follows the pattern below is rendered as a `descriptive_listing` (title, description, and optional meta rows) instead of a plain list — the command reference in [Backup, sync & recovery](#backup-sync--recovery) is one:
 
-```s
+```md
 - **title** — description
 - **title** — description — meta
 ```

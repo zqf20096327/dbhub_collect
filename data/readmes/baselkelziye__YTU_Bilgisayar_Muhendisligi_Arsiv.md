@@ -60,7 +60,7 @@ mi
 - 📋 readme_olustur -> readme dosyası oluşturmak için kullanılan python kodu
 - 📋 taslaklar -> eski yazılmış staj defteri ve readme örnekleri
 - 📋 :star::star::star:Burada olmayan bazı [çıkmış sorulara](https://drive.google.com/drive/folders/1imIiwx0xxIPWREGP-YqotnFdUku8Ealf?usp=drive_link)/lablara/ödevlere [linkten](https://drive.google.com/drive/folders/1LI_Bo7kWqI2krHTw0noUFl9crfZSlrZh) ulaşabilirsiniz. :star::star::star:
-- 📋 :star::star::star:[BÜYÜK VE KARIŞIK ARŞİV LİNKİ](https://stdyildizedu-my.sharepoint.com/:f:/g/personal/kayra_bulut_std_yildiz_edu_tr/Ei5C2iB-XwJEv7KG6CwzYw4Bn8hUPB8MsB7HCghD-vVyZQ?e=pTT4HI):star::star::star:
+- 📋 :star::star::star:[BÜYÜK VE KARIŞIK ARŞİV LİNKİ](https://1drv.ms/f/c/02786812ae44c4ed/IgA_WOXBtMhMRLN8Upw0SNr-AVOw7U-tUe58zon0A18abhs?e=K0YBUa):star::star::star:
 
 
 ### 📝 Talimatlar:
@@ -83,4 +83,4 @@ mi
   - 📘 **S: KOOP Nedir?** **C:** İşletmede Mesleki Eğitim kapsamında uygulanan YTÜ KOOP Modeli (CO-OP - Cooperative Education), geleneksel stajın yeniden tanımlanmış inovatif halidir. Çoğunlukla stajla karıştırılan KOOP, üniversite ve iş dünyası arasındaki iş birliğini geliştirmeyi amaçlar. Bu bağlamda altı çizilmesi gereken nokta, belli programlarda var olan stajın bir zorunluluk olduğudur; KOOP ise gönüllülük esasına dayanır.
   - 📘 Üniversite, KOOP yapmak isteyen öğrenciyle uygun sektördeki işvereni tanıştırır. İşveren de aradığı nitelikteki öğrenciyi KOOP Eğitimi süresince iş hayatına hazırlamaya başlar. Ayrıca, araştırmalara göre, KOOP Eğitimi uygulayan üniversitenin ilerleyen yıllarda tercih edilme oranı yükselme göstermektedir. Özetle KOOP'un amacı, üniversite ile iş dünyası arasındaki bağı daha organik biçimde içselleştirerek kuvvetlendirmektir. Bu şekilde öğrenci 4.sınıf 2.dönemini okul dersleri yerine hafta içi 5 gün (remote/hybrid/office) çalışarak geçirir.
   - 📘 **S: Süreç nasıl işler?** **C:** KOOP süreci her fakülte ve bölüm için farklıdır. 4.sınıf 2.döneminde koop koordinatörlüğü sayfasında belirlenen dersler ve bitirme çalışması dışında derslerini tamamlamış olan adaylar koop programında başvurabilir. Dikkat! bu 3 ders ve bitirme dışında 4.sınıf 2.dönemindeki dersleri üstten alarak tamamlamayan adaylar bu programa kesinlikle başvuramaz. Programa başvuran adayların ortalamasının 2.7 ve üstü olması gerekmektedir. 
-  - 📘 Şartları sağlayan adaylar, ara tatilde (takvimde tarih belirtilir) üniversitenin koop programı için olan sitesinden Koop başvurularını gerçekleştirir. https://kariyer.yildiz.edu.tr/. Detaylı başvuru kılavuzu eklerde. İlk başvuru sadece programa katılabilmek içindir. Ardından yine be
+  - 📘 Şartları sağlayan adaylar, ara tatilde (takvimde tarih belirtilir) üniversitenin koop programı için olan sitesinden Koop başvurularını gerçekleştirir. https://kariyer.yildiz.edu.tr/. Detaylı başvuru kılavuzu eklerde. İlk başvuru sadece programa katılabilmek içindir. Ardından yine belirtilen tarihlerde Fakültenin koop sitesinde 

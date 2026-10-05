@@ -5,8 +5,8 @@
 [![Release](https://img.shields.io/github/v/release/pgsty/pgext?color=teal)](https://github.com/pgsty/pgext/releases)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
 
-**pgext** catalogs the PostgreSQL extension universe: 2,230 extensions, including
-575 packaged extensions, with metadata, dependencies, categories, and exact package
+**pgext** catalogs the PostgreSQL extension universe: 2,507 extensions, including
+600 packaged extensions, with metadata, dependencies, categories, and exact package
 availability across PostgreSQL versions, operating systems, and repositories
 (PGDG / Pigsty, APT / YUM).
 
@@ -66,11 +66,16 @@ pgext pkg <name>              # show package availability matrix
 pgext bin <name> -p 17 -o el9 # show binary packages with URLs
 
 pgext gen all                 # run every content generator
+pgext gen lint                # check bilingual stub Markdown without a database
 pgext pgxn                    # crawl PGXN dist metadata
 pgext purge                   # drop the pgext schema
 ```
 
 Run `pgext help <command>` for details on any command.
+
+For extension usage sources and their review/generation checks, follow the
+[stub documentation SOP](docs/stub-documentation-sop.md). Run `make check-stubs`
+before generating or loading reviewed documentation.
 
 ## Repository Metadata
 

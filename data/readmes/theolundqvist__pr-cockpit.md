@@ -33,7 +33,7 @@ The first sync fetches PRs involving you. **All PRs** loads on demand without ex
 
 Press <kbd>r</kbd> to filter repositories. Use arrows to highlight one, <kbd>Enter</kbd> to toggle it, or <kbd>Shift+Enter</kbd> to select only that repository.
 
-Enable **Date filters and sorting** in **Settings → Workspace** for **Opened** and **Order** controls in the main PR lists. Filter to the last 24 hours, 7 days, 30 days, or a custom local date-and-time range; custom bounds apply when you press **Apply**. Order by newest or oldest opened, or most or least recently updated. **Queue order** keeps the usual priorities. Grouped queues keep their sections, manual pin order, and stacks; the Whiteboard is unchanged. PRs with an unknown opened date appear in All time but not an active date range.
+Enable **Date filters and sorting** in **Settings → Workspace** for **Opened** and **Order** controls in the main PR lists, plus **Grouping** in Your queue. Switch grouping between Status, Feature area, PR type, and Manual without leaving the queue; the choice is saved. Filter to the last 24 hours, 7 days, 30 days, or a custom local date-and-time range; custom bounds apply when you press **Apply**. Order by newest or oldest opened, or most or least recently updated. **Queue order** keeps the usual priorities. Grouped queues keep their sections, manual pin order, and stacks; the Whiteboard is unchanged. PRs with an unknown opened date appear in All time but not an active date range.
 
 ## From finding the PR to finishing the review
 
@@ -127,7 +127,9 @@ Arming auto-merge approves the feature and delegates safely landing it to the me
 
 Safe-merge approval is also visible in CLI output and as `approvedForSafeMerge` in `--json`; `listen` wakes when it changes. Agents must re-read approval immediately before merging and still satisfy the safety checks above. Approval is granted or revoked in the app, never by an agent approving itself.
 
-The Agents tab renders Markdown answers, groups tool activity into expandable details, and shows an identical final-answer echo only once. Full tool inputs, errors, and raw logs remain available.
+The PR detail’s Agents tab renders Markdown answers and expandable tool activity, shows an identical final-answer echo only once, and keeps available tool inputs, errors, and log tails inspectable.
+
+Enable **Agent conversations** in **Settings → Agents & merging** for a conversation-first **Agents** workspace beside the inbox tabs. Search sessions grouped into **Working**, **Needs attention**, and **Recent**, including closed PRs. Read **Conversation**, expand longer tasks in place, inspect **Log tail**, or open an older attempt from run history. Run links support Back/Forward; each run and view remembers its reading position. New output follows only when you’re at the end; otherwise **Jump to latest** signals unread output. Transcripts and logs contain the recent output available from the cache, not complete logs. PR filters and grouping sit below the inbox tabs.
 
 Enable **Quick Generate** in **Settings → Agents & merging** to draft text from anywhere with <kbd>⌥⌘J</kbd> on macOS or <kbd>Super+Alt+J</kbd> on Linux X11. Choose an API key and model, write a prompt, then press <kbd>⌘Enter</kbd> to generate. Results render Markdown with Cockpit’s syntax-highlighted code blocks; **Copy** keeps the original Markdown. Closing the prompt keeps its draft and result. Updating an older desktop shell requires a normal relaunch for the global shortcut.
 

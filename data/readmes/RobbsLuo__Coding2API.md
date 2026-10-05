@@ -8,9 +8,9 @@
 
 ## 特性
 
-- **OpenAI 兼容出口**：`/v1/chat/completions`（流式 + 非流式）、`/v1/responses`（Codex CLI）、`/v1/models`、`/v1/user/balance`（DeepSeek 兼容余额）
+- **OpenAI 兼容出口**：`/v1/chat/completions`（流式 + 非流式）、`/v1/responses`（Codex CLI）、`/v1/messages`（Anthropic / Claude Code）、`/v1/models`、`/v1/user/balance`（DeepSeek 兼容余额）
 - **六个上游渠道**：CodeBuddy、TRAE SOLO、OpenCode Zen、Kilo Gateway、Qoder、CodeArts——统一模型名、统一调度、统一统计
-- **统一调度**：扁平模型名按健康度自动选号，`模型@渠道` 强制指定；三态健康度 + 分级冷却避开坏号。模型级限流或「该渠道无此模型」只避让那一个模型，同账号其他模型立刻可用
+- **统一调度**：扁平模型名按健康度自动选号，`模型@渠道` 强制指定；三态健康度 + 分级冷却避开坏号，健康度打平时**余额多者优先**。模型级限流或「该渠道无此模型」只避让那一个模型，同账号其他模型立刻可用
 - **到期额度优先消化**：主窗口 36h 内将过期的额度多者先用（避免过期浪费），打平再比 7 天窗口；额度单位统一为积分
 - **会话粘性**：同一对话多轮粘住同一凭证，出错才轮换
 - **模型列表按渠道凭证加载**：只展示**当前有可用凭证**的渠道（未暂停、未会话失效）；未接入的渠道不出现幽灵模型，暂停或凭证失效时其模型暂时消失，恢复即回来。模型目录落盘 + 启动同步回灌，重启第一秒归属表即可用
@@ -190,6 +190,20 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 - **累计全文 SSE**：上游流式 `text` 是**累计全文（替换语义）**而非增量，本服务在解析层还原为增量事件，对客户端透明。
 - **节流与并发**：真实账号渠道，默认 `CODEARTS_CHAT_MIN_INTERVAL=5`（独立节流器）；上游硬限**每账号并发会话数 3**，故 pacer 另配在途上限 `CODEARTS_MAX_CONCURRENCY=3`。实测该限制更接近「每账号每约 60s 最多 3 个会话」（会话在流结束后仍滞留数十秒），故再叠加滑动窗口 `CODEARTS_REQUEST_WINDOW_SECONDS=60`，把突发也挡在 400 之前（`400 TM.00001041`）。均可在「任务与配置」热更。
 
+### 按渠道出站代理（可选）
+
+`PROVIDER_PROXIES` 给每个渠道单独指定出站代理，适合「某渠道需经代理才能访问」的场景：
+
+```
+PROVIDER_PROXIES="codebuddy=http://127.0.0.1:7890;qoder=socks5://127.0.0.1:1080"
+```
+
+- 格式 `渠道=代理URL;渠道2=代理URL2`，渠道取 `codebuddy/trae/zen/kilo/qoder/codearts`；协议支持 `http/https/socks5/socks5h`（SOCKS 由 `httpx[socks]` 提供）；留空 = 全部直连（默认，行为不变）。
+- 作用于该渠道**全部出站请求**：聊天流、额度/模型拉取、后台任务（签到/成长/刷新/活跃上报）与 OAuth 登录，都走同一代理。
+- **启动期项**：代理作用于连接池，改后需重启后端；不做管理台热更（与上游端点同类）。
+- **严格解析**：未知渠道 / 非法协议 / 缺 `=` 一律启动失败——代理常带合规/隐私意图，「以为走了代理其实直连」比启动报错更糟。
+- 环境变量里的 `HTTP_PROXY` 等一律**不采信**（`trust_env=False`，防部署环境的全局代理意外劫持带 Token 的上游请求）；只有这里显式配置才生效。
+
 ### Responses API（Codex CLI）
 
 `POST /v1/responses` 提供 Responses 子集，供 [Codex CLI](https://github.com/openai/codex) 这类只走 Responses 的客户端接入。与 `/v1/chat/completions` 共用同一套选号 / 冷却 / 轮换 / 统计与会话粘性，只换入站映射与出口翻译（实现与取舍见 [TECHNICAL.md §3.7](TECHNICAL.md)）：
@@ -207,6 +221,24 @@ codex -c "model_providers.coding2api={ name='coding2api', base_url='http://127.0
 支持文本、流式正文、思考摘要（`reasoning` item）、函数工具调用与 `finish_reason=length` → `response.incomplete`。**不支持** `store=true`、`previous_response_id`（服务端无状态，不假装支持）、Responses 私有工具（`web_search` / `computer` / `custom` 等）——一律显式 400，不静默降级。`include=["reasoning.encrypted_content"]`（Codex 每轮必带）接受但忽略，本网关不产加密推理内容。
 
 > 验证边界：开发环境无 Codex CLI；协议形状取自官方 `openai` SDK 类型并以其为客户端跑通全部契约，另对真实上游冒烟，未经真实 Codex CLI 端到端验证。
+
+### Anthropic Messages API（Claude Code）
+
+`POST /v1/messages` 提供 Anthropic Messages 子集，供 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 这类只走 Anthropic 协议的客户端接入。与 `/v1/chat/completions` / `/v1/responses` 共用同一套选号 / 冷却 / 轮换 / 统计与会话粘性，只换入站映射与出口翻译（实现见 [TECHNICAL.md §3.18](TECHNICAL.md)）：
+
+```bash
+export ANTHROPIC_BASE_URL=http://127.0.0.1:8000
+export ANTHROPIC_AUTH_TOKEN=sk-你的key     # 或 ANTHROPIC_API_KEY（走 x-api-key 头）
+claude
+```
+
+- **鉴权**：`x-api-key`（`ANTHROPIC_API_KEY`）与 `Authorization: Bearer`（`ANTHROPIC_AUTH_TOKEN`）都接受。
+- **流式**：`message_start` → `content_block_start/delta/stop` → `message_delta`（含 `stop_reason` 与 usage）→ `message_stop`；Anthropic 协议无 `[DONE]` 哨兵，`message_stop` 即流结束。thinking 块在 `content_block_stop` 前补 `signature_delta`。
+- **非流式**：复用 `executor.complete` 后转换为 `message` 形状。
+- **`count_tokens`**：`POST /v1/messages/count_tokens` 本地估算输入 token（不转发上游，口径与上下文压缩共用）。
+- **不支持**：图片 / 文档块、Anthropic 服务端工具（`web_search` / `computer` 等）一律显式 400，不静默降级。
+
+> 验证边界：协议形状取自官方 `anthropic` Python SDK 类型并以其为客户端跑通全部契约，未经真实 Claude Code 端到端验证。
 
 ### 余额查询
 
@@ -243,12 +275,14 @@ curl http://127.0.0.1:8000/v1/user/balance -H "Authorization: Bearer sk-你的ke
 
 五类计数互斥且合计 = `total`，与调度器同一口径（`disabled` / `paused` / `cooling` 依次优先归入各自桶，其余为 `ready`）。`ready=0` 时对话请求直接返回 503，值得配置告警。
 
-### API Key 的渠道绑定与来源 IP 白名单
+### API Key 的渠道绑定、模型白名单、来源 IP 与到期时间
 
-创建 Key 时可限定它只能走某个渠道、只能从某些 IP 调用，适合「按出口分发 Key」：一个给团队用，另一个只给某台服务器或某个客户端。
+创建 Key 时可限定它只能走某个渠道、只能调用某些模型、只能从某些 IP 调用、在某时刻后失效，适合「按出口分发 Key」：一个给团队用，另一个只给某台服务器或某个客户端，再给试用者一个到期 Key。
 
 - **渠道绑定**：选 CodeBuddy / TRAE / OpenCode Zen / Kilo Gateway / Qoder / CodeArts 后，该 Key 只在对应渠道的凭证里选号；模型属于另一渠道时直接 400 并指出实际归属（不静默改道，也不白打一次上游）。留空 = 自动（默认，跨渠道选健康凭证）。`模型@渠道` 与绑定冲突时同样 400。
 - **来源 IP 白名单**：逗号分隔的 IP 或 CIDR（如 `203.0.113.9,10.0.0.0/8`），留空 = 不限制。写入时校验并规范化（`10.0.0.1` 存为 `10.0.0.1/32`），非法值当场 400；来源不在白名单内返回 403。
+- **模型白名单**：逗号分隔的模型名或 fnmatch glob（如 `glm-*,kimi-k3`），留空 = 不限制。匹配不区分大小写，`模型@渠道` 的后缀不参与匹配；命中之外的模型返回 400，`/v1/models` 也只列出白名单内的模型。
+- **到期时间**：epoch 秒（如 `expires_at`），留空 = 永不过期；到期后该 Key 立即 401（与「Key 不存在」统一文案，不泄露可枚举信息）。
 
 **默认不采信 `X-Forwarded-For`**（客户端可写，信它等于白名单形同虚设）。仅 `TRUST_PROXY=true` 时按 XFF 判定，且取**最后一个**条目（紧邻本服务的受信代理实际看到的地址）。故该开关只适用于「本服务前恰好一层受信反代」；多层反代或直连请保持默认 `false`。
 
@@ -276,6 +310,8 @@ curl http://127.0.0.1:8000/v1/user/balance -H "Authorization: Bearer sk-你的ke
 ### 模型目录落盘与启动即用
 
 模型表除进程内 TTL 缓存（300s）外，每次拉取成功还会写快照到 `DATA_DIR/model_catalog.json` 并在**启动时同步读回**：重启那一刻「模型 → 渠道」归属表就已就绪，扁平名请求不会在预热（zen 免费模型探活要十几秒）跑完前扇出打错渠道；某渠道拉取失败时的缓存兜底也跨重启生效。快照存未过滤原始表（黑名单是热更项，在出口现算），损坏 / 超 7 天一律只丢缓存、不影响启动；恢复只覆盖「已注册且当前有可用凭证」的渠道。另有一条 `MODEL_CATALOG_MINUTES`（默认 30、下限 5）后台任务兜底刷新，保证没人访问 `/v1/models` 时归属表也不变陈旧。实现与故障复盘见 [`TECHNICAL.md`](TECHNICAL.md) §3.5。
+
+Playground 与 `GET /v1/models` 走 **stale-while-revalidate**：有缓存就立刻回旧列表，TTL 到期的渠道丢后台异步刷新，不把 zen 探活的十几秒压在请求上；只有某渠道**一条缓存都没有**（冷启动无快照 / 新接入渠道）时才同步等它一次。代价是列表最多滞后一个 TTL。见 [`TECHNICAL.md`](TECHNICAL.md) §3.5。
 
 ### token 到期展示
 
@@ -329,6 +365,16 @@ CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端�
 | `GROWTH_IRREVERSIBLE_ACTIONS` | `true` | 是否允许成长中心的不可逆动作：抽奖、连登兑换、开 Buddy 盲盒、消耗补登卡。`false` 时仍会领取旅行礼物与任务奖励 |
 | `ACTIVITY_REPORT_ENABLED` | `false` | 活跃上报（仅 CodeBuddy）：每天为账号补发一条对话事件续连登。**默认关闭**——官方条款禁止脚本篡改活动数据（处罚为取消资格并追回礼品），上游改版即失效，不作为可靠性功能（见上文「活跃上报」） |
 | `ACTIVITY_REPORT_HOUR` | `10` | 活跃上报的本地（北京）时间整点窗口；仅在 `ACTIVITY_REPORT_ENABLED=true` 时生效 |
+| `ALERT_ENABLED` | `true` | 运维告警开关：后台周期评估四类风险（池耗尽 / 任务连续失败 / token 临近到期 / 上游错误率骤升），命中落 `alert_events` 供管理台「运维告警」页回看。关闭后不评估、不落库、不推送 |
+| `ALERT_WEBHOOK_URL` | 空 | 告警 Webhook 地址：命中时 POST JSON，多个用逗号分隔，全部成功才算投递成功；留空 = 只在管理台留站内记录、不外推 |
+| `ALERT_INTERVAL_MINUTES` | `5` | 运维告警评估周期（下限 1 分钟） |
+| `ALERT_SILENCE_MINUTES` | `30` | 同一 `(规则, 对象)` 的静默窗：窗口内只落库 / 推送一次，避免持续状态每轮刷屏；`0` 关闭静默（每轮都报） |
+| `ALERT_POOL_READY_MIN` | `1` | 池耗尽阈值：可用凭证数少于该值时告警（服务活着但用不了）；`0` 关闭该规则 |
+| `ALERT_TASK_FAILURES` | `3` | 后台任务连续失败达到该次数时告警（成功一轮清零）；`0` 关闭该规则 |
+| `ALERT_TOKEN_EXPIRY_HOURS` | `24` | token 剩余时间少于该小时数时告警；`0` 关闭该规则 |
+| `ALERT_ERROR_RATE_THRESHOLD` | `0.5` | 上游错误率阈值：统计窗内失败占比达到该值且样本足够时告警；`0` 关闭该规则 |
+| `ALERT_ERROR_RATE_MIN_REQUESTS` | `20` | 错误率最小样本数：窗内请求数少于该值不判（样本太小无意义） |
+| `ALERT_ERROR_RATE_WINDOW_MINUTES` | `15` | 错误率统计窗（分钟），数据源为 `usage_events` 明细（非小时汇总） |
 | `QUOTA_EXPIRY_WINDOW_SECONDS` | `129600` | 主到期排序窗口：把距到期 ≤ 该秒数的积分加总，多的账号先用（避免积分过期浪费）；CodeBuddy 与 TRAE 都按包独立到期、都参与该排序；`≤0` 关闭整套到期排序（次窗口一并失效），退回纯健康度排序 |
 | `QUOTA_EXPIRY_SECONDARY_WINDOW_SECONDS` | `604800` | 次到期排序窗口：主窗口打平（常见的是都为 0）时才比较，`7 天`覆盖一个完整的小包到期周期；`≤0` 关闭该级 |
 | `CONVERSATION_STICKY_SECONDS` | `3600` | 会话粘性 TTL：优先按请求体显式会话标识（`conversation_id`/`conversationId`/`prompt_cache_key`，metadata 或顶层），无则回落消息前缀指纹，多轮请求固定用同一凭证（手动 pin 的凭证优先，粘性让位）；带 `user_id` 时不派生前缀兜底键（避免并行对话误钉同一号）；凭证出错仍会轮换，成功后重新粘定；`≤0` 关闭 |
@@ -347,6 +393,7 @@ CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端�
 | `QODER_ALLOWED_ENDPOINTS` | 国内 openapi+gateway + 国际版（见 compose） | Qoder 端点白名单，带 COSY 签名的请求只发往白名单内地址 |
 | `CODEARTS_API_ENDPOINT` | `https://snap-access.cn-north-4.myhuaweicloud.com` | CodeArts snap 引擎地址；改动时必须同时把它加入 `CODEARTS_ALLOWED_ENDPOINTS` |
 | `CODEARTS_ALLOWED_ENDPOINTS` | snap 引擎 + STS + 福利网关 + 门户（见 compose） | CodeArts 端点白名单，AK/SK 签名请求只发往白名单内地址 |
+| `PROVIDER_PROXIES` | `""` | **按渠道出站代理**（启动期项，改后需重启）。格式 `渠道=代理URL;渠道2=代理URL2`，渠道取 `codebuddy/trae/zen/kilo/qoder/codearts`，协议支持 `http/https/socks5/socks5h`；留空 = 全部直连。作用于该渠道的聊天、额度/模型拉取、后台任务与 OAuth 登录全部出站请求（含 SOCKS5，依赖 `httpx[socks]`）。解析严格：未知渠道 / 非法协议 / 缺 `=` 一律启动失败，避免「以为走了代理其实直连」。`trust_env=False` 不受环境代理影响，只有这里显式配置才生效 |
 | `CODEBUDDY_CHAT_MIN_INTERVAL` | `5` | CB/TRAE 聊天节流器的最小间隔（秒）：按凭证分桶、**桶内允许并发**（同渠道同模型并发不排队、立即发出），只在同凭证「上一请求已结束、紧接着又来一个」的顺序连发时补足间隔；`0` 关闭 |
 | `ZEN_CHAT_MIN_INTERVAL` | `0` | Zen 聊天最小间隔（秒），独立于 CB/TRAE 的节流器，默认关闭。zen 是匿名免费层、无账号级频率风控；若与 CB/TRAE 共享，zen 会排在它们之后空等满 5s（并发/连发时每个请求 +5s），故不共享 |
 | `KILO_CHAT_MIN_INTERVAL` | `0` | Kilo 聊天最小间隔（秒），独立于 zen / CB/TRAE 的节流器，默认关闭。同为匿名免费层，与 zen 各自独立、互不排队 |
@@ -362,14 +409,19 @@ CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端�
 | `ENABLE_DOCS` | `false` | 是否暴露 `/docs` 与 `/openapi.json`（默认关闭：匿名可拉全量 API 结构）；本地调试需 Swagger 时置 `true` |
 | `DUMP_REQUEST_BODIES` | `false` | 诊断：把 `/v1` 原始请求体落盘到 `data/dumps/`（**含对话内容**，仅排查用） |
 | `AUTO_CONTINUE_MAX` | `10` | 上游以 `finish_reason=length` 截断时同凭证自动续写的最多次数；`0` 关闭（见 TECHNICAL.md §3.4） |
+| `CONTEXT_COMPRESS_ENABLED` | `true` | 按模型目录里的输入上限裁剪过长对话，避免撞上游硬限制（CodeBuddy `11115 prompt is too long`）。目录里查不到上限的模型不受影响（宁可不裁剪也不猜）。见 TECHNICAL.md §3.19 |
+| `CONTEXT_COMPRESS_RESERVE_TOKENS` | `4096` | 压缩预算里为模型回复预留的输出 token 数 |
+| `CONTEXT_COMPRESS_MIN_KEEP_MESSAGES` | `4` | 无论多长都保留的最近消息条数（保证当前这轮对话完整） |
+| `CONTEXT_COMPRESS_SAFETY_RATIO` | `0.95` | 按模型上限的百分比计算压缩预算，给 token 估算误差留余量 |
 | `UPSTREAM_COMPLETE_TIMEOUT_SECONDS` | `600` | 非流式聚合整体超时（秒）：上游连接半开停滞会让非流式请求无限悬挂并占住凭证，超时按瞬态错误换号重试（流式路径有心跳兜底不受影响）；`≤0` 关闭 |
+| `MODEL_FALLBACK_GROUPS` | `""` | 跨渠道 fallback 兼容组（热更项，见 TECHNICAL.md §3.20）。格式 `组名=成员1,成员2;组名2=成员3`；成员可带 `@渠道` 固定渠道，组名只是入口别名（不进链）。请求任一成员时该成员置首、组内其余成员依次回退；主渠道全部不可用才回退，**仅在本次尝试尚未产出任何响应帧前**切换（已出帧绝不换模型）。留空 = 不启用 |
 | `HOST` / `PORT` | `127.0.0.1` / `8000` | 监听地址与端口（compose 默认 `0.0.0.0`，`PORT` 同时决定宿主机映射端口） |
 
 ### 管理台热更（「任务与配置」页）
 
-上表中带「可热更」语义的 20 项可不改 `.env`、不重启，直接在管理台「任务与配置」页修改：
+上表中带「可热更」语义的 35 项可不改 `.env`、不重启，直接在管理台「任务与配置」页修改：
 
-`DEFAULT_MODEL`、`MODEL_BLOCKLIST`、`QUOTA_EXPIRY_WINDOW_SECONDS`、`QUOTA_EXPIRY_SECONDARY_WINDOW_SECONDS`、`CONVERSATION_STICKY_SECONDS`、`GROWTH_IRREVERSIBLE_ACTIONS`、`GROWTH_INTERVAL_MINUTES`、`QUOTA_PROBE_MINUTES`、`MODEL_CATALOG_MINUTES`、`CODEBUDDY_CHAT_MIN_INTERVAL`、`ZEN_CHAT_MIN_INTERVAL`、`KILO_CHAT_MIN_INTERVAL`、`QODER_CHAT_MIN_INTERVAL`、`CODEARTS_CHAT_MIN_INTERVAL`、`CODEARTS_MAX_CONCURRENCY`、`CODEARTS_REQUEST_WINDOW_SECONDS`、`PACER_MIN_SECONDS`、`PACER_MAX_SECONDS`、`ACTIVITY_REPORT_ENABLED`、`ACTIVITY_REPORT_HOUR`。
+`DEFAULT_MODEL`、`MODEL_BLOCKLIST`、`CONTEXT_COMPRESS_ENABLED`、`CONTEXT_COMPRESS_RESERVE_TOKENS`、`CONTEXT_COMPRESS_MIN_KEEP_MESSAGES`、`CONTEXT_COMPRESS_SAFETY_RATIO`、`MODEL_FALLBACK_GROUPS`、`QUOTA_EXPIRY_WINDOW_SECONDS`、`QUOTA_EXPIRY_SECONDARY_WINDOW_SECONDS`、`CONVERSATION_STICKY_SECONDS`、`GROWTH_IRREVERSIBLE_ACTIONS`、`GROWTH_INTERVAL_MINUTES`、`QUOTA_PROBE_MINUTES`、`MODEL_CATALOG_MINUTES`、`CODEBUDDY_CHAT_MIN_INTERVAL`、`ZEN_CHAT_MIN_INTERVAL`、`KILO_CHAT_MIN_INTERVAL`、`QODER_CHAT_MIN_INTERVAL`、`CODEARTS_CHAT_MIN_INTERVAL`、`CODEARTS_MAX_CONCURRENCY`、`CODEARTS_REQUEST_WINDOW_SECONDS`、`PACER_MIN_SECONDS`、`PACER_MAX_SECONDS`、`ACTIVITY_REPORT_ENABLED`、`ACTIVITY_REPORT_HOUR`、`ALERT_ENABLED`、`ALERT_WEBHOOK_URL`、`ALERT_INTERVAL_MINUTES`、`ALERT_SILENCE_MINUTES`、`ALERT_POOL_READY_MIN`、`ALERT_TASK_FAILURES`、`ALERT_TOKEN_EXPIRY_HOURS`、`ALERT_ERROR_RATE_THRESHOLD`、`ALERT_ERROR_RATE_MIN_REQUESTS`、`ALERT_ERROR_RATE_WINDOW_MINUTES`。
 
 要点：
 
@@ -377,7 +429,7 @@ CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端�
 - 值存 `runtime_settings` 表（纯 key/value），新增可热更项无需迁移；白名单外的 key、非法类型 / 越界值写入前即拒，读取时坏行跳过并记警告。
 - 启动期项（`APP_SECRET` / `PORT` / `DATA_DIR` / `USERS_FILE` / 上游端点白名单）**不在**白名单：它们决定进程如何启动，运行期改只会让内存与磁盘静默分叉。
 - 接口：`GET /api/settings` 读快照，`PUT /api/settings` 写（admin + CSRF），body `{"values": {key: value}}`，传 `null` 恢复默认。
-- 该页同时展示**后台任务运行态**：7 类任务的周期、上次执行时间、最近结果与错误；页面按 tab 组织，每个任务一个 tab，无任务归属的配置（默认模型、黑名单、到期窗口、节流等）按后端下发的网关卡组各占一个 tab。
+- 该页同时展示**后台任务运行态**：8 类任务的周期、上次执行时间、最近结果与错误；页面按 tab 组织，每个任务一个 tab，无任务归属的配置（默认模型、黑名单、到期窗口、节流等）按后端下发的网关卡组各占一个 tab。
 - 运行态是**进程内**的（`GET /api/tasks`，admin，页面每 30 秒刷新）：只显示「本次启动以来跑过没有」，**重启归零**，不落库、不留历史。未到点或未开启的轮次不算执行——否则签到会显示成「刚刚跑过」，而当天一次都没签。
 
 ## 部署注意
@@ -481,11 +533,15 @@ M0–M3 及后续迭代全部完成，`main` 分支可运行，当前版本 v0.2
 后续批次（B1–B4）已按批准计划落地：
 
 - **B1 请求质量**：错误分类细分 + 模型级冷却、出站指纹清洗（11128 内容风控）、截断续写、会话粘性键、模型元数据/黑名单
-- **B2 协议出口**：`/v1/responses`（Codex CLI 子集）；Anthropic `/v1/messages` **暂不做**（当前无 Claude Code 场景，架构已预留中立事件层，后续按需补）
+- **B2 协议出口**：`/v1/responses`（Codex CLI 子集）；Anthropic `/v1/messages`（Claude Code，含 `count_tokens`，见 P0-1）
 - **B3 运维**：凭证暂停语义、运行时配置热更、token 到期展示、积分变动流水、池健康 `/healthz` + 多 Key 出口/IP 绑定
 - **B4 任务可视化**：后台任务运行态并入「任务与配置」页；模型黑名单热更延迟修复
 - **B5 账号体系**：用户从 `users.txt` 迁入 SQLite、三角色 RBAC、会话吊销（epoch）、一次性令牌激活 + 首登强制改密、用户管理页、审计日志页、硬删降为 CLI
 - **B6 新渠道**：接入 **Qoder**（COSY 私有协议 + 设备码登录 + 签到/额度）与 **CodeArts**（华为云 SDK-HMAC 签名 + DPoP 刷新 + 累计全文 SSE + 福利领取）；`KNOWN_PROVIDERS` 扩到六个，展示排序、渠道绑定、前端图标与文档同步
+- **B7 竞品能力补齐（P0）**：Anthropic `/v1/messages` 出口（Claude Code）、上下文压缩（按模型目录输入上限裁剪过长对话）、API Key 模型白名单 + 到期时间（对比与迁移分档见 `docs/competitor-comparison.md`）
+- **B8 智能路由（P1）**：跨渠道 fallback 兼容组（`MODEL_FALLBACK_GROUPS`，主渠道全不可用时按组顺序回退、仅在未出帧前切换）
+- **B9 运维告警（P1）**：后台周期评估四类风险（凭证池耗尽 / 后台任务连续失败 / token 临近到期 / 上游错误率骤升），命中落 `alert_events` 并在管理台「运维告警」页回看，可选推送 webhook（`ALERT_WEBHOOK_URL`），同一告警在静默窗内只报一次
+- **B10 按渠道代理（P1）**：`PROVIDER_PROXIES` 为每个渠道单独指定出站代理（HTTP/SOCKS5），作用于该渠道全部出站请求（聊天 / 额度 / 模型 / 后台任务 / OAuth 登录）；留空直连，默认行为不变
 
 规划与实测收窄的完整记录见 `PROPOSAL.md`（Q1–Q54）与 `TECHNICAL.md`（§3.1–§3.17、§6.1–§6.4）。
 

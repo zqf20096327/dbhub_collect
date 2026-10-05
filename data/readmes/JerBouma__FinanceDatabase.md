@@ -1,3 +1,4 @@
+<!-- mcp-name: io.github.JerBouma/financedatabase -->
 <img src="https://user-images.githubusercontent.com/46355364/220746807-669cdbc1-ac67-404c-b0bb-4a3d67d9931f.jpg" alt="Logo">
 
 [![GitHub Sponsors](https://img.shields.io/badge/Sponsor_this_Project-grey?logo=github)](https://github.com/sponsors/JerBouma)
@@ -19,26 +20,28 @@ As a private investor, the sheer amount of information that can be found on the 
 
 The aim of this database is explicitly _not_ to provide up-to-date fundamentals or stock data, as those can be obtained with ease (with the help of this database) by using the [Finance Toolkit 🛠️](https://github.com/JerBouma/FinanceToolkit). Instead, it gives insights into the products that exist in each country, industry, and sector and provides the most essential information about each product. With this information, you can analyze specific areas of the financial world and/or find a product that is hard to find. For examples of how you can combine this database with the earlier mentioned packages, see the [Usage](#usage) section.
 
+**🔌 The Finance Database is also available as an [MCP Server](#mcp-server)**: explore all 300,000+ symbols from Claude, Copilot, Cursor, Windsurf or any MCP-compatible client without writing code. Run `uvx --from "financedatabase[mcp]" financedatabase-mcp-setup` to configure your client. No API key needed.
+
 Some key statistics of the database:
 
 <!-- STATISTICS:START (generated weekly by scripts/update_readme_stats.py from database/; edits between these markers are overwritten) -->
 
 <div align="center">
 
-![symbols](https://img.shields.io/badge/symbols-316%2C297-0A66C2?style=flat-square) ![equities](https://img.shields.io/badge/equities-117%2C916-2EA44F?style=flat-square) ![ETFs](https://img.shields.io/badge/ETFs-42%2C057-8250DF?style=flat-square) ![countries](https://img.shields.io/badge/countries-117-BF8700?style=flat-square) ![updated](https://img.shields.io/badge/updated-2026--10--04-57606A?style=flat-square)
+![symbols](https://img.shields.io/badge/symbols-316%2C351-0A66C2?style=flat-square) ![equities](https://img.shields.io/badge/equities-117%2C948-2EA44F?style=flat-square) ![ETFs](https://img.shields.io/badge/ETFs-42%2C068-8250DF?style=flat-square) ![countries](https://img.shields.io/badge/countries-117-BF8700?style=flat-square) ![updated](https://img.shields.io/badge/updated-2026--10--05-57606A?style=flat-square)
 
 </div>
 
 | | Asset class | Symbols | Actively listed | Exchanges | Coverage |
 | :-: | :-- | --: | --: | --: | :-- |
-| 🏢 | **Equities** | 117,916 | 103,587 | 84 | 11 sectors · 80 industries · 117 countries |
-| 📦 | **ETFs** | 42,057 | 41,450 | 53 | 593 issuers · 43 categories |
+| 🏢 | **Equities** | 117,948 | 103,616 | 84 | 11 sectors · 76 industries · 117 countries |
+| 📦 | **ETFs** | 42,068 | 41,461 | 53 | 593 issuers · 43 categories |
 | 💼 | **Funds** | 57,853 | – | 33 | 1,540 fund families · 74 categories |
 | 📈 | **Indices** | 91,181 | – | 63 | 42 categories |
 | 💱 | **Currencies** | 2,556 | – | – | 178 currencies |
-| 🪙 | **Cryptocurrencies** | 3,367 | – | – | 351 coins · 12 quote currencies |
+| 🪙 | **Cryptocurrencies** | 3,378 | – | – | 352 coins · 12 quote currencies |
 | 🏦 | **Money Markets** | 1,367 | – | 2 | 129 fund families |
-| | **Total** | **316,297** | | | |
+| | **Total** | **316,351** | | | |
 
 <details>
 <summary><b>📊 More statistics</b>: composition, sectors, countries, exchanges and ETF categories</summary>
@@ -46,11 +49,11 @@ Some key statistics of the database:
 ```mermaid
 pie showData
     title Symbols per asset class
-    "Equities" : 117916
+    "Equities" : 117948
     "Indices" : 91181
     "Funds" : 57853
-    "ETFs" : 42057
-    "Cryptocurrencies" : 3367
+    "ETFs" : 42068
+    "Cryptocurrencies" : 3378
     "Currencies" : 2556
     "Money Markets" : 1367
 ```
@@ -61,14 +64,14 @@ pie showData
 
 | Sector | Equities |
 | :-- | --: |
-| Industrials | 13,922 |
-| Financials | 13,208 |
-| Materials | 12,663 |
-| Information Technology | 10,612 |
-| Health Care | 10,248 |
-| Consumer Discretionary | 9,895 |
-| Consumer Staples | 5,205 |
-| Real Estate | 4,427 |
+| Industrials | 13,924 |
+| Financials | 13,211 |
+| Materials | 12,662 |
+| Information Technology | 10,615 |
+| Health Care | 10,249 |
+| Consumer Discretionary | 9,892 |
+| Consumer Staples | 5,206 |
+| Real Estate | 4,426 |
 | Communication Services | 4,078 |
 | Energy | 3,993 |
 | Utilities | 2,257 |
@@ -78,17 +81,17 @@ pie showData
 
 | Country | Equities |
 | :-- | --: |
-| United States | 24,025 |
+| United States | 24,033 |
 | Canada | 8,873 |
 | China | 6,614 |
-| India | 6,513 |
-| Japan | 6,440 |
+| India | 6,520 |
+| Japan | 6,448 |
 | Germany | 4,353 |
 | United Kingdom | 3,795 |
-| Australia | 3,585 |
+| Australia | 3,586 |
 | France | 2,562 |
 | Hong Kong | 2,474 |
-| *Other (103)* | 25,150 |
+| *Other (103)* | 25,152 |
 
 </td>
 </tr>
@@ -102,12 +105,12 @@ pie showData
 | STU | 8,327 |
 | BER | 7,347 |
 | MUN | 5,883 |
-| NMS | 4,437 |
-| JPX | 3,737 |
+| NMS | 4,447 |
+| JPX | 3,745 |
 | BSE | 3,710 |
 | DUS | 3,353 |
-| NYQ | 3,339 |
-| *Other (74)* | 42,231 |
+| NYQ | 3,342 |
+| *Other (74)* | 42,239 |
 
 </td>
 <td valign="top">
@@ -535,6 +538,54 @@ A sample of the output is shown below, focusing on ETH-BTC:
 | 2025Q2 | 0.0218 | 0.0217 | 0.0216 |  0.0216 |      0.0216 |   195229 |           0 |  -0.0137 |       0.1415 |         -0.053  |              0.1361 |              1.0435 |
 
 
+# MCP Server
+
+The Finance Database MCP Server gives any AI assistant that supports the [Model Context Protocol](https://modelcontextprotocol.io) (MCP) direct access to the database. Ask in plain English for, say, every mid cap semiconductor company in Taiwan or the bond ETFs of a given issuer, and the assistant queries the database on your behalf. No API key is needed. The data is downloaded once, cached locally and checked for updates at most once a day, exactly like the Python package.
+
+### Installation
+
+Run the setup wizard. It locates your client's config file (Claude Desktop, Claude Code, VS Code, Cursor, Gemini or Windsurf) and adds the server:
+
+```
+uvx --from "financedatabase[mcp]" financedatabase-mcp-setup
+```
+
+Or add it manually to your client's MCP config file (e.g. `claude_desktop_config.json`, `.cursor/mcp.json`; VS Code's `.vscode/mcp.json` uses `servers` instead of `mcpServers`):
+
+```json
+{
+  "mcpServers": {
+    "finance-database": {
+      "command": "uvx",
+      "args": ["--from", "financedatabase[mcp]", "financedatabase-mcp"]
+    }
+  }
+}
+```
+
+For Claude Code: `claude mcp add finance-database -- uvx --from "financedatabase[mcp]" financedatabase-mcp`. To serve over HTTP instead of stdio, use `financedatabase-mcp --transport streamable-http --port 8000` or the included `Dockerfile` and `docker-compose.yml`. `financedatabase-mcp-inspector` opens the [MCP Inspector](https://github.com/modelcontextprotocol/inspector) to try the tools in a browser.
+
+### Tools
+
+| Tool | What it does |
+|:-----|:-------------|
+| `equities`, `etfs`, `funds`, `indices`, `currencies`, `cryptos`, `moneymarkets` | List the instruments of an asset class matching its `select()` filters (e.g. `country`, `sector`, `industry`, `market_cap` for equities; `category_group`, `category`, `family` for ETFs) and/or a free-text `query` on symbol and name. Filters accept several comma-separated values. Supports `include_delisted`, `only_primary_listing`, `show_columns`, `include_summary`, `limit` and `offset`. |
+| `search_instruments` | Find a symbol by ticker, name or ISIN across all asset classes at once. |
+| `show_options` | Show the valid values of a filter (e.g. every sector or country), optionally narrowed by other filters. |
+| `search_categories` | List the asset classes with their size, filters and description. |
+
+Every response is compact JSON with `total`, `returned`, `offset`, `columns` and `rows`, at most 200 rows per call (25 by default), with a `_notes` hint on how to get the next page. Summaries are left out unless asked for and truncated to 300 characters, so a response never contains the full dataset. Invalid filter values return the package's error message together with suggestions such as "Did you mean 'Information Technology'?".
+
+### Example prompts
+
+- *"Which Dutch financial companies are Large or Mega Cap?"*
+- *"Find all mid cap semiconductor companies in Taiwan and list their exchanges."*
+- *"What ETFs does Vanguard offer in the Fixed Income category group?"*
+- *"Which ticker belongs to ISIN US0378331005, and on which exchanges is it listed?"*
+- *"List the industries in the Health Care sector and how many German companies are in each."*
+
+Combine it with the [Finance Toolkit MCP Server](https://www.jeroenbouma.com/projects/financetoolkit/mcp) to go from a list of symbols to their financial statements, ratios and prices.
+
 # Questions & Answers
 In this section you can find answers to commonly asked questions. In case the answer to your question is not here, 
 consider creating an [Issue](https://github.com/JerBouma/FinanceDatabase/issues).
@@ -568,6 +619,10 @@ While professional financial data services like Bloomberg charge over $25,000 an
 Most companies don't change so rapidly that the database becomes obsolete - major changes like Facebook's rebrand to META are quickly incorporated. Even when companies go bankrupt, their ticker information remains valuable for historical analysis.
 
 If you notice outdated information, please consider contributing through the [Contributing Guidelines](https://github.com/JerBouma/FinanceDatabase/blob/main/CONTRIBUTING.md).
+
+> **Is the data downloaded every time I use the package?**
+
+No. Each dataset is downloaded once and cached in your user cache folder (or the folder set in `FINANCEDATABASE_CACHE_DIR`). Once a day the package checks for a newer version and only downloads it when it changed; offline, the cached copy is used. Queries run lazily with [Polars](https://pola.rs/) and return pandas by default, or Polars with `as_pandas=False`, e.g. `equities.select(country="Canada", as_pandas=False)`.
 
 # Contributions
 

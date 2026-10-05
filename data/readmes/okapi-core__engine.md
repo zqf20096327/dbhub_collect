@@ -97,32 +97,18 @@ The Okapi Helm charts deploy only Okapi. ClickHouse and PostgreSQL are
 external dependencies and must already be reachable from the Kubernetes
 namespace where Okapi is installed.
 
-The charts are published as OCI artifacts in GHCR. For a release such as
-`0.0.2`, install the migration job first, followed by the services:
+The unified `okapi` chart is published as an OCI artifact in GHCR. For a
+release such as `0.0.2`, install the complete application stack in one Helm
+release:
 
 ```sh
 export OKAPI_VERSION=0.0.2
 export OKAPI_NAMESPACE=okapi
 
-helm upgrade --install ops oci://ghcr.io/okapi-core/charts/ops \
+helm upgrade --install okapi oci://ghcr.io/okapi-core/charts/okapi \
   --version "$OKAPI_VERSION" \
   --namespace "$OKAPI_NAMESPACE" --create-namespace \
-  -f deployment-artifacts/values-yaml/ha/ops-values.yaml --wait
-
-helm upgrade --install ingester oci://ghcr.io/okapi-core/charts/ingester \
-  --version "$OKAPI_VERSION" \
-  --namespace "$OKAPI_NAMESPACE" \
-  -f deployment-artifacts/values-yaml/ha/okapi-ingester-values.yaml --wait
-
-helm upgrade --install oscar oci://ghcr.io/okapi-core/charts/oscar \
-  --version "$OKAPI_VERSION" \
-  --namespace "$OKAPI_NAMESPACE" \
-  -f deployment-artifacts/values-yaml/ha/oscar-values.yaml --wait
-
-helm upgrade --install web oci://ghcr.io/okapi-core/charts/web \
-  --version "$OKAPI_VERSION" \
-  --namespace "$OKAPI_NAMESPACE" \
-  -f deployment-artifacts/values-yaml/ha/okapi-web-values.yaml --wait
+  -f deployment-artifacts/values-yaml/okapi-values.yaml --wait
 ```
 
 The sample files contain placeholders for database service names. Replace
@@ -226,32 +212,6 @@ dashboard configurations, see the [dashboard YAML documentation](./dashboard-yam
 For a remote or Kubernetes installation, replace `http://localhost:9009` with
 the externally reachable Okapi ingester endpoint. Keep the tenant header
 consistent with the tenant used by the Okapi installation.
-
-## OpenTelemetry demo harness
-
-For development and benchmark work, the repository also contains a pinned
-OpenTelemetry demo harness:
-
-```sh
-make docker-all
-make otel-harness
-```
-
-The harness checks out a pinned OpenTelemetry demo revision, adds the Okapi
-collector and Compose configuration, and starts the demo without the demo's
-other observability backends.
-
-To check that telemetry is flowing into Okapi:
-
-```sh
-curl -s \
-  -H 'Content-Type: application/json' \
-  -d '{"window":"5m"}' \
-  http://localhost:9009/api/v1/overview
-```
-
-The setup is ready when the response reports non-zero metrics and trace event
-counts.
 
 ## License
 

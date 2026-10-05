@@ -5,22 +5,14 @@
 
 [![GitHub release](https://img.shields.io/github/v/release/PVRLabs/statlite)](https://github.com/PVRLabs/statlite/releases)
 [![Go powered](https://img.shields.io/github/go-mod/go-version/PVRLabs/statlite?label=Go%20powered&logo=go&logoColor=white)](go.mod)
-[![Frameworks: Spring Boot · Quarkus](https://img.shields.io/badge/Frameworks-Spring%20Boot%20%C2%B7%20Quarkus-e7e7e7?labelColor=333)](docs/integrations.md)
+[![Frameworks: Spring Boot · Quarkus · Micronaut](https://img.shields.io/badge/Frameworks-Spring%20Boot%20%C2%B7%20Quarkus%20%C2%B7%20Micronaut-e7e7e7?labelColor=333)](docs/integrations.md)
 [![CI](https://github.com/PVRLabs/statlite/actions/workflows/test.yml/badge.svg)](https://github.com/PVRLabs/statlite/actions/workflows/test.yml)
 [![License](https://img.shields.io/github/license/PVRLabs/statlite)](LICENSE)
 
-A lightweight, self-hosted metrics dashboard with a small memory and operational
-footprint, designed for applications running on VPSs and small servers. A single
-Go binary monitors Spring Boot applications through Actuator JSON or Micrometer
-Prometheus metrics, Quarkus applications through Micrometer metrics, and other
-applications that expose [a small, fixed JSON metrics
-endpoint](docs/statlite-metrics-v1.md), without requiring Prometheus or Grafana.
-It stores focused traffic, latency, CPU, memory, optional authoritative health,
-and optional host metrics in SQLite on your server. Samples and history stay
-there, without continuously sending application metrics to a third-party
-monitoring SaaS. When a target has no health signal, the
-dashboard reports whether StatLite is successfully receiving its metrics
-without treating reachability as application health.
+StatLite provides lightweight, self-hosted application monitoring for apps running
+on VPSs and small servers. One Go binary polls multiple applications, stores
+metrics locally in SQLite, and provides built-in historical
+charts, without requiring Prometheus or Grafana.
 
 🌐 [Website](https://pvrlabs.xyz/statlite) · 👀 [Interactive demo](https://pvrlabs.xyz/statlite/demo.html) · [简体中文](README.zh-Hans.md)
 
@@ -28,6 +20,12 @@ without treating reachability as application health.
   <img src="docs/images/dashboard.webp" alt="StatLite dashboard monitoring a Spring Boot payments API">
   <br><sub>Main application dashboard for the Spring target.</sub>
 </p>
+
+StatLite supports Spring Boot, Quarkus, and Micronaut integrations, and other
+applications through [a small, fixed JSON metrics endpoint](docs/statlite-metrics-v1.md).
+It collects traffic, latency, CPU, memory, optional application health, and
+optional host metrics. Metrics and history stay on your server, without
+continuously sending application metrics to a third-party monitoring SaaS.
 
 StatLite is built for [resource-constrained servers](docs/low-resource-monitoring.md).
 Low memory, CPU, disk, and operational overhead are treated as product
@@ -54,11 +52,11 @@ dashboard starts with live data.
 See the [Docker guide](docs/docker.md) for persistent storage, container
 networking, local builds, and access guidance.
 
-StatLite is intentionally focused and is not a replacement for Prometheus and
-Grafana. See [monitoring options for small applications and VPS
-deployments](docs/monitoring-options.md) for the practical tradeoffs between
-StatLite, a general-purpose self-hosted stack, telemetry pipelines, and hosted
-platforms.
+StatLite provides predefined application and host metrics with built-in charts.
+It does not provide PromQL, unrestricted custom metrics, custom dashboard
+building, distributed tracing, centralized logs, or built-in alert delivery.
+See [monitoring options for small applications and VPS
+deployments](docs/monitoring-options.md) for the practical tradeoffs.
 
 ## Install
 
@@ -116,11 +114,13 @@ For other supported frameworks, select the type explicitly when needed:
 
 ```bash
 statlite inspect --type quarkus 'http://localhost:9000'
+statlite inspect --type micronaut 'http://localhost:8080'
 ```
 
 Inspection checks conventional supported endpoints and is bounded and
-read-only. For untyped discovery, start with a base HTTP or HTTPS URL without a
-query string or fragment.
+read-only. Micronaut requires `--type micronaut`; inspection validates its
+supported contract without proving framework identity. For untyped discovery, start with
+a base HTTP or HTTPS URL without a query string or fragment.
 
 See [Configuration](docs/configuration.md) for exact endpoint forms, discovery
 limits, authentication limitations, all settings, and manual target
@@ -135,14 +135,23 @@ when the application needs to add the `/statlite/metrics` endpoint. See
 
 ## Supported metric sources
 
-- **Spring Boot:** Collects authoritative health when Actuator health is
-  available and automatically selects a compatible Micrometer Prometheus
+When a target has no health signal, the dashboard reports whether StatLite is
+successfully receiving its metrics without treating reachability as application
+health.
+
+- **[Spring Boot](docs/targets/spring.md):** Collects authoritative health
+  when Actuator health is available and automatically selects a compatible Micrometer Prometheus
   endpoint or Actuator JSON for request, JVM, process, and optional host
   metrics. Independently usable metrics remain reportable if health retrieval
   fails.
-- **Quarkus Micrometer:** Collects bounded request, latency, CPU, heap, process,
-  and restart concepts from an exact Prometheus/OpenMetrics endpoint. SmallRye
+- **[Quarkus Micrometer](docs/targets/quarkus.md):** Collects bounded request,
+  latency, CPU, heap, process, and restart concepts from an exact Prometheus/OpenMetrics endpoint. SmallRye
   Health is an optional capability when the application publishes it.
+- **[Micronaut Micrometer](docs/targets/micronaut.md):** Collects the existing request,
+  duration, CPU, heap, process, and restart concepts from an exact configured Prometheus endpoint,
+  conventionally `/prometheus`. Management health is optional; database health
+  requires visible JDBC aggregate status.
+  See the [certified setup](docs/targets/micronaut.md).
 - **[StatLite Metrics v1](docs/statlite-metrics-v1.md):** A small, fixed JSON
   endpoint that applications in any language or framework can implement. See
   the [direct integration guides](docs/integrate/) for FastAPI, Express,

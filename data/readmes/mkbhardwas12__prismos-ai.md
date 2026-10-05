@@ -1,8 +1,12 @@
+<img src="docs/brand/prismos-ai-app-icon.svg" width="96" alt="PrismOS-AI app icon: a P drawn as one beam that opens into three lanes of light" />
+
 # PrismOS-AI
 
-> **A desktop AI that reads your files, answers offline, and remembers — in a knowledge graph that lives on your disk, not someone's server.**
+> **Use AI on the documents you're not allowed to paste into ChatGPT.**
 
-Drop a PDF and ask. A local [Ollama](https://ollama.com) model answers, and what it learns lands in a SQLite knowledge graph you can explore in 3D and that the *next* conversation can use. Works with Wi-Fi off.
+Mac, Windows or Linux · runs on your own laptop · free and open source
+
+Client files, contracts, internal specs: drop them in and ask. A local [Ollama](https://ollama.com) model answers, and what it learns goes into a knowledge graph on your own disk that the *next* conversation can use. Your documents never leave your machine, and you don't have to take that on trust: turn off Wi-Fi and it keeps working.
 
 <p align="center">
   <a href="https://github.com/mkbhardwas12/prismos-ai/releases/latest">
@@ -12,6 +16,7 @@ Drop a PDF and ask. A local [Ollama](https://ollama.com) model answers, and what
   <sub>
     <a href="docs/media/prismos-demo.mp4">▶ 1280×720 MP4 (with voiceover)</a> ·
     <a href="docs/media/stream-demo.mp4">live Ollama stream</a> ·
+    <a href="docs/media/prismos-one-app-three-jobs.mp4">one app, three one-line jobs (66 s)</a> ·
     <a href="docs/screenshots/">stills</a>
   </sub>
 </p>
@@ -35,7 +40,13 @@ out in [What stays local](#what-stays-local-and-what-can-use-the-network).
 | **Reads your documents** | PDF, DOCX, PPTX, XLSX. Text is extracted on-device, chunked, and retrieved with TF-IDF instead of naively truncated. |
 | **Talks to any local model** | Streaming chat against any Ollama model; curated registry of 18 models with hardware-aware recommendations on first run. Attach an image and it swaps to a vision model, then swaps back. |
 | **Generates documents, decks and small apps** | Ask for a report, a slide deck (5 layouts, speaker notes) or a self-contained HTML app; it writes the file locally and opens it. |
+| **Builds a living 3D scene from one line** | `/scene a voxel lighthouse on a rocky island in a storm at night` and a local model writes a real-time scene that opens in the browser: a GPU ocean, sweeping beams, rain and lightning, and only the things that really move are moving. One HTML file with three.js inlined, so it works with Wi-Fi off. |
+| **Investigates incidents and hardens configs** | Drop in logs and ask what happened: indicators, a timeline and findings mapped to MITRE ATT&CK, then containment and next steps. Drop in an sshd_config, nginx, Dockerfile, Compose, Kubernetes or .env file and get each problem with the exact fix. Nothing is uploaded. |
 | **Agent roles debate the answer** | Orchestrator, Reasoner, Memory Keeper, Tool Smith and Sentinel vote on the response before it's shown; operation approvals go through a small wasmtime policy module. |
+| **Signs its answers** | Opt-in **answer receipts**: each reply can carry a locally signed record (HMAC-SHA256, device-bound key) of the model that actually ran, the documents and graph nodes used, digests of question and answer, and a link into the tamper-evident audit log. Verify it later on the same machine; export it as JSON (digests only, never your text). |
+| **Warns when new knowledge contradicts old** | Opt-in **conflict alerts**: after a document is indexed, a bounded local pass (embeddings → cosine neighbours → a strict structured verdict from your chat model) quotes both sides of any contradiction and records a `contradicts` link. Nothing is deleted or overwritten. |
+| **Does the arithmetic on spreadsheets** | Drop a CSV or XLSX: Rust parses, types and profiles every column and aggregates the series; the model only explains the profile. Ask for a chart and you get a self-contained HTML file — inline SVG, no JavaScript, no external resources. |
+| **Turns recordings into knowledge** | Drop a voice memo or meeting recording: transcribed on-device by a [whisper.cpp](https://github.com/ggml-org/whisper.cpp) sidecar spawned only for that job (`brew install whisper-cpp` + a ggml model), summarised by your local model, indexed into the graph. Honest status if the sidecar or model is missing. |
 | **Stays out of your way** | Global hotkey summons it over any app; it minimizes to the tray and the agents stay resident. |
 
 Optional, **off by default**, opt-in: user-directed Web Research (only URLs you
@@ -43,6 +54,28 @@ type), IMAP Email Keeper, Yahoo Finance Keeper. Full feature history in
 [CHANGELOG.md](CHANGELOG.md).
 
 ---
+
+
+### One line in, a living world out
+
+<p align="center">
+  <img src="docs/media/scene-builder-demo.gif" width="640" alt="A voxel lighthouse on a rocky island in a storm at night, written by a local model from one line" />
+  <br/>
+  <sub><a href="docs/media/scene-builder-demo.mp4">12 s MP4</a> · <a href="docs/examples/storm-lighthouse-island.html">open the scene file</a> · prompt: <code>/scene a voxel lighthouse on a rocky island in a storm at night</code> · qwen3.8:27b on a MacBook</sub>
+</p>
+
+The model never writes a renderer. It describes the world against a small scene kit (voxels, moving parts, water, light), and PrismOS fills in what a one-line prompt leaves out: a lighthouse gets its beam, a keeper's cottage and a boat at the jetty; a storm gets rain, lightning and a rough sea. Every reply is parsed and dry-run before you see it, a broken line gets repaired on its own, and the file carries a Content-Security-Policy that blocks all network access.
+
+### Two prompts, one bad night
+
+<p align="center">
+  <img src="docs/media/prismos-security-investigation.gif" width="420" alt="PrismOS investigating a staged break-in on a made-up bakery's web server from one question" />
+  <img src="docs/media/prismos-bakery-website.gif" width="420" alt="The bakery website PrismOS built from one line: a filterable menu, today's hours and a pickup form" />
+</p>
+
+A made-up bakery's web server has a very bad night ([the staged log](docs/examples/maple-lane/maple-lane-last-night.txt) uses documentation IPs only). Attach it and ask *"Something happened on our bakery's web server last night. What happened, and what do we do now?"*: about a minute later you have 13 findings mapped to MITRE ATT&CK, a timeline in plain words, the next hour's steps and how to harden. PrismOS reads every line itself first; the model only writes up the evidence. [Read the saved report](docs/examples/maple-lane/investigation-report.md), unedited.
+
+Then one more line: *"Build a new website for Maple Lane Bakery: menu, opening hours and pickup orders"*. The App Builder plans the site, writes four plain files one at a time and checks the journey: a filterable menu, today's hours, a map card, reviews and a pickup form that checks itself before it confirms. It took about 21 minutes on the same laptop. [The site is in the repo](docs/examples/maple-lane/site/), unedited, with [honest notes](docs/examples/maple-lane/README.md#honest-notes) on what it got wrong.
 
 ## Try it
 
@@ -85,8 +118,8 @@ Prefer to click? Grab an installer from the
 | Platform | Asset |
 |---|---|
 | Windows x64 | `.msi` (recommended) or `.exe` |
-| macOS Apple Silicon | `PrismOS-AI_0.6.0_aarch64.dmg` |
-| macOS Intel | `PrismOS-AI_0.6.0_x64.dmg` |
+| macOS Apple Silicon | `PrismOS-AI_<version>_aarch64.dmg` |
+| macOS Intel | `PrismOS-AI_<version>_x64.dmg` |
 | Linux x64 | `.AppImage` or `.deb` |
 | Linux ARM | not published — [build from source](#build-from-source) |
 
@@ -158,6 +191,14 @@ installed, but PrismOS is not an OS-level network sandbox:
 
 - Installers, model/voice downloads, configured model-management endpoints and
   update checks can access external services.
+- The **Audio → Knowledge** panel in Settings has a one-time, user-initiated
+  "Download base model" button that fetches a whisper.cpp ggml model from
+  Hugging Face. Transcription itself never touches the network; with a model
+  already in the models folder nothing is downloaded.
+- **Answer receipts**, **conflict alerts** and the **data lane** are entirely
+  local: signing uses a device-bound key, contradiction checks and chart specs
+  use the loopback Ollama daemon, and chart files contain no scripts or
+  external resources.
 - The optional **Email Keeper** agent connects to *your* IMAP server if you
   configure it. It is off by default.
 - The optional **Finance Keeper** fetches public market data from Yahoo Finance.
@@ -189,6 +230,13 @@ and the [reviewed public knowledge pack](resources/knowledge/reliable-local-assi
 (public reference guidance only; your personal knowledge database stays outside
 this repository, and ingestion is not model training).
 
+A second reviewed pack, [SAP and security](resources/knowledge/sap-and-security/about-this-pack.md),
+holds dated, cited notes on SAP Basis, SAP HANA, SAP BTP and the 2025 to 2026 threat
+picture, plus what the security lane checks in SAP profiles, HANA .ini files and SAP
+logs. Import it with the same `prismos-knowledge` tool. It is searchable reference
+text with its sources listed, not training, and it goes stale: every document says
+what it knew on 2026-10-05.
+
 ---
 
 ## Security model
@@ -202,6 +250,7 @@ evidence.
 | Action tags | HMAC tags use public identifiers; they are not trusted code signatures | [`sandbox_prism.rs`](src-tauri/src/sandbox_prism.rs) |
 | 3-tier allow-list | Operation categories and per-role permissions, not an OS permission boundary | [`sandbox_prism.rs`](src-tauri/src/sandbox_prism.rs) |
 | Audit chain | Local SHA-256 chain detects consistency errors; it is neither immutable nor protected against full-file rewriting | [`audit_log.rs`](src-tauri/src/audit_log.rs) |
+| Answer receipts | HMAC-SHA256 over answer/source digests with a key derived from device identifiers; verifiable on the issuing machine only — provenance for you, not a third-party attestation | [`answer_receipt.rs`](src-tauri/src/answer_receipt.rs) |
 | Hardware detection | Detects platform hardware; current software key derivation does not perform protected TPM/Secure Enclave key operations | [`secure_enclave.rs`](src-tauri/src/secure_enclave.rs) |
 | Live storage | Ordinary, unencrypted SQLite in local app data; use OS disk encryption and access controls | [`spectrum_graph.rs`](src-tauri/src/spectrum_graph.rs) |
 | Graph exports | AES-GCM payloads, but legacy identity-derived keys and a fast passphrase derivation need a versioned security upgrade; keep exports private | [`you_port.rs`](src-tauri/src/you_port.rs) |
@@ -306,8 +355,9 @@ implementation lands.
 
 Being straight about it, because you can check most of this anyway:
 
-- **It works.** v0.6.0 ships CI-built installers for Windows, both Macs, and
-  Linux x64. 176 frontend tests and the Rust suite pass; CI is green.
+- **It works.** v0.7.0 ships CI-built installers for Windows, both Macs, and
+  Linux x64; the Android build in the release workflow is broken for now. 396
+  frontend tests and the Rust library tests pass.
 - **Almost nobody uses it yet.** A few dozen installer downloads. The star and
   fork counts on this repo are not a reliable signal of anything — judge it by
   the release download counts, the issue tracker, and the commit log.

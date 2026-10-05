@@ -661,6 +661,42 @@ object splitDb extends LightDB {
 }
 ```
 
+### Search index durability (`LuceneDurability`)
+
+A committed write is searchable at once either way: every transaction searches through a near-real-time reader over
+the index writer. What differs is when the write becomes durable on disk (a Lucene commit: flush, new commit point,
+fsync of the new files, the costliest step of a write).
+
+- `LuceneDurability.Immediate` (the default): every transaction that changed the index commits it durably before
+  its own commit returns.
+- `LuceneDurability.Deferred(interval)`: a transaction's commit makes its changes visible and leaves the durable
+  commit to a timer; one Lucene commit, `interval` (default 1 second) after the first change since the last one,
+  covers every change made meanwhile, on a background thread that does not hold up writers.
+
+```scala
+import lightdb.lucene.{LuceneDurability, LuceneStore}
+import lightdb.rocksdb.RocksDBStore
+import lightdb.store.split.SplitStoreManager
+
+val storeManager = SplitStoreManager(RocksDBStore, LuceneStore.withDurability(LuceneDurability.Deferred()))
+```
+
+Deferred durability applies only to an index on disk that mirrors a storage store (`StoreMode.Indexes`, as the
+search side of a split collection), because that storage is what it is rebuilt from: storage stays the source of
+truth and is never written less durably. Any other Lucene store commits immediately whatever it is configured with.
+
+- Before a split collection transaction's first change reaches storage, a marker file (`.lightdb-uncommitted`,
+  fsynced) goes down in the index directory; it comes off once a durable commit has covered every committed change
+  and no transaction holds uncommitted ones, and at a clean `dispose`.
+- An index that opens with the marker down was left behind by a crash (process kill, OS crash) and is rebuilt from
+  its storage before the database finishes initializing, whatever durability the store now has. The rebuild reads
+  the whole collection, so a crash costs a reindex at the next start.
+- A rolled-back transaction restores the documents it touched from storage (the whole index after a rolled-back
+  truncate) rather than rolling back the shared writer, which also holds other transactions' committed changes.
+
+Without `withDurability`, stores use `lightdb.lucene.durability` (`immediate` or `deferred`) with
+`lightdb.lucene.durableCommitIntervalMs` for the interval.
+
 ## Sharded / MultiStore
 
 ```scala
@@ -749,6 +785,33 @@ sqlDb.rows.transaction(_.insert(Row("hi sql"))).sync()
 //   _id = StringId("uVLkGGTzMKQ2iySTKFfQUv7iRn9aCxjt")
 // )
 ```
+
+### Read-only transactions on a connection pool (`lazyBegin`)
+
+A pooled connection in manual-commit mode opens a database transaction with its first statement, so a LightDB
+transaction that only read still ends with a COMMIT: one round trip that changes nothing. With `lazyBegin` the
+connection stays in auto-commit until the first statement that writes or locks and opens the transaction just
+before it; a transaction that only read sends no COMMIT and no ROLLBACK.
+
+```scala
+import lightdb.postgresql.PostgreSQLStoreManager
+import lightdb.sql.connect.{HikariConnectionManager, SQLConfig}
+
+val manager = PostgreSQLStoreManager(HikariConnectionManager(SQLConfig(
+  jdbcUrl = "jdbc:postgresql://localhost:5432/app",
+  lazyBegin = true
+)))
+```
+
+- Off by default. `SQLConfig.lazyBegin` defaults to the `lightdb.sql.lazyBegin` setting (default `false`).
+- Applies to the pooled managers (`HikariConnectionManager`, `DBCPConnectionManager`) when their connections are in
+  manual-commit mode at READ COMMITTED isolation or weaker (the PostgreSQL default). Under REPEATABLE READ or
+  SERIALIZABLE a transaction's reads share one snapshot, which reads run in auto-commit would not, so the setting is
+  ignored with a warning.
+- A read runs before the transaction only when its result is bounded: no fetch size, a top-level `LIMIT` no larger
+  than the fetch size, or a `COUNT`. A read that may return more rows opens the transaction first, so PostgreSQL
+  still streams it through a cursor instead of loading the whole result. Locking reads (`FOR UPDATE` / `FOR SHARE`),
+  savepoints and anything run on the unwrapped driver connection open it too.
 
 ## Reindex / Optimize / Upgrades
 

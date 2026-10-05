@@ -6,11 +6,13 @@ and keeps scrolling smoothly through a million-row table.
 
 > Early days. Everything listed below works today.
 
-![DBDelve](assets/screenshot.png)
+![DBDelve, dark theme](assets/screenshotglass.png)
 
-A table of a million rows, scrolling at speed with quick tab switches.
+![DBDelve, light theme](assets/screenshotlight.png)
 
-https://github.com/user-attachments/assets/c24c98d9-6ab8-45c4-974b-96822b5a3042
+DBDelve in action with 1M rows loaded.
+
+https://github.com/user-attachments/assets/ee555c10-4a18-4059-b451-bfadfc9f9ae0
 
 ## Why
 
@@ -36,9 +38,10 @@ time.
 
 ## What it does
 
-- **Make it yours.** A theme library with DBDelve's own Glass, Black, Dark and
-  Light alongside favorites like Catppuccin, Tokyo Night, Gruvbox and Dracula,
-  in dark, light and a translucent glass.
+- **Make it yours.** A theme library with DBDelve's own Dark, Light and Black,
+  the first two also in translucent glass, alongside favorites like Catppuccin,
+  Tokyo Night, Gruvbox and Dracula, each in dark and light, and each of those
+  in glass.
 - **Bring your connections with you.** Import every saved connection,
   passwords and SSH settings included, from DBeaver on macOS, Linux and
   Windows, or from TablePlus on macOS.

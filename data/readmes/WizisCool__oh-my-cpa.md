@@ -56,7 +56,7 @@ with latency, TTFT, tokens and cost.
 ### Manage
 
 Providers, OAuth sign-in, client keys, quotas, plugins and CPA's `config.yaml`, as forms
-or as YAML.
+or as YAML. Model Square lists the model names clients can call, by maker, with price, recent requests and models.dev specifications.
 
 </td>
 <td width="25%" valign="top">
@@ -282,7 +282,7 @@ so connect only agents you would trust with the console.
 - **Client keys**: create, name and revoke gateway API keys. Names appear in request records and filters.
 - **Model catalog**: pull model lists straight from upstream providers.
 - **Playground**: test any routed model with text and images, streamed multi-turn answers and request diagnostics.
-- **Plugins**: installed plugins, a plugin store and typed settings forms on one page.
+- **Plugins**: installed plugins, a plugin store, typed settings forms, and the pages plugins register, opened inside the console.
 
 </details>
 

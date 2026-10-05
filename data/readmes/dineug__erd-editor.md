@@ -34,16 +34,28 @@ run **Create new diagram** from the command palette. In Google Drive, choose
   diagram. Object types become tables, scalars map to the diagram's own dialect, and the
   fields that point at another type become the relationships between them
 - **DBML import** — read a `.dbml` file written for dbdiagram.io or dbdocs.io, or emitted by
-  `sql2dbml` or `prisma-dbml-generator`. Tables, columns, indexes, enums and every `Ref`
-  spelling arrive; the elements the diagram has no place for are skipped rather than refused
+  `sql2dbml` or `prisma-dbml-generator`. Tables, columns, indexes, enums, header colors and
+  every `Ref` spelling arrive; the elements the diagram has no place for are skipped rather
+  than refused
 - **AML import** — read an `.aml` file written for [Azimutt](https://azimutt.app), in either the
-  v2 or the legacy v1 spelling. Entities, attributes, indexes, enums and every relation arrow
-  arrive; a check, a struct type and a view are skipped rather than refused
+  v2 or the legacy v1 spelling. Entities, attributes, indexes, enums, colors and every relation
+  arrow arrive; a check, a struct type and a view are skipped rather than refused
+- **Imports land laid out** — a schema imported from the diagram's Import menu, the command
+  palette or an IDE's file dialog arrives with its tables placed by their relationships, and one
+  undo puts the previous diagram back. A SQL, DBML, AML or GraphQL file imported into
+  erd-editor.io's schema list or the Google Drive editor becomes a new diagram laid out the
+  same way
+- **Import and Add** — the menu beside Import, and its five formats in the command palette, add
+  a file to the diagram instead of replacing it: its tables arrive as new ones below everything
+  already there, laid out the same way (a `.erd.json` file keeps its own placement), selected,
+  and one undo takes them away. Tables of the same name are kept side by side, and a foreign
+  key to a table outside the file is dropped
 - **SQL DDL export** — Databricks, MariaDB, MSSQL, MySQL, Oracle, PostgreSQL, Snowflake, SQLite
 - **Code generation** — TypeScript, GraphQL, C#, Java, JPA, Kotlin, Scala, Go,
-  SQLAlchemy, TypeORM, Sequelize, Drizzle, DBML, AML
+  SQLAlchemy, TypeORM, Sequelize, Drizzle, DBML, AML, Mermaid
 - **Visualization** — a force-directed view of how the tables actually relate
-- **Export** — `.erd.json`, `.sql`, `.png`
+- **Export** — `.erd.json`, `.sql`, and a `.png` or `.svg` from a dialog with a preview:
+  transparent background, light or dark, the PNG at 1x to 3x or copied to the clipboard instead
 - **Quick search** over commands, and over tables, columns, comments and memos after `#`, `@` or
   `:`, **find and replace** across names, comments and memos, **undo / redo**, keyboard
   shortcuts, and a theme builder
@@ -132,13 +144,14 @@ coding agent such as Claude Code or Codex edit diagrams, live in VS Code, Obsidi
 IDE, or straight on disk. Everything else is internal.
 
 <details>
-<summary>All 17 packages</summary>
+<summary>All 18 packages</summary>
 
 | Package | Description |
 | --- | --- |
 | [`erd-editor`](./packages/erd-editor) | The editor core — the `<erd-editor>` custom element |
 | [`erd-editor-schema`](./packages/erd-editor-schema) | The `.erd.json` document format, parsers and LWW operators |
 | [`schema-sql-parser`](./packages/schema-sql-parser) | Permissive DDL parser used for SQL import |
+| [`uuid`](./packages/uuid) | UUIDv7 and the Uuid25 encoding, the ids the editor mints |
 | [`r-html`](./packages/r-html) | The tagged-template rendering framework the editor is built on |
 | [`vite-plugin-r-html`](./packages/vite-plugin-r-html) | JSX → tagged templates, plus HMR boundaries |
 | [`app`](./packages/app) | The React PWA at erd-editor.io |

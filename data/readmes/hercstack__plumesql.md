@@ -40,15 +40,19 @@ Free · No account · macOS, Windows, Linux
   disk, one file per object, to search and compare without a query.
 - **A guard on production.** Reading runs as ever; a statement that
   changes data asks first.
-- **SQL that becomes a tool.** A few comments add inputs, row buttons, a
-  refresh timer and charts to a plain SQL file.
+- **SQL that becomes a tool.** Save a query as a query extension and a
+  few comments add inputs, row buttons, a refresh timer and charts.
 - **Find an extension for the job, or write your own.**
+- **In the desktop app, or in your browser.** The same PlumeSQL runs in
+  a tab of the browser you already have: `plumesql -browser .`
 - **Feels like VS Code.** Its editor, its shortcuts, its command palette,
-  and Import from VS Code for your settings, theme and connections.
+  one title row with the menus on Windows, and Import from VS Code for
+  your settings, theme and connections.
 
 ## Turn SQL into tools
 
-A plain SQL file with a few `@` comments:
+A query extension is a SQL file (`lock-monitor.plumesql.sql`) with a few
+`@` comments:
 
 ```sql
 -- @description Backends waiting on a lock, and the one holding it
@@ -65,8 +69,8 @@ select pg_catalog.pg_terminate_backend($blocker);
 
 That is a live lock monitor with a Terminate button on every row.
 
-**SQL → annotations → a tool → an extension → shared.** Save it as an
-extension and anyone can install it. The format is open:
+**SQL → annotations → a tool → shared.** Publish it to the Marketplace
+and anyone can install it. The format is open:
 [ACTIONSPEC.md](docs/ACTIONSPEC.md).
 
 ## Need a tool? Search the extensions.
@@ -158,6 +162,20 @@ Open, or run
 
 ```sh
 xattr -dr com.apple.quarantine /Applications/PlumeSQL.app
+```
+
+The Windows installer is not signed yet: if SmartScreen stops it, choose
+More info and Run anyway.
+
+### From the command line
+
+The Welcome tab adds a `plumesql` command to your shell. Then:
+
+```sh
+plumesql .                         # this folder, in the desktop app
+plumesql -browser .                # this folder, in a browser tab
+plumesql postgres://user@host/db   # open and connect, like psql
+plumesql --help                    # everything else
 ```
 
 ## Privacy

@@ -86,6 +86,13 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
 
 ## What works today
 
+- **Declarative conformance cases**: contribute generic requirements and measure them locally with
+  `make conformance`; [case format and reports](conformance/README.md). CI never executes cases.
+
+- **Outgoing TLS** for Temporal, Weaviate, PostgreSQL, S3 and plugins, with verified
+  certificates and configurable trust. Incoming HTTPS terminates at your platform;
+  see [Run Quivr behind TLS](https://docs.quivr.thevibecompany.co/run-quivr/tls).
+
 - **Corpora** with scoped API keys per Organization, action and Corpus.
 - **Durable, idempotent ingestion**: inline text, bounded batches with per-entry
   outcomes, verified uploads (presigned PUT + checksum confirm), structured Manifests,
@@ -95,7 +102,8 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   rechecks on every hit, optionally within chosen Source Namespaces (filtered before
   ranking).
 - **Change feed** through polling and resumable SSE, plus **catalog resync** after
-  cursor expiry.
+  cursor expiry. List a Corpus's Records newest first by current-Version acceptance
+  time, filter by time bounds, and read exact range counts through the API or CLI.
 - **Saved Queries and Subscriptions**, pinned and versioned; enabled Subscriptions turn
   newly searchable Versions into unique **Matches** (`/v0/matches`), each with a
   Delivery. Matching is decided by a pinned alert-rule plugin (the
@@ -185,23 +193,31 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   - worker: processing outcomes, time from acceptance to searchable, and delivery
     attempts and durations.
 
-  JSON logs link request, Receipt, Record and Version IDs
-  ([harness](docs/quivr-v2-local-harness.md)).
+  JSON logs link caller request IDs, trace/span IDs, Receipts, Records and Versions.
+  Opt-in OpenTelemetry exports traces and metrics to an OTLP collector, carrying
+  one trace through durable ingestion, Temporal, plugin calls and webhooks
+  ([configuration](docs-site/reference/configuration.mdx#opentelemetry)).
+- **Local load measurement** (`make load`) with deterministic free providers,
+  versioned scenarios, ingestion bursts and replica failure. Reports include
+  latency, errors, throughput and delays until documents are searchable and alerted;
+  see [Run local load tests](docs-site/run-quivr/run-local-load-tests.mdx).
 - **Retrieval measurement** with a frozen workload (`make measure`), and **search
   quality** on public French and English evaluation sets or a private set, nightly
   (`make eval`, [guide](docs/agents/evaluation.md)).
   Share measurements through MLflow with an offline outbox, paired comparisons and a
   Pareto leaderboard ([results guide](docs/eval-results.md)).
-- **Bounded search campaigns** explore public settings with a persistent Pareto
-  front, daily/total caps, recoverable cleanup and daily summaries. Leads submit bounded
+- **Bounded search campaigns** explore settings on public development or encrypted
+  private working sets, with a persistent Pareto front, daily/total caps, recoverable
+  cleanup and daily summaries. Leads submit bounded
   proposals and exact usage receipts ([guide](docs/search-campaigns.md)).
   Configured campaigns confirm finalists on the full stack before opening settings PRs.
-- **Private news evaluation builder**: pluggable question generation, pooled judgments,
-  separate encrypted working/held-out sets and a human review sheet
+- **Private news evaluation builder**: pluggable generation with configurable targets
+  and attempt budgets, pooled judgments, encrypted working/held-out sets and human review
   ([contributor guide](docs/agents/news-set.md)); real provider runs are operator controlled.
 - **Plugin Protocol v0 contract** (`contracts/plugins/v0/`) and `quivr plugin inspect`,
   which validates a `quivr-plugin.yaml` and reports its compatibility, Contributions,
   schemas, secrets and limits.
+- **Signed engine calls** (Plugin API 0.14): per-plugin HS256 tokens bind the operation and body, expire within 60 seconds, and support overlapping key rotation. Both SDKs reject invalid calls before dispatch. Older declared APIs remain unsigned with a startup warning. [Protocol reference](https://docs.quivr.thevibecompany.co/reference/plugin-protocol#signed-engine-requests).
 - **Plugin registry and activation without restart**: the plugins pinned at startup are
   recorded in the database, with the active Pipeline Plan saying which plugin serves each role
   (a media type, an alert rule, a connector kind, ingestion, retrieval). An operator key with

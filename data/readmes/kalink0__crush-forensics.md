@@ -32,6 +32,7 @@ Running from source: see [Development setup](#development-setup).
 | Archives | ZIP, TAR, 7z — browsed in place, including password-protected ones |
 | Mobile backups | iOS (iTunes/Finder) and Android (`adb backup`) — browsable as a file tree (iOS rebuilt from `Manifest.db` instead of hashed names), encrypted backups supported |
 | Disk images | Raw and forensic acquisitions (E01 and others) with common desktop, mobile and embedded/flash filesystems — no mounting, no admin rights. Built on [ewfprobe](https://github.com/abrignoni/ewfprobe) and [qnxprobe](https://github.com/abrignoni/qnxprobe) by Alexis Brignoni. |
+| Logical evidence | EnCase L01 and FTK Imager AD1 (also AD-encrypted) — the collected files with their recorded hashes |
 | Cellebrite UFDR (10.x) | Original device file tree with Cellebrite's recorded hashes (filesystem only) |
 | Folders & files | Any folder or single file |
 
@@ -103,6 +104,7 @@ Integrity Mode (Linux)
 
 - [Feature Reference](crush/docs/feature-reference.md)
 - [Format Support & Parser Limitations](crush/docs/format-support.md)
+- [Format Reference](https://kalink0.github.io/crush-forensics/formats/): every format in Crush's format database (forensic relevance, signatures, references, Crush support), as of the latest build (nightly or release)
 - [Forensic Test Coverage](crush/docs/forensic-test-coverage.md)
 - [Translating Crush](TRANSLATING.md)
 
