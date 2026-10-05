@@ -25,11 +25,11 @@ make all          # rebuild, verify, export — no dependencies
 ./f1 chassis lotus
 ```
 
-Built <!-- fig:built -->2026-09-28<!-- /fig -->; `meta.verification_date` is
-<!-- fig:verified_on -->2026-09-28<!-- /fig -->. The last race with a
-classification is the <!-- fig:last_race -->2026 Azerbaijan Grand Prix<!-- /fig -->.
+Built <!-- fig:built -->2026-10-05<!-- /fig -->; `meta.verification_date` is
+<!-- fig:verified_on -->2026-10-05<!-- /fig -->. The last race with a
+classification is the <!-- fig:last_race -->2026 Bahrain Grand Prix<!-- /fig -->.
 The chassis, engine, entrant and results registers are F1DB
-<!-- fig:f1db_version -->v2026.15.1<!-- /fig -->.
+<!-- fig:f1db_version -->v2026.16.0<!-- /fig -->.
 
 Every figure in this file that describes the current database is generated
 from it — `tools/readme_figures.py` computes each one from `f1.db` (and
@@ -43,13 +43,13 @@ here is a number the build checked.
 
 | File | What it is |
 |---|---|
-| `f1.db` | The SQLite database. <!-- fig:tables -->53<!-- /fig --> tables, <!-- fig:views -->43<!-- /fig --> views, <!-- fig:rows -->173,152<!-- /fig --> rows. This is the artefact. |
+| `f1.db` | The SQLite database. <!-- fig:tables -->53<!-- /fig --> tables, <!-- fig:views -->43<!-- /fig --> views, <!-- fig:rows -->177,210<!-- /fig --> rows. This is the artefact. |
 | `f1-geometry.db` | The OpenStreetMap circuit centrelines (ODbL), shipped beside `f1.db` and never merged into it. See *Illustration*. |
 | `f1` | Command-line query tool. `./f1` with no arguments prints the commands. |
 | `f1_database.json` | Full JSON export of every table. **Not committed** — `make export` writes it in about a second, and each release carries a copy. |
 | `f1_compat.json` | JSON in the *original* v1 key layout, so anything already consuming that file keeps working. |
 | `schema.sql` | The schema, commented. Served at `lapledger.org/schema.sql`, so a downloader can read what the tables mean. |
-| `build.py` | Rebuilds `f1.db` and `f1-geometry.db` from the data modules. Idempotent, and byte-for-byte reproducible. <!-- fig:stages -->39<!-- /fig --> named stages; `STAGES` is the schedule. |
+| `build.py` | Rebuilds `f1.db` and `f1-geometry.db` from the data modules. Idempotent, and byte-for-byte reproducible. <!-- fig:stages -->40<!-- /fig --> named stages; `STAGES` is the schedule. |
 | `verify.py` | Integrity, cross-tabulation and sanity checks on the DATA. Exit code 1 on failure. |
 | `tests/` | Unit tests for the CODE — name matching, lap-closure arithmetic — plus `test_conventions.py`, the reviewer checklists' mechanical items as tests, and `test_verify_refuses.py`, the licence gate shown refusing each thing it exists to refuse. `make test`, stdlib only. |
 | `ruff.toml`, `web/biome.jsonc` | The linters CI runs on the Python and the front end, and every rule left out with its reason. `make lint`. Neither is a dependency of the build. |
@@ -73,6 +73,7 @@ here is a number the build checked.
 | `harvest/circuit_geometry.txt`, `.log` | The OSM centrelines and every relation refused. **Generated** by `tools/osm_geometry.py`. |
 | `harvest/circuit_articles.txt`, `.log` | The Wikipedia article that describes each circuit, off the List of Formula One circuits and matched on country, seasons and races held, never on the name; every row and circuit not matched, and why. **Generated** by `tools/circuit_articles.py`. Loaded into `circuits.article` and `circuits.article_section`; `verify.py` checks it against the register. |
 | `harvest/circuit_images.txt`, `.log` | The aerial photograph of each circuit whose article carries one, and its licence; every mapped circuit refused, and why. **Generated** by `tools/wikimedia_images.py --route circuit`. |
+| `harvest/race_images.txt`, `.log` | Up to twelve photographs of each completed race from the Commons category named for it, and their licences; every race and file refused, and why. **Generated** by `tools/wikimedia_images.py --route race`. |
 | `tools/f1db_fetch.py` | Pulls the registers, the classification, qualifying, practice, standings and pit stops from F1DB (CC BY 4.0) into the generated harvest files. Needs network; not part of the build. |
 | `tools/wikispec_fetch.py` | Harvests chassis specifications from the `{{Racing car}}` infobox on each car's article, refusing any page that disagrees with the register. Needs network; not part of the build. |
 | `tools/circuit_articles.py` | Maps each circuit to its Wikipedia article from one revision of the List of Formula One circuits, refusing any row whose country, seasons or race count is not one circuit's own. Needs network; not part of the build. |
@@ -154,18 +155,18 @@ nobody has established goes in `known_gaps`.
 **Championship history** — all <!-- fig:seasons -->78<!-- /fig --> seasons
 <!-- fig:season_span -->1950–2027<!-- /fig -->: champion, points, wins,
 runner-up, margin, constructors' champion, engine formula, tyre suppliers and a
-paragraph of context on each, plus **<!-- fig:standings -->34,597<!-- /fig -->
+paragraph of context on each, plus **<!-- fig:standings -->34,631<!-- /fig -->
 championship standings rows** — the table after every round of every season
 and the end-of-season classification for each.
 
 **Every race** — <!-- fig:races -->1,196<!-- /fig --> championship Grands
-Prix on the calendar, <!-- fig:races_run -->1,164<!-- /fig --> of them run,
+Prix on the calendar, <!-- fig:races_run -->1,165<!-- /fig --> of them run,
 from the <!-- fig:first_race -->1950 British Grand Prix<!-- /fig --> to the
-<!-- fig:last_race -->2026 Azerbaijan Grand Prix<!-- /fig -->, each with its
+<!-- fig:last_race -->2026 Bahrain Grand Prix<!-- /fig -->, each with its
 circuit, date, pole position, fastest lap, winner, constructor and entrant, and
-the **full classification of every run race** — <!-- fig:race_entries -->27,526<!-- /fig -->
+the **full classification of every run race** — <!-- fig:race_entries -->27,548<!-- /fig -->
 race entries with position, grid, laps, retirement cause and points, and
-<!-- fig:qualifying -->27,039<!-- /fig --> qualifying rows beside them. The
+<!-- fig:qualifying -->27,061<!-- /fig --> qualifying rows beside them. The
 <!-- fig:races_without_fastest_lap -->1<!-- /fig --> run race without a fastest
 lap is the 2021 Belgian Grand Prix, where none was set: two laps behind the
 safety car, half points, no racing lap completed. Shared drives carry both
@@ -178,8 +179,8 @@ constructors. Sprint classifications are held for all
 <!-- fig:sprint_qualifying -->466<!-- /fig --> rows of the sessions that set their
 grids; the classification of every practice, warm-up and pre-qualifying
 session F1DB holds, 1977 on —
-<!-- fig:practice -->49,664<!-- /fig --> rows over
-<!-- fig:practice_weekends -->787<!-- /fig --> weekends, each driver's best lap
+<!-- fig:practice -->49,730<!-- /fig --> rows over
+<!-- fig:practice_weekends -->788<!-- /fig --> weekends, each driver's best lap
 and laps run, which is a classification and not lap timing; and
 <!-- fig:pit_stops -->22,526<!-- /fig --> pit stops — lap and order, no
 durations, because no source publishes those under a licence that permits
@@ -728,8 +729,8 @@ F1DB's per-season entry lists record which chassis a constructor ran in a
 season — the constraint the abandoned chassis harvest was missing, because the
 race winner tells you which race a row describes and nothing whatever about
 what he drove. The winning chassis is now known for
-**<!-- fig:races_with_winning_chassis -->877<!-- /fig --> of
-<!-- fig:races_run -->1,164<!-- /fig --> races**.
+**<!-- fig:races_with_winning_chassis -->878<!-- /fig --> of
+<!-- fig:races_run -->1,165<!-- /fig --> races**.
 
 The limit is hard and it decides the shape of the whole result:
 
@@ -766,7 +767,7 @@ constructor-seasons; the remaining work is in `known_gaps`.
 Poles were once a lower bound by construction, because the pole harvest
 recorded who took pole but not what they drove. The entry lists now supply the
 constructor for almost all of them: <!-- fig:poles_without_constructor -->11<!-- /fig -->
-of <!-- fig:poles -->1,164<!-- /fig --> pole entries still carry none.
+of <!-- fig:poles -->1,165<!-- /fig --> pole entries still carry none.
 
 ---
 
@@ -849,6 +850,42 @@ the rest have none, which fails closed. The three circuits whose list row
 links a section of a larger article, and Caesars Palace, whose link is the
 race, take none whatever their article holds. The same licence and
 attribution checks apply, and the rows sit at `unverified`.
+
+**A fourth route, for races.** The routes above illustrate a race only
+through its cars, photographed wherever their articles' editors found them —
+a launch, a museum, another race. Wikimedia Commons keeps a category per
+Grand Prix, and `tools/wikimedia_images.py --route race` takes up to twelve
+photographs from it: the category whose title is the season and the name
+the race was run under, exactly (`Category:1967 Dutch Grand Prix`), filed by
+Commons as that season's Formula One, for a race that has been run. Only
+the files filed directly under it, only JPEGs, none whose name carries a
+copyright mark, none another race's category also holds and one version
+of a photograph filed twice, in title order; a credit that claims somebody
+else's permission is refused.
+A category holds what is *of* a race as well as what is *from* it — the first
+run took the 1995 winner's trophy photographed in a private collection in
+2019 — so a file whose name says trophy, ticket, museum, collection or map,
+or names a season other than the race's, is passed over too. That narrows;
+it does not prove the rest were taken at the race.
+<!-- fig:images_race -->3,911<!-- /fig --> photographs of
+<!-- fig:races_with_images -->513<!-- /fig --> races come from it, keyed on the
+race. The claim is the category route's — a Commons editor filed the file
+there — and so is the rung, `catalogued`. The race page shows them first,
+under a heading that says they are of that race, and the cars after them
+under one that says what they are.
+
+**What a credit says.** A page credits a photograph's artist, or its credit
+field where there is no artist, and every route's harvest reads the two
+fields the same way before storing them. Commons' own boilerplate — "Own
+work", or the opening of its licence sentence — is read as empty, so the
+other field speaks or the file is refused for naming nobody. An author field
+that carries the whole licence paragraph is cut to the name before it; the
+file page the credit links keeps the full terms. Where the artist is
+Commons' unknown-author value and the credit field names the source — a
+newspaper, a magazine, an archive — the source is what is stored and shown;
+where the credit names nobody either (a footnote marker, "here", a note that
+the file was transferred from another wiki), "Unknown author" stays. A bare
+link is left as it is, because a link is an acceptable credit under CC BY.
 
 ### Centrelines — `circuit_geometry`
 
@@ -990,12 +1027,12 @@ remembered, and several famous ones are missing for exactly that reason.
 
 ## The finishing order
 
-`race_entries` holds **<!-- fig:race_entries -->27,526<!-- /fig --> rows —
-every entry of every one of the <!-- fig:races_classified -->1,164<!-- /fig -->
+`race_entries` holds **<!-- fig:race_entries -->27,548<!-- /fig --> rows —
+every entry of every one of the <!-- fig:races_classified -->1,165<!-- /fig -->
 run races**, <!-- fig:season_span -->1950–2027<!-- /fig -->, in the committed
 database. Position, grid, laps, retirement cause and points. Alongside it sit
-**<!-- fig:qualifying -->27,039<!-- /fig --> qualifying rows** and
-**<!-- fig:standings -->34,597<!-- /fig --> championship standings rows**: the
+**<!-- fig:qualifying -->27,061<!-- /fig --> qualifying rows** and
+**<!-- fig:standings -->34,631<!-- /fig --> championship standings rows**: the
 table after every round of every season, and the end-of-season classification
 for each, which `v_standings_final` returns one row per entity.
 
@@ -1055,7 +1092,7 @@ is wrong, so neither is overwritten.
 Three things the old two-column model could not say, each found by a check
 failing:
 
-- **A result is not always a number.** <!-- fig:dnf -->8,725<!-- /fig -->
+- **A result is not always a number.** <!-- fig:dnf -->8,727<!-- /fig -->
   retirements, <!-- fig:dnq -->1,041<!-- /fig --> failures to qualify,
   <!-- fig:dnpq -->337<!-- /fig --> failures to *pre*-qualify,
   <!-- fig:dns -->378<!-- /fig --> non-starts,
@@ -1083,7 +1120,7 @@ and **Matra entered four of them**, Beltoise finishing eighth.
 
 With the classification committed, podiums are derived rather than trusted.
 <!-- fig:podiums_compared -->7<!-- /fig --> drivers hold an official podium
-count and <!-- fig:podiums_match -->4<!-- /fig --> match it exactly; the
+count and <!-- fig:podiums_match -->3<!-- /fig --> match it exactly; the
 others have stood on the podium since their external figure's `stats_as_of`,
 and the pairs are in `v_stat_reconciliation`.
 
@@ -1179,7 +1216,7 @@ the source that gave it.
 The two are compared on every build. Across the
 **<!-- fig:drivers_with_external -->233<!-- /fig --> drivers that hold such a
 figure — <!-- fig:external_comparisons -->391<!-- /fig -->
-comparisons — live differences: <!-- fig:external_differences -->2<!-- /fig -->**,
+comparisons — live differences: <!-- fig:external_differences -->3<!-- /fig -->**,
 and `verify.py` fails the build on any that is not declared in
 `discrepancies`. Two earlier differences were errors in the external figure,
 found the same way and since corrected, which is why they no longer appear:
@@ -1200,9 +1237,9 @@ and `known_gaps` says so.
 
 **Where two sources disagree and neither can be checked against an official
 source, the disagreement is itself the fact worth storing.** `discrepancies`
-holds <!-- fig:discrepancies -->90<!-- /fig --> rows:
+holds <!-- fig:discrepancies -->93<!-- /fig --> rows:
 <!-- fig:discrepancies_open -->22<!-- /fig --> open,
-<!-- fig:discrepancies_explained -->19<!-- /fig --> explained — an external
+<!-- fig:discrepancies_explained -->22<!-- /fig --> explained — an external
 figure older than the race it lacks, a championship total net of the scores
 the best-results rule dropped, an entry or a car a source counts that the race
 records hold no row for, or two readings of a career span that are each right
@@ -1240,7 +1277,11 @@ queried, not just read here. `./f1 gaps` prints them with the fix for each.
   one only from a Commons category, held a rung lower at `catalogued` and not
   shown. `./f1 images` lists the
   <!-- fig:images_unnamed -->346<!-- /fig --> whose file name does not even
-  name the car.
+  name the car. The <!-- fig:races_with_images -->513<!-- /fig --> races with
+  photographs of their own have them because a Commons editor filed them
+  under the race's category, also at `catalogued`; that one was taken at
+  the race is the editor's word, narrowed by the file's name and checked by
+  nothing.
 - **Historic circuit geometry.** Centrelines are traced from OpenStreetMap,
   which maps what is on the ground. Spa's 14.1 km road course and Monza's
   banking are unmapped and unmappable; Wikidata's own historic-layout
@@ -1264,7 +1305,7 @@ queried, not just read here. `./f1 gaps` prints them with the fix for each.
 - **Most cars, as designs.** `cars` holds <!-- fig:cars -->29<!-- /fig -->
   landmark chassis, not the several hundred that have started a Grand Prix,
   and <!-- fig:entries_with_car -->1,635<!-- /fig --> of
-  <!-- fig:race_entries -->27,526<!-- /fig --> race entries reach one. The
+  <!-- fig:race_entries -->27,548<!-- /fig --> race entries reach one. The
   `chassis` register covers the rest at the level of the entry list, and the
   schema says which entries are unlinked rather than guessing.
 - **Lap-by-lap anything before 2018.** Not a gap that can be filled — it was

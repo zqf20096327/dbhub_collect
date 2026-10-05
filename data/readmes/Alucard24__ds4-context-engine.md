@@ -56,6 +56,20 @@ It provides:
 - an inspectable Context Manifest explaining included and excluded material;
 - fail-open recovery to Pi's native context path for operational failures.
 
+### Patch 0.5.2 — rebase validates the active handoff
+
+[Coordinated 0.5.2 release notes](docs/releases/0.5.2.md): validate tool exchanges in the exact compaction-aware Pi context transferred to the checkpoint, not the full historical branch. Archived incomplete exchanges remain preserved without blocking the handoff; active incomplete exchanges still block. Rebase diagnostics expose issue counts only, with no tool IDs or bodies.
+
+### Patch 0.5.1 — summary recovery after external purge
+
+[Coordinated 0.5.1 release notes](docs/releases/0.5.1.md): recover summary graphs whose sources were removed by another extension. DS4 preserves canonical summary text as explicitly unverified history instead of inheriting dangling source links; original JSONL is never rewritten by the repair. Compaction validation and budgets remain unchanged. The separate large-index FTS rebuild cost is not addressed by this patch.
+
+### History Recall / Session Rebase — 0.5.0
+
+[Coordinated 0.5.0 release notes](docs/releases/0.5.0.md): explicit history tools and recoverable manual rebase, enabled by default and configurable from Pi.
+
+DS4 adds explicit `context_history_recall`, `context_history_read` and `context_history_status` tools, plus manual `/context rebase --dry-run` / `/context rebase` / `/context rebase --recover <operationId>`. Both feature switches default on and can be changed through Pi's `/context config set historyTools.enabled false` and `/context config set sessionRebase.enabled false` commands. Saved changes apply at the next session start. Rebase never runs automatically. Source JSONL remains intact; migrations 17–18 only add disposable projections. Deterministic checkpoints do not invoke a provider and block if live context exceeds their budget. See [configuration, privacy and recovery contracts](docs/HISTORY_RECALL_REBASE.md), [implementation handoff](docs/HISTORY_RECALL_REBASE_IMPLEMENTATION.md) and [ADR 074](docs/ADR/074-canonical-history-recall-and-recoverable-session-rebase.md).
+
 ## Architectural guarantees
 
 1. **Pi JSONL remains canonical.** DS4 never replaces Pi's session format.
@@ -188,6 +202,8 @@ Project configuration and project source indexing are disabled when Pi reports t
 | `/context excluded all` | Excluded item-level provenance (retained projection after rollup) |
 | `/context summaries` | Hierarchical summary graph diagnostics |
 | `/context retrieved` | Historical retrieval diagnostics |
+| `/context history [search <query>\|status\|read <sourceRef> [startLine] [maxLines]]` | Scoped recall and bounded original-source reads (enabled by default) |
+| `/context rebase [--dry-run\|--recover <operationId>]` | Manual session rebase with source preservation and recoverable activation (enabled by default) |
 | `/context project` | Project index and retrieval status |
 | `/context privacy` | Classification and provider-policy status |
 | `/context model` | Active model profile and calibration |
@@ -228,6 +244,8 @@ DS4 registers two model-callable tools by default:
 | --- | --- |
 | `context_artifact_search` | Search a known DS4 artifact reference with bounded quoted excerpts |
 | `context_persistence` | Inspect Pins, Memory, and project-memory sources; perform explicitly requested persistence mutations |
+
+History Recall / Session Rebase is enabled by default. `historyTools.enabled` controls the additional `context_history_recall`, `context_history_read`, and `context_history_status` tools; `sessionRebase.enabled` controls the manual rebase command. Both can be disabled through `/context config`, and rebase never runs automatically or deletes the original session. See [History Recall / Session Rebase](docs/HISTORY_RECALL_REBASE.md) for scopes, privacy, budgets, recovery, and limitations.
 
 `context_persistence` read actions return bounded metadata and sanitized find previews. Every write requires a fresh local `ctx.ui.confirm()` decision. In print/JSON or any other no-UI mode, reads remain available and writes fail closed with `confirmation-required`. Sessions without a persistent Pi JSONL destination (for example `--no-session`) fail closed with `runtime-unavailable` before confirmation. Destructive writes require an exact ID or volatile source reference plus the `targetRevision` returned by a prior read; fuzzy writes are not supported.
 
@@ -508,6 +526,7 @@ scripts             package and release-readiness checks
 - [Compaction](docs/COMPACTION.md)
 - [Summary graph](docs/SUMMARY_GRAPH.md)
 - [Historical retrieval](docs/RETRIEVAL.md)
+- [History Recall / Session Rebase](docs/HISTORY_RECALL_REBASE.md)
 - [Hybrid semantic retrieval](docs/HYBRID_RETRIEVAL.md)
 - [Project knowledge](docs/PROJECT_KNOWLEDGE.md)
 - [Artifacts](docs/ARTIFACTS.md)

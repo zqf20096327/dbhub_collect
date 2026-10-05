@@ -4,13 +4,17 @@
 
 ---
 
-![Graphmem — Shared, local memory for coding agents](docs/assets/graphmem-banner.png)
+![Graphmem — Shared, local memory for coding agents](https://raw.githubusercontent.com/sonic182/graphmem/master/docs/assets/graphmem-banner.png)
 
 ----
 
 Graphmem gives coding agents shared, local memory and optional code navigation. Claude Code, Codex, OpenCode, pi, and other MCP clients can use the same store, so project decisions and context survive new sessions and switches between tools. It finds relevant memories even when a query uses different words.
 
 Its code helpers find definitions, outline files, list declared imports, and show which symbols changed between Git revisions. Agents get compact results with source ranges before reading code; the rebuildable code index stays separate from durable memories.
+
+> **Using pi?** Install Graphmem with `pi install npm:@sonic182/graphmem`.
+> On first startup, approve the matching binary download or select your existing executable. See
+> [the pi setup guide](docs/plugins.md#pi).
 
 ## Highlights
 
@@ -38,7 +42,8 @@ with SQLite FTS5 for lexical search.
 ```text
 Install gmem (Graphmem) for me:
 1. Check whether a working `gmem` is already on my PATH with `gmem version`.
-2. If it is, keep using it. Otherwise install Graphmem with `npm install --global @sonic182/graphmem`.
+2. If it is, keep using it. Otherwise install Graphmem with `npm install --global @sonic182/graphmem`,
+   then run `gmem-install` to explicitly download and verify the matching binary.
 3. If npm installation is unavailable for my platform, download the matching gmem release binary from
    https://github.com/sonic182/graphmem/releases/latest, verify it against `SHA256SUMS`, and install it in a directory on my PATH.
 4. Check it works with `gmem version`.
@@ -55,7 +60,14 @@ For more references, run
 `curl --silent https://raw.githubusercontent.com/sonic182/graphmem/refs/heads/master/README.md`
 ```
 
-The simplest option is `npm install --global @sonic182/graphmem`. It provides the `gmem` command and downloads the matching release binary only if a working `gmem` is not already on your PATH. The downloaded archive is verified against the release `SHA256SUMS`. If you use `--ignore-scripts`, run `gmem-install` afterward. npm does not replace or update a separately installed binary.
+For the CLI, run `npm install --global @sonic182/graphmem`, then `gmem-install`.
+The package contains launchers, not binaries, and has no `postinstall`: installing
+it, even with scripts disabled, does not download or execute a release binary.
+The explicit installer reuses a working native `gmem` on your `PATH`; otherwise
+it downloads the matching CPU release, verifies `SHA256SUMS`, smoke-tests it,
+and caches it by package version and platform. npm does not replace or update
+a separately installed binary. Upgrading the npm package requires an explicit
+install of the new binary unless a working native `gmem` is already available.
 
 Or install by hand: download the **CPU binary** for your platform from [GitHub Releases](https://github.com/sonic182/graphmem/releases/latest):
 
@@ -85,7 +97,8 @@ cargo install --locked --features code --path .                                 
 cargo install --locked --features code --git https://github.com/sonic182/graphmem # latest from GitHub
 ```
 
-The editor plugins assume `gmem` is on your `PATH`; see [docs/plugins.md](docs/plugins.md). `git` must also be on your `PATH` for repository-scoped memory: `gmem` runs `git rev-parse --show-toplevel` to derive the current repository, and falls back to `global` when it cannot.
+Claude Code and Codex need `gmem` on your `PATH`. Pi and OpenCode also resolve
+package-local binaries by absolute path; see [docs/plugins.md](docs/plugins.md). `git` must also be on your `PATH` for repository-scoped memory: `gmem` runs `git rev-parse --show-toplevel` to derive the current repository, and falls back to `global` when it cannot.
 
 ## Use it with your coding agent
 
@@ -105,10 +118,16 @@ codex plugin add graphmem@graphmem
 
 ```sh
 # OpenCode
-opencode plugin graphmem@git+https://github.com/sonic182/graphmem.git#master --global
+opencode plugin @sonic182/graphmem --global
 ```
 
-pi has no native MCP support and needs a one-time adapter; see [docs/plugins.md](docs/plugins.md) for pi and the full details.
+```sh
+# pi
+pi install npm:@sonic182/graphmem
+# Start Pi and approve setup, or run /graphmem-setup later.
+```
+
+See [docs/plugins.md](docs/plugins.md#pi) for details.
 
 ## Code navigation (optional)
 

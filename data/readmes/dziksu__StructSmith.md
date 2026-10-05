@@ -66,6 +66,64 @@ docker run -d --name structsmith \
 Then open <http://localhost:8090>. No repository clone or local build is needed.
 Your workspaces persist in the `structsmith-data` Docker volume.
 
+Choose the launcher below if you want the built-in chat to use CLIs installed on
+your computer. Plain `docker run` and Compose run the server inside the container,
+which cannot execute the host's programs or use its CLI login automatically.
+
+### Docker with host-installed agents, without cloning
+
+On macOS or Linux with glibc (arm64/x64), install Docker, curl and at least one signed-in
+Codex, Claude Code or Copilot CLI. The local launcher downloads the matching
+Docker release and runs chat on your computer:
+
+```bash
+curl -fsSL https://github.com/dziksu/StructSmith/releases/latest/download/structsmith-local-install.sh | sh
+```
+
+The release installer verifies the binary's SHA-256 checksum. No Git clone,
+Node.js or Bun installation is required. **These assets become available after
+this change ships in a GitHub release; older releases do not contain them.**
+
+Open <http://localhost:8090> and choose **Agent settings** to select your installed
+CLI, model and reasoning effort. The launcher uses port 8090 for UI/chat and
+8091 for the private Docker backend, both on loopback. It reuses the
+`structsmith-data` volume, keeps chat under `~/.local/share/structsmith/chat`, and
+leaves CLI credentials on the host. An optional source directory is a host path.
+Stop an existing instance using those ports or the same data volume before
+starting this mode. For a Compose deployment, pass its actual volume name with
+`--volume NAME` if you want to reuse the existing model.
+
+The browser talks to the localhost helper. It serves chat directly and proxies
+the editor to Docker; agent changes still pass through the domain's MCP tools,
+revision checks and snapshots. No agent credentials or host executable need to
+be mounted into the container.
+
+Keep its terminal open. Ctrl+C stops the helper, active agents and managed
+container; it retains the model volume and chat history. Subsequent starts use:
+
+```bash
+~/.local/share/structsmith/structsmith-local
+```
+
+For a different port, pass `--port 8095` (the backend uses 8096). In another
+terminal, `~/.local/share/structsmith/structsmith-local status` or `stop` controls
+the saved profile. Use `--volume NAME` to select another Docker model volume,
+`--read-only` to disable architecture changes, or `--help` for all options.
+The launcher refuses to replace containers that belong to another deployment.
+It also refuses a volume used by another running container. To upgrade, stop the
+launcher and rerun the installer command; the downloaded helper and image share
+the same release version, while the existing model and conversations are retained.
+
+For testing changes from a checkout, build the matching local image and start it:
+
+```bash
+docker build -t structsmith-local:dev .
+bun run docker:local --image structsmith-local:dev
+```
+
+`bun run docker:local` by itself uses the version pinned release image.
+The helper and image versions must match. More details are in the [local chat guide](docs/LOCAL_AGENT_CHAT.md).
+
 ### Build from source with Docker Compose
 
 ```bash
@@ -393,6 +451,77 @@ Errors always use the same envelope:
 - Snapshots with restore; undo/redo (`⌘Z` / `⌘⇧Z`) rides on them
 - Command palette (`⌘K`), `F` to fit the view, `Delete`, `Escape`
 - Light / dark / system themes, English and Polish UI
+- Built-in chat with local Codex, Claude Code and GitHub Copilot CLIs: project topics,
+  general discussions, contextual node/relationship actions, scoped architecture edits,
+  model and Codex thinking settings, streamed replies with collapsible reasoning,
+  and topic renaming, archiving, restoration and drag-and-drop ordering
+
+### Chat with local agents
+
+Run StructSmith from source on the same machine as your signed-in CLI (`bun run dev`).
+Open **Agent chat** using the bubble in the lower right, select a project or
+**General · no project**, and create a topic. A project here is a StructSmith
+workspace; each topic shows its project and keeps that assignment when you navigate
+elsewhere. Right-click a node or relationship and choose **Ask agent about this**
+to attach it as a context chip; the inspector, view and record reference controls
+also offer a chat button. Review the prompt, then press **Send** or Enter.
+Shift+Enter adds a new line.
+
+Choose **Codex**, **Claude Code** or **GitHub Copilot** inside the topic. **Ask** is
+the default. **Edit architecture** enables MCP changes in that topic's project,
+with revision checks, activity and snapshots; the diagram updates through the
+existing event stream. General topics cannot edit projects. Switching agents keeps
+the topic's conversation and project.
+
+Open the chat gear to configure **Agent settings**:
+
+| Setting | Behavior |
+| --- | --- |
+| Default agent | Provider used for new topics; existing topics keep their selected agent |
+| CLI executable | Command or absolute path for each provider, such as `codex`, `claude` or `copilot` |
+| Model | Codex offers a list from the configured CLI plus a custom model ID; other providers accept an optional model ID. Use the CLI default to keep its configured model |
+| Codex reasoning effort | Thinking level for Codex; **Default** keeps the CLI's configured behavior |
+
+Model and reasoning settings apply to subsequent turns across that provider's topics.
+Refresh the Codex model list after changing its executable, updating the CLI or
+switching CLI accounts. The list comes from `codex app-server` and may differ from
+the desktop app's models; account access is still checked when a turn runs.
+Available Codex thinking levels follow the selected model's CLI catalog. For a
+custom model outside the catalog, compatibility depends on the installed CLI and model;
+changing to a known model that cannot use the selected level resets it to **Default**.
+The topic gear configures its title and optional absolute source directory on the
+server for reading local code.
+
+Manage topics from the sidebar:
+
+- **Rename:** open the topic's **…** menu and choose **Rename**.
+- **Archive / restore:** choose **Archive** to keep the history and project in the
+  **Archive** tab. Use **Restore topic** there to continue the conversation.
+  Renaming and archiving are disabled while that topic's agent is running.
+- **Reorder:** hold the topic body for about 350 ms, outside the **…** action button,
+  then drag it with a mouse or touch. With keyboard focus on the topic, press Space,
+  use the up/down arrows and press Space to drop; Escape cancels. The saved order
+  survives reloads and server restarts, including when topics receive new messages.
+
+Replies stream into the conversation as the CLI produces them. Readable reasoning
+exposed by the CLI appears in a collapsed **Reasoning** panel; Codex provides
+reasoning summaries. Expand it to follow updates live. Both the reply and available
+reasoning are saved with the topic. Scrolling up keeps your reading position;
+returning near the bottom resumes following the response. Closing the chat or
+switching topics keeps the agent running, and reopening retrieves its current
+response. **Stop** interrupts the turn while preserving partial output and any
+architecture changes already applied.
+
+Agent authentication stays with the installed CLI; sign in in your terminal first.
+For native development, history, settings, topic order and archive status are saved
+under `data/agent-chat` (configurable with `AGENT_CHAT_DIR`). The local Docker launcher
+saves them under `~/.local/share/structsmith/chat`. Set `AGENT_CHAT_ENABLED=false`
+on a native backend to disable its CLI chat bridge.
+
+This feature requires a localhost connection and a recent CLI version. Use the
+local launcher above for a Docker deployment with host-installed agents. A plain
+`docker run` or Compose deployment sees only programs installed inside its container. See the
+[local chat guide](docs/LOCAL_AGENT_CHAT.md) for testing and implementation details.
 
 ### Mermaid import
 
@@ -464,6 +593,8 @@ to `supportedLanguages`. No copy is hard-coded in components.
 | `MCP_READ_ONLY` | `false` | When `true`, MCP exposes no mutating tools |
 | `SEED_EXAMPLE` | `true` | Seed the example workspace on first boot |
 | `APP_NAME` | `StructSmith` | Product name shown in the UI |
+| `AGENT_CHAT_ENABLED` | `true` | Enable the localhost-only CLI chat bridge |
+| `AGENT_CHAT_DIR` | `./data/agent-chat` (`/data/agent-chat` in Docker) | Local chat history, settings and empty working directory |
 
 In token mode, `/api` and `/mcp` require `Authorization: Bearer <APP_TOKEN>`; `/health`
 stays public. There is no user system — this is a local/self-hosted tool.

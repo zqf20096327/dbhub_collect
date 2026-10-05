@@ -53,8 +53,7 @@ on macOS and Linux. Use `oh update disable` to keep a version. See
   call the agent never sees. See [Give an agent working memory](docs/working-memory.md).
 
 [The thread through hraness](https://hraness.com/writing/the-thread-through-hraness)
-follows this design across the projects, and the
-[ALGAL vision](https://algal.computer/docs/vision/) states the bet behind it.
+follows this design across the projects.
 
 ## Install and first run
 
@@ -122,6 +121,34 @@ The CLI may print an occasional note about optional development support on
 stderr. It never changes stdout or exit codes, CI turns it off, and
 [Optional development support](docs/development-support.md) explains how to
 switch it off yourself.
+
+## Choose the store and space
+
+| Option | Default | Effect |
+| --- | --- | --- |
+| `--db <path>` | `.oh/oh.sqlite` relative to your current directory | Selects the SQLite file for this command. |
+| `--space <id>` | `default` | Selects the graph and operation history within that file. |
+| `--json` | Automatic in a recognized agent environment | Prints canonical JSON instead of terminal text. |
+
+Repeat `--db` and `--space` on each command when you use a nondefault store.
+For example, `oh get entity:ada-lovelace --db /absolute/path/memory.sqlite --space default`
+reads that file regardless of your current directory. Continue with the
+[TypeScript SDK](#use-the-sdk) or [working-memory guide](docs/working-memory.md)
+when you need to use these records from an application.
+
+## Troubleshooting the first run
+
+| Symptom | What to check next |
+| --- | --- |
+| `No Oh store at ...` | Check your current directory and `--db` path. Run `oh init` only if you intend to create a store there; reads do not create one. |
+| `No record named ...` (exit 3) | Run `oh list` with the same `--db` and `--space` as the write, then check the record key. |
+| JSON appears instead of terminal text | An agent environment selects JSON automatically. Set `HRANESS_AUDIENCE=human` for terminal text, or pass `--json` when parsing results. |
+| `OhConflictError`: `The expected head does not match the current space head.` | Another write moved the head after you read it. Read the new head and records, reconcile your change, and submit it again with the new head. See [Handle errors](docs/sdk.md#handle-errors). |
+
+`oh verify` checks saved history and SQLite integrity, not the truth of a fact.
+If verification fails, preserve the database and error output rather than
+reinitializing it. See the [storage specification](spec/v1/storage.md) for the
+record and history contracts.
 
 ## How Oh behaves
 
@@ -269,10 +296,31 @@ reranker, or the hosted cache, and what each costs.
 ## Give Oh to a coding agent
 
 The repository includes an installable Agent Skill at
-[`skills/oh`](skills/oh/SKILL.md). Copy or link that directory into the skill
-location your agent runner uses. The skill teaches an agent to read the
+[`skills/oh`](skills/oh/SKILL.md). The skill teaches an agent to read the
 contract and current head, write with the expected generation, verify the
 replay, and sync only where you tell it to.
+
+Install the skill from this release with the [skills CLI](https://skills.sh):
+
+```sh
+npx skills add hraness/oh#v0.14.1 --skill oh
+```
+
+The installer sets up the agents it finds, asking you to choose when there are
+several, and asks whether the skill is for the current project or for all your
+projects; `--global` chooses all projects. With Claude Code and Codex selected,
+it puts the skill in `.agents/skills/oh`, or `~/.agents/skills/oh` for all
+projects, where Codex reads it, and links `.claude/skills/oh` or
+`~/.claude/skills/oh` to that folder for Claude Code.
+
+To install it by hand, copy the `skills/oh` folder from the installed npm
+package (in a project that depends on Oh, it is inside `node_modules`) to
+`~/.claude/skills/oh` for Claude Code or `~/.agents/skills/oh` for Codex.
+Run `/skills` in either agent to check that `oh` is listed, then ask for it by
+name: `/oh` in Claude Code or `$oh` in Codex. These locations and commands come
+from the [Claude Code](https://code.claude.com/docs/en/skills) and
+[Codex](https://developers.openai.com/codex/skills) skills documentation,
+checked October 4, 2026.
 
 You can also give an agent this prompt:
 
@@ -445,15 +493,18 @@ Use Oh to build an application’s memory layer. Use Wordcell to maintain and qu
 Each consumer pins an immutable release and upgrades on its own schedule:
 
 - [Wordcell](https://wordcell.io)
-  ([source](https://github.com/hraness/wordcell)) is a knowledge base for
-  agents: markdown, backlinks, search, ontology, and git context. Its Markdown
-  vault is the only source of truth. `wordcell graph rebuild` writes a
+  ([source](https://github.com/hraness/wordcell)) is a Markdown knowledge base
+  that gives agents the decisions behind code. It rebuilds a disposable Oh graph
+  from your Markdown to answer named graph queries with source proofs. The
+  Markdown vault is the only source of truth. `wordcell graph rebuild` writes a
   disposable, gitignored `.wordcell/oh.sqlite` copy of the graph, and no query
   or rebuild writes back into notes.
-- [Sponge](https://sponge.computer) is a private library for what you read,
-  with notes your agent can cite. Its hosted research agents kept working
-  memory in a server-side Oh store, apart from the knowledge you reviewed.
-  Sponge stopped accepting new hosted research on September 12, 2026.
+  [How Wordcell uses Oh](https://wordcell.io/blog/how-wordcell-uses-oh).
+- [Sponge](https://sponge.computer) runs deep research on your own machine.
+  Its earlier hosted library at sponge.computer keeps its research agents’
+  working memory in a server-side Oh store, separate from the reviewed
+  knowledge in its product database. The hosted library stopped accepting new
+  research on September 12, 2026.
   [How Sponge uses Oh](https://sponge.computer/docs/how-sponge-uses-oh).
 
 [Oh and Wordcell](docs/wordcell.md) explains where one ends and the other
@@ -462,6 +513,7 @@ scores do not carry over to it.
 
 ## Find the right documentation
 
+- **Project direction:** [The memory north star](docs/north-star.md) describes proposed source-preserving overviews and the later-use evidence needed for adoption.
 - **Try it:** [Install and first run](#install-and-first-run).
 - **Build on it in TypeScript:** [Use the SDK](#use-the-sdk), then
   [Call Oh from TypeScript](docs/sdk.md) and
@@ -470,7 +522,8 @@ scores do not carry over to it.
   [Direct libSQL store](docs/libsql-runtime.md) and
   [Fast-forward sync](docs/sync-runtime.md).
 - **Give an agent memory:** [Give an agent working memory](docs/working-memory.md),
-  [Memory pages and `.oh.md` files](docs/memory-pages.md), and
+  [Memory pages and `.oh.md` files](docs/memory-pages.md),
+  [Progressive memory context](docs/memory-context.md), and
   [How memory host calls run](docs/memory-runtime.md).
 - **Derive facts with rules:** [Derive facts with rules](docs/projections.md).
 - **Run semantic search:**

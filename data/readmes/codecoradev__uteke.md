@@ -56,6 +56,7 @@ Want your agent (Claude Code, Cursor, Hermes) to use it? One line:
 
 | Method | Command |
 |--------|---------|
+| **Homebrew** | `brew install codecoradev/tap/uteke` (macOS Apple Silicon & Linux) |
 | **Cargo** | `cargo install uteke-cli` |
 | **Docker** | `docker run -d -p 127.0.0.1:8767:8767 -v uteke-data:/data ghcr.io/codecoradev/uteke:latest` |
 | **Binary** | [GitHub Releases](https://github.com/codecoradev/uteke/releases) (macOS, Linux, Windows) |
@@ -352,7 +353,7 @@ Yes. Uteke ships with an MCP server that works with Claude Code, Cursor, and Her
 <details>
 <summary><strong>Is it production-ready?</strong></summary>
 
-Uteke is at v0.19.0 with 200+ tests, CI/CD on every commit, and a benchmark harness. It's used in production by the CodeCora team and other early adopters. Still in 0.x, so expect rough edges, but the core is stable.
+Uteke is at v0.19.1 with 200+ tests, CI/CD on every commit, and a benchmark harness. It's used in production by the CodeCora team and other early adopters. Still in 0.x, so expect rough edges, but the core is stable.
 </details>
 
 ---

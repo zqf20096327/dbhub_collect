@@ -1,11 +1,11 @@
 <p align="center">
-  <a href="https://library-management-system-dbms.onrender.com/" target="_blank">
+  <a href="https://library-management-system-dbms-rryf.onrender.com/" target="_blank">
     <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=header&text=Library%20Management%20System&fontSize=50&fontAlignY=35&desc=DBMS%20Project%20%E2%80%94%20Multi-Agent%20AI%20Library%20Assistant&descAlignY=55" />
   </a>
 </p>
 
 <p align="center">
-  <a href="https://library-management-system-dbms.onrender.com/" target="_blank">
+  <a href="https://library-management-system-dbms-rryf.onrender.com/" target="_blank">
     <img src="https://img.shields.io/badge/Live_Demo-Render-46E3B7?logo=render&logoColor=white" alt="Live Demo"/>
   </a>
 </p>

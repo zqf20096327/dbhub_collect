@@ -55,6 +55,33 @@ DALgo does not try to hide every database difference. Adapters can return
 the core API honest while still giving applications a shared path for the common
 operations.
 
+### Exact decimal arithmetic for federated aggregates
+
+Federated queries can opt into exact decimal text arithmetic with the existing
+`MoneyConfig` option. In this mode, fractional values must arrive as decimal
+strings; fractional or unsafe binary floating-point values, exponent notation,
+malformed values,
+and values exceeding 38 significant digits are rejected. Source fields may
+contain at most `MinorUnitScale` fractional digits. Safe whole-number Go
+floating-point inputs remain accepted. Addition, subtraction,
+multiplication, and `SUM` preserve finite decimal precision; division and
+`AVG` round half-even to `DivisionScale`. Exact decimal ordering applies to
+numeric-looking values in money comparisons, while other text values remain
+lexical. The default query path is unchanged.
+
+Money mode supports aggregate queries over one source, and flat hash-join
+federated aggregates. For example, a line total can be aggregated without
+converting either operand to `float64`:
+
+```go
+options := dal.FederatedQueryOptions{Money: &dal.MoneyConfig{
+	MinorUnitScale: 2,
+	DivisionScale: 4,
+	Rounding: "halfEven",
+}}
+reader, err := dal.ExecuteFederatedQueryWithOptions(ctx, query, resolve, options)
+```
+
 ## 🛡️ Access Policies: Least Privilege at the DAL Boundary
 
 DALgo can wrap any adapter with a capability boundary that is enforced before
@@ -349,6 +376,13 @@ Recent query capabilities include:
 - Recordset readers with typed columns where the adapter supports columnar
   output.
 
+Structured queries reach SQL engines through `dalgo2sql`. Its SQLite compiler
+(`StructuredQueryDialect: "sqlite"`) and its PostgreSQL compiler
+(`StructuredQueryDialect: "postgres"`) bind query values; with an empty dialect
+every `database/sql` engine, SQLite included, uses the legacy text emitter,
+which writes query values into the SQL text. Do not pass untrusted values
+through it.
+
 ## 🔁 Transactions
 
 Transactions use callback-style workers. This keeps transaction lifetime scoped
@@ -386,10 +420,14 @@ DALgo supports production use through separate adapter modules:
 - [`dalgo2firestore`](https://github.com/dal-go/dalgo2firestore) for Google
   Cloud Firestore.
 - [`dalgo2sql`](https://github.com/dal-go/dalgo2sql) for SQL databases through
-  Go SQL drivers. SQLite has a structured-query compiler (opt in with
-  `DbOptions.StructuredQueryDialect: "sqlite"`). PostgreSQL, MySQL, Microsoft
-  SQL Server and Oracle have no compiler yet and use the legacy text emitter,
-  which is not dialect-aware; a PostgreSQL compiler is planned.
+  Go SQL drivers. Two engines have a structured-query compiler that binds query
+  values as parameters: SQLite (`DbOptions.StructuredQueryDialect: "sqlite"`)
+  and PostgreSQL (`DbOptions.StructuredQueryDialect: "postgres"`, available
+  from dalgo2sql v0.26.0). With an empty dialect every `database/sql` engine,
+  SQLite and PostgreSQL included, uses the legacy text emitter, which is not
+  dialect-aware and writes query values into the SQL text instead of binding
+  them; do not pass untrusted values through it. MySQL, Microsoft SQL Server and
+  Oracle have no compiler yet and use the legacy text emitter.
 - [`dalgo2sqlite`](https://github.com/dal-go/dalgo2sqlite) for SQLite-specific
   schema, DDL, and concurrency-aware behavior on top of SQL support.
 

@@ -19,7 +19,7 @@ See history, get alerts, and open a local web dashboard before you hit throttlin
 
 **Compatibility & Docs**
 
-[![Version](https://img.shields.io/badge/Version-v2.14.8-0EA5E9?style=for-the-badge)](https://github.com/onllm-dev/onwatch/releases/tag/v2.14.8)
+[![Version](https://img.shields.io/badge/Version-v2.14.11-0EA5E9?style=for-the-badge)](https://github.com/onllm-dev/onwatch/releases/tag/v2.14.11)
 [![VS Code Marketplace](https://vsmarketplacebadges.dev/version-short/onllm-dev.onwatch.svg?style=for-the-badge&label=VS%20Code&logo=visualstudiocode&logoColor=white&color=007ACC)](https://marketplace.visualstudio.com/items?itemName=onllm-dev.onwatch)
 [![Go 1.25+](https://img.shields.io/badge/Go-1.25+-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://go.dev)
 [![Platform](https://img.shields.io/badge/macOS%20%7C%20Linux%20%7C%20Windows-orange?style=for-the-badge&logo=apple&logoColor=white)](#quick-start)
@@ -272,7 +272,7 @@ Set `CODEX_TOKEN` in your `.env` (recommended for Codex-only installs). You can 
 
 Codex 5h and weekly windows only begin counting once you send your first message after a reset -- so if you do not use Codex right away, the fresh window (and its reserve) sits unstarted. The auto quota-starter detects an unstarted window (its reset countdown stays pinned at the full length instead of ticking down) and sends one tiny request that asks the model to reply `Quota Resumed`, which starts the window for you.
 
-It is **Beta and disabled by default.** Enable it per window in **Settings -> Providers -> Codex** (`Auto-start 5h window` / `Auto-start weekly window`); changes apply without a daemon restart. Each ping costs roughly **62 tokens** (~44 in, ~18 out) and is hard-capped to **5 pings per rolling 4 hours per window**, so the token/quota cost is negligible. Full details: [Codex Setup Guide](docs/CODEX_SETUP.md#auto-quota-starter-beta).
+It is **Beta and disabled by default.** Enable it per window in **Settings -> Providers -> Codex** (`Auto-start 5h window` / `Auto-start weekly window`); changes apply without a daemon restart. Each ping costs roughly **62 tokens** (~44 in, ~18 out) and is hard-capped to **5 pings per rolling 4 hours per account**, so the token/quota cost is negligible. Full details: [Codex Setup Guide](docs/CODEX_SETUP.md#auto-quota-starter-beta).
 
 ### How do I track my GitHub Copilot usage?
 

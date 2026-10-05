@@ -120,12 +120,13 @@ doc-str get-chunk --chunk-id 100 --include-neighbors --max-context-tokens 2000 -
 
 Fixed in **v0.1.3 / v0.1.4 / v0.1.5 / v0.1.6** (2026-09-08, from the 2026-09-08 code review): F01/F02 in 0.1.3, F07 in 0.1.4, F03 in 0.1.5, F04 in 0.1.6.
 
+- **Watermarked-PDF repair** (new, 0.1.7): `rebuild` rebuilds a PDF that the standard `parse` collapsed into mega-chunks because of a tiled watermark text layer (per-user e-mail/UUID/timestamp spans in a distinct font, sometimes with zero-width characters interleaved). Span-level filter signature (`--wm-fonts`, `--wm-font-size Font:Min`, `--wm-drop-below/above`, `--wm-pattern` regex) + sectioning via real PDF bookmarks, printed TOC, or page-per-chunk. A residual guard re-runs the watermark regexes on the rebuilt chunk content and refuses to store when they still match.
 - **Tag-scoped search** (new, 0.1.6): `search --tags a,b` restricts results to documents carrying ALL listed tags (AND, case-insensitive) — enforced on both the FTS and vector legs of hybrid search. No matching document → zero results.
 
 - **Search ordering** (fixed): FTS results are now ordered by FTS5 `bm25()` relevance (stable id tie-breaker); the FTS LIKE-fallback is capped by `config.search_limit`; `--min-fts-rank` filters that relevance rank (hybrid mode only).
 - **Punctuated query terms** (new contract, 0.1.3): query punctuation maps to whitespace (`PCI-Express` → `"PCI" "Express"`), matching how the `unicode61` tokenizer split the stored text. An abbreviation does not match a longer stored word (`PCI-E` ≠ `Express`).
 - **Token budget** (tightened): `--max-context-tokens` is an estimate applied to neighbors only; the target chunk is never truncated; if the budget is below the target's own estimate, `get-chunk` fails closed with `ERROR_BUDGET_TOO_SMALL` instead of returning over-budget content; a truncated next-neighbor is no longer dropped from the result.
-- **Page location**: PDF `page_start` is reliable only where headings match PDF bookmarks; DOCX page numbers are always the placeholder 1 (cite by section/symbol instead).
+- **Page location**: PDF `page_start`/`page_end` are exact physical pages since 0.1.5 (one conversion chunk per physical page); DOCX page numbers are always the placeholder 1 (cite by section/symbol instead).
 - **Tables**: DOCX rendering escapes `|` oddly and deduplicates consecutive identical rows; the advertised PDF borderless fallback is not yet active.
 - **C/H extraction**: top-level symbols only; no `#if`-container or function-like-macro coverage; comment attachment is inconsistent.
 - **Document identity**: `parse` keys by filename basename (same-named files replace each other). Since 0.1.4 the replacement is **atomic**: new version is created and verified inside one transaction before the old rows are removed; a failed re-parse rolls back and the previous version is fully intact. Ingestion is not safe to run concurrently.

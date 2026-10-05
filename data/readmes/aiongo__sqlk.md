@@ -59,15 +59,21 @@ The `exec` package wraps a connection plus a compiler into one handle with gener
 
 ```go
 import (
-    "github.com/jmoiron/sqlx"
     _ "modernc.org/sqlite" // your database driver, registered by your app
 
-    "github.com/aiongo/sqlk/compiler"
     "github.com/aiongo/sqlk/exec"
 )
 
-sqlxDB := sqlx.NewDb(sqlDB, "sqlite")
-db := exec.New(sqlxDB, compiler.NewSqlite())
+// sql.Open parameters; the dialect is inferred from the driver name
+db, err := exec.New("sqlite", "file:test.db")
+
+// already holding a *sql.DB or *sqlx.DB? wrap it instead:
+// db, err := exec.FromDB(sqlDB, "sqlite")
+// db, err := exec.FromDBx(sqlxDB)
+
+// a dialect the inference cannot name (legacy forms, the ANSI base) takes
+// the compiler explicitly:
+// db, err := exec.NewWithCompiler("sqlite3", "test.db", compiler.NewSqlite())
 
 // scan into your types — Get[T], First[T], FirstOrDefault[T],
 // Paginate[T], Chunk[T], Exists, Count[T], Sum[T], ...

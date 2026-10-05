@@ -29,43 +29,95 @@
 
 ## Quickstart
 
+Your first job in about a minute. On Bun the queue runs inside your app, with no
+server to start:
+
 ```bash
 bun add bunqueue
 ```
 
 ```typescript
-import { Bunqueue } from 'bunqueue/client';
+// jobs.ts
+import { Queue, Worker } from 'bunqueue/client';
 
-const app = new Bunqueue('emails', {
-  embedded: true,
-  dataPath: './data/emails.db', // omit to run in-memory (lost on restart)
-  processor: async (job) => {
-    console.log(`Sending to ${job.data.to}`);
+const queue = new Queue<{ to: string }>('emails', { embedded: true });
+
+const worker = new Worker<{ to: string }>(
+  'emails',
+  async (job) => {
+    console.log('Processing:', job.data.to);
     return { sent: true };
   },
-});
+  { embedded: true }
+);
 
-await app.add('send', { to: 'alice@example.com' });
+worker.on('error', (error) => console.error(error));
+await queue.add('welcome', { to: 'hello@example.com' });
 ```
 
-That's it. Queue + Worker in one object, persisted to a single SQLite file.
-No Redis, no config, no setup. `msgpackr` is the only runtime dependency;
-cron, SQLite, S3, HTTP and WebSocket use Bun's built-ins.
+```bash
+bun jobs.ts
+# Processing: hello@example.com
+```
+
+That's it: no Redis, no config, no setup. The worker keeps waiting for more jobs
+until you stop it with Ctrl+C. The example keeps jobs in memory; pass
+`dataPath: './jobs.db'` to the queue and the worker to persist them in one
+SQLite file. `msgpackr` is the only runtime dependency; cron, SQLite, S3, HTTP and
+WebSocket use Bun's built-ins.
 
 ### Not on Bun? Run the server, connect from anywhere
 
-The queue also runs as a standalone server. Memory is the zero-configuration
-default; SQLite is the zero-infrastructure persistent option:
+Start the server with Docker (no Bun needed) or, if Bun is installed, with
+`bunx bunqueue start --host 127.0.0.1 --data-path ./bunqueue.db`:
 
 ```bash
-# in-memory without --data-path; pass it to persist jobs to SQLite
-bunx bunqueue start --data-path ./data/bunq.db   # TCP :6789, HTTP :6790
-
-# or, with no runtime at all (the volume persists /app/data):
-docker run -d -p 6789:6789 -p 6790:6790 \
+docker run -d --name bunqueue \
+  --restart unless-stopped \
+  -p 127.0.0.1:6789:6789 \
+  -p 127.0.0.1:6790:6790 \
   -v bunqueue-data:/app/data \
-  egeominotti/bunqueue:latest
+  egeominotti/bunqueue:alpine
+
+curl --fail http://127.0.0.1:6790/health
 ```
+
+Then, in another terminal, add a job and process it from Node.js:
+
+```bash
+npm install bunqueue-client
+```
+
+```javascript
+// jobs.mjs
+import { Queue, Worker } from 'bunqueue-client';
+
+const options = {
+  embedded: false,
+  connection: { host: '127.0.0.1', port: 6789 },
+};
+const queue = new Queue('emails', options);
+
+const worker = new Worker(
+  'emails',
+  async (job) => {
+    console.log('Processing:', job.data.to);
+    return { sent: true };
+  },
+  options
+);
+
+worker.on('error', (error) => console.error(error));
+await queue.add('welcome', { to: 'hello@example.com' });
+```
+
+```bash
+node jobs.mjs
+# Processing: hello@example.com
+```
+
+Deno, Python, PHP, Go, Rust and Elixir take the same three steps: see the
+[Quick Start](https://bunqueue.dev/guide/quickstart/) for each language.
 
 For multiple active brokers, the repository includes a topology pinned to
 PostgreSQL 18.6:
@@ -101,10 +153,10 @@ Choose a Linux distribution with the same tags on either registry:
 
 | Variant | Version tag | Moving tag | Runtime base |
 |---|---|---|---|
-| Alpine (default) | `2.9.8-alpine` | `alpine`, `latest` | Alpine 3.22, musl |
-| Debian | `2.9.8-debian` | `debian` | Debian 13 |
-| Debian slim | `2.9.8-slim` | `slim` | Debian 13 slim |
-| Distroless | `2.9.8-distroless` | `distroless` | Debian 13, no shell or package manager |
+| Alpine (default) | `2.9.11-alpine` | `alpine`, `latest` | Alpine 3.22, musl |
+| Debian | `2.9.11-debian` | `debian` | Debian 13 |
+| Debian slim | `2.9.11-slim` | `slim` | Debian 13 slim |
+| Distroless | `2.9.11-distroless` | `distroless` | Debian 13, no shell or package manager |
 
 **Which variant should I use?**
 
@@ -130,18 +182,18 @@ user permission to install packages at runtime.
 docker run -d --name bunqueue --restart unless-stopped \
   -p 127.0.0.1:6789:6789 -p 127.0.0.1:6790:6790 \
   -v bunqueue-data:/app/data \
-  egeominotti/bunqueue:2.9.8-alpine
+  egeominotti/bunqueue:2.9.11-alpine
 
 curl --fail http://127.0.0.1:6790/health
 ```
 
-This example exposes the APIs only on your machine. Replace `2.9.8-alpine` with
-`2.9.8-debian`, `2.9.8-slim`, or `2.9.8-distroless` to choose another base.
+This example exposes the APIs only on your machine. Replace `2.9.11-alpine` with
+`2.9.11-debian`, `2.9.11-slim`, or `2.9.11-distroless` to choose another base.
 Moving tags such as `alpine` follow newer releases; version tags identify a
 release, while a digest pins the exact image even across base-image rebuilds.
 
 Every variant supports both architectures, runs as UID/GID `1001:1001`, and
-stores SQLite data in `/app/data`. Unsuffixed tags such as `2.9.8` stay on Alpine.
+stores SQLite data in `/app/data`. Unsuffixed tags such as `2.9.11` stay on Alpine.
 Production images contain the compiled server and required system libraries;
 development dependencies and a separate Bun installation stay out of the image.
 The built-in health check uses `/app/bunqueue healthcheck`, including on distroless.

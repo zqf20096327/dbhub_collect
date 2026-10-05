@@ -55,6 +55,8 @@ needs to actually come back to life isn't covered. CBM backs up the whole resour
 | **Multi‑server** Coolify instances | n/a | ✅ |
 | Alerts on **failed / missing / overdue** backups | ❌ | ✅ |
 | **Reconciliation** (detect backups deleted at the destination) | ❌ | ✅ |
+| **Integrity check** (detect silently corrupted backups) | ❌ | ✅ |
+| **Mirror** a backup to a second destination (redundancy) | ❌ | ✅ |
 | **Disaster recovery** — back up CBM itself, restore it elsewhere | ❌ | ✅ |
 
 ---
@@ -87,9 +89,17 @@ needs to actually come back to life isn't covered. CBM backs up the whole resour
   with a schedule per server.
 - **Alerts** via a generic webhook (Discord / Slack / custom) on **failed**, **missing**
   (deleted at the destination), and **overdue** (never ran) backups.
-- **Reconciliation, parallelism & hooks** — a periodic check confirms every backup is still
-  present at its destination; agents run several jobs at once (`AGENT_CONCURRENCY`); and you
-  can set **per‑container pre/post‑backup commands** (e.g. quiesce an app, flush a cache).
+- **Automatic test restores.** A restore drill proves a backup actually restores: an agent
+  loads each database dump into a network‑less sandbox container of the same engine and checks
+  every table came back, reads volume archives back end to end, then deletes everything —
+  Coolify and your resources are never touched. On demand, via the API/MCP, or weekly; a failure
+  alerts you. See [docs/restore.md](docs/restore.md#test-restores-restore-drills).
+- **Reconciliation, integrity & mirroring.** A daily check confirms every backup is still
+  **present**; an opt‑in weekly **integrity** check re‑reads the stored data to catch **silent
+  corruption** (`restic check` / tar re‑checksum); and a destination can **mirror** every backup
+  to a second destination for a redundant, independently‑restorable copy.
+- **Parallelism & hooks** — agents run several jobs at once (`AGENT_CONCURRENCY`), and you can
+  set **per‑container pre/post‑backup commands** (e.g. quiesce an app, flush a cache).
 - **Scheduling** with grandfather‑father‑son retention, in a **configurable timezone**.
 - **Team access with roles.** Invite people as **admin / operator / viewer** via one‑time
   invitation links (copy‑paste or emailed). Operators run backups/restores; only admins
@@ -97,6 +107,9 @@ needs to actually come back to life isn't covered. CBM backs up the whole resour
   UI hiding what a role can't use.
 - **Email (SMTP).** Optional self‑service **password reset** and **account verification**;
   configured from Settings (or env), with a built‑in test that verifies the connection.
+- **MCP server.** An [MCP](https://modelcontextprotocol.io) server lets any AI agent (Claude
+  Desktop, Claude Code, Cursor, Cline…) inspect your fleet and trigger backups over a
+  token‑authenticated API, with the same role model as the UI. See [docs/mcp.md](docs/mcp.md).
 
 ---
 
@@ -200,6 +213,7 @@ Detailed docs live in **[`/docs`](docs/)**:
 - [Backups](docs/backups.md) — how each resource type is captured, hooks, live mode
 - [Restore](docs/restore.md) — in place vs → new
 - [Disaster recovery](docs/disaster-recovery.md) — self‑backup, recovery file, restore onto a fresh Coolify
+- [MCP server](docs/mcp.md) — drive CBM from any AI agent (Claude Desktop, Cursor, Cline…)
 - [Multi‑server](docs/multi-server.md), [Alerts](docs/alerts.md),
   [Reconciliation & retention](docs/reconciliation-retention.md)
 - [Security](docs/security.md) · [Troubleshooting / FAQ](docs/troubleshooting.md)
@@ -210,8 +224,10 @@ Detailed docs live in **[`/docs`](docs/)**:
 
 Being upfront so you don't lose data by surprise.
 
-- **No automatic restore verification** — artifacts are checksummed and destinations are
-  reconciled, but backups are not (yet) test‑restored. Test your restores.
+- **Test restores prove the data, not the redeploy** — a restore drill restores each snapshot
+  into an agent‑side sandbox (databases loaded into a real engine, archives read back), but it
+  doesn't redeploy the application in Coolify. An occasional real **→ new** restore remains the
+  ultimate check.
 - **Volume copies are crash‑consistent** (the app recovers), not application‑consistent; an
   in‑service database restored from its *volume* is version‑locked to the same engine version
   — use the logical dump captured alongside it for a portable restore.

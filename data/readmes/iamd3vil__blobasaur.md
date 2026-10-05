@@ -73,9 +73,9 @@ You can download pre-compiled binaries for Linux from the [GitHub Releases page]
 
 1.  **Download the latest release:**
 
-    For example, to download version `v0.6.1`:
+    For example, to download version `v0.7.1`:
     ```bash
-    wget https://github.com/iamd3vil/blobasaur/releases/download/v0.6.1/blobasaur-Linux-musl-x86_64.tar.gz
+    wget https://github.com/iamd3vil/blobasaur/releases/download/v0.7.1/blobasaur-Linux-musl-x86_64.tar.gz
     ```
 
 2.  **Extract the archive:**
@@ -110,9 +110,8 @@ docker run -d \
 
 Available tags:
 - `latest` - Latest stable release
-- `x.y.z` - Specific version (e.g., `0.6.1`)
+- `x.y.z` - Specific version (e.g., `0.7.1`)
 - `x.y` - Latest patch for minor version (e.g., `0.2`)
-- `main` - Latest build from main branch
 
 ### Prerequisites
 
@@ -259,7 +258,12 @@ async_write = false                 # Enable async writes
 batch_size = 1                      # Write batch size
 batch_timeout_ms = 0               # Batch timeout in milliseconds
 shutdown_timeout_secs = 30          # Max time to drain writes on shutdown
+max_request_size_mb = 100           # Max size of one request (command + all arguments)
+cleanup_chunk_size = 1000           # Max expired rows deleted per cleanup statement
+cleanup_interval_secs = 60          # Seconds between expiry cleanup sweeps
 ```
+
+A request larger than `max_request_size_mb` gets an `ERR Protocol error` reply and the connection is closed. The same happens for any malformed request, as in Redis. Each request is held in memory while it's processed, so peak memory grows with concurrent large writes times this limit.
 
 ### Storage Compression
 
@@ -369,7 +373,7 @@ Use namespaces to organize data into logical groups.
   # Set multiple fields with expiration
   redis-cli HSETEX cache EX 300 FIELDS 2 key1 "value1" key2 "value2"
 
-  # Set with millisecond precision
+  # TTL in milliseconds (rounded up to whole seconds)
   redis-cli HSETEX temp PX 5000 FIELDS 1 data "temporary"
 
   # Only set if field doesn't exist (FNX option)
@@ -557,8 +561,10 @@ async_write = true
 
 **Features:**
 - Immediate response to clients
-- Inflight cache prevents race conditions
-- Maintains consistency guarantees
+- Inflight cache prevents race conditions: `GET`, `HGET`, `EXISTS`, `HEXISTS`, `DEL`, `HDEL` and `HSET` see writes and deletes that are acknowledged but not yet committed
+- Acknowledged writes are committed before a graceful shutdown completes (see [Shutdown](#shutdown))
+
+**Known gap** (settles within milliseconds, once the queued op commits): `TTL` reads only committed data, so right after an async `SET ... EX` it can return `-2`.
 
 ### Storage Compression
 
@@ -603,13 +609,15 @@ CREATE TABLE blobs (
 **Features:**
 - **Redis-Compatible TTL**: Full support for `SET EX/PX`, `TTL`, and `EXPIRE` commands
 - **Automatic Expiry**: All read operations (`GET`, `EXISTS`, `TTL`) automatically filter expired keys
-- **Background Cleanup**: Per-shard cleanup tasks run every 60 seconds to remove expired keys
+- **Background Cleanup**: Per-shard cleanup tasks run every 60 seconds (`cleanup_interval_secs`) to remove expired keys
 - **Efficient Storage**: Uses indexed `expires_at` timestamps for fast expiry queries
+- **Second Resolution**: Expiry is stored in whole seconds, so `PX` TTLs are rounded up (`PX 500` lives for 1 second). `EX 0`, `PX 0` and out-of-range TTLs are rejected, as in Redis
+- **UTF-8 Keys**: Keys, namespaces and other string arguments must be valid UTF-8 (values can be any bytes)
 
 **Implementation Details:**
 - Expiration timestamps stored as Unix epoch seconds in `expires_at` column
 - Database indexes on `expires_at` for efficient cleanup queries
-- Background cleanup processes both main `blobs` table and namespaced tables
+- Background cleanup processes both main `blobs` table and namespaced tables, deleting expired rows in chunks (`cleanup_chunk_size`, default 1000) so writes to the shard are not blocked for long
 - Race-free expiry checking: keys are considered expired at query time
 
 **Usage Examples:**
@@ -626,11 +634,11 @@ redis-cli EXPIRE permanent_key 3600
 
 ### Race Condition Handling
 
-**The Problem:** Async writes could cause GET requests to miss recently SET data.
+**The Problem:** Async writes could cause GET requests to miss recently SET data, or still return data that was just deleted.
 
 **The Solution:** Inflight cache system:
-- Tracks pending write operations
-- Serves data from cache during async writes
+- Tracks pending write and delete operations
+- Serves data from cache during async writes, and treats keys with a pending delete as absent
 - Automatic cleanup after database commits
 
 ### Redis Cluster Compatibility
@@ -671,6 +679,7 @@ Comprehensive test suite covering:
 - **Unit Tests**: RESP protocol parsing and serialization
 - **Integration Tests**: Command handling and binary data
 - **Protocol Compliance**: Redis compatibility verification
+- **Client Compatibility**: a [go-redis](https://github.com/redis/go-redis) suite (`tests/goredis`) run against a live server in sync and async mode, over RESP2 and RESP3
 
 ```bash
 # Run all tests
@@ -679,6 +688,8 @@ cargo test
 # Run with output
 cargo test -- --nocapture
 ```
+
+The go-redis suite needs Go (version in `tests/goredis/go.mod`); the first run downloads the pinned go-redis module. Without Go, `cargo test` fails with a message explaining this. Set `BLOBASAUR_SKIP_GO_TESTS=1` to skip that suite.
 
 ### Key Dependencies
 

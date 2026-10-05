@@ -37,10 +37,13 @@ database and empty provider keys. The interactive API documentation is at
 | --- | --- | --- |
 | Explore a corpus you own or may process | Ingest text, ask a question, inspect source IDs and snippets | [Quickstart](QUICKSTART.md) |
 | Recover paper IDs after restart | Browse bounded document summaries, filter by source/title, and select papers for queries | [Document catalog](docs/guides/DOCUMENT_CATALOG_GUIDE.md) |
+| Find exact wording across stored papers | `POST /research/search` returns literal matches, Unicode offsets, and bounded excerpts without retrieval, generation, or run writes | [Literal passage search](docs/guides/LITERAL_SEARCH_GUIDE.md) |
 | Reuse a named paper selection after restart | Save a collection, then pass `collection_id` to `/query` or `/retrieve`; revisioned edits preserve old evidence | [Paper collections](docs/guides/PAPER_COLLECTIONS_GUIDE.md) |
 | Screen papers before choosing evidence | Save human include/exclude/unsure decisions, resume the queue, and explicitly preview current included IDs | [Human paper screening](docs/guides/PAPER_SCREENING_GUIDE.md) |
+| Download complete human screening results | Export every current collection member in one read snapshot as bounded JSON or spreadsheet-safe CSV, including stale and unscreened states | [Screening exports and measured offline demo](docs/guides/SCREENING_EXPORT_GUIDE.md) |
 | Restrict a query to selected ingested papers | Pass `document_ids` through hybrid and graph retrieval; preserve scope in the saved evidence | [Document scope](docs/guides/DOCUMENT_SCOPE_GUIDE.md) |
 | Inspect evidence before generating | `POST /retrieve` returns the actual prepared chunks and plan without any live/fake LLM call or agent-event writes | [Retrieval preview](docs/guides/RETRIEVAL_PREVIEW_GUIDE.md) |
+| Collapse overlapping evidence before generating | Opt in to `near_duplicate_threshold` on `/query` or `/retrieve`; preserve exact survivors and reviewable transformation paths | [Near-duplicate evidence collapse](docs/guides/NEAR_DUPLICATE_COLLAPSE_GUIDE.md) |
 | Limit how many passages one paper contributes | Opt in to `max_chunks_per_document` on `/query` or `/retrieve`; retain the quota and gate provenance in saved evidence | [Per-paper evidence limits](docs/guides/PER_PAPER_EVIDENCE_LIMITS_GUIDE.md) |
 | Require a minimum number of evidence documents before generating | Opt in to `min_evidence_documents`; inspect count diagnostics with `/retrieve`, or retain exact evidence in an `ERROR` run without generation | [Minimum evidence documents](docs/guides/MINIMUM_EVIDENCE_DOCUMENTS_GUIDE.md) |
 | Inspect the same questions against each selected paper | Build a bounded, model-free question-by-paper worksheet and save JSON/Markdown with passage provenance | [Research worksheets](docs/guides/RESEARCH_WORKSHEET_GUIDE.md) |
@@ -55,6 +58,29 @@ database and empty provider keys. The interactive API documentation is at
 | Demonstrate your engineering work | Use synthetic notes, review warnings, save artifacts, and explain limitations | [Portfolio walkthrough](docs/guides/RESEARCH_WORKFLOW_GUIDE.md#6-present-a-portfolio-demonstration) |
 | Catch retrieval regressions before a release | Compare real BM25/hybrid rankings on labeled passages and enforce per-retriever quality gates | [Offline benchmarks](docs/guides/RETRIEVAL_BENCHMARK_GUIDE.md) |
 | Extend ingestion or retrieval | Explicitly wire Python connectors, ranking helpers, or screening utilities | [Categorized catalog](docs/README.md) |
+
+## Inspect near-duplicate evidence before generating
+
+![Measured synthetic offline evidence collapse](docs/assets/near-duplicate-evidence.gif)
+
+`near_duplicate_threshold` reuses the existing lexical collapser after reranking,
+before paper quotas and minimum-document assessment. The measured fixture drops
+five passages to three and changes context from 435 to 264 UTF-8 bytes, with zero
+model/network calls. Threshold `1` means equal meaningful-term sets, not identical
+text. Similar passages may contain important differences: inspect a baseline and
+the [complete guide](docs/guides/NEAR_DUPLICATE_COLLAPSE_GUIDE.md), not a scientific
+equivalence claim. Omission leaves existing behavior unchanged.
+
+## Find exact wording without ranking
+
+![Measured synthetic offline literal passage search](docs/assets/literal-search.gif)
+
+`POST /research/search` finds literal phrases in current persisted chunks,
+including text beyond the normal chunk prefix. Inspect exact Unicode match
+offsets and bounded excerpts, narrow scope by paper or collection, and page in
+stable ID order without retrieval, generation, or run writes. The
+[complete API/Python guide](docs/guides/LITERAL_SEARCH_GUIDE.md) covers limits,
+privacy, current-corpus semantics, and reproduction of this measured illustration.
 
 ## Compare selected papers before generating
 
@@ -75,6 +101,19 @@ events. Resume after restart, inspect stale decisions after a collection edit,
 and explicitly pass current included IDs to retrieval. It is not automated
 screening or scientific validation. The [complete guide](docs/guides/PAPER_SCREENING_GUIDE.md)
 includes API/Python usage, revision conflicts, privacy limits, and GIF reproduction.
+
+## Export complete human screening results
+
+![Measured synthetic offline screening-result exports](docs/assets/screening-exports.gif)
+
+`GET /collections/{collection_id}/screening/export?collection_revision=N&format=json|csv`
+downloads all current members, labels, reasons, timestamps, revisions and counts
+in one read transaction. Stale includes never become current retrieval IDs.
+CSV text cells use a reversible apostrophe prefix; oversized full downloads fail
+instead of silently dropping rows. This measured synthetic/offline illustration
+is not a live UI, active learning, a PRISMA audit or frozen paper contents.
+The [complete API/Python guide](docs/guides/SCREENING_EXPORT_GUIDE.md) covers
+escaping, limits, errors, privacy, peer workflow attribution and reproduction.
 
 ## Export cited sources to a reference manager
 
@@ -207,6 +246,9 @@ Existing cue illustrations remain available without interrupting the introductio
 | BayesianInterimPriorCueExtractor | [GIF](docs/assets/bayesian-interim-prior-cue-extractor.gif) |
 | DifferenceInDifferencesCueExtractor | [GIF](docs/assets/difference-in-differences-cue-extractor.gif) |
 | NegativeControlExposureCueExtractor | [GIF](docs/assets/negative-control-exposure-cue-extractor.gif) |
+| EValueSensitivityCueExtractor | [GIF](docs/assets/evalue-sensitivity-cue-extractor.gif) |
+| DoseResponseCueExtractor | [GIF](docs/assets/dose-response-cue-extractor.gif) |
+| SpilloverInterferenceCueExtractor | [GIF](docs/assets/spillover-interference-cue-extractor.gif) |
 | PlaceboTestCueExtractor | [GIF](docs/assets/placebo-test-cue-extractor.gif) |
 | HeterogeneousTreatmentEffectCueExtractor | [GIF](docs/assets/heterogeneous-treatment-effect-cue-extractor.gif) |
 | RegressionDiscontinuityCueExtractor | [GIF](docs/assets/regression-discontinuity-cue-extractor.gif) |
