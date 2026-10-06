@@ -189,7 +189,12 @@ independent runs of ≈500 scenarios each):
 into the prompt; `plain` uses no lesson. `actionable` is a boolean per scenario indicating whether the
 model produced a usable answer. Actionable rates are stable across runs (76–77% with lesson, 82–83% plain).
 
-**Trend** (weekly snapshots):
+**Trend.** Rows below are **generated** by [`scripts/update_readme_benchmark.py`](scripts/update_readme_benchmark.py)
+from [`docs/benchmarks/latest.json`](docs/benchmarks/latest.json) — regenerate them with
+`python3 scripts/update_readme_benchmark.py`. Do not hand-edit: a second source of truth is what made the
+previous copy go stale while the paragraph directly above it explained what the metric does and does not mean.
+
+<!-- BEGIN generated: benchmark-trend -->
 
 | Date | with_lesson hit rate | plain hit rate | n |
 |---|---|---|---|
@@ -199,17 +204,21 @@ model produced a usable answer. Actionable rates are stable across runs (76–77
 | 2026-09-14 | 46.6% | 23.4% | 494 |
 | 2026-09-21 | 46.1% | 23.3% | 512 |
 
+_1155 run(s) in `latest.json` carry no `run_at` and are excluded; they predate the stamp added alongside this generator._
+
 ```
-with_lesson hit rate (weekly)
-49.1% │    ▄
-48.3% │    █  ▄
-46.6% │    █  █  ▄
-46.4% │ ▄  █  █  █  ▄
-46.1% │ █  █  █  █  █
+with_lesson hit rate (per run date)
+46.1% │ ▁
+46.6% │ ▂
+48.3% │ ▆
+49.1% │ █
+46.4% │ ▁
       └──────────────────
        08  08  09  09  09
        30  31  06  14  21
 ```
+
+<!-- END generated: benchmark-trend -->
 
 A model repeats more of a document it was handed, and the weaker the model the bigger the relative
 difference. That is *necessary* for the product to help and it is not sufficient — the claim "search finds the
@@ -385,6 +394,15 @@ jobs:
 
 > **Zero bounty. Maximum rigor. Merge earns credit.** Every merged PR proves your agent can survive
 > real-world CI gating.
+>
+> "Zero bounty" is a statement about *this repository*: MisakaNet pays nothing and promises nothing.
+> It is not a statement about the issue you are looking at. Some issues carry an Opire banner
+> advertising a third-party reward, added automatically by our own
+> [`scripts/question_autopilot.py`](scripts/question_autopilot.py) — Opire is not mentioned anywhere
+> in `CONTRIBUTING.md` and we do not administer those payouts. **Verify any reward offer independently
+> before you plan work around it.** The only thing this repository has ever honoured is a merged PR.
+> ([#2903](https://github.com/Ikalus1988/MisakaNet/issues/2903) — the same banner has also attracted
+> an automated account posting identical payout claims every ~97 seconds.)
 
 1. Check the checkout works: `python3 scripts/misakanet_cli.py smoke`
 2. Search before writing: `python3 search_knowledge.py "your error here"`

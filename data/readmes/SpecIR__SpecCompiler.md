@@ -55,7 +55,21 @@ The fundamental purpose of SpecCompiler is to prevent the occurrence of *finding
 curl -fsSL https://raw.githubusercontent.com/SpecIR/SpecCompiler/main/scripts/install.sh | bash
 ```
 
-**Windows.** One command in PowerShell, after Docker Desktop or Podman is
+**Windows 10/11 (native, no container or installer).** Download
+`SpecCompiler-<version>-windows-x64.zip` from the
+[latest release](https://github.com/SpecIR/SpecCompiler/releases), extract it
+anywhere and add its `bin` folder to your PATH. Then, in cmd or PowerShell:
+```powershell
+specc build project.yaml
+specc test
+```
+The zip bundles Pandoc built with native Lua module support and PlantUML.
+Optional, used when found on PATH: a Java runtime (PlantUML diagrams) and
+LibreOffice (DOCX field update and PDF export), e.g.
+`winget install EclipseAdoptium.Temurin.21.JRE TheDocumentFoundation.LibreOffice`.
+See [windows/README.md](windows/README.md).
+
+**Windows (container).** One command in PowerShell, after Docker Desktop or Podman is
 installed:
 ```powershell
 irm https://raw.githubusercontent.com/SpecIR/SpecCompiler/main/scripts/install.ps1 | iex

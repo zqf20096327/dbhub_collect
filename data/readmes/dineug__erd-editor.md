@@ -28,6 +28,9 @@ run **Create new diagram** from the command palette. In Google Drive, choose
 
 - **Visual schema design** — tables, columns, memos, and four relationship cardinalities
   (zero-one, zero-N, one-only, one-N)
+- **Link existing columns** — while you draw a relationship with a mouse or a pen, the buttons
+  beside the table it ends on either map the parent's key onto columns that table already has or
+  add new ones, and Map Columns in a relationship's right-click menu changes its columns later
 - **SQL DDL import** — point it at a `.sql` dump and get a diagram; the parser skips what it
   does not recognize, so an awkward dump imports partially rather than failing outright
 - **GraphQL SDL import** — point it at a schema from any tool that emits SDL and get a
@@ -59,6 +62,15 @@ run **Create new diagram** from the command palette. In Google Drive, choose
 - **Quick search** over commands, and over tables, columns, comments and memos after `#`, `@` or
   `:`, **find and replace** across names, comments and memos, **undo / redo**, keyboard
   shortcuts, and a theme builder
+- **25 display languages** — the editor's menus, panels, command palette and messages, with
+  Arabic, Hebrew and Persian laid out right to left while the diagram stays left to right. Pick
+  one from the toolbar or the command palette, or System, which follows the language of the
+  browser, VS Code, the JetBrains IDE or Obsidian; the IDE and Obsidian plugins also keep it in
+  their settings. The app's and the plugins' own screens stay in English, as the npm element
+  does until its host turns the picker on or names a language
+- **Welcome screen** — an empty diagram opens on a menu of New Table, New Memo, Import, the
+  command palette and the shortcuts, with arrows at the tools, until its first table or memo; the
+  npm element shows it only once its host turns it on
 - **Real-time collaboration** (experimental) — peer-to-peer, end-to-end encrypted, with no
   backend holding your schema. Live on erd-editor.io; embedders get the same action stream
   through the element's `getSharedStore()`

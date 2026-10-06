@@ -10,8 +10,9 @@
 **A key-value database for object storage, written in Go.**
 
 Store durable key-value data on Amazon S3, Google Cloud Storage, Azure Blob
-Storage, MinIO, or local files. Add reader services independently and run
-compaction outside your application processes.
+Storage, or any S3-compatible store such as MinIO; local files and memory work
+for development. Add reader services independently and run compaction outside
+your application processes.
 
 IsleDB provides:
 
@@ -34,7 +35,8 @@ IsleDB requires Go 1.25 or newer.
 
 This example uses an Amazon S3 bucket; credentials come from the standard AWS
 environment (`AWS_PROFILE`, `AWS_ACCESS_KEY_ID`, an instance role, and so on).
-`Put` buffers the mutation and `Flush` makes it durable and visible to readers.
+`Put` buffers the mutation and `Flush` makes it durable and visible to readers
+that refresh.
 
 ```go
 package main
@@ -64,6 +66,8 @@ func run(ctx context.Context) error {
 	defer func() { _ = db.Close() }()
 
 	writerOptions := isledb.DefaultWriterOptions()
+	// Commit only on Flush, for this example; by default the writer also
+	// commits every second.
 	writerOptions.Flush.Interval = 0
 
 	writer, err := db.OpenWriter(ctx, writerOptions)
@@ -117,25 +121,57 @@ Credentials and provider-specific options come from the corresponding
 for each database.
 
 > **Local stores are for development only.** `file://` and `mem://` buckets
-> work for local experiments and tests, but they cannot provide the atomic
-> conditional writes that IsleDB relies on to fence writers and commit safely.
-> Do not run more than one process against them, and do not use them in
-> production. Use S3, Google Cloud Storage, or Azure Blob Storage.
+> behave correctly within one process, which is enough for local experiments
+> and tests. Across processes, their conditional writes are not atomic, so
+> never point two processes at the same `file://` directory, and do not use
+> them in production. Use S3, Google Cloud Storage, Azure Blob Storage, or an
+> S3-compatible store.
 
 ## Behavior to know
 
-- `Put`, `PutWithTTL`, and `Delete` buffer mutations in memory.
+- `Put`, `PutWithTTL`, and `Delete` buffer mutations in memory and return
+  each mutation's sequence. `WaitCommitted(ctx, seq)` returns once that write
+  is in object storage; use it before acting on a write you cannot lose.
+- If storage is down, writes wait in memory and are retried; once
+  `MaxPendingMemtables` memtables are waiting, `Put` returns `ErrBackpressure`.
 - A successful `Flush`, background flush, or `Writer.Close` is the durability
-  and visibility boundary.
+  and visibility boundary. `Flush` can be retried; `Close` makes one attempt
+  and finishes the writer either way, reporting any writes not known to be
+  committed. To stop gracefully, call `Drain`, then `Close` with a deadline,
+  then `DB.Close`; see [Shutting down](#shutting-down).
 - One writer owns a database prefix at a time. Writer ownership is fenced across
   processes.
 - A reader uses a consistent loaded view. It refreshes according to its view
   policy; call `Refresh` when a newly committed write must be discovered
   immediately.
+- `Writer.State` reports whether the writer is open, stopped, closed or
+  fenced, and how much is not yet committed, for readiness probes and
+  dashboards.
 - Reader services scale independently by opening the same bucket and prefix with
   their own local cache directories.
 - Run maintenance in production so compaction, checkpoints, configured
   retention, and physical cleanup continue to make progress.
+
+### Shutting down
+
+`Drain` stops intake and commits everything accepted, retrying until its
+context ends; `Close` is the final step:
+
+```go
+if err := writer.Drain(ctx); err != nil { // Put and Delete now return ErrWritesStopped
+    log.Printf("drain: %v", err)
+}
+closeCtx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+defer cancel()
+if err := writer.Close(closeCtx); err != nil {
+    log.Printf("writer closed with unconfirmed writes: %v", err) // the error names them
+}
+_ = db.Close()
+```
+
+`DB.Close` alone closes an open writer with a fixed 30-second deadline and no
+retry; it is cleanup, not the durability step. Set `Flush.Interval` so a
+crash loses at most one interval of writes.
 
 See the [Go API guide](api.md) for scans, iterators, snapshots, prefetching,
 configuration, metrics, and error handling.
@@ -160,7 +196,7 @@ is persisted when the feed is enabled and cannot later be changed for that
 database prefix.
 
 Consumers use `OpenChangeReader` with an opaque, persistent cursor. See
-[Enable and consume the change feed](api.md#enable-and-consume-the-change-feed)
+[Change feed](api.md#change-feed)
 for the complete example and retention behavior.
 
 ## Run maintenance separately
@@ -169,25 +205,22 @@ Maintenance can run continuously in its own service or periodically as a job.
 It opens the same database prefix as the writer and readers.
 
 ```go
-db, err := isledb.Open(ctx, bucketURL, isledb.DBOptions{
-	Prefix: "prod/accounts",
-})
-if err != nil {
-	log.Fatal(err)
-}
-defer db.Close()
+func runMaintenance(ctx context.Context, bucketURL string) error {
+	db, err := isledb.Open(ctx, bucketURL, isledb.DBOptions{
+		Prefix: "prod/accounts",
+	})
+	if err != nil {
+		return err
+	}
+	defer func() { _ = db.Close() }()
 
-maintenance, err := db.OpenMaintenance(
-	ctx,
-	isledb.DefaultMaintenanceOptions(),
-)
-if err != nil {
-	log.Fatal(err)
-}
-defer maintenance.Close(ctx)
+	maintenance, err := db.OpenMaintenance(ctx, isledb.DefaultMaintenanceOptions())
+	if err != nil {
+		return err
+	}
+	defer func() { _ = maintenance.Close(context.Background()) }()
 
-if err := maintenance.Run(ctx); err != nil {
-	log.Fatal(err)
+	return maintenance.Run(ctx) // until ctx ends or another process takes over maintenance
 }
 ```
 

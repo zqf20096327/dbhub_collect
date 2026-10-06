@@ -28,8 +28,6 @@ Open `http://localhost:8518`, log in(user=admin passwd=admin1234 )
 ./fogping user=admin,alice,bob passwd=admin1234,alice-pw,bob-pw
 ```
 
-`./fogping --help` prints the common commands with copy-ready examples. The rest of
-this page covers each step in detail.
 
 ## Docker
 
@@ -37,18 +35,14 @@ Images for linux/amd64, arm64 and arm/v7 (Raspberry Pi, NAS, RouterOS). Data liv
 
 ```bash
 # first run: --edit so you can add targets in the web UI
-docker run -d --name fogping --restart unless-stopped \
-  --user $(id -u):$(id -g) -p 8518:8518 \
-  -v ~/fogping:/data githubflyideas/fogping \
-  --edit user=admin passwd=change-me
+docker run -d --name fogping --restart unless-stopped   -p 8518:8518   -v fogping_data:/data   githubflyideas/fogping:latest   --edit user=admin passwd=change-me
 
 # done editing: recreate without --edit (data in ~/fogping is kept)
 docker rm -f fogping
-docker run -d --name fogping --restart unless-stopped \
-  --user $(id -u):$(id -g) -p 8518:8518 \
-  -v ~/fogping:/data githubflyideas/fogping \
-  user=admin passwd=change-me
+docker run -d --name fogping --restart unless-stopped   -p 8518:8518   -v fogping_data:/data   githubflyideas/fogping:latest            user=admin passwd=change-me
 ```
+`./fogping --help` prints the common commands with copy-ready examples. The rest of
+this page covers each step in detail.
 
 Everything after the image name is passed to fogping as-is (`--edit`, `--days=90`,
 `user=` / `passwd=`). Where you can set environment variables but not a command

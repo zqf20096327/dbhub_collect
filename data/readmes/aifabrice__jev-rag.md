@@ -12,6 +12,7 @@ passages are sent to the configured Jev and answer-model providers.
 [![Release](https://img.shields.io/github/v/release/aifabrice/jev-rag?include_prereleases)](https://github.com/aifabrice/jev-rag/releases)
 [![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-3776ab)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-17624f)](LICENSE)
+[Listed in Awesome Jev](https://github.com/yibie/awesome-jev)
 
 [简体中文](README.zh-CN.md) · [Seven-pipeline field report](docs/JEV_RAG_SEVEN_PIPELINES.md) · [Architecture](docs/ARCHITECTURE.md) · [Security](SECURITY.md) · [Contributing](CONTRIBUTING.md)
 
@@ -24,6 +25,24 @@ passages are sent to the configured Jev and answer-model providers.
 · [Cite Jev RAG](CITATION.cff)
 
 ![Jev RAG local web interface](docs/assets/demo-ui.png)
+
+## Try local search without an API key
+
+Start with the public documents included in this repository. This demo needs
+only Python 3.9+ with SQLite FTS5: no package install, API key, embeddings, or
+model request. It indexes only `./docs`, not your personal Documents folder.
+
+```bash
+git clone https://github.com/aifabrice/jev-rag.git
+cd jev-rag
+python3 local_kb.py --documents ./docs --db .knowledge/quickstart.db index
+python3 local_kb.py --documents ./docs --db .knowledge/quickstart.db search 'retrieval' --no-jev
+```
+
+Expect ranked passages with source paths and retrieval timing. This is the
+**BM25-only baseline**, not Jev reranking or a generated answer. Keep the same
+`--documents` and `--db` on both commands; the index is isolated from your
+normal knowledge base. To try the full pipeline, continue below.
 
 ## Run it locally
 

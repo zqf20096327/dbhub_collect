@@ -86,6 +86,11 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
 
 ## What works today
 
+- Rolling application upgrades use additive schema expansions; destructive cleanup
+  runs only with `quivr migrate --contract`. CI checks the merge-base binary against
+  expansions. See [Upgrade Quivr](https://docs.quivr.thevibecompany.co/run-quivr/upgrade-quivr).
+
+- **Release images and build identity.** Release-please manages alpha release PRs, versions and changelogs. Publishing a release builds signed engine and first-party plugin images on GHCR, with signed SPDX inventories and vulnerability scans. `quivr --version`, `GET /v0/version`, startup logs and process metrics report the build. See [Deploy and configure Quivr](https://docs.quivr.thevibecompany.co/run-quivr/deploy) and [release security](https://docs.quivr.thevibecompany.co/run-quivr/security).
 - **Declarative conformance cases**: contribute generic requirements and measure them locally with
   `make conformance`; [case format and reports](conformance/README.md). CI never executes cases.
 
@@ -99,8 +104,11 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   extensions and relations.
 - **Corrections and withdrawals** with immutable Versions and fenced withdrawn Records.
 - **Search**: lexical, semantic and hybrid, with canonical rehydration and access
-  rechecks on every hit, optionally within chosen Source Namespaces (filtered before
+  rechecks on every hit, with common metadata and typed Corpus filters across sources,
+  optionally within chosen Source Namespaces (filtered before
   ranking).
+- **Metadata facets**: exact document counts across Corpora, bounded top values
+  and UTC day, month or year histograms, under the same metadata filters.
 - **Change feed** through polling and resumable SSE, plus **catalog resync** after
   cursor expiry. List a Corpus's Records newest first by current-Version acceptance
   time, filter by time bounds, and read exact range counts through the API or CLI.
@@ -165,6 +173,9 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   validated and activated.
 - **Connector Instances**: scheduled pull acquisition into a Corpus, with write-only
   deposited credentials and health, through the same ingestion path as pushed content.
+  Archives import through `object_storage_archive`: immutable S3-compatible `.tar.gz` and ZIP sources,
+  bounded batches and concurrency, resumable member checkpoints, and configured numeric revision ordering
+  ([guide](https://docs.quivr.thevibecompany.co/guides/archive-import)).
   Delivered kinds: `rss` (RSS and Atom feeds), `m365_mail` (Microsoft 365 mailboxes)
   and `x_list` (first-party plugin `plugins/x-list`), which polls an X list: edits become
   corrections, deleted or protected posts are withdrawn, and health shows daily reads
@@ -257,7 +268,8 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   the built-in text path ([guide](https://docs.quivr.thevibecompany.co/plugins/pin)).
 - **Reprocessing quarantined Versions**: after a plugin fix or rollback, an operator
   lists quarantined Versions, runs a dry run, then reprocesses them with the active
-  plan. The Operation is paced, resumable and keeps each Version's identity
+  plan, optionally restarting from the stored source through normalization. The
+  Operation is paced, resumable and keeps each Version's identity
   ([guide](https://docs.quivr.thevibecompany.co/plugins/reprocess-quarantined-versions)).
 - **Plugin-owned extension namespaces**: the pinned plugin's declared namespaces are
   registered at startup beside the built-in ones. Its normalizer's extensions are
@@ -274,6 +286,10 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   output with the engine's own validation: Manifest rules, response size, input-Blob-only
   Blob Parts and declared namespaces. It writes a JSON report with `--report`, and CI
   publishes one for the `quivr plugin init` template.
+- **Searchable NewsML-G2 text** through [`plugins/newsml-g2`](plugins/newsml-g2/README.md):
+  headlines, sluglines and paragraphs retain their language and direction, editorial
+  metadata stays namespaced, and the raw XML remains available as the source Blob.
+  Both item and single-item message media types are supported.
 - **Searchable PDFs** through the reference plugin [`plugins/pdf-text`](plugins/pdf-text/README.md)
   (pypdf, BSD-3-Clause). An `application/pdf` Blob becomes one `body` Part per page with
   text, and a phrase is found on its page's Part. Blank or scanned pages give warnings;
@@ -326,10 +342,6 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   candidate depth and relative-score or RRF fusion (defaults: alpha 0.5, search limit,
   relative score). The engine ranks nothing itself.
 
-## What comes next
-
-- Filtering on typed field mappings (filter roles are validated and stored today).
-
 ## Documentation
 
 The documentation site, [docs.quivr.thevibecompany.co](https://docs.quivr.thevibecompany.co),
@@ -358,7 +370,7 @@ contracts/plugins/v0/ Plugin Protocol v0 schemas and normative fixtures
 sdks/go/            Go Plugin SDK for every Contribution
 sdks/python/        Python Plugin SDK
 plugins/pdf-text/   reference normalizer: PDF text, one Part per page
-migrations/         ordered PostgreSQL migrations (UTC-stamped; legacy 0xx_ first)
+migrations/         expand/contract PostgreSQL migrations (UTC-stamped; legacy 0xx_ first)
 scripts/            local stack, verification and measurement tooling
 quivr-search/       demo web UI
 deploy/             Docker Compose and Railway deployment

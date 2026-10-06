@@ -95,7 +95,7 @@ t Does |
 | **Web UI** | Server-rendered `/mail/` routes for human oversight, unified inbox review, search, attachments, and overseer messaging |
 | **Robot Mode** | 19 agent-optimized CLI subcommands with `toon`/`json` output (`md` for thread and message views) for non-interactive workflows |
 | **Git-Backed Archive** | Every message, reservation, and agent profile stored as files in per-project Git repos |
-| **Hybrid Search** | Search V3 via frankensearch. The lexical tier ships by default; semantic and hybrid routing are controlled by the hybrid feature flag (`feature = "hybrid"`). |
+| **Hybrid Search** | Search V3 via frankensearch. The lexical tier ships by default; semantic and hybrid routing need a build with the hybrid feature (`feature = "hybrid"`) and the runtime opt-in `AM_SEARCH_SEMANTIC_ENABLED=true`. Without both, every query runs lexical. |
 | **Pre-Commit Guard** | Git hook that blocks commits touching files reserved by other agents |
 | **Dual-Mode Interface** | MCP server (`mcp-agent-mail`) and operator CLI (`am`) share tools but enforce strict surface separation |
 
@@ -140,5 +140,4 @@ Example exchange between two agents coordinating a refactor:
 │                                                                              │
 │ ┌──────────────────────────────────────────────────────────────────────────┐ │
 │ │ BlueLake -> GreenCastle                                 2026-02-16 10:04 │ │
-│ │ Subject: Re: Starting auth refactor                                      │ │
-│ ├───────────
+│ │

@@ -4,10 +4,11 @@
 
 <p align="center">
   Search every screenshot you have ever taken by the text inside it.<br>
-  Native on Linux and Windows, fully offline, and fast on any hardware, with or without a GPU.
+  Native on Linux, macOS and Windows, fully offline, and fast on any hardware, with or without a GPU.
 </p>
 
 <h4 align="center">
+  <a href="https://gyotaku.app">Website</a> |
   <a href="#installation">Installation</a> |
   <a href="docs/usage.md">Usage</a> |
   <a href="docs/troubleshooting.md">Troubleshooting</a> |
@@ -17,7 +18,7 @@
 <p align="center">
   <a href="https://github.com/xevrion/gyotaku/actions/workflows/ci.yml"><img src="https://github.com/xevrion/gyotaku/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-blue.svg" alt="GPL-3.0 licensed" /></a>
-  <img src="https://img.shields.io/badge/platform-linux%20%7C%20windows-blue.svg" alt="Linux and Windows" />
+  <img src="https://img.shields.io/badge/platform-linux%20%7C%20windows%20%7C%20macos-blue.svg" alt="Linux, Windows and macOS" />
   <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs welcome" /></a>
 </p>
 
@@ -34,7 +35,7 @@ All processing happens locally. gyotaku does not take screenshots itself; it ind
 | Window summon time | ~120 ms |
 | Frame rate with a GPU | 144 fps (display refresh rate) |
 | Memory while idle in the background | 37 MB |
-| Disk usage | ~28 MB per 1,000 screenshots |
+| Disk usage | ~30 MB per 1,000 screenshots |
 
 It also runs without a GPU, using software rendering. All figures were measured on real hardware; see [Performance](docs/performance.md) for the full results and methodology.
 
@@ -46,7 +47,20 @@ It also runs without a GPU, using software rendering. All figures were measured 
 curl -fsSL https://raw.githubusercontent.com/xevrion/gyotaku/main/install.sh | sh
 ```
 
-The script downloads the latest release for your machine, verifies its SHA-256 checksum and installs `gyotaku` and `gyotaku-app` to `~/.local/bin`. It needs no root access and changes nothing outside your home directory. On a first install it opens gyotaku so you can choose your screenshot folders, then shows how to add a keyboard shortcut for your desktop.
+The script downloads the latest release for your machine, verifies its SHA-256 checksum and installs `gyotaku` and `gyotaku-app` to `~/.local/bin`, with an entry in your app launcher. It needs no root access and changes nothing outside your home directory. On a first install it opens gyotaku so you can choose your screenshot folders, then shows how to add a keyboard shortcut for your desktop.
+
+Each release also has a `.deb` for Debian and Ubuntu and an `.rpm` for Fedora and openSUSE, which install to `/usr/bin` through your package manager:
+
+```sh
+# Debian, Ubuntu (replace x86_64 with aarch64 on ARM)
+curl -fsSLO https://github.com/xevrion/gyotaku/releases/latest/download/gyotaku-x86_64-linux.deb
+sudo apt install ./gyotaku-x86_64-linux.deb
+
+# Fedora
+sudo dnf install https://github.com/xevrion/gyotaku/releases/latest/download/gyotaku-x86_64-linux.rpm
+```
+
+These don't update on their own yet; install the newer one the same way. More packages are on the way, see [packaging](packaging).
 
 Release builds run on x86_64 and ARM64 with glibc 2.35 or newer: Ubuntu 22.04, Debian 12, Fedora 36, Linux Mint 21, Pop!_OS 22.04 and later, as well as Kali, Arch Linux and openSUSE Tumbleweed. Anything else can [build from source](#build-from-source).
 
@@ -58,15 +72,29 @@ Windows support is a preview. In PowerShell:
 irm https://raw.githubusercontent.com/xevrion/gyotaku/main/install.ps1 | iex
 ```
 
-This installs to `%LOCALAPPDATA%\Programs\gyotaku`, adds gyotaku to the Start menu and opens it. Press **Alt+Shift+S** anywhere to open or close the search window. No administrator rights are needed. Windows 10 and 11 on x64 are supported; ARM64 runs the x64 build through emulation.
+This installs to `%LOCALAPPDATA%\Programs\gyotaku`, adds gyotaku to the Start menu and opens it. Press **Alt+Shift+S** anywhere to open or close the search window. No administrator rights are needed. Windows 10 and 11 on x64 are supported; ARM64 runs the x64 build through emulation. While it waits, gyotaku sits in the notification area: click its icon to open the window, right-click it for settings or to quit. The window never takes a taskbar button, and Alt+F4 just puts it away.
+
+If you prefer a regular installer, download [`gyotaku-setup-x86_64.exe`](https://github.com/xevrion/gyotaku/releases/latest/download/gyotaku-setup-x86_64.exe) from the latest release and run it. It installs the same files to the same folder, also without administrator rights, and lists gyotaku in Settings > Apps so it can be uninstalled from there. The setup is not code-signed yet, so SmartScreen may warn about an unknown publisher; choose **More info** and then **Run anyway**. The setup and the PowerShell command update each other's installs.
 
 ### macOS
 
-Not supported yet. It is on the [roadmap](#roadmap).
+In a terminal:
 
-### Keyboard shortcut (Linux)
+```sh
+curl -fsSL https://raw.githubusercontent.com/xevrion/gyotaku/main/install.sh | sh
+```
 
-`gyotaku-app` opens the search window, and pressing the same shortcut again closes it. Bind it in your desktop's keyboard settings, using the full path `~/.local/bin/gyotaku-app`, since some desktops do not use your shell's `PATH`:
+The same installer as on Linux: it downloads the release for Apple Silicon Macs, verifies its SHA-256 checksum and installs `gyotaku` and `gyotaku-app` to `~/.local/bin`, with ONNX Runtime beside them. Apple Silicon (arm64) is supported. Microsoft publishes no ONNX Runtime build for Intel macs, so those need a [build from source](#build-from-source) with `ORT_DYLIB_PATH` pointing at an `onnxruntime` library.
+
+It also adds `gyotaku.app` to `~/Applications`, so Spotlight and Launchpad can open it. Like Raycast, it runs without a Dock icon: while it waits it sits in the menu bar, whose menu opens the window or settings and is where it's quit. Cmd+W and Cmd+Q in the window just put it away.
+
+Config, index and models live in `~/Library/Application Support/gyotaku`, thumbnails in `~/Library/Caches/gyotaku`.
+
+### Keyboard shortcut (Linux and macOS)
+
+On macOS the app registers the shortcut itself: `Alt+Shift+S` opens the search window, and pressing it again closes it. The key can be changed in the settings.
+
+On Linux, `gyotaku-app` opens the search window, and pressing the same shortcut again closes it. Bind it in your desktop's keyboard settings, using the full path `~/.local/bin/gyotaku-app`, since some desktops do not use your shell's `PATH`:
 
 | Environment | Configuration |
 |---|---|
@@ -84,15 +112,15 @@ Not supported yet. It is on the [roadmap](#roadmap).
 On first launch, gyotaku asks:
 
 1. **Which folders contain your screenshots.** It suggests the save locations of common screenshot tools (Flameshot, Spectacle, ksnip, grim, Hyprshot, niri) along with `~/Pictures/Screenshots`, `~/Pictures` and `~/Desktop`, with the number of images in each. On Windows it suggests `Pictures\Screenshots`, where Win+PrtScn and the Snipping Tool save.
-2. **Whether to index new screenshots in the background.** On Linux this installs a systemd user service, or an XDG autostart entry on systems without systemd. On Windows it starts gyotaku when you sign in.
+2. **Whether to index new screenshots in the background.** On Linux this installs a systemd user service, or an XDG autostart entry on systems without systemd. On Windows it starts gyotaku when you sign in. On macOS the settings toggle "start at login" installs a launchd agent that reads new screenshots in the background.
 
 Indexing starts immediately, newest screenshots first, at idle CPU and I/O priority. Search is available while it runs.
 
-Before the first screenshot is read, gyotaku downloads the OCR models once (22 MB), and on Linux ONNX Runtime as well (24 MB). No network access is needed after that.
+Before the first screenshot is read, gyotaku downloads the OCR models once (22 MB), and on Linux and macOS ONNX Runtime as well (24 MB on Linux). No network access is needed after that.
 
 ### Updating
 
-Run the install command again. It replaces the programs and restarts the background indexer; the index, settings and thumbnails are kept.
+Run the install command again, or on Windows the newest setup. It replaces the programs and restarts the background indexer; the index, settings and thumbnails are kept.
 
 ### Uninstalling
 
@@ -108,7 +136,15 @@ Windows, in PowerShell:
 $env:GYOTAKU_UNINSTALL = 1; irm https://raw.githubusercontent.com/xevrion/gyotaku/main/install.ps1 | iex
 ```
 
-Both stop the background indexer and remove the programs, and print how to also remove the index and settings. Remove the keyboard shortcut yourself. gyotaku never modifies or deletes your screenshots unless you move them to the trash yourself.
+Installed with the setup on Windows, gyotaku can also be uninstalled from Settings > Apps, which asks whether to delete the index and settings too.
+
+macOS:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/xevrion/gyotaku/main/install.sh | sh -s -- --uninstall
+```
+
+These commands stop the background indexer and remove the programs, and print how to also remove the index and settings. On Linux, remove the keyboard shortcut yourself. gyotaku never modifies or deletes your screenshots unless you move them to the trash yourself.
 
 ### Build from source
 
@@ -140,7 +176,17 @@ sudo dnf install git curl gcc gcc-c++ make pkgconf-pkg-config fontconfig-devel l
 sudo zypper install git curl gcc gcc-c++ make pkg-config fontconfig-devel libxkbcommon-x11-devel wayland-devel libxcb-devel
 ```
 
-Optional: install `wl-clipboard` (Wayland) or `xclip` (X11) to enable copying images. Copying text works without them.
+Optional: install `wl-clipboard` (Wayland) or `xclip` (X11) to enable copying images, and saving copied images (off by default). Copying text works without them.
+
+**macOS**: the indexer (`gyotaku`) builds with the Xcode Command Line Tools alone, which provide the C compiler that the bundled SQLite compiles with:
+
+```sh
+xcode-select --install
+```
+
+The search window (`gyotaku-app`) additionally needs full Xcode, free from the App Store, because the UI toolkit compiles Metal shaders at build time. With only the Command Line Tools installed that build fails with `cannot execute tool 'metal'`; if a fresh Xcode still lacks it, run `xcodebuild -downloadComponent MetalToolchain` once.
+
+On an Intel mac, ONNX Runtime also has to be provided separately, since Microsoft publishes no macOS x86_64 build of it: install or build `onnxruntime` and set `ORT_DYLIB_PATH` to its library (see [Compatibility](docs/compatibility.md)). Apple Silicon needs nothing beyond Xcode; the runtime is downloaded on first use.
 
 #### 2. Install Rust
 
@@ -160,7 +206,7 @@ cargo install --locked --path crates/cli     # gyotaku: the indexer and command-
 cargo install --locked --path crates/app     # gyotaku-app: the search window
 ```
 
-Both binaries are installed to `~/.cargo/bin`; use `~/.cargo/bin/gyotaku-app` for the [keyboard shortcut](#keyboard-shortcut-linux). The first build compiles the UI toolkit from source and takes several minutes. It requires about 3 GB of free disk space while running; the build directory is removed afterwards.
+Both binaries are installed to `~/.cargo/bin`; use `~/.cargo/bin/gyotaku-app` for the [keyboard shortcut](#keyboard-shortcut-linux-and-macos). The first build compiles the UI toolkit from source and takes several minutes. It requires about 3 GB of free disk space while running; the build directory is removed afterwards.
 
 To update a source build, `git pull` and run both `cargo install` commands again, then `systemctl --user restart gyotaku-watch` and `pkill -x gyotaku-app` so the new version is used. To remove it, run the uninstall command above, then `cargo uninstall gyotaku gyotaku-app`.
 
@@ -176,10 +222,11 @@ If anything does not work as described, see [Troubleshooting](docs/troubleshooti
 | Ctrl+C | Copy the screenshot's text, or the selected lines |
 | Ctrl+Shift+C | Copy the image |
 | Ctrl+, | Open settings |
+| Ctrl+E | Show the similar screenshots folded behind the selected one |
 | Ctrl+Shift+A, Ctrl+Delete | Mark every result, then move them to the trash. Ctrl+Z puts them back. |
 | Escape | Clear the search, then close |
 
-Every word in a query must appear somewhere in the screenshot, not necessarily on the same line. On an open screenshot, drag a box to copy only the lines inside it.
+Every word in a query must appear somewhere in the screenshot, not necessarily on the same line. Filters narrow it down by folder and date: `otp in:discord date:week`. On an open screenshot, drag a box to copy only the lines inside it.
 
 A command-line interface is also available:
 
@@ -191,23 +238,34 @@ See the [usage guide](docs/usage.md) for all keys, settings and commands.
 
 ## Privacy
 
-gyotaku runs entirely on your machine. It has no telemetry, accounts or update checks. Its only network access is the one-time download of the OCR models (from ModelScope) and ONNX Runtime (Microsoft's official build, from GitHub), each verified against a pinned SHA-256 checksum before use.
+gyotaku runs entirely on your machine. It has no telemetry, accounts or update checks. Its only network access is the one-time download of the OCR models (from this repository's releases, with ModelScope as a fallback) and ONNX Runtime (Microsoft's official build, from GitHub), each verified against a pinned SHA-256 checksum before use.
 
 ## Roadmap
 
 - [x] Move screenshots to the trash in bulk: search, mark the results, move them to the system trash, with undo
-- [ ] Simple installation on every supported OS: prebuilt releases and a one-command install, no Rust toolchain needed
-- [ ] A landing page with a demo, the measured numbers and the install commands
-- [ ] Windows support
-- [ ] macOS support
+- [x] Simple installation on every supported OS: prebuilt releases and a one-command install, no Rust toolchain needed
+- [x] A Windows setup `.exe`: Start menu entry, uninstall from Apps and features
+- [ ] A macOS `.dmg` with a signed, notarized app
+- [ ] Linux packages for every family, each a separate piece of the release pipeline: Flatpak on Flathub, the AUR, a Fedora COPR, an apt repository for Debian and Ubuntu, and openSUSE's OBS
+- [x] A landing page with a demo, the measured numbers and the install commands
+- [x] Windows support
+- [x] macOS support on Apple Silicon (thanks to [@saurav-codes](https://github.com/saurav-codes))
+- [ ] macOS: shortcuts shown and bound with ⌘ instead of Ctrl, the way Mac apps do
+- [ ] macOS: confirm the summon key works after a real reboot, with the launch agent starting the app hidden
+- [ ] macOS on Intel Macs
 - [ ] Optional classification of screenshots (one-time codes, receipts, chats) with Jev, to find and clear out the throwaway ones. Opt-in and off by default; only the recognized text is sent, never the image
-- [ ] Typo-tolerant search for OCR misreads: look-alike characters (`0` and `O`, `rn` and `m`, `l` and `1`) and words the OCR split apart (`ord er` for `order`). Exact matches always rank first, and near matches are labelled as such, with the text exactly as it was read, so an error code is never silently "corrected". Substring matching already works through the trigram index
-- [ ] Search by what a screenshot shows, not only the text in it ("the one with a cat"), using a small local image embedding model such as CLIP. Optional, offline, and fast enough without a GPU
+- [x] Typo-tolerant search for OCR misreads: look-alike characters (`0` and `O`, `rn` and `m`, `l` and `1`). Exact matches always rank first, and near matches are labelled as such, with the text exactly as it was read, so an error code is never silently "corrected"
+- [ ] Words the OCR split apart (`ord er` for `order`), without matching words that really are apart: joining them naively found "HOURS IN VOICE" for `invoice`
+- [ ] Search by what a screenshot shows, not only the text in it ("the one with a cat"), using a small local image embedding model such as CLIP. Optional, offline, and fast enough without a GPU. The most requested feature so far
 - [x] A keyboard shortcuts page in settings that lists every shortcut and lets each one be rebound by pressing the new keys
-- [ ] Screenshots that only ever go to the clipboard: an opt-in setting that saves images copied to the clipboard into a folder of their own, so they become searchable like any other screenshot
-- [ ] Group bursts of near-identical screenshots
-- [ ] Search filters such as `app:`, `in:` and dates like `yesterday`
-- [ ] More scripts, starting with Devanagari, and vertical text
+- [ ] Screenshots that only ever go to the clipboard: an opt-in setting that saves images copied to the clipboard into a folder of their own, so they become searchable like any other screenshot. Works on Linux (Wayland and X11); the Windows side is written but not yet tried on a real machine; macOS needs a pasteboard watcher (saved screenshots already work there)
+- [x] Group bursts of near-identical screenshots into one tile, with the rest a key away
+- [x] Search filters for the folder (`in:discord`) and the date (`date:yesterday`, `before:aug`, `after:2026-08-01`)
+- [ ] An `app:` filter, which first needs a way to know which app a screenshot was taken in: the file itself doesn't say
+- [ ] A short title for every screenshot, generated from what it shows and says ("Order confirmation from Fern & Co"), shown on the tile and searchable, and optional auto-organizing into groups by those titles. Offline, like everything else
+- [x] Devanagari (Hindi, Marathi, Nepali), opt-in in settings, and vertical text
+- [ ] More scripts: Cyrillic, Hangul, Arabic, Thai and the rest
+- [ ] Handwriting: measure how well neat and messy handwritten notes read, and add an optional handwriting pass if it's worth it
 
 Suggestions are welcome as [feature requests](https://github.com/xevrion/gyotaku/issues/new?template=feature_request.yml).
 

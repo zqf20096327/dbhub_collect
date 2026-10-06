@@ -151,6 +151,25 @@ Rerun at `7fe938d` with the fix and `--judge`, same 10 tasks, 15 turns: **8/10 e
 
 The fix and the judge landed together, so this run cannot split their shares. What the log shows: Rozwaga ran on 5 tasks. On 2 of them the first attempt was empty and the second attempt was right and verified (`Fred`, `No`). On 1 it picked the verified short `3` over a verbose sentence. On 1 it picked a verified but wrong paper title. On 1 both attempts were empty after the HTTP 500s. The other 3 gains had no judge involvement. N=10, one run each, at 8.5x Gemini's time per task. "Exact" here is normalized string equality (case and punctuation ignored); the runner's own substring-based CLEAN metric scored the old run 5/10 and this one 8/10. Raw JSON and log: `benchmarks/results/gaia_loop_guard/qwen38jit_t15_judge_10.{json,log}`.
 
+### 4. Edge / On-Device Autonomy: LiquidAI LFM 2.5 (2.6B-64k) on Apple Silicon Metal (2026-10-05)
+
+Can a **sub-3B edge model** running locally on an Apple Silicon Mac Mini or MacBook Pro solve real-world SWE benchmarks without cloud LLMs?
+
+We tested **LiquidAI LFM 2.5 2.6B-64k** (1.7 GB Q4_K_M, 2.5 GB RAM footprint, 60–75 tok/s on Metal M2 Pro) on SWE-bench task `django__django-15400` (*"SimpleLazyObject doesn't implement __radd__"*) with an autonomous multi-turn tool loop (`search_files`, `read_file`, `patch`, `run_tests`):
+
+| Metric | Without JIT (Raw Discovery) | With JIT Context (Heuristic) | With JIT + JEV (Bayesian Engine) | JIT Advantage |
+|---|---|---|---|---|
+| **Test Suite Verdict (`pytest`)** | ✅ **PASS** (exit 0) | ✅ **PASS** (exit 0) | ✅ **PASS** (exit 0) | 100% Correctness |
+| **Turns Taken** | 5 turns | **3 turns** | **3 turns** | **-40% turns** |
+| **Discovery Operations** | 3 (`search` + 2x `read`) | **1 (`read`)** | **1 (`read`)** | **-67% exploratory loops** |
+| **Wall Clock Execution** | 21.18s | **14.41s** | 36.61s (API roundtrip) | **-32% faster** (14.4s vs 21.2s) |
+| **Completion Tokens** | 1,158 tokens | **691 tokens** | 2,098 tokens | **-40% token burn** |
+| **Inference Cost** | **$0.00 / 0 PLN** | **$0.00 / 0 PLN** | **$0.00 / 0 PLN** | Zero API fees (Local Metal) |
+
+> 💡 **Key Finding:** Without JIT, small 2.6B models wander across directories burning turn budgets on blind file inspections. With the JIT capsule (<1.5k tokens), the model immediately identifies the candidate target (`django/utils/functional.py`), executes surgical `patch`, and passes the test suite on the first attempt in **14.4 seconds**.
+>
+> Run it locally: `jit solve "Fix bug in module" [--model lfm2.5:2.6b-64k] [--dir .]`
+
 > 📊 **Explore the Live Telemetry & Architecture:**
 > * **Interactive Benchmark Hub:** [theones.io/benchmark/](https://theones.io/benchmark/) *(fixture-battle logs and other measured runs; not a full SWE-bench Docker sweep)*
 > * **Architectural Deep-Dive:** [theones.io/blog/jit-jev-context-the-first-production-agent-runtime](https://theones.io/blog/jit-jev-context-the-first-production-agent-runtime) *(System 1 routing, Fail-Open Circuit-Breaker, and telemetry)*
@@ -211,6 +230,18 @@ One repository, one installer, four agent hosts. Versions are independent:
 
 `jit-context-os` is the root-level mirror of `integrations/agent-zero/` that the Agent Zero Plugin Hub needs; issues, PRs and stars belong here. The [verified Agent Zero production rollout](docs/plans/2026-09-24-agent-zero-integration.md) is recorded separately.
 
+## Development workflow
+
+This repository is the single source of truth. Installed copies are read-only snapshots that the next install overwrites, so never edit them (`~/.hermes/plugins/ona-context`, `~/.claude/hooks`, `~/.claude/jit-context-runtime`, the Agent Zero container, the `jit-context-os` mirror).
+
+1. Fix in this repo.
+2. `python3 -m pytest src/tests -q`
+3. Commit.
+4. `jit install` redeploys every local host (each snapshot records its origin in `DEPLOYED_FROM.txt`).
+5. Push; CI mirrors `integrations/agent-zero/` to `jit-context-os`.
+
+A half-finished edit in the checkout no longer reaches running hooks. To try uncommitted `src/` changes live in Claude Code, export `JIT_DEV_LIVE=1` (hooks import `~/.jit-context/src` directly; `JIT_DEV_LIVE=1 jit install` also drops the `current` snapshot link) or point `JIT_SRC` at any tree. Unset it and re-run `jit install` to return to snapshots.
+
 ## Quickstart
 
 ### 1. One-line install (all agent hosts)
@@ -221,8 +252,8 @@ The installer clones the repo to `~/.jit-context`, links the `jit` CLI into `~/.
 
 | Host | Detected by | What it does |
 |---|---|---|
-| Claude Code | `~/.claude` | copies the JIT hooks to `~/.claude/hooks`, adds missing entries to `settings.json` (backup first, never duplicates) |
-| Hermes | `~/.hermes` | deploys an immutable `src` snapshot to `plugin-releases/`, points `plugins/ona-context` at it, sets runtime guards, restarts the gateway |
+| Claude Code | `~/.claude` | copies the JIT hooks to `~/.claude/hooks`, deploys a read-only `src` snapshot to `~/.claude/jit-context-runtime/` (hooks import it via the `current` link, last 3 kept), adds missing entries to `settings.json` (backup first, never duplicates) |
+| Hermes | `~/.hermes` | deploys a read-only `src` snapshot to `plugin-releases/` (last 3 kept), points `plugins/ona-context` at it, sets runtime guards, restarts the gateway |
 | OpenCode | `~/.config/opencode` or `opencode` on PATH | adds `opencode-plugin-jit-context` to `opencode.json`, or a locally built bundle in `plugins/` while the npm package is unpublished (needs `bun`) |
 | Agent Zero | a checkout with `usr/plugins` (or `A0_DIR`), or a container in the local Docker | copies `integrations/agent-zero` to `usr/plugins/jit_context`, keeping the plugin's `data/`, then runs its `execute.py` self-test; restart Agent Zero afterwards. For Agent Zero on another server, use the UI install (git or ZIP) |
 
@@ -249,7 +280,14 @@ jit init .
 ```
 This generates the `.planning/STATE.md` working set and configures the project for structured context injection.
 
-### 5. Launch the Live Observatory Dashboard
+### 5. Run Local Edge Worker (Offline Bugfixing with LFM 2.5 / Qwen)
+Fix bugs and apply patches directly using local Apple Silicon models without cloud LLMs:
+```bash
+jit solve "Fix bug in calculator.py where add multiplies instead of adding"
+# Solves bugs in ~14s, runs pytest exit 0, costs 0 PLN ($0.00).
+```
+
+### 6. Launch the Live Observatory Dashboard
 ```bash
 jit-observatory
 # Open http://127.0.0.1:8765 in your browser (or set JIT_HEALTH_PORT).

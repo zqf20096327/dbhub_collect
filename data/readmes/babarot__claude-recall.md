@@ -47,10 +47,12 @@ Each Claude Code session runs its own `recall mcp`, so Claude can look into past
 
 | Tool | Description |
 |------|-------------|
-| `recall_search` | Full-text search across past sessions |
-| `recall_list` | List archived sessions |
-| `recall_export` | Export a session's full conversation |
+| `recall_search` | Full-text search across past sessions, optionally within one repository (`repo`); each hit names its session's title, size and repository |
+| `recall_list` | List archived sessions, optionally of one repository (`repo`) |
+| `recall_export` | Export a session's full conversation, or with `tail` only its last messages |
 | `recall_stats` | Show archive statistics |
+
+It also offers one prompt, `recap`, which has Claude read where a session ended, sum up what was done, decided and left, and ask how to go on. Claude Code lists it as a command named after the server: `/claude-recall:recap <session-id>` with `claude mcp add`, `/plugin:claude-recall:claude-recall:recap <session-id>` from the plugin.
 
 A session ID from the TUI (`y`) works too: "look up session a1b2c3 with claude-recall and continue from there".
 
@@ -191,7 +193,7 @@ The archive is `~/.claude/vault.db`. Sessions whose JSONL Claude Code has delete
 sqlite3 ~/.claude/vault.db ".backup '/path/to/backup.db'"
 ```
 
-Sessions are imported from `~/.claude/projects` (`$CLAUDE_CONFIG_DIR/projects` when Claude Code runs with `CLAUDE_CONFIG_DIR`); [docs/architecture.md](docs/architecture.md#sync-timing) says when. The archive stays in `~/.claude` either way; `db` in the [config file](#configuration) moves it.
+Sessions are imported from `~/.claude/projects` (`$CLAUDE_CONFIG_DIR/projects` when Claude Code runs with `CLAUDE_CONFIG_DIR`), and from the trees `extra_projects_dirs` in the [config file](#configuration) lists, such as a container's; [docs/architecture.md](docs/architecture.md#sync-timing) says when. Symlinked project directories and transcripts are followed. The archive stays in `~/.claude` either way; `db` in the [config file](#configuration) moves it.
 
 | Stored | Excluded |
 |--------|----------|
@@ -230,6 +232,7 @@ recall import               # Import all sessions
 recall search "terraform module"
 recall search "deploy" --project oksskolten --from 2026-03-01
 recall list --project gh-infra --format json
+recall search "staging" --repo .            # this repository, its worktrees included
 recall export <session-id> --format json --output session.json
 recall stats
 recall ui                   # Web UI in the background (http://localhost:6276)

@@ -60,7 +60,7 @@ O projeto utiliza diversas tecnologias e conceitos de design de sistemas:
 
 ## Qualidade e Testes
 
-O sistema possui diversas funcionalidades e integrações com serviços externos, o que leva a uma grande quantidade de casos de uso que precisam ser validados continuamente conforme a evolução do projeto.
+O sistema possui diversas funcionalidades e integrações com serviços externos, o que leva a uma grande quantidade de casos de uso que precisam ser validados continuamente conforme o projeto evolui.
 
 São +2.000 testes divididos entre unidade (30%) e integração (70%). Os de integração rodam contra dependências reais sempre que possível, pra testar o sistema do jeito que ele roda em produção:
 
