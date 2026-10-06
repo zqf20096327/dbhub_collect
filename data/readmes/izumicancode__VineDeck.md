@@ -18,19 +18,30 @@ _Screenshots show the application UI with generated sample cover art._
 
 ## Features
 
-- Add a `.exe` (or `.lnk`) with its own **Wine prefix**, working directory, launch arguments and environment variables
+- Add a `.exe` (or `.lnk`) with an optional **Wine prefix**, working directory, launch arguments and per-application environment variables that override inherited values
 - A Wine prefix contains a Windows-style drive and registry. Separate prefixes keep each application's environment independent.
-- Grid, compact grid, list and large-cover views, with sorting and drag-and-drop custom ordering
+- Grid, compact grid, list and large-cover views, with sorting and drag-and-drop custom ordering in All, Favorites and category views (select Custom Order; reverse sorting disables dragging)
+- Sort the library by name, date added, last played, launch count, category or custom order
 - Adjustable card grids include column count, size, gaps, corner radius and visible details; changes apply immediately
-- Cover images (PNG/JPG/WEBP) are stored in VineDeck’s data folder with cached thumbnails; executable icons are extracted when possible
-- Categories, favourites, Recently and Most Played views, plus as-you-type search
+- Appearance and layout controls can be previewed live in Settings without closing the window
+- Cover images (PNG/JPG/JPEG/WEBP, up to 60 MB) are copied as WebP files, resized to at most 2000 px per side, and cached as thumbnails; the source image is left untouched
+- Categories, favourites, Recently Played (ordered by launch time) and Most Played (ordered by launch count) views, plus case-insensitive, as-you-type search across names, categories and descriptions; every search term must match
+- Deleting a category keeps its applications in the library and makes them uncategorised
+- Optional developer, publisher, version, genre, release year and website details can be entered for each application
 - Launch states (Launching… / Running / Closed / Failed) update without blocking the UI; running games remain open if you close VineDeck
 - Dark, light or system theme, with an accent colour and optional blurred custom background
-- Export and import the library as JSON, optionally including artwork
+- Export and import the library as JSON, or as a ZIP archive with artwork
 - **Steam Proton support**: detected builds can be selected instead of System Wine from the top bar or *Settings → Wine* (see below)
 - Friendly error dialogs, rotating logs, keyboard shortcuts, tooltips and accessible names
 
 VineDeck does not currently manage Bottles, Lutris or Heroic installations, or fetch online metadata. See *Architecture* for extension points.
+
+Exports without artwork are JSON files. Exports with artwork are ZIP archives containing `library.json` and managed covers and icons under `artwork/`; neither format includes app settings, executable files, Wine prefix contents, or the full launch history.
+
+Import merges entries into the current library. Entries with the same name (case-insensitive) and executable path are skipped rather than overwritten, and VineDeck reports how many were added or skipped.
+Category names from the export are also restored; missing categories are created during import.
+
+Exports keep the executable and prefix paths as references, not as files. On another machine, place those files where the saved paths resolve or edit each imported entry before launching it.
 
 ## Quick start
 
@@ -39,7 +50,11 @@ Install VineDeck using an option in *Installation* or *Packaging*, then follow t
 1. Install Wine, or install Steam and a Proton build if you plan to use Proton.
 2. Launch VineDeck and select **Add Your First Application** (or **+ Add Application** when the library is not empty).
 3. Select the Windows `.exe` or `.lnk` file. Set a working directory, launch arguments, environment variables, or an existing Wine prefix if needed. Enter arguments as a command-line string; quote values that contain spaces. VineDeck parses the string into arguments and does not invoke a shell.
+  A custom prefix must already exist; create one with `WINEPREFIX="$HOME/Games/MyGame" wineboot`. If you leave the prefix unset, Wine uses its default prefix. An empty working directory uses the executable's folder.
+  VineDeck launches `.lnk` shortcuts through Wine's `start /unix` command.
 4. Save the entry and launch it from the library.
+
+Removing an entry only removes its library record and VineDeck-managed artwork; the executable, its files and its Wine prefix are left in place.
 
 ## Using Proton from Steam
 
@@ -137,7 +152,7 @@ These are the default locations; VineDeck respects the corresponding XDG environ
 
 To reset generated data without changing the library, delete `~/.cache/vinedeck/` and relaunch; VineDeck rebuilds thumbnails and theme assets as needed.
 
-For a portable library backup, export JSON with artwork. For a full profile backup, close VineDeck and copy the configuration and data directories; the cache is reproducible. To test a clean profile without affecting your install, set `XDG_CONFIG_HOME`, `XDG_DATA_HOME` and `XDG_CACHE_HOME` to temporary directories before launch.
+For a portable library backup, export a ZIP with artwork. For a full profile backup, close VineDeck and copy the configuration and data directories; the cache is reproducible. To test a clean profile without affecting your install, set `XDG_CONFIG_HOME`, `XDG_DATA_HOME` and `XDG_CACHE_HOME` to temporary directories before launch.
 
 ### Architecture
 
@@ -168,7 +183,7 @@ cd packaging
 makepkg -si          # builds and installs the package
 ```
 
-For a quick package-level smoke test without building the full Arch package, run `python -m build` from the repository root and confirm the wheel can be produced cleanly.
+For a quick package-level smoke test without building the full Arch package, install the `build` frontend in your active Python environment with `python -m pip install build`, then run `python -m build` from the repository root and confirm the wheel can be produced cleanly.
 
 This installs the `vinedeck` command, the application-menu entry (`/usr/share/applications/vinedeck.desktop`), the icon
 and the license files (`LICENSE`, `NOTICE`). Afterwards VineDeck appears in your launcher like any other app. To remove it:
@@ -263,7 +278,7 @@ builds are settled.
 - **“The selected Wine prefix does not exist”** – prefixes must exist before use. Create one with `WINEPREFIX=~/Games/MyGame wineboot`.
 - **Application closes immediately (“Failed”)** – open *View Details* in the dialog or read `~/.local/share/vinedeck/logs/launch-<id>.log` for Wine’s output.
 - **No tray/window icon on Wayland** – make sure the `.desktop` file is installed (the app id is `vinedeck`).
-- **Blank rendering on odd GPUs** – try `QT_QUICK_BACKEND=software` or `QT_QPA_PLATFORM=xcb`/`wayland` explicitly.
+- **Blank rendering on some setups** – try `QT_QPA_PLATFORM=xcb` or `wayland` explicitly.
 - Logs: `~/.local/share/vinedeck/logs/vinedeck.log`.
 
 ## Keyboard shortcuts

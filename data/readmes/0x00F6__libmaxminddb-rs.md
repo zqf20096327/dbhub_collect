@@ -12,8 +12,8 @@
 </p>
 
 <p align="center">
-  <a href="#code-coverage--tests"><img src="https://img.shields.io/badge/tests-141%20passing-brightgreen" alt="141 workspace tests passing"></a>
-  <a href="#code-coverage--tests"><img src="https://img.shields.io/badge/code%20coverage-97.55%25-brightgreen" alt="97.55% line coverage"></a>
+  <a href="#code-coverage--tests"><img src="https://img.shields.io/badge/tests-185%20passing-brightgreen" alt="185 workspace tests passing"></a>
+  <a href="#code-coverage--tests"><img src="https://img.shields.io/badge/code%20coverage-97.05%25-brightgreen" alt="97.05% line coverage"></a>
 </p>
 
 An independent Rust implementation of the MaxMind DB (MMDB) v2 format. It reads IPv4/IPv6 databases with borrowed decoding and writes deterministic MMDB files.
@@ -27,6 +27,7 @@ An independent Rust implementation of the MaxMind DB (MMDB) v2 format. It reads 
 - [📦 Installation & Cargo Features](#-installation--cargo-features)
 - [🚀 Quickstart Guide](#-quickstart-guide)
   - [🔍 1. Reading & Zero-Copy Lookups](#-1-reading--zero-copy-lookups)
+  - [Scan all stored network ranges](#scan-all-stored-network-ranges)
   - [Lookup API Reference](#lookup-api-reference)
   - [✍️ 2. Database Creation & Serialization](#️-2-database-creation--serialization)
   - [🔀 3. Merging Databases (Deep Merge)](#-3-merging-databases-deep-merge)
@@ -99,7 +100,7 @@ Add `libmaxminddb-rs` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-libmaxminddb-rs = "0.3.2"
+libmaxminddb-rs = "0.5.0"
 ```
 
 ### ⚙️ Cargo Features
@@ -157,6 +158,103 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 ```
 
 For a zero-copy walkthrough that can be run with Cargo, see [`examples/zero_copy_lookup.rs`](examples/zero_copy_lookup.rs).
+
+### Scan all stored network ranges
+
+`Reader::visit_records` exposes a complete, checked network/value scan with the
+`reader` feature alone. `Reader::visit_borrowed_records` decodes directly into
+`MmdbDecode` types and avoids generic map/array containers for borrowed scalar
+fields. Deriving those types additionally requires `derive`; handwritten trait
+implementations do not.
+
+Build a small synthetic FireHOL-style database, deep-merge records for three
+IPv4/IPv6 addresses, and scan its unique files/categories with assertions
+(requires `reader`, `writer` and `derive`):
+
+```rust
+use libmaxminddb_rs::{MergeStrategy, MetadataBuilder, MmdbDecode, Reader, Writer};
+use serde_json::json;
+use std::collections::BTreeSet;
+use std::sync::Mutex;
+
+#[derive(MmdbDecode)]
+struct Record<'a> {
+    files: Vec<&'a str>,
+    categories: Vec<&'a str>,
+}
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let metadata = MetadataBuilder::new().ip_version(6).build()?;
+    let mut writer = Writer::with_metadata(metadata).merge_strategy(MergeStrategy::DeepMerge);
+    let networks = [
+        "192.0.2.1/32".parse()?,
+        "198.51.100.42/32".parse()?,
+        "2001:db8::1/128".parse()?,
+    ];
+
+    for network in networks {
+        writer.insert(
+            network,
+            &json!({"files": ["base.ipset"], "categories": ["other"]}),
+        )?;
+        writer.insert(
+            network,
+            &json!({"files": ["malware.ipset"], "categories": ["malware", "other"]}),
+        )?;
+    }
+
+    let bytes = writer.finish()?;
+    let reader = Reader::from_bytes(&bytes)?;
+    let mut seen = BTreeSet::new();
+    let mut files = BTreeSet::new();
+    let mut categories = BTreeSet::new();
+
+    reader.visit_borrowed_records(|network, record: Record<'_>| {
+        assert_eq!(record.files, ["base.ipset", "malware.ipset"]);
+        assert_eq!(record.categories, ["other", "malware", "other"]);
+        assert!(seen.insert(network));
+        files.extend(record.files);
+        categories.extend(record.categories);
+        Ok(())
+    })?;
+
+    assert_eq!(seen, BTreeSet::from(networks));
+    assert_eq!(files, BTreeSet::from(["base.ipset", "malware.ipset"]));
+    assert_eq!(categories, BTreeSet::from(["malware", "other"]));
+    // Parallel callbacks use Fn + Sync; borrowed fields can be retained.
+    // This tiny demo uses the adaptive sequential fallback. On larger trees,
+    // decoding runs concurrently and the callback order is unspecified.
+    let parallel_files = Mutex::new(BTreeSet::new());
+    reader.visit_borrowed_records_parallel(|_network, record: Record<'_>| {
+        parallel_files.lock().unwrap().extend(record.files);
+        Ok(())
+    })?;
+    assert_eq!(parallel_files.into_inner().unwrap(), files);
+    println!("Files: {files:?}");
+    println!("Categories: {categories:?}");
+    Ok(())
+}
+```
+
+Run [the complete example](examples/unique_fields_scan_records.rs) with `cargo run --example unique_fields_scan_records`.
+It builds and scans its own in-memory database. Strings borrow the reader;
+containers and database construction allocate.
+
+`visit_borrowed_records_parallel` uses scoped threads from 24,000 tree nodes;
+smaller trees or one CPU use a sequential scan. Set a worker limit and bypass
+the size heuristic with `visit_borrowed_records_parallel_with_workers(NonZeroUsize, visitor)`.
+Callbacks require `Fn + Sync` and run in unspecified order. Errors cancel
+cooperatively: in-flight callbacks may finish before all workers are joined.
+
+Records stream without collection; strings/bytes stay borrowed, and `T` needs
+neither `Send` nor `Sync`. Setup allocates, but borrowed scalar decoding has no
+per-record allocations. Prefer worker-local accumulation for throughput.
+
+Two synthetic IPv4/IPv6 benchmark passes on an 8-CPU Xeon VM measured
+**3.26–3.41x faster scans at 100k ranges** and **4.14–4.26x at 1M ranges**,
+including thread setup. Gains depend on the schema and callback. See
+[scan details](docs/record-scan.md) for requirements, safety limits, full results
+and the small sequential generic-IPv6 tradeoff.
 
 ### Lookup API Reference
 
@@ -803,7 +901,7 @@ make coverage
 Open `target/coverage/html/index.html` in a browser. Both Makefile targets refresh this section and the test and code coverage badges; `make tests` runs coverage after its other tests. Documentation tests are run separately and are not included in these coverage figures because instrumenting them requires a nightly Rust toolchain.
 
 <!-- coverage-summary:start -->
-The latest local coverage run measured **97.55% overall line coverage** and **96.03% region coverage**.
+The latest local coverage run measured **97.05% overall line coverage** and **95.70% region coverage**.
 <!-- coverage-summary:end -->
 
 <!-- coverage-table:start -->
@@ -815,16 +913,19 @@ The latest local coverage run measured **97.55% overall line coverage** and **96
 | [`derive/src/lib.rs`](derive/src/lib.rs) | 97.01% (292/301) | 96.47% (465/482) | 100.00% (41/41) |
 | [`src/decoder/ascii.rs`](src/decoder/ascii.rs) | 97.35% (147/151) | 98.35% (298/303) | 100.00% (12/12) |
 | [`src/decoder/mod.rs`](src/decoder/mod.rs) | 96.86% (524/541) | 95.11% (895/941) | 96.55% (28/29) |
-| [`src/decoder/raw.rs`](src/decoder/raw.rs) | 98.29% (518/527) | 95.51% (999/1046) | 94.00% (47/50) |
+| [`src/decoder/raw.rs`](src/decoder/raw.rs) | 98.48% (519/527) | 95.51% (999/1046) | 94.00% (47/50) |
+| [`src/editor.rs`](src/editor.rs) | 85.87% (158/184) | 88.14% (327/371) | 76.19% (16/21) |
 | [`src/encoder.rs`](src/encoder.rs) | 100.00% (113/113) | 94.30% (215/228) | 100.00% (8/8) |
 | [`src/metadata.rs`](src/metadata.rs) | 97.02% (228/235) | 96.59% (340/352) | 100.00% (26/26) |
 | [`src/reader/marker.rs`](src/reader/marker.rs) | 96.79% (211/218) | 97.00% (420/433) | 100.00% (18/18) |
-| [`src/reader/mod.rs`](src/reader/mod.rs) | 97.50% (781/801) | 94.94% (1407/1482) | 98.53% (67/68) |
-| [`src/reader/tree.rs`](src/reader/tree.rs) | 96.98% (835/861) | 96.27% (1576/1637) | 100.00% (54/54) |
-| [`src/traits.rs`](src/traits.rs) | 100.00% (354/354) | 97.82% (629/643) | 100.00% (59/59) |
+| [`src/reader/mod.rs`](src/reader/mod.rs) | 97.25% (919/945) | 95.25% (1644/1726) | 96.47% (82/85) |
+| [`src/reader/scan.rs`](src/reader/scan.rs) | 94.46% (392/415) | 92.01% (576/626) | 96.97% (32/33) |
+| [`src/reader/tree.rs`](src/reader/tree.rs) | 97.56% (840/861) | 97.07% (1589/1637) | 100.00% (54/54) |
+| [`src/reloadable.rs`](src/reloadable.rs) | 92.86% (39/42) | 87.67% (64/73) | 90.00% (9/10) |
+| [`src/traits.rs`](src/traits.rs) | 100.00% (360/360) | 97.85% (636/650) | 100.00% (61/61) |
 | [`src/value.rs`](src/value.rs) | 98.67% (593/601) | 97.78% (750/767) | 98.15% (106/108) |
-| [`src/writer/mod.rs`](src/writer/mod.rs) | 96.65% (865/895) | 95.34% (1412/1481) | 95.24% (60/63) |
-| **Total** | **97.55% (5461/5598)** | **96.03% (9406/9795)** | **98.13% (526/536)** |
+| [`src/writer/mod.rs`](src/writer/mod.rs) | 96.71% (883/913) | 95.87% (1441/1503) | 95.31% (61/64) |
+| **Total** | **97.05% (6218/6407)** | **95.70% (10659/11138)** | **96.94% (601/620)** |
 
 </details>
 <!-- coverage-table:end -->

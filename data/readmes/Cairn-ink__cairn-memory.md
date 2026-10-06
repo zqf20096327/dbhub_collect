@@ -116,6 +116,18 @@ and forget. Its recall step reports `model_not_configured`.
 
 ## Install
 
+For **Claude Code automatic memory**, the prepared one-command installer is:
+
+```sh
+npx @cairn-ink/memory setup
+```
+
+**Not published yet:** this becomes available after chichi approves the npm
+release. For this checkout use `node packages/setup/bin/memory.mjs setup`, or
+the [manual plugin fallback](#install-for-claude-code-automatic-memory).
+Requires Node ≥22.16 and `claude` on PATH. Other clients use MCP. This scoped
+helper installs the hosted plugin/hooks; local SQLite setup remains separate.
+
 Choose the mode that fits your workflow:
 
 - **[Local preview](#try-the-local-memory-layer):** your SQLite database,
@@ -222,7 +234,31 @@ deploy a server or enable Codex lifecycle hooks. See
 
 ## Install for Claude Code (automatic memory)
 
-From your terminal, run:
+After the approved npm release, run from your terminal:
+
+```sh
+npx @cairn-ink/memory setup
+```
+
+While unpublished, use `node packages/setup/bin/memory.mjs setup` from this
+checkout. It checks Node ≥22.16 and Claude Code, installs SessionStart,
+UserPromptSubmit recall and Stop/PreCompact capture hooks with the plugin,
+opens the PAT settings page, and accepts one hidden paste. Supported CLIs save
+`api_endpoint`/`api_token` through stdin; older CLIs direct you to `/plugin
+configure`. Existing configuration is preserved. Legacy MCP `cairn` removal
+requires confirmation after plugin configuration. Restart Claude Code afterward.
+
+Preview or inspect (use the local executable before publication):
+
+```sh
+npx @cairn-ink/memory setup --dry-run
+npx @cairn-ink/memory status
+```
+
+[Setup options and credential handling](packages/setup/README.md) ·
+[chichi's release checklist](docs/npx-setup-release.md)
+
+**Manual fallback:** from your terminal, run:
 
 ```sh
 claude plugin marketplace add Cairn-ink/cairn-memory
@@ -239,6 +275,17 @@ Or use the slash-command form inside Claude Code:
 Create a personal access token at `https://cairn.ink/settings/tokens`, then run
 `/plugin configure cairn-memory@cairn-memory` in Claude Code and enter it there.
 Start a new session after installation.
+
+`/cairn-memory:status` reads content-free credential observations written by the
+hooks, because Claude Code's Bash tool does not inherit sensitive plugin options.
+`configured (verified <time>)` reports the last accepted authenticated request;
+`rejected` links to the configured endpoint's token page. `configured (not
+verified yet)` or `configured (unreachable <time>; not verified)` does not claim
+successful authentication; `server answered: busy/error` reports an HTTP refusal.
+SessionStart clears the old verdict so token rotation requires new verification.
+`not seen yet` asks you to restart Claude Code and
+send one message; `missing` means a hook actually observed no configured token.
+Status makes no network request and never reads the token from secure storage.
 
 Agents: ask the user before installing. The hosted plugin captures allowlisted
 conversation text by default, and the user creates and enters the token themselves.
@@ -352,6 +399,7 @@ The dependency-free plugin runtime and test suite require Node.js 20 or newer. M
 
 ```bash
 npm test
+npm run test:setup
 npm run validate
 npm ci --prefix tools/plugin-validation
 npm run validate --prefix tools/plugin-validation

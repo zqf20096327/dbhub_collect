@@ -30,7 +30,7 @@ Korean public-sector and enterprise applications. The existing C-extension drive
 - **Pure Python implementation** — no C build dependencies, install with `pip install` only
 - **Implements PEP 249 (DB-API 2.0)** — standard exception hierarchy, type objects, cursor interface
 - **Offline regression suite** with a **95% coverage floor on full coverage runs** — see [measured coverage](https://codecov.io/gh/cubrid-lab/pycubrid) and the [CI execution policy](docs/CI_POLICY.md); routine PR smoke does not measure coverage
-- **TLS/SSL for sync and async connections** — opt-in `ssl=True` (verified context, TLS 1.2 minimum) or custom `ssl.SSLContext` on `connect()` and `pycubrid.aio.connect()`. On Python 3.10 the async path automatically runs a preflight TLS verification probe to work around a known CPython asyncio bug (fixed in 3.13/3.14) where `loop.start_tls()` would otherwise hang on cert-verify failures — see [Troubleshooting](docs/TROUBLESHOOTING.md#async-tls-handshake-hangs-on-python-310) and [#156](https://github.com/cubrid-lab/pycubrid/issues/156).
+- **TLS/SSL for sync and async connections** — opt-in `ssl=True` (verified context, TLS 1.2 minimum) or custom `ssl.SSLContext` on `connect()` and `pycubrid.aio.connect()`.
 - **Native asyncio support** — async/await API via `pycubrid.aio` for high-concurrency applications
 - **PEP 561 typed package** — `py.typed` marker for modern IDE and static analysis support
 - **Direct CUBRID CAS protocol** implementation — no additional middleware required
@@ -40,14 +40,12 @@ Korean public-sector and enterprise applications. The existing C-extension drive
 
 **Python 3.10 support retirement:** Python 3.10 reached upstream end of life on
 2026-10-01 ([PEP 619](https://peps.python.org/pep-0619/#310-lifespan)).
-The current 1.8.x line and the upcoming 1.9.x advance-notice release retain Python
-3.10 support. The following minor release (planned 1.10.0) will require Python
-3.11 or newer, after the 1.9.0 notice has shipped. Upgrade your interpreter,
-recreate your virtual environment and validate your application before upgrading
-to that release. This notice does not change the current installation requirement
-or add a runtime warning.
+The 1.8.x and 1.9.x lines support Python 3.10; 1.9.0 carried the advance notice.
+From 1.10.0 the package requires Python 3.11 or newer, so `pip` on Python 3.10
+keeps installing 1.9.x. Upgrade your interpreter, recreate your virtual
+environment and validate your application before upgrading.
 
-- Python 3.10+
+- Python 3.11 or later
 - CUBRID database server 10.2+ (CI validates 10.2, 11.0, 11.2, 11.4)
 
 <img src="docs/demo.gif" alt="pycubrid in action" width="100%"/>
@@ -253,7 +251,7 @@ SQLAlchemy features (ORM, Core, Alembic migrations, schema reflection) are acces
 
 ## Compatibility
 
-Supported: Python 3.10–3.14 and CUBRID 10.2, 11.0, 11.2, 11.4.
+Supported: Python 3.11–3.14 and CUBRID 10.2, 11.0, 11.2, 11.4.
 Ordinary PRs use one Ubuntu/Python 3.12 offline smoke lane; high-risk changes add
 Python 3.14/CUBRID 11.4. Main/changed-weekly validation uses oldest/newest live
 endpoints. The full 5 × 4 live matrix runs on explicit dispatch and every release.
@@ -326,7 +324,7 @@ Yes. Install `pip install "sqlalchemy-cubrid[pycubrid]"` and use the connection 
 
 ### What Python versions are supported?
 
-Python 3.10, 3.11, 3.12, 3.13, and 3.14.
+Python 3.11, 3.12, 3.13, and 3.14.
 
 ### Does pycubrid support LOBs (CLOB/BLOB)?
 

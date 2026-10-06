@@ -1,5 +1,8 @@
 # Oracle APEX 26.1: The Complete Guide — Code Examples
 
+> [!IMPORTANT]
+> **Updated October 2026:** `apex/f100.sql` now installs the app, its data, and your access in one import. If an earlier download gave you "not authorized" or unstyled pages, download it again and see [Run Orbit Sales in Three Steps](#run-orbit-sales-in-three-steps).
+
 The scripts, data files, and code examples of the book **Oracle APEX 26.1: The Complete Guide** by Vinish Kapoor.
 
 <a href="https://vinish.dev/oracle-apex-26-1-book-the-complete-guide"><img src="https://vinish.dev/wp-content/uploads/2026/09/apex-book-cover.webp" alt="Cover of Oracle APEX 26.1: The Complete Guide by Vinish Kapoor" width="220" align="right"></a>
@@ -22,6 +25,20 @@ Download it with **Code ▸ Download ZIP**, or clone it:
 git clone https://github.com/devvinish/apex-book-code-examples.git
 ```
 
+## Run Orbit Sales in Three Steps
+
+To see the finished application first, you need only one file, [`apex/f100.sql`](https://github.com/devvinish/apex-book-code-examples/raw/main/apex/f100.sql), and an Oracle APEX workspace: your own, or a free one on [apex.oracle.com](https://apex.oracle.com). The import installs the application **and** its sample data; there are no scripts to run.
+
+1. In **App Builder**, click **Import**, choose `f100.sql`, click **Next**, and then **Import Application**.
+2. On the **Credentials** page, click **Next** (the AI service of Chapter 44 can wait). Then click **Install Supporting Objects**.
+3. Click **Run Application**, and sign in with your workspace user name and password.
+
+The import creates the Orbit Outfitters tables and sample data in your workspace's schema, and makes you the application's administrator. If the schema already has the Orbit tables, from Chapter 12 for example, they stay as they are and only the application is added.
+
+**Who may do what.** The import gives you, the developer who imports it, the **Administrator** role: you can view, change, and administer everything. Other users of your workspace can open the application and view the data, but changing data (the Customer form, for example) needs the **Contributor** or **Administrator** role, and the administration pages need **Administrator**. Give roles in the application's **Shared Components ▸ Application Access Control ▸ Add User Role Assignment**.
+
+If a page says *"Insufficient privileges, user is not a Contributor"* or *"You are not authorized to view this application"*, your user has no role in this copy of the application, for example a copy imported by someone else or before this version of `f100.sql`. Add your user name with the **Administrator** role in **Application Access Control**, then sign out of the application and sign in again.
+
 ## Contents
 
 | Folder | Contents |
@@ -34,10 +51,12 @@ git clone https://github.com/devvinish/apex-book-code-examples.git
 | `sql/examples/static` | `orbit.js` and `orbit.css`, the static application files of Chapter 32 |
 | `sql/examples/translations` | The German translation file of Chapter 41 |
 | `sql/examples/data` | `price-update.csv`, the data load file of Chapter 40 |
-| `apex/f100.sql` | An export of the finished Orbit Sales application |
+| `apex/f100.sql` | The finished Orbit Sales application; its import also installs the sample schema |
 | `api-book` | The API Lab and the JavaScript and PL/SQL examples of the second book, *Oracle APEX 26.1 API by Example* |
 
 ## Installing the Sample Schema
+
+To build Orbit Sales yourself as you read, install the sample schema with these scripts, as Chapter 12 describes. (To run the finished application, the [three steps above](#run-orbit-sales-in-three-steps) are enough.)
 
 Requirements: Oracle APEX 26.1 on Oracle AI Database 26ai (the schema uses the `BOOLEAN` data type and a JSON relational duality view); for Oracle Database 19c, see [On Oracle Database 19c](#on-oracle-database-19c) below. Chapters 2 to 8 of the book describe the installation.
 
@@ -47,6 +66,8 @@ Requirements: Oracle APEX 26.1 on Oracle AI Database 26ai (the schema uses the `
    ```sql
    grant execute on sys.dbms_crypto to orbit;
    ```
+
+   If you can't run this grant, for example on apex.oracle.com or another hosted APEX service, skip it, and skip `06_auth.sql` below: only Chapter 35 needs it, and the application works without it.
 
 3. Install the schema with SQLcl, connected as the schema owner:
 
@@ -76,11 +97,15 @@ The sample data is generated relative to the current date, so the orders always 
 
 ## Importing the Finished Application
 
-`apex/f100.sql` is the Orbit Sales application as it stands at the end of the book. After installing the schema:
+`apex/f100.sql` is the Orbit Sales application as it stands at the end of the book. Its **supporting objects** install everything it needs, so the [three steps above](#run-orbit-sales-in-three-steps) are enough:
 
-1. In **App Builder**, click **Import**, choose `apex/f100.sql`, and click **Next**.
-2. Choose the schema of the sample data as the **Parsing Schema**, choose **Auto Assign New Application ID** if application 100 already exists in your instance, and click **Install Application**.
-3. Sign in with a user of your workspace. The application uses **Oracle APEX Accounts**.
+- The tables, triggers, package, views, and sample data of the Orbit Outfitters schema, unless the schema already has them. On Oracle Database 19c, the 19c versions of the scripts (see [On Oracle Database 19c](#on-oracle-database-19c)).
+- The **Administrator** role for you, the developer who imports the application. Other users of the workspace can open the application and view the data; to change data they need the **Contributor** or **Administrator** role, which you assign in **Shared Components ▸ Application Access Control** (see [Who may do what](#run-orbit-sales-in-three-steps)).
+- The users and password checking of Chapter 35, only if the schema may execute `SYS.DBMS_CRYPTO` (often not on hosted APEX). The application doesn't need them.
+
+The Content Security Policy of Chapter 36 is set as `Content-Security-Policy-Report-Only` in this export: the browser reports violations in its console but blocks nothing, because hosted services such as apex.oracle.com load APEX's own files from another address, which the strict policy would block. To enforce it on your own server, change the header name in **Shared Components ▸ Security Attributes ▸ HTTP Response Headers** to `Content-Security-Policy`.
+
+If you skipped **Install Supporting Objects** during the import, install them later: open the application in App Builder, choose **Supporting Objects**, and click **Install Supporting Objects**. If the import offers **Auto Assign New Application ID**, keep it when application 100 already exists in your instance.
 
 Some features need configuration that an application export cannot carry:
 

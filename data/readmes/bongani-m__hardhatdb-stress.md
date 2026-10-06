@@ -17,7 +17,6 @@ HardhatDB is the published image `ghcr.io/bongani-m/hardhatdb:v0.1.0-alpha.6`. S
 ./run.sh mysql-sharded
 ./run.sh tidb-single
 ./run.sh tidb-replicated
-./run.sh tidb-sharded
 ./run.sh compare
 ./run.sh elyra
 ./run.sh contend
@@ -64,7 +63,7 @@ Single: a commit fsyncs on the one node, and reads use that node. TiDB single is
 
 Replicated: Hardhat writes go to the Raft leader and wait for a majority. Reads go to the followers, which wait until they have applied the commit. MySQL uses semi-sync. The primary waits for one replica to flush the relay log, not to apply it, and keeps waiting if that replica is unavailable. Reads go to the two replicas and can lag the commit. TiDB uses three TiKV stores. Reads are follower reads through the one SQL server, so they can lag the leader. A TiDB commit still waits for the prewrite quorum and the commit quorum.
 
-Sharded: two of those groups. Account ids below the midpoint stay on the first group. Hardhat keeps the catalog on a meta group and places each account, with its notes, by key range. An email lookup uses `CHECK email`. MySQL is two semi-sync groups, and an email lookup is sent to both groups and counted as one operation. TiDB is six TiKV stores. The account table and the notes account index are split at the midpoint before the load. New note inserts still land on TiDB's auto-increment primary key.
+Sharded: two of those groups. Account ids below the midpoint stay on the first group. Hardhat keeps the catalog on a meta group and places each account, with its notes, by key range. An email lookup uses `CHECK email`. MySQL is two semi-sync groups, and an email lookup is sent to both groups and counted as one operation. TiDB has no sharded target: six TiKV stores do not fit in an 8 GB Docker VM.
 
 | Target | Address |
 |--------|---------|
@@ -76,7 +75,6 @@ Sharded: two of those groups. Account ids below the midpoint stay on the first g
 | mysql-sharded | Writes `127.0.0.1:3420` and `3423`. Reads `3421`–`3422` and `3424`–`3425`. |
 | tidb-single | `127.0.0.1:3430` |
 | tidb-replicated | `127.0.0.1:3346` |
-| tidb-sharded | `127.0.0.1:3440` |
 | elyra | `127.0.0.1:3356` |
 
 The account is `root` / `stress`, database `stress`. Every target requires TLS. The script creates the CA and server certificate on first use.

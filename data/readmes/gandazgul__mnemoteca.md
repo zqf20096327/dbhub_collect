@@ -66,9 +66,9 @@ mnemoteca --help
 mnemoteca setup
 ```
 
-`mnemoteca setup` downloads ONNX Runtime and the local embedding/reranker
-models. Setup is idempotent. It also runs automatically on first `add` or
-`search`. No HuggingFace account or API token is required for the built-in
+`mnemoteca setup` downloads ONNX Runtime and the Jina v5 nano retrieval embedding
+model. The optional cross-encoder reranker is downloaded only when enabled.
+Setup is idempotent. It also runs automatically on first `add` or `search`. No HuggingFace account or API token is required for the built-in
 models.
 
 ### Windows release ZIP
@@ -227,6 +227,7 @@ mnemoteca export --all -o ./backups/
 # Import a collection or a directory of collection JSONL files
 mnemoteca import myproject.jsonl
 mnemoteca import myproject.jsonl --name other
+mnemoteca import memories.jsonl --global
 mnemoteca import --dir ./backups/
 
 # Import Claude Code memory without modifying Claude files
@@ -257,6 +258,15 @@ This format is intended for evaluation harnesses that must map retrieved
 documents back to external corpus IDs stored in metadata.
 
 ## Configuration
+
+Fresh installs use Jina v5 nano retrieval (768 dimensions, last-token pooling),
+vector-BM25 fusion with weight `0.10`, 300 candidates, and cross-encoder reranking
+disabled. These settings match the best saved FiQA nDCG@10 run; the LongMemEval
+runs used the same model and fusion with 50 candidates.
+
+Existing config files override these defaults. When switching an existing Arctic
+database to Jina, export with `--no-embeddings` and import into a fresh database
+to regenerate vectors with the new model.
 
 Mnemoteca reads `~/.config/mnemoteca/config.yaml` when it exists. You can also
 point a command or benchmark run at another config file:

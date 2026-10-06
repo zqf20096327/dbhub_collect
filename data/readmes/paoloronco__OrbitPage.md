@@ -1,11 +1,16 @@
-# OrbitPage - Open-source, self-hosted link-in-bio and public page builder
+# OrbitPage - Open-source, self-hosted public page builder
 
 <p align="center">
-  <img src="./app/public/brand/orbitpage-lockup.svg" alt="OrbitPage open-source self-hosted public page builder" width="420" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/paoloronco/OrbitPage/main/docs/brand/orbitpage-lockup-on-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/paoloronco/OrbitPage/main/app/public/brand/orbitpage-lockup.svg" />
+    <img src="./app/public/brand/orbitpage-lockup.svg" alt="OrbitPage open-source self-hosted public page builder" width="420" />
+  </picture>
 </p>
 
 <p align="center">
-  Create a link-in-bio, digital business card, portfolio, venue page, or small-business microsite - and self-host it with Docker.
+  <strong>Build your corner of the web. Make it unmistakably yours.</strong><br />
+  Design visually. Publish on your domain. Keep control of your data.
 </p>
 
 <p align="center">
@@ -24,12 +29,14 @@
   <a href="./SECURITY.md">Security</a>
 </p>
 
-OrbitPage is a free, MIT-licensed Linktree alternative for building link-in-bio pages, digital business cards, portfolios, creator profiles, venue menus, event pages, and small-business websites. It combines a visual editing dashboard with responsive public rendering, built-in SEO and analytics, an Express backend, SQLite, and local file storage. No external database is required.
+**OrbitPage is an open-source visual page builder for creators, professionals, venues, and small businesses.** Create a portfolio, introduce your services, share a venue menu, or give an event its own home on the web. Combine images, video, links, contact details, maps, and calls to action; shape the layout, colors, and typography with a live preview.
 
-This repository is the self-hosted edition. The optional managed service is available at [orbitpage.com](https://orbitpage.com), but its control plane, billing, managed storage, and hosted-only features are not part of this repository.
+Your page adapts to phones and desktops, with SEO, QR codes, analytics, and newsletters built in. The self-hosted edition is free, MIT-licensed, and runs in one Docker container, keeping your content and data on your own server.
+
+Prefer managed hosting? Explore [orbitpage.com](https://orbitpage.com). This repository contains the self-hosted application.
 
 <p align="center">
-  <img src="./docs/screenshots/orbitpage-product-loop.gif" alt="Illustrated OrbitPage product walkthrough" width="800" />
+  <img src="./docs/screenshots/orbitpage-product-loop.gif" alt="OrbitPage dashboard walkthrough: page, content, menu, additional pages, themes, newsletter, publishing and the public page" width="800" />
 </p>
 
 > **Docker Hub namespace migration:** the official image is now `paoloronco/orbitpage`. The former `paueron/orbitpage` path is a temporary compatibility feed and stops receiving updates on **October 9, 2026**. Existing volumes and data are unaffected; follow the [migration guide](./docs/wiki/Docker-Hub-migration.md).
@@ -38,7 +45,7 @@ This repository is the self-hosted edition. The optional managed service is avai
 
 - **Own the stack and the data.** Run one Docker container with SQLite and local storage, on your server or homelab.
 - **Edit visually.** Manage content, design, menus, subpages, privacy, analytics, and publishing from the responsive dashboard.
-- **Publish more than a list of links.** Combine profiles, media, contact details, events, maps, menus, calls to action, and focused subpages.
+- **Build your public page.** Combine profiles, media, contact details, events, maps, menus, calls to action, and focused subpages.
 - **Ship a discoverable public page.** Configure canonical URLs, Open Graph and Twitter cards, Schema.org data, sitemaps, robots directives, QR codes, and consent-aware analytics.
 
 ## Contents
@@ -61,65 +68,59 @@ This repository is the self-hosted edition. The optional managed service is avai
 
 ### Docker image (recommended)
 
-OrbitPage publishes one multi-architecture Linux image for amd64 and arm64 on Docker Hub and GitHub Container Registry. Docker automatically selects the matching image for the host. The commands below use Docker Hub:
+With Docker installed, pull the image and start OrbitPage:
 
 ~~~bash
-sudo install -d -m 0750 /var/lib/orbitpage
-
-sudo docker pull paoloronco/orbitpage:latest
-sudo docker run -d --name orbitpage \
-  --restart unless-stopped \
-  -p 127.0.0.1:8080:8080 \
-  -v /var/lib/orbitpage:/app/data \
-  --security-opt no-new-privileges:true \
-  paoloronco/orbitpage:latest
-
-git clone https://github.com/paoloronco/OrbitPage.git
-cd OrbitPage
-sudo ./scripts/install-updater.sh
+docker pull paoloronco/orbitpage
+docker run -d --name orbitpage --restart unless-stopped -p 127.0.0.1:8080:8080 -v orbitpage-data:/app/data --security-opt no-new-privileges:true paoloronco/orbitpage
 ~~~
 
-Open the public page at <http://localhost:8080>, the dashboard at <http://localhost:8080/dashboard/profile>, and the health check at <http://localhost:8080/health>. Read the first-run token with <code>sudo cat /var/lib/orbitpage/.setup-token</code> and enter it in the setup wizard. Place a trusted HTTPS reverse proxy in front before remote access. The last command installs the host updater; run <code>sudo orbitpage-update</code> for later updates. Python 3 is required on the host for manual Docker and Compose installations.
+Docker automatically creates the persistent <code>orbitpage-data</code> volume. OrbitPage initializes the database, uploads, and private secret there; no host directory, environment file, or repository checkout is needed. The image works on amd64 and arm64. Use <code>sudo docker</code> on Linux if your account requires it.
 
-### Automatic JWT secret
+Open the public page at <http://localhost:8080> or the dashboard at <http://localhost:8080/dashboard/profile> and create the administrator in the setup wizard. No setup token is required by default: the first person to complete the wizard takes control of the instance. Place a trusted HTTPS reverse proxy in front before remote access. [Token protection is optional](./docs/wiki/Deployment.md#optional-setup-token).
 
-Docker users do not need to configure <code>JWT_SECRET</code>. On first start, the image generates a private 256-bit value in <code>/app/data/.jwt-secret</code> with mode <code>0600</code> and reuses it across restarts and updates. Persist and back up <code>/app/data</code>: losing or changing the secret invalidates active sessions and can make encrypted TOTP and saved provider credentials unreadable. An explicit <code>JWT_SECRET</code> override is still supported, but it must contain at least 32 random characters and remain stable and private.
+Docker requires the restart policy, host port, data mount, and security option at container creation; an image cannot supply them. For a **startup without flags**, use [Docker Compose](#docker-compose-automatic-defaults) below. To customize Docker Run, change the host port to <code>127.0.0.1:8090:8080</code>, or replace <code>orbitpage-data</code> with your existing volume or an absolute host directory. Existing installations must keep their current data mount.
 
-The same multi-architecture image is available as <code>ghcr.io/paoloronco/orbitpage:latest</code>. Registries contain only <code>latest</code> and complete release tags such as <code>4.21.29</code>; <code>latest</code> follows the newest stable release but remains mutable. For release integrity and deterministic rollback, review and pin an image digest. The <code>unless-stopped</code> policy restarts OrbitPage after failures and host reboots while respecting an explicit stop; use <code>always</code> only when an explicit stop must not survive a Docker daemon restart.
+More options: [Docker deployment guide](./docs/wiki/Deployment.md#docker-image-recommended).
 
-See the complete [Docker deployment procedure](./docs/wiki/Deployment.md#docker-image-recommended) for image selection, Compose, verification, updates, backups, and rollback.
+### Docker Compose (automatic defaults)
 
-### Docker Compose (local evaluation)
-
-Clone the repository and start the local evaluation service:
+For an automatic setup without Docker Run flags, use the included Compose file:
 
 ~~~bash
 git clone https://github.com/paoloronco/OrbitPage.git
 cd OrbitPage
 docker compose up -d
-sudo ./scripts/install-updater.sh
 ~~~
 
-The tracked Compose file binds only to <code>127.0.0.1:8080</code> and persists the database, uploads, and generated JWT secret in <code>./orbitpage-data</code>. For production, use the [Docker deployment procedure](./docs/wiki/Deployment.md#docker-image-recommended).
+This command pulls the image, starts OrbitPage on <code>localhost:8080</code>, creates <code>./orbitpage-data</code> automatically, and sets <code>restart: unless-stopped</code>. Complete setup in the browser. Later, run <code>docker compose pull</code> followed by <code>docker compose up -d</code> to update while keeping the data. Keep this checkout and its data directory together; <code>docker compose down</code> stops and removes the container but leaves that directory in place.
+
+Edit the port mapping or data mount in <code>docker-compose.yml</code> only if you need different settings. For production hardening, backups, and reverse proxies, use the [Docker deployment procedure](./docs/wiki/Deployment.md#docker-image-recommended).
 
 ### Linux install
 
-On a clean x86-64 Debian 12/13 or Ubuntu 22.04/24.04 server, VM, or LXC:
+On a clean x86-64 Linux system:
 
 ~~~bash
+sudo apt-get update
+sudo apt-get install -y git
 git clone https://github.com/paoloronco/OrbitPage.git
 cd OrbitPage
 sudo ./install.sh
 ~~~
 
-The installer automates the same Docker deployment, generates a private JWT secret, persists application data, starts OrbitPage, and installs the <code>orbitpage</code> and <code>orbitpage-update</code> management commands.
+If you are already root, omit <code>sudo</code>. Supported Linux distributions and advanced options are in the [deployment guide](./docs/wiki/Deployment.md#linux-installer).
 
-For a Proxmox VE 8+ host, use the dedicated host-to-LXC installer instead:
+The installer automates the same Docker deployment, persists application data, starts OrbitPage, and installs the <code>orbitpage</code> management command. On Linux with systemd, official <code>latest</code> installations also get dashboard updates automatically. See [web updates](./docs/wiki/Deployment.md#web-updates) for existing Docker containers.
+
+On a Proxmox VE 8+ host, run the dedicated host-to-LXC installer as root:
 
 ~~~bash
+apt-get update
+apt-get install -y git
 git clone https://github.com/paoloronco/OrbitPage.git
 cd OrbitPage
-sudo ./install-pve.sh
+./install-pve.sh
 ~~~
 
 Do not run the Linux guest installer directly on a Proxmox host. See [Deployment](./docs/wiki/Deployment.md) for supported options, static networking, image pinning, backups, updates, and removal.
@@ -131,12 +132,10 @@ Requirements:
 - Node.js <code>^20.19.0</code> or <code>>=22.12.0</code>
 - npm
 - Git
-- Python 3 (for <code>orbitpage-update</code> on a source checkout)
 
 ~~~bash
 git clone https://github.com/paoloronco/OrbitPage.git
 cd OrbitPage
-sudo ./scripts/install-updater.sh source "$PWD"
 cd app
 npm ci
 npm run install:server
@@ -145,20 +144,22 @@ export DATA_DIR="$PWD/.orbitpage-data"
 npm run start
 ~~~
 
-The production-style source run is available at <http://localhost:3001>. Read <code>$DATA_DIR/.setup-token</code> on the host for first setup. Source mode makes SQLite storage owner-only on POSIX hosts; keep <code>DATA_DIR</code> on a private volume.
-Run <code>sudo orbitpage-update</code> from any directory to pull a fast-forward release, reinstall dependencies, and rebuild. Restart a foreground <code>npm run start</code> process afterward; an active <code>orbitpage</code> systemd service is restarted automatically.
+The production-style source run is available at <http://localhost:3001>. Complete setup in the browser. Source mode makes SQLite storage owner-only on POSIX hosts; keep <code>DATA_DIR</code> on a private volume.
 
 ## Updates
 
-The Linux and Proxmox installers install <code>orbitpage-update</code> automatically. For an existing manual Docker Run or Docker Compose installation on Linux, install the host command once, then update:
+Update directly from **Dashboard → Account → General → Instance details**: click **Check for updates**, then **Install update…** as an administrator. Linux and Proxmox installations enable dashboard updates automatically for official <code>latest</code> images; manual Docker installations need [one-time activation](./docs/wiki/Deployment.md#web-updates).
+
+### Terminal (optional)
+
+For Docker installations with the host update command already installed, including legacy setups:
 
 ~~~bash
-sudo ./scripts/install-updater.sh
 sudo orbitpage-update
 sudo docker exec orbitpage node -p "require('./package.json').version"
 ~~~
 
-The version check applies to a container named <code>orbitpage</code>; use your own container name if different. The updater discovers existing official Docker containers and Compose projects, preserves their configuration and data mount, pulls the current <code>:latest</code> image, recreates the service, and checks its image ID and health. For an existing source checkout, run <code>sudo ./scripts/install-updater.sh source "$PWD"</code> from its root once; the updater then updates that registered directory. Restart a foreground source process afterward. A Compose file pinned to a numbered image tag must be changed and redeployed manually; the updater leaves it in place. See [update procedures](./docs/wiki/Deployment.md#update-safely) for unsupported container layouts and recovery steps.
+Back up your data before updating. See the [update guide](./docs/wiki/Deployment.md#update-safely) for manual Docker, Compose, source installations, and rollback.
 
 ## What you can build
 
