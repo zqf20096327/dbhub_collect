@@ -34,6 +34,9 @@ BACKUP_DIR = Path("D:/dbhub_purge_backup_20261003")
 DRY = "--dry-run" in sys.argv
 TODAY = "20261003"
 
+sys.path.insert(0, str(ROOT / "lib"))
+import interp_store as ist  # noqa: E402  interp_cache 分片存储（10-06 起）
+
 
 def load_blocklist():
     bl = set()
@@ -129,14 +132,21 @@ def main():
     log.append(f"interp_state: 删 {len(removed_items)} 条 -> 剩 {len(d['items'])}")
     manifest["removed"]["interp_state"] = sorted(removed_items)
 
-    # --- 2. interp_cache：只删孤儿 sha（存活仓共用的保留） ---
-    p = ROOT / "state/interp_cache.json"
-    ic = json.load(open(p, encoding="utf-8"))
+    # --- 2. interp_cache：只删孤儿 sha（存活仓共用的保留）；分片存储走 interp_store ---
+    ic = ist.load_cache()
     orphan = sorted(s for s in bad_shas if s in ic and s not in keep_shas)
     if orphan:
+        bdst = BACKUP_DIR / "interp_cache_shards"
+        if not DRY and ist.SHARD_DIR.is_dir() and not bdst.exists():
+            shutil.copytree(ist.SHARD_DIR, bdst)   # 改前备份分片目录到仓外（对齐 sniff_write 语义）
         for s in orphan:
             del ic[s]
-        sniff_write(p, ic, "state/interp_cache.json")
+        if not DRY:
+            ist.save_cache_all(ic)
+            if ist.LEGACY.is_file():   # 过渡期双写：旧单文件同步过滤，否则并集读取会把删掉的 sha 复活
+                tmp = ist.LEGACY.with_suffix(".json.tmp")
+                tmp.write_text(json.dumps(ic, ensure_ascii=False, indent=1), encoding="utf-8")
+                tmp.replace(ist.LEGACY)
     shared = len(bad_shas & keep_shas)
     absent = len(bad_shas) - len(orphan) - shared
     log.append(f"interp_cache: 删 {len(orphan)} 条孤儿 sha -> 剩 {len(ic)}"
@@ -245,12 +255,10 @@ def main():
 
     # 正文级子串提及（仅报告；登录名可能是别的词的子串，如 htmle~htmleditor）
     mention = []
-    for f in [ROOT / "state/interp_cache.json"]:
-        d = json.load(open(f, encoding="utf-8"))
-        t = json.dumps(d, ensure_ascii=False).lower()
-        hit = [u for u in BL if u in t]
-        if hit:
-            mention.append((str(f.name), hit))
+    t = json.dumps(ist.load_cache(), ensure_ascii=False).lower()
+    hit = [u for u in BL if u in t]
+    if hit:
+        mention.append(("interp_cache(union)", hit))
 
     print("=" * 60)
     for l in log:

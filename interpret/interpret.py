@@ -51,6 +51,7 @@ for _d in (ROOT, ROOT / "lib", ROOT / "config", ROOT / "interpret"):
 HERE = ROOT                      # 历史引用兼容：统一指向项目根
 import strategy                    # noqa: E402
 from gh import atomic_write_json, load_env  # noqa: E402
+from interp_store import InterpCacheStore  # noqa: E402  分片缓存（10-06 起，兼容读旧单文件）
 from rm_clean import clean_readme   # noqa: E402
 from db_scan import number_lines, _COMPILED as _DB_COMPILED  # noqa: E402  行号口径与 db_scan 严格一致
 import runlog                       # noqa: E402  条目级 jsonl（优化决策的数据燃料）
@@ -906,7 +907,7 @@ def pick_schema(schemas: dict, degraded: bool, mode: str) -> str:
 
 def run(args):
     st = json.loads(ISTATE.read_text(encoding="utf-8")) if ISTATE.is_file() else {"items": {}}
-    cache = json.loads(CACHE.read_text(encoding="utf-8")) if CACHE.is_file() else {}
+    cache = InterpCacheStore()
     rstate_p = HERE / "state" / "readme_state.json"
     rstate = json.loads(rstate_p.read_text(encoding="utf-8")) if rstate_p.is_file() else {"items": {}}
     dbscan_p = HERE / "state" / "db_scan.json"
@@ -1020,15 +1021,15 @@ def run(args):
                                             "error": r["error"]}
                     failed_n += 1
                 chunk_done += 1
-            if chunk_done:                      # 按 chunk 落盘（每条全量重写是 O(n²) I/O）
-                atomic_write_json(CACHE, cache)
+            if chunk_done:                      # 按 chunk 落盘（分片后只重写脏桶，~250KB/桶）
+                cache.flush()
                 atomic_write_json(ISTATE, st)
                 # 心跳：每个 chunk（并发×4 条）一行，长窗不再"静默干活"
                 log.info("进度 %d/%d · 成功 %d · 拒收 %d · 失败 %d · 缓存 %d · 已用 %.0f 分钟",
                          min(i + chunk_done, len(todo)), len(todo),
                          done, len(rejected), failed_n, len(cache), (time.time() - t0) / 60)
     # 收尾必落 + 人工队列累积合并
-    atomic_write_json(CACHE, cache)
+    cache.flush()
     atomic_write_json(ISTATE, st)
     prev_review = json.loads(REVIEW.read_text(encoding="utf-8")) if REVIEW.is_file() else {}
     failed_fns = [fn for fn, r in st["items"].items()

@@ -24,6 +24,12 @@
   python tools/sync_remote_api.py --dry-run       # 只看差异不落盘
   python tools/sync_remote_api.py --limit 300     # 本次最多拉 300 个文件
   python tools/sync_remote_api.py --prefixes data,state,deploy
+  python tools/sync_remote_api.py --via-compare   # 用 compare API 增量拉（见下）
+
+--via-compare 背景（10-06）：间歇阻断下全量树（~9MB）单请求传不完（IncompleteRead
+反复断在 2~9MB 处）。compare API 只返回本地 HEAD...origin/main 的变更文件清单
+（几百~1MB 级），链路扛得住。限制：本地 HEAD 必须已推送到远端（否则 404）；
+removed 文件跳过（保持只读不删本地）。
 """
 from __future__ import annotations
 
@@ -34,6 +40,7 @@ import json
 import os
 import sys
 import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -62,7 +69,7 @@ def load_token() -> str:
     sys.exit("未找到 GITHUB_TOKEN（.env 或环境变量）")
 
 
-def api_get(url: str, token: str, retries: int = 5):
+def api_get(url: str, token: str, retries: int = 8):
     """GET with retry；429/5xx/网络失败退避重试。返回 (bytes, remaining)。"""
     for i in range(retries):
         req = urllib.request.Request(url, headers={**UA, "Authorization": f"Bearer {token}"})
@@ -88,25 +95,129 @@ def blob_sha(data: bytes) -> str:
     return h.hexdigest()
 
 
+def fetch_compare_files(token: str, base: str, head: str, depth: int = 0):
+    """compare API 拿 base...head 变更文件；超 300 条被截断时按中间 commit 分段递归。
+
+    返回 [(path, blob_sha)]，removed 的不返回（只读同步不删本地）。
+    注意（10-06 实测）：diff 大时 files 数组被静默截到 300 条且 truncated 字段
+    不置位——所以把 len(files)>=290 也当截断信号，不信任 truncated 标志。
+    分段最多 1 层：本仓单个采集/解读提交常超 300 文件，深递归只会层层触底
+    （每段仍截断+请求翻倍），readmes 漏项交给 git 恢复后的正常合并兜底。
+    """
+    raw, rem = api_get(f"{API}/compare/{base}...{head}", token)
+    data = json.loads(raw)
+    files = [f for f in data.get("files", []) if f.get("status") != "removed" and f.get("sha")]
+    truncated = data.get("truncated") or len(files) >= 290
+    if not truncated:
+        return files, rem
+    commits = data.get("commits", [])
+    if depth >= 1 or len(commits) < 3:
+        print(f"提示：compare 截断（files={len(files)}），readmes 清单不全；"
+              f"snapshot/state 由 contents 目录补全，readmes 差异等 git 恢复对齐", flush=True)
+        return files, rem
+    mid = commits[len(commits) // 2]["sha"]
+    print(f"  compare 截断（files={len(files)}），按 {mid[:8]} 分段 …", flush=True)
+    left, rem = fetch_compare_files(token, base, mid, depth + 1)
+    right, rem = fetch_compare_files(token, mid, head, depth + 1)
+    merged = {f["filename"]: f for f in left}
+    for f in right:
+        if f["filename"] in merged and f.get("status") == "removed":
+            merged.pop(f["filename"], None)
+        else:
+            merged[f["filename"]] = f
+    return list(merged.values()), rem
+
+
+def list_remote_dir(token: str, dir_path: str):
+    """contents API 列目录（含一层子目录，如 snapshot 的 meta/）；404 视为不存在。
+
+    返回 [(path, sha, size)]——size 用于落盘前按 --max-blob-mb 过滤大文件。
+    """
+    out: list[tuple[str, str, int]] = []
+
+    def _list(path: str):
+        try:
+            raw, _ = api_get(f"{API}/contents/{path}", token)
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                return
+            raise
+        for e in json.loads(raw):
+            if e["type"] == "file":
+                out.append((e["path"], e["sha"], e.get("size") or 0))
+            elif e["type"] == "dir" and path.count("/") <= 1:  # 只下钻一层
+                _list(e["path"])
+
+    _list(dir_path)
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="只列出差异，不落盘")
     ap.add_argument("--limit", type=int, default=0, help="本次最多拉取文件数（0=不限）")
     ap.add_argument("--prefixes", default=",".join(p.rstrip("/") for p in DEFAULT_PREFIXES),
                     help="同步的顶层目录（逗号分隔，默认 data,state）")
+    ap.add_argument("--via-compare", action="store_true",
+                    help="用 compare API 只拉本地 HEAD 之后的变更（绕开 9MB 全量树）")
+    ap.add_argument("--skip-compare", action="store_true",
+                    help="配合 --via-compare：跳过 compare（链路差时 1.2MB 反复传断），"
+                         "只走 contents 目录补全（state/ + 近几天快照），不追 readmes 增量")
+    ap.add_argument("--max-blob-mb", type=float, default=5.0,
+                    help="跳过超过此大小（MB）的文件（10-06 实测：链路差时 1.2MB 都传断，"
+                         "interp_cache 60MB/db_scan 16MB+ 必死且重试耗时长；"
+                         "本地切片改造后远端大缓存拉下来也是倒退）。默认 5")
     args = ap.parse_args()
 
     prefixes = tuple(p.strip().strip("/") + "/" for p in args.prefixes.split(",") if p.strip())
     token = load_token()
+    sizes: dict[str, int] = {}  # path -> 远端文件字节数（contents 补全时填，用于大文件过滤）
 
-    print(f"拉取远端树 {REPO}@main …", flush=True)
-    raw, rem = api_get(f"{API}/git/trees/main?recursive=1", token)
-    tree = json.loads(raw)
-    if tree.get("truncated"):
-        print("警告：树被截断（文件太多），差异清单可能不全")
-    remote = {e["path"]: e["sha"] for e in tree.get("tree", [])
-              if e["type"] == "blob" and e["path"].startswith(prefixes)}
-    print(f"远端 {prefixes} 下 blob 共 {len(remote)} 个（Core 余量 {rem}）", flush=True)
+    if args.via_compare:
+        import subprocess
+        head_local = subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True,
+        ).stdout.strip()
+        if not head_local:
+            sys.exit("拿不到本地 HEAD，无法 compare")
+        print(f"compare {head_local[:10]}...main …", flush=True)
+        if args.skip_compare:
+            print("  --skip-compare：跳过 compare，readmes 增量留给 git 恢复后对齐", flush=True)
+            files, rem = [], "?"
+        else:
+            try:
+                files, rem = fetch_compare_files(token, head_local, "main")
+            except Exception as e:  # noqa: BLE001 链路差时 compare 1.2MB 反复传不完；
+                # readmes 增量本就是尽力而为，跳过继续走 contents 补全（state/快照）
+                print(f"compare 失败（{str(e)[:70]}），跳过 readmes 增量，仅用 contents 补全", flush=True)
+                files, rem = [], "?"
+        remote = {f["filename"]: f["sha"] for f in files
+                  if f["filename"].startswith(prefixes)}
+        # compare 300 条静默截断会漏文件（readms 大头注定漏，等 git 恢复对齐）；
+        # 文件数少的目录用 contents API 全量列出补齐：state/ + 新快照目录（含 meta）
+        for d in ["state", "data/snapshot_20261005", "data/snapshot_20261006",
+                  "data/snapshot_20261007"]:
+            n = 0
+            for p, sha, sz in list_remote_dir(token, d):
+                if p.startswith(prefixes):
+                    remote[p] = sha
+                    sizes[p] = sz
+                    n += 1
+            if n:
+                print(f"  contents 补全 {d}/：{n} 个文件", flush=True)
+        n_removed = sum(1 for f in files
+                        if f.get("status") == "removed" and f["filename"].startswith(prefixes))
+        print(f"远端变更 {len(remote)} 个（removed {n_removed} 个不拉；Core 余量 {rem}）",
+              flush=True)
+    else:
+        print(f"拉取远端树 {REPO}@main …", flush=True)
+        raw, rem = api_get(f"{API}/git/trees/main?recursive=1", token)
+        tree = json.loads(raw)
+        if tree.get("truncated"):
+            print("警告：树被截断（文件太多），差异清单可能不全")
+        remote = {e["path"]: e["sha"] for e in tree.get("tree", [])
+                  if e["type"] == "blob" and e["path"].startswith(prefixes)}
+        print(f"远端 {prefixes} 下 blob 共 {len(remote)} 个（Core 余量 {rem}）", flush=True)
 
     changed, added = [], []
     for path, sha in sorted(remote.items()):
@@ -123,6 +234,14 @@ def main() -> None:
 
     print(f"差异：修改 {len(changed)}，新增 {len(added)}")
     todo = changed + added
+    if args.max_blob_mb and sizes:
+        limit = args.max_blob_mb * 1048576
+        skipped = [p for p in todo if sizes.get(p, 0) > limit]
+        if skipped:
+            print(f"跳过 {len(skipped)} 个大文件（> {args.max_blob_mb}MB，git 恢复后对齐）：")
+            for p in skipped:
+                print(f"    {p}（{sizes[p] / 1048576:.1f}MB）")
+            todo = [p for p in todo if p not in set(skipped)]
     if not todo:
         print("本地已是最新。")
         return

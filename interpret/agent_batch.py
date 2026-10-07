@@ -24,7 +24,8 @@ for _d in (ROOT, ROOT / "lib", ROOT / "config", ROOT / "interpret"):
 HERE = ROOT                      # 历史引用兼容：统一指向项目根
 import strategy                              # noqa: E402
 from gh import atomic_write_json             # noqa: E402
-from interpret import (CACHE, ISTATE, REVIEW, info_gain,  # noqa: E402
+from interp_store import InterpCacheStore, load_cache  # noqa: E402
+from interpret import (ISTATE, REVIEW, info_gain,  # noqa: E402
                        latest_pool, merge_review, validate)
 
 BATCH = HERE / "state" / "pending_batch.json"
@@ -35,7 +36,7 @@ def next_batch(n: int, pool_path: Path | None):
     if not rstate_p.is_file() or not (pool_path or (HERE / "data")).is_dir():
         sys.exit("readme_state.json 或 pool 不存在（先跑采集）")
     rstate = json.loads(rstate_p.read_text(encoding="utf-8"))
-    cache = json.loads(CACHE.read_text(encoding="utf-8")) if CACHE.is_file() else {}
+    cache = load_cache()
     pool = {it["full_name"]: it
             for it in json.loads(pool_path.read_text(encoding="utf-8"))}
     todo = [(fn, rec["sha"]) for fn, rec in rstate.get("items", {}).items()
@@ -57,7 +58,7 @@ def next_batch(n: int, pool_path: Path | None):
 
 def submit(path: str):
     gen = strategy.derive()
-    cache = json.loads(CACHE.read_text(encoding="utf-8")) if CACHE.is_file() else {}
+    cache = InterpCacheStore()
     st = json.loads(ISTATE.read_text(encoding="utf-8")) if ISTATE.is_file() else {"items": {}}
     batch = {b["fn"]: b for b in json.loads(Path(path).read_text(encoding="utf-8"))}
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -83,7 +84,7 @@ def submit(path: str):
         cache[b["sha"]] = obj
         st["items"][fn] = {"sha": b["sha"], "status": "done"}
         ok += 1
-    atomic_write_json(CACHE, cache)
+    cache.flush()
     atomic_write_json(ISTATE, st)
     prev_review = json.loads(REVIEW.read_text(encoding="utf-8")) if REVIEW.is_file() else {}
     failed_fns = [fn for fn, r in st["items"].items()
