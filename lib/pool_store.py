@@ -64,6 +64,14 @@ def read_ndjson(path: Path) -> list:
     return out
 
 
+def read_any(path: Path) -> list:
+    """兼容读：ndjson 活文件或旧 pretty-json 快照（--pool 显式传路径也通吃）。"""
+    path = Path(path)
+    if path.suffix == ".ndjson":
+        return read_ndjson(path)
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def load_latest(name: str = "pool") -> tuple[list, Path]:
     """当日池：活文件优先，回退最新快照。返回 (records, source_path)。
 

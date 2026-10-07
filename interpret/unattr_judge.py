@@ -188,10 +188,11 @@ def load_collect_rows(byfn: dict):
     topic2db.update(org2db)
     oos_tokens = {w.lower() for w in dp.GLOBAL.get("out_of_scope_dbs", [])}
 
-    pools = sorted((ROOT / "data").glob("snapshot_20*/pool.json"))
-    if not pools:
-        raise SystemExit("collect 模式需要 data/snapshot_20*/pool.json")
-    items = json.loads(pools[-1].read_text(encoding="utf-8"))
+    import pool_store
+    try:
+        items, _src = pool_store.load_latest("pool")
+    except FileNotFoundError:
+        raise SystemExit("collect 模式需要池（活文件或快照均无）")
     rows, seen = [], set()
     for it in items:
         fn = it.get("full_name") or ""

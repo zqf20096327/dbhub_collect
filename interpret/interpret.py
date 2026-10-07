@@ -69,10 +69,11 @@ REVIEW = HERE / "state" / "manual_review.json"
 
 
 def latest_pool() -> Path:
-    pools = sorted((HERE / "data").glob("snapshot_20*/pool.json"))
-    if not pools:
-        raise SystemExit("无可用 pool（data/snapshot_20*/pool.json）")
-    return pools[-1]
+    """M2b：活文件优先（data/live/pool.ndjson），回退最新快照。调用方用
+    pool_store.read_any(path) 兼容读两种格式。"""
+    import pool_store
+    _recs, src = pool_store.load_latest("pool")
+    return src
 
 
 # ============================================================
@@ -914,7 +915,8 @@ def run(args):
     dbscan = json.loads(dbscan_p.read_text(encoding="utf-8")) if dbscan_p.is_file() else {}
     log.info("db_scan 候选库清单：%d 项（缺失时先跑 interpret/db_scan.py）", len(dbscan))
     pool_path = Path(args.pool) if args.pool else latest_pool()
-    pool = {it["full_name"]: it for it in json.loads(pool_path.read_text(encoding="utf-8"))}
+    import pool_store
+    pool = {it["full_name"]: it for it in pool_store.read_any(pool_path)}
 
     gen = strategy.derive()
     # schema 必须按【条目】选而不是按 run 整把选（9-30 与 10-01 两次事故同源）：
@@ -1044,7 +1046,7 @@ def run(args):
 
 def main():
     ap = argparse.ArgumentParser(description="AI 结构化解读（中立版）")
-    ap.add_argument("--pool", default=None, help="池路径（默认取最新 snapshot_20*/pool.json）")
+    ap.add_argument("--pool", default=None, help="池路径（默认活文件 data/live/pool.ndjson，回退最新快照）")
     ap.add_argument("--concurrency", type=int, default=6)
     ap.add_argument("--max-items", type=int, default=800)
     ap.add_argument("--max-minutes", type=float, default=90.0)

@@ -32,10 +32,16 @@ jobs:
       - name: 衔接当日池（准备 snapshot_latest）
         run: |
           mkdir -p data/snapshot_latest
-          POOL=$(ls -t data/snapshot_*/pool.json 2>/dev/null | head -1)
-          [ -z "$POOL" ] && { echo "无可用 pool"; exit 1; }
-          cp "$POOL" data/snapshot_latest/pool.json
-          echo "用池: $POOL（$(python -c "import json;print(len(json.load(open('data/snapshot_latest/pool.json')))") ) 仓）"
+          if [ -f data/live/pool.ndjson ]; then
+            python -c "import sys; sys.path.insert(0,'lib'); import pool_store; \
+              recs,_ = pool_store.load_latest('pool'); import json; \
+              json.dump(recs, open('data/snapshot_latest/pool.json','w',encoding='utf-8'), ensure_ascii=False)"
+          else
+            POOL=$(ls -t data/snapshot_*/pool.json 2>/dev/null | head -1)
+            [ -z "$POOL" ] && { echo "无可用 pool"; exit 1; }
+            cp "$POOL" data/snapshot_latest/pool.json
+          fi
+          echo "用池: data/snapshot_latest/pool.json（$(python -c "import json;print(len(json.load(open('data/snapshot_latest/pool.json')))") ) 仓）"
 
       # calibrated 当日标记跨 run 接力：本窗校验过的下窗自动跳过（9845284c），
       # 断点续采 = 再 dispatch 一次即接着跑
