@@ -4,7 +4,12 @@ on:
     - cron: '0 16 * * *'      # 每天一窗（UTC 16 = 北京 00:00）。采集已稳定，
                               # 单 job 上限 6h、窗内自计时，跑完即收工；当窗
                               # 未跑完的量靠断点续采次日继续，不丢数据。
-  workflow_dispatch: {}        # 支持手动触发
+  workflow_dispatch:             # 手动触发（可勾选强制月度校准）
+    inputs:
+      force_monthly:
+        description: '强制 README 走月度全量校准（不受 1 号限制；calibrated 按日标记跨窗接力不重烧）'
+        type: boolean
+        default: false
 permissions:
   contents: write
 concurrency:
@@ -76,6 +81,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           MODE=weekly; [ "$(date -u +%d)" = "01" ] && MODE=monthly
+          [ "${{ github.event.inputs.force_monthly }}" = "true" ] && MODE=monthly
+          echo "README 模式: $MODE（force_monthly=${{ github.event.inputs.force_monthly || 'false' }}）"
           REM=$(( 360*60 - ($(date +%s) - JOB_T0) - 600 ))
           [ "$REM" -lt 300 ] && REM=300
           echo "README 本窗总预算 $(( REM / 60 )) 分钟"
