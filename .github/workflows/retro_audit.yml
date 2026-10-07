@@ -54,10 +54,10 @@ jobs:
         run: |
           git config user.name "zqf20096327"
           git config user.email "zqf20096327@users.noreply.github.com"
-          git add state/interp_cache.json state/interp_state.json \
+          git add state/interp_cache_shards state/interp_state.json \
                   state/db_scan.json state/manual_review.json \
                   state/retro_audit_baseline.json \
-                  state/retro_audit_report.md state/retro_audit_report.jsonl 2>/dev/null
+                  state/retro_audit_report.md state/retro_audit_report.jsonl
           git diff --cached --quiet && { echo "无变更"; exit 0; }
           git commit -m "重审 $(date -u +%F\ %H:%M) · 基线 $(python -c "import json;print(len(json.load(open('state/retro_audit_baseline.json'))))" 2>/dev/null || echo 0) 条" -q
           for i in 1 2 3 4 5; do
