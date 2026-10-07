@@ -7257,5 +7257,68 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f88ca6eb906d": {
+  "identity": {
+   "one_liner": "Rust 编写的属性图数据库内核，统一 MVCC/时间旅行/分支/复制的提交流",
+   "review": "frankengraphdb 是一个用 Rust 实现的属性图数据库，提供嵌入式库（fgdb）、服务器（fgdbd）与 CLI 三种形态，支持 GQL（ISO/IEC 39075:2024）与 openCypher 上手路径。其机制包括内容寻址、RaptorQ 纠删码的提交流（Chronicle）、三层温度分级的存储、统一 WCO/因式分解执行器、DBSP 式增量引擎与能力令牌（macaroon）治理。README 自述按目标态撰写，截至记录日仅 11 条示例语句中的 4 条可按原样运行，尚无发布版或安装包，仅可从源码检出运行。",
+   "highlights": [
+    "提供嵌入式库、服务器与 CLI 三种运行形态，支持 GQL 与 openCypher 兼容的查询入口",
+    "将 MVCC、时间旅行查询（FOR SYSTEM_TIME AS OF/BETWEEN）、git 式分支与复制统一为单一追加式提交流",
+    "确定性结果输出附带可审计、可重放的 plan certificate，并提供确定性 lab runtime 测试机制"
+   ],
+   "use_cases": [
+    "需要时间旅行历史与分支隔离的属性图数据管理",
+    "GraphRAG 场景下在单个 planner 内融合向量检索、BM25 与图扩展",
+    "对结果可复现性与可审计性有要求的图查询负载"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **A reference oracle.** `fgdb-reference` is a deliberately simple, single-threaded, obviously-correct implementation of the full logical semantics, compiled for tests only. \"What should this return\" is a *program*, not a debate, and it exists before the firs",
+     "lines": [
+      235
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库本身是一个数据库内核/引擎实现，属于数据库生态的基础组件而非使用其他数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT + Rider 双许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A blank-slate, memory-safe, ultra-high-performance property-graph database in Rust, built on the Franken/asupersync ecosystem. It unifies MVCC, time-travel history, git-style branches, replication, and change subscriptions into a single fountain-coded commit stream, runs transactional writes and static-CSR analytics on one temperature-tiered store, and makes every query result deterministic, auditable, and replayable.** ／ # What runs today, from a source checkout (there are no releases or installer yet — see Installation): ／ **The solution.** `frankengraphdb` composes them. One codebase, three postures: an embedded library (`fgdb`), a server (`fgdbd`), and a CLI (`fgdb`), all speaking **GQL** (ISO/IEC 39075:2024) with an openCypher on-ramp. Larger-than-memory is first-class everywhere. It is, in a precise sense, *a database written in the asupersync programming model*, the way FoundationDB is a database written in Flow: structured concurrency, capability contexts, fountain coding, and a deterministic lab runtime are the substrate, not add-ons.",
+   "evidence_lines": [
+    10,
+    13,
+    25
+   ]
+  },
+  "fn": "Dicklesworthstone/frankengraphdb",
+  "sha": "f88ca6eb906d",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

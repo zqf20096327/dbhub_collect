@@ -9175,5 +9175,77 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "70b379728efe": {
+  "identity": {
+   "one_liner": "漫画/轻小说阅读平台，Next.js+Hono monorepo 全栈应用",
+   "review": "一个漫画、manhwa、manhua 和轻小说阅读平台，当前 rewrite 分支包含 Hono API 后端、Storybook 组件 playground 和空白 Web 前端。使用 PostgreSQL 作为主数据库（Kysely 查询）、Meilisearch 做容错搜索、Dragonfly 缓存、RustFS 对象存储，含 Better Auth 认证与图片处理管线，通过 Docker Compose 提供本地基础设施并可用 pnpm 运行开发环境。",
+   "highlights": [
+    "支持 manga、manhwa、manhua、轻小说四种内容格式",
+    "基于 Meilisearch 的容错搜索 /medias/search",
+    "服务端图片管线：magic-byte 校验、EXIF 剥离、JPEG 转码"
+   ],
+   "use_cases": [
+    "自建漫画/轻小说阅读站点",
+    "汉化组（scanlation group）作品发布与归属管理",
+    "基于 Hono + Kysely + PostgreSQL 的全栈开发参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Kysely (typed SQL query builder) on PostgreSQL ／ - PostgreSQL 18 — primary database ／ - Integration tests live under `apps/api/src/__integration-tests__/` and hit real Postgres / S3 / Meilisearch / Dragonfly via Docker. Each test gets a freshly-cloned Postgres database (`CREATE DATABASE … TEMPLATE …`) and a fresh S3 bucket for isolation. See `.",
+     "lines": [
+      40,
+      62,
+      157
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 为 primary database，平台数据存于其中，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A manga reading platform — manga, manhwa, manhua, light novels — being rebuilt from scratch on the `rewrite` branch. This branch currently ships the backend (Hono API), a Storybook component playground, and a blank TanStack Start web app; background workers are planned but not yet checked in. ／ - PostgreSQL 18 — primary database",
+   "evidence_lines": [
+    5,
+    62
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "taiyomoe/taiyo",
+  "sha": "70b379728efe",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

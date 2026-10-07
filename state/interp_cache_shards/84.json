@@ -8568,5 +8568,146 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "66a42630220f": {
+  "identity": {
+   "one_liner": "三端分离的全栈博客系统，Go+Vue+Nuxt 构建",
+   "review": "FlecBlog 是一个包含博客前台、管理后台与 Go 后端服务的三端分离博客系统，服务端基于 Gin/GORM 使用 PostgreSQL 存储数据，首次启动时自动执行 SQL 初始化表结构。适合需要自建博客、内容管理与个人品牌站点的用户，可通过 Docker Compose 或源码部署。",
+   "highlights": [
+    "三端分离：博客前台（Nuxt SSR）、管理后台（Vue 3 + Element Plus）、后端服务（Go/Gin/GORM）",
+    "支持文章、评论、友链、动态、数据统计等博客功能",
+    "集成 SEO 功能：sitemap、robots.txt、Atom Feed、Open Graph、结构化数据"
+   ],
+   "use_cases": [
+    "个人博客或个人品牌站点的自建部署",
+    "需要后台内容管理与评论互动的内容站点",
+    "基于 Docker Compose 快速搭建带数据库的完整博客环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`server`|Go 1.27.1 / Gin / GORM / PostgreSQL|后端服务、认证、接口、数据与定时任务| ／ - **数据库**: PostgreSQL ／ 包含 PostgreSQL 的完整配置（点击展开）",
+     "lines": [
+      32,
+      60,
+      108
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统使用 PostgreSQL 存储应用数据，属于使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`server`|Go 1.27.1 / Gin / GORM / PostgreSQL|后端服务、认证、接口、数据与定时任务| ／ - **数据库**: PostgreSQL",
+   "evidence_lines": [
+    32,
+    60
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "talen8/FlecBlog",
+  "sha": "66a42630220f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2158c1b5250e": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码代理工作记忆系统，基于 SQLite 存储与本地嵌入",
+   "review": "MAMA 是运行在本机的工作代理，记录连接工具中的消息、文件与日程，保存工作项的变更历史与修正指令，并通过 Telegram/Discord/Slack 接收指令和发送报告；同时为 Claude Code 提供跨会话的开发记忆插件与 MCP 服务器。数据以 SQLite 存于本地，无托管服务。适合希望 AI 代理保留决策与工作历史的个人使用者；需要 Node.js 22.13+ 与已登录的 claude 或 codex CLI。",
+   "highlights": [
+    "将消息、文件与日程变更以原始形式保存为带证据链的修订记录（L34-L36, L90-L91）",
+    "提供 MCP 服务器与 Claude Code 插件，为 AI 编码代理提供跨会话开发记忆（L78-L79, L160-L161）",
+    "本地存储与本地搜索索引，支持 Telegram/Discord/Slack 等多种来源连接器（L87, L112-L124）"
+   ],
+   "use_cases": [
+    "为 Claude Code / Codex 等 AI 编码代理保存决策与检查点，实现会话连续性",
+    "通过 Telegram/Discord/Slack 以消息方式查询工作状态并接收定时报告",
+    "将 Slack、Notion、Google Calendar 等来源的工作变动集中为带历史的本地工作台账"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The record SQLite on your machine: originals · work history · guidance · reports · run logs · local search index",
+     "lines": [
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "MAMA 使用本机 SQLite 存储其记录（原句与工作历史），SQLite 是其存数据组件而非其服务的数据库对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The record         SQLite on your machine: originals · work history · guidance · reports · run logs · local search index ／ Claude Code development memory is separate and needs no daemon: `/plugin install mama`, or add the ／ MAMA runs no hosted service. The record stays on your machine. Only the content a run needs",
+   "evidence_lines": [
+    87,
+    78,
+    20
+   ]
+  },
+  "fn": "jungjaehoon-lifegamez/MAMA",
+  "sha": "2158c1b5250e",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

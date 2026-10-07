@@ -9191,5 +9191,135 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9bbe06a5393d": {
+  "identity": {
+   "one_liner": "免费开发者工具清单，按类别编目并自动检查在线状态",
+   "review": "该仓库是一个 awesome-list 性质的目录，收录 46 个面向开发者与独立开发者的免费档工具，覆盖数据库后端、云托管、AI 编码、支付、安全等分类，并通过 GitHub Actions 每晚自动检测各工具站点的在线状态（响应码<500 记为在线）。适合需要寻找免费层级服务或工具的开发者查阅，仓库本身不提供工具，仅做编目与状态检查。",
+   "highlights": [
+    "收录 46 个工具，按 Database & Backend、Cloud & Hosting、AI Coding IDEs 等分类编目",
+    "通过 GitHub Actions 每晚自动检查各工具站点在线状态",
+    "采用 MIT 许可，接受 PR 与 Issue 贡献"
+   ],
+   "use_cases": [
+    "开发者寻找提供免费层级的工具与服务",
+    "查阅数据库、托管、AI 编码等类别的可选工具清单",
+    "跟踪清单内各工具的可用状态"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL and backend services (Auth, Storage, Realtime) ／ Serverless PostgreSQL",
+     "lines": [
+      34,
+      39
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库本身是工具清单与状态检查目录，既非为数据库生态服务的工具组件，也非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 🎯 **The best free-tier tools collection** for developers and Vibe Coders. Status is automatically checked every night to keep information accurate. ／ |Total Tools|46| ／ - **Status** is automatically checked every night by GitHub Actions.",
+   "evidence_lines": [
+    9,
+    17,
+    370
+   ]
+  },
+  "fn": "pnnnhan99/awesome-free-dev-tools",
+  "sha": "9bbe06a5393d",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8ed2893abe03": {
+  "identity": {
+   "one_liner": "自托管 PR 安全审查工作台，GitHub App 只读接入+多Agent审查闭环",
+   "review": "MergePilot 是一个自托管的 PR 安全审查平台：通过只读 GitHub App 同步 Pull Request，自动触发审查、修复建议与修复验证，结论以 check run 回写，人工执行合并。提供多用户 RBAC、DB 持久会话和可选本地 RAG 检索，Docker 部署。面向个人开发者与小团队自托管使用，不支持多租户、SSO 与高可用等企业特性。",
+   "highlights": [
+    "GitHub App 只读接入，自动同步 PR 并运行安全审查，全程带审计追踪",
+    "多用户 RBAC 五角色与 DB 持久安全会话",
+    "可选本地 RAG 语料检索（reference-only），Agent 输出仅为建议，合并决策由人工执行"
+   ],
+   "use_cases": [
+    "个人开发者在自有仓库运行带审计的只读 PR 审查",
+    "小团队内部自托管、分角色协作进行安全审查",
+    "将团队安全规范构建为可检索的本地语料库辅助审查"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- ❌ **无 RLS 行级隔离** — 应用层租户约束（非 PostgreSQL RLS） ／ |租户模型|应用层 tenant_id 约束 + DB 复合 FK|PostgreSQL RLS 行级隔离|",
+     "lines": [
+      42,
+      89
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 GitHub PR 安全审查服务的工作台工具，自身仅用数据库持久化会话/数据，不针对特定数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MergePilot 是一台跑在你自己机器上的 PR 安全审查工作台：通过 GitHub App **只读**接入你的仓库， ／ 自动同步 Pull Request，运行安全审查，管理发现，验证修复——全程带完整审计追踪。 ／ docker compose --env-file .env up -d  # console 拉取 GHCR 官方 digest（rc.16 = b1c95275…）",
+   "evidence_lines": [
+    6,
+    7,
+    57
+   ]
+  },
+  "fn": "nghqqa/MergePilot",
+  "sha": "8ed2893abe03",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9162,5 +9162,225 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4715ed9fe904": {
+  "identity": {
+   "one_liner": "台灣中小學自架排課與調代課系統，OR-Tools CP-SAT 自動排課",
+   "review": "这是一个面向台湾国小/国中/高中职教务组的自架式 Web 排课与调代课系统，涵盖学期资料建立、手动拖拉排课、OR-Tools CP-SAT 自动排课、请假代课调度与课表导出（Excel/PDF/PNG）。后端 FastAPI + PostgreSQL 16 + Redis，通过 Docker Compose 六容器部署于校内单机，数据不出校；不提供多租户 SaaS。",
+   "highlights": [
+    "内置 OR-Tools CP-SAT 自动排课引擎，支持 H1–H10 硬约束与 S1–S8 软约束加权，无解时输出冲突说明",
+    "支持请假登记、代课推荐、调课验证、站内与 Email 通知及钟点统计（Excel）",
+    "支持每日自动备份/手动备份还原、RBAC 权限、课程表导出 Excel/PDF/PNG"
+   ],
+   "use_cases": [
+    "中小学教务组进行学期配课、手动与自动排课",
+    "学期中处理教师请假、代课、调课与通知单打印",
+    "学校单机自架部署并导出各类课表报表"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|資料庫|PostgreSQL 16| ／ |部署|Docker Compose(6 容器:web / api / worker(排課)/ worker-ops(匯出·備份·定時)/ postgres / redis)|",
+     "lines": [
+      116,
+      118
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该系统以 PostgreSQL 16 作为自身数据存储，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|資料庫|PostgreSQL 16| ／ |部署|Docker Compose(6 容器:web / api / worker(排課)/ worker-ops(匯出·備份·定時)/ postgres / redis)|",
+   "evidence_lines": [
+    116,
+    118
+   ]
+  },
+  "fn": "begin0808/Course_Scheduling_System",
+  "sha": "4715ed9fe904",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4199a63b5d57": {
+  "identity": {
+   "one_liner": "自托管学习打卡 + AI 模拟面试平台，基于 PostgreSQL/pgvector",
+   "review": "annona 是一个自托管的训练平台，提供自习室打卡、AI 模拟面试、知识问答与计划管理功能，出题由规则链依据历史得分与掌握度等数据决定，决策依据留痕可查。面向备考面试的个人用户，需自行准备 PostgreSQL 16（含 pgvector/citext 扩展）与 Redis，采用 BYOK 模式自带模型 Key，AGPL-3.0 许可。",
+   "highlights": [
+    "提供自习室、模拟面试、知识问答、知识库与计划日程五个功能入口",
+    "决策层基于历史得分、掌握度、错题等数据出题，决策依据落库可查看",
+    "支持 BYOK 自带 API Key，不内置任何模型密钥"
+   ],
+   "use_cases": [
+    "个人备考面试的自学记录与复习安排",
+    "基于自身学习数据的模拟面试与评估",
+    "自托管部署的知识库问答与检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 存储：PostgreSQL 16 + pgvector · Redis 7 · S3 兼容对象存储（**不使用 MySQL / MongoDB，默认不部署 ES**）",
+     "lines": [
+      10
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- 存储：PostgreSQL 16 + pgvector · Redis 7 · S3 兼容对象存储（**不使用 MySQL / MongoDB，默认不部署 ES**）",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统以 PostgreSQL 存储业务数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "主项目 AGPL-3.0，skills/ 目录下 SKILL.md 采用 CC-BY-4.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- 存储：PostgreSQL 16 + pgvector · Redis 7 · S3 兼容对象存储（**不使用 MySQL / MongoDB，默认不部署 ES**） ／ **annona 是什么**：自习室 + AI 模拟面试的双功能训练平台。自习室 / 模拟面试 / 知识问答 / 知识库 / 计划日程各入口平级且各自独立成立（知识库入口为 2026-09-27 新增，见 docs/specs/2026-09-27-knowledge-ingestion-adr.md §决策 10），共用一套内核（身份、模型网关、知识库、学习信号、方向字典）。 ／ 本机要真跑起来时必须自行准备 PostgreSQL 16（含 `vector` 与 `citext` 扩展）与 Redis，配置写进 `.env`（模板见 `.env.example`）。没有这两个组件时，**仍然可以正常完成编译、单测与前端构建**——这正是上面的开发循环。",
+   "evidence_lines": [
+    10,
+    5,
+    89
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "Ember452/annona",
+  "sha": "4199a63b5d57",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1a7fff1ea766": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 TiDB 的开发者博客/技术写作平台",
+   "review": "DevNotes 是一个全栈博客与技术写作平台，使用 Next.js 15、Prisma ORM 与 TiDB Serverless 存储，支持 MDX 渲染、自动保存、图片压缩与用户投稿管理流程，面向开发者写作与社区内容运营者使用。内容依赖 TiDB Cloud 与 Cloudflare R2 等云服务，投稿需经管理员审核后发布。",
+   "highlights": [
+    "提供 Markdown/MDX 编辑、实时预览、30 秒自动保存与图片上传压缩流程",
+    "提供用户投稿与管理员审核流水线（DRAFT→PENDING→APPROVED/REJECTED）及状态变更记录",
+    "提供邮箱验证、密码重置、账号删除宽限期等账户生命周期功能"
+   ],
+   "use_cases": [
+    "开发者搭建技术博客或团队写作站点",
+    "需要多作者投稿与内容审核流程的内容社区",
+    "基于 Next.js 全栈实践的应用参考项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "|**Primary Database**|TiDB Serverless (MySQL-compatible)|Distributed relational storage with auto-scaling capabilities.|",
+     "lines": [
+      33
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "- **Enterprise-Grade Infrastructure:** Distributed TiDB Cloud storage, Cloudflare R2 object storage, and Brevo transactional email — deployed on a serverless-first architecture. ／ |**Primary Database**|TiDB Serverless (MySQL-compatible)|Distributed relational storage with auto-scaling capabilities.|",
+     "lines": [
+      24,
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是使用 TiDB 存储数据的博客平台，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **Executive Summary:** DevNotes is a production-grade blog and technical writing platform engineered with the Next.js 15 App Router, Prisma ORM, and a distributed cloud stack. It combines a rich Markdown editing experience with MDX rendering, autosave, image compression, user-generated post submissions with a full admin moderation pipeline (approve / reject / edit), and post engagement (views and likes) — all backed by enterprise-grade identity, transactional email, and object storage infrastructure. ／ |**Primary Database**|TiDB Serverless (MySQL-compatible)|Distributed relational storage with auto-scaling capabilities.|",
+   "evidence_lines": [
+    14,
+    33
+   ]
+  },
+  "fn": "programmingpioneer/devnotes-blog",
+  "sha": "1a7fff1ea766",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

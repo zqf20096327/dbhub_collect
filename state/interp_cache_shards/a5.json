@@ -8237,5 +8237,128 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5bded8fa3eaa": {
+  "identity": {
+   "one_liner": "基于 Grafana k6 扩展的数据库基准测试套件",
+   "review": "这是 ParadeDB 开源的基准测试框架，通过 k6 的 k6/x/database 扩展模块为多种数据库提供统一的负载测试 API，支持场景编排、实时仪表盘、延迟分位数指标与数据加载工具。适合需要对搜索/分析型数据库做性能压测和横向对比的开发者与 DBA。用户需自行编写 SQL 或 API 查询脚本，框架负责计时、指标采集与可视化，MIT 许可。",
+   "highlights": [
+    "基于 k6 扩展模块 k6/x/database 实现统一 API 的数据库基准测试",
+    "提供实时仪表盘，输出 P50/P90/P95/P99 延迟、QPS、ingest 速率等指标，并可导出 HTML 与 CSV",
+    "包含数据加载工具、Docker Compose profiles 与 warmup 阶段等可复现测试配置"
+   ],
+   "use_cases": [
+    "对全文搜索/分析类数据库进行压测与多后端横向对比",
+    "在查询负载下评估数据库写入延迟退化（混合读写场景）",
+    "为数据库发布/调优流程提供可复现的性能基准"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Compare performance across **ParadeDB**, **PostgreSQL FTS**, **Elasticsearch**, **OpenSearch**, **ClickHouse**, and **MongoDB Atlas Search** with consistent metrics and visualization. Docker Compose profiles are included for single-node benchmarking, but you c",
+     "lines": [
+      14
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "Compare performance across **ParadeDB**, **PostgreSQL FTS**, **Elasticsearch**, **OpenSearch**, **ClickHouse**, and **MongoDB Atlas Search** with consistent metrics and visualization. Docker Compose profiles are included for single-node benchmarking, but you c",
+     "lines": [
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为数据库生态服务的基准测试框架，提供驱动后端、指标采集与数据加载工具，而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A k6 extension for benchmarking databases with a unified API, real-time dashboard, and comprehensive data loading tools. While the included datasets focus on full-text search, the framework works for any query workload. You write the SQL or API calls, it handles timing, metrics, and visualization. ／ Compare performance across **ParadeDB**, **PostgreSQL FTS**, **Elasticsearch**, **OpenSearch**, **ClickHouse**, and **MongoDB Atlas Search** with consistent metrics and visualization. Docker Compose profiles are included for single-node benchmarking, but you can point at any database: local installs, remote servers, or cloud services. ／ This project extends k6 with the `k6/x/database` module, adding backend drivers, automatic metrics, a real-time dashboard, and an export format on top.",
+   "evidence_lines": [
+    12,
+    14,
+    24
+   ]
+  },
+  "fn": "paradedb/benchmarker",
+  "sha": "5bded8fa3eaa",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f17869d98b17": {
+  "identity": {
+   "one_liner": "Couchbase SaaS 软件的信息编目页，提供跳转链接",
+   "review": "该仓库不是软件本体，而是针对 Couchbase 数据库 SaaS 产品的第三方信息页，提供概述、截图、价格与功能说明的链接入口，引导用户经 SOFTGIT 列表页访问厂商站点或申请试用；仓库明确声明不分发安装包与账号凭据，且与 Couchbase 官方无隶属关系。",
+   "highlights": [
+    "提供 Couchbase 的概述、截图与定价/功能说明链接",
+    "包含指向 couchbase.com 官方站点与 SourceForge 列表页的链接",
+    "明确声明不分发软件本体或凭据"
+   ],
+   "use_cases": [
+    "查找 Couchbase 官方站点与产品信息的入口",
+    "查看 SaaS 产品列表页的截图与概况"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 仅为 Couchbase 的第三方信息列表页，不含可验证的数据库生态服务功能或自身数据库应用逻辑",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Type: Business / SaaS listing (information page) ／ 4. This GitHub repo is an informational listing only — it does not host SaaS installers or account credentials. ／ An unofficial information page for Couchbase, with links to the SOFTGIT listing.",
+   "evidence_lines": [
+    26,
+    54,
+    61
+   ]
+  },
+  "fn": "pegasuscodeberth/couchbase-download",
+  "sha": "f17869d98b17",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

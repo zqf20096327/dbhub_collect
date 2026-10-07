@@ -8409,5 +8409,90 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e1aa9f4bb4c8": {
+  "identity": {
+   "one_liner": "基于嵌入式 SQLite 用同一规范实现 9 种后端技术栈并做负载测试的基准项目",
+   "review": "该项目用同一份规范在 9 种后端技术栈（Rust、Go、Node、Java 等）中实现同一地址簿 API，统一使用嵌入式 SQLite 存储，通过负载生成器和一致性校验对比各栈的容量与延迟，并记录性能优化经验。适合需要横向对比后端运行时和 Web 框架性能的开发者参考；结果仅限苹果 M5 Max 环境，README 提示具体数字存在噪声。",
+   "highlights": [
+    "同一规范实现 9 种后端栈，共享 schema 迁移并通过 parity 校验（71 个响应加 42 个契约检查）",
+    "统一使用嵌入式 SQLite、相同缓存与 gzip 配置，以负载测试测量 p99 延迟下的用户容量",
+    "提供 Docker 与 native 两种运行模式，并记录各栈的性能优化过程与结论"
+   ],
+   "use_cases": [
+    "对比不同语言运行时与 Web 框架在同一工作负载下的性能表现",
+    "学习嵌入式 SQLite 的编译选项、线程模型等性能调优经验",
+    "研究由 AI 根据同一规范生成的代码质量的对比样本"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "same address-book API from the same written spec, over the same SQLite ／ Each backend embeds SQLite and reads a local database file. There's no",
+     "lines": [
+      6,
+      23
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "That was a deliberate choice. With Postgres or MySQL, every request includes a",
+     "lines": [
+      26
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "That was a deliberate choice. With Postgres or MySQL, every request includes a",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是负载测试基准工具，用于测试后端技术栈，SQLite 等数据库仅作为被测应用的数据层被使用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This repo compares backend stacks on equal terms. Every backend implements the ／ measures how many simulated users each one can serve, and a parity check ／  open contacts and edit (5%), with ~3 s pauses. `bench/run.py` builds each",
+   "evidence_lines": [
+    5,
+    8,
+    72
+   ]
+  },
+  "fn": "webdz9r/stack-benchmark",
+  "sha": "e1aa9f4bb4c8",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

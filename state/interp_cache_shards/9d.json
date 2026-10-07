@@ -9042,5 +9042,72 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2c7810c7b24c": {
+  "identity": {
+   "one_liner": "Android 本地优先 Markdown 笔记应用，基于 Room/SQLite 存储",
+   "review": "Markleaf 是一款 Android 本地优先的 Markdown 笔记应用，数据仅存于设备，通过 Room（SQLite + FTS4 虚拟表）实现持久化与全文检索，支持文件夹镜像同步（由外部应用完成）、Wikilinks、标签分类和 GFM 渲染。面向希望以纯 .md 文件持有数据、可配合 Obsidian/Logseq 文件夹使用的 Android 用户；限制包括只读取所选文件夹顶层、不递归子目录，保存时会按标题重命名文件。",
+   "highlights": [
+    "使用 Room（SQLite）本地存储，FTS4 虚拟表支持正文全文检索（L66, L104）",
+    "文件夹镜像同步：每条笔记镜像为标题命名的 .md/.txt 文件，同步委托给外部应用，应用自身不上传（L70）",
+    "无自有 vault 格式，直接读取 Obsidian/Logseq 等已有 Markdown 文件夹，未知 frontmatter 字节级保留（L84, L87）"
+   ],
+   "use_cases": [
+    "在 Android 设备上离线记录与整理 Markdown 笔记",
+    "将 Obsidian/Logseq 等桌面 vault 作为移动端收件箱或只读编辑入口（L96）",
+    "通过用户自选的同步文件夹（Syncthing/Drive/NAS 等）在多设备间同步纯文本笔记"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite FTS full-text search** — fast, down to the body text ／ - **Database**: Room — SQLite-backed local persistence, FTS4 virtual tables for full-text search",
+     "lines": [
+      66,
+      104
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用使用 Room/SQLite 存储自身笔记数据，而非为数据库生态提供工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Database**: Room — SQLite-backed local persistence, FTS4 virtual tables for full-text search ／ **Markleaf** is an Android Markdown note app designed to strip away the clutter so you can focus on just two things: capturing and organizing. Your data is stored only on your device, and standard Markdown guarantees full ownership and portability. Even sync happens only through *a folder you choose* — Markleaf never syncs or uploads anything itself. ／ - **Folder mirror sync** — mirrors each note as a **title-named** `.md` / `.txt` file to a folder you pick via SAF (Drive/Dropbox/Syncthing/OneDrive/NAS, etc.); rename a note and its file follows. Markleaf never syncs anything itself; it is delegated to *whatever external app syncs that folder*",
+   "evidence_lines": [
+    104,
+    43,
+    70
+   ]
+  },
+  "fn": "jeiel85/markleaf-android",
+  "sha": "2c7810c7b24c",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

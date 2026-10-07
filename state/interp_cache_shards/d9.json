@@ -9137,5 +9137,74 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3a7d2750405f": {
+  "identity": {
+   "one_liner": "自托管 Git 服务器，单 Go 程序加 SQLite 文件，带浏览器面板",
+   "review": "OwnGit 是面向个人或小团体的自托管 Git 服务器，提供 HTTP 克隆/推送、浏览器端 PR 评审、历史保留、定时备份与仓库导入。单一 Go 程序以 SQLite 文件存记录，无需数据库服务；不支持用户账号（仅共享密码），不托管 Git LFS，需 Git 2.38+ 才能合并 PR。",
+   "highlights": [
+    "提供 HTTP Git 协议克隆、推送与浏览器仪表盘（文件、提交、diff、分支、标签）",
+    "支持保留被强推/删除的历史、定时备份与从其他 Git 主机导入仓库",
+    "支持通过 JSON 命令或 MCP 连接编码工具，并运行项目检查"
+   ],
+   "use_cases": [
+    "在家用服务器、NAS 或本机托管私有 Git 仓库",
+    "小团队在浏览器中做代码评审与 PR 合并",
+    "为本地项目配置定时备份与历史恢复"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- One Go program with a SQLite file. There is no database service to run.",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明程序用 SQLite 文件存储记录（L28），属使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OwnGit is a self-hosted Git server for one person or a small group. It keeps your private repositories on your own computer, NAS or home server, and gives you a browser dashboard for them. You need no cloud account or subscription. ／ - One Go program with a SQLite file. There is no database service to run.",
+   "evidence_lines": [
+    12,
+    28
+   ]
+  },
+  "fn": "juliankang4/owngit",
+  "sha": "3a7d2750405f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

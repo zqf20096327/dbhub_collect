@@ -8975,5 +8975,141 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e03baef63522": {
+  "identity": {
+   "one_liner": "CLIProxyAPI 用量追踪器，以 SQLite 持久化并内置仪表盘",
+   "review": "该项目为 CLIProxyAPI（CPA）提供独立的用量追踪与仪表盘，记录请求历史、模型成本估算、请求详情与凭证配额，并将数据持久化到本地 SQLite 数据库（支持定时备份）。面向已部署或计划部署 CPA 的使用者，通过 Docker Compose、Homebrew 或二进制部署，默认启用登录保护。",
+   "highlights": [
+    "将 CPA 用量持久化到 SQLite 并支持定时备份",
+    "提供用量、缓存与预估成本的模型/API Key/提供商维度分析",
+    "支持请求详情检查导出、成功率与 TTFT/总延迟查看及凭证配额监控"
+   ],
+   "use_cases": [
+    "追踪 CLIProxyAPI 的模型调用成本与用量历史",
+    "排查请求性能（成功率、TTFT、延迟）与导出请求明细",
+    "监控凭证健康度与配额剩余，并为单个 API Key 提供只读用量视图"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Keep your history**: persist CPA usage in SQLite with scheduled backups.",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仪表盘使用 SQLite 存储自身的 CPA 用量数据，属于使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Keep usage history for CLIProxyAPI (CPA), understand model costs, and track request performance and credential quotas. CPA Usage Keeper brings overviews, realtime diagnostics, request details, and quota history into one independently deployed dashboard. ／ - **Keep your history**: persist CPA usage in SQLite with scheduled backups. ／ Optional community rankings and CPA plugin embedding in CPAMC are also available. Deploy with Docker Compose, Homebrew, or binaries; login protection is enabled by default.",
+   "evidence_lines": [
+    18,
+    50,
+    56
+   ]
+  },
+  "fn": "Willxup/cpa-usage-keeper",
+  "sha": "e03baef63522",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f7862f909e60": {
+  "identity": {
+   "one_liner": "Apple Mail 的 MCP 服务器，提供 54 个工具并以 SQLite 实现毫秒级邮件搜索",
+   "review": "一个用 Swift 编写、经 Developer ID 签名公证的 macOS Apple Mail MCP 服务器，向 Claude 等 MCP 客户端暴露 54 个工具，覆盖邮件搜索、读取、标记、邮箱管理、撰写与草稿操作。搜索通过读取邮件的 SQLite 数据实现毫秒级响应，并支持 .emlx 解析和批量 Markdown 导出；需要授予完全磁盘访问权限，否则读取能力受限。",
+   "highlights": [
+    "提供 54 个 MCP 工具，覆盖搜索、读取、标记、邮箱 CRUD、签名、规则与 VIP 管理",
+    "通过 SQLite 读取路径实现毫秒级邮件搜索，支持主题/发件人/收件人/日期字段",
+    "支持批量操作（单次最多 50 封）、批量 Markdown 导出，撰写经由 Mail 自身编辑器完成"
+   ],
+   "use_cases": [
+    "在 Claude 等 MCP 客户端中通过自然语言管理和检索 Apple Mail 邮件",
+    "对 25 万封以上邮件的邮箱进行快速搜索与批量导出 Markdown",
+    "以草稿方式自动回复/转发邮件并保留人工审核环节"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**The most comprehensive Apple Mail MCP server** - 54 tools with SQLite-powered millisecond search across 250K+ emails. ／ |Search Speed|Seconds (AppleScript)|**Milliseconds (SQLite)**| ／ > **💡 Full Disk Access** is what makes the fast SQLite read path and",
+     "lines": [
+      8,
+      18,
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其搜索能力依赖 SQLite 读取路径，SQLite 是其内部数据存取机制而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**The most comprehensive Apple Mail MCP server** - 54 tools with SQLite-powered millisecond search across 250K+ emails. ／ claude plugin marketplace add PsychQuant/che-apple-mail-mcp ／ > **💡 Full Disk Access** is what makes the fast SQLite read path and",
+   "evidence_lines": [
+    8,
+    34,
+    45
+   ]
+  },
+  "fn": "PsychQuant/che-apple-mail-mcp",
+  "sha": "f7862f909e60",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

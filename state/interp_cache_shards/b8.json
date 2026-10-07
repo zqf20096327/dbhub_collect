@@ -7263,5 +7263,181 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "67909a5f0710": {
+  "identity": {
+   "one_liner": "将 Claude Code 会话归档进 SQLite FTS5，提供 MCP/TUI/Web UI 检索",
+   "review": "claude-recall 把 Claude Code 的每个会话（含已删 JSONL）归档到本地 SQLite，用 FTS5 全文检索，并通过 MCP server、TUI 和本地 Web UI 三种入口供人查看或让 Claude 回查历史会话。面向 Claude Code 用户，弥补会话记录被删除后无法回溯的问题；定位为检索工具而非记忆系统，不做 LLM 摘要注入，数据仅存本地。",
+   "highlights": [
+    "提供 recall_search/recall_list/recall_export/recall_stats 四个 MCP 工具，支持在指定仓库内全文检索",
+    "单一静态二进制，包含 CLI、TUI 与仅监听 127.0.0.1 的 Web UI，运行中会话约半秒内增量导入",
+    "通过 Claude Code 插件的 SessionEnd 钩子在会话结束时运行 recall import"
+   ],
+   "use_cases": [
+    "跨会话回顾历史决策与上下文，让 Claude 通过 MCP 检索过往会话回答问题",
+    "浏览、过滤并原地恢复被 Claude Code 删除的旧会话",
+    "在浏览器中阅读长对话和图片，实时跟随正在运行的会话"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "claude-recall archives every Claude Code session into SQLite, including the ones whose JSONL Claude Code has since deleted, and gives you three ways back into them from one binary called `recall`:",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 SQLite 作为自身会话归档的存储引擎，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "claude-recall archives every Claude Code session into SQLite, including the ones whose JSONL Claude Code has since deleted, and gives you three ways back into them from one binary called `recall`: ／ claude-mem extends the agent's memory, for Claude Code and many other agents. It captures observations on every tool use, summarizes them with an LLM into structured facts, stores them in a vector DB, and injects the result into the next session's prompt. claude-recall doesn't touch the memory layer. It stores the JSONL files Claude Code already writes and searches them with SQLite FTS5. ／ recall import                                        # create the archive from ~/.claude/projects",
+   "evidence_lines": [
+    9,
+    94,
+    182
+   ]
+  },
+  "fn": "babarot/claude-recall",
+  "sha": "67909a5f0710",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "072b1c3e7621": {
+  "identity": {
+   "one_liner": "嵌入式异步 Rust 数据路由库，在消息队列与数据库间搬运数据",
+   "review": "mq-bridge 是一个异步 Rust 库，通过统一的 receive_batch/send_batch 接口在 Kafka、NATS、MQTT、PostgreSQL、ClickHouse 等端点间路由消息与数据，支持 Postgres/MongoDB CDC、SQL 轮询写入、重试去重等中间件，并提供 Python/Node 绑定及零代码 CLI。适合需要在自有服务中嵌入数据管道、做 CDC 同步或事务性 outbox 的开发者使用。",
+   "highlights": [
+    "提供 PostgreSQL CDC（逻辑 replication/pgoutput）与 SQL 数据库读写端点",
+    "支持 ClickHouse 批量写入与可恢复读取",
+    "提供 Rust、Python、Node.js 三种语言的绑定及无代码 CLI（mq-bridge-app）"
+   ],
+   "use_cases": [
+    "将 Postgres 变更流式同步到向量索引或数据仓库",
+    "实现数据库更新与事件发布的原子性 outbox 模式",
+    "在消息系统与 SQL 数据库之间搬运数据"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object s ／ |**Change Data Capture (CDC)**: stream Postgres or MongoDB changes to Kafka, files, a warehouse, …|`postgres_cdc` (logical replication, `pgoutput`) · `postgres-cdc`; `mongodb` with `consume: capture_all` / `capture_new` (change streams) · `mongodb`|Postgres CD ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      27,
+      89,
+      90
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object s ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      27,
+      90
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object s ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      27,
+      90
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object s ／ |**ClickHouse** bulk insert and resumable reads|`clickhouse` endpoint · `clickhouse`|ClickHouse|",
+     "lines": [
+      27,
+      92
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明它是在数据库与消息系统之间搬运数据的库，数据库是其服务的端点而非仅存储自身数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object storage, files, and in-memory channels. Every endpoint sits behind the same batch-shaped `receive_batch` / `send_batch` traits, so any source can feed any sink. ／ |**Change Data Capture (CDC)**: stream Postgres or MongoDB changes to Kafka, files, a warehouse, …|`postgres_cdc` (logical replication, `pgoutput`) · `postgres-cdc`; `mongodb` with `consume: capture_all` / `capture_new` (change streams) · `mongodb`|Postgres CDC tutorial · MongoDB| ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+   "evidence_lines": [
+    27,
+    89,
+    90
+   ]
+  },
+  "fn": "marcomq/mq-bridge",
+  "sha": "072b1c3e7621",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -7719,5 +7719,143 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "313df04ed21b": {
+  "identity": {
+   "one_liner": "连接 ClickHouse 与 Python/Pandas/Superset 的数据库驱动",
+   "review": "该仓库提供 clickhouse-connect Python 包，实现 ClickHouse 的 HTTP 接口客户端，支持 Pandas、NumPy、PyArrow、Polars 数据结构，附带 SQLAlchemy 方言与 Alembic 迁移支持，并提供 Apache Superset 连接器与 aiohttp 异步客户端。面向需要在 Python 环境中读写 ClickHouse 数据或为 Superset 接入 ClickHouse 的开发者；要求 Python 3.10 以上，ORM 支持有限。",
+   "highlights": [
+    "提供 Pandas、NumPy、PyArrow、Polars 数据结构的读取支持",
+    "包含 SQLAlchemy 方言实现与 Alembic schema 迁移支持",
+    "支持通过 aiohttp 的原生异步客户端及实验性 chDB 后端"
+   ],
+   "use_cases": [
+    "Python 应用中查询和写入 ClickHouse 数据",
+    "为 Apache Superset 配置 ClickHouse 数据源",
+    "使用 Alembic 管理 ClickHouse 表结构与迁移"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "## ClickHouse Connect ／ A high performance core database driver for connecting ClickHouse to Python, Pandas, and Superset ／ ClickHouse Connect uses the ClickHouse HTTP interface for maximum compatibility. An experimental",
+     "lines": [
+      1,
+      6,
+      15
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为连接 ClickHouse 提供的 Python 驱动/连接器，为数据库生态服务的组件而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "ClickHouse"
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A high performance core database driver for connecting ClickHouse to Python, Pandas, and Superset ／ pip install clickhouse-connect ／ ClickHouse Connect includes a lightweight SQLAlchemy dialect implementation focused on compatibility with **Superset**",
+   "evidence_lines": [
+    6,
+    22,
+    50
+   ]
+  },
+  "fn": "ClickHouse/clickhouse-connect",
+  "sha": "313df04ed21b",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a6429f9b3ea9": {
+  "identity": {
+   "one_liner": "基于 Proton Bridge 的 Proton Mail MCP 服务器与 CLI",
+   "review": "该项目通过本地 Proton Bridge 的 IMAP/SMTP 接口为 Proton Mail 提供 MCP 服务器和 CLI，提供 96 个工具用于读取、搜索、起草、发送和整理邮件，并维护本地 SQLite 全文索引以避免每次查询都访问 IMAP。面向使用 Claude Desktop、Claude Code、Cline 等 MCP 客户端或脚本的 Proton 用户；依赖 Proton Bridge 常驻运行，需 Node.js 24+。",
+   "highlights": [
+    "提供 96 个 MCP 工具及对应的完整 CLI 命令，支持读取、搜索、起草、发送和整理邮件",
+    "维护本地全文索引（SQLite），搜索不经远程 IMAP 查询",
+    "提供只读模式、发送门控、破坏性操作确认等安全控制"
+   ],
+   "use_cases": [
+    "在 Claude Desktop/Cline 等 MCP 客户端中用自然语言管理 Proton Mail 收件箱",
+    "用 CLI 和 cron 脚本化批量处理邮件、生成摘要",
+    "多 Proton 账户的本地隔离索引与草稿管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install ／ |`search_indexed_emails` (local SQLite index)|~10 ms| ／ - The local index lives at `PROTONMAIL_DATA_DIR/mail-index.sqlite`. Background sync and IMAP IDLE keep it warm.",
+     "lines": [
+      113,
+      420,
+      473
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是读取和管理用户邮件的客户端应用，SQLite 仅作为其本地邮件索引存储，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mail inbox: read, search, send, draft, triage threads, manage folders, save attachments, and more — 96 MCP tools in total. Most of the same capabilities are also available as a full CLI for scripting, cron, and piped automation — no Claude required. ／ - **Fast local search** — full-text search across your inbox without hitting IMAP on every query ／ The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install leaves the working one untouched. The config is merged, not replaced: existing `env` keys you added by hand are kept, and the config is rewritten atomically (the newest 5 `.bak-*` copies are kept). Passwords are never printed. Run `npm run check:claude-desktop` to verify an install; it exits non-zero when the command, the runtime or the database module is broken.",
+   "evidence_lines": [
+    21,
+    45,
+    113
+   ]
+  },
+  "fn": "googlarz/proton-mail-bridge-client",
+  "sha": "a6429f9b3ea9",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

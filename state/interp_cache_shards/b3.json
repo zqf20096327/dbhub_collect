@@ -9195,5 +9195,91 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "598dd2366727": {
+  "identity": {
+   "one_liner": "针对 HardhatDB、MySQL、TiDB 等多数据库的压力测试工作负载工具",
+   "review": "这是一个压力/基准测试套件，通过 run.sh 在 Docker 中启动 HardhatDB、MySQL、TiDB、ElyraSQL 的单节点、复制、分片目标，执行统一的读写工作负载，输出吞吐、p99 延迟、CPU 与磁盘报告，并支持故障转移场景记录选举与恢复时间。面向需要对比这些数据库在相同负载下表现的测试者与运维人员，要求 Docker 与 TLS 证书配置。",
+   "highlights": [
+    "提供 compare、contend、cold、sweep、failover 等多种工作负载场景，输出 Markdown 与 JSON 报告",
+    "支持单节点、三节点复制、分片等矩阵目标，并可记录 failover 选举与恢复时间",
+    "可通过 GitHub Pages 站点按发布版本归档并图表化展示历史结果"
+   ],
+   "use_cases": [
+    "对 HardhatDB、MySQL、TiDB 等运行同一工作负载进行吞吐与延迟对比",
+    "测试复制集群的故障转移与恢复时间",
+    "用 GitHub Pages 归档并展示历次基准测试结果"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "One workload against Hardhat, MySQL, and TiDB. Each engine runs as a single node, a replicated group of three, and two of those groups. ElyraSQL is still available on its own. ／ `single`, `cluster`, `ranged`, `mysql`, and `tidb` are aliases for `hardhat-single`, `hardhat-replicated`, `hardhat-sharded`, `mysql-single`, and `tidb-replicated`.",
+     "lines": [
+      3,
+      18
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "`failover-follower` kills a Hardhat node that is not the leader. Writes stay on the leader, and any error in the fault window fails the run. `failover-mysql` kills one replica, checks that commits continue, then kills the primary and starts it again. The prima ／ Single: a commit fsyncs on the one node, and reads use that node. TiDB single is one SQL server, one TiKV store with `max-replicas = 1`, and one PD.",
+     "lines": [
+      22,
+      49
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "One workload against Hardhat, MySQL, and TiDB. Each engine runs as a single node, a replicated group of three, and two of those groups. ElyraSQL is still available on its own. ／ `single`, `cluster`, `ranged`, `mysql`, and `tidb` are aliases for `hardhat-single`, `hardhat-replicated`, `hardhat-sharded`, `mysql-single`, and `tidb-replicated`.",
+     "lines": [
+      3,
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为多数据库提供压力测试与报告的工具，而非使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One workload against Hardhat, MySQL, and TiDB. Each engine runs as a single node, a replicated group of three, and two of those groups. ElyraSQL is still available on its own. ／ `./run.sh` starts one target in Docker, loads the same workload, and writes `summary.md`. Docker has to be running. The first start creates `certs/` with `openssl`. These ports stay off 3306–3308, so this stack can run beside the HardhatDB example cluster. ／ `compare` runs the nine matrix targets one after another so they do not share the CPU. The summary scores each engine against the MySQL in the same variant. Each run also prints a text report and stores JSON, CPU samples, and disk usage under `results/`. `REPEATS=3 ./run.sh hardhat-single` runs that target three times. The summary uses the median ops/s and the worst read and write p99. The same numbers are archived for the results site. `PUBLISH=0` skips that archive.",
+   "evidence_lines": [
+    3,
+    9,
+    24
+   ]
+  },
+  "fn": "bongani-m/hardhatdb-stress",
+  "sha": "598dd2366727",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8862,5 +8862,278 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "99bdd3aedb9d": {
+  "identity": {
+   "one_liner": "AI 代理记忆运行时，预编译带溯源的上下文包",
+   "review": "Statewave 是一个开源记忆运行时，把代理事件先编译为带置信度与溯源的定型记忆，再按需组装确定性的 token 限额上下文包。面向构建 AI 代理与对话系统的开发者，提供 REST API 与 Python/TypeScript SDK，通过 Docker Compose/Helm 自托管，数据存于 PostgreSQL 14+ 与 pgvector；默认以本地启发式编译器运行，LLM 编译需另配 LiteLLM 提供商的密钥。",
+   "highlights": [
+    "提供事件摄入、记忆编译、上下文包组装与治理四阶段数据生命周期，每步幂等",
+    "每条记忆可溯源至源 episode，提供内容哈希与 HMAC 签名的状态回执",
+    "支持 YAML 策略的敏感标签（deny/redact）、X-Tenant-ID 多租户隔离与区域固定"
+   ],
+   "use_cases": [
+    "客服代理跨会话识别老客户并携带溯源上下文",
+    "长期运行的编码代理在多会话间保留技术栈与架构决策",
+    "为代理 A/B 对比无状态与有记忆两种回答方式"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Self-hosted on Postgres + pgvector** — no vendor lock-in; runs on your infrastructure ／ Brings up Postgres (pgvector) + the API; migrations run automatically on container start. The API is available at `http://localhost:8100`. ／ |Database|PostgreSQL 14+ with pgvector ≥ 0.4.2| ／ |`STATEWAVE_DATABASE_URL`|`postgresql+asyncpg://statewave:statewave@localhost:5432/statewave`|Postgres connection string|",
+     "lines": [
+      59,
+      114,
+      163,
+      238
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Statewave 使用 Postgres+pgvector 作为自身的存储层，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "docker",
+    "source",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Statewave is the open-source memory runtime that gives AI agents reproducible, provenance-tagged context — without sampling-noise from query-time retrieval. ／ - **Self-hosted on Postgres + pgvector** — no vendor lock-in; runs on your infrastructure ／ |Database|PostgreSQL 14+ with pgvector ≥ 0.4.2|",
+   "evidence_lines": [
+    11,
+    59,
+    163
+   ]
+  },
+  "fn": "smaramwbc/statewave",
+  "sha": "99bdd3aedb9d",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "572eb928fa6e": {
+  "identity": {
+   "one_liner": "开源自托管可视化页面构建器，单容器 Docker + SQLite 存储",
+   "review": "OrbitPage 是一个开源、可自托管的可视化页面构建器，供创作者、专业人士、场地和小型企业制作链接、媒体、菜单、活动等公开页面，内置 SEO、二维码、分析、简报与备份等功能。整个应用以单个 Docker 容器运行，使用 SQLite 与本地存储保存数据，MIT 许可，另有官方托管服务版本。",
+   "highlights": [
+    "提供可视化编辑器、主题系统、实时预览和响应式公开页面渲染",
+    "内置自托管访问分析、简报（自备 SMTP）、JSON 备份恢复与多用户权限管理",
+    "单 Docker 容器运行，使用 SQLite 与本地存储持久化数据，支持增量式 SQLite 迁移"
+   ],
+   "use_cases": [
+    "自托管创建个人/品牌链接主页、作品集与活动页面",
+    "场地菜单、简报订阅与访问分析等小型业务页面",
+    "homelab/私有服务器上以 Docker 部署并保留数据控制权"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Own the stack and the data.** Run one Docker container with SQLite and local storage, on your server or homelab. ／ The production-style source run is available at <http://localhost:3001>. Complete setup in the browser. Source mode makes SQLite storage owner-only on POSIX hosts; keep <code>DATA_DIR</code> on a private volume. ／ - Health checks, persistent local data, Docker support, and additive SQLite migrations.",
+     "lines": [
+      32,
+      119,
+      171
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用以 SQLite 存储自身数据，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可（自托管版），另有官方托管服务",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Own the stack and the data.** Run one Docker container with SQLite and local storage, on your server or homelab. ／ Your page adapts to phones and desktops, with SEO, QR codes, analytics, and newsletters built in. The self-hosted edition is free, MIT-licensed, and runs in one Docker container, keeping your content and data on your own server.",
+   "evidence_lines": [
+    32,
+    22
+   ]
+  },
+  "fn": "paoloronco/OrbitPage",
+  "sha": "572eb928fa6e",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b45f32fa5fb2": {
+  "identity": {
+   "one_liner": "C# 编写的内存图数据库，用运行时编译的 C# 委托替代查询语言",
+   "review": "Fallen-8 是一个用 C#/.NET 实现的内存图数据库，不提供 Cypher/Gremlin 等查询语言，查询通过运行时编译的 C# 委托片段或预编译存储查询完成，并提供路径查找、子图、图分析、向量/语义搜索、REST API、MCP server 与浏览器 UI F8 Studio。适合需要在 .NET 进程内嵌入图引擎、或让 AI 代理以工具方式操作图数据的开发者；动态代码执行常开，暴露服务前需设置 API key。",
+   "highlights": [
+    "提供有向属性图模型，所有变更经串行化事务队列，支持路径查找、PageRank 等图分析算法",
+    "支持向量 kNN、语义搜索、PDF/Office/markdown 文档到图结构的语义层导入",
+    "提供 REST API、MCP server、NuGet 库嵌入、插件机制与 Prometheus/OTLP 可观测性"
+   ],
+   "use_cases": [
+    ".NET 应用内嵌图引擎（无 HTTP、无服务器进程，含 WebAssembly 单线程宿主）",
+    "AI 代理通过 MCP 以类型化工具读取/写入图数据",
+    "文档（PDF/Office/markdown）向量化入库并做语义检索与遍历"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明它是数据库本体（内存图存储引擎），为使用图数据的开发场景提供引擎与工具组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Fallen-8 is an in-memory graph database ／ It has **no query language** — no Cypher, no Gremlin, and none is planned. Queries are C#: ／ - **MCP server** — a Model Context Protocol surface so AI agents call",
+   "evidence_lines": [
+    9,
+    12,
+    110
+   ]
+  },
+  "fn": "cosh/fallen-8-core",
+  "sha": "b45f32fa5fb2",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "63d31ff82aa2": {
+  "identity": {
+   "one_liner": "LLM 代理自动交易系统，以确定性安全层包裹订单执行",
+   "review": "这是一个 AI 自动交易系统，LLM 代理通过 MCP 协议在进程外进行市场分析与决策，运行时负责数据采集、订单执行与验证，内置 fail-closed 订单门控、幂等键、成交证据对账等机制，支持韩国/美国股票及加密货币的实盘与模拟账户，通过 FastAPI 提供 140+ MCP 工具与 React 仪表盘，使用 PostgreSQL 存储数据。适合希望以安全约束方式实验 AI 交易的个人开发者。",
+   "highlights": [
+    "LLM 通过 MCP（streamable-http）连接，运行时不含进程内 LLM provider，并以权限配置分离工具面",
+    "订单采用 fail-closed 机制：dry_run 默认值、preview-approval_hash 校验、确定性幂等键防止重复下单",
+    "成交记录仅凭券商 order-id 证据通过 reconcile 确认，并提供 forecast 校准仪表盘"
+   ],
+   "use_cases": [
+    "为韩国/美国股票及加密货币构建带审批门控的 AI 辅助交易流程",
+    "在多个券商模拟环境（KIS/Kiwoom 模拟、Alpaca Paper、Binance Demo 等）上运行多套模拟交易环境",
+    "作为 LLM 代理+MCP 安全架构（进程外代理、确定性运行时）的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Python 3.13 · FastAPI · SQLAlchemy(async) + PostgreSQL · Redis · Alembic · TaskIQ · Prefect · React + TypeScript(invest 프론트엔드) · MCP(streamable-http) · pytest(85%+ 커버리지, xdist 병렬) ／ - Python 3.13+, UV, PostgreSQL, Redis ／ docker compose up -d # PostgreSQL / Redis / Adminer",
+     "lines": [
+      69,
+      75,
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL 与 Redis 作为必需基础设施（DATABASE_URL、docker compose），是使用数据库存数据的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Python 3.13 · FastAPI · SQLAlchemy(async) + PostgreSQL · Redis · Alembic · TaskIQ · Prefect · React + TypeScript(invest 프론트엔드) · MCP(streamable-http) · pytest(85%+ 커버리지, xdist 병렬) ／ docker compose up -d          # PostgreSQL / Redis / Adminer ／ 런타임은 결정론적인 데이터·주문·안전 레이어만 담당하고, 판단(LLM)은 MCP(Model Context Protocol)로 연결된 **프로세스 밖의 에이전트**가 수행합니다. 국내주식·미국주식·암호화폐를 실계좌로 운용 중이며, 같은 도구 표면 위에서 다수의 모의 환경(KIS 모의, 키움 모의, Alpaca Paper, Binance Demo, Upbit shadow-sim)을 함께 지원합니다.",
+   "evidence_lines": [
+    69,
+    87,
+    5
+   ]
+  },
+  "fn": "mgh3326/auto_trader",
+  "sha": "63d31ff82aa2",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

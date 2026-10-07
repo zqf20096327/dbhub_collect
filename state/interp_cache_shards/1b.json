@@ -10106,5 +10106,72 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1d72ef183054": {
+  "identity": {
+   "one_liner": "基于 Python 和 PostgreSQL 的 SEC EDGAR 财务数据采集库",
+   "review": "该项目用 Python 从 SEC EDGAR 抓取公司标识、申报文件和 XBRL 财务事实，规范化存储到 PostgreSQL 并记录数据来源（provenance），通过 financial-db CLI 支持可断点的批量导入和迁移，另附可复用 SQL 分析脚本；数据层面向价值投资分析者，需自备 PostgreSQL 14+ 且依赖外部数据源访问政策。",
+   "highlights": [
+    "提供 financial-db CLI，支持可恢复的 SEC 批量摄取（含 dry-run 模式）",
+    "以编号迁移管理 PostgreSQL schema，并记录数据来源 provenance",
+    "附带可复用的 SQL 分析脚本，价格数据来自 Yahoo Finance 并落库存储"
+   ],
+   "use_cases": [
+    "构建用于价值投资的上市公司财务与申报数据仓库",
+    "需要保留数据来源历史与可审计性的财务数据 ETL 流程",
+    "本地开发环境中通过 Docker Compose 运行 PostgreSQL 进行财务数据分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Stores normalized facts and daily market prices in PostgreSQL with provider provenance. ／ |PostgreSQL|Required database for normalized records, migrations, provenance, and imported prices. A local development service is available through Docker Compose.|",
+     "lines": [
+      12,
+      23
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明将规范化事实与价格数据存储于 PostgreSQL，PostgreSQL 是其必需的数据存储（L23）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Python and PostgreSQL project for ingesting public-company filings and financial facts, preserving their source history, and making the data available through a CLI and reusable SQL analyses. ／ - Stores normalized facts and daily market prices in PostgreSQL with provider provenance. ／ |PostgreSQL|Required database for normalized records, migrations, provenance, and imported prices. A local development service is available through Docker Compose.|",
+   "evidence_lines": [
+    5,
+    12,
+    23
+   ]
+  },
+  "fn": "JdeJusto/Financial-DataBase",
+  "sha": "1d72ef183054",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

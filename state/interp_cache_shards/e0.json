@@ -8137,5 +8137,279 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1e02eeee2cc4": {
+  "identity": {
+   "one_liner": "面向 Java/Kotlin 与 Android 的轻量嵌入式 NoSQL 数据库，含向量检索",
+   "review": "ObjectBox Java 是一个运行在 Android 与 JVM（Linux/macOS/Windows）上的嵌入式 NoSQL 数据库，支持向量存储与端侧向量检索，用于本地持久化场景。开发者通过注解实体类和语言原生 API 操作对象，经 Gradle 或 Maven 集成，自动处理 schema 迁移，另提供 Sync 与时序扩展。",
+   "highlights": [
+    "支持端侧向量数据管理与向量检索，可用于 RAG/相似度搜索场景",
+    "通过注解实体类与语言原生 API 操作对象，自动生成 schema 迁移，无需手写更新脚本",
+    "提供 ObjectBox Sync 设备间同步与 TS 时序扩展，另含 C/C++、Dart/Flutter、Go、Swift 绑定"
+   ],
+   "use_cases": [
+    "Android/JVM 应用的本地离线优先数据持久化",
+    "端侧向量检索与相似度搜索应用",
+    "资源受限设备上的本地数据存储"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "🏁 **High performance:** exceptional speed, outperforming alternatives like SQLite and Realm in all CRUD operations.\\ ／ excellent performance, while also minimizing CPU, RAM, and power usage. ObjectBox outperforms SQLite and Realm across ／ With its concise language-native API, ObjectBox simplifies development by requiring less code compared to SQLite. It",
+     "lines": [
+      53,
+      196,
+      201
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它是独立的嵌入式数据库本体，README 未表明为其他数据库生态提供工具或服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0（README L15 所示）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# ObjectBox - Fast and Efficient Java Database (Android, JVM) with Vector Search ／ ObjectBox Java is a lightweight yet powerful on-device database & vector database designed specifically for **Java and Kotlin** applications. ／ ObjectBox is a NoSQL Java database designed for local data storage on resource-restricted devices, prioritizing",
+   "evidence_lines": [
+    21,
+    23,
+    189
+   ]
+  },
+  "fn": "objectbox/objectbox-java",
+  "sha": "1e02eeee2cc4",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "688f790b3f57": {
+  "identity": {
+   "one_liner": "Yjs CRDT 的纯 Go 移植，含 Hocuspocus 兼容服务器 yserve",
+   "review": "该仓库将 JavaScript 生态的 Yjs CRDT 协作框架移植为纯 Go 库，逐字节实现 Yjs V1/V2 线格式并通过双向跨语言用例验证，提供 UndoManager、快照、子文档、观察者等 API，并附带单二进制 WebSocket 服务器 yserve，支持 SQLite 持久化与文档版本化，可通过 gomobile 生成 iOS/Android 移动端 SDK。面向需要在 Go 服务端或移动端实现实时协作编辑的开发者。",
+   "highlights": [
+    "逐字节兼容 Yjs V1/V2 线格式，199 个跨语言 fixture 双向验证",
+    "提供可嵌入的离线优先同步客户端与单二进制 yserve 服务器（内置 SQLite 持久化和定期文档版本化）",
+    "纯 Go 无 CGO，支持编译到 wasm 及通过 gomobile 生成 iOS/Android SDK"
+   ],
+   "use_cases": [
+    "为 Web/移动端文档协作应用提供 Go 服务端同步",
+    "在 Go 或移动端本地实现离线优先的协作数据结构",
+    "自托管替代 Node 版 Hocuspocus 的 Yjs 协作服务器"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Pure Go, no CGO — mobile included.** Cross-compiles freely to every Go target. The CRDT core, the sync client and the server also compile to `js/wasm` and `wasip1/wasm`; the one exception is the SQLite-backed store in `persist/sqlite`, since `modernc.org/s ／ - **Embeddable sync client, offline-first.** The `client` package is a Go-native y-websocket/Hocuspocus provider: handshake, incremental updates, awareness, reconnect with backoff. With a `LocalStore` it persists the document to disk (pure-Go SQLite), loads it ／ - **Ready-to-run server: yserve.** A self-hosted Yjs server in a single static binary — a Hocuspocus alternative with no Node, no Redis, no CGO. Same wire protocol, so existing `@hocuspocus/provider` / `y-websocket` clients connect unchanged; SQLite persistenc",
+     "lines": [
+      20,
+      21,
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为协作编辑生态提供的 CRDT 库/服务器组件，SQLite 仅作为其可选持久化存储实现之一",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pure-Go port of Yjs, the CRDT framework for collaborative applications, officially listed in the Yjs documentation's ports page. ／ - **Ready-to-run server: yserve.** A self-hosted Yjs server in a single static binary — a Hocuspocus alternative with no Node, no Redis, no CGO. Same wire protocol, so existing `@hocuspocus/provider` / `y-websocket` clients connect unchanged; SQLite persistence and periodic document versioning built in. Also embeds as a plain `http.Handler` inside an existing Go backend. ／ For a collaborative server backend, see yserve — a stand-alone, Hocuspocus-compatible WebSocket server with SQLite persistence and document versioning, in one static binary:",
+   "evidence_lines": [
+    13,
+    27,
+    43
+   ]
+  },
+  "fn": "Deln0r/ygo",
+  "sha": "688f790b3f57",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ec9515777eff": {
+  "identity": {
+   "one_liner": "beads 问题跟踪器的原生桌面 GUI 客户端",
+   "review": "为 beads（bd CLI）git 化 issue 跟踪工具提供跨 macOS/Windows/Linux 的原生图形界面，展示 epic 树、依赖图、时间线与实时活动。基于 Tauri v2 + Next.js/React，通过 stdio 调用 bd CLI 操作数据而不直接访问数据库。依赖 beads CLI 1.1.0+，属于使用 SQLite 等存储的终端工具之上的界面层。",
+   "highlights": [
+    "提供 epic 树、依赖图表、Trains 与实时活动流等视图",
+    "通过 bd CLI 读写数据，实时更新无需刷新，支持多工作区切换",
+    "支持 brew 安装、Releases 下载及从源码构建"
+   ],
+   "use_cases": [
+    "使用 beads/bd CLI 的开发者以图形界面管理任务与依赖",
+    "多项目/多工作区的本地及远程 Dolt 服务器工作区切换查看",
+    "团队查看任务状态、优先级与活动时间线"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是 beads issue 跟踪器的 GUI 客户端应用，通过 bd CLI 使用底层数据库，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A fast, native GUI for the beads issue tracker. ／ **Requires the beads CLI, version 1.1.0 or newer** (`brew install beads`). Beadbox is a GUI over `bd`; issue data lives in your beads database. `.beadtrain` files in `.beads/` are optional plans (see Beadtrains) shown on the Trains tab. ／ Beadbox is a Tauri v2 app. The Rust shell spawns a Bun sidecar process and talks to it over stdio (kkrpc) — the app itself opens no network ports. (One opt-in exception, off by default: if you enable the `bd serve` reads pilot for a local server-mode workspace, `bd` opens one token-authenticated listener on 127.0.0.1 for that workspace, which the app starts and stops with itself; see SECURITY.md for the helper process `bd` starts alongside it and the one case where that can outlive the app.) All issue data flows through the `bd` CLI; Beadbox never touches the database behind `bd`'s back. Live updates come from watching the workspace filesystem (local) or polling Dolt table hashes (server workspaces).",
+   "evidence_lines": [
+    6,
+    28,
+    109
+   ]
+  },
+  "fn": "beadbox/beadbox",
+  "sha": "ec9515777eff",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b9ce8f4a0a5d": {
+  "identity": {
+   "one_liner": "Ping/Traceroute 网络测量框架，支持将结果导入 SQL/NoSQL 数据库",
+   "review": "HiPerConTracer 是一个执行 Ping 与 Traceroute 测量的 C++ 框架，支持 ICMP/UDP 多协议、多宿主与纳秒级时间戳，并提供查看、转换、采集、数据库导入/查询等配套工具。面向网络运维与研究人员；测量数据可通过 Importer Tool 写入 MariaDB/MySQL、PostgreSQL 或 MongoDB 后端。",
+   "highlights": [
+    "支持 ICMP、UDP 多传输协议测量及纳秒级时间戳（软件/硬件 timestamping）",
+    "提供 Importer/Query/Database Shell 等工具，将测量结果存入并查询 MariaDB/MySQL、PostgreSQL、MongoDB",
+    "提供共享/静态库 libhipercontracer，可集成到其他软件；支持 Linux、FreeBSD 等多平台"
+   ],
+   "use_cases": [
+    "跨站点定期 Ping/Traceroute 测量与网络连通性监测",
+    "将测量结果批量导入数据库做长期存储与查询分析",
+    "通过 Collector/Node 工具搭建多节点测量采集架构"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* HiPerConTracer Importer Tool for storing measurement data from results files into SQL or NoSQL databases. Currently, database backends for MariaDB/MySQL, PostgreSQL and MongoDB are provided; ／ The HiPerConTracer Importer Tool provides the continuous storage of collected measurement data from results files into SQL or NoSQL databases. Currently, database backends for MariaDB/MySQL, PostgreSQL and MongoDB are provided.",
+     "lines": [
+      30,
+      899
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* HiPerConTracer Importer Tool for storing measurement data from results files into SQL or NoSQL databases. Currently, database backends for MariaDB/MySQL, PostgreSQL and MongoDB are provided; ／ The HiPerConTracer Importer Tool provides the continuous storage of collected measurement data from results files into SQL or NoSQL databases. Currently, database backends for MariaDB/MySQL, PostgreSQL and MongoDB are provided.",
+     "lines": [
+      30,
+      899
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* HiPerConTracer Importer Tool for storing measurement data from results files into SQL or NoSQL databases. Currently, database backends for MariaDB/MySQL, PostgreSQL and MongoDB are provided; ／ The HiPerConTracer Importer Tool provides the continuous storage of collected measurement data from results files into SQL or NoSQL databases. Currently, database backends for MariaDB/MySQL, PostgreSQL and MongoDB are provided.",
+     "lines": [
+      30,
+      899
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是网络测量框架，数据库仅作为测量结果的可选存储后端（Importer Tool 写入），并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU GPL",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "High-Performance Connectivity Tracer&nbsp;(HiPerConTracer) is a Ping/Traceroute measurement framework. ／ * HiPerConTracer Importer Tool for storing measurement data from results files into SQL or NoSQL databases. Currently, database backends for MariaDB/MySQL, PostgreSQL and MongoDB are provided; ／ For a larger setup, particularly consisting of measurement nodes and/or database import, it is recommended to properly set up storage directories. As current best practices for using the HiPerConTracer framework securely, the following directory structure and file permissions are recommended:",
+   "evidence_lines": [
+    10,
+    30,
+    265
+   ]
+  },
+  "fn": "dreibh/hipercontracer",
+  "sha": "b9ce8f4a0a5d",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

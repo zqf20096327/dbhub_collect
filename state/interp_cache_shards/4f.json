@@ -9193,5 +9193,128 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7003376d8fd4": {
+  "identity": {
+   "one_liner": "为 SQLite 添加图数据库能力与 Cypher 查询的扩展",
+   "review": "GraphQLite 是一个 SQLite 扩展，使 SQLite 数据库具备存储和查询图数据的能力，支持 Cypher 查询语言及 PageRank、Louvain、Dijkstra 等图算法，通过 brew/pip/cargo 安装，提供 Python、Rust 和原生 SQL 三种接口，适合需要在嵌入式 SQLite 中处理图数据的开发者。其 Cypher 实现通过 openCypher TCK 验证，覆盖率 98.4%。",
+   "highlights": [
+    "支持 Cypher 查询语句（MATCH、CREATE、MERGE、SET、DELETE、WITH、UNWIND、RETURN），并通过 openCypher TCK 验证",
+    "内置图算法：PageRank、Louvain、Dijkstra、BFS/DFS、连通分量",
+    "提供 Python、Rust 和原生 SQL 多种绑定接口，无需服务器、零配置"
+   ],
+   "use_cases": [
+    "在单文件嵌入式 SQLite 中存储和查询图数据",
+    "构建知识图谱并运行图分析算法（如社区发现、最短路径）",
+    "通过 SQL/Cypher 在现有 SQLite 数据库上进行关系建模查询"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "An SQLite extension that adds graph database capabilities using the Cypher query language. ／ Store and query graph data directly in SQLite—combining the simplicity of a single-file, zero-config embedded database with Cypher's expressive power for modeling relationships. ／ - **Zero configuration** — Works with any SQLite database, no server required",
+     "lines": [
+      5,
+      7,
+      30
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 SQLite 扩展为该数据库提供图存储与查询能力，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An SQLite extension that adds graph database capabilities using the Cypher query language. ／ - **Zero configuration** — Works with any SQLite database, no server required ／ - **Multiple bindings** — Python, Rust, and raw SQL interfaces",
+   "evidence_lines": [
+    5,
+    30,
+    31
+   ]
+  },
+  "fn": "colliery-io/graphqlite",
+  "sha": "7003376d8fd4",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c269c9daf3de": {
+  "identity": {
+   "one_liner": "DuckDB 扩展，允许用任意语言经 Apache Arrow IPC 扩展 DuckDB",
+   "review": "VGI 是一个 DuckDB 扩展，通过 Apache Arrow IPC 协议让任意语言编写的 worker 程序向 DuckDB 注册标量、表、聚合等函数，无需编写或编译 C++ 扩展。worker 以独立进程运行，支持 subprocess、HTTP、TCP、Unix socket 等传输方式，并提供谓词下推、worker 池与远程凭据代理。适合需要从 SQL 调用外部库（如 Python ML、REST API）或用非 C++ 语言开发 DuckDB 函数的开发者。需注意采用 Source-Available 许可证。",
+   "highlights": [
+    "支持以任意语言编写 worker，经 Apache Arrow IPC 与 DuckDB 通信，无需编译 C++ 扩展",
+    "支持标量、表、流式、聚合、窗口等多种函数形态，并提供投影/过滤/排序/连接键下推",
+    "支持 subprocess、HTTP、TCP、Unix socket 多种传输方式及 POSIX 共享内存零拷贝传输"
+   ],
+   "use_cases": [
+    "在 SQL 中直接调用 REST API 或运行 Python ML 推理（PyTorch、scikit-learn）",
+    "用 Python/pandas/numpy 处理数据并构建自定义 ETL 转换",
+    "将外部数据源暴露为可查询的表和视图"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是 DuckDB 的扩展，为扩展 DuckDB 功能提供服务，属于数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Query Farm Source-Available License, Version 1.0",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**VGI** (Vector Gateway Interface) is an Apache Arrow–based protocol for extending DuckDB ／ This repository contains the **DuckDB extension** (the C++ side of VGI). It loads into ／ The reference worker SDK is **vgi-python** — `pip install vgi-python`.",
+   "evidence_lines": [
+    5,
+    12,
+    19
+   ]
+  },
+  "fn": "Query-farm/vgi",
+  "sha": "c269c9daf3de",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8356,5 +8356,83 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3bba429c6e28": {
+  "identity": {
+   "one_liner": "本地优先的 MCP 多智能体协调中心，用 SQLite/WAL 存储协调记录",
+   "review": "Okto Nexus 是一个 MCP 服务器与操作员控制台，为同一仓库内的多个 AI agent 提供持久身份、消息收件箱、任务交接、事件日志、治理控制与实时仪表盘。协调记录存储在本地 SQLite/WAL 数据库中，通过 HTTP 暴露 MCP、REST API 和仪表盘。适合需要多 agent 协作且不依赖云服务的开发团队；目前为 0.2.0 开发版本，部分适配尚待最终验收。",
+   "highlights": [
+    "通过 MCP over HTTP 与 REST/SSE 提供消息、交接、事件日志与治理控制",
+    "协调数据持久化于本地 SQLite/WAL 数据库，支持消息租约、重投递与确认",
+    "内置 React 仪表盘，提供身份、API key、权限策略与人工审批管理"
+   ],
+   "use_cases": [
+    "同一代码仓库内多个 AI agent 的消息传递与任务交接",
+    "需要人工审批、配额与护栏等治理控制的多 agent 团队",
+    "通过仪表盘与 SSE/事件游标观察 agent 团队运行状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite database in WAL mode. Optional metrics, referenced workspace files, and ／ |Storage|local SQLite/WAL catalog + adapter-backed artifact payloads| ／ Always continue from `next_cursor`. The waiter uses SQLite",
+     "lines": [
+      17,
+      29,
+      224
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL, or cloud broker adapter.",
+     "lines": [
+      1072
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明协调记录持久存储在本地 SQLite/WAL 数据库中，SQLite 是其内部存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MCP is available through HTTP. Coordination records live in one ／ |Storage|local SQLite/WAL catalog + adapter-backed artifact payloads| ／ - coordination truth is durable in SQLite; bounded process caches are",
+   "evidence_lines": [
+    16,
+    29,
+    252
+   ]
+  },
+  "fn": "OktoLabsAI/okto-nexus",
+  "sha": "3bba429c6e28",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8734,5 +8734,208 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "51164e6535b7": {
+  "identity": {
+   "one_liner": "自托管开源平面设计编辑器，用 Fabric.js 画布编辑并持久化到 SQLite",
+   "review": "OpenDesign 是一个可自托管的开源图形设计编辑器，面向社交媒体内容创作者和 OpenClaw/AI 代理场景，提供 LinkedIn 等模板、模板字段批量填充和 PNG/PDF 导出。前端为 Preact + Fabric.js，后端为 Hono，设计数据通过 better-sqlite3 持久化到 SQLite。注意它没有服务端渲染器，批量保存变体的规模有限，需要浏览器端导出。",
+   "highlights": [
+    "提供 Fabric.js 画布编辑、预置 LinkedIn 模板、品牌套件与撤销/重做",
+    "支持模板字段命名并通过 REST API 批量填充文本与图片，导出 2x PNG 与多页轮播 PDF",
+    "设计数据通过 better-sqlite3 持久化到 SQLite，并提供面向 AI 代理的 ?agent=true 模式"
+   ],
+   "use_cases": [
+    "自托管制作 LinkedIn、Instagram 等社交媒体图形与轮播 PDF",
+    "通过 REST API 或 AI 代理（Claude Code）按数据行批量生成设计变体",
+    "嵌入 SaaS 产品中作为可定制的可视化设计组件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A design editor for creating professional social media graphics — LinkedIn posts, quote cards, announcements, and more. Part of the OpenClaw ecosystem. Zero cloud dependencies — runs locally with SQLite. ／ Built with **Preact + Fabric.js + Tailwind CSS + Hono + SQLite**. Ships with a Figma-inspired dark editor UI, retina canvas rendering, and pre-built LinkedIn post templates. ／ - **Auto-save** — designs persist to SQLite with debounced saves ／ |**Database**|SQLite (better-sqlite3)| ／ schema.sql — SQLite schema (designs, templates, pages)",
+     "lines": [
+      7,
+      9,
+      32,
+      97,
+      109
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明设计数据持久化到 SQLite（better-sqlite3），该库是存储本应用数据而非为其服务的生态组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A design editor for creating professional social media graphics — LinkedIn posts, quote cards, announcements, and more. Part of the OpenClaw ecosystem. Zero cloud dependencies — runs locally with SQLite. ／ - **Auto-save** — designs persist to SQLite with debounced saves ／ |**Database**|SQLite (better-sqlite3)|",
+   "evidence_lines": [
+    7,
+    32,
+    97
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "clawnify/OpenDesign",
+  "sha": "51164e6535b7",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "91dd9e0d317e": {
+  "identity": {
+   "one_liner": "基于 Effect v4 的本地优先（local-first）变更日志引擎",
+   "review": "这是一个面向 Effect 应用开发的本地优先数据同步库：客户端将变更乐观写入本地 SQLite，离线可用，联网后与服务器按序协调。核心机制包括 Effect Schema 定义契约、Effect Cluster 做路由与归属、浏览器多标签页通过 BroadcastChannel/Web Locks 组成副本集群。目标用户是使用 Effect v4 构建 Web/React Native 应用的开发者；项目尚无稳定版本，公开契约在 v1 前可能变更。",
+   "highlights": [
+    "客户端将变更乐观提交到本地 SQLite，离线工作并在恢复连接后与服务器协调",
+    "浏览器同一 origin 的多标签页通过 BroadcastChannel 与 Web Locks 组成集群，领导者标签页持有 SQLite 数据库",
+    "提供 Raw SQL 查询接口，支持 join、子查询、聚合、窗口函数与递归 CTE，并按模型粒度驱动响应式重查"
+   ],
+   "use_cases": [
+    "需要离线优先、数据本地可用并在联网后同步的场景（如协作/移动应用）",
+    "基于 Effect v4 的浏览器与 Node 应用开发",
+    "React Native 应用通过 expo-sqlite 构建本地副本"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "local SQLite, works while offline, and reconciles with an authoritative server assigned order when connectivity ／ R --> L[\"Local SQLite\"] ／ `SqlReplica.layer` assembles one public `Replica` that owns one SQLite database, one synchronization transport, and",
+     "lines": [
+      4,
+      16,
+      112
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The server runs unchanged on PostgreSQL 16 or later. Provide a `PgClient` from `@effect/sql-pg` where the example",
+     "lines": [
+      285
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述其为面向 Effect 应用的变更日志/数据同步库，SQLite 作为其本地存储机制、PostgreSQL 作为服务端存储，属于为应用构建提供数据层能力的组件库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Effect Local is a local first mutation log for Effect applications. A client commits mutations optimistically to ／ The library targets Effect `4.0.x`. It has not published a stable release. Durable and public contracts may ／ |`@lucas-barake/effect-local`|Models, mutations, queries, field semantics, protocol, and errors|",
+   "evidence_lines": [
+    3,
+    8,
+    47
+   ]
+  },
+  "fn": "lucas-barake/effect-local",
+  "sha": "91dd9e0d317e",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3c6ba6e67447": {
+  "identity": {
+   "one_liner": "Zig 编写的 Minecraft Bedrock 世界嵌入式键值存储引擎",
+   "review": "ZigriteDB 是用 Zig 实现的嵌入式 Minecraft Bedrock 世界存储引擎，为 Quark 构建，可逐字节导入/导出 LevelDB 世界。世界按 32×32 区块区域拆分为仅追加段文件，带校验帧、内存索引和后台压缩；提供 Zig API 与冻结于 C ABI 3 的 C API。仅 Linux 支持存储操作，需 Zig 0.16.0 构建。适用于 Bedrock 世界数据存取相关工具的开发者。",
+   "highlights": [
+    "提供 zigrite 工具用于 LevelDB 世界导入/导出/校验/压缩/格式迁移",
+    "提供 Zig API 与 C ABI 3 的 C API，支持并发写入与后台压缩",
+    "帧校验（CRC-32C）与崩溃恢复，原子性以区域为单位"
+   ],
+   "use_cases": [
+    "为 Bedrock 世界提供替代存储后端的工具开发",
+    "LevelDB 世界与 ZigriteDB 格式间的双向转换与校验"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 称其为嵌入式世界存储引擎并提供 Zig/C API 供应用集成使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ZigriteDB is an embedded Minecraft Bedrock world storage engine written in Zig ／ This builds `libzigritedb_native` (C API), a static Zig library and the `zigrite` tool. ／ - Linux only for storage. Other targets build but can't open worlds.",
+   "evidence_lines": [
+    5,
+    43,
+    162
+   ]
+  },
+  "fn": "TrixNEW/ZigriteDB",
+  "sha": "3c6ba6e67447",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

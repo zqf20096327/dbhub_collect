@@ -8744,5 +8744,71 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b829ed7d901e": {
+  "identity": {
+   "one_liner": "WorkBuddy 数据迁移 CLI：改写 user_id 实现跨账号/跨设备会话迁移",
+   "review": "面向 WorkBuddy 客户端用户的命令行数据迁移工具，用于跨设备携带项目会话、账号切换后恢复对话记录/长期记忆/MCP 连接器。通过修改 SQLite 中 user_id、合并 JSON 配置实现迁移，带备份与回滚机制；完整跨版本链路目前仅 Windows 实测通过。",
+   "highlights": [
+    "支持整账号迁移、单对话跨版本迁移、跨设备项目打包导出/导入三种模式",
+    "迁移前自动备份，支持 --rollback 一键还原，迁移前后执行 SQLite WAL checkpoint",
+    "提供交互式向导与 --dry-run 模式，零第三方依赖"
+   ],
+   "use_cases": [
+    "家庭与办公两台电脑、两个账号间交替做同一项目，打包带走会话数据",
+    "WorkBuddy 切换/重新登录账号后恢复对话记录、记忆与连接器配置",
+    "将单个对话在国内版与国际版之间迁移或克隆"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|✅ Session 对话记录迁移|修改 SQLite 数据库中的 `user_id` 字段，对话记录全部回归| ／ |✅ WAL 安全处理|迁移前后执行 SQLite checkpoint，确保数据持久化|",
+     "lines": [
+      62,
+      66
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "工具直接读取并改写 WorkBuddy 所用 SQLite 数据库以完成数据迁移，为该数据生态服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|✅ Session 对话记录迁移|修改 SQLite 数据库中的 `user_id` 字段，对话记录全部回归| ／ |✅ WAL 安全处理|迁移前后执行 SQLite checkpoint，确保数据持久化| ／ |Session 对话记录|`workbuddy.db` sessions 表|`user_id` 字段|✅|UPDATE user_id|",
+   "evidence_lines": [
+    62,
+    66,
+    124
+   ]
+  },
+  "fn": "xiaoliuzhuan666/workbuddy-account-migrate",
+  "sha": "b829ed7d901e",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

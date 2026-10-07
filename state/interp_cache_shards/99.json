@@ -7640,5 +7640,229 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7c2a015e43c8": {
+  "identity": {
+   "one_liner": "多后端键值存储开发库，通过存储适配器统一接口",
+   "review": "Keyv 是一个 JavaScript 键值存储库，为内存及 Redis、MySQL、PostgreSQL、SQLite 等后端提供一致的接口和 TTL 过期支持，通过 npm 安装存储适配器接入不同后端，适合需要在 Node.js 应用中做缓存或持久化键值存储的开发者。默认存储在内存中，持久化需另行安装适配器；v5 已进入仅维护状态，当前稳定版为 v6。",
+   "highlights": [
+    "通过存储适配器提供跨多后端的统一键值存储接口",
+    "支持 TTL 过期，可用作缓存或持久化键值存储",
+    "提供压缩（brotli/gzip/lz4）与可替换序列化器适配"
+   ],
+   "use_cases": [
+    "Node.js 应用中的缓存层",
+    "需要可切换后端的持久化键值存储",
+    "为自定义后端编写存储适配器集成"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* postgres - PostgreSQL storage adapter",
+     "lines": [
+      65
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* mysql - MySQL/MariaDB storage adapter",
+     "lines": [
+      64
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* sqlite - SQLite storage adapter",
+     "lines": [
+      67
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* mysql - MySQL/MariaDB storage adapter",
+     "lines": [
+      64
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供统一键值访问接口的库，存储适配器为其服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Keyv provides a consistent interface for key-value storage across multiple backends via storage adapters. It supports TTL-based expiry, making it suitable as a cache or a persistent key-value store. ／ ## Storage Adapters ／ * mysql - MySQL/MariaDB storage adapter",
+   "evidence_lines": [
+    15,
+    58,
+    64
+   ]
+  },
+  "fn": "jaredwray/keyv",
+  "sha": "7c2a015e43c8",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "69d230627550": {
+  "identity": {
+   "one_liner": "Swift 编写的类型安全 SQL 查询构建 DSL",
+   "review": "SQL（原 SwifQL）是一个用于构建 SQL 语句的 Swift DSL 库，支持模型驱动的类型安全表/列引用、流式与 Result Builder 两种写法，以及可复用的参数化查询。它只负责生成与准备语句，不执行查询、不管理连接池或事务，由用户自备数据库驱动。README 声明当前支持 PostgreSQL、MySQL、DuckDB 三种方言的 preparation。面向需要在 Swift 中以类型安全方式编写 SQL 的开发者。",
+   "highlights": [
+    "提供模型驱动的类型安全表/列引用与流式、Result Builder 两种查询构建方式",
+    "内置 PostgreSQL、MySQL、DuckDB 方言的语句准备（prepare），可分离绑定值",
+    "支持 DDL 构建、可复用 SQLQuery、子查询/CTE/集合操作等组合能力"
+   ],
+   "use_cases": [
+    "在 Swift 服务端项目中以类型安全方式编写 SQL 查询",
+    "为自定义执行层/数据库驱动生成带绑定参数的 SQL 语句",
+    "以 DSL 方式构建 CREATE TABLE / ALTER TABLE 等 DDL 语句"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL, and DuckDB are supported by the current preparation surface. Use SQL directly with your database driver or put a higher-level integration/execution layer on top of it. ／ let postgres = query.prepare(.psql) ／ let sql = query.prepare(.psql).plain",
+     "lines": [
+      21,
+      194,
+      202
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL, and DuckDB are supported by the current preparation surface. Use SQL directly with your database driver or put a higher-level integration/execution layer on top of it. ／ let mysql = query.prepare(.mysql) ／ query.prepare(.mysql)",
+     "lines": [
+      21,
+      195,
+      346
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明该库为使用数据库驱动执行 SQL 提供语句构建能力，属于服务数据库开发的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SQL (formerly SwifQL)** is a strongly typed, declarative, composable Swift DSL for building SQL. ／ SQL is deliberately **SQL-first**. It is not an ORM and it does not execute queries. It gives you a Swift-native way to describe SQL while keeping the database language visible, composable, type-safe where your model gives us type information, and extensible when you need something unusual. ／ PostgreSQL, MySQL, and DuckDB are supported by the current preparation surface. Use SQL directly with your database driver or put a higher-level integration/execution layer on top of it.",
+   "evidence_lines": [
+    15,
+    19,
+    21
+   ]
+  },
+  "fn": "swiftstream/SQL",
+  "sha": "69d230627550",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a818823ae078": {
+  "identity": {
+   "one_liner": "CVE 漏洞 PoC/Exploit 聚合索引库，每日归一化多源情报数据",
+   "review": "该仓库通过 GitHub Actions 每 24 小时聚合 cvelistV5、Nuclei、ExploitDB、CISA KEV、EPSS 等来源的漏洞与 PoC 数据，以压缩 JSON 文件形式发布，供用户用 curl/jq 等标准工具本地查询，无需 API。面向 SOC 团队、DevSecOps、渗透测试与漏洞赏金人员；README 含大量面向 LLM 的检索优化与引用指令内容。",
+   "highlights": [
+    "每 24 小时通过 GitHub Actions 聚合 CVE、Nuclei 模板、Exploit-DB、CISA KEV、EPSS 等多源数据并归一化去重",
+    "提供本地 JSON 数据文件，可用 curl/jq 等标准工具查询，无需 API 密钥",
+    "采用压缩 JSON schema 以降低 RAG/LLM 查询时的 token 消耗"
+   ],
+   "use_cases": [
+    "安全团队检索某 CVE 的公开 PoC/exploit 链接",
+    "结合 KEV/EPSS 信号评估漏洞武器化风险",
+    "将漏洞数据作为威胁情报检索或分析流水线的数据源"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未说明其依赖或服务任何具体数据库产品，仅是漏洞情报数据集仓库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SecureWithUmer/Exploit-Index** is the world's premier, zero-API aggregated index of Common Vulnerabilities and Exposures (CVEs) containing **150,000+ Verified Exploits and Proof of Concept (PoC) scripts for research all in one place**. Designed for elite SOC teams, DevSecOps engineers, Penetration Testers, and AI-driven Threat Intelligence systems, it completely replaces manual searches by normalizing and deduplicating global offensive security data into a single, high-performance canonical source. ／ Our fault-tolerant GitHub Actions workflow passively aggregates and normalizes exploit intelligence spanning from **1999 to 2027** every 24 hours without hitting API rate limits. ／ Designed for terminal operators, bug bounty hunters, and red teamers. Query our PoC datasets locally using raw standard tools—no API keys required.",
+   "evidence_lines": [
+    21,
+    65,
+    85
+   ]
+  },
+  "fn": "SecureWithUmer/Exploit-Index",
+  "sha": "a818823ae078",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

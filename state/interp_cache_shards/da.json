@@ -7920,5 +7920,159 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b72cc356df97": {
+  "identity": {
+   "one_liner": "Go 编写的 haste 兼容 pastebin 文档分享服务",
+   "review": "gobin 是一个与 hastebin/haste-server 兼容的 pastebin 文档分享服务，支持创建、更新、删除文档，内置速率限制、语法高亮、文档过期和 Webhook，可通过 Docker 或单个二进制文件部署，数据存储支持 PostgreSQL 或 SQLite，并提供配套 CLI 客户端，适合需要自托管代码片段分享服务的个人或团队。",
+   "highlights": [
+    "支持 PostgreSQL 或 SQLite 作为后端存储，启动时自动创建或迁移数据库 schema",
+    "提供文档增删改 API、过期机制与基于滑动窗口的 IP 速率限制",
+    "使用 chroma 实现语法高亮，支持 base16 与自定义主题，可 Docker 部署"
+   ],
+   "use_cases": [
+    "自托管与 haste-server 兼容的代码/文本片段分享服务",
+    "通过 API 或 CLI 在脚本与终端中创建、更新带过期时间的文档",
+    "需要速率限制与语法高亮的团队内部粘贴服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Supports PostgreSQL or SQLite",
+     "lines": [
+      28
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Supports PostgreSQL or SQLite",
+     "lines": [
+      28
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|M|Makefile, Mako, markdown, Mason, Mathematica, Matlab, MiniZinc, MLIR, Modula-2, MonkeyC, MorrowindScript, Myghty, MySQL|",
+     "lines": [
+      241
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "gobin 是一个使用 PostgreSQL/SQLite 存储文档数据的 pastebin 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "gobin is a simple lightweight haste-server alternative written in Go, HTML, JS and CSS. It is aimed to be easy to use ／ - Supports PostgreSQL or SQLite ／ - Docker image available",
+   "evidence_lines": [
+    11,
+    28,
+    30
+   ]
+  },
+  "fn": "topi314/gobin",
+  "sha": "b72cc356df97",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "48918accd3e8": {
+  "identity": {
+   "one_liner": "自托管中文 AI 写作工作台，PostgreSQL 单库承载 RAG 与记忆",
+   "review": "面向中文内容创作者的自托管 AI 写作应用，Go + React 实现，提供素材检索、提纲确认、风格化成稿、质量评审与分层记忆沉淀等流程。检索与向量存储依赖 PostgreSQL 单库（ParadeDB 镜像含 pgvector 与 pg_bm25），部署经 docker compose，需配置 LLM API Key，支持 BYOK 与多用户管理。",
+   "highlights": [
+    "在 PostgreSQL 单库内实现 BM25、向量检索与 RRF 融合，无需外部向量库",
+    "提供分层记忆系统并输出注入遥测事件，支持事件查询",
+    "通过 docker compose 提供快速启动与自构建两种部署方式"
+   ],
+   "use_cases": [
+    "中文长文创作与多材料综合写作",
+    "需要引用可校验的深度研究与综述写作",
+    "个人或团队自托管部署的 AI 辅助内容生产"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |📚 **自托管 RAG，零外部向量库**|PostgreSQL 单库内完成 BM25（ParadeDB）+ 向量（pgvector）+ RRF 融合 + GraphRAG；上传素材永远是你的最高优先级（P0），检索结果不得覆盖用户原始表达| ／ |数据库|PostgreSQL 17（ParadeDB 镜像：pgvector + pg_bm25）· Redis 7|",
+     "lines": [
+      6,
+      24,
+      170
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 PostgreSQL 17 存储数据（含向量与 BM25 检索），该库仅是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|📚 **自托管 RAG，零外部向量库**|PostgreSQL 单库内完成 BM25（ParadeDB）+ 向量（pgvector）+ RRF 融合 + GraphRAG；上传素材永远是你的最高优先级（P0），检索结果不得覆盖用户原始表达| ／ |数据库|PostgreSQL 17（ParadeDB 镜像：pgvector + pg_bm25）· Redis 7| ／ docker compose -f docker-compose.quickstart.yml up -d",
+   "evidence_lines": [
+    24,
+    170,
+    75
+   ]
+  },
+  "fn": "Echo-Smith/LuminWrite-OSS",
+  "sha": "48918accd3e8",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

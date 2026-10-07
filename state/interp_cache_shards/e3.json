@@ -8485,5 +8485,83 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "36008ac421f1": {
+  "identity": {
+   "one_liner": "本地自托管的 MCP Agent 记忆服务器，基于 Bun + SQLite 提供 FTS5 检索",
+   "review": "Titen 是一个无需 API key、无需 LLM 或 embedding 提供方的 agent 记忆服务器，以单进程通过 stdio 提供 MCP 服务，数据存储在本地 SQLite 文件中，检索默认使用 FTS5 词法匹配。每条记忆保留来源、读取权限与矛盾证据，并提供审计工具检查其他记忆存储。面向使用 MCP 协议的 agent 开发者，可作为 @modelcontextprotocol/server-memory 的替代；模型辅助推导功能存在但未通过公开激活门槛。也可运行于 Cloudflare Workers（D1）。",
+   "highlights": [
+    "通过 stdio/HTTP/REST 提供 MCP 协议服务，兼容 @modelcontextprotocol/server-memory 的九个工具名与 schema",
+    "基于 SQLite 与 FTS5 的本地检索，默认无 LLM、无 embedding、无外部依赖",
+    "内置审计命令，可读取自身、reference-server 及 Mem0 导出的存储并报告重复、召回循环、密钥模式与过期项"
+   ],
+   "use_cases": [
+    "为本地运行的 MCP agent 提供带来源与权限的记忆存储",
+    "从 @modelcontextprotocol/server-memory 迁移现有 memory. 并获得全文检索能力",
+    "审计已有的 agent 记忆库质量（重复、过期、密钥泄露模式）"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Bun and one SQLite file; everything else is the standard library and Web APIs. ／ |Growth|full-file rewrite, unbounded|SQLite, retention and eviction policies| ／ You can run Titen on Bun with SQLite or on Cloudflare Workers with D1. Semantic",
+     "lines": [
+      72,
+      114,
+      371
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The base service does not require Docker, Redis, Postgres, a graph database, or",
+     "lines": [
+      728
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 agent 生态提供 MCP 记忆服务的工具组件，SQLite 仅为其存储后端而非其服务的应用对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Bun and one SQLite file; everything else is the standard library and Web APIs. ／ real organization, workspace, project and owner into it, and serves MCP over ／ claude mcp add --transport stdio --scope user titen -- npx -y titen-memory mcp",
+   "evidence_lines": [
+    72,
+    30,
+    40
+   ]
+  },
+  "fn": "RamaAditya49/titen",
+  "sha": "36008ac421f1",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

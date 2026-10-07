@@ -8474,5 +8474,139 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "46b66dd174f4": {
+  "identity": {
+   "one_liner": "开源搜索引擎，提供全文/语义/混合搜索 RESTful API",
+   "review": "Meilisearch 是一个用 Rust 编写的搜索引擎，通过 RESTful API 提供全文、语义和混合搜索能力，支持拼写容错、分面过滤、地理搜索、多租户和 API 密钥权限管理，并提供多种语言的 SDK 与插件。面向为应用和网站集成搜索功能的开发者。社区版采用 MIT 许可，企业版功能（如分片）受商业许可或 BSL 1.1 约束，非生产用途之外需商业授权。",
+   "highlights": [
+    "提供混合搜索，结合语义搜索与全文搜索，支持拼写容错、分面过滤、排序、同义词和地理搜索",
+    "提供 RESTful API 及多语言 SDK 与集成插件，兼容 LangChain 与 Model Context Protocol（MCP）",
+    "通过 API 密钥实现细粒度权限控制，支持多租户个性化搜索结果"
+   ],
+   "use_cases": [
+    "为电商网站构建分面过滤与分页搜索界面",
+    "为媒体、图片库等应用提供自然语言或语义搜索",
+    "为多租户 SaaS 应用（如 CRM）提供个性化搜索"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表述其为可嵌入应用技术栈的搜索引擎，通过 API/SDK 为其他应用提供搜索服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双版本：Community Edition 采用 MIT 许可；Enterprise Edition 受商业许可或 Business Source License 1.1 约束",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " ⚡ A lightning-fast search engine that fits effortlessly into your apps, websites, and workflow 🔍 ／ - **RESTful API:** integrate Meilisearch in your technical stack with our plugins and SDKs ／ - **AI-ready:** works out of the box with LangChain and the Model Context Protocol (MCP) ／ - Fully open source under the MIT license ／ - Governed by a commercial license or the Business Source License 1.1",
+   "evidence_lines": [
+    20,
+    56,
+    62,
+    99,
+    108
+   ]
+  },
+  "fn": "meilisearch/meilisearch",
+  "sha": "46b66dd174f4",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0f666d454be7": {
+  "identity": {
+   "one_liner": "本地优先的 Windows 求职管理桌面应用，基于 Electron 与 SQLite 存储求职记录",
+   "review": "职迹是一款面向 Windows 的本地求职管理桌面应用，用于跟踪岗位、公司、简历、面试日程和投递进度，数据经 better-sqlite3 保存于本机 SQLite，无账号无云同步。还内置智能体助手，可连接自选模型并通过 MCP 连接外部 AI 工具。适合求职者个人使用；安装包依赖系统 Microsoft Edge Stable。",
+   "highlights": [
+    "提供求职记录、公司管理、简历版本管理与日历提醒功能",
+    "使用 SQLite（better-sqlite3）在本地保存数据，支持完整备份导出与导入",
+    "内置智能体助手，支持连接自选模型并通过 MCP 连接外部 AI 工具"
+   ],
+   "use_cases": [
+    "个人求职者跟踪岗位投递进度与面试日程",
+    "管理多版本简历并记录每次投递使用的版本",
+    "离线/本地环境下保存求职记录，不依赖云服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|本地数据|SQLite、better-sqlite3|在本机保存求职记录和应用数据|",
+     "lines": [
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 仅用于在本机保存该应用的求职记录数据，应用本身不服务于数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "职迹是一款面向 Windows 的本地求职管理桌面应用，将公司、岗位、简历、求职进度和面试日程集中在一起，帮助你有条理地推进每一次求职。 ／ |本地数据|SQLite、better-sqlite3|在本机保存求职记录和应用数据| ／ 职迹无需账号，不提供云同步，求职记录、简历和聊天历史保存在本机。使用智能体时，相关对话和选定内容会发送到你配置的模型服务。",
+   "evidence_lines": [
+    5,
+    24,
+    55
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "baozha2023/JobTrail",
+  "sha": "0f666d454be7",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

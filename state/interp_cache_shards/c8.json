@@ -8468,5 +8468,140 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2e6921cc4d2f": {
+  "identity": {
+   "one_liner": "AI 编码代理长期记忆系统，Markdown 存储，FTS5+向量混合检索",
+   "review": "Eidetic 为 Claude Code 等 AI 编码代理提供基于 Markdown 文件的长期记忆：会话结束时由 LLM 抽取决策与规则生成记忆卡片，并自动注入下次会话。它通过漂移检测（死链、过期、声明的矛盾）对陈旧记忆降权，支持 FTS5+e5 向量混合检索、记忆合并去重和 Obsidian vault 导出，还可将外部语料构建为按项目附加的 topic base。适合使用 Claude Code/MCP 代理的开发者维护跨会话的项目知识；语义检索需额外安装 fastembed。",
+   "highlights": [
+    "支持 FTS5 + 向量（e5 模型）混合检索，多语言查询",
+    "提供漂移检测：死 wikilink、时效过期、置信度升级、声明矛盾均降低卡片排序权重",
+    "支持记忆合并更新、证据分层权重、使用遥测，以及导出为 Obsidian vault"
+   ],
+   "use_cases": [
+    "让 Claude Code 在会话间保留决策、规则和项目上下文",
+    "将 API 文档、方法论等外部语料构建为 topic base 并按项目附加",
+    "为 MCP 代理提供可检索的长期知识库"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|**Core** — FTS5 search, auto-injection, drift, compounding, Obsidian vault export|`bash` + `python3` + `sqlite3` (preinstalled on macOS/Linux)|— works fully|",
+     "lines": [
+      249
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明其核心依赖 bash、python3 与 sqlite3（FTS5），SQLite 仅作为本地检索组件被使用，项目本身是面向 AI 代理的记忆工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Eidetic gives an AI coding agent **long-term memory** that lives in plain Markdown files and is searched with hybrid FTS5 + vector search. One engine, **two kinds of memory**: ／ One command. `install.sh` asks 3 quick questions (Enter = sensible default) and wires the Claude Code hooks. The **core** (FTS5 search, auto-injection, drift, vault) needs **zero pip installs** and works immediately; semantic search adds one — `pip install fastembed` (see Dependencies). Piped / CI / agent installs stay non-interactive via env or the defaults. ／ |Keyword search only|**Hybrid FTS5 + vector** search (e5-large, ~100 languages)|",
+   "evidence_lines": [
+    13,
+    53,
+    92
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "LARIkoz/eidetic",
+  "sha": "2e6921cc4d2f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "37a063e6168a": {
+  "identity": {
+   "one_liner": "家庭实验室通知过滤器：聚合各服务告警到一个收件箱，过滤打包后推送",
+   "review": "nexsift 是一个自托管的通知聚合与过滤服务，为 homelab 用户解决告警疲劳：以 Gotify/ntfy API、webhook、SMTP、syslog、Discord webhook 等多种端口接收各服务告警，按规则分级、打包降噪，再经 ntfy、Gotify、Telegram 或 Web Push 推送到手机。数据以 SQLite 存储于 /data，通过 Docker Compose 部署。",
+   "highlights": [
+    "支持 webhook、Gotify API、ntfy API、Discord webhook、SMTP、syslog（RFC 3164/5424）多种接入方式，兼容已有发送方无需改动",
+    "提供基于标题/正文的规则引擎，支持分级（info/warning/critical）、打包、all-clear 关闭问题与风暴守卫汇总",
+    "数据（来源、规则、消息、设置）存储于单个 SQLite 数据库，内置每日备份与 AES-256 加密归档导出"
+   ],
+   "use_cases": [
+    "家庭实验室中将 Proxmox、Watchtower、Uptime Kuma 等多服务告警聚合到单一收件箱",
+    "对通知做降噪打包与分级过滤，仅将关键消息推送到手机",
+    "为无法修改推送配置的旧设备（仅支持邮件或 syslog）提供统一告警接入"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`nexsift.db`|The SQLite database: sources, rules, targets, messages, settings|",
+     "lines": [
+      152
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "nexsift 是使用 SQLite 存储自身数据（来源、规则、消息、设置）的通知应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "nexsift collects the alerts of all your services in one inbox, sorts them, bundles the noise and passes on only ／ - **Backup and restore:** a copy of the database every night (or weekly, monthly, off), one before every update ／ |`nexsift.db`|The SQLite database: sources, rules, targets, messages, settings|",
+   "evidence_lines": [
+    8,
+    87,
+    152
+   ]
+  },
+  "fn": "DerKezorm/nexsift",
+  "sha": "37a063e6168a",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

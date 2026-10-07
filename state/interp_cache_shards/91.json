@@ -9169,5 +9169,151 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "46d34b56b91c": {
+  "identity": {
+   "one_liner": "Malloy 语义模型的分析引擎，经 MCP 与 REST 供代理/BI查询",
+   "review": "Publisher 是 Malloy 语言的语义建模与查询服务引擎：用 Malloy 定义数据源、连接、指标和访问规则，经 MCP 服务给 Claude、Cursor 等 AI 代理，经 REST 服务给应用和 BI 工具。内置 DuckDB 读取 CSV/Parquet/JSON/Excel，也可经连接访问 BigQuery、Snowflake、Postgres 等仓库，并支持物化预聚合、访问过滤、仪表盘与数据应用。适合以代理优先的分析工作流；服务器无认证，需网关保护。",
+   "highlights": [
+    "提供 MCP 与 REST 双接口，将 Malloy 模型服务给 AI 代理、应用与 BI 工具",
+    "内置 DuckDB 读取本地文件，支持经连接访问 BigQuery、Snowflake、Postgres、Databricks、MotherDuck 等数据源",
+    "支持 #@ persist 物化、#@ preaggregate 预聚合及行级访问过滤"
+   ],
+   "use_cases": [
+    "让 AI 代理基于语义模型查询数据而非手写 SQL",
+    "构建受访问控制的仪表盘、笔记本与 HTML 数据应用",
+    "按计划物化和预聚合昂贵查询源"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Run anywhere** — DuckDB built in for CSV, Parquet, JSON, and Excel; BigQuery, Snowflake, Postgres, ／ connection — BigQuery, Snowflake, Postgres, Databricks, MotherDuck, and more —",
+     "lines": [
+      50,
+      102
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "Postgres, MySQL, Trino, Databricks, MotherDuck, and DuckLake — docs/connections.md.",
+     "lines": [
+      229
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为连接数据库、提供语义建模与查询服务的组件，属数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One data model, served over MCP and REST to AI agents, applications, and BI tools. ／ connection — BigQuery, Snowflake, Postgres, Databricks, MotherDuck, and more — ／ - **Run anywhere** — DuckDB built in for CSV, Parquet, JSON, and Excel; BigQuery, Snowflake, Postgres,",
+   "evidence_lines": [
+    6,
+    102,
+    50
+   ]
+  },
+  "fn": "malloydata/publisher",
+  "sha": "46d34b56b91c",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "17baaf861e4e": {
+  "identity": {
+   "one_liner": "自托管蛋鸡养殖场管理系统，基于 .NET 10 + PostgreSQL，支持多租户。",
+   "review": "这是一个自托管的家禽（蛋鸡）养殖场管理系统，用于记录每日产蛋数据、按等级分级、FIFO 蛋批追溯、销售与库存管理。面向养殖场运营者，架构上支持多租户并预留肉鸡、种鸡、孵化等扩展模块。后端为 .NET 10 (EF Core)，前端 React 19，通过 Aspire 进行本地开发编排，生产环境以 Docker Compose 单容器部署，依赖 PostgreSQL 与 Redis。",
+   "highlights": [
+    "支持每日产蛋记录、分级计数与 FIFO 蛋批追溯",
+    "从架构上支持多租户（租户/农场/鸡舍/鸡群层级）",
+    "支持通过 Aspire 启动全栈开发环境，或通过 Docker Compose 进行生产级部署",
+    "在数据层（EF 全局查询过滤器 + 租户插入戳）强制执行租户隔离"
+   ],
+   "use_cases": [
+    "蛋鸡养殖场的日常生产记录与 Dashboard（仪表板）监控",
+    "种鸡群鸡蛋批次从产蛋到销售的全链路追溯",
+    "具有未付款/逾期跟踪的多租户销售订单管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Backend:** C# / .NET 10 (ASP.NET Core minimal APIs) · **Database:** PostgreSQL (EF Core) ／ Aspire starts PostgreSQL, Redis, the API, and Vite; waits on their existing",
+     "lines": [
+      28,
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统使用 PostgreSQL 作为自身的后端数据库来存储农场运营数据，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Backend:** C# / .NET 10 (ASP.NET Core minimal APIs) · **Database:** PostgreSQL (EF Core) ／ Poultry farm management, starting with egg-producing layer operations. It has",
+   "evidence_lines": [
+    28,
+    3
+   ]
+  },
+  "fn": "mforce/cluckwork",
+  "sha": "17baaf861e4e",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9312,5 +9312,145 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7c12b23cfa82": {
+  "identity": {
+   "one_liner": "SQLite 兼容 SQL 的列式存储数据库引擎，内置 JIT 编译执行",
+   "review": "musql 是一个用 Go 实现的嵌入式/服务端数据库引擎，实现 SQLite 的 SQL 方言，采用列式段存储格式并支持对查询路径做 JIT 编译。可通过 database/sql 驱动嵌入 Go 程序，也可用 musqld 以 Hrana 协议对外服务，提供 musql-convert 做与 SQLite 文件的双向转换，并支持 CRDT/Leader 模式复制。适合需要嵌入式 SQL 存储或向 libSQL/Turso 客户端提供服务的 Go 开发者；注意 SQL 兼容与文件兼容分离，SQLite 文件需先转换，且无 JIT 时扫描性能下降。",
+   "highlights": [
+    "提供列式段存储格式（.musq）与 JIT 编译执行路径，支持向量化过滤内核",
+    "实现 SQLite SQL 方言，包含 joins、窗口函数、触发器、JSON、全文检索与 R-tree 索引",
+    "提供 musql-convert 与 SQLite 文件双向导入导出，musqld 支持 Hrana 1–3 协议及 CRDT/Leader/quorum 复制"
+   ],
+   "use_cases": [
+    "在 Go 程序中通过 database/sql 作为嵌入式数据库使用",
+    "将现有 SQLite 数据库转换后以列式格式运行查询",
+    "向 libSQL/Turso 客户端提供协议兼容的数据库服务，并在多节点间复制数据"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "compat",
+     "quote": "**SQLite-compatible SQL, accelerated by columnar storage and a JIT compiler.** ／ Use it as an embedded database through `database/sql`, import existing SQLite ／ musql implements SQLite's SQL dialect through its own parser, planner, and",
+     "lines": [
+      7,
+      17,
+      134
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "musql 本身是数据库引擎，既非为现有数据库服务的工具，也非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**SQLite-compatible SQL, accelerated by columnar storage and a JIT compiler.** ／ musql implements SQLite's SQL dialect through its own parser, planner, and ／ The driver connects `database/sql` to the parser, planner, and execution engine.",
+   "evidence_lines": [
+    7,
+    134,
+    249
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "samyfodil/musql",
+  "sha": "7c12b23cfa82",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3b48416eb0b1": {
+  "identity": {
+   "one_liner": "DSH Tavern 的 SQLite 存储与服务端执行插件",
+   "review": "面向 DSH Tavern 的插件，把聊天、会话事件和 MVU 变量历史改为 SQLite 管理，提供增量写入、按需读取、独立存档分叉与物理尾部回退，并把 MVU 结算与角色卡脚本搬到服务端执行。适用于使用 DSH Tavern 的长对话用户；需依赖特定上游版本，与 V1 互斥。",
+   "highlights": [
+    "提供 SQLite 增量存档：按头字段与消息楼层拆分存储，局部更新只写入变化部分",
+    "支持 MVU 变量历史归档与按楼层/swipe 按需补回，聊天与变量快照共用同一写事务",
+    "实现物理尾部回退：截断被撤销的会话事件尾部并回拨事件计数与运行状态"
+   ],
+   "use_cases": [
+    "将 DSH Tavern 长对话存档从 JSON 迁移到数据库存档并继续对话",
+    "需要剧情回退真正清理被撤销尾部的场景",
+    "关掉浏览器后仍需在服务端完成 MVU 结算与脚本执行的部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# DSH Tavern SQLite V2 ／ 这是面向DSH Tavern的SQLite存储与服务端执行插件：聊天、会话事件和MVU变量历史改用数据库管理，提供增量写入、按需读取、独立存档分叉与干净回退。**V2在存储与状态一致性之上，把MVU结算、角色卡脚本VM/ESM与Helper生成搬进服务端进程执行，浏览器只负责界面。** ／ |**SQLite增量存档**|按聊天头字段、消息楼层拆分存储；普通局部更新只序列化、写入变化的部分，不因追加一楼就重写全部历史。会话事件使用SQLite事务与WAL管理。|",
+     "lines": [
+      1,
+      5,
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目用 SQLite 管理聊天与变量数据，是使用数据库存数据的应用/插件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU AGPL v3，基于 DSH Tavern 适配的独立修改版，非上游官方发行",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "这是面向DSH Tavern的SQLite存储与服务端执行插件：聊天、会话事件和MVU变量历史改用数据库管理，提供增量写入、按需读取、独立存档分叉与干净回退。**V2在存储与状态一致性之上，把MVU结算、角色卡脚本VM/ESM与Helper生成搬进服务端进程执行，浏览器只负责界面。** ／ |**SQLite增量存档**|按聊天头字段、消息楼层拆分存储；普通局部更新只序列化、写入变化的部分，不因追加一楼就重写全部历史。会话事件使用SQLite事务与WAL管理。| ／ - 当前适配**作者DSH Tavern 2.5.0（首发与重发布树兼容，接缝和维护检查复核至 `8480f7de`）、DSH／boot 0.1.5-rc.2**，需要既有Node22.19+、pnpm与CLI tavern profile；安装器面向Linux、macOS、WSL2与Windows（桌面版/CLI）。",
+   "evidence_lines": [
+    5,
+    12,
+    89
+   ]
+  },
+  "fn": "huajiao1998/dsh-tavern-sqlite-v2",
+  "sha": "3b48416eb0b1",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

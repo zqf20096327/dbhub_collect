@@ -7967,5 +7967,153 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2014e2a25f14": {
+  "identity": {
+   "one_liner": "Go 泛型 Repository 库，统一封装 13 种数据引擎的 CRUD 访问层",
+   "review": "go-crud 是一个 Go 语言数据访问层工具库，通过泛型 Repository 接口为 GORM、Ent、MongoDB、ClickHouse、Elasticsearch、向量/图/时序等 13 类引擎提供统一的 CRUD、分页、过滤与向量检索 API，并以 Protobuf 定义分页/过滤契约。面向需要跨多存储引擎开发 Go 服务的团队；关系库能力经 GORM/Ent 通用层获得，兼容引擎走线协议，向量检索等部分能力仅限特定引擎。",
+   "highlights": [
+    "提供覆盖 GORM、Ent、MongoDB、ClickHouse、Doris 等引擎的统一泛型 Repository 接口",
+    "基于 Protobuf 定义分页、过滤、排序契约，支持 28 种过滤操作符与 Page/Offset/Token 三种分页模式",
+    "内置 Redis Cache-Aside 缓存层、Auditor 审计接口与五级数据范围（SELF/UNIT/USER/ALL/NONE）权限控制"
+   ],
+   "use_cases": [
+    "Go 微服务中需要统一多存储引擎数据访问层的场景",
+    "需要在 gRPC 服务中复用标准化分页/过滤接口的项目",
+    "需要跨引擎向量检索（RAG/语义搜索）或多租户行级隔离的应用开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|GORM|关系型 ORM|✅|MySQL、PostgreSQL、SQLite、SQL Server 等主流关系型数据库| ／ |CockroachDB / YugabyteDB / openGauss / 人大金仓|GORM|PostgreSQL 线协议兼容|",
+     "lines": [
+      31,
+      52
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|GORM|关系型 ORM|✅|MySQL、PostgreSQL、SQLite、SQL Server 等主流关系型数据库| ／ |TiDB / OceanBase|GORM|MySQL 线协议兼容|",
+     "lines": [
+      31,
+      51
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle|GORM|`gorm.io/driver/oracle`（GORM 官方驱动）|",
+     "lines": [
+      54
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|GORM|关系型 ORM|✅|MySQL、PostgreSQL、SQLite、SQL Server 等主流关系型数据库| ／ |Ent|关系型 ORM (Code Gen)|✅|MySQL、PostgreSQL、SQLite，编译时类型安全，Facebook 开源|",
+     "lines": [
+      31,
+      32
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|GORM|关系型 ORM|✅|MySQL、PostgreSQL、SQLite、SQL Server 等主流关系型数据库|",
+     "lines": [
+      31
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **统一数据访问层**：一套泛型 Repository 接口，覆盖 GORM、Ent、MongoDB、ClickHouse、Apache Doris、Elasticsearch、OpenSearch、Qdrant、Milvus、Weaviate、Neo4j、InfluxDB、Cassandra 十三大数据引擎，告别重复 Boilerplate ／ - **Upsert 支持**：GORM / ClickHouse / Doris 原生支持 Upsert（INSERT ON CONFLICT），冲突自动更新 ／ |ClickHouse|列式 OLAP|✅|海量日志分析、指标聚合、用户行为分析、实时数仓|",
+     "lines": [
+      16,
+      24,
+      34
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "compat",
+     "quote": "|TiDB / OceanBase|GORM|MySQL 线协议兼容|",
+     "lines": [
+      51
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "compat",
+     "quote": "|TiDB / OceanBase|GORM|MySQL 线协议兼容|",
+     "lines": [
+      51
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "|达梦 DM8|GORM|社区 gorm driver（dm-go）|",
+     "lines": [
+      53
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "compat",
+     "quote": "|CockroachDB / YugabyteDB / openGauss / 人大金仓|GORM|PostgreSQL 线协议兼容|",
+     "lines": [
+      52
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为多种数据库提供统一访问封装的 Go 工具库，属于数据库生态的数据访问组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **统一数据访问层**：一套泛型 Repository 接口，覆盖 GORM、Ent、MongoDB、ClickHouse、Apache Doris、Elasticsearch、OpenSearch、Qdrant、Milvus、Weaviate、Neo4j、InfluxDB、Cassandra 十三大数据引擎，告别重复 Boilerplate ／ ## 支持的数据引擎 ／ 每个数据访问层模块均提供统一的泛型 Repository 封装，基于 `mapper.CopierMapper[DTO, ENTITY]` 实现 DTO ↔ Entity 双向自动映射：",
+   "evidence_lines": [
+    16,
+    27,
+    87
+   ]
+  },
+  "fn": "tx7do/go-crud",
+  "sha": "2014e2a25f14",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

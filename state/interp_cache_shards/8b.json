@@ -8281,5 +8281,208 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7b706538d95d": {
+  "identity": {
+   "one_liner": "开源会议预约排程平台，Elixir/Phoenix LiveView 构建，内置 Postgres",
+   "review": "Tymeslot 是一个自托管的会议预约平台，提供预约页、日历双向同步（Google/Outlook/CalDAV 等）、视频会议创建、邮件提醒和 Stripe 付费预约。使用 Elixir/Phoenix LiveView 开发，以 Docker 单容器运行并捆绑 PostgreSQL 14+ 存储，也支持外接 Postgres。适合需要自助掌控预约流程与数据的个人和小团队。",
+   "highlights": [
+    "支持 Google Calendar、Outlook、iCloud、CalDAV 等日历双向同步与冲突检测",
+    "提供内嵌/弹窗/悬浮按钮三种预约组件嵌入方式",
+    "支持 OIDC/OAuth SSO、webhooks 自动化及 Stripe Connect 付费预约"
+   ],
+   "use_cases": [
+    "自托管替代商业预约 SaaS 的会议预约站点",
+    "在自有网站嵌入预约组件收集会议",
+    "需要付费预约并通过 webhook 对接自动化流程的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "One command. Postgres is bundled, so there is nothing else to install. ／ PostgreSQL 14+&nbsp;",
+     "lines": [
+      32,
+      164
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明捆绑并使用 PostgreSQL 存储数据（L32、L164），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One command. Postgres is bundled, so there is nothing else to install. ／ PostgreSQL 14+&nbsp; ／ Booking pages, calendar sync, video rooms and automated emails — running on your server, under your control.",
+   "evidence_lines": [
+    32,
+    164,
+    5
+   ]
+  },
+  "fn": "Tymeslot/tymeslot",
+  "sha": "7b706538d95d",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "aa6f0cc99e10": {
+  "identity": {
+   "one_liner": "开源教育管理系统，用 ASP.NET 和 Vue.js 加 Postgres 构建",
+   "review": "Estud 是面向学校管理者、教师和学生的教育管理平台，提供班级排课、考勤、成绩、通知、SSO/2FA 等功能。技术栈为 ASP.NET、Vue.js 和 Postgres，采用 RBAC、多租户、Outbox 模式与 Webhooks。仓库提供 docker compose 一键本地运行，集成测试直接针对真实 Postgres 实例，外部服务（Google 登录、R2、邮件）在本地模式下关闭。",
+   "highlights": [
+    "支持管理者、教师、学生三种角色，涵盖排课、考勤、成绩与通知功能",
+    "实现 RBAC、OAuth、SSO、2FA 与多租户，并提供 Webhooks 与异步事件集成",
+    "包含 2000+ 单元与集成测试，集成测试运行于真实 PostgreSQL、RustFS 和 Keycloak 依赖"
+   ],
+   "use_cases": [
+    "教育机构管理校区、教室、课程与排班",
+    "教师发布课程计划、点名、布置与批改作业",
+    "学生查看课表、出勤与成绩进度"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- ASP.NET, Vue.js, Postgres ／ Isso sobe o Postgres (já com o schema criado), o backend em http://localhost:5000 e o frontend em http://localhost:3000.",
+     "lines": [
+      43,
+      80
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明系统使用 Postgres 存储数据（docker compose 启动含 schema 的 Postgres），是使用数据库的应用而非数据库工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "O **Estud** é um sistema open-source para gestão educacional, utilizado por gestores, professores e alunos para descomplicar sua vida acadêmica. ／ - ASP.NET, Vue.js, Postgres ／ Isso sobe o Postgres (já com o schema criado), o backend em http://localhost:5000 e o frontend em http://localhost:3000.",
+   "evidence_lines": [
+    7,
+    43,
+    80
+   ]
+  },
+  "fn": "ZaqueuCavalcante/estud",
+  "sha": "aa6f0cc99e10",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0890ebc6a5b8": {
+  "identity": {
+   "one_liner": "Devin Desktop 本地安装诊断工具，只读检查存储、schema、配置与磁盘",
+   "review": "devin-doctor 是一个 Python CLI 工具，用于诊断 Devin Desktop 的本地数据目录：检查 SQLite 存储、schema 版本（v15–v17）、配置文件和磁盘占用，并输出 PASS/WARN/FAIL 报告与修复建议。面向 Devin 桌面用户和运维场景；严格只读，不修复问题，遇到未知的更高 schema 版本会直接报错而非误读。",
+   "highlights": [
+    "提供六项检查：stores、schema、health-of-data、config、hooks-windows、disk，每项输出 PASS/WARN/FAIL 与 fix 建议",
+    "只读运行，不写入数据目录，默认不发起网络请求（--probe-network 仅做一次 TCP 探测）",
+    "plan 子命令生成编号化的修复计划，支持 -- 输出"
+   ],
+   "use_cases": [
+    "Devin 出现历史丢失、认证错误或磁盘占用异常时定位原因",
+    "调试前对 Devin 本地数据做健康检查",
+    "生成 markdown 报告用于 bug report（devin-doctor report --md）"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|`health-of-data`|empty sessions, orphan `message_nodes`, sessions idle > `--stale-days`, `SQLITE_BUSY` locks| ／ - **Locked stores.** If Devin is running, DBs may report `SQLITE_BUSY` — ／ - Devin is running and DBs are locked — close Devin and re-run to clear `SQLITE_BUSY`.",
+     "lines": [
+      83,
+      138,
+      164
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是诊断本地 SQLite 存储文件的只读检查工具，而非使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT，非 Cognition 官方项目，社区维护",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`devin-doctor` diagnoses a Devin Desktop installation — one command that ／ prints a health report with concrete fix suggestions. Read-only, always. ／ |`schema`|schema version vs the supported range (15–17); layout recognition for the ledger-less stores|",
+   "evidence_lines": [
+    24,
+    26,
+    82
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Icaro0310/devin-doctor",
+  "sha": "0890ebc6a5b8",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

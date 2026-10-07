@@ -8734,5 +8734,236 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "955642425cef": {
+  "identity": {
+   "one_liner": "把普通 SQLite 文件组成一个分片数据库，提供并行写入与多协议访问",
+   "review": "BriskDB 是一个用 Rust 实现的分片数据库引擎，将多个普通 SQLite WAL 文件路由为单一逻辑数据库，提供并行写入、跨分片索引、分片安全 ID，以及 PostgreSQL 协议兼容、HTTP 接口和嵌入式 Rust/Python API。数据分片仍是标准 SQLite 文件，可用常规工具检查。当前为 0.1.0 beta，面向本地开发与应用测试，MongoDB 子集为可选且非完整实现，MySQL 协议尚在计划中。",
+   "highlights": [
+    "将多个独立 SQLite WAL 分片文件组成一个逻辑数据库，不同分片可并行写入",
+    "提供 PostgreSQL 线协议兼容、HTTP 访问及嵌入式 Rust/Python API，多个入口共享同一 Rust 路由引擎",
+    "数据分片保持为标准 SQLite 文件，无 fork；另提供实验性 ISAM 元数据与 S3/Parquet 写覆盖层模式"
+   ],
+   "use_cases": [
+    "需要并行写入且希望保持文件可检查的本地分片数据场景",
+    "通过 PostgreSQL 客户端或 HTTP 访问分片 SQLite 数据",
+    "基于 Lambda/EFS/S3 的无服务器应用读写（实验性 S3-overlay 模式）"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "PostgreSQL compatibility, HTTP access, and embedded Rust/Python APIs**. It keeps ／ |**Use existing clients**|PostgreSQL and HTTP work today; an opt-in MongoDB subset is growing, and MySQL is planned.| ／ |PostgreSQL wire protocol|TLS/SCRAM, backpressured row streaming, SQLite-interrupt cancellation, text/binary CRUD, real single-shard transactions, and a live psql/tokio-postgres/psycopg/SQLAlchemy matrix|",
+     "lines": [
+      11,
+      22,
+      301
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|**Use existing clients**|PostgreSQL and HTTP work today; an opt-in MongoDB subset is growing, and MySQL is planned.| ／ Follow MongoDB and MySQL ／ |MySQL wire protocol|Planned| ／ - **More wire protocols:** broader PostgreSQL client compatibility and a MySQL",
+     "lines": [
+      22,
+      30,
+      311,
+      628
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **SQLite files. One sharded database.** ／ BriskDB turns ordinary SQLite files into one database with **parallel writes, ／ SQLite's proven storage engine and tooling; BriskDB adds the routing layer,",
+     "lines": [
+      8,
+      10,
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明 BriskDB 在 SQLite 存储引擎之上添加路由层、分片 ID、协议监听器等机制，是为 SQLite 存储服务的引擎组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "BriskDB turns ordinary SQLite files into one database with **parallel writes, ／ SQLite's proven storage engine and tooling; BriskDB adds the routing layer, ／ |**Embed or run a service**|The same Rust engine powers the binary, Python wheel, and Rust crate.|",
+   "evidence_lines": [
+    10,
+    12,
+    23
+   ]
+  },
+  "fn": "schapman1974/briskdb",
+  "sha": "955642425cef",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "13533bc5c15d": {
+  "identity": {
+   "one_liner": "多引擎桌面数据库管理器，Rust+Tauri 构建",
+   "review": "DBine 是 AddLayer 出品的桌面多引擎数据库管理工具，基于 Tauri 2、Rust 核心与 Vue 3 UI，运行于 Windows/macOS/Linux。提供连接管理、SSH 隧道、查询编辑器、Profiler、ER 图、schema 与数据比较、跨引擎迁移，并内置本地 AI 助手与 MCP 服务器。 README 主要为西班牙语，各引擎功能细节以 docs/ 文档补充说明。",
+   "highlights": [
+    "支持 130 个 SQL 与 NoSQL 引擎的连接、查询、脚本执行与结果导出（CSV/JSON/XLSX 等）",
+    "提供 Profiler、服务器监控、进程管理、执行计划、ER 图与表设计器",
+    "支持跨引擎 schema/数据比较、克隆、同步与类型转换迁移，并含 MCP 服务器与加密云同步"
+   ],
+   "use_cases": [
+    "开发者在单一桌面客户端中管理多种数据库引擎",
+    "DBA 进行查询监控、Profiler 抓取与进程/会话管理",
+    "跨引擎数据库迁移、schema 比较与数据同步"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL). ／ PostgreSQL, TimescaleDB, KingbaseES, AlloyDB, Cloud SQL, Aurora, EDB y ／ |Relacionales|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Clo",
+     "lines": [
+      124,
+      134,
+      324
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Relacionales|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Clo",
+     "lines": [
+      324
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|Relacionales|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Clo",
+     "lines": [
+      324
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- El estado local es un SQLite en la carpeta de configuración de la app.",
+     "lines": [
+      305
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Profiler de SQL Server. De cada una muestra la hora, la duración, el texto, ／ - Si el motor registra cada consulta (Extended Events en SQL Server, ／ `IDENTITY_INSERT` en SQL Server o volver a sincronizar las secuencias en",
+     "lines": [
+      58,
+      61,
+      123
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|Analíticas|DuckDB · archivos CSV / Parquet / JSON · ClickHouse · Trino · Presto · Starburst · BigQuery · Athena · Snowflake · Databricks · Redshift · StarRocks · Doris · Databend · Hive · Impala · Drill · Dremio · Calcite Avatica · Flight SQL · Teradata · Ver",
+     "lines": [
+      325
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Relacionales|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Clo",
+     "lines": [
+      324
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|Relacionales|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Clo",
+     "lines": [
+      324
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "|Relacionales|SQL Server · PostgreSQL · CockroachDB · YugabyteDB · TimescaleDB · Greenplum · KingbaseES · Denodo · MySQL · MariaDB · TiDB · OceanBase · SingleStore · SQLite · libSQL / Turso · Oracle · Oracle Autonomous · Firebird · SAP HANA · Aurora DSQL · Clo",
+     "lines": [
+      324
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述其为连接和操作多种数据库引擎的桌面管理器，为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**DBine** es un gestor de bases de datos multimotor de escritorio, de ／ - **Migrar, clonar y sincronizar bases:** \"Migrar…\" en el menú de una base ／ - **Comparar esquemas:** \"Comparar esquemas…\" en el menú de una base muestra",
+   "evidence_lines": [
+    3,
+    125,
+    154
+   ]
+  },
+  "fn": "addlayer-io/dbine",
+  "sha": "13533bc5c15d",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

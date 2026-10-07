@@ -9888,5 +9888,132 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "desc::psql benchmark tui": {
+  "identity": {
+   "one_liner": "psql 查询基准测试的 TUI 工具",
+   "review": "pglap 是一个基于 Rust 与 ratatui 的终端界面（TUI）工具，用于对 PostgreSQL 的 psql 查询进行基准测试（benchmark）。它面向需要测量查询性能的开发者或运维人员，通过 TUI 呈现基准结果。基于简介判断，仅可确认其基准测试与终端界面能力，其他细节简介未提供。",
+   "highlights": [
+    "提供终端界面（TUI，基于 ratatui）进行 psql 查询基准测试",
+    "使用 Rust 实现的命令行工具",
+    "面向 PostgreSQL 查询性能测量"
+   ],
+   "use_cases": [
+    "对 PostgreSQL 查询进行基准测试",
+    "在终端中查看查询性能测试结果",
+    "比较不同查询执行的表现（基于 benchmark 用途推断）"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "psql benchmark tui"
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "工具对 PostgreSQL 的 psql 查询执行基准测试，是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "psql benchmark tui"
+  },
+  "fn": "cesartalen/pglap",
+  "sha": "desc::psql benchmark tui",
+  "source": "desc",
+  "generated_at": "2026-10-07",
+  "ver": 2,
+  "prompt_ver": "3.3"
+ },
+ "d646743fd3b5": {
+  "identity": {
+   "one_liner": "HackYeah 2026 参赛项目评分网站，AI 评委会打分，队列与状态存于 SQLite",
+   "review": "一个展示 HackYeah 2026 入围及提交项目的网站，用 Bun 单进程流水线构建证据包，由三个固定模型按任务官方标准打分并生成评审文本。队列、步骤状态和上传材料存于 SQLite 并随站点一起 Docker 部署。面向参赛团队和公众浏览结果，团队可通过表单免费提交项目获得相同评审。评审依赖外部 LLM API 的 key 与每日限额。",
+   "highlights": [
+    "提交项目经统一流水线评审：证据包构建、三模型按标准打分取中位数、裁判模型撰写评审文本",
+    "每个评审步骤持久化到 SQLite，重启或重新部署后可从中断处继续",
+    "提供 /submit 提交表单与队列状态展示，支持限速重试、每日配额和管理端点（隐藏、重跑、恢复队列）"
+   ],
+   "use_cases": [
+    "浏览 HackYeah 2026 入围项目及其按任务标准的评分与评审详情",
+    "参赛团队提交自己的公开仓库获取评分与评审反馈",
+    "管理员通过 admin API 管理评审队列与提交"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "F[Finalists and /submit uploads] --> Q[Queue in SQLite] ／ - Every finished step is stored in SQLite, so a restart or a deploy resumes where it stopped. ／ - SQLite and uploaded decks live in a volume at `/data`.",
+     "lines": [
+      17,
+      40,
+      109
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 用于存储评审队列与已完成的评审步骤，网站使用其存数据而非为数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "  F[Finalists and /submit uploads] --> Q[Queue in SQLite] ／  - Every finished step is stored in SQLite, so a restart or a deploy resumes where it stopped. ／ - SQLite and uploaded decks live in a volume at `/data`.",
+   "evidence_lines": [
+    17,
+    40,
+    109
+   ]
+  },
+  "fn": "justAnArthur/hackyeah-review",
+  "sha": "d646743fd3b5",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

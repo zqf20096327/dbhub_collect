@@ -9075,5 +9075,145 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "09e54029b11f": {
+  "identity": {
+   "one_liner": "编码代理本地记忆层，逐字引用事实+置信度审计",
+   "review": "jevmory 为 Claude Code、Codex CLI、Cursor 等编码代理提供本地记忆：hooks 在会话结束时摄取记录，事实以逐字引用存储，可选调用 Jev 做校准置信度评分，并可用 audit 命令对照证据逐条审计 MEMORY.md。数据存于每项目的 SQLite 库，纯 Python 标准库实现，无 pip 依赖；适合希望代理跨会话保留可溯源事实的开发者，评分功能需显式 opt-in 才产生 API 调用。",
+   "highlights": [
+    "以逐字引用存储事实，不做 LLM 生成，含 runs/judgments 表可溯源",
+    "提供 Claude Code 插件、stdio MCP 服务器与 jevmory CLI 三种接入方式",
+    "纯 Python 3 标准库实现，零 pip 依赖，本地 SQLite 存储，静态脱敏"
+   ],
+   "use_cases": [
+    "为编码代理跨会话保留项目记忆并在会话开始时注入上下文",
+    "审计手工维护的 MEMORY.md，识别过期、错误、无证据的记忆行",
+    "离线演示确定性审计流程（demo/run_demo.py）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite, secrets redacted at rest before storage, and grading gated ／ CC[\"Claude Code<br/>(SessionEnd hook)\"] -->|redacted at rest| DB[(\"per-project SQLite<br/>+ FTS\")] ／ /path/to/project` using a compatible CLI. SQLite may manage WAL sidecars;",
+     "lines": [
+      42,
+      107,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该工具自身的每项目存储介质，README 明言 per-project SQLite，属使用数据库的应用而非为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- 🛡️ **Local by architecture** — Python 3 stdlib only, per-project ／     CC[\"Claude Code<br/>(SessionEnd hook)\"] -->|redacted at rest| DB[(\"per-project SQLite<br/>+ FTS\")] ／ **Active.** 606 offline tests (the same `python -m unittest discover`",
+   "evidence_lines": [
+    41,
+    107,
+    148
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "romiluz13/jevmory",
+  "sha": "09e54029b11f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f820900a0ddb": {
+  "identity": {
+   "one_liner": "自托管服务器监控面板，SSH 无 Agent 采集 + SQLite 存储",
+   "review": "这是一个自托管的服务器监控面板，通过 SSH 定时执行只读命令采集节点指标，内置 RAPL 功耗计量、WireGuard 组网管理和多家内网穿透平台托管，并提供玻璃拟态状态页。面向需要集中监控多台 VPS 与家庭服务器的自托管用户，后端使用 Go + Gin，数据存于 SQLite，Docker 单容器部署，SSH 凭据加密落库。",
+   "highlights": [
+    "通过 SSH 执行只读命令（/proc、df、sysfs）采集指标，被监控机无需安装 Agent",
+    "支持 Intel RAPL 功耗监控，包含实时功率、分项计量与月度 kWh 估算",
+    "内置 WireGuard 星型组网管理：密钥生成、conf 渲染推送、防火墙放行与成员管理"
+   ],
+   "use_cases": [
+    "集中监控多台 VPS / 家庭服务器的 CPU、内存、磁盘、网络指标",
+    "为 Intel 机器进行整机功耗与电费估算",
+    "管理 WireGuard 组网及 Sakura/ChmlFrp/Cloudflare 等内网穿透平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|后端|Go 1.26 + Gin + SQLite（modernc.org/sqlite 纯 Go，无 CGO）|",
+     "lines": [
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是服务器监控应用，SQLite 仅作为其自身数据存储，不面向数据库生态提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|后端|Go 1.26 + Gin + SQLite（modernc.org/sqlite 纯 Go，无 CGO）| ／ 通过 SSH 直连被监控机采集真实指标，Docker 单容器部署，公开页永不暴露 IP 等敏感信息。 ／ - **零 Agent 采集**：面板定时 SSH 连接各节点执行只读命令（`/proc`、`df`、`sysfs`），被监控机不装任何东西；面板自身自动作为「本机」节点展示（本地进程采集，免 SSH）",
+   "evidence_lines": [
+    88,
+    4,
+    16
+   ]
+  },
+  "fn": "Yoahoug/BeaconTower",
+  "sha": "f820900a0ddb",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

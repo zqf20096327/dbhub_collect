@@ -7986,5 +7986,76 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f68e6ce6d9b3": {
+  "identity": {
+   "one_liner": "CLIProxyAPI 网关的自托管管理与用量观测控制台",
+   "review": "Oh My CPA 是为 CLIProxyAPI (CPA) API 网关提供的 Web 控制台，以单个 Go 二进制内嵌 React 界面运行，数据写入本地 SQLite 数据库并支持离线部署。它用于管理网关的 AI 提供商、OAuth 凭据、客户端密钥和 config.yaml，并记录 CPA 本身不存储的每次请求的用量与成本快照，内置 Agent 与 MCP 服务器可在审批后操作控制台。面向自托管 CPA 的运维者；需单独安装 CPA（v8.0.0+），主密钥丢失则加密数据不可读。",
+   "highlights": [
+    "提供仪表盘、年度 token 热力图与逐请求记录，含延迟、TTFT、token 与成本维度",
+    "管理提供商、OAuth 凭据、客户端密钥、配额与 CPA 的 config.yaml，表单与 YAML 双模式",
+    "内置 Agent 与 MCP 服务器按声明的能力操作控制台，变更需人工批准；数据 AES-GCM 加密存储"
+   ],
+   "use_cases": [
+    "自托管 CLIProxyAPI 网关后集中管理提供商凭据与客户端密钥",
+    "记录并分析 LLM 请求的 token 用量、延迟与成本，生成价格快照",
+    "通过 MCP 让外部代理查询用量并在批准后执行管理操作"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "binary with the React console embedded and a local SQLite database, runs offline, and ／ ├─ SQLite WAL (/data)",
+     "lines": [
+      29,
+      275
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 CLIProxyAPI 网关提供管理与观测功能的控制台组件，SQLite 仅作为其内嵌存储，属于服务于数据库生态的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "adapts protocols, holds credentials and proxies requests. **Oh My CPA** (OMC) is a web ／ records the usage and cost of every request, which CPA does not store. It is a single Go ／ Requires Docker Engine with the Compose plugin and CLIProxyAPI v8.0.0 or later. The",
+   "evidence_lines": [
+    26,
+    28,
+    90
+   ]
+  },
+  "fn": "WizisCool/oh-my-cpa",
+  "sha": "f68e6ce6d9b3",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

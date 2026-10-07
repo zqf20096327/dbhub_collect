@@ -8483,5 +8483,144 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8e4a2a836515": {
+  "identity": {
+   "one_liner": "面向编码 agent 的本地长期记忆库，SQLite 存储并以 MCP/HTTP 提供召回",
+   "review": "Hippo 为编码 agent（如 Claude Code、Cursor、Codex）提供本地长期记忆：数据存于本地 SQLite 并生成可 git 跟踪的 markdown 镜像，默认 BM25 检索、可选本地嵌入，支持记忆衰减、纠错降级与 supersede 替换，通过 hooks 与 MCP 接入多工具。适合希望跨工具共享项目记忆、数据留在本地的开发者。",
+   "highlights": [
+    "以本地 SQLite 存储 agent 记忆，附 markdown 镜像，支持 git 跟踪，零运行时依赖",
+    "提供 BM25 检索、记忆纠错降级、supersede 替换与衰减/合并/去重整理机制",
+    "支持 Claude Code、Codex、Cursor、OpenCode 等 hooks 接入，任意 MCP 客户端可连接，并可从 ChatGPT/Cursor/Slack/markdown 导入"
+   ],
+   "use_cases": [
+    "为编码 agent 配置跨工具共享的本地项目记忆存储",
+    "从 ChatGPT、Cursor 规则、Slack 历史等导入已有记忆并统一检索",
+    "在多个 git 仓库批量初始化记忆库并安排每日整理任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Hippo keeps your coding agents' memories in a SQLite store on your machine, with markdown mirrors you can read and commit. Search is BM25 out of the box, with no model and no network call; embeddings are an optional install. `hippo init` installs hooks for Cla ／ Storage: SQLite backbone with markdown mirrors. Git-trackable, human-readable. ／ - **The project's store.** A `.hippo/` folder: SQLite plus markdown mirrors. On the first run in a git repo it learns lessons from the last 30 days of commits.",
+     "lines": [
+      15,
+      32,
+      106
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 SQLite 作为记忆数据的本地存储后端，属于使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Hippo keeps your coding agents' memories in a SQLite store on your machine, with markdown mirrors you can read and commit. Search is BM25 out of the box, with no model and no network call; embeddings are an optional install. `hippo init` installs hooks for Claude Code and OpenCode, adds 2 hooks to Codex's `hooks.json` when Codex is installed (Codex runs them once you trust them in `/hooks`), and adds instructions to an existing `AGENTS.md` for Codex, Cursor, OpenClaw and Pi. Any MCP client can connect. Mark a memory wrong and it ranks lower; run `hippo supersede` and the old fact leaves recall. Zero runtime deps. ／ Storage:       SQLite backbone with markdown mirrors. Git-trackable, human-readable. ／ npm install -g hippo-memory && hippo init",
+   "evidence_lines": [
+    15,
+    32,
+    20
+   ]
+  },
+  "fn": "kitfunso/hippo-memory",
+  "sha": "8e4a2a836515",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6cbcc586be84": {
+  "identity": {
+   "one_liner": "UFC 等 MMA 赛事逐回合统计的 SQLite 数据库与采集器",
+   "review": "该项目每日通过 GitHub Action 抓取 UFC Stats、Sherdog 与 BestFightOdds 数据，生成包含赛事、比赛、逐回合统计、赔率和裁判评分的 SQLite 数据库，并按日期发布版本供其他仓库下载引用。附带基于 sql.js 的静态浏览站点。适合需要离线 MMA 数据做分析的下游项目使用；部分字段（如早期 corner 标记）有覆盖限制。",
+   "highlights": [
+    "提供 1993 年以来 UFC 等 MMA 赛事与逐回合统计的 SQLite 数据库，按 release 版本化发布",
+    "GitHub Action 每日自动抓取更新并发布新版 canon.db",
+    "包含 events、fights、round_stats、odds、judge_scores 等 13 张表的 schema"
+   ],
+   "use_cases": [
+    "为 MMA 数据分析项目提供数据层",
+    "通过附带静态站点在浏览器中查询赛事与逐回合数据",
+    "按 promotion 过滤查询 PRIDE 等其他联盟的比赛记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A SQLite database of MMA events, fights and round-by-round stats (UFC, PRIDE and more),",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储抓取的赛事数据，是使用数据库的应用/数据集而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A SQLite database of MMA events, fights and round-by-round stats (UFC, PRIDE and more), ／ A GitHub Action runs daily. It fetches any new events from UFC Stats, reloads the ／ changed publishes the database as a new release and commits `data/summary.json`. A second, weekly Action picks up events UFC Stats",
+   "evidence_lines": [
+    3,
+    65,
+    67
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Jadevit/fight-canon-db",
+  "sha": "6cbcc586be84",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

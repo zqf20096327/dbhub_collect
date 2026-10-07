@@ -8573,5 +8573,147 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "18ae244adde8": {
+  "identity": {
+   "one_liner": "单二进制 Go 文档管理系统，内置 SQLite 与内容寻址存储",
+   "review": "Suchi 是一个以单个 Go 二进制运行的文档管理系统，将文档元数据存入 SQLite、原始与派生文件按 SHA-256 内容寻址存储，并提供 Svelte 界面和 HTTP API。它包含 OCR、全文检索、ACL、IMAP 摄取、备份恢复及 MCP 接口，面向需要自托管文档归档的用户。当前版本为 v0.1.0，README 提醒升级前需备份。",
+   "highlights": [
+    "支持 PDF/图片 OCR、EPUB、Office、OpenDocument、EML、Outlook MSG 等多种格式读取与索引",
+    "提供全文检索、自定义字段、版本化文档、ACL、OIDC、分享链接、审计事件与备份恢复工具",
+    "以静态 CGO_ENABLED=0 Go 二进制运行，无需外部数据库服务器、队列或缓存服务"
+   ],
+   "use_cases": [
+    "自托管文档归档与检索（扫描件、发票、邮件等）",
+    "通过 HTTP API 或 MCP 集成到现有工作流",
+    "使用 Johnny.Decimal 编码体系组织归档目录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Suchi combines SQLite, content-addressed storage, a Svelte interface, and an ／ SQLite metadata and the API still decide who can see each document. ／ share one server, SQLite/FTS and CAS; server administrators and host/backup operators",
+     "lines": [
+      11,
+      19,
+      159
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Suchi 是使用 SQLite 存储元数据、CAS 存储文件的应用程序本身，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "README 声明以两种许可提供（AGPL-3.0，L164 提及双许可）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A document-management system as a single Go binary. ／ Suchi combines SQLite, content-addressed storage, a Svelte interface, and an ／ integration-friendly HTTP API. It needs no database server, queue, cache, or",
+   "evidence_lines": [
+    5,
+    11,
+    12
+   ]
+  },
+  "fn": "johnnybravo-xyz/suchi",
+  "sha": "18ae244adde8",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f1ed0c5d26fd": {
+  "identity": {
+   "one_liner": "像素风游戏化学习 Agent，基于 LLM 与 SQLite 本地存储",
+   "review": "一个用 AI 对话驱动的学习应用：从提问出发让模型查资料、生成词条和练习，通过知识大陆、卡牌、对战等游戏化形式复习，复习调度使用 FSRS-5。面向个人学习者，支持自带模型 Key、本地运行（npm）和自托管部署，数据以 SQLite 单文件存储；后端为 Express + better-sqlite3，支持本地单机与多用户两种形态。",
+   "highlights": [
+    "对话式学习内核：流式回答、工具调用、联网检索、自动出题与解析（L26、L47）",
+    "基于 FSRS-5 的间隔复习调度，词条自动沉淀为卡牌并铺入知识大陆（L29、L168）",
+    "数据存 SQLite 单文件（WAL），可本地运行、可自托管，支持零 API key 的确定性演示（L49、L68、L118）"
+   ],
+   "use_cases": [
+    "个人学习者用 AI 对话整理词条并做间隔复习",
+    "本地/自托管部署，数据自留的隐私敏感学习场景",
+    "零 API key 演示或教学环境下的全栈离线体验"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**像素风的游戏化学习 Agent：对话里学、出题里练、知识大陆上复习——你自己的词条库是主体，数据归你（SQLite 单文件，可自托管，开源）。** 在线：<https://11wand.com>（免注册可直接体验）· 本地：`npm install && npm run dev` · 零 key 全栈演示：`npm run demo:e2e`。 ／ - **数据归你**：SQLite 单文件、可自托管、开源。 ／ > ⚠️ **Node 版本必须「装依赖」与「运行时」一致**（`engines: >=22.11.0`，仓库带 `.nvmrc`）：`better-sqlite3` 是原生模块，产物按**安装那一刻**的 Node ABI 编译；换 Node 大版本必须删 `node_modules` 重装，只换运行时无效，症状是涉库代码全线 `ERR_DLOPEN_FAILED`（极易误判成新代码写错）。 ／ 运行时形态：`api(Express :18791，默认仅绑 127.0.0.1) + web(Vite :5173)`，数据存 SQLite 单文件（WAL）；多用户 Web 形态同一份代码 + 邮箱/密码/GitHub OAuth 鉴权 + 按用户数据归属 + Caddy 反代 + systemd 守护。★ `server/auth/form.ts` 是形态的**唯一事实源**（`SB_REQUIRE_AUTH` 开 = cloud / 关 = local），「本地有、线上没有」的功能一律从这里判断，禁止各自读 env。",
+     "lines": [
+      17,
+      49,
+      63,
+      118
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 作为自身存储的应用，README 明确数据存 SQLite 单文件，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**像素风的游戏化学习 Agent：对话里学、出题里练、知识大陆上复习——你自己的词条库是主体，数据归你（SQLite 单文件，可自托管，开源）。** 在线：<https://11wand.com>（免注册可直接体验）· 本地：`npm install && npm run dev` · 零 key 全栈演示：`npm run demo:e2e`。 ／ **三包职责**：`@sb/shared` 只放契约与纯函数（前后端共用一份，不允许各写一套）；`@sb/server` 承载全部业务域（Express + better-sqlite3，逐版本迁移 v1..v52）；`@sb/web` 是 React 18 前端，**零第三方运行时依赖**（无 UI 库 / 无 Markdown 库 / 无图表库）。 ／ 运行时形态：`api(Express :18791，默认仅绑 127.0.0.1) + web(Vite :5173)`，数据存 SQLite 单文件（WAL）；多用户 Web 形态同一份代码 + 邮箱/密码/GitHub OAuth 鉴权 + 按用户数据归属 + Caddy 反代 + systemd 守护。★ `server/auth/form.ts` 是形态的**唯一事实源**（`SB_REQUIRE_AUTH` 开 = cloud / 关 = local），「本地有、线上没有」的功能一律从这里判断，禁止各自读 env。",
+   "evidence_lines": [
+    17,
+    114,
+    118
+   ]
+  },
+  "fn": "llwand1/studentbuddy-v2",
+  "sha": "f1ed0c5d26fd",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

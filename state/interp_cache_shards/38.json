@@ -9149,5 +9149,173 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1c9d58b83cc8": {
+  "identity": {
+   "one_liner": "Rust+GPUI 编写的跨平台多引擎数据库客户端",
+   "review": "DBDelve 是一个用 Rust 和 GPUI 构建的本地数据库客户端应用，支持连接并浏览查询多种数据库。它面向需要跨平台桌面工具的开发者和运维人员，提供连接管理、SSH 隧道、单元格编辑、主题和命令面板等功能；支持 MySQL、PostgreSQL、SQLite、MariaDB、MongoDB 等，部分功能（如 Snowflake 内联编辑）有限制。",
+   "highlights": [
+    "支持连接多种数据库引擎：PostgreSQL、MySQL、MariaDB、SQLite、Snowflake、SQL Server、MongoDB",
+    "提供 SSH 隧道连接、查询编辑前的 UPDATE 语句预览、只读/读写权限控制",
+    "支持从 DBeaver/TablePlus 导入连接配置，主题与键盘快捷键可自定义"
+   ],
+   "use_cases": [
+    "开发者在本地浏览、查询和编辑多种数据库中的数据",
+    "通过 SSH 隧道安全访问远程数据库",
+    "将现有 DBeaver/TablePlus 连接配置迁移到本地优先客户端"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Postgres:** supported",
+     "lines": [
+      23
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **MySQL:** supported",
+     "lines": [
+      24
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **MariaDB:** supported",
+     "lines": [
+      25
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite:** supported",
+     "lines": [
+      26
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **SQL Server:** supported, 2017 or later, without Explain. See",
+     "lines": [
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是连接数据库进行数据管理的桌面客户端应用，自身依赖数据库存取数据，不是为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A fast, native, cross-platform, multi-engine database client. Written in Rust ／ ## Supported databases ／ - **Bring your connections with you.** Import every saved connection,",
+   "evidence_lines": [
+    3,
+    21,
+    45
+   ]
+  },
+  "fn": "ShayanAbbas1/dbdelve",
+  "sha": "1c9d58b83cc8",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4698fa7fec53": {
+  "identity": {
+   "one_liner": "macOS 常驻语音 AI 助手，Python 守护进程+Electron 伴侣界面",
+   "review": "Jarvis 是一款运行于 macOS（Apple Silicon）的个人 AI 助手，通过语音交互汇总日历、待办、邮件和编码会话信息，并以 SQLite 存储记忆与事件日志。它目前是作者自用的开发者构建，尚未提供正式安装包，公开版本在计划中，需要 OpenAI 与 MiniMax 密钥才能完整使用。",
+   "highlights": [
+    "支持实时语音交互， wake word 用 microWakeWord，语音识别用 SenseVoice/Silero VAD，可选用本地 Whisper",
+    "通过 MCP 以插件方式连接 Gmail、Outlook、Microsoft To Do、GitHub 和 Notion 账户",
+    "用 SQLite 存储，按日保存事件摘要并支持人工更正的记忆页"
+   ],
+   "use_cases": [
+    "macOS 个人助理场景：查看当日待办、前一日活动摘要",
+    "在菜单栏管理并批准 Claude Code / Codex 会话的命令执行",
+    "筛选需要回复的邮件并生成回复草稿"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A Python daemon owns the microphone, speaker, models, memory and tools. The companion is Electron with React and TypeScript, with a small AppKit module for the glass. They talk over localhost with a per-machine key. Wake word: microWakeWord. Speech recognition",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 Storage: SQLite，该项目是使用数据库存储数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Python daemon owns the microphone, speaker, models, memory and tools. The companion is Electron with React and TypeScript, with a small AppKit module for the glass. They talk over localhost with a per-machine key. Wake word: microWakeWord. Speech recognition: SenseVoice with Silero VAD, optionally with local Whisper for longer turns. Speech: MiniMax. Mail and agent sorting: a small model on zero-data-retention endpoints. Storage: SQLite. The full design is in docs/spec.html. ／ Jarvis is built for one person and one machine, so the setup below is a developer's setup, not an installer. A public version will take some time.",
+   "evidence_lines": [
+    50,
+    54
+   ]
+  },
+  "fn": "samsara0xgg/Jarvis",
+  "sha": "4698fa7fec53",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

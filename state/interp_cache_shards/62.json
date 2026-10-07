@@ -8431,5 +8431,149 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "15c44eb15bdf": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的记忆数据库，融合语义+词法+图+时间检索",
+   "review": "Brain 是一个用 Rust 实现的记忆数据库，存储 Memory/Entity/Statement/Relation 四类记录，带来源、置信度与双时间轴，通过语义、词法、实体图、时间四路检索的加权 RRF 融合回答查询。面向构建 AI Agent 的开发者；运行需强制提供 LLM API key，无客户端 SDK，需自行实现 wire 协议接入。",
+   "highlights": [
+    "提供 encode/recall/plan/reason/forget 等认知操作动词与事务、订阅、遗忘机制",
+    "实现三路检索（semantic/lexical/graph）经加权 RRF 融合的单一读取路径",
+    "强制 schema 驱动的类型化抽取管道（pattern → GLiNER → LLM），每条记录携带来源与双时间戳"
+   ],
+   "use_cases": [
+    "为 AI Agent 存储带来源和时效的记忆并提供召回",
+    "基于实体图的多跳关系推理与证据追溯",
+    "按自定义 schema DSL 持久化领域类型化数据"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "仓库本身是一个独立实现的数据库内核（Rust core + wire protocol），为 AI Agent 生态提供存储组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0，无附加商业版",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> **A memory database for AI agents.** Stores four record types — Memory, Entity, Statement, Relation — with explicit provenance, confidence, and bi-temporal validity. Fused retrieval (semantic + lexical + entity-graph + temporal) combined with weighted rank fusion. One Rust core, one wire protocol, one schema. Apache 2.0. ／ Brain collapses the stack into one Rust core with one wire protocol and one schema: ／ - **`brain-server`** — the database. Binary wire protocol on the data port; a loopback HTTP admin listener (stats, snapshots, audit, worker control) reachable with `curl`. Brain ships no client/SDK/CLI — speak the wire protocol from any language; a `brainctl` migration tool is future work.",
+   "evidence_lines": [
+    11,
+    26,
+    99
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "arc-labs-ai/brain-db",
+  "sha": "15c44eb15bdf",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8f3d27a2e43e": {
+  "identity": {
+   "one_liner": "Rust 编写的 Debian 多节点托管控制面板，事务化开通站点",
+   "review": "Hyperion 是面向 Debian 的自托管主机控制面板，用 Rust 实现，通过每台服务器一个 agent 加主节点 Web UI/CLI/API，以事务方式开通 PHP 站点、nginx vhost、PHP-FPM、数据库、TLS 和 WordPress，失败即回滚。面向需要批量管理多台服务器站点的运维者，支持 HestiaCP/CloudPanel 迁移导入；仅支持 Debian 12+，项目尚年轻。",
+   "highlights": [
+    "提供站点一键开通事务：Linux 用户、PHP-FPM 池、数据库、nginx vhost、TLS 一次创建，任一步失败整体回滚",
+    "支持主节点加多工作节点的集群管理、签名 RPC、跨节点迁移与克隆",
+    "包含 BLAKE3 哈希链防篡改审计日志、S3 离线备份（age 加密）和 HestiaCP/CloudPanel 导入向导"
+   ],
+   "use_cases": [
+    "在多台 Debian VPS 上集中托管和管理 PHP/静态/反向代理站点",
+    "从 HestiaCP 或 CloudPanel 迁移现有站点与数据库",
+    "通过 HTTP API/CLI 将站点开通与备份纳入自动化脚本或 CI"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "DB + TLS · multi-version PHP + MariaDB/PostgreSQL · suspend/resume, limits,",
+     "lines": [
+      247
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "DB + TLS · multi-version PHP + MariaDB/PostgreSQL · suspend/resume, limits,",
+     "lines": [
+      247
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite) — no scraping.",
+     "lines": [
+      198
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "面板将数据库作为托管站点的一部分进行开通和管理，自身是使用数据库的托管应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One agent binary per server, one web UI on the master. Hyperion provisions ／ PHP-FPM pool, database, TLS, WordPress — in a single transaction that rolls ／  profiles that stamp limits, plugins, and DB engine onto many sites at once.",
+   "evidence_lines": [
+    5,
+    7,
+    105
+   ]
+  },
+  "fn": "nechodom/hyperion",
+  "sha": "8f3d27a2e43e",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

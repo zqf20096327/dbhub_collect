@@ -8413,5 +8413,160 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5d32b47bd52b": {
+  "identity": {
+   "one_liner": "LangGraph+FastAPI AI代理后端模板，用PostgreSQL持久化会话",
+   "review": "这是一个AI代理后端起点模板：提供FastAPI路由、API-key认证、租户隔离、Alembic迁移、Docker与测试等后端基础设施，代理逻辑集中在四个LangGraph文件中供替换。适合想把LangGraph原型转成REST API服务的AI工程师使用。数据统一存于PostgreSQL（含pgvector），不含UI、队列和可观测性平台，流式响应仍在路线图中。",
+   "highlights": [
+    "提供API-key认证、租户隔离和PostgreSQL持久化的多轮会话历史",
+    "首个迁移启用pgvector扩展并提供文档检索扩展点",
+    "包含Alembic迁移、结构化JSON日志、Docker部署、pytest/Ruff/MyPy和GitHub Actions CI"
+   ],
+   "use_cases": [
+    "作为RAG助手或内部copilot的后端起点",
+    "将LangGraph图原型转为带认证的REST API服务",
+    "需要多租户API-key访问控制的AI SaaS后端脚手架"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A lean, open-source, production-shaped Python backend for **LangGraph agents** with **FastAPI**, **PostgreSQL + pgvector**, API-key auth, persistent conversations, Docker, migrations, and tests. ／ - **Deliberately boring infrastructure:** one PostgreSQL database, explicit SQL, and no hidden runtime magic. ／ POSTGRES_PASSWORD=localdev",
+     "lines": [
+      7,
+      29,
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README声明PostgreSQL是唯一必需数据存储，用于保存应用数据、会话历史、API密钥和向量，项目只是使用该库存数据的应用模板",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A lean, open-source, production-shaped Python backend for **LangGraph agents** with **FastAPI**, **PostgreSQL + pgvector**, API-key auth, persistent conversations, Docker, migrations, and tests. ／ - **Deliberately boring infrastructure:** one PostgreSQL database, explicit SQL, and no hidden runtime magic. ／ PostgreSQL stores application data, conversation history, API keys, and—when you add a document table—vectors. This keeps the local and early-production stack understandable. Add Redis or a dedicated vector database when measured constraints justify it.",
+   "evidence_lines": [
+    7,
+    29,
+    212
+   ]
+  },
+  "fn": "IgnazioDS/langgraph-fastapi-starter",
+  "sha": "5d32b47bd52b",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8331c1d232d9": {
+  "identity": {
+   "one_liner": "AI 编码代理的可逆副作用防护层，快照文件并托管 PostgreSQL 写入",
+   "review": "unring 是一个面向 AI 编码代理的安全层，用 Go 编写：它包裹一次有界的代理运行，通过 APFS 快照/克隆保护本地文件，把代理的 PostgreSQL 写入共享在单个真实事务中以便最终 COMMIT 或 ROLLBACK，并提供可选的出站 HTTPS 审查适配器。适用于运行 Claude Code、Codex 等代理的开发者。需 Go 1.26+、cgo 和 C 编译器，文件保护在 macOS 上依赖 APFS/Time Machine，Linux 为较低保护层级。",
+   "highlights": [
+    "将代理的 PostgreSQL 连接共享于单个真实事务，支持最终 COMMIT 或 ROLLBACK 回收写入",
+    "通过 APFS 本地快照与 copy-on-write 克隆保护文件变更，支持事后按路径恢复",
+    "提供审计日志与 --outbound 出站操作审查适配器"
+   ],
+   "use_cases": [
+    "让 AI 代理在有界任务中执行代码/数据库变更，运行结束后统一审查、提交或回滚",
+    "防止代理对开发数据库或本地文件的误操作不可逆",
+    "审计代理运行期间产生的副作用记录"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Snapshot local files, hold PostgreSQL writes in a real transaction, and review opt-in outbound effects before they become permanent. ／ |**PostgreSQL**|Shares one real transaction across the agent's connections|One final `COMMIT` or `ROLLBACK`| ／ export DATABASE_URL='postgresql://user:password@localhost/app'",
+     "lines": [
+      12,
+      28,
+      49
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- Postgres only. MySQL commits DDL implicitly, which breaks the core guarantee.",
+     "lines": [
+      575
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Change detection keeps metadata as its fast oracle. For a clone-backed regular file whose",
+     "lines": [
+      251
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI 编码代理提供文件快照与数据库事务托管的安全层，服务于数据库使用流程而非自身作为应用存储数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A safety layer for AI coding agents. ／  Snapshot local files, hold PostgreSQL writes in a real transaction, and review opt-in outbound effects before they become permanent. ／ |**PostgreSQL**|Shares one real transaction across the agent's connections|One final `COMMIT` or `ROLLBACK`|",
+   "evidence_lines": [
+    11,
+    12,
+    28
+   ]
+  },
+  "fn": "hyj28/unring",
+  "sha": "8331c1d232d9",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

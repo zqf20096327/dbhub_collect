@@ -8814,5 +8814,363 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "910c32e42265": {
+  "identity": {
+   "one_liner": "开源桌面 SQL 工作台，内置 3 个驱动并经插件扩展多库支持",
+   "review": "Tabularis 是一款跨平台桌面 SQL 客户端，提供连接管理、数据库浏览器、ER 图、SQL 编辑器、SQL 笔记本、可视化查询构建器与可视化 EXPLAIN 等功能，并内置 MCP 服务器供 AI 代理读取 schema 和执行查询。PostgreSQL、MySQL/MariaDB、SQLite 内置支持，其余数据库通过 JSON-RPC 插件接入（注意内置 PostgreSQL 驱动已弃用，改由插件提供）。适合需要在桌面统一管理多种数据库并使用 AI 辅助写 SQL 的开发者。",
+   "highlights": [
+    "内置 PostgreSQL、MySQL/MariaDB、SQLite 驱动，其余数据库通过插件（JSON-RPC over stdio）扩展",
+    "提供 ER 图、可视化查询构建器、SQL 笔记本、可视化 EXPLAIN 计划图",
+    "内置 MCP 服务器，支持 Claude、Cursor、Devin 等 AI 代理读取 schema 并运行查询"
+   ],
+   "use_cases": [
+    "在桌面统一连接和浏览多种数据库（表、列、索引、视图、存储例程）",
+    "编写和运行 SQL 笔记本，组合 SQL 与 Markdown 单元格并生成图表",
+    "让 AI 代理通过 MCP 服务器查询数据库 schema 并执行查询"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection.",
+     "lines": [
+      81,
+      201
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection.",
+     "lines": [
+      81,
+      201
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection.",
+     "lines": [
+      81,
+      201
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage o ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection.",
+     "lines": [
+      81,
+      201
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|DM / Dameng|tabularis-dameng-plugin|Oracle|tabularis-oracle-plugin|",
+     "lines": [
+      90
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|Elasticsearch|tabularis-elasticsearch-plugin|SQL Server|tabularis-sqlserver-plugin|",
+     "lines": [
+      93
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Tabularis is an open-source desktop SQL workspace with 3 built-in database drivers and 21 shipped plugins, including DuckDB, ClickHouse, Redis and Firestore. Its built-in MCP server lets Claude, Cursor and Devin (formerly Windsurf) read your schema and run que ／ |ClickHouse|tabularis-clickhouse-plugin|LibSQL / Turso|tabularis-libsql-plugin|",
+     "lines": [
+      6,
+      87
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "|DM / Dameng|tabularis-dameng-plugin|Oracle|tabularis-oracle-plugin|",
+     "lines": [
+      90
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "|Scoped|Amazon Redshift, CockroachDB, TiDB|",
+     "lines": [
+      103
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接和管理多种数据库的桌面客户端工具，为数据库生态提供服务而非使用数据库构建应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "Oracle",
+    "SQL Server",
+    "ClickHouse",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tabularis is an open-source desktop SQL workspace with 3 built-in database drivers and 21 shipped plugins, including DuckDB, ClickHouse, Redis and Firestore. Its built-in MCP server lets Claude, Cursor and Devin (formerly Windsurf) read your schema and run queries in the same app you already use. ／ PostgreSQL, MySQL/MariaDB and SQLite ship built in. Everything else is a plugin. The built-in PostgreSQL driver is deprecated in favour of the PostgreSQL plugin, which Tabularis installs automatically. Current coverage, mirroring the driver & plugin coverage on the website: ／ - Support for **MySQL/MariaDB**, **PostgreSQL** (with multi-schema support) and **SQLite**, with multi-database selection per connection.",
+   "evidence_lines": [
+    6,
+    81,
+    201
+   ]
+  },
+  "fn": "TabularisDB/tabularis",
+  "sha": "910c32e42265",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "20bec85b4d31": {
+  "identity": {
+   "one_liner": "本地优先的项目管理工具，提供 CLI、Web UI 和 AI agent 技能，数据存于 SQLite",
+   "review": "Pad 是一个本地优先、单二进制运行的项目/任务管理系统，提供 CLI、Web UI 和面向 Claude Code、Cursor 等 AI 编码工具的 /pad 技能，支持约定、playbook、自定义集合与字段，代理操作会被记录归属。默认用本地 SQLite 存储，可选 Pad Cloud 同步，多实例部署支持 Postgres + Redis。适合在本机开发并与 AI 代理协作的开发者使用。",
+   "highlights": [
+    "单二进制本地运行，提供 CLI 与 Web UI（localhost:7777），数据存于本地 SQLite",
+    "提供 /pad agent 技能，支持 Claude Code、Cursor、Windsurf、Codex 等 7+ AI 工具读写项目条目",
+    "支持集合与自定义类型字段、约定规则、多步 playbook，以及代理操作的命名归属记录"
+   ],
+   "use_cases": [
+    "开发者在本机管理任务、计划与文档，无需云端账户",
+    "让 AI 编码代理通过自然语言创建和更新项目条目",
+    "多步工作流（如 ship/release）通过 playbook 交由代理执行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For multi-instance deployments, Pad supports Postgres + Redis via `docker-compose.yml` — see docs/deployment.md for the full setup.",
+     "lines": [
+      206
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud. ／ |**Data**|Local SQLite you own — or opt-in Pad Cloud|Their cloud|Their cloud|",
+     "lines": [
+      25,
+      56
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Pad 使用 SQLite/Postgres 存储自身项目数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud. ／ For multi-instance deployments, Pad supports Postgres + Redis via `docker-compose.yml` — see docs/deployment.md for the full setup.",
+   "evidence_lines": [
+    25,
+    206
+   ]
+  },
+  "fn": "PerpetualSoftware/pad",
+  "sha": "20bec85b4d31",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "27055d45fd59": {
+  "identity": {
+   "one_liner": ".NET 单人全栈 Web 框架，SQLite 优先，C# 一码本全含",
+   "review": "Rask 是一个构建在 ASP.NET Core 与 EF Core 之上的 .NET 全栈框架，用 C# 编写 UI 组件（支持服务端渲染、WebAssembly 及 React/Vue 等前端岛屿），内置认证、后台任务、邮件、缓存、文件存储等组件并默认存储于 SQLite，通过 rask CLI 完成建项目、迁移和部署到单台服务器。面向独立开发者或小团队，提供 dotnet tool 与安装脚本方式安装；目前为 pre-1.0，API 可能变动。",
+   "highlights": [
+    "提供 C# 组件渲染模型，支持 React、Vue、Angular、Svelte、Solid、Preact、Lit 组件作为岛屿运行",
+    "内置认证、后台任务、邮件、Outbox、缓存、文件存储，记录保存在应用自身的 SQLite 数据库",
+    "提供 rask CLI 实现 new/db/deploy 流程，部署基于 Docker 与自动 HTTPS"
+   ],
+   "use_cases": [
+    "独立开发者或小团队在单台服务器上构建和运行完整 Web 产品",
+    "在 C# 代码库中混用现有前端框架组件的岛屿架构项目",
+    "基于 SQLite 的自托管应用，配合 Litestream 备份与快照运行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "CLI. SQLite is the production default; PostgreSQL and SQL Server are a package away.",
+     "lines": [
+      14
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "CLI. SQLite is the production default; PostgreSQL and SQL Server are a package away.",
+     "lines": [
+      14
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "CLI. SQLite is the production default; PostgreSQL and SQL Server are a package away.",
+     "lines": [
+      14
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "框架及其内置组件将记录保存在应用自身的 SQLite 数据库中，属于使用数据库的应用框架",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ASP.NET Core and EF Core. Rask.Data and source-generated CQRS with a ／ CLI. SQLite is the production default; PostgreSQL and SQL Server are a package away. ／ records in the app's own SQLite database (an upload's bytes go to disk or a bucket) — no broker, no",
+   "evidence_lines": [
+    8,
+    14,
+    105
+   ]
+  },
+  "fn": "pal-tamas/rask",
+  "sha": "27055d45fd59",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dd3a2e1edc08": {
+  "identity": {
+   "one_liner": "BeansTech 医疗健康门户在阿里云上的基础设施即代码仓库",
+   "review": "该仓库以基础设施即代码方式管理 BeansTech 旗下多个医疗健康门户在阿里云上的部署，涵盖 ACR、ECS、KMS、PolarDB、OSS 等云资源，密钥在部署时从 KMS 获取，不在仓库中存储。适用于维护这些门户的运维团队，包含架构决策记录与部署 runbook 文档。",
+   "highlights": [
+    "提供阿里云多资源的 Infra-as-code 配置（ACR/ECS/KMS/PolarDB/OSS）",
+    "部署时通过 KMS 3.0 实时获取密钥，仓库不存密钥",
+    "包含架构决策文档与部署 runbook（构建 ACR→部署 ECS→DNS→备份）"
+   ],
+   "use_cases": [
+    "以代码方式声明和部署阿里云上的健康门户应用基础设施",
+    "统一管理部署期密钥分发流程",
+    "查阅门户系统的架构与备份决策记录"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "仓库是使用阿里云资源（含 PolarDB）部署自身应用的基础设施代码，不是为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# healthtech-infra — BeansTech na Alibaba Cloud ／ portaldodentista.ai, drhealth.tech, petiq.tech). **Sem segredos**: tudo vem do KMS 3.0 em tempo de deploy.",
+   "evidence_lines": [
+    1,
+    4
+   ]
+  },
+  "fn": "beanstechhub/healthtech-infra",
+  "sha": "dd3a2e1edc08",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

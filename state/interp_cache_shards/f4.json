@@ -8652,5 +8652,139 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7998d20f157f": {
+  "identity": {
+   "one_liner": "键盘驱动的终端界面工具，用于浏览数据库与消息流",
+   "review": "OneTUI 是一个键盘驱动的终端浏览器，用于在单一界面内检查 PostgreSQL、Cassandra/CQL、DynamoDB 等数据库数据以及 Kafka、NATS、RabbitMQ 等消息流。用户可查看表数据、执行原生 SQL/CQL/PartiQL 查询、浏览消息与主题，并支持主题配置和 TOML 文件管理连接。适用于需要在终端中巡检多种数据源的运维与开发人员，查询依赖只读权限账号以限制写入。",
+   "highlights": [
+    "支持 PostgreSQL 表/视图浏览、SQL 查询与复制统计",
+    "支持 Kafka/NATS/RabbitMQ 消息浏览与 Avro/Protobuf 解码",
+    "通过 TOML 配置文件管理连接，支持环境变量引用密钥"
+   ],
+   "use_cases": [
+    "终端内巡检多种数据库与消息队列数据源",
+    "开发调试时执行原生查询并查看行详情",
+    "运维排查 Kafka 消费组延迟与 WAL 副本状态"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "### PostgreSQL ／ PostgreSQL in OneTUI ／ |PostgreSQL|Tables, views, typed values, SQL and replication statistics|",
+     "lines": [
+      82,
+      86,
+      140
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为连接和检查数据库及消息系统服务的终端工具，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OneTUI is a keyboard-driven terminal browser for databases and message streams, with navigation inspired by k9s. Inspect data, run native queries with syntax highlighting and follow live messages without switching tools. ／ |PostgreSQL|Tables, views, typed values, SQL and replication statistics|",
+   "evidence_lines": [
+    21,
+    140
+   ]
+  },
+  "fn": "syndbg/onetui",
+  "sha": "7998d20f157f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dbf5d2adaba9": {
+  "identity": {
+   "one_liner": "带长期记忆与心智模型的 QQ AI 陪伴机器人",
+   "review": "LuckyTri 是一个 Node.js 编写的 QQ AI 陪伴机器人，通过 OneBot 11 或 QQ 官方机器人接入群聊与私聊，以 SQLite 文件存储记忆、关系与聊天数据，支持日记、回顾、可撤销的状态变化和自动备份。适合想在 QQ 上运营具备连续记忆的 AI 伙伴、且自带 LLM API Key 的个人用户；数据全部保存在本机。",
+   "highlights": [
+    "支持 OneBot 11 与 QQ 官方机器人两种接入方式，运行中可切换",
+    "数据存储于单个 SQLite 文件，包含迁移与带 SHA-256 校验清单的自动备份",
+    "提供 WebUI 工作室，可查看记录、决策依据与模型用量，变化可回看和撤销"
+   ],
+   "use_cases": [
+    "在 QQ 群与私聊中运行具备长期记忆的 AI 陪伴角色",
+    "本地部署管理个人 AI 伙伴的聊天记录与配置",
+    "通过插件机制扩展通道、活动与页面"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|存储|`server/storage/`|一个 SQLite 文件、迁移、备份|",
+     "lines": [
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 文件存储自身数据库、记忆与配置，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|存储|`server/storage/`|一个 SQLite 文件、迁移、备份| ／ 该目录下 `.env` 保存环境配置，`data/friend.db` 保存数据库、记忆、关系、聊天和界面配置，`data/knowledge/` 保存资料，`data/plugins/` 保存插件与插件数据，`data/launcher.log` 保存后台日志，`data/backups/` 保存备份。运行 `luckytri paths` 查看实际路径。npm 更新、卸载与重装都不删除这些文件；启动不依赖当前工作目录。",
+   "evidence_lines": [
+    66,
+    170
+   ]
+  },
+  "fn": "TodayYueC/LuckyTri",
+  "sha": "dbf5d2adaba9",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

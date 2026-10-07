@@ -8057,5 +8057,74 @@
   "generated_at": "2026-10-04",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "556b683be92c": {
+  "identity": {
+   "one_liner": "AI 编码代理的本地协作层，基于单文件 SQLite 存储记忆与消息",
+   "review": "MeMesh 为 AI 编码代理提供本地化的记忆共享与代理间消息传递：将偏好、决策、经验教训跨会话保存，并支持工作交接与代理间留言。数据存于一个 SQLite 文件，检索用 FTS5，不调用 LLM 或向量服务。面向 Claude Code、Codex、Cursor 等 MCP 客户端用户，通过 npm CLI、插件或 MCP 服务器安装，提供 12 个记忆协调工具和本地 dashboard。",
+   "highlights": [
+    "提供 12 个记忆与协调工具（remember/recall/briefing/task_state/message 等）及 10 个 Claude Code/Codex hooks",
+    "本地单 SQLite 文件存储，FTS5 全文检索，不配置或调用 LLM/embedding/vector 提供商",
+    "支持 Claude Code、Codex CLI、Gemini CLI、Cursor 等 MCP 客户端及 HTTP API 接入，含本地 dashboard"
+   ],
+   "use_cases": [
+    "在多会话或多代理间延续偏好、决策与经验教训，避免重复解释",
+    "代理间发送任务、问题与进度，保留工作交接上下文",
+    "本地浏览与管理代理记忆的 dashboard 与命令行工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One SQLite file. No Docker. No cloud required. ／ Recall and capture are local and deterministic: SQLite FTS5 search, explicit memory tools, and rule-based hooks. This version does not configure or call an LLM, embedding, or vector provider. Retired provider settings from older versions stay on disk but are i",
+     "lines": [
+      6,
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其数据存于一个 SQLite 文件并用 FTS5 检索，它是使用数据库存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " One SQLite file. No Docker. No cloud required. ／ Recall and capture are local and deterministic: SQLite FTS5 search, explicit memory tools, and rule-based hooks. This version does not configure or call an LLM, embedding, or vector provider. Retired provider settings from older versions stay on disk but are ignored; `memesh doctor` names the top-level keys without reading or printing their values. ／  A local collaboration layer for AI coding agents.",
+   "evidence_lines": [
+    6,
+    47,
+    5
+   ]
+  },
+  "fn": "PCIRCLE-AI/memesh",
+  "sha": "556b683be92c",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

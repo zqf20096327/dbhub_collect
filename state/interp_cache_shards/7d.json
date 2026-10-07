@@ -9160,5 +9160,74 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a8934a4a77d0": {
+  "identity": {
+   "one_liner": "PostgreSQL 持续优化平台，内省与负载分析生成整改计划",
+   "review": "pgAssistant 是面向开发者与 DBA 的 PostgreSQL 优化助手，通过数据库内省、负载分析、多个确定性 advisor（索引、参数、autovacuum 等）生成可执行的整改计划，并跟踪前后对比验证效果。支持单库与大规模实例集群两种模式，LLM 辅助为可选项，核心功能可不依赖 LLM 运行。",
+   "highlights": [
+    "提供 Global、Index、Parameter、Autovacuum 等确定性 advisor，生成按优先级排序的整改计划",
+    "Collector 支持周期性采集历史负载与环境快照，比较连续采集结果",
+    "可选 LLM 辅助提供 SQL 重写、schema 设计反馈与命名检查"
+   ],
+   "use_cases": [
+    "开发者与 DBA 对单个 PostgreSQL 数据库做 SQL、schema、配置与维护分析",
+    "跨数百上千个 PostgreSQL 实例的集中化诊断、优先级排序与趋势对比",
+    "生成面向 DEV/OPS 的 PDF 整改报告并跟踪建议的实施状态"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A continuous PostgreSQL improvement platform. ／ Analyze PostgreSQL, turn findings into an actionable remediation plan, track what changed, and measure whether the workload actually improved. ／ pgAssistant is an open-source platform that turns PostgreSQL evidence into prioritized action. It combines database introspection, workload analysis, specialized advisors, implementation planning, historical evidence, and result measurement in a single web int",
+     "lines": [
+      5,
+      6,
+      25
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确其通过内省与分析为 PostgreSQL 数据库提供服务，而非使用数据库作为存储的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pgAssistant is an open-source platform that turns PostgreSQL evidence into prioritized action. It combines database introspection, workload analysis, specialized advisors, implementation planning, historical evidence, and result measurement in a single web interface. ／ pgAssistant is not a real-time monitoring system. It builds a continuous improvement loop from periodic database and workload collections; monitoring platforms remain the source for what is happening right now. ／ - **Multi-database support** — connect to a PostgreSQL instance, list its databases, and select the database to analyze.",
+   "evidence_lines": [
+    25,
+    44,
+    87
+   ]
+  },
+  "fn": "beh74/pgassistant-community",
+  "sha": "a8934a4a77d0",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

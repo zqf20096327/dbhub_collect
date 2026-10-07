@@ -8127,5 +8127,139 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5cdf62300ceb": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的跨会话分层记忆插件",
+   "review": "StrataGate 是一个面向 DeepSeek Harness 的跨会话记忆插件，将对话块以 L0–L5 六级视图存储，旧记忆按指数衰减精简，重要信息抽取为事件并构建知识图谱，支持按需展开原始记录与证据充分性检查。通过 dsh 命令安装，数据默认存于本地 memory.db。适用于使用 DeepSeek Harness 的开发者，为 AI agent 提供跨会话记忆管理。",
+   "highlights": [
+    "提供 L0–L5 六级分层视图，旧对话块随累积自动降低默认展示细节，原始记录保留可展开",
+    "从对话中抽取事件并构建知识图谱，支持长期权重衰减与仅实际采用的强化机制",
+    "提供证据门检查机制，检索证据不足时可再次搜索或声明不确定性"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness 中的 AI agent 提供跨会话长期记忆",
+    "需要保留原始对话记录以供追溯验证的场景",
+    "从其他 AI 导入既有记忆内容并转化为可追溯事件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`StrataGate.open()` uses SQLite; `StrataGate.inMemory()` is for temporary runs and tests. In persistent mode, `recordMemoryUse()` requires a stable `receiptId`. Reuse it when retrying the same recorded use to prevent duplicate reinforcement. See the architectu",
+     "lines": [
+      392
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该插件默认将记忆数据库存储为本地 SQLite 文件（memory.db），属于使用数据库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "StrataGate is a cross-session memory plugin for DeepSeek Harness. Recent conversations stay detailed, older conversations become concise, and original records remain available when needed. Important decisions, preferences, and plans become long-term memories for future sessions. ／ dsh plugin --profile web add stratagate-dsh ／ DSH_HOME/stratagate/memory.db",
+   "evidence_lines": [
+    7,
+    66,
+    76
+   ]
+  },
+  "fn": "diqierjia/StrataGate-AgentMemory",
+  "sha": "5cdf62300ceb",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "765086b226ee": {
+  "identity": {
+   "one_liner": "分层 Go REST API 图书馆管理系统，内置 SQLite 存储",
+   "review": "这是一个用 Go 编写的图书馆目录与借阅管理后端，提供 HTTP API、CLI 和 REPL 三种交互方式，实现了图书副本计数、借阅者管理和带事务保护的借还流程。数据存储于 SQLite（纯 Go 驱动，免 CGO），写操作需 JWT 认证。适合作为 Go 分层架构学习和中小型图书馆系统的参考实现。",
+   "highlights": [
+    "单个二进制提供 HTTP 服务器、CLI 与 REPL 三种交互模式",
+    "使用 modernc.org/sqlite 纯 Go 驱动，Docker 镜像无需 C 工具链",
+    "借还操作使用事务与 SQL 条件更新防止副本计数竞态"
+   ],
+   "use_cases": [
+    "图书馆目录与借阅事务管理",
+    "Go 分层 REST API 架构参考实现",
+    "OpenAPI/Postman/Bruno 接口测试场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Database|SQLite via `modernc.org/sqlite` (pure Go, no CGO)|Zero-config embedded database fits a library catalog's scale; the pure-Go driver means the Docker image needs no C toolchain and `CGO_ENABLED=0` just works.|",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 作为自身存数据的嵌入式数据库，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A REST API for managing a library's catalog and lending: authors, books (with per-title copy counts, not just a single \"is this borrowed\" flag), borrowers, and loans — checkout/return with due dates and a derived active/overdue/returned status. ／ |Database|SQLite via `modernc.org/sqlite` (pure Go, no CGO)|Zero-config embedded database fits a library catalog's scale; the pure-Go driver means the Docker image needs no C toolchain and `CGO_ENABLED=0` just works.| ／ |Containerization|Docker (multi-stage, `CGO_ENABLED=0`), Docker Compose|Small final image; a single named volume persists the SQLite file across restarts.|",
+   "evidence_lines": [
+    5,
+    26,
+    31
+   ]
+  },
+  "fn": "hoangsonww/Library-Management-Backend",
+  "sha": "765086b226ee",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

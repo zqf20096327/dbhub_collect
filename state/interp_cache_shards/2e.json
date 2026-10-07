@@ -9377,5 +9377,163 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a2c30a6d516d": {
+  "identity": {
+   "one_liner": "基于 SQLite 权威存储的本地智能体长期记忆核心",
+   "review": "Scope Recall v3 是为 Hermes、Codex、Claude Code 等智能体宿主提供长期记忆的本地组件，以 SQLite 为唯一事实权威、向量索引为可重建伴随物，通过宿主适配器与 MCP 工具实现记忆的读写、检索、更正与删除。适用对象是运行这些智能体并需要跨宿主共享记忆的用户；2.0 旧库需离线迁移，PostgreSQL/pgvector 路径不在 v3 分发内。",
+   "highlights": [
+    "提供 Hermes、Codex、Claude Code、WorkBuddy、DeepSeek Harness 的宿主适配器，支持多宿主共享同一记忆存储",
+    "以 SQLite 为事实权威，向量索引可经 respace-embeddings 或 rebuild 重建，记忆条目携带来源证据并可检查、更正、删除",
+    "通过 PyPI 包 hermes-scope-recall 分发，附带 plan/apply 式安装与卸载 CLI，卸载默认保留核心数据"
+   ],
+   "use_cases": [
+    "为 Hermes/Codex/Claude Code 等智能体提供跨会话长期记忆",
+    "多个智能体宿主共享同一份记忆存储并追溯记忆来源宿主",
+    "对已存记忆进行审计、更正、静默或删除治理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The `codex` extra adds the MCP SDK. Without that extra, the Core and Hermes paths remain importable. The `lancedb` extra enables the tested LanceDB companion path. PostgreSQL/pgvector is outside this v3 distribution; an explicit configuration error directs ope",
+     "lines": [
+      106
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, Codex and Claude Code (the last two share one adapter of hooks and an MCP server), with the MCP tools when the  ／ migration procedure for a 2.0.1 memory database. SQLite remains the only fact ／ SQLite truth lives in the verified Core data directory. Vector indexes are companions and may be rebuilt only through an explicit configured space. The Hermes and Codex adapters bind host identity, installation identity, scopes, and project roots before openin",
+     "lines": [
+      3,
+      21,
+      104
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 作为自身记忆数据的存储层，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, Codex and Claude Code (the last two share one adapter of hooks and an MCP server), with the MCP tools when the optional `codex` extra is installed. The public package is `hermes-scope-recall`; the Python import is `scope_recall`; the host wrapper identity remains `scope-recall`. ／ SQLite truth lives in the verified Core data directory. Vector indexes are companions and may be rebuilt only through an explicit configured space. The Hermes and Codex adapters bind host identity, installation identity, scopes, and project roots before opening Core. After that binding is verified, an omitted runtime-config argument checks only `<data_directory>/runtime-config.json`; a missing file stays basic plus an explicit capability gap. The file is never generated or discovered from the current directory, parent directories, or credential locations. Optional host wiring must report a capability gap instead of creating or repairing a database. ／ The `codex` extra adds the MCP SDK. Without that extra, the Core and Hermes paths remain importable. The `lancedb` extra enables the tested LanceDB companion path. PostgreSQL/pgvector is outside this v3 distribution; an explicit configuration error directs operators to retain the old installation and use the migration guide.",
+   "evidence_lines": [
+    3,
+    104,
+    106
+   ]
+  },
+  "fn": "410979729/scope-recall-hermes",
+  "sha": "a2c30a6d516d",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1f45b0d3441a": {
+  "identity": {
+   "one_liner": "Go 编写的 ATProtocol 个人数据服务器（PDS），含 SQLite 块与 blob 存储",
+   "review": "Cocoon 用 Go 实现 ATProtocol PDS，提供身份、repo、server、sync 等 XRPC 端点及邀请码、2FA/YubiKey 登录。默认使用 SQLite 存储数据与 blob，可切换 PostgreSQL，并支持 S3 数据库备份（仅 SQLite）与 blob 存储，通过 Docker Compose 部署并自带 Caddy 自动 HTTPS。作者标注为实验性质、未达生产可用。适合想自托管 ATProto 数据的个人用户。",
+   "highlights": [
+    "实现 com.atproto.identity/repo/server/sync 等系列端点（README 有实现清单）",
+    "支持 SQLite（默认）与 PostgreSQL 两种数据库后端，通过 COCOON_DB_TYPE 配置",
+    "支持 S3 兼容存储用于 SQLite 数据库备份（每小时）与 blob 存储，可配 CDN URL 提供 blob 跳转"
+   ],
+   "use_cases": [
+    "自托管 ATProtocol/Bluesky 个人数据服务器",
+    "使用 SQLite 或 PostgreSQL 部署单用户/少量账户的 PDS",
+    "配合本地 PLC 目录进行 ATProto 集成测试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**For PostgreSQL deployment:** ／ By default, Cocoon uses SQLite which requires no additional setup. For production deployments with higher traffic, you can use PostgreSQL: ／ # Database type: sqlite (default) or postgres",
+     "lines": [
+      52,
+      101,
+      104
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- `./data/` - SQLite database and blockstore ／ By default, Cocoon uses SQLite which requires no additional setup. For production deployments with higher traffic, you can use PostgreSQL: ／ # Database type: sqlite (default) or postgres",
+     "lines": [
+      94,
+      101,
+      104
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Cocoon 是使用 SQLite/PostgreSQL 存储数据与 blob 的 PDS 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Cocoon is a PDS implementation in Go. It is highly experimental, and is not ready for any production use. ／ - `./data/` - SQLite database and blockstore ／ # Database type: sqlite (default) or postgres",
+   "evidence_lines": [
+    6,
+    94,
+    104
+   ]
+  },
+  "fn": "haileyok/cocoon",
+  "sha": "1f45b0d3441a",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

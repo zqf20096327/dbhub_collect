@@ -8717,5 +8717,128 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dd5d8ccbc674": {
+  "identity": {
+   "one_liner": "包含30万+金融符号（股票/ETF/基金等）的开源金融数据库，以CSV存储、Python包查询",
+   "review": "FinanceDatabase 是一个收录 30 多万条金融符号（股票、ETF、基金、指数、货币、加密货币、货币市场）的数据库，以 CSV 文件存储并通过 pip 安装的 Python 包 financedatabase 提供查询接口，支持按国家、行业、板块等类别过滤和搜索。面向私人投资者和金融分析者，用于概览和筛选投资标的；数据经本地缓存，无需 API key，不提供实时行情数据。",
+   "highlights": [
+    "包含 314,126 条符号，覆盖股票、ETF、基金、指数、货币、加密货币和货币市场七类资产",
+    "通过 Python 包提供 select/search/show_options 三类查询函数，支持按类别过滤和全文搜索",
+    "以 CSV 文件存储，社区可读取和编辑，数据下载后本地缓存，无需 API key"
+   ],
+   "use_cases": [
+    "按国家、行业、板块筛选股票或 ETF 以寻找投资标的",
+    "结合 Finance Toolkit 对筛选出的标的做竞争分析",
+    "探索某一资产类别下可用的产品全景（发行人、交易所、类别分布）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该仓库是使用 Python 包与 CSV 文件构建的金融数据集及应用，并非为某个数据库生态服务的工具/组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**This is why I created the FinanceDatabase**, a database featuring 300,000+ symbols containing Equities, ETFs, Funds, Indices, Currencies, Cryptocurrencies and Money Markets. It allows you to obtain a broad overview of sectors, industries, types of investments and much more, entirely for free. Everything is stored in CSV files that anyone can read and edit, so the database grows and improves through the community. ／ pip install financedatabase -U ／ Each asset class has the same three functions: `select` to filter on the database's categories, `search` to look for any text in any column and `show_options` to see which values a category can take. The asset classes are `fd.Equities()`, `fd.ETFs()`, `fd.Funds()`, `fd.Indices()`, `fd.Currencies()`, `fd.Cryptos()` and `fd.MoneyMarkets()`.",
+   "evidence_lines": [
+    14,
+    44,
+    86
+   ]
+  },
+  "fn": "JerBouma/FinanceDatabase",
+  "sha": "dd5d8ccbc674",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b01decca8a34": {
+  "identity": {
+   "one_liner": "自托管摄影师客户相册平台，含选片、打印店与AI打标",
+   "review": "Lumio 是一个面向摄影师和工作室的自托管图片/视频客户相册系统，提供选片批注、评分、打印商店、CLIP 自动打标和多租户等能力。技术上以 Docker Compose 一键启动，API 用 Fastify + Prisma 依赖 Postgres 存数据、BullMQ 用 Redis 做队列，存储支持内置 RustFS 及外部 S3 兼容服务。许可证为 FSL-1.1（source-available，非 OSI 开源），禁止将其作为 SaaS 提供给第三方使用。",
+   "highlights": [
+    "提供照片/视频选片批注、评分、评论与时间锚点标注",
+    "支持基于 CLIP 模型的图片自动打标及 RAW/HLS 视频处理",
+    "支持 Docker Compose 部署、多租户、单/多模式与外部 S3 存储接入"
+   ],
+   "use_cases": [
+    "摄影师向客户交付可批注的选片相册",
+    "工作室自建打印销售渠道（打印店 + Stripe 支付）",
+    "多摄影师机构自托管多租户相册管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This builds the containers and starts Postgres, Redis, the bundled S3 storage (RustFS), API, frontend, worker and Caddy. The first start takes 3–5 min (build + DB migration). ／ │ Frontend │◄──►│ API │◄──►│ Postgres/Redis │ ／ - **`apps/api`** — Fastify + Prisma (Postgres) + BullMQ (Redis)",
+     "lines": [
+      110,
+      165,
+      171
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Lumio 使用 Postgres 存储业务数据、Redis 作队列，是使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Functional Source License 1.1 (FSL-1.1-ALv2)，source-available 非 OSI 开源",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This builds the containers and starts Postgres, Redis, the bundled S3 storage (RustFS), API, frontend, worker and Caddy. The first start takes 3–5 min (build + DB migration). ／ - **`apps/api`** — Fastify + Prisma (Postgres) + BullMQ (Redis)",
+   "evidence_lines": [
+    110,
+    171
+   ]
+  },
+  "fn": "markusthiel/lumio",
+  "sha": "b01decca8a34",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8225,5 +8225,72 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "939b05996dda": {
+  "identity": {
+   "one_liner": "PostgreSQL schema-as-code 迁移工具：定义、diff、生成并安全应用迁移",
+   "review": "pgmold 是用 Rust 编写的 PostgreSQL schema-as-code 命令行工具：从 SQL DDL 文件定义目标 schema，读取活数据库当前结构，计算差异并生成迁移计划后以单事务应用。提供 GitHub Action 做 CI drift 检测、Terraform provider、以及生成编号迁移文件以兼容既有迁移系统。限制包括无法检测重命名（会生成 drop+add）。适合用声明式方式管理 Postgres schema 的开发与 DBA 团队。",
+   "highlights": [
+    "通过 introspection 读取活数据库 schema 并生成差异迁移计划，apply 以单事务执行",
+    "提供 GitHub Action 与 drift 检测用于 CI/CD schema 校验，支持 JSON 输出",
+    "可作为 Terraform provider 使用，默认阻断破坏性操作"
+   ],
+   "use_cases": [
+    "以声明式 SQL 文件管理 PostgreSQL schema 并自动生成迁移",
+    "在 CI/CD 中检测 schema 漂移并生成 PR 迁移计划评论",
+    "通过 pgmold dump 从既有数据库生成基线以接入存量项目"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL schema-as-code: define, diff, plan, and safely apply migrations. ／ - **Schema-as-Code**: Define PostgreSQL schemas in native SQL DDL files ／ - **Introspection**: Read schema from live PostgreSQL databases",
+     "lines": [
+      5,
+      10,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 服务的 schema 管理与迁移工具，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " PostgreSQL schema-as-code: define, diff, plan, and safely apply migrations. ／ - **Diffing**: Compare schemas and generate migration plans ／ - **Transactional Apply**: All migrations run in a single transaction",
+   "evidence_lines": [
+    5,
+    12,
+    15
+   ]
+  },
+  "fn": "fmguerreiro/pgmold",
+  "sha": "939b05996dda",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

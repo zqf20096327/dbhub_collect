@@ -6932,5 +6932,211 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fd511df8be6f": {
+  "identity": {
+   "one_liner": "FastAPI + Next.js 全栈 AI 应用脚手架生成器，内置 Agent 与 RAG",
+   "review": "该仓库是一个项目生成器 CLI（fastapi-fullstack），通过向导或命令行参数生成包含 FastAPI 后端、Next.js 前端、AI Agent（5 种框架可选）、RAG 管道、认证和计费等模块的全栈应用代码。生成的应用以 PostgreSQL 作为数据库，通过 make bootstrap 启动 Docker 栈并执行 Alembic 迁移。面向需要快速搭建 AI 应用项目的开发者。",
+   "highlights": [
+    "提供 CLI 向导与非交互参数两种方式生成全栈项目，支持 5 种 AI Agent 框架（Pydantic AI、LangChain、LangGraph 等）",
+    "生成的项目内置 RAG 管道（支持 Milvus、Qdrant、pgvector、ChromaDB）、JWT/OAuth 认证与 Stripe 计费模块",
+    "提供 make upgrade 三方合并机制，将模板更新合入已生成项目且保留用户自定义"
+   ],
+   "use_cases": [
+    "快速生成带 AI 聊天、Agent 与 RAG 能力的全栈 Web 应用初始代码",
+    "为团队提供统一的技术栈模板并可持续跟进模板升级"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> **What `make bootstrap` does** (= `make dev` + `make seed`): builds the backend Docker image, starts the stack via `docker-compose.dev.yml`, waits for PostgreSQL (`pg_isready`), applies Alembic migrations, and seeds `admin@example.com` / `admin123`. It's ide ／ fastapi-fullstack create my_ai_app --database postgresql --frontend nextjs",
+     "lines": [
+      87,
+      117
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "生成的应用以 PostgreSQL 作为数据存储，模板本身不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Production-ready FastAPI + Next.js project generator with AI agents, RAG, and 20+ enterprise integrations. ／ > **What `make bootstrap` does** (= `make dev` + `make seed`): builds the backend Docker image, starts the stack via `docker-compose.dev.yml`, waits for PostgreSQL (`pg_isready`), applies Alembic migrations, and seeds `admin@example.com` / `admin123`. It's idempotent — re-run it anytime. ／ fastapi-fullstack create my_ai_app --database postgresql --frontend nextjs",
+   "evidence_lines": [
+    9,
+    87,
+    117
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "vstorm-co/full-stack-ai-agent-template",
+  "sha": "fd511df8be6f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5f8de8cf4058": {
+  "identity": {
+   "one_liner": "Go 编写的 9Router LLM 路由代理网关，单二进制运行",
+   "review": "该项目以单个 Go 二进制提供 9Router 的 LLM 代理 API 与嵌入式 Svelte 控制面板，将 Claude Code、Cursor、Cline 等 CLI 工具接入多个 AI 提供商，提供组合路由、回退、多账号轮询与 RTK token 压缩，数据持久化到 SQLite（WAL 模式），可与上游 Node.js 版 9Router 共享同一数据库文件，无需 Node.js 运行时。",
+   "highlights": [
+    "单二进制包含代理 API 与嵌入式 Svelte 5 控制面板，支持 OpenAI Chat、Claude Messages、Gemini、Ollama 兼容等多种 API 形态",
+    "使用 SQLite WAL 模式持久化，可与 9Router（Next.js 版）读写同一 data.sqlite 文件，仅做增量式 schema 同步",
+    "支持组合路由（fallback、round-robin、sticky）、多账号轮询、后台守护进程管理与 Docker 部署"
+   ],
+   "use_cases": [
+    "为 Claude Code、Codex、Cursor 等 CLI 工具提供本地统一的 LLM API 端点",
+    "从 Node.js 版 9Router 迁移到 Go 实现而不迁移数据",
+    "需要在多提供商账号间做轮询与自动回退的 LLM 网关部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 💾 SQLite WAL persistence, outbound proxy support, self-update, MITM commands, Docker, cross-compilation ／ |macOS / Linux|`~/.9router/db/data.sqlite`|",
+     "lines": [
+      114,
+      124
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅用于该项目自身的配置与用量数据存储，README 未提供面向数据库生态的服务功能",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 💾 SQLite WAL persistence, outbound proxy support, self-update, MITM commands, Docker, cross-compilation ／ Both read the same tables, so a connection you add in either dashboard shows up in the other. SQLite serialises the writes; the supported setup is one active writer, so avoid editing the same combo or settings entry in both at the same moment.",
+   "evidence_lines": [
+    114,
+    137
+   ]
+  },
+  "fn": "luqman-v1/9router-go",
+  "sha": "5f8de8cf4058",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5e1578275705": {
+  "identity": {
+   "one_liner": "基于 Pekko Http 的 ClickHouse Scala 响应式流客户端",
+   "review": "一个用 Scala 编写的 ClickHouse 客户端库，通过 Pekko Http 实现响应式流方式读写数据，提供查询执行、流式结果解析与插入、多主机负载均衡、健康检查与查询重试。面向使用 ClickHouse 的 Scala/akka 开发者，支持 Scala 2.13 与 3.3，并注明不保证 API 向后兼容。",
+   "highlights": [
+    "提供读写查询执行及基于 Pekko 的流式 source/sink 数据插入与结果解析",
+    "支持单主机、多主机负载均衡与集群感知三种连接模式，内置健康检查与查询重试",
+    "提供类型化可组合 DSL 及测试工具包（testkit）"
+   ],
+   "use_cases": [
+    "Scala 应用中以响应式流方式读写 ClickHouse 数据",
+    "多主机/集群环境下的负载均衡查询分发",
+    "为访问 ClickHouse 的代码编写自动化测试"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "# Clickhouse Scala Client ／ Clickhouse Scala Client that uses Pekko Http to create a reactive streams implementation to access the Clickhouse database in a reactive way. ／ Tested against the last three ClickHouse LTS releases: 25.3, 25.8 and 26.3.",
+     "lines": [
+      1,
+      6,
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为访问 ClickHouse 数据库的 Scala 客户端库，是为该数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Clickhouse Scala Client that uses Pekko Http to create a reactive streams implementation to access the Clickhouse database in a reactive way. ／ Tested against the last three ClickHouse LTS releases: 25.3, 25.8 and 26.3.",
+   "evidence_lines": [
+    6,
+    23
+   ]
+  },
+  "fn": "crobox/clickhouse-scala-client",
+  "sha": "5e1578275705",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

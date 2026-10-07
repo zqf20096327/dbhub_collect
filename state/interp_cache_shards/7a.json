@@ -10589,5 +10589,150 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7ce19ffb123c": {
+  "identity": {
+   "one_liner": "开源产品分析平台，事件采集+漏斗/留存/画像分析",
+   "review": "一个开源自托管的产品分析平台，提供事件采集、漏斗、留存、趋势、分段与用户流分析及可定制仪表盘，面向需要网站/产品行为分析的团队。后端用 Go 编写，以 PostgreSQL 存关系数据、ClickHouse 存分析事件、NATS 做采集管道消息，通过 make build 从源码构建运行，许可为 AGPL v3.0。",
+   "highlights": [
+    "提供事件采集管道，含地理位置、User-Agent、bot 检测与流量归因富化",
+    "支持漏斗、留存、趋势、分段、用户流（Sankey）分析与自定义仪表盘",
+    "提供 GDPR/DPDP 数据主体事件与画像擦除功能"
+   ],
+   "use_cases": [
+    "网站/产品行为分析与仪表盘搭建",
+    "用户画像识别与活动查询",
+    "需数据主体擦除的合规分析场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Built in Go on PostgreSQL, ClickHouse, and NATS. ／ - **PostgreSQL** — relational store (orgs, projects, dashboards, auth) ／ > **Local databases only.** By default `seed` migrates Postgres and ClickHouse",
+     "lines": [
+      11,
+      57,
+      81
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Built in Go on PostgreSQL, ClickHouse, and NATS. ／ ClickHouse-backed profile and activity API. ／ - **ClickHouse** — analytical store for events, insights, and profiles",
+     "lines": [
+      11,
+      22,
+      58
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明以 PostgreSQL 与 ClickHouse 作为自身数据存储来构建分析平台，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU AGPL v3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pug is an open-source product analytics platform. Capture events, identify the ／ - **PostgreSQL** — relational store (orgs, projects, dashboards, auth) ／ - **ClickHouse** — analytical store for events, insights, and profiles",
+   "evidence_lines": [
+    7,
+    57,
+    58
+   ]
+  },
+  "fn": "pug-sh/pug",
+  "sha": "7ce19ffb123c",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "02599796db71": {
+  "identity": {
+   "one_liner": "零依赖后量子加密 P2P mesh 网络协议，含三跳洋葱路由",
+   "review": "Metrice 是运行在 Node.js 上的去中心化 P2P mesh 网络协议实现，使用 ML-KEM-768 后量子密钥封装与 Ed25519 节点身份，提供三跳洋葱路由、CGNAT 反向隧道和内置 SSH-2 服务器，节点状态与路由表持久化在内置 SQLite 中。面向需要匿名组网与端到端加密通信的使用者，要求 Node 24.7+ 且依赖 node:sqlite 内置模块。",
+   "highlights": [
+    "支持 NIST FIPS 203 ML-KEM-768 后量子密钥封装与 Ed25519 签名帧完整性验证",
+    "实现 3 跳洋葱路由电路，2048 字节统一单元填充，电路 10 分钟 TTL",
+    "提供 Rendezvous 持久反向隧道用于 CGNAT 穿透，并内置零依赖 SSH-2 服务器"
+   ],
+   "use_cases": [
+    "需要匿名多跳路由的 P2P 组网",
+    "防火墙/CGNAT 环境下通过反向隧道建立节点互联",
+    "通过 SSH-2 或虚拟 .mesh 域名进行加密节点访问"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Persistent Key Architecture:** On bootstrap, every node generates an Ed25519 identity key pair (SPKI/PKCS#8 PEM) and a NIST FIPS 203 ML-KEM-768 key pair natively via `node:crypto`. Keys are durably committed to the SQLite `node_identity` table. ／ - **Circuit Lifecycle & Teardown:** Circuits are retired and purged from memory and SQLite `active_circuits` after 10 minutes (`CIRCUIT_TTL_MS = 600000`) to mitigate long-term traffic correlation. ／ - **SQLite Routing Persistence & TTL:** Ephemeral routes are recorded in the SQLite `routing_table` with a `last_seen` timestamp. Inactive entries expire and are pruned automatically after 60 seconds (`PRESENCE_TTL_MS`).",
+     "lines": [
+      22,
+      59,
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 node:sqlite 存储节点身份、电路与路由表的 P2P 网络应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPLv3",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Metrice is a decentralized peer-to-peer (P2P) mesh networking protocol engineered with zero external npm dependencies (Zero-Dependency), running natively on Node.js core libraries (`node:crypto`, `node:net`, `node:dgram`, `node:sqlite`, `node:dns`). It features quantum-resistant cryptography (Post-Quantum Cryptography) and a Tor-like multi-hop onion routing architecture. ／ - **Persistent Key Architecture:** On bootstrap, every node generates an Ed25519 identity key pair (SPKI/PKCS#8 PEM) and a NIST FIPS 203 ML-KEM-768 key pair natively via `node:crypto`. Keys are durably committed to the SQLite `node_identity` table. ／ - **SQLite Routing Persistence & TTL:** Ephemeral routes are recorded in the SQLite `routing_table` with a `last_seen` timestamp. Inactive entries expire and are pruned automatically after 60 seconds (`PRESENCE_TTL_MS`).",
+   "evidence_lines": [
+    15,
+    22,
+    66
+   ]
+  },
+  "fn": "GokturkA1/metrice",
+  "sha": "02599796db71",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

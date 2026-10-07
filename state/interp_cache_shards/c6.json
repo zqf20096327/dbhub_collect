@@ -9134,5 +9134,71 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4554d2330aba": {
+  "identity": {
+   "one_liner": "本地 AI API 网关，提供多上游路由、负载均衡与格式转换",
+   "review": "这是一个运行在本机的 AI API 网关代理，将 OpenAI、Anthropic、Gemini 等上游统一暴露为本地端点，支持基于优先级的上游调度、模型别名映射和 API 格式转换（如 OpenAI Chat ⇄ Responses、Anthropic Messages）。它使用 SQLite 记录请求统计并在仪表盘中展示，提供 Tauri 桌面应用和 Rust CLI 两种形态，面向在本地使用 Claude Code、Codex 等 AI 客户端、需要统一管理多个上游密钥与配 额的开发者。",
+   "highlights": [
+    "支持多上游优先级调度、模型别名映射与跨格式请求转换（含 SSE/tools/images）",
+    "使用 SQLite 存储每请求统计（tokens、延迟等）并生成仪表盘",
+    "提供 macOS Tauri 桌面应用与 Rust CLI 两种运行方式，支持 Claude Code / Codex 一键配置"
+   ],
+   "use_cases": [
+    "在本地统一代理和管理多个 AI 提供商的 API 密钥与额度",
+    "为 Claude Code / Codex 等客户端配置本地网关端点",
+    "在 OpenAI / Anthropic / Gemini 格式之间进行请求格式转换与回退"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Local AI API gateway for OpenAI / Gemini / Anthropic. Runs on your machine, keeps tokens counted (SQLite), offers priority-based load balancing, optional API format conversion (OpenAI Chat/Responses ↔ Anthropic Messages, plus Gemini ↔ OpenAI/Anthropic, includi ／ - SQLite-powered dashboard (requests, tokens, cached tokens, latency, recent)",
+     "lines": [
+      5,
+      17
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该网关应用记录请求统计的内置存储，项目本身服务于 AI API 调用而非数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Local AI API gateway for OpenAI / Gemini / Anthropic. Runs on your machine, keeps tokens counted (SQLite), offers priority-based load balancing, optional API format conversion (OpenAI Chat/Responses ↔ Anthropic Messages, plus Gemini ↔ OpenAI/Anthropic, including SSE/tools/images), and one-click setup for Claude Code / Codex. ／ - SQLite-powered dashboard (requests, tokens, cached tokens, latency, recent)",
+   "evidence_lines": [
+    5,
+    17
+   ]
+  },
+  "fn": "mxyhi/token_proxy",
+  "sha": "4554d2330aba",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

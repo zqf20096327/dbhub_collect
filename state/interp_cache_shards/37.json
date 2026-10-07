@@ -8288,5 +8288,183 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8719de7f8f48": {
+  "identity": {
+   "one_liner": "开源 Reverse ETL 工具，以 YAML 声明式配置将数仓数据同步到外部目标",
+   "review": "drt 是一个 Reverse ETL 命令行工具，通过 YAML 文件定义同步任务，把数仓中的数据激活到 Slack、SaaS API、云存储等目标，数据不经过托管中间层。采用类似 dbt 的声明式工作流，适合数据工程师在 Git 中版本化管理同步，并可集成 Dagster/Airflow 等编排器，内置 MCP 服务器供 AI 客户端运行同步。",
+   "highlights": [
+    "提供 CLI 与 YAML 声明式同步定义，数据直达目标不经托管中介",
+    "提供源/目标连接器矩阵，含 PostgreSQL、MySQL、ClickHouse、SQL Server、SQLite 等适配",
+    "内置 MCP 服务器与 Claude Code 技能，用于通过 AI 客户端生成和运行同步"
+   ],
+   "use_cases": [
+    "将数仓数据反向同步到 SaaS 应用、Webhook 或消息渠道",
+    "以代码优先方式在 CI/CD 与编排器中管理数据激活管道",
+    "通过 MCP 客户端以对话方式编写、调试和运行同步任务"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "drt init --template postgres_to_slack ／ |PostgreSQL|✅ v0.1|`pip install drt-core[postgres]`|Password (env var)| ／ |PostgreSQL (upsert)|✅ v0.4|`pip install drt-core[postgres]`|Password (env var)|",
+     "lines": [
+      70,
+      206,
+      236
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Sheets, GitHub Actions, MySQL, ClickHouse, BigQuery, …) and ／ |MySQL|✅ v0.5|`pip install drt-core[mysql]`|Password (env var)| ／ |MySQL (upsert)|✅ v0.4|`pip install drt-core[mysql]`|Password (env var)|",
+     "lines": [
+      76,
+      211,
+      237
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|✅ v0.4.2|(core)|File path|",
+     "lines": [
+      208
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|✅ v0.6|`pip install drt-core[sqlserver]`|Password (env var)|",
+     "lines": [
+      215
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Sheets, GitHub Actions, MySQL, ClickHouse, BigQuery, …) and ／ |ClickHouse|✅ v0.4.3|`pip install drt-core[clickhouse]`|Password (env var)| ／ |ClickHouse|✅ v0.5|`pip install drt-core[clickhouse]`|Password (env var)|",
+     "lines": [
+      76,
+      210,
+      238
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库提供数据读出/写入连接器，属于服务数据栈的 Reverse ETL 工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0，README 提及 open core 边界见 OPEN_CORE.md",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dlt loads data in, dbt transforms it, and **drt** activates it back out — reverse ETL from your warehouse to the tools your team works in, as YAML in your own repo. No dashboard to babysit, no audience builder duplicating what dbt already does, no hosted runtime billing you per row. Your data goes straight from your warehouse to the destination — never through a drt-hosted intermediary. ／ |Connector|Status|Install|Auth| ／ |ClickHouse|✅ v0.4.3|`pip install drt-core[clickhouse]`|Password (env var)|",
+   "evidence_lines": [
+    7,
+    202,
+    210
+   ]
+  },
+  "fn": "drt-hub/drt",
+  "sha": "8719de7f8f48",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "26433e1b3a05": {
+  "identity": {
+   "one_liner": "Markdown 规范编译器，将规范编译为存储于 SQLite 的类型化中间表示",
+   "review": "该项目包含 CommonSpec 结构化 Markdown 语言、SpecIR 中间表示与 SpecCompiler 编译器：将带类型系统的 Markdown 规范编译为 SQLite 中的关系型 IR，在编译期做类型检查与追溯性检查，并经 Pandoc 输出 DOCX、HTML+SQLite.js、ReqIF 等格式。面向以文档形式做需求工程的作者，容器/二进制安装，状态为 Alpha。",
+   "highlights": [
+    "将 CommonSpec Markdown 编译为存储于 SQLite 的类型化关系中间表示 SpecIR",
+    "在编译期检测无效对象类型、缺失必填属性与追溯性缺口",
+    "支持输出 DOCX、自包含 HTML（内嵌 SQLite.js 浏览器内查询）、ReqIF 及 Pandoc 支持的格式"
+   ],
+   "use_cases": [
+    "以 Markdown 编写带类型与追溯关系的软件需求规范并在编译期校验",
+    "将规范导出为 ReqIF/DOORS CSV 以与需求工程工具交换数据",
+    "生成可在浏览器中直接查询的自包含 HTML 规范文档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**SpecIR** is a typed relational intermediate representation stored in SQLite. CommonSpec compiles into SpecIR. Other formats (ReqIF, DOORS CSV) can also encode and decode into SpecIR, making it a universal interchange hub for specification data. ／ SpecCompiler runs as a Pandoc Lua filter and adds a SQLite middle-end between Pandoc's reader and writer: ／ **2. Middle-end (SpecCompiler).** Lower the AST into SpecIR (SQLite), apply type",
+     "lines": [
+      14,
+      149,
+      174
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SpecIR 使用 SQLite 存储其中间表示，SQLite 是该项目内部的数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SpecIR** is a typed relational intermediate representation stored in SQLite. CommonSpec compiles into SpecIR. Other formats (ReqIF, DOORS CSV) can also encode and decode into SpecIR, making it a universal interchange hub for specification data. ／ SpecCompiler runs as a Pandoc Lua filter and adds a SQLite middle-end between Pandoc's reader and writer: ／ Apache License 2.0, see LICENSE and NOTICE.",
+   "evidence_lines": [
+    14,
+    149,
+    196
+   ]
+  },
+  "fn": "SpecIR/SpecCompiler",
+  "sha": "26433e1b3a05",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

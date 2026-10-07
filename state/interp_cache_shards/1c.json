@@ -9196,5 +9196,127 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "098373152119": {
+  "identity": {
+   "one_liner": "基于对象存储的 Go 键值数据库",
+   "review": "IsleDB 是用 Go 编写的键值数据库，将数据持久化到 Amazon S3、Google Cloud Storage、Azure Blob Storage 或 S3 兼容存储（本地文件和内存仅用于开发）。它提供单写者（带 fence）多读者模型、快照、TTL、变更 feed，并支持将压缩维护拆到独立进程。适合在对象存储上构建低成本、读者可独立扩缩的写入场景，不提供多键事务、二级索引或查询语言。",
+   "highlights": [
+    "支持在 S3、GCS、Azure Blob 及 S3 兼容存储上存储键值数据，支持点读、范围扫描、迭代器、快照与 TTL",
+    "支持一个带 fence 的写者进程加任意数量的独立读者进程，读者可配置本地缓存",
+    "提供可选的键序或全值变更 feed，压缩与清理可在独立进程或定时任务中运行"
+   ],
+   "use_cases": [
+    "以对象存储作为持久化与容量层的键值数据存储",
+    "读者服务需要独立扩缩而不维护数据库副本的场景",
+    "需要将压缩和维护作业与应用进程分离的场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它本身是键值数据库引擎，使用对象存储作为底层持久化层，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A key-value database for object storage, written in Go.** ／ IsleDB provides: ／ go get github.com/ankur-anand/isledb",
+   "evidence_lines": [
+    10,
+    17,
+    29
+   ]
+  },
+  "fn": "ankur-anand/isledb",
+  "sha": "098373152119",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8ba248ac62be": {
+  "identity": {
+   "one_liner": "本地 AI 编程会话存档搜索与溯源的 Rust CLI 工具",
+   "review": "sessionwiki 读取磁盘上多个 AI 编程工具（Claude Code、Codex、Gemini CLI、Cline、OpenCode 等）已有的会话记录，建立 FTS5 全文索引，提供跨工具搜索、文件级溯源（trace/blame）、归档、标签笔记、本地 web 查看器，并可通过 MCP server 供 agent 调用。面向使用 AI 编程助手的开发者；索引首次构建需按 GB 分钟级耗时，之后增量更新。",
+   "highlights": [
+    "跨多个 AI 工具的会话统一扫描、全文搜索（trigram/unicode61 分词，支持 CJK 子串匹配）与本地 web 界面",
+    "将文件追溯到生成它的会话（trace/blame），并提供归档防止工具清理原始记录",
+    "提供只读 MCP server 与 Claude Code 插件，供 agent 检索历史会话"
+   ],
+   "use_cases": [
+    "找回数月前 AI 助手解决过的问题的会话记录",
+    "追溯某个文件或某行代码由哪次 AI 会话产生",
+    "通过 MCP 让 agent 检索本地会话历史作为上下文"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|OpenCode|`~/.local/share/opencode/opencode.db` (SQLite; also the legacy `storage/**` JSON)|supported|",
+     "lines": [
+      304
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它使用 FTS5/SQLite 建索引为 AI 编程工具的会话存档服务，是服务于开发工作流的工具而非数据库本体",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`tokenizer [SPEC]`|Show the current FTS5 tokenizer, or set one and rebuild only the search index.| ／ Search uses the `trigram` tokenizer by default, which finds substrings and works",
+   "evidence_lines": [
+    133,
+    145
+   ]
+  },
+  "fn": "youdie006/sessionwiki",
+  "sha": "8ba248ac62be",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

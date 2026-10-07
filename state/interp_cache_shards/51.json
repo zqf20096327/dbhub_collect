@@ -9385,5 +9385,74 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4e3f2cbe2bf7": {
+  "identity": {
+   "one_liner": "基于 Go 与 PostgreSQL 的自托管货运车队运输管理系统（TMS）",
+   "review": "Trenova 是一个面向美国中小型公路承运商的开源可读运输管理系统，覆盖调度、计价、账单、会计结算、EDI 与 FMCSA 合规等订单到收款全流程。技术栈为 Go + GraphQL + React，使用 PostgreSQL（含 PostGIS、pg_cron、pgvector）、Meilisearch 与 Redis，支持 Docker Compose 单机自托管。目前为 pre-release 软件尚不适合生产使用，许可证为 FSL-1.1-ALv2，两年后转为 Apache 2.0，禁止托管转售。",
+   "highlights": [
+    "提供调度、计价、账单、会计、EDI（204/210/214/990/997）与 FMCSA 合规等全流程功能",
+    "通过 GTC 实现 PostgreSQL 逻辑复制 CDC，将数据投影到 Meilisearch 与 Redis",
+    "提供 Docker Compose 自托管部署栈，含 Caddy 自动 HTTPS 与 GHCR 镜像"
+   ],
+   "use_cases": [
+    "中小型资产型卡车承运商管理调度、计价与结算流程",
+    "需要 EDI 合作伙伴工作流与 FMCSA 合规记录的货运企业",
+    "希望在自有基础设施上自托管 TMS 的承运商或集成商"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Source-available trucking TMS written in Go, PostgreSQL, GraphQL, and React. ／ |Database|PostgreSQL via pgx, SQL-first migrations| ／ |Change data capture|GTC: a Go PostgreSQL logical-replication connector that projects rows into Meilisearch and Redis (runs as the `ghcr.io/emoss08/gtc` image; routing in `deploy/gtc/sinks.yaml`)| ／ - `ghcr.io/emoss08/trenova/postgres` (PostgreSQL with PostGIS, pg_cron and pgvector)",
+     "lines": [
+      4,
+      48,
+      50,
+      113
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Trenova 是使用 PostgreSQL 存储数据的运输管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "FSL-1.1-ALv2（Functional Source License），每个发布版两年后转为 Apache 2.0；禁止托管服务与竞品用途",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Source-available trucking TMS written in Go, PostgreSQL, GraphQL, and React. ／ Trenova is a transportation management system (TMS) for small and mid-sized over-the-road carriers in the United States. Enterprise TMS platforms often cost more than $50,000 a year, which puts them out of reach for the carriers that make up most of the industry. Trenova aims to close that gap with a flat-priced, self-hostable TMS that covers the full order-to-cash cycle: shipment entry, dispatch, driver assignment, rating, billing, settlement, accounting, and compliance. ／ |Database|PostgreSQL via pgx, SQL-first migrations|",
+   "evidence_lines": [
+    4,
+    25,
+    48
+   ]
+  },
+  "fn": "emoss08/Trenova",
+  "sha": "4e3f2cbe2bf7",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

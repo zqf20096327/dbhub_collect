@@ -9560,5 +9560,77 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "286782763275": {
+  "identity": {
+   "one_liner": "阿育吠陀体质评估平台，React+Express+Prisma 存储于 PostgreSQL",
+   "review": "该仓库是一个面向阿育吠陀医师与学员的 Web 应用，用于标准化 Prakriti 体质问卷评估：题目权重与答案以 JSONB 快照存入 PostgreSQL（经 Prisma ORM），由 TypeScript 评分引擎归一化计算 Vata/Pitta/Kapha 占比并做确定性平局判定，内置 DOCTOR/STUDENT/PATIENT 三种角色的 RBAC 与 JWT 认证，提供 REST API 与 Postman 测试集。",
+   "highlights": [
+    "每条答案保存权重与题目的 JSONB 快照，支持历史评估结果可复现",
+    "实现 DOCTOR、STUDENT、PATIENT 三角色的 RBAC 与 JWT 认证",
+    "提供 REST API 并附带 Postman 自动化测试集合与 Vitest 测试用例"
+   ],
+   "use_cases": [
+    "医师对个体进行 Prakriti 体质问卷评估并追踪纵向变化",
+    "带教场景下学员录入评估、医师审核定稿与重开",
+    "生成含患者历史与从业者备注的临床评估报告"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database**: PostgreSQL 16+ ／ The database uses PostgreSQL with Prisma ORM: ／ |**02**|`02 Patients`|`POST /api/patients` `GET /api/patients/:id` `POST /api/patients (No Auth)`|• Creates patient record in PostgreSQL • Captures UUID into `{{patientId}}` • Asserts unauthenticated request fails (`401`)|`201 Created` `200 OK` `401 Unauthoriz",
+     "lines": [
+      38,
+      54,
+      185
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明该平台以 PostgreSQL 经 Prisma ORM 存储患者与评估数据，是使用数据库的业务应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Database**: PostgreSQL 16+ ／ The database uses PostgreSQL with Prisma ORM: ／ Ayur Essence is a clinical-grade web platform for Ayurvedic practitioners (physicians and clinical scholars) to perform standardized, reproducible **Prakriti (psychophysical constitution)** assessments, calculate normalized **Vata**, **Pitta**, and **Kapha** bio-energetic distributions, and record longitudinal clinical observations.",
+   "evidence_lines": [
+    38,
+    54,
+    7
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "codexanjan/ayur-essence",
+  "sha": "286782763275",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

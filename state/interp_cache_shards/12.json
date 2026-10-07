@@ -7243,5 +7243,127 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7d81d729c7fc": {
+  "identity": {
+   "one_liner": "SedonaDB 空间 SQL 引擎的浏览器端 WebAssembly 构建",
+   "review": "CereusDB 将 SedonaDB 的空间 SQL 引擎（基于 DataFusion 与 Arrow）编译为 Wasm，提供 minimal/standard/global/full 四档 npm 包，供开发者在浏览器或 Node.js 中执行空间 SQL、读取 Parquet 并导出 GeoParquet。支持 OPFS 持久化数据库与空间连接/ST_KNN，但运行于受限配置：单分区、纯内存、无落盘溢出执行。",
+   "highlights": [
+    "提供四档 Wasm 构建包，含 GEOS/PROJ/S2/GDAL 可选组件，支持空间连接与 ST_KNN",
+    "支持 OPFS 持久化数据库，表以 LZ4 压缩的 Arrow IPC 文件存储",
+    "支持读取 Snappy/Gzip/Brotli/LZ4/ZSTD 压缩的 Parquet，并导出 GeoParquet 1.1"
+   ],
+   "use_cases": [
+    "在浏览器中执行空间 SQL 查询与分析",
+    "在浏览器端注册 GeoJSON/GeoTIFF/Parquet 数据并导出 GeoParquet",
+    "通过 OPFS 在页面会话间保存持久化空间数据库"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 提供用于浏览器端空间 SQL 执行的数据库引擎 Wasm 构建包，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A custom WebAssembly (Wasm) build of Apache SedonaDB for browser-side spatial SQL. ／ CereusDB compiles SedonaDB's spatial SQL engine (built on Apache DataFusion and Apache Arrow) to WebAssembly, with optional GEOS, PROJ, GDAL, and opt-in S2 geography support cross-compiled via Emscripten. ／ |`db.createDatabase(url, options?)`|Create a persistent database such as `opfs://mydb` (`CREATE DATABASE`)|",
+   "evidence_lines": [
+    3,
+    9,
+    129
+   ]
+  },
+  "fn": "tobilg/cereusdb",
+  "sha": "7d81d729c7fc",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bbb18e24ba3a": {
+  "identity": {
+   "one_liner": "离线优先的 Android 笔记应用，本地数据存于 SQLite",
+   "review": "Lumapse 是一款面向高校学生的离线优先 Android 笔记应用，提供快速笔记捕捉、学科/章节组织、学术日历与 Markdown 渲染，通过 Capacitor 打包并以 @capacitor-community/sqlite 在本地存储数据；以 APK 形式分发 beta，无账户与云同步，支持 ZIP 备份导入导出。",
+   "highlights": [
+    "离线优先，数据经 @capacitor-community/sqlite 本地持久化",
+    "支持 Markdown 渲染（marked + DOMPurify）与学科/章节组织",
+    "提供 ZIP 备份导出/导入与学术日历功能"
+   ],
+   "use_cases": [
+    "网络不稳定环境下学生的笔记记录与复习",
+    "按学科组织学习资料并跟踪学术日期",
+    "无账户依赖的本地知识管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Offline-first · Markdown · SQLite · Sin fricción. ／ Lumapse se enfoca en una fricción concreta: para parte del público relevado, las herramientas disponibles resultan demasiado complejas, dependen de una cuenta o no se adaptan bien al uso cotidiano con conectividad irregular. La beta se distribuye como APK Andr ／ |Persistencia actual|SQLite (vía `@capacitor-community/sqlite`)|Robusta, relacional, offline-first y alineada con ADR-006|",
+     "lines": [
+      8,
+      37,
+      49
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明该应用使用 SQLite 作为本地持久化存储数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lumapse se enfoca en una fricción concreta: para parte del público relevado, las herramientas disponibles resultan demasiado complejas, dependen de una cuenta o no se adaptan bien al uso cotidiano con conectividad irregular. La beta se distribuye como APK Android, guarda los datos localmente con SQLite y prioriza los flujos sin conexión. ／ |Persistencia actual|SQLite (vía `@capacitor-community/sqlite`)|Robusta, relacional, offline-first y alineada con ADR-006| ／ - Migración de persistencia: IndexedDB → SQLite (`@capacitor-community/sqlite`)",
+   "evidence_lines": [
+    37,
+    49,
+    170
+   ]
+  },
+  "fn": "jdfesa/lumapse",
+  "sha": "bbb18e24ba3a",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

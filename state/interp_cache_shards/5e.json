@@ -9565,5 +9565,170 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0cc7a33e7af5": {
+  "identity": {
+   "one_liner": "本地优先的图片提示词库应用，用 SQLite 存储图片与提示词",
+   "review": "这是一个本地优先的图片提示词管理应用，用于保存图片及其提示词、来源、标签与收藏集，支持关键词和结构化搜索，并可选连接 ChatGPT/Grok OAuth 生成图片和推荐标题。数据存于本地 SQLite 和本地图片文件，无需账号，默认监听 127.0.0.1。面向需要本地整理和复用图像生成提示词的个人用户，图像生成依赖外部服务商账号。",
+   "highlights": [
+    "提供图片与提示词卡片管理，支持收藏集、标签、备注与批量操作",
+    "使用本地 SQLite 和本地图片文件存储，无需账号，默认仅监听 127.0.0.1",
+    "支持可选的 ChatGPT/Grok OAuth 连接用于生成图片和标题建议"
+   ],
+   "use_cases": [
+    "本地保存、检索和整理图像生成提示词与参考图",
+    "通过 ChatGPT 或 Grok 生成图片并将结果归档到收藏集",
+    "导入多语言示例提示词包进行浏览和复用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Your library uses local SQLite and local image files. You do not need an account to save, search, or organize it. Optional ChatGPT and Grok connections let you generate images and suggest titles; those requests run on the provider's servers, not on your comput",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确说明该应用使用本地 SQLite 存储库数据，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later，示例数据采用独立许可（CC BY 4.0 / MIT）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Image Prompt Library** is a local-first app for saving images with their prompts, sources, and notes. Browse visually, organize cards into collections and tags, and find a prompt when you want to use it again. ／ Your library uses local SQLite and local image files. You do not need an account to save, search, or organize it. Optional ChatGPT and Grok connections let you generate images and suggest titles; those requests run on the provider's servers, not on your computer. ／ `v0.11.2` is the current stable release, available from GitHub Latest. It simplifies **ChatGPT image generation and editing** with direct Images endpoints and removes the generation-only chat-model selector. See the v0.11.2 release notes. Grok, multi-image cards, and batch organization introduced in v0.11.0 remain available.",
+   "evidence_lines": [
+    10,
+    12,
+    20
+   ]
+  },
+  "fn": "EddieTYP/image-prompt-library",
+  "sha": "0cc7a33e7af5",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9800b2de76e3": {
+  "identity": {
+   "one_liner": "TiDB 生态可复现实验集：迁移/兼容性/排障 Lab 合集",
+   "review": "该项目以 Lab 形式组织围绕 TiDB 及其数据迁移工具链（DM、Dumpling、Lightning、sync-diff-inspector 等）的可复现实验，覆盖迁移、兼容性差异与故障排查模式。实验分 Scripted/Manual/Project/Investigation 四类，部分提供 run-all.sh 脚本，需 Docker、mysql client 和可选 TiUP 运行，适合做 TiDB 迁移与运维实验的人员。",
+   "highlights": [
+    "包含 DM 分片合并迁移、MariaDB 权限修复等迁移实验，支持脚本化运行（run-all.sh）",
+    "实验覆盖 Dumpling 导出、Lightning 导入、sync-diff-inspector 数据校验等 TiDB 工具链",
+    "按四种类型（Scripted/Manual/Project/Investigation）组织实验，每 Lab 有 Tested Environment 说明"
+   ],
+   "use_cases": [
+    "复现 TiDB 数据迁移（DM、Dumpling、Lightning、Import Into）中的兼容性与排障问题",
+    "验证 MySQL 8.4/MariaDB 与 TiDB 的行为差异",
+    "学习或测试 TiProxy/HAProxy/ProxySQL 代理切换与 DNS 故障转移场景"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|lab-06|Recursive CTE fan-out: MySQL vs PostgreSQL|Manual|",
+     "lines": [
+      60
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|lab-05|Shard merge migration (3 MySQL shards → TiDB, pessimistic mode)|Scripted| ／ |lab-06|LOCK TABLES privilege and consistency modes (vanilla MySQL vs RDS)|Scripted| ／ |lab-09|MySQL 8.4 compatibility: full-load + incremental validation + Dumpling workaround|Scripted|",
+     "lines": [
+      17,
+      18,
+      21
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|lab-01|MariaDB 10.6.13 privilege fix & workarounds|Manual| ／ |lab-02|Legacy MariaDB full-load precheck & target fixups|Manual|",
+     "lines": [
+      13,
+      14
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "# TiDB Sandbox ／ Reproducible experiments exploring TiDB ecosystem behavior, compatibility gaps, ／ |lab-05|Shard merge migration (3 MySQL shards → TiDB, pessimistic mode)|Scripted|",
+     "lines": [
+      1,
+      3,
+      17
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 TiDB 生态提供可复现实验与排障模式，服务数据库工具链的验证与测试",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# TiDB Sandbox ／ Reproducible experiments exploring TiDB ecosystem behavior, compatibility gaps, ／ |Scripted|Full automation with `run-all.sh`|sync-diff/lab-01|",
+   "evidence_lines": [
+    1,
+    3,
+    74
+   ]
+  },
+  "fn": "alastori/tidb-sandbox",
+  "sha": "9800b2de76e3",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

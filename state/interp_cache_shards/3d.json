@@ -10335,5 +10335,75 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ad55514305f8": {
+  "identity": {
+   "one_liner": "基于 Postgres/Supabase 的开源复式记账核心（schema+规则数据+工具）",
+   "review": "Ekwo OS 提供一套部署在用户自有 Supabase/Postgres 数据库上的复式记账核心，包含 schema、迁移、各国财税规则包和报表（如法国 FEC），通过 npx CLI 一键初始化，并内置 MCP 服务器供 AI 代理读写账簿。面向希望自己掌握账簿数据的企业、会计事务所与开发者；无独立服务端，依赖 Supabase 生成 REST API 并用行级安全控制权限。",
+   "highlights": [
+    "复式记账约束由数据库触发器实现，含锁定期间拒绝写入",
+    "国家财税规则以数据行形式组织，提供 90 余个国家包",
+    "内置 MCP 服务器，支持 AI 代理经 REST API 操作账簿"
+   ],
+   "use_cases": [
+    "企业用自有 Supabase 项目自管账簿并准备增值税申报",
+    "会计事务所在一套安装中运行多家公司账目",
+    "开发者需要以数据形式承载增值税规则的复式记账核心"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "also owns.** So the whole accounting core is open, the data sits in a Postgres ／ A double-entry accounting core for Postgres. It is the schema, the posting ／ - **Tested on real Postgres.** The test suite runs the migrations, the seeds,",
+     "lines": [
+      31,
+      89,
+      123
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "项目将账簿数据存储在用户控制的 Postgres/Supabase 数据库中，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0；部分格式库以独立 MIT 包发布，另有 ekwo.ai 托管商业版",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A double-entry accounting core for Postgres. It is the schema, the posting ／ There is no server to run: Supabase turns the schema into a REST API with an ／ Supabase, and an MCP server sits on top of them, so an AI agent can book a",
+   "evidence_lines": [
+    89,
+    91,
+    34
+   ]
+  },
+  "fn": "Ekwo-ai/ekwo-os",
+  "sha": "ad55514305f8",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

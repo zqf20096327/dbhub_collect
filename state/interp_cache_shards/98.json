@@ -8323,5 +8323,155 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "51731bd16917": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，可在 PG 中直接对 ClickHouse 运行分析查询",
+   "review": "pg_clickhouse 是一个 PostgreSQL 扩展，让用户在不改写 SQL 的情况下从 PostgreSQL 对 ClickHouse 执行分析查询，支持查询下推。适用于已使用 PostgreSQL 并需访问 ClickHouse 分析数据的开发者；要求 PostgreSQL 14+ 与 ClickHouse v23+，部分 TPC-H 查询尚无下推，DML 功能在路线图中。",
+   "highlights": [
+    "支持从 PostgreSQL 直接对 ClickHouse 运行分析查询而无需改写 SQL",
+    "支持查询下推（含 TPC-H 多数查询的单次或多 foreign scan 下推）",
+    "支持 PGXN、源码编译、Docker 镜像及 CloudNativePG 集成安装"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 环境中查询 ClickHouse 中的分析数据",
+    "对存于 ClickHouse 的数据执行 TPC-H 类分析查询",
+    "在 CloudNativePG 管理的 PostgreSQL 集群中加载该扩展"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This library contains `pg_clickhouse`, a PostgreSQL extension that runs ／ SQL. It supports PostgreSQL 14 and later and ClickHouse v23 and later. ／ The `pg_clickhouse` extension requires [PostgreSQL] 14 or higher, [libcurl],",
+     "lines": [
+      5,
+      7,
+      239
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "analytics queries on ClickHouse right from PostgreSQL without rewriting any ／ SQL. It supports PostgreSQL 14 and later and ClickHouse v23 and later. ／ * Support all ClickHouse data types",
+     "lines": [
+      6,
+      7,
+      254
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明它是为 PostgreSQL 提供查询 ClickHouse 接口的扩展，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "ClickHouse"
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This library contains `pg_clickhouse`, a PostgreSQL extension that runs ／ analytics queries on ClickHouse right from PostgreSQL without rewriting any ／ SQL. It supports PostgreSQL 14 and later and ClickHouse v23 and later.",
+   "evidence_lines": [
+    5,
+    6,
+    7
+   ]
+  },
+  "fn": "ClickHouse/pg_clickhouse",
+  "sha": "51731bd16917",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "af1d5e4c8651": {
+  "identity": {
+   "one_liner": "乐队自托管歌本与演出准备应用，基于 ChordPro 格式与 Postgres 存储",
+   "review": "Gigboy 是一个供乐队和音乐人自托管使用的 Web 应用，用于撰写、整理和排练 ChordPro 格式的歌曲，并提供歌单、演出日历、新闻资料包、排练录音等功能。技术上采用 React 前端加 Express API，通过 Drizzle ORM 使用 PostgreSQL 存储数据，仅支持 Docker Compose 部署，无公开注册，需管理员邀请链接添加成员。",
+   "highlights": [
+    "支持 ChordPro 渲染、实时移调、多种来源导入及 ZIP 全量导出",
+    "提供歌单、演出/巡演管理、日历订阅与 Concert Mode 同步",
+    "离线可用的 PWA，内置录音、节拍器、调音器等排练工具"
+   ],
+   "use_cases": [
+    "乐队自托管管理共享歌本与演出歌单",
+    "生成并分享新闻资料包与技术台位图",
+    "排练时录制、标注与同步乐谱显示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Express + Postgres (Drizzle ORM)|API server & data storage| ／ # fill in POSTGRES_PASSWORD, SESSION_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD ／ mkdir -p data/postgres data/attachments",
+     "lines": [
+      116,
+      138,
+      139
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用通过 Drizzle ORM 使用 Postgres 存储歌本与乐队数据，属使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Express + Postgres (Drizzle ORM)|API server & data storage| ／ Gigboy is a web app for musicians and bands to write, organize, and rehearse songs from — built",
+   "evidence_lines": [
+    116,
+    19
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "blindpassasjer/gigboy",
+  "sha": "af1d5e4c8651",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

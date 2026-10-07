@@ -7551,5 +7551,138 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b11187b1a98b": {
+  "identity": {
+   "one_liner": "本地优先 LLM 知识库，将文档摄入为可引用的 wiki 并支持对话",
+   "review": "该项目把用户的文档摄入为带引用的 markdown wiki，并提供阅读与对话界面，回答附带引用来源；内置数据集引擎可存储并计算结构化数据。面向想在本地管理个人知识、不需要云服务的个人用户，基于 FastAPI、HTMX、SQLite/FTS5 与任意 OpenAI 兼容模型运行。",
+   "highlights": [
+    "支持 wiki-first 检索：index.md → FTS5 → 原始文档块三层回退",
+    "提供 cite-or-refuse 确定性校验，回答无工具证据时返回拒绝",
+    "内置数据集引擎，支持结构化数据的定期刷新与确定性计算"
+   ],
+   "use_cases": [
+    "将个人文档整理为可检索、可追溯引用的本地知识库",
+    "基于本地知识库进行带引用的问答对话",
+    "对含实时数据（如利率、价格）的场景做确定性计算咨询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "(Apache-2.0); the rest is an independent local-first build on FastAPI, HTMX and SQLite. See `NOTICE`. ／ - **Citation graph in SQLite** — every page→source and page→page edge is recorded and rebuilt deterministically, so provenance is queryable.",
+     "lines": [
+      16,
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目使用 SQLite/FTS5 存储引用图与检索索引，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A personal, local-first wiki that ingests your documents, builds a structured knowledge base, and lets you read and chat with it — all on your machine, no cloud required. ／ (Apache-2.0); the rest is an independent local-first build on FastAPI, HTMX and SQLite. See `NOTICE`. ／ - **Citation graph in SQLite** — every page→source and page→page edge is recorded and rebuilt deterministically, so provenance is queryable.",
+   "evidence_lines": [
+    12,
+    16,
+    89
+   ]
+  },
+  "fn": "Clod/llmwiki-marimo",
+  "sha": "b11187b1a98b",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5e18b91241d3": {
+  "identity": {
+   "one_liner": "AI 牛种识别 Web 应用，PyTorch 图像分类+SQLite 历史",
+   "review": "CattleVision AI 是一个通过网页上传牛只图片并预测印度牛品种的计算机视觉应用，前端 React、后端 FastAPI，使用微调的 EfficientNet-B0 模型输出品种、置信度和 top-3 预测，预测历史存入 SQLite，并集成 OpenStreetMap/Overpass 的兽医机构定位。面向农民、田间工作者和研究人员等需要识别牛品种的用户。README 未提供本地安装说明，仅给出线上部署地址。",
+   "highlights": [
+    "使用微调 EfficientNet-B0 模型对 18 个印度牛品种进行图像分类，返回置信度与 top-3 预测",
+    "提供 FastAPI REST 后端与 React 前端，支持图像上传到推理的端到端流程",
+    "预测历史存储于 SQLite，并支持基于 OpenStreetMap/Overpass 的兽医机构定位"
+   ],
+   "use_cases": [
+    "通过上传牛只图片识别印度牛品种",
+    "查询附近的兽医医院与诊所（含农村地区回退机制）",
+    "保存与查看历史识别记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Prediction history using SQLite ／ Prediction information can be stored in the SQLite-based identification history. ／ * SQLite",
+     "lines": [
+      63,
+      242,
+      271
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是一个使用 SQLite 存储预测历史的 Web 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CattleVision AI is a **computer-vision-based web application** that identifies Indian cattle breeds from images using a deep-learning classification model. ／ - Prediction history using SQLite ／ Prediction information can be stored in the SQLite-based identification history.",
+   "evidence_lines": [
+    5,
+    63,
+    242
+   ]
+  },
+  "fn": "nitin25J/CattleVision-AI",
+  "sha": "5e18b91241d3",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9410,5 +9410,224 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7a711d74731c": {
+  "identity": {
+   "one_liner": "电子书/有声书自动下载管理工具，监控作者并组织馆藏",
+   "review": "Bindery 是一个用 Go 编写的电子书与有声书自动化下载管理器，监控作者、通过 Newznab/Torznab 索引器搜索、经 SABnzbd 等客户端下载并整理入库。面向家庭服务器/媒体库自托管用户，内置 React UI，单二进制内嵌 SQLite 存储，无需外部数据库，提供从 Readarr 数据库一键迁移的命令与 Web 入口。",
+   "highlights": [
+    "单 Go 二进制内嵌 UI 与 SQLite，无外部数据库依赖，提供 Distroless 镜像与 Helm chart",
+    "支持 OpenLibrary、Google Books、Hardcover 等多个公开元数据源及 Readarr .db 导入",
+    "集成 SABnzbd、NZBGet、qBittorrent、Transmission、Deluge、rTorrent 等下载客户端"
+   ],
+   "use_cases": [
+    "家庭媒体库自动化：监控作者新书并自动抓取电子书/有声书",
+    "从 Readarr 迁移既有作者、索引器与下载客户端配置",
+    "对已有本地图书/有声书文件夹执行扫描匹配与导入整理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Boring to run, by design.** A single Go binary with the UI embedded, SQLite, no external database, no sidecars, no nginx. Distroless image, Helm chart, and ARM builds down to a Pi Zero.",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其以 SQLite 作为内嵌数据存储，属于使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Boring to run, by design.** A single Go binary with the UI embedded, SQLite, no external database, no sidecars, no nginx. Distroless image, Helm chart, and ARM builds down to a Pi Zero. ／  Automated ebook &amp; audiobook management for Usenet &amp; torrents — monitor authors, search indexers, download, organize. ／ - Completed downloads matched by NZO ID and placed in the library with configurable naming. Modes: **Auto** (default — hardlink when possible, else copy, so a torrent keeps seeding; a usenet grab is moved, since there is nothing to seed), **Move**, **Copy** (keep source for seeding), **Hardlink** (zero extra disk; same filesystem required), **External** (hand off to a sibling tool).",
+   "evidence_lines": [
+    50,
+    6,
+    106
+   ]
+  },
+  "fn": "vavallee/bindery",
+  "sha": "7a711d74731c",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "006ad5a7afa4": {
+  "identity": {
+   "one_liner": "AI代理的本地记忆层，基于RAM优先架构与SQLite WAL持久化",
+   "review": "Mnemostroma 是一个为 AI 代理与机器人提供离线记忆的常驻程序，通过 Observer 异步捕获会话中的决策与关键事实，压缩后存入多层级记忆模型，随时间逐步淡化细节。核心数据默认驻留 RAM，由 PersistenceLayer 异步写入 SQLite WAL 保证可靠性，并提供 MCP Server、SSE/HTTP 适配器、MITM 代理和系统托盘。面向需要跨会话保留上下文的 AI 代理用户，需 Python 3.12+，安装后下载约 300MB 模型，基线内存占用约 420MB。",
+   "highlights": [
+    "提供 MCP Server（stdio + SSE）、HTTP 读取适配器与 HTTPS/MITM 代理多种接入方式",
+    "双线程异步管线（Observer + Content）与 5 层记忆模型，检索延迟约 20ms",
+    "通过 PersistenceLayer 异步写入 SQLite WAL，实现 RAM 优先与持久化隔离"
+   ],
+   "use_cases": [
+    "为 AI 代理提供跨会话的上下文记忆，避免重复说明历史决策",
+    "通过 passthrough 代理捕获 Claude Code 等客户端会话写入记忆",
+    "在边缘设备或本地环境离线运行机器人/代理的记忆组件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "(SessionRepo, PrecisionRepo) over SQLite WAL. All in ~420MB RAM (baseline) / ~650MB (zoo), ~20ms retrieval. ／ **Core product is RAM-only by default** for speed. Reliability is guaranteed by a formal `PersistenceLayer` (Phase 9.2), which manages asynchronous SQLite WAL writes and provides a strict isolation boundary between memory logic and storage. ／ Week: Detail fades — precision moves to SQLite",
+     "lines": [
+      41,
+      73,
+      81
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Architecture|RAM-first sidecar|LLM-managed pages|Server + Postgres|Cloud API|",
+     "lines": [
+      746
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 仅作为其记忆组件的内嵌持久化存储，产品本身是面向 AI 代理的记忆应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "(SessionRepo, PrecisionRepo) over SQLite WAL. All in ~420MB RAM (baseline) / ~650MB (zoo), ~20ms retrieval. ／ **Core product is RAM-only by default** for speed. Reliability is guaranteed by a formal `PersistenceLayer` (Phase 9.2), which manages asynchronous SQLite WAL writes and provides a strict isolation boundary between memory logic and storage. ／ |MCP Server (stdio + SSE)|✅ DONE|",
+   "evidence_lines": [
+    41,
+    73,
+    104
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "GG-QandV/mnemostroma",
+  "sha": "006ad5a7afa4",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "762183923491": {
+  "identity": {
+   "one_liner": "纯 C99 的单文件向量检索与 AI 代理情景记忆库",
+   "review": "NanoVector 是一个约 120KB、零依赖的向量索引库，用 C99 与 AVX2/NEON/FASM 实现 SIMD 暴力精确检索，支持余弦/内积/L2 距离、元数据过滤、LangChain 集成和内置 MCP 服务器，数据可序列化为单个 .nvec 文件。面向需要本地持久记忆的 AI 代理与 LLM 管线开发者，适用于中小规模向量（数万级）场景，不提供 HNSW 等图索引。",
+   "highlights": [
+    "纯 C99 实现 SIMD（AVX2+FMA、ARM NEON、FASM x64）精确向量检索，零外部依赖",
+    "支持元数据过滤（exact/$gte/$in/lambda）、LangChain 集成与内置 MCP JSON-RPC 服务器",
+    "索引可持久化为单个 .nvec 二进制文件，并提供 NumPy Buffer Protocol 零拷贝批量写入"
+   ],
+   "use_cases": [
+    "为 AI 代理提供本地持久化的情景记忆存储与检索",
+    "在 CLI、serverless（如 AWS Lambda）等对导入开销敏感的环境运行向量检索",
+    "作为 ChromaDB/FAISS 在中小规模向量场景下的 LangChain 替换组件"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "### The SQLite of Vector Search & Episodic Memory for AI Agents ／ |**Storage Format**|**Single file (`.nvec`)**|SQLite + DuckDB dirs|Custom binary|",
+     "lines": [
+      3,
+      68
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它是独立的向量检索开发库，README 未声明其服务于某个数据库生态，也未用 SQLite 存储自身数据（L68 中 SQLite 为竞品 ChromaDB 的存储格式）。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### The SQLite of Vector Search & Episodic Memory for AI Agents ／ **Bare-metal C99 · AVX2+FMA · ARM NEON · FASM x64 · Zero Dependencies · ~120 KB** ／ ### `nanovector.Index(dim: int, metric: str = \"cosine\", normalize: bool = False)`",
+   "evidence_lines": [
+    3,
+    4,
+    203
+   ]
+  },
+  "fn": "eminsk/nanovector",
+  "sha": "762183923491",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

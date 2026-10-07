@@ -8526,5 +8526,154 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5c3f229a28ef": {
+  "identity": {
+   "one_liner": "纯 Go 文档型嵌入式数据库，内置 btree/WAL 引擎，Mongo 风格查询",
+   "review": "any-store 是面向 Go 开发者的文档型嵌入式数据库，提供 MongoDB 风格查询、聚合管道、全文与向量搜索、ACID 事务及多进程并发访问，纯 Go 实现无 CGO。存储引擎为自研 btree/pager/WAL，设计参考 SQLite 但磁盘格式独立。适合嵌入 Go 应用（含 wasm）的本地数据存储场景。",
+   "highlights": [
+    "提供 MongoDB 风格查询、聚合管道与运行时索引（复合/唯一/稀疏/多键）",
+    "实现 ACID 事务、多进程并发访问与崩溃安全的 WAL 恢复",
+    "内置全文（BM25）与向量（IVF-SQ/HNSW）搜索，支持页级校验与 AEAD 加密"
+   ],
+   "use_cases": [
+    "嵌入 Go 应用或 js/wasm 的本地文档存储",
+    "需要离线全文/向量检索的端侧应用",
+    "多进程共享同一数据库文件的场景"
+   ],
+   "db_verdicts": []
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "A **document-oriented embedded database** for Go with a MongoDB-like query language, built on an in-tree btree/pager/WAL storage engine derived from SQLite (aligned with its design, not a literal port — the on-disk format is our own). ／ * **Multi-process** — SQLite-like contract: any number of OS processes may open, read and write the same database file at any time (WAL + shared-memory index, busy handling, cross-process DDL reconciliation). ／ > **Choosing document ids.** Unlike SQLite there is no hidden rowid — the document id is the btree key. Increment-like ids (`anyenc.NewObjectID()`, timestamps, sequences) keep inserts append-ordered and reads cache-friendly; fully random ids (e.g. UUIDv4) scat",
+     "lines": [
+      7,
+      19,
+      51
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定义其为 Go 语言库（go get 安装），是供其他程序嵌入使用的数据库/存储引擎组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A **document-oriented embedded database** for Go with a MongoDB-like query language, built on an in-tree btree/pager/WAL storage engine derived from SQLite (aligned with its design, not a literal port — the on-disk format is our own). ／ Schema-less documents, rich indexes, full-text and vector search, ACID transactions, multi-process access, page-level integrity and optional encryption — pure Go, no CGO. ／ go get github.com/anyproto/any-store/v2",
+   "evidence_lines": [
+    7,
+    8,
+    31
+   ]
+  },
+  "fn": "anyproto/any-store",
+  "sha": "5c3f229a28ef",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "69e1b41b56cb": {
+  "identity": {
+   "one_liner": ".NET 的 Testcontainers 风格集成测试容器库，支持 WSLC 与 Docker 双后端",
+   "review": "该库为 .NET (net10.0) 项目提供一次性 Linux 容器，用于集成测试：可在 Windows 上经 Microsoft WSL Containers 运行（无需安装 Docker），也可通过 Testcontainers 走 Docker 后端，测试代码在两种后端间无需改动。内置等待策略、镜像/标签解析、注册表认证等能力，并附八个服务模块（PostgreSQL、Redis、SQL Server、RabbitMQ、Azurite、NATS、MySQL、Azure Key Vault Emulator）。项目自述为实验性 preview，API 与打包规则可能在预发布版本间变更，无生产支持保证。",
+   "highlights": [
+    "提供后端无关的统一 API，同一套测试代码可在 WSLC（Windows）与 Docker（Linux CI）上运行",
+    "包含八个服务模块：PostgreSQL、Redis、SQL Server、RabbitMQ、Azurite、NATS、MySQL、Azure Key Vault Emulator",
+    "WSLC 后端默认共享镜像存储（StorageMode.Shared），镜像按存储路径缓存，减少逐会话拉取"
+   ],
+   "use_cases": [
+    "在 Windows 开发机上无需安装 Docker 运行集成测试容器",
+    "在 Linux CI 上复用同一套 .NET 测试代码运行 Docker 容器",
+    "在测试中启动 PostgreSQL、SQL Server、Redis 等服务容器并获取连接字符串"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator). On WSLC, **images are shared ／ await using var postgres = new PostgreSqlBuilder()",
+     "lines": [
+      31,
+      93
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "> modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator). On WSLC, **images are shared",
+     "lines": [
+      31
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "> modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator). On WSLC, **images are shared ／ await using var sqlServer = new MsSqlBuilder().WithPassword(\"SomeStrong!Password1\").AcceptLicense().Build();",
+     "lines": [
+      31,
+      102
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为集成测试提供数据库等服务容器，服务于数据库开发测试流程而非使用数据库存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT，README 声明与 Testcontainers 项目或 Microsoft 无隶属关系",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Testcontainers-style library for .NET that runs throwaway Linux containers for integration testing — on **Microsoft WSL Containers (WSLC)** with no Docker installation, or on **Docker** through Testcontainers. ／ > **Experimental.** This project is an experiment in running throwaway containers through Microsoft ／ > modules** (PostgreSQL, Redis, SQL Server, RabbitMQ, Azurite, NATS, MySQL, Azure Key Vault Emulator). On WSLC, **images are shared",
+   "evidence_lines": [
+    6,
+    24,
+    31
+   ]
+  },
+  "fn": "purview-dev/containers",
+  "sha": "69e1b41b56cb",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8565,5 +8565,130 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4d0602b46a32": {
+  "identity": {
+   "one_liner": "Robinhood Chain 链上交易者追踪与信号系统",
+   "review": "追踪 fomo.family 交易者在 Robinhood Chain 上的链上成交：解析 profile 到真实钱包，每 20 秒读取链上成交并校验回执来源，由 LLM 对交易者打分，生成信号/爆发/退出数据，通过网站、Telegram 机器人和 HTTP API 展示。使用 SQLite 存储数据，运行成本为每月 0 美元。已于 2026 年 10 月归档停运，仓库保留全部复现所需的代码与两个月运行档案。",
+   "highlights": [
+    "提供 profile 到钱包的解析管线、逐笔回执来源校验（provenance）与从成交重建交易者持仓簿",
+    "支持 rpc/trenches/codex/helius 多数据源，默认通过 eth_getLogs 免费读取链上成交",
+    "提供独立 HTML 页面、Telegram 机器人与 HTTP API 三种输出，评分可导出 JSON 供任意 LLM 处理后回导"
+   ],
+   "use_cases": [
+    "追踪 Robinhood Chain 上特定交易者群体的链上买卖与聚合信号",
+    "生成交易者评分排行榜与代币持仓分析",
+    "归档研究：复现或检视其两个月运行期的告警与判定记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明它是一个使用 SQLite 存储数据的链上信号应用，而非为某数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "discontinued",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "one database: signals, bursts, launches, exits, a token analyzer, a trader analyzer, and a ／ > It ran from 6 August to 6 October 2026: 187,306 fills from 562 tracked wallets over 28,524 ／ pip install -e .",
+   "evidence_lines": [
+    13,
+    21,
+    59
+   ]
+  },
+  "fn": "cvxv666/fomo-robinhood-radar",
+  "sha": "4d0602b46a32",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a25f050d290e": {
+  "identity": {
+   "one_liner": "Telegram 聊天/论坛批量导出工具，多账号并行写入 SQLite 并按主题分目录存储",
+   "review": "该工具是一个命令行 Python 程序，用于将 Telegram 聊天或论坛导出为本地文件：按主题生成文件夹，内含 messages.txt、messages.l 及 SQLite 数据库。它使用多账号并行与 Telegram 的 takeout 导出模式提升速度，支持断点续传和按日期、作者、类型的过滤，适合需要本地备份和检索大规模聊天记录的用户；仅下载文本与元数据，不下载媒体文件。",
+   "highlights": [
+    "使用多账号并行 worker 及 Telegram takeout 导出模式导出消息，进度每 100 条提交至 SQLite，可断点续传且后续只拉取新消息",
+    "输出按论坛主题分目录，包含 messages.txt、messages.l 与 SQLite 数据库，支持 reactions、polls、markdown 等可选附加数据",
+    "支持按日期范围、作者、消息类型过滤，以及 SOCKS5/HTTP 代理和交互式/命令行两种运行方式"
+   ],
+   "use_cases": [
+    "将大型 Telegram 群组或论坛聊天完整导出为本地可查询的 SQLite 数据库与文本文件",
+    "以 cron 或脚本方式定期增量备份聊天内容",
+    "按日期、作者或消息类型生成独立的过滤导出结果"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Dump an entire Telegram chat into SQLite and a folder per forum topic at **over 100,000 messages a minute**. It runs Telegram's own data-export mode with parallel workers on several accounts, so a chat of several hundred thousand messages is done in minutes: a ／ - Progress is committed to SQLite every 100 messages. An interrupted run resumes where it stopped, and later runs fetch only new messages. ／ - `messages.txt` for reading, `messages.jsonl` for scripts, and the SQLite database for queries.",
+     "lines": [
+      12,
+      27,
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该工具使用 SQLite 存储导出的消息与进度数据，属于使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dump an entire Telegram chat into SQLite and a folder per forum topic at **over 100,000 messages a minute**. It runs Telegram's own data-export mode with parallel workers on several accounts, so a chat of several hundred thousand messages is done in minutes: about 4× faster than Telegram Desktop's own export, and a whole forum in one pass instead of topic by topic. ／ The raw data is in `data/<chat id>.sqlite`, with tables `messages`, `topics` and `tasks` (download progress). ／    pipx install tg-chat-dump",
+   "evidence_lines": [
+    12,
+    159,
+    40
+   ]
+  },
+  "fn": "renkagod/tg-chat-dump",
+  "sha": "a25f050d290e",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9347,5 +9347,77 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aa9053d59d1d": {
+  "identity": {
+   "one_liner": "基于 MCP Apps 扩展的开源引擎，为 MCP 宿主提供持久化可复用 AI 应用 UI",
+   "review": "该项目是一个构建在 MCP Apps 扩展之上的引擎，允许 AI 生成单文件 HTML 应用并保存到注册表中，人与 AI 通过 window.oma API 共享同一数据存储。数据以单个 SQLite 文件持久化，带 append-only 变更账本与乐观并发控制。面向使用 Claude Desktop、Codex 等 MCP 宿主的用户，通过 npx 或安装脚本接入，当前自托管远程部署仍在路线图中。",
+   "highlights": [
+    "提供可由 AI 写入的应用注册表，支持单文件 HTML 应用与 window.oma 数据 API",
+    "数据基于 SQLite 与 append-only change_event 账本，支持幂等命令与乐观并发（expected_version）",
+    "内置 App Store，含 33 个工具与 3 个系统应用，支持按环境变量（OMA_DB 等）配置"
+   ],
+   "use_cases": [
+    "为 Claude Desktop、Claude Code、Codex 等宿主生成并复用持久化 UI 应用",
+    "需要数据在会话结束后仍保留的交互式小工具场景",
+    "通过 openmcp.app 托管方式访问 claude.ai、ChatGPT 等浏览器宿主"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "*collections* of items backed by SQLite plus an append-only `change_event` ledger. Every ／ |`OMA_DB`|per-user store|Path to the SQLite store. Set it to isolate a store.| ／ **Where your data lives.** The whole store is one SQLite file, `open-mcp-apps.db`, in",
+     "lines": [
+      23,
+      170,
+      179
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用数据存储在一个 SQLite 文件中，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**open-mcp-apps** is an open engine built on MCP Apps ／  *collections* of items backed by SQLite plus an append-only `change_event` ledger. Every ／ **Where your data lives.** The whole store is one SQLite file, `open-mcp-apps.db`, in",
+   "evidence_lines": [
+    13,
+    23,
+    179
+   ]
+  },
+  "fn": "2nd1st/open-mcp-apps",
+  "sha": "aa9053d59d1d",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
