@@ -141,7 +141,7 @@ The script handles:
 8. Service verification (PostgreSQL, Valkey, Vault running and accessible)
 9. A litany of other configuration steps
 
-There is no in-place upgrade path: 2.0 installs the greenfield schema into an empty database. To salvage data from an older install, take a `pg_dump` first and restore it manually.
+Deployed installs update themselves in place with `mira update` (non-breaking releases only; a release carrying `BREAKING.md` is refused and prints the manual path). The database stays greenfield either way: the schema installs into an empty database, and data salvage across a schema change is agent-run (`deploy/HOW_TO_MIGRATE_OLD_INSTALLS.txt`) — take a `pg_dump` first and never rely on the updater to carry data.
 
 ## Injection Screen (optional)
 
@@ -164,6 +164,43 @@ The bare-metal installer writes these to `/opt/mira/systemone.env`, which the
 systemd unit (`EnvironmentFile=`), the `run.sh` launcher, and the container's
 start script all read. Secrets never travel by env — the bearer token lives
 only in Vault (`secret/mira/api_keys` `systemone_key`).
+
+## Bash tool guardrail (optional)
+
+MIRA's shell tool (`bash_tool`) refuses destructive commands by default — no
+configuration needed. Two settings let an operator tune that stance for a
+semi-autonomous instance; both live on the bash tool's config (set them like
+any per-user tool config; defaults ship safe and off):
+
+- **`dangerous_skip_permissions_enabled`** (default `false`) — the master gate
+  for the tool's `skip_permissions` parameter. Off (the default), a call that
+  passes `skip_permissions: true` simply errors. On, MIRA may run a command
+  under the catastrophic core only: the rules against system-ruining,
+  unrecoverable, or audit-erasing actions stay enforced (disk formatting,
+  filesystem-root and container deletes, fork bombs, mass process kills,
+  ssh-key plants, sudoers edits, download-to-shell, log destruction), while
+  recoverable judgment calls are relaxed after the human has approved the
+  exact command in the conversation: system-config overwrites, service
+  control (including restarting MIRA itself), package removal, firewall
+  flushes, and the git checkout/restore/reset/clean rules. `/dev` and
+  `/Volumes` contents stay protected even in skip mode — block devices and
+  mounted backups have no recovery path. Every executed bypass is logged
+  one line per invocation to `<log_dir>/guardrail_bypass.log` and marked
+  `"guardrail": "bypassed"` in the tool result, so it is visible both
+  in-transcript and on disk.
+- **`blocked_patterns`** (default `[]`) — the operator's personal tripwires.
+  Each entry is matched against the raw command string before anything else
+  runs; every character is literal except `*`, which matches anything,
+  including slashes, spaces, and quotes (e.g. `rm * /etc*` blocks every
+  delete spelling of an /etc path, quoted or not). Blocklist entries cannot
+  be bypassed by any mode — including skip mode — and config can never make
+  the tool refuse *less*, only more. A refusal names your own pattern, so it
+  is always traceable to config, not code.
+
+For precise file edits, MIRA carries a built-in skill, `precise-file-editing`,
+teaching the fast shell one-liner patterns (perl/sed in-place substitution,
+heredoc writes, targeted line-range reads); the tool's own description points
+the model at it.
 
 ## Install MIRA via Docker
 Build the base image first (heavy, rarely changes), then the thin app layer:

@@ -78,20 +78,19 @@ RETURN node.name, score ORDER BY score DESC LIMIT 10;
 -- Standing query: a live changefeed maintained incrementally by Ripple
 SUBSCRIBE TO MATCH (a:Person)-[:KNOWS]->(b:Person) WHERE b.born < 1800;
 
--- GraphRAG retrieval in one planner-fused operator (ANN + BM25 + graph expansion)
+-- GraphRAG retrieval in one fused operator (ANN + BM25 + graph expansion, exact RRF)
 CALL hybrid.search(
-  text  => 'computing pioneers',
-  vector => $query_embedding,
-  seeds  => [ (:Person {name: 'Ada'}) ],
-  expand_pattern => '-[:KNOWS]->{1,2}',
-  k => 20, fusion => RRF
-) YIELD node, score RETURN node.name, score;
+  text   => 'computing pioneers',  text_property => 'bio',
+  vector => $query_embedding,      vector_properties => ['e0', 'e1', 'e2'],
+  seeds  => $ada, relation => 'KNOWS', max_hops => 2,
+  k => 20, fusion => 'RRF'
+) YIELD node, score RETURN node.name, score ORDER BY score DESC;
 
 -- Every result is auditable: get its plan certificate
 EXPLAIN (CERTIFICATE) MATCH (a:Person)-[:KNOWS]->(b) RETURN count(*);
 ```
 
-> **Target state.** Checked 2026-09-28, and again 2026-10-05, by running each statement through the `fgdb` CLI on a fresh database: 4 of these 11 statements run as written: the `INSERT`, the `SHORTEST` quantified-path match, `FOR SYSTEM_TIME AS OF SEQ` (given a sequence number the database has retained) and `EXPLAIN (CERTIFICATE)`. `CALL fnx.pagerank() YIELD node, score ...` also runs without the `GRAPH social` argument. Not yet: `CREATE GRAPH` (there is no graph catalog), the three branch statements (there is no branch catalog, fork, merge or branch write; `AT BRANCH` works on reads only, against a pinned snapshot the host resolves through `Database::query_with_branch_resolver`), naming a graph in `CALL` (fgdb-luq0b), `CALL hybrid.search` (no `hybrid` procedure namespace exists), and `SUBSCRIBE TO`. The CLI has no subscribe verb, and the library's `Database::subscribe_native`, which registers a `SUBSCRIBE TO` in process, needs a native read that ends in `RETURN`; the statement above has none, so the library refuses it too.
+> **Target state.** Checked 2026-09-28, and again 2026-10-05, by running each statement through the `fgdb` CLI on a fresh database: 6 of these 11 statements run as written: the `INSERT`, the `SHORTEST` quantified-path match, `FOR SYSTEM_TIME AS OF SEQ` (given a sequence number the database has retained), `EXPLAIN (CERTIFICATE)`, `CALL hybrid.search` (named arguments; the corpus is the projection the arguments name, built per call at the read's snapshot, and `$ada` is a list of seed vertices) and `SUBSCRIBE TO` (served by `fgdbd` and streamed by `fgdb remote subscribe`, or registered in process with `Database::subscribe_native`; a read with no `RETURN` subscribes to its bound variables). `CALL fnx.pagerank() YIELD node, score ...` also runs without the `GRAPH social` argument. Not yet: `CREATE GRAPH` (there is no graph catalog), the three branch statements (there is no branch catalog, fork, merge or branch write; `AT BRANCH` works on reads only, against a pinned snapshot the host resolves through `Database::query_with_branch_resolver`), and naming a graph in `CALL` (fgdb-luq0b).
 
 ---
 
@@ -216,6 +215,11 @@ fgdb query --db mydb.fgdbdir --key-file fgdb.keys "<gql>"
 fgdb query --db mydb.fgdbdir --key-file fgdb.keys --stream "<gql>"
 fgdb query --db mydb.fgdbdir --key-file fgdb.keys --certify-to result.cert "<gql>"
 
+# External ORDER BY/DISTINCT with private query scratch in an existing directory
+fgdb query --db mydb.fgdbdir --key-file fgdb.keys --property score=1 \
+  --spill-dir /tmp --spill-memory-bytes 67108864 --spill-disk-bytes 1073741824 \
+  "MATCH (n) RETURN n AS node ORDER BY n.score DESC LIMIT 100"
+
 # Commit a write, then compare two committed revisions of one query
 fgdb write --db mydb.fgdbdir --key-file fgdb.keys "<gql>"
 fgdb diff  --db mydb.fgdbdir --key-file fgdb.keys --before <seq> --after <seq> "<gql>"
@@ -239,6 +243,21 @@ fgdb query --db mydb.fgdbdir --key-file fgdb.keys --relation KNOWS=1 \
 fgdb search --db mydb.fgdbdir --key-file fgdb.keys --property title=1 --property x=2 \
   --text "graph memory" --text-property title --vector 0.5 --vector-property x --k 5
 
+# ...or the same retrieval inside GQL, composed with the rest of the statement
+fgdb query --db mydb.fgdbdir --key-file fgdb.keys --property title=1 --property x=2 \
+  "CALL hybrid.search(text => 'graph memory', text_property => 'title', vector => [0.5],
+     vector_properties => ['x'], k => 5) YIELD node, score
+   RETURN node.title, score ORDER BY score DESC"
+
+# Real embeddings live in ONE property as packed little-endian f32 bytes
+# (`--param e=vector:0.1,0.2,...`, or {"$vector": [...]} over HTTP)
+fgdb write --db mydb.fgdbdir --key-file fgdb.keys --label Doc=1 --property title=1 --property emb=3 \
+  --param 'e=vector:0.12,0.80,0.05' "CREATE (:Doc {title: 'Ada', emb: \$e})"
+fgdb query --db mydb.fgdbdir --key-file fgdb.keys --property title=1 --property emb=3 \
+  --param 'q=json:[0.1,0.8,0.1]' \
+  "CALL hybrid.search(vector => \$q, vector_property => 'emb', metric => 'cosine', k => 5)
+     YIELD node, score RETURN node.title, score ORDER BY score DESC"
+
 # Replay a saved certificate against the current database state
 fgdb replay --db mydb.fgdbdir --key-file fgdb.keys --certificate result.cert
 
@@ -259,11 +278,22 @@ fgdb remote --addr 127.0.0.1:7687 --token-file token --database social \
 # ...or over HTTP/JSON (add --http-listen 127.0.0.1:7474 to serve)
 curl -H "Authorization: Bearer $(cat token)" -d '{"statement":"MATCH (p:Person) RETURN p.name"}' \
   http://127.0.0.1:7474/v1/databases/social/query
+
+# ...or from any official Neo4j driver, read-only (add --bolt-listen 127.0.0.1:7688)
+python3 -c 'from neo4j import GraphDatabase, bearer_auth
+d = GraphDatabase.driver("bolt://127.0.0.1:7688", auth=bearer_auth(open("token").read().strip()))
+print(d.execute_query("MATCH (p:Person) RETURN p LIMIT 3").records)'
 ```
 
-`fgdbd` (`crates/fgdb-server`) serves the FGP handshake, one autocommit GQL read or write per `EXECUTE`, ephemeral flow-controlled result streams, and live `SUBSCRIBE TO` changefeeds (a baseline, then one exact delta per commit), plus the same statements over an HTTP/1.1 JSON adapter. Every statement runs through a capability-authorized session built from the connection's Warden token, so a token's label/relation/property scope applies before expansion. It does not yet serve TLS, durable result retention (ACK/release/resume), explicit multi-statement transactions, durable or capability-masked subscriptions, or the HTTP/2, gRPC, WebSocket and Bolt adapters; [docs/FABRIC_PROTOCOL.md](docs/FABRIC_PROTOCOL.md) lists exactly what is served.
+`query --spill-dir <existing-directory>` uses the native external sorter for vertex and fixed-edge scans, including property-only projections, `DISTINCT`, terminal `SKIP`/`LIMIT`, and historical cuts. `ORDER BY` may use unreturned vertex or edge properties and supported path functions: these private cells determine ordering and pagination, then are removed before result rows and column names are published. Multiple sort keys, direction and null placement use the ordinary query semantics. Under `DISTINCT`, sort keys must be projected. Aggregates, optional or variable-length joins, maps, and other unsupported native instructions refuse without an eager retry. It cannot be combined with `--stream`, `--certify-to`, or a standalone `CALL fnx`.
 
-> **Target state.** The interactive shell, `branch`/`subscribe`, `backup`/`restore` archives, `doctor`/`analyze` operations, `robot health`, a `--json` output flag, and the remaining `fgdbd` surfaces above remain W10 composition work (`registries/workspace_topology.toml`). The commands above are exactly the ones that run today.
+The scratch files share one memory allowance (`--spill-memory-bytes`, default 64 MiB), and split one append-only disk allowance (`--spill-disk-bytes`, default 1 GiB) equally. Every intermediate pass and metadata write spends disk quota. `--max-spill-rows` (default 1,000,000) bounds input occurrences independently of final `--max-result-rows`; `--max-sort-work` (default 1,000,000,000) bounds additional sort work independently of the query's source budget. Encoded evaluation rows, including hidden sort keys, are capped at 1 MiB. The decoded source generation, one native row and scalar/output encoding are outside the scratch pool, so this is external result ordering, not a whole-engine memory bound.
+
+Sorting finishes before delivery begins. Rows are decoded and flushed individually with the ordinary native cell types and streaming completion contract. Each invocation creates a private scratch directory and exclusive files, then retires its own files before the success result; failures and cancellation also clean them up. Process death can leave that invocation's private directory, which later invocations never reuse or sweep. An error, unsuccessful exit, or missing terminal result means incomplete delivery.
+
+`fgdbd` (`crates/fgdb-server`) serves the FGP handshake, one autocommit GQL read or write per `EXECUTE` (a `CREATE ... RETURN` answers its rows with the commit), ephemeral flow-controlled result streams, and live `SUBSCRIBE TO` changefeeds (a baseline, then one exact delta per commit), plus the same statements over an HTTP/1.1 JSON adapter, and the read-only Bolt-compat subset (`BoltCompatProfileV1`, `--bolt-listen`) that official Neo4j drivers connect to with `bolt://` or `neo4j://`: autocommit and explicit read transactions (each transaction reads one pinned generation), nodes returned with their labels and properties, and writes refused with `Neo.ClientError.Statement.AccessMode`. Every statement runs through a capability-authorized session built from the connection's Warden token, so a token's label/relation/property scope applies before expansion. It does not yet serve TLS, durable result retention (ACK/release/resume), explicit multi-statement write transactions, Bolt writes or relationship/path values, durable or capability-masked subscriptions, or the HTTP/2, gRPC and WebSocket adapters; [docs/FABRIC_PROTOCOL.md](docs/FABRIC_PROTOCOL.md) lists exactly what is served.
+
+> **Target state.** The interactive shell, `branch`, `backup`/`restore` archives, `doctor`/`analyze` operations, `robot health`, a `--json` output flag, and the remaining `fgdbd` surfaces above remain W10 composition work (`registries/workspace_topology.toml`). The commands above are exactly the ones that run today.
 
 ## Installation
 
@@ -323,7 +353,7 @@ for row in db.query("MATCH (p:Person) RETURN p.name LIMIT 5"):
 
 ## Quick start
 
-> **Target state.** The workflow below shows the 1.0 shape. The `fgdb` binary is real today for `create`/`query`/`write`/`diff`/`transaction`/`import-csv`/`load`/`compact`/`scrub`/`search`/`replay` and `fgdb robot schema` (see [The `fgdb` CLI](#the-fgdb-cli)); the `--branch` and `subscribe` steps, and `fgdbd`'s TOML config and Bolt protocol, await W10 composition (`fgdbd serve` itself runs today with flags, FGP only). The minimal runnable witness is `cargo run -p fgdb --example open_a_database` (see [Installation](#installation)).
+> **Target state.** The workflow below shows the 1.0 shape. The `fgdb` binary is real today for `create`/`query`/`write`/`diff`/`transaction`/`import-csv`/`load`/`compact`/`scrub`/`search`/`replay` and `fgdb robot schema` (see [The `fgdb` CLI](#the-fgdb-cli)); the `--branch` step, and `fgdbd`'s TOML config and Bolt protocol, await W10 composition (`fgdbd serve` itself runs today with flags, serving FGP and the HTTP/JSON adapter; `fgdb remote subscribe` streams a changefeed from it). The minimal runnable witness is `cargo run -p fgdb --example open_a_database` (see [Installation](#installation)).
 
 ```bash
 # 1. Create a database directory and bulk-load a graph
