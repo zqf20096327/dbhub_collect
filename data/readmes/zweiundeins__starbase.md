@@ -13,8 +13,8 @@ Go · templ · SQLite · Datastar + Rocket · CQRS · plain modern CSS. No Node,
 
 ## Features
 
-- **41 components** (forms, navigation, feedback, layout, media, data, utilities, and a multiplayer pixel board), each with live demos, API tables generated from its Rocket manifest, and an auto-generated props **Playground**.
-- **Code playground:** edit a component's JS and HTML in a sandboxed live preview, save and share immutable links, submit the result as a component.
+- **51 components** (forms, navigation, feedback, layout, media, data, utilities, drag-and-drop surfaces from derekr's [PD rockets](https://github.com/derekr/pd-rockets), and a multiplayer pixel board), each with live demos, API tables generated from its Rocket manifest, and an auto-generated props **Playground**. The seven from PD rockets keep its Beer-Ware licence; everything else is MIT.
+- **Code playground:** edit a component's JS (or TypeScript) and HTML in a sandboxed live preview, type-check it against Datastar's types, save and share immutable links, submit the result as a component.
 - **Submissions without tools:** a GitHub issue form (paste code, link a repo or a playground link); a bot validates it and opens a pull request.
 - **Autoloader:** one `<script>` loads each `<sb-*>` component on first use, on any site.
 - **Showcase:** a live Mission Control dashboard and a multiplayer pixel board, both server-driven.
@@ -39,6 +39,8 @@ go tool task live            # dev server with live reload on http://localhost:7
 go tool task test            # vet + tests (including component validation)
 go tool task build           # production binary in bin/starbase
 ```
+
+`live`, `test` and `build` first fetch the pinned TypeScript compiler (`go run ./cmd/fetchtsc`, once) into `internal/tscheck/dist`, where the binary embeds it for the playground's type check. A plain `go build` without it works too, without the type check.
 
 Without GitHub credentials, dev builds sign you in as a fake user at `/auth/dev?login=you`.
 
@@ -92,7 +94,7 @@ With integrity in place, a changed file is refused instead of run. The autoloade
 go tool task new -- my-widget --category forms --author your-handle
 ```
 
-This creates `components/my-widget/README.md` (front matter + docs, where ```` ```html preview ```` blocks become live demos) and `my-widget.js` (the `rocket('sb-my-widget', …)` definition). Open `/components/my-widget` in the dev server. The page publishes Rocket's manifest and the server writes `manifest.json`, which drives the API tables. No Go changes are needed. See [/contribute](content/contribute.md) for the house rules.
+This creates `components/my-widget/README.md` (front matter + docs, where ```` ```html preview ```` blocks become live demos) and `my-widget.js` (the `rocket('sb-my-widget', …)` definition). To write it in TypeScript, rename that to `my-widget.ts` and run `go tool task ts`, which type-checks it strictly, with any helper `.ts` modules and `.d.ts` declarations in its folder, and writes the `.js` the site serves next to each module (commit both). Open `/components/my-widget` in the dev server. The page publishes Rocket's manifest and the server writes `manifest.json`, which drives the API tables. No Go changes are needed. See [/contribute](content/contribute.md) for the house rules.
 
 Every component page also gets a **Playground**, generated from the manifest: number props become sliders, booleans toggles, `oneOf` selects and strings inputs. Each control is bound to a local signal that drives the live element through `data-attr`. Tune it in the README front matter:
 
@@ -126,7 +128,7 @@ POST /cmd/...        commands: validate → enqueue → 204. Never HTML.
 - **Design system:** `static/css`. Primitive `--sb-*` tokens feed semantic tokens, which feed components. Layers, container queries, nesting and OKLCH. Themes remap the semantic tokens only.
 - **Pixel art** is generated in Go (`internal/pixelart`) and served as cached SVG.
 - **Multiplayer pixel board** (Showcase): `sb-pixel-board` is driven by one server-owned attribute (`cells`, a hex digit per pixel) re-rendered in every stream frame. Painting is the `PaintPixels` command (`POST /cmd/paint`, rate-limited per session). The hub counts viewers per page ("N watching").
-- **Code playground:** `/playground` (and "Open in playground" on every component) edits a component's JS and HTML with `sb-code-editor` and `sb-code-playground`. Previews run in a `sandbox="allow-scripts allow-modals"` iframe served by `/playground/run`, with its own CSP and an opaque origin. "Save & share" is the `SaveSnippet` command (immutable `/playground?s=<id>` links). "Submit as component" prefills the issue form with that link, and the bot imports it (set the repository variable `STARBASE_URL`).
+- **Code playground:** `/playground` (and "Open in playground" on every component) edits a component's JS and HTML with `sb-code-editor` and `sb-code-playground`. Previews run in a `sandbox="allow-scripts allow-modals"` iframe served by `/playground/run`, with its own CSP and an opaque origin. A TypeScript switch turns `component.js` into `component.ts`, which the runner has the server transpile (`/playground/transpile`, esbuild). TypeScript, and JavaScript that starts with `// @ts-check`, is type-checked on the server against the patched Datastar build's declarations (`internal/tscheck`: TypeScript's native compiler, embedded in the binary and run as a subprocess) and underlined in the editor. "Save & share" is the `SaveSnippet` command (immutable `/playground?s=<id>` links). "Submit as component" prefills the issue form with that link, and the bot imports it (set the repository variable `STARBASE_URL`).
 - **Live demo data:** `GET /demo/telemetry` streams a simulated mission as signal patches (`$_tm`). It is a pure function of time, with no state. The Showcase page's Mission Control and the gauge, sparkline and meter docs use it.
 - **Example dataset:** a small universe (galaxies, star systems, planets, moons, bright stars by constellation), seeded into SQLite at startup (`internal/demo`, `SeedDemo`). Two generic, stateless endpoints serve it to any component's docs:
   - `GET /demo/data/children?parent=<id>` returns the children of a node, or the top level without `parent`.
@@ -159,4 +161,4 @@ CI runs vet, tests, the templ and manifest checks, govulncheck, cross-platform b
 
 ## Licences
 
-Code: [MIT](LICENSE), © zwei und eins gmbh and starbase contributors. Fonts: Pixelify Sans and JetBrains Mono (SIL OFL, see `static/fonts`). Icons: Lucide (ISC), GitHub mark (MIT, Octicons). Datastar + Rocket bundle: MIT, vendored in `static/vendor`.
+Code: [MIT](LICENSE), © zwei und eins gmbh and starbase contributors. Fonts: Pixelify Sans and JetBrains Mono (SIL OFL, see `static/fonts`). Icons: Lucide (ISC), GitHub mark (MIT, Octicons). Datastar + Rocket bundle: MIT, vendored in `static/vendor`. TypeScript compiler: Apache-2.0, embedded for the playground's type check; release archives carry its licence and notices in `typescript/`, the container image in `/usr/share/doc/typescript`.

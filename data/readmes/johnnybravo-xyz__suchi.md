@@ -8,7 +8,7 @@
 <h1 align="center">suchi</h1>
 
 <p align="center">
-  <b>A document-management system as a single Go binary.</b><br>
+  <b>A self-hosted document archive that files itself.</b><br>
   <sub>Sanskrit <i>सूची</i> — "an index, a catalog, a list"; pronounced <i>SOO-chee</i>, like kimchi.</sub>
 </p>
 
@@ -17,36 +17,72 @@
   <a href="https://suchi.page"><img alt="Homepage" src="https://img.shields.io/badge/site-suchi.page-007ec6"></a>
 </p>
 
+<p align="center">
+  <a href="https://demo.suchi.page">Live demo</a> ·
+  <a href="#quick-start">Quick start</a> ·
+  <a href="https://docs.suchi.page">Docs</a> ·
+  <a href="https://johnnybravo.xyz/posts/building-suchi-dms/">Why I built it</a>
+</p>
+
+<p align="center">
+  <img src=".github/brand/suchi-demo.gif" alt="A bank statement arrives by email and is filed; then IMG_2047.pdf is dropped in, read, renamed Form 16 · FY 2025-26 and filed under 23 Taxes." width="800">
+</p>
+
+Drop in a scan, an email attachment or a photo. Suchi reads it, gives it
+a useful title and files it into a numbered category tree. If it is unsure, it
+leaves the document in the Inbox for you instead of guessing. Originals are
+never modified, and the archive is also rendered as a plain folder tree you can
+browse without the app.
+
+Suchi began as a personal and household archive. The same principles apply more
+broadly, so the built-in filing trees also include approachable starting points
+for freelancers and smaller teams.
+
+- **One binary.** Go, SQLite and files on disk. No Postgres, Redis, queue or
+  telemetry service. Nothing calls out until you enable an integration.
+- **One filing model.** Numbered categories in the
+  [Johnny.Decimal](https://johnnydecimal.com) style instead of overlapping tags,
+  types and storage paths. Start from a built-in tree or import your own.
+- **Deterministic automations first.** Suchi calls its explicit text-matching
+  rules automations; they run before any model. An optional model, either local
+  (Ollama, llama.cpp) or any OpenAI-compatible endpoint, suggests titles,
+  categories and dates. Sending document text to a hosted model requires
+  explicit acknowledgement.
+- **Capture from anywhere.** Browser upload, watched folders, your own IMAP
+  mailbox, and the [Suchi Companion](https://github.com/johnnybravo-xyz/suchi-companion)
+  app for iOS and Android, which can queue and keep scans while offline.
+- **Find it and follow up.** OCR and full-text search, a calendar of dates
+  linked to the text they came from, and archive questions answered with links
+  to the source documents.
+
+> [!NOTE]
+> Suchi is early (v0.1.0). Back up the data
+> directory, test a restore before relying on it, and read the
+> [database compatibility policy](docs/release-process.mdx#stable-v1-database-compatibility)
+> before upgrading.
+
+## How it is built
+
 Suchi combines SQLite, content-addressed storage, a Svelte interface, and an
-integration-friendly HTTP API. It needs no database server, queue, cache, or
-telemetry service.
+integration-friendly HTTP API. Original and derived bytes are stored
+immutably under their SHA-256 digest, so identical files share one object and
+retried uploads do not create copies. The content store is not encryption or an
+access-control boundary; SQLite metadata and the API decide who can see each
+document.
 
-The content-addressed store keeps immutable original and derived bytes under
-their SHA-256 digest. Identical bytes can share one stored object, retries do not
-create another copy, and database rows can retain stable content while filing
-paths are rebuilt as views. It is not encryption or an access-control boundary;
-SQLite metadata and the API still decide who can see each document.
-
-Current source line: **v0.1.0**. Back up before upgrades, test restore for
-critical archives, and follow the documented stable-v1 compatibility policy.
-
-[Container images](https://github.com/johnnybravo-xyz/suchi/pkgs/container/suchi) ·
-[Releases](https://github.com/johnnybravo-xyz/suchi/releases) ·
-[Actions](https://github.com/johnnybravo-xyz/suchi/actions)
-
+- Static, `CGO_ENABLED=0` Go binary with multi-user ACLs and scoped tokens.
 - Reproducible size and startup measurements live under
   [`hack/bench/latest-published/`](hack/bench/latest-published/).
-- No built-in outbound connection is made until an operator enables or uses an
-  integration. Operator scripts are outside Suchi's egress inventory.
-- Static, `CGO_ENABLED=0` Go binary with multi-user ACLs and scoped tokens.
-- AGPL-3.0.
+- [Container images](https://github.com/johnnybravo-xyz/suchi/pkgs/container/suchi) ·
+  [Releases](https://github.com/johnnybravo-xyz/suchi/releases) ·
+  [Actions](https://github.com/johnnybravo-xyz/suchi/actions)
 
 ## Capabilities
 
 - PDF and image OCR, thumbnails, barcodes, encrypted PDFs, and ZUGFeRD invoices.
 - EPUB, Office, OpenDocument, RTF, CSV, DjVu, HEIC/HEIF, EML, and Outlook MSG.
-- Full-text search, Johnny.Decimal filing, custom fields, saved views, and
-  rendered filesystem views.
+- Full-text search, Johnny.Decimal filing, revision notes, typed custom fields,
+  named exact-document links, saved views, and folder layouts.
 - Import-introduced filing systems with permanent codes, direct membership plus
   document ACLs, and `SYS.AC.documentID` addresses using existing global IDs.
   Unprefixed archives keep their existing UI and paths until first prefixed Apply.
@@ -58,8 +94,8 @@ critical archives, and follow the documented stable-v1 compatibility policy.
   review-first mode sends inferred changes to Approvals instead.
 - Groups, object ACLs, OIDC, share links, audit events, backups, and restore
   tooling.
-- Svelte SPA, Android/iOS Suchi Companion, a documented scoped HTTP
-  API, and MCP over stdio or HTTP.
+- Svelte SPA, [Suchi Companion](https://github.com/johnnybravo-xyz/suchi-companion)
+  for Android/iOS, a documented scoped HTTP API, and MCP over stdio or HTTP.
 
 The [feature comparison](docs/comparison.mdx) and
 [architecture](docs/architecture.mdx) describe the detailed scope and
@@ -154,9 +190,10 @@ hack/         fixtures, benchmarks, smoke tests, and developer tools
 The root module contains the shipped application; `plugin-api` stays separate
 for external plugins and the utilities under `hack/` keep isolated dependency
 graphs. The empty `ui` module keeps Go tooling out of frontend dependencies.
-`make build` produces `dist/suchi`; `suchi doctor` inventories configured
-egress, pipeline tools, schema and taxonomy state, data-directory writability,
-and selected job, backup, audit, upload-limit, and CAS indicators.
+`make build` uses Bun to install locked frontend dependencies, generates the
+ignored SPA bundle, and produces `dist/suchi`; `suchi doctor` inventories
+configured egress, pipeline tools, schema and taxonomy state, data-directory
+writability, and selected job, backup, audit, upload-limit, and CAS indicators.
 
 ## Documentation
 
@@ -187,7 +224,7 @@ Copyright (c) 2026 Ritesh Shrivastav. Suchi is available under two licenses:
   AGPL section 13 requires you to offer them its complete corresponding source.
 - **Commercial license** — for embedding Suchi in a proprietary product, or for
   running a modified instance as a service without that source-offer obligation.
-  Write to contact@suchi.page.
+  Write to <contact@suchi.page>.
 
 The AGPL offer begins with Suchi's first public release. Before that release,
 its repository and container images were private development artifacts and were

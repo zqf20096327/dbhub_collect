@@ -1,0 +1,348 @@
+# Dispatcher SDK: local task execution and orchestration
+
+[English](README.md) | [简体中文](README.zh-CN.md) | [Wiki](wiki/Home.md) | [Docs for coding agents](DocsforAgents/README.md) | [API documentation](docs/SDK.md)
+
+Dispatcher runs Python functions and scripts, controls timeouts and cancellation,
+and saves task state, results and notifications in SQLite. An Agent application
+can resume queued work after restart and subscribe to completion or recovery
+notifications.
+
+Scripts can also run in remote sandboxes. The SDK collects output and artifacts
+within configured limits and records the resources that still need cleanup after
+an interruption. The core uses only Python's standard library and SQLite.
+
+## What you can do
+
+| Capability | Where it helps |
+| --- | --- |
+| Execution isolation and control | Run tasks in separate processes. In process mode, timeouts and cancellation terminate the supervised process tree to handle stuck tool calls. |
+| Sandbox execution | Run scripts through a pluggable `SandboxBackend`, collect bounded output and artifacts, and persist lifecycle state for cleanup and recovery. The optional OpenSandbox adapter requires its SDK and a separate sandbox service. |
+| Durable execution | Save tasks, results, and notifications in SQLite. Queued work remains available when you close and reopen the database. |
+| Bounded retries | Configure attempt limits and backoff for retryable failures, avoiding endless reruns. |
+| External effect recovery | Save receipts for file writes and API calls registered through the Effect interface. When an interruption leaves the outcome uncertain, wait for the application to verify and resolve it. |
+| Multi-step orchestration | Record dependencies, business attempts, and wait conditions. The application decides when to dispatch, rework, or finish. |
+| Results and notifications | Read execution results and script logs, and notify the application so its Agent can continue without repeated LLM progress checks. |
+| Execution observations | Inspect process state, output bytes, model and tool activity, application progress and structured waits. Heartbeats and logs do not count as application progress. |
+| Inherited execution budgets | Carry Run, parent and local deadlines into child work. Recovery retains clock floors and refuses new work while a required clock sample remains unresolved. |
+| Managed stall supervision | Run a registered supervisor handler with reserved capacity, memory limits and an original notice budget. Capacity or memory shortages remain visible; the application decides whether to continue or cancel work. |
+
+Dispatcher is a Python SDK embedded in your application. It needs no separate
+queue service and is not tied to a particular model or Agent framework.
+The optional OpenSandbox adapter
+adds the pinned `opensandbox` dependency and requires a separate sandbox service.
+
+## When to use Dispatcher
+
+Use Dispatcher when your Agent application needs to run tools or scripts, limit
+execution time, retain task state, or organize tasks into a recoverable workflow.
+You can also use it for a single function task without adding notifications or
+multi-step orchestration.
+
+Your application defines the work and its acceptance criteria, then decides what
+happens next. Dispatcher controls execution, records state and delivers messages.
+Keep the host process running while work executes in the background.
+
+Integration boundaries:
+
+- Process mode contains trusted code with timeouts, cancellation, and process cleanup. It does not provide a filesystem, network, or permission sandbox for untrusted code. Agent-generated code still needs application review or an additional sandbox.
+- Linux process mode uses subreaper cleanup for detached descendants; other POSIX platforms use process-group cleanup. Native Windows process and script execution uses Job Objects. Earlier native tests passed on Windows 11 x64 (build 10.0.26100.9168) with Python 3.12.10; see [Windows runtime](docs/WINDOWS_RUNTIME.md) for their scope. The acceptance index records native matrix evidence and its scope. Thread mode cannot forcibly stop a blocked handler.
+- Resume with the original database and matching handler deployment. Reopening the database does not reset retry budgets or guarantee that interrupted tasks will automatically rerun.
+- The SDK cannot undo a write or API call that has already happened. Uncertain outcomes require verification before recovery; arbitrary operations are not guaranteed to happen exactly once.
+- `Dispatcher` durably accepts and deduplicates notifications in its built-in inbox. User callbacks remain at-least-once; external calls need idempotency. Use `consume_results` for atomic local SQL and receipt settlement.
+
+The current source version is `0.7.1` and requires Python 3.10+.
+Kernel storage uses schema 5; Orchestrator storage uses schema 4. Older databases
+need an explicit upgrade. Read [storage and upgrades](docs/STORAGE_AND_UPGRADES.md)
+and the [compatibility guide](docs/PUBLIC_API.md) before opening them with this version.
+
+Execution observations and managed supervision are documented in the
+[execution guide](docs/EXECUTION_OBSERVABILITY.md). The
+[acceptance index](docs/EXECUTION_OBSERVABILITY_ACCEPTANCE.md) records installed-package
+and native matrix evidence, applicable skips and validation limits.
+
+## Install
+
+To install from source, run these commands in a Linux terminal:
+
+```sh
+git clone https://github.com/FlightDan/dispatcher-sdk.git
+cd dispatcher-sdk
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install .
+```
+
+In Windows PowerShell, activate the environment with `.venv\Scripts\Activate.ps1`.
+You can also download a wheel from
+[GitHub Releases](https://github.com/FlightDan/dispatcher-sdk/releases)
+and install it with `python -m pip install <path-to-wheel>`.
+
+## Quick start: one managed task
+
+`Dispatcher` owns the runtime, background host, startup deployment checks and
+notification inbox. Start with handlers, tasks and stable request IDs. Advanced
+workflows can still use the Kernel and Orchestrator APIs below.
+
+```python
+from pathlib import Path
+import tempfile
+
+from dispatcher_sdk import Dispatcher
+
+
+def double(payload, context):
+    return payload * 2
+
+
+def main():
+    with tempfile.TemporaryDirectory() as directory:
+        path = Path(directory) / "tasks.sqlite3"
+        with Dispatcher(path, {"double": double}) as app:
+            task = app.submit("double", 21, request_id="message-42")
+            result = task.wait(timeout=10)
+            print(result["value"])
+
+
+if __name__ == "__main__":
+    main()
+```
+
+```text
+42
+```
+
+Use a persistent database path in your application; the temporary directory is
+only for this demo. Reopen the same path and call `app.task("message-42")` to
+recover the handle. Repeating the same submission and request ID returns the
+original task; changing its content raises a conflict. Keep the application
+process alive while the context is running. The default is process isolation.
+
+For background results, pass `on_result=callback` to `Dispatcher`. Notifications
+are durably accepted before callback processing, and callback failures retry
+without rerunning the task. For local application SQL, use
+`app.consume_results(mutation)` instead: its `(connection, notification)` callback
+commits SQL and the consumed marker together. Neither API promises exactly-once
+external API calls. Execution success does not decide business acceptance.
+
+See the [0.7 design and migration notes](docs/DEV_0_7.md) and
+[managed application API](docs/MANAGED_APPLICATION.md).
+
+## Advanced integration examples
+
+### 1. Stop a stuck task and its child process on timeout
+
+Tool calls can block or launch additional child processes. Process mode cleans up
+the supervised process tree after a timeout so the application can run other tasks.
+
+In this Linux example, a function sleeps for 30 seconds and starts a child that
+also sleeps. Its execution timeout is 2 seconds. After checking that the function
+process and its child have exited, the example runs a normal task with the same
+runtime to verify that it can continue working.
+
+```sh
+python examples/isolation_timeout.py
+```
+
+Expected output:
+
+```text
+timeout: timed_out; handler and child are gone
+next task: succeeded
+```
+
+<details>
+<summary>Show the complete Python example: process isolation, timeout cleanup, and another task</summary>
+
+Save this code as `isolation_demo.py` and run `python isolation_demo.py` on Linux.
+You can also read the [example file](examples/isolation_timeout.py).
+
+<!-- example-platform: linux -->
+
+```python
+import os
+from pathlib import Path
+import sys
+import tempfile
+import time
+
+from dispatcher_sdk.execution_kernel import ExecutionCommandV2, Kernel, RetryPolicy
+
+
+def sleep_with_child(payload, _context):
+    child = os.fork()
+    if child == 0:
+        time.sleep(30)
+        os._exit(0)
+    Path(payload["pid_file"]).write_text(f"{os.getpid()} {child}", encoding="ascii")
+    time.sleep(30)
+
+
+sleep_with_child.__execution_kernel_revision__ = "isolation-timeout-v1"
+
+
+def echo(payload, _context):
+    return payload
+
+
+echo.__execution_kernel_revision__ = "isolation-timeout-v1"
+
+
+def command(runtime, execution_id, handler_id, payload, timeout_seconds):
+    return ExecutionCommandV2(
+        execution_id=execution_id,
+        idempotency_key=execution_id,
+        registry_revision=runtime.registry_revision,
+        correlation_id=execution_id,
+        causation_id=None,
+        handler_id=handler_id,
+        handler_contract_version=1,
+        retry_policy=RetryPolicy(max_attempts=1),
+        timeout_seconds=timeout_seconds,
+        payload=payload,
+    )
+
+
+def assert_gone(pid):
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return
+    raise AssertionError(f"PID {pid} survived timeout cleanup")
+
+
+def main():
+    if os.name != "posix" or not sys.platform.startswith("linux"):
+        raise SystemExit("This example requires Linux process isolation.")
+
+    with tempfile.TemporaryDirectory(prefix="dispatcher-isolation-") as directory:
+        root = Path(directory)
+        pid_file = root / "pids.txt"
+        handlers = {"sleep": sleep_with_child, "echo": echo}
+        with Kernel.open_sqlite(root / "jobs.sqlite3", handlers, isolation_mode="process") as runtime:
+            runtime.submit(command(runtime, "timeout", "sleep", {"pid_file": str(pid_file)}, 2))
+            timed_out = runtime.run_once()
+            assert timed_out.state == "timed_out", timed_out.state
+            assert timed_out.result.error.code == "handler_timeout"
+            assert pid_file.exists(), "timed-out handler never reached startup"
+            pids = [int(value) for value in pid_file.read_text(encoding="ascii").split()]
+            assert len(pids) == 2, pids
+            for pid in pids:
+                assert_gone(pid)
+            print("timeout: timed_out; handler and child are gone")
+
+            runtime.submit(command(runtime, "next", "echo", {"message": "reused"}, 2))
+            succeeded = runtime.run_once()
+            assert succeeded.state == "succeeded"
+            assert succeeded.result.value == {"message": "reused"}
+            print("next task: succeeded")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+The example runs a trusted function and records its PIDs in a temporary directory
+for the cleanup checks. It controls the process lifecycle without restricting
+the function's filesystem or network access.
+
+</details>
+
+Applications can also cancel tasks explicitly with `runtime.cancel`. Process mode
+cleans up the supervised process tree. Thread mode only revokes authority to
+publish results and Effects; it cannot forcibly stop a blocked thread.
+If an interruption leaves an unresolved external operation, the task may enter
+`recovery_required` instead of ending immediately. `ScriptSpec` executions register
+an Effect, so check recovery state when a script is interrupted.
+See [isolation and lifecycle behavior](docs/PUBLIC_API.md).
+
+### 2. Resume queued work after restart and reconcile interrupted external operations
+
+If your application exits after submission, reopening the same database lets it
+claim work that was already queued. The [persistence example](examples/kernel_task.py)
+submits a task, closes the runtime, reopens the database, and executes the task,
+printing `{'total': 60}`:
+
+```sh
+python examples/kernel_task.py
+```
+
+If a task writes a file but crashes before saving its operation receipt, rerunning
+it directly could duplicate the write. The [recovery example](examples/effect_recovery.py)
+exits its worker at this point. The application inspects the file,
+confirms the write happened, records that decision with `resolve_effect`, and
+resumes execution while verifying there was no second write:
+
+```sh
+python examples/effect_recovery.py
+```
+
+Register external operations through `context.effects.execute_once`. Committed
+receipts can be reused; unresolved operations enter `recovery_required` for the
+application to resolve using external evidence. The example uses a controllable
+clock to skip the lease wait and operates only on temporary files.
+
+Ordinary execution failures and lease-expiry redelivery share
+`RetryPolicy.max_attempts`, which includes the first claim and defaults to 1.
+Set bounded attempts and backoff according to whether the task is safe to retry.
+Business rework uses explicit new attempts, counted separately from execution
+retries and notification redelivery. See the [recovery and retry guide](docs/SDK_RECOVERY.md).
+
+### 3. Choose the next task based on the previous result
+
+Before continuing, reworking, or waiting in an Agent workflow, your application
+may need to inspect the previous result. Organize task dependencies within a Run
+and explicitly submit the next step after reading that result.
+
+The [dependency example](examples/dependent_tasks.py) first calculates an invoice
+total. The application checks the result, passes it to a dependent receipt task,
+and explicitly finishes the Run, printing `Invoice total: 60`:
+
+```sh
+python examples/dependent_tasks.py
+```
+
+A successful dependency does not automatically dispatch its successor, and a
+successful task does not automatically finish the Run. Applications can also
+register wait conditions, release them when satisfied, or submit a new business
+attempt. See [SDK operations and orchestration](docs/SDK.md).
+
+## Integrate with your Agent application
+
+Choose the entry points you need:
+
+| Capability | Entry points and application responsibilities |
+| --- | --- |
+| Function execution and isolation | Register handlers and select isolation with `Kernel.open_sqlite`; set the command timeout and `RetryPolicy`. |
+| Scripts and logs | Use `ScriptSpec` to specify source, interpreter, working directory, and log directory; set the timeout with `.command()`. |
+| Persistence and recovery | Keep a fixed database path and matching handler deployment. Record external operations with `context.effects.execute_once` and use evidence to `resolve_effect`. |
+| Dependencies, waits, and business rework | Create a Run with `Orchestrator`; use `apply_operations` to explicitly submit tasks, dependencies, waits, new attempts, and completion. |
+| Background execution | Use `RuntimeHost` for standalone execution or `OrchestratorHost` to drive execution, synchronization, and notifications for orchestration. |
+| Application notifications | Associate a conversation or business task through `watch_task`'s `target`. Durably accept and deduplicate notifications in the callback; let the inbox consumer continue the workflow. |
+| Activity and child work | Report through `context.activity`, inspect with `task.observe()`, and use `context.budget` and `context.children` for inherited deadlines and child execution. |
+| Stall supervision | Configure `task.watch_stall(...)`, subscribe with `app.subscribe_stalls(...)`, and inspect reserved supervisor execution with `app.stall_supervisor_status(...)`. See the observation guide for callback and managed-handler options. |
+
+## Further reading
+
+- [Execution observations and supervision](docs/EXECUTION_OBSERVABILITY.md): activity, inherited deadlines, child capacity and reserved supervisor handlers.
+- [Atomic task submission](docs/TASK_SUBMISSION.md): stable request IDs and per-handler command bindings.
+- [Storage and upgrades](docs/STORAGE_AND_UPGRADES.md): durability profiles, preflight, backups, paged Run reads, and linked Run continuation.
+- [Run storage validation](docs/RUN_STORAGE_VALIDATION.md): measured incremental history growth and remaining full-Run costs.
+- [Durable notification inbox](docs/NOTIFICATION_INBOX.md): fenced processing and atomic application SQL.
+- [Sandbox runtime](docs/SANDBOX_RUNTIME.md) and [OpenSandbox adapter](docs/SANDBOX_ADAPTERS.md): remote execution, artifacts, and disposal recovery.
+- [Process cleanup validation](docs/PROCESS_CLEANUP_VALIDATION.md): Linux containment evidence and fallback limitations.
+- [SDK operations and examples](docs/SDK.md): tasks, dependencies, waits, and explicit orchestration.
+- [Reliable audit and dependency approval](docs/SDK_INTEGRATION_FAQ.md): integration FAQ and a runnable durable consumer example (Chinese).
+- [Kernel execution contract](src/dispatcher_sdk/execution_kernel/README.md): isolation, timeouts, cancellation, and persistence.
+- [Recovery, retries, and external effects](docs/SDK_RECOVERY.md): inspecting, waiting, and recovering after interruptions.
+- [Script execution and application notifications](docs/SDK_SCRIPT_WAKEUPS.md): scripts, logs, callbacks, and notification retries.
+- [Public API and compatibility](docs/PUBLIC_API.md): interfaces, platform differences, and upgrade constraints.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development and tests,
+[SECURITY.md](SECURITY.md) for vulnerability reports, and
+[PROVENANCE.md](PROVENANCE.md) for source provenance.
+
+## License
+
+Dispatcher SDK is open source under the [Apache License, Version 2.0](LICENSE).
+See [LICENSE](LICENSE) for the full terms and [NOTICE](NOTICE) for copyright and
+attribution notices. Both files are included in the source distribution and wheel.

@@ -33,7 +33,8 @@ Running from source: see [Development setup](#development-setup).
 | Mobile backups | iOS (iTunes/Finder) and Android (`adb backup`) — browsable as a file tree (iOS rebuilt from `Manifest.db` instead of hashed names), encrypted backups supported |
 | Disk images | Raw and forensic acquisitions (E01 and others) with common desktop, mobile and embedded/flash filesystems — no mounting, no admin rights. Built on [ewfprobe](https://github.com/abrignoni/ewfprobe) and [qnxprobe](https://github.com/abrignoni/qnxprobe) by Alexis Brignoni. |
 | Logical evidence | EnCase L01 and FTK Imager AD1 (also AD-encrypted) — the collected files with their recorded hashes |
-| Cellebrite UFDR (10.x) | Original device file tree with Cellebrite's recorded hashes (filesystem only) |
+| Cellebrite UFD / UFDX | The extraction(s) they describe: each dump as a folder, an iTunes backup in a dump opened with the recorded BackupPassword, recorded file hashes verifiable |
+| Cellebrite UFDR (10.x) | The exported files under their device paths with Cellebrite's recorded hashes, the items it derived from files (e.g. decrypted app databases), and per folder how many of the extraction's files the UFDR holds (filesystem only) |
 | Folders & files | Any folder or single file |
 
 Not a full disk-forensics suite: no carving, no journal analysis, no snapshots, no RAID/LVM. Exact formats, filesystems and limitations: [Format Support & Parser Limitations](crush/docs/format-support.md).
@@ -77,14 +78,20 @@ Every release attaches its own audit result, including failures: [latest audit r
 
 ## Screenshots
 
-| SQLite summary (Windows) | BLOB Inspector (Linux) |
+| Start screen (Linux) | SQLite summary (Windows) |
 |---|---|
-| ![](crush/docs/pictures/example_ios_win_sqlite_summary.png) | ![](crush/docs/pictures/example_BLOB_inspector.png) |
-| **Value Inspector (Linux)** | **Format reference (Linux)** |
-| ![](crush/docs/pictures/example_value_inspector.png) | ![](crush/docs/pictures/example_lin_file_formats.png) |
+| ![](crush/docs/pictures/example_start_screen.png) | ![](crush/docs/pictures/example_ios_win_sqlite_summary.png) |
+| **BLOB Inspector (Linux)** | **Value Inspector (Linux)** |
+| ![](crush/docs/pictures/example_BLOB_inspector.png) | ![](crush/docs/pictures/example_value_inspector.png) |
 
 <details>
 <summary>More screenshots</summary>
+
+Drag & drop files (Linux)
+![Drag & drop zones (Linux)](crush/docs/pictures/example_drag_drop.png)
+
+Format reference (Linux)
+![Format reference (Linux)](crush/docs/pictures/example_lin_file_formats.png)
 
 iOS SEGB (Windows)
 ![iOS SEGB (Windows)](crush/docs/pictures/example_ios_win_segb.png)

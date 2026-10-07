@@ -7,7 +7,7 @@
 
 <p align="center"><img src="assets/speed.svg" width="100%" alt="Over 100,000 messages per minute: ~115,000 with tg-chat-dump, ~29,000 with Telegram Desktop's export, ~6,000 through the regular API"></p>
 
-<p align="center"><img src="assets/demo.gif" width="100%" alt="Interactive mode: find a chat with live suggestions, then dump 420,912 messages in 3m 48s"><br><sub>A 420,912-message group dumped in 3m 48s with two accounts (the download part is sped up 12×; account names are blurred).</sub></p>
+<p align="center"><img src="assets/demo.gif" width="100%" alt="Interactive mode: find a chat with live suggestions, then dump 421,393 messages in 3m 47s"><br><sub>A 421,393-message group dumped in 3m 47s with two accounts (the download part is sped up 12×; account names are blurred).</sub></p>
 
 Dump an entire Telegram chat into SQLite and a folder per forum topic at **over 100,000 messages a minute**. It runs Telegram's own data-export mode with parallel workers on several accounts, so a chat of several hundred thousand messages is done in minutes: about 4× faster than Telegram Desktop's own export, and a whole forum in one pass instead of topic by topic.
 
@@ -57,14 +57,14 @@ out/1234567890_My_Chat/
    uv run dump.py
    ```
 
-The first start asks for `api_id` and `api_hash` and saves them to `.env`. After that it works like this:
+The first start asks for `api_id` and `api_hash` and saves them to `.env`. On the first dump Telegram sends a "Data export request" message to the account: that is the fast export mode, allow it there (see [Extras](#extras)). After that it works like this:
 
 ```
 Accounts:
   1) Alice @alice
   2) Bob
 Output folder: D:\Telegram dumps
-Extras: meta, polls
+Extras: takeout, meta, polls
 [a] add account  [d N] remove  [f] output folder  [x] extras  [Enter] continue >
 Loading your chats… 312 found.
 
@@ -75,8 +75,8 @@ Number, [p] search public chats, or Enter to search again > 1
 
 Forum Club  [forum]  id -1001234567890
 ~152,310 messages
-Dump it with 2 accounts, extras: meta, polls? [Y/n, f = filters]
-[████████░░░░░░░░░░░░]  41%  62,104 saved  +62,104  11,480/min  ETA 7m 40s
+Dump it with 2 accounts, extras: takeout, meta, polls? [Y/n, f = filters]
+[████████░░░░░░░░░░░░]  41%  62,104 saved  112,400/min  ETA 48s
 ```
 
 - Matching chats pop up under the cursor as you type; Tab fills in the highlighted one and Enter picks it.
@@ -86,10 +86,11 @@ Dump it with 2 accounts, extras: meta, polls? [Y/n, f = filters]
 - Answering `f` instead of `Y` asks for filters for this one dump.
 - **Ctrl+C** stops the dump; the next run resumes it.
 - If Telegram is blocked in your network, set `TG_PROXY` in `.env`, for example `TG_PROXY=socks5://127.0.0.1:1080`.
+- The interactive mode is colored in a terminal; set `NO_COLOR=1` to turn colors off.
 
 ## Extras
 
-All of them are off by default. Switch them on with `x` in the interactive mode, `--with` on the command line, or `TG_OPTIONS` in `.env`.
+`takeout` is on by default, the others are off. Switch them with `x` in the interactive mode, `--with` on the command line (it replaces the saved list), or `TG_OPTIONS` in `.env`; `TG_OPTIONS=none` turns all of them off.
 
 | Extra | Adds | Cost |
 |---|---|---|

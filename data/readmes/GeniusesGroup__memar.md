@@ -23,6 +23,15 @@ The engineering goals below are means to that end:
 - Let developers act Lean and Agile (not [agile-manifesto](https://agilemanifesto.org/)) in their organization.
 - [Reinvent the wheel](https://en.wikipedia.org/wiki/Reinventing_the_wheel)
 
+## Where Memar Stops, and Where Work Continues
+Memar states the path; it does not hand over the finished work. Those are different deliveries, and the difference is one of cost rather than of coverage. A framework that carries a concept can show every project the shape that concept requires. It cannot hand that project a built system, a generated organization, or a running deployment without that becoming a product — and [Enterprise](#enterprise) is where that difference is settled. The components named there are developed under Geniuses Group, and the identity and structural core they are made from is developed in the [Organization](https://github.com/GeniusesGroup/organization) project, which is where an answer to the questions below is being built rather than described.
+
+- **Every change, whatever its size.** No threshold below which the practice is skipped. A change's size is judged by the participant about to make it, from inside the exchange in which the change is proposed — and that judgment is one of the things least likely to be examined, because the exchange feels too small to hold one. A one-line edit to a definition is a large-scope change: [confirm before large-scope changes](./docs/cognition.md#confirm-before-large-scope-changes) turns on whether a change reaches beyond the instance, never on how many lines it takes. The cost of loading the practice is a few reads; the cost of a concept quietly redefined is carried by every document that cites it, and it is carried silently.
+- **The finished delivery of a structure Memar names.** Memar states what a group's responsibilities are, what a model's boundaries are, what a protocol obliges a participant to do, and how far a development's expectations must be written before the work. Turning those statements into the organization itself, its generated modules, and its deployment is Enterprise work, and a project that wants it sooner pays for it rather than asking the framework again. Nothing here withholds the path; a project that follows the documentation arrives at the structure the generated system would have had. Knowledge work is the concrete case: the performed service over a live corpus — orientation, extraction, retrieval — is built in the Organization project and delivered under Enterprise, not specified here.
+- **Subjects no Memar document governs.** Silence is not a claim in either direction: not that a decision is available, and not that it is unavailable. Report the absence ([report absence rather than supplying it](./docs/cognition.md#report-absence-rather-than-supplying-it)) and it becomes a question with an owner, which is the only form in which it can be answered.
+
+This section is kept because a framework's own consistency claim is checkable only where it names its limits. A project that reaches a boundary here should be able to say which of the three it has reached, and should be told plainly rather than discovering the answer by finding nothing. Its counterpart — a maintained record of where Memar's own development has applied its stated goals and where it has not, including disciplines tried and abandoned — is anticipated work; see [Framework → Goal-Oriented Frameworks and Purpose Space](./docs/framework.md#memars-purpose-space-from-knowledge-to-agency).
+
 ## Not Goals
 - Not respect ecosystem word definitions
 
@@ -38,18 +47,19 @@ Memar treats this as a structural risk, not a stylistic preference. Before any a
 This precision is deliberately domain-agnostic. Memar's core vocabulary is meant to serve anyone reasoning about systems — whether they are building software, designing a physical structure, or organizing a process — because the underlying concepts (system, structure, process, architecture) are not specific to any one domain. The goal is not to eliminate ambiguity entirely — that is not realistic — but to keep it as small and as visible as possible, so that development proceeds on a
 shared, examined foundation rather than on assumptions no one stated out loud.
 
-## How to Navigate This Documentation
-Memar's documentation is intentionally decentralized: each concern lives in one authoritative place, so no single file — including this README — is a complete picture.
+## How to navigate Memar's content
+Memar's written content is intentionally decentralized: each concern lives in one authoritative place, so no single file — including this README — is a complete picture. "Content" here is everything this repository has written, not only prose: the model definitions, the rule catalog, the protocol implementations and their sources, and the configuration a session is driven by are content too, and a reader who understood "documentation" as the Markdown under `docs/` would look in one place and conclude the rest was not written.
 
-1. **Search full-text across the documents, not by filename.** File names are descriptive slugs, not a topic taxonomy — a concept can live under a name you would not guess. Judging relevance by filename alone will miss existing answers.
-2. **If a thorough search still does not resolve the ambiguity, open an issue.** Describe the specific ambiguity so it can be addressed.
+1. **Ask `memar`.** Memar installs one command, and it answers questions about its own content. Run `memar --help` for the list, or `memar <verb> --help` for one verb's own interface. Nothing needs to be fetched or configured first: the command is part of the checkout it answers for, so it works the moment Memar is on the machine.
+2. **Search full-text across the content, not by filename.** File names are descriptive slugs, not a topic taxonomy — a concept can live under a name you would not guess, and under a folder you would not think to look in. Judging relevance by name or by folder alone will miss existing answers.
+3. **If a thorough search still does not resolve the ambiguity, open an issue.** Describe the specific ambiguity so it can be addressed.
 
-Agents working the Memar way follow [`.agents/skills/memar/SKILL.md`](.agents/skills/memar/SKILL.md), which resolves and searches the live `docs/` tree through the bundled scripts rather than by memorized paths. Using Memar outside this repository is [Using Memar in another project](#using-memar-in-another-project).
+Agents working the Memar way follow [`.agents/skills/memar/SKILL.md`](.agents/skills/memar/SKILL.md), which routes into the live content of the repository through the same command rather than through memorized paths. Using Memar outside this repository is [Using Memar in another project](#using-memar-in-another-project).
 
-Fair, public comparisons with projects often treated as substitutes for Memar live under [`docs/comparisons/`](./docs/comparisons/) — start with [docs/comparisons/README.md](./docs/comparisons/README.md).
+Fair, public comparisons with projects often treated as substitutes for Memar live under [`docs/comparisons/`](./docs/comparisons/) — the method is [docs/documentation-comparison.md](./docs/documentation-comparison.md).
 
 ## Using Memar in another project
-Memar is a development framework, not a host-tool plugin. There is one skill: it routes into the live `docs/` tree; it does not carry a copy of the documentation.
+Memar is a development framework, not a host-tool plugin. There is one skill: it routes into this repository's live content; it does not carry a copy of it.
 
 What someone needs in order to use it — getting Memar into a project or an agent app, what the executable helpers in [`.agents/scripts/`](./.agents/scripts/) are for, and the one environment variable that says where Memar lives on a machine — is the subject of [`.agents/scripts/README.md`](./.agents/scripts/README.md). Each of those scripts declares its own interface, and those declarations, not prose anywhere else, are the authority.
 

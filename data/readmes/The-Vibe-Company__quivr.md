@@ -99,6 +99,17 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   see [Run Quivr behind TLS](https://docs.quivr.thevibecompany.co/run-quivr/tls).
 
 - **Corpora** with scoped API keys per Organization, action and Corpus.
+- **Corpus lifecycle controls**: archive and restore a Corpus with
+  `POST /v0/corpora/{corpus_id}/archive` and `/unarchive` (`corpora:archive`).
+  Archived Corpora stay stored but disappear from the default list, search and
+  catalog scopes, and the change feed; explicit search or catalog access returns
+  `409 corpus_archived`, while connector polling stops without changing its
+  enabled state. `GET /v0/corpora?include_archived=true` lists archived entries,
+  and `GET /v0/corpora/{corpus_id}` exposes its archived state.
+  `PATCH /v0/corpora/{corpus_id}` renames it with `corpora:rename`. These commands
+  are audited.
+  Archived direct record, version and explorer timeline reads return `not_found`
+  until restored.
 - **Durable, idempotent ingestion**: inline text, bounded batches with per-entry
   outcomes, verified uploads (presigned PUT + checksum confirm), structured Manifests,
   extensions and relations.
@@ -162,7 +173,8 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   delivery window, exhaustion, and no new attempt once a Subscription is disabled.
   The worker exposes delivery metrics on its probe listener (`/metrics`).
 - **Projection rebuilds** from durable artifacts as recoverable Operations, with cancel
-  and rerun.
+  and rerun. Re-embedding runs concurrently with configurable `rebuild.concurrency`
+  (default 8), while new rebuild activities have separate worker capacity.
 - **Document step times**: each Version reports when it was accepted, materialized, cut
   into segments, made searchable, given vectors, evaluated by alerts, quarantined or
   withdrawn (`steps`). A key with `observability:read` lists the latest documents with

@@ -1,9 +1,10 @@
 <!-- zoomies-ai-context:start -->
+
 [![Zoomies AI Context](https://github.com/eyupio/zoomies/actions/workflows/zoomies-ai-context.yml/badge.svg)](https://github.com/eyupio/zoomies/actions/workflows/zoomies-ai-context.yml)
 
 Repomix-generated context: [`.zoomies/ai-context/`](https://github.com/eyupio/zoomies/tree/zoomies-ai-context/.zoomies/ai-context). The badge shows workflow status, not context freshness or assistant connectivity. Private repository badges require GitHub access.
-<!-- zoomies-ai-context:end -->
 
+<!-- zoomies-ai-context:end -->
 
 <div align="center">
 
@@ -101,9 +102,12 @@ flowchart LR
   [See every page](https://zoomies.sh/ui/).
 * **Elastic CPU zoomies.** Every runner keeps its guaranteed share of its
   host, and a busy one is lent the CPU nobody else is using — the next queued
-  job's room held back, the host's reserve untouched, memory never moved. New
-  pools measure it by default and move nothing until you say so.
+  job's room held back, the host's reserve untouched. New pools measure it by
+  default and move nothing until you say so.
   [How it works](https://zoomies.sh/elastic-cpu/).
+* **Elastic memory.** A job about to be killed for its memory limit is given
+  more, out of memory no other runner on its host was promised — raised, never
+  lowered, with swap as the last resort. [How it works](https://zoomies.sh/elastic-memory/).
 * **Ephemeral by default.** One job per runner. Nothing leaks from one workflow
   run to the next.
 * **No pasted tokens.** Zoomies authenticates as a GitHub App and mints
@@ -355,7 +359,8 @@ Thirteen pages, one job each: **Overview** (fleet health, queue depth, scaling
 decisions in plain words, and a problems panel that is quiet when nothing is
 wrong), **Pools**, **Runners**, **Queue**, **Workflows** (one row per
 workflow run, opening to the jobs inside it), **Usage**, **Hosts**,
-**Providers**, **Installations**, **Migrate**, **AI Context**, **Audit**, **Settings**. It is
+**Providers**, **Installations**, **Migrate**, **Kennel Club** (the repositories this fleet
+serves, checked against what affects CI, with **AI Context** inside it), **Audit**, **Settings**. It is
 the primary way to configure and run a fleet, and the docs describe each task
 from there first; the CLI, Compose and the API are
 [the other ways in](https://zoomies.sh/#run-it-from-the-browser-reach-it-from-anywhere).
