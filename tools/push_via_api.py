@@ -39,7 +39,22 @@ API = "https://api.github.com"
 RETRIES = 5
 
 
-def _load_token() -> str:
+GH_EXES = [r"C:\Program Files\GitHub CLI\gh.exe",
+           Path.home() / "AppData/Local/Programs/GitHub CLI/gh.exe"]
+
+
+def _load_token(use_gh: bool = False) -> str:
+    if use_gh:
+        # gh 登录的 OAuth token 默认带 workflow scope——改 .github/workflows/**
+        # 走 Data API 必须 workflow 权限（无权限时 GitHub 一律伪装 404，防 CI 注入探测）
+        for exe in GH_EXES:
+            if Path(exe).is_file():
+                out = subprocess.run([str(exe), "auth", "token"],
+                                     capture_output=True, text=True)
+                tok = out.stdout.strip()
+                if out.returncode == 0 and tok:
+                    return tok
+        raise SystemExit("找不到 gh CLI 或未登录（--gh-token 需要 gh auth login）")
     for line in (ROOT / ".env").read_text(encoding="utf-8").splitlines():
         if line.startswith("GITHUB_TOKEN="):
             return line.split("=", 1)[1].strip().strip('"')
@@ -90,14 +105,16 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="git 断连时经 Data API 推送本地 commit")
     ap.add_argument("commit", help="本地 commit sha（重放其文件变更到远端 HEAD）")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--gh-token", action="store_true",
+                    help="用 gh CLI 的 token（含 workflow scope，推 .github/ 改动必须）")
     args = ap.parse_args()
 
-    token, slug = _load_token(), _repo_slug()
+    token, slug = _load_token(args.gh_token), _repo_slug()
 
-    # 变更清单（含新增）：name/status/mode。二进制安全走 base64 统一处理
+    # 变更清单：A新增/M修改/D删除（D 在 tree API 里以 sha:null 表达）
     diff = subprocess.run(
         ["git", "diff-tree", "--no-commit-id", "-r", "--name-status",
-         "--diff-filter=AM", "-z", args.commit],
+         "--diff-filter=AMD", "-z", args.commit],
         cwd=ROOT, capture_output=True, text=True).stdout.split("\0")
     changes = [(diff[i], diff[i + 1]) for i in range(0, len(diff) - 1, 2)]
     if not changes:
@@ -110,6 +127,10 @@ def main() -> int:
     entries = []
     total = 0
     for i, (status, path) in enumerate(changes, 1):
+        if status.startswith("D"):
+            entries.append({"path": path, "mode": "100644", "type": "blob", "sha": None})
+            print(f"  [{i}] 删除 {path}")
+            continue
         blob = subprocess.run(["git", "show", f"{args.commit}:{path}"],
                               cwd=ROOT, capture_output=True).stdout
         total += len(blob)

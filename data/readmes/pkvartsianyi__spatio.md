@@ -52,7 +52,7 @@ nearby = db.query_radius("cities", nyc, 100000, limit=10)
 ### Rust
 ```toml
 [dependencies]
-spatio = "0.4"
+spatio = "0.3"
 ```
 
 ```rust
@@ -170,7 +170,7 @@ Connect using the native Rust client (`spatio-client`):
 ```rust
 use spatio_client::SpatioClient;
 
-let client = SpatioClient::connect("127.0.0.1:3000".parse()?).await?;
+let client = SpatioClient::new("127.0.0.1".to_string(), 3000);
 let stats = client.stats().await?;
 ```
 

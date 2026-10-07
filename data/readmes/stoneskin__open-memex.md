@@ -4,7 +4,6 @@
 
 [![npm version](https://img.shields.io/npm/v/open-memex.svg)](https://www.npmjs.com/package/open-memex)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
-[![open-memex MCP server – quality and maintenance score on Glama](https://glama.ai/mcp/servers/stoneskin/open-memex/badges/score.svg)](https://glama.ai/mcp/servers/stoneskin/open-memex)
 
 [中文文档](./README.zh-CN.md)
 
@@ -86,8 +85,6 @@ open-memex doctor
 ## Core concepts
 
 Three ideas explain almost everything open-memex does.
-
-![open-memex architecture: your editors share one local memory — Markdown files as the source of truth, an SQLite FTS5 index for search, personal scope that never leaves the machine, and project scope shared through git PRs](docs/assets/open-memex-architecture-en.png)
 
 **1. Two scopes: `project` and `personal`.**
 Every memory belongs to one of two places:

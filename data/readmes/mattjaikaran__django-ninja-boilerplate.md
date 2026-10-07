@@ -8,8 +8,9 @@ A production-ready, **opinionated** Django boilerplate built with **Django Ninja
 
 > **Architecture Note:** This boilerplate uses [Django Ninja Extra](https://eadwincode.github.io/django-ninja-extra/) which extends Django Ninja with class-based API controllers, dependency injection, and permissions. Instead of function-based views, you write clean controller classes with decorators like `@api_controller` and `@http_get`.
 
+[![CI](https://github.com/mattjaikaran/django-ninja-boilerplate/actions/workflows/ci.yml/badge.svg)](https://github.com/mattjaikaran/django-ninja-boilerplate/actions/workflows/ci.yml)
 [![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/)
-[![Django 5.2](https://img.shields.io/badge/django-5.2-green.svg)](https://docs.djangoproject.com/)
+[![Django 5.2 and 6.0](https://img.shields.io/badge/django-5.2%20%7C%206.0-green.svg)](https://docs.djangoproject.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 [![OpenAPI](https://img.shields.io/badge/OpenAPI-3.1-6BA539.svg)](https://swagger.io/specification/)
@@ -197,7 +198,7 @@ app_name/
 ### Core Stack
 
 - **Python 3.13** with type hints
-- **[Django 5.2 LTS](https://docs.djangoproject.com/en/5.2/)** - The only supported version; `just test-django6` runs the suite on 6.0 by hand (see `DEPENDENCIES.md`)
+- **[Django 5.2 LTS](https://docs.djangoproject.com/en/5.2/)** - Default; Django 6.0 is also tested
 - **[Django Ninja](https://django-ninja.dev/)** - Fast API framework
 - **[Django Ninja Extra](https://eadwincode.github.io/django-ninja-extra/)** - Class-based controllers
 - **[Django Ninja JWT](https://eadwincode.github.io/django-ninja-jwt/)** - JWT authentication
@@ -243,7 +244,7 @@ That's it! The setup recipe will:
 - Validate your environment (Docker, Python, etc.)
 - Build the Docker images and start the stack
 - Run migrations
-- Create the superuser from the `SUPERUSER_*` values in `.env` (set `SUPERUSER_PASSWORD` first; the template ships it empty)
+- Create the superuser from the `SUPERUSER_*` values in `.env`
 - Leave you a login at http://localhost:8000/admin/
 
 Add demo content when you want it:
@@ -301,9 +302,9 @@ cd django-ninja-boilerplate
 # Create virtual environment and install dependencies
 uv sync --extra dev
 
-# Create .env with generated secrets (docs/ENV_SECRETS.md). For a local
-# Postgres, set DB_PASSWORD in .env to that server's password.
-just setup-env
+# Setup environment
+cp .env.example .env
+./scripts/generate_secret_key.sh
 
 # Start PostgreSQL and Valkey locally, then:
 just legacy local-migrate
@@ -317,9 +318,7 @@ just legacy local-run
 ```bash
 just setup               # Ask for a task backend, then bootstrap the project
 just doctor              # Validate development environment
-just setup-env           # Create .env with generated secrets, or add missing ones
-                         # Run it before any `docker compose` call: Compose refuses
-                         # every profile while a required secret is unset.
+just setup-env           # Create .env from template without starting services
 ```
 
 ### Docker Commands
@@ -330,7 +329,7 @@ just up-full             # Add monitoring, realtime, Mailhog, and MCP
 just up-realtime         # Add Centrifugo (ws://localhost:8800)
 just up-monitoring       # Add Flower (:5555) and Jaeger (:16686); set OTEL_ENABLED=true for traces
 just up-mail             # Add Mailhog (:8025); point EMAIL_* at mailhog first (see .env.example)
-just up-mcp              # Add the dev MCP server (SSE on 127.0.0.1:8001/sse); needs DJANGO_MCP_AUTH_TOKEN, see docs/AI_LAYER.md
+just up-mcp              # Add the MCP server (SSE on 127.0.0.1:8001/sse)
 just logs                # View logs
 just shell               # Django shell
 just migrate             # Run migrations
@@ -1265,7 +1264,7 @@ def process_payment(self, payment_id):
 
 ### Task Status API
 
-Monitor and manage tasks via REST API. Every `/api/tasks/` route requires a staff user: task results are not scoped to an owner.
+Monitor and manage tasks via REST API:
 
 ```bash
 # Get task status and progress
@@ -1439,7 +1438,7 @@ SLOW_REQUEST_THRESHOLD_MS=1000        # Log slow requests above this threshold
 
 ### Tracing
 
-With `OTEL_ENABLED=true`, Django, requests, psycopg, Redis, and Celery calls
+With `OTEL_ENABLED=true`, Django, requests, psycopg2, Redis, and Celery calls
 are traced automatically. If the OpenTelemetry packages are missing, startup
 fails with `ImproperlyConfigured` instead of running without traces. Add custom
 spans:
@@ -1570,10 +1569,6 @@ The `ObservabilityMiddleware` automatically:
 - Adds `X-Trace-ID` and `X-Request-ID` headers to responses
 
 ## Deployment
-
-Upgrading an existing platform? Read [UPGRADING.md](UPGRADING.md) first:
-production requires TLS (`USE_TLS=true`), and the signup, CSRF and refresh
-contracts changed.
 
 ### Docker Compose (Split Services)
 

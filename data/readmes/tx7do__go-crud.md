@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">go-crud · 通用数据访问层工具库</h1>
   <p align="center">
-    <strong>一套泛型 Repository 接口，统一驾驭 13 种数据存储引擎</strong>
+    <strong>一套泛型 Repository 接口，统一驾驭 8 种数据存储引擎</strong>
   </p>
   <p align="center">
     <em>让数据操作不再是重复劳动，让每一行代码都聚焦业务价值</em>
@@ -23,9 +23,9 @@
 
 ## 项目亮点
 
-- **统一数据访问层**：一套泛型 Repository 接口，覆盖 GORM、Ent、MongoDB、ClickHouse、Apache Doris、Elasticsearch、OpenSearch、Qdrant、Milvus、Weaviate、Neo4j、InfluxDB、Cassandra 十三大数据引擎，告别重复 Boilerplate
+- **统一数据访问层**：一套泛型 Repository 接口，覆盖 GORM、Ent、MongoDB、ClickHouse、Apache Doris、Elasticsearch、OpenSearch、InfluxDB 八大数据引擎，告别重复 Boilerplate
 - **三种分页策略**：Offset / Page / Token 三种分页模式，从传统 Web 分页到无限滚动，全场景覆盖
-- **结构化过滤引擎**：28 种操作符，支持 AND/OR 多层嵌套，同时兼容 JSON 与 Google AIP 两种过滤语法，参数化查询杜绝 SQL 注入
+- **结构化过滤引擎**：29+ 种操作符，支持 AND/OR 多层嵌套，同时兼容 JSON 与 Google AIP 两种过滤语法，参数化查询杜绝 SQL 注入
 - **Protocol Buffers 契约**：基于 Protobuf 定义标准化的分页、过滤、排序协议，天然适配 gRPC 微服务架构，接口即文档
 - **Redis 缓存层**：内置 Cache-Aside 模式与 SingleFlight 防击穿机制，一行代码开启缓存，保护后端数据库
 - **审计日志**：统一的 Auditor 接口，Context 注入、全链路操作追溯与数据变更记录
@@ -47,32 +47,8 @@
 | [Apache Doris](./doris) | 列式 OLAP | ✅ | 实时 BI 报表、交互式分析、Stream Load 高速写入 |
 | [Elasticsearch](./elasticsearch) | 搜索引擎 | ✅ | 全文检索、日志分析、高亮搜索、聚合分析 |
 | [OpenSearch](./opensearch) | 搜索引擎 | ✅ | Elasticsearch 开源替代、向量检索、安全分析 |
-| [Qdrant](./qdrant) | 向量数据库 | ✅ | RAG 检索、语义搜索、推荐召回、多租户向量隔离 |
-| [Milvus](./milvus) | 向量数据库 | ✅ | RAG 检索、语义搜索、推荐召回、多租户向量隔离 |
-| [Weaviate](./weaviate) | 向量数据库 | ✅ | RAG 检索、语义搜索、多租户向量隔离（GraphQL 检索） |
-| [Neo4j](./neo4j) | 图数据库 | ✅ | 节点 CRUD、属性级多租户（label 即表、element id 即行身份） |
 | [InfluxDB](./influxdb) | 时序数据库 | ✅ | IoT 监控、DevOps 指标、时序数据分析 |
-| [Cassandra](./cassandra) | 宽列数据库 | ✅ | 高可用写入、跨数据中心复制、行级多租户（ScyllaDB 直连兼容） |
-
-### 兼容生态
-
-以下引擎经兼容协议直接复用现有模块，无需新增依赖：
-
-| 兼容引擎 | 复用模块 | 说明 |
-|----------|----------|------|
-| TiDB / OceanBase | GORM | MySQL 线协议兼容 |
-| CockroachDB / YugabyteDB / openGauss / 人大金仓 | GORM | PostgreSQL 线协议兼容 |
-| 达梦 DM8 | GORM | 社区 gorm driver（dm-go） |
-| Oracle | GORM | `gorm.io/driver/oracle`（GORM 官方驱动） |
-| StarRocks | GORM | MySQL 线协议兼容（Doris 系） |
-| DuckDB | GORM | 社区 gorm driver；嵌入式分析型 OLAP（"分析界的 SQLite"） |
-| TimescaleDB | GORM | PostgreSQL 扩展，向量侧叠加 pgvector |
-| ScyllaDB | Cassandra | 同一 CQL 二进制协议直连（见 cassandra/README 兼容性注记） |
-| AWS DocumentDB / Azure Cosmos DB (Mongo API) | MongoDB | Mongo 线协议兼容 |
-| Zilliz Cloud | Milvus | 官方 SDK 兼容 |
-
-> 不在此列的云托管服务（Pinecone 等闭源 SaaS）与多模型新贵不在适配计划内；
-> Redis 在本库中定位为 [cache](./cache) 层而非主存储引擎。
+| [Cassandra](./cassandra) | 宽列数据库 | 🚧 | 高可用写入、跨数据中心复制（开发中） |
 
 ---
 
@@ -89,7 +65,6 @@ graph TB
         Cache["Cache<br/>Redis Cache-Aside · SingleFlight 防击穿"]
         Audit["Audit<br/>审计日志 · Context 注入 · 变更追踪"]
         Viewer["Viewer<br/>身份上下文 · 权限检查 · 五级数据范围"]
-        Vector["Vector<br/>向量检索契约 · 距离度量统一"]
     end
 
     subgraph DAL["数据访问层"]
@@ -100,12 +75,7 @@ graph TB
         Doris["Apache Doris"]
         ES["Elasticsearch"]
         OS["OpenSearch"]
-        Qdrant["Qdrant"]
-        Milvus["Milvus"]
-        Weaviate["Weaviate"]
-        Neo4j["Neo4j"]
         Influx["InfluxDB"]
-        Cassandra["Cassandra"]
     end
 
     API --> Pagination
@@ -113,7 +83,6 @@ graph TB
     Cache --> DAL
     Audit --> DAL
     Viewer --> DAL
-    Vector --> DAL
 ```
 
 ---
@@ -132,7 +101,6 @@ go-crud/
 ├── cache/                        # Redis 缓存层 (Cache-Aside + SingleFlight 防击穿)
 ├── audit/                        # 统一审计日志接口 (Auditor · Entry · Context)
 ├── viewer/                       # 查看者上下文 (身份 · 权限 · 五级数据范围)
-├── vector/                       # 向量检索契约 (Query/Result · 距离度量 · pgvector 文本编解码)
 ├── gorm/                         # GORM 数据访问层 (CRUD · Upsert · 缓存 · 软删除)
 ├── entgo/                        # Ent 数据访问层 (CRUD · 树形查询 · 缓存 · 事务)
 ├── mongodb/                      # MongoDB 数据访问层 (CRUD · QueryBuilder)
@@ -140,12 +108,8 @@ go-crud/
 ├── doris/                        # Apache Doris 数据访问层 (CRUD · Stream Load · SQL 查询)
 ├── elasticsearch/                # Elasticsearch 客户端与工具
 ├── opensearch/                   # OpenSearch 客户端与工具
-├── qdrant/                       # Qdrant 数据访问层 (向量检索 · 租户隔离)
-├── milvus/                       # Milvus 数据访问层 (向量检索 · 租户隔离)
-├── weaviate/                     # Weaviate 数据访问层 (向量检索 · 租户隔离)
-├── neo4j/                        # Neo4j 数据访问层 (节点 CRUD · 属性级租户)
 ├── influxdb/                     # InfluxDB 数据访问层 (Flux 查询)
-├── cassandra/                    # Cassandra 数据访问层 (裸 CQL 执行器 · 泛型仓库 · 租户隔离)
+└── cassandra/                    # Cassandra 数据访问层 (开发中)
 ```
 
 ---
@@ -160,7 +124,7 @@ go-crud/
 |------|:----:|:---:|:-------:|:----------:|:-----:|:-------:|:--------:|
 | Create / Get / Update / Delete | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | 分页查询 (Page / Offset / Token) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| 结构化过滤 (28 操作符) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| 结构化过滤 (29+ 操作符) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | 多字段排序 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | 字段选择 (FieldMask) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | 批量写入 (BatchCreate) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -173,52 +137,10 @@ go-crud/
 | 事务支持 | ✅ | ✅ | — | — | ✅ | — | — |
 | Stream Load | — | — | — | — | ✅ | — | — |
 | SQL 原生查询 | — | — | — | — | ✅ | ✅ | — |
-| 向量检索 (kNN / TopK) | ✅ pgvector | — | ✅ Atlas | ✅ | ✅ | ✅ kNN | — |
-
-> 上表覆盖 7 个全量 DAL 模块。向量数据库（Qdrant / Milvus / Weaviate）、图数据库（Neo4j）与宽列数据库（Cassandra）提供聚焦的方法集：Create / BatchCreate / Get / GetByUUID / Count / Exists / DeleteByIDs / DeleteByUUIDs，另有 Query、条件删除（DeleteByFilter / DeleteByExpr / DeleteByWhere）、Upsert（Milvus 显式提供；Qdrant / Cassandra 的 Create 天然 Upsert）与 SearchByVector 按引擎提供。泛型 Update 与统一分页契约暂不在这五个模块范围内，能力细节见各模块 README。
-
-### 向量检索（RAG / 语义检索）
-
-通过独立的 [vector](./vector) 契约模块提供跨引擎统一的向量检索：`vector.Query` 表达请求（向量字段、查询向量、TopK、距离度量、元数据过滤），`vector.Result[T]` 返回「相似度分恒为越大越相似」的命中列表。
-
-| 引擎 | 底层语法 | 度量时机 | 元数据过滤 | 备注 |
-|------|----------|----------|------------|------|
-| GORM (PostgreSQL) | pgvector `<->` / `<=>` / `<#>` | 查询期 | whereSelectors 通道 | 实体字段用 `vector.Float32Vector`（`gorm:"type:vector(N)"`），附 HNSW 索引创建 |
-| MongoDB | Atlas `$vectorSearch` 聚合 | mapping（Search 索引） | pre-filter + Builder | 需要 Atlas 7.0+ / 自管 8.0+，附 Search 索引创建/删除 |
-| Elasticsearch 8+/9.x | 顶层 `knn` 子句 + dense_vector | mapping（similarity） | knn.filter（query DSL） | 支持与 query 同体的混合检索 |
-| OpenSearch 2.11+ | `query.knn` + knn_vector | mapping（space_type） | knn.filter（DSL） | 建索引自动开启 `index.knn` |
-| ClickHouse | cosineDistance / L2Distance / dotProduct | 查询期 | baseWhere + whereArgs | 距离函数暴力检索，分数在 Go 侧重算 |
-| Doris 3.0+ | cosine_distance / l2_distance / inner_product | 查询期 | baseWhere + whereArgs | 启用向量索引后自动加速 |
-| Qdrant | Query API（最近邻） | 集合创建时固定 | qdrant.Filter（payload 过滤，配合载荷索引） | tenant_id 整数载荷索引；Filter 注入租户条件；按 ID 直取路径客户端租户校验 |
-| Milvus 2.4+ | Search（AUTOINDEX ANN） | 索引创建时固定 | Milvus 表达式 pre-filter | tenant_id 列标记 partition key；表达式注入租户谓词；按主键直取路径客户端租户校验 |
-| Weaviate 1.27+ | GraphQL nearVector | 建库期固定（vectorIndexConfig.distance） | Where 条件 pre-filter | 属性名强制小写开头（GraphQL 命名约定）；Where 注入租户条件；按 UUID 直取路径客户端租户校验 |
-
-```go
-// 各引擎同构的检索请求
-q := &vector.Query{
-    Field:  "embedding",
-    Vector: embedding,        // []float32
-    TopK:   10,
-    Metric: vector.MetricCosine,
-}
-
-// ES / OpenSearch（客户端方法）
-res, err := client.KnnSearch(ctx, "docs", q)
-// GORM / MongoDB / ClickHouse / Doris（Repository 方法，过滤经 where/builder 通道）
-res, err := repo.SearchByVector(ctx, baseWhereOrBuilder, q)
-// Qdrant / Milvus / Weaviate（Repository 方法，过滤经 q.Filter 引擎原生条件通道）
-res, err := repo.SearchByVector(ctx, q)
-```
-
-统一约定：
-- **分数语义**：`Score` 恒为「越大越相似」，各引擎把原生距离/分数换算到该语义（换算规则见各模块实现注释）；
-- **TopK 语义**：向量检索是 TopK 近邻而非分页，`Total` 即命中条数；
-- **租户隔离**：Repository 侧检索沿用各模块租户行级强制（tenant 谓词注入）的既有约定；
-- InfluxDB / Ent / Cassandra / Neo4j 暂不提供向量检索。
 
 ### 过滤操作符
 
-基于 Protobuf 定义的结构化过滤引擎，支持 28 种操作符：
+基于 Protobuf 定义的结构化过滤引擎，支持 29+ 种操作符：
 
 | 分类 | 操作符 |
 |------|--------|
@@ -280,10 +202,7 @@ res, err := repo.SearchByVector(ctx, q)
 | 文档数据库 | MongoDB | NoSQL 文档存储 |
 | OLAP 引擎 | ClickHouse / Apache Doris | 列式存储，极致分析性能 |
 | 搜索引擎 | Elasticsearch / OpenSearch | 全文检索与数据分析 |
-| 向量数据库 | Qdrant / Milvus / Weaviate | 向量检索与多租户向量隔离 |
-| 图数据库 | Neo4j | 属性图存储与 Cypher 查询 |
 | 时序数据库 | InfluxDB | 时序数据采集与分析 |
-| 宽列数据库 | Cassandra | 高可用宽列存储，ScyllaDB 直连兼容 |
 | 缓存 | Redis | 内存数据库，防击穿保护 |
 | DTO 映射 | go-utils/mapper | 泛型 CopierMapper，双向自动映射 |
 | API 定义 | Protobuf + buf.build | 接口契约优先，跨语言支持 |
@@ -306,12 +225,7 @@ go get github.com/tx7do/go-crud/clickhouse    # ClickHouse
 go get github.com/tx7do/go-crud/doris         # Apache Doris
 go get github.com/tx7do/go-crud/elasticsearch # Elasticsearch
 go get github.com/tx7do/go-crud/opensearch    # OpenSearch
-go get github.com/tx7do/go-crud/qdrant        # Qdrant
-go get github.com/tx7do/go-crud/milvus        # Milvus
-go get github.com/tx7do/go-crud/weaviate      # Weaviate
-go get github.com/tx7do/go-crud/neo4j         # Neo4j
 go get github.com/tx7do/go-crud/influxdb      # InfluxDB
-go get github.com/tx7do/go-crud/cassandra     # Cassandra
 ```
 
 ### 示例：GORM Repository
@@ -330,9 +244,9 @@ import (
 
 // 1. 定义 Entity（数据库表映射）
 type UserEntity struct {
-    ID    uint64 `gorm:"primaryKey;autoIncrement"`
-    Name  string `gorm:"column:name;type:varchar(100)"`
-    Email string `gorm:"column:email;type:varchar(200)"`
+    ID    uint64 `gorm:"primaryKey;autoIncrement"
+    Name  string `gorm:"column:name;type:varchar(100)"
+    Email string `gorm:"column:email;type:varchar(200)"
 }
 
 func (UserEntity) TableName() string { return "users" }
@@ -414,10 +328,10 @@ result, _ := repo.ListWithPaging(ctx, db, &paginationV1.PagingRequest{
 
 | 特性 | go-crud | 纯手写 Repository | 其他 CRUD 库 |
 |------|---------|-------------------|-------------|
-| 多引擎统一 API | ✅ 13 种引擎 | ❌ 每种手写 | ❌ 通常只支持一种 |
+| 多引擎统一 API | ✅ 8 种引擎 | ❌ 每种手写 | ❌ 通常只支持一种 |
 | 泛型类型安全 | ✅ DTO ↔ Entity 双向映射 | ⚠️ 视实现而定 | ⚠️ 部分支持 |
 | Protocol Buffers 契约 | ✅ 标准化接口定义 | ❌ | ❌ |
-| 结构化过滤引擎 | ✅ 28 操作符 + AND/OR 嵌套 | ❌ | ⚠️ 基础过滤 |
+| 结构化过滤引擎 | ✅ 29+ 操作符 + AND/OR 嵌套 | ❌ | ⚠️ 基础过滤 |
 | 三种分页策略 | ✅ Page / Offset / Token | ❌ | ❌ |
 | 内置缓存 | ✅ Cache-Aside + 防击穿 | ❌ | ❌ |
 | 审计日志 | ✅ 全链路追踪 | ❌ | ❌ |
@@ -426,9 +340,6 @@ result, _ := repo.ListWithPaging(ctx, db, &paginationV1.PagingRequest{
 | OLAP 引擎支持 | ✅ ClickHouse + Doris | ❌ | ❌ |
 | 搜索引擎支持 | ✅ Elasticsearch + OpenSearch | ❌ | ❌ |
 | 时序数据库支持 | ✅ InfluxDB | ❌ | ❌ |
-| 向量数据库支持 | ✅ Qdrant + Milvus + Weaviate（另有 pgvector / Atlas / ES kNN） | ❌ | ❌ |
-| 图数据库支持 | ✅ Neo4j | ❌ | ❌ |
-| 宽列数据库支持 | ✅ Cassandra（ScyllaDB 直连兼容） | ❌ | ❌ |
 
 ---
 
