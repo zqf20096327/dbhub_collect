@@ -931,11 +931,22 @@ def run(args):
 
     # 待办：readme 有内容且 sha 未解读（或 sha 变化）；含 no_readme 降级项。
     # 过滤：出池 fn 不解读；同 sha 已拒收不重烧（进人工队列）；空描述降级项跳过
+    # 仓库静默黑名单（config/exclude_repos.txt，与 pool_core 同源）：400 contentFilter
+    # 必再失败的仓每窗重试纯烧钱（10-07 17 条），todo 直接跳过
+    _rb_p = HERE / "config" / "exclude_repos.txt"
+    repo_bl: set = set()
+    if _rb_p.is_file():
+        repo_bl = {ln.strip() for ln in _rb_p.read_text(encoding="utf-8-sig").splitlines()
+                   if ln.strip() and not ln.startswith("#")}
     todo: list[tuple[str, str, bool]] = []      # (fn, sha, degraded)
-    n_skip = {"out_of_pool": 0, "rejected_same_sha": 0, "empty_desc": 0}
+    n_skip = {"out_of_pool": 0, "rejected_same_sha": 0, "empty_desc": 0,
+              "repo_blacklist": 0, "failed_same_sha": 0}
     for fn, rec in rstate.get("items", {}).items():
         if fn not in pool:
             n_skip["out_of_pool"] += 1
+            continue
+        if fn in repo_bl:
+            n_skip["repo_blacklist"] += 1
             continue
         sha = rec.get("sha")
         prev = st["items"].get(fn) or {}
@@ -951,7 +962,18 @@ def run(args):
                 n_skip["empty_desc"] += 1
                 continue
             dkey = "desc::" + desc
-            if prev.get("sha") != dkey and dkey not in cache:
+            # 10-07 修：原条件 prev.sha != dkey AND dkey not in cache —— done 同 sha 但
+            # 缓存丢失的 desc 项永远不重入队（清缓存/迁移丢档即永久卡死，实测 9 条）。
+            # 改为缓存缺即入队，但 rejected/failed 同 sha 守卫与普通分支对齐（无守卫
+            # 会把拒收/400 家族每窗重烧——复核阶段抓到，49 条里 15 条属于此类）
+            if dkey not in cache:
+                if prev.get("sha") == dkey:
+                    if prev.get("status") == "rejected" and not args.retry_rejected:
+                        n_skip["rejected_same_sha"] += 1
+                        continue
+                    if prev.get("status") == "failed":
+                        n_skip["failed_same_sha"] += 1
+                        continue
                 todo.append((fn, dkey, True))
     todo.sort(key=lambda x: -((pool.get(x[0]) or {}).get("stars") or 0))
     total_todo = len(todo)
