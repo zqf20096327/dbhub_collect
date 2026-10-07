@@ -8619,5 +8619,73 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "af388cef4c82": {
+  "identity": {
+   "one_liner": "用于销售和管理 Remnawave VPN 订阅的 Telegram 机器人及 Mini App",
+   "review": "这是一个自托管的开源 Telegram 机器人和 Mini App，配合网页端个人中心使用，面向 Remnawave VPN 面板运营者。它提供套餐与试用管理、支付系统与 Telegram Stars 集成、推广码、推荐系统、工单、消息推送、多语言支持（RU/EN/FA）以及 AI 助手。它通过 Docker Compose 部署，并内置从 Bedolaga 的迁移工具。",
+   "highlights": [
+    "提供 Telegram 机器人、Mini App 和网页端个人中心，用于管理订阅、套餐、设备和流量",
+    "集成支付系统、Telegram Stars、推广码以及带奖励的推荐系统",
+    "提供从 Bedolaga 机器人迁移数据（用户、余额、推荐、订阅）的功能",
+    "通过 Docker Compose 并自动配置 HTTPS 进行部署"
+   ],
+   "use_cases": [
+    "运营基于 Remnawave 面板、通过 Telegram 销售和管理 VPN 订阅服务",
+    "将现有的 Bedolaga Telegram 机器人数据迁移至 Link-Bot",
+    "通过网页端/Telegram 个人中心实现自助式订阅管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Переносятся **пользователи, баланс, рефералы и активные/пробные подписки**. Оба бота должны использовать одну панель Remnawave; база PostgreSQL Bedolaga должна быть доступна контейнеру Link-Bot. ／ export BEDOLAGA_DATABASE_URL='postgres://USER:PASSWORD@BEDOLAGA_HOST:5432/DBNAME'",
+     "lines": [
+      71,
+      76
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "这是一个面向最终用户的 Telegram 机器人/应用，用于销售 VPN 订阅；PostgreSQL 仅作为迁移源 Bedolaga 的数据存储出现。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Telegram-бот, Mini App и веб-кабинет для VPN-подписок Remnawave. ／ Нужны VPS с Ubuntu 22.04/24.04 или Debian 12, Docker Compose, доступная панель Remnawave и бот от @BotFather. Создайте `A`-запись домена на IP сервера; откройте порты `80` и `443`. ／ Переносятся **пользователи, баланс, рефералы и активные/пробные подписки**. Оба бота должны использовать одну панель Remnawave; база PostgreSQL Bedolaga должна быть доступна контейнеру Link-Bot.",
+   "evidence_lines": [
+    5,
+    24,
+    71
+   ]
+  },
+  "fn": "bruhxax/Link-Bot",
+  "sha": "af388cef4c82",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
