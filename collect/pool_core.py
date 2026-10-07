@@ -67,6 +67,17 @@ else:
     log.warning("config/exclude_users.txt 不存在")
 log.info("用户黑名单：%d 人", len(USER_BLACKLIST))
 
+# 仓库级静默黑名单（10-07）：与 db_profiles 的 exclude_repos 不同——本名单【不】拼进
+# 搜索查询（-repo: 前缀多条会撑爆 256 字符查询上限），只在落地即丢 + merge/union
+# 兜底丢弃，点位镜像上面用户黑名单；interpret todo 同源跳过（400 审查仓止血）
+_REPO_BL_FILE = ROOT / "config" / "exclude_repos.txt"
+REPO_BLACKLIST: set[str] = set()
+if _REPO_BL_FILE.is_file():
+    REPO_BLACKLIST |= {ln.strip() for ln in
+                       _REPO_BL_FILE.read_text(encoding="utf-8-sig").splitlines()
+                       if ln.strip() and not ln.startswith("#")}
+log.info("仓库黑名单：%d 个", len(REPO_BLACKLIST))
+
 
 # ---------------- 条目归一 ----------------
 
@@ -99,7 +110,8 @@ def slim(it: dict, source: str, source_topic: str = "") -> dict:
 def _slim_many(items, source: str, label: str) -> dict:
     return {it["full_name"]: slim(it, source, label) for it in items
             if (it.get("full_name") or "").split("/", 1)[0].lower()
-            not in USER_BLACKLIST}
+            not in USER_BLACKLIST
+            and it.get("full_name") not in REPO_BLACKLIST}
 
 
 # ---------------- 抓取（含截断修复 + 分 section 拆档） ----------------
@@ -395,7 +407,8 @@ def _merge_parts(parts: Path) -> dict:
     for stage in MERGE_STAGES:
         for it in _load_parts(parts, stage).values():
             fn = it["full_name"]
-            if fn in BLACKLIST or fn.split("/", 1)[0].lower() in USER_BLACKLIST:
+            if fn in BLACKLIST or fn in REPO_BLACKLIST \
+                    or fn.split("/", 1)[0].lower() in USER_BLACKLIST:
                 dropped += 1
                 continue
             if fn not in merged:
@@ -467,7 +480,8 @@ def _union_pools_live() -> dict:
             return {}
         for it in items:
             fn = it["full_name"]
-            if fn in BLACKLIST or fn.split("/", 1)[0].lower() in USER_BLACKLIST:
+            if fn in BLACKLIST or fn in REPO_BLACKLIST \
+                    or fn.split("/", 1)[0].lower() in USER_BLACKLIST:
                 dropped += 1
                 continue
             if fn not in union:
