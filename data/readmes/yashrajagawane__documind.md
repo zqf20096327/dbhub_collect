@@ -1,6 +1,5 @@
 # DocuMind
 
-
 DocuMind is a private document-intelligence workspace: authenticated users upload documents, process them, inspect/export results, and ask grounded questions with source citations.
 
 ## Run locally

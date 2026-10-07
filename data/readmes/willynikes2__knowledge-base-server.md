@@ -1,8 +1,5 @@
 # knowledge-base-server
 
-[![CI](https://github.com/willynikes2/knowledge-base-server/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/willynikes2/knowledge-base-server/actions/workflows/ci.yml)
-[![CodeQL](https://github.com/willynikes2/knowledge-base-server/actions/workflows/codeql.yml/badge.svg?branch=master)](https://github.com/willynikes2/knowledge-base-server/actions/workflows/codeql.yml)
-
 **Make every AI agent you use smarter.**
 
 A persistent memory system that captures, classifies, synthesizes, and retrieves knowledge for AI agents. One brain, multiple agents, compounding intelligence. Production-proven with 200+ documents, three agents (Claude, Codex, Gemini), and daily use.
@@ -180,8 +177,7 @@ The loop in detail:
 
 **Security**
 - bcrypt password hashing with HttpOnly session cookies
-- Dual auth: API keys (fast path) + OAuth 2.1 Bearer tokens (signed JWTs bound to the MCP resource)
-- No self-registration: OAuth accounts are created by the operator with `kb auth add-user`
+- Dual auth: API keys (fast path) + OAuth Bearer tokens
 - Three separate API keys for Claude, OpenAI, and Gemini
 - Safety review tool checks KB history before destructive actions
 - No external dependencies for core functionality
@@ -222,22 +218,21 @@ kb setup --auto --password=yourpass --vault=~/obsidian-vault --agents=claude,cod
 
 ```bash
 KB_PASSWORD=yourpassword kb start    # Start server on port 3838
-kb register                          # Register MCP with Claude, Codex, and Gemini
-kb register --agents=claude,codex    # Register only a subset
+kb register                          # Register MCP with Claude Code
 kb ingest ~/obsidian-vault           # Ingest your knowledge
 kb search "docker networking"        # Search from terminal
 kb status                            # Check stats
 ```
 
-### Connect to Local Agents
+### Connect to Claude Code
 
-After `kb register`, Claude Code, Codex CLI, and Gemini CLI automatically point at `kb mcp`. Restart the sessions you want to update, then test it:
+After `kb register`, Claude Code automatically has access to all KB tools. Test it:
 
 ```
 > Search the knowledge base for recent bug fixes
 ```
 
-Your agent will use `kb_search` and return results from your accumulated knowledge.
+Claude will use `kb_search` and return results from your accumulated knowledge.
 
 ---
 
@@ -267,9 +262,7 @@ First 500 early adopters get Pro at $12/mo forever (normally $25): [memstalker.c
 
 ## MCP Tools
 
-### Core tools (stdio + HTTP)
-
-All 16 core tools are available via both stdio and HTTP:
+All 16 tools available via MCP (stdio and HTTP):
 
 | Tool | Description |
 |------|-------------|
@@ -289,28 +282,6 @@ All 16 core tools are available via both stdio and HTTP:
 | `kb_capture_youtube` | Capture a YouTube transcript with metadata |
 | `kb_vault_status` | Show vault indexing stats by type and project |
 | `kb_safety_check` | Review a destructive action against KB history |
-
-### Local-only bus tools (stdio only)
-
-The stdio MCP server also exposes a lightweight append-only message bus for cross-model coordination:
-
-| Tool | Description |
-|------|-------------|
-| `bus_send` | Send a markdown message to a local channel |
-| `bus_inbox` | Read messages newer than a cursor |
-| `bus_wait` | Long-poll until a new message arrives or timeout elapses |
-
-Resource template: `bus://{channel}`
-
-Shell shims:
-
-```bash
-bus-send ticket:PF-1884 "report ready" --sender codex --kind result
-bus-inbox ticket:PF-1884 --since 0
-bus-wait ticket:PF-1884 --since 12 --timeout-ms 30000
-```
-
-See [docs/message-bus.md](docs/message-bus.md) for channel conventions and cross-model usage.
 
 ---
 
@@ -445,7 +416,7 @@ Use kb_capture_fix to record:
 ### Claude Code (MCP -- Native)
 
 ```bash
-kb register    # Writes to ~/.claude.json, ~/.codex/mcp.json, ~/.gemini/mcp.json
+kb register    # Writes to ~/.claude.json automatically
 ```
 
 All 16 MCP tools become available in Claude Code immediately.

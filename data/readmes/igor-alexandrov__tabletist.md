@@ -5,10 +5,6 @@
 <h1 align="center">Tabletist</h1>
 
 <p align="center">
-  <a href="https://igor.works/tabletist/">igor.works/tabletist</a>
-</p>
-
-<p align="center">
   <a href="https://github.com/igor-alexandrov/tabletist/actions/workflows/ci.yml"><img src="https://github.com/igor-alexandrov/tabletist/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License: MIT"></a>
   <a href="rust-toolchain.toml"><img src="https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Figor-alexandrov%2Ftabletist%2Fmain%2FCargo.toml&query=%24.workspace.package.rust-version&label=rust&logo=rust&color=orange" alt="Rust version"></a>
@@ -19,9 +15,6 @@
 A fast, native database client for **PostgreSQL**, **MySQL** and
 **SQLite**. Written in Rust with egui; runs on
 Linux (Omarchy and Hyprland first), macOS and Windows.
-
-The guide and the reference are on the website:
-**[igor-alexandrov.github.io/tabletist](https://igor-alexandrov.github.io/tabletist/)**.
 
 <p align="center">
   <img src="assets/screenshots/macos.png" width="900" alt="Tabletist 0.1.0, the macOS look: a table's data grid with the sidebar of tables on the left and the row panel on the right">
@@ -46,23 +39,12 @@ The guide and the reference are on the website:
   connection tab (reconnecting in that tab reuses them).
 - A connection opens read-only when its "Open read-only" box says so, which
   is the default for production. A writable one opens a read-write session,
-  in which browsing, a raw WHERE and a SQL editor switched to Read-only
-  still only read.
-- On a writable connection a table's values are edited in its grid: changes
-  stay pending until Save writes them in one transaction, which never
-  overwrites a row someone else changed: a save that finds one writes
-  nothing and asks about each such row, with what was loaded, what the
-  server holds now and yours side by side (keep mine, use the server's
-  values, or overwrite). Before saving, Review SQL shows the statements
-  that will run (`:diff` on Omarchy, Cmd/Ctrl+Shift+D everywhere) and
-  copies them, and a save to production asks first, with them on screen.
+  in which browsing, a raw WHERE and the SQL editor still only read.
 - A sidebar of recent objects and one schema's tables and views, folded into
   prefix groups (`book_`) or listed flat; each table opens with a data grid
   (keys, foreign keys, value tags, JSON at a glance), a row panel showing
-  every field in full with a jump along foreign keys, where a value of a
-  writable table is edited in place (a click on it, or Cmd/Ctrl+I to
-  reach the row's fields and Enter or typing to edit one),
-  and a Structure view (columns, indexes, foreign keys).
+  every field in full with a jump along foreign keys, and a Structure view
+  (columns, indexes, foreign keys).
 - Server-side sorting and paging, a filter bar with a raw WHERE option, exact
   counts on demand, and cancel for any running query. MySQL sessions run in
   utf8mb4, with `ANSI_QUOTES`, the combination modes that imply it and
@@ -71,15 +53,8 @@ The guide and the reference are on the website:
 - A SQL editor per connection (Cmd/Ctrl+T): run the statement at the cursor
   (Cmd/Ctrl+Return) or the whole script, with a row limit and a timeout, and
   read a result row in full in the row panel.
-  On a read-only connection, and on production, every run happens in a
-  read-only transaction that is rolled back, and statements that would
-  leave it are refused. On a writable connection that is not production's
-  a tab opens in Read-write: a run that changes data is one transaction,
-  committed when every statement succeeded and rolled back on the first
-  error, cancel or timeout, and the Messages say which. A run of reads is
-  read-only there too, and the toolbar's switch (or Cmd/Ctrl+Shift+M)
-  sets the tab to Read-only and back.
-  Format (Cmd/Ctrl+Shift+F)
+  Every run happens in a read-only transaction that is rolled back, and
+  statements that would leave it are refused. Format (Cmd/Ctrl+Shift+F)
   lays queries out in river style and uppercases reserved words, in the
   selection's statements or the whole script. Keywords, schemas, tables,
   views and the columns of a statement's tables are completed while typing

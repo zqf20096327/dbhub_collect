@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -39,10 +40,13 @@ RETRIES = 5
 
 
 def _load_token() -> str:
+    # CI 无 .env：优先环境变量（Actions 注入的 GITHUB_TOKEN，contents:write 即可建 Release）
+    if os.environ.get("GITHUB_TOKEN"):
+        return os.environ["GITHUB_TOKEN"]
     for line in (ROOT / ".env").read_text(encoding="utf-8").splitlines():
         if line.startswith("GITHUB_TOKEN="):
             return line.split("=", 1)[1].strip().strip('"')
-    raise SystemExit(".env 里没有 GITHUB_TOKEN")
+    raise SystemExit("无 GITHUB_TOKEN（环境变量或 .env）")
 
 
 def repo_slug() -> str:
@@ -173,11 +177,15 @@ def rotate(slug: str, token: str, apply: bool, out_dir: Path) -> int:
                 pkg.unlink()
         if not pkg.is_file():
             pkg = pack(d, out_dir)
-        upload(slug, token, pkg, date)
-        if verify_remote(slug, token, date, pkg) != 0:
-            print(f"校验未过，保留本地目录 {d.name}", file=sys.stderr)
-            rc = 1
-            continue
+        if verify_remote(slug, token, date, pkg) == 0:
+            # 幂等跳过：远端资产已存在且 digest 一致（重跑只补漏，不删重传）
+            print(f"远端已有一致资产，跳过 {pkg.name}")
+        else:
+            upload(slug, token, pkg, date)
+            if verify_remote(slug, token, date, pkg) != 0:
+                print(f"校验未过，保留本地目录 {d.name}", file=sys.stderr)
+                rc = 1
+                continue
         if apply:
             import shutil
             shutil.rmtree(d)

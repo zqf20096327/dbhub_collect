@@ -1,7 +1,3 @@
-<div align="center">
-  <img src="apps/web/public/logo.svg" alt="pacman app icon" width="128" height="128">
-</div>
-
 # pacman
 
 A self-hosted, open-source **agent workspace**: a task board where you write the tasks and AI agents build them on your own machines.

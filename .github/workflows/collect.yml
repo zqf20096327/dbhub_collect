@@ -86,6 +86,16 @@ jobs:
             echo "非月初，跳过"
           fi
 
+      # M1 滚动归档：≥15 天的快照目录打包上 Releases（按月 archive-YYYY-MM），
+      # 远端 digest 一致才删本地目录；失败只警告不阻断采集（次晚重试补漏，幂等）
+      - name: 快照滚动归档（≥15 天 → Releases）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pip install zstandard >/dev/null
+          python tools/release_archive.py rotate --apply || echo "::warning::滚动归档失败（次晚自动补漏）"
+          rm -rf _archive_tmp
+
       - name: 提交并推送数据
         run: |
           git config user.name "zqf20096327"
