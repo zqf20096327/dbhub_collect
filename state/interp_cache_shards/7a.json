@@ -10734,5 +10734,156 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0f6ec97d0bb2": {
+  "identity": {
+   "one_liner": "基于 Docker 的 PHP 沙箱开发环境，内置 LAMP 栈",
+   "review": "这是一个面向 PHP 开发者的容器化学习/测试/调试环境，通过 docker-compose 启动 Web 服务器与数据库两个容器，内置 Xdebug 调试、PHPStan 静态分析、PHP CS Fixer 与 SPX 性能分析，支持多 PHP 版本（7.4–8.5）、多虚拟主机与 HTTPS。数据库侧提供 MariaDB 11.4.4 容器，可用任意 MySQL 客户端连接。适合需要本地 PHP 全套调试工具链的开发者使用。",
+   "highlights": [
+    "提供 PHP 7.4–8.5 多版本、Apache、php-fpm 组成的 LAMP 容器环境",
+    "内置 Xdebug 调试/性能分析、PHPStan 静态分析、PHP CS Fixer、SPX profiler",
+    "包含 MariaDB 11.4.4 数据库容器，支持通过 MySQL 客户端连接（localhost:3306）"
+   ],
+   "use_cases": [
+    "本地学习、测试和调试 PHP 代码",
+    "需要 Xdebug 与 VSCode 集成调试的 PHP 项目开发",
+    "使用 PHP 代码性能分析工具进行 profiling"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "A lightweight, Docker-based `PHP` and `MySQL` sandbox environment designed for developers to easily learn, test, and debug PHP code. It supports multiple PHP versions from 8.5 to 7.4, integrates popular tools like `Xdebug` for step-by-step debugging, `PHPStan` ／ You can connect to the database using your favorite MySQL client (on Windows, HeidiSQL for example)",
+     "lines": [
+      3,
+      158
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A lightweight, Docker-based `PHP` and `MySQL` sandbox environment designed for developers to easily learn, test, and debug PHP code. It supports multiple PHP versions from 8.5 to 7.4, integrates popular tools like `Xdebug` for step-by-step debugging, `PHPStan` ／ - `Alpine Linux`, `Apache`, `php-fpm` and `MariaDB` (LAMP) ／ - `MariaDB` 11.4.4",
+     "lines": [
+      3,
+      9,
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 MariaDB 作为内置数据库组件的 PHP 开发沙箱环境，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A lightweight, Docker-based `PHP` and `MySQL` sandbox environment designed for developers to easily learn, test, and debug PHP code. It supports multiple PHP versions from 8.5 to 7.4, integrates popular tools like `Xdebug` for step-by-step debugging, `PHPStan` for static code analysis, and `PHP CS Fixer` for code cleanup. The sandbox features a LAMP stack built on `Alpine Linux` with `Apache`, `php-fpm`, and `MariaDB`, offering HTTPS out of the box and support for multiple virtual hosts. Its flexible architecture allows hot reloading of configuration changes and seamless integration with Visual Studio Code, making it ideal for efficient PHP development and profiling in a containerized environment. ／  - `MariaDB` 11.4.4 ／ You can connect to the database using your favorite MySQL client (on Windows, HeidiSQL for example)",
+   "evidence_lines": [
+    3,
+    36,
+    158
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "8ctopus/php-sandbox",
+  "sha": "0f6ec97d0bb2",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a9c81078dde7": {
+  "identity": {
+   "one_liner": "本地运行的 AI 长篇小说写作应用，SQLite 单文件持久化",
+   "review": "一个基于 Node.js + Express 的本地小说创作环境，提供书籍/卷/章节结构、AI 写作面板、大纲与人物世界观账本，通过 OpenAI 兼容接口调用大模型，用 sql.js（SQLite WASM）将数据存于本地文件并提供自动备份。面向希望在本地管理写作数据并自带 LLM 密钥的作者，首次启动需下载约 90MB 本地 Embedding 模型。",
+   "highlights": [
+    "提供写作工作台、大纲工作台与人物/世界观/事件账本，AI 提案、人工采纳写入",
+    "内置本地向量检索（RAG），章节正文切块建索引，Embedding 由本地模型完成",
+    "使用 sql.js（SQLite WASM）单文件数据库，含单实例锁与自动备份，无需外部服务"
+   ],
+   "use_cases": [
+    "在本机离线进行长篇小说创作并接入任意 OpenAI 兼容模型接口",
+    "管理章节大纲、人物与世界观条目并保留审计与乐观锁",
+    "对已有章节正文做本地向量检索以组织上下文"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **本地持久化**：sql.js（SQLite WASM）单文件数据库，含单实例锁与自动备份，无需外部服务 ／ - 后端：Node.js + Express 5，sql.js（SQLite WASM）持久化到 `data/novel.db` ／ - 检索：`@xenova/transformers` 本地 Embedding + 余弦检索（`server/vector/`），向量存于同一份 SQLite 库",
+     "lines": [
+      22,
+      72,
+      73
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储自身应用数据（书稿、台账、向量），非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本地优先的 AI 小说创作工坊（墨砚）。一个跑在本机 Node.js 上的长篇小说写作环境：书籍、卷、章节三级结构，接入任意 OpenAI 兼容接口即可开始写作，所有数据保存在本地 SQLite 文件中。 ／ - **本地持久化**：sql.js（SQLite WASM）单文件数据库，含单实例锁与自动备份，无需外部服务 ／ - 后端：Node.js + Express 5，sql.js（SQLite WASM）持久化到 `data/novel.db`",
+   "evidence_lines": [
+    8,
+    22,
+    72
+   ]
+  },
+  "fn": "1while1/Plotforge",
+  "sha": "a9c81078dde7",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

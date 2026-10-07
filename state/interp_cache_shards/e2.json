@@ -7626,5 +7626,77 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "44663da55e77": {
+  "identity": {
+   "one_liner": "ClickHouse 数据库备份工具，备份至 S3 兼容存储",
+   "review": "ch-backup 是 Yandex 开源的 Python 命令行备份工具，用于将 ClickHouse 中 MergeTree 引擎族表备份到 S3 兼容存储，并支持从备份恢复损坏数据。它默认启用 part 级别的去重，通过配置文件设置。仅支持 MergeTree 族表（因其可在不停服时生成一致快照），需要从源码构建 wheel 后用 pip/uv 安装。",
+   "highlights": [
+    "支持将 ClickHouse 数据备份到 S3 兼容存储并从备份恢复",
+    "支持 MergeTree 引擎族表，在不停服情况下生成一致数据快照",
+    "支持 part 级别粒度的去重，默认启用，通过配置文件设置"
+   ],
+   "use_cases": [
+    "ClickHouse 数据定期备份到对象存储",
+    "原始数据损坏后从备份恢复",
+    "ClickHouse 集群备份流程的自动化运维"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Backup tool for ClickHouse DBMS. ／ Tool for managing ClickHouse backups. ／ ClickHouse and SeaweedFS (open source S3-compatible storage server) docker",
+     "lines": [
+      7,
+      46,
+      66
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 自述为 ClickHouse DBMS 的备份工具，为该数据库生态提供备份/恢复能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Backup tool for ClickHouse DBMS. ／ It allows to perform backups to S3 compatible storage and restore from backup ／ Backup is performed for tables of MergeTree engine family only as these are",
+   "evidence_lines": [
+    7,
+    9,
+    12
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "yandex/ch-backup",
+  "sha": "44663da55e77",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

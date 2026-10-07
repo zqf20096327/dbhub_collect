@@ -7705,5 +7705,141 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5571888bfbfa": {
+  "identity": {
+   "one_liner": "本地优先的多智能体协调平台，用 SQLite WAL 做权威状态持久化",
+   "review": "KIN 是一个运行在本机工作站上的多智能体协调桌面应用（Tauri v2 + Rust + Node），用户可在本地编排自主代理团队执行研究、日常自动化、网页操作和软件工程等任务。它以本地 SQLite（WAL 模式）存储全部状态并逐轮生成检查点实现崩溃恢复，含 RAM 动态限流和 Win32 输入互斥，支持本地 Ollama 或 BYOK 云端 LLM。安装提供 Windows 可执行文件/安装包或源码脚本启动。",
+   "highlights": [
+    "本地 SQLite WAL 存储 + 逐轮不可变检查点，异常退出后可从记录状态恢复",
+    "基于空闲内存的动态进程并发分级调节，Win32 DesktopLock 互斥序列化鼠标键盘输入",
+    "模型网关支持本地 Ollama 及多家云 LLM 提供商（BYOK），429 限流时可暂停并切换到本地模型"
+   ],
+   "use_cases": [
+    "在本地工作站编排多代理团队执行研究、运营、日程自动化等任务",
+    "在离线环境下使用本地 Ollama 模型运行自主代理",
+    "多代理并行软件工程，通过隔离 git worktree 和原子任务租约避免冲突"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "KIN pairs **authoritative local SQLite persistence** with **turn-by-turn crash recovery**, **hardware-aware dynamic RAM governors**, and **governed desktop & browser automation** into a cohesive, private desktop environment.",
+     "lines": [
+      25
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有消息、任务、检查点等数据以 SQLite 存于本机，SQLite 是其持久化层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "KIN pairs **authoritative local SQLite persistence** with **turn-by-turn crash recovery**, **hardware-aware dynamic RAM governors**, and **governed desktop & browser automation** into a cohesive, private desktop environment. ／ - **Local Sovereignty & Zero Cloud Lock-In**: All messages, tasks, goals, memories, checkpoints, and credentials reside on your own machine in SQLite with Write-Ahead Logging (`WAL` mode). Zero telemetry is transmitted to third parties. ／ 1. Storage & State Layer (SQLite 3 WAL + Turn-by-Turn Checkpointing)",
+   "evidence_lines": [
+    25,
+    29,
+    94
+   ]
+  },
+  "fn": "abhayzangir1/KIN",
+  "sha": "5571888bfbfa",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b45098837de4": {
+  "identity": {
+   "one_liner": "macOS 常驻语音 AI 助手，Python 守护进程加 Electron 伴生界面",
+   "review": "Jarvis 是一个面向个人的 macOS 语音助手，Python 守护进程负责麦克风、语音识别、模型与工具，Electron 界面驻留刘海旁，提供日程汇报、Claude Code/Codex 会话监控、邮件分诊和用量统计，数据存于 SQLite。目前仅作者自用，需开发者手动安装，尚无公开产品版本。",
+   "highlights": [
+    "Python 守护进程与 Electron 伴生程序通过 localhost 和密钥通信",
+    "语音链路包含 microWakeWord 唤醒词、SenseVoice/Silero VAD 识别、MiniMax 语音合成，可选本地 Whisper",
+    "通过 MCP 插件连接 Gmail、Outlook、Microsoft To Do、GitHub 和 Notion"
+   ],
+   "use_cases": [
+    "在 macOS 上通过语音查询日程、待办、git 历史和屏幕活动",
+    "在刘海旁监控并审批 Claude Code/Codex 会话的命令执行",
+    "新邮件分诊与 Claude/Codex 用量追踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A Python daemon owns the microphone, speaker, models, memory and tools. The companion is Electron with React and TypeScript, with a small AppKit module for the glass. They talk over localhost with a per-machine key. Wake word: microWakeWord. Speech recognition",
+     "lines": [
+      51
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确 Storage: SQLite，项目是使用数据库存储数据的个人助手应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Python daemon owns the microphone, speaker, models, memory and tools. The companion is Electron with React and TypeScript, with a small AppKit module for the glass. They talk over localhost with a per-machine key. Wake word: microWakeWord. Speech recognition: SenseVoice with Silero VAD, optionally with local Whisper for longer turns. Speech: MiniMax. Mail and agent sorting: a small model on zero-data-retention endpoints. Storage: SQLite. The full design is in docs/spec.html. ／ Jarvis is built for one person and one machine, so the setup below is a developer's setup, not an installer. A public version will take some time. ／ Jarvis sits next to the MacBook notch as a small glass ball with eyes. It answers when you talk to it, keeps a record of your day, and tells you when a Claude Code or Codex session needs you.",
+   "evidence_lines": [
+    51,
+    55,
+    18
+   ]
+  },
+  "fn": "samsara0xgg/Jarvis",
+  "sha": "b45098837de4",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

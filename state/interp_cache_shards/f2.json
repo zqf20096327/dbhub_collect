@@ -9388,5 +9388,159 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a7d43d6124df": {
+  "identity": {
+   "one_liner": "PHP 自托管开源电商平台，用 MySQL/MariaDB 存储数据",
+   "review": "CubeCart 是一个用 PHP 编写的免费自托管电商平台，运行在用户自己的服务器上且不抽取销售佣金。它需要 PHP 7.4+ 与 MySQL 5.7+/MariaDB 10.3+（InnoDB），通过 Releases 下载安装包部署，官方提供免费扩展和托管服务，适合想自建在线商店的商家。",
+   "highlights": [
+    "基于 PHP（7.4+，支持 8.4）与 MySQL 5.7+/MariaDB 10.3+ InnoDB 存储",
+    "通过 Releases 包安装，提供官方扩展体系（cubecart.com/extensions）",
+    "提供演示站点、社区论坛与官方技术支持渠道"
+   ],
+   "use_cases": [
+    "在自有服务器上搭建在线商店",
+    "需要自托管且不抽取交易佣金的电商场景",
+    "基于 PHP/MySQL 技术栈的购物车与店面系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL 5.7+ or MariaDB 10.3+, using InnoDB",
+     "lines": [
+      12
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MySQL 5.7+ or MariaDB 10.3+, using InnoDB",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明该平台以 MySQL/MariaDB 为运行必需的数据库存储，属于使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CubeCart is a free, self-hosted ecommerce platform written in PHP. Run an online store on your own server; CubeCart never takes a percentage of your sales. ／ - MySQL 5.7+ or MariaDB 10.3+, using InnoDB ／ Download the latest package from Releases, then follow the installation guide.",
+   "evidence_lines": [
+    3,
+    12,
+    20
+   ]
+  },
+  "fn": "cubecart/v6",
+  "sha": "a7d43d6124df",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4845d43a338d": {
+  "identity": {
+   "one_liner": "自托管的 MySQL/PostgreSQL 访问控制代理，提供列级脱敏与审计",
+   "review": "proxy-monster 是一个部署在客户端与目标数据库之间的透明代理，通过原生 MySQL/PostgreSQL 线协议拦截语句，基于 Cedar 策略和列标签实现角色化的列级脱敏与拒绝，并以血统分析保证敏感值在子查询、join 等场景下持续被掩码，所有决策写入哈希链审计日志。面向需要细粒度数据库访问管控的运维与安全管理员；README 注明 MySQL 为完全实施目标，PostgreSQL 支持为实验性，控制面存储仅支持 PostgreSQL。",
+   "highlights": [
+    "支持原生 MySQL/PostgreSQL 线协议的透明代理，客户端工具无需改动即可连接",
+    "实现基于 Cedar 策略的列级脱敏与 fail-closed 拒绝，并通过查询血统分析保持掩码在表达式中传播",
+    "提供哈希链防篡改审计日志，并附带独立的 auditmon 监控进程与 MCP 管理接口"
+   ],
+   "use_cases": [
+    "需要按角色对敏感列脱敏并记录每次访问决策的数据库访问管控场景",
+    "通过审批工作流实现临时性、可撤销的权限提升",
+    "将审计决策导出至 SIEM 进行异常检测"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL. Clients connect with their normal tools over the native wire ／ - **Transparent proxy.** Speaks the native MySQL and PostgreSQL wire protocols, ／ MySQL is the primary, fully-enforced target; PostgreSQL is experimental. ／ - **The control-plane store — what proxy-monster runs on.** PostgreSQL only.",
+     "lines": [
+      4,
+      11,
+      48,
+      49
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A self-hosted, open-source database access-control proxy for MySQL and ／ - **Transparent proxy.** Speaks the native MySQL and PostgreSQL wire protocols, ／ MySQL is the primary, fully-enforced target; PostgreSQL is experimental.",
+     "lines": [
+      3,
+      11,
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 MySQL/PostgreSQL 提供访问控制、脱敏与审计服务的代理组件，不是使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted, open-source database access-control proxy for MySQL and ／ - **Transparent proxy.** Speaks the native MySQL and PostgreSQL wire protocols, ／ - **Target databases — what proxy-monster protects.** MySQL and PostgreSQL.",
+   "evidence_lines": [
+    3,
+    11,
+    47
+   ]
+  },
+  "fn": "ridi-oss/proxy-monster",
+  "sha": "4845d43a338d",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

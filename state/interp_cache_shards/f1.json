@@ -8361,5 +8361,74 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d69f35cbdbc8": {
+  "identity": {
+   "one_liner": "本地优先的 AI 代理记忆与安全后端，以 PostgreSQL 存储并附签名溯源。",
+   "review": "HOM-AIMOS 是运行在用户 Mac 上的 AI 代理持久记忆后端，数据存于 PostgreSQL 18，通过签名的 SAVE/RECALL 流水线提供来源绑定、溯源验证、治理式召回与自动维护，暴露 HTTP 和 MCP 接口；面向需要在本地为代理构建可审计长期记忆的开发者，要求 macOS 14+ 与 Node.js 20/24/26，采用 AGPL-3.0 许可。",
+   "highlights": [
+    "提供 15 阶段 SAVE 与 8 阶段 RECALL 原生流水线，内容不可变、检索权重在有界区间内签名可逆变更",
+    "以 PostgreSQL 为规范存储，附签名溯源、仅追加账本与签名召回回执",
+    "暴露签名 HTTP 与 MCP 接口，供代理或应用在无直接数据库访问的情况下使用"
+   ],
+   "use_cases": [
+    "为 AI 代理提供跨会话持久化且来源可验证的长期记忆",
+    "需要对记忆写入、召回与变更保留可审计记录的安全场景",
+    "通过 MCP 集成代理工具并执行披露策略的本地部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "in PostgreSQL, and does not require a hosted HOM-AIMOS account or control plane. ／ **Current release:** `v1.0.5` · macOS 14+ · Node.js 20/24/26 · PostgreSQL 18 · ／ - PostgreSQL 18;",
+     "lines": [
+      14,
+      16,
+      353
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 PostgreSQL 作为自身规范存储，而非为数据库生态提供工具或组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-or-later",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "use, and durable outcomes. It runs on the user's Mac, keeps its canonical brain ／ in PostgreSQL, and does not require a hosted HOM-AIMOS account or control plane. ／ This repository is the HOM-AIMOS backend and developer integration surface. It",
+   "evidence_lines": [
+    13,
+    14,
+    79
+   ]
+  },
+  "fn": "wallidsaydi-creator/HOM-AIMOS",
+  "sha": "d69f35cbdbc8",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

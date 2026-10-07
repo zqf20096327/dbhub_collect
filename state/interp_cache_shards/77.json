@@ -9759,5 +9759,149 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b679c9603d2e": {
+  "identity": {
+   "one_liner": "把持续内容流转为搜索与监控的开源引擎",
+   "review": "Quivr V2 是一个开源内容引擎，将连续内容流持久化摄取并转为可搜索数据，支持词法/语义/混合搜索、订阅告警与索引重建。核心用 Go 编写，以 PostgreSQL 17 作为事务目录、S3 存原始数据、Weaviate 做检索、Temporal 做编排，插件承载格式、模型与业务规则。适合需要自建内容搜索与主题监控的开发团队；README 标注处于评估阶段，API 为 v0，明确不建议用于生产。",
+   "highlights": [
+    "提供持久化、幂等的摄取管道，写入确认基于事务提交，历史版本不可变",
+    "支持词法、语义与混合搜索，每次命中从规范存储回源并重新鉴权",
+    "支持基于关键词与语义描述的订阅告警，以及从持久化工件重建搜索索引"
+   ],
+   "use_cases": [
+    "对持续输入的内容流（如新闻、文章）建立秒级可搜索的语料库",
+    "按关键词或自然语言描述设置订阅告警并跟踪主题变化",
+    "作为领域定制的搜索/监控平台基座，通过插件扩展格式、模型与规则"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Rebuildable indexes.** PostgreSQL and S3 hold the canonical data; the search index ／ api -->|commit receipt + intent| pg[(PostgreSQL<br/>catalog, receipts, changes)] ／ |Transactional catalog|PostgreSQL 17|",
+     "lines": [
+      24,
+      36,
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL 17 声明为引擎自身的事务目录组件，Quivr 是使用该库存数据的应用而非为数据库服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**An open-source engine that turns continuous content streams into search and monitoring.** ／ |Transactional catalog|PostgreSQL 17| ／ > **Status: evaluation stage.** The API is `v0` and may change without notice. Do not",
+   "evidence_lines": [
+    5,
+    45,
+    12
+   ]
+  },
+  "fn": "The-Vibe-Company/quivr",
+  "sha": "b679c9603d2e",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9fdcad0b29f7": {
+  "identity": {
+   "one_liner": "TiDB 的流水线化二进制协议多语句事务客户端库",
+   "review": "Go 开发库，手写 COM_STMT_EXECUTE 包，将一个事务的多条语句背靠背写入连接、再按序读取响应，从而消除每语句一次的网络往返，实测 TiDB Cloud 上事务 P95 延迟从 62.4ms 降至 31.5ms。通过 go-sql-driver/mysql 的 RegisterDialContext 钩子接管连接，面向需要低延迟批量写入的 TiDB 使用者；尚不支持 TLS 与协议压缩。",
+   "highlights": [
+    "基于 MySQL 二进制协议 COM_STMT_PREPARE/COM_STMT_EXECUTE 实现事务内多语句流水线发送，无逐语句往返",
+    "使用真正的二进制参数绑定，不做字符串替换，提供 ExpandIn/ExpandValues 展开 IN 列表与批量 INSERT",
+    "对线上字节解析入口提供 Go fuzz 测试目标；尚未支持 TLS 与 compress=true"
+   ],
+   "use_cases": [
+    "对 TiDB 批量 INSERT/UPDATE 等事务延迟敏感的场景",
+    "需要将一批语句以参数绑定方式一次提交并逐语句获取成功/失败结果的程序",
+    "在私网免 TLS 链路上进行高频小事务写入的应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "# tidb-binary-multistmt ／ healthy. Measured on a real TiDB Cloud cluster:",
+     "lines": [
+      1,
+      27
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "Pipelines a transaction's statements over MySQL's **binary** protocol",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 TiDB 提供专用流水线协议访问能力的 Go 客户端库，属为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# tidb-binary-multistmt ／ healthy. Measured on a real TiDB Cloud cluster: ／ Experimental, ported from a benchmark originally embedded in",
+   "evidence_lines": [
+    1,
+    27,
+    117
+   ]
+  },
+  "fn": "dulao5/tidb-binary-multistmt",
+  "sha": "9fdcad0b29f7",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8690,5 +8690,308 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a66300424a1e": {
+  "identity": {
+   "one_liner": "键盘优先的轻量级桌面 SQL 客户端，支持多种数据库",
+   "review": "data-peek 是一个面向开发者的桌面 SQL 客户端，提供查询编辑、结果内联编辑、查询计划树、Watch Mode 实时刷新、ER 图和健康监控等功能，并内置 MCP 服务器供 AI 代理只读查询（写操作需人工批准）。源码 MIT 许可，预构建应用对个人免费、商用需 Pro 许可；ClickHouse 支持处于 beta，仅限查询浏览。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、SQL Server、SQLite 和 ClickHouse（beta）连接，提供 schema 感知自动补全和 EXPLAIN 计划树查看",
+    "内置 MCP 服务器（默认关闭），AI 代理只读查询，写操作需应用内批准",
+    "CLI 提供 doctor 命令执行八项 PostgreSQL schema 健康检查并生成修复 SQL"
+   ],
+   "use_cases": [
+    "开发者在终端/桌面快速查询和编辑多数据库数据",
+    "通过 MCP 让 AI 代理在受控只读模式下访问数据库连接",
+    "在 CI 中用 doctor 命令检查 PostgreSQL schema 问题（缺主键、无索引外键等）"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta). ／ - PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections.",
+     "lines": [
+      5,
+      123
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta). ／ - PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections.",
+     "lines": [
+      5,
+      123
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta). ／ - PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections.",
+     "lines": [
+      5,
+      123
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta). ／ - PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections.",
+     "lines": [
+      5,
+      123
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta). ／ - PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections.",
+     "lines": [
+      5,
+      123
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接和管理多种数据库的客户端工具，为数据库使用提供服务而非以某库存储自身数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "源码 MIT，预构建应用个人免费、营利性公司使用需 Pro 许可（双许可）",
+   "install": [
+    "binary",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta). ／ - A built-in MCP server (off by default) that exposes your connections to AI agents. Reads are capped and run read-only, and every write needs your approval in the app. ／ - PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections.",
+   "evidence_lines": [
+    5,
+    119,
+    123
+   ]
+  },
+  "fn": "Rohithgilla12/data-peek",
+  "sha": "a66300424a1e",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e29d6e89dbcc": {
+  "identity": {
+   "one_liner": "Emacs 交互式数据库客户端，支持 MySQL/PostgreSQL/SQLite/MongoDB/Redis 及 JDBC",
+   "review": "Clutch 是在 Emacs 内运行的数据库查询与浏览客户端，通过 MELPA 安装，提供 SQL 编辑缓冲区、结果网格、行编辑暂存预览与多后端连接：MySQL/PostgreSQL/SQLite 走原生或纯 Elisp 通道，MongoDB/Redis 有原生支持，Oracle/SQL Server/ClickHouse 等则依赖 Java 17+ 的 clutch-jdbc-agent 提供 JDBC 接入。适合以 Emacs 为主要工作环境的开发者和 DBA 使用。",
+   "highlights": [
+    "在 SQL 缓冲区内执行查询并以结果网格展示，支持行编辑的本地暂存、预览与确认后提交",
+    "支持表名/列名补全、Eldoc、外键跳转、元数据缓存，以及 TSV/CSV/Org 格式导出",
+    "提供原生后端与 JDBC 适配两条路径，JDBC 覆盖 Oracle、SQL Server、DB2、Snowflake、Redshift、ClickHouse、DuckDB 等"
+   ],
+   "use_cases": [
+    "在 Emacs 中连接并查询 MySQL/PostgreSQL/SQLite 等数据库",
+    "对带主键或唯一键的查询结果进行受控的行级增删改",
+    "通过 JDBC 访问 Oracle、SQL Server、ClickHouse 等数据库"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |PostgreSQL|Core SQL support|Requires `pgsql`, available from MELPA|",
+     "lines": [
+      7,
+      71
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11|",
+     "lines": [
+      7,
+      70
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle JDBC|Non-null unique keys, then `ROWID` for confirmed base tables| ／ |Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`|",
+     "lines": [
+      61,
+      74
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The shortest path uses SQLite, which requires only Emacs 29.1+—no protocol package or Java runtime. ／ |SQLite|Core SQL support|Uses Emacs 29.1+ built-in `sqlite-*` functions; no external dependency|",
+     "lines": [
+      13,
+      73
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`|",
+     "lines": [
+      74
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse / Snowflake / Redshift / DB2 / generic JDBC|Basic SQL / query-first support|Backend-specific limits apply to editing, transactions, and dialect behavior|",
+     "lines": [
+      78
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MariaDB 10.11 has been live-validated through the native `mysql` backend, including TLS with `mysql_native_password`; other MariaDB versions are expected to be broadly compatible but are not yet part of the regular test matrix. MySQL 5.6 has no native JSON col",
+     "lines": [
+      120
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为数据库查询/浏览/编辑客户端工具，为使用数据库提供服务，而非以数据库为存储的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Query and browse databases—and stage SQL row edits—without leaving Emacs. ／ Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracle, SQL Server, DB2, Snowflake, Redshift, ClickHouse, DuckDB, and other databases. ／ ## Backend Support",
+   "evidence_lines": [
+    5,
+    7,
+    66
+   ]
+  },
+  "fn": "LuciusChen/clutch",
+  "sha": "e29d6e89dbcc",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "08fdf73fb707": {
+  "identity": {
+   "one_liner": "自托管 Git 服务器，单 Go 程序+SQLite 文件存储",
+   "review": "OwnGit 是面向个人或小团队的自托管 Git 服务器，供 homelab/本地机器使用。提供浏览器仪表盘、HTTP 克隆推送、PR 审查合并、force-push 历史保留、定时备份与仓库导入。整个系统是一个 Go 程序加一个 SQLite 文件，无需独立数据库服务；仅支持共享密码认证，无多用户账户，不支持 Git LFS。",
+   "highlights": [
+    "支持任意 Git 客户端通过 HTTP 克隆/拉取/推送，仓库为普通 bare Git 仓库",
+    "提供浏览器端 PR 审查合并、文件/提交/差异浏览及 ZIP/tar.gz 下载",
+    "支持按计划或按需备份还原仓库，并通过 MCP 与编码工具集成"
+   ],
+   "use_cases": [
+    "homelab 或家庭服务器上的私有 Git 托管",
+    "本地机器代码备份与异地仓库镜像导入",
+    "个人/小团队的代码评审与自动化检查"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- One Go program with a SQLite file. There is no database service to run.",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明程序使用一个 SQLite 文件存储记录，SQLite 是其内嵌数据存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0-or-later；1.1.4 及之前版本为 MIT 许可",
+   "install": [
+    "binary",
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OwnGit is a self-hosted Git server for one person or a small group. It keeps your private repositories on your own computer, NAS or home server, and gives you a browser dashboard for them. You need no cloud account or subscription. ／ - One Go program with a SQLite file. There is no database service to run. ／ GPL-3.0-or-later. Versions 1.1.4 and earlier were released under the MIT license. Notices for third-party code are in THIRD_PARTY_NOTICES.",
+   "evidence_lines": [
+    12,
+    28,
+    123
+   ]
+  },
+  "fn": "juliankang4/owngit",
+  "sha": "08fdf73fb707",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

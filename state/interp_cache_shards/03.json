@@ -9315,5 +9315,121 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "51379870fa5d": {
+  "identity": {
+   "one_liner": "Rust 编写的图数据库，内置向量与 BM25 全文检索",
+   "review": "HelixDB 是一个开源图数据库，以标签属性图存储实体与关系，并原生支持近似最近邻向量搜索和 BM25 全文搜索，查询可从 Rust、TypeScript、Go、Python 四种 SDK 发起。运行需 Docker/Podman 启动本地实例，默认数据存内存，加 --disk 可持久化，另支持嵌入式模式与 Cloud 托管部署。",
+   "highlights": [
+    "单引擎事务性存储实体、关系、嵌入向量与文本，支持图遍历预过滤的向量检索（L18, L24）",
+    "提供 Rust/TypeScript/Python/Go 四种 SDK，通过 POST /v2/query 以 JSON 查询（L19, L78）",
+    "源码构建支持 Cypher 读写接口，并提供 helix chef 安装 MCP 与项目脚手架（L57, L68）"
+   ],
+   "use_cases": [
+    "需要将图关系与向量/全文检索合并在同一事务引擎中的应用",
+    "RAG 类应用中存储实体、关系与嵌入向量并联合查询",
+    "通过 helix chef 由编码代理搭建图数据驱动的应用原型"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "仓库本身是数据库内核而非为其他数据库服务的工具或使用数据库的应用，生态位不在候选三分类内。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "HelixDB is an open-source (Apache 2.0) graph database with native vector search and BM25 ／ full-text search, built in Rust on object storage. Store entities, relationships, embeddings, ／ helix start dev                                # serves http://localhost:6969",
+   "evidence_lines": [
+    17,
+    18,
+    45
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "HelixDB/helix-db",
+  "sha": "51379870fa5d",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d605716f1b36": {
+  "identity": {
+   "one_liner": "系统开发方法论框架，以结构化文档定义概念体系",
+   "review": "Memar 是一个以结构化文档形式存在的系统开发框架，提供一套从第一性原理出发定义工程概念（系统、架构、协议等）的词汇与方法论，供开发系统、设计物理结构或组织流程的人员使用。它通过 memar 命令行查询自身内容，但本身不含可安装的软件运行时，也未声明任何安装方式。",
+   "highlights": [
+    "以文档形式定义工程概念词汇，供跨领域（软件、硬件、流程）系统推理使用",
+    "提供 memar 命令行，用于查询仓库内全部内容",
+    "为 AI agent 提供 .agents/skills/memar/SKILL.md 路由以访问仓库内容"
+   ],
+   "use_cases": [
+    "团队需要统一定义工程术语、减少概念歧义时参考",
+    "开发者通过 memar 命令查询框架内概念与规则",
+    "AI agent 按 SKILL.md 路由读取框架内容"
+   ]
+  },
+  "classification": {
+   "cat": "建模/设计",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未说明其针对数据库生态提供服务，或以何种方式使用数据库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "**Memar** is a system development **framework** as **structure** document that gives you a structuralism mental model to understand the development model. ／ Throughout the history of computing, many concepts have become deeply embedded in industry practice. Terms such as architecture, framework, technology, relation, encapsulation, leadership, abstraction, and many others are widely used and often treated as self-evident. Memar started from the observation that widespread usage does not necessarily imply conceptual clarity. Many software projects operate within existing assumptions. Memar takes a different approach. Instead of starting from established terminology, it starts from definitions. Instead of accepting classifications, it asks how those classifications are justified. Instead of optimizing implementation details, it attempts to understand the underlying structure of the problem space. ／ 1. **Ask `memar`.** Memar installs one command, and it answers questions about its own content. Run `memar --help` for the list, or `memar <verb> --help` for one verb's own interface. Nothing needs to be fetched or configured first: the command is part of the checkout it answers for, so it works the moment Memar is on the machine.",
+   "evidence_lines": [
+    2,
+    11,
+    53
+   ]
+  },
+  "fn": "GeniusesGroup/memar",
+  "sha": "d605716f1b36",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

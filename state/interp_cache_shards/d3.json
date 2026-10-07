@@ -8259,5 +8259,72 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "57df2e047e7a": {
+  "identity": {
+   "one_liner": "SQLite 运行时可加载扩展，基于 hnswlib 提供向量搜索",
+   "review": "Vectorlite 是一个 SQLite 运行时可加载扩展，通过虚拟表和 SQL 标量函数提供基于 HNSW 的近似最近邻向量搜索，支持向量索引的保存与加载、谓词下推过滤和 JSON 序列化。面向需要在任意带 SQLite 驱动的语言中做向量检索的开发者，当前处于 beta 阶段，仅提供 Linux x64、Windows x64 和 macOS Apple Silicon 构建。",
+   "highlights": [
+    "基于 hnswlib 实现 ANN 近似最近邻搜索，通过 SQL 接口和虚拟表模块使用",
+    "支持 l2、cosine、ip 距离类型、HNSW 参数调优、rowid 元数据过滤（SQLite>=3.38）及索引的显式保存/加载",
+    "提供 Python wheel 和 npm 包，可通过任何带 SQLite 驱动的语言使用"
+   ],
+   "use_cases": [
+    "在 SQLite 中存储嵌入向量并执行 KNN 向量检索",
+    "为单机应用添加向量搜索能力而无需独立向量数据库服务",
+    "加载 hnswlib 索引文件并通过 SQL 查询"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Vectorlite is a Runtime-loadable extension for SQLite that enables fast vector search based on hnswlib and works on Linux x64, Windows x64 and macOS Apple Silicon (arm64). It provides fast vector search capabilities with a SQL interface and runs on every langu",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 SQLite 的运行时可加载扩展为 SQLite 生态提供向量搜索能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Vectorlite is a Runtime-loadable extension for SQLite that enables fast vector search based on hnswlib and works on Linux x64, Windows x64 and macOS Apple Silicon (arm64). It provides fast vector search capabilities with a SQL interface and runs on every language with a SQLite driver. ／ ### Virtual Table ／ Official releases and CI support Linux x64, Windows x64 and macOS Apple Silicon (arm64) only. Python wheels and npm packages are provided for these platforms; the macOS arm64 wheel requires macOS 11.0 or newer. Intel macOS is not supported. Install with:",
+   "evidence_lines": [
+    5,
+    59,
+    20
+   ]
+  },
+  "fn": "1yefuwang1/vectorlite",
+  "sha": "57df2e047e7a",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

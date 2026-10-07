@@ -9519,5 +9519,95 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "504ccb73a9fa": {
+  "identity": {
+   "one_liner": "ClickHouse/VictoriaLogs 日志分析查询界面，单二进制自托管",
+   "review": "Logchef 是自托管的日志分析与可观测性平台，为已有 ClickHouse 或 VictoriaLogs 后端提供查询探索、仪表盘、实时 tail、告警与访问控制，不迁移或重塑数据。面向需要统一日志工作流的团队，支持 LogchefQL、SQL/LogsQL、OIDC/本地认证，元数据默认用 SQLite，可切 Postgres，AGPLv3 许可。",
+   "highlights": [
+    "提供日志查询探索、实时 tail、多面板仪表盘与定时告警，支持 ClickHouse 与 VictoriaLogs 数据源",
+    "内置 AI 查询助手（自然语言转 LogchefQL/SQL/LogsQL）与 MCP 端点",
+    "单二进制交付，内置 RBAC 与 OIDC/邮箱密码认证，元数据存储可插拔（SQLite/Postgres）"
+   ],
+   "use_cases": [
+    "为已有 ClickHouse/VictoriaLogs 日志后端搭建统一的搜索与仪表盘界面",
+    "无需外部身份 provider 的自托管日志告警与访问控制",
+    "通过 CLI 或 MCP 在终端和 AI 助手中查询日志"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Pluggable metadata store**: Zero-config SQLite by default; opt into Postgres for multi-replica high availability.",
+     "lines": [
+      38
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Pluggable metadata store**: Zero-config SQLite by default; opt into Postgres for multi-replica high availability.",
+     "lines": [
+      38
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "The open-source log workspace for ClickHouse and VictoriaLogs. Search, live tail, dashboards, alerts, and access control in one self-hosted binary. ／ Logchef is a lightweight, self-hosted log analytics and observability platform for teams that want a strong query and control plane on top of the log backends they already run. Connect ClickHouse, VictoriaLogs, or both. Logchef gives them one workflow for expl ／ - **Build real operational dashboards.** Mix ClickHouse and VictoriaLogs panels on one grid, drag and resize them in place, and choose time series, stat, breakdown, or table views.",
+     "lines": [
+      3,
+      11,
+      20
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Logchef 为 ClickHouse/VictoriaLogs 日志后端提供查询与可视化控制面，是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPLv3",
+   "install": [
+    "docker",
+    "helm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Logchef is a lightweight, self-hosted log analytics and observability platform for teams that want a strong query and control plane on top of the log backends they already run. Connect ClickHouse, VictoriaLogs, or both. Logchef gives them one workflow for exploration, dashboards, saved queries, alerting, and access control — without moving or reshaping your data. ／ - **Datasource-first**: Connect ClickHouse tables, VictoriaLogs instances, or both without reshaping your storage layer. ／ - **Pluggable metadata store**: Zero-config SQLite by default; opt into Postgres for multi-replica high availability.",
+   "evidence_lines": [
+    11,
+    36,
+    38
+   ]
+  },
+  "fn": "mr-karan/logchef",
+  "sha": "504ccb73a9fa",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8715,5 +8715,107 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "18d379d388f6": {
+  "identity": {
+   "one_liner": "本地 Git 原生数据库分支工具，按分支提供隔离数据库副本",
+   "review": "BranchBase 是一个 Go 编写的 CLI 工具，在本地为 Git 分支自动创建隔离的数据库实例：通过 post-checkout 等 Git hook 检测分支切换，用 PostgreSQL TEMPLATE 克隆或文件系统写时复制生成数据库，并运行本地 TCP 代理按当前分支路由应用连接，prune 命令负责清理合并后的临时库。面向使用 Docker 本地数据库的开发者；MySQL/MariaDB 采用逐表复制，不支持事务快照一致性。",
+   "highlights": [
+    "支持通过 PostgreSQL CREATE DATABASE ... TEMPLATE 或 reflink/APFS/Btrfs 写时复制实现本地分支数据库创建",
+    "提供透明 TCP 代理，按工作目录所在 Git 分支路由数据库连接",
+    "提供 post-checkout/post-merge Git hook 自动化与 prune 清理合并分支数据库"
+   ],
+   "use_cases": [
+    "在多分支开发中为每个分支保留独立的本地数据库，避免切换分支时删库重建",
+    "通过 Git hook 自动完成分支对应数据库的创建与切换",
+    "合并分支后用 prune 清理不再需要的临时数据库"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> **Zero-config, Git-native local database branching for PostgreSQL, MySQL, SQLite, and MongoDB.** ／ - **Instant Branching:** Creates a fresh, isolated branch database in milliseconds using PostgreSQL `CREATE DATABASE ... TEMPLATE` or filesystem copy-on-write (reflink/APFS/Btrfs for SQLite). ／ * **PostgreSQL:** Disconnects lingering connections to the template and executes `CREATE DATABASE <target> TEMPLATE ;` (instant CoW clone).",
+     "lines": [
+      3,
+      44,
+      80
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "> **Zero-config, Git-native local database branching for PostgreSQL, MySQL, SQLite, and MongoDB.** ／ * **MySQL / MariaDB:** Copies schemas and rows table by table (`CREATE TABLE ... LIKE`, `INSERT INTO ... SELECT`); concurrent writes to the source are not captured from a single transaction snapshot.",
+     "lines": [
+      3,
+      81
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **Zero-config, Git-native local database branching for PostgreSQL, MySQL, SQLite, and MongoDB.** ／ - **Instant Branching:** Creates a fresh, isolated branch database in milliseconds using PostgreSQL `CREATE DATABASE ... TEMPLATE` or filesystem copy-on-write (reflink/APFS/Btrfs for SQLite). ／ * **SQLite:** Performs a filesystem reflink/clone (`clonefile()` or `FICLONE`) only when the source has no active WAL/SHM/journal sidecars; otherwise it refuses the snapshot until clients stop and the database is checkpointed.",
+     "lines": [
+      3,
+      44,
+      83
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* **MySQL / MariaDB:** Copies schemas and rows table by table (`CREATE TABLE ... LIKE`, `INSERT INTO ... SELECT`); concurrent writes to the source are not captured from a single transaction snapshot.",
+     "lines": [
+      81
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为本地数据库提供分支、代理路由与生命周期管理，是为数据库生态服务的开发工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> **Zero-config, Git-native local database branching for PostgreSQL, MySQL, SQLite, and MongoDB.** ／ - **Instant Branching:** Creates a fresh, isolated branch database in milliseconds using PostgreSQL `CREATE DATABASE ... TEMPLATE` or filesystem copy-on-write (reflink/APFS/Btrfs for SQLite). ／ |`branchbase proxy`|Start the local transparent TCP routing proxy (default port: `5432`) with JIT provisioning|",
+   "evidence_lines": [
+    3,
+    44,
+    55
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "oscarbol09/branchbase",
+  "sha": "18d379d388f6",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

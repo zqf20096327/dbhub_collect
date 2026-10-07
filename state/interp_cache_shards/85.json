@@ -9389,5 +9389,77 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3497d0e1539a": {
+  "identity": {
+   "one_liner": "SQLite 兼容 SQL 数据库，列式存储+JIT 编译执行",
+   "review": "musql 是一个用 Go 编写的嵌入式/服务端数据库引擎，实现 SQLite 的 SQL 方言，以列式段格式存储数据并通过 JIT 将查询路径编译为原生代码。提供 database/sql 驱动、musql-convert 转换工具与 musqld 服务端，可导入 SQLite 数据，并支持 CRDT 或 Leader 模式复制。注意：文件格式与 SQLite 不兼容，需先转换。",
+   "highlights": [
+    "实现 SQLite SQL 方言，含 JOIN、窗口函数、触发器、JSON、全文搜索、R-tree 索引",
+    "提供 SQLite 与 .musq 格式双向转换工具 musql-convert",
+    "支持 CRDT/Leader/Quorum 三种复制模式，musqld 实现 Hrana 协议供 libSQL 客户端连接"
+   ],
+   "use_cases": [
+    "替换 Go 项目中的 SQLite 驱动以加速读密集查询",
+    "将既有 SQLite 数据库转换后以服务端形式供 libSQL/Turso 客户端访问",
+    "需要在离线独立节点间同步数据的嵌入式数据库场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "compat",
+     "quote": "**SQLite-compatible SQL, accelerated by columnar storage and a JIT compiler.** ／ **about 300× faster than C SQLite and nearly 1,000× faster than Turso**. ／ Use it as an embedded database through `database/sql`, import existing SQLite",
+     "lines": [
+      7,
+      14,
+      17
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是数据库引擎本体，同时提供工具连接 SQLite 生态（驱动、转换器、协议服务端）",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**SQLite-compatible SQL, accelerated by columnar storage and a JIT compiler.** ／ - **A format built for fast queries.** The `.musq` segment format gives compiled ／ musql implements SQLite's SQL dialect through its own parser, planner, and",
+   "evidence_lines": [
+    7,
+    20,
+    144
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "samyfodil/musql",
+  "sha": "3497d0e1539a",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9229,5 +9229,77 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "74eb1428ab15": {
+  "identity": {
+   "one_liner": "自托管 GitHub Actions 临时运行器舰队控制器",
+   "review": "Zoomies 是一个自托管的 GitHub Actions 运行器管理控制器，监听 workflow_job webhook 后为每个任务启动一次性运行器并在结束后销毁，支持多主机 agent、GitHub App 认证和实时 Web UI。使用 SQLite 存储状态、单 Go 二进制部署、无需 Kubernetes。适用于需要为 GitHub 组织或仓库自建 CI 运行器集群的运维人员；README 明确说明支持矩阵区分实测与仅可编译平台。",
+   "highlights": [
+    "以 webhook 事件驱动，为每个排队任务启动临时运行器并在完成后销毁",
+    "单 Go 二进制，使用 SQLite 存储状态，提供 Prometheus 指标与审计日志",
+    "通过 GitHub App 认证并生成单次使用的 JIT 注册，支持多主机多操作系统 agent"
+   ],
+   "use_cases": [
+    "为 GitHub 组织或仓库自托管 Actions 运行器",
+    "利用自有硬件（含 NAT 后私有主机）运行 CI 任务",
+    "按队列负载自动扩缩运行器资源池"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Single Go binary. SQLite. AGPL-3.0. ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+     "lines": [
+      16,
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅用于存储控制器自身状态，项目服务对象是 GitHub Actions 运行器管理而非数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Zoomies gives each job a fresh runner, scales across the hosts and runner ／ Single Go binary. SQLite. AGPL-3.0. ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+   "evidence_lines": [
+    12,
+    16,
+    99
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "eyupio/zoomies",
+  "sha": "74eb1428ab15",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

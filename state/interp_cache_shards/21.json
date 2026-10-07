@@ -9135,5 +9135,60 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9a6417469961": {
+  "identity": {
+   "one_liner": "本地 API 行为录制回放与对比调试 CLI",
+   "review": "Graybox 是一个本地 CLI 工具，通过反向代理录制真实 HTTP 流量生成可移植的 .graybox 文件，供开发者或 AI 编码代理在修改应用后回放请求并对比响应，检测行为回归。支持检查单条交换、脱敏 Authorization/Cookie 等敏感头、运行时注入凭据。需从源码编译或下载预编译二进制，需 Go 1.26.6+。",
+   "highlights": [
+    "通过代理录制 HTTP 流量为可移植文件，无需账户、守护进程或云服务",
+    "提供 record/ls/show/replay/diff 子命令，支持回放并与录制基线对比响应差异",
+    "录制时自动脱敏 Authorization、Cookie 等敏感头，支持 --secret-header 运行时注入凭据"
+   ],
+   "use_cases": [
+    "修改应用后回放录制请求，检测 API 行为回归",
+    "检查和分析已录制的 HTTP 请求/响应交换内容",
+    "在脱敏录制文件上复现带认证的 API 调用"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 未声明使用任何数据库存储数据，录制格式为自有的 .graybox 可移植文件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Graybox records real API behavior so you can reproduce it and detect behavioral ／ A local CLI records HTTP traffic into portable `.graybox` files. No account, ／ record → inspect → change → diff → verify",
+   "evidence_lines": [
+    3,
+    6,
+    10
+   ]
+  },
+  "fn": "ViniTamanhao/graybox-core",
+  "sha": "9a6417469961",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8575,5 +8575,70 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "601420e2d75f": {
+  "identity": {
+   "one_liner": "开源自托管数字标牌 CMS，管理屏幕内容播放",
+   "review": "ScreenTinker 是一个可自托管的开源数字标牌内容管理系统，用于集中管理电视、视频墙和自助终端屏幕上的内容播放。提供播放列表、排程、多区布局、远程控制、播放证明统计等功能，后端通过 Express API 并以 SQLite 存储数据（经 better-sqlite3 内置，无需单独安装数据库）。适用于零售、餐饮菜单屏、办公大堂、教育等多地点屏幕管理场景，支持多租户工作区与成员角色权限。",
+   "highlights": [
+    "支持播放列表、排程、多区布局、视频墙与远程控制等屏幕管理能力",
+    "支持 Android TV、Fire TV、Tizen、webOS、Raspberry Pi 等多种播放平台，并提供离线缓存播放",
+    "后端为 Node.js/Express，使用内置 better-sqlite3 存储，支持本地磁盘、S3 兼容存储及 Azure Blob 等媒体后端"
+   ],
+   "use_cases": [
+    "零售门店、快餐菜单屏等多地点集中发布与排程内容",
+    "办公大堂、会议室门口屏展示（含目录牌与会议日历集成）",
+    "私有局域网内气隙环境或自助终端 kiosk 的内容播放管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Admin REST** → `/api/*` HTTPS → Express → SQLite. Everything scoped by `workspace_id` from JWT `current_workspace_id` claim. ／ - SQLite (bundled via `better-sqlite3`; no separate install needed — `npm install` handles the native bindings)",
+     "lines": [
+      145,
+      175
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储自身数据的数字标牌管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ScreenTinker is a free, open-source **digital signage CMS** you can self-host on your own server — or run in our managed cloud. Manage TVs, video walls, and kiosks across multiple locations from one dashboard, with remote control, scheduling, playlists, and analytics. Built for retail, QSR menu boards, offices, lobbies, education, and any environment where you need centralized control over remote screens. Multi-tenant, MIT-licensed, single-developer maintained with direct contact access. ／ - **Workspaces** — multi-tenant data model: organizations contain workspaces, workspaces contain devices/content/playlists/schedules; users can be members of multiple workspaces and switch via a dropdown in the sidebar",
+   "evidence_lines": [
+    11,
+    44
+   ]
+  },
+  "fn": "screentinker/screentinker",
+  "sha": "601420e2d75f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

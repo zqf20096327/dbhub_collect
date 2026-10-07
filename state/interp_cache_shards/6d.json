@@ -9037,5 +9037,69 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4c0a05d612bf": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Haskell 分布式任务队列库",
+   "review": "Arbiter 是一个用 Haskell 编写的分布式任务队列，使用 PostgreSQL 作为存储后端，支持生产者入队与独立 Worker 进程消费，部署前需运行迁移初始化表结构。它面向 Haskell 开发者，提供 Simple、Orville、Hasql 三种后端接入方式，通过 Cabal 或 Stack 以源码仓库依赖方式安装。",
+   "highlights": [
+    "支持 Simple、Orville、Hasql 三种后端，Orville 与 Hasql 各需额外依赖监听组件",
+    "提供 Migrations 模块，用于部署时按注册表运行队列迁移",
+    "生产者仅负责入队，Worker 作为独立进程运行"
+   ],
+   "use_cases": [
+    "Haskell 应用中需要基于 PostgreSQL 的后台任务处理",
+    "生产者与 Worker 分进程部署的异步任务场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A PostgreSQL job queue for Haskell applications.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明它是为 Haskell 应用提供基于 PostgreSQL 的任务队列机制的库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A PostgreSQL job queue for Haskell applications. ／ Orville also needs `arbiter-libpq` for the listener, and Hasql also needs `pqi-ffi`. ／ Mig.runMigrationsForRegistry (Proxy @AppRegistry) connStr \"arbiter\" Mig.defaultMigrationConfig",
+   "evidence_lines": [
+    3,
+    14,
+    51
+   ]
+  },
+  "fn": "velveteer/arbiter",
+  "sha": "4c0a05d612bf",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

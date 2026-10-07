@@ -8178,5 +8178,71 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7fc76409238a": {
+  "identity": {
+   "one_liner": "自托管的期权与股票交易日志及分析平台",
+   "review": "Tradr 是一个可自部署的交易日志平台，记录期权与股票持仓的完整生命周期（建仓、加仓、分批平仓），提供交易计算器、多账户账本、收益曲线、期权定价和 CSV 导入功能。面向个人交易者，通过 Docker Compose 一键部署，使用 PostgreSQL 存储，API 尚未稳定（Pre-1.0），无下单功能。",
+   "highlights": [
+    "记录持仓完整流程：草稿、加仓、分批平仓，含每笔成交、费用与备注",
+    "提供交易计算器、期权链查询、OCC 符号解析与 Black-Scholes 定价",
+    "支持 CSV 导入历史成交数据，所有外部集成为可选配置"
+   ],
+   "use_cases": [
+    "个人交易者自托管记录和分析期权与股票交易",
+    "多经纪商账户的统一账本与对账管理",
+    "从经纪商导出的 CSV 导入历史交易进行绩效复盘"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`POSTGRES_PASSWORD`|Database password. Compose builds the API's `DATABASE_URL` from the `POSTGRES_*` values — do not set `DATABASE_URL` yourself.|",
+     "lines": [
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明平台通过 Compose 使用 PostgreSQL 作为数据库存数据，自身是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tradr is a self-hostable journal for options and equities traders. It records the whole ／ |`POSTGRES_PASSWORD`|Database password. Compose builds the API's `DATABASE_URL` from the `POSTGRES_*` values — do not set `DATABASE_URL` yourself.| ／ The script generates the three required secrets, writes your `.env`, starts the stack,",
+   "evidence_lines": [
+    12,
+    91,
+    41
+   ]
+  },
+  "fn": "madmatt112/tradr",
+  "sha": "7fc76409238a",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

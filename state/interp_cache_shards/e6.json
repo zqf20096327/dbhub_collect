@@ -8740,5 +8740,89 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9f353fdeea8c": {
+  "identity": {
+   "one_liner": "自托管看板应用，内置 MCP 服务器，供 AI 代理管理任务",
+   "review": "一个单容器自托管看板系统，后端用 Node 标准库实现，默认以内置 node:sqlite 存储数据，可通过环境变量切换到 PostgreSQL。面向使用 AI 编码代理（Claude Code、Cursor 等）的团队：代理通过内置 MCP 端点或 REST API 以 bearer 令牌身份创建、移动、关闭任务，人类用户通过浏览器查看进度。支持多用户角色、动态流水线列和审计日志。",
+   "highlights": [
+    "内置 MCP 服务器（POST /mcp），提供 11 个 kanban_* 工具供代理操作看板",
+    "默认使用内置 node:sqlite 存储，零 npm 依赖；可通过 DATABASE_URL 切换到 PostgreSQL",
+    "提供 REST API 与 bearer 令牌认证，令牌仅存 sha256 哈希且所有变更记录审计日志"
+   ],
+   "use_cases": [
+    "AI 编码代理在规划与实现阶段管理任务卡片",
+    "团队自托管部署看板并通过多用户角色协作",
+    "通过 MCP 客户端或 REST API 自动化任务流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Optional PostgreSQL**: switch the storage engine via environment ／ |PostgreSQL (optional)|`DATABASE_URL` or `POSTGRES_HOST` set|requires `npm install` (the `pg` package, optional dependency)|",
+     "lines": [
+      42,
+      81
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Node 26 stdlib backend • zero npm dependencies (SQLite) • vanilla JS, no build step ／ |SQLite (default)|nothing configured|data in `$KANBAN_DATA/kanban.db` (WAL mode)|",
+     "lines": [
+      5,
+      80
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该看板应用以 SQLite（默认）或 PostgreSQL 存储自身数据，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Optional PostgreSQL**: switch the storage engine via environment ／ |SQLite (default)|nothing configured|data in `$KANBAN_DATA/kanban.db` (WAL mode)| ／ |`server.js`|backend: stdlib http + sqlite/pg adapters, auth (scrypt), static with ETag|",
+   "evidence_lines": [
+    42,
+    80,
+    177
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "rikamalov/kanban-agent-mcp",
+  "sha": "9f353fdeea8c",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

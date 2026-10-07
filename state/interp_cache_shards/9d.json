@@ -9109,5 +9109,213 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "674dda186c51": {
+  "identity": {
+   "one_liner": "Go 库：嵌入式 B-Tree 存储引擎 + AI agent 动作验证屏障",
+   "review": "Joltrin 是一个开源 Go 库，在 AI agent 的动作提交前，依据服务端记录的 trace 与 runbook 规则独立验证意图，通过后与记录在一次调用内原子完成；底层为内嵌 ACID B-Tree 存储引擎，附带向量搜索、erasure coding 与可恢复的 agent 记忆。面向构建 agent 系统或 local-first 应用的工程师，提供 MCP/A2A 接入，核心为 MIT，治理功能收费。",
+   "highlights": [
+    "提供独立于 agent 上下文的动作验证，检查与提交在一次调用内完成",
+    "内嵌 ACID B-Tree 存储引擎，支持向量搜索、crash-safe 记忆与 Reed-Solomon erasure coding",
+    "提供 MCP server 与 A2A 接入，同一 verify 包可编译为 WebAssembly 在浏览器运行"
+   ],
+   "use_cases": [
+    "为 AI agent 的操作流程强制执行前置条件（如先备份验证后执行删除）",
+    "为 local-first 应用提供持久化状态与向量搜索",
+    "用 MCP 将验证屏障接入 Claude Code、Codex、Gemini CLI 等客户端"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The verifier sits on an embedded, ACID-compliant B-Tree storage engine, so the trace and the agent's state share one transaction boundary. The same library gives you crash-safe agent memory that another worker can resume, vector search stored next to structure",
+     "lines": [
+      132
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "自身提供嵌入式存储引擎与验证组件，为 agent 系统这一使用方服务，而非仅使用外部数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "open-core：核心（引擎、向量搜索、agent 记忆、验证屏障）MIT，Pro/Enterprise 付费层提供治理功能",
+   "install": [
+    "source",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Joltrin (formerly SOP) is an open-source Go library that checks an AI agent's action against the recorded trace before the action commits. The agent proposes. A separate verifier decides, using fixed preconditions and the steps the server has actually recorded. It does not use the agent's claims, its prompt context, its self-evaluation, or its confidence. ／ The verifier sits on an embedded, ACID-compliant B-Tree storage engine, so the trace and the agent's state share one transaction boundary. The same library gives you crash-safe agent memory that another worker can resume, vector search stored next to structured data, Reed-Solomon erasure coding, and swarm task coordination. It is for engineers building agent systems or local-first apps, and for teams running Redis, a queue, and Postgres only to keep one application's state durable. Benchmarks, with their limits, are in docs/BENCHMARKS.md. The long version is in docs/WHY_JOLTRIN.md and docs/SOP_ARCHITECTURE_WHITEPAPER.md. ／ The engine, vector search, agent memory, and the verification barrier are MIT licensed and stay free. Paid tiers (Pro, and Enterprise on request) add governance on top. Prices and setup are in docs/MONETIZATION_AND_TIERS.md.",
+   "evidence_lines": [
+    16,
+    132,
+    147
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "SharedCode/joltrin",
+  "sha": "674dda186c51",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4de7cbbe3673": {
+  "identity": {
+   "one_liner": "Rocket+Datastar Web组件画廊站点，Go/templ/SQLite/CQRS实现",
+   "review": "这是一个为Rocket框架提供的Datastar Web组件社区画廊站点，包含51个组件的演示、API文档和代码Playground。用Go编写，以SQLite存储组件目录、代码片段和UI状态，采用CQRS+SSE架构，以单个静态二进制（内嵌资产与SQLite）分发。适合想为Datastar/Rocket生态贡献或使用组件的前端与Go开发者。",
+   "highlights": [
+    "提供51个Web组件，含沙盒代码Playground与不可变分享链接",
+    "通过GitHub issue表单提交组件，机器人校验并开PR",
+    "单二进制分发，资产与迁移内嵌，SQLite用FTS5支持搜索"
+   ],
+   "use_cases": [
+    "为Datastar/Rocket站点查找和加载sb-*组件",
+    "在线编辑、类型检查并分享组件代码",
+    "自托管组件画廊与提交工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Go · templ · SQLite · Datastar + Rocket · CQRS · plain modern CSS. No Node, no bundler. ／ The binary is self-contained (assets, components and migrations are embedded; SQLite is pure Go). `starbase --version` prints the version, `/healthz` answers `ok <version>`.",
+     "lines": [
+      10,
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite是站点自身存储组件目录、tab状态与演示数据的数据库，项目并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（部分PD rockets组件保留Beer-Ware许可）",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Community Components for Rocket.** A community gallery of Rocket web components for Datastar, in the spirit of shoelace.style. ／ Go · templ · SQLite · Datastar + Rocket · CQRS · plain modern CSS. No Node, no bundler. ／ - **Catalog:** `components/` is embedded. At startup `SyncCatalog` mirrors it into SQLite (FTS5 for search).",
+   "evidence_lines": [
+    8,
+    10,
+    124
+   ]
+  },
+  "fn": "zweiundeins/starbase",
+  "sha": "4de7cbbe3673",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c1ae253189e0": {
+  "identity": {
+   "one_liner": "Telegram 聊天/论坛导出工具，写入 SQLite 与按话题分目录的文件",
+   "review": "该工具将整个 Telegram 聊天或论坛导出为 SQLite 数据库和按话题划分的文件夹，提供多账户并行下载、断点续传、多种过滤条件（日期、作者、消息类型）以及可选的附加信息（反应、投票、评论等）。适合需要批量备份或分析 Telegram 群组/频道历史记录的用户，需自备 Telegram API 凭据，仅下载文本与元数据而不下载媒体文件。",
+   "highlights": [
+    "使用 Telegram 导出模式与多账户并行 worker 进行高速导出",
+    "支持断点续传与增量导出，进度每 100 条消息提交一次至 SQLite",
+    "支持日期范围、作者、消息类型过滤，以及可选的 reactions、polls、comments 等附加数据"
+   ],
+   "use_cases": [
+    "批量备份 Telegram 群组或频道的历史消息",
+    "将聊天记录导出为结构化数据（SQLite/l）供后续分析或检索",
+    "需要绕过网络限制导出 Telegram 数据的场景（支持 SOCKS5/HTTP 代理）"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Dump an entire Telegram chat into SQLite and a folder per forum topic at **over 100,000 messages a minute**. It runs Telegram's own data-export mode with parallel workers on several accounts, so a chat of several hundred thousand messages is done in minutes: a ／ - Progress is committed to SQLite every 100 messages. An interrupted run resumes where it stopped, and later runs fetch only new messages. ／ - `messages.txt` for reading, `messages.jsonl` for scripts, and the SQLite database for queries.",
+     "lines": [
+      12,
+      27,
+      32
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具以 SQLite 作为导出数据的目标存储，属于为数据导出/备份服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dump an entire Telegram chat into SQLite and a folder per forum topic at **over 100,000 messages a minute**. It runs Telegram's own data-export mode with parallel workers on several accounts, so a chat of several hundred thousand messages is done in minutes: about 4× faster than Telegram Desktop's own export, and a whole forum in one pass instead of topic by topic. ／ - Progress is committed to SQLite every 100 messages. An interrupted run resumes where it stopped, and later runs fetch only new messages. ／ - `messages.txt` for reading, `messages.jsonl` for scripts, and the SQLite database for queries.",
+   "evidence_lines": [
+    12,
+    27,
+    32
+   ]
+  },
+  "fn": "renkagod/tg-chat-dump",
+  "sha": "c1ae253189e0",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

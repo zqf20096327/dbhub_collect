@@ -8109,5 +8109,76 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aaa2e2c14374": {
+  "identity": {
+   "one_liner": "自托管多 Agent PR 审查工作台，webhook 触发审查管线",
+   "review": "MergePilot 是一个自托管的 PR 安全审查工作台：通过只读 GitHub App 接收 PR 事件，运行由确定性规则与 LLM Reviewer 组成的审查管线，结论仅在自身 Console 呈现，不回写 GitHub、不自动合并。面向个人开发者与小团队，数据存于内网 PostgreSQL（含 pgvector），提供五角色 RBAC 与应用层多租户隔离；企业能力如 RLS、SSO、HA 在路线图中尚未实现。",
+   "highlights": [
+    "提供 webhook 触发的多 Agent 审查管线：确定性规则发现 + LLM Reviewer 建议 + dry-run 修复验证，内部 Leader 终裁",
+    "GitHub App 仅只读权限，无 merge/approve 写权限，高危变更停下等人工审批",
+    "支持五角色 RBAC、邀请制 onboarding 与按 tenant_id 收窄的应用层多租户隔离"
+   ],
+   "use_cases": [
+    "个人开发者为自己的 GitHub 仓库部署带审计留痕的只读审查台",
+    "小团队内网自托管协作审查，配置本地 RAG 语料检索团队规范",
+    "对高危变更需要人工闸门审批、不信任 AI 结论直接生效的审查流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **代码与凭据不应失控出站** —— 单机自托管、GitHub App 只读、数据落在你自己的 PostgreSQL。自托管**不等于零出站**：审查管线需要外部 LLM 时会有受控外发，见数据出站边界。 ／ 部署拓扑：GitHub App 只读接入，webhook ingress 验签去重后交给 Console；数据在仅内网的 PostgreSQL；可选 bge-m3 RAG sidecar 与独立部署的 AgentTeams 执行器；cchain 三层校验任一缺失即 BLOCKED ／ - **数据**：PostgreSQL + pgvector，八张业务表按 `tenant_id` 强制收窄（应用层隔离）；数据库只存会话 / CSRF / OAuth state 的 sha256 摘要。",
+     "lines": [
+      28,
+      93,
+      97
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其业务数据存储在自托管 PostgreSQL 并依赖其建表与查询，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MergePilot 跑在你自己的服务器上：通过 GitHub App **只读**接入仓库，PR 事件自动触发审查管线； ／ - **数据**：PostgreSQL + pgvector，八张业务表按 `tenant_id` 强制收窄（应用层隔离）；数据库只存会话 / CSRF / OAuth state 的 sha256 摘要。 ／ docker compose --env-file .env up -d    # 首次启动自动建表（mu schema v23）",
+   "evidence_lines": [
+    9,
+    97,
+    52
+   ]
+  },
+  "fn": "nghqqa/MergePilot",
+  "sha": "aaa2e2c14374",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

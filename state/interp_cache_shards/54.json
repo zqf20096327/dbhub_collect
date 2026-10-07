@@ -7984,5 +7984,128 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "86028baec731": {
+  "identity": {
+   "one_liner": "中国历代人物传记资料的 SQLite 数据库发行仓库",
+   "review": "该仓库提供中国历代人物传记资料库（CBDB）的 SQLite 格式最新版本下载，发布于 Hugging Face，并提供可选后处理脚本：添加外键约束、创建 18 个便捷视图、生成 ADDRESSES 层级表，可一键在 Colab 运行。适用于需要在本地使用 SQLite 数据的研究者和开发者，脚本部分采用 CC BY-NC-SA 许可。",
+   "highlights": [
+    "提供 CBDB 最新 SQLite 数据库下载及 latest. 元信息（SHA-256 校验）",
+    "附带脚本用于添加外键约束、创建 18 个便捷视图和 ADDRESSES 表",
+    "提供一键 Colab 笔记本执行后处理"
+   ],
+   "use_cases": [
+    "本地离线研究使用 CBDB 历史人物数据",
+    "基于 SQLite 的人物关系查询与数据分析",
+    "用视图替代已弃用的反规范化表发布"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# cbdb_sqlite ／ You can download the latest SQLite release of the China Biographical Database at the following page. ／ * https://huggingface.co/datasets/cbdb/cbdb-sqlite/blob/main/latest.zip",
+     "lines": [
+      1,
+      3,
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用 SQLite 存储发布的数据集应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "数据遵循 CBDB Data Licensing Terms；脚本为 CC BY-NC-SA 4.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# cbdb_sqlite ／ You can download the latest SQLite release of the China Biographical Database at the following page. ／ The raw database export does not include convenience views or the denormalised `ADDRESSES` table.",
+   "evidence_lines": [
+    1,
+    3,
+    11
+   ]
+  },
+  "fn": "cbdb-project/cbdb_sqlite",
+  "sha": "86028baec731",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0cf309f502dd": {
+  "identity": {
+   "one_liner": "Apache Cloudberry 的外部数据访问扩展框架，通过连接器查询外部数据",
+   "review": "PXF 是为 Apache Cloudberry（衍生自 Greenplum PXF）提供的可扩展框架，使该分布式数据库能查询元数据不受库管理的外部数据文件。内置 HDFS、Hive、HBase 及 JDBC 数据源连接器，用户也可自建连接器；仓库包含外部表协议处理器、FDW 扩展、服务端与 CLI，供使用 Cloudberry 做外部数据查询的用户部署使用。",
+   "highlights": [
+    "内置访问 HDFS 文件、Hive 表、HBase 表及 JDBC 数据库的连接器",
+    "提供外部表协议处理器与 FDW 两种 Cloudberry 扩展",
+    "支持用户自定义连接器接入其他存储或处理引擎"
+   ],
+   "use_cases": [
+    "在 Cloudberry 中直接查询 HDFS/Hive/HBase 中的外部数据",
+    "通过 JDBC 连接器访问外部关系型数据库数据",
+    "开发自定义连接器以接入新的数据存储系统"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "PXF 是为 Cloudberry 数据库提供外部数据查询能力的扩展组件与配套服务，为数据库生态服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License V2.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PXF is an extensible framework that allows a distributed database like Greenplum and Apache Cloudberry to query external data files, whose metadata is not managed by the database. ／ PXF includes built-in connectors for accessing data that exists inside HDFS files, Hive tables, HBase tables, JDBC-accessible databases and more. ／ * `external-table/` : Contains the Cloudberry extension implementing an External Table protocol handler",
+   "evidence_lines": [
+    13,
+    14,
+    21
+   ]
+  },
+  "fn": "apache/cloudberry-pxf",
+  "sha": "0cf309f502dd",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

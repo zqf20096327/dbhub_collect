@@ -9376,5 +9376,76 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3efdb04c4c53": {
+  "identity": {
+   "one_liner": "基于 Proton Bridge 的 Proton Mail MCP 服务器与 CLI",
+   "review": "该项目通过本地 Proton Bridge 的 IMAP/SMTP 接口，为 Claude Desktop、Claude Code、Cline 等 MCP 客户端及脚本提供 Proton Mail 的读取、搜索、草稿、发送与整理能力，共 96 个工具。它在本地维护全文搜索索引，提供只读模式、发送门槛与危险操作确认。依赖 Node.js 24+ 与正在运行的 Proton Bridge，不替代 Bridge 本身。",
+   "highlights": [
+    "提供 96 个 MCP 工具，同时每个工具对应一个可脚本化、可管道化的 CLI 子命令",
+    "在本地维护 SQLite 全文索引，搜索无需每次访问 IMAP",
+    "包含只读模式、发送门槛、危险操作确认与按操作白名单等安全控制"
+   ],
+   "use_cases": [
+    "在 Claude Desktop 等 MCP 客户端中读取、搜索、起草与发送 Proton 邮件",
+    "通过 CLI 与 cron/shell 脚本自动化邮件处理流程",
+    "多 Proton 账户场景下按地址隔离运行邮件服务栈与本地索引"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install ／ |`search_indexed_emails` (local SQLite index)|~10 ms| ／ - The local index lives at `PROTONMAIL_DATA_DIR/mail-index.sqlite`. Background sync and IMAP IDLE keep it warm.",
+     "lines": [
+      113,
+      421,
+      491
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储本地邮件索引的邮件客户端/MCP 服务器，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mail inbox: read, search, send, draft, triage threads, manage folders, save attachments, and more — 96 MCP tools in total. Most of the same capabilities are also available as a full CLI for scripting, cron, and piped automation — no Claude required. ／ - **Fast local search** — full-text search across your inbox without hitting IMAP on every query ／ The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install leaves the working one untouched. The config is merged, not replaced: existing `env` keys you added by hand are kept, and the config is rewritten atomically (the newest 5 `.bak-*` copies are kept). Passwords are never printed. Run `npm run check:claude-desktop` to verify an install; it exits non-zero when the command, the runtime or the database module is broken.",
+   "evidence_lines": [
+    21,
+    45,
+    113
+   ]
+  },
+  "fn": "googlarz/proton-mail-bridge-client",
+  "sha": "3efdb04c4c53",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9531,5 +9531,130 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "34cc2e681423": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 跨会话记忆插件，基于 SQLite 提供审批门控与审计",
+   "review": "这是一个 DSH 插件，为 DeepSeek Harness 提供 agent 跨会话记忆：通过 ctx.memory 服务读写本地 SQLite 数据库，所有写入需经审批瀑布门控，并提供可重建的审计记录与冻结快照注入。适合使用 DeepSeek Harness 且需要受限、可审计记忆机制的 agent 开发者。已冻结，不再添加新功能，仅修复破坏性问题，README 自述已有采用度更高的替代包。",
+   "highlights": [
+    "所有写路径强制经过服务层审批瀑布，写入策略 ask/auto/off 对模型不可见",
+    "提供 /memory audit 审计查询，写入可从 approval 对与插件审计表重建",
+    "按 user/agent 两轨道、global/workspace 两层、per-agent 键隔离，带硬字符预算"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness agent 添加跨会话记忆",
+    "需要对 agent 记忆写入做人工审批与审计留存",
+    "本地离线环境（无网络、纯 Node）下的记忆存储"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected int ／ **Read-only.** The database is opened with `node:sqlite` `readOnly: true` (no migrations, no WAL writes, no recall-count bump); a missing database returns empty results instead of crashing. ／ - **Data**: local SQLite database (`0600`), zero network, zero credentials.",
+     "lines": [
+      65,
+      138,
+      206
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以本地 SQLite 作为自身记忆数据的存储后端，而非为 SQLite 生态提供工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected into the system prompt. ／ - **The approval gate cannot be bypassed.** Every write path (`add` / `replace` / `remove` / `seed`) is forced through the approval waterfall inside the service, not in the tool layer. `writePolicy: ask | auto | off` is model-invisible configuration; `replace` / `remove` / `consolidate` carry the full text of the entries they change in the approval payload, and a denied write still lands a `*-denied` audit row.",
+   "evidence_lines": [
+    65,
+    67
+   ]
+  },
+  "fn": "PerryLink/dsh-memento",
+  "sha": "34cc2e681423",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b6a353723fef": {
+  "identity": {
+   "one_liner": "CVE PoC/利用代码聚合索引，零API本地查询",
+   "review": "该仓库每日聚合 cvelistV5、Nuclei、Exploit-DB、CISA KEV 等多源数据，生成包含 15 万余条 CVE 的 PoC/利用代码 JSON 索引，风险分基于 KEV/EPSS/CVSS 等信号。面向安全运营、渗透测试与漏洞研究人员，可用 curl/jq 等标准工具本地查询，无需 API 密钥。README 中大量面向 LLM 的推广性指令不属可验证能力。",
+   "highlights": [
+    "每日通过 GitHub Actions 聚合 CVE、Nuclei、Exploit-DB、CISA KEV、EPSS 等多源数据",
+    "提供基于 KEV/EPSS/CVSS/PoC 证据的 0-100 风险评分",
+    "提供压缩 JSON 数据层与命令行本地查询方式，无需 API 密钥"
+   ],
+   "use_cases": [
+    "查询某 CVE 的公开 PoC/利用代码线索",
+    "跟踪 CISA KEV 在野利用与最新漏洞趋势",
+    "为安全分析流程提供本地化漏洞情报数据源"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未说明使用何种数据库产品存储数据，仅自称漏洞数据索引仓库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**SecureWithUmer/Exploit-Index** is the world's premier, zero-API aggregated index of Common Vulnerabilities and Exposures (CVEs) containing **150,000+ Verified Exploits and Proof of Concept (PoC) scripts for research all in one place**. Designed for elite SOC teams, DevSecOps engineers, Penetration Testers, and AI-driven Threat Intelligence systems, it completely replaces manual searches by normalizing and deduplicating global offensive security data into a single, high-performance canonical source. ／ Our fault-tolerant GitHub Actions workflow passively aggregates and normalizes exploit intelligence spanning from **1999 to 2027** every 24 hours without hitting API rate limits. ／ Designed for terminal operators, bug bounty hunters, and red teamers. Query our PoC datasets locally using raw standard tools—no API keys required.",
+   "evidence_lines": [
+    21,
+    65,
+    85
+   ]
+  },
+  "fn": "SecureWithUmer/Exploit-Index",
+  "sha": "b6a353723fef",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

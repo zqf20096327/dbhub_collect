@@ -8293,5 +8293,71 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b6cf4c7011d0": {
+  "identity": {
+   "one_liner": "外卖配送后端平台，NestJS 微服务 + Kafka 事件驱动 + PostgreSQL",
+   "review": "Delivery Plus 是一个外卖配送系统的后端平台，按领域拆分为认证、订单、支付、骑手、配送、追踪等多个 NestJS 微服务，通过 REST 与 Kafka 事件通信，订单/配送事件采用事务性 outbox，数据由 PostgreSQL 存储，购物车与追踪使用 Redis。仅含后端，客户端应用在独立仓库；支付为模拟实现，无真实支付渠道。",
+   "highlights": [
+    "按领域拆分为 12 个可独立部署的微服务，经 API Gateway 统一入口暴露，每个服务提供 /health 与 Swagger 文档",
+    "订单与配送事件经事务性 outbox 写入 Kafka，消费者带去重、三次重试与死信主题重放机制",
+    "通过 Docker Compose 编排本地与测试环境，提供种子数据与单元/E2E 测试脚本"
+   ],
+   "use_cases": [
+    "外卖/即时配送业务的后端服务参考实现",
+    "学习 NestJS 微服务、Kafka 事件驱动与 outbox 模式的工程示例",
+    "作为三端（顾客/骑手/商家）客户端应用的 API 后端"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Delivery Plus** is a backend food-delivery platform built as independently deployable **microservices** that communicate over REST and **Kafka** events. Domain responsibilities are separated across auth, users, restaurants, menus, carts, orders, payments, dr ／ |Database|PostgreSQL 16|",
+     "lines": [
+      32,
+      96
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 PostgreSQL-backed services 存储自身业务数据，PostgreSQL 是该平台使用的数据库而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Delivery Plus** is a backend food-delivery platform built as independently deployable **microservices** that communicate over REST and **Kafka** events. Domain responsibilities are separated across auth, users, restaurants, menus, carts, orders, payments, drivers, deliveries, tracking, and notifications. PostgreSQL-backed services own relational data; cart and tracking use Redis; images live in S3-compatible object storage, uploaded directly by clients through presigned POST policies; the gateway owns no domain data. ／ |Database|PostgreSQL 16|",
+   "evidence_lines": [
+    32,
+    96
+   ]
+  },
+  "fn": "Delivery-Plus0/delivery-plus",
+  "sha": "b6cf4c7011d0",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

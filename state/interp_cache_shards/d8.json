@@ -8452,5 +8452,89 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "35a0a657071f": {
+  "identity": {
+   "one_liner": "Go 语言 database/sql 包的纯 Go MySQL 驱动",
+   "review": "该项目实现 Go 标准库 database/sql/driver 接口，为应用提供连接 MySQL 的原生驱动，无需 C 绑定。面向使用 Go 语言访问 MySQL 数据库的开发者，通过 DSN 配置连接参数，支持连接池管理、TLS、压缩、多种认证方式等特性，需 Go 1.25 及以上版本。",
+   "highlights": [
+    "实现 Go database/sql/driver 接口，纯 Go 实现，无 C 绑定",
+    "支持 TCP/IPv4、TCP/IPv6、Unix domain socket 及自定义协议连接，支持 zlib 压缩",
+    "通过 DSN 参数配置字符集、排序规则、时间解析、占位符插值、连接存活检查等行为"
+   ],
+   "use_cases": [
+    "Go 应用程序连接和查询 MySQL 数据库",
+    "需要通过 database/sql API 使用 MySQL 的后端服务开发",
+    "连接 MariaDB、TiDB 等兼容服务器的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A MySQL-Driver for Go's database/sql package ／ * MySQL (8.0+) and MariaDB (10.11+) are supported by maintainers.",
+     "lines": [
+      5,
+      28
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* MySQL (8.0+) and MariaDB (10.11+) are supported by maintainers.",
+     "lines": [
+      28
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "* TiDB is supported by PingCAP.",
+     "lines": [
+      29
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为数据库生态提供客户端驱动的组件，供应用通过标准接口访问 MySQL，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A MySQL-Driver for Go's database/sql package ／ _Go MySQL Driver_ is an implementation of Go's `database/sql/driver` interface. You only need to import the driver and can use the full `database/sql` API then. ／ * MySQL (8.0+) and MariaDB (10.11+) are supported by maintainers.",
+   "evidence_lines": [
+    5,
+    45,
+    28
+   ]
+  },
+  "fn": "go-sql-driver/mysql",
+  "sha": "35a0a657071f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

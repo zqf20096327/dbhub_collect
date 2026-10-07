@@ -8107,5 +8107,78 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b4d6924a0f96": {
+  "identity": {
+   "one_liner": "Python 持久化任务执行与编排 SDK，用 SQLite 存任务状态",
+   "review": "这是一个嵌入式 Python SDK，在应用进程内运行函数与脚本，控制超时、取消、重试，并把任务状态、结果和通知持久化到 SQLite，重启后可恢复排队任务并提供外部操作回执机制。面向需要运行工具/脚本并管理可恢复工作流的 Agent 应用开发者。限制包括不提供不可信代码沙箱（需另接 OpenSandbox）、外部调用不保证恰好一次。当前版本 0.7.1，需 Python 3.10+。",
+   "highlights": [
+    "提供进程隔离执行、超时与取消，并清理被监管的进程树（L18）",
+    "用 SQLite 持久化任务、结果与通知，重启后可恢复排队任务（L20）",
+    "支持 Effect 回执机制，用于中断后核对不确定的文件写入和 API 调用（L22）"
+   ],
+   "use_cases": [
+    "Agent 应用需要运行工具或脚本、限制执行时间并保留任务状态（L36-L37）",
+    "应用退出后重新打开同一数据库以认领已排队任务（L162-L164）",
+    "单函数任务的托管执行，无需通知或多步编排（L38-L39）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "and saves task state, results and notifications in SQLite. An Agent application ／ an interruption. The core uses only Python's standard library and SQLite. ／ |Durable execution|Save tasks, results, and notifications in SQLite. Queued work remains available when you close and reopen the database.|",
+     "lines": [
+      6,
+      12,
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该 SDK 自身的嵌入存储使用，README 未提供任何面向数据库生态的服务能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "and saves task state, results and notifications in SQLite. An Agent application ／ |Durable execution|Save tasks, results, and notifications in SQLite. Queued work remains available when you close and reopen the database.| ／ Dispatcher is a Python SDK embedded in your application. It needs no separate",
+   "evidence_lines": [
+    6,
+    20,
+    29
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "FlightDan/dispatcher-sdk",
+  "sha": "b4d6924a0f96",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

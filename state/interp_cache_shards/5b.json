@@ -7994,5 +7994,73 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5fc079f2483c": {
+  "identity": {
+   "one_liner": "本地优先的 AI 代理记忆层与 MCP 服务器，基于 SQLite 存储",
+   "review": "marm-memory 是一个本地运行的记忆服务器，通过 MCP 协议为 Claude Code、Codex、Cursor 等编码代理提供跨会话的记忆：核心记忆、代码图谱和概念图谱三类工具集，共 16 个工具，数据全部存于本地 SQLite。提供 pip/Docker 安装和 HTTP/STDIO 两种传输方式，适合希望在无云环境下保留项目上下文的开发者。",
+   "highlights": [
+    "提供 16 个 MCP 工具，覆盖核心记忆、代码图谱与概念图谱（L74-78）",
+    "使用 SQLite WAL 模式、连接池与序列化写队列支持多代理共享记忆（L85）",
+    "支持 HTTP 与 STDIO 传输及 pip、Docker 部署（L78, L90）"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供跨会话的本地持久记忆",
+    "多代理共享同一记忆库的 swarm 场景",
+    "仓库索引后的代码符号检索与变更影响分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Scale layer**|SQLite WAL mode, connection pooling, serialized write queue, and HTTP rate-limit presets|Lets one server support solo use, multi-agent work, and swarm-style bursts|",
+     "lines": [
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是面向 AI 代理的记忆服务应用，使用 SQLite 作为本地存储而非为数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "All 16 tools work over HTTP and STDIO. Your agents share the same local memory across sessions instead of starting from scratch each time. The bundled Console App provides a local control plane for memory, graphs, code context, distillation, runtime controls, and the integrated terminal. Indexing a repository creates its independent Code Graph, which you can explore from Knowledge Graph → Code Explorer even before storing any memories. ／ |**Scale layer**|SQLite WAL mode, connection pooling, serialized write queue, and HTTP rate-limit presets|Lets one server support solo use, multi-agent work, and swarm-style bursts|",
+   "evidence_lines": [
+    78,
+    85
+   ]
+  },
+  "fn": "Lyellr88/marm-memory",
+  "sha": "5fc079f2483c",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

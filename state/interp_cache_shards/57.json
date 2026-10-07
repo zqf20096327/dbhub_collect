@@ -8115,5 +8115,141 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fd12bd450be0": {
+  "identity": {
+   "one_liner": "C# 纯托管移植的 SQLite 兼容数据库引擎",
+   "review": "Ahtola 是 Turso Rust 内核的纯 C# 实验性移植，直接读写 SQLite 磁盘格式，提供 ADO.NET 提供程序、EF Core 提供程序、浏览器 WebAssembly/OPFS 支持和 PowerShell 模块。面向需要在 .NET 环境免原生依赖运行 SQLite 兼容引擎的开发者；README 明确标注为研究原型，非生产就绪。",
+   "highlights": [
+    "纯托管实现，直接读写 SQLite on-disk 格式，无原生依赖",
+    "提供 ADO.NET 提供程序与 EF Core 提供程序（UseAhtola）",
+    "支持浏览器 WebAssembly 部署，基于 OPFS 存储，并支持 AES-GCM/AEGIS 页级加密"
+   ],
+   "use_cases": [
+    "在 .NET 8/9/10 应用中嵌入式读写 SQLite 格式数据库",
+    "在浏览器 Blazor/WebAssembly 环境中本地持久化数据",
+    "通过 PowerShell cmdlet 管理和查询 SQLite 数据库"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "compat",
+     "quote": "SQLite-compatible database engine, with ADO.NET and EF Core providers. ／ Ahtola is a C# engine that reads and writes SQLite’s on-disk format directly —",
+     "lines": [
+      6,
+      13
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "(PostgreSQL-compatible byte access) and `json_object(*)`/`jsonb_object(*)`",
+     "lines": [
+      455
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目本身是数据库引擎及其驱动/提供程序组件，为数据存取生态服务而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An experimental pure managed (C#) port of Turso’s ／ > ⚠️ **Experimental project.** Ahtola is a research / prototype engine and is ／ Ahtola is a C# engine that reads and writes SQLite’s on-disk format directly —",
+   "evidence_lines": [
+    5,
+    8,
+    13
+   ]
+  },
+  "fn": "Devolutions/ahtola",
+  "sha": "fd12bd450be0",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "84748fc34fc9": {
+  "identity": {
+   "one_liner": "用 C11 从零实现的类 SQLite 关系数据库存储引擎",
+   "review": "sqlite-c 是一个以 C11 从零编写的小型关系数据库引擎，重点展示固定大小页、B 树存储、SQL 解析与持久化等存储机制，附带交互式 shell、测试套件和基准。适合想理解数据库内部实现的学习者与教学场景；仅支持 INSERT/SELECT 子集，文件格式为项目私有，不兼容 SQLite 数据库文件。",
+   "highlights": [
+    "实现固定 4096 字节页、B 树叶子分裂与磁盘持久化存储",
+    "提供交互式 shell，支持 INSERT/SELECT（含 WHERE id 查询）",
+    "包含单元测试、1000 行插入基准及 ASan/UBSan CI 检查"
+   ],
+   "use_cases": [
+    "学习数据库存储引擎（页管理、B 树、持久化）的实现原理",
+    "作为可构建、可测试的 C 系统编程教学代码库"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "A small SQLite inspired relational database engine built from scratch in C11. ／ The database file format is intentionally project specific and is not compatible with SQLite database files.",
+     "lines": [
+      3,
+      7
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该项目本身是数据库引擎实现，README 未表明其为其他数据库生态服务的工具或仅使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small SQLite inspired relational database engine built from scratch in C11. ／ The project focuses on the storage mechanisms behind a database rather than reproducing SQLite's full feature set. It includes persistent storage built around fixed size pages, B tree table storage, a small SQL parser, an interactive shell, automated tests, a benchmark, and sanitizer coverage. ／ |Storage|Persistent fixed size pages|",
+   "evidence_lines": [
+    3,
+    5,
+    53
+   ]
+  },
+  "fn": "MugdhoAI/sqlite-c",
+  "sha": "84748fc34fc9",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

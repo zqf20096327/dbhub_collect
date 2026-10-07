@@ -8292,5 +8292,123 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5ef759bbaac0": {
+  "identity": {
+   "one_liner": "ИТМО 大学 ISy27 专业的多学科课程笔记集合仓库",
+   "review": "收录 ИТМО 大学 ISy27 专业各学期课程笔记，涵盖数据库、操作系统、机器学习、数学、Java 等科目，以 TeX、Typst、Markdown 三种格式编写，提供 Python 脚本 build.py 配合 latexmk/typst 编译，并通过 GitLab Pages 发布。面向该校学生复习备考使用，采用 Unlicense/CC0 许可。",
+   "highlights": [
+    "提供 TeX、Typst、Markdown 三种格式的课程笔记",
+    "提供 build.py 脚本用于编译单个笔记文件",
+    "部分科目附考试大纲、小抄与 Anki 卡片"
+   ],
+   "use_cases": [
+    "ИТМО 学生按课程查阅和编译学习笔记",
+    "通过 fork 和 pull request 补充或修正笔记内容"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未表明其为数据库生态工具或使用数据库的应用，仅为课程笔记集合",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Unlicense 或 CC0 1.0 Universal 双许可，第三方图片保留原许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Конспекты по разным предметам первого потока ИСy27 университета ИТМО** ／ Конспекты представлены файлами на трех языках разметки: TeX, Typst, Markdown ／ Для сборки есть 3 скрипта, для их запуска нужны:",
+   "evidence_lines": [
+    3,
+    290,
+    292
+   ]
+  },
+  "fn": "pelmesh619/itmo_conspects",
+  "sha": "5ef759bbaac0",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "64551a4d06b7": {
+  "identity": {
+   "one_liner": "Claude Code 会话记忆的日常整理与归档工具",
+   "review": "remcycle 是一个 Claude Code 的 mod（插件），每天在后台重读会话记录，保留已决定的内容、质疑过时笔记，并维护一个本地会话归档。面向使用 Claude Code 的开发者，通过 hooks 在会话开始时注入记忆、结束时归档，并提供 /remcycle 面板和 recall 等工具。归档为单个本地文件（测试针对真实 SQLite 文件），需 Claude Code 2.1.287 以上和 uv，目前主要面向 macOS/Linux。",
+   "highlights": [
+    "每日后台读取新会话，保留决定、质疑陈旧笔记并交由用户裁决",
+    "提供 recall、close_thread、settle_memory 三个会话内工具和 /remcycle 面板",
+    "归档为本地单个文件，每条记忆可溯源到原文"
+   ],
+   "use_cases": [
+    "让 Claude Code 新会话继承历史决定与未完成事项",
+    "压缩会话开始时加载的笔记列表，由用户裁决可疑记忆",
+    "检索并回读过去会话中的原话"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "The Python tests sit at these seams: transcript parsing, the archive against a real SQLite file, settings, reconciliation as pure functions, the memory store against folders in Claude Code's format, extraction through a stand-in for the model, the gate, and wh",
+     "lines": [
+      119
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是一个使用数据库（本地归档文件，测试针对真实 SQLite）存储自身数据的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The Python tests sit at these seams: transcript parsing, the archive against a real SQLite file, settings, reconciliation as pure functions, the memory store against folders in Claude Code's format, extraction through a stand-in for the model, the gate, and whole dream runs against temporary folders. ／ Claude Code starts every session fresh, and the notes it keeps about your projects pile up until the old ones are wrong. remcycle keeps everything you and Claude said, and once a day it reads the new sessions in the background, keeps what you actually decided, and questions the rest. The sessions after that start knowing it. ／ This is early software, written for one person's machine and released as it stands. It reads Claude Code's transcripts and, when you ask it to, writes to the memory Claude Code loads, so read what a command will do before you run it.",
+   "evidence_lines": [
+    119,
+    11,
+    105
+   ]
+  },
+  "fn": "lianmatsuo/remcycle",
+  "sha": "64551a4d06b7",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -7320,5 +7320,71 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "204750afb6b5": {
+  "identity": {
+   "one_liner": "自托管同步观影应用，Go+SQLite+ffmpeg，经Tailscale同步",
+   "review": "PauseTogether 是一个自托管的 watch-together 应用，用 Go 单二进制加内嵌 SvelteKit 前端，通过 Tailscale 组网让多设备观看本地视频库并保持同步，无账号、靠服务端房间状态驱动播放。数据库仅作为应用内存储使用（SQLite，modernc.org/sqlite 驱动），并非数据库生态工具，部署依赖 Docker Compose 与 Plex 式文件命名规则。",
+   "highlights": [
+    "服务端持有房间状态，播放器跟随并做小幅速度修正以保持同步",
+    "读取本地媒体文件夹，按 Plex 命名规则识别电影与剧集，不重编码视频",
+    "访问控制完全依赖 Tailscale，admin 端口仅监听 127.0.0.1"
+   ],
+   "use_cases": [
+    "异地亲友通过私有网络同步观看同一视频库",
+    "家庭媒体服务器上的多人观影场景",
+    "小范围自托管部署，无需公网开放端口"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "M[(Media folder<br/>read-only)] --> A[PauseTogether<br/>Go + SQLite + ffmpeg]",
+     "lines": [
+      59
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该应用自身的本地数据存储组件，项目本身是面向终端用户的观影应用而非数据库服务工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "    M[(Media folder<br/>read-only)] --> A[PauseTogether<br/>Go + SQLite + ffmpeg] ／ - One Go binary with the SvelteKit app built in, running in Docker. ／ - Tailscale is the only access control. Anyone who reaches the guest port is trusted.",
+   "evidence_lines": [
+    59,
+    63,
+    66
+   ]
+  },
+  "fn": "erkanvatan/pause-together",
+  "sha": "204750afb6b5",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

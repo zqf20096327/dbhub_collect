@@ -9627,5 +9627,284 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3e0d051a2a4c": {
+  "identity": {
+   "one_liner": "ClickHouse 的 MCP 服务器，将 ClickHouse 接入 AI 助手",
+   "review": "这是为 ClickHouse 实现 MCP 协议的服务器，提供 run_query、list_databases、list_tables 等工具，支持查询参数绑定、DESCRIBE/EXPLAIN 预检查，查询默认只读，还可通过 chdb 扩展执行嵌入式查询。面向想把 ClickHouse 接入 Claude Desktop 等 MCP 客户端的用户；HTTP/SSE 传输默认要求认证。",
+   "highlights": [
+    "提供 run_query、list_databases、list_tables 等 MCP 工具，查询默认只读，可显式开启写权限",
+    "支持 ClickHouse {name:Type} 查询参数绑定及 DESCRIBE/EXPLAIN ESTIMATE 预检查",
+    "可选 chdb 扩展用嵌入式引擎执行查询；HTTP/SSE 传输支持 bearer token、OAuth/OIDC 认证并提供 /health 端点"
+   ],
+   "use_cases": [
+    "让 MCP 客户端（如 Claude Desktop）查询 ClickHouse 集群数据",
+    "用 chdb 免 ETL 直接查询文件、URL 等数据源",
+    "通过 /health 端点接入 Kubernetes 等编排系统的探针"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "# ClickHouse MCP Server ／ An MCP server for ClickHouse. ／  * Execute SQL queries on your ClickHouse cluster.",
+     "lines": [
+      1,
+      5,
+      29
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 ClickHouse 提供 MCP 接入服务器的数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "ClickHouse"
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# ClickHouse MCP Server ／ An MCP server for ClickHouse.",
+   "evidence_lines": [
+    1,
+    5
+   ]
+  },
+  "fn": "ClickHouse/mcp-clickhouse",
+  "sha": "3e0d051a2a4c",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4245e8e472dd": {
+  "identity": {
+   "one_liner": "桌面 AI 小说创作助手，Agent 自主调用工具维护结构化创作状态",
+   "review": "Goink 是面向长篇小说作者的桌面 AI 写作应用，通过 ReAct Agent 调用 31 个结构化工具追踪角色、伏笔、弧线、地点和读者认知，内置基于 ONNX 本地推理与 sqlite-vec 的语义搜索，正文修改经 Diff 审批并有 Git 历史。数据存储在本地 SQLite，需自带 LLM API Key。",
+   "highlights": [
+    "Agent 通过 31 个 Function Calling 工具自主查询和更新角色、伏笔、弧线等结构化状态",
+    "本地语义搜索：BGE 中文模型 ONNX 推理 + sqlite-vec 向量索引，无需网络",
+    "正文修改经 Diff 审批写入，内置 Git 自动 commit 支持回退，并有路径白名单沙箱"
+   ],
+   "use_cases": [
+    "长篇小说创作中的角色/伏笔/弧线一致性维护",
+    "数十万字前文的本地语义检索",
+    "通过可复用 Skill 文件定制写作方法论与风格"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "整套引擎在本机运行——BGE 中文语义模型 ONNX 本地推理，sqlite-vec 向量索引，MMR 去冗余重排序。写完章节后台自动增量索引，无需网络，无需额外配置。 ／ |数据库|SQLite + GORM（ACID 事务 + 操作日志回滚）|",
+     "lines": [
+      51,
+      201
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确使用 SQLite + GORM 存储应用数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，含 NOTICE 附加条款（Section 7）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "31 个结构化工具，LLM 自主决策调用哪个、传什么参数、下一步干什么。不是\"写完一章传给下一棒\"的 pipeline——Agent 在当前对话中调工具查角色、查伏笔、读写正文、更新状态，直到任务完成。 ／ |数据库|SQLite + GORM（ACID 事务 + 操作日志回滚）| ／ 需要 LLM API Key（内置 DeepSeek、GLM、MiMo 模板，兼容 OpenAI 格式）。安装包 < 60MB，不需要 Python、Node.js、数据库或 GPU。Windows SmartScreen 可能弹出提示（未签名），点击\"更多信息\"→\"仍要运行\"即可。",
+   "evidence_lines": [
+    39,
+    201,
+    179
+   ]
+  },
+  "fn": "sigpanic/goink",
+  "sha": "4245e8e472dd",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a36ce520b60c": {
+  "identity": {
+   "one_liner": "以 SQLite 为中间表示的 Markdown 规格编译器与类型系统",
+   "review": "SpecCompiler 将结构化 Markdown（CommonSpec）编译为存储在 SQLite 中的关系型中间表示 SpecIR，并在其上执行类型检查与追溯性约束，输出 DOCX、HTML+ WASM、ReqIF 等格式。面向以文档即代码方式编写需求规格的工程师。SQLite 在此作为嵌入式的编译中间存储与查询层，而非对外数据库服务。",
+   "highlights": [
+    "提供基于 SQLite 的类型化关系型中间表示 SpecIR，CommonSpec 编译其中，ReqIF 与 DOORS CSV 也可编解码入内",
+    "以 Pandoc Lua filter 形式运行，在 reader 与 writer 之间加入 SQLite middle-end，编译期检测类型错误与追溯性缺口",
+    "支持输出 DOCX、自包含 HTML（内嵌 SQLite.js 可在浏览器查询）、ReqIF 及任何 Pandoc 支持的格式"
+   ],
+   "use_cases": [
+    "以 Markdown 编写带类型系统与追溯性的需求规格（SRS/SVC）并在 Git 中验证",
+    "将规格编译为 DOCX/HTML/ReqIF，与既有需求工程工具交换数据",
+    "在浏览器中无服务器查询编译后的规格数据库"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**SpecIR** is a typed relational intermediate representation stored in SQLite. CommonSpec compiles into SpecIR. Other formats (ReqIF, DOORS CSV) can also encode and decode into SpecIR, making it a universal interchange hub for specification data. ／ **HTML + WASM (Web Native):** A self-contained html file bundled with SQLite.js enables queries directly in the browser without any server infrastructure. ／ SpecCompiler runs as a Pandoc Lua filter and adds a SQLite middle-end between Pandoc's reader and writer:",
+     "lines": [
+      14,
+      36,
+      150
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "SQLite 被用作编译器内部的中间表示存储引擎，项目是为文档/规格工作流服务的工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SpecIR** is a typed relational intermediate representation stored in SQLite. CommonSpec compiles into SpecIR. Other formats (ReqIF, DOORS CSV) can also encode and decode into SpecIR, making it a universal interchange hub for specification data. ／ **SpecCompiler** is the reference compiler. It lowers CommonSpec into SpecIR and executes declarative structural constraints over the resulting model. ／ SpecCompiler runs as a Pandoc Lua filter and adds a SQLite middle-end between Pandoc's reader and writer:",
+   "evidence_lines": [
+    14,
+    16,
+    150
+   ]
+  },
+  "fn": "SpecIR/SpecCompiler",
+  "sha": "a36ce520b60c",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e38ef0f294dc": {
+  "identity": {
+   "one_liner": "编码代理的本地记忆存储，基于SQLite+嵌入+PageRank检索",
+   "review": "Graphmem 为编码代理提供共享的本地记忆：将带作用域的记忆和实体关系图存入 SQLite，通过本地嵌入与 Personalized PageRank 实现语义召回，并提供基于 FTS5 的词法检索和可选的代码导航 MCP 工具。它以单个 Rust 二进制通过 MCP stdio 供 Claude Code、Codex、OpenCode、pi 等客户端使用，可经 npm 安装，本地运行、无需托管服务。",
+   "highlights": [
+    "本地 SQLite 存储，支持作用域隔离的记忆与实体关系图",
+    "结合本地嵌入、图上下文与 Personalized PageRank 进行召回，可用 SQLite FTS5 做词法检索",
+    "通过 MCP over stdio 提供 remember/recall/update/graph 等工具，并附带代码导航工具与 CLI/TUI"
+   ],
+   "use_cases": [
+    "为多个 MCP 客户端的编码代理提供跨会话共享的项目决策与上下文记忆",
+    "在代理读取源码前定位符号定义、文件大纲、导入与 Git 版本间变更",
+    "本地离线环境下的记忆检索与图浏览（CUDA/CPU 可选后端）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Local SQLite storage; no hosted service required. ／ with SQLite FTS5 for lexical search.",
+     "lines": [
+      17,
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 存储记忆与实体图，属使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Local SQLite storage; no hosted service required. ／ - MCP server over stdio with `remember`, `recall`, `update`, `stats`, `relate`, `graph`, `inspect`, and `forget` tools. ／ Memory recall combines local embeddings, graph context, and Personalized PageRank",
+   "evidence_lines": [
+    17,
+    25,
+    30
+   ]
+  },
+  "fn": "sonic182/graphmem",
+  "sha": "e38ef0f294dc",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

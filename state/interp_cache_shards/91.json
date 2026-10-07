@@ -9315,5 +9315,111 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "db65e9e8ec21": {
+  "identity": {
+   "one_liner": "数据库 schema 与数据 diff 工具，自动生成迁移 SQL",
+   "review": "DBDiff 是一个命令行工具，对比两个本地或远程数据库（MySQL、PostgreSQL、SQLite）的结构与数据差异，自动生成含 up/down SQL 的迁移文件，并内置 migration runner，也可配合 Flyway、Liquibase 等使用。面向需要数据库版本控制的开发与运维团队；PostgreSQL 的 enum 标签删除/重排等场景存在已声明的限制。",
+   "highlights": [
+    "支持通过 --driver 对比 MySQL、PostgreSQL、SQLite，生成 up/down SQL 迁移文件",
+    "内置 migration runner（up/down/status/validate/repair/baseline），并兼容 Flyway、Liquibase、Laravel Migrations",
+    "可 diff 表、视图、物化视图、触发器、存储过程、枚举类型、RLS 策略及数据"
+   ],
+   "use_cases": [
+    "数据库 schema 版本控制与变更脚本生成",
+    "本地与远程/生产数据库结构与数据差异比对",
+    "Supabase（PostgreSQL）项目的 RLS 策略与 schema 迁移"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "DBDiff is an automated database schema and data diff tool for MySQL, Postgres & SQLite. It compares two databases, local or remote, and produces a migration file of the differences automatically. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver` ／ ### PostgreSQL",
+     "lines": [
+      9,
+      16,
+      42
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "DBDiff is an automated database schema and data diff tool for MySQL, Postgres & SQLite. It compares two databases, local or remote, and produces a migration file of the differences automatically. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver` ／ ### MySQL",
+     "lines": [
+      9,
+      16,
+      33
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "DBDiff is an automated database schema and data diff tool for MySQL, Postgres & SQLite. It compares two databases, local or remote, and produces a migration file of the differences automatically. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver` ／ ### SQLite",
+     "lines": [
+      9,
+      16,
+      184
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "compat",
+     "quote": "|MariaDB 10.x / 11.x|MySQL wire protocol; minor DDL dialect differences|",
+     "lines": [
+      225
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "compat",
+     "quote": "|TiDB|MySQL-compatible; default port 4000|",
+     "lines": [
+      230
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库 schema/数据对比与迁移生成服务的命令行工具，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " DBDiff is an automated database schema and data diff tool for MySQL, Postgres & SQLite. It compares two databases, local or remote, and produces a migration file of the differences automatically. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver` ／ - Built-in migration runner: `migration:up`, `down`, `status`, `validate`, `repair`, `baseline`",
+   "evidence_lines": [
+    9,
+    16,
+    21
+   ]
+  },
+  "fn": "DBDiff/DBDiff",
+  "sha": "db65e9e8ec21",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
