@@ -57,7 +57,8 @@ def readme_path(fn: str) -> Path:
 
 
 def build(set_no: int = 1, per_cat: int = 12, boundary_n: int = 30):
-    pool = {it["full_name"]: it for it in json.loads(latest_pool().read_text(encoding="utf-8"))}
+    from pool_store import read_any
+    pool = {it["full_name"]: it for it in read_any(latest_pool())}
     cache = load_cache()
     ist = json.loads(ISTATE_P.read_text(encoding="utf-8")).get("items", {})
     rst = json.loads(RSTATE_P.read_text(encoding="utf-8")).get("items", {})
@@ -144,7 +145,8 @@ def run(tag: str, mode: str, limit: int, only: str, workers: int, dbscan_p: str 
         if out_p == p:
             raise SystemExit(f"tag '{tag}' 与金标集文件名冲突，请换一个 tag")
     gs = json.loads(golden_path(set_no).read_text(encoding="utf-8"))
-    pool = {it["full_name"]: it for it in json.loads(latest_pool().read_text(encoding="utf-8"))}
+    from pool_store import read_any
+    pool = {it["full_name"]: it for it in read_any(latest_pool())}
     if mode == "v2":
         dbscan = json.loads((_P(dbscan_p) if dbscan_p else
                              _P(_IHERE) / "state" / "db_scan.v2.json").read_text(encoding="utf-8"))

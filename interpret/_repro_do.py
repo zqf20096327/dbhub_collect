@@ -22,8 +22,9 @@ import interpret                     # noqa: E402
 
 gen = strategy.derive()
 schemas = interpret.format_schemas(gen)
+from pool_store import read_any
 pool = {it["full_name"]: it
-        for it in json.loads(interpret.latest_pool().read_text(encoding="utf-8"))}
+        for it in read_any(interpret.latest_pool())}
 dbscan = json.loads((ROOT / "state" / "db_scan.json").read_text(encoding="utf-8"))
 ai = interpret.AIClient()
 

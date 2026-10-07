@@ -109,11 +109,13 @@ def jload(p: Path, default):
 
 def pool_stars() -> dict:
     """最新快照 pool.json → {full_name: stars}（目标资格 + 排序用，缺失记 0）。"""
-    pools = sorted((ROOT / "data").glob("snapshot_20*/pool.json"))
-    if not pools:
+    import pool_store
+    try:
+        items, _src = pool_store.load_latest("pool")
+    except FileNotFoundError:
         return {}
     return {it.get("full_name") or "": it.get("stars") or 0
-            for it in json.loads(pools[-1].read_text(encoding="utf-8"))}
+            for it in items}
 
 
 def fn_cache_keys(cache: dict, fn: str) -> list:

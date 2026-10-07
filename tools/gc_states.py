@@ -33,12 +33,21 @@ TARGETS = ("readme_state.json", "enrich_state.json", "enrich_cache.json")
 
 
 def alive_fns(keep: int) -> set[str]:
-    pools = sorted((ROOT / "data").glob("snapshot_*/pool.json"))
+    """M2b：当前活文件（最新全量池）∪ 最近旧快照 pool.json 并集判活。
+
+    15 天后旧快照归档完只剩活文件——退化为当前池判活；防漏兜底是每晚
+    全量重扫（设计意图），此处弱化可接受。"""
+    from pool_store import load_latest, read_any
     alive: set[str] = set()
+    try:
+        items, _src = load_latest("pool")
+        alive |= {it["full_name"] for it in items}
+    except FileNotFoundError:
+        pass
+    pools = sorted((ROOT / "data").glob("snapshot_*/pool.json"))
     for p in pools[-keep:]:
         try:
-            alive |= {it["full_name"] for it in
-                      json.loads(p.read_text(encoding="utf-8"))}
+            alive |= {it["full_name"] for it in read_any(p)}
         except (json.JSONDecodeError, KeyError):
             continue
     return alive

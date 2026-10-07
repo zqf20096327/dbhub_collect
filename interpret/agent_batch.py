@@ -37,8 +37,9 @@ def next_batch(n: int, pool_path: Path | None):
         sys.exit("readme_state.json 或 pool 不存在（先跑采集）")
     rstate = json.loads(rstate_p.read_text(encoding="utf-8"))
     cache = load_cache()
+    from pool_store import read_any
     pool = {it["full_name"]: it
-            for it in json.loads(pool_path.read_text(encoding="utf-8"))}
+            for it in read_any(pool_path)}
     todo = [(fn, rec["sha"]) for fn, rec in rstate.get("items", {}).items()
             if rec.get("status") in ("done", "oversized") and rec.get("sha")
             and rec["sha"] not in cache and fn in pool]
@@ -99,7 +100,7 @@ def main():
     ap = argparse.ArgumentParser(description="会话内解读批处理")
     ap.add_argument("--next", type=int, help="导出 N 条待解读")
     ap.add_argument("--submit", help="提交 submit.json 入库")
-    ap.add_argument("--pool", default=None, help="池路径（默认取最新 snapshot_20*/pool.json）")
+    ap.add_argument("--pool", default=None, help="池路径（默认活文件 data/live/pool.ndjson，回退最新快照）")
     args = ap.parse_args()
     if not args.next and not args.submit:
         ap.error("--next 与 --submit 至少其一")

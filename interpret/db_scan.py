@@ -69,16 +69,10 @@ QUOTE_MAX = 260
 
 
 def latest_pool() -> Path:
-    base = ROOT / "data"
-    cands = []
-    for d in base.iterdir():
-        if d.is_dir() and re.fullmatch(r"snapshot_\d{8}", d.name):
-            pj = d / "pool.json"
-            if pj.is_file() and pj.stat().st_size > 1000:
-                cands.append(pj)
-    if not cands:
-        raise SystemExit("no non-empty snapshot pool.json found")
-    return max(cands)
+    """M2b：活文件优先（data/live/pool.ndjson），回退最新非空快照。"""
+    import pool_store
+    _recs, src = pool_store.load_latest("pool")
+    return src
 
 
 def number_lines(text: str) -> list[tuple[int, str]]:
@@ -125,7 +119,8 @@ def scan_text(text: str) -> dict:
 
 
 def main():
-    pool = {it["full_name"]: it for it in json.loads(latest_pool().read_text(encoding="utf-8"))}
+    from pool_store import read_any
+    pool = {it["full_name"]: it for it in read_any(latest_pool())}
     result, n_with_cand = {}, 0
     for fn, it in pool.items():
         readme_cands, desc_cands = {}, {}

@@ -40,6 +40,7 @@ HERE = ROOT
 import db_profiles as dp        # noqa: E402
 import strategy                 # noqa: E402
 from gh import Budget, BudgetOut, GitHubClient, atomic_write_json  # noqa: E402
+import pool_store               # noqa: E402  M2b：池活文件读写层（data/live/*.ndjson）
 
 log = logging.getLogger("collect")
 CAP = dp.GLOBAL["per_page"] * dp.GLOBAL["max_pages"]      # GitHub Search 单查询 1000 硬上限
@@ -410,47 +411,61 @@ def _merge_parts(parts: Path) -> dict:
 
 
 def _merge_step(snap: Path, section: str) -> None:
-    """写本 section 完成标记 pool_{section}.json；另一侧标记也在时才写并集 pool.json。
+    """写本 section 完成标记 pool_{section}.json（轻量）+ 侧活文件；两侧标记都在才写并集到 pool 活文件+桥（M2b）。
 
-    parts_* 不入库（gitignore）——CI/换机续跑时只有 state（记录"已完成"）而没有 parts，
-    此时绝不能从空 parts 重写池（2026-09-29 实发事故：CI 把 3.4 万项的池写成 []），
-    应保留既有 pool_{section}.json 直接参与并集。
+    parts_* 不入库（gitignore）——CI/换机续跑时 git 里只有 state 和侧活文件
+    （data/live/pool_{section}.ndjson），侧数据由活文件滚动承载（替代旧
+    pool_{section}.json 载体）。2026-09-29 空池事故防线保留：parts 合并结果
+    为空时绝不重写活文件（:424 语义）；union 为空也不写 pool（次防线）。
     """
     parts = snap / f"parts_{section}"
     own_pool = snap / f"pool_{section}.json"
     if parts.is_dir() and any(parts.glob("*.json")):
         merged_list = sorted(_merge_parts(parts).values(),
                              key=lambda x: -(x.get("stars") or 0))
-        if merged_list or not own_pool.is_file():   # 空结果不覆盖既有好池
-            atomic_write_json(own_pool, merged_list)
+        if merged_list:                                   # 空结果不覆盖既有好池
+            pool_store.write_live(merged_list, f"pool_{section}")
         else:
-            log.warning("parts_%s 合并结果为空，保留既有 pool_%s.json", section, section)
+            log.warning("parts_%s 合并结果为空，保留既有侧活文件", section)
+        atomic_write_json(own_pool, {
+            "done": bool(merged_list), "count": len(merged_list),
+            "ts": datetime.now(timezone.utc).isoformat(timespec="seconds")})
     elif own_pool.is_file():
-        n = len(json.loads(own_pool.read_text(encoding="utf-8")))
-        log.warning("parts_%s 不在本机（CI/换机续跑）——保留既有 pool_%s.json（%d 项）",
-                    section, section, n)
+        log.warning("parts_%s 不在本机（CI/换机续跑）——侧池由活文件 data/live/pool_%s.ndjson 滚动承载",
+                    section, section)
     else:
-        log.warning("既无 parts_%s 也无 pool_%s.json，本 section 无产物可合并", section, section)
+        log.warning("既无 parts_%s 也无 pool_%s.json，本 section 无产物可合并", section)
     other = "cn" if section == "intl" else "intl"
     if not (snap / f"pool_{other}.json").is_file():
-        log.warning("pool_%s.json 未生成（未跑或预算截断），pool.json 暂不更新（下游回退昨池）",
+        log.warning("pool_%s.json 未生成（未跑或预算截断），pool 活文件暂不更新（下游回退昨池）",
                     other)
         return
-    union = _union_pools(snap)
-    atomic_write_json(snap / "pool.json",
+    union = _union_pools_live()
+    if not union:                                         # 09-29 防线：空并集不写池
+        log.warning("union 为空（两侧活文件皆缺失？），保留昨池")
+        return
+    pool_store.write_live(list(union.values()), "pool")
+    # 旧格式桥文件（gitignored）：CI 内 enrich/readme_sweep 的唯一池接口，零改造
+    atomic_write_json(HERE / "data" / "snapshot_latest" / "pool.json",
                       sorted(union.values(), key=lambda x: -(x.get("stars") or 0)))
-    log.info("合并：pool_%s → pool.json 并集 %d 项", section, len(union))
+    log.info("合并：侧活文件 → pool 活文件并集 %d 项", len(union))
 
 
-def _union_pools(snap: Path) -> dict:
-    """跨 section 并集：只读两侧完成标记 pool_{sec}.json，固定 intl→cn 顺序，与执行顺序无关。"""
+def _union_pools_live() -> dict:
+    """跨 section 并集：读侧活文件（load_latest 回退最新快照，切换期无缝），
+    固定 intl→cn 顺序。黑名单过滤与 all_sources 合并与旧 _union_pools 同款。"""
     union: dict[str, dict] = {}
     dropped = 0
     for sec_name in ("intl", "cn"):
-        p = snap / f"pool_{sec_name}.json"
-        if not p.is_file():
-            continue
-        for it in json.loads(p.read_text(encoding="utf-8")):
+        try:
+            items, _src = pool_store.load_latest(f"pool_{sec_name}")
+        except FileNotFoundError:
+            # 标记在而活文件缺=git 级事故（两者本应同 commit 进出）；宁可保留
+            # 昨池也不写单侧 union（旧机制标记与数据同文件，无此分叉）
+            log.error("侧活文件 data/live/pool_%s.ndjson 及快照回退均缺失——union 放弃，保留昨池",
+                      sec_name)
+            return {}
+        for it in items:
             fn = it["full_name"]
             if fn in BLACKLIST or fn.split("/", 1)[0].lower() in USER_BLACKLIST:
                 dropped += 1
