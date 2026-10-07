@@ -53,6 +53,12 @@ def sync_code(src: Path) -> int:
 
 def sync_state(src: Path) -> int:
     n = 0
+    sdir = src / "state" / "interp_cache_shards"
+    if sdir.is_dir():                      # 分片缓存整目录搬运（10-06 起；以源为准覆盖）
+        ddir = ROOT / "state" / "interp_cache_shards"
+        shutil.rmtree(ddir, ignore_errors=True)
+        shutil.copytree(sdir, ddir)
+        n += 1
     for name in STATE_FILES:
         s, d = src / "state" / name, ROOT / "state" / name
         if s.is_file():

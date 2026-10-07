@@ -39,6 +39,7 @@ import requests
 ROOT = Path(__file__).resolve().parents[1]          # dbhub_collect
 sys.path.insert(0, str(ROOT / "lib"))
 from gh import load_env                             # noqa: E402  与现管线同款 .env 装载
+from interp_store import load_cache                 # noqa: E402  分片缓存读取（兼容旧单文件）
 
 try:
     sys.stdout.reconfigure(encoding="utf-8")
@@ -410,7 +411,7 @@ def main():
     else:
         print("警告：.env 无 GITHUB_TOKEN，匿名限速 60/hr", flush=True)
 
-    cache = json.loads(CACHE.read_text(encoding="utf-8"))
+    cache = load_cache()
     byfn = latest_by_fn(cache)
     scan = json.loads(SCAN.read_text(encoding="utf-8"))
 

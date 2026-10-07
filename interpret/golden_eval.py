@@ -34,6 +34,7 @@ for _d in (ROOT, ROOT / "lib", ROOT / "config", ROOT / "interpret"):
 HERE = ROOT
 import strategy                              # noqa: E402
 from gh import atomic_write_json             # noqa: E402
+from interp_store import load_cache          # noqa: E402  分片缓存读取（兼容旧单文件）
 import interpret as interp                   # noqa: E402
 import runlog                                # noqa: E402
 from interpret import AIClient, build_prompt, judge, latest_pool   # noqa: E402
@@ -57,7 +58,7 @@ def readme_path(fn: str) -> Path:
 
 def build(set_no: int = 1, per_cat: int = 12, boundary_n: int = 30):
     pool = {it["full_name"]: it for it in json.loads(latest_pool().read_text(encoding="utf-8"))}
-    cache = json.loads(CACHE_P.read_text(encoding="utf-8"))
+    cache = load_cache()
     ist = json.loads(ISTATE_P.read_text(encoding="utf-8")).get("items", {})
     rst = json.loads(RSTATE_P.read_text(encoding="utf-8")).get("items", {})
     used = set()

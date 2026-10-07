@@ -43,6 +43,7 @@ ROOT = _pl.Path(__file__).resolve().parents[1]
 for _d in (ROOT, ROOT / "lib", ROOT / "config", ROOT / "interpret"):
     _sys.path.insert(0, str(_d))
 from gh import atomic_write_json, load_env  # noqa: E402  与现管线同一套原子写/环境装载
+from interp_store import load_cache  # noqa: E402  分片缓存读取（兼容旧单文件）
 
 load_env()   # 本地跑时读 .env；Actions 由 workflow env 提供（setdefault 不覆盖）
 
@@ -224,7 +225,7 @@ def run_interpret(batch_n: int, concurrency: int, max_minutes: float) -> int:
 
 def report(baseline: dict, scan: dict) -> dict:
     """全量重生成报告（幂等）。三态：done / pending（仍在目标集）/ skipped（不可跑）。"""
-    cache = jload(CACHE, {})
+    cache = load_cache()
     byfn = latest_by_fn(cache)
     stars = pool_stars()
     rstate = (jload(RSTATE, {}).get("items") or jload(RSTATE, {}))
@@ -321,7 +322,7 @@ def main():
                         format="%(asctime)s %(levelname)-6s %(name)s | %(message)s",
                         datefmt="%H:%M:%S")
 
-    cache = jload(CACHE, {})
+    cache = load_cache()
     scan = jload(SCAN, {})
     baseline = jload(BASE, {})
 
@@ -377,7 +378,7 @@ def main():
     run_interpret(len(batch), args.concurrency, args.max_minutes)
 
     # ── R2 对账："剪后存在即新结果"；无键者原键原值写回 ───────────────────
-    cache = jload(CACHE, {})      # 子进程已按 chunk 落盘，重新装载
+    cache = load_cache()      # 子进程已按 chunk 落盘，重新装载
     done = restored = 0
     for t in batch:
         b = baseline.get(t["fn"])
