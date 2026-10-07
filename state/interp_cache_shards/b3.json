@@ -9349,5 +9349,74 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8e1fcd563af0": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的多引擎网页搜索插件，含持久化缓存与证据管线",
+   "review": "这是一个面向 DSH（DeepSeek Harness）宿主的 bundle 插件，把多引擎网页搜索、平台搜索、持久化缓存、Playwright 渲染打包成模型可调用的 web_index/web_call 两个工具。供使用 DSH 的开发者和 AI 会话用户安装，通过 dsh plugin add 安装并锁定宿主版本范围（0.2.0-rc.2 线）。SQLite 仅用于其用量账本与缓存存储，属使用而非适配数据库。",
+   "highlights": [
+    "提供 web_index / web_call 两个工具入口，聚合 20 个搜索与读取动作",
+    "支持 GitHub、B站、Reddit、知乎等约 20 个平台来源 provider 及自定义平台",
+    "使用 SQLite 实现用量账本与缓存持久化，并提供证据管线与后端冷却回退"
+   ],
+   "use_cases": [
+    "在 DSH 会话中进行多引擎网页搜索与证据式调研",
+    "搜索特定平台内容（GitHub/B站/知乎/Reddit 等）或登录后页面",
+    "通过 ctx.web provider 机制接管宿主内置 web_search/web_fetch"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **用量账本与上限**：每次模型调用前按保守估算预留 token、调用后按服务返回的 `usage` 结算（服务不返回则按估算记账并标 `estimated`；价格未声明时金额为空，不是 0；`price` 可选声明）。预留是原子的（SQLite `usage_ledger` 表，跨搜索、跨进程，重启不清零，未结算的预留继续占用额度）。超过单次搜索或当日上限时跳过模型阶段、回退规则评分，`notes` 出现 “model budget exceeded”。`sources.status` 的 `evidence ／ |`search`|`run`|多引擎搜索 + RRF 融合 + 内存/SQLite 双层缓存 + 历史；传 `task` / `profile` 得证据包；传 `platform` 搜单个平台（GitHub/B站/YouTube/V2EX/小红书/Twitter/Reddit/IG/FB/RSS + 知乎/微博/豆瓣/贴吧/抖音/快手，登录态走 Playwright；RSS 用 `url` 传 feed、`query` 可选过滤；平台与网页引擎走同一条注册表执行路径，可与 `task`/`profile` 同用得",
+     "lines": [
+      194,
+      218
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "插件自身用 SQLite 存储用量账本与缓存数据，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "增强型、可持久化的扩展网页搜索插件 for DeepSeek Harness（DSH）。 ／ 一个 DSH **bundle 插件**，把多引擎网页搜索、平台搜索、持久化缓存、受控按站增强和 Playwright 渲染打包成模型可调用的能力。常驻上下文只有 `web_index` / `web_call` 两个工具（原 11 个 `web_*` 工具已并入 20 个动作，见工具面）。路由控制面借鉴 Agent-Reach 的后端探测、顺序选择和失败冷却思路，核心逻辑为本项目原生 TypeScript 实现。 ／ dsh plugin --profile web add @anweat/dsh-browser@0.2.0 dsh-web-search-pro@0.2.0",
+   "evidence_lines": [
+    3,
+    5,
+    37
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "anweat/dsh-web-search-pro",
+  "sha": "8e1fcd563af0",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

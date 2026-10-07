@@ -8813,5 +8813,171 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0adfe76a8521": {
+  "identity": {
+   "one_liner": "部署在自有 Cloudflare 账户的类型安全实时后端框架",
+   "review": "Lunora 是一个后端框架，让开发者用 TypeScript 编写类型安全的查询、mutation 与 action，并部署到自有 Cloudflare 账户的 Workers 上；实时状态由 Durable Objects（SQLite）持有，SQL 走 D1，blob 存 R2，开发基于 Vite 并本地运行于 workerd。面向希望在 Cloudflare 上构建全栈应用、追求 Convex 式开发体验的前端/全栈开发者，当前处于 alpha 阶段，API 可能存在破坏性变更。",
+   "highlights": [
+    "提供端到端类型安全：schema、校验器、查询结果与客户端钩子同源生成",
+    "支持 WebSocket 实时订阅，mutation 变更推送到所有订阅者",
+    "提供 D1 适配器与基于 Durable Objects（SQLite、OCC）的 ShardDO，支持 .shardBy() 分片与 .global() 地理复制"
+   ],
+   "use_cases": [
+    "在自有 Cloudflare 账户上构建带实时订阅的全栈应用",
+    "需要端到端类型推断与自动客户端代码生成的 TypeScript 项目",
+    "单 Durable Object 需按租户分片或多区域读取扩展的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`@lunora/hyperdrive`|npm|Bring-your-own Postgres/MySQL for Lunora via Cloudflare Hyperdrive: a driver-agnostic, action-only ctx.sql|",
+     "lines": [
+      192
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`@lunora/hyperdrive`|npm|Bring-your-own Postgres/MySQL for Lunora via Cloudflare Hyperdrive: a driver-agnostic, action-only ctx.sql|",
+     "lines": [
+      192
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`@lunora/do`|npm|Lunora Durable Objects: ShardDO (SQLite, OCC, hibernated WebSocket subscriptions) and SessionDO| ／ |`@lunora/agent`|npm|Durable AI agents for Lunora: defineAgent compiles a replay-safe tool-loop onto Cloudflare Workflows, with DO SQLite threads and live message subscriptions| ／ |`@lunora/replica`|npm|Local-first replica runtime + local SQLite mirror for Lunora|",
+     "lines": [
+      123,
+      184,
+      199
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Lunora 使用 Cloudflare D1、Durable Objects（SQLite）等托管数据库服务运行应用数据，属使用数据库的框架应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "FSL-1.1-Apache-2.0",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lunora gives you Convex-style DX on your own Cloudflare account. You write type-safe queries, mutations, and actions in TypeScript, and Lunora deploys them as Cloudflare Workers. Durable Objects hold real-time state, D1 handles SQL, R2 stores blobs, and Queues run jobs. Nothing runs on servers we operate; everything lives in the Cloudflare account you already pay for. ／ |`@lunora/do`|npm|Lunora Durable Objects: ShardDO (SQLite, OCC, hibernated WebSocket subscriptions) and SessionDO| ／ |`@lunora/sql-store`|npm|Internal dialect-parameterized SQL store core for Lunora .global() backends (D1, PlanetScale)|",
+   "evidence_lines": [
+    21,
+    123,
+    128
+   ]
+  },
+  "fn": "anolilab/lunora",
+  "sha": "0adfe76a8521",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "34f6653389ac": {
+  "identity": {
+   "one_liner": "AI Agent 语义检查点与可验证崩溃恢复框架",
+   "review": "CONTINUUM 为长时间运行的 AI Agent 提供崩溃恢复能力：构造语义检查点而非对话转储，通过幂等动作账本防止重复副作用，并用哈希链事件日志保证防篡改，以默认拒绝的 MCP 服务器对外暴露。面向构建/运维长任务 Agent 的开发者，支持 SQLite 与 PostgreSQL 存储后端，提供 CLI、hooks 与 Docker 运行方式，要求 Python 3.11+。",
+   "highlights": [
+    "提供语义检查点与恢复前环境独立再验证机制",
+    "提供幂等动作账本与哈希链事件日志，拒绝重复副作用",
+    "支持 MCP 服务器接入（Claude Code、Gemini CLI、Codex hooks）及 SQLite/PostgreSQL 存储后端"
+   ],
+   "use_cases": [
+    "长任务 Agent 崩溃后从检查点恢复并复放未完成工作",
+    "通过 MCP/hooks 为编码 Agent 接入证据链与副作用门控",
+    "对 Agent 运行状态做防篡改事件审计"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Schema v6. SQLite is primary, Postgres is CI verified. One log, many projections. ／ |`storage/`|`SQLiteStorage` v6, `postgres.py`, `migrations.py`, `actionindex.py`|",
+     "lines": [
+      353,
+      373
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Third-party clients**: Gemini CLI and Kilo Code connected over stdio JSON-RPC against the live SQLite store, validating multi-agent co-existence and authorization isolation. ／ - **Self-healing**: hard-killed servers recover from orphaned SQLite `-wal`/`-shm` sidecars via single-retry cleanup at startup.",
+     "lines": [
+      194,
+      196
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 AI Agent 提供检查点/恢复基础设施，SQLite/Postgres 仅作为其存储后端被适配，本身不是使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Semantic checkpoints**: a compact, versioned representation of what the agent needs to continue, not a conversation dump. ／ |Durable execution|What happened before a crash and what can be replayed without losing work?|Hash-chained event log `src/continuum/events.py` with `verify()` and `trusted_through`, durable storage `src/continuum/storage/sqlite.py` (WAL, `synchronous=FULL`, schema v6) and `src/continuum/storage/postgres.py` plus `src/continuum/storage/migrations.py`, policy-driven checkpoints `src/continuum/checkpoint/manager.py` and `src/continuum/checkpoint/policy.py` that replay the gap on `restore()`. Walkthrough is in `docs/recovery_walkthrough.md` (output of `examples/recovery_walkthrough.py`).| ／  log, all exposed as a deny-by-default MCP server. Framework-agnostic,",
+   "evidence_lines": [
+    34,
+    125,
+    6
+   ]
+  },
+  "fn": "Cyrax321/CONTINUUM",
+  "sha": "34f6653389ac",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9015,5 +9015,89 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8d37b234e6d0": {
+  "identity": {
+   "one_liner": "受 rails migrate 启发的纯 SQL 文件数据库 schema 迁移工具",
+   "review": "dbmigrate 是一个用 Go 编写的数据库迁移工具，通过在 db/migrations 目录生成成对的 .up.sql/.down.sql 文件管理 schema 变更，用 dbmigrate_versions 表跟踪已应用的版本，支持事务回滚、非事务迁移和跨进程锁。面向使用 docker-compose 或 CI/CD 的开发与运维团队，提供 PostgreSQL 与 MySQL 驱动配置。",
+   "highlights": [
+    "提供 -create/-up/-down/-versions-pending 等命令，以纯 SQL 文件执行迁移并用版本表跟踪历史",
+    "支持事务性迁移回滚，以及 -create-no-db-txn 创建在事务外执行的非事务迁移文件",
+    "v3.0.0 引入跨进程锁定、可配置事务模式，并支持 PostgreSQL 的 CREATE INDEX CONCURRENTLY"
+   ],
+   "use_cases": [
+    "在 docker-compose 项目中随应用启动自动应用待执行的数据库迁移",
+    "CI/CD 流水线中用 -wanted-cli-version 强制团队迁移工具版本一致",
+    "为 PostgreSQL 等数据库维护可回滚的 SQL schema 变更脚本"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**PostgreSQL**",
+     "lines": [
+      238
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**MySQL**",
+     "lines": [
+      255
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**SQLite and CQL users** need a small update:",
+     "lines": [
+      309
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是为数据库提供 schema 迁移能力的工具，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`rails migrate` inspired approach to database schema migrations but with plain sql files. and much faster. ／ 1. Connect to database (defaults to the value of `DATABASE_URL` env; configure with `-url`) ／ **PostgreSQL**",
+   "evidence_lines": [
+    3,
+    186,
+    238
+   ]
+  },
+  "fn": "choonkeat/dbmigrate",
+  "sha": "8d37b234e6d0",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

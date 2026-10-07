@@ -8634,5 +8634,70 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7cfb5bb9bf17": {
+  "identity": {
+   "one_liner": "waterdrop 的 TiDB 输入插件，基于 tispark2.0+ 读取 TiDB 数据",
+   "review": "该项目为 waterdrop 数据集成工具提供读取 TiDB 的 input 插件，解决原版 tispark 依赖 1.1 版本无法读取 TiDB 3.0 数据的问题。使用者需将替换 jar 包放入 waterdrop 1.4.2 的 lib 与 plugins 目录，并在 input 配置中指定数据库使用；要求 spark2.3+、tispark2.0+ 与 TiDB 3.0+ 搭配。",
+   "highlights": [
+    "提供 waterdrop input 插件，通过 tispark2.0+ 读取 TiDB 数据",
+    "替换原版 jar 包以适配 spark2.3 与 TiDB 3.0",
+    "以插件 jar 形式安装，按原 waterdrop 插件方式配置使用"
+   ],
+   "use_cases": [
+    "在 waterdrop 数据管道中批量读取 TiDB 3.0 数据",
+    "使用 spark2.3 + tispark2.0+ 环境的数据同步任务"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "1. 可能是由于 waterdrop 的作者比较忙吧，waterdrop 的 input 中的 tidb 插件用到的 tispark 依赖包还是 1.1 版本的。导致读取 spark2.3 读取 tidb3.0 数据失败(tidb2.0 没测，估计应该可以吧，如果哪位测了话，可以告诉我一下，原版的1.4.2读tidb2.0的行不。) ／ 1.4.2 的版本用的是 spark2.3，要想读取 tidb 数据，得用tispark2.0+，并且 tidb3.0+",
+     "lines": [
+      2,
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 waterdrop 数据集成工具提供读取 TiDB 的插件组件，服务于数据库生态而非自建应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 1. 将Waterdrop-1.4.2-tispark2.2.jar包下载下来，替换原版的1.4.2版本lib下的jar包 https://github.com/ludengke95/waterdrop-tidb2-plugin/releases ／  2. 将waterdrop-tidb2-plugin.jar按照原来作者插件的形式放到plugins里面。 ／  3. 在配置文件的input中，使用插件",
+   "evidence_lines": [
+    14,
+    15,
+    16
+   ]
+  },
+  "fn": "ludengke95/waterdrop-tidb2-plugin",
+  "sha": "7cfb5bb9bf17",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

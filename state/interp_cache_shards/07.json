@@ -9164,5 +9164,59 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4ecffcd4ebde": {
+  "identity": {
+   "one_liner": "Rust 故障注入库，源自 tikv/fail-rs",
+   "review": "failpoints 是一个 Rust 语言的故障点实现库，源自 tikv/fail-rs，灵感来自 FreeBSD failpoints。它通过宏在代码中注入故障点，可在运行时动态触发 panic、提前返回、休眠等行为，支持程序化与环境变量控制、条件与概率触发，主要用于测试场景，面向需要在失败条件下验证程序行为的 Rust 开发者。",
+   "highlights": [
+    "提供 failpoint! 宏，可在运行时动态注入错误、panic、提前返回、休眠等行为",
+    "支持通过程序代码和环境变量（FAILPOINTS）控制故障点，可条件性、概率性触发",
+    "默认禁用故障点生成，需通过 Cargo feature 启用"
+   ],
+   "use_cases": [
+    "为 Rust 程序中的易错路径（如 I/O 失败）编写失败场景测试",
+    "在集成或混沌测试中按需触发特定故障行为",
+    "为分布式存储系统（如源自 TiKV 生态的代码）构建故障注入能力"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 仅为通用 Rust 故障注入库，未声明服务于任何数据库生态，仅源自 tikv/fail-rs。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A failpoints implementation for Rust. ／ Failpoints are code instrumentations that allow errors and other behavior to be injected dynamically at runtime, primarily for testing purposes. Fail points are flexible and can be configured to exhibit a variety of behavior, including panics, early returns, and sleeping. They can be controlled both programmatically and via the environment, and can be triggered conditionally and probabilistically. ／ Now you can import the `failpoint!` macro from the `failpoints` crate and use it to inject dynamic failures.",
+   "evidence_lines": [
+    8,
+    10,
+    23
+   ]
+  },
+  "fn": "ritelabs/failpoints",
+  "sha": "4ecffcd4ebde",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

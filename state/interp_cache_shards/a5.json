@@ -8360,5 +8360,72 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b88463b42429": {
+  "identity": {
+   "one_liner": "基于 LangGraph 的 Teradata Vantage 分析智能体",
+   "review": "tdsql-agent 是一个基于 LangGraph 的分析智能体，采用 supervisor/worker 架构：supervisor LLM 将请求路由给 React worker agent，后者通过 tdsql-mcp MCP 服务器在 Teradata Vantage 数据库中执行查询、探索 schema 并运行分析。面向需要用自然语言驱动数据库分析的 Teradata 用户，依赖 AWS Bedrock 的 Claude 模型；写操作会立即执行，需谨慎使用。",
+   "highlights": [
+    "采用 supervisor/worker 架构，通过 tdsql-mcp MCP 服务器连接 Teradata Vantage",
+    "支持执行查询、探索 schema、多步分析（递归上限 100），并实时流式输出工具调用与 LLM 响应",
+    "写操作 execute_statement 会立即执行，偏重只读操作"
+   ],
+   "use_cases": [
+    "通过自然语言对话对 Teradata Vantage 执行查询与 schema 探索",
+    "多步分析任务（递归限制支持复杂分析查询）"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "TDSQL",
+     "rel": "support",
+     "quote": "# tdsql-agent ／ A LangGraph-powered analytics agent for Teradata Vantage. Uses a supervisor/worker architecture: a supervisor LLM routes requests to a React worker agent that executes queries, explores schemas, and runs analytics directly in the database via the `tdsql-mcp` M",
+     "lines": [
+      1,
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确其为连接并通过 MCP 服务器在 Teradata Vantage 中执行查询与分析的分析智能体，为该数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TDSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A LangGraph-powered analytics agent for Teradata Vantage. Uses a supervisor/worker architecture: a supervisor LLM routes requests to a React worker agent that executes queries, explores schemas, and runs analytics directly in the database via the `tdsql-mcp` MCP server. ／    DATABASE_URI=teradata://user:password@host/database",
+   "evidence_lines": [
+    3,
+    39
+   ]
+  },
+  "fn": "ksturgeon-td/tdsql-agent",
+  "sha": "b88463b42429",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

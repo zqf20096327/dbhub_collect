@@ -7182,5 +7182,68 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5415e6237373": {
+  "identity": {
+   "one_liner": "TiDB 坏行定位工具，用二分扫描找出无法解码的数据行",
+   "review": "该工具用于在 TiDB 表中查找损坏的数据行，通过 EXPLAIN ANALYZE 执行二分扫描定位无法解码的行，并输出 _tidb_rowid 供进一步检查。面向 TiDB 运维/排障人员，支持指定并发数、连接参数和投影列以降低扫描开销，还可通过 HTTP 接口读取行的原始 MVCC 值。",
+   "highlights": [
+    "使用二分法扫描目标表，定位无法成功解码的损坏数据行",
+    "支持 -projection 参数减少扫描列以降低扫描开销",
+    "支持并发扫描及自定义远程数据库连接参数"
+   ],
+   "use_cases": [
+    "排查 TiDB 表中无法解码的损坏数据行",
+    "获取损坏行的 _tidb_rowid 后查看原始 MVCC 值"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "A tool for finding corrupted data rows in TiDB. It scans the target table and using a divide and conquer paradigm to locate all corrupted data rows in the table that cannot decode successfully.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明这是查找 TiDB 损坏数据行的工具，为 TiDB 生态服务的运维组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A tool for finding corrupted data rows in TiDB. It scans the target table and using a divide and conquer paradigm to locate all corrupted data rows in the table that cannot decode successfully. ／ go build -o bad_rows main.go",
+   "evidence_lines": [
+    3,
+    17
+   ]
+  },
+  "fn": "breezewish/tidb-bad-rows",
+  "sha": "5415e6237373",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

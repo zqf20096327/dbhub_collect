@@ -8846,5 +8846,92 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b84e7d6d78e1": {
+  "identity": {
+   "one_liner": "Coolify 自托管的备份与恢复管理器，基于 restic 去重加密备份",
+   "review": "CBM 是面向 Coolify 平台的备份与恢复管理器，由控制面板和每台 Docker 主机上的轻量 Agent 组成，备份对象包括应用、compose 服务、卷、bind mounts 和数据库，输出到本地、SSH/SFTP 或 S3，使用 restic 实现增量去重加密存储，支持原地恢复、恢复为新资源、备份缺失/失败告警和多服务器管理。适合使用 Coolify 自托管部署、需要灾难恢复能力的运维人员；控制器需配置 MASTER_KEY 等环境变量运行。",
+   "highlights": [
+    "支持通过 pg_dump/mysqldump/mongodump 及 Redis RDB 在不停机情况下对数据库做逻辑导出，并对卷做短暂冻结后归档",
+    "提供多目标备份（本地/SSH-SFTP/S3）、restic 增量去重加密、镜像副本、完整性检查与对账",
+    "提供自动测试恢复、失败/缺失/逾期备份告警，并通过 MCP server 支持 AI 代理触发备份"
+   ],
+   "use_cases": [
+    "对 Coolify 托管的应用、服务与数据库做定时备份与灾难恢复",
+    "将备份恢复到新的 Coolify 资源或全新实例（源已不存在时）",
+    "多服务器 Coolify 实例的集中备份调度与团队角色协作管理"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Scheduled **database** dumps (Postgres/MySQL/MariaDB/Mongo)|✅|✅| ／ - **No restart, ever.** Standalone databases are exported live (`pg_dump`/`mysqldump`/ ／ (e.g. the Postgres in n8n) also gets its own logical dump on top of the volume copy —",
+     "lines": [
+      46,
+      66,
+      71
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Scheduled **database** dumps (Postgres/MySQL/MariaDB/Mongo)|✅|✅|",
+     "lines": [
+      46
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Scheduled **database** dumps (Postgres/MySQL/MariaDB/Mongo)|✅|✅|",
+     "lines": [
+      46
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Coolify 平台及其中数据库服务的备份工具，本身不作为业务应用使用数据库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CBM is a self‑hosted control panel + lightweight agents. It gives you consistent, scheduled ／ |Scheduled **database** dumps (Postgres/MySQL/MariaDB/Mongo)|✅|✅| ／ - **No restart, ever.** Standalone databases are exported live (`pg_dump`/`mysqldump`/",
+   "evidence_lines": [
+    11,
+    46,
+    66
+   ]
+  },
+  "fn": "Holo795/CBMCoolifyBackup",
+  "sha": "b84e7d6d78e1",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
