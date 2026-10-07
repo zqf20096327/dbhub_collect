@@ -9582,5 +9582,90 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3d00ce111600": {
+  "identity": {
+   "one_liner": "基于 HTTP 的加密播放器许可证服务器，多进程+epoll+线程池，支持 MySQL/SQLite",
+   "review": "PlayerServer 是一个为加密视频播放器提供用户登录校验与视频密钥分发的 HTTP 服务器，采用多进程加 epoll 与线程池架构，并带独立日志进程。数据库层提供统一接口，内置 MySQL 与 SQLite3 两种实现，首次运行自动建表。仅支持 Linux，需 C++14 与 CMake 构建，适合作为自建播放授权后端使用。",
+   "highlights": [
+    "多进程 + 线程池 + epoll 架构，业务进程间通过无锁队列与 fd 传递同步",
+    "数据库层抽象统一接口，内置 MySQL 与 SQLite3 两种实现，首次运行自动建表",
+    "提供基于 MD5 签名的登录校验接口与独立日志进程落盘"
+   ],
+   "use_cases": [
+    "为加密视频播放器提供用户登录校验服务",
+    "分发视频解密密钥的授权后端",
+    "以 HTTP + JSON 提供业务接口的自部署场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 数据库层抽象出统一接口，内置 **MySQL** 与 **SQLite3** 两种实现 ／ |libmysqlclient-dev|MySQL 客户端库| ／ |MySQL 5.7+ / MariaDB|业务数据库，建表语句由代码自动执行|",
+     "lines": [
+      12,
+      32,
+      34
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 数据库层抽象出统一接口，内置 **MySQL** 与 **SQLite3** 两种实现",
+     "lines": [
+      12
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL 5.7+ / MariaDB|业务数据库，建表语句由代码自动执行|",
+     "lines": [
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是用 MySQL/MariaDB 存业务数据（用户表）的播放器授权服务器，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "README 未声明开源许可证，仅说明 third_party 下各库遵循原始许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "基于 HTTP 协议的加密播放器服务器，提供用户登录校验、视频密钥分发等服务。请求通过 HTTP 承载，响应体使用 JSON 传递业务数据。 ／ - 数据库层抽象出统一接口，内置 **MySQL** 与 **SQLite3** 两种实现 ／ |MySQL 5.7+ / MariaDB|业务数据库，建表语句由代码自动执行|",
+   "evidence_lines": [
+    5,
+    12,
+    34
+   ]
+  },
+  "fn": "hatmore/PlayerServer",
+  "sha": "3d00ce111600",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

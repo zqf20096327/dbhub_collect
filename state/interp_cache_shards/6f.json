@@ -8957,5 +8957,129 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0e07a29fab75": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式时空数据库，用于移动物体实时跟踪",
+   "review": "Spatio 是一个用 Rust 实现的嵌入式时空数据库，提供空间索引查询、轨迹历史存储与持久化，并通过 PyO3 提供 Python 绑定，还可选 TCP 服务器支持远程/多进程访问。适用于需要在应用内嵌存储和查询位置数据的开发者，无需部署外部服务或 SQL 引擎。",
+   "highlights": [
+    "支持半径、包围盒、KNN、圆柱体等空间查询及 2D/3D 版本",
+    "冷热状态分离：内存 R*-tree 存当前状态，追加式日志持久化轨迹并可恢复",
+    "提供原生 Python 绑定和可选 TCP 服务器模式"
+   ],
+   "use_cases": [
+    "车辆、配送、无人机等移动物体的实时位置跟踪",
+    "历史轨迹的存储与时间范围查询",
+    "在应用内嵌入地理空间数据存储而无需外部数据库服务"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 描述其本身是一个嵌入式数据库引擎，为应用提供存储与查询能力，而非使用其他数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Spatio** is a high-performance, **embedded spatio-temporal database** written in Rust. ／ - **Lightweight:** No external services, no SQL overhead, and a zero-setup embedded engine.",
+   "evidence_lines": [
+    23,
+    66
+   ]
+  },
+  "fn": "pkvartsianyi/spatio",
+  "sha": "0e07a29fab75",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "575f4f9bb98b": {
+  "identity": {
+   "one_liner": "本地文档存储与检索 CLI，用 SQLite 向量+BM25 混合搜索为 AI 代理提供记忆",
+   "review": "Mnemoteca 是一个用 Go 编写的本地 CLI 工具，为 AI 代理提供文档记忆的存储与检索：数据存于 SQLite（含 FTS5 全文与 sqlite-vec 向量），检索采用向量相似度加 BM25 词法融合，并支持本地 ONNX 模型做嵌入与可选重排，全部推理在本地运行、无需云 API。它面向使用 Claude Code、OpenCode 等 AI 代理的开发者，通过配套集成插件或 AGENTS.md 指令接入多个代理，并提供 JSONL 导出导入和 BEIR/LongMemEval 基准测试工具。",
+   "highlights": [
+    "基于 SQLite 的文档存储，含 FTS5 全文检索（BM25 排序）与 sqlite-vec 向量搜索（余弦相似度）",
+    "本地 ONNX Runtime 运行嵌入与可选交叉编码器重排模型，无云依赖",
+    "提供 JSONL 导出导入以及 BEIR SciFact、LongMemEval 基准测试工具"
+   ],
+   "use_cases": [
+    "为 Claude Code、OpenCode 等 AI 代理接入跨会话的本地长期记忆",
+    "本地语义检索与混合搜索（向量+BM25），支持 JSON 输出供脚本和评估工具使用",
+    "从 Mnemosyne 迁移记忆数据，或通过 JSONL 备份与转移记忆库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite document storage with metadata support. ／ - SQLite FTS5 full-text search with BM25 ranking. ／ - sqlite-vec vector search with cosine similarity.",
+     "lines": [
+      15,
+      17,
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它以 SQLite 作为自身文档数据的存储后端（文档存储、FTS5、sqlite-vec），是使用数据库的应用而非为 SQLite 生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Mnemoteca is a local document storage and retrieval CLI built in Go. Store short ／ - SQLite document storage with metadata support. ／ - SQLite FTS5 full-text search with BM25 ranking.",
+   "evidence_lines": [
+    7,
+    15,
+    17
+   ]
+  },
+  "fn": "gandazgul/mnemoteca",
+  "sha": "575f4f9bb98b",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

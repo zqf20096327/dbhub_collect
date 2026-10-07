@@ -8665,5 +8665,70 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ca86e925166d": {
+  "identity": {
+   "one_liner": "Supabase CRUD 工具插件，让 DSH Agent 通过自然语言操作数据库",
+   "review": "为 DeepSeek Harness Agent 提供 10 个模型工具的 Cordis 动态插件，可通过对话执行 Supabase 的 PostgREST CRUD、Management API SQL、Storage 桶文件上传和 RPC 调用。面向使用 DSH 的开发者，密钥经环境变量传递且 update/delete 强制过滤条件；插件为会话级，进程重启后需重装。",
+   "highlights": [
+    "提供 10 个工具：配置、连通性测试、任意 SQL（Management API）、RPC、CRUD、Storage 建桶与上传",
+    "update/delete 强制要求非空过滤条件，API Key 通过环境变量传递",
+    "纯 JS 零依赖，单个 apply(ctx) 函数实现，无构建步骤"
+   ],
+   "use_cases": [
+    "在 DSH Agent 会话中用自然语言对 Supabase 表做增删改查",
+    "通过对话建表、定义外键/索引/RLS 策略",
+    "将本地文件上传至 Storage 桶并把公开 URL 写回数据表"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|`supabase_rpc`|调用 Postgres 函数（PostgREST /rpc）|`fn`、`args?`|",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 Agent 提供操作 Supabase/Postgres 数据库能力的插件工具，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "让 DeepSeek Harness 里的 Agent 直接操作你的 Supabase 项目 —— 数据库增删改查、建表/外键/RLS 策略、Storage 桶与文件上传、RPC，全部通过自然语言完成。 ／ - 🔌 **10 个模型工具**：配置、连通性测试、任意 SQL、RPC、CRUD、Storage 建桶/上传 ／ - 📦 **纯 JS、零依赖**：一个 `apply(ctx)` 函数就是整个插件，不需要构建工具",
+   "evidence_lines": [
+    3,
+    11,
+    17
+   ]
+  },
+  "fn": "xiaolinlin360/dsh-supabase",
+  "sha": "ca86e925166d",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

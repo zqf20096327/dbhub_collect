@@ -8548,5 +8548,71 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5c8c07ffabe0": {
+  "identity": {
+   "one_liner": "Rust 编写的终端 SQL 客户端，流式渲染查询结果",
+   "review": "sql-bomb 是一个在终端中运行 SQL 并将结果流式写入表格的数据库客户端，可查看完整单元格值、复用已保存连接、浏览本地历史与收藏查询。面向在 macOS/Linux 终端工作的数据库使用者，需自行提供运行中的数据库服务器。配置、历史与收藏存储在本地 SQLite 文件中，目前处于 v0.1 开发阶段。",
+   "highlights": [
+    "在终端中执行 SQL 并随行到达流式展示结果，支持单元格完整值查看",
+    "支持保存连接、查询历史与收藏，存储于本地 SQLite 文件",
+    "实现表/列发现的客户端提供 SQL 编辑时的表名与列名补全"
+   ],
+   "use_cases": [
+    "在终端中对已运行的数据库服务器执行查询并浏览结果",
+    "管理多个数据库连接配置并在会话间复用",
+    "保存、搜索和重用历史 SQL 查询"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Profiles live in `~/.sqlbomb/queries.sqlite3`. Authentication and credential ／ History and stars live in `~/.sqlbomb/queries.sqlite3`, outside the project. ／ |Query library|Local history and starred queries in SQLite|",
+     "lines": [
+      132,
+      197,
+      323
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接数据库服务器执行 SQL 的客户端工具，服务于数据库使用场景而非使用数据库构建应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "sql-bomb is a database-agnostic terminal application for running SQL and streaming ／ A client connects sql-bomb to a database server, and every client shares the same ／ **In development · v0.1** — See available clients and",
+   "evidence_lines": [
+    7,
+    12,
+    20
+   ]
+  },
+  "fn": "fusor-rs/sql-bomb",
+  "sha": "5c8c07ffabe0",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

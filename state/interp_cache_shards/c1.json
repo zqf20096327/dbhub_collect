@@ -8450,5 +8450,180 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0484bcc53130": {
+  "identity": {
+   "one_liner": "终端数据库客户端，集成 SQL 编辑器与 visidata 交互表格",
+   "review": "DbCls 是一个终端中的数据库客户端，将带语法高亮和 schema 自动补全的 SQL 编辑器与 visidata 表格结合，查询结果可直接以交互表浏览、筛选、透视并支持管道式多步处理。面向需要在终端内查询和管理多种数据库的开发者与运维人员，通过 pip 安装，支持 MySQL、PostgreSQL、ClickHouse、SQLite，Cassandra/ScyllaDB 需单独的驱动插件。",
+   "highlights": [
+    "提供带语法高亮与 schema 感知自动补全的 SQL 编辑器，查询结果以 visidata 交互表呈现",
+    "支持在 .sql 文件中用管道语法组合 SQL、Python、正则过滤等多步流水线",
+    "可选 LLM 聊天功能，通过 OpenAI 兼容端点读写 schema 并生成/修复查询"
+   ],
+   "use_cases": [
+    "在终端中对 MySQL/PostgreSQL/ClickHouse/SQLite 进行交互式查询与数据浏览",
+    "编写可版本化的多步数据处理流水线（含分片批量执行）",
+    "借助 LLM 辅助编写与修复 SQL 查询"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL, PostgreSQL, ClickHouse, SQLite — and Cassandra / ScyllaDB through the driver plugin in `plugins/cassandra` ／ |`-E, --engine`|Database engine: `mysql`, `postgres`, `clickhouse`, `sqlite3`, plus whatever a driver plugin added (`cassandra` with `--plugin-dir ./plugins`). Defaults to `sqlite3`|",
+     "lines": [
+      26,
+      108
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- MySQL, PostgreSQL, ClickHouse, SQLite — and Cassandra / ScyllaDB through the driver plugin in `plugins/cassandra` ／ |`-E, --engine`|Database engine: `mysql`, `postgres`, `clickhouse`, `sqlite3`, plus whatever a driver plugin added (`cassandra` with `--plugin-dir ./plugins`). Defaults to `sqlite3`|",
+     "lines": [
+      26,
+      108
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- MySQL, PostgreSQL, ClickHouse, SQLite — and Cassandra / ScyllaDB through the driver plugin in `plugins/cassandra` ／ - With no connection arguments it starts on an in-memory SQLite — just open a file and type ／ With no connection arguments at all, dbcls opens the file on an in-memory SQLite database —",
+     "lines": [
+      26,
+      27,
+      89
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- MySQL, PostgreSQL, ClickHouse, SQLite — and Cassandra / ScyllaDB through the driver plugin in `plugins/cassandra` ／ |`-E, --engine`|Database engine: `mysql`, `postgres`, `clickhouse`, `sqlite3`, plus whatever a driver plugin added (`cassandra` with `--plugin-dir ./plugins`). Defaults to `sqlite3`| ／ |`--no-compress`|Disable compression for ClickHouse connections (can also be switched at runtime via the `Toggle connection compression` command in the command palette)|",
+     "lines": [
+      26,
+      108,
+      115
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接多种数据库提供查询管理能力的客户端工具，为数据库使用提供服务而非以某数据库存储自身数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DbCls is a terminal database client in which a SQL editor and visidata work as one thing: you write the query in an editor with syntax highlighting and schema-aware autocomplete, and its result opens straight away as an interactive table you can filter, sort, pivot, reshape, chart and drill into. On top of that sits a pipeline language that turns the editor into the place multi-step work happens — \"collect ids from one query, run them against every shard, show progress\" — right inside the `.sql` file, instead of in a throwaway Python script. ／ - MySQL, PostgreSQL, ClickHouse, SQLite — and Cassandra / ScyllaDB through the driver plugin in `plugins/cassandra` ／ pip install dbcls",
+   "evidence_lines": [
+    3,
+    26,
+    71
+   ]
+  },
+  "fn": "Sets88/dbcls",
+  "sha": "0484bcc53130",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "41793a98d417": {
+  "identity": {
+   "one_liner": "本地优先任务看板，AI 代理经 MCP 协作、变更需人工批准",
+   "review": "Task Tracker 是一个运行在本机的个人任务看板应用，数据存于单个 SQLite 文件。它内置 MCP 服务器，提供 19 个工具供 Claude Code、Cursor 等 MCP 客户端读写任务，所有变更默认进入审批收件箱由用户一键应用；另带可接 OpenAI 兼容服务商（含 Ollama、LM Studio）的内置助手。适合与编码代理协作、注重数据本地化的个人开发者，不支持团队共享与多设备同步。",
+   "highlights": [
+    "内置 MCP 服务器，提供 19 个工具供 AI 代理规划、更新、完成任务",
+    "代理与内置助手的写操作默认进入审批卡，用户确认后才应用",
+    "数据存于单个本地 SQLite 文件，无账号与遥测，可配合 Ollama/LM Studio 全程本地运行"
+   ],
+   "use_cases": [
+    "开发者为编码代理（Claude Code、Cursor）提供共享任务规划与进度记录入口",
+    "个人本地任务/项目管理：看板、甘特图时间线、提醒与语音问答",
+    "需要 AI 辅助但要求所有变更经人工批准的工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**One SQLite file.** No account, no cloud, no telemetry. Pair it with Ollama or LM Studio and even the AI runs locally. ／ That's it. No database to install and no config files. SQLite is built into Node 22.13+, so there's nothing native to compile either. ／ The MCP server works on the same SQLite file as the app, so agents can read your board even when the web server isn't running. When it is, open tabs **update live** within about half a second.",
+     "lines": [
+      26,
+      68,
+      128
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用使用内置 SQLite 文件存数据，SQLite 是其存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**One SQLite file.** No account, no cloud, no telemetry. Pair it with Ollama or LM Studio and even the AI runs locally. ／ That's it. No database to install and no config files. SQLite is built into Node 22.13+, so there's nothing native to compile either. ／ Task Tracker ships with a Model Context Protocol server, so your agent can keep track of its own work, or yours.",
+   "evidence_lines": [
+    26,
+    68,
+    72
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Parv17k/tasktracker",
+  "sha": "41793a98d417",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

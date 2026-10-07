@@ -9248,5 +9248,124 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ab11e308934b": {
+  "identity": {
+   "one_liner": "自托管游戏库服务器，用 SQLite 存储目录并提供 ROMM 兼容 API",
+   "review": "Teatro 是一个自托管的游戏库服务器，用于浏览、上传、扫描和管理游戏文件目录，游戏文件保留在磁盘上，目录元数据存于 SQLite。面向希望自建游戏库并远程浏览下载的玩家，通过浏览器管理界面和受限 API 访问。注意：项目处于 beta 阶段，非商业许可（CC BY-NC-SA 4.0），不提供游戏文件，ROMM API 仅实现子集。",
+   "highlights": [
+    "提供带认证的浏览器界面，支持搜索、游戏详情、封面和下载",
+    "支持单文件、光盘描述文件、多碟播放列表的导入与托管库扫描，以及 CRC32/MD5/SHA-1/SHA-256 哈希校验",
+    "实现 ROMM API 的一个子集，用于浏览和下载，并提供受限账户与作用域 API 令牌"
+   ],
+   "use_cases": [
+    "自托管个人游戏库，通过浏览器远程浏览和下载游戏文件",
+    "对导入的游戏文件做哈希验证与 Logiqx XML DAT 校验",
+    "从远程 RomM 服务器浏览并导入选定游戏（实验性）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "browser administration, and a focused ROMM-compatible API. SQLite stores the",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 SQLite 存储其目录数据，Teatro 本身是使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "源码可得但非商业许可，CC BY-NC-SA 4.0，无双许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Teatro is a self-hosted game library server with a player library, ／ browser administration, and a focused ROMM-compatible API. SQLite stores the ／ CC BY-NC-SA 4.0. Docker is the main deployment method.",
+   "evidence_lines": [
+    9,
+    10,
+    15
+   ]
+  },
+  "fn": "lodilorenzo/teatro",
+  "sha": "ab11e308934b",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4a1e8f90124f": {
+  "identity": {
+   "one_liner": "Windows 端赛马信息浏览应用，使用 JRA-VAN 数据",
+   "review": "KMY竞马是一个在 Windows 上运行的赛马信息浏览应用，通过 JV-Link 从 JRA-VAN 及地方竞马 DATA 下载数据，使用 EntityFrameworkCore 和 SQLite 存取数据。适合日本赛马数据用户，开源部分不含马券购买插件，构建还需额外下载 Data Lab. SDK 文件。",
+   "highlights": [
+    "包含主应用、数据下载器、JV-Link 数据获取模块等子项目",
+    "使用 EntityFrameworkCore 访问数据库，数据类型定义位于 KmyKeiba.Data 项目",
+    "基于 .NET 8.0 与 C# 12，使用 WPF 构建 Windows 桌面应用"
+   ],
+   "use_cases": [
+    "浏览 JRA-VAN、地方竞马 DATA 提供的赛马数据",
+    "下载并本地保存赛马数据用于查看"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该项目是使用数据库存储赛马数据的应用程序，README 未提供面向数据库生态的工具能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Windowsで動作する競馬情報閲覧用のアプリです。JRA-VAN、地方競馬DATAのデータを使用します。 ／ |`KmyKeiba.Data`|競馬データの型定義が含まれます。ここにある`MyContextBase`を継承したクラスを利用することで、データベースへアクセスできます| ／ このプログラムはEntityFrameworkCoreを使用しています。`Add-Migration` を実行するときには、以下の手順が必要です。",
+   "evidence_lines": [
+    3,
+    13,
+    74
+   ]
+  },
+  "fn": "kmycode/kmy-keiba",
+  "sha": "4a1e8f90124f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

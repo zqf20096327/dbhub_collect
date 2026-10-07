@@ -9113,5 +9113,74 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "574c27036b58": {
+  "identity": {
+   "one_liner": "从OPPO健康App导出解密数据并生成CSV/JSON/SQLite与报告的工具集",
+   "review": "该项目是一套从 OPPO 健康 App（运行于模拟器）提取个人健康数据的工具：用 Frida hook 取出加密密钥，在电脑端用 sqlcipher3 解密数据库，导出为 CSV/JSON/SQLite 并生成 Markdown 与离线网页分析报告。面向想在本机管理自己健康数据的用户；依赖特定模拟器环境（雷电 14 已实测，MuMu 暂缓），且涉及 Android 逆向操作。",
+   "highlights": [
+    "通过 Frida 自动获取密钥并解密 SQLCipher 数据库，导出为 CSV / JSON / SQLite 三种格式",
+    "生成 12 维 Markdown 分析报告与支持四个时间窗口的离线单文件网页报告",
+    "内置导出完整性检查与独立数据校验脚本，并提供 MCP 接口供本机 AI 查询数据"
+   ],
+   "use_cases": [
+    "导出 OPPO 手环/手表记录的个人健康数据用于本地存档与分析",
+    "生成离线健康报告进行睡眠、心率等指标的自我管理",
+    "通过 MCP 接口让本机 AI 助手查询健康数据"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 从 OPPO 健康 App 中导出属于你的健康数据：自动获取加密密钥 → 拉取数据库 → 电脑端解密 → 导出 CSV / JSON / SQLite → 生成 12 维 MD 分析报告（2 个时间窗口）与离线网页报告（4 个时间窗口 × 六模块）。 ／ - **一条命令完成导出**——连上模拟器运行一个脚本，自动取数据、解密并导出为 CSV / JSON / SQLite 三种格式，无需手工操作。 ／ |产物去向|分块 HTTP 上传|CSV / JSON / 类型化 SQLite 落盘|",
+     "lines": [
+      5,
+      14,
+      88
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目实现对数据库的提取、解密与格式导出，SQLite 是其输出产物格式之一，属为数据管理服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 从 OPPO 健康 App 中导出属于你的健康数据：自动获取加密密钥 → 拉取数据库 → 电脑端解密 → 导出 CSV / JSON / SQLite → 生成 12 维 MD 分析报告（2 个时间窗口）与离线网页报告（4 个时间窗口 × 六模块）。 ／ - **一条命令完成导出**——连上模拟器运行一个脚本，自动取数据、解密并导出为 CSV / JSON / SQLite 三种格式，无需手工操作。 ／ |解密位置|手机端（模块内 SQLCipher）|电脑端（Python `sqlcipher3`）|",
+   "evidence_lines": [
+    5,
+    14,
+    87
+   ]
+  },
+  "fn": "NightvoyagerLin/oppo-health-data-toolkit",
+  "sha": "574c27036b58",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

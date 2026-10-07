@@ -7904,5 +7904,394 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c52d02f41891": {
+  "identity": {
+   "one_liner": "AI Agent 会话记忆压缩与跨会话上下文注入插件",
+   "review": "Claude-Mem 为 Claude Code 等 AI 编码代理提供跨会话的持久记忆：通过生命周期钩子自动捕获工具调用观察，用 AI 生成语义摘要存入 SQLite（FTS5）与 Chroma 向量库，未来会话通过 MCP 搜索工具检索并注入相关上下文。面向使用 Claude Code、Codex、OpenCode 等代理的开发者，通过 npx 或插件市场安装，需要 Node 20+ 和 Bun 运行时。",
+   "highlights": [
+    "提供 5 个生命周期钩子（SessionStart、UserPromptSubmit、PostToolUse、Stop、SessionEnd）自动捕获会话观察",
+    "提供 4 个 MCP 搜索工具（search、timeline、get_observations 等）实现分层检索",
+    "使用 SQLite 存储 sessions/observations/summaries，并结合 Chroma 向量库做混合语义+关键词搜索"
+   ],
+   "use_cases": [
+    "AI 编码代理跨会话保持项目知识连续性",
+    "以自然语言查询项目历史操作记录",
+    "通过 Web Viewer 实时查看代理的记忆流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "4. **SQLite Database** - Stores sessions, observations, summaries ／ - **SQLite 3**: For persistent storage (bundled)",
+     "lines": [
+      236,
+      289
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该项目存储会话与观察数据的持久化存储，README 未提供面向数据库生态的服务功能",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "4. **SQLite Database** - Stores sessions, observations, summaries ／ - **SQLite 3**: For persistent storage (bundled) ／ Claude-Mem provides intelligent memory search through **4 MCP tools** following a token-efficient **3-layer workflow pattern**:",
+   "evidence_lines": [
+    236,
+    289,
+    244
+   ]
+  },
+  "fn": "thedotmack/claude-mem",
+  "sha": "c52d02f41891",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0adaa89267c2": {
+  "identity": {
+   "one_liner": "国家/州/城市/邮编开源数据集，以12种格式发布",
+   "review": "社区维护的地理数据仓库，包含250个国家、5299个州、153,765个城市及邮编数据，以JSON、SQL、XML、YAML、CSV、Parquet等12种格式发布，并提供REST API、NPM/PyPI离线快照包和导出工具。适用于需要在应用中内置地理数据的开发者；数据为社区维护，许可为ODbL并要求署名。",
+   "highlights": [
+    "提供JSON、MySQL、PostgreSQL、SQLite、SQL Server、MongoDB、CSV等12种数据格式导出",
+    "提供官方REST API、Python/NPM客户端包与CLI访问方式",
+    "数据包含ISO2/ISO3编码、首都、多语言名称及427个IANA时区"
+   ],
+   "use_cases": [
+    "为应用内置国家/州/城市/邮编离线数据",
+    "通过REST API在任意语言中查询地理数据",
+    "按需筛选国家、区域与字段生成定制数据集"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Formats:** JSON, MySQL, PostgreSQL, SQLite, SQL Server, MongoDB, XML, YAML, CSV, GeoJSON, TOON (LLM-optimised, ~40% fewer tokens than JSON), Parquet (columnar, analytics-ready)",
+     "lines": [
+      120
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Formats:** JSON, MySQL, PostgreSQL, SQLite, SQL Server, MongoDB, XML, YAML, CSV, GeoJSON, TOON (LLM-optimised, ~40% fewer tokens than JSON), Parquet (columnar, analytics-ready) ／ |MySQL SQL|3s|86 MB|22 MB|",
+     "lines": [
+      120,
+      126
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Formats:** JSON, MySQL, PostgreSQL, SQLite, SQL Server, MongoDB, XML, YAML, CSV, GeoJSON, TOON (LLM-optimised, ~40% fewer tokens than JSON), Parquet (columnar, analytics-ready) ／ |SQLite|45s|89 MB|—|",
+     "lines": [
+      120,
+      133
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "- **Formats:** JSON, MySQL, PostgreSQL, SQLite, SQL Server, MongoDB, XML, YAML, CSV, GeoJSON, TOON (LLM-optimised, ~40% fewer tokens than JSON), Parquet (columnar, analytics-ready)",
+     "lines": [
+      120
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README表明其为以多种数据库格式发布的数据集仓库，为使用数据库的开发者提供数据，而非使用某数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "ODbL-1.0，要求署名，衍生品需同许可共享",
+   "install": [
+    "npm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A comprehensive, community-maintained dataset of **countries, states, cities, and postcodes** — published in 12 formats and free under the Open Database License **(attribution required)**. ／ - **Formats:** JSON, MySQL, PostgreSQL, SQLite, SQL Server, MongoDB, XML, YAML, CSV, GeoJSON, TOON (LLM-optimised, ~40% fewer tokens than JSON), Parquet (columnar, analytics-ready) ／ Licensed under the Open Database License (ODbL v1.0). Commercial use, modification, and redistribution all permitted. **Attribution is required**, and derivatives must be shared under the same license.",
+   "evidence_lines": [
+    5,
+    120,
+    138
+   ]
+  },
+  "fn": "dr5hn/countries-states-cities-database",
+  "sha": "0adaa89267c2",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1e2e5961ba1b": {
+  "identity": {
+   "one_liner": "开源 AI 原生笔记与知识库应用，内置 MCP，可部署于 Cloudflare 或 Docker",
+   "review": "EdgeEver 是一个开源的笔记与知识库应用，提供 Evernote 风格的三栏布局、网页剪藏、AI 智能体集成与多端客户端。数据构建在 SQLite 之上并提供 REST API 与 ZIP 导出，支持 Cloudflare Workers/D1/R2 或 Docker 自托管部署，适合希望自持数据的个人与团队用户。",
+   "highlights": [
+    "内置 MCP 与 ACP 协议，供外部 AI Agent 读取和整理笔记",
+    "数据基于标准 SQLite，提供 REST API、CLI 工具与无损 ZIP 全量导入导出",
+    "支持 Cloudflare Serverless 与 Docker 两种部署方式，多平台客户端覆盖"
+   ],
+   "use_cases": [
+    "个人知识库与笔记管理（Evernote 风格三栏工作流）",
+    "自托管的多端同步笔记服务",
+    "结合 AI Agent 的笔记整理与协作创作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Flexible Deployment & Unlocked Data**: Run for free on Cloudflare Serverless (~150k short notes and ~50k images on the free tier), or deploy via Docker to your VPS, NAS, or home server for millions of notes; built on standard SQLite with REST APIs, CLI too ／ - Android app: Expo + React Native in `apps/mobile`, with SQLite local storage and incremental sync. ／ - Native desktop app: Electron + Rust sidecar combines a consistent cross-platform experience with high-performance local data services; SQLite enables offline editing, incremental sync when back online, and local backups.",
+     "lines": [
+      77,
+      169,
+      171
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是一个使用 SQLite 存储数据的笔记知识库应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "EdgeEver is a modern, open-source notes and knowledge base workspace. It revives the beloved Evernote-style three-pane layout while offering an open data architecture and seamless AI Agent integration for complete ownership and smart productivity. ／ - **Flexible Deployment & Unlocked Data**: Run for free on Cloudflare Serverless (~150k short notes and ~50k images on the free tier), or deploy via Docker to your VPS, NAS, or home server for millions of notes; built on standard SQLite with REST APIs, CLI tooling, and lossless full ZIP export/import to keep your data completely independent. ／ 2. Create D1 `edgeever` and R2 `edgeever-resources` in Cloudflare.",
+   "evidence_lines": [
+    19,
+    77,
+    95
+   ]
+  },
+  "fn": "tianma-if/edgeever",
+  "sha": "1e2e5961ba1b",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "75014510ade0": {
+  "identity": {
+   "one_liner": "基于 Laravel 的 Usenet 索引器，采集并组织新闻组内容",
+   "review": "NNTmux 是一个用 Laravel 编写的 Usenet 索引器，自动抓取新闻组头部、组织成可搜索的发布内容，并提供 newznab 兼容 API 供 Sonarr 等下载客户端调用。要求 PHP 8.4+ 和 MariaDB 10.6+/MySQL 8+，明确不支持 PostgreSQL，依赖 tmux、Redis 及 ManticoreSearch/Elasticsearch 实现多线程处理和全文搜索。适合自建 Usenet 索引服务的 Linux 运维人员部署使用。",
+   "highlights": [
+    "提供多线程处理（头部采集、发布生成、后处理）及 tmux 引擎监控线程与性能",
+    "支持 newznab 标准兼容的 RESTful API，可对接 Sonarr、Radarr 等客户端",
+    "支持 ManticoreSearch 或 Elasticsearch 作为全文搜索引擎，并可抓取 IRC pre 通道获取发布信息"
+   ],
+   "use_cases": [
+    "自建 Usenet 索引站，采集新闻组并生成可搜索发布",
+    "为下载客户端和媒体管理器提供 newznab API 搜索服务",
+    "从 IRC pre 通道或 PreDB API 收集早期发布信息"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- MariaDB 10.6+ or MySQL 8+ (PostgreSQL not supported)",
+     "lines": [
+      27
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- PHP 8.4+ with extensions: curl, json, pdo_mysql, openssl, mbstring, xml, zip, gd, intl, pcntl ／ - MariaDB 10.6+ or MySQL 8+ (PostgreSQL not supported)",
+     "lines": [
+      26,
+      27
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MariaDB 10.6+ or MySQL 8+ (PostgreSQL not supported) ／ # /etc/mysql/mariadb.conf.d/99-nntmux.cnf",
+     "lines": [
+      27,
+      124
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 要求 MariaDB/MySQL 作为数据存储，是使用数据库运行的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPLv3（来自主题标签）",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "NNTmux is a modern Usenet indexer built on Laravel, designed for high performance and scalability. It automatically scans Usenet, collects headers, and organizes them into searchable releases. The project is actively maintained and features multi-threaded processing, advanced search, and a web-based front-end with API access. ／ - MariaDB 10.6+ or MySQL 8+ (PostgreSQL not supported) ／ NNTmux provides a newznab-compatible API for integration with download clients and media managers (Sonarr, Radarr, etc.).",
+   "evidence_lines": [
+    7,
+    27,
+    271
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "NNTmux/newznab-tmux",
+  "sha": "75014510ade0",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9c076fe9131c": {
+  "identity": {
+   "one_liner": "3D打印记录网站的REST API后端，追踪打印机、耗材与打印历史",
+   "review": "这是为 3dprintlog.com 提供数据的 ASP.NET Core REST API，用于记录打印任务、管理打印机库存与耗材、统计电费成本，并支持从切片软件导入设置及通过 OctoPrint/Klipper webhook 自动记录。数据存于 SQL Server（Entity Framework Core），文件存 Azure Blob，采用 Auth0 双认证，生产环境托管在 Azure，另提供 MCP 服务器供 AI 代理调用。",
+   "highlights": [
+    "提供 REST API 记录打印任务、打印机统计与耗材用量（L12-L14）",
+    "支持从 Cura、OrcaSlicer、PrusaSlicer、Bambu Studio 导入切片设置，并通过 OctoPrint/Klipper webhook 自动记录（L16-L17）",
+    "内置 MCP 服务器并发布 Agent 插件/技能供 AI 代理使用（L56-L66）"
+   ],
+   "use_cases": [
+    "3D 打印个人或团队在线记录打印历史与耗材成本",
+    "通过 webhook 自动采集 OctoPrint/Klipper 打印数据",
+    "让 AI 代理通过 MCP 服务器查询或操作打印记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- Entity Framework Core + SQL Server ／ The production environment runs on Azure (App Service, SQL Server, Blob Storage). That part is manually managed. Email is the exception: Amazon SES, its DNS and the event webhook topic are defined in Terraform in HoffmanEngineering/3d-print-log-infra.",
+     "lines": [
+      35,
+      42
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是使用 SQL Server 存储数据的 Web 应用后端 API，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The backend API powering 3D Print Log — a web application for tracking 3D prints, printers, and filaments. Running in production at api.3dprintlog.com/swagger. ／ - Entity Framework Core + SQL Server ／ The production environment runs on Azure (App Service, SQL Server, Blob Storage). That part is manually managed. Email is the exception: Amazon SES, its DNS and the event webhook topic are defined in Terraform in HoffmanEngineering/3d-print-log-infra.",
+   "evidence_lines": [
+    8,
+    35,
+    42
+   ]
+  },
+  "fn": "HoffmanEngineering/3d-print-log-api",
+  "sha": "9c076fe9131c",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

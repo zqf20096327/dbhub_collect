@@ -8358,5 +8358,75 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "11fe5bc394fd": {
+  "identity": {
+   "one_liner": "基于 SQLite 的单二进制日志与指标服务器，含 Web UI 和告警",
+   "review": "Pooml 是一个自托管的单二进制可观测性服务，用 SQLite 存储日志与指标，支持 FluentBit/HTTP 日志接入、OTLP 推送与 Prometheus 抓取，提供 SQL 查询、仪表盘、SQL 规则告警和 S3 定时备份，面向个人开发者与小团队在 VPS 上部署。注意它刻意保持小型化，指标仅支持 counter 和 gauge 两类，histogram 会被降采样，且不接受外部贡献。",
+   "highlights": [
+    "单二进制运行，日志与指标分别存储于 SQLite 文件，支持 FTS5 全文检索与 SQL 查询",
+    "支持 FluentBit HTTP 接入、OTLP/HTTP 推送与 Prometheus 端点抓取，提供仪表盘、War Room 和 SQL 告警",
+    "内置 S3 定时备份（SQLite 在线备份 API）与 @pooml/mcp 服务器，向 MCP 客户端提供只读 SQL 访问"
+   ],
+   "use_cases": [
+    "个人项目或 VPS 部署的自托管日志收集与检索",
+    "小型团队的应用指标采集、仪表盘展示与告警",
+    "通过 MCP 让 AI 助手以只读 SQL 查询日志与指标"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Pooml (stands for \"Poor Man's Logger\") is a self-hosted, single-binary log and metrics server on top of SQLite, built ／ One binary, two SQLite files, a web UI. Ship logs from FluentBit or plain HTTP, push metrics via OTLP or let pooml",
+     "lines": [
+      3,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身实现日志/指标存储与查询服务，SQLite 是其内嵌存储组件而非其服务的目标数据库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pooml (stands for \"Poor Man's Logger\") is a self-hosted, single-binary log and metrics server on top of SQLite, built ／ One binary, two SQLite files, a web UI. Ship logs from FluentBit or plain HTTP, push metrics via OTLP or let pooml ／ - **Logs**: FluentBit-compatible HTTP ingestion with automatic format detection per line (JSON, Common Log Format, plain",
+   "evidence_lines": [
+    3,
+    7,
+    16
+   ]
+  },
+  "fn": "n0rdy/pooml",
+  "sha": "11fe5bc394fd",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

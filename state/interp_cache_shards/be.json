@@ -8893,5 +8893,83 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "47dc1d28e1d5": {
+  "identity": {
+   "one_liner": "达梦数据库工具的 Rust 插件宿主 CLI（dm），管理插件安装/更新/卸载",
+   "review": "dameng-cli 是一个用 Rust 编写的插件宿主命令行工具，命令名为 dm，负责插件的安装、发现、执行、更新与卸载，通过版本化协议与独立进程插件通信。数据库功能由独立插件提供：plugins/db 管理达梦数据库连接配置（其 test/exec 驱动仍是占位实现，会报错），plugins/ssh 管理 SSH 连接。它为达梦数据库的运维与开发人员提供插件化的工具管理入口，是独立社区项目，非达梦官方。",
+   "highlights": [
+    "提供插件安装、发现、执行、更新、卸载与原子升级，安装过程校验 SHA-256",
+    "提供 dm-plugin-sdk，插件以独立进程通过版本化能力协议与宿主通信，支持 hooks 与源码编译安装",
+    "内置 db 插件管理达梦连接配置（AES-GCM 加密存储），ssh 插件管理 SSH 服务器连接"
+   ],
+   "use_cases": [
+    "为达梦数据库环境统一安装和管理多个 Rust CLI 插件工具",
+    "管理达梦数据库与 SSH 服务器的连接配置并支持加密导出迁移",
+    "基于 dm-plugin-sdk 开发自定义 Rust 插件扩展 CLI 功能"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "面向达梦（Dameng）数据库工具的 **Rust 插件宿主**。命令名为 `dm`。 ／ 当前仓库通过 git submodule 固定两个独立插件仓库的提交：`plugins/ssh` 管理 SSH 服务器连接，`plugins/db` 管理达梦数据库连接配置（`test`/`exec` 的驱动实现待接入）。 ／ |`dm db add/edit/list/remove/test/exec`|由 `plugins/db` 插件提供的达梦数据库连接管理；连接写入插件自身的 `data/db/connections.sqlite3`，密码用本机 AES-GCM 密钥加密，`add` 在终端下省略任意字段时逐项交互式输入，`list [--json]` 输出带边框表格或 JSON；插件自己的默认值写在 `config/db/config.toml`（`[defaults]` 的 port/username/driver/schema 与 `[connect]` 的 timeout/probe）。`test`（探测语句）与 `exec`（输出制表符分隔的结果集）的命令与接口已就位，但驱动仍是占位实现，当前会明确报错|",
+     "lines": [
+      6,
+      9,
+      99
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|`dm doctor [--repair]`|检查或修复 SQLite、插件目录、残留事务与孤立配置/数据/缓存目录| ／ |`dm ssh add/edit/list/remove/test/connect`|由 `plugins/ssh` 插件提供的 SSH 服务器管理；配置写入插件自身的 `data/ssh/servers.sqlite3`，`add` 在终端下省略任意字段时逐项交互式输入，密码/口令隐藏回显；`list [--json]` 输出带边框表格或 JSON，从不回显秘密；插件自己的默认值写在 `config/ssh/config.toml`（`[defaults]`、`[test]`）。SSH 使用内置 Rust 库， ／ |`dm db add/edit/list/remove/test/exec`|由 `plugins/db` 插件提供的达梦数据库连接管理；连接写入插件自身的 `data/db/connections.sqlite3`，密码用本机 AES-GCM 密钥加密，`add` 在终端下省略任意字段时逐项交互式输入，`list [--json]` 输出带边框表格或 JSON；插件自己的默认值写在 `config/db/config.toml`（`[defaults]` 的 port/username/driver/schem",
+     "lines": [
+      95,
+      97,
+      99
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是为达梦数据库服务的 CLI 工具宿主，管理数据库连接配置，属于数据库生态工具而非使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，插件可独立选择许可证",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向达梦（Dameng）数据库工具的 **Rust 插件宿主**。命令名为 `dm`。 ／ 当前仓库通过 git submodule 固定两个独立插件仓库的提交：`plugins/ssh` 管理 SSH 服务器连接，`plugins/db` 管理达梦数据库连接配置（`test`/`exec` 的驱动实现待接入）。 ／ |`dm db add/edit/list/remove/test/exec`|由 `plugins/db` 插件提供的达梦数据库连接管理；连接写入插件自身的 `data/db/connections.sqlite3`，密码用本机 AES-GCM 密钥加密，`add` 在终端下省略任意字段时逐项交互式输入，`list [--json]` 输出带边框表格或 JSON；插件自己的默认值写在 `config/db/config.toml`（`[defaults]` 的 port/username/driver/schema 与 `[connect]` 的 timeout/probe）。`test`（探测语句）与 `exec`（输出制表符分隔的结果集）的命令与接口已就位，但驱动仍是占位实现，当前会明确报错|",
+   "evidence_lines": [
+    6,
+    9,
+    99
+   ]
+  },
+  "fn": "guangl/dameng-cli",
+  "sha": "47dc1d28e1d5",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

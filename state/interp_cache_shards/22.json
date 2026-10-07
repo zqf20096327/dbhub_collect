@@ -8530,5 +8530,268 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e6200265fb7a": {
+  "identity": {
+   "one_liner": "NestJS DDD+CQRS 分层架构 REST API 示例项目，使用 MySQL 与 SQS Outbox",
+   "review": "该仓库是一个可运行的 NestJS REST API 示例，展示 DDD 四层结构（接口/应用/领域/基础设施）与 CQRS 命令/查询分离、领域事件、Outbox 表配合 SQS 的事件发布机制，通过 Docker Compose 提供 MySQL 8.4 与 LocalStack 环境。适合学习微服务架构与 DDD/CQRS 实现方式的 Node.js/TypeScript 开发者，仓库定位为稳定参考示例而非持续开发。",
+   "highlights": [
+    "实现 DDD 四层架构（领域/应用/接口/基础设施）与 CQRS 命令/查询分离",
+    "使用 Outbox 表在同一事务中存储领域事件，由 OutboxPoller 发布至 SQS",
+    "提供 Docker、Docker Compose、Kubernetes 多种运行方式"
+   ],
+   "use_cases": [
+    "学习微服务架构下 DDD 与 CQRS 的实现模式",
+    "参考 Outbox 模式与 SQS 集成事件的落地代码",
+    "作为 NestJS 项目分层结构的参考示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "This is REST api made by node.js, nest, mysql with typescript. ／ So you have to get node.js environment, mysql for database, LocalStack (or real AWS) for messaging, know typescript syntax. ／ Next up, generate mysql and LocalStack.",
+     "lines": [
+      87,
+      93,
+      123
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该项目是用 MySQL 存储数据的 REST API 应用，MySQL 仅为运行前提之一",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This is REST api made by node.js, nest, mysql with typescript. ／   docker compose up -d database localstack # create mysql 8.4 and LocalStack containers ／ Docker compose in this project is include api, nginx proxy, mysql 8.4 for database and LocalStack.",
+   "evidence_lines": [
+    87,
+    132,
+    179
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "kyhsa93/nestjs-rest-cqrs-example",
+  "sha": "e6200265fb7a",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6379c08fbb47": {
+  "identity": {
+   "one_liner": "连接 Claude 与多种关系数据库的 MCP 服务器",
+   "review": "一个 MCP 服务器，通过 SQLAlchemy 让 Claude Desktop 访问关系数据库，提供列出表名、读取 schema、执行 SQL 查询等工具，并可通过 claude-local-files 处理超出上下文窗口的完整结果集。面向需要在 Claude Desktop 中探索数据库、编写验证 SQL、生成报告的用户。支持 stdio 与 HTTP 传输，需按数据库配置相应驱动。",
+   "highlights": [
+    "通过 SQLAlchemy 支持 PostgreSQL、MySQL/MariaDB、SQLite、Oracle、SQL Server、CrateDB、Vertica 等数据库",
+    "提供 all_table_names、schema_definitions、execute_query 等 MCP 工具",
+    "支持 stdio 与 streamable-http/SSE 传输，提供带常用驱动的 Docker 镜像"
+   ],
+   "use_cases": [
+    "在 Claude Desktop 中探索数据库结构与表关系",
+    "由 LLM 辅助编写并验证 SQL 查询",
+    "分析大数据集并生成报告与可视化"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Works with PostgreSQL, MySQL, MariaDB, SQLite, Oracle, MS SQL Server, CrateDB, Vertica, ／ ### PostgreSQL",
+     "lines": [
+      15,
+      43
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Works with PostgreSQL, MySQL, MariaDB, SQLite, Oracle, MS SQL Server, CrateDB, Vertica, ／ ### MySQL/MariaDB",
+     "lines": [
+      15,
+      51
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Works with PostgreSQL, MySQL, MariaDB, SQLite, Oracle, MS SQL Server, CrateDB, Vertica, ／ ### MySQL/MariaDB ／ (PostgreSQL, MySQL/MariaDB, MS SQL Server, Oracle) preinstalled:",
+     "lines": [
+      15,
+      51,
+      96
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Works with PostgreSQL, MySQL, MariaDB, SQLite, Oracle, MS SQL Server, CrateDB, Vertica, ／ ### SQLite (built into Python)",
+     "lines": [
+      15,
+      35
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Works with PostgreSQL, MySQL, MariaDB, SQLite, Oracle, MS SQL Server, CrateDB, Vertica, ／ ### Microsoft SQL Server",
+     "lines": [
+      15,
+      59
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Works with PostgreSQL, MySQL, MariaDB, SQLite, Oracle, MS SQL Server, CrateDB, Vertica, ／ ### Oracle",
+     "lines": [
+      15,
+      67
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为 LLM 客户端访问数据库提供连接与查询能力的 MCP 服务器组件，非以数据库存储数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "SQL Server",
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Mozilla Public License 2.0",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Let Claude be your database expert! MCP Alchemy connects Claude Desktop directly to your databases, allowing it to: ／ Works with PostgreSQL, MySQL, MariaDB, SQLite, Oracle, MS SQL Server, CrateDB, Vertica, ／ - **all_table_names**",
+   "evidence_lines": [
+    7,
+    15,
+    150
+   ]
+  },
+  "fn": "runekaagaard/mcp-alchemy",
+  "sha": "6379c08fbb47",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "798e8dcd91ee": {
+  "identity": {
+   "one_liner": "零信任 AI 子代理任务编排器，用 SQLite 持久化任务队列",
+   "review": "g8s 是一个单二进制 Go 编排工具，让上层 AI 模型把机械性任务委托给外部 CLI worker，通过 SQLite WAL 任务队列、能力凭据（receipt）、进程隔离和心跳清理来约束 worker 权限。面向使用 Claude/GPT 等 CLI 代理的开发者。提供 MCP 集成接入 Claude Desktop、Cursor 等，不提供 Web UI。",
+   "highlights": [
+    "提供基于 SQLite WAL 的持久任务队列，支持原子 CAS 租约、幂等键和父子任务谱系",
+    "实现单次使用、限时、路径范围的能力凭据机制控制 worker 写文件系统",
+    "通过 stdio JSON-RPC 提供 MCP 集成，可接入 Claude Desktop、Cursor、Codex、Windsurf"
+   ],
+   "use_cases": [
+    "让高阶 AI 编排器安全地把任务委托给多个 CLI 代理执行",
+    "需要任务在会话中断后存活并自动重试的代理工作流",
+    "对代理文件写入需要凭据化权限约束的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Durable task queue**: SQLite WAL, atomic CAS leases, idempotency keys, parent-child lineage. Tasks survive session death; the queue is the memory.",
+     "lines": [
+      19
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其持久任务队列使用 SQLite WAL 存储任务状态，SQLite 是其存数据组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，另有 LICENSE-APACHE-2.0 等双许可变体文件",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Durable task queue**: SQLite WAL, atomic CAS leases, idempotency keys, parent-child lineage. Tasks survive session death; the queue is the memory. ／ > **Single-binary zero-trust process execution harness (<25MB static pure-Go binary) for AI agent CLI workers.** ／ Plug into Claude Desktop, Cursor, Codex, or Windsurf via stdio JSON-RPC:",
+   "evidence_lines": [
+    19,
+    5,
+    98
+   ]
+  },
+  "fn": "tamld/g8s",
+  "sha": "798e8dcd91ee",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

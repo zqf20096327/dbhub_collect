@@ -8561,5 +8561,160 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "382aa47adb54": {
+  "identity": {
+   "one_liner": ".NET 类型化对象存储库，schema 即 C# 类，经 LINQ API 存取 PostgreSQL/MSSQL/SQLite",
+   "review": "RedBase 是面向 .NET 开发者的对象存储/ORM 替代库：把 C# 类当作 schema，将类型化对象存入 PostgreSQL、SQL Server 或 SQLite（含嵌入式与 Blazor WASM 场景），提供 CRUD、对象图加载、Where 过滤、树查询、聚合与窗口函数等 LINQ 风格 API，无需迁移脚本。适用于 .NET 应用开发与 Blazor/MAUI 客户端场景；核心免费（Apache 2.0），另有 Pro 扩展包提供并行物化、变更跟踪等能力。",
+   "highlights": [
+    "以 C# 类为 schema，提供 CRUD、对象图一次加载、Where 过滤、树查询与聚合等 LINQ API",
+    "提供 PostgreSQL、SQL Server、SQLite 三个 provider 包及对应 Pro 扩展",
+    "支持导出 .redb 文件（JSONL/ZIP）用于备份和 PostgreSQL 与 MSSQL 间迁移"
+   ],
+   "use_cases": [
+    ".NET 应用中替代 EF Core 进行类型化对象持久化",
+    "Blazor WebAssembly 与 .NET MAUI 移动端的嵌入式/offline 数据存储",
+    "DBA/CI 场景导出 SQL 脚本创建 schema"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# RedBase — typed object storage for .NET. Schema = C# class. Zero migrations. Full LINQ. Postgres, MSSQL & SQLite. ／ RedBase is a data platform for .NET that stores typed objects in a relational backend (PostgreSQL, Microsoft SQL Server, or SQLite — including embedded/offline, Blazor WebAssembly and mobile via the SQLite provider). You define schemas as plain C# classes — Re ／ |`redb.Postgres`|NuGet|PostgreSQL provider (free, Apache 2.0)|",
+     "lines": [
+      1,
+      7,
+      54
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "# RedBase — typed object storage for .NET. Schema = C# class. Zero migrations. Full LINQ. Postgres, MSSQL & SQLite. ／ RedBase is a data platform for .NET that stores typed objects in a relational backend (PostgreSQL, Microsoft SQL Server, or SQLite — including embedded/offline, Blazor WebAssembly and mobile via the SQLite provider). You define schemas as plain C# classes — Re ／ |`redb.MSSql`|NuGet|Microsoft SQL Server provider (free, Apache 2.0)|",
+     "lines": [
+      1,
+      7,
+      55
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# RedBase — typed object storage for .NET. Schema = C# class. Zero migrations. Full LINQ. Postgres, MSSQL & SQLite. ／ RedBase is a data platform for .NET that stores typed objects in a relational backend (PostgreSQL, Microsoft SQL Server, or SQLite — including embedded/offline, Blazor WebAssembly and mobile via the SQLite provider). You define schemas as plain C# classes — Re ／ |`redb.SQLite`|NuGet|SQLite provider (free, Apache 2.0) — embedded/offline, native loadable extension|",
+     "lines": [
+      1,
+      7,
+      56
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为数据库提供类型化对象存储/访问层的开发库，为数据库生态服务而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "核心包 Apache 2.0，另有 Pro 付费扩展包（3.x/4.x 无需 license key）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "RedBase is a data platform for .NET that stores typed objects in a relational backend (PostgreSQL, Microsoft SQL Server, or SQLite — including embedded/offline, Blazor WebAssembly and mobile via the SQLite provider). You define schemas as plain C# classes — RedBase handles storage, indexing, querying, trees, lists, aggregation, and window functions through a single LINQ-style API. ／ |`redb.Core`|NuGet|Core abstractions, query builder, LINQ provider| ／ |`redb.Postgres`|NuGet|PostgreSQL provider (free, Apache 2.0)|",
+   "evidence_lines": [
+    7,
+    53,
+    54
+   ]
+  },
+  "fn": "redbase-app/redb",
+  "sha": "382aa47adb54",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fa0675e059b6": {
+  "identity": {
+   "one_liner": "内嵌 sing-box 的自托管代理面板，一个 Go 二进制加 SQLite",
+   "review": "m-ui 是一个自托管代理管理面板，将 sing-box 数据面内嵌于单个 Go 二进制，以线路抽象入口/出口/路由，保存前先干跑校验、失败自动回滚，支持一主多副配置推送、订阅分发、证书与备份。面向个人、小团队及多服务器统一管理代理用户的运维者，依赖 Linux systemd 环境。",
+   "highlights": [
+    "单二进制内嵌 sing-box 数据面，面板、订阅服务、数据面、后台任务共用同一 SQLite 文件",
+    "每次应用配置先经 sing-box 干跑校验，失败不落库，启动失败自动回滚",
+    "支持一主多副部署、订阅三种格式输出、证书签发续期与定时备份还原"
+   ],
+   "use_cases": [
+    "个人或小团队在多台服务器上统一管理代理用户与流量配额",
+    "通过订阅向多客户端分发节点并集中判定配额与限速",
+    "需要证书自动续期、备份还原与换机搬迁的自托管代理运维"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "一个二进制里跑着四件事:**面板**(管理界面与 API)、**订阅服务**(客户端来拉配置)、**数据面**(内嵌 sing-box,真正过流量)、**后台**(统计、配额与限速规则判定、上游巡检、公网 IP 探测、大陆连通检测、日志清理、主副同步)。它们共用同一个 SQLite 文件,所以面板里点一下保存,订阅和数据面立刻看到同一份数据。 ／ |`database/`|模型、SQLite 打开与迁移|",
+     "lines": [
+      67,
+      156
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明面板、订阅、数据面与后台共用同一个 SQLite 文件存储数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "m-ui 是一个自托管的代理面板:**一个二进制 + 一个数据库文件**,sing-box 直接内嵌其中。线路、用户、订阅、证书、备份、多台服务器,全在网页里管。 ／ 一个二进制里跑着四件事:**面板**(管理界面与 API)、**订阅服务**(客户端来拉配置)、**数据面**(内嵌 sing-box,真正过流量)、**后台**(统计、配额与限速规则判定、上游巡检、公网 IP 探测、大陆连通检测、日志清理、主副同步)。它们共用同一个 SQLite 文件,所以面板里点一下保存,订阅和数据面立刻看到同一份数据。",
+   "evidence_lines": [
+    26,
+    67
+   ]
+  },
+  "fn": "Maoyangui/m-ui",
+  "sha": "fa0675e059b6",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

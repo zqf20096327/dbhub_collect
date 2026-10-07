@@ -7272,5 +7272,140 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "302589c27475": {
+  "identity": {
+   "one_liner": "基于 Claude 的持续型 AI 助手/数字实体，含长期记忆与上下文管理机制",
+   "review": "MIRA 是一个持续对话的 AI 助手应用，通过会话分段折叠生成第一人称记忆、记忆衰减公式、Subcortical 上下文检索和 Peanut Gallery 元认知观察实现长期连续性，并将行为反馈信号存储在 Postgres 中。面向想要个人 AI 伴侣/助手的用户，使用 Postgres 持久化历史，单线程会话不可新建对话。",
+   "highlights": [
+    "会话分段折叠生成第一人称记忆，按使用日衰减而非日历日",
+    "记忆通过语义相似度、实体枢纽、遍历、过滤与重排被动加载进上下文",
+    "Text-Based LoRA：用 Postgres 累积行为信号定期合成个性化行为画像",
+    "工具从文件系统自动发现注册，支持临时调用与固定"
+   ],
+   "use_cases": [
+    "构建长期连续的个人 AI 助手/数字实体",
+    "需要跨会话长期记忆与个性化行为适配的场景",
+    "通过自定义工具扩展助手能力（邮件、提醒、家庭自动化等）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The loop works like this: After each conversation segment collapses, an assessment extractor compares the conversation against MIRA's behavioral contract. It records alignment, misalignment, and contextual passes with the specific evidence and prompt section i ／ Segment collapse and live context compaction are deliberately separate. Collapse is the durable end of a conversational segment. Live compaction is a pressure-release valve for a conversation that is still active: older messages are replaced in the provider re",
+     "lines": [
+      40,
+      83
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "MIRA 使用 PostgreSQL 存储对话历史与行为反馈信号，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The loop works like this: After each conversation segment collapses, an assessment extractor compares the conversation against MIRA's behavioral contract. It records alignment, misalignment, and contextual passes with the specific evidence and prompt section involved. These signals accumulate in Postgres. ／ Segment collapse and live context compaction are deliberately separate. Collapse is the durable end of a conversational segment. Live compaction is a pressure-release valve for a conversation that is still active: older messages are replaced in the provider request by one rolling continuation brief, while the recent turns and the original PostgreSQL history remain intact.",
+   "evidence_lines": [
+    40,
+    83
+   ]
+  },
+  "fn": "taylorsatula/mira",
+  "sha": "302589c27475",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ead6c20f9f52": {
+  "identity": {
+   "one_liner": "QQ群消息实时摘要推送服务，SQLite存储+LLM/规则筛选，推送微信",
+   "review": "该项目通过 NapCat(OneBot v11) 只读接收 QQ 群消息，用本地规则加可选百炼 LLM 过滤闲聊、提取通知/待办/截止时间，经 WxPusher 等通道推送微信，并提供 PWA 待办台。数据用 SQLite + JSONL 归档、去重和重启恢复。面向需要跟踪班级群/社群通知的 Windows 个人用户；依赖 NapCat 第三方协议客户端，仅限 Windows 部署。",
+   "highlights": [
+    "只读接收白名单 QQ 群消息，支持 24 小时历史补采与跨群去重",
+    "本地规则摘要为主，可选百炼 LLM 精炼，失败自动回退；限流、静默时段与重试队列保证不静默丢消息",
+    "内置移动端待办台 PWA，支持候选确认、截止提醒与每周复盘"
+   ],
+   "use_cases": [
+    "班级群/家长群通知与待办的自动提取和微信推送",
+    "多群同内容通知的去重与截止时间跟踪",
+    "群文件(PDF/Word/截图)内容解析纳入摘要"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`qq_live_digest/store.py`|SQLite + JSONL：消息去重、摘要归档、投递去重与重启恢复| ／ - SQLite 默认保存最近 30 天消息（`QQ_DIGEST_RETENTION_DAYS`），`msg_id` 唯一约束保证重启不重复推送。",
+     "lines": [
+      30,
+      264
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身使用 SQLite 存储消息去重与待办数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`qq_live_digest/store.py`|SQLite + JSONL：消息去重、摘要归档、投递去重与重启恢复| ／ - SQLite 默认保存最近 30 天消息（`QQ_DIGEST_RETENTION_DAYS`），`msg_id` 唯一约束保证重启不重复推送。",
+   "evidence_lines": [
+    30,
+    264
+   ]
+  },
+  "fn": "wc985732-lang/qq-live-digest",
+  "sha": "ead6c20f9f52",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

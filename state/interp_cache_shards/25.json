@@ -9200,5 +9200,77 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d914b4d9f96f": {
+  "identity": {
+   "one_liner": "Turso 引擎的实验性 C# 移植，直接读写 SQLite 磁盘格式",
+   "review": "Ahtola 是用纯 C# 编写的数据库引擎，读取和写入 SQLite 的磁盘文件格式，提供 ADO.NET 与 EF Core 提供程序，并附带浏览器 WebAssembly（OPFS）与 PowerShell 模块支持。它不是对原生 SQLite 或 Rust 内核的绑定，无需原生依赖。README 明确标注为研究/原型性质，不适用于生产环境的 .NET 工作负载。",
+   "highlights": [
+    "纯托管 C# 实现，直接读写 SQLite 兼容的磁盘格式，无需原生 SQLite 二进制或 Rust 工具链",
+    "提供 ADO.NET 提供程序、EF Core 提供程序、浏览器 WebAssembly（OPFS 存储）及 PowerShell 模块",
+    "支持 AES-GCM/AEGIS 页级加密，并可打开由 System.Data.SQLite / Microsoft.Data.Sqlite / 原生 sqlite3 创建的未加密 SQLite 文件"
+   ],
+   "use_cases": [
+    "在 .NET 应用中以托管方式嵌入 SQLite 兼容存储（桌面或 Blazor/WebAssembly 浏览器端）",
+    "需要 ADO.NET / EF Core 访问 SQLite 格式数据且不希望携带原生依赖的场景",
+    "通过 PowerShell cmdlet 对 SQLite 格式数据库执行查询、备份、完整性检查与维护操作"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "(PostgreSQL-compatible byte access) and `json_object(*)`/`jsonb_object(*)`",
+     "lines": [
+      451
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "compat",
+     "quote": "SQLite-compatible database engine, with ADO.NET and EF Core providers. ／ Ahtola is a C# engine that reads and writes SQLite’s on-disk format directly —",
+     "lines": [
+      6,
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是数据库引擎本体及其驱动/提供程序组件，为数据库生态提供存储与访问能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An experimental pure managed (C#) port of Turso’s ／ Ahtola is a C# engine that reads and writes SQLite’s on-disk format directly — ／ |`Devolutions.Ahtola.Core`|Managed engine|nuget.org|",
+   "evidence_lines": [
+    5,
+    13,
+    39
+   ]
+  },
+  "fn": "Devolutions/ahtola",
+  "sha": "d914b4d9f96f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

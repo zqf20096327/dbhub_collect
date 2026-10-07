@@ -9703,5 +9703,78 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "741e4476e78a": {
+  "identity": {
+   "one_liner": "将六个编码 AI 渠道统一封装为 OpenAI 兼容 API 的代理网关",
+   "review": "该项目把 CodeBuddy、TRAE SOLO、OpenCode Zen、Kilo Gateway、Qoder、CodeArts 六个上游渠道的接口封装为统一的 OpenAI 兼容 API，提供公共凭证池、健康度调度、会话粘性与按人用量统计，用户与凭证存于 SQLite，含 Web 管理台与 Docker 部署方式。适合需要聚合多个编码 AI 渠道凭证并统一 API 出口的使用者；README 明确标注为逆向接口实现，仅供学习研究，未做安全审计。",
+   "highlights": [
+    "提供 /v1/chat/completions、/v1/responses、/v1/messages 等 OpenAI 兼容端点，支持流式与非流式",
+    "实现三态健康度调度、会话粘性、到期额度优先与模型级冷却机制",
+    "用户账号存 SQLite，包含 admin/operator/viewer 三角色体系、审计日志与 Web 管理台"
+   ],
+   "use_cases": [
+    "将多个编码 AI 渠道凭证统一为一个 OpenAI 兼容 API 出口供客户端调用",
+    "团队共享凭证池并按人统计用量",
+    "通过管理台集中维护凭证、额度探测与每日签到自动化"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **三角色账号体系**：`admin` / `operator` / `viewer`，用户存 SQLite；一次性激活链接自设密码（无共享初始密码）、首登强制改密、改角色/停用即时吊销会话；登录与写操作留审计 ／ > `scripts/create_user.py` 直接写 SQLite（`--db` 或 `DATA_DIR`，默认 `data/coding2api.sqlite3`）。 ／ 账号存在 SQLite 的 `users` 表里，管理台「用户管理」页（仅管理员可见）负责日常增删改。",
+     "lines": [
+      18,
+      44,
+      50
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为统一封装上游 AI 渠道接口并提供 OpenAI 兼容出口的网关组件，SQLite 仅为其用户存储，不是存业务数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "把 **CodeBuddy**、**TRAE SOLO**、**OpenCode Zen**、**Kilo Gateway**、**Qoder** 与 **CodeArts** 六个上游渠道，统一封装为 OpenAI 兼容 API， ／ - **OpenAI 兼容出口**：`/v1/chat/completions`（流式 + 非流式）、`/v1/responses`（Codex CLI）、`/v1/messages`（Anthropic / Claude Code）、`/v1/models`、`/v1/user/balance`（DeepSeek 兼容余额） ／ - **三角色账号体系**：`admin` / `operator` / `viewer`，用户存 SQLite；一次性激活链接自设密码（无共享初始密码）、首登强制改密、改角色/停用即时吊销会话；登录与写操作留审计",
+   "evidence_lines": [
+    3,
+    11,
+    18
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "RobbsLuo/Coding2API",
+  "sha": "741e4476e78a",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8585,5 +8585,160 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c61ead40ca3f": {
+  "identity": {
+   "one_liner": "单文件 SQL 脚本，用于审计 Supabase/Postgres 生产安全隐患",
+   "review": "这是一个包含十二条检查的 SQL 审计文件，用户将其粘贴到 Supabase SQL 编辑器中运行，即可检查 RLS 配置、SECURITY DEFINER 函数、策略递归、缺失索引等常见生产故障模式。它只读取系统目录，不传输表数据，也不需要安装或凭据共享。适合使用 Supabase/Postgres 的开发者运行自检，要求 Postgres 15+ 以支持 security_invoker 检查项。",
+   "highlights": [
+    "提供十二项检查，覆盖 RLS 禁用、零策略、SECURITY DEFINER、策略递归、无索引外键等故障模式",
+    "只 SELECT 系统目录，不读取表数据、不写入、不外发",
+    "按严重程度输出结果并附修复语句"
+   ],
+   "use_cases": [
+    "Supabase 项目上线前自检 RLS 与函数暴露风险",
+    "排查策略递归与 auth.uid() 性能问题",
+    "纳入 CI 定期运行审计"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|4|`SECURITY DEFINER` functions **executable by PUBLIC**|Postgres grants EXECUTE to PUBLIC by default. These are born open to the anon key.| ／ **#4 is the one that surprises people.** In Postgres, a newly created function ／ Tested against Postgres 17 / Supabase. Requires Postgres 15+ for the",
+     "lines": [
+      22,
+      49,
+      66
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Postgres/Supabase 数据库提供安全审计检查的 SQL 脚本，属为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One SQL file. Paste it into the Supabase SQL Editor, hit Run, get a list of the ／ account anywhere. It only `SELECT`s from system catalogs: it reads none of your ／ Tested against Postgres 17 / Supabase. Requires Postgres 15+ for the",
+   "evidence_lines": [
+    3,
+    7,
+    66
+   ]
+  },
+  "fn": "EstasDespedido/supabase-audit",
+  "sha": "c61ead40ca3f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "47835f723f9f": {
+  "identity": {
+   "one_liner": "Go database/sql 层的多语句批处理逐条结果处理库",
+   "review": "这是一个纯应用层的 Go 库，构建在 go-sql-driver/mysql 与 TiDB/MySQL 多语句协议之上，为批量语句提供逐条结果回调、失败定位与会话变量标记，并支持服务端预处理语句缓存及 IN 列表、批量 INSERT 的参数展开。适用于需要在 database/sql API 下感知批内哪条语句失败的 Go 开发者；不提供非 SELECT 语句的受影响行数，需自行处理事务语句。",
+   "highlights": [
+    "基于 TiDB/MySQL multiStatements 协议实现逐条结果回调，失败时通过用户会话变量定位失败语句位置",
+    "提供按物理连接键控的服务端预处理语句缓存（PreparedCache）与 LRU 淘汰",
+    "提供 ExpandIn 与 ExpandValues 用于可变长度 IN 列表和批量 INSERT VALUES 的参数展开"
+   ],
+   "use_cases": [
+    "批量执行多条 SQL 且需精确知道哪条失败、哪些被跳过的 Go 应用",
+    "多语句批中混合 SELECT 与非 SELECT 语句并需逐条消费结果集的场景",
+    "需要复用预处理语句以避免批内重复 PREPARE 的应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL pipeline-mode-style ／ PostgreSQL's pipeline mode does when an error occurs. ／ PostgreSQL's `libpq` doesn't have this problem: `PQgetResult()` returns one",
+     "lines": [
+      4,
+      13,
+      23
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "per-statement result handling on top of TiDB/MySQL's multi-statement protocol — ／ without touching the server, the protocol, or `go-sql-driver/mysql` itself. ／ TiDB (and MySQL) support sending several statements as one `COM_QUERY` round",
+     "lines": [
+      5,
+      6,
+      10
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "# tidb-multistmt ／ per-statement result handling on top of TiDB/MySQL's multi-statement protocol — ／ TiDB (and MySQL) support sending several statements as one `COM_QUERY` round",
+     "lines": [
+      1,
+      5,
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为 TiDB/MySQL 的多语句协议提供客户端侧结果处理能力，是为数据库生态服务的开发库组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Application-layer, Go `database/sql`-only library that gives ／ per-statement result handling on top of TiDB/MySQL's multi-statement protocol — ／ This library reproduces that experience over TiDB/MySQL, entirely in Go,",
+   "evidence_lines": [
+    3,
+    5,
+    26
+   ]
+  },
+  "fn": "dulao5/tidb-multistmt",
+  "sha": "47835f723f9f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

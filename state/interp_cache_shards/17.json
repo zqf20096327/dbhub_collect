@@ -9286,5 +9286,347 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c37df80e2f21": {
+  "identity": {
+   "one_liner": "AI导演式小说创作桌面应用，Tauri+Rust实现，集成多代理创作工作流",
+   "review": "StoryMoss 是一款基于 Tauri、React 和 Rust 构建的桌面小说写作软件，提供幕前沉浸写作与幕后故事资产管理双界面，支持多代理协作、知识图谱、伏笔追踪和七阶段创作工作流，可通过 OpenAI、Anthropic、Ollama 等接口接入大语言模型。面向使用 AI 辅助进行长篇小说创作的作者，数据本地存储于 SQLite。",
+   "highlights": [
+    "提供幕前写作与幕后资产管理双界面，包含角色、世界观、场景、知识图谱、伏笔看板等资产类型",
+    "支持 OpenAI、Anthropic、Ollama 及本地 API 多模型接入，并可按角色与任务路由模型",
+    "实现多代理（主创/管理/编辑审计）协作与章节质量门校验机制"
+   ],
+   "use_cases": [
+    "长篇小说的 AI 辅助续写与大纲生成",
+    "故事角色、世界观与伏笔的结构化管理",
+    "本地/局域网模型环境下的离线创作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "v0.30.33 修复后续写内容仍丢失。根因：多次续写时保存操作**并发执行**，`update_scene` 全量覆写在 SQLite 写锁竞争下乱序提交，较早的小内容覆写较晚的大内容（编辑器正常但 DB 回退，重启才发现）。修复：①所有 `update_scene` **串行化**（Promise 链排队，最后一次写总是最新）；②修稿 `setContent`/`insertText` 后补同步 + 立即保存；③关闭等待 3s -> 6s（超过 SQLite busy_timeout）。 ／ 1. **后端生成链路止血**：本地 / 局域网模型默认单候选 + 全局并发限流，候选总超时硬上限 90s；LLM 连接 / 生成超时拆分；上下文准备 SQLite 高频路径 spawn_blocking 化；全局 Mutex 替换为 OnceLock / RwLock。",
+     "lines": [
+      417,
+      515
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其为桌面写作应用，数据以 SQLite 本地存储，仅使用数据库而非为其生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " 🌿 越写越懂的 AI 小说创作桌面应用 ／  Tauri ／ |🔌|**多模型适配**|OpenAI / Anthropic / Ollama / 本地 API，角色 × 任务模型路由|",
+   "evidence_lines": [
+    5,
+    12,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "91zgaoge/StoryMoss",
+  "sha": "c37df80e2f21",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2f867fa104c0": {
+  "identity": {
+   "one_liner": "TypeScript 有状态 Actor 运行时，持久化状态与串行执行",
+   "review": "提供有状态 serverless 函数（Actor）：状态在重启/中断后存活，调用串行化避免并发冲突，并通过 SDK 自动生成类型安全的 Python/TypeScript 客户端。面向需要实时协作、多会话状态的应用开发者，可用 npx 本地开发并自托管运行时，内置可观测性功能。README 未直接说明底层存储实现细节。",
+   "highlights": [
+    "支持 @Persisted 标记字段实现状态持久化，状态在中断、错误与重启后保留",
+    "提供 SDK 自动生成类型安全客户端，支持 Python 与 TypeScript",
+    "通过 npx 命令本地开发运行，并可自托管于 GCP，内置可观测性"
+   ],
+   "use_cases": [
+    "多用户实时 AI 聊天（共享会话、消息排队、流式回复）",
+    "多人协作文档的并发编辑协调",
+    "需要持久状态与串行执行的 agent 应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未说明是否直接使用或适配某个数据库，仅主题标签含 sqlite，无正文证据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "They provide _stateful serverless functions_, a foundational building block that abstracts away persistence, coordination, and infrastructure challenges in distributed systems. ／ 1. Define an _actor_, a class with _durable state_ (i.e. data survives interruptions, errors, and restarts) and _serialized execution_ (i.e. concurrent callers can update it safely). ／ 2. Generate type-safe clients automatically with the Durable Actors SDK. For now, it supports Python and TypeScript.",
+   "evidence_lines": [
+    7,
+    13,
+    19
+   ]
+  },
+  "fn": "TerseAI/durable-actors",
+  "sha": "2f867fa104c0",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "af145850980b": {
+  "identity": {
+   "one_liner": "为 PostgreSQL 数据库自动生成 RESTful API 的中间件",
+   "review": "SmoothDB 是一个用 Go 编写的中间件，为 PostgreSQL 数据库自动提供 REST JSON API，支持单实例管理多个数据库、DDL 操作、JWT 认证及 Admin UI 管理面板。API 与 PostgREST 大部分兼容，可直接复用其客户端库；可作为独立服务或 Go 库使用，支持关系嵌套查询与函数调用。",
+   "highlights": [
+    "为 PostgreSQL 数据库自动提供 REST JSON API，支持 CRUD、分页、关系嵌套查询和 /rpc 函数调用",
+    "支持 DDL 操作（创建/修改/删除数据库、表、约束、角色），单实例可管理多个数据库",
+    "提供 JWT 认证（内部认证与 Supabase Auth 两种模式）、Admin UI 管理面板，并可独立运行或作为 Go 库使用"
+   ],
+   "use_cases": [
+    "为 PostgreSQL 数据库快速生成 REST API 供应用访问",
+    "需要兼容 PostgREST API 并复用其现有客户端库的场景",
+    "通过单一实例和 Admin UI 管理多个数据库及表结构"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "SmoothDB provides a RESTful API to PostgreSQL databases. ／ 1. **Internal Authentication** (`LoginMode: \"db\"`), suitable for local development but not recommended for production. Credentials are verified against PostgreSQL database users. ／ As in PostgREST, the access mode of a request follows the HTTP method and, for functions, their volatility: `GET` and `HEAD` run **read-only** (tables, views and functions alike), `POST`, `PATCH` and `DELETE` run read-write, except that a `POST` calling a `STA",
+     "lines": [
+      3,
+      118,
+      282
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 数据库提供 REST API 中间件服务，属于为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SmoothDB provides a RESTful API to PostgreSQL databases. ／ * It also supports DDL operations (create / alter / drop databases, tables, manage constraints, roles, etc) ／ * Supports multiple databases with a single instance",
+   "evidence_lines": [
+    3,
+    15,
+    16
+   ]
+  },
+  "fn": "sted/smoothdb",
+  "sha": "af145850980b",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d86c37f5b6f4": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 3 + Vue 3 的 B2C 电商平台，含秒杀与多 Agent 客服",
+   "review": "该项目是覆盖注册登录、商品浏览、购物车、下单、支付（模拟）全流程的 B2C 电商系统，面向学习与演示使用者。后端用 MyBatis-Plus 访问 MySQL，以 Redis Lua 原子扣减库存、RabbitMQ 异步下单与延迟队列取消订单，并内置 LangGraph 编排的多 Agent 智能客服；支付为模拟实现，未接入真实第三方渠道。",
+   "highlights": [
+    "提供秒杀高并发方案：Redis Lua 脚本原子扣减库存、RabbitMQ 消息削峰异步下单、消费重试与幂等处理",
+    "提供多 Agent 智能客服服务：LangGraph 编排 Supervisor 路由、RAG 知识库检索与 SSE 流式响应",
+    "提供本地 Docker Compose 一键启动中间件，首次启动自动执行 db/mall.sql 初始化库表和种子数据"
+   ],
+   "use_cases": [
+    "部署 B2C 商城前台与管理后台进行商品、订单、秒杀管理",
+    "学习/研究秒杀场景下限流、分布式锁、缓存与消息队列的实现",
+    "运行基于 LangGraph/RAG 的多 Agent 智能客服对话服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**mall-server**|后端服务，REST API|Spring Boot 3.2.5 + MyBatis-Plus + MySQL + Redis + RabbitMQ + Elasticsearch + Sa-Token|8800| ／ |MySQL|8.0|关系数据库（Druid 连接池）| ／ - Docker（中间件统一由 Docker 容器提供，无需本机安装 MySQL/Redis 等） ／ 首次启动 MySQL 会自动执行 `db/mall.sql` 初始化库表和种子数据。",
+     "lines": [
+      19,
+      91,
+      146,
+      154
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明后端以 MySQL 作为关系数据库存储业务数据，属使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "基于 Spring Boot 3 + Vue 3 的 B2C 电商平台，覆盖用户注册登录、商品浏览、购物车、下单、支付全流程，并内置高并发秒杀系统与多 Agent 智能客服。 ／ |**mall-server**|后端服务，REST API|Spring Boot 3.2.5 + MyBatis-Plus + MySQL + Redis + RabbitMQ + Elasticsearch + Sa-Token|8800| ／ |MySQL|8.0|关系数据库（Druid 连接池）|",
+   "evidence_lines": [
+    7,
+    19,
+    91
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "quuuuj/mall",
+  "sha": "d86c37f5b6f4",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bad5fe742db1": {
+  "identity": {
+   "one_liner": "Pieces 记忆导出工具：导出到本地 SQLite 文件并提供 MCP 搜索与年度仪表盘",
+   "review": "InkVault 用于在 Pieces for Developers 关停前，把 PiecesOS 中的捕获、摘要、聊天和片段以原始记录形式导出到单个 SQLite 文件（vault.db），并提供 MCP 服务器供 Claude Code、Codex 等 AI 客户端检索，以及年度记忆仪表盘和基于 Ollama 本地模型的每日摘要。适合 Pieces 用户做本地数据抢救与备份； nightly 定时备份和导出仅在部分平台上完整测试过。",
+   "highlights": [
+    "将 PiecesOS 数据导出为单个 SQLite 文件，可中断续传，并在夜间任务后自动备份",
+    "提供 MCP 服务器，含 search_memories、timeline、get_memory、memory_stats 工具",
+    "生成 Memory Atlas 仪表盘和基于本地 Ollama 模型的每日摘要，全程数据不出本机"
+   ],
+   "use_cases": [
+    "PiecesOS 关停前抢救并长期保存个人捕获、聊天与片段记录",
+    "让 Claude Code、Codex 等 MCP 客户端检索本地记忆",
+    "定时夜间刷新与备份 vault.db"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "websites, people), saved as the raw records Pieces returned, so nothing is lost to interpretation. One SQLite file.",
+     "lines": [
+      25
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它导出数据到本地 SQLite 文件并基于该文件提供检索与备份，属于为数据管理服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "InkVault copies all of it into a single file on your machine, makes it searchable by your AI tools, and draws it ／ Each run exports new captures (if PiecesOS is running) and saves a dated copy of `vault.db` in `backups/` right ／ |`inkvault serve`|Run the MCP server|",
+   "evidence_lines": [
+    9,
+    67,
+    110
+   ]
+  },
+  "fn": "sandoreclegane/inkvault",
+  "sha": "bad5fe742db1",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9452,5 +9452,72 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "244c2d01b79c": {
+  "identity": {
+   "one_liner": "将持续内容流转换为搜索与监控的开源引擎，持久化摄取+混合检索",
+   "review": "Quivr V2 是一个用 Go 编写的搜索引擎：对持续内容流做持久化、幂等摄取，几秒内可检索，并支持词法/语义混合搜索、订阅告警和插件扩展。适合需要对自己领域内容做持续追踪、检索和告警的团队自建服务。状态为评估阶段（API v0），官方明确提示勿用于生产；数据以 PostgreSQL 和 S3 为权威存储，搜索索引为可重建投影。",
+   "highlights": [
+    "提供持久化、幂等的内容摄取，提交后写入不丢失",
+    "支持词法、语义与混合搜索，并提供关键词与语义告警",
+    "连接器、模型与业务规则以插件形式扩展，核心保持通用"
+   ],
+   "use_cases": [
+    "持续追踪 RSS、邮箱等来源内容并设置关键词/语义告警",
+    "为组织内多来源文档构建统一可检索语料库",
+    "需要对内容做更正、撤回并保留版本历史的内容管理场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Rebuildable indexes.** PostgreSQL and S3 hold the canonical data; the search index ／ api -->|commit receipt + intent| pg[(PostgreSQL<br/>catalog, receipts, changes)] ／ |Transactional catalog|PostgreSQL 17|",
+     "lines": [
+      24,
+      36,
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 与 S3 持有权威数据，PostgreSQL 是该引擎自身的目录/事务存储而非被服务的数据库对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Rebuildable indexes.** PostgreSQL and S3 hold the canonical data; the search index ／ |Transactional catalog|PostgreSQL 17|",
+   "evidence_lines": [
+    24,
+    45
+   ]
+  },
+  "fn": "The-Vibe-Company/quivr",
+  "sha": "244c2d01b79c",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

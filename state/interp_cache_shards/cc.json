@@ -9233,5 +9233,237 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b3ae094d00e7": {
+  "identity": {
+   "one_liner": "Go 语言数据库抽象层，统一记录、查询、事务 API",
+   "review": "DALgo 是面向 Go 应用的数据访问层库，提供统一的记录 CRUD、结构化查询、事务和钩子机制，底层可切换 Firestore、SQL、内存等适配器。供 Go 开发者在业务代码与具体数据库客户端之间解耦使用；README 说明部分数据库方言（如 MySQL、SQL Server、Oracle）尚无编译器，走遗留文本发射器。",
+   "highlights": [
+    "提供统一的 records、queries、transactions、hooks API，存储后端可替换",
+    "内置结构化查询构建器，通过 dalgo2sql 支持 SQLite 与 PostgreSQL 方言编译",
+    "提供 DAL 边界的最小权限访问策略控制与层级化规则"
+   ],
+   "use_cases": [
+    "Go 应用需要在不绑定具体数据库客户端的情况下编写数据访问代码",
+    "用内置内存适配器测试业务逻辑",
+    "对扩展、租户等模块施加适配器无关的访问策略"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "(`StructuredQueryDialect: \"sqlite\"`) and its PostgreSQL compiler ／ (`StructuredQueryDialect: \"postgres\"`) bind query values; with an empty dialect",
+     "lines": [
+      260,
+      261
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Structured queries reach SQL engines through `dalgo2sql`. Its SQLite compiler ／ every `database/sql` engine, SQLite included, uses the legacy text emitter,",
+     "lines": [
+      259,
+      262
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "them; do not pass untrusted values through it. MySQL, Microsoft SQL Server and",
+     "lines": [
+      309
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Oracle have no compiler yet and use the legacy text emitter.",
+     "lines": [
+      310
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "them; do not pass untrusted values through it. MySQL, Microsoft SQL Server and",
+     "lines": [
+      309
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为应用程序访问数据库服务的 Go 数据访问层组件，属于数据库生态工具/库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**DALgo** is a database abstraction layer for Go applications. It gives your ／ Structured queries reach SQL engines through `dalgo2sql`. Its SQLite compiler",
+   "evidence_lines": [
+    5,
+    259
+   ]
+  },
+  "fn": "dal-go/dalgo",
+  "sha": "b3ae094d00e7",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b1dfb1eecfc1": {
+  "identity": {
+   "one_liner": "1950–2026年F1赛事记录，构建为单一规范化SQLite数据库",
+   "review": "该项目将1950年至今的F1世界锦标赛数据（比赛、参赛、排位、积分榜）整理为一个规范化的SQLite数据库，每次构建时从多个独立来源交叉核验，各行带置信度并保留来源分歧记录。附命令行查询工具、JSON导出与schema文档。适合F1数据分析者、研究者或需要可验证体育开放数据的用户下载查询。",
+   "highlights": [
+    "提供53表、43视图、约17.7万行的单一SQLite数据库及JSON/Parquet导出",
+    "每次构建对独立来源交叉核验，行级置信度标注且保留来源分歧",
+    "构建无外部依赖（Python 3.9+标准库），支持 make all 重建、验证与导出"
+   ],
+   "use_cases": [
+    "以SQL查询分析1950年以来的F1历史赛事数据",
+    "需要带来源核验记录的可信体育开放数据消费场景",
+    "通过JSON/Parquet静态接口或lapledger.org下载数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "to run — as one normalised, queryable SQLite database. It is rebuilt from ／ |`f1.db`|The SQLite database. 53 tables, 43 views, 177,216 rows. This is the artefact.|",
+     "lines": [
+      6,
+      44
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README声明产出物是以SQLite文件形式发布的F1数据集及其查询工具，SQLite为数据存储载体而非被服务的数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "数据为CC BY-SA 4.0（自建列为CC BY 4.0），代码另有LICENSE条款",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "to run — as one normalised, queryable SQLite database. It is rebuilt from ／ |`f1.db`|The SQLite database. 53 tables, 43 views, 177,216 rows. This is the artefact.| ／ |`f1`|Command-line query tool. `./f1` with no arguments prints the commands.|",
+   "evidence_lines": [
+    6,
+    44,
+    46
+   ]
+  },
+  "fn": "Alex-Farley/formula-1-data",
+  "sha": "b1dfb1eecfc1",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8de828c651c3": {
+  "identity": {
+   "one_liner": "TiDB Cloud Filesystem 博客系列示例代码集",
+   "review": "该仓库是配合 Zenn 博客系列发布的示例代码，演示如何将 TiDB Cloud Filesystem 用作 Strands Agents 及 Amazon Bedrock AgentCore 代理的工作目录与持久化位置，包含本地与 AgentCore 运行时等多种目录，各目录 README 提供对应文章与执行步骤。前提是已配置 TiDB Cloud FS 和 ti 命令。适合想按教程复现这些代理场景的开发者。",
+   "highlights": [
+    "提供多个示例目录，覆盖本地 Strands Agents、AgentCore Runtime、会话与成果物持久化等场景",
+    "各目录 README 包含对应文章链接与运行步骤",
+    "通过 ti 命令与 TI_FS_FILE_SYSTEM_ID 环境变量操作 TiDB Cloud FS"
+   ],
+   "use_cases": [
+    "学习 ti 命令与 TiDB Cloud FS 的基本操作",
+    "将 Strands Agents 的工作目录/成果物/会话记录持久化到 TiDB Cloud FS",
+    "在 Amazon Bedrock AgentCore Runtime 上运行带 Streamlit 聊天界面的代理示例"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "# TiDB Cloud Filesystem samples ／ Zenn のブログシリーズ「TiDB Cloud Filesystem」で使ったサンプルコードです。 ／ |—|`ti` コマンドのインストールと TiDB Cloud FS の基本操作（コードなし）|tiコマンドではじめるTiDB Cloud Filesystem|",
+     "lines": [
+      1,
+      3,
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 全文围绕 TiDB Cloud Filesystem 的使用方法示例展开，服务于 TiDB 生态的教学与演示",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# TiDB Cloud Filesystem samples ／ Zenn のブログシリーズ「TiDB Cloud Filesystem」で使ったサンプルコードです。 ／ |—|`ti` コマンドのインストールと TiDB Cloud FS の基本操作（コードなし）|tiコマンドではじめるTiDB Cloud Filesystem|",
+   "evidence_lines": [
+    1,
+    3,
+    8
+   ]
+  },
+  "fn": "tadapin/tidb-cloud-fs-samples",
+  "sha": "8de828c651c3",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

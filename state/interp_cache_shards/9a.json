@@ -10154,5 +10154,69 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0e8e75acb93c": {
+  "identity": {
+   "one_liner": "基于Java的代理服务器，将DuckDB通过网络以PostgreSQL协议提供访问",
+   "review": "SlackerDB用Java实现PostgreSQL线协议，把DuckDB从本地单进程引擎变成可远程、多进程访问的网络数据服务，提供dbserver数据库服务器与dbproxy连接代理两种形态，并支持REST数据API、插件扩展与MCP配置。适合需要在BI工具、Java应用或边缘环境中通过标准PostgreSQL客户端/JDBC访问DuckDB数据的用户。注意其本质是DuckDB后端，并非PostgreSQL本体。",
+   "highlights": [
+    "实现PostgreSQL wire protocol，支持JDBC、ODBC、libpq、psql等客户端连接",
+    "提供dbserver与dbproxy双组件，支持负载均衡与多进程并发访问",
+    "支持REST数据API、SQL-as-a-Service端点、PF4J插件系统与MCP配置"
+   ],
+   "use_cases": [
+    "为BI工具和报表应用提供分析型数据后端",
+    "让Java应用以嵌入式库或独立服务器方式使用DuckDB",
+    "边缘设备/IoT场景的轻量OLAP数据服务"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "* *PostgreSQL Protocol Compatibility* – Implements the PostgreSQL wire protocol, making DuckDB accessible through any PostgreSQL‑compatible client (JDBC, ODBC, libpq, psql, etc). ／ SlackerDB provides full PostgreSQL wire protocol compatibility, allowing you to connect using standard JDBC drivers. This enables you to use any PostgreSQL‑compatible JDBC client, including the native SlackerDB JDBC driver for optimal integration.",
+     "lines": [
+      14,
+      346
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为DuckDB提供网络化协议代理与连接服务，属于数据库生态服务组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "== SlackerDB (DuckDB Postgres proxy) ／ * *PostgreSQL Protocol Compatibility* – Implements the PostgreSQL wire protocol, making DuckDB accessible through any PostgreSQL‑compatible client (JDBC, ODBC, libpq, psql, etc). ／ * *Dual‑Layer Architecture* – Provides both a direct database server (`dbserver`) and a connection proxy (`dbproxy`) for load balancing and high availability.",
+   "evidence_lines": [
+    4,
+    14,
+    16
+   ]
+  },
+  "fn": "robotslacker/slackerdb",
+  "sha": "0e8e75acb93c",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

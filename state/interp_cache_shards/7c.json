@@ -8559,5 +8559,168 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "80fbb72cf808": {
+  "identity": {
+   "one_liner": "自托管工作管理平台，数据存单 SQLite 文件并内置 MCP 服务器",
+   "review": "weave 是一个开源自托管的工作管理平台，提供关联表格、双向关系、公式、rollup、工作流状态和每行可挂载的 markdown 文档，所有数据存于单个 SQLite 文件（零运行时依赖，需 Node ≥ 22.16，git clone 即可运行）。它通过内置 MCP 服务器、REST API 和 CLI 让 AI agent 与人使用同一引擎操作数据，适合想让 Claude Code、Cursor 等 MCP 客户端直接管理结构化工作数据的个人或小团队。",
+   "highlights": [
+    "所有结构化数据与文档存储于单个 SQLite 文件，无运行时依赖，无需构建步骤",
+    "内置 MCP 服务器（默认 16 个工具，可扩至 60 个），并配套 REST API 与 CLI，三接口驱动同一引擎",
+    "支持双向关系、公式、rollup、自动化触发器、文档版本修订、实体级撤销（undo）与 SQLite FTS5 全文搜索"
+   ],
+   "use_cases": [
+    "AI agent（Claude Code、Cursor 等 MCP 客户端）通过 MCP 直接读写结构化工作数据",
+    "个人或小团队在本地或自有服务器上以表格+文档形式管理任务与知识",
+    "需要离线运行、数据完全落在本地单文件的工作管理场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "documents. One SQLite file. Zero dependencies. No build step. MIT. ／ weave stores structured work (tables, rows, relations, documents) in one SQLite ／ - **Local-first** — your workspace is one SQLite file next to your project.",
+     "lines": [
+      9,
+      28,
+      57
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|NocoDB|Sustainable Use License (since v0.301.0)|Docker + external DB|Putting a smart-spreadsheet UI on an existing MySQL/Postgres| ／ |Baserow|MIT (core; paid tiers separate)|Docker Compose + Postgres|A full Airtable-shaped product, cloud or self-hosted| ／ |Teable|AGPL-3.0 (core)|Docker + Postgres|Postgres-native scale with an Airtable UI|",
+     "lines": [
+      161,
+      162,
+      164
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|NocoDB|Sustainable Use License (since v0.301.0)|Docker + external DB|Putting a smart-spreadsheet UI on an existing MySQL/Postgres|",
+     "lines": [
+      161
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "weave 使用 SQLite 作为自身数据存储，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "weave stores structured work (tables, rows, relations, documents) in one SQLite ／ file on your disk. No signup, no cloud, no telemetry. ／ |Storage|One workspace = one `.db` file (WAL, row-level writes, crash-safe). Legacy JSON workspaces migrate automatically; `exportJSON`/`importJSON` remain the human-readable interchange. CLI, server, and MCP can run concurrently.|",
+   "evidence_lines": [
+    28,
+    55,
+    182
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "grunion-ai/weave",
+  "sha": "80fbb72cf808",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dbe5e287795c": {
+  "identity": {
+   "one_liner": "Rust 单二进制 AI 原生内容管理系统，内容以块结构存储",
+   "review": "Vyasa 是用 Rust 编写的 CMS，将内容存为结构化块、主题作为数据、插件运行于 WebAssembly 沙箱，并内置 MCP 服务器供 AI 代理管理内容。面向需要自托管建站的用户，运行仅需单个服务二进制加一个 PostgreSQL 数据库，支持 Docker 或安装脚本部署；项目处于 1.0 之前阶段，API 可能在小版本间变动，迁移仅向前。",
+   "highlights": [
+    "提供块编辑器、OpenAPI REST 与 GraphQL API，API 调用经过统一权限检查",
+    "插件以声明能力的 WebAssembly 组件运行，主题为数据令牌编译为 CSS",
+    "内置 MCP 服务器，AI 代理可在用户权限下管理内容"
+   ],
+   "use_cases": [
+    "自托管博客或内容站点搭建",
+    "需要 AI 辅助写作与语义搜索的内容团队",
+    "通过 AI 代理自动化内容管理流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "capabilities they declare. One server binary and PostgreSQL are all it needs. ／ verifies it and puts `vyasa` on your `PATH`; it needs a PostgreSQL ／ cd ~/vyasa && VYASA_DATABASE_URL=postgres://vyasa:PASSWORD@localhost:5432/vyasa vyasa migrate && vyasa serve",
+     "lines": [
+      16,
+      66,
+      71
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明它是需要 PostgreSQL 数据库存储数据的内容管理系统，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "双许可：MIT OR Apache-2.0",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "capabilities they declare. One server binary and PostgreSQL are all it needs. ／ verifies it and puts `vyasa` on your `PATH`; it needs a PostgreSQL",
+   "evidence_lines": [
+    16,
+    66
+   ]
+  },
+  "fn": "vyasa-cms/vyasa",
+  "sha": "dbe5e287795c",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

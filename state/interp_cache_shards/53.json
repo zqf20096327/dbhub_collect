@@ -8685,5 +8685,147 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d6b02807e7c3": {
+  "identity": {
+   "one_liner": "自托管的 AI 代理共享记忆服务器，基于 PostgreSQL+pgvector，经 MCP 提供记忆读写",
+   "review": "Kenfold 是一个自托管记忆服务器，让 Claude Code、Codex、OpenCode、ChatGPT 等多个 AI 代理通过 MCP 共享同一份记忆。它将记忆分类为语义、情景、项目、偏好等类型并保留历史版本，数据存于 PostgreSQL+pgvector；提供 API key 归属、会话钩子自动记录、本地模型嵌入与检索、记忆抽取人工审核等机制，支持 Docker Compose 部署，也支持 stdio 方式直连数据库。适合希望多个 AI 编码代理之间延续上下文的个人开发者或团队。",
+   "highlights": [
+    "通过 MCP 向多个 AI 代理提供共享记忆，每条记忆记录来源代理与信任度，替换时保留历史",
+    "支持全文检索与本地嵌入模型（bge-m3）+ 重排序的混合检索，记忆抽取与合并需人工审核后生效",
+    "提供会话钩子自动加载/记录记忆，并基于代码引用将过期记忆标记为 stale"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理（Claude Code/Codex/OpenCode 等）之间共享项目上下文与交接工作",
+    "自托管场景下对代理记忆进行审核、合并与过期管理",
+    "为本地模型/远程客户端（ChatGPT、claude.ai）提供经 OAuth 2.1 鉴权的记忆服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "OpenCode ────┼── Kenfold ── PostgreSQL + pgvector ／ make up # Postgres 18 + pgvector and Kenfold on http://127.0.0.1:7077 ／ |`KENFOLD_DATABASE_URL`|`postgres://kenfold:kenfold@127.0.0.1:54329/kenfold?sslmode=disable` (compose database)|",
+     "lines": [
+      10,
+      30,
+      267
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个面向 AI 代理的记忆服务应用，PostgreSQL+pgvector 仅作为其存储后端使用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OpenCode ────┼── Kenfold ── PostgreSQL + pgvector ／ make up                        # Postgres 18 + pgvector and Kenfold on http://127.0.0.1:7077 ／ > **Status: Phase 5 in progress.** Shared storage, hybrid search, session hooks, memory extraction, code references, and OAuth remote access are implemented. Phase 5 adds export/import, a review dashboard, and consolidation. The LoCoMo and LongMemEval benchmark harness is ready (`make bench`); results are still pending.",
+   "evidence_lines": [
+    10,
+    30,
+    23
+   ]
+  },
+  "fn": "jeonjw85/kenfold",
+  "sha": "d6b02807e7c3",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e79da79414df": {
+  "identity": {
+   "one_liner": "DSH 插件：对话自动沉淀为知识卡，SQLite 存储、可检索记忆库与知识图谱",
+   "review": "这是一个面向 DeepSeek Harness（DSH）的 AI 记忆插件，也可通过 npm 安装后接入 Claude Code、Codex CLI、Cursor 或独立浏览器使用。它把每轮对话压缩沉淀为知识卡，新卡默认进入审核中心，人工批准后才入主库；数据用 SQLite（node:sqlite）持久存储于 ~/.dsh/memory-vault，并支持 Markdown、知识图谱展示与多库隔离。提供 MCP 挂载与 memory_recall 检索工具。",
+   "highlights": [
+    "支持对话结束自动沉淀知识卡与 memory_recall 检索，并通过 MCP 接入 Claude Code/Codex/Cursor",
+    "提供审核中心与数据库层审核守卫（enforceAudit），未审核卡物理隔离于 quarantine 表",
+    "使用 SQLite（node:sqlite 内置）持久存储，含知识图谱、去重与多库配置"
+   ],
+   "use_cases": [
+    "为 DSH/Claude Code/Codex/Cursor 等 Agent 提供跨会话持久记忆",
+    "团队或个人对 AI 记忆入库进行人工审核与审计追溯",
+    "本地维护可检索的知识卡库与知识图谱"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 全自研、零第三方记忆框架、不改 DSH 源码、一个记忆库所有 Agent 共享，SQLite 持久存储，零外部依赖。 ／ |存储|**SQLite**（`node:sqlite` 内置，零依赖）|不锁库、分表存储、SQL 查询|",
+     "lines": [
+      12,
+      238
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明用 SQLite 持久存储记忆数据，是使用数据库存数据的应用/插件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> 全自研、零第三方记忆框架、不改 DSH 源码、一个记忆库所有 Agent 共享，SQLite 持久存储，零外部依赖。 ／ |存储|**SQLite**（`node:sqlite` 内置，零依赖）|不锁库、分表存储、SQL 查询| ／ > **v0.3.0 起：审核守卫下沉到数据库层。** 所有写入路径（自动沉淀 / MCP / UI 新建 / 导入）强制经过 `enforceAudit()`，调用方无法绕过。`setCardStatus()` 是唯一审核操作入口，每次变更写入 `audit_log` 审计日志（who/what/when/why），不可篡改。",
+   "evidence_lines": [
+    12,
+    238,
+    199
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "EternalNight996/memory-eternal",
+  "sha": "e79da79414df",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

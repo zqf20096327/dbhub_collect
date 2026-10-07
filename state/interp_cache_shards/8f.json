@@ -8207,5 +8207,148 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a460f1b11e22": {
+  "identity": {
+   "one_liner": "AI Agent 长期记忆引擎，混合检索+记忆治理+Web控制台",
+   "review": "aiduMEI 是一个面向 AI Agent 的自托管长期记忆系统，提供向量+BM25+重排的混合检索、双时间轴记忆存储、会话萃取与认知治理，并通过 Hermes/Claude Code/Cursor 的钩子脚本接入宿主。提供 FastAPI 服务、零构建 Web 控制台和 Docker Compose 部署；使用嵌入式 Qdrant 与 SQLite 存数据，支持云端/本地双引擎切换。",
+   "highlights": [
+    "支持向量 + 中文 BM25/trigram + cross-encoder 混合检索与六型记忆分类",
+    "提供 /ui 可视化控制台，支持记忆查看、调整、溯源与 Markdown 导出",
+    "提供 Hermes pre/post_llm_call 与 Claude Code Stop 钩子脚本及接线自检脚本"
+   ],
+   "use_cases": [
+    "为 MCP 宿主（Hermes/Claude Code/Cursor）添加长期记忆读写钩子",
+    "单机自托管的 Agent 记忆服务，支持云端/本地模型双引擎部署",
+    "记忆数据可视化治理与档案导出"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**共同项**：CPU 2 核足够、闲时 < 1%；`/search` 单次 0.14~0.23s；冷启动 5.2s；数据盘千级记忆约 13 MB 向量 + 数百 KB SQLite；前端 0 依赖；Python 3.10–3.12。 ／ > 其余的轻是刻意设计：向量库嵌入式落盘（无独立进程/端口）、不吃 GPU、相关性闸门先拦闲聊、SQLite+FTS5 兜底。一句话：**云端档 1 核 1G 跑得动；自动挡/本地档建议 2 核 2G 起步。**",
+     "lines": [
+      229,
+      234
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite（FTS5 兜底）与嵌入式 Qdrant 存储数据的记忆服务应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**向量后端**：compose 不单起 Qdrant 服务，用的是嵌入式（本地模式）Qdrant，数据落在配置的 `vector_store.config.path` 下——样例的 `./data/qdrant` 在容器里即 `/app/data/qdrant`，随 `./data` 持久化；改到数据目录以外，容器一重建就丢。嵌入式 Qdrant 持有目录锁，只能单进程。 ／ |**优** · Engine|**优化配置，双引擎全自动**|双引擎自动挡（云端断供就地换本地备胎、恢复自动升挡）· 一行 Prompt 全自动部署 · 读/写/萃取三条钩子自己触发，接上之后你不用再管记忆| ／ python api_server.py                                                              # → http://127.0.0.1:8767",
+   "evidence_lines": [
+    213,
+    59,
+    191
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "monkey2jack/aiduMEI",
+  "sha": "a460f1b11e22",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5c829de27096": {
+  "identity": {
+   "one_liner": "本地优先的持久化自治 AI Agent 平台，状态存于 Postgres",
+   "review": "AI17Z 是一个本地优先的自主 AI Agent 平台，将身份、记忆、关系、信念、知识等持久状态与可替换的模型分离，存储在本机 Postgres 数据库中，并通过不可变事件与任务管线保证动作幂等。面向想在自己机器上运行持久 Agent 的用户，支持 OpenAI、Anthropic、Ollama 等多种模型提供方，目前处于 beta 阶段。",
+   "highlights": [
+    "提供持久化 Agent 状态：身份、记忆、关系、信念、知识，跨重启与模型更换保留",
+    "事件驱动管线实现数据库级三层幂等，任务可在重启后从最后完成步骤恢复",
+    "支持 OpenAI、Anthropic、OpenRouter、Ollama 及 OpenAI 兼容端点的模型网关与回退链"
+   ],
+   "use_cases": [
+    "在本机自托管长期运行的自主 AI Agent",
+    "需要可审计 Agent 行为记录（提示层、记忆检索、验证过程）的场景",
+    "基于真实 Chrome 浏览器驱动的渠道自动化"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Everything an agent knows stays on the machine running it: the Postgres",
+     "lines": [
+      189
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明所有 Agent 状态存储在本机运行的 Postgres 数据库中，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A local-first platform for persistent autonomous AI agents.** ／ Everything an agent knows stays on the machine running it: the Postgres ／ AI17Z is in **beta** and under active development. It is used daily against",
+   "evidence_lines": [
+    5,
+    189,
+    142
+   ]
+  },
+  "fn": "ShiftAboveCtrl/ai17z",
+  "sha": "5c829de27096",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

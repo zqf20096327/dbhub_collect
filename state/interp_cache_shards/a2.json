@@ -8735,5 +8735,232 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3d7b3e6ad8d1": {
+  "identity": {
+   "one_liner": "AI 编码代理的持久化记忆系统，Go 单二进制 + SQLite/FTS5",
+   "review": "Engram 为 AI 编码代理提供跨会话的持久化记忆：以单个 Go 二进制运行，将结构化记忆存入本地 SQLite 数据库并用 FTS5 做全文检索，通过 MCP stdio、HTTP API、CLI 和 TUI 暴露。面向 Claude Code、Cursor、Gemini CLI 等 MCP 兼容代理的用户，默认本地存储，另提供 Git Sync 和可选的 Engram Cloud 同步。",
+   "highlights": [
+    "单个 Go 二进制内置 SQLite + FTS5 全文检索，无需 Node.js、Python 或 Docker",
+    "通过 MCP 服务器与任意 MCP 兼容代理集成，并提供 HTTP API、CLI 和交互式 TUI",
+    "记忆默认存于本地 SQLite 文件，支持 Git Sync 导出与可选的 Engram Cloud 复制"
+   ],
+   "use_cases": [
+    "为 AI 编码代理保存决策、bug 修复、项目约定等持久化知识",
+    "跨会话恢复上下文：会话交接、压缩后的历史恢复",
+    "团队共享项目记忆（经 Git Sync 或 Cloud）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A **Go binary** with SQLite + FTS5 full-text search, exposed through CLI, HTTP API, MCP, and an interactive TUI. It works with any MCP-compatible agent, including Claude Code, OpenCode, Gemini CLI, Codex, VS Code (Copilot), Antigravity, Cursor, and Windsurf. ／ No Node.js, Python, or Docker is required: one binary, one SQLite file. ／ SQLite + FTS5 (~/.engram/engram.db)",
+     "lines": [
+      31,
+      33,
+      40
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目只是把 SQLite 用作自身记忆数据的本地存储，并非为数据库生态提供的服务工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A **Go binary** with SQLite + FTS5 full-text search, exposed through CLI, HTTP API, MCP, and an interactive TUI. It works with any MCP-compatible agent, including Claude Code, OpenCode, Gemini CLI, Codex, VS Code (Copilot), Antigravity, Cursor, and Windsurf. ／ SQLite + FTS5 (~/.engram/engram.db) ／ Engram keeps memory local by default. The local SQLite database is authoritative; Git Sync exports portable compressed chunks for sharing across machines, and Engram Cloud is optional, project-scoped replication/shared access with browser visibility.",
+   "evidence_lines": [
+    31,
+    40,
+    148
+   ]
+  },
+  "fn": "Gentleman-Programming/engram",
+  "sha": "3d7b3e6ad8d1",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c767f9f07def": {
+  "identity": {
+   "one_liner": "Rocket+Datastar Web组件画廊站点，Go/templ/SQLite 单二进制，CQRS+SSE",
+   "review": "这是一个为 Rocket 框架提供 Datastar Web 组件的社区画廊网站，包含41个组件、在线代码 Playground、组件提交机器人流程和多人像素板展示。使用 Go 编写，采用 templ 模板、CQRS 架构、Brotli 压缩的 SSE 流渲染，SQLite 嵌入于单一自包含二进制中存储目录、标签状态与组件文件。适合使用 Datastar+Rocket 技术栈、需要现成超媒体组件的前端开发者。",
+   "highlights": [
+    "提供41个 Web 组件及自动加载器（autoloader），支持在任何站点按需加载 sb-* 组件",
+    "内置代码 Playground，支持 JS/TS 编辑、服务端类型检查与不可变分享链接",
+    "单一静态二进制，资产、组件与迁移内嵌，SQLite 支持目录镜像、FTS5 搜索与每标签状态存储"
+   ],
+   "use_cases": [
+    "为基于 Rocket+Datastar 的网站引入现成超媒体组件",
+    "组件作者通过 GitHub issue 表单提交并经机器人验证贡献新组件",
+    "在生产环境中通过固定目录快照与 SRI 完整性校验加载组件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Go · templ · SQLite · Datastar + Rocket · CQRS · plain modern CSS. No Node, no bundler. ／ The binary is self-contained (assets, components and migrations are embedded; SQLite is pure Go). `starbase --version` prints the version, `/healthz` answers `ok <version>`.",
+     "lines": [
+      10,
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明组件目录、每标签 UI 状态、演示数据集等均存储在 SQLite 中，该仓库是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Go · templ · SQLite · Datastar + Rocket · CQRS · plain modern CSS. No Node, no bundler. ／ The binary is self-contained (assets, components and migrations are embedded; SQLite is pure Go). `starbase --version` prints the version, `/healthz` answers `ok <version>`. ／ - **Catalog:** `components/` is embedded. At startup `SyncCatalog` mirrors it into SQLite (FTS5 for search).",
+   "evidence_lines": [
+    10,
+    32,
+    124
+   ]
+  },
+  "fn": "zweiundeins/starbase",
+  "sha": "c767f9f07def",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f044502b9b52": {
+  "identity": {
+   "one_liner": "GPU 原生分布式计算机视觉平台模板，视频接入+检测推理",
+   "review": "AegisVision 是一个可 fork 的分布式计算机视觉平台模板，接入 RTSP/文件视频流，在 NVIDIA Triton 上运行检测、跟踪与推理管线，并通过受限自治代理提供查询与操作。包含 35 个 Go 服务、39 个 Helm 图表及合规证据包，元数据存于 PostgreSQL，事件数据存入 ClickHouse，适合需要自建实时视觉产品的团队。",
+   "highlights": [
+    "提供 35 个 Go 服务、14 个共享库与 39 个 Helm 图表的完整平台骨架",
+    "支持 NVIDIA Triton 推理、MIG GPU 分区调度与金丝雀发布",
+    "提供 SOC 2、EU AI Act、GDPR 合规证据包与签名离线交付包"
+   ],
+   "use_cases": [
+    "fork 后搭建自有实时视觉感知产品",
+    "在 Kubernetes 集群或离线隔离环境部署视频分析管线",
+    "构建带人工审批门的受限自治智能体应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ task dev:up # docker-compose: Postgres + NATS + Kafka + ClickHouse + MinIO + OTel",
+     "lines": [
+      26,
+      203
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite",
+     "lines": [
+      32
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse ／ task dev:up # docker-compose: Postgres + NATS + Kafka + ClickHouse + MinIO + OTel",
+     "lines": [
+      27,
+      203
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该平台以 PostgreSQL/ClickHouse 等存储自身数据，是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "source",
+    "docker",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " PostgreSQL ／ This repository ships **35 Go services + 1 Next.js console**, **14 ／ task dev:up           # docker-compose: Postgres + NATS + Kafka + ClickHouse + MinIO + OTel",
+   "evidence_lines": [
+    26,
+    103,
+    203
+   ]
+  },
+  "fn": "hoangsonww/AegisVision-Computer-Vision-System",
+  "sha": "f044502b9b52",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

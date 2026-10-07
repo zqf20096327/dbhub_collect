@@ -8740,5 +8740,139 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "88a17b412a39": {
+  "identity": {
+   "one_liner": "Obsidian 插件，将 Markdown 笔记转为可编辑的数据库视图",
+   "review": "这是一个 Obsidian 社区插件，把 vault 中的 Markdown 笔记（含 frontmatter）以表格、看板、画廊、列表、图表、日历、时间线、表单八种视图呈现和编辑，支持公式、关系、汇总、筛选与批量编辑；数据不复制、不外传，全部保留为本地 Markdown 文件。面向使用 Obsidian 管理结构化笔记的个人用户，不依赖任何外部数据库。",
+   "highlights": [
+    "提供八种视图（table/board/gallery/list/chart/calendar/timeline/form），均作用于同一组 Markdown 笔记",
+    "数据库以带 db_view: true 的普通 Markdown 文件存储，记录与属性保存在 vault 内",
+    "支持公式计算、基于 wikilink 的关系与 Rollup、条件格式、冻结列与嵌入式视图"
+   ],
+   "use_cases": [
+    "在 Obsidian 中以表格/看板形式管理任务、清单与资料库",
+    "用表单快速录入笔记并用日历/时间线规划日期",
+    "基于 frontmatter 属性做筛选、分组、汇总与图表分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是 Obsidian 插件，存储层为本地 Markdown 文件而非数据库，属于使用存储的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Turn Markdown notes into editable, visual databases inside Obsidian. ／ - **Local Markdown storage:** each database is an ordinary Markdown file with `db_view: true`; records, properties, and relations also stay inside your vault. ／ - **Local and private:** no cloud data copy and no external transmission of vault content, metadata, formulas, or settings.",
+   "evidence_lines": [
+    5,
+    23,
+    34
+   ]
+  },
+  "fn": "pangy9/obsidian-note-database",
+  "sha": "88a17b412a39",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ba6f96055468": {
+  "identity": {
+   "one_liner": "自托管英语词典服务器，提供只读公共 API、管理面板与 SDK",
+   "review": "一个可自行部署的英语词典服务器，内置 30 万词条数据集，通过只读 API 提供查询，附管理面板用于编辑与数据集管理，并生成 Node.js 和 Python SDK。后端运行于 NestJS/Next.js，生产环境使用 PostgreSQL，开发模式无外部数据库时回退到本地 SQLite 文件。适合需要自托管词典数据并通过 API 对外提供服务的个人或组织。",
+   "highlights": [
+    "提供只读公共 API /api/v1，无需密钥，支持搜索、容错、批量查询，附 OpenAPI 文档",
+    "支持安装、导入、导出多个词典数据集，保留来源、许可证与编辑历史，可 fork 数据集",
+    "管理面板支持编辑词条、审核读者纠错、批量调用语言模型，提供 Prometheus 指标与健康探针"
+   ],
+   "use_cases": [
+    "自托管英语词典并通过 API 向应用提供查询服务",
+    "基于开放词典数据（Wiktionary、WordNet 等）构建定制数据集",
+    "使用 Node.js/Python SDK 在词典数据之上开发应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Under the hood** — PostgreSQL (SQLite for development), Docker images, migrations on start, ／ Open `.env` and set two passwords: `ADMIN_PASSWORD` (the admin login) and `POSTGRES_PASSWORD` ／ On PostgreSQL, add another dictionary from **Managing → Datasets → How to install**:",
+     "lines": [
+      88,
+      117,
+      196
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Under the hood** — PostgreSQL (SQLite for development), Docker images, migrations on start, ／ No database needed: without `DATABASE_URL` the server uses a local SQLite file, and every app",
+     "lines": [
+      88,
+      169
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 PostgreSQL 作为存储后端（开发时用 SQLite），属于使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码 MIT，词典数据 CC BY 4.0，第三方数据集保留各自来源许可",
+   "install": [
+    "docker",
+    "source",
+    "npm",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A dictionary server you run yourself. It comes with the data, an API to read it, an admin ／ **Under the hood** — PostgreSQL (SQLite for development), Docker images, migrations on start, ／ No database needed: without `DATABASE_URL` the server uses a local SQLite file, and every app",
+   "evidence_lines": [
+    37,
+    88,
+    169
+   ]
+  },
+  "fn": "Fristail27/vocab-bloom-hub",
+  "sha": "ba6f96055468",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

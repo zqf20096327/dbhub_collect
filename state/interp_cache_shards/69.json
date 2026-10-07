@@ -9044,5 +9044,143 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bd5fc35b1d13": {
+  "identity": {
+   "one_liner": "离线漏洞数据库与包搜索库，将多源公告转为 CVE 5.2 存入 SQLite",
+   "review": "vdb 从 vuln-list、OSV、NVD、GitHub 等上游拉取安全公告，转换为 CVE 5.2 格式并存入普通 SQLite 文件（.vdb7），供按 purl、CPE 或 git URL 做离线查询，扫描过程不访问网络。它主要作为库供 owasp-dep-scan 使用，也提供 CLI 用于构建、刷新（分片原子换入）和检索数据库，适合需要本地化软件成分分析数据的开发者与安全团队。",
+   "highlights": [
+    "提供 vdb db 命令分阶段下载、校验并原子换入数据分片，支持 full/app-only 等多种规格",
+    "数据以 CVE 5.2 与 purl/vers 开放规范存储，.vdb7 文件可被任意 SQLite 工具读取",
+    "支持从 purl、CPE 或 git URL 检索，批量查询显式标记 coverage_gap"
+   ],
+   "use_cases": [
+    "为软件成分分析（SCA）工具提供离线漏洞数据源",
+    "在无网络的扫描环境中按 purl/CPE/git URL 查询漏洞公告",
+    "自建 CI 流水线中构建并发布自定义范围的漏洞数据库镜像"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "schema, and stores it in SQLite with indexes built for fast offline lookup by ／ library. The `.vdb7` files are ordinary SQLite databases. ／ Lookups run entirely against local SQLite files; there is no network access",
+     "lines": [
+      5,
+      10,
+      32
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为依赖扫描生态提供漏洞数据与查询能力，使用 SQLite 作为本地存储引擎，而非以数据库为主体的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An offline vulnerability database and package search library. `vdb` downloads ／ schema, and stores it in SQLite with indexes built for fast offline lookup by ／ pip install appthreat-vulnerability-db>=7.0.0",
+   "evidence_lines": [
+    3,
+    5,
+    92
+   ]
+  },
+  "fn": "AppThreat/vulnerability-db",
+  "sha": "bd5fc35b1d13",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d5063c877666": {
+  "identity": {
+   "one_liner": "本地离线运行的 AI 记忆系统，含零损失归档、知识图谱与混合检索",
+   "review": "taOSmd 是面向 AI 代理的本地记忆系统：对话先进入只追加的零损失归档，其上构建知识图谱与混合检索，并用校验器将抽取事实与原文比对。它通过 pip 安装，提供 MCP 服务端（taosmd[mcp]），支持多代理隔离注册，可在 8GB+ RAM 的树莓派、迷你主机等离线设备上运行。SQLite 在其中用作向量库与全文检索（FTS5）的存储后端。适合在离线/隔离环境为 Claude Code、Cursor 等代理框架添加持久记忆层。",
+   "highlights": [
+    "提供零损失只追加归档，事实校验器比对原文并剔除无依据事实",
+    "使用 SQLite 作为向量存储后端，并提供 SQLite FTS5 全文检索",
+    "通过 pip 安装并附带 MCP 服务端，支持多代理按 agent 标签隔离索引"
+   ],
+   "use_cases": [
+    "在离线或气隙设备上为 AI 代理添加持久记忆",
+    "在多个代理间共享并隔离记忆索引",
+    "在低配硬件（Pi 4B、迷你主机等）上运行本地记忆服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Vector Store**|SQLite + numpy|Cosine similarity search|CPU| ／ |**Full-Text Search**|SQLite FTS5|Keyword search over archive|CPU|",
+     "lines": [
+      560,
+      561
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 显示该系统使用 SQLite 作为向量存储与全文检索的存储后端，而非为数据库生态提供工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Most memory systems pull facts out of your conversations and throw the source away. So when a fact is wrong, nothing flags it, and when it gets overwritten, the old version is gone without a trace. taOSmd works the other way around. Everything lands first in an append-only archive that is never edited or deleted, and the memory you search is derived from that archive, never written over it. Because the source stays, taOSmd checks each extracted fact against the exact text it came from, tells you the share it cannot support, and keeps the unsupported ones out of recall. On our own data that unsupported-fact rate was 18.8 percent, a number systems that discard the source cannot even measure. ／ > **Install:** `pip install taosmd` (add the MCP server with `pip install \"taosmd[mcp]\"`). For a source install instead, `git clone` then `pip install -e .`. Warning: `pip install -e .` installs the runtime only and gives you no test runner. The failure is silent, so a reader will otherwise assume their setup worked. See the Dev setup section below for the working commands. The one-line bootstrap below additionally installs Ollama and downloads the embedding and LLM models; it is newer and still being validated across clean machines, so please report issues. ／ > kg = KnowledgeGraph(os.path.expanduser(\"~/.taosmd/knowledge-graph.db\"))",
+   "evidence_lines": [
+    9,
+    59,
+    129
+   ]
+  },
+  "fn": "jaylfc/taosmd",
+  "sha": "d5063c877666",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

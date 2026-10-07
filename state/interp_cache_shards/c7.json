@@ -8121,5 +8121,62 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "910b14ce30f9": {
+  "identity": {
+   "one_liner": "本地优先、与 LLM 无关的记忆系统，混合检索（向量+词法+图）加多信号排序",
+   "review": "Memoria 是一个 Python 实现的本地记忆基础设施，通过 FAISS 向量、BM25 词法、图、短语、属性、时序多路并行检索与多信号融合排序来存储和召回信息，提供 CLI/TUI/GUI/HTTP API/MCP 接口，并带插件系统。面向需要为 LLM 代理或本地知识库提供外部记忆能力的开发者；纯 CPU、约 4GB 内存即可运行，无需云端服务或 API key。",
+   "highlights": [
+    "提供 FAISS 向量、BM25、图、短语、属性、时序多路并行检索与多信号融合排序",
+    "内置 MCP 服务器，提供 memory_search/store/update/delete 等操作供 MCP 客户端使用",
+    "支持基于配置的插件架构，可注册检索 worker、排序信号、存储后端等，附插件生成器"
+   ],
+   "use_cases": [
+    "为 LLM 代理提供可本地运行的外部记忆系统",
+    "Obsidian vault 笔记的摄取与混合检索",
+    "记忆系统检索质量的基准评测（LongMemEval、合成负载）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 定位为供 MCP 客户端和代理使用的记忆基础设施，属服务上层生态的组件而非使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Local-first, LLM-agnostic memory infrastructure with parallel hybrid retrieval, multi-signal ranking, declarative type routing, temporal retrieval, and a plugin-based architecture.** ／ Memoria includes a Model Context Protocol server: ／ Available operations: `memory_search`, `memory_store`, `memory_store_many`, `memory_fetch`, `memory_update`, `memory_delete` — letting MCP-compatible clients and agents use Memoria as an external memory system.",
+   "evidence_lines": [
+    3,
+    140,
+    146
+   ]
+  },
+  "fn": "Kitzkatz/memoria",
+  "sha": "910b14ce30f9",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

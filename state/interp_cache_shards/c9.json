@@ -7318,5 +7318,138 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "85dfc2d830b8": {
+  "identity": {
+   "one_liner": "Rust 编写的 Redis 兼容多模型数据库引擎",
+   "review": "Lux 是一个用 Rust 编写的数据库引擎，通过 RESP 协议兼容支持的 Redis 客户端，同时提供关系表、向量搜索、时间序列、实时订阅、队列和应用级认证等原语，面向需要缓存、会话、语义搜索等第二数据层的应用后端开发者。支持二进制、Docker 自托管及嵌入式 Rust API，另有托管版 Lux Cloud。",
+   "highlights": [
+    "支持 RESP2 协议，支持的 Redis 客户端可直接连接",
+    "提供关系表、向量搜索、时间序列、实时订阅、Streams、Lua 脚本和 TTL 等命令面",
+    "支持快照与 WAL 持久化、分层冷热存储，以及嵌入式 Rust API 和 HTTP REST 接口"
+   ],
+   "use_cases": [
+    "用单个引擎承载应用后端的缓存、队列与命令型负载",
+    "为应用添加语义搜索与向量检索",
+    "自托管或以 Rust 嵌入方式运行应用状态层"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Use Lux when you want one database process to cover the hot path of your application backend instead of stitching together Redis, Postgres, Pinecone, Kafka-style realtime plumbing, BullMQ, and a metrics store for every new product. ／ Every app has a second data layer beyond its primary rows: cache, sessions, live UI state, semantic search, jobs, metrics, queues, leaderboards. Today you assemble it from Redis + Postgres + Pinecone + Kafka-style plumbing + BullMQ + a metrics store, each its ",
+     "lines": [
+      23,
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位其为数据库引擎/运行时，提供 RESP 兼容接口与持久化层，为应用后端服务而非仅消费数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lux is a database engine for modern application state. A real app is not just rows in a primary database: it is users and sessions, cache, live UI state, semantic search, jobs, metrics, queues, durable records, and low-latency commands. Lux puts those primitives in one runtime so they can share the same operational model, connection surface, durability layer, and SDK. ／ The engine speaks RESP, so supported Redis clients can connect directly. That compatibility is intentional: Lux should be easy to adopt for cache, queues, BullMQ, pub/sub, and command-oriented workloads. But Lux is not only a cache. It also includes typed relational tables, native vector search, time series, realtime key subscriptions, streams, snapshots, WAL recovery, tiered storage, and optional app auth. ／ is MIT licensed and runs as a normal binary or container.",
+   "evidence_lines": [
+    19,
+    21,
+    57
+   ]
+  },
+  "fn": "lux-db/lux",
+  "sha": "85dfc2d830b8",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9304334abaef": {
+  "identity": {
+   "one_liner": "SQLite 3 C 库的 Swift 封装，含 Perfect-CRUD 驱动",
+   "review": "该包提供围绕 SQLite3 C API 的同步 Swift 封装（SQLite/SQLiteStmt），并实现 Perfect-CRUD 的 SQLGenDelegate/SQLExeDelegate 集成，使 Perfect-CRUD 的类型化查询构建器可操作 SQLite。依赖系统 libsqlite3，支持 SwiftPM 安装，适用于 macOS 12+、iOS 15+ 与 Linux 的 Swift 服务端/应用开发者。需注意类型非线程安全，调用方需自行串行化访问。",
+   "highlights": [
+    "提供 SQLite3 C API 的同步 Swift 封装（open/close/prepare/execute/forEachRow/事务）",
+    "实现 Perfect-CRUD 的代理协议，支持基于 Codable 的类型化查询构建器访问 SQLite",
+    "连接默认关闭双引号字符串字面量回退，未知双引名抛出 no such column 错误，可按连接选择性回退"
+   ],
+   "use_cases": [
+    "在 Swift 6 服务端项目中通过 raw API 读写 SQLite 文件数据库",
+    "配合 Perfect-CRUD 以 Codable 类型安全方式操作 SQLite",
+    "为 Perfect-Session 提供 SQLite 会话存储驱动"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# Perfect - SQLite Connector ／ This project provides a Swift wrapper around the SQLite 3 C library, plus a Perfect-CRUD database driver built on top of it. ／ - **`SQLite.swift`** — a thin, synchronous Swift wrapper around the SQLite3 C API: the `SQLite` class (open/close/prepare/execute/`forEachRow`/transactions) and `SQLiteStmt` (bind-by-position/name, column reading).",
+     "lines": [
+      1,
+      13,
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该包是封装 SQLite C 库并为 Perfect-CRUD 提供数据库驱动的组件，为数据库生态服务而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This project provides a Swift wrapper around the SQLite 3 C library, plus a Perfect-CRUD database driver built on top of it. ／ - **`SQLite.swift`** — a thin, synchronous Swift wrapper around the SQLite3 C API: the `SQLite` class (open/close/prepare/execute/`forEachRow`/transactions) and `SQLiteStmt` (bind-by-position/name, column reading). ／ It depends on **Perfect-CRUD** (product `PerfectCRUD`) for the ORM integration layer, and has no remote/external package dependencies otherwise — only the system SQLite3 C library. On macOS that comes from the SDK's `SQLite3` module; on Linux the package's `PerfectCSQLite` system-library target links the distribution's `libsqlite3` (found via `pkg-config sqlite3`).",
+   "evidence_lines": [
+    13,
+    23,
+    38
+   ]
+  },
+  "fn": "PerfectlySoft/Perfect-SQLite",
+  "sha": "9304334abaef",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

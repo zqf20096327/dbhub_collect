@@ -9391,5 +9391,133 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b09672fba271": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的本地文档知识库插件，SQLite/JSON 存储的混合检索索引",
+   "review": "dsh-library 是面向 DeepSeek Harness 智能体的 DSH 插件，把本地 md/txt 文档切块并嵌入后存入宿主的存储域（JSON 或 SQLite 后端），提供 library_add/remove/list/search/cite_check/diagnose 等工具，支持语义+关键词混合检索、MMR 多样性重排与引用校验。内置确定性哈希嵌入器，无需下载模型，也可配置外部命令或本地 Ollama；文档需按路径导入，PDF/docx 不在 v0.1.0 范围内。",
+   "highlights": [
+    "提供 library_search 混合语义+关键词检索、MMR 多样性重排、相关性过滤与 lost-in-the-middle 规避，支持注入式结果页",
+    "提供 library_cite_check 对答案中的 [n] 引用做模糊 token 匹配与语义相似度双重校验，library_diagnose 输出分块统计与自检索探针",
+    "支持 hash、外部命令、本地 Ollama 三种嵌入后端，默认零下载、零网络请求，存储后端可选 JSON 或 SQLite"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness 智能体构建可检索、可校验引用的本地文档知识库",
+    "在无网络、无模型下载的本地环境中做文档语义/关键词混合检索",
+    "对智能体回答中的引用进行逐条有效性核验与索引质量诊断"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Storage|Any storage-domain backend (JSON or SQLite); the index lives in the host's storage domain|",
+     "lines": [
+      37
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 DeepSeek Harness 智能体生态提供检索能力的 DSH 插件，SQLite 仅是宿主存储域的可选后端之一，并非为其服务的专用组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Local document knowledge base for DeepSeek Harness.** ／ |Storage|Any storage-domain backend (JSON or SQLite); the index lives in the host's storage domain| ／ `dsh-library` turns local md/txt documents into a queryable knowledge base with a quality pipeline your agent can trust:",
+   "evidence_lines": [
+    7,
+    37,
+    42
+   ]
+  },
+  "fn": "PerryLink/dsh-library",
+  "sha": "b09672fba271",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "37f110b43635": {
+  "identity": {
+   "one_liner": "AI 编程代理会话的桌面浏览与检索工具",
+   "review": "SeshBuddy 是一款本地桌面应用，读取 Claude Code、Codex 等 CLI 写入磁盘的会话数据并建立索引，提供树状浏览、全文搜索、归档和流量检查功能，内置反向代理可查看代理请求内容。面向使用 AI 编码代理并需要管理本地会话记录的开发者，基于 Tauri 构建，仅支持 macOS 和 Windows。",
+   "highlights": [
+    "读取并索引 Claude Code/Codex/Gemini 等 7 个 CLI 的本地会话数据",
+    "基于 Tantivy 的本地全文搜索，覆盖 prompt、回复、工具调用与代码块",
+    "内置 seshbuddy-proxy 反向代理，可检查请求/响应载荷与 token 用量"
+   ],
+   "use_cases": [
+    "集中浏览、搜索与归档多个 AI 编码 CLI 的历史会话",
+    "检查 AI 代理与厂商端点之间的 API 请求/响应内容",
+    "审查代理对代码的改动差异"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "读取本地会话文件并本地索引，不依赖外部数据库产品。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SeshBuddy is a native desktop workbench for the sessions you build with AI coding agents. It reads the session data and logs that Claude Code, Codex, Gemini, Antigravity, WorkBuddy, DSH and OpenCode already write to disk, indexes them locally, and gives you one place to browse, search, archive and inspect everything — plus a local reverse proxy that shows you exactly what your agent sends over the wire. ／ |**API Reverse Proxy & Traffic Inspector**|`seshbuddy-proxy` sits between your CLI and the vendor endpoint (**Claude Code** and **Codex**) so you can read request/response payloads, latency and token usage. One click to enable, one click to restore the original endpoint.|",
+   "evidence_lines": [
+    21,
+    29
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "huangy7/seshbuddy",
+  "sha": "37f110b43635",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

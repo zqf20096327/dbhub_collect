@@ -6512,5 +6512,147 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b8a6e5a57b72": {
+  "identity": {
+   "one_liner": "AzerothCore 服务端的 3D 世界与任务可视化编辑器，导出 SQL 补丁",
+   "review": "一款面向 AzerothCore 私服运营者的桌面应用，通过读取游戏客户端文件在 3D 视图中摆放 NPC、物件与巡逻路径，并在画布上编排任务链与战斗脚本，最终生成 SQL 补丁或写入开发库，全程只读线上 world 数据库；需连接可达的 MySQL world 数据库，支持 Windows/macOS/Linux 安装包，也可从源码构建。",
+   "highlights": [
+    "从游戏客户端文件绘制 3D 世界，可视化放置 NPC、物件、刷怪点与巡逻路径",
+    "画布式任务链编辑，支持任务脚本场景与 NPC 战斗设计",
+    "导出 SQL 补丁或应用到开发数据库，对线上 world 数据库只读"
+   ],
+   "use_cases": [
+    "为 AzerothCore 服务端制作与修改任务内容",
+    "在 3D 视图中调整 NPC/物件位置、朝向与刷怪配置",
+    "生成 SQL 补丁用于版本化提交世界改动"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- An AzerothCore world database (including the Conquest of AzerothCore fork) reachable over MySQL.",
+     "lines": [
+      57
+     ]
+    }
+   ],
+   "dbs": [
+    "MySQL"
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为编辑 AzerothCore world 数据库内容并导出 SQL 补丁的工具，服务于该数据库生态而非仅消费数据的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0-or-later",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A world editor for your AzerothCore server: build quests and shape the world around them, then export it all as SQL. ／ - **Export.** Review every change, then export an SQL patch or apply it to a dev database. Your live world database is only ever read. ／ - An AzerothCore world database (including the Conquest of AzerothCore fork) reachable over MySQL.",
+   "evidence_lines": [
+    3,
+    29,
+    57
+   ]
+  },
+  "fn": "DMCK96/azeroth-world-editor",
+  "sha": "b8a6e5a57b72",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "43d14f1010f4": {
+  "identity": {
+   "one_liner": "自托管错误追踪服务，Sentry SDK 兼容，双容器 Rust+PostgreSQL",
+   "review": "Epure 是一个自托管的错误追踪系统，接收应用通过官方 Sentry SDK 发送的错误事件，进行解包、分组并写入 PostgreSQL 16，再通过内置仪表板展示。面向独立开发者和小团队，通过 Docker Compose 两容器部署，不支持分布式追踪、session replay、性能剖析与基础设施指标，项目处于早期发布阶段。",
+   "highlights": [
+    "兼容官方 Sentry SDK，仅需更换 DSN 即可接入",
+    "单 Rust 二进制实现 ingest、worker 与仪表板，Docker Compose 两容器运行",
+    "支持分组 issue、JS/TS sourcemap、告警 webhook、RBAC 与 PostgreSQL RLS"
+   ],
+   "use_cases": [
+    "自托管替代方案接收 Sentry SDK 上报的应用错误事件",
+    "小团队/个人项目在 VPS 上以低资源运行错误追踪",
+    "部署于 Render/Railway/Coolify 等平台托管错误数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 16 ／ Self-hosted error tracking: grouped issues and stack traces, one Rust binary and PostgreSQL 16. ／  How an error gets in: your app sends an envelope to ingest (202 ACK), a worker demangles and groups into Postgres 16, and you open the dashboard over a session. One Rust binary on :8080. No Kafka, Redis, or ClickHouse.",
+     "lines": [
+      8,
+      12,
+      88
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "How an error gets in: your app sends an envelope to ingest (202 ACK), a worker demangles and groups into Postgres 16, and you open the dashboard over a session. One Rust binary on :8080. No Kafka, Redis, or ClickHouse.",
+     "lines": [
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 PostgreSQL 16 存储错误事件数据，是依赖数据库运行的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache 2.0，无独立闭源核心",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted error tracking: grouped issues and stack traces, one Rust binary and PostgreSQL 16. ／ Two containers. The SDK talks to ingest; ingest returns 202 and a worker writes Postgres. The dashboard is the same binary. ／  How an error gets in: your app sends an envelope to ingest (202 ACK), a worker demangles and groups into Postgres 16, and you open the dashboard over a session. One Rust binary on :8080. No Kafka, Redis, or ClickHouse.",
+   "evidence_lines": [
+    12,
+    86,
+    88
+   ]
+  },
+  "fn": "epure-sh/epure",
+  "sha": "43d14f1010f4",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

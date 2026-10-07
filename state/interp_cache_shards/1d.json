@@ -7037,5 +7037,70 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "02d09e769193": {
+  "identity": {
+   "one_liner": "Express 编写的 bug 报告提交与管理 CRUD 应用，用内置 SQLite 存储",
+   "review": "这是一个基于 Express 的小型 bug 报告应用：用户提交 bug 后，管理员在 /admin 页面关闭记录并通过 Mailtrap 邮件通知提交者。数据存于 Node 24 内置 SQLite 模块，使用 Zod 校验输入，邮件发送与记录保存分开处理并提供重试脚本。适合作为演示项目或小团队内部反馈工具，不支持多实例部署。",
+   "highlights": [
+    "使用 Node.js 内置 SQLite 模块实现本地持久化，无需数据库服务器或原生编译工具",
+    "记录保存与邮件写入在单个 SQLite 事务中完成，邮件失败不影响记录",
+    "提供邮件状态管理与 npm run retry-email 重试脚本，并支持 MAIL_MODE=log 本地无凭据调试"
+   ],
+   "use_cases": [
+    "内部小团队收集和跟踪 bug 报告并在解决后邮件通知提交者",
+    "学习 Express CRUD 路由、Zod 校验与 SQLite 事务的示例项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Node.js 24 and its built-in SQLite module for local persistence ／ Install Node.js 24 or newer in the 24.x release line and npm. The built-in SQLite API is experimental in some Node 24 releases; no database server or native build tools are required. ／ |`DB_PATH`|SQLite file; defaults to `.data/app.sqlite`|",
+     "lines": [
+      15,
+      21,
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该应用使用 Node 内置 SQLite 模块存取 bug 报告数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Node.js 24 and its built-in SQLite module for local persistence ／ |`DB_PATH`|SQLite file; defaults to `.data/app.sqlite`|",
+   "evidence_lines": [
+    15,
+    65
+   ]
+  },
+  "fn": "solovey23/express-bug-report-desk",
+  "sha": "02d09e769193",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

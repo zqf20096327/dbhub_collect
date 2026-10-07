@@ -7953,5 +7953,159 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "40bfff3415b8": {
+  "identity": {
+   "one_liner": "基于 SQLite 存储的 AI 跨会话记忆层，经 MCP 暴露工具",
+   "review": "Cairn Memory 是开源开发者预览项目，将 AI 会话记忆以 receipt（来源凭据）形式存入用户本地 SQLite 文件，通过 MCP 或 JavaScript 提供保存、检查、修正、遗忘五个显式工具。面向需要跨会话保留上下文的 AI 开发者。限制：默认抽取仍未通过其来源支持标准，语义召回需自备 OpenAI 密钥，npm 包尚未发布。",
+   "highlights": [
+    "记忆以 receipt 形式存入用户自己的 SQLite 文件，本地使用无需 Cairn 账号",
+    "通过 MCP 或 JavaScript 暴露 remember/recall/inspect/correct/forget 五个显式工具",
+    "保存、检查、修正、遗忘无需模型密钥即可运行"
+   ],
+   "use_cases": [
+    "为 Claude Code/Codex 等 AI 客户端提供跨会话记忆",
+    "在本地保存并人工审查、修正或删除 AI 记忆内容",
+    "基于 MCP 或 JavaScript 构建自定义记忆集成"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Cairn's open-source memory layer stores memories in your own SQLite file and ／ helper installs the hosted plugin/hooks; local SQLite setup remains separate. ／ - **Local preview:** your SQLite database,",
+     "lines": [
+      74,
+      115,
+      119
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为 AI 客户端提供记忆存储能力的组件/工具，SQLite 仅作为其存储后端。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Cairn's open-source memory layer stores memories in your own SQLite file and ／ exposes them through MCP or JavaScript. No Cairn account is needed for local use.",
+   "evidence_lines": [
+    74,
+    75
+   ]
+  },
+  "fn": "Cairn-ink/cairn-memory",
+  "sha": "40bfff3415b8",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c42c70ebea54": {
+  "identity": {
+   "one_liner": "面向 VastBase/openGauss/PostgreSQL 的离线数据应急恢复工具",
+   "review": "vbdul 是一款二进制分发的应急数据恢复工具，用于在数据库无法启动、误删表、误 UPDATE/DELETE、无备份等场景下，直接解析磁盘数据文件、文件系统空闲空间或 WAL 抢救数据。面向 VastBase、openGauss、PostgreSQL 的运维/DBA 用户。源代码不公开，正式版按主机指纹授权，仅支持 Heap 行存引擎，恢复窗口依赖空闲页面未被覆写。",
+   "highlights": [
+    "支持从数据文件、文件系统空闲空间、WAL 及 ProBackup 备份集中离线恢复数据",
+    "提供 logminer 按 LSN/XID/时间区间挖掘 WAL 并按事务反向恢复",
+    "严格只读访问源数据，输出写入独立目录"
+   ],
+   "use_cases": [
+    "数据库无法启动或数据目录被删时离线提取数据",
+    "无备份下恢复 DROP/TRUNCATE 释放的表页面碎片",
+    "从 WAL 回滚误 UPDATE/DELETE 或从 ProBackup 备份做单表选择性恢复"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "vbdul 是一款数据库应急数据恢复工具（类似 Oracle ODU），支持 VastBase、openGauss 内核版本与 PostgreSQL 11~17。在数据库无法启动、误删表/数据、误 UPDATE/DELETE、无备份的极端场景下，直接从磁盘数据文件、文件系统空闲空间或 WAL 中抢救恢复数据。 ／ |数据库|VastBase v0/v1/v2/v3/v5/v6（PG11/PG14/PG16/openGauss 6.0/PG17/G100 2.2.5 内核）、PostgreSQL 11~17|",
+     "lines": [
+      3,
+      40
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "# vbdul — VastBase/openGauss/PostgreSQL 数据应急恢复工具 ／ vbdul 是一款数据库应急数据恢复工具（类似 Oracle ODU），支持 VastBase、openGauss 内核版本与 PostgreSQL 11~17。在数据库无法启动、误删表/数据、误 UPDATE/DELETE、无备份的极端场景下，直接从磁盘数据文件、文件系统空闲空间或 WAL 中抢救恢复数据。 ／ |数据库|VastBase v0/v1/v2/v3/v5/v6（PG11/PG14/PG16/openGauss 6.0/PG17/G100 2.2.5 内核）、PostgreSQL 11~17|",
+     "lines": [
+      1,
+      3,
+      40
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "vbdul 是一款数据库应急数据恢复工具（类似 Oracle ODU），支持 VastBase、openGauss 内核版本与 PostgreSQL 11~17。在数据库无法启动、误删表/数据、误 UPDATE/DELETE、无备份的极端场景下，直接从磁盘数据文件、文件系统空闲空间或 WAL 中抢救恢复数据。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 VastBase/openGauss/PostgreSQL 提供数据文件与 WAL 层面的离线恢复能力，属数据库生态服务工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "源代码不公开，仅提供二进制发布；正式版按主机指纹授权（Ed25519 签名 license）",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "vbdul 是一款数据库应急数据恢复工具（类似 Oracle ODU），支持 VastBase、openGauss 内核版本与 PostgreSQL 11~17。在数据库无法启动、误删表/数据、误 UPDATE/DELETE、无备份的极端场景下，直接从磁盘数据文件、文件系统空闲空间或 WAL 中抢救恢复数据。 ／ |数据库|VastBase v0/v1/v2/v3/v5/v6（PG11/PG14/PG16/openGauss 6.0/PG17/G100 2.2.5 内核）、PostgreSQL 11~17| ／ - **严格只读**：所有源数据（设备/数据文件/备份/WAL）仅以只读方式访问，绝不修改原始数据",
+   "evidence_lines": [
+    3,
+    40,
+    157
+   ]
+  },
+  "fn": "LiXiangYu0612/vbdul",
+  "sha": "c42c70ebea54",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

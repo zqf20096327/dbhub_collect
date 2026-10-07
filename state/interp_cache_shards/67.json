@@ -8827,5 +8827,151 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a4c75d1e3e3c": {
+  "identity": {
+   "one_liner": "自托管的 Claude Code 网关，为每台设备提供独立密钥、限额与用量记录",
+   "review": "DeviceGate 是一个自托管代理网关，让一台机器持有 Claude 登录凭据，局域网内其他 PC 通过各自可撤销的设备令牌访问 Claude Code，并提供按设备的模型白名单、请求/令牌/费用限额、用量统计与审计日志。适合在个人多台机器上使用同一订阅并需要限额与追踪的用户。数据存于单个 SQLite 文件，仅限局域网使用，不支持公网直接暴露。",
+   "highlights": [
+    "为每台设备提供独立可撤销的设备令牌、模型访问白名单与每日/每周请求、令牌和费用限额",
+    "记录每请求的输入、输出与缓存令牌用量及按 API 费率折算的成本，支持按设备、模型、日期过滤",
+    "提供审计日志，管理员操作与登录尝试均记录前后差异；提示词与响应内容不存储"
+   ],
+   "use_cases": [
+    "个人在多台机器上共用一个 Claude 订阅并需区分各机器的用量",
+    "需要对自动化机器上的 Claude Code 设置更严格的模型与限额控制",
+    "需要在局域网内集中追踪订阅额度消耗与成本"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Small.** One Next.js process and one SQLite file. No Redis, Postgres or Docker required.",
+     "lines": [
+      49
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Small.** One Next.js process and one SQLite file. No Redis, Postgres or Docker required. ／ |`DATABASE_PATH`|no|SQLite file. Default `./data/gateway.db`.|",
+     "lines": [
+      49,
+      171
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明项目用单个 SQLite 文件存储设备、限额与用量数据（L49、L171），SQLite 是其数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Small.** One Next.js process and one SQLite file. No Redis, Postgres or Docker required. ／ |`DATABASE_PATH`|no|SQLite file. Default `./data/gateway.db`.| ／ **A self-hosted gateway that gives each of your machines its own key, model access, limits and",
+   "evidence_lines": [
+    49,
+    171,
+    7
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "jkugsiya/DeviceGate",
+  "sha": "a4c75d1e3e3c",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c73c2646fc5b": {
+  "identity": {
+   "one_liner": "面向印度银行/信用卡账单的本地离线个人理财应用，内嵌 Go 版 SQLite。",
+   "review": "LocalFinance 是一个完全离线运行的个人财务分析工具，用 Go 编写并打包为单个可执行文件，内置 React 前端和纯 Go 实现的 SQLite 数据库。它解析印度主流银行（HDFC、ICICI、Axis 等）的 PDF/CSV/Excel 账单，自动清理 UPI/POS 交易描述、识别信用卡账单周期和返现信息。数据只保存在本地 SQLite 文件中，适合关注隐私的印度银行用户进行本地记账和分析。",
+   "highlights": [
+    "提供 PDF（含密码加密文件）、CSV、Excel 格式的银行账单解析引擎，自动检测银行格式与账户类型",
+    "支持 UPI/IMPS/NEFT/POS 等印度交易描述的 regex 清洗与受益人提取，以及信用卡账期、返现、积分信息提取",
+    "使用 SQLite 存储，基于 SHA-256 哈希去重和幂等 upsert，内置 Goose 自动迁移与可选 PIN/密码保护"
+   ],
+   "use_cases": [
+    "个人本地导入和分析印度银行储蓄/活期账户对账单",
+    "信用卡账单周期、最低还款、返现与积分的跟踪管理",
+    "无网络环境下保护隐私的多账户多年份交易记录管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Distributed as a **single standalone executable binary** with an embedded React frontend and an embedded pure-Go SQLite database. ／ - **100% Offline & Private**: Zero cloud sync, zero telemetry, no SMS scraping, and no third-party account aggregators. All your financial data stays strictly on your local machine in an open SQLite database file (`local_finance.db` or `~/.localfinance/local_f ／ - Idempotent SQLite upserts (`ON CONFLICT`) safely update balances while **strictly preserving** your custom category overrides, notes, and tags.",
+     "lines": [
+      10,
+      24,
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 作为自身数据存储，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Distributed as a **single standalone executable binary** with an embedded React frontend and an embedded pure-Go SQLite database. ／ |**Database Engine**|**SQLite (`modernc.org/sqlite`)**|Pure Go SQLite engine (zero CGO required), WAL mode enabled with busy timeout pragmas.|",
+   "evidence_lines": [
+    10,
+    97
+   ]
+  },
+  "fn": "usmslm102/local-finance",
+  "sha": "c73c2646fc5b",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -7636,5 +7636,219 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d70cf073cce3": {
+  "identity": {
+   "one_liner": "单二进制、YAML 声明 schema 的 Supabase 兼容后端平台",
+   "review": "instancez 用单个 YAML 文件定义表、RLS、存储、RPC，自动对数据库做增量迁移并对外提供 PostgREST 风格 API，兼容 supabase-js 客户端，含认证与 S3/本地存储。面向需要快速自托管后端的开发者和 LLM 编码代理；Realtime 尚未支持，运行需 Postgres 或内置嵌入式实例。",
+   "highlights": [
+    "单一 YAML 文件声明 schema，自动 diff 并应用增量迁移",
+    "兼容 Supabase 客户端，提供 auth、REST、RPC、存储能力",
+    "提供编码代理 skill，支持 Claude Code、Codex、Cursor 等"
+   ],
+   "use_cases": [
+    "为 Web/移动应用自托管 Supabase 兼容后端",
+    "让 LLM 编码代理以 YAML 方式生成和管理后端 schema",
+    "本地开发嵌入式 Postgres 并部署到 Docker/Kubernetes/Lambda"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "inz dev --embedded-pg # no Postgres to install; or drop the flag and set INSTANCEZ_DATABASE_URL to use your own ／ `inz dev` provisions the Postgres roles, applies the schema, and serves the API at `http://localhost:8080`. Editing `instancez.yaml` re-applies the schema automatically. ／ |Self-host footprint|One binary + Postgres|Multi-container stack|",
+     "lines": [
+      49,
+      55,
+      134
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明以 Postgres 为运行依赖并负责对其做角色配置与 schema 应用，是为数据库生态服务的后端组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0，贡献受 CLA 约束",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **One YAML file is the schema.** Edit `instancez.yaml` and instancez diffs it against the live database, applying just the delta migration (including drops) — no migration files to write or run by hand. ／ `inz dev` provisions the Postgres roles, applies the schema, and serves the API at `http://localhost:8080`. Editing `instancez.yaml` re-applies the schema automatically. ／ |Self-host footprint|One binary + Postgres|Multi-container stack|",
+   "evidence_lines": [
+    17,
+    55,
+    134
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "instancez/instancez",
+  "sha": "d70cf073cce3",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4070d631942d": {
+  "identity": {
+   "one_liner": "暗黑奇幻风健身 RPG 移动应用，基于 SQLite 离线优先存储训练数据",
+   "review": "Bati 是一款 Expo + React Native 构建的移动端健身游戏化应用，把训练记录转化为任务、Boss 战和村庄成长。数据离线存储在设备本地 SQLite（经 Drizzle ORM 管理），无账号无服务器，仅地图瓦片、更新检查和 WebDAV/Nextcloud 加密同步三处可选联网。通过 F-Droid 或 APK 分发，适合独自训练并需要激励的健身者。",
+   "highlights": [
+    "基于 SQLite + Drizzle 的离线优先本地存储，训练数据保留在设备上",
+    "可选通过 WebDAV 或 Nextcloud 同步，传输前使用 AES-256-GCM 在本机加密",
+    "使用 lint 规则限制网络调用，仅允许地图、更新检查和同步三处联网"
+   ],
+   "use_cases": [
+    "独自在家、健身房或户外训练时进行游戏化激励",
+    "无账号、无云端依赖的本地训练历史记录与追踪",
+    "通过自建 WebDAV/Nextcloud 或 Syncthing 在多设备间同步加密训练数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite + Drizzle ／ native modules: SQLite, audio, an Android home-screen widget, MapLibre, and `modules/bati-location`, ／ - `db/`: SQLite + Drizzle domain logic; the source of truth for game rules",
+     "lines": [
+      22,
+      176,
+      213
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该应用用 SQLite 在设备上存储用户训练数据，SQLite 是其数据存储而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码 MIT，美术资源 CC BY-SA 4.0 双许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SQLite + Drizzle ／ - `db/`: SQLite + Drizzle domain logic; the source of truth for game rules",
+   "evidence_lines": [
+    22,
+    213
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Guiforge/bati",
+  "sha": "4070d631942d",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "472051f22412": {
+  "identity": {
+   "one_liner": "从数据模型生成关系完整合成数据与可运行 dbt 项目的 CLI",
+   "review": "model2data 是一个 Python CLI 工具：读取 YAML 或 DBML 数据模型，生成保留外键关系的合成数据，并生成完整可运行的 dbt 项目（seeds、staging 模型、测试、DuckDB/Postgres profile），支持确定性种子、增量日期、历史表、注入缺陷和指标校验，面向分析工程师、顾问、培训者等需要在无生产数据条件下构建或测试数据管道的人。",
+   "highlights": [
+    "按依赖顺序生成合成数据并保证外键指向已存在的父行",
+    "生成包含 seeds、staging 模型和测试的完整 dbt 项目，支持 DuckDB 与 Postgres profile",
+    "支持确定性输出（同 model+seed 生成相同字节）、增量日期、SCD2 历史表与按注入缺陷的数据"
+   ],
+   "use_cases": [
+    "在无生产数据访问权限时为数据管道生成测试/演示数据",
+    "在 CI 中用固定 seed 生成字节一致的 fixtures 做构建与测试",
+    "培训场景中生成故意含缺陷的数据以演示 dbt 测试失败"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "staging models, tests, and a DuckDB or Postgres profile. Add a metrics file and it also knows ／ a DuckDB (zero-config) or Postgres profile. One `dbt build` loads, builds and tests it, and ／ DuckDB (zero-config, file-based) or Postgres. ／ pip install \"model2data[postgres]\" # to target Postgres with --adapter postgres",
+     "lines": [
+      17,
+      50,
+      197,
+      205
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为数据工程工作流生成合成数据和 dbt 项目并适配 DuckDB/Postgres 目标，本身不是使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "relationship-preserving synthetic data *and* a complete, runnable dbt project around it: seeds, ／ a DuckDB (zero-config) or Postgres profile. One `dbt build` loads, builds and tests it, and ／  DuckDB (zero-config, file-based) or Postgres.",
+   "evidence_lines": [
+    16,
+    50,
+    197
+   ]
+  },
+  "fn": "JB-Analytica/model2data",
+  "sha": "472051f22412",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

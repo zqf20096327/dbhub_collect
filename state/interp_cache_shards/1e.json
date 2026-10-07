@@ -8338,5 +8338,205 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d391d20921f3": {
+  "identity": {
+   "one_liner": "基于 axum 与 sqlite 后端的 Rust 自托管 pastebin 服务",
+   "review": "wastebin 是一个用 Rust 编写的自托管 pastebin 应用，使用 axum 框架与 sqlite3 数据库存储粘贴内容，将文本压缩后落盘。面向需要私有部署文本分享服务的用户，支持语法高亮、Markdown 渲染、 ChaCha20Poly1305 加密和过期删除。它不含用户认证与管理功能，官方提示直接暴露公网时需自行配置限流或反向代理。",
+   "highlights": [
+    "以 sqlite3 为后端存储粘贴内容，使用 zstd 压缩",
+    "支持 170+ 语言语法高亮、Markdown 渲染、ChaCha20Poly1305 加密与过期/阅后删除",
+    "提供单二进制运行、REST API、wastebin-ctl 管理工具及 neovim 插件"
+   ],
+   "use_cases": [
+    "自托管文本/代码片段分享服务",
+    "通过 API 或命令行从剪贴板、stdin 快速创建粘贴",
+    "对粘贴内容进行加密或设置过期时间"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* axum and sqlite3 ／ > with `TMPDIR` being set. If database migrations fail with an extended sqlite ／ |`WASTEBIN_DATABASE_PATH`|Path to the sqlite3 database file.|`:memory:`|",
+     "lines": [
+      37,
+      89,
+      191
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 wastebin 使用 sqlite3 数据库存储粘贴数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* axum and sqlite3 ／ A minimal pastebin with a design shamelessly copied from ／ |`WASTEBIN_DATABASE_PATH`|Path to the sqlite3 database file.|`:memory:`|",
+   "evidence_lines": [
+    37,
+    7,
+    191
+   ]
+  },
+  "fn": "matze/wastebin",
+  "sha": "d391d20921f3",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2a5a8d7f2247": {
+  "identity": {
+   "one_liner": "轻量自托管应用监控工具，单 Go 二进制采集指标并存入 SQLite",
+   "review": "StatLite 是一个面向 VPS 与小型服务器的自托管应用监控工具，用单个 Go 二进制轮询多个应用的指标端点，将历史数据存在本地 SQLite 中并提供内置图表。它通过 Spring Boot Actuator、Quarkus/Micronaut Micrometer 或固定格式的 JSON 指标端点采集数据，面向不希望部署 Prometheus/Grafana 的用户；README 说明其不提供 PromQL、自定义面板、分布式追踪或内置告警投递，且无内置认证。",
+   "highlights": [
+    "单个 Go 二进制轮询多个应用，指标与历史数据存储在本地 SQLite，无需外部监控栈",
+    "支持 Spring Boot、Quarkus、Micronaut 集成，以及任意语言可实现的固定 JSON 指标端点（StatLite Metrics v1）",
+    "提供内置历史图表，采集流量、延迟、CPU、内存及可选的应用健康与主机指标"
+   ],
+   "use_cases": [
+    "在资源受限的 VPS 或小型服务器上监控 Spring Boot/Quarkus/Micronaut 应用",
+    "为 Express、Django、FastAPI、Go 等应用实现轻量 JSON 指标端点后进行本地监控",
+    "以 Docker 或 systemd 方式自托管部署、数据不出服务器的监控场景"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "metrics locally in SQLite, and provides built-in historical ／ `storage.sqlite_path`, and `polling.interval` are required:",
+     "lines": [
+      11,
+      112
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为服务器运维服务的自托管监控工具，使用 SQLite 作为本地指标存储组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "StatLite provides lightweight, self-hosted application monitoring for apps running ／ metrics locally in SQLite, and provides built-in historical ／ charts, without requiring Prometheus or Grafana.",
+   "evidence_lines": [
+    9,
+    11,
+    12
+   ]
+  },
+  "fn": "PVRLabs/statlite",
+  "sha": "2a5a8d7f2247",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "581255faac16": {
+  "identity": {
+   "one_liner": "Rust 编写的嵌入式内存无锁事务 KV 存储引擎",
+   "review": "SurrealMX 是一个嵌入式、内存型、无锁的键值数据库引擎，基于 MVCC 与并发自适应基数树实现，配有环形提交缓冲区，支持事务、快照隔离与可选持久化（AOL 日志+快照、LZ4 压缩、可配置 fsync），并支持 WebAssembly 环境。面向需要微秒级延迟与高并发的服务端应用、缓存层及浏览器场景。默认不持久化，进程终止数据即丢失，需自行配置持久化模式。",
+   "highlights": [
+    "基于 MVCC 与并发自适应基数树的无锁内存存储，支持可串行化与快照隔离事务及保存点",
+    "提供可选持久化：追加式日志（AOL）、周期快照、可配置 fsync 与 LZ4 压缩",
+    "支持浏览器 WebAssembly 环境运行"
+   ],
+   "use_cases": [
+    "高并发服务端应用的嵌入式缓存层与微秒级延迟存储",
+    "开发测试或数据可从其他来源重建的临时数据存储",
+    "需要持久化的场景可配置同步 AOL+fsync 以在崩溃后保留数据"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- Deterministic Simulation Tested (DST) against an in-memory linearizable model oracle across 25,000,000 operations with zero divergences",
+     "lines": [
+      59
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为独立的嵌入式存储引擎与缓存层，为数据库生态提供存储内核组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SurrealMX is an ultra-high-throughput, in-memory, lock-free key-value database engine built on multi-version concurrency control (MVCC) over a concurrent adaptive radix tree, with a circular commit ring buffer. ／ It is designed as an independent, standalone embedded storage engine and caching layer suitable for microsecond-latency workloads, high-concurrency server applications, and browser WebAssembly environments. ／ - Optional persistence with configurable modes:",
+   "evidence_lines": [
+    16,
+    18,
+    60
+   ]
+  },
+  "fn": "surrealdb/surrealmx",
+  "sha": "581255faac16",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

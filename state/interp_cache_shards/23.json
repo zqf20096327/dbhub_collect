@@ -9334,5 +9334,297 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3acded1fcbb8": {
+  "identity": {
+   "one_liner": "单文件 AI 记忆与知识图谱库，Go 实现向量、RAG 与 RDF/SPARQL",
+   "review": "CortexDB 是一个纯 Go 的嵌入式库，把向量检索、FTS5 全文搜索、RDF/SPARQL 知识图谱和 agent 记忆封装进单个 SQLite 文件（可切换 PostgreSQL + pgvector），提供 80+ MCP 工具和 gRPC 共享服务端，且可在不配置 embedding 模型的情况下以词法模式运行。面向需要为 Claude Code、Codex 等 agent 添加持久记忆与知识图谱的开发者。",
+   "highlights": [
+    "提供向量索引（HNSW/IVF/flat/二进制码）、FTS5 全文检索及混合与图检索",
+    "实现 RDF 1.2 图谱，支持 SPARQL、RDFS/OWL 2 RL 推理、SHACL 校验和只读 Cypher",
+    "以库、Claude Code/Codex 插件及 MCP 工具三种形态提供 80+ 工具"
+   ],
+   "use_cases": [
+    "为 AI agent 提供跨会话持久记忆与自动召回",
+    "在单文件内构建带推理能力的知识图谱",
+    "多 agent 或多机器通过 gRPC 服务端共享同一记忆与图谱"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "AI memory and a knowledge graph in one SQLite file. Pure Go, no service to run, works without an embedding model. ／ - SQLite by default, PostgreSQL + pgvector with a `postgres://` DSN",
+     "lines": [
+      5,
+      72
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- SQLite by default, PostgreSQL + pgvector with a `postgres://` DSN",
+     "lines": [
+      72
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目自身实现存储引擎能力并以库/插件/MCP 服务形态为 agent 生态提供记忆与图谱基础设施",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "AI memory and a knowledge graph in one SQLite file. Pure Go, no service to run, works without an embedding model. ／ - Vectors (HNSW, IVF, flat, binary codes), FTS5 full-text search, hybrid and graph retrieval ／ - SQLite by default, PostgreSQL + pgvector with a `postgres://` DSN",
+   "evidence_lines": [
+    5,
+    64,
+    72
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "liliang-cn/cortexdb",
+  "sha": "3acded1fcbb8",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d5a6b18e8fc1": {
+  "identity": {
+   "one_liner": "Emacs 交互式数据库客户端，支持多后端查询与 SQL 行编辑",
+   "review": "Clutch 是运行于 Emacs 29.1+ 的交互式数据库客户端，提供可编辑 SQL 缓冲区、结果网格展示、行级编辑暂存与预览执行。它为 MySQL、PostgreSQL、SQLite、XTDB、MongoDB、Redis 提供原生后端，并通过 Java 17+ 的 clutch-jdbc-agent 访问 Oracle、SQL Server、DuckDB 等 JDBC 数据库。适合在 Emacs 中工作的开发者与 DBA；行编辑仅限能识别稳定行标识的结果集。",
+   "highlights": [
+    "在 Emacs 缓冲区内执行 SQL 查询并以交互网格展示结果，支持 TSV/CSV/Org 格式复制与导出",
+    "支持行级编辑暂存：INSERT/UPDATE/DELETE 经校验和预览确认后提交",
+    "提供 MySQL/PostgreSQL/SQLite/MongoDB/Redis 原生后端及经 JDBC agent 的多数据库访问"
+   ],
+   "use_cases": [
+    "开发者在 Emacs 中直接查询、浏览和编辑多种数据库数据",
+    "对支持行标识的表进行受控的行级数据修改",
+    "通过 JDBC 通道访问 Oracle、SQL Server、ClickHouse 等数据库"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with Installation Details and Saved Connections and Query Workflow. ／ |PostgreSQL native|Non-null unique keys, then `ctid` for ordinary heap tables|",
+     "lines": [
+      7,
+      39,
+      58
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with Installation Details and Saved Connections and Query Workflow. ／ |MySQL native|Non-null unique keys; no physical row-locator fallback|",
+     "lines": [
+      7,
+      39,
+      57
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |Oracle JDBC|Non-null unique keys, then `ROWID` for confirmed base tables| ／ |Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`|",
+     "lines": [
+      7,
+      61,
+      74
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ The shortest path uses SQLite, which requires only Emacs 29.1+—no protocol package or Java runtime. ／ ### 2. Open a SQLite database",
+     "lines": [
+      7,
+      13,
+      23
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`| ／ |`:backend jdbc` / Oracle / SQL Server / ClickHouse / DB2 / DuckDB|None in Emacs; uses the bundled JDBC adapter|",
+     "lines": [
+      7,
+      74,
+      94
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |ClickHouse / Snowflake / Redshift / DB2 / generic JDBC|Basic SQL / query-first support|Backend-specific limits apply to editing, transactions, and dialect behavior| ／ |`:backend jdbc` / Oracle / SQL Server / ClickHouse / DB2 / DuckDB|None in Emacs; uses the bundled JDBC adapter|",
+     "lines": [
+      7,
+      78,
+      94
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11| ／ MariaDB 10.11 has been live-validated through the native `mysql` backend, including TLS with `mysql_native_password`; other MariaDB versions are expected to be broadly compatible but are not yet part of the regular test matrix. MySQL 5.6 has no native JSON col",
+     "lines": [
+      70,
+      120
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供查询与管理的客户端工具，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Query and browse databases—and stage SQL row edits—without leaving Emacs. ／ ## Backend Support ／ - **Choose the backend path you need:** use native or pure-Elisp integrations when available, or the Java 17+ clutch-jdbc-agent for JDBC databases.",
+   "evidence_lines": [
+    5,
+    66,
+    49
+   ]
+  },
+  "fn": "LuciusChen/clutch",
+  "sha": "d5a6b18e8fc1",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e046025cab3b": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 AI 智能体持久化记忆 MCP 服务器",
+   "review": "Mnemo 是一个 MCP 服务器，为 AI 编码助手（Claude Code、Cursor 等）提供本地持久化记忆存储：数据保存在单个 SQLite 文件（WAL 模式）中，通过 FTS5 与向量检索融合实现混合搜索，支持时间衰减评分、重要度归档策略和时序知识图谱。仅提供 Streamable HTTP 传输，需自行启动 HTTP 实例，跨机备份依赖 rclone，无嵌入式同步。",
+   "highlights": [
+    "支持 FTS5 + sqlite-vec 向量检索，经 RRF 融合与交叉编码器重排序",
+    "提供双时态知识图谱与实体解析（embedding KNN）及 as_of 历史查询",
+    "本地单文件 SQLite（WAL）存储，备份与迁移通过 rclone 完成"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 MCP 客户端提供跨会话持久化记忆",
+    "需要本地自托管、无云端依赖的智能体记忆存储",
+    "需要记忆去重、重要度评分与软归档策略的记忆管理"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> one local SQLite store (WAL), per-task `[models.*]` provider cells ／ - **Hybrid retrieval** -- FTS5 + vector search (sqlite-vec), fused via Reciprocal Rank Fusion (k=60), then re-ranked via the `[models.rerank]` provider cell (OpenRouter pre-wired default) with the local Fastretrieval Qwen3 cross-encoder as fallback, plus tempo ／ - **Local-first storage** -- one SQLite file (WAL) under `~/.mnemo/`; backup and cross-machine migration = `rclone` outside the server (no embedded sync)",
+     "lines": [
+      53,
+      64,
+      72
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Self-hostable (single SQLite file)|yes (zero ext deps)|partial (cloud-first)|yes (Postgres)|yes (Postgres + Qdrant)|",
+     "lines": [
+      111
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明其为 MCP 服务器，本地 SQLite 存储仅为自身持久化机制，服务于 AI 智能体记忆场景。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Mnemo MCP Server ／ > one local SQLite store (WAL), per-task `[models.*]` provider cells ／ - **Local-first storage** -- one SQLite file (WAL) under `~/.mnemo/`; backup and cross-machine migration = `rclone` outside the server (no embedded sync)",
+   "evidence_lines": [
+    1,
+    53,
+    72
+   ]
+  },
+  "fn": "n24q02m/mnemo",
+  "sha": "e046025cab3b",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

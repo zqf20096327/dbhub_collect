@@ -9626,5 +9626,142 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3f0c1a64a5a5": {
+  "identity": {
+   "one_liner": "Elixir/OTP 持久化执行引擎，以 Postgres 作为日志与协调存储",
+   "review": "Continuum 是一个供 Elixir/OTP 应用嵌入的持久化执行库：将工作流状态以 journal 形式写入 Postgres，通过确定性重放、租约与 fencing token 实现进程崩溃后的恢复续跑，并支持 saga 补偿、子工作流、版本化与 Observer 观测界面。面向需要长事务业务流程在崩溃后继续执行的 Elixir 团队；限制包括仅支持 Elixir 1.19/1.20、以 Postgres 为唯一存储、不提供多语言 SDK 与独立集群服务。",
+   "highlights": [
+    "以 Postgres 实现 journal、租约存储、定时器与信号总线，写入采用 fencing token CAS",
+    "编译期 AST 扫描拒绝非确定性调用，提供确定性重放与 ReplayDriftError 检测",
+    "提供 saga 补偿、父子工作流、版本化调度及 Phoenix LiveView Observer 与 OpenTelemetry 桥接"
+   ],
+   "use_cases": [
+    "多步骤业务流程需在应用崩溃或节点失效后从断点继续执行",
+    "需要 saga 补偿与跨运行幂等保证的订单/支付类编排",
+    "Elixir 团队希望不引入独立集群服务即获得持久化执行能力"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "OTP-native and Postgres-backed. No separate cluster service, no paid SaaS ／ Postgres is the only moving part — journal, lease store, timer wheel, and signal ／ - **One dependency.** Postgres is the only thing you need to operate — it is",
+     "lines": [
+      30,
+      100,
+      118
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Continuum 依赖 Postgres 作为其执行引擎的存储组件，为数据库生态提供持久化执行能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Continuum is a durable execution engine — Temporal's programming model, but ／ OTP-native and Postgres-backed. No separate cluster service, no paid SaaS ／     {:postgrex, \"~> 0.19\"}",
+   "evidence_lines": [
+    29,
+    30,
+    156
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "Yyeger/Continuum",
+  "sha": "3f0c1a64a5a5",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "318267414137": {
+  "identity": {
+   "one_liner": "开源账单提醒平台，基于 Supabase PostgreSQL 与周期引擎",
+   "review": "Bill Reminder 是一个跨平台账单提醒应用，用于追踪订阅、水电费、EMI 等周期性付款，包含七状态账单生命周期、可配置的周期引擎、推送与邮件提醒及支付历史记录。面向需要管理周期性账单的个人与家庭用户，移动端用 React Native + Expo，Web 端为功能对等的仪表盘，两者共享 Supabase PostgreSQL 后端，定时任务通过 pg_cron 与 Edge Functions 实现。",
+   "highlights": [
+    "提供基于 anchor_date 的周期引擎，支持固定到期日、预付/有效期、钱包余额三种计费模型与多种重复频率",
+    "服务端计算七种账单状态，paid 与 archived 记录作为不可变历史",
+    "提供账单级提醒规则配置、JSON 数据导出、OTP 验证账户删除与家庭成员管理"
+   ],
+   "use_cases": [
+    "追踪订阅、水电、EMI、充值等周期性付款",
+    "个人或家庭共享的账单到期提醒与支付记录",
+    "多端（移动/Web）同步的账单管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Backend|Supabase PostgreSQL| ／ |Scheduled work|PostgreSQL `pg_cron`|",
+     "lines": [
+      206,
+      209
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 显示其以后端身份使用 Supabase PostgreSQL 存储账单数据并通过 pg_cron 处理定时任务，是用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Backend|Supabase PostgreSQL| ／ |Scheduled work|PostgreSQL `pg_cron`|",
+   "evidence_lines": [
+    206,
+    209
+   ]
+  },
+  "fn": "suryadeepbanerjee/Bill-Reminder",
+  "sha": "318267414137",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

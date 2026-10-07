@@ -8817,5 +8817,143 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8cd37caed1d6": {
+  "identity": {
+   "one_liner": "离线截图文字搜索工具，用 OCR 建立可检索索引",
+   "review": "gyotaku 读取本机截图工具保存的截图，通过 PaddleOCR 提取文字并用 SQLite FTS5 建立本地索引，用户按快捷键输入关键词即可检索历史截图并复制文本或图像。全部处理离线完成，支持 Linux、macOS（Apple Silicon）与 Windows 预览版，需要下载约 22MB OCR 模型。",
+   "highlights": [
+    "提供快捷键唤起的全文检索界面，支持复制匹配文本或图像",
+    "本地离线运行，索引后台以空闲优先级增量更新",
+    "支持 Linux、macOS（Apple Silicon）和 Windows（预览）三平台"
+   ],
+   "use_cases": [
+    "在大量历史截图中按 remembered 文字快速定位截图",
+    "从截图直接复制其中的文字内容",
+    "无网络环境下对本地截图做全文检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**macOS**: the indexer (`gyotaku`) builds with the Xcode Command Line Tools alone, which provide the C compiler that the bundled SQLite compiles with:",
+     "lines": [
+      173
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其内部索引存储组件（rusqlite/捆绑 SQLite），项目本身是面向最终用户的截图搜索应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "gyotaku reads the text in every screenshot you take and makes it searchable. Press a shortcut, type a few letters of anything you remember seeing, and every matching screenshot appears with the matched words highlighted in place. Open one to copy its text, a selection of lines, or the image itself. ／ All processing happens locally. gyotaku does not take screenshots itself; it indexes the folders your existing screenshot tool saves to. ／ **macOS**: the indexer (`gyotaku`) builds with the Xcode Command Line Tools alone, which provide the C compiler that the bundled SQLite compiles with:",
+   "evidence_lines": [
+    17,
+    19,
+    173
+   ]
+  },
+  "fn": "xevrion/gyotaku",
+  "sha": "8cd37caed1d6",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8027c2a7ca47": {
+  "identity": {
+   "one_liner": "OpenCode 会话存储的分析与垃圾回收 CLI 工具",
+   "review": "ocgc 是一个命令行工具，用于分析、可视化和回收 OpenCode（v1/v2）会话占用的磁盘空间，包括本地 SQLite 数据库、diff 文件和 git 快照。它提供状态仪表盘、存储分析、dry-run 预览、reasoning token 剥离、WAL checkpoint、Markdown 导出和完整性诊断等功能，面向使用 OpenCode 的开发者，需 Python 3.10+。",
+   "highlights": [
+    "支持 OpenCode v1 与 v2 两种 schema 的自动检测与深度 SQLite JSON 解析",
+    "提供 purge dry-run 预览、reasoning token 剥离、WAL checkpoint 与数据库健康诊断",
+    "内置 OpenCode 原生 Skill，可通过自然语言驱动检查与清理流程"
+   ],
+   "use_cases": [
+    "分析 OpenCode 会话数据库与快照占用的磁盘空间分布",
+    "按年龄、类型、大小等条件清理过期会话并回收存储",
+    "将大型会话导出为 Markdown 归档后再执行清理"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "OpenCode stores sessions, messages, and part data in a local SQLite database that grows without bound and has no built-in cleanup. It also stores file diffs and git snapshots on disk. As you use OpenCode, thinking tokens (reasoning), snapshots, and historical  ／ |**v2 Part Type Storage Analysis**|❌ Not supported|✅ **Deep SQLite JSON parsing** (`json_each` array extraction)| ／ |**SQLite Read-Only URI Handling**|⚠️ Fragile string formatting|✅ **Standard `path.resolve().as_uri()`** across all OSes|",
+     "lines": [
+      15,
+      34,
+      40
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为 OpenCode 本地存储的 SQLite 数据库提供分析与清理能力，属于为数据存储服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# ocgc: OpenCode Storage Analyzer & Garbage Collector ／ OpenCode stores sessions, messages, and part data in a local SQLite database that grows without bound and has no built-in cleanup. It also stores file diffs and git snapshots on disk. As you use OpenCode, thinking tokens (reasoning), snapshots, and historical sessions can easily consume tens of gigabytes of disk space and slow down queries. ／ `ocgc` provides comprehensive visibility into where your OpenCode storage goes and gives you fine-grained, safe controls to reclaim it.",
+   "evidence_lines": [
+    1,
+    15,
+    17
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "codehands028/ocgc",
+  "sha": "8027c2a7ca47",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

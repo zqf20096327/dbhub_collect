@@ -7658,5 +7658,105 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2d969bbd2b26": {
+  "identity": {
+   "one_liner": "MySQL binlog 分析副本工具，生成 Parquet 快照供 DuckDB 查询",
+   "review": "DBTrail 通过复制协议读取 MySQL/MariaDB 的 binlog，将表数据折叠为自有对象存储中的 Parquet 文件，并生成 views.sql 使 DuckDB 按表视图查询，同时保留行历史用于时间旅行查询与生成撤销 SQL。面向需要对生产库做报表分析和误操作恢复的 DBA 与数据团队；要求 ROW binlog 与完整行镜像，非高可用亦非备份。",
+   "highlights": [
+    "通过 replication 协议读取 binlog，无需在数据库主机安装插件或代理，支持 RDS/Aurora",
+    "提供时间旅行查询、行级撤销 SQL 生成（含 recover-cascade 级联删除重建）与 verify 校验",
+    "提供 Web 界面、MCP server 接入，以及导出 Iceberg 供 Spark/Trino/Athena 使用"
+   ],
+   "use_cases": [
+    "将报表、仪表盘与临时分析查询从 MySQL 主库分流到 Parquet 副本",
+    "按时间点回看行历史并生成撤销 SQL 修复误删/误改数据",
+    "将快照导出为 Iceberg 供 Spark、Trino、Athena 等引擎分析"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "DBTrail: the open-source analytical replica for MySQL. Reads your binlog, writes Parquet to your bucket, query it with DuckDB. ／ **DBTrail keeps your MySQL tables as Parquet files you own, minutes behind the source, with every version of every row. Query them with DuckDB. Production never sees the query.** ／ That query read Parquet files. The MySQL primary never saw it. ／ |MySQL 8.0, 8.4|Yes|Yes|",
+     "lines": [
+      1,
+      3,
+      16,
+      157
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Cascaded deletes before MySQL 9.6, and on MariaDB.** Rows deleted by a ／ |MariaDB 10.11+, including Amazon RDS for MariaDB|Yes|Yes. See MariaDB source| ／ ||MariaDB source · PostgreSQL source||",
+     "lines": [
+      142,
+      162,
+      216
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL 14+|One-time copy only, no scheduled update yet|Beta. See PostgreSQL source| ／ ||MariaDB source · PostgreSQL source||",
+     "lines": [
+      163,
+      216
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "|ClickHouse fed by Airbyte CDC|12.6 s|",
+     "lines": [
+      59
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 MySQL 等数据库提供 binlog 捕获、Parquet 副本与分析查询服务，是数据库生态服务工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DBTrail: the open-source analytical replica for MySQL. Reads your binlog, writes Parquet to your bucket, query it with DuckDB. ／ 2. **After that, only the binlog.** DBTrail connects over the replication ／ 4. **You query it with DuckDB.** A generated `views.sql` gives you one view",
+   "evidence_lines": [
+    1,
+    35,
+    42
+   ]
+  },
+  "fn": "dbtrail/dbtrail",
+  "sha": "2d969bbd2b26",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

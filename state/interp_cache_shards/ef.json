@@ -8804,5 +8804,218 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1ca0e923231c": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的开源一体化项目管理工具",
+   "review": "Worklenz 是一个开源项目管理系统，提供任务、资源规划、时间跟踪、报表等功能，前端 React，后端 Express.js，数据存储于 PostgreSQL，并集成 Redis 与 S3 兼容存储。面向需要自托管或云端使用的团队，支持 Docker 一键部署和手动开发安装，要求 PostgreSQL v15 及以上。",
+   "highlights": [
+    "提供任务管理、甘特图、看板、资源调度与时间跟踪功能",
+    "支持 Docker 一键部署与手动安装，含自动备份和 SSL 配置脚本",
+    "支持 CSV 导入导出及项目模板"
+   ],
+   "use_cases": [
+    "团队自托管项目管理平台",
+    "任务与资源容量规划",
+    "项目成本与工时跟踪"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |**Database**|PostgreSQL| ／ - PostgreSQL version v15 or newer",
+     "lines": [
+      100,
+      107,
+      115
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 PostgreSQL 作为数据库存储应用数据，Worklenz 是使用数据库的项目管理应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**Database**|PostgreSQL| ／ - PostgreSQL version v15 or newer ／ # Create a PostgreSQL database named worklenz_db",
+   "evidence_lines": [
+    107,
+    115,
+    207
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Worklenz/worklenz",
+  "sha": "1ca0e923231c",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8c5c743556d5": {
+  "identity": {
+   "one_liner": "本地优先的 agent 对话分析与可重复评测仪表盘",
+   "review": "OpenEval 是一个本地运行的 agent 观测与评测工具：读取本机 agent 对话记录（支持 Claude Code、Codex、Kimi、DeepSeek 导出等），提供分析仪表盘、会话检索，以及 40 个可重复评测用例与可审计的评分证据。面向开发/评测 agent 的用户，通过 npm 安装，数据由 SQLite 本地存储。",
+   "highlights": [
+    "读取多种本地 agent 会话格式，提供图表钻取与会话全文检索",
+    "包含 40 个可重复评测用例，评分保留确定性检查与 judge 证据",
+    "运行记录与摘要由 SQLite 本地存储，无需 API key 即可查看已有记录"
+   ],
+   "use_cases": [
+    "分析本机 agent 会话的使用量、工具错误与成本估算",
+    "对 agent 或代码改动运行共享用例集并对比评分与证据",
+    "核查评测分数背后的确定性、trace、视觉与 judge 证据"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite native binding, and builds the production dashboard. The first build can ／ - **Local history.** SQLite stores runs and summaries on your machine. The public website is a static tour; it does not connect to your local dashboard or read your transcripts. ／ - **Easier installation and updates.** `npm run setup` installs, verifies SQLite, and builds; `npm run open` starts the dashboard on loopback. **Settings → OpenEval updates** checks GitHub on demand and shows release links and installation instructions. Updati",
+     "lines": [
+      64,
+      79,
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目用 SQLite 在本机存储运行记录与摘要，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Inspect local agent conversations, follow analytics into transcript evidence, and run repeatable evaluations—all from one dashboard on your machine. ／ - **Local history.** SQLite stores runs and summaries on your machine. The public website is a static tour; it does not connect to your local dashboard or read your transcripts. ／ Collecting an existing transcript and launching an agent are separate capabilities. Local readers include Claude Code, Codex, Kimi, supported DeepSeek plaintext exports, compatible OpenCode/ZCode stores, and Grok Markdown exports. Support depends on the recorded format and version; a detected source does not imply complete metrics.",
+   "evidence_lines": [
+    9,
+    79,
+    83
+   ]
+  },
+  "fn": "RasputinKaiser/OpenEval",
+  "sha": "8c5c743556d5",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7b09d0cb35e0": {
+  "identity": {
+   "one_liner": "WAP 동아리 활동 통합 아카이빙·투표·팀빌딩 웹 플랫폼",
+   "review": "WAPs 是一个面向 WAP 学生社团的平台，把项目展示、浏览存档、投票、按优先级算法组队和日历等功能集中到一起，以项目数据为中心统一管理社团活动记录。采用 React 前端与 Spring Boot/JPA 后端，使用 MySQL 存储数据，部署在 Oracle Cloud 上并用 Docker Compose 运行。适合该社团成员用于浏览项目、参与投票和组队。",
+   "highlights": [
+    "提供项目浏览与跨学期作品存档功能",
+    "支持项目投票统计与基于优先级算法的学期组队",
+    "提供日历展示活动、日程与发表安排"
+   ],
+   "use_cases": [
+    "社团成员按学期浏览与检索历史项目作品",
+    "组织学期项目人气投票",
+    "基于优先级算法进行学期团队编制"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**Database**|MySQL|",
+     "lines": [
+      37
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|**Infrastructure**|Oracle Cloud, Grafana, Prometheus|",
+     "lines": [
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 MySQL 作为存储数据库，是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "WAPs는 동아리의 모든 활동을 ‘프로젝트 데이터 중심’으로 묶어주는 플랫폼으로, ／ |**Database**|MySQL|",
+   "evidence_lines": [
+    8,
+    37
+   ]
+  },
+  "fn": "pknu-wap/WAPs",
+  "sha": "7b09d0cb35e0",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

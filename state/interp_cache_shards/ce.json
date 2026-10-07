@@ -9157,5 +9157,130 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "273cb152f180": {
+  "identity": {
+   "one_liner": "Notion API 的类型安全 Kotlin 客户端库，提供 DSL 与协程支持",
+   "review": "该仓库是一个用于调用 Notion API 的 Kotlin 客户端库，通过类型安全的 DSL 和协程实现页面、数据库、数据源、块等资源的读写操作，内置限流与 429/5xx 自动重试管道。面向需要以编程方式访问 Notion 工作区的 Kotlin/JVM 开发者。README 说明其主要由 AI（Claude Code）辅助开发，文档示例可能与实现存在偏差，适配 API 版本 2026-03-11。",
+   "highlights": [
+    "提供类型安全 DSL，覆盖 Pages、Databases、Blocks、Data Sources、Search 等 API 类别的 CRUD 操作",
+    "内置限流管道：令牌桶主动限速及对 429/5xx 的指数退避重试，可通过配置项调节或关闭",
+    "通过 Maven Central 发布，要求 Kotlin 2.3.21+ 与 JVM 21+"
+   ],
+   "use_cases": [
+    "在 Kotlin/JVM 应用中以编程方式查询和写入 Notion 页面与数据源",
+    "批量创建页面或对大型数据库做数据灌入等高并发场景的限流调优",
+    "以 Markdown 形式读取和更新页面内容的内容同步类集成"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 定位为调用 Notion API 的客户端库，为访问 Notion 服务提供 SDK 能力，而非以数据库存储自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A modern, type-safe Kotlin client for the Notion API with comprehensive DSL support and coroutine-based operations. ／ - **🛡️ Type-Safe DSLs** - Intuitive builder patterns for pages, databases, blocks, and queries with compile-time safety ／ ## Installation",
+   "evidence_lines": [
+    3,
+    19,
+    23
+   ]
+  },
+  "fn": "jsaabel/kotlin-notion-client",
+  "sha": "273cb152f180",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "90fb383d03bc": {
+  "identity": {
+   "one_liner": "企业 AI 业务接入平台，统一身份权限并经 MCP/HTTP 工具连接业务系统",
+   "review": "该仓库提供一套以 Python/Vue 实现的 AI 业务接入平台，管理企业、成员、角色与会话，通过 MCP 与 OpenAPI 工具把 AI 连接到 CRM、订单等业务数据，并支持微信、企业微信等多渠道接入。适合需要自建 AI 业务网关的企业团队；README 明确当前为平台骨架与 Mock 链路，生产级渠道与备份恢复需另行配置验收。",
+   "highlights": [
+    "提供 MCP 与 HTTP/OpenAPI 工具调用，含服务端执行上下文与防重放校验",
+    "支持 Web、微信服务号、微信客服和企业微信多渠道适配器",
+    "使用 PostgreSQL 实现持久化、异步 Worker、幂等投递与审计"
+   ],
+   "use_cases": [
+    "企业内 AI 应用接入 CRM、订单、物流等业务系统",
+    "多渠道（微信/企微/Web）统一身份与会话管理",
+    "需要审计与权限边界约束的 MCP 工具调用场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 14 or later ／ - PostgreSQL 持久化、异步 Worker、幂等投递和审计； ／ 要求 Python 3.12、Node.js 22、PostgreSQL 14+ 和 uv。复制环境模板并只填写本地配置：",
+     "lines": [
+      12,
+      30,
+      48
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "平台使用 PostgreSQL 作为自身持久化存储，属使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，基于腾讯云 ADP Chat Client 二次开发，部分第三方组件含 MIT 归属",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " PostgreSQL 14 or later ／ - PostgreSQL 持久化、异步 Worker、幂等投递和审计； ／ 本仓库提供可运行的平台骨架、Mock 和本地验证链路。正式 CRM、M3、云厂商 ADP、微信/企微账号、生产备份恢复、压测和监控接入需要各自的第三方文档、租户、权限与验收，不能以本地 Mock 或单元测试替代。公开进度见 docs/roadmap.md。",
+   "evidence_lines": [
+    12,
+    30,
+    83
+   ]
+  },
+  "fn": "agentiker/adp-biz-portal",
+  "sha": "90fb383d03bc",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

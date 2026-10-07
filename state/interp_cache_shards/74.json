@@ -8466,5 +8466,76 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4f4675e4ceec": {
+  "identity": {
+   "one_liner": "AI 原生金融智能平台，将账务数据建模为知识图谱供 AI 代理查询",
+   "review": "开源金融平台，面向会计、财务报告与投资管理场景，把交易、事实与计算结构建模为知识图谱，每租户独享图数据库实例。通过 LadybugDB/DuckDB 后端、PostgreSQL 元数据、Dagster 管道与 MCP 接口运行，提供 RoboLedger 会计与 RoboInvestor 投资组合两个扩展，支持 GitHub Actions 部署到自有 AWS 环境。",
+   "highlights": [
+    "每租户独立图数据库实例，schema-per-tenant 隔离",
+    "提供 REST/GraphQL/MCP 多接口，写入操作带幂等键、审计日志与 SSE 进度流",
+    "内置 SEC XBRL 共享知识库、文档语义搜索与 AI Operator 信用计费"
+   ],
+   "use_cases": [
+    "会计结算与财务报告生成（RoboLedger）",
+    "私募持股与投资组合管理（RoboInvestor）",
+    "SEC XBRL 公开财报数据的查询与基准分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL for IAM, graph metadata, extensions and Dagster ／ Extensions are domain-specific subsystems that bring their own schema, OLTP tables, API routes, data pipelines, and dedicated frontend apps. They share a single PostgreSQL database with schema-per-tenant isolation and materialize to the graph for analytical qu ／ - **Schema-per-graph OLTP** — each graph gets its own PostgreSQL schema, with `search_path` re-stamped on every request rather than inherited from a pooled connection. A CI structural test pins the contract.",
+     "lines": [
+      78,
+      23,
+      187
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明平台使用 PostgreSQL 存储 IAM、图元数据与扩展数据，PostgreSQL 是其运行依赖而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "RoboSystems is an open-source, AI-native financial intelligence platform for accounting, financial reporting, and investment management. It models your financial data as a **knowledge graph** — transactions, facts, reporting elements, and the calculation structures that relate them are all nodes and edges, with the semantics preserved rather than flattened into rows you query around. On top of that graph it gives AI agents and analysts a ledger-grade system of record they can both query and operate — closing the books, producing reports, and analyzing portfolios across your own ledger, your holdings, and SEC public filings queryable alongside them. Powers RoboLedger and RoboInvestor. ／ - PostgreSQL for IAM, graph metadata, extensions and Dagster ／ Extensions are domain-specific subsystems that bring their own schema, OLTP tables, API routes, data pipelines, and dedicated frontend apps. They share a single PostgreSQL database with schema-per-tenant isolation and materialize to the graph for analytical queries. Domain content is authored as **block molecules** — self-describing envelopes bundling atomic facts with their structure, rules, and verification — never bare rows.",
+   "evidence_lines": [
+    3,
+    78,
+    23
+   ]
+  },
+  "fn": "RoboFinSystems/robosystems",
+  "sha": "4f4675e4ceec",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

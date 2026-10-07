@@ -8810,5 +8810,168 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "030d1175a588": {
+  "identity": {
+   "one_liner": "Nginx Proxy Manager 的原生 Bash 安装器，systemd 直装无 Docker",
+   "review": "该脚本在 Debian/Ubuntu 上从源码原生安装 Nginx Proxy Manager，用 systemd 管理服务、better-sqlite3 存数据、certbot 配置 Let's Encrypt 证书，无需 Docker 或 LXC。面向希望在裸机上直接运行 NPM 的自托管用户。安装前自动做时间戳备份，提供交互菜单与 30+ 项健康检查；要求 root 权限，前端构建内存峰值约 1.4-2.4 GB，低内存主机会提示创建 swap 文件。",
+   "highlights": [
+    "从源码构建并原生安装 NPM，通过 systemd 管理服务并开机自启",
+    "使用 better-sqlite3，无需外部数据库，数据落盘于 /data/database.sqlite",
+    "每次安装/更新自动生成时间戳备份并提供 30+ 检查项的 verify 健康检查模式"
+   ],
+   "use_cases": [
+    "在 Debian/Ubuntu 裸机或 LXC 中不依赖 Docker 部署 Nginx Proxy Manager",
+    "需要带自动备份与健康检查的 NPM 安装/升级/恢复流程",
+    "小内存主机上借助自动 swap 创建完成 NPM 前端构建"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Uses **SQLite** via `better-sqlite3` -- no external database required ／ |SQLite database|`/data/database.sqlite`| ／ - **Restore from backup** (fresh only, when a prior `database.sqlite.bak.*` exists) -- \"Restore this backup instead of a fresh install? [y/N]\". Accepting switches the flow to update mode with the restored database in place.",
+     "lines": [
+      15,
+      113,
+      100
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **MySQL / PostgreSQL support** -- detects and dumps external databases via `mysqldump` or `pg_dump` (auto-reads credentials from container env vars or `production.json`)",
+     "lines": [
+      214
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **MySQL / PostgreSQL support** -- detects and dumps external databases via `mysqldump` or `pg_dump` (auto-reads credentials from container env vars or `production.json`)",
+     "lines": [
+      214
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "脚本为安装 Nginx Proxy Manager 应用服务，自身通过 better-sqlite3 使用 SQLite 存储数据，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A native Bash installer for Nginx Proxy Manager on Debian and Ubuntu -- no Docker required.** ／ - Installs **Nginx Proxy Manager v2.x** (latest release auto-detected) natively on the host OS ／ - Uses **SQLite** via `better-sqlite3` -- no external database required",
+   "evidence_lines": [
+    1,
+    13,
+    15
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "njordium/npm-native",
+  "sha": "030d1175a588",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cc161e940623": {
+  "identity": {
+   "one_liner": "抖音收藏夹本地 RAG 知识库应用，音频转写后向量入库并支持对话问答",
+   "review": "一个个人本地知识库项目：扫码登录抖音后同步收藏夹，将视频音频经 faster-whisper 转写、切块并写入 Chroma 向量库，再通过 Qwen 大模型实现检索增强的对话问答。面向想检索自己抖音收藏内容的个人用户，提供前后端与 Docker 镜像；SQLite 仅作为业务数据存储，且首次扫码登录需要带桌面的环境。",
+   "highlights": [
+    "支持扫码登录抖音后手动同步收藏夹并一键入库（音频转写、切块、Chroma 向量化）",
+    "提供对话问答与流式问答 API（/chat/ask、/chat/ask/stream）",
+    "提供 Docker 镜像与本地自动部署脚本，数据持久化到挂载目录或命名卷"
+   ],
+   "use_cases": [
+    "将个人抖音收藏内容转为可检索、可对话的本地知识库",
+    "本地化运行媒体转写与向量检索，问答由 Qwen API 提供",
+    "通过 Docker Compose 在本机持续部署并自动更新镜像"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Backend: FastAPI + SQLAlchemy + SQLite ／ ## 清库重建（SQLite + Chroma） ／ 运行容器时，需要把后端的 `/data` 挂载到持久化目录，并通过环境变量提供 Qwen 配置。SQLite、Chroma 数据、Playwright 登录状态和模型缓存都保存在该目录下。",
+     "lines": [
+      11,
+      78,
+      93
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 仅作为后端业务数据存储、Chroma 存向量数据，项目本身是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "个人版“抖音收藏夹 RAG 知识库”本地项目：扫码登录抖音后手动同步收藏夹，按收藏夹一键入库（音频转写 -> 切块 -> Chroma 向量），再进行对话问答。 ／ - Backend: FastAPI + SQLAlchemy + SQLite ／ - Vector DB: ChromaDB (本地持久化)",
+   "evidence_lines": [
+    3,
+    11,
+    12
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Jonesxq/douyin_RAG",
+  "sha": "cc161e940623",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

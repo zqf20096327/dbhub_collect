@@ -9180,5 +9180,140 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5858308c8e19": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 逻辑复制的 Go 语言 CDC 变更数据捕获库",
+   "review": "go-pq-cdc 是 Trendyol 开源的 Go 库，利用 PostgreSQL 内置逻辑复制能力捕获数据库变更并流转到 Kafka、Elasticsearch 等下游系统。提供初始快照同步、TOAST 字段补全、心跳机制防止 WAL 膨胀、主被动模式保障可用性。适合需要在 Go 技术栈中实现 PostgreSQL 实时数据同步或事件驱动架构的开发者；要求目标表正确配置 replica identity，使用普通角色即可部署。",
+   "highlights": [
+    "基于 pgoutput 协议（proto_version 1/2）通过逻辑复制槽捕获变更，支持流式事务",
+    "提供 chunk 分块快照、崩溃恢复、快照/CDC 无缝切换的初始数据同步",
+    "内置表级心跳机制推进 confirmed_flush_lsn，防止低流量库的 WAL 膨胀"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 变更实时流转到 Kafka、Elasticsearch、RabbitMQ 等下游系统",
+    "存量数据一次性导出（Snapshot Only 模式）或全量+增量同步",
+    "构建事件驱动的实时数据同步管道"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "go-pq-cdc is designed to provide efficient and lightweight Change Data Capture (CDC) for PostgreSQL databases. ／ The architecture leverages PostgreSQL's built-in logical replication capabilities to capture changes in the database and ／ - **Zero Data Loss**: Consistent point-in-time snapshot using PostgreSQL's `pg_export_snapshot()`",
+     "lines": [
+      3,
+      4,
+      15
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确它是专为 PostgreSQL 服务的 CDC 连接器/库，通过逻辑复制槽捕获变更供下游使用，属于为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "go-pq-cdc is designed to provide efficient and lightweight Change Data Capture (CDC) for PostgreSQL databases. ／ The architecture leverages PostgreSQL's built-in logical replication capabilities to capture changes in the database and ／ go get github.com/Trendyol/go-pq-cdc",
+   "evidence_lines": [
+    3,
+    4,
+    45
+   ]
+  },
+  "fn": "Trendyol/go-pq-cdc",
+  "sha": "5858308c8e19",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "01e1ffd914c0": {
+  "identity": {
+   "one_liner": "AI 编程代理的邮件式协调层，以 MCP 服务器暴露，Git 存档 + SQLite 索引",
+   "review": "为多 AI 编程代理提供持久身份、收发消息、线程会话和文件预留（租约）机制的协调层，通过 MCP 协议（45 工具/25 资源）供 Claude Code、Codex CLI 等客户端使用，附带 16 屏 TUI、Web UI 和机器人 CLI。数据以 Git 仓库存档、SQLite 做索引检索，适合并行运行多个编码代理的开发团队。",
+   "highlights": [
+    "提供 45 个 MCP 工具与 25 个只读 MCP 资源，覆盖身份、消息、预留、搜索等",
+    "文件预租约（advisory reservations）与 pre-commit 钩子阻止冲突提交",
+    "全部数据存于每项目 Git 仓库，SQLite 用于索引与搜索，支持词法/混合搜索"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理并行修改代码时的消息协调与冲突预防",
+    "人工通过 TUI/Web UI 监督代理通信与文件占用",
+    "脚本化非交互流程下用机器人 CLI 查询消息与预留状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A mail-like coordination layer for AI coding agents, exposed as an MCP server with 45 tools and 25 resources, Git-backed archive, SQLite indexing, an interactive 16-screen TUI, a server-rendered web UI, and an agent-first robot CLI. The Rust rewrite of the ori ／ **The Solution**: Agent Mail gives every coding agent a persistent identity (e.g., `GreenCastle`), an inbox/outbox, searchable threaded conversations, and advisory file reservations (leases) to signal editing intent. Everything is backed by Git for human-audit",
+     "lines": [
+      9,
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明项目用 SQLite 做索引与搜索、用 Git 做存档，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT+Rider（L5 标注）",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A mail-like coordination layer for AI coding agents, exposed as an MCP server with 45 tools and 25 resources, Git-backed archive, SQLite indexing, an interactive 16-screen TUI, a server-rendered web UI, and an agent-first robot CLI. The Rust rewrite of the original Python project (1,700+ stars). ／ **The Solution**: Agent Mail gives every coding agent a persistent identity (e.g., `GreenCastle`), an inbox/outbox, searchable threaded conversations, and advisory file reservations (leases) to signal editing intent. Everything is backed by Git for human-auditable artifacts and SQLite for fast indexing and search. ／ |**Git-Backed Archive**|Every message, reservation, and agent profile stored as files in per-project Git repos|",
+   "evidence_lines": [
+    9,
+    29,
+    47
+   ]
+  },
+  "fn": "Dicklesworthstone/mcp_agent_mail_rust",
+  "sha": "01e1ffd914c0",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

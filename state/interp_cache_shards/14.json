@@ -9029,5 +9029,73 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ce1b574ebfd7": {
+  "identity": {
+   "one_liner": "面向编码代理的决策溯源与数据流记录工具（Claude Code 插件）",
+   "review": "provLedger 是一个 Claude Code 插件加 PyPI 库，通过钩子记录编码代理和团队成员在数据工作中做出的决策及其依据（原话、邮件、证据），构建项目的节点图与任务视图，并用 /ledger 命令以带记录 id 的引用方式回答'为什么是这样'的问题。所有数据以 SQLite 文件形式保存在本地 ~/skill-workspace/ 下。适合维护数据管道、需要追溯决策历史的团队与使用编码代理的开发者。",
+   "highlights": [
+    "通过 SessionStart、UserPromptSubmit、PostToolUse、PreToolUse、Stop 等 Claude Code 钩子自动记录会话、提示词与工具调用（L159-L165）",
+    "从源码重建数据流图，比较每次运行并统计变更；节点、任务、图三个视图共享同一项目/节点/时间锚点（L38、L48）",
+    "提供 /ledger、/receipts 等命令与本地 Web 仪表盘，回答均引用具体记录 id，无记录时明示（L56-L59、L133-L146）"
+   ],
+   "use_cases": [
+    "追溯数据集划分、指标口径等决策的来源与依据（L8-L10、L32）",
+    "在编码代理修改代码前展示锚定在待改动行上的既有规则，拦截静默失败（L64、L120）",
+    "新成员接手项目时查看任务、决策历史与上下游影响范围（L60、L72）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything stays local, in SQLite files under `~/skill-workspace/`. The hooks only ever add:",
+     "lines": [
+      157
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有记录以 SQLite 文件形式本地存储（L157），SQLite 仅为其存储后端，项目本身不服务数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Claude Code plugin for data work. It keeps what was decided and why — your words, the email, the agent's reading, kept apart and never blended — and puts them in front of whoever is about to change the thing again. ／ claude plugin marketplace add yizhao95/prov_ledger ／ Everything stays local, in SQLite files under `~/skill-workspace/`. The hooks only ever add:",
+   "evidence_lines": [
+    24,
+    85,
+    157
+   ]
+  },
+  "fn": "yizhao95/prov_ledger",
+  "sha": "ce1b574ebfd7",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

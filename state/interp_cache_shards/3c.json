@@ -8701,5 +8701,139 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "55caa31e5b08": {
+  "identity": {
+   "one_liner": "Rails 风格 Go CLI 脚手架，生成仅限 Postgres 的 API 服务",
+   "review": "Bogie 是一个 rails new 式的命令行生成器，用 Gin、sqlc、goose、River、Kamal 搭建仅支持 Postgres 的 API-only Go 服务，且生成器会自动注册代码。生成物不依赖 Bogie 本身。它面向已有 Rails 应用、需要旁置一个 Go 服务的团队；当前为 v0.1.0，不可配置、仅支持 Gin 和 Postgres。",
+   "highlights": [
+    "提供 rails new / rails g 风格的 new、generate、destroy、doctor 命令，生成并注册控制器、模型、迁移等代码",
+    "生成的应用基于 Gin、sqlc、goose、River（Postgres 后台任务）与 Kamal 2 部署配置组合，自带 bin/ci 流水线",
+    "生成的应用不导入 Bogie，删除该工具后应用不受影响"
+   ],
+   "use_cases": [
+    "Rails 团队为高并发或长连接场景在 Rails 应用旁搭建单个 Go API 服务",
+    "需要统一约定的 webhook 接收器、队列 worker 等小型 Go 服务的快速搭建",
+    "希望迁移、测试、部署命令与 Rails 用法一致的 Go 服务维护"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A <code>rails new</code>-style CLI that scaffolds an API-only, Postgres-only Go service ／ requires it. The generated app runs its Postgres in Compose on port 5440, so it ／ |Background jobs|River, opt-in with `--jobs`: Postgres-backed, no Redis, enqueue in the same transaction|",
+     "lines": [
+      6,
+      49,
+      151
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite is deliberately out until River's SQLite driver is stable",
+     "lines": [
+      183
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为生成和管理使用 Postgres 的 Go 服务服务的 CLI 工具，不是用数据库存自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A <code>rails new</code>-style CLI that scaffolds an API-only, Postgres-only Go service ／ out of Gin, sqlc, goose, River and Kamal, with generators that also wire the code in. ／ Bogie only builds what has no Go equivalent: `new`, generators that wire,",
+   "evidence_lines": [
+    6,
+    7,
+    156
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "bogie-go/bogie",
+  "sha": "55caa31e5b08",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "18661883a96b": {
+  "identity": {
+   "one_liner": "Tidbyt LED 屏的独立时钟/应用集，通过 GitHub Actions 渲染推送",
+   "review": "为 Tidbyt（64×32 LED 矩阵）提供时钟、天气、新闻等自定义应用的仓库，通过 GitHub Actions 定时渲染并推送 WebP 图像，无需家用机器常驻；面向 fork 自行部署的 Tidbyt 用户，另兼容 Tronbyt 自托管固件（直接放 .star 文件）。时钟应用在原厂硬件上因设备仅缓冲部分动画帧而标注为实验性。与数据库无关。",
+   "highlights": [
+    "提供 clock/news/weather/logo/rocketfuel 多个 .star 应用，经 GitHub Actions 定时推送 WebP 到 Tidbyt 设备",
+    "提供 deploy.sh 脚本直接渲染推送并取消过期的自循环工作流",
+    "支持 Tronbyt 自托管固件：直接放置 .star 文件，无需推送机制"
+   ],
+   "use_cases": [
+    "在无家用常驻机器的情况下为 Tidbyt 屏幕定时推送时钟/天气/新闻卡片",
+    "用 pixlet 本地预览和渲染像素应用",
+    "在 Tronbyt 服务器上以持续渲染方式运行时钟应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "这是一个使用硬件设备 API 和 GitHub Actions 的展示应用集合，不涉及数据库存储或生态组件；候选清单中的 tidb 仅来自 keyword 通道，README 未出现任何数据库相关内容",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Custom apps for a Tidbyt (64×32 LED matrix) in a warm-dark espresso ／ palette, pushed standalone by GitHub Actions — no home machine involved. ／ ## Run them on your own Tidbyt",
+   "evidence_lines": [
+    3,
+    4,
+    14
+   ]
+  },
+  "fn": "adamlee117097/tidbyt-clock",
+  "sha": "18661883a96b",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

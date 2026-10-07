@@ -9626,5 +9626,138 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7385128497fb": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 跨会话记忆插件，基于本地 SQLite 存储",
+   "review": "该仓库实现一个 DSH 插件，为 AI 会话提供有界、分层的跨会话记忆：通过类型化 ctx.memory 服务、本地 SQLite provider、memory 工具和冻结快照注入工作，写入须经审批门并留审计记录。面向 DeepSeek Harness 用户；项目已于 2026-10-05 冻结，仅修复真实损坏，维护者建议新工作改用其他替代插件。",
+   "highlights": [
+    "所有写路径经服务层审批门（writePolicy: ask/auto/off），生成 approval/decided 审计行",
+    "双层双轨记忆结构（user/agent 轨道 × user-global/workspace 层），带硬字符预算",
+    "只读打开 SQLite 数据库，数据存于本地文件，无网络依赖"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness 会话提供持久化、可审计的跨会话记忆",
+    "需要写审批与审计可重建的受控记忆场景",
+    "本地离线环境下管理智能体记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected int",
+     "lines": [
+      65
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用本地 SQLite 存储记忆数据，本身是 DSH 插件应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected into the system prompt.",
+   "evidence_lines": [
+    65
+   ]
+  },
+  "fn": "PerryLink/dsh-memento",
+  "sha": "7385128497fb",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1a436e76b38f": {
+  "identity": {
+   "one_liner": "Neon 开源 JavaScript/TypeScript SDK、CLI 与框架插件的 monorepo",
+   "review": "该仓库包含 Neon 官方 TypeScript SDK、Neon CLI、Config-as-Code（neon.ts）运行时以及实时查询、AI 网关等多个独立发布的 npm 包，供在 Node/前端项目中调用 Neon API 或管理 Neon 分支的开发者使用；采用 pnpm workspace 管理，需 Node.js >= 22 参与开发，发布包运行时支持 Node.js >= 20.19，全部为 Apache-2.0 许可。",
+   "highlights": [
+    "提供 Neon CLI（neon/neonctl）与官方 TypeScript SDK（@neon/sdk），后者由 OpenAPI 规范生成",
+    "提供 Config-as-Code 能力：@neon/config 的 defineConfig 类型与 diff 引擎，@neon/config-runtime 支持 inspect/plan/apply",
+    "提供带 MCP、Eve、Mastra 适配器的类型安全 agent 工具包 @neon/tools，以及实时查询的 React/TanStack/Drizzle/Kysely 适配器"
+   ],
+   "use_cases": [
+    "通过 CLI 或 SDK 以编程方式管理 Neon 项目、分支与环境",
+    "以 neon.ts 策略文件实现 Neon 配置的版本化与 apply/push/pull",
+    "在前端或后端应用中订阅 Neon 实时 live queries"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "`neon-new` and `vite-plugin-neon-new` are **deprecated**. Use Claimable Neon in the Neon CLI: `npx neon@latest claim create`. The old alias packages (`get-db`, `neondb`, `vite-plugin-db`, `@neondatabase/vite-plugin-postgres`) still re-export them.",
+     "lines": [
+      44
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库内容是为 Neon 数据库服务提供的 SDK、CLI 与框架插件，属于服务数据库生态的工具集合",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": true,
+    "of": "PostgreSQL"
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "全部包采用 Apache-2.0 许可",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The monorepo for Neon's open-source JavaScript/TypeScript SDKs, libraries, CLIs, and framework plugins. Each folder under `packages/` is an independently versioned, separately published package; they share tooling (pnpm workspaces, Biome, tsdown, Vitest, Changesets) but ship on their own cadence. ／ |`@neon/sdk`|The official TypeScript SDK for the Neon API — a modern, Fetch-based client generated from Neon's OpenAPI spec (successor to `@neondatabase/api-client`).| ／ |`neon`|The Neon CLI. Install this package for the `neon` command.|",
+   "evidence_lines": [
+    3,
+    28,
+    13
+   ]
+  },
+  "fn": "neondatabase/neon-pkgs",
+  "sha": "1a436e76b38f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

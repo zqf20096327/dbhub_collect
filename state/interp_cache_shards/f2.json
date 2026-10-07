@@ -9267,5 +9267,126 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d518f150403d": {
+  "identity": {
+   "one_liner": "个人自托管基础设施文档库，记录服务器搭建与各服务部署流程",
+   "review": "该仓库是作者自托管基础设施的文档集合，记录从服务器硬件、SSH 加固、备份、Nginx、VPN 到 MQTT 遥测、PostgreSQL/TimescaleDB/PostgREST 数据栈及 GPU/AI 服务的搭建过程。面向作者本人作为运维笔记，也可供需要参考自托管部署步骤的读者查阅。它不提供可安装的软件，仅为文档。",
+   "highlights": [
+    "记录服务器初始化、SSH 加固、备份、Nginx、OpenVPN/WireGuard 等基础部署流程",
+    "包含 MQTT 遥测接入 TimescaleDB 与 PostgREST 的数据管道文档",
+    "覆盖 GPU 会话管理与 Whisper/RAG/TTS 服务的按需运行方案"
+   ],
+   "use_cases": [
+    "参考家庭/小型服务器的自托管服务部署步骤",
+    "参考 MQTT 遥测数据写入 TimescaleDB 并经 PostgREST 提供 API 的做法",
+    "参考单机上按需运行 GPU AI 任务的运维方式"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL",
+     "lines": [
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是记录使用 PostgreSQL 等数据库存取数据的自托管服务部署文档，而非为数据库生态服务的工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- MQTT to TimescaleDB and PostgREST ／ - PostgreSQL",
+   "evidence_lines": [
+    61,
+    67
+   ]
+  },
+  "fn": "TheBeachLab/selfhosted",
+  "sha": "d518f150403d",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0488de895419": {
+  "identity": {
+   "one_liner": "Kurrent (EventStoreDB) 的 Swift gRPC 客户端 SDK",
+   "review": "这是一个用 Swift 编写的 Kurrent（原 EventStoreDB）gRPC 客户端库，提供事件流读写、多流原子写入、投影、持久订阅、用户管理、服务器运维操作和集群监控等 API，面向使用 Server-Side Swift 做事件溯源开发的工程师。要求 Swift 6.0+，通过 Swift Package Manager 引入，2.x 重构为 target-based API，旧 1.x API 保留在 KurrentDB_V1 模块中供迁移。",
+   "highlights": [
+    "支持流读写、多流原子追加、持久订阅、投影管理、用户管理与服务器运维操作（scavenge、合并索引等）",
+    "基于 Swift 6 async/await 与严格并发，提供 TLS 集群连接、gossip 发现、自动重连与按调用凭证覆盖",
+    "提供 KurrentDBPool 客户端池，可在多个独立 KurrentDB 实例间借出客户端"
+   ],
+   "use_cases": [
+    "在 Server-Side Swift 应用中实现事件溯源架构",
+    "通过 Swift 脚本或服务管理 KurrentDB 集群的投影、订阅与运维任务",
+    "为 KurrentDB 开发与测试搭建客户端连接（含本地 Docker 集群）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是为 Kurrent 数据库提供 gRPC 客户端访问的 SDK，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A modern, type-safe Swift client for Kurrent (formerly EventStoreDB)** ／ |Category|Operations| ／ |**KurrentDB 26.1**|✅ Supported|Full feature support|",
+   "evidence_lines": [
+    8,
+    194,
+    259
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "gradyzhuo/swift-kurrentdb",
+  "sha": "0488de895419",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

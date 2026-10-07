@@ -7808,5 +7808,276 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cc486bcba4f6": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的 git 化调试经验库，MCP 接口提供 BM25 检索",
+   "review": "MisakaNet 将调试失败教训以 Markdown 文件存于 git 仓库，通过 MCP server、WebMCP、llms.txt 等接口供 AI Agent 异步搜索与提交经验，检索用 Python 标准库实现 BM25，无需向量数据库或嵌入模型。面向使用 AI 编码助手的开发者，需要 Python ≥ 3.10，或直接使用托管端点。",
+   "highlights": [
+    "提供 MCP server（7 个工具）、WebMCP、llms.txt 与 A2A 发现等 Agent 接口",
+    "教训为仓库内 Markdown 文件，按证据等级 E0–E4 分级，用 BM25 关键词检索",
+    "支持 DeepSeek Harness、Claude Code、Codex 等多种宿主的插件/安装方式"
+   ],
+   "use_cases": [
+    "AI Agent 调试出错时检索已有的失败修复教训",
+    "将调试死角通过 intake 流程沉淀为可检索教训",
+    "本地 git clone 后离线搜索教训库"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Windows, SQLite on an NTFS mount, a GitHub 401 after a token rotation, FANUC error codes. The fix usually",
+     "lines": [
+      216
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 未声明其服务于某数据库生态或依赖某数据库存储，SQLite 仅在教训示例文本中被提及",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Git-backed failure memory for AI coding agents.** An error shows up → the agent searches the lessons → ／ like code (each commit DCO-signed), graded by evidence level, retrieved with BM25 over the Python standard ／ |❌ A vector database or RAG system|✅ BM25 keyword search — **stdlib only**, no third-party packages, but a **Python ≥ 3.10 interpreter is still required**|",
+   "evidence_lines": [
+    107,
+    110,
+    128
+   ]
+  },
+  "fn": "Ikalus1988/MisakaNet",
+  "sha": "cc486bcba4f6",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3b155c18eb9b": {
+  "identity": {
+   "one_liner": "Shell 脚本一键配置 Linux/macOS 上的 Elixir/Phoenix 开发环境",
+   "review": "phx.tools 是一个运行在 Linux 和 macOS 上的 shell 脚本，通过 curl 管道 bash 执行，自动配置 Elixir/Phoenix 开发环境。项目还包含一个文档站点（Cloudflare Pages 托管），构建流程使用 npm 和 Python 3，并生成 Markdown 页面与 llms.txt 供 agent 读取。适合需要在 Linux/macOS 上搭建 Elixir/Phoenix 开发环境的开发者。",
+   "highlights": [
+    "提供 curl|bash 一键安装方式，在 Linux 和 macOS 上配置 Elixir/Phoenix 开发环境",
+    "构建系统从 HTML 派生 Markdown 页面和 llms.txt，供 agent 读取",
+    "包含 github_workflows_generator 工具用于更新 GitHub workflows"
+   ],
+   "use_cases": [
+    "在 Linux/macOS 上快速搭建 Elixir/Phoenix 开发环境",
+    "为团队提供标准化的开发环境初始化脚本",
+    "生成和维护项目的 GitHub workflows 配置"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未说明该工具与特定数据库生态的服务关系，仅主题标签提示 PostgreSQL，证据不足",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "phx.tools is a shell script for **Linux** and **macOS** that configures the Elixir/Phoenix development environment in a few easy steps. ／ When someone runs `curl https://phx.tools | bash`, Cloudflare Pages middleware serves `script.sh` instead of the landing page. An explicit `Accept: text/markdown` requests the page representation; ordinary installer requests keep receiving the script. ／ The build derives Markdown pages and `llms.txt` from the authored HTML; About, Contact and Privacy pages describe the tool and current site configuration. Cloudflare Pages serves the installer to ordinary `curl` requests and returns the page representation for an explicit `Accept: text/markdown` request. Build generation uses Python 3.",
+   "evidence_lines": [
+    3,
+    5,
+    39
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "optimumBA/phx.tools",
+  "sha": "3b155c18eb9b",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d9a753da5a03": {
+  "identity": {
+   "one_liner": "自托管文档与数据库应用，AI 代理编辑以可审阅的修订形式落地",
+   "review": "Stuga 是一个自托管的 Notion 替代应用，提供基于 Yjs CRDT 的实时协作文档和每个库对应一个 SQLite 文件的类型化数据库。AI 代理通过 MCP 连接，其编辑默认以修订形式等待人工逐条接受或拒绝。搜索基于 Postgres 的 pg_search 与 pgvector 实现权限感知的关键词与语义检索。面向个人或团队的私有知识库场景，安装方式为 macOS 安装包或 Docker。",
+   "highlights": [
+    "AI 代理编辑默认以 tracked changes 形式等待人工接受，支持逐条审阅或由所有者设为直接生效并留痕可回滚",
+    "代理通过 MCP 连接，支持浏览器授权限定工作区范围与只读权限，并记录完整审计日志",
+    "提供权限感知的 BM25 关键词与 pgvector 语义搜索，以及 Notion/Obsidian/Markdown 导入导出"
+   ],
+   "use_cases": [
+    "团队或个人自托管知识库，希望 AI 参与写作但保留人工审核",
+    "将 Notion 导出或 Obsidian 仓库迁移为可协作、可被代理编辑的工作区",
+    "通过 MCP 让 Claude Code、Codex 等代理在受权限约束下读写文档与数据库表"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "own Postgres and Node.js (docs/install/macos.md). ／ - **Docker** on x86-64 or arm64, such as a Linux server or a NAS: `install.sh` starts Postgres ／ A node is one Node.js process and Postgres with pgvector and pg_search; people open it in a browser.",
+     "lines": [
+      78,
+      79,
+      86
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Databases with SQL.** Typed tables beside your documents, each database its own SQLite file,",
+     "lines": [
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Stuga 使用 Postgres 和 SQLite 存储自身数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only，integrations/ 目录除外（MIT）",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Self-hosted documents and databases where edits from Claude Code, Codex or any MCP client arrive as ／ - **Databases with SQL.** Typed tables beside your documents, each database its own SQLite file, ／ - **Docker** on x86-64 or arm64, such as a Linux server or a NAS: `install.sh` starts Postgres",
+   "evidence_lines": [
+    5,
+    38,
+    79
+   ]
+  },
+  "fn": "stuga-dev/stuga",
+  "sha": "d9a753da5a03",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0ae939d97fd5": {
+  "identity": {
+   "one_liner": "为 Pi 提供非破坏性、与供应商无关的上下文管理层",
+   "review": "该仓库为 Pi 编码会话实现上下文管理：保留 Pi 的原生 JSONL 会话为规范历史，在其上构建更小的、可检查的、按模型感知的工作上下文，提供确定性 token 预算、FTS5/语义历史检索与层级化压缩摘要，默认以 per-project SQLite 投影存储。面向使用 Pi 进行长编码会话、需要控制上下文窗口消耗的用户；运行依赖 Node.js >=22.19，且 Pi 版本被固定在 0.84.3。",
+   "highlights": [
+    "提供确定性 token 预算与软/硬输入限制，保留当前请求、近期轮次与原子工具调用组",
+    "支持精确与 FTS5 历史检索（含来源出处）以及可选的本地混合语义检索",
+    "实现层级化、经验证的非破坏性压缩摘要，并以 JSONL 为规范历史、SQLite 为投影存储"
+   ],
+   "use_cases": [
+    "长编码会话中管理超出模型上下文窗口的历史与项目状态",
+    "需要带来源出处的可检查工作上下文与历史检索的场景",
+    "基于 Pi 扩展机制定制上下文压缩与持久化的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **Project status:** The coordinated `0.4.0` release adds `storage.scope: \"agent\" | \"project\"`, now defaulting to per-project SQLite projections with shared token calibration in the agent database (opt out with `storage.scope: \"agent\"`). The opt-in BPE estima ／ 2. **SQLite is disposable.** It contains derived projections and can be rebuilt from canonical sources. ／ - SQLite support provided by Node's built-in `node:sqlite`",
+     "lines": [
+      16,
+      77,
+      89
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 SQLite 作为 per-project 投影与 agent 数据库存储数据，项目本体是面向 Pi 的上下文管理应用层",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DS4 Context Engine is a non-destructive, provider-independent context management layer for Pi. It keeps Pi's native JSONL session as the canonical history and builds a smaller, inspectable, model-aware working context for each model call. ／ > **Project status:** The coordinated `0.4.0` release adds `storage.scope: \"agent\" | \"project\"`, now defaulting to per-project SQLite projections with shared token calibration in the agent database (opt out with `storage.scope: \"agent\"`). The opt-in BPE estimation and bounded auto-tuning from `0.3.10` keep `chars-v1` and disabled auto-tuning as their defaults. The bounded compaction controls from `0.3.9` remain in place; canonical history, SQLite schema 16 and runtime contracts are unchanged. Pi remains pinned to `0.84.3`. Patch `0.4.1` states the contiguous-span rule for compaction summaries in the summarizer prompt while leaving validation strictness, the eight-bullet repair bound and every provider-facing default unchanged. Patch `0.4.2` adds class-only diagnostics for rejected exact-value spans: the existing `custom_fallback` warning carries `unsupportedSpanClasses` as class names and counters, never span text, with validation, repair bounds and provider-facing defaults unchanged. Patch `0.4.3` makes those diagnostics interpretable: every distinct span receives the cheap transformed-form lookups before the bounded near-miss analysis starts, each near-miss candidate may spend only an equal share of what remains, and spans that were not analysed report `not-classified-length`, `not-classified-partial` or `not-classified-budget` instead of `no-near-miss`. Patch `0.4.4` accepts a backticked exact value whose canonical JSON-escaped rendering is literally present in the evidence — the decoded rendering a summarizer produces when it quotes serialized JSON — while absent values, the reverse escape direction, span composition and single-character variants stay rejected; the diagnostics probe budget rises from 4000 to 24000 evidence-source scans. Patch `0.4.5` grades the summarizer quoting fallback: the prompt requires one contiguous excerpt per backticked span, tells the model to backtick only the fragments that are themselves contiguous or to keep the fact as ordinary text without backticks instead of composing a span, and reserves bullet omission for facts with no support in the evidence; diagnostics split composition into `composed-adjacent-present` (both parts next to each other in one source, so the span may be a re-rendering of a contiguous region) and `composed-two-present-parts` (parts found at unrelated positions), with validation strictness, the eight-bullet and 25% repair bounds and every provider-facing default unchanged. Patch `0.4.6` makes an engine/core artifact mismatch visible instead of a missing function: the core exports `CORE_VERSION` and the engine verifies at session start and at every compaction attempt that the loaded core matches its own version and exposes the entry points it calls, so a core rebuilt under a running Pi — which a `/reload` does not pick up — reports one actionable line, keeps the DS4 compaction layer inert instead of failing mid-generation, and never blocks Pi; validation strictness, repair bounds and every provider-facing default stay unchanged. Patch `0.4.7` stops the recurrent fail-closed fallback at its source: when the summarizer re-renders a value the evidence holds in another form — JSON-escaped or unescaped, collapsed whitespace, stripped typographic characters, or two parts adjacent in one source — the repair retracts only the backticks and keeps the fact, so those spans no longer consume the eight-bullet bound; invented values, unrelated compositions, one-character deviations, case changes and unanalysed spans keep the existing fail-closed bullet removal, validation strictness is unchanged, and both effects are recorded as counters (`unsupported-exact-bullets-pruned`, `unsupported-exact-spans-unquoted`). Patch `0.4.8` ends the recurrent exact-value fallback at its root: an unsupported backticked value no longer costs its bullet or the whole compaction — the repair retracts the quoting of every rejected span, keeps the text as prose and re-validates, so exact-value failures cannot end a compaction while every surviving backticked value is still verified literally or as its canonical JSON-escaped rendering; the eight-bullet and 25% removal bounds no longer apply to this path, structural, transport and budget failures still fall back to Pi, and the class report remains class-only diagnostics. See the 0.4.8 release record, the 0.4.7 release record, the 0.4.6 release record, the 0.4.5 release record, the 0.4.4 release record, the 0.4.3 release record, the 0.4.2 release record, the 0.4.1 release record and the 0.4.0 release record, ADR 069, ADR 068, ADR 067, ADR 066, ADR 065, ADR 064 and model-awareness validation.",
+   "evidence_lines": [
+    7,
+    16
+   ]
+  },
+  "fn": "Alucard24/ds4-context-engine",
+  "sha": "0ae939d97fd5",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

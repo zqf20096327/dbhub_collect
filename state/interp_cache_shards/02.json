@@ -8606,5 +8606,75 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d7cc17c2f0ec": {
+  "identity": {
+   "one_liner": "本地知识搜索引擎，默认基于 SQLite FTS5/BM25 的免向量 RAG 检索与重排",
+   "review": "Jev RAG 是一个开源的本地知识检索/问答系统，索引本地文档文件夹，提供 BM25、Agentic 词法、混合检索等七条可选管道，并输出带文件引用的流式答案。默认路径不需要 embedding 或向量数据库，直接用 SQLite FTS5/BM25 建索引；适合想在本地对文档库做带引用的检索问答、且希望避免搭建向量库的开发者或个人用户。项目处于 alpha 阶段，API 和存储结构在 1.0 前可能变化，远程重排管道会引入较高的延迟与费用。",
+   "highlights": [
+    "提供七条可选检索管道（BM25、Agentic 词法、混合检索、Taxonomy 路由、Passage Gate、Line Search 等），可在同一 UI 中切换",
+    "默认基于 SQLite FTS5/BM25 的免向量索引，不需要 embedding 或向量数据库，支持 Markdown/HTML/PDF 等多格式增量索引",
+    "输出带编号文件引用的流式答案，并发布可复现的 nDCG/MRR/Recall/延迟/成本基准数据（含负面结果）"
+   ],
+   "use_cases": [
+    "对本地文档文件夹（Markdown、PDF、DOCX 等）建立可搜索的知识库并生成带引用的答案",
+    "不引入向量数据库的前提下做中文 aware 的词法检索与 RAG 实验",
+    "基于公开 BEIR NFCorpus 基准复现并比较不同检索管道的延迟、成本与质量"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "only Python 3.9+ with SQLite FTS5: no package install, API key, embeddings, or ／ default: local files -> SQLite BM25 ----------------------> Jev -> MiniMax ／ Jev RAG indexes a local folder and defaults to vector-free SQLite FTS5/BM25.",
+     "lines": [
+      32,
+      133,
+      139
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统将本地文件索引存入 SQLite（FTS5/BM25），SQLite 是其数据存储层，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT（L14），无多许可说明",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "only Python 3.9+ with SQLite FTS5: no package install, API key, embeddings, or ／ default: local files -> SQLite BM25 ----------------------> Jev -> MiniMax ／ > Status: alpha. The software is usable locally, but APIs and storage schemas may change before 1.0.",
+   "evidence_lines": [
+    32,
+    133,
+    164
+   ]
+  },
+  "fn": "aifabrice/jev-rag",
+  "sha": "d7cc17c2f0ec",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

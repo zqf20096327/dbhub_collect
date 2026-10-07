@@ -8965,5 +8965,123 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4cc7ce8c6be6": {
+  "identity": {
+   "one_liner": "自托管宠物健康与护理追踪应用，基于 SvelteKit 和 SQLite",
+   "review": "EinVault 是一个面向 homelab 用户的自托管宠物（伴侣动物）健康与护理追踪系统，用于记录健康档案、日常活动、用药提醒和护理排班。采用 SvelteKit 构建，单个 Docker 容器内嵌 SQLite 数据库，数据完全留在本地硬件上；提供 Bearer-token API 供脚本和设备无头调用，并支持基于角色的访问控制和 ICS 日历订阅。",
+   "highlights": [
+    "单 Docker 容器运行，内嵌 SQLite 数据库，无外部依赖",
+    "提供 Bearer-token API，支持从脚本、按钮和设备无头记录活动与日志",
+    "支持基于角色的访问控制（管理员、成员、照护者）与 ICS 日历订阅"
+   ],
+   "use_cases": [
+    "家庭自托管环境追踪宠物的健康记录、疫苗和用药",
+    "多照护者协作记录宠物日常活动与交接班",
+    "通过 API 从智能按钮或脚本快速记录重复性事件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Self-contained:** single Docker container, SQLite database, no external dependencies",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 存储应用数据，属于使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "EinVault is a private, self-hosted companion health and care tracker built for homelabs. Track health records, daily activities, and care schedules for your animal companions. All data stays on your hardware. No cloud, no telemetry, no external accounts. ／ - **Self-contained:** single Docker container, SQLite database, no external dependencies ／ |`DATABASE_URL`|`/data/einvault.db`|Database path inside the container. Unlikely to need changing.|",
+   "evidence_lines": [
+    8,
+    27,
+    90
+   ]
+  },
+  "fn": "davefatkin/EinVault",
+  "sha": "4cc7ce8c6be6",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b87e1f1fb781": {
+  "identity": {
+   "one_liner": "Tidbyt/Pixlet 应用，展示 Midnight City 三个角色的实时状态",
+   "review": "一个用 Pixlet/Starlark 编写的 Tidbyt 状态显示应用，通过 Midnight City 的公开未认证 API 定期读取三个角色（Praise、Raze、Blame）的 XP 排名、合同完成数与告警状态（离线、饥饿、受伤、被托管 AI 接管），并以全屏告警帧提示异常；支持 nix 开发环境、本地渲染预览和 podman 容器常驻推送，适合运行 Midnight City 角色的玩家自行部署观察角色状态。",
+   "highlights": [
+    "提供每5分钟推送的常驻容器运行方式（OCI 镜像 + podman kube play）",
+    "支持在渲染时通过参数覆盖显示的角色列表，无需修改文件",
+    "数据源为公开未认证 API，应用本身不存储任何 API 令牌（仅存 Tidbyt 推送凭证）"
+   ],
+   "use_cases": [
+    "在 Tidbyt 设备上查看 Midnight City 角色的 XP 排名与合同进度",
+    "检测自托管角色离线、饥饿、受伤或被 City 托管 AI 接管并显示告警"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未涉及任何数据库的使用或服务，数据来源是 HTTP API，与数据库生态关系证据不足",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Midnight City — Tidbyt app ／ A Pixlet/Starlark Tidbyt app showing the live state of our three Midnight City characters at a glance: **Praise**, **Raze**, and **Blame**. ／ Data sources, both **public and unauthenticated** — no Midnight City API token is stored in or needed by this app:",
+   "evidence_lines": [
+    1,
+    3,
+    16
+   ]
+  },
+  "fn": "functionally/tidbyt-mcity",
+  "sha": "b87e1f1fb781",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

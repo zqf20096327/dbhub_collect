@@ -6603,5 +6603,351 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d95a0a44fc7e": {
+  "identity": {
+   "one_liner": "基于 Elixir/Phoenix 的 WebSocket 服务器，广播消息并转发 Postgres 变更",
+   "review": "Supabase Realtime 是一个用 Elixir 和 Phoenix 框架构建的服务器，通过 WebSocket 提供三类功能：Broadcast 低延迟消息广播、Presence 客户端共享状态同步，以及 Postgres Changes——监听 Postgres 数据库变更并推送给已授权客户端。它面向需要实时通信的应用开发者，需连接 Postgres 数据库（14 及以上版本，部分需超级用户权限），且服务器本身不保证消息必达。",
+   "highlights": [
+    "通过 WebSocket 提供 Broadcast、Presence、Postgres Changes 三类功能",
+    "监听 Postgres 数据库变更并转发给已授权客户端",
+    "提供 Postgres 版本兼容矩阵（14.x 至 17.x，含 orioledb 与 Multigres）"
+   ],
+   "use_cases": [
+    "应用内实时消息广播与多客户端协同",
+    "数据库变更实时推送给前端客户端",
+    "多用户共享状态（在线状态/光标等）同步"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Send ephemeral messages, track and synchronize shared state, and listen to Postgres changes all over WebSockets. ／ |Postgres Changes|✔|✔|GA| ／ - Postgres Changes: Listen to Postgres database changes and send them to authorized clients.",
+     "lines": [
+      9,
+      24,
+      40
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该服务器监听 Postgres 数据库变更并通过 WebSocket 转发，是为数据库变更分发服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is a server built with Elixir using the Phoenix Framework that enables the following functionality: ／ - Postgres Changes: Listen to Postgres database changes and send them to authorized clients. ／ ## Postgres compatibility",
+   "evidence_lines": [
+    36,
+    40,
+    63
+   ]
+  },
+  "fn": "supabase/realtime",
+  "sha": "d95a0a44fc7e",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cac57dd2d9bd": {
+  "identity": {
+   "one_liner": "Supabase 的 Swift SDK，提供查询、实时、存储与函数调用客户端",
+   "review": "该仓库是 Supabase 平台的官方 Swift 客户端库，包含 Auth、PostgREST、Realtime、Storage、Functions 等模块，供 iOS/macOS 等 Apple 平台开发者访问 Supabase 后端：通过 REST 查询数据库、订阅变更、管理文件、调用 Edge Functions 和 pgvector。要求 Swift 6.2+，Android/Linux/Windows 可用但非官方支持。",
+   "highlights": [
+    "提供 Auth、PostgREST、Realtime、Storage、Functions 等可单独引入的模块",
+    "支持通过 RPC 调用 Postgres 函数并查询 pgvector",
+    "支持 iOS/macOS/tvOS/watchOS/visionOS 多平台，通过 Swift Package Manager 安装"
+   ],
+   "use_cases": [
+    "在 Apple 平台应用中访问 Supabase 数据库与实时事件",
+    "客户端上传下载文件到 Supabase Storage",
+    "调用 Supabase Edge Functions 与 Postgres 函数"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**PostgREST**|Query your Postgres database via REST|",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "该 SDK 为访问 Supabase/Postgres 数据库服务提供客户端能力，属于数据库生态的客户端组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Supabase**|Full client — includes all libraries below| ／ |**PostgREST**|Query your Postgres database via REST| ／ Add `supabase-swift` as a Swift Package Manager dependency:",
+   "evidence_lines": [
+    19,
+    21,
+    39
+   ]
+  },
+  "fn": "supabase/supabase-swift",
+  "sha": "cac57dd2d9bd",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a927b394a10f": {
+  "identity": {
+   "one_liner": "GitHub PR 审查桌面应用，本地镜像缓存实现快速打开",
+   "review": "PR Cockpit 是面向 macOS 和 Linux 的 GitHub 拉取请求审查桌面应用，通过 webhook 维护本地镜像，从磁盘渲染队列、diff、检查日志与评审线程，并提供键盘快捷操作和供编码代理使用的 CLI。应用内置 Bun 服务器维护 SQLite 缓存，白板等个人数据也存于 SQLite；Windows 不受支持。",
+   "highlights": [
+    "通过本地镜像与 webhook 同步，PR 队列、diff、检查日志从磁盘读取",
+    "提供面向人类与编码代理的 CLI，以及全局快捷键搜索打开 PR",
+    "在 SQLite 数据库中保存个人白板与本地缓存数据"
+   ],
+   "use_cases": [
+    "维护者日常批量审查 GitHub 拉取请求并管理合并队列",
+    "编码代理通过 CLI 读取评审上下文并提交补丁",
+    "需要离线快速浏览 PR 缓存与个人笔记白板的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Enable **Whiteboard (Experimental)** in **Settings → Workspace** to add the final review-queue tab. It is off by default. One personal canvas is saved in this installation's SQLite database; disabling the setting keeps it and stops board activity in every conn",
+     "lines": [
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用用 SQLite 缓存 PR 状态与保存白板数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PR Cockpit is a desktop app for GitHub pull requests on **macOS and Linux**. A local mirror, kept current by webhooks, holds every PR you care about, so the queue, the diff, the failed check logs and the review threads paint from disk. Keyboard for everything; GitHub stays the source of truth. ／ Enable **Whiteboard (Experimental)** in **Settings → Workspace** to add the final review-queue tab. It is off by default. One personal canvas is saved in this installation's SQLite database; disabling the setting keeps it and stops board activity in every connected window. Unsaved work stays protected in its window with a visible export/re-enable banner; keep that window open until recovered. Board actions never change GitHub, manual queue groups, or queue order.",
+   "evidence_lines": [
+    5,
+    88
+   ]
+  },
+  "fn": "theolundqvist/pr-cockpit",
+  "sha": "a927b394a10f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "33dd1325436e": {
+  "identity": {
+   "one_liner": "自托管键盘驱动的缺陷跟踪与项目管理应用，Go API + PostgreSQL 存储",
+   "review": "Kuayle 是一个自托管的 issue 跟踪与项目管理系统，提供工作区、团队、issue、循环、甘特图、分析、GitHub 集成和 WebSocket 实时协作，面向需要自建工单/项目管理系统的团队。后端为 Go + Echo，数据库为 PostgreSQL 17，直接用 sqlx/pgx 写原生 SQL，无 ORM，还包含未发布的 Dev Machines 多容器代理编码子系统。",
+   "highlights": [
+    "提供 issue、循环、项目、甘特视图、分析与基于 WebSocket 的实时事件",
+    "使用 PostgreSQL 17 作为主数据存储，通过 sqlx/pgx 执行原生 SQL，无 ORM",
+    "支持自托管 Docker Compose 参考栈（Caddy、PostgreSQL、Redis 等）"
+   ],
+   "use_cases": [
+    "团队自托管部署 issue 跟踪与 sprint/项目管理看板",
+    "需要键盘驱动工作流与实时协作的开发团队",
+    "结合 GitHub 仓库链接与状态规则的研发流程管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Database**|PostgreSQL 17|Primary data store, raw SQL via sqlx/pgx, no ORM| ／ |**Self-hosting**|Reference Docker Compose stack with Caddy, PostgreSQL, Redis, backend, frontend, an update script, and dedicated config in `selfhosting/`.| ／ |**Dev Machines**|Unreleased development-branch functionality implemented as an opt-in self-hosted subsystem: PostgreSQL control plane, multi-container runtime, manager, authenticated gateway, four agent providers, collector, and UI. Disabled by default; see `",
+     "lines": [
+      119,
+      28,
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确 PostgreSQL 17 为其主要数据存储，Kuayle 是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Database**|PostgreSQL 17|Primary data store, raw SQL via sqlx/pgx, no ORM| ／ |**Self-hosting**|Reference Docker Compose stack with Caddy, PostgreSQL, Redis, backend, frontend, an update script, and dedicated config in `selfhosting/`.| ／ Kuayle's published releases are runnable MVPs, not a mature enterprise platform. This development branch also contains unreleased work described below. The repository includes the Go API, SvelteKit frontend, database migrations, development tooling, and reference self-hosting configuration.",
+   "evidence_lines": [
+    119,
+    28,
+    19
+   ]
+  },
+  "fn": "carbogninalberto/kuayle",
+  "sha": "33dd1325436e",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "34770d12f54e": {
+  "identity": {
+   "one_liner": "自托管知识后端，基于 PostgreSQL+pgvector 存储、检索人与 AI 代理的知识",
+   "review": "Postgram 是一个自托管的个人/小团队知识库后端，用 TypeScript 实现，以 PostgreSQL 加 pgvector 做持久化与向量检索，提供浏览器 UI、REST API、MCP 端点和 pgm CLI，供人和 AI 代理读写笔记、文档、任务、记忆等实体，并通过 Docker Compose 部署；README 说明其面向单人或小型可信团队的本地/单机部署，不是多租户托管服务。",
+   "highlights": [
+    "提供类型化实体存储与 BM25+向量混合检索及知识图谱",
+    "提供 REST API、MCP Streamable HTTP 端点和 pgm CLI 三类访问方式",
+    "支持会话上下文与持久记忆分离、Talon SQLite 迁移工具和加密备份"
+   ],
+   "use_cases": [
+    "个人或小团队通过 Docker Compose 自托管知识库",
+    "让 AI 代理通过 MCP 读写共享的知识语料与代理记忆",
+    "从本地 Markdown 仓库同步文档并做全文/向量检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Operator control.** Choose where PostgreSQL runs, which embedding and ／ The first run creates persistent Docker volumes for PostgreSQL and ／ - PostgreSQL + `pgvector` for persistence and vector search",
+     "lines": [
+      44,
+      86,
+      180
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- Talon SQLite migration tooling",
+     "lines": [
+      170
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Postgram 使用 PostgreSQL 存储其自身数据，是为用户提供知识库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- PostgreSQL + `pgvector` for persistence and vector search ／  A self-hosted productivity and knowledge backend for humans and AI agents. ／ Postgram is built for one person or a small trusted team running a local or",
+   "evidence_lines": [
+    180,
+    5,
+    47
+   ]
+  },
+  "fn": "ivo-toby/postgram",
+  "sha": "34770d12f54e",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8842,5 +8842,73 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1993011c3542": {
+  "identity": {
+   "one_liner": "基于 Effect 的多租户 B2B SaaS 起始模板，附带 AI 代理工作流",
+   "review": "一个多租户 B2B SaaS 应用起始模板，内置认证、组织、租户隔离（Postgres RLS + withOrgScope）、审计、计费、后台任务等模块，并通过 skills、subagents、hooks 等机制驱动 Claude Code 等代理安全地在其上开发。面向 AI 优先的软件工程师、设计工程师和独立创始人。依赖 TypeScript、Effect 4（候选版本）和 Postgres，MIT 许可。",
+   "highlights": [
+    "使用 Postgres RLS 与 withOrgScope 双重机制实现租户隔离，应用以受限角色连接数据库",
+    "包含认证、SSO、计费、公共 API、MCP server、后台任务等内置模块",
+    "提供 .agents/ 与 docs/workflow/ 下的 skills、subagents、hooks 工作流，用于约束 AI 代理开发行为"
+   ],
+   "use_cases": [
+    "快速搭建多租户 B2B SaaS 产品",
+    "在 AI 代理辅助开发中实施租户隔离与安全审查流程",
+    "以统一设计系统开发产品界面与市场页面"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Here that means the application connects as a Postgres role that **cannot** ／ - ✅ **Tenant isolation** — Postgres RLS _and_ `withOrgScope`, proven by browser tests ／ - ✅ **Background jobs** — a transactional outbox in Postgres, BullMQ for delivery ／ |`SessionStart`|prints the pinned Effect version, whether `repos/` is vendored, whether Postgres is up, and the current phase|",
+     "lines": [
+      46,
+      104,
+      108,
+      301
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 Postgres 存储数据的多租户 SaaS 应用模板，Postgres 是其运行依赖而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，双部分（产品与方法）均为 MIT，无付费层",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Here that means the application connects as a Postgres role that **cannot** ／ - ✅ **Tenant isolation** — Postgres RLS _and_ `withOrgScope`, proven by browser tests ／ - ✅ **Background jobs** — a transactional outbox in Postgres, BullMQ for delivery",
+   "evidence_lines": [
+    46,
+    104,
+    108
+   ]
+  },
+  "fn": "vantionlabs/saas-starter",
+  "sha": "1993011c3542",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

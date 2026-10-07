@@ -8929,5 +8929,91 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1229312831fe": {
+  "identity": {
+   "one_liner": "Go 语言 database/sql 的 MySQL 协议驱动，纯 Go 实现",
+   "review": "Go-MySQL-Driver 是为 Go database/sql 包实现的 MySQL 驱动，供 Go 应用连接和操作 MySQL 类数据库。它通过实现 database/sql/driver 接口工作，支持 TCP/IPv4、TCP/IPv6、Unix 域套接字连接、连接池管理、预处理语句、LOAD DATA LOCAL INFILE 及 zlib 压缩等 DSN 可配置参数。维护者明确支持 MySQL 8.0+ 与 MariaDB 10.11+，TiDB 由 PingCAP 支持。",
+   "highlights": [
+    "纯 Go 实现，无需 C 绑定，实现 database/sql/driver 接口",
+    "支持 TCP/IPv4、TCP/IPv6、Unix 域套接字及自定义协议连接",
+    "提供连接池管理、预处理语句、LOAD DATA LOCAL INFILE 允许列表和 zlib 压缩等 DSN 参数配置"
+   ],
+   "use_cases": [
+    "Go 应用通过 database/sql API 连接 MySQL / MariaDB 数据库",
+    "需要配置连接池、超时、字符集、排序规则等细粒度连接参数的场景",
+    "TiDB 等兼容 MySQL 协议的数据库接入 Go 程序"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# Go-MySQL-Driver ／ A MySQL-Driver for Go's database/sql package ／ * MySQL (8.0+) and MariaDB (10.11+) are supported by maintainers.",
+     "lines": [
+      1,
+      5,
+      28
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* MySQL (8.0+) and MariaDB (10.11+) are supported by maintainers. ／ > `time.Time` arguments are sent with up to nanosecond precision, so a value from `time.Now()` usually has more fractional-second digits than a `DATETIME(N)` or `TIMESTAMP(N)` column stores. On MariaDB, comparing such a value against an indexed column can prev",
+     "lines": [
+      28,
+      282
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "* TiDB is supported by PingCAP.",
+     "lines": [
+      29
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 MySQL 类数据库提供 Go 语言驱动，是服务数据库生态的连接组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A MySQL-Driver for Go's database/sql package ／ * MySQL (8.0+) and MariaDB (10.11+) are supported by maintainers. ／ _Go MySQL Driver_ is an implementation of Go's `database/sql/driver` interface. You only need to import the driver and can use the full `database/sql` API then.",
+   "evidence_lines": [
+    5,
+    28,
+    45
+   ]
+  },
+  "fn": "go-sql-driver/mysql",
+  "sha": "1229312831fe",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

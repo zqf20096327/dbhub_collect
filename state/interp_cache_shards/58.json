@@ -9802,5 +9802,138 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "98dd9d0fee48": {
+  "identity": {
+   "one_liner": "DuckDB 的 SQL Server 连接扩展，基于 TDS 协议实现查询与下推",
+   "review": "该仓库是 DuckDB 社区扩展，用于 ATTACH 并查询 Microsoft SQL Server 数据库。它内置实现 TDS 协议，无需 ODBC/JDBC，提供 DuckDB catalog 集成、过滤与远程下推、DML、事务及 BCP 批量加载。适用于已有 SQL Server 2019+ 且用 DuckDB 做查询分析的用户。README 标注为实验性项目，API 与行为可能在版本间变化。",
+   "highlights": [
+    "内置 TDS 协议实现，连接不依赖 ODBC/JDBC 或外部驱动（L10、L46）",
+    "支持谓词/远程下推、DML、事务与 BCP 批量加载（L49、L50、L55、L57、L58）",
+    "支持 Azure AD、Kerberos/Windows SSPI 认证及 TLS 证书校验（L54、L61、L62）"
+   ],
+   "use_cases": [
+    "在 DuckDB 中通过 ATTACH 直接查询 SQL Server 数据（L33、L111）",
+    "将过滤/聚合下推到 SQL Server 执行，减少数据传输（L49、L50）",
+    "通过 COPY/CTAS 在 DuckDB 与 SQL Server 之间批量写入数据（L56、L57）"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "A DuckDB extension for connecting to Microsoft SQL Server databases using native TDS protocol - no ODBC, JDBC, or external drivers required.",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该扩展为 DuckDB 提供连接 SQL Server 的连接器能力，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可；二进制静态链接 OpenSSL(Apache-2.0) 与 simdutf(Apache-2.0/MIT 双许可)",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# DuckDB MSSQL Extension ／ A DuckDB extension for connecting to Microsoft SQL Server databases using native TDS protocol - no ODBC, JDBC, or external drivers required. ／ - Full DuckDB catalog integration with three-part naming and lazy metadata loading",
+   "evidence_lines": [
+    8,
+    10,
+    48
+   ]
+  },
+  "fn": "hugr-lab/mssql-extension",
+  "sha": "98dd9d0fee48",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "472e951a75f2": {
+  "identity": {
+   "one_liner": "NestJS 事务性 Outbox/Inbox 库，提供确定性 idempotencyKey 契约",
+   "review": "这是一个面向 NestJS 后端开发者的可靠性开发库，通过将 Outbox 与 Inbox 写入与业务变更加同一个数据库事务来消除双写不一致，并派生确定性 idempotencyKey 供外部 API 重试。存储层为针对 PostgreSQL 的原生 SQL 实现，测试使用 Testcontainers 跑真实 Postgres，共 16 个失败场景。项目自述为 MVP/Experimental 阶段，API 可能在 v1.0 前变更。",
+   "highlights": [
+    "提供 Outbox 与 Inbox 同事务持久化，配合基于租约的调度重试与 claim-only 去重",
+    "提供由 (messageId, effectName) 派生的确定性 idempotencyKey 契约",
+    "实现 lease/fencing/SKIP LOCKED 调度，16 个失败场景在 CI 中以真实 Postgres 容器测试"
+   ],
+   "use_cases": [
+    "NestJS 应用需要将消息发布与数据库变更加同一事务提交",
+    "需要向外部 API（如支付接口）转发稳定幂等键以安全重试",
+    "需要以经过测试的失败模式矩阵验证消息投递可靠性"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> Outbox and Inbox as one transactional unit, a deterministic `idempotencyKey` contract for external APIs, and a failure-mode matrix verified against a real Postgres instance, not asserted in a README. ／ pnpm add @reliablejs/nest @reliablejs/postgres @reliablejs/core ／ * **`pg-boss` (v10+)** already enqueues inside a caller-supplied transaction.",
+     "lines": [
+      5,
+      13,
+      90
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为使用数据库的 NestJS 应用提供事务性消息可靠性能力的组件库，包含专门的 postgres 存储层实现",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pnpm add @reliablejs/nest @reliablejs/postgres @reliablejs/core ／ packages/postgres   raw-SQL implementation: outbox, inbox, lease, fencing ／ packages/nest       NestJS integration: ReliableModule, decorators, CLS binding",
+   "evidence_lines": [
+    13,
+    105,
+    107
+   ]
+  },
+  "fn": "donfreddy/reliable-nest",
+  "sha": "472e951a75f2",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

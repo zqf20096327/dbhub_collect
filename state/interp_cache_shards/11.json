@@ -9512,5 +9512,155 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d0b8052e2169": {
+  "identity": {
+   "one_liner": "运行在自有 Cloudflare 账户上的类型安全实时后端框架",
+   "review": "Lunora 是一个部署到用户自有 Cloudflare 账户的后端框架：用 TypeScript 编写类型安全的 query/mutation/action，由 Workers 执行，Durable Objects 持有实时状态（基于 SQLite），D1 处理 SQL，R2 存储 blobs，Queues 跑任务，通过 WebSocket 提供实时订阅。面向希望在 Cloudflare 上构建全栈应用、偏好 Vite 开发流程的开发者。当前处于 Alpha 阶段，npm 包名为 lunorash，首个稳定版前可能有破坏性变更。",
+   "highlights": [
+    "提供端到端类型安全：schema、校验器、查询结果与客户端 hooks 来自单一来源，开发服务器保存时自动重新生成客户端类型",
+    "支持实时订阅：客户端通过 WebSocket 订阅，mutation 变更推送到所有订阅者",
+    "核心不依赖 Cloudflare：响应式引擎通过 @lunora/platform 主机契约解耦，提供 cloudflare 与 node 两种平台实现及能力矩阵"
+   ],
+   "use_cases": [
+    "在自有 Cloudflare 账户上构建带实时订阅的全栈应用",
+    "需要多租户分片或地理复制读取的 Durable Objects 应用",
+    "为 React/Vue/Solid/Svelte 等前端框架或多语言客户端生成类型化 SDK 的后端项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|`@lunora/hyperdrive`|npm|Bring-your-own Postgres/MySQL for Lunora via Cloudflare Hyperdrive: a driver-agnostic, action-only ctx.sql|",
+     "lines": [
+      192
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|`@lunora/hyperdrive`|npm|Bring-your-own Postgres/MySQL for Lunora via Cloudflare Hyperdrive: a driver-agnostic, action-only ctx.sql|",
+     "lines": [
+      192
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`@lunora/do`|npm|Lunora Durable Objects: ShardDO (SQLite, OCC, hibernated WebSocket subscriptions) and SessionDO|",
+     "lines": [
+      123
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Lunora 是使用 Cloudflare Durable Objects（SQLite）、D1、R2 存数据的后端框架/应用，而非为某数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "FSL-1.1-Apache-2.0",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lunora gives you Convex-style DX on your own Cloudflare account. You write type-safe queries, mutations, and actions in TypeScript, and Lunora deploys them as Cloudflare Workers. Durable Objects hold real-time state, D1 handles SQL, R2 stores blobs, and Queues run jobs. Nothing runs on servers we operate; everything lives in the Cloudflare account you already pay for. ／ |`@lunora/do`|npm|Lunora Durable Objects: ShardDO (SQLite, OCC, hibernated WebSocket subscriptions) and SessionDO| ／ > **Alpha.** The npm package is `lunorash` because the unscoped `lunora` name is taken; the CLI it installs is still called `lunora`. Install from the `@alpha` dist-tag and expect breaking changes until the first stable release (see Status).",
+   "evidence_lines": [
+    21,
+    123,
+    34
+   ]
+  },
+  "fn": "anolilab/lunora",
+  "sha": "d0b8052e2169",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "54fce03ac212": {
+  "identity": {
+   "one_liner": "Rust 编写的命令行门控，预览、备份并拦截 AI Agent 的 shell 命令",
+   "review": "Termaxa 是一个 Rust CLI 工具，作为 Claude Code、Codex、Cursor、Copilot 等 coding agent 的 hook 或包装器，在命令执行前解析影响范围、先行备份、按策略 allow/ask/deny，并记录审计日志。面向使用 AI agent 进行开发的工程师，支持 psql/Postgres 命令的行数估算（来自 planner 统计）、复合命令拆分与意图分类、会话级熔断，作者也明确说明它不是沙箱，无法理解用户真实意图。",
+   "highlights": [
+    "支持通过 Claude Code/Codex/Cursor/Copilot 的 hook 或 termaxa wrap 接入，并在执行前预览命令影响范围",
+    "包含删除保险备份、git reset/force-push 快照回滚与审计记录，策略以 policy.yaml 配置",
+    "实现复合命令拆分、意图分类和跨会话的熔断机制，支持 psql 命令的行数估算"
+   ],
+   "use_cases": [
+    "为运行 AI coding agent 的开发环境添加命令门控与审计",
+    "拦截或确认 rm/git reset --hard/DROP TABLE 等破坏性命令并支持回滚",
+    "用 termaxa replay 统计 agent 历史命令的判定情况以调整策略"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Claude Code --> TERMAXA --> git . postgres . docker . terraform . your shell",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "它作为命令门控工具服务于 agent 工作流，包含对 psql/Postgres 命令的解析与行数估算能力，而非使用数据库存储自身业务数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Termaxa is a Rust command-line gate for the shell commands a coding agent runs: it previews the blast radius, backs up first, blocks the dangerous ones, and keeps a record the agent cannot rewrite. No model, no service, no account — a hook for Claude Code, Codex, Cursor and Copilot, or a wrapper for anything else. It's a cooperative windshield, not a sandbox. ／ Termaxa is a third option: a gate the agent's commands pass through. It reads a policy you wrote, shows you what's actually about to happen, backs up what's about to change, and records everything. Hooks for **Claude Code**, **Codex**, **Cursor** and **Copilot CLI**, all live-tested; `termaxa wrap` for a harness without hooks; a standalone CLI anywhere. Running agents in Herdr? `herdr plugin install termaxa/termaxa` puts the gate, the record and the reason a pane went red in the multiplexer (the plugin). ／ Row estimates come from the planner (`pg_class.reltuples`, stale between `ANALYZE`s) — Termaxa never scans your tables.",
+   "evidence_lines": [
+    11,
+    23,
+    93
+   ]
+  },
+  "fn": "termaxa/termaxa",
+  "sha": "54fce03ac212",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
