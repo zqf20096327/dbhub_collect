@@ -713,13 +713,18 @@ def info_gain(review: str, desc: str) -> bool:
 
 
 def merge_review(prev: dict, low_conf: list, rejected: list, failed_fns: list) -> dict:
-    """人工复核队列跨运行累积合并——旧版整体覆盖写，历史队列永远只剩最后一次运行。"""
+    """人工复核队列跨运行累积合并——旧版整体覆盖写，历史队列永远只剩最后一次运行。
+    rejected/failed 保序去重后裁尾 500：不裁会无限涨（failed 是纯 fn 串无时间戳，
+    10-07 实测 24,109 条且绝大多数已出池/救回）。"""
     by_fn = {}
     for r in list(prev.get("rejected") or []) + list(rejected):
         by_fn[r.get("fn")] = r            # 同 fn 保最新
+    by_failed = {}
+    for fn in list(prev.get("failed") or []) + list(failed_fns):
+        by_failed[fn] = None              # 字符串队列无 payload；保序去重同 rejected
     return {"low_confidence": sorted(set(prev.get("low_confidence") or []) | set(low_conf)),
             "rejected": list(by_fn.values())[-500:],
-            "failed": sorted(set(prev.get("failed") or []) | set(failed_fns))}
+            "failed": list(by_failed)[-500:]}
 
 
 # ---------------- 一次解读（build_prompt + judge，golden_eval 复用） ----------------
