@@ -92,7 +92,6 @@ def slim(it: dict, source: str, source_topic: str = "") -> dict:
         "owner": owner.get("login") or "",
         "owner_type": owner.get("type") or "",
         "source": source, "source_topic": source_topic,
-        "snapshot_date": datetime.now(timezone.utc).strftime("%Y%m%d"),
     }
 
 
