@@ -8632,5 +8632,74 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0f1397bc7c9f": {
+  "identity": {
+   "one_liner": "面向智能体分析的语义层运行时引擎，将语义请求编译为方言化 SQL",
+   "review": "Metis 是一个引擎中立的语义层运行时，读取 Apache Ossie 语义模型，对指标/维度请求执行验证、解析、规划与 SQL 编译，支持 MCP、REST、CLI 与 Go 嵌入接口。面向使用智能体做分析的应用与团队；内置 Doris 与 ClickHouse 执行后端，DuckDB 需 CGO 构建开启，编译模式无需数据库连接。",
+   "highlights": [
+    "支持 MCP、REST 与 Go 嵌入 API 暴露语义发现、解析与 SQL 编译服务",
+    "内置 Doris、ClickHouse 执行后端，DuckDB 可通过 CGO 构建标签启用",
+    "提供 project test 命令在 CI 中验证编译结果与外部数据库 fixture 的指标结果"
+   ],
+   "use_cases": [
+    "智能体通过 MCP 工具发现语义资产并查询指标",
+    "离线验证 Ossie 语义模型并编译生成 SQL",
+    "对指标变化进行归因分解分析"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "database access. Built-in targets are Doris, ClickHouse, and DuckDB. ／ Use `--dialect DORIS`, `CLICKHOUSE`, or `DUCKDB` to select a target. Add repeatable ／ runtime fixture example for Doris/ClickHouse setup.",
+     "lines": [
+      19,
+      136,
+      171
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Metis 位于智能体与分析型数据库之间，为查询语义化与 SQL 编译提供服务，属于为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Metis is an open-source, Ossie-first, engine-neutral semantic layer runtime engine. ／  database access. Built-in targets are Doris, ClickHouse, and DuckDB. ／ |MCP|Give an agent tools for semantic discovery, SQL compilation, and bounded analytics over stdio or HTTP.|",
+   "evidence_lines": [
+    3,
+    19,
+    42
+   ]
+  },
+  "fn": "meaningforge/metis",
+  "sha": "0f1397bc7c9f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

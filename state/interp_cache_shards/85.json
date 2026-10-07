@@ -9461,5 +9461,209 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fad0075c980d": {
+  "identity": {
+   "one_liner": "1C:Enterprise 开发环境 Docker 编排栈，含 1C 版 PostgreSQL",
+   "review": "在 Apple Silicon Mac 上用 docker compose 运行 1C:Enterprise 8.3/8.5 开发栈：1C 专用构建的 PostgreSQL 18.4、两个 1C 服务器集群容器及 VNC 许可证激活容器。面向 1C 开发者；需自行从 1C 官网下载发行包到 dists/，且原生 PostgreSQL 不被 1C 支持；8.5 集群目前客户端无法连接。",
+   "highlights": [
+    "提供原生 arm64 的 1C 版 PostgreSQL 18.4-1.1C 与 8.3/8.5 两个集群容器",
+    "包含许可证激活 stand 容器，通过 epf 自动机实现社区许可证自动激活与续期",
+    "通过 bootstrap.sh 一键生成 .env、校验发行包、构建并启动容器"
+   ],
+   "use_cases": [
+    "在 Apple Silicon Mac 上搭建 1C:Enterprise 开发环境",
+    "为 1C 信息库运行配套的 1C 构建 PostgreSQL",
+    "自动化社区开发许可证的首次激活与周期性续期"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL (1C build) + 1C:Enterprise 8.3 / 8.5 clusters + a fully ／ mac client ──┐ ┌─ pg1c PostgreSQL 18.4-1.1C arm64 :5432",
+     "lines": [
+      5,
+      17
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该栈使用 1C 构建 PostgreSQL 作为 1C 信息库的中央 DBMS，属于使用数据库的应用编排",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL (1C build) + 1C:Enterprise 8.3 / 8.5 clusters + a fully ／ |`pg1c`|`pg1c:18.4-1.1C`|central DBMS for all infobases (native arm64 1C build)|",
+   "evidence_lines": [
+    5,
+    41
+   ]
+  },
+  "fn": "0x3654/v8dock",
+  "sha": "fad0075c980d",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c24db2eb6095": {
+  "identity": {
+   "one_liner": "达梦数据库 DM8 官方 Go 语言驱动",
+   "review": "该项目提供达梦数据库 DM8 的 Go 语言驱动源码，源自官方安装包内的驱动目录，通过 dm:// 连接串连接数据库，支持 SSL、超时等参数配置，用 go get 安装。供使用 Go 语言访问达梦数据库的开发者使用，注意 32 位编译存在版本限制。",
+   "highlights": [
+    "提供 dm:// 连接串协议，支持 schema、SSL 文件路径、超时等参数",
+    "源码来源于官方安装包 drivers/go/dm-go-driver.zip",
+    "通过 go get 安装，要求 Go 1.13+、DM 8.0+"
+   ],
+   "use_cases": [
+    "Go 应用连接和访问达梦 DM8 数据库",
+    "需要在 Go 项目中执行达梦 SQL 的开发场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "达梦官方 Go 驱动源码",
+     "lines": [
+      2
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是达梦数据库的 Go 驱动，为数据库生态提供语言接入组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "达梦官方 Go 驱动源码 ／ 源码来源于官方安装包，驱动包的路径： `dmdbms/drivers/go/dm-go-driver.zip` , 详见说明： Go 数据库接口 ／ `go get github.com/ganl/go-dm@v1.2.193`",
+   "evidence_lines": [
+    2,
+    8,
+    20
+   ]
+  },
+  "fn": "ganl/go-dm",
+  "sha": "c24db2eb6095",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "33a4eb896f37": {
+  "identity": {
+   "one_liner": "openGauss 与 PostgreSQL 并发性能评估测试代码集",
+   "review": "该仓库包含用 Java 编写的测试代码，通过 java.util.concurrent 构造多个并发查询请求，测量 openGauss 与 PostgreSQL 处理请求所需时间，并通过 pg_stat_database 查询资源使用信息，用于对两者的并发性能进行对比评估。使用前需先拉取 openGauss 的 docker 镜像，适合需要对 openGauss 做并发性能测试的开发或运维人员。",
+   "highlights": [
+    "提供连接 openGauss 与 PostgreSQL 并构造并发查询请求的 Java 代码",
+    "通过 pg_stat_database 读取事务、命中块等资源使用统计",
+    "保持两套测试代码除连接部分外一致以支撑对比"
+   ],
+   "use_cases": [
+    "评估 openGauss 在并发查询下的性能表现",
+    "对比 openGauss 与 PostgreSQL 的并发处理耗时",
+    "获取数据库资源使用统计信息"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "3. get_info_postgresSQL: connection is the same as connected_to_postgresSQL, then using the SQL query \"SELECT datname, numbackends, xact_commit, xact_rollback, blks_read, blks_hit, tup_returned, tup_fetched FROM pg_stat_database\" to get the infomation about th",
+     "lines": [
+      9
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "A simple evaluation for openGauss mainly on the concurrency performance ／ 2. connected_to_gauss: using java to connect to the opengauss and constructs multiple concurrent query requests using java.util.concurrent, returning the time required to process the request",
+     "lines": [
+      1,
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库提供针对 openGauss/PostgreSQL 的性能测试代码，是为数据库评估服务的工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A simple evaluation for openGauss mainly on the concurrency performance ／ 2. connected_to_gauss: using java to connect to the opengauss and constructs multiple concurrent query requests using java.util.concurrent, returning the time required to process the request",
+   "evidence_lines": [
+    1,
+    8
+   ]
+  },
+  "fn": "Polusss/project_evaluation_for_openGauss",
+  "sha": "33a4eb896f37",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

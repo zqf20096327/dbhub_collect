@@ -9413,5 +9413,81 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4ac53e0b1531": {
+  "identity": {
+   "one_liner": "自愈式数据库引擎：检测数据异常并用沙箱验证修复",
+   "review": "HealerDB 是一个针对 PostgreSQL 目标库的自愈工具：通过检测与分析发现数据异常，调用 LLM 结合 ChromDB 向量知识做根因诊断，在 Testcontainers 沙箱中验证 SQL 修复脚本，经人工审批后以事务方式应用。面向需要自动化数据质量修复的数据库运维/开发人员，默认 dry-run 模式，依赖 Groq API。",
+   "highlights": [
+    "提供异常检测、AI 根因诊断、沙箱验证、审批、事务化执行的五阶段流水线",
+    "支持隔离沙箱中对数据副本预执行修复脚本，生产修复在事务内执行并含回滚语句",
+    "提供 Next.js 监控控制台（KPI、画像、提案审批、审计历史等页面）与 REST API"
+   ],
+   "use_cases": [
+    "生产 PostgreSQL 数据库的空值泄漏、引用完整性破坏等异常的自动化检测与修复",
+    "接收数据测试失败的 webhook 遥测并生成 SQL 修复提案供人工审批",
+    "保留带时间戳的修复审计历史以支持回滚与追溯"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ # Starts Postgres :5433 and Redis :6379",
+     "lines": [
+      10,
+      63
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具检测并修复 PostgreSQL 目标数据库中的数据异常，为数据库运维服务，而非以数据库为存储的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "rag"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "1. **Detects & Profiles** — Inspects tables on-demand or receives real-time webhook telemetry on data-test failures. ／ 5. **Applies Transactionally** — Executes validated remedies inside single transactions with post-apply assertions and zero downtime. ／         TargetDB[(Target Database\\nPostgreSQL)]",
+   "evidence_lines": [
+    18,
+    22,
+    29
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "PranavTJ-05/HealerDB",
+  "sha": "4ac53e0b1531",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -7832,5 +7832,76 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "087c36b09aa4": {
+  "identity": {
+   "one_liner": "TiDB Cloud 集群指标采集命令行脚本，生成容量规划与健康报告",
+   "review": "一个 Python 命令行脚本，通过 TiDB Cloud 的 Prometheus API 读取集群指标，提供容量规划（基于预估流量增长与资源冗余生成 CSV 报表）、健康检查报告和集群列表功能，集群列表可写入 Lark 表格。适用于使用 TiDB Cloud 并需查看/规划集群资源数据的运维人员；需 Python3.8+ 并手动从浏览器获取 Prometheus API token。",
+   "highlights": [
+    "通过 Prometheus API 读取 TiDB Cloud 集群的 CPU、内存、磁盘、网络等指标",
+    "生成容量规划 CSV 报表（含各分位数与规划值）",
+    "生成健康检查报告并列出租户下的集群信息"
+   ],
+   "use_cases": [
+    "TiDB Cloud 集群容量规划与资源估算",
+    "TiDB Cloud 集群指标采集与健康检查"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "- List clusters: List all clusters for a tenant, including cluster id, project id, number of nodes for each TiDB components ／ |tidb|CPU(core)|23.784666666636863|6.891452040305764|6.4966666666169965|10.47533333338797|11.068000000038495|11.763333333283663|12.577333333343267|13.587733333359147|15.136666666684672|16.846442666622035|32|64|190.2773333330949|55.13161632244611|51.97333333293 ／ |tidb|Memory(byte)|26741944320.0|16920691356.352173|17130733568.0|17670386688.0|17807736012.8|17977865420.8|18201889587.2|18560214425.6|19336546385.92|20367362531.32808|66206752768|64|103.40240926645895|65.4268153341575|66.23898031633485|68.32564357867768|68.8",
+     "lines": [
+      6,
+      56,
+      57
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该脚本为 TiDB Cloud 集群提供指标采集与容量规划能力，是为该数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Run this command line script to get TiDBCloud Cluster Metrics ／ - Capacity plan: a capacity plan will be generated based on the metrics and estimated traffic increase and resource redundancy required. ／ - `prometheus.cluster_prom_base_url`: URL for prometheus API, contains TiDBCloud Cluster information",
+   "evidence_lines": [
+    2,
+    3,
+    41
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "yinx0004/tidbcloud-metrics",
+  "sha": "087c36b09aa4",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
