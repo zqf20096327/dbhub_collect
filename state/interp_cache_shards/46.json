@@ -7951,5 +7951,74 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b0e944bd1950": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码代理工作记忆系统，基于 SQLite 存储与设备端嵌入",
+   "review": "MAMA 是一个运行在用户本机的工作代理与开发记忆系统，为 Claude Code、Codex 等 MCP 客户端记录决策及其演变，保留原始文本与修订历史，并支持本地搜索。数据存于本机 SQLite，无需云端服务，通过 Telegram/Discord/Slack 等消息工具交互，需要 Node.js 22.13+。",
+   "highlights": [
+    "提供基于 SQLite 的本地记录存储，保留原始文本、时间戳与修订历史",
+    "支持 Claude Code 插件与 stdio MCP 服务器形式接入",
+    "提供本地 viewer（127.0.0.1:3847）展示工作板、历史与记忆图"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供跨会话的决策与检查点记忆",
+    "通过消息工具跟踪工作项变化并接收定期报告",
+    "记录用户纠偏作为指导规则并在后续会话中应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The record SQLite on your machine: originals · work history · guidance · reports · run logs · local search index",
+     "lines": [
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "MAMA 使用 SQLite 在本机存储工作记录，本身不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The record         SQLite on your machine: originals · work history · guidance · reports · run logs · local search index ／ MCP server `{\"mcpServers\":{\"mama\":{\"command\":\"npx\",\"args\":[\"@jungjaehoon/mama-server\"]}}}`. ／ npm install -g @jungjaehoon/mama-os",
+   "evidence_lines": [
+    87,
+    79,
+    66
+   ]
+  },
+  "fn": "jungjaehoon-lifegamez/MAMA",
+  "sha": "b0e944bd1950",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

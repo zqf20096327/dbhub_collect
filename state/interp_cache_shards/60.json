@@ -8933,5 +8933,83 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3dfa1f4935c8": {
+  "identity": {
+   "one_liner": "Swift 编写的类型安全 SQL 查询构建 DSL",
+   "review": "一个 Swift 声明式 DSL 库，供 Swift 开发者以类型安全、可组合的方式在代码中构建 SQL 语句，支持链式和 result builder 两种写法，并可将同一查询按 PostgreSQL、MySQL、DuckDB 方言渲染。它只生成语句，不负责连接、执行与事务，执行需交由外部数据库驱动完成。",
+   "highlights": [
+    "提供模型键路径引用的类型安全表/列表达，支持链式与 result builder 两种声明式写法",
+    "同一查询值可按内置方言 prepare 为 PostgreSQL、MySQL、DuckDB 渲染，支持 plain 与占位符分离两种输出",
+    "包含 CreateTable/AlterTable 等 DDL 构建器，但不管理迁移版本与执行"
+   ],
+   "use_cases": [
+    "在 Swift 应用中以类型安全方式组合与复用 SQL 查询",
+    "为多方言数据库驱动生成对应的 SQL 语句与绑定值",
+    "以声明式方式构建 CREATE/ALTER TABLE 等 DDL 语句"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Write SQL concepts directly in Swift, compose them as values, and prepare the result for PostgreSQL, MySQL, or DuckDB. SQL builds statements. Execution stays with your database driver. ／ Generated SQL examples in this README use PostgreSQL `.plain` rendering unless noted otherwise. Use `.splitted` when you need query placeholders and bind values for a driver. ／ PostgreSQL gives:",
+     "lines": [
+      17,
+      19,
+      194
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Write SQL concepts directly in Swift, compose them as values, and prepare the result for PostgreSQL, MySQL, or DuckDB. SQL builds statements. Execution stays with your database driver. ／ let mysql = query.prepare(.mysql) ／ query.prepare(.mysql)",
+     "lines": [
+      17,
+      275,
+      430
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为构建 SQL 语句的 DSL，执行交给数据库驱动，本身是为数据库生态服务的构建组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SQL (formerly SwifQL)** is a strongly typed, declarative, composable Swift DSL for building SQL. ／ Write SQL concepts directly in Swift, compose them as values, and prepare the result for PostgreSQL, MySQL, or DuckDB. SQL builds statements. Execution stays with your database driver. ／ SQL builds statements. Your driver executes them.",
+   "evidence_lines": [
+    15,
+    17,
+    269
+   ]
+  },
+  "fn": "swiftstream/SQL",
+  "sha": "3dfa1f4935c8",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

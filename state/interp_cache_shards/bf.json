@@ -9253,5 +9253,74 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f6e8950dc91a": {
+  "identity": {
+   "one_liner": "把 Postgres 连接转成带治理能力的 MCP 服务器",
+   "review": "该项目读取一个 Postgres 连接并生成 MCP 服务器，供 AI 代理访问数据库。用户可通过参数化 SQL 定义自定义工具，用作用域 API key 控制各 key 可用的工具集合，并提供审计日志与分析面板。面向需要向员工或第三方平台开放生产数据访问的团队，要求以最小权限角色连接数据库。",
+   "highlights": [
+    "支持从参数化 SQL 创建自定义 MCP 工具",
+    "支持按组管理工具权限的作用域 API key",
+    "包含审计日志与分析仪表盘"
+   ],
+   "use_cases": [
+    "管理员工对生产数据的 MCP 访问",
+    "控制向第三方平台开放的数据库数据范围",
+    "为代理提供语义层数据查询工具"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`postgres2mcp` takes a Postgres connection and gives you a fully-featured MCP server with governance built-in. ／ * Quickly create an MCP server from your Postgres databases ／ We built `postgres2mcp` to make it easy to give agents access to Postgres databases while ensuring orgs retain control and can manage permissions more easily than they would be able to with roles in Postgres.",
+     "lines": [
+      3,
+      36,
+      43
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 Postgres 数据库提供带权限治理和审计的 MCP 网关服务，属数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`postgres2mcp` takes a Postgres connection and gives you a fully-featured MCP server with governance built-in. ／ * Complete audit logs and analytics ／ We built `postgres2mcp` to make it easy to give agents access to Postgres databases while ensuring orgs retain control and can manage permissions more easily than they would be able to with roles in Postgres.",
+   "evidence_lines": [
+    3,
+    29,
+    43
+   ]
+  },
+  "fn": "Railcode-HQ/postgres2mcp",
+  "sha": "f6e8950dc91a",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

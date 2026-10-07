@@ -8965,5 +8965,74 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7752460f968b": {
+  "identity": {
+   "one_liner": "基于SQLite的本地AI记忆层，为Claude Code提供持久记忆",
+   "review": "Counterparts 是一个为 AI 助手（当前支持 Claude Code）提供持久记忆的本地工具，通过 hooks 与 MCP 服务器在会话开始加载简报、过程中召回相关记忆，并由 AI 自行写入笔记和日志；全部数据存于本机单个 SQLite 文件，带遗忘衰减机制。面向希望与 AI 建立长期记忆关系的个人用户。",
+   "highlights": [
+    "数据存储于本机单个 SQLite 文件，含可重建的搜索缓存与每日快照，无需 API 密钥",
+    "通过 Claude Code hooks 与 MCP 服务器实现会话简报加载与相关记忆召回",
+    "记忆具备衰减机制，夜间执行淡化、修剪、合并等整理任务"
+   ],
+   "use_cases": [
+    "为 Claude Code 提供跨会话的个人记忆与身份连续性",
+    "本地隐私场景下的 AI 记忆管理，数据可导出加密副本",
+    "按目录关闭记忆（scope --off）以排除敏感项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **It's yours.** Everything lives on your machine in one SQLite file you can read, ／ |store|One SQLite database, plus a rebuildable search cache and daily snapshots|",
+     "lines": [
+      51,
+      97
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确全部记忆数据存于本机一个 SQLite 文件，SQLite 是其存储依赖",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **It's yours.** Everything lives on your machine in one SQLite file you can read, ／ and bring up related memories as you talk. A small MCP server gives the AI tools to save ／ |store|One SQLite database, plus a rebuildable search cache and daily snapshots|",
+   "evidence_lines": [
+    51,
+    89,
+    97
+   ]
+  },
+  "fn": "mlapeter/counterparts",
+  "sha": "7752460f968b",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

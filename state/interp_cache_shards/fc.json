@@ -8719,5 +8719,136 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "183289022204": {
+  "identity": {
+   "one_liner": "Apache Cassandra 的 Sidecar 组件，提供 CDC 流转与实例管理接口",
+   "review": "该项目是 Apache Cassandra 的官方 Sidecar，与 Cassandra 4.0+ 同机部署，通过 HTTP API 提供服务能力，重点实现了变更数据捕获（CDC），可将表的变更以 Avro 格式序列化后发送到 Apache Kafka。面向需要为 Cassandra 集群配置 CDC 管道和本地管理代理的运维与开发人员。README 标明项目仍处于 WIP（开发中）阶段。",
+   "highlights": [
+    "支持将 Cassandra 表的 CDC 变更以 Avro 格式流式发送到 Kafka（L91、L186）",
+    "要求 Apache Cassandra >= 4.0，依赖虚拟表特性（L12）",
+    "提供 CDC、Kafka 生产者等配置的 HTTP API 端点（L147、L169）"
+   ],
+   "use_cases": [
+    "为 Cassandra 表搭建 CDC 管道，将变更数据投递到 Kafka 供下游消费",
+    "在 Cassandra 节点同机运行 Sidecar 进行实例配置与管理"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "1. Java >= 11 1 (OpenJDK or Oracle)",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确该组件是为 Cassandra 数据库服务的 Sidecar，为其提供 CDC 与配置能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is a Sidecar for the highly scalable Apache Cassandra database. ／ **This is project is still WIP.** ／ Apache Cassandra Sidecar supports Change Data Capture (CDC) to stream table mutations to Apache Kafka. This section describes how to configure and run Sidecar with CDC enabled.",
+   "evidence_lines": [
+    3,
+    8,
+    91
+   ]
+  },
+  "fn": "apache/cassandra-sidecar",
+  "sha": "183289022204",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "18c546ff5967": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的本地文档知识库插件，基于混合检索与引用校验",
+   "review": "dsh-library 是 DeepSeek Harness 的一个插件，将本地 md/txt 文档导入为可查询的知识库，提供 library_add/search/cite_check/diagnose 等工具，实现语义+关键词混合检索、MMR 多样性重排与引用核验。面向使用 DSH 的 agent 开发者；通过宿主 storage 域存储索引，内置 hash 嵌入器，可选外部命令或本地 Ollama，且仅支持 md/txt 导入。",
+   "highlights": [
+    "提供混合语义+关键词检索，含 MMR 多样性重排、相关性过滤与 lost-in-the-middle 规避",
+    "提供 library_cite_check 引用核验与 library_diagnose 索引诊断工具",
+    "内置确定性 hash 嵌入器，零下载、零网络请求，可选外部命令或本地 Ollama 嵌入"
+   ],
+   "use_cases": [
+    "让 DSH agent 导入本地文档并带引用标记地回答问题",
+    "校验 agent 回答中 [n] 引用与检索结果的一致性",
+    "诊断文档库的块大小分布、近重复块与检索质量信号"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|Any storage-domain backend (JSON or SQLite); the index lives in the host's storage domain|",
+     "lines": [
+      37
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为宿主 storage 域的可选后端用于存数据，插件本身服务于 DeepSeek Harness agent 生态，而非为数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0（40+ 插件家族统一许可）",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Local document knowledge base for DeepSeek Harness.** ／ |Storage|Any storage-domain backend (JSON or SQLite); the index lives in the host's storage domain| ／ `dsh-library` turns local md/txt documents into a queryable knowledge base with a quality pipeline your agent can trust:",
+   "evidence_lines": [
+    7,
+    37,
+    42
+   ]
+  },
+  "fn": "PerryLink/dsh-library",
+  "sha": "18c546ff5967",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

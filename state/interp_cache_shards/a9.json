@@ -9776,5 +9776,139 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3f9c5900ff9f": {
+  "identity": {
+   "one_liner": "语音笔记应用，录音转录后可 RAG 问答自己的笔记",
+   "review": "FlowFlow 是一款面向 iPhone 和 macOS 用户的语音笔记应用：录音后经云端或本地 Whisper 转录，支持以 BM25+向量混合检索的 RAG 聊天方式查询笔记内容。技术上以 Rust 和 Dioxus 构建，使用 LanceDB 存向量、SQLite 存 API 密钥等数据，并通过 MCP 与 Hermes Agent 集成，设备间靠 Noise 协议做局域网 P2P 加密同步。",
+   "highlights": [
+    "支持云端（Soniox）与本地 Whisper 两种语音转录方式，长录音分块断点续录",
+    "提供基于 BM25 + 向量 + rerank 的混合检索 RAG 聊天，答案附笔记原文引用",
+    "通过 MCP 服务器与 Hermes Agent 共享笔记空间，并支持加密局域网 P2P 同步"
+   ],
+   "use_cases": [
+    "随时口述想法并转录存档，之后以对话方式检索笔记内容",
+    "在 iPhone 与 Mac 之间无云服务器地同步个人笔记",
+    "将笔记接入自有 Hermes Agent 进行自动化处理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "API keys can be set in-app via Settings and are stored in SQLite. ChatGPT",
+     "lines": [
+      176
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 SQLite 存 API 密钥、LanceDB 存嵌入数据的语音笔记应用，数据库仅为其存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "FlowFlow is a voice notes app that captures what you say, transcribes it, and lets you **chat with your notes** later. You ask \"what was that pricing idea?\" and the right passages come up - with links to the original notes. ／ |App (`src/`)|Rust: Dioxus 0.8 alpha, rig, LanceDB, rusqlite, snow (Noise XXpsk3), cpal, whisper-rs, tokio, Tailwind CSS v4| ／ API keys can be set in-app via Settings and are stored in SQLite. ChatGPT",
+   "evidence_lines": [
+    10,
+    159,
+    176
+   ]
+  },
+  "fn": "mirkobozzetto/flowflow",
+  "sha": "3f9c5900ff9f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2d79a86d5d47": {
+  "identity": {
+   "one_liner": "本地优先的 Android Markdown 笔记应用，用 SQLite FTS 做全文检索",
+   "review": "Markleaf 是一款本地优先、无云端的 Android Markdown 笔记应用，数据仅存于设备，通过用户选定的文件夹（SAF）镜像 .md/.txt 文件实现同步，用 Room（SQLite FTS4）做全文搜索，支持标签、wikilinks 和反链面板，适合注重数据自主与隐私的 Android 用户；限制包括只读单层文件夹、不进入子目录及保存时按标题重命名文件可能破坏外部链接。",
+   "highlights": [
+    "基于 Room（SQLite FTS4 虚拟表）实现正文全文搜索",
+    "文件夹镜像同步：将笔记导出为标题命名的 .md/.txt 文件，通过 SAF 与外部同步应用配合",
+    "支持 GFM 表格、复选框、callouts、wikilinks、backlinks 与 frontmatter 字节级保留"
+   ],
+   "use_cases": [
+    "在 Android 设备上离线记录与组织 Markdown 笔记",
+    "与 Obsidian/Logseq 等基于文件夹的笔记库共用同一 Markdown 目录",
+    "通过 Syncthing/NAS 等外部工具同步笔记文件夹实现多设备"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite FTS full-text search** — fast, down to the body text ／ - **Database**: Room — SQLite-backed local persistence, FTS4 virtual tables for full-text search",
+     "lines": [
+      66,
+      104
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 Room/SQLite 作为应用本地数据存储，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Database**: Room — SQLite-backed local persistence, FTS4 virtual tables for full-text search ／ **Markleaf** is an Android Markdown note app designed to strip away the clutter so you can focus on just two things: capturing and organizing. Your data is stored only on your device, and standard Markdown guarantees full ownership and portability. Even sync happens only through *a folder you choose* — Markleaf never syncs or uploads anything itself.",
+   "evidence_lines": [
+    104,
+    43
+   ]
+  },
+  "fn": "jeiel85/markleaf-android",
+  "sha": "2d79a86d5d47",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

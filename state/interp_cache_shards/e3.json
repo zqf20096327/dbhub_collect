@@ -8563,5 +8563,74 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "80ab954b65da": {
+  "identity": {
+   "one_liner": "单可执行文件的本地多模态 ggml 推理工具，内嵌 SQLite 持久化",
+   "review": "chimera 将 llama.cpp、whisper.cpp、stable-diffusion.cpp 打包进一个静态链接的 C++ 二进制和库，提供文本生成、聊天、语音转写、图像生成、embedding、RAG 向量存储及 OpenAI 兼容 HTTP 服务，聊天历史与向量数据存于单一 SQLite 数据库（sqlite-vec 做 ANN 检索）。面向命令行优先的多模态本地推理用户及需要嵌入静态库的 C++ 开发者。",
+   "highlights": [
+    "单一进程内运行文本生成、语音转写、图像生成、embedding 与 RAG，共享同一组 ggml 后端和同一 SQLite 数据库",
+    "提供 OpenAI 兼容的 HTTP 端点（chat/completions、embeddings、audio、images 等）",
+    "同一构建产出静态库 libchimera.a，供外部 C++ 进程嵌入"
+   ],
+   "use_cases": [
+    "本地多模态推理：在单机单进程中运行 LLM 聊天、Whisper 转写和 Stable Diffusion 图像生成",
+    "个人 RAG / 向量存储：对文档建立索引并做 KNN 检索",
+    "C++ 嵌入：在自己的进程中链接静态库复用模型加载与 HTTP 服务代码路径"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It bundles llama.cpp, whisper.cpp, stable-diffusion.cpp, SQLite, and sqlite-vec into one native binary. The same process can run text generation, interactive chat with persistent history, speech-to-text, text-to-image, embeddings, a personal RAG / vector store ／ chimera targets CLI-first users who run more than one ggml-backed modality (text + audio + image) and want them sharing one process, one ggml backend set, one SQLite database, and one OpenAI-compatible HTTP API, rather than running, configuring, and gluing tog ／ - **Shared persistence.** Chat history, embedding caches, and vector-store collections live in a single SQLite database (sqlite-vec for ANN search). `chat`, `serve`, `index`, and `search` read and write the same file.",
+     "lines": [
+      5,
+      34,
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明聊天历史、embedding 缓存和向量存储存于单一 SQLite 数据库，SQLite 是其内部存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "chimera is a statically linked C++ inference multitool for local ggml-backed models. ／ It bundles llama.cpp, whisper.cpp, stable-diffusion.cpp, SQLite, and sqlite-vec into one native binary. The same process can run text generation, interactive chat with persistent history, speech-to-text, text-to-image, embeddings, a personal RAG / vector store, and an OpenAI-compatible HTTP server across modalities, all sharing one ggml backend set and one SQLite database. ／ - **Shared persistence.** Chat history, embedding caches, and vector-store collections live in a single SQLite database (sqlite-vec for ANN search). `chat`, `serve`, `index`, and `search` read and write the same file.",
+   "evidence_lines": [
+    3,
+    5,
+    52
+   ]
+  },
+  "fn": "shakfu/chimera",
+  "sha": "80ab954b65da",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

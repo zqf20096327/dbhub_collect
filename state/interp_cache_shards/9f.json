@@ -9707,5 +9707,58 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b3cbe35c3a97": {
+  "identity": {
+   "one_liner": "在 Tidbyt LED 屏上显示附近航班信息的 Python 追踪应用",
+   "review": "该仓库实现一个运行于 GCP e2-micro VM 的航班追踪服务，从 airplanes.live 和 OpenSky 拉取附近飞机数据，在 Tidbyt Gen1 的 64x32 LED 屏上渲染航班号、方向、航线与实时模拟时钟。面向拥有 Tidbyt 设备的个人用户，通过 GitHub 定时拉取实现自动部署，追踪默认以 Seattle 某坐标为中心。",
+   "highlights": [
+    "支持 dual/airplanes_live/opensky 三种数据源配置",
+    "提供 GitHub 定时拉取的自动部署机制（systemd timer）",
+    "在 64x32 像素屏上渲染航班信息与像素模拟时钟"
+   ],
+   "use_cases": [
+    "在 Tidbyt 设备上显示附近空域航班动态",
+    "以低成本 GCP 免费层运行持续追踪服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是一个调用外部航班 API 并向 Tidbyt 设备推送显示内容的应用，README 未涉及数据库服务功能",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A high-performance, resilient flight tracking system for the **Tidbyt Gen 1** (64x32 RGB LED matrix) running on a free Google Cloud Platform (GCP) `e2-micro` VM, automated with a GitHub-controlled deployment system. ／ The GCP VM includes an automated systemd timer (`tidbyt-updater.timer`) running as `root` that polls GitHub every 3 minutes. ／ |`DATA_SOURCE`|`dual`|`dual` (tries airplanes.live, falls back to OpenSky), `airplanes_live`, or `opensky`|",
+   "evidence_lines": [
+    3,
+    99,
+    110
+   ]
+  },
+  "fn": "sparhi12/tidbyt-tracker",
+  "sha": "b3cbe35c3a97",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

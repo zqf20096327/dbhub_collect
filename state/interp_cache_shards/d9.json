@@ -9206,5 +9206,143 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "785938444753": {
+  "identity": {
+   "one_liner": "本地CLI，索引并检索磁盘上多个AI编码工具的会话历史",
+   "review": "sessionwiki 是一个 Rust 单二进制 CLI，扫描本机 Claude Code、Codex、Gemini CLI 等多个 AI 编码工具已写入磁盘的会话文件，建立支持全文检索（含 CJK）的索引，提供搜索、文件到会话的溯源（trace/blame）、归档、标签整理，以及在原工具中恢复会话。面向使用 AI 编码工具并需要回查历史的开发者；还可通过 MCP server 供任意 agent 只读调用。首次建索引需按 GB 计的耗时。",
+   "highlights": [
+    "跨多个 AI 编码工具（Claude Code、Codex、Gemini CLI 等）统一扫描、搜索和归档本地会话，无需 daemon 或云服务",
+    "提供文件级与行级溯源（trace/blame），将代码文件关联回写入它的会话",
+    "内置 FTS5 全文索引与 trigram/unicode61 分词器配置，支持 substring 与 CJK 检索，并提供本地 web UI 和 MCP server"
+   ],
+   "use_cases": [
+    "回查数月前 AI 会话中解决过的问题，按文件或关键词定位对应对话",
+    "在被工具裁剪前归档会话历史，删除原始大文件后仍可检索",
+    "通过 MCP server 或 Claude Code 插件让 agent 召回项目过往会话上下文"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|OpenCode|`~/.local/share/opencode/opencode.db` (SQLite; also the legacy `storage/**` JSON)|supported|",
+     "lines": [
+      316
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它索引 AI 编码工具的会话历史，虽自身使用 SQLite FTS5 索引并读取 OpenCode 的 SQLite 会话文件，但定位是面向开发者的会话检索应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**sessionwiki turns the sessions your AI coding tools already wrote to disk into one durable history you can read, search, and trace &mdash; every file back to the conversation that wrote it, and nothing lost when a tool prunes the original.** Every tool at once. No daemon, no cloud, no logging habit to build &mdash; it works retroactively over the history you already have. ／ sessionwiki search \"jwt retry\"  # full-text search across every tool ／ shared by CLI, web, and MCP; changing it rebuilds the FTS table from the",
+   "evidence_lines": [
+    20,
+    129,
+    164
+   ]
+  },
+  "fn": "youdie006/sessionwiki",
+  "sha": "785938444753",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "64544b26610a": {
+  "identity": {
+   "one_liner": "自托管网页抓取与 Markdown 提取工具，供 AI 代理读取网页",
+   "review": "AgentCrawl 是一个自托管爬虫，将网页与本地文档转为 Markdown、文本、链接、元数据与结构化数据，供 AI 代理通过 MCP、CLI、Python 库或 Docker/API 使用；抓取任务、缓存与失败记录存储在本地 SQLite 中，并提供从 SQLite 生成只读静态 HTML 仪表盘的能力。",
+   "highlights": [
+    "提供 MCP 服务器，暴露 scrape_url、crawl_site、extract_structured、search_web 等工具",
+    "抓取任务、事件、检查点与失败记录存储在 SQLite 中，支持断点续爬与重试",
+    "支持 Firecrawl 兼容 API（/v2/scrape、/v2/map、/v2/search、/v2/crawl 等）"
+   ],
+   "use_cases": [
+    "为 AI 代理/LLM 工具链提供网页内容抓取与 Markdown 提取",
+    "自托管环境中执行带检查点的批量站点爬取与变更跟踪",
+    "通过 CSS schema 做无 LLM 的确定性结构化抽取"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🧱 Durable crawls: SQLite jobs with checkpoints, pagination, cancellation, events, retries, and failure inspection. ／ - 📊 Read-only dashboard: generate static HTML from SQLite with `agentcrawl dashboard` or open `/dashboard` on the API server (it follows the API auth setting). ／ |Durable crawls|SQLite jobs, events, checkpoints, retries, and failure records.|",
+     "lines": [
+      88,
+      90,
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身使用 SQLite 存储抓取任务、缓存与失败记录，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AgentCrawl gives agents a simple way to read normal web pages without pasting raw HTML into chat or routing every URL through a hosted scraper. It turns pages and local documents into Markdown, text, links, metadata, JSON-LD, and crawl results. It runs from the CLI, Python, Docker/API, or as an MCP server. ／ - 🧱 Durable crawls: SQLite jobs with checkpoints, pagination, cancellation, events, retries, and failure inspection. ／ |Firecrawl-compatible API|`/v2/scrape`, `/v2/map`, `/v2/search`, `/v2/crawl` and `/v2/batch/scrape` answer Firecrawl's v2 SDKs: point `api_url` at your server. Options AgentCrawl cannot honour are refused with the reason.|",
+   "evidence_lines": [
+    10,
+    88,
+    120
+   ]
+  },
+  "fn": "JorG18/agentcrawl",
+  "sha": "64544b26610a",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

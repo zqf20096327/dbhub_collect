@@ -7539,5 +7539,79 @@
   "generated_at": "2026-10-04",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "ad4c76d5db68": {
+  "identity": {
+   "one_liner": "OpenShift 应用部署快速启动模板，含示例栈与 CI/CD 流水线",
+   "review": "该仓库提供一组 OpenShift 部署模板，使用者以模板方式新建仓库后，可通过 GitHub Actions 完成 PR 流水线、沙箱环境、容器发布、Prometheus 指标导出、Flyway 数据库迁移等流程，并附带 TypeScript 前后端示例应用。适用于希望在 OpenShift 上部署 Web 应用并复用既有 CI/CD 与安全扫描配置的团队，依赖 GitHub 账号与 OpenShift 集群命名空间。",
+   "highlights": [
+    "提供基于 Pull Request 的 CI/CD 流水线与沙箱开发环境",
+    "包含 Flyway 数据库迁移、Prometheus 指标导出与水平 Pod 自动伸缩配置",
+    "内置示例应用栈：Postgres 数据库、TypeScript/Nest.js 后端、Caddy+Coraza WAF 前端"
+   ],
+   "use_cases": [
+    "在 OpenShift 上快速部署 Web 应用并搭建 CI/CD 流水线",
+    "为团队提供 DEV/TEST/PROD 多环境命名空间与受控发布流程",
+    "需要数据库迁移、安全扫描与依赖自动更新集成的 Node.js 项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* Database: Postgres, Flyway ／ The password used for the PostgreSQL database. This **MUST** be a strong, unique password and **DISTINCT** across all environments (pr, test, prod). Reusing the same password in development/PRs as in production is a critical security risk.",
+     "lines": [
+      31,
+      182
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Teams will receive a set of project namespaces, usually DEV (for PRs), TEST and PROD. TOOLS namespaces (e.g. Jenkins, shared Oracle resources) are not used here. Provided by your OpenShift platform team.",
+     "lines": [
+      166
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是部署到 OpenShift 的应用模板，PostgreSQL 作为其示例栈使用的数据库而非服务对象。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# QuickStart for OpenShift ／ * **Sample application stack:** ／  * Database: Postgres, Flyway",
+   "evidence_lines": [
+    6,
+    30,
+    31
+   ]
+  },
+  "fn": "bcgov/quickstart-openshift",
+  "sha": "ad4c76d5db68",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

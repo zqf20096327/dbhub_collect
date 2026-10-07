@@ -8132,5 +8132,155 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "db89b1dda216": {
+  "identity": {
+   "one_liner": "Tauri+Rust 桌面 AI 小说创作软件，集成多代理协作与故事资产管理",
+   "review": "一款面向小说作者的桌面写作应用，提供幕前沉浸式写作与幕后故事资产管理双界面，内置多代理协作、知识图谱、伏笔追踪和七阶段创作工作流，支持 OpenAI/Anthropic/Ollama 等多模型接入，数据本地存储于 SQLite。需要 Node.js 与 Rust 工具链从源码构建，或下载预构建安装包。",
+   "highlights": [
+    "提供幕前写作与幕后工作室双界面，管理角色、世界观、场景、知识图谱与伏笔等故事资产",
+    "支持 OpenAI、Anthropic、Ollama 及本地 API 多模型接入，可按角色与任务路由模型",
+    "基于 Tauri + Rust + React 构建，提供 macOS/Windows/Linux 安装包"
+   ],
+   "use_cases": [
+    "长篇小说创作中的章节续写与大纲管理",
+    "利用知识图谱与伏笔看板维护长篇故事的连贯性",
+    "本地运行 LLM（如 Ollama）进行离线辅助写作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "v0.30.33 修复后续写内容仍丢失。根因：多次续写时保存操作**并发执行**，`update_scene` 全量覆写在 SQLite 写锁竞争下乱序提交，较早的小内容覆写较晚的大内容（编辑器正常但 DB 回退，重启才发现）。修复：①所有 `update_scene` **串行化**（Promise 链排队，最后一次写总是最新）；②修稿 `setContent`/`insertText` 后补同步 + 立即保存；③关闭等待 3s -> 6s（超过 SQLite busy_timeout）。 ／ 1. **后端生成链路止血**：本地 / 局域网模型默认单候选 + 全局并发限流，候选总超时硬上限 90s；LLM 连接 / 生成超时拆分；上下文准备 SQLite 高频路径 spawn_blocking 化；全局 Mutex 替换为 OnceLock / RwLock。",
+     "lines": [
+      430,
+      528
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其为桌面写作应用，SQLite 仅作为本地数据存储使用（L430/L528 提及 SQLite 写锁与高频路径优化）",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " 🌿 越写越懂的 AI 小说创作桌面应用 ／  Tauri ／ |🔌|**多模型适配**|OpenAI / Anthropic / Ollama / 本地 API，角色 × 任务模型路由|",
+   "evidence_lines": [
+    5,
+    12,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "91zgaoge/StoryMoss",
+  "sha": "db89b1dda216",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "00010128c5c0": {
+  "identity": {
+   "one_liner": "本地 MCP Agent 记忆服务器，基于 Bun 与 SQLite，无 LLM 依赖",
+   "review": "Titen 是一个自托管的 Agent 记忆服务，通过 stdio 或 HTTP 提供 MCP 接口，默认用 SQLite + FTS5 做检索，不需要 API key、LLM 或 embedding 提供商。它兼容 @modelcontextprotocol/server-memory 的工具接口并可导入其数据，还提供对任意记忆存储的审计命令。适合需要在本地为 AI Agent 搭建带来源与权限记录的记忆层的开发者；记忆条目需由调用方显式撰写，模型自动归纳功能尚未通过其公开门槛。",
+   "highlights": [
+    "提供 MCP 接口（stdio/Streamable HTTP/REST/TypeScript SDK），兼容 @modelcontextprotocol/server-memory 的九个工具名并可导入其 memory.",
+    "默认用 SQLite 存储、FTS5 做词法检索，运行时零依赖、无外呼网络请求，embeddings 为可选项",
+    "提供 audit 命令，只读检查自身或其他记忆存储（reference-server、Mem0 导出）中的重复、回环、密钥模式与过期条目"
+   ],
+   "use_cases": [
+    "为 Claude 等 MCP 客户端本地部署带来源与权限控制的 Agent 记忆服务",
+    "替换现有 @modelcontextprotocol/server-memory 而无需改客户端配置",
+    "审计任意 Agent 记忆存储中的重复、回环与过期数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Bun and one SQLite file; everything else is the standard library and Web APIs.",
+     "lines": [
+      72
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The base service does not require Docker, Redis, Postgres, a graph database, or",
+     "lines": [
+      732
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为自身存储构建面向 AI Agent 的记忆应用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "real organization, workspace, project and owner into it, and serves MCP over ／  Bun and one SQLite file; everything else is the standard library and Web APIs. ／ Agents connect through authenticated REST, Streamable HTTP MCP, the `titen mcp`",
+   "evidence_lines": [
+    30,
+    72,
+    177
+   ]
+  },
+  "fn": "RamaAditya49/titen",
+  "sha": "00010128c5c0",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

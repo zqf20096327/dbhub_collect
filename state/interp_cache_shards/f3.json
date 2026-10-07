@@ -8507,5 +8507,217 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0687b2ff1565": {
+  "identity": {
+   "one_liner": "基于 Docker Compose 的 LAMP（Linux/Apache/MySQL/PHP）开发环境模板",
+   "review": "这是一个用 Docker Compose 搭建 LAMP 开发环境的模板项目，包含 PHP 8.2、MySQL/MariaDB、Apache 与 PHPMyAdmin 服务。面向 PHP 开发者和学习 Docker 的用户，通过 .env 配置数据库凭据、支持切换 MariaDB 镜像、放置 SQL 文件到 ./dump/ 初始化数据库，并可把应用代码放入 www/ 目录部署。",
+   "highlights": [
+    "通过 docker-compose up 一条命令启动 Apache、PHP、MySQL 与 PHPMyAdmin 服务",
+    "支持通过 DB_IMAGE 环境变量切换 MySQL 8 或 MariaDB 11.4 数据库引擎",
+    "支持将 *.sql 文件放入 ./dump/ 目录实现首次启动时自动初始化数据库"
+   ],
+   "use_cases": [
+    "为 PHP + MySQL 项目快速搭建本地开发环境",
+    "需要通过 PHPMyAdmin 管理数据库的本地开发场景",
+    "学习 Docker Compose 多服务编排的入门练习"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A modern and efficient LAMP stack (Linux, Apache, MySQL, PHP) development environment using Docker. Perfect for PHP development with a clean, easy-to-use interface and dark mode support. ／ - **Development Ready**: Perfect for PHP projects with MySQL ／ MYSQL_ROOT_PASSWORD=your_root_password",
+     "lines": [
+      8,
+      32,
+      69
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "depend on **MariaDB-only** SQL — most commonly ／ `ERROR 1064`. If your app targets MariaDB, set `DB_IMAGE=mariadb:11.4` in your",
+     "lines": [
+      118,
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 MySQL/MariaDB 存储数据的 LAMP 应用环境模板，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A modern and efficient LAMP stack (Linux, Apache, MySQL, PHP) development environment using Docker. Perfect for PHP development with a clean, easy-to-use interface and dark mode support. ／    docker-compose up -d ／ The default engine is **MySQL 8** (`DB_IMAGE=mysql:8.0`). Some applications",
+   "evidence_lines": [
+    8,
+    55,
+    117
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "jersonmartinez/docker-lamp",
+  "sha": "0687b2ff1565",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c5b4b85ed71e": {
+  "identity": {
+   "one_liner": "多租户电商系统，位置电子围栏分单，Go + PostgreSQL + Flutter",
+   "review": "Keel 是一个用 Go 编写的开源多租户电商系统，提供门店电子围栏、同城配送、商品/SKU/库存/优惠券/订单/售后等电商核心功能，并通过 MCP 协议向外部 agent 提供 AI 员工接口（提案审批制），内置 Rust 实现的分布式事务协调器。面向从实体门店发货的连锁商家，所有数据存于 PostgreSQL（含 pgvector 向量检索），通过 docker compose 部署。支付目前仅沙箱，地图、短信等外发渠道需另行配置密钥或尚未接入。",
+   "highlights": [
+    "提供电子围栏门店解析与同城配送（按距离分档计费、起送价、满额免配送费）",
+    "提供 26 个 MCP 工具的 AI 员工接口，写操作走提案审批队列并留痕审计",
+    "内置 dtmrs 分布式事务协调器，支持 SAGA、TCC、二阶段消息、XA；跨租户隔离依赖 merchant_id 列、复合外键与 PostgreSQL 行级安全"
+   ],
+   "use_cases": [
+    "连锁便利店、生鲜、药店等从实体门店发货的 O2O 与同城配送电商",
+    "需要单机起步、可平滑拆分为微服务部署形态的多商家电商场景",
+    "为电商运营引入 AI agent 执行补货、定价等提案并由人审批的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "开源多租户电商系统 · 多门店 O2O 与同城配送 · 电子围栏按位置分配门店 · Go + PostgreSQL + Flutter + Vue 3 ／ PostgreSQL ／ 靠的是每张表都带 `merchant_id`、父子关系用复合外键钉死、以及 PostgreSQL 行级安全兜底。 ／ 一条命令起 PostgreSQL、跑迁移、加载一家种子店铺、起 API 和商家后台。",
+     "lines": [
+      6,
+      13,
+      125,
+      163
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统以 PostgreSQL 作为唯一数据库存储商品、订单、库存等业务数据，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "开源多租户电商系统 · 多门店 O2O 与同城配送 · 电子围栏按位置分配门店 · Go + PostgreSQL + Flutter + Vue 3 ／ 靠的是每张表都带 `merchant_id`、父子关系用复合外键钉死、以及 PostgreSQL 行级安全兜底。 ／ 一条命令起 PostgreSQL、跑迁移、加载一家种子店铺、起 API 和商家后台。",
+   "evidence_lines": [
+    6,
+    125,
+    163
+   ]
+  },
+  "fn": "jackwangfeng/keel",
+  "sha": "c5b4b85ed71e",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "73d23b9b0b80": {
+  "identity": {
+   "one_liner": "AI 编码代理会话的本地桌面浏览与检索工作台",
+   "review": "SeshBuddy 是一个原生桌面应用，读取 Claude Code、Codex、Gemini 等多个 AI 编码 CLI 写入磁盘的会话数据与日志，本地建索引后提供统一浏览、全文搜索、归档与流量检查，附带一个可显示代理请求内容的本地反向代理；面向需要在本地管理 AI 代理会话的开发者，采用 MIT 许可，需从源码构建。",
+   "highlights": [
+    "在单一树状视图中浏览、整理、收藏和归档七个 CLI 的会话",
+    "基于 Tantivy 的本地全文索引，覆盖 prompt、回复、工具调用与代码块",
+    "内置本地反向代理 seshbuddy-proxy，可查看请求/响应负载、延迟与 token 用量"
+   ],
+   "use_cases": [
+    "集中检索和回顾多个 AI 编码代理的历史会话",
+    "检查代理与厂商端点之间的请求流量和 token 消耗",
+    "通过桌面助手提问并引用到具体会话来源"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是使用本地数据索引为开发者提供会话管理的桌面应用，README 未声明为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "SeshBuddy is a native desktop workbench for the sessions you build with AI coding agents. It reads the session data and logs that Claude Code, Codex, Gemini, Antigravity, WorkBuddy, DSH and OpenCode already write to disk, indexes them locally, and gives you one place to browse, search, archive and inspect everything — plus a local reverse proxy that shows you exactly what your agent sends over the wire. ／ |**Multi-CLI Session Explorer**|Browse, organize, bookmark and archive sessions from **Claude Code / Codex / Gemini / Antigravity / WorkBuddy / DSH / OpenCode** in a single tree.| ／ git clone https://github.com/huangy7/seshbuddy.git",
+   "evidence_lines": [
+    21,
+    27,
+    42
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "huangy7/seshbuddy",
+  "sha": "73d23b9b0b80",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

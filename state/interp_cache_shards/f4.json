@@ -8786,5 +8786,145 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "416e473afc00": {
+  "identity": {
+   "one_liner": "基于 SQLite 单文件格式的本地优先关系型电子表格应用",
+   "review": "Eidos 提供一种构建在标准 SQLite 之上的单文件格式 Eidos File，配套桌面应用 Eidos Lite、实验性移动端、浏览器编辑器及 CLI，用于创建、查询和更新表格记录并编辑 Markdown，本地使用无需账号。面向个人用户及其 AI 代理，桌面端通过 Graft 实现本地版本历史与局域网同步；移动端为实验性需自行从源码构建。",
+   "highlights": [
+    "提供基于标准 SQLite 的开放单文件格式，并配套 CLI 支持创建、检查、查询、更新和服务该格式",
+    "支持桌面、Android、iOS、浏览器多端编辑，本地文件可离线使用且无需账号",
+    "CLI 面向代理与自动化工作流提供本地服务器（eidos serve）"
+   ],
+   "use_cases": [
+    "个人本地表格与 Markdown 文档管理",
+    "AI 代理通过 CLI 自动化读写结构化数据",
+    "同一局域网内桌面与移动端的本地数据同步"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Eidos File is an open, single-file format built on standard SQLite.",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是使用 SQLite 作为底层存储格式的桌面/移动/浏览器应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " A single-file relational spreadsheet, for you and your agent. ／  Eidos File is an open, single-file format built on standard SQLite. ／  Eidos Lite is the desktop app for working with Eidos Files and ordinary files in a local folder.",
+   "evidence_lines": [
+    3,
+    5,
+    6
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "mayneyao/eidos",
+  "sha": "416e473afc00",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9e1d44a908e0": {
+  "identity": {
+   "one_liner": "AI agent 的持久化决策记忆工具，经本地 MCP/CLI 存取 SQLite 记录",
+   "review": "Selvedge 是一个为 AI 编码 agent 提供持久化决策记忆的工具：agent 通过本地 stdio MCP 或 CLI 将决策理由、被否决方案和实体变更事件记录到项目内 .selvedge/ 目录的本地 SQLite 数据库，后续会话以函数、列、路由等实体为键检索。面向使用兼容 agent 的个人开发者与团队，支持 Claude Code、Cursor、Codex 等客户端预设，不验证记录真实性且检索不保证被 agent 采纳。",
+   "highlights": [
+    "通过本地 stdio MCP 服务器或 CLI 存取决策记录，存储于项目内本地 SQLite，无需托管账号",
+    "提供 selvedge export/import 支持 Agent Trace v0.1.0 格式的记录交换",
+    "为 Claude Code、Codex、Cursor、Copilot、Gemini CLI、Windsurf 六类客户端提供 setup 预设与生命周期 hooks"
+   ],
+   "use_cases": [
+    "开发者在新会话中按函数、列、路由等实体键检索此前的决策理由与被否决方案",
+    "团队跨会话、跨编码工具传递已记录的架构决策",
+    "通过 selvedge diff/status 查看某实体（如 users.email）的全部变更记录"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "the same SQLite store in `.selvedge/` when you switch tools. ／ 2. **Keep it with the project.** Selvedge stores the record in local SQLite,",
+     "lines": [
+      23,
+      98
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI agent 工作流提供决策记录存取服务的工具组件，本地 SQLite 仅为其存储层",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Selvedge is for anyone using a compatible agent. Connect through local MCP ／ the same SQLite store in `.selvedge/` when you switch tools. ／ 2. **Keep it with the project.** Selvedge stores the record in local SQLite,",
+   "evidence_lines": [
+    21,
+    23,
+    98
+   ]
+  },
+  "fn": "masondelan/selvedge",
+  "sha": "9e1d44a908e0",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

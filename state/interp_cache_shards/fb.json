@@ -8537,5 +8537,100 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "98480ef0f141": {
+  "identity": {
+   "one_liner": "将 ADBC 驱动经 VGI-RPC 暴露为网络服务的代理驱动/服务",
+   "review": "Grainlift 由客户端驱动和有状态服务组成：应用加载其 ADBC 驱动，通过 VGI-RPC（HTTP/TCP/mTLS/Iroh 传输）连接到持有真实下游驱动与凭据的服务端，从而把 ADBC 数据库访问变为集中托管的网络服务。适合希望客户端免装本地驱动和凭据、由运维统一管理授权/配额/遥测的团队。项目为预发布状态，需从源码构建，且引入查询路径上的额外有状态服务。",
+   "highlights": [
+    "提供标准 ADBC 1.1 客户端驱动与配套服务端，经 VGI-RPC 传输原生 Arrow record-batch 流",
+    "服务端集中管理下游驱动、凭据、认证（bearer/JWT/SPIFFE/Iroh）、配额与 OpenTelemetry 遥测",
+    "支持 SQL 与 Substrait 语句、事务、参数绑定、分区结果与语句取消等 ADBC 操作"
+   ],
+   "use_cases": [
+    "客户端环境不安装本地数据库驱动与凭据，由服务端统一托管 ADBC 驱动访问",
+    "在服务边界统一执行认证、授权、配额与遥测策略",
+    "以 Arrow 原生流方式跨多种下游数据库进行网络化数据库访问"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Downstream ADBC driver|The Grainlift service|Connects to SQLite, DuckDB, PostgreSQL, or another configured database| ／ driver = \"postgresql\" ／ [targets.postgresql-byoc]",
+     "lines": [
+      73,
+      200,
+      213
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "manager. CI exercises SQLite, DuckDB, PostgreSQL, MySQL, Flight SQL,",
+     "lines": [
+      536
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Downstream ADBC driver|The Grainlift service|Connects to SQLite, DuckDB, PostgreSQL, or another configured database| ／ together with an automatic dependency on the SQLite ADBC wheel, enabling ／ `uvx grainlift-adbc-gateway serve sqlite ./database.sqlite`. (The `grainlift`",
+     "lines": [
+      73,
+      117,
+      118
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "DataFusion, Trino, and Microsoft SQL Server, plus HTTP, TCP, mTLS, and Iroh",
+     "lines": [
+      537
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 ADBC 数据库访问提供网络代理与驱动托管服务的组件，本身不存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache 2.0",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Grainlift makes an ADBC driver ／  An ADBC application loads the Grainlift client driver, connects over VGI-RPC, and reaches a stateful Grainlift service that owns server-installed ADBC drivers and downstream database connections. ／ |Downstream ADBC driver|The Grainlift service|Connects to SQLite, DuckDB, PostgreSQL, or another configured database|",
+   "evidence_lines": [
+    16,
+    66,
+    73
+   ]
+  },
+  "fn": "Query-farm/grainlift",
+  "sha": "98480ef0f141",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

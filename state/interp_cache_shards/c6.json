@@ -9200,5 +9200,73 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bf4559455e7f": {
+  "identity": {
+   "one_liner": "DSH Tavern 的服务端插件，用 SQLite 接管聊天存档与状态回退",
+   "review": "面向 DSH Tavern 的存储与执行插件，把聊天、会话事件和 MVU 变量历史改由 SQLite 管理，提供增量存档、按需读取和物理尾部回退，计算脚本移到服务端执行。适合 DSH Tavern 2.5.0 用户在 Windows 或 Linux CLI 环境安装；限制是 V1/V2 不可共装，升级上游需重新核对适配。",
+   "highlights": [
+    "SQLite 增量存档：头字段与消息楼层分开存储，局部更新只处理变化部分，会话事件由事务与 WAL 管理",
+    "物理尾部回退：截断被撤销的事件尾部并重建内存投影，正文与变量同库同事务提交",
+    "原档保持只读，用户可在 SQLite 新分叉中继续对话"
+   ],
+   "use_cases": [
+    "DSH Tavern 用户希望聊天存档改用 SQLite 增量存储与按需读取",
+    "需要对剧情回退时同步回滚变量、进度与运行数据的场景",
+    "旧存档只读保留、在新分叉中继续游玩的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**服务端 MVU 与卡脚本、SQLite 增量存档、历史按需读取，以及正文和状态一起回退。** ／ 这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。 ／ |**SQLite 增量存档**|聊天头字段、消息楼层分开存储，局部更新只处理变化部分，避免为了追加或修改一楼反复重写全部历史。会话事件由 SQLite 事务与 WAL 管理。|",
+     "lines": [
+      3,
+      5,
+      14
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "插件面向 DSH Tavern 应用，使用 SQLite 存储其聊天与状态数据，属于使用数据库的应用侧插件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU AGPL v3，基于 DSH Tavern 的独立修改版",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。 ／ |**SQLite 增量存档**|聊天头字段、消息楼层分开存储，局部更新只处理变化部分，避免为了追加或修改一楼反复重写全部历史。会话事件由 SQLite 事务与 WAL 管理。| ／ 基于 DSH Tavern 适配，保留原来源声明与 GNU AGPL v3 许可。本项目是独立修改版，不是上游官方发行；随包官方恢复字节的许可及对应源码入口也保留。",
+   "evidence_lines": [
+    5,
+    14,
+    96
+   ]
+  },
+  "fn": "huajiao1998/dsh-tavern-sqlite-v2",
+  "sha": "bf4559455e7f",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9250,5 +9250,85 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "529fdd8fdea3": {
+  "identity": {
+   "one_liner": "AI agent 记忆库，提供可溯源、双时钟的持久记忆与恢复机制",
+   "review": "一个为 AI agent 提供持久记忆的 Python 库，记录事实来源、生效时间与作用域，支持双时间查询、修正、擦除与备份重放，核心零第三方依赖，SQLite 开箱即用，PostgreSQL、MCP、LangGraph 以可选包形式提供。供构建 agent 应用的开发者使用，当前为 v0.1.0 Alpha，需 Python 3.13+。",
+   "highlights": [
+    "提供带来源证据、双时间（valid_at/known_at）的版本化事实存储与检索",
+    "支持擦除同步与备份重放，可在旧备份副本上重放权威删除日志",
+    "核心零第三方运行时依赖，SQLite 运行时内置，PostgreSQL 与向量支持为可选包"
+   ],
+   "use_cases": [
+    "为 AI agent 记录偏好、决策等可溯源记忆并在上下文中回放",
+    "需要事实修正、时间区间查询与证据保留的长期记忆场景",
+    "通过 MCP server 或 LangGraph 适配器向本地/远程宿主提供记忆服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`agent-memory`|Domain contracts, SQLite runtime, retrieval, plugin loading|`python -m pip install -e .`| ／ agent-memory-mcp --transport stdio --database memory.sqlite3 \\",
+     "lines": [
+      155,
+      165
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|PostgreSQL provider and optional vector support|`python -m pip install -e packages/postgres`|",
+     "lines": [
+      159
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该库以 SQLite/PostgreSQL 作为自身记忆数据的存储层，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`agent-memory`|Domain contracts, SQLite runtime, retrieval, plugin loading|`python -m pip install -e .`| ／ |PostgreSQL|PostgreSQL provider and optional vector support|`python -m pip install -e packages/postgres`| ／ The public boundary is `MemoryProvider`. Optional packages use lazy discovery; importing the core does not load database drivers, framework runtimes, or ML libraries. Plugin Protocol v1 adds manifests, capability negotiation, lifecycle health, resource limits, and stable errors. See the plugin example and architecture guide.",
+   "evidence_lines": [
+    155,
+    159,
+    171
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "agent-memory-lab/agent-memory",
+  "sha": "529fdd8fdea3",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

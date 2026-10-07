@@ -7905,5 +7905,72 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4c23cf7aee61": {
+  "identity": {
+   "one_liner": "自托管协作白板应用，使用 SQLite 存储，支持实时多人编辑",
+   "review": "nexcanvas 是一个部署在自己服务器上的白板应用，提供便签、形状、画笔、照片和 PDF 的多人实时协作编辑，内置 350 多个形状的图形库、模板、版本历史和回收站。面向个人、家庭或小团队自托管使用，通过 Docker 部署，所有数据（账号、画板、版本）存放在单个 SQLite 数据库文件中，并需注意该数据库不能放在网络文件系统上。",
+   "highlights": [
+    "提供多人实时协作编辑，含他人指针显示与独立撤销",
+    "提供 350+ 形状库、30+ 模板，支持导出 PNG/PDF 和 JSON Canvas (.canvas) 格式读写",
+    "提供内置备份机制，将 SQLite 数据库与照片文件一致性地打包为 ZIP"
+   ],
+   "use_cases": [
+    "自托管团队/家庭的协作白板与头脑风暴",
+    "绘制网络拓扑图、平面图、流程图等图表",
+    "与 Obsidian 之间通过 JSON Canvas 文件交换画板"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything lives in `/data`: the SQLite database `nexcanvas.db` (accounts, spaces, boards and their versions), ／ Mount it from a local disk, never from an SMB or NFS share: SQLite's locking does not work reliably over network",
+     "lines": [
+      131,
+      133
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 SQLite 存储自身数据（账号、画板、版本）的白板应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "highlighter, photos and PDFs on an endless board, edited by several people at the same time. Self-hosted, for ／ docker compose up -d ／ Everything lives in `/data`: the SQLite database `nexcanvas.db` (accounts, spaces, boards and their versions),",
+   "evidence_lines": [
+    6,
+    91,
+    131
+   ]
+  },
+  "fn": "DerKezorm/nexcanvas",
+  "sha": "4c23cf7aee61",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

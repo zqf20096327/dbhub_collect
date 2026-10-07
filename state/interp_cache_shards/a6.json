@@ -8633,5 +8633,212 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4c301b7965c6": {
+  "identity": {
+   "one_liner": "基于 Laravel 的 Usenet 索引器，采集并组织新闻组数据供检索",
+   "review": "NNTmux 是一个用 Laravel 编写的 Usenet 索引器，自动扫描新闻组、采集 header 并整理为可检索的 release，提供 newznab 兼容 API 供 Sonarr、Radarr 等客户端集成。要求 PHP 8.4+ 与 MariaDB 10.6+/MySQL 8+，支持 tmux 多线程处理、Elasticsearch/ManticoreSearch 全文检索及 Prometheus+Grafana 监控，不支持 PostgreSQL。",
+   "highlights": [
+    "提供 newznab 标准兼容的 RESTful API，用于对接下载客户端和媒体管理器",
+    "支持多线程处理（header 获取、release 生成、后处理），基于 tmux 引擎监控线程与数据库",
+    "支持 Elasticsearch 或 ManticoreSearch 全文检索，并可抓取 IRC pre 频道获取发布信息"
+   ],
+   "use_cases": [
+    "自建 Usenet 索引与搜索站点",
+    "为 Sonarr/Radarr 等媒体管理工具提供 newznab API 数据源",
+    "通过 Prometheus+Grafana 监控索引处理与主机服务状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MariaDB 10.6+ or MySQL 8+ (PostgreSQL not supported) ／ # /etc/mysql/mariadb.conf.d/99-nntmux.cnf",
+     "lines": [
+      27,
+      124
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MariaDB 10.6+ or MySQL 8+ (PostgreSQL not supported) ／ # /etc/mysql/mariadb.conf.d/99-nntmux.cnf",
+     "lines": [
+      27,
+      124
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- MariaDB 10.6+ or MySQL 8+ (PostgreSQL not supported)",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 MariaDB/MySQL 存储索引数据的 Usenet 索引应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPLv3（主题标签 gplv3）",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "NNTmux is a modern Usenet indexer built on Laravel, designed for high performance and scalability. It automatically scans Usenet, collects headers, and organizes them into searchable releases. The project is actively maintained and features multi-threaded processing, advanced search, and a web-based front-end with API access. ／ - MariaDB 10.6+ or MySQL 8+ (PostgreSQL not supported) ／ - RESTful API compatible with newznab standard",
+   "evidence_lines": [
+    7,
+    27,
+    19
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "NNTmux/newznab-tmux",
+  "sha": "4c301b7965c6",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9fc695b78332": {
+  "identity": {
+   "one_liner": "键盘优先的终端数据库客户端，内置 AI 聊天与 MCP 服务器",
+   "review": "一个用 Go 编写的终端 TUI 数据库客户端，支持 PostgreSQL、MySQL、SQLite 等多种引擎的浏览、查询、编辑、导出和 notebook，并提供 AI 聊天与 MCP 服务器供外部代理调用数据库工具。适合习惯键盘操作、需要在终端管理多数据库或让 AI 代理访问库的开发者与 DBA；URL 连接对原生驱动选项支持不完整。",
+   "highlights": [
+    "支持多引擎（PostgreSQL、MySQL、MariaDB、SQL Server、ClickHouse、SQLite、Cassandra、Redis、MongoDB 等）",
+    "内置 AI 聊天（Anthropic/OpenAI 等）与 MCP 服务器，查询前需确认",
+    "提供浏览、SQL 编辑、query builder、notebook、导入导出、schema 对比、dump/restore、无头模式"
+   ],
+   "use_cases": [
+    "终端环境下的多数据库日常查询与数据编辑",
+    "让 AI 编码代理通过 MCP 受控访问数据库",
+    "脚本/CI 中无头运行 SQL 并导出 CSV/JSON"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list. ／ - `masume postgres://ada@127.0.0.1:5432/shop` opens a URL. ／ engine = \"postgres\"",
+     "lines": [
+      11,
+      111,
+      119
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list.",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list. ／ - `masume ./notes.db` opens a SQLite file.",
+     "lines": [
+      11,
+      112
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list.",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list.",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list.",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为连接多种数据库的终端客户端，为数据库使用生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A keyboard-first terminal database client with AI chat and an MCP server ／ **Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list. ／ `masume --mcp` serves the allowed profiles to an external agent over stdio. It opens its own connections, with an access level per profile and one for the whole server. See MCP server.",
+   "evidence_lines": [
+    3,
+    11,
+    174
+   ]
+  },
+  "fn": "masumedb/masume",
+  "sha": "9fc695b78332",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

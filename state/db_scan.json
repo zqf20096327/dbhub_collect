@@ -2677,6 +2677,28 @@
    ]
   }
  },
+ "1while1/Plotforge": {
+  "cands": {
+   "SQLite": [
+    {
+     "line": 8,
+     "q": "本地优先的 AI 小说创作工坊（墨砚）。一个跑在本机 Node.js 上的长篇小说写作环境：书籍、卷、章节三级结构，接入任意 OpenAI 兼容接口即可开始写作，所有数据保存在本地 SQLite 文件中。"
+    },
+    {
+     "line": 22,
+     "q": "- **本地持久化**：sql.js（SQLite WASM）单文件数据库，含单实例锁与自动备份，无需外部服务"
+    },
+    {
+     "line": 72,
+     "q": "- 后端：Node.js + Express 5，sql.js（SQLite WASM）持久化到 `data/novel.db`"
+    },
+    {
+     "line": 73,
+     "q": "- 检索：`@xenova/transformers` 本地 Embedding + 余弦检索（`server/vector/`），向量存于同一份 SQLite 库"
+    }
+   ]
+  }
+ },
  "1x6/xenylist": {
   "cands": {
    "SQLite": [
@@ -2695,23 +2717,23 @@
    "SQLite": [
     {
      "line": 5,
-     "q": "Vectorlite is a Runtime-loadable extension for SQLite that enables fast vector search based on hnswlib and works on Windows, MacOS and Linux. It provides fast vector search capabilities with a SQL interface and runs on every language with a SQLite driver."
+     "q": "Vectorlite is a Runtime-loadable extension for SQLite that enables fast vector search based on hnswlib and works on Linux x64, Windows x64 and macOS Apple Silicon (arm64). It provides fast vector search capabilities with a SQL interface and runs on every langu"
     },
     {
-     "line": 9,
+     "line": 7,
+     "q": "**Rust is the main and only extension implementation.** The Cargo crate owns the SQLite virtual table, scalar functions, parsers, registry and index policy. Native C++ is retained only for hnswlib, Google Highway SIMD operations, and their thin C ABI shim; the"
+    },
+    {
+     "line": 11,
      "q": "Below is an example of using it in sqlite CLI shell:"
     },
     {
-     "line": 29,
+     "line": 31,
      "q": "1. Fast ANN(approximate nearest neighbors) search backed by hnswlib. Vector query is significantly faster than similar projects like sqlite-vec and sqlite-vss. Please see benchmark below."
     },
     {
-     "line": 34,
+     "line": 36,
      "q": "4. Predicate pushdown support for vector metadata(rowid) filter (requires sqlite version >= 3.38). Please check this example;"
-    },
-    {
-     "line": 51,
-     "q": "-- use a normal sqlite table"
     }
    ]
   }
@@ -5667,15 +5689,15 @@
   "cands": {
    "SQLite": [
     {
-     "line": 417,
+     "line": 430,
      "q": "v0.30.33 修复后续写内容仍丢失。根因：多次续写时保存操作**并发执行**，`update_scene` 全量覆写在 SQLite 写锁竞争下乱序提交，较早的小内容覆写较晚的大内容（编辑器正常但 DB 回退，重启才发现）。修复：①所有 `update_scene` **串行化**（Promise 链排队，最后一次写总是最新）；②修稿 `setContent`/`insertText` 后补同步 + 立即保存；③关闭等待 3s -> 6s（超过 SQLite busy_timeout）。"
     },
     {
-     "line": 515,
+     "line": 528,
      "q": "1. **后端生成链路止血**：本地 / 局域网模型默认单候选 + 全局并发限流，候选总超时硬上限 90s；LLM 连接 / 生成超时拆分；上下文准备 SQLite 高频路径 spawn_blocking 化；全局 Mutex 替换为 OnceLock / RwLock。"
     },
     {
-     "line": 830,
+     "line": 843,
      "q": "- **向量存储**：LanceDB + SQLite"
     }
    ]
@@ -14568,20 +14590,6 @@
    ]
   }
  },
- "afnan-nex/Links-vault": {
-  "cands": {
-   "SQLite": [
-    {
-     "line": 18,
-     "q": "10. **100% Offline & Private**: All data is stored locally in Room SQLite with zero internet permissions."
-    },
-    {
-     "line": 25,
-     "q": "- **Database**: Room SQLite (`LinkDatabase`, `LinkDao`, `LinkEntity`)"
-    }
-   ]
-  }
- },
  "afnan-nex/Nexus-Forensics": {
   "cands": {
    "SQLite": [
@@ -15079,6 +15087,42 @@
     {
      "line": 82,
      "q": "- **Zero infrastructure.** Single binary. SQLite. No Docker, no cloud, no config files. Works offline."
+    }
+   ]
+  }
+ },
+ "agent-memory-lab/agent-memory": {
+  "cands": {
+   "PostgreSQL": [
+    {
+     "line": 6,
+     "q": "Start with Python + SQLite. Add PostgreSQL, MCP, and LangGraph when you need them."
+    },
+    {
+     "line": 159,
+     "q": "|PostgreSQL|PostgreSQL provider and optional vector support|`python -m pip install -e packages/postgres`|"
+    },
+    {
+     "line": 188,
+     "q": "Validation records include SQLite and real PostgreSQL contracts, cross-connection races, process-kill recovery, and backup replay. The stage 12 full-suite report belongs to its recorded code baseline; stage 13 and stage 14A record targeted and affected regress"
+    }
+   ],
+   "SQLite": [
+    {
+     "line": 6,
+     "q": "Start with Python + SQLite. Add PostgreSQL, MCP, and LangGraph when you need them."
+    },
+    {
+     "line": 155,
+     "q": "|`agent-memory`|Domain contracts, SQLite runtime, retrieval, plugin loading|`python -m pip install -e .`|"
+    },
+    {
+     "line": 165,
+     "q": "agent-memory-mcp --transport stdio --database memory.sqlite3 \\"
+    },
+    {
+     "line": 188,
+     "q": "Validation records include SQLite and real PostgreSQL contracts, cross-connection races, process-kill recovery, and backup replay. The stage 12 full-suite report belongs to its recorded code baseline; stage 13 and stage 14A record targeted and affected regress"
     }
    ]
   }
@@ -31704,29 +31748,29 @@
   "cands": {
    "MySQL": [
     {
-     "line": 45,
+     "line": 46,
      "q": "4. **ACID Financial Ledger & Escrow Economy**: MySQL 8.0 handles overdraft-proof wallet transactions and slot bookings with row-level locks (`lockForUpdate()`) and composite indexing (`idx_bookings_booked_by_status_date`), safely holding funds in escrow until "
     },
     {
-     "line": 64,
+     "line": 66,
      "q": "|**3. Distributed State, Caching & Database Tier**|MySQL 8.0 (`taj_mysql`) & Redis 7 (`taj_redis`)|InnoDB ACID financial ledger with composite indexing (`idx_bookings_booked_by_status_date`) and pessimistic row locking (`lockForUpdate()`), paired with tagged R"
     },
     {
-     "line": 82,
+     "line": 84,
      "q": "|**Teacher Discovery Catalog**|Direct MySQL queries on each search|**Multi-tier Redis tagged cache** (`10m – 24h` TTL)|**🚀 ~85% reduction** in response time|"
     },
     {
-     "line": 84,
+     "line": 86,
      "q": "|**Database Read Load at Peak**|100% direct database queries on catalog/schedule|**~68% reduction** in MySQL read queries|**🛡️ High resilience** against DB connection pool exhaustion|"
     },
     {
-     "line": 262,
+     "line": 273,
      "q": "> **Core:** Laravel 12.0 • PHP 8.3 • MySQL 8.0"
     }
    ],
    "SQLite": [
     {
-     "line": 413,
+     "line": 427,
      "q": "The backend test suite uses **PHPUnit** via `php artisan test` with an in-memory **SQLite** database (configured in `phpunit.xml`) so no running MySQL server is required."
     }
    ]
@@ -33181,32 +33225,6 @@
     {
      "line": 26,
      "q": "* ODBC Driver Manager and SQL Server driver are built in; hence, no further installation is necessary. Alternatively, instead of SQL Server driver, one can use Microsoft ODBC Driver; see Microsoft Docs."
-    }
-   ]
-  }
- },
- "andrea-lopez-dev/siep": {
-  "cands": {
-   "MySQL": [
-    {
-     "line": 9,
-     "q": "MySQL"
-    },
-    {
-     "line": 36,
-     "q": "|**Base de Datos**|MySQL 8.0 (Relacional, Normalizada)|"
-    },
-    {
-     "line": 104,
-     "q": "Requisito Versión PHP 8.2 o superior MySQL 8.0 o superior Servidor Web Apache (XAMPP, WAMP o Laragon recomendados)"
-    },
-    {
-     "line": 120,
-     "q": "Edita el archivo **config/Conexion.php (o config/global.php)** con las credenciales de MySQL:"
-    },
-    {
-     "line": 136,
-     "q": "mysql -u root -p mi_tienda < \"siep.sql\""
     }
    ]
   }
@@ -36831,7 +36849,7 @@
      "q": "|`@lunora/replica`|npm|Local-first replica runtime + local SQLite mirror for Lunora|"
     },
     {
-     "line": 217,
+     "line": 218,
      "q": "|`@lunora/platform-node`|npm|Node implementation of the Lunora platform contracts: ShardHost, SocketHost, ShardDirectory, ShardKvStore, SchedulerHost over better-sqlite3 and an in-process socket registry (dev/test target)|"
     }
    ]
@@ -41444,109 +41462,109 @@
   "cands": {
    "PostgreSQL": [
     {
-     "line": 230,
+     "line": 231,
      "q": "APIJSON.NET APIJSON for C#, supports CRUD for MySQL, PostgreSQL, SQL Server, Oracle, SQLite"
     },
     {
-     "line": 238,
+     "line": 239,
      "q": "APIJSON-php APIJSON for PHP, based on ThinkPHP，supports MySQL, PostgreSQL, SQL Server, Oracle, etc"
     },
     {
-     "line": 240,
+     "line": 241,
      "q": "apijson-php APIJSON for PHP, based on ThinkPHP，supports MySQL, PostgreSQL, SQL Server, Oracle, etc"
     },
     {
-     "line": 244,
+     "line": 245,
      "q": "nestjs-apijson APIJSON for NestJS, supports CRUD, Joins for MySQL, PostgreSQL, SQLite (AI assisted)"
     },
     {
-     "line": 246,
+     "line": 247,
      "q": "uliweb-apijson APIJSON for Python, supports CRUD for MySQL, PostgreSQL, SQL Server, Oracle, SQLite, etc"
     }
    ],
    "MySQL": [
     {
-     "line": 230,
+     "line": 231,
      "q": "APIJSON.NET APIJSON for C#, supports CRUD for MySQL, PostgreSQL, SQL Server, Oracle, SQLite"
     },
     {
-     "line": 236,
+     "line": 237,
      "q": "apijson-hyperf APIJSON for PHP, based on Hyperf, supports MySQL"
     },
     {
-     "line": 238,
+     "line": 239,
      "q": "APIJSON-php APIJSON for PHP, based on ThinkPHP，supports MySQL, PostgreSQL, SQL Server, Oracle, etc"
     },
     {
-     "line": 240,
+     "line": 241,
      "q": "apijson-php APIJSON for PHP, based on ThinkPHP，supports MySQL, PostgreSQL, SQL Server, Oracle, etc"
     },
     {
-     "line": 244,
+     "line": 245,
      "q": "nestjs-apijson APIJSON for NestJS, supports CRUD, Joins for MySQL, PostgreSQL, SQLite (AI assisted)"
     }
    ],
    "Oracle": [
     {
-     "line": 230,
+     "line": 231,
      "q": "APIJSON.NET APIJSON for C#, supports CRUD for MySQL, PostgreSQL, SQL Server, Oracle, SQLite"
     },
     {
-     "line": 238,
+     "line": 239,
      "q": "APIJSON-php APIJSON for PHP, based on ThinkPHP，supports MySQL, PostgreSQL, SQL Server, Oracle, etc"
     },
     {
-     "line": 240,
+     "line": 241,
      "q": "apijson-php APIJSON for PHP, based on ThinkPHP，supports MySQL, PostgreSQL, SQL Server, Oracle, etc"
     },
     {
-     "line": 246,
+     "line": 247,
      "q": "uliweb-apijson APIJSON for Python, supports CRUD for MySQL, PostgreSQL, SQL Server, Oracle, SQLite, etc"
     },
     {
-     "line": 280,
+     "line": 281,
      "q": "api-json-demo Demo for APIJSON to replace traditional ORM, compated Oracle transactions"
     }
    ],
    "SQLite": [
     {
-     "line": 230,
+     "line": 231,
      "q": "APIJSON.NET APIJSON for C#, supports CRUD for MySQL, PostgreSQL, SQL Server, Oracle, SQLite"
     },
     {
-     "line": 244,
+     "line": 245,
      "q": "nestjs-apijson APIJSON for NestJS, supports CRUD, Joins for MySQL, PostgreSQL, SQLite (AI assisted)"
     },
     {
-     "line": 246,
+     "line": 247,
      "q": "uliweb-apijson APIJSON for Python, supports CRUD for MySQL, PostgreSQL, SQL Server, Oracle, SQLite, etc"
     }
    ],
    "SQL Server": [
     {
-     "line": 230,
+     "line": 231,
      "q": "APIJSON.NET APIJSON for C#, supports CRUD for MySQL, PostgreSQL, SQL Server, Oracle, SQLite"
     },
     {
-     "line": 238,
+     "line": 239,
      "q": "APIJSON-php APIJSON for PHP, based on ThinkPHP，supports MySQL, PostgreSQL, SQL Server, Oracle, etc"
     },
     {
-     "line": 240,
+     "line": 241,
      "q": "apijson-php APIJSON for PHP, based on ThinkPHP，supports MySQL, PostgreSQL, SQL Server, Oracle, etc"
     },
     {
-     "line": 246,
+     "line": 247,
      "q": "uliweb-apijson APIJSON for Python, supports CRUD for MySQL, PostgreSQL, SQL Server, Oracle, SQLite, etc"
     }
    ],
    "ClickHouse": [
     {
-     "line": 262,
+     "line": 263,
      "q": "APIJSONDemo Demo of APIJSON + ClickHouse database, open-sourced by a ByteDance engineer"
     },
     {
-     "line": 264,
+     "line": 265,
      "q": "APIJSONDemo_ClickHouse Demo for APIJSON + SpringBoot + ClickHouse"
     }
    ]
@@ -50101,19 +50119,19 @@
      "q": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than rank"
     },
     {
-     "line": 52,
+     "line": 54,
      "q": "--url \"postgresql+psycopg://user:pw@host/db\" --answer --provider anthropic --model <model-id>"
     },
     {
-     "line": 68,
+     "line": 70,
      "q": "schemagate select \"revenue by month\" --url postgresql://localhost/app --principal okta:jdoe --role finance"
     },
     {
-     "line": 69,
+     "line": 71,
      "q": "schemagate studio --url postgresql://localhost/app # the same thing, as a page"
     },
     {
-     "line": 138,
+     "line": 140,
      "q": "cat = Catalog().bootstrap(\"postgresql://localhost/app\") # or: from schemagate.demo_schema import demo_catalog; cat = demo_catalog()"
     }
    ],
@@ -50123,19 +50141,19 @@
      "q": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than rank"
     },
     {
-     "line": 159,
+     "line": 161,
      "q": "pip install 'schemagate[mssql]' 'schemagate[mysql]'"
     },
     {
-     "line": 198,
+     "line": 200,
      "q": "1. **Connect.** Paste a URL — `postgres://…`, `postgresql://…`, `mysql://…`,"
     },
     {
-     "line": 209,
+     "line": 211,
      "q": "Drivers come as extras — `schemagate[postgres]`, `[oracle]`, `[mysql]`,"
     },
     {
-     "line": 852,
+     "line": 854,
      "q": "one is safe to act on. Verified live on PostgreSQL 16, MySQL 8.4 and Oracle"
     }
    ],
@@ -50145,19 +50163,19 @@
      "q": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than rank"
     },
     {
-     "line": 158,
+     "line": 160,
      "q": "pip install 'schemagate[postgres]' 'schemagate[oracle]'"
     },
     {
-     "line": 199,
+     "line": 201,
      "q": "`oracle://…` and a JDBC string all work, as does the wallet form for an"
     },
     {
-     "line": 209,
+     "line": 211,
      "q": "Drivers come as extras — `schemagate[postgres]`, `[oracle]`, `[mysql]`,"
     },
     {
-     "line": 249,
+     "line": 251,
      "q": "schemagate select --schema APP --url \"oracle+oracledb://ADMIN:pw@/?dsn=(description=(address=(protocol=tcps)(port=1522)(host=adb.us-phoenix-1.oraclecloud.com))(connect_data=(service_name=abc123_mydb_low.adb.oraclecloud.com)))\" \"unpaid invoices\" # Autonomous Da"
     }
    ],
@@ -50167,11 +50185,11 @@
      "q": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than rank"
     },
     {
-     "line": 879,
+     "line": 881,
      "q": "|SQLite|certified, 10/10, in CI|"
     },
     {
-     "line": 1157,
+     "line": 1159,
      "q": "|Reflection|certified on SQLite, PostgreSQL 16, Oracle 26ai, MySQL 8.4 and SQL Server 2022|"
     }
    ],
@@ -50181,29 +50199,29 @@
      "q": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than rank"
     },
     {
-     "line": 159,
+     "line": 161,
      "q": "pip install 'schemagate[mssql]' 'schemagate[mysql]'"
     },
     {
-     "line": 210,
+     "line": 212,
      "q": "`[mssql]`, or `schemagate[all]` for the lot:"
     },
     {
-     "line": 869,
+     "line": 871,
      "q": "python scripts/certify_dialect.py 'mssql+pyodbc://user:pw@host/db?driver=ODBC+Driver+18+for+SQL+Server'"
     },
     {
-     "line": 882,
+     "line": 884,
      "q": "|SQL Server|certified live on SQL Server 2022 (16.0.4295.3), 10/10, **in CI on every push** against a service container, plus 13 live dialect tests covering alias types, `hierarchyid`/`sql_variant`, and `max_length` being bytes|"
     }
    ],
    "MariaDB": [
     {
-     "line": 883,
+     "line": 885,
      "q": "|MySQL / MariaDB|certified live on MySQL 8.4.11, 10/10, **in CI on every push** against a service container, plus the GRANT reader suite: all three privilege levels, the role graph, and the role-only blind spot MySQL cannot report. MariaDB has not been run|"
     },
     {
-     "line": 886,
+     "line": 888,
      "q": "saying plainly: MariaDB is inferred from MySQL rather than run. Point the"
     }
    ]
@@ -61903,13 +61921,13 @@
      "q": "* Database: Postgres, Flyway"
     },
     {
-     "line": 171,
+     "line": 182,
      "q": "The password used for the PostgreSQL database. This **MUST** be a strong, unique password and **DISTINCT** across all environments (pr, test, prod). Reusing the same password in development/PRs as in production is a critical security risk."
     }
    ],
    "Oracle": [
     {
-     "line": 155,
+     "line": 166,
      "q": "Teams will receive a set of project namespaces, usually DEV (for PRs), TEST and PROD. TOOLS namespaces (e.g. Jenkins, shared Oracle resources) are not used here. Provided by your OpenShift platform team."
     }
    ]
@@ -67543,11 +67561,11 @@
      "q": "NOORwave is that second thing. It pulls your TIDAL library down into a SQLite database on your own machine, then builds a real desktop player on top of it. Search answers instantly because it never leaves your disk. The queue is something you shape, not someth"
     },
     {
-     "line": 189,
+     "line": 199,
      "q": "|`NOOR_DB`|Path to the SQLite database file.|"
     },
     {
-     "line": 204,
+     "line": 214,
      "q": "noor-server Rust Axum server: SQLite, audio engine, integrations, WebSocket events"
     }
    ]
@@ -78284,11 +78302,11 @@
   "cands": {
    "PostgreSQL": [
     {
-     "line": 71,
+     "line": 73,
      "q": "Переносятся **пользователи, баланс, рефералы и активные/пробные подписки**. Оба бота должны использовать одну панель Remnawave; база PostgreSQL Bedolaga должна быть доступна контейнеру Link-Bot."
     },
     {
-     "line": 76,
+     "line": 78,
      "q": "export BEDOLAGA_DATABASE_URL='postgres://USER:PASSWORD@BEDOLAGA_HOST:5432/DBNAME'"
     }
    ]
@@ -91906,7 +91924,7 @@
      "q": "Chartbrew can run on MySQL or PostgreSQL. Create an empty database that Chartbrew can use."
     },
     {
-     "line": 85,
+     "line": 95,
      "q": "Before running the commands below, make sure you have a MySQL server already running and an empty database that Chartbrew can use. The database name should match the value of the `CB_DB_NAME` variable."
     }
    ]
@@ -92886,6 +92904,9 @@
     }
    ]
   }
+ },
+ "chenin0931/OpenWorkbuddy": {
+  "cands": {}
  },
  "chenisvert/SuperChen-API-": {
   "cands": {
@@ -99201,11 +99222,11 @@
      "q": "Built with **Preact + Hono + SQLite**. Ships with a clean dashboard UI, weekly calendar view, job management, customer database, invoicing, materials tracking, and technician dispatch."
     },
     {
-     "line": 195,
+     "line": 196,
      "q": "|**Database**|SQLite (better-sqlite3)|"
     },
     {
-     "line": 209,
+     "line": 210,
      "q": "schema.sql — SQLite schema (customers, jobs, technicians, invoices, materials)"
     }
    ]
@@ -105990,24 +106011,24 @@
   "cands": {
    "SQLite": [
     {
-     "line": 15,
+     "line": 16,
      "q": "OpenCode stores sessions, messages, and part data in a local SQLite database that grows without bound and has no built-in cleanup. It also stores file diffs and git snapshots on disk. As you use OpenCode, thinking tokens (reasoning), snapshots, and historical "
     },
     {
-     "line": 34,
-     "q": "|**v2 Part Type Storage Analysis**|❌ Not supported|✅ **Deep SQLite JSON parsing** (`json_each` array extraction)|"
-    },
-    {
-     "line": 40,
-     "q": "|**SQLite Read-Only URI Handling**|⚠️ Fragile string formatting|✅ **Standard `path.resolve().as_uri()`** across all OSes|"
-    },
-    {
-     "line": 96,
+     "line": 67,
      "q": "- *\"Strip bulky reasoning tokens from OpenCode SQLite DB to save space\"*"
     },
     {
-     "line": 149,
+     "line": 120,
      "q": "- SQLite file size, WAL journal size, and combined DB footprint"
+    },
+    {
+     "line": 253,
+     "q": "SQLite in Write-Ahead Logging (WAL) mode appends write transactions into `opencode.db-wal`, which can grow to hundreds of megabytes and may not shrink automatically. While `vacuum` fully rebuilds the database (which can take minutes and requires 2× free disk s"
+    },
+    {
+     "line": 265,
+     "q": "SQLite does not automatically shrink its `.db` file when rows are deleted; it retains empty pages for future writes. Run `vacuum` to release free space back to the operating system:"
     }
    ]
   }
@@ -115777,30 +115798,21 @@
   }
  },
  "cubecart/v6": {
-  "cands": {}
- },
- "cubelitblade/lode": {
   "cands": {
-   "SQLite": [
+   "MySQL": [
     {
-     "line": 159,
-     "q": "Mining processes discovered documents, generates embeddings, and stores searchable indexes locally in SQLite."
+     "line": 12,
+     "q": "- MySQL 5.7+ or MariaDB 10.3+, using InnoDB"
     },
     {
-     "line": 195,
-     "q": "### Why does Lode fail to load SQLite extensions on macOS?"
-    },
+     "line": 14,
+     "q": "- PHP extensions: mysqli, GD, SimpleXML, cURL, Zip, mbstring, fileinfo, DOM, XMLWriter and OpenSSL"
+    }
+   ],
+   "MariaDB": [
     {
-     "line": 199,
-     "q": "Lode requires SQLite extension loading for certain features."
-    },
-    {
-     "line": 201,
-     "q": "Some Python builds, especially those linked against SQLite libraries without"
-    },
-    {
-     "line": 203,
-     "q": "`sqlite3.Connection.enable_load_extension()`."
+     "line": 12,
+     "q": "- MySQL 5.7+ or MariaDB 10.3+, using InnoDB"
     }
    ]
   }
@@ -117401,74 +117413,6 @@
     {
      "line": 30,
      "q": "2. If you want to change default values of `bg_mon.listen_address`, `bg_mon.port`, `bg_mon.naptime`, or `bg_mon.history_buckets` - just add them to the postgresql.conf"
-    }
-   ]
-  }
- },
- "cyberducttape/StePanel": {
-  "cands": {
-   "PostgreSQL": [
-    {
-     "line": 10,
-     "q": "StePanel is an open-source server management panel written in Go. It installs Caddy by default, with Apache and OpenLiteSpeed available explicitly, plus PHP and a selectable MySQL, MariaDB, or PostgreSQL version. It provides a focused operations dashboard and "
-    },
-    {
-     "line": 32,
-     "q": "- **Flexible database layer:** choose MySQL, MariaDB, or PostgreSQL and request an exact repository/AppStream version during installation."
-    },
-    {
-     "line": 33,
-     "q": "- **Database administration:** optionally install phpMyAdmin for MySQL/MariaDB or phpPgAdmin for PostgreSQL; the dashboard reports service health and links to the matching administrator."
-    },
-    {
-     "line": 39,
-     "q": "|Installation|Caddy by default, or Apache/OpenLiteSpeed, PHP, MySQL/MariaDB/PostgreSQL, optional phpMyAdmin/phpPgAdmin, Exim/Dovecot/SpamAssassin/vsftpd, systemd, Debian/Ubuntu and RHEL-family systems|"
-    }
-   ],
-   "MySQL": [
-    {
-     "line": 10,
-     "q": "StePanel is an open-source server management panel written in Go. It installs Caddy by default, with Apache and OpenLiteSpeed available explicitly, plus PHP and a selectable MySQL, MariaDB, or PostgreSQL version. It provides a focused operations dashboard and "
-    },
-    {
-     "line": 32,
-     "q": "- **Flexible database layer:** choose MySQL, MariaDB, or PostgreSQL and request an exact repository/AppStream version during installation."
-    },
-    {
-     "line": 33,
-     "q": "- **Database administration:** optionally install phpMyAdmin for MySQL/MariaDB or phpPgAdmin for PostgreSQL; the dashboard reports service health and links to the matching administrator."
-    },
-    {
-     "line": 39,
-     "q": "|Installation|Caddy by default, or Apache/OpenLiteSpeed, PHP, MySQL/MariaDB/PostgreSQL, optional phpMyAdmin/phpPgAdmin, Exim/Dovecot/SpamAssassin/vsftpd, systemd, Debian/Ubuntu and RHEL-family systems|"
-    }
-   ],
-   "SQLite": [
-    {
-     "line": 42,
-     "q": "|Control plane|Durable SQLite state, independently supervised worker, leases/retries/cancellation, dead-letter readiness gate, desired-state reconciliation, and recovery inventory|"
-    },
-    {
-     "line": 177,
-     "q": "verified SQLite backup, and `stepanel restore-control-plane SOURCE --dry-run`"
-    }
-   ],
-   "MariaDB": [
-    {
-     "line": 10,
-     "q": "StePanel is an open-source server management panel written in Go. It installs Caddy by default, with Apache and OpenLiteSpeed available explicitly, plus PHP and a selectable MySQL, MariaDB, or PostgreSQL version. It provides a focused operations dashboard and "
-    },
-    {
-     "line": 32,
-     "q": "- **Flexible database layer:** choose MySQL, MariaDB, or PostgreSQL and request an exact repository/AppStream version during installation."
-    },
-    {
-     "line": 33,
-     "q": "- **Database administration:** optionally install phpMyAdmin for MySQL/MariaDB or phpPgAdmin for PostgreSQL; the dashboard reports service health and links to the matching administrator."
-    },
-    {
-     "line": 39,
-     "q": "|Installation|Caddy by default, or Apache/OpenLiteSpeed, PHP, MySQL/MariaDB/PostgreSQL, optional phpMyAdmin/phpPgAdmin, Exim/Dovecot/SpamAssassin/vsftpd, systemd, Debian/Ubuntu and RHEL-family systems|"
     }
    ]
   }
@@ -129139,11 +129083,11 @@
      "q": "MySQL, MariaDB, PostgreSQL and SQLite"
     },
     {
-     "line": 84,
+     "line": 83,
      "q": "|**Connections**|Multiple simultaneous MySQL, MariaDB, PostgreSQL and SQLite connections, folders, colors, read-only mode, diagnostics and search. MySQL, MariaDB and PostgreSQL support direct, SSH and TLS paths.|"
     },
     {
-     "line": 86,
+     "line": 85,
      "q": "|**Schema context**|Browse PostgreSQL databases, schemas, `search_path`, tables, views, materialized views, functions, procedures, sequences and types. MySQL/MariaDB system schemas and visual relationship maps remain available.|"
     }
    ],
@@ -129161,11 +129105,11 @@
      "q": "MySQL, MariaDB, PostgreSQL and SQLite"
     },
     {
-     "line": 84,
+     "line": 83,
      "q": "|**Connections**|Multiple simultaneous MySQL, MariaDB, PostgreSQL and SQLite connections, folders, colors, read-only mode, diagnostics and search. MySQL, MariaDB and PostgreSQL support direct, SSH and TLS paths.|"
     },
     {
-     "line": 86,
+     "line": 85,
      "q": "|**Schema context**|Browse PostgreSQL databases, schemas, `search_path`, tables, views, materialized views, functions, procedures, sequences and types. MySQL/MariaDB system schemas and visual relationship maps remain available.|"
     }
    ],
@@ -129183,11 +129127,11 @@
      "q": "MySQL, MariaDB, PostgreSQL and SQLite"
     },
     {
-     "line": 84,
+     "line": 83,
      "q": "|**Connections**|Multiple simultaneous MySQL, MariaDB, PostgreSQL and SQLite connections, folders, colors, read-only mode, diagnostics and search. MySQL, MariaDB and PostgreSQL support direct, SSH and TLS paths.|"
     },
     {
-     "line": 119,
+     "line": 118,
      "q": "|**Beta 5 — complete**|SQLite, local diagnostics, visible relationships, system schemas and reviewable access management.|"
     }
    ],
@@ -129209,7 +129153,7 @@
      "q": "LakeDB listed on the MariaDB Server Ecosystem Hub"
     },
     {
-     "line": 84,
+     "line": 83,
      "q": "|**Connections**|Multiple simultaneous MySQL, MariaDB, PostgreSQL and SQLite connections, folders, colors, read-only mode, diagnostics and search. MySQL, MariaDB and PostgreSQL support direct, SSH and TLS paths.|"
     }
    ]
@@ -134098,6 +134042,32 @@
  "delight-im/Android-DDP": {
   "cands": {}
  },
+ "Delivery-Plus0/delivery-plus": {
+  "cands": {
+   "PostgreSQL": [
+    {
+     "line": 10,
+     "q": "PostgreSQL 16"
+    },
+    {
+     "line": 32,
+     "q": "**Delivery Plus** is a backend food-delivery platform built as independently deployable **microservices** that communicate over REST and **Kafka** events. Domain responsibilities are separated across auth, users, restaurants, menus, carts, orders, payments, dr"
+    },
+    {
+     "line": 96,
+     "q": "|Database|PostgreSQL 16|"
+    },
+    {
+     "line": 149,
+     "q": "$env:POSTGRES_USER=\"compose_validation_user\""
+    },
+    {
+     "line": 150,
+     "q": "$env:POSTGRES_PASSWORD=\"compose_validation_only_7f3c2b\""
+    }
+   ]
+  }
+ },
  "dellisd/sqldelight-sqlite-wasm": {
   "cands": {
    "SQLite": [
@@ -135368,6 +135338,20 @@
  "DerKezorm/nexbeat": {
   "cands": {}
  },
+ "DerKezorm/nexcanvas": {
+  "cands": {
+   "SQLite": [
+    {
+     "line": 131,
+     "q": "Everything lives in `/data`: the SQLite database `nexcanvas.db` (accounts, spaces, boards and their versions),"
+    },
+    {
+     "line": 133,
+     "q": "Mount it from a local disk, never from an SMB or NFS share: SQLite's locking does not work reliably over network"
+    }
+   ]
+  }
+ },
  "DerKezorm/nexlore": {
   "cands": {
    "SQLite": [
@@ -135798,15 +135782,15 @@
      "q": "- **BM25 full-text search** via SQLite FTS5 with `cbm_camel_split` tokenizer (camelCase / snake_case aware)"
     },
     {
-     "line": 230,
+     "line": 231,
      "q": "- **RAM-first pipeline**: LZ4 compression, in-memory SQLite, single dump at end. Memory released after."
     },
     {
-     "line": 233,
+     "line": 234,
      "q": "- **Native runtime set, zero infrastructure services**: SQLite-backed, persists to `~/.cache/codebase-memory-mcp/`"
     },
     {
-     "line": 245,
+     "line": 246,
      "q": "- **Format**: SQLite database, indexes stripped, `VACUUM INTO` compacted, then zstd 1.5.7 compressed (8–13:1 ratio typical)"
     }
    ]
@@ -137673,7 +137657,7 @@
   "cands": {
    "PostgreSQL": [
     {
-     "line": 451,
+     "line": 455,
      "q": "(PostgreSQL-compatible byte access) and `json_object(*)`/`jsonb_object(*)`"
     }
    ],
@@ -139760,11 +139744,11 @@
   "cands": {
    "Oracle": [
     {
-     "line": 235,
+     "line": 241,
      "q": "- **A reference oracle.** `fgdb-reference` is a deliberately simple, single-threaded, obviously-correct implementation of the full logical semantics, compiled for tests only. \"What should this return\" is a *program*, not a debate, and it exists before the firs"
     },
     {
-     "line": 239,
+     "line": 245,
      "q": "- **Governance applied before expansion.** Macaroon caveats compile to mandatory planner predicates: a capability that can't see an edge type can't observe its existence via degree either. Absence-of-results witnesses are scoped to the authorized subgraph, so "
     }
    ]
@@ -142632,7 +142616,7 @@
      "q": "Before you get started, ensure you have the following minimum versions: Ruby 3.4+, PostgreSQL 15, Redis 7."
     },
     {
-     "line": 73,
+     "line": 79,
      "q": "- PostgreSQL &mdash; Our main data store is in Postgres."
     }
    ]
@@ -143904,20 +143888,6 @@
     {
      "line": 38,
      "q": "binary in $PATH if you go this route. The precompiled binaries embed a copy of sqlite."
-    }
-   ]
-  }
- },
- "dkwolf1/Codex-Lifeboat": {
-  "cands": {
-   "SQLite": [
-    {
-     "line": 53,
-     "q": "- Consistent SQLite snapshots and SHA-256 integrity validation"
-    },
-    {
-     "line": 148,
-     "q": "unclear. It checks Windows compatibility, Codex data access, SQLite consistency,"
     }
    ]
   }
@@ -152573,6 +152543,54 @@
  },
  "dulao5/tf-gke-tidb": {
   "cands": {}
+ },
+ "dulao5/tidb-binary-multistmt": {
+  "cands": {
+   "MySQL": [
+    {
+     "line": 3,
+     "q": "Pipelines a transaction's statements over MySQL's **binary** protocol"
+    },
+    {
+     "line": 7,
+     "q": "go-sql-driver/mysql's) normal"
+    },
+    {
+     "line": 36,
+     "q": "MySQL command packets are self-delimited (length-prefixed) — nothing in the"
+    },
+    {
+     "line": 42,
+     "q": "This package doesn't fork go-sql-driver/mysql to get around that. A custom"
+    },
+    {
+     "line": 44,
+     "q": "`mysql.RegisterDialContext` hook, dials the real TCP connection and also"
+    }
+   ],
+   "TiDB": [
+    {
+     "line": 1,
+     "q": "# tidb-binary-multistmt"
+    },
+    {
+     "line": 12,
+     "q": "tidb-multistmt already solves"
+    },
+    {
+     "line": 27,
+     "q": "healthy. Measured on a real TiDB Cloud cluster:"
+    },
+    {
+     "line": 32,
+     "q": "|TiDB CPU|205%|195%|"
+    },
+    {
+     "line": 37,
+     "q": "wire protocol or in TiDB's connection read loop requires a round trip"
+    }
+   ]
+  }
  },
  "dulao5/tidb-in-action-ja": {
   "cands": {
@@ -167128,7 +167146,7 @@
      "q": "M[(Media folder<br/>read-only)] --> A[PauseTogether<br/>Go + SQLite + ffmpeg]"
     },
     {
-     "line": 327,
+     "line": 322,
      "q": "**Stack:** Go standard library, SQLite (modernc.org/sqlite),"
     }
    ]
@@ -171406,11 +171424,11 @@
      "q": "Single Go binary. SQLite. AGPL-3.0."
     },
     {
-     "line": 96,
+     "line": 99,
      "q": "* **Actually observable.** SQLite for state, Prometheus metrics, structured"
     },
     {
-     "line": 480,
+     "line": 484,
      "q": "internal/store domain model, SQLite schema, every query"
     }
    ]
@@ -171549,6 +171567,20 @@
     {
      "line": 54,
      "q": "Postgres after they have been enqueued to Sidekiq"
+    }
+   ]
+  }
+ },
+ "ezdev21/video-sharing": {
+  "cands": {
+   "PostgreSQL": [
+    {
+     "line": 25,
+     "q": "install and configure postgres database"
+    },
+    {
+     "line": 31,
+     "q": "setup credentials in the .env file from postgres database and JWT_SECRET"
     }
    ]
   }
@@ -177096,7 +177128,7 @@
      "q": "PostgreSQL"
     },
     {
-     "line": 50,
+     "line": 51,
      "q": "- Built-in support for MySQL, PostgreSQL, SQLite, DuckDB, SQL Server, Oracle, and ClickHouse; TDengine is provided as an installable extension driver, alongside Dameng DM, KingbaseES, GBase 8s, OceanBase, openGauss, Apache IoTDB, and Oscar."
     }
    ],
@@ -177106,7 +177138,7 @@
      "q": "MySQL"
     },
     {
-     "line": 50,
+     "line": 51,
      "q": "- Built-in support for MySQL, PostgreSQL, SQLite, DuckDB, SQL Server, Oracle, and ClickHouse; TDengine is provided as an installable extension driver, alongside Dameng DM, KingbaseES, GBase 8s, OceanBase, openGauss, Apache IoTDB, and Oscar."
     }
    ],
@@ -177116,11 +177148,11 @@
      "q": "Oracle"
     },
     {
-     "line": 50,
+     "line": 51,
      "q": "- Built-in support for MySQL, PostgreSQL, SQLite, DuckDB, SQL Server, Oracle, and ClickHouse; TDengine is provided as an installable extension driver, alongside Dameng DM, KingbaseES, GBase 8s, OceanBase, openGauss, Apache IoTDB, and Oscar."
     },
     {
-     "line": 143,
+     "line": 144,
      "q": "For the full artifact table, Windows portable-mode notes, upgrade migration from v0.10.1 or earlier ZIPs, and the Oracle Instant Client / pure-Go driver note, see the Install & update guide."
     }
    ],
@@ -177130,7 +177162,7 @@
      "q": "SQLite"
     },
     {
-     "line": 50,
+     "line": 51,
      "q": "- Built-in support for MySQL, PostgreSQL, SQLite, DuckDB, SQL Server, Oracle, and ClickHouse; TDengine is provided as an installable extension driver, alongside Dameng DM, KingbaseES, GBase 8s, OceanBase, openGauss, Apache IoTDB, and Oscar."
     }
    ],
@@ -177140,7 +177172,7 @@
      "q": "SQL Server"
     },
     {
-     "line": 50,
+     "line": 51,
      "q": "- Built-in support for MySQL, PostgreSQL, SQLite, DuckDB, SQL Server, Oracle, and ClickHouse; TDengine is provided as an installable extension driver, alongside Dameng DM, KingbaseES, GBase 8s, OceanBase, openGauss, Apache IoTDB, and Oscar."
     }
    ],
@@ -177150,17 +177182,17 @@
      "q": "ClickHouse"
     },
     {
-     "line": 50,
+     "line": 51,
      "q": "- Built-in support for MySQL, PostgreSQL, SQLite, DuckDB, SQL Server, Oracle, and ClickHouse; TDengine is provided as an installable extension driver, alongside Dameng DM, KingbaseES, GBase 8s, OceanBase, openGauss, Apache IoTDB, and Oscar."
     }
    ],
    "OceanBase": [
     {
-     "line": 23,
+     "line": 24,
      "q": "OceanBase"
     },
     {
-     "line": 50,
+     "line": 51,
      "q": "- Built-in support for MySQL, PostgreSQL, SQLite, DuckDB, SQL Server, Oracle, and ClickHouse; TDengine is provided as an installable extension driver, alongside Dameng DM, KingbaseES, GBase 8s, OceanBase, openGauss, Apache IoTDB, and Oscar."
     }
    ],
@@ -177170,27 +177202,31 @@
      "q": "Dameng DM"
     },
     {
-     "line": 50,
+     "line": 51,
      "q": "- Built-in support for MySQL, PostgreSQL, SQLite, DuckDB, SQL Server, Oracle, and ClickHouse; TDengine is provided as an installable extension driver, alongside Dameng DM, KingbaseES, GBase 8s, OceanBase, openGauss, Apache IoTDB, and Oscar."
     }
    ],
    "openGauss": [
     {
-     "line": 24,
+     "line": 25,
      "q": "openGauss"
     },
     {
-     "line": 50,
+     "line": 51,
      "q": "- Built-in support for MySQL, PostgreSQL, SQLite, DuckDB, SQL Server, Oracle, and ClickHouse; TDengine is provided as an installable extension driver, alongside Dameng DM, KingbaseES, GBase 8s, OceanBase, openGauss, Apache IoTDB, and Oscar."
     }
    ],
    "GBase": [
     {
      "line": 22,
+     "q": "GBase 8a"
+    },
+    {
+     "line": 23,
      "q": "GBase 8s"
     },
     {
-     "line": 50,
+     "line": 51,
      "q": "- Built-in support for MySQL, PostgreSQL, SQLite, DuckDB, SQL Server, Oracle, and ClickHouse; TDengine is provided as an installable extension driver, alongside Dameng DM, KingbaseES, GBase 8s, OceanBase, openGauss, Apache IoTDB, and Oscar."
     }
    ]
@@ -181726,6 +181762,28 @@
     {
      "line": 25,
      "q": "With this style of configure command, you'll need to make sure pg_config (and the correct pg_config if you have postgres installed in multiple places) is in the PATH."
+    }
+   ]
+  }
+ },
+ "FlightDan/dispatcher-sdk": {
+  "cands": {
+   "SQLite": [
+    {
+     "line": 6,
+     "q": "and saves task state, results and notifications in SQLite. An Agent application"
+    },
+    {
+     "line": 12,
+     "q": "an interruption. The core uses only Python's standard library and SQLite."
+    },
+    {
+     "line": 20,
+     "q": "|Durable execution|Save tasks, results, and notifications in SQLite. Queued work remains available when you close and reopen the database.|"
+    },
+    {
+     "line": 217,
+     "q": "|Function execution and isolation|Register handlers and select isolation with `Kernel.open_sqlite`; set the command timeout and `RetryPolicy`.|"
     }
    ]
   }
@@ -190802,24 +190860,6 @@
    ]
   }
  },
- "gabrielbrandino/edgeprovisioning": {
-  "cands": {
-   "PostgreSQL": [
-    {
-     "line": 10,
-     "q": "PostgreSQL"
-    },
-    {
-     "line": 21,
-     "q": "For my Next.js applications, I typically use PostgreSQL, Nginx, Cloudflare Origin Certificates, Node.js, and PM2. Setting up and configuring all of these components manually is tedious and error-prone. That’s why I created this toolkit to automate the installa"
-    },
-    {
-     "line": 111,
-     "q": "* PostgreSQL"
-    }
-   ]
-  }
- },
  "gabrielcordeiro2/Hospital-query-system": {
   "cands": {
    "PostgreSQL": [
@@ -190947,24 +190987,6 @@
     {
      "line": 114,
      "q": "1. PHP 8.5 ou versao superior (com extensoes: pdo_mysql, mbstring, curl, zip)."
-    }
-   ]
-  }
- },
- "gabrielmaialva33/experimente-plus": {
-  "cands": {
-   "PostgreSQL": [
-    {
-     "line": 7,
-     "q": "PostgreSQL 16"
-    },
-    {
-     "line": 86,
-     "q": "|PostgreSQL|`localhost:5435`|"
-    },
-    {
-     "line": 278,
-     "q": "publicando somente no loopback, atrás de um nginx que termina TLS. PostgreSQL e Redis são"
     }
    ]
   }
@@ -201736,6 +201758,14 @@
     {
      "line": 282,
      "q": "> `time.Time` arguments are sent with up to nanosecond precision, so a value from `time.Now()` usually has more fractional-second digits than a `DATETIME(N)` or `TIMESTAMP(N)` column stores. On MariaDB, comparing such a value against an indexed column can prev"
+    },
+    {
+     "line": 559,
+     "q": "The driver implements a pluggable authentication system that supports various authentication methods used by MySQL and MariaDB servers. The built-in authentication plugins include:"
+    },
+    {
+     "line": 566,
+     "q": "* `client_ed25519` - MariaDB Ed25519 authentication"
     }
    ],
    "TiDB": [
@@ -203915,15 +203945,19 @@
   "cands": {
    "SQLite": [
     {
-     "line": 414,
+     "line": 113,
+     "q": "The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install"
+    },
+    {
+     "line": 421,
      "q": "|`search_indexed_emails` (local SQLite index)|~10 ms|"
     },
     {
-     "line": 467,
+     "line": 491,
      "q": "- The local index lives at `PROTONMAIL_DATA_DIR/mail-index.sqlite`. Background sync and IMAP IDLE keep it warm."
     },
     {
-     "line": 478,
+     "line": 503,
      "q": "`better-sqlite3` is a native binary built for your machine. After a major Node.js upgrade or environment change, rebuild it:"
     }
    ]
@@ -215440,6 +215474,32 @@
  "harikitech/django-horizon": {
   "cands": {}
  },
+ "Hariomdubey01/DataCo-Smart-Supply-Chain-Analytics": {
+  "cands": {
+   "MySQL": [
+    {
+     "line": 3,
+     "q": "> End-to-End Data Analysis & Business Intelligence Project using Python, MySQL & Power BI"
+    },
+    {
+     "line": 9,
+     "q": "MySQL"
+    },
+    {
+     "line": 86,
+     "q": "|MySQL|Structured business analysis and metric validation|"
+    },
+    {
+     "line": 117,
+     "q": "MySQL was used to validate the dataset and perform structured business analysis."
+    },
+    {
+     "line": 277,
+     "q": "1. Open MySQL Workbench"
+    }
+   ]
+  }
+ },
  "hariprasanths/synchly": {
   "cands": {
    "PostgreSQL": [
@@ -221536,6 +221596,32 @@
    ]
   }
  },
+ "HENG148/portfolio-v2": {
+  "cands": {
+   "PostgreSQL": [
+    {
+     "line": 13,
+     "q": "|**Database**|PostgreSQL (Neon), MongoDB, Drizzle ORM, Flyway|"
+    },
+    {
+     "line": 24,
+     "q": "- Image uploads to Cloudinary, stored in Postgres"
+    },
+    {
+     "line": 27,
+     "q": "- **Stack:** Next.js, TypeScript, Tailwind CSS, Drizzle ORM, Neon Postgres, Better Auth, Cloudinary"
+    },
+    {
+     "line": 37,
+     "q": "- **Stack:** Next.js, Tailwind CSS, React Hook Form, Zod, Express.js, TypeScript, Drizzle ORM, Neon Postgres, Docker"
+    },
+    {
+     "line": 43,
+     "q": "- PostgreSQL with Flyway migrations"
+    }
+   ]
+  }
+ },
  "hengestone/protodb": {
   "cands": {}
  },
@@ -225511,20 +225597,8 @@
   "cands": {
    "openGauss": [
     {
-     "line": 383,
-     "q": "|`formal-research`|Optional Lean formalization lane with local checks and declaration-search setup.|`formal-skeleton-helper`, `lean-formalization-intake`, `lax-formalization`, `zenodo-artifact`, `lean-explore-mcp`, `lean-strict-verification-gate`, `opengauss`|"
-    },
-    {
-     "line": 384,
-     "q": "|`formal-research-remote`|Optional remote formal lane setup for LeanExplore and AXLE MCP plus local formal-lane skills; install is inert and does not start remote services.|`formal-skeleton-helper`, `lean-formalization-intake`, `lax-formalization`, `zenodo-art"
-    },
-    {
-     "line": 385,
-     "q": "|`full-research`|All research-related skills.|`autonomous-research-loop`, `autonomous-research-loop-runtime`, `deep-research-workflow`, `source-research`, `research-briefing`, `research-report-reviewer`, `research-verification-gate`, `draft-writing`, `zotero`,"
-    },
-    {
-     "line": 483,
-     "q": "|`opengauss`|Optional inert readiness helper for Math Inc. OpenGauss Lean prove/formalize workflows; live install is manual-native.|`formal-research`, `formal-research-remote`, `full-research`|"
+     "line": null,
+     "q": "ss-platform (Linux/macOS/Windows), with cross-agent delegation, remote-bridge (Zulip/Telegram + OpenClaw /aas adapter), OpenGauss readiness, leak sanitization, and lifecycle/rollback."
     }
    ]
   }
@@ -229176,20 +229250,20 @@
      "q": "# DSH Tavern SQLite V2"
     },
     {
+     "line": 3,
+     "q": "**服务端 MVU 与卡脚本、SQLite 增量存档、历史按需读取，以及正文和状态一起回退。**"
+    },
+    {
      "line": 5,
-     "q": "这是面向DSH Tavern的SQLite存储与服务端执行插件：聊天、会话事件和MVU变量历史改用数据库管理，提供增量写入、按需读取、独立存档分叉与干净回退。**V2在存储与状态一致性之上，把MVU结算、角色卡脚本VM/ESM与Helper生成搬进服务端进程执行，浏览器只负责界面。**"
+     "q": "这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。"
     },
     {
-     "line": 12,
-     "q": "|**SQLite增量存档**|按聊天头字段、消息楼层拆分存储；普通局部更新只序列化、写入变化的部分，不因追加一楼就重写全部历史。会话事件使用SQLite事务与WAL管理。|"
+     "line": 14,
+     "q": "|**SQLite 增量存档**|聊天头字段、消息楼层分开存储，局部更新只处理变化部分，避免为了追加或修改一楼反复重写全部历史。会话事件由 SQLite 事务与 WAL 管理。|"
     },
     {
-     "line": 17,
-     "q": "|**原档保留，独立分叉继续玩**|旧存档保持只读；你在面板点击「分叉迁移到数据库存档」，创建新的聊天和原生会话身份，在SQLite分叉中继续，源档与源链接保持不变。|"
-    },
-    {
-     "line": 34,
-     "q": "curl -fsSL https://raw.githubusercontent.com/huajiao1998/dsh-tavern-sqlite-v2/main/install.sh | sh"
+     "line": 19,
+     "q": "|**原档保留，独立分叉继续玩**|原档保持只读；用户主动创建新的聊天与原生会话身份，在 SQLite 新分叉中继续，源档及源链接保留。|"
     }
    ]
   }
@@ -233515,16 +233589,6 @@
  },
  "hyperf/database": {
   "cands": {}
- },
- "hyperformant/vibecarbon": {
-  "cands": {
-   "PostgreSQL": [
-    {
-     "line": 148,
-     "q": "- Background jobs via pg_cron (zero extra infrastructure)"
-    }
-   ]
-  }
  },
  "hyperion-cs/pgsql_faq": {
   "cands": {
@@ -249970,7 +250034,7 @@
      "q": "一条命令起 PostgreSQL、跑迁移、加载一家种子店铺、起 API 和商家后台。"
     },
     {
-     "line": 227,
+     "line": 228,
      "q": "**只有一个数据库。** 向量检索在 `pgvector`，全文检索在 `tsvector`，任务队列是一张表。"
     }
    ]
@@ -256934,32 +256998,6 @@
    ]
   }
  },
- "JdeJusto/Financial-DataBase": {
-  "cands": {
-   "PostgreSQL": [
-    {
-     "line": 5,
-     "q": "A Python and PostgreSQL project for ingesting public-company filings and financial facts, preserving their source history, and making the data available through a CLI and reusable SQL analyses."
-    },
-    {
-     "line": 12,
-     "q": "- Stores normalized facts and daily market prices in PostgreSQL with provider provenance."
-    },
-    {
-     "line": 21,
-     "q": "|Yahoo Finance via `yfinance`|Current source used by `financial-db prices update` for daily OHLCV data. Unlike Value Investing's on-demand price service, this project **stores imported prices** in its PostgreSQL `prices` table. Coverage, delays, and availabili"
-    },
-    {
-     "line": 23,
-     "q": "|PostgreSQL|Required database for normalized records, migrations, provenance, and imported prices. A local development service is available through Docker Compose.|"
-    },
-    {
-     "line": 27,
-     "q": "The core stack is Python, PostgreSQL, Psycopg 3, `aiohttp`, and `ijson`;"
-    }
-   ]
-  }
- },
  "jdelic/12factor-vault": {
   "cands": {
    "PostgreSQL": [
@@ -258882,6 +258920,24 @@
     {
      "line": 71,
      "q": "MYSQL_USER=your_user"
+    }
+   ],
+   "MariaDB": [
+    {
+     "line": 115,
+     "q": "### MySQL vs MariaDB"
+    },
+    {
+     "line": 118,
+     "q": "depend on **MariaDB-only** SQL — most commonly"
+    },
+    {
+     "line": 120,
+     "q": "`ERROR 1064`. If your app targets MariaDB, set `DB_IMAGE=mariadb:11.4` in your"
+    },
+    {
+     "line": 128,
+     "q": "database volume (via MySQL/MariaDB's `docker-entrypoint-initdb.d`). It does"
     }
    ]
   }
@@ -265003,17 +265059,27 @@
  },
  "johnnybravo-xyz/suchi": {
   "cands": {
+   "PostgreSQL": [
+    {
+     "line": 28,
+     "q": "- **One binary.** Go, SQLite and files on disk. No Postgres, Redis, queue or"
+    }
+   ],
    "SQLite": [
     {
-     "line": 11,
+     "line": 28,
+     "q": "- **One binary.** Go, SQLite and files on disk. No Postgres, Redis, queue or"
+    },
+    {
+     "line": 53,
      "q": "Suchi combines SQLite, content-addressed storage, a Svelte interface, and an"
     },
     {
-     "line": 19,
-     "q": "SQLite metadata and the API still decide who can see each document."
+     "line": 57,
+     "q": "access-control boundary; SQLite metadata and the API decide who can see each"
     },
     {
-     "line": 158,
+     "line": 191,
      "q": "share one server, SQLite/FTS and CAS; server administrators and host/backup operators"
     }
    ]
@@ -265391,9 +265457,6 @@
     }
    ]
   }
- },
- "jojo8356/TDSQL": {
-  "cands": {}
  },
  "jojoarianto/go-ddd-api": {
   "cands": {
@@ -266585,6 +266648,32 @@
     {
      "line": null,
      "q": "🎬 Movie app template made with flutter. 🚀 The template shows good coding practice to use Sqlite as Local library. you can use the repository by forking. It can be also used as coding challenge. 🐛"
+    }
+   ]
+  }
+ },
+ "JorG18/agentcrawl": {
+  "cands": {
+   "SQLite": [
+    {
+     "line": 88,
+     "q": "- 🧱 Durable crawls: SQLite jobs with checkpoints, pagination, cancellation, events, retries, and failure inspection."
+    },
+    {
+     "line": 90,
+     "q": "- 📊 Read-only dashboard: generate static HTML from SQLite with `agentcrawl dashboard` or open `/dashboard` on the API server (it follows the API auth setting)."
+    },
+    {
+     "line": 105,
+     "q": "|Durable crawls|SQLite jobs, events, checkpoints, retries, and failure records.|"
+    },
+    {
+     "line": 106,
+     "q": "|Local dashboard|Read-only static HTML over SQLite via `agentcrawl dashboard` and `/dashboard`; the HTTP view follows the API auth setting.|"
+    },
+    {
+     "line": 213,
+     "q": "Generate a dependency-free static HTML snapshot from any AgentCrawl SQLite database:"
     }
    ]
   }
@@ -271176,7 +271265,7 @@
   "cands": {
    "SQLite": [
     {
-     "line": 85,
+     "line": 87,
      "q": "The record SQLite on your machine: originals · work history · guidance · reports · run logs · local search index"
     }
    ]
@@ -274566,23 +274655,23 @@
   "cands": {
    "SQLite": [
     {
-     "line": 45,
+     "line": 46,
      "q": "|Databases|SQLite (incl. WAL, free blocks/pages, SQLCipher¹), LevelDB, Realm (incl. encrypted¹), MMKV|"
     },
     {
-     "line": 58,
+     "line": 59,
      "q": "- **Hex provenance** — with the hex view open, selecting an entry in the SQLite, Protobuf, MMKV or Realm viewer shows exactly where its bytes are."
     },
     {
-     "line": 70,
+     "line": 71,
      "q": "- No side-effect files (e.g. SQLite `-wal`/`-shm`)"
     },
     {
-     "line": 80,
-     "q": "|SQLite summary (Windows)|BLOB Inspector (Linux)|"
+     "line": 81,
+     "q": "|Start screen (Linux)|SQLite summary (Windows)|"
     },
     {
-     "line": 112,
+     "line": 119,
      "q": "|SQLite|What Hides in the WAL|"
     }
    ]
@@ -277363,28 +277452,6 @@
  },
  "Kayychuu/TIDB-FUTURE-APP-HACKATON-2024": {
   "cands": {}
- },
- "Kazbonfim2/Upy": {
-  "cands": {
-   "PostgreSQL": [
-    {
-     "line": 9,
-     "q": "Monitoramento local de endpoints de um projeto, health checks de APIs de portfólio ou sandbox para estudar arquitetura desacoplada (worker + Postgres + API + dashboard + IA). Não é SaaS multi-tenant: um Postgres, uma API, um worker."
-    },
-    {
-     "line": 14,
-     "q": "- **Banco de Dados:** PostgreSQL + Drizzle ORM"
-    },
-    {
-     "line": 42,
-     "q": "- **Postgres:** localhost:5432 (`upy` / `upy` / `upy`)"
-    },
-    {
-     "line": 46,
-     "q": "1. Suba uma instância PostgreSQL e configure `DATABASE_URL` no `.env`"
-    }
-   ]
-  }
  },
  "kazhuravlev/database-gateway": {
   "cands": {
@@ -298441,6 +298508,16 @@
    ]
   }
  },
+ "lianmatsuo/remcycle": {
+  "cands": {
+   "SQLite": [
+    {
+     "line": 119,
+     "q": "The Python tests sit at these seams: transcript parsing, the archive against a real SQLite file, settings, reconciliation as pure functions, the memory store against folders in Claude Code's format, extraction through a stand-in for the model, the gate, and wh"
+    }
+   ]
+  }
+ },
  "liaogx/fastapi-tutorial": {
   "cands": {
    "SQLite": [
@@ -298926,59 +299003,63 @@
      "q": "PostgreSQL Clients"
     },
     {
-     "line": 36,
+     "line": 38,
      "q": "Aiven for PostgreSQL,"
     },
     {
-     "line": 92,
+     "line": 94,
      "q": "The test instance comes with a pre-configured PostgreSQL database via Seed Connections. No setup required!"
     },
     {
-     "line": 96,
+     "line": 98,
      "q": "You create a Postgres on a managed platform. It is ready in forty seconds. Then you want to look inside it — so you open a port to the internet, dig an SSH tunnel, or install a desktop client on every machine that needs one."
     }
    ],
    "MySQL": [
     {
-     "line": 37,
+     "line": 26,
+     "q": "MySQL,"
+    },
+    {
+     "line": 39,
      "q": "Aiven for MySQL"
     },
     {
-     "line": 100,
+     "line": 102,
      "q": "Twenty-six engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdr"
     }
    ],
    "Oracle": [
     {
-     "line": 100,
+     "line": 102,
      "q": "Twenty-six engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdr"
     }
    ],
    "SQLite": [
     {
-     "line": 100,
+     "line": 102,
      "q": "Twenty-six engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdr"
     }
    ],
    "SQL Server": [
     {
-     "line": 100,
+     "line": 102,
      "q": "Twenty-six engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdr"
     }
    ],
    "ClickHouse": [
     {
-     "line": 27,
+     "line": 28,
      "q": "ClickHouse,"
     },
     {
-     "line": 100,
+     "line": 102,
      "q": "Twenty-six engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdr"
     }
    ],
    "MariaDB": [
     {
-     "line": 28,
+     "line": 29,
      "q": "MariaDB,"
     }
    ]
@@ -316391,7 +316472,7 @@
      "q": "TLS, against your own Postgres, or on a different port, see the"
     },
     {
-     "line": 88,
+     "line": 91,
      "q": "|`POSTGRES_PASSWORD`|Database password. Compose builds the API's `DATABASE_URL` from the `POSTGRES_*` values — do not set `DATABASE_URL` yourself.|"
     }
    ]
@@ -316908,11 +316989,11 @@
      "q": "|**简历和资料存在哪**|你自己电脑上的一个 SQLite 文件，可随时拷走|对方的服务器，导出要走会员|"
     },
     {
-     "line": 320,
+     "line": 325,
      "q": "简历通架构图：React 前端 → 同源 /api → FastAPI 后端 → 本地 SQLite / 你配置的模型服务商 / 本机浏览器"
     },
     {
-     "line": 335,
+     "line": 340,
      "q": "- **默认全部留在本机。** 业务数据存在 `backend/data/resume_forge.db` 这**一个** SQLite 文件里（附件、照片与历史兼容字段也在库内），不经过任何第三方服务；导出、渲染、PDF 生成都在本机完成。"
     }
    ]
@@ -317683,24 +317764,6 @@
  },
  "mahdihosseini/ADP": {
   "cands": {}
- },
- "mahdisnasr/authentication-form": {
-  "cands": {
-   "SQLite": [
-    {
-     "line": 3,
-     "q": "A full-stack authentication form built with Next.js, Prisma, SQLite, bcrypt, and Playwright."
-    },
-    {
-     "line": 12,
-     "q": "- 🗄️ SQLite database with Prisma ORM"
-    },
-    {
-     "line": 27,
-     "q": "- SQLite"
-    }
-   ]
-  }
  },
  "mahediislam00/TidBiThread": {
   "cands": {}
@@ -321267,7 +321330,7 @@
      "q": "一个二进制里跑着四件事:**面板**(管理界面与 API)、**订阅服务**(客户端来拉配置)、**数据面**(内嵌 sing-box,真正过流量)、**后台**(统计、配额与限速规则判定、上游巡检、公网 IP 探测、大陆连通检测、日志清理、主副同步)。它们共用同一个 SQLite 文件,所以面板里点一下保存,订阅和数据面立刻看到同一份数据。"
     },
     {
-     "line": 156,
+     "line": 133,
      "q": "|`database/`|模型、SQLite 打开与迁移|"
     }
    ]
@@ -326401,19 +326464,19 @@
   "cands": {
    "SQLite": [
     {
-     "line": 21,
+     "line": 23,
      "q": "the same SQLite store in `.selvedge/` when you switch tools."
     },
     {
-     "line": 96,
+     "line": 98,
      "q": "2. **Keep it with the project.** Selvedge stores the record in local SQLite,"
     },
     {
-     "line": 406,
+     "line": 408,
      "q": "as they work, logging structured change events to a local SQLite database."
     },
     {
-     "line": 517,
+     "line": 519,
      "q": "`.selvedge/selvedge.db` is a SQLite file, so the reasoning inside it doesn't"
     }
    ]
@@ -326633,7 +326696,7 @@
      "q": "engine = \"postgres\""
     },
     {
-     "line": 212,
+     "line": 213,
      "q": "masume TARGET open a connection, postgres://you@host/shop"
     }
    ],
@@ -330604,8 +330667,20 @@
      "q": "Eidos File is an open, single-file format built on standard SQLite."
     },
     {
-     "line": 62,
+     "line": 79,
+     "q": "- `crates` contains private Rust libraries for the Runtime, SQLite"
+    },
+    {
+     "line": 82,
      "q": "- `apps/sqlite-web-viewer` is a standalone, read-only SQLite viewer."
+    },
+    {
+     "line": 88,
+     "q": "|`eidos-file-core`|SQLite format helpers|"
+    },
+    {
+     "line": 94,
+     "q": "SQLite dependencies. CLI and native apps retain their own release lifecycles;"
     }
    ]
   }
@@ -342882,7 +342957,7 @@
   "cands": {
    "SQLite": [
     {
-     "line": 169,
+     "line": 176,
      "q": "API keys can be set in-app via Settings and are stored in SQLite. ChatGPT"
     }
    ]
@@ -345033,6 +345108,20 @@
     {
      "line": 354,
      "q": "Postfix can use an MySQL database as a source for any of its lookups including virtual mailbox and aliases."
+    }
+   ]
+  }
+ },
+ "mlapeter/counterparts": {
+  "cands": {
+   "SQLite": [
+    {
+     "line": 51,
+     "q": "- **It's yours.** Everything lives on your machine in one SQLite file you can read,"
+    },
+    {
+     "line": 97,
+     "q": "|store|One SQLite database, plus a rebuildable search cache and daily snapshots|"
     }
    ]
   }
@@ -354685,6 +354774,32 @@
  },
  "muffe/tidbyt": {
   "cands": {}
+ },
+ "MugdhoAI/sqlite-c": {
+  "cands": {
+   "SQLite": [
+    {
+     "line": 1,
+     "q": "# sqlite-c"
+    },
+    {
+     "line": 3,
+     "q": "A small SQLite inspired relational database engine built from scratch in C11."
+    },
+    {
+     "line": 5,
+     "q": "The project focuses on the storage mechanisms behind a database rather than reproducing SQLite's full feature set. It includes persistent storage built around fixed size pages, B tree table storage, a small SQL parser, an interactive shell, automated tests, a "
+    },
+    {
+     "line": 7,
+     "q": "The database file format is intentionally project specific and is not compatible with SQLite database files."
+    },
+    {
+     "line": 21,
+     "q": "sqlite-c makes those mechanisms explicit in a small codebase that can be built, tested, and inspected end to end."
+    }
+   ]
+  }
  },
  "mugglmenzel/serverless-examples-cached-rds-ws": {
   "cands": {
@@ -369085,12 +369200,24 @@
   "cands": {
    "PostgreSQL": [
     {
-     "line": 40,
-     "q": "- ❌ **无 RLS 行级隔离** — 应用层租户约束（非 PostgreSQL RLS）"
+     "line": 28,
+     "q": "- **代码与凭据不应失控出站** —— 单机自托管、GitHub App 只读、数据落在你自己的 PostgreSQL。自托管**不等于零出站**：审查管线需要外部 LLM 时会有受控外发，见数据出站边界。"
     },
     {
-     "line": 86,
-     "q": "|租户模型|应用层 tenant_id 约束 + DB 复合 FK|PostgreSQL RLS 行级隔离|"
+     "line": 93,
+     "q": "部署拓扑：GitHub App 只读接入，webhook ingress 验签去重后交给 Console；数据在仅内网的 PostgreSQL；可选 bge-m3 RAG sidecar 与独立部署的 AgentTeams 执行器；cchain 三层校验任一缺失即 BLOCKED"
+    },
+    {
+     "line": 97,
+     "q": "- **数据**：PostgreSQL + pgvector，八张业务表按 `tenant_id` 强制收窄（应用层隔离）；数据库只存会话 / CSRF / OAuth state 的 sha256 摘要。"
+    },
+    {
+     "line": 131,
+     "q": "资源构成：基础档 = console + PostgreSQL（2C2G）；+ bge-m3 sidecar 推荐 4C8G，语义嵌入 8C16G；"
+    },
+    {
+     "line": 140,
+     "q": "- ❌ **无 PostgreSQL RLS / SSO / SCIM / HA / 配额限流** —— 多租户为应用层约束（复合 FK + 查询收窄），Developer Edition 不含企业能力"
     }
    ]
   }
@@ -374873,10 +375000,6 @@
      "q": "# /etc/mysql/mariadb.conf.d/99-nntmux.cnf"
     },
     {
-     "line": 305,
-     "q": "- creates a MariaDB `prometheus@localhost` user (unix_socket auth, `PROCESS`/`REPLICATION CLIENT` and read access to `performance_schema` only). It tries root over the socket, `/etc/mysql/debian.cnf` and `DB_USERNAME` from `.env`; if your root uses a password,"
-    },
-    {
      "line": 461,
      "q": "mysql -e \"SELECT table_name, ROUND(data_length/1024/1024, 2) as 'Size (MB)' FROM information_schema.tables WHERE table_schema='nntmux' AND table_name LIKE 'pulse%';\""
     }
@@ -374896,7 +375019,7 @@
     },
     {
      "line": 305,
-     "q": "- creates a MariaDB `prometheus@localhost` user (unix_socket auth, `PROCESS`/`REPLICATION CLIENT` and read access to `performance_schema` only). It tries root over the socket, `/etc/mysql/debian.cnf` and `DB_USERNAME` from `.env`; if your root uses a password,"
+     "q": "- points the MariaDB exporter at the database user from `.env` (`DB_USERNAME`/`DB_PASSWORD`, connecting the way Laravel does). It only reads global status and variables, so no root password or extra grants are needed. Pass `--db-admin-user=root --db-admin-pass"
     },
     {
      "line": 432,
@@ -400585,28 +400708,6 @@
  "orisintel/laravel-process-stamps": {
   "cands": {}
  },
- "orlandoc01/tallyo": {
-  "cands": {
-   "SQLite": [
-    {
-     "line": 30,
-     "q": "Tallyo ships as a single `tallyo` binary with the web app embedded. It runs background sync loops (Plaid, SimpleFIN, crypto wallets, prices), stores everything in a local SQLite database, and serves a GraphQL API plus the SPA over one HTTP port. Runtime settin"
-    },
-    {
-     "line": 76,
-     "q": "Every release publishes standalone static archives for Linux (amd64 and arm64), with SHA-256 checksums. Download the archive for your platform from the Releases page, extract it, and run the `tallyo` binary — the web app and SQLite are embedded, nothing else i"
-    },
-    {
-     "line": 105,
-     "q": "|`DB_PATH`|`/data/tallyo.db`|SQLite database file path|"
-    },
-    {
-     "line": 243,
-     "q": "The SQLite database contains bank access tokens, OAuth refresh tokens, and the JWT signing key — treat the file and its backups as secrets. Highlights:"
-    }
-   ]
-  }
- },
  "orlandorino/https-github.com-vfranco2-TidBit": {
   "cands": {}
  },
@@ -401294,11 +401395,11 @@
    "PostgreSQL": [
     {
      "line": 3,
-     "q": "> **Zero-config, Git-native local database branching for PostgreSQL, MySQL, and SQLite.**"
+     "q": "> **Zero-config, Git-native local database branching for PostgreSQL, MySQL, SQLite, and MongoDB.**"
     },
     {
      "line": 16,
-     "q": "Every developer working with Docker, local PostgreSQL, MySQL, or SQLite has suffered this loop:"
+     "q": "Every developer working with Docker, local PostgreSQL, MySQL, SQLite, or MongoDB has suffered this loop:"
     },
     {
      "line": 44,
@@ -401316,11 +401417,11 @@
    "MySQL": [
     {
      "line": 3,
-     "q": "> **Zero-config, Git-native local database branching for PostgreSQL, MySQL, and SQLite.**"
+     "q": "> **Zero-config, Git-native local database branching for PostgreSQL, MySQL, SQLite, and MongoDB.**"
     },
     {
      "line": 16,
-     "q": "Every developer working with Docker, local PostgreSQL, MySQL, or SQLite has suffered this loop:"
+     "q": "Every developer working with Docker, local PostgreSQL, MySQL, SQLite, or MongoDB has suffered this loop:"
     },
     {
      "line": 81,
@@ -401330,18 +401431,18 @@
    "SQLite": [
     {
      "line": 3,
-     "q": "> **Zero-config, Git-native local database branching for PostgreSQL, MySQL, and SQLite.**"
+     "q": "> **Zero-config, Git-native local database branching for PostgreSQL, MySQL, SQLite, and MongoDB.**"
     },
     {
      "line": 16,
-     "q": "Every developer working with Docker, local PostgreSQL, MySQL, or SQLite has suffered this loop:"
+     "q": "Every developer working with Docker, local PostgreSQL, MySQL, SQLite, or MongoDB has suffered this loop:"
     },
     {
      "line": 44,
      "q": "- **Instant Branching:** Creates a fresh, isolated branch database in milliseconds using PostgreSQL `CREATE DATABASE ... TEMPLATE` or filesystem copy-on-write (reflink/APFS/Btrfs for SQLite)."
     },
     {
-     "line": 82,
+     "line": 83,
      "q": "* **SQLite:** Performs a filesystem reflink/clone (`clonefile()` or `FICLONE`) only when the source has no active WAL/SHM/journal sidecars; otherwise it refuses the snapshot until clients stop and the database is checkpointed."
     }
    ],
@@ -404878,24 +404979,6 @@
    ]
   }
  },
- "padolphylis/boss_agent": {
-  "cands": {
-   "SQLite": [
-    {
-     "line": 13,
-     "q": "- 在 SQLite 中保存配置、会话、任务进度和投递状态，支持任务恢复、会话删除和投递幂等控制。"
-    },
-    {
-     "line": 113,
-     "q": "- `sql.py`：SQLite 连接、事务、线程锁和关闭逻辑的公共封装。"
-    },
-    {
-     "line": 131,
-     "q": "`.env`、SQLite 数据库、上传简历、浏览器用户目录、Qdrant 数据、运行日志和测试/调试数据都保留在本机，不提交到 Git。"
-    }
-   ]
-  }
- },
  "padurean/gosmig": {
   "cands": {
    "PostgreSQL": [
@@ -404970,7 +405053,7 @@
      "q": "|自己的研究|`npm run start:research`|`data/runtime/research.sqlite`|在线新闻入口、重点公司的公开行情、按需材料|"
     },
     {
-     "line": 149,
+     "line": 155,
      "q": "工作台使用 **React + Vite**，本机 API 使用 **Node.js HTTP + 内置 SQLite**。网页经同源 `/api` 代理访问服务，输入、研究与模拟决定保存版本。无需另外安装数据库服务。"
     }
    ]
@@ -413593,7 +413676,7 @@
     },
     {
      "line": 184,
-     "q": "|**dsh-memento**|Approval-gated cross-session memory: ctx.memory seam + SQLite + memory tool||🧊 FROZEN — see the repo README|"
+     "q": "|**dsh-memento**|Approval-gated cross-session memory: ctx.memory seam + SQLite + memory tool|🧊 FROZEN — see the repo README|"
     }
    ]
   }
@@ -426371,12 +426454,22 @@
   "cands": {
    "PostgreSQL": [
     {
-     "line": 35,
+     "line": 34,
      "q": "PostgreSQL and backend services (Auth, Storage, Realtime)"
     },
     {
-     "line": 41,
+     "line": 39,
      "q": "Serverless PostgreSQL"
+    }
+   ],
+   "SQLite": [
+    {
+     "line": 49,
+     "q": "Serverless SQL database built on SQLite with global read replication and native Cloudflare Workers integration"
+    },
+    {
+     "line": 54,
+     "q": "Serverless SQLite database with edge replication"
     }
    ]
   }
@@ -428246,6 +428339,16 @@
     {
      "line": 264,
      "q": "- Local First: Prioritize SQLite data"
+    }
+   ]
+  }
+ },
+ "poolfullofmilk/WifiWatch": {
+  "cands": {
+   "SQLite": [
+    {
+     "line": 32,
+     "q": "- MudBlazor, ApexCharts and SQLite through Entity Framework Core"
     }
    ]
   }
@@ -439310,32 +439413,6 @@
    ]
   }
  },
- "quangdang46/prompt_storage": {
-  "cands": {
-   "SQLite": [
-    {
-     "line": 10,
-     "q": "**Your prompts, one command away.** `pst` is a local-first prompt library stored in SQLite with full-text search, variable templating, and a bridge that teaches AI coding agents how to use it. Type `pst code-review` and the prompt lands on stdout instantly — a"
-    },
-    {
-     "line": 67,
-     "q": "`pst` collapses everything into **one SQLite database** with:"
-    },
-    {
-     "line": 83,
-     "q": "|💾 **Durable**|SQLite WAL + forward-only migrations + atomic JSONL backup/restore (byte-equal roundtrip)|"
-    },
-    {
-     "line": 121,
-     "q": "|Privacy|local SQLite file|local|cloud-hosted|"
-    },
-    {
-     "line": 139,
-     "q": "|**Fast-first, boring tech**|Bundled SQLite, WAL, FTS5. No daemons, no network, no dynamic-linking surprises.|"
-    }
-   ]
-  }
- },
  "quangdangfit/go-admin": {
   "cands": {
    "PostgreSQL": [
@@ -440009,13 +440086,13 @@
      "q": "[targets.postgresql-byoc]"
     },
     {
-     "line": 523,
+     "line": 536,
      "q": "manager. CI exercises SQLite, DuckDB, PostgreSQL, MySQL, Flight SQL,"
     }
    ],
    "MySQL": [
     {
-     "line": 523,
+     "line": 536,
      "q": "manager. CI exercises SQLite, DuckDB, PostgreSQL, MySQL, Flight SQL,"
     }
    ],
@@ -440043,7 +440120,7 @@
    ],
    "SQL Server": [
     {
-     "line": 524,
+     "line": 537,
      "q": "DataFusion, Trino, and Microsoft SQL Server, plus HTTP, TCP, mTLS, and Iroh"
     }
    ]
@@ -442123,9 +442200,6 @@
    ]
   }
  },
- "Racoon80/frigate-recording-delete": {
-  "cands": {}
- },
  "Racum/uuinfo": {
   "cands": {}
  },
@@ -443505,6 +443579,28 @@
    ]
   }
  },
+ "Railcode-HQ/postgres2mcp": {
+  "cands": {
+   "PostgreSQL": [
+    {
+     "line": 3,
+     "q": "`postgres2mcp` takes a Postgres connection and gives you a fully-featured MCP server with governance built-in."
+    },
+    {
+     "line": 36,
+     "q": "* Quickly create an MCP server from your Postgres databases"
+    },
+    {
+     "line": 43,
+     "q": "We built `postgres2mcp` to make it easy to give agents access to Postgres databases while ensuring orgs retain control and can manage permissions more easily than they would be able to with roles in Postgres."
+    },
+    {
+     "line": 55,
+     "q": "2. Connect your Postgres database (see Security for more details)"
+    }
+   ]
+  }
+ },
  "rails-sqlserver/activerecord-sqlserver-adapter": {
   "cands": {
    "PostgreSQL": [
@@ -444851,7 +444947,7 @@
   "cands": {
    "PostgreSQL": [
     {
-     "line": 728,
+     "line": 732,
      "q": "The base service does not require Docker, Redis, Postgres, a graph database, or"
     }
    ],
@@ -444873,7 +444969,7 @@
      "q": "retrieval is optional: use `sqlite-vec` on Bun, or Vectorize and Workers AI on"
     },
     {
-     "line": 585,
+     "line": 589,
      "q": "runs. A Bun vector deployment must also add `sqlite-vec@0.1.9`."
     }
    ]
@@ -451710,7 +451806,7 @@
      "q": "- `messages.txt` for reading, `messages.jsonl` for scripts, and the SQLite database for queries."
     },
     {
-     "line": 159,
+     "line": 160,
      "q": "The raw data is in `data/<chat id>.sqlite`, with tables `messages`, `topics` and `tasks` (download progress)."
     }
    ]
@@ -452920,43 +453016,43 @@
      "q": "PostgreSQL"
     },
     {
-     "line": 71,
+     "line": 77,
      "q": "2. **The BaaS Trap**: Serverless \"5-minute backends\" lure developers in with toys, then slap them with a $5,000/mo cloud hostage bill when they need relational integrity, background queues, or compliance audits. Real software runs sovereign PostgreSQL, native "
     },
     {
-     "line": 113,
+     "line": 86,
+     "q": "1. **Platform Concurrency & ACID Durability**: Full-stack Node monoliths struggle when managing long-lived WebSockets, multi-stage background media compression, and transactional billing ledgers. Rails 8 with **Solid Queue** (Fiber + Thread hybrid concurrency)"
+    },
+    {
+     "line": 87,
+     "q": "2. **Zero Cloud Hostage Fees**: BaaS solutions (Supabase, Firebase) and serverless hosts (Vercel) lure developers in with \"5-minute MVPs,\" but quickly turn into \\$500–\\$5,000/mo cloud ransoms. RexOne Core runs the entire sovereign platform (API, PostgreSQL, So"
+    },
+    {
+     "line": 127,
      "q": "|**Database Integrity**|✅ **Strict Relational PostgreSQL**: Foreign keys, ACID, UUIDs, soft-deletes|⚠️ **ORM Inconsistencies**: Serverless connection pool limits on Prisma/Drizzle|✅ **PostgreSQL**: Relational integrity via managed Postgres instance|✅ **Postgre"
-    },
-    {
-     "line": 128,
-     "q": "- **RexOne (100% Free & Open)**: Forges Rails 8 API + React 19 Web + Flutter 3 Mobile into one synchronized ecosystem, eliminates Redis with Solid Queue on PostgreSQL 18, includes self-hosted Garage S3 storage, and enforces constitutional AI laws (`LAW.md`) so"
-    },
-    {
-     "line": 152,
-     "q": "- **Multi-Cloud & Polyglot Background**: Extensive real-world production engineering across AWS SAM, Microsoft Azure, FastAPI (Python), Laravel & TALL/Filament (PHP), NestJS & Next.js (Node/TypeScript), Go, Prisma, MongoDB, MySQL, and PostgreSQL."
     }
    ],
    "MySQL": [
     {
-     "line": 113,
+     "line": 127,
      "q": "|**Database Integrity**|✅ **Strict Relational PostgreSQL**: Foreign keys, ACID, UUIDs, soft-deletes|⚠️ **ORM Inconsistencies**: Serverless connection pool limits on Prisma/Drizzle|✅ **PostgreSQL**: Relational integrity via managed Postgres instance|✅ **Postgre"
     },
     {
-     "line": 152,
+     "line": 166,
      "q": "- **Multi-Cloud & Polyglot Background**: Extensive real-world production engineering across AWS SAM, Microsoft Azure, FastAPI (Python), Laravel & TALL/Filament (PHP), NestJS & Next.js (Node/TypeScript), Go, Prisma, MongoDB, MySQL, and PostgreSQL."
     }
    ],
    "SQLite": [
     {
-     "line": 112,
+     "line": 126,
      "q": "|**Offline-First Durability**|✅ **Drift SQLite (`rexone_offline`)**: Schema mirroring, offline subtitles & AES-256 saves|❌ **None**: Application breaks entirely on network disconnect|⚠️ **No Relational Offline**: Unreliable offline sync across foreign keys|❌ *"
     },
     {
-     "line": 220,
+     "line": 234,
      "q": "|📱 **Native Tri-Platform Synchrony**|Rails 8.1 API + React 19 SPA + Flutter 3 native app, shared OpenAPI v1 specs, Drift SQLite offline storage|Exact contract parity across Web and Mobile; true 60fps native Flutter with offline-first sync.|"
     },
     {
-     "line": 260,
+     "line": 274,
      "q": "||Offline AES-GCM Encrypted Media Downloads (Drift SQLite)|N/A|N/A|✅|Ecosystem Matrix|"
     }
    ]
@@ -455297,6 +455393,54 @@
     {
      "line": 64,
      "q": "You can also open an existing SQLite database directly:"
+    }
+   ]
+  }
+ },
+ "rikamalov/kanban-agent-mcp": {
+  "cands": {
+   "PostgreSQL": [
+    {
+     "line": 34,
+     "q": "pipeline (columns configured in the UI), optional PostgreSQL."
+    },
+    {
+     "line": 42,
+     "q": "- **Optional PostgreSQL**: switch the storage engine via environment"
+    },
+    {
+     "line": 81,
+     "q": "|PostgreSQL (optional)|`DATABASE_URL` or `POSTGRES_HOST` set|requires `npm install` (the `pg` package, optional dependency)|"
+    },
+    {
+     "line": 87,
+     "q": "DATABASE_URL=postgres://user:pass@host:5432/kanban"
+    },
+    {
+     "line": 93,
+     "q": "idempotent. To move an existing SQLite installation to PostgreSQL, export"
+    }
+   ],
+   "SQLite": [
+    {
+     "line": 5,
+     "q": "Node 26 stdlib backend • zero npm dependencies (SQLite) • vanilla JS, no build step"
+    },
+    {
+     "line": 14,
+     "q": "dependencies by default — `node:http` + built-in `node:sqlite`), **vanilla JS"
+    },
+    {
+     "line": 43,
+     "q": "variables; SQLite stays the zero-config default."
+    },
+    {
+     "line": 80,
+     "q": "|SQLite (default)|nothing configured|data in `$KANBAN_DATA/kanban.db` (WAL mode)|"
+    },
+    {
+     "line": 93,
+     "q": "idempotent. To move an existing SQLite installation to PostgreSQL, export"
     }
    ]
   }
@@ -459645,7 +459789,7 @@
    "PostgreSQL": [
     {
      "line": 5,
-     "q": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, and SQLite."
+     "q": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta)."
     },
     {
      "line": 47,
@@ -459667,31 +459811,41 @@
    "MySQL": [
     {
      "line": 5,
-     "q": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, and SQLite."
+     "q": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta)."
     },
     {
      "line": 123,
-     "q": "- PostgreSQL, MySQL, Microsoft SQL Server, and SQLite"
+     "q": "- PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections."
     }
    ],
    "SQLite": [
     {
      "line": 5,
-     "q": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, and SQLite."
+     "q": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta)."
     },
     {
      "line": 123,
-     "q": "- PostgreSQL, MySQL, Microsoft SQL Server, and SQLite"
+     "q": "- PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections."
     }
    ],
    "SQL Server": [
     {
      "line": 5,
-     "q": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, and SQLite."
+     "q": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta)."
     },
     {
      "line": 123,
-     "q": "- PostgreSQL, MySQL, Microsoft SQL Server, and SQLite"
+     "q": "- PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections."
+    }
+   ],
+   "ClickHouse": [
+    {
+     "line": 5,
+     "q": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta)."
+    },
+    {
+     "line": 123,
+     "q": "- PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections."
     }
    ]
   }
@@ -466589,6 +466743,50 @@
    ]
   }
  },
+ "saburali/play_showcase": {
+  "cands": {
+   "MySQL": [
+    {
+     "line": 37,
+     "q": "Traditional web-based TV streaming sites frequently suffer from unhandled stream timeouts, broken CDN links, sluggish directory navigation, and intrusive interfaces. **Play** solves these challenges by combining a lightning-fast **React 19** and **Tailwind CSS"
+    },
+    {
+     "line": 228,
+     "q": "- **Resilient Cloud Database Connection Pool**: Connected to **TiDB Cloud Serverless MySQL** via `mysql2/promise` with SSL encryption (`TLSv1.2`), `waitForConnections: true`, and automated socket keep-alive (`keepAliveInitialDelay: 10000`) to prevent dropped c"
+    },
+    {
+     "line": 264,
+     "q": "- **Database**: TiDB Cloud (Distributed Serverless MySQL Compatible) / MySQL 8.0+"
+    },
+    {
+     "line": 277,
+     "q": "3. **Database**: Hosted on **TiDB Cloud** Serverless MySQL with SSL encryption."
+    }
+   ],
+   "TiDB": [
+    {
+     "line": 37,
+     "q": "Traditional web-based TV streaming sites frequently suffer from unhandled stream timeouts, broken CDN links, sluggish directory navigation, and intrusive interfaces. **Play** solves these challenges by combining a lightning-fast **React 19** and **Tailwind CSS"
+    },
+    {
+     "line": 228,
+     "q": "- **Resilient Cloud Database Connection Pool**: Connected to **TiDB Cloud Serverless MySQL** via `mysql2/promise` with SSL encryption (`TLSv1.2`), `waitForConnections: true`, and automated socket keep-alive (`keepAliveInitialDelay: 10000`) to prevent dropped c"
+    },
+    {
+     "line": 240,
+     "q": "|**Database Pool Resilience**|TiDB Cloud serverless pools use active keep-alive probes and automated reconnection logic to guard against cloud cluster sleep cycles.|"
+    },
+    {
+     "line": 264,
+     "q": "- **Database**: TiDB Cloud (Distributed Serverless MySQL Compatible) / MySQL 8.0+"
+    },
+    {
+     "line": 277,
+     "q": "3. **Database**: Hosted on **TiDB Cloud** Serverless MySQL with SSL encryption."
+    }
+   ]
+  }
+ },
  "sachaarbonel/pgsearch-gorm-example": {
   "cands": {
    "PostgreSQL": [
@@ -469716,7 +469914,7 @@
   "cands": {
    "SQLite": [
     {
-     "line": 45,
+     "line": 51,
      "q": "A Python daemon owns the microphone, speaker, models, memory and tools. The companion is Electron with React and TypeScript, with a small AppKit module for the glass. They talk over localhost with a per-machine key. Wake word: microWakeWord. Speech recognition"
     }
    ]
@@ -470162,7 +470360,7 @@
     },
     {
      "line": 14,
-     "q": "**about 75× faster than C SQLite and over 200× faster than Turso**."
+     "q": "**about 300× faster than C SQLite and nearly 1,000× faster than Turso**."
     },
     {
      "line": 17,
@@ -470453,19 +470651,15 @@
   "cands": {
    "PostgreSQL": [
     {
-     "line": 9,
-     "q": "> PGlite, an Embeddable Postgres"
+     "line": 7,
+     "q": "> PGlite, an Embeddable Postgres Run a full Postgres database locally in WASM with reactivity and live sync."
     },
     {
-     "line": 10,
-     "q": "> Run a full Postgres database locally in WASM with reactivity and live sync."
-    },
-    {
-     "line": 98,
+     "line": 95,
      "q": "This, in combination with `Sync`, will make us able to create an offline-first application with the ability for the users to save their data in a centralized postgres instance."
     },
     {
-     "line": 104,
+     "line": 101,
      "q": "In the following example we are creating a `/server/plugins/extend-pglite.ts` plugin that adds and configure `pgvector` and `Sync`:"
     }
    ]
@@ -473265,24 +473459,6 @@
  "sayanarijit/sqla-fancy-core": {
   "cands": {}
  },
- "Sayandeep1013/Rein-Bot": {
-  "cands": {
-   "PostgreSQL": [
-    {
-     "line": 5,
-     "q": "Postgres"
-    },
-    {
-     "line": 22,
-     "q": "read. So guesses are graded inside Postgres, the clip is named by a random UUID,"
-    },
-    {
-     "line": 65,
-     "q": "|Database|Supabase Postgres|RLS, realtime and storage in one free tier|"
-    }
-   ]
-  }
- },
  "Sayed94h/manage-appointments": {
   "cands": {}
  },
@@ -475456,23 +475632,23 @@
   "cands": {
    "SQLite": [
     {
-     "line": 144,
+     "line": 145,
      "q": "- **Admin REST** → `/api/*` HTTPS → Express → SQLite. Everything scoped by `workspace_id` from JWT `current_workspace_id` claim."
     },
     {
-     "line": 174,
+     "line": 175,
      "q": "- SQLite (bundled via `better-sqlite3`; no separate install needed — `npm install` handles the native bindings)"
     },
     {
-     "line": 410,
+     "line": 411,
      "q": "4. Update the `plans` table in the SQLite DB with your Stripe price IDs:"
     },
     {
-     "line": 658,
+     "line": 659,
      "q": "repairs it (`npm install --omit=dev`, or `npm rebuild better-sqlite3`) and continues; if it cannot,"
     },
     {
-     "line": 666,
+     "line": 667,
      "q": "- **upgrading Node** leaves `better-sqlite3` compiled against the previous ABI, which fails in a way"
     }
    ]
@@ -482994,7 +483170,7 @@
   "cands": {
    "PostgreSQL": [
     {
-     "line": 129,
+     "line": 132,
      "q": "The verifier sits on an embedded, ACID-compliant B-Tree storage engine, so the trace and the agent's state share one transaction boundary. The same library gives you crash-safe agent memory that another worker can resume, vector search stored next to structure"
     }
    ]
@@ -484344,20 +484520,20 @@
      "q": "Natural language to SQL and semantic operators for PostgreSQL"
     },
     {
-     "line": 21,
+     "line": 12,
+     "q": "Existing PostgreSQL ·"
+    },
+    {
+     "line": 23,
      "q": "jev4pg is a carefully designed JEV harness, brings semantic intelligence to PostgreSQL with a comprehensive toolkit of **41 JEV operators** for filtering, extraction, ranking, matching and verification. Build semantic search, document workflows and analyst too"
     },
     {
-     "line": 25,
+     "line": 27,
      "q": "**Evidence caching** retains raw observations for compatible queries and threshold changes, with source and evaluator identity checks. **Controlled retries and reviewable fallbacks** keep errors, uncertainty and skipped work explicit, and preserve legal SQL pr"
     },
     {
-     "line": 27,
+     "line": 29,
      "q": "See it in action at jev4pg.com, then build with the workspace, HTTP API or PostgreSQL interfaces."
-    },
-    {
-     "line": 65,
-     "q": "The native evidence registry extends compatible reuse across PostgreSQL connections, matching the projected context, typed questions and evaluator revision. This avoids paying for the same eligible judgment again. Evidence reuse."
     }
    ]
   }
@@ -489971,11 +490147,11 @@
      "q": "整套引擎在本机运行——BGE 中文语义模型 ONNX 本地推理，sqlite-vec 向量索引，MMR 去冗余重排序。写完章节后台自动增量索引，无需网络，无需额外配置。"
     },
     {
-     "line": 193,
+     "line": 201,
      "q": "|数据库|SQLite + GORM（ACID 事务 + 操作日志回滚）|"
     },
     {
-     "line": 194,
+     "line": 202,
      "q": "|向量搜索|sqlite-vec + ONNX Runtime（bge-small-zh-v1.5 int8 量化）|"
     }
    ]
@@ -501148,24 +501324,6 @@
    ]
   }
  },
- "songconmaisaix31-design/tongpin-real-tags": {
-  "cands": {
-   "SQLite": [
-    {
-     "line": 5,
-     "q": "`PORTFOLIO / MAINTENANCE` · 纯爱战神黑客松全场第二 · Flask / Jinja2 / SQLite"
-    },
-    {
-     "line": 29,
-     "q": "|双向会话|SQLite 中唯一 direct 会话、双方消息持久化、举报与拉黑限制|服务端渲染；对方需要打开或刷新页面，无实时推送|"
-    },
-    {
-     "line": 97,
-     "q": "Python 测试使用临时 SQLite 和 Flask `test_client()`，不访问外部 provider，也不需要任何凭据。当前验证结果与已知限制见 STATUS.md。"
-    }
-   ]
-  }
- },
  "SongLee24/contacts-app": {
   "cands": {
    "SQLite": [
@@ -501272,11 +501430,11 @@
   "cands": {
    "SQLite": [
     {
-     "line": 13,
+     "line": 17,
      "q": "- Local SQLite storage; no hosted service required."
     },
     {
-     "line": 28,
+     "line": 32,
      "q": "with SQLite FTS5 for lexical search."
     }
    ]
@@ -503482,15 +503640,15 @@
      "q": "**HTML + WASM (Web Native):** A self-contained html file bundled with SQLite.js enables queries directly in the browser without any server infrastructure."
     },
     {
-     "line": 149,
+     "line": 150,
      "q": "SpecCompiler runs as a Pandoc Lua filter and adds a SQLite middle-end between Pandoc's reader and writer:"
     },
     {
-     "line": 174,
+     "line": 175,
      "q": "**2. Middle-end (SpecCompiler).** Lower the AST into SpecIR (SQLite), apply type"
     },
     {
-     "line": 193,
+     "line": 194,
      "q": "**4. Post-processing (optional).** Format-specific adjustments to the emitted artifacts. For example, OOXML tweaks in DOCX output or packaging sqlite.js in HTML."
     }
    ]
@@ -520535,42 +520693,42 @@
   "cands": {
    "PostgreSQL": [
     {
-     "line": 21,
-     "q": "PostgreSQL, MySQL, and DuckDB are supported by the current preparation surface. Use SQL directly with your database driver or put a higher-level integration/execution layer on top of it."
+     "line": 17,
+     "q": "Write SQL concepts directly in Swift, compose them as values, and prepare the result for PostgreSQL, MySQL, or DuckDB. SQL builds statements. Execution stays with your database driver."
+    },
+    {
+     "line": 19,
+     "q": "Generated SQL examples in this README use PostgreSQL `.plain` rendering unless noted otherwise. Use `.splitted` when you need query placeholders and bind values for a driver."
     },
     {
      "line": 194,
+     "q": "PostgreSQL gives:"
+    },
+    {
+     "line": 274,
      "q": "let postgres = query.prepare(.psql)"
     },
     {
-     "line": 202,
+     "line": 282,
      "q": "let sql = query.prepare(.psql).plain"
-    },
-    {
-     "line": 208,
-     "q": "let prepared = query.prepare(.psql).splitted"
-    },
-    {
-     "line": 325,
-     "q": "PostgreSQL gives:"
     }
    ],
    "MySQL": [
     {
-     "line": 21,
-     "q": "PostgreSQL, MySQL, and DuckDB are supported by the current preparation surface. Use SQL directly with your database driver or put a higher-level integration/execution layer on top of it."
+     "line": 17,
+     "q": "Write SQL concepts directly in Swift, compose them as values, and prepare the result for PostgreSQL, MySQL, or DuckDB. SQL builds statements. Execution stays with your database driver."
     },
     {
-     "line": 195,
+     "line": 275,
      "q": "let mysql = query.prepare(.mysql)"
     },
     {
-     "line": 346,
+     "line": 430,
      "q": "query.prepare(.mysql)"
     },
     {
-     "line": 350,
-     "q": "The goal is not to pretend PostgreSQL, MySQL, and DuckDB are identical. The goal is to keep one composable Swift SQL model while the selected dialect owns the rendering differences that actually belong to that database."
+     "line": 434,
+     "q": "Queries can share structure across PostgreSQL, MySQL, and DuckDB while each dialect owns its database-specific rendering."
     }
    ]
   }
@@ -527159,10 +527317,10 @@
     },
     {
      "line": 136,
-     "q": "There is no in-place upgrade path: 2.0 installs the greenfield schema into an empty database. To salvage data from an older install, take a `pg_dump` first and restore it manually."
+     "q": "Deployed installs update themselves in place with `mira update` (non-breaking releases only; a release carrying `BREAKING.md` is refused and prints the manual path). The database stays greenfield either way: the schema installs into an empty database, and data"
     },
     {
-     "line": 172,
+     "line": 209,
      "q": "docker run -it -v mira-data:/opt/vault -v mira-userdata:/opt/mira/app/data -v mira-pgdata:/var/lib/postgresql/17/main -v mira-valkey:/var/lib/valkey -p 1993:1993 mira:latest"
     }
    ]
@@ -530067,6 +530225,9 @@
  "TencentCloud/terraform-provider-tencentcloudenterprise": {
   "cands": {}
  },
+ "TencentCloud/THCLI": {
+  "cands": {}
+ },
  "TencentCloud/TIMSDK": {
   "cands": {}
  },
@@ -530934,28 +531095,6 @@
    ]
   }
  },
- "terrylica/cc-skills": {
-  "cands": {
-   "ClickHouse": [
-    {
-     "line": 21,
-     "q": "|devops-tools|DevOps automation: ClickHouse, Doppler, MLflow, Cloudflare Workers, pueue orchestration, notifications, session recovery, LLM session debriefs|devops|"
-    },
-    {
-     "line": 40,
-     "q": "|quality-tools|Code quality and validation: clone detection, dead-code, multi-agent E2E + performance profiling, ClickHouse architect, refactoring guide|quality|"
-    },
-    {
-     "line": 477,
-     "q": "17 bundled skills: clickhouse-cloud-management, clickhouse-pydantic-config, claude-code-proxy-patterns, disk-hygiene, distributed-job-safety, doppler-workflows, doppler-secret-validation, dual-channel-watchexec, firecrawl-research-patterns, ml-data-pipeline-ar"
-    },
-    {
-     "line": 489,
-     "q": "Six bundled skills: clickhouse-architect, code-clone-assistant, multi-agent-e2e-validation, multi-agent-performance-profiling, schema-e2e-validation, symmetric-dogfooding"
-    }
-   ]
-  }
- },
  "terryzwt/compose-lnmp-drupal": {
   "cands": {
    "MySQL": [
@@ -531729,16 +531868,6 @@
  "thallyta-castro-cv/algafood-api": {
   "cands": {}
  },
- "thalyssondelano/drf-schedule-manager": {
-  "cands": {
-   "PostgreSQL": [
-    {
-     "line": 15,
-     "q": "- **Banco de Dados:** PostgreSQL"
-    }
-   ]
-  }
- },
  "thamaraiselvam/LEMP-Installer": {
   "cands": {
    "MySQL": [
@@ -532437,7 +532566,7 @@
      "q": "- **Outgoing TLS** for Temporal, Weaviate, PostgreSQL, S3 and plugins, with verified"
     },
     {
-     "line": 249,
+     "line": 261,
      "q": "latency, and writes the counts to PostgreSQL every few seconds"
     }
    ]
@@ -535551,6 +535680,16 @@
     {
      "line": 86,
      "q": "2. PostgreSQL"
+    }
+   ]
+  }
+ },
+ "this-acorn/stormhacks-2026": {
+  "cands": {
+   "TiDB": [
+    {
+     "line": 15,
+     "q": "- **Database:** TiDB Cloud, for storage and vector search"
     }
    ]
   }
@@ -561104,16 +561243,6 @@
  "vansacer/tdsql": {
   "cands": {}
  },
- "vanshjain-0702/DBX-Database-Extreme": {
-  "cands": {
-   "PostgreSQL": [
-    {
-     "line": 186,
-     "q": "|Relational queries, joins, transactions across entities|Postgres (+ pgvector)|DBX is a memory engine, not a system of record|"
-    }
-   ]
-  }
- },
  "VanshRana-1004/Orbitron": {
   "cands": {
    "PostgreSQL": [
@@ -561885,23 +562014,23 @@
   "cands": {
    "SQLite": [
     {
-     "line": 48,
+     "line": 50,
      "q": "- **Boring to run, by design.** A single Go binary with the UI embedded, SQLite, no external database, no sidecars, no nginx. Distroless image, Helm chart, and ARM builds down to a Pi Zero."
     },
     {
-     "line": 135,
+     "line": 140,
      "q": "- **Webhook notifications** for grab, import, failure, new books found, new requests, health changes and a new Bindery release (pipe to Apprise, ntfy, Home Assistant, Discord, Slack via proxies). **On-demand SQLite backups.** **Persistent log viewer** in Setti"
     },
     {
-     "line": 150,
+     "line": 155,
      "q": "**Packaging** — single Go binary with the React frontend embedded via `go:embed`. Distroless container, non-root by default, and a Helm chart that adds a read-only root filesystem, all capabilities dropped and a RuntimeDefault seccomp profile. Helm chart for A"
     },
     {
-     "line": 187,
+     "line": 192,
      "q": "|`BINDERY_DB_PATH`|platform-default|SQLite database path|"
     },
     {
-     "line": 218,
+     "line": 223,
      "q": "Bindery is a single Go binary (chi router, distroless container) with the React 19 + TypeScript frontend embedded via `go:embed`, talking to SQLite in WAL mode through the pure-Go `modernc.org/sqlite` driver — no CGO, no external database, no sidecars."
     }
    ]
@@ -563017,6 +563146,10 @@
     {
      "line": 3,
      "q": "A PostgreSQL job queue for Haskell applications."
+    },
+    {
+     "line": 14,
+     "q": "Orville also needs `arbiter-libpq` for the listener, and Hasql also needs `pqi-ffi`."
     }
    ]
   }
@@ -567621,6 +567754,9 @@
    ]
   }
  },
+ "ViniTamanhao/graybox-core": {
+  "cands": {}
+ },
  "VinithS/sea-bus-tidbyt": {
   "cands": {}
  },
@@ -571985,24 +572121,6 @@
  },
  "vuejs/vuefire": {
   "cands": {}
- },
- "Vujavujavuja/Overdoo": {
-  "cands": {
-   "Oracle": [
-    {
-     "line": 61,
-     "q": "records the policy. No oracle is involved: nothing has happened to the flight"
-    },
-    {
-     "line": 67,
-     "q": "can trigger it, and the oracle decides, not the caller."
-    },
-    {
-     "line": 125,
-     "q": "**The oracle threshold is 1, not 2.** The design wants two independent providers"
-    }
-   ]
-  }
  },
  "vukmanovicmilos/web-app": {
   "cands": {
@@ -596995,16 +597113,6 @@
    ]
   }
  },
- "Y-K-SAI-SRIKAR/AIRiskManagerBackend": {
-  "cands": {
-   "MySQL": [
-    {
-     "line": 26,
-     "q": "|**Persistence**|SQLAlchemy · PyMySQL · MySQL (AWS RDS)|"
-    }
-   ]
-  }
- },
  "y0f/asura": {
   "cands": {
    "PostgreSQL": [
@@ -597820,7 +597928,7 @@
     },
     {
      "line": 66,
-     "q": "ClickHouse and Minio (open source S3-compatible storage server) docker"
+     "q": "ClickHouse and SeaweedFS (open source S3-compatible storage server) docker"
     },
     {
      "line": 78,
@@ -598917,20 +599025,6 @@
  },
  "Yarin78/Tidbyt-FTI-recycle": {
   "cands": {}
- },
- "yarizm/Yunchuang": {
-  "cands": {
-   "SQLite": [
-    {
-     "line": 166,
-     "q": "中日韩文本使用子串匹配，正文通过 trigram 索引加速；其他语种使用 SQLite FTS5。"
-    },
-    {
-     "line": 385,
-     "q": "|数据库|Drift + SQLite + FTS5|"
-    }
-   ]
-  }
  },
  "yarncraft/awesome-edge": {
   "cands": {
@@ -602368,22 +602462,6 @@
    ]
   }
  },
- "yihongchen772-alt/careerplatform-local": {
-  "cands": {
-   "PostgreSQL": [
-    {
-     "line": 7,
-     "q": "- 数据库从 Postgres 换成 SQLite，存在你自己电脑的本地文件里"
-    }
-   ],
-   "SQLite": [
-    {
-     "line": 7,
-     "q": "- 数据库从 Postgres 换成 SQLite，存在你自己电脑的本地文件里"
-    }
-   ]
-  }
- },
  "yihonglei/mimosa-framework": {
   "cands": {}
  },
@@ -604588,7 +604666,7 @@
      "q": "**Databases:** PostgreSQL, MySQL and SQLite"
     },
     {
-     "line": 152,
+     "line": 153,
      "q": "This is what autodb is for in an organisation. autodb speaks the PostgreSQL"
     }
    ],
@@ -605458,7 +605536,7 @@
   "cands": {
    "SQLite": [
     {
-     "line": 291,
+     "line": 316,
      "q": "|OpenCode|`~/.local/share/opencode/opencode.db` (SQLite; also the legacy `storage/**` JSON)|supported|"
     }
    ]
@@ -619147,11 +619225,11 @@
      "q": "The binary is self-contained (assets, components and migrations are embedded; SQLite is pure Go). `starbase --version` prints the version, `/healthz` answers `ok <version>`."
     },
     {
-     "line": 121,
+     "line": 123,
      "q": "- **Per-tab UI state** (filters, sort, preview theme) is stored in SQLite, in `tab_state`. The stream keeps the URL in sync."
     },
     {
-     "line": 122,
+     "line": 124,
      "q": "- **Catalog:** `components/` is embedded. At startup `SyncCatalog` mirrors it into SQLite (FTS5 for search)."
     }
    ]

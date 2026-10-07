@@ -8428,5 +8428,72 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7e11d1d7ca83": {
+  "identity": {
+   "one_liner": "内嵌 sing-box 的自托管代理面板，单二进制+SQLite",
+   "review": "m-ui 是一个用 Go 编写的自托管代理管理面板，通过\"线路\"抽象统一 inbound/outbound/route，内嵌 sing-box 作为数据面，配置应用前先干跑校验、失败自动回滚，支持一主多副服务器、用户/套餐/代理管理、订阅分发与备份还原。面向自用者和小团队的多服务器统一管理场景，要求 Linux amd64/arm64 与 systemd 环境，不支持 Alpine 等无 systemd 系统。",
+   "highlights": [
+    "提供配置干跑校验与失败自动回滚，改用户/上游为热更新",
+    "支持一主多副架构：主机推送配置、回收流量、集中判定配额",
+    "提供订阅分发（通用链接/Clash/sing-box）、证书签发续期、备份还原与 Telegram 通知"
+   ],
+   "use_cases": [
+    "自托管多服务器代理节点的集中管理",
+    "向用户/代理分发订阅并提供用量、配额、限速管理",
+    "面板内完成证书、备份、换机迁移等运维操作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "一个二进制里跑着四件事:**面板**(管理界面与 API)、**订阅服务**(客户端来拉配置)、**数据面**(内嵌 sing-box,真正过流量)、**后台**(统计、配额与限速规则判定、上游巡检、公网 IP 探测、大陆连通检测、日志清理、主副同步)。它们共用同一个 SQLite 文件,所以面板里点一下保存,订阅和数据面立刻看到同一份数据。 ／ |`database/`|模型、SQLite 打开与迁移|",
+     "lines": [
+      67,
+      133
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "面板用 SQLite 作为自身数据存储，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "m-ui 是一个自托管的代理面板:**一个二进制 + 一个数据库文件**,sing-box 直接内嵌其中。线路、用户、订阅、证书、备份、多台服务器,全在网页里管。 ／ 一个二进制里跑着四件事:**面板**(管理界面与 API)、**订阅服务**(客户端来拉配置)、**数据面**(内嵌 sing-box,真正过流量)、**后台**(统计、配额与限速规则判定、上游巡检、公网 IP 探测、大陆连通检测、日志清理、主副同步)。它们共用同一个 SQLite 文件,所以面板里点一下保存,订阅和数据面立刻看到同一份数据。 ／ |`database/`|模型、SQLite 打开与迁移|",
+   "evidence_lines": [
+    26,
+    67,
+    133
+   ]
+  },
+  "fn": "Maoyangui/m-ui",
+  "sha": "7e11d1d7ca83",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

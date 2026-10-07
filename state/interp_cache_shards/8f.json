@@ -8350,5 +8350,68 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d874e63157ab": {
+  "identity": {
+   "one_liner": "Rust 编写的属性图数据库，统一 MVCC/时间旅行/分支/复制于喷泉码提交流",
+   "review": "frankengraphdb 是用 Rust 实现的属性图数据库，提供嵌入式库（fgdb）、服务端（fgdbd）和 CLI 三种形态，支持 GQL（ISO/IEC 39075:2024）与 openCypher 入口。核心机制是把 MVCC、时间旅行、git 式分支、复制与变更订阅统一为一条内容寻址、RaptorQ 纠删码的提交流，并以确定性实验运行时支撑可审计、可重放的结果。README 声明当前尚无发布版本或安装器，只能从源码 checkout 运行部分示例语句。",
+   "highlights": [
+    "统一 MVCC、时间旅行查询、git 式零拷贝分支、复制与变更订阅于单一提交流",
+    "支持 GQL（ISO/IEC 39075:2024）与 openCypher 入口，提供嵌入式库、服务端与 CLI",
+    "全程确定性输出：查询结果附带可审计、可重放的 plan certificate，并在确定性实验运行时下测试"
+   ],
+   "use_cases": [
+    "需要时间旅行历史查询与数据库分支的图数据工作负载",
+    "GraphRAG 检索场景：在一个规划器内融合向量、BM25 与图扩展的 hybrid.search",
+    "对结果可重放、可审计有确定性要求的多智能体（agent）读写场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **A reference oracle.** `fgdb-reference` is a deliberately simple, single-threaded, obviously-correct implementation of the full logical semantics, compiled for tests only. \"What should this return\" is a *program*, not a debate, and it exists before the firs",
+     "lines": [
+      241
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明它是图数据库引擎本体（内核/引擎），其自身的存储与查询实现即项目主体",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT + Rider 双许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A blank-slate, memory-safe, ultra-high-performance property-graph database in Rust, built on the Franken/asupersync ecosystem. It unifies MVCC, time-travel history, git-style branches, replication, and change subscriptions into a single fountain-coded commit stream, runs transactional writes and static-CSR analytics on one temperature-tiered store, and makes every query result deterministic, auditable, and replayable.** ／ # What runs today, from a source checkout (there are no releases or installer yet — see Installation): ／ cargo run -p fgdb --example open_a_database",
+   "evidence_lines": [
+    10,
+    13,
+    16
+   ]
+  },
+  "fn": "Dicklesworthstone/frankengraphdb",
+  "sha": "d874e63157ab",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

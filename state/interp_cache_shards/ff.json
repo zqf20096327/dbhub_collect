@@ -9519,5 +9519,62 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c937e07ec494": {
+  "identity": {
+   "one_liner": "Couchbase 的 MCP 服务器，让 AI 代理通过自然语言访问集群",
+   "review": "这是一个自托管的 Model Context Protocol 服务器，为 AI 代理和 LLM 客户端（如 Claude、Cursor 等）提供访问 Couchbase/Capella 集群的工具集，涵盖集群健康检查、schema 发现、文档 KV 读写、SQL++ 查询与索引管理、FTS 等。默认只读模式阻止写操作，支持按工具禁用。通过 PyPI 或 Docker 安装，适合想让 AI 助手安全探查和查询 Couchbase 数据的开发与运维人员。",
+   "highlights": [
+    "提供集群健康、schema、KV、查询、FTS、性能等多类 MCP 工具",
+    "默认只读模式，写工具默认禁用并支持细粒度工具关闭",
+    "支持 STDIO 与 Streamable HTTP 传输，后者可选 OAuth 2.1 认证"
+   ],
+   "use_cases": [
+    "通过 AI 助手用自然语言探查 Couchbase 集群结构与数据",
+    "运行 SQL++ 查询、获取 EXPLAIN 计划与索引建议",
+    "检查集群健康状态、诊断与性能指标"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是为 Couchbase 数据库提供 MCP 协议接入能力的服务端组件，为数据库生态服务而非使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Couchbase MCP Server ／ Couchbase MCP Server is a self-hosted Model Context Protocol (MCP) server that connects AI agents and LLM-powered assistants — Claude, Cursor, Windsurf, VS Code Copilot, and other MCP clients — to data in Couchbase clusters, whether hosted on Capella or self-managed. MCP is an open standard for letting AI assistants call tools and query external data sources; this server implements that standard for Couchbase, so an AI agent can inspect your cluster, run SQL++ queries, read and write documents, and analyze query performance using natural language instead of hand-written code. ／ It provides tools across categories including Cluster Health, Data Schema, Key-Value, Query, and Performance — with safety controls via read-only mode (on by default) and fine-grained tool disabling, so you can let an AI agent explore and query your data without risking unintended writes. It supports both STDIO and Streamable HTTP transports.",
+   "evidence_lines": [
+    1,
+    3,
+    5
+   ]
+  },
+  "fn": "couchbase/mcp-server-couchbase",
+  "sha": "c937e07ec494",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

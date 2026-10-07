@@ -10010,5 +10010,72 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2ddd5c8b7099": {
+  "identity": {
+   "one_liner": "基于 Claude 的长期记忆 AI 助手，含记忆衰减与自我提示进化机制",
+   "review": "MIRA 是一个持续型 AI 聊天助手，围绕单一永久会话实现长期持久化：旧对话折叠为第一人称记忆，按访问频率与时间相关性衰减；通过 subcortical 检索与 Peanut Gallery 观察者两次辅助处理准备和校正上下文；并以文本化提示更新替代微调实现个性化。使用 PostgreSQL 存储历史与行为信号，适合想搭建长期个人 AI 伙伴的用户。",
+   "highlights": [
+    "对话段落折叠生成第一人称记忆，按使用天数衰减",
+    "Text-Based LoRA 机制基于对话反馈迭代更新系统提示",
+    "工具从文件系统自动发现注册，支持临时启用与固定"
+   ],
+   "use_cases": [
+    "构建具有长期记忆的个人 AI 助手",
+    "需要上下文压缩与记忆管理的长对话场景",
+    "通过反馈文本实现个性化行为适配"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The loop works like this: After each conversation segment collapses, an assessment extractor compares the conversation against MIRA's behavioral contract. It records alignment, misalignment, and contextual passes with the specific evidence and prompt section i ／ Segment collapse and live context compaction are deliberately separate. Collapse is the durable end of a conversational segment. Live compaction is a pressure-release valve for a conversation that is still active: older messages are replaced in the provider re",
+     "lines": [
+      40,
+      83
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其用 PostgreSQL 存储对话历史与行为信号，是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The loop works like this: After each conversation segment collapses, an assessment extractor compares the conversation against MIRA's behavioral contract. It records alignment, misalignment, and contextual passes with the specific evidence and prompt section involved. These signals accumulate in Postgres. ／ Segment collapse and live context compaction are deliberately separate. Collapse is the durable end of a conversational segment. Live compaction is a pressure-release valve for a conversation that is still active: older messages are replaced in the provider request by one rolling continuation brief, while the recent turns and the original PostgreSQL history remain intact.",
+   "evidence_lines": [
+    40,
+    83
+   ]
+  },
+  "fn": "taylorsatula/mira",
+  "sha": "2ddd5c8b7099",
+  "source": "readme",
+  "generated_at": "2026-10-07",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
