@@ -8676,5 +8676,131 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5974246c5d17": {
+  "identity": {
+   "one_liner": "跨平台桌面应用，集中监控 AI 编程工具本机用量与服务商额度",
+   "review": "CC Usage 是基于 Tauri 2 构建的跨平台桌面应用，通过增量读取本机 AI 工具（Claude Code、Codex CLI、Gemini CLI 等）的会话记录并去重写入本地 SQLite，展示 Token、缓存、请求数与费用估算，同时查询订阅服务商返回的额度窗口；数据保存在本机 usage.db，面向需要查看 AI 编程用量的个人开发者。注意费用为按价目估算，且本地统计与在线额度是两条独立链路。",
+   "highlights": [
+    "提供桌面灵动岛与统计主面板，按平台、时间范围和模型展示 Token、缓存、请求数与估算费用",
+    "读取本机会话记录并去重写入本地 SQLite（usage.db），支持导入导出统计记录",
+    "支持连接管理，识别多个额度服务商并显示其返回的窗口信息"
+   ],
+   "use_cases": [
+    "个人开发者集中查看多个 AI 编程工具的本机用量与费用估算",
+    "查询 Claude、Codex 等订阅套餐的额度窗口与重置时间",
+    "监控经本地代理的 API Key 连接用量并按连接归账"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "本机会话文件 ──增量读取、去重──→ 本地 SQLite ──→ 主面板 / 灵动岛 ／ - 统计记录保存在本机 SQLite 数据库 `usage.db`，运行偏好保存在 `settings.json`。 ／ 技术栈：**Tauri 2 · Rust · React 19 · TypeScript · Vite · Tailwind CSS 4 · SQLite**。",
+     "lines": [
+      198,
+      203,
+      242
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 保存自身统计数据的桌面应用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "仓库原说明标注为 MIT，独立 LICENSE 文件尚未补充",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "本机会话文件 ──增量读取、去重──→ 本地 SQLite ──→ 主面板 / 灵动岛 ／ 技术栈：**Tauri 2 · Rust · React 19 · TypeScript · Vite · Tailwind CSS 4 · SQLite**。",
+   "evidence_lines": [
+    198,
+    242
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "haishishushu/cc-usage",
+  "sha": "5974246c5d17",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7e2e2779be3b": {
+  "identity": {
+   "one_liner": "2027法国总统大选民调数据汇总仓库，以CSV/JSON格式发布",
+   "review": "该项目汇总2027年法国总统选举的投票意向民调，提供合并后的CSV文件与JSON数据流，并定义candidats.csv、polls.csv等数据格式。贡献者通过提交PR添加民调数据，GitHub Actions自动校验CSV格式与数据一致性并生成合并文件，适合需要民调数据的分析者与研究者使用。",
+   "highlights": [
+    "提供合并后的民调CSV文件与JSON数据流",
+    "GitHub Actions自动校验CSV格式、数据一致性并生成合并文件",
+    "定义候选人、民调元数据与结果的CSV数据结构"
+   ],
+   "use_cases": [
+    "获取2027法国总统选举民调的汇总数据集",
+    "以CSV/JSON格式进行民调数据分析",
+    "通过PR贡献新的民调数据并经自动校验合并"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README仅描述以CSV/JSON文件形式汇总民调数据，未提及使用任何数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Deux fichiers principaux contiennent l'ensemble des résultats de sondages consolidés avec leurs métadonnées: ／ 4. Testez localement avec `pytest` et `python merge.py` (vérification locale avant PR) ／ Une fois mergé, `presidentielle2027.csv` est mis à jour automatiquement.",
+   "evidence_lines": [
+    8,
+    45,
+    55
+   ]
+  },
+  "fn": "MieuxVoter/presidentielle2027",
+  "sha": "7e2e2779be3b",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

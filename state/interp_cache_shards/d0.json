@@ -9060,5 +9060,142 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9a5f317137c0": {
+  "identity": {
+   "one_liner": "libsqlite3 的 wasm32-unknown-unknown Rust 绑定库",
+   "review": "一个 Rust crate，为 libsqlite3 提供 wasm32-unknown-unknown 目标的 FFI 绑定，使 SQLite 可编译并在 WebAssembly 环境运行。可选启用 sqlite3mc 特性获得 SQLite3MultipleCiphers 加密支持，内置 memory 与 sahpool（OPFS）两种 VFS，支持自定义 SQLite 源码编译。适合需要在浏览器/WASM 环境中使用 SQLite 的 Rust 开发者。",
+   "highlights": [
+    "提供 libsqlite3 的 wasm32-unknown-unknown 平台 FFI 绑定",
+    "支持通过 sqlite3mc 特性启用加密（SQLite3MultipleCiphers）",
+    "实现 memory 与 sahpool（OPFS）两种 VFS，并支持自定义 SQLite 源码"
+   ],
+   "use_cases": [
+    "在浏览器 WebAssembly 环境中运行 SQLite",
+    "需要 OPFS 或内存 VFS 的 WASM 数据库存储方案",
+    "需要加密功能的 WASM SQLite 场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "sqlite-wasm-rs = { version = \"0.6\", features = [\"wasm-bindgen\"] } ／ sqlite-wasm-rs = { version = \"0.6\", features = [\"wasm-bindgen\", \"sqlite3mc\"] } ／ use sqlite_wasm_rs as ffi;",
+     "lines": [
+      9,
+      16,
+      20
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为 SQLite 提供 WASM 绑定，属于为 SQLite 生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`wasm32-unknown-unknown` bindings to the libsqlite3 library. ／ use sqlite_wasm_rs as ffi; ／ sqlite-wasm-vfs = { version = \"0.3\", features = [\"sahpool\"] }",
+   "evidence_lines": [
+    3,
+    20,
+    30
+   ]
+  },
+  "fn": "Spxg/sqlite-wasm-rs",
+  "sha": "9a5f317137c0",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "309dd11ece77": {
+  "identity": {
+   "one_liner": "将 Postgres 连接转换为带治理能力的 MCP 服务器",
+   "review": "postgres2mcp 读取 Postgres 连接并生成 MCP 服务器，供 AI agent 访问数据库。用户可从参数化 SQL 创建自定义工具，通过作用域 API 密钥控制工具访问权限，并提供审计日志与分析面板。适用于需要向员工或第三方平台开放生产数据的团队。",
+   "highlights": [
+    "支持从参数化 SQL 创建自定义工具并生成 MCP 服务器",
+    "提供作用域 API 密钥与分组权限控制",
+    "包含审计日志、用量分析与自托管仪表盘"
+   ],
+   "use_cases": [
+    "管理员工对生产数据的 MCP 访问",
+    "控制向第三方平台开放的数据库内容",
+    "为非技术用户提供受控的语义层查询工具"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`postgres2mcp` takes a Postgres connection and gives you a fully-featured MCP server with governance built-in. ／ * Quickly create an MCP server from your Postgres databases ／ We built `postgres2mcp` to make it easy to give agents access to Postgres databases while ensuring orgs retain control and can manage permissions more easily than they would be able to with roles in Postgres.",
+     "lines": [
+      3,
+      36,
+      43
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其将 Postgres 连接转换为受治理的 MCP 服务器，是为数据库访问提供治理层的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`postgres2mcp` takes a Postgres connection and gives you a fully-featured MCP server with governance built-in. ／ * Scoped API keys ／ * Complete audit logs and analytics",
+   "evidence_lines": [
+    3,
+    27,
+    29
+   ]
+  },
+  "fn": "Railcode-HQ/postgres2mcp",
+  "sha": "309dd11ece77",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

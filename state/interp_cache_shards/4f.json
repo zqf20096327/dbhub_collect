@@ -9489,5 +9489,300 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c02f780ac9fe": {
+  "identity": {
+   "one_liner": "键盘优先的桌面 SQL 客户端，支持多数据库查询与浏览",
+   "review": "data-peek 是一个 Electron 桌面 SQL 客户端，面向需要快速查询数据的开发者。它提供 Monaco 编辑器、schema 感知自动补全、内联编辑、查询计划查看、ER 图、健康监控，并内置 MCP 服务器供 AI 代理读取连接（写操作需人工批准）。ClickHouse 支持为 beta，仅覆盖查询浏览；商业使用需 Pro 许可证。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、SQL Server、SQLite，ClickHouse 为 beta（仅查询浏览）",
+    "提供 EXPLAIN 计划树、Watch Mode 轮询、Time Machine 结果快照对比与 ER 图",
+    "内置 MCP 服务器，读操作有上限且只读，写操作需在应用内批准"
+   ],
+   "use_cases": [
+    "开发者日常快速查询、浏览和内联编辑数据",
+    "用 EXPLAIN 计划树和性能提示排查慢查询与缺失索引",
+    "通过 CLI doctor 在 CI 中对 Postgres schema 做检查"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta). ／ - PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections.",
+     "lines": [
+      5,
+      124
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta). ／ - PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections.",
+     "lines": [
+      5,
+      124
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta). ／ - PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections.",
+     "lines": [
+      5,
+      124
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta). ／ - PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections.",
+     "lines": [
+      5,
+      124
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta). ／ - PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections.",
+     "lines": [
+      5,
+      124
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为 SQL 客户端，连接并操作多种数据库，为数据库使用场景服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "源码 MIT；预构建应用个人免费，营利性公司或商业服务使用需 Pro 许可证（双许可模式）",
+   "install": [
+    "binary",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A fast, keyboard-first SQL client for PostgreSQL, MySQL, SQL Server, SQLite, and ClickHouse (beta). ／ - PostgreSQL, MySQL, Microsoft SQL Server, SQLite, and ClickHouse. ClickHouse support is in beta and covers querying and browsing, so inline editing and the table designer stay off for ClickHouse connections. ／ The source is MIT licensed. The pre-built app is **free for personal use**: side projects, learning, open source, students, educators, non-profits, and solo founders, with every feature included. Using it at a for-profit company of two or more people, or as a freelancer or agency billing clients, needs a Pro licence. Details are in LICENSE.md.",
+   "evidence_lines": [
+    5,
+    124,
+    133
+   ]
+  },
+  "fn": "Rohithgilla12/data-peek",
+  "sha": "c02f780ac9fe",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6410764cbb37": {
+  "identity": {
+   "one_liner": "个人生产力/自律管理系统，基于 Next.js 与 Supabase PostgreSQL 构建",
+   "review": "PACT 是一个开源的个人生产力与问责系统，提供任务、目标、时间块规划、专注计时、记账和承诺合同等功能，强调承诺绑定后果与工作成果验证（对接 GitHub、LeetCode、Codeforces）。面向希望提升执行力的个人用户及开源贡献者，数据存储在 Supabase PostgreSQL，要求零数据库本地配置即可运行。",
+   "highlights": [
+    "提供 14 个功能系统：任务、规划器、目标、项目、问责引擎、专注计时、习惯、记账、周回顾、分析等",
+    "支持 Google Calendar 双向同步，并通过 GitHub、LeetCode、Codeforces 连接器验证工作证明",
+    "包含多阶段 Dockerfile 与 docker-compose.yml 用于自托管部署，以及 44 个自动化测试套件"
+   ],
+   "use_cases": [
+    "个人时间块规划与日程执行管理",
+    "自律承诺与结果验证（如编程练习打卡）",
+    "个人收支流水记录与预算提醒"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database & Auth**: Supabase PostgreSQL with Row Level Security (RLS) & SSR Cookie Auth (`@supabase/ssr`)",
+     "lines": [
+      201
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PACT 是使用 Supabase PostgreSQL 存储数据的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**PACT** is an open-source **Personal Operating System (OS)** built with **Next.js 16**, **React 19**, **TypeScript 5**, **Tailwind CSS v4**, and **Supabase PostgreSQL** to bridge the critical divide between intention and action. Rather than functioning as a passive checklist, PACT provides an active governance system unifying time-blocked planning, strategic milestone tracking, deep work focus sessions, integer-cents financial cash flow, and unbreakable accountability contracts.",
+   "evidence_lines": [
+    32
+   ]
+  },
+  "fn": "TheVicky1/Pact_OS",
+  "sha": "6410764cbb37",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "24aad1f54263": {
+  "identity": {
+   "one_liner": "Linux 桌面黑匣子：以单一 SQLite 文件持续记录崩溃、日志与系统负载",
+   "review": "Blackbox 是一个用 Rust 编写的常驻 systemd 用户服务，持续采集 Linux 桌面上的进程崩溃、journald 警告、auditd 事件、pacman 软件包变更和 CPU/内存/GPU 负载，全部写入一个启用 WAL 模式的 SQLite 文件（7.5 GB 环形缓冲），并提供 GTK4 只读查看器按时间点回看。面向 Arch Linux 用户，依赖 pacman、systemd 和 journald，需从源码构建安装。",
+   "highlights": [
+    "通过内核 netlink 进程连接器与 BPF 过滤采集进程退出事件，配合 100ms 批量写入降低唤醒开销",
+    "SQLite 采用 WAL 模式加 synchronous=FULL 写入，数据库作为 7.5 GB 环形缓冲自动裁剪旧数据",
+    "附带 GTK4 只读查看器，可按时刻查看崩溃堆栈、资源图表与同期其他事件"
+   ],
+   "use_cases": [
+    "桌面死机或程序崩溃后回溯问题发生时刻的完整系统状态",
+    "排查登录失败、sudo 使用等 auditd 安全事件与软件包升级的关联",
+    "记录非正常关机（冻结、断电、内核 panic）的时刻与前置日志"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Blackbox answers that question in one click. It records continuously, into one SQLite file, and ／ audit.log ─────────────────────────────► auditd ───┤ one writer, SQLite, WAL, GTK4, read-only, ／ - **Writes that survive a hard freeze.** SQLite runs in WAL mode with `synchronous=FULL`, so every",
+     "lines": [
+      21,
+      44,
+      69
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 作为自身数据的存储后端，并非为数据库生态服务的工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Blackbox answers that question in one click. It records continuously, into one SQLite file, and ／  journalctl --follow ───────────────────► journald ─┼──► database.rs ──► blackbox.db ◄── Blackbox app ／ sudo pacman -S --needed rust sqlite python-gobject gtk4 libadwaita",
+   "evidence_lines": [
+    21,
+    43,
+    105
+   ]
+  },
+  "fn": "HawkOsm/BlackBox",
+  "sha": "24aad1f54263",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fa719134ab55": {
+  "identity": {
+   "one_liner": "统一仓库，包含 Laravel 后端与 Ionic/Angular 前端的完整系统",
+   "review": "该仓库将一个系统的前后端代码集中在一个代码库中：后端为基于 PHP 8.2 的 Laravel REST API（以 Docker 打包），前端为 Ionic/Angular 构建的 PWA 及移动 Web 客户端，适合前后端需要统一维护的团队使用。可见 README 未展示数据库适配或部署细节，TiDB Cloud 相关信息仅在简介处提及。",
+   "highlights": [
+    "包含 Laravel REST API 后端，使用 PHP 8.2 并以 Docker 打包",
+    "包含 Ionic/Angular 前端客户端，支持 PWA / 移动 Web 形态"
+   ],
+   "use_cases": [
+    "需要同时维护前后端代码的单仓库开发场景",
+    "以 REST API 为后端、PWA/移动 Web 为客户端的应用开发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "仓库是使用数据库的应用系统（前后端业务系统），而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Unified repository containing the complete system: ／ - `srh-toda-backend`: Laravel REST API backend (Dockerized, PHP 8.2) ／ - `srh-toda-frontend`: Ionic / Angular client (PWA / Mobile web)",
+   "evidence_lines": [
+    3,
+    4,
+    5
+   ]
+  },
+  "fn": "istibagets/srh-toda-system",
+  "sha": "fa719134ab55",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

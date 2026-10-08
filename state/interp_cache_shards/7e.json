@@ -9966,5 +9966,169 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7ccffdc67633": {
+  "identity": {
+   "one_liner": "免客户端的 SSH/HTTPS/K8s/MySQL/PostgreSQL 堡垒机代理",
+   "review": "Warpgate 是部署在 DMZ 的堡垒/访问代理服务，接受 SSH、HTTPS、Kubernetes、MySQL、PostgreSQL、RDP/VNC 连接并转发到目标，无需客户端额外软件。提供用户-目标 1:1 授权、会话录制回放、2FA/SSO 和防暴力破解，通过内置管理 Web UI 配置。适合需要托管访问内网主机与数据库的运维团队，本身用 SQLite 存储会话历史。",
+   "highlights": [
+    "支持 SSH/HTTPS/Kubernetes/MySQL/PostgreSQL/RDP/VNC 连接的透明转发",
+    "内置管理 Web UI，提供会话录制、实时查看与回放",
+    "内置 TOTP 与 OpenID Connect 的 2FA/SSO 及防暴力破解（IP 封锁、用户锁定）"
+   ],
+   "use_cases": [
+    "为内网主机和数据库提供受控的远程访问入口",
+    "托管访问的会话审计与录制",
+    "DMZ 部署的堡垒机替代 jump host/VPN 的场景"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Warpgate is a smart & fully transparent SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC bastion host that doesn't require a client app or an SSH wrapper. ／ Warpgate is a service that you deploy on the bastion/DMZ host, which will accept SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC connections and provide an (optional) web admin UI.",
+     "lines": [
+      9,
+      65
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Warpgate is a smart & fully transparent SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC bastion host that doesn't require a client app or an SSH wrapper. ／ Warpgate is a service that you deploy on the bastion/DMZ host, which will accept SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC connections and provide an (optional) web admin UI.",
+     "lines": [
+      9,
+      65
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "You manage the target and user lists and assign them to each other through the admin UI, and the session history is stored in an SQLite database (default: in `/var/lib/warpgate`). ／ * Database: SQLite via `sea-orm` + `sqlx`",
+     "lines": [
+      73,
+      100
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Warpgate 为数据库连接提供代理转发与访问控制，是服务于数据库生态的基础设施组件，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Warpgate is a smart & fully transparent SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC bastion host that doesn't require a client app or an SSH wrapper. ／ Warpgate is a service that you deploy on the bastion/DMZ host, which will accept SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC connections and provide an (optional) web admin UI. ／ You manage the target and user lists and assign them to each other through the admin UI, and the session history is stored in an SQLite database (default: in `/var/lib/warpgate`).",
+   "evidence_lines": [
+    9,
+    65,
+    73
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "warp-tech/warpgate",
+  "sha": "7ccffdc67633",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "22d7d1d5613d": {
+  "identity": {
+   "one_liner": "像素风游戏化学习 Agent，基于 LLM 与 SQLite 单文件存储",
+   "review": "一个以个人词条库为核心的学习应用：AI 对话生成词条与练习，FSRS-5 调度复习，以知识大陆、卡牌与对战呈现。支持自带模型 Key、npm 本地运行、Windows 安装包及自部署。数据存于本地 SQLite 单文件，需 Node 22.11+，且 better-sqlite3 为原生模块、安装与运行时的 Node 版本须一致。",
+   "highlights": [
+    "提供 AI 对话、词条入库、出题练习与 FSRS-5 复习调度的学习流程",
+    "数据存储于 SQLite 单文件（WAL），支持本地运行与自托管部署",
+    "提供三条验证命令：npm run check / demo:e2e / metrics --check"
+   ],
+   "use_cases": [
+    "个人学习者用对话+游戏化方式积累与复习知识词条",
+    "自带 API Key 本地部署、数据自托管的离线学习场景",
+    "多用户 Web 形态自部署（OAuth 鉴权 + Caddy 反代）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**像素风的游戏化学习 Agent：对话里学、出题里练、知识大陆上复习——你自己的词条库是主体，数据归你（SQLite 单文件，可自托管，开源）。** 在线：<https://11wand.com>（免注册可直接体验）· 本地：`npm install && npm run dev` · 零 key 全栈演示：`npm run demo:e2e`。 ／ - **数据归你**：SQLite 单文件、可自托管、开源。 ／ > ⚠️ **Node 版本必须「装依赖」与「运行时」一致**（`engines: >=22.11.0`，仓库带 `.nvmrc`）：`better-sqlite3` 是原生模块，产物按**安装那一刻**的 Node ABI 编译；换 Node 大版本必须删 `node_modules` 重装，只换运行时无效，症状是涉库代码全线 `ERR_DLOPEN_FAILED`（极易误判成新代码写错）。",
+     "lines": [
+      17,
+      49,
+      63
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 存储学习数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**像素风的游戏化学习 Agent：对话里学、出题里练、知识大陆上复习——你自己的词条库是主体，数据归你（SQLite 单文件，可自托管，开源）。** 在线：<https://11wand.com>（免注册可直接体验）· 本地：`npm install && npm run dev` · 零 key 全栈演示：`npm run demo:e2e`。 ／ **三包职责**：`@sb/shared` 只放契约与纯函数（前后端共用一份，不允许各写一套）；`@sb/server` 承载全部业务域（Express + better-sqlite3，逐版本迁移 v1..v52）；`@sb/web` 是 React 18 前端，**零第三方运行时依赖**（无 UI 库 / 无 Markdown 库 / 无图表库）。 ／ 运行时形态：`api(Express :18791，默认仅绑 127.0.0.1) + web(Vite :5173)`，数据存 SQLite 单文件（WAL）；多用户 Web 形态同一份代码 + 邮箱/密码/GitHub OAuth 鉴权 + 按用户数据归属 + Caddy 反代 + systemd 守护。★ `server/auth/form.ts` 是形态的**唯一事实源**（`SB_REQUIRE_AUTH` 开 = cloud / 关 = local），「本地有、线上没有」的功能一律从这里判断，禁止各自读 env。",
+   "evidence_lines": [
+    17,
+    114,
+    118
+   ]
+  },
+  "fn": "llwand1/studentbuddy-v2",
+  "sha": "22d7d1d5613d",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

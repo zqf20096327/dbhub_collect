@@ -9542,5 +9542,80 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8087a366e858": {
+  "identity": {
+   "one_liner": "外置/副盘文件整理与优化框架，内置SQLite FTS5即时搜索与MCP服务器",
+   "review": "SmartDrive-OS 是一个零外部依赖的 Python 存储整理框架，针对 exFAT 512KB 簇 slack 与 NTFS 副盘 C 盘缓存迁移两类场景，提供文件自动分类、防误删白名单、FTS5 快速搜索及符合 JSON-RPC 2.0 的 MCP stdio 服务器（8 个工具），供开发者和学生（含越南高校用户）管理外置 SSD 与内部副盘；MIT 许可，仅限 Python 3.9+ 环境。",
+   "highlights": [
+    "提供 exFAT 512KB 簇 slack 防护与 NTFS Junction 缓存卸载（mklink /J）双文件系统适配",
+    "内置基于 Python 标准库 sqlite3 的 FTS5 即时搜索与 MCP stdio 服务器（8 个专用工具）",
+    "实现多层白名单防护，排除 Windows 系统目录、游戏库与活动 SQL Server 数据目录"
+   ],
+   "use_cases": [
+    "整理外置 exFAT SSD 上的小型文件以减少簇 slack 浪费",
+    "将 AI 模型/包管理缓存从 C 盘迁移到内部 NTFS 副盘",
+    "通过 MCP 协议让 AI 编码代理搜索与审计驱动器内容"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **`Quick_Search`**: Interactive instant SQLite FTS5 search prompt.",
+     "lines": [
+      241
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "- **Active Database Service Defense**: Specifically protects active Microsoft SQL Server 2022 instances, databases, and LDF/MDF data directories (`DBI202_VuPT\\MSSQL16.MSSQLSERVER`, `MSSQLSERVER`, `MSSQL`).",
+     "lines": [
+      107
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是管理文件系统与驱动器的工具，内嵌 SQLite FTS5 作为自身索引/搜索机制，并非使用数据库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **exFAT Volumes (512KB Clusters)**: Activates the **512KB Cluster Slack Guard**, enforcing anti-symlink invariants, Spotlight/FSEvents anti-indexing shields (`.metadata_never_index`, `.fseventsd/no_log`), and loose file packaging. ／ ### 6. Model Context Protocol (MCP) Server Grade A (100/100) & Token Efficiency ／ - **Active Database Service Defense**: Specifically protects active Microsoft SQL Server 2022 instances, databases, and LDF/MDF data directories (`DBI202_VuPT\\MSSQL16.MSSQLSERVER`, `MSSQLSERVER`, `MSSQL`).",
+   "evidence_lines": [
+    82,
+    126,
+    107
+   ]
+  },
+  "fn": "DuongNAD/smart-drive-os",
+  "sha": "8087a366e858",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

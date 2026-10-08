@@ -9632,5 +9632,76 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d7a5cc20b45d": {
+  "identity": {
+   "one_liner": "Telegram 问答/奖励机器人，验证 LeetCode 提交并自动创建 GitHub 提交",
+   "review": "一个个人用 Telegram 机器人：读取 LeetCode 已通过提交并按难度生成 10/20/50 条 GitHub 提交作为奖励记录，同时提供每日提醒和可选的 CS 练习题。面向希望装饰个人贡献图的开发者；用 SQLite 持久化提醒、得分与排队数据，可部署于 Render 并配合 GitHub Actions 定时检查。依赖 LeetCode 非官方 GraphQL 接口，数据可见性受限。",
+   "highlights": [
+    "按问题难度（Easy/Medium/Hard）生成 10/20/50 条 GitHub 提交作为奖励记录",
+    "通过 SQLite 持久化提醒偏好、练习得分、待处理队列和 streak 历史",
+    "支持 Render webhook 部署与 GitHub Actions 定时同步两种运行方式"
+   ],
+   "use_cases": [
+    "自动化补充个人 GitHub 贡献图",
+    "每日 LeetCode 提醒与练习打卡记录",
+    "以 Telegram 命令手动管理和重试奖励提交"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ The app checks submissions every **15 minutes while running**. Render free services can sleep after inactivity and their local files are ephemeral. SQLite reminder preferences, practice scores, pending queues, and locally synced streak history therefore need a ／ `main.py` handles Telegram commands and schedules; `leetcode_client.py` reads public metadata; `rewards.py` queues and syncs rewards; `github_committer.py` creates resumable GitHub records; `storage.py` retains existing SQLite tables; `questions.py` holds the ",
+     "lines": [
+      7,
+      119,
+      172
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该机器人使用 SQLite 存储提醒偏好、练习得分等自身数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The app checks submissions every **15 minutes while running**. Render free services can sleep after inactivity and their local files are ephemeral. SQLite reminder preferences, practice scores, pending queues, and locally synced streak history therefore need a persistent disk for durability. Reward deduplication itself survives a lost SQLite database because the records are stored in GitHub. `/streak` reports the synced cache; after cache loss, `/check` can repopulate only submissions still visible in LeetCode's recent list. ／ `main.py` handles Telegram commands and schedules; `leetcode_client.py` reads public metadata; `rewards.py` queues and syncs rewards; `github_committer.py` creates resumable GitHub records; `storage.py` retains existing SQLite tables; `questions.py` holds the optional CS bank. `sync_leetcode.py` and `send_daily.py` provide standalone Actions entry points. Tests use in-memory GitHub fixtures, never live reward writes.",
+   "evidence_lines": [
+    119,
+    172
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "mitraboga/ContributionGraphPopQuiz",
+  "sha": "d7a5cc20b45d",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

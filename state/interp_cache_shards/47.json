@@ -9247,5 +9247,145 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "72c7117a0f4f": {
+  "identity": {
+   "one_liner": "开发者免费工具清单，含数据库与后端等分类目录",
+   "review": "这是一个以表格形式编目的免费/免费额度开发工具合集，涵盖数据库与后端、云托管、AI 编码代理、DevOps、支付等多个分类，共 49 项工具。通过 GitHub Actions 每晚自动检测各工具站点在线状态。面向开发者和使用 AI 辅助编码的用户，用于查找免费工具；仓库本身不含代码工具实现。",
+   "highlights": [
+    "编目 49 项工具，含 16 个分类目录",
+    "通过 GitHub Actions 每晚自动检查工具站点在线状态",
+    "提供 MIT 许可的开源清单，接受 PR 贡献"
+   ],
+   "use_cases": [
+    "查找提供免费额度的数据库/后端服务（如 PostgreSQL 托管、Serverless SQLite）",
+    "挑选 AI 编码代理与 IDE 工具",
+    "为个人或 SaaS 项目选型免费开发工具"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL and backend services (Auth, Storage, Realtime) ／ Serverless PostgreSQL",
+     "lines": [
+      34,
+      39
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Serverless SQL database built on SQLite with global read replication and native Cloudflare Workers integration ／ Serverless SQLite database with edge replication",
+     "lines": [
+      49,
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "清单只是罗列使用/提供数据库服务的第三方工具条目，本身不实现任何数据库相关组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### Database & Backend ／  Supabase ／ - **Status** is automatically checked every night by GitHub Actions.",
+   "evidence_lines": [
+    26,
+    33,
+    385
+   ]
+  },
+  "fn": "pnnnhan99/awesome-free-dev-tools",
+  "sha": "72c7117a0f4f",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bba4f2c62ff6": {
+  "identity": {
+   "one_liner": "AI代理操作治理控制平面：策略判定、人工审批与审计",
+   "review": "自托管的AI代理操作治理平台，在代理与外部工具（Gmail/GitHub/Slack连接器）之间设置确定性安全边界，提供ALLOW/DENY/REQUIRE_APPROVAL决策、基于哈希绑定的人工审批、幂等执行声明和脱敏审计记录。提供React管理面板、Python/TypeScript SDK和MCP服务器。数据存储使用PostgreSQL，当前定位为小规模受控试点，高可用与SSO等仍在路线图中。",
+   "highlights": [
+    "提供确定性ALLOW/DENY/REQUIRE_APPROVAL决策与最小权限作用域检查",
+    "支持人工审批的哈希绑定与执行前重授权，以及幂等键和执行声明机制",
+    "提供React仪表盘、Python/TypeScript SDK和MCP服务器等集成接口"
+   ],
+   "use_cases": [
+    "对AI代理调用外部系统（邮件、GitHub、Slack）的操作进行策略管控",
+    "敏感代理操作需人工审批和脱敏审计记录的合规流程",
+    "通过MCP服务器为MCP客户端提供统一的授权执行点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`infrastructure`|PostgreSQL models, JWT handling, and encrypted secret storage|",
+     "lines": [
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README显示PostgreSQL仅作为平台自身的模型与数据存储，项目为AI代理治理应用而非数据库生态组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-or-later",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`infrastructure`|PostgreSQL models, JWT handling, and encrypted secret storage| ／ |`apps/mcp_server`|MCP-to-platform adapter| ／ AI agents can read data, send messages, and change external systems. AgentGuard places a deterministic security boundary between an agent and those tools. It decides whether an action is allowed, denied, or held for human approval; executes approved connector calls; and records a redacted audit trail.",
+   "evidence_lines": [
+    111,
+    114,
+    21
+   ]
+  },
+  "fn": "furkanulusoy/agentguardai-pro",
+  "sha": "bba4f2c62ff6",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

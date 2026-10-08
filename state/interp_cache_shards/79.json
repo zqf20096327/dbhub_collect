@@ -9656,5 +9656,138 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e600d5be39bd": {
+  "identity": {
+   "one_liner": "面向 JVM/Android 的 SQLite 数据库开发库，封装 SQLCipher 加密与连接池",
+   "review": "Selekt 提供 Android API 和 JDBC 接口两个库，默认封装 SQLCipher 社区版以实现对数据库文件的 256 位 AES 加密，并内置感知 SQLite 并发模型的连接池，在 WAL 模式下支持读写并发。Bloomberg 自家 Android 应用使用它存数据，适合需要在 JVM 或 Android 上使用加密 SQLite 并避免额外第三方连接池的开发者。",
+   "highlights": [
+    "默认封装 SQLCipher 社区版，提供数据库文件 256 位 AES 加密",
+    "内置 SQLite 感知的 JDBC 连接池，通过主写连接协调读写，默认启用 WAL 读并发",
+    "Android 库镜像 Android SQLite API，JDBC 库面向 Java 11+"
+   ],
+   "use_cases": [
+    "Android 应用本地加密数据存储",
+    "JVM 应用需要支持加密文件的 SQLite JDBC DataSource",
+    "需要规避 SQLITE_BUSY 写冲突的 SQLite 多连接场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Selekt is a familiar Android and JDBC SQLite database library that by default wraps the community edition of SQLCipher, an SQLite extension that provides 256-bit AES encryption of database files. Selekt realises the maximum concurrency offered by SQLite3: When ／ JVM applications commonly use Xerial SQLite JDBC. Applications that want a pooled `DataSource` must add a separate JDBC pool, such as the general-purpose HikariCP. Xerial's standard distribution does not support encrypted database files, while a generic pool t ／ Selekt provides its own database-scoped SQLite-aware connection pool behind the JDBC API. It coordinates a primary writer and pooled readers around SQLite's locking and transaction model, so no third-party connection pool is required. By funnelling writes thro",
+     "lines": [
+      11,
+      29,
+      31
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是封装 SQLite 能力供 JVM/Android 开发者使用的库，而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Selekt is a familiar Android and JDBC SQLite database library that by default wraps the community edition of SQLCipher, an SQLite extension that provides 256-bit AES encryption of database files. Selekt realises the maximum concurrency offered by SQLite3: When enabled for WAL-journal mode, \"readers do not block writers and a writer does not block readers. Reading and writing can proceed concurrently.\" ／ Selekt provides its own database-scoped SQLite-aware connection pool behind the JDBC API. It coordinates a primary writer and pooled readers around SQLite's locking and transaction model, so no third-party connection pool is required. By funnelling writes through the primary connection, it avoids `SQLITE_BUSY` errors caused by competing writer connections. The pool enables WAL read/write concurrency by default and avoids repeatedly creating native connections. Selekt also supports encrypted database files through SQLCipher.",
+   "evidence_lines": [
+    11,
+    31
+   ]
+  },
+  "fn": "bloomberg/selekt",
+  "sha": "e600d5be39bd",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "52436311411c": {
+  "identity": {
+   "one_liner": "管理本地推理服务器的终端 TUI，用 SQLite 存配置",
+   "review": "infai 是一个终端 UI 工具，用于管理并启动本地大模型推理服务器：扫描 GGUF/SafeTensors 模型目录、从 HuggingFace 下载模型、为 llama.cpp 和 vLLM 保存命名启动配置并实时查看日志。面向在本地运行推理服务器的用户，配置与 profile 存于本地 SQLite 数据库，启动时自动执行 schema 迁移。",
+   "highlights": [
+    "支持 llama.cpp 与 vLLM 双引擎，可配置二进制路径与启动参数",
+    "递归扫描模型目录并提供 HuggingFace 模型搜索与断点续传下载",
+    "提供命名启动 profile 与实时服务器监控，读取 /metrics 展示 tokens-per-second 等指标"
+   ],
+   "use_cases": [
+    "在终端中集中管理本地多个推理引擎与模型文件",
+    "为不同模型保存并复用参数启动配置",
+    "实时查看推理日志与性能指标"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "On first launch, infai creates a local SQLite database to store scan directories, engine paths, and launch profiles. Add at least one model directory and one inference engine to get started. ／ All settings and profiles are stored in a local SQLite database:",
+     "lines": [
+      138,
+      161
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明用本地 SQLite 数据库存放扫描目录、引擎路径与启动配置，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A terminal UI for managing and launching local inference servers.** ／ On first launch, infai creates a local SQLite database to store scan directories, engine paths, and launch profiles. Add at least one model directory and one inference engine to get started. ／ All settings and profiles are stored in a local SQLite database:",
+   "evidence_lines": [
+    12,
+    138,
+    161
+   ]
+  },
+  "fn": "dipankardas011/infai",
+  "sha": "52436311411c",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

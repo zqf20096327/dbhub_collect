@@ -8411,5 +8411,141 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bc5733a11b65": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core MVC 与 PostgreSQL 的个人/企业管理 Web 应用（CMS）",
+   "review": "Maroik-CMS 是一个开源作品集版本的 Web 应用，提供记账、日历、公告板、角色用户管理和后台仪表盘等功能，供个人与企业管理使用。后端采用 ASP.NET Core MVC、EF Core 与 PostgreSQL 17，配合 Valkey 会话存储与 RabbitMQ 邮件队列，通过 Docker Compose 本地运行；生产部署脚本与 CI/CD 管线未包含在此仓库中。",
+   "highlights": [
+    "提供个人记账、日历日程、公告板、角色用户管理与后台仪表盘功能",
+    "后端使用 ASP.NET Core MVC、Entity Framework Core 与 PostgreSQL 17，测试用 Testcontainers 运行真实 PostgreSQL 与 RabbitMQ",
+    "通过 Docker Compose 提供本地运行栈与仅含默认管理员和演示账号的种子数据库"
+   ],
+   "use_cases": [
+    "个人或小企业的费用/收入记录与资产管理",
+    "团队内部的日历共享与公告板发布",
+    "需要基于角色的用户与权限管理的 Web 应用参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL 17 ／ |`Maroik.Core.Repository.Tests`|EF Core repositories against a real PostgreSQL 17 loaded from `Maroik.DB/.../Debugging/Init.sql`|yes|",
+     "lines": [
+      64,
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是一个使用 PostgreSQL 存储数据的 Web 应用（CMS），而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Maroik is a modern web application built with ASP.NET Core MVC, featuring a comprehensive set of tools for personal and business management. It includes features such as expense tracking, calendar management, bulletin boards, and role-based user management. ／ - PostgreSQL 17 ／ ### Quick start (Docker Compose)",
+   "evidence_lines": [
+    6,
+    64,
+    152
+   ]
+  },
+  "fn": "IkhyeonJo/Maroik-CMS",
+  "sha": "bc5733a11b65",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e2904c079f1c": {
+  "identity": {
+   "one_liner": "Telegram 聊天/论坛导出工具，多账号并行写入 SQLite 并按话题分文件夹",
+   "review": "这是一个命令行工具，用于把整个 Telegram 聊天或论坛批量导出为 SQLite 数据库和按话题组织的文本/JSONL 文件夹。它基于 Telethon，通过多账号并行 worker 和 Telegram 的 takeout 导出模式提高速度，进度每 100 条消息提交一次以支持断点续传。适合需要批量归档 Telegram 聊天记录的用户；限制是只下载文本和元数据，不下载媒体文件。",
+   "highlights": [
+    "多账号并行下载，按 message-id 区间切分任务，支持断点续传与增量追加",
+    "输出 messages.txt、messages.l 和可查询的 SQLite 数据库三种形式",
+    "支持日期、作者、消息类型过滤，以及 SOCKS5/HTTP 代理和交互式模式"
+   ],
+   "use_cases": [
+    "批量归档 Telegram 群组或论坛频道的聊天记录",
+    "导出后用 SQL 或脚本对消息数据做查询和分析",
+    "定期增量备份聊天内容（仅追加新消息）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Dump an entire Telegram chat into SQLite and a folder per forum topic at **over 100,000 messages a minute**. It runs Telegram's own data-export mode with parallel workers on several accounts, so a chat of several hundred thousand messages is done in minutes: a ／ - Progress is committed to SQLite every 100 messages. An interrupted run resumes where it stopped, and later runs fetch only new messages and append them to the files, so a repeat run of a large chat takes seconds. When a forum topic is renamed, its folder is  ／ - `messages.txt` for reading, `messages.jsonl` for scripts, and the SQLite database for queries. ／ The raw data is in `data/<chat id>.sqlite`, with tables `messages`, `topics`, `tasks` (download progress) and `exports` (what was last written to each folder, so a repeat run only appends). While a dump runs, `.sqlite-wal` and `.sqlite-shm` files sit next to t",
+     "lines": [
+      12,
+      27,
+      32,
+      160
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储导出消息与下载进度的 Telegram 聊天归档应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dump an entire Telegram chat into SQLite and a folder per forum topic at **over 100,000 messages a minute**. It runs Telegram's own data-export mode with parallel workers on several accounts, so a chat of several hundred thousand messages is done in minutes: about 4× faster than Telegram Desktop's own export, and a whole forum in one pass instead of topic by topic. ／ - Progress is committed to SQLite every 100 messages. An interrupted run resumes where it stopped, and later runs fetch only new messages and append them to the files, so a repeat run of a large chat takes seconds. When a forum topic is renamed, its folder is renamed too. ／ The raw data is in `data/<chat id>.sqlite`, with tables `messages`, `topics`, `tasks` (download progress) and `exports` (what was last written to each folder, so a repeat run only appends). While a dump runs, `.sqlite-wal` and `.sqlite-shm` files sit next to the database; they are part of it and disappear when the run ends, so copy the database only after that.",
+   "evidence_lines": [
+    12,
+    27,
+    160
+   ]
+  },
+  "fn": "renkagod/tg-chat-dump",
+  "sha": "e2904c079f1c",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

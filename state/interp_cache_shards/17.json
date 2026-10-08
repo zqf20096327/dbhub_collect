@@ -9628,5 +9628,107 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8e77b34e0880": {
+  "identity": {
+   "one_liner": "开源自托管数据库监控与查询分析平台",
+   "review": "PMM 是一个开源的数据库监控、可观测性与管理工具，通过 PMM Server（基于 Grafana、VictoriaMetrics、ClickHouse）存储指标，PMM Client（pmm-agent 加导出器）部署在数据库主机旁采集数据，提供 Query Analytics、仪表盘、告警、Advisor 检查和备份恢复功能。面向需要管理 MySQL、PostgreSQL、MongoDB、Valkey/Redis 等数据库的运维人员和 DBA，支持自托管部署且所有功能均在开源版本中提供。",
+   "highlights": [
+    "提供 Query Analytics，按负载对查询排序，包含执行计划与表统计信息",
+    "支持节点、实例到查询各层的仪表盘、告警模板与 Advisor 自动检查",
+    "支持 Docker、Podman、Kubernetes（Helm）等多种部署方式，运行于物理机、VM、Kubernetes 及多家云平台"
+   ],
+   "use_cases": [
+    "定位数据库慢查询及其背后的资源消耗原因",
+    "集中监控多种数据库实例并进行告警与安全配置检查",
+    "对 MongoDB/MySQL 进行备份与恢复管理"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Open source monitoring and query analytics for MySQL, PostgreSQL, MongoDB and Valkey/Redis. ／ PMM: from a CPU spike to the PostgreSQL query behind it ／ PostgreSQL ／ For MySQL, PostgreSQL, MongoDB, Valkey/Redis, ProxySQL and HAProxy. Built on Grafana.",
+     "lines": [
+      5,
+      19,
+      26,
+      73
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Open source monitoring and query analytics for MySQL, PostgreSQL, MongoDB and Valkey/Redis. ／ MySQL ／ For MySQL, PostgreSQL, MongoDB, Valkey/Redis, ProxySQL and HAProxy. Built on Grafana. ／  MySQL",
+     "lines": [
+      5,
+      23,
+      73,
+      75
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**PMM Server** (Grafana, VictoriaMetrics, ClickHouse, PostgreSQL) stores metrics and query data. **PMM Client** (`pmm-agent` plus exporters) runs next to each database and sends them. Details are in the architecture reference. ／ PMM is built on Grafana and VictoriaMetrics (PromQL-compatible) and adds the database parts: exporters configured for you, query analytics stored in ClickHouse, curated dashboards, advisors, alert templates and backups. It installs and upgrades as one product.",
+     "lines": [
+      119,
+      133
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MariaDB",
+     "lines": [
+      25
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "PMM 是为数据库生态服务的监控工具，为 MySQL/PostgreSQL 等数据库提供采集、分析与告警能力，而非使用数据库构建的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：AGPL-3.0 / Apache-2.0（PMM Server 为 GNU AGPLv3）",
+   "install": [
+    "docker",
+    "helm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Open source monitoring and query analytics for MySQL, PostgreSQL, MongoDB and Valkey/Redis. ／ For MySQL, PostgreSQL, MongoDB, Valkey/Redis, ProxySQL and HAProxy. Built on Grafana. ／ **PMM Server** (Grafana, VictoriaMetrics, ClickHouse, PostgreSQL) stores metrics and query data. **PMM Client** (`pmm-agent` plus exporters) runs next to each database and sends them. Details are in the architecture reference.",
+   "evidence_lines": [
+    5,
+    73,
+    119
+   ]
+  },
+  "fn": "percona/pmm",
+  "sha": "8e77b34e0880",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

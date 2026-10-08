@@ -9317,5 +9317,137 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f968a0d1b48e": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地优先项目管理工具，含 CLI、Web UI 与 AI agent skill",
+   "review": "Pad 是一个运行在本机的项目/任务管理系统，提供 CLI、Web UI 和面向 AI 编码代理的 /pad skill，数据存储在本地 SQLite（多实例部署支持 Postgres + Redis），供个人开发者及其 AI 代理在其机器上管理任务、计划、约定与工作流，可选接入 Pad Cloud 同步。",
+   "highlights": [
+    "提供 CLI、Web UI（localhost:7777）与可安装到 Claude Code、Cursor 等工具的 /pad agent skill",
+    "数据存储于本地 SQLite，多实例部署支持 Postgres + Redis（L206）",
+    "支持 collections 自定义字段、conventions 与 playbooks，agent 写操作记录归因到具名 agent"
+   ],
+   "use_cases": [
+    "开发者在本地终端和浏览器中管理个人项目任务与计划",
+    "让 AI 编码代理通过自然语言读取/创建/更新项目条目",
+    "离线或本地优先环境下替代云端项目管理工具的使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For multi-instance deployments, Pad supports Postgres + Redis via `docker-compose.yml` — see docs/deployment.md for the full setup.",
+     "lines": [
+      206
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud. ／ |**Data**|Local SQLite you own — or opt-in Pad Cloud|Their cloud|Their cloud|",
+     "lines": [
+      25,
+      56
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Pad 使用 SQLite/Postgres 存储自身项目数据，是为终端用户提供功能的应用而非服务数据库生态的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud. ／ For multi-instance deployments, Pad supports Postgres + Redis via `docker-compose.yml` — see docs/deployment.md for the full setup.",
+   "evidence_lines": [
+    25,
+    206
+   ]
+  },
+  "fn": "PerpetualSoftware/pad",
+  "sha": "f968a0d1b48e",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "455a0f585023": {
+  "identity": {
+   "one_liner": "面向吉他手的轻量桌面乐谱管理与查看应用",
+   "review": "HAYA-TAB 是一个桌面应用，用于集中管理、阅读和播放乐谱文件，支持 PDF、Guitar Pro 和 MusicXML 格式，内置 PDF 阅读器和基于 AlphaTab 的乐谱查看器，提供自动滚动、非破坏性标注、循环段落和速度调节等功能，并可通过 WebDAV 在多台电脑间同步曲库。适用于需要整理和练习乐谱的吉他手和音乐人，通过 GitHub Releases 下载安装。",
+   "highlights": [
+    "内置 PDF 与 AlphaTab 查看器，支持标注、自动滚动、播放与变速",
+    "支持 PDF、Guitar Pro、MusicXML 格式文件的检索与管理",
+    "通过 WebDAV 实现多设备曲库同步与离线文件下载"
+   ],
+   "use_cases": [
+    "吉他手集中管理 PDF/Guitar Pro/MusicXML 乐谱库",
+    "练习时播放乐谱、循环段落、调节速度并免提自动滚动",
+    "多台电脑间通过 WebDAV 同步乐谱与元数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明它是使用本地存储（主题含 sqlite）的音乐谱管理应用，未为数据库生态提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Organize, read, play, and sync your music tabs from one lightweight desktop app. ／ - Keep PDF, Guitar Pro, and MusicXML files in one searchable library. ／ - Carry the same organized library between computers through WebDAV.",
+   "evidence_lines": [
+    3,
+    15,
+    17
+   ]
+  },
+  "fn": "HAYASAKA7/HAYA-TAB",
+  "sha": "455a0f585023",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

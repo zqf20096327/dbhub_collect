@@ -8160,5 +8160,235 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6570a7abedf9": {
+  "identity": {
+   "one_liner": "openGauss 开源关系型数据库的服务端内核源码仓库",
+   "review": "这是 openGauss 数据库的服务端主代码仓库。openGauss 是一款开源关系型数据库管理系统，README 介绍其内核在多核、ARM 架构、存储引擎（含 MOT 内存引擎）、优化器方面的优化，以及安全与 AI 辅助运维能力，并提供 docker 环境构建、源码编译和集群安装/卸载步骤。面向需要自行编译、部署和维护该数据库的开发者与运维人员。",
+   "highlights": [
+    "提供 MOT 内存优化表存储引擎与 SQL BY PASS 执行路径优化",
+    "内置 SQL 执行时间预测、SQL 诊断器、参数自动调整等 AI 运维功能",
+    "提供主备部署的并行恢复，支持 gs_preinstall/gs_install/gs_uninstall 全套安装卸载脚本"
+   ],
+   "use_cases": [
+    "需要从源码编译 openGauss 或参与内核开发的场景",
+    "在一主一备等多节点环境部署 openGauss 集群",
+    "通过 docker 预置环境运行 UT 测试与冒烟测试"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "openGauss是一款开源的关系型数据库管理系统，它具有多核高性能、全链路安全性、智能运维等企业级特性。",
+     "lines": [
+      9
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": ">直连数据库调试(默认进 postgres): docker exec -e PORT=5432 -it og-server /opt/gsql.sh",
+     "lines": [
+      118
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库本身即 openGauss 数据库服务端内核，是生态的核心组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "openGauss"
+   },
+   "dbs": [
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "openGauss是一款开源的关系型数据库管理系统，它具有多核高性能、全链路安全性、智能运维等企业级特性。 ／ 编译openGauss需要openGauss-server和binarylibs两个组件。 ／ ## docker 安装",
+   "evidence_lines": [
+    9,
+    325,
+    71
+   ]
+  },
+  "fn": "opengauss-mirror/openGauss-server",
+  "sha": "6570a7abedf9",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a1c31cfafe78": {
+  "identity": {
+   "one_liner": "AzerothCore 服务器的 3D 世界与任务编辑器，导出 SQL",
+   "review": "AWE 是面向 AzerothCore 私服管理者的桌面编辑器，提供 3D 世界视图，用于放置 NPC/物件、设计任务链与战斗脚本，最终生成 SQL 补丁或写入开发数据库；运行需可通过 MySQL 访问的世界数据库，游戏客户端文件为可选依赖。",
+   "highlights": [
+    "基于游戏客户端文件渲染 3D 世界，支持放置 NPC、物件、巡逻路径与刷怪组",
+    "提供任务链、任务脚本场景与 NPC 战斗向导编辑",
+    "可将全部改动导出为 SQL 补丁或应用到开发数据库，实时世界数据库只读"
+   ],
+   "use_cases": [
+    "为 AzerothCore 服务器编写和串接任务链",
+    "在 3D 视图中摆放 NPC/物件与巡逻路线",
+    "在测试服务器上通过 GM 命令验证任务后导出 SQL 补丁"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- An AzerothCore world database (including the Conquest of AzerothCore fork) reachable over MySQL.",
+     "lines": [
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是连接 MySQL 世界数据库进行编辑的桌面应用，数据库为其存取数据的后端。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0-or-later",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- An AzerothCore world database (including the Conquest of AzerothCore fork) reachable over MySQL. ／ - **Export.** Review every change, then export an SQL patch or apply it to a dev database. Your live world database is only ever read. ／  A world editor for your AzerothCore server: build quests and shape the world around them, then export it all as SQL.",
+   "evidence_lines": [
+    57,
+    29,
+    3
+   ]
+  },
+  "fn": "DMCK96/azeroth-world-editor",
+  "sha": "a1c31cfafe78",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "00a35d9def55": {
+  "identity": {
+   "one_liner": "GaussDB 规格驱动的 SQL 测试用例静态生成系统",
+   "review": "该项目将 GaussDB 产品文档（PDF）抽取为 Factor Package 规格文件，再通过约束感知组合生成器静态产出 SQL 测试用例与兼容性事实，并配套覆盖审计、缺口诊断与验证脚本。面向需要在 GaussDB 上做 SQL 测试与兼容性验证的测试/DBA 人员；README 声明默认不连接数据库，SQL 为静态生成候选，需在目标环境执行验证。",
+   "highlights": [
+    "提供文档到规格（Doc2Spec）到 SQL 用例的静态生成链路与覆盖审计",
+    "支持 Fixture/目标错误 Oracle、约束感知 Pairwise 与结构契约校验",
+    "提供 Web/API 浏览因子包、覆盖报告与生成 SQL"
+   ],
+   "use_cases": [
+    "为 GaussDB 生成大规模 SQL 兼容性测试候选用例",
+    "对数据库文档做规格化抽取与覆盖缺口诊断",
+    "在获得 GaussDB 环境后用配套验证脚本执行核验"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# GaussDB 规格驱动 SQL 测试生成系统 ／ 本项目把 GaussDB 产品文档转换为可追溯、可静态校验的 Factor Package V1，再通过约束感知的组合生成器输出 SQL 测试用例。当前阶段聚焦“文档抽取 → 规格建模 → SQL 生成 → 静态覆盖审计”，默认不连接数据库。",
+     "lines": [
+      1,
+      3
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|MySQL B模式|18|完整兼容性|",
+     "lines": [
+      52
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|Oracle高级包（22个）|170|接口签名+参数+行为示例|",
+     "lines": [
+      40
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|CORE_OTHER_SYSTEM_PG_COMPAT_WAVE7_9_V1.md|1.6.60其他系统函数第一阶段：兼容PostgreSQL清单抽取：18页、13个facts|",
+     "lines": [
+      160
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 GaussDB 提供测试用例生成与验证脚本等生态服务，本身不使用数据库存数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# GaussDB 规格驱动 SQL 测试生成系统 ／ 本项目把 GaussDB 产品文档转换为可追溯、可静态校验的 Factor Package V1，再通过约束感知的组合生成器输出 SQL 测试用例。当前阶段聚焦“文档抽取 → 规格建模 → SQL 生成 → 静态覆盖审计”，默认不连接数据库。 ／ 本项目把 GaussDB 产品文档转换为可追溯、可静态校验的 Factor Package V1，再通过约束感知的组合生成器输出 SQL 测试用例。当前阶段聚焦“文档抽取 → 规格建模 → SQL 生成 → 静态覆盖审计”，默认不连接数据库。",
+   "evidence_lines": [
+    1,
+    3,
+    3
+   ]
+  },
+  "fn": "yuziyydss/gaussdb_test",
+  "sha": "00a35d9def55",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

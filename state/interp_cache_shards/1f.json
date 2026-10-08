@@ -9456,5 +9456,139 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4bffe089702d": {
+  "identity": {
+   "one_liner": "基于 Postgres+pgvector 的 AI 编码代理自托管长期记忆 MCP 服务",
+   "review": "HyperMnesia 为 AI 编码代理（如 Claude Code 等 MCP 客户端）提供两类长期记忆：仓库文档的 doc-RAG 检索与组件约束映射，以及双时间线的个人记忆。数据存储于 Postgres+pgvector，嵌入可用 Ollama 或 TEI 本地模型生成；约束注入和记忆召回通过 Claude Code hooks 实现，检索采用 RRF 混合排序与可选重排，记忆检索在低置信时选择不返回结果。适合自托管、希望代理跨会话保留项目规则与个人偏好的开发者。",
+   "highlights": [
+    "提供 MCP 工具接口，任何 MCP 客户端均可调用搜索、映射与记忆功能",
+    "文档检索融合稠密向量与词法检索（RRF），并支持可选的 cross-encoder 重排",
+    "个人记忆采用双时间线与 supersede-not-overwrite 机制，低置信合并进入人工审查队列"
+   ],
+   "use_cases": [
+    "让编码代理在编辑文件前自动获得该路径适用的架构约束规则",
+    "跨会话保留用户偏好、决策与事实，避免每次会话重复说明",
+    "在本地或 Kubernetes 上自托管代理记忆，不依赖云端服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres-backed store that gives an agent (Claude Code, or any MCP client) two things: ／ One store (Postgres + pgvector), local-model friendly",
+     "lines": [
+      10,
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其为 Postgres-backed store，使用 Postgres+pgvector 作为自身数据存储，服务对象是 AI 编码代理而非数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（单许可）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postgres-backed store that gives an agent (Claude Code, or any MCP client) two things: ／ One store (Postgres + pgvector), local-model friendly ／ an edit, memory recalled per prompt, sessions captured — is a set of **Claude Code hooks**.",
+   "evidence_lines": [
+    10,
+    18,
+    24
+   ]
+  },
+  "fn": "Recluse/HyperMnesia",
+  "sha": "4bffe089702d",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dc963c767f23": {
+  "identity": {
+   "one_liner": "KICC Laravel 13 网站平台，以 TiDB 为单一事实来源",
+   "review": "这是一个 KICC 组织的内容平台：管理员通过 Kotlin 管理应用分级编辑内容，写入 TiDB 作为单一数据来源；Laravel 网站渲染县级/部门/国家级内容，媒体经转码管线生成 HLS/WebM/WebP/Draco 派生物存入 R2，并通过 HMAC webhook 发布。面向 KICC 母站及 47 个县级组织等机构，部署依赖 docker compose 提供的 mysql8/redis/minio 等基础设施。",
+   "highlights": [
+    "提供 Laravel 13 公开网站与 engine API，内容写入 TiDB 作为单一事实来源",
+    "支持媒体转码管线，生成 HLS、WebM、WebP 海报与 Draco .glb 派生物并存入 R2",
+    "通过 HMAC webhook 发布并执行缓存标签清除，凭据存放于外部 secrets manager"
+   ],
+   "use_cases": [
+    "为多层级组织（母站/国家/47 县/大型企业展商）发布内容网站",
+    "需要管理员后台编辑、API 审计写入的机构内容管理场景",
+    "4K/8K 视频与 3D 模型媒体的上传转码与分发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "in **TiDB** (single source of truth). The **Laravel** website on **kicctest.org** (behind",
+     "lines": [
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统将业务数据写入 TiDB 作为单一事实来源，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "in **TiDB** (single source of truth). The **Laravel** website on **kicctest.org** (behind ／ cd infra && docker compose up -d          # mysql8 (TiDB-compat), redis, minio, mailpit",
+   "evidence_lines": [
+    15,
+    23
+   ]
+  },
+  "fn": "techhubltd254/ann",
+  "sha": "dc963c767f23",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

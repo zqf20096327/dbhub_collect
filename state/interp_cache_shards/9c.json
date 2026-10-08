@@ -8562,5 +8562,260 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "148481b2aee9": {
+  "identity": {
+   "one_liner": "Rust/Python 库，从数据库加载数据到 DataFrame",
+   "review": "ConnectorX 是一个用 Rust 编写、提供 Python 接口的数据加载库，通过 read_sql 一行代码将数据库查询结果写入 Pandas、PyArrow、Polars 等 DataFrame，支持按列分区并行加载和跨库联邦查询。面向需要在 Python 中批量读取数据库数据的开发者。联邦查询功能标注为实验性，分区仅限无数值 NULL 列的 SPJA 查询。",
+   "highlights": [
+    "通过 pip 安装，提供 read_sql 接口将查询结果加载到 Pandas/PyArrow/Modin/Dask/Polars",
+    "支持基于数值列分区、多线程并行加载数据",
+    "实验性支持在单个查询中联合多个数据源的表"
+   ],
+   "use_cases": [
+    "将数据库表批量加载到 Python DataFrame 做数据分析",
+    "大表并行分区导出，减少加载时间与内存占用",
+    "跨多个数据库的联合查询读取"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- [x] Postgres",
+     "lines": [
+      89
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- [x] Mysql",
+     "lines": [
+      90
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- [x] Mariadb (through mysql protocol)",
+     "lines": [
+      91
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- [x] Sqlite",
+     "lines": [
+      92
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- [x] SQL Server",
+     "lines": [
+      95
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- [x] Clickhouse",
+     "lines": [
+      94
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- [x] Oracle",
+     "lines": [
+      97
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明为多数据库到 DataFrame 的数据加载连接器，属于为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ConnectorX enables you to load data from databases into Python in the fastest and most memory efficient way. ／ # Supported Sources & Destinations ／ - [x] Postgres",
+   "evidence_lines": [
+    5,
+    82,
+    89
+   ]
+  },
+  "fn": "sfu-db/connector-x",
+  "sha": "148481b2aee9",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b9ca12f6832a": {
+  "identity": {
+   "one_liner": "Capacitor 键值存储插件，将字符串数据以 SQLite 持久化",
+   "review": "这是一个 Capacitor 插件，为应用提供基于 SQLite 的键值字符串持久存储，支持多 store/多表、可选 SQLCipher 加密及 JSON 导入导出，平台覆盖 iOS、Android、Electron 和 Web（IndexedDB/localforage）。适合需要在移动/桌面混合应用中做简单本地数据持久化的 Capacitor/Ionic 开发者，仅支持字符串类型数据。",
+   "highlights": [
+    "提供 set/get/remove/clear 等键值 API 及多 store、多表管理",
+    "支持 iOS 与 Android 上经 SQLCipher 的可选加密存储",
+    "支持 JSON 导入导出（importFromJson/exportToJson）"
+   ],
+   "use_cases": [
+    "Capacitor/Ionic 应用中替代 localStorage 的持久化键值存储",
+    "需要加密本地数据的 iOS/Android 应用",
+    "跨平台（iOS/Android/Electron/Web）本地字符串数据存储与 JSON 数据迁移"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Store key and value strings in SQLite from your Capacitor app, with multiple stores and tables and optional encryption on iOS and Android. A simple, persistent alternative to localStorage. ／ @capgo/capacitor-data-storage-sqlite for Capacitor apps ／ Capacitor Data Storage SQlite Plugin is a custom Native Capacitor plugin providing a key-value permanent store for simple data of type string only to SQLite on IOS, Android and Electron platforms and to IndexDB for the Web platform.",
+     "lines": [
+      1,
+      10,
+      31
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "插件封装 SQLite 为应用提供存储能力，是服务于数据库使用的开发组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Capacitor Data Storage SQlite Plugin is a custom Native Capacitor plugin providing a key-value permanent store for simple data of type string only to SQLite on IOS, Android and Electron platforms and to IndexDB for the Web platform. ／ Store key and value strings in SQLite from your Capacitor app, with multiple stores and tables and optional encryption on iOS and Android. A simple, persistent alternative to localStorage. ／ The IOS & Android code use SQLCipher allowing for database encryption.",
+   "evidence_lines": [
+    31,
+    1,
+    197
+   ]
+  },
+  "fn": "Cap-go/capacitor-data-storage-sqlite",
+  "sha": "b9ca12f6832a",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0061d953cb94": {
+  "identity": {
+   "one_liner": "iOS/macOS 本地文档问答应用，端上 RAG 检索并引用来源页码",
+   "review": "这是一款 Apple 平台原生应用，用于对 PDF、Office 文件、图片、音视频等本地文档做 OCR、索引与带引用的问答。摄取、向量检索、BM25、重排与验证均在设备端运行，可选接入 Apple Private Cloud Compute 生成最终回答。面向需要在本地处理隐私文档的个人用户；依赖 Apple Silicon 与 iOS/macOS 26+，部分能力需 SDK 27。",
+   "highlights": [
+    "混合检索：向量相似度与 BM25 并行，经 RRF 融合、cross-encoder 重排与 MMR 多样化",
+    "端上运行：摄取、索引、检索、验证均本地执行，无账号与第三方 AI 服务",
+    "流式分批摄取管线支持 500+ 页 PDF 的页级断点续传"
+   ],
+   "use_cases": [
+    "在 iPhone/Mac 上对医疗、法律、财务等私有文档做离线问答",
+    "对扫描件与文字层不可靠的 PDF 进行 OCR 与全文检索",
+    "需要每条回答可点击回溯到原文出处的资料核查"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Indexing**|`SQLiteFullTextService.swift`, `BNNSVectorDatabase.swift`|SQLite FTS5 and BNNS-accelerated vector storage|",
+     "lines": [
+      150
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite FTS5 与 BNNS 向量存储只是应用内部的索引实现，该仓库是使用数据库的端上应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Indexing**|`SQLiteFullTextService.swift`, `BNNSVectorDatabase.swift`|SQLite FTS5 and BNNS-accelerated vector storage| ／ **It runs on your device.** Ingestion, indexing, retrieval, ranking, and ／ Shipping on the App Store for iPhone, iPad, and Mac. **5.5 is live on both platforms**, released",
+   "evidence_lines": [
+    150,
+    18,
+    189
+   ]
+  },
+  "fn": "Gunnarguy/OpenIntelligence",
+  "sha": "0061d953cb94",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

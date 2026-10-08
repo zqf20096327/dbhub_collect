@@ -8632,5 +8632,275 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a9e6c4034e58": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的认知记忆数据库，支持衰减、合并与矛盾检测",
+   "review": "YantrikDB 是为 AI Agent 提供持久化记忆的数据库，可嵌入（Python/Rust 库）、以 MCP 服务器或 HTTP 集群方式运行，提供记忆写入、召回、时间衰减、重复合并、矛盾检测和实体图等 15 个 MCP 工具。本地模式使用 SQLite 文件存储，集群基于 openraft 实现 HA。适合为 Claude Code、Cursor 等客户端配置记忆层的开发者；README 自述仍有未修复的读性能问题。",
+   "highlights": [
+    "提供 MCP 服务器与 HTTP API，包含 remember/recall/think/forget 等 15 个记忆工具",
+    "实现时间衰减、重复合并（consolidation）与矛盾检测，并提供实体关系图与性格推导",
+    "支持嵌入库（PyPI/crates.io）、单二进制 HTTP 服务与 openraft 2-voter+1-witness HA 集群"
+   ],
+   "use_cases": [
+    "为 Claude Code/Cursor/Windsurf 等 AI Agent 配置跨会话持久记忆",
+    "需要记忆自动衰减与矛盾检测的 Agent 记忆管理场景",
+    "多节点部署的共享记忆集群（Docker Compose/Kubernetes）"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "That's it. No env vars. Uses a local SQLite memory file at `~/.yantrikdb/memory.db`. First call auto-initializes the schema. Restart your client — the `yantrikdb` MCP server will show up with 15 memory tools (see below). ／ **Want a shared memory across machines or teammates?** Point at a YantrikDB cluster instead of local SQLite:",
+     "lines": [
+      118,
+      120
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "db.record(\"decided to use PostgreSQL\") # auto-linked to session",
+     "lines": [
+      329
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目本身是一个为 AI Agent 生态服务的记忆数据库引擎/服务器，而非使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "pypi",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Full cognitive architecture lives in the standalone engine repo. This server repo focuses on deployment, HTTP API, and cluster operations. ／ That's it. No env vars. Uses a local SQLite memory file at `~/.yantrikdb/memory.db`. First call auto-initializes the schema. Restart your client — the `yantrikdb` MCP server will show up with 15 memory tools (see below). ／ Single Rust binary. HTTP + binary wire protocol. 2-voter + 1-witness HA cluster via Docker Compose or Kubernetes. Per-tenant quotas, Prometheus metrics, AES-256-GCM at-rest encryption, runtime deadlock detection. See docker-compose.cluster.yml and k8s manifests.",
+   "evidence_lines": [
+    99,
+    118,
+    163
+   ]
+  },
+  "fn": "yantrikos/yantrikdb-server",
+  "sha": "a9e6c4034e58",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "deadb923724a": {
+  "identity": {
+   "one_liner": "Rust 编写的分片 Blob 存储服务器，用 SQLite 做后端并实现 Redis 协议",
+   "review": "Blobasaur 是一个二进制大对象存储服务器：将数据按一致性哈希分片到多个 SQLite 数据库，同时实现 Redis 协议，可用标准 Redis 客户端读写。适合需要以 Redis 接口存取大对象、且希望以文件级 SQLite 落盘的运维团队；注意迁移分片时需停服。",
+   "highlights": [
+    "实现 Redis 协议（GET/SET/DEL/HGET/HSET 等），兼容 Redis 客户端与集群协议",
+    "每个分片使用独立的 SQLite 数据库存储，支持分片迁移与数据校验",
+    "支持 TTL 过期、命名空间、多种压缩算法，并暴露 Prometheus 指标"
+   ],
+   "use_cases": [
+    "通过 Redis 客户端存取二进制大对象的场景",
+    "希望以 SQLite 文件落盘并按分片水平扩展存储的部署",
+    "需要 Prometheus 指标接入的存储服务监控"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Blobasaur is a high-performance, sharded blob storage server written in Rust. It implements the Redis protocol for client compatibility and uses SQLite as the backend for each shard, providing a simple yet robust solution for storing and retrieving binary larg ／ - **🚀 High Performance Sharding**: Distributes data across multiple SQLite databases using multi-probe consistent hashing for optimal concurrency and scalability ／ - **💾 SQLite Backend**: Each shard uses its own SQLite database for simple deployment and reliable storage",
+     "lines": [
+      9,
+      15,
+      19
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 未声明为其他数据库生态服务的工具或组件，SQLite 仅作为其内部存储后端被使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Blobasaur is a high-performance, sharded blob storage server written in Rust. It implements the Redis protocol for client compatibility and uses SQLite as the backend for each shard, providing a simple yet robust solution for storing and retrieving binary large objects (blobs). ／ - **🔌 Redis Protocol Compatible**: Full compatibility with Redis clients using standard commands (`GET`, `SET`, `DEL`, `EXISTS`, `HGET`, `HSET`, `HSETEX`, `HDEL`, `HEXISTS`) ／ - **💾 SQLite Backend**: Each shard uses its own SQLite database for simple deployment and reliable storage",
+   "evidence_lines": [
+    9,
+    17,
+    19
+   ]
+  },
+  "fn": "iamd3vil/blobasaur",
+  "sha": "deadb923724a",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5152388d71b4": {
+  "identity": {
+   "one_liner": "面向编码代理的本地任务与记忆层，基于 SQLite 存储与混合检索",
+   "review": "myc 是一个运行在 Bun 上的 CLI 工具，为 AI 编码代理提供任务队列、事实与决策的 oplog、混合（词法+向量）搜索和内置代码索引，通过 hooks 和 MCP 接入 Claude Code、Codex、opencode 等代理。运行时绑定 bun:sqlite，要求 SQLite ≥ 3.50.4，不支持 Node.js/Deno，Windows 需经 WSL。",
+   "highlights": [
+    "提供任务队列、记忆 oplog、词法+向量混合搜索与代码索引",
+    "通过 myc wire 为 Claude Code、Codex、opencode 等配置 hooks 与 MCP 服务器",
+    "支持多代理共享的重命令队列（myc run）与跨机器的 git 同步"
+   ],
+   "use_cases": [
+    "为编码代理持久化决策与任务，避免上下文压缩后丢失",
+    "多代理在同一机器上排队执行测试、构建等重命令",
+    "在 git worktree 场景下为代理接入 MCP 服务器与状态栏"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "The runtime is bound to `bun:sqlite` (no native bindings on the Node side). ／ **SQLite ≥ 3.50.4.** The floor has two reasons. Below 3.44.0, FTS5 cannot be",
+     "lines": [
+      29,
+      33
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "repositories; a team server over Postgres with tokens, roles and ACL",
+     "lines": [
+      470
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为编码代理生态服务的 CLI 工具，SQLite 只是其内部存储引擎而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local, fast task-and-memory layer for coding agents: a task queue, an oplog of ／ The runtime is bound to `bun:sqlite` (no native bindings on the Node side). ／ myc wire                     # hooks + MCP for Claude Code, Codex, opencode, Kimi, mcode and mimo",
+   "evidence_lines": [
+    3,
+    29,
+    93
+   ]
+  },
+  "fn": "aistastudio/myc",
+  "sha": "5152388d71b4",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::OceanBase-PowerContext": {
+  "identity": {
+   "one_liner": "面向 OceanBase 的上下文增强工具仓库（基于简介）",
+   "review": "该仓库简介仅包含名称 OceanBase-PowerContext，无 README 说明。从名称推断其与 OceanBase 数据库相关，可能提供上下文处理能力，但具体功能、目标用户、安装运行方式均无法验证。谨慎起见仅按名称做保守编目，confidence 取 low，待 README 补充后再复核。",
+   "highlights": [
+    "仓库名称表明与 OceanBase 相关（基于简介）"
+   ],
+   "use_cases": [
+    "OceanBase 相关使用场景（具体不明，基于简介推断）"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "OceanBase-PowerContext"
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "简介仅含名称，无法确认是服务数据库的工具还是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "OceanBase-PowerContext"
+  },
+  "fn": "Nvole/OceanBase-PowerContext",
+  "sha": "desc::OceanBase-PowerContext",
+  "source": "desc",
+  "generated_at": "2026-10-08",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

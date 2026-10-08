@@ -8369,5 +8369,61 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4d2e1aa5cfba": {
+  "identity": {
+   "one_liner": "Rust 编写的去中心化混合检索分布式数据库引擎",
+   "review": "CameoDB 是一个用 Rust 实现的分布式数据库，将 ACID 键值存储（redb）与全文倒排索引（tantivy）结合在每个分片中，通过 Kademlia DHT 和一致性哈希实现无主节点组网。提供 HTTP API、多格式数据加载与多语言分析器。适合需要同时做 KV 存取和全文检索的分布式场景部署使用。",
+   "highlights": [
+    "每个分片同时包含 KV 存储与倒排索引，支持混合检索",
+    "无主节点拓扑，使用一致性哈希与 Kademlia DHT 进行节点发现与路由",
+    "支持 CSV/TSV/JSON/JSONL 等格式加载及 Gzip/Zip 解压，支持 rustls 的 HTTPS 访问"
+   ],
+   "use_cases": [
+    "需要全文检索的分布式键值数据存储",
+    "多语言文本数据的索引与搜索服务",
+    "Docker 或多节点集群方式部署的检索引擎"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明其为数据库引擎本体，提供存储、索引与查询能力，而非使用其他数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CameoDB is a decentralized, leaderless database that combines the durability of an ACID-compliant Key-Value store (`redb`) with the power of a full-text inverted index engine (`tantivy`). ／ * **Decentralized Topology:** Zero master nodes. Utilizes Consistent Hashing and a custom Kademlia DHT behavior for seamless peer discovery and routing. ／  A high-performance, distributed hybrid-search database built in Rust.",
+   "evidence_lines": [
+    9,
+    16,
+    2
+   ]
+  },
+  "fn": "cameodb/cameodb",
+  "sha": "4d2e1aa5cfba",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

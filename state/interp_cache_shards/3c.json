@@ -8904,5 +8904,78 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e3efba461258": {
+  "identity": {
+   "one_liner": "离线优先的零售 POS 收银系统，桌面端以 SQLite 本地存储",
+   "review": "POS Pro 是一个面向小型零售店家的免费离线优先收银系统，提供收银、库存、会员储值、进货订货、复式记账与报表功能，采用 Electron 桌面版与 PWA 浏览器版双形态，数据默认存本机（桌面端用 SQLite、浏览器端用 localStorage），云端同步经 Supabase 选配。适合需要离线可用、繁体中文界面的零售/手作经营者。",
+   "highlights": [
+    "支持收银（条码、混合付款、退货冲库存）、库存、会员储值、进货与复式记账、报表等模块",
+    "数据层经 dataAccess.js 抽象：桌面端走 SQLite，浏览器端走 localStorage",
+    "云端同步为可选功能，基于 Supabase（含 Auth 与 RLS）"
+   ],
+   "use_cases": [
+    "小型零售店铺的离线收银与库存管理",
+    "需要会员储值、点数与复式记账的零售经营",
+    "桌面（Windows）与浏览器多端使用同一套数据（选配 Supabase 同步）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "POS Pro 的產品原則是**所有店家、全部功能免費**，不限規模與店型，不設訂閱或進階功能解鎖費。資料預設存在本機（桌面版走 SQLite、瀏覽器版走 localStorage），雲端同步是選用。 ／ 需要 Node.js 24 或更新的受支援版本。桌面版原生 SQLite 套件會依 Electron 版本重建。 ／ Electron 44 · better-sqlite3 13 · React 18 · Vite 8 · Supabase（選用）· Vitest 5",
+     "lines": [
+      17,
+      56,
+      80
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 本地存储经营数据的 POS 应用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "POS Pro 的產品原則是**所有店家、全部功能免費**，不限規模與店型，不設訂閱或進階功能解鎖費。資料預設存在本機（桌面版走 SQLite、瀏覽器版走 localStorage），雲端同步是選用。 ／ Electron 44 · better-sqlite3 13 · React 18 · Vite 8 · Supabase（選用）· Vitest 5 ／ 資料層由 `src/utils/dataAccess.js` 抽象：桌面走 SQLite、瀏覽器走 localStorage，UI 共用一套。",
+   "evidence_lines": [
+    17,
+    80,
+    82
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Hao0321/pos-pro",
+  "sha": "e3efba461258",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

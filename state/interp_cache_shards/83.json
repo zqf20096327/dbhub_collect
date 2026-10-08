@@ -9473,5 +9473,192 @@
   "generated_at": "2026-10-07",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "fcf22885133a": {
+  "identity": {
+   "one_liner": "单命令在数据库/平台间复制数据的 CLI 数据摄取工具",
+   "review": "ingestr 是一个命令行工具，用于通过 URI 标识源与目标，单条命令在数据库、消息队列、SaaS 平台与文件之间复制数据，支持 append、merge、delete+insert 增量加载方式，并提供 Python SDK 以 Arrow IPC 流传输数据。适合数据工程师搭建 ELT 流程；注意其采用 FSL 1.1 许可，不得用于提供竞争性数据管道服务。",
+   "highlights": [
+    "支持以命令行标志方式在任意源与目标间复制数据，无需编写代码",
+    "提供 append、merge、delete+insert 三种增量加载方式",
+    "提供 Python SDK，支持 DataFrame、生成器经 Arrow IPC 流传输数据"
+   ],
+   "use_cases": [
+    "将数据库表复制到数据仓库（如 Postgres 到 BigQuery）",
+    "从 SaaS 平台/API 增量摄取数据到数据库",
+    "在 Python 程序中把 DataFrame 写入 DuckDB 等目标库"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "with ingestr.ingest(dest_uri=\"postgresql://...\", dest_table=\"public.events\") as ingest: ／ --source-uri 'postgresql://admin:admin@localhost:8837/web?sslmode=disable' \\ ／ Postgres",
+     "lines": [
+      58,
+      75,
+      294
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL",
+     "lines": [
+      274
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Oracle",
+     "lines": [
+      284
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite",
+     "lines": [
+      324
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Microsoft SQL Server",
+     "lines": [
+      254
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse",
+     "lines": [
+      139
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为在数据库间复制数据的摄取工具，为数据管道场景服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "FSL 1.1 source-available，未来转为 Apache 2.0；禁止用于竞争性数据管道产品",
+   "install": [
+    "binary",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ingestr is a command-line app that allows you to ingest data from any source into any destination using simple command-line flags, no code necessary. ／ ## Supported sources & destinations ／ ingestr is source-available under the Functional Source License 1.1, with Apache 2.0 as the future license. You can use ingestr freely for internal production use, development, testing, education, research, and professional services. You cannot use ingestr to offer a competing commercial ingestion, ELT, connector, or managed data pipeline product/service.",
+   "evidence_lines": [
+    7,
+    96,
+    914
+   ]
+  },
+  "fn": "bruin-data/ingestr",
+  "sha": "fcf22885133a",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "40f2673530cd": {
+  "identity": {
+   "one_liner": "基于 Raft 集群的嵌入式 SQLite 数据库，含缓存",
+   "review": "Hiqlite 是一个可嵌入的 SQLite 数据库库，通过 Raft 集群提供强一致性、高可用、自动 leader 故障转移和自愈能力，并附带磁盘/内存 K/V 缓存、分布式锁与计数器、listen/notify 消息。面向使用 Rust 开发应用的开发者，基于 rusqlite 与 openraft 实现，需在应用进程内运行而非独立数据库服务器。",
+   "highlights": [
+    "提供 Raft 集群的强一致性复制、自动 leader 故障转移与自愈",
+    "提供加密备份到 s3、自动数据库迁移和分布式锁/计数器功能",
+    "提供可选独立 server 二进制，可单节点、集群或代理运行"
+   ],
+   "use_cases": [
+    "需要嵌入式 SQLite 且要求高可用的 Rust 应用",
+    "需要分布式缓存、分布式锁或实时消息的场景",
+    "单机嵌入式数据库无法容忍故障的部署环境"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Hiqlite is an embeddable SQLite database that can form a Raft cluster to provide strong consistency, high availability",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "like a Postgres anymore as well.",
+     "lines": [
+      83
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它本身是一个嵌入式数据库引擎，为应用提供数据库能力而非仅使用现有数据库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Hiqlite is an embeddable SQLite database that can form a Raft cluster to provide strong consistency, high availability ／ Hiqlite builds on top of `rusqlite` and provides an async wrapper around it. For the Raft logic, it builds on top of ／ `openraft` while providing its own storage and network implementations.",
+   "evidence_lines": [
+    3,
+    16,
+    17
+   ]
+  },
+  "fn": "sebadob/hiqlite",
+  "sha": "40f2673530cd",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

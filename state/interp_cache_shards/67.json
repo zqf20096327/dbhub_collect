@@ -8973,5 +8973,246 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a86652c59e9d": {
+  "identity": {
+   "one_liner": "Rust 编写的优化型 C 编译器，以 SQLite/PostgreSQL/Linux 内核为验证目标",
+   "review": "rucc 是一个用 Rust 实现的优化 C 编译器，包含 SMT 验证的重写规则和无环 e-graph 中端，自行编码指令并输出 ELF/Mach-O/COFF 与 DWARF，不依赖外部汇编器。它以能无补丁构建 SQLite、PostgreSQL、Linux 内核为里程碑，适合关注编译器实现、形式化验证与交叉编译的开发者。",
+   "highlights": [
+    "重写规则经 SMT 求解器验证，IR 每次 pass 后由验证器检查",
+    "自编码指令、写 ELF/Mach-O/COFF 与 DWARF，编译路径无外部汇编器",
+    "发布 Linux/macOS/Windows 预编译二进制，并支持 WASI 模块与交叉编译"
+   ],
+   "use_cases": [
+    "以无源码补丁方式编译 SQLite、PostgreSQL、GNU make 等 C 项目",
+    "面向 x86_64/aarch64/i686 Linux 及 musl 的交叉编译",
+    "编译器验证与优化技术的研究参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The goal is a compiler that builds real software without patches, generates code that stands up next to `gcc -O2`, and runs on every platform its users do. The target ladder goes SQLite, then a mid tier of well known C projects, then PostgreSQL, then the Linux ／ The twelve milestones are in `spec/17-milestones.md` and are tracked as issues. Three of them are sane stopping points: M5 is a correct, fast, optimizing compiler that builds SQLite; M9 adds PostgreSQL on three hosts and three targets; M11 is the kernel. ／ PostgreSQL 18.6 built by rucc 0.20.0 at `-O2` takes 1.12 times as long as the same server built by `gcc -O2` on pgbench `select-only`, with the two servers run one after the other on the same machine on the night of 2026-10-05. The other bench numbers are nigh",
+     "lines": [
+      5,
+      47,
+      49
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "The goal is a compiler that builds real software without patches, generates code that stands up next to `gcc -O2`, and runs on every platform its users do. The target ladder goes SQLite, then a mid tier of well known C projects, then PostgreSQL, then the Linux ／ rucc builds real programs today. On Linux x86-64, GNU make built by rucc passes its own test suite, SQLite built at `-O2` runs its speed test with the correct result, and the real corpus builds 74 projects with no source patch. The full technical design is wri ／ 2. SQLite 3.53.4 built by rucc at `-O2` runs speedtest1 with the correct result. The program is 22% slower than the GCC build, and rucc compiles `sqlite3.c` at `-O2` in about one third of the GCC time.",
+     "lines": [
+      5,
+      7,
+      41
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它是通用 C 编译器，SQLite/PostgreSQL 仅作为编译验证目标与基准出现，非为其服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An optimizing C compiler written in Rust. ／ The goal is a compiler that builds real software without patches, generates code that stands up next to `gcc -O2`, and runs on every platform its users do. The target ladder goes SQLite, then a mid tier of well known C projects, then PostgreSQL, then the Linux kernel. Nothing on that ladder is allowed a source patch. If a project needs one, the compiler is wrong. ／ 2. SQLite 3.53.4 built by rucc at `-O2` runs speedtest1 with the correct result. The program is 22% slower than the GCC build, and rucc compiles `sqlite3.c` at `-O2` in about one third of the GCC time.",
+   "evidence_lines": [
+    3,
+    5,
+    41
+   ]
+  },
+  "fn": "tamnd/rucc",
+  "sha": "a86652c59e9d",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5e656556a19d": {
+  "identity": {
+   "one_liner": "将 nmap 扫描结果转为可交互 3D 城市视图的网络安全可视化应用",
+   "review": "Portscape 读取 nmap 扫描结果，把网络中每台设备渲染为 3D 城市中的建筑，结合 NVD CVE 查询、CISA KEV 目录和 7 天基线对比展示风险。基于 Spring Boot 后端、React/Three.js 前端，数据存于 Docker 中的 PostgreSQL。适合需要以可视化方式跟踪私有网络资产变化与暴露端口的运维/安全人员使用。",
+   "highlights": [
+    "将 nmap 扫描结果生成 3D 城市，建筑高度为开放端口数、颜色为风险等级",
+    "将检测到的服务版本与 NVD 交叉比对获取 CVE，并核对 CISA KEV 目录",
+    "以 MAC 地址跟踪设备身份，支持与基线快照对比新出现或变更的设备"
+   ],
+   "use_cases": [
+    "私有网络资产的定期扫描与基线差异监控",
+    "以 3D 可视化方式向团队展示网络暴露面与风险评分",
+    "为扫描发现的服务版本检索已知 CVE 与在野利用状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Docker|any recent|Runs PostgreSQL only — see note below| ／ This starts PostgreSQL (Docker), the backend (`http://localhost:8080`) and the ／ Responses are cached in PostgreSQL. Without the cache, the NVD rate limit (5 requests",
+     "lines": [
+      75,
+      97,
+      210
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明通过 Docker 运行 PostgreSQL 并在其中缓存数据，数据库仅作为应用的存储依赖。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Docker|any recent|Runs PostgreSQL only — see note below| ／ This starts PostgreSQL (Docker), the backend (`http://localhost:8080`) and the",
+   "evidence_lines": [
+    75,
+    97
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "brunovieira88/PortScape",
+  "sha": "5e656556a19d",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "119ce8ff8072": {
+  "identity": {
+   "one_liner": "达梦数据库的非官方 Entity Framework Core 10 提供程序",
+   "review": "该项目为达梦 DM8 提供 EF Core 10 关系数据库提供程序，基于官方 DM.DmProvider ADO.NET 驱动实现查询、CRUD、迁移等功能，面向使用 .NET 和 EF Core 访问达梦数据库的开发者。项目明确声明并非完整提供程序，DDL 迁移不具备原子性，且异步 API 因驱动限制会回退同步实现。",
+   "highlights": [
+    "基于官方 DM.DmProvider ADO.NET 驱动实现，支持通过 UseDameng 接入 EF Core",
+    "提供反向工程（scaffold）、迁移脚本生成与执行、标识列/序列值生成等能力",
+    "附带可安装的达梦 SQL 方言 Agent Skill，整理与 Oracle/MySQL/SQL Server 的方言差异"
+   ],
+   "use_cases": [
+    ".NET 10 / EF Core 10 项目连接达梦 DM8 数据库进行 ORM 开发",
+    "使用 dotnet ef 对达梦数据库做模式反向工程和迁移管理",
+    "为 AI Agent 安装达梦 SQL 方言参考 skill"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "# W.EntityFrameworkCore.Dameng ／ 这是一个独立维护的非官方达梦数据库 Entity Framework Core 10 关系数据库提供程序。 ／ - 达梦 DM8；各轮实例版本记录见兼容性矩阵，不声明最低服务器版本；",
+     "lines": [
+      1,
+      3,
+      9
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "仓库在 `skills/dameng-sql` 提供可安装的 Agent Skill，按达梦公开 SQL 文档整理方言差异：与 Oracle / MySQL / SQL Server 一致的部分只作索引，表空间、`IDENTITY` / 序列、DMSQL、页大小、聚集主键、`compatible_mode` 等达梦特有写法带有示例。",
+     "lines": [
+      107
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "仓库在 `skills/dameng-sql` 提供可安装的 Agent Skill，按达梦公开 SQL 文档整理方言差异：与 Oracle / MySQL / SQL Server 一致的部分只作索引，表空间、`IDENTITY` / 序列、DMSQL、页大小、聚集主键、`compatible_mode` 等达梦特有写法带有示例。",
+     "lines": [
+      107
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "仓库在 `skills/dameng-sql` 提供可安装的 Agent Skill，按达梦公开 SQL 文档整理方言差异：与 Oracle / MySQL / SQL Server 一致的部分只作索引，表空间、`IDENTITY` / 序列、DMSQL、页大小、聚集主键、`compatible_mode` 等达梦特有写法带有示例。",
+     "lines": [
+      107
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明这是为达梦数据库服务的 EF Core 提供程序组件，本身不存数据，属于数据库生态的开发库/驱动组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "这是一个独立维护的非官方达梦数据库 Entity Framework Core 10 关系数据库提供程序。 ／ 它使用官方 `DM.DmProvider` ADO.NET 驱动程序，不依赖任何具体应用框架。 ／ - 达梦 DM8；各轮实例版本记录见兼容性矩阵，不声明最低服务器版本；",
+   "evidence_lines": [
+    3,
+    4,
+    9
+   ]
+  },
+  "fn": "whynpc9/W.EntityFrameworkCore.Dameng",
+  "sha": "119ce8ff8072",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

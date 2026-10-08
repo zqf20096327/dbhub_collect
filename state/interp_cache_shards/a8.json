@@ -8963,5 +8963,203 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "20b8f4edf7ba": {
+  "identity": {
+   "one_liner": "NestJS DDD+CQRS 示例项目，REST API 结合 MySQL 与 SQS Outbox",
+   "review": "该仓库是一个可运行的 NestJS 示例应用，演示分层 DDD（领域/应用/接口/基础设施）、CQRS 命令查询分离、领域事件与 Outbox 模式，事件经 SQS（本地用 LocalStack 模拟）发布消费，数据存储于 MySQL。面向学习微服务架构与 DDD/CQRS 实现方式的开发者。README 注明项目作为稳定参考维护，不再进行活跃的功能开发。",
+   "highlights": [
+    "提供领域/应用/接口/基础设施四层 DDD 分层与聚合、领域事件示例",
+    "实现 CQRS 命令与查询分离处理",
+    "包含 Outbox 表与 SQS 集成事件的发布/消费实现"
+   ],
+   "use_cases": [
+    "学习如何在 NestJS 中实现 DDD 分层与 CQRS",
+    "参考 Outbox 模式与 SQS 事件驱动微服务集成",
+    "作为微服务架构应用的参考代码库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "This is REST api made by node.js, nest, mysql with typescript. ／ So you have to get node.js environment, mysql for database, LocalStack (or real AWS) for messaging, know typescript syntax. ／ Next up, generate mysql and LocalStack.",
+     "lines": [
+      88,
+      94,
+      124
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 MySQL 存储数据的 REST API 示例应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "This is REST api made by node.js, nest, mysql with typescript. ／ So you have to get node.js environment, mysql for database, LocalStack (or real AWS) for messaging, know typescript syntax. ／   docker compose up -d database localstack # create mysql 8.4 and LocalStack containers",
+   "evidence_lines": [
+    88,
+    94,
+    133
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "kyhsa93/nestjs-rest-cqrs-example",
+  "sha": "20b8f4edf7ba",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a18c8da13ada": {
+  "identity": {
+   "one_liner": "面向单片机的轻量级Flash键值存储库",
+   "review": "TinyFlashDB 是一个运行在单片机上的小型Flash存储库，为每个变量分配独立Flash扇区并做读写校验，提供单块和dual双块两套API，用于保存IAP标志等少量关键变量，适合嵌入式开发者在51、STM32等MCU上移植使用，不适合大规模数据存储。",
+   "highlights": [
+    "每个变量独占一个Flash扇区，长度不可变，读写均带和校验与写入重试",
+    "提供dual双块API，通过seq机制在记录损坏时可回退读取上一条有效数据",
+    "单块模式代码占用不到1kb，可通过实现三个tfdb_port接口移植到多种MCU"
+   ],
+   "use_cases": [
+    "在单片机上存储IAP跳转标志、系统断电时间等少量关键变量",
+    "在电池供电、意外断电等写入不稳定环境中保障变量存储",
+    "移植到51、STM32L4、Flash加密单片机等平台的嵌入式项目"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 提及 EASYFLASH、FLASHDB 等仅为同类方案对比，本项目自身是为 MCU Flash 存储服务的组件，不依赖某个数据库产品。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Tiny Flash Database for MCU. ／ 不同于其他很多的KV型数据库，TinyFlashDB每一个需要存储的变量都会分配一个单独的单片机flash扇区，变量长度不可变。 ／ TinyFlashDB在设计时就考虑了写入错误的影响，追求力所能及的安全保障、资源占用方面尽可能的缩小（单块模式代码占用不到1kb）、尽可能的通用性（可以移植到51等8位机，无法逆序写入的stm32L4系列，某些flash加密的单片机和其他普通32位机上）。",
+   "evidence_lines": [
+    3,
+    12,
+    14
+   ]
+  },
+  "fn": "smartmx/TFDB",
+  "sha": "a18c8da13ada",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0afef97249f9": {
+  "identity": {
+   "one_liner": "SQLite 数据库操作的 MCP 服务器，提供标准化读写接口",
+   "review": "该项目用 Go 实现一个 MCP 服务器，让 MCP 客户端（如 Claude Desktop）以标准化方式访问 SQLite 数据库：提供 get_schema 模式查看、query 只读查询和 execute 写入三个工具，查询层限制只允许 SELECT/WITH/EXPLAIN，写操作走 execute。需 Go 1.24.4 或 Docker 构建，适合需要通过 AI 客户端操作本地 SQLite 数据的开发者。",
+   "highlights": [
+    "提供 get_schema、query、execute 三个 MCP 工具，覆盖模式查看、只读查询和写入操作",
+    "query 工具仅允许 SELECT、WITH、EXPLAIN 只读查询",
+    "支持二进制和 Docker 两种构建运行方式"
+   ],
+   "use_cases": [
+    "通过 MCP 客户端检查本地 SQLite 数据库的表结构与索引",
+    "在 AI 助手中执行受限的只读 SQL 查询",
+    "通过 MCP 接口执行 INSERT/UPDATE/DDL 等写入操作"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# SQLite MCP Server ／ A Model Context Protocol (MCP) server for SQLite database operations. This server provides a standardized interface for SQLite database interactions including schema inspection, read and write operations. ／ - Description: List all tables in the SQLite database with their schema information",
+     "lines": [
+      1,
+      3,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 SQLite 数据库提供 MCP 接口访问的中间件组件，为数据库生态服务而非使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Model Context Protocol (MCP) server for SQLite database operations. This server provides a standardized interface for SQLite database interactions including schema inspection, read and write operations. ／ The MCP server exposes three main tools: ／ #### Using built binary:",
+   "evidence_lines": [
+    3,
+    7,
+    62
+   ]
+  },
+  "fn": "rvarun11/sqlite-mcp",
+  "sha": "0afef97249f9",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

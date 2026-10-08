@@ -9299,5 +9299,82 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4741cc2422e7": {
+  "identity": {
+   "one_liner": "语义层运行时引擎，将智能体请求编译为确定性 SQL",
+   "review": "Metis 是一个开源、引擎中立的语义层运行时，基于 Ossie 模型定义指标、维度和关系，通过发现、验证、解析、规划和编译流程，把智能体或应用的结构化指标请求生成目标数据库方言的 SQL，并提供 MCP、REST、CLI 与 Go 嵌入式接口；内置执行目标为 Doris、ClickHouse 和 DuckDB，支持离线编译与在线校验，面向构建分析型智能体应用的开发者。",
+   "highlights": [
+    "提供 MCP、REST、CLI 与 Go 包四种入口，支持语义发现、SQL 编译与有界分析",
+    "内置 Doris、ClickHouse、DuckDB 方言渲染与执行后端，支持离线编译与在线校验",
+    "提供语义测试命令，支持 compile 与 runtime 两种模式并输出 JSON/JUnit 报告"
+   ],
+   "use_cases": [
+    "为 AI 智能体提供指标查询与 SQL 生成能力（MCP 服务器）",
+    "对语义模型做离线校验、diff 与 CI 中的编译回归测试",
+    "从数据库目录元数据生成可审查的 Ossie 语义项目初稿"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "platform. The oracle must not favor Metis SQL spelling or output aliases.",
+     "lines": [
+      258
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "database access. Built-in targets are Doris, ClickHouse, and DuckDB. ／ Use `--dialect DORIS`, `CLICKHOUSE`, or `DUCKDB` to select a target. Add repeatable ／ |`metis semantic validate --online`|Inspect query dependencies and check Doris/ClickHouse or optional DuckDB EXPLAIN acceptance.|",
+     "lines": [
+      19,
+      140,
+      153
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Metis 位于智能体与分析数据库之间，为数据库生态提供语义解析与 SQL 编译服务，本身不是使用数据库存储业务数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Metis is an open-source, Ossie-first, engine-neutral semantic layer runtime engine. ／  database access. Built-in targets are Doris, ClickHouse, and DuckDB. ／ |MCP|Give an agent tools for semantic discovery, SQL compilation, and bounded analytics over stdio or HTTP.|",
+   "evidence_lines": [
+    3,
+    19,
+    42
+   ]
+  },
+  "fn": "meaningforge/metis",
+  "sha": "4741cc2422e7",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

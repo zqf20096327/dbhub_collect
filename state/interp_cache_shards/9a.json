@@ -10218,5 +10218,71 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6eb9660f52ce": {
+  "identity": {
+   "one_liner": "Devin Desktop 安装诊断 CLI，只读检查本地 SQLite 存储并给出修复建议",
+   "review": "devin-doctor 是一个针对 Devin Desktop 本地安装的诊断命令行工具，检查 sessions.db、acp-messages、state.vscdb 等存储、schema 版本（v15–v17）、配置文件和磁盘占用，输出 PASS/WARN/FAIL 报告与 fix 建议，严格只读、不联网。面向 Devin 用户排障，版本绑定 devin-internals-spec，新 schema 会报 unknown version。",
+   "highlights": [
+    "六项检查：stores、schema、health-of-data、config、hooks-windows、disk，每项输出 PASS/WARN/FAIL 及 fix 建议",
+    "严格只读，不修改数据目录且默认不发起网络请求",
+    "capabilities 子命令输出 JSON 机器能力画像，plan 子命令生成只读修复计划"
+   ],
+   "use_cases": [
+    "Devin 出现历史丢失、认证错误或磁盘压力时定位原因",
+    "调试前对本地安装做只读健康检查",
+    "受限/企业环境中生成可粘贴的诊断报告（report --md）"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`health-of-data`|empty sessions, orphan `message_nodes`, sessions idle > `--stale-days`, `SQLITE_BUSY` locks|",
+     "lines": [
+      87
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "工具直接解析 Devin 的 SQLite 存储文件，但其定位是 Devin 安装诊断而非数据库生态组件，生态位证据不足。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`devin-doctor` diagnoses a Devin Desktop installation — one command that ／ |`stores`|present/missing, sizes and row counts for `sessions.db`, `acp-messages/*.db`, `state.vscdb`| ／ devin-doctor is a pure local diagnostic: it reads Devin's own data",
+   "evidence_lines": [
+    24,
+    85,
+    112
+   ]
+  },
+  "fn": "Icaro0310/devin-doctor",
+  "sha": "6eb9660f52ce",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9716,5 +9716,71 @@
   "generated_at": "2026-10-07",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "d26652edbd6d": {
+  "identity": {
+   "one_liner": "本地 Oracle Cloud Infrastructure (OCI) 云服务模拟器",
+   "review": "floci-oci 是一个开源的本地 OCI 模拟器，在单容器内实现 Identity、Object Storage、Queue、Streaming、Vault/KMS、Functions、OKE 等 OCI 形态服务，供 OCI SDK、CLI 及 Terraform/OpenTofu 无改动接入，面向开发、测试与 CI 流水线使用者；基于 Quarkus 构建，需 JDK 25，Functions 与 OKE 通过 Docker sidecar 真实运行。",
+   "highlights": [
+    "实现 OCI 真实线协议：opc-request-id、分页头、etag 条件请求与官方错误体（README L100）",
+    "官方 oci-java-sdk、Python SDK、OCI CLI 与 Terraform provider 无需修改即可接入，并有兼容性套件持续验证（README L104）",
+    "提供 memory/persistent/hybrid/wal 四种持久化模式并支持按服务覆盖（README L110-L196）"
+   ],
+   "use_cases": [
+    "无需 Oracle Cloud 账号即可在本地开发与调试 OCI 集成",
+    "在 CI 流水线中运行 OCI SDK/CLI/Terraform 的集成测试",
+    "多租户隔离场景下的本地资源模拟与验证"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Light, fluffy, and always free, now for Oracle Cloud ／ floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI. ／ It gives you OCI-shaped services on your machine without an Oracle Cloud account, uploaded API keys, or paid feature gates. Point the OCI SDKs, the OCI CLI, Terraform, or OpenTofu at `http://localhost:4599` and keep your existing workflows.",
+     "lines": [
+      5,
+      24,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它模拟 Oracle Cloud Infrastructure 服务供开发测试使用，并非使用或适配某个数据库的存储层",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI. ／ It gives you OCI-shaped services on your machine without an Oracle Cloud account, uploaded API keys, or paid feature gates. Point the OCI SDKs, the OCI CLI, Terraform, or OpenTofu at `http://localhost:4599` and keep your existing workflows. ／ The official oci-java-sdk, Python SDK, OCI CLI, and the `oracle/oci` Terraform provider work unchanged, validated continuously by the compatibility suite.",
+   "evidence_lines": [
+    24,
+    26,
+    104
+   ]
+  },
+  "fn": "floci-io/floci-oci",
+  "sha": "d26652edbd6d",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

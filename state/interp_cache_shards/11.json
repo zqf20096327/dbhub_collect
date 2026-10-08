@@ -9662,5 +9662,82 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2e4fec68deda": {
+  "identity": {
+   "one_liner": "自托管桌面 ERP 应用，基于 FastAPI 与嵌入式 PostgreSQL",
+   "review": "Celerp 是一个可下载、自托管的企业运营桌面 ERP 系统，覆盖库存、开票、采购、制造、复式记账与 CRM。后端采用 Python/FastAPI 与事件溯源账本，架构模块化，各业务域为独立插件模块，并开放同一 loader API 供用户自建模块。数据保存在本地标准 PostgreSQL 数据库，桌面版内置 Postgres，无需云服务。适合需要本地部署、无订阅的中小型团队使用。",
+   "highlights": [
+    "提供库存、开票、采购、制造、复式记账、CRM 等模块化功能，模块可通过 loader API 自行开发扩展",
+    "桌面应用内置 PostgreSQL，celerp init 自动完成数据库初始化与迁移，支持指向现有 Postgres 服务器",
+    "事件溯源架构，所有变更为不可变账本条目，并内置 REST API 与 CSV 导入导出"
+   ],
+   "use_cases": [
+    "中小企业在本地或局域网内自托管管理进销存与账务",
+    "需要离线运行、数据保留在自己机器上的业务运营管理",
+    "开发者基于模块 API 定制行业专属业务模块"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "No PostgreSQL to install: `celerp init` uses your existing PostgreSQL server if one is ／ service. Point it at a specific server with `celerp init --db-url postgresql+asyncpg://…`. ／ - **Python/FastAPI** backend, **FastHTML** UI, embedded **PostgreSQL**",
+     "lines": [
+      50,
+      52,
+      116
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite in-memory for tests - no external dependencies to run the test suite",
+     "lines": [
+      117
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Celerp 是使用嵌入式 PostgreSQL 存储自身业务数据的 ERP 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "source-available 核心 + MIT 许可模块",
+   "install": [
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Python/FastAPI** backend, **FastHTML** UI, embedded **PostgreSQL** ／ Celerp runs on your machine and keeps its primary database local. Optional Connect features can relay remote access or send selected data to Celerp cloud services.",
+   "evidence_lines": [
+    116,
+    76
+   ]
+  },
+  "fn": "celerp/celerp",
+  "sha": "2e4fec68deda",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

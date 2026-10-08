@@ -8494,5 +8494,205 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ea26c0d67afb": {
+  "identity": {
+   "one_liner": "JDBC 代理库，拦截查询执行与方法调用",
+   "review": "为 Java 的 JDBC API 提供代理类，可拦截查询执行和 JDBC 方法调用，用于实现查询日志记录、指标采集等监听逻辑。面向需要在应用层观察数据库访问的 Java 开发者；通过 Maven 引入，无强制的第三方依赖，需 JDK 6 或更高版本。",
+   "highlights": [
+    "提供 JDBC API 的代理类，拦截查询执行与 JDBC 方法调用",
+    "监听器框架，如 SLF4JQueryLoggingListener 可选集成",
+    "无必需的第三方依赖，支持 Java 8 及以上"
+   ],
+   "use_cases": [
+    "为应用中的 JDBC 查询执行添加日志记录",
+    "采集 SQL 执行的方法调用与查询指标",
+    "在不修改数据访问代码的情况下插入拦截逻辑"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为 JDBC 访问数据库的交互提供拦截代理组件，属于数据库生态服务工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Provides proxy classes for the JDBC API, allowing you to intercept query execution and JDBC method calls. ／ - The library has no required third-party dependencies; integrations are optional.",
+   "evidence_lines": [
+    7,
+    26
+   ]
+  },
+  "fn": "jdbc-observations/datasource-proxy",
+  "sha": "ea26c0d67afb",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4afa474339d2": {
+  "identity": {
+   "one_liner": "本地 LLM 可观测性工具，单二进制接收 OTel 追迹存入 SQLite 展示",
+   "review": "spoor 是一个本地运行的 LLM/agent 可观测性工具：接收 OpenTelemetry 追迹数据，存入单个 SQLite 文件，并以 Web UI 展示 token 用量、延迟和成本明细，还提供只读 MCP 端点供 agent 读取。面向使用 Claude Code、Copilot 等 LLM 应用的开发者。限制：仅接收 HTTP OTLP 追迹，端口无认证，只监听 loopback。",
+   "highlights": [
+    "单二进制无运行时依赖，零配置启动，接收 OTLP/HTTP 追迹并存入单个 SQLite 文件",
+    "按 token 类型（输入、缓存读、缓存写、输出）计算成本，提供 trace 列表、搜索、过滤和会话视图",
+    "提供只读 MCP 端点和单文件 HTML 导出，支持 Claude Code、OpenLLMetry、Vercel AI SDK 等多种 sender"
+   ],
+   "use_cases": [
+    "查看 LLM 应用或编码 agent 的 token 用量、延迟与成本去向",
+    "分析 prompt 缓存失效原因与上下文增长对成本的影响",
+    "让 agent 通过 MCP 端点读取自身追迹数据"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One binary, one SQLite file, OpenTelemetry in. No account, no key, no cloud. ／ - **One SQLite file.** It is the storage, the backup unit and the read API: open it with `sqlite3`, the schema is documented and stable. ／ docker run -d -v spoor-data:/data -e SPOOR_SQLITE_PATH=/data/spoor.db \\",
+     "lines": [
+      6,
+      35,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "spoor 用 SQLite 作为自身存储后端，是为 LLM 观测服务的独立工具，而非数据库生态组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One binary, one SQLite file, OpenTelemetry in. No account, no key, no cloud. ／ spoor receives OpenTelemetry traces from LLM applications and coding agents, stores them, and shows where the time, the tokens and the money went. Your agent can read the traces too. ／ - **One SQLite file.** It is the storage, the backup unit and the read API: open it with `sqlite3`, the schema is documented and stable.",
+   "evidence_lines": [
+    6,
+    18,
+    35
+   ]
+  },
+  "fn": "jhisse/spoor",
+  "sha": "4afa474339d2",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c48d31dcad7b": {
+  "identity": {
+   "one_liner": "本地优先 macOS 跟单应用，读取 Discord 交易信号并经风控后下单到 Alpaca",
+   "review": "CopyTrading 是一款本地优先的 macOS 原生应用，读取 Discord 上的股票交易帖子，由用户选择的模型解析为精确订单，经每日亏损、单笔、单标的等风控限额检查后通过 Alpaca 账户下单。SQLite 存储全部决策记录，支持 CLI 与 MCP 服务器控制，适合希望在自设限额内自动复制交易者的个人用户。当前为开发者预览版，未经实盘资格认证，建议先使用 Alpaca 纸面账户。",
+   "highlights": [
+    "由所选模型读取 Discord 帖子并解析为订单，所有数值须出现在原帖中",
+    "每笔买入前检查每日亏损、单笔、单标的与总敞口限额，每笔持仓可追溯到原帖",
+    "提供 CLI 与 MCP 服务器，可在无 GUI 的 Mac 或 Linux 服务器上以 Docker 运行引擎"
+   ],
+   "use_cases": [
+    "在自设风控限额内自动复制 Discord 交易者的股票调用",
+    "纸面与实盘账户并存的多账户、多交易者跟单管理",
+    "通过 CLI/MCP 让脚本或编码代理只读监控并暂停引擎"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A SwiftUI app supervises one local Python engine. The engine owns every decision, keeps it in SQLite, and reconciles with the broker after a crash or sleep, so a signal that expires while the app is closed never becomes a late order. Architecture has the detai",
+     "lines": [
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "eco_why": "应用自身使用 SQLite 存储引擎决策与持仓记录，是使用数据库的应用而非数据库生态工具",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CopyTrading is a native macOS app that reads the stock calls traders post on Discord, turns each one into an exact order, checks it against your limits, and places it with your Alpaca account. Everything runs on your Mac. ／ A SwiftUI app supervises one local Python engine. The engine owns every decision, keeps it in SQLite, and reconciles with the broker after a crash or sleep, so a signal that expires while the app is closed never becomes a late order. Architecture has the details and the ADRs record why. ／ The engine also runs without the app, on a Mac or a Linux server, so copying continues while your Mac sleeps. `copytrading-server` reads a `copytrading.toml` file and keys from environment variables, and a Docker image is included. See Run the engine without the app.",
+   "evidence_lines": [
+    17,
+    87,
+    102
+   ]
+  },
+  "fn": "YZXBiz/copytrading",
+  "sha": "c48d31dcad7b",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

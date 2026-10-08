@@ -8057,5 +8057,207 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "edba81512bde": {
+  "identity": {
+   "one_liner": "开源自托管数字标牌 CMS，管理屏幕内容与播放",
+   "review": "ScreenTinker 是一个自托管的数字标牌内容管理系统，提供播放列表、排期、远程控制、视频墙、Kiosk 模式和播放统计等功能，运行于 Node.js 并使用 SQLite 存储数据（better-sqlite3 内置）。面向零售、餐饮菜单屏、办公大堂、教育等需要集中管理远程屏幕的场景，也提供托管云版本。",
+   "highlights": [
+    "支持 Android TV、Fire TV、Tizen、webOS、树莓派、Windows、浏览器等多种播放端",
+    "提供播放列表、分时排期、多分区布局、视频墙同步与远程控制",
+    "多租户工作区模型与六级成员角色，MIT 许可，SQLite 存储"
+   ],
+   "use_cases": [
+    "零售/餐饮门店菜单屏与促销屏的集中内容管理",
+    "办公大堂、会议室门牌、Kiosk 交互屏的部署与排期",
+    "教育机构多地点屏幕的自托管统一管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Admin REST** → `/api/*` HTTPS → Express → SQLite. Everything scoped by `workspace_id` from JWT `current_workspace_id` claim. ／ - SQLite (bundled via `better-sqlite3`; no separate install needed — `npm install` handles the native bindings)",
+     "lines": [
+      145,
+      175
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 作为自身数据存储的数字标牌应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ScreenTinker is a free, open-source **digital signage CMS** you can self-host on your own server — or run in our managed cloud. Manage TVs, video walls, and kiosks across multiple locations from one dashboard, with remote control, scheduling, playlists, and analytics. Built for retail, QSR menu boards, offices, lobbies, education, and any environment where you need centralized control over remote screens. Multi-tenant, MIT-licensed, single-developer maintained with direct contact access. ／ - **Workspaces** — multi-tenant data model: organizations contain workspaces, workspaces contain devices/content/playlists/schedules; users can be members of multiple workspaces and switch via a dropdown in the sidebar",
+   "evidence_lines": [
+    11,
+    44
+   ]
+  },
+  "fn": "screentinker/screentinker",
+  "sha": "edba81512bde",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "01d9eb3ac67c": {
+  "identity": {
+   "one_liner": "自托管 AI 代理任务看板与编排中枢，基于 MCP 与 HTTP 协作",
+   "review": "Retinue 是一个自托管任务看板，让人与 AI 代理在同一张卡片上协作：每张卡单一持有者、附验收标准，并通过只追加的回执链记录进度。代理可通过 MCP 或带令牌的 HTTP API 认领与回写任务，服务端状态存于 SQLite。适合运行多个 AI 编码代理的个人或小团队自托管使用。",
+   "highlights": [
+    "每张任务卡仅允许持有者写入，带验收检查项与不可改写的追加式回执链",
+    "提供 MCP 服务器接口和 HTTP + bearer token API 供代理访问",
+    "支持 Claude Code 与 Codex 会话数据的只读导入，以及 Lark/Feishu 与 Telegram 桥接适配器"
+   ],
+   "use_cases": [
+    "个人或小团队协调多个人工智能编码代理的任务分派与验收",
+    "通过回执链与操作视图审计代理的工作进度与用量记录",
+    "自托管环境（单机、家庭服务器、NAS）中替代托管代理平台管理任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The server stores canonical state in `retinue.db`; use a consistent SQLite ／ before copying it. Server mode uses `retinue.db` and needs a consistent SQLite",
+     "lines": [
+      106,
+      234
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个任务看板应用，服务端模式使用 SQLite 存储自身规范状态数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "self-hosted task board and orchestration hub where a mixed team of people and ／ - **MCP-native coordination.** `retinue-server mcp` exposes the board to any ／  The server stores canonical state in `retinue.db`; use a consistent SQLite",
+   "evidence_lines": [
+    16,
+    98,
+    106
+   ]
+  },
+  "fn": "jklthinking/retinue",
+  "sha": "01d9eb3ac67c",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "695e06df6ae6": {
+  "identity": {
+   "one_liner": "面向 DSH Tavern 的 SQLite 存储与服务端执行插件",
+   "review": "一个 DSH Tavern 插件，把聊天、会话事件和 MVU 变量历史改由 SQLite 管理并支持增量存档、按需读取与物理尾部回退，MVU 计算脚本移到服务端执行。面向使用 DSH Tavern 酒馆的玩家，保留原档只读、通过分叉继续游玩；支持 Windows 桌面版与 Linux CLI 安装，依赖特定作者契约版本，不保证所有卡或 API 兼容。",
+   "highlights": [
+    "SQLite 增量存档，头字段与消息楼层分开存储，局部更新只处理变化部分，会话事件由 SQLite 事务与 WAL 管理",
+    "支持历史按需读取与 MVU 变量历史归档瘦身，正文与变量同库同事务提交",
+    "提供物理尾部回退与前后台同步恢复，原档保持只读，可在 SQLite 新分叉中继续"
+   ],
+   "use_cases": [
+    "DSH Tavern 用户希望将 JSON 存档切换为 SQLite 管理以支持增量更新和按需读取",
+    "需要对剧情、变量与进度执行一致的物理回退撤销",
+    "在 Windows 桌面版或 Linux CLI 环境部署服务端 MVU 与卡脚本执行"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# DSH Tavern SQLite V2 ／ **服务端 MVU 与卡脚本、SQLite 增量存档、历史按需读取，以及正文和状态一起回退。** ／ 这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。",
+     "lines": [
+      1,
+      3,
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是面向 DSH Tavern 的存储与服务端执行插件，为宿主应用提供数据存储能力，本身不是终端应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU AGPL v3，基于 DSH Tavern 的独立修改版，非上游官方发行",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。 ／ |**SQLite 增量存档**|聊天头字段、消息楼层分开存储，局部更新只处理变化部分，避免为了追加或修改一楼反复重写全部历史。会话事件由 SQLite 事务与 WAL 管理。| ／ 基于 DSH Tavern 适配，保留原来源声明与 GNU AGPL v3 许可。本项目是独立修改版，不是上游官方发行；随包官方恢复字节的许可及对应源码入口也保留。",
+   "evidence_lines": [
+    5,
+    14,
+    96
+   ]
+  },
+  "fn": "huajiao1998/dsh-tavern-sqlite-v2",
+  "sha": "695e06df6ae6",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

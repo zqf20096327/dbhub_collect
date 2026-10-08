@@ -8962,5 +8962,139 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dc864c568018": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地 AI 代理长期记忆核心，带可重建向量索引与 MCP 工具",
+   "review": "Scope Recall 为 Hermes、Codex、Claude Code 等 AI 代理主机提供长期记忆：事实以 SQLite 为唯一权威存储，向量索引仅作伴随、可重建，多个代理可共享同一记忆库，并提供检查、更正、删除记忆的 MCP 工具与维护 CLI。面向使用 Hermes/Codex 等 Python 环境代理的用户与运维者，通过 PyPI 包安装，卸载默认保留数据、清除需单独步骤。",
+   "highlights": [
+    "以 SQLite 为唯一事实权威，向量索引可重建，支持共享存储供多代理条目接入",
+    "提供 host 适配器与 MCP 服务器，覆盖 Hermes、Codex、Claude Code、WorkBuddy、dsh",
+    "提供维护 CLI：plan/apply 安装与卸载、doctor 检查、重嵌入（respace-embeddings）、重试失败向量写入"
+   ],
+   "use_cases": [
+    "为 Hermes/Codex 代理添加可检查、可更正、可删除的本地长期记忆",
+    "多个代理主机共享同一份记忆库，实现跨代理召回",
+    "对记忆数据库进行版本升级迁移（含 2.0.1 离线迁移流程）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, Codex and Claude Code (the last two share one adapter of hooks and an MCP server), with the MCP tools when the  ／ migration procedure for a 2.0.1 memory database. SQLite remains the only fact ／ SQLite truth lives in the verified Core data directory. Vector indexes are companions and may be rebuilt only through an explicit configured space. The Hermes and Codex adapters bind host identity, installation identity, scopes, and project roots before openin",
+     "lines": [
+      3,
+      21,
+      104
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 SQLite 作为自身事实数据的存储权威，属于使用数据库存数据的项目。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, Codex and Claude Code (the last two share one adapter of hooks and an MCP server), with the MCP tools when the optional `codex` extra is installed. The public package is `hermes-scope-recall`; the Python import is `scope_recall`; the host wrapper identity remains `scope-recall`. ／ The package is `hermes-scope-recall` on PyPI. Install it into the same isolated Python ／ SQLite truth lives in the verified Core data directory. Vector indexes are companions and may be rebuilt only through an explicit configured space. The Hermes and Codex adapters bind host identity, installation identity, scopes, and project roots before opening Core. After that binding is verified, an omitted runtime-config argument checks only `<data_directory>/runtime-config.json`; a missing file stays basic plus an explicit capability gap. The file is never generated or discovered from the current directory, parent directories, or credential locations. Optional host wiring must report a capability gap instead of creating or repairing a database.",
+   "evidence_lines": [
+    3,
+    53,
+    104
+   ]
+  },
+  "fn": "410979729/scope-recall-hermes",
+  "sha": "dc864c568018",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ce5e3af23d47": {
+  "identity": {
+   "one_liner": "OceanBase PALF 仲裁副本的 TLA+ 形式化模型",
+   "review": "该仓库包含 OceanBase PALF 仲裁副本（2F1A/4F1A）的 TLA+ 模型，覆盖选举、日志恢复、配置确认、崩溃重启等路径，用 TLC 检查安全性与活性并给出可达性见证，依据 OceanBase 源码某提交建模。适合数据库内核与分布式共识的形式化验证人员使用；需 Java 8+，4F1A 检查耗时较长。",
+   "highlights": [
+    "提供 2F1A 与 4F1A 配置的 TLC 可运行模型（./run.sh 启动）",
+    "检查安全性（日志不丢不覆盖、leader 唯一）与活性（少数派异常后恢复）性质",
+    "模型对照 OceanBase 源码 src/logservice/palf 特定提交建立"
+   ],
+   "use_cases": [
+    "对 OceanBase PALF 仲裁副本的共识协议做形式化验证",
+    "复现协议安全性/活性检查并查看可达性见证",
+    "研究日志流选举与日志恢复机制的建模方法"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "OceanBase PALF 仲裁副本的 TLA+ 模型，检查了 2F1A 和 4F1A：一个日志流上的选举、日志重确认（Prepare 阶段、日志恢复、StartWorking 日志）、配置确认、日志的接受与提交、降级和升级、仲裁副本推送配置，以及全量副本和仲裁副本的崩溃与重启。模型依据 OceanBase 源码 `src/logservice/palf`（提交 `0fa1778`），名称与论文的术语一致（对照见 `arbitration/README.md`）。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库是为 OceanBase PALF 日志流模块服务的 TLA+ 形式化模型与验证工具，不是使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OceanBase PALF 仲裁副本的 TLA+ 模型，检查了 2F1A 和 4F1A：一个日志流上的选举、日志重确认（Prepare 阶段、日志恢复、StartWorking 日志）、配置确认、日志的接受与提交、降级和升级、仲裁副本推送配置，以及全量副本和仲裁副本的崩溃与重启。模型依据 OceanBase 源码 `src/logservice/palf`（提交 `0fa1778`），名称与论文的术语一致（对照见 `arbitration/README.md`）。 ／ 需要 Java 8 或更新版本。TLC（`tools/tla2tools.jar`，TLC 2.14，MIT 许可）随仓库提供。",
+   "evidence_lines": [
+    3,
+    15
+   ]
+  },
+  "fn": "redhandora/arbitration-tla",
+  "sha": "ce5e3af23d47",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

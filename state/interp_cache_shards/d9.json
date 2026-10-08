@@ -9396,5 +9396,69 @@
   "generated_at": "2026-10-07",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "52abe289a93a": {
+  "identity": {
+   "one_liner": "GitHub PR 评审桌面应用，本地缓存镜像加速打开",
+   "review": "PR Cockpit 是面向 macOS 和 Linux 的 GitHub 拉取请求评审桌面应用，通过 webhook 维护本地 PR 镜像，使队列、diff、检查日志和评审线程从磁盘读取。提供键盘优先操作、全局搜索和面向编码代理的 CLI；不支持 Windows。",
+   "highlights": [
+    "通过本地镜像从磁盘渲染 PR 队列、diff、检查日志与评审线程",
+    "提供键盘快捷键驱动的评审工作流和全局搜索面板",
+    "内置 CLI，可将 PR 上下文传给配置的编码代理"
+   ],
+   "use_cases": [
+    "维护者日常批量审阅大量开源仓库 PR",
+    "编码代理工作流中快速打开并传递 PR 上下文",
+    "需要离线快速浏览 PR 详情与检查日志的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Enable **Whiteboard (Experimental)** in **Settings → Workspace** to add the final review-queue tab. It is off by default. One personal canvas is saved in this installation's SQLite database; disabling the setting keeps it and stops board activity in every conn",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明应用使用本地 SQLite 数据库保存白板等数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PR Cockpit is a desktop app for GitHub pull requests on **macOS and Linux**. A local mirror, kept current by webhooks, holds every PR you care about, so the queue, the diff, the failed check logs and the review threads paint from disk. Keyboard for everything; GitHub stays the source of truth. ／ Enable **Whiteboard (Experimental)** in **Settings → Workspace** to add the final review-queue tab. It is off by default. One personal canvas is saved in this installation's SQLite database; disabling the setting keeps it and stops board activity in every connected window. Unsaved work stays protected in its window with a visible export/re-enable banner; keep that window open until recovered. Board actions never change GitHub, manual queue groups, or queue order.",
+   "evidence_lines": [
+    5,
+    90
+   ]
+  },
+  "fn": "theolundqvist/pr-cockpit",
+  "sha": "52abe289a93a",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

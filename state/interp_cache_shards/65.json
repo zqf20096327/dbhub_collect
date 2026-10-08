@@ -8687,5 +8687,80 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2ea143c2d733": {
+  "identity": {
+   "one_liner": "Kafka 消息批量写入 OceanBase/TDengine 的 Java 同步服务",
+   "review": "kafka2db 是一个 Java 数据同步服务，消费 Kafka 集群中的 Topic 消息，按外置 YAML 配置的字段映射将明细解析后批量写入 OceanBase 或 TDengine。面向需要把 Kafka 明细数据落库的运维或开发人员，提供多集群消费、双库路由、失败重试、失败消息本地落盘与 offset 手动提交机制；仅支持 `oceanbase` 路由目标，双库写入无分布式事务，配置修改需重启进程。",
+   "highlights": [
+    "支持同时连接最多 10 个 Kafka 集群，按 Topic 外置映射配置批量写入 OceanBase 或 TDengine",
+    "写入失败自动重试 3 次，耗尽后完整原始消息落盘为 JSONL 失败文件并提交 offset",
+    "关闭 Kafka 自动提交，逐条按 partition 提交 offset，OceanBase 通过 upsert 实现幂等"
+   ],
+   "use_cases": [
+    "将 Kafka 实时消息明细按自定义报文格式解析后落库到 OceanBase",
+    "同一 Topic 数据同时写入 OceanBase 与 TDengine 双目标",
+    "需要对同步失败消息持久化留档并仅重写失败目标的场景"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- 使用 MySQL JDBC 驱动。",
+     "lines": [
+      89
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "本服务同时连接最多 10 个 Kafka 集群。每个集群可以订阅多个 Topic，并按 Topic 的外置映射配置，将一条 Kafka 消息中的全部明细批量写入 OceanBase、TDengine 或两个数据库。 ／ 需要 JDK 8 或更高版本，以及 Maven 3.6.3 或更高版本。运行前准备 Kafka，并按目标数据库配置创建 OceanBase 表或 TDengine 超级表。 ／ - 仅 `oceanbase`。",
+     "lines": [
+      6,
+      12,
+      81
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 OceanBase/TDengine 提供数据写入同步能力，是为数据库生态服务的工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（原创代码），第三方依赖遵循各自许可证",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本服务同时连接最多 10 个 Kafka 集群。每个集群可以订阅多个 Topic，并按 Topic 的外置映射配置，将一条 Kafka 消息中的全部明细批量写入 OceanBase、TDengine 或两个数据库。 ／ - 使用 MySQL JDBC 驱动。 ／ 双库写入没有分布式事务。一个数据库成功、另一个数据库失败时，成功写入的结果不会回滚；失败文件会记录两个目标各自的状态，便于只修复失败目标。",
+   "evidence_lines": [
+    6,
+    89,
+    104
+   ]
+  },
+  "fn": "White-Bear1122/kafka2db",
+  "sha": "2ea143c2d733",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

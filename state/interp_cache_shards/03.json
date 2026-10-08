@@ -9431,5 +9431,204 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b773b57885b8": {
+  "identity": {
+   "one_liner": "开源 AI 原生笔记与知识库，支持 MCP，可部署于 Cloudflare 或 Docker",
+   "review": "EdgeEver 是一个开源的笔记与知识库应用，提供 Evernote 风格的三栏布局、网页剪藏、AI Agent 集成与原生 MCP 协议支持，供个人与团队自托管使用。数据基于标准 SQLite 存储，可零成本部署在 Cloudflare Serverless（使用 D1 和 R2），也可通过 Docker 部署到 VPS 或 NAS，并提供 REST API、CLI 工具及 ZIP 全量导入导出。",
+   "highlights": [
+    "内置 Model Context Protocol（MCP）与 Agent Client Protocol（ACP），支持外部 AI Agent 读取与整理笔记",
+    "基于标准 SQLite 存储，提供 REST API、CLI 工具与无损 ZIP 导入导出",
+    "支持 Cloudflare Serverless 与 Docker 两种部署方式，并提供 Web、桌面及移动端客户端"
+   ],
+   "use_cases": [
+    "自托管的个人/团队笔记与知识库管理",
+    "通过 AI Agent 和 MCP 进行笔记的自动整理与协作创作",
+    "多渠道内容剪藏与微信聊天记录归档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Flexible Deployment & Unlocked Data**: Run for free on Cloudflare Serverless (~150k short notes and ~50k images on the free tier), or deploy via Docker to your VPS, NAS, or home server for millions of notes; built on standard SQLite with REST APIs, CLI too",
+     "lines": [
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite（经 Cloudflare D1）存储笔记数据的知识库应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Flexible Deployment & Unlocked Data**: Run for free on Cloudflare Serverless (~150k short notes and ~50k images on the free tier), or deploy via Docker to your VPS, NAS, or home server for millions of notes; built on standard SQLite with REST APIs, CLI tooling, and lossless full ZIP export/import to keep your data completely independent. ／ 2. Create D1 `edgeever` and R2 `edgeever-resources` in Cloudflare. ／ - **Native Agent Protocols (MCP & ACP)**: Built-in Model Context Protocol (MCP) enables external AI Agents to read and organize notes; desktop app integrates Agent Client Protocol (ACP) to drive local agents (Codex, Antigravity, Claude Code, WorkBuddy, etc.) directly for collaborative creation.",
+   "evidence_lines": [
+    77,
+    95,
+    73
+   ]
+  },
+  "fn": "tianma-if/edgeever",
+  "sha": "b773b57885b8",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f5160360c8ca": {
+  "identity": {
+   "one_liner": "SurrealDB 官方 Python SDK，用于连接和操作 SurrealDB",
+   "review": "该仓库提供 SurrealDB 的 Python SDK，支持同步与异步客户端，提供 CRUD builder、RecordID/Table 类型校验、字段投影、记录范围查询、into= 模型映射以及多语句查询和事务。面向在 Python 应用中使用 SurrealDB 的开发者，需配合本地或云端 SurrealDB 服务端运行。",
+   "highlights": [
+    "提供同步 Surreal 与异步 AsyncSurreal 两种客户端，通过 ws:// RPC 连接",
+    "v3.0 提供类型化的链式 CRUD builder，字段投影与 SurrealQL 子句映射",
+    "支持 into= 将记录映射到 dataclass/pydantic 模型，以及 BEGIN...COMMIT 事务"
+   ],
+   "use_cases": [
+    "Python 应用通过 WebSocket RPC 读写 SurrealDB 数据",
+    "以 dataclass 或 pydantic 模型承载查询结果",
+    "执行多语句查询与事务块"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 声明这是 SurrealDB 的官方 SDK，为该数据库提供 Python 连接与操作能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " The official SurrealDB SDK for Python. ／ The official SurrealDB SDK for Python. ／ pip install surrealdb",
+   "evidence_lines": [
+    3,
+    21,
+    31
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "surrealdb/surrealdb.py",
+  "sha": "f5160360c8ca",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c5f0555c5e03": {
+  "identity": {
+   "one_liner": "AI-first 个人健康量化基础设施，Apple Health 数据经 FastAPI 落盘 SQLite 并以 CLI 供 AI 分析",
+   "review": "该项目是一套个人健康数据采集与分析基础设施：iOS App 从 HealthKit 读取数据，通过 Tailscale 网络内 POST 到 Mac 上的 FastAPI 服务，幂等写入本地 SQLite 作为唯一事实来源，并提供 Python CLI 做结构化查询与记录管理，分析报告由 AI Agent 基于 CLI 输出生成。面向拥有 iPhone/Apple Watch 与 Mac、能自行编译 iOS App 的开发者。限制包括无应用层鉴权、依赖 Tailscale、无端到端集成测试。",
+   "highlights": [
+    "三层解耦架构：iOS 采集层、FastAPI 幂等写入层、CLI+AI 分析层",
+    "支持睡眠、生命体征、活动、体测、生活方式、运动、心电图等 HealthKit 指标映射",
+    "AI 编程工具可通过 AGENTS.md 与 Skill 文件自主完成环境配置、数据库初始化与数据查询"
+   ],
+   "use_cases": [
+    "个人健康数据的长期量化记录与本地存储",
+    "基于 Apple Health 数据的睡眠趋势与日常报告 AI 分析",
+    "手动记录生活方式与疾病状态等补充数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "AI-first 个人健康量化基础设施。通过 iOS App 采集 Apple Health 数据，经 FastAPI 服务归一化并幂等落盘至 SQLite，提供 Python CLI 进行结构化数据查询与记录管理。数据分析与报告生成完全由 AI 驱动。 ／ iPhone (HealthKit) --POST--> Mac (FastAPI:7996) --write--> SQLite (唯一事实来源) ／ - **写入层**：FastAPI 后端只负责批量接入与幂等写入 SQLite。设备身份、传输加密和访问控制由 Tailscale 与 tailnet ACL 管理，不由 FastAPI 实现。",
+     "lines": [
+      3,
+      12,
+      17
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明将采集数据幂等写入 SQLite 作为唯一事实来源存储，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "AI-first 个人健康量化基础设施。通过 iOS App 采集 Apple Health 数据，经 FastAPI 服务归一化并幂等落盘至 SQLite，提供 Python CLI 进行结构化数据查询与记录管理。数据分析与报告生成完全由 AI 驱动。 ／ iPhone (HealthKit) --POST--> Mac (FastAPI:7996) --write--> SQLite (唯一事实来源)",
+   "evidence_lines": [
+    3,
+    12
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "grapeot/health-quantification",
+  "sha": "c5f0555c5e03",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

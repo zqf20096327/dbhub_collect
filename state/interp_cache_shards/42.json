@@ -7841,5 +7841,72 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f8996b6eaf13": {
+  "identity": {
+   "one_liner": "用 Docker 快速搭建 Nitro Habbo Retro 私服环境的编排项目",
+   "review": "该项目通过 Docker Compose 与 just 命令封装 Nitro 客户端、Arcturus 模拟器及 MySQL 数据库，实现两条命令即可启动一个 Habbo Retro 开发环境，附资产提取与迁移命令。面向想本地运行/开发 Nitro 私服的用户；依赖 Docker Desktop 与 just，首次启动需等待较长时间。",
+   "highlights": [
+    "提供 just install / start-all 等命令一键启动完整环境",
+    "包含 MySQL 容器及 Arcturus 基础数据库导入与迁移机制",
+    "支持资产提取命令 just extract-nitro-assets"
+   ],
+   "use_cases": [
+    "本地搭建 Habbo Retro 私服开发环境",
+    "Arcturus 模拟器与 Nitro 客户端联调",
+    "数据库结构迁移与资产提取测试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Mysql server use these credentials: ／ - MYSQL_ROOT_PASSWORD=arcturus_root_pw ／ The first database come from mysql/dumps, it's the base Arcturus database for 3.0.X with just a default SSO ticket (123), followed by the migrations up to 3.5.5. These files only run on an empty database: for an existing one, apply new migrations with `just migrate-db <file>`.",
+     "lines": [
+      26,
+      28,
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 MySQL 容器存放 Arcturus 私服数据，属于使用数据库的应用编排而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Mysql server use these credentials: ／ The first database come from mysql/dumps, it's the base Arcturus database for 3.0.X with just a default SSO ticket (123), followed by the migrations up to 3.5.5. These files only run on an empty database: for an existing one, apply new migrations with `just migrate-db <file>`.",
+   "evidence_lines": [
+    26,
+    33
+   ]
+  },
+  "fn": "Holo5/nitro-docker",
+  "sha": "f8996b6eaf13",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

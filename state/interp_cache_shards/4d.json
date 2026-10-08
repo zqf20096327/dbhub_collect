@@ -8441,5 +8441,73 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3e9e3012032f": {
+  "identity": {
+   "one_liner": "VPS 自托管引擎，AI 代理经 MCP/REST 接口部署与管理多个项目",
+   "review": "PanelAlpha Engine 安装在 VPS 上，通过 REST API 和 MCP 工具（204 个）让 Claude Code、Cursor 等 AI 代理执行部署、维护和服务器管理，支持 Git 部署、预览地址、staging、备份、监控、Docker 项目隔离、防火墙与 WAF，并可创建 MySQL 数据库。面向非系统管理员的自托管用户。要求 Debian 12/13 或 Ubuntu 22.04/24.04/26.04，至少 2GB 内存。",
+   "highlights": [
+    "提供 204 个 MCP 工具，供兼容 MCP 的 AI 代理连接执行部署、备份、域名、SSL、数据库等操作",
+    "支持 Git 部署任意技术栈，提供 staging 环境、自动备份与恢复、监控和 Docker 容器级项目隔离",
+    "内置防火墙、ModSecurity/OWASP 规则，AI 通过引擎操作而非获得 root 权限"
+   ],
+   "use_cases": [
+    "在自有 VPS 上自托管 AI 生成或开源项目，无需系统管理背景",
+    "让 AI 代理完成部署、日志排查、数据库创建、备份恢复等运维任务",
+    "在一台服务器上隔离运行多个项目并统一管理域名、SSL 和 Cloudflare 集成"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`Create a MySQL database for this project and a user for it.`|Database, user and privileges, without you touching SQL.|",
+     "lines": [
+      147
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明引擎核心负责管理数据库、文件和项目容器，为托管在服务器上的项目提供数据库创建与管理能力",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PanelAlpha Engine is software you install on your VPS to host AI-built and vibe-coded projects, websites and open source apps you found online. Once installed, you can connect your own AI agent directly to PanelAlpha Engine and let it handle deployments, maintenance and server management for you. Your server stays organized and under control. ／  PanelAlpha Engine architecture: your AI agent, Git host, REST API clients and SSH reach the engine API on port 2011; core runs every operation and manages databases, files and isolated project containers; visitors reach projects through nginx-proxy on ports 80 and 443; backups go to an external store and Cloudflare tunnels connect into projects ／ |`Create a MySQL database for this project and a user for it.`|Database, user and privileges, without you touching SQL.|",
+   "evidence_lines": [
+    38,
+    56,
+    147
+   ]
+  },
+  "fn": "panelalpha/panelalpha-engine",
+  "sha": "3e9e3012032f",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

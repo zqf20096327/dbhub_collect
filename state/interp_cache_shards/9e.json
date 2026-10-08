@@ -8730,5 +8730,80 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "15ef72fa7eb6": {
+  "identity": {
+   "one_liner": "SQLite 自然语言查询与受控写入的本地实验工具",
+   "review": "IntentSQL 是一个本地运行的单用户应用，用于用自然语言查询和修改 SQLite 数据，并展示语义判断、类型化查询计划、SQL 与结果。写入需预览并确认，支持事务提交与回退。面向想探索自然语言查询机制的开发者；作者同时将其作为 Jev 决策模型的实验载体，不覆盖窗口函数等复杂查询。",
+   "highlights": [
+    "自然语言生成类型化查询计划与 SQL，参数化执行并可检查生成过程",
+    "写入操作提供预览、显式确认、事务提交与受保护的撤销",
+    "内置 Cyberchase、DESE、Moneyball 示例库，并支持导入 SQLite 数据库（在副本上工作）"
+   ],
+   "use_cases": [
+    "用英文自然语言查询本地 SQLite 数据库的行、计数与分组结果",
+    "在确认预览后安全地执行 INSERT/UPDATE/DELETE 并可撤销",
+    "演示和实验小型有界语义判断与确定性代码的组合"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Explore a SQLite database in plain English, then inspect how the answer was built.** ／ IntentSQL is a local playground for querying and changing SQLite data. Ask for rows, counts, grouped results or related fields; inspect the semantic decisions, typed plan, SQL and result. For `INSERT`, `UPDATE` and `DELETE`, review the proposed changes before  ／ Bundled Cyberchase, DESE and Moneyball databases give you something to explore immediately. You can also import SQLite databases; the app works on copies and preserves the originals.",
+     "lines": [
+      3,
+      5,
+      76
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为查询和修改 SQLite 数据提供服务，是围绕 SQLite 构建的工具而非使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "代码 MIT；捆绑演示数据库来自 Harvard CS50 课程，按 CC BY-NC-SA 4.0 提供",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "IntentSQL is a local playground for querying and changing SQLite data. Ask for rows, counts, grouped results or related fields; inspect the semantic decisions, typed plan, SQL and result. For `INSERT`, `UPDATE` and `DELETE`, review the proposed changes before confirming them. ／ Bundled Cyberchase, DESE and Moneyball databases give you something to explore immediately. You can also import SQLite databases; the app works on copies and preserves the originals. ／ **v0.1.0-alpha.1** is a local, single-user experiment. The supported shapes do not cover every phrasing. Jev can reject valid wording, and probabilistic coverage does not prove an accepted interpretation correct. Inspect important results and every mutation preview.",
+   "evidence_lines": [
+    5,
+    76,
+    80
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Amine-LG/IntentSQL",
+  "sha": "15ef72fa7eb6",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

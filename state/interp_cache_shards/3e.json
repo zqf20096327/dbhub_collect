@@ -9277,5 +9277,170 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d0cdf34ed6e6": {
+  "identity": {
+   "one_liner": "Linux 服务器开源控制面板，集成网站、数据库、安全与应用管理",
+   "review": "VortexPanel 是一个基于 Python/Flask + Alpine.js 的自托管 Linux 服务器控制面板，提供 Nginx/Apache/OpenLiteSpeed/Caddy 网站管理、多引擎数据库、防火墙/WAF/Fail2ban、WP Toolkit、应用商店、备份与监控等功能，面向自行管理 VPS/服务器的运维人员和站长，通过安装脚本部署，支持 2FA 与面板 HTTPS。",
+   "highlights": [
+    "提供 MySQL、MariaDB、PostgreSQL、MongoDB 多引擎数据库管理与 phpMyAdmin 集成",
+    "内置 ModSecurity WAF（OWASP CRS v4）、UFW/firewalld 防火墙、Fail2ban 与面板 2FA",
+    "支持 Nginx/Apache/OLS/Caddy 四种 Web 服务器与 27 项一键安装、站点备份至 S3"
+   ],
+   "use_cases": [
+    "在自有 Linux 服务器上部署和管理多个网站与 PHP/Go/Node.js 应用",
+    "统一管理服务器防火墙、WAF、Fail2ban 等安全组件",
+    "一键安装与版本管理 MySQL/MariaDB/PostgreSQL/MongoDB 等数据库服务"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- MySQL, MariaDB, PostgreSQL, MongoDB — multi-engine ／ - **27** one-click installs: Nginx, Apache, OpenLiteSpeed, Caddy, PHP (multi-version), MySQL, MariaDB, PostgreSQL, MongoDB, Redis, **Memcached**, **FFmpeg** (multi-version, side by side), Docker, Node.js, Python, Composer, Fail2ban, ClamAV, ModSecurity, Roundc",
+     "lines": [
+      81,
+      85
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **PHP 7.4 → 8.5**, **Nginx / Apache / OpenLiteSpeed / Caddy**, **MariaDB / MySQL** — pick any combination ／ - MySQL, MariaDB, PostgreSQL, MongoDB — multi-engine ／ - **27** one-click installs: Nginx, Apache, OpenLiteSpeed, Caddy, PHP (multi-version), MySQL, MariaDB, PostgreSQL, MongoDB, Redis, **Memcached**, **FFmpeg** (multi-version, side by side), Docker, Node.js, Python, Composer, Fail2ban, ClamAV, ModSecurity, Roundc",
+     "lines": [
+      59,
+      81,
+      85
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Firewall** — UFW (Debian/Ubuntu) **and** firewalld (Fedora/RHEL/AlmaLinux/Rocky/Oracle/CentOS/CloudLinux) from the same UI",
+     "lines": [
+      67
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **PHP 7.4 → 8.5**, **Nginx / Apache / OpenLiteSpeed / Caddy**, **MariaDB / MySQL** — pick any combination ／ - MySQL, MariaDB, PostgreSQL, MongoDB — multi-engine ／ - **27** one-click installs: Nginx, Apache, OpenLiteSpeed, Caddy, PHP (multi-version), MySQL, MariaDB, PostgreSQL, MongoDB, Redis, **Memcached**, **FFmpeg** (multi-version, side by side), Docker, Node.js, Python, Composer, Fail2ban, ClamAV, ModSecurity, Roundc",
+     "lines": [
+      59,
+      81,
+      85
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "面板用于安装和管理 MySQL/MariaDB/PostgreSQL/MongoDB 等数据库服务，属数据库生态服务工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- MySQL, MariaDB, PostgreSQL, MongoDB — multi-engine ／ - **27** one-click installs: Nginx, Apache, OpenLiteSpeed, Caddy, PHP (multi-version), MySQL, MariaDB, PostgreSQL, MongoDB, Redis, **Memcached**, **FFmpeg** (multi-version, side by side), Docker, Node.js, Python, Composer, Fail2ban, ClamAV, ModSecurity, Roundcube, Supervisor, Pure-FTPd, BIND9 DNS, and more ／ wget -O install.sh https://raw.githubusercontent.com/BrowserlessAPI/VortexPanel/main/install.sh && bash install.sh",
+   "evidence_lines": [
+    81,
+    85,
+    122
+   ]
+  },
+  "fn": "BrowserlessAPI/VortexPanel",
+  "sha": "d0cdf34ed6e6",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "47d6a723f3ef": {
+  "identity": {
+   "one_liner": "PostgreSQL 17+ 的原生 BM25 排名全文检索索引访问方法扩展",
+   "review": "这是一个纯 C 编写、基于 PGXS 构建的 PostgreSQL 扩展，实现索引访问方法 bm25_native，用于 Okapi BM25 排名全文检索，无需外部搜索引擎或独立运行时。面向 PostgreSQL 17/18 用户的运维与开发人员；最低要求 PG17，磁盘格式自版本 6 起提供前后兼容契约。",
+   "highlights": [
+    "提供 USING bm25_native 索引访问方法，实现 Okapi BM25 排名全文检索",
+    "索引数据存储在索引关系自身页面，继承核心 WAL、崩溃恢复与物理复制",
+    "提供 @@@ 匹配与 &@@ 排序算子、bm25_score 评分访问器及 b 查询树构建函数"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 内对 text 列做 BM25 排名全文检索",
+    "不引入外部搜索引擎、复用数据库复制与恢复机制的场景",
+    "需要 top-N 排序查询（ORDER BY … &@@ …）的检索应用"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A native PostgreSQL **index access method** (`USING bm25_native`) for Okapi BM25 ranked ／ full-text search. Pure C against stock PostgreSQL via PGXS — no external search ／ - **PostgreSQL 17 or 18**, with the matching server development headers",
+     "lines": [
+      3,
+      4,
+      20
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展为数据库增加索引访问方法，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A native PostgreSQL **index access method** (`USING bm25_native`) for Okapi BM25 ranked ／ - **PostgreSQL 17 or 18**, with the matching server development headers ／ make",
+   "evidence_lines": [
+    3,
+    20,
+    36
+   ]
+  },
+  "fn": "pgexperts/pgx-bm25",
+  "sha": "47d6a723f3ef",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

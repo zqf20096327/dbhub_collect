@@ -7451,5 +7451,162 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3f39296b0c2c": {
+  "identity": {
+   "one_liner": "etcd 兼容 API 适配层，让 K8s 用 SQL 等后端替代 etcd",
+   "review": "Kine 实现了 etcd V3 API 的子集（Lease、Watch、KV、Cluster、Maintenance），将请求转换为对 SQLite、MySQL/MariaDB、Postgres、内存、NATS、T4 等后端的操作，可独立运行供任意 Kubernetes 集群替代 etcd 使用，但作者声明其不用于作为通用 etcd 服务器。适合需要在已有 SQL 数据库上运行 Kubernetes 的运维人员。",
+   "highlights": [
+    "实现 Kubernetes API server 所需的 etcd V3 API 子集",
+    "支持多种后端：SQLite、MySQL/MariaDB、Postgres、内存、NATS、T4",
+    "可独立运行，供非 K3s 的 Kubernetes 发行版使用"
+   ],
+   "use_cases": [
+    "用已有 SQL 数据库替代 etcd 运行 Kubernetes",
+    "K3s 及其他 k8s 发行版的 etcd 后端替换",
+    "基于 NATS JetStream 构建etcd 兼容存储"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- SQL (SQLite, MySQL/MariaDB, Postgres)",
+     "lines": [
+      4
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- SQL (SQLite, MySQL/MariaDB, Postgres)",
+     "lines": [
+      4
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQL (SQLite, MySQL/MariaDB, Postgres)",
+     "lines": [
+      4
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- SQL (SQLite, MySQL/MariaDB, Postgres)",
+     "lines": [
+      4
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite/MySQL/Postgres 等数据库提供 etcd 兼容 API 的适配中间件，服务于数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Kine is an etcdshim that provides an etcd-compatible API on top of various backend datastores: ／ - SQL (SQLite, MySQL/MariaDB, Postgres) ／ - Implements the subset of the etcd V3 API required by the Kubernetes API server - not intendend to be usable as a generic etcd server",
+   "evidence_lines": [
+    3,
+    4,
+    11
+   ]
+  },
+  "fn": "k3s-io/kine",
+  "sha": "3f39296b0c2c",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7d9a77683c3c": {
+  "identity": {
+   "one_liner": "Go 文档型嵌入式数据库，Mongo 风格查询，纯 Go 自研 btree/WAL 引擎",
+   "review": "Any Store 是一个纯 Go（无 CGO）的文档型嵌入式数据库，提供 MongoDB 风格的查询与聚合管道、复合/唯一/多键索引、全文与向量检索、ACID 事务以及多进程读写同一文件的能力。面向需要在 Go 程序内嵌存储的开发者，可编译到包括 js/wasm 在内的平台；数据文件由自研 btree/pager/WAL 引擎管理，默认带页级校验和，可选 AES-GCM 或 ChaCha20-Poly1305 加密。",
+   "highlights": [
+    "提供 Mongo 风格查询、聚合管道、全文（BM25）与向量（IVF-SQ/HNSW）检索",
+    "支持 ACID 事务与多进程并发读写同一数据库文件（WAL+共享内存索引）",
+    "默认页级 XXH3-128 校验和，可选 AEAD 加密，纯 Go 可运行于 js/wasm"
+   ],
+   "use_cases": [
+    "Go 应用需要嵌入式文档存储且避免 CGO 依赖",
+    "多进程读写同一本地数据文件的场景",
+    "需要在本地数据上做全文或向量检索的嵌入式场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "A **document-oriented embedded database** for Go with a MongoDB-like query language, built on an in-tree btree/pager/WAL storage engine derived from SQLite (aligned with its design, not a literal port — the on-disk format is our own). ／ * **Multi-process** — SQLite-like contract: any number of OS processes may open, read and write the same database file at any time (WAL + shared-memory index, busy handling, cross-process DDL reconciliation). ／ > **Choosing document ids.** Unlike SQLite there is no hidden rowid — the document id is the btree key. Increment-like ids (`anyenc.NewObjectID()`, timestamps, sequences) keep inserts append-ordered and reads cache-friendly; fully random ids (e.g. UUIDv4) scat",
+     "lines": [
+      7,
+      19,
+      51
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 自述为面向 Go 的嵌入式数据库，为应用提供存储能力而非使用外部数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A **document-oriented embedded database** for Go with a MongoDB-like query language, built on an in-tree btree/pager/WAL storage engine derived from SQLite (aligned with its design, not a literal port — the on-disk format is our own). ／ Schema-less documents, rich indexes, full-text and vector search, ACID transactions, multi-process access, page-level integrity and optional encryption — pure Go, no CGO. ／ * **Cross-platform** — pure Go, no CGO; runs anywhere Go runs, including `js/wasm` (see wasm/).",
+   "evidence_lines": [
+    7,
+    8,
+    23
+   ]
+  },
+  "fn": "anyproto/any-store",
+  "sha": "7d9a77683c3c",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

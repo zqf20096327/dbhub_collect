@@ -7937,5 +7937,74 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "110318c36f3c": {
+  "identity": {
+   "one_liner": "基于 Go/templ/SQLite/CQRS 的 Rocket Datastar Web 组件画廊站点",
+   "review": "Starbase 是一个为 Rocket 框架与 Datastar 提供的社区 Web 组件画廊应用，包含 51 个组件、代码 Playground、组件提交与自动加载器。它使用 SQLite 存储组件版本、每个标签页的 UI 状态及目录索引（FTS5 搜索），以单个自包含二进制发布，内嵌资产与迁移，通过 SSE 流和 CQRS 命令驱动页面更新。适合使用 Datastar + Rocket 技术栈的前端开发者浏览与贡献组件。",
+   "highlights": [
+    "提供 51 个带实时演示、API 表和自动生成 Playground 的 Web 组件",
+    "以单个自包含二进制运行，内嵌资产、组件与 SQLite 迁移，支持 docker 部署",
+    "采用 CQRS 架构与每标签页单条 Brotli 压缩的 SSE 渲染流"
+   ],
+   "use_cases": [
+    "查找并在自己的站点中引入 Datastar/Rocket Web 组件",
+    "通过 GitHub issue 表单或本地脚手架向画廊提交新组件",
+    "在沙箱 Playground 中编辑并分享组件的 JS/HTML 片段"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Go · templ · SQLite · Datastar + Rocket · CQRS · plain modern CSS. No Node, no bundler. ／ - Themes, pixel-art design system, zero Node, single static binary with embedded assets and SQLite. ／ The binary is self-contained (assets, components and migrations are embedded; SQLite is pure Go). `starbase --version` prints the version, `/healthz` answers `ok <version>`.",
+     "lines": [
+      10,
+      22,
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它使用 SQLite 存储组件文件、目录索引和每标签页状态（tab_state、FTS5），是使用数据库的应用而非数据库工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT；其中七个来自 derekr's PD rockets 的组件保留 Beer-Ware 许可",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Go · templ · SQLite · Datastar + Rocket · CQRS · plain modern CSS. No Node, no bundler. ／ - Themes, pixel-art design system, zero Node, single static binary with embedded assets and SQLite. ／ - **Per-tab UI state** (filters, sort, preview theme) is stored in SQLite, in `tab_state`. The stream keeps the URL in sync.",
+   "evidence_lines": [
+    10,
+    22,
+    136
+   ]
+  },
+  "fn": "zweiundeins/starbase",
+  "sha": "110318c36f3c",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

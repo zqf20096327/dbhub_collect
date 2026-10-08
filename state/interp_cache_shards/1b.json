@@ -10173,5 +10173,142 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "27e1b9a1e246": {
+  "identity": {
+   "one_liner": "Dokku 官方 MySQL 服务插件",
+   "review": "该仓库是 Dokku PaaS 的 MySQL 官方插件，通过 dokku mysql:create 等命令创建、管理 MySQL 服务容器，支持服务创建/销毁、应用链接、S3 备份与定时备份、DSN 信息查询等。面向使用 Dokku 部署应用并需要托管 MySQL 服务的运维人员。要求 dokku 0.35.x+ 与 docker 1.8.x，以 Docker 容器方式运行 MySQL（默认镜像版本 26.7.0）。",
+   "highlights": [
+    "提供 mysql:create/destroy/info 等命令管理 MySQL 服务容器",
+    "支持备份到 S3 及 cron 定时备份，含 GPG 加密与 IAM 认证",
+    "支持自定义镜像、版本、环境变量、卷挂载、网络与重启策略"
+   ],
+   "use_cases": [
+    "在 Dokku 上为应用创建并链接 MySQL 数据库服务",
+    "将 MySQL 服务数据定时备份到 S3 兼容存储",
+    "查看服务 DSN、状态、备份配置等运行信息"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# dokku mysql Build Status IRC Network ／ Official mysql plugin for dokku. Currently defaults to installing mysql 26.7.0. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mysql.git --name mysql",
+     "lines": [
+      1,
+      3,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Dokku 平台提供 MySQL 服务的创建与管理能力，是为数据库生态服务的插件组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "MySQL"
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Official mysql plugin for dokku. Currently defaults to installing mysql 26.7.0. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mysql.git --name mysql",
+   "evidence_lines": [
+    3,
+    14
+   ]
+  },
+  "fn": "dokku/dokku-mysql",
+  "sha": "27e1b9a1e246",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6941e95fb8a8": {
+  "identity": {
+   "one_liner": "从 BaoStock API 下载中国A股市场数据并存入 SQLite 的数据下载器",
+   "review": "该项目是一个 Python 数据采集工具，从 BaoStock API 拉取中国A股的K线、财务、宏观、指数及公司报告数据，写入含 33 张表的 SQLite 数据库。提供断点续传、批量下载、日志与数据库管理脚本，并支持压缩备份至百度网盘及邮件通知。适合需要在本地维护A股历史数据集的量化研究或数据分析用户；受 API 频率限制，不支持并发下载。",
+   "highlights": [
+    "下载日/周/月/分钟K线（3种复权）、6类财务指标、宏观数据与指数数据",
+    "使用 33 张表的 SQLite 数据库存储，采用 WAL 模式",
+    "支持断点续传、会话自动重连、百度网盘定时备份与邮件日报"
+   ],
+   "use_cases": [
+    "在本地 SQLite 中构建A股历史行情与财务数据集用于量化研究",
+    "通过定时任务在服务器上执行每日增量数据更新",
+    "需要离线备份数据库并接收拉取进度邮件通知的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "从 BaoStock API 下载中国A股市场数据（K线、财务数据、宏观经济数据）到 SQLite 数据库。 ／ 项目使用 SQLite 数据库，共设计**33 张表**，涵盖：",
+     "lines": [
+      3,
+      130
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明项目用 SQLite 存储下载的市场数据，SQLite 是其数据存储层而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "从 BaoStock API 下载中国A股市场数据（K线、财务数据、宏观经济数据）到 SQLite 数据库。 ／ 项目使用 SQLite 数据库，共设计**33 张表**，涵盖： ／ - **数据库优化**：使用WAL模式提升写入性能",
+   "evidence_lines": [
+    3,
+    130,
+    221
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "zxygithub/baostock",
+  "sha": "6941e95fb8a8",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9938,5 +9938,80 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e62db7408f8c": {
+  "identity": {
+   "one_liner": "自托管 AI 队友团队应用，基于 SQLite 与 AI SDK 实现多智能体房间协作",
+   "review": "OpenStaff 是一个自托管的多智能体协作应用：人类与命名的 bot 共享 iMessage 风格房间，bot 按调度轮次运行，敏感工具调用可暂停等待人工批准。后端为 Hono + SQLite（Drizzle 迁移），提供本地/Docker/E2B 等计算机驱动与浏览器操作能力，适合想自建 AI 队友工作区的开发团队。",
+   "highlights": [
+    "支持本地、Docker、E2B、Daytona、Freestyle、Vercel Sandbox 多种计算机驱动",
+    "工具调用提供人工审批暂停机制，浏览器操作走持久化上下文",
+    "服务器使用 SQLite（Drizzle 迁移）与 WebSocket hub，数据存于 DATA_DIR"
+   ],
+   "use_cases": [
+    "自托管部署一套人机共享房间、可审批的 AI 队友协作环境",
+    "让 bot 通过持久浏览器上下文执行网页点击/输入等操作任务",
+    "基于 Docker/E2B 等隔离环境给 agent 提供桌面与命令执行能力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite replicated to R2. The same Dockerfile serves every host through the `OPENSTAFF_TARGET` ／ - `apps/server`: Hono, WebSocket hub, SQLite with Drizzle migrations, authentication, scheduling, the AI SDK agent runtime, approvals, tasks, and the local computer driver.",
+     "lines": [
+      111,
+      161
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其服务器以 SQLite 存储运行数据（openstaff.db），是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "OpenStaff is an open-source foundation for an always-on staff of AI teammates. Humans and named bots share iMessage-style rooms, bots get separately scheduled turns, and consequential tools can pause for approval without losing the conversation. ／ SQLite replicated to R2. The same Dockerfile serves every host through the `OPENSTAFF_TARGET` ／ - `apps/server`: Hono, WebSocket hub, SQLite with Drizzle migrations, authentication, scheduling, the AI SDK agent runtime, approvals, tasks, and the local computer driver.",
+   "evidence_lines": [
+    3,
+    111,
+    161
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "superworker-ai/openstaff",
+  "sha": "e62db7408f8c",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

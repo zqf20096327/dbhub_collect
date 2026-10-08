@@ -8539,5 +8539,73 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9c9cfd17e17c": {
+  "identity": {
+   "one_liner": "自托管家庭事务规划应用，以容器运行，数据存于单个 SQLite 文件",
+   "review": "Yuvomi 是一个自托管的家庭规划应用，包含任务、日历、膳食、购物、预算、健康等 20 个可开关的模块，面向家庭或个人用户，部署在自己的服务器或 NAS 上。数据存储为单个 SQLite 文件，支持可选 AES-256 数据库加密、TOTP 双因素认证、OIDC 单点登录，并提供 OpenAPI 规范和 MCP 端点供 AI 代理调用，通过 Docker 或 Podman 镜像安装。",
+   "highlights": [
+    "提供任务、日历、膳食、购物、预算、健康等 20 个可独立开关的模块，模块间可联动（如膳食计划导入购物清单）",
+    "数据保存在单个 SQLite 文件，支持可选 AES-256 加密及手动/定时备份，备份可上传 WebDAV",
+    "支持 PWA、推送通知、CalDAV/CardDAV 同步、OIDC 单点登录、TOTP 双因素认证，并内置 OpenAPI 3.1 规范与 MCP 端点"
+   ],
+   "use_cases": [
+    "家庭或个人在自有服务器/NAS 上统一管理任务、日程、预算与膳食规划",
+    "多成员家庭通过邀请链接与角色权限协同使用，儿童账户由家长创建",
+    "需要数据本地化与可导出的用户，通过复制 SQLite 文件完成数据迁移"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**What if you want your data somewhere else?** Everything lives in one SQLite file on your own ／ - **Your data** - one SQLite file at `/data/yuvomi.db`, plus the folder, WebDAV or Drive if you moved documents there.",
+     "lines": [
+      105,
+      134
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明全部数据存于单个 SQLite 文件，该仓库是使用 SQLite 存储数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**What if you want your data somewhere else?** Everything lives in one SQLite file on your own ／ - **Needs** - 256 MB RAM and one port, 3000 by default. ／ - **Your data** - one SQLite file at `/data/yuvomi.db`, plus the folder, WebDAV or Drive if you moved documents there.",
+   "evidence_lines": [
+    105,
+    125,
+    134
+   ]
+  },
+  "fn": "ulsklyc/yuvomi",
+  "sha": "9c9cfd17e17c",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

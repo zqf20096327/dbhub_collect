@@ -8608,5 +8608,72 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "22d80ad478e2": {
+  "identity": {
+   "one_liner": "Go+SQLite 的网络质量 PING 监控工具",
+   "review": "一个用 Go 1.24 与 Vue 3 构建的网络质量检测工具，提供正/反向 PING 绘图、互 PING 拓扑与报警、全国延迟地图和在线检测功能，数据存储于各节点的 SQLite 中，支持单文件部署与 Docker 运行。适合需要多点网络质量观测的网络运维人员，架构为无中心节点互联，各节点数据仅存本地。",
+   "highlights": [
+    "提供正向/反向 PING 绘图、互 PING 拓扑与阈值报警（含 MTR 检测）",
+    "支持全国 PING 延迟地图与在线检测工具",
+    "单文件部署，多平台二进制与 Docker 多架构镜像"
+   ],
+   "use_cases": [
+    "多点机器间网络质量与丢包监控",
+    "按运营商线路查看全国各省份延迟",
+    "节点间连通性异常时进行 MTR 排查"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **后端**: Go 1.24 + SQLite3（纯 Go 实现，无 CGO 依赖）",
+     "lines": [
+      34
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明后端使用 SQLite3 存储自身的 Ping/报警数据，SQLite 为内嵌存储依赖而非服务目标。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 一个综合性网络质量(PING)检测工具，支持正/反向PING绘图、互PING拓扑绘图与报警、全国PING延迟地图与在线检测工具等功能 ／ - **后端**: Go 1.24 + SQLite3（纯 Go 实现，无 CGO 依赖） ／ 本系统的定位为轻量级工具，即使组多点成互Ping网络可以遵守无中心化原则，所有的数据均存储自身节点中，每个节点提供出方向的数据，从任意节点查询数据均会通过Ajax请求关联节点的API接口获取并组装全部数据。",
+   "evidence_lines": [
+    3,
+    34,
+    197
+   ]
+  },
+  "fn": "Antman2023/SmartPingNext",
+  "sha": "22d80ad478e2",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

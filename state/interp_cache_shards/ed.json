@@ -8180,5 +8180,91 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dd34961e12c9": {
+  "identity": {
+   "one_liner": "安全优先的 SQL 编辑器兼 PostgreSQL 协议代理，含角色权限、危险 SQL 拦截与审计日志",
+   "review": "autodb 是一个用 Go 编写的键盘驱动 SQL 编辑器，提供终端 UI、原生窗口、浏览器和 Neovim 插件四种前端，并可作为 PostgreSQL wire 协议代理部署在生产库前，按用户/应用/AI 代理分发个人访问令牌，实现加密凭据存储、角色权限、无 WHERE 更新拦截和完整审计。适合需要管控生产库访问的团队和运维人员。自建元数据存储于 SQLite，仅支持 PostgreSQL、MySQL、SQLite 三种目标库。",
+   "highlights": [
+    "提供终端 UI、原生窗口、浏览器与 Neovim 插件四种前端",
+    "实现 PostgreSQL wire 协议代理，客户端用普通 DSN 经其访问生产库",
+    "提供角色访问控制、无 WHERE 的 UPDATE/DELETE 拦截、连接密码 AES-256-GCM 加密及可查询的审计日志"
+   ],
+   "use_cases": [
+    "团队通过个人访问令牌和角色管控对生产数据库的访问",
+    "为 AI 代理或 CI 分配只读/受限账户并审计其全部语句",
+    "在终端或 Neovim 中安全地编写和执行 SQL"
+   ],
+   "use_cases_end": 0
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "under your passphrase. It is also a **PostgreSQL-wire proxy**. Put it in front ／ **A production front door:** `psql`, DataGrip, your app or an AI agent connects to autodb with an ordinary PostgreSQL DSN; production only has to trust one host",
+     "lines": [
+      18,
+      29
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Databases:** PostgreSQL, MySQL and SQLite",
+     "lines": [
+      47
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Databases:** PostgreSQL, MySQL and SQLite",
+     "lines": [
+      47
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库访问提供安全管控、代理与审计的组件，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "under your passphrase. It is also a **PostgreSQL-wire proxy**. Put it in front ／ **An audit trail you can query:** who ran what, against which connection, how long it took, how many rows, and why it was refused ／ **Databases:** PostgreSQL, MySQL and SQLite",
+   "evidence_lines": [
+    18,
+    39,
+    47
+   ]
+  },
+  "fn": "yongjohnlee80/autodb",
+  "sha": "dd34961e12c9",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

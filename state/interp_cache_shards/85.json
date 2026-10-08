@@ -9665,5 +9665,78 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f34486fed15c": {
+  "identity": {
+   "one_liner": "单机自托管 Cloudflare Workers 兼容平台，单二进制运行时",
+   "review": "该项目将 Cloudflare Workers 的编程模型搬到用户自有硬件上，提供 Workers、KV、D1、R2、Durable Objects 等产品绑定的兼容实现，运行于固定的 workerd fork 之上，用内嵌 SQLite 管理平台元数据。面向想在单台机器上自托管 Workers 应用的开发者与运维者，通过 ocd 控制面 CLI 进行部署与管理；D1 等部分能力仍处早期兼容阶段。",
+   "highlights": [
+    "以单个二进制提供运行时、控制面、调度器及产品绑定，支持 macOS 与 Linux",
+    "兼容 Cloudflare Workers 模块语法与 Wrangler 部署工作流，官方兼容性矩阵覆盖 KV、R2、D1、Durable Objects、Queues 等模块",
+    "平台元数据存储于内嵌 SQLite（rusqlite），对象存储默认使用本地文件系统，可选 S3 兼容存储"
+   ],
+   "use_cases": [
+    "在自有单机上运行 Cloudflare Workers 风格的 JavaScript/TypeScript 应用",
+    "使用 Wrangler 和 cloudflare.config.ts 工作流进行本地开发与部署",
+    "需要单一节点、离线启动、无外部数据库依赖的 Workers 运行环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Nothing else to run.** SQLite owns platform metadata and Local storage owns object bytes by default. S3-compatible storage is optional; neither mode needs a database or cache sidecar. ／ |SQLite|Local authoritative state — no external database, no eventual consistency| ／ - **In-process state.** `rusqlite` embeds SQLite in `ocd`; transactions are function calls, not network round-trips. Foreign keys stay enabled and WAL remains locally owned.",
+     "lines": [
+      47,
+      183,
+      195
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用内嵌 SQLite 作为自身平台元数据的权威存储，而非为数据库生态提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Nothing else to run.** SQLite owns platform metadata and Local storage owns object bytes by default. S3-compatible storage is optional; neither mode needs a database or cache sidecar. ／ |SQLite|Local authoritative state — no external database, no eventual consistency| ／ - **In-process state.** `rusqlite` embeds SQLite in `ocd`; transactions are function calls, not network round-trips. Foreign keys stay enabled and WAL remains locally owned.",
+   "evidence_lines": [
+    47,
+    183,
+    195
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "elliothux/open-compute",
+  "sha": "f34486fed15c",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

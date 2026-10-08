@@ -8937,5 +8937,203 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "afd416264f38": {
+  "identity": {
+   "one_liner": "PostgreSQL plpgsql 存储过程静态检查扩展（linter）",
+   "review": "plpgsql_check 是一个 PostgreSQL 扩展，通过内部 parser/evaluator 对 plpgsql 函数与触发器做静态分析，检查嵌入 SQL 语义错误、未用变量、死代码、隐式转换和 SQL 注入风险，支持 text//xml 输出与 PRAGMA 注释选项。供 plpgsql 存储过程开发者用于代码质量检查与批量扫描函数。支持 PostgreSQL 14–19，以 CREATE EXTENSION 方式安装。",
+   "highlights": [
+    "利用 PostgreSQL 内部 parser/evaluator 检查 plpgsql 函数中嵌入 SQL 的语义错误",
+    "提供性能、安全（SQL 注入）、兼容性等多级可选警告，支持触发器函数与注释内 PRAGMA 选项",
+    "输出支持 text、、xml 三种格式，可批量检查函数/存储过程"
+   ],
+   "use_cases": [
+    "存储过程开发时提前发现嵌入 SQL 的列/表错误",
+    "对数据库中全部 plpgsql 函数做批量静态检查",
+    "检查 EXECUTE 语句的 SQL 注入风险"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This extension is a full linter for plpgsql for PostgreSQL. It leverages only the internal ／ PostgreSQL parser/evaluator so you see exactly the errors would occur at runtime. ／ PostgreSQL 14 - 19 are supported.",
+     "lines": [
+      5,
+      6,
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展为 plpgsql 开发提供静态检查服务，属于数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This extension is a full linter for plpgsql for PostgreSQL. It leverages only the internal ／ PostgreSQL 14 - 19 are supported. ／  postgres=# CREATE EXTENSION plpgsql_check;",
+   "evidence_lines": [
+    5,
+    35,
+    42
+   ]
+  },
+  "fn": "okbob/plpgsql_check",
+  "sha": "afd416264f38",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5bf364315020": {
+  "identity": {
+   "one_liner": "《The Internals of PostgreSQL》中文版书籍仓库",
+   "review": "该仓库托管《The Internals of PostgreSQL》一书的中文译稿与在线阅读站点，讲解 PostgreSQL 进程、并发控制、WAL、备份与复制等内部机制，供想理解数据库内核原理的读者和 DBA 阅读。译稿基于 2018 年中文版本并持续补译原著新增内容，站点以 Hugo 构建，支持 make 命令本地开发与生产构建；中文译本保留所有权利，整章转载或商用需授权。",
+   "highlights": [
+    "提供涵盖进程、并发控制、VACUUM、缓冲区、WAL、备份与物理/逻辑复制的中文译稿",
+    "持续补译英文原著新增章节，覆盖 PostgreSQL 10 至 19 的特性",
+    "基于 Hugo 与 OINK 主题构建站点，提供 make dev/serve/build/check 命令"
+   ],
+   "use_cases": [
+    "在线阅读 PostgreSQL 内部原理中文版书籍",
+    "DBA 或开发者学习 WAL、备份、复制等机制",
+    "本地构建与预览书籍站点"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "# PostgreSQL 技术内幕 ／ **《The Internals of PostgreSQL》中文版** ／ 深入理解 PostgreSQL 的进程、查询、并发控制、存储、WAL、备份与复制机制",
+     "lines": [
+      1,
+      3,
+      5
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库是关于 PostgreSQL 内部机制的书籍翻译，既非服务数据库的工具组件，也非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "英文原著版权归原作者所有；中文译本 All Rights Reserved，引用需注明出处，整章转载与商用需授权",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**《The Internals of PostgreSQL》中文版** ／ PostgreSQL 是一个开源的关系型数据库，在世界各地被广泛用于各种目的。它是一个由多个子系统集成而来的巨大系统，每个子系统都包含着特殊的复杂功能，并与其它子系统相互协调工作。理解其内部原理对于管理和集成 PostgreSQL 而言至关重要，但其巨大性与复杂性让这一点变得相当困难。本书的目的正是解释这些子系统是如何工作的，并提供一幅关于 PostgreSQL 的全景图像。 ／ 本站基于 Hugo 与 OINK 主题构建，生产构建使用 `go.mod` 中固定的 OINK v1.2.0，需要 Hugo Extended 0.160.1+ 与 Go 1.27+。",
+   "evidence_lines": [
+    3,
+    15,
+    31
+   ]
+  },
+  "fn": "Vonng/pg-internal",
+  "sha": "5bf364315020",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8deb994941cf": {
+  "identity": {
+   "one_liner": "基于原生 PHP 和 MySQL 的库存管理系统应用",
+   "review": "这是一个用原生 PHP 和 MySQL 开发的库存/仓库管理系统应用源码，包含前端 UI，用户需自行安装 XAMPP 环境，导入 SQL 文件创建数据库后即可在本地运行，适合需要免费库存管理源码的开发者或小型商户下载部署使用。",
+   "highlights": [
+    "使用原生 PHP 和 MySQL 实现库存管理功能",
+    "包含 Bootstrap 构建的 UI",
+    "提供 SQL 文件用于导入创建数据库"
+   ],
+   "use_cases": [
+    "小型仓库/店铺的库存管理",
+    "PHP 初学者学习库存系统源码",
+    "本地 XAMPP 环境部署试用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "### Simple inventori system develope using native PHP with mysql databased, include bootstrap for UI. ／ XAMPP for apache web server and mysql databased.",
+     "lines": [
+      5,
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 MySQL 存储数据的库存管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### Simple inventori system develope using native PHP with mysql databased, include bootstrap for UI. ／ XAMPP for apache web server and mysql databased. ／ + create new databased and name it with inventori",
+   "evidence_lines": [
+    5,
+    10,
+    18
+   ]
+  },
+  "fn": "mesinkasir/inventoriphpapp",
+  "sha": "8deb994941cf",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

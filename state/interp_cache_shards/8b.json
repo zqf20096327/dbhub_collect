@@ -8484,5 +8484,85 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "68daceebeed4": {
+  "identity": {
+   "one_liner": "AI 原生 HTAP 分布式数据库，支持数据版本控制与内置向量/全文检索",
+   "review": "MatrixOne 是用 Go 编写的分布式 HTAP 数据库，在单一系统内提供 OLTP、OLAP、全文检索与向量检索（IVF/HNSW），并实现 Git 式数据版本控制（快照、时间旅行、分支合并、回滚）。兼容 MySQL 协议，提供 Python SDK，可通过 Docker、mo_ctl、源码编译或 Kubernetes 部署。面向需要混合负载、RAG 应用与数据分支管理的开发者和运维团队。",
+   "highlights": [
+    "提供 Git 式数据版本控制：零拷贝快照、时间旅行查询、分支/合并与即时回滚",
+    "单一引擎内支持 OLTP、OLAP、全文检索与向量检索（IVF/HNSW），声明 ACID 合规",
+    "兼容 MySQL，提供 Python SDK 与 async/await 支持，可经 Docker/Kubernetes/源码部署"
+   ],
+   "use_cases": [
+    "构建 RAG 应用与语义搜索，无需外部向量数据库",
+    "HTAP 混合负载场景，减少 OLTP 与 OLAP 系统间的 ETL 同步",
+    "需要数据快照、历史查询与分支隔离来测试迁移和转换的团队"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "mysql-compatible ／ **🗄️ MySQL-Compatible** ／ Drop-in replacement for MySQL. Use existing tools, ORMs, and applications without code changes. Seamless migration path.",
+     "lines": [
+      19,
+      72,
+      74
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "🗄️ MySQL for transactions → 📊 ClickHouse for analytics → 🔍 Elasticsearch for search → 🤖 Pinecone for AI",
+     "lines": [
+      88
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库引擎，为上层应用提供数据存储与查询服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "At its core, MatrixOne is a **HTAP (Hybrid Transactional/Analytical Processing) database** with a hyper-converged **HSTAP engine** that seamlessly handles transactional (OLTP), analytical (OLAP), full-text search, and vector search workloads in a single unified system—no data movement, no ETL, no compromises. ／ **🗄️ MySQL-Compatible** ／ docker run -d -p 6001:6001 --name matrixone matrixorigin/matrixone:latest",
+   "evidence_lines": [
+    56,
+    72,
+    103
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "matrixorigin/matrixone",
+  "sha": "68daceebeed4",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

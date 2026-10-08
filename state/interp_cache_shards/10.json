@@ -9419,5 +9419,72 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7835cbd0263c": {
+  "identity": {
+   "one_liner": "Android 本地运行时，内置 CPython、SQLite 浏览器与 MCP 桥接供 AI 客户端操作",
+   "review": "runcode 是一个 Android 原生应用，在应用沙箱内嵌入 CPython 3.12 解释器、HTTP 文件服务器和前台服务，提供 shell、SQLite 浏览器、调试器、Git、备份和诊断功能，并通过 JSON-RPC 2.0 的 MCP 桥让 AI 客户端执行文件、Python 与 SQL 操作。面向需要在 Android 设备本地运行 Python 项目的开发者。",
+   "highlights": [
+    "内置 Chaquopy CPython 3.12 解释器，含标准库、sqlite3 与 ssl",
+    "提供 27 个 MCP 工具，覆盖文件、命令执行、Python、sql_query、Git 与调试",
+    "支持带 SHA-256 校验的项目备份、基于 bdb 的 Python 调试器与 dulwich 实现 Git 操作"
+   ],
+   "use_cases": [
+    "在 Android 设备上运行 Python 脚本与本地 HTTP 服务",
+    "通过 MCP 桥让 AI 客户端管理项目文件、执行 Python 和 SQL 查询",
+    "本地浏览和查询项目中的 SQLite 数据库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite browser|Android platform SQLite|",
+     "lines": [
+      47
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 Android 平台 SQLite 存储和查询项目数据的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Projects live in the app sandbox, run on an embedded CPython interpreter or a built-in HTTP ／ service. There is a shell, a SQLite browser, backups, and an MCP bridge that lets an AI ／ |SQLite browser|Android platform SQLite|",
+   "evidence_lines": [
+    5,
+    7,
+    47
+   ]
+  },
+  "fn": "hami9/runcode",
+  "sha": "7835cbd0263c",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

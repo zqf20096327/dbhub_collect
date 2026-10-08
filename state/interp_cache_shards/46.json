@@ -8020,5 +8020,368 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a62a8df396ef": {
+  "identity": {
+   "one_liner": "自托管的 SofaScore 体育数据抓取平台，本地存储并导出 SQLite 等格式",
+   "review": "该项目抓取 SofaScore 的比赛数据，支持 21 种体育项目的联赛、球队、球员关注，按请求预算下载历史数据，存入 SQLite 目录并以 CSV/JSONL/Parquet/SQLite 导出。提供 Python 库、ssc 命令行、HTTP API 和 Web UI，面向自托管用户。注意：非官方，且 3.0.0 版本尚未发布，需从源码构建。",
+   "highlights": [
+    "支持 21 种体育项目的数据下载，包含请求预算（默认 5 请求/秒）与熔断机制",
+    "提供 Python 库、ssc CLI、版本化 HTTP API 与 Web 应用四种使用方式",
+    "支持 CSV、JSONL、Parquet、SQLite 导出以及数据文件夹的备份与恢复"
+   ],
+   "use_cases": [
+    "自托管关注特定联赛、球队或球员的比赛历史数据",
+    "通过 CLI 或 systemd 定时任务自动化同步与导出数据",
+    "以 CSV/JSONL/Parquet/SQLite 格式导出规范化数据集供分析使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Storage**: compressed raw payloads plus a rebuildable catalog (SQLite); every match status is stored, results that SofaScore corrects later are re-read and logged. ／ - **Exports**: normalized datasets (matches, data types, score changes, odds, standings) as CSV, JSONL, Parquet or SQLite, the raw payloads as they are, and the 2.x wide CSV. Files are named after the league or dataset and the date. ／ ssc export --dataset slices --format sqlite --out slices.sqlite",
+     "lines": [
+      25,
+      26,
+      171
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 用于本地存储目录与导出格式，数据存储使用该库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "PolyForm Noncommercial 1.0.0 非商业许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Storage**: compressed raw payloads plus a rebuildable catalog (SQLite); every match status is stored, results that SofaScore corrects later are re-read and logged. ／ - **Exports**: normalized datasets (matches, data types, score changes, odds, standings) as CSV, JSONL, Parquet or SQLite, the raw payloads as they are, and the 2.x wide CSV. Files are named after the league or dataset and the date. ／ **A self-hosted data platform for SofaScore match data.** Follow leagues, teams, players or single matches in 21 sports, download their history into a local store, and take it out as CSV, JSONL, Parquet or SQLite.",
+   "evidence_lines": [
+    25,
+    26,
+    9
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "tunjayoff/sofascore_scraper",
+  "sha": "a62a8df396ef",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9a78b405062f": {
+  "identity": {
+   "one_liner": "macOS 屏幕使用时间导出器，读取 Apple 数据写入本地数据库",
+   "review": "Screen Time Exporter 是一个运行在 Mac 上的 Python 后台代理，每 15 分钟读取 iPhone/iPad 通过 iCloud 同步的 Biome 数据和本机 knowledgeC.db，将应用使用会话存入本地 SQLite，并可导出到 InfluxDB、Grafana、Home Assistant 或通过 MCP 提供给 AI 助手。适合想本地留存和查询 Apple 屏幕使用时间的个人用户；要求 macOS、Full Disk Access，且 Apple 仅保留数周历史。",
+   "highlights": [
+    "每 15 分钟读取 Biome 与 knowledgeC.db，按会话粒度存入本地 SQLite，只读不写 Apple 数据",
+    "提供 InfluxDB/Grafana 的 Docker Compose 集成、Home Assistant 传感器及终端报告命令",
+    "内置只读 MCP 服务器，供 Claude、Codex、Cursor 等 MCP 客户端查询本地数据库"
+   ],
+   "use_cases": [
+    "长期留存并图表化 Apple 各设备的屏幕使用时间",
+    "在 Home Assistant 中基于使用数据触发自动化",
+    "通过 AI 助手用自然语言查询自己的屏幕使用记录"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Screen Time Exporter reads those stores on the Mac — Biome for iPhone and iPad, `knowledgeC.db` for the Mac itself — every 15 minutes. It keeps every session in a local SQLite database, names and categorises the apps, and passes the result on to InfluxDB and G ／ - **Sources only read.** `sources/biome.py` parses the SEGB files of the `App.InFocus` stream, `sources/knowledgec.py` reads `/app/usage` from a temporary copy of `knowledgeC.db`. Each keeps its own cursor in SQLite.",
+     "lines": [
+      25,
+      181
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是采集/导出组件，将数据写入 SQLite 与 InfluxDB 等数据库供 Grafana、Home Assistant 消费，为数据库生态服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Screen Time Exporter reads those stores on the Mac — Biome for iPhone and iPad, `knowledgeC.db` for the Mac itself — every 15 minutes. It keeps every session in a local SQLite database, names and categorises the apps, and passes the result on to InfluxDB and Grafana, Home Assistant, the terminal, or an AI assistant over MCP. ／ - **Grafana dashboard**: provisioned or importable, with device, category and app filters. A Docker Compose file starts InfluxDB and Grafana with everything wired up. ／ - **MCP server**: Claude, Codex, Cursor and other MCP clients answer questions about your screen time from the local database.",
+   "evidence_lines": [
+    25,
+    42,
+    45
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "nichtlegacy/screentime",
+  "sha": "9a78b405062f",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "64aa814eac9c": {
+  "identity": {
+   "one_liner": "AI Agent 记忆插件：对话自动沉淀为知识卡，SQLite/Markdown 存储",
+   "review": "一个面向 DeepSeek Harness、Claude Code、Codex、Cursor 等 AI Agent 的记忆插件，通过 hooks 与 MCP 在会话结束时自动将对话沉淀为知识卡，提供检索、知识图谱与人工审核中心，数据用 SQLite 和纯 Markdown 存于本地目录。适合需要跨会话保留项目决策与知识的 AI 使用者；蒸馏去重等功能调用 LLM 会产生费用。",
+   "highlights": [
+    "对话结束自动沉淀知识卡，并提供 memory_recall 检索工具与知识图谱界面",
+    "未审核内容物理隔离于 quarantine 表，写入强制经过 enforceAudit() 审核入口并记录审计日志",
+    "零第三方运行时依赖，支持 DSH/Claude Code/Codex/Cursor 多 Agent 共享同一记忆库"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供跨会话的长期记忆，自动保存历史决策与结论",
+    "多 Agent（DSH/Claude/Codex/Cursor）共享同一份经人工审核的知识库",
+    "本地化存储与管理个人/团队知识卡，配合独立 Web 界面检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 全自研、零第三方记忆框架、不改 DSH 源码、一个记忆库所有 Agent 共享，SQLite 持久存储，零外部依赖。 ／ |存储|**SQLite**（`node:sqlite` 内置，零依赖）|不锁库、分表存储、SQL 查询|",
+     "lines": [
+      16,
+      263
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 持久存储记忆数据，SQLite 是其存储层而非其服务的对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> 全自研、零第三方记忆框架、不改 DSH 源码、一个记忆库所有 Agent 共享，SQLite 持久存储，零外部依赖。 ／ npm i -g memory-eternal     # 装 CLI + MCP（写 ~/.claude.json mcpServers.memory） ／ **MCP 是协议不是常驻服务**：agent 开会话才 spawn，用完即退，没有「开机自启」一说。",
+   "evidence_lines": [
+    16,
+    60,
+    130
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "EternalNight996/memory-eternal",
+  "sha": "64aa814eac9c",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "95cdcaba0d06": {
+  "identity": {
+   "one_liner": "Windows Wi-Fi 监控应用，检测并用 SQLite 记录网络问题",
+   "review": "这是一个运行在 Windows 11 上的桌面应用，实时监测 Wi-Fi、路由器和互联网连接状态，记录信号、信道和延迟变化，并将问题归类到 Wi-Fi、家庭网络、运营商或 DNS。技术上基于 .NET 10、WPF + Blazor 和 SQLite 存储。适合需要排查自家网络故障的个人用户使用，要求系统为英文版 Windows 11 并开启定位服务。",
+   "highlights": [
+    "提供 Wi-Fi、路由器和互联网的实时状态，并将故障定位到 Wi-Fi、家庭网络、运营商或 DNS",
+    "记录每次问题与历史，可生成速度测试和给运营商的报告",
+    "在雷达信号迫使路由器离开 DFS 信道时发出警告"
+   ],
+   "use_cases": [
+    "排查家庭网络故障来源（Wi-Fi、路由器、运营商或 DNS）",
+    "记录断网历史并生成向运营商反馈的报告",
+    "监测 DFS 信道被雷达切换的情况"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- .NET 10, WPF with Blazor, MudBlazor and SQLite",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其为监控自身 Wi-Fi 的桌面应用，SQLite 仅作为其技术栈中的本地存储，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tells you if your connection is fine, and when it wasn't, where it went wrong. ／ - Live status of your Wi-Fi, router and internet ／ - .NET 10, WPF with Blazor, MudBlazor and SQLite",
+   "evidence_lines": [
+    3,
+    14,
+    28
+   ]
+  },
+  "fn": "poolfullofmilk/WifiWatch",
+  "sha": "95cdcaba0d06",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "87a5b1e8868d": {
+  "identity": {
+   "one_liner": "基于 Docker 的 MongoDB/MySQL 数据库克隆 CLI，dump 流直通 restore",
+   "review": "一个 Go 编写的命令行工具，用于在任意两个服务器连接之间克隆 MongoDB 与 MySQL 数据库，可整库或按表/集合选择，通过本地官方镜像容器内运行 mongodump/mysqldump 并以管道直接流入 restore，无落盘 dump 文件，支持并行流、重试和终端实时进度。面向需要在 staging、prod、local 环境间同步开发数据的开发者；依赖 Docker 且明言不适用于备份场景。",
+   "highlights": [
+    "在任意两个命名 profile 连接间整库或按表/集合克隆 MongoDB 与 MySQL 数据库",
+    "dump 通过管道直接流入 restore，不在磁盘生成 dump 文件",
+    "跨数据库共享全局并发流池，支持失败重试与终端实时进度"
+   ],
+   "use_cases": [
+    "将 staging 或 prod 数据克隆到本地 Docker 容器用于开发",
+    "在本地与 staging 服务器之间同步指定表/集合",
+    "非交互式命令行批量克隆多库"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Clone MongoDB and MySQL databases between **any two connections** — staging → local, ／ - **MySQL** — tables are split into up to `-w` size-balanced groups, each its own",
+     "lines": [
+      10,
+      162
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Engines are adapters behind one interface. To add one (PostgreSQL, …), implement",
+     "lines": [
+      183
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库间的数据克隆/迁移服务的 CLI 工具，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Clone MongoDB and MySQL databases between **any two connections** — staging → local, ／ - **Nothing to install on the host.** Dump and restore run with the tools that already ship in ／ source ──────────▶│ mongodump / mysqldump ──pipe──▶ mongorestore / mysql │──────────▶ target",
+   "evidence_lines": [
+    10,
+    27,
+    155
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "phuthuycoding/dbclone",
+  "sha": "87a5b1e8868d",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

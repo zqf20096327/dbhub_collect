@@ -7245,5 +7245,71 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "859fc522b127": {
+  "identity": {
+   "one_liner": "自托管的 WordPress/Joomla 站点监控与维护面板，基于 Docker 与 PostgreSQL 运行",
+   "review": "Sentinel TD 是一个面向 WordPress 和 Joomla 网站的自托管管理面板，提供可用性监控、核心/插件/主题批量更新、更新前备份与自动回滚、漏洞信息匹配、域名到期提醒以及 PDF/邮件报告与 Telegram 通知。它通过在站点上安装连接器采集信息，自身以 Docker Compose 部署，数据存储于内部网络的 PostgreSQL，适合管理多站点网站的维护者或代理商使用。",
+   "highlights": [
+    "提供站点可用性监控、WordPress 核心校验（对照 wordpress.org checksums）与批量更新能力，更新失败可自动回滚",
+    "提供漏洞信息匹配、域名到期提醒（RDAP/WHOIS）、月度 PDF 报告与邮件/Telegram 通知",
+    "通过 Docker Compose 部署，PostgreSQL 与 Redis 等服务仅保留在内部 Docker 网络"
+   ],
+   "use_cases": [
+    "托管多个 WordPress/Joomla 客户站点，需要集中监控与批量更新维护",
+    "跟踪插件漏洞、被弃维护插件与域名/许可续期事项",
+    "向客户自动发送仅含其站点内容的月度 PDF 报告"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Everything else (PostgreSQL, Redis, the screenshot service) stays on the internal Docker",
+     "lines": [
+      141
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PostgreSQL 是面板自带的内部数据存储服务，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Self-hosted monitoring and maintenance for WordPress and Joomla sites** — one dashboard ／ - A Linux server with **Docker** and the **Docker Compose** plugin ／ Everything else (PostgreSQL, Redis, the screenshot service) stays on the internal Docker",
+   "evidence_lines": [
+    3,
+    132,
+    141
+   ]
+  },
+  "fn": "Giuseppe-sciarra/SentinelTD",
+  "sha": "859fc522b127",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

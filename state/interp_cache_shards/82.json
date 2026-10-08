@@ -8786,5 +8786,82 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9ee90b7b4588": {
+  "identity": {
+   "one_liner": "甲烷传感器数据流的统计变化检测实验平台，用 SQLite 持久化",
+   "review": "这是一个面向模拟或串口传感器数据的 Python 可复现实验平台：内置 CUSUM、EWMA、Z-score、阈值等检测器，通过统一 DetectionPipeline 生成基准指标并把样本、事件、实验元数据写入 SQLite，经 FastAPI 提供查询接口。面向做变化检测/异常检测实验的研究者，README 明确声明非认证气体安全设备、未做真实硬件验证。",
+   "highlights": [
+    "提供 Threshold、Z-score、EWMA、CUSUM 四种检测器及统一的事件级/样本级指标语义",
+    "基准记录包含随机种子、配置、Git commit 等可复现性元数据",
+    "包含 FastAPI 接口、Dockerfile 与 GitHub Actions CI"
+   ],
+   "use_cases": [
+    "对模拟或串口传感器数据流做泄漏检测实验与基准评估",
+    "以受控合成场景（漂移、离群点、缺失、饱和等）复现检测结果"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A reproducible Python platform for simulated or serial sensor streams, statistical change detection, SQLite persistence, and controlled experiments. It is **not certified gas-safety equipment**.",
+     "lines": [
+      8
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "There is no PostgreSQL adapter, frontend, visualization pipeline, physical gas calibration, real hardware verification, or ML model. Future work should use controlled laboratory data, environmental compensation, multiple seeds and nuisance conditions, and doma",
+     "lines": [
+      152
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明用 SQLite 持久化读数、事件与实验数据，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A reproducible Python platform for simulated or serial sensor streams, statistical change detection, SQLite persistence, and controlled experiments. It is **not certified gas-safety equipment**. ／ Missing simulator samples remain persisted rows with nullable raw/filtered values and `artifact_type=\"missing\"`. Serial rows use `source=\"serial\"`, null simulation metadata, and unknown hardware ground truth.",
+   "evidence_lines": [
+    8,
+    144
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "SoheilGtex/methane-gas-detection",
+  "sha": "9ee90b7b4588",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

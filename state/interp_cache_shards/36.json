@@ -9317,5 +9317,94 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7b528e4cda27": {
+  "identity": {
+   "one_liner": "数据库语义网关，将数据库发布为 MCP 服务供 AI 代理调用",
+   "review": "DatI 是连接 AI 代理与企业数据库的语义网关：通过配置数据源元数据、业务主题和内置或参数化 SQL 工具，将数据库发布为标准 MCP（Streamable HTTP）服务，并提供用户级权限与数据范围隔离。面向需要让代理查询业务数据、做 NL2SQL 分析的团队，基于 Spring Boot，自身支持 H2/MySQL/PostgreSQL 存储元数据。",
+   "highlights": [
+    "支持 MySQL、PostgreSQL、ClickHouse、Doris 等关系型与分析型数据库，通过标准 MCP（Streamable HTTP）发布服务",
+    "提供语义增强（业务术语、列别名、枚举字典提取）与语义检索，内置 schema 检查、SQL 执行工具及参数化 SQL 工具",
+    "集中管理数据库凭据，提供用户级权限与数据范围隔离"
+   ],
+   "use_cases": [
+    "连接业务数据库进行对话式数据分析（NL2SQL）",
+    "将数据库包装为 MCP 服务，供代理通过对话查询/更新数据以构建轻量应用",
+    "通过语义元数据治理指标与表结构，辅助模型理解业务术语"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "1. **Multi-Database Support**: Supports MySQL, PostgreSQL, ClickHouse, Doris, and other relational and analytical databases ／ - **Database**: H2 (Development) / MySQL / PostgreSQL (Production)",
+     "lines": [
+      68,
+      83
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "1. **Multi-Database Support**: Supports MySQL, PostgreSQL, ClickHouse, Doris, and other relational and analytical databases ／ - **Database**: H2 (Development) / MySQL / PostgreSQL (Production)",
+     "lines": [
+      68,
+      83
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "1. **Multi-Database Support**: Supports MySQL, PostgreSQL, ClickHouse, Doris, and other relational and analytical databases",
+     "lines": [
+      68
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库生态提供网关/代理组件，将数据库能力以 MCP 服务形式暴露给代理使用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DatI (Data Intelligence) is a lightweight semantic gateway connecting **AI Agents with enterprise databases**. Simply connect your database, enrich semantic metadata, and configure built-in or parameterized SQL tools to publish an MCP service — ready for your agents or any MCP host. ／ 1. **Multi-Database Support**: Supports MySQL, PostgreSQL, ClickHouse, Doris, and other relational and analytical databases ／ 4. **Effortless MCP Publishing**: Ready-to-use built-in tools (schema inspection, SQL execution) and parameterized SQL tools to publish MCP services with zero extra deployment",
+   "evidence_lines": [
+    5,
+    68,
+    71
+   ]
+  },
+  "fn": "yimindev/dati",
+  "sha": "7b528e4cda27",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

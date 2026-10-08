@@ -9321,5 +9321,70 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3d0c467be4e0": {
+  "identity": {
+   "one_liner": "检测 Rails/Active Record 项目数据库问题的 Rake 任务集",
+   "review": "这是一个面向 Ruby on Rails（也支持非 Rails 的 Rake 项目）的数据库体检工具，通过一组 rake 任务检测多余索引、缺失外键约束、缺失唯一索引、未加索引的软删除列等十余类问题，并可生成补建索引的迁移文件；适合 Rails 开发者在开发、测试或 CI 中运行，依赖已加载的 Active Record 模型与数据库连接。",
+   "highlights": [
+    "提供 extraneous_indexes、missing_foreign_keys、missing_unique_indexes 等多种检测器，经 rake/rails 任务运行",
+    "支持为未索引外键自动生成补建索引的数据库迁移文件",
+    "支持通过 .active_record_doctor.rb 配置文件按表/索引/模型配置忽略项，可在 CI 中以非零退出码报告问题"
+   ],
+   "use_cases": [
+    "Rails 项目在开发或上线前检查索引、外键、约束等数据库定义问题",
+    "在持续集成流程中作为构建步骤自动检测数据库问题",
+    "为缺失索引的外键批量生成修复迁移"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* PostgreSQL timestamps without time zone - `active_record_doctor:postgres_timestamps_without_time_zone`",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它通过 Active Record 连接检查并修复数据库 schema 问题，是为数据库生态服务的工具而非存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Active Record Doctor helps to keep the database in a good shape. Currently, it ／ **IMPORTANT**. `active_record_doctor` expects that after running `deps` and ／ If you want to use `active_record_doctor` in a Continuous Integration setting",
+   "evidence_lines": [
+    3,
+    62,
+    84
+   ]
+  },
+  "fn": "gregnavis/active_record_doctor",
+  "sha": "3d0c467be4e0",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

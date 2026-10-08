@@ -9903,5 +9903,81 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9374f0298754": {
+  "identity": {
+   "one_liner": "基于 Nuxt 4 + Prisma + PostgreSQL 的个人博客与内容管理系统",
+   "review": "这是一套个人博客/CMS 的全栈源码，用于内容创作、发布、评论互动与多端展示，包含 Web 主站、管理后台和 uni-app 小程序端。数据层通过 Prisma 适配器直连 PostgreSQL，可选 Redis 做 ISR 整页缓存与搜索缓存；部署依赖 Node ≥22 与 Bun，需自行搭建 PostgreSQL 并执行初始化脚本，也提供 Docker compose 方案。",
+   "highlights": [
+    "使用 Prisma 7 搭配 PostgreSQL 适配器直连 PG，通过 init 脚本自动建库建表（16 张表，幂等可重复执行）",
+    "支持 SSR + ISR 架构，可选 Redis 缓存渲染结果与搜索缓存",
+    "包含 Web 主站、/admin 管理后台及基于 uni-app 的 H5/微信/支付宝小程序三端"
+   ],
+   "use_cases": [
+    "搭建个人技术博客或内容站点",
+    "需要带审核流程评论、友链、RSS 聚合等内容平台功能的场景",
+    "希望同时覆盖 Web 与小程序端展示的内容管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "项目采用 **SSR + ISR（增量静态再生成）** 架构：页面在服务端渲染以保证首屏与 SEO，同时借助 Redis 缓存渲染结果（未配置 Redis 时页面不做整页缓存、每次实时渲染，搜索缓存关闭），兼顾性能与实时性——ISR 路由统一 **30 分钟过期**（时长由 `nuxt.config.ts` 的 `ISR_CACHE_SECONDS` 常量统一控制，改动内容最迟 30 分钟内在全站可见）。数据层使用 Prisma 7 搭配 PostgreSQL 适配器直连 PG，前后端类型则通过 Nuxt 的 `I ／ - **PostgreSQL** ≥ 14（推荐 16，与 docker 镜像版本一致；用于存储站点数据） ／ 2. **安装 PostgreSQL**",
+     "lines": [
+      17,
+      35,
+      48
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "> ⚠️ **PG 单用户即超级用户**，不像 MySQL 区分 `root` / `MYSQL_USER`；`DB_USER` 设成 `postgres` 也能跑，但建议沿用普通用户名（如 `imqi1`）保持历史命名习惯。`DB_PASSWORD` 会作为 `POSTGRES_PASSWORD` 直接传给镜像，应用与 healthcheck 全程只使用这个用户。",
+     "lines": [
+      387
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL 存储站点数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ImQi1 CMS 是一套基于 **Nuxt 4 + Prisma + TailwindCSS** 构建的全栈个人博客与内容管理系统，也是个人站点 imqi1.com 的完整源码。它并非通用型 CMS 模板，而是围绕「做技术的分享者、生活的摄影师、时事的评论员」这一定位打磨的一站式内容平台，覆盖从内容创作、发布、管理到多端展示的完整链路。 ／ - **PostgreSQL** ≥ 14（推荐 16，与 docker 镜像版本一致；用于存储站点数据） ／ - **带 Redis**（`docker/docker-compose.yml` + `docker/Dockerfile`）：应用 + PostgreSQL 16 + Redis 7。默认烘焙 `redis:6379`（compose 服务名）并启动 redis 容器，ISR 增量缓存与搜索缓存共用。",
+   "evidence_lines": [
+    15,
+    35,
+    345
+   ]
+  },
+  "fn": "imqi1-github/imqi1-cms",
+  "sha": "9374f0298754",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

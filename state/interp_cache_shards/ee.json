@@ -7613,5 +7613,147 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f0a62ed9d35e": {
+  "identity": {
+   "one_liner": "基于 Nuxt 4、Better Auth 与 Drizzle 的 PostgreSQL 认证起始模板",
+   "review": "这是一个 Nuxt 4 应用起始模板，内置 Better Auth 服务端点、认证 schema 与初始迁移，通过 Drizzle 访问 PostgreSQL，默认使用 Neon 作为托管提供商并可替换为其他 PostgreSQL 客户端。面向需要快速搭建含服务端认证的 Nuxt 应用的开发者。注意：邮箱验证、密码找回、Google OAuth 等功能仍处于规划阶段，尚未完成。",
+   "highlights": [
+    "包含 Better Auth 服务端点、auth schema 与初始迁移，用户、会话、账号和验证记录存储于 PostgreSQL",
+    "数据库层结构化设计，可在不改动 schema、迁移和认证模型的情况下替换 Neon 为其他 PostgreSQL 提供商",
+    "提供 pnpm 脚本覆盖开发、测试、lint、typecheck 及 Drizzle 迁移生成与应用"
+   ],
+   "use_cases": [
+    "快速启动带有服务端认证的 Nuxt 4 应用开发",
+    "以 Neon 为默认提供商、可切换其他 PostgreSQL 提供商的部署起点",
+    "使用 Drizzle Kit 管理 schema 迁移的 TypeScript 项目模板"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A reusable Nuxt 4 starter with a public application shell and server-side authentication powered by Better Auth, Drizzle and PostgreSQL. ／ Neon is the default PostgreSQL provider, but the database layer is structured so another PostgreSQL client can be used without changing the schema, migrations or authentication model. ／ - PostgreSQL",
+     "lines": [
+      5,
+      7,
+      19
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 PostgreSQL 存储用户与会话数据的 Nuxt 应用模板，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A reusable Nuxt 4 starter with a public application shell and server-side authentication powered by Better Auth, Drizzle and PostgreSQL. ／ Neon is the default PostgreSQL provider, but the database layer is structured so another PostgreSQL client can be used without changing the schema, migrations or authentication model. ／ and stores users, sessions, accounts and verification records in PostgreSQL.",
+   "evidence_lines": [
+    5,
+    7,
+    182
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "aruizcastillo/nuxt-auth-starter",
+  "sha": "f0a62ed9d35e",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "07d6cd1eddb5": {
+  "identity": {
+   "one_liner": "DSH 智能体的对话归档与分层摘要压缩插件，SQLite 存储",
+   "review": "为 DeepSeek Harness (DSH) 提供完整对话存档的插件：原文按事件保存于本机 SQLite 数据库，后台将分块摘要逐层合并为目录，智能体通过 lcm_find/outline/read 工具检索和读回历史，可选在阈值时接管上下文压缩。适合使用 DSH 的智能体用户，需 Node.js 22.16+，通过 npm pack 与 dsh plugin 命令安装。",
+   "highlights": [
+    "完整保存 DSH 对话事件，支持按事件编号精确读取原文",
+    "后台生成约 20K token 分块的分层摘要目录",
+    "提供 lcm_find/lcm_outline/lcm_read 召回工具及可选压缩接管"
+   ],
+   "use_cases": [
+    "需要核对智能体历史决策与原始记录的长期任务",
+    "长对话超出模型上下文时的压缩与召回",
+    "跨模型配置切换时保留历史记忆"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "数据库默认位于 `$DSH_HOME/SuperLcm/lcm.sqlite`；未设置 `DSH_HOME` 时使用当前用户的 `~/.dsh`。支持 `DSH_SUPERLCM_DB` 自定义文件，兼容旧 `DSH_LOSSLESS_DB` 和 `lossless-context` 数据库路径。",
+     "lines": [
+      85
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 DSH 智能体提供对话存档/摘要能力，SQLite 仅作本机存储，属数据库生态之外的工具组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SuperLcm for DSH 为 **DeepSeek Harness（DSH）** 保存完整对话，在后台整理分层摘要，让智能体需要历史细节时能找到并读取原文。摘要和压缩都在 **DSH 插件设置页**管理，使用 DSH 已配置的供应商和模型。 ／ 数据库默认位于 `$DSH_HOME/SuperLcm/lcm.sqlite`；未设置 `DSH_HOME` 时使用当前用户的 `~/.dsh`。支持 `DSH_SUPERLCM_DB` 自定义文件，兼容旧 `DSH_LOSSLESS_DB` 和 `lossless-context` 数据库路径。",
+   "evidence_lines": [
+    9,
+    85
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "yu381792/dsh-superlcm",
+  "sha": "07d6cd1eddb5",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

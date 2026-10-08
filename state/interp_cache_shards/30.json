@@ -9277,5 +9277,154 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ebd23882f80c": {
+  "identity": {
+   "one_liner": "DbUp 风格的数据库迁移扩展库，支持 SQL Server/MySQL/Postgres",
+   "review": "DbEx 是一个 .NET 库，为 DbUp 风格的数据库迁移提供扩展功能，支持数据库的删除、创建、迁移、Schema 对象管理和参考数据导入，通过有序脚本与日志跟踪已执行脚本。提供 MySQL、Postgres、SQL Server 三个专用包，面向使用 .NET 进行数据库部署与变更管理的开发者和 DBA。",
+   "highlights": [
+    "提供 Drop/Create/Migrate/Schema/Data/Reset 等迁移命令，可组合执行",
+    "迁移脚本按顺序跟踪执行，兼容 DbUp 的日志机制",
+    "支持 YAML/JSON 定义参考数据，Inspect 命令可推断表结构输出 markdown"
+   ],
+   "use_cases": [
+    ".NET 项目中的有序 SQL 迁移脚本管理与部署",
+    "数据库 Schema 对象（类型/函数/视图/存储过程）的代码化维护",
+    "测试场景下的数据库重置与参考/主数据填充"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`DbEx.Postgres` | NuGet version | Link",
+     "lines": [
+      15
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`DbEx.MySql` | NuGet version | Link",
+     "lines": [
+      14
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "`DbEx.SqlServer` | NuGet version | Link",
+     "lines": [
+      16
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为为数据库迁移服务的 .NET 扩展库，提供针对 MySQL/Postgres/SQL Server 的专用包",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "_DbEx_ provides database extensions for DbUp-inspired database migrations. ／ `DbEx.MySql` | NuGet version | Link ／ `DbEx.Postgres` | NuGet version | Link",
+   "evidence_lines": [
+    5,
+    14,
+    15
+   ]
+  },
+  "fn": "Avanade/DbEx",
+  "sha": "ebd23882f80c",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0f521015d0d1": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 微服务的银行后端，Kafka 驱动事件与 SAGA 补偿",
+   "review": "这是一个作品集性质的银行转账后端系统，由 API 网关和六个 Spring Boot 服务组成：账户、交易、风控、支付、通知与分析。转账通过 Kafka 编排 SAGA 流程并支持补偿退款，风控基于 Redis 规则引擎并可升级为邮件 OTP 验证，支付对接 Paymob 并以 HMAC 校验 webhook。数据分别存于 MariaDB 与 Cassandra，适合学习事件驱动微服务架构的开发者。",
+   "highlights": [
+    "提供基于 Kafka 事件编排的 SAGA 转账流程，失败时触发补偿退款",
+    "实现基于 Redis 规则的风控检测，可疑交易升级为带 5 分钟 TTL 的邮件 OTP 验证",
+    "提供网关请求经 Kafka 写入 Cassandra 并由 Prometheus 抓取的分析管线"
+   ],
+   "use_cases": [
+    "学习微服务间 Kafka 事件驱动与 SAGA 补偿模式的实现",
+    "参考 Redis 规则引擎与 OTP 验证的转账风控流程",
+    "搭建带 Prometheus/Grafana 监控的本地微服务演示环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**JDBC / MariaDB**|`account_db`, `transaction_db`, `payment_db`|",
+     "lines": [
+      37
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 MariaDB、Redis、Cassandra 存储自身业务数据的银行业务应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An event-driven banking backend made of an API gateway and six Spring Boot services. Money transfers run as a choreographed saga over Kafka with compensating refunds, and every transfer passes a Redis-backed fraud engine that can escalate to email OTP verification. Every gateway request flows through a Kafka → Cassandra → Prometheus analytics pipeline, and Paymob payments are confirmed through HMAC-SHA512-verified webhooks. Built with Java 21, Spring Boot 4.1.1, Spring Cloud, MariaDB, Redis, Cassandra and Kafka. ／ |**JDBC / MariaDB**|`account_db`, `transaction_db`, `payment_db`| ／ Docker Compose provides the infrastructure: Redis (`6379`), MariaDB (host port `3307`), Cassandra (`9042`), ZooKeeper, Kafka (`9092`), Mailpit (SMTP `1025`, UI `8025`), Prometheus (`9090`) and Grafana (`3000`). The application services run locally through the Maven Wrapper; service Dockerfiles are planned.",
+   "evidence_lines": [
+    8,
+    37,
+    73
+   ]
+  },
+  "fn": "Mohammed-Elhawary/Banking-System",
+  "sha": "0f521015d0d1",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

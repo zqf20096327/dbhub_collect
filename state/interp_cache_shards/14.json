@@ -9097,5 +9097,273 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c43d6b0fe4f6": {
+  "identity": {
+   "one_liner": "自托管 AI 品牌可见度追踪工具，单二进制加 SQLite 存储",
+   "review": "这是一个自托管的 AI 可见度追踪工具（AEO/GEO/LLMO），用于跟踪 ChatGPT、Claude、Perplexity、Gemini 等 AI 引擎在回答中提及和引用品牌的情况。面向需要在自有基础设施上测量 AI 搜索表现的品牌方。它以单个 Go 二进制运行，首次启动时自动创建并迁移 SQLite 数据库，内置仪表盘，提供 MCP 服务器供 AI 助手读取数据，并支持每日/每小时调度和 JSON/CSV 导出。注意：当前为 pre-release，11 个引擎提供者中仅实现 6 个。",
+   "highlights": [
+    "单二进制运行，首次启动自动创建并迁移 SQLite 数据库，数据存于用户自有文件中",
+    "提供 MCP 服务器（stdio 和 streamable HTTP），含 14 个只读工具供 AI 助手读取可见度数据",
+    "支持每日/每小时调度测量与一次性运行，带 runs_per_day 上限控制，并可导出全部数据为 JSON 或 CSV"
+   ],
+   "use_cases": [
+    "在自有服务器上追踪品牌在多个 AI 引擎回答中的提及率、引用来源与份额声量",
+    "通过 MCP 让 Claude 等 AI 助手用自然语言查询可见度数据",
+    "将历史数据导出为 JSON/CSV 或升级迁移到 Limelit Cloud"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **One binary.** No Docker, no Node, no Postgres. It creates and migrates its ／ |**Single binary, SQLite**: no cgo, no Docker requirement, no Postgres|**working**|",
+     "lines": [
+      50,
+      159
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "own SQLite database on first start and serves the dashboard at ／ SQLite file you own. Nothing leaves the box except the calls to the engines ／ |**Single binary, SQLite**: no cgo, no Docker requirement, no Postgres|**working**|",
+     "lines": [
+      51,
+      129,
+      159
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身创建并使用 SQLite 数据库存放品牌、提示与测量结果，SQLite 是其存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "open-core：Apache 2.0 开源版为 Limelit Cloud 托管产品的开放核心",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " own SQLite database on first start and serves the dashboard at ／  SQLite file you own. Nothing leaves the box except the calls to the engines ／ |**Single binary, SQLite**: no cgo, no Docker requirement, no Postgres|**working**|",
+   "evidence_lines": [
+    51,
+    129,
+    159
+   ]
+  },
+  "fn": "limelit-co/open",
+  "sha": "c43d6b0fe4f6",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5781305b3143": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 的银行与金融聚合 REST 平台",
+   "review": "使用 Java 17 与 Spring Boot 3.3 构建的金融服务后端，提供认证、交易记录、分类管理和月度分析等 REST API，并实现离线 UPI 网状支付结算引擎（BLE 中继、混合加密、CAS 去重）。使用 PostgreSQL 存储数据，面向需要构建银行类应用或离线支付场景的开发者。通过 Docker Compose 部署运行。",
+   "highlights": [
+    "提供认证、交易、分类、分析等 REST API 接口",
+    "实现离线 UPI 网状支付结算引擎，支持 BLE 中继与混合加密（RSA-OAEP + AES-256-GCM）",
+    "使用 JWT 进行无状态认证，支持多租户用户数据隔离"
+   ],
+   "use_cases": [
+    "构建需要用户认证与交易记录的金融服务后端",
+    "无网络环境下的点对点支付结算场景",
+    "个人收支与月度财务分析数据管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL",
+     "lines": [
+      16
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 PostgreSQL 存储数据的金融 REST 平台应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL ／ * **Offline UPI Mesh Settlement Engine:** Full store-and-forward peer-to-peer payment settlement over Bluetooth Low Energy (BLE) gossip relays for zero-connectivity environments (basements, remote flights, disaster zones). ／ * **Modern Security Architecture:** Stateless authentication via **Spring Security 6 (Lambda DSL)** and modern JJWT (`0.12.6`) signed tokens with secure claim extraction.",
+   "evidence_lines": [
+    16,
+    22,
+    25
+   ]
+  },
+  "fn": "ronitgupta138/finflow-core",
+  "sha": "5781305b3143",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bdfb7f886ef4": {
+  "identity": {
+   "one_liner": "面向 .NET 开发者的 Oracle 数据库浏览器，带 EF Core 模型桥接",
+   "review": "FerretSharp 是一个 Windows 桌面 GUI 工具，供日常使用 Oracle 数据库的 .NET 开发者浏览、过滤、编辑数据。它按连接管理工作区（各自独立的数据库会话），支持外键导航、沙箱式事务编辑，并可加载 EF Core 项目编译模型，将 C# 实体/属性/枚举名映射到表和列，提供 LINQ 控制台显示生成的 SQL。默认只读连接由 Oracle READ ONLY 事务保证；生产环境建议仅授予 SELECT 权限。",
+   "highlights": [
+    "提供按连接隔离的工作区，各自拥有独立数据库会话与显式事务的沙箱编辑",
+    "支持外键导航，包括仅存在于 EF Core 模型中、无外键约束的关系",
+    "提供 LINQ 控制台，显示 EF Core 生成的 SQL 并在工作区会话中执行"
+   ],
+   "use_cases": [
+    "由 .NET/EF Core 项目使用 Oracle 数据库的开发者进行日常数据浏览与编辑",
+    "跨连接/模式的 schema 对比与 DDL 差异对齐",
+    "查看执行计划与生成 SQL 的调试"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "An Oracle database explorer for .NET developers – with workspaces, foreign-key navigation,",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "dbs": [
+    "Oracle"
+   ],
+   "eco": "tool",
+   "eco_why": "它是为操作 Oracle 数据库服务的专用浏览器/客户端工具，而非使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " An Oracle database explorer for .NET developers – with workspaces, foreign-key navigation, ／ developer works with an Oracle database day to day: ／ - Oracle Database 19c or later (12.2 should work). Plain TCP connections (host/port with service name or SID, or a TNS",
+   "evidence_lines": [
+    5,
+    22,
+    105
+   ]
+  },
+  "fn": "JuliusFo/FerretSharp",
+  "sha": "bdfb7f886ef4",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::Terraform Module for the PolarDB product in terraform-provider-alibabacloudstack": {
+  "identity": {
+   "one_liner": "基于 Terraform 的阿里云专有云 PolarDB 资源编排模块",
+   "review": "该仓库提供一个 Terraform Module，用于在 terraform-provider-alibabacloudstack（阿里云专有云 Apsara Stack）中编排 PolarDB 产品的资源创建。面向使用 Terraform 管理专有云基础设施的运维人员，通过模块化配置实现 PolarDB 实例的声明式部署。仓库无 README，具体可用参数、支持资源和版本兼容情况基于现有简介无法确认。",
+   "highlights": [
+    "以 Terraform Module 形式提供",
+    "面向 terraform-provider-alibabacloudstack 使用",
+    "用于 PolarDB 产品的资源编排"
+   ],
+   "use_cases": [
+    "在 Apsara Stack 专有云中以声明式方式创建 PolarDB 资源",
+    "将 PolarDB 部署纳入 Terraform 基础设施即代码流程"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PolarDB",
+     "rel": "support",
+     "quote": "Terraform Module for the PolarDB product in terraform-provider-alibabacloudstack"
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该模块为部署/管理 PolarDB 数据库资源提供 Terraform 编排能力，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PolarDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Terraform Module for the PolarDB product in terraform-provider-alibabacloudstack"
+  },
+  "fn": "apsarastack-automation/terraform-alibabacloudstack-polardb",
+  "sha": "desc::Terraform Module for the PolarDB product in terraform-provider-alibabacloudstack",
+  "source": "desc",
+  "generated_at": "2026-10-08",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

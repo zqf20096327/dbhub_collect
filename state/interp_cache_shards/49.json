@@ -9111,5 +9111,77 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b4d7d20a83ce": {
+  "identity": {
+   "one_liner": "浏览器本地运行的信封式零基预算应用，数据存 SQLite WASM",
+   "review": "Moneta 是一个纯前端预算应用，实现零基信封预算、账户与交易管理、OFX/CSV 账单导入、定期交易和报表。数据以 SQLite（WASM）文件存于浏览器 OPFS，不上传服务器；支持加密备份与可选的 Google Drive 自动备份。适合希望数据完全留在本地的个人用户；README 自述为实验性个人项目，且清空浏览器站点数据会丢失预算。",
+   "highlights": [
+    "以 SQLite WASM 在浏览器私有存储（OPFS）中保存预算数据，可离线运行",
+    "支持 OFX/CSV 账单导入、定期交易、按类别/收款人的报表",
+    "支持加密的 .moneta 备份文件（AES-256-GCM）及可选 Google Drive 自动加密备份"
+   ],
+   "use_cases": [
+    "在手机或电脑浏览器中进行本地零基信封预算管理",
+    "导入银行 OFX/CSV 账单并与本地账户对账",
+    "将预算以加密备份文件或 Google Drive 异地留存"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "budget is a SQLite database stored on your device, and it stays there. Install it as an app ／ Each budget is one SQLite file in your browser's private storage for the site (the Origin ／ SQLite file. Older `.sqlite` backups still restore.",
+     "lines": [
+      27,
+      70,
+      84
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是该预算应用本地存储数据的数据库，项目本身是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Moneta is a budgeting app in the spirit of YNAB and Actual Budget. You give every unit of ／ It runs entirely in your browser. There is no server, no account and no tracking: your ／ budget is a SQLite database stored on your device, and it stays there. Install it as an app",
+   "evidence_lines": [
+    21,
+    26,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "flyri0/moneta",
+  "sha": "b4d7d20a83ce",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

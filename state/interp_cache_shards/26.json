@@ -8574,5 +8574,136 @@
   "generated_at": "2026-10-07",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "ffdc0a830321": {
+  "identity": {
+   "one_liner": "AI 编码代理的持久化记忆系统，单二进制+SQLite+FTS5，经 MCP/HTTP/CLI/TUI 访问",
+   "review": "Engram 是一个面向 AI 编码代理的持久化记忆工具，用单个 Go 二进制内嵌 SQLite 与 FTS5 全文检索存储项目记忆，通过 MCP stdio、HTTP API、CLI 和 TUI 暴露给 Claude Code、Cursor 等 MCP 兼容代理。默认数据保存在本地 ~/.engram/engram.db，另支持 Git Sync 导出和可选的 Engram Cloud 复制。适合在多个代理间保留项目决策与历史记录的开发者使用。",
+   "highlights": [
+    "提供 MCP 工具集（保存、搜索、时间线、会话摘要等）供代理读写持久化记忆",
+    "使用 SQLite + FTS5 实现本地全文搜索，单二进制运行，无需 Node.js/Python/Docker",
+    "支持 14 个代理的 setup 命令配置及任意 MCP 兼容代理的手动接入"
+   ],
+   "use_cases": [
+    "为 AI 编码代理保存项目决策、修复记录与用户约束，跨会话检索",
+    "会话压缩或结束后恢复上下文并进行交接（session summary）",
+    "通过 Git Sync 或可选 Cloud 在多台机器间共享项目记忆"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite + FTS5 (~/.engram/engram.db) ／ A **Go binary** with SQLite + FTS5 full-text search, exposed through CLI, HTTP API, MCP, and an interactive TUI. It works with any MCP-compatible agent, including Claude Code, OpenCode, Gemini CLI, Codex, VS Code (Copilot), Antigravity, Cursor, and Windsurf. N ／ Engram keeps memory local by default. The local SQLite database is authoritative; Git Sync exports portable compressed chunks for sharing across machines, and Engram Cloud is optional, project-scoped replication/shared access with browser visibility.",
+     "lines": [
+      62,
+      65,
+      77
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 AI 编码代理生态提供记忆能力的工具组件，SQLite 仅为其内嵌存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A **Go binary** with SQLite + FTS5 full-text search, exposed through CLI, HTTP API, MCP, and an interactive TUI. It works with any MCP-compatible agent, including Claude Code, OpenCode, Gemini CLI, Codex, VS Code (Copilot), Antigravity, Cursor, and Windsurf. No Node.js, Python, or Docker is required: one binary, one SQLite file. ／ |**MCP tools**|Save, search, timeline, session, review, and diagnosis tools for your agent| ／ |Claude Code|`engram setup claude-code`|",
+   "evidence_lines": [
+    65,
+    117,
+    151
+   ]
+  },
+  "fn": "Gentleman-Programming/engram",
+  "sha": "ffdc0a830321",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e433bcf51e7a": {
+  "identity": {
+   "one_liner": "Rust 编写的内存安全属性图数据库，统一 MVCC/时间旅行/分支/复制于单一提交流",
+   "review": "这是一个用 Rust 从零构建的属性图数据库，提供嵌入式库、服务器和 CLI 三种形态，支持 GQL 语言与 openCypher 入口。其核心机制是将 MVCC、时间旅行、git 式分支、复制和变更订阅统一为基于 fountain 编码的单一提交流，并保证查询结果确定性、可审计、可回放。项目目前处于计划驱动阶段，仅源码检出可用，快速示例中的 11 条语句只有 6 条按原样运行。",
+   "highlights": [
+    "提供嵌入式库（fgdb）、服务器（fgdbd）和 CLI 三种运行形态，支持 GQL（ISO/IEC 39075:2024）与 openCypher 入口",
+    "将 MVCC 版本、时间旅行查询（FOR SYSTEM_TIME）、git 式零拷贝分支、复制与订阅统一为单一内容寻址、RaptorQ 纠删码提交流",
+    "查询结果确定性可回放，附带可审计的 plan certificate，整个数据库在确定性 lab 运行时下测试"
+   ],
+   "use_cases": [
+    "需要时间旅行查询与 git 式分支的图数据分析场景",
+    "GraphRAG 式混合检索（文本+向量+图扩展在同一 planner 内）",
+    "对结果确定性与可审计性有要求的图查询应用"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **A reference oracle.** `fgdb-reference` is a deliberately simple, single-threaded, obviously-correct implementation of the full logical semantics, compiled for tests only. \"What should this return\" is a *program*, not a debate, and it exists before the firs",
+     "lines": [
+      281
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库本身就是图数据库引擎（内核/存储实现），不属于使用某数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "双许可：MIT + Rider",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A blank-slate, memory-safe, ultra-high-performance property-graph database in Rust, built on the Franken/asupersync ecosystem. It unifies MVCC, time-travel history, git-style branches, replication, and change subscriptions into a single fountain-coded commit stream, runs transactional writes and static-CSR analytics on one temperature-tiered store, and makes every query result deterministic, auditable, and replayable.** ／ # What runs today, from a source checkout (there are no releases or installer yet — see Installation): ／ **The solution.** `frankengraphdb` composes them. One codebase, three postures: an embedded library (`fgdb`), a server (`fgdbd`), and a CLI (`fgdb`), all speaking **GQL** (ISO/IEC 39075:2024) with an openCypher on-ramp. Larger-than-memory is first-class everywhere. It is, in a precise sense, *a database written in the asupersync programming model*, the way FoundationDB is a database written in Flow: structured concurrency, capability contexts, fountain coding, and a deterministic lab runtime are the substrate, not add-ons.",
+   "evidence_lines": [
+    10,
+    13,
+    25
+   ]
+  },
+  "fn": "Dicklesworthstone/frankengraphdb",
+  "sha": "e433bcf51e7a",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

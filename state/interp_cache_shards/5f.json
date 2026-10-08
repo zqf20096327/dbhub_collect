@@ -8823,5 +8823,106 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "325a515b328a": {
+  "identity": {
+   "one_liner": "Rust 编写的 CDC 引擎，读取数据库变更并路由转换后投递到下游",
+   "review": "DeltaForge 是一个变更数据捕获（CDC）引擎，通过 MySQL binlog（含 GTID）和 PostgreSQL 逻辑复制（pgoutput）读取源库变更，经 JavaScript/Outbox/Flatten/Filter 等处理器后写入 Kafka、Redis、NATS、HTTP、S3、ClickHouse、Elasticsearch 等 sink，支持 Debezium 兼容信封格式与检查点/DLQ。面向需要自建 CDC 管道的数据工程团队，可经 Docker 或 Helm 部署；README 标明处于活跃开发期，API 可能变化。",
+   "highlights": [
+    "支持 MySQL binlog（GTID）与 PostgreSQL pgoutput 逻辑复制作为源，含初始快照/回填与断点续传",
+    "提供 JavaScript、Outbox、Flatten、Filter 处理器，以及按事件动态路由与 Native/Debezium/CloudEvents 信封格式",
+    "内置 per-sink 独立检查点、死信队列（REST API 管理）与 JSON/Avro（Confluent Schema Registry）编码"
+   ],
+   "use_cases": [
+    "将 MySQL/PostgreSQL 的数据变更实时流入 Kafka、Redis 等消息系统",
+    "向 S3（Parquet）或 ClickHouse/Elasticsearch 同步表的变更日志或当前状态镜像",
+    "从事务性 outbox 模式发布领域事件，输出 Debezium 或 CloudEvents 兼容格式"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Rust|MySQL · PostgreSQL|JavaScript · Outbox · Flatten · Filter|Kafka · Redis · NATS · HTTP · S3 · ClickHouse · Elasticsearch|JSON · Avro|Native · Debezium · CloudEvents| ／ - PostgreSQL logical replication via pgoutput ／ - Initial snapshot/backfill for existing tables (MySQL and PostgreSQL)",
+     "lines": [
+      84,
+      90,
+      91
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "-e MYSQL_DSN=\"mysql://user:pass@host:3306/mydb\" \\ ／ --set secrets.data.MYSQL_USER=cdc_user \\ ／ --set secrets.data.MYSQL_PASSWORD=s3cret ／ - MySQL binlog CDC with GTID support ／  - Initial snapshot/backfill for existing tables (MySQL and PostgreSQL)",
+     "lines": [
+      48,
+      60,
+      61,
+      89,
+      91
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- Pluggable backends (File, SQLite with versioning, in-memory) ／ The container persists state to a SQLite database at `./data/deltaforge.db` by default — override with `--storage-backend` / `--storage-path`. In the published (`scratch`-based) image the working directory is `/`, so that path resolves to `/data/deltaforge.db`",
+     "lines": [
+      109,
+      217
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|Rust|MySQL · PostgreSQL|JavaScript · Outbox · Flatten · Filter|Kafka · Redis · NATS · HTTP · S3 · ClickHouse · Elasticsearch|JSON · Avro|Native · Debezium · CloudEvents| ／ - ClickHouse sink — HTTP + RowBinary; change-log (`MergeTree`) or current-state upsert (`ReplacingMergeTree`) selected by target engine; auto table creation from source DDL; per-row DLQ",
+     "lines": [
+      84,
+      135
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库变更流的采集与投递提供管道服务，是服务于数据库生态的工具而非使用数据库存业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> A versatile, high-performance Change Data Capture (CDC) engine built in Rust. ／  - MySQL binlog CDC with GTID support ／  - PostgreSQL logical replication via pgoutput",
+   "evidence_lines": [
+    25,
+    89,
+    90
+   ]
+  },
+  "fn": "vnvo/deltaforge",
+  "sha": "325a515b328a",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

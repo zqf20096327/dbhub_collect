@@ -9422,5 +9422,322 @@
   "generated_at": "2026-10-07",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "13442c1af4ed": {
+  "identity": {
+   "one_liner": "基于 go-kratos 的用户行为分析平台，事件经 Kafka 入 ClickHouse/Doris 数仓",
+   "review": "这是一个用户行为分析（UBA）平台，提供 25 个分析模型（事件、漏斗、留存、归因、路径、分群及游戏专项），通过自研 Web/C# SDK 采集事件，经 Kafka 由 OLAP 引擎自行拉取入仓，数据落在 ClickHouse 或 Apache Doris（编译期开关二选一，当前仅 Doris 分支生效），业务库为 PostgreSQL。面向需要行为分析的企业和游戏团队，需配合 Docker、Kafka、Superset 等组件部署。",
+   "highlights": [
+    "提供 25 个分析模型，覆盖通用行为分析、用户深度洞察与游戏专项三类",
+    "支持 Web 与 C#（Unity/Godot）SDK 采集，事件经 Kafka 由 Doris Routine Load 或 ClickHouse Kafka 表引擎写入 OLAP",
+    "内置多租户隔离、风险规则引擎与 Webhook 告警，支持对接 Apache Superset 报表"
+   ],
+   "use_cases": [
+    "网站/App 用户行为的事件、漏斗、留存与归因分析",
+    "游戏数值与运营分析（关卡、付费分层、LTV、滚服留存、经济系统）",
+    "基于风险规则的行为异常检测与告警"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|ORM|Ent|Go 实体框架（PostgreSQL）| ／ PostgreSQL 的表结构由 ent 在 Core 首次启动时自动迁移（`app/core/service/configs/data.yaml` 里 ／ # PostgreSQL（业务库）：只需导入字典/初始数据（表结构已自动迁移）",
+     "lines": [
+      86,
+      275,
+      281
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **双引擎可切换数据仓库**：原生支持 ClickHouse 与 Apache Doris 两种 OLAP 引擎，按需二选一部署，极致查询性能 ／ |OLAP 引擎|ClickHouse / Apache Doris|列式存储，极致分析性能| ／ > **Routine Load**，ClickHouse 用 **Kafka 表引擎 + 物化视图**。`uba-ingest` 负责把 Doris 这条",
+     "lines": [
+      18,
+      87,
+      127
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该平台使用 PostgreSQL 存业务数据、ClickHouse/Doris 作为 OLAP 数仓存储自身分析数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|ORM|Ent|Go 实体框架（PostgreSQL）| ／ |OLAP 引擎|ClickHouse / Apache Doris|列式存储，极致分析性能| ／ PostgreSQL 的表结构由 ent 在 Core 首次启动时自动迁移（`app/core/service/configs/data.yaml` 里",
+   "evidence_lines": [
+    86,
+    87,
+    275
+   ]
+  },
+  "fn": "tx7do/go-wind-uba",
+  "sha": "13442c1af4ed",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "61287964e2c0": {
+  "identity": {
+   "one_liner": "本地优先的 Docker Compose 知识平台，将 RSS 内容经 AI 流水线转为可检索知识",
+   "review": "Alt 是一个以 Docker Compose 部署的本地优先知识平台，读取 RSS 订阅源后在本地运行 AI 流水线完成摘要、标签提取、每周回顾、向量检索与 RAG 问答，结果汇聚到 Knowledge Home 界面。面向希望在自有硬件上自托管、无云依赖的个人用户。数据存储依赖 PostgreSQL（含 pgvector）、Meilisearch、ClickHouse 与 Redis，需 Docker 与 Compose v2，AI 工作流可选 Ollama + NVIDIA GPU。",
+   "highlights": [
+    "提供本地运行的 RSS 摄取与 AI 富化流水线：摘要、标签提取、周回顾、RAG 问答",
+    "采用事件溯源（append-only knowledge_events）与 CQRS 模式构建知识投影",
+    "由 20+ 多语言微服务组成，经 REST、Connect-RPC（Protobuf）与 Redis Streams 通信"
+   ],
+   "use_cases": [
+    "在本地服务器/home-lab 上自托管 RSS 阅读与知识管理",
+    "基于个人文章历史的本地 RAG 问答与引用式研究报告生成",
+    "容器化遥测日志采集（rask 转发/聚合至 ClickHouse）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Six layers: **Edge & Auth** (plecto-proxy, auth-hub, Kratos) · **Product Surface** (SvelteKit frontend, BFF) · **Core Platform** (alt-backend, alt-data-hub, alt-harvester, alt-notifier, mq-hub, knowledge-sovereign) · **Ingestion & Enrichment** (pre-processor,  ／ |`rag-orchestrator/`|Go 1.26+|`9010` / `9011`|Semantic search index client querying pgvector configurations.|",
+     "lines": [
+      75,
+      113
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "* **Ultra-High Throughput Log Ingestion (Rask Telemetry):** Telemetry is handled by a custom, lock-free Rust agent (`rask-log-forwarder`) tailing container stdout with `simd-json` yielding over 4 GB/s parsing throughput. Logs are buffered via `bytes::Bytes` ze ／ |`rask-log-aggregator/`|Rust 1.94+ / Axum|`9600` / `4317`|OpenTelemetry receiver collecting telemetry buffers for ClickHouse bulk inputs.| ／ altctl up logging # Structured logs → ClickHouse",
+     "lines": [
+      60,
+      119,
+      150
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL、ClickHouse、Meilisearch、Redis 等存储自身数据的知识平台应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Alt is a Docker Compose-first, local-first knowledge platform that transforms standard RSS feeds into searchable, enriched, and rediscoverable intelligence. Featuring a local-first AI extraction pipeline, it handles text summarization, tag extraction, weekly recaps, vector-based RAG Q&A, and multi-agent report compilation—exposing the results in a real-time, event-sourced discovery interface. ／ Six layers: **Edge & Auth** (plecto-proxy, auth-hub, Kratos) · **Product Surface** (SvelteKit frontend, BFF) · **Core Platform** (alt-backend, alt-data-hub, alt-harvester, alt-notifier, mq-hub, knowledge-sovereign) · **Ingestion & Enrichment** (pre-processor, news-creator, tag-generator, search-indexer) · **Intelligence** (rag-orchestrator, acolyte-orchestrator, recap-worker) · **Observability & Data** (PostgreSQL 16/17/18 x7, Meilisearch, ClickHouse, Redis x2, Grafana, Prometheus) ／ altctl up                                       # 3. Start default stack (db, auth, core, workers)",
+   "evidence_lines": [
+    31,
+    75,
+    130
+   ]
+  },
+  "fn": "Kaikei-e/Alt",
+  "sha": "61287964e2c0",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7baea0d0ee3d": {
+  "identity": {
+   "one_liner": "自托管工作管理平台，数据存于单个 SQLite 文件，内置 MCP 服务器供 AI 代理驱动",
+   "review": "weave 是一个自托管的工作管理平台，提供连接表、双向关系、公式、汇总、工作流和 markdown 文档，数据存储在一个 SQLite 文件中，零运行时依赖。它面向人类用户与 AI 代理两类使用者，代理可通过内置 MCP 服务器、REST API 或 CLI 操作全部功能。运行要求 Node ≥ 22.16，存储使用 Node 内置 node:sqlite。",
+   "highlights": [
+    "内置 MCP 服务器（默认 17 个工具，共 61 个），任意 stdio MCP 客户端可挂载，另有 REST API 和 CLI 驱动同一引擎",
+    "数据模型包含双向关系、查找、汇总、公式、工作流状态、自动化触发器，每个实体可挂载多个 markdown 文档（.md/.html/.pdf）",
+    "存储为单个 SQLite 文件（WAL、行级写入），搜索基于 SQLite FTS5，支持 weach undo 实体级撤销"
+   ],
+   "use_cases": [
+    "个人或小团队自托管替代 Airtable/ClickUp 类 SaaS 工作管理工具",
+    "让 Claude Code、Cursor 等 MCP 客户端直接读写结构化工作数据",
+    "离线/本地优先的项目与知识库管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "documents. One SQLite file. Zero dependencies. No build step. MIT. ／ weave stores structured work (tables, rows, relations, documents) in one SQLite ／ - **Local-first** — your workspace is one SQLite file next to your project.",
+     "lines": [
+      9,
+      28,
+      57
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|NocoDB|Sustainable Use License (since v0.301.0)|Docker + external DB|Putting a smart-spreadsheet UI on an existing MySQL/Postgres|",
+     "lines": [
+      161
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|NocoDB|Sustainable Use License (since v0.301.0)|Docker + external DB|Putting a smart-spreadsheet UI on an existing MySQL/Postgres| ／ |Baserow|MIT (core; paid tiers separate)|Docker Compose + Postgres|A full Airtable-shaped product, cloud or self-hosted| ／ |Teable|AGPL-3.0 (core)|Docker + Postgres|Postgres-native scale with an Airtable UI|",
+     "lines": [
+      161,
+      162,
+      164
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "weave 使用 SQLite 存储自身数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " documents. One SQLite file. Zero dependencies. No build step. MIT. ／ weave stores structured work (tables, rows, relations, documents) in one SQLite ／ - **Zero dependencies** — `git clone` and run. Storage is Node's built-in",
+   "evidence_lines": [
+    9,
+    28,
+    60
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "grunion-ai/weave",
+  "sha": "7baea0d0ee3d",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2d185f6441f1": {
+  "identity": {
+   "one_liner": "SillyTavern 客户端扩展，以 SQLite 存储角色心智与世界状态",
+   "review": "InnerLore 是一个 SillyTavern 扩展，为角色扮演对话维护 NPC 私有心智、自动生成的世界设定、时间推进和可触发事件，全部状态保存在随附 innerlore-storage 插件的单个 SQLite 数据库中。适合已在运行 SillyTavern（1.13+，Node.js）并连接任意聊天补全 API 的用户，通过 UI 安装扩展并运行 setup.cjs 完成部署。",
+   "highlights": [
+    "通过随附的 innerlore-storage 服务器插件将状态存储在 SQLite（data/worlds/innerlore-storage.db），并提供嵌入式回退模式",
+    "在故事回复后运行后台模型请求，生成并合并设定补丁（默认 InnerLore DSL v1，JSON 为兼容回退）",
+    "提供带保存/恢复的修订历史（每聊天最近 20 次）和基于触发规则的编辑器事件机制"
+   ],
+   "use_cases": [
+    "需要从现有聊天记录重建心智与设定的长对话场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "InnerLore is a SillyTavern client extension backed by its bundled `innerlore-storage` server plugin (pure SQLite) for four related jobs: ／ **State storage:** the bundled **`innerlore-storage`** server plugin keeps everything in pure SQLite (see install step 2) — this is the default and recommended mode. An *Embedded* fallback (state inside the chat file) is available in **InnerLore → State storag",
+     "lines": [
+      3,
+      19
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目用 SQLite 存储其自身状态，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "InnerLore is a SillyTavern client extension backed by its bundled `innerlore-storage` server plugin (pure SQLite) for four related jobs: ／ **State storage:** the bundled **`innerlore-storage`** server plugin keeps everything in pure SQLite (see install step 2) — this is the default and recommended mode. An *Embedded* fallback (state inside the chat file) is available in **InnerLore → State storage** for zero-plugin setups.",
+   "evidence_lines": [
+    3,
+    19
+   ]
+  },
+  "fn": "ChrisDitfort/SillyTavern-InnerLore",
+  "sha": "2d185f6441f1",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

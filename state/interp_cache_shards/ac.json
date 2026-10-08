@@ -8940,5 +8940,170 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "25327896b556": {
+  "identity": {
+   "one_liner": "Yjs CRDT 的纯 Go 移植，含 WebSocket 服务器",
+   "review": "Ygo 是 Yjs CRDT 框架的纯 Go 实现，线格式与 yjs V1/V2 字节兼容，提供 Map/Array/Text 等共享类型、UndoManager、快照、子文档和离线同步客户端；附带的 yserve 是单二进制 Hocuspocus 兼容服务器，内置 SQLite 持久化与文档版本化，支持 gomobile 生成 iOS/Android SDK。适合 Go 后端开发者构建实时协同应用，SQLite 存储在 wasm 目标不可用。",
+   "highlights": [
+    "与 yjs@13.x V1/V2 线格式字节兼容，218 个跨语言 fixture 双向验证",
+    "提供内嵌离线同步客户端与单二进制 yserve 服务器，含 SQLite 持久化和文档版本化",
+    "无 CGO，可交叉编译至 Go 各目标并生成 iOS/Android 移动 SDK"
+   ],
+   "use_cases": [
+    "Go 后端为 Web/移动应用提供实时协同编辑服务",
+    "通过 gomobile 在 iOS/Android 应用中嵌入协同编辑能力",
+    "自托管 Yjs 协同服务器（替代 Node 环境的 Hocuspocus）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Pure Go, no CGO — mobile included.** Cross-compiles freely to every Go target. The CRDT core, the sync client and the server also compile to `js/wasm` and `wasip1/wasm`; the one exception is the SQLite-backed store in `persist/sqlite`, since `modernc.org/s ／ - **Ready-to-run server: yserve.** A self-hosted Yjs server in a single static binary — a Hocuspocus alternative with no Node, no Redis, no CGO. Same wire protocol, so existing `@hocuspocus/provider` / `y-websocket` clients connect unchanged; SQLite persistenc",
+     "lines": [
+      20,
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 Yjs 生态的 Go 语言移植与服务端实现，为协同应用提供 CRDT 库和同步服务器组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pure-Go port of Yjs, the CRDT framework for collaborative applications, officially listed in the Yjs documentation's ports page. ／ - **Ready-to-run server: yserve.** A self-hosted Yjs server in a single static binary — a Hocuspocus alternative with no Node, no Redis, no CGO. Same wire protocol, so existing `@hocuspocus/provider` / `y-websocket` clients connect unchanged; SQLite persistence and periodic document versioning built in. Also embeds as a plain `http.Handler` inside an existing Go backend. ／ For a collaborative server backend, see yserve — a stand-alone, Hocuspocus-compatible WebSocket server with SQLite persistence and document versioning, in one static binary:",
+   "evidence_lines": [
+    13,
+    27,
+    43
+   ]
+  },
+  "fn": "Deln0r/ygo",
+  "sha": "25327896b556",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "090ff4abd54e": {
+  "identity": {
+   "one_liner": "Rust 数据库表搬运引擎，Python 单行 API，内存有界",
+   "review": "apitap 是一个在数据库之间整表搬运数据的传输引擎，使用 Rust 实现各数据库自有线路协议（COPY、RowBinary、LOAD DATA、逻辑复制、binlog），通过 Python 绑定提供单行调用 API，支持 replace/append/merge/log_based 等模式，内存按容器 cgroup 规划。面向需要批量搬迁、增量加载或批量 CDC 的数据工程人员，需 CPython ≥3.9，当前为 0.x 版本需固定版本号。",
+   "highlights": [
+    "支持 postgres/mysql/clickhouse/bigquery/gcs/s3/iceberg 等源和目标，提供 replace、append、merge、log_based 四种传输模式",
+    "通过 Arrow C stream 协议向 polars、pyarrow、duckdb、pandas 输出 DataFrame",
+    "内存由管道×缓冲区规划并受 cgroup 限制约束，与表大小无关"
+   ],
+   "use_cases": [
+    "在 Postgres、MySQL、ClickHouse、BigQuery 之间批量搬迁整表数据",
+    "从 Postgres/MySQL 逻辑复制与 binlog 进行批量 CDC 同步",
+    "在内存受限的容器环境中运行数据摄入流水线"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (any REST catalog)| ／ |**Modes**|`replace` (default, atomic swap) · `append` · `merge` (Postgres, Iceberg) · `log_based` batch CDC from Postgres and MySQL/MariaDB into Postgres, ClickHouse, MySQL, BigQuery, Iceberg|",
+     "lines": [
+      44,
+      45,
+      46
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL binlog — through its own Rust wire clients, moves tables over parallel ／ |**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (any REST catalog)|",
+     "lines": [
+      7,
+      44,
+      45
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Destinations**|`postgres://` · `mysql://` · `clickhouse://` · `bigquery://` · `gcs://` · `s3://` (AWS, MinIO, R2, any S3-compatible store) · `iceberg://` (any REST catalog)| ／ |**Modes**|`replace` (default, atomic swap) · `append` · `merge` (Postgres, Iceberg) · `log_based` batch CDC from Postgres and MySQL/MariaDB into Postgres, ClickHouse, MySQL, BigQuery, Iceberg|",
+     "lines": [
+      44,
+      45,
+      46
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |MySQL / MariaDB|`mysql://user:pass@host:3306/db?ssl-mode=verify_identity`|TLS is **required for any non-loopback host** since 0.55.1; `ssl-mode` = `disabled` (send in clear, on purpose) · `required` (encrypt, no verify) · `verify_ca` · `verify_identity` (defa",
+     "lines": [
+      44,
+      114
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为数据库之间的数据传输服务的引擎/组件，而非使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "apitap is a transfer engine, not an API client. It speaks the databases' own ／ |**Sources**|`postgres://` · `mysql://` (MySQL 8.x, MariaDB) · `clickhouse://` · `gsheets://` · `github://` (repo CSVs as tables) · `github+api://` (issues, PRs, commits… as typed tables)| ／ |**Modes**|`replace` (default, atomic swap) · `append` · `merge` (Postgres, Iceberg) · `log_based` batch CDC from Postgres and MySQL/MariaDB into Postgres, ClickHouse, MySQL, BigQuery, Iceberg|",
+   "evidence_lines": [
+    5,
+    44,
+    46
+   ]
+  },
+  "fn": "apitap/apitap-lib",
+  "sha": "090ff4abd54e",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

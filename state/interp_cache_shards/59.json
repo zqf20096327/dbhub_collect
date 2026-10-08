@@ -7800,5 +7800,74 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a39efcfd0a08": {
+  "identity": {
+   "one_liner": "以本地 MCP 服务器形式运行的 AI 原生视频编辑器",
+   "review": "Open Edit 是一个通过 MCP 协议驱动的本地视频编辑器：外部 agent（Cursor、Claude Code 等）负责创作决策，仓库本身实现 SHA-256 内容寻址 ingest、faster-whisper 词级转写、基于 SQLite（WAL）的 append-only 编辑图，以及 melt+ffmpeg 渲染与 10 项 QC 检查。面向使用 MCP 客户端的开发者/创作者，需本地安装 ffmpeg/melt/Node.js 运行时；README 自述为实验性原型。",
+   "highlights": [
+    "以本地 MCP 服务器（stdio）形式提供 query_project、edit_project、trigger_render 等六个工具",
+    "包含 faster-whisper 词级转写与基于 SQLite（WAL）的 append-only IR 编辑图",
+    "支持 proxy（640×360）与 final（1080p）两种渲染模式，渲染前执行 10 项确定性 QC 检查"
+   ],
+   "use_cases": [
+    "通过 MCP 客户端（Cursor、Claude Code 等）以 agent 驱动方式完成素材 ingest、转写与剪辑",
+    "生成 640×360 代理预览与 1080p 最终成片的本地渲染流水线",
+    "以 review-only 模式在浏览器中预览剪辑与检查渲染产物"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "(faster-whisper), an append-only IR edit graph in SQLite (WAL), and melt + ffmpeg rendering",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身是视频编辑应用，SQLite 仅用于存储其编辑图数据，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT，README 自述为实验性原型，行为可能随版本变化",
+   "install": [
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Open Edit is an AI-native video editor that runs as a **local MCP server** over stdio. ／ (faster-whisper), an append-only IR edit graph in SQLite (WAL), and melt + ffmpeg rendering ／ MIT — see LICENSE. Experimental prototype; behavior may change between",
+   "evidence_lines": [
+    24,
+    27,
+    138
+   ]
+  },
+  "fn": "AH64-dll/OpenEdit",
+  "sha": "a39efcfd0a08",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8840,5 +8840,87 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bacf5cd2df57": {
+  "identity": {
+   "one_liner": "语义/上下文层，将 YAML 模型编译为 8 种方言 SQL",
+   "review": "OrionBelt 是一个语义层与规则引擎，以 sidecar 方式运行：用户在 YAML 中声明维度、度量、指标与 join，工具经 AST 编译为针对 8 种 SQL 方言的可执行 SQL，并通过 PostgreSQL wire、Arrow Flight SQL、REST 和 MCP 四种接口对外提供服务，附带业务规则评估、本体概念映射与 RDF 血缘能力。面向需要统一指标定义、让 BI 工具和 AI 代理访问数据的分析团队，要求 Python 3.12+，采用 BUSL-1.1 许可。",
+   "highlights": [
+    "将 YAML 声明的模型经 AST 编译为 BigQuery、ClickHouse、Databricks、Dremio、DuckDB、MySQL、PostgreSQL、Snowflake 8 种 SQL 方言",
+    "提供 PostgreSQL wire、Arrow Flight SQL、REST、MCP 四种访问接口",
+    "内置规则引擎、本体概念映射与 RDF/SPARQL 模型图谱"
+   ],
+   "use_cases": [
+    "BI 工具经 Postgres 驱动查询统一指标定义",
+    "AI 代理经 MCP/REST 获取指标与业务规则上下文",
+    "同一模型编译到多个数据仓库引擎的自托管场景"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "|**PostgreSQL wire**|`5432`|Postgres protocol|DuckDB via `ATTACH`, Tableau, Dremio as a federated source, Power BI, Superset, DBeaver, Metabase, `psql`|",
+     "lines": [
+      29
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "Compiles to **BigQuery, ClickHouse, Databricks, Dremio, DuckDB/MotherDuck, MySQL, PostgreSQL, and Snowflake.** The warehouse behind the model is independent of the surface in front of it: any of the four surfaces, against any of the eight dialects.",
+     "lines": [
+      38
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "compat",
+     "quote": "Compiles to **BigQuery, ClickHouse, Databricks, Dremio, DuckDB/MotherDuck, MySQL, PostgreSQL, and Snowflake.** The warehouse behind the model is independent of the surface in front of it: any of the four surfaces, against any of the eight dialects.",
+     "lines": [
+      38
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为语义层 sidecar 为数据仓库生态提供 SQL 编译与指标服务，本身不存储业务数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BUSL-1.1（source-available）",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OrionBelt is a **semantic and context layer** with a **rule engine**, and it runs as a **semantic sidecar**. You declare dimensions, measures, metrics, and joins in version-controlled YAML. OrionBelt compiles them into dialect-specific SQL through a real AST, and routes multi-fact queries through a Composite Fact Layer planner that blocks the join paths that produce fan traps. Agents and BI tools ask for `\"Total Revenue\" by \"Country\"`. They never see a table name. ／ Compiles to **BigQuery, ClickHouse, Databricks, Dremio, DuckDB/MotherDuck, MySQL, PostgreSQL, and Snowflake.** The warehouse behind the model is independent of the surface in front of it: any of the four surfaces, against any of the eight dialects. ／ pip install orionbelt-semantic-layer",
+   "evidence_lines": [
+    19,
+    38,
+    63
+   ]
+  },
+  "fn": "ralforion/orionbelt-semantic-layer",
+  "sha": "bacf5cd2df57",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

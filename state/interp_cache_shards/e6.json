@@ -8824,5 +8824,128 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1f1c5ca75e7b": {
+  "identity": {
+   "one_liner": "无人机飞行日志分析仪表盘，基于DuckDB本地存储",
+   "review": "一个用于组织和分析 DJI/Litchi 等飞行日志的应用程序，支持导入多种日志格式、自动去重、交互式飞行地图、遥测图表、电池健康与维护跟踪，数据全部存于本地 DuckDB 数据库，无需云端上传。提供 Tauri 桌面版、Docker Web 版和 Android APK，面向需要私有化管理飞行记录的无人机用户。",
+   "highlights": [
+    "支持导入 DJI .txt、Litchi CSV、Airdata CSV 等格式，可通过 parsers. 配置外部解析插件",
+    "所有数据存储于本地 DuckDB 数据库，支持全库备份与恢复",
+    "提供飞行地图回放、遥测图表、CSV/JSON/GPX/KML 导出及 HTML 法规报告生成"
+   ],
+   "use_cases": [
+    "私人本地化管理与分析 DJI/Litchi 无人机飞行日志",
+    "按电池、无人机、飞行员分档案跟踪飞行记录与电池健康",
+    "生成可打印的飞行法规报告与分享用飞行卡片图片"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 明确说明数据存储于本地 DuckDB 数据库（L40），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A high-performance application for analyzing drone flight logs (DJI and Litchi CSV formats). Available as a Tauri v2 desktop app or a Docker-deployable web app. Built with DuckDB and React. ／ - **Local-First Storage**: All data in a local DuckDB database. No cloud upload required (except DJI key fetch during first import). ／ - **Backup & Restore**: Export/import full database across desktop and Docker instances.",
+   "evidence_lines": [
+    21,
+    40,
+    51
+   ]
+  },
+  "fn": "arpanghosh8453/open-dronelog",
+  "sha": "1f1c5ca75e7b",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f549cd323bac": {
+  "identity": {
+   "one_liner": "将 PiecesOS 记忆导出为单个 SQLite 文件并提供 MCP 搜索的本地工具",
+   "review": "InkVault 把 PiecesOS 关停后遗留的长期记忆（captures、摘要、聊天、片段）导出为本地单个 SQLite 文件（vault.db），并提供 MCP server 供 Claude Code、Codex 等 AI 客户端搜索，附年度仪表盘和可选的本地模型每日摘要。面向已弃用 Pieces 的个人用户；仅限本地运行，依赖 uv 与 PiecesOS（read-only）配合使用。",
+   "highlights": [
+    "将 PiecesOS 中的记录全量导出为一个 SQLite 文件，支持中断续传与每夜定时导出及备份",
+    "提供 MCP server，含 search_memories、timeline、get_memory、memory_stats 等工具",
+    "生成 Memory Atlas 仪表盘与可选的本地 Ollama 模型每日摘要，全程不上传数据"
+   ],
+   "use_cases": [
+    "在 Pieces 停服前抢救本地长期记忆并归档为单文件",
+    "让 Claude/Codex 等 MCP 客户端搜索历史记忆与时间线",
+    "定时每晚增量刷新 vault.db 并保留最近 7 份备份"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "websites, people), saved as the raw records Pieces returned, so nothing is lost to interpretation. One SQLite file.",
+     "lines": [
+      25
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明所有数据以一个 SQLite 文件（vault.db）存储于本机，SQLite 是其数据存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "InkVault copies all of it into a single file on your machine, makes it searchable by your AI tools, and draws it ／  websites, people), saved as the raw records Pieces returned, so nothing is lost to interpretation. One SQLite file. ／ - **Search for your AI tools**: an MCP server with `search_memories` (keyword + meaning, merged), `timeline`",
+   "evidence_lines": [
+    9,
+    25,
+    26
+   ]
+  },
+  "fn": "sandoreclegane/inkvault",
+  "sha": "f549cd323bac",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9910,5 +9910,150 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a0c14cb19955": {
+  "identity": {
+   "one_liner": "面向 DMR 数字电台的呼号用户数据文件仓库，每 30 分钟自动生成",
+   "review": "该仓库为 Ailunce、Anytone、Tytera 及 Pi-Star 设备提供 DMR 用户 ID 与呼号对照数据文件，每 30 分钟自动重建，并针对各机型输出不同格式（含表头、条目上限、额外 TG 联系人等）。适用于需要在电台显示屏上显示完整呼号信息的业余无线电用户，README 提供 Pi-Star 下的替换安装步骤。",
+   "highlights": [
+    "每 30 分钟自动生成更新数据文件，自动收录新注册 DMR 用户",
+    "针对 Anytone、Ailunce HD1、Tytera MD-2017/MD-380/390、Pi-Star 等机型提供不同格式的数据文件",
+    "提供在 Pi-Star 中通过修改 HostFilesUpdate.sh 脚本接入数据源的步骤"
+   ],
+   "use_cases": [
+    "为 DMR 数字电台导入最新用户呼号数据以便显示屏显示呼号",
+    "替换 Pi-Star 默认 DMRIds.dat 数据源",
+    "需要对比 BETA 与 verified 版本条目统计的维护者"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "仓库内容是面向无线电设备的数据文件集合，README 未表明其服务于某数据库生态或依赖某数据库存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DMR user database BETA is an \"up to date\" database wich are automatically created every 30 minutes. This means that new dmr users who register, will be automatically added here to the databases, but the data might not be complete. If you always need to be up to date, even if the display might not show all the information for the newest users, then these files are what you need. ／  Anytone BETA Database has 315532 entries ／ curl --fail -o ${DMRIDFILE} -s https://raw.githubusercontent.com/DMR-Database/database-beta/master/DMRIds.dat",
+   "evidence_lines": [
+    7,
+    12,
+    50
+   ]
+  },
+  "fn": "DMR-Database/database-beta",
+  "sha": "a0c14cb19955",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "30c5c1833a8a": {
+  "identity": {
+   "one_liner": "ADBC 驱动网络代理服务，经 VGI-RPC 转发 Arrow 数据访问",
+   "review": "Grainlift 将 ADBC 驱动封装为网络服务：客户端加载统一的 Grainlift ADBC 驱动，经 VGI-RPC（HTTP/TCP/mTLS/Iroh QUIC 传输）连接服务端，由服务端持有真实下游驱动与数据库凭据并施加认证、配额与遥测策略。适合需集中管理原生数据库驱动与凭据的运维团队；为预发布软件，需从源码构建，且因上游 ADBC 限制取消语句执行受阻。",
+   "highlights": [
+    "提供标准 ADBC 1.1 C API 客户端驱动，经 VGI-RPC 访问服务端下游驱动",
+    "支持 HTTP(S)、TCP、mTLS、Iroh QUIC 传输与拉取式 Arrow record-batch 流",
+    "服务端集中管理凭据、目标策略、配额与 OpenTelemetry 遥测"
+   ],
+   "use_cases": [
+    "客户端无需安装原生数据库驱动即可访问授权数据库",
+    "数据库凭据不下发给应用侧的部署场景",
+    "对 ADBC 访问统一施加认证、配额与可观测性策略"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Downstream ADBC driver|The Grainlift service|Connects to SQLite, DuckDB, PostgreSQL, or another configured database| ／ driver = \"postgresql\"",
+     "lines": [
+      73,
+      200
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Downstream ADBC driver|The Grainlift service|Connects to SQLite, DuckDB, PostgreSQL, or another configured database| ／ together with an automatic dependency on the SQLite ADBC wheel, enabling ／ `uvx grainlift-adbc-gateway serve sqlite ./database.sqlite`. (The `grainlift`",
+     "lines": [
+      73,
+      117,
+      118
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "manager. CI exercises SQLite, DuckDB, PostgreSQL, MySQL, Flight SQL,",
+     "lines": [
+      586
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "DataFusion, Trino, and Microsoft SQL Server, plus HTTP, TCP, mTLS, and Iroh",
+     "lines": [
+      587
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为下游数据库驱动提供代理网络服务，是数据库生态服务组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache 2.0，预发布，未发布 Foundry/Cargo 包",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Grainlift makes an ADBC driver ／  An ADBC application loads the Grainlift client driver, connects over VGI-RPC, and reaches a stateful Grainlift service that owns server-installed ADBC drivers and downstream database connections. ／ |Downstream ADBC driver|The Grainlift service|Connects to SQLite, DuckDB, PostgreSQL, or another configured database|",
+   "evidence_lines": [
+    16,
+    66,
+    73
+   ]
+  },
+  "fn": "Query-farm/grainlift",
+  "sha": "30c5c1833a8a",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

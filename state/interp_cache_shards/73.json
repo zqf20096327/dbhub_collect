@@ -8910,5 +8910,122 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1f3c42aacb34": {
+  "identity": {
+   "one_liner": "tql：终端数据库客户端，内置多库驱动并经 MCP 提供只读代理访问",
+   "review": "tql 是一个运行于终端的数据库客户端，支持浏览、查询、导出、导入和同步数据，内置 MySQL、MariaDB、PostgreSQL、SQLite 驱动，SQL Server 需 ODBC 驱动，并通过 MCP 服务器让 AI 代理以只读方式访问同一查询引擎。面向在终端工作的开发者与运维人员；支持 TLS、SSH 隧道及只读连接标记等机制。",
+   "highlights": [
+    "支持 MySQL、MariaDB、PostgreSQL、SQLite 内置连接，SQL Server 经 ODBC 驱动连接",
+    "提供 MCP 服务器（tql mcp:start），AI 代理与用户共用同一 QueryRunner 且代理侧只读",
+    "提供 tql dump/load/sync/export 命令用于备份、恢复与库间同步，支持 SSH 隧道与 TLS"
+   ],
+   "use_cases": [
+    "在终端中浏览、筛选、排序和查询数据库表数据",
+    "为 AI 编码代理提供数据库的只读 MCP 访问入口",
+    "数据库导出、导入与两库间一次性同步"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "for MySQL, MariaDB, PostgreSQL and SQLite — and the hosted databases that speak ／ |**PostgreSQL**|built in|",
+     "lines": [
+      6,
+      40
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "for MySQL, MariaDB, PostgreSQL and SQLite — and the hosted databases that speak ／ |**MySQL** and **MariaDB**|built in|",
+     "lines": [
+      6,
+      39
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "for MySQL, MariaDB, PostgreSQL and SQLite — and the hosted databases that speak ／ |**SQLite**|built in — any `.sqlite`, `.sqlite3` or `.db` file|",
+     "lines": [
+      6,
+      41
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|**SQL Server**|built into the macOS binary, with Microsoft's ODBC driver installed once — below; on Linux, from `tql.phar` on a PHP with `pdo_sqlsrv`| ／ SQL Server goes through Microsoft's ODBC driver, which tql cannot bundle.",
+     "lines": [
+      42,
+      60
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "for MySQL, MariaDB, PostgreSQL and SQLite — and the hosted databases that speak ／ |**MySQL** and **MariaDB**|built in|",
+     "lines": [
+      6,
+      39
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "Azure Database, DigitalOcean, PlanetScale, TiDB, SingleStore",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "tql 是为连接和操作多种数据库服务的终端客户端工具，而非使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "tql (pronounced *TEE-kwuhl*, like sequel) is a database client for the terminal, ／ |**MySQL** and **MariaDB**|built in| ／ |`tql mcp:start tql`|run the MCP server on stdio, for an agent|",
+   "evidence_lines": [
+    5,
+    39,
+    228
+   ]
+  },
+  "fn": "VheissuLabs/tql",
+  "sha": "1f3c42aacb34",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

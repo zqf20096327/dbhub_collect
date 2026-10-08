@@ -8593,5 +8593,212 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f33eb6256a08": {
+  "identity": {
+   "one_liner": "为 ZCode 桌面客户端提供的实时 token 用量悬浮状态栏，只读本地 SQLite",
+   "review": "该项目为 ZCode 桌面客户端（Electron 应用）提供悬浮状态栏，实时展示当前会话的 token 用量、生成速度、上下文占用、工具调用等信息。数据来源是只读读取本地 SQLite 数据库，完全离线运行；另提供 CLI 查询和 MCP in-chat 查询接口，通过 Python 安装脚本注入 app.asar，适用于 Windows/macOS 上的 ZCode 用户以及自建 Web 部署用户。",
+   "highlights": [
+    "实时展示生成速度、上下文容量、会话/当日 token 总量、子代理用量等 8 类指标，可逐项开关",
+    "严格只读读取本地 SQLite 数据库，事件驱动刷新，无轮询、不联网",
+    "内置 MCP 查询接口与 Python CLI，支持多会话、多模型、按工作目录聚合查询"
+   ],
+   "use_cases": [
+    "ZCode 桌面用户实时监控当前会话的 token 消耗与上下文窗口占用",
+    "通过 MCP 或 CLI 按天/会话/模型/工作区统计历史 token 用量",
+    "通过 SSH 查询远程服务器上会话的用量数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A floating status bar for the ZCode desktop client (Electron app) that shows real-time token usage of the current conversation window. It only reads the local SQLite database — never touches the network. ／ - **SSH remote sessions (v9)**: when the desktop client is connected to a remote zcode-server, session data lives in the remote machine's `~/.zcode/cli/db/db.sqlite`. Add a `remote` section to `config.json` and the bar **automatically switches to querying the  ／ Reads `~/.zcode/cli/db/db.sqlite` (`model_usage` / `turn_usage` / `tool_usage` — one row per model request), strictly read-only, never online. Numbers refresh event-driven when a request completes; when idle there are zero extra processes and zero polling.",
+     "lines": [
+      5,
+      72,
+      122
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是 ZCode 客户端的状态栏应用，只是读取 ZCode 存于 SQLite 数据库中的数据，不提供数据库服务能力",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A floating status bar for the ZCode desktop client (Electron app) that shows real-time token usage of the current conversation window. It only reads the local SQLite database — never touches the network. ／ Reads `~/.zcode/cli/db/db.sqlite` (`model_usage` / `turn_usage` / `tool_usage` — one row per model request), strictly read-only, never online. Numbers refresh event-driven when a request completes; when idle there are zero extra processes and zero polling. ／ - License: MIT.",
+   "evidence_lines": [
+    5,
+    122,
+    141
+   ]
+  },
+  "fn": "xhwxt/zcode-token-usage-statusbar",
+  "sha": "f33eb6256a08",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d33a4d5ff50d": {
+  "identity": {
+   "one_liner": "Dokku 的 ClickHouse 服务插件，用于在 PaaS 上管理 ClickHouse 实例",
+   "review": "该仓库是 Dokku 官方的 ClickHouse 插件，为使用 Dokku 部署应用的用户提供 ClickHouse 服务的创建、销毁、链接应用、备份到 S3、导入导出等命令管理能力，默认安装 clickhouse/clickhouse-server 镜像（当前锁定 26.9.8.3），要求 dokku 0.35.x+ 和 docker 1.8.x，通过 dokku plugin:install 安装。",
+   "highlights": [
+    "提供 clickhouse:create/destroy/info/link 等完整服务生命周期管理命令",
+    "支持将服务备份到 S3 兼容存储，可配置 IAM 认证、GPG 加密与 cron 定时备份",
+    "支持自定义镜像与版本、内存限制、卷挂载、网络与重启策略等服务运行参数"
+   ],
+   "use_cases": [
+    "在 Dokku PaaS 上为应用一键创建并链接 ClickHouse 服务",
+    "为 ClickHouse 服务配置定时备份到 S3 存储桶",
+    "以插件方式统一管理 Dokku 上数据存储容器的运行参数与连接信息"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "# dokku clickhouse Build Status IRC Network ／ Official clickhouse plugin for dokku. Currently defaults to installing clickhouse/clickhouse-server 26.9.8.3. ／ clickhouse:app-links [<app>] # list all Clickhouse service links for a given app",
+     "lines": [
+      1,
+      3,
+      22
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该插件为 Dokku 平台管理 ClickHouse 服务实例，属于为数据库生态服务的工具/组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "ClickHouse"
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Official clickhouse plugin for dokku. Currently defaults to installing clickhouse/clickhouse-server 26.9.8.3. ／ sudo dokku plugin:install https://github.com/dokku/dokku-clickhouse.git --name clickhouse ／ clickhouse:app-links [<app>]                       # list all Clickhouse service links for a given app",
+   "evidence_lines": [
+    3,
+    16,
+    22
+   ]
+  },
+  "fn": "dokku/dokku-clickhouse",
+  "sha": "d33a4d5ff50d",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8f4f5b58ee22": {
+  "identity": {
+   "one_liner": "AI 代理本地持久记忆服务，基于 SQLite 知识图谱，经 MCP/HTTP 提供存取",
+   "review": "SynaptoMind 是一个为 AI 代理提供本地持久记忆的自托管服务，将笔记、边、项目、标签存入单个 SQLite 数据库（vec0 向量检索 + FTS5 全文检索），通过 MCP（stdio/HTTP）与 HTTP API 暴露记忆存储、检索、聚类等工具，支持 Claude Desktop、Cursor、OpenCode、Codex 等 MCP 客户端；运行于 Bun，本地生成嵌入向量，无需外部 API key，MIT 许可。",
+   "highlights": [
+    "提供 MCP server（stdio 与 HTTP 传输）和 HTTP API 两类访问方式，工具涵盖 recall/store/supersede/status/manage/crystallize",
+    "混合检索：vec0 向量搜索与 FTS5 BM25 全文搜索经 Reciprocal Rank Fusion 融合",
+    "本地嵌入基于 @huggingface/transformers，全部数据存储于单个 SQLite 数据库"
+   ],
+   "use_cases": [
+    "编码代理跨会话保留架构决策、bug 根因与 TODO",
+    "作为任意 MCP 兼容代理的持久记忆后端",
+    "本地知识图谱/想法图，用语义搜索发现关联"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Graph storage** — thoughts, edges, projects, tags in SQLite ／ embeddings over IPC. Storage is one SQLite database using the `vec0` extension ／ B --> C[(SQLite)]",
+     "lines": [
+      110,
+      121,
+      127
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其数据存储于单个 SQLite 数据库，SQLite 为其内嵌存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Graph storage** — thoughts, edges, projects, tags in SQLite ／ **Local persistent memory for AI agents.** Your agent remembers decisions, goals, and context across sessions — via MCP or HTTP API. Data stays on your machine. ／ - **MCP server** — stdio + HTTP transport",
+   "evidence_lines": [
+    110,
+    12,
+    113
+   ]
+  },
+  "fn": "zumik3-del/synaptomind",
+  "sha": "8f4f5b58ee22",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

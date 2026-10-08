@@ -8507,5 +8507,279 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5a8b50831b22": {
+  "identity": {
+   "one_liner": "基于LLM的长期记忆AI代理，用Postgres持久化对话与记忆",
+   "review": "MIRA是一个持续运行的AI个人代理，通过对话分段折叠生成第一人称记忆、按使用衰减的记忆管理及自我修改的上下文窗口实现长期连续性，内含邮件、提醒、天气等工具集。它面向想运行个人AI助手的用户，依赖Postgres存储信号与历史记录，README未见安装命令。",
+   "highlights": [
+    "提供分段折叠与滚动压缩的上下文管理机制",
+    "提供基于使用衰减的记忆与文档(domaindocs)存储",
+    "提供自发现注册的文件系统工具扩展机制"
+   ],
+   "use_cases": [
+    "构建具有长期记忆的AI个人助理",
+    "对话历史与用户行为模型的持久化管理",
+    "可扩展工具的AI代理运行环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The loop works like this: After each conversation segment collapses, an assessment extractor compares the conversation against MIRA's behavioral contract. It records alignment, misalignment, and contextual passes with the specific evidence and prompt section i ／ Segment collapse and live context compaction are deliberately separate. Collapse is the durable end of a conversational segment. Live compaction is a pressure-release valve for a conversation that is still active: older messages are replaced in the provider re",
+     "lines": [
+      40,
+      83
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README描述其信号与对话历史存储在Postgres，是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The loop works like this: After each conversation segment collapses, an assessment extractor compares the conversation against MIRA's behavioral contract. It records alignment, misalignment, and contextual passes with the specific evidence and prompt section involved. These signals accumulate in Postgres. ／ Segment collapse and live context compaction are deliberately separate. Collapse is the durable end of a conversational segment. Live compaction is a pressure-release valve for a conversation that is still active: older messages are replaced in the provider request by one rolling continuation brief, while the recent turns and the original PostgreSQL history remain intact.",
+   "evidence_lines": [
+    40,
+    83
+   ]
+  },
+  "fn": "taylorsatula/mira",
+  "sha": "5a8b50831b22",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ff3ab7d72823": {
+  "identity": {
+   "one_liner": "本地优先的文献RAG工具包，FastAPI服务+SQLite持久化",
+   "review": "这是一个本地运行的Python工具包与FastAPI服务，用于对自有论文语料提问并检查证据来源，支持无模型凭据的离线演示（fake adapter）。提供只读语料浏览、人工筛选、证据导出、BibTeX导出等功能；数据持久化到SQLite，默认不联网生成，适合需要可审查文献工作流的研究人员。",
+   "highlights": [
+    "提供 FastAPI 服务与只读语料浏览页面（/explore），支持分页与过滤",
+    "支持人工论文筛选、证据标注、运行历史保存与运行间对比",
+    "支持导出 JSON/Markdown/CSV/HTML/BibTeX，含冻结来源与溯源信息"
+   ],
+   "use_cases": [
+    "对本地论文语料进行比较或假设性问题并核查引用片段",
+    "文献筛选（人工 include/exclude 决策）并导出筛选结果",
+    "离线阅读保存的答案及其引用来源、生成 BibTeX 书目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "literature workflows, with SQLite persistence and optional model-provider adapters.",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 持久化存储文档与运行数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**local-first Python toolkit and FastAPI service** for building inspectable ／ literature workflows, with SQLite persistence and optional model-provider adapters. ／ The demo explicitly uses the fake model, ingests a synthetic fixture into a",
+   "evidence_lines": [
+    9,
+    10,
+    26
+   ]
+  },
+  "fn": "Francis1998/scholar-rag-agent",
+  "sha": "ff3ab7d72823",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "efb583b9a7cd": {
+  "identity": {
+   "one_liner": "Canva 克隆版在线设计应用，用 Fabric.js 提供模板与 AI 功能",
+   "review": "一个基于 Next.js、React 与 Fabric.js 的 Canva 克隆 Web 应用，提供可定制模板、画布编辑器、Unsplash 图片和 AI 辅助功能。数据存储在 Neon 托管的 PostgreSQL 中，通过 drizzle-orm 访问，并用 drizzle-kit 做迁移。面向想本地运行或二次开发此可视化设计应用的开发者，需配置 Neon、OAuth、Stripe 等多项环境变量才能运行。",
+   "highlights": [
+    "提供基于 Fabric.js 的可视化画布编辑器",
+    "使用 Neon PostgreSQL 存储数据，经 drizzle-orm 访问",
+    "集成 GitHub/Google OAuth 登录、Stripe 订阅与 Unsplash 图片"
+   ],
+   "use_cases": [
+    "学习 Next.js 全栈应用的项目结构",
+    "作为在线图片/画布编辑应用的二次开发起点",
+    "演示 drizzle-orm 与 Neon PostgreSQL 的集成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "### 13. PostgreSQL Neon Database URL ／ To get the Neon PostgreSQL database URL: ／ React JS Next JS Typescript PostgreSQL Tailwind CSS Vercel",
+     "lines": [
+      106,
+      108,
+      152
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 Neon PostgreSQL 存储数据的可视化设计应用，而非为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "### 13. PostgreSQL Neon Database URL ／ 16. Now app is fully configured 👍 and you can start using this app using either one of `npm run dev` or `yarn dev` or `pnpm dev`. ／ React JS Next JS Typescript PostgreSQL Tailwind CSS Vercel",
+   "evidence_lines": [
+    106,
+    128,
+    152
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "sanidhyy/canva-clone",
+  "sha": "efb583b9a7cd",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5944c29c1ec2": {
+  "identity": {
+   "one_liner": "面向 LLM 的长期记忆后端，含注入网关与 MCP 记忆工具",
+   "review": "StillerBrain 是一个供 LLM 客户端使用的长期记忆后端：AI 通过 MCP 工具写入、查询和修改记忆，ST 网关在回复前按对话语境注入相关记忆。数据用 SQLite 本地存储，部署者自建运行（Windows/Linux 源码安装）。适用于支持 OpenAI 兼容接口与 MCP 的模型和客户端；当前为源码开发预览版。",
+   "highlights": [
+    "提供 OpenAI 兼容 Chat Completions 网关，在回复开始前按话题相关性注入记忆",
+    "提供带认证的 MCP 工具集（日常档 8 个入口 / 完整目录 54 项），支持查、存、改与自写提醒",
+    "使用 SQLite 本地存储，保留原文、摘要与版本历史，支持模块化浮现开关"
+   ],
+   "use_cases": [
+    "为 LLM 角色扮演或个人助手客户端接入长期记忆，实现跨会话话题延续",
+    "仅连接 MCP 工具，让 AI 主动查询、保存与修订记忆记录",
+    "部署者在本地 Windows/Linux 设备自建记忆服务供手机等远程客户端连接"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`0.2.0-preview.4` · Python / SQLite · 网关断线收尾与安全恢复 · 日常 8 入口 / 完整模型目录 54 项 · 源码开发预览",
+     "lines": [
+      279
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是面向 LLM 的记忆后端应用，SQLite 仅作为其本地存储介质，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "源码开发预览（非商业源码预览）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ST 是面向 LLM 的长期记忆后端。它接住 AI 自己写下的经历、理解与打算，再通过网关，在回复开始前带回与当前话题相关的记忆；MCP 工具则让 AI 随时主动查阅、保存和修改。接入以网关接口与 MCP 工具调用能力为依据，面向具备相应能力的模型与客户端。 ／ `0.2.0-preview.4` · Python / SQLite · 网关断线收尾与安全恢复 · 日常 8 入口 / 完整模型目录 54 项 · 源码开发预览 ／ 源码包含记忆运行时、MCP 服务、控制面、兼容网关、运维脚本及合成测试。Orbis 是独立前端；手机操作、共读服务和长期任务执行由对应宿主与授权共同支持。",
+   "evidence_lines": [
+    7,
+    279,
+    285
+   ]
+  },
+  "fn": "AZHi-xinxin/StillerBrain",
+  "sha": "5944c29c1ec2",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9760,5 +9760,147 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3d495ddba8cc": {
+  "identity": {
+   "one_liner": "为 Claude Code 与 Codex CLI 提供本地持久化记忆的 Rust CLI，基于 SQLite/SQLCipher",
+   "review": "remem 是一个 Rust 编写的本地优先记忆工具，通过 hooks、MCP、CLI 和 localhost REST API 自动捕获、蒸馏、检索并注入工程记忆，供使用 Claude Code、Codex CLI 或 Cursor 的开发者跨会话延续上下文。数据默认存于 SQLCipher 加密的 SQLite 数据库，含来源标注、过期标记与注入审计，README 未提及 Windows 之外的安装渠道之外的备份机制。",
+   "highlights": [
+    "通过 hooks 自动捕获会话并由后台 LLM 蒸馏记忆，支持 SessionStart 注入",
+    "默认使用 SQLite + SQLCipher 加密存储，提供来源标注、过期标记、抑制与注入审计",
+    "提供 MCP、CLI 和经认证的 localhost REST 三种访问接口"
+   ],
+   "use_cases": [
+    "长时间运行的编码项目中新会话无需重复说明项目决策与历史",
+    "检索此前的 bug 修复根因、架构笔记与提交依据",
+    "对注入到代理上下文的记忆进行审查与生命周期治理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite with SQLCipher encryption by default for fresh installs.",
+     "lines": [
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 SQLite 作为自身的数据存储后端，是为编码代理服务的记忆应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- SQLite with SQLCipher encryption by default for fresh installs. ／ - MCP, CLI, and authenticated localhost REST access from one Rust runtime. ／ hooks, MCP, CLI, and a localhost REST API.",
+   "evidence_lines": [
+    33,
+    34,
+    12
+   ]
+  },
+  "fn": "majiayu000/remem",
+  "sha": "3d495ddba8cc",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c2091a803f35": {
+  "identity": {
+   "one_liner": "面向 Kiro IDE 的多上游 AI 模型中转网关，含协议转换与积分计费",
+   "review": "kiroRelayRouter 把多个上游 AI 中转服务聚合成统一入口，向 Kiro IDE 提供协议转换（OpenAI/Anthropic 协议转 AWS EventStream）、健康感知路由、会话亲和与积分预扣结算。后端为 Java/Spring Boot，数据存于 PostgreSQL，配 React 管理后台和 VS Code 扩展，需自建 PostgreSQL/Redis/RabbitMQ。适合想用自己的模型接入 Kiro Agent 的个人使用者与中小团队运营者。",
+   "highlights": [
+    "支持 OpenAI Chat Completions、OpenAI Responses、Anthropic Messages 三种协议与 Kiro AWS EventStream 之间的双向转换",
+    "提供基于能力集（IMAGE/PDF/TOOL_USE 等）的路由过滤、主动健康检查与请求级故障转移",
+    "实现积分预扣、三级价格回退与基于发件箱（outbox）模式的最终一致结算，PostgreSQL 为账务权威数据源"
+   ],
+   "use_cases": [
+    "在 Kiro IDE 的 Agent 工作流中使用自己接入的模型"
+   ],
+   "applicability_note": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`kiroProxy`|Java 17 · Spring Boot 3.4.9 · PostgreSQL · Redis · RabbitMQ|核心中转服务：鉴权、选路、协议转换、流式转发、积分计费|",
+     "lines": [
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 PostgreSQL 存储钱包、用量与计费流水等自身业务数据（L162、L264、L268），PostgreSQL 是其存储依赖而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`kiroProxy`|Java 17 · Spring Boot 3.4.9 · PostgreSQL · Redis · RabbitMQ|核心中转服务：鉴权、选路、协议转换、流式转发、积分计费| ／ 请求发出前先在 PostgreSQL 里锁钱包、冻结积分、写一条 `PENDING` 用量记录，冻结不成功就绝不发上游付费请求。流结束后按快照单价算出真实成本，同一个事务里写入 `relay_billing_outbox`，由发件箱轮询投递到 RabbitMQ，worker 消费后完成结算。整条链路的幂等基石是积分流水表上 `request:{id}:freeze` / `:settle` / `:release` 三种确定性事件键。 ／ |PostgreSQL|硬依赖。计费 fail-closed：冻结没提交成功就绝不发付费请求。|",
+   "evidence_lines": [
+    29,
+    162,
+    264
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Bdysj/kiroRelayRouter",
+  "sha": "c2091a803f35",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

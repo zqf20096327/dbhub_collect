@@ -9017,5 +9017,141 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "30919fe77baf": {
+  "identity": {
+   "one_liner": "本地运行的 AI 代理权限网关，基于 MCP 提供作用域化连接器访问与人工审批",
+   "review": "AIPermission 是一个面向单个开发者的本地网关，用于让 AI 助手通过 MCP 令牌执行作用域受限的连接器操作。凭据保存在 SQLCipher 加密的本地 SQLite 数据库中，网关不向 AI 返回原始凭据；每次操作按 blocked/approval_required/always_run 规则裁决，并可要求人工审批，历史与审计记录加密存储。README 明确其为 pre-1.0 软件，仅限本机运行，不是远程多用户或团队 RBAC 服务。",
+   "highlights": [
+    "通过 MCP 令牌向 AI 客户端提供作用域化的连接器操作权限，凭据保留在网关内不外泄",
+    "每个权限解析为 blocked、approval_required 或 always_run 三类执行规则，支持人工审批与临时权限过期",
+    "运行数据存于 SQLCipher 加密的本地 SQLite 数据库，历史与审计记录支持保留期控制与加密备份导入导出"
+   ],
+   "use_cases": [
+    "开发者让 AI 助手在受控权限下操作自己的系统（连接器目标），需人工审批高风险动作",
+    "需要为 AI 代理的连接器操作保留加密审计历史与审批快照的场景",
+    "在本地单机环境中管理 AI 客户端可访问的凭据配置与目标"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Runtime data is stored in a SQLCipher-encrypted local SQLite database.",
+     "lines": [
+      233
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明运行时数据存储在 SQLCipher 加密的本地 SQLite 数据库中，SQLite 是其自身存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AIPermission is a local, single-user developer gateway. You register connector ／ - Runtime data is stored in a SQLCipher-encrypted local SQLite database. ／ AIPermission is pre-1.0 developer software. Read the",
+   "evidence_lines": [
+    23,
+    233,
+    58
+   ]
+  },
+  "fn": "aipermission/aipermission",
+  "sha": "30919fe77baf",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1983096f2fb7": {
+  "identity": {
+   "one_liner": "基于Roslyn将.NET解决方案索引到SQLite的语义代码地图，供AI代理检索",
+   "review": "Lurp将.NET解决方案经Roslyn编译加载后，把符号、类型化关系、源码区间与来源证据存入SQLite，为AI代理提供上下文胶囊、语义diff、影响分析等16个MCP读工具，还支持全文搜索与死代码候选识别。面向使用C#代码库的AI代理开发者和维护者，仅支持Windows并要求.NET 10运行时/SDK。",
+   "highlights": [
+    "提供context、impact、diff、search、grep等CLI模式及16个MCP读工具",
+    "将符号、类型化关系与来源证据等级（compiler_proved→runtime_unknown）持久化到SQLite索引",
+    "支持快照机制、增量索引与token预算受限的上下文胶囊输出"
+   ],
+   "use_cases": [
+    "为AI代理提供C#代码库的有界代码上下文，避免重复解析整个解决方案",
+    "分析符号影响范围、调用方与两快照间的语义差异",
+    "查找死代码候选和未使用的using指令"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Lurp indexes a .NET solution into SQLite with Roslyn, so an agent gets a small,",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite是其内部索引发存，README明确将.NET解决方案索引进SQLite数据库以服务AI代理",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Lurp indexes a .NET solution into SQLite with Roslyn, so an agent gets a small, ／ Also MCP: `--mode=serve` exposes 16 read tools (`lurp_context`, `lurp_get_source`,",
+   "evidence_lines": [
+    10,
+    199
+   ]
+  },
+  "fn": "t-macabee/lurp",
+  "sha": "1983096f2fb7",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

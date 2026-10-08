@@ -8923,5 +8923,235 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d68592e7aba4": {
+  "identity": {
+   "one_liner": "基于 SQL 的 Rails 虚拟 Actor 库，用现有数据库存 Actor 状态",
+   "review": "Solid Objects 是面向 Ruby on Rails 的虚拟 Actor 库，提供持久状态、按序调用、自动激活、提醒与效果恢复等机制，状态存放在应用已有的 SQL 数据库中，不依赖 Redis 或独立 Actor 服务。适合需要在请求间保持有序、可恢复状态的 Rails 开发者。当前为 pre-1.0 早期版本，官方声明未经生产就绪验证，可能有破坏性变更。",
+   "highlights": [
+    "Actor 状态持久化于应用现有 SQL 数据库（支持 SQLite、PostgreSQL、MySQL），无需 Redis 或独立服务",
+    "提供按序调用、至少一次投递、fencing、提醒（reminders）与效果恢复等机制",
+    "通过 bundle add 与 Rails generator 安装，附带 doctor 检查与授权回调配置"
+   ],
+   "use_cases": [
+    "购物车、票务预留与库存占用等需持久过期与按序处理的场景",
+    "多人房间、聊天、协作文档等有序变更会话",
+    "需在部署重启后继续执行的账户/审批类工作流与定时提醒"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, or MySQL. Redis and a separate actor service are not required. ／ against SQLite, PostgreSQL, and MySQL, but the project makes no production-ready",
+     "lines": [
+      105,
+      159
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL, or MySQL. Redis and a separate actor service are not required. ／ against SQLite, PostgreSQL, and MySQL, but the project makes no production-ready",
+     "lines": [
+      105,
+      159
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "staged consequences together inside the Rails application. It uses SQLite, ／ against SQLite, PostgreSQL, and MySQL, but the project makes no production-ready",
+     "lines": [
+      104,
+      159
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 Rails 应用服务的库组件，声明支持在 SQLite/PostgreSQL/MySQL 上存取 Actor 状态，而非仅使用数据库的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Solid Objects is a SQL-backed virtual actor library for Ruby on Rails, with ／ staged consequences together inside the Rails application. It uses SQLite, ／ Solid Objects Ruby is a pre-1.0 early release. Its correctness core is tested",
+   "evidence_lines": [
+    8,
+    104,
+    158
+   ]
+  },
+  "fn": "cardmagic/solid-objects-ruby",
+  "sha": "d68592e7aba4",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0e4347d9b059": {
+  "identity": {
+   "one_liner": "TypeScript AI agent 运行时，含流式对话、工具调用与 RAG 检索",
+   "review": "这是一个用 TypeScript/NestJS 实现的 agent 运行时，提供流式聊天、工具调用、上下文压缩与带引用的知识库检索，并附带 Vue 聊天前端和管理控制台。使用 PostgreSQL（需 pgvector 扩展）通过 Prisma 存储运行记录，面向希望阅读并掌握 agent 循环细节的开发者。",
+   "highlights": [
+    "运行步骤逐条记录，管理控制台展示时间线、token 用量与延迟",
+    "上下文工程：token 预算控制，超限时后台摘要而非丢弃历史",
+    "支持 OpenAI 兼容模型供应商，API 密钥以 AES-256-GCM 加密存储"
+   ],
+   "use_cases": [
+    "学习 agent 主循环、取消/竞态等真实失败模式的参考实现",
+    "自托管带知识库检索和引用回答的聊天应用",
+    "作为构建自有 agent 运行时的代码基础"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "docker compose up -d postgres # PostgreSQL (the image ships pgvector, which an early migration needs) ／ If you run PostgreSQL yourself, it needs the pgvector extension, because an early migration creates it. See `.env.example` for every setting. The run deadline and the Serper API key for the `web_search` tool live on the admin console's runtime settings page (「 ／ PostgreSQL",
+     "lines": [
+      94,
+      103,
+      14
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明运行依赖 docker compose 启动 PostgreSQL（pgvector）并通过 Prisma 存数据，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "docker compose up -d postgres     # PostgreSQL (the image ships pgvector, which an early migration needs) ／ If you run PostgreSQL yourself, it needs the pgvector extension, because an early migration creates it. See `.env.example` for every setting. The run deadline and the Serper API key for the `web_search` tool live on the admin console's runtime settings page (「运行配置」). ／ |`apps/api`|NestJS API: host of the agent runtime (transactions, credentials, product policy), tools, model provider config|",
+   "evidence_lines": [
+    94,
+    103,
+    80
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "mufeiyu-ayu/agent",
+  "sha": "0e4347d9b059",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "83fce6aa0e18": {
+  "identity": {
+   "one_liner": "纯 C99 单文件向量检索库，为 AI 代理提供情景记忆",
+   "review": "NanoVector 是一个约 120KB 的零依赖向量检索与持久化库，使用 C99 编写并通过 AVX2/FMA、NEON 和 FASM 汇编加速，提供精确暴力向量搜索、元数据过滤、LangChain 集成接口和内置 MCP 服务器。面向为 AI 代理构建记忆功能的开发者，数据保存为单个 .nvec 二进制文件。",
+   "highlights": [
+    "提供基于 AVX2+FMA、ARM NEON 与 FASM x64 汇编的精确 SIMD 向量搜索，支持 cosine/dot/l2 度量与元数据过滤",
+    "提供内置零依赖 MCP JSON-RPC 2.0 服务器（nanovector-mcp），用于连接 Claude Desktop、Cursor 等客户端",
+    "支持单文件 .nvec 二进制持久化、Zero-Copy NumPy Buffer Protocol 及 LangChain 集成"
+   ],
+   "use_cases": [
+    "为 AI 代理/LLM 管线提供持久化情景记忆（对话轮次、工具执行历史等向量存储）",
+    "在 CLI 工具、serverless（AWS Lambda）等需要低冷启动开销的场景做小规模向量检索",
+    "作为 MCP 服务器为 AI 助手提供 remember/recall 记忆能力"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "### The SQLite of Vector Search & Episodic Memory for AI Agents ／ |**Storage Format**|**Single file (`.nvec`)**|SQLite + DuckDB dirs|Custom binary|",
+     "lines": [
+      3,
+      72
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI 代理提供向量检索与记忆存储能力的开发库，本身不是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### The SQLite of Vector Search & Episodic Memory for AI Agents ／ **Bare-metal C99 · AVX2+FMA · ARM NEON · FASM x64 · Zero Dependencies · ~120 KB** ／ **NanoVector** solves this by delivering **exact, sub-millisecond, brute-force SIMD search** directly in CPU cache with zero external dependencies.",
+   "evidence_lines": [
+    3,
+    4,
+    63
+   ]
+  },
+  "fn": "eminsk/nanovector",
+  "sha": "83fce6aa0e18",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

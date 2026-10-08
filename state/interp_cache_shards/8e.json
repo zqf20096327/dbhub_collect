@@ -7239,5 +7239,64 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4210248e2f11": {
+  "identity": {
+   "one_liner": "Harness CI 教程：在流水线中运行 Pytest 并发布 JUnit 测试报告",
+   "review": "这是一个 Harness CI 的简短教学仓库，演示如何在一个 Run 步骤中执行 Pytest 测试并通过 reports 块将 JUnit XML 发布到 Tests 标签页，另附 Jest 与 Java Surefire 的多框架写法及可选的覆盖率上传与质量门禁步骤。面向需要在 Harness Cloud CI 中配置测试报告的用户。要求具备 Harness 账号与 GitHub 令牌。",
+   "highlights": [
+    "通过 pytest --junitxml 生成 JUnit XML 并经 reports 块发布到 Tests 标签页",
+    "提供 Jest（jest-junit）与 Java Maven Surefire 的多框架报告配置示例",
+    "支持可选代码覆盖率上传与 hcli cov 阈值质量门禁"
+   ],
+   "use_cases": [
+    "在 Harness Cloud CI 流水线中发布可浏览的结构化测试结果",
+    "为多语言测试框架（Python/JS/Java）配置 JUnit 格式报告",
+    "在 PR 构建中设置覆盖率阈值门禁"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "仓库为 Harness CI 测试报告教程，未涉及任何数据库的适配或使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "One Run step does two jobs: it **executes** the tests and **writes** a report file. The `reports:` block on that step is what turns the file into the clickable **Tests** tab shown below — nothing else in the pipeline knows or cares that tests ran. Code coverage (dashed path) is the same idea with a different file format and upload command — see Step 5. ／ |**Pytest**|`pytest --junitxml=path`|**Yes** — primary path| ／ - **Run unit tests** installs `pytest` from `requirements.txt`, executes `tests/`, writes `/harness/test-results/junit.xml`, and declares that path under `reports:`.",
+   "evidence_lines": [
+    14,
+    24,
+    120
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "harness-community/ci-tidbits-test-report",
+  "sha": "4210248e2f11",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

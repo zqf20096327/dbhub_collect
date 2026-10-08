@@ -9154,5 +9154,105 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bb2576a0f72f": {
+  "identity": {
+   "one_liner": "AI 代理自改进上下文框架，通过查询审计账本促进重复查询成工具",
+   "review": "Skardi 是面向 AI 代理的开源上下文框架：代理以 SQL 联邦查询已注册数据源并声明意图，所有查询连同 purpose/session 记入 SQLite 或 Postgres 审计账本；反复出现的意图可被提升为命名 pipeline 和例程，经 shell/REST/MCP 多种绑定对外提供。适合为 Claude Code、Cursor 等代理主机维护数据工具的开发者。目前处于 Beta，查询审计库尚未进入 tagged release，DDL 始终被拒绝。",
+   "highlights": [
+    "提供带 ai_context 的联邦 SQL 查询入口，将 purpose/session_id/task 写入审计账本",
+    "支持将重复查询提升为 pipeline，经 shell、REST 与 MCP（stdio 与 streamable HTTP）绑定使用",
+    "账本支持 SQLite 文件或 Postgres 数据库存储，提供 auto-context、retrieval、graph-source、graph-rag 四个技能"
+   ],
+   "use_cases": [
+    "为 AI 代理提供跨数据源的统一联邦查询与意图记录",
+    "将代理反复执行的查询固化为可复查、可回滚的 pipeline YAML",
+    "基于已运行的数据存储构建可搜索的上下文服务（向量+FTS 混合检索）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres database, via `SKARDI_QUERY_AUDIT_PG_DSN` — same fail-closed ／ pointed at Postgres + pgvector, MongoDB, or Lance. ／ |PostgreSQL|Full|Yes|pgvector KNN, FTS (`pg_fts`, plus `tsvector` predicates pushed down from raw SQL)|docs|",
+     "lines": [
+      101,
+      161,
+      280
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|Full|Yes|Table or catalog registration|docs|",
+     "lines": [
+      281
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "before anyone asks. And because the ledger is one SQLite file (or one ／ |SQLite|Full|Yes|sqlite-vec KNN, FTS|docs|",
+     "lines": [
+      100,
+      282
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|Read|Yes|Columnar OLAP, filter/limit pushdown|docs|",
+     "lines": [
+      287
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse"
+   ],
+   "eco": "tool",
+   "eco_why": "它为代理提供跨数据库的联邦查询与上下文服务，是服务于数据访问的工具组件而非使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Skardi is an open-source self-improving context framework.** ／  The loop — ① Observe: the agent asks anything, in SQL, and declares why (POST /query + ai_context → audit ledger). ② Learn: read the ledger, group by session and purpose, find the intentions that keep coming back. ③ Act: recurring queries become named pipelines; recurring intentions become routines that run before they ／ Postgres database, via `SKARDI_QUERY_AUDIT_PG_DSN` — same fail-closed",
+   "evidence_lines": [
+    3,
+    33,
+    101
+   ]
+  },
+  "fn": "SkardiLabs/skardi",
+  "sha": "bb2576a0f72f",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

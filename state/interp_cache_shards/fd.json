@@ -9763,5 +9763,154 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f12d7551b18a": {
+  "identity": {
+   "one_liner": "自托管实时后端平台，内置数据库与 TypeScript 函数实时查询",
+   "review": "Concile 是一个开源自托管后端平台，将嵌入式数据库、实时查询、鉴权、文件存储、定时任务和仪表盘打包为单个二进制/容器运行。开发者用 TypeScript 编写函数即可获得数据变更推送。默认使用内嵌 SQLite，可通过参数切换到 Postgres。当前处于 pre-1.0 阶段，分布式层与搜索功能尚未完成。",
+   "highlights": [
+    "提供基于数据变更的实时查询推送，仅重执行受影响查询",
+    "默认使用内嵌 SQLite，可切换到 Postgres",
+    "内置文件存储、鉴权、定时任务调度与仪表盘，支持 npm 与 Docker 部署"
+   ],
+   "use_cases": [
+    "需要实时数据同步的 Web/移动应用后端",
+    "自托管部署的全栈应用开发",
+    "从 Convex 迁移的项目"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* 🗄️ **A database built right in.** We use an embedded SQLite database by default so there is zero config. When you need to grow, switch to Postgres with a single flag. You keep the same code and run zero migrations.",
+     "lines": [
+      75
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* 🗄️ **A database built right in.** We use an embedded SQLite database by default so there is zero config. When you need to grow, switch to Postgres with a single flag. You keep the same code and run zero migrations.",
+     "lines": [
+      75
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明默认使用内嵌 SQLite 并支持切换到 Postgres，数据库是其作为后端平台的组成部分。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "FSL-1.1-Apache-2.0，两年后自动转为 Apache 2.0",
+   "install": [
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* 🗄️ **A database built right in.** We use an embedded SQLite database by default so there is zero config. When you need to grow, switch to Postgres with a single flag. You keep the same code and run zero migrations. ／ docker compose up    # one container, one volume, zero configuration needed",
+   "evidence_lines": [
+    75,
+    68
+   ]
+  },
+  "fn": "concile-dev/concile",
+  "sha": "f12d7551b18a",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cdbe23d2cce6": {
+  "identity": {
+   "one_liner": "基于 Rust 与 Tauri 2 的桌面 RSS 阅读器，用 SQLite 存储文章",
+   "review": "一款桌面 RSS/Atom/JSON Feed 阅读器，文章存于本地 SQLite 并以 FTS5 提供全文检索，支持 OPML 导入导出、五类布局、本地排序规则，并通过内置 MCP 服务器让 Claude Code、Cursor 等 AI 代理读取订阅内容。面向希望本地管理订阅源的桌面用户；暂不支持在线同步服务。",
+   "highlights": [
+    "支持 RSS 0.9x/1.0/2.0、Atom、JSON Feed 自动识别及 OPML 双向导入导出",
+    "文章以 SQLite FTS5 建索引，提供输入即匹配的全文搜索",
+    "内置 MCP 服务器（应用内或 --mcp 启动），默认关闭、默认只读，供 AI 代理读取订阅库"
+   ],
+   "use_cases": [
+    "在 Windows/macOS/Linux 桌面本地订阅和阅读 RSS 源",
+    "将个人订阅库作为新闻源接入 Claude Code、Cursor 等 MCP 代理",
+    "用便携版在 USB 设备上携带阅读库运行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Full-text search across every article, backed by SQLite FTS5, matching as you type ／ **SQLite instead of an in-memory store.** Articles stay on disk, queries are paged, and search goes through FTS5, so a library of a hundred thousand articles costs the same at startup as a library of ten.",
+     "lines": [
+      106,
+      207
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该阅读器将文章数据存于本地 SQLite（L106、L207），属使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Full-text search across every article, backed by SQLite FTS5, matching as you type ／ **SQLite instead of an in-memory store.** Articles stay on disk, queries are paged, and search goes through FTS5, so a library of a hundred thousand articles costs the same at startup as a library of ten.",
+   "evidence_lines": [
+    106,
+    207
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "t21dev/turbo-reader",
+  "sha": "cdbe23d2cce6",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

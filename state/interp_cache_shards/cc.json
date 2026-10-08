@@ -9465,5 +9465,83 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4d17c76478fa": {
+  "identity": {
+   "one_liner": "Rust 实现的嵌入式任务队列，以 SQLite/Postgres/Redis 作存储，无需独立 broker",
+   "review": "FlexiQ 是一个用 Rust 编写的任务队列库，将存储、调度和 worker 管理集成在单一安装内，无需外部消息中间件，底层用 Diesel 操作 SQLite（WAL 模式），也可切换 Postgres 或 Redis 后端支持多机 worker。通过 Python/Node/Java 的原生 SDK 和 Go/Ruby 远程客户端对外提供能力，适合需要任务队列但不想部署独立 broker 的开发者。",
+   "highlights": [
+    "提供 Python、Node.js、Java 原生 SDK 及 Go、Ruby 远程客户端",
+    "支持 SQLite（默认）、Postgres、Redis 三种存储后端，API 一致",
+    "包含重试、死信队列、工作流（chain/group/chord）、定时与限流调度、Prometheus/OpenTelemetry 导出"
+   ],
+   "use_cases": [
+    "单机或无外部 broker 环境下的后台任务执行",
+    "多机部署的分布式任务 worker 集群",
+    "需要链式依赖、扇出/扇入等工作流的异步作业编排"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Backends** — SQLite (default), Postgres or Redis for multi-machine workers; same API. ／ |Postgres backend|**Yes**|Yes|No|No|No|",
+     "lines": [
+      59,
+      76
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "and Diesel over SQLite in WAL mode — exposed to each language through a thin native SDK. ／ - **Backends** — SQLite (default), Postgres or Redis for multi-machine workers; same API.",
+     "lines": [
+      14,
+      59
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它是以数据库为存储后端的任务队列开发库，既非专门的数据库生态工具，也不是直接面向终端用户的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Rust-powered task queue with native SDKs. One engine — no broker required, just SQLite, Postgres, or Redis. ／ services. The engine is a single Rust core — a Tokio async scheduler, an OS-thread worker pool, ／ - **Backends** — SQLite (default), Postgres or Redis for multi-machine workers; same API.",
+   "evidence_lines": [
+    3,
+    13,
+    59
+   ]
+  },
+  "fn": "ByteVeda/flexiq",
+  "sha": "4d17c76478fa",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

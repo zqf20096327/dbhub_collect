@@ -6654,5 +6654,146 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7e6a138d55e3": {
+  "identity": {
+   "one_liner": "《设计数据密集型应用》第二版中文翻译项目",
+   "review": "该项目是 Martin Kleppmann 等著《Designing Data-Intensive Applications》第二版的中文翻译，内容覆盖数据系统设计与实现的各章主题，面向架构师、DBA、后端工程师等读者。译文可通过 ddia.vonng.com 在线阅读，也可用 Hugo 与 OINK 主题自行构建，支持 Markdown、llms.txt 输出与 EPUB 导出；仓库同时记录了 200 余位贡献者的翻译校订记录。",
+   "highlights": [
+    "提供 DDIA 第二版十四章中文译文，通过 Hugo/OINK 主题可自行构建站点",
+    "在线版支持稳定图表编号、交叉引用、整书打印、Markdown/llms.txt 输出与 EPUB 导出",
+    "包含繁体中文版本及转换脚本，记录 212 位贡献者的校订与 Issue/PR 历史"
+   ],
+   "use_cases": [
+    "以中文阅读 DDIA 第二版全书（在线或导出 EPUB）",
+    "使用 Hugo 主题在本地构建翻译站点",
+    "参与或查阅译文校订的贡献记录"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "**译者**：冯若航 / Vonng (rh@vonng.com) Pigsty 创始人，活跃开源贡献者，PostgreSQL Hacker。开源 RDS PG 发行版 Pigsty 与公众号《老冯云数》作者，数据库老司机，云计算泥石流，曾于阿里，苹果，探探担任架构师与DBA。",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库内容为一本书的翻译文档，仅译者简介中提及 PostgreSQL，无对数据库生态的服务功能声明",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 设计数据密集型应用（第二版） - 中文翻译版 ／ **译者**：冯若航 / Vonng (rh@vonng.com) Pigsty 创始人，活跃开源贡献者，PostgreSQL Hacker。开源 RDS PG 发行版 Pigsty 与公众号《老冯云数》作者，数据库老司机，云计算泥石流，曾于阿里，苹果，探探担任架构师与DBA。 ／ **阅读**：访问 https://ddia.vonng.com 阅读本书在线版本，或使用 Hugo / OINK 1.2.0 主题自行构建。在线版支持稳定图表编号与交叉引用、顺序阅读、整书打印、Markdown / `llms.txt` 输出和 EPUB 导出。",
+   "evidence_lines": [
+    1,
+    9,
+    13
+   ]
+  },
+  "fn": "Vonng/ddia",
+  "sha": "7e6a138d55e3",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "339bbabc051d": {
+  "identity": {
+   "one_liner": "本地 MCP 智能体消息总线，单 SQLite 文件实现多代理通信",
+   "review": "agent-bus 是一个面向 AI 编码代理的本地消息总线，通过 MCP 协议让 Claude Code、Codex、Cursor 等多个代理会话互相发消息、问答、委派任务，数据持久化在一个本地 SQLite 文件中，无需守护进程、账号或互联网；提供 Slack 风格的只读监控界面和任务看板，并含可选的 Cloudflare 托管云版本。适合在同一台机器上运行多个代理会话并需要协调交接的开发者。",
+   "highlights": [
+    "提供 20 个 MCP 工具，支持消息广播、问答阻塞、任务委派与能力路由",
+    "本地持久化基于单个 SQLite 文件（~/.agent-bus/bus.db），无守护进程、无云依赖",
+    "提供只读的本地 cockpit 界面，包含线程聊天、Kanban 看板与活动时间线"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理会话（Claude Code、Codex、Cursor 等）之间的消息传递与任务交接",
+    "为代理会话注册角色（pm、reviewer 等）并按能力路由任务",
+    "人工通过本地界面或终端实时查看并介入代理对话"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The local bus stays the default: one SQLite file, no daemon, no account. For ／ That's the whole setup. One tiny SQLite file appears at `~/.agent-bus/bus.db`, no ／ **That's the whole reason agent-bus exists.** One SQLite file at",
+     "lines": [
+      22,
+      154,
+      201
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Specialist routing.** Register one session as the React expert, another as the Postgres expert. Use `ask_best(capability=…)` and the bus picks.",
+     "lines": [
+      221
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为自身数据存储，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The local bus stays the default: one SQLite file, no daemon, no account. For ／ That's the whole setup. One tiny SQLite file appears at `~/.agent-bus/bus.db`, no ／ `~/.agent-bus/bus.db` plus an MCP server every agent already speaks fluently.",
+   "evidence_lines": [
+    22,
+    154,
+    202
+   ]
+  },
+  "fn": "MustaphaSteph/agent-bus",
+  "sha": "339bbabc051d",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

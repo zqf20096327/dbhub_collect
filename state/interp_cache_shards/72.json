@@ -9083,5 +9083,75 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cd4c28962e3e": {
+  "identity": {
+   "one_liner": "AI 代理跨会话记忆层，以 SQLite 存储并通过 MCP/JS 暴露工具",
+   "review": "Cairn Memory 是一个为 AI 代理提供跨会话记忆的开源工具包，将记忆及来源收据保存在本地 SQLite 文件中，通过 MCP 或 JavaScript 提供 remember/recall/inspect/correct/forget 五个显式工具，面向使用 Claude Code、Codex 等 MCP 客户端的开发者。目前处于 developer preview，语义召回需自备 OpenAI 密钥，默认抽取仍存在已知局限。",
+   "highlights": [
+    "提供 remember_memory、recall_memory、inspect_memory、correct_memory、forget_memory 五个 MCP 记忆工具",
+    "记忆与其 Source Receipt（提交原文）一同保存在用户本地 SQLite 文件中",
+    "保存、检查、更正、遗忘无需模型密钥；语义召回需配置 OpenAI 密钥"
+   ],
+   "use_cases": [
+    "在 Claude Code 等 MCP 客户端的多次会话间保存并修正偏好与项目决策",
+    "本地自托管记忆层，无需账号即可试用开源记忆工具",
+    "基于 MCP 或 JavaScript 集成构建自己的记忆功能"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Cairn's open-source memory layer stores memories in your own SQLite file and ／ - **Local preview:** your SQLite database, ／ - Memory, receipts and organization persist in your selected SQLite database.",
+     "lines": [
+      74,
+      120,
+      195
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其记忆数据的本地存储文件，项目本身是面向 AI 代理的记忆应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Cairn's open-source memory layer stores memories in your own SQLite file and ／ exposes them through MCP or JavaScript. No Cairn account is needed for local use. ／ |`remember_memory`|Explicitly save one memory and its receipt|",
+   "evidence_lines": [
+    74,
+    75,
+    181
+   ]
+  },
+  "fn": "Cairn-ink/cairn-memory",
+  "sha": "cd4c28962e3e",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

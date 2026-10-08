@@ -7864,5 +7864,72 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "838855e4fac5": {
+  "identity": {
+   "one_liner": "索引 Claude Code 会话历史的本地 MCP 知识库工具",
+   "review": "该仓库将本机已有的 Claude Code 会话记录（JSONL 转写）建立全文索引，通过 13 个 MCP 工具供 Claude 搜索历史决策、命令与凭据记录。面向使用 Claude Code 的开发者，纯 Python 标准库实现，基于 SQLite FTS5（含 CJK bigram 分词），索引文件本地化并做凭据脱敏与权限限制。仅支持 Claude Code 转写格式，代码索引仅覆盖 Python/JS/TS。",
+   "highlights": [
+    "提供 13 个 MCP 工具：全文搜索、时间线重建、工具调用检索、凭据注册表等",
+    "纯 Python 标准库实现，基于 SQLite FTS5 全文索引，CJK 用 bigram 预分词",
+    "索引前对常见凭据格式做模式替换脱敏，数据库文件以 0600/0700 权限存储"
+   ],
+   "use_cases": [
+    "跨项目检索 Claude Code 历史会话中的决策与命令记录",
+    "按外部服务标签查找已实现的集成代码，识别重复实现",
+    "本地管理并追溯会话中出现过的变量与凭据候选值"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "redaction. The index directory is restricted to mode 0700; every generated SQLite",
+     "lines": [
+      46
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是服务于 Claude Code 工作流的 MCP 工具，SQLite 仅作为其本地索引的存储引擎依赖",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This indexes all of it and hands Claude 13 MCP tools to search it. You just ask normally. ／ redaction. The index directory is restricted to mode 0700; every generated SQLite ／ the query is expanded the same way — exact matches work, still on the FTS5 index, BM25",
+   "evidence_lines": [
+    14,
+    46,
+    142
+   ]
+  },
+  "fn": "nameforjt-afk/session-knowledge",
+  "sha": "838855e4fac5",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

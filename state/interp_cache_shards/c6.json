@@ -9268,5 +9268,144 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ba9e728ebd14": {
+  "identity": {
+   "one_liner": "自托管单进程博客系统，以 Bun + SQLite 文件为存储，内置 MCP 支持 AI 代理管理",
+   "review": "quireINK 是一个自托管博客/CMS，单进程运行、用两个 SQLite 文件存储数据，可部署在 VPS、Cloudflare 或 Docker/Kubernetes 上；提供 Markdown 编辑器、主题设置、评论、newsletter、内容 API，并通过内置 MCP 服务器让 AI 代理代为撰写和发布。面向个人博主而非需要多角色协作的团队。许可证为 PolyForm Noncommercial（source-available，非开源），商用需注意限制。",
+   "highlights": [
+    "提供内置 MCP 服务器，AI 代理可通过代理端点草拟、发布文章并读取统计数据",
+    "支持从 WordPress、Ghost、Substack、Medium 导入，可导出 Markdown ZIP",
+    "提供 Docker、Cloudflare、VPS 一键脚本、Kubernetes 等多种安装方式，支持 amd64/arm64 镜像"
+   ],
+   "use_cases": [
+    "个人在自有服务器或 Cloudflare 上搭建无广告的独立博客",
+    "通过 MCP 交给 AI 代理代为管理和撰写博客内容",
+    "从 WordPress、Ghost 等平台迁移到自托管博客"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One process. Two SQLite files. No cloud account needed, and Cloudflare if you want one. Your name on it, not ours. ／ - **Fast on a small box.** One Bun process, two SQLite files, no database server, no cloud account needed. ／ |`src/`|The whole thing: Bun, Hono, SQLite. How the pieces fit|",
+     "lines": [
+      7,
+      38,
+      149
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 SQLite 文件存数据的博客应用本身，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial 1.0.0 加附加许可，source-available 而非开源",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One process. Two SQLite files. No cloud account needed, and Cloudflare if you want one. Your name on it, not ours. ／ A blog you write in and publish from, on a server you rent. It has the usual furniture — a front page, posts, categories, search, comments, a newsletter that goes out when you publish — and none of an algorithm deciding who sees your writing, ads across the middle of it, or a company that can change the rules next year. ／ - **An AI agent can run it.** A built-in MCP server lets an assistant draft, publish, read your numbers and tidy up, through the same rules the admin follows.",
+   "evidence_lines": [
+    7,
+    23,
+    37
+   ]
+  },
+  "fn": "joiha-steven/quireink",
+  "sha": "ba9e728ebd14",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a281b10f7365": {
+  "identity": {
+   "one_liner": "Rust 编写的从 OpenTelemetry 轨迹和日志生成错误故事的自托管工具",
+   "review": "Tayga 读取 OTLP 格式的分布式追踪和日志，将失败或慢请求组装为含根因 span、关键路径和基线对比的错误故事，并对日志模板化后发出告警。面向需要定位微服务故障的运维与开发人员，数据存储于 ClickHouse，经 Redpanda 流式传输，提供 Docker Compose 与 Helm 部署方式，核心采用 AGPLv3，另有商业许可的 Enterprise 版本。",
+   "highlights": [
+    "提供基于固定规则（非 LLM）的根因 span 与关键路径分析，相同输入产生相同结果",
+    "在摄取时对日志做 Drain 模板化，支持新模板、速率激增与静默的告警并投递到 webhook 和 Slack",
+    "支持 Docker Compose 一键安装与 Kubernetes Helm chart 部署"
+   ],
+   "use_cases": [
+    "微服务环境下对失败或慢请求进行根因定位与请求路径回溯",
+    "对服务日志进行模板挖掘与异常模式告警",
+    "与 OpenTelemetry Collector 集成，自托管观测数据存储于 ClickHouse"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**Tayga turns OpenTelemetry traces and logs into error stories.** For each failing or slow request it shows the root-cause span, the request path across services, the critical path, a diff against the endpoint's normal baseline, and the logs that matter. It an ／ **Docker Compose.** Tayga, ClickHouse and Redpanda on one host; the installer checks the ports, waits for health, and prints the URLs: ／ **Kubernetes.** Bundled single-node ClickHouse and Redpanda for evaluation, or your own for production:",
+     "lines": [
+      18,
+      41,
+      49
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为观测/错误分析工具，README 声明其数据存储在 ClickHouse 并经 Redpanda 流式处理，属为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "核心 AGPLv3，另有商业许可的 Enterprise 版本",
+   "install": [
+    "docker",
+    "helm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Tayga turns OpenTelemetry traces and logs into error stories.** For each failing or slow request it shows the root-cause span, the request path across services, the critical path, a diff against the endpoint's normal baseline, and the logs that matter. It analyses traces as they stream in, so by the time you open it the failing requests are already explained, and repeats of one problem fold into one story group instead of hundreds of traces. It mines your logs into templates and alerts on new, spiking and silent ones. Tayga is written in Rust, reads standard OTLP, stores in ClickHouse, streams through Redpanda, and is self-hosted under the AGPLv3. ／ **Docker Compose.** Tayga, ClickHouse and Redpanda on one host; the installer checks the ports, waits for health, and prints the URLs:",
+   "evidence_lines": [
+    18,
+    41
+   ]
+  },
+  "fn": "softberries/tayga",
+  "sha": "a281b10f7365",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

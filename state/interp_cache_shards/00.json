@@ -7847,5 +7847,125 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d47e060df62a": {
+  "identity": {
+   "one_liner": "终端浏览器中查看 AI 编程工具令牌与花费记录的本地仪表盘",
+   "review": "OpenTab 读取本机 Claude Code、Codex、OpenCode、Copilot 等编程代理的本地历史记录，在终端 TUI 或浏览器中汇总展示令牌用量、花费、上下文填充与工具调用，并支持关键词搜索历史会话和 MCP/JSON 接口访问。面向使用 AI 编码工具并需核对用量开销的开发者；运行在本地，只读原始记录，搜索索引需显式开启且为明文存储。",
+   "highlights": [
+    "提供终端 TUI 与本地 Web 浏览器两种界面，展示会话、令牌经济、上下文增长与工具用量明细",
+    "提供 `opentab mcp` 本地 stdio MCP 服务器及版本化 JSON 命令，用于程序化访问用量数据",
+    "支持对本地会话记录建立关键词搜索索引，并提供 CSV 与单文件 HTML 报告导出"
+   ],
+   "use_cases": [
+    "按天/周/月浏览 AI 编码工具的令牌与花费趋势并下钻到具体会话和回合",
+    "在更换模型前，用相同令牌用量按另一模型价目表估算费用",
+    "通过 MCP 服务器让代理查询历史会话与用量摘要"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "opentab conversations search \"sqlite locking\" --allow-raw-content",
+     "lines": [
+      159
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 显示它读取本地 AI 工具的记录文件，未说明其数据层实现或与某数据库的适配关系",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "OpenTab brings the history your tools already keep into one interactive browser. ／ OpenTab discovers supported tools' local records and brings them together automatically. ／ stdio MCP server: `opentab usage summary --range 30d` and `opentab mcp`. See",
+   "evidence_lines": [
+    7,
+    25,
+    60
+   ]
+  },
+  "fn": "hamidi-dev/opentab",
+  "sha": "d47e060df62a",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "44567b7552b2": {
+  "identity": {
+   "one_liner": "印尼行政区划边界数据集，含多边形坐标与SQL数据",
+   "review": "该项目提供依据印尼内政部Kepmendagri No 300.2.2-2430/2025号决定的行政区划边界数据，覆盖省、县/市、区、村等级别的多边形边界及质心经纬度坐标，并附SQL数据。数据经简化处理，部分村/区数据尚不完整（README列明缺口），适合需要印尼行政区划空间数据的应用开发者与数据分析者使用。",
+   "highlights": [
+    "提供印尼34个省级单位的行政区划多边形边界数据",
+    "提供各地域质心经纬度坐标",
+    "以SQL形式分发数据，并附代码关联仓库链接"
+   ],
+   "use_cases": [
+    "需要印尼行政区划空间边界数据的应用开发",
+    "基于经纬度的地域归属计算与查询",
+    "行政区划代码与地理数据的关联分析"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 提供空间数据且主题含 mysql/sql，但正文未见明确数据库适配或使用声明，证据不足",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Data boundaries wilayah administrasi pemerintahan Indonesia sesuai Kepmendagri No 300.2.2-2430 Tahun 2025 ／ * Koordinat latitude longitude diperhitungkan dari koordinat centroid dari polygon wilayah tersebut ／ * Karena keterbatasan resources, wilayah boundaries berupa multipoliygon yang di simplified, untuk resolusi yang lebih tinggi akan dibuatkan repo tersendiri",
+   "evidence_lines": [
+    2,
+    55,
+    56
+   ]
+  },
+  "fn": "cahyadsn/wilayah_boundaries",
+  "sha": "44567b7552b2",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

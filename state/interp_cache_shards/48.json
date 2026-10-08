@@ -8047,5 +8047,230 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dca74c40cd38": {
+  "identity": {
+   "one_liner": "基于 SQLite 的单二进制日志与指标自托管服务器",
+   "review": "Pooml 是一个自托管的单二进制日志与指标服务器，将日志、指标、仪表盘和告警存储在 SQLite 文件中，用 SQL 查询。面向个人开发者和小团队部署在 VPS 上；通过 FluentBit/HTTP 采集日志，OTLP/Prometheus 采集指标，并提供 MCP 服务器供 LLM 客户端只读查询。指标仅支持 counters 与 gauges 两种类型。",
+   "highlights": [
+    "提供日志全文检索（SQLite FTS5）、SQL 查询、仪表盘与基于 SQL 规则的告警",
+    "支持 OTLP/HTTP 指标推送、Prometheus 抓取与定时 S3 备份",
+    "提供 @pooml/mcp MCP 服务器，允许 MCP 客户端通过只读 SQL API 访问数据"
+   ],
+   "use_cases": [
+    "个人项目或 VPS 上自托管日志与指标采集查询",
+    "通过 SQL 编写告警规则并推送到 Pushover/Campfire",
+    "用 Claude 等 MCP 客户端以自然语言查询日志与指标"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Pooml (stands for \"Poor Man's Logger\") is a self-hosted, single-binary log and metrics server on top of SQLite, built ／ One binary, two SQLite files, a web UI. Ship logs from FluentBit or plain HTTP, push metrics via OTLP or let pooml ／ text), full-text search (SQLite FTS5), live tail, infinite scroll, SQL querying",
+     "lines": [
+      3,
+      7,
+      17
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为日志与指标观测场景提供采集、存储、查询与告警能力，SQLite 是其内嵌存储组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pooml (stands for \"Poor Man's Logger\") is a self-hosted, single-binary log and metrics server on top of SQLite, built ／ One binary, two SQLite files, a web UI. Ship logs from FluentBit or plain HTTP, push metrics via OTLP or let pooml ／ - **Logs**: FluentBit-compatible HTTP ingestion with automatic format detection per line (JSON, Common Log Format, plain",
+   "evidence_lines": [
+    3,
+    7,
+    16
+   ]
+  },
+  "fn": "n0rdy/pooml",
+  "sha": "dca74c40cd38",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6e533f0fefc0": {
+  "identity": {
+   "one_liner": "讀取本機 LINE 聊天資料庫（wxSQLite3/aes128cbc 解密）產生摘要的 MCP server",
+   "review": "这是一个运行于 Windows 的 MCP server，通过读取 LINE 电脑版进程内存提取密钥，解密本机 LINE 聊天数据库，供 Claude Code 查询指定聊天室与时间范围的记录并生成每日摘要。面向使用 Claude Code 且需要整理本机 LINE 聊天记录的 Windows 用户。关键限制：数据库只读、需配置聊天室允许清单与输出额度上限，且摘要内容会进入模型供应商上下文。",
+   "highlights": [
+    "提供四个 MCP 工具，读取历史与近似未读消息，回传分页 envelope（items/has_more/next_cursor）",
+    "支持密钥仅驻留内存、数据库唯讀访问，以及 allowed_chat_ids 允许清单与 per-call/session 输出额度上限",
+    "附带可选的捲动补历史脚本，通过模拟鼠标键盘输入让 LINE 下载更早消息"
+   ],
+   "use_cases": [
+    "在 Windows 上用 Claude Code 总结指定 LINE 群组或联系人某时间段的对话",
+    "整理允许清单内聊天室的近期未读重点",
+    "对 LINE 聊天记录按日期区间进行分页查询与导出"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "歷史分頁按時間與唯一訊息 ID 排序，在資料庫不變時可穩定遍歷。首次呼叫的 rowid 上界可減少一般新增資料混入，但 SQLite 刪除後可能重用 rowid，修改／刪除也會影響分頁；因此 `consistency: \"live_keyset_scan\"`、`database_changes_may_affect_pagination: true`、`coverage: \"local_rows_only\"` 不代表完整快照、完全排除新訊息或同步完成。工具的時間字串以 `+08:00` 顯示，摘要應換算成使用者指定",
+     "lines": [
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目读取 LINE 本机 SQLite 数据库作为数据源生成摘要，并非为数据库生态提供工具或组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "用 Claude Code 讀取本機 LINE 電腦版已儲存的聊天記錄，整理指定聊天室與時間範圍的摘要。適用於 Windows；不是完整聊天備份，也不能證明 LINE 雲端訊息已全部同步。 ／                                 MCP 工具結果 ／ - 對本機資料庫的讀取權限，以及可用的 SQLite3MultipleCiphers 引擎。",
+   "evidence_lines": [
+    3,
+    10,
+    24
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "yung13yubabie/line-summary",
+  "sha": "6e533f0fefc0",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fa221a9b9eef": {
+  "identity": {
+   "one_liner": "面向 AI 代理的可追溯记忆库，基于双时序事实与证据链",
+   "review": "这是一个 Python 实现的 AI 代理记忆组件，记录事实来源、生效时间和使用范围，提供证据保留、可撤销删除与备份重放能力。核心零第三方依赖，默认以 SQLite 运行，可选 PostgreSQL 提供程序、MCP 服务器和 LangGraph 适配器。适用于为自己的代理应用添加带证据、带时间维度的记忆存取的开发者；项目处于 Alpha（v0.1.0）阶段，需 Python 3.13+。",
+   "highlights": [
+    "提供双时序（valid_at/known_at）事实模型，保留证据、支持更正与删除重放",
+    "核心运行时零第三方依赖，支持 SQLite 与 PostgreSQL 两种存储",
+    "提供 MCP 服务器（stdio/Streamable HTTP）与 LangGraph 生命周期适配器，输出有界的 MemoryBundle"
+   ],
+   "use_cases": [
+    "为 AI 代理记录带来源和有效时间的偏好/事实，并在事实失效后返回 unknown",
+    "对旧数据库备份重放权威删除日志，防止已擦除内容回返",
+    "通过 MCP 服务器让本地或远程代理宿主接入有范围控制与权限校验的记忆检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Start with Python + SQLite. Add PostgreSQL, MCP, and LangGraph when you need them. ／ |PostgreSQL|PostgreSQL provider and optional vector support|`python -m pip install -e packages/postgres`|",
+     "lines": [
+      6,
+      161
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Start with Python + SQLite. Add PostgreSQL, MCP, and LangGraph when you need them. ／ |`agent-memory`|Domain contracts, SQLite runtime, retrieval, plugin loading|`python -m pip install -e .`| ／ agent-memory-mcp --transport stdio --database memory.sqlite3 \\",
+     "lines": [
+      6,
+      157,
+      167
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 SQLite/PostgreSQL 作为自身记忆数据的存储后端，是使用数据库的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Start with Python + SQLite. Add PostgreSQL, MCP, and LangGraph when you need them. ／ |`agent-memory`|Domain contracts, SQLite runtime, retrieval, plugin loading|`python -m pip install -e .`| ／ |PostgreSQL|PostgreSQL provider and optional vector support|`python -m pip install -e packages/postgres`|",
+   "evidence_lines": [
+    6,
+    157,
+    161
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "agent-memory-lab/agent-memory",
+  "sha": "fa221a9b9eef",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

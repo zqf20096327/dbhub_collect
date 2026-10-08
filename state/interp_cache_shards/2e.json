@@ -9602,5 +9602,74 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a9b238a719f9": {
+  "identity": {
+   "one_liner": "企业技术支持 RAG 问答与受控工单 Agent 后端",
+   "review": "这是一个面向企业技术支持场景的 FastAPI 后端，提供基于 Chroma Dense 检索的 RAG 问答（带来源返回与低相关拒答）、预览-人工确认后再建单的受控工单 Agent，以及 AgentOps 运行记录与检索评测体系，使用 TechQA 语料作主数据集与评测基准。适合搭建需要可追溯、可拒答的知识问答与工单升级流程的团队；文档明确标注 Hybrid 等检索路线仅为冻结候选，尚未切换到在线运行时。",
+   "highlights": [
+    "提供 /rag/search 与 /rag/ask 接口，支持 tenant/category 元数据过滤、来源返回与低相关拒答",
+    "工单创建采用预览-确认流程，服务端校验审批状态与草稿一致性后才执行真实写操作",
+    "包含基于 TechQA 28,481 篇文档的检索/生成/拒答离线评测框架与 AgentOps 运行轨迹记录"
+   ],
+   "use_cases": [
+    "企业内部技术支持知识库问答与答案来源追溯",
+    "需要人工审批环节的客户工单创建与问题升级流程",
+    "RAG 检索/重排/拒答策略的离线评测与失败归因实验"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "DATABASE_URL=sqlite:///data/todos.db",
+     "lines": [
+      382
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储数据的 RAG/工单应用后端，而非为数据库生态服务的工具组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向**企业技术支持**场景，构建知识检索、回答 / 拒答与工单升级一体化的 **RAG + 受控工单 Agent 后端**。 ／ |RAG 在线运行时|Chroma Dense 检索、租户 / 类别过滤、来源返回、低相关拒答| ／ |受控工单 Agent|`search_kb` / `classify_ticket` / `create_ticket`，预览-确认 + 人工审批|",
+   "evidence_lines": [
+    5,
+    33,
+    34
+   ]
+  },
+  "fn": "Air000000/Enterprise-Support-AI-Copilot-API",
+  "sha": "a9b238a719f9",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8640,5 +8640,72 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1adb53655b41": {
+  "identity": {
+   "one_liner": "记录 agent 与人类工作、信念、发现的知识图谱数据库，基于 Postgres + FastAPI",
+   "review": "trackinizer 是一个集中式的 agent 知识库系统，将 Issue、Artifact、Belief、Paper、Experiment 等实体以类型化节点和有向边存入 Postgres（或 PGlite），通过 FastAPI 提供 HTTP API，并附带 Web UI 与 trax CLI 用于浏览图、查看 agent 会话和控制台消息，面向需要追踪 agent 研究过程与证据链的团队。",
+   "highlights": [
+    "以 inquiries、edges、change_log 三张核心表在 Postgres 上实现类型化知识图谱，边插入时拒绝环并带 CHECK 约束",
+    "提供 FastAPI HTTP API、内置 Web UI（/app/）与 trax CLI，支持 API token 认证及 --no-auth 本地单用户模式",
+    "支持 trax export 将图导出为确定性 JSONL，并存储 agent 会话记录与语义搜索向量"
+   ],
+   "use_cases": [
+    "集中记录多 agent 与人类的研究工作、产物与证据关系",
+    "以图形式浏览 Belief/Paper/Experiment 之间的证明与引用结构",
+    "通过控制台实时查看并消息 agent 会话"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "by Postgres (real or PGlite). FastAPI on top. ／ that contract over Postgres + HTTP. ／ trackinizer --engine pg --dsn ... # against real Postgres",
+     "lines": [
+      28,
+      31,
+      262
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 Postgres 存储其数据的应用系统，而非为数据库生态服务的工具或组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "by Postgres (real or PGlite). FastAPI on top. ／ that contract over Postgres + HTTP.",
+   "evidence_lines": [
+    28,
+    31
+   ]
+  },
+  "fn": "rekursiv-ai/trackinizer",
+  "sha": "1adb53655b41",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

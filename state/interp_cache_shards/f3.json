@@ -8719,5 +8719,69 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6801ce15e2d5": {
+  "identity": {
+   "one_liner": "自托管家庭植物养护记录与提醒应用，单容器运行，SQLite 存储",
+   "review": "Plants 是一个用于记录家庭植物养护任务并生成提醒的 Web 应用，支持多用户、照片时间线、天气展示与浏览器推送通知，通过 Docker 单容器部署，数据存储于 SQLite。适合想在自己服务器上管理家庭植物养护计划的家庭用户；项目处于 beta 阶段，功能和数据格式可能变化。",
+   "highlights": [
+    "提供养护任务的今天视图、延后、跳过、批量操作及每植物自定义任务间隔",
+    "支持多用户、照片时间线、Apprise 与浏览器 VAPID 推送通知",
+    "提供 JSON 全量导出/导入备份和 API token 用于脚本与自动化"
+   ],
+   "use_cases": [
+    "家庭多人共享记录浇水、施肥等植物养护任务并接收提醒",
+    "自托管部署于 NAS/Docker 环境的植物养护日志",
+    "通过 API token 接入家庭自动化或提醒脚本"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Plants is a simple household plant care log with reminders. It shows what needs checking today, lets you tap **Done**, **Snooze**, or **Skip**, and keeps a photo timeline for every plant. You decide what each plant needs; the app just keeps track. It is self-h",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用使用 SQLite 存储自身数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Plants is a simple household plant care log with reminders. It shows what needs checking today, lets you tap **Done**, **Snooze**, or **Skip**, and keeps a photo timeline for every plant. You decide what each plant needs; the app just keeps track. It is self-hosted, multi-user, and runs as one Docker container with SQLite storage. No subscriptions, no cloud account, and your data stays on your server. ／    docker run -d --name plants -p 8653:8000 -v ./data:/app/data -e TZ=America/Chicago ghcr.io/dhrandy/plants:latest",
+   "evidence_lines": [
+    9,
+    34
+   ]
+  },
+  "fn": "dhrandy/plants",
+  "sha": "6801ce15e2d5",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

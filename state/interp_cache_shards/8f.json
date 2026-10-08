@@ -8413,5 +8413,88 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0eb3fc310152": {
+  "identity": {
+   "one_liner": "本地优先的 AI 代理记忆引擎，Rust 单二进制，支持 MCP",
+   "review": "Uteke 是一个为 AI 代理（Claude、Cursor 等 MCP 兼容客户端）提供持久记忆的本地工具，通过 CLI 或 MCP 服务器存取和检索记忆，检索路径采用向量 + FTS5 全文检索的 RRF 融合，并支持多代理共享的 Rooms、时间点回溯和来源引用；数据与嵌入模型均在本地运行，首次运行需下载约 200MB 嵌入模型，适合构建离线、隐私敏感场景下的 AI 代理开发者使用。",
+   "highlights": [
+    "提供向量 + FTS5 全文检索并用加权 RRF 融合的混合检索，默认 fusion 策略",
+    "内置 MCP 服务器（JSON-RPC + HTTP），可通过一行配置接入 Claude Code、Cursor 等代理",
+    "支持多代理共享记忆的 Rooms、时间点回溯查询与记忆来源引用"
+   ],
+   "use_cases": [
+    "为 AI 代理提供跨会话的持久记忆且数据不出本机",
+    "团队通过 Rooms 共享会议纪要、项目决策等可检索知识",
+    "医疗、金融、法律等隐私敏感场景下的本地化记忆存储"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Many memory layers (Python-based or TypeScript-based) require cloud API keys (OpenAI/LLM) and external infrastructure (Docker, Postgres, Qdrant). Your data gets sent to a cloud LLM provider. Uteke is a single binary with zero API keys. All embeddings run local",
+     "lines": [
+      264
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Search**|**Fusion** (weighted RRF of vector + hybrid; hybrid = HNSW + FTS5 RRF)|sqlite-vec + FTS5|Vector + Graph|Vector + Graph|Vector|Hybrid (semantic + keyword + graph)|Vector + rerank|**FTS5 only**| ／ 2. **FTS5** (SQLite): finds by exact terms (\"deploy\" matches \"deploy\")",
+     "lines": [
+      122,
+      205
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是面向 AI 代理的记忆应用，内部以 SQLite（FTS5）为存储组件，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**Search**|**Fusion** (weighted RRF of vector + hybrid; hybrid = HNSW + FTS5 RRF)|sqlite-vec + FTS5|Vector + Graph|Vector + Graph|Vector|Hybrid (semantic + keyword + graph)|Vector + rerank|**FTS5 only**| ／ { \"mcpServers\": { \"uteke\": { \"command\": \"uteke-mcp\" } } } ／ |**Docker**|`docker run -d -p 127.0.0.1:8767:8767 -v uteke-data:/data ghcr.io/codecoradev/uteke:latest`|",
+   "evidence_lines": [
+    122,
+    36,
+    45
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "codecoradev/uteke",
+  "sha": "0eb3fc310152",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

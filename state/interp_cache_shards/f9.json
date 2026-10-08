@@ -7475,5 +7475,76 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "71ed2f357edd": {
+  "identity": {
+   "one_liner": "自托管 GitHub Actions 临时 Runner 集群控制器",
+   "review": "Zoomies 是一个自托管的 GitHub Actions Runner 集群控制器：监听 workflow_job webhook，为每个排队任务启动全新临时 Runner，任务结束后销毁，并通过 GitHub App 认证生成一次性注册令牌。面向需要为组织或仓库自建 Runner 资源池的团队，提供 Web UI、多主机 Agent、CPU/内存弹性分配和备份恢复。单 Go 二进制，状态存于内嵌 SQLite，无需 Kubernetes 或独立数据库服务器。",
+   "highlights": [
+    "每个任务启动临时 Runner，支持 webhook 驱动的事件伸缩与多主机、多操作系统 Agent",
+    "使用 SQLite 存储状态，内置夜间数据库备份并推送到 S3 兼容目标，提供备份验证与恢复",
+    "以 GitHub App 身份认证并生成一次性 JIT 注册令牌，提供实时 Web UI 与 Prometheus 指标"
+   ],
+   "use_cases": [
+    "为 GitHub 组织或仓库自建可弹性伸缩的 Runner 资源池",
+    "在自有硬件（含 NAT 后内网主机）上运行 CI Runner",
+    "需要临时隔离 Runner 且不允许令牌粘贴的工作流环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Single Go binary. SQLite. AGPL-3.0. ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+     "lines": [
+      12,
+      96
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该控制器自身的内嵌状态存储使用，项目本身服务于 GitHub Actions CI 而非数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Single Go binary. SQLite. AGPL-3.0. ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+   "evidence_lines": [
+    12,
+    96
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "eyupio/zoomies",
+  "sha": "71ed2f357edd",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

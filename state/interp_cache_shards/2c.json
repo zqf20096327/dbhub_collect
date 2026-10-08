@@ -9447,5 +9447,198 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2cde520324cd": {
+  "identity": {
+   "one_liner": "浏览器端多数据库 SQL IDE，部署在数据侧",
+   "review": "LibreDB Studio 是一个部署在数据旁边的浏览器端数据库编辑器，通过 Docker、npm 或 Helm 运行，为 26 种数据库引擎提供统一的对象浏览、SQL 编辑、ER 图、schema diff 和监控界面，内置 SSO 和审计日志。适合需要在托管数据库旁查看和管理数据的开发与运维人员，无需在每台机器安装桌面客户端。",
+   "highlights": [
+    "统一界面支持 26 种数据库引擎，包括 PostgreSQL、MySQL、Oracle、SQLite、ClickHouse 等",
+    "支持 Docker、npx、Helm 等多种部署方式，部署在数据侧而非本地",
+    "内置 SSO 登录与审计日志，MIT 许可"
+   ],
+   "use_cases": [
+    "在托管云数据库旁部署 Web 客户端查看和管理数据",
+    "团队通过浏览器和 SSO 集中访问多种数据库引擎",
+    "查看 ER 图、执行 schema diff 和查询结果图表化"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Listed by the PostgreSQL project: ／ PostgreSQL Clients",
+     "lines": [
+      16,
+      19
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL, ／ Twenty-six engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdr",
+     "lines": [
+      26,
+      103
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Twenty-six engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdr",
+     "lines": [
+      103
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Twenty-six engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdr",
+     "lines": [
+      103
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Twenty-six engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdr",
+     "lines": [
+      103
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse, ／ Twenty-six engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdr",
+     "lines": [
+      28,
+      103
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MariaDB,",
+     "lines": [
+      29
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为连接和管理多种数据库而构建的 IDE/管理工具，本身不存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，README 声明无功能被锁在企业版之后",
+   "install": [
+    "docker",
+    "npm",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Twenty-six engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdrant, InfluxDB (InfluxQL), InfluxDB 3 (SQL) and Oxia, with the same explorer everywhere, and ER diagrams, schema diff and monitoring wherever the engine has something to report. Three of the twenty-six are read-only because their own SQL is: Druid, Elasticsearch and OpenSearch have no `UPDATE` and no `CREATE TABLE` in the grammar at all, so those controls are reported as unsupported instead of failing when used. Cassandra is the one that reports the least on purpose: it publishes no row count and no size that is true, so the object browser shows neither rather than showing a number that is wrong; the estimate it does publish counts partitions from flushed files, and it read 143 for a 500-row table. Trino is the other odd one: it is a query engine rather than a database, so it declares no keys and no indexes and reports the bytes as belonging to the systems behind its connectors. ／ ```bash ／ LibreDB Studio goes the other way. It deploys next to the data: a container, a Helm chart, an operator, a one-click template on your PaaS, or `npm i @libredb/studio` inside your own product. Nothing has to face outward.",
+   "evidence_lines": [
+    103,
+    72,
+    101
+   ]
+  },
+  "fn": "libredb/libredb-studio",
+  "sha": "2cde520324cd",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0a532c06180f": {
+  "identity": {
+   "one_liner": "DSH 红队模式插件：智能体编排渗透测试，战果落本地 SQLite 事实库",
+   "review": "该项目是 DeepSeek Harness 的红队模式插件，通过主会话编排信息收集、漏洞发现、漏洞利用、内网渗透等多个执行智能体，对单一授权靶标开展渗透测试；所有资产与战果实时写入本机 SQLite 事实库并在 Web 控制台可视化，数据不出本机。适合已获书面授权的攻防演练、红蓝对抗与企业自检人员；需 Node.js ≥22.13 并以 dsh plugin 方式安装。",
+   "highlights": [
+    "提供 56 个 redteam_* 工具与 14 个随包技能，主会话最多 3 个并发执行角色",
+    "22 张事实库表存储资产与漏洞战果，数据仅落本机 $DSH_HOME/redteam/，无遥测上报",
+    "按攻击链顺序生成可复现报告，含报文/命令、判定标准与证据截图"
+   ],
+   "use_cases": [
+    "已获授权的红队攻防演练与红蓝对抗",
+    "企业对自有系统的安全自检",
+    "安全教学研究环境的渗透测试流程管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "所有发现实时落进本机 SQLite 事实库，并在界面右侧栏的常驻控制台里可视化。 ／ > 前置：DSH 能正常 `dsh web` 启动；Node.js ≥ 22.13（依赖内置 `node:sqlite`）。",
+     "lines": [
+      5,
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该渗透测试应用的本机事实库存储发现数据，非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "所有发现实时落进本机 SQLite 事实库，并在界面右侧栏的常驻控制台里可视化。 ／ > ⚠️ **仅限已获授权的攻防演练 / 渗透测试使用。** 本仓库是智能体编排与事实库的工程实现， ／ dsh plugin --profile web add dsh-redteam-mode",
+   "evidence_lines": [
+    5,
+    7,
+    15
+   ]
+  },
+  "fn": "Jueze-2019/dsh-redteam-mode",
+  "sha": "0a532c06180f",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -7386,5 +7386,73 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e56ddb275a6e": {
+  "identity": {
+   "one_liner": "内容流搜索引擎，提供持久化摄入、混合检索与告警",
+   "review": "Quivr V2 是一个开源引擎，把持续的内容流变成可搜索、可监控的数据：支持持久化摄入、词法/语义混合搜索、变更订阅与告警，通过插件扩展格式、AI 模型和业务规则。面向需要内容监控与检索的开发者团队；以 PostgreSQL 存事务目录、S3 存原始数据、Weaviate 做检索，API 处于 v0 评估阶段，尚不建议生产使用。",
+   "highlights": [
+    "支持词法、语义和混合搜索，每次命中从规范存储重水合并重新鉴权",
+    "写入携带幂等键，通过不可变版本支持更正与撤回",
+    "提供关键词、语义描述和本地向量三类告警，经签名 webhook 投递"
+   ],
+   "use_cases": [
+    "持续监控新闻或信息流并对特定主题设置告警",
+    "构建跨来源的企业内容搜索与目录检索服务",
+    "需要对历史版本进行更正与撤回管理的内容平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Rebuildable indexes.** PostgreSQL and S3 hold the canonical data; the search index ／ api -->|commit receipt + intent| pg[(PostgreSQL<br/>catalog, receipts, changes)] ／ |Transactional catalog|PostgreSQL 17|",
+     "lines": [
+      24,
+      36,
+      45
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 持有规范数据并作为事务目录，项目是使用数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Rebuildable indexes.** PostgreSQL and S3 hold the canonical data; the search index ／ |Transactional catalog|PostgreSQL 17| ／ > **Status: evaluation stage.** The API is `v0` and may change without notice. Do not",
+   "evidence_lines": [
+    24,
+    45,
+    12
+   ]
+  },
+  "fn": "The-Vibe-Company/quivr",
+  "sha": "e56ddb275a6e",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

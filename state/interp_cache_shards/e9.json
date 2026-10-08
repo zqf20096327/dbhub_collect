@@ -9800,5 +9800,73 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ab664216b87f": {
+  "identity": {
+   "one_liner": "自托管多 Agent PR 审查工作台，GitHub 只读接入+Console 汇集",
+   "review": "MergePilot 通过 GitHub App 只读接入仓库，用 Reviewer/Fixer/Verifier/Leader 四个 Agent 角色协作产出代码审查发现与验证证据，并在自托管 Console 中呈现，合并决定权保留给维护者，不自动合并。面向需要审查留痕的开发团队，当前为 Developer Beta，不含 RLS、SSO 等企业能力，多租户隔离在应用层实现。",
+   "highlights": [
+    "通过 GitHub App 只读接入 PR 事件，不回写 Check Run、不自动合并",
+    "四个 Agent 角色分工：审查、修复建议（默认 dry-run）、独立验证、编排裁决",
+    "提供 GitHub OAuth 登录、五角色 RBAC、应用层多租户隔离与审计"
+   ],
+   "use_cases": [
+    "团队自托管代码审查流程并留存审查发现与验证证据",
+    "对高危 finding 的修复执行人工审批的受控验证管线",
+    "本地 RAG 检索团队规范作为审查参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Beta 不含企业能力**：无 PostgreSQL RLS、SSO/SCIM、HA 或配额限流；当前多租户隔离在应用层实施。",
+     "lines": [
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用数据库存储数据（部署者自行管理数据库并初始化，L70 提及其缺少 PostgreSQL RLS），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MergePilot 通过 GitHub App 只读接入仓库，把 PR 事件、审查发现、修复建议与验证证据汇集到你自己的 Console。 ／ Console、数据库和部署配置由你自行管理；官网是文档入口，**不是托管版 Console 或登录入口**。 ／ - **Beta 不含企业能力**：无 PostgreSQL RLS、SSO/SCIM、HA 或配额限流；当前多租户隔离在应用层实施。",
+   "evidence_lines": [
+    10,
+    41,
+    70
+   ]
+  },
+  "fn": "nghqqa/MergePilot",
+  "sha": "ab664216b87f",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

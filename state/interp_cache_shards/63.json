@@ -9433,5 +9433,197 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3b917ef28008": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的自托管后端平台，自动生成 REST API 与 JWT 认证",
+   "review": "SereniBase 是一个自托管后端平台，用 PostgreSQL 存数据，每张表自动生成带 Swagger 文档的 REST API，并提供 JWT 认证、S3/RustFS 文件存储（含 ClamAV 病毒扫描）、SMTP 邮件等微服务，通过 docker-compose 一键部署，面向需要快速搭建后端的开发者与团队。当前标注为 Beta。",
+   "highlights": [
+    "建表即自动生成带 OpenAPI/Swagger 文档的 REST API，无需编写迁移",
+    "提供 JWT 认证、RBAC、审计日志及 ClamAV 文件扫描微服务",
+    "通过 docker-compose 或 make 命令统一部署管理全部微服务"
+   ],
+   "use_cases": [
+    "为应用快速搭建含数据库、API、认证、存储的后端",
+    "需要数据自主托管、避免厂商绑定的团队",
+    "需对上传文件做病毒扫描的文件存储场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "### Open-Source Self-Hosted Backend Platform — PostgreSQL + Auto REST APIs + JWT + Storage + ClamAV ／ A production-ready, self-hosted backend platform built on PostgreSQL. Every table you create automatically ／ |**PostgreSQL**|Primary database|5432|",
+     "lines": [
+      3,
+      5,
+      99
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PostgreSQL 是该平台的主数据库，平台本身是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A production-ready, self-hosted backend platform built on PostgreSQL. Every table you create automatically ／ |**PostgreSQL**|Primary database|5432|",
+   "evidence_lines": [
+    5,
+    99
+   ]
+  },
+  "fn": "aptlogica/sereni-base",
+  "sha": "3b917ef28008",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6ff6a3625a0a": {
+  "identity": {
+   "one_liner": "CVE 漏洞 PoC 索引库，每日聚合多源漏洞情报为 JSON 数据集",
+   "review": "一个通过 GitHub Actions 每 24 小时聚合 cvelistV5、Nuclei、Exploit-DB、CISA KEV 等来源的 CVE PoC 数据索引仓库，提供去重后的 JSON 数据文件和本地 curl/jq 查询方式，无需 API 密钥。面向安全研究、渗透测试与威胁情报人员，还提供面向 LLM/RAG 的压缩 JSON schema 与引用指引。",
+   "highlights": [
+    "每日聚合 cvelistV5、Nuclei、ExploitDB、CISA KEV、EPSS 等多来源漏洞数据",
+    "提供 0-100 漏洞风险评分（基于 KEV、EPSS、CVSS、PoC 证据等）",
+    "提供针对 LLM/RAG 的压缩 JSON schema 与本地 CLI 查询方式"
+   ],
+   "use_cases": [
+    "安全研究人员查询 CVE 对应的 PoC/exploit 链接",
+    "SOC/威胁情报团队跟踪 CISA KEV 活跃利用",
+    "红队与 bug bounty 人员本地检索漏洞数据"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "内容为漏洞情报数据聚合索引，README 未表明其为某数据库生态服务的工具或基于数据库存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**SecureWithUmer/Exploit-Index** is the world's premier, zero-API aggregated index of Common Vulnerabilities and Exposures (CVEs) containing **150,000+ Verified Exploits and Proof of Concept (PoC) scripts for research all in one place**. Designed for elite SOC teams, DevSecOps engineers, Penetration Testers, and AI-driven Threat Intelligence systems, it completely replaces manual searches by normalizing and deduplicating global offensive security data into a single, high-performance canonical source. ／ Our fault-tolerant GitHub Actions workflow passively aggregates and normalizes exploit intelligence spanning from **1999 to 2027** every 24 hours without hitting API rate limits.",
+   "evidence_lines": [
+    21,
+    65
+   ]
+  },
+  "fn": "SecureWithUmer/Exploit-Index",
+  "sha": "6ff6a3625a0a",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4c2fd83cf61c": {
+  "identity": {
+   "one_liner": "开源自托管可视化页面构建器，Docker 单容器运行并使用 SQLite 存储数据",
+   "review": "OrbitPage 是一个开源、MIT 许可的可视化页面构建器，用于在自有服务器上创建作品集、活动、场馆菜单等公开页面，提供可视化编辑、QR 码、SEO、简报和分析功能。它以单个 Docker 容器部署，数据目录包含 SQLite 数据库与上传文件，适合想在自有服务器上托管页面的个人或小团队使用。",
+   "highlights": [
+    "通过 Docker Run、Compose、Linux/Proxmox 安装脚本或源码方式运行",
+    "数据目录包含 SQLite 数据库文件与上传文件，支持 JSON/ZIP 导出备份",
+    "内置分析、隐私同意、简报、团队权限和 AI 辅助工作台"
+   ],
+   "use_cases": [
+    "自托管个人主页或链接聚合页",
+    "场馆菜单、活动或服务页面发布",
+    "需要数据自持和备份导出的小型站点搭建"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Self-hosted.** Run one Docker container with SQLite and local storage on your server or homelab.",
+     "lines": [
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 SQLite 和本地存储运行整个应用，OrbitPage 是使用数据库的应用而非为数据库服务的工具",
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ],
+   "ai": {
+    "flag": false,
+    "kind": []
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**OrbitPage is an open-source visual page builder for anyone who wants a public page on their own server.** Create portfolios, service pages, venue menus, or event pages. Add images, video, links, contact details, maps, and calls to action. Edit the layout, colors, and typography with a live preview. ／ - **Self-hosted.** Run one Docker container with SQLite and local storage on your server or homelab.",
+   "evidence_lines": [
+    20,
+    34
+   ]
+  },
+  "fn": "paoloronco/OrbitPage",
+  "sha": "4c2fd83cf61c",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

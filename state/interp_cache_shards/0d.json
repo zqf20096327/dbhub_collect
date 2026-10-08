@@ -8773,5 +8773,74 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2f1d587378fa": {
+  "identity": {
+   "one_liner": "为 AI 代理提供可溯源、可回放历史记忆的 CLI/SDK/Agent Skill",
+   "review": "Oh 是一个开源的代理记忆工具，将每条事实与其来源引用一起存储，所有变更写入仅追加的操作日志，可回放验证（oh verify）。提供 TypeScript SDK、CLI 和 Agent Skill 三种入口，默认用本地单个 SQLite 文件存储，无需账号和托管服务，支持基于契约确认的同步与冲突处理。面向需要答案可回溯到原始片段的 TypeScript 开发者。",
+   "highlights": [
+    "每条记录带来源引用，所有变更记入可回放的仅追加操作日志，oh verify 可校验历史与 SQLite 完整性",
+    "提供 TypeScript SDK、CLI 和 Agent Skill 三种接口，读写同一版本化记录集",
+    "默认以本地单个 SQLite 文件为存储，搜索索引（FTS5 关键词与本地嵌入）为可重建副本；同步需双方确认契约，分歧历史以冲突形式交由用户处理"
+   ],
+   "use_cases": [
+    "为编码代理或研究代理提供可溯源、可审计的长期记忆",
+    "将研究流程（问题、来源、声明、引用）映射为可检查的记录图",
+    "离线或跨机同步代理记忆（bundle 导出导入或 libSQL/Turso 传输）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "default store is one SQLite file on your machine: it needs no account and no ／ in one SQLite file. Sync is a step you call, with a transport you supply, and ／ - The SQLite records and the operation log are the source of truth. The FTS5",
+     "lines": [
+      18,
+      47,
+      180
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其默认本地存储文件使用，项目本身是面向 AI 代理的记忆应用/库而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可，发布于 npm（v0.14.1）",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "You get a TypeScript SDK, a CLI, and an Agent Skill. All three read and write ／ default store is one SQLite file on your machine: it needs no account and no ／ - The SQLite records and the operation log are the source of truth. The FTS5",
+   "evidence_lines": [
+    16,
+    18,
+    180
+   ]
+  },
+  "fn": "hraness/oh",
+  "sha": "2f1d587378fa",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

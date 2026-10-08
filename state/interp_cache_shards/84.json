@@ -8709,5 +8709,151 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "67de60ad80b4": {
+  "identity": {
+   "one_liner": "SQL 数据转换框架，提供编译期检查、端到端测试与安全重命名",
+   "review": "SQLBuild 是面向 SQL 和 Python 数据管道的开源转换框架，供数据工程师在数仓中做模型开发与重构。它提供编译期引用校验、跨模型测试、sqb rename/mv 等安全重命名（迁移既有表而非重建），状态以 append-only 表存于用户自己的数仓，无外部状态库。Snowflake/DuckDB/PostgreSQL 等已支持，BigQuery/Databricks/SQL Server 为 Beta。",
+   "highlights": [
+    "编译期解析引用、校验 SQL、推断列类型并计算列血缘",
+    "sqb rename/mv 更新全部引用并迁移既有表，兼容视图保持旧名可用",
+    "支持自定义 Python 规则与跨模型 SQL 测试、端到端场景回放"
+   ],
+   "use_cases": [
+    "数据仓库 SQL 模型的开发与重构",
+    "CI 中的离线编译检查与端到端数据测试",
+    "增量模型表结构变更与重命名管理"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|Supported|",
+     "lines": [
+      153
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|Beta|",
+     "lines": [
+      156
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据仓库中的 SQL 转换管道服务的框架，状态存于用户仓库，属于数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Change your warehouse as often as your code. SQLBuild brings compile-time checks, end-to-end tests ／ |Warehouse|Status| ／ |PostgreSQL|Supported|",
+   "evidence_lines": [
+    10,
+    148,
+    153
+   ]
+  },
+  "fn": "chio-labs/sqlbuild",
+  "sha": "67de60ad80b4",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "efb1fc1c2fc2": {
+  "identity": {
+   "one_liner": "跑在 Discord 上的修仙放置游戏机器人，数据存 SQLite",
+   "review": "一个部署在 Discord 平台的修仙文字 RPG 机器人，提供角色创建、境界修炼、宗门、锻造、炼丹、赌坊、钱庄、交易坊等玩法，并内置 8080 端口的 Web 管理面板。面向 Discord 服务器运营者和玩家使用，数据通过 SQLAlchemy async 层存储在本地 SQLite 文件，支持预编译包、源码和 Docker 三种运行方式。",
+   "highlights": [
+    "提供锻造、炼丹、钱庄、交易坊、赌坊、宗门、探险等游戏系统，含 480 个探险事件与 321 种物品",
+    "内置 Web 管理面板，运行在 8080 端口，包含修士列表、属性榜、物品图鉴等页面",
+    "数据层使用 SQLAlchemy async，通过 DB_PATH 配置 SQLite 数据库文件路径"
+   ],
+   "use_cases": [
+    "在 Discord 服务器中架设修仙放置游戏供成员游玩",
+    "通过 Web 面板查看玩家列表、排行榜与事件记录",
+    "以 Docker Compose 方式一键部署机器人服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "一个跑在 Discord 上的修仙放置游戏。前缀 `cat!`，数据存 SQLite，Web 管理面板跑在 8080 端口。 ／ - `DB_PATH` — 本地用 `sqlite-data/game.db`，Docker 用 `/app/sqlite-data/game.db`",
+     "lines": [
+      3,
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储游戏数据的 Discord 游戏机器人，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "一个跑在 Discord 上的修仙放置游戏。前缀 `cat!`，数据存 SQLite，Web 管理面板跑在 8080 端口。 ／ - `DB_PATH` — 本地用 `sqlite-data/game.db`，Docker 用 `/app/sqlite-data/game.db`",
+   "evidence_lines": [
+    3,
+    24
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "GenKnot/MischicatBot",
+  "sha": "efb1fc1c2fc2",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

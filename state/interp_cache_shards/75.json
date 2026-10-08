@@ -9628,5 +9628,74 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2492a0ff8d7d": {
+  "identity": {
+   "one_liner": "Go 单二进制 LLM 代理网关，兼容 9Router，用 SQLite 持久化",
+   "review": "该项目提供一个 Go 编写的单二进制代理网关，面向使用 Claude Code、Cursor、Cline 等 CLI 工具的开发者，将请求转发至 40+ AI 提供商，提供路由组合、故障回退、用量统计与内嵌 Svelte 仪表盘。它直接读写上游 9Router 的同一 SQLite 数据文件（WAL 模式），共享 providers、API keys 等数据，无需导入迁移；仅做增量 schema 变更，不做破坏性迁移。",
+   "highlights": [
+    "单二进制运行，包含内嵌 Svelte 仪表盘，支持 OpenAI/Claude/Gemini/Ollama 兼容接口",
+    "读取与 9Router 相同的 SQLite 数据文件，共享数据无需导入或迁移",
+    "支持 SQLite WAL 持久化、Docker 部署、后台守护进程与自更新"
+   ],
+   "use_cases": [
+    "为多个 AI CLI 编码工具提供统一的本地代理端点与多提供商路由",
+    "与现有 9Router (Node.js) 部署共用同一数据目录并行运行",
+    "通过 Docker 或二进制在本地/服务器部署带仪表盘的 API 网关"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **Already using upstream 9Router?** Point 9router-go at the same data dir — it opens the **same `DATA_DIR/db/data.sqlite`**. Your providers, connections, combos, API keys, and usage history carry over as-is. No import step, no migration. See Sharing a databa ／ - 💾 SQLite WAL persistence, outbound proxy support, self-update, MITM commands, Docker, cross-compilation ／ |macOS / Linux|`~/.9router/db/data.sqlite`|",
+     "lines": [
+      68,
+      121,
+      131
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该项目自身的持久化存储（data.sqlite），并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Same idea as 9Router, minus the Node.js runtime: **one Go binary** serves the proxy APIs + an embedded Svelte dashboard. ／ > **Already using upstream 9Router?** Point 9router-go at the same data dir — it opens the **same `DATA_DIR/db/data.sqlite`**. Your providers, connections, combos, API keys, and usage history carry over as-is. No import step, no migration. See Sharing a database with 9Router for the caveats. ／ - 💾 SQLite WAL persistence, outbound proxy support, self-update, MITM commands, Docker, cross-compilation",
+   "evidence_lines": [
+    17,
+    68,
+    121
+   ]
+  },
+  "fn": "luqman-v1/9router-go",
+  "sha": "2492a0ff8d7d",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

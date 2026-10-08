@@ -7772,5 +7772,147 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1604f014b59f": {
+  "identity": {
+   "one_liner": "TeknoParrot iT 游戏的 PostgreSQL 安装与数据库恢复教程",
+   "review": "一份面向 TeknoParrot 用户的分步操作手册，指导在 Windows 上安装 PostgreSQL v8.3、用 pgAdmin 创建游戏数据库并从备份恢复 iT 系列游戏（如 Golden Tee）的数据库。仓库自带 Postgres 安装程序发布，限定版本与默认路径，2018 后版本可由 TPUI 自动恢复。",
+   "highlights": [
+    "提供 PostgreSQL v8.3 安装程序及 Windows 下的逐步安装指引",
+    "提供用 pgAdmin III 创建游戏数据库并导入备份的完整步骤",
+    "包含各游戏的 TPUI 默认数据库名与编码设置（SQL_ASCII/UTF8）"
+   ],
+   "use_cases": [
+    "为 TeknoParrot 环境首次安装 PostgreSQL 并恢复游戏数据库",
+    "在同一台电脑上为多个 iT 游戏追加新的游戏数据库",
+    "TPUI 自动恢复失败时手动完成数据库配置"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- install PostgreSQL v8.3, ／ - For a first-time full Postgres install and your first game database restore: 10-15 minutes ／ - If you have NOT installed PostgreSQL v8.3 on your Windows PC yet, carry on to the next section titled “PostgreSQL v8.3 Install”.",
+     "lines": [
+      11,
+      30,
+      40
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 指导为 TeknoParrot 应用安装 PostgreSQL 以存储游戏数据，属使用数据库的应用侧文档",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- install PostgreSQL v8.3, ／ This universal guide is created to assist people with setting up their legally owned backups of their incredible Technologies (iT) games, to be used with the TeknoParrot application (TPUI). This guide assumes that the reader has a basic understanding of how to use a Windows computer. It has been written with a level of detail that even an inexperienced user should be able to follow. If you have your legally owned backup of the game, you have everything you need for this setup. ／ # DOWNLOAD THE POSTGRES v8.3 installer from the release section of this repository",
+   "evidence_lines": [
+    11,
+    27,
+    48
+   ]
+  },
+  "fn": "Eggmansworld/tp-it-guides",
+  "sha": "1604f014b59f",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4a6c456c33e3": {
+  "identity": {
+   "one_liner": "离线解析 openGauss 数据目录堆文件并导出 SQL/CSV/DDL 的 Go 工具",
+   "review": "gauss2sql-go 直接读取 openGauss 数据目录中的堆文件，在不依赖在线服务的情况下还原数据库对象并导出为 SQL、CSV、DDL 及元数据 JSON，支持坏块三级恢复与已删除行导出。面向需要离线读取 openGauss 数据文件的开发与运维人员，可运行于 Linux，通过 go build 产出单一静态二进制。",
+   "highlights": [
+    "离线解析 openGauss 数据目录堆文件，导出 SQL / CSV / DDL / 元数据 JSON",
+    "对页头损坏、坏行、字段级损坏提供三级坏块处理，支持 --deleted 导出已删除行",
+    "纯 Go 标准库实现（仅依赖 golang.org/x/text），编译为单一静态二进制"
+   ],
+   "use_cases": [
+    "openGauss 数据库离线数据导出与还原（SQL/CSV/DDL）",
+    "损坏数据文件中的数据恢复与已删除行取证",
+    "openGauss 衍生库（如 MogDB）数据文件的解析读取"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|系统目录三级定位|标准文件名 → relmapper → pg_class 取 relfilenode（pg_enum/pg_namespace 不在 relmapper）|",
+     "lines": [
+      50
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "> 离线解析 openGauss（含 openGauss 衍生库）数据目录堆文件并导出为 SQL / CSV / DDL / 元数据 JSON 的 Go 实现。 ／ gauss2sql-go 是 gauss2sql（Python 版）的 **Golang 完整重写版**，功能完全等同：直接读取 openGauss 数据目录中的堆文件（heap file），不依赖任何在线服务，实现数据库对象的导出与数据还原。 ／ - **全版本兼容**：openGauss 5.0.0 ~ 6.0.6 共 12 个正式发布版本（x86_64）全功能回归 ALL PASS；openGauss 衍生库 MogDB 5.0.9 实测 18/18 ALL PASS",
+     "lines": [
+      7,
+      9,
+      13
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 openGauss 数据库文件格式服务的离线解析导出工具，属数据库生态组件而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 离线解析 openGauss（含 openGauss 衍生库）数据目录堆文件并导出为 SQL / CSV / DDL / 元数据 JSON 的 Go 实现。 ／ gauss2sql-go 是 gauss2sql（Python 版）的 **Golang 完整重写版**，功能完全等同：直接读取 openGauss 数据目录中的堆文件（heap file），不依赖任何在线服务，实现数据库对象的导出与数据还原。 ／ - **全版本兼容**：openGauss 5.0.0 ~ 6.0.6 共 12 个正式发布版本（x86_64）全功能回归 ALL PASS；openGauss 衍生库 MogDB 5.0.9 实测 18/18 ALL PASS",
+   "evidence_lines": [
+    7,
+    9,
+    13
+   ]
+  },
+  "fn": "raysuen/gauss2sql",
+  "sha": "4a6c456c33e3",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

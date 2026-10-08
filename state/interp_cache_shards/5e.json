@@ -9785,5 +9785,141 @@
   "generated_at": "2026-10-07",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "a6388e4da467": {
+  "identity": {
+   "one_liner": "面向编码代理的决策溯源与数据流追踪 Claude Code 插件",
+   "review": "provLedger 是一个 Claude Code 插件加 Python 库，用于记录代码与数据变更背后的决策依据（口头陈述、邮件、会议记录等）并计算数据流图，在编辑前向代理与团队成员展示相关约束与历史。数据全部本地存于 SQLite 文件，可经 /ledger 命令问答或只读仪表盘查看，面向数据工程与代理辅助开发团队。",
+   "highlights": [
+    "以 hooks 记录提示词、工具调用与会话，构建节点级决策与数据流图谱",
+    "提供 /ledger 与 /receipts 命令，答案逐句引用记录 id，未记录时如实标注",
+    "支持作为 Claude Code 插件安装或仅用 pip 安装核心库读写账本"
+   ],
+   "use_cases": [
+    "追踪数据管道与数据集变更背后的决策依据",
+    "在编码代理编辑前提示相关约束与曾尝试并放弃的方案",
+    "接手遗留项目时查询某设计为何如此"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything stays local, in SQLite files under `~/skill-workspace/`. The hooks only ever add:",
+     "lines": [
+      157
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库/数据资产提供决策溯源与血缘记录的工具，SQLite 仅作本地存储介质",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Claude Code plugin for data work. It keeps what was decided and why — your words, the email, the agent's reading, kept apart and never blended — and puts them in front of whoever is about to change the thing again. ／ Everything stays local, in SQLite files under `~/skill-workspace/`. The hooks only ever add: ／ pip install provledger",
+   "evidence_lines": [
+    24,
+    157,
+    92
+   ]
+  },
+  "fn": "yizhao95/prov_ledger",
+  "sha": "a6388e4da467",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4a7198f4f3f3": {
+  "identity": {
+   "one_liner": "单 VPS 自托管部署平台，Git 推送经 webhook 构建并 HTTPS 发布",
+   "review": "Shipyard 是一个面向单台 VPS 的自托管持续部署平台：接收 GitHub webhook（HMAC 校验），将操作写入 PostgreSQL 队列，由 worker 通过 Docker Engine 构建镜像、做健康检查，并经 Caddy 提供 HTTPS 与原子流量切换，支持部署历史和一键回滚。适合运维自有服务器、信任仓库的开发者；明确不支持不可信租户沙箱，当前为 v1.0.0-rc.1 发布候选阶段。",
+   "highlights": [
+    "支持从 git push 或 CLI 触发部署，构建失败或健康检查不过时不影响当前在线版本",
+    "保留镜像实现回滚，无需重新构建，并提供部署历史与备份恢复",
+    "提供 OpenAPI 3.1 的 /v1 API、可选 React Web UI 和 systemd 安装脚本"
+   ],
+   "use_cases": [
+    "在单台 VPS 上自托管部署基于 Dockerfile 的 GitHub 仓库应用",
+    "需要 HTTPS 发布、健康检查与一键回滚的个人或小团队服务",
+    "需要部署历史、备份恢复与运维文档支撑的小型生产环境"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "git push ──► webhook (HMAC-verified) ──► PostgreSQL (operation queue) ／ Go · PostgreSQL 18 · Docker Engine 29 (BuildKit) · Caddy v2 · optional React UI",
+     "lines": [
+      16,
+      56
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Shipyard 使用 PostgreSQL 作为操作队列存数据，是部署平台应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，无其他许可说明",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted deployment platform for a single VPS. Point it at a GitHub repository that has a Dockerfile, and it builds, health-checks, and serves the app over HTTPS. You also get deployment history and one-command rollback. ／ git push ──► webhook (HMAC-verified) ──► PostgreSQL (operation queue) ／ Go · PostgreSQL 18 · Docker Engine 29 (BuildKit) · Caddy v2 · optional React UI",
+   "evidence_lines": [
+    7,
+    16,
+    56
+   ]
+  },
+  "fn": "hami9/Shipyard",
+  "sha": "4a7198f4f3f3",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

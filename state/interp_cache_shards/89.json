@@ -7972,5 +7972,201 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3a3bfa1fed32": {
+  "identity": {
+   "one_liner": "Emacs 交互式数据库客户端，支持多后端连接查询与行编辑",
+   "review": "Clutch 是运行在 Emacs 内的交互式数据库客户端，提供查询缓冲区、结果网格展示、SQL 行编辑暂存预览、表/列补全与 CSV/TSV 导出。面向 Emacs 用户，通过原生协议包或 Java 17+ 的 JDBC agent 连接多种数据库；行编辑要求可识别稳定行标识，歧义结果集保持只读。",
+   "highlights": [
+    "提供 SQL 查询执行、结果网格展示与 staged 行编辑（insert/update/delete 预览后提交）",
+    "支持 MySQL、PostgreSQL、SQLite、MongoDB、Redis 原生后端及 JDBC 访问 Oracle、SQL Server、ClickHouse 等",
+    "提供表/列补全、外键跳转、服务端 WHERE/ORDER BY 过滤及 CSV/TSV/Org 导出"
+   ],
+   "use_cases": [
+    "在 Emacs 内对多类数据库执行查询并浏览结果",
+    "对查询结果进行受控的行级编辑与预览确认",
+    "通过 JDBC 统一访问 Oracle、SQL Server、DB2、Snowflake 等数据库"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with Installation Details and Saved Connections and Query Workflow. ／ |PostgreSQL native|Non-null unique keys, then `ctid` for ordinary heap tables| ／ |PostgreSQL|Core SQL support|Requires `pgsql`, available from MELPA|",
+     "lines": [
+      39,
+      58,
+      71
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with Installation Details and Saved Connections and Query Workflow. ／ |MySQL native|Non-null unique keys; no physical row-locator fallback| ／ |MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11|",
+     "lines": [
+      39,
+      57,
+      70
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle JDBC|Non-null unique keys, then `ROWID` for confirmed base tables| ／ |Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`|",
+     "lines": [
+      61,
+      74
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The shortest path uses SQLite, which requires only Emacs 29.1+—no protocol package or Java runtime. ／ ### 2. Open a SQLite database ／ |SQLite native|Non-null unique keys, then `rowid` for tables not declared `WITHOUT ROWID`|",
+     "lines": [
+      13,
+      23,
+      60
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`|",
+     "lines": [
+      74
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse / Snowflake / Redshift / DB2 / generic JDBC|Basic SQL / query-first support|Backend-specific limits apply to editing, transactions, and dialect behavior| ／ |`:backend jdbc` / Oracle / SQL Server / ClickHouse / DB2 / DuckDB|None in Emacs; uses the bundled JDBC adapter|",
+     "lines": [
+      78,
+      94
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11| ／ MariaDB 10.11 has been live-validated through the native `mysql` backend, including TLS with `mysql_native_password`; other MariaDB versions are expected to be broadly compatible but are not yet part of the regular test matrix. MySQL 5.6 has no native JSON col",
+     "lines": [
+      70,
+      120
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为连接多种数据库的客户端工具，为数据库交互提供服务而非以某库存储数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Query and browse databases—and stage SQL row edits—without leaving Emacs. ／ Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracle, SQL Server, DB2, Snowflake, Redshift, ClickHouse, DuckDB, and other databases. ／ |MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11|",
+   "evidence_lines": [
+    5,
+    7,
+    70
+   ]
+  },
+  "fn": "LuciusChen/clutch",
+  "sha": "3a3bfa1fed32",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0e1a42486d2e": {
+  "identity": {
+   "one_liner": "本地优先的多 AI Agent 工作区系统，基于 Bun/React/SQLite 构建",
+   "review": "Jelly 是一个运行在本机硬件上的多 Agent 系统，用户可创建多个 AI Agent 并按项目分组，Agent 可执行 shell 命令、控制本地 Chrome 浏览器、通过认证卡片申请 sudo 权限，并支持 MCP 连接与子 Agent 并行任务。面向在单台 VM 上用 Agent 运营业务的开发者，需自备 ChatGPT 订阅或 OpenAI API key，且定位为可信用户工具而非沙箱。",
+   "highlights": [
+    "支持多 Agent 创建与项目分组，子 Agent 任务以实时卡片展示进度",
+    "Agent 可控制本地 Chrome 浏览器，用户可随时通过 VNC 接管浏览器",
+    "提供 sudo 请求机制，密码通过私有认证卡片输入，不发送给模型"
+   ],
+   "use_cases": [
+    "在自有服务器/VM 上运行个人 AI Agent 处理日常业务任务",
+    "通过 Tailscale 从手机或笔记本远程访问与管理 Agent",
+    "需要 Agent 操作浏览器（如网站登录）并由人工接管审批的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Built with Bun, React, SQLite, and the Pi agent harness.",
+     "lines": [
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明该项目使用 SQLite 作为内置存储构建（Built with SQLite），数据库仅为应用组成部分而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，捆绑字体及依赖（如 noVNC）保留各自许可（MPL-2.0）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Jelly is a local multi-bot agent system** ／ - Built with Bun, React, SQLite, and the Pi agent harness. ／ Agents can use `request_sudo` to run commands with root privileges—for example, to install packages or manage system services. If your sudo policy permits, the command runs immediately. Otherwise, Jelly shows the command for review and asks for your password in a private authentication card, never in chat. The password is not sent to the model or saved by Jelly.",
+   "evidence_lines": [
+    3,
+    22,
+    103
+   ]
+  },
+  "fn": "dctanner/jelly",
+  "sha": "0e1a42486d2e",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

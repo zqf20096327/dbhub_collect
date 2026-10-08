@@ -8614,5 +8614,129 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ed4357e646dc": {
+  "identity": {
+   "one_liner": "面向数据密集型应用的编程语言，含流式数据流运行时",
+   "review": "Cambra 是一门用于构建事务处理、流式与分析等数据密集型应用的编程语言，采用 Pythonic 表面语法（CHL）编译到精炼类型核心语言（CCL），运行时以数据流算子图驱动，支持程序分支验证与热重载。目前为 research preview，需 Rust 工具链和 z3 从源码构建，不接受 PR。",
+   "highlights": [
+    "基于 refinement types 的类型系统，可借助 z3 求解器做约束求解",
+    "程序编译为 producer/consumer 数据流算子，运行时提供流水线与增量计算",
+    "支持程序分支与 /reload 热重载，在保持状态连续性的前提下替换运行中程序"
+   ],
+   "use_cases": [
+    "以单一语言编写事务处理与流式数据处理应用",
+    "对候选版本做运行时行为对比验证后再发布",
+    "通过 Inspector 查看编译各阶段 IR 与算子间数据流"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 将自身定位为编程语言与数据库 substrate，但未说明适配或使用任何具体数据库。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Cambra is a programming language for building data-intensive applications — transaction processing, streaming, analytics, serving — as **one coherent program** rather than a stack of separately-modeled components. The premise (argued at length in Composition Shouldn't be this Hard) is that systems turn brittle when their components interact through a model lower than the one they're written in: tooling loses its leverage at exactly the boundaries where the hard bugs live. Cambra collapses those boundaries — one language, one type system, one execution model, whole-program tooling. ／ Programs are written in a Pythonic surface syntax — the Cambra High-level Language (**CHL**) — that lowers into a small core language (**CCL**: literals, records, lambdas, lets, application), where the program is type-checked, optimized, and converted to operators. ／ ## Status: research preview",
+   "evidence_lines": [
+    3,
+    26,
+    12
+   ]
+  },
+  "fn": "cambra-dev/cambra",
+  "sha": "ed4357e646dc",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "50901d7a813f": {
+  "identity": {
+   "one_liner": "开源自托管 issue 跟踪与文档应用，单镜像单 Postgres 部署",
+   "review": "Bemmoly 是一个开源自托管的项目问题跟踪与团队文档应用，定位类似 Linear 和 Notion，供公司全员使用。它以单个 Docker 镜像加一个 Postgres 部署，Postgres 是唯一数据存储，承载数据、任务队列、全文搜索和向量嵌入。0.1.0 为基础版本，尚无 issues、boards 或 docs 功能，这些计划在 0.2/0.3 版本交付。",
+   "highlights": [
+    "提供一键安装脚本，自动设置 Docker、Postgres、HTTPS、备份与更新",
+    "模块化架构：Fastify 内核加可启停的模块，模块间仅通过内核注册表与事件通信",
+    "内置备份保留与校验、一键升级回滚、审计日志、Prometheus 指标等运维能力"
+   ],
+   "use_cases": [
+    "团队自托管的问题/任务跟踪与 sprint 管理",
+    "公司内部知识库与文档协作（docs 模块计划于 0.3 交付）",
+    "从 Jira/Confluence 导入既有项目与页面（0.5 起）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "in your Postgres, behind your login, under your backups. ／ It is one app image and one Postgres, installed with one command on a $20 server and upgraded ／ The installer sets up Docker, Postgres, HTTPS, backups and updates; it checks the",
+     "lines": [
+      14,
+      16,
+      37
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确其数据存于 Postgres，Postgres 是该应用的唯一数据存储，属使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Bemmoly is open source, self-hosted, AI-first issues and docs for your whole company. Plan ／ in your Postgres, behind your login, under your backups. ／ and a React shell loads one chunk per module. Postgres is the only datastore, holding the data,",
+   "evidence_lines": [
+    11,
+    14,
+    89
+   ]
+  },
+  "fn": "bemmoly/bemmoly",
+  "sha": "50901d7a813f",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

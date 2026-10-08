@@ -10177,5 +10177,72 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5f6cbeae6122": {
+  "identity": {
+   "one_liner": "自托管协作白板应用，多人实时编辑笔记、图形与图片",
+   "review": "nexcanvas 是一个部署在自己服务器上的协作白板，提供无限画布、350+ 形状库、模板、版本历史与回收站，支持多人实时协作编辑，可导入导出 JSON Canvas 文件。面向个人、家庭或小团队自托管使用，通过 Docker Compose 运行，数据（含 SQLite 数据库与媒体文件）统一存放在 /data 目录。",
+   "highlights": [
+    "支持多人实时协作编辑，显示他人指针与选中状态",
+    "内置 350+ 形状库与 30+ 模板，支持导出 PNG/PDF",
+    "以 JSON Canvas 格式保存与导入画板，并内置数据库备份与版本恢复"
+   ],
+   "use_cases": [
+    "小团队或家庭自托管协作白板",
+    "绘制流程图、网络拓扑、平面布置图与思维导图",
+    "与 Obsidian 等 JSON Canvas 生态交换画板文件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything lives in `/data`: the SQLite database `nexcanvas.db` (accounts, spaces, boards and their versions), ／ Mount it from a local disk, never from an SMB or NFS share: SQLite's locking does not work reliably over network",
+     "lines": [
+      134,
+      136
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 仅作为该应用自身的数据存储，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A whiteboard for your own server, in the spirit of Apple Freeform: sticky notes, shapes, text, lines, pen and ／     image: ghcr.io/derkezorm/nexcanvas:latest ／ Everything lives in `/data`: the SQLite database `nexcanvas.db` (accounts, spaces, boards and their versions),",
+   "evidence_lines": [
+    5,
+    88,
+    134
+   ]
+  },
+  "fn": "DerKezorm/nexcanvas",
+  "sha": "5f6cbeae6122",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

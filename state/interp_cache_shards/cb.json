@@ -9253,5 +9253,73 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "10baf959d47a": {
+  "identity": {
+   "one_liner": "Pi 编码代理的持久化记忆扩展，含记忆编辑器与会话归档",
+   "review": "pi-jarvis 是 Pi 编码代理的扩展，为主会话提供一个侧向会话（overlay）以及共享持久化记忆、可人工编辑的记忆 TUI、可搜索的会话归档和可选密码加密归档，并通过本地工具与原生 MCP 提供受控后台任务。数据以本地明文 SQLite 存储，归档与加密默认关闭。适合使用 Pi 的开发者做跨会话记忆与历史检索。",
+   "highlights": [
+    "提供 TUI 记忆编辑器，支持搜索、过滤、编辑、批量删除（每批最多 50 条）及冲突提示",
+    "提供可选的全量会话归档，支持本地索引关键词搜索、来源溯源与分页原始读取",
+    "共享记忆与归档各有独立 SQLite 存储及全局/项目级开关，支持确认式批量历史导入"
+   ],
+   "use_cases": [
+    "跨会话保存并人工校正项目偏好、决策与修正笔记",
+    "按关键词检索历史会话与工具输出，查看原始证据",
+    "为既有 Pi 聊天记录做审阅后的批量归档导入"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Storage**|Local plaintext SQLite|Plaintext by default; optional password encryption for the archive database, index and SQLite journals| ／ Both work across main Pi and Jarvis, independently of **Repo tools** and whether the overlay is open. Each has its own local SQLite store and global/project controls. Turning one off does not turn the other off.",
+     "lines": [
+      139,
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是 Pi 代理的扩展，使用 SQLite 作为本地数据存储，本身不服务于数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Storage**|Local plaintext SQLite|Plaintext by default; optional password encryption for the archive database, index and SQLite journals| ／ Both work across main Pi and Jarvis, independently of **Repo tools** and whether the overlay is open. Each has its own local SQLite store and global/project controls. Turning one off does not turn the other off. ／ pi install npm:pi-jarvis",
+   "evidence_lines": [
+    139,
+    142,
+    26
+   ]
+  },
+  "fn": "crustyhacker/pi-jarvis",
+  "sha": "10baf959d47a",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

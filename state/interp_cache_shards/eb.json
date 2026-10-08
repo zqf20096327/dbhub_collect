@@ -8747,5 +8747,212 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "78e0e77a2c33": {
+  "identity": {
+   "one_liner": "基于 git 的 AI Agent 调试经验教训库，提供 MCP 检索",
+   "review": "MisakaNet 是一个零依赖、以 git 仓库为存储的失败调试经验（lesson）知识库，供 AI 编码 Agent 通过 MCP 服务器、WebMCP、llms.txt 等接口异步共享和检索教训；每条 lesson 是 Markdown 文件，检索采用标准库实现的 BM25 关键词搜索，不需要向量数据库或嵌入模型，但需要 Python ≥ 3.10 解释器。",
+   "highlights": [
+    "提供 MCP 服务器（7 个工具）、WebMCP、llms.txt 与 A2A 发现等多种 Agent 接入方式",
+    "lesson 以 Markdown 文件存于 git 仓库，按 E0–E4 证据等级分级，DCO 签名提交",
+    "检索使用 Python 标准库 BM25 关键词搜索，无向量数据库、无嵌入模型"
+   ],
+   "use_cases": [
+    "AI Agent 在调试报错前先检索已索引的失败教训以避免重复踩坑",
+    "开发者将调试死胡同通过 intake 流程沉淀为可检索的 lesson",
+    "为自有代码集成时通过 pip 安装库或 stdio 服务器进行本地检索"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Windows, SQLite on an NTFS mount, a GitHub 401 after a token rotation, FANUC error codes. The fix usually",
+     "lines": [
+      216
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目面向 AI Agent 的调试经验检索，README 未表明其为数据库生态服务的工具或组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Git-backed failure memory for AI coding agents.** An error shows up → the agent searches the lessons → ／ like code (each commit DCO-signed), graded by evidence level, retrieved with BM25 over the Python standard ／ |❌ A vector database or RAG system|✅ BM25 keyword search — **stdlib only**, no third-party packages, but a **Python ≥ 3.10 interpreter is still required**|",
+   "evidence_lines": [
+    107,
+    110,
+    128
+   ]
+  },
+  "fn": "Ikalus1988/MisakaNet",
+  "sha": "78e0e77a2c33",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "72630b9ff03c": {
+  "identity": {
+   "one_liner": "Claude Code 等 AI 编码工具的 Token 用量与成本实时仪表盘，基于 SQLite 存储",
+   "review": "一个自托管的实时分析仪表盘，读取 Claude Code、OpenAI Codex、Google Antigravity 的本地会话日志，统计 token、成本、模型与工具用量，通过 SSE 实时更新图表。面向使用这些 AI 编码工具并希望本地追踪用量与费用的开发者，数据以 SQLite（WAL 模式）本地存储，支持 GitHub OAuth 多用户模式。",
+   "highlights": [
+    "从本地日志零依赖摄取 Claude Code、Codex、Antigravity 会话数据，实时文件监听并通过 SSE 推送更新",
+    "按 TTL 档位（5 分钟 1.25×、1 小时 2×）计算缓存写入费用，价格来自 LiteLLM",
+    "支持 GitHub OAuth 多用户与多设备追踪，提供 HTML 导出与每项目 HTML/PDF 报告"
+   ],
+   "use_cases": [
+    "开发者本地追踪 AI 编码工具的 token 消耗与成本",
+    "团队自托管部署，按用户/设备汇总 AI 用量",
+    "向客户分享项目级 token 用量数据（Share API）"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "better-sqlite3 11.0.0 ／ SQLite in WAL mode ／ - **Database download** — download the full SQLite database from Settings for local backup or analysis",
+     "lines": [
+      42,
+      54,
+      122
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 better-sqlite3 作为自身数据存储的仪表盘应用，而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " Real-time analytics dashboard for AI coding token usage (Claude Code, OpenAI Codex, Google Antigravity) with cost estimation and activity tracking. ／  better-sqlite3 11.0.0 ／  SQLite in WAL mode",
+   "evidence_lines": [
+    5,
+    42,
+    54
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "pepperonas/token-tracker",
+  "sha": "72630b9ff03c",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "148ac460e8f3": {
+  "identity": {
+   "one_liner": "DuckDB 扩展，将 DuckLake 数据文件以行存储在 PostgreSQL 中",
+   "review": "pgvfs 是一个 DuckDB 文件系统扩展，把 DuckLake 的数据文件作为行存入 PostgreSQL，使一个 PostgreSQL 实例同时充当数据湖目录与存储。面向需要多 DuckDB 读取进程、单写入进程的用户，无需对象存储或网关，要求 PostgreSQL 11 及以上版本。",
+   "highlights": [
+    "提供 pgvfs:// DuckDB 文件系统，将 DuckLake 数据文件存储为 PostgreSQL 行",
+    "支持 PostgreSQL 11+，包括 Amazon Aurora，多读取进程直接查询，单进程写入",
+    "提供全文检索（tantivy 索引）与向量检索能力，均可通过 SQL 操作"
+   ],
+   "use_cases": [
+    "用单个 PostgreSQL 实例承载 DuckLake 数据湖（目录+数据文件+统一备份与角色管理）",
+    "多 DuckDB 读取进程并发查询、无需对象存储或 HTTP 网关的部署",
+    "在 SQL 中对湖内数据进行全文检索与向量最近邻查询"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pgvfs: DuckLake on PostgreSQL ／ PostgreSQL. Put the DuckLake catalog in the same database and one PostgreSQL ／ lookups take milliseconds. One process writes. Works on any PostgreSQL 11+,",
+     "lines": [
+      1,
+      4,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 DuckDB/DuckLake 提供存储文件系统的扩展组件，服务于数据库生态而非直接使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pgvfs://` is a DuckDB filesystem that stores DuckLake's data files as rows in ／ PostgreSQL. Put the DuckLake catalog in the same database and one PostgreSQL ／ Apache-2.0.",
+   "evidence_lines": [
+    3,
+    4,
+    69
+   ]
+  },
+  "fn": "adonm/pgvfs",
+  "sha": "148ac460e8f3",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9520,5 +9520,78 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7a3307747c93": {
+  "identity": {
+   "one_liner": "基于 Node.js 与 M-Pesa STK Push 的 WiFi 热点计费系统",
+   "review": "一个使用 Next.js/React 构建前端的 WiFi 热点计费应用，通过 M-Pesa 移动支付完成付费上网，包含用户认证、赊贷上网、管理面板，并可选集成 MikroTik 路由器自动管理热点用户；数据存储于 PostgreSQL，使用 Prisma 做迁移，面向需要 M-Pesa 收款的热点运营者。",
+   "highlights": [
+    "集成 M-Pesa STK Push 移动支付与回调处理",
+    "提供基于 JWT 的认证、赊贷系统与管理面板",
+    "支持 MikroTik 热点用户自动管理，提供 Render/Docker/PM2 部署方式"
+   ],
+   "use_cases": [
+    "运营 M-Pesa 收费的 WiFi 热点服务",
+    "管理用户上网计费与赊贷额度",
+    "配合 MikroTik 路由器自动开通/管理热点账户"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Render will automatically create PostgreSQL database ／ - PostgreSQL (or use Docker) ／ - PostgreSQL 15+",
+     "lines": [
+      59,
+      68,
+      124
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该系统使用 PostgreSQL 存储业务数据（含 pg_dump 备份、prisma db push 迁移），属于使用数据库的应用而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " - Render will automatically create PostgreSQL database ／ 1. **Create PostgreSQL database:** ／    npx prisma db push",
+   "evidence_lines": [
+    59,
+    224,
+    233
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "mwakidenis/Mpesa-Based_Wi-Fi-Hotspot_Billing_System",
+  "sha": "7a3307747c93",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8979,5 +8979,90 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "96348bb7d876": {
+  "identity": {
+   "one_liner": "SQL 支撑的 TypeScript/Node.js 虚拟 actor 库，状态存于现有 SQL 数据库",
+   "review": "这是一个面向 TypeScript 和 Node.js 开发者的虚拟 actor 框架库，为每个 actor 提供稳定身份、按序执行和重启后恢复的持久状态，状态直接存储在应用已有的 SQL 数据库中，支持 SQLite、PostgreSQL 和 MySQL 后端，也提供运行于浏览器 WASM SQLite 的运行时。要求 Node.js 24.4+，目前为 pre-1.0 早期版本，投递语义为至少一次而非恰好一次。",
+   "highlights": [
+    "actor 状态、邮箱、重试和提醒持久化到 SQLite、PostgreSQL 或 MySQL，无需额外守护进程或消息代理",
+    "同一身份的调用按序执行，不同身份可并发，提供 fencing 防止过期 worker 提交",
+    "提供浏览器端运行时，使用 SQLite WASM 和 OPFS 持久化，通过 Web Locks API 与 BroadcastChannel 在多标签间协调"
+   ],
+   "use_cases": [
+    "购物车、票务锁仓和库存预留等需要持久过期与并发安全的场景",
+    "多人房间、协作文档等需要按序编辑与实时发布的场景",
+    "会话过期、配额限制和任务租约等依赖已提交状态的后台工作流"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, or MySQL. No daemon, broker, Cloudflare account, or new datastore is",
+     "lines": [
+      88
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL, or MySQL. No daemon, broker, Cloudflare account, or new datastore is",
+     "lines": [
+      88
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The quickstart uses Node's built-in SQLite driver and proves that concurrent ／ import { sqlite } from \"solid-objects/database/sqlite\" ／ Its state, mailbox, retries, reminders, and staged consequences live in SQLite,",
+     "lines": [
+      49,
+      59,
+      87
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为组件直接适配多种 SQL 数据库作为持久化后端，为使用这些数据库的应用提供运行时能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Solid Objects is a SQL-backed virtual actor library for TypeScript and Node.js, ／ Its state, mailbox, retries, reminders, and staged consequences live in SQLite, ／ PostgreSQL, or MySQL. No daemon, broker, Cloudflare account, or new datastore is",
+   "evidence_lines": [
+    8,
+    87,
+    88
+   ]
+  },
+  "fn": "cardmagic/solid-objects-js",
+  "sha": "96348bb7d876",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

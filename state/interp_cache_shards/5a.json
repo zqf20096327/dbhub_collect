@@ -7199,5 +7199,140 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b4542ec06ee9": {
+  "identity": {
+   "one_liner": "桌面数据库管理客户端，内置16种数据源驱动，免装本机客户端",
+   "review": "Dbee 是一款面向个人开发调试场景的桌面数据库管理工具，提供连接管理、对象树浏览、SQL 工作台、表数据编辑、表结构设计、导入导出与跨库数据传输等功能，并为 Redis、Kafka、Elasticsearch 等提供专属视图。支持 MySQL、PostgreSQL、Oracle、达梦等 16 种数据源。README 明确提示密码明文保存、无审计与权限收敛，不建议接入生产库；仓库未附带 LICENSE，默认保留全部权利。",
+   "highlights": [
+    "内置 16 种数据源驱动，Oracle、SQL Server、Redis 等无需安装本机客户端，除 SQLite 外均支持 SSL/TLS，部分支持 mTLS",
+    "提供跨库表到表数据传输并自动做列类型映射，导出支持 CSV/JSON/SQL 等格式的流式写出",
+    "包含 SQL 编辑补全、执行计划、表结构设计、ER 图建模与各类存储的专属管理视图"
+   ],
+   "use_cases": [
+    "开发调试场景下用统一客户端连接和管理多种关系型、文档、缓存、消息队列数据源",
+    "跨不同类型数据库执行表数据迁移与批量导入导出",
+    "通过 ER 图进行数据库模型设计与导出"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|关系型|MySQL、MariaDB、PostgreSQL、SQL Server、Oracle|",
+     "lines": [
+      53
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **一个客户端管全部**：从 MySQL 到 Kafka 都在同一套界面里，不必为每种库开一个工具。",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **免装驱动**：Oracle、SQL Server、Redis（RESP2）等都不依赖本机客户端 —— 不用装 Oracle Client，不用配 ODBC。",
+     "lines": [
+      5
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|文件 / 嵌入式|SQLite|",
+     "lines": [
+      56
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **免装驱动**：Oracle、SQL Server、Redis（RESP2）等都不依赖本机客户端 —— 不用装 Oracle Client，不用配 ODBC。",
+     "lines": [
+      5
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "3. **写操作会真实落库，且部分方言无法回滚。** MySQL / MariaDB / Oracle / 达梦的 DDL 会隐式提交，事务里 `ROLLBACK` 撤不掉已经执行的 `DROP` / `CREATE`。数据传输、导入向导、单元格编辑都是直写目标库 —— 执行前请确认目标、先备份、先在测试库上跑一遍。",
+     "lines": [
+      38
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "> 阿里云 RDS / PolarDB / OceanBase 等托管变体不作为独立类型出现，用对应内核类型连接、自行填写连接参数即可；早期版本存下的 `aliyun-*` 连接仍可正常读取。",
+     "lines": [
+      64
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "mention",
+     "quote": "> 阿里云 RDS / PolarDB / OceanBase 等托管变体不作为独立类型出现，用对应内核类型连接、自行填写连接参数即可；早期版本存下的 `aliyun-*` 连接仍可正常读取。",
+     "lines": [
+      64
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "|国产关系型|Kingbase 金仓、Dameng 达梦|",
+     "lines": [
+      54
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明为数据库管理工具，内置各数据源驱动并为其提供连接、查询、设计、传输等管理功能，属于为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "仓库未附带 LICENSE，默认保留全部权利；允许个人使用与开发调试，禁止二次分发与商用，需书面授权",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Dbee 是一款桌面数据库管理工具。覆盖关系型、国产、时序、文件 / 嵌入式、文档 / 缓存、搜索、分布式协调与消息队列八类数据源，共 16 种。 ／ |关系型|MySQL、MariaDB、PostgreSQL、SQL Server、Oracle| ／ ### 连接管理",
+   "evidence_lines": [
+    3,
+    53,
+    68
+   ]
+  },
+  "fn": "JYR-CHEN/Dbee",
+  "sha": "b4542ec06ee9",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8251,5 +8251,84 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4338603487a3": {
+  "identity": {
+   "one_liner": "Kafka 兼容的消息代理，支持可插拔存储引擎",
+   "review": "Nisshi 是一个用 Rust 编写的 Kafka 兼容消息代理（broker），提供 topic 管理、schema registry、生产/消费 CLI 和代理组件，支持 PostgreSQL、libSQL (SQLite)、S3 或内存作为存储引擎，并可将带 schema 的 topic 写为 Apache Iceberg 或 Delta Lake 表。适用于需要 Kafka API 但希望替换底层存储的场景，如事件流处理与数据湖写入。单二进制静态链接，通过环境变量或 .env 配置存储引擎。",
+   "highlights": [
+    "支持 PostgreSQL、libSQL (SQLite)、S3、内存四种可插拔存储引擎",
+    "兼容 Apache Kafka API，包含 broker、topic、cat、proxy 四个子命令",
+    "支持 Avro/JSON/Protobuf schema 校验并写入 Iceberg/Delta Lake 表"
+   ],
+   "use_cases": [
+    "用 PostgreSQL 或 S3 替代 Kafka 原生存储的消息队列部署",
+    "将带 schema 的流数据写入 Iceberg/Delta Lake 数据湖",
+    "临时或非生产环境的内存消息代理"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "stateless Kafka-compatible broker with pluggable storage (PostgreSQL, SQLite, S3, memory) ／ Apache Kafka with PostgreSQL, libSQL (SQLite), S3 or memory storage engines. ／ - Available with PostgreSQL, libSQL, S3 or memory storage engines",
+     "lines": [
+      2,
+      21,
+      28
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "stateless Kafka-compatible broker with pluggable storage (PostgreSQL, SQLite, S3, memory) ／ Apache Kafka with PostgreSQL, libSQL (SQLite), S3 or memory storage engines.",
+     "lines": [
+      2,
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为消息代理为数据管道生态服务，并明确支持 PostgreSQL/SQLite 作为存储引擎。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "stateless Kafka-compatible broker with pluggable storage (PostgreSQL, SQLite, S3, memory) ／ Apache Kafka with PostgreSQL, libSQL (SQLite), S3 or memory storage engines. ／ - **broker** an Apache Kafka API compatible broker and schema registry",
+   "evidence_lines": [
+    2,
+    21,
+    43
+   ]
+  },
+  "fn": "nisshi-io/nisshi",
+  "sha": "4338603487a3",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

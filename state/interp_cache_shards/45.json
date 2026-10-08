@@ -9093,5 +9093,160 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f5ce814b2902": {
+  "identity": {
+   "one_liner": "Coolify 自托管备份恢复管理器，控制器+代理架构",
+   "review": "CBM 是面向 Coolify 的自托管备份与恢复系统，由 Next.js 控制面板和每台 Docker 主机上的轻量代理组成。它备份应用、服务、卷、bind mount 和数据库，支持本地/S3/SSH-SFTP 目的地，通过 restic 实现增量去重加密存储，并支持原地恢复、恢复为新资源、备份告警与多服务器管理。适合使用 Coolify 部署并需要完整灾备能力的运维人员。",
+   "highlights": [
+    "提供数据库逻辑导出（pg_dump/mysqldump/mongodump）与卷冻结拷贝，备份过程不重启服务",
+    "支持本地、S3、SSH/SFTP 多目的地，基于 restic 实现增量、去重、加密存储",
+    "提供恢复演练、备份完整性校验、镜像冗余副本与 webhook 告警"
+   ],
+   "use_cases": [
+    "为 Coolify 托管的应用、卷与数据库制定定时备份策略",
+    "需要将备份恢复到新资源或全新 Coolify 实例的灾备场景",
+    "多服务器 Coolify 实例的集中备份管理与失败告警"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Scheduled **database** dumps (Postgres/MySQL/MariaDB/Mongo)|✅|✅| ／ - **No restart, ever.** Standalone databases are exported live (`pg_dump`/`mysqldump`/",
+     "lines": [
+      46,
+      66
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Scheduled **database** dumps (Postgres/MySQL/MariaDB/Mongo)|✅|✅|",
+     "lines": [
+      46
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Scheduled **database** dumps (Postgres/MySQL/MariaDB/Mongo)|✅|✅|",
+     "lines": [
+      46
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 Coolify 生态提供数据库与卷的备份恢复能力，包含数据库逻辑导出功能，属于服务于数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CBM is a self‑hosted control panel + lightweight agents. It gives you consistent, scheduled ／ |Scheduled **database** dumps (Postgres/MySQL/MariaDB/Mongo)|✅|✅| ／ - **No restart, ever.** Standalone databases are exported live (`pg_dump`/`mysqldump`/",
+   "evidence_lines": [
+    11,
+    46,
+    66
+   ]
+  },
+  "fn": "Holo795/CBMCoolifyBackup",
+  "sha": "f5ce814b2902",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "91eaa36926b0": {
+  "identity": {
+   "one_liner": "AI 编码代理本地记忆层：Markdown 为源，SQLite FTS5 索引，MCP 服务",
+   "review": "open-memex 为 AI 编码代理提供跨会话持久记忆：记忆以 Markdown 文件为唯一事实来源，SQLite FTS5 索引仅作可重建的搜索加速器，通过 MCP server 和 CLI 接入 VS Code、Cursor、Claude Code、opencode 等编辑器，团队共享走 git PR 审查流程，数据全部留在本地。适合使用 AI 编码工具的开发者。",
+   "highlights": [
+    "记忆以纯 Markdown 文件存储，附带可随时重建的 SQLite FTS5 关键词索引",
+    "提供 MCP server 与 opencode 原生插件，多种编辑器共享同一份本地记忆",
+    "支持项目与个人两级作用域，团队共享经由 git PR 审查流程"
+   ],
+   "use_cases": [
+    "让 AI 编码代理跨会话记住项目决策、约束与教训",
+    "在 VS Code、Cursor、Claude Code 等多个编辑器间共享同一份项目记忆",
+    "通过 git PR 在团队内审查并共享项目知识"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "a rebuildable SQLite keyword index. Nothing leaves your machine unless you ／ open-memex architecture: your editors share one local memory — Markdown files as the source of truth, an SQLite FTS5 index for search, personal scope that never leaves the machine, and project scope shared through git PRs ／ grep them. The SQLite index next to them is just a search accelerator and ／ (SQLite FTS5 — exact words, fast, explainable via `search --explain`);",
+     "lines": [
+      21,
+      71,
+      93,
+      519
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "使用 SQLite 作为自身记忆索引的存储组件，为开发者工具链服务而非以数据库为核心的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " a rebuildable SQLite keyword index. Nothing leaves your machine unless you ／ grep them. The SQLite index next to them is just a search accelerator and ／ standard **MCP server** that any MCP-capable editor can use. (MCP — Model",
+   "evidence_lines": [
+    21,
+    93,
+    101
+   ]
+  },
+  "fn": "stoneskin/open-memex",
+  "sha": "91eaa36926b0",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

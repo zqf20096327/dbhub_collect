@@ -8410,5 +8410,72 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e4bd41643fc2": {
+  "identity": {
+   "one_liner": "基于 tree-sitter 和 SQLite/FTS5 的确定性代码知识图谱工具",
+   "review": "CodeGraph-Rust 将源码树解析为本地知识图谱，节点为符号、边为调用/引用等关系，索引持久化于项目内嵌的 SQLite 中，通过 CLI、MCP 服务器和本地浏览器查看器查询。面向编码代理和开发者；无 AI/LLM 参与，输出字节级稳定，支持增量同步。",
+   "highlights": [
+    "通过 tree-sitter 提取符号与调用关系，使用 SQLite/FTS5 建立本地全文搜索索引",
+    "提供 CLI 与 MCP 服务器，供编码代理查询调用者/被调用者、影响面等结构信息",
+    "确定性输出：无模型调用与向量检索，增量索引与全量重建结果字节级一致"
+   ],
+   "use_cases": [
+    "编码代理在回答代码问题前查询符号结构与调用路径",
+    "开发者本地检索符号、分析影响面与多文件调用流",
+    "通过浏览器查看器只读浏览调用路径与模块依赖图"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Tree-sitter extraction, SQLite/FTS5 search, graph traversal, CLI, and MCP in one ／ The installed executable is `codegraph`; SQLite is bundled. ／ SQLite schema parity, deterministic resolution and ordering, project-contained",
+     "lines": [
+      5,
+      108,
+      253
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 作为内嵌存储用于代码索引，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tree-sitter extraction, SQLite/FTS5 search, graph traversal, CLI, and MCP in one ／ The installed executable is `codegraph`; SQLite is bundled.",
+   "evidence_lines": [
+    5,
+    108
+   ]
+  },
+  "fn": "sunerpy/codegraph-rust",
+  "sha": "e4bd41643fc2",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

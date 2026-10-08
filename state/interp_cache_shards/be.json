@@ -8971,5 +8971,73 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0b8464d94419": {
+  "identity": {
+   "one_liner": "Neon 官方开源 JS/TS SDK、库、CLI 与框架插件的 monorepo",
+   "review": "该仓库以 pnpm workspace 形式托管 Neon 的多个独立发布包：neon CLI、neon.ts 配置即代码运行时、官方 TypeScript SDK、实时查询 SDK、认证适配器及 MCP 等 agent 工具适配器。面向使用 Neon（serverless Postgres 平台）的 JavaScript/TypeScript 开发者，要求 Node.js >= 22 参与开发，发布包运行时支持 Node.js >= 20.19。",
+   "highlights": [
+    "包含官方 TypeScript SDK（@neon/sdk，基于 Fetch、由 OpenAPI spec 生成）与 neon CLI（L28,L13）",
+    "提供 Config-as-Code（neon.ts）的 defineConfig 类型、diff 引擎与 plan/apply 运行时（L20-L21）",
+    "提供 MCP、Eve、Mastra 的 agent 工具适配器及 Drizzle/Kysely/TanStack 实时查询集成（L29,L40-L42）"
+   ],
+   "use_cases": [
+    "为使用 Neon 数据库的应用开发 JavaScript/TypeScript 客户端",
+    "通过 neon.ts 策略实现 Neon 配置的声明式管理与部署",
+    "在 React/Next.js 等框架中接入 Neon Auth 与实时查询订阅"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`@neon/postgrest-js`|Generic PostgreSQL client for the Neon Data API without built-in authentication.|",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库内容是为 Neon（serverless Postgres）生态服务的 SDK、CLI 与插件，而非仅使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The monorepo for Neon's open-source JavaScript/TypeScript SDKs, libraries, CLIs, and framework plugins. Each folder under `packages/` is an independently versioned, separately published package; they share tooling (pnpm workspaces, Biome, tsdown, Vitest, Changesets) but ship on their own cadence. ／ |`@neon/sdk`|The official TypeScript SDK for the Neon API — a modern, Fetch-based client generated from Neon's OpenAPI spec (successor to `@neondatabase/api-client`).| ／ |`@neon/postgrest-js`|Generic PostgreSQL client for the Neon Data API without built-in authentication.|",
+   "evidence_lines": [
+    3,
+    28,
+    49
+   ]
+  },
+  "fn": "neondatabase/neon-pkgs",
+  "sha": "0b8464d94419",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -7857,5 +7857,71 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a922e8e7e59e": {
+  "identity": {
+   "one_liner": "PostgreSQL/Greenplum/Greengage 的库内后台任务调度扩展",
+   "review": "pg_task 是以 PostgreSQL 背后 worker 形式运行的 SQL 任务调度扩展：通过向 task 表插入行来调度任意 SQL 在指定时间后台异步执行，结果写回同一行。面向需要在数据库内部定时执行 SQL 的使用者；部署方式为 PGXS 编译扩展并配置 shared_preload_libraries，需重新启动数据库。",
+   "highlights": [
+    "以背景 worker 完全运行在数据库内部，无需外部守护进程或客户端库",
+    "通过向 task 表 INSERT 行来调度任务，支持一次性、延时、定时与重复执行，状态（PLAN/TAKE/WORK/DONE/FAIL 等）与结果均记录在表中",
+    "提供约 30 个 GUC 及任务行级覆盖参数，支持并发数、超时、分组、休眠间隔等配置"
+   ],
+   "use_cases": [
+    "在 PostgreSQL/Greenplum/Greengage 中定时或异步执行 SQL 任务",
+    "通过普通 SQL 查询 task 表跟踪任务执行结果与错误",
+    "以行级参数实现按组并发控制与重复调度"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, Greenplum and Greengage job scheduler `pg_task` allows to execute any sql command at any specific time at background asynchronously. ／ First, enable the extension by adding it to `shared_preload_libraries` and restarting PostgreSQL:",
+     "lines": [
+      3,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 等数据库提供任务调度能力的扩展，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL, Greenplum and Greengage job scheduler `pg_task` allows to execute any sql command at any specific time at background asynchronously. ／ It runs entirely inside the database as a set of background workers — no external daemon, no client library, nothing to babysit outside PostgreSQL itself. You enable it with a single GUC, and from then on scheduling a job is just an `INSERT` into a plain table: `pg_task` polls that table, runs `input`, and writes the result back into the same row (see Task state machine for exactly how). ／ `pg_task` is a standard PGXS extension, built against an installed PostgreSQL, Greenplum or Greengage server.",
+   "evidence_lines": [
+    3,
+    5,
+    28
+   ]
+  },
+  "fn": "RekGRpth/pg_task",
+  "sha": "a922e8e7e59e",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

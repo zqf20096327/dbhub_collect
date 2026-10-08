@@ -8962,5 +8962,200 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aab69a0f624f": {
+  "identity": {
+   "one_liner": "Windows 桌面建筑成本估算与工程量计算套件",
+   "review": "EstimForge 2026 是一个面向承包商、造价师、建筑师及中小建筑企业的离线桌面应用，提供建筑成本建模、工程量计算、模板管理、版本对比和 PDF 报告导出等功能，数据存储在本机，支持 12 种语言界面。README 未提及任何数据库，仅有标签含 mysql；项目定位为独立软件，需要 .NET Desktop Runtime 6 以上环境。",
+   "highlights": [
+    "提供逐项成本建模、工程量计算向导与项目/阶段/版本层级管理",
+    "本地离线存储项目数据，支持自动滚动备份与文件校验",
+    "支持 CSV/Excel 兼容表格导入导出及 PDF 报告生成"
+   ],
+   "use_cases": [
+    "建筑工程项目的成本估算与工程量清单编制",
+    "报价版本对比与审计追踪",
+    "离线环境下生成面向业主的打印/PDF 报告"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是一个使用本地文件存储数据的桌面造价软件，未提供任何数据库服务或适配能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "README 标注 MIT 许可；仓库描述与正文存在 ProEst 安装包下载相关的表述差异，请谨慎核实",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**EstimForge 2026** is a complete desktop workspace for construction cost modeling, quantity surveying, and project budgeting. Where spreadsheets bend and break under the weight of a real project, EstimForge holds its shape — like a steel frame around your numbers. It is designed for contractors, estimators, architects, and small-to-medium construction firms who want a serious, offline-capable desktop application on Windows 10 and Windows 11. ／ ### 💾 Offline-First Architecture ／ |Runtime|.NET Desktop Runtime 6 or newer|Latest .NET Desktop Runtime|",
+   "evidence_lines": [
+    15,
+    47,
+    142
+   ]
+  },
+  "fn": "MetaVersusUniverse/ProEst-Desktop-Suite",
+  "sha": "aab69a0f624f",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2bd6fbc89bde": {
+  "identity": {
+   "one_liner": "AI 编码代理的长期记忆系统，Markdown 存储+FTS5/向量混合检索",
+   "review": "Eidetic 为 Claude Code 等 AI 编码代理提供持久化记忆：会话结束由 LLM 抽取决策与经验存为 Markdown 卡片，下次会话自动注入，并支持 FTS5+向量混合检索、漂移检测降权过期记忆、记忆合并去重，以及导出为 Obsidian vault。面向使用 AI 编码代理的开发者；核心零 pip 依赖，语义检索需另装 fastembed。",
+   "highlights": [
+    "会话结束自动抽取决策/规则/教训写入 Markdown 记忆卡片，并在每次会话开始自动注入",
+    "提供漂移检测：失效 wikilink、时效老化、置信度升级、声明矛盾均降低卡片排名",
+    "支持 FTS5+向量混合检索（e5 嵌入）、主题库隔离索引与 Obsidian vault 导出"
+   ],
+   "use_cases": [
+    "让 Claude Code 等 AI 代理跨会话记住项目规则与决策",
+    "将 API 文档/方法论/书籍构建为主题库并按项目挂载查询",
+    "排查与清理随时间退化的代理记忆（drift 诊断与降权）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Core** — FTS5 search, auto-injection, drift, compounding, Obsidian vault export|`bash` + `python3` + `sqlite3` (preinstalled on macOS/Linux)|— works fully|",
+     "lines": [
+      249
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI 编码代理提供记忆检索/注入服务，SQLite 仅作为其 FTS5 检索依赖而非存储业务数据的主体应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Eidetic gives an AI coding agent **long-term memory** that lives in plain Markdown files and is searched with hybrid FTS5 + vector search. One engine, **two kinds of memory**: ／ One command. `install.sh` asks 3 quick questions (Enter = sensible default) and wires the Claude Code hooks. The **core** (FTS5 search, auto-injection, drift, vault) needs **zero pip installs** and works immediately; semantic search adds one — `pip install fastembed` (see Dependencies). Piped / CI / agent installs stay non-interactive via env or the defaults. ／ |Keyword search only|**Hybrid FTS5 + vector** search (e5-large, ~100 languages)|",
+   "evidence_lines": [
+    13,
+    53,
+    92
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "LARIkoz/eidetic",
+  "sha": "2bd6fbc89bde",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c3d4b3274417": {
+  "identity": {
+   "one_liner": "自托管工作室，将故事生成 AI 插画漫画/条漫/解说视频",
+   "review": "OpenManga 是一个自托管的 AI 漫画与视频生产工具：把故事结构化为角色、章节、场景、分格等状态，调用用户自备的 provider 密钥生成图像与文本，本地 Kokoro-82M 做语音合成，分格排版与导出为确定性流程，支持 PDF/CBZ/EPUB/MP4 等导出。面向想自行制作漫画、webtoon 或解说视频的自托管用户。数据存储使用 PostgreSQL。",
+   "highlights": [
+    "支持 BYOK：用户自备文本推理与图像生成的 provider 密钥，本地 Kokoro-82M 语音合成",
+    "支持无 API 密钥运行：文本步骤可粘贴任意聊天回复验证，分格可上传自备图",
+    "提供确定性导出：PNG/JPG、PDF、CBZ、EPUB、webtoon 条漫、MP4 解说视频及 YouTube 套件"
+   ],
+   "use_cases": [
+    "自托管生成连载漫画、manhwa、webtoon 页面",
+    "制作带解说的 16:9 视频或竖屏条漫并导出 YouTube 发布包",
+    "在无 API 密钥环境下以粘贴聊天回复的方式体验完整流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "cp .env.example .env # set POSTGRES_PASSWORD, SESSION_SECRET (openssl rand -hex 32), public URLs, INITIAL_ADMIN_* ／ docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d postgres redis kokoro",
+     "lines": [
+      152,
+      181
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述其为自托管漫画/视频生产应用，部署配置中使用 PostgreSQL 服务存数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Self-hosted studio that turns a story into a consistent AI-illustrated comic, webtoon or ／ A self-hosted production tool for consistent AI-generated manhwa, manga, webtoons and illustrated recaps. It is not \"story → giant prompt → comic.png\": the story becomes structured state (cast, world, chapters, scenes, pages, panel specs), canonical references pin identity, panels are generated cheaply and versioned, and lettering, layout, narration and exports are deterministic. ／ - **No telemetry, no analytics, no phone-home.** Outbound requests go only to the AI providers you configure,",
+   "evidence_lines": [
+    3,
+    23,
+    29
+   ]
+  },
+  "fn": "pr0h0/OpenManga",
+  "sha": "c3d4b3274417",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

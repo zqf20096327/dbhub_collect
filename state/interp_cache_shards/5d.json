@@ -8495,5 +8495,192 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c582a3496aa0": {
+  "identity": {
+   "one_liner": "dokku 的 MariaDB 服务插件，用于在 PaaS 中创建和管理 MariaDB 服务",
+   "review": "该仓库是 dokku PaaS 的官方 MariaDB 插件，通过 dokku 命令创建、销毁、链接 MariaDB 服务容器，支持自定义镜像版本、环境变量、卷挂载、密码、重启策略等配置，并提供 info 查询、端口暴露与基于 S3 的备份调度能力。适用于使用 dokku 部署应用并需要托管 MariaDB 数据库的运维人员，需搭配 dokku 0.35.x+ 与 docker 1.8.x 使用。",
+   "highlights": [
+    "提供 mariadb:create/destroy/info 等命令管理 MariaDB 服务容器，支持自定义镜像、版本、密码、卷挂载与重启策略",
+    "支持将服务备份到 S3 兼容存储，可配置 cron 调度、GPG 加密与 IAM 认证",
+    "支持将服务 DSN 暴露到外部端口并与 dokku 应用链接"
+   ],
+   "use_cases": [
+    "在 dokku PaaS 上为应用创建和托管 MariaDB 数据库服务",
+    "通过 cron 调度将 MariaDB 服务定期备份到 S3",
+    "查询服务的 DSN、运行状态、备份配置等详细信息"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "# dokku mariadb Build Status IRC Network ／ Official mariadb plugin for dokku. Currently defaults to installing mariadb 13.0.2. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mariadb.git --name mariadb",
+     "lines": [
+      1,
+      3,
+      14
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "DATABASE_URL=mysql://:SOME_PASSWORD@dokku-mariadb-lollipop:3306 ／ BLUE_DATABASE_URL=mysql://:SOME_PASSWORD@dokku-mariadb-lollipop:3306",
+     "lines": [
+      338,
+      356
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该插件为 dokku 平台提供 MariaDB 服务的部署与管理能力，是为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "MariaDB"
+   },
+   "dbs": [
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Official mariadb plugin for dokku. Currently defaults to installing mariadb 13.0.2. ／ sudo dokku plugin:install https://github.com/dokku/dokku-mariadb.git --name mariadb ／ dokku mariadb:create <service> [--create-flags...]",
+   "evidence_lines": [
+    3,
+    14,
+    36
+   ]
+  },
+  "fn": "dokku/dokku-mariadb",
+  "sha": "c582a3496aa0",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ed7ff08d511d": {
+  "identity": {
+   "one_liner": "实现 Redis 协议的分布式 NoSQL 键值数据库",
+   "review": "Remixdb 是构建在 Erlang/BEAM 虚拟机上的键值 NoSQL 数据库，实现 Redis 协议，可直接使用现有 Redis 客户端驱动连接。尚未覆盖全部 Redis 命令，过期、有序集合、Pub/Sub 等缺失，适合在开发或实验环境中通过 Docker 或源码编译运行验证。",
+   "highlights": [
+    "实现 Redis 协议，可直接使用 Redis 客户端驱动连接",
+    "基于 Erlang/BEAM 虚拟机构建，提供 Docker 镜像和源码编译两种运行方式",
+    "支持集群与主从副本自动故障转移（规划中）"
+   ],
+   "use_cases": [
+    "需要 Redis 协议接口且以 Docker 或源码方式运行键值存储的场景",
+    "BEAM 生态下分布式键值数据库的开发实验"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未说明它为某个数据库生态提供服务，也未描述具体应用功能，证据不足。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## A Redis Protocol Compliant NoSQL database targeting Concurrency ／ RemixDB is a distributed NoSQL database, that implements the Redis protocol, built on the legendary Erlang VM. It aims for matching all of the performance of Redis while leveraging all of the good Systems Tooling of the BEAM VM - High Availability and High Throughput. ／ This library is still being worked on, so it does NOT support all of redis' commands -- that being said, the plan is to get it to full compliance with Redis' single server commands, ASAP. Redis Cluster is something I do not believe in - since I do not understand the Availability Guarantees it provides.",
+   "evidence_lines": [
+    5,
+    6,
+    41
+   ]
+  },
+  "fn": "santosh79/remixdb",
+  "sha": "ed7ff08d511d",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "993d671a1458": {
+  "identity": {
+   "one_liner": "在 Linux/macOS 上配置 Elixir/Phoenix 开发环境的 shell 脚本",
+   "review": "这是一个通过 curl|bash 运行的 shell 脚本工具，用于在 Linux 和 macOS 上逐步配置 Elixir/Phoenix 开发环境；仓库同时包含以 Astro 构建的落地页与文档站点，通过 Cloudflare Pages 区分脚本与页面请求。适用于搭建 Phoenix 开发环境的开发者，README 未详细列出脚本具体安装哪些组件。",
+   "highlights": [
+    "提供一条 curl 命令完成 Elixir/Phoenix 开发环境配置的 shell 脚本",
+    "站点构建同时生成 Markdown 页面与 llms.txt 供 agent 读取",
+    "支持 Linux 和 macOS"
+   ],
+   "use_cases": [
+    "在 Linux/macOS 上初始化 Elixir/Phoenix 开发环境",
+    "为新项目快速准备本地开发工具链"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "主题标签含 postgresql 但 README 全文未提及任何数据库，无法判断是否为数据库生态服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "phx.tools is a shell script for **Linux** and **macOS** that configures the Elixir/Phoenix development environment in a few easy steps. ／ The build derives Markdown pages and `llms.txt` from the authored HTML; About, Contact and Privacy pages describe the tool and current site configuration. Cloudflare Pages serves the installer to ordinary `curl` requests and returns the page representation for an explicit `Accept: text/markdown` request. Build generation uses Python 3.",
+   "evidence_lines": [
+    3,
+    39
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "optimumBA/phx.tools",
+  "sha": "993d671a1458",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

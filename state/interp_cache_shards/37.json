@@ -8466,5 +8466,301 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4c516a499c19": {
+  "identity": {
+   "one_liner": "Rust 工作区，将 Solana 账本数据摄取入 ClickHouse 并提供 JSON-RPC 服务",
+   "review": "Superbank 是一个 Rust 工作区，用于把 Solana 账本数据（来自 Fumarole、gRPC、JSON-RPC getBlock 或 Bigtable）摄取存储到 ClickHouse，并基于该数据提供 Solana 兼容的 JSON-RPC 端点。包含 Parquet 归档（solparq）、PoH 链验证器、可选 gRPC 缓存/流式特性及 k6 负载测试场景，供需要自建 Solana 历史数据查询服务的团队使用。AGPL-3.0 许可。",
+   "highlights": [
+    "支持从 Yellowstone Fumarole、Yellowstone gRPC、Solana JSON-RPC、Solana Bigtable 多种来源摄取数据",
+    "提供 superbank-solparq 组件将 ClickHouse 表归档为 Parquet 并支持从本地/S3 恢复",
+    "包含 k6 负载与验证测试场景，以及 Prometheus 指标与健康检查端点"
+   ],
+   "use_cases": [
+    "自建 Solana 兼容 JSON-RPC 历史数据查询服务",
+    "将 Solana 账本数据长期归档为 Parquet 并可恢复回 ClickHouse",
+    "对已存储账本数据做 Proof-of-History/Alpenglow 历史链验证"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Ingest Solana ledger data into ClickHouse and serve Solana-compatible JSON-RPC from that data. ／ - Store blocks + transactions in ClickHouse (`ddl/`)",
+     "lines": [
+      6,
+      20
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明该系统将 Solana 账本数据存入 ClickHouse 并以其为后端提供 RPC 服务，ClickHouse 是其存储依赖而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Superbank is a Rust workspace for ingesting Solana ledger data into ClickHouse and serving ／ - Serve Solana-compatible JSON-RPC backed by ClickHouse (`crates/superbank-rpc`) ／ - Store blocks + transactions in ClickHouse (`ddl/`)",
+   "evidence_lines": [
+    10,
+    21,
+    20
+   ]
+  },
+  "fn": "solana-rpc/superbank",
+  "sha": "4c516a499c19",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5f30c280d00e": {
+  "identity": {
+   "one_liner": "自架的中小学排课与调代课系统，基于 OR-Tools CP-SAT 自动排课",
+   "review": "这是一个面向台湾国小/国中/高中职教务场景的 Web 排课与调代课系统，供教学组长完成学期设置、手动与自动排课、请假代课调课、通知与钟点统计等全流程。自动排课采用 OR-Tools CP-SAT 引擎并在无解时输出冲突说明；通过 Docker Compose 六容器单机部署，数据使用 PostgreSQL 16 存储，仅支持单校自架、无多租户。",
+   "highlights": [
+    "提供基于 OR-Tools CP-SAT 的自动排课，含硬约束/软约束加权与冲突定位说明",
+    "支持请假登记、代课推荐、调课验证、站内与 Email 通知及 Excel/PDF/PNG 课表导出",
+    "提供 Docker Compose 一键部署，含每日自动备份、审计记录与 RBAC 角色管理"
+   ],
+   "use_cases": [
+    "中小学教务组进行学期配课、手动拖拽排课与自动排课",
+    "学期中处理教师请假、代课指派与调课通知",
+    "单校自架场景下生成并导出班级/教师/场地课表"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|資料庫|PostgreSQL 16| ／ |部署|Docker Compose(6 容器:web / api / worker(排課)/ worker-ops(匯出·備份·定時)/ postgres / redis)|",
+     "lines": [
+      116,
+      118
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据库层使用 PostgreSQL 16 存储业务数据，系统本身是使用数据库的排课应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "從學期基礎資料、手動與自動排課(OR-Tools CP-SAT 引擎),到學期中最繁瑣的請假、代課、調課、通知與鐘點統計,一套涵蓋。以 Docker Compose 一鍵部署在校內一台主機上,資料不出校。 ／ |排課引擎|Google OR-Tools CP-SAT(RQ + Redis 背景執行)| ／ |資料庫|PostgreSQL 16|",
+   "evidence_lines": [
+    8,
+    114,
+    116
+   ]
+  },
+  "fn": "begin0808/Course_Scheduling_System",
+  "sha": "5f30c280d00e",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bfb888065481": {
+  "identity": {
+   "one_liner": "自托管多用户间隔重复闪卡服务，用 FSRS v6 调度",
+   "review": "Engram 是一个用 Go 编写的自托管闪卡学习服务，支持多种卡片类型、Markdown 与公式渲染、OIDC 多用户和卡组共享，并提供 REST API 与内置 MCP 服务器供代理调用。可通过 Docker 部署，SQLite 用于单机运行，PostgreSQL 用于 Compose 部署，适合需要自建记忆学习系统的个人或小组。",
+   "highlights": [
+    "实现 FSRS v6 调度算法，内置多种卡片类型，支持 Markdown、数学公式与媒体文件",
+    "支持 OIDC 多用户登录与卡组共享，各用户保留独立学习进度",
+    "内置 MCP 服务器，向代理提供增删改查工具，另提供 REST API 与 PWA"
+   ],
+   "use_cases": [
+    "自托管个人记忆学习/背卡片系统",
+    "多用户共享卡组并分别跟踪学习进度",
+    "让 AI 代理通过 MCP 工具管理卡片内容"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Uses a PostgreSQL database.",
+     "lines": [
+      47
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Uses a SQLite database.",
+     "lines": [
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是一个使用 SQLite/PostgreSQL 存储数据的自托管闪卡应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Engram is a self-hosted flashcard service. ／ Uses a SQLite database. ／ Uses a PostgreSQL database.",
+   "evidence_lines": [
+    5,
+    32,
+    47
+   ]
+  },
+  "fn": "bestnite/engram",
+  "sha": "bfb888065481",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7e621bbba502": {
+  "identity": {
+   "one_liner": "VastBase/openGauss/PostgreSQL 数据应急恢复工具，离线解析数据文件抢救数据",
+   "review": "vbdul 是一款面向 VastBase、openGauss、PostgreSQL 11~17 的应急数据恢复工具，在数据库无法启动、误删表、误 UPDATE/DELETE、无备份等场景下，从磁盘数据文件、文件系统空闲空间或 WAL 中提取数据。采用闭源二进制分发，需按主机指纹申请授权，仅支持 Heap 行存引擎。适合 DBA 和运维人员在灾难恢复场景使用。",
+   "highlights": [
+    "支持从数据文件、文件系统空闲空间、WAL、ProBackup 备份四种来源恢复数据",
+    "提供 logminer 按事务反向恢复误 DELETE/UPDATE，导出 COPY/SQL 格式可直接 psql 导入",
+    "所有源数据只读访问，支持 Linux x86_64/aarch64，静态编译零运行时依赖"
+   ],
+   "use_cases": [
+    "数据库无法启动且无备份时离线解析数据文件抢救数据",
+    "DROP TABLE/TRUNCATE 后通过空闲页面碎片扫描还原数据",
+    "误 UPDATE/DELETE 后基于 WAL 日志按事务回滚恢复"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# vbdul — VastBase/openGauss/PostgreSQL 数据应急恢复工具 ／ vbdul 是一款数据库应急数据恢复工具（类似 Oracle ODU），支持 VastBase、openGauss 内核版本与 PostgreSQL 11~17。在数据库无法启动、误删表/数据、误 UPDATE/DELETE、无备份的极端场景下，直接从磁盘数据文件、文件系统空闲空间或 WAL 中抢救恢复数据。 ／ |数据库|VastBase v0/v1/v2/v3/v5/v6（PG11/PG14/PG16/openGauss 6.0/PG17/G100 2.2.5 内核）、PostgreSQL 11~17|",
+     "lines": [
+      1,
+      3,
+      40
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "vbdul 是一款数据库应急数据恢复工具（类似 Oracle ODU），支持 VastBase、openGauss 内核版本与 PostgreSQL 11~17。在数据库无法启动、误删表/数据、误 UPDATE/DELETE、无备份的极端场景下，直接从磁盘数据文件、文件系统空闲空间或 WAL 中抢救恢复数据。",
+     "lines": [
+      3
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "# vbdul — VastBase/openGauss/PostgreSQL 数据应急恢复工具 ／ vbdul 是一款数据库应急数据恢复工具（类似 Oracle ODU），支持 VastBase、openGauss 内核版本与 PostgreSQL 11~17。在数据库无法启动、误删表/数据、误 UPDATE/DELETE、无备份的极端场景下，直接从磁盘数据文件、文件系统空闲空间或 WAL 中抢救恢复数据。 ／ |数据库|VastBase v0/v1/v2/v3/v5/v6（PG11/PG14/PG16/openGauss 6.0/PG17/G100 2.2.5 内核）、PostgreSQL 11~17|",
+     "lines": [
+      1,
+      3,
+      40
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为 VastBase/openGauss/PostgreSQL 数据库提供应急数据恢复服务，属于数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "源代码不公开，正式版按主机指纹授权（Ed25519 签名 license）",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "vbdul 是一款数据库应急数据恢复工具（类似 Oracle ODU），支持 VastBase、openGauss 内核版本与 PostgreSQL 11~17。在数据库无法启动、误删表/数据、误 UPDATE/DELETE、无备份的极端场景下，直接从磁盘数据文件、文件系统空闲空间或 WAL 中抢救恢复数据。 ／ |数据库|VastBase v0/v1/v2/v3/v5/v6（PG11/PG14/PG16/openGauss 6.0/PG17/G100 2.2.5 内核）、PostgreSQL 11~17|",
+   "evidence_lines": [
+    3,
+    40
+   ]
+  },
+  "fn": "LiXiangYu0612/vbdul",
+  "sha": "7e621bbba502",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

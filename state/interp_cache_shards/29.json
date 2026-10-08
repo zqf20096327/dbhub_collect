@@ -9146,5 +9146,73 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ac1f65358806": {
+  "identity": {
+   "one_liner": "数据模型转合成数据与可运行 dbt 项目的 Python CLI 工具",
+   "review": "model2data 读取 .model2data.yml 或 DBML 格式的数据模型，生成保持外键关系的合成数据，并生成包含 seeds、staging 模型和测试的完整 dbt 项目，默认使用 DuckDB 或 Postgres profile 运行。面向需要测试数据或 CI fixtures 的分析工程师、顾问和培训者。支持确定性生成、逐日增量数据、SCD2 历史表、指标校验，以及通过 --defects 生成含缺陷的数据。",
+   "highlights": [
+    "支持从 YAML 或 DBML 模型生成外键一致、可复现（--seed 确定性）的合成数据",
+    "生成完整可运行的 dbt 项目，含 seeds、staging 模型、not_null/unique/relationships 等测试及指标校验测试",
+    "提供增量天数（--days/--next）、SCD2 历史表、故意缺陷注入（--defects）等数据模拟能力"
+   ],
+   "use_cases": [
+    "分析工程师在 CI 中构建可复现的数据 fixtures",
+    "顾问在获得客户生产数据访问权限前搭建演示项目",
+    "培训中生成带有已知缺陷的数据用于教学 dbt 测试"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "staging models, tests, and a DuckDB or Postgres profile. Add a metrics file and it also knows ／ a DuckDB (zero-config) or Postgres profile. One `dbt build` loads, builds and tests it, and ／ DuckDB (zero-config, file-based) or Postgres. ／ pip install \"model2data[postgres]\" # to target Postgres with --adapter postgres",
+     "lines": [
+      17,
+      50,
+      200,
+      209
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据分析工作流生成测试数据和 dbt 项目、并通过 profile 适配 DuckDB/Postgres 的工具组件，而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "relationship-preserving synthetic data *and* a complete, runnable dbt project around it: seeds, ／ 2. **Generate.** Produces synthetic values per column — typed generation for known SQL types ／  DuckDB (zero-config, file-based) or Postgres.",
+   "evidence_lines": [
+    16,
+    191,
+    200
+   ]
+  },
+  "fn": "JB-Analytica/model2data",
+  "sha": "ac1f65358806",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

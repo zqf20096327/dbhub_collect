@@ -10885,5 +10885,153 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3d2974b2a561": {
+  "identity": {
+   "one_liner": "基于 .NET 10 与 PostgreSQL 的仓库管理系统（WMS）应用",
+   "review": "WareCommand 是一个以模块化单体架构实现的仓库管理系统，提供库存台账、收货、拣货、发运、退货、移库、盘点、补货、报表与预测等功能，配有 ASP.NET Core Web 主机与可选 WinForms 桌面主机。生产环境使用 PostgreSQL 持久化，本地演示可用 SQLite；EF Core 迁移需显式应用，支持英/阿（RTL）双语与权限、审计控制，适合物流仓储团队自部署使用。",
+   "highlights": [
+    "提供库存台账、收货、分配/拣货、发运、退货、移库、盘点、补货、报表与预测等仓储业务服务与 HTTP 路由",
+    "实现 Identity 认证、按权限与仓库范围授权、审计，以及迁移门控的 PostgreSQL 启动校验",
+    "提供确定性种子配置（None/Reference/Demo）与加密备份、灾备演练文档"
+   ],
+   "use_cases": [
+    "仓库入库、拣货、发运与库存追溯的日常作业管理",
+    "需要条码/手持扫描工作站（WinForms 主机）的仓储场景",
+    "阿拉伯语（RTL）与英语双语环境的物流库存管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL is the production persistence adapter. ／ For PostgreSQL, set the connection string, apply migrations, and then start the ／ $env:WARECOMMAND_POSTGRES_CONNECTION = 'Host=localhost;Port=5432;Database=warecommand;Username=warecommand;Password=<local-password>'",
+     "lines": [
+      10,
+      75,
+      80
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite is an explicit local/demo adapter only. ／ SQLite file and explicitly opts into the deterministic Demo seed profile:",
+     "lines": [
+      11,
+      58
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以 PostgreSQL 为生产持久化适配器、SQLite 为本地演示适配器，属于使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "WareCommand is a warehouse management system implemented as a .NET 10 modular ／ - PostgreSQL is the production persistence adapter. ／ - SQLite is an explicit local/demo adapter only.",
+   "evidence_lines": [
+    3,
+    10,
+    11
+   ]
+  },
+  "fn": "RealAhmedOsama/WareCommand",
+  "sha": "3d2974b2a561",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "aa170ce22e76": {
+  "identity": {
+   "one_liner": "面向农村微型创业者的多语言创业评估与DPR生成平台",
+   "review": "该平台面向农村微型创业者，提供业务可行性评估、确定性财务计算、审批工作流及异步 DPR PDF 生成。前端为 React PWA，后端 FastAPI + Celery，数据层使用 PostgreSQL/PostGIS 与 Redis，通过 Docker 快速部署，MIT 许可。",
+   "highlights": [
+    "基于确定性服务端计算进行财务与方案测算，不使用客户端或 LLM 财务运算",
+    "支持地理空间可行性评分与本地政务上下文数据",
+    "通过 Celery 异步生成 DPR PDF，并内置英/印地语设备端语音助手"
+   ],
+   "use_cases": [
+    "农村微型创业者进行商业想法可行性与融资合规评估",
+    "DIC 官员与 SCA 审计人员的多角色审核工作流",
+    "多语言、无障碍优先的 DPR 项目报告生成与审批"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Data: PostgreSQL with PostGIS and Redis",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据存储使用 PostgreSQL with PostGIS 和 Redis，数据库为应用自身的数据层。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Data: PostgreSQL with PostGIS and Redis ／ - Supports applicant, DIC officer, and SCA auditor workflows with JWT-based roles and an audit trail. ／ - Generates DPR PDFs asynchronously through Celery.",
+   "evidence_lines": [
+    21,
+    13,
+    14
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "andy1924/UdyogSaarthi",
+  "sha": "aa170ce22e76",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

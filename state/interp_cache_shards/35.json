@@ -8256,5 +8256,73 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f6586cd9de6f": {
+  "identity": {
+   "one_liner": "Home Assistant 实验性 AI App，基于 Pi Durable/SQLite 实现持久任务与人工审批",
+   "review": "这是一个以 Home Assistant Add-on 形式安装的实验性 AI 代理应用，把输入、任务检查点、对话记录写入 SQLite（synchronous=FULL）实现断线后恢复到已提交状态，灯光/开关等操作默认关闭并需人工逐条批准。提供 Home 与隔离 Code 两种模式，支持 OpenAI API、ChatGPT 订阅 OAuth 及本地 OpenAI 兼容服务器等 provider，面向 HA OS 管理员的测试环境。",
+   "highlights": [
+    "用 Pi Durable 将任务检查点、对话与文档以 synchronous=FULL 写入 SQLite，重连后恢复已提交状态",
+    "HA 读取按白名单范围限定，操作默认禁用，启用后默认要求人工逐条批准（Ask/Read-only/Full 三档）",
+    "可选编码代理运行在独立的非 root、无网络 worker 容器中，与 HA 凭据隔离"
+   ],
+   "use_cases": [
+    "在 Home Assistant 上通过对话查询与控制灯光/开关，并要求人工审批",
+    "在 HA 附加环境中运行带持久化任务与恢复能力的 AI 编码助手",
+    "使用本地 OpenAI 兼容服务器（Ollama、vLLM 等）进行不依赖云端的演示与实验"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Continuity, not just history.** Genuine pinned Pi Durable commits admitted inputs, task checkpoints, transcripts and documents to SQLite with `synchronous=FULL`. One writer owns each store. Reconnect to committed state.",
+     "lines": [
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 仅作为该 AI 应用的持久化存储（L15/L21 写入 Pi Durable 存储），并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT（应用代码/美术原创，第三方依赖另有说明）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Continuity, not just history.** Genuine pinned Pi Durable commits admitted inputs, task checkpoints, transcripts and documents to SQLite with `synchronous=FULL`. One writer owns each store. Reconnect to committed state. ／ ## Home Assistant installation ／ Requires **Home Assistant OS**, an administrator account and an **amd64 or aarch64** host. Use an authorized test installation with a backup; this is an experimental third-party App, not HACS or a Devices & services integration.",
+   "evidence_lines": [
+    15,
+    40,
+    42
+   ]
+  },
+  "fn": "cosmyo/ha-pi-durable",
+  "sha": "f6586cd9de6f",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

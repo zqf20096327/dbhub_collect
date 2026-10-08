@@ -7889,5 +7889,92 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fb7533cf2856": {
+  "identity": {
+   "one_liner": "导出 Last.fm 听歌记录并导入 SQLite 数据库的工具",
+   "review": "该项目将用户的 Last.fm 收听历史抓取后导入本地数据库并保存原始 JSON，后续运行只补充缺失记录；同时提供 matplotlib 绘图脚本生成歌手/专辑/曲目榜单及 Telegram bot 查询榜单。2026 年 4 月起已移除 MySQL/MariaDb 支持，仅支持 SQLite，数据库结构由 liquibase 创建。适合想本地留存并可视化自己听歌数据的 Last.fm 用户。",
+   "highlights": [
+    "将 Last.fm 收听历史导入 SQLite 数据库，含原始 JSON 表和播放记录表，增量导入缺失记录",
+    "提供 matplotlib 绘图脚本，按天数或年份生成歌手/专辑/曲目榜单图",
+    "内置 Telegram bot 模块，可按时间段查询歌手/专辑/曲目榜单"
+   ],
+   "use_cases": [
+    "将 Last.fm 收听历史备份到本地 SQLite 数据库",
+    "生成个人年度/月度听歌榜单图表",
+    "通过 Telegram bot 随时查询自己的听歌榜单"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- Remove MySQL/MariaDb support ／ - choose between MySQL/MariaDb and Sqlite ／ - for **MySQL/MariDb**:",
+     "lines": [
+      15,
+      51,
+      53
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "### Export your Last.fm tracks and import them into a Sqlite database ／ This project imports your Last.fm listening history inside a Sqlite database. ／ - choose between MySQL/MariaDb and Sqlite",
+     "lines": [
+      2,
+      4,
+      51
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "- Remove MySQL/MariaDb support ／ - choose between MySQL/MariaDb and Sqlite ／ - mariadb",
+     "lines": [
+      15,
+      51,
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 Last.fm 数据存入 SQLite 数据库供自身绘图和 bot 使用，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This project imports your Last.fm listening history inside a Sqlite database. ／ - Remove MySQL/MariaDb support ／ - export.py gets the new tracks from Last.fm and inserts them into json_track.",
+   "evidence_lines": [
+    4,
+    15,
+    69
+   ]
+  },
+  "fn": "nicolasm/lastfm-export",
+  "sha": "fb7533cf2856",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

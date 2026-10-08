@@ -7439,5 +7439,73 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b494dceb6041": {
+  "identity": {
+   "one_liner": "基于 Postgres 的 Python 任务队列库，用 fork 隔离执行任务",
+   "review": "pq 是一个 Python 任务队列库，使用已有的 Postgres 数据库实现后台任务处理，无需部署 Redis 或 RabbitMQ 等消息代理。它通过 SELECT ... FOR UPDATE SKIP LOCKED 原子认领任务，每个任务在 fork 出的子进程中运行以隔离崩溃，支持事务性入队、定时任务、优先级队列。需要 PostgreSQL 和 Python 3.13+。适合已在运行 Postgres 的 Python 团队添加后台任务能力。",
+   "highlights": [
+    "任务在 fork 的子进程中执行，实现进程级隔离，子进程崩溃不影响 worker",
+    "支持事务性入队、周期任务（timedelta/cron）、五级优先级队列",
+    "使用 PostgreSQL FOR UPDATE SKIP LOCKED 原子认领任务，无需额外消息代理"
+   ],
+   "use_cases": [
+    "已有 Postgres 的 Python 项目处理后台任务",
+    "需要任务与业务写入在同一事务中提交的场景",
+    "需要定时/周期任务调度与并发控制的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres-backed job queue for Python with fork-based worker isolation. ／ If you already run Postgres, you don't need Redis or RabbitMQ to process background jobs. pq uses `SELECT ... FOR UPDATE SKIP LOCKED` to turn your existing database into a reliable task queue. Enqueue in the same transaction as your writes, and process tasks i ／ pq = PQ(\"postgresql://localhost/mydb\")",
+     "lines": [
+      7,
+      9,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库以 PostgreSQL 为任务队列的底层存储，依赖其行锁机制为 Python 应用提供后台任务能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Postgres-backed job queue for Python with fork-based worker isolation. ／ If you already run Postgres, you don't need Redis or RabbitMQ to process background jobs. pq uses `SELECT ... FOR UPDATE SKIP LOCKED` to turn your existing database into a reliable task queue. Enqueue in the same transaction as your writes, and process tasks in isolated child processes that can't crash your worker. ／ Requires PostgreSQL and Python 3.13+.",
+   "evidence_lines": [
+    7,
+    9,
+    30
+   ]
+  },
+  "fn": "ricwo/pq",
+  "sha": "b494dceb6041",
+  "source": "readme",
+  "generated_at": "2026-10-08",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
