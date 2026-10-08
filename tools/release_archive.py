@@ -163,11 +163,18 @@ def verify_remote(slug: str, token: str, date: str, pkg: Path) -> int:
     return 1
 
 
-def rotate(slug: str, token: str, apply: bool, out_dir: Path) -> int:
-    """滚动归档：plan(≥15天) → pack（原子）→ upload → verify → 删工作树目录。CI 每日调用。"""
+def asset_exists(slug: str, token: str, date: str, pkg_name: str) -> bool:
+    """远端月 release 是否已有同名资产（只查存在，不比对 digest）。"""
+    rel = _get_release(slug, token, month_of(date))
+    return rel is not None and any(a["name"] == pkg_name for a in rel.get("assets", []))
+
+
+def rotate(slug: str, token: str, apply: bool, out_dir: Path,
+           min_age_days: int = MIN_AGE_DAYS) -> int:
+    """滚动归档：plan(≥min_age_days 天) → pack（原子）→ upload → verify → 删工作树目录。CI 每日调用。"""
     from archive_snapshot import verify as verify_pkg
     rc = 0
-    for d in plan_dirs():
+    for d in plan_dirs(min_age_days):
         date = d.name.replace("snapshot_", "")
         pkg = out_dir / f"{date}.tar.zst"
         if pkg.is_file():
@@ -180,6 +187,14 @@ def rotate(slug: str, token: str, apply: bool, out_dir: Path) -> int:
         if verify_remote(slug, token, date, pkg) == 0:
             # 幂等跳过：远端资产已存在且 digest 一致（重跑只补漏，不删重传）
             print(f"远端已有一致资产，跳过 {pkg.name}")
+        elif asset_exists(slug, token, date, pkg.name):
+            # 远端已有同名资产但 digest 不一致——多数是"目录已删大文件后的残缺重打包"，
+            # 严禁覆盖（10-07 09:45 事故即旧代码走到 upload：15 个完整归档被 meta-only
+            # 残包覆盖，后从 git 历史重建修复）。保留目录人工核对。
+            print(f"远端已有同名资产且 digest 不一致，拒绝覆盖 {pkg.name}（人工核对）",
+                  file=sys.stderr)
+            rc = 1
+            continue
         else:
             upload(slug, token, pkg, date)
             if verify_remote(slug, token, date, pkg) != 0:
@@ -208,6 +223,8 @@ def main() -> int:
     p4 = sub.add_parser("rotate")
     p4.add_argument("--apply", action="store_true", help="真删工作树目录（默认 dry-run）")
     p4.add_argument("-o", "--out", default=str(ROOT / "_archive_tmp"))
+    p4.add_argument("--min-age-days", type=int, default=MIN_AGE_DAYS,
+                    help="目录龄阈值覆盖（默认 15；M3 前置补档用 2=归档全部昨日及更早目录）")
     args = ap.parse_args()
 
     token, slug = _load_token(), repo_slug()
@@ -222,7 +239,7 @@ def main() -> int:
     if args.cmd == "verify":
         return verify_remote(slug, token, args.date, Path(args.pkg))
     if args.cmd == "rotate":
-        return rotate(slug, token, args.apply, Path(args.out))
+        return rotate(slug, token, args.apply, Path(args.out), args.min_age_days)
     return 2
 
 
