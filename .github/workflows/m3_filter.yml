@@ -1,0 +1,100 @@
+name: m3-filter-repo
+on:
+  workflow_dispatch: {}
+permissions:
+  contents: write        # 建 Release 传 bundle + force push 重写后的 main
+concurrency:
+  group: m3-filter       # 与采集/解读不同组，互不取消；自身防重入
+  cancel-in-progress: false
+jobs:
+  m3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0    # 全量历史（filter-repo 与 bundle 的前提）
+
+      - run: pip install git-filter-repo zstandard
+
+      - name: G1 预检与基线
+        run: |
+          set -e
+          git fsck --no-progress > /dev/null && echo "fsck OK"
+          echo "BASE_HEAD=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+          echo "BASE_TREE=$(git rev-parse 'HEAD^{tree}')" >> "$GITHUB_ENV"
+          echo "基线 HEAD=$BASE_HEAD TREE=$BASE_TREE"
+          git count-objects -vH | grep -E 'count:|size-pack'
+
+      - name: G2 全量备份（artifact + Releases 双副本，任何后续失败都可回滚）
+        run: |
+          set -e
+          git bundle create pre_m3_full.bundle --all
+          sha256sum pre_m3_full.bundle | tee pre_m3_full.bundle.sha256
+          ls -l --block-size=M pre_m3_full.bundle
+          git bundle verify pre_m3_full.bundle > /dev/null && echo "bundle verify OK"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pre-m3-full-bundle
+          path: |
+            pre_m3_full.bundle
+            pre_m3_full.bundle.sha256
+          retention-days: 90
+
+      - name: G2b 备份上 Releases（第二副本，artifact 之外的物理位置）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          gh release create m3-backup-20261008 --title "M3 前全量备份" --notes "filter-repo 前完整历史 bundle（回滚用，90 天）" || true
+          gh release upload m3-backup-20261008 pre_m3_full.bundle pre_m3_full.bundle.sha256 --clobber
+        # runner 自带 gh；GITHUB_TOKEN 在 runner 上对 gh 有效
+
+      - name: G3 枚举剥离名单（>10M 且不在 tip 树——当前大文件原样保留）
+        run: |
+          set -e
+          git ls-tree -r HEAD | awk '{print $3}' | sort -u > tip_blobs.txt
+          git cat-file --batch-check='%(objectname) %(objecttype) %(objectsize)' --batch-all-objects \
+            | awk '$2=="blob" && $3>10485760 {print $1}' | sort -u > big_blobs.txt
+          comm -23 big_blobs.txt tip_blobs.txt > strip_list.txt
+          echo "历史大blob=$(wc -l < big_blobs.txt) | tip保护=$(comm -12 big_blobs.txt tip_blobs.txt | wc -l) | 实际剥离=$(wc -l < strip_list.txt)"
+
+      - name: G4 过滤 + tip 树一致性断言（不过即停，远端零触碰）
+        run: |
+          set -e
+          git config user.name m3-bot; git config user.email m3@users.noreply.github.com
+          git filter-repo --force --strip-blobs-with-ids strip_list.txt
+          AFTER=$(git rev-parse 'HEAD^{tree}')
+          echo "过滤后 TREE=$AFTER（基线 $BASE_TREE）"
+          if [ "$AFTER" != "$BASE_TREE" ]; then echo "G4 FAIL：树不一致，中止"; exit 42; fi
+          echo "G4 树一致性 PASS"
+          git count-objects -vH | grep -E 'count:|size-pack'
+          git rev-list --count HEAD
+          git bundle create post_m3_filtered.bundle --all
+          git bundle verify post_m3_filtered.bundle > /dev/null && echo "post bundle verify OK"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: post-m3-filtered-bundle
+          path: post_m3_filtered.bundle
+          retention-days: 90
+
+      - name: G5 force push（lease 锁基线——期间任何人推进过 main 则拒绝）
+        run: |
+          set -e
+          git remote add push_target "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force-with-lease=main:${BASE_HEAD} push_target HEAD:refs/heads/main
+          echo "force push 完成"
+
+      - name: G6 远端复核（指向 push_target；比远端 HEAD 与其树）
+        run: |
+          set -e
+          sleep 5
+          git fetch --quiet push_target main
+          R=$(git rev-parse FETCH_HEAD)
+          L=$(git rev-parse HEAD)
+          RT=$(git rev-parse 'FETCH_HEAD^{tree}')
+          echo "远端=$R 本地=$L 远端树=$RT 基线树=$BASE_TREE"
+          [ "$R" = "$L" ] && echo "G6a 远端=过滤后 HEAD ✓"
+          [ "$RT" = "$BASE_TREE" ] && echo "G6b 远端 tip 树=基线树 ✓（内容零变化）"
