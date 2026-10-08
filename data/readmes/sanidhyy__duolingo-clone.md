@@ -250,8 +250,8 @@ Useful resources and dependencies that are used in Lingo.
 - Flagpack: https://flagpack.xyz/
 
 <!--- DEPENDENCIES_START --->
-- [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^7.9.4
-- [@neondatabase/serverless](https://www.npmjs.com/package/@neondatabase/serverless): ^1.1.0
+- [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^7.9.10
+- [@neondatabase/serverless](https://www.npmjs.com/package/@neondatabase/serverless): ^1.2.0
 - [@radix-ui/react-avatar](https://www.npmjs.com/package/@radix-ui/react-avatar): ^1.2.6
 - [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.1.23
 - [@radix-ui/react-progress](https://www.npmjs.com/package/@radix-ui/react-progress): ^1.1.16
@@ -260,7 +260,7 @@ Useful resources and dependencies that are used in Lingo.
 - [@types/node](https://www.npmjs.com/package/@types/node): ^26.2.0
 - [@types/react](https://www.npmjs.com/package/@types/react): ^19.3.0
 - [@types/react-dom](https://www.npmjs.com/package/@types/react-dom): ^19.3.0
-- [@vercel/config](https://www.npmjs.com/package/@vercel/config): ^0.7.2
+- [@vercel/config](https://www.npmjs.com/package/@vercel/config): ^0.9.0
 - [autoprefixer](https://www.npmjs.com/package/autoprefixer): ^10.6.1
 - [class-variance-authority](https://www.npmjs.com/package/class-variance-authority): ^0.7.1
 - [clsx](https://www.npmjs.com/package/clsx): ^2.1.0
@@ -270,7 +270,7 @@ Useful resources and dependencies that are used in Lingo.
 - [eslint](https://www.npmjs.com/package/eslint): ^9
 - [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.3.6
 - [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier): ^10.1.8
-- [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.48.0
+- [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.52.0
 - [next](https://www.npmjs.com/package/next): ^16.3.6
 - [pg](https://www.npmjs.com/package/pg): ^8.23.0
 - [postcss](https://www.npmjs.com/package/postcss): ^8
@@ -278,7 +278,7 @@ Useful resources and dependencies that are used in Lingo.
 - [prettier-plugin-tailwindcss](https://www.npmjs.com/package/prettier-plugin-tailwindcss): ^0.8.0
 - [ra-data-simple-rest](https://www.npmjs.com/package/ra-data-simple-rest): ^5.15.3
 - [react](https://www.npmjs.com/package/react): ^19.3.0
-- [react-admin](https://www.npmjs.com/package/react-admin): ^5.15.1
+- [react-admin](https://www.npmjs.com/package/react-admin): ^5.15.4
 - [react-circular-progressbar](https://www.npmjs.com/package/react-circular-progressbar): ^2.2.0
 - [react-confetti](https://www.npmjs.com/package/react-confetti): ^6.4.0
 - [react-dom](https://www.npmjs.com/package/react-dom): ^19.3.0

@@ -14,6 +14,7 @@
 [![Live App](https://img.shields.io/badge/Live_App-pact--os.vercel.app-000000.svg?style=for-the-badge&logo=vercel&logoColor=white&color=000000)](https://pact-os.vercel.app)
 [![CI](https://github.com/TheVicky1/Pact_OS/actions/workflows/ci.yml/badge.svg)](https://github.com/TheVicky1/Pact_OS/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-d4af37.svg?style=for-the-badge)](LICENSE)
+[![Hacktoberfest 2026](https://img.shields.io/badge/Hacktoberfest-2026-ff79c6.svg?style=for-the-badge&logo=hacktoberfest&logoColor=white)](https://hacktoberfest.com/)
 [![Good First Issues](https://img.shields.io/github/issues/TheVicky1/Pact_OS/good%20first%20issue?style=for-the-badge&color=7057ff&label=Good%20First%20Issues)](https://github.com/TheVicky1/Pact_OS/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 [![First Timers Only](https://img.shields.io/badge/First--Timers--Only-Friendly-7057ff.svg?style=for-the-badge)](https://www.firsttimersonly.com/)
 [![Up For Grabs](https://img.shields.io/badge/Up--For--Grabs-Listed-00b0ff.svg?style=for-the-badge)](https://up-for-grabs.net/)
@@ -136,7 +137,7 @@ Contributions are warmly welcomed! PACT is designed to be one of the most welcom
 
 > 🚀 **New to Open Source? Start with a Micro-Contribution!**
 > We deliberately scope our beginner tasks into **tiny, single-file micro-contributions** (5–30 minutes of work) with exact file pointers, concrete acceptance criteria, and step-by-step guidance.
-> 👉 [**Browse Live Good First Issues (28 Available)**](https://github.com/TheVicky1/Pact_OS/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) &nbsp;|&nbsp; 📖 [**Read the Beginner's Guide**](docs/CONTRIBUTING-BEGINNERS.md)
+> 👉 [**Browse Live Hacktoberfest & Good First Issues (50+ Available)**](https://github.com/TheVicky1/Pact_OS/issues?q=is%3Aissue+is%3Aopen+label%3Ahacktoberfest) &nbsp;|&nbsp; 📖 [**Read the Beginner's Guide**](docs/CONTRIBUTING-BEGINNERS.md)
 
 ### 🌟 Why Contribute to PACT OS?
 

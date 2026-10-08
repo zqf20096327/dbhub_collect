@@ -4,7 +4,7 @@
 
 这是面向 [DSH Tavern](https://github.com/flizzywine/dsh-tavern) 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。
 
-[下载最新版](https://github.com/huajiao1998/dsh-tavern-sqlite-v2/releases/latest) · [一键安装](#一键安装) · [原档继续使用](#原档怎么继续使用) · [详细安装说明](deploy/INSTALL.md)
+[下载最新版](https://github.com/huajiao1998/dsh-tavern-sqlite-v2/releases/latest) · [一键安装](#一键安装) · [原档继续使用](#原档怎么继续使用) · [详细安装说明](deploy/INSTALL.md) · [更新日志](CHANGELOG.md)
 
 ## 功能亮点
 
@@ -76,7 +76,7 @@ Windows 使用新包菜单的卸载/更新功能。**卸载保留原档与 SQLit
 
 ## 兼容与使用须知
 
-- 当前面向作者 DSH Tavern **2.5.0**（复核至 `8480f7de`）、DSH / boot **0.1.5-rc.2**；Linux CLI 需要 Node.js **22.19+**、pnpm 及 VM 模块启动条件。完整环境与 systemd 准备步骤见[安装说明](deploy/INSTALL.md)。
+- 面向随包已审查的 DSH Tavern **2.5.0 作者契约**（有限基线覆盖至 `68215e47`）、DSH / boot **0.1.5-rc.2**。从 **0.3.2** 起，仅版号变化而契约相同、批准槽位的 UI／提示文案更新、作者原样重装覆盖接缝，可经完整有限检查后安装或重接；保留作者新文案与版本，同包重接不重复装包。不是任意作者新版或所有字符串变化都能放行。Linux CLI 需要 Node.js **22.19+**、pnpm 及 VM 模块启动条件。完整环境与 systemd 准备步骤见[安装说明](deploy/INSTALL.md)。
 - Windows 面向桌面版；原生 Windows CLI 的生命周期尚未完整接线，不列作已支持。
 - **V1 / V2 不可在同一实例共装**，V2 是服务端计算版本线。
 - UI 脚本仍保留浏览器职责；不承诺所有 DOM 脚本、所有卡或所有 SillyTavern API 都兼容。

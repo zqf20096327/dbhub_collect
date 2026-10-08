@@ -20,7 +20,7 @@ curl -fsSL https://raw.githubusercontent.com/theolundqvist/pr-cockpit/main/scrip
 
 [Read the installer first](scripts/bootstrap). It checks prerequisites, installs the desktop app and `pr-cockpit` CLI, and opens setup. On macOS it offers to install missing tools where supported; on Linux it checks system prerequisites and installs missing Bun and GitHub CLI tools into the managed installation.
 
-**Supported platforms:** macOS and Linux. Linux requires systemd and the desktop libraries listed by the installer; x64 and arm64 are supported. X11 is supported directly; Wayland uses XWayland, and global shortcuts depend on compositor policy. Windows is not supported.
+**Supported platforms:** macOS and Linux, both with Git 2.38 or newer; the installer stops with the found version when Git is older. Linux also requires systemd and the desktop libraries listed by the installer; x64 and arm64 are supported. X11 is supported directly; Wayland uses XWayland, and global shortcuts depend on compositor policy. Windows is not supported.
 
 ### Try it on a PR you already know
 
@@ -33,7 +33,7 @@ The first sync fetches PRs involving you. **All PRs** loads on demand without ex
 
 Press <kbd>r</kbd> to filter repositories. Use arrows to highlight one, <kbd>Enter</kbd> to toggle it, or <kbd>Shift+Enter</kbd> to select only that repository.
 
-Enable **Date filters and sorting** in **Settings → Workspace** for **Opened** and **Order** controls in the main PR lists. Filter to the last 24 hours, 7 days, 30 days, or a custom local date-and-time range; custom bounds apply when you press **Apply**. Order by newest or oldest opened, or most or least recently updated. **Queue order** keeps the usual priorities. Grouped queues keep their sections, manual pin order, and stacks; the Whiteboard is unchanged. PRs with an unknown opened date appear in All time but not an active date range.
+Enable **Date filters and sorting** in **Settings → Workspace** for **Opened** and **Order** controls in the main PR lists, plus **Grouping** in Your queue. Switch grouping between Status, Feature area, PR type, and Manual without leaving the queue; the choice is saved. Filter to the last 24 hours, 7 days, 30 days, or a custom local date-and-time range; custom bounds apply when you press **Apply**. Order by newest or oldest opened, or most or least recently updated. **Queue order** keeps the usual priorities. Grouped queues keep their sections, manual pin order, and stacks; the Whiteboard is unchanged. PRs with an unknown opened date appear in All time but not an active date range.
 
 ## From finding the PR to finishing the review
 
@@ -41,11 +41,13 @@ Enable **Date filters and sorting** in **Settings → Workspace** for **Opened**
 
 Press <kbd>⌥⌘K</kbd> on macOS or <kbd>Super+Alt+K</kbd> on Linux X11 to search from another app. Move the pointer or use the arrow keys to select a result; Enter opens that highlighted result in Cockpit, with the cached PR ready to read. Typing a number such as `51` or `#51` lists that exact PR first, then PRs whose numbers contain it, open before closed and highest first, so `51` also finds `#10051`.
 
+The search panel uses its own connection pool, so pending main-window requests cannot queue ahead of its page load. Shell updates take effect after relaunching the desktop app.
+
 ![Searching for a public rust-lang/rust pull request from the desktop and opening it in PR Cockpit](docs/screenshots/landing-search.gif)
 
 ### Read the change, then follow the details
 
-Diffs, threads, checks, and file history live in the same review workspace. The PR check summary uses the latest workflow run and job attempt; earlier runs remain in Actions history. Press <kbd>x</kbd> to fold test files when you want to see the implementation first; press it again to bring the tests back.
+Diffs, threads, checks, and file history live in the same review workspace. The PR check summary uses the latest workflow run and job attempt; earlier runs remain in Actions history. Press <kbd>x</kbd> to fold tests and generated files when you want to see the implementation first; press it again to bring them back. Generated files include `.generated.` names and committed `.gitattributes` rules marked `linguist-generated`; nested rules and overrides follow the reviewed revision. The same group can be hidden by default in Settings.
 
 ![Folding five regression-test diffs in graphql/graphql-js#4692 to isolate the one-line implementation change](docs/screenshots/landing-hide-tests.gif)
 
@@ -56,6 +58,8 @@ Reviewer badges show scores explicitly posted in reviews or comments, parsed wit
 Enable **Pending reviews** in **Settings → Workspace** to save inline comments as a native GitHub draft and submit them together as one review. Drafts survive reloads and remain editable; if the PR head changes, submission stops until the stale draft is discarded. **Comment now** still posts a single comment immediately.
 
 Enable **Mark changed descriptions** in **Settings → Workspace** to show a small blue dot to the left of the avatar, vertically centered on it, when the PR description differs from the one you last read. It is off by default. A description counts as read while it is on screen in the Conversation tab of a foreground window; PRs you have never read stay unmarked, and a description reverted to the version you read clears the dot.
+
+Task-list checkboxes (`- [ ]`, `- [x]`) in a PR description can be ticked in the Conversation tab; comments stay read-only. Each tick is queued as a description edit that rewrites only that checkbox in the description GitHub currently holds, so text republished since you loaded the PR, such as a regenerated report, is kept. A task is matched by the PR number that starts it (`#123`), otherwise by its text; if it is gone or ambiguous the edit fails and you reload. Checkboxes stay disabled while a description edit is open, queued, or failed.
 
 Enable **Approve PRs for safe merge** in **Settings → Workspace**, then right-click a PR and choose **Approve for safe merge**. It appears above ordinary pins, below failed merges, without launching an agent. Approval covers that PR through fixes and base updates until revoked; closing it or disabling the feature clears approval. Ordinary pins remain bookmarks.
 
@@ -76,7 +80,7 @@ Desktop notifications are off by default. In **Settings → Notifications**, cho
 | <kbd>c</kbd> / <kbd>r</kbd> | Comment / reply |
 | <kbd>p</kbd> | Open in the configured agent |
 | <kbd>e</kbd> | Edit the open file |
-| <kbd>x</kbd> | Hide / show test files |
+| <kbd>x</kbd> | Hide / show tests and generated files |
 | <kbd>h</kbd> | File history |
 | <kbd>m</kbd> | Merge |
 | <kbd>⌘</kbd><kbd>z</kbd> / <kbd>Ctrl</kbd><kbd>z</kbd> | Undo a group-move rename or Set Aside action |
@@ -127,19 +131,21 @@ Arming auto-merge approves the feature and delegates safely landing it to the me
 
 Safe-merge approval is also visible in CLI output and as `approvedForSafeMerge` in `--json`; `listen` wakes when it changes. Agents must re-read approval immediately before merging and still satisfy the safety checks above. Approval is granted or revoked in the app, never by an agent approving itself.
 
-The Agents tab renders Markdown answers, groups tool activity into expandable details, and shows an identical final-answer echo only once. Full tool inputs, errors, and raw logs remain available.
+The PR detail’s Agents tab renders Markdown answers and expandable tool activity, shows an identical final-answer echo only once, and keeps available tool inputs, errors, and log tails inspectable.
+
+Enable **Agent conversations** in **Settings → Agents & merging** for a conversation-first **Agents** workspace beside the inbox tabs. Search sessions grouped into **Working**, **Needs attention**, and **Recent**, including closed PRs. Read **Conversation**, expand longer tasks in place, inspect **Log tail**, or open an older attempt from run history. Run links support Back/Forward; each run and view remembers its reading position. New output follows only when you’re at the end; otherwise **Jump to latest** signals unread output. Transcripts and logs contain the recent output available from the cache, not complete logs. PR filters and grouping sit below the inbox tabs.
 
 Enable **Quick Generate** in **Settings → Agents & merging** to draft text from anywhere with <kbd>⌥⌘J</kbd> on macOS or <kbd>Super+Alt+J</kbd> on Linux X11. Choose an API key and model, write a prompt, then press <kbd>⌘Enter</kbd> to generate. Results render Markdown with Cockpit’s syntax-highlighted code blocks; **Copy** keeps the original Markdown. Closing the prompt keeps its draft and result. Updating an older desktop shell requires a normal relaunch for the global shortcut.
 
 Keys are detected from `$XDG_CONFIG_HOME/.env` (or `~/.config/.env`), then `~/.env`, then the Cockpit server's environment; the first nonempty value wins. **API key file** selects a different file and accepts absolute paths, `~/`, `$HOME`, or `$XDG_CONFIG_HOME`. A missing selected file shows an error instead of falling back. Supported names are `CEREBRAS_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, and `GROQ_API_KEY`; suffixes such as `CEREBRAS_API_KEY_WORK` provide additional choices. Credentials stay on the Cockpit host and go only to their provider, including in replica mode. Models come from the provider's catalog, with Cerebras Qwen preferred by default.
 
-**Settings → Usage** shows REST core and GraphQL quota separately, including exhausted balances and reset times. Reading quota status remains available when the primary REST limit is exhausted; GitHub's secondary cooldowns still apply.
+**Settings → Usage** shows REST core and GraphQL quota separately, including exhausted balances and reset times. Optional REST request attribution is off by default; turn on **Record REST requests** there to record this Cockpit server's actual outbound attempts by source and endpoint, with a 72-hour history. On a replica, the switch controls its authoritative source rather than the viewing machine. Other-client usage stays unknown until uninterrupted recording covers the whole quota window with authoritative headers and known charges, and while responses remain in flight. Turning recording off or on, account changes, failed ledger writes and restarts start coverage over. Automatically followed redirects have unknown charges. While Cockpit runs a `gh` command that can call GitHub's API (sign-in checks, and webhook forwarding for as long as it runs), Cockpit's own requests are still recorded but other-client usage stays unknown. Reading quota status remains available when the primary REST limit is exhausted; GitHub's secondary cooldowns still apply.
 
 ## Local reads. GitHub authority.
 
 Cockpit is a client for your existing GitHub workflow, not a second place to maintain pull requests.
 
-- **On your machine:** a Bun server maintains a SQLite cache of PR state and serves the desktop UI and CLI. Diffs, threads, checks, and images are cached locally.
+- **On your machine:** a Bun server caches PR state in SQLite and serves the desktop UI and CLI. In replica mode, cached lists stay local; GitHub searches and keyed PR title lookups use the connected source.
 - **Mirror storage:** Git mirrors compact automatically and evict the oldest unprotected caches toward a 20 GiB target. Active reads, recent use, and linked worktrees are protected, so the target is not a hard limit.
 - **Back to GitHub:** comments, reviews, file edits, thread resolution, and merges use your GitHub CLI authentication. GitHub remains authoritative.
 - **Keeping it current:** the hosted relay is enabled by default. It receives GitHub webhooks and delivers compact change markers and Actions run/job state, including runner assignment—not full PR contents or job logs—to Cockpit. Branch pushes refresh open PRs whose head or base matches, including recently viewed PRs outside the inbox. A direct GitHub poller repairs missed events.

@@ -160,6 +160,44 @@ ethical behaviour, user sovereignty and privacy, lifecycle and guardians, data s
 [an honest ledger](docs/policies/ENFORCEMENT.md) of what the code enforces, what a prompt carries, and
 what is still a person's decision. They change in the open.
 
+## Enterprise
+
+The same store for an organisation: a shared database, rules about who sees what, encryption
+the operator controls, and erasure on request. SQLite stays the default, and nothing here changes
+a local setup.
+
+- **Postgres.** `PostgresMemoryStore` (pgvector 0.8 or newer) sits behind the same
+  `MemoryStore` interface and passes the same conformance suite. Every read and write is confined
+  to one tenant key, and the audit chain is kept per tenant in the same transaction as each
+  governed write; `verify-audit --postgres --tenant <key>` checks it. A write reads and writes
+  only the rows it acts on, so its cost does not grow with the tenant: measured flat from 1,000
+  to 100,000 facts (about 1–3 ms a write, 3–6 ms governed and audited, in-process PGlite).
+  [docs/POSTGRES.md](docs/POSTGRES.md)
+- **Boundaries.** A policy can declare who sees what as data: `readBoundary`, fact labels
+  against the asking actor's attributes, with equality, membership, AND and OR. SQLite and
+  Postgres compile it into their own `WHERE`, before ranking and before any `limit`, so facts
+  outside it never take a place in a page. It fails closed, and `beforeRead` still has the final
+  word. [docs/policies/boundaries.md](docs/policies/boundaries.md)
+- **Sign-in.** The HTTP server can accept OIDC/JWT bearer tokens from your own identity provider
+  (Okta, Microsoft Entra, Google Workspace, any OIDC issuer) instead of the owner's passphrase.
+  Signature (the issuer's JWKS), issuer, audience and expiry are checked with jose; configured
+  claims become the actor attributes boundaries read, and one claim can name the tenant. Any
+  failed check is a 401. [docs/SIGN-IN.md](docs/SIGN-IN.md)
+- **Encryption at rest** is not something this library does. On Postgres it belongs to the
+  database: storage encryption with KMS-managed keys, encrypted backups, TLS. Locally the SQLite
+  file is plaintext, owner-only (0600 in a 0700 directory), so use full-disk encryption
+  (FileVault, BitLocker, LUKS). For file-level encryption, a SQLCipher build of SQLite is the
+  route, but it is **not built or tested here**. `encryptionKeyRef` names a key you manage; it
+  encrypts nothing.
+- **Erasure.** `eraseWhere({ label: "subject", equals: "person-42" })` erases every fact
+  carrying that label that the actor can see, along with what was concluded from them. Each
+  fact goes through the erase policies, so a memory lock still refuses and Recently deleted
+  still holds. The call returns a receipt: selector, actor and time; counts erased, refused
+  (with reasons) and held; ids hashed. Its digest is chained into the audit trail, so
+  `verify-audit memory.db --receipt receipt.json` checks it. **Backups and exports made before
+  the erasure are outside it**, and the receipt says so. It behaves the same on SQLite and
+  Postgres. [docs/ERASURE.md](docs/ERASURE.md)
+
 ## Limits, measured
 
 One SQLite file, one process, one writer. Measured on an M1 Pro laptop with 100,000
@@ -198,8 +236,9 @@ difference does not show, and a test holds its quality: twelve facts asked for i
 questions ("what is the wifi login") among two hundred distractors all land on the first page.
 
 What that means: a personal assistant or a single-tenant service will not notice the
-store; a multi-tenant SaaS needs the Postgres backend on the roadmap. Node/TypeScript
-only for now; the optional on-device embedder is a 25 MB model download.
+store. Hosted deployments can use `PostgresMemoryStore` with explicit tenant keys;
+SQLite remains the default. Node/TypeScript only for now; the optional on-device
+embedder is a 25 MB model download.
 
 ### The semantic path costs more
 
@@ -480,7 +519,8 @@ In Claude: *Customize → Connectors → Add custom connector*, URL `https://…
 ChatGPT: *Settings → Security and login → Developer mode*, then add the same URL. Each app
 opens a consent page once; the passphrase allows it. Only hashes of codes and tokens are
 kept on disk, and five wrong passphrases lock the page for 15 minutes. Facts an app writes
-carry its name in the audit trail, as over stdio.
+carry its name in the audit trail, as over stdio. For an organisation, the same server can be
+signed in by your own identity provider instead: [docs/SIGN-IN.md](docs/SIGN-IN.md).
 
 ## Use it as a Claude Code plugin
 
@@ -550,7 +590,7 @@ from source (it ships no Node 20 binary).
 - [x] The audit event committed in the same transaction as the fact it describes, as one chain many processes share (v0.4.2)
 - [x] A comparison table and a live paste-your-export demo (albuddy.com)
 - [x] Transaction time, the second half of bi-temporal: "what did we believe at X", including a fact held wrongly and later corrected (v0.5.0)
-- [ ] A Postgres backend behind the same `MemoryStore` interface, for multi-tenant and hosted deployments (SQLite stays the local-first default; the interface is small and the conformance suite is what a backend must pass)
+- [x] A Postgres backend behind the same `MemoryStore` interface, for multi-tenant and hosted deployments (SQLite stays the local-first default; the backend runs the shared conformance suite)
 - [ ] Framework integrations (LangChain, CrewAI, Vercel AI SDK)
 
 ## Development

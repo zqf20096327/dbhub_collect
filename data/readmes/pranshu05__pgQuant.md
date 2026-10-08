@@ -36,11 +36,13 @@ The inspiration for starting this project was the course I have taken currently,
   - Shrinkage Covariance Matrix (Ledoit-Wolf style)
 - **[Factor Construction (docs/factors.md)](docs/factors.md):**
   - Portfolio sort infrastructure (cross-sectional bucketing)
-  - SMB and HML factor construction (Fama-French double-sort)
+  - SMB, HML, and WML (momentum) factor construction
+
+- **[Portfolio Optimization (docs/optimization.md)](docs/optimization.md):**
+  - Unconstrained mean-variance analytical optimization
 
 **Planned Features (WIP):**
-- **Factor Construction:** WML (momentum) construction.
-- **Portfolio Optimization:** Unconstrained and constrained (long-only) mean-variance optimization.
+- **Portfolio Optimization:** Constrained (long-only) mean-variance optimization (Quadratic Programming).
 
 ## Data Access Convention
 
@@ -55,8 +57,21 @@ Rather than owning a schema, `pgQuant` is designed to be flexible. Functions acc
 
 ## Installation
 
-### 1. Pre-Compiled Release (Recommended)
-You can download the pre-compiled binary for your specific PostgreSQL version directly from the [GitHub Releases](https://github.com/pranshu05/pgQuant/releases) page.
+### 1. One-Line Installation (Recommended)
+
+The easiest way to install pgQuant is to use our installation script. It will automatically detect your PostgreSQL version, download the correct pre-compiled binary from GitHub, and install it to the correct paths.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/pranshu05/pgQuant/main/install.sh | bash
+```
+
+Once installed, connect to your PostgreSQL database and enable the extension:
+```sql
+CREATE EXTENSION pgquant;
+```
+
+### 2. Manual Pre-Compiled Installation
+You can also manually download the pre-compiled binary for your specific PostgreSQL version directly from the [GitHub Releases](https://github.com/pranshu05/pgQuant/releases) page.
 
 1. Download the ZIP file for your PostgreSQL version (e.g., `pgquant-v0.1.2-pg14-linux-amd64.zip`).
 2. Unzip the file:

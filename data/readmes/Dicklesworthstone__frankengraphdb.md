@@ -220,6 +220,11 @@ fgdb query --db mydb.fgdbdir --key-file fgdb.keys --property score=1 \
   --spill-dir /tmp --spill-memory-bytes 67108864 --spill-disk-bytes 1073741824 \
   "MATCH (n) RETURN n AS node ORDER BY n.score DESC LIMIT 100"
 
+# Numeric grouping with bounded resident groups and exact aggregate values
+fgdb query --db mydb.fgdbdir --key-file fgdb.keys --property score=1 \
+  --spill-dir /tmp \
+  "MATCH (n) RETURN n.score AS score, count(*) AS count, avg(n.score) AS mean"
+
 # Commit a write, then compare two committed revisions of one query
 fgdb write --db mydb.fgdbdir --key-file fgdb.keys "<gql>"
 fgdb diff  --db mydb.fgdbdir --key-file fgdb.keys --before <seq> --after <seq> "<gql>"
@@ -285,13 +290,25 @@ d = GraphDatabase.driver("bolt://127.0.0.1:7688", auth=bearer_auth(open("token")
 print(d.execute_query("MATCH (p:Person) RETURN p LIMIT 3").records)'
 ```
 
-`query --spill-dir <existing-directory>` uses the native external sorter for vertex and fixed-edge scans, including property-only projections, `DISTINCT`, terminal `SKIP`/`LIMIT`, and historical cuts. `ORDER BY` may use unreturned vertex or edge properties and supported path functions: these private cells determine ordering and pagination, then are removed before result rows and column names are published. Multiple sort keys, direction and null placement use the ordinary query semantics. Under `DISTINCT`, sort keys must be projected. Aggregates, optional or variable-length joins, maps, and other unsupported native instructions refuse without an eager retry. It cannot be combined with `--stream`, `--certify-to`, or a standalone `CALL fnx`.
+`query --spill-dir <existing-directory>` uses the native external sorter for vertex and fixed-edge scans, including property-only projections, `DISTINCT`, terminal `SKIP`/`LIMIT`, and historical cuts. `ORDER BY` may use unreturned vertex or edge properties and supported path functions: these private cells determine ordering and pagination, then are removed before result rows and column names are published. Multiple sort keys, direction and null placement use the ordinary query semantics. Under `DISTINCT`, sort keys must be projected. Optional or variable-length joins, maps, and other unsupported native instructions refuse without an eager retry. It cannot be combined with `--stream`, `--certify-to`, or a standalone `CALL fnx`.
 
-The scratch files share one memory allowance (`--spill-memory-bytes`, default 64 MiB), and split one append-only disk allowance (`--spill-disk-bytes`, default 1 GiB) equally. Every intermediate pass and metadata write spends disk quota. `--max-spill-rows` (default 1,000,000) bounds input occurrences independently of final `--max-result-rows`; `--max-sort-work` (default 1,000,000,000) bounds additional sort work independently of the query's source budget. Encoded evaluation rows, including hidden sort keys, are capped at 1 MiB. The decoded source generation, one native row and scalar/output encoding are outside the scratch pool, so this is external result ordering, not a whole-engine memory bound.
+The same flag supports numeric grouping over vertex and fixed-edge inputs: `count`, `sum`, `avg`, `min`, and `max`, including global summaries and historical cuts. Computed grouping keys and aggregate arguments, such as `sum(n.quantity * n.price)` or `avg(n.p + $weights.delta)`, run through the native expression evaluator before partitioning. Every declared input expression runs, including hidden columns and when `LIMIT 0` requests no output. Input occurrences are written into deterministic partitions, and a partition that exceeds the resident group allowance is split again before reduction. Every group finishes before `HAVING`, computed output expressions, exact typed `ORDER BY`, and `SKIP`/`LIMIT`; even `LIMIT 0` cannot hide a later invalid qualified group. Computed outputs such as `sum(n.p) * 2`, conditional scalar expressions, lists and maps use the native evaluator once per qualified group and remain in scratch beside the complete hidden ranking cells. Ordering can use hidden aggregate columns, and visible grouping keys may be omitted or repeated. Full canonical grouping keys determine expression evaluation order and break ordering ties; hidden cells are removed before delivery. Counts remain unsigned counts, integer sums retain their full wide range, and exact averages retain their numerator and denominator. Aggregate `DISTINCT`, `COLLECT`, relational inputs, and output `DISTINCT` still refuse before source execution. Hash collisions or skew that cannot fit within the bounded partition contract return a resource refusal.
 
-Sorting finishes before delivery begins. Rows are decoded and flushed individually with the ordinary native cell types and streaming completion contract. Each invocation creates a private scratch directory and exclusive files, then retires its own files before the success result; failures and cancellation also clean them up. Process death can leave that invocation's private directory, which later invocations never reuse or sweep. An error, unsuccessful exit, or missing terminal result means incomplete delivery.
+The scratch files share one memory allowance (`--spill-memory-bytes`, default 64 MiB), and split one append-only disk allowance (`--spill-disk-bytes`, default 1 GiB) equally across two files for ordering or three for grouping. Every intermediate pass and metadata write spends disk quota. `--max-spill-rows` (default 1,000,000) bounds input occurrences independently of final `--max-result-rows`; `--max-sort-work` (default 1,000,000,000) bounds additional partition, reduction, and sort work independently of the query's source budget. Encoded evaluation rows, including hidden sort keys, and private aggregate frames are capped at 1 MiB; a computed-output frame includes both its complete ranking row and its projected row. External grouping charges its resident groups, decoded aggregate rows, computed-output workspaces and projection copies to the shared pool before allocation. The decoded source generation, one native source/computed input row and final transport encoding remain outside that pool; input and output expressions share the source cursor's work and scratch-entry budgets.
 
-`fgdbd` (`crates/fgdb-server`) serves the FGP handshake, one autocommit GQL read or write per `EXECUTE` (a `CREATE ... RETURN` answers its rows with the commit), ephemeral flow-controlled result streams, and live `SUBSCRIBE TO` changefeeds (a baseline, then one exact delta per commit), plus the same statements over an HTTP/1.1 JSON adapter, and the read-only Bolt-compat subset (`BoltCompatProfileV1`, `--bolt-listen`) that official Neo4j drivers connect to with `bolt://` or `neo4j://`: autocommit and explicit read transactions (each transaction reads one pinned generation), nodes returned with their labels and properties, and writes refused with `Neo.ClientError.Statement.AccessMode`. Every statement runs through a capability-authorized session built from the connection's Warden token, so a token's label/relation/property scope applies before expansion. It does not yet serve TLS, durable result retention (ACK/release/resume), explicit multi-statement write transactions, Bolt writes or relationship/path values, durable or capability-masked subscriptions, or the HTTP/2, gRPC and WebSocket adapters; [docs/FABRIC_PROTOCOL.md](docs/FABRIC_PROTOCOL.md) lists exactly what is served.
+Grouping and sorting finish before delivery begins. Rows are decoded and flushed individually with the ordinary native cell types and streaming completion contract. Each invocation creates a private scratch directory and exclusive files, then retires its own files before the success result; failures and cancellation also clean them up. Process death can leave that invocation's private directory, which later invocations never reuse or sweep. An error, unsuccessful exit, or missing terminal result means incomplete delivery.
+
+`fgdbd` (`crates/fgdb-server`) serves the FGP handshake, one autocommit GQL read or write per `EXECUTE`, ephemeral flow-controlled result streams, and live `SUBSCRIBE TO` changefeeds (a baseline, then one exact delta per commit), plus the same statements over an HTTP/1.1 JSON adapter. `CREATE`/`INSERT`, matched `SET`/`REMOVE`/deletion, and vertex `MERGE` can return rows with their native transaction outcome. Their `RETURN` expressions run against the authorized statement result before commit, so expression or result-quota failures discard the writes; `LIMIT 0` still applies effects. The read-only Bolt-compat subset (`BoltCompatProfileV1`, `--bolt-listen`) accepts official Neo4j drivers: autocommit and explicit read transactions each use one pinned generation, nodes include their labels and properties, and writes refuse with `Neo.ClientError.Statement.AccessMode`. Every statement runs through a capability-authorized session built from the connection's Warden token, so a token's label/relation/property scope applies before expansion. It does not yet serve durable result retention (ACK/release/resume), explicit multi-statement write transactions, Bolt writes or relationship/path values, durable or capability-masked subscriptions, or the HTTP/2, gRPC and WebSocket adapters; [docs/FABRIC_PROTOCOL.md](docs/FABRIC_PROTOCOL.md) lists exactly what is served.
+
+To encrypt all configured listeners, add `--tls-cert-file server-chain.pem --tls-key-file server.key` to `fgdbd serve`. The PEM private key must be owner-only. FGP, HTTPS and Bolt then require TLS 1.3 through the pinned foundation; a refused handshake never falls back to plaintext. FGP requires ALPN `fgp/1`, HTTPS requires `http/1.1`, and Bolt retains its encrypted version negotiation without requiring ALPN. Capability authentication and fresh checks before physical output still apply. Clients connect with an explicit trusted CA and the name on the server certificate:
+
+```bash
+fgdb remote --addr 127.0.0.1:7687 --token-file token --database social \
+  --tls-server-name db.example.test --tls-ca-file ca.pem \
+  query "MATCH (p:Person) RETURN p.name"
+```
+
+The same TLS options apply to remote writes and subscriptions. HTTP clients use `https://` with their CA verification enabled; Neo4j drivers use their encrypted Bolt configuration. Server identity is validated at startup, early data is disabled, and drain cancels unfinished handshakes.
 
 > **Target state.** The interactive shell, `branch`, `backup`/`restore` archives, `doctor`/`analyze` operations, `robot health`, a `--json` output flag, and the remaining `fgdbd` surfaces above remain W10 composition work (`registries/workspace_topology.toml`). The commands above are exactly the ones that run today.
 
@@ -337,6 +354,63 @@ fn main() -> fgdb::Result<()> {
     Ok(())
 }
 ```
+
+**Buffered native reads available today.** `Database::open_buffered_read_view` opens an owned, fixed checkpoint without constructing the resident graph snapshot or a block writer. Its async `vertex`, `edge`, and bounded incoming/outgoing `adjacency_at` methods fault authenticated immutable objects through the Strata extent cache. The corresponding `*_at` methods read historical statements with the same winning-version and retirement metadata as the ordinary resident view. `open_buffered_read_view_with_vfs` provides the same path through an injected filesystem.
+
+The caller supplies a shared `MemoryPool` and `BufferedReadLimits`: root bytes, source bytes inspected during admission, block/vertex-patch counts, per-operation work, and cache frame/extent limits. Metadata, decoding workspace, admission history, cache frames and returned `BufferedValue` rows retain reservations for their lifetimes. A held result remains charged after its view is dropped. Point reads currently scan the admitted descriptors; bounded adjacency returns the complete winning incidence or a resource error, and parallel edges remain distinct.
+
+Within the caller's async runtime, with `commit`, `query`, and `keys` supplied as the ordinary capability contexts and database keys:
+
+```rust
+use fgdb::{BufferLimits, BufferedReadLimits, Database, MemoryPool};
+use fgdb_types::VId;
+
+let memory = MemoryPool::new(16 * 1024 * 1024, 0)?;
+let limits = BufferedReadLimits {
+    max_root_bytes: 64 * 1024,
+    max_source_bytes: 64 * 1024 * 1024,
+    max_blocks: 512,
+    max_vertex_patches: 512,
+    max_work: 1_000_000,
+    buffer: BufferLimits {
+        max_frames: 8,
+        max_ghost_entries: 16,
+        max_extent_bytes: 16 * 1024,
+    },
+};
+let mut view = Database::open_buffered_read_view(
+    &commit, "mydb.fgdbdir", keys, memory.clone(), limits,
+).await?;
+let vertex = view.vertex(&query, VId(1)).await?;
+```
+
+**Buffered GQL execution.** The same view now exposes `stream_graph_values_governed` and its historical `_at` counterpart. Prepare and bind with the existing native GQL compiler and your symbol resolver; execution then pulls canonical vertex histories through the extent cache. The supported projection begins with the scanned vertex identity and can include its canonical properties. Labels, local `WHERE` expressions, `DISTINCT`/`ALL`, and `SKIP`/`LIMIT` use the existing evaluator and row semantics. `stream_graph_vertices_governed` provides the identity-only counterpart for native prepared patterns.
+
+For example, with property name `score` bound to the application's catalog ID:
+
+```rust
+use fgdb_delta_types::PropertyKeyId;
+use fgdb_gql::{
+    GqlParameters, GqlQueryPolicy, GraphSymbol, GraphSymbolKind, PreparedGraphText,
+};
+
+let prepared = PreparedGraphText::prepare(
+    "MATCH (n) WHERE n.score >= 10 RETURN n, n.score LIMIT 100",
+    |kind, name| match (kind, name) {
+        (GraphSymbolKind::Property, "score") => Some(GraphSymbol::Property(PropertyKeyId(1))),
+        _ => None,
+    },
+)?.bind_parameters(&GqlParameters::new())?;
+let policy = GqlQueryPolicy::new(100_000, 100, 10_000_000, 1_000_000);
+let mut cursor = view.stream_graph_values_governed(&query, &prepared, policy)?;
+while let Some(row) = cursor.next().await {
+    println!("{:?}", row?.values());
+}
+```
+
+The scan merges sorted patches with one small head per patch and one decoded patch, while scan misses bypass point-cache admission. It admits each candidate before reading that identity's history and shares one cumulative query budget across storage and evaluation. Evaluator temporaries and returned `BufferedQueryRow` values reserve bytes before allocation; a returned row stays charged after dropping the cursor or view. A failed or dropped in-flight pull permanently stops its cursor. Earlier successful pulls remain delivered after a later error, so complete success requires exhausting the cursor. Joins, edge expansion, probes, aggregation, property-only output, and alternate ordering still refuse in this buffered query profile. These owner-level methods do not apply Warden session masking.
+
+Opening checks the existing slot, manifest coordinates, Chronicle binding and complete object/history admission. A missing or lagging checkpoint returns `BufferedOpenError::RecoveryRequired`; recovery is an explicit ordinary writable open. The buffered view holds no writer lease once returned, so later writes and compaction leave its selected root unchanged. Initial history validation can still exceed the chosen pool and refuse; its conservative reservations favor a hard admission boundary over density. Source-byte refusal can inspect one format-bounded object beyond the requested source limit. Chronicle recovery and caller-owned query preparation/catalog metadata remain outside the pool. The view does not supply a cross-process object-retention/GC lease; the database's immutable object directory must remain available.
 
 **4. Python bindings** (ABI3 wheels, with a zero-friction `to_fnx()` / `from_fnx()` bridge and NumPy views over `Embedding` columns). **Target state:** no wheels are published — `pip install frankengraphdb` installs nothing of ours today. When releases exist:
 

@@ -76,14 +76,18 @@ I built it for myself first. I hope it helps someone in my shoes.
 
 ## Installation
 
-autodb is a single static binary with no runtime dependencies.
+autodb is a single binary. On Linux the plain download is static, with no
+runtime dependencies, and runs anywhere. The native window (`--gui`) is a
+separate `linux-<arch>-gui` download, because it links the window system's
+libraries (Wayland/X11/EGL) and needs them to run. The macOS build carries the
+window itself and needs only macOS.
 
 | Platform | Install |
 |---|---|
 | macOS, Linux | [Homebrew](https://brew.sh): `brew install yongjohnlee80/tap/autodb` |
 | Linux, macOS | [mise](https://mise.jdx.dev): `mise use -g github:yongjohnlee80/autodb` |
 | Linux, macOS | The install script, below |
-| Linux, macOS | A [release archive](https://github.com/yongjohnlee80/autodb/releases/latest) (`amd64` and `arm64`, with SHA-256 checksums) |
+| Linux, macOS | A [release archive](https://github.com/yongjohnlee80/autodb/releases/latest) (`amd64` and `arm64`, with SHA-256 checksums; on Linux, the `-gui` archive adds `--gui`) |
 | Windows | Use [WSL2](https://learn.microsoft.com/windows/wsl/install) and any Linux method. A native Windows build is not published yet. |
 | Any, with Go 1.25+ | Build from source, below |
 
@@ -245,6 +249,7 @@ your system clipboard over SSH and inside tmux.
 | [Browser frontend](docs/web-ui.md) | `--web-ui`, access over SSH, and how it differs from the terminal |
 | [Remote access](docs/remote-access.md) | The TUI on your own computer, reaching a server through Remote Control |
 | [Configuration](docs/configuration.md) | The config file, and who can reach the server |
+| [Cancelling on SQLite](docs/reference/sqlite-cancel.md) | Why a cancel on a SQLite target can be lost, and what to do |
 | [`config.example.toml`](config.example.toml) | Every setting, its default, and why |
 | [RPC protocol](rpc/README.md) | The msgpack-RPC surface the frontends use |
 | [Security policy](SECURITY.md) | How to report a vulnerability, privately |

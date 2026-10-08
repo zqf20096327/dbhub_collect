@@ -69,16 +69,18 @@ your own: save a board as a template, with its content or only the skeleton.*
   archive, and a canvas from Obsidian or nexlore comes in, into an open board or as a new one. What only nexcanvas
   knows (shapes, drawings, turned things, the background) travels along unseen and comes back whole, so a board
   moves from one nexcanvas to another as a file.
-- **Spaces and rights.** Boards live in spaces; each member of a space reads, writes or manages there. A space
-  somebody may not read answers like one that does not exist. A board can get a public page, read only, with an end
-  date and a password if you like.
+- **Spaces and rights.** Boards live in spaces; each member of a space reads, writes or manages there, on their own or
+  through a team. Team leads change their teams only if the operator allows it. A space somebody may not read answers
+  like one that does not exist. A board can get a public page, read only, with an end date and a password if you
+  like; no page of nexcanvas asks to be listed by search engines.
 - **Versions and the trash.** A state of each board is kept every half hour while people work on it; bring one back
   with a click. Boards and spaces go to the trash for 30 days.
 - **On the phone.** All tools with the finger: the tools sit at the bottom, one finger moves the board, two zoom,
   a long press opens the menu, a double tap starts a text.
 - **Around it, as in nexlore.** Accounts by invitation, second factor with recovery codes, sign-in through an OIDC
-  provider, a log in four levels, German and English plus languages the operator adds as JSON files, backups of the
-  database together with every photo and file, with a check before going back.
+  provider, a log in four levels, German and English plus languages the operator adds as JSON files, mails in the
+  language of whoever receives them, backups of the database together with every photo and file, with a check before
+  going back.
 
 ## Start
 
@@ -128,7 +130,8 @@ nexcanvas is made to be reachable from outside, for yourself on the road or for 
    through, and send HSTS from the proxy.
 3. **Tell nexcanvas about the proxy**: `NEXCANVAS_PUBLIC_URL` (the address people use), `NEXCANVAS_TRUSTED_PROXIES`
    (the proxy's address or network; without it every sign-in seems to come from the proxy and the brake against
-   guessing cannot tell people apart), and `NEXCANVAS_COOKIE_SECURE: "on"`.
+   guessing cannot tell people apart; Settings, Server says so while it is missing), and
+   `NEXCANVAS_COOKIE_SECURE: "on"`.
 4. **A second factor**: set up your own under My account, Security. Or sign in through your OpenID Connect provider.
 5. **Leave the switches closed you do not need**: public pages and API tokens are off until you open them.
 6. **Optionally keep the operator's settings at home**: `NEXCANVAS_OPERATOR_NETWORKS: "192.168.0.0/16"` refuses them
@@ -191,8 +194,12 @@ The routes are in [docs/api.md](docs/api.md).
 
 ## Security in short
 
-- Passwords are hashed with Argon2id; failed sign-ins lock an account for a while, and a brake per sender slows
-  guessing on top. With a second factor, the password alone opens nothing.
+- Passwords are hashed with Argon2id; failed sign-ins lock an account for a while (its API tokens keep working), and
+  a brake per name and per sender across all names slows guessing on top. A browser that signed in as a name before
+  is counted on its own for that name (until a new password, a block or signing out everywhere): somebody guessing
+  from the same address, that very name included, does not hold it, while its own wrong passwords still slow it
+  down. With a second factor, the password alone opens nothing.
+- Pictures of more than 50 million pixels are refused before they are decoded.
 - Every changing request needs the header `X-Nexcanvas-Client`, which a page on another site cannot send; the live
   connection checks where it comes from and checks the rights of each connection again every 30 seconds, so a
   member taken out of a space is out of its boards at once.

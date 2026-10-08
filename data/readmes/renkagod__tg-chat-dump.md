@@ -30,7 +30,7 @@ out/1234567890_My_Chat/
 - Run it without arguments for the interactive mode: add or remove accounts, find a chat as you type, watch a progress bar with ETA.
 - A whole forum in one pass. Messages are sorted into topics as they arrive.
 - The chat is split into message-id ranges that several workers download at once. Telegram limits each account separately, so every extra account adds about as much speed as the first.
-- Progress is committed to SQLite every 100 messages. An interrupted run resumes where it stopped, and later runs fetch only new messages.
+- Progress is committed to SQLite every 100 messages. An interrupted run resumes where it stopped, and later runs fetch only new messages and append them to the files, so a repeat run of a large chat takes seconds. When a forum topic is renamed, its folder is renamed too.
 - Optional extras, each a toggle: reactions and views, poll results, formatting with hidden links, comments under channel posts, and Telegram's export mode (see [Extras](#extras)).
 - Filters by date range, author or message type, such as links or documents.
 - On `FLOOD_WAIT` the run sleeps and then continues on its own.
@@ -81,7 +81,7 @@ Dump it with 2 accounts, extras: takeout, meta, polls? [Y/n, f = filters]
 
 - Matching chats pop up under the cursor as you type; Tab fills in the highlighted one and Enter picks it.
 - If nothing in your chats matches the search, public groups and channels are searched too. Public chats can be dumped without joining.
-- Every account that can see the chat is used.
+- Every account that can see the chat is used. A private chat or a small (non-super) group is the exception: each account has its own copy of it, so you see how many messages each one has and pick one (Enter takes the biggest).
 - `x` toggles the extras, `f` sets the output folder. Both are saved. By default the output goes to `~/tg-chat-dump`, or `out/` in a source checkout.
 - Answering `f` instead of `Y` asks for filters for this one dump.
 - **Ctrl+C** stops the dump; the next run resumes it.
@@ -123,6 +123,7 @@ uv run dump.py --chat @somegroup --with meta,polls   # with extras
 uv run dump.py --chat @somegroup --export-only       # rebuild the folders from the database, no network
 uv run dump.py --login acc2                          # add another account (see below)
 uv run dump.py --chat @somegroup --workers 2         # workers per account, default 3
+uv run dump.py --chat @friend --account acc2         # only this account: session name, @username or id
 uv run dump.py --chat @somegroup --out "D:\Telegram dumps"   # output folder, remembered in .env
 ```
 
@@ -134,7 +135,7 @@ Every extra account that is a member of the chat adds throughput. Add one with `
 uv run dump.py --login acc2   # log in once, saved to data/acc2.session
 ```
 
-Each `data/*.session` file is picked up automatically. Accounts that are not logged in or are not members of the chat are skipped with a warning.
+Each `data/*.session` file is picked up automatically. Accounts that are not logged in or are not members of the chat are skipped with a warning. Private chats and small groups are numbered separately in every account, so they are always dumped by one account; on the command line it is the one with the most messages, unless `--account` names another.
 
 ### Performance
 
@@ -179,7 +180,7 @@ Each topic folder contains:
 | `grouped_id` | album id |
 | `text_md`, `views`, `forwards`, `replies`, `reactions`, `extra` | only with the matching [extras](#extras) |
 
-The raw data is in `data/<chat id>.sqlite`, with tables `messages`, `topics` and `tasks` (download progress).
+The raw data is in `data/<chat id>.sqlite`, with tables `messages`, `topics`, `tasks` (download progress) and `exports` (what was last written to each folder, so a repeat run only appends). While a dump runs, `.sqlite-wal` and `.sqlite-shm` files sit next to the database; they are part of it and disappear when the run ends, so copy the database only after that.
 
 ## Limitations
 

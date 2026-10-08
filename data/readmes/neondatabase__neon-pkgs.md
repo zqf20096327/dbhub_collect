@@ -31,15 +31,22 @@ If you're looking for a single package's docs, see its own `README.md` under `pa
 | `@neon/functions` | Runtime helpers for Neon Functions: `waitUntil`, `upgradeWebSocket` (fetch handler or Hono route via `@neon/functions/hono`), `attachDatabasePool`, and `parseTriggerInvocation` (`@neon/functions/triggers`). |
 | `@neon/ai-sdk-provider` | Community [Vercel AI SDK](https://ai-sdk.dev) provider for the Neon AI Gateway. |
 
-### Neon Live
+### Realtime
 
 | Package | Description |
 | --- | --- |
-| `@neon/live` | Typed backend and browser SDKs for defining and consuming Neon Live queries. |
-| `@neon/live-react` | React provider and hook for Neon Live subscriptions. |
-| `@neon/live-tanstack` | TanStack DB collection integration for Neon Live subscriptions. |
-| `@neon/live-drizzle` | Drizzle adapter for type-safe Neon Live queries. |
-| `@neon/live-kysely` | Kysely adapter for type-safe Neon Live queries. |
+| `@neon/realtime` | Typed backend and browser SDKs for defining and consuming live queries in realtime. |
+| `@neon/realtime-react` | React provider and hook for live-query subscriptions. |
+| `@neon/realtime-tanstack` | TanStack DB collection integration for live-query subscriptions. |
+| `@neon/realtime-drizzle` | Drizzle adapter for type-safe live queries. |
+| `@neon/realtime-kysely` | Kysely adapter for type-safe live queries. |
+
+### Auth & data access
+
+| Package | Description |
+| --- | --- |
+| `@neon/auth` | Authentication adapters for Neon Auth (Supabase-compatible and Better Auth APIs), with React, Next.js, and framework-agnostic server toolkit entrypoints. |
+| `@neon/postgrest-js` | Generic PostgreSQL client for the Neon Data API without built-in authentication. |
 
 `neon-new` and `vite-plugin-neon-new` are **deprecated**. Use Claimable Neon in the Neon CLI: `npx neon@latest claim create`. The old alias packages (`get-db`, `neondb`, `vite-plugin-db`, `@neondatabase/vite-plugin-postgres`) still re-export them.
 

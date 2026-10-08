@@ -38,6 +38,7 @@
   <a href="https://trino.io/ecosystem/client-application#libredb-studio">Trino</a>,
   <a href="https://cloudberry.apache.org/docs/ecosystem/sql-clients/libredb-studio/">Apache Cloudberry</a>,
   <a href="https://docs.yugabyte.com/stable/integrations/tools/libredb-studio/">YugabyteDB</a>,
+  <a href="https://www.tigerdata.com/docs/integrate/query-administration/libredb-studio">TimescaleDB</a>,
   <a href="https://www.dragonflydb.io/docs/integrations/libredb-studio">DragonflyDB</a>,
   <a href="https://microsoft.github.io/garnet/docs/welcome/compatibility#gui-tools">Garnet</a>,
   <a href="https://opensearch.org/community-projects/#:~:text=LibreDB%20Studio">OpenSearch</a>,
@@ -64,11 +65,11 @@
 </p>
 
 <p align="center">
-  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16-black?logo=next.js" alt="Next.js 1
+  <a href=
 
 [...截断...]
 
-6"></a>
+"https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16-black?logo=next.js" alt="Next.js 16"></a>
   <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19-61DAFB?logo=react" alt="React 19"></a>
   <a href="https://hub.docker.com/r/libredb/libredb-studio?tag=latest"><img src="https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker" alt="Docker Support"></a>
   <a href="https://artifacthub.io/packages/helm/libredb-studio/libredb-studio"><img src="https://img.shields.io/badge/Kubernetes-Compatible-326CE5?logo=kubernetes" alt="Kubernetes Compatible"></a>
@@ -123,5 +124,4 @@ You create a Postgres on a managed platform. It is ready in forty seconds. Then 
 LibreDB Studio goes the other way. It deploys next to the data: a container, a Helm chart, an operator, a one-click template on your PaaS, or `npm i @libredb/studio` inside your own product. Nothing has to face outward.
 
 Twenty-six engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdrant, InfluxDB (InfluxQL), InfluxDB 3 (SQL) and Oxia, with the same explorer everywhere, and ER diagrams, schema diff and monitoring wherever the engine has something to report. Three of the twenty-six are read-only because their own SQL is: Druid, Elasticsearch and OpenSearch have no `UPDATE` and no `CREATE TABLE` in the grammar at all, so those controls are reported as unsupported instead of failing when used. Cassandra is the one that reports the least on purpose: it publishes no row count and no size that is true, so the object browser shows neither rather than showing a number that is wrong; the estimate it does publish counts partitions from flushed files, and it read 143 for a 500-row table. Trino is the other odd one: it is a query engine rather than a database, so it declares no keys and no indexes and reports the bytes as belonging to the systems behind its connectors.
-Oxia is the newest: `oxia client` read commands typed in the editor read an Oxia 0.16.10 or 0.17.1 server over its gRPC client API, the tree shows shards and the Keys panel every key, read-only by construction, because the client can call only the four read RPCs and the health check, and Studio dials a shard leader only when it is the address the connection names or a listed data server.
-Inf
+Oxia is the newest: `oxia client` read commands typed in the editor read an Oxia 0.16.10 or 0.17.1 server over its gRPC client API, the tree shows shards and the Keys panel every key, read-only by construction, because the client can call only the four read RPCs and the health check, and

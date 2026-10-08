@@ -10,6 +10,7 @@
 [![Release](https://github.com/luqman-v1/9router-go/actions/workflows/release.yml/badge.svg)](https://github.com/luqman-v1/9router-go/actions/workflows/release.yml)
 [![GitHub release](https://img.shields.io/github/v/release/luqman-v1/9router-go)](https://github.com/luqman-v1/9router-go/releases/latest)
 [![License](https://img.shields.io/github/license/luqman-v1/9router-go)](https://github.com/luqman-v1/9router-go/blob/main/LICENSE)
+[![Telegram](https://img.shields.io/badge/Telegram-Join%20Group-26A5E1?logo=telegram&logoColor=white)](https://t.me/+eW9d0UanBFU4ODNl)
 
 [🚀 Quick Start](#-quick-start) • [💡 Features](#-key-features) • [⚙️ Setup](#-setup-guide) • [🔄 Share DB with 9Router](#-sharing-a-database-with-9router) • [🌐 Upstream](https://github.com/decolua/9router)
 
@@ -32,7 +33,13 @@ Same idea as [9Router](https://github.com/decolua/9router), minus the Node.js ru
 
 - ✅ **RTK Token Saver** — auto-compress tool_result content, save 20-40% tokens
 - ✅ **Auto fallback** — Subscription → Cheap → Free, zero downtime
+- ✅ **Extended combo routing** — per-combo strategy: fallback, round-robin, sticky, capacity, or fusion
 - ✅ **Multi-account** — round-robin between accounts per provider
+- ✅ **Proxy per API key** — bind a proxy pool to each provider API key (connection), one-by-one or via **Apply Proxy** across many at once
+- ✅ **Custom headers** — add your own request headers to custom compatible providers
+- ✅ **Unified custom provider add** — one shared dialog adds OpenAI-/Anthropic-compatible endpoints
+- ✅ **Custom usage ranges** — analyze any window (`14d`, `12h`), not just fixed presets
+- ✅ **Extended logging** — live console log with level filters & search, plus per-request payload inspector
 - ✅ **Single binary** — Go + embedded dashboard, works with Claude Code, Codex, Cursor, Cline, any CLI tool
 
 ---
@@ -205,6 +212,24 @@ Full schema, operator contract, and multi-process limits: [`DATABASE.md`](DATABA
 
 Download from [GitHub Releases](https://github.com/luqman-v1/9router-go/releases/latest), verify against `SHA256SUMS.txt`.
 
+### 🧪 Experimental builds
+
+Unreleased work also ships as **experimental** builds. They are published
+separately and are never offered to a normal install:
+
+- GitHub Releases marks them **Pre-release**, so `releases/latest` — the URL
+  `9router-go update` falls back to — keeps pointing at the stable version.
+- Docker Hub tags them `exp` (`luqmenul/9router-go:exp`), never `latest`.
+
+```bash
+docker pull luqmenul/9router-go:exp
+```
+
+Opt in only if you want to help shake out bugs. `9router-go update` will not
+install one over a stable release — grab the asset for your platform from the
+[pre-releases page](https://github.com/luqman-v1/9router-go/releases) and
+replace the running binary with it.
+
 ### Build from source
 
 Prerequisites: Go 1.27 and Bun 1.x (dashboard is embedded into the binary, so build web first):
@@ -317,12 +342,24 @@ Go reads/writes the upstream 9router table/JSON shapes and bootstraps the core s
 
 ---
 
+## 🤝 Contributing
+
+Issues and pull requests use templates, so pick the right one rather than opening a blank report:
+
+- **Bug report** — something behaves incorrectly. Include a reproduction, `9router-go version`, OS, and the log excerpt around the failure.
+- **Feature request** — the problem you cannot solve today, the surface it touches, and whether upstream already has it.
+- **Upstream parity** — a behaviour `decolua/9router` has and this gateway does not; link the upstream commit or PR.
+- **Question** — configuration and usage help.
+
+PRs follow the checks CI runs: `go vet ./...`, `go test -count=1 ./...`, `make test-integration`, plus `cd web && bun test` and `make vet-svelte` for anything touching the dashboard. Before writing code, skim [`AGENTS.md`](AGENTS.md) — provider isolation and the Go/Svelte conventions there are enforced by review.
+
+
 ## 📚 Docs
 
 - [`ARCHITECTURE.md`](ARCHITECTURE.md) — routing, providers, runtime layout
 - [`DATABASE.md`](DATABASE.md) — SQLite schema & operator contract
 - [`ROADMAP.md`](ROADMAP.md) — proposals only, not current behavior
-- [`CHANGELOG.md`](CHANGELOG.md) — release history (Go **v1.9.8**, upstream baseline `decolua/9router` v0.5.85)
+- [`CHANGELOG.md`](CHANGELOG.md) — release history (Go **v1.9.9**, upstream baseline `decolua/9router` v0.5.85)
 
 ## Credits
 

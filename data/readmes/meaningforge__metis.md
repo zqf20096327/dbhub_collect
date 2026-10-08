@@ -48,7 +48,7 @@ same runtime services that Go applications can embed directly.
 | [`metis`](#run-from-source) | Validate and compile semantic models offline, manage local projects, or run the standalone semantic runtime. |
 | [MCP](#connect-an-mcp-client) | Give an agent tools for semantic discovery, SQL compilation, and bounded analytics over stdio or HTTP. |
 | [REST](#serve-mcp-and-rest-over-http) | Integrate semantic discovery, compilation, explanation, and analytics into applications. |
-| [`s2sbench`](#s2sbench-agent-analytics-benchmarks) | Run repeatable agent analytics experiments and inspect correctness, readiness, and execution evidence. |
+| [`a2sbench`](#a2sbench-agent-analytics-benchmarks) | Run repeatable agent analytics experiments and inspect correctness, readiness, and execution evidence. |
 | [Go packages](#embed-in-a-go-application) | Compose a runtime with your own configuration, policies, and database integrations. |
 
 ## Run from source
@@ -141,7 +141,11 @@ Explain generates SQL without executing it.
 
 ## Offline tools
 
-The `metis model`, `metis project`, and `metis query` commands work offline. Use
+Semantic authoring commands use `metis semantic`; the former `metis project`
+group is removed without an alias. `--project` and `project.yaml` still identify
+the Project namespace and its manifest.
+
+The `metis model`, `metis semantic`, and `metis query` commands work offline. Use
 them to validate and inspect models, compare projects, or generate SQL without
 starting a server, connecting to a database, or resolving secrets.
 
@@ -164,23 +168,40 @@ driver. Values are never interpolated into SQL text.
 | --- | --- |
 | `metis query compile` | Compile a semantic request into SQL and parameters as JSON. |
 | `metis model validate`, `metis model inspect` | Validate an Ossie document or inspect its metadata. |
-| `metis project validate`, `metis project inspect` | Load and check a complete semantic project. |
-| `metis project diff` | Compare two local semantic project inputs. |
-| `metis project test --mode compile` | Check project-owned compile expectations in CI without connecting to a database. |
-| `metis project test --mode runtime` | Assert metric results against an externally prepared database fixture; emit JSON and optional JUnit. |
+| `metis semantic validate [--offline]`, `metis semantic inspect` | Load and check a complete semantic project without database connections. |
+| `metis semantic validate --online` | Inspect query dependencies and check Doris/ClickHouse or optional DuckDB EXPLAIN acceptance. |
+| `metis semantic diff` | Compare two local semantic project inputs. |
+| `metis semantic init` | Generate a reviewable Ossie project from catalog evidence and an explicit map, offline. |
+| `metis semantic test --mode compile` | Check project-owned compile expectations in CI without connecting to a database. |
+| `metis semantic test --mode runtime` | Assert metric results against an externally prepared database fixture; emit JSON and optional JUnit. |
 | `metis model format` | Format a model file. |
 
 ```sh
-bin/metis project validate --project demo --config examples/demo/project.yaml
+bin/metis semantic validate --project demo --config examples/demo/project.yaml
 bin/metis model inspect --model examples/demo/models/sales.ossie.yaml
 ```
+
+Validation is offline by default. Explicit online validation requires a deployment
+configuration, query inventory and a fresh report path:
+
+```sh
+bin/metis semantic validate --online --project sales --config ./metis.yaml \
+  --queries ./queries.json --output ./validation.json
+```
+
+See [online validation](docs/specs/semantic/online-validation.md) for modes,
+authorization, parameter support and report coverage.
+
+ClickHouse supports server-bound query and policy parameters during online
+validation. Doris parameterized validation remains explicitly unsupported;
+unparameterized validation is available for both backends.
 
 Run the [demo compile suite](examples/demo/checks/compile.yaml) against a complete
 project. The command writes a private JSON report and exits nonzero on a failed
 or incomplete case:
 
 ```sh
-bin/metis project test --mode compile --project demo \
+bin/metis semantic test --mode compile --project demo \
   --config examples/demo/project.yaml --suite examples/demo/checks/compile.yaml \
   --dialect DORIS --output ./compile-report.json
 ```
@@ -196,27 +217,76 @@ external; the CLI is not a general-purpose testing framework.
 
 ## Execute queries
 
+To start a model from metadata, use the
+[offline authoring example](examples/authoring/README.md):
+
+```sh
+bin/metis semantic init --catalog examples/authoring/catalog-doris.json \
+  --mapping examples/authoring/model-map.yaml --output ./candidate-sales
+bin/metis semantic validate --project sales --config ./candidate-sales/project.yaml
+```
+
+The generator selects only mapped fields and optional technical row counts.
+Review its report and author business metrics and relationships before adoption.
+The [authoring contract](docs/specs/semantic/catalog-authoring.md) defines supported
+schemas and mappings. To capture metadata from Doris or ClickHouse first:
+
+```sh
+bin/metis catalog inspect --config ./metis.yaml --project sales \
+  --data-source warehouse --relations examples/authoring/relations.json \
+  --output ./catalog.json
+```
+
+Only explicitly selected, qualified relations are inspected; there is no database
+crawl or row sampling. The command authorizes before reading deployment/source
+configuration or resolving credentials. Local CLI authoring uses the operator's
+OS/database identity; remote embedders must enforce Project `author` and their
+physical metadata access policy. The snapshot feeds `semantic init`; successful
+inspection does not prove SELECT permission. Follow the
+[Doris/ClickHouse table-to-query walkthrough](examples/authoring/live/README.md)
+for disposable setup data, explicit business-model review, and verified query
+results through the CLI and authenticated REST interface.
+
 To enable execution, reference a named DataSource from your project registration
 and define it in a local DataSource registry. The DataSource type selects the
 database backend and SQL renderer.
 
 The default build includes Doris and ClickHouse execution backends. To enable
-DuckDB execution, build with CGO and the `duckdb` tag:
+DuckDB execution, catalog inspection and online validation, build with CGO and the `duckdb` tag:
 
 ```sh
 CGO_ENABLED=1 go build -tags duckdb -o bin/metis ./cmd/metis
 ```
 
-DuckDB SQL compilation works with the default build. Compile-only deployments
+The [local DuckDB walkthrough](examples/authoring/duckdb/README.md) covers an
+existing read-only database file through catalog capture, reviewed project
+generation, parameterized online validation and result tests, without Docker.
+Offline generation from DuckDB snapshots and DuckDB SQL compilation work with
+the default build. Compile-only deployments
 require no database credentials. The execution runtime manages connections,
 secrets, cancellation, timeouts, and output limits.
 
-## `s2sbench`: Agent analytics benchmarks
+## `a2sbench`: Agent benchmarks for Metis Core
 
-S2SBench evaluates how an agent completes analytical tasks through semantic
-interfaces. It runs frozen scenario suites, records attempts and query evidence,
-and produces machine-readable reports. Use it to investigate whether a change to
-Metis helps agents discover the right data and produce correct analytical results.
+A2SBench (Agent-to-SQL Benchmark) evaluates how agents use **Metis Core** to
+complete analytical tasks. It runs frozen questions with explicit budgets,
+scores independently reviewed result expectations, records attempts and query
+evidence, and produces machine-readable reports. Metis MCP is the system under
+test; OKF assets/direct SQL provide controlled baselines. Neutrality means fair
+scoring and comparable experimental conditions, not a multi-semantic-engine
+platform. The oracle must not favor Metis SQL spelling or output aliases.
+
+New report identifiers use the `a2sbench` prefix. Branding migrations must
+preserve experiment identities, tested interface names, scores and raw results;
+they do not constitute new benchmark runs. Input and agent-driver protocols
+retain their existing versions independently of the executable name.
+
+These tools have separate responsibilities: `metis semantic test` checks an
+author's explicit compile/result expectations without running an agent, while
+`a2sbench` owns frozen benchmark suites, agent runners, scoring and comparisons.
+Metis does not expose benchmark commands; A2SBench does not replace semantic
+authoring, catalog capture or project-owned regression commands. Both use the
+existing semantic/query services rather than implementing another query engine.
 
 A run selects one interface: `metis-mcp` for Metis tools, or `okf` for
 catalog-derived semantic files. Running the same suite with the same agent and
@@ -225,9 +295,9 @@ model through each interface enables a paired comparison.
 Build with embedded DuckDB support and inspect the available commands:
 
 ```sh
-make s2sbench-build
-bin/s2sbench --help
-bin/s2sbench run --help
+make a2sbench-build
+bin/a2sbench --help
+bin/a2sbench run --help
 ```
 
 Agent runs require an installed, authenticated agent CLI and model access. The
@@ -236,34 +306,34 @@ also requires CGO and a C toolchain. Start with the `smoke` suite and set the
 model identifiers to those used by your agent:
 
 ```sh
-bin/s2sbench run \
+bin/a2sbench run \
   --suite smoke \
   --arm metis-mcp \
   --agent codex \
   --model '<model-id>' \
   --provider '<provider>' \
   --model-version '<model-version>' \
-  --output ./s2sbench-results/smoke-metis
+  --output ./a2sbench-results/smoke-metis
 ```
 
 Completed runs contain `manifest.json`, `collection.json`, `attempts.jsonl`, and
 `report.json`. Repeat an interrupted command with `--resume` to keep completed
-work. Use `--detach` for a background run and `s2sbench stop <output-directory>`
+work. Use `--detach` for a background run and `a2sbench stop <output-directory>`
 to stop it.
 
 For a paired experiment, repeat the run with `--arm okf` and a separate output
 directory, then compare both collections:
 
 ```sh
-bin/s2sbench analyze \
-  --input ./s2sbench-results/smoke-okf \
-  --input ./s2sbench-results/smoke-metis \
-  --output ./s2sbench-results/comparison.json
+bin/a2sbench analyze \
+  --input ./a2sbench-results/smoke-okf \
+  --input ./a2sbench-results/smoke-metis \
+  --output ./a2sbench-results/comparison.json
 ```
 
 Additional commands cover workload generation (`gen`), catalog-derived file
 creation (`okfgen`), reports (`report`), and attribution and comparison
-experiments. Use `bin/s2sbench <command> --help` for their inputs and options.
+experiments. Use `bin/a2sbench <command> --help` for their inputs and options.
 Agent benchmark runs are separate from the standard correctness tests.
 
 ## Use your own models
@@ -272,7 +342,7 @@ Agent benchmark runs are separate from the standard correctness tests.
 2. Add your Ossie model files under `models/`.
 3. Update `project.yaml` to select those files and register your project in
    `metis.yaml`.
-4. Validate the project with `metis project validate`, then start `metis serve` or
+4. Validate the project with `metis semantic validate`, then start `metis serve` or
    `metis mcp` with your runtime configuration.
 
 Model paths are resolved relative to the project manifest. A runtime can register
@@ -324,6 +394,15 @@ run, set `OSSIE_GIT_DIR` to a local Apache Ossie Git object directory containing
 that commit. Database integration tests require explicitly configured services
 and run separately.
 
+CI reuses Go module/build caches. Ordinary code PRs run the complete correctness,
+embedded DuckDB, E2E and container checks; full release archives additionally run
+for packaging, dependency, license, CI or platform-specific changes, on `main`
+code pushes, and for manual dispatch. Documentation-only changes use the docs
+gate (changes to packaged license files still trigger full checks). Snapshot
+packaging shares the same commit's correctness gate rather than repeating its
+tests through GoReleaser hooks. Tag releases run `make release-check` before
+publishing. See [the CI scope classifier](tools/ci/change_scope.py).
+
 ## License
 
 [Apache License 2.0](LICENSE). Third-party attribution and license texts are
@@ -334,5 +413,5 @@ available in [NOTICE](NOTICE), [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES), and
 ## Design and RFCs
 
 See the [documentation guide](docs/README.md) for architecture, public contracts,
-model authoring, execution, and S2SBench. [Core RFCs](docs/proposals/README.md)
+model authoring, execution, and A2SBench. [Core RFCs](docs/proposals/README.md)
 record proposals and design rationale, with explicit lifecycle status.

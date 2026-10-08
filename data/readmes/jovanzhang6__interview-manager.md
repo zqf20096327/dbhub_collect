@@ -1,27 +1,27 @@
-<div align="center">
+<h1 align="center">InterviewManager · 面试记录管理器</h1>
 
-# InterviewManager · 面试记录管理器
+<p align="center">
+  <a href="https://github.com/jovanzhang6/interview-manager/actions/workflows/ci.yml"><img src="https://github.com/jovanzhang6/interview-manager/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-1c1917.svg" alt="License: MIT" /></a>
+  <img src="https://img.shields.io/badge/node%20%3E%3D-22.13-339933" alt="Node" />
+  <img src="https://img.shields.io/badge/Vue-3-42b883" alt="Vue 3" />
+  <img src="https://img.shields.io/badge/TypeScript-5.7-3178c6" alt="TypeScript" />
+</p>
 
-**轻量级求职面试进度追踪工具 —— 多公司、多岗位，一张时间线看清每一步**
+<p align="center"><strong>轻量级求职面试进度追踪工具 —— 多公司、多岗位，一张时间线看清每一步</strong></p>
 
-[![CI](https://github.com/jovanzhang6/interview-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/jovanzhang6/interview-manager/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-1c1917.svg)](LICENSE)
-[![Node](https://img.shields.io/badge/node%20%3E%3D-22.13-339933)](https://nodejs.org/)
-[![Vue 3](https://img.shields.io/badge/Vue-3-42b883)](https://vuejs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178c6)](https://www.typescriptlang.org/)
+<p align="center">
+  一台 1 核 1G 的服务器、或一台装有 Node.js 的电脑即可运行。<br />
+  数据 100% 归你所有：SQLite 单文件存储，备份就是复制一个文件。
+</p>
 
-轻量自托管：一台 1 核 1G 的服务器、或一台装有 Node.js 的电脑即可运行。
-数据 100% 归你所有——SQLite 单文件存储，备份就是复制一个文件。
+<p align="center">
+  <img src="assets/demo.gif" alt="操作演示" width="100%" />
+</p>
 
-<div align="center">
-
-**[▶ 观看操作演示视频](https://github.com/jovanzhang6/interview-manager/releases/latest)**
-
-<img src="assets/screenshot-dashboard.png" alt="控制台界面" width="100%" />
-
-</div>
-
----
+<p align="center">
+  <a href="https://github.com/jovanzhang6/interview-manager/releases/latest"><strong>▶ 高清版演示视频（MP4）</strong></a>
+</p>
 
 ## ✨ 功能特性
 

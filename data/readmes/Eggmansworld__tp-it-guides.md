@@ -16,11 +16,13 @@ This universal guide applies to almost all Incredible Technologies games support
 
 It is no longer recommended to use the older individual "Detailed Guides". The TPUI app will setup and make the necessary changes to the game databases even if you do them yourself - you're just wasting your time needlessly messing with tables.
 
-## Golden Tee Live 2018 and future releases
+## Golden Tee Live 2018, and future releases
 
 As of the release of Golden Tee Live 2018 in February 2026, TP devs have added a game settings feature that automatically restores the database backup and settings if it has not been done before.
 
 You can use this option to save yourself some time. You can certainly still opt to perform the db restore yourself following this guide, it's up to you.  This new feature is only for GT 2018 and newer versions, it will not be added to the older versions. For the full steps of how to use this new feature, jump to [Golden Tee Live 2018 TPUI Express Database install](#golden-tee-live-2018-tpui-express-database-install)
+
+If you have problems with your database setup using the TPUI restore db functionality, head to the TeknoParrot Discord and ask for help. Or, just follow this simple guide and get back up and running.
 
 ---
 
@@ -212,19 +214,19 @@ For questions about different game settings and problems with gameplay, please v
 
 ---
 
-# Golden Tee Live 2018 TPUI Express Database Install
+# Golden Tee Live 2018+ TPUI Express Database Install
 
 As of the release of Golden Tee Live 2018 in February 2026, TP devs have added a game settings feature that automatically restores the database backup and settings if it has not been done before.
 
 You can use this option to save yourself even more time! You can still opt to follow the guide and perform the db restore yourself - it's up to you. This new feature is only for GT 2018 and newer versions, it will not be added to the older GT versions or any other IT game.
 
 1. Install PostgreSQL and set it up as per the instructions at the top of this guide, under the "PostgreSQL v8.3 INSTALL" header.
-2. Go into the game settings for GT 2018 (or newer release), and setup the Postgres fields as necessary. DO NOT FORGET to give your database a name, or enter the password!  People still forget to do this, even with a guide.
+2. Go into the game settings for GT 2018 or newer, and setup the Postgres fields as necessary. DO NOT FORGET to give your database a name, or enter the password!  People still forget to do this, even with a guide.
 3. Enable the **"Postgres - Automatically create Database"** setting in the TPUI game settings.
-4. Start the game. On first run, you will be asked where the location of the backup file is, just look inside the game folder for the "pg_backup" folder and select the backup file. The database is then restored and settings appliedand you'll see a message when it is complete. 
-5. If this is not working for you, go back to the top of the guide, review all the steps of the guide, and see where you went wrong.
+4. Start the game. On first run, you will be asked where the location of the backup file is, just look inside the game folder for the "pg_backup" folder and select the backup file. The database is then restored and settings applied. You'll see a message when it is complete. 
+5. If this is not working for you, go back to the top of the guide, review all the steps of the guide, and see where you went wrong. Still having problems? Go visit the TP Discord for help.
 
-<img width="697" height="232" alt="image" src="https://github.com/user-attachments/assets/3a8f23bb-a9ba-4a79-b185-fbc8c3fe6119" />
+<img width="681" height="289" alt="image" src="https://github.com/user-attachments/assets/1f280994-6f03-44e9-aa40-083a6ec54db7" />
 
 ---
 
@@ -315,6 +317,12 @@ DB name: GameDB19
 Encoding: SQL_ASCII    
 db backup location: \pg_backup\2025-05-20\   
 db filename: 1610-postgresql_database-GameDB-backup
+
+**Golden Tee Live 2020** (15.04.08)   
+DB name: GameDB20   
+Encoding: SQL_ASCII    
+db backup location: \pg_backup\2025-05-10\   
+db filename: 2228-postgresql_database-GameDB-backup
 
 **Orange County Choppers Pinball** (0.00.51)   
 DB name: GameDBOCC   

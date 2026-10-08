@@ -554,7 +554,7 @@ See [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## 💬 Community
 
-- **Discord** — join the English-speaking community: [discord.gg/jPas5J8Ua](https://discord.gg/jPas5J8Ua)
+- **Discord** — join the English-speaking community: [discord.gg/jPas5J8Ua](https://discord.gg/QnWdhJxq9h)
 
 ### WeCom Customer Group (CN)
 

@@ -22,20 +22,20 @@ Some key statistics of the database:
 
 <div align="center">
 
-![symbols](https://img.shields.io/badge/symbols-314%2C126-0A66C2?style=flat-square) ![equities](https://img.shields.io/badge/equities-115%2C474-2EA44F?style=flat-square) ![ETFs](https://img.shields.io/badge/ETFs-42%2C505-8250DF?style=flat-square) ![countries](https://img.shields.io/badge/countries-117-BF8700?style=flat-square) ![updated](https://img.shields.io/badge/updated-2026--10--06-57606A?style=flat-square)
+![symbols](https://img.shields.io/badge/symbols-310%2C146-0A66C2?style=flat-square) ![equities](https://img.shields.io/badge/equities-120%2C742-2EA44F?style=flat-square) ![ETFs](https://img.shields.io/badge/ETFs-43%2C963-8250DF?style=flat-square) ![countries](https://img.shields.io/badge/countries-118-BF8700?style=flat-square) ![updated](https://img.shields.io/badge/updated-2026--10--07-57606A?style=flat-square)
 
 </div>
 
-| | Asset class | Symbols | Actively listed | Exchanges | Coverage |
-| :-: | :-- | --: | --: | --: | :-- |
-| 🏢 | **Equities** | 115,474 | 101,588 | 83 | 11 sectors · 69 industries · 117 countries |
-| 📦 | **ETFs** | 42,505 | 41,863 | 63 | 588 issuers · 42 categories |
-| 💼 | **Funds** | 57,826 | – | 33 | 1,540 fund families · 71 categories |
-| 📈 | **Indices** | 91,178 | – | 63 | 42 categories |
-| 💱 | **Currencies** | 2,556 | – | – | 178 currencies |
-| 🪙 | **Cryptocurrencies** | 3,378 | – | – | 352 coins · 12 quote currencies |
-| 🏦 | **Money Markets** | 1,209 | – | 2 | 126 fund families |
-| | **Total** | **314,126** | | | |
+| | Asset class | Symbols | Exchanges | Coverage |
+| :-: | :-- | --: | --: | :-- |
+| 🏢 | **Equities** | 120,742 | 87 | 11 sectors · 69 industries · 118 countries |
+| 📦 | **ETFs** | 43,963 | 64 | 599 issuers · 35 categories |
+| 💼 | **Funds** | 58,011 | 34 | 1,560 fund families · 71 categories |
+| 📈 | **Indices** | 80,287 | 63 | 42 categories |
+| 💱 | **Currencies** | 2,556 | – | 178 currencies |
+| 🪙 | **Cryptocurrencies** | 3,378 | – | 352 coins · 12 quote currencies |
+| 🏦 | **Money Markets** | 1,209 | 2 | 126 fund families |
+| | **Total** | **310,146** | | |
 
 <!-- STATISTICS:END -->
 
@@ -106,8 +106,8 @@ A portion of the output is shown below. The tables in this section are cut off t
 |:---------|:-------------------------|:-----------|:-----------------------|:-------------------------------------------|:-----------|:---------------------|:--------------|:-------------|:-------------|
 | AAPL     | Apple Inc.               | USD        | Information Technology | Technology Hardware, Storage & Peripherals | NMS        | NASDAQ Global Select | United States | Mega Cap     | US0378331005 |
 | ASML.AS  | ASML Holding N.V.        | EUR        | Information Technology | Semiconductors & Semiconductor Equipment   | AMS        | Euronext Amsterdam   | Netherlands   | Mega Cap     | NL0010273215 |
-| 7203.T   | Toyota Motor Corporation | JPY        | Consumer Discretionary | Automobiles                                | JPX        | Tokyo Stock Exchange | Japan         | Mega Cap     |              |
-| NESN.SW  | Nestle S.A.              | CHF        | Consumer Staples       | Food Products                              | EBS        | SIX Swiss Exchange   | Switzerland   | Mega Cap     |              |
+| 7203.T   | Toyota Motor Corporation | JPY        | Consumer Discretionary | Automobiles                                | JPX        | Tokyo Stock Exchange | Japan         | Mega Cap     | JP3633400001 |
+| NESN.SW  | Nestle S.A.              | CHF        | Consumer Staples       | Food Products                              | EBS        | SIX Swiss Exchange   | Switzerland   | Mega Cap     | CH0038863350 |
 | SAP.DE   | SAP SE                   | EUR        | Information Technology | Software                                   | GER        | XETRA                | Germany       | Mega Cap     | DE0007164600 |
 
 And below the actively listed equities are counted per sector.
@@ -174,34 +174,35 @@ The options of every column can be shown this way, including `currency`, `exchan
 
 ### Selecting Equities
 
-Given these options, it becomes possible to filter the database on the categories you are interested in. For example, the 'Insurance' companies in the 'Netherlands'. The `sector` can be omitted here since the industry already implies 'Financials'.
+Given these options, it becomes possible to filter the database on the categories you are interested in. For example, the 'Insurance' companies in the 'United States', one row per company. The `sector` can be omitted here since the industry already implies 'Financials'.
 
 ```python
-# Select the insurance companies in the Netherlands
+# Select the primary listings of insurance companies in the United States
 equities.select(
-    country="Netherlands",
+    country="United States",
     industry="Insurance",
+    only_primary_listing=True,
 )
 ```
 
-This returns 34 listings, of which the first five are shown below.
+This returns 181 companies, of which a few of the larger ones are shown below.
 
-| symbol   | name               | currency   | sector     | industry   | exchange   | market                              | country     | market_cap   | isin         |
-|:---------|:-------------------|:-----------|:-----------|:-----------|:-----------|:------------------------------------|:------------|:-------------|:-------------|
-| 0RHS.IL  | ASR Nederland N.V. | EUR        | Financials | Insurance  | IOB        | London Stock Exchange (OTC and ITR) | Netherlands | Large Cap    | NL0011872643 |
-| A16.BE   | ASR Nederland N.V. | EUR        | Financials | Insurance  | BER        | Berlin Stock Exchange               | Netherlands | Large Cap    | NL0011872643 |
-| A16.DU   | ASR Nederland N.V. | EUR        | Financials | Insurance  | DUS        | Dusseldorf Stock Exchange           | Netherlands | Large Cap    | NL0011872643 |
-| A16.F    | ASR Nederland N.V. | EUR        | Financials | Insurance  | FRA        | Frankfurt Stock Exchange            | Netherlands | Large Cap    | NL0011872643 |
-| A16.MU   | ASR Nederland N.V. | EUR        | Financials | Insurance  | MUN        | Munich Stock Exchange               | Netherlands | Large Cap    | NL0011872643 |
+| symbol   | name                             | currency   | sector     | industry   | exchange   | market                  | country       | market_cap   |
+|:---------|:---------------------------------|:-----------|:-----------|:-----------|:-----------|:------------------------|:--------------|:-------------|
+| AFL      | Aflac Incorporated               | USD        | Financials | Insurance  | NYQ        | New York Stock Exchange | United States | Large Cap    |
+| AJG      | Arthur J. Gallagher & Co.        | USD        | Financials | Insurance  | NYQ        | New York Stock Exchange | United States | Large Cap    |
+| BRO      | Brown & Brown, Inc.              | USD        | Financials | Insurance  | NYQ        | New York Stock Exchange | United States | Large Cap    |
+| CINF     | Cincinnati Financial Corporation | USD        | Financials | Insurance  | NMS        | NASDAQ Global Select    | United States | Large Cap    |
+| PGR      | Progressive Corporation          | USD        | Financials | Insurance  | NYQ        | New York Stock Exchange | United States | Large Cap    |
 
-And below these listings are counted per market, showing how the same companies trade across Europe and beyond.
+Without `only_primary_listing=True`, the same query returns 454 listings on 23 exchanges, because every exchange a company trades on is shown by default. Progressive, for example, also appears as `PGV.F` (Frankfurt), `PGV.SG` (Stuttgart), `PGR.MX` (Mexico) and `P1GR34.SA` (B3). Primary listings are the symbols without an exchange suffix, which makes the option mostly useful for US companies. For companies elsewhere, filter on the `exchange` or `market` instead. The chart below shows how the Dutch insurers' listings are spread over the markets.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/JerBouma/FinanceDatabase/main/assets/readme/listings-dark.png">
   <img alt="Listings" src="https://raw.githubusercontent.com/JerBouma/FinanceDatabase/main/assets/readme/listings-light.png">
 </picture>
 
-The same company appears multiple times because all exchanges are shown by default. To focus on one entry per company, use `only_primary_listing=True` (mostly useful for US exchanges) or filter on an `exchange` or `market`. For the Netherlands, it makes sense to select the market "Euronext Amsterdam" (exchange "AMS"), here together with the market cap:
+For the Netherlands, it makes sense to select the market "Euronext Amsterdam" (exchange "AMS"), here together with the market cap:
 
 ```python
 # Select the large insurance companies on Euronext Amsterdam
@@ -217,30 +218,9 @@ This gives the following three companies:
 
 | symbol   | name               | currency   | sector     | industry   | exchange   | market             | country     | market_cap   | isin         |
 |:---------|:-------------------|:-----------|:-----------|:-----------|:-----------|:-------------------|:------------|:-------------|:-------------|
-| AGN.AS   | Aegon N.V.         | EUR        | Financials | Insurance  | AMS        | Euronext Amsterdam | Netherlands | Large Cap    |              |
+| AGN.AS   | Aegon N.V.         | EUR        | Financials | Insurance  | AMS        | Euronext Amsterdam | Netherlands | Large Cap    | BMG0112X1056 |
 | ASRNL.AS | ASR Nederland N.V. | EUR        | Financials | Insurance  | AMS        | Euronext Amsterdam | Netherlands | Large Cap    | NL0011872643 |
-| NN.AS    | NN Group N.V.      | EUR        | Financials | Insurance  | AMS        | Euronext Amsterdam | Netherlands | Large Cap    |              |
-
-Given that the Netherlands is a relatively small country, the list becomes small quickly. The same selection for the United States, using `only_primary_listing`, returns 178 companies:
-
-```python
-# Select the primary listings of insurance companies in the United States
-equities.select(
-    country="United States",
-    industry="Insurance",
-    only_primary_listing=True,
-)
-```
-
-For example, a few of the larger ones are shown below.
-
-| symbol   | name                             | currency   | sector     | industry   | exchange   | market                  | country       | market_cap   |
-|:---------|:---------------------------------|:-----------|:-----------|:-----------|:-----------|:------------------------|:--------------|:-------------|
-| AFL      | Aflac Incorporated               | USD        | Financials | Insurance  | NYQ        | New York Stock Exchange | United States | Large Cap    |
-| AJG      | Arthur J. Gallagher & Co.        | USD        | Financials | Insurance  | NYQ        | New York Stock Exchange | United States | Large Cap    |
-| BRO      | Brown & Brown, Inc.              | USD        | Financials | Insurance  | NYQ        | New York Stock Exchange | United States | Large Cap    |
-| CINF     | Cincinnati Financial Corporation | USD        | Financials | Insurance  | NMS        | NASDAQ Global Select    | United States | Large Cap    |
-| PGR      | Progressive Corporation          | USD        | Financials | Insurance  | NYQ        | New York Stock Exchange | United States | Large Cap    |
+| NN.AS    | NN Group N.V.      | EUR        | Financials | Insurance  | AMS        | Euronext Amsterdam | Netherlands | Large Cap    | NL0010773842 |
 
 Every filter also accepts a list, so both queries can be combined into one with `country=["Netherlands", "United States"]` and `market=["Euronext Amsterdam", "New York Stock Exchange", "NASDAQ Global Select"]`. Equities can be selected on `country`, `sector`, `industry_group`, `industry`, `currency`, `exchange`, `mic`, `market` and `market_cap`. **Find the Notebook [here](https://www.jeroenbouma.com/projects/financedatabase/getting-started) and the full documentation [here](https://www.jeroenbouma.com/projects/financedatabase).**
 
@@ -294,13 +274,13 @@ etfs.select(
 
 For example, see some of the Vanguard bond ETFs listed in Berlin below:
 
-| symbol   | name                      | currency   | category_group   | category        | family                    | exchange   |
-|:---------|:--------------------------|:-----------|:-----------------|:----------------|:--------------------------|:-----------|
-| 0250.BE  | VANG.INT.-T.C.BD IDX ETF  | EUR        | Fixed Income     | Corporate Bonds | Vanguard Asset Management | BER        |
-| 0251.BE  | VANG.SH.-T.CO.BD IDX ETF  | EUR        | Fixed Income     | Corporate Bonds | Vanguard Asset Management | BER        |
-| 0252.BE  | VANG.SC.FDS-V.TO.W.BD ETF | EUR        | Fixed Income     |                 | Vanguard Asset Management | BER        |
-| 025L.BE  | VANG.TOTAL INT.BD IDX ETF | EUR        | Fixed Income     |                 | Vanguard Asset Management | BER        |
-| 025N.BE  | VANG.LO.-T.C.BD IDX ETF   | EUR        | Fixed Income     | Corporate Bonds | Vanguard Asset Management | BER        |
+| symbol   | name                                                             | currency   | category_group   | category               | family                    | exchange   |
+|:---------|:-----------------------------------------------------------------|:-----------|:-----------------|:-----------------------|:--------------------------|:-----------|
+| 0250.BE  | Vanguard Intermediate-Term Corporate Bond Index Fund ETF Shares | EUR        | Fixed Income     | Corporate Bonds        | Vanguard Asset Management | BER        |
+| 0251.BE  | Vanguard Short-Term Corporate Bond Index Fund ETF Shares        | EUR        | Fixed Income     | Corporate Bonds        | Vanguard Asset Management | BER        |
+| 0252.BE  | Vanguard Total World Bond ETF                                    | EUR        | Fixed Income     | Investment Grade Bonds | Vanguard Asset Management | BER        |
+| 025L.BE  | Vanguard Total International Bond Index Fund ETF Shares         | EUR        | Fixed Income     | Investment Grade Bonds | Vanguard Asset Management | BER        |
+| 025N.BE  | Vanguard Long-Term Corporate Bond Index Fund ETF Shares         | EUR        | Fixed Income     | Corporate Bonds        | Vanguard Asset Management | BER        |
 
 The same applies to `search`, for example to find the funds that focus on pension plans:
 
@@ -312,7 +292,7 @@ funds = fd.Funds()
 funds.search(summary="Pension")
 ```
 
-Which returns 623 funds, of which a few are shown below:
+Which returns 628 funds, of which a few are shown below:
 
 | symbol       | name                                | currency   | category_group   | category                 | family                           | exchange   |
 |:-------------|:------------------------------------|:-----------|:-----------------|:-------------------------|:---------------------------------|:-----------|

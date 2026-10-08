@@ -86,8 +86,13 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
 
 ## What works today
 
+- [Bulk worker autoscaling](deploy/railway/autoscaler/README.md) uses a standalone Go controller on Railway; Kubernetes can use KEDA. Live workers keep separate capacity.
+
 - Rolling application upgrades use additive schema expansions; destructive cleanup
-  runs only with `quivr migrate --contract`. CI checks the merge-base binary against
+  runs only with `quivr migrate --contract`. API and worker retry performance-index
+  builds in the background, so their busy index builds do not delay startup. An
+  older binary's index build can still hold the migration lock until it finishes
+  or is stopped. CI checks the merge-base binary against
   expansions. See [Upgrade Quivr](https://docs.quivr.thevibecompany.co/run-quivr/upgrade-quivr).
 
 - **Release images and build identity.** Release-please manages alpha release PRs, versions and changelogs. Publishing a release builds signed engine and first-party plugin images on GHCR, with signed SPDX inventories and vulnerability scans. `quivr --version`, `GET /v0/version`, startup logs and process metrics report the build. See [Deploy and configure Quivr](https://docs.quivr.thevibecompany.co/run-quivr/deploy) and [release security](https://docs.quivr.thevibecompany.co/run-quivr/security).
@@ -117,7 +122,9 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
 - **Search**: lexical, semantic and hybrid, with canonical rehydration and access
   rechecks on every hit, with common metadata and typed Corpus filters across sources,
   optionally within chosen Source Namespaces (filtered before
-  ranking).
+  ranking). New or rebuilt indexes support configurable item-field boosts, a French
+  keyword copy, range-indexed dates and identity filters; the default retrieval
+  plugin returns each Record once with its best passage.
 - **Metadata facets**: exact document counts across Corpora, bounded top values
   and UTC day, month or year histograms, under the same metadata filters.
 - **Change feed** through polling and resumable SSE, plus **catalog resync** after
@@ -174,7 +181,13 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   The worker exposes delivery metrics on its probe listener (`/metrics`).
 - **Projection rebuilds** from durable artifacts as recoverable Operations, with cancel
   and rerun. Re-embedding runs concurrently with configurable `rebuild.concurrency`
-  (default 8), while new rebuild activities have separate worker capacity.
+  (default 8), refilling slots across pages while a slow document is still running.
+  Safe checkpoints preserve unfinished work on resume; rebuild activities have
+  separate worker capacity. Imports
+  remain lexically searchable through embedding recipe changes; incompatible
+  enrichment settles with `rebuild_required` until rebuilt vectors are served.
+  Progress reports covered Versions and passage/vector-space entries separately
+  as `versions_covered` and `passages_covered`.
 - **Document step times**: each Version reports when it was accepted, materialized, cut
   into segments, made searchable, given vectors, evaluated by alerts, quarantined or
   withdrawn (`steps`). A key with `observability:read` lists the latest documents with
@@ -198,7 +211,10 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   refused with `503 credentials_unavailable`, and everything else works.
   `GET /v0/connector-kinds` publishes each enabled kind's config and credential JSON
   Schemas, `PUT /v0/connectors/{id}/schedule` changes the polling interval,
-  `POST /v0/connectors/{id}/runs` checks a source again now, and validation errors name the offending field as a JSON Pointer.
+  `POST /v0/connectors/{id}/runs` checks a source again now. Pause and resume
+  scheduled collection with `POST /v0/connectors/{id}/pause` and `…/resume`,
+  including a continuing import; the last saved position is retained.
+  Validation errors name the offending field as a JSON Pointer.
 - **Secure source API routes** (Plugin API 0.12): connector plugins declare POST push and GET challenge routes at `/v0/connectors/{id}/api/<path>`. The engine checks a collection-scoped `connector:push` key, an instance-scoped bearer token, or provider signature policy, with timestamp and replay protection for signed pushes; accepted pushes return `202` with ingestion Receipts. [Author guide](https://docs.quivr.thevibecompany.co/plugins/push-source#choose-authentication).
 - **Sources page in the web app** (`quivr-search`, **Sources** tab): paste a site
   or feed address and the web app finds its RSS or Atom feed (refusing private
@@ -215,6 +231,15 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   - API: accepted commands and the pending-ingestion backlog;
   - worker: processing outcomes, time from acceptance to searchable, and delivery
     attempts and durations.
+
+  Live/bulk backlog observations refresh every 15 seconds by default, with a
+  configurable interval and rebuild/backfill estimates from progress counters
+  ([queue configuration](docs-site/reference/configuration.mdx#worker-queues)).
+
+  Bulk workers group ready document commits within each receipt batch, up to
+  sixteen distinct Records per organization. Segments-only ingestion providers
+  can publish new content and keyword readiness together; vectors remain a
+  separate step. The change feed keeps synchronous, gap-free commit ordering.
 
   JSON logs link caller request IDs, trace/span IDs, Receipts, Records and Versions.
   Opt-in OpenTelemetry exports traces and metrics to an OTLP collector, carrying
@@ -340,8 +365,12 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   and coverage ([Write an ingestion plugin](https://docs.quivr.thevibecompany.co/plugins/write-an-ingestion-plugin)).
   The first-party [core.ingest](plugins/core-ingest/README.md) plugin (token windows,
   E5) is pinned by default; the engine segments and embeds nothing itself.
-  Optional [hosted.embed](plugins/hosted-embed/README.md) selects a hosted model
+  Optional [hosted.embed](plugins/hosted-embed/README.md) packs consecutive body Parts
+  together for bounded items and retains full-text paging for large items and size
+  refusals. Rebuild affected Corpora after the packing recipe changes. It selects a hosted model
   or OpenAI-compatible server by configuration, with OpenAI and Cohere v2 formats.
+  An optional pinned [CPU text encoder](deploy/railway/README.md#optional-cpu-query-encoding)
+  answers queries beside the API while documents keep using the remote provider.
 - **Search ranked by a plugin** (Plugin API 0.7, the `retrieval` Contribution): a
   selected plugin answers each search in up to three rounds, asking the engine for
   keyword, vector or hybrid candidates it has already authorized, then ranking them

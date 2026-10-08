@@ -26,6 +26,12 @@ gyotaku reads the text in every screenshot you take and makes it searchable. Pre
 
 All processing happens locally. gyotaku does not take screenshots itself; it indexes the folders your existing screenshot tool saves to.
 
+## Support gyotaku
+
+gyotaku is free and stays free. If it saves you time, sponsoring keeps it maintained.
+
+[Sponsor on GitHub](https://github.com/sponsors/xevrion) · [Get updates by email](https://gyotaku.app/#updates)
+
 ## Highlights
 
 | Metric | Result |
@@ -92,7 +98,7 @@ Config, index and models live in `~/Library/Application Support/gyotaku`, thumbn
 
 ### Keyboard shortcut (Linux and macOS)
 
-On macOS the app registers the shortcut itself: `Alt+Shift+S` opens the search window, and pressing it again closes it. The key can be changed in the settings.
+On macOS the app registers the shortcut itself: `Alt+Shift+S` opens the search window, and pressing it again closes it. To use another key, set `summon` under `[keys]` in `config.toml` (for example `summon = "cmd-shift-space"`) and restart gyotaku; it isn't in the settings yet.
 
 On Linux, `gyotaku-app` opens the search window, and pressing the same shortcut again closes it. Bind it in your desktop's keyboard settings, using the full path `~/.local/bin/gyotaku-app`, since some desktops do not use your shell's `PATH`:
 
@@ -226,6 +232,8 @@ If anything does not work as described, see [Troubleshooting](docs/troubleshooti
 | Ctrl+Shift+A, Ctrl+Delete | Mark every result, then move them to the trash. Ctrl+Z puts them back. |
 | Escape | Clear the search, then close |
 
+On macOS each Ctrl shortcut above is Cmd instead.
+
 Every word in a query must appear somewhere in the screenshot, not necessarily on the same line. Filters narrow it down by folder and date: `otp in:discord date:week`. On an open screenshot, drag a box to copy only the lines inside it.
 
 A command-line interface is also available:
@@ -250,7 +258,7 @@ gyotaku runs entirely on your machine. It has no telemetry, accounts or update c
 - [x] A landing page with a demo, the measured numbers and the install commands
 - [x] Windows support
 - [x] macOS support on Apple Silicon (thanks to [@saurav-codes](https://github.com/saurav-codes))
-- [ ] macOS: shortcuts shown and bound with ⌘ instead of Ctrl, the way Mac apps do
+- [x] macOS: shortcuts shown and bound with ⌘ instead of Ctrl, the way Mac apps do (thanks to [@Chiroyce1](https://github.com/Chiroyce1))
 - [ ] macOS: confirm the summon key works after a real reboot, with the launch agent starting the app hidden
 - [ ] macOS on Intel Macs
 - [ ] Optional classification of screenshots (one-time codes, receipts, chats) with Jev, to find and clear out the throwaway ones. Opt-in and off by default; only the recognized text is sent, never the image

@@ -65,10 +65,10 @@
 
 | 技术                                            | 说明         |
 |:----------------------------------------------|:-----------|
-| [Vue 3](https://vuejs.org/)                   | 渐进式前端框架    |
+| [React 19](https://react.dev/)                | 渐进式前端框架    |
 | [TypeScript](https://www.typescriptlang.org/) | 类型安全       |
-| [Ant Design Vue](https://antdv.com/)          | 企业级 UI 组件库 |
-| [Vben Admin](https://doc.vben.pro/)           | 后台管理框架     |
+| [Ant Design](https://ant.design/)             | 企业级 UI 组件库 |
+| [ProComponents](https://procomponents.ant.design/) | 企业级中后台组件 |
 
 ### 前台展示前端
 
@@ -120,6 +120,19 @@
 | 个人中心         | 个人信息编辑、头像修改、密码重置、登录记录查看               |
 | Headless API | 完整 OpenAPI 接口，支持内容 CRUD，适配多端调用        |
 
+### AI 助手
+
+| 功能    | 说明                                                                 |
+|:------|:-------------------------------------------------------------------|
+| 模型提供商 | OpenAI 兼容端点管理（云端 API / 本地 Ollama），API Key 加密落库，用量记账与统计       |
+| 对话助手  | SSE 流式对话，挂载 CMS 域只读工具（内容概览/帖子查询/评论统计），工具调用过程可见    |
+| 知识库 RAG | 文档上传（txt/md/docx/pdf）自动切片向量化入 pgvector，对话检索注入相关片段        |
+| 智能问数  | 自然语言→只读 SQL→结构化结果，表白名单与租户谓词 fail-closed，防注入四重护栏      |
+| 内容语义搜索 | 帖子标题/摘要向量化入全局搜索（Ctrl+K），语义命中直达编辑页，支持增量/全量重建 |
+| 安全洞察  | Dashboard 规则预筛 24h 审计异常模式，LLM 总评按界面语言生成（平台用户专属）           |
+| AI 内容生成 | 帖子标题/摘要/正文、页面标题、分类/标签描述、评论回复、角色描述等表单一键 AI 生成 |
+| 用量统计  | 对话/生成/embedding 全调用记账，当月汇总与服务端全量导出                     |
+
 ## 项目结构
 
 ```
@@ -135,7 +148,7 @@ go-wind-cms/
 │   ├── pkg/                        # 公共包 (鉴权/加密/事件总线/JWT/中间件/OSS...)
 │   └── scripts/                    # 部署脚本 (Docker/PM2/环境安装)
 ├── frontend/
-│   ├── admin/                      # 管理后台前端 (Vue3 + Ant Design Vue + Vben Admin)
+│   ├── admin/                      # 管理后台前端 (React 19 + Ant Design 6 + ProComponents)
 │   └── app/                        # 前台应用
 │       ├── react/                  # React 前台 (Next.js)
 │       ├── vue/                    # Vue 前台 (Nuxt.js)
@@ -178,7 +191,7 @@ gow run admin
 
 ```bash
 # 管理后台
-cd frontend/admin-react
+cd frontend/admin
 pnpm install
 pnpm dev
 

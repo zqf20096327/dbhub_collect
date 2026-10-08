@@ -36,7 +36,7 @@ untested.
 
 ## Building
 
-Requires a recent stable Rust toolchain and `protoc` (`choco install protoc` on Windows).
+Requires a recent stable Rust toolchain.
 SQLite is bundled.
 
 ```bash
@@ -70,7 +70,6 @@ paths = ['{USER_HOME}/Documents/Ableton Projects']   # folders to scan
 
 # database_path = ''          # default: %APPDATA%\Seula\seula.db
 http_port = 50052
-grpc_port = 50051
 log_level = "error"           # error, warn, info, debug, trace
 media_storage_dir = '...'     # cover art and audio
 
@@ -82,7 +81,7 @@ vst_search_paths = []         # empty = the platform's usual plugin folders
 ```
 
 `{USER_HOME}` expands to your home folder. The environment variables
-`SEULA_HTTP_PORT`, `SEULA_GRPC_PORT`, `SEULA_LOG_LEVEL` and `SEULA_DATABASE_PATH`
+`SEULA_HTTP_PORT`, `SEULA_LOG_LEVEL` and `SEULA_DATABASE_PATH`
 override the matching settings. Restart Seula after you edit the file.
 
 ## CLI
@@ -103,10 +102,10 @@ details.
 > This is an early alpha preview. It works on the database directly, and it will be
 > replaced by a separate client that talks to the running service over HTTP, so expect
 > command names and flags to change
-> ([ADR-0050](docs/decisions/0050-a-cli-client-talks-to-the-daemon-over-http.md)). The
-> gRPC server is being removed
-> ([ADR-0046](docs/decisions/0046-retire-grpc-and-the-cli-for-a-pure-http-api.md)), so
-> don't build on it.
+> ([ADR-0050](docs/decisions/0050-a-cli-client-talks-to-the-daemon-over-http.md)).
+> There is no gRPC server any more
+> ([ADR-0046](docs/decisions/0046-retire-grpc-and-the-cli-for-a-pure-http-api.md)); the
+> HTTP API is the only one.
 
 ## API
 
@@ -139,3 +138,21 @@ Start with [CLAUDE.md](CLAUDE.md) for the commands and the rules that are easy t
 break, then [docs/README.md](docs/README.md) for how the docs are organised. Several
 choices that look odd are deliberate and written up in
 [docs/decisions/](docs/decisions/). Open an issue before you start on anything large.
+
+Contributions are accepted under the licence of the files they change, and nothing
+more. There is no contributor licence agreement, so Seula cannot be taken proprietary
+by anyone, including its maintainer.
+
+## Licence
+
+Seula is free software: you can redistribute it and/or modify it under the terms of the
+GNU Affero General Public License as published by the Free Software Foundation, either
+version 3 of the License, or (at your option) any later version. See [LICENSE](LICENSE).
+
+The plugin scanners in `crates/vst-meta/` are under the Mozilla Public License 2.0
+instead ([crates/vst-meta/LICENSE](crates/vst-meta/LICENSE)). One additional permission,
+for linking with the Steamworks SDK, is in [LICENSE-EXCEPTIONS.md](LICENSE-EXCEPTIONS.md).
+The reasoning is in [ADR-0054](docs/decisions/0054-seula-is-agpl-and-the-plugin-scanners-stay-mpl.md).
+
+Versions up to and including commit e697019 were released under the Mozilla Public
+License 2.0, and remain available under it.

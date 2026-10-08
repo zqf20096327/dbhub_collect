@@ -6,7 +6,7 @@
 **Bare-metal C99 · AVX2+FMA · ARM NEON · FASM x64 · Zero Dependencies · ~120 KB**
 
 [![PyPI Version](https://img.shields.io/pypi/v/nanovector?style=for-the-badge&color=blue&label=pypi)](https://pypi.org/project/nanovector/)
-[![Conda-Forge](https://img.shields.io/conda/vn/conda-forge/nanovector.svg?style=for-the-badge)](https://anaconda.org/conda-forge/nanovector)
+[![Conda](https://img.shields.io/conda/vn/m_n_nik/nanovector.svg?style=for-the-badge&logo=anaconda)](https://anaconda.org/m_n_nik/nanovector)
 [![Debian / Ubuntu PPA](https://img.shields.io/badge/Debian%20%2F%20Ubuntu-APT%20PPA-E95420.svg?style=for-the-badge)](https://eminsk.github.io/ppa/)
 [![Python Versions](https://img.shields.io/badge/Python-3.8%20--%203.16-brightgreen?style=for-the-badge)](https://pypi.org/project/nanovector/)
 [![PyPy](https://img.shields.io/badge/PyPy-3.8%20--%203.12-orange?style=for-the-badge)](https://www.pypy.org/)
@@ -17,6 +17,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![MCP Server](https://img.shields.io/badge/MCP-Native_Stdio_Server-00a67e?style=for-the-badge)](#mcp-server)
 [![SIMD](https://img.shields.io/badge/SIMD-AVX2%20%7C%20NEON%20%7C%20FASM-purple?style=for-the-badge)](#architecture)
+[![Donate USDT](https://img.shields.io/badge/Donate-USDT-26A17B?style=for-the-badge&logo=tether&logoColor=white)](https://tronscan.org/#/address/TDVbEdnpgNgoAhNcn1EwXxWHiR3RKLit5P)
+
+> ⭐ **Enjoying NanoVector?** Give it a star on GitHub to support development!  
+> ☕ **Want to support the author?** USDT (TRC-20): `TDVbEdnpgNgoAhNcn1EwXxWHiR3RKLit5P` ([TronScan](https://tronscan.org/#/address/TDVbEdnpgNgoAhNcn1EwXxWHiR3RKLit5P))
 
 <p align="center">
   <a href="#quickstart">Quickstart</a> •
@@ -34,7 +38,7 @@
 |---|---|
 | **PyPI (pip)** | `pip install nanovector` |
 | **PyPI (uv)** | `uv add nanovector` |
-| **Conda-Forge** | `conda install -c conda-forge nanovector` |
+| **Conda (Anaconda.org)** | `conda install -c m_n_nik nanovector` |
 | **Ubuntu / Debian (APT PPA)** | `curl -sS https://eminsk.github.io/ppa/setup.sh \| sudo bash`<br>`sudo apt install python3-nanovector` |
 | **Ubuntu / Debian (.deb)** | `sudo dpkg -i python3-nanovector_0.1.6-1_amd64.deb` |
 
@@ -389,6 +393,22 @@ All 17 tests pass with 100% success rate across **Python 3.8 through 3.16 (inclu
 * 📊 [**xlsx_vievers**](https://github.com/eminsk/xlsx_vievers) — Headless Excel formula engine (129+ functions) & desktop spreadsheet processor with SSE2 SIMD math (`pip install xlsx-viewer-pro`).
 * 🎥 [**screenvideo**](https://github.com/eminsk/screenvideo) — Desktop screen recorder with WASAPI audio and standalone pure x64 FASM edition.
 * 🔍 [**StackOverflowAPI**](https://github.com/eminsk/StackOverflowAPI) — Bilingual desktop client with native FASM x64 search client.
+
+---
+
+## ☕ Support, Community & Donations
+
+If you find this project valuable and would like to support ongoing development:
+
+* ⭐ **Star the Repository**: If NanoVector speeds up your similarity searches and embeddings, give us a star on GitHub — it helps more developers discover bare-metal vector search!
+* 💬 **Join Discussions**: Have ideas, use cases, or vector indexing benchmarks? Start or join a thread in [GitHub Discussions](https://github.com/eminsk/nanovector/discussions)!
+* ☕ **Donate (USDT TRC-20)**:  
+  `TDVbEdnpgNgoAhNcn1EwXxWHiR3RKLit5P`  
+  *(Network: TRON / TRC-20 | [Verify on TronScan](https://tronscan.org/#/address/TDVbEdnpgNgoAhNcn1EwXxWHiR3RKLit5P))*
+
+[![GitHub Repo stars](https://img.shields.io/github/stars/eminsk/nanovector?style=social)](https://github.com/eminsk/nanovector)
+[![GitHub Discussions](https://img.shields.io/badge/Discussions-Join_Community-blue?logo=github&style=flat-square)](https://github.com/eminsk/nanovector/discussions)
+[![Donate USDT](https://img.shields.io/badge/Donate-USDT_(TRC20)-26A17B?style=flat-square&logo=tether&logoColor=white)](https://tronscan.org/#/address/TDVbEdnpgNgoAhNcn1EwXxWHiR3RKLit5P)
 
 ---
 

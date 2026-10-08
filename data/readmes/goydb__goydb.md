@@ -93,6 +93,81 @@ CouchDB replication does.
 
 See another example at the `cmd/goydb/main.go`.
 
+## Build tags
+
+By default goydb builds with goja (JS views), tengo, bleve full-text search,
+JWT auth, and TOTP all included; each can be excluded to shrink the binary
+with its own negative tag (`-tags nogoja,notengo,nosearch,nojwt,nototp`, in
+any combination).
+
+The storage engine is the opposite: bbolt is always built in, and SQLite is
+an opt-in addition, enabled with `-tags sqlite`:
+
+    go build -tags sqlite ./cmd/goydb
+
+The official `ghcr.io/goydb/goydb` Docker image is built with `-tags sqlite`,
+so both engines are available out of the box when using it.
+
+This doesn't replace bbolt — a `-tags sqlite` binary can open and create
+databases with either engine, chosen per database. `PUT /{db}` picks the
+engine via an `?engine=bbolt|sqlite` query parameter (same idea as CouchDB's
+own per-database engine selection), falling back to the `couchdb/default_engine`
+runtime-config value, and finally to `bbolt` if neither is set. See
+[Configuration Reference](docs/config.md#choosing-a-storage-engine-per-database)
+for details.
+
+SQLite databases are stored as `<name>.sqlite3`, distinct from the default
+bbolt files (which have no extension), so both kinds of files can coexist in
+the same `dbs` directory — each is always reopened with the engine that
+actually wrote it, regardless of the current default. A binary built
+*without* `-tags sqlite` only has the `bbolt` engine available; it refuses
+`?engine=sqlite` (`400 Bad Request`), and a `.sqlite3` file present in its
+`dbs` directory doesn't stop the server from starting or affect any other
+database — that one database is reported as unavailable (it still appears
+in `_all_dbs`/Fauxton; any request against it gets a clear "database exists
+but could not be opened" error) until it's deleted or opened with a binary
+that has `-tags sqlite`.
+
+The SQLite engine's connection-pool behavior (how many concurrent readers,
+how long idle connections are kept) is tunable via the `sqlite` section of
+the [runtime config](docs/config.md#section-sqlite) — `GET`/`PUT
+/_config/sqlite/{key}`, same mechanism as every other `_config` section.
+
+## Replication
+
+Besides the built-in CouchDB-compatible `/_replicate` HTTP endpoint, the
+replication engine is also exposed as a standalone Go API via
+[`pkg/replication`](pkg/replication) and [`pkg/replicator`](pkg/replicator),
+so external code can drive goydb's checkpoint-based pull/push protocol
+directly, without going through HTTP:
+
+```go
+import (
+	"github.com/goydb/goydb/pkg/goydb"
+	"github.com/goydb/goydb/pkg/replication"
+	"github.com/goydb/goydb/pkg/replicator"
+)
+
+cfg, err := goydb.NewConfig()
+// ...
+gdb, err := cfg.BuildDatabase() // *goydb.Goydb satisfies port.Storage
+
+r := &replicator.Replicator{
+	Source:     &replication.LocalDB{Storage: gdb, DBName: "source"},
+	Target:     &replication.LocalDB{Storage: gdb, DBName: "target"},
+	Continuous: true, // keep polling and replicating until ctx is cancelled
+}
+_, err = r.Run(ctx)
+```
+
+Both `Source` and `Target` only need to satisfy `port.ReplicationPeer`, so a
+`replication.RemoteClient` (talking to any CouchDB-compatible server over
+HTTP) can be mixed with a `replication.LocalDB` on either side. With
+`Continuous: false` (the default), `Run` returns once the target has caught
+up; with `Continuous: true` it keeps polling for new changes and only
+returns when `ctx` is cancelled — same as CouchDB's own continuous
+replication mode.
+
 ## Documentation
 
 * [Configuration Reference](docs/config.md)

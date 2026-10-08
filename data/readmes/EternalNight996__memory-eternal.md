@@ -1,5 +1,13 @@
 # 🧠 memory-eternal — 给 AI 装「第二大脑」
 
+[![HOL Guard](https://img.shields.io/endpoint?url=https%3A%2F%2Fhol.org%2Fapi%2Fregistry%2Fbadges%2Fplugin%3Fslug%3Deternalnight996%252Fmemory-eternal%26metric%3Dtrust)](https://hol.org/registry/plugins/eternalnight996%2Fmemory-eternal)
+
+<!-- 语言 / Language：本文件是**默认**（简体中文）README；英文镜像见 README.en.md。
+     两份是**独立文件**、标题层级一一对应；改一处请同步另一处（新增一节要两边都加）。
+     npm / DSH 插件市场默认展示本文件（中文）。 -->
+
+<p align="center"><b>简体中文（默认）</b> · <a href="README.en.md">English</a></p>
+
 <p align="center">
   <img src="https://img.shields.io/badge/DeepSeek%20Harness-plugin-3B82F6" alt="DSH plugin" />
   <img src="https://img.shields.io/npm/v/memory-eternal" alt="npm version" />
@@ -122,8 +130,11 @@ dsh-memory serve [--port 7999]       # 前台跑 web
 dsh-memory open                      # ensure web 存活 + 开浏览器
 dsh-memory watchdog [--port 7799]    # 看门狗保活 web（独立进程）
 dsh-memory status [--json]           # 看常驻 watchdog：pid / 端口 / 版本 / 是否存活
+                                     # 以及**端口上真正在服务的版本**（锁里的版本号只是 watchdog 自述）
 dsh-memory stop [--port 7799]        # 停止常驻 watchdog（配置改动不会自动停；连它拉起的 web 一起停）
+                                     # 停完会再问一次端口占用者，仍被占着就明确告警
 dsh-memory restart [--port 7799]     # 停止并重起 watchdog（升级后换新版）
+                                     # 按端口占用者兜底收掉锁里没登记的旧 web，起完自检端口上服务的版本
 dsh-memory audit list [--status pending|rejected|approved|deleted|all] [--limit N] [--json]
                                      # 列出卡片；总数不受 --limit 影响，--limit 只限制显示条数（默认全部）
                                      # all = 审核队列（pending + rejected），不含 approved / deleted
@@ -141,14 +152,26 @@ dsh-memory audit reject <卡片路径...> --reason "..." # 人工批量驳回
 
 - **web server 怎么保活**（`autoWebMode`）→ `init`=DSH 启动时拉一次（默认）；`interval`=DSH 进程内定时探活自动拉起（0 额外内存）；`manual`=全手动只从 `dsh-memory open` 起。
 - **看门狗进程**（`watchdogAutoSpawn`，默认开）→ 一个**独立** node 进程，DSH 退出了它也能拉起 web（约 +47 MB 内存）。只在要 7×24 保活时开。
+- **版本漂移自愈**（`autoRestartOnDrift`，默认开）→ 常驻 web **比 DSH 活得久**：升级只换磁盘文件，端口上那个进程仍跑着启动时加载的旧代码（「启动 dsh 后运行中还是旧版本」就是这么来的）。开着它，DSH 激活时会**问端口上真正服务的版本**，与磁盘不一致就用新代码重启常驻实例；关掉则只告警，需要时在「插件信息」点**重启常驻实例**。
 - **自动挂载 MCP**（`autoMcpSetup`，默认关）→ 是否自动把 MCP 写进 Claude Code/Codex/Cursor 配置。关 = 不碰你本机配置文件，需要时手动 `dsh-memory setup`。
 
 **改这些**：记忆库左栏「记忆配置」（或 DSH 设置 → 记忆）→ 表格里改，点「保存配置」；`autoWebMode`/`watchdogAutoSpawn` 需重启 DSH 生效。
 
-> ⚠️ **同端口不会自动替换（#19）**：看门狗是**独立进程且故意不杀**（多会话共用一个），所以
+> ⚠️ **同端口不会因配置改动而自动替换（#19）**：看门狗是**独立进程且故意不杀**（多会话共用一个），所以
 > 关闭 `watchdogAutoSpawn` **不会**停掉已经在跑的那个，改 `webCheckIntervalMs`/`webMaxRestart` 也不会生效。
 > 要停止 / 换新版请显式执行 `dsh-memory stop [--port N]` 与 `dsh-memory restart [--port N]`（`stop` 会**连它拉起的 web 一起停**，不留占端口的孤儿）；
-> `dsh-memory status` 会显示常驻实例的 pid、端口、启动时间与**版本是否落后于本机安装的包**。
+> `dsh-memory status` 会显示常驻实例的 pid、端口、启动时间与**版本是否落后于本机安装的包**，并单独报出**端口上真正服务的版本**
+> （锁文件里的版本号只是 watchdog 自述，端口上跑旧代码时它不会变）。
+>
+> ⚠️ **升级后请以「端口实际服务版本」为准（#23）**：`restart` 现在不只信锁里登记的 web 子进程，
+> 还会按**端口占用者**兜底清理（锁里没登记的旧 web 也会被识别并收掉，非本插件的进程只告警不动手），
+> 并在起完之后自检「端口上服务的版本 = 本机版本」——对不上就以非 0 退出码报失败，不再打印「已启动」就完事。
+>
+> ✅ **「更新了却还是旧版本」现在有两条出路（#19/#23）**：① 默认开的 `autoRestartOnDrift` 在 DSH 启动时
+> **自动**替换旧常驻实例；② 面板「插件信息」里发现版本漂移时给一个**🔄 重启常驻实例**按钮（服务端即
+> `dsh-memory restart --port N` 的同一实现：收旧实例 → 抢锁 → 拉起新 web → 自检端口版本）。
+> 注意「运行中」那一格指的是**服务本页的进程**：独立 Web 页里就是常驻 web，DSH 设置页里是宿主 ——
+> 面板会同时列出**常驻实例**的版本，两者不同时一眼能看出该重启谁。
 
 **MCP 是协议不是常驻服务**：agent 开会话才 spawn，用完即退，没有「开机自启」一说。
 
@@ -212,7 +235,16 @@ dsh-memory audit reject <卡片路径...> --reason "..." # 人工批量驳回
 |---|---|---|
 | 保活模式 `autoWebMode` | init | `init`=DSH 启动时开一次 web；`interval`=定时检查挂了自动重启；`manual`=全靠手动 |
 | 看门狗 `watchdogAutoSpawn` | 开 | 后台一个**独立进程**保证 web 不死（+47 MB 内存）。个人用可关——但关闭后**既有实例不会自动停**，需 `dsh-memory stop`（#19） |
+| 漂移自愈 `autoRestartOnDrift` | 开 | DSH 激活时发现**端口上服务的版本 ≠ 磁盘版本**（升级后常驻 web 还是旧代码）就用新代码重启常驻实例。关掉只告警，仍可在「插件信息」点**🔄 重启常驻实例**（#19/#23） |
 | 自动挂载 MCP `autoMcpSetup` | 关 | **让 Claude Code / Codex / Cursor 也能用你的记忆库**。开=自动配好它们；关=不碰你电脑配置，手动跑 `dsh-memory setup` |
+| 凭证提示 `secretHint` | 空 | 填一句自己的约定（例如「需要 API key/token 时先查记忆里的密钥目录」），会**注入每个会话的 systemPrompt**。记忆库里只存**目录**（名字/位置/取用方式），密钥的**值**不入库 —— 见下方「密钥怎么放」 |
+
+> 🔑 **密钥怎么放（`secretHint` 的用法）**：把**值**留在本机凭据里（环境变量 / 密钥文件，权限收紧），
+> 记忆库里只留一张**目录卡**（有哪些键、放在哪、干什么用、轮换状态），再用 `secretHint` 让 agent
+> 每次会话都想到去查这张卡。为什么值不能入库：卡片 `summary` 就是正文开头，**召回默认就带 130 字**
+> （`recallSummaryLen`），值一入库就随每次相关召回进入模型上下文；`/export`、备份、多机同步也会带上。
+> `dsh-memory setup` 会在 Claude Code 里注册一个 `PreToolUse` 守卫：直接读
+> `.credentials.yaml` / `.env` / `*-token` 会被拒绝并指路到目录卡。
 
 > 💰 **想省钱**：把「蒸馏知识卡」关掉、调低「蒸馏输出上限」、调高「召回相关性阈值」。
 
@@ -301,6 +333,9 @@ npm test        # 单元测试：vault 去重/检索/图谱 + capture 管线 + A
 npm run build   # 构建 lib/client.js（DSH 内嵌）+ web/app.js（独立 web bundle）
 ```
 
+> 📄 **README 是中英两份独立文件**：`README.md`（简体中文，**默认**，npm / 插件市场展示这一份）
+> 与 `README.en.md`（English）。两份标题层级一一对应，**改一处要同步另一处**（新增一节两边都加）。
+
 ---
 
 ## 🐞 反馈问题
@@ -358,6 +393,10 @@ curl http://127.0.0.1:7999/memory-eternal/api/web-info    # 独立 web 是否活
 
 | 版本 | 日期 | 关键改动 |
 |---|---|---|
+| **v0.10.7** | 2026-10-08 | **「启动 dsh 后运行中还是旧版本」根治：版本漂移自愈 + 一键重启常驻实例（#19 / #23 的正面解法）**。现场：升级 npm 包只换了磁盘文件，**常驻 web（默认 7999）比 DSH 宿主活得久** —— 端口上那个进程仍在跑「启动时加载进内存」的旧代码；而宿主激活时的策略是「同端口已有活着的 watchdog 就 `delegated`（不再 spawn、更不替换）」，于是**重启多少次 DSH 都不会换掉它**（实测本机：宿主 10:19 启动已是新版、设置页同源显示 0.10.6，而 7999 上的 web 是 08:15 启动的 0.10.0，`/config` 与 `/version-check` 各报一个版本）。① **启动自愈（`autoRestartOnDrift`，默认开）**：激活时先 `inspectResident()` 体检 —— 版本一律**问端口**（锁里的 `pkgVersion` 只是 watchdog 自述，旧实例写的还是空串，根本看不出版本漂移），再 `decideResidentAction()` 决策：一致 → `delegate`（保持 #19 的如实口径）、漂移 → `restart`、读不到本机版本 → 绝不乱动、刚替换过 → 防抖不重来（配置改动会让 effect 重跑）。**「更新运行中的程序」的正确形态由此定为「用新代码重启那个常驻进程」，而不是热替换内存里的模块**：ESM 模块缓存 + 闭包状态（settings / vault 路由 / SSE hub / `fs.watch` / 已监听端口）没有安全热换的余地，缓存失效重 import 只会得到第二份模块图（双实例、双监听、双写）。② **替换机制统一到一处**：新增 `restartResident()` = spawn 一个 detached 的 `watchdog.js --replace` 助手（收旧 watchdog / 旧 web → **等端口真的空出来** → 抢锁 → 拉起新 web），再自检「端口上真正服务的版本 = 本机版本」（#23 建议 2）；端口没空出来就**中止接管**、不退让到 `port+1`（退让实例正是孤儿 web 的诞生地）。`dsh-memory restart`、宿主启动自愈、面板按钮现在共用这一份实现。助手是 detached + `stdio:ignore`（stderr 没人看），所以接管结论**必须**写进「自动沉淀日志」—— 否则「重启了却没生效」又会变成一条无迹可查的静默失败。③ **面板一键修复**：新增 `POST /memory-eternal/api/restart-self`，三条硬约束 —— 本进程很可能**就是**要被替换的旧 web，所以**先回响应再调度**替换；常驻实例已经是最新就回 `alreadyCurrent`（宿主面板点这个按钮时最常见，绝不为一个健康实例白折腾一次停机）；同一时刻只允许一个替换在跑。④ **面板语义消歧**：「运行中」改为「**运行中（服务本页的进程）**」（独立 Web 页里它是常驻 web，DSH 设置页里是宿主 —— 这正是两个面板数字「打架」的根源），并新增「**常驻实例 vX**」徽标：两者不同时一眼看出该重启谁；漂移横幅给按钮 + 等价命令，若常驻实例已新而本页仍旧，则明说「需重启桌面版 / DSH」，不再给一个点了也没用的按钮。⑤ **`updateAvailable` 改按版本比较**：`latest !== onDisk` 在本地跑未发布版本时会**反过来劝你装回旧版**（磁盘 0.10.7 / npm 0.10.6），现在用 `compareVersions`（含预发布语义 `rc.2 < rc.10`）。⑥ 顺带清掉客户端词典里重复的 `saving` 键（esbuild 每次构建都在报警告）。新增 `tests/watchdog-restart.test.mjs`（17 项：决策矩阵 / 体检问端口 / 替换自检 / 接管前清场不误杀 / 路由先响应后替换 + 并发闸门 / 版本比较）。⑦ **README 改为中英两份独立文件**：`README.md` 是**默认**的简体中文（npm 与 DSH 插件市场展示这一份），`README.en.md` 是英文镜像；顶部加语言切换与「改一处要同步另一处」的说明，并补齐英文版缺失的「环境自检」小节；新增 `tests/readme-i18n.test.mjs` 锁住**结构 1:1**（标题层级序列 + 代码块数量 + 互链 + 默认语言标记），防止以后只改一份。⑧ **`secretHint` 凭证提示 + 凭据读取守卫**：填一句自己的约定就会被注入每个会话的 systemPrompt，让 agent 需要 API key / token 时**先查记忆里的「密钥目录」卡**（记忆库只存目录：名字/位置/取用方式，**值留在本机凭据库**）；`dsh-memory setup` 同时注册 Claude Code 的 `PreToolUse` 守卫（拒读 `.credentials.yaml` / `.env` / `*-token` 并指路到加载器），并会刷新仍指向旧安装副本的 hook 路径。`npm test` 共 **266 项** |
+| **v0.10.6** | 2026-10-07 | **孤儿 web 有了回收机制 + 共享配置同步失败不再静默**。① **孤儿 web**：web 子进程是 detached 启动的，watchdog 被硬终止时（Windows 上 `process.kill(pid,'SIGTERM')` 即无条件终止）它的退出处理器不执行；若这个 web 当初因为目标端口被占而**退让到 port+1…**，登记它的锁条目又随 watchdog 一起消失 —— 于是 8001/8002 这类端口上会常驻没人认领的 web（实测本机就躺着两个，其中一个已跑了 20 小时，而 `status` 只探配置端口，永远发现不了）。现在 `startWatchdog` 启动时、以及 `stop`/`restart`（`checkPort` 路径）都会扫**退让窗口** `[port+1, port+9]` 并收掉它们；三道门缺一不可（端口在窗口内 / 命令行**确实是本插件的 web** / pid 不在锁里任何 watchdog 的 `pid` 或 `webPid` 上），**别人的 `node web.js` 一个都不杀**。另外 `spawnWeb` 发现目标端口上已有自家 web 时**不再重复拉起**（退让实例的主要来源），只交给 tick 探活。② **`syncConfigFile()` 不再静默吞错**：它写的是独立页 / hooks / MCP 共用的读源，写不进去就表现为「配置改了但他们看不到」——旧实现是 `catch { /* 静默 */ }`（实测到过一次：共享文件 mtime 停在激活前，而宿主里的值已经变了）。现在失败会进 stderr 与「自动沉淀日志」的 warn（同一原因只报一次，不刷屏）；因为 `logCapture` 定义在 `apply()` 更靠后的位置，日志刻意**延迟一拍**再写，避开 `const` 的 TDZ。新增 `tests/watchdog-orphans.test.mjs`（7 项），`npm test` 共 **245 项** |
+| **v0.10.5** | 2026-10-07 | **独立 Web 端的配置保存：不再空头承诺，也不再要求「必须装了 DSH」**。① **宿主无关的直写路径（#21）**：独立端保存后若 800ms 内没人消费 pending 文件、**且**本机没有活着的 DSH 宿主（心跳文件 `memory-eternal-config.host.json` 不新鲜、或里面的 pid 已死），就直接把改动**原子合并**写进共享配置、清掉 pending，响应回 `pendingOutcome: applied-direct` —— 于是 Codex / Claude Code / Cursor、以及只跑 `dsh-memory serve` 的用户，保存当场生效（此前那条路只会写「待应用」等一个**根本不存在**的宿主，界面上那句「下次启动生效」永远不会兑现）。宿主活着时**绝不**直写：共享配置是宿主的派生镜像，绕过它会被下一次 `syncConfigFile()` 盖回去（有专门的反向测试守着这条边界）。② **失败要指路，不只是重复报错（#21）**：识别「宿主守卫类」报错 —— `HMR transactions cannot be nested`（Cordis HMR 宿主）与 `root.events.emit is unavailable from a plugin activation`（dsh-tui 一类）是同一族缺陷的两种措辞 —— 并把「此宿主不允许插件从自己的回调上下文写配置」与「去哪改」（**DSH 设置 → 记忆**，或 profile 的配置补丁层）写进放弃时的报错、诊断信息与独立页提示；`POST /config` 同时回 `hostGuard` / `hint` 字段。③ **界面不再一律弹「已保存」（#21）**：客户端开始消费 `pendingOutcome` —— `queued` / `failed` 用**非成功样式**并说明「尚未确认生效」，`applied-direct` 明确写「本机没有 DSH 宿主，已直接写入共享配置」，只有真生效才显示「已保存」。④ 顺带修掉一个会让宿主/测试**无法退出**的清理竞态：心跳定时器与 pending 文件监听都是在异步 `import()` 之后才建立，若在它 resolve 之前就 dispose，回调就再没人清理（心跳定时器还额外 `unref()`）—— `tests/settings-compat.test.mjs` 用假 ctx 跑 `apply()` 时正是被它挂住的。新增 `tests/issue-fixes-3.test.mjs`（9 项），`npm test` 共 **238 项** |
+| **v0.10.4** | 2026-10-07 | **四个「看着正常、实际静默错位」的 issue 集中修复（#21 / #22 / #23 / #24）**。① **宿主守卫误报的保存不再被当成失败（#21）**：dsh-tui 一类宿主的能力守卫会在 `settings.update` **内部**的 `describe()` 上抛 `root.events.emit is unavailable from a plugin activation`，而写入其实已经提交 —— 旧实现只认「有没有抛错」，会把**已生效**的改动重试 5 次后标成 `dropped`、日志里还报失败。新增 `applyPatchVerified`（抛错后**回读确认**，判据 `patchApplied` 浅比较，命中则记一行日志按成功处理），drain 与独立 Web 端共用这条路径；独立 Web 的 `POST /config` 也不再无条件回「一切正常」：等最多 800ms 回读 pending 文件，回 `pendingOutcome: applied / failed / queued` 并给对应措辞（`waitPendingOutcome`）。② **`/cards` 的 status 不再静默错位（#22）**：`status=deleted` 现在真的列**回收站**（与 `/recycle/list` 的数字对得上），未知取值显式回 `unknownStatus: true` 并回显 `appliedStatus` / `requestedStatus`（回落 approved 的老行为保留，但不再沉默）。③ **升级后以「端口上真正服务的版本」为准（#23）**：`/overview` 新增**当前服务进程**加载的 `version`；`dsh-memory status` 单独报「端口实际服务版本」，对不上就直说「升级尚未生效」（锁里的版本号只是 watchdog 自述；端口上是 **v0.10.4 之前**的旧 web 时探不到版本 —— 它的 `/overview` 还没有 `version` 字段 —— 这时会明说「是本插件的 web 但不会自报版本，即旧版」，而不是误报「没有服务在响应」）；`stop` 停完再问一次端口占用者、仍被占就告警；`restart` 不再只信锁里登记的 webPid —— 按**端口占用者**兜底收掉锁里没登记的旧 web（先用命令行确认**确实是本插件的 web**（包名 `memory-eternal`，或本插件自己的 `lib/web.js` 绝对路径）才动手，别人的 `node web.js` 只告警不动手 —— 收紧这条判据是刻意的：误杀别人占着该端口的进程，比不杀更糟），端口没空出来就中止重启，起完自检「端口服务版本 = 本机版本」，对不上以非 0 退出（不再打印「已启动」就完事）。④ **蒸馏解析不再把「字符串里的裸控制字符」误判成无法解析（#24）**：模型把 markdown 正文的换行写成真实 U+000A（括号闭合、`looksTruncatedJson` 为 false）时，旧实现必然 `JSON.parse` 失败 → 整卡退成原文卡；新增 `repairJsonControlChars` **只在字符串内部**把裸控制字符转成合法转义（`\n` `\r` `\t` `\b` `\f`，其余 `\u00XX`；字符串外的换行是合法 JSON 空白，一律不动），候选串顺序为「原样 → 截 `{ … }` → 各自的已修复版」；解析失败的消息不再吞掉 `JSON.parse` 原始报错，现场摘要改为**首尾各留一段**（`describeOutputExcerpt`，旧的 `slice(0,160)` 恰好把「被切在 `"body":` 半截处」显示得像输出断了）；撞输出上限的重试从「只翻倍一次」改为 `maxTokenLadder` **一路翻倍到 schema 上限**（1200 → 2400 → 4000，不再止步 2400）。新增 `tests/issue-fixes-2.test.mjs`（21 项），`npm test` 共 **229 项** |
 | **v0.10.3** | 2026-10-06 | **修复 `audit list` 的计数语义（#20）**。① 总数与 `--limit` **解耦**：`共 N 张` 取**匹配总数**（`countCards`），`--limit` 只限制显示条数，截断时明确写出 `显示前 M 张 … 还有 X 张未显示`。② **默认不再静默截断**（不给 `--limit`、或 `--limit 0` = 全部显示）。③ `--json` 拆分为 `total`（匹配总数）/ `returned`（本次返回）/ `count`（= total 的兼容别名；0.10.2 里它误等于 returned）/ `limit`（null = 全部）/ `hasMore`。④ `--status all` 的语义写进用法与 README：= 审核队列（pending + rejected），**不含**已出队的 approved 与回收中心的 deleted；`approved` 可显式查询。⑤ **同源修复 MCP 的 `memory_audit_list`**：它同样存在「默认 20 静默截断 + 把截断条数报成待处理数」，现改为报匹配总数 + 未显示提示，上限 100 → 500。 |
 | **v0.10.2** | 2026-10-06 | **五个存量 issue 集中修复（#15 / #16 / #17 / #18 / #19）**。① **按项目选库在宿主侧终于生效（#15-1）**：宿主过去拿进程 cwd 去匹配 `vaultProfiles[].match.workspace`，而那是「启动 dsh 的目录」——现在从 `session.header.cwd` 取**会话自己的工作区**（capture 与 memory_recall 两条路径都传），CLI/MCP/hooks 行为不变。② **蒸馏不再选错 provider（#15-2）**：声明 `supportsReasoningEffort:false` 的候选不再被传 `reasoningEffort`（能力未知一律按支持处理），并把它们排到支持者之后但**不删除**，避免兜底全无。③ **输出截断不再伪装成解析失败（#18）**：新增独立错误码 `MAX_TOKENS`（含实际上限值），撞上限自动以双倍上限重试同一候选；兜底上报改为**始终以第一候选为主因** + 其余错误按码汇总（不再被最后一个候选覆盖）；默认 `captureMaxTokens` 900 → **2000**；失败兜底的原文卡加 `distill-failed` 标签便于过滤。④ **独立 Web 端保存配置不再静默丢失（#16）**：drain 报错不再被 `catch {}` 吞掉（进 stderr + 自动沉淀日志，5 分钟去重节流），共享配置 `memory-eternal-config.json` 改为 **tmp + rename 原子写**（原先非原子写会在截断窗口内被独立 web / MCP 读到半截内容 → JSON.parse 失败 → 设置静默回落成默认值），重试耗尽后**保留 pending 文件**并标注 `dropped:true` + `lastError`（不再删除用户改动），失败状态进 `/diagnostics` 与 `/config` 响应。⑤ **审核中心有了 CLI（#17）**：`dsh-memory audit list/approve/reject`（多路径批量、`--json` 便于 jq 筛选、复用同一套 `setCardStatus` 守卫与 `audit_log`）；MCP 侧只新增**只读**的 `memory_audit_list`，不暴露 approve/reject。⑥ **看门狗有了生命周期（#19）**：新增 `dsh-memory status/stop/restart`，锁文件写入 `pkgVersion`（status 会提示「常驻实例是旧版」），宿主日志按抢锁结果如实打印 `spawned` / `delegated to existing pid`（不再每次都谎报 spawned），关闭 `watchdogAutoSpawn` 时明确提示既有实例仍在跑；并且 `dsh-memory stop` 会**连同该 watchdog 拉起的 web 一起停**（Windows 上 `process.kill(pid,'SIGTERM')` 是无条件终止，watchdog 的退出处理器根本不会执行 —— 旧写法会在 stop 后留下一个占着端口的孤儿 web；web 子进程 pid 现在记在锁里，杀之前还会用进程命令行确认确实是 `web.js`，防 pid 复用误杀）；README 修正「默认值自相矛盾」与「重启即可关闭」的错误承诺。 |
 | **v0.10.1** | 2026-10-02 | **修复「导出 OK、导入 0 张」**。根因：客户端「导出JSON」写出的是**裸数组**，而 `/import` 只读 `payload.cards` —— 裸数组被静默当成空备份（`ok:true` / `imported:0` / `skipped:0`），UI 只显示「导入完成：0」，看不出是格式不匹配。① `/import` 现在同时接受**裸数组**（v0.10.0 及以前的备份）与**信封对象** `{format, formatVersion, exportedAt, count, cards}`；形状不认识 → **400 + 人话原因**，空文件 → `warning`，坏 JSON → 原有的解析失败提示；② 导出改为**带信封**（老版本只认 `payload.cards`，信封对老版本也互通）并保留每张卡的 `status` / `store`；③ 导入去重基线改为**导入前快照**（`writeCard` 新增 `dedupAgainst`）—— 否则同一份备份里互相近似的卡会在写入过程中互相判重、被自己人吞掉一批（备份是真相源）；④ 导入应答补 `total` / `skipped` / `quarantined` / `failed[]`（含每条未导入原因），提示语改为「导入完成：N 张 / 文件共 M 张 · 待审核 K · 跳过 D」，一张都没进来时按**失败样式**提示；⑤ 新增 `tests/import-roundtrip.test.mjs`（6 项：裸数组 / 信封 / 导出→导入全量往返 / 重复导入如实报重复 / 坏形状 / 审核守卫不可绕过）。⑥ **装坏了也要说人话（issue #14）**：从插件市场装出来的副本可能缺 `web/` 静态资源，那时侧边栏「记忆」只会弹一页 `{"ok":false,"error":"ENOENT …"}` —— 现在缺 `index.html` 但 `app.js` 还在就用**内置外壳**把界面拉起来（自救），缺 `app.js` 则回一段把诊断画进 `#root` 的 JS + 一页含「缺哪个文件 / 绝对路径 / 包版本 / 怎么重装」的说明；两种缺失都写进自动沉淀日志（`app.js` → `fail` 健康态亮红、只缺 `index.html` → `warn`），宿主启动时也自检一次（判据与措辞由新增的 `lib/web-assets.js` 统一，附 `tests/web-assets.test.mjs` 6 项）。⑦ 顺带修 `appendCaptureLog` 在 `DSH_HOME` 目录不存在时静默失败（诊断信息连一条都留不下）。⑧ **DSH 兼容范围放宽到 `>=0.1.5-alpha.2 <0.3.0-0`**：旧上界 `<0.2.0` 按 semver 会把 DSH `0.2.0-rc.x` 排除在外（DSH 守卫用 `includePrerelease:true`，实际装得上，但声明与事实不符）——现在覆盖整个 0.1/0.2 线，`<0.3.0-0` 仍挡住 0.3.0 及其预发布；`dsh.compatibility` 同步补 `"0.2.0-rc.2": "compatible"`（本机在官方桌面版 0.2.0-rc.2 上实测运行）。⑨ **修三个第三方插件清单长期非法 JSON**：`.claude-plugin` / `.codex-plugin` / `.cursor-plugin` 的 `description` 收尾引号被双重编码吃掉（最后改动停在 v0.9.23），DSH 不走这三个文件所以一直没暴露，但 Claude Code / Codex / Cursor 侧安装**必然解析失败**；现已重写为合法 UTF-8 JSON、`version` 跟到 0.10.1，并新增**随包体检守卫** `tests/manifests.test.mjs`（3 项：随包 JSON 全部可解析 / 三清单 `name`+`version` 与 package.json 一致 / 随包文本无编码事故乱码）。实测用户 **661 张真实备份（裸数组、3.9MB）：修复前导入 0 张 → 修复后 661 张**（654 进主库 + 7 进隔离区）。`npm test` 共 **187 项** |

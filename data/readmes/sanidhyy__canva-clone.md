@@ -313,7 +313,7 @@ Useful resources and dependencies that are used in Canva Clone.
 - [@radix-ui/react-tooltip](https://www.npmjs.com/package/@radix-ui/react-tooltip): ^1.2.8
 - [@radix-ui/react-visually-hidden](https://www.npmjs.com/package/@radix-ui/react-visually-hidden): ^1.2.4
 - [@tailwindcss/postcss](https://www.npmjs.com/package/@tailwindcss/postcss): ^4.3.3
-- [@tanstack/react-query](https://www.npmjs.com/package/@tanstack/react-query): ^5.103.1
+- [@tanstack/react-query](https://www.npmjs.com/package/@tanstack/react-query): ^5.104.1
 - [@trivago/prettier-plugin-sort-imports](https://www.npmjs.com/package/@trivago/prettier-plugin-sort-imports): ^6.0.0
 - [@types/lodash.debounce](https://www.npmjs.com/package/@types/lodash.debounce): ^4.0.9
 - [@types/material-colors](https://www.npmjs.com/package/@types/material-colors): ^1.2.3
@@ -336,11 +336,11 @@ Useful resources and dependencies that are used in Canva Clone.
 - [eslint-config-prettier](https://www.npmjs.com/package/eslint-config-prettier): ^10.0.1
 - [eslint-plugin-prettier](https://www.npmjs.com/package/eslint-plugin-prettier): ^5.2.1
 - [fabric](https://www.npmjs.com/package/fabric): 7.4.0
-- [hono](https://www.npmjs.com/package/hono): ^4.13.7
+- [hono](https://www.npmjs.com/package/hono): ^4.13.12
 - [lodash.debounce](https://www.npmjs.com/package/lodash.debounce): ^4.0.8
-- [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.45.0
+- [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.51.0
 - [material-colors](https://www.npmjs.com/package/material-colors): ^1.2.6
-- [next](https://www.npmjs.com/package/next): 16.3.4
+- [next](https://www.npmjs.com/package/next): 16.3.6
 - [next-auth](https://www.npmjs.com/package/next-auth): ^5.0.0-beta.32
 - [next-themes](https://www.npmjs.com/package/next-themes): ^0.4.6
 - [onnxruntime-web](https://www.npmjs.com/package/onnxruntime-web): 1.29.0
@@ -356,7 +356,7 @@ Useful resources and dependencies that are used in Canva Clone.
 - [react-use](https://www.npmjs.com/package/react-use): ^17.6.0
 - [server-only](https://www.npmjs.com/package/server-only): ^0.0.1
 - [sonner](https://www.npmjs.com/package/sonner): ^2.0.7
-- [stripe](https://www.npmjs.com/package/stripe): 22.6.2
+- [stripe](https://www.npmjs.com/package/stripe): 23.0.0
 - [tailwind-merge](https://www.npmjs.com/package/tailwind-merge): ^3.7.0
 - [tailwindcss](https://www.npmjs.com/package/tailwindcss): ^4.3.3
 - [tw-animate-css](https://www.npmjs.com/package/tw-animate-css): ^1.4.0

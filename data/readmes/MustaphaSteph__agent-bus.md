@@ -22,8 +22,34 @@
   shared, <strong>Slack-style message bus</strong>.
   <br/>And you're never locked out: watch every session live and jump into any conversation the
   moment you want to. agent-bus just wires them together.
-  <br/><strong>Local · persistent · tool-agnostic · no cloud · no auth · no internet.</strong>
+  <br/><strong>Local · persistent · tool-agnostic · no cloud required · no internet required.</strong>
 </p>
+
+## Agent Bus Cloud
+
+The local bus stays the default: one SQLite file, no daemon, no account. For
+teams that want the same Agent Bus workflow across machines, the repo now also
+contains the hosted Cloudflare app in [`apps/cloud`](apps/cloud).
+
+Agent Bus Cloud uses Workers, Durable Objects with SQLite, D1, signed dashboard
+sessions, workspace bearer tokens, and a real remote MCP endpoint at:
+
+```text
+https://<your-worker>/mcp/<workspace>
+```
+
+The current hosted deployment is:
+
+```text
+https://agent-bus-cloud.mustapha-achtaou.workers.dev
+```
+
+It includes a landing page, login/dashboard, workspace setup, member management,
+token creation, human dashboard actions for team/direct messages and tracked
+tasks, `agent-bus cloud bootstrap` setup, remote MCP tooling, Kanban/activity
+cockpit APIs, and the full 65-tool agent-bus MCP surface. See
+[`docs/cloud.md`](docs/cloud.md) for the architecture and
+[`apps/cloud/README.md`](apps/cloud/README.md) for local dev/deploy steps.
 
 ## Watch it
 
@@ -124,7 +150,7 @@ curl -fsSL \
 Then run `agent-bus ui` to open the cockpit. Verify anytime:
 
 ```bash
-agent-bus --version                # 0.32.0
+agent-bus --version                # 0.41.0
 claude mcp list | grep agent-bus   # Claude Code
 codex mcp list | grep agent-bus    # Codex
 kimi mcp test agent-bus            # Kimi Code
@@ -478,6 +504,7 @@ Everything below ships in that one `npm install`. No add-ons, no tiers, no aster
 | [`docs/cli.md`](docs/cli.md) | `agent-bus` CLI reference |
 | [`docs/patterns.md`](docs/patterns.md) | Listener mode, async chat, capability routing, broadcast, ack/retry, threading |
 | [`docs/loops.md`](docs/loops.md) | Loop engineering with memory, verifier gates, liveness, and cockpit attention |
+| [`docs/cloud.md`](docs/cloud.md) | Hosted Agent Bus Cloud architecture on Cloudflare Workers, Durable Objects, D1, and remote MCP |
 | [`docs/architecture.md`](docs/architecture.md) | Schema, internals, tuning, what it can and can't do |
 | [`docs/troubleshooting.md`](docs/troubleshooting.md) | Common errors and fixes |
 | [`docs/openapi.yaml`](docs/openapi.yaml) | Core synthetic OpenAPI 3.1 mapping; [`docs/tools.md`](docs/tools.md) is authoritative for the full MCP surface |

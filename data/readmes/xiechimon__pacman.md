@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="apps/web/public/logo.svg" alt="pacman app icon" width="128" height="128">
+</div>
+
 # pacman
 
 A self-hosted, open-source **agent workspace**: a task board where you write the tasks and AI agents build them on your own machines.
@@ -102,9 +106,8 @@ pnpm test         # vitest
 | `apps/server` | Server: Hono REST + SSE + SQLite (package `@xiechimon/pacman` — directory name differs from package name) |
 | `apps/daemon` | Executor daemon (package `@xiechimon/pacman-cli` — directory name differs from package name) |
 | `packages/shared` | Protocol vocabulary, record shapes, brand-slot single source (`@pacman/shared`) |
-| `docs/spec/` | Implementation canon, volumes 00–06 (Chinese) |
-| `docs/research/` | r1–r8 replication-era site inventories and evidence (historical archive) |
-| `parity/` | Pixel-parity harness against `docs/research/assets/` baselines (now a regression tool) |
+| `docs/spec/` | Implementation canon, volumes 00–26 (Chinese) |
+| `docs/research/` | r1–r15 site inventories and later product research (historical archive) |
 | `scripts/` | Build-time tools (incl. `generate-icons.mjs`) |
 
 ## Third-party credits

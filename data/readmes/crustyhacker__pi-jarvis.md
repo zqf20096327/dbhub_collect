@@ -6,11 +6,11 @@
 
 ## Remember more. Explore in parallel. Stay in control.
 
-**Persistent shared memory. A second lane of thought. A searchable past.**
+**Persistent shared memory—with an editor you control. A second lane of thought. A searchable past.**
 
 Your main Pi session stays on the job. **Jarvis gives you room to investigate, remember and act**—without turning every side question into a change of plan. Open a polished conversation overlay, choose its model and thinking level, and let assigned work continue when you close the window.
 
-**The payoff compounds across sessions.** Main Pi and Jarvis share saved preferences, corrections and project decisions—even if you never open the overlay. Add the optional history archive to search recorded conversations and tool activity, import existing Pi chats after review, and optionally encrypt the active archive.
+**The payoff compounds across sessions.** Main Pi and Jarvis share saved preferences, corrections and project decisions—even if you never open the overlay. **Now you can open the [curated memory editor](#edit-what-pi-remembers), inspect the saved facts and correct them yourself.** Add the optional history archive to search recorded conversations and tool activity, import existing Pi chats after review, and optionally encrypt the active archive.
 
 **Power is explicit:** opt-in local tools + native MCP, quiet notes to main, and redirects that require your confirmation. [See the whole toolkit](#at-a-glance) · [Try memory in a minute](#memory-in-60-seconds).
 
@@ -22,16 +22,17 @@ Your main Pi session stays on the job. **Jarvis gives you room to investigate, r
 [![Pi extension](https://img.shields.io/badge/Pi-extension-06b6d4?style=for-the-badge)](https://github.com/crustyhacker/pi-jarvis)
 [![TypeScript](https://img.shields.io/badge/TypeScript-powered-2563eb?style=for-the-badge)](./package.json)
 
-<p><strong>Current version:</strong> 1.11.4</p>
+<p><strong>Current version:</strong> 1.12.1</p>
 
 ```bash
 pi install npm:pi-jarvis
 ```
 
-[Install](#quick-start) · [Shared memory](#shared-memory) · [Search & import](#full-session-archive) · [Encryption](#optional-archive-encryption) · [TUI controls](#overlay-controls) · [Native MCP](#native-mcp)
+[Install](#quick-start) · [Memory editor](#edit-what-pi-remembers) · [Shared memory](#shared-memory) · [Search & import](#full-session-archive) · [Encryption](#optional-archive-encryption) · [TUI controls](#overlay-controls) · [Native MCP](#native-mcp)
 
 <p>
   <strong>Shared persistent memory</strong> ·
+  <strong>Curated memory editor</strong> ·
   <strong>Optional indexed session archive</strong> ·
   <strong>Optional password encryption</strong> ·
   <strong>Confirmed bulk history import</strong> ·
@@ -44,6 +45,34 @@ pi install npm:pi-jarvis
 </p>
 
 </div>
+
+## Edit what Pi remembers
+
+**A useful memory should be inspectable—not a black box.** The curated memory editor, introduced in **1.12.0**, gives you a dedicated TUI for the preferences, corrections, decisions and references saved by you and your models.
+
+```text
+/jarvis-memory editor
+```
+
+Inside Jarvis, use **`/memory editor`**. No model call or side-session boot is required.
+
+![Curated memory editor, actual renderer with synthetic notes](https://raw.githubusercontent.com/crustyhacker/pi-jarvis/main/docs/assets/jarvis-memory-editor.svg)
+
+*Actual component with synthetic notes and a custom palette—not a live memory database. [Open the full-size preview](https://raw.githubusercontent.com/crustyhacker/pi-jarvis/main/docs/assets/jarvis-memory-editor.svg).*
+
+| When you want to… | The editor lets you… |
+|---|---|
+| **Find a saved decision** | Search and filter by project/global scope, category or origin lane; sort and browse pages. |
+| **Understand where a fact came from** | Inspect the full text, timestamps, ID and original provenance—not just an excerpt. |
+| **Correct or reorganize a note** | Edit its title, multiline body, category and scope, with a visible save review. |
+| **Build on something useful** | Create a new note or duplicate an existing one without silently overwriting its title. |
+| **Remove outdated notes** | Review deletion of one note or a selected batch of up to 50. Concurrent changes produce a conflict, not a silent overwrite. |
+
+**Curated notes only:** this is not the full-session archive editor and does not edit automatic conversation captures. Notes remain local plaintext and may be recalled to models. Full memory off or denied trust blocks access; capture/recall-only pauses still allow human management. Deleting a note does not erase earlier context, transcripts or backups.
+
+**Quick keys:** Ctrl+F search · Ctrl+S review save · F1 help · **Escape, then Enter** back/close. [All editor controls and safeguards](#curated-memory-editor).
+
+---
 
 <details>
 <summary>Plain-text wordmark</summary>
@@ -76,6 +105,7 @@ A fresh session should not mean throwing away every useful decision. `pi-jarvis`
 |---|---|
 | **"Remember how I like to work."** | Global preference notes, available to main Pi and Jarvis across projects |
 | **"We already decided this."** | Project-scoped decisions and corrections that survive session changes |
+| **"That saved fact needs fixing."** | A human-controlled editor for inspecting, correcting, organizing and reviewing deletion of curated notes |
 | **"Jarvis found something useful."** | A saved fact can be recalled later in main Pi without enabling `Note main` or `Redirect` |
 | **"What did we say about deployment?"** | Keyword search across saved notes and bounded conversation captures |
 | **"Show me the original tool output."** | Separately enabled archive search, session provenance and paged raw entries |
@@ -125,7 +155,7 @@ Use `/jarvis` for a second opinion, progress checks or repo inspection while the
 | **Default** | **On in trusted projects**, with separate capture/recall controls | **Off**; recording and model access are separately controlled |
 | **Retrieval** | Automatic recall from global/current-project memory; explicit broader search | Local indexed search and session browsing; no automatic context injection |
 | **Storage** | Local plaintext SQLite | Plaintext by default; optional password encryption for the archive database, index and SQLite journals |
-| **Manage it** | `/jarvis-memory` · overlay `/memory` | `/jarvis-archive` · overlay `/archive` |
+| **Manage it** | `/jarvis-memory editor` for curated notes; `/jarvis-memory` controls · overlay `/memory` | `/jarvis-archive` · overlay `/archive` |
 
 Both work across main Pi and Jarvis, independently of **Repo tools** and whether the overlay is open. Each has its own local SQLite store and global/project controls. Turning one off does not turn the other off.
 
@@ -141,6 +171,7 @@ Both work across main Pi and Jarvis, independently of **Repo tools** and whether
 |---|---|
 | **[Shared persistent memory](#shared-memory)** | Stop re-explaining useful preferences and project decisions. Main Pi and Jarvis use the same local store, across sessions—even without the overlay. |
 | **[Scoped recall and search](#memory-in-60-seconds)** | Relevant global/current-project facts can inform the next prompt. Explicitly search further when needed; inspect, edit or forget records yourself. |
+| **[Curated memory editor](#curated-memory-editor)** | A dedicated TUI to browse, inspect, create, duplicate, edit and review deletion of saved notes—with filters, provenance and conflict protection. Not the history archive. |
 | **[Searchable original history](#full-session-archive)** | Go beyond a summary: find recorded conversations, exposed tool activity and provenance, then page through the original accepted entries. Separate recording and model-access opt-ins. |
 | **[Bulk history import](#import-all-existing-pi-sessions)** | Put existing Pi chats to work: preview the exact file set, confirm once, skip identical entries and inspect per-file results. No silent backfill or source rewriting. |
 | **[Optional archive encryption](#optional-archive-encryption)** | Protect the active archive database, index and SQLite journals. Choose session, process, fixed-duration, idle or OS-backed remembered unlock. |
@@ -276,7 +307,7 @@ Sets the thinking level used by `/jarvis` without changing the main session thin
 Removes the selected scope so `/jarvis` thinking falls back through the remaining config layers to the built-in `auto` default.
 
 ### `/jarvis-memory`
-Reports shared-memory status. Use `/jarvis-memory help` for controls and data-management commands. Memory controls default to **global**, unlike model/thinking controls. See [Shared memory](#shared-memory) below.
+Reports shared-memory status. Use `/jarvis-memory editor` for the curated-note TUI editor, or `/jarvis-memory help` for controls and inline data-management commands. Memory controls default to **global**, unlike model/thinking controls. See [Shared memory](#shared-memory) below.
 
 ### `/jarvis-archive`
 Reports the separate full-session archive's status. It defaults **OFF**, with independent capture, model-access and optional encryption controls. `/jarvis-archive help` documents enablement warnings, paging, explicit import, deletion and human-only encryption administration. See [Full-session archive](#full-session-archive).
@@ -530,7 +561,41 @@ Controls share the existing settings files and preserve model/thinking/unknown k
 
 Place this in `<agentDir>/extensions/pi-jarvis.json` to disable memory before installation/startup (normally `~/.pi/agent/extensions/pi-jarvis.json`; honors `PI_CODING_AGENT_DIR`). Project overrides live in `.pi/jarvis.json`. Memory settings writes are atomic and use a bounded cooperative lock; legacy model/thinking writers do not share that lock, so avoid concurrent configuration changes. Corrupt shared settings are never automatically repaired or overwritten—even by model/thinking set or clear commands. Repair the JSON manually while preserving privacy settings. A crashed config writer can leave a `.memory.lock` file; remove it only after confirming no writer is running.
 
+### Curated memory editor
+
+```text
+/jarvis-memory editor
+```
+
+A dedicated TUI overlay for **the useful facts you and your models save**—not the full-session archive and not automatic conversation captures. New in **1.12.0**. Inside Jarvis, `/memory editor` opens the same editor locally without a model call or waiting for queued side work.
+
+- **Find the right note:** paged browsing, keyword search, current-project/global/all-project scope, category and origin-lane filters, and sorting.
+- **See the whole record:** full text, scope/project association, category, ID, timestamps and original provenance—not just a search excerpt.
+- **Manage it deliberately:** create or duplicate notes; edit title, multiline body, category and scope; review saves and single/selected-note deletions.
+- **Keep your work:** dirty-draft discard checks and conflict detection protect against accidentally overwriting a concurrently changed note. Reload and review explicitly; failed or uncertain writes are not replayed automatically.
+
+| In the memory editor | Key |
+|---|---|
+| Search notes | Ctrl+F |
+| Scope / category / origin lane / sort | F2 / F3 / F4 / F5 |
+| Inspect / new / edit / duplicate | Enter / N / E / D |
+| Select notes / clear selections | Space / Ctrl+U |
+| Review selected deletion (up to 50), or the current note | Delete / Ctrl+D |
+| Review a save | Ctrl+S |
+| Back or close | **Escape, then Enter** |
+| Complete shortcut help | F1 |
+
+Escape deliberately arms back/close rather than immediately releasing the window: a lone Escape can be the first byte of a slowly arriving paste. The next Enter confirms that navigation gesture; a second Escape does not close. Dirty drafts still require a separate discard review. Save/delete approvals require freshly visible review pages, and pasted input cannot approve them.
+
+[See the editor preview and workflow overview above](#edit-what-pi-remembers). Initial window width is capped at 144 columns; Pi clamps smaller terminals, and reopening recalculates the width.
+
+The editor is **human-only and TUI-only**, independent of Repo tools and archive access. It works with capture or recall paused, but full memory off, denied project trust or invalid configuration blocks record access; it never enables memory for you. Opening it from Jarvis closes only Jarvis's presentation, preserving assigned work and grants. Private archive input, model pickers and memory reviews cannot overlap the editor's modal ownership.
+
+Notes remain **local plaintext and untrusted historical context**, not a password vault. The existing 160-character title and 16 KiB UTF-8 body limits apply, with best-effort suspected-secret rejection. Scope/title changes retain deterministic identities and deletion markers; existing titles are not silently overwritten. Forgotten titles require the existing explicit `remember` command to restore. Deleting notes does not erase other mentions, original Pi transcripts, previously sent model context or backups.
+
 ### Inspect, edit and forget
+
+The existing inline commands remain available alongside the overlay:
 
 ```text
 /jarvis-memory list                    # recent global/current-project records
@@ -774,6 +839,7 @@ Regenerate the shared logo and actual-renderer demo artwork after visual changes
 
 ```bash
 npm run render:branding
+npm run render:memory-editor
 ```
 
 This uses deterministic fixtures, without opening a terminal, calling a provider, or connecting to MCP servers.

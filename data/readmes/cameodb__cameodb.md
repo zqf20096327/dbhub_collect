@@ -230,7 +230,8 @@ Dive deeper into CameoDB's architecture and APIs:
 - 📦 **[Building & Packaging](docs/BUILDING.md)**: Instructions for compiling cross-platform binaries and generating RPM/DEB packages.
 - 💻 **[Development Setup](docs/DEVELOPMENT.md)**: Getting a clean macOS or Linux machine ready to build, test and validate CameoDB.
 - 🚢 **[Deployment](docs/DEPLOYMENT.md)**: Running CameoDB as a service, in containers, and as a cluster.
-- 🧭 **[Architecture Decisions](docs/ADR.md)**: Why the system is shaped the way it is.
+- � **[MCP Server](docs/MCP.md)**: Enabling, securing and feeding the Model Context Protocol surface an agent searches through.
+- �🧭 **[Architecture Decisions](docs/ADR.md)**: Why the system is shaped the way it is.
 - 🧪 **[Scripts](scripts/README.md)**: Build, setup, validation and testing scripts, and what each one checks.
 - 📊 **[Data Ingestion Examples](examples/README.md)**: Sample python scripts and datasets (TED Talks, Book Summaries) to try out right away.
 
@@ -266,6 +267,29 @@ The CLI client features a robust ingestion pipeline that transparently handles:
 - **Formats:** `CSV`, `TSV`, `JSON` (Documents/Arrays), and `JSONL/NDJSON`.
 - **Compression:** Automatically detects and decompresses `Gzip (.gz/.gzip)` and `Zip (.zip)` archives on the fly.
 - **Sources:** Ingest data from local disk files, mounted network paths, or by streaming directly from public `HTTP/HTTPS` URLs.
+
+### 🔎 Schema Detection and Ids
+Detection reads a local file up to 1 GB whole, and a larger one from the head and in blocks spread over the rest, then types each column by every value it saw. To see what it found and why:
+
+```bash
+cameodb client schema detect ./wifi_kpi_hourly.csv --report
+```
+
+The id is the column filled and unique in every scanned row, preferring names such as `sha256`, `uuid` or `*_id`. When no single column is unique, name the columns whose values together are — the report suggests them — and they are joined with `|`, each staying a field of its own:
+
+```bash
+cameodb client data load wifi ./wifi_kpi_hourly.csv --id Hr,cmMacAddress
+```
+
+The index records its id, and later loads key documents the same way without `--id`. A schema can be edited and applied before loading (`schema detect … > schema.json`, then `schema load wifi schema.json`); once the index holds documents, a change to the id needs its documents deleted first — `data load --recreate` does that, keeping the schema, and loads again. A change to a field's type or tokenizer needs the edited schema applied in between: `delete wifi` (keeps the schema), `schema load wifi schema.json`, then load.
+
+A load sends one batch at a time unless told otherwise. `--parallel N` (1 to 16) keeps up to N batches in flight, converting rows to documents beside the reading, so the nodes index while the next batches are read:
+
+```bash
+cameodb client data load wifi ./wifi_kpi_hourly.csv --id Hr,cmMacAddress --parallel 4
+```
+
+On a 3-node cluster the 5.2 GB, 5.17-million-row file above loaded in 185 s with `--parallel 4` against 357 s one batch at a time; 8 and 16 added little there, the nodes' writers being the limit. A batch repeating an id sent before waits for the batches ahead of it, so the later row still replaces the earlier one. The ceiling is half of the 32 requests a node takes at once in the shipped configuration, leaving the rest to searches.
 
 ## 🔒 Security
 

@@ -70,89 +70,113 @@ The platform operates on a high-performance decoupled monorepo architecture engi
 
 
 ```mermaid
-graph TB
-    %% External Actors
-    Student(["👨‍🎓 Student & Parent<br/>Session Booking & Virtual Classroom"])
-    Teacher(["👩‍🏫 Verified Teacher<br/>Classroom Host & Teaching Studio"])
-    Admin(["🛡️ Platform Administrator<br/>Filament v3 Control Panel"])
-
-    %% External Cloud Services & Real-time Engines
-    AgoraRTC["📹 Agora RTC & RTM Cloud<br/><b>WebRTC Video & State Synchronization</b>"]
-    NetlessWB["🎨 Netless Whiteboard Cloud<br/><b>Agora Fastboard Interactive Canvas</b>"]
-    CloudflareR2["☁️ Cloudflare R2 Storage<br/><b>Zero-Egress Object Store & Edge CDN</b>"]
-    MoyasarAPI["💳 Moyasar Payment Gateway<br/><b>Mada, Visa, Apple Pay & Escrow Vault</b>"]
-    RecaptchaAPI["🤖 Google reCAPTCHA v3<br/><b>Bot Mitigation & Risk Scoring</b>"]
-    SentryTelemetry["📊 Sentry APM & Telemetry<br/><b>Error Tracking & Source Map Profiling</b>"]
-
-    %% Main Docker Container Ecosystem
-    subgraph DockerNet ["🐳 Docker Container Ecosystem (taj-network / taj-net)"]
-
-        subgraph PresentationLayer ["1. Presentation & API Gateway Tier"]
-            Frontend["🖥️ <b>taj-frontend</b><br/>Next.js 15.3 • React 19 • TypeScript • Tailwind<br/>TanStack Query • Arabic RTL Localization<br/><code>Port 3000</code>"]
-            Backend["🛡️ <b>taj_admin_web (Laravel Backend)</b><br/>Laravel 12.0 • PHP 8.3 FPM • Nginx<br/>Sanctum Bearer Auth • FilamentPHP v3 Panel<br/><code>Internal 80 / Host 8000 (8082 Prod)</code>"]
-        end
-
-        subgraph AsyncLayer ["2. Asynchronous Queue & Background Worker Tier"]
-            QueueWorker["⚡ <b>taj_queue_worker</b><br/>Laravel Queue Engine (CLI Worker)<br/>• Classroom Provisioning (ProvisionVirtualClassroom)<br/>• Agora RTC / RTM / Screen Token Pre-signing<br/>• Escrow Releases & Automated Refund Dispatch<br/><code>Redis Worker Daemon</code>"]
-        end
-
-        subgraph StorageLayer ["3. Distributed State, Caching & Database Tier"]
-            Redis[("⚡ <b>taj_redis</b><br/>Redis 7 (Alpine)<br/>• Tagged Catalog Cache (subjects, teachers, slots)<br/>• Parent Dashboard Aggregates Cache (10m)<br/>• Pre-signed Agora Token Store (110m TTL)<br/>• High-Throughput Job Queue Broker<br/><code>Internal 6379 / Host 6381/6390</code>")]
-            MySQL[("🐬 <b>taj_mysql</b><br/>MySQL 8.0 Relational Engine<br/>• Double-Entry Escrow Wallets & Ledger<br/>• Bookings (Composite Index Covered)<br/>• Teacher KYC Docs, Slots, Subjects & Reviews<br/><code>Internal 3306 / Host 3306/3307</code>")]
-        end
-
+flowchart LR
+    %% ─────────────────────────────────────────────────────────────
+    %% 1. ACTORS & CLIENTS
+    %% ─────────────────────────────────────────────────────────────
+    subgraph ClientsCol ["👥 Users & Roles"]
+        direction TB
+        Student(["👨‍🎓 Student & Parent<br/>Web Portal & Classroom"])
+        Teacher(["👩‍🏫 Verified Teacher<br/>Studio & Classroom Host"])
+        Admin(["🛡️ Platform Admin<br/>Filament v3 Dashboard"])
     end
 
-    %% User & External Ingress Flows
-    Student -->|HTTPS / RTL Web UI| Frontend
-    Teacher -->|HTTPS / RTL Web UI| Frontend
-    Admin -->|HTTPS / Admin Auth Session| Backend
+    %% ─────────────────────────────────────────────────────────────
+    %% 2. PRESENTATION & REAL-TIME MEDIA EDGE
+    %% ─────────────────────────────────────────────────────────────
+    subgraph EdgeCol ["🌐 Presentation & Real-Time Edge"]
+        direction TB
+        Frontend["🖥️ <b>taj-frontend</b><br/>Next.js 15.3 • React 19<br/>Edge RSC • RTL Arabic<br/><code>Port 3000</code>"]
+        Agora["📹 <b>Agora SD-RTN Cloud</b><br/>Adaptive HD Video / Audio<br/>Isolated Screen Share Channel"]
+        Netless["🎨 <b>Netless Cloud</b><br/>Interactive Vector Whiteboard<br/>Real-Time Follower Mode"]
+    end
 
-    %% Direct Browser WebRTC & Interactive Canvas Streams
-    Frontend <-->|Low-Latency WebRTC A/V & Screen Share| AgoraRTC
-    Frontend <-->|WebSocket Real-Time Whiteboard & Follower Mode| NetlessWB
-    Frontend <-->|Direct Image Retrieval & Edge CDN Avatars| CloudflareR2
+    %% ─────────────────────────────────────────────────────────────
+    %% 3. TAJ DOCKER BACKEND ECOSYSTEM
+    %% ─────────────────────────────────────────────────────────────
+    subgraph DockerApp ["🐳 Taj Docker Ecosystem (taj-net)"]
+        direction TB
 
-    %% Frontend to Backend API Ingress
-    Frontend -->|REST API v1 + Sanctum Bearer Token| Backend
-    Frontend -.->|Client reCAPTCHA Token| RecaptchaAPI
+        subgraph GatewayTier ["1. API & WebSockets Gateway"]
+            Backend["⚙️ <b>taj_admin_web</b><br/>Laravel 12 • PHP 8.3 FPM<br/>Sanctum Auth • Filament Panel"]
+            Reverb["⚡ <b>taj_reverb</b> (WebSockets)<br/>Laravel Reverb • Port 8080<br/>Instant In-App Event Push"]
+        end
 
-    %% Backend to External Third-Party Integrations
-    Backend -->|Verify Token Score via Secret Key| RecaptchaAPI
-    Backend -->|Hold / Capture / Release Escrow Funds| MoyasarAPI
-    Backend -->|Stream Avatars & KYC Uploads via S3 API| CloudflareR2
-    Backend <-->|Fetch KYC Credentials for Admin Verification| CloudflareR2
-    Backend -.->|Server Exceptions & Performance Traces| SentryTelemetry
-    Frontend -.->|Client Errors & Session Replays| SentryTelemetry
+        subgraph WorkerTier ["2. Asynchronous Background Engine"]
+            QueueWorker["⚡ <b>taj_queue_worker</b><br/>Laravel Redis Daemon<br/>• Pre-provisioning (Agora & WB)<br/>• Escrow Releases & Refunds<br/>• AI Session Summaries"]
+        end
 
-    %% Backend Core Data & State Access
-    Backend <-->|PDO / Eloquent ORM / ACID Transactions| MySQL
-    Backend <-->|Cache Tags, Rate Limits & Token Lookup| Redis
-    Backend -->|Dispatch Async Provisioning Jobs| Redis
+        subgraph StorageTier ["3. Distributed State & Ledger"]
+            Redis[("⚡ <b>taj_redis</b> (Redis 7)<br/>128MB • volatile-lru • AOF<br/>Queue Broker & Tagged Cache")]
+            MySQL[("🐬 <b>taj_mysql</b> (MySQL 8.0)<br/>Double-Entry Escrow Ledger<br/>ACID Transactions & Bookings")]
+        end
+    end
 
-    %% Worker Consumption & Background Provisioning
-    Redis -->|Poll Background Jobs via BLPOP| QueueWorker
-    QueueWorker -->|Update Booking & Provision State| MySQL
-    QueueWorker -->|HMAC-SHA256 Token Pre-generation & Cache| Redis
+    %% ─────────────────────────────────────────────────────────────
+    %% 4. EXTERNAL CLOUD APIS & AI
+    %% ─────────────────────────────────────────────────────────────
+    subgraph CloudCol ["☁️ External Cloud & AI Services"]
+        direction TB
+        OpenAI["🧠 <b>OpenAI Cloud (gpt-4o-mini)</b><br/>24/7 AI Assistant • Summaries & Quizzes"]
+        Moyasar["💳 <b>Moyasar Payment Gateway</b><br/>Mada, Visa, Apple Pay • Escrow Vault"]
+        R2["☁️ <b>Cloudflare R2 Storage</b><br/>Zero-Egress Object Store & Edge CDN"]
+        Recaptcha["🤖 <b>Google reCAPTCHA v3</b><br/>Risk Scoring & Bot Mitigation"]
+        Sentry["📊 <b>Sentry APM</b><br/>Telemetry & Source Map Profiling"]
+    end
 
-    %% Modern Theme Styling
+    %% ── USER INGRESS FLOWS ──
+    Student -->|HTTPS| Frontend
+    Teacher -->|HTTPS| Frontend
+    Admin -->|HTTPS Auth| Backend
+
+    %% ── DIRECT BROWSER-TO-CLOUD STREAMS (ZERO SERVER LOAD) ──
+    Frontend <-->|Direct WebRTC| Agora
+    Frontend <-->|Direct WebSocket| Netless
+    Frontend -.->|Edge CDN Avatars| R2
+
+    %% ── FRONTEND TO BACKEND API & WEBSOCKETS ──
+    Frontend -->|REST API v1 + Sanctum| Backend
+    Frontend <-->|WebSockets Echo Push| Reverb
+
+    %% ── BACKEND & STORAGE RELATIONSHIPS ──
+    Backend <-->|Cache & Tokens| Redis
+    Backend <-->|ACID Ledger| MySQL
+    Backend -->|Dispatch Jobs| Redis
+    Backend -->|Broadcast Events| Reverb
+    Redis <-->|Scaling Pub/Sub| Reverb
+
+    %% ── QUEUE WORKER CONSUMPTION ──
+    Redis -->|Poll BLPOP| QueueWorker
+    QueueWorker -->|Update State| MySQL
+    QueueWorker -->|Pre-sign Tokens| Redis
+
+    %% ── BACKEND & WORKER TO CLOUD INTEGRATIONS ──
+    Backend -->|Live Support Chat| OpenAI
+    QueueWorker -->|Generate Summaries| OpenAI
+    Backend -->|Escrow Capture & Release| Moyasar
+    Backend <-->|S3 Uploads & KYC Docs| R2
+    Backend -.->|Score Check| Recaptcha
+    Backend -.->|Server Telemetry| Sentry
+    Frontend -.->|Client Errors| Sentry
+
+    %% ── LUXURY MODERN COLOR PALETTE ──
     classDef client fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+    classDef edge fill:#022c22,stroke:#10b981,stroke-width:2px,color:#f8fafc;
     classDef gateway fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#f8fafc;
     classDef worker fill:#1c1917,stroke:#f59e0b,stroke-width:2px,color:#f8fafc;
     classDef redis fill:#450a0a,stroke:#ef4444,stroke-width:2px,color:#f8fafc;
     classDef mysql fill:#042f2e,stroke:#14b8a6,stroke-width:2px,color:#f8fafc;
-    classDef external fill:#18181b,stroke:#a1a1aa,stroke-width:1px,stroke-dasharray: 4 4,color:#f8fafc;
-    classDef cloudflare fill:#2e1065,stroke:#f97316,stroke-width:2px,color:#f8fafc;
-    classDef media fill:#022c22,stroke:#10b981,stroke-width:2px,color:#f8fafc;
+    classDef cloud fill:#18181b,stroke:#a1a1aa,stroke-width:1px,stroke-dasharray: 4 4,color:#f8fafc;
+    classDef ai fill:#0c2a4a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
 
     class Student,Teacher,Admin client;
-    class Frontend,Backend gateway;
+    class Frontend,Agora,Netless edge;
+    class Backend,Reverb gateway;
     class QueueWorker worker;
     class Redis redis;
     class MySQL mysql;
-    class MoyasarAPI,RecaptchaAPI,SentryTelemetry external;
-    class CloudflareR2 cloudflare;
-    class AgoraRTC,NetlessWB media;
+    class Moyasar,R2,Recaptcha,Sentry cloud;
+    class OpenAI ai;
 ```
 
 
@@ -162,12 +186,12 @@ graph TB
 | Layer / Tier | Primary Technologies | Architectural Role & Implementation Details |
 | :--- | :--- | :--- |
 | **0. External Actors & Roles** | RBAC (Student, Teacher, Parent, Admin) | Distinct personas partitioned by Spatie RBAC, accessing tailored functional portals and localized Arabic RTL interfaces. |
-| **1. Presentation & API Gateway Tier** | Next.js 15.3 App Router (React 19) & Laravel 12 API / Filament v3 | Hybrid Edge architecture with React Server Components (RSC) and SWR caching on the frontend (`taj-frontend`); REST API v1 with Sanctum Bearer tokens and administrative KYC/dispute dashboard on the backend (`taj_admin_web`). |
-| **2. Asynchronous Queue & Background Worker Tier** | Laravel Queue Worker (`taj_queue_worker` / Redis) | Dedicated background CLI daemon executing `ProvisionVirtualClassroom` to pre-generate Agora RTC/RTM tokens and whiteboard rooms ahead of time, plus processing escrow releases and refund dispatches. |
-| **3. Distributed State, Caching & Database Tier** | MySQL 8.0 (`taj_mysql`) & Redis 7 (`taj_redis`) | InnoDB ACID financial ledger with composite indexing (`idx_bookings_booked_by_status_date`) and pessimistic row locking (`lockForUpdate()`), paired with tagged Redis caching (`Cache::tags()`) and sub-millisecond pre-signed token retrieval. |
+| **1. Presentation & API Gateway Tier** | Next.js 15.3 App Router (React 19) & Laravel 12 API / Filament v3 / Laravel Reverb | Hybrid Edge architecture with React Server Components (RSC) and SWR caching on the frontend (`taj-frontend`); REST API v1 with Sanctum Bearer tokens and administrative KYC/dispute dashboard on the backend (`taj_admin_web`), paired with native high-throughput Laravel Reverb WebSockets (`taj_reverb` / port 8080) for instant event push (bookings, wallets, classroom presence). |
+| **2. Asynchronous Queue & Background Worker Tier** | Laravel Queue Worker (`taj_queue_worker` / Redis) | Dedicated background CLI daemon executing `ProvisionVirtualClassroom` to pre-generate Agora RTC/RTM tokens and whiteboard rooms ahead of time, processing escrow releases and refund dispatches, and generating AI session summaries and quizzes via OpenAI. |
+| **3. Distributed State, Caching & Database Tier** | MySQL 8.0 (`taj_mysql`) & Redis 7 (`taj_redis`) | InnoDB ACID financial ledger with composite indexing (`idx_bookings_booked_by_status_date`) and pessimistic row locking (`lockForUpdate()`), paired with tagged Redis caching (`Cache::tags()`), AOF disk persistence (`appendfsync everysec`), and eviction-proof financial queues via `volatile-lru`. |
 | **Cloud Object Storage (Zero Egress)** | Cloudflare R2 Storage (`league/flysystem-aws-s3-v3`) | S3-compatible cloud bucket storing user profile avatars and teacher KYC documents (national ID & degrees) with direct CDN distribution, Livewire local staging, and zero bandwidth egress fees. |
 | **Real-Time Media Cloud (Zero Server Load)** | Agora SD-RTN (RTC/RTM) & Netless Cloud | **Direct browser-to-cloud streams**: Real-time 720p/120p simulcast video, independent screen sharing channel (`UID + 1_000_000_000`), WebSocket signaling, and collaborative vector whiteboard canvas. |
-| **Cloud SaaS & Security Integrations** | Moyasar + Google reCAPTCHA v3 + Sentry | Saudi-compliant payment escrow with HMAC-SHA256 signed webhooks, Google reCAPTCHA v3 bot protection, and full-stack Sentry APM with automated production source maps. |
+| **Cloud SaaS & Security Integrations** | Moyasar + Google reCAPTCHA v3 + Sentry + OpenAI | Saudi-compliant payment escrow with HMAC-SHA256 signed webhooks, Google reCAPTCHA v3 bot protection, full-stack Sentry APM with automated production source maps, and OpenAI `gpt-4o-mini` for 24/7 grounded support chat, post-lesson summaries, and auto-graded quizzes. |
 
 ---
 
