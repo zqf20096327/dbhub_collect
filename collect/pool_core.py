@@ -192,6 +192,23 @@ def discovery_base(exclude_topics: list[str]) -> str:
     return f"topic:{dp.GLOBAL['discovery_topics'][0]} fork:false {excl}".strip()
 
 
+def _drop_lib_tagged(items: dict, lib_variants: set[str]) -> tuple[dict, int]:
+    """发现桶后过滤：database+17库变体双标仓让位给库自己的 topic 通道——查询侧
+    -topic: 排除只有 big_four 三个（12 个否定词会撑爆 256 字符查询上限），改在
+    结果侧丢弃。防 topics 列表中字母序靠前的 database 抢注 source_topic
+    （10-03 池归属审计：615 条 17 库仓被错标发现桶，sqlite 系 468 为主）。
+    让位不丢数据：过滤集=两 section 全部 topic 通道并集，被丢仓必由自己的
+    库通道以同星线重新捞回。局限：slim 只留 topics 前 20，超长双标仓会漏过滤。"""
+    kept: dict[str, dict] = {}
+    dropped = 0
+    for fn, r in items.items():
+        if lib_variants.intersection(r.get("topics") or []):
+            dropped += 1
+        else:
+            kept[fn] = r
+    return kept, dropped
+
+
 def run(section: str, args) -> None:
     if section == "cn" and args.only == "new":
         print("国产无新项目窗口（主通道无星线，新仓从第 0 天起即被覆盖），--only new 无事可做")
@@ -212,6 +229,9 @@ def run(section: str, args) -> None:
     only = args.only
     disc = dp.GLOBAL["discovery_topics"][0]
     big_four_excl = [t for t in dp.GLOBAL["big_four"] if t != disc]
+    # 17 库 topic 变体全集（动态取自两 section，勿手抄）：发现桶取数后过滤让位用
+    lib_variants = ({t for s_ in secs.values() for t in s_["topics"]}
+                    - set(dp.GLOBAL["discovery_topics"]))
 
     if args.dry_run:
         print(f"[dry-run] section={section} star_min={star}"
@@ -220,7 +240,8 @@ def run(section: str, args) -> None:
             base = (discovery_base(big_four_excl) if t == disc
                     else f"topic:{t} fork:false") + _REPO_EXCL
             print(f"  topic: {base}" + (f" stars:>={star}" if star else "")
-                  + ("（大topic自动分档）" if star else "（超1000按创建期拆）"))
+                  + ("（大topic自动分档）" if star else "（超1000按创建期拆）")
+                  + ("（17库双标仓后过滤让位）" if t == disc else ""))
         for w, q in sec["queries"].items():
             print(f"  search: {q}")
         for name, o in _orgs_dedup(sec["orgs"]).items():
@@ -256,6 +277,10 @@ def run(section: str, args) -> None:
                     else f"topic:{t} fork:false") + _REPO_EXCL
                     items, total = fetch_all(client, f"{base} stars:>={ns} created:>={cutoff}",
                                              "topic", t)
+                    if t == disc:
+                        items, n_yield = _drop_lib_tagged(items, lib_variants)
+                        if n_yield:
+                            log.info("新项目窗口·发现桶让位 %d 条（17 库双标仓交还库通道）", n_yield)
                     for fn, r in items.items():
                         pool_t.setdefault(fn, r)
                     totals[f"new:topic:{t}"] = total
@@ -280,8 +305,12 @@ def run(section: str, args) -> None:
                 if f"topic:{t}" in state["done"]:
                     continue
                 base = (discovery_base(big_four_excl) if t == disc
-                    else f"topic:{t} fork:false") + _REPO_EXCL
+                        else f"topic:{t} fork:false") + _REPO_EXCL
                 items, total = fetch_topic(client, base, star, t)
+                if t == disc:
+                    items, n_yield = _drop_lib_tagged(items, lib_variants)
+                    if n_yield:
+                        log.info("topic:%s 让位 %d 条（17 库双标仓交还库通道）", t, n_yield)
                 totals[f"topic:{t}"] = total
                 if total == 0:
                     log.info("topic:%s = 0（known_empty 或空）", t)

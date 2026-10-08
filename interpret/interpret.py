@@ -714,15 +714,19 @@ def info_gain(review: str, desc: str) -> bool:
 
 def merge_review(prev: dict, low_conf: list, rejected: list, failed_fns: list) -> dict:
     """人工复核队列跨运行累积合并——旧版整体覆盖写，历史队列永远只剩最后一次运行。
-    rejected/failed 保序去重后裁尾 500：不裁会无限涨（failed 是纯 fn 串无时间戳，
-    10-07 实测 24,109 条且绝大多数已出池/救回）。"""
+    三队列保序去重后裁尾 500：不裁会无限涨（failed 10-07 实测 24,109 条、
+    low_confidence 10-08 实测 2,760 条，绝大多数已出池/已救回；解读结果本体
+    在 interp_cache，此队列仅人工抽检 TODO，被裁 fn 再现会重新入队）。"""
     by_fn = {}
     for r in list(prev.get("rejected") or []) + list(rejected):
         by_fn[r.get("fn")] = r            # 同 fn 保最新
     by_failed = {}
     for fn in list(prev.get("failed") or []) + list(failed_fns):
         by_failed[fn] = None              # 字符串队列无 payload；保序去重同 rejected
-    return {"low_confidence": sorted(set(prev.get("low_confidence") or []) | set(low_conf)),
+    by_low = {}
+    for fn in list(prev.get("low_confidence") or []) + list(low_conf):
+        by_low[fn] = None                 # 同 failed：保序去重（勿 sorted——会抹掉插入序致裁尾变按字母序砍）
+    return {"low_confidence": list(by_low)[-500:],
             "rejected": list(by_fn.values())[-500:],
             "failed": list(by_failed)[-500:]}
 
