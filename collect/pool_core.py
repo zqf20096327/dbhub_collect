@@ -185,6 +185,42 @@ def _orgs_dedup(orgs: list) -> dict:
     return out
 
 
+# cadence 声明 → 携带周期（天）。db_profiles 的 orgs dict 形态可带 cadence:weekly，
+# 执行层此前每晚照扫（10-03 审计缺口 4）——池每夜全新重建，直接跳扫会让该 org
+# 的仓当晚出池引发下游 churn，故用携带文件：周期内复用上次结果并入 parts。
+CADENCE_DAYS = {"weekly": 7}
+_CARRY_DIR = HERE / "state" / "org_carry"
+
+
+def _carry_path(section: str, org: str) -> Path:
+    return _CARRY_DIR / f"{section}__{org.replace('/', '_')}.json"
+
+
+def _load_carry(section: str, org: str, cad_days: int) -> tuple[dict | None, str]:
+    """周期内有效返回 (items, 扫描日)；缺失/残损/过期一律 (None, '') 走现扫自愈。"""
+    if cad_days <= 0:
+        return None, ""
+    p = _carry_path(section, org)
+    if not p.is_file():
+        return None, ""
+    try:
+        d = json.loads(p.read_text(encoding="utf-8"))
+        age = (datetime.now(timezone.utc)
+               - datetime.fromisoformat(d["scanned"])).total_seconds() / 86400
+        if 0 <= age < cad_days and isinstance(d.get("items"), dict):
+            return d["items"], d["scanned"][:10]
+    except Exception:
+        pass                     # 残损携带=无携带，宁可现扫不猜
+    return None, ""
+
+
+def _save_carry(section: str, org: str, items: dict) -> None:
+    _CARRY_DIR.mkdir(parents=True, exist_ok=True)
+    atomic_write_json(_carry_path(section, org), {
+        "scanned": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "items": items})
+
+
 # ---------------- 查询构造 ----------------
 
 def discovery_base(exclude_topics: list[str]) -> str:
@@ -245,7 +281,9 @@ def run(section: str, args) -> None:
         for w, q in sec["queries"].items():
             print(f"  search: {q}")
         for name, o in _orgs_dedup(sec["orgs"]).items():
-            print(f"  org: {name} (star_line={org_star_line(o, section)})")
+            cad = o.get("cadence") if isinstance(o, dict) else None
+            print(f"  org: {name} (star_line={org_star_line(o, section)})"
+                  + (f" [cadence={cad}·周期内携带跳扫]" if cad else ""))
         print("  whitelist:", " ".join(sec["watch"]))
         if section == "intl":
             cutoff = _cutoff(sec["new_days"])
@@ -336,21 +374,39 @@ def run(section: str, args) -> None:
                 _save(state_p, state)
                 log.info("keyword:%s 完成（%d 条），累计 %d", w, len(items), len(pool))
 
-        # ④ org
+        # ④ org（cadence 周期内的 org 跳扫携带：结果并入 parts 保持池零波动）
         if only in (None, "org"):
             pool = _load_parts(parts, "org")
             for name, o in _orgs_dedup(sec["orgs"]).items():
                 if f"org:{name}" in state["done"]:
                     continue
+                cad = o.get("cadence") if isinstance(o, dict) else None
+                cad_days = CADENCE_DAYS.get(cad or "", 0)
+                if cad_days:
+                    carried, scanned = _load_carry(section, name, cad_days)
+                    if carried is not None:
+                        for fn, r in carried.items():
+                            pool[fn] = r
+                        atomic_write_json(parts / "org.json", list(pool.values()))
+                        state["done"].append(f"org:{name}")
+                        _save(state_p, state)
+                        log.info("org:%s 周扫携带 %d 条（%s 扫描，cadence=%s 跳扫）",
+                                 name, len(carried), scanned, cad)
+                        continue
                 line = org_star_line(o, section)
+                fresh: dict[str, dict] = {}
                 for it in client.org_repos(name):
                     if (it.get("stargazers_count") or 0) >= line:
                         r = slim(it, "org", name)
+                        fresh[r["full_name"]] = r
                         pool[r["full_name"]] = r
+                if cad_days:      # 空结果也写：org 真空仓与扫描结果的区分交给 scanned 时间戳
+                    _save_carry(section, name, fresh)
                 atomic_write_json(parts / "org.json", list(pool.values()))
                 state["done"].append(f"org:{name}")
                 _save(state_p, state)
-                log.info("org:%s 完成（star_line=%d），累计 %d", name, line, len(pool))
+                log.info("org:%s 完成（star_line=%d，%d 条），累计 %d",
+                         name, line, len(fresh), len(pool))
 
         # ⑤ 白名单（不受星线约束）
         if only in (None, "whitelist"):
