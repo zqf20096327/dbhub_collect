@@ -1,0 +1,24 @@
+name: m3-upload-post-bundle
+on:
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0      # 当前 main（M3 重写后）全量
+      - name: 打 post-M3 bundle 并上 Releases（本地重建与第三备份用）
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          git bundle create post_m3_current.bundle --all
+          sha256sum post_m3_current.bundle > post_m3_current.bundle.sha256
+          git bundle verify post_m3_current.bundle > /dev/null && echo "verify OK"
+          ls -l --block-size=M post_m3_current.bundle
+          gh release upload m3-backup-20261008 post_m3_current.bundle post_m3_current.bundle.sha256 --clobber
+          echo "上传完成 @ $(git rev-parse --short HEAD)"
