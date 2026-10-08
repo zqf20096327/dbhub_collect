@@ -90,11 +90,15 @@ jobs:
             --max-calls 4200 --max-minutes 60 \
             --wait-windows 10 --max-total-minutes $(( REM / 60 ))
 
-      - name: state 残渣 GC（每月 1 号）
+      - name: 出池仓 absent_since 打戳（每晚，零侵入只写台账）
+        run: |
+          python tools/purge_outpool.py --stamp || echo "::warning::absent_since 打戳失败（不影响当晚采集数据）"
+
+      - name: 出池仓清理 dry-run 清单（每月 1 号，人工过目后本地 --apply）
         run: |
           d=$(date -u +%d)
           if [ "$d" = "01" ]; then
-            python tools/gc_states.py --apply || echo "::warning::gc_states 失败（不影响当晚采集数据）"
+            python tools/purge_outpool.py || echo "::warning::purge dry-run 失败（不影响当晚采集数据）"
           else
             echo "非月初，跳过"
           fi

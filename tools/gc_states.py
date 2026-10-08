@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """state 残渣 GC：连续 N 个快照池都不再出现的仓，从 readme/enrich 状态清除。
 
+**已退役（2026-10-08）**：collect.yml 改用 tools/purge_outpool.py（absent_since
+台账+30 天宽限+文件备份式删除）。本工具判活依赖旧快照 pool.json，M1 归档后退化为
+"仅当晚池"=无宽限，与 10-02 清理方案冲突（假出池误删 state）；保留仅作历史参考。
+
 背景（方案评审漏洞五）：新项目窗口 45 天未毕业（仍不满足星线）的仓会出池，
 但 readme_state / enrich_state / enrich_cache 按 fn 键控的条目会永久残留；
 国产无星线后窗口仓虽减少，池口径调整（如星线变化）仍会产生残渣，逐年累积。

@@ -58,6 +58,9 @@ jobs:
             --max-calls 4200 --max-minutes 60 \
             --wait-windows 10 --max-total-minutes $(( REM / 60 ))
 
+      - name: 出池仓清理 dry-run 清单（月度窗口尾部，人工过目后本地 --apply）
+        run: python tools/purge_outpool.py || echo "::warning::purge dry-run 失败（不影响校准）"
+
       - name: 提交并推送
         run: |
           git config user.name "zqf20096327"
