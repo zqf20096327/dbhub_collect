@@ -36,6 +36,7 @@ TODAY = "20261003"
 
 sys.path.insert(0, str(ROOT / "lib"))
 import interp_store as ist  # noqa: E402  interp_cache 分片存储（10-06 起）
+import enrich_store as est  # noqa: E402  enrich_cache 分片存储（10-09 起）
 
 
 def load_blocklist():
@@ -230,8 +231,11 @@ def main():
         residue["data/readmes"] = len(hits)
     for sp in ["state/readme_state.json", "state/interp_state.json", "state/enrich_state.json",
                "state/enrich_cache.json", "state/db_scan.json", "state/db_scan.v2.json"]:
-        d = json.load(open(ROOT / sp, encoding="utf-8"))
-        items = d.get("items", d) if isinstance(d, dict) else {}
+        if sp == "state/enrich_cache.json":            # 10-09 起分片（cutover 后单文件已删）：并集读
+            items = est.load_cache()
+        else:
+            d = json.load(open(ROOT / sp, encoding="utf-8"))
+            items = d.get("items", d) if isinstance(d, dict) else {}
         n = sum(1 for k in items if owner_blocked(k))
         if n:
             residue[sp] = n

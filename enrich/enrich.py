@@ -46,7 +46,6 @@ from enrich_store import EnrichCacheStore  # noqa: E402  enrich_cache 分片存�
 
 log = logging.getLogger("enrich")
 STATE = HERE / "state" / "enrich_state.json"
-CACHE = HERE / "state" / "enrich_cache.json"   # 过渡期双写旧单文件（cutover 时与分片收口同步删）
 THREE_STRIKES = 3
 DIMS = ("commit", "release", "security", "contrib", "lang")
 TIER_STAR = {"head": 1000, "mid": 100, "tail": 0}
@@ -90,12 +89,6 @@ def load_json(path: Path, default):
     if path.is_file():
         return json.loads(path.read_text(encoding="utf-8"))
     return default
-
-
-def _persist(cache: EnrichCacheStore) -> None:
-    """落盘：分片 flush（只重写脏桶）+ 过渡期双写旧单文件（切换期保险，cutover 时去掉后者）。"""
-    cache.flush()
-    atomic_write_json(CACHE, cache)
 
 
 def tier_of(stars: int, cn: bool = False) -> str:
@@ -331,7 +324,7 @@ def run(args):
                     continue
                 if (i + 1) % 50 == 0:
                     atomic_write_json(STATE, st)
-                    _persist(cache)
+                    cache.flush()
                     log.info("进度 %d/%d · %s", i + 1, len(targets), counts)
             break                                  # 本窗自然扫完且无剩余到期项 → 收尾
         except CoreReserveOut as e:
@@ -365,7 +358,7 @@ def run(args):
             continue
         finally:
             atomic_write_json(STATE, st)
-            _persist(cache)
+            cache.flush()
 
     summary = {"tiers": tiers, "dims": want_dims or "per-tier", "targets": len(targets),
                "cn_floor_mid": n_cn,
