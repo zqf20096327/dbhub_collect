@@ -170,11 +170,14 @@ You can set level of warnings via function's parameters:
 
 * `anyenumtype regtype DEFAULT '-'` - an actual type to be used when testing the anyenum type
 
-* `anyrangetype regtype DEFAULT 'int4range'` - an actual type to be used when testing the anyrange type
+* `anyrangetype regtype DEFAULT 'int4range'` - an actual type to be used when testing
+  `anyrange`; its associated multirange type is used for `anymultirange`
 
 * `anycompatibletype DEFAULT 'int'` - an actual type to be used when testing the anycompatible type
 
-* `anycompatiblerangetype DEFAULT 'int4range'` - an actual range type to be used when testing the anycompatible range type
+* `anycompatiblerangetype DEFAULT 'int4range'` - an actual range type to be used when
+  testing `anycompatiblerange`; its associated multirange type is used for
+  `anycompatiblemultirange`
 
 * `without_warnings DEFAULT false` - disable all warnings (Ignores all xxxx_warning parameters, a quick override)
 
@@ -432,9 +435,10 @@ that setting only in development or preproduction environments.</i>
 
 ## Dynamic SQL
 
-This module doesn't check queries that are assembled in runtime. It is not possible
-to identify results of dynamic queries - so <i>plpgsql_check</i> cannot to set correct type to record
-variables and cannot to check a dependent SQLs and expressions. 
+The checker can analyze dynamically executed queries when constant tracing or
+known `format()` arguments determine their text, including field widths and
+padding. When the query text or a format width is unknown, it cannot reliably
+infer the result's record type or check expressions depending on its fields.
 
 When type of record's variable is not know, you can assign it explicitly with pragma `type`:
 
@@ -595,6 +599,10 @@ There are some limitations to the query identifier retrieval:
 * a query identifier is retrieved only for instructions containing
   expressions.  This means that plpgsql_profiler_function_tb() function can
   report less query identifier than instructions on a single line.
+* query_id of dynamically executed queries are reported only when
+  `plpgsql_check.profiler_show_dynquery_query_id` is on (default is off).
+  Attention: in this case, the expression that produce query string is
+  executed second by profiler.
 
 Attention: An update of shared profiles can decrease performance on servers under higher load.
 
@@ -676,6 +684,9 @@ plpgsql_check provides two functions:
 
 The coverage data are collected only when profiling is active.
 
+An exception while evaluating an `IF` or `ELSIF` condition does not cover a
+branch, including an implicit `ELSE`. An exception after entering a branch
+does count as reaching that branch.
 
 ## Note
 
@@ -944,6 +955,9 @@ are expanded by PostgreSQL itself. Column constraints (`PRIMARY KEY`, `NOT NULL`
 generated pragma - the pragma holds only column names and types, which is enough for
 the static checks. In both cases no object survives the call, and repeated calls
 return the same result.
+
+Zero-column tables produce an empty column list, such as `table: target()`,
+which is accepted by the table pragma parser.
 
     create table gtp_src(a int, b text);
 

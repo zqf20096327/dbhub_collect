@@ -43,7 +43,7 @@ here is a number the build checked.
 
 | File | What it is |
 |---|---|
-| `f1.db` | The SQLite database. <!-- fig:tables -->53<!-- /fig --> tables, <!-- fig:views -->43<!-- /fig --> views, <!-- fig:rows -->177,216<!-- /fig --> rows. This is the artefact. |
+| `f1.db` | The SQLite database. <!-- fig:tables -->53<!-- /fig --> tables, <!-- fig:views -->43<!-- /fig --> views, <!-- fig:rows -->177,243<!-- /fig --> rows. This is the artefact. |
 | `f1-geometry.db` | The OpenStreetMap circuit centrelines (ODbL), shipped beside `f1.db` and never merged into it. See *Illustration*. |
 | `f1` | Command-line query tool. `./f1` with no arguments prints the commands. |
 | `f1_database.json` | Full JSON export of every table. **Not committed** — `make export` writes it in about a second, and each release carries a copy. |
@@ -639,7 +639,7 @@ article. `chassis.car_id` joins the two.
 <!-- fig:chassis_published_wins -->784<!-- /fig --> chassis carry a published
 career win total. The wins this database derives independently, from its own
 race records through the linkage below, **agree exactly for
-<!-- fig:chassis_wins_match -->634<!-- /fig --> of them and exceed for
+<!-- fig:chassis_wins_match -->635<!-- /fig --> of them and exceed for
 <!-- fig:chassis_wins_exceed -->0<!-- /fig -->**; the rest are lower bounds
 where a season could not be linked.
 
@@ -823,7 +823,7 @@ of their own — Wikipedia covers them on the team's page — so the route above
 never reaches them. For those, `tools/wikimedia_images.py --route category`
 looks for a Wikimedia Commons category named for the chassis, such as
 `Category:Vanwall VW5`, and takes a photograph filed under it.
-<!-- fig:images_catalogued -->119<!-- /fig --> rows come from it. The claim is
+<!-- fig:images_catalogued -->118<!-- /fig --> rows come from it. The claim is
 only that a Commons editor filed the file there, and a category also holds
 replicas and show cars, so these rows sit a rung *below* `unverified`, at
 `catalogued`, and the `route` column keeps them apart. A category is taken
@@ -867,8 +867,8 @@ run took the 1995 winner's trophy photographed in a private collection in
 2019 — so a file whose name says trophy, ticket, museum, collection or map,
 or names a season other than the race's, is passed over too. That narrows;
 it does not prove the rest were taken at the race.
-<!-- fig:images_race -->3,911<!-- /fig --> photographs of
-<!-- fig:races_with_images -->513<!-- /fig --> races come from it, keyed on the
+<!-- fig:images_race -->3,916<!-- /fig --> photographs of
+<!-- fig:races_with_images -->514<!-- /fig --> races come from it, keyed on the
 race. The claim is the category route's — a Commons editor filed the file
 there — and so is the rung, `catalogued`. The race page shows them first,
 under a heading that says they are of that race, and the cars after them
@@ -1215,7 +1215,7 @@ the source that gave it.
 
 The two are compared on every build. Across the
 **<!-- fig:drivers_with_external -->233<!-- /fig --> drivers that hold such a
-figure — <!-- fig:external_comparisons -->391<!-- /fig -->
+figure — <!-- fig:external_comparisons -->392<!-- /fig -->
 comparisons — live differences: <!-- fig:external_differences -->3<!-- /fig -->**,
 and `verify.py` fails the build on any that is not declared in
 `discrepancies`. Two earlier differences were errors in the external figure,
@@ -1237,13 +1237,14 @@ and `known_gaps` says so.
 
 **Where two sources disagree and neither can be checked against an official
 source, the disagreement is itself the fact worth storing.** `discrepancies`
-holds <!-- fig:discrepancies -->99<!-- /fig --> rows:
-<!-- fig:discrepancies_open -->28<!-- /fig --> open,
-<!-- fig:discrepancies_explained -->22<!-- /fig --> explained — an external
+holds <!-- fig:discrepancies -->108<!-- /fig --> rows:
+<!-- fig:discrepancies_open -->35<!-- /fig --> open,
+<!-- fig:discrepancies_explained -->23<!-- /fig --> explained — an external
 figure older than the race it lacks, a championship total net of the scores
 the best-results rule dropped, an entry or a car a source counts that the race
-records hold no row for, or two readings of a career span that are each right
-about something — and the rest resolved — corrected,
+records hold no row for, an exclusion that explains a driver missing from a
+session sheet, or two readings of a career span that are each right about
+something — and the rest resolved — corrected,
 withdrawn or not corroborated — with the outcome on the row. Each open one is
 shown on the page of the driver, team or race it is about. `./f1 gaps` prints
 them.
@@ -1273,11 +1274,11 @@ queried, not just read here. `./f1 gaps` prints them with the fix for each.
   *article* is well constrained; what the picture depicts is not, and there is
   no second source to disagree with it. This is the only part of the database
   with no cross-check available at all. A further
-  <!-- fig:images_catalogued -->119<!-- /fig --> chassis with no article have
+  <!-- fig:images_catalogued -->118<!-- /fig --> chassis with no article have
   one only from a Commons category, held a rung lower at `catalogued` and not
   shown. `./f1 images` lists the
   <!-- fig:images_unnamed -->346<!-- /fig --> whose file name does not even
-  name the car. The <!-- fig:races_with_images -->513<!-- /fig --> races with
+  name the car. The <!-- fig:races_with_images -->514<!-- /fig --> races with
   photographs of their own have them because a Commons editor filed them
   under the race's category, also at `catalogued`; that one was taken at
   the race is the editor's word, narrowed by the file's name and checked by

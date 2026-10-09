@@ -36,11 +36,14 @@ de cada base.
   sobre una conexión comparte un solo túnel, que se vuelve a abrir solo si se
   cae. Detalle: [`docs/tuneles-ssh.md`](docs/tuneles-ssh.md).
 - **Menú contextual de la base:**
-  - nueva query, nueva tabla con diseñador, nuevos objetos desde plantillas;
+  - nueva query, nueva tabla con diseñador (y modificar una existente), nuevos objetos desde plantillas;
   - diagrama ER, generar script, exportar o importar la base, ejecutar un
     archivo de script;
   - comparar esquemas, migrar, clonar o sincronizar, y Profiler;
-  - crear o eliminar la base, copiar su nombre o el del servidor.
+  - crear o eliminar la base, copiar su nombre o el del servidor;
+  - **crear una base con las opciones avanzadas de cada motor** (intercalación,
+    archivos, réplicas, retención…), con el script a la vista. Detalle:
+    [`docs/crear-bases.md`](docs/crear-bases.md).
 - **Crear y borrar esquemas**, con su dueño y sus permisos en el mismo script,
   que se revisa antes de ejecutarlo. Detalle:
   [`docs/esquemas.md`](docs/esquemas.md).
@@ -95,6 +98,11 @@ de cada base.
 - **Edición de celdas:** al modificar una celda se genera el código de
   actualización en el lenguaje del motor. DBine no lo ejecuta: lo agrega a la
   query y vos decidís.
+- **Agregar filas y documentos:** las filas nuevas se suman a los cambios
+  pendientes junto con ediciones y borrados, y el código de inserción sale en
+  el lenguaje de cada motor (SQL, comandos de Redis, `insertMany`, Cypher…).
+  Los motores de documentos agregan uno o varios documentos desde un editor
+  JSON, también en colecciones vacías.
 - **Grilla virtualizada** con varios resultados por ejecución, mensajes y visor
   de celdas (con JSON formateado).
 - **Filtros por columna** en los datos de una tabla (valores, rangos, nulos,
@@ -106,8 +114,30 @@ de cada base.
   JSONL, SQL, XLSX y XML. La exportación vuelve a correr la query completa en
   streaming, así que no se limita a las filas en pantalla.
 - **Gráficos** de resultados con Apache ECharts.
+- **Vista JSON en árbol** de los resultados, pensada para las bases de
+  documentos y disponible en todos los motores: despliega los campos anidados
+  y las columnas JSON, con búsqueda en claves y valores, tipos por campo y
+  arrays grandes agrupados.
 - **Planes de ejecución gráficos**, al estilo de Management Studio: estimado,
   real o los dos, con zoom y desplazamiento.
+- **Buscar en la base:** un texto en los nombres de los objetos, los nombres
+  de columna y el código de vistas, rutinas y triggers, con resultados a
+  medida que avanza. Detalle: [`docs/busqueda.md`](docs/busqueda.md).
+- **Ejecutar en varias bases:** el código del editor en varias bases de una
+  conexión a la vez, con los resultados juntos en una grilla con la columna
+  `base`. Detalle: [`docs/ejecutar-en-varias-bases.md`](docs/ejecutar-en-varias-bases.md).
+- **Calidad de código:** el editor marca consultas lentas, resultados que
+  probablemente no son los esperados y cambios que afectan más filas de las
+  previstas, con las reglas de cada familia de motores, sin consultar la base.
+  Detalle: [`docs/calidad-de-codigo.md`](docs/calidad-de-codigo.md).
+- **Constructor de consultas:** arma un `SELECT` (o su equivalente en CQL)
+  sobre un lienzo con tablas, uniones, agregados, orden y filtros, con el
+  SQL del motor. Detalle:
+  [`docs/constructor-de-consultas.md`](docs/constructor-de-consultas.md).
+- **Optimizar consulta:** reescrituras equivalentes por reglas y por IA,
+  índices sugeridos a partir del plan y una comparación de tiempos y de
+  resultado en solo lectura. Detalle:
+  [`docs/optimizar-consulta.md`](docs/optimizar-consulta.md).
 
 ### Diseño y estructura
 
@@ -197,6 +227,16 @@ de cada base.
   con mapeo de columnas.
 - **Ejecutar un archivo de script** grande en partes, por ejemplo para
   restaurar un volcado.
+- **Datos de prueba:** llena una tabla con filas inventadas pero verosímiles,
+  respetando claves, largos y claves foráneas. Detalle:
+  [`docs/datos-de-prueba.md`](docs/datos-de-prueba.md).
+- **Documentar la base:** un diccionario de datos en HTML o Markdown, con
+  tablas, claves, índices, código de las rutinas, dependencias y diagrama
+  entidad-relación. Detalle:
+  [`docs/documentar-la-base.md`](docs/documentar-la-base.md).
+- **Subconjunto de datos:** copia algunas filas de una tabla a otra base, con
+  las filas padre que necesitan, y enmascara los datos personales. Detalle:
+  [`docs/subconjunto-de-datos.md`](docs/subconjunto-de-datos.md).
 
 ### Administración
 
@@ -227,6 +267,19 @@ de cada base.
     se revisa antes de ejecutarlo.
 
   Detalle: [`docs/backups.md`](docs/backups.md).
+- **Tareas programadas:** scripts, exportaciones, comparaciones de esquemas,
+  backups, documentación de la base y mails que corren solos con DBine
+  cerrado, con aviso del sistema, historial y aprobación previa de lo que
+  cambia datos. Detalle:
+  [`docs/tareas-programadas.md`](docs/tareas-programadas.md).
+
+- **Chequeo de salud:** revisa una base y lista lo que conviene atender por
+  gravedad, con los chequeos propios de cada motor y scripts de corrección
+  que se revisan antes de ejecutarlos. Detalle:
+  [`docs/chequeo-de-salud.md`](docs/chequeo-de-salud.md).
+- **Propiedades de la base:** muestra lo que el motor informa de una base y
+  cambia lo que permite, con el script y las advertencias a la vista. Detalle:
+  [`docs/propiedades-de-la-base.md`](docs/propiedades-de-la-base.md).
 
 ### Biblioteca de scripts
 
@@ -505,6 +558,7 @@ Documentación:
 - [`docs/cache-del-explorador.md`](docs/cache-del-explorador.md): la caché del
   árbol del explorador.
 - [`docs/esquemas.md`](docs/esquemas.md): crear y borrar esquemas.
+- [`docs/crear-bases.md`](docs/crear-bases.md): crear bases con opciones.
 - [`docs/ventanas.md`](docs/ventanas.md): las ventanas, qué guarda cada
   una y cerrar una ventana o salir.
 - [`docs/comparacion-de-esquemas.md`](docs/comparacion-de-esquemas.md): cómo

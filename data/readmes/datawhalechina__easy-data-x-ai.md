@@ -237,6 +237,22 @@ python code/D1/d1_1_base.py
 
 ---
 
+## 2026 OceanBase 数据库大赛
+
+最后为大家推荐一个 OceanBase 数据库大赛，欢迎高校的学生朋友们来了解详情和报名参加比赛~
+
+本届大赛聚焦从 Data 到 AI 实践，赛题覆盖数据库、上下文工程、AI 应用与智能体开发、基础模型与算力、具身智能及行业落地等方向，形成从 AI 数据库设施到智能应用落地的完整技术挑战链路，为不同技术背景的学习者和开发者提供实践与创新空间。
+
+大赛支持方将为参赛选手提供 Token 额度、技术资源、平台能力、社区曝光、专属礼品等权益，欢迎感兴趣的学生朋友们积极报名和参与~
+
+大赛详情和报名链接，详见：
+
+- [大赛详情页](https://open.oceanbase.com/competition?activityCode=4924143&officerId=4986)
+
+- [大赛报名链接](https://open.oceanbase.com/competition/enroll?activityCode=4924143&officerId=4986)
+
+---
+
 ## 🧑‍💻 项目维护者
 
 <table>
@@ -274,7 +290,14 @@ python code/D1/d1_1_base.py
     <img src="https://avatars.githubusercontent.com/u/13233790?v=4&s=144" width="72" height="72" alt="liboyang0730" style="border-radius:50%;" />
   </a><br />
   <a href="https://github.com/liboyang0730" title="打开 liboyang0730 的 GitHub 主页"><kbd><strong>liboyang073…</strong></kbd></a><br />
-  <sub>122 commits<br />15 merged PRs</sub>
+  <sub>123 commits<br />16 merged PRs</sub>
+</td>
+<td align="center" valign="top" width="104">
+  <a href="https://github.com/Kratos-Lee" title="Kratos-Lee">
+    <img src="https://avatars.githubusercontent.com/u/180283969?v=4&s=144" width="72" height="72" alt="Kratos-Lee" style="border-radius:50%;" />
+  </a><br />
+  <a href="https://github.com/Kratos-Lee" title="打开 Kratos-Lee 的 GitHub 主页"><kbd><strong>Kratos‑Lee</strong></kbd></a><br />
+  <sub>27 commits<br />11 merged PRs</sub>
 </td>
 <td align="center" valign="top" width="104">
   <a href="https://github.com/knqiufan" title="knqiufan">
@@ -282,13 +305,6 @@ python code/D1/d1_1_base.py
   </a><br />
   <a href="https://github.com/knqiufan" title="打开 knqiufan 的 GitHub 主页"><kbd><strong>knqiufan</strong></kbd></a><br />
   <sub>26 commits<br />16 merged PRs</sub>
-</td>
-<td align="center" valign="top" width="104">
-  <a href="https://github.com/Kratos-Lee" title="Kratos-Lee">
-    <img src="https://avatars.githubusercontent.com/u/180283969?v=4&s=144" width="72" height="72" alt="Kratos-Lee" style="border-radius:50%;" />
-  </a><br />
-  <a href="https://github.com/Kratos-Lee" title="打开 Kratos-Lee 的 GitHub 主页"><kbd><strong>Kratos‑Lee</strong></kbd></a><br />
-  <sub>26 commits<br />11 merged PRs</sub>
 </td>
 <td align="center" valign="top" width="104">
   <a href="https://github.com/PsiACE" title="PsiACE">

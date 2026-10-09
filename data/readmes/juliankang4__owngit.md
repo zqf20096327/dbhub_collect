@@ -5,7 +5,7 @@
 <h1 align="center">OwnGit</h1>
 
 <p align="center">
-  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-1.1.5-0A62C9?style=flat&colorA=222222" alt="Version 1.1.5"></a>
+  <a href="CHANGELOG.md"><img src="https://img.shields.io/badge/version-1.1.7-0A62C9?style=flat&colorA=222222" alt="Version 1.1.7"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-GPL--3.0-58A6FF?style=flat&colorA=222222" alt="GPL-3.0 License"></a>
   <a href="https://github.com/juliankang4/homebrew-tap"><img src="https://img.shields.io/badge/Homebrew-juliankang4%2Ftap-FBB040?style=flat&colorA=222222&logo=homebrew&logoColor=white" alt="Homebrew tap juliankang4/tap"></a>
   <a href="https://www.npmjs.com/package/owngit"><img src="https://img.shields.io/npm/v/owngit?style=flat&colorA=222222&color=CB3837&logo=npm&logoColor=white&label=npm" alt="npm package owngit"></a>
@@ -53,6 +53,7 @@ Other ways to install:
 | Route | Command |
 | --- | --- |
 | Homebrew (macOS, Linux) | `brew install juliankang4/tap/owngit` |
+| Homebrew menu bar app (macOS, optional) | `brew install --cask juliankang4/tap/owngit`, then `owngit service install` |
 | npm (needs Node.js) | `npm install -g owngit` |
 | Arch Linux | `makepkg -si` with the `PKGBUILD` from the [latest release](https://github.com/juliankang4/owngit/releases/latest) |
 | Docker Compose | `docker compose up -d` with [`compose.yaml`](packaging/container/compose.yaml), then `docker compose exec -it owngit owngit setup-link` |
@@ -60,6 +61,8 @@ Other ways to install:
 | Source (Go 1.27 or newer) | `go build -o bin/owngit ./cmd/owngit` |
 
 Except for the container and Proxmox VE, OwnGit needs Git with `git-http-backend` on the computer. Homebrew and the Arch package install it. On Windows, use Command Prompt for npm, because PowerShell's default policy blocks the npm scripts.
+
+On macOS 27, a menu bar manager such as Hidden Bar can hide the OwnGit icon when its app is outside `/Applications`. The one-line installer puts the app there when it can. Homebrew users get the same with the optional cask, which also installs the formula if it is missing.
 
 [Operations](docs/OPERATIONS.md) has the details for each route.
 

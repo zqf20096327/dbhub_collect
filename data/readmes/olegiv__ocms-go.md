@@ -74,7 +74,7 @@ Running `ocms-go` in production? [Tell us about it.](https://github.com/olegiv/o
 The path to v1.0 is tracked in the [Roadmap to v1.0 issue](https://github.com/olegiv/ocms-go/issues). Headlines:
 
 - ✅ RSS / Atom feeds for published posts, categories and tags, with language-prefixed URLs
-- JSON-LD structured data in the theme layer
+- ✅ JSON-LD structured data: Article, homepage WebSite and visible/structured breadcrumbs
 - PostgreSQL adapter alongside SQLite
 - ✅ Public demo — live at [ocms-demo.fly.dev](https://ocms-demo.fly.dev/), 24h auto-reset
 
@@ -146,6 +146,7 @@ Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and the [Good f
 - **Robots.txt**: Configurable robots.txt generation
 - **Canonical URLs**: Set canonical URLs to avoid duplicate content
 - **NoIndex/NoFollow**: Control search engine indexing per page
+- **Structured Data**: Article JSON-LD, homepage WebSite markup, and accessible breadcrumbs with matching BreadcrumbList data in shipped themes
 
 ### Administration
 - **User Management**: Role-based access control (admin/editor)
@@ -203,7 +204,7 @@ Prebuilt release binaries have no external runtime dependencies beyond the opera
 
 Building from source requires:
 
-- Go 1.27.1 or later
+- Go 1.27.2 or later
 - [Node.js](https://nodejs.org/) (npm) for frontend dependencies
 - [sqlc](https://sqlc.dev/) for SQL code generation
 - [templ](https://templ.guide/) for type-safe HTML templates
@@ -268,7 +269,7 @@ Available release archives:
 3. Install required tools:
    ```bash
    go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
-   go install github.com/a-h/templ/cmd/templ@latest
+   go install github.com/a-h/templ/cmd/templ@v0.3.1070
    go install github.com/pressly/goose/v3/cmd/goose@latest
    ```
 
@@ -948,7 +949,7 @@ git commit -m "Update Claude Code shared submodule"
 
 ## Technology Stack
 
-- **Backend**: Go 1.27.1+
+- **Backend**: Go 1.27.2+
 - **Database**: SQLite with [goose](https://github.com/pressly/goose) migrations
 - **SQL**: Type-safe queries with [sqlc](https://sqlc.dev/)
 - **Templates**: [templ](https://templ.guide/) for type-safe HTML

@@ -1,4 +1,5 @@
 <p align="center">
+  <img src="docs/brand/mark/pad-mark.svg" width="72" height="72" alt="">
   <h1 align="center">Pad</h1>
   <p align="center"><strong>Project Management for the agent era.</strong></p>
   <p align="center">
@@ -103,6 +104,15 @@ pad server info                         # How this client is connected to Pad
 </p>
 
 ### For AI Agents
+
+**Using Claude Code? Install the Pad plugin.** It bundles the `/pad` skill, typed shortcuts (`/pad:status`, `/pad:capture`, `/pad:onboard`), live item notifications and a side panel (`/pad-pane`), and it updates itself:
+
+```
+/plugin marketplace add PerpetualSoftware/pad
+/plugin install pad@pad
+```
+
+In the Claude Desktop app's Code tab: **+ → Plugins**, add the marketplace `PerpetualSoftware/pad`, then install **pad**. Open the panel with `/pad-pane`. If nothing is set up yet, it walks you through connecting to Pad Cloud, installing Pad on this machine, or linking your own server. The panel needs Claude Code 2.1.287 or later; the skills work on any version.
 
 **Your agent becomes a project partner.** Install the `/pad` skill once, and your AI coding tool can read, create, and update project items through natural language. Cursor, Codex, Windsurf, and OpenCode receive a compact dispatcher, reuse bootstrapped context within a conversation, and load detailed guidance by topic with `pad agent guide`, keeping routine turns small.
 
@@ -390,7 +400,7 @@ directory for `claude-code`, and an `[mcp_servers.pad]` table in
 project-scoped, it's install-on-request only — `--all` and `pad mcp status` cover
 the per-user clients (including Codex) and skip it.
 
-**Tool catalog (v0.72)** — ten resource × action tools plus `pad_set_workspace`. Undeclared input keys are rejected with a structured error rather than silently dropped, and field values are typed against the collection schema on the server:
+**Tool catalog (v0.77)** — ten resource × action tools plus `pad_set_workspace`. Undeclared input keys are rejected with a structured error rather than silently dropped, and field values are typed against the collection schema on the server:
 
 | Tool | Actions |
 |---|---|
@@ -414,7 +424,7 @@ Plus resources at `pad://workspaces`, `pad://workspace/{ws}/dashboard`,
 and `pad://_meta/version`.
 
 **Stability contract.** The catalog is versioned
-(`tool_surface_version: "0.72"`) and advertised in the initialize handshake and at
+(`tool_surface_version: "0.77"`) and advertised in the initialize handshake and at
 `pad://_meta/version`, so external agents can pin against it; the per-version
 changelog lives in [`internal/mcp/version.go`](internal/mcp/version.go). Errors
 come back as structured envelopes (`{error: {code, message, hint, ...}}`) from a
@@ -657,7 +667,7 @@ See [SECURITY.md](SECURITY.md) for reporting vulnerabilities.
 
 **Pushes into agent sessions are consent-gated.** `pad push` (and the web push composer) puts an item — and a message — in front of a running Claude Code session as direction from its own user. That is deliberate terminal instruction injection, so since v0.15.0 (PLAN-2613) receiving it is opt-in per session, not a side effect of installing the plugin:
 
-- **No consent, no stream.** Nothing streams and nothing listens — watches and pushes alike — until the session consents (the plugin's always-on wrapper only registers presence and exits). `/pad:connect` arms the session locally and starts the monitor, which announces the armed state when its stream connects; `/pad:disconnect` withdraws; `/pad:status` reports the state. A repo can opt its sessions in at start with `push.auto_arm = true` in `.pad.toml` — an explicit file edit, never a machine-global default, and vetoable per user in `~/.pad/config.toml`.
+- **No consent, no stream.** Nothing streams and nothing listens — watches and pushes alike — until the session consents. At session start the plugin's mod records the session's presence and asks whether it has consented; a session that has not starts nothing and shows nothing (TASK-3513). `/pad:connect` arms the session locally and starts the monitor, which announces the armed state when its stream connects; `/pad:disconnect` withdraws; `/pad:status` reports the state. A repo can opt its sessions in at start with `push.auto_arm = true` in `.pad.toml` — an explicit file edit, never a machine-global default, and vetoable per user in `~/.pad/config.toml`.
 - **Self-addressed only.** The server forces every push's target to the caller's own sessions; nobody can push into a session that isn't theirs. Delivery is filtered to armed sessions, and the surfaces are honest about it: the web composer shows the split ("2 connected, 0 accepting pushes") and withholds a send it knows nobody would accept; a CLI broadcast still publishes and reports `delivered_sessions` (in JSON output), and a targeted push to a session that is not accepting skips the publish rather than pretending.
 - **No grandfathering.** Updating the plugin replaces the v0.14 always-on monitor with the gated one for everyone. Sessions that used to receive pushes receive none until they connect; the web composer's counts make that visible rather than silent.
 - **The accepted caveat.** An agent can run the arm command from inside its own session. That is visible in the transcript, within the operator's sight: the gate protects sessions from the outside and does not police the inside. A push can inject text; it cannot click a permission prompt.

@@ -1,496 +1,517 @@
-This is the README for ODBC QueryTool
-=====================================
-
-This ODBC Query tool is meant to be used against ODBC datasources.
-It's primary purpose was to test various SQL commands againt an ODBC
-connection instead of an Oracle OCI connection. This was needed because
-1) Specific ODBC SQL could be tested like "{ oj ... }" outer join syntax
-2) Specific escape sequences could be testen like "{ fn ...}" syntax
-3) General proof that a command does work against an ODBC connection
-4) General proof that the ODBC connection does work
-
-More general: nowdays every database tend to come with it's own administration
-and query tools, which means that a user has to have knowledge of all seperate
-tools and interfaces. This tool provides 1 (one) interface for a general
-ODBC database, so that a user only needs one tool to learn.
-The downside of this choice is that the more sophisticated administration tasks
-cannot be administred right away other than by typing SQL. There are no
-fancy dialogs to administer database dependent objects like stored procs and
-such. The good thing about this is that the user gets to know their database
-pretty well.
-
-LATEST HISTORY
-==============
-
-Releasenotes 3.6.4
-------------------
--  AUTO transactions. A DML action (INSERT/UPDATE/DELETE) will now automatically
-   start a transaction. You must either use the "COMMIT" command, or the commit
-   button in the toolbar.
--  The execution of the SQL is moved to a seperate thread. This makes a new button
-   in the toolbar possible to stop a very long running current SQL query.
-   During execution you can view text in the current view or other views, but you
-   cannot change the text until the query completes.
--  Startup performance boost for PostgreSQL databases with a very large number
-   of objects. The SQLTables function that returns the META data (META_CATALOGS,
-   META_SCHEMAS, META_TABLES) returns all the objects instead of just the object
-   types, which made the login very bad performend. These functions are now taken
-   care of by the SQLInfoPostgreSQL class.
-
-Releasenotes 3.6.3
-------------------
--  Enhanced the performance of the F5 batch command. Performance was degrading if 
-   a batch of more than 200 SQL commands was run. The degradation is now minimal
--  Stripping of the basic ISO8859-1 diacritics in a database migration has been 
-   added as an option in SQLMigrate
--  Export of the text in the output panes of the SQL results are now re-directed
-   to a new temporary file within the ODBCQueryTool, instead of starting your default
-   *.txt windows viewer.
--  Creating view DDL from the right click menu on a view in the object tree. 
-   This is a very useful feature to quickly get the DDL of a view, 
-   which is not directly supported by ODBC.
--  Fixing the split-cursors for dragging the panels sideways and up/down.
-   In essence the cursor definition files (*.cur) where missing.
--  The password field in the login dialog now has a password eye to view the 
-   currently entered password.
--  Fix for a crash when copying text to the MS-Windows clipboard. This was caused
-   by an incoreect handling of the clipboard data formats.
--  Added packages to the object tree. This feature is no implemented for Firebird.
-   The package definition and the package body are shown as separate nodes in the tree.
-   The procedure and function names are shown as modules and are extended by the 
-   package name. So for instance "my_package.my_procedure" is the name of a procedure
-   in a package.
--  Entries in the login list can now be sorted. The sorting will be retained in the 
-   Windows registry in between sessions.
--  SQLMigrate has a 'STOP' button to stop the current migration
--  The migration in SQLMigrate has been moved to a seperate thread, so that the 
-   interface can show the logging more reliable during the long migrations.
-
-Releasenotes 3.6.2
-------------------
--  Fix for a crash while saving *.sql files
-
-Releasenotes 3.6.1
-------------------
--  Partly rewrite of the settings streams. This was done on behalf of reports of 
-   corrupted settings after modifying some of them. The settings should be more 
-   stable now. Please remove old (corrupted) settings files from the 
-   "C:\USERS\<YOURACCOUNT>\AppData\Roaming\EDO\ODBCQueryTool" directory to 
-   permanently get rid of this problem.
--  Small fixes for the "ODBC Report" for a RDBMS datasource. Some strings where missing, 
-   due to the ANSI to Unicode conversion.
--  Better SQLMigrate path from Oracle to PostgreSQL.
--  Various small bugfixes, found by the strict compiling under /W4/WX settings.
-
-Releasenotes 3.6.0
-------------------
--  Upgraded to the newwest versions of the libraries (SQLComponents, BaseLibrary) that
-   are no longer using the MFC-library from Microsoft. By using ISO std::string makes the 
-   program more stable and faster
--  Dropped the suport of 32-Bits versions. Only 64-Bits versions are now released. 
-   This is in line with the general trend of software development, where 64-Bits is the 
-   standard and 32-Bits is becoming obsolete.
--  Fixed a bug in the parsing of the ODBC SQL to fix the parsing of double quoted strings
-   This was specially for the usage of the "ODBC Text driver" in order to be able
-   to do a: "SELECT * FROM "textfile.txt" or from a "*.csv" file. This is now working again.
--  DEPRECATION WARNING: This will also be the last version of the ODBCQuerytool that supports 
-   the ANSI/MBCS coding. The next version will soly be Unicode 16. The ANSI/MBCS coding is 
-   becoming obsolete and the Unicode 16 version is more in line with internationalization 
-   and the general trend of software development
-
-Releasenotes 3.5.6
-------------------
--  Discovery of functions in Firebird 4 and 5 work again
--  Exporting and importing of views with SQLMigrate now honor the correct column
-   names if they differ from the column names in the select
-
-Releasenotes 3.5.5
-------------------
--  Reworked the SQLMigrate application to be (again) able to convert an Oracle
-   database to Firebird.
--  Added a 'Slow datapump' method to the SQLMigrate program for those drivers
-   that cannot do the tight SQLExecute loop multiple times (Firebird).
--  Added a 'Save' button in SQLMigrate to save the settings before running.
-
-Releasenotes 3.5.4
-------------------
-- The return type variable in the scripting documentation has been mis-named 'RESULT',
-  instead of 'RETURN'. In this case, the documentation has been updated to reflect the 
-  correct state of the program
-- NEW: The discovered user datatypes are now displayed in the ODBC object tree, under a 
-  new node "UserTypes". There are in total three different types of user types:
-  o  Enumerator of values 
-  o  Domein type (datatype + constraints on that datatype) 
-  o  Compound type: a number of columns and datatypes 
-  The user types have been implemented for the following RDBMS types: Firebird, Oracle,
-  PostgreSQL and MS-SQLServer
-
-Releasenotes 3.5.3
-------------------
-- When an external editor did change one of the files we are working on, the Querytool prompts
-  whether we want to reload this page. This question had to be answered three times. This
-  redundancy has been eliminated.
-- Fix for navigating to the last lines in the query output view. When scrolling by pulling
-  the vertical scroll bars with the mouse, some of the last lines in the grid where not 
-  accessible. This is fixed by testing for the 'last page' of results.
-- The scripting statement ":if" has been expanded to be able to skip the next SQL statement,
-  so that the script can decide wheter or not to execute it. See the example in the help page.
-
-Releasenotes 3.5.2
-------------------
-- Fixes for the MS-Access Jet databaase engine. Discovery of table and columns was broken
-- Fixes for opnening a extra line in the editor by going a line down. Inserting of spaces
-  before the text was essentially broken. This makes editting queries a lot better experience.
-- Fixes for table discovery of a named table in Firebird.
-
-Releasenotes 3.5.1
-------------------
-- Various fixes for the discovery of databases with quoted identifiers. 
-  (Firebird, MariaDB, Oracle, SQL-Server, PostgreSQL). 
-- For most ODBC drivers only the SQLTables and SQLColumns work correctly.
-  Other functions such as the discovery of SQLPrimaryKeys, SQLForeignKeys,
-  SQLStatistics, SQLProcedures do not work for case senstive identifiers.
-- Also various fixes for the Info tree, so that we can now see the compelete 
-  view, trigger, function and stored procedure source.
-
-Releasenotes 3.5.0
-------------------
-Quoted identifiers have been added to the system. OpenODBCQuerytool now understands the
-identifiers (tablenames, viewnames, columns, indexes and such) that are stored in mixed
-case format. So "FullName" and "Fullname" are different identifiers.
-As a standard rule, all identifiers in one (1) case are understood to be non-quoted identifiers.
-These will not be quoted, and standard nameing rules apply.
-Per supported database platform the naming conventions are applied, beginning with Firebird.
-Stay tuned for next service packs for other RDBMS'es that have case sensitive catalogs.
-By default lMS-SQLServer and PostgreSQL can handel mixed cases. These work now out-of-the-box.
-Orace, Informix, MySQL and MariaDB need extra work in their respective InfoDB classes.
-
-Releasenotes 3.4.5
-------------------
-Fix for querying decimal number fields after a CLOB/BLOB column
-Performance fix for retrieving columns after the last bound column
-Unicode and SQLDate fixes
-Fix for Firbird databases in getting procedures and procedure-parameters
-Fix for PostgreSQL databases in getting procedures and procedure-parameters
-For PostgreSQL databases it is now also possible to retrieve the procedure/function source text
-
-Releasenotes 3.4.4
-------------------
-A variable can now be assigned the value of another variable
-Added a build instructions manual
-Fixes for the bitmaps in the installers
-Minimal ms-access database for testing
-Support for procedures and functions wrapped in packages in the Oracle database. 
-ODBC Discovery now can extract information, sourcecode and parameters for these 
-procedures and functions
-
-Releasenotes 3.4.3
-------------------
-The scripting :if command now has multiple operators: '=', '<>', '<', '>', '<=', '>='
-The value of a variable can now be printed in the :print command to the output file
-A variable can be assigned the value of another variable with ":variable<n> = variable<x>;" 
-Fixed a bug in the variables dialog (See menu: Script/Variables)
-
-Releasenotes 3.4.2
-------------------
-Updated the libraries to the latest version. After a half year of testing: fixing 
-a lot of small Unicode bugs
-Added the 'mustard' (yelow) and 'dark' themes
-Fixed a bug in the object-discovery of the Firebird drivers.
-Columns of tables and procedure arguments are working again.
-Fixed a bug in the installer. Check on 'not-yet-installed' added
-
-Releasenotes 3.4.1
-------------------
-Fixed a bug getting the database "Ping" from Firebird. 
-Also fixes a crash on that database after a few minutes.
-
-Releasenotes 3.4.0
-------------------
-This version is dedicated to the conversion to Unicode 16. 
-The Unicode versions are still in early development stages. 
-For production environments you are still encouraged to choose for the (old fashioned) 
-ANSI/MBCS coding version.
-
-You can make a choise from the following set of installers:
-- 32 Bits ANSI/MBCS coding 
-- 32 Bits Unicode version 
-- 64 Bits ANSI/MBCS coding 
-- 64 Bits Unicode version 
-
-Releasenotes 3.3.1
-------------------
-It is now possible to override the character set from the database by using one of two methods:
-
-1) Reading the default character set from a system table (e.g. Firebird); 
-2) Choosing a character set directly from a list. 
-
-You can find this setting by navigating to the 'Text' menu, and then 'Permanent settings' and 
-then to the 'SQL' tab. There you will find the field 'Charset handling'. When choosing the third 
-option ('Use charset translation') the combobox for 'character set' will become active and you 
-can choose a character set.
-
-Most notabely you can use this setting for RDBMS types that are not directly supported such as 
-for instance a 'SAP-Hana' database. Or for database types where the ODBC driver does not correctly 
-hands over the character buffer in UTF-16 form to the MS-Windows operating system. 
-Such as the Firebird ODBC driver 2.x
-
-NOTE:Do NOT forget to reset this general setting when connecting to a different database that does 
-not adhere correctly to the ODBC standard! As it will bite you as it did me!! :-(
-
-Releasenotes 3.3.0
-------------------
-In this release the free 'odbc-connection-string' feature is implemented (at last). 
-Connections can have the combination of "datasource" / "user" / "password". 
-Or a free connection string. In the latter case, only the 'datasource' name is
-stored for the connection.
-
-Optionally you can leave out the user name and/or the password name if a datasource 
-does not require these for security reasons. An MS-Access database or the MS-Excel ODBC driver 
-are examples of these.
-
-There is a new button "Connection string" on the connection dialog, or you can use the 
-'Details' button to fill in a connection string to your liking.
-
-Releasenotes 3.2.4
-------------------
-- At-Exec data at the end of a SELECT, or no NUMERIC columns
-
-Releasenotes 3.2.3
-------------------
-- Fix for login dialog and the "production / development" switch
-- QueryRewriter no has knowledge of the 'UPDATE STATISTICS' statement
-
-Releasenotes 3.2.2
-------------------
-- Fix for decimals in NUMERIC/DECIMAL datatypes. 
-- Fix for reading stored-procedures from SQL-Server
-- Precision and scale are recalculated before syncing with the database
-- Please note that the SQLMigrate tool has been removed from the SQLComponents library 
-  and now officially exists within this project.
-
-Releasenotes 3.2.1
-------------------
-- Fix for removing old and stale settings from the roaming profile directory
-
-Releasenotes 3.2.0
-------------------
-Adding in this release:
-- SQLMigrate tool to migrate between RDBMS vendors
-- QueryReWrite tool to make queries versatile for more than 1 vendor
-- Upgrades of all major libaries (BaseLibrary, SQLComponents, StyleFramework)
-- Smaller improvements (SQL_NTS option for running queries)
-
-Releasenotes version 3.1.0
---------------------------
-- Added toasts when (de-)populating the object tree of the QueryTool
-- Added the SQLMigrate program from the SQLComponents to the toolsset.
-  The program can be reached through the new 'Tools' submenu.
-  This program makes it possible to migrate complete database sets from one database to 
-  another, even if it is of a different vendor making. 
-  Real life situations that has been tested include conversions from the following:
-  Informix   -> Oracle
-  Informix   -> PostgreSQL
-  Informix   -> Firebird
-  Oracle     -> SQL-Server
-  Oracle     -> MySQL & MariaDB
-  SQL-Server -> Oracle
-- Added the QueryReWriter program. Can be configured to translate SQL Queries from
-  on RDBMS to another. Use the config tab to set your favourite setup.
-  The program can be reached through tne new 'Tools' submenu.
-
-Relaesenotes version 3.0.8
---------------------------
-- Various fixes for discovery of views, stored procedures in SQL-Server
-- Better filter combo box above the objects tree plus toasts
-
-Releasenotes version 3.0.7
--------------------------
-- Fixed discovery of stored-procedures, sql-text and parameters for MS SQL-Server
-- Added discovery of global/local temporary tables
-
-Releasenotes version 3.0.6
---------------------------
-- Fixed problem with the "Table DDL" command. Table create statements are generated again.
-- Fixed the problem with the F10 key (run current SQL command line). The program is now prevented
-  from entering the 'Select main menu' state, after the pressing of this key.
-  If you wish to use the main menu from the keyboard, use a single ALT key to go there.
-
-Releasenotes version 3.0.5
---------------------------
-- Fixed a bug when changing the default font in the settings when installed in "C:\Progam Files\Edo"
-  this is the default location, so a lot of users will have this settup. The crash derived from the  
-  fact that there where no update rigths on the settings files.
-  ODBCQueryTool now makes a copy of the setup files to the roaming profile of the user and afterwards
-  works from this set of setting files. This also fixes the crash.
-- Fixes for the saving of a changed text file when closing the application. A crash in the dialog 
-  that asks for the fact that the users wishes to save her/his work is solved.
-- Fixed unwanted/unneeded message in the installer that same version is already installed
-- Updates from support libraries to the latest versions (SQLComponents, StyleFramework, BaseLibrary)
-
-Releasenotes version 3.0.4
---------------------------
-- Added the ":exit;" command to the script language
-
-Releasenotes version 3.0.3
---------------------------
-- Fixed a bug when setting the font for the results grid
-- Updated to SQLComponents version 2.0.0 and BaseLibrary
-- Dropped support for 32-Bits version. Only 64-Bits version now released
-
-Releasenotes version 3.0.2
---------------------------
-- Various small fixes and Open source license in all files
-- Added a PayPal donation button.
-
-Releasenotes version 3.0.1
---------------------------
-- Fixed a bug in the login dialog when defining a new connection.
-
-Releasenotes version 3.0.0
---------------------------
-- Completely rewritten interface in the latest modern MFC style.
-
-Releasenotes version 2.5.1
---------------------------
-- Fixed various bugs in the handling of the MariaDB database in Oracle mode
-  Prefer to turn OFF the "Strict ODBC" handling in the general SQL settings
-  for this database type, as the replacement SQL's work better for this database
-  - Columns and other attributes of tables in other schema's can be discovered
-    than just the currently active database schema.
-  - All database types are tested and some minor bugs in the handling of 'text'
-    and 'longtext' columns have been fixed.
-
-Releasenotes version 2.5.0
---------------------------
-- Fixed a bug in the saving of the permanent file settings causing the application
-  to crash after changing the file settings (e.g. tabs and space inserts).
-  See: Menu / Text / File settings & information
-- Fixed a bug in the parameter binding of a query with the ":variable<n>" settings
-  for a "?" binding in a query.
-  See the file "script_syntax.txt" for more details
-- Fixed a bug in the ":select on" command of the scripting syntax
-  Columnnames and row values are now correctly written to the script output file, 
-  provided that you have used the ":file" command previously.
-  See the file "script_syntax.txt" for more details
-
-
-Releasenotes version 2.4.0
---------------------------
-- The source code of the SQLComponents are now replaced by a deployment ZIP file
-  in the root directory of the project. The ZIP contains the include directory
-  of that component and the four library files.
-  For a full explanation, see: https://github.com/edwig/SQLComponents
-- Various discovery methods for the info tree have been improved in speed for the
-  Oracle database. The methods are:
-  - SQLColumns          -> Discovery of all columns of a table
-  - SQLStatistics       -> Discovery of all indices of a table
-  - SQLTablePrivileges  -> Discovery of all table privileges 
-  - SQLColumnPrivileges -> Discovery of all column privileges (NEW !)
-- New setting. See menu: "Text / Permanent settings / SQL Settings"
-  A new checkbox is added "Prefer ODBC Meta-SQL". These are the settings:
-  off : If a meta-sql is present in SQLComponents, that one is used, 
-        otherwise the ODBC discovery is used;
-  on  : The ODBC discovery routines are always used.
-  
-  So now it is possible to switch between the on-board SQL meta queries or the 
-  ones provided by the standard ODBC driver (even if they are slower an more incorrect).
-
-Releasenotes version 2.3.3
---------------------------
-- Fixed a bug in the startup cycle on the first discovery queries.
-  It turned out that there where a few tables for in there that not all users
-  have rights on to see (e.g. Oracle: "dba_db_links")
-  Similar bugs for Informix, Firebird, PostgreSQL and SQLServer have been fixed
-- Errors in SQL now turn up always with the erring SQL statement in them, so we
-  can always see what went wrong.
-
-Releasenotes version 2.3.2
---------------------------
-- Fixed more exception errors 
-- Upgraded to latest Windows 10 SDK
-
-Releasenotes version 2.3.1
---------------------------
-- Fixed the integration of the SQLComponents StdException into the exception 
-  handling of the OpenEditor source code. This makes it better in catching user
-  mistakes in SQL and logging in into databases.
-
-Releasenotes version 2.3.0
---------------------------
-- Fixed performance bug in starting of Oracle 12 database. Knocked of 6 seconds
-  of each login for meta info of tables and catalogs.
-- Oracle databases now also display all linked catalogs in the driver page
-- Connection errors at login are now shown
-- Upgraded to the latest MS-Windows 10 SDK build (17763)
-
-Releasenotes version 2.2.2
---------------------------
-- Compileable in Visual Studio 2017 (fixed std::string throws)
-- Fixed 'no error on F5 after end-of-file' bug
-- Fixed CTRL-F12 file error after installation
-- Fixed CTRL-F12 error after END-OF-FILE in the buffer
-- NEW FEATURE: right click on a ODBC table in the table tree to
-  - SELECT first 100 rows of the table
-  - Create a DDL script of the table
-  Both right-click menu items only work on a table or a view node
-
-Releasenotes version 2.2.1
---------------------------
-- It is now possible to login on a database without a user/password combination
-  e.g. a spreadsheet or a MS-Access database
-
-Releasenotes version 2.2.0
---------------------------
-- Sequences and procedures in the treeview are working in Oracle 12.2c
-- Sequences metadata current and start values have been changed from long to double
-  to accomodate Oracle 12.2 changes.
-
-Releasenotes version 2.1.0
---------------------------
-In this release much work has been done for the object tree. The object tree 
-is now fully functional with the folllowing objects
-- Tables 
-	- Table columns
-    - Primary and foreign keys
-    - Indices and table statistics
-    - pecial (unique) columns not visible as table columns
-    - Other table referencing this table
-    - Triggers for the table
-    - Sequences for the table
-    - Granted rights on the table
-- Views
-- Catalog tables
-- Synonyms
-- Sequences
-- Triggers
-- Stored procedures
-
-Sequences, triggers and catalog tables are objects that are not directly 
-supported by ODBC. For these objects the tree will only fully function:
-
-1.Firebird 3.x and higher
-2.PostgreSQL 9.x and higher
-3.MySQL 5.7 and higher
-4.Oracle 11.2 and higher
-5.IBM-Informix 12.x and higher
-
-For triggers and stored procedures: you can see the full source code 
-of the persistent-stored-module by double clicking on the 'S'ourcecode 
-node under the trigger or stored procedure.
-
-
-Releasenotes version 2.0.0
---------------------------
-- This is the 10th year anniversary edition of the Open ODBC Querytool!
-  The following have been changed / extended:
-- The object tree was previously a tree with just one table at the most. 
-  It is now a tree with tables, views, catalogs, and procedures you can 
-  expand any object at will, the control will then try to read in extra 
-  information for you. Thusly reading the performance hit over more than 
-  just one action. 
-- The implmentation info tree (odbc options) has been moved from the 
-  SQLComponents module to the ODBCQuerytool module (no functional changes).
-- The installer has been moved to the standard open source NSIS installer
-- The SQLComponents library has been upgraded to version 1.4.2
+This is the README for ODBC QueryTool
+=====================================
+
+This ODBC Query tool is meant to be used against ODBC datasources.
+It's primary purpose was to test various SQL commands againt an ODBC
+connection instead of an Oracle OCI connection. This was needed because
+1) Specific ODBC SQL could be tested like "{ oj ... }" outer join syntax
+2) Specific escape sequences could be testen like "{ fn ...}" syntax
+3) General proof that a command does work against an ODBC connection
+4) General proof that the ODBC connection does work
+
+More general: nowdays every database tend to come with it's own administration
+and query tools, which means that a user has to have knowledge of all seperate
+tools and interfaces. This tool provides 1 (one) interface for a general
+ODBC database, so that a user only needs one tool to learn.
+The downside of this choice is that the more sophisticated administration tasks
+cannot be administred right away other than by typing SQL. There are no
+fancy dialogs to administer database dependent objects like stored procs and
+such. The good thing about this is that the user gets to know their database
+pretty well.
+
+LATEST HISTORY
+==============
+
+Releasenotes 3.6.4
+------------------
+-  The 32bits and ANSI versions are dropped from the release system and are declared 
+   DEPRECATED. Only 64bits Unicode versions of the programs are enclosed in the installer.
+-  AUTO transactions. Any action other than a 'SELECT' will now automatically
+   start a transaction. You must either use the "COMMIT" command, or the commit
+   button in the toolbar.
+-  Standard the querytool runs in "AUTO COMMIT" mode. This means that every DML 
+   action that is not a 'SELECT' statement will automatically commit in the database.
+   You can turn this now off by using the 'Auto-commit mode' option in the menu, 
+   or in the SQL settings page to make ths permanent.
+   If you turn this off, you must use the "COMMIT" command, or when you issue another
+   command than 'SELECT', 'WITH' or 'EXPLAIN', you will automatically enter the 
+   transaction mode. 
+   You can commit by using the 'Commit' menu option, or the 'Commit' button in the
+   toolbar, or you can issue a "COMMIT" command. 
+   Of course you can also rollback by using the 'Rollback' menu option, the 'Rollback' 
+   button in the toolbar, or you can issue a "ROLLBACK" command.
+-  The default of the 'auto-commit-mode' is set to 'ON' upon installation of this version.
+   This is the default behaviour of the ODBCQueryTool in previous versions.
+-  The execution of the SQL is moved to a seperate thread. This makes a new button
+   in the toolbar possible to stop a very long running current SQL query.
+   During execution you can view text in the current view or other views, but you
+   cannot change the text until the query completes.
+   Please notice the red X button in the toolbar to stop a long running query. 
+   This is especially useful for queries that are running for a long time, 
+   or when you have a wrong SQL statement that will never complete.
+-  Startup performance boost for PostgreSQL databases with a very large number
+   of objects. The SQLTables function that returns the META data (META_CATALOGS,
+   META_SCHEMAS, META_TABLES) returns all the objects instead of just the object
+   types, which made the login very bad performend. These functions are now taken
+   care of by the SQLInfoPostgreSQL class.
+-  The performance of the F5 (batch command) has been improved further, by 
+   using a better method of interacting with the front end views of the SQL results,
+   the output timings and the history view.
+
+Releasenotes 3.6.3
+------------------
+-  Enhanced the performance of the F5 batch command. Performance was degrading if 
+   a batch of more than 200 SQL commands was run. The degradation is now minimal
+-  Stripping of the basic ISO8859-1 diacritics in a database migration has been 
+   added as an option in SQLMigrate
+-  Export of the text in the output panes of the SQL results are now re-directed
+   to a new temporary file within the ODBCQueryTool, instead of starting your default
+   *.txt windows viewer.
+-  Creating view DDL from the right click menu on a view in the object tree. 
+   This is a very useful feature to quickly get the DDL of a view, 
+   which is not directly supported by ODBC.
+-  Fixing the split-cursors for dragging the panels sideways and up/down.
+   In essence the cursor definition files (*.cur) where missing.
+-  The password field in the login dialog now has a password eye to view the 
+   currently entered password.
+-  Fix for a crash when copying text to the MS-Windows clipboard. This was caused
+   by an incoreect handling of the clipboard data formats.
+-  Added packages to the object tree. This feature is no implemented for Firebird.
+   The package definition and the package body are shown as separate nodes in the tree.
+   The procedure and function names are shown as modules and are extended by the 
+   package name. So for instance "my_package.my_procedure" is the name of a procedure
+   in a package.
+-  Entries in the login list can now be sorted. The sorting will be retained in the 
+   Windows registry in between sessions.
+-  SQLMigrate has a 'STOP' button to stop the current migration
+-  The migration in SQLMigrate has been moved to a seperate thread, so that the 
+   interface can show the logging more reliable during the long migrations.
+
+Releasenotes 3.6.2
+------------------
+-  Fix for a crash while saving *.sql files
+
+Releasenotes 3.6.1
+------------------
+-  Partly rewrite of the settings streams. This was done on behalf of reports of 
+   corrupted settings after modifying some of them. The settings should be more 
+   stable now. Please remove old (corrupted) settings files from the 
+   "C:\USERS\<YOURACCOUNT>\AppData\Roaming\EDO\ODBCQueryTool" directory to 
+   permanently get rid of this problem.
+-  Small fixes for the "ODBC Report" for a RDBMS datasource. Some strings where missing, 
+   due to the ANSI to Unicode conversion.
+-  Better SQLMigrate path from Oracle to PostgreSQL.
+-  Various small bugfixes, found by the strict compiling under /W4/WX settings.
+
+Releasenotes 3.6.0
+------------------
+-  Upgraded to the newwest versions of the libraries (SQLComponents, BaseLibrary) that
+   are no longer using the MFC-library from Microsoft. By using ISO std::string makes the 
+   program more stable and faster
+-  Dropped the suport of 32-Bits versions. Only 64-Bits versions are now released. 
+   This is in line with the general trend of software development, where 64-Bits is the 
+   standard and 32-Bits is becoming obsolete.
+-  Fixed a bug in the parsing of the ODBC SQL to fix the parsing of double quoted strings
+   This was specially for the usage of the "ODBC Text driver" in order to be able
+   to do a: "SELECT * FROM "textfile.txt" or from a "*.csv" file. This is now working again.
+-  DEPRECATION WARNING: This will also be the last version of the ODBCQuerytool that supports 
+   the ANSI/MBCS coding. The next version will soly be Unicode 16. The ANSI/MBCS coding is 
+   becoming obsolete and the Unicode 16 version is more in line with internationalization 
+   and the general trend of software development
+
+Releasenotes 3.5.6
+------------------
+-  Discovery of functions in Firebird 4 and 5 work again
+-  Exporting and importing of views with SQLMigrate now honor the correct column
+   names if they differ from the column names in the select
+
+Releasenotes 3.5.5
+------------------
+-  Reworked the SQLMigrate application to be (again) able to convert an Oracle
+   database to Firebird.
+-  Added a 'Slow datapump' method to the SQLMigrate program for those drivers
+   that cannot do the tight SQLExecute loop multiple times (Firebird).
+-  Added a 'Save' button in SQLMigrate to save the settings before running.
+
+Releasenotes 3.5.4
+------------------
+- The return type variable in the scripting documentation has been mis-named 'RESULT',
+  instead of 'RETURN'. In this case, the documentation has been updated to reflect the 
+  correct state of the program
+- NEW: The discovered user datatypes are now displayed in the ODBC object tree, under a 
+  new node "UserTypes". There are in total three different types of user types:
+  o  Enumerator of values 
+  o  Domein type (datatype + constraints on that datatype) 
+  o  Compound type: a number of columns and datatypes 
+  The user types have been implemented for the following RDBMS types: Firebird, Oracle,
+  PostgreSQL and MS-SQLServer
+
+Releasenotes 3.5.3
+------------------
+- When an external editor did change one of the files we are working on, the Querytool prompts
+  whether we want to reload this page. This question had to be answered three times. This
+  redundancy has been eliminated.
+- Fix for navigating to the last lines in the query output view. When scrolling by pulling
+  the vertical scroll bars with the mouse, some of the last lines in the grid where not 
+  accessible. This is fixed by testing for the 'last page' of results.
+- The scripting statement ":if" has been expanded to be able to skip the next SQL statement,
+  so that the script can decide wheter or not to execute it. See the example in the help page.
+
+Releasenotes 3.5.2
+------------------
+- Fixes for the MS-Access Jet databaase engine. Discovery of table and columns was broken
+- Fixes for opnening a extra line in the editor by going a line down. Inserting of spaces
+  before the text was essentially broken. This makes editting queries a lot better experience.
+- Fixes for table discovery of a named table in Firebird.
+
+Releasenotes 3.5.1
+------------------
+- Various fixes for the discovery of databases with quoted identifiers. 
+  (Firebird, MariaDB, Oracle, SQL-Server, PostgreSQL). 
+- For most ODBC drivers only the SQLTables and SQLColumns work correctly.
+  Other functions such as the discovery of SQLPrimaryKeys, SQLForeignKeys,
+  SQLStatistics, SQLProcedures do not work for case senstive identifiers.
+- Also various fixes for the Info tree, so that we can now see the compelete 
+  view, trigger, function and stored procedure source.
+
+Releasenotes 3.5.0
+------------------
+Quoted identifiers have been added to the system. OpenODBCQuerytool now understands the
+identifiers (tablenames, viewnames, columns, indexes and such) that are stored in mixed
+case format. So "FullName" and "Fullname" are different identifiers.
+As a standard rule, all identifiers in one (1) case are understood to be non-quoted identifiers.
+These will not be quoted, and standard nameing rules apply.
+Per supported database platform the naming conventions are applied, beginning with Firebird.
+Stay tuned for next service packs for other RDBMS'es that have case sensitive catalogs.
+By default lMS-SQLServer and PostgreSQL can handel mixed cases. These work now out-of-the-box.
+Orace, Informix, MySQL and MariaDB need extra work in their respective InfoDB classes.
+
+Releasenotes 3.4.5
+------------------
+Fix for querying decimal number fields after a CLOB/BLOB column
+Performance fix for retrieving columns after the last bound column
+Unicode and SQLDate fixes
+Fix for Firbird databases in getting procedures and procedure-parameters
+Fix for PostgreSQL databases in getting procedures and procedure-parameters
+For PostgreSQL databases it is now also possible to retrieve the procedure/function source text
+
+Releasenotes 3.4.4
+------------------
+A variable can now be assigned the value of another variable
+Added a build instructions manual
+Fixes for the bitmaps in the installers
+Minimal ms-access database for testing
+Support for procedures and functions wrapped in packages in the Oracle database. 
+ODBC Discovery now can extract information, sourcecode and parameters for these 
+procedures and functions
+
+Releasenotes 3.4.3
+------------------
+The scripting :if command now has multiple operators: '=', '<>', '<', '>', '<=', '>='
+The value of a variable can now be printed in the :print command to the output file
+A variable can be assigned the value of another variable with ":variable<n> = variable<x>;" 
+Fixed a bug in the variables dialog (See menu: Script/Variables)
+
+Releasenotes 3.4.2
+------------------
+Updated the libraries to the latest version. After a half year of testing: fixing 
+a lot of small Unicode bugs
+Added the 'mustard' (yelow) and 'dark' themes
+Fixed a bug in the object-discovery of the Firebird drivers.
+Columns of tables and procedure arguments are working again.
+Fixed a bug in the installer. Check on 'not-yet-installed' added
+
+Releasenotes 3.4.1
+------------------
+Fixed a bug getting the database "Ping" from Firebird. 
+Also fixes a crash on that database after a few minutes.
+
+Releasenotes 3.4.0
+------------------
+This version is dedicated to the conversion to Unicode 16. 
+The Unicode versions are still in early development stages. 
+For production environments you are still encouraged to choose for the (old fashioned) 
+ANSI/MBCS coding version.
+
+You can make a choise from the following set of installers:
+- 32 Bits ANSI/MBCS coding 
+- 32 Bits Unicode version 
+- 64 Bits ANSI/MBCS coding 
+- 64 Bits Unicode version 
+
+Releasenotes 3.3.1
+------------------
+It is now possible to override the character set from the database by using one of two methods:
+
+1) Reading the default character set from a system table (e.g. Firebird); 
+2) Choosing a character set directly from a list. 
+
+You can find this setting by navigating to the 'Text' menu, and then 'Permanent settings' and 
+then to the 'SQL' tab. There you will find the field 'Charset handling'. When choosing the third 
+option ('Use charset translation') the combobox for 'character set' will become active and you 
+can choose a character set.
+
+Most notabely you can use this setting for RDBMS types that are not directly supported such as 
+for instance a 'SAP-Hana' database. Or for database types where the ODBC driver does not correctly 
+hands over the character buffer in UTF-16 form to the MS-Windows operating system. 
+Such as the Firebird ODBC driver 2.x
+
+NOTE:Do NOT forget to reset this general setting when connecting to a different database that does 
+not adhere correctly to the ODBC standard! As it will bite you as it did me!! :-(
+
+Releasenotes 3.3.0
+------------------
+In this release the free 'odbc-connection-string' feature is implemented (at last). 
+Connections can have the combination of "datasource" / "user" / "password". 
+Or a free connection string. In the latter case, only the 'datasource' name is
+stored for the connection.
+
+Optionally you can leave out the user name and/or the password name if a datasource 
+does not require these for security reasons. An MS-Access database or the MS-Excel ODBC driver 
+are examples of these.
+
+There is a new button "Connection string" on the connection dialog, or you can use the 
+'Details' button to fill in a connection string to your liking.
+
+Releasenotes 3.2.4
+------------------
+- At-Exec data at the end of a SELECT, or no NUMERIC columns
+
+Releasenotes 3.2.3
+------------------
+- Fix for login dialog and the "production / development" switch
+- QueryRewriter no has knowledge of the 'UPDATE STATISTICS' statement
+
+Releasenotes 3.2.2
+------------------
+- Fix for decimals in NUMERIC/DECIMAL datatypes. 
+- Fix for reading stored-procedures from SQL-Server
+- Precision and scale are recalculated before syncing with the database
+- Please note that the SQLMigrate tool has been removed from the SQLComponents library 
+  and now officially exists within this project.
+
+Releasenotes 3.2.1
+------------------
+- Fix for removing old and stale settings from the roaming profile directory
+
+Releasenotes 3.2.0
+------------------
+Adding in this release:
+- SQLMigrate tool to migrate between RDBMS vendors
+- QueryReWrite tool to make queries versatile for more than 1 vendor
+- Upgrades of all major libaries (BaseLibrary, SQLComponents, StyleFramework)
+- Smaller improvements (SQL_NTS option for running queries)
+
+Releasenotes version 3.1.0
+--------------------------
+- Added toasts when (de-)populating the object tree of the QueryTool
+- Added the SQLMigrate program from the SQLComponents to the toolsset.
+  The program can be reached through the new 'Tools' submenu.
+  This program makes it possible to migrate complete database sets from one database to 
+  another, even if it is of a different vendor making. 
+  Real life situations that has been tested include conversions from the following:
+  Informix   -> Oracle
+  Informix   -> PostgreSQL
+  Informix   -> Firebird
+  Oracle     -> SQL-Server
+  Oracle     -> MySQL & MariaDB
+  SQL-Server -> Oracle
+- Added the QueryReWriter program. Can be configured to translate SQL Queries from
+  on RDBMS to another. Use the config tab to set your favourite setup.
+  The program can be reached through tne new 'Tools' submenu.
+
+Relaesenotes version 3.0.8
+--------------------------
+- Various fixes for discovery of views, stored procedures in SQL-Server
+- Better filter combo box above the objects tree plus toasts
+
+Releasenotes version 3.0.7
+-------------------------
+- Fixed discovery of stored-procedures, sql-text and parameters for MS SQL-Server
+- Added discovery of global/local temporary tables
+
+Releasenotes version 3.0.6
+--------------------------
+- Fixed problem with the "Table DDL" command. Table create statements are generated again.
+- Fixed the problem with the F10 key (run current SQL command line). The program is now prevented
+  from entering the 'Select main menu' state, after the pressing of this key.
+  If you wish to use the main menu from the keyboard, use a single ALT key to go there.
+
+Releasenotes version 3.0.5
+--------------------------
+- Fixed a bug when changing the default font in the settings when installed in "C:\Progam Files\Edo"
+  this is the default location, so a lot of users will have this settup. The crash derived from the  
+  fact that there where no update rigths on the settings files.
+  ODBCQueryTool now makes a copy of the setup files to the roaming profile of the user and afterwards
+  works from this set of setting files. This also fixes the crash.
+- Fixes for the saving of a changed text file when closing the application. A crash in the dialog 
+  that asks for the fact that the users wishes to save her/his work is solved.
+- Fixed unwanted/unneeded message in the installer that same version is already installed
+- Updates from support libraries to the latest versions (SQLComponents, StyleFramework, BaseLibrary)
+
+Releasenotes version 3.0.4
+--------------------------
+- Added the ":exit;" command to the script language
+
+Releasenotes version 3.0.3
+--------------------------
+- Fixed a bug when setting the font for the results grid
+- Updated to SQLComponents version 2.0.0 and BaseLibrary
+- Dropped support for 32-Bits version. Only 64-Bits version now released
+
+Releasenotes version 3.0.2
+--------------------------
+- Various small fixes and Open source license in all files
+- Added a PayPal donation button.
+
+Releasenotes version 3.0.1
+--------------------------
+- Fixed a bug in the login dialog when defining a new connection.
+
+Releasenotes version 3.0.0
+--------------------------
+- Completely rewritten interface in the latest modern MFC style.
+
+Releasenotes version 2.5.1
+--------------------------
+- Fixed various bugs in the handling of the MariaDB database in Oracle mode
+  Prefer to turn OFF the "Strict ODBC" handling in the general SQL settings
+  for this database type, as the replacement SQL's work better for this database
+  - Columns and other attributes of tables in other schema's can be discovered
+    than just the currently active database schema.
+  - All database types are tested and some minor bugs in the handling of 'text'
+    and 'longtext' columns have been fixed.
+
+Releasenotes version 2.5.0
+--------------------------
+- Fixed a bug in the saving of the permanent file settings causing the application
+  to crash after changing the file settings (e.g. tabs and space inserts).
+  See: Menu / Text / File settings & information
+- Fixed a bug in the parameter binding of a query with the ":variable<n>" settings
+  for a "?" binding in a query.
+  See the file "script_syntax.txt" for more details
+- Fixed a bug in the ":select on" command of the scripting syntax
+  Columnnames and row values are now correctly written to the script output file, 
+  provided that you have used the ":file" command previously.
+  See the file "script_syntax.txt" for more details
+
+
+Releasenotes version 2.4.0
+--------------------------
+- The source code of the SQLComponents are now replaced by a deployment ZIP file
+  in the root directory of the project. The ZIP contains the include directory
+  of that component and the four library files.
+  For a full explanation, see: https://github.com/edwig/SQLComponents
+- Various discovery methods for the info tree have been improved in speed for the
+  Oracle database. The methods are:
+  - SQLColumns          -> Discovery of all columns of a table
+  - SQLStatistics       -> Discovery of all indices of a table
+  - SQLTablePrivileges  -> Discovery of all table privileges 
+  - SQLColumnPrivileges -> Discovery of all column privileges (NEW !)
+- New setting. See menu: "Text / Permanent settings / SQL Settings"
+  A new checkbox is added "Prefer ODBC Meta-SQL". These are the settings:
+  off : If a meta-sql is present in SQLComponents, that one is used, 
+        otherwise the ODBC discovery is used;
+  on  : The ODBC discovery routines are always used.
+  
+  So now it is possible to switch between the on-board SQL meta queries or the 
+  ones provided by the standard ODBC driver (even if they are slower an more incorrect).
+
+Releasenotes version 2.3.3
+--------------------------
+- Fixed a bug in the startup cycle on the first discovery queries.
+  It turned out that there where a few tables for in there that not all users
+  have rights on to see (e.g. Oracle: "dba_db_links")
+  Similar bugs for Informix, Firebird, PostgreSQL and SQLServer have been fixed
+- Errors in SQL now turn up always with the erring SQL statement in them, so we
+  can always see what went wrong.
+
+Releasenotes version 2.3.2
+--------------------------
+- Fixed more exception errors 
+- Upgraded to latest Windows 10 SDK
+
+Releasenotes version 2.3.1
+--------------------------
+- Fixed the integration of the SQLComponents StdException into the exception 
+  handling of the OpenEditor source code. This makes it better in catching user
+  mistakes in SQL and logging in into databases.
+
+Releasenotes version 2.3.0
+--------------------------
+- Fixed performance bug in starting of Oracle 12 database. Knocked of 6 seconds
+  of each login for meta info of tables and catalogs.
+- Oracle databases now also display all linked catalogs in the driver page
+- Connection errors at login are now shown
+- Upgraded to the latest MS-Windows 10 SDK build (17763)
+
+Releasenotes version 2.2.2
+--------------------------
+- Compileable in Visual Studio 2017 (fixed std::string throws)
+- Fixed 'no error on F5 after end-of-file' bug
+- Fixed CTRL-F12 file error after installation
+- Fixed CTRL-F12 error after END-OF-FILE in the buffer
+- NEW FEATURE: right click on a ODBC table in the table tree to
+  - SELECT first 100 rows of the table
+  - Create a DDL script of the table
+  Both right-click menu items only work on a table or a view node
+
+Releasenotes version 2.2.1
+--------------------------
+- It is now possible to login on a database without a user/password combination
+  e.g. a spreadsheet or a MS-Access database
+
+Releasenotes version 2.2.0
+--------------------------
+- Sequences and procedures in the treeview are working in Oracle 12.2c
+- Sequences metadata current and start values have been changed from long to double
+  to accomodate Oracle 12.2 changes.
+
+Releasenotes version 2.1.0
+--------------------------
+In this release much work has been done for the object tree. The object tree 
+is now fully functional with the folllowing objects
+- Tables 
+	- Table columns
+    - Primary and foreign keys
+    - Indices and table statistics
+    - pecial (unique) columns not visible as table columns
+    - Other table referencing this table
+    - Triggers for the table
+    - Sequences for the table
+    - Granted rights on the table
+- Views
+- Catalog tables
+- Synonyms
+- Sequences
+- Triggers
+- Stored procedures
+
+Sequences, triggers and catalog tables are objects that are not directly 
+supported by ODBC. For these objects the tree will only fully function:
+
+1.Firebird 3.x and higher
+2.PostgreSQL 9.x and higher
+3.MySQL 5.7 and higher
+4.Oracle 11.2 and higher
+5.IBM-Informix 12.x and higher
+
+For triggers and stored procedures: you can see the full source code 
+of the persistent-stored-module by double clicking on the 'S'ourcecode 
+node under the trigger or stored procedure.
+
+
+Releasenotes version 2.0.0
+--------------------------
+- This is the 10th year anniversary edition of the Open ODBC Querytool!
+  The following have been changed / extended:
+- The object tree was previously a tree with just one table at the most. 
+  It is now a tree with tables, views, catalogs, and procedures you can 
+  expand any object at will, the control will then try to read in extra 
+  information for you. Thusly reading the performance hit over more than 
+  just one action. 
+- The implmentation info tree (odbc options) has been moved from the 
+  SQLComponents module to the ODBCQuerytool module (no functional changes).
+- The installer has been moved to the standard open source NSIS installer
+- The SQLComponents library has been upgraded to version 1.4.2
 - Repaired the number format export in the XLS Excel export.

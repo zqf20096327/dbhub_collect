@@ -21,6 +21,7 @@ without forking the platform.
   Versions instead of overwriting history.
 - **Useful early, richer later.** Text is lexically searchable as soon as it is
   segmented; embeddings and other enrichments arrive afterwards without blocking it.
+  Hybrid search keeps keyword results while vectors are rebuilt and reports the affected Corpora.
 - **Rebuildable indexes.** PostgreSQL and S3 hold the canonical data; the search index
   is a projection that can be rebuilt from durable artifacts.
 - **Honest search.** Every hit is rehydrated from canonical storage and re-authorized.
@@ -59,7 +60,7 @@ A single `quivr` binary provides the `api`, `worker` and `migrate` commands.
 
 ## Quickstart
 
-Requirements (Linux x86_64, or macOS on Apple Silicon for `make dev`): Go 1.27.1, Docker with Compose v2, Python 3 with `venv`,
+Requirements (Linux x86_64, or macOS on Apple Silicon for `make dev`): Go 1.27.2, Docker with Compose v2, Python 3 with `venv`,
 Node.js 22+ and `jq`. The first run downloads pinned images and the E5 model (~1 GB).
 
 ```bash
@@ -86,7 +87,11 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
 
 ## What works today
 
-- [Bulk worker autoscaling](deploy/railway/autoscaler/README.md) uses a standalone Go controller on Railway; Kubernetes can use KEDA. Live workers keep separate capacity.
+- [Choose an embedding model](https://docs.quivr.thevibecompany.co/run-quivr/choose-an-embedding-model) for local inference, your own model server or a hosted API, with rebuild requirements and execution-only tuning. [Run a large import](https://docs.quivr.thevibecompany.co/run-quivr/run-a-large-import) covers bulk workers, provider capacity, database sizing and queue monitoring.
+
+- Searches report query-model outages as retryable `503 model_unavailable`, separately from overload and other search dependency failures. See [Search errors](https://docs.quivr.thevibecompany.co/guides/search#when-a-search-fails).
+
+- [Worker autoscaling](https://docs.quivr.thevibecompany.co/run-quivr/deploy#scale-workers-on-backlog) follows the bulk or live queue backlog, with KEDA, the `quivr-autoscaler` binary (Kubernetes or Railway) or by hand. Live workers keep separate capacity.
 
 - Rolling application upgrades use additive schema expansions; destructive cleanup
   runs only with `quivr migrate --contract`. API and worker retry performance-index
@@ -122,9 +127,10 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
 - **Search**: lexical, semantic and hybrid, with canonical rehydration and access
   rechecks on every hit, with common metadata and typed Corpus filters across sources,
   optionally within chosen Source Namespaces (filtered before
-  ranking). New or rebuilt indexes support configurable item-field boosts, a French
-  keyword copy, range-indexed dates and identity filters; the default retrieval
-  plugin returns each Record once with its best passage.
+  ranking). New or rebuilt indexes support configurable item-field boosts, a
+  language-neutral or French keyword copy, range-indexed dates and identity
+  filters; the default retrieval plugin returns each Record once with its best
+  passage.
 - **Metadata facets**: exact document counts across Corpora, bounded top values
   and UTC day, month or year histograms, under the same metadata filters.
 - **Change feed** through polling and resumable SSE, plus **catalog resync** after
@@ -132,7 +138,8 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   time, filter by time bounds, and read exact range counts through the API or CLI.
 - **Saved Queries and Subscriptions**, pinned and versioned; enabled Subscriptions turn
   newly searchable Versions into unique **Matches** (`/v0/matches`), each with a
-  Delivery. Matching is decided by a pinned alert-rule plugin (the
+  Delivery when a destination is configured. Omit `destination_id` to read Matches
+  and all change-feed notices through the API without webhook delivery. Matching is decided by a pinned alert-rule plugin (the
   `subscription` Contribution), batched per article. Both can be renamed without a
   new Version.
 - **Keyword alerts** through the first-party plugin [`plugins/alerts`](plugins/alerts/README.md),
@@ -199,7 +206,8 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
 - **Connector Instances**: scheduled pull acquisition into a Corpus, with write-only
   deposited credentials and health, through the same ingestion path as pushed content.
   Archives import through `object_storage_archive`: immutable S3-compatible `.tar.gz` and ZIP sources,
-  bounded batches and concurrency, resumable member checkpoints, and configured numeric revision ordering
+  bounded batches and concurrency, resumable member checkpoints, immediate continuation while the cursor advances,
+  ingestion queue backpressure, and configured numeric revision ordering
   ([guide](https://docs.quivr.thevibecompany.co/guides/archive-import)).
   Delivered kinds: `rss` (RSS and Atom feeds), `m365_mail` (Microsoft 365 mailboxes)
   and `x_list` (first-party plugin `plugins/x-list`), which polls an X list: edits become
@@ -228,16 +236,20 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   source ([guide](quivr-search/README.md#fil)).
 - **Operational metrics and correlated logs** on each process's private probe
   listener (`/metrics`, Prometheus text, bounded labels):
-  - API: accepted commands and the pending-ingestion backlog;
+  - API: accepted commands, pending-ingestion backlog, and search admission capacity,
+    occupancy and refusals;
   - worker: processing outcomes, time from acceptance to searchable, and delivery
     attempts and durations.
+  - both: HTTP request counts by registered route, method and status class;
+    durations and requests in flight by route and method; local PostgreSQL pool
+    occupancy and saturation.
 
   Live/bulk backlog observations refresh every 15 seconds by default, with a
   configurable interval and rebuild/backfill estimates from progress counters
   ([queue configuration](docs-site/reference/configuration.mdx#worker-queues)).
 
-  Bulk workers group ready document commits within each receipt batch, up to
-  sixteen distinct Records per organization. Segments-only ingestion providers
+  Live and bulk workers group ready document commits within each receipt batch,
+  up to sixteen distinct Records per organization. Segments-only ingestion providers
   can publish new content and keyword readiness together; vectors remain a
   separate step. The change feed keeps synchronous, gap-free commit ordering.
 
@@ -369,6 +381,11 @@ For a browser UI over the same API, run `make demo` and open http://127.0.0.1:51
   together for bounded items and retains full-text paging for large items and size
   refusals. Rebuild affected Corpora after the packing recipe changes. It selects a hosted model
   or OpenAI-compatible server by configuration, with OpenAI and Cohere v2 formats.
+  Templates are explicit settings; authenticated providers use `EMBED_API_KEY`.
+  Prepare a checksum-pinned tokenizer for any hosted model; the published plugin
+  image runs it from a read-only mount for exact token budgets.
+  [EmbeddingGemma 2](plugins/hosted-embed/examples/embeddinggemma-2.json) is an example
+  configuration. Changed space ids require fresh ingestion or a rebuild.
   An optional pinned [CPU text encoder](deploy/railway/README.md#optional-cpu-query-encoding)
   answers queries beside the API while documents keep using the remote provider.
 - **Search ranked by a plugin** (Plugin API 0.7, the `retrieval` Contribution): a

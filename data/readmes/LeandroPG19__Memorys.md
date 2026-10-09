@@ -13,7 +13,7 @@ Formerly **cuba-memorys**. Same daemon, same `cuba_*` MCP tools, new product nam
 
 **Long-term memory for AI coding agents.** An MCP server that gives your agent a knowledge graph it can search, reason over, and be corrected by — so it stops forgetting your codebase between sessions.
 
-Written in Rust. Backed by PostgreSQL + pgvector. **31 MCP tools** (32 with `CUBA_DOCS=1`), **25 CLI commands**, and every number below measured on a benchmark that — as of v0.12 — actually measures what it claims to. (The previous one did not. See [Measured](#measured--and-the-benchmark-that-was-lying).)
+Written in Rust. Backed by PostgreSQL + pgvector. **31 MCP tools** (32 with `CUBA_DOCS=1`), **26 CLI commands**, and every number below measured on a benchmark that — as of v0.12 — actually measures what it claims to. (The previous one did not. See [Measured](#measured--and-the-benchmark-that-was-lying).)
 
 <p align="center">
   <img src="assets/demo.gif" alt="MemoryIndustry terminal demo — hybrid search, claim verification with an LLM judge, procedural memory, and the CLI" width="760" />
@@ -98,7 +98,7 @@ With `CUBA_HTTP_TOKEN` in an `Authorization: Bearer` header the answer also carr
 
 The token is mandatory if you bind anything other than loopback — the daemon serves the entire graph with no authentication by default — and on a routable address it must be at least 32 characters.
 
-The port opens first, then the models load, and only then does the daemon announce itself and start serving. Binding first keeps the cheap diagnosis — a second daemon on the same port fails immediately instead of spending two minutes loading before it finds out — and connections that arrive during the load queue in the kernel backlog, so a client waits and gets a real answer rather than a refused connection. If the load overruns `MEMORY_INDUSTRY_WARM_BEFORE_SERVE_SECS` (180 s) the daemon serves anyway, `/health` says `starting`, and every search asking for reranking comes back marked degraded. Under stdio a client that gives up at 30 s without closing stdin used to leave an abandoned multi-GB process holding every model it had loaded; stdio now exits if no handshake arrives within `CUBA_HANDSHAKE_TIMEOUT_SECS` (60 s, `0` disables).
+The port opens first, then the models load, and only then does the daemon announce itself and start serving. Binding first keeps the cheap diagnosis — a second daemon on the same port fails immediately instead of spending two minutes loading before it finds out — and connections that arrive during the load queue in the kernel backlog, so a client waits and gets a real answer rather than a refused connection. If the load overruns `MEMORY_INDUSTRY_WARM_BEFORE_SERVE_SECS` (180 s) the daemon serves anyway, `/health` says `starting`, and every search asking for reranking comes back marked degraded. Under stdio a client that gives up at 30 s without closing stdin used to leave an abandoned multi-GB process holding every model it had loaded; stdio now exits if no handshake arrives within `MEMORY_INDUSTRY_HANDSHAKE_TIMEOUT_SECS` (60 s, `0` or `off` disables).
 
 That queue only helps a client that can outwait the load: one whose own budget is shorter — a sync peer gives up after `CUBA_HANDLER_TIMEOUT_SECS` (30 s) — still cuts the call, and cuts it seeing a timeout instead of a refused connection, which is the better diagnosis but is not the real answer the queue was there to buy. `/health` is what says which of the two states the daemon is in, and it answers two different questions. That it answers at all means the port is served, which is everything a caller needs when what it is about to call does not touch the models — a sync fetch moves rows. That it answers `ready: true` means the models finished loading as well, which is what to wait for before a search that asks for reranking, or when the first search must not be the one that pays for the load. The first wait is bounded and the second is not: the daemon opens within `MEMORY_INDUSTRY_WARM_BEFORE_SERVE_SECS` whatever the models are doing, but a warm-up that overruns that ceiling keeps serving everything with `ready: false` for as long as it takes, so `ready: true` can fail to arrive on a daemon that is answering perfectly. Wait on it without a ceiling of your own and you hang on a healthy machine.
 </details>
@@ -117,7 +117,16 @@ cuba-memorys models all --gpu    # GPU runtime, if you have one
 cuba-memorys doctor              # confirms what loaded
 ```
 
-Everything lands in `~/.cache/cuba-memorys/` and is found automatically. `models` downloads only when you run it — nothing is fetched behind your back.
+Everything lands in `~/.cache/memory-industry/` (or in `~/.cache/cuba-memorys/` on an install from before the rename) and is found automatically. `models` downloads only when you run it — nothing is fetched behind your back. A download goes to `<dir>.downloading` first and becomes `<dir>` only once every file is down and verified, so a failed one leaves no empty directory for the loaders to pick.
+
+**Moving an old cache under the new name.** The `~/.cache/cuba-memorys/` root is still read for this release, but each file decides between the two roots on its own, and one entry created under the new name — `pgpass_app` at startup, `undo/` from `delete` — is enough for `models` to download again what the old root already holds. `doctor` warns while the old root has anything in it. One command moves it:
+
+```bash
+memory-industry cache migrate            # the plan: touches nothing
+memory-industry cache migrate --apply    # moves it
+```
+
+An entry only in the old root moves; one identical in both loses its old copy. One that differs keeps the copy the binary reads today — for `pgpass_app` the one next to the `pgpass` in use, for a model directory the one that actually holds the model — and the other is set aside as `<name>.legacy-YYYYMMDD` in the new root, never deleted. A file another process holds (on Windows, the runtime a running daemon loaded) is skipped and the command exits non-zero: stop the daemon and run it again. What already moved stays moved, and a second run says there is nothing to migrate.
 
 **bge-m3 (1024-d) is better than e5-small** for Spanish, though the size of the gap is no longer claimed (the old +21 nDCG figure came from a broken benchmark). It needs a dimension migration (`scripts/migrate-embedding-dim.sh 1024`) and `CUBA_EMBED_MODEL=bge-m3 CUBA_POOLING=cls`.
 </details>
@@ -206,14 +215,20 @@ The out-of-distribution gate rejects queries the corpus cannot answer. The thres
 `CUBA_MODE=red` puts two machines on one database. `cuba_sync` is the other route, for machines that never see each other: the graph is written out as JSON you can commit, and read back on the other side.
 
 ```bash
-cuba-memorys sync export            # write the bundle under .cuba-memorys/
+cuba-memorys sync export            # write the bundle under .memory-industry/ (or $CUBA_SYNC_DIR)
 cuba-memorys sync import            # read one back in
 cuba-memorys sync diff              # entities on disk vs entities in the database
 cuba-memorys sync status            # which bundles this machine has already imported
-cuba-memorys hook install           # export after every commit, import after every checkout
+cuba-memorys hook install           # export after every commit, import after every checkout, merge and rebase
 ```
 
-The same four actions are `cuba_sync action=export|import|diff|status`. A bundle is one JSON file per entity with its observations inside, plus `episodes/YYYY-MM/`, `errors/`, `decisions/`, `relations.json`, `projects.json`, `tombstones.json` and a `manifest.json` — the active project and anything not bound to a project, unless you pass `--scope all`. Embeddings stay out unless you ask for them (`--with-embeddings`): they are most of the bytes and they can be recomputed. A bundle imports once, and the manifest hash covers the contents of every file in it — so an unchanged bundle is skipped, and a hand-edited entity file is a new bundle rather than a silent no-op.
+The same four actions are `cuba_sync action=export|import|diff|status`. A bundle is one JSON file per entity with its observations inside, plus `episodes/YYYY-MM/`, `errors/`, `decisions/`, `relations.json`, `projects.json`, `tombstones.json` and a `manifest.json` — the active project and anything not bound to a project, unless you pass `--scope all`. Embeddings stay out unless you ask for them (`--with-embeddings`): they are most of the bytes and they can be recomputed. A bundle imports once, and the manifest hash covers the contents of every file in it — so an unchanged bundle is skipped, and a hand-edited entity file is a new bundle rather than a silent no-op. An export writes only the files whose contents changed: exporting a database nobody wrote to since the last export touches nothing, `manifest.json` included, whose `exported_at` is therefore the time the bundle last changed.
+
+**`hook install` imports after a merge and a rebase, too.** It writes four hooks: `post-commit` exports, `post-checkout` imports, `post-merge` imports, and `post-rewrite` imports after a rebase. git runs neither of the first two for a `git merge`, and no `post-merge` for a `git rebase` (what `git pull --rebase` runs on a branch with commits of its own), so without the last two a merged or rebased bundle never reached the database and the next commit exported the database over it, dropping the other side's rows. githooks(5) says `post-rewrite` "is invoked by commands that rewrite commits (git-commit when called with --amend and git-rebase)", with `amend` or `rebase` as its first argument; after an amend it does nothing, since the amended commit is this machine's own export. A merge git stops on runs no `post-merge`; the commit that concludes it has a second parent, and on that commit `post-commit` imports the resolution before it exports. Installed before this? Run `hook install` again.
+
+**`hook install` writes down the directory it resolved.** Every hook sets `CUBA_SYNC_DIR` to the directory `install` resolved — a relative value is read against the repository root, not the directory you ran it from — because a commit made from an IDE, a GUI client or a cron job brings its own environment, and without the fixed value that commit exported somewhere the merge driver was not looking. Change the variable, run `hook install` again: it replaces its own block instead of keeping the first one. The `.gitattributes` line is written the only way git matches one, relative to the top of the work tree with `/` and no `.` or `..` (quoted when the name has a space), and it replaces any line an earlier install left; before, `./dir`, an absolute path or `data\sync` on Windows were written as given, matched nothing, and were reported as `added`. A `CUBA_SYNC_DIR` outside the repository still gets the hooks — they export to and import from the shared folder — but no merge driver and no line, because git never merges files outside its work tree; `install` says so: `.gitattributes: skipped — <path> is outside this repo; git never merges it`.
+
+**The merge driver merges what it knows and leaves the rest to you.** Entities, relations, projects, episodes, errors and decisions are recognised by where they sit under the sync directory (`entities/<file>`, `relations.json`, `episodes/<YYYY-MM>/<file>`, …), whatever that directory is called, and merged by id. `tombstones.json` is merged as one set keyed by `(table_name, row_id)`: both branches' deletions, once each, and where both deleted the same row the later deletion stands. `facts.json`, `procedures.json`, `artifacts.json` and `source_trust.json` are merged by the key the import conflicts on — `fact_id`, `id`, `(path, project_id)`, `source` — keeping, where both sides hold a row, the later one: a closed fact over an open one, the later `updated_at` of a procedure (its success and failure counts at the greater of the two), the later CRDT clock of an artifact, and each count of a source's trust at its highest. `manifest.json` merges as yours when both sides agree on `project_id`, `with_embeddings`, `embedding_dim`, `embedding_model` and `schema_version` — what the import acts on without checking it against the files; the rest is derived and the next `sync export` rewrites it. When one of them differs it is a conflict, and the message names the field. `embeddings.bin.zst`, any other file, and any file whose two sides do not parse whole — or carry a field this build does not know — make it exit non-zero, so git leaves a conflict. It used to exit 0 without writing, which git reads as "merged": your side was kept and the other one dropped with no marker.
 
 **A deletion travels now, and stops where it would take something with it.** Deleting a row records a tombstone, and the receiving side deletes exactly the ids that were named. Before this, a delete was not slow to arrive — it was undone: the peer still had the row, exported it, and it came back on the next round trip. The **entity** tombstone is the dangerous one, because deleting an entity cascades to everything hanging off it. It is applied only when this machine has no observations or episodes under that entity that the sender never named; otherwise it is withheld and reported in `tombstones_withheld`. A tombstone for an entity with three children there must not take three hundred here.
 
@@ -347,7 +362,7 @@ Named after Cuban culture. `cuba-memorys` advertises all of them, or set `CUBA_T
 | `CUBA_PEER_URL` | unset | Default address of the other daemon for `cuba_sync action=fetch`, e.g. `https://brain.example.net`. Only a fallback: the address is remembered per peer name after the first successful fetch |
 | `CUBA_PEER_TOKEN` | unset | A second bearer token for another machine that syncs with this one. It reaches only the sync verbs — never `cuba_forget`, `cuba_zafra prune` or `cuba_sync import` — so a peer can read what this node knows and cannot write or delete a single row. Must differ from `CUBA_HTTP_TOKEN`, which is also the tunnel's; `serve` refuses to start if they match |
 | `MEMORY_INDUSTRY_DOCTOR_DEEP_SECS` · `CUBA_DOCTOR_DEEP_SECS` | `300` | How long `doctor --deep` waits for one model to open before calling it a failure. The load runs on a blocking thread, so a model that never returns cannot hang the tool: the budget expiring is a `fail` with the reason on it, never a skip |
-| `CUBA_HANDSHAKE_TIMEOUT_SECS` | `60` | stdio exits if no MCP handshake arrives, instead of holding the models for a client that gave up. `0` disables |
+| `MEMORY_INDUSTRY_HANDSHAKE_TIMEOUT_SECS` · `CUBA_HANDSHAKE_TIMEOUT_SECS` | `60` | stdio exits if no MCP handshake arrives, instead of holding the models for a client that gave up. Whole seconds, spaces around them ignored. `0` (also `00`, `+0`) or `off` disables. Anything else — `60s`, `1.5`, `-5` — keeps the 60 s default and logs a warning with the value; it used to switch the watchdog off without a word |
 | `CUBA_HANDLER_TIMEOUT_SECS` | `30` | Ceiling on one tool call. It is also the budget the LLM extraction inside `cuba_ingesta` gets, at 60% of this value — raising it lets extraction think longer |
 | `CUBA_DOCS` | **off** | `1` enables `cuba_docs`, the only tool that leaves your machine. Unset, it is not even advertised. |
 | `CUBA_COMPACT_CHARS` | `1200` | Compact truncation (measured knee) |
@@ -368,7 +383,7 @@ Named after Cuban culture. `cuba-memorys` advertises all of them, or set `CUBA_T
 | `CUBA_REM_SCAN_TIMEOUT_SECS` | `90` | Budget for one entity's relation scan |
 | `CUBA_REM_EXTRACTION_BATCH` | `5` | Observations the REM cycle runs `cuba_ingesta auto_extract` over per pass, right after the relation scan. `0` skips it. What it finds is written `trust=quarantined`, always — this is the graph's only fully unattended writer, so nothing it produces is visible to `cuba_faro` until `cuba_eco action=promote` clears it by hand |
 | `CUBA_REM_BACKFILL_LIMIT` | `100` | Observations without an embedding that the REM cycle backfills per pass. `0` disables the backfill; a negative value leaves the default |
-| `CUBA_SYNC_DIR` | unset → `.memory-industry` under the working directory, or `.cuba-memorys` when that one already exists and the preferred one does not | Root for `cuba_sync` export/import. It is also the confinement boundary: a `--dir` outside this root is refused, so setting it is how you sync somewhere else instead of escaping with `../` |
+| `CUBA_SYNC_DIR` | unset → `.memory-industry` under the working directory, or `.cuba-memorys` when that one already exists and the preferred one does not | Root for `cuba_sync` export/import. It is also the confinement boundary: a `--dir` outside this root is refused, so setting it is how you sync somewhere else instead of escaping with `../`. `hook install` resolves it once (a relative value against the repository root) and writes the result into the hooks, so re-run it after changing the variable |
 | `CUBA_UNDO_DIR` | `~/.cache/memory-industry/undo`, or `~/.cache/cuba-memorys/undo` when that one already exists | Where destructive CLI commands write their undo snapshots. Set explicitly, it is read before the home directory is resolved, so it keeps working on a machine where neither `HOME` nor `USERPROFILE` is defined |
 
 ---
@@ -403,7 +418,7 @@ Four things got it there:
 <summary>The systemd pair</summary>
 
 ```ini
-# ~/.config/systemd/user/cuba-memorys.socket
+# ~/.config/systemd/user/memory-industry.socket
 [Socket]
 ListenStream=127.0.0.1:8787
 Accept=no
@@ -413,22 +428,17 @@ WantedBy=default.target
 ```
 
 ```ini
-# ~/.config/systemd/user/cuba-memorys.service — no [Install]; the socket starts it
-[Unit]
-Requires=cuba-memorys.socket
-
+# ~/.config/systemd/user/memory-industry.service (abridged)
 [Service]
 Type=exec
-ExecStart=%h/.local/bin/cuba-memorys-daemon serve 127.0.0.1:8787
+ExecStart=%h/.local/bin/memory-industry serve 127.0.0.1:8787
+# Every knob — CUBA_IDLE_SHUTDOWN_SECS, the per-model devices — lives in the env file, never here.
+EnvironmentFile=%h/.config/memory-industry/memory-industry.env
 # An idle shutdown exits 0 — Restart=always would bounce it straight back up.
 Restart=on-failure
-Environment=CUBA_IDLE_SHUTDOWN_SECS=1200
-Environment=CUBA_EMBED_DEVICE=cpu
-Environment=CUBA_RERANK_DEVICE=gpu
-Environment=CUBA_NLI_DEVICE=cpu
 ```
 
-Both units ship in [`packaging/`](packaging/). `ExecStart` has to name the binary you actually installed — `command -v cuba-memorys` — and the `-daemon` suffix above is only the convention for keeping a GPU build beside a stock one. A wrong path here fails as `status=203/EXEC`.
+Both units, and the env file that offers every key, are generated by the binary and versioned in [`packaging/`](packaging/): `memory-industry setup service` prints the plan and `--apply` installs them. `ExecStart` has to name the binary you actually installed — `command -v memory-industry` — and a wrong path fails as `status=203/EXEC`. The `cuba-memorys.service` / `cuba-memorys.socket` pair earlier releases shipped left the repository in 0.28.0; if you still have them installed, see the 0.28.0 entry in the [CHANGELOG](CHANGELOG.md).
 
 `serve` adopts the socket systemd passes as fd 3 (`LISTEN_FDS`), so the port is held while the daemon is not running and no client sees a refused connection.
 

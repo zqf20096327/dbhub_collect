@@ -73,8 +73,8 @@ rates, and later price changes do not alter past records.
 
 ### Automate
 
-A built-in Agent and an MCP server operate the console through declared capabilities.
-Changes run only after approval.
+A built-in Agent and a remote MCP endpoint operate the console through declared capabilities.
+Changes beyond low-risk writes run only after approval.
 
 </td>
 </tr>
@@ -350,10 +350,49 @@ troubleshooting.
 and operates the console: usage and request analysis, providers, OAuth, quota, client
 keys, configuration and pricing. Reads run directly. Changes are prepared server-side
 and run only after an Allow in the console. Secrets, tokens and OAuth authorization
-never enter the model's context.
+never enter the model's context. Answers can mix text with inline interactive components that
+appear while they are generated: local filters, calculators, diagrams and charts. Components
+use the console's visual system; follow-ups needing new data or actions stay in the reviewed
+conversation flow.
 
-**From an external agent.** The same capabilities are available over MCP from the binary
-itself:
+**From an external agent.** The same capabilities are served over MCP at
+`<console URL>/api/mcp` (Streamable HTTP), so an agent on another machine connects by
+URL with the CPA management key as a bearer token. Nothing is installed on the agent's
+side. The **Connect** action at the top of `/agent` shows the deployment's own endpoint
+with ready-to-copy configuration.
+
+Claude Code:
+
+```bash
+claude mcp add --transport http oh-my-cpa https://cpa.example.com/omc/api/mcp \
+  --header "Authorization: Bearer $OMCPA_CPA_MANAGEMENT_KEY"
+```
+
+Codex (`~/.codex/config.toml`):
+
+```toml
+[mcp_servers.oh-my-cpa]
+url = "https://cpa.example.com/omc/api/mcp"
+bearer_token_env_var = "OMCPA_CPA_MANAGEMENT_KEY"
+```
+
+Clients configured in JSON, such as Cursor:
+
+```json
+{
+  "mcpServers": {
+    "oh-my-cpa": {
+      "url": "https://cpa.example.com/omc/api/mcp",
+      "headers": { "Authorization": "Bearer <CPA management key>" }
+    }
+  }
+}
+```
+
+<details>
+<summary>Clients that only support stdio</summary>
+
+The binary carries a stdio bridge that forwards to the console:
 
 ```json
 {
@@ -370,9 +409,13 @@ itself:
 }
 ```
 
-An external agent can read state and prepare an operation, but cannot approve it, submit
-a secret or complete an OAuth sign-in. The management key is administrator-equivalent,
-so connect only agents trusted with full access to the console.
+</details>
+
+An external agent reads state and makes low-risk writes, such as display names and
+preferences, directly. Every other change it can only prepare: it cannot approve the
+operation, submit a secret or complete an OAuth sign-in, and the prepared change returns a
+link that opens its approval in the console. The management key is administrator-equivalent, so connect only
+trusted agents, and serve the console over HTTPS before connecting one remotely.
 [`docs/agent-capabilities.md`](docs/agent-capabilities.md) is the contract.
 
 ## Configuration

@@ -11,6 +11,16 @@
   <img src="docs/screenshots/mobile-tasks.jpg" width="380" alt="手机待办台：完成度卡片、紧急与待办标签、群来源、查看完整原文与纠错入口" />
 </p>
 
+群聊降噪效果（26 秒）：假群里的一天 500 条消息，经本地规则过滤、重复合并后只剩 23 次通知，
+并顺手建好 63 项待办。画面里的群、人、消息全部是程序生成的虚构示例：
+
+<p align="center">
+  <img src="docs/demo/demo.gif" width="720" alt="假群聊回放演示：500 条群消息 → 过滤 377 条 + 重复 54 条 → 68 条要点 → 23 次通知 → 63 项待办" />
+</p>
+
+这条片子由 `python tools/make_demo.py` 生成，**数字全部来自真实回放**，可用
+`python main.py simulate --count 500` 自己复现；也提供 [mp4 版](docs/demo/demo.mp4)（0.5 MB）。
+
 ## 功能概览
 
 - 只接收白名单 QQ 群，消息在本地完成筛选、摘要和待办提取。
@@ -29,13 +39,14 @@
 | `qq_digest.py` | 本地筛选/摘要引擎（规则 + 可选百炼 LLM） |
 | `qq_live_digest/receiver.py` | OneBot v11 HTTP 接收器，监听 NapCat 上报 |
 | `qq_live_digest/catchup.py` | 调用 NapCat API 补采历史消息，按 `msg_id` 去重 |
-| `qq_live_digest/store.py` | SQLite + JSONL：消息去重、摘要归档、投递去重与重启恢复 |
+| `qq_live_digest/store.py` | SQLite + JSONL：消息去重、摘要归档、投递去重、模型用量与重启恢复 |
+| `qq_live_digest/llmstats.py` | 模型用量词表与日 / 周 / 月聚合、token 成本折算 |
 | `qq_live_digest/summarizer.py` | 分级筛选、待办/截止提取、推送文本生成 |
 | `qq_live_digest/push.py` | WxPusher / Server酱 / PushPlus / Webhook / QQ 私聊，失败自动回退 |
 | `qq_live_digest/service.py` | 10 分钟滚动窗口、紧急立即推、无重点不推、失败重试 |
 | `qq_live_digest/bot.py` | 可选的 QQ 官方机器人，当前关闭 |
 | 外部 `watchdog.ps1` | 可选的健康检查、自动重启和故障告警脚本，部署在 NapCat 目录 |
-| `main.py` | CLI：run / catchup / tick / preview / send-test / doctor / stats |
+| `main.py` | CLI：run / catchup / tick / preview / send-test / doctor / stats / decisions / llm-stats / feedback / groups / simulate |
 
 ## 环境要求
 
@@ -94,19 +105,249 @@ cd <项目目录>
 
 # 测试微信推送
 .\.venv\Scripts\python.exe main.py send-test
+
+# 全链路自检（配置 / 存储 / NapCat / 接收服务 / 待办台 / 访问层）
+.\.venv\Scripts\python.exe main.py doctor
+
+# 决策日志：最近 20 条消息为什么被推 / 没被推
+.\.venv\Scripts\python.exe main.py decisions --limit 20
+
+# 只查某一条消息的完整决策轨迹
+.\.venv\Scripts\python.exe main.py decisions --msg-id <msg_id>
+
+# 只查「延后未决」：本该推、但被夜间静默 / 额度 / 大模型失败推迟的
+.\.venv\Scripts\python.exe main.py decisions --outcome deferred
+
+# 回看最近几条摘要：每条都给出置信度与「为什么推」
+.\.venv\Scripts\python.exe main.py show --limit 5
+
+# 模型用量与成本：日视图（默认）、周 / 月视图、最近明细
+.\.venv\Scripts\python.exe main.py llm-stats
+.\.venv\Scripts\python.exe main.py llm-stats --period week
+.\.venv\Scripts\python.exe main.py llm-stats --period month --recent 20
+
+# 人工反馈回收：候选确认率 / 忽略率 / 纠错类型 / 按群规则建议
+.\.venv\Scripts\python.exe main.py feedback --days 30
+
+# 群级策略：每个群最终生效的安静群 / 关键词 / 最低分 / 模型档 / 免打扰
+.\.venv\Scripts\python.exe main.py groups
+
+# 假群聊回放：500 条消息走完整链路，一条真实推送都不发（不联网、不碰 data/）
+.\.venv\Scripts\python.exe main.py simulate --count 500
+
+# 脱敏评测集：召回 / 误报 / 待办 / 截止时间 / 去重 / 延迟 / 成本基线（同样离线）
+.\.venv\Scripts\python.exe main.py benchmark
 ```
 
-## 百炼 AI 精简（推荐开启）
+### 模型用量与成本 `main.py llm-stats`
+
+每次调用模型都会往 SQLite 的 `llm_calls` 表落**一行**：provider、模型名、输入/输出 token、
+耗时、失败原因，以及**是否重试过、是否降级回本地规则**。视图按日 / 周 / 月聚合：
+
+```powershell
+.\.venv\Scripts\python.exe main.py llm-stats                  # 最近 14 天，按天
+.\.venv\Scripts\python.exe main.py llm-stats --period week    # 最近 8 周
+.\.venv\Scripts\python.exe main.py llm-stats --period month   # 最近 6 个月
+.\.venv\Scripts\python.exe main.py llm-stats --recent 20      # 附最近 20 条调用明细
+.\.venv\Scripts\python.exe main.py llm-stats --json           # 交给脚本消费
+```
+
+每期给出调用次数、成功 / 失败 / 跳过、重试与降级次数、输入输出 token 与费用；末尾还有合计、
+用途分布（候选精炼 / 图片识别 / 文档理解）、模型分布和失败原因 TOP。
+
+| 列 | 含义 |
+| --- | --- |
+| 调用 / 成功 / 失败 | 一次**逻辑调用**算一次：同一批里重试多次仍然只算一行 |
+| 跳过 | 本该调用但没调（例如没配 `DASHSCOPE_API_KEY`）——让「为什么一条都没有」有答案 |
+| 重试 | 这一行发生过重试（`attempts > 1`） |
+| 降级 | 最终失败并回退本地规则（不会阻塞推送） |
+| 费用 | 按 `QQ_DIGEST_LLM_PRICE_IN` / `QQ_DIGEST_LLM_PRICE_OUT`（**元 / 百万 token**）折算 |
+
+费用只在展示时折算、不入库，所以改价目表可以重算历史；两个单价都留空就只统计 token。
+`doctor` 新增「模型用量」一行，给出最近 24 小时的调用次数、token 与费用，有失败会提示看明细。
+`llm_calls` 与 `decisions` 一样，随数据保留天数在 `prune` 时一起清理。
+
+### 决策日志 `main.py decisions`
+
+每条消息在「入口 → 筛选 → 去重 → 投递」这条链上只留**一条最终结论**，按 `msg_id` 就能读成一段轨迹：
+
+| 结论 | 含义 |
+| --- | --- |
+| `pushed` | 进了摘要，并且确实推到至少一个通道 |
+| `held` | 进了摘要，但这次没投出去（暂无可用通道 / 全部失败 / 稍后重试） |
+| `filtered` | 被本地规则挡下，`reason` 会写清是阈值、闲聊还是安静群 |
+| `deduped` | 与最近几小时已推内容重复，或与本批另一条要点相同（`dedupe_reason` 给出对照文本） |
+| `truncated` | 命中但超出 `QQ_DIGEST_MAX_ITEMS` 上限 |
+| `deferred` | 本该推送，但被夜间静默 / 当日额度 / 大模型失败推迟；**过程态**，下个窗口会再试 |
+| `duplicate` / `rejected` | 入口就挡下了：`msg_id` 重复，或群不在白名单 |
+
+`reason` 里带着**当时的分值和阈值**（例如「分值 2 < 阈值 3」），所以改了配置之后旧记录依然解释得通。
+
+`deferred` 与其他结论的区别在于它是**过程态**：消息还没落定，所以这条会按 `msg_id` 就地更新（夜里
+tick 几百次也只有一行，`reason` 保留最新一次的原因）。等它真的推出去或最终被挡下，这条过程行会被
+最终结论覆盖——不会出现「同时又延后又已推送」的自相矛盾。而**还没到合并窗口**的消息仍是
+「尚未决定」，一行都不留，避免每分钟刷噪声。
+
+`main.py decisions` 的抬头把两者分开显示：先是「已决分布」，再另起一行「延后未决 N 条」；
+`doctor` 的本地存储一行也会给出 `decisions_deferred`，夜里一眼能看出积压了多少条待推。
+
+### 置信度与「为什么」`main.py show`
+
+每条进摘要的候选都自带一个 0–1 的**置信度**和一组**触发规则**，回答「凭什么判它值得推 / 值得办」：
+
+| 等级 | 分数 | 含义 |
+| --- | --- | --- |
+| 把握较高 | ≥ 0.75 | 证据充分，直接进摘要 / 待办 |
+| 把握中等 | 0.55 – 0.75 | 可用，保留依据方便回查 |
+| 把握较低 | < 阈值（默认 0.55） | 只进「待确认」，等你点头才转正式待办；阈值 `QQ_DIGEST_CANDIDATE_MIN_CONFIDENCE` 是**硬门槛**，低于它的候选不会绕过确认直接进正式待办 |
+
+触发规则是**人话 + 权重**的形式，例如 `+0.18 分值 10，高出阈值 3 两分以上`、
+`-0.24 原话有“记得”等不确定措辞`。权重写在解释里，所以改规则就会改解释，两者不会各说各话。
+摘要候选（`assess_notice`）与待办分类（`assess_task`）是两套尺度，分别回答「值不值得看」和
+「能不能直接执行」；不进候选的条目不会被硬凑一个分数。
+
+同一套解释出现在三个地方：
+
+- 推送正文多一行「为什么：…（把握较高 82%）」；
+- 待办台的候选卡片给出把握度与「依据：…」（直接读入库的触发规则）；
+- `python main.py show` 回看最近几条摘要时逐条打印「为什么：…」。
+
+A7 之前归档的老摘要没有这条记录，`show` 会如实写「这条没有置信度记录」，不假装算过 0 分。
+实现是纯函数（`qq_live_digest/confidence.py`，不碰数据库、不联网），所以推送、待办台和回归测试
+看到的是同一套结果。
+
+### 人工确认与反馈回收 `main.py feedback`
+
+低置信度的行动项不会直接混进正式待办：它们进「待确认」，由你在待办台点头才转正（Roadmap `A8`）。
+这条链路有两半：
+
+- **进待确认**：待办分类用 A7 的置信度打分，低于 `QQ_DIGEST_CANDIDATE_MIN_CONFIDENCE`
+  （默认 0.55）的候选被硬挡住，不会绕过确认直接进正式待办；判定原因里写明分数与阈值，
+  待办台卡片与 `doctor` 的「候选置信度」一行都能看到。
+- **反馈回收**：确认 / 忽略 / 纠错都会记成事件；`main.py feedback` 汇总最近 N 天的确认率、
+  忽略率、纠错类型与按群分布，并把纠错样本转成**可读的规则建议**（例如「某群：误判紧急 3 次，
+  建议收紧该群规则」）。
+
+```powershell
+.\.venv\Scripts\python.exe main.py feedback            # 最近 30 天
+.\.venv\Scripts\python.exe main.py feedback --days 7   # 只看最近一周
+.\.venv\Scripts\python.exe main.py feedback --json     # 交给脚本消费
+```
+
+它**只汇总与建议，不自动改配置**——「怎么改规则」始终由人决定。
+`doctor` 的「反馈闭环」一行给出近 30 天的候选 / 确认 / 忽略 / 纠错概况。
+
+### 群级个性化策略 `main.py groups`
+
+一个群一个脾气：有的群只该收通知、有的群要多盯几个关键词、有的群夜里干脆别打扰。
+`A9` 让每个群在全局配置之上覆盖少量开关，**没写的字段一律继承全局**——只改一个群不会牵连别的群。
+
+| 字段 | 作用 | 默认（继承自） |
+| --- | --- | --- |
+| `quiet` | 安静群：只留明确通知，普通讨论不入摘要 / 待办 | `QQ_DIGEST_QUIET_GROUPS` |
+| `keywords` | 本群额外关键词，命中即视为明确通知（安静 / 免打扰也会放行） | 全局词表 |
+| `min_score` | 本群进摘要的最低分 | `QQ_DIGEST_MIN_SCORE` |
+| `model` | 本群走哪一档模型：`rule` / `light` / `strong` / `default`，对接 `A6` 分级路由 | 路由判据 |
+| `quiet_hours` | 本群免打扰时段，按**消息时间**算，支持跨零点（如 `23:00-06:30`） | 不继承，只在本群写时生效 |
+
+配置写在一条 JSON 环境变量 `QQ_DIGEST_GROUP_POLICIES` 里，键写群号或群名都行：
+
+```ini
+QQ_DIGEST_GROUP_POLICIES={"123456": {"quiet": true, "min_score": 5, "keywords": ["考试", "选课"]}, "学院通知群": {"model": "light", "quiet_hours": "23:00-06:30"}}
+```
+
+```powershell
+.\.venv\Scripts\python.exe main.py groups           # 逐群打印最终生效的开关，以及本群覆盖了哪些字段
+.\.venv\Scripts\python.exe main.py groups --json    # 交给脚本消费
+```
+
+坏 JSON / 认不出的字段 / 非法时段只会丢掉自己，不会让程序报错。原有的 `QQ_DIGEST_QUIET_GROUPS`
+仍然生效，只有被群策略显式写成 `"quiet": false` 时才让位；`min_score` 被覆盖后，决策原因会改写成
+「分值 X < 本群阈值 Y」。模型档只对**单个群的批次**生效：混群批次、或写了 `light` 但没配
+`QQ_DIGEST_LLM_MODEL_LIGHT` 时，都回落到默认路由判据。推送渠道的每群覆盖尚未纳入本项。
+
+`doctor` 的「群白名单」一行会提示有几个群配了策略。
+
+### 假群聊回放 `main.py simulate`
+
+想验证「500 条群消息最后剩下几条通知」，不用真去加群、也不用量自己的数据：
+
+```powershell
+.\.venv\Scripts\python.exe main.py simulate --count 500              # 500 条 / 16 小时 / 默认配置
+.\.venv\Scripts\python.exe main.py simulate --quiet-hours 23:00-07:00 # 看夜间静默把消息推成「延后未决」
+.\.venv\Scripts\python.exe main.py simulate --budget 0                # 不限额度，看自然聚合的结果
+.\.venv\Scripts\python.exe main.py simulate --out events.jsonl --write-only   # 只导出 fixture
+```
+
+它生成的是一整天的高校群消息流——闲聊、通知、作业、考试安排、活动报名、广告、图片、文件、
+跨群重复转发，字段与 OneBot 上报完全一致，所以走的是**和生产完全相同的代码路径**：
+入库 → 判定 → 去重 → 摘要 → 投递 → 决策日志。
+
+三件事是刻意的：
+
+- **不联网**：通道是内存里的假通道，大模型关闭，自动回退本地规则；配置里没有任何凭证。
+- **不碰 `data/`**：默认在一个临时目录里跑，跑完可以直接删。
+- **确定性**：`--seed` 相同必然得到同一份数据，`msg_id` 形如 `sim-20261008-00042`，
+  可以拿 `main.py decisions --msg-id` 逐条回查为什么它被推 / 被挡。
+
+### 评测集基线 `main.py benchmark`
+
+想知道"改了规则或模型之后是变好还是变坏"，跑一遍脱敏评测集就行：
+
+```powershell
+.\.venv\Scripts\python.exe main.py benchmark                    # 500 条 / seed=20261008
+.\.venv\Scripts\python.exe main.py benchmark --json             # 全部指标 + 每类消息明细
+.\.venv\Scripts\python.exe main.py benchmark --fail-under 0.9   # 召回低于 90% 退出码 1
+```
+
+评测集直接复用 `simulate` 的假群聊，每条消息自带**意图标注**（该不该推 / 该不该建待办 /
+有没有截止时间），跑完真实链路后输出召回、误报、待办判定、截止时间、跨群去重、延迟、成本
+与置信度分布。当前基线：**召回 100%、误报 0.5%、待办与截止时间 100%、去重 100%、
+延迟中位 0.0 / P95 31.6 分钟**。同样不联网、不碰 `data/`、同 seed 必得同数字，
+`tests/test_benchmark.py` 把它锁进了 CI。详见 [评测集与基线数字](docs/BENCHMARK.md)。
+
+### 全链路自检 `main.py doctor`
+
+`doctor` 会逐项检查 Python 版本、配置文件、群白名单、推送通道、OneBot 接收器、大模型、
+模型用量、候选置信度、本地存储、NapCat、接收服务、待办台和访问层，每项给出 `OK / WARN / FAIL`
+和一句可执行的建议：
+
+```text
+[OK  ] Python 版本   3.12.4
+[OK  ] 群白名单        6 个群：95***96、10***22、55***18 等 6 个（已脱敏）
+[FAIL] 推送通道        未配置任何可用通道
+                   → 至少配置 WxPusher / Server酱 / PushPlus / Webhook 之一
+[WARN] NapCat        get_status 请求失败: refused
+                   → 确认 NapCat 与 QQ 已启动并登录（实时接收与历史补采都依赖它）
+```
+
+- 退出码：有任何 `FAIL` 返回 1，否则 0，方便写进脚本或计划任务。
+- `--json`：输出同上内容的 JSON，便于自动化处理。
+- `--online`：额外在线校验 QQ 官方机器人凭证（默认不联网校验）。
+- 自检**只读**：不会发送消息、不改配置；输出已脱敏，不含 token、`.env` 全文和真实群号，可直接贴到 Issue 里。
+
+## 模型精炼（推荐开启）
 
 在 `.env` 填入阿里云百炼的 `DASHSCOPE_API_KEY`，保持 `QQ_DIGEST_LLM=1`。推送会调用
 `QQ_DIGEST_LLM_MODEL` 指定的模型把通知改写成短摘要，默认不再附带原文：
 
-- `QQ_DIGEST_LLM_MODEL`：当前部署使用 `qwen3.8-max`，优先准确率；如果更在意成本，可改回 `qwen-plus`，改完重启。
-  `QQ-Live-Digest` 任务即可。
+- `QQ_DIGEST_LLM_MODEL`：当前部署使用 `qwen3.8-max`，优先准确率；如果更在意成本，
+  可改回 `qwen-plus`，改完重启 `QQ-Live-Digest` 任务即可。
 - `summary` 不超过 40 个汉字，只保留对象、事项、时间或行动。
 - `action` 不超过 20 个汉字，没有明确行动就留空。
 - `QQ_DIGEST_INCLUDE_RAW=0`：推送只显示精简摘要、截止时间、行动项和来源。
-- 百炼 API 失败时自动回退本地摘要，不会影响正常推送。
+- 模型 API 失败时自动回退本地摘要，不会影响正常推送。
+
+模型层是**可替换**的（Roadmap `A4`）：业务代码只依赖 `qq_live_digest/providers.py` 里的
+`LLMProvider` 接口，不自己拼 HTTP 请求。任何 OpenAI 兼容端点（Ollama / vLLM / OpenAI / 其他厂商）
+只要保持 `QQ_DIGEST_LLM_PROVIDER=openai-compat` 并改 `QQ_DIGEST_LLM_ENDPOINT` 就能接上；
+非兼容协议如何接入见 `docs/PROVIDERS.md`。设成 `QQ_DIGEST_LLM_PROVIDER=none` 可彻底关闭模型调用。
+
+想省成本可以开启**分级路由**（Roadmap `A6`）：填上 `QQ_DIGEST_LLM_MODEL_LIGHT`（例如
+`qwen-turbo`）后，清晰的小批次走轻量模型，只有难例（候选偏多、分值贴着阈值、A7 判为低置信度）
+才升级到 `QQ_DIGEST_LLM_MODEL` 指定的高能力模型；每次走了哪一档、为什么，都记进
+`llm_calls` 并由 `main.py llm-stats` 的「路由分布」展示。留空 = 不启用，行为与之前一致；
+详见 `docs/PROVIDERS.md`。
 
 ## 推送卡片与截止提醒
 
@@ -284,6 +525,17 @@ powershell -NoProfile -ExecutionPolicy Bypass -File <NapCat目录>\watchdog.ps1
 - 电脑必须开机且 NapCat 保持登录，才能实时接收。关机期间依赖 24 小时补采窗口。
 - 摘要由本地规则生成，可选大模型只做精炼；模型失败会自动回退本地规则。
 - SQLite 默认保存最近 30 天消息（`QQ_DIGEST_RETENTION_DAYS`），`msg_id` 唯一约束保证重启不重复推送。
+
+## 参与与文档
+
+- [发展规划 Roadmap](docs/ROADMAP.md)：项目唯一路线图入口，含评分模型与分阶段排期。
+- [常见问题 FAQ](docs/FAQ.md)：定位、模型、风控、部署等统一口径。
+- [故障演练手册](docs/DR-DRILL.md)：NapCat 掉线、模型故障、推送失败、进程被杀等场景怎么验证「不丢事」。
+- [评测集与基线数字](docs/BENCHMARK.md)：脱敏评测集的指标定义、第一版基线与 CI 门槛。
+- [安全边界与数据流向](docs/SECURITY-BOUNDARY.md)：四条数据路径、配置加固清单、依赖供应链核查与第三方审计核实结果。
+- [贡献指南](CONTRIBUTING.md)：分支、测试、代码风格、隐私与安全要求。
+- [安全政策](SECURITY.md)：如何私密报告安全问题。
+- [更新日志](CHANGELOG.md)：各版本变更记录。
 
 ## License
 

@@ -125,7 +125,7 @@ This example supplies the structured claim from host code. It demonstrates persi
   <img src="docs/assets/agent-memory-overview.svg" alt="Agent Memory: host events flow through L0 source evidence, typed admission, and L1 versioned facts to a bounded MemoryBundle. Optional language Observations support bounded history and current same-scope L2 language pages. L3 remains planned. Evidence, time, scope, and erasure govern the flow." width="100%">
 </p>
 
-The [v6.1 design](docs/design/AGENT_MEMORY_DESIGN_V6.1.0.md) separates the source, the accepted interpretation, and the views built from it:
+The [v7 design](docs/design/AGENT_MEMORY_DESIGN_V7.0.0.md) separates the source, the accepted interpretation, and the views built from it:
 
 | Component | Responsibility | Available scope |
 | --- | --- | --- |
@@ -214,7 +214,7 @@ The public boundary is `MemoryProvider`. Optional packages use lazy discovery; i
 
 ## Capability status and roadmap
 
-The current documented delivery baseline is **[stage 15: bounded current language L2 pages](docs/design/v6.1.0/stage-15.md)** of the v6.1 architecture plan. The software package is **v0.1.0 / Alpha**; architecture, protocol, and package versions are tracked separately.
+The current documented delivery baseline is **[V7-B6: integrated engineering verification](docs/design/v7.0.0/batch-b6.md)** plus the [local real Ollama synthetic smoke](docs/design/v7.0.0/ollama-smoke.md), building on the existing language and L1 lifecycle. The software package is **v0.1.0 / Alpha**; architecture, protocol, and package versions are tracked separately.
 
 | Capability | Current implementation | Evidence |
 | --- | --- | --- |
@@ -226,28 +226,40 @@ The current documented delivery baseline is **[stage 15: bounded current languag
 | Derived parent inputs | Fixed current language revisions, complete processing lineage, guarded delivery and transitive physical erasure | [Stage 14C](docs/design/v6.1.0/stage-14c.md) |
 | Query and host permissions | Versioned current queries, expiring local authority, source-grant binding, and checks before final delivery | [Stage 14A](docs/design/v6.1.0/stage-14a.md) |
 | Current language L2 pages | Typed Scenario/Page/Block versions, stable block identities, atomic full rebuild, fixed readiness targets, guarded delivery, and transitive erasure | [Stage 15](docs/design/v6.1.0/stage-15.md) |
+| Trusted project questions | Host-reviewed owner, status, commitments and risks; deterministic full/delta answers and guarded proof reuse, shared durable refresh, exact routing and opt-in SDK/MCP reads | [B3](docs/design/v7.0.0/batch-b3.md) · [B4](docs/design/v7.0.0/batch-b4.md) · [Example](examples/project_questions.py) |
+| Qualified current parents and project L2 pages | Compatible trusted contexts, preserved conditions/exceptions, stable blocks, host-only typed patches and immutable provenance; guarded whole-page delivery | [B3](docs/design/v7.0.0/batch-b3.md) · [Typed patches](docs/design/v7.0.0/typed-page-patches.md) |
+| Governed model/cache contracts (opt-in) | Host-bound immutable provider/input/output identity, exact caching, multi-account reservations and unknown-cost recovery; real local Qwen 9B smoke over synthetic facts, domain/cost acceptance open | [B5](docs/design/v7.0.0/batch-b5.md) · [Local smoke](docs/design/v7.0.0/ollama-smoke.md) |
+| Bounded host retention | Atomic reference-aware QuestionView GC with explicit holds; exact receipts, delta ancestry and model audits can remain pinned and exhaust capacity | [Retention/GC](docs/design/v7.0.0/retention-gc.md) |
+| Offline A9 evaluation tooling | Actual SQLite runtime arms, isolated ablations, all-phase unknown debt, paired bootstrap and opt-in observer/tariff/Ollama binding; synthetic evidence only | [A9 runner](docs/design/v7.0.0/a9-experiment-runner.md) |
 | Retrieval and feedback foundations | Scoped, bounded recall; optional lexical/hybrid candidates; outcome-linked Episode/Procedure and gated Evolution components | [Architecture](docs/ARCHITECTURE.md) · [Feedback](docs/FEEDBACK_CONTRACT.md) |
 
 Observation remains limited to documented language templates. Published-point and certified-interval history preserve frozen policies/context and current access checks; gaps are rejected. Current `locale-parents/1` views bind fixed parent revisions and transitive processing permissions. Current `language-scenario/1` pages combine 1–4 non-conditional language Observation parents in the same exact scope, with compatible subject, purpose, and authority.
 
-Conditional/historical parents, pages as parents, historical pages, delta updates, general scenario templates, cross-scope composition, remote ACL synchronization, and L3 remain disabled or planned. The bounded page delivery does not complete the full L2/L3 lifecycle. L1's existing bitemporal queries remain independently available; `l1_decided` means processing completed, not that a fact is true.
+With explicit `qualified_current=True`, `locale-qualified-parents/1` and `language-qualified-scenario/1` preserve trusted conditions and exceptions. `QuestionService` separately supports finite current project questions, host-triggered initial project-page publication, shared-scheduler background revalidation, validated reuse, and [bounded deterministic typed block patches](docs/design/v7.0.0/typed-page-patches.md). Pass `questions=service` to the SDK/MCP adapter to expose this optional surface. Historical parents/pages, pages as parents, legacy facet/page delta and free-form partial block edits, generic scenarios, cross-scope composition, remote ACL synchronization and L3 remain disabled or planned. The bounded page delivery does not complete the full L2/L3 lifecycle. L1's existing bitemporal queries remain independently available; `l1_decided` means processing completed, not that a fact is true.
 
 Validation records include SQLite and real PostgreSQL contracts, cross-connection races, process-kill recovery, and backup replay. The [stage 12 full-suite report](docs/design/v6.1.0/stage-12-full-test.md) is an older baseline; [stage 13](docs/design/v6.1.0/stage-13.md) and stage 14 [A](docs/design/v6.1.0/stage-14a.md)/[B.3](docs/design/v6.1.0/stage-14b3.md)/[C](docs/design/v6.1.0/stage-14c.md) record targeted and affected regression runs. [Stage 15](docs/design/v6.1.0/stage-15.md) records a full repository/package run and build/install verification, with [independent evidence](docs/design/v6.1.0/validation-stage-15.json). Each report applies to its recorded code baseline; counts are not cumulative. Production acceptance, real-domain extraction quality, and full M0/M1/M2 milestone acceptance remain open.
 
-**Next in the [implementation plan](docs/design/v6.1.0/next-steps.md):**
+**The latest target is [v7.0.0](docs/design/AGENT_MEMORY_DESIGN_V7.0.0.md).** B0 provides strict protocol/domain and whole-cost contracts; [B1](docs/design/v7.0.0/batch-b1.md) provides indexed invalidation; the [B2 scheduler](docs/design/v7.0.0/batch-b2.md) supplies durable coalescing, fixed coverage targets, shared budgets and host execution. [B3](docs/design/v7.0.0/batch-b3.md) closes the finite current project read/page lifecycle on those foundations. Its [validation record](docs/design/v7.0.0/validation-b3.json) states the actual source fingerprints and per-run results. Earlier stage counts are separate evidence, not cumulative passes.
 
-1. **Qualified current parents and pages:** the [stage 16 plan](docs/design/v6.1.0/stage-16-plan.md) defines compatible host routing and qualification contracts that preserve conditions and exceptions; it is not yet implemented or accepted.
-2. **Further composition:** historical parents/pages and broader templates need their own frozen-input contracts and acceptance; cross-scope composition remains disabled.
-3. **Incremental views and L3:** delta is deferred pending evidence of benefit and a versioned patch contract; inferred profiles require independent stability, counterexample, and quality acceptance.
-4. **Real-world validation:** domain gold, model input and delivery controls, dispatch budgets, and reproducible quality/cost comparisons.
+[ProjectAdmission](src/agent_memory/consolidation/project_admission.py) requires trusted source authorities, reviewed membership and field/time support. Missing completion stays unknown, conflicting owners stay contested, and no risk match means only a complete empty result within the known authorized scope. Both admitted-L1 and explicitly closed finite publication manifests are supported. Current permission/context/time is checked before bodies and at delivery; deletion and old-backup replay also scrub unpublished registrations and page routes.
+
+Upgrade requires stopping old writers. The project candidate index is additive; opt-ins default off and rollback disables the new readers/workers while preserving the authoritative deletion journal. Project pages are bounded projections of current parents. After initial host publication, an enabled `RefreshHost` maintains published pages through the existing shared scheduler, parent dependencies, leases and resource budgets; stale pages still refuse reads until valid publication. No second queue or free-form editor is introduced. Governed model answers reserve cache slots before dispatch and report current ledger settlement. Long-lived model authorization audit requires explicit host durable archival and checkpoint/receipt acknowledgment; financial receipts and other finite retention limits remain protected. See [runtime repairs and compatibility](docs/design/v7.0.0/runtime-repairs.md).
+
+[B4](docs/design/v7.0.0/batch-b4.md) adds complete-group deterministic delta, old-remove/new-add aggregates, continuous-log checks with real full fallback, and immutable generation versus current validation proofs. Original private inputs remain guarded even when public values match. Its [validation record](docs/design/v7.0.0/validation-b4.json) covers randomized full equivalence, real dual-provider lifecycle/erasure, and independent adversarial review. Runtime/registration/worker contracts advance to version 2; upgrade requires re-registration after draining old writers.
+
+B2's [verified lifecycle evidence](docs/design/v7.0.0/validation-b2.json) includes fixed responsibilities, fair shared limits, clock guards and process-kill recovery. Its deterministic resource limits do not represent model-spend budgets or measured production savings.
+
+Remaining acceptance follows the [v7 plan](docs/design/v7.0.0/plan.md) and [task ledger](docs/design/v7.0.0/task.md): licensed held-out domain quality and measured whole-cost comparison. Local Ollama configuration and nine synthetic runtime checks passed with seven actual Qwen 9B generations; this does not establish those external results. All 44 previous task statuses remain preserved. Synthetic tests and this local smoke do not establish licensed real-data quality, production savings or full M0/M1/M2 acceptance; those gates remain open.
 
 Advanced retrieval and optional read-only Reflect remain on the [task ledger](docs/design/v6.1.0/task.md). Remote deployments use the [security policy](SECURITY.md) and [threat model](docs/THREAT_MODEL.md); external caches, remote ACL systems, and provider-held copies need their own integration contracts.
+
+Explicit model explanations are available through the host-bound [B5 runtime](docs/design/v7.0.0/batch-b5.md) and SDK `question_model_answer`. Ordinary structured answers remain model-free. The opt-in [local validation CLI](docs/design/v7.0.0/ollama-smoke.md) freezes installed model/configuration and exercises caching, authorization and erasure. Real-domain quality/cost acceptance remains open; local compute is never assumed free.
 
 ## Documentation
 
 | You want to… | Start here |
 | --- | --- |
-| Understand the design | [v6.1 architecture](docs/design/AGENT_MEMORY_DESIGN_V6.1.0.md) · [Module boundaries](docs/ARCHITECTURE.md) |
+| Understand the design | [v7 architecture](docs/design/AGENT_MEMORY_DESIGN_V7.0.0.md) · [Module boundaries](docs/ARCHITECTURE.md) |
 | Admit or extract facts | [Atom admission](docs/ATOM_ADMISSION.md) · [Automatic extraction](docs/ATOM_EXTRACTION.md) |
 | Read facts across time | [Bitemporal memory](docs/BITEMPORAL_MEMORY.md) |
 | Build a controlled language view | [Observation lifecycle](docs/design/v6.1.0/stage-12.md) · [Conditional view](docs/design/v6.1.0/stage-13.md) · [Query and permissions](docs/design/v6.1.0/stage-14a.md) |
@@ -255,11 +267,11 @@ Advanced retrieval and optional read-only Reflect remain on the [task ledger](do
 | Connect feedback and evolution | [Feedback contract](docs/FEEDBACK_CONTRACT.md) · [Evolution package](packages/evolution/README.md) |
 | Deploy and recover | [Single-host deployment](docs/single-host-deployment.md) · [Recovery operations](docs/recovery-operations.md) |
 | Inspect evaluation evidence | [Evaluation methodology](docs/LOCAL_MEMORY_COMPARISON_EVAL.md) · [Resource baseline](docs/RESOURCE_BASELINE.md) |
-| Follow or contribute to development | [Plan](docs/design/v6.1.0/plan.md) · [Tasks](docs/design/v6.1.0/task.md) · [Next steps](docs/design/v6.1.0/next-steps.md) |
+| Follow or contribute to development | [v7 plan](docs/design/v7.0.0/plan.md) · [v7 tasks](docs/design/v7.0.0/task.md) · [Design versions](docs/design/README.md) |
 
 ## Contributing
 
-Useful contributions include **a reproducible edge case, an integration adapter, or a well-annotated evaluation scenario**. Start with the [task ledger](docs/design/v6.1.0/task.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
+Useful contributions include **a reproducible edge case, an integration adapter, or a well-annotated evaluation scenario**. Start with the [task ledger](docs/design/v7.0.0/task.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```bash
 ./setup.sh --all
@@ -274,3 +286,5 @@ Integration and live PostgreSQL tests have additional setup; see [CI](.github/wo
 ## License
 
 [Apache License 2.0](LICENSE).
+
+B6 fixed-source closeout verification: 3931 passed, zero skips/failures/errors across the complete repository/all package suite; all prior 3783 passing cases remain covered. Six distributions were built/clean-installed, 241 Python files and 19 SQL migrations matched, and full source/12 archives scanned with zero findings. Bounded reference-aware GC and frozen offline A9 tooling are included. See [the scoped report](docs/design/v7.0.0/batch-b6.md). The later [local Ollama smoke](docs/design/v7.0.0/ollama-smoke.md) has separate targeted evidence; licensed-domain quality and measured whole-cost acceptance remain open.

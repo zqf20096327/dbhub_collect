@@ -10,14 +10,14 @@
 
 - **OpenAI 兼容出口**：`/v1/chat/completions`（流式 + 非流式）、`/v1/responses`（Codex CLI）、`/v1/messages`（Anthropic / Claude Code）、`/v1/models`、`/v1/user/balance`（DeepSeek 兼容余额）
 - **六个上游渠道**：CodeBuddy、TRAE SOLO、OpenCode Zen、Kilo Gateway、Qoder、CodeArts——统一模型名、统一调度、统一统计
-- **统一调度**：扁平模型名按健康度自动选号，`模型@渠道` 强制指定；三态健康度 + 分级冷却避开坏号，健康度打平时**余额多者优先**。模型级限流或「该渠道无此模型」只避让那一个模型，同账号其他模型立刻可用
+- **统一调度**：扁平模型名按健康度自动选号，`模型@渠道` 强制指定；候选里有免费渠道（x0）时**免费优先**（免费档跑一条中等回复省下的积分，多于付费号 36h 内到期的积分），之后三态健康度 + 分级冷却避开坏号，健康度打平时**余额多者优先**。模型级限流或「该渠道无此模型」只避让那一个模型，同账号其他模型立刻可用；某模型**只有**一个渠道持有且它正在模型级冷却时，不把请求扇给不认该模型的其他渠道（那样只是白打并写负缓存），而是直接回「该模型暂不可用，换模型即可」
 - **到期额度优先消化**：主窗口 36h 内将过期的额度多者先用（避免过期浪费），打平再比 7 天窗口；额度单位统一为积分
 - **会话粘性**：同一对话多轮粘住同一凭证，出错才轮换
 - **模型列表按渠道凭证加载**：只展示**当前有可用凭证**的渠道（未暂停、未会话失效）；未接入的渠道不出现幽灵模型，暂停或凭证失效时其模型暂时消失，恢复即回来。模型目录落盘 + 启动同步回灌，重启第一秒归属表即可用
 - **公共凭证池**：admin 集中维护、全员共享、加密入库（`APP_SECRET`）；设备码登录、多账号切换、额度探测、每日签到、token 预刷新
 - **三角色账号体系**：`admin` / `operator` / `viewer`，用户存 SQLite；一次性激活链接自设密码（无共享初始密码）、首登强制改密、改角色/停用即时吊销会话；登录与写操作留审计
 - **成长中心**（仅 CodeBuddy）：自动领 Buddy 旅行礼物、派 Buddy、领取新任务与任务奖、断登补登、连登奖励兑换、开盲盒；不可逆动作可用 `GROWTH_IRREVERSIBLE_ACTIONS=false` 关停；管理台可手动执行并查看逐条结果
-- **脱敏统计**：不存对话内容；明细 90 天、小时汇总永久；按人/渠道/模型可视化
+- **脱敏统计**：不存对话内容；明细 90 天、小时汇总永久；按人/渠道/模型可视化；另按 models.dev 刊例价估算**成本**（人民币为主，Q70）
 - **管理台安全加固**：登录限流、CSRF 校验、请求体上限、Host 白名单
 
 六个渠道的接入方式与各自注意事项见下文「[渠道](#渠道)」；协议层实现（私有信封、签名、门禁伪装等）见 [`TECHNICAL.md`](TECHNICAL.md) §3.14–§3.17。
@@ -105,7 +105,7 @@ docker compose exec coding2api python scripts/create_user.py admin --role admin
 
 ```bash
 docker compose pull
-# 或指定版本：docker pull ghcr.io/robbsluo/coding2api:v0.3.0
+# 或指定版本：docker pull ghcr.io/robbsluo/coding2api:v0.4.0
 ```
 
 推送新版本：打 tag `v*` 推到 main 即触发 publish workflow（见 `.github/workflows/publish.yml`），同时打 `<tag>` 和 `:latest` 到 GHCR。也可在 Actions 页面手动触发（填版本号）。
@@ -138,6 +138,11 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 任意 OpenAI 兼容客户端可直接接入（Base URL `http://127.0.0.1:8000/v1`、Key 用 `sk-...`、模型名以 `GET /v1/models` 为准）；「Playground」页用登录会话直接测试，无需 API Key。
 
 模型列表只展示**当前有可用凭证**的渠道（未接入 / 全部暂停 / 会话失效的渠道不出现），详见下文「模型列表按渠道凭证加载」。
+
+几点要知道：
+
+- **流式会带 usage 帧**：收尾时在 finish chunk 之后、`data: [DONE]` 之前补一帧 `choices: []` 的 usage（OpenAI 标准形态）。只从流里读用量的客户端（如 pi-ai / DSH）据此显示 tok/s、上下文占用率与会话 token 统计；上游没上报用量时**不补**这一帧（不发 0 占位），非流式出口的 `usage` 同理，未上报的字段一律为 `null`。
+- **思考 token 需要客户端带 `reasoning_effort`**：CodeBuddy 渠道在客户端**未给**该字段时补 `medium`——上游缺此字段会把整段思考以「可见推演」写进正文（客户端里思考与正文混成一块）。客户端显式给的值（如 `low`）原样透传、不被覆盖，可据此压低思考量。
 
 ## 渠道
 
@@ -172,7 +177,7 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 
 几点要知道：
 
-- **额度与签到**：支持额度探测（`GET /api/v2/quota/usage`）与每日签到（积分可累积）。签到自 2026-10 起为**活动制**（`/sash/api/v1/me/campaigns`，需带 `Cosy-ClientType`），本服务自动查询可领活动并领取，旧的 `daily-check-in` 接口仅作回退。签到由后台任务自动执行，管理台可手动触发；当日已签（含重复领取 / 同一自然人已领）归一为「已签」而非失败。新协议不提供连续天数，界面不再显示「连续 N 天」。**国际版没有签到接口**（该端点 404），此时签到记为「本区域无此接口」，不是错误。
+- **额度与签到**：支持额度探测（`GET /api/v2/quota/usage`）与每日签到（积分可累积）。签到自 2026-10 起为**活动制**（`/sash/api/v1/me/campaigns`，需带 `Cosy-ClientType`），本服务自动查询可领活动并领取，旧的 `daily-check-in` 接口仅作回退。签到由后台任务自动执行，管理台可手动触发；当日已签（含重复领取 / 同一自然人已领）归一为「已签」而非失败。**签到活动每日 10:00（UTC+8）刷新**（领取后 30 天有效），后台任务按这个窗口而非自然日封账：凌晨看到的「已领」只封到当天 09:59，10:00 新一轮出现后会自动补签，不需要人工点。新协议不提供连续天数，界面不再显示「连续 N 天」。**国际版没有签到接口**（该端点 404），此时签到记为「本区域无此接口」，不是错误。
 - **端点白名单**：默认国内版（`openapi.qoder.com.cn` + `gateway.qoder.com.cn`）；国际版改 `QODER_API_ENDPOINT=https://openapi.qoder.sh`，并确认 `QODER_ALLOWED_ENDPOINTS` 含国际版域名。签名会携带完整 `cosy-*` 头，白名单防止误把签名请求发往未授权主机。
 - **节流**：真实账号渠道，默认 `QODER_CHAT_MIN_INTERVAL=5`（独立节流器，与其它渠道互不排队），可在「任务与配置」热更。
 - **上游节点故障**：Qoder 有时会把自身推理节点故障包成 400（报错原文形如 `[FAIL]node:… msg:Execution failed`）。本服务识别这类响应为**模型级瞬时故障**——只冷却该模型（同账号其他模型照常可用），并在耗尽候选时返回「该模型暂时不可用」的 503（错误码 `no_healthy_credential`），而不是误报「模型不存在」或「无可用凭证」；稍后重试通常自愈。
@@ -183,9 +188,9 @@ curl http://127.0.0.1:8000/v1/chat/completions \
 
 几点要知道：
 
-- **令牌刷新是刚性的**：refresh_token 与 `client_id=codearts-agent`、DPoP 私钥三者绑定，且**一次性**——刷新后必须回写新的 refresh_token，否则该账号失效。本服务由 token 预刷新任务自动完成（DPoP ES256/P-256 签名）；这也是该渠道的「保活」手段。
-- **没有每日签到**：CodeArts 额度是**每日 1000 万免费 token（当日 0 点清零、不累计）**，上游没有每日签到接口，因此本服务不提供签到入口。启动/定时会尝试领取福利 Token（幂等）并探测余额。
-- **优先消耗**：每日池用完即弃，故当日剩余被登记为「次日本地 0 点到期」的到期额度，调度器会优先把它排在其它渠道之前——只要 CodeArts 还有额度就先走它，用尽后自动回落。上游按 token 计量，管理台统一显示为**积分**（1 积分 = 10000 token，每日池满额 = 1000 积分）；升级前落库的历史数据由 `scripts/convert_codearts_credit_unit.py` 一次性折算。
+- **令牌刷新是刚性的**：refresh_token 与 `client_id=codearts-agent`、DPoP 私钥三者绑定，且**一次性**——刷新后必须回写新的 refresh_token，否则该账号失效。本服务由 token 预刷新任务自动完成（DPoP ES256/P-256 签名）；这也是该渠道的「保活」手段。为降低烧票风险，本渠道的预刷新窗口封顶 45 分钟，且该封顶必须**宽于**预刷新轮询周期（`REFRESH_INTERVAL_MINUTES`，默认 30 分钟）——否则窗口整轮漏过、凭证拖到到期才刷（全局 `REFRESH_SKEW_HOURS` 默认 24h ≫ 凭证 2h 寿命，不封顶会每轮都刷）。一旦续期凭据被上游作废（票被消费 / 绑定项不符），该凭证会被标记为「需重新登录」并停止自动重试，需重新登录后按状态列的「恢复」解除。
+- **每日签到**：上游有「每日签到领 1000 积分」活动（`GET /v1/ops/delivery` → `POST /v1/ops/claim` → `POST /v1/ops/confirm`），2026-12-31 截止。后台任务每日自动领取，管理台可手动触发；`claim` 后**必须** `confirm`（上游 `CLAIMED` 是「已领未确认」而非终态），本服务两步一起做，已领未确认的账号会自动补确认。当日已领归一为「已签」而非失败。**注意这套积分与每日 token 池是两套并行的账**：token 池给福利模型（`deepseek-v4.1-flash` 等）用，积分给系统内置模型（GLM-5.2 / OpenPangu 等）用，互不通气。
+- **优先消耗**：每日池用完即弃，故当日剩余被登记为「次日本地 0 点到期」的到期额度，调度器会优先把它排在其它渠道之前——只要 CodeArts 还有额度就先走它，用尽后自动回落。上游按 token 计量，管理台统一显示为**积分**（1 积分 = 10000 token，每日池满额 = 1000 积分）；升级前落库的历史数据由 `scripts/convert_codearts_credit_unit.py` 一次性折算。**这个「积分」是为跨渠道排序合成的折算值，与上游签到/套餐积分同名但不同物**，不要混。
 - **签名**：上游要求华为云 `SDK-HMAC-SHA256`（AK/SK + `X-Security-Token`）。白名单 `CODEARTS_ALLOWED_ENDPOINTS` 必须含 snap 引擎、STS、福利网关与门户四个主机；改 `CODEARTS_API_ENDPOINT` 时同步调整。
 - **累计全文 SSE**：上游流式 `text` 是**累计全文（替换语义）**而非增量，本服务在解析层还原为增量事件，对客户端透明。
 - **节流与并发**：真实账号渠道，默认 `CODEARTS_CHAT_MIN_INTERVAL=5`（独立节流器）；上游硬限**每账号并发会话数 3**，故 pacer 另配在途上限 `CODEARTS_MAX_CONCURRENCY=3`。实测该限制更接近「每账号每约 60s 最多 3 个会话」（会话在流结束后仍滞留数十秒），故再叠加滑动窗口 `CODEARTS_REQUEST_WINDOW_SECONDS=60`，把突发也挡在 400 之前（`400 TM.00001041`）。均可在「任务与配置」热更。
@@ -268,7 +273,7 @@ curl http://127.0.0.1:8000/v1/user/balance -H "Authorization: Bearer sk-你的ke
 {
   "status": "ok",
   "service": "coding2api",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "credentials": {"total": 5, "ready": 4, "cooling": 1, "paused": 0, "disabled": 0}
 }
 ```
@@ -325,15 +330,24 @@ Playground 与 `GET /v1/models` 走 **stale-while-revalidate**：有缓存就立
 
 统计页 **Credit 消耗** 列：CodeBuddy 是上游**真值**；TRAE 的 `token_usage` 帧只有 token 数，credit 按官方单价**推算**并标 `≈`；CodeArts 福利模型按每日池 1:1 扣减推算，同样标 `≈`。单价表与推算逻辑集中在 `src/provider/trae/pricing.py`（TRAE）与 `src/provider/codearts/units.py`（CodeArts），未收录的模型不推算（显示 `—`）。历史明细可分别用 `python3 scripts/backfill_trae_credit.py` / `scripts/convert_codearts_credit_unit.py` 补齐（默认预览、`--apply` 才写）。单价 / 折扣的实测细节见 [`TECHNICAL.md`](TECHNICAL.md) §9 与 PROPOSAL Q36 / Q52。
 
+### 用量统计里的成本（估算，≈）
+
+统计页 **成本（估算）** 卡片与各表的**成本**列是「按 token × 公开刊例价」的**估算**，不是上游真实扣费：单价取自 [models.dev](https://models.dev) 的模型目录（`input` / `output` / `cache_read`，单位 **USD / 百万 token**），按 `(输入−命中)×输入价 + 命中×缓存价 + 输出×输出价` 折算成美元，再按**写入时生效的汇率**（`USD_CNY_RATE`，默认 `6.70`）折成人民币。人民币为主、美元为辅（明细单元格悬停显示美元）。
+
+- **写入时定值**：成本在写明细那一刻算好落库（`usage_events.cost_usd` / `cost_cny`），历史行**不随价表或汇率变化重算**——改汇率只影响之后写入的请求。功能上线前的历史明细两列是 `NULL`（显示 `—`），可用 `python3 scripts/backfill_cost.py --apply` 一次性按**当前**价表与汇率补齐 / 重算（默认预览、写库前自动备份、幂等；口径是「按今天重估」，不是还原当时花费）。
+- **匹配不到就不计**：本地模型名按 `models.dev` 的 `model.id`（小写）对齐，同一 id 挂在几十个 provider 下时**优先原厂 provider**（`canonical_model_id` 前缀 == provider id），否则取 `input` 价最高的非空条目；未匹配到定价、或未上报输入 token 的请求不计入，聚合值为 `null` 时显示 `—`（**不拿 0 冒充免费**）。因此成本是**下限**：只覆盖能在 models.dev 里找到的模型。
+- **价表来源与刷新**：价表由后台任务 `PRICE_CATALOG_MINUTES`（默认每日一次、下限 60 分钟）从 `models.dev` 拉取并落盘 `data/model_prices.json`（同时把明细目录落盘 `data/models_dev_catalog.json`），启动时同步回灌（零上游请求）；**没有快照时**（首次部署）启动会后台补拉一次，避免成本空窗到下一轮。价表缺失时成本全部显示 `—`，不影响聊天。
+- **模型列表页**：管理台「模型列表」页只读展示 models.dev 的模型目录——既列出成本估算所用的输入 / 输出 / 缓存读 / 缓存写单价（USD / 百万 token，可切人民币按当前汇率折算），也带出上下文·输出上限、输入→输出模态、能力（推理 / 工具调用 / 附件 / 结构化输出 / 开放权重）、知识截止与发布日期等元数据；支持按 id / 名称 / 渠道搜索，并显示模型数与目录更新时间。四项单价合并为一列两行展示（上行「输入 · 输出」，下行「缓存读 · 缓存写」），上下文/输出与模态/能力列允许折行，避免宽表横向滚动。目录条目可达数千，故表格**分页渲染（每页 20/50/100，默认 50）**并在表格容器内滚动、表头吸顶——否则一次性渲染全部条目会拖慢搜索输入。目录缺失时显示空态而不是报错；`GET /api/model-catalog` 仅供登录会话读取。
+
 ### 用量统计里的缓存命中率
 
 **Token 消耗**卡片在 token 分项后追加**缓存命中率** = 命中 token ÷ 输入 token（保留 1 位小数），取自上游上报的 `cached_tokens`（TRAE 的 `cache_read_input_tokens` 映射）；**未上报或输入为 0 时显示 `—`**，不拿 0 冒充「0%」。
 
 ## 后台任务
 
-额度探测、token 预刷新、每日签到、成长中心、活跃上报、明细清理、模型目录刷新由 `TaskRunner` 自动调度，失败互不影响；周期见 TECHNICAL.md §6.2。每类任务的上次执行时间、最近结果与错误在管理台**「任务与配置」页**查看（30 秒自动刷新），运行态只存在于**本次进程**内，重启归零。
+额度探测、token 预刷新、每日签到、成长中心、活跃上报、明细清理、渠道模型列表刷新、模型列表刷新（models.dev）由 `TaskRunner` 自动调度，失败互不影响；周期见 TECHNICAL.md §6.2。每类任务的上次执行时间、最近结果与错误在管理台**「任务与配置」页**查看（30 秒自动刷新），运行态只存在于**本次进程**内，重启归零。
 
-**模型目录刷新**（`MODEL_CATALOG_MINUTES`，默认 30、下限 5）是兜底保鲜：模型表本身仍按「谁访问 `/v1/models` 或 Playground 谁刷新、TTL 300s」更新，这条任务只是保证**没人访问时也会更新**。没有它，纯 API 用法的部署（客户端自己缓存了模型列表）会让「模型 → 渠道」归属表与落盘快照一起变陈旧：上游新增的模型不认识 → 扁平名请求按全部渠道扇出，各渠道回 11102 / 4001，还给每个凭证写上 6 小时起步的负缓存；停机超过 7 天后落盘快照也会因过期被丢弃。周期取 30 分钟是跟着 zen 免费模型判活缓存（30 分钟）对齐——再密也不会让 zen 多探活一次，只是白打其余渠道的 `/models`。
+**渠道模型列表刷新**（`MODEL_CATALOG_MINUTES`，默认 30、下限 5）是兜底保鲜：模型表本身仍按「谁访问 `/v1/models` 或 Playground 谁刷新、TTL 300s」更新，这条任务只是保证**没人访问时也会更新**。没有它，纯 API 用法的部署（客户端自己缓存了模型列表）会让「模型 → 渠道」归属表与落盘快照一起变陈旧：上游新增的模型不认识 → 扁平名请求按全部渠道扇出，各渠道回 11102 / 4001，还给每个凭证写上 6 小时起步的负缓存；停机超过 7 天后落盘快照也会因过期被丢弃。周期取 30 分钟是跟着 zen 免费模型判活缓存（30 分钟）对齐——再密也不会让 zen 多探活一次，只是白打其余渠道的 `/models`。
 
 成长中心仅 CodeBuddy 有（动作清单见上文「特性」）。Buddy 旅行 1–4 小时回来一次，故周期默认 60 分钟（`GROWTH_INTERVAL_MINUTES`），回来就领、不把礼物压到第二天。抽奖 / 连登兑换 / 开 Buddy 盲盒 / 消耗补登卡属**不可逆动作**，`GROWTH_IRREVERSIBLE_ACTIONS=false` 可全部跳过（仍领旅行礼物与任务奖励）。凭证列表的「成长中心」列显示每个账号最近一轮的结果，行内菜单可手动执行一次。
 
@@ -360,7 +374,11 @@ CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端�
 | `USERS_FILE` | `secrets/users.txt` | **仅引导期**：老式用户文件路径，启动时一次性导入 SQLite（已存在的用户名不覆盖，幂等）。账号唯一源是 `users` 表 |
 | `DATA_DIR` | `./data` | SQLite 与运行数据目录 |
 | `QUOTA_PROBE_MINUTES` | `60` | 额度探测周期（下限 1 分钟） |
-| `MODEL_CATALOG_MINUTES` | `30` | 模型目录兜底刷新周期（下限 5 分钟）；只影响「没人访问列表时」的保鲜，正常仍按 TTL 随访问刷新 |
+| `REFRESH_INTERVAL_MINUTES` | `30` | token 预刷新轮询周期（下限 5 分钟）；短寿命渠道的预刷新窗口封顶必须**宽于**它，否则窗口整轮漏过、凭证拖到到期才刷 |
+| `MODEL_CATALOG_MINUTES` | `30` | 渠道模型列表兜底刷新周期（下限 5 分钟）；只影响「没人访问列表时」的保鲜，正常仍按 TTL 随访问刷新 |
+| `PRICE_CATALOG_MINUTES` | `1440` | 模型列表刷新周期（下限 60 分钟，models.dev）：后台从 `models.dev` 拉取模型目录（刊例价 + 明细元数据，USD/百万 token）并落盘，供统计里的成本估算与「模型列表」页；上游变动很少，默认每日一次 |
+| `USD_CNY_RATE` | `6.70` | 成本估算的美元兑人民币汇率（1 USD = 该值 CNY）；可热更，只影响之后写入的请求，历史成本不重算 |
+| `MODELS_DEV_URL` | `https://models.dev/api.json` | 价表来源地址；改后需重启 |
 | `GROWTH_INTERVAL_MINUTES` | `60` | 成长中心（仅 CodeBuddy）一轮领取的周期；下限 5 分钟 |
 | `GROWTH_IRREVERSIBLE_ACTIONS` | `true` | 是否允许成长中心的不可逆动作：抽奖、连登兑换、开 Buddy 盲盒、消耗补登卡。`false` 时仍会领取旅行礼物与任务奖励 |
 | `ACTIVITY_REPORT_ENABLED` | `false` | 活跃上报（仅 CodeBuddy）：每天为账号补发一条对话事件续连登。**默认关闭**——官方条款禁止脚本篡改活动数据（处罚为取消资格并追回礼品），上游改版即失效，不作为可靠性功能（见上文「活跃上报」） |
@@ -402,7 +420,7 @@ CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端�
 | `CODEARTS_MAX_CONCURRENCY` | `3` | CodeArts 每账号**在途并发上限**（热更项）。上游硬限每账号并发会话数 3，超出即 `400 TM.00001041`；桶内名额满时请求挂起直到有请求结束；`0` 关闭上限（回到「有在途即放行」，会再次击穿）。名额在每次尝试结束时**同步**归还，不依赖 GC |
 | `CODEARTS_REQUEST_WINDOW_SECONDS` | `60` | CodeArts **账号滑动窗口**（秒，热更项）。与上一项组合成「每账号每 60s 最多启动 3 次」——实测上游限制的是「每账号每约 60s 最多 3 个会话」（会话在流结束后仍滞留数十秒，实测约 68s 才恢复），纯在途上限挡不住「3 个刚结束就再发 3 个」的突发。窗口内满额时请求挂起到最早一次启动滑出窗口；`0` 关闭窗口口径，退回纯在途上限 |
 | `CODEBUDDY_SANITIZE_CHANNEL_MARKERS` | `true` | 出站 `system`/`assistant` 正文命中「伪装其他厂商官方客户端」指纹串时替换为占位符（上游 11128 内容风控：换号无效、会话带入即持续报错）；只改出站副本，客户端历史不受影响；`false` 关闭（见 TECHNICAL.md §3.2） |
-| `REFRESH_SKEW_HOURS` | `24` | token 到期前该小时数窗口内预刷新。到期时间取凭证显式 `expires_at`，缺失时回落 access token 的 JWT `exp`（CodeBuddy 实测不带显式到期字段） |
+| `REFRESH_SKEW_HOURS` | `24` | token 到期前该小时数窗口内预刷新。到期时间取凭证显式 `expires_at`/`expiration`，缺失时回落 access token 的 JWT `exp`（CodeBuddy 实测不带显式到期字段）。短寿命渠道自行封顶该窗口：CodeArts STS 只有 2h，封顶 30min（否则 24h 窗口对它恒为真、每轮都烧一张一次性 refresh_token）。下游硬约束是预刷新周期（60min），窗口窄于周期会整轮漏过 |
 | `TOKEN_EXPIRY_WARNING_SECONDS` | `3600` | 管理台 token 到期预警阈值：剩余低于该值时标红；`≤0` 关闭预警（仍显示剩余时间）。纯展示，不参与调度 |
 | `PACER_MIN_SECONDS` / `PACER_MAX_SECONDS` | `5` / `20` | 全局节流器随机等待区间（秒） |
 | `LOG_LEVEL` | `INFO` | 日志级别；审计日志是 INFO 级，调到 `WARNING` 会一并关掉 |
@@ -419,9 +437,9 @@ CodeBuddy 成长中心的「连登天数 / 活跃地图」按日统计客户端�
 
 ### 管理台热更（「任务与配置」页）
 
-上表中带「可热更」语义的 35 项可不改 `.env`、不重启，直接在管理台「任务与配置」页修改：
+上表中带「可热更」语义的 36 项可不改 `.env`、不重启，直接在管理台「任务与配置」页修改：
 
-`DEFAULT_MODEL`、`MODEL_BLOCKLIST`、`CONTEXT_COMPRESS_ENABLED`、`CONTEXT_COMPRESS_RESERVE_TOKENS`、`CONTEXT_COMPRESS_MIN_KEEP_MESSAGES`、`CONTEXT_COMPRESS_SAFETY_RATIO`、`MODEL_FALLBACK_GROUPS`、`QUOTA_EXPIRY_WINDOW_SECONDS`、`QUOTA_EXPIRY_SECONDARY_WINDOW_SECONDS`、`CONVERSATION_STICKY_SECONDS`、`GROWTH_IRREVERSIBLE_ACTIONS`、`GROWTH_INTERVAL_MINUTES`、`QUOTA_PROBE_MINUTES`、`MODEL_CATALOG_MINUTES`、`CODEBUDDY_CHAT_MIN_INTERVAL`、`ZEN_CHAT_MIN_INTERVAL`、`KILO_CHAT_MIN_INTERVAL`、`QODER_CHAT_MIN_INTERVAL`、`CODEARTS_CHAT_MIN_INTERVAL`、`CODEARTS_MAX_CONCURRENCY`、`CODEARTS_REQUEST_WINDOW_SECONDS`、`PACER_MIN_SECONDS`、`PACER_MAX_SECONDS`、`ACTIVITY_REPORT_ENABLED`、`ACTIVITY_REPORT_HOUR`、`ALERT_ENABLED`、`ALERT_WEBHOOK_URL`、`ALERT_INTERVAL_MINUTES`、`ALERT_SILENCE_MINUTES`、`ALERT_POOL_READY_MIN`、`ALERT_TASK_FAILURES`、`ALERT_TOKEN_EXPIRY_HOURS`、`ALERT_ERROR_RATE_THRESHOLD`、`ALERT_ERROR_RATE_MIN_REQUESTS`、`ALERT_ERROR_RATE_WINDOW_MINUTES`。
+`DEFAULT_MODEL`、`MODEL_BLOCKLIST`、`CONTEXT_COMPRESS_ENABLED`、`CONTEXT_COMPRESS_RESERVE_TOKENS`、`CONTEXT_COMPRESS_MIN_KEEP_MESSAGES`、`CONTEXT_COMPRESS_SAFETY_RATIO`、`MODEL_FALLBACK_GROUPS`、`QUOTA_EXPIRY_WINDOW_SECONDS`、`QUOTA_EXPIRY_SECONDARY_WINDOW_SECONDS`、`CONVERSATION_STICKY_SECONDS`、`GROWTH_IRREVERSIBLE_ACTIONS`、`GROWTH_INTERVAL_MINUTES`、`QUOTA_PROBE_MINUTES`、`REFRESH_INTERVAL_MINUTES`、`MODEL_CATALOG_MINUTES`、`CODEBUDDY_CHAT_MIN_INTERVAL`、`ZEN_CHAT_MIN_INTERVAL`、`KILO_CHAT_MIN_INTERVAL`、`QODER_CHAT_MIN_INTERVAL`、`CODEARTS_CHAT_MIN_INTERVAL`、`CODEARTS_MAX_CONCURRENCY`、`CODEARTS_REQUEST_WINDOW_SECONDS`、`PACER_MIN_SECONDS`、`PACER_MAX_SECONDS`、`ACTIVITY_REPORT_ENABLED`、`ACTIVITY_REPORT_HOUR`、`ALERT_ENABLED`、`ALERT_WEBHOOK_URL`、`ALERT_INTERVAL_MINUTES`、`ALERT_SILENCE_MINUTES`、`ALERT_POOL_READY_MIN`、`ALERT_TASK_FAILURES`、`ALERT_TOKEN_EXPIRY_HOURS`、`ALERT_ERROR_RATE_THRESHOLD`、`ALERT_ERROR_RATE_MIN_REQUESTS`、`ALERT_ERROR_RATE_WINDOW_MINUTES`。
 
 要点：
 
@@ -528,7 +546,7 @@ pnpm build
 
 ## 状态
 
-M0–M3 及后续迭代全部完成，`main` 分支可运行，当前版本 v0.3.0。
+M0–M3 及后续迭代全部完成，`main` 分支可运行，当前版本 v0.4.0。
 
 后续批次（B1–B11）已按批准计划落地：
 

@@ -100,6 +100,8 @@ The SQLite Quick Start has no optional dependency. For other backends, install o
 
 If a configured native backend package is missing, Clutch reports it when connecting. Install that package with your package manager, ensure it is on `load-path`, and reconnect.
 
+`nerd-icons` is optional: without it, Clutch uses text symbols and backend names instead of icons. Its availability is checked once per Emacs session, including when it is missing; restart Emacs after installing it during a running session.
+
 JDBC support ships with Clutch, but its runtime requires Java 17+, `clutch-jdbc-agent.jar`, and a database driver jar where applicable. Clutch pins agent 0.2.26, which preserves structured BLOB whitespace, keeps CLOB previews at complete Unicode character boundaries, bounds per-connection lock retention, runs Oracle schema-wide listings on their own session so they cannot delay a query's metadata lookups, and lets a statement run without a time limit when none is configured. On first connection, Clutch can prompt to download the agent and supported drivers; it verifies the configured agent jar against its SHA-256 before startup. See the [JDBC backend guide](docs/jdbc-backend.org) for setup, supported drivers, connection examples, and transaction behavior.
 
 For source checkouts, add Clutch and each native protocol checkout you use to `load-path`:
@@ -221,6 +223,10 @@ SELECT * FROM users LIMIT 10;
 
 Press `C-c C-c` to execute. If a region is selected, the selected SQL runs; otherwise the statement at point runs. Select a region first when exact execution boundaries matter. Results appear in a split result buffer below.
 
+Use `M-x clutch-export-query` or Execute → Export query to file (`C-c ?`, then `e`) to export one SELECT directly to a CSV or TSV file, choosing its format, encoding and destination in the minibuffer. SELECT-only CTEs are supported; multiple statements and data-changing clauses are refused. The query's own row limits are preserved, and otherwise all pages are fetched without opening a result grid or replacing an existing result. MySQL, PostgreSQL and JDBC statement waits are asynchronous and `C-g` requests cancellation; if the backend refuses, Clutch waits for the current query's result, then stops the export without replacing the destination. Formatting and writing each batch still run in Emacs, and JDBC remaining-row fetches and synchronous backends can block. Use an explicit `ORDER BY` for stable paging. The file is replaced only after success.
+
+Query export and all-row result export use `clutch-export-page-size` (default 2000), independently of the display page size (default 500). Set it to a positive integer, for example `(setq clutch-export-page-size 5000)` for larger export pages. Larger pages reduce repeated pagination queries but increase memory use and can prolong synchronous JDBC fetches; use a smaller value for wide rows or slow remote connections.
+
 By default, `TRUNCATE` and `UPDATE` or `DELETE` without an effective `WHERE`, including one in a PostgreSQL `WITH` clause or a DB2 data change table, require entering the exact token `YES`. Customize `clutch-high-risk-query-confirmation` to use an ordinary `yes-or-no` prompt or to disable this high-risk confirmation. Other destructive SQL keeps its ordinary confirmation prompt, and each statement asks at most once.
 
 #### 4. Control transactions
@@ -240,6 +246,8 @@ Native MySQL maps `C-c C-a` to the server session's autocommit flag directly. Na
 On native MySQL and PostgreSQL, and on XTDB, the server reports with each reply whether a transaction is open, and Clutch follows it. A write inside an open transaction is uncommitted work in Auto mode too: after a `BEGIN` or `START TRANSACTION` typed in Auto mode and an `INSERT`, the indicator shows `Tx: Auto*`, and disconnecting, killing the console or connecting elsewhere asks first. End such a transaction with a typed `COMMIT` or `ROLLBACK`, or switch to Manual mode with `C-c C-a`, which keeps it open, uncommitted work and all, for `C-c C-m` or `C-c C-u`. The work stays known until the server reports no open transaction, so a MySQL `CREATE TEMPORARY TABLE`, which commits nothing, keeps it, while DDL that commits clears it.
 
 If recovery of an atomic submission fails, or any `COMMIT` returns without a known outcome, the transaction indicator changes to `Tx: Uncertain`. Clutch then blocks further queries, commit, and transaction-mode changes; explicitly roll back with `C-c C-u`, or reconnect if rollback cannot recover the session. Either action restores a usable session, but it cannot prove that an earlier uncertain commit did not happen, so verify the database before retrying retained work.
+
+After a session is lost, editing a result cell, copying rows as UPDATE statements and submitting staged changes reconnect before contacting the server, keeping the session's Auto or Manual mode. If reconnecting restores another database, schema or search path, these actions refuse until you switch back or rerun the query. An uncertain submission still requires explicit recovery before retrying. After an explicit disconnect, results retain their rows, but commands that need the connection, including copying MongoDB document mutation snippets, report that it is closed.
 
 ### Password Management
 
@@ -360,7 +368,7 @@ You can also open any `.sql` file, enable `clutch-mode`, and connect manually �
 4. C-c C-c                 — execute region, or the current statement/query at point
 ```
 
-In ordinary `clutch-mode` or REPL buffers, `C-c C-e` keeps that generic connect flow: select a saved connection, or press RET with no matching connection to enter temporary params. For SQLite files, prefer `M-x clutch-query-sqlite-file`, or `M-x clutch-query-console` followed by RET with no matching connection and backend `sqlite`; both open a connected SQL console rather than using the database file buffer as the editor. In query-console buffers, `C-c C-e` reconnects the connection already associated with that console, without reopening the global connection picker. To switch to another saved or temporary connection, use `M-x clutch-query-console`.
+In ordinary `clutch-mode` or REPL buffers, `C-c C-e` keeps that generic connect flow: select a saved connection, or press RET with no matching connection to enter temporary params. Picking the connection the buffer is already on connects its session anew, keeping the commit mode and moving its results; picking another connects the buffer alone. For SQLite files, prefer `M-x clutch-query-sqlite-file`, or `M-x clutch-query-console` followed by RET with no matching connection and backend `sqlite`; both open a connected SQL console rather than using the database file buffer as the editor. In query-console buffers, `C-c C-e` connects the console's session anew with the connection already associated with that console, without reopening the global connection picker: its results move to the new connection, which keeps the console's commit mode, unless the saved entry changed in anything but `:password` or `:pass-entry`, when the console connects alone. To switch to another saved or temporary connection, use `M-x clutch-query-console`.
 
 For deeper troubleshooting, enable `M-x clutch-debug-mode`, reproduce the failure, then inspect `*clutch-debug*`. Enabling the mode starts a fresh capture window and creates that dedicated buffer automatically. It is the only supported debug UI, and it shows problem records, generated/internal SQL when relevant, recent redacted debug events, and JDBC stderr/debug payload when available.
 
@@ -395,6 +403,7 @@ Common entry points:
 - Copy (`c`) identifies its scope as the current cell or selected cells. Export (`e`) explicitly targets all result rows, fetching all pages when supported, and warns in its menu when an active local filter is ignored. Export does not adopt the selected cells or local filter; SQL `WHERE` and explicit row limits still apply.
 - Insert forms use `C-c C-n` for SQL NULL, `C-c C-e` for an empty string, and `C-c C-d` to omit a field and use its server default. Typing `NULL` inserts literal text; cloning preserves SQL NULL and empty strings as distinct values. Single-row CSV/TSV imports replace a field's previous special state with the imported value. Opening and cancelling a JSON child editor preserves the insert field's value and state. Clones and INSERT exports retain the source schema.
 - JDBC CLOBs longer than the returned preview remain explicitly marked as incomplete. They can be viewed, but editing, cloning a copied incomplete field, and exporting that value are blocked to prevent data loss. Complete short CLOBs, including emoji and empty text, remain usable as ordinary text.
+- See the [interactive guide](docs/interactive-client.org) for JDBC binary values whose content is unavailable.
 - CSV, TSV, INSERT and UPDATE file exports write in batches and replace the destination only after the export succeeds. Symbolic links are preserved and their final target receives the output; the selected filename determines transformations such as `.gz` compression, even if the link target has a different extension. These transformations run on the complete encoded output and may hold it in memory. A failed or cancelled export preserves the existing file. CSV/TSV default to UTF-8 with one BOM for Excel; custom UTF-16 exports retain their byte order and line endings without adding BOMs between batches. Clipboard exports and native document `insertMany` helpers retain their complete output in memory; backends may also materialize a bounded or nonpageable query before formatting begins.
 - Explicit SQL row limits (`LIMIT`, `OFFSET`, `TOP`, `FETCH`) remain part of the query during pagination and export. Ordinary column, table and alias names such as `top` or `fetch` do not disable pagination.
 - A statement that writes is not paginated, even when it returns rows. `SELECT ... INTO` runs as written and copies every row; `INSERT ... RETURNING`, a PostgreSQL `SELECT` whose `WITH` clause modifies data, and a DB2 or H2 `SELECT` over a data change table such as `FINAL TABLE (INSERT ...)` run once, and all their rows show on one page.
@@ -408,7 +417,7 @@ MongoDB is basic native document support through `mongodb.el`: ordinary MongoDB 
 
 Native MongoDB `updateOne` requires update operators such as `$set`; use `replaceOne` for a replacement document. Clutch rejects a plain document passed to `updateOne` before it can replace existing fields.
 
-The shared `clutch-switch-schema` command lists databases visible to the current MongoDB user and changes Clutch's logical database without reconnecting.
+The shared `clutch-switch-schema` command lists databases visible to the current MongoDB user and changes Clutch's logical database without reconnecting; the automatic reconnect returns to it and authenticates where the connection first did.
 
 ### Redis Backend
 
@@ -419,6 +428,8 @@ Redis profiles may select an initial logical database with `:database`, and a `S
 ### JDBC Backend
 
 JDBC support covers Oracle, SQL Server, DB2, Snowflake, Redshift, ClickHouse, MongoDB SQL Interface, DuckDB, and generic JDBC URLs through the [clutch-jdbc-agent](https://github.com/LuciusChen/clutch-jdbc-agent) sidecar. For setup, driver installation, connection examples, backend-specific notes, and transaction behavior, see [docs/jdbc-backend.org](docs/jdbc-backend.org).
+
+For ClickHouse URLs, Clutch decodes the database name for browsing and metadata queries; switching databases encodes the replacement name while preserving the URL's HTTP path and other properties.
 
 The agent keeps stdout exclusively for its JSON protocol and redirects third-party Java console output to captured stderr before loading drivers. Driver messages such as Snowflake external-browser login status therefore remain available to Clutch diagnostics without breaking the connection.
 

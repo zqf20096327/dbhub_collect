@@ -14,6 +14,7 @@
 | [cloudrobo-samples](https://github.com/huaweicloud-samples/cloudrobo-samples) | This repository provides a comprehensive collection of practice samples for the CloudRobo Embodied AI Platform. Covering key modules such as simulation, data processing, embodied models, Ascend adaptation, and robot integration. | public-cloudrobo | incubating |
 | [database-archery](https://github.com/huaweicloud-samples/database-archery) | 基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。 | gaussdb-drivers | incubating |
 | [database-crewai-gaussdb](https://github.com/huaweicloud-samples/database-crewai-gaussdb) | 开源工具CrewAI兼容GaussDB | gaussdb-drivers | incubating |
+| [database-gaussdb-php-driver](https://github.com/huaweicloud-samples/database-gaussdb-php-driver) | 应客户要求，本项目为 PHP 提供 GaussDB M 模式和 Oracle 兼容模式接入能力 | gaussdb-drivers | incubating |
 | [database-langchain-gaussdb-sync](https://github.com/huaweicloud-samples/database-langchain-gaussdb-sync) | GaussDB生态建设：适配LangChain，提供同步VectorStore和ChatMessageHistory能力 | gaussdb-drivers | incubating |
 | [database-lightrag-gaussdb](https://github.com/huaweicloud-samples/database-lightrag-gaussdb) | 开源工具LightRAG兼容GaussDB | gaussdb-drivers | incubating |
 | [database-n8n-gaussdb](https://github.com/huaweicloud-samples/database-n8n-gaussdb) | gaussdb生态建设：n8n 兼容gaussdb | gaussdb-drivers | incubating |

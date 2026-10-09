@@ -38,10 +38,6 @@ now you can.
 | **PostgreSQL** | Shares one real transaction across the agent's connections | One final `COMMIT` or `ROLLBACK` |
 | **GitHub, HTTPS** | Opt-in adapters, HTTPS interception, and a structured `gh` shim | Stage first; compensate where possible |
 
-> [!IMPORTANT]
-> unring is an accident guard, not a hostile-process sandbox. It reports what it could
-> not intercept instead of silently claiming coverage. Read [Honest limits](#honest-limits)
-> before relying on it for sensitive work.
 
 ## Quick start
 

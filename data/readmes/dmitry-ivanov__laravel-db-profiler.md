@@ -19,6 +19,7 @@ Database Profiler for Laravel Web and Console Applications.
 
 | Laravel | Database Profiler                                                      |
 |---------|------------------------------------------------------------------------|
+| 13.x    | [13.x](https://github.com/dmitry-ivanov/laravel-db-profiler/tree/13.x) |
 | 12.x    | [12.x](https://github.com/dmitry-ivanov/laravel-db-profiler/tree/12.x) |
 | 11.x    | [11.x](https://github.com/dmitry-ivanov/laravel-db-profiler/tree/11.x) |
 | 10.x    | [10.x](https://github.com/dmitry-ivanov/laravel-db-profiler/tree/10.x) |
@@ -58,11 +59,6 @@ Enabled only for the `local` environment, so you don't have to worry about `prod
 If you want to force profiling for non-local environments - specify it explicitly in your `.env` file:
 
 > DB_PROFILER_FORCE=true
-
-## Sponsors
-
-[![Laravel Idea](art/sponsor-laravel-idea.png)](https://laravel-idea.com)<br>
-[![Material Theme UI Plugin](art/sponsor-material-theme.png)](https://material-theme.com)<br>
 
 ## License
 

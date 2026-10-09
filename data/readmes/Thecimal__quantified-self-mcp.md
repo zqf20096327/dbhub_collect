@@ -1,8 +1,12 @@
 
 # Quantified Self MCP
 [![CI](https://github.com/Thecimal/quantified-self-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/Thecimal/quantified-self-mcp/actions)
+[![CodeQL](https://github.com/Thecimal/quantified-self-mcp/actions/workflows/codeql.yml/badge.svg)](https://github.com/Thecimal/quantified-self-mcp/actions/workflows/codeql.yml)
 [![PyPI](https://img.shields.io/pypi/v/quantified-self-mcp.svg)](https://pypi.org/project/quantified-self-mcp/)
+[![Python Versions](https://img.shields.io/pypi/pyversions/quantified-self-mcp.svg)](https://pypi.org/project/quantified-self-mcp/)
 [![License](https://img.shields.io/github/license/Thecimal/quantified-self-mcp)](https://github.com/Thecimal/quantified-self-mcp/blob/main/LICENSE)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 [![M8ven Score](https://m8ven.ai/badge/mcp/thecimal-quantified-self-mcp-v6tlvp)](https://m8ven.ai/mcp/thecimal-quantified-self-mcp-v6tlvp)
 [![Quantified Self MCP Server MCP server – quality and maintenance score on Glama](https://glama.ai/mcp/servers/Thecimal/quantified-self-mcp/badges/score.svg)](https://glama.ai/mcp/servers/Thecimal/quantified-self-mcp)
 
@@ -135,7 +139,7 @@ Supported imports include:
 - CSV
 - Apple Health exports
 
-See the [import documentation](docs/).
+See the [import documentation](docs/importing.md).
 
 ---
 
@@ -166,7 +170,7 @@ See the [import documentation](docs/).
 
 The MCP currently exposes **20 tools** across data access, measurements, workouts, analytics, personal intelligence, and data freshness (`get_data_status`, `get_import_status`).
 
-See the [tool reference](docs/) for the complete list.
+See the [tool reference](docs/tools.md) for the complete list.
 
 ---
 
@@ -208,6 +212,14 @@ Apple Health:
 
 ```bash
 quantified-self-init-db export.xml
+```
+
+### Verify your setup (optional)
+
+Run the built-in diagnostic tool to check Python, dependencies, and database readiness:
+
+```bash
+quantified-self-doctor
 ```
 
 ### Connect an MCP client
@@ -285,8 +297,8 @@ The MCP server is the bridge between your health history and your AI.
 Detailed documentation lives outside the README:
 
 - **[Client setup](docs/clients/)**
-- **[Importing health data](docs/)**
-- **[Tool reference](docs/)**
+- **[Importing health data](docs/importing.md)**
+- **[Tool reference](docs/tools.md)**
 - **[Security](SECURITY.md)**
 - **[Contributing](CONTRIBUTING.md)**
 - **[Changelog](CHANGELOG.md)**

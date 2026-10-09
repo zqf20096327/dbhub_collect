@@ -21,13 +21,13 @@
 > - **Product:** TropaTT — Free Self-Hosted Open-Source CRM & Work Management Platform.
 > - **Architecture:** PHP 8.1+, MySQL 8.0+ / MariaDB 10.4+. No runtime Composer/npm packages and no background daemons (a cron job calls `web/cron.php`). Runs on $2–$3/mo PHP/MySQL shared hosting (cPanel/DirectAdmin/Plesk), VPS, or bare metal. No official Docker image yet.
 > - **Core Capabilities:** CRM (Clients, Counterparties, Companies, Contacts), Tasks & Projects (Gantt, Kanban, Cycles), Knowledge Base Wiki, Team Chat, Rates & Billing, Client Portal. Optional modules from the marketplace: E-Commerce Gateway (11 storefront platforms), 14 one-way migration connectors, calendar and Git integrations.
-> - **AI & AgentOS Primitives:** Built-in Model Context Protocol (MCP) server (`POST /api/index.php?route=api/v1/mcp`) exposing **621 tools** (a 27-tool `core` profile by default) and **6 resources** with RBAC and `density: "compact"` (up to 85% token savings). Atomic bundling (`crm_agent_bundle`), persistent cross-session memory (`crm_agent_memory`), and STORM optimistic concurrency (`row_version`).
+> - **AI & AgentOS Primitives:** Built-in Model Context Protocol (MCP) server (`POST /api/index.php?route=api/v1/mcp`) exposing **621 tools** (a 27-tool `core` profile by default) and **6 resources** with RBAC and `density: "compact"` (up to 85% token savings). Multi-step task orchestration (`crm_agent_bundle`), persistent cross-session memory (`crm_agent_memory`), and STORM optimistic concurrency (`row_version`).
 > - **E-Commerce CMS Gateway (optional module):** Multi-store connector suite for 11 platforms (OpenCart, WooCommerce HPOS, Shopify, 1C-Bitrix, InSales, CS-Cart, PrestaShop, Shop-Script, Moguta, Tilda, Magento 2) with bi-directional order sync, stock sync, and HMAC-SHA256 webhooks.
-> - **Documentation Suite:** REST API ([EN](docs_api/api_en.md) · [RU](docs_api/api_ru.md) · [ZH](docs_api/api_zh.md)), MCP Server ([EN](docs_mcp/mcp_en.md) · [RU](docs_mcp/mcp_ru.md) · [ZH](docs
+> - **Documentation Suite:** REST API ([EN](docs_api/api_en.md) · [RU](docs_api/api_ru.md) · [ZH](docs_api/api_zh.md)), MCP Server ([EN](docs_mcp/mcp_en.md) · [RU](docs_mcp/mcp_ru.m
 
 [...截断...]
 
-_mcp/mcp_zh.md)), Modules SDK ([EN](docs_modules/modules_en.md) · [RU](docs_modules/modules_ru.md) · [ZH](docs_modules/modules_zh.md)).
+d) · [ZH](docs_mcp/mcp_zh.md)), Modules SDK ([EN](docs_modules/modules_en.md) · [RU](docs_modules/modules_ru.md) · [ZH](docs_modules/modules_zh.md)).
 
 ### Product tour (sanitized browser captures)
 
@@ -133,4 +133,4 @@ Fallback UI mockups with fictional labels are also available as [SVG assets](.gi
 
 ### What's TropaTT
 
-TropaTT is a free, self-hosted, open-source PHP/MySQL work platform for client proje
+TropaTT is a free, self-hosted, open-source PHP/MySQL work platform fo

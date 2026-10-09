@@ -43,8 +43,9 @@ https://github.com/user-attachments/assets/ac975684-afcc-4702-a325-d015fb89665d
 
 
 **More demos:**
+[Get Precise Data via Interactive Disambiguation](https://megagonlabs.github.io/tabulaflow/#demo-disambiguation) ·
 [Build a Research Paper Database](https://megagonlabs.github.io/tabulaflow/#demo-research) ·
-[Ask Your Database Anything](https://megagonlabs.github.io/tabulaflow/#demo-database) ·
+[Chat to a Bioinformatics MySQL db](https://megagonlabs.github.io/tabulaflow/#demo-database) ·
 [Explore a Multimodal Hugging Face Dataset](https://megagonlabs.github.io/tabulaflow/#demo-hugging-face) ·
 [Query and Visualize Graphs](https://megagonlabs.github.io/tabulaflow/#demo-wikidata)
 
@@ -83,26 +84,26 @@ You can use any of these building blocks to create
 data applications with (e.g. data agents) or without an LLM (e.g., interactive dashboards). Choose the
 building blocks you need:
 
-- [Data connectors](https://megagonlabs.github.io/tabulaflow/python-library/data-connectors/): inspect schemas and query SQL
+- [Data connectors](https://megagonlabs.github.io/tabulaflow/library/data-connectors/): inspect schemas and query SQL
   databases, Neo4j, SPARQL endpoints, files, and datasets through a unified
   async interface.
-- [Extraction and enrichment](https://megagonlabs.github.io/tabulaflow/python-library/extraction-and-enrichment/): turn documents
+- [Extraction and enrichment](https://megagonlabs.github.io/tabulaflow/library/extraction-and-enrichment/): turn documents
   into structured records and enrich DataFrames with new fields.
-- [Chat sessions](https://megagonlabs.github.io/tabulaflow/python-library/chat-sessions/): use `ChatSession` to converse
+- [Chat sessions](https://megagonlabs.github.io/tabulaflow/library/chat-sessions/): use `ChatSession` to converse
   across multiple data sources, run tools, and stream answers and progress,
   with automatic context compaction for long conversations.
-- [Structured outputs](https://megagonlabs.github.io/tabulaflow/python-library/structured-outputs/): let agents produce tables, charts, maps,
+- [Structured outputs](https://megagonlabs.github.io/tabulaflow/library/structured-outputs/): let agents produce tables, charts, maps,
   and graphs as structured artifacts by defining declarative specifications, with optional lazy data resolution for
   parameter-driven interaction.
-- [Custom agents](https://megagonlabs.github.io/tabulaflow/python-library/custom-agents/): combine reusable query, visualization, and
+- [Custom agents](https://megagonlabs.github.io/tabulaflow/library/custom-agents/): combine reusable query, visualization, and
   document tools with your own functions and actions, without adopting `ChatSession`.
-- [Schema and result formatting](https://megagonlabs.github.io/tabulaflow/python-library/api/output/#formatting): turn structured
+- [Schema and result formatting](https://megagonlabs.github.io/tabulaflow/library/api/output/#formatting): turn structured
   schemas and query results into readable text for LLM prompts or human
   inspection.
 
 These building blocks are fully typed and organized into four layers:
 `core <- data <- output <- agents`. See the
-[API reference](https://megagonlabs.github.io/tabulaflow/python-library/api-reference/) for how they fit together.
+[API reference](https://megagonlabs.github.io/tabulaflow/library/api-reference/) for how they fit together.
 
 ### Quick start
 
@@ -230,7 +231,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-[Python library guide](https://megagonlabs.github.io/tabulaflow/python-library/quick-start/)
+[Python library guide](https://megagonlabs.github.io/tabulaflow/library/quick-start/)
 
 ## TabulaFlow for Researchers
 
@@ -336,7 +337,7 @@ runs/full-schema/
 Inspect queries, scores, agent trajectories, token usage, and latency without
 rerunning the agent.
 
-[Research toolkit guide](https://megagonlabs.github.io/tabulaflow/research-toolkit/quick-start/)
+[Research toolkit guide](https://megagonlabs.github.io/tabulaflow/research/quick-start/)
 
 ## Disclosures
 

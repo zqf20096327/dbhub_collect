@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/JorG18/agentcrawl/actions/workflows/ci.yml/badge.svg)](https://github.com/JorG18/agentcrawl/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![ClawHub](https://img.shields.io/badge/ClawHub-agentcrawl-darkred)](https://clawhub.ai/JorG18/agentcrawl)
 
 ![AgentCrawl README hero](assets/readme-hero.png)
 
@@ -42,6 +43,16 @@ agentcrawl mcp
 By default the MCP exposes the core tools an agent needs: `scrape_url`, `scrape_many`, `map_site`, `crawl_site` and `extract_structured`, plus `search_web` when a search engine is configured. Set `AGENTCRAWL_MCP_PROFILE=full` for the operator tools (job history, cancellation, failure inspection, retries, usage, cache, change checks). Coding agents should follow [INSTALL_FOR_AGENTS.md](INSTALL_FOR_AGENTS.md).
 
 The MCP only fetches URLs by default: local file paths are refused, because an agent can be steered by the pages it reads. To let it read a docs folder, set `AGENTCRAWL_ALLOW_LOCAL_FILES=true` and `AGENTCRAWL_LOCAL_FILES_ROOT=/path/to/docs`. The Python library and the CLI still read local files by default.
+
+### Agents: skill 🧩
+
+An agent skill (Claude Code, Codex, Cursor, OpenClaw and other clients that read `SKILL.md`) teaches the agent when and how to use AgentCrawl, including reading long pages section by section:
+
+```bash
+npx skills add JorG18/agentcrawl
+```
+
+The skill lives in [skills/agentcrawl/SKILL.md](skills/agentcrawl/SKILL.md) and is also on [ClawHub](https://clawhub.ai/JorG18/agentcrawl) for OpenClaw. ClawHub publishes every skill under MIT-0; that covers the skill text only, the code stays Apache-2.0.
 
 ### Developers: Python + CLI 🧪
 
@@ -114,7 +125,7 @@ AgentCrawl Community is the self-hosted trust layer:
 | Durable crawls | SQLite jobs, events, checkpoints, retries, and failure records. |
 | Local dashboard | Read-only static HTML over SQLite via `agentcrawl dashboard` and `/dashboard`; the HTTP view follows the API auth setting. |
 | Quality extraction | Markdown, links, metadata, JSON-LD/provenance, tables, code blocks. |
-| Web search | `search` in the library, API (`/v1/search`), MCP (`search_web`) and CLI: search, then read the top results with the query as the relevance query. Opt-in with `AGENTCRAWL_SEARCH_ENGINE=duckduckgo` (or `serper` + `SERPER_API_KEY`). |
+| Web search | `search` in the library, API (`/v1/search`), MCP (`search_web`) and CLI: search, then read the top results with the query as the relevance query. Opt-in with `AGENTCRAWL_SEARCH_ENGINE=serper` + `SERPER_API_KEY` (`duckduckgo` needs no key but often answers automated clients with a bot check, reported as an error). |
 | llms.txt | `map` reads a site's `/llms.txt` links; `agentcrawl llms-txt URL` generates one from a bounded crawl. |
 | Citable chunks | `formats=["chunks"]`: pieces of about `chunk_tokens` (default 400) that keep tables and code whole, with the heading path, a `cite_url` text-fragment link and, with `query`, a BM25 score. |
 | Browser actions and screenshots | `browser_actions` (click, type, press, scroll, scroll_to_end, virtual_scroll, wait, wait_for; at most 25 bounded steps) run before the page is read, and `formats=["screenshot"]` returns a full-page PNG. Local Playwright only; a failed step fails the scrape with the step named. |
@@ -221,7 +232,7 @@ Several pages at once, and structured data without an LLM:
 
 ```bash
 agentcrawl scrape-many https://example.com/a https://example.com/b
-AGENTCRAWL_SEARCH_ENGINE=duckduckgo agentcrawl search "fastapi dependency injection" --limit 3
+AGENTCRAWL_SEARCH_ENGINE=serper SERPER_API_KEY=... agentcrawl search "fastapi dependency injection" --limit 3
 agentcrawl scrape https://example.com/docs/faq --query "refund policy"
 
 cat > products.json <<'JSON'

@@ -30,6 +30,7 @@ the first commit rather than bolted on by a translation file.
 - [Block editor](#block-editor)
 - [Built-in SEO](#built-in-seo)
 - [Comparison](#comparison)
+- [Documentation](#documentation)
 - [Installation](#installation)
 - [Server requirements](#server-requirements)
 - [Local development](#local-development)
@@ -184,8 +185,9 @@ All three hooks are optional, so a plugin that only needs one does not have to d
 others. Turning a plugin off removes it from the role matrix, the widget palette and the
 block tabs, and leaves its stored data alone.
 
-Full contract: [`docs/PLUGIN-MANIFEST-CONTRACT.md`](docs/PLUGIN-MANIFEST-CONTRACT.md)
-· Full guide: [`docs/PLUGIN-GUIDE.md`](docs/PLUGIN-GUIDE.md)
+Full contract: [`docs/PLUGIN-MANIFEST-CONTRACT.en.md`](docs/PLUGIN-MANIFEST-CONTRACT.en.md)
+· Full guide: [`docs/PLUGIN-GUIDE.en.md`](docs/PLUGIN-GUIDE.en.md)
+· Persian guide: [`docs/PLUGIN-GUIDE.md`](docs/PLUGIN-GUIDE.md)
 
 > 🇮🇷 [این بخش به زبان فارسی](README.fa.md#سیستم-پلاگین)
 
@@ -255,7 +257,7 @@ Read it before you decide anything: **[COMPARISON.md](COMPARISON.md)** ·
 
 ```bash
 git clone https://github.com/ArmanOskouei/Pishdad.git
-cd Pishdad/cms-core
+cd Pishdad/pishdad-core
 
 # --- Backend ---
 cd backend
@@ -270,7 +272,16 @@ npm install
 npm run build
 ```
 
-Point Nginx at the backend `public/` and the frontend `.next/`, and the site is running.
+Then open the web installer — it checks every requirement and finishes the
+setup (superadmin, demo content, storage link):
+
+```bash
+cd ../backend && php artisan serve
+# open http://127.0.0.1:8000/install
+```
+
+Full guide — per-OS commands, what each step installs, updating, shared
+hosting (cPanel), Docker, ZIP download: **[INSTALL.md](INSTALL.md)**.
 
 > 🇮🇷 [راهنمای نصب به زبان فارسی](README.fa.md#نصب)
 
@@ -287,19 +298,18 @@ Point Nginx at the backend `public/` and the frontend `.next/`, and the site is 
 | Domain | 1 domain with DNS pointed at the server | plus 1 subdomain |
 
 <details>
-<summary>What the installer provisions automatically</summary>
+<summary>What you need first (the installer checks these, it does not install them)</summary>
 
 | Service | Version |
 |---|---|
-| PHP | 8.3+ (FPM) |
-| PHP extensions | `pdo_pgsql` · `redis` · `sodium` · `intl` · `bcmath` · `mbstring` · `zip` · `gd` · `fileinfo` · `curl` · `openssl` |
-| Nginx | 1.31+ |
-| PostgreSQL | 18+ with `fa-IR` collation |
-| Redis | 8+ |
-| MinIO | latest, S3-compatible object storage |
+| PHP | 8.2+, 8.3 recommended (FPM) |
+| PHP extensions | `pdo_pgsql` · `sodium` · `intl` · `bcmath` · `mbstring` · `zip` · `gd` · `fileinfo` · `curl` · `openssl` |
+| PostgreSQL | 14+ — MySQL/MariaDB do **not** work (`jsonb` migrations) |
 | Composer | 2.x |
-| Node.js | 22 LTS, 24 recommended |
-| TLS | automatic certificate and renewal |
+| Node.js | 22 LTS (only to build the frontend once) |
+
+Redis, MinIO and Supervisor are **not** required. Full per-OS commands, update
+flow, shared-hosting (cPanel) guide and ZIP download: **[INSTALL.md](INSTALL.md)**.
 
 </details>
 
@@ -311,19 +321,19 @@ Point Nginx at the backend `public/` and the frontend `.next/`, and the site is 
 
 ```bash
 # Backend — http://127.0.0.1:8000
-cd cms-core/backend
+cd pishdad-core/backend
 cp .env.example .env && composer install && php artisan serve
 
 # Frontend — http://127.0.0.1:3000
-cd cms-core/frontend
+cd pishdad-core/frontend
 npm install && npm run dev
 ```
 
 Docker Compose brings up Nginx, PHP-FPM, PostgreSQL, Redis and MinIO:
 
 ```bash
-cd cms-core/backend  && docker compose up -d
-cd cms-core/frontend && docker compose up -d
+cd pishdad-core/backend  && docker compose up -d
+cd pishdad-core/frontend && docker compose up -d
 ```
 
 | Frontend command | |
@@ -373,6 +383,27 @@ enough for a small site. The full list is under
 Yes. PostgreSQL is yours and the schema is plain, so a `pg_dump` is the whole export.
 
 > 🇮🇷 [این بخش به زبان فارسی](README.fa.md#پرسش‌های-پرتکرار)
+
+---
+
+## Documentation
+
+Developer-facing docs. Each has an English and a Persian edition; the Persian originals are the
+source and the English editions mirror them (code is the tie-breaker on any conflict).
+
+| Document | English | فارسی |
+|---|---|---|
+| Developer quickstart | [DEVELOPER-QUICKSTART.en.md](docs/DEVELOPER-QUICKSTART.en.md) | — |
+| Plugin guide | [PLUGIN-GUIDE.en.md](docs/PLUGIN-GUIDE.en.md) | [PLUGIN-GUIDE.md](docs/PLUGIN-GUIDE.md) |
+| Plugin manifest contract | [PLUGIN-MANIFEST-CONTRACT.en.md](docs/PLUGIN-MANIFEST-CONTRACT.en.md) | [PLUGIN-MANIFEST-CONTRACT.md](docs/PLUGIN-MANIFEST-CONTRACT.md) |
+| Plugin ecosystem architecture | [PLUGIN-ECOSYSTEM-ARCHITECTURE.en.md](docs/PLUGIN-ECOSYSTEM-ARCHITECTURE.en.md) | [PLUGIN-ECOSYSTEM-ARCHITECTURE.md](docs/PLUGIN-ECOSYSTEM-ARCHITECTURE.md) |
+| Search-plugin contract (superseded) | [SEARCH-PLUGIN-CONTRACT.en.md](docs/SEARCH-PLUGIN-CONTRACT.en.md) | [SEARCH-PLUGIN-CONTRACT.md](docs/SEARCH-PLUGIN-CONTRACT.md) |
+
+Project-level: [README.fa.md](README.fa.md) · [COMPARISON.md](COMPARISON.md) ·
+[COMPARISON.fa.md](COMPARISON.fa.md) · [CONTRIBUTING.md](CONTRIBUTING.md) ·
+[SECURITY.md](SECURITY.md) · [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
+> 🇮🇷 [این بخش به زبان فارسی](README.fa.md#مستندات)
 
 ---
 

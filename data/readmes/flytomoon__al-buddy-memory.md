@@ -404,12 +404,12 @@ transaction as the fact.
 
 ```json
 { "mcpServers": { "memory": { "command": "npx",
-    "args": ["-y", "--package=al-buddy-memory@0.10.1", "al-buddy-memory-mcp"] } } }
+    "args": ["-y", "--package=al-buddy-memory@0.11.0", "al-buddy-memory-mcp"] } } }
 ```
 
 `al-buddy-memory-mcp` is an executable *inside* the `al-buddy-memory` package, not a
 package of its own, so `--package=` is what tells npx where to find it — `npx
-al-buddy-memory-mcp` looks for a package by that name and gets a 404. Drop the `@0.10.1`
+al-buddy-memory-mcp` looks for a package by that name and gets a 404. Drop the `@0.11.0`
 to track the latest release instead of the one you tested.
 
 > **Releasing?** This pin is a documented version and goes stale the moment a new one
@@ -518,7 +518,8 @@ AL_BUDDY_MEMORY_PUBLIC_URL=https://you.example.ts.net:8443 al-buddy-memory-http
 In Claude: *Customize → Connectors → Add custom connector*, URL `https://…:8443/mcp`. In
 ChatGPT: *Settings → Security and login → Developer mode*, then add the same URL. Each app
 opens a consent page once; the passphrase allows it. Only hashes of codes and tokens are
-kept on disk, and five wrong passphrases lock the page for 15 minutes. Facts an app writes
+kept on disk. Five wrong passphrases from one app lock that app out for 15 minutes, and twenty
+from all apps within 15 minutes lock every app out; each lock is logged. Facts an app writes
 carry its name in the audit trail, as over stdio. For an organisation, the same server can be
 signed in by your own identity provider instead: [docs/SIGN-IN.md](docs/SIGN-IN.md).
 

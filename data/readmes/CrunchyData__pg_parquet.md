@@ -44,8 +44,8 @@ After installing `Postgres`, you need to set up `rustup`, `cargo-pgrx` to build 
 > curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # set cargo-pgrx (should be the same as pgrx dep in Cargo.toml) and pg versions
-> export CARGO_PGRX_VERSION=0.16.1
-> export PG_MAJOR=18
+> export CARGO_PGRX_VERSION=0.19.3
+> export PG_MAJOR=19
 
 # install cargo-pgrx
 > cargo install --force --locked cargo-pgrx@"${CARGO_PGRX_VERSION}"
@@ -63,6 +63,24 @@ After installing `Postgres`, you need to set up `rustup`, `cargo-pgrx` to build 
 
 # create the extension in the database
 psql> "CREATE EXTENSION pg_parquet;"
+```
+
+> [!NOTE]
+> `pgrx` installs the extension into the directories of the `pg_config` that it is configured with, which are owned by `root` for a packaged `Postgres`. `cargo pgrx install` can be told to use `sudo` for that, but `cargo pgrx run` has no such flag and instead needs those directories to be writable, as shown below. Alternatively, `cargo pgrx init --pg"${PG_MAJOR}" download` has `pgrx` build its own `Postgres` under `~/.pgrx`, which belongs to you and needs no root permissions at all.
+
+```bash
+# either install the extension with sudo
+> cargo pgrx install --release --sudo --features pg"${PG_MAJOR}"
+
+# or make the installation directories writable once
+> sudo chmod a+rwx $(pg_config --pkglibdir)         \
+                   $(pg_config --pkglibdir)/bitcode \
+                   $(pg_config --sharedir)/extension
+
+# the files of a packaged pg_parquet are still owned by root after that, and they are
+# overwritten in place rather than recreated, so remove them to be able to install over
+> sudo rm -f $(pg_config --pkglibdir)/pg_parquet* \
+             $(pg_config --sharedir)/extension/pg_parquet*
 ```
 
 ## Usage
@@ -284,6 +302,7 @@ Alternatively, you can use the following environment variables when starting pos
 - `AWS_CONFIG_FILE`: an alternative location for the config file **(only via environment variables)**
 - `AWS_PROFILE`: the name of the profile from the credentials and config file (default profile name is `default`) **(only via environment variables)**
 - `AWS_ALLOW_HTTP`: allows http endpoints **(only via environment variables)**
+- `AWS_<HTTP CLIENT OPTION>`: an [http client option](#http-client-options), e.g. `AWS_TIMEOUT` **(only via environment variables)**
 
 Config source priority order is shown below:
 1. Environment variables,
@@ -321,6 +340,7 @@ Alternatively, you can use the following environment variables when starting pos
 - `AZURE_STORAGE_ENDPOINT`: the endpoint **(only via environment variables)**
 - `AZURE_CONFIG_FILE`: an alternative location for the config file **(only via environment variables)**
 - `AZURE_ALLOW_HTTP`: allows http endpoints **(only via environment variables)**
+- `AZURE_<HTTP CLIENT OPTION>`: an [http client option](#http-client-options), e.g. `AZURE_TIMEOUT` **(only via environment variables)**
 
 Config source priority order is shown below:
 1. Connection string (read from environment variable or config file),
@@ -330,7 +350,7 @@ Config source priority order is shown below:
 Supported Azure Blob Storage uri formats are shown below:
 - az:// \<container\> / \<path\>
 - azure:// \<container\> / \<path\>
-- https:// \<account\>.blob.core.windows.net / \<container\>
+- https:// \<account\>.blob.core.windows.net / \<container\> / \<path\>
 
 Supported authorization methods' priority order is shown below:
 1. Bearer token via client secret,
@@ -340,6 +360,9 @@ Supported authorization methods' priority order is shown below:
 #### Http(s) Storage
 
 Only `https` uris are supported by default. You can set `ALLOW_HTTP` environment variable to allow `http` uris.
+
+You can also use the following environment variables when starting postgres to configure the http(s) client:
+- `HTTP_<HTTP CLIENT OPTION>`: an [http client option](#http-client-options), e.g. `HTTP_TIMEOUT` **(only via environment variables)**
 
 #### Google Cloud Storage
 
@@ -359,9 +382,30 @@ $ cat ~/.config/gcloud/application_default_credentials.json
 Alternatively, you can use the following environment variables when starting postgres to configure the Google Cloud Storage client:
 - `GOOGLE_SERVICE_ACCOUNT_KEY`: json serialized service account key **(only via environment variables)**
 - `GOOGLE_SERVICE_ACCOUNT_PATH`: an alternative location for the config file **(only via environment variables)**
+- `GOOGLE_<HTTP CLIENT OPTION>`: an [http client option](#http-client-options), e.g. `GOOGLE_TIMEOUT` **(only via environment variables)**
 
 Supported Google Cloud Storage uri formats are shown below:
 - gs:// \<bucket\> / \<path\>
+
+#### Http Client Options
+
+Each object storage client has its own http client, which can be configured via environment variables that are named after the storage prefix, e.g. `AWS_TIMEOUT` for S3 and `AZURE_TIMEOUT` for Azure Blob Storage. The supported options are shown below:
+- `TIMEOUT`: the timeout for a single request, including the time it takes to read the response body. Defaults to 30 seconds. Slow links or large `file_size_bytes` values might need a higher value,
+- `CONNECT_TIMEOUT`: the timeout for only establishing the connection. Defaults to 5 seconds,
+- `READ_TIMEOUT`: the timeout for reading the response body after the response headers arrived,
+- `PROXY_URL`: the proxy to send the requests through,
+- `PROXY_CA_CERTIFICATE`: a PEM encoded CA certificate to trust when connecting to the proxy,
+- `PROXY_EXCLUDES`: a comma separated list of hosts that should not be sent through the proxy,
+- `ALLOW_INVALID_CERTIFICATES`: skips certificate validation. **Insecure, it allows man in the middle attacks**,
+- `DISABLE_SYSTEM_CERTIFICATES`: does not trust the certificates of the operating system,
+- `USER_AGENT`: the user agent header to send with the requests,
+- `DEFAULT_CONTENT_TYPE`: the content type header to send with the requests,
+- `HTTP1_ONLY`, `HTTP2_ONLY`: forces a single http version,
+- `HTTP2_KEEP_ALIVE_INTERVAL`, `HTTP2_KEEP_ALIVE_TIMEOUT`, `HTTP2_KEEP_ALIVE_WHILE_IDLE`, `HTTP2_MAX_FRAME_SIZE`: tune the http2 connections,
+- `POOL_IDLE_TIMEOUT`, `POOL_MAX_IDLE_PER_HOST`: tune the connection pool,
+- `RANDOMIZE_ADDRESSES`: shuffles the resolved addresses of a host before connecting.
+
+Durations are given with a unit, e.g. `30s`, `5m` or `1m30s`. Booleans are given as `true` or `false`.
 
 ## Copy Options
 `pg_parquet` supports the following options in the `COPY TO` command:
@@ -393,6 +437,7 @@ There is currently only one GUC parameter to enable/disable the `pg_parquet`:
 | `bigint`          | INT64                     |                  |
 | `real`            | FLOAT                     |                  |
 | `oid`             | INT32                     |                  |
+| `oid8`(6)         | INT64                     | INTEGER(64,false)|
 | `double`          | DOUBLE                    |                  |
 | `numeric`(1)      | FIXED_LEN_BYTE_ARRAY(16)  | DECIMAL(128)     |
 | `text`            | BYTE_ARRAY                | STRING           |
@@ -425,6 +470,7 @@ There is currently only one GUC parameter to enable/disable the `pg_parquet`:
 > - (3) The `timestamptz` and `timetz` types are adjusted to `UTC` when writing to Parquet files. They are converted back with `UTC` timezone when reading from Parquet files.
 > - (4) The `geometry` type is represented as `BYTE_ARRAY` encoded as `WKB`, specified by [geoparquet spec](https://geoparquet.org/releases/v1.1.0/), when `postgis` extension is created. Otherwise, it is represented as `BYTE_ARRAY` with `STRING` logical type.
 > - (5) `crunchy_map` is dependent on functionality provided by [Crunchy Bridge](https://www.crunchydata.com/products/crunchy-bridge). The `crunchy_map` type is represented as `GROUP` with `MAP` logical type when `crunchy_map` extension is created. Otherwise, it is represented as `BYTE_ARRAY` with `STRING` logical type.
+> - (6) The `oid8` type only exists on PostgreSQL 19 and later. It is written as an unsigned `INT64`, so its whole range round-trips.
 
 > [!WARNING]
 > Any type that does not have a corresponding Parquet type will be represented, as a fallback mechanism, as `BYTE_ARRAY` with `STRING` logical type. e.g. `enum`
@@ -438,3 +484,4 @@ There is currently only one GUC parameter to enable/disable the `pg_parquet`:
 | 16                       |    ✅     |
 | 17                       |    ✅     |
 | 18                       |    ✅     |
+| 19                       |    ✅     |

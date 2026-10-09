@@ -102,7 +102,8 @@ t Does |
 ### Quick Example
 
 ```bash
-# Install and start (auto-detects all installed coding agents)
+# Start the server (the installer already configured your detected coding agents;
+# `am setup run` re-runs that setup at any time)
 am
 
 # That's it. Server starts on 127.0.0.1:8765 with the interactive TUI.
@@ -139,5 +140,4 @@ Example exchange between two agents coordinating a refactor:
 │ └──────────────────────────────────────────────────────────────────────────┘ │
 │                                                                              │
 │ ┌──────────────────────────────────────────────────────────────────────────┐ │
-│ │ BlueLake -> GreenCastle                                 2026-02-16 10:04 │ │
-│ │
+│ │ BlueLake -> 

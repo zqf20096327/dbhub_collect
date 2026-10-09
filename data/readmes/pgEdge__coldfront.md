@@ -8,8 +8,11 @@ The ColdFront documentation consists of the following guides:
 
 - [Introduction](docs/index.md)
 - Getting Started
-    - [Running the Walkthrough](docs/walkthrough.md)
-    - [Exploring the Walkthrough Demos](docs/walkthrough_demos.md)
+    - [Getting Started with ColdFront](docs/walkthrough.md)
+    - [Exploring Tiered Storage](docs/walkthrough_tiered.md)
+    - [Exploring Decoupled Mode](docs/walkthrough_decoupled.md)
+    - [Exploring the Standalone Partitioner](docs/walkthrough_partitioner.md)
+    - [Exploring Distributed Mode](docs/walkthrough_distributed.md)
     - [Building ColdFront from Source](docs/installation.md)
     - [Setting Up an Object Store](docs/object_store.md)
 - Architecture
@@ -63,27 +66,39 @@ ColdFront runs inside PostgreSQL and rewrites each statement to the correct
 tier, so the application sees one relation:
 
 ```text
-                       Application
-                            │
-              SELECT / INSERT / UPDATE / DELETE
-              against one relation: "events"
-                            │
-                 PostgreSQL 16 / 17 / 18
-           events VIEW: reads union hot + cold
-       coldfront extension: routes writes by tier
-              ┌─────────────┴───────────────┐
-              │                             │
-          hot tier                      cold tier
-      _events: native PostgreSQL    pg_duckdb: in-process DuckDB
-      range partitions              Iceberg reads + writes
-              │                             │
-              │                     Lakekeeper (Iceberg REST catalog)
-              │                             │
-              │                     object store, S3 / Azure / GCS
-              │                     (Parquet data + Iceberg metadata)
-              │                             ▲
-              └──── Archiver (Go, cron) ────┘
-                    moves partitions past the hot window: hot → cold
+                            Application
+                                │
+                SELECT / INSERT / UPDATE / DELETE
+                    on one relation: "events"
+                                │
+   ┌────────────────────────────▼─────────────────────────────┐
+   │                 PostgreSQL 16 / 17 / 18                  │
+   │                                                          │
+   │  events view: reads return hot + cold rows               │
+   │  coldfront extension: routes writes by tier.             │
+   └───────────┬─────────────────────────────────┬────────────┘
+               │                                 │
+           HOT TIER                          COLD TIER
+    recent rows, local disk         older rows, object storage
+               │                                 │
+    ┌──────────▼───────────┐        ┌────────────▼────────────┐
+    │ _events              │        │ pg_duckdb               │
+    │ native PostgreSQL    │        │ in-process DuckDB       │
+    │ range partitions     │        │ Iceberg reads + writes  │
+    └──────────┬───────────┘        └────────────┬────────────┘
+               │                                 │
+               │                     ┌───────────▼─────────────┐
+               │                     │ Lakekeeper              │
+               │                     │ Iceberg REST catalog    │
+               │                     └───────────┬─────────────┘
+               │                                 │ 
+               │                                 │
+               │                     ┌───────────▼─────────────────────┐
+               │                     │ Object store, S3 / Azure / GCS  │
+               │                     │                                 │
+               └── Archiver (Go) ───▶│(Parquet data + Iceberg metadata)│
+                                     └─────────────────────────────────┘
+                   cron job: moves partitions out of the hot window: hot -> cold
 ```
 
 ## Installation
@@ -116,6 +131,8 @@ else from the server: each table's lifecycle in `coldfront.partition_config`,
 the cold-store credential in `coldfront.storage_secret` and the catalog
 settings above. The `import` command takes a deployment YAML, modeled on
 [config.example.yaml](config.example.yaml), and writes it into the server once.
+ColdFront has no configuration file. A YAML passed to any later run is checked
+against the server, and the run takes only `postgres.dsn` from the file.
 For every setting, see the [One-Time Setup](docs/usage.md#one-time-setup) and
 [Tuning Knobs](docs/usage.md#tuning-knobs) sections of the Using ColdFront
 guide.
@@ -166,8 +183,8 @@ See [Vended Credentials](docs/usage.md#vended-credentials).
 The Quickstart covers a decoupled table from start to finish. The
 [Using ColdFront](docs/usage.md) guide covers both modes in depth, the
 standalone partition manager and its CLI, the storage backends, and the
-distributed setup; the [walkthrough demos](docs/walkthrough_demos.md) run each
-mode on a sample table.
+distributed setup; the [walkthrough](docs/walkthrough.md) demos run each mode
+on a sample table.
 
 ## Documentation
 
@@ -176,11 +193,14 @@ The following table lists the ColdFront guides and what each one covers:
 | Doc | Contents |
 |---|---|
 | [Walkthrough](docs/walkthrough.md) | Sets up the demo stack and runs ColdFront hands-on. |
-| [Walkthrough demos](docs/walkthrough_demos.md) | Walks through the tiered, decoupled, partitioner, and distributed demos. |
+| [Tiered storage demo](docs/walkthrough_tiered.md) | Adds ColdFront to an existing database and moves its cold data to object storage. |
+| [Decoupled mode demo](docs/walkthrough_decoupled.md) | Stores a table in Iceberg from the first row and adopts a table that another engine wrote. |
+| [Partitioner demo](docs/walkthrough_partitioner.md) | Manages PostgreSQL range partitions without any cold tier. |
+| [Distributed demo](docs/walkthrough_distributed.md) | Points two PostgreSQL nodes at one shared lake. |
 | [Embeddings](docs/usage_vectors.md) | Covers storing and searching embeddings with the pgvector interface. |
 | [Usage](docs/usage.md) | Covers day-to-day use: both modes plus the standalone partition manager, one-time setup, reading and writing, supported types, the partition CLI, storage backends, distributed (mesh) setup, and tuning. |
 | [Installation](docs/installation.md) | Covers building from source (Docker or bare-metal), and testing and CI. |
-| [Object store setup](docs/object_store.md) | Gets ColdFront running on cloud S3 (virtual-hosted), end to end. |
+| [Configuring your Object Store](docs/object_store.md) | Gets ColdFront running on cloud S3 (virtual-hosted), end to end. |
 | [Compaction](docs/compaction.md) | Covers cold-tier table maintenance: compaction, snapshot expiry, and orphan-file removal. |
 | [Architecture](docs/architecture.md) | Describes the shared architecture and core mechanics. |
 | [Architecture: tiered](docs/architecture_tiered.md) | Describes tiered mode (hot PG plus cold Iceberg) in depth. |
@@ -264,7 +284,9 @@ pgedge-coldfront/
 │   ├── entrypoint.sh
 │   └── seaweedfs-s3.json        ← SeaweedFS S3 auth config (example)
 ├── docs/                       ← MkDocs site (user docs; mkdocs.yml at repo root)
-│   ├── index.md · walkthrough.md · walkthrough_demos.md · installation.md
+│   ├── index.md · walkthrough.md · installation.md
+│   ├── walkthrough_tiered.md · walkthrough_decoupled.md
+│   ├── walkthrough_partitioner.md · walkthrough_distributed.md
 │   ├── object_store.md · usage.md · compaction.md
 │   ├── architecture.md · architecture_tiered.md · architecture_decoupled.md
 │   ├── architecture_vectors.md · usage_vectors.md · changelog.md

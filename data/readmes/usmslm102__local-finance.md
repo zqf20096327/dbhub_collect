@@ -69,6 +69,21 @@ LocalFinance features dedicated parsers for major Indian banks, with native extr
 
 Synthetic ICICI and Union Bank savings PDFs in `samples/savings/` exercise parser detection and full PDF extraction in the test suite. They contain only fabricated names, descriptions, dates, and amounts.
 
+### Investment Statements and Samples
+
+Import portfolio holdings through **Import Statements → Investments**. Attach a supported workbook, review its preview, and import it. The **Investments** page shows dated holdings, provider fields, and original worksheets.
+
+| Provider | Format | Ready-to-import fictional sample | Expected values |
+| :--- | :--- | :--- | :--- |
+| Zerodha | Holdings export (`.xlsx`) | [zerodha-fictional.xlsx](samples/investments/zerodha-fictional.xlsx) | Invested ₹800; current value ₹900; unrealized return ₹100 (12.5%) |
+| INDmoney | US stock holdings export (`.xls`) | [indmoney-fictional.xls](samples/investments/indmoney-fictional.xls) | Current value $62.345679; acquisition cost and returns unavailable |
+
+Both samples contain only fictional accounts and holdings dated April 1, 2026. Download and import them directly; Python and sample-generation scripts are not required. Use a separate demo database to keep them apart from your own portfolio.
+
+Portfolio totals use the latest statement per provider, account, and currency. INR and USD totals remain separate, with no currency conversion or live price lookup. Re-importing the same workbook does not create a duplicate snapshot. Investment holdings stay separate from bank transactions and do not affect income, expenses, cash flow, or budgets.
+
+Zerodha statements provide cost and closing valuations. INDmoney's **Total Value** is current valuation; its export does not supply acquisition cost, so invested value and returns remain unavailable. A holdings snapshot cannot provide annualized returns or XIRR.
+
 ### Credit Card Variants Breakdown
 
 | Bank | Card Variant / Series | Network | Supported Formats | Extracted Intelligence | Status |
@@ -446,6 +461,20 @@ func (p *SBISavingsCSVParser) Parse(r io.Reader, opts ParseOptions) ([]ParsedTra
 
 ---
 
+## Adding an Investment Parser
+
+Investment imports follow the same adapter-and-registry pattern as bank statements. Each provider implements `investment.Parser` in `internal/investment/<provider>_<format>.go` and registers itself locally:
+
+```go
+func init() {
+	DefaultRegistry.Register(ExampleHoldingsParser{})
+}
+```
+
+Implement `ID()` with a stable, versioned format ID; `Info()` with the provider name, format label, and supported extensions; `CanParse(filename, data)` to identify the export from its contents; and `Parse(data)` to return the common `models.InvestmentSnapshot`. Supply provider, account reference, statement date (`YYYY-MM-DD`), currency, and holdings. Keep unavailable cost or return values nil, preserve provider-specific fields in `Fields`, and retain original worksheets in `Sheets` when applicable. Use the shared workbook helpers rather than depending on another provider's adapter.
+
+The registry rejects unsupported files and files recognized by multiple adapters. Its metadata drives `/api/investments/formats` and the upload UI, while the shared service handles preview, import, file limits, and deduplication. Adding a provider requires no provider-specific changes to routes, storage, or frontend lists. Add a fictional fixture under `samples/investments/` and tests for detection, values, preview, and repeat imports; never check in personal statements.
+
 ## Monthly Review
 
 Overview now includes a compact review of the latest month with imported data. Choose **Understand what changed** to open the detailed review in Cash Flow, or use **Review month** there to inspect another month.
@@ -487,3 +516,80 @@ The review is read-only, runs offline, and uses the app's existing authenticatio
 
 ## 📄 License
 MIT License. Free and open source for local personal finance intelligence.
+
+## AI tools and MCP (opt-in)
+
+LocalFinance can serve **read-only** finance data to AI tools through a local
+Streamable HTTP MCP endpoint. MCP is disabled by default, and LocalFinance must
+remain running. It does not call an AI provider itself. Your connected AI tool
+may send returned transactions, notes, payees, balances, and reports to its model
+provider. Review that tool's data policy before connecting.
+
+1. Open **Settings → AI / MCP** and click **Create access token**.
+2. Save the token; LocalFinance shows it once and stores only its SHA-256 hash.
+3. Enable MCP. The default endpoint is `http://127.0.0.1:8081/mcp`.
+4. Copy the configuration for your client from Settings. One shared token works
+   across all your clients. Keep it in private user configuration, never in a repo.
+
+For Codex, add this to your private `config.toml`:
+
+```toml
+[mcp_servers.localfinance]
+url = "http://127.0.0.1:8081/mcp"
+bearer_token_env_var = "LOCALFINANCE_MCP_TOKEN"
+```
+
+Set `LOCALFINANCE_MCP_TOKEN` in the environment that launches Codex. Alternatively,
+replace `bearer_token_env_var` with a private static header:
+
+```toml
+http_headers = { Authorization = "Bearer YOUR_TOKEN" }
+```
+
+For Claude Code, add a private, user-scoped connection:
+
+```bash
+claude mcp add --transport http --scope user localfinance \
+  http://127.0.0.1:8081/mcp --header "Authorization: Bearer YOUR_TOKEN"
+```
+
+For another MCP client, select **Streamable HTTP**, use the endpoint above, and
+set the header `Authorization: Bearer YOUR_TOKEN`. Clients running only in the
+cloud cannot reach this computer's loopback address. There is no stdio transport,
+remote hosting, or automatic app startup. Client configuration references:
+[Codex MCP](https://learn.chatgpt.com/docs/extend/mcp?surface=cli) and
+[Claude Code MCP](https://code.claude.com/docs/en/mcp).
+
+### Access and revocation
+
+- The token grants read-only finance access and **remains usable while the UI is
+  locked**. It cannot authenticate against LocalFinance's REST API or settings.
+- Disable MCP to close the listener and cancel active requests. Re-enabling uses
+  the same token. Rotate the token to invalidate it and update every client.
+- Restoring or resetting the database disables MCP and clears its credentials,
+  including credentials present in a restored backup.
+- If the port is occupied, the app keeps running and Settings shows the failure.
+  Choose another port and save, then update your clients' endpoint URLs.
+- Returned data cannot be recalled from an AI client after disabling access.
+
+### Available data
+
+Tools cover accounts, transaction search and calendar ranges, categories and rules,
+overview, monthly review and its evidence, cash flow, salary, yearly Wrapped,
+credit-card portfolio/bills/reward rules and hypothetical card comparisons,
+budgets, existing subscriptions, reconciliation summaries, merchants, statement
+import history, parser capabilities, and the local app version. No tool imports,
+scans, changes data, reads arbitrary files, executes SQL, exports the database,
+manages security, or checks/applies software updates.
+
+Account numbers are represented by their existing masked identifiers; full
+account-number fields, customer IDs, and account-holder fields are omitted,
+including in nested reports. Narration and user notes are included and may contain
+sensitive information. The UI's privacy blur is a display preference, not an MCP
+access control.
+
+Tool results include `data` and `pagination`. Collections default to 50 items,
+with a maximum `page_size` of 200. Nested collections use JSON-pointer paths in
+`pagination`; `page` applies independently to each collection, and `has_more`
+indicates additional results. Transaction search uses database pagination.
+Monthly review evidence retains the app's fixed page size of 50.

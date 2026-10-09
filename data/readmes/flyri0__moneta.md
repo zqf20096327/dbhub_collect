@@ -49,9 +49,10 @@ explains how to budget with it, screen by screen.
   overspending, or clear.
 - **Accounts and transactions.** Budget and tracking accounts, credit cards whose payments
   don't touch the budget, split transactions, transfers between accounts, and payees you can
-  rename everywhere, merge, and give a default category. Select several transactions to set
-  their category or date, clear or delete them at once, and undo a deletion, a money move or an
-  import right after.
+  rename everywhere, merge, and give a default category. Six colored flags you can name mark
+  transactions to find them again in the filters and the reports. Select several transactions to
+  set their category, date or flag, clear or delete them at once, and undo a deletion, a money
+  move or an import right after.
 - **Bank statements.** Import OFX and CSV statements: lines you already entered are matched
   instead of doubled, a statement imported twice adds nothing, and each payee's usual category
   comes back by itself. Reconcile an account against the bank's balance to lock what was
@@ -217,6 +218,11 @@ pnpm exec playwright install chromium   # first time only
 pnpm test:e2e
 ```
 
+`pnpm test:e2e` builds first, unless a server is already answering on port 4173. To run the tests
+again and again, serve a build in another terminal
+(`VITE_GOOGLE_CLIENT_ID=e2e-client-id pnpm build && pnpm preview`), then run one file at a time
+with `pnpm test:e2e e2e/budget.e2e.ts`. Build again after changing the app.
+
 On a fresh Linux or WSL machine Chromium may fail to start because system libraries are
 missing (for example `libnspr4.so`). Install them once from a regular terminal:
 
@@ -236,6 +242,7 @@ src/features/          feature modules (colocated screen logic + Svelte componen
   accounts/            account list, register, account creation dialogs, reconciliation,
                        statement import (import/: OFX and CSV parsers, review)
   transactions/        transaction entry dialog, form validation
+  flags/               flag picker, flag names, flag filters
   schedules/           schedules screen, schedule form, rule summaries
   reports/             report cards and pages, overview layout, date ranges
   settings/            backup & restore, storage, theme, budget files

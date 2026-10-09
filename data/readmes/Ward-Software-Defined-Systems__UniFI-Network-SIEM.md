@@ -6,6 +6,8 @@
 
 A self-contained, **AI-powered** Node.js application that collects syslog from UniFi consoles and gateways, parses all event types, stores them in SQLite (or OpenSearch/WardSONDB), and serves a real-time security dashboard with built-in AI threat hunting.
 
+> **Source & mirroring:** this project is developed on an internal GitLab instance; the GitHub repository is an automatic read-only mirror of it. Issues and feature requests are welcome on GitHub — see [CONTRIBUTING.md](CONTRIBUTING.md). Pull requests can't be merged on the mirror.
+
 > **📊 Backend Recommendation for Scale:** Both **OpenSearch** and **SQLite** are production-ready at scale. OpenSearch uses native aggregations (`date_histogram`, `terms`, `cardinality`) for sub-second dashboard queries. SQLite uses five materialized rollup tables updated atomically on insert plus a dedicated stats worker thread, tested stable at 8M+ events. **WardSONDB** mirrors SQLite's rollup pattern (daily event partitions + five rollup collections) and is running live at 12M+ events — optimizations are still being iterated on and tested, so treat it as Beta for now. See [Using OpenSearch Backend](#using-opensearch-backend-optional) below to get started.
 
 ## Features
@@ -14,7 +16,7 @@ A self-contained, **AI-powered** Node.js application that collects syslog from U
 - **11 event type parsers** — firewall, threat, DHCP, DNS, DNS filter (CoreDNS ad-block), Wi-Fi, admin, device, client, VPN, system
 - **Real-time live stream** — WebSocket-powered event table with type/action badges, search, and pause
 - **Dashboard** — stats cards, event timeline chart, top blocked, top threats, top ports, top clients, top sources, top destinations; progressive loading with progress bar
-- **Live Map** — Leaflet-based world map showing geo-enriched traffic with color-coded markers (normal/blocked/threat), flow lines, and stats overlay
+- **Live Map** — Leaflet-based world map showing geo-enriched traffic with color-coded markers (normal/blocked/threat), flow lines, and stats overlay. Basemap from [OpenFreeMap](https://openfreemap.org) by default (free vector tiles, no key, rendered with MapLibre GL); CARTO (with your API key), OpenStreetMap, or a custom raster/vector source are selectable in Settings
 - **Refresh controls** — Dashboard, Live Map, and Threat Intel all include manual refresh, pause/resume, and selectable auto-refresh rates (1m, 2m, 5m). Defaults to paused to reduce load on large datasets — especially useful with remote database backends (e.g., WardSONDB over VPN) where concurrent queries can be expensive
 - **GeoIP & threat enrichment** — MaxMind GeoLite2 for geolocation, AbuseIPDB for threat scoring, reverse DNS — all async with caching
 - **Country flags & abuse badges** — 🇺🇸 emoji flags with country codes on external IPs; color-coded abuse score badges across all views
@@ -56,6 +58,7 @@ A self-contained, **AI-powered** Node.js application that collects syslog from U
   - Debian / Ubuntu: `sudo apt-get install build-essential python3`
   - Windows: Visual Studio 2022 Build Tools with the "Desktop development with C++" workload
 - macOS, Linux, or Windows
+- A current browser for the dashboard — the UI is built with Tailwind CSS 4, which targets Safari 16.4+, Chrome 111+, and Firefox 128+
 
 ### Install
 
@@ -82,11 +85,13 @@ cd frontend && npm run build && cd ..
 npm start
 
 # Development (two terminals)
-npm run dev          # Backend with auto-reload (port 3000)
+npm run dev          # Backend with auto-reload via node --watch (port 3000)
 cd frontend && npm run dev   # Vite HMR (port 5173)
 ```
 
 Open https://localhost:3000 in your browser. Accept the self-signed certificate warning on first visit.
+
+Continuous integration runs on the internal GitLab: every merge request runs `npm test`, builds the frontend, and runs `npm audit` in both dependency trees (see `.gitlab-ci.yml`); a weekly scheduled pipeline turns new advisories into a failing run.
 
 ### Using OpenSearch Backend (Optional)
 
@@ -184,6 +189,7 @@ For full functionality, three logging sources on the UniFi Console should be con
 | `GET /api/stats/threat-intel` | Enriched IPs with abuse scores and event counts |
 | `GET /api/stats/geo-events` | Aggregated IPs with geo coordinates for map |
 | `GET /api/stats/recent-geo-events` | Recent events with geo data for flow lines |
+| `GET /api/map/config` | Resolved Live Map basemap (provider, tile/style URL, attribution, fallback); the CARTO key is substituted into the tile URL here and nowhere else |
 | `GET /api/health` | System health, event counts, DB size |
 | `GET /api/settings` | Legacy flat-key settings (sensitive values redacted) |
 | `PUT /api/settings` | Legacy flat-key update (AbuseIPDB key, etc.) |
@@ -212,13 +218,13 @@ Operator settings live in the SQLite database and are managed via the **Settings
 | `SIEM_API_TOKEN` | *(auto-generated)* | API/WebSocket auth token. Auto-generated and logged once on first run if unset. Required for `/api` and `/ws` auth (Phase 3+). |
 | `SIEM_MASTER_KEY` | *(auto-generated)* | 64 hex chars (32 bytes). Decrypts sensitive settings at rest (AES-256-GCM). Auto-generated and logged once on first run if unset. |
 
-### First-run seeding (optional)
+### Environment defaults (optional)
 
-Any setting that has an `envVar` in the schema can be pre-populated on first run by setting it in `.env`. After the first run the value is in the DB and `.env` becomes inert for that key — edit through the Settings UI thereafter. See `.env.example` for the full list of seedable env vars.
+Any setting that has an `envVar` in the schema can also be set in `.env`. Startup layers schema default → `.env` → database row and never copies `.env` into the database, so an `.env` value applies on every boot until that setting has a row in the database — that is, until you save it (or clear/reset it, which stores an empty value) in the Settings UI. From then on the database row wins and the `.env` line is ignored for that key. For settings whose default is empty, such as API keys, that includes an empty row: a key cleared in Settings stays cleared across restarts even if `.env` still carries one. See `.env.example` for the full list.
 
 ### Settings UI
 
-All other settings (syslog port, retention, AbuseIPDB key, WardSONDB tunables, OpenSearch credentials, Threat Hunt model + max tokens, HTTPS timeouts, health debounce, etc.) are configurable in **Settings → Operator Settings**, grouped by category. Sensitive values (API keys, passwords, tokens) are encrypted at rest with the master key and shown masked in the UI.
+All other settings (syslog port, retention, AbuseIPDB key, Live Map basemap provider + CARTO key, WardSONDB tunables, OpenSearch credentials, Threat Hunt model + max tokens, HTTPS timeouts, health debounce, etc.) are configurable in **Settings → Operator Settings**, grouped by category. Settings with a fixed set of values (map provider, map styles, Threat Hunt provider) render as drop-downs. Sensitive values (API keys, passwords, tokens) are encrypted at rest with the master key and shown masked in the UI.
 
 > **⚠️ Important:** Settings and configuration are always stored in the local SQLite database (`data/events.db`), regardless of which storage backend is active. Do not delete this file even when using WardSONDB or OpenSearch — it contains your backend configuration, API keys, and other settings needed to boot the application. Changing the storage backend requires a SIEM restart to take effect.
 
@@ -332,6 +338,20 @@ scripts/
 2. Download `GeoLite2-City.mmdb`
 3. Place in `./data/GeoLite2-City.mmdb`
 
+### Live Map basemap
+
+The Live Map needs a basemap tile provider. The default works with zero configuration; the others are selectable under **Settings → Live Map** (`map.*` settings, or the matching `MAP_*` env vars until a Settings-UI value exists) and apply on the next page load — no restart.
+
+| Provider (`map.provider`) | Kind | Key? | Notes |
+|---|---|---|---|
+| `openfreemap` (default) | vector (MapLibre GL) | no | [OpenFreeMap](https://openfreemap.org): free, no registration, no limits, donation-funded, weekly OSM updates. Styles: `dark` (default, the OpenMapTiles port of CARTO Dark Matter), `fiord`, `positron`, `liberty`, `bright`. Needs WebGL in the browser; falls back to OpenStreetMap raster automatically if WebGL is unavailable. If you rely on it, consider [sponsoring the project](https://openfreemap.org/#sponsor). |
+| `carto` | raster | **yes** | CARTO raster basemaps require an API key since Sep 2026 ([get one free](https://carto.com/basemaps/apikey) — 5M requests/month non-commercial, 1M commercial). Save it as `map.cartoApiKey` (encrypted at rest, masked in the UI; it travels to the browser inside tile URLs, as CARTO intends). Styles: `dark_all`, `dark_nolabels`, `light_all`, `light_nolabels`, `voyager`, `voyager_nolabels`, `voyager_labels_under`. Without a key the map shows a warning and uses OpenFreeMap. |
+| `osm` | raster | no | OpenStreetMap's standard (light) tiles. Best-effort public servers under the [OSMF tile usage policy](https://operations.osmfoundation.org/policies/tiles/) — fine for a dashboard viewport, not for bulk use. |
+| `custom-raster` | raster | — | Your own XYZ template in `map.customRasterUrl`, e.g. `https://tiles.example.com/{z}/{x}/{y}.png` or `https://{s}.example.com/{z}/{x}/{y}{r}.png?key=…`. HTTPS only (the dashboard is HTTPS, so put TLS in front of self-hosted tile servers); `{s}` only as the first host label. Set `map.customAttribution` (plain text). |
+| `custom-vector` | vector | — | A MapLibre style JSON URL in `map.customVectorStyleUrl` — self-hosted OpenFreeMap / VersaTiles / Protomaps, or MapTiler / Stadia with the key in the URL. HTTPS only; needs WebGL. |
+
+Security notes: the Content-Security-Policy's `img-src` always allows the built-in CARTO and OpenStreetMap hosts and adds a validated custom-raster host only while that provider is selected; a custom host change therefore needs a page reload (the map says so). The dashboard sends no `Referer`, so referrer-restricted keys won't work — embed keys in the URL instead. Invalid custom URLs fall back to OpenFreeMap with a warning on the map.
+
 ### AbuseIPDB (threat scoring)
 
 1. Get a free API key at [abuseipdb.com](https://www.abuseipdb.com) (1000 lookups/day)
@@ -348,13 +368,15 @@ The app runs HTTPS by default with an auto-generated self-signed certificate. Be
 | Syslog spoofing | **Low** | UDP has no authentication by design — a device on your LAN could send crafted syslog to inject fake events. Mitigations available: set `SYSLOG_ALLOWED_SOURCES` to a CIDR allowlist (Phase 3B) so the listener drops packets from anywhere outside; the listener also has a per-source rate cap to limit a single misbehaving sender. Without an allowlist, any host on the broadcast domain can submit events. |
 | TLS certificate trust | **Info** | The self-signed certificate will trigger browser warnings. For production, replace `data/server.key` and `data/server.cert` with certs from a trusted CA or your own internal CA. |
 
-**Known advisories:** none. As of 2026-06-14, `npm audit` reports **0 vulnerabilities** in both the backend and frontend trees. The previously-residual dev-only esbuild advisory ([GHSA-67mh-4wv8-2f99](https://github.com/advisories/GHSA-67mh-4wv8-2f99) — Vite dev server / Vitest runner only; production builds and `npm start` were never affected) was cleared by the Vite 5 → 8 + Vitest 2 → 4 upgrade, and the runtime `ws` / `qs` advisories were patched in-range. The remaining dependency majors (`recharts`, `tailwindcss`, React 19 + `react-leaflet`, `express`) carry no open advisory.
+**Known advisories:** none. As of 2026-10-08, `npm audit` reports **0 vulnerabilities** in both the backend and frontend trees. The 2026-10 pass patched `undici`, `qs`, `body-parser`, `proxy-addr`, `dompurify`, `postcss`, `vitest` and their transitive dependencies in-range, replaced `nodemon` (whose watcher chain carries an advisory with no patched release) with Node's built-in `--watch`, and moved the frontend to Tailwind CSS 4 via `@tailwindcss/vite`, which removed the PostCSS/autoprefixer/chokidar build chain that held the last build-time findings. The remaining dependency majors (`recharts`, React 19 + `react-leaflet`, `express`) carry no open advisory.
 
 **Already mitigated:**
 - **API + WebSocket authentication** — bearer-token middleware on every `/api/*` route; WebSocket validates the same token via `?token=` query at upgrade time; frontend `TokenGate.jsx` login screen + global fetch wrapper. The reset-DB endpoint sits behind this same gate (Phase 3). The fetch wrapper scopes the `Authorization` header to **same-origin `/api/`** requests only, so the token is never attached to cross-origin URLs (e.g. map-tile CDNs)
-- **Sensitive settings at rest** — AbuseIPDB / Anthropic / OpenAI / Gemini keys, OpenSearch password, etc. are AES-256-GCM-encrypted in the SQLite settings table (`v1:iv:tag:ct` envelope). Master key auto-generated on first run, logged once, rotatable via Settings (Phase 2)
+- **Sensitive settings at rest** — AbuseIPDB / Anthropic / OpenAI / Gemini keys, the CARTO basemap key, OpenSearch password, etc. are AES-256-GCM-encrypted in the SQLite settings table (`v1:iv:tag:ct` envelope). Master key auto-generated on first run, logged once, rotatable via Settings (Phase 2)
 - **Default localhost bind** — `HTTP_HOST` defaults to `127.0.0.1`; the server is reachable only from the host until you explicitly set a LAN IP or `0.0.0.0`
-- **Request body limit** — `express.json({ limit: '64kb' })` caps API request bodies; Helmet sets a CSP scoped for OSM/CartoDB tiles + `wss:`
+- **Request body limit** — `express.json({ limit: '64kb' })` caps API request bodies
+- **Content-Security-Policy** — Helmet scopes `img-src` to the configured map tile hosts (the built-in OpenStreetMap/CARTO CDNs plus a validated custom host while selected — operator URLs are validated before they can reach the header), allows the MapLibre renderer only a same-origin worker (`worker-src 'self'`) and `blob:` images, and limits `connect-src` to `https:` + `wss:`
+- **Query-string hygiene** — Express runs with the `simple` query parser (no nested objects) and `/api/events` forwards only string-valued parameters to the storage backends, so bracket syntax such as `?src_ip[$ne]=x` can never become a filter operator
 - **LLM prompt-injection defense** — every attacker-influenceable Threat Hunt field (IDS signature, hostname, geo_country, whois fields) is wrapped in `<untrusted>...</untrusted>` after control-char strip + 256-char truncation + closing-tag entity-escape; system prompt sent via the elevated-trust channel of each provider (Phase 13)
 - **LLM output rendering** — markdown rendered via `marked` + `DOMPurify` with `ALLOWED_TAGS` restricted to formatting + lists; no attributes, no `<a>`, no `<img>`. PDF export escapes operator-supplied interpolated values (Phase 13)
 - **SQL injection** — all queries use parameterized prepared statements. The `getTimeline()` strftime format string is derived from a fixed internal lookup (not from caller input), eliminating the previous injection surface

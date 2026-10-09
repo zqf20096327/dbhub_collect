@@ -8,19 +8,15 @@ Source-available **NetSuite MCP client** — chat UI for NetSuite’s AI Connect
 
 Bring your own LLM keys (**Google Gemini**, **Anthropic Claude**, **OpenAI**, or an **OpenAI-compatible** endpoint). Self-host for internal use. Commercial rights reserved by [Unstacked Apps, LLC](https://www.unstackedapps.com/).
 
-**Current release:** [v5.7.1](https://github.com/unstackedapps/opensuitemcp/releases/tag/v5.7.1) · [Changelog](CHANGELOG.md)
+**Current release:** [v5.9.0](https://github.com/unstackedapps/opensuitemcp/releases/tag/v5.9.0) · [Changelog](CHANGELOG.md)
 
 <img src="./docs/screenshot-chat.png" alt="OpenSuiteMCP chat UI" width="100%" />
 
 _Main chat UI._
 
-## What’s in 5.7
+## What’s in 5.9
 
-- **A chat says what it is doing** — a dot on every thread: pulsing while the assistant works, blue when a turn finished while you were reading something else, empty once you have seen it. Work an agent does over MCP pulses the same way
-- **Chats file into groups** — create, rename, reorder and collapse them, and drag a chat from one to another. A group's **+** opens a chat already in that group
-- **The list has a toolbar** — filter by persona, sort by activity or title, and search without leaving the panel
-- **The thread title heads the conversation** — rename, share and delete live in its menu, so sharing is in one place instead of two
-- **The side panel carries the product name**, and can be resized, collapsed to a rail, or peeked at from its edge
+- **An instance reports its health to whoever operates it** — set `OSMCP_INSTANCE_REPORT_TOKEN`, and `GET /api/instance/report` answers that bearer token with the version, usage counts, NetSuite accounts that need connecting again, and the 50 most recent server errors. Counts only: no message text, emails or names. See [Instance report](docs/instance-report.md)
 
 Earlier releases are in the [changelog](CHANGELOG.md).
 
@@ -230,6 +226,7 @@ Written by `pnpm setup:backend` (or set manually for production):
 | `OSMCP_NS_ACCOUNT_ID` | Optional | Optional | NetSuite account for OIDC app login |
 | `OSMCP_NS_OIDC_CLIENT_ID` | Optional | Optional | OIDC integration client ID for app login |
 | `OSMCP_ENABLE_GUEST` | — | — | Set `true` for guest auto-login in demo/e2e |
+| `OSMCP_INSTANCE_REPORT_TOKEN` | Optional | Optional | Bearer token of 32+ characters that turns on `/api/instance/report`; see [Instance report](docs/instance-report.md) |
 
 Upgrading an existing install with users already in the database: see [docs/org-admin-upgrade.md](docs/org-admin-upgrade.md).
 

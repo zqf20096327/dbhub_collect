@@ -10,11 +10,11 @@
 
 One core, three faces: a **Python library**, the **`ssc` command line** for servers and automation, and a versioned **HTTP API** with a **web app** on top. It runs on your own machine or server.
 
-> **3.0.0 is in preparation.** This README describes 3.0.0, which is on `main` but not released yet: the version number still says 2.0.0, and there is no published Docker image or release archive. Until the release, build from a checkout (`docker compose up -d --build`, or the pip steps below).
+> **3.1.0 is released from source.** Install it from a checkout (the Docker or pip steps below); each release on GitHub also has a source archive with the built web app, and its Docker image is `ghcr.io/tunjayoff/sofascore_scraper`. There is no package on PyPI. Coming from 3.0: [Upgrading from 3.0](#upgrading-from-30); from 2.x: [Upgrading from 2.x](#upgrading-from-2x).
 
 Unofficial and not affiliated with SofaScore; see the [disclaimer](#disclaimer).
 
-**Contents:** [Features](#features) · [Screenshots](#screenshots) · [Quick start](#quick-start) · [Command line](#command-line-ssc) · [HTTP API](#http-api) · [Python library](#python-library) · [Configuration](#configuration) · [Data and exports](#data-and-exports) · [Live watching](#live-watching) · [Security model](#security-model) · [Upgrading from 2.x](#upgrading-from-2x) · [FAQ](#faq) · [Documentation](#documentation) · [Contributing](#contributing-and-development) · [License](#license)
+**Contents:** [Features](#features) · [Screenshots](#screenshots) · [Quick start](#quick-start) · [Command line](#command-line-ssc) · [HTTP API](#http-api) · [Python library](#python-library) · [Configuration](#configuration) · [Data and exports](#data-and-exports) · [Live watching](#live-watching) · [Security model](#security-model) · [Upgrading from 3.0](#upgrading-from-30) · [Upgrading from 2.x](#upgrading-from-2x) · [FAQ](#faq) · [Documentation](#documentation) · [Contributing](#contributing-and-development) · [License](#license)
 
 ## Features
 
@@ -23,7 +23,7 @@ Unofficial and not affiliated with SofaScore; see the [disclaimer](#disclaimer).
 - **Choose what is downloaded**: match details, statistics, line-ups, incidents, head to head, form and streaks are on by default; betting odds, standings, season data, leaders, rankings and player statistics are off until you select them, for every sport, per sport or per follow.
 - **History downloads within a request budget**: 5 requests per second for all processes together by default, with a circuit breaker that stops a job when SofaScore keeps refusing.
 - **Storage**: compressed raw payloads plus a rebuildable catalog (SQLite); every match status is stored, results that SofaScore corrects later are re-read and logged.
-- **Exports**: normalized datasets (matches, data types, score changes, odds, standings) as CSV, JSONL, Parquet or SQLite, the raw payloads as they are, and the 2.x wide CSV. Files are named after the league or dataset and the date.
+- **Exports**: normalized datasets (matches, data types, score changes, odds, standings) as CSV, JSONL, Parquet or SQLite, the raw payloads as they are, and the 2.x wide CSV. Files are named after the league, the team or player, or the dataset, and the date.
 - **Backups and restore** of the data folder, from the web app or the command line.
 - **Live watching** with `ssc watch`: changes of live matches go to an event log and to sinks (stdout JSON lines, a file, a webhook). The web app has no live view, by design.
 - **Automation**: a non-interactive CLI with JSON output and meaningful exit codes, a declarative config file (`sofascore.toml`) with environment overrides, systemd units and a Docker image. An in-app scheduler exists and is off by default.
@@ -32,16 +32,16 @@ Unofficial and not affiliated with SofaScore; see the [disclaimer](#disclaimer).
 
 ## Screenshots
 
-![Overview: matches stored, the connection to SofaScore, the services and the recent jobs](docs/images/overview.webp)
+![Overview with real data: 804 matches stored, 41 follows in 20 sports, the connection to SofaScore, the services, the recent jobs and the latest score change](docs/images/overview.webp)
 
 | | |
 |---|---|
-| ![Add league: search SofaScore by name, or enter the id from the address](docs/images/add-league.webp) | ![A finished football match with its statistics by period](docs/images/match-statistics.webp) |
-| **Add league**: search by name or enter the SofaScore id, then choose seasons and data. | **A match**: score by period, statistics, line-ups, incidents and the raw data. |
-| ![New export dialog with the normalized datasets and the CSV, JSONL, Parquet and SQLite formats](docs/images/export-dialog.webp) | ![The match list in the dark theme, with filters by sport, tournament, date, data and status](docs/images/matches-dark.webp) |
+| ![Add a league or team: typing "premier" suggests SofaScore's leagues with their sport and country](docs/images/add-league.webp) | ![Paris Saint-Germain against Tottenham Hotspur, the 2025 UEFA Super Cup final, 2-2 and 4-3 on penalties, with its statistics](docs/images/match-statistics.webp) |
+| **Add league**: suggestions while you type, or the SofaScore id, then seasons and data. | **A match**: score, statistics by period, line-ups, incidents, odds and the raw data. |
+| ![New export dialog: normalized data, the match table or SofaScore's original data, in the CSV, JSONL, Parquet and SQLite formats](docs/images/export-dialog.webp) | ![The match list in the dark theme: played football matches, newest first, with the Played / Upcoming / All switch and filters by sport, tournament, date, team, data and status](docs/images/matches-dark.webp) |
 | **Exports**: normalized data, the match table or the raw payloads. | **Matches** in the dark theme. |
 
-The screenshots use a synthetic demo data set, not real SofaScore data.
+The screenshots show real SofaScore data, downloaded on 2026-10-08, in the English UI.
 
 ## Quick start
 
@@ -170,14 +170,14 @@ ssc config init         # prints a commented starter file
 ssc describe config     # every section and key as JSON Schema
 ```
 
-- **Layers**, the later one wins: built-in default → `.env` → `config/overrides.json` (what the web app's **Settings** page saves) → `sofascore.toml` → environment variables → command-line flags. A value fixed by the file, the environment or a flag shows as locked on the Settings page.
-- **Environment overrides**: every key as `SOFASCORE_<SECTION>__<KEY>`, for example `SOFASCORE_CLIENT__RATE=2` or `SOFASCORE_LIVE__SOURCE=poll`. The variable names of 2.x (`DATA_DIR`, `REQUEST_RATE_LIMIT`, `APP_LANGUAGE`, …, in `.env.example`) still work.
-- **Secrets** come from the environment only: the access token `SOFASCORE_API_TOKEN` and webhook secrets (`secret_env` names the variable).
-- **Language**: `APP_LANGUAGE=en|tr` (or `[display] language`) pins it; otherwise Turkish systems and browsers get Turkish and everyone else English. `--lang` sets it for one command; JSON output is never translated.
+- **Layers**, the later one wins: built-in default → `config/overrides.json` (what the web app's **Settings** page saves) → `sofascore.toml` → environment variables (`.env` is loaded into the environment) → command-line flags. A value fixed by the file, the environment or a flag shows as locked on the Settings page.
+- **Environment overrides**: every key as `SOFASCORE_<SECTION>__<KEY>`, for example `SOFASCORE_CLIENT__RATE=2` or `SOFASCORE_LIVE__SOURCE=poll` (`.env.example` lists them). The variable names of 2.x (`DATA_DIR`, `REQUEST_RATE_LIMIT`, `APP_LANGUAGE`, …) are not read since 3.1.0; four of them (`SOFASCORE_API_TOKEN`, `SOFASCORE_ALLOWED_HOSTS`, `USE_PROXY`, `PROXY_URL`) are deprecated and still read until 3.2; `ssc doctor` and `ssc config show` name the new name of each one still set.
+- **Secrets** come from the environment only: the access token `SOFASCORE_SERVER__TOKEN` and webhook secrets (`secret_env` names the variable).
+- **Language**: `SOFASCORE_DISPLAY__LANGUAGE=en|tr` (or `[display] language`) pins it; otherwise Turkish systems and browsers get Turkish and everyone else English. `--lang` sets it for one command; JSON output is never translated.
 
 ## Data and exports
 
-All data lives in one folder, `data/` by default (`DATA_DIR`, `[storage] data_dir`, `--data-dir`):
+All data lives in one folder, `data/` by default (`[storage] data_dir`, `SOFASCORE_STORAGE__DATA_DIR`, `--data-dir`):
 
 ```text
 data/
@@ -196,6 +196,7 @@ data/
 ```bash
 ssc export --dataset events --format parquet --tournament 17 --out pl.parquet   # needs pyarrow
 ssc export --dataset slices --format sqlite --out slices.sqlite
+ssc export --dataset events --format csv --team 3071 --player 822471 --out mine.csv   # a team's or a player's matches
 ssc export --schema raw --format jsonl --out raw.jsonl     # the stored SofaScore payloads
 ssc export --out matches.csv                               # the 2.x wide CSV
 ```
@@ -204,7 +205,7 @@ ssc export --out matches.csv                               # the 2.x wide CSV
 
 ## Live watching
 
-`ssc watch` is the live service: a foreground process that follows live matches and writes their changes (`live.status_changed`, `live.score_changed`, `live.stuck`) to the event log and to the configured sinks. It is not part of the web app.
+`ssc watch` is the live service: a foreground process that follows live matches and writes their changes (`live.status_changed`, `live.score_changed`, `live.stuck`) to the event log and to the configured sinks. It is not part of the web app. With no follow marked live it exits with code 2; `ssc watch --idle` (used by the Compose example and the systemd unit) waits instead and reads the follows again every 60 seconds. In set sports (tennis, table tennis, volleyball, badminton, padel) a `live.score_changed` is a set won, not a game or a point inside a set.
 
 ```bash
 ssc watch                                                    # follows marked live
@@ -231,25 +232,46 @@ Sinks are `[[sink]]` tables in `sofascore.toml` (`stdout`, `file`, or `webhook` 
 
 The web app has **no user accounts** and listens on `127.0.0.1` by default. Opening it to a network is the installer's decision and responsibility:
 
-- set `SOFASCORE_API_TOKEN` to a long random value (every `/api` request then needs `Authorization: Bearer <token>`, or the web app's session cookie);
-- list the names it is reached by in `SOFASCORE_ALLOWED_HOSTS` (`ssc serve --host 0.0.0.0` refuses to start without it);
+- set `SOFASCORE_SERVER__TOKEN` to a long random value (every `/api` request then needs `Authorization: Bearer <token>`, or the web app's session cookie);
+- list the names it is reached by in `SOFASCORE_SERVER__ALLOWED_HOSTS` (`ssc serve --host 0.0.0.0` refuses to start without it);
 - put a firewall or VPN and TLS (a reverse proxy) in front of it.
 
 The app itself answers only to allowed host names, refuses state-changing requests sent by other sites, sends a strict Content-Security-Policy, warns when it is exposed without a token, and keeps `.env`, the settings file and the browser profile readable by their owner only. Details: [docs/deploy](docs/deploy/README.md#access-token).
+
+## Upgrading from 3.0
+
+```bash
+git pull
+pip install -r requirements.txt -c constraints.txt
+pip install -e .
+cd frontend && npm install && npm run build && cd ..
+ssc doctor                # names every 2.x setting name that is still set
+```
+
+With Docker Compose: `git pull`, then `docker compose pull` (or `docker compose build`) and `docker compose up -d`.
+
+- **Rename the 2.x environment names.** 3.1.0 no longer reads `DATA_DIR`, `REQUEST_RATE_LIMIT`, `APP_LANGUAGE`, `LOG_LEVEL` and the other 2.x names, wherever they are set (`.env`, the shell, a service file, the container settings): the default applies instead, so an old `DATA_DIR` leaves the app on the default data folder. Four of them are deprecated instead: `SOFASCORE_API_TOKEN`, `SOFASCORE_ALLOWED_HOSTS`, `USE_PROXY` and `PROXY_URL` still work in 3.1, with a warning, and are removed in 3.2; when the new name is set too, the new one wins. Use `SOFASCORE_<SECTION>__<KEY>` (`SOFASCORE_STORAGE__DATA_DIR`, `SOFASCORE_SERVER__TOKEN`, `SOFASCORE_SERVER__ALLOWED_HOSTS`, `SOFASCORE_CLIENT__PROXY`, …). `ssc doctor` and `ssc config show` list each old name still set with its new name and where it is set; `ssc config init --from-legacy > sofascore.toml` writes the old settings as a config file.
+- **The catalog is rebuilt on its first open** (catalog schema 2): `catalog.db` is rebuilt once from the stored files, without a request to SofaScore, so the first start on a large data folder takes longer.
+- **Removed**: the `main.py` flags (an old flag is a usage error that names the `ssc` command replacing it), the 2.x routes under `/api/...` (they answer 404; use `/api/v1`) and the backup scopes `config`, `seasons`, `matches` and `match_details` (use `all`, `state` or `data`; old backups still restore). A web app built before 3.0.0 does not work under the strict Content-Security-Policy: build it again.
+- **`ssc export` file names**: without `--out`, a file is named like a web export (`exports/premier-league_2026-10-09_142530.jsonl`), and the wide CSV is `match_details/processed/events-wide_<date>_<time>.csv` instead of `all_matches_<epoch>.csv`.
+
+The full list is in [CHANGELOG.md](CHANGELOG.md#310---2026-10-09).
 
 ## Upgrading from 2.x
 
 ```bash
 git pull
 pip install -r requirements.txt -c constraints.txt
+pip install -e .          # again after every update: the import package is now sofascore_scraper
 cd frontend && npm install && npm run build && cd ..
 ssc migrate --dry-run     # optional: what would move to the new layout
 ```
 
 - **Data**: nothing is moved on its own. Old data is read where it is; new writes use the new layout. `ssc migrate` converts and verifies the old folders and keeps them; `ssc migrate --delete-legacy --yes` removes verified old copies later.
 - **The terminal menu is gone.** `python main.py` without arguments prints a short help and exits with `2`. Use the web app, or `ssc` for scripts.
-- **Deprecated for one release**: the `main.py` flags (`--headless --update-all` runs `ssc sync`, `--refresh-only` runs `ssc refresh`, `--watch` runs `ssc watch --source poll --stdout`, `--web` runs `ssc serve`, …; each prints the command it ran), and the 2.x routes under `/api/...`, which answer with a `Deprecation` header and a `Link` to their `/api/v1` successor. Exit codes follow the new table (a breaker stop is `4`, no longer `2`).
-- **Settings**: `.env` keeps working; `ssc config init --from-legacy > sofascore.toml` writes today's `.env` and `config/leagues.txt` as a config file. Leagues in `config/leagues.txt` are still downloaded; **Move to here** on a league's page moves one into the app.
+- **The import package is `sofascore_scraper`** (it was `src`, and there is no alias): your own systemd units and scripts run `python -m sofascore_scraper.cli.main` instead of `python -m src.cli.main`, and library code imports `sofascore_scraper`.
+- **Removed in 3.1.0** (deprecated in 3.0.0): the `main.py` flags (a usage error names the command that replaces each one: `--headless --update-all` is `ssc sync`, `--refresh-only` is `ssc refresh`, `--watch` is `ssc watch --source poll --stdout`, `--web` is `ssc serve`, …), the 2.x routes under `/api/...` (use `/api/v1`), the backup scopes `config`, `seasons`, `matches` and `match_details` (use `all`, `state` or `data`; old backups still restore) and the 2.x environment names (four of them are deprecated and still read until 3.2; see [Upgrading from 3.0](#upgrading-from-30)). Exit codes follow the new table (a breaker stop is `4`, no longer `2`).
+- **Settings**: rename the 2.x names in `.env` (`ssc doctor` lists each one with its new name), or run `ssc config init --from-legacy > sofascore.toml`, which writes the old `.env` and `config/leagues.txt` as a config file. Leagues in `config/leagues.txt` are still downloaded; **Move to here** on a league's page moves one into the app.
 
 The full list of changes is in [CHANGELOG.md](CHANGELOG.md).
 

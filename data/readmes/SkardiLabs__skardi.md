@@ -72,7 +72,7 @@ spec:
 ```
 
 ```bash
-# from a source checkout — Docker once --query-audit-db ships in a tagged release
+# from a source checkout; the v0.6.0 Docker image takes the same flags (Docker & cloud, under More)
 git clone https://github.com/SkardiLabs/skardi.git && cd skardi
 cargo run --release --bin skardi-server -- \
   --ctx ctx.yaml --query-audit-db ./audit.db --port 8080
@@ -93,8 +93,9 @@ JSON
 **3 — Promote what recurs.** &nbsp;`in flight` — the
 [`skardi-query-log`](https://github.com/SkardiLabs/skardi-skills/pull/25) skill
 reads the ledger, writes the pipeline, reloads the server, health-checks it, and
-rolls back if the install fails. Held until `--query-audit-db` lands in a tagged
-release; today you can read the ledger yourself with plain SQL — it is a SQLite
+rolls back if the install fails. The server flag it relies on,
+`--query-audit-db`, ships in v0.6.0; the skill itself is still in review, and
+until it lands you can read the ledger yourself with plain SQL — it is a SQLite
 file indexed on `(session_id, created_at)`.
 
 ```yaml
@@ -122,7 +123,7 @@ skardi run weekly-churn -p window='7 days'
 curl -X POST localhost:8080/weekly-churn/execute \
   -H 'Content-Type: application/json' -d '{"window": "7 days"}'
 # same pipeline as an MCP tool — hosts that spawn a local process (Claude Desktop, …)
-# from a source checkout until `skardi mcp` ships in a tagged release
+# (v0.6.0 or later)
 skardi mcp
 # … and as remote MCP — hosts that only take a URL (claude.ai, hosted agents):
 # the server above already serves http://localhost:8080/mcp. With auth enabled
@@ -333,7 +334,7 @@ agents; deploy it next to your data, behind your usual auth.
 | DynamoDB | Full | Yes | Scan + filter pushdown | [docs](docs/dynamodb/) |
 | SeekDB | Full | Yes | MySQL-wire CRUD, FULLTEXT, HNSW | [docs](docs/seekdb/) |
 | ClickHouse | Read | Yes | Columnar OLAP, filter/limit pushdown | [docs](docs/clickhouse/) |
-| Lance | Read + job-write | No | KNN, BM25 FTS; job destination | [docs](docs/lance/) |
+| Lance | Read + job-write | No | KNN, BM25 FTS; job destination, local or in S3 | [docs](docs/lance/), [S3](docs/S3_USAGE.md#lance-datasets-in-s3-and-s3-compatible-stores) |
 | Apache Iceberg | Read | No | Schema evolution, partition pruning | [docs](docs/iceberg/) |
 | InfluxDB 3 | Read | No | Time series over Arrow Flight SQL | [docs](docs/influxdb/) |
 | S3 / GCS / Azure | Read | No | CSV, Parquet, Lance in object stores | [docs](docs/S3_USAGE.md) |

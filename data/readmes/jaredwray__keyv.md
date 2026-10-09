@@ -56,7 +56,7 @@ compression/      Compression adapters
   compress-lz4/
 storage/          Storage adapters
   redis/  postgres/  mysql/  mongo/  sqlite/
-  memcache/  etcd/  valkey/  dynamo/  cloudflare-kv/
+  memcache/  etcd/  valkey/  valkey-glide/  dynamo/  cloudflare-kv/
 website/          Documentation website (keyv.org)
 ```
 
@@ -77,6 +77,7 @@ website/          Documentation website (keyv.org)
 * [redis](https://github.com/jaredwray/keyv/tree/main/storage/redis) - Redis storage adapter
 * [sqlite](https://github.com/jaredwray/keyv/tree/main/storage/sqlite) - SQLite storage adapter
 * [valkey](https://github.com/jaredwray/keyv/tree/main/storage/valkey) - Valkey (Open Source Redis) storage adapter
+* [valkey-glide](https://github.com/jaredwray/keyv/tree/main/storage/valkey-glide) - Valkey GLIDE storage adapter
 
 ## Compression Adapters
 
@@ -110,7 +111,7 @@ We welcome contributions! Here are some ways to get involved:
 
 # Keyv v5 to v6
 
-Keyv v6 is in pre-release. It includes several major changes such as improved TypeScript support, enhanced hooks system, and streamlined storage adapter interfaces. See the full migration guide at https://keyv.org/docs/migration/v5-to-v6/ (coming from v4? start with https://keyv.org/docs/migration/v4-to-v5/).
+Keyv v6 is the current stable release, starting with 6.1.0. It includes several major changes such as improved TypeScript support, enhanced hooks system, and streamlined storage adapter interfaces. See the full migration guide at https://keyv.org/docs/migration/v5-to-v6/ (coming from v4? start with https://keyv.org/docs/migration/v4-to-v5/).
 
 Using an AI coding agent? Tell it: *"Upgrade this project to Keyv v6 using https://keyv.org/skills/migrate"*. The migration skill lives in [skills/keyv-migrate](skills/keyv-migrate/SKILL.md) and can also be installed with `npx skills add jaredwray/keyv --skill keyv-migrate`.
 

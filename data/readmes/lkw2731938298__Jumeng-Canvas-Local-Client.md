@@ -6,8 +6,9 @@
 
 | | |
 |---|---|
-| 运行方式 | 本机 Next.js 服务 `http://127.0.0.1:3456` + 系统默认浏览器 |
-| 数据位置 | `data/JumengCanvas/`（可在设置里改成任意绝对路径） |
+| 运行方式 | **推荐**：Windows 安装包（Electron）双击桌面图标；或 bat 便携包 + 浏览器 |
+| 本机地址 | `http://127.0.0.1:3456`（安装版由应用内嵌窗口打开） |
+| 数据位置 | 安装版：`%AppData%` 下用户目录；便携包：`data/JumengCanvas/`（设置里可改） |
 | 依赖服务 | 无。不需要数据库、Docker、登录、联网鉴权 |
 | 模型来源 | 任意 OpenAI 兼容网关（聚梦、ComfyUI 及其它）由你自行配置 |
 | 许可证 | Apache-2.0 |
@@ -35,9 +36,32 @@
 
 ## 快速开始
 
-### 方式 A：免安装完整包（推荐给最终用户）
+### 方式 A：Windows 安装包（推荐给最终用户）
 
-**下载地址（百度网盘）**：https://pan.baidu.com/s/1Jx60MQiBSqn1EpZ-9_J5Ig?pwd=ztvv　提取码 `ztvv`
+**下载**：https://www.jumeng.vip/canvas.html（「立即下载」）或直链  
+https://www.jumeng.vip/downloads/JumengCanvas-Setup.exe
+
+1. 运行安装程序（可改安装目录；同一软件再次安装即**覆盖升级**，**无需先卸载**）
+2. 桌面快捷方式「聚梦无限画布」启动
+3. 项目与密钥保存在用户目录，升级后仍在
+4. 应用内顶栏「检查更新」→ 读官网 `downloads/latest.json`，下载 Setup 静默覆盖并重启
+
+> 未做代码签名时，Windows SmartScreen 可能提示「未知发布者」，选「仍要运行」即可。  
+> Gitee Release 附件有 100MB 限制，安装包请挂官网 `/downloads/`，勿依赖 Gitee 附件。
+
+**维护者打安装包**（开发机）：
+
+```bash
+npm install
+npm run dist:win
+# 产物：packages/desktop/dist/JumengCanvas-Setup-<version>.exe
+# 上传到官网 website/downloads/JumengCanvas-Setup.exe
+# 并更新 website/downloads/latest.json 的 version 字段
+```
+
+### 方式 B：免安装 bat 完整包
+
+**百度网盘**：https://pan.baidu.com/s/1Jx60MQiBSqn1EpZ-9_J5Ig?pwd=ztvv　提取码 `ztvv`
 
 完整包内已含便携 Node 和全部依赖，**无需安装 Node.js**：
 
@@ -45,8 +69,9 @@
 2. 双击 `启动本机画布.bat`
 3. 浏览器自动打开 `http://127.0.0.1:3456/projects`
 4. 关闭时双击 `停止本机画布.bat`
+5. 顶栏「检查更新」会从 **Gitee** 拉源码 zip 覆盖（不动 `data/`）
 
-### 方式 B：源码运行（开发者）
+### 方式 C：源码运行（开发者）
 
 本仓库即源码，不含 `node_modules` 与便携 Node：
 
@@ -61,7 +86,7 @@ npm install
 npm run dev
 ```
 
-启动后访问 `http://127.0.0.1:3456`。
+启动后访问 `http://127.0.0.1:3456`。开发可用 `npm run desktop:electron` 调试 Electron 壳（仍走 next dev）。
 
 ---
 
@@ -108,7 +133,7 @@ npm run dev
 |---|---|
 | `packages/web` | **主应用**。Next.js 16 + React 19 + TypeScript + Tailwind 4 |
 | `packages/shared` | 跨包共享的类型与常量 |
-| `packages/desktop` | 可选 Electron 外壳（`main.js` / `preload.js`），默认不启用，日常走浏览器 |
+| `packages/desktop` | Electron 桌面壳 + NSIS 打包（`npm run dist:win`）；`updater.js` 走 Gitee Releases |
 
 #### `packages/web/src` 布局
 

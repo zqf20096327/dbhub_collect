@@ -6,6 +6,9 @@
   <strong>Replayable memory for AI agents. Governed recall with canonical, hash-anchored audit evidence.</strong>
 </p>
 <p align="center">
+  The governed memory layer for multi-agent and regulated use: agents propose, reviewers approve, every change is audited.
+</p>
+<p align="center">
   Built on the MIND substrate &bull; Governed-write &bull; Deterministic recall &bull; 107 MCP tools<br>
   <sub>MIND Language Profile: <code>default</code> (full tensor stdlib + Q16.16 + heap) &mdash; see <a href="https://github.com/star-ga/mind/blob/main/docs/roadmap.md#phase-106--library-output--c-abi-mindc-026--030">Phase 10.6</a></sub><!-- mind-profile: default -->
 </p>
@@ -21,9 +24,9 @@
   <img src="https://img.shields.io/badge/core_deps-zero-brightgreen?style=flat-square" alt="Zero Core Dependencies">
   <a href="https://github.com/star-ga/mind-mem/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/star-ga/mind-mem/ci.yml?branch=main&style=flat-square&label=CI" alt="CI"></a>
   <a href="https://github.com/star-ga/mind-mem/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/star-ga/mind-mem/release.yml?style=flat-square&label=Release" alt="Release"></a>
-  <img src="https://img.shields.io/badge/test_functions-12%2C525-brightgreen?style=flat-square" alt="Test functions: 12,525">
+  <img src="https://img.shields.io/badge/test_functions-12%2C624-brightgreen?style=flat-square" alt="Test functions: 12,624">
   <img src="https://img.shields.io/badge/MCP_tools-107-blue?style=flat-square" alt="MCP Tools: 107">
-  <img src="https://img.shields.io/badge/clients-19-blueviolet?style=flat-square" alt="AI Clients: 19">
+  <img src="https://img.shields.io/badge/clients-20-blueviolet?style=flat-square" alt="AI Clients: 20">
   <img src="https://img.shields.io/badge/backends-markdown_%7C_postgres_%7C_encrypted-teal?style=flat-square" alt="Storage: Markdown + Postgres + Encrypted">
   <img src="https://img.shields.io/badge/audit-cross--model_%2B_SAST_%2B_SoW-darkgreen?style=flat-square" alt="Cross-model consensus audit + SAST (CodeQL/bandit/trivy) + external-audit SoW published">
 </p>
@@ -38,11 +41,11 @@
 
 MIND-Mem is a deterministic AI memory system: recall is defined by the **query, admitted corpus, configuration, scoring instant, and execution providers**. With those inputs held constant, its canonical audit/evidence encoding is byte-identical across replay; ranking scores themselves remain standard floating-point. The Q16.16 fixed-point audit chain is embedded in every applied decision.
 
-`scoring_instant` is a UTC date and is the honest part of that claim: recency ranking is load-bearing for a coding agent, so it is not deleted, it is *named
+`scoring_
 
 [...截断...]
 
-*. Omit it and it resolves to today in UTC — the one clock read on the whole path, taken once at the boundary, never inside the scoring loop. Its resolved value is bound into the recall attestation, so any attested run replays exactly by passing that date back.
+instant` is a UTC date and is the honest part of that claim: recency ranking is load-bearing for a coding agent, so it is not deleted, it is *named*. Omit it and it resolves to today in UTC — the one clock read on the whole path, taken once at the boundary, never inside the scoring loop. Its resolved value is bound into the recall attestation, so any attested run replays exactly by passing that date back.
 
 Built on the MIND substrate. Governed-write (`propose → review → approve_apply`). 107 MCP tools as the surface — but the differentiator is the substrate underneath. On the same workspace, recall uses the query, admitted corpus, configuration, `scoring_instant`, and execution providers. With those inputs held constant, the canonical audit/evidence encoding is byte-identical across replay; ranking scores remain standard floating-point, so this does not promise universal cross-provider result identity.
 
@@ -79,5 +82,4 @@ Output:
 | **Governed-write**      | Nothing reaches the source of truth without `propose → review → approve_apply`. No silent mutations. Ever. |
 | **Auditable**           | Every apply logged with timestamp, receipt, and DIFF. Full traceability from signal to decision. |
 | **Deterministic**       | No ML in the retrieval core. Q16.16 fixed-point encoding in the audit-hash preimage. The same preimage produces the same hash. |
-| **Local-first**         | The default retrieval path stores data locally. External storage and model providers are optional and must be configured. |
-| **No vendor lock-in**   | Plain Markdown files. Move to any 
+| **Local-first**         | The default retrieval path stores data 

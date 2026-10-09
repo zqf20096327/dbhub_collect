@@ -7,7 +7,7 @@
 </p>
 
 [![Continuous integration](https://github.com/sediment-ai/sediment/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/sediment-ai/sediment/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/sediment-cli?release=0.5.0)](https://pypi.org/project/sediment-cli/)
+[![PyPI](https://img.shields.io/pypi/v/sediment-cli?release=0.6.0)](https://pypi.org/project/sediment-cli/)
 [![Python 3.12](https://img.shields.io/badge/python-3.12-blue)](CONTRIBUTING.md)
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue)](LICENSE)
 [![Follow @sedimentai on X](https://img.shields.io/badge/Follow-%40sedimentai-000000?logo=x&logoColor=white)](https://x.com/sedimentai)
@@ -49,17 +49,17 @@ attribution_rate    80.0%    60.0%   +20.0%  +0.442    -2.6%   +42.6%    1.69   
 
 ## Get started
 
-On macOS with Homebrew, Debian, or Ubuntu:
+Install the CLI from PyPI with Python 3.12, then start the local server:
 
 ```sh
-curl -fsSL https://sediment.so/install.sh | sh
+pipx install sediment-cli    # or: uv tool install sediment-cli
 sediment server
 ```
 
-To preview the installer's changes, pipe it to `sh -s -- --dry-run` instead.
-
-Or install from PyPI with Python 3.12: `pipx install sediment-cli`, after the
-host libraries listed in the [Quickstart](docs/quickstart.md).
+`sediment server` needs host libraries: `libpq` and `openssl@3` with Homebrew,
+or `git ca-certificates libpq5 libxml2 libzstd1 liblz4-1 zlib1g` with `apt-get`
+on Debian and Ubuntu. The [installer](install.sh) adds them and the CLI for you:
+`curl -fsSL https://sediment.so/install.sh | sh`.
 
 - [Quickstart](docs/quickstart.md): connect an agent and verify capture.
 - [Integrations](docs/capture/agent-integrations.md): Claude Code, Codex,
@@ -73,9 +73,9 @@ host libraries listed in the [Quickstart](docs/quickstart.md).
 
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/architecture-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset=".github/assets/architecture-light.svg">
-    <img alt="Agent, gateway, and repository events flow into Facts in PostgreSQL, then into reports, agent context, and training datasets." src=".github/assets/architecture-light.svg" width="880">
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/data-flow-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset=".github/assets/data-flow-light.svg">
+    <img alt="A coding agent, Git, and CI send Facts to Sediment. Sediment derives an Attributed completion for reports and training rows. Agent context reads the Facts." src=".github/assets/data-flow-light.svg" width="782">
   </picture>
 </p>
 

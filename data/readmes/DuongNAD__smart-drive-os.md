@@ -10,6 +10,7 @@
 [![MCP Protocol: JSON-RPC 2.0](https://img.shields.io/badge/MCP-JSON--RPC%202.0%20stdio-purple.svg)](https://modelcontextprotocol.io/)
 [![MCP Security Audit: Grade A (100/100)](https://img.shields.io/badge/MCP%20Audit-Grade%20A%20(100%2F100)-brightgreen.svg)](#)
 [![M8ven Score](https://m8ven.ai/badge/mcp/duongnad-smart-drive-os-1kxkwu)](https://m8ven.ai/mcp/duongnad-smart-drive-os)
+[![CI](https://github.com/DuongNAD/smart-drive-os/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/DuongNAD/smart-drive-os/actions/workflows/tests.yml)
 [![Tests: 750/750 Passed (100%)](https://img.shields.io/badge/tests-750%2F750%20passed%20(100%25)-brightgreen.svg)](#)
 [![20 Portable Launchers](https://img.shields.io/badge/launchers-20%20portable%20scripts-blue.svg)](#)
 [![Release: v1.1.0](https://img.shields.io/badge/release-v1.1.0-blue.svg)](https://github.com/DuongNAD/smart-drive-os/releases/tag/v1.1.0)
@@ -416,6 +417,8 @@ Register all installed AI assistants instantly:
 smart-drive mcp register --all
 ```
 
+Run from a source checkout (no `pip install`), each registered entry also sets `PYTHONPATH` to the checkout, so clients can start the server from any working directory. A pip-installed copy needs no extra setting.
+
 Pre-packaged configuration templates are also maintained in `configs/`:
 - `configs/.mcp.json` — Local project / workspace root
 - `configs/mcp_config.json` — Google Antigravity 2.0 (`~/.gemini/antigravity/mcp_config.json`)
@@ -481,6 +484,7 @@ SmartDrive-OS is engineered from the ground up with a strict **local-first, zero
 - **Zero Telemetry & Phone-Home**: Zero analytics, zero usage trackers, and zero background network beacons.
 - **Zero PII Logging**: File contents, credentials, and source code secrets are never parsed or harvested; only basic filesystem metadata is stored in local `.smart_drive/index.db`.
 - **Air-Gap Ready**: Zero external pip dependencies (`dependencies = []`). The embedded Web Dashboard binds exclusively to `127.0.0.1` (`localhost`), and the MCP Server operates solely over local `stdio`.
+- **Dashboard Request Guard**: The dashboard API answers only requests whose `Host` is `127.0.0.1`/`localhost` on its own port and whose `Origin`, when present, is the dashboard itself, so a web page open in your browser can neither read it nor trigger a purge. Foreign hosts/origins get `403`, state-changing calls must be `application/json`, and responses carry `X-Frame-Options`, `nosniff` and a Content-Security-Policy. To let a local front-end dev server call the API, opt in explicitly: `SMART_DRIVE_UI_ALLOWED_ORIGINS=http://localhost:5173`.
 - **Defensive Safeguards**: Inviolable whitelist protecting critical files (`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `README.md`, `PRIVACY.md`), mandatory dry-run defaults for cleanup, and strict input boundary validation.
 
 For full architectural details, security models, and compliance specifications, please read our authoritative [PRIVACY.md](PRIVACY.md).
