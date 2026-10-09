@@ -10284,5 +10284,120 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "af83b270a2e2": {
+  "identity": {
+   "one_liner": "自托管的零信任访问网关，通过浏览器工作区代理访问内网数据库与应用",
+   "review": "Liaison 是一个自托管的零信任访问平台，通过外发连接器接入私有网络，提供浏览器端 WebSSH/WebRDP/WebMySQL 等工作区访问内网服务，并为本地 LLM 提供带密钥管理与配额的 API 共享；内置 Agent 可在用户权限范围内检查终端输出、起草命令和查询数据库。适合需要统一审计与访问管控的运维/DBA 团队。",
+   "highlights": [
+    "提供浏览器端工作区，支持访问 MySQL、PostgreSQL、Redis、MongoDB 等服务",
+    "外发连接器可在不开放入站端口的情况下接入私有网络",
+    "内置 AI Agent，工具访问遵循用户权限并需确认审批"
+   ],
+   "use_cases": [
+    "通过浏览器安全访问内网数据库和桌面服务",
+    "向网络外部分享本地 LLM 模型的 API 访问",
+    "对管理操作和应用会话进行日志与审计"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🖥️ **Browser workspaces** — WebSSH, WebSFTP, WebRDP, WebVNC, MySQL, MariaDB, PostgreSQL, SQL Server, Oracle, ClickHouse, MongoDB, Elasticsearch, OpenSearch, Redis, and Memcached.",
+     "lines": [
+      31
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 🖥️ **Browser workspaces** — WebSSH, WebSFTP, WebRDP, WebVNC, MySQL, MariaDB, PostgreSQL, SQL Server, Oracle, ClickHouse, MongoDB, Elasticsearch, OpenSearch, Redis, and Memcached. ／ ### Web MySQL ／ Using MySQL through Liaison",
+     "lines": [
+      31,
+      100,
+      104
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- 🖥️ **Browser workspaces** — WebSSH, WebSFTP, WebRDP, WebVNC, MySQL, MariaDB, PostgreSQL, SQL Server, Oracle, ClickHouse, MongoDB, Elasticsearch, OpenSearch, Redis, and Memcached.",
+     "lines": [
+      31
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- 🖥️ **Browser workspaces** — WebSSH, WebSFTP, WebRDP, WebVNC, MySQL, MariaDB, PostgreSQL, SQL Server, Oracle, ClickHouse, MongoDB, Elasticsearch, OpenSearch, Redis, and Memcached.",
+     "lines": [
+      31
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- 🖥️ **Browser workspaces** — WebSSH, WebSFTP, WebRDP, WebVNC, MySQL, MariaDB, PostgreSQL, SQL Server, Oracle, ClickHouse, MongoDB, Elasticsearch, OpenSearch, Redis, and Memcached.",
+     "lines": [
+      31
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- 🖥️ **Browser workspaces** — WebSSH, WebSFTP, WebRDP, WebVNC, MySQL, MariaDB, PostgreSQL, SQL Server, Oracle, ClickHouse, MongoDB, Elasticsearch, OpenSearch, Redis, and Memcached.",
+     "lines": [
+      31
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "提供浏览器端数据库访问代理和连接管理，为数据库生态服务而非仅使用数据库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU Affero General Public License v3.0",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🔌 **Outbound-only connectors** — connect private networks without opening inbound ports on them. ／ - 🖥️ **Browser workspaces** — WebSSH, WebSFTP, WebRDP, WebVNC, MySQL, MariaDB, PostgreSQL, SQL Server, Oracle, ClickHouse, MongoDB, Elasticsearch, OpenSearch, Redis, and Memcached. ／  SQL databases WebMySQL&nbsp;&nbsp; WebMariaDB&nbsp;&nbsp; WebPostgreSQL&nbsp;&nbsp; WebSQLServer&nbsp;&nbsp; WebOracle&nbsp;&nbsp; WebClickHouse",
+   "evidence_lines": [
+    29,
+    31,
+    58
+   ]
+  },
+  "fn": "liaisonio/liaison",
+  "sha": "af83b270a2e2",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

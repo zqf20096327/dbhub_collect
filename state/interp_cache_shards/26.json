@@ -8705,5 +8705,142 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "97a4920833dc": {
+  "identity": {
+   "one_liner": "ClickHouse 官方 ODBC 驱动，将 ClickHouse 作为 ODBC 数据源访问",
+   "review": "该项目实现 ClickHouse 的官方 ODBC 驱动，供应用程序通过 ODBC 驱动管理器（MDAC、UnixODBC、iODBC）读取 ClickHouse 数据。支持 DSN 参数配置连接、TLS/SSL、压缩与驱动日志，主要针对 ClickHouse 21.3 版本测试。使用者是需要通过 ODBC 接口接入 ClickHouse 的应用开发与集成人员，需自行处理驱动注册与 DSN 配置。",
+   "highlights": [
+    "通过 ODBC 驱动管理器（MDAC、UnixODBC、iODBC）访问 ClickHouse 数据源",
+    "支持 DSN 参数配置，包括 TLS/SSL 证书验证、数据压缩、驱动日志等",
+    "提供 Linux、macOS、Windows 预编译二进制包，并支持从源码构建"
+   ],
+   "use_cases": [
+    "BI/报表等支持 ODBC 的应用程序连接 ClickHouse 读取数据",
+    "在 Windows、macOS、Unix 环境中为应用配置 ClickHouse ODBC 数据源",
+    "需要定制参数（如 HugeIntAsString、SqlCompatibilitySetting）的集成场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "# ODBC Driver for ClickHouse ／ This is the official ODBC driver implementation for accessing ClickHouse as a data source.",
+     "lines": [
+      1,
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "驱动本身不存储业务数据，而是为应用程序访问 ClickHouse 提供连接组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": true,
+    "of": "ClickHouse"
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is the official ODBC driver implementation for accessing ClickHouse as a data source. ／ Note, that since ODBC drivers are not used directly by a user, but rather accessed through applications, which in their turn access the driver through ODBC driver manager, user have to install the driver for the **same architecture** (32- or 64-bit) as the application that is going to access the driver. Moreover, both the driver and the application must be compiled for (and actually use during run-time) the **same ODBC driver manager implementation** (we call them \"ODBC providers\" here). There are three supported ODBC providers:",
+   "evidence_lines": [
+    9,
+    29
+   ]
+  },
+  "fn": "ClickHouse/clickhouse-odbc",
+  "sha": "97a4920833dc",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0768c166b7c2": {
+  "identity": {
+   "one_liner": "单二进制 Go MCP 服务器，用本地 SQLite 为 AI 编码代理提供共享上下文、记忆与任务协调",
+   "review": "guild 是一个单编译 Go 二进制，内含 MCP 服务器，用嵌入式 SQLite 在本地存储 lore（知识）、briefs（交接）和 quest（任务），支持原子任务认领与依赖解锁，搜索混合 BM25 关键词与向量相似度（可选 Ollama/ONNX 嵌入后端，Windows 和无嵌入构建仅关键词检索）。面向使用 Claude Code、Codex、Cursor 等 MCP 客户端的开发者与自动化代理团队，需 macOS/Linux/Windows 及支持 MCP 的编辑器。",
+   "highlights": [
+    "提供 MCP 服务器，任何 MCP 客户端（Claude Code、Codex、Cursor 等）可共享同一本地状态",
+    "搜索混合 BM25 关键词与向量相似度（rank fusion），嵌入后端可选本机 ONNX 或 Ollama",
+    "支持原子 quest 认领防止并行代理冲突，任务完成自动解锁依赖；Windows/无嵌入构建降级为仅关键词检索"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理跨编辑器共享项目上下文与记忆",
+    "并行代理会话的任务认领与交接协调",
+    "团队知识的本地持久化积累与检索"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`guild` is a single compiled Go binary containing a first-class MCP server backed by embedded SQLite. State is stored locally, and the default embedding backend runs on your machine. The optional Ollama backend sends embedding text to the configured Ollama end ／ keeps everything (SQLite databases, config) under `/home/guild/.guild`. ／ State lives in SQLite under `~/.guild/`. Switching MCP clients requires no export, no migration.",
+     "lines": [
+      12,
+      117,
+      265
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 是其嵌入式本地状态存储，项目本身是为 AI 代理协调服务的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`guild` is a single compiled Go binary containing a first-class MCP server backed by embedded SQLite. State is stored locally, and the default embedding backend runs on your machine. The optional Ollama backend sends embedding text to the configured Ollama endpoint. Search blends keyword (BM25) with vector similarity using rank fusion that preserves strong matches from either source, so \"how did we do X last time\" surfaces both exact-term and semantic neighbors. ／ Guild is designed to be operated autonomously by the agents, for the agents. Guildmasters (us humans) stay in the loop for important decisions and course corrections. Any MCP client — Claude Code, Codex, Cursor, etc. — can act as a Gate into the substrate. This lets parallel agents across different editors share context safely, using atomic locks to claim tasks without stepping on each other. ／ keeps everything (SQLite databases, config) under `/home/guild/.guild`.",
+   "evidence_lines": [
+    12,
+    14,
+    117
+   ]
+  },
+  "fn": "mathomhaus/guild",
+  "sha": "0768c166b7c2",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

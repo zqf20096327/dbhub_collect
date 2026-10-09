@@ -7931,5 +7931,145 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "45b278dcea0e": {
+  "identity": {
+   "one_liner": "离线优先的本地个人记账 Android 应用，数据存于本地 SQLite",
+   "review": "Poka CE 是一款用 Flutter 开发的个人财务管理应用，所有交易、预算、目标数据存储在设备本地的 SQLite 数据库（通过 Drift 访问），无账户、无云端同步、无遥测。面向注重数据隐私、希望完全离线使用记账工具的个人用户。目前仅提供 Android APK 发行版，iOS 与桌面版尚未提供。",
+   "highlights": [
+    "所有数据仅存储在设备本地 SQLite 数据库（Drift），无网络传输与分析埋点",
+    "支持多账户管理、预算、目标、借贷跟踪及 Excel/JSON 导入导出",
+    "提供英文与印尼语双语界面与应用内语言切换"
+   ],
+   "use_cases": [
+    "个人日常收支、预算与储蓄目标记录",
+    "需要在无网络环境下管理财务数据的场景",
+    "希望本地持有并自行备份/导出财务数据的用户"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "record lives exclusively in a local SQLite database on your device. ／ - **Offline First & Private** — 100% local SQLite storage via Drift. No internet required, no analytics, no trackers. ／ - **Database**: Drift (SQLite, local-only)",
+     "lines": [
+      45,
+      68,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储自身数据的终端应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0，附商标与品牌使用限制政策",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "record lives exclusively in a local SQLite database on your device. ／ - **Database**: Drift (SQLite, local-only) ／ |**Poka (Official Play Store)**|Multi-device cloud sync, shared wallets & pocket collaboration, multi-currency, AI assistant, and automatic updates|Google Play|",
+   "evidence_lines": [
+    45,
+    74,
+    88
+   ]
+  },
+  "fn": "getpoka/poka-ce",
+  "sha": "45b278dcea0e",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ae34d5700ab2": {
+  "identity": {
+   "one_liner": "基于 Rust axum+SeaORM 的企业级多租户管理后台平台",
+   "review": "该仓库是运行在 RushWind 框架上的管理后台应用，提供 RBAC、多租户隔离、TOTP MFA 与审计日志功能，并附带 Vue3 与 React 三套前端。数据存储使用 PostgreSQL，Redis 尚在接入中；后端经 cargo run 启动，启动时执行迁移与种子数据。适合需要私有化部署企业后台的团队自部署使用。",
+   "highlights": [
+    "以 Protobuf 为 API 契约，构建期生成路由、错误状态映射与服务接口",
+    "内置多租户 RBAC、TOTP MFA、JWT RS256 鉴权与审计日志留存",
+    "同时提供 Vue3 Vben / Vue3 Element Plus / React19 三套前端"
+   ],
+   "use_cases": [
+    "企业内部管理后台的私有化部署",
+    "需要多租户隔离与权限控制的 SaaS 管理端",
+    "按等保 2.0 技术要求准备审计与访问控制措施的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "存储层 <code>SeaORM</code> · <code>PostgreSQL</code> · <code>Redis</code>（接入中） ／ |**数据备份恢复**|定时全量备份（pg_dump，默认保留 30 份自动轮换），支持 Docker 容器 / 本地直连双模式| ／ - 启动时连接 PostgreSQL 与 Redis，配置位于 `backend/services/admin-api/assets/`（`auth.yaml` / `data.yaml` / `oss.yaml`）",
+     "lines": [
+      78,
+      96,
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明存储层使用 PostgreSQL 与 SeaORM，启动时连接 PostgreSQL 与 Redis 存取数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " 存储层 <code>SeaORM</code> · <code>PostgreSQL</code> · <code>Redis</code>（接入中） ／ |**数据备份恢复**|定时全量备份（pg_dump，默认保留 30 份自动轮换），支持 Docker 容器 / 本地直连双模式| ／ - 启动时连接 PostgreSQL 与 Redis，配置位于 `backend/services/admin-api/assets/`（`auth.yaml` / `data.yaml` / `oss.yaml`）",
+   "evidence_lines": [
+    78,
+    96,
+    142
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "tx7do/rushwind-admin",
+  "sha": "ae34d5700ab2",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

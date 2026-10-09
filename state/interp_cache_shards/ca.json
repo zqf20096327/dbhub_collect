@@ -8148,5 +8148,194 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d3e7dfc5f125": {
+  "identity": {
+   "one_liner": "MQTT 消息代理，兼容 MQTT v3.1/v3.1.1/v5.0，基于 Kafka 提供持久化",
+   "review": "TBMQ 是一个分布式 MQTT broker，支持单机和集群部署，提供会话与订阅管理、多种认证方式、实时监控和 REST API。面向构建 IoT 设备通信的场景， README 提到单集群可水平扩展管理超过 1 亿 MQTT 连接。安装方式包含 Docker、Kubernetes 和 Helm Charts。许可为 Apache 2.0。",
+   "highlights": [
+    "兼容 MQTT v3.1、v3.1.1 和 v5.0 协议，支持单节点与集群环境",
+    "支持水平扩展，可管理超过 1 亿 MQTT 连接",
+    "支持 Basic、JWT、X.509、SCRAM、HTTP 等认证方式，并提供每客户端 ACL 规则"
+   ],
+   "use_cases": [
+    "IoT 设备遥测接入（fan-in 消息采集）",
+    "设备广播通知（fan-out 消息分发）",
+    "设备命令与控制（点对点消息路由）"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "TBMQ 是为 IoT 设备通信提供 MQTT 消息中间件服务的代理，不是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "docker",
+    "helm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TBMQ is fully compliant with the MQTT v3.1, v3.1.1 and v5.0 protocols, delivering complete support for all core MQTT features across both single-node and clustered environments. Whether you’re building scalable IoT solutions or ensuring reliable communication for connected devices, TBMQ meets the latest standards for seamless interoperability. ／ * **Docker** for quick local or on-premise setups. ／  Scale horizontally to manage more than 100M MQTT connections on a single cluster.",
+   "evidence_lines": [
+    11,
+    37,
+    118
+   ]
+  },
+  "fn": "thingsboard/tbmq",
+  "sha": "d3e7dfc5f125",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "eb46c0cad835": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 图+向量的确定性代码图上下文引擎，供 AI 编码代理查询",
+   "review": "该工具把代码仓库索引为符号、调用、引用等关系图，存入带 Apache AGE 与 pgvector 的 PostgreSQL，通过图遍历生成可复现的上下文包，并提供 MCP 与 REST 接口供 Cursor、Claude Code 等编码代理调用。检索路径不使用 LLM，仅有可选的上下文选择器步骤。需要自行运行 PostgreSQL 实例与索引流程。",
+   "highlights": [
+    "将代码索引为图（CALLS、REFERENCES、INHERITS 等）并通过图遍历排序返回上下文，检索路径无模型、无随机性",
+    "提供 MCP（stdio）与 REST 两种接入方式，内置 Cursor、VS Code、Claude Code 等初始化命令",
+    "支持 Python/JavaScript/TypeScript 内置，Java/C#/Go 经 langs extra 启用，共六种语言"
+   ],
+   "use_cases": [
+    "AI 编码代理在陌生仓库中定位与任务相关的符号与调用链",
+    "评估代码变更影响范围（调用方、引用点）",
+    "需要可复现检索结果的代理工作流调试与回放"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# 1. PostgreSQL 16 with Apache AGE + pgvector, in one database",
+     "lines": [
+      60
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目以 PostgreSQL（含 Apache AGE、pgvector）作为存储后端，为编码代理提供索引与检索服务，属于围绕数据库能力的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 1. PostgreSQL 16 with Apache AGE + pgvector, in one database ／ bce serve-mcp    # MCP over stdio, for agents (install the [mcp] extra; see below) ／ - **Code graph, not chunks.** Symbols, `CALLS`, `REFERENCES`, `INHERITS`, `IMPLEMENTS`,",
+   "evidence_lines": [
+    60,
+    70,
+    222
+   ]
+  },
+  "fn": "bgts-ai-org/bgts-context-engine",
+  "sha": "eb46c0cad835",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b02a40152472": {
+  "identity": {
+   "one_liner": "AI 编码代理的可回滚安全层，快照文件并代理 PostgreSQL 写入",
+   "review": "unring 用命令包装一次有边界的 agent 运行：对本地文件做 APFS 快照与写时复制克隆，对 PostgreSQL 写入共享同一真实事务，运行结束后由用户审查再执行最终 COMMIT 或 ROLLBACK。面向使用 Claude Code、Codex、OpenCode 等代理的开发者；仅支持 PostgreSQL 14+，MySQL 因 DDL 隐式提交不被支持，macOS 保护层级高于 Linux。",
+   "highlights": [
+    "通过真实事务持有 PostgreSQL 写入，以最终 COMMIT/ROLLBACK 决定生效",
+    "用 APFS 快照与写时复制克隆实现文件变更回滚，附审计日志",
+    "提供 GitHub、HTTPS 出站操作的 opt-in 审查适配器"
+   ],
+   "use_cases": [
+    "运行 AI 编码代理前保护本地文件与开发数据库，运行后审查并撤销变更",
+    "对 agent 发起的 GitHub/HTTPS 出站操作先暂存再人工确认",
+    "记录 agent 会话的变更清单与审计日志用于事后排查"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- Postgres only. MySQL commits DDL implicitly, which breaks the core guarantee.",
+     "lines": [
+      570
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明为 AI 编码代理提供安全层，通过代理/事务机制为 PostgreSQL 写入提供可回滚能力，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT license",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A safety layer for AI coding agents. ／  Snapshot local files, hold PostgreSQL writes in a real transaction, and review opt-in outbound effects before they become permanent. ／ |**PostgreSQL**|Shares one real transaction across the agent's connections|One final `COMMIT` or `ROLLBACK`|",
+   "evidence_lines": [
+    11,
+    12,
+    28
+   ],
+   "softened": []
+  },
+  "fn": "hyj28/unring",
+  "sha": "b02a40152472",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

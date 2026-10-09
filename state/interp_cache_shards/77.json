@@ -9903,5 +9903,78 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2ea603931302": {
+  "identity": {
+   "one_liner": "私有文档智能工作区：上传解析文档并做带引用的RAG问答",
+   "review": "DocuMind 是一个自托管的文档问答平台：用户上传文档后经 Docling 布局解析，向量化存入 Qdrant，通过 Gemini 生成带来源引用的回答。采用 Next.js 前端 + FastAPI 后端 + PostgreSQL 存储，Compose 一键启动，内置 JWT 认证、按用户隔离数据、S3 存储适配与 Celery 任务队列，适合需要私有化部署文档问答的团队或个人。",
+   "highlights": [
+    "提供基于 JWT 的认证与按用户 ID 隔离的文档查询与向量过滤",
+    "支持 Docker Compose 一键启动，后端自动执行 Alembic 迁移",
+    "提供本地与 S3 两种存储后端，默认服务端加密"
+   ],
+   "use_cases": [
+    "私有化部署的文档问答与检索",
+    "带来源引用的文档内容审阅与导出",
+    "多用户隔离的团队知识库场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Compose starts PostgreSQL, Qdrant, the backend, and the Next.js frontend. The backend applies Alembic migrations before starting. Uploaded bytes stay under private `storage/` and are never returned as public URLs. ／ - `GET /api/v1/metrics` is intentionally hidden unless `METRICS_TOKEN` is configured and supplied as `X-Metrics-Token`. Job counts, retry totals, queue age, and average processing duration are read from PostgreSQL; rate-limit and dispatch error counters are pr",
+     "lines": [
+      17,
+      58
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 PostgreSQL 由 Compose 启动、后端对其执行迁移并从其读取任务指标，即该库是平台自身的数据存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "DocuMind is a private document-intelligence workspace: authenticated users upload documents, process them, inspect/export results, and ask grounded questions with source citations. ／ Compose starts PostgreSQL, Qdrant, the backend, and the Next.js frontend. The backend applies Alembic migrations before starting. Uploaded bytes stay under private `storage/` and are never returned as public URLs. ／ - `GET /api/v1/metrics` is intentionally hidden unless `METRICS_TOKEN` is configured and supplied as `X-Metrics-Token`. Job counts, retry totals, queue age, and average processing duration are read from PostgreSQL; rate-limit and dispatch error counters are process-local.",
+   "evidence_lines": [
+    3,
+    17,
+    58
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "yashrajagawane/documind",
+  "sha": "2ea603931302",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

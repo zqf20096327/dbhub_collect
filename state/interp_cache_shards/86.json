@@ -8740,5 +8740,211 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "71338dbee27b": {
+  "identity": {
+   "one_liner": "开源设计画布应用，用于图形、图像与演示创作",
+   "review": "Grida 是一个开源画布工具，提供桌面端应用，用于图形设计、图像生成和演示制作，支持导入 Figma 文件并集成 AI 模型（可用 Ollama 本地模型或自带 provider key）。配套提供 CLI、FX 工作流与 AI Gateway 等组件。面向设计师与创意工作者，采用 Apache 2.0 许可证，基于自研 nothing 图形引擎构建。",
+   "highlights": [
+    "提供 macOS、Windows、Linux 桌面端，支持在开放画布上组合图像、文字与矢量图形",
+    "支持 AI 辅助创作，可使用自带 provider key 或 Ollama 本地文本模型",
+    "提供 CLI 用于从终端或脚本生成媒体内容，无需运行桌面端"
+   ],
+   "use_cases": [
+    "图形设计与图像创作",
+    "演示文稿制作",
+    "通过 CLI/脚本在自动化流程中生成媒体资产"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未说明数据库的具体用途，仅 topic 标签含 postgresql，证据不足",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**An open-source canvas for design and creative work.** ／ Design graphics, create images, and make presentations with AI in Grida Desktop. ／ Available for macOS, Windows, and Linux.",
+   "evidence_lines": [
+    5,
+    7,
+    11
+   ]
+  },
+  "fn": "gridaco/grida",
+  "sha": "71338dbee27b",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a9cf34372d78": {
+  "identity": {
+   "one_liner": "面向 UniFi 设备的 AI 驱动 syslog 采集与安全仪表盘应用，存 SQLite",
+   "review": "这是一个自包含的 Node.js SIEM 应用：通过 UDP 采集 UniFi 控制台/网关的 syslog 与 CEF 日志，解析 11 类事件，默认存入 SQLite（可切换 OpenSearch/WardSONDB），并提供实时事件流、地图、威胁情报和 AI 威胁猎捕界面。面向使用 Ubiquiti UniFi 设备并需要集中查看安全日志的网络管理员。依赖 Node.js 22 和 better-sqlite3 原生编译，AI Threat Hunt 需自备大模型 API 密钥。",
+   "highlights": [
+    "提供 UDP syslog 采集器，支持 11 类事件解析（防火墙、威胁、DHCP、DNS、Wi-Fi、VPN 等）",
+    "提供可插拔存储后端：SQLite（默认，WAL 模式+物化汇总表）、WardSONDB（Beta）、OpenSearch（Beta，经 Docker 运行）",
+    "提供实时仪表盘、Leaflet 地图、GeoIP/AbuseIPDB 富化，以及基于 SSE 流式的 AI Threat Hunt 调查（支持 Anthropic/OpenAI/Google API 密钥）"
+   ],
+   "use_cases": [
+    "集中采集并实时查看 UniFi 控制台/网关的防火墙、IDS、DHCP、VPN 等日志",
+    "对可疑 IP 做时间窗口内的本地事件与外部情报（rDNS、WHOIS/ASN、AbuseIPDB）关联调查",
+    "以 8M+ 至 12M+ 事件规模运行时切换 OpenSearch 或 WardSONDB 后端以支撑仪表盘查询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A self-contained, **AI-powered** Node.js application that collects syslog from UniFi consoles and gateways, parses all event types, stores them in SQLite (or OpenSearch/WardSONDB), and serves a real-time security dashboard with built-in AI threat hunting. ／ > **📊 Backend Recommendation for Scale:** Both **OpenSearch** and **SQLite** are production-ready at scale. OpenSearch uses native aggregations (`date_histogram`, `terms`, `cardinality`) for sub-second dashboard queries. SQLite uses five materialized rollup ta ／ - **Pluggable storage backends** — SQLite (built-in default), WardSONDB (Beta), OpenSearch (Beta). OpenSearch runs via Docker with native aggregations (no rollup tables), batched enrichment backfill with `update_by_query`, and full Threat Hunt support. WardSON",
+     "lines": [
+      7,
+      11,
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该应用把采集的 syslog 事件存储在 SQLite/OpenSearch 中，数据库是其数据存储而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A self-contained, **AI-powered** Node.js application that collects syslog from UniFi consoles and gateways, parses all event types, stores them in SQLite (or OpenSearch/WardSONDB), and serves a real-time security dashboard with built-in AI threat hunting. ／ - **Pluggable storage backends** — SQLite (built-in default), WardSONDB (Beta), OpenSearch (Beta). OpenSearch runs via Docker with native aggregations (no rollup tables), batched enrichment backfill with `update_by_query`, and full Threat Hunt support. WardSONDB runs remotely over HTTPS with a per-client undici dispatcher for connect-timeout tuning ／ - **SQLite storage** — WAL mode, batched inserts, automatic retention cleanup, worker thread enrichment. Materialized rollup tables (event_stats_5m, ip/port/sig/client_stats_hourly) are updated atomically on insert for sub-second dashboard stats at scale (tested to 8M+ events). A dedicated stats worker thread keeps the event loop responsive during queries. Existing databases self-heal on restart: legacy indexes are automatically dropped and replaced with optimized compound indexes, and rollup tables are backfilled from existing events on first upgrade",
+   "evidence_lines": [
+    7,
+    26,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Ward-Software-Defined-Systems/UniFI-Network-SIEM",
+  "sha": "a9cf34372d78",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1cc6fac95b4e": {
+  "identity": {
+   "one_liner": "面向 PHP 的 GaussDB M/ORA 兼容接入套件，基于 PDO_ODBC 实现",
+   "review": "该项目为中文 PHP 开发者提供一套兼容层源码，通过 PHP PDO_ODBC 与官方 Unicode ODBC 驱动访问 GaussDB 的 M 模式和 A/ORA 模式数据库，处理模式校验、UTF-8、布尔与二进制差异，保留参数化 SQL、事务和保存点。仓库明确声明这是教学与集成参考代码，非厂商二进制驱动，生产使用需自行验证加固。适用于需要以 PHP 接入 GaussDB 两种模式的开发场景。",
+   "highlights": [
+    "提供 src/ 下的 PHP 兼容层，Windows/Linux 使用同一 API（L20-L21）",
+    "保留参数化 SQL、事务、保存点、SQLSTATE 与原生 PDO 访问能力（L24）",
+    "连接后核对数据库模式及 UTF-8，提供显式布尔与二进制结果类型（L22-L23）"
+   ],
+   "use_cases": [
+    "PHP 业务代码通过 ODBC 链路接入 GaussDB M 模式或 A/ORA 模式数据库",
+    "作为教学与集成参考代码，学习 GaussDB 兼容层的设计与部署（L10）",
+    "在已有 GaussDB 实例上部署只读连接验证示例（L31、L73）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# GaussDB PHP M/ORA 兼容接入套件 ／ 本套件面向中文 PHP 开发者，演示如何通过官方 Unicode ODBC 驱动访问 GaussDB M 模式和 A/ORA 模式数据库，处理模式校验、UTF-8、布尔及二进制差异，不修改数据库内核。 ／ PHP 业务代码 → GaussDb\\Compat → PHP PDO_ODBC → 官方 Unicode ODBC → GaussDB",
+     "lines": [
+      1,
+      8,
+      17
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- M 模式接受数据库标识 `M/MYSQL`；A/ORA 模式也接受输入别名 `O`。",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为访问 GaussDB 数据库服务的 PHP 兼容层组件，本身不存储业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0，按原样提供，不作任何保证（L3、L112）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本套件面向中文 PHP 开发者，演示如何通过官方 Unicode ODBC 驱动访问 GaussDB M 模式和 A/ORA 模式数据库，处理模式校验、UTF-8、布尔及二进制差异，不修改数据库内核。 ／ 这是教学与集成参考代码，不是厂商二进制驱动或生产支持承诺。生产使用前必须在实际运行时、数据库和驱动组合中完成充分验证、加固与优化。 ／ PHP 业务代码 → GaussDb\\Compat → PHP PDO_ODBC → 官方 Unicode ODBC → GaussDB",
+   "evidence_lines": [
+    8,
+    10,
+    17
+   ]
+  },
+  "fn": "huaweicloud-samples/database-gaussdb-php-driver",
+  "sha": "1cc6fac95b4e",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

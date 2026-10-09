@@ -10076,5 +10076,257 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3d56b87c8483": {
+  "identity": {
+   "one_liner": "AI 热点日报网站框架：采集信源，LLM 精选打分聚簇成刊",
+   "review": "AIHOT 是一个自建行业热点日报站的开源框架：从 RSS、网页、X、公众号等六种信源采集内容，用大模型预筛、两次独立评分、写中文摘要，并把同一事件的报道聚簇后按热度生成日报、周报、月报。信源名单、评分提示词和门槛均可替换为用户自己的行业标准。技术栈为 Node.js/TypeScript + PostgreSQL + pg-boss，通过 Docker Compose 部署，并提供 RSS、API、MCP 等 Agent 接入出口。",
+   "highlights": [
+    "提供采集、预筛、两次评分、写作、聚簇、成刊六步流水线，提示词与入选门槛存于 industry/prompts/ 可修改",
+    "支持 RSS、网页列表、JSON 接口、X 账号、微信公众号及脚本推送六种信源，按来源分级设置入选门槛",
+    "对外提供 RSS、公开 API、MCP、Agent Markdown、llms.txt 等机器访问出口"
+   ],
+   "use_cases": [
+    "为法律、HR、金融等行业搭建自己的 AI 热点日报站",
+    "替换信源与评分标准，运行自有行业的每日精选与周报月报",
+    "通过 MCP/API/RSS 将精选内容接入 Agent 或其他阅读工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 17 ／ 技术栈：Node.js 24 · TypeScript · React Router（服务端渲染）· Fastify · PostgreSQL · pg-boss · Tailwind CSS · Docker Compose。",
+     "lines": [
+      5,
+      140
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 技术栈声明使用 PostgreSQL 作为数据存储，属于使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可证；AIHOT 名称与 Logo 及字体不在许可范围内",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 一个自己找热点、自己写日报的网站框架。 ／ |**日报、周报、月报**|每天出日报（默认 08:00），按规则编出当天要闻：一件事一条，报过的事只在有新进展时跟进，不调模型。每周一出周报、每月 1 日出月报（默认 10:00、10:30），从日报里汇编，模型只写总述和栏目导读。几点出刊在 `site/site.ts` 的 `EDITION_TIMES` 里改| ／ 技术栈：Node.js 24 · TypeScript · React Router（服务端渲染）· Fastify · PostgreSQL · pg-boss · Tailwind CSS · Docker Compose。",
+   "evidence_lines": [
+    9,
+    70,
+    140
+   ]
+  },
+  "fn": "KKKKhazix/AIHOT",
+  "sha": "3d56b87c8483",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "db08f2842859": {
+  "identity": {
+   "one_liner": "EF Core 批量 CRUD 扩展库，基于各数据库原生 BulkCopy 实现",
+   "review": "一个 .NET 的 Entity Framework Core 扩展库，通过各数据库原生的批量协议（如 SqlBulkCopy、COPY BINARY、MySqlBulkCopy）提供 Insert/Update/Delete/Read/Upsert/Sync/Truncate 等批量操作，以及 SaveChanges 的批量重写。面向使用 EF Core 且需处理大批量数据的 .NET 开发者。注意 Batch 类操作自 EF8 起已标记弃用，Sync 功能不支持 SQLite 与 PostgreSQL。",
+   "highlights": [
+    "提供 BulkInsert/BulkUpdate/BulkDelete/BulkRead/Upsert/Sync/Truncate/BulkSaveChanges 等批量 API，支持同步与异步调用",
+    "针对各数据库使用原生批量机制：SqlBulkCopy、PostgreSQL COPY BINARY、MySqlBulkCopy、OracleBulkCopy、SQLite UPSERT",
+    "通过 NuGet 分发，提供主包与按数据库适配器后缀的单提供程序小包"
+   ],
+   "use_cases": [
+    "EF Core 项目中大批量数据的快速插入/更新/删除/读取",
+    "将实体列表与数据库表行进行同步（BulkInsertOrUpdateOrDelete）",
+    "基于实体列表的大集合条件查询（BulkRead，替代 Where IN / 内存 JOIN）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Supports all 5 major sql databases: **SQLServer, PostgreSQL, MySQL, Oracle, SQLite.** ／ -**PostgreSQL** (9.5+) is using COPY BINARY combined with ON CONFLICT for Update. ／ Specific ones have adapter suffix: MainNuget + *.SqlServer/PostgreSql/MySql/Oracle/Sqlite*",
+     "lines": [
+      10,
+      41,
+      52
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Supports all 5 major sql databases: **SQLServer, PostgreSQL, MySQL, Oracle, SQLite.** ／ -**MySQL** (8+) is using MySqlBulkCopy combined with ON DUPLICATE for Update. ／ Specific ones have adapter suffix: MainNuget + *.SqlServer/PostgreSql/MySql/Oracle/Sqlite*",
+     "lines": [
+      10,
+      42,
+      52
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Supports all 5 major sql databases: **SQLServer, PostgreSQL, MySQL, Oracle, SQLite.** ／ -**Oracle** (8+) is using OracleBulkCopy combined with MERGE for Update. ／ Specific ones have adapter suffix: MainNuget + *.SqlServer/PostgreSql/MySql/Oracle/Sqlite*",
+     "lines": [
+      10,
+      43,
+      52
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Supports all 5 major sql databases: **SQLServer, PostgreSQL, MySQL, Oracle, SQLite.** ／ -**SQLite** has no Copy tool, instead library uses plain SQL combined with UPSERT. ／ Specific ones have adapter suffix: MainNuget + *.SqlServer/PostgreSql/MySql/Oracle/Sqlite*",
+     "lines": [
+      10,
+      44,
+      52
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Supports all 5 major sql databases: **SQLServer, PostgreSQL, MySQL, Oracle, SQLite.** ／ -**SQLServer** (or AzureSQL) under the hood uses SqlBulkCopy for Insert, Update/Delete = BulkInsert + raw Sql MERGE. ／ Instead Test options are SqlServer(Developer or Express), LocalDb(if alongside Developer v.), or with other adapters.",
+     "lines": [
+      10,
+      40,
+      46
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为数据库访问层（EF Core）服务的批量操作类库，而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可（cFOSS：conditionally Free OSS）",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "-Bulk operations (super fast, en masse DB Protocol): **Insert, Update, Delete, Read, Upsert, Sync, SaveChanges.** ／ Supports all 5 major sql databases: **SQLServer, PostgreSQL, MySQL, Oracle, SQLite.** ／ Available on NuGet Downloads",
+   "evidence_lines": [
+    3,
+    10,
+    49
+   ]
+  },
+  "fn": "borisdj/EFCore.BulkExtensions",
+  "sha": "db08f2842859",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "74f133c99e98": {
+  "identity": {
+   "one_liner": "像素风游戏化学习 Agent，以 SQLite 单文件存储词条库",
+   "review": "一个游戏化学习 Agent 应用：AI 对话生成词条、出题练习，配 FSRS-5 间隔复习、知识大陆地图与对战玩法。面向想用自己资料自学的个人用户，支持自带模型 Key、本地运行与自行部署。数据存 SQLite 单文件，依赖 Node 22.11+ 的原生模块 better-sqlite3，不支持容器化部署。",
+   "highlights": [
+    "提供对话式学习 Agent，具备工具循环、写操作确认门与长期记忆",
+    "数据存于 SQLite 单文件（WAL），支持本地单机与多用户 Web 两种形态",
+    "内置 FSRS-5 复习调度、出题管道与知识大陆/对战游戏化模块"
+   ],
+   "use_cases": [
+    "用自有长文档与 AI 对话学习并生成练习题",
+    "自托管本地单机版，学习数据留存在本机",
+    "多用户 Web 部署（邮箱/密码/GitHub OAuth 鉴权）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**像素风的游戏化学习 Agent：对话里学、出题里练、知识大陆上复习——你自己的词条库是主体，数据归你（SQLite 单文件，可自托管，开源）。** 在线：<https://11wand.com>（免注册可直接体验）· 本地：`npm install && npm run dev` · 零 key 全栈演示：`npm run demo:e2e`。 ／ - **数据归你**：SQLite 单文件、可自托管、开源。 ／ > ⚠️ **Node 版本必须「装依赖」与「运行时」一致**（`engines: >=22.11.0`，仓库带 `.nvmrc`）：`better-sqlite3` 是原生模块，产物按**安装那一刻**的 Node ABI 编译；换 Node 大版本必须删 `node_modules` 重装，只换运行时无效，症状是涉库代码全线 `ERR_DLOPEN_FAILED`（极易误判成新代码写错）。",
+     "lines": [
+      17,
+      49,
+      63
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库使用 SQLite 存储应用自身数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**像素风的游戏化学习 Agent：对话里学、出题里练、知识大陆上复习——你自己的词条库是主体，数据归你（SQLite 单文件，可自托管，开源）。** 在线：<https://11wand.com>（免注册可直接体验）· 本地：`npm install && npm run dev` · 零 key 全栈演示：`npm run demo:e2e`。 ／ **三包职责**：`@sb/shared` 只放契约与纯函数（前后端共用一份，不允许各写一套）；`@sb/server` 承载全部业务域（Express + better-sqlite3，逐版本迁移 v1..v52）；`@sb/web` 是 React 18 前端，**零第三方运行时依赖**（无 UI 库 / 无 Markdown 库 / 无图表库）。 ／ 运行时形态：`api(Express :18791，默认仅绑 127.0.0.1) + web(Vite :5173)`，数据存 SQLite 单文件（WAL）；多用户 Web 形态同一份代码 + 邮箱/密码/GitHub OAuth 鉴权 + 按用户数据归属 + Caddy 反代 + systemd 守护。★ `server/auth/form.ts` 是形态的**唯一事实源**（`SB_REQUIRE_AUTH` 开 = cloud / 关 = local），「本地有、线上没有」的功能一律从这里判断，禁止各自读 env。",
+   "evidence_lines": [
+    17,
+    114,
+    118
+   ]
+  },
+  "fn": "llwand1/studentbuddy-v2",
+  "sha": "74f133c99e98",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -7454,5 +7454,71 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "373ef76e4d57": {
+  "identity": {
+   "one_liner": "基于 DuckLake 与 S3 持久层的云端多租户数据库服务",
+   "review": "SimpleBase 是一个用 Go 构建的云端数据库服务，以 S3 作为在线持久层、DuckLake（DuckDB catalog + Parquet）作为存储引擎，通过 HTTP API 提供数据库管理、SQL 执行、配额与审计，并集成 LLM Gateway 与只读云 Agent。面向需要托管 SQL 服务的开发者；部署上副本数固定为 1，写请求经单写实例路由。",
+   "highlights": [
+    "以 S3 为在线持久层，节点丢失本地数据后可仅凭 S3 恢复",
+    "通过 REST API 提供逻辑数据库创建、参数化查询、单条写与批量事务执行，并输出审计记录",
+    "内置 LLM Gateway（复用 litellm）与项目级只读工具代理 /agents"
+   ],
+   "use_cases": [
+    "为应用提供多租户托管的云端 SQL 数据库服务",
+    "通过 API Key 认证的项目化数据库管理与 SQL 执行",
+    "结合 LLM Gateway 与云 Agent 的项目数据只读查询"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "从旧版本（LessDB/ha-sqlite）迁移到新链路的工作流详见 docs/ops/migration.md。",
+     "lines": [
+      112
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库是数据库服务本体而非为既有数据库服务的工具或使用数据库的应用，README 未给出足够证据归入 tool 或 app。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "基于 DuckLake、S3 在线持久层与 Go 构建的云端数据库服务，并集成 LLM Gateway 与云 Agent。 ／ - **DuckLake-only**：用户库与系统库都走 DuckLake（DuckDB catalog + Parquet DATA_PATH）；历史 Turso/libSQL 引擎已退役。 ／ - **单写实例**：首期固定副本数为 1，所有写请求经同一进程的 Registry 路由，保证单库唯一 writer。",
+   "evidence_lines": [
+    3,
+    18,
+    17
+   ]
+  },
+  "fn": "linkxzhou/SimpleBase",
+  "sha": "373ef76e4d57",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

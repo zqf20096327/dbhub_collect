@@ -7893,5 +7893,71 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "00e4108eb451": {
+  "identity": {
+   "one_liner": "基于 Telegram Bot 与 WebUI 的 VPS/独立服务器监控管理工具",
+   "review": "该项目通过 Telegram Bot 和 Web 界面监控管理多台 VPS 或独立服务器，提供节点指标采集、SSH Web 终端、systemd 服务管理、备份、计费提醒与安全通知等功能，面向系统管理员、DevOps 和主机服务商。数据存储使用 SQLite，部署方式包括 Systemd 与 Docker Compose 脚本安装；README 声明平台要求为 Ubuntu 20.04+ 或 Debian 11+。",
+   "highlights": [
+    "通过 Telegram Bot 和 WebUI 提供节点 CPU/RAM/Disk/Network 指标监控与 SSH Web 终端",
+    "提供 systemd 服务管理、定时备份、数据库自动迁移与 Watchdog 自重启",
+    "采用 Agent-Client 模式支持多节点接入，Web 端提供 SSE 实时更新与 PWA 支持"
+   ],
+   "use_cases": [
+    "从单一入口集中监控和管理多台远程服务器",
+    "通过 Telegram 接收服务器阈值告警、SSH 登录通知与到期提醒",
+    "自助管理 VPS 上的 systemd 服务、配置备份与系统更新"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "│ ├── SQLite DB (nodes, users, metrics) │ ／ - **Database:** SQLite (aiosqlite)",
+     "lines": [
+      120,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 作为该 Bot 自身存储 nodes/users/metrics 数据的内嵌数据库，项目是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "│  ├── SQLite DB (nodes, users, metrics)          │ ／ - **Database:** SQLite (aiosqlite)",
+   "evidence_lines": [
+    120,
+    126
+   ]
+  },
+  "fn": "jatixs/tgbotvpscp",
+  "sha": "00e4108eb451",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

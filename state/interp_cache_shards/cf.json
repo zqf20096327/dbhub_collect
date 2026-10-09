@@ -9608,5 +9608,135 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8d2694d5a121": {
+  "identity": {
+   "one_liner": "开源电子实验记录本（ELN），供科研团队存储管理实验数据",
+   "review": "eLabFTW 是一个面向科研团队的电子实验记录本（ELN），通过浏览器访问，支持实验记录、资源数据库、时间戳、REST API 等功能，可服务多团队共享部署。通过 Docker 安装运行，依赖 MySQL 存储数据，需要自建服务器或使用 Deltablot 的商业托管服务。",
+   "highlights": [
+    "支持实验记录与实验资源数据库，可存储抗体、细胞系、试剂等多类对象",
+    "提供公开 REST API 及时间戳、区块链时间戳功能",
+    "通过 Docker 部署，单实例可承载多个研究团队"
+   ],
+   "use_cases": [
+    "科研机构或企业为实验室部署统一的实验记录与数据追溯系统",
+    "实验室管理试剂、设备、样本等资源库存",
+    "通过 REST API 将实验数据接入其他分析或报告流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**eLabFTW** can easily be installed on any GNU/Linux server. It requires at least 512 MB of RAM (1 GB recommended) and 300 MB of disk space. Installation is done through Docker, so Docker needs to be installed on the server. Since it runs in a Docker container",
+     "lines": [
+      53
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 MySQL 存储数据的电子实验记录本应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU AGPL",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**eLabFTW®** is an electronic lab notebook manager for research teams. ／ **eLabFTW** can easily be installed on any GNU/Linux server. It requires at least 512 MB of RAM (1 GB recommended) and 300 MB of disk space. Installation is done through Docker, so Docker needs to be installed on the server. Since it runs in a Docker container, php, webservers or mysql do not have to be installed on your server. Everything is provided by the containers so different versions and extensions do not matter. This makes upgrading versions much easier.",
+   "evidence_lines": [
+    22,
+    53
+   ]
+  },
+  "fn": "elabftw/elabftw",
+  "sha": "8d2694d5a121",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "82567557d12b": {
+  "identity": {
+   "one_liner": "Hyperion 跨链转账的链下后端，索引、监控并推进卡住的跨链转账",
+   "review": "这是 StellarHyperion 跨链转账系统的链下服务，监听 Stellar/Soroban 与 EVM 两条链的事件及中间桥（Circle Iris、Axelar）状态，把转账记录写入 PostgreSQL，并通过 BullMQ keeper 提交链上许可调用以推进卡住的转账。供该组织自身部署运维使用；进程不持任何能动用用户资金的私钥，仅做读取和无许可调用。",
+   "highlights": [
+    "提供 Stellar/Soroban 与 EVM 双链事件监听器，含 EVM 重组检测与确认数控制",
+    "使用 PostgreSQL 存储转账记录，NUMERIC 列处理 uint256/超出 int8 的数值",
+    "内置 /health 与 /ready 探针、REST API 和 Prometheus 指标"
+   ],
+   "use_cases": [
+    "查询跨链转账在两条链及桥中间环节的状态",
+    "监测并推进因 gas 变化、接收方冻结或缺少第二腿提交而卡住的转账",
+    "保存超出 Soroban RPC 节点七天历史窗口的转账记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "158 tests passing across unit and integration suites against real PostgreSQL 16 and Redis 7. Both watchers are verified against live chains and testnet router contracts.",
+     "lines": [
+      37
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL 与 Redis 存储自身索引和转账数据的链下应用服务，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Hyperion backend ／ |Database|Schema, SQL migrations, connection pool, row mappers| ／ 158 tests passing across unit and integration suites against real PostgreSQL 16 and Redis 7. Both watchers are verified against live chains and testnet router contracts.",
+   "evidence_lines": [
+    1,
+    29,
+    37
+   ]
+  },
+  "fn": "StellarHyperion/stellarhyperion-backend",
+  "sha": "82567557d12b",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9161,5 +9161,85 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3116252801c2": {
+  "identity": {
+   "one_liner": "Flask+SQLite 库存管理系统，含认证、出入库与审计日志",
+   "review": "这是一个基于 Flask 和 SQLAlchemy 的本地库存管理应用，提供用户注册登录、商品 CRUD、出入库流水记录、低库存告警和报表功能，库存变动全部写入 StockLog 表并通过乐观校验保证一致性。适合小型团队或个人在本地部署管理库存；README 提示多用户生产环境建议切换到 PostgreSQL。",
+   "highlights": [
+    "出入库/调整逐笔写入 StockLog 审计表，数量不会被静默覆盖",
+    "库存更新通过读写余额比对实现一致性校验，冲突返回 HTTP 409",
+    "低库存仪表盘告警、库存估值与活跃商品报表"
+   ],
+   "use_cases": [
+    "小型商家本地管理商品、供应商与库存流水",
+    "需要完整出入库审计历史的库存记录场景",
+    "Flask Web 应用的学习/教学示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A Flask + SQLite inventory manager with authentication, product CRUD, stock ／ Open that URL in your browser. The SQLite database file (`inventory.db`) ／ SQLite database. `DATABASE_URL` can override the local database URI; changing",
+     "lines": [
+      3,
+      85,
+      144
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- Consider switching from SQLite to PostgreSQL for multi-user production use.",
+     "lines": [
+      108
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储库存数据的 Flask 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A Flask + SQLite inventory manager with authentication, product CRUD, stock ／ ├── models.py           # SQLAlchemy models (User, Category, Supplier, Product, StockLog) ／ Open that URL in your browser. The SQLite database file (`inventory.db`)",
+   "evidence_lines": [
+    3,
+    23,
+    85
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Ismail-ux23/inventory_management",
+  "sha": "3116252801c2",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

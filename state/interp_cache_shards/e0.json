@@ -8547,5 +8547,148 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "10933bf117f0": {
+  "identity": {
+   "one_liner": "面向AI代理的代码搜索MCP服务器，用SQLite存储tree-sitter索引",
+   "review": "一个用Rust编写的MCP服务器，提供约32个代码搜索与导航工具：基于tree-sitter解析14种语言的源码，把符号、函数体、调用图和元数据写入SQLite索引，供Claude Code、Cursor等MCP客户端查询。还支持解析1C:Enterprise配置导出。索引由后台守护进程构建，服务器仅读取；需npm安装或下载二进制运行。",
+   "highlights": [
+    "提供32个MCP工具：函数/类全文搜索、调用图（callers/callees/调用树）、文件内容读取等",
+    "用tree-sitter解析14种语言，索引与元数据存入SQLite，支持1C(BSL)配置导出解析",
+    "提供单二进制分发与npm安装，HTTP与stdio两种MCP接入方式"
+   ],
+   "use_cases": [
+    "为AI编码代理提供低 token 消耗的代码检索与调用关系查询",
+    "对1C:Enterprise大型配置库做结构化导航与影响分析",
+    "在本地通过MCP客户端索引和检索多个代码仓库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Поиск по коду для ИИ-агентов. Один бинарник, индекс в SQLite, ответ за миллисекунды. ／ складывает символы, тела, вызовы и метаданные в SQLite и отдаёт агенту готовый",
+     "lines": [
+      11,
+      149
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite仅作为其自身代码索引的存储介质，项目是为MCP客户端服务的开发者工具，不服务于数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Поиск по коду для ИИ-агентов. Один бинарник, индекс в SQLite, ответ за миллисекунды. ／ складывает символы, тела, вызовы и метаданные в SQLite и отдаёт агенту готовый ／ ответ по протоколу MCP. Модель получает три строки вместо трёх файлов.",
+   "evidence_lines": [
+    11,
+    149,
+    150
+   ]
+  },
+  "fn": "Regsorm/code-index-mcp",
+  "sha": "10933bf117f0",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2fa443d623f8": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的持续学习插件，用本地 SQLite 存储学习线程",
+   "review": "dsh-explain 是 DeepSeek Harness（DSH）的学习模式插件，把完成的工作转化为结构化解释，通过间隔复习调度巩固概念，并允许用户查看、纠正或遗忘模型推断出的偏好。数据以 SQLite 存于本地 $DSH_HOME，面向使用 DSH Web 的个人用户，依赖配置辅助模型完成评估，不修改主代理。",
+   "highlights": [
+    "支持将已完成回答或选中文本转为可编辑的 /explain 草稿",
+    "实现本地间隔复习调度，按 recall/application/distinction 三级推进概念",
+    "学习线程存储于本地 SQLite 文件，支持版本化导出与原子清除"
+   ],
+   "use_cases": [
+    "在 DSH Web 中将日常工作内容沉淀为可复习的知识解释",
+    "检查并纠正模型对个人解释偏好的推断",
+    "在本地环境管理学习数据并导出备份"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The primary agent stays untouched. Explain uses its own model calls, scheduler, context, and local SQLite database. ／ |Learning thread|Stored in `$DSH_HOME/dsh-explain/v1/thread.sqlite`.|",
+     "lines": [
+      18,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其使用本地 SQLite 数据库存储学习线程数据，SQLite 仅为其存储层",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`dsh-explain` is a learning-mode plugin for DeepSeek Harness. It turns useful concepts from completed work into structured explanations, schedules lightweight reviews, and lets you inspect or correct what it learns about you. ／ The primary agent stays untouched. Explain uses its own model calls, scheduler, context, and local SQLite database. ／ |Learning thread|Stored in `$DSH_HOME/dsh-explain/v1/thread.sqlite`.|",
+   "evidence_lines": [
+    16,
+    18,
+    79
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "yuezengwu/dsh-explain",
+  "sha": "2fa443d623f8",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

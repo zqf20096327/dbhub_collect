@@ -8556,5 +8556,78 @@
   "generated_at": "2026-10-08",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "30cf6b9d2ce8": {
+  "identity": {
+   "one_liner": "数字取证分析工作台，以只读方式解析SQLite等数据源",
+   "review": "一个用于数字取证的开源桌面 GUI 工作台，可打开压缩包、iOS/Android 备份、磁盘镜像（E01 等）和单个文件，并提供 SQLite（含 WAL、SQLCipher）、LevelDB、Realm、MMKV 等专用查看器与十六进制/结构化数据视图。面向需要检视具体文件或数据源的取证人员；不提供 carving、日志分析等完整磁盘取证功能，加密数据库需用户自行提供密钥。",
+   "highlights": [
+    "提供 SQLite（含 WAL、free blocks/pages、SQLCipher）、LevelDB、Realm、MMKV 等数据库文件查看器",
+    "支持打开 ZIP/TAR/7z 归档、iOS/Android 备份、raw/EWF 磁盘镜像，无需先解包",
+    "内置完整性模式与取证测试套件，校验证据源未被修改"
+   ],
+   "use_cases": [
+    "检视移动设备备份或应用数据库中的 SQLite/Realm/LevelDB 数据",
+    "浏览 UFDR/E01 等取证镜像并核对哈希",
+    "对目录运行 iLEAPP/ALEAPP 移植的分析模块并查看结果表"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Databases|SQLite (incl. WAL, free blocks/pages, SQLCipher¹), LevelDB, Realm (incl. encrypted¹), MMKV| ／ - **Hex provenance** — with the hex view open, selecting an entry in the SQLite, Protobuf, MMKV or Realm viewer shows exactly where its bytes are. ／ - No side-effect files (e.g. SQLite `-wal`/`-shm`)",
+     "lines": [
+      46,
+      59,
+      71
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "以只读查看器形式解析 SQLite 等数据库文件用于取证分析，本身不依赖数据库存储数据，也不是数据库管理工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "**Crush is a digital forensic analysis workbench.** Open archives, mobile backups, disk images, folders and single files, identify what's inside, and inspect it in dedicated viewers. Sources are opened without extracting them first. Built for examiners who need to look inside a specific file or source, not run a full processing pipeline. Every release runs a forensic test suite that checks whether Crush leaves the evidence untouched. ／ |Databases|SQLite (incl. WAL, free blocks/pages, SQLCipher¹), LevelDB, Realm (incl. encrypted¹), MMKV| ／ **Integrity mode** — file, ZIP and TAR sources hashed on open, exports get a hash manifest.",
+   "evidence_lines": [
+    15,
+    46,
+    66
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "kalink0/crush-forensics",
+  "sha": "30cf6b9d2ce8",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

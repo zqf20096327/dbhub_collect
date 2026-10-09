@@ -9739,5 +9739,297 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "29ce8cd81166": {
+  "identity": {
+   "one_liner": "自托管多账户教材 RAG 学习助手，回答强制原文引用",
+   "review": "一个用 Flask 实现的自托管学习应用：上传 Markdown/TXT/DOCX 教材后提供问答、章节讲解、要点提纲与自测四种模式，所有回答必须携带可展开的 C/W 引用标签并通过服务端校验，否则整体拒收。检索采用词汇+FTS5+向量三路 RRF 融合，SQLite 存储全部状态，长对话自动压缩，适合需要以原文为依据学习教材的个人或多账户场景。",
+   "highlights": [
+    "回答逐句携带可展开引用标签，服务端校验 C/W 引用，缺失证据的回答整体拒收",
+    "词汇、FTS5、向量三路检索经等权 RRF 融合，无嵌入服务时降级为关键词检索",
+    "长对话服务端自动压缩并附带上下文用量表，支持批注阅读器与 Anki 兼容导出"
+   ],
+   "use_cases": [
+    "将教材上传后进行引用原文的问答式学习与章节讲解",
+    "基于教材章节生成自测题并复习到期问题、导出 Anki 卡片",
+    "在阅读器中对原文段落做批注并就地提问"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A single-instance Flask service (one Gunicorn worker); SQLite holds all state. The only external dependencies are model / embedding / search services — each optional, each degradable:",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储自身全部状态（账户、书籍、对话、批注），是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A single-instance Flask service (one Gunicorn worker); SQLite holds all state. The only external dependencies are model / embedding / search services — each optional, each degradable: ／ Book Learning (「书内」, a.k.a. BOOKNOTE) is a self-hostable, multi-account textbook study workspace: upload Markdown / TXT / DOCX textbooks, switch between Q&A, chapter explanation, key-point outlining and self-testing, and get answers whose every claim carries an expandable citation back to the source text. It ships with an annotation reader, automatic long-conversation compaction, and an opt-in web-search supplement. All data is scoped by account and by book — one book per retrieval context, no cross-book leakage.",
+   "evidence_lines": [
+    18,
+    12
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Zafer-Liu/book-learning",
+  "sha": "29ce8cd81166",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "59c2c3549349": {
+  "identity": {
+   "one_liner": "AI 智能体语义检查点与崩溃恢复库，经 MCP 服务器暴露",
+   "review": "CONTINUUM 是面向长时间运行 AI 智能体的 Python 库，提供语义检查点、幂等动作账本与哈希链事件日志，并内置 SQLite/Postgres 存储适配；通过 CLI 和 deny-by-default 的 MCP 服务器对外暴露，供构建或运维智能体的开发者接入 Claude Code、Gemini CLI 等编码代理实现崩溃后恢复。",
+   "highlights": [
+    "提供语义检查点与恢复前环境再校验，支持崩溃后从检查点恢复并回放缺失动作",
+    "提供幂等动作账本与哈希链防篡改事件日志，拒绝重复副作用",
+    "以 MCP stdio 服务器形式提供访问，支持 SQLite（WAL）与 Postgres 存储后端"
+   ],
+   "use_cases": [
+    "长时间运行智能体崩溃后从语义检查点恢复，避免重复副作用",
+    "通过 MCP 将检查点与恢复能力接入编码代理（Claude Code、Gemini CLI、Codex）",
+    "多智能体共享同一状态存储时的授权与副作用门控"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Durable execution|What happened before a crash and what can be replayed without losing work?|Hash-chained event log `src/continuum/events.py` with `verify()` and `trusted_through`, durable storage `src/continuum/storage/sqlite.py` (WAL, `synchronous=FULL`, sc",
+     "lines": [
+      125
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Schema v6. SQLite is primary, Postgres is CI verified. One log, many projections.",
+     "lines": [
+      353
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 为其主要存储、Postgres 为存储后端选项，数据库是被其使用而非被服务的对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Durable execution|What happened before a crash and what can be replayed without losing work?|Hash-chained event log `src/continuum/events.py` with `verify()` and `trusted_through`, durable storage `src/continuum/storage/sqlite.py` (WAL, `synchronous=FULL`, schema v6) and `src/continuum/storage/postgres.py` plus `src/continuum/storage/migrations.py`, policy-driven checkpoints `src/continuum/checkpoint/manager.py` and `src/continuum/checkpoint/policy.py` that replay the gap on `restore()`. Walkthrough is in `docs/recovery_walkthrough.md` (output of `examples/recovery_walkthrough.py`).| ／  log, all exposed as a deny-by-default MCP server. Framework-agnostic,",
+   "evidence_lines": [
+    125,
+    6
+   ]
+  },
+  "fn": "Cyrax321/CONTINUUM",
+  "sha": "59c2c3549349",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6f25a746b176": {
+  "identity": {
+   "one_liner": "单企业自部署项目管理系统，Docker Compose 一键安装",
+   "review": "这是一个面向单个企业内部使用的自部署项目管理系统，覆盖需求、项目、专题、故事、迭代与流程模板等研发管理模块，并提供组织权限、审计日志与企业项目看板。目标用户是需要私有化部署的研发团队；安装仓库通过预构建镜像以 Docker Compose 三步启动，仅支持 MySQL 8.4 作为数据库，不支持多租户模式，源码分散在 pms-backend 和 pms-front 两个仓库。",
+   "highlights": [
+    "提供需求、项目、专题、故事、迭代的流程模板化研发管理，支持节点、字段与业务工作台配置",
+    "提供组织架构、角色权限、审计日志与企业项目看板，可选接入 LDAP / OIDC 登录",
+    "通过 Docker Compose 使用预构建镜像安装，支持 amd64/arm64，附状态、日志、备份、升级脚本"
+   ],
+   "use_cases": [
+    "企业私有化部署的研发项目与需求交付管理",
+    "组织级项目组合、交付健康与里程碑看板展示",
+    "需要审计留痕与流程模板定制的内部协作场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "需要 Docker Engine 或 Docker Desktop，以及 Compose v2。默认数据库是 **MySQL 8.4**，Docker 建议至少分配 **2 GiB** 内存。 ／ 请立刻修改该密码。MySQL 与 JWT 等基础设施密钥仍由脚本随机生成，写入未被 Git 跟踪的 `.pms-bootstrap-secrets`。生产部署必须更换管理员密码（`validate-production-config.sh` 会拒绝上述默认值）。 ／ |数据库|仅 MySQL 8.4|",
+     "lines": [
+      70,
+      85,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统使用 MySQL 8.4 存储业务数据，是使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，第三方镜像和依赖受各自许可证约束",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "需要 Docker Engine 或 Docker Desktop，以及 Compose v2。默认数据库是 **MySQL 8.4**，Docker 建议至少分配 **2 GiB** 内存。 ／ |数据库|仅 MySQL 8.4| ／ 本仓库是安装入口，使用预构建镜像。本机不需要安装 Java、Maven、Node.js 或 pnpm。源码在 `pms-backend` 和 `pms-front`。",
+   "evidence_lines": [
+    70,
+    126,
+    5
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "xiebinJava/pms-distribution",
+  "sha": "6f25a746b176",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7c2805215383": {
+  "identity": {
+   "one_liner": "基于模块化 Python 库的开源数据代理，用于查询、转换和可视化多源数据",
+   "review": "TabulaFlow 提供一个 CLI 数据代理和 Python 库，用户以自然语言描述即可查询、转换并可视化 SQL/图数据库、文件、Hugging Face 数据集和网页，代理只生成查询与可视化规格，库负责数据解析、渲染和数据溯源记录，并附带面向 text-to-SQL 研究者的基准评测模块。适合数据分析人员、数据应用开发者和 AI/数据库研究者；需配置 LLM 模型 API key 才能使用代理功能。",
+   "highlights": [
+    "提供数据连接器，通过统一异步接口查询 SQL 数据库、Neo4j、SPARQL endpoint、文件和数据集",
+    "自动追踪数据溯源：每个可视化展示底层数据表，每个表展示生成它的查询",
+    "内置 BIRD-SQL、Spider 2.0、CypherBench 等基准的加载器、评测指标与实验流水线"
+   ],
+   "use_cases": [
+    "用自然语言对数据库和数据集进行查询、分析与可视化",
+    "用其 Python 构建块开发带或不带 LLM 的数据应用（如交互式仪表板）",
+    "在 text-to-SQL 与数据代理基准上运行和评测实验"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Chat to a Bioinformatics MySQL db · ／ |PyMySQL|No|PyMySQL/PyMySQL|MIT|",
+     "lines": [
+      42,
+      283
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其数据连接器用于检查 schema 并查询 SQL 数据库、Neo4j 等多种数据源，是为数据访问与数据库生态服务的工具而非某数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "TabulaFlow is an open-source data agent built on a modular Python library. ／ - Data connectors: inspect schemas and query SQL ／ TabulaFlow Research extends the main Python library for AI and database researchers working",
+   "evidence_lines": [
+    9,
+    81,
+    137
+   ]
+  },
+  "fn": "megagonlabs/tabulaflow",
+  "sha": "7c2805215383",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

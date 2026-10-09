@@ -8817,5 +8817,149 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0e3f77175419": {
+  "identity": {
+   "one_liner": "基于 Rust + Tauri 2 的桌面 RSS 阅读器，用 SQLite 存储文章",
+   "review": "一款运行于 Windows、macOS 和 Linux 的桌面 RSS 阅读器，以 Rust 为核心、Tauri 2 打包，文章持久化在本地 SQLite 中并通过 FTS5 提供全文检索。支持 RSS/Atom/JSON Feed 解析、OPML 导入导出、本地排名和内置 MCP 服务器，可被 Claude Code 等 AI 代理读取订阅内容。不提供在线同步服务。",
+   "highlights": [
+    "文章存储于本地 SQLite，使用 FTS5 实现全文搜索（L113, L214）",
+    "支持 RSS 0.9x/1.0/2.0、Atom、JSON Feed 及 OPML 导入导出（L133, L139）",
+    "内置 MCP 服务器，可向 AI 代理提供只读或可写的订阅数据接口（L151-L163）"
+   ],
+   "use_cases": [
+    "在桌面端本地管理并阅读 RSS/Atom 订阅源",
+    "让 AI 编码代理或助手通过 MCP 查询和摘要订阅文章",
+    "从 OPML 迁移现有订阅列表并离线归档文章"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Full-text search across every article, backed by SQLite FTS5, matching as you type ／ **SQLite instead of an in-memory store.** Articles stay on disk, queries are paged, and search goes through FTS5, so a library of a hundred thousand articles costs the same at startup as a library of ten.",
+     "lines": [
+      113,
+      214
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明文章数据存储在本地 SQLite 中，SQLite 是该应用的存储后端而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**SQLite instead of an in-memory store.** Articles stay on disk, queries are paged, and search goes through FTS5, so a library of a hundred thousand articles costs the same at startup as a library of ten. ／ - RSS 0.9x, 1.0 and 2.0, Atom, and JSON Feed, detected automatically ／ Turbo Reader can be a news source for Claude Code, Codex, Claude Desktop,",
+   "evidence_lines": [
+    214,
+    133,
+    151
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "t21dev/turbo-reader",
+  "sha": "0e3f77175419",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "059eb202f975": {
+  "identity": {
+   "one_liner": "Go 单二进制 CMS，内置 SQLite 存储、HTMX 管理端与 REST API",
+   "review": "ocms-go 是用 Go 编写的内容管理系统，编译为单个二进制文件，嵌入 SQLite 作为存储并自带数据库迁移。它提供页面管理、媒体库、表单构建器、多语言、Webhook、SEO 工具，以及基于 HTMX/Alpine.js 的服务端渲染管理界面和 Bearer 认证的 REST API。适合需要自托管网站内容并使用 SQLite 的开发者或站长；构建源码需 Go、Node、sqlc 等工具链。",
+   "highlights": [
+    "单二进制部署，内嵌 SQLite 数据库及迁移，无需外部数据库配置",
+    "提供 REST API（Bearer 认证、权限、限流）与 MCP 只读端点供 AI 代理读取站点内容",
+    "包含媒体库、表单构建器、多语言内容、Webhook 投递（HMAC 签名、重试、死信队列）与 JSON/ZIP 导入导出"
+   ],
+   "use_cases": [
+    "自托管企业或个人网站的内容管理",
+    "通过 REST API/MCP 做无头内容分发（headless CMS）",
+    "需要多语言站点与内容定期发布、Webhook 事件通知的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> A single-binary Go CMS with HTMX/Alpine.js admin, REST API, themes & modules. SQLite by default — drop onto a server, run the rest. ／ - **Full-Text Search**: Built-in SQLite FTS5 search for fast content discovery ／ - **SQLite Database**: Zero-configuration embedded database with migrations",
+     "lines": [
+      3,
+      80,
+      146
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用内嵌 SQLite 存储站点数据（零配置数据库），是使用数据库的应用而非数据库工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> A single-binary Go CMS with HTMX/Alpine.js admin, REST API, themes & modules. SQLite by default — drop onto a server, run the rest. ／ - **SQLite Database**: Zero-configuration embedded database with migrations",
+   "evidence_lines": [
+    3,
+    146
+   ]
+  },
+  "fn": "olegiv/ocms-go",
+  "sha": "059eb202f975",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

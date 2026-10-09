@@ -8694,5 +8694,77 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eaf0c01fe494": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，用内嵌 Raft 实现集群自动选主与故障切换",
+   "review": "HyperionDb（pg_replica）是一个 Postgres 扩展，在数据库后台 worker 内运行嵌入式 Raft 组，为少量 vanilla Postgres 节点提供自动 leader 选举与故障切换，数据复制复用 Postgres 自带的物理 WAL 流复制，覆盖表、角色、DDL 等，无需 etcd/Consul/Kubernetes 等外部依赖。面向需要小型高可用 Postgres 集群的运维者；声明为 3 或 5 节点场景，不支持分片、连接池代理和备份 PITR。",
+   "highlights": [
+    "通过内嵌 Raft quorum 实现自动选主与故障切换，无需外部 DCS（etcd/Consul/Kubernetes）",
+    "复用 Postgres 物理 WAL 流复制实现全集群字节级一致（表、索引、角色、GRANT、DDL）",
+    "提供 SQL 运维接口（replica.status()）、凭据轮换、Rust 编写的多主机 Node.js 客户端"
+   ],
+   "use_cases": [
+    "为 3/5 节点 Postgres 集群搭建无需外部协调服务的自动故障切换",
+    "在容器/虚拟机环境中用 systemd 或 Docker 策略管理 Postgres 生命周期的高可用部署",
+    "通过 Docker 运行 3 节点真实集群进行故障注入与混沌测试"
+   ]
+  },
+  "classification": {
+   "cat": "高可用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A PostgreSQL extension that gives a small cluster of **vanilla Postgres** nodes ／ **Don't reinvent replication.** Postgres already ships **physical (WAL) streaming",
+     "lines": [
+      5,
+      19
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "以扩展形式为 Postgres 提供选主与故障切换能力，是为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A PostgreSQL extension that gives a small cluster of **vanilla Postgres** nodes ／ election and failover**, using an **embedded Raft quorum** instead of an external ／ - **Automatic, consensus-driven failover** — an embedded Raft quorum keeps a single leader elected and promotes a new primary in seconds when it dies. No etcd, no Consul, no Kubernetes, no external DCS.",
+   "evidence_lines": [
+    5,
+    26,
+    39
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "hyperiondb/hyperiondb",
+  "sha": "eaf0c01fe494",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

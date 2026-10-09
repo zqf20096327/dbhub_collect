@@ -7886,5 +7886,83 @@
   "generated_at": "2026-10-04",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f4558c8e18fe": {
+  "identity": {
+   "one_liner": "本地优先的多智能体 MCP 协调中心，消息持久化于 SQLite/WAL",
+   "review": "Okto Nexus 是一个面向多智能体团队的 MCP 服务器与运维中心，提供持久身份、消息收件箱、任务交接、治理策略、事件日志与实时仪表盘，通过单一 HTTP 端口暴露 MCP、REST/SSE 与 React 界面。协调记录持久化在本地 SQLite/WAL 数据库中。适用于在同一代码仓库内协作的 AI 智能体团队；README 标注当前为开发版（0.2.2），部分适配器集成尚未完成最终验收。",
+   "highlights": [
+    "提供单端口 HTTP hub：/mcp（MCP over streamable HTTP）、/api/v1（运维 REST 与 SSE）、/（React 仪表盘）",
+    "支持持久消息投递（租约、重投、确认、已读回执）与单赢家任务交接（原子认领、依赖图、可选验证）",
+    "协调记录持久化于本地 SQLite/WAL 数据库，支持权限、配额、护栏与人工审批等治理控制"
+   ],
+   "use_cases": [
+    "多智能体在同一代码仓库内进行消息传递与任务交接的协调",
+    "需要人工审批与治理控制的智能体团队运维管理",
+    "本地优先、不依赖云服务的智能体协调部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite database in WAL mode. Optional metrics, referenced workspace files, and ／ |Storage|local SQLite/WAL catalog + adapter-backed artifact payloads| ／ Always continue from `next_cursor`. The waiter uses SQLite",
+     "lines": [
+      17,
+      29,
+      230
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL, or cloud broker adapter.",
+     "lines": [
+      1078
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明协调记录持久化在本地 SQLite 数据库中，SQLite 是其存储数据所依赖的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLite database in WAL mode. Optional metrics, referenced workspace files, and ／ |Storage|local SQLite/WAL catalog + adapter-backed artifact payloads| ／ - coordination truth is durable in SQLite; bounded process caches are",
+   "evidence_lines": [
+    17,
+    29,
+    258
+   ]
+  },
+  "fn": "OktoLabsAI/okto-nexus",
+  "sha": "f4558c8e18fe",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

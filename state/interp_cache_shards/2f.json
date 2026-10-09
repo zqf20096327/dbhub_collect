@@ -9886,5 +9886,134 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9ffb06cfde75": {
+  "identity": {
+   "one_liner": "约120KB的纯C99向量检索与情景记忆库，内置MCP服务器",
+   "review": "NanoVector 是一个用 C99 编写、支持 AVX2/FMA、ARM NEON 与 FASM x64 加速的向量索引库，提供精确最近邻检索、元数据过滤、.nvec 单文件持久化和内置 MCP JSON-RPC 服务器，面向为 AI Agent 和本地 LLM 流水线构建情景记忆的开发者，通过 pip/conda/apt 等多渠道安装。",
+   "highlights": [
+    "零外部依赖，单文件 .nvec 二进制持久化（64字节对齐头+原始浮点块+元数据表）",
+    "支持 cosine/dot/l2 距离度量、元数据过滤（$gte/$in/exact/lambda）与 GIL 释放的多线程查询",
+    "内置 nanovector-mcp MCP JSON-RPC 2.0 服务器，并提供 LangChain 集成（NanoVectorStore）"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供持久化情景记忆（对话轮次、工具执行历史）",
+    "本地 LLM 流水线中 50~50,000 规模向量的精确最近邻检索",
+    "接入 Claude Desktop/Cursor/Windsurf 等支持 MCP 的客户端作为记忆后端"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "### The SQLite of Vector Search & Episodic Memory for AI Agents ／ |**Storage Format**|**Single file (`.nvec`)**|SQLite + DuckDB dirs|Custom binary|",
+     "lines": [
+      3,
+      78
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它是独立的向量检索库，不依赖也不专门服务某个现有数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Bare-metal C99 · AVX2+FMA · ARM NEON · FASM x64 · Zero Dependencies · ~120 KB** ／ |**Storage Format**|**Single file (`.nvec`)**|SQLite + DuckDB dirs|Custom binary| ／ ### `nanovector.Index(dim: int, metric: str = \"cosine\", normalize: bool = False)`",
+   "evidence_lines": [
+    4,
+    78,
+    213
+   ]
+  },
+  "fn": "eminsk/nanovector",
+  "sha": "9ffb06cfde75",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c1be4c06fbc8": {
+  "identity": {
+   "one_liner": "OceanBase 大赛 PowerContext 赛题的参赛记录仓库",
+   "review": "该仓库是第六届 OceanBase 数据库大赛 PowerContext 赛题的参赛者个人仓库，用于记录赛题进展、环境搭建笔记和按题号组织的问题目录，并提供大赛官网、提测平台与社区论坛链接。适合参赛者本人用于赛程管理与资料归档；README 显示环境尚未搭建，属于赛前准备阶段。",
+   "highlights": [
+    "提供赛题记录、环境搭建笔记与按题号组织的目录结构",
+    "包含环境搭建、跑测与提交脚本目录（规划中）",
+    "记录关键时间节点与晋级规则"
+   ],
+   "use_cases": [
+    "参赛过程中管理赛题与排定优先级",
+    "记录 PowerContext 赛题的环境搭建与解题笔记"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "# 第六届 OceanBase 数据库大赛 · PowerContext 赛题 ／ - 大赛官网：https://open.oceanbase.com/competition",
+     "lines": [
+      1,
+      33
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库目前仅包含赛题说明与进度记录，尚无可运行代码或对数据库生态的服务组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 第六届 OceanBase 数据库大赛 · PowerContext 赛题 ／ problems/    每道题一个子目录（开赛后按题号建） ／ - [ ] 搭好 PowerContext 本地环境",
+   "evidence_lines": [
+    1,
+    26,
+    41
+   ]
+  },
+  "fn": "lzq06093/oceanbase-2026-powercontext",
+  "sha": "c1be4c06fbc8",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

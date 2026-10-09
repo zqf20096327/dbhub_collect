@@ -8427,5 +8427,83 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3468f855adeb": {
+  "identity": {
+   "one_liner": ".NET 后台任务处理库，基于存储提供者与队列调度",
+   "review": "NexJob 是面向 .NET 8+ 的后台作业处理库，提供作业定义、重试、死信、截止时间控制、限流与循环断路器等机制，并内置仪表盘与 OpenTelemetry 可观测性。开发者在应用中通过 NuGet 安装并实现 IJob 接口使用；存储支持 PostgreSQL、SQL Server、Redis、MongoDB 及内存提供者，README 说明其并非 Hangfire 的直接替代品，不支持日历式调度。",
+   "highlights": [
+    "提供 IJob 接口、重试策略、死信处理与 deadlineAfter 截止时间机制",
+    "提供 PostgreSQL、SQL Server、Redis、MongoDB、InMemory 五种存储提供者包",
+    "内置独立仪表盘、健康检查与 OpenTelemetry 埋点"
+   ],
+   "use_cases": [
+    "在 .NET 应用中执行需要重试与可追踪的后台任务",
+    "将 Kafka、RabbitMQ、AWS SQS 等消息转为作业触发",
+    "通过内置仪表盘查看与控制队列和作业状态"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Storage providers|5 free (PostgreSQL, SQL Server, Redis, MongoDB, InMemory)|Free InMemory only; others require paid license| ／ - **Five storage providers** — PostgreSQL, SQL Server, Redis, MongoDB and in-memory ／ |PostgreSQL|`NexJob.Postgres`|Production ready|",
+     "lines": [
+      28,
+      109,
+      124
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|Storage providers|5 free (PostgreSQL, SQL Server, Redis, MongoDB, InMemory)|Free InMemory only; others require paid license| ／ - **Five storage providers** — PostgreSQL, SQL Server, Redis, MongoDB and in-memory ／ |SQL Server|`NexJob.SqlServer`|Production ready|",
+     "lines": [
+      28,
+      109,
+      125
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为 .NET 应用提供后台作业处理能力，并通过专门存储提供者包适配 PostgreSQL、SQL Server 等数据库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "NexJob is a reliable background job processing library for .NET 8. ／ - **Five storage providers** — PostgreSQL, SQL Server, Redis, MongoDB and in-memory ／ |PostgreSQL|`NexJob.Postgres`|Production ready|",
+   "evidence_lines": [
+    17,
+    109,
+    124
+   ]
+  },
+  "fn": "oluciano/NexJob",
+  "sha": "3468f855adeb",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

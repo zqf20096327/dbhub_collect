@@ -8675,5 +8675,266 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d7b91c43478a": {
+  "identity": {
+   "one_liner": "AI 应用记忆层 Python 框架，提供持久化记忆存储与检索",
+   "review": "Memorizz 是一个 Python 框架，为 AI agent 提供跨会话的持久化记忆管理，包含情景、语义、程序性、短期和共享记忆五类，支持文件系统、MongoDB、Oracle 等存储提供者，并内置 CLI、本地 Web UI 与 MCP 服务器。面向构建持久化 agent 的 Python 开发者。注意其许可证为 PolyForm Noncommercial 1.0.0，仅限非商业使用。",
+   "highlights": [
+    "支持五类记忆（情景/语义/程序性/短期/共享），可按 agent、用户和会话隔离",
+    "存储提供者可插拔：本地文件系统、MongoDB、Oracle、Notion，配独立向量存储",
+    "提供 SDK、CLI、本地 Web UI，并可作为 MCP 服务器或 Codex/Claude Code 插件运行"
+   ],
+   "use_cases": [
+    "为需要跨会话记忆的 AI agent 提供持久化存储与语义检索",
+    "为 Codex/Claude Code 等编码 agent 提供项目事实与会话历史记忆",
+    "通过持续学习回路将成功的工具调用流程沉淀为可复用技能"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "with local filesystem storage, or use MongoDB, Oracle, or ／ - Persistent notes and searchable history: filesystem and Oracle notebooks",
+     "lines": [
+      34,
+      176
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 MongoDB/Oracle 等作为可插拔记忆存储后端使用，本身是面向 AI 应用开发的框架而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial 1.0.0（源可用，仅限非商业用途）",
+   "install": [
+    "pypi",
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " with local filesystem storage, or use MongoDB, Oracle, or ／ - Persistent notes and searchable history: filesystem and Oracle notebooks ／ Source available under PolyForm Noncommercial 1.0.0. See NOTICE.",
+   "evidence_lines": [
+    34,
+    176,
+    185
+   ]
+  },
+  "fn": "RichmondAlake/memorizz",
+  "sha": "d7b91c43478a",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "03bc7c83b831": {
+  "identity": {
+   "one_liner": "SQLite 兼容的嵌入式 SQL 数据库，列式存储+JIT 编译",
+   "review": "musql 是一个用 Go 实现的 SQLite 兼容 SQL 引擎，采用列式段存储（.musq 格式）和 JIT 编译执行查询，可通过 database/sql 嵌入 Go 程序，或以 musqld 服务器运行并兼容 Turso/libSQL 协议；提供 musql-convert 在 SQLite 文件与 .musq 格式间导入导出，支持 CRDT/leader 复制。适合需要在 Go 中嵌入或复用 SQLite 方言的开发者；注意它不直接打开 SQLite 文件，需先转换。",
+   "highlights": [
+    "以列式段格式存储数据，JIT 将支持的查询路径编译为原生机器码",
+    "实现 SQLite SQL 方言（含窗口函数、触发器、JSON、全文检索、R-tree 索引），并提供 musql-convert 双向导入导出",
+    "musqld 实现 Hrana 1–3 协议，兼容 libSQL/Turso 客户端；复制支持 CRDT 与 leader 模式"
+   ],
+   "use_cases": [
+    "Go 程序中通过 database/sql 使用 SQLite 方言的嵌入式数据库",
+    "将现有 SQLite 数据库转换为列式格式以运行分析型读取查询",
+    "为 libSQL/Turso 客户端提供协议兼容的服务端，并在节点间复制数据库"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "compat",
+     "quote": "**SQLite-compatible SQL, accelerated by columnar storage and a JIT compiler.** ／ musql implements SQLite's SQL dialect through its own parser, planner, and",
+     "lines": [
+      7,
+      144
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite 生态提供协议兼容引擎、格式转换工具和 libSQL 协议服务器，而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**SQLite-compatible SQL, accelerated by columnar storage and a JIT compiler.** ／ Pure Go, no CGo; needs Go 1.27 or newer. The driver registers as `sqlite` ／ `musqld` serves a musql database over Hrana, the protocol libSQL and Turso",
+   "evidence_lines": [
+    7,
+    51,
+    204
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "samyfodil/musql",
+  "sha": "03bc7c83b831",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "03d3bfd8ecac": {
+  "identity": {
+   "one_liner": "OpenAlgo 网页版单用户桌面版算法交易平台，本地运行 REST API 与行情 WebSocket",
+   "review": "OpenAlgo Desktop 是 OpenAlgo 网页版的单用户桌面封装，运行于 Windows/macOS/Linux/Raspberry Pi，无需自建服务器。它在本地监听与网页版相同的 REST API（5000 端口）和行情 WebSocket（8765 端口），供 Python SDK、TradingView、Amibroker、MCP 客户端等直接接入；提供沙盒模拟交易模式。数据存储于本地 openalgo.db、sandbox.db、logs.db 等文件，凭证经密钥链加密。面向个人算法交易者。",
+   "highlights": [
+    "提供与 OpenAlgo 网页版相同的 REST API 和 WebSocket 协议，支持 Python SDK、TradingView、Amibroker、Excel 及 MCP 客户端接入",
+    "包含沙盒（analyzer）模式，用模拟资金和真实行情测试策略、webhook 和 API 客户端",
+    "凭证加密，密钥保存在操作系统密钥链中；数据集中在单一文件夹便于备份"
+   ],
+   "use_cases": [
+    "在本地运行个人算法交易客户端并连接券商账户",
+    "用模拟资金在沙盒模式中测试交易策略和 API 客户端",
+    "为 TradingView、Amibroker 等外部交易工具提供本地 REST/WebSocket API 接口"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述其为一个使用本地数据库文件存储账户、策略与日志的终端用户交易应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**OpenAlgo on your own computer. Install, sign in, connect your broker, trade.** ／ OpenAlgo Desktop is a single-user desktop version of ／ Inside it: `openalgo.db` (account, settings, strategies, encrypted broker",
+   "evidence_lines": [
+    8,
+    10,
+    218
+   ]
+  },
+  "fn": "marketcalls/openalgo-desktop",
+  "sha": "03d3bfd8ecac",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "76bb36ece095": {
+  "identity": {
+   "one_liner": "OceanBase 大赛 seekdb 赛题的参赛记录仓库",
+   "review": "这是第六届 OceanBase 数据库大赛 seekdb 赛道的参赛者个人仓库，用于记录赛题进度、环境搭建笔记与赛题解答，包含 docs、problems、src、scripts 等目录及大赛官网、提测平台等链接。面向参赛者本人使用；README 显示环境尚未搭建完毕，处于赛前准备阶段。",
+   "highlights": [
+    "按赛题组织目录结构，含题解、笔记、公共代码与脚本",
+    "提供环境搭建、跑测、提交的脚本目录",
+    "收录大赛官网、提测平台与社区论坛链接"
+   ],
+   "use_cases": [
+    "跟踪 seekdb 赛题解答进度与赛程时间节点",
+    "记录 seekdb 本地环境搭建过程",
+    "管理赛期代码与提交脚本"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "# 第六届 OceanBase 数据库大赛 · seekdb 赛题 ／ seekdb 是 OceanBase 面向 AI 的原生数据库，围绕数据存储、处理、检索与智能应用的完整链路出题，考察数据库内核、AI 能力集成、查询与检索优化、系统性能与稳定性，以及 Agent 应用。",
+     "lines": [
+      1,
+      20
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库是参赛记录仓库，README 未说明其自身为数据库生态提供工具或以数据库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "seekdb 是 OceanBase 面向 AI 的原生数据库，围绕数据存储、处理、检索与智能应用的完整链路出题，考察数据库内核、AI 能力集成、查询与检索优化、系统性能与稳定性，以及 Agent 应用。 ／ docs/        赛题记录、环境搭建笔记 ／ - [x] 报名、建仓库、填地址",
+   "evidence_lines": [
+    20,
+    25,
+    40
+   ]
+  },
+  "fn": "lzq06093/oceanbase-2026-seekdb",
+  "sha": "76bb36ece095",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

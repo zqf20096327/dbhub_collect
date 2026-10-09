@@ -9437,5 +9437,138 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4f0d52270183": {
+  "identity": {
+   "one_liner": "Rust 编写的属性图数据库，统一 MVCC/时序/分支/复制于单一提交流",
+   "review": "frankengraphdb 是一个用 Rust 从零实现的属性图数据库，提供嵌入式库（fgdb）、服务端（fgdbd）和 CLI 三种形态，使用 GQL（ISO/IEC 39075:2024）语言并提供 openCypher 入口。其核心机制是将 MVCC、时间旅行、git 风格分支、复制与变更订阅统一到一条 fountain 编码的提交流上。README 明确说明当前尚无发布版本，部分示例语句尚未实现，适合关注图数据库引擎实现的开发者阅读源码。",
+   "highlights": [
+    "统一提交流实现 MVCC、时间旅行查询（FOR SYSTEM_TIME AS OF/BETWEEN）与 git 风格数据库分支",
+    "支持 GQL ISO/IEC 39075:2024 语言及 openCypher 入口，提供混合向量/文本/图检索 operator hybrid.search",
+    "全工作区禁用 unsafe（unsafe_code=forbid），依赖闭集，结果确定性可审计并输出 plan certificate"
+   ],
+   "use_cases": [
+    "需要带时间旅行与分支能力的图数据管理的场景",
+    "GraphRAG 式检索（向量+文本+图扩展融合查询）",
+    "需要确定性、可审计、可重放查询结果的场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **A reference oracle.** `fgdb-reference` is a deliberately simple, single-threaded, obviously-correct implementation of the full logical semantics, compiled for tests only. \"What should this return\" is a *program*, not a debate, and it exists before the firs",
+     "lines": [
+      289
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库内核/引擎实现，属于数据库生态的基础组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT + Rider 双许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A blank-slate, memory-safe, ultra-high-performance property-graph database in Rust, built on the Franken/asupersync ecosystem. It unifies MVCC, time-travel history, git-style branches, replication, and change subscriptions into a single fountain-coded commit stream, runs transactional writes and static-CSR analytics on one temperature-tiered store, and makes every query result deterministic, auditable, and replayable.** ／ # What runs today, from a source checkout (there are no releases or installer yet — see Installation): ／ **The solution.** `frankengraphdb` composes them. One codebase, three postures: an embedded library (`fgdb`), a server (`fgdbd`), and a CLI (`fgdb`), all speaking **GQL** (ISO/IEC 39075:2024) with an openCypher on-ramp. Larger-than-memory is first-class everywhere. It is, in a precise sense, *a database written in the asupersync programming model*, the way FoundationDB is a database written in Flow: structured concurrency, capability contexts, fountain coding, and a deterministic lab runtime are the substrate, not add-ons.",
+   "evidence_lines": [
+    10,
+    13,
+    25
+   ]
+  },
+  "fn": "Dicklesworthstone/frankengraphdb",
+  "sha": "4f0d52270183",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "71fc47356f8a": {
+  "identity": {
+   "one_liner": "基于本地 SQLite、经 MCP 暴露的 AI 代理共享事实记忆层",
+   "review": "该项目实现一个本地运行的 MCP 服务，将事实记忆存入单个 SQLite 数据库，供多个 AI 编码工具（如 Codex、Claude Code、Cursor）通过四组 MCP 工具读写共享。写入携带来源与信任级别，含版本历史、冲突记录与用户授权治理，嵌入与冲突判定模型均在本地运行。适用于需要跨客户端共享可追溯事实记忆的 AI 代理用户；需要显式配置身份，仅绑定 localhost，HTTP 头不构成认证。",
+   "highlights": [
+    "提供 memory/memory_review/memory_govern/memory_repair 四组 MCP 工具，支持记忆写入、召回、治理与修复",
+    "每条记忆保留原文并附 source_type/event_time 等来源字段，写入产生版本历史与替换链",
+    "嵌入使用本地 GGUF 模型，冲突判定使用本地 mDeBERTa 模型，仅含可关闭的 PyPI 更新检查外联"
+   ],
+   "use_cases": [
+    "为多个 AI 编码客户端提供共享的本地事实记忆库",
+    "需要来源可追溯、可治理的记忆写入与冲突检测场景",
+    "离线/本地优先环境下运行 MCP 记忆服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Memory Arbiter is a trustworthy local fact layer for AI agents — not just shared memory, but shared facts that are current, trusted, traceable, and safe to use. It is a local SQLite service exposed over MCP: four product tools, evidence-based recall, advisory  ／ pip install \"memory-arbiter-mcp[vec,semantic-local]\" # core + sqlite-vec + local GGUF runtime",
+     "lines": [
+      5,
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以本地 SQLite 数据库存放记忆数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Memory Arbiter is a trustworthy local fact layer for AI agents — not just shared memory, but shared facts that are current, trusted, traceable, and safe to use. It is a local SQLite service exposed over MCP: four product tools, evidence-based recall, advisory conflict notices, and user-authorized governance. Every fact is stored once in local SQLite and every model it can call runs locally. ／ pip install \"memory-arbiter-mcp[vec,semantic-local]\"  # core + sqlite-vec + local GGUF runtime ／ `mema setup` without `--install` stays guidance-only: it writes `~/.config/memory-arbiter/config.json` and self-checks the environment without touching pip or the network; `--install` is the execution mode (pip installs the extras, downloads the embedding GGUF model with resume/mirror fallback, and writes the finished config itself). Since 0.15.0 configuration is file-only and the whole user surface is 21 keys (see Configuration): paths, identity, workspace/isolation, `update_check.enabled`, `include_size`, the embedding model, the optional semantic-conflict mDeBERTa judge (`mdeberta_ckpt`, see below), and MCP transport/host/port. The reference `examples/memory-arbiter.config.example.json` shows the same slim surface with per-key notes. Then wire your MCP client from `examples/*.mcp.json` and start the server with `mema`.",
+   "evidence_lines": [
+    5,
+    66,
+    71
+   ]
+  },
+  "fn": "billy12151/memory-arbiter-mcp",
+  "sha": "71fc47356f8a",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

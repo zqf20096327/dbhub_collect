@@ -9609,5 +9609,159 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5d75541c47b3": {
+  "identity": {
+   "one_liner": "自托管的 ALTCHA 验证码管理服务器",
+   "review": "GateCHA 是一个自托管的 ALTCHA 工作量证明验证码管理服务器，提供 API 密钥管理、按站点配置、重放防护、统计仪表盘，并可选收集人机交互信号（HIS）评分。面向需要自建验证码服务的网站运维者；默认构建仅含 SQLite，MySQL 需专用构建变体。项目自称是 ALTCHA Sentinel 的开源替代。",
+   "highlights": [
+    "提供 ALTCHA 兼容的工作量证明验证码服务，支持 API 密钥管理、域名限制与重放防护",
+    "提供统计仪表盘与可选的 HIS 人机交互信号评分，支持按分数阻断",
+    "提供 MCP 端点，可从 AI 客户端管理 API 密钥（默认关闭）"
+   ],
+   "use_cases": [
+    "为自托管网站添加 ALTCHA 工作量证明验证码",
+    "多站点场景下集中管理验证码 API 密钥与查看统计",
+    "基于交互信号对提交进行风险评分并选择性阻断"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Multi-Database** - SQLite by default; MySQL available in the `mysql` build variant ／ Every tag has a `-mysql` counterpart (`latest-mysql`, `0.3-mysql`, `main-mysql`, …) ／ make build-mysql # with MySQL support",
+     "lines": [
+      22,
+      59,
+      88
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Multi-Database** - SQLite by default; MySQL available in the `mysql` build variant ／ - **Docker Ready** - One container, zero external dependencies (SQLite mode) ／ make build # SQLite only (default)",
+     "lines": [
+      22,
+      23,
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "GateCHA 是一个验证码管理服务应用，默认使用 SQLite 存储自身数据，MySQL 为可选存储构建变体，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Self-hosted ALTCHA CAPTCHA management with API keys, multi-site support, and statistics.** ／ GateCHA is an open-source alternative to ALTCHA Sentinel. It wraps the ALTCHA proof-of-work CAPTCHA protocol with a management layer: API key management, per-site configuration, replay protection, and a dashboard with statistics. ／ - **Multi-Database** - SQLite by default; MySQL available in the `mysql` build variant",
+   "evidence_lines": [
+    8,
+    12,
+    22
+   ]
+  },
+  "fn": "Upellift99/GateCHA",
+  "sha": "5d75541c47b3",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1bd9747c1c93": {
+  "identity": {
+   "one_liner": "本地运行的二次元插画整理工具，用本地模型识别角色并归类",
+   "review": "Emaki 是一个在 Windows 本机运行的插画整理应用，用 onnxruntime 跑 PixAI/WD14 标签模型识别图片中的角色、作品与画师，按角色和作品分组、分离漫画/截图/照片并查重，整理结果存入 SQLite 数据库。面向在个人电脑存放大量二次元插画的用户，图片不上传，提供免安装版与源码运行方式。",
+   "highlights": [
+    "本机模型识别 8,300+ 角色，支持按角色、作品、画师分组与标签筛选",
+    "自动分离漫画/截图/照片并查找完全相同或画面相似的重复图",
+    "整理数据存于本地 SQLite，支持撤销操作与数据目录迁移备份"
+   ],
+   "use_cases": [
+    "整理本机数万张二次元插画，按角色和作品自动归类",
+    "查找图库中的重复或相似图片并清理",
+    "离线管理移动硬盘上的图片收藏，不联网也能运行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|数据库（你做的所有整理）|`data/emaki.sqlite`| ／ `data/` 不会被提交到 Git。备份的话复制 `data/emaki.sqlite` 就行，缩略图和模型都能重新生成、重新下载。想换位置可以在 `.env` 里改 `EMAKI_DATA_DIR`，其他配置见 .env.example。 ／ 前端是 React + Vite + Tailwind，后端是 Node.js + Fastify + SQLite，识别用 onnxruntime-node。架构和各页面的设计说明在 docs/ARCHITECTURE.md 和 docs/FRONTEND.md，开发任务清单在 docs/TASKS.md。",
+     "lines": [
+      133,
+      138,
+      171
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明整理结果存入 SQLite 数据库，SQLite 仅作为该应用的存储组件使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|数据库（你做的所有整理）|`data/emaki.sqlite`| ／ 前端是 React + Vite + Tailwind，后端是 Node.js + Fastify + SQLite，识别用 onnxruntime-node。架构和各页面的设计说明在 docs/ARCHITECTURE.md 和 docs/FRONTEND.md，开发任务清单在 docs/TASKS.md。",
+   "evidence_lines": [
+    133,
+    171
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "nickname21kmr/emaki",
+  "sha": "1bd9747c1c93",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

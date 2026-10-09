@@ -8998,5 +8998,197 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4bfb495375cf": {
+  "identity": {
+   "one_liner": "面向数据库的开源 MCP 服务器，为 AI 代理提供数据库工具",
+   "review": "MCP Toolbox for Databases 是 Google 开源的 Model Context Protocol 服务器，用于将 AI 代理、IDE 和应用连接到企业数据库。它提供预置通用工具（如 list_tables、execute_sql）和通过 tools.yaml 定义自定义工具的框架，支持连接池、IAM 认证与 OpenTelemetry 可观测性，面向使用 Gemini CLI、Claude Code 等 MCP 客户端的开发者和数据团队。",
+   "highlights": [
+    "提供预置 MCP 服务器，通过 --prebuilt=<database> 参数加载针对特定数据库的标准工具",
+    "支持通过 tools.yaml 定义自定义数据源、工具、工具集、提示与只读资源",
+    "提供 Python、JS/TS、Go、Java SDK，并集成 OpenTelemetry 指标与追踪"
+   ],
+   "use_cases": [
+    "让 IDE 或 CLI 中的 AI 助手直接探索数据库 schema、查询数据",
+    "为生产环境 AI 代理构建带受限访问与结构化查询的数据库工具",
+    "以少于 10 行代码将数据库工具集成到 ADK、LangChain、LlamaIndex 代理"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Google Cloud:** AlloyDB, BigQuery, Cloud SQL (PostgreSQL, MySQL, SQL Server), Spanner, Firestore, Knowledge Catalog (formerly known as Dataplex). ／ - **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      68,
+      69
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Google Cloud:** AlloyDB, BigQuery, Cloud SQL (PostgreSQL, MySQL, SQL Server), Spanner, Firestore, Knowledge Catalog (formerly known as Dataplex). ／ - **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      68,
+      69
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      69
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Google Cloud:** AlloyDB, BigQuery, Cloud SQL (PostgreSQL, MySQL, SQL Server), Spanner, Firestore, Knowledge Catalog (formerly known as Dataplex). ／ - **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      68,
+      69
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      69
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+     "lines": [
+      69
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 MCP 服务器为各类数据库向 AI 客户端提供工具服务，属于数据库生态的服务组件而非存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "MCP Toolbox for Databases is an open source Model Context Protocol (MCP) server that connects your AI agents, IDEs, and applications directly to your enterprise databases. ／ Supported databases currently include: ／ - **Other Databases:** PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, MongoDB, Redis, Elasticsearch, CockroachDB, ClickHouse, Couchbase, Neo4j, Snowflake, Trino, and more.",
+   "evidence_lines": [
+    18,
+    67,
+    69
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "googleapis/mcp-toolbox",
+  "sha": "4bfb495375cf",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c9f916f6b6ea": {
+  "identity": {
+   "one_liner": "C++ 单仓 agentic 工具集：交互式编码代理、CLI、MCP 客户端/服务端库",
+   "review": "std::slop 是一个 C++ monorepo，提供交互式编码代理 std_slop、脚本化 CLI sl、MCP 客户端/服务端库和 Markdown 终端渲染库；面向需要在终端中运行 AI 编码代理并脚本化其会话的开发者。代理用 SQLite 存储会话、工具调用与补丁审核状态，仅支持 OpenAI 兼容端点。构建依赖 Bazel，发布提供 Linux/macOS 二进制。",
+   "highlights": [
+    "提供 std_slop 交互式代理与 sl 批处理 CLI，会话与工具调用状态持久化于 SQLite",
+    "包含 MCP 客户端与服务端库，支持 Streamable HTTP 与 stdio 连接",
+    "提供 Markdown 解析与 ANSI 终端渲染库"
+   ],
+   "use_cases": [
+    "在终端中对代码仓库执行交互式或批量 AI 编码任务",
+    "在 C++ 应用中接入或实现 MCP 服务器",
+    "通过脚本调用代理并获取 JSON/Schema 约束的结构化输出"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite sessions, model authentication, personas, and mail workflows belong to the coding-agent runtime. They are not requirements for every library. ／ - **SQLite ledger**: Interactions and tool calls are stored in SQLite. Interactive sessions and `sl` use persistent storage; batch mode can use an in-memory database.",
+     "lines": [
+      79,
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 SQLite 作为代理运行时的会话与状态存储使用，而非为数据库生态提供服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`std::slop` is a C++ monorepo for agentic tooling. It provides the `std_slop` interactive coding agent, the `sl` command-line tool, MCP client and server libraries with examples, and a Markdown parser and terminal renderer. ／ - **SQLite ledger**: Interactions and tool calls are stored in SQLite. Interactive sessions and `sl` use persistent storage; batch mode can use an in-memory database.",
+   "evidence_lines": [
+    9,
+    87
+   ]
+  },
+  "fn": "hsaliak/std_slop",
+  "sha": "c9f916f6b6ea",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9197,5 +9197,111 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dd9d628771f1": {
+  "identity": {
+   "one_liner": "基于状态声明的多平台 schema 部署工具集",
+   "review": "SchemaSmith 是一组面向 SQL Server、PostgreSQL、MySQL 和 MariaDB 的状态式 schema 管理工具，用户将期望的表、视图、存储过程、索引等状态定义为元数据，由 SchemaQuench 等工具将目标服务器转换至匹配状态，无需编写迁移脚本。提供 Windows/Linux/macOS 单文件可执行文件、Docker 镜像与 GitHub Action，支持声明最低引擎版本下限校验、WhatIf 预演和断点续跑。适合数据库团队与 DevOps 流水线使用。注意其许可证为自定义的 SSCL v2.0，禁止独立再分发或托管服务。",
+   "highlights": [
+    "提供 SchemaTongs/SchemaQuench/DataTongs/SchemaShears 四个工具，覆盖 schema 提取、部署、数据抽取与补丁生成",
+    "支持以元数据声明目标状态，无需编写或排序迁移脚本",
+    "提供 WhatIf 预演、checkpoint/resume、版本下限校验及 GitHub Action CI/CD 集成"
+   ],
+   "use_cases": [
+    "多数据库平台的 schema 版本化部署与变更同步",
+    "在 CI/CD 流水线中对 PR 做 WhatIf 预演、合并后自动部署",
+    "从现有数据库提取 schema/数据并生成跨平台可部署的 schema 包"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "*Terraform for SQL Server, Postgres, MySQL, and MariaDB databases* ／ SchemaSmith is a state-based database schema management toolset for SQL Server, PostgreSQL, MySQL, and MariaDB. Define your desired database state as metadata — tables, views, procedures, indexes, constraints, data — and SchemaSmith transforms any target serve ／ - **SchemaQuench** — Deploys schema packages to SQL Server, PostgreSQL, MySQL, and MariaDB. 9 execution slots, conditional deployment via `ShouldApplyExpression`, secondary-server fan-out, FK-aware data delivery, checkpoint/resume, WhatIf analysis, indexed vie ／ |PostgreSQL|12|",
+     "lines": [
+      3,
+      15,
+      24,
+      47
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "*Terraform for SQL Server, Postgres, MySQL, and MariaDB databases* ／ SchemaSmith is a state-based database schema management toolset for SQL Server, PostgreSQL, MySQL, and MariaDB. Define your desired database state as metadata — tables, views, procedures, indexes, constraints, data — and SchemaSmith transforms any target serve ／ - **SchemaQuench** — Deploys schema packages to SQL Server, PostgreSQL, MySQL, and MariaDB. 9 execution slots, conditional deployment via `ShouldApplyExpression`, secondary-server fan-out, FK-aware data delivery, checkpoint/resume, WhatIf analysis, indexed vie ／ |MySQL|5.7|",
+     "lines": [
+      3,
+      15,
+      24,
+      48
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "*Terraform for SQL Server, Postgres, MySQL, and MariaDB databases* ／ SchemaSmith is a state-based database schema management toolset for SQL Server, PostgreSQL, MySQL, and MariaDB. Define your desired database state as metadata — tables, views, procedures, indexes, constraints, data — and SchemaSmith transforms any target serve ／ - **SchemaQuench** — Deploys schema packages to SQL Server, PostgreSQL, MySQL, and MariaDB. 9 execution slots, conditional deployment via `ShouldApplyExpression`, secondary-server fan-out, FK-aware data delivery, checkpoint/resume, WhatIf analysis, indexed vie ／ |SQL Server|2008 (major version 10)|",
+     "lines": [
+      3,
+      15,
+      24,
+      46
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "*Terraform for SQL Server, Postgres, MySQL, and MariaDB databases* ／ SchemaSmith is a state-based database schema management toolset for SQL Server, PostgreSQL, MySQL, and MariaDB. Define your desired database state as metadata — tables, views, procedures, indexes, constraints, data — and SchemaSmith transforms any target serve ／ - **SchemaQuench** — Deploys schema packages to SQL Server, PostgreSQL, MySQL, and MariaDB. 9 execution slots, conditional deployment via `ShouldApplyExpression`, secondary-server fan-out, FK-aware data delivery, checkpoint/resume, WhatIf analysis, indexed vie ／ |MariaDB|10.2|",
+     "lines": [
+      3,
+      15,
+      24,
+      49
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "SchemaSmith 是为四种数据库提供 schema 部署/管理服务的工具集，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "SSCL v2.0（自定义源码可用许可，禁止独立再分发、捆绑转售或提供托管服务）",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SchemaSmith is a state-based database schema management toolset for SQL Server, PostgreSQL, MySQL, and MariaDB. Define your desired database state as metadata — tables, views, procedures, indexes, constraints, data — and SchemaSmith transforms any target server to match. Same toolset, same package format, four engines — no migration scripts to author or order. ／ - **SchemaQuench** — Deploys schema packages to SQL Server, PostgreSQL, MySQL, and MariaDB. 9 execution slots, conditional deployment via `ShouldApplyExpression`, secondary-server fan-out, FK-aware data delivery, checkpoint/resume, WhatIf analysis, indexed views (SQL Server), materialized views (PostgreSQL), and a token system that reaches every script. ／ ## Installation",
+   "evidence_lines": [
+    15,
+    24,
+    53
+   ]
+  },
+  "fn": "Schema-Smith/SchemaSmith",
+  "sha": "dd9d628771f1",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

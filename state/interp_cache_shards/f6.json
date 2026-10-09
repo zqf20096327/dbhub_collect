@@ -9979,5 +9979,74 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b81def81ef5d": {
+  "identity": {
+   "one_liner": "LangGraph 多智能体 RAG 旅行客服助手，用 SQLite/Qdrant/Redis 实现查询与审批",
+   "review": "MORA 是一个基于 LangChain/LangGraph 构建的多智能体旅行客服系统，提供航班查询、酒店与租车预订、行程推荐与 FAQ 混合检索，写操作须经人工审批后执行。业务数据存于 SQLite，向量检索用 Qdrant/ChromaDB，会话状态存 Redis，面向需要带审批流程的智能客服场景的开发者。",
+   "highlights": [
+    "提供航班、酒店、租车、行程等多领域专业助手编排，支持跨业务请求",
+    "实现受限只读 text-to-SQL 查询与事务化的酒店库存写入控制",
+    "实现敏感写操作前的人工审批检查点与分层会话记忆"
+   ],
+   "use_cases": [
+    "旅行类业务的智能客服与预订助手",
+    "需要人审流程的智能体写操作场景",
+    "FAQ 知识库混合检索问答"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "多智能体协作的智能服务助手，基于 **LangChain、LangGraph、Redis、ChromaDB、Qdrant 与 SQLite** 构建。 ／ - **结构化业务查询**：酒店与航班直接查询 SQLite，常规搜索使用参数化 SQL，复杂统计使用受限只读 text-to-SQL；个人预订按会话乘客 ID 查询。 ／ |业务数据|SQLite|实时查询、预订管理与酒店库存|",
+     "lines": [
+      5,
+      17,
+      41
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储业务数据、Redis 保存会话状态，是构建于数据库之上的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "多智能体协作的智能服务助手，基于 **LangChain、LangGraph、Redis、ChromaDB、Qdrant 与 SQLite** 构建。 ／ |业务数据|SQLite|实时查询、预订管理与酒店库存|",
+   "evidence_lines": [
+    5,
+    41
+   ]
+  },
+  "fn": "yukui9222/mora",
+  "sha": "b81def81ef5d",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

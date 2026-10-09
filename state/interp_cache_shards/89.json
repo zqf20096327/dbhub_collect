@@ -8168,5 +8168,207 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9dcbb14930b1": {
+  "identity": {
+   "one_liner": "AI 代理优先的 CLI 生成器，读取 API 文档并生成 Go CLI、MCP 服务器",
+   "review": "该工具读取 API 文档、研究社区 CLI 与 MCP 服务器，为任意 API 或网站生成 Go 语言 CLI、Claude Code 技能和 MCP 服务器。面向 AI 代理与使用 Claude Code/Codex 的开发者，生成物内置本地 SQLite 镜像、FTS5 全文搜索、增量同步与 JSON 输出标志。需安装 Go 1.26.9+ 与 Node/npm，通过 install.sh 脚本安装二进制与技能两部分。",
+   "highlights": [
+    "生成的 CLI 使用本地 SQLite 表、FTS5 全文索引与增量同步，支持离线查询（L183）",
+    "一次运行生成二进制 CLI 与 MCP 服务器、研究文档、验证证明和质量分数（L132）",
+    "提供 agent 原生输出：管道自动 JSON、--compact 字段裁剪、类型化退出码（L189）"
+   ],
+   "use_cases": [
+    "为有/无官方 API 的服务生成供 AI 代理调用的命令行工具",
+    "基于本地 SQLite 镜像构建离线搜索与复合查询命令",
+    "通过 Claude Code / Codex 技能驱动的生成-验证-发布流程管理 CLI 库"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It reads the official API docs, studies every popular community CLI and MCP server, sniffs the web for the APIs nobody published (think Google Flights or Dominos), and applies the power-user playbook Peter Steinberger proved with discrawl and gogcli - local SQ ／ Local-first data layer. High-gravity resources get domain-specific SQLite tables (not JSON blobs), FTS5 full-text search indexes, and incremental sync with cursor tracking. `sync` pulls data down. `search` finds it in milliseconds. `sql` lets power users query",
+     "lines": [
+      11,
+      183
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明其为生成 AI 代理用 CLI/MCP 服务器的开发者工具，生成的 CLI 以 SQLite 作本地数据层（L11、L183）",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "It reads the official API docs, studies every popular community CLI and MCP server, sniffs the web for the APIs nobody published (think Google Flights or Dominos), and applies the power-user playbook Peter Steinberger proved with discrawl and gogcli - local SQLite, compound commands, agent-native flags. It fuses all of that and prints a token-efficient Go CLI plus a Claude Code skill plus an MCP server for any API or any website. ／ Local-first data layer. High-gravity resources get domain-specific SQLite tables (not JSON blobs), FTS5 full-text search indexes, and incremental sync with cursor tracking. `sync` pulls data down. `search` finds it in milliseconds. `sql` lets power users query directly. All offline, all local.",
+   "evidence_lines": [
+    11,
+    183
+   ]
+  },
+  "fn": "mvanhorn/cli-printing-press",
+  "sha": "9dcbb14930b1",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dd254a11409f": {
+  "identity": {
+   "one_liner": "浏览器采集平台：录制交互生成 DSL 规则并定时执行",
+   "review": "AegisCrawler 提供浏览器插件录制用户交互并生成 YAML/JSON DSL 规则，Go 服务器以租约机制调度任务，ScriptCat 油猴脚本在真实浏览器中执行规则并回传结果。支持 OpenAI/Anthropic 兼容 API 增强 LLM 规则（需安全扫描与人工审核）。数据存储使用 SQLite，面向需要长期定时采集网页数据的用户，UI 为中文。",
+   "highlights": [
+    "录制浏览器操作生成可执行的 YAML/JSON DSL 规则，支持 click/type/scroll/loop/if/extract 等动作",
+    "任务生命周期含租约认领、心跳续期、重试恢复与死信队列，提供 Prometheus 指标与健康探针",
+    "服务器为单二进制 Go 程序，内置 SQLite（WAL、版本化迁移）并嵌入 Admin UI"
+   ],
+   "use_cases": [
+    "将浏览器页面操作录制为规则并按 cron 计划定时采集数据",
+    "通过 Admin UI 管理规则、任务取消重试与审计日志",
+    "在 LLM 增强规则场景下经安全扫描和 diff 审核后应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Single-binary Go server** with SQLite (WAL, versioned migrations, pure Go, ／ - **Backups**: back up the SQLite file (`/data/opencrawler.db` inside the",
+     "lines": [
+      41,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明服务器使用 SQLite 作为自身数据存储，属使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0-or-later",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A production-grade browser data-collection platform built around one idea: ／ - **Single-binary Go server** with SQLite (WAL, versioned migrations, pure Go, ／ - **Backups**: back up the SQLite file (`/data/opencrawler.db` inside the",
+   "evidence_lines": [
+    9,
+    41,
+    126
+   ]
+  },
+  "fn": "singhand-labs/AegisCrawler",
+  "sha": "dd254a11409f",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f17f363d3376": {
+  "identity": {
+   "one_liner": "Spring Boot + Vue 超市管理系统源码展示，含 17 张表结构",
+   "review": "基于 Spring Boot 2.3.2 与 Vue 2 的商场管理项目公开展示版，覆盖商品、库存、会员、销售、人员和权限模块。使用 MySQL 与 Redis 存数据，通过 schema.sql 提供建表语句，需复制模板并用环境变量配置数据库连接。README 说明未验证独立部署，完整资料在私有仓库，公开版不含业务数据与真实账号。",
+   "highlights": [
+    "提供前端页面、后端接口与 17 张表数据库结构的源码展示",
+    "数据库连接通过 DB_URL/DB_USERNAME/DB_PASSWORD 等环境变量配置",
+    "schema.sql 仅含建表语句，不含初始账号与业务数据"
+   ],
+   "use_cases": [
+    "作为超市/商场管理系统的前后端代码学习参考",
+    "阅读业务表结构与数据模型设计",
+    "对照源码了解 Spring Boot + Vue 项目的分层组织"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|数据与缓存|MySQL、Redis|",
+     "lines": [
+      25
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 MySQL 与 Redis 存储业务数据，是使用数据库的管理系统应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "基于 **Spring Boot + Vue 2** 的商场管理项目，覆盖商品、库存、会员、销售、人员和权限管理。 ／ |数据与缓存|MySQL、Redis| ／ - 后端模板为 `backend/src/main/resources/application.example.yaml`。复制为 `application.yaml` 后，通过 `DB_URL`、`DB_USERNAME`、`DB_PASSWORD`、`REDIS_HOST`、`REDIS_PORT`、`REDIS_PASSWORD` 配置连接。",
+   "evidence_lines": [
+    3,
+    25,
+    44
+   ]
+  },
+  "fn": "nocTia-O9/supermarket-management-system-showcase",
+  "sha": "f17f363d3376",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

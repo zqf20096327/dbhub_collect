@@ -9643,5 +9643,138 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2c6d43f1d74a": {
+  "identity": {
+   "one_liner": "基于 SQLite SQL 定义的纯 Go SQL 解析器",
+   "review": "这是一个用 Go 编写的 SQL 解析器库，依据 SQLite 的语法定义解析 SQL 语句，目标为支持完整的 SQLite 语法。README 提供 Go 代码示例（NewParser/Parse），并建议查看 parser_test.go 中的单元测试作为解析示例。该库原由 Ben Johnson 创建，供 rqlite 项目使用，面向 Go 开发者。",
+   "highlights": [
+    "提供纯 Go 实现的 SQL 解析器，基于 SQLite SQL 定义",
+    "目标是支持完整的 SQLite 语法",
+    "通过 parser_test.go 提供大量解析示例"
+   ],
+   "use_cases": [
+    "Go 项目中解析 SQL 语句并生成语法表达式",
+    "rqlite 项目内部的 SQL 解析组件",
+    "需要处理 SQLite 语法的开发场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "This repository holds a pure Go SQL parser based on the SQLite SQL definition. Its goal is to support the full SQLite syntax.",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQL 解析提供开发库组件，原为服务 rqlite 数据库生态而创建",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This repository holds a pure Go SQL parser based on the SQLite SQL definition. Its goal is to support the full SQLite syntax. ／ This parser was originally created by Ben Johnson. Many thanks to him for making it available for use by rqlite.",
+   "evidence_lines": [
+    5,
+    18
+   ]
+  },
+  "fn": "rqlite/sql",
+  "sha": "2c6d43f1d74a",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5a7bcad59715": {
+  "identity": {
+   "one_liner": "Go 单二进制 LLM 路由代理网关，提供多提供商转发与仪表盘",
+   "review": "9router-go 用单个 Go 二进制实现 LLM API 代理网关，将 Claude Code、Cursor 等 CLI 工具接入 40+ AI 提供商，支持 fallback/round-robin 等组合路由、token 压缩（RTK）与内嵌 Svelte 仪表盘；数据用 SQLite WAL 持久化，可与上游 Node.js 版 9Router 共享同一数据库文件。适合需要统一管理多家 LLM 账户与用量的开发者。",
+   "highlights": [
+    "提供 OpenAI Chat、Claude Messages、Gemini、Ollama 兼容等多种 API 格式的代理转发",
+    "支持组合路由策略：fallback、round-robin、sticky、capacity、fusion，以及按 API key 绑定代理池",
+    "使用 SQLite WAL 持久化数据，并可与 9Router 共享同一 data.sqlite 文件"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 CLI 编码工具统一接入多家 LLM 提供商",
+    "在订阅、付费与免费模型间自动降级切换以规避配额与限流",
+    "替代 Node.js 版 9Router，无需 Node.js 运行时即可复用其现有数据目录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **Already using upstream 9Router?** Point 9router-go at the same data dir — it opens the **same `DATA_DIR/db/data.sqlite`**. Your providers, connections, combos, API keys, and usage history carry over as-is. No import step, no migration. See Sharing a databa ／ - 💾 SQLite WAL persistence, outbound proxy support, self-update, MITM commands, Docker, cross-compilation ／ |macOS / Linux|`~/.9router/db/data.sqlite`|",
+     "lines": [
+      68,
+      121,
+      131
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该网关自身的持久化存储，项目定位是面向 LLM 提供商的代理应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Same idea as 9Router, minus the Node.js runtime: **one Go binary** serves the proxy APIs + an embedded Svelte dashboard. ／ > **Already using upstream 9Router?** Point 9router-go at the same data dir — it opens the **same `DATA_DIR/db/data.sqlite`**. Your providers, connections, combos, API keys, and usage history carry over as-is. No import step, no migration. See Sharing a database with 9Router for the caveats. ／ - 💾 SQLite WAL persistence, outbound proxy support, self-update, MITM commands, Docker, cross-compilation",
+   "evidence_lines": [
+    17,
+    68,
+    121
+   ]
+  },
+  "fn": "luqman-v1/9router-go",
+  "sha": "5a7bcad59715",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

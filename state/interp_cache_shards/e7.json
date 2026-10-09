@@ -8879,5 +8879,143 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b05ea7964d34": {
+  "identity": {
+   "one_liner": "AI Agent 会话记忆压缩与跨会话上下文持久化插件",
+   "review": "Claude-Mem 通过生命周期钩子自动捕获 agent 会话中的工具使用记录，生成语义摘要存入 SQLite，并在后续会话中注入相关上下文。面向 Claude Code、OpenCode、Codex 等 AI 编程工具用户，提供 MCP 搜索工具与本地 worker 服务；SQLite 为自带依赖，需 Node.js 20+ 与 Bun。",
+   "highlights": [
+    "提供 5 类生命周期钩子，自动捕获会话工具使用并生成摘要",
+    "提供 4 个 MCP 搜索工具（search/timeline/get_observations 等）实现分层记忆检索",
+    "使用 SQLite 与 Chroma 向量库实现关键词+语义混合搜索"
+   ],
+   "use_cases": [
+    "为 Claude Code 等编程 agent 保留跨会话项目上下文",
+    "对历史会话观察记录进行自然语言检索",
+    "通过 Web UI 实时查看记忆流并管理隐私内容排除"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Database** - SQLite schema & FTS5 search ／ 4. **SQLite Database** - Stores sessions, observations, summaries ／ - **SQLite 3**: For persistent storage (bundled)",
+     "lines": [
+      221,
+      238,
+      291
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明使用 SQLite 存储会话、观察与摘要数据，SQLite 是其内置存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "4. **SQLite Database** - Stores sessions, observations, summaries ／ Claude-Mem provides intelligent memory search through **4 MCP tools** following a token-efficient **3-layer workflow pattern**: ／ - **SQLite 3**: For persistent storage (bundled)",
+   "evidence_lines": [
+    238,
+    246,
+    291
+   ]
+  },
+  "fn": "thedotmack/claude-mem",
+  "sha": "b05ea7964d34",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dfa6a7f77e8f": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Rust 后台任务与定时任务库",
+   "review": "jalari 是一个 Rust 任务队列库，将任务、调度与 worker 状态存于 PostgreSQL 表中，支持延迟任务、cron 调度、去重、重试与多 worker 崩溃恢复，worker 之间仅通过数据库协调。适合需要在 Rust 应用中实现后台作业而引入 PostgreSQL 之外基础设施的开发者；任务至少执行一次，需自行保证幂等。",
+   "highlights": [
+    "任务与 cron 调度状态存储于 PostgreSQL 表，支持事务内入队与运行时修改调度",
+    "多 worker 通过数据库行锁协调，无额外配置，worker 崩溃后任务自动释放重跑"
+   ],
+   "use_cases": [
+    "Rust Web 应用中的异步后台任务处理",
+    "需要时区与夏令时支持的定时任务（cron）调度",
+    "多进程/多实例部署下的任务队列与崩溃恢复"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "jalari: background jobs for Rust that need nothing but PostgreSQL ／ PostgreSQL ／ jalari keeps jobs, schedules and workers in PostgreSQL tables. Declare a job with",
+     "lines": [
+      1,
+      8,
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明任务、调度与 worker 状态存储在 PostgreSQL 表中，属使用数据库存数据的应用级库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0（双许可条款起始，可见部分为 Apache-2.0）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "jalari: background jobs for Rust that need nothing but PostgreSQL ／ jalari keeps jobs, schedules and workers in PostgreSQL tables. Declare a job with ／ jalari = \"0.2\"",
+   "evidence_lines": [
+    1,
+    10,
+    15
+   ],
+   "softened": [
+    "highlights:『优雅』删条x1"
+   ]
+  },
+  "fn": "MengXi47/jalari",
+  "sha": "dfa6a7f77e8f",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

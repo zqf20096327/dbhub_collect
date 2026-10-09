@@ -6795,5 +6795,94 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6953cdd91872": {
+  "identity": {
+   "one_liner": "EF Core 扩展库，提供批量操作、临时表等 SQL 增强功能",
+   "review": "这是一组针对 Entity Framework Core 的扩展库，按 SQL Server、PostgreSQL、SQLite 提供独立 NuGet 包，实现临时表、批量插入/更新/合并、窗口函数、位聚合、嵌套事务、表提示及迁移增强等特性，并提供 AI 编码助手技能文件；面向使用 EF Core 的 .NET 开发者。",
+   "highlights": [
+    "支持 SQL Server、PostgreSQL、SQLite 三种 EF Core 提供程序的批量插入、更新与 Upsert",
+    "提供临时表、窗口函数、位聚合、跨库查询、运行时切换 schema 等 SQL 级扩展",
+    "提供面向 AI 编码代理的技能文件并可通过 skills CLI 或 Claude Code 插件安装"
+   ],
+   "use_cases": [
+    "在 EF Core 应用中执行大批量数据写入或更新",
+    "需要使用临时表传递集合参数或窗口函数等原生数据库特性",
+    "在 LINQ 迁移中控制列、标识列与聚集主键等细节"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Thinktecture.EntityFrameworkCore.PostgreSQL ／ |PostgreSQL (Npgsql)|`Thinktecture.EntityFrameworkCore.PostgreSQL`| ／ * Temp-Tables (SQL Server, PostgreSQL, SQLite)",
+     "lines": [
+      10,
+      22,
+      26
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Thinktecture.EntityFrameworkCore.Sqlite.Core ／ Thinktecture.EntityFrameworkCore.Sqlite ／ * Temp-Tables (SQL Server, PostgreSQL, SQLite)",
+     "lines": [
+      11,
+      12,
+      26
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Thinktecture.EntityFrameworkCore.SqlServer ／ |SQL Server|`Thinktecture.EntityFrameworkCore.SqlServer`| ／ * Temp-Tables (SQL Server, PostgreSQL, SQLite)",
+     "lines": [
+      8,
+      21,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为 EF Core 及其数据库提供程序提供扩展能力，是服务于数据库使用的开发组件而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "These libraries extend Entity Framework Core by a few features to make it easier to work with EF and for easier integration testing or to get more performance in some special cases. ／ ## Supported Providers ／ |SQLite|`Thinktecture.EntityFrameworkCore.Sqlite`|",
+   "evidence_lines": [
+    15,
+    17,
+    23
+   ]
+  },
+  "fn": "PawelGerr/Thinktecture.EntityFrameworkCore",
+  "sha": "6953cdd91872",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

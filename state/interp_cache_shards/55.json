@@ -9813,5 +9813,273 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3f5c69713d5b": {
+  "identity": {
+   "one_liner": "基于 .NET 的开源报表与 BI 工具，支持 SQL/NoSQL 数据源与调度",
+   "review": "Seal Report 是一个用 C# 编写的报表与 BI 平台，可将 SQL/NoSQL 数据源生成报告、透视表、图表并支持定时调度输出。它面向需要在 Windows 或 Linux 上自托管的报表开发者和业务用户，核心机制包括动态 SQL 生成、LINQ 跨源查询和内置 AI 代理。运行依赖 .NET 10，报表设计器需要 Microsoft Edge WebView2。",
+   "highlights": [
+    "提供动态 SQL 源、LINQ 跨数据源查询、原生透视表和多种图表引擎",
+    "支持通过 AI 代理以自然语言生成和分析报表，可接入 OpenAI、Anthropic、Ollama 等提供方",
+    "支持报表调度输出到文件夹、FTP/SFTP、SharePoint 及邮件，并包含 ETL 与批处理任务"
+   ],
+   "use_cases": [
+    "从多个数据库或文件数据源生成 HTML、Excel、PDF 格式报表",
+    "定时生成并分发报表（FTP/SFTP、SharePoint、邮件等）",
+    "通过自然语言对话让 AI 代理设计报表或分析数据"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. **Connect**: Use the Server Manager to declare a data source (OLE DB, ODBC, MS SQL Server, Oracle, MySQL, SQLite, PostgreSQL, MongoDB, Excel, CSV, ...). ／ * Database drivers: OLE DB, ODBC, MS SQL Server, Oracle, MySQL, SQLite, PostgreSQL, MongoDB",
+     "lines": [
+      49,
+      70
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "2. **Connect**: Use the Server Manager to declare a data source (OLE DB, ODBC, MS SQL Server, Oracle, MySQL, SQLite, PostgreSQL, MongoDB, Excel, CSV, ...). ／ * Database drivers: OLE DB, ODBC, MS SQL Server, Oracle, MySQL, SQLite, PostgreSQL, MongoDB",
+     "lines": [
+      49,
+      70
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "2. **Connect**: Use the Server Manager to declare a data source (OLE DB, ODBC, MS SQL Server, Oracle, MySQL, SQLite, PostgreSQL, MongoDB, Excel, CSV, ...). ／ * Database drivers: OLE DB, ODBC, MS SQL Server, Oracle, MySQL, SQLite, PostgreSQL, MongoDB",
+     "lines": [
+      49,
+      70
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "2. **Connect**: Use the Server Manager to declare a data source (OLE DB, ODBC, MS SQL Server, Oracle, MySQL, SQLite, PostgreSQL, MongoDB, Excel, CSV, ...). ／ * Database drivers: OLE DB, ODBC, MS SQL Server, Oracle, MySQL, SQLite, PostgreSQL, MongoDB",
+     "lines": [
+      49,
+      70
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "2. **Connect**: Use the Server Manager to declare a data source (OLE DB, ODBC, MS SQL Server, Oracle, MySQL, SQLite, PostgreSQL, MongoDB, Excel, CSV, ...). ／ * Database drivers: OLE DB, ODBC, MS SQL Server, Oracle, MySQL, SQLite, PostgreSQL, MongoDB",
+     "lines": [
+      49,
+      70
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为各类数据库提供报表、BI 和 ETL 服务，属于数据库生态的工具/组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Seal Report turns any SQL or NoSQL source into reports, pivot tables, charts and scheduled outputs, ／ 2. **Connect**: Use the Server Manager to declare a data source (OLE DB, ODBC, MS SQL Server, Oracle, MySQL, SQLite, PostgreSQL, MongoDB, Excel, CSV, ...). ／ * Database drivers: OLE DB, ODBC, MS SQL Server, Oracle, MySQL, SQLite, PostgreSQL, MongoDB",
+   "evidence_lines": [
+    10,
+    49,
+    70
+   ]
+  },
+  "fn": "ariacom/Seal-Report",
+  "sha": "3f5c69713d5b",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "11e32542e961": {
+  "identity": {
+   "one_liner": "PostgreSQL 与 SQLite 数据库快照的创建与恢复工具",
+   "review": "Lunar 是 Stellar 的重新实现，用于在开发过程中快速创建、恢复和管理 PostgreSQL 与 SQLite 数据库快照。它利用 PostgreSQL 的 TEMPLATE 数据库复制机制和 SQLite 的文件复制（含 WAL 处理）实现快照。面向需要在本地开发中切换分支、迭代 schema 变更的开发者，仅限开发环境使用。",
+   "highlights": [
+    "利用 PostgreSQL CREATE DATABASE ... TEMPLATE 特性生成数据库副本，恢复通过重命名完成",
+    "SQLite 快照为文件复制，自动处理 WAL 模式文件",
+    "通过 lunar.yml 配置文件管理，支持快照前后的 hook 命令"
+   ],
+   "use_cases": [
+    "本地开发中快速迭代 schema 变更",
+    "切换分支或实验性修改前保存数据库状态",
+    "跨平台分发二进制文件供开发者使用（无需语言运行时）"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A fast database snapshot tool for PostgreSQL and SQLite. Create, restore, and manage database snapshots. ／ - PostgreSQL and SQLite support (Stellar supports PostgreSQL and partial MySQL) ／ ### PostgreSQL",
+     "lines": [
+      5,
+      23,
+      28
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- PostgreSQL and SQLite support (Stellar supports PostgreSQL and partial MySQL)",
+     "lines": [
+      23
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A fast database snapshot tool for PostgreSQL and SQLite. Create, restore, and manage database snapshots. ／ - PostgreSQL and SQLite support (Stellar supports PostgreSQL and partial MySQL) ／ ### SQLite",
+     "lines": [
+      5,
+      23,
+      31
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为数据库生态提供服务（数据库快照与恢复），本身不是使用数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A fast database snapshot tool for PostgreSQL and SQLite. Create, restore, and manage database snapshots. ／ Lunar is a reimplementation of Stellar, designed to make database snapshots and restoration lightning-fast during development. ／ Lunar leverages PostgreSQL's `CREATE DATABASE ... TEMPLATE` feature to create efficient database copies. Restoring a snapshot performs a fast rename operation rather than slow SQL dumps and imports.",
+   "evidence_lines": [
+    5,
+    18,
+    29
+   ]
+  },
+  "fn": "leonvogt/lunar",
+  "sha": "11e32542e961",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0c43e1a9fa7f": {
+  "identity": {
+   "one_liner": "基于 Express+Prisma+PostgreSQL 的全栈业务门户应用",
+   "review": "SCP Portal App 是一个全栈业务门户系统，用于管理公司、联系人、任务、笔记、邮件、报价和库存，前端为 React+TypeScript，后端为 Express+TypeScript+Prisma，数据存储依赖 PostgreSQL，并包含 JWT 认证与 REST API。适合需要自建业务管理系统的团队部署使用，需自行配置数据库环境变量并运行 Prisma 迁移。",
+   "highlights": [
+    "提供公司、联系人、报价、任务、笔记、邮件与库存管理功能",
+    "实现基于 JWT 的认证与角色感知的访问控制",
+    "提供 REST API、健康检查端点及 Vitest+Supertest 测试"
+   ],
+   "use_cases": [
+    "企业内部业务数据（公司/联系人/报价/库存）管理",
+    "需要角色权限控制的任务与邮件记录管理",
+    "基于 Prisma + PostgreSQL 的全栈应用二次开发参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Backend: Express, TypeScript, Prisma ORM, PostgreSQL-compatible database ／ - PostgreSQL database running locally or in your environment ／ DATABASE_URL=\"postgresql://user:password@localhost:5432/scp_portal\"",
+     "lines": [
+      8,
+      26,
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 PostgreSQL 存储数据的业务应用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SCP Portal App is a modern full-stack business portal for managing companies, contacts, tasks, notes, emails, quotes, and inventory. The application combines a React + TypeScript frontend with a migrated Express + TypeScript + Prisma backend, providing a responsive user experience and secure JWT-based authentication. ／ - Backend: Express, TypeScript, Prisma ORM, PostgreSQL-compatible database ／ - PostgreSQL database running locally or in your environment",
+   "evidence_lines": [
+    3,
+    8,
+    26
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "sonusindhu/scp-portal-app",
+  "sha": "0c43e1a9fa7f",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

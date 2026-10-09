@@ -9214,5 +9214,75 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "eee38ef960fe": {
+  "identity": {
+   "one_liner": "自托管家庭健康数据仪表盘，用单个 SQLite 文件做本地镜像",
+   "review": "Hælan 从 Google Health API 或 Android 伴侣应用读取家庭健康数据，将完整历史镜像到一个 SQLite 文件，并提供九页仪表盘展示睡眠、活动、恢复等指标及个人基线对比。面向想自托管掌握自身健康数据的家庭（一户一实例），支持多用户隔离，并通过 MCP 暴露只读查询工具供 AI 代理调用。作者声明代码由 AI 代理编写，且未经专业安全审计。",
+   "highlights": [
+    "将全部健康历史写入单个 SQLite 文件，作为超出 Google 保留窗口的本地镜像",
+    "提供 MCP 只读工具集（含 sql_query 与 explain），按人隔离并支持 stdio 与 HTTP 访问",
+    "支持家庭多用户隔离与基于个人 60 天基线的周期对比分析"
+   ],
+   "use_cases": [
+    "家庭自托管归档 Google Health 数据并长期保留分钟级历史",
+    "多成员各自查看与分析自己的健康指标趋势",
+    "通过 MCP 让本地 AI 代理只读查询个人健康数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Your whole history in one SQLite file, kept past Google's retention windows and surviving you ／ `haelan.sqlite` is the database: the archived payloads, everything derived from them, and every ／ 1. move the chosen file from `backups/` over `haelan.sqlite`",
+     "lines": [
+      56,
+      317,
+      401
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明将健康数据存入 SQLite 文件，属于使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Your whole history in one SQLite file, kept past Google's retention windows and surviving you ／ **A self-hosted dashboard and local mirror for your own health data, read from Google's Health API ／ ### 🧰 Seventeen typed tools for an agent, read-only and person-bound",
+   "evidence_lines": [
+    56,
+    6,
+    134
+   ]
+  },
+  "fn": "bardesss/haelan",
+  "sha": "eee38ef960fe",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -7705,5 +7705,163 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b3f8ecf13da8": {
+  "identity": {
+   "one_liner": "Node.js 键值存储库，通过存储适配器支持多后端",
+   "review": "Keyv 是一个 Node.js 键值存储开发库，通过存储适配器提供统一接口，支持 TTL 过期，可用于缓存或持久化键值存储。面向需要在多种后端（内存、Redis、MySQL、PostgreSQL、SQLite 等）之间切换的 JavaScript 开发者，通过 npm 安装，采用适配器架构扩展后端，v5 仅维护、v6 为当前稳定版。",
+   "highlights": [
+    "通过存储适配器提供跨后端的统一键值接口",
+    "支持 TTL 过期，可作缓存或持久化存储",
+    "提供 MySQL/MariaDB、PostgreSQL、SQLite、Redis、MongoDB 等存储适配器"
+   ],
+   "use_cases": [
+    "Node.js 应用的缓存层",
+    "需要可切换后端的键值持久化",
+    "为 Keyv 开发自定义存储适配器"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* postgres - PostgreSQL storage adapter",
+     "lines": [
+      65
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* mysql - MySQL/MariaDB storage adapter",
+     "lines": [
+      64
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* sqlite - SQLite storage adapter",
+     "lines": [
+      67
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* mysql - MySQL/MariaDB storage adapter",
+     "lines": [
+      64
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库等后端提供统一键值访问接口的库，属于服务数据存储生态的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Keyv provides a consistent interface for key-value storage across multiple backends via storage adapters. It supports TTL-based expiry, making it suitable as a cache or a persistent key-value store. ／ * keyv - Simple key-value storage with support for multiple backends ／ ## Storage Adapters",
+   "evidence_lines": [
+    15,
+    54,
+    58
+   ]
+  },
+  "fn": "jaredwray/keyv",
+  "sha": "b3f8ecf13da8",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cc432f06ab42": {
+  "identity": {
+   "one_liner": "Capacitor 插件，在 iOS/Android 等平台用 SQLite 提供键值字符串持久存储",
+   "review": "这是一个 Capacitor 原生插件，为移动端应用提供基于 SQLite 的键值字符串存储，支持多 store/多表、经 SQLCipher 的可选加密、JSON 导入导出及按 key 过滤，Web 端落到 IndexedDB、Electron 端用 sqlite3 包。适合 Ionic/Capacitor 开发者在应用内做简单本地持久化，仅存字符串、不面向复杂 SQL 查询；仅维护与最新 Capacitor 大版本匹配的插件版本。",
+   "highlights": [
+    "提供 set/get/remove/clear 等 key-value API，支持多 store 与多表",
+    "iOS/Android 经 SQLCipher 支持可选加密存储",
+    "提供 JSON 导入导出（importFromJson/exportToJson）及数据迁移能力"
+   ],
+   "use_cases": [
+    "Capacitor/Ionic 应用内简单数据的本地持久化（localStorage 替代）",
+    "需要加密本地存储的移动应用场景",
+    "跨 iOS/Android/Web/Electron 的统一键值存储接口"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Store key and value strings in SQLite from your Capacitor app, with multiple stores and tables and optional encryption on iOS and Android. A simple, persistent alternative to localStorage. ／ Capacitor Data Storage SQlite Plugin is a custom Native Capacitor plugin providing a key-value permanent store for simple data of type string only to SQLite on IOS, Android and Electron platforms and to IndexDB for the Web platform.",
+     "lines": [
+      1,
+      31
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Capacitor 应用提供基于 SQLite 的存储能力，属于服务数据库使用场景的插件/组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Store key and value strings in SQLite from your Capacitor app, with multiple stores and tables and optional encryption on iOS and Android. A simple, persistent alternative to localStorage. ／  Capacitor Data Storage SQlite Plugin is a custom Native Capacitor plugin providing a key-value permanent store for simple data of type string only to SQLite on IOS, Android and Electron platforms and to IndexDB for the Web platform. ／ npm install --save @capgo/capacitor-data-storage-sqlite",
+   "evidence_lines": [
+    1,
+    31,
+    92
+   ]
+  },
+  "fn": "Cap-go/capacitor-data-storage-sqlite",
+  "sha": "cc432f06ab42",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

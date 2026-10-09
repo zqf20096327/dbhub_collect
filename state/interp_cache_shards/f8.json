@@ -8329,5 +8329,84 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fb98c08570fb": {
+  "identity": {
+   "one_liner": "自托管多用户间隔重复记忆卡片服务，内置 FSRS v6 调度与 MCP 服务器",
+   "review": "Engram 是一个用 Go 编写的自托管间隔重复（SRS）抽认卡服务，面向需要自建学习系统的个人或团队。它实现 FSRS v6 调度算法，提供多种卡片类型、Markdown/TeX 支持、OIDC 多用户与卡组共享，并通过内置 MCP 服务器和 REST API 让 LLM 代理检索、创建和复习卡片。部署可用内置 SQLite，多用户场景推荐 PostgreSQL。",
+   "highlights": [
+    "基于 FSRS v6 算法实现复习调度，支持自定义参数优化",
+    "内置 MCP 服务器，提供 9 个工具供 LLM 代理搜索、创建、更新、复习和导出卡片",
+    "支持多用户与 OIDC/SSO 登录，卡组可共享且各用户复习进度隔离"
+   ],
+   "use_cases": [
+    "自托管个人或多用户记忆卡片学习平台",
+    "通过 MCP 客户端（如 Claude Desktop、Cursor）由 AI 代理管理卡片与复习流程",
+    "需要 OIDC 单点登录和卡组共享的团队学习场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For multi-user deployments, PostgreSQL is recommended. ／ image: postgres:18 ／ |`DB_DRIVER`|Database driver (`sqlite` or `postgres`)|`postgres` (or `sqlite`)|",
+     "lines": [
+      77,
+      84,
+      111
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Uses an embedded SQLite database suitable for personal use or testing: ／ |`DB_DRIVER`|Database driver (`sqlite` or `postgres`)|`postgres` (or `sqlite`)|",
+     "lines": [
+      63,
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Engram 使用 SQLite/PostgreSQL 存储自身业务数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Engram is an open-source, self-hosted spaced repetition flashcard service. Built with a modern Svelte 5 SPA frontend and a Go backend, it pairs the state-of-the-art **FSRS v6** scheduling algorithm with a native **Model Context Protocol (MCP)** server for AI-assisted card creation and workflow automation. ／ Uses an embedded SQLite database suitable for personal use or testing: ／ |`DB_DRIVER`|Database driver (`sqlite` or `postgres`)|`postgres` (or `sqlite`)|",
+   "evidence_lines": [
+    10,
+    63,
+    111
+   ]
+  },
+  "fn": "bestnite/engram",
+  "sha": "fb98c08570fb",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

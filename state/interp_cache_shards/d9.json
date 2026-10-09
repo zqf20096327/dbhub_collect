@@ -9460,5 +9460,260 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "65d175930faf": {
+  "identity": {
+   "one_liner": "声明式数据库 schema 迁移与推理状态变更管理 CLI",
+   "review": "Ptah 是一个 Go 编写的声明式数据库变更管理工具，比较期望 schema 与线上数据库后生成版本化迁移或直接执行计划，另可编排持久化推理状态（embedding 代次）的迁移、验证与回滚。面向使用 PostgreSQL、MySQL 等多种数据库的开发与运维人员，提供无需 Go 工具链的 CLI 及可嵌入的 Go 包。当前为 pre-GA，API 可能变动。",
+   "highlights": [
+    "支持生成版本化迁移或直接应用 schema 变更计划，并可检测 schema 漂移",
+    "支持编排持久化推理状态的候选生成、验证、切换与回滚",
+    "提供 CLI 与 Go 包两种使用方式，ptah-compat 提供 Atlas 兼容命令面"
+   ],
+   "use_cases": [
+    "将 schema 变更以 SQL 文件形式纳入代码评审与部署历史的团队",
+    "需要检测线上数据库与期望 schema 漂移的 CI 门禁",
+    "迁移外部 embedding 端点支撑的持久化推理状态"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL",
+     "lines": [
+      19
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL",
+     "lines": [
+      21
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MariaDB",
+     "lines": [
+      23
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ ## Try Ptah with SQLite ／ ptah schema render --schema-file schema.sql --dialect sqlite",
+     "lines": [
+      25,
+      93,
+      108
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "SQL Server",
+     "lines": [
+      27
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse",
+     "lines": [
+      29
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Oracle",
+     "lines": [
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供 schema 迁移与变更管理服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Ptah manages database change across schemas and persistent inference state. For ／ schemas, it compares a desired schema with a live database and either writes ／ Schema sources can come from SQL, YAML, HCL, DBML, Go annotations, external",
+   "evidence_lines": [
+    41,
+    42,
+    151
+   ]
+  },
+  "fn": "stokaro/ptah",
+  "sha": "65d175930faf",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ae4a6cf0f99b": {
+  "identity": {
+   "one_liner": "Android 英语词汇学习应用，基于 Room/SQLite 本地持久化",
+   "review": "一款面向家教、学生和自学者的 Android 单词训练应用，支持自建词组、卡片学习和配对/拼写测验。数据通过 Room 2.6.1 持久化到本地 SQLite 数据库，内置 800 词种子数据，完全离线运行、无需账号，采用 Java 11 与分层 Repository 风格架构。",
+   "highlights": [
+    "提供 Tap to Match（配对）和 Spelling（拼写）两种测验模式",
+    "支持自定义词组管理，UI 按数据库中 difficulty 值动态生成",
+    "使用 Room (SQLite) 在设备本地持久化全部词库，离线优先，内置 800 词种子数据"
+   ],
+   "use_cases": [
+    "教师/家教按课程或考试范围录入并分发词汇清单",
+    "学生通过配对与拼写测验进行单词记忆练习",
+    "自学者构建专属词库（商务英语、旅行用语、备考词汇等）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Persistent Personal Dictionary**|A local **Room (SQLite)** database keeps every built-in and user-created word permanently on the device.| ／ |Persistence|**Room 2.6.1** (`room-runtime` + `room-compiler` via `annotationProcessor`) over SQLite| ／ so that UI code never talks to SQLite directly.",
+     "lines": [
+      43,
+      114,
+      132
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 Room/SQLite 存储词汇数据的 Android 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Persistent Personal Dictionary**|A local **Room (SQLite)** database keeps every built-in and user-created word permanently on the device.| ／ |Persistence|**Room 2.6.1** (`room-runtime` + `room-compiler` via `annotationProcessor`) over SQLite| ／ **Vocab Master** is a single-developer Android application for learning English vocabulary with Chinese",
+   "evidence_lines": [
+    43,
+    114,
+    29
+   ]
+  },
+  "fn": "wong060404/vocab-master",
+  "sha": "ae4a6cf0f99b",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "758df2fd0f3a": {
+  "identity": {
+   "one_liner": "通过内省 TiDB schema 生成 GraphQL API 的 SQL-first GraphQL 服务器",
+   "review": "TiDB GraphQL 是一个面向 TiDB 数据库的 GraphQL 服务器，通过内省在线 schema 将表结构映射为 GraphQL 接口，供需要为 TiDB 快速构建 API 的团队使用。项目提供 docker compose 快速启动、Kubernetes 场景、OIDC 角色鉴权测试及 OpenTelemetry 集成示例；README 自述项目处于 experimental 阶段，采用 Apache-2.0 许可。",
+   "highlights": [
+    "通过内省在线数据库 schema 生成 GraphQL 接口",
+    "提供多种 docker compose 场景，含 Kubernetes、OIDC 鉴权与 OpenTelemetry 集成示例",
+    "附带 GraphiQL 界面与无头 HTTP 查询方式"
+   ],
+   "use_cases": [
+    "为已有 TiDB 数据库快速暴露 GraphQL API",
+    "本地演示与教程环境搭建（TiDB + 示例数据 + GraphQL）",
+    "基于角色的数据库鉴权与可观测性集成测试"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "# TiDB GraphQL ／ TiDB GraphQL is a SQL-first GraphQL server for teams who want a fast API over TiDB by introspecting a live schema into GraphQL.",
+     "lines": [
+      1,
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 TiDB 数据库提供 GraphQL API 访问层的服务组件，而非仅使用数据库存储数据的业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "TiDB GraphQL is a SQL-first GraphQL server for teams who want a fast API over TiDB by introspecting a live schema into GraphQL. ／ This starts TiDB, tutorial sample data, `tidb-graphql`, and GraphiQL.",
+   "evidence_lines": [
+    3,
+    16
+   ]
+  },
+  "fn": "benmeadowcroft/tidb-graphql",
+  "sha": "758df2fd0f3a",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9367,5 +9367,71 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e87c009a09a6": {
+  "identity": {
+   "one_liner": "用 SQLite trigger 拦截 Codex 桌面版高频日志写入的工具",
+   "review": "该项目针对 Codex 桌面版的日志数据库 logs_2.sqlite，通过创建 BEFORE INSERT trigger（RAISE(IGNORE)）丢弃日志 INSERT，消除数据页/WAL/索引写入，并配合 launchd 守护进程每 5 分钟自检重建 trigger。提供 install/verify/status/uninstall 等脚本命令。适用于使用 Codex 桌面版的 macOS 用户；局限是仅拦截 logs 表，不涉及其他数据。",
+   "highlights": [
+    "通过 SQLite BEFORE INSERT trigger 实现 RAISE(IGNORE)，从源头丢弃日志 INSERT",
+    "提供 launchd 守护进程，每 5 分钟自检并自动重建丢失的 trigger",
+    "包含 verify/status/install/uninstall 脚本命令，支持 30 秒监控验证拦截效果"
+   ],
+   "use_cases": [
+    "使用 Codex 桌面版的 macOS 用户控制其日志数据库的高频写盘",
+    "排查 Codex 问题时临时卸载恢复日志记录，排查后重新安装"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Codex（ChatGPT 桌面版）会在后台以每分钟数十次的频率向 `~/.codex/logs_2.sqlite` 写入 TRACE/DEBUG/INFO 日志，持续消耗 SSD 写入寿命（TBW）。极端情况下 **21 天可产生约 37TB 写入量**。这个 skill 用一条 SQLite trigger 从源头掐断所有日志写入，让 WAL 归零、写入量为零。 ／ Codex 桌面版在运行期间，会通过 Rust 的 tracing 机制不断向 `~/.codex/logs_2.sqlite`（SQLite 数据库）写入日志： ／ SQLite 的写入放大效应使实际磁盘写入远大于日志数据本身：",
+     "lines": [
+      3,
+      9,
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目通过 SQLite trigger 和脚本对 SQLite 数据库文件进行管理操作，是为数据库运维服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "在 `logs_2.sqlite` 上安装一个 SQLite **BEFORE INSERT trigger**： ／ 配合 **launchd 守护进程**，每 5 分钟自检 trigger 是否存在，防止 Codex 升级/重启后 trigger 丢失。 ／ |`install`|安装 trigger + VACUUM 回收碎片空间|",
+   "evidence_lines": [
+    32,
+    45,
+    116
+   ]
+  },
+  "fn": "songlanglang/codex-log-blocker",
+  "sha": "e87c009a09a6",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

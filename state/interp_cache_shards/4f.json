@@ -9841,5 +9841,73 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "832a2a63baaf": {
+  "identity": {
+   "one_liner": "AI 编码代理与 shell 之间的命令闸门，预览后果、备份并可回滚",
+   "review": "Termaxa 是一个 Rust 单二进制工具，以 hook 方式拦截 Claude Code、Codex、Cursor、Copilot CLI 等 AI 代理执行的 shell 命令，按仓库内策略文件判定允许/询问/拒绝，预览命令后果（如 DROP TABLE 影响的行数）、执行前做可回滚备份，并写入防篡改审计日志。面向无人值守运行 AI 编码代理的开发者。注意其 PostgreSQL 预览依赖 planner 统计信息，且不执行任何 SQL。",
+   "highlights": [
+    "提供命令后果预览（文件删除、force push 丢失的提交、DROP TABLE 移除的行）",
+    "执行前自动备份，支持 termaxa rollback 回滚",
+    "记录 append-only 哈希链审计日志，内置断路器按破坏意图计数拦截"
+   ],
+   "use_cases": [
+    "为 AI 编码代理（Claude Code/Codex 等）设置无人值守的破坏性命令闸门",
+    "用 replay/review 模式先观察代理已执行命令的风险再启用强制模式",
+    "拦截针对 PostgreSQL 的危险 SQL（如 DROP TABLE）并预览影响行数"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "$ termaxa check \"psql -d shop -c 'DROP TABLE users'\" ／ Row estimates come from the planner (`pg_class.reltuples`, stale between `ANALYZE`s); Termaxa never scans your tables, and the preview never executes anything of yours. It did once: the Postgres preview could run the SQL file it was analysing (GHSA-gxg4-5fmj-5 ／ |`DROP`, `TRUNCATE`, `DELETE` through `psql`|rows, dependents, whether the statement even succeeds|`pg_dump` of the tables (schema and data for `DROP`, data only otherwise)|replays the dump|",
+     "lines": [
+      106,
+      112,
+      227
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为运行 AI 代理的开发流程提供命令拦截、备份与审计组件，并包含针对 Postgres 破坏性语句的预览与备份能力，属数据库生态服务工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Termaxa is a single Rust binary that sits in the agent's hook path, with no model, no service and no account. For every command: ／ $ termaxa check \"psql -d shop -c 'DROP TABLE users'\" ／ Row estimates come from the planner (`pg_class.reltuples`, stale between `ANALYZE`s); Termaxa never scans your tables, and the preview never executes anything of yours. It did once: the Postgres preview could run the SQL file it was analysing (GHSA-gxg4-5fmj-534m, fixed in v0.14.1), which is why \"the preview runs nothing on a denied command\" is now a rule with tests.",
+   "evidence_lines": [
+    23,
+    106,
+    112
+   ]
+  },
+  "fn": "termaxa/termaxa",
+  "sha": "832a2a63baaf",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9825,5 +9825,176 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "60f55b02ad3b": {
+  "identity": {
+   "one_liner": "数据库结构/数据对比工具，自动生成正反向迁移 SQL",
+   "review": "DBDiff 是命令行差异比较工具，对比两个 MySQL、PostgreSQL 或 SQLite 数据库的 schema 与数据，生成包含 UP/DOWN 的迁移 SQL，并内置 migration:up 等迁移执行命令，可与 Flyway、Liquibase 等配合做版本控制。适合需要跨环境同步数据库结构的开发与运维人员；对 PostgreSQL 的视图、枚举、分区等对象处理最完整，MariaDB/TiDB 等兼容变体未经核心团队测试。",
+   "highlights": [
+    "比较两个数据库并自动生成含 UP/DOWN 的 schema 与数据迁移 SQL",
+    "通过 --driver 支持 MySQL、PostgreSQL、SQLite，兼容 Flyway、Liquibase 等迁移工具",
+    "内置迁移运行器（migration:up/down/status/validate/repair/baseline）"
+   ],
+   "use_cases": [
+    "开发/测试/生产环境间的数据库 schema 与数据同步",
+    "配合迁移工具实现数据库版本控制",
+    "为 Supabase 等 PostgreSQL 服务生成含 RLS 策略的迁移"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "DBDiff compares two MySQL, PostgreSQL or SQLite databases, local or remote, and writes the migration that turns one into the other: schema and data, up and down, ready to apply. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver` ／ ### MySQL",
+     "lines": [
+      9,
+      21,
+      40
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "DBDiff compares two MySQL, PostgreSQL or SQLite databases, local or remote, and writes the migration that turns one into the other: schema and data, up and down, ready to apply. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver`",
+     "lines": [
+      9,
+      21
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "DBDiff compares two MySQL, PostgreSQL or SQLite databases, local or remote, and writes the migration that turns one into the other: schema and data, up and down, ready to apply. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver` ／ SQLite 3.x is supported (any version supported by the installed `pdo_sqlite` PHP extension).",
+     "lines": [
+      9,
+      21,
+      162
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "compat",
+     "quote": "|MariaDB 10.x / 11.x|MySQL wire protocol; minor DDL dialect differences|",
+     "lines": [
+      200
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "compat",
+     "quote": "|TiDB|MySQL-compatible; default port 4000|",
+     "lines": [
+      205
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库之间的 schema/数据对比与迁移生成服务的工具，属于数据库生态工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " DBDiff compares two MySQL, PostgreSQL or SQLite databases, local or remote, and writes the migration that turns one into the other: schema and data, up and down, ready to apply. ／ - Supports MySQL, PostgreSQL, and SQLite via `--driver` ／ The databases below work with DBDiff's existing drivers with no code changes. **Unless otherwise noted, these have not been tested by the core team.** PRs to add official support are welcome.",
+   "evidence_lines": [
+    9,
+    21,
+    194
+   ]
+  },
+  "fn": "DBDiff/DBDiff",
+  "sha": "60f55b02ad3b",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8786d7245ceb": {
+  "identity": {
+   "one_liner": "Linux 桌面黑匣子：持续采集崩溃/日志/负载写入单个 SQLite 文件并提供 GTK4 查看器",
+   "review": "Blackbox 是一个常驻的 Rust systemd 用户服务，持续记录桌面上的崩溃、错误日志、失败登录、软件包升级与系统负载，全部写入一个 SQLite（WAL 模式，50GB 环形缓冲）文件，并用只读的 GTK4 应用查看。面向 Arch Linux 桌面用户，依赖 pacman、systemd 与 journald；安装通过源码脚本或 PKGBUILD。",
+   "highlights": [
+    "采集进程崩溃（含 coredump 栈）、journald 告警、auditd 事件、pacman 事务与 CPU/内存/磁盘/GPU/功耗温度数据",
+    "单个 SQLite 文件存储，WAL + synchronous=FULL，50GB 环形缓冲，分块裁剪不阻塞写入",
+    "提供 GTK4 只读查看器，按时间轴对齐事件与系统状态，可生成纯文本报告"
+   ],
+   "use_cases": [
+    "桌面死机/崩溃后回溯当时的日志、负载与软件包变更",
+    "记录并核查失败登录、sudo 使用等 auditd 安全事件",
+    "将分散在 journal/audit/coredump/pacman 日志中的证据汇于一个时间轴查看"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Blackbox answers that question in one click. It records continuously, into one SQLite file, and ／ audit.log ─────────────────────────────► auditd ───┤ one writer, SQLite, WAL, GTK4, read-only, ／ - **Writes that survive a hard freeze.** SQLite runs in WAL mode with `synchronous=FULL`, so every",
+     "lines": [
+      21,
+      45,
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身使用 SQLite 存储采集到的数据，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Blackbox answers that question in one click. It records continuously, into one SQLite file, and ／ One process (`blackbox`, a systemd user service) runs each source on its own thread and writes ／ deploy/install.sh",
+   "evidence_lines": [
+    21,
+    50,
+    109
+   ]
+  },
+  "fn": "HawkOsm/BlackBox",
+  "sha": "8786d7245ceb",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

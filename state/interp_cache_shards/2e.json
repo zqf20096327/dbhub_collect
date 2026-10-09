@@ -9671,5 +9671,150 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3418f387cd7d": {
+  "identity": {
+   "one_liner": "蜜蜂记账 App 的自建同步云，单 Docker 容器提供同步服务与 Web 控制台",
+   "review": "为 BeeCount 记账应用提供自托管云端：单容器内运行 FastAPI 同步服务与 React Web 控制台，通过 WebSocket 实现多端实时同步与共享账本，内置 AES-256 加密多远端备份、MCP 服务与 RAG 文档问答。适合已使用或愿意使用 BeeCount 移动端、想将账本数据留在自己服务器上的个人用户；数据以 SQLite 文件加附件形式持久化。",
+   "highlights": [
+    "提供多端实时双向同步，冲突以 Last-Write-Wins 规则解决，支持共享账本的 Owner/Editor 角色与邀请码协作",
+    "内置定时备份系统：rclone 多远端推送、AES-256 加密 ZIP、保留策略清理与恢复隔离",
+    "内置 MCP 服务与 ⌘K AI 问答，可由 LLM 查询交易、记账和调整预算；提供 Prometheus /metrics 与 /ready 探针"
+   ],
+   "use_cases": [
+    "自托管 BeeCount 记账数据，实现 iOS/Android/Web 多设备实时同步",
+    "多人通过邀请码共享同一账本并协同记账",
+    "定时将 SQLite 数据与附件加密备份到 S3/R2/WebDAV 等远端存储"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Deployment cost|Single container + 1 volume|Container + Postgres|Container + file storage|Multi-service|",
+     "lines": [
+      23
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🛡️ **No lock-in** — Data = SQLite + attachment files, walk away anytime ／ The `./data/` directory contains all persistent data: SQLite database, attachments, backup archives, JWT secret. Just tar the directory:",
+     "lines": [
+      31,
+      169
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储账本数据的记账应用自建云，为终端用户提供记账同步服务而非为数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Self-hosted sync cloud for the BeeCount personal accounting app.** Keep iOS / Android / Web books on one ledger you fully own — no ads, no subscription, no third-party lock-in. ／ - 🛡️ **No lock-in** — Data = SQLite + attachment files, walk away anytime ／ The prebuilt image `sunxiao0721/beecount-cloud` bundles FastAPI backend + Web console — single container + one data volume.",
+   "evidence_lines": [
+    8,
+    31,
+    121
+   ]
+  },
+  "fn": "TNT-Likely/BeeCount-Cloud",
+  "sha": "3418f387cd7d",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ef4b7b176373": {
+  "identity": {
+   "one_liner": "基于YOLOv8的城市问题上报与AI分类管理平台",
+   "review": "市民拍照+GPS提交城市问题（坑洞、红绿灯、垃圾），YOLOv8模型自动分类并经Redis/BullMQ队列异步推理，结果写回PostgreSQL（含PostGIS），管理员在地图仪表盘派单，工人通过门户处理任务。部署为6容器的Docker Compose应用，含演示账号与训练notebook。",
+   "highlights": [
+    "支持照片上传与GPS自动定位，YOLOv8自动检测并分类三类城市问题",
+    "提供管理员地图仪表盘、任务派发、分析页与CSV导出",
+    "通过Docker Compose部署6个容器，含Redis队列与FastAPI推理服务"
+   ],
+   "use_cases": [
+    "市政部门收集、分类与派发城市设施问题工单",
+    "市民上报并追踪城市问题处理进度",
+    "基于YOLOv8的自定义目标检测分类流程参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ **Flow:** the backend accepts a report and enqueues an inference job in Redis. The worker consumes the job, calls the ML service's `/predict` endpoint, and writes the classification (category, confidence, bounding box) back to PostgreSQL. The admin dashboard r ／ |**Database**|PostgreSQL 15 + PostGIS extension|",
+     "lines": [
+      8,
+      145,
+      157
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统用 PostgreSQL 15 + PostGIS 存储报告数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "*SmartCity is an AI-powered urban issue reporting platform that helps citizens submit reports with photos and GPS, while city teams manage, classify, and resolve them through a unified dashboard.* ／ **Flow:** the backend accepts a report and enqueues an inference job in Redis. The worker consumes the job, calls the ML service's `/predict` endpoint, and writes the classification (category, confidence, bounding box) back to PostgreSQL. The admin dashboard reads the updated report and displays it on the live map. ／ |**Database**|PostgreSQL 15 + PostGIS extension|",
+   "evidence_lines": [
+    12,
+    145,
+    157
+   ]
+  },
+  "fn": "hamza01055/smartcity-ai",
+  "sha": "ef4b7b176373",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

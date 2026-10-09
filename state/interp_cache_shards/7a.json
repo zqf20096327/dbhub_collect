@@ -11033,5 +11033,71 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "12ae2434ab01": {
+  "identity": {
+   "one_liner": "家庭实验室通知过滤中枢：聚合各服务告警，捆绑噪声，按规则推送",
+   "review": "nexsift 是一个自托管的通知聚合与过滤服务，不是推送服务器，而是置于 ntfy/Gotify 之前的过滤层：以 webhook、Gotify/ntfy API、Discord webhook、SMTP、syslog 等多种端口接收各服务消息，用三级分类、捆绑、all-clear 和规则引擎决定是否推送到手机。面向 homelab 运维者，Docker 部署，数据全部存在 /data 下的 SQLite 中，不支持网络文件系统。",
+   "highlights": [
+    "支持 webhook、Gotify/ntfy API、Discord webhook、SMTP、syslog（RFC 3164/5424）多种接收入口",
+    "提供规则引擎，可按条件设置级别、捆绑键、all-clear、推送行为或丢弃",
+    "支持 Web Push 直推设备、风暴守护限流、每日数据库备份为 AES-256 ZIP"
+   ],
+   "use_cases": [
+    "集中收集 Proxmox、Watchtower、Uptime Kuma、Home Assistant 等服务的告警",
+    "减少重复推送，通过捆绑和最低推送级别过滤噪声",
+    "自托管推送网关，通过 ntfy/Gotify/Telegram/Pushover/Apprise 发送通知"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything lives in `/data`. Mount it from a local disk, never from an SMB or NFS share; SQLite's locking does not ／ |`nexsift.db`|The SQLite database: sources, rules, targets, messages, settings|",
+     "lines": [
+      149,
+      154
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "nexsift 使用 SQLite 作为自身数据存储（nexsift.db），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "nexsift collects the alerts of all your services in one inbox, sorts them, bundles the noise and passes on only ／ them: your services report to nexsift, and nexsift decides what is worth a push. That push then goes out through ／ |`nexsift.db`|The SQLite database: sources, rules, targets, messages, settings|",
+   "evidence_lines": [
+    8,
+    12,
+    154
+   ]
+  },
+  "fn": "DerKezorm/nexsift",
+  "sha": "12ae2434ab01",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

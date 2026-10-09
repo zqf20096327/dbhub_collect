@@ -10055,5 +10055,174 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dc4031f30404": {
+  "identity": {
+   "one_liner": "PostgreSQL 可信语言扩展开发框架，通过 SQL API 构建扩展",
+   "review": "pg_tle 是一个 PostgreSQL 扩展框架，供开发者在无文件系统访问权限的托管环境中创建、安装和管理用 SQL、PL/pgSQL、JavaScript、Perl 等语言编写的扩展，依托 PostgreSQL 可信语言的安全属性提供安全保证。适用于托管数据库服务或容器场景下的扩展开发者。支持 PostgreSQL 12–19 Beta（1.5.3 版）。",
+   "highlights": [
+    "通过 SQL API 开发和安装 PostgreSQL 扩展，无需底层文件系统访问权限",
+    "支持以 SQL、PL/pgSQL、JavaScript、Perl 等可信语言编写扩展",
+    "提供扩展管理 API 和 hooks，支持版本管理",
+    "支持 PostgreSQL 12 至 19 Beta 4（1.5.3 版）"
+   ],
+   "use_cases": [
+    "托管数据库服务（无法访问文件系统）中安装扩展",
+    "在容器化环境中部署 PostgreSQL 扩展",
+    "让非特权用户安全地安装受信任的扩展"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# Trusted Language Extensions for PostgreSQL (pg_tle) ／ Trusted Language Extensions (TLE) for PostgreSQL (`pg_tle`) is an open source project that lets developers extend and deploy new PostgreSQL functionality with lower administrative and technical overhead. Developers can use Trusted Language Extensions for Postg ／ `pg_tle` 1.5.3 supports PostgreSQL major versions 12 to 19 Beta 4.",
+     "lines": [
+      1,
+      3,
+      33
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 生态提供扩展开发框架，本身是服务于数据库的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Trusted Language Extensions for PostgreSQL (pg_tle) ／ Trusted Language Extensions for PostgreSQL, or `pg_tle`, is an extension to help developers install and manage extensions in environments that do not provide access to the filesystem. PostgreSQL provides \"trusted languages\" for development that have certain safety attributes, including restrictions on accessing the filesystem directly and certain networking properties. With these security guarantees in place, a PostgreSQL administrator can let unprivileged users write stored procedures in their preferred programming languages, such as PL/pgSQL, JavaScript, or Perl. PostgreSQL also provides the ability to mark an extension as \"trusted\" and let unprivileged users install and use extensions that do not contain code that could potentially impact the security of a system. ／ `pg_tle` 1.5.3 supports PostgreSQL major versions 12 to 19 Beta 4.",
+   "evidence_lines": [
+    1,
+    14,
+    33
+   ]
+  },
+  "fn": "aws/pg_tle",
+  "sha": "dc4031f30404",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "60775df57246": {
+  "identity": {
+   "one_liner": "Laravel 迁移分区表扩展包",
+   "review": "该包扩展 Illuminate/Laravel 迁移系统，提供分区表的创建与维护 API，支持 Range、List、Hash 分区的建立、附加与分离，并提供 artisan 命令生成和列出分区迁移。面向 Laravel 开发者使用，依据数据库连接驱动选择 PostgreSQL、MySQL 或 MariaDB 语法；注意 PostgreSQL 目前仅支持 Range 分区。",
+   "highlights": [
+    "在 Laravel 迁移中创建 Range、List、Hash 分区表，并支持分区的附加与分离",
+    "根据连接驱动自动选择 PostgreSQL、MySQL、MariaDB 语法",
+    "提供 artisan 命令生成与列出分区相关迁移"
+   ],
+   "use_cases": [
+    "Laravel 项目中需要对大表做分区管理的迁移开发",
+    "为 PostgreSQL/MySQL/MariaDB 分区表编写可维护的 schema 迁移"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL ／ The same API works for PostgreSQL, MySQL and MariaDB. The package picks the grammar from your connection's driver. ／ ## PostgreSQL",
+     "lines": [
+      28,
+      38,
+      50
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL ／ The same API works for PostgreSQL, MySQL and MariaDB. The package picks the grammar from your connection's driver. ／ ## MySQL / MariaDB",
+     "lines": [
+      29,
+      38,
+      40
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MariaDB ／ The same API works for PostgreSQL, MySQL and MariaDB. The package picks the grammar from your connection's driver.",
+     "lines": [
+      30,
+      38
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "- SQL Server 2017+",
+     "lines": [
+      34
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- SQLite 3.8.8+",
+     "lines": [
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Laravel 开发者提供数据库分区迁移能力的开发库/工具，非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This package extends Illuminate to provide partitioned table creation in migrations for PostgreSQL, MySQL and MariaDB. ／ The same API works for PostgreSQL, MySQL and MariaDB. The package picks the grammar from your connection's driver. ／ - This package currently supports PostgreSQL Range Partitions.",
+   "evidence_lines": [
+    2,
+    38,
+    191
+   ]
+  },
+  "fn": "orptech-com/laravel-migration-partition",
+  "sha": "60775df57246",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

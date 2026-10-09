@@ -9486,5 +9486,116 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2aaf578f8be7": {
+  "identity": {
+   "one_liner": "DSH 聊天式数据库管理插件，支持 8 种数据库与分级授权",
+   "review": "这是一个 DSH 社区插件，允许在聊天中安全地操作数据库，并提供侧边栏管理台（含连接管理、SQL 控制台、数据浏览）。它支持 MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle 和达梦共 8 种数据库，通过连接级（只读/读写）与项目级授权、危险操作确认机制以及审计日志来约束模型与用户的操作。适用于使用 DSH 平台且需要在对话中执行数据库查询、脚本与维护操作的开发者或运维人员。",
+   "highlights": [
+    "通过 DatabaseManager 单工具提供查询、执行、schema 浏览与脚本运行等 action，脚本在 node:vm 沙箱内运行并设 60s 超时",
+    "实现连接级 ro/rw 与项目级 grants. 授权，未授权项目一律拒绝；DDL/FLUSHALL 等危险操作需一次性 challengeId 确认",
+    "全部执行写入 audit.l 审计日志，凭据存放于 0600 权限的 secrets. 且不返回给模型"
+   ],
+   "use_cases": [
+    "在 DSH 聊天环境中对多种数据库执行只读查询或受控写操作",
+    "通过侧边栏 SQL 控制台进行多标签 SQL 编辑、格式化与结果导出",
+    "按项目路径为不同连接分配只读/读写权限并留存审计记录"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **8 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM）",
+     "lines": [
+      9
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **8 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM）",
+     "lines": [
+      9
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "- **8 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM）",
+     "lines": [
+      9
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **8 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM）",
+     "lines": [
+      9
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "- **8 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM）",
+     "lines": [
+      9
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **8 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM）",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供连接、授权、执行与审计的管理工具，属于数据库生态服务组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL",
+    "GaussDB",
+    "SQLite",
+    "Dameng",
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DSH 社区插件：在聊天中安全操作数据库，配套侧边栏管理台与 `db-admin` skill。架构与交互模式对齐 dsh-ssh-tunnel。 ／ - **8 种数据库**：MySQL、PostgreSQL、GaussDB、SQLite、Redis、MongoDB、Oracle、达梦（DM） ／ - **分级权限**：连接级只读（ro）/读写（rw）+ 项目级授权（`grants.json`：projectPathKey → 连接 → 模式）；未授权项目一律拒绝",
+   "evidence_lines": [
+    5,
+    9,
+    11
+   ]
+  },
+  "fn": "mengqi1436/dsh-db-tool",
+  "sha": "2aaf578f8be7",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

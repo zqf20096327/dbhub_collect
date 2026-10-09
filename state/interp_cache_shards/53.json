@@ -8827,5 +8827,143 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a8efdb39e2fc": {
+  "identity": {
+   "one_liner": "本地优先的 AI 简历工作台，FastAPI+React+SQLite 单机运行",
+   "review": "这是一个面向求职者的本地简历管理应用，提供岗位管理、AI 按岗位 JD 生成定制简历、事实台账防虚构校验、多格式导出、模拟面试、自动投递与求职进度看板等功能。前后端为 React + FastAPI，业务数据存储在本机单个 SQLite 文件中，不注册账号、数据不出本机；AI 功能需自行配置模型服务 API Key。",
+   "highlights": [
+    "业务数据存储在本机单个 SQLite 文件，含附件、照片与历史兼容字段，支持导出与数据集备份",
+    "生成结果与资料库逐条比对，提供防虚构警告与【待补】导出拦截机制",
+    "支持 PDF/Word/Markdown/JSON/HTML 等多格式导出，带一键脱敏与水印"
+   ],
+   "use_cases": [
+    "求职期间集中管理岗位、简历版本、投递进度与面试记录",
+    "按岗位 JD 由 AI 生成定制简历并做事实一致性校验",
+    "模拟面试练习与网申表单辅助填写"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**简历和资料存在哪**|你自己电脑上的一个 SQLite 文件，可随时拷走|对方的服务器，导出要走会员| ／ - **默认全部留在本机。** 业务数据存在 `backend/data/resume_forge.db` 这**一个** SQLite 文件里（附件、照片与历史兼容字段也在库内），不经过任何第三方服务；导出、渲染、PDF 生成都在本机完成。",
+     "lines": [
+      50,
+      340
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明业务数据存在本机 SQLite 文件中，SQLite 是其数据存储层，项目本身是面向求职者的应用而非数据库工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**简历和资料存在哪**|你自己电脑上的一个 SQLite 文件，可随时拷走|对方的服务器，导出要走会员| ／ > 在线体验是一个**只读演示版**：界面是真的、数据是虚构的、AI 输出是预录回放。想真的生成、真的导出、真的投递，按下面的快速开始在本机跑起来——Windows 第一次双击 `start.cmd`、macOS 第一次双击 `start.command`，都会自动装好环境；也可以到官网直接下载对应平台的压缩包，不用经过 GitHub。",
+   "evidence_lines": [
+    50,
+    31
+   ]
+  },
+  "fn": "magicapple123/ResumeForge",
+  "sha": "a8efdb39e2fc",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "16213d2fd1d6": {
+  "identity": {
+   "one_liner": "单文件 SQLite 自托管网站分析工具",
+   "review": "Fusionaly 是一个用 Go 编写的自托管 Web 分析应用，将页面浏览、点击、事件等追踪数据存储在单个 SQLite 文件中，无需外部数据库、Redis 或队列。面向希望在自己服务器上托管分析、不依赖第三方服务的站点运营者。它还提供 MCP 端点，可通过 Claude、Cursor 等 AI 客户端以自然语言查询流量数据。",
+   "highlights": [
+    "将全部分析数据存储在单个 SQLite 文件中，无需外部数据库、Redis 或队列",
+    "实现 Model Context Protocol，暴露四个只读工具供 AI 客户端查询流量数据",
+    "通过每日轮转哈希而非固定标识符对访客进行计数"
+   ],
+   "use_cases": [
+    "在自有服务器上托管站点访问分析",
+    "通过 AI 客户端以自然语言查询流量数据",
+    "在 Raspberry Pi 或低价 VPS 等低配资源上运行分析服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Self-hosted web analytics in one SQLite file. ／ - One SQLite file. No external database, no Redis, no queue. ／ - **Backend**: Go (Fiber, GORM, SQLite, cartridge)",
+     "lines": [
+      3,
+      109,
+      121
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 SQLite 作为该分析应用的存储数据库，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- One SQLite file. No external database, no Redis, no queue. ／ - **Backend**: Go (Fiber, GORM, SQLite, cartridge)",
+   "evidence_lines": [
+    109,
+    121
+   ]
+  },
+  "fn": "karloscodes/fusionaly-oss",
+  "sha": "16213d2fd1d6",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

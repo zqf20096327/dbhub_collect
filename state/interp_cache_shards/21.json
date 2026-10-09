@@ -9190,5 +9190,268 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a7ccba4e4d68": {
+  "identity": {
+   "one_liner": "本地优先的软件架构建模工具，内置 MCP 服务端与 C4 语义模型",
+   "review": "StructSmith 是一个本地优先、开源（MIT）的软件架构建模工具，以 C4 风格的语义模型为数据源，通过 React Flow 编辑器可视化，支持 REST API 和 MCP（Streamable HTTP）接口，允许 AI 客户端（Codex、Claude Code、Copilot 等）读写同一模型。单容器单 SQLite 文件部署，完全离线运行，适合架构师、售前和技术团队做架构文档、研讨会与 AI 协作建模。",
+   "highlights": [
+    "以 C4 风格语义模型为唯一事实源，React Flow 仅做可视化与布局",
+    "内置 MCP 服务端（Streamable HTTP 和 stdio），AI 客户端可通过 model_apply_operations 等工具原子化修改模型",
+    "单容器单 SQLite 文件部署，MIT 许可，无账号、无云端、无遥测，可完全离线运行"
+   ],
+   "use_cases": [
+    "软件架构与 C4 模型建模、系统文档化",
+    "售前方案与解决方案架构演示",
+    "与 AI 助手协作进行架构设计工作坊"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- One container, one SQLite file ／ on <http://localhost:5173>, which proxies `/api` and `/mcp` to the backend. The SQLite ／ batch runs in one SQLite transaction — it either lands completely or not at all. ／ |`DATABASE_PATH`|`./data/architecture.db`|SQLite file|",
+     "lines": [
+      32,
+      137,
+      277,
+      499
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "database is created and migrated automatically — no Docker, Postgres, Redis, Java or Python ／ `technology = PostgreSQL` — roles drive icons, styling and filtering only.",
+     "lines": [
+      138,
+      323
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为自身存储的独立应用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- One container, one SQLite file ／ on <http://localhost:5173>, which proxies `/api` and `/mcp` to the backend. The SQLite ／ > The diagram is **not** the source of truth. The semantic architecture model is.",
+   "evidence_lines": [
+    32,
+    137,
+    24
+   ]
+  },
+  "fn": "dziksu/StructSmith",
+  "sha": "a7ccba4e4d68",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "68c6d0c42fdd": {
+  "identity": {
+   "one_liner": "纯本地健身训练记录 App，数据存于手机端 SQLite",
+   "review": "Ischys 是一个开源的设备端健身训练记录应用，支持 iPhone、Android 及手表伴侣，用于记录动作组数、休息计时、个人纪录与图表。数据全部存储在手机本地 SQLite（经 expo-sqlite + Drizzle ORM），无账号无服务器，可导出 JSON/CSV。适合重视隐私、不想上传训练数据的健身用户自行构建或安装使用。",
+   "highlights": [
+    "训练数据完全存储于手机本地 SQLite，无服务器与账号",
+    "支持 Apple Watch / Wear OS 伴侣应用及 HealthKit / Health Connect 读写",
+    "提供 JSON/CSV 导出导入、736 个动作目录及个人纪录与图表"
+   ],
+   "use_cases": [
+    "需要离线、不上云的训练日志记录",
+    "通过 Apple Health / Health Connect 同步心率与体重数据辅助记录",
+    "从其他记录工具经 CSV 导入迁移历史训练数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "local SQLite database and all the training logic (volume, estimated 1RM, PR ／ React Native + **Expo SDK 57** (New Architecture), **expo-sqlite** + **Drizzle",
+     "lines": [
+      23,
+      101
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个健身应用，使用本地 SQLite 存储自身训练数据，而非为数据库生态提供工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **100% on-device.** Install and start tracking immediately. No sign-up, no ／  local SQLite database and all the training logic (volume, estimated 1RM, PR ／ React Native + **Expo SDK 57** (New Architecture), **expo-sqlite** + **Drizzle",
+   "evidence_lines": [
+    21,
+    23,
+    101
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ischys-app/Ischys",
+  "sha": "68c6d0c42fdd",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7ee0463b8918": {
+  "identity": {
+   "one_liner": "浏览器端 SQL 工具集，基于 DuckDB-WASM 本地运行",
+   "review": "SQLParity 是一组完全在浏览器中运行的 SQL 工具，提供本地文件查询、批量查询生成、schema 对比、方言转换、SQL 格式化与数据迁移核对报表等功能，面向需要做数据迁移验证和 SQL 方言处理的开发者。全部计算经 DuckDB-WASM 在客户端完成，无后端、无上传、无遥测；构建产物为纯静态站点，可部署到任意静态主机。",
+   "highlights": [
+    "提供十余个 SQL 工具：Parity Run 核对、测试数据生成、批量方言转换、查询计划可视化、schema diff、SQL 格式化等",
+    "通过 DuckDB-WASM 在浏览器内查询本地 CSV/Parquet 文件，无后端与数据上传",
+    "SQL 转换结果可在页面内于 PostgreSQL、SQLite 或 DuckDB 上实际运行验证"
+   ],
+   "use_cases": [
+    "数据迁移后核对两份表数据的缺失键、重复与差异值",
+    "将 SQL 在不同方言间转换并本地验证",
+    "在浏览器中直接查询本地 CSV/Parquet 文件"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|**SQL Converter**|`/sql-converter`|Translate quoting, escaping, row limits and function names between dialects, then run the result on real PostgreSQL, SQLite or DuckDB in the tab| ／ Redshift, Hive, Spark, ClickHouse — but *not* Trino, PostgreSQL, T-SQL, Oracle, SQLite)",
+     "lines": [
+      34,
+      64
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- `backslashIsEscape` — whether a literal backslash must be doubled (MySQL, BigQuery, Snowflake,",
+     "lines": [
+      63
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Redshift, Hive, Spark, ClickHouse — but *not* Trino, PostgreSQL, T-SQL, Oracle, SQLite)",
+     "lines": [
+      64
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|**SQL Converter**|`/sql-converter`|Translate quoting, escaping, row limits and function names between dialects, then run the result on real PostgreSQL, SQLite or DuckDB in the tab| ／ Redshift, Hive, Spark, ClickHouse — but *not* Trino, PostgreSQL, T-SQL, Oracle, SQLite)",
+     "lines": [
+      34,
+      64
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "az64` in Redshift, `nvarchar` from SQL Server, `VARCHAR2(20 BYTE)` from Oracle — stopped the",
+     "lines": [
+      398
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "Redshift, Hive, Spark, ClickHouse — but *not* Trino, PostgreSQL, T-SQL, Oracle, SQLite)",
+     "lines": [
+      64
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为面向数据迁移验证的 SQL 工具集合，处理 SQL 方言与 schema 对比等数据库相关任务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Browser-only SQL tools for data-migration verification: querying a local file, bulk query ／ |**SQL Scratchpad**|`/scratchpad`|Drop in a CSV or Parquet file and query it with real SQL, via DuckDB compiled to WebAssembly| ／ `/scratchpad` runs DuckDB compiled to WebAssembly",
+   "evidence_lines": [
+    11,
+    28,
+    75
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "bhardwajtulsiram/sqlparity",
+  "sha": "7ee0463b8918",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -7334,5 +7334,142 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6d45b8a7a786": {
+  "identity": {
+   "one_liner": "嵌入式单文件双时态图数据库，支持 Datalog 查询",
+   "review": "Minigraf 是一个用 Rust 实现的嵌入式单文件图数据库，提供 Datalog 查询与双时态时间旅行能力，可在原生、WASM、移动端嵌入使用，并提供 Python/Node/Java/Swift/C 等语言绑定。面向 AI 代理记忆、移动应用离线存储等场景；按设计不支持分布式与客户端-服务器模式，单文件事实大小上限 4080 字节。",
+   "highlights": [
+    "提供 Datalog 查询语言，支持递归规则与窗口函数",
+    "支持双时态查询（transaction time + valid time）实现历史回溯",
+    "提供 Rust 原生、WASM 浏览器/WASI、Python、Node.js、Java、Android、iOS、C 等多平台绑定"
+   ],
+   "use_cases": [
+    "为 AI 代理存储可修正、可审计的信念记忆",
+    "移动应用的离线优先存储与追溯性更正",
+    "浏览器端嵌入式图数据存储与可视化回放"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "> **Embedded graph memory for AI agents, mobile apps, and the browser** — the SQLite of bi-temporal graph databases ／ A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ |Feature|Minigraf|XTDB|Cozo|Neo4j|SQLite|",
+     "lines": [
+      12,
+      14,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位其为自包含的嵌入式图数据库本体，属存储引擎而非使用其他数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：MIT OR Apache-2.0",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ Minigraf is a **single-file embedded graph database** that lets you: ／ Minigraf runs as:",
+   "evidence_lines": [
+    14,
+    22,
+    174
+   ]
+  },
+  "fn": "project-minigraf/minigraf",
+  "sha": "6d45b8a7a786",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "57f552de61d3": {
+  "identity": {
+   "one_liner": "基于 Go+Vue3+SQLite 的自托管租房管理系统",
+   "review": "面向个人房东、小型公寓运营者和宿舍管理员的自托管租房管理应用，提供房源/租户/合同管理、月度抄表账单自动计算、缴费提醒、收款跟踪、CSV 导入导出与单据打印；数据以 SQLite 单文件存储在本地，支持 Docker、飞牛 fnOS 安装包和裸二进制部署，首个注册用户为管理员。",
+   "highlights": [
+    "提供房源结构化管理、租户入住/退租、租约到期与缴费日提醒",
+    "实现月度抄表账单自动计算（水电气用量×单价）与欠缴判定",
+    "支持 CSV 模板导入导出、收费单据打印及钉钉/邮箱/短信/QQ 机器人推送提醒"
+   ],
+   "use_cases": [
+    "个人房东或小公寓运营者管理房源、租约与月度账单",
+    "工厂宿舍多租户同房的入住与费用分摊管理",
+    "NAS/自托管环境下本地保存租房业务数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "基于 smallgo 应用框架实例化（Go/Gin/GORM/SQLite + Vue 3/TS/Vite/Pinia/Tailwind），默认端口 **8910**。 ／ > 默认端口 `8910`；数据默认是挂载目录下的 SQLite 单文件，备份即拷贝，恢复支持上传本地备份文件。 ／ - 后端：Go + Gin + GORM + SQLite（WAL，`CGO_ENABLED=1`） ／ 首次启动注册的第一个用户为管理员。业务数据存储于 `data/db/rental.db`（SQLite，WAL）。",
+     "lines": [
+      13,
+      27,
+      72,
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储自身业务数据的租房管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向个人房东、小型公寓运营者、工厂宿舍管理员的租房管理系统：结构化房源、租约到期提醒、月度抄表账单（水电气费用自动计算）、收款与欠缴跟踪、CSV 模板导入导出、收费单据打印；电脑端表格与手机端卡片双布局，支持飞牛 fnOS 一键登录与 Docker 自托管。 ／ - 后端：Go + Gin + GORM + SQLite（WAL，`CGO_ENABLED=1`） ／ 首次启动注册的第一个用户为管理员。业务数据存储于 `data/db/rental.db`（SQLite，WAL）。",
+   "evidence_lines": [
+    7,
+    72,
+    87
+   ]
+  },
+  "fn": "TechFunWay/rental",
+  "sha": "57f552de61d3",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8259,5 +8259,72 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2170777efaa8": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的复式记账（double-entry ledger）SQL 实现",
+   "review": "pgledger 用 PostgreSQL 的表、函数和视图实现复式记账账本，不含应用层代码，调用方通过 SQL 函数记账、通过视图查询余额。由于完全运行在数据库内，账本写入可与应用其他事务原子提交。适合需要在项目内嵌入账本能力的开发者，依赖 PostgreSQL 并需先安装配套 ULID 辅助函数。",
+   "highlights": [
+    "账本完全以 PostgreSQL 表、函数、视图实现，应用层无代码",
+    "提供账户创建、单笔/批量转账函数及余额、分录视图",
+    "支持负余额约束校验、多币种账户、event_at 事件时间戳与前缀 ULID 标识"
+   ],
+   "use_cases": [
+    "在应用数据库内嵌复式记账账本并获得事务一致性",
+    "多币种余额管理与货币兑换记账",
+    "将银行 webhook 等异步事件按真实发生时间记入账本"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A double entry ledger implementation in PostgreSQL. ／ `pgledger` is a reusable ledger implementation that works across projects and programming languages. There is no application-level code; the entire thing is implemented in PostgreSQL tables, functions, and views. The application just calls SQL functions and qu ／ Furthermore, since `pgledger` lives entirely in PostgreSQL, it allows transactional guarantees with the rest of the application. Do some work, write to the ledger, and it all commits or doesn't atomically.",
+     "lines": [
+      3,
+      9,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "实现完全以 PostgreSQL 表/函数/视图形式提供，作为可复用组件供各项目调用，而非仅使用数据库的独立应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pgledger` is a reusable ledger implementation that works across projects and programming languages. There is no application-level code; the entire thing is implemented in PostgreSQL tables, functions, and views. The application just calls SQL functions and queries data via SQL views. ／ Furthermore, since `pgledger` lives entirely in PostgreSQL, it allows transactional guarantees with the rest of the application. Do some work, write to the ledger, and it all commits or doesn't atomically. ／ The ledger implementation is currently in a single file: pgledger.sql. But it also relies on some helper ULID/UUID functions from scoville/pgsql-ulid (see #IDS for more information). I vendored the helpers in this repository for simplicity and compatibility (in case the pgsql-ulid library changes).",
+   "evidence_lines": [
+    9,
+    11,
+    21
+   ]
+  },
+  "fn": "pgr0ss/pgledger",
+  "sha": "2170777efaa8",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8863,5 +8863,139 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c890c421ff5c": {
+  "identity": {
+   "one_liner": "跨平台 Electron 桌面客户端，统一连接 Meshtastic/MeshCore/Reticulum 网状网络",
+   "review": "这是一个基于 Electron 的桌面应用，为 Meshtastic、MeshCore 和 Reticulum 三种 RF 网状网络协议提供统一的聊天、节点管理、路由诊断和地图界面，支持 BLE、USB 串口、Wi-Fi/TCP、MQTT 等传输方式，并用本地 SQLite 数据库持久化消息历史与网状日志。面向使用 LoRa 网状电台的桌面用户，包括应急通信（EMCOMM）场景；README 提及 Linux BLE 依赖 BlueZ 等已知限制。",
+   "highlights": [
+    "支持 Meshtastic、MeshCore、Reticulum 三种协议栈，通过协议切换器在同一界面使用",
+    "使用本地 SQLite 数据库实现消息历史与网状日志的持久化存储",
+    "支持 BLE、USB 串口、Wi-Fi/TCP、MQTT 等多种传输方式，并提供路由诊断功能"
+   ],
+   "use_cases": [
+    "桌面端管理 Meshtastic/MeshCore 无线电节点与频道配置",
+    "通过 MQTT 网关收发网状网络消息并保持历史记录",
+    "应急通信（EMCOMM）场景下的 MECP 与 TAK 集成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "With a dedicated local SQLite database, Mesh-Client keeps message history and mesh logs durable across restarts and sync failures. It provides one reliable hub for Meshtastic, MeshCore, and Reticulum (via an AGPL Rust sidecar), delivering a unified workflow re ／ - **True message persistence:** Local SQLite storage for reliable long-term history, without lost chats or broken logs.",
+     "lines": [
+      29,
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储消息历史的桌面客户端应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Cross-platform **Electron** desktop client for **Meshtastic**, **MeshCore**, and **Reticulum (LXMF)** on **macOS**, **Linux**, and **Windows** — **BLE**, **USB serial**, **Wi-Fi/TCP**, **MQTT**, local **SQLite** history, **routing diagnostics**, **16-language UI**, plus a Ratspeak-compatible Reticulum sidecar (**Games**, **encrypted paper**, **LXST voice**, Nomad, RRC, Remote). EMCOMM support via MECP & TAK. ／ With a dedicated local SQLite database, Mesh-Client keeps message history and mesh logs durable across restarts and sync failures. It provides one reliable hub for Meshtastic, MeshCore, and Reticulum (via an AGPL Rust sidecar), delivering a unified workflow regardless of protocol or hardware. ／ - **True message persistence:** Local SQLite storage for reliable long-term history, without lost chats or broken logs.",
+   "evidence_lines": [
+    3,
+    29,
+    33
+   ]
+  },
+  "fn": "Colorado-Mesh/mesh-client",
+  "sha": "c890c421ff5c",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d11ce0e6f42b": {
+  "identity": {
+   "one_liner": "Oracle APEX 项目插件，为导航菜单添加搜索框",
+   "review": "一个 Oracle APEX item 类型插件，在 Universal Theme 导航菜单中加入搜索框，支持输入过滤菜单项、快捷键跳转页面、Interactive Report 过滤、item 或 URL 快捷方式。面向使用 Oracle APEX 构建应用的开发者，需按 APEX 版本导入对应 SQL 插件文件，3.0 版要求 APEX 24.2 及以上，旧版 2.2 支持 APEX 5.0–24.2。",
+   "highlights": [
+    "提供导航菜单的实时过滤搜索，支持子列表匹配与首匹配高亮",
+    "支持页面、Interactive Report 过滤、item 和 URL 四类快捷方式及 JavaScript API",
+    "提供 APEX 24.2（3.0）与 5.0–24.2（2.2）两个版本线"
+   ],
+   "use_cases": [
+    "在 APEX 应用的全局页面（page 0）为导航菜单添加搜索入口",
+    "通过快捷方式快速跳转到页面、IR 过滤或外部 URL",
+    "需要会话状态保存搜索文本的应用导航场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Oracle APEX item plug-in that adds a search box to the Universal Theme navigation menu: type to filter the menu, ／ |Your Oracle APEX version|Plug-in version|Plug-in file|Demo app| ／ ### V 3.0 (Oracle APEX 24.2 and later)",
+     "lines": [
+      3,
+      14,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Oracle APEX 平台提供的 item 插件组件，扩展 APEX 应用开发能力而非使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Oracle APEX item plug-in that adds a search box to the Universal Theme navigation menu: type to filter the menu, ／  Import the plug-in file for your APEX version (see Which version do I need?) into your application. ／  3.0: Oracle APEX 24.2",
+   "evidence_lines": [
+    3,
+    98,
+    134
+   ]
+  },
+  "fn": "grlicaa/SearchNavigationMenu",
+  "sha": "d11ce0e6f42b",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

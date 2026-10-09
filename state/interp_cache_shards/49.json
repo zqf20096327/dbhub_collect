@@ -9183,5 +9183,212 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "602c3b0bde53": {
+  "identity": {
+   "one_liner": "基于 Hermes Agent 的本地运行外贸业务员 AI 助手",
+   "review": "面向外贸业务员的 AI 助手应用，本地运行并提供客户背调、开发信生成、客户管理、定时简报等 38 项技能，依赖 Hermes Agent 调用 LLM 与搜索 API，后端为 FastAPI+SQLite。适合自行承担决策风险的个人/小团队外贸从业者使用，需要网络访问 GitHub/PyPI 安装。",
+   "highlights": [
+    "提供 38 项 B2B 技能：客户背调（WHOIS/制裁名单等 6 层检测）、开发信生成、客户分级管理、定时任务",
+    "数据默认存储于本地 ~/.trade/，绑定 127.0.0.1，支持多公司数据隔离（X-Company-ID）",
+    "基于 Hermes Agent 调用 LLM（推荐 DeepSeek，兼容 OpenAI/Anthropic/Ollama 等接口），并支持用自然语言生成新 skill"
+   ],
+   "use_cases": [
+    "外贸客户开发：搜索潜在客户、生成个性化开发信、询盘回复与报价谈判",
+    "客户背调与合规参考：邮箱验证、WHOIS、制裁名单检查（结果仅供参考）",
+    "日常运营自动化：汇率/行情早报、社媒内容日历、B2B 平台询盘定时检查"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **后端**: FastAPI + SQLite + uvicorn",
+     "lines": [
+      252
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明使用 SQLite 作为本地数据存储，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " 外贸业务员的 AI 助手 ／ - **后端**: FastAPI + SQLite + uvicorn ／ - **业务数据默认存储在本地**（`~/.trade/`），不上传任何服务器",
+   "evidence_lines": [
+    13,
+    252,
+    230
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "chefroger/smart-trade-ai",
+  "sha": "602c3b0bde53",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "171414d93fc4": {
+  "identity": {
+   "one_liner": "本地优先个人 AI 助手系统，FastAPI+SQLite 单机运行",
+   "review": "Amethyst 是一个本地优先的个人 AI 助理应用，通过 agent 循环调度工具，连接日历、邮件、任务、文件和 MCP 连接器，并提供 Library 知识库、自动化与桌面模式。面向想在本地管理个人信息与工具调用的个人用户。数据存储在本地 SQLite（WAL 模式），支持 Ollama 本地模型及 21 个云模型预设；工具调用需逐操作审批权限。",
+   "highlights": [
+    "提供 agent 循环（推理-执行-观察）与 MCP 连接器注册，支持 stdio/SSE/HTTP 三种协议",
+    "数据保存在本地 SQLite 数据库（WAL 模式），Library 内容以纯 markdown 文件存储",
+    "每个工具调度经过操作级权限门控，密钥存于操作系统钥匙串"
+   ],
+   "use_cases": [
+    "个人在本地统一管理任务、日历、邮件、笔记与收藏链接",
+    "通过本地模型（Ollama）或云模型 API 运行带权限审批的 AI 助手",
+    "多源 URL 内容采集并汇入可搜索的本地知识库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "frontend, one SQLite database — everything stays on your machine. ／ - State is a local SQLite database (WAL mode); Library files are plain",
+     "lines": [
+      8,
+      181
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 作为自身状态存储，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local-first personal operating system. One FastAPI backend, one React ／ - State is a local SQLite database (WAL mode); Library files are plain",
+   "evidence_lines": [
+    7,
+    181
+   ]
+  },
+  "fn": "Wayn-Git/Amethyst",
+  "sha": "171414d93fc4",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b7e285681a97": {
+  "identity": {
+   "one_liner": "单机 Claude Code 会话与容器控制面板",
+   "review": "这是一个自托管面板，用于在一台机器上查看和操作 Claude Code 会话、容器与系统负载，可从手机或显示器访问。它以三个权限隔离的进程运行：服务容器、只读采集器、主机执行器；前端为 PWA，数据存于独立容器中的 Postgres，指标按分区写入并通过保留策略清理。适合使用 Claude Code 的个人 homelab 用户管理会话与主机。",
+   "highlights": [
+    "提供会话、容器、机器指标、用量、告警、操作日志等屏幕，可启动/停止容器并向会话写入消息与斜杠命令",
+    "以三个权限相反的进程实现隔离：服务容器对宿主机无权限，采集器只读转录，执行器运行程序但不可读转录",
+    "使用 passkey (WebAuthn) 与长期令牌登录，无需密码；Postgres 指标按分区存储并支持整体卸载保留"
+   ],
+   "use_cases": [
+    "从手机监控并操作 homelab 机器上的 Docker 容器与系统负载",
+    "在移动设备上查看、驱动和归档 Claude Code 会话，回答模型提问并发送文件",
+    "追踪各账号、模型、项目的 token 用量与限额，接收阈值告警推送"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres does not have to be installed, it arrives as a container, and neither ／ **The database** — Postgres in its own container. Metrics are partitioned, ／ |`internal/store/`|Postgres: pool, migrations, partitions, writing metrics|",
+     "lines": [
+      102,
+      130,
+      156
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 Postgres 以独立容器随面板部署，用于存储指标与日志，面板是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**The database** — Postgres in its own container. Metrics are partitioned, ／ Postgres does not have to be installed, it arrives as a container, and neither ／ |`internal/store/`|Postgres: pool, migrations, partitions, writing metrics|",
+   "evidence_lines": [
+    130,
+    102,
+    156
+   ]
+  },
+  "fn": "BeMySlaveDarlin/aacpanel",
+  "sha": "b7e285681a97",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

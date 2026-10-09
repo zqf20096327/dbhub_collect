@@ -9738,5 +9738,122 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c4bc8cd1c7d8": {
+  "identity": {
+   "one_liner": "text-to-SQL 架构级访问控制库，按调用者授权过滤可见 schema",
+   "review": "schemagate 是一个 Python 库，在 LLM 看到 schema 之前按调用者的权限过滤表清单，使无权读取的表不出现在提示词中，并基于 BM25 与离线哈希向量化做表选择，减少 prompt token。面向构建 SQL agent（LangChain、MCP 等）的开发者与数据团队；通过 pip 安装，支持 PostgreSQL、Oracle、MySQL、SQL Server、SQLite 驱动 extras，提供 demo/select/studio/describe/certify 子命令及浏览器页面。",
+   "highlights": [
+    "提供 schema 选择前置权限过滤，按调用者 principal/role 剔除不可读表",
+    "内置 BM25 与离线哈希向量化选择器，不调用模型即可完成表筛选",
+    "提供 CLI（demo/select/studio/describe/certify）、本地 Studio 页面与浏览器版"
+   ],
+   "use_cases": [
+    "为 text-to-SQL / LangChain / MCP agent 添加表级访问控制",
+    "缩减大型 schema 提示词中的 token 消耗",
+    "本地调试与演示 LLM 可见 schema 随角色变化的效果"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "--url \"postgresql+psycopg://user:pw@host/db\" --answer --provider anthropic --model <model-id> ／ schemagate select \"revenue by month\" --url postgresql://localhost/app --principal okta:jdoe --role finance",
+     "lines": [
+      54,
+      70
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "pip install 'schemagate[mssql]' 'schemagate[mysql]' ／ 1. **Connect.** Paste a URL — `postgres://…`, `postgresql://…`, `mysql://…`,",
+     "lines": [
+      161,
+      200
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "pip install 'schemagate[postgres]' 'schemagate[oracle]' ／ `oracle://…` and a JDBC string all work, as does the wallet form for an",
+     "lines": [
+      160,
+      201
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|certified, 10/10, in CI|",
+     "lines": [
+      881
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "pip install 'schemagate[mssql]' 'schemagate[mysql]' ／ `[mssql]`, or `schemagate[all]` for the lot:",
+     "lines": [
+      161,
+      212
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "compat",
+     "quote": "saying plainly: MariaDB is inferred from MySQL rather than run. Point the",
+     "lines": [
+      888
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 SQL agent 与数据库生态服务的访问控制/表选择库，而非使用数据库存储业务数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Your text-to-SQL agent picks which tables to show the model before anyone checks what the caller is allowed to read. schemagate does the check first: it filters the schema by the caller's grants, so restricted tables are absent from the prompt rather than ranked low. Works with LangChain, MCP, or any SQL agent, on Postgres, Oracle, MySQL, SQL Server and SQLite. ／ pip install 'schemagate[postgres]'     'schemagate[oracle]' ／ `[mssql]`, or `schemagate[all]` for the lot:",
+   "evidence_lines": [
+    9,
+    160,
+    212
+   ]
+  },
+  "fn": "ashishsinha1602/schemagate",
+  "sha": "c4bc8cd1c7d8",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

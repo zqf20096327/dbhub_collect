@@ -9322,5 +9322,130 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6c5c954b140a": {
+  "identity": {
+   "one_liner": "Emacs 交互式数据库客户端，提供查询、浏览与 SQL 行编辑暂存",
+   "review": "Clutch 是运行在 Emacs 内的数据库查询与浏览客户端，支持在可编辑 SQL 缓冲区中执行查询、以表格网格展示结果，并对可定位行的 UPDATE/DELETE 提供暂存预览机制。面向使用 Emacs 的开发者和 DBA，通过原生协议包或 Java 17+ 的 JDBC agent 连接多种数据库。",
+   "highlights": [
+    "在 Emacs 缓冲区内执行 SQL 并以交互式网格展示结果，支持 TSV/CSV/Org 表格导出",
+    "支持行编辑暂存：本地 stage 增删改，经验证和确认后提交",
+    "提供原生后端与 JDBC agent（Java 17+）两条连接路径，支持表/列补全、外键跳转和元数据缓存"
+   ],
+   "use_cases": [
+    "在 Emacs 工作流中直接查询和浏览 MySQL/PostgreSQL/SQLite 等数据库",
+    "对 SQL 查询结果进行受控的行级编辑与预览提交",
+    "通过 JDBC 统一访问 Oracle、SQL Server、ClickHouse 等数据库"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |PostgreSQL|Core SQL support|Requires `pgsql`, available from MELPA|",
+     "lines": [
+      7,
+      71
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11|",
+     "lines": [
+      7,
+      70
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |SQLite|Core SQL support|Uses Emacs 29.1+ built-in `sqlite-*` functions; no external dependency|",
+     "lines": [
+      7,
+      73
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`|",
+     "lines": [
+      7,
+      74
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`|",
+     "lines": [
+      7,
+      74
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |ClickHouse / Snowflake / Redshift / DB2 / generic JDBC|Basic SQL / query-first support|Backend-specific limits apply to editing, transactions, and dialect behavior|",
+     "lines": [
+      7,
+      78
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MariaDB 10.11 has been live-validated through the native `mysql` backend, including TLS with `mysql_native_password`; other MariaDB versions are expected to be broadly compatible but are not yet part of the regular test matrix. MySQL 5.6 has no native JSON col",
+     "lines": [
+      122
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述其为连接和操作多种数据库的 Emacs 客户端工具，为数据库使用提供服务而非以数据库存储自身数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "Oracle",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracle, SQL Server, DB2, Snowflake, Redshift, ClickHouse, DuckDB, and other databases. ／ |MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11| ／ |Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`|",
+   "evidence_lines": [
+    7,
+    70,
+    74
+   ]
+  },
+  "fn": "LuciusChen/clutch",
+  "sha": "6c5c954b140a",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

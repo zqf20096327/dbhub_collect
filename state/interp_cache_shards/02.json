@@ -8802,5 +8802,73 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "233e51696ce7": {
+  "identity": {
+   "one_liner": "基于 Proton Bridge 的 Proton Mail MCP 服务器与 CLI，提供 100 个邮件工具",
+   "review": "该项目通过本地运行的 Proton Mail Bridge 以 IMAP/SMTP 协议读取和管理 Proton 邮箱，并以 MCP 服务器和 CLI 两种形式对外提供读信、搜索、草稿、发送、归档等 100 个工具，供 Claude Desktop、Claude Code、Cline 等 MCP 客户端或脚本调用；需 Node.js 24+ 和已登录的 Bridge，内置本地全文索引（SQLite）缓存邮件以加速搜索，支持只读模式和发送限制等安全控制。",
+   "highlights": [
+    "提供 100 个 MCP 工具，并有对应 CLI 命令，可脚本化用于 cron 与管道自动化",
+    "维护本地全文搜索索引，通过后台同步与 IMAP IDLE 保持更新，查询不依赖每次 IMAP 访问",
+    "支持只读模式、发送门控、破坏性操作确认与按操作白名单，以及多账户隔离索引与草稿存储"
+   ],
+   "use_cases": [
+    "在 Claude Desktop/Cline 等客户端中通过自然语言检索、整理和起草 Proton 邮件",
+    "用 CLI 编写 cron 脚本或管道自动化处理收件箱摘要与邮件分拣",
+    "需要邮件内容不出本机、仅经本地 Bridge 解密访问的本地化邮件工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- The local index lives at `PROTONMAIL_DATA_DIR/mail-index.sqlite`. Background sync and IMAP IDLE keep it warm.",
+     "lines": [
+      498
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储本地邮件索引的邮件客户端/MCP 服务器，而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mail inbox: read, search, send, draft, triage threads, manage folders, save attachments, and more — 100 MCP tools in total. Most of the same capabilities are also available as a full CLI for scripting, cron, and piped automation — no Claude required. ／ - **Fast local search** — full-text search across your inbox without hitting IMAP on every query",
+   "evidence_lines": [
+    21,
+    45
+   ]
+  },
+  "fn": "googlarz/proton-mail-bridge-client",
+  "sha": "233e51696ce7",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

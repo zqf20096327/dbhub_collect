@@ -7858,5 +7858,90 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b817f45b3b54": {
+  "identity": {
+   "one_liner": "Rust 编写的 Debian 多节点自托管主机控制面板",
+   "review": "Hyperion 用 Rust 实现，在每台服务器部署 agent、主节点提供 Web UI/HTTP API/CLI，一体式开通 PHP 站点、nginx、PHP-FPM、数据库与 TLS，并提供备份、WordPress 管理、WAF/防火墙、监控等托管运维功能，面向运营小型主机业务的运维人员。数据库仅作为托管站点可选的存储组件，非多节点路径尚少验证。",
+   "highlights": [
+    "提供站点一键开通事务，失败自动回滚（Linux 用户、nginx、PHP-FPM、数据库、TLS）",
+    "支持 MariaDB/PostgreSQL 数据库开通、S3 加密异地备份与 restic 快照",
+    "提供 BLAKE3 哈希链审计日志、多节点集群与 OpenAPI HTTP API 和 CLI"
+   ],
+   "use_cases": [
+    "小型托管业务的站点开通与日常运维",
+    "WordPress 站点群的更新、修复与备份",
+    "多台 Debian 服务器的集中监控与安全管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. which software to install: PHP 8.1–8.4, MariaDB, PostgreSQL, vsftpd, ／ - **MariaDB or PostgreSQL**, with one-click phpMyAdmin that signs in",
+     "lines": [
+      78,
+      114
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite) rather than scraping it. You pick the sites, their PHP version, profile",
+     "lines": [
+      285
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "2. which software to install: PHP 8.1–8.4, MariaDB, PostgreSQL, vsftpd, ／ - **MariaDB or PostgreSQL**, with one-click phpMyAdmin that signs in",
+     "lines": [
+      78,
+      114
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "面板本身是运行在服务器上的托管应用，站点数据库仅是其可安装/管理的组件，并非为数据库生态服务的专用工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One agent on each server, one web UI on the master. Hyperion provisions PHP, ／ 2. which software to install: PHP 8.1–8.4, MariaDB, PostgreSQL, vsftpd, ／ - **MariaDB or PostgreSQL**, with one-click phpMyAdmin that signs in",
+   "evidence_lines": [
+    5,
+    78,
+    114
+   ]
+  },
+  "fn": "nechodom/hyperion",
+  "sha": "b817f45b3b54",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

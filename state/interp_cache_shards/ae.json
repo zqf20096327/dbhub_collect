@@ -9062,5 +9062,157 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "15d6e73f820b": {
+  "identity": {
+   "one_liner": "面向 AI 代理的本地优先问题跟踪器，单二进制+SQLite+内置 MCP",
+   "review": "一个本地优先的问题/计划跟踪器，用单个 Rust 二进制运行，数据存于一个 SQLite 文件，内置 31 个 MCP 工具，供 AI 代理通过 MCP 协议管理 issue、计划与评论，人类经 Web UI（:3456）查看。适合个人指挥多个代理的场景；明确不适合需要 SSO、多服务器同步或 git 原生存储的团队。",
+   "highlights": [
+    "单个二进制内置 SQLite、Web UI 与每小时备份，支持 Docker 可选部署",
+    "内置 MCP 服务器，31 个工具覆盖 issues、plans、pages、comments、attachments、export 等",
+    "`lific connect` 为 11 种 AI 客户端写入 MCP 配置，支持 remote HTTP 与本地 stdio 两种模式"
+   ],
+   "use_cases": [
+    "个人开发者用多个 AI 代理协作管理任务与计划",
+    "通过 MCP 客户端（Claude Code、Cursor 等）读写本地 issue 数据库",
+    "需要本地自托管、无外部数据库依赖的轻量任务跟踪场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **One 25 to 32 MB binary** with SQLite, the web UI and backups built in. No Docker, no Postgres.",
+     "lines": [
+      21
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One binary. One SQLite file. MCP built in. ／ - **One 25 to 32 MB binary** with SQLite, the web UI and backups built in. No Docker, no Postgres. ／ lific connect --client zed --stdio # no server: direct SQLite over stdio",
+     "lines": [
+      10,
+      21,
+      81
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明数据存储于其自身的 SQLite 数据库文件，Lific 是使用该数据库存数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " One binary. One SQLite file. MCP built in. ／ Plans and issues live on your server instead of in the context window, so work outlives the session. Agents use it over MCP; you use the web UI. ／ - **One 25 to 32 MB binary** with SQLite, the web UI and backups built in. No Docker, no Postgres.",
+   "evidence_lines": [
+    10,
+    18,
+    21
+   ]
+  },
+  "fn": "VoidNullable/lific",
+  "sha": "15d6e73f820b",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "97d12017fd93": {
+  "identity": {
+   "one_liner": "自托管单企业项目管理系统 PMS 的 Vue 前端应用",
+   "review": "PMS Front 是浏览器端应用，负责页面展示、交互和前端路由，账号、权限、项目数据均由 pms-backend 提供，数据经后端存入 MySQL。面向单企业本地部署（非 SaaS），最终用户通过 pms-distribution 发行镜像使用，本仓库面向前端本地开发。",
+   "highlights": [
+    "提供研发管理（需求、项目、专题、故事、迭代、系统版本）、配置管理（人员、组织、角色、导入、审计日志）、通知中心等页面模块",
+    "通过 Vite 将 /api 请求代理到后端，前端不做权限判断，权限由后端 RBAC 决定",
+    "支持中英文切换、Vue 生态工具链（pnpm/vue-tsc）测试与类型检查"
+   ],
+   "use_cases": [
+    "单企业自托管研发项目管理系统的前端页面",
+    "与 pms-backend / pms-distribution 配合进行本地开发联调"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "在兄弟仓库 `pms-backend` 中完成 MySQL 配置并启动 API。后端默认地址： ／ |页面提示 `Request failed with status code 500`|查看后端日志；先确认 MySQL 迁移已到当前基线，再访问 `/api/health/ready`| ／ - 后端 README：架构、MySQL 和部署",
+     "lines": [
+      18,
+      172,
+      181
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "前端只是使用后端服务的应用，项目数据由后端存入 MySQL，本仓库不含为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "PMS Front 是 PMS 的浏览器端应用，负责页面展示、交互和前端路由；账号、权限、组织关系、项目数据和文件上传都由 `pms-backend` 提供。项目面向单个企业本地部署，不是独立 SaaS 前端。 ／ 在兄弟仓库 `pms-backend` 中完成 MySQL 配置并启动 API。后端默认地址： ／ 当前统一发行包镜像版本：`1.1.0`。最终用户请使用 `pms-distribution` 的预构建镜像；本仓库面向前端本地开发。",
+   "evidence_lines": [
+    6,
+    18,
+    8
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ],
+   "status_hint": "deprecated"
+  },
+  "fn": "xiebinJava/pms-front",
+  "sha": "97d12017fd93",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

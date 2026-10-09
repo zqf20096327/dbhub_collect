@@ -8682,5 +8682,74 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "916232f3ca4d": {
+  "identity": {
+   "one_liner": "基于 Go+SQLite+CQRS 的 Rocket/Datastar Web 组件画廊",
+   "review": "这是一个为 Rocket/Datastar 框架服务的社区组件画廊站点，收录 51 个 Web 组件并提供实况演示、Playground、自动加载器与 SRI 固定机制。用 Go 单二进制运行，SQLite 内嵌存储组件目录、每标签页状态与历史版本，写侧走 CQRS 命令队列、读侧经 SSE Brotli 流渲染。适合想使用或提交 Rocket 组件的前端开发者，也提供自托管部署方式。",
+   "highlights": [
+    "提供 51 个 Web 组件的目录，含实况演示、manifest 生成的 API 表与 Playground",
+    "自动加载器按需加载组件，支持版本固定与 SHA-384 integrity 校验",
+    "单静态二进制运行，资产与迁移内嵌，SQLite（含 FTS5）持久化，SSE 实时流，CQRS 架构"
+   ],
+   "use_cases": [
+    "在网站中引入/自托管 Rocket+Datastar 组件",
+    "通过 GitHub issue 表单提交新组件并经机器人校验生成 PR",
+    "作为组件 Playground 编辑、类型检查与分享代码片段"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Go · templ · SQLite · Datastar + Rocket · CQRS · plain modern CSS. No Node, no bundler. ／ - Themes, pixel-art design system, zero Node, single static binary with embedded assets and SQLite. ／ The binary is self-contained (assets, components and migrations are embedded; SQLite is pure Go). `starbase --version` prints the version, `/healthz` answers `ok <version>`.",
+     "lines": [
+      10,
+      22,
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 为其内嵌存储，用于保存组件目录、tab 状态与历史文件，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT；源自 derekr PD rockets 的七个组件保留 Beer-Ware 许可",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The binary is self-contained (assets, components and migrations are embedded; SQLite is pure Go). `starbase --version` prints the version, `/healthz` answers `ok <version>`. ／ - **Per-tab UI state** (filters, sort, preview theme) is stored in SQLite, in `tab_state`. The stream keeps the URL in sync. ／ - **Catalog:** `components/` is embedded. At startup `SyncCatalog` mirrors it into SQLite (FTS5 for search).",
+   "evidence_lines": [
+    32,
+    136,
+    137
+   ]
+  },
+  "fn": "zweiundeins/starbase",
+  "sha": "916232f3ca4d",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

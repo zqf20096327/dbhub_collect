@@ -8855,5 +8855,160 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "da2c9f4d58b7": {
+  "identity": {
+   "one_liner": "嵌入 PostgreSQL 的 Kafka broker 扩展，复用数据库作为事件日志",
+   "review": "kafgres 是一个 PostgreSQL 扩展，通过 pgrx 实现 Kafka 协议，让未经修改的 Kafka 客户端（librdkafka、Java 客户端、Sarama、kcat 等）直接连接 Postgres 的 9092 端口，将主题、分区、消费者组与日志数据存于数据库内，实现业务写入与事件产出的同一事务提交。面向需要事务性耦合数据库与事件流的开发者，支持 CDC 逻辑解码输出插件、SCRAM/mTLS 认证及两种存储引擎；使用 Elastic License 2.0 许可，需 PostgreSQL 13–18。",
+   "highlights": [
+    "支持未经修改的 Kafka 客户端（librdkafka、Java 客户端、Sarama、kafka-python、kcat）直接连接 Postgres 9092 端口",
+    "提供 kafgres_produce() 在业务事务内原子产出消息，并内置逻辑解码输出插件实现 CDC 映射",
+    "实现 Kafka 管理协议（topics/configs/consumer-groups/ACLs）、事务、KIP-848 消费者协议及两种存储引擎"
+   ],
+   "use_cases": [
+    "需要业务写入与事件发布在同一事务中提交、避免 outbox 或双写不一致的场景",
+    "在数据库内实现变更数据捕获（CDC），无需 Kafka Connect 或独立 JVM",
+    "用 Postgres 角色与 SQL 表管理 Kafka 客户端认证与 ACL 的部署"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A PostgreSQL extension that embeds a Kafka broker. Unmodified Kafka clients (librdkafka, ／ Postgres on port 9092 and cannot tell the difference. Topics, partitions, offsets,",
+     "lines": [
+      3,
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是一个为 PostgreSQL 提供嵌入 Kafka broker 能力的数据库扩展，为数据库生态服务而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Elastic License 2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A PostgreSQL extension that embeds a Kafka broker. Unmodified Kafka clients (librdkafka, ／ consumer groups, and the log itself live in the database. ／ - CDC: a table's changes reach a topic through a logical decoding output plugin shipped",
+   "evidence_lines": [
+    3,
+    6,
+    49
+   ]
+  },
+  "fn": "RayElg/kafgres",
+  "sha": "da2c9f4d58b7",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f76af38df6a3": {
+  "identity": {
+   "one_liner": "基于 Laravel 的 Usenet 索引器，抓取头信息生成可检索的发布",
+   "review": "NNTmux 是一个基于 Laravel 框架的 Usenet 索引应用，自动扫描 Usenet、收集头信息并整理成可搜索的发布，提供 newznab 兼容 API 和 Web 前端。面向自建 Usenet 索引站点的用户，要求 PHP 8.4+ 与 MariaDB 10.6+ 或 MySQL 8+，明确不支持 PostgreSQL，支持 ManticoreSearch 或 Elasticsearch 做全文检索，提供 tmux 多线程处理引擎。",
+   "highlights": [
+    "自动扫描 Usenet、收集头信息并组织成可搜索的发布",
+    "提供 newznab 标准兼容的 RESTful API，可对接 Sonarr/Radarr 等下载客户端",
+    "支持 ManticoreSearch 与 Elasticsearch 两种全文检索引擎，提供 tmux 多线程处理引擎"
+   ],
+   "use_cases": [
+    "自建 Usenet 索引站点",
+    "为媒体管理器提供 newznab API 搜索服务",
+    "对接 IRC pre 频道或 PreDB API 获取发布信息"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- MariaDB 10.6+ or MySQL 8+ (PostgreSQL not supported)",
+     "lines": [
+      27
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MariaDB 10.6+ or MySQL 8+ (PostgreSQL not supported)",
+     "lines": [
+      27
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MariaDB 10.6+ or MySQL 8+ (PostgreSQL not supported)",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 MariaDB/MySQL 作为数据存储（数据库迁移、调优配置），是使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "NNTmux is a modern Usenet indexer built on Laravel, designed for high performance and scalability. It automatically scans Usenet, collects headers, and organizes them into searchable releases. The project is actively maintained and features multi-threaded processing, advanced search, and a web-based front-end with API access. ／ - MariaDB 10.6+ or MySQL 8+ (PostgreSQL not supported) ／ 5. Run database migrations:",
+   "evidence_lines": [
+    7,
+    27,
+    65
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "NNTmux/newznab-tmux",
+  "sha": "f76af38df6a3",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

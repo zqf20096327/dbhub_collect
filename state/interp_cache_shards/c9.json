@@ -7690,5 +7690,156 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "456815933f15": {
+  "identity": {
+   "one_liner": "DSH 酒馆的 SQLite 存储与服务端执行插件",
+   "review": "该插件将 DSH Tavern 的聊天存档、会话事件与 MVU 变量历史交由 SQLite 管理，支持增量写入、按需读取、事务回退，并把 MVU 与卡脚本计算移到服务端执行。面向使用 DSH 酒馆的玩家与服主，提供 Windows/Linux 一键安装。限制：仅适配特定版本契约，V1/V2 不可共装，原档不自动迁移。",
+   "highlights": [
+    "SQLite 增量存档：头字段与消息楼层分开存储，仅提交变化部分，由事务与 WAL 管理会话事件",
+    "服务端执行 MVU 结算与卡脚本，浏览器保留界面职责",
+    "物理尾部回退：截断被撤销事件、回拨运行轮次并重建内存投影，正文与变量同库同事务提交"
+   ],
+   "use_cases": [
+    "DSH 酒馆用户希望存档改用 SQLite 增量管理并按需读取历史",
+    "需要在服务端执行 MVU 与卡脚本、减少浏览器计算依赖的场景",
+    "需要对剧情进行可靠回退且正文与变量保持一致的游玩场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# DSH Tavern SQLite V2 ／ **服务端 MVU 与卡脚本、SQLite 增量存档、历史按需读取，以及正文和状态一起回退。** ／ 这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。",
+     "lines": [
+      1,
+      3,
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该插件使用 SQLite 存储酒馆聊天与会话数据，属使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU AGPL v3，基于 DSH Tavern 的独立修改版",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。 ／ |**SQLite 增量存档**|聊天头字段、消息楼层分开存储，局部更新只处理变化部分，避免为了追加或修改一楼反复重写全部历史。会话事件由 SQLite 事务与 WAL 管理。| ／ 基于 DSH Tavern 适配，保留原来源声明与 GNU AGPL v3 许可。本项目是独立修改版，不是上游官方发行；随包官方恢复字节的许可及对应源码入口也保留。",
+   "evidence_lines": [
+    5,
+    14,
+    96
+   ]
+  },
+  "fn": "huajiao1998/dsh-tavern-sqlite-v2",
+  "sha": "456815933f15",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4a972caea042": {
+  "identity": {
+   "one_liner": "中间件离线部署打包器，本地 Web 选型打包、服务器零交互部署",
+   "review": "该项目提供本地 Web 界面选择中间件（Nginx/MySQL/Redis/Kafka 等）并生成含镜像、compose、备份策略的离线部署包，服务器解压后执行 deploy.sh 完成零交互安装，附健康检查、部署报告与备份/恢复脚本，插件机制可扩展中间件。适用于内网/隔离机房等无法联网的服务器交付场景，属 DevOps 部署自动化工具。",
+   "highlights": [
+    "本地打包生成离线包，服务器端 deploy.sh 零交互、幂等可重跑部署",
+    "支持 MySQL 单机与主从复制（GTID 自动同步）、Redis 哨兵、Kafka 集群等多种形态",
+    "内置定时备份与 restore.sh 恢复脚本，自动生成部署报告"
+   ],
+   "use_cases": [
+    "内网/无公网服务器的中间件离线交付部署",
+    "一键搭建含 MySQL 主从、Redis 哨兵的 Docker/Compose 环境",
+    "离线环境下的定时备份与恢复运维"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **定时备份 + 一键恢复**：MySQL/PostgreSQL/MongoDB 各自独立的备份计划(crontab), 容器内原生工具按库分文件压缩(mysqldump / pg_dump -Fc / mongodump), 超出保留份数自动轮转；`restore.sh` 一条命令恢复指定库 ／ - **集群形态**：MySQL 单机 / **主从复制**(一主一从 · GTID 自动同步 · 部署时自动配置复制，8.0 与 5.7 均支持)； ／ - **MySQL 参数可定制**：自动挂载 `conf/<svc>/my.cnf`（内置 sql_mode 严格模式声明），改参数不用进容器",
+     "lines": [
+      41,
+      44,
+      46
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **定时备份 + 一键恢复**：MySQL/PostgreSQL/MongoDB 各自独立的备份计划(crontab), 容器内原生工具按库分文件压缩(mysqldump / pg_dump -Fc / mongodump), 超出保留份数自动轮转；`restore.sh` 一条命令恢复指定库 ／ 9. **健康实测**：所有带 compose 健康检查的容器(mysql/redis/minio/postgres/kafka/elasticsearch 等插件中间件)等转 healthy； ／ 10. **备份恢复脚本**：部署了本地数据库(MySQL/PostgreSQL/MongoDB)时自动安装 `restore.sh` 到部署目录",
+     "lines": [
+      41,
+      145,
+      149
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为 MySQL/PostgreSQL 等数据库的离线部署、备份恢复提供服务，属数据库生态的部署运维工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "在本地 Web 界面上选好中间件、端口、密码、数据库、备份策略，一键打出**只含本次所需物料**的离线包； ／ - **定时备份 + 一键恢复**：MySQL/PostgreSQL/MongoDB 各自独立的备份计划(crontab), 容器内原生工具按库分文件压缩(mysqldump / pg_dump -Fc / mongodump), 超出保留份数自动轮转；`restore.sh` 一条命令恢复指定库 ／ - **集群形态**：MySQL 单机 / **主从复制**(一主一从 · GTID 自动同步 · 部署时自动配置复制，8.0 与 5.7 均支持)；",
+   "evidence_lines": [
+    5,
+    41,
+    44
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "litianyanaa-pixel/middleware-offline-deploy",
+  "sha": "4a972caea042",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

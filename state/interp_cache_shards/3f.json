@@ -9108,5 +9108,85 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c1cae559e104": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 SQL 查询引擎，用 SQL 查询文件与应用并提供 MCP 接口",
+   "review": "Anyquery 是一个 SQL 查询引擎，通过插件机制支持对文件、数据库和应用（如 Notion、Chrome）执行 SQL 查询，并可充当 MySQL 服务器供兼容客户端连接，还通过 MCP 协议让 LLM 访问数据。适合需要统一 SQL 接口查询多种数据源的个人和团队。核心依赖 SQLite 与 cgo，核心引擎采用 AGPLv3 许可。",
+   "highlights": [
+    "支持通过插件查询文件、数据库和应用，并可加载任意 SQLite 扩展",
+    "内置 MySQL 服务器，兼容 MySQL 客户端连接",
+    "通过 MCP 协议向 LLM 客户端提供数据访问"
+   ],
+   "use_cases": [
+    "用 SQL 统一查询多种 SaaS 应用与本地文件数据",
+    "让支持 MCP 的 LLM 客户端访问本地数据",
+    "通过 MySQL 协议在 BI/客户端工具中查询应用数据"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "Finally, it can act as a MySQL server, allowing you to run SQL queries from your favorite MySQL-compatible client (e.g. TablePlus, Metabase, etc.). ／ You can also launch the MySQL server with `anyquery server` and connect to it with your favorite MySQL-compatible client. ／ mysql -u root -h 127.0.0.1 -P 8070",
+     "lines": [
+      27,
+      60,
+      64
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Anyquery is a SQL query engine that allows you to run SQL queries on pretty much anything. It supports querying files, databases, and apps (e.g. Apple Notes, Notion, Chrome, Todoist, etc.). It's built on top of SQLite and uses plugins to extend its functionali ／ CGO_ENABLED=1 go install -tags \"vtable fts5 sqlite_json sqlite_math_functions\" github.com/julien040/anyquery@main ／ Anyquery relies on cgo (through go-sqlite3), so you need a C compiler (gcc, clang, or a mingw toolchain on Windows) available in your `PATH`.",
+     "lines": [
+      23,
+      140,
+      143
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据源与数据库提供 SQL 查询接口和 MySQL 服务端能力，属数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "核心引擎 AGPLv3，RPC 库 MIT 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Anyquery is a SQL query engine that allows you to run SQL queries on pretty much anything. It supports querying files, databases, and apps (e.g. Apple Notes, Notion, Chrome, Todoist, etc.). It's built on top of SQLite and uses plugins to extend its functionality. ／ Finally, it can act as a MySQL server, allowing you to run SQL queries from your favorite MySQL-compatible client (e.g. TablePlus, Metabase, etc.). ／ Anyquery is plugin-based, and you can install plugins to extend its functionality. You can install plugins from the official registry or create your own. Anyquery can also load any SQLite extension.",
+   "evidence_lines": [
+    23,
+    27,
+    147
+   ]
+  },
+  "fn": "julien040/anyquery",
+  "sha": "c1cae559e104",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

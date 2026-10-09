@@ -8940,5 +8940,141 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ba6ff60e741e": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，将量化金融计算原语带入 SQL",
+   "review": "pgQuant 是用 Rust（pgrx）编写的 PostgreSQL 扩展，在数据库内提供收益率、VaR/ES 风险、波动率（EWMA/GARCH）、协方差、因子构建和均值方差组合优化等函数，直接作用于用户自有价格与收益率表。适用于需要在 SQL 中运行量化分析的开发者和金融研究人员。安装支持脚本一键安装、预编译二进制和源码编译（需 cargo-pgrx）。",
+   "highlights": [
+    "在 SQL 中提供收益率、VaR/ES、波动率（EWMA/GARCH）等风险度量函数",
+    "支持协方差矩阵（样本/收缩）、SMB/HML/WML 因子构建与均值方差组合优化",
+    "函数接受 SQL 查询文本或 double precision[] 数组，不拥有独立 schema"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 中对自有价格表直接计算风险与收益指标",
+    "构建多因子组合并进行均值方差优化",
+    "量化金融教学模型的数据库内生产化实现"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The quant toolkit Postgres never had ／ PostgreSQL ／ `pgQuant` is a PostgreSQL extension written in Rust (using `pgrx`) that brings quantitative finance primitives - returns, risk (VaR/ES), volatility (rolling/EWMA/GARCH), covariance (sample/shrinkage), factor construction (HML/SMB/WML), and mean-variance portfo",
+     "lines": [
+      3,
+      7,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展为数据库生态提供量化金融计算能力，非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pgQuant` is a PostgreSQL extension written in Rust (using `pgrx`) that brings quantitative finance primitives - returns, risk (VaR/ES), volatility (rolling/EWMA/GARCH), covariance (sample/shrinkage), factor construction (HML/SMB/WML), and mean-variance portfolio optimization directly into SQL. It operates directly on your own price and returns tables. ／ **Currently Implemented:** ／ ## Installation",
+   "evidence_lines": [
+    11,
+    19,
+    58
+   ]
+  },
+  "fn": "pranshu05/pgQuant",
+  "sha": "ba6ff60e741e",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5ec6dc2fc4a6": {
+  "identity": {
+   "one_liner": "DSH 插件，归档完整对话并生成分层摘要供智能体召回",
+   "review": "SuperLcm for DSH 是 DeepSeek Harness 的独立插件，按事件编号保存完整对话原文，在后台按约 20K token 分块生成分层摘要，并提供 lcm_find/lcm_outline/lcm_read 工具供智能体搜索和读回历史；数据以 SQLite 保存在本机，摘要与压缩分别用 DSH 配置的模型。适合使用 DSH 的智能体用户。需 Node.js 22.16+，通过 npm pack 安装。",
+   "highlights": [
+    "按事件编号保存完整对话原文，供精确读回",
+    "后台生成多层摘要目录，支持搜索定位后读取原文",
+    "可选压缩接管，在设定上下文比例时一次替换较旧内容"
+   ],
+   "use_cases": [
+    "智能体需要核对历史决策与原文细节的场景",
+    "长对话的本地持久化与分层摘要管理",
+    "需要本地保存数据、不经外部服务的会话归档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "数据库默认位于 `$DSH_HOME/SuperLcm/lcm.sqlite`；未设置 `DSH_HOME` 时使用当前用户的 `~/.dsh`。支持 `DSH_SUPERLCM_DB` 自定义文件，兼容旧 `DSH_LOSSLESS_DB` 和 `lossless-context` 数据库路径。",
+     "lines": [
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为本机存储对话与摘要数据的数据库，项目本身是 DSH 的上下文管理插件，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SuperLcm for DSH 为 **DeepSeek Harness（DSH）** 保存完整对话，在后台整理分层摘要，让智能体需要历史细节时能找到并读取原文。摘要和压缩都在 **DSH 插件设置页**管理，使用 DSH 已配置的供应商和模型。 ／ 数据库默认位于 `$DSH_HOME/SuperLcm/lcm.sqlite`；未设置 `DSH_HOME` 时使用当前用户的 `~/.dsh`。支持 `DSH_SUPERLCM_DB` 自定义文件，兼容旧 `DSH_LOSSLESS_DB` 和 `lossless-context` 数据库路径。",
+   "evidence_lines": [
+    9,
+    85
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "yu381792/dsh-superlcm",
+  "sha": "5ec6dc2fc4a6",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

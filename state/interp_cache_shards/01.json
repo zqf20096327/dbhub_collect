@@ -8871,5 +8871,253 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6a5fb442389c": {
+  "identity": {
+   "one_liner": "SQL 编译器：从标注 .sql 文件生成 10 种语言的类型安全数据库访问代码",
+   "review": "Scythe 是一个 Rust 编写的 CLI 工具，把带注解的 .sql 文件静态编译为行类型、查询函数等数据库访问代码，生成过程无需连接数据库，可运行在 pre-commit 钩子中。面向以 SQL 为核心的开发者，附带 24 条 lint 规则和 35 条审计规则、代码漂移检查（scythe check）与在线库健康检查（scythe inspect，覆盖 PostgreSQL 13 项、MySQL/MariaDB 4 项）。每配置块只针对一个数据库引擎，不提供跨方言运行时抽象。",
+   "highlights": [
+    "从静态 SQL 生成 10 种语言（Rust/Python/TypeScript/Go/Java/Kotlin/C#/Elixir/Ruby/PHP 及 JavaScript）的类型安全代码，共 56 个后端",
+    "内置 59 条规则：24 条 lint 规则与 35 条安全/迁移审计规则，输出 SARIF/JSON/人类可读格式",
+    "提供 scythe check（代码与 SQL 源一致性校验，可接 PostgreSQL catalog 做 schema 漂移检查）和 scythe inspect（在线健康检查）"
+   ],
+   "use_cases": [
+    "在 CI 或 pre-commit 中对 .sql 文件做格式化、lint 和安全审计",
+    "以 SQL 为源生成带行类型的数据库访问代码，替代手写映射层",
+    "从 sqlc 迁移（scythe migrate 可转换 sqlc.yaml）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "JavaScript via the four `javascript-*` backends — across PostgreSQL, MySQL, MariaDB, SQLite, DuckDB, ／ |Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+     "lines": [
+      254,
+      260
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "JavaScript via the four `javascript-*` backends — across PostgreSQL, MySQL, MariaDB, SQLite, DuckDB, ／ |Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+     "lines": [
+      254,
+      260
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "JavaScript via the four `javascript-*` backends — across PostgreSQL, MySQL, MariaDB, SQLite, DuckDB, ／ |Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+     "lines": [
+      254,
+      260
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "JavaScript via the four `javascript-*` backends — across PostgreSQL, MySQL, MariaDB, SQLite, DuckDB, ／ |Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+     "lines": [
+      254,
+      260
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "CockroachDB, MSSQL, Oracle, Redshift and Snowflake. **Coverage is not uniform**: not every language ／ |Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+     "lines": [
+      255,
+      260
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "CockroachDB, MSSQL, Oracle, Redshift and Snowflake. **Coverage is not uniform**: not every language ／ |Language|PostgreSQL|MySQL|SQLite|DuckDB|CockroachDB|MSSQL|Oracle|MariaDB|Redshift|Snowflake|",
+     "lines": [
+      255,
+      260
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供代码生成、lint、审计与健康检查工具链，本身不存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "Oracle",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source",
+    "npm",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Scythe compiles annotated `.sql` files into database access code — row types, query functions and ／ |**59 built-in rules**|24 lint rules (`UPDATE` without `WHERE`, `NULL` compared with `=`, leading-wildcard `LIKE`, `SELECT *`) and 35 audit rules, plus sqruff's style rules through `scythe fmt`.|Lint rules · Linting| ／ JavaScript via the four `javascript-*` backends — across PostgreSQL, MySQL, MariaDB, SQLite, DuckDB,",
+   "evidence_lines": [
+    5,
+    42,
+    254
+   ]
+  },
+  "fn": "Goldziher/scythe",
+  "sha": "6a5fb442389c",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5e47ad118eb2": {
+  "identity": {
+   "one_liner": "TIDAL 桌面播放器，本地 SQLite 存储实现即时检索",
+   "review": "一个面向 TIDAL 用户的桌面音乐播放器，把用户曲库同步到本地 SQLite 数据库，实现本地即时搜索、音乐视频索引、Genre Galaxy 类型图谱、无缝高保真播放、automix 与手机遥控。适合拥有大量已保存曲目、希望本地管理曲库和播放历史的 TIDAL 订阅用户；音频源仍依赖 TIDAL 流媒体，本地数据为只读镜像。",
+   "highlights": [
+    "将 TIDAL 曲库镜像到本地 SQLite 数据库，搜索与浏览在本地磁盘完成",
+    "支持音乐视频索引、视频电台、Genre Galaxy 类型图谱与监听分析",
+    "实现无缝播放、automix 过渡规划，并通过 PWA 提供局域网手机遥控"
+   ],
+   "use_cases": [
+    "在本地快速检索和浏览大规模 TIDAL 已保存曲库",
+    "为曲库中的曲目索引现场、翻唱、 alternate 版本视频并按类型/年份浏览",
+    "通过手机 PWA 在局域网内遥控桌面播放"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "NOORwave is a desktop music player for TIDAL built for **instant local search and fast library browsing**. Your synced library lives in a SQLite database on your own machine, so searching your saved collection runs locally. Your library and listening history s ／ SQLite ／ NOORwave is that second thing. It pulls your TIDAL library down into a SQLite database on your own machine, then builds a real desktop player on top of it. Search answers instantly because it never leaves your disk. The queue is something you shape, not someth",
+     "lines": [
+      7,
+      22,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该播放器将 TIDAL 曲库数据存入本地 SQLite 数据库，SQLite 是其数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial 1.0.0（非商业许可）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "NOORwave is a desktop music player for TIDAL built for **instant local search and fast library browsing**. Your synced library lives in a SQLite database on your own machine, so searching your saved collection runs locally. Your library and listening history stay on your disk; TIDAL supplies the audio. ／ NOORwave is that second thing. It pulls your TIDAL library down into a SQLite database on your own machine, then builds a real desktop player on top of it. Search answers instantly because it never leaves your disk. The queue is something you shape, not something that happens to you. Transitions are planned instead of stumbled into. And your own taste becomes a map you can fly through.",
+   "evidence_lines": [
+    7,
+    31
+   ]
+  },
+  "fn": "biggiesmallcap-blip/NOORwave",
+  "sha": "5e47ad118eb2",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "830d28e7ec38": {
+  "identity": {
+   "one_liner": "本机运行的 AI 创作画布，节点连线编排图片/视频/文本生成",
+   "review": "这是一个完全跑在本机的 AI 创作画布应用，用于剧本、图片、视频、漫剧等内容生成。用户自行填写 OpenAI 兼容网关的 API Base 与 Key，画布转发请求并把生成结果、素材、工程文件落盘本地目录；不依赖数据库、Docker 或云端账号，支持 Electron 安装包或源码运行。适合做短视频/漫剧内容生产的个人创作者使用。",
+   "highlights": [
+    "提供无限画板工作区，图片、视频、文本节点可自由连线并作为上下文提交",
+    "支持任意 OpenAI 兼容网关与自定义 HTTP 模板，本机代理转发请求",
+    "项目、素材、模型配置与生成任务记录全部存储在本地数据目录"
+   ],
+   "use_cases": [
+    "漫剧、带货视频、宣传片等视频内容的分镜与生成制作",
+    "需要参考图直链上传（OSS）的图生图、图生视频工作流",
+    "数据需完全保留在本机的个人 AI 创作场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 明确说明无数据库依赖，数据存本地磁盘，仅转发请求到模型平台，是使用外部 API 的创作应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|依赖服务|无。不需要数据库、Docker、登录、联网鉴权| ／ 你自己填写模型平台的 API Base 和 Key，画布只是把请求转发出去；生成的图片、视频、文本和工程文件全部落在本机目录里。 ／ |`packages/web`|**主应用**。Next.js 16 + React 19 + TypeScript + Tailwind 4|",
+   "evidence_lines": [
+    12,
+    5,
+    120
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "lkw2731938298/Jumeng-Canvas-Local-Client",
+  "sha": "830d28e7ec38",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

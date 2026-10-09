@@ -8873,5 +8873,240 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9f40b66e4996": {
+  "identity": {
+   "one_liner": "基于逻辑复制的 Postgres 只读副本，提供搜索与变更审计",
+   "review": "PgStack 通过 Postgres 逻辑复制把源库数据同步到独立副本：一个提供 BM25 关键词及可选语义/混合检索的搜索副本，一个记录行级变更历史的审计副本，查询经由 Postgres 兼容端点以 SQL 进行。面向需要在主库之外承担检索与变更追踪负载的开发者；语义检索需配置 OpenAI API 密钥，镜像主要面向本地开发与评估。",
+   "highlights": [
+    "通过逻辑复制持续同步源 Postgres 数据，搜索与审计负载与 OLTP 隔离",
+    "搜索副本支持关键词（BM25）检索，配置 OpenAI 密钥后支持语义与混合检索",
+    "审计副本记录行级变更历史，以 Parquet/Iceberg 存储，内部用 DuckDB 执行 SQL"
+   ],
+   "use_cases": [
+    "为应用数据提供产品搜索、查重与相似记录发现",
+    "行变更追踪用于合规审计、问题排查与选择性数据恢复",
+    "为 AI 智能体检索当前应用数据作为上下文"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**PgStack** is Postgres read replicas for Search and Audit. ／ PgStack replicates your data while your existing Postgres remains the source of truth. Indexing and queries run outside your application database through a separate Postgres-compatible endpoint.",
+     "lines": [
+      3,
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Postgres 提供复制、搜索与审计能力的数据库配套组件，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，另有商业托管版 PgStack Cloud（open-core 模式）",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**PgStack** is Postgres read replicas for Search and Audit. ／ PgStack replicates your data while your existing Postgres remains the source of truth. Indexing and queries run outside your application database through a separate Postgres-compatible endpoint. ／ Audit stores Parquet with Iceberg metadata. Search uses Lance for BM25 and optional vectors. DuckDB runs inside PgStack's Postgres-compatible server to execute SQL over this data.",
+   "evidence_lines": [
+    3,
+    8,
+    146
+   ]
+  },
+  "fn": "pgstack-io/pgstack",
+  "sha": "9f40b66e4996",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2a02853f012d": {
+  "identity": {
+   "one_liner": "NetSuite ERP 的 MCP 客户端，提供聊天 UI 连接 AI 与业务数据",
+   "review": "OpenSuiteMCP 是面向 NetSuite ERP 的 MCP 客户端与服务端，提供聊天界面、角色（personas）、技能（skills）管理和提示词库，可通过 MCP 标准工具执行 SuiteQL、记录、报表和保存的搜索；同时可作为 MCP 服务器让外部 AI 代理以用户身份操作工作区。面向需要用 LLM 访问 NetSuite 数据的企业或顾问，需自备 LLM API 密钥并依赖 Docker 运行 PostgreSQL、Redis 等本地服务。",
+   "highlights": [
+    "支持连接 Google Gemini、Anthropic Claude、OpenAI 或 OpenAI 兼容端点（BYO LLM key）",
+    "可同时作为 MCP 客户端与 MCP 服务器，支持 OAuth 2.1（含 DCR）与 Bearer 认证",
+    "提供四类技能来源（Oracle/Community/Connected/Custom）与三种注入模式，支持 persona 与技能配对"
+   ],
+   "use_cases": [
+    "通过聊天界面用自然语言查询和操作 NetSuite 业务数据（SuiteQL、记录、报表、保存搜索）",
+    "企业内部自托管部署，为团队成员提供带权限控制的 AI 助手接入 NetSuite",
+    "让外部 AI 代理通过 MCP 协议以指定用户身份读写 NetSuite 工作区技能与工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Built-in personas ship in `.personas/*.md` in this repo. Custom personas are stored per user in Postgres. ／ - Docker (Docker Desktop on macOS/Windows, or Docker Engine on Linux) for local PostgreSQL, Redis, and SearXNG via `pnpm setup:backend` ／ - `.env.local` — app / migrate vars (`POSTGRES_URL`, `REDIS_URL`, `AUTH_SECRET`, `OSMCP_INSTALL_MODE`, etc.)",
+     "lines": [
+      27,
+      129,
+      157
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|**Oracle**|Disabled|Shared pack; Auto / Slash command / Disabled. Core AI Connector instructions stay Auto.| ／ A skill can carry reference files beside its `SKILL.md`, the way Oracle and Community packs do. `SKILL.md` holds up to 32,000 characters. Beside it, up to 32 reference files, 64,000 characters each and 256,000 across them. ／ That downloads Oracle’s agent-skills into `.data/oracle-skills` (or `ORACLE_SKILLS_DIR`) and Community skills into `.data/community-skills` (or `COMMUNITY_SKILLS_DIR`). Run after setup, on deploy (production entrypoint), and on a **weekly cron**. New upstream ",
+     "lines": [
+      39,
+      50,
+      58
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用 PostgreSQL 存储用户自定义 personas 等数据（L27、L157），是使用数据库的应用而非为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Source-available，商业权利保留（Commercial rights reserved by Unstacked Apps, LLC）",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Source-available **NetSuite MCP client** — chat UI for NetSuite’s AI Connector Service, MCP Standard Tools, Companion prompt library, and SuiteCloud Agent Skills. ／ Built-in personas ship in `.personas/*.md` in this repo. Custom personas are stored per user in Postgres. ／ - Docker (Docker Desktop on macOS/Windows, or Docker Engine on Linux) for local PostgreSQL, Redis, and SearXNG via `pnpm setup:backend`",
+   "evidence_lines": [
+    7,
+    27,
+    129
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "unstackedapps/opensuitemcp",
+  "sha": "2a02853f012d",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "80c7042032ac": {
+  "identity": {
+   "one_liner": "自托管波斯语 CMS，Laravel 后端 + Next.js 前端",
+   "review": "Pishdad 是一个 MIT 许可的自托管内容管理系统，后端基于 Laravel，前端使用 Next.js，内置可视化区块编辑器、插件运行时、可安装主题和 SEO 工具。面向需要波斯语/RTL 支持并希望在自有服务器上管理内容的用户。数据层要求 PostgreSQL 14+（依赖 b，不支持 MySQL/MariaDB），插件需 Ed25519 签名验证后才能运行。",
+   "highlights": [
+    "提供声明式插件系统，通过 manifest. 声明权限、小部件和页面类型，插件安装前进行 Ed25519 签名验证",
+    "内置可视化区块编辑器、主题切换、sitemap/robots.txt 等 SEO 工具",
+    "提供 OpenAPI 3.1 契约（135 个端点）并生成前端类型"
+   ],
+   "use_cases": [
+    "需要波斯语界面、RTL 布局和 Jalali 历法的网站内容管理",
+    "在自有服务器上部署并保留数据所有权的 CMS 使用场景",
+    "通过安装插件和主题扩展站点功能"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Data|PostgreSQL `≥18` (ICU `fa-IR` collation) · Redis `≥8` · MinIO (S3-compatible)| ／ |PostgreSQL|14+ — MySQL/MariaDB do **not** work (`jsonb` migrations)|",
+     "lines": [
+      101,
+      228
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|PostgreSQL|14+ — MySQL/MariaDB do **not** work (`jsonb` migrations)|",
+     "lines": [
+      228
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|PostgreSQL|14+ — MySQL/MariaDB do **not** work (`jsonb` migrations)|",
+     "lines": [
+      228
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 PostgreSQL 为数据存储的 CMS 应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted Laravel CMS with a Next.js frontend, running on a server you control. ／ |Data|PostgreSQL `≥18` (ICU `fa-IR` collation) · Redis `≥8` · MinIO (S3-compatible)| ／ |PostgreSQL|14+ — MySQL/MariaDB do **not** work (`jsonb` migrations)|",
+   "evidence_lines": [
+    6,
+    101,
+    228
+   ]
+  },
+  "fn": "ArmanOskouei/Pishdad",
+  "sha": "80c7042032ac",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8743,5 +8743,72 @@
   "generated_at": "2026-10-09",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "8c1b66eacdcc": {
+  "identity": {
+   "one_liner": "人脸识别门禁系统，用SQLite记录并审计每月居住时数",
+   "review": "一套基于ESP32-S3-CAM与OpenCV LBPH的人脸识别门禁原型：摄像头记录住户进出事件并写入本地SQLite数据库，月底脚本将出入时间配对求和，按单位汇总居住时数并标出低于150小时阈值的单位。面向香港公共房屋居住审查场景，为学生毕业专题；未实现活体检测与管理GUI。",
+   "highlights": [
+    "通过ESP32-S3-CAM串流影像，用Haar Cascade检测、MOSSE跟踪、LBPH识别住户身份",
+    "将进出时间戳写入单文件SQLite数据库，无服务器、无ORM",
+    "月结脚本汇总每人/每户居住时数并生成低于阈值的单位名单"
+   ],
+   "use_cases": [
+    "公共房屋居住时数核查的证据收集",
+    "需要按月统计出入停留时长的门禁场景",
+    "嵌入式+计算机视觉课程的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Three-tier architecture: hardware, Python processing layer, SQLite data layer / 三層架構：硬件、Python 處理層、SQLite 資料層 ／ A single entrance camera identifies the resident as they come and go. Those events become timestamped rows in a local SQLite database. At month end, a script sums the entry/exit pairs into \"resident hours\", groups them into \"flat hours\", and prints every flat  ／ |Log Entry/Leave timestamps into SQLite 將進出時間寫入 SQLite|✅ working · 已完成|`sql_record.py`|",
+     "lines": [
+      13,
+      49,
+      80
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用SQLite作为自身的事件数据存储层，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Three-tier architecture: hardware, Python processing layer, SQLite data layer / 三層架構：硬件、Python 處理層、SQLite 資料層 ／ A single entrance camera identifies the resident as they come and go. Those events become timestamped rows in a local SQLite database. At month end, a script sums the entry/exit pairs into \"resident hours\", groups them into \"flat hours\", and prints every flat below **150 hours**. That list is what gets referred to a community centre or social worker for a supportive follow-up — not a penalty notice. ／ - **Tier 3 — Data.** A single SQLite file, `database_pkpd.db`. No server, no credentials, no ORM. Two append-only event tables (`REC_ENTRY`, `REC_LEAVE`), one resident table (`Info`), and two families of generated report tables.",
+   "evidence_lines": [
+    13,
+    49,
+    108
+   ]
+  },
+  "fn": "wong060404/Living-Hour-Counting-System-ESP32",
+  "sha": "8c1b66eacdcc",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

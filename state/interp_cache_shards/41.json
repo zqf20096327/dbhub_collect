@@ -7110,5 +7110,211 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a44ff46a3b90": {
+  "identity": {
+   "one_liner": "PostgreSQL 数据分层扩展，冷数据落 Iceberg 对象存储",
+   "review": "ColdFront 是 pgEdge 开源的 PostgreSQL 扩展与配套 Go 组件，在库内拦截改写语句，使单张表的热数据留在 PG 分区、冷数据写入 S3/Azure/GCS 上的 Apache Iceberg，也支持纯 Iceberg 解耦模式。适合需要对 PG 表做分区生命周期与冷层管理的运维/DBA。当前为 Beta，README 标明不用于生产，依赖 pg_duckdb、Lakekeeper 等。",
+   "highlights": [
+    "透明分层：应用通过同一视图读写热/冷两层",
+    "支持 Iceberg 目录 Lakekeeper 及 S3/ADLS/GCS 存储后端",
+    "提供独立分区管理器、压缩及最小权限应用角色接入"
+   ],
+   "use_cases": [
+    "PostgreSQL 大表冷热数据分层归档",
+    "纯 Iceberg 解耦模式建表并读写湖上数据",
+    "无冷层的 PostgreSQL 范围分区生命周期管理"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "ColdFront runs inside PostgreSQL and rewrites each statement to the correct ／ ColdFront is open source under the PostgreSQL License and runs on PostgreSQL ／ |PostgreSQL|16, 17, or 18|Provides the database with native partitioning; stock PostgreSQL serves a single node, and the Docker image and distributed mode use pgEdge's PostgreSQL build with Spock.|",
+     "lines": [
+      9,
+      24,
+      178
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展与配套守护进程为数据库提供分层存储能力，而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "PostgreSQL License",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ColdFront runs inside PostgreSQL and rewrites each statement to the correct ／ `postgresql.conf`: `shared_preload_libraries = 'pg_duckdb,coldfront'`, ／ │   ├── archiver/               ← tiering daemon: moves expired PG partitions → Iceberg (pure Go, pgx)",
+   "evidence_lines": [
+    9,
+    40,
+    168
+   ]
+  },
+  "fn": "pgEdge/coldfront",
+  "sha": "a44ff46a3b90",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c8aa56a41703": {
+  "identity": {
+   "one_liner": "本地优先的零基信封记账应用，浏览器内运行 SQLite WASM",
+   "review": "Moneta 是一个纯浏览器端的零基信封记账 PWA，每个预算对应一个存储在浏览器私有存储（OPFS）中的 SQLite 文件，数据不离设备。提供账户交易、对账、定期交易、报表、备份及可选的加密备份到 Google Drive。适合希望在本地管理个人或家庭预算的用户；项目自述为 LLM 编写的实验性个人项目，无数据安全保证。",
+   "highlights": [
+    "每个预算为一个 SQLite 文件，存储在浏览器 Origin Private File System，支持离线运行",
+    "支持 OFX/CSV 银行账单导入、去重匹配与对账锁定",
+    "支持 .moneta（ZIP）备份、AES-256-GCM 加密备份及自动备份到 Google Drive"
+   ],
+   "use_cases": [
+    "个人/家庭零基信封预算管理",
+    "在手机或电脑上离线记录账户、交易与定期支出",
+    "查看按类别、收款人、净资产的支出报表与现金流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "budget is a SQLite database stored on your device, and it stays there. Install it as an app ／ Each budget is one SQLite file in your browser's private storage for the site (the Origin ／ SQLite file. Older `.sqlite` backups still restore.",
+     "lines": [
+      27,
+      71,
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明预算数据以 SQLite 数据库形式存储于设备上，SQLite 是其存数据的存储层而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Moneta is a budgeting app in the spirit of YNAB and Actual Budget. You give every unit of ／ It runs entirely in your browser. There is no server, no account and no tracking: your ／ budget is a SQLite database stored on your device, and it stays there. Install it as an app",
+   "evidence_lines": [
+    21,
+    26,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "flyri0/moneta",
+  "sha": "c8aa56a41703",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1e8763644bf3": {
+  "identity": {
+   "one_liner": "单企业本地部署项目管理系统后端，Spring Boot + MySQL 8",
+   "review": "PMS 后端提供项目、任务、迭代、组织架构、RBAC 权限、Excel/CSV 导入和审计日志等 REST API，配套 Vue 3 前端，通过 Docker Compose 一键启动。运行时和测试只使用 MySQL 8，数据库结构变更由后端启动时的 Flyway 迁移（V1–V69）完成，支持从已有 MySQL 库升级。面向想本地自托管项目管理系统的单个企业。",
+   "highlights": [
+    "后端实现 JWT 会话、RBAC 权限与数据范围校验的 REST API",
+    "使用 Flyway（V1–V69）管理数据库迁移，运行时只依赖 MySQL 8",
+    "提供 Excel/CSV 预览、校验、幂等提交与错误报告导入流程"
+   ],
+   "use_cases": [
+    "单企业本地部署的项目与迭代管理",
+    "组织架构与员工归属管理",
+    "员工主数据与组织数据的 Excel/CSV 批量导入"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PMS 是一个面向单个企业、本地部署的项目管理系统。一个部署实例只服务一家企业，不使用 `tenant_id`，也不拆分成微服务。运行时和测试都只使用 MySQL 8。 ／ 运行时只使用 MySQL 8 数据库 `pms`。Compose 会创建 `MYSQL_USER` 应用账号；Flyway 在后端启动时执行迁移，不再使用独立的 migrator 镜像。",
+     "lines": [
+      6,
+      116
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确系统运行时只使用 MySQL 8 存储业务数据，属使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PMS 是一个面向单个企业、本地部署的项目管理系统。一个部署实例只服务一家企业，不使用 `tenant_id`，也不拆分成微服务。运行时和测试都只使用 MySQL 8。 ／ 运行时只使用 MySQL 8 数据库 `pms`。Compose 会创建 `MYSQL_USER` 应用账号；Flyway 在后端启动时执行迁移，不再使用独立的 migrator 镜像。",
+   "evidence_lines": [
+    6,
+    116
+   ]
+  },
+  "fn": "xiebinJava/pms-backend",
+  "sha": "1e8763644bf3",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

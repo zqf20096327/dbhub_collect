@@ -8039,5 +8039,210 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d309dceeed15": {
+  "identity": {
+   "one_liner": "编码代理的本地长期记忆层，以 SQLite 存储、BM25 检索、MCP 接入",
+   "review": "Hippo 为 Cursor、Claude Code、Codex 等编码代理提供本地长期记忆：数据保存在本机 SQLite 存储（附 markdown 镜像），默认用 BM25 检索，嵌入为可选安装；通过 hippo init 写入各代理的钩子和指令文件，任何 MCP 客户端可连接。面向使用 AI 编码工具、需要跨工具共享项目记忆的开发者，运行依赖 Node.js 22.16+。",
+   "highlights": [
+    "本地 SQLite 存储配 markdown 镜像，可 git 跟踪，零运行时依赖",
+    "支持 Claude Code、Codex、Cursor、OpenClaw、OpenCode、Pi 及任意 MCP 客户端接入",
+    "提供记忆衰减、supersede 替换、错误记忆降权与 Slack/GitHub 连接器摄取"
+   ],
+   "use_cases": [
+    "跨多个编码代理工具共享同一份项目记忆",
+    "从 ChatGPT 导出、CLAUDE.md、.cursorrules、Slack 导入记忆并统一检索",
+    "通过钩子在会话结束时自动从 git 提交中学习并整理记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Hippo keeps your coding agents' memories in a SQLite store on your machine, with markdown mirrors you can read and commit. Search is BM25 out of the box, with no model and no network call; embeddings are an optional install. `hippo init` installs hooks for Cla ／ Storage: SQLite backbone with markdown mirrors. Git-trackable, human-readable.",
+     "lines": [
+      15,
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为自身记忆数据的存储后端，而非为数据库生态提供工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Hippo keeps your coding agents' memories in a SQLite store on your machine, with markdown mirrors you can read and commit. Search is BM25 out of the box, with no model and no network call; embeddings are an optional install. `hippo init` installs hooks for Claude Code and OpenCode, adds 2 hooks to Codex's `hooks.json` when Codex is installed (Codex runs them once you trust them in `/hooks`), and adds instructions to an existing `AGENTS.md` for Codex, Cursor, OpenClaw and Pi. Any MCP client can connect. Mark a memory wrong and it ranks lower; run `hippo supersede` and the old fact leaves recall. Zero runtime deps. ／ npm install -g hippo-memory && hippo init ／ Works with:    Claude Code, Codex, Cursor, OpenClaw, OpenCode, Pi, any MCP client",
+   "evidence_lines": [
+    15,
+    20,
+    30
+   ]
+  },
+  "fn": "kitfunso/hippo-memory",
+  "sha": "d309dceeed15",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1dea12957551": {
+  "identity": {
+   "one_liner": "读取 MoneyWiz SQLite 数据库的 Python API 库",
+   "review": "moneywiz-api 提供以 Python 访问 MoneyWiz 应用 SQLite 数据库的 API，通过 SchemaProfile 将数据表字段映射到 Record 模型类并支持自定义映射，附带交互式 shell moneywiz-cli。面向需要程序化读取 MoneyWiz 财务数据的 Python 用户，处于早期阶段。",
+   "highlights": [
+    "提供 Python API 与交互式 shell moneywiz-cli 读取 MoneyWiz SQLite 数据库",
+    "通过 SchemaProfile 实现字段到数据库列的映射，支持自定义 profile 与校验",
+    "提供单元测试与可选的集成测试（通过环境变量指定测试数据库路径）"
+   ],
+   "use_cases": [
+    "用 Python 脚本读取和分析 MoneyWiz 的财务数据",
+    "基于 SQLite 文件构建自定义报表或数据导出",
+    "针对 MoneyWiz schema 开发数据处理工具"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A Python API to access MoneyWiz Sqlite database. ／ moneywizApi = MoneywizApi(\"<path_to_your_sqlite_file>\") ／ api = MoneywizApi(\"<path_to_your_sqlite_file>\")",
+     "lines": [
+      8,
+      21,
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为访问 MoneyWiz（使用 SQLite 存储）数据服务的 Python API 组件，不是用数据库自身存储的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Python API to access MoneyWiz Sqlite database. ／ `MoneywizApi` resolves the default `SchemaProfile` from the database path when it ／ This project is in very early stage, all contributions are welcomed!",
+   "evidence_lines": [
+    8,
+    29,
+    90
+   ]
+  },
+  "fn": "ileodo/moneywiz-api",
+  "sha": "1dea12957551",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2bf5502ccccf": {
+  "identity": {
+   "one_liner": "自托管的网页抓取与Markdown提取工具，供AI代理读取网页",
+   "review": "AgentCrawl 是一个自托管爬虫，把网页和本地文档转成 Markdown、文本、链接、元数据、JSON-LD 等格式，供 AI 代理读取。提供 CLI、Python 库、HTTP API、Docker 和 MCP server 多种接口，内置基于 SQLite 的任务持久化、检查点、重试与静态 HTML 仪表盘。项目处于早期阶段，托管版 Enhanced 尚在计划中。",
+   "highlights": [
+    "提供 MCP server，暴露 scrape_url、crawl_site、extract_structured 等工具",
+    "使用 SQLite 实现带检查点、重试与失败记录的持久化爬取任务",
+    "支持 Firecrawl v2 兼容 API、浏览器渲染、登录会话与代理轮换"
+   ],
+   "use_cases": [
+    "为 AI 代理/LLM 工作流提供网页内容的 Markdown 化读取",
+    "自托管部署爬取服务并通过 HTTP API 或 MCP 调用",
+    "对网站进行结构化提取、变更追踪与站点地图生成"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🧱 Durable crawls: SQLite jobs with checkpoints, pagination, cancellation, events, retries, and failure inspection. ／ |Durable crawls|SQLite jobs, events, checkpoints, retries, and failure records.|",
+     "lines": [
+      99,
+      116
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为代理与开发者服务的抓取工具，SQLite 仅作为其本地任务与状态存储组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0；skills 部分 MIT-0",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AgentCrawl gives agents a simple way to read normal web pages without pasting raw HTML into chat or routing every URL through a hosted scraper. It turns pages and local documents into Markdown, text, links, metadata, JSON-LD, and crawl results. It runs from the CLI, Python, Docker/API, or as an MCP server. ／ - 🧱 Durable crawls: SQLite jobs with checkpoints, pagination, cancellation, events, retries, and failure inspection. ／ |MCP|Standards-based stdio MCP server for agent clients.|",
+   "evidence_lines": [
+    11,
+    99,
+    114
+   ]
+  },
+  "fn": "JorG18/agentcrawl",
+  "sha": "2bf5502ccccf",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

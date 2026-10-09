@@ -9454,5 +9454,146 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4f709478b11e": {
+  "identity": {
+   "one_liner": "团队沙箱 AI Agent 运行平台，含网关凭据注入",
+   "review": "OneCLI 是开源的团队级 AI Agent 平台：为每名员工提供一个运行在沙箱中的个人 Agent，通过 Rust 网关拦截出站请求并注入凭据，密钥以 AES-256-GCM 加密存储。包含 Next.js 仪表盘、API 控制面、Runner 与 Slack 适配器，支持 Helm 自托管于自有基础设施。面向需要集中管理密钥、权限与团队策略的企业用户。",
+   "highlights": [
+    "提供沙箱化个人 Agent，凭据经网关按主机/路径模式注入，Agent 本身不接触密钥",
+    "支持从企业 IdP 按员工身份开通 Agent，并接入 Slack、SSH 与定时任务",
+    "Runner 仅出站连接、无入站端口，可在 NAT 后的笔记本/家庭服务器/VPC 运行"
+   ],
+   "use_cases": [
+    "企业为员工统一开通和管理受策略约束的个人 AI Agent",
+    "团队集中保管 LLM 密钥与服务账号，按 Agent 授予而不下发凭据",
+    "在自有基础设施（Kubernetes/VPC）自托管 Agent 平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "That's the whole setup: `pnpm dev` generates `.env` with every required secret, starts PostgreSQL, applies migrations, and runs the full stack. Prerequisites, the command reference, project structure, and configuration live in docs/development.md.",
+     "lines": [
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "API Server 拥有并使用数据库存储会话与工作队列（L74），README 中 PostgreSQL 是本地开发启动的组成部分（L91）。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，ee/ 目录有例外条款",
+   "install": [
+    "source",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **API Server**: the control plane. Owns the database, the conversation plane, and the work queue the runner polls. ／ That's the whole setup: `pnpm dev` generates `.env` with every required secret, starts PostgreSQL, applies migrations, and runs the full stack. Prerequisites, the command reference, project structure, and configuration live in docs/development.md. ／ - **Rust Gateway**: intercepts outbound requests (HTTPS included, via MITM) and injects credentials. Agents authenticate with access tokens via `Proxy-Authorization` headers.",
+   "evidence_lines": [
+    74,
+    91,
+    75
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "onecli/onecli",
+  "sha": "4f709478b11e",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3f1308d42d30": {
+  "identity": {
+   "one_liner": "本地健康数据 MCP 服务器，基于 SQLite 存储",
+   "review": "该项目将个人健康历史（睡眠、心率、HRV 等）存入本地 SQLite 数据库，通过 MCP 协议向 AI 代理提供读取与分析工具，分析结果附带证据与可信度声明。支持 CSV 和 Apple Health 导入，可在全本地 AI 栈运行，也可连接云模型。面向关注隐私、想让 AI 分析自身健康数据的个人用户。",
+   "highlights": [
+    "提供 20 个 MCP 工具，覆盖数据读取、测量、锻炼、分析与数据新鲜度",
+    "分析结果附带 claim/evidence/profile/decision 证据结构，可追溯数据来源",
+    "支持 CSV 与 Apple Health 导入，可通过环境变量将私有指标排除出 AI 访问"
+   ],
+   "use_cases": [
+    "让 MCP 兼容的 AI 代理查询和解释个人健康历史趋势",
+    "在完全本地栈中管理健康数据隐私",
+    "从 CSV 或 Apple Health 导出导入既有健康数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Your health database runs locally in SQLite. ／ Local SQLite",
+     "lines": [
+      43,
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将健康数据存储在本地 SQLite 中，自身是使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Your health database runs locally in SQLite. ／ Cloud models are also supported. In that configuration, the MCP database remains local, but data returned by MCP tools may be sent to the model provider. ／ pip install quantified-self-mcp",
+   "evidence_lines": [
+    43,
+    56,
+    173
+   ]
+  },
+  "fn": "Thecimal/quantified-self-mcp",
+  "sha": "3f1308d42d30",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

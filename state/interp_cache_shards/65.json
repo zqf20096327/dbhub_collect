@@ -8762,5 +8762,140 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1d7a2799819c": {
+  "identity": {
+   "one_liner": "自托管工作室：将故事转为一致的AI插绘漫画/视频",
+   "review": "一个自托管的AI生成漫画/条漫/解说视频制作工具，把故事结构化为角色、章节、分镜等状态数据，结合用户自带的模型密钥生成图像、本地TTS配音与确定性排版导出，支持无API密钥的演示模式。面向想自行部署制作AI漫画或解说视频的创作者；需Docker部署，使用PostgreSQL和Redis存储与队列数据。",
+   "highlights": [
+    "将故事结构化为角色/世界/章节/分镜状态，并以参考图固定角色形象",
+    "支持BYOK多提供商接入、本地Kokoro-82M语音合成、无需API密钥运行",
+    "导出PNG/PDF/PSD/CBZ/EPUB/MP4/YouTube包装包等多种格式"
+   ],
+   "use_cases": [
+    "自托管制作长篇一致的AI插绘漫画或条漫",
+    "生成带配音与章节信息的解说视频并发布YouTube",
+    "导出印刷级PDF/PSD用于出版或后期加工"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d postgres redis kokoro",
+     "lines": [
+      184
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README部署步骤启动postgres redis供应用自身使用，数据库是本应用的存储依赖",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted production tool for consistent AI-generated manhwa, manga, webtoons and illustrated recaps. It is not \"story → giant prompt → comic.png\": the story becomes structured state (cast, world, chapters, scenes, pages, panel specs), canonical references pin identity, panels are generated cheaply and versioned, and lettering, layout, narration and exports are deterministic.",
+   "evidence_lines": [
+    23
+   ]
+  },
+  "fn": "pr0h0/OpenManga",
+  "sha": "1d7a2799819c",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "90460d8ee34c": {
+  "identity": {
+   "one_liner": "开源自托管所见即所得简历编辑器，支持模板、Markdown 导入与 PDF 导出",
+   "review": "AnonResume 是一个开源在线简历编辑器，提供实时预览、模板、Markdown 导入、版本历史、PDF 导出和公开分享链接，并包含账号、角色权限、审计与 MFA 管理后台。面向希望自托管、掌控数据的个人用户和管理员，基于 Next.js + Drizzle + PostgreSQL 构建，PDF 与 AI 功能依赖独立 Worker 进程，当前所有版本为尝鲜测试版。",
+   "highlights": [
+    "提供 A4 画布实时编辑预览、多种模板、章节与样式细调及 Markdown 导入（含木及简历格式解析）",
+    "支持版本历史、公开只读链接分享，以及带排队、取消和重试的 PDF 导出任务系统",
+    "包含角色权限、虚拟 MFA、审计记录、平台配置加密存储与版本回滚等管理能力"
+   ],
+   "use_cases": [
+    "个人用户在线制作简历并导出 PDF 或发布公开链接",
+    "部署者自行托管简历服务并掌控数据与运行环境",
+    "需要 AI 辅助起草和优化简历内容的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 14+ ／ - PostgreSQL 14 或更高版本 ／ 业务数据保存在 `postgres-data` 卷，自动生成的部署信任根保存在 `deployment-secrets` 卷；两者都应备份，丢失配置主密钥可能导致已加密的平台配置无法恢复。",
+     "lines": [
+      13,
+      44,
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明业务数据、任务队列与检查点均持久化在 PostgreSQL 中，属使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-or-later，Logo 与品牌素材受单独 BRAND-NOTICE.md 约束",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AnonResume 是一款开源的在线简历编辑器。你可以像编辑文档一样整理经历，实时查看最终排版，从模板开始创作或导入已有 Markdown 内容，也可以让 AI 助手协助起草和优化内容，最后将简历发布为公开链接或导出为 PDF。 ／ 三个进程需要连接同一个 PostgreSQL 数据库，使用一致的部署信任根，并从数据库读取已发布的平台配置。PDF Worker 可以运行多个进程，但 PDF 最大并发数通过 PostgreSQL 在全局范围内限制，而不是每个 Worker 单独计算。AI Worker 使用 PostgreSQL 持久化任务和检查点，并通过数据库锁协调执行与维护，不依赖单独的 Redis 或定时任务服务；`bun run ai:maintenance` 仅保留用于运维诊断，不应作为生产正确性的前提。 ／ AnonResume 使用 Next.js 16、React 19、TypeScript、Ant Design、Tiptap、Zustand、Better Auth、Drizzle ORM、PostgreSQL 与 Playwright 构建，并使用 Bun 管理依赖和运行脚本。",
+   "evidence_lines": [
+    21,
+    164,
+    181
+   ]
+  },
+  "fn": "Sapphire-Learning-Hub/AnonResume",
+  "sha": "90460d8ee34c",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

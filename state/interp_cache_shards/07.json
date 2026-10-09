@@ -9218,5 +9218,73 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "98b40cd62641": {
+  "identity": {
+   "one_liner": "Transport Fever 3 第二屏实时仪表盘，mod 导出 + 本地配套程序",
+   "review": "这是一个面向 Transport Fever 3 玩家的第二屏仪表盘，由游戏内 Lua 模组和 Windows 配套程序组成：模组定期把游戏状态快照写入文件，collector.py 读取后存入本地 SQLite 数据库，server.py 在浏览器中提供界面，可查看资金、线路、载具、车站等并可选远程控制游戏。仅支持 Windows，需从 Releases 下载使用。",
+   "highlights": [
+    "Lua 模组通过官方 TF3 脚本 API 导出游戏状态快照，配套程序解析并存储至本地 SQLite 数据库",
+    "在浏览器中提供资金、线路、载具、车站、城镇、产业等实时与历史数据视图，支持中文存档显示",
+    "可选游戏远程控制（速度、镜头、载具、停靠点配置），仅监听 127.0.0.1，数据不出本机"
+   ],
+   "use_cases": [
+    "TF3 玩家第二屏实时监控公司/线路/载具状态",
+    "从仪表盘远程控制游戏（暂停、镜头、载具操作）",
+    "查看最长 14 天的运营历史数据与告警"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Companion program (this repo)**|Your PC, Windows|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Python 3.12 st ／ (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it. ／ collector/ collector.py (tf3dash_live.lua + tf3dash_slow_*.lua -> SQLite), luatable.py (Lua parser), tf3paths.py (folder detection), schema.sql",
+     "lines": [
+      36,
+      48,
+      149
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为本项目自身存储历史快照的本地数据库，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Mod `Second Screen Dashboard`**|mod.io (in-game Mod Hub) or `mod/` in this repo|A Lua game script that writes a snapshot of the game state to `<userdata>/dashboard_export/live.lua` every few seconds, and (if you enable it) executes commands written to `cmd.lua`. Uses only the official TF3 scripting API. Never modifies the savegame.| ／ |**Companion program (this repo)**|Your PC, Windows|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Python 3.12 standard library only — the release zip ships a bundled Python, nothing to install.| ／ |**Companion program (this repo)**|Your PC, Windows|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Python 3.12 standard library only — the release zip ships a bundled Python, nothing to install.|",
+   "evidence_lines": [
+    35,
+    36,
+    36
+   ]
+  },
+  "fn": "M1r077/tf3-dashboard",
+  "sha": "98b40cd62641",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

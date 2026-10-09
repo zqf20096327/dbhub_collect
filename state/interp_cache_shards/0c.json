@@ -9856,5 +9856,209 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2ed73b631c7e": {
+  "identity": {
+   "one_liner": "CLIProxyAPI 用量统计插件，本地 SQLite 存储",
+   "review": "该仓库是一个 CLIProxyAPI 插件，通过 usage.handle 回调在本机 SQLite 中记录请求的 Token 用量，并提供带 shadcn/ui 界面的仪表盘，展示趋势、模型/匿名 Key/请求明细。供使用 CLIProxyAPI 的用户在本地查看用量数据；数据不上传，支持插件商店或手动安装二进制，限 macOS 与 Linux。",
+   "highlights": [
+    "通过 usage.handle 插件回调实时写入本地 SQLite，无需额外进程",
+    "提供仪表盘页面，支持模型/匿名 Key/请求明细筛选与日/小时/月粒度趋势",
+    "支持插件商店安装与手动二进制安装，可从源码构建"
+   ],
+   "use_cases": [
+    "查看 CLIProxyAPI 实例的 Token 用量趋势与请求明细",
+    "对请求用量按模型、匿名 Key、日期范围进行本地统计",
+    "在本地保留用量数据且不上传第三方平台"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **本地优先**：用量数据保存在本机 SQLite，不上传第三方分析平台；插件仅随你的 CLIProxyAPI 运行。 ／ |`plugins.configs.usage-report.db_path`|SQLite 路径，默认 `~/.cli-proxy-api/usage-report/usage.sqlite`| ／ - 用量事件保存在 `db_path` 指向的本地 SQLite（表 `usage_events`），页面 API 在返回前将 Key 转换为稳定的匿名分组（`key-xxxxxxxxxx` 或 `未知 Key`）。",
+     "lines": [
+      5,
+      68,
+      73
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 CLIProxyAPI 提供用量采集与仪表盘功能的插件，SQLite 仅作为其本地数据存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT；界面组件基于 shadcn/ui（MIT）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**本地优先，轻量运行。** A local-first, lightweight **CLIProxyAPI plugin** for token usage analytics. ／ - **本地优先**：用量数据保存在本机 SQLite，不上传第三方分析平台；插件仅随你的 CLIProxyAPI 运行。 ／ - **实时采集**：通过 `usage.handle` 插件回调，请求完成的瞬间写入数据库——无轮询、无队列窗口、不丢数据。",
+   "evidence_lines": [
+    3,
+    5,
+    6
+   ]
+  },
+  "fn": "andyWang1688/cpa-usage",
+  "sha": "2ed73b631c7e",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "868f725f79fe": {
+  "identity": {
+   "one_liner": "延迟与吞吐量教学实验套件，含核心银行模拟 API 与可观测性栈",
+   "review": "该仓库为 FIAP/Alura 培训项目提供完整的实验基础设施，包含 Spring Boot 模拟银行 API、PostgreSQL、Redis、Grafana、Jaeger、Prometheus 等服务，配合 k6 压测脚本与分步实验手册，用于延迟吞吐量测量、SLO 基线、分布式追踪、EXPLAIN 查询调优及 HikariCP 调参练习，面向参与 PBL 培训的学员在 GitHub Codespaces 中独立运行。",
+   "highlights": [
+    "提供 docker compose 一键启动的完整实验栈（API、PostgreSQL 16、Redis、Grafana、Jaeger、Prometheus）",
+    "包含 k6 负载测试脚本与按课时分步的学员实验手册",
+    "支持 OpenTelemetry 分布式追踪与 PostgreSQL EXPLAIN ANALYZE 查询计划分析实验"
+   ],
+   "use_cases": [
+    "在 Codespaces 中进行延迟与吞吐量基线测量和 SLO 违规实验",
+    "通过 Jaeger 追踪定位分布式调用问题",
+    "使用 EXPLAIN ANALYZE 对含 15 万条交易的 PostgreSQL 库进行查询调优练习"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "docker exec -it banco-postgres psql -U postgres -d banco_db ／ |**PostgreSQL 16**|`5432`|Banco relacional com 150k transações para tuning de queries|",
+     "lines": [
+      65,
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用 PostgreSQL 等数据库存数据的培训实验应用套件，而非为数据库生态服务的独立工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Este repositório contém a infraestrutura completa, a API simulada de Core Banking e os roteiros de laboratórios práticos para o treinamento executivo de **Latência e Vazão** (*Latency & Throughput*) em sistemas distribuídos. ／      docker exec -it banco-postgres psql -U postgres -d banco_db ／ |**PostgreSQL 16**|`5432`|Banco relacional com 150k transações para tuning de queries|",
+   "evidence_lines": [
+    10,
+    65,
+    77
+   ]
+  },
+  "fn": "rafaelmatsuyama/FIAP-Corporate-LatencyThroughput",
+  "sha": "868f725f79fe",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d72aebd2d983": {
+  "identity": {
+   "one_liner": "把 DuckLake 数据以行存储在 PostgreSQL 的 DuckDB 文件系统扩展",
+   "review": "pgvfs 是一个 DuckDB 扩展，实现 pgvfs:// 文件系统，将 DuckLake 的数据文件作为行存入 PostgreSQL，使单个 PostgreSQL 数据库即可承载整个 lake，支持一写多读，无需对象存储或网关。面向已使用 PostgreSQL 并希望以 SQL 直接读写 DuckLake 的用户。要求 PostgreSQL 14 及以上版本。",
+   "highlights": [
+    "提供 pgvfs:// DuckDB 文件系统，将 DuckLake 数据文件存为 PostgreSQL 行",
+    "支持一个写者与多个读者直接读写，无需对象存储、网关或 HTTP",
+    "提供全文搜索（tantivy 索引）与向量搜索能力"
+   ],
+   "use_cases": [
+    "在单个 PostgreSQL 上搭建 DuckLake，统一备份与角色管理",
+    "多个 DuckDB 进程并发读取同一 lake 的场景",
+    "通过 SQL 构建全文或向量搜索"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pgvfs: DuckLake on PostgreSQL ／ PostgreSQL. Put the DuckLake catalog in the same database and one PostgreSQL ／ HTTP. Any process whose PostgreSQL role can write may write. Works on PostgreSQL ／ Use an existing PostgreSQL database and a writer role that can create ／ INSTALL postgres;",
+     "lines": [
+      1,
+      4,
+      7,
+      26,
+      33
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为 DuckDB/DuckLake 提供基于 PostgreSQL 的存储文件系统扩展，属于为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# pgvfs: DuckLake on PostgreSQL ／ `pgvfs://` is a DuckDB filesystem that stores DuckLake's data files as rows in ／ INSTALL pgvfs FROM community;",
+   "evidence_lines": [
+    1,
+    3,
+    15
+   ]
+  },
+  "fn": "adonm/pgvfs",
+  "sha": "d72aebd2d983",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

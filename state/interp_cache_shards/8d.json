@@ -8689,5 +8689,167 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fe3d1995d950": {
+  "identity": {
+   "one_liner": "Coolify 备份恢复管理器，用 restic 做去重加密备份与恢复",
+   "review": "CBM 是面向 Coolify 平台的自托管备份恢复管理系统，由控制面板和每台 Docker 主机上的 Agent 组成，支持应用、服务、卷、绑定挂载和数据库（Postgres/MySQL/MariaDB/Mongo/Redis 等）的计划备份，提供本地/S3/SSH-SFTP 多目的地、增量去重加密存储、原地或克隆恢复、失败告警与自动恢复演练。供使用 Coolify 自托管部署的运维人员使用。",
+   "highlights": [
+    "支持对运行中的数据库做不停机的逻辑导出备份（pg_dump/mysqldump/mongodump 等）",
+    "使用 restic 实现增量、去重、加密存储，目的地支持本地、S3 和 SSH/SFTP",
+    "提供恢复到新资源、自动测试恢复、备份缺失/失败/超期告警与完整性校验"
+   ],
+   "use_cases": [
+    "对 Coolify 部署的应用、数据库和卷做定期计划备份",
+    "异地容灾：将备份镜像到第二目的地并在全新 Coolify 环境恢复",
+    "通过 webhook（Discord/Slack）接收备份失败或遗漏的告警"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Scheduled **database** dumps (Postgres/MySQL/MariaDB/Mongo)|✅|✅| ／ - **No restart, ever.** Standalone databases are exported live (`pg_dump`/`mysqldump`/ ／ (e.g. the Postgres in n8n) also gets its own logical dump on top of the volume copy —",
+     "lines": [
+      46,
+      66,
+      71
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Scheduled **database** dumps (Postgres/MySQL/MariaDB/Mongo)|✅|✅|",
+     "lines": [
+      46
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Scheduled **database** dumps (Postgres/MySQL/MariaDB/Mongo)|✅|✅|",
+     "lines": [
+      46
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ],
+   "eco": "tool",
+   "eco_why": "为 Coolify 部署中的数据库与应用提供备份恢复服务，属于数据库生态的运维工具而非存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CBM is a self‑hosted control panel + lightweight agents. It gives you consistent, scheduled ／ |Scheduled **database** dumps (Postgres/MySQL/MariaDB/Mongo)|✅|✅| ／ - **No restart, ever.** Standalone databases are exported live (`pg_dump`/`mysqldump`/",
+   "evidence_lines": [
+    11,
+    46,
+    66
+   ]
+  },
+  "fn": "Holo795/CBMCoolifyBackup",
+  "sha": "fe3d1995d950",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dcd3e283c938": {
+  "identity": {
+   "one_liner": "面向代理分析的引擎中立语义层运行时，将语义请求编译为SQL",
+   "review": "Metis 是一个开源语义层运行时，读取 Ossie 语义模型，对代理或应用提交的指标/维度请求执行发现、校验、解析、规划并编译成 SQL，可通过 CLI、MCP、REST 和嵌入式 Go API 使用；内置 Doris、ClickHouse、DuckDB 目标方言，执行需配置后端，编译可离线完成。适合为 AI 代理与应用构建受治理的分析查询流程的团队使用。",
+   "highlights": [
+    "提供 MCP 工具集与 REST 接口，支持语义发现、SQL 编译、指标查询、同期对比与指标变化归因",
+    "内置 Doris、ClickHouse、DuckDB 三种编译目标方言，支持带占位符参数化的 SQL 输出",
+    "支持离线模型校验与在线 EXPLAIN 验证，以及编译/运行时两种语义测试模式并可输出 JUnit 报告"
+   ],
+   "use_cases": [
+    "为 AI 代理提供受治理的指标查询与 SQL 编译服务（MCP/stdio 或 HTTP）",
+    "在 CI 中对语义项目进行离线校验、编译测试与运行时指标断言",
+    "从数据库目录元数据离线生成可评审的 Ossie 语义项目初稿"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "platform. The oracle must not favor Metis SQL spelling or output aliases.",
+     "lines": [
+      273
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "database access. Built-in targets are Doris, ClickHouse, and DuckDB.",
+     "lines": [
+      19
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Metis 位于代理/应用与分析型数据库之间，为数据库查询的语义编译与执行提供服务，自身不作为终端应用存取业务数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Metis is an open-source, Ossie-first, engine-neutral semantic layer runtime engine. ／  database access. Built-in targets are Doris, ClickHouse, and DuckDB. ／ |MCP|Give an agent tools for semantic discovery, SQL compilation, and bounded analytics over stdio or HTTP.|",
+   "evidence_lines": [
+    3,
+    19,
+    42
+   ]
+  },
+  "fn": "meaningforge/metis",
+  "sha": "dcd3e283c938",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

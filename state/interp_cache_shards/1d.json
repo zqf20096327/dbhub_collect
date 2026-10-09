@@ -7102,5 +7102,153 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b32d45562e70": {
+  "identity": {
+   "one_liner": "AI 编码代理的本地持久化 MCP 记忆服务器",
+   "review": "为 Claude Code、Codex CLI、Cursor 等 MCP 客户端提供本地持久记忆的服务器，将决策、事实、会话摘要存于本机 SQLite（团队版可选 PostgreSQL），检索融合 BM25、本地嵌入与知识图谱并通过 MCP 返回。面向日常使用编码代理的开发者和需要可本地运行记忆基线的研究者，默认档写入和检索不调用 LLM。",
+   "highlights": [
+    "通过 MCP 协议提供 77 个工具，支持 Claude Code、Codex CLI、Cursor 等 9 类客户端",
+    "检索融合 BM25 全文、本地稠密嵌入、模糊匹配与知识图谱，并支持可选交叉编码器重排",
+    "支持团队服务器模式，含个人/部门/公司分区、角色与审计日志"
+   ],
+   "use_cases": [
+    "为编码代理跨会话保存和召回项目决策与惯例",
+    "本地可复现的记忆检索基准测试",
+    "团队级共享记忆服务器部署"
+   ],
+   "cat": "应用"
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`pip install \"total-agent-memory[rerank]\"`. The PostgreSQL backend of the team ／ - **PostgreSQL** (team server backend): install the extra with",
+     "lines": [
+      48,
+      134
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Each store is one directory built around a SQLite database. Recall combines",
+     "lines": [
+      19
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite/PostgreSQL 是其存储后端，项目本身是 AI 代理记忆应用而非数据库生态组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "total-agent-memory (TAM) is an open-source memory server for AI coding agents. ／ through the Model Context Protocol (MCP), so ／ Each store is one directory built around a SQLite database. Recall combines",
+   "evidence_lines": [
+    12,
+    16,
+    19
+   ]
+  },
+  "fn": "vbcherepanov/total-agent-memory",
+  "sha": "b32d45562e70",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a7ba989b7efa": {
+  "identity": {
+   "one_liner": "基于 WPF + OWIN + SQLite 的单机物业收费与台账管理系统",
+   "review": "面向中小型住宅小区与商住项目的单机物业管理系统，提供房产/业主档案、财务收费、设备台账、应急处置、人员排班等模块。采用 WPF 客户端 + 本机 OIN 自承载后端（仅绑定 127.0.0.1），数据存于本地 SQLite，由后端独占访问，前端不直连数据库。支持离线/内网部署，提供安装包脚本与备份恢复、审计日志等运维能力，适合需要数据不出本机的物业管理人员使用。",
+   "highlights": [
+    "单机部署，业务数据全部保存在本机，仅绑定 127.0.0.1，适合内网或离线环境",
+    "覆盖财务收费、设备台账、纠纷调解、人员组织等物业业务模块，关键操作写入审计日志并支持软删留痕",
+    "提供 Inno Setup 打包脚本生成单文件安装包，内置 .NET Framework 4.8 离线安装器，含备份与恢复功能"
+   ],
+   "use_cases": [
+    "中小型住宅小区或商住项目的物业收费与台账管理",
+    "无外网或要求数据本地化的内网/离线环境部署",
+    "物业日常事务如账单发布、收款登记、设备保养年检提醒的桌面化管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|数据库|SQLite（System.Data.SQLite + Dapper），数据库由后端独占访问，前端不直接连库| ／ |数据库|System.Data.SQLite 1.0.118、Dapper 2.1.35|",
+     "lines": [
+      46,
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统使用 SQLite 存储业务数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码与文档以 MIT License 发布，品牌标识（名称、徽记、字标）不随 MIT 授权",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向中小型住宅小区与商住项目的**单机部署**物业收费与台账管理桌面系统：WPF 客户端 + 本地后端服务，业务数据全部保存在本机，不依赖外部服务器与互联网，适合内网或离线环境。 ／ |数据库|SQLite（System.Data.SQLite + Dapper），数据库由后端独占访问，前端不直接连库| ／ 脚本会依次完成：解析 `ISCC.exe` → 编译 Release → 生成向导品牌图 → 编译安装包 → 校验打包完整性并输出 SHA256 与文件清单。安装包默认按 **per-machine** 安装到 `C:\\Program Files\\PropertyManagement`，运行数据落在 `C:\\ProgramData\\PropertyManagement`，卸载时默认**保留数据**（可选一并删除并二次确认）。",
+   "evidence_lines": [
+    5,
+    46,
+    92
+   ]
+  },
+  "fn": "liuma3995-dot/anyi-property-management",
+  "sha": "a7ba989b7efa",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

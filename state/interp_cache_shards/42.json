@@ -7908,5 +7908,75 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6e5b2ea8c49a": {
+  "identity": {
+   "one_liner": "非官方《魔法运动员》中文浏览器多人游戏，React+Socket.IO 联机",
+   "review": "这是一个浏览器端的桌面游戏数字实现，包含 36 名角色、四场比赛流程与自动技能结算，支持本地同机 2–6 人游玩和由独立服务器结算、保存的好友房联机模式。同机模式存档写入浏览器 IndexedDB 并可 JSON 导入导出备份；联机服务端使用 Node 内置 SQLite 保存房间状态。适合想线下或联机游玩该桌游中文版的玩家，README 明确为非官方实现、不提供 AI 对手或公开匹配。",
+   "highlights": [
+    "支持本地同机 2–6 人与好友房联机两种模式，联机由独立服务器执行规则结算与存档",
+    "同机模式每次操作后自动保存到 IndexedDB，支持 JSON 导入导出与版本校验",
+    "规则按事件队列逐步结算，相同种子与操作可复现，长连锁可暂停续算"
+   ],
+   "use_cases": [
+    "线下同机或好友联机游玩《魔法运动员》桌游的中文数字版",
+    "通过服务器部署为朋友提供带权限校验和 7 天存档的联机房间",
+    "以 JSON 导出备份本机游戏进度并在不同设备间迁移（本地模式）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "技术：React、TypeScript、Vite、Vitest、Playwright；联机服务使用 Socket.IO 与 Node 内置 SQLite。使用 Node.js 24、pnpm 11.19.0；依赖由 `pnpm-lock.yaml` 固定。没有 Python 运行时依赖。",
+     "lines": [
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是浏览器游戏应用，SQLite 仅作为联机服务端保存游戏状态的内置依赖，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码、界面与 SVG 插画采用 MIT，非官方实现",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "二维中文多人游戏：36 位运动员、双面赛道、2–6 人、四场比赛、自动技能结算与私密出场选择。支持本地同机，以及由独立服务器结算和保存的好友房联机模式。原创 SVG 图案随项目保存，不依赖外部图片。 ／ 技术：React、TypeScript、Vite、Vitest、Playwright；联机服务使用 Socket.IO 与 Node 内置 SQLite。使用 Node.js 24、pnpm 11.19.0；依赖由 `pnpm-lock.yaml` 固定。没有 Python 运行时依赖。 ／ - `server`：联机房间、身份、权限校验与事务存档；完整联网游戏状态只在服务端执行。",
+   "evidence_lines": [
+    3,
+    47,
+    57
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "pedestrian6/magical-athlete",
+  "sha": "6e5b2ea8c49a",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

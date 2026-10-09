@@ -9153,5 +9153,140 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3cbb18dad153": {
+  "identity": {
+   "one_liner": "基于 tree-sitter 的语言无关代码导航 CLI，生成本地 SQLite 索引",
+   "review": "cymbal 是一个命令行代码导航工具，用 tree-sitter 解析代码并将符号、导入、引用写入本地 SQLite 索引（FTS5），提供 investigate/trace/impact 等命令做符号查询、调用图与影响分析，输出支持 JSON 和 Mermaid 图。面向开发者和 AI agent，可通过 Homebrew/AUR/PowerShell/Go/Docker 安装，支持多语言语料基准测试。",
+   "highlights": [
+    "用 tree-sitter 解析代码生成本地 SQLite 索引（FTS5 支持符号搜索），查询前增量重解析变更文件",
+    "提供 investigate/trace/impact/refs/impls 等符号查询命令，全部支持 -- 结构化输出和 --graph 依赖图",
+    "提供 hook 命令和 Go 库，用于接入 AI agent 和编辑器工具；支持 git worktree 索引联邦查询"
+   ],
+   "use_cases": [
+    "在终端中快速理解陌生仓库的符号定义、引用与调用关系",
+    "为 AI agent 提供聚焦的代码导航命令层，减少搜索/读取调用链",
+    "作为 Go 库嵌入编辑器工具、机器人或内部自动化系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "into a local SQLite index, then answers symbol lookups, cross-references,",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明工具将索引自数据存储于本地 SQLite 数据库（L10、L74、L219），SQLite 是其内部存储组件而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "cymbal is a fast, language-agnostic code navigator. It parses your codebase ／ into a local SQLite index, then answers symbol lookups, cross-references, ／ 1. **Index** — tree-sitter parses each file into an AST. Cymbal extracts",
+   "evidence_lines": [
+    9,
+    10,
+    218
+   ]
+  },
+  "fn": "1broseidon/cymbal",
+  "sha": "3cbb18dad153",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b350710c59be": {
+  "identity": {
+   "one_liner": "面向 .NET 开发者的 Oracle 数据库探索工具，集成 EF Core 模型",
+   "review": "FerretSharp 是一个运行在 Windows 上的 Oracle 数据库浏览与编辑桌面工具，提供工作区、外键导航、沙箱编辑、SQL 编辑器、执行计划查看和 schema 对比，并能加载 EF Core 项目模型显示实体名和运行 LINQ 查询。面向日常使用 Oracle 的 .NET 开发者；要求 Oracle Database 19c 或更高版本，界面为德语，采用 MIT 许可。",
+   "highlights": [
+    "提供按连接划分的工作区，每个工作区拥有独立数据库会话和显式事务，生产连接默认只读",
+    "支持外键导航、SQL 编辑器（含绑定变量与执行计划）、schema 矩阵对比与 DDL 建议",
+    "可加载 EF Core 编译模型，显示实体/属性名、枚举值并提供 LINQ 控制台与代码生成"
+   ],
+   "use_cases": [
+    ".NET 开发者日常浏览和查询 Oracle 数据库表、视图与 PL/SQL 对象",
+    "在受控事务的沙箱中编辑数据，避免误写生产库",
+    "对比开发、测试、生产环境的 schema 差异并生成对齐 DDL 提案"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "An Oracle database explorer for .NET developers – with workspaces, foreign-key navigation, ／ developer works with an Oracle database day to day: ／ read-only by default, enforced by Oracle itself.",
+     "lines": [
+      5,
+      22,
+      29
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明这是一个 Oracle database explorer，为操作 Oracle 数据库提供浏览、编辑与管理功能，属于服务数据库的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，内嵌的 AG Grid Community 与 Monaco Editor 亦为 MIT 许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " An Oracle database explorer for .NET developers – with workspaces, foreign-key navigation, ／ developer works with an Oracle database day to day: ／ - Oracle Database 19c or later (12.2 should work). Plain TCP connections (host/port with service name or SID, or a TNS",
+   "evidence_lines": [
+    5,
+    22,
+    111
+   ]
+  },
+  "fn": "JuliusFo/FerretSharp",
+  "sha": "b350710c59be",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

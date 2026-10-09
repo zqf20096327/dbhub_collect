@@ -9856,5 +9856,139 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f7f5079d1a06": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码代理工作记忆，基于 SQLite 与本地嵌入",
+   "review": "MAMA 是运行在个人电脑上的工作代理，跟踪连接工具中的对话、文件与日程，记录工作项的变更历史与决策，并通过 Telegram/Discord/Slack 等消息渠道交互与发送报告。同时为 Claude Code 提供跨会话开发记忆（MCP 服务器/插件形式）。数据以 SQLite 本地存储并做本地检索，不提供托管服务；需要 Node.js 22.13+ 及已登录的 claude 或 codex CLI。",
+   "highlights": [
+    "提供 MCP 服务器与 Claude Code 插件，为编码代理提供跨会话决策与检查点记忆",
+    "记录以 SQLite 存于本机，包含原始观察、工作历史与本地搜索索引，支持本地嵌入检索",
+    "支持连接 Chatwork、Slack、Discord、Trello、Notion、Google 系列等数据源，并提供本地 Web 查看器"
+   ],
+   "use_cases": [
+    "为 Claude Code/Codex 等 MCP 客户端维护跨会话的开发决策记忆",
+    "在本地聚合多个工作来源的变更历史并接收定时报告",
+    "以消息机器人口径查询与修正个人工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The record SQLite on your machine: originals · work history · guidance · reports · run logs · local search index",
+     "lines": [
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明记录以 SQLite 存储于本机，项目是使用 SQLite 存数据的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The record         SQLite on your machine: originals · work history · guidance · reports · run logs · local search index ／ MCP server `{\"mcpServers\":{\"mama\":{\"command\":\"npx\",\"args\":[\"@jungjaehoon/mama-server\"]}}}`. ／ npm install -g @jungjaehoon/mama-os",
+   "evidence_lines": [
+    87,
+    79,
+    66
+   ]
+  },
+  "fn": "jungjaehoon-lifegamez/MAMA",
+  "sha": "f7f5079d1a06",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b3164d7b7a0f": {
+  "identity": {
+   "one_liner": "自托管多 Agent PR 审查工作台，GitHub 只读接入",
+   "review": "MergePilot 是自托管的代码 PR 审查工作台，通过 GitHub App 只读接入仓库，由 Reviewer、Fixer、Verifier、Leader 四个 Agent 角色产出审查发现、修复建议与验证证据，汇集到部署者自管的 Console，合并决策保留给维护者。面向需要审查留痕的开发团队，当前为 Developer Beta，需自行部署 Docker Compose、Node.js 与 LLM 端点。",
+   "highlights": [
+    "通过 GitHub App 只读接入，不回写 Check Run、不自动合并或批准 PR",
+    "提供四个 Agent 角色（Reviewer/Fixer/Verifier/Leader）的审查管线，高危 finding 修复需人工审批",
+    "支持 GitHub OAuth 登录、五角色 RBAC、应用层多租户隔离与审计，以及可选本地 RAG 知识库"
+   ],
+   "use_cases": [
+    "团队自托管 PR 审查流程，汇集审查发现与验证证据",
+    "需要审查留痕与人工合并决策的代码协作场景",
+    "本地检索团队规范作为审查参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Beta 不含企业能力**：无 PostgreSQL RLS、SSO/SCIM、HA 或配额限流；当前多租户隔离在应用层实施。",
+     "lines": [
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 Console、数据库和部署配置由部署者自行管理，数据库仅为其存储数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MergePilot 通过 GitHub App 只读接入仓库，把 PR 事件、审查发现、修复建议与验证证据汇集到你自己的 Console。 ／ Console、数据库和部署配置由你自行管理；官网是文档入口，**不是托管版 Console 或登录入口**。 ／ - **Beta 不含企业能力**：无 PostgreSQL RLS、SSO/SCIM、HA 或配额限流；当前多租户隔离在应用层实施。",
+   "evidence_lines": [
+    10,
+    41,
+    70
+   ]
+  },
+  "fn": "nghqqa/MergePilot",
+  "sha": "b3164d7b7a0f",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9580,5 +9580,142 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "70764732b101": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 的博客 REST API，使用 PostgreSQL 存储数据",
+   "review": "一个用 Java Spring Boot 构建的博客后端服务，提供博客文章的增删改查接口和基于 JWT 的用户认证。README 说明它面向学习者和开源新手，通过 Docker Compose 一键启动 API、PostgreSQL、pgAdmin、MailHog 等服务，并内置 Swagger 文档、速率限制与熔断保护。项目自述仍在开发中，功能与文档可能变动，且仅提供 API 不含前端页面。",
+   "highlights": [
+    "提供博客 CRUD 接口及基于 JWT 的用户认证与鉴权",
+    "通过 Docker Compose 启动 API 与 PostgreSQL、pgAdmin、MailHog 等配套服务",
+    "实现 API 速率限制与熔断保护（Resilience4j），并提供 Swagger/OpenAPI 文档"
+   ],
+   "use_cases": [
+    "作为博客或内容类应用的 REST 后端",
+    "用于学习 Spring Boot、Spring Security、JPA 与 Docker Compose 的实践项目",
+    "作为前后端分离架构中供独立前端调用的 API 服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL ／ |PostgreSQL|`localhost:5432`| ／ Stop the services and delete the PostgreSQL volume:",
+     "lines": [
+      15,
+      57,
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 PostgreSQL 存储博客数据的博客应用后端，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT License",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- PostgreSQL ／ |PostgreSQL|`localhost:5432`| ／ **This project is in active development and not yet complete. Features and documentation may change.**",
+   "evidence_lines": [
+    15,
+    57,
+    186
+   ]
+  },
+  "fn": "huseynovvusal/spring-blog-api",
+  "sha": "70764732b101",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7bfc1ff5f958": {
+  "identity": {
+   "one_liner": "自托管二手市场价格追踪器，LLM 代理驱动无头浏览器抓取 listings",
+   "review": "Snagr 是一个自托管价格追踪应用：用户描述关注目标与目标价，常驻代理通过 Playwright MCP 无头浏览器搜索并复查二手市场 listings，React 仪表盘实时展示价格历史与代理状态。数据以 PostgreSQL（含 pgvector 扩展）为唯一接口层，backend/agent 通过数据库表和 NOTIFY/触发器协作。适合自建 homelab、想用 LLM 自动盯价跟踪闲置商品的个人用户；要求 PostgreSQL + pgvector、Playwright MCP 端点和一个 LLM 提供商。",
+   "highlights": [
+    "代理通过 Playwright MCP 驱动真实浏览器抓取并复查 listings，模型可经 LangChain init_chat_model 接入多家提供商",
+    "backend 与 agent 以 PostgreSQL 数据库为唯一通信接口，使用 jobs 表、NOTIFY 与触发器驱动实时更新",
+    "通过 Model Context Protocol 对外暴露与 Web 应用相同的操作，供 MCP 客户端以 scoped API token 使用"
+   ],
+   "use_cases": [
+    "跨多个二手市场站点跟踪商品价格并在达到目标价时收到通知",
+    "由常驻代理自动搜索新 listings 并定期复查已跟踪 listings 的价格",
+    "通过 MCP 客户端（如 Claude Code）程序化浏览 watches 并向 hunter 请求任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL with the pgvector extension** — required whether or not the vision sidecar is enabled (the schema carries embedding columns either way). The `pgvector/pgvector` image ships it preinstalled; on an existing server, install the distro package (e.g.",
+     "lines": [
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是以 PostgreSQL 存储自身数据的价格追踪应用，数据库是其组件间通信接口而非被服务的对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted price tracker for secondhand-marketplace hunting. You describe what you're watching for and at what price; an always-on agent drives a real headless browser to find new listings and re-check known ones, and the web UI shows every hunt's state at a glance — current best price, drift against your target, price history, and what the hunter is doing right now. ／ The backend and the agent never talk to each other directly; the database is the whole interface. The backend writes a row to the `jobs` table (\"hunt this watch\", \"check this listing now\"), and the agent — woken by `NOTIFY` — claims it, works it, and writes what it found back. Hunt progress and price checks reach the browser the same way: database triggers wake the backend, which pushes them over a server-sent event stream. Notifications work alike — the agent queues an outbox row, and the backend delivers it. ／ - **PostgreSQL with the pgvector extension** — required whether or not the vision sidecar is enabled (the schema carries embedding columns either way). The `pgvector/pgvector` image ships it preinstalled; on an existing server, install the distro package (e.g. `postgresql-18-pgvector` on Debian/Ubuntu, matching your major version) and enable it once per database as a superuser:",
+   "evidence_lines": [
+    8,
+    44,
+    55
+   ]
+  },
+  "fn": "oldmoldycake/Snagr",
+  "sha": "7bfc1ff5f958",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

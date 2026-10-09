@@ -9505,5 +9505,168 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9c2bfcce7aad": {
+  "identity": {
+   "one_liner": "开源企业世界模型：基于Postgres与pgvector的双时态知识图谱平台",
+   "review": "Utopia 是 DeepLethe 开发的知识工程系统，将文档摄入为带双时间线的本体知识图谱，提供全文检索、向量检索、冲突检测、MCP 代理接入和审查队列。部署形态为一个 Rust 二进制加一个 Postgres（向量存 pgvector），通过 Docker 镜像运行，需自配 chat/embedding 模型端点，可离线部署。面向需要可审计知识治理与决策留痕的企业团队。",
+   "highlights": [
+    "提供双时态知识图谱，每条事实记录生效时间与录入时间，修正链接旧版本而非覆盖",
+    "支持通过 MCP 为每个知识库暴露只读工具，供 Claude Desktop、Cursor 等代理连接",
+    "支持挂载外部数据库（Postgres、MySQL、ClickHouse、Trino 等）经本体映射后由对话查询"
+   ],
+   "use_cases": [
+    "合同链条、人事与财务记录等随时间变更的企业知识管理与按日期回溯问答",
+    "为代理（agent）提供带证据与稳定标识的结构化知识读取与提案式写入",
+    "机器人、监控、安全系统的时序观测入库与状态回溯查询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "One Rust binary and one Postgres. Full-text search is embedded in the binary, vectors go in pgvector, and the job queue is a table: nothing else to run. ／ |**Ontology-driven querying**|Mount a database on a base (Postgres, MySQL and the engines that speak its protocol, ClickHouse, Trino for Iceberg / Delta Lake / Hive, Databricks, Snowflake) and chat can query it alongside the documents. The agent proposes how i ／ # 1. Postgres with pgvector",
+     "lines": [
+      46,
+      61,
+      93
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**Ontology-driven querying**|Mount a database on a base (Postgres, MySQL and the engines that speak its protocol, ClickHouse, Trino for Iceberg / Delta Lake / Hive, Databricks, Snowflake) and chat can query it alongside the documents. The agent proposes how i",
+     "lines": [
+      61
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|**Ontology-driven querying**|Mount a database on a base (Postgres, MySQL and the engines that speak its protocol, ClickHouse, Trino for Iceberg / Delta Lake / Hive, Databricks, Snowflake) and chat can query it alongside the documents. The agent proposes how i",
+     "lines": [
+      61
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**Ontology-driven querying**|Mount a database on a base (Postgres, MySQL and the engines that speak its protocol, ClickHouse, Trino for Iceberg / Delta Lake / Hive, Databricks, Snowflake) and chat can query it alongside the documents. The agent proposes how i",
+     "lines": [
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统以 Postgres 作为自身存储基座（pgvector、任务队列表），属于使用数据库存数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One Rust binary and one Postgres. Full-text search is embedded in the binary, vectors go in pgvector, and the job queue is a table: nothing else to run. ／ |**Ontology-driven querying**|Mount a database on a base (Postgres, MySQL and the engines that speak its protocol, ClickHouse, Trino for Iceberg / Delta Lake / Hive, Databricks, Snowflake) and chat can query it alongside the documents. The agent proposes how its tables map onto the ontology, and you confirm. The method behind it, Ontology2SQL, is state of the art on BIRD Mini-Dev for SQLite and PostgreSQL (submission).| ／ docker compose --profile app up -d",
+   "evidence_lines": [
+    46,
+    61,
+    77
+   ]
+  },
+  "fn": "deeplethe/utopia",
+  "sha": "9c2bfcce7aad",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "42129ad84579": {
+  "identity": {
+   "one_liner": "AzerothCore 服务器的 3D 世界与任务编辑器，导出 SQL",
+   "review": "这是一个面向 AzerothCore 私服管理者的桌面应用（Electron），提供 3D 视图编辑 NPC、物件、刷点、巡逻路径，以及任务链构建、任务脚本和战斗设计功能，最终生成 SQL 补丁或写入开发库，只读取线上世界数据库。依赖可经 MySQL 访问的 AzerothCore 世界数据库，游戏客户端文件可选（无则仅任务工具可用）。",
+   "highlights": [
+    "提供 3D 世界视图，可放置、移动 NPC 与物件并绘制巡逻路径",
+    "支持任务链、任务脚本场景与 NPC 战斗设计的可视化编辑",
+    "支持将变更导出为 SQL 补丁或应用到开发数据库，仅读取线上库"
+   ],
+   "use_cases": [
+    "为 AzerothCore 服务器制作和修改任务链",
+    "在不手写 SQL 的情况下调整 NPC/物件刷点与巡逻",
+    "在测试服上通过 GM 命令验证新任务"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- An AzerothCore world database (including the Conquest of AzerothCore fork) reachable over MySQL.",
+     "lines": [
+      57
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AzerothCore 世界数据库提供可视化编辑并生成 SQL，是服务于数据库内容的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A world editor for your AzerothCore server: build quests and shape the world around them, then export it all as SQL. ／ - **Export.** Review every change, then export an SQL patch or apply it to a dev database. Your live world database is only ever read. ／ - An AzerothCore world database (including the Conquest of AzerothCore fork) reachable over MySQL.",
+   "evidence_lines": [
+    3,
+    29,
+    57
+   ]
+  },
+  "fn": "DMCK96/azeroth-world-editor",
+  "sha": "42129ad84579",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9739,5 +9739,72 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6b636f158105": {
+  "identity": {
+   "one_liner": "论坛存档只读浏览与全文检索引擎，基于 SQLite FTS5",
+   "review": "一个只读的 Web 应用，用于浏览和搜索存档的论坛帖子、主题与用户资料。它将存档数据导入单个 SQLite 文件并用 FTS5 建立全文索引，支持短语、前缀、布尔查询与片段高亮，还提供归档统计仪表板与 CSV 导出。适用于自托管浏览社区历史存档的研究者与档案管理员；限制在于只读、不含数据集本身。",
+   "highlights": [
+    "支持基于 SQLite FTS5 的全文检索，包含短语、前缀与布尔运算",
+    "提供适配器机制读取 HTML/JSON/CSV/文本等多种存档格式并写入统一 schema",
+    "只读设计：数据库以 immutable 模式打开，全部查询使用参数化语句"
+   ],
+   "use_cases": [
+    "自托管浏览与检索已关闭社区的存档帖子与用户资料",
+    "对论坛历史进行统计研究并导出 CSV 数据",
+    "通过插件适配器将多种格式的存档导入统一可检索库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ The engine is deliberately simple: a single SQLite file with FTS5 full-text indexing. That means queries return in milliseconds even across millions of rows, and the entire dataset can travel on a USB stick. No external database server, no cloud dependency, no ／ - SQLite FTS5 virtual tables power sub-100ms queries across large archives.",
+     "lines": [
+      10,
+      20,
+      25
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明全部数据存于单个 SQLite 文件并以其为核心存储层，SQLite 是该应用的存储依赖而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The engine is deliberately simple: a single SQLite file with FTS5 full-text indexing. That means queries return in milliseconds even across millions of rows, and the entire dataset can travel on a USB stick. No external database server, no cloud dependency, no tracking layer sitting between you and the content. ／ A single SQLite file holds everything: threads, posts, users, attachments metadata, and the FTS5 index structures.",
+   "evidence_lines": [
+    20,
+    95
+   ]
+  },
+  "fn": "siasithole2-ship-it/V3rmillion-Vault-Index",
+  "sha": "6b636f158105",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

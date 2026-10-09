@@ -9630,5 +9630,191 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "27293211c713": {
+  "identity": {
+   "one_liner": "Rust 扩展标准库，提供多领域基础包",
+   "review": "该项目为 Rust 开发者提供一组扩展标准库软件包，覆盖 base64、csv、crypto、cel 等通用基础能力。软件包直接从源码引入以规避中心化包仓库的供应链风险，多数支持 no_std 环境。适用于需要轻量基础组件的 Rust 开发者；README 中未涉及 PostgreSQL 相关内容，topic 标签与正文证据不符。",
+   "highlights": [
+    "提供 base64、csv、crypto、cel 等多领域软件包，从 git 源码直接引入",
+    "多数软件包支持 no_std，部分支持无 alloc 环境",
+    "不使用中心化包仓库，支持固定到具体 commit 引入"
+   ],
+   "use_cases": [
+    "Rust 项目需要基础编码/加解密/解析等组件",
+    "嵌入式或 wasm 等 no_std 环境",
+    "需要按 commit 锁定依赖来源的供应链场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 为通用 Rust 基础库集合，未提及数据库相关功能",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（部分 fork 包保留各自原始许可）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Rust's (unofficial) extended standard library: simplicity, performance and supply chain security for everyone ／ Inspired by Go's extensive standard library, we are building Rust's extended standard library to bring simplicity, performance and supply chain security to every Rust developer. ／ To avoid namespace clashes and supply chain risks, we do not use a centralized package repository. Import packages directly from source, for example:",
+   "evidence_lines": [
+    1,
+    3,
+    11
+   ]
+  },
+  "fn": "rust-stdx/stdx",
+  "sha": "27293211c713",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3907bbfc4026": {
+  "identity": {
+   "one_liner": "Agent 优先的 Rust 语音识别编排栈，内置纯 Rust Whisper 引擎与 SQLite 运行历史",
+   "review": "franken_whisper 是一个单一 Rust 二进制的语音转文字（ASR）工具，内置纯 Rust Whisper 推理引擎，支持 whisper.cpp 等多后端的贝叶斯路由、NDJSON 实时流式输出、说话人分离，并将每次转写记录持久化到 SQLite。面向 LLM agent 与需要机器可读输出的自动化流水线用户。需注意其说话人分离功能标注为未认证状态。",
+   "highlights": [
+    "内置纯 Rust 进程内 Whisper 引擎，无 FFI/Python/子进程，支持 ggml 模型加载与 DTW 词级时间戳",
+    "自适应贝叶斯后端路由，覆盖 whisper.cpp、insanely-fast-whisper、whisper-diarization 等后端",
+    "实时 NDJSON 流式输出（schema v1.1.0），SQLite 持久化运行历史并支持 JSONL 导出/导入"
+   ],
+   "use_cases": [
+    "LLM agent 集成语音转写，需结构化流式 JSON 输出",
+    "批量音频转写与说话人分离流水线",
+    "需要崩溃后可恢复、可回放的转写任务历史记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Agent-first Rust ASR stack with a real in-process pure-Rust Whisper engine (no FFI, no Python, no subprocess), adaptive Bayesian backend routing, real-time NDJSON streaming (true-live mic/pipe streaming via `fw robot listen`; batch robot mode streams sequenc ／ - **Durable run history.** Every transcription persists to SQLite with full event logs, replay envelopes, and JSONL export/import, even when the process crashes mid-run.",
+     "lines": [
+      10,
+      80
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 存储转写运行历史，本身是 ASR 应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT+Rider 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`franken_whisper` is a single Rust binary that wraps every major Whisper backend behind a unified, agent-first interface — and ships its own engine: ／ - **Durable run history.** Every transcription persists to SQLite with full event logs, replay envelopes, and JSONL export/import, even when the process crashes mid-run.",
+   "evidence_lines": [
+    74,
+    80
+   ]
+  },
+  "fn": "Dicklesworthstone/franken_whisper",
+  "sha": "3907bbfc4026",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "71f07d774bbd": {
+  "identity": {
+   "one_liner": "SQLite 的最小化安全 Docker 镜像，内置 sqlite3 shell 与常用扩展",
+   "review": "该项目提供一个包含 sqlite3 shell、FTS5 等扩展的 SQLite Docker 镜像，用于在 Coolify 等容器主机上以非特权用户、只读根文件系统的方式运行 SQLite 数据库文件。适用于需要在容器中部署、备份或 vacuum SQLite 的运维场景。当前为 v0 阶段，README 声明 v1.0.0 前可能存在破坏性变更，需固定具体版本标签使用。",
+   "highlights": [
+    "以非特权用户 65532 在 scratch 基础上运行，支持只读根文件系统",
+    "内置 FTS3/FTS4/FTS5、R*Tree、Geopoly、JSON、math、dbstat、soundex 扩展",
+    "支持多数据库容器管理与 linux/amd64、arm64、arm/v7、riscv64 多架构构建"
+   ],
+   "use_cases": [
+    "在 Coolify 或 Kubernetes 等容器环境中托管 SQLite 数据库文件",
+    "为缺少 sqlite3 shell 的应用容器提供备份、vacuum 等维护操作环境"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# SQLite ／ SQLite ／ Minimal, production-ready, hardened and secure SQLite Docker image. Made for SQLite database deployments on Coolify and any other container host.",
+     "lines": [
+      1,
+      4,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该 Docker 镜像为 SQLite 数据库文件提供带 shell 和扩展的运行/维护环境，服务于 SQLite 部署运维。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Minimal, production-ready, hardened and secure SQLite Docker image. Made for SQLite database deployments on Coolify and any other container host. ／ SQLite has no server and the database is just a file. Application images rarely ship the `sqlite3` shell to run backup or vacuum commands, so this image gives the database file a minimal and secure home with the shell and the extensions built in. ／ > `peakimages/sqlite` is currently **v0** and subject to breaking changes prior to `v1.0.0`. Pin to a specific version like `peakimages/sqlite:3.53.4-v0.1.0` to avoid breaking changes.",
+   "evidence_lines": [
+    11,
+    18,
+    14
+   ]
+  },
+  "fn": "peakimages/sqlite",
+  "sha": "71f07d774bbd",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

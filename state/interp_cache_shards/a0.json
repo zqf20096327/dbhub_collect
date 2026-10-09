@@ -8249,5 +8249,129 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3b5bd1ff4f86": {
+  "identity": {
+   "one_liner": "格斗游戏排位对局实时追踪工具",
+   "review": "用于实时追踪 Street Fighter 6 与 Tekken 8 玩家的排位对局，通过网页抓取获取对局数据，存储对局日志与统计信息，并支持通过 OBS Browser Source 展示实时数据，面向格斗游戏主播与玩家。基于 Wails/React 构建，本地开发使用 mise 管理环境，安装运行依赖 mise 任务命令。",
+   "highlights": [
+    "实时追踪 SF6 与 Tekken 8 玩家对局",
+    "存储对局日志与统计数据",
+    "支持 OBS Browser Source 与 CSS 自定义主题展示实时数据"
+   ],
+   "use_cases": [
+    "主播实时展示对局数据到 OBS",
+    "追踪特定玩家排位战绩",
+    "本地保存个人对局统计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明其为追踪格斗游戏对局的应用，SQLite 仅为本地存储日志统计的依赖",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Track any Street Fighter 6 or Tekken 8 user's live matches. ／ - Storing match logs and statistics ／ 1. Install mise and run `mise install`",
+   "evidence_lines": [
+    2,
+    7,
+    18
+   ]
+  },
+  "fn": "williamsjokvist/cfn-tracker",
+  "sha": "3b5bd1ff4f86",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "93b979590cce": {
+  "identity": {
+   "one_liner": "S3 兼容对象存储的多租户控制平面，含 IAM 与审计",
+   "review": "Paladin 是面向 S3 兼容对象存储的多租户控制平面：应用使用租户级凭据访问，请求经 Cedar 策略校验并写入审计，数据字节走预签名 URL 直连存储而非代理转发。提供 Connect API、Web 控制台、Go/Python SDK 及 MCP 工具接口，部署为单个 Go 二进制的多个角色，需外部提供 PostgreSQL 16+ 与 S3 兼容存储，通过 Helm 部署到 Kubernetes。适合需要在对象存储之上做租户隔离、配额与审计的平台团队。",
+   "highlights": [
+    "提供 Connect API、Web 控制台及 Go/Python SDK，并通过 MCP 向 AI 智能体暴露操作",
+    "基于 Cedar 策略做租户级授权，支持配额计量与审计日志，凭据短时且可单独撤销",
+    "以 Helm chart 部署到 Kubernetes，镜像经 Sigstore 签名并附带 SPDX SBOM"
+   ],
+   "use_cases": [
+    "为多租户平台提供对象存储的租户隔离凭据与授权",
+    "需要对象存储操作审计与配额计量的场景",
+    "让 AI 智能体通过 MCP 以工具形式管理存储桶与对象"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ It needs PostgreSQL and an S3-compatible store — SeaweedFS, MinIO, Garage or ／ The charts run neither PostgreSQL nor the object store: bring PostgreSQL 16+",
+     "lines": [
+      9,
+      56,
+      74
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Paladin 是为 S3 兼容对象存储生态提供控制平面能力的组件，自身依赖 PostgreSQL 作为元数据存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A multi-tenant control plane for S3-compatible object storage. Applications ／ Paladin is one Go binary. Each role below runs as its own Deployment ／ It needs PostgreSQL and an S3-compatible store — SeaweedFS, MinIO, Garage or",
+   "evidence_lines": [
+    15,
+    43,
+    56
+   ]
+  },
+  "fn": "oleg-tkachuk/paladin",
+  "sha": "93b979590cce",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

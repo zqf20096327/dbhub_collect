@@ -8683,5 +8683,258 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9f5c75a25f15": {
+  "identity": {
+   "one_liner": "自托管 AI 协作工作区，提供共享页面、对话与 AI 工具",
+   "review": "OpenSpaces 是一个可自托管的开源 AI 工作区应用，用于组织 Spaces 中的共享页面、对话与 AI 工具（聊天、写作、图像生成）。技术栈为 Next.js 前端加 FastAPI 后端，数据持久化依赖外部 PostgreSQL 数据库（需自行提供 DATABASE_URL）。README 明确指出当前尚未实现一致的鉴权与授权，部分功能为原型或模拟状态，不宜作为多用户服务使用。",
+   "highlights": [
+    "提供 Spaces、页面与消息管理，内置 TipTap 富文本编辑器、Markdown 模式与行内 AI 操作",
+    "通过 MuAPI 集成支持聊天与图像生成，媒体上传经由配置的提供方完成",
+    "使用 MIT 许可证，支持自托管，数据库采用 PostgreSQL 兼容配置（含 Supabase）"
+   ],
+   "use_cases": [
+    "在自有基础设施上搭建团队知识库与共享工作区",
+    "将 AI 聊天与写作工具嵌入文档编辑流程",
+    "作为学习 Next.js/FastAPI 全栈协作应用的代码参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database:** PostgreSQL-compatible configuration (including Supabase) ／ - A PostgreSQL database for persistent storage (the app also has an in-memory development fallback) ／ Edit `server/.env` and set `MUAPI_API_KEY`. For persistence, set `DATABASE_URL` (and `DIRECT_URL` if needed) to your PostgreSQL connection string. Keep this file private.",
+     "lines": [
+      36,
+      45,
+      58
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 PostgreSQL 持久化存储数据的自托管工作区应用，而非为数据库生态服务的工具或组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Database:** PostgreSQL-compatible configuration (including Supabase) ／ - A PostgreSQL database for persistent storage (the app also has an in-memory development fallback) ／ The current codebase does not yet enforce authentication and per-Space authorization consistently across API routes. Do not expose it as a multi-user service or use it with sensitive data until that boundary has been implemented and reviewed. Configure secrets and database access privately; never commit `.env` files or credentials.",
+   "evidence_lines": [
+    36,
+    45,
+    30
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Anil-matcha/open-spaces",
+  "sha": "9f5c75a25f15",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6314295683a5": {
+  "identity": {
+   "one_liner": "本地优先的项目管理工具，提供 CLI、Web UI 和 AI agent skill，基于 SQLite 存储",
+   "review": "Pad 是一个运行在本机的项目/任务管理系统，提供 CLI、Web UI（localhost:7777）以及可安装在 Claude Code、Cursor、Codex 等 7+ AI 编码工具中的 /pad skill，支持任务集合、自定义字段、约定与 playbook。数据默认存于本地 SQLite，多实例部署支持 Postgres + Redis，也可选用 Pad Cloud。面向在本地机器上与 AI agent 协作的开发者。",
+   "highlights": [
+    "提供 CLI、Web UI 与 AI agent skill，单二进制本地运行，数据存于本地 SQLite",
+    "/pad skill 可安装在 Claude Code、Cursor、Windsurf、Codex 等工具中，agent 通过自然语言读写项目条目",
+    "支持 typed collections、自定义字段、约定规则与多步 playbook，agent 操作记录归因到具名 agent"
+   ],
+   "use_cases": [
+    "开发者在本地管理任务、计划与文档，无需云端账号",
+    "让 AI 编码 agent 通过 skill 读取/创建/更新项目条目并遵循项目约定",
+    "通过 Docker 在局域网内多设备访问工作区"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud. ／ |**Data**|Local SQLite you own — or opt-in Pad Cloud|Their cloud|Their cloud|",
+     "lines": [
+      25,
+      56
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "For multi-instance deployments, Pad supports Postgres + Redis via `docker-compose.yml` — see docs/deployment.md for the full setup.",
+     "lines": [
+      215
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Pad 是用 SQLite（及可选 Postgres）存储项目数据的项目管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> One binary. Local-first. No sign-up. Pad gives you a CLI, a web UI, and an AI agent skill — all backed by SQLite, all running on your machine. Your project data stays on your laptop — unless you take it to Pad Cloud.",
+   "evidence_lines": [
+    25
+   ]
+  },
+  "fn": "PerpetualSoftware/pad",
+  "sha": "6314295683a5",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e9d7d07e6d10": {
+  "identity": {
+   "one_liner": "本地优先的桌面数据库客户端，连接 PostgreSQL/MySQL/SQLite/Redis",
+   "review": "Plugboard 是一款用 Go、Svelte 和 Wails 构建的桌面数据库客户端，支持 PostgreSQL、MySQL/MariaDB、SQLite、Redis/Valkey 连接，提供 SQL 编辑器、表格编辑、SSH 隧道、只读连接保护和 schema 图等功能，连接数据存于本地 JSON 文件、密码存系统钥匙串。面向需要在本地管理多种数据库的开发者，提供 macOS/Windows/Linux 安装包，也可从源码构建。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、SQLite、Redis/Valkey 多连接管理，可粘贴连接 URL 自动填表",
+    "提供只读连接、写操作确认、事务化表格编辑等生产保护机制，支持 SSH 隧道连接",
+    "包含 SQL 编辑器（方言高亮、补全）、外键跳转、schema 图和 Redis 键树浏览"
+   ],
+   "use_cases": [
+    "开发者在本地用 GUI 查询和编辑多种关系型数据库与 Redis",
+    "通过 SSH 隧道安全连接 staging/production 环境并限制写操作",
+    "浏览表结构、外键关系和生成 schema 图"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**A fast, local-first database client for PostgreSQL, MySQL, SQLite and Redis. No accounts, no cloud sync, no telemetry — just you and your data.** ／ - PostgreSQL, MySQL and MariaDB, SQLite files, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name.",
+     "lines": [
+      3,
+      37
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**A fast, local-first database client for PostgreSQL, MySQL, SQLite and Redis. No accounts, no cloud sync, no telemetry — just you and your data.** ／ - PostgreSQL, MySQL and MariaDB, SQLite files, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name. ／ - Paste a connection URL — `postgres://…`, `mysql://…`, `redis://…`, a JDBC URL or a line from a `.env` file — and the form fills itself in.",
+     "lines": [
+      3,
+      37,
+      39
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**A fast, local-first database client for PostgreSQL, MySQL, SQLite and Redis. No accounts, no cloud sync, no telemetry — just you and your data.** ／ - PostgreSQL, MySQL and MariaDB, SQLite files, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name.",
+     "lines": [
+      3,
+      37
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- PostgreSQL, MySQL and MariaDB, SQLite files, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name.",
+     "lines": [
+      37
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为数据库客户端，为连接和管理多种数据库提供服务，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，捆绑图标、logo 与字体沿用各自许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A fast, local-first database client for PostgreSQL, MySQL, SQLite and Redis. No accounts, no cloud sync, no telemetry — just you and your data.** ／ The database counterpart of Relay, formerly called Relay DB. Built with Go, Svelte 5 and Wails. ／ - PostgreSQL, MySQL and MariaDB, SQLite files, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name.",
+   "evidence_lines": [
+    3,
+    10,
+    37
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "falsea3/plugboard",
+  "sha": "e9d7d07e6d10",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

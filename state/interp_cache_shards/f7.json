@@ -9196,5 +9196,187 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8fa943c6cc6e": {
+  "identity": {
+   "one_liner": "终端数据库客户端，支持 MySQL/PostgreSQL/SQLite 并内置 MCP 服务",
+   "review": "tql 是一个运行在终端的数据库客户端，提供浏览界面和 SQL 编辑器，屏幕上始终显示当前查询语句。它内置 MCP 服务器，使 AI 代理可以只读访问数据库并与用户共用同一查询历史。单一二进制文件、无需 PHP 运行时，面向习惯在终端工作的开发者与 DBA。支持只读连接标记、SSH 隧道和 TLS 连接托管数据库。",
+   "highlights": [
+    "提供终端全屏浏览界面，SQL 面板实时显示生成当前结果的查询语句",
+    "内置 MCP 服务器（tql mcp:start），为 AI 代理提供只读数据库访问",
+    "支持 SSH 隧道、TLS 连接托管数据库，并提供 dump/load/sync/export 命令"
+   ],
+   "use_cases": [
+    "在终端中浏览和查询 MySQL/PostgreSQL/SQLite 数据库",
+    "让 AI 代理通过 MCP 只读查询生产数据库",
+    "数据库迁移与同步（tql dump/load/sync）"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "for MySQL, MariaDB, PostgreSQL and SQLite, and the hosted databases that speak ／ |**PostgreSQL**|built in|",
+     "lines": [
+      6,
+      40
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "for MySQL, MariaDB, PostgreSQL and SQLite, and the hosted databases that speak ／ |**MySQL** and **MariaDB**|built in|",
+     "lines": [
+      6,
+      39
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "for MySQL, MariaDB, PostgreSQL and SQLite, and the hosted databases that speak ／ |**SQLite**|built in, any `.sqlite`, `.sqlite3` or `.db` file|",
+     "lines": [
+      6,
+      41
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|**SQL Server**|built into the macOS binary, with Microsoft's ODBC driver installed once (below); on Linux, from `tql.phar` on a PHP with `pdo_sqlsrv`| ／ SQL Server goes through Microsoft's ODBC driver, which tql cannot bundle.",
+     "lines": [
+      42,
+      60
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "for MySQL, MariaDB, PostgreSQL and SQLite, and the hosted databases that speak ／ |**MySQL** and **MariaDB**|built in|",
+     "lines": [
+      6,
+      39
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "Azure Database, DigitalOcean, PlanetScale, TiDB, SingleStore",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "tql 是连接和操作多种数据库的客户端工具，为数据库生态提供服务而非使用某个库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "tql (pronounced *TEE-kwuhl*, like sequel) is a database client for the terminal, ／ for MySQL, MariaDB, PostgreSQL and SQLite, and the hosted databases that speak ／ |`tql mcp:start tql`|run the MCP server on stdio, for an agent|",
+   "evidence_lines": [
+    5,
+    6,
+    228
+   ]
+  },
+  "fn": "VheissuLabs/tql",
+  "sha": "8fa943c6cc6e",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "64f86963789b": {
+  "identity": {
+   "one_liner": "本地求职申请工作台，基于 SQLite 存储、配合 Codex/Claude Code 运行",
+   "review": "Career Agent 是一个本地优先的开源求职申请管理应用：仪表盘用于保存简历、档案和可复用答案，Codex 或 Claude Code 通过仓库内技能执行职位搜索、表单填写与提交，用户可选择手动、批量审批或自动提交。数据默认存于本地 SQLite，单用户运行在 Node 22 环境，目前仅面向美国全职职位申请场景。",
+   "highlights": [
+    "提供职位筛选、发现、查重、材料留存和提交结果追踪功能",
+    "默认使用本地 SQLite 存储，无需数据库账户",
+    "支持三种提交控制模式：手动提交、精确批次审批、自动申请"
+   ],
+   "use_cases": [
+    "本地管理个人求职申请流程与原始文档",
+    "配合 Codex 或 Claude Code 进行职位搜索与表单填写",
+    "通过仪表盘审核申请包并保存提交确认证据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Open source under the MIT license.** Built with TypeScript, React, Express, SQLite, and a shared agent workflow. This repository contains reusable code and synthetic examples; personal applications and documents belong in each user's private workspace. ／ Setup lets you provide the full path to your original résumé PDF or press Enter and add it in **Start here**. It preserves the PDF and uses **local SQLite by default**, with no database account or storage choice required. Existing configuration and backend sel",
+     "lines": [
+      53,
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身是求职申请应用，SQLite 仅作为其本地默认存储后端使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Open source under the MIT license.** Built with TypeScript, React, Express, SQLite, and a shared agent workflow. This repository contains reusable code and synthetic examples; personal applications and documents belong in each user's private workspace. ／ Setup lets you provide the full path to your original résumé PDF or press Enter and add it in **Start here**. It preserves the PDF and uses **local SQLite by default**, with no database account or storage choice required. Existing configuration and backend selections are kept. The default port is **4317**.",
+   "evidence_lines": [
+    53,
+    120
+   ]
+  },
+  "fn": "AdiRosenstock/career-agent-public",
+  "sha": "64f86963789b",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -7914,5 +7914,80 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a2cb94a0bb20": {
+  "identity": {
+   "one_liner": "单二进制 TR-069/CWMP ACS，Go+SQLite 存储纳管光猫/FTTR 设备",
+   "review": "这是一个用 Go 编写的 TR-069/CWMP 自动配置服务器（ACS），通过 Web 面板对光猫、FTTR 主机进行纳管、查看参数、改配置、诊断和管理子设备。数据存于单个 SQLite 文件，无需 Redis 或消息队列，支持 systemd 一键部署和 CPE 模拟器测试。适合需要在自建环境中管理 TR-069 设备的运维人员使用；写瓶颈来自 SQLite 单连接串行写。",
+   "highlights": [
+    "实现 TR-069/CWMP 标准协议（Inform、Get/SetParameterValues、诊断、Connection Request）",
+    "单静态二进制 + SQLite 文件部署，提供 Web 管理面板与 CLI 配置",
+    "支持厂商私有参数映射表、能力探测、离线探测判活与任务队列持久化"
+   ],
+   "use_cases": [
+    "自建 ACS 纳管管理光猫/FTTR 主机等 TR-069 设备",
+    "查看设备光功率、WAN、无线终端等参数并下发配置与诊断",
+    "用自带 CPE 模拟器做协议互通与压测验证"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **单文件部署**：一个静态二进制 + 一个 SQLite 文件，没有 Redis / MySQL / 消息队列",
+     "lines": [
+      14
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "单二进制、零外部中间件的 TR-069/CWMP ACS（Go + SQLite），用来管一批光猫 / FTTR 主机： ／ |`-db`|`ACS_DB`|`acs.db`|SQLite 文件路径|",
+     "lines": [
+      5,
+      113
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该 ACS 服务器自身使用 SQLite 存储设备与任务数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，修改版作为网络服务提供需开源",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "单二进制、零外部中间件的 TR-069/CWMP ACS（Go + SQLite），用来管一批光猫 / FTTR 主机： ／ ./acs -listen :9090 -db acs.db   # 面板 http://<IP>:9090/ ，CWMP http://<IP>:9090/acs ／ |`-db`|`ACS_DB`|`acs.db`|SQLite 文件路径|",
+   "evidence_lines": [
+    5,
+    85,
+    113
+   ]
+  },
+  "fn": "hakureiyuyuko/go-acs",
+  "sha": "a2cb94a0bb20",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

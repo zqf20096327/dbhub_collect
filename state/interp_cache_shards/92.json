@@ -8780,5 +8780,74 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e3a4fcedfebe": {
+  "identity": {
+   "one_liner": "基于本地 SQLite 图与 Hebbian 学习的 AI 编码代理程序性记忆工具",
+   "review": "BrainBox 是一个 MCP 服务器和 CLI 工具，通过钩子观察编码代理的文件读取、编辑和工具调用，用 Hebbian 学习在本地 SQLite 图上记录文件/工具/错误之间的关联，并在后续任务中提前注入召回结果。面向使用 Claude Code、Kilo、OpenCode 等代理的开发者。数据全部留在本地，依赖 Node 22+，嵌入模型可选，未缓存时回退为关键词搜索。",
+   "highlights": [
+    "通过 Claude Code 钩子与 MCP 服务器提供 record/recall/explain/error 等 8 个工具",
+    "在本地 SQLite 图上实现 Hebbian 学习、扩散激活与边衰减机制",
+    "提供 brainbox eval 离线回放评测，并内置 FTS5 BM25 与 sqlite-vec 融合的代码搜索"
+   ],
+   "use_cases": [
+    "为编码代理提供跨会话的文件与工具链记忆，减少重复搜索",
+    "记录错误指纹到修复文件的对应关系，便于同类错误再次出现时召回",
+    "通过 git 历史导入（brainbox bootstrap）对现有仓库进行冷启动预热"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Zero cost, local, SQLite ／ **Not a vector database. Not RAG.** Hebbian learning on a local SQLite graph. Zero API cost, no GPU, nothing leaves your machine.",
+     "lines": [
+      7,
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以本地 SQLite 作为自身数据存储，服务于 AI 编码代理而非数据库生态。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Zero cost, local, SQLite ／ **Not a vector database. Not RAG.** Hebbian learning on a local SQLite graph. Zero API cost, no GPU, nothing leaves your machine. ／ 4. Registers the MCP server via `claude mcp add`, with 8 tools: `record`, `recall`, `explain`, `error`, `resolve`, `predict_next`, `stats`, `decay`.",
+   "evidence_lines": [
+    7,
+    24,
+    55
+   ]
+  },
+  "fn": "thebasedcapital/brainbox",
+  "sha": "e3a4fcedfebe",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

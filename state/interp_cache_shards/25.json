@@ -9272,5 +9272,198 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2cb7b4583321": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 跨会话记忆插件，基于本地 SQLite 存储",
+   "review": "这是一个 DeepSeek Harness 插件，为 AI Agent 会话提供有界的跨会话记忆：通过 ctx.memory 能力接缝、写入审批门与可重建审计表管理记忆读写，数据以只读/WAL 方式存于本地 SQLite 文件。面向使用 DeepSeek Harness 的开发者，安装方式为 dsh plugin 命令；自 2026-10-05 起冻结，不再新增功能，仅修复实际损坏。",
+   "highlights": [
+    "提供类型化 ctx.memory 服务、memory 工具与冻结快照注入，所有写入经审批瀑布并生成审计记录",
+    "使用 node:sqlite 本地 SQLite 数据库（WAL、0600 权限）存储数据，无网络、零凭据",
+    "按 user/agent 两轨道、全局/工作区两层、按 agentPreset 隔离，并施加硬字符预算"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness 上的 AI Agent 提供跨会话记忆持久化",
+    "需要对模型记忆写入进行审批与审计的受控环境",
+    "在本地离线（零网络）场景下管理 Agent 上下文记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected int",
+     "lines": [
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该插件使用本地 SQLite 文件存储自身记忆数据，而非为 SQLite 生态提供服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected into the system prompt.",
+   "evidence_lines": [
+    79
+   ]
+  },
+  "fn": "PerryLink/dsh-memento",
+  "sha": "2cb7b4583321",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6a7c9187178b": {
+  "identity": {
+   "one_liner": "本地优先的跨平台 CLI，用于下载网络小说与漫画并生成 EPUB/PDF/CBZ 文件",
+   "review": "Benny-Scraper 是一个运行在 Windows、Linux 和 macOS 上的命令行下载器，将网页小说保存为 EPUB、漫画保存为 PDF 或 CBZ，并支持增量更新已下载内容。它通过 JSON 文件配置站点，对无法直接加载的站点可使用 Selenium 或 FlareSolverr。适用于希望离线保存并持续更新网络小说和漫画内容的个人用户。",
+   "highlights": [
+    "支持增量更新：可只下载新章节而不重复下载旧章节，失败的章节可保留并稍后重试",
+    "站点配置以独立 JSON 文件存放，可添加兼容站点而无需编写新的抓取策略",
+    "对需要浏览器加载的站点提供 Selenium 和 FlareSolverr 支持"
+   ],
+   "use_cases": [
+    "将网络小说下载为 EPUB 用于离线阅读",
+    "将漫画下载为 PDF 或 CBZ 并保持本地归档更新",
+    "通过交互式测试命令为新站点创建和验证 JSON 配置"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明其在本地存储数据库、章节和生成文件供自身使用，未见其为其他数据库生态提供工具或组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Benny-Scraper is an open-source command-line web novel and manga downloader. It saves web novels as EPUB files and manga as PDF or CBZ (ZIP-based comic book archives). It runs on Windows, Linux, and macOS. ／ I originally made this because I wanted an easier way to listen to web novels. It grew into a way to keep novels and manga offline and update them without downloading every old chapter again. The database, downloaded chapters, and generated files stay on your computer. ／ - The database is stored under the operating system's application data directory in `BennyScraper/Database`.",
+   "evidence_lines": [
+    3,
+    5,
+    161
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "martial-god/Benny-Scraper",
+  "sha": "6a7c9187178b",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2c80b7424746": {
+  "identity": {
+   "one_liner": "AI 编码代理本地协作工具，经 MCP 服务器、Unix socket 与 SQLite 代理中转消息",
+   "review": "该项目为 Codex 与 Claude Code 等 AI 编码代理提供本地消息协作：代理通过 MCP 服务器与共享 Unix socket 连接到一个 SQLite 支撑的 broker，实现持久化消息与自动投递，并提供只读仪表盘查看连接与待处理消息。面向需要在沙箱（Incus 容器）中让多个代理协同工作的开发者，含沙箱供给脚本与代理 token 用量软上限等管理功能。",
+   "highlights": [
+    "通过 MCP 服务器与共享 Unix socket 连接多个 AI 代理",
+    "提供基于 SQLite 的 broker，实现持久化消息与自动投递",
+    "提供终端与浏览器只读仪表盘，查看代理连接与待处理消息"
+   ],
+   "use_cases": [
+    "在 Incus 沙箱中让 Codex 与 Claude 协同完成任务",
+    "查看与管理代理间消息传递及 token 用量上限",
+    "在无 Incus 的主机上本地运行代理协作环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**workspace**; **secured** owns one broker and SQLite database. ／ Codex, Claude and the read-only dashboard in workspace connect through a shared Unix socket to the broker and SQLite in secured.",
+     "lines": [
+      69,
+      73
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该消息代理自身的内置存储，项目定位是为 AI 代理协作服务而非为数据库生态提供工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**workspace**; **secured** owns one broker and SQLite database. ／ Codex, Claude and the read-only dashboard in workspace connect through a shared Unix socket to the broker and SQLite in secured.",
+   "evidence_lines": [
+    69,
+    73
+   ]
+  },
+  "fn": "makarski/collab-ai",
+  "sha": "2c80b7424746",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

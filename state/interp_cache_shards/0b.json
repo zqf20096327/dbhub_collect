@@ -7488,5 +7488,185 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "28ea1c4c69ed": {
+  "identity": {
+   "one_liner": "Deno 下的数据库迁移工具，基于 @stdx/database 提供 CLI 与库两种用法",
+   "review": "Nessie 是面向 Deno 的数据库迁移与种子数据工具，运行带版本的 up/down 迁移和 seed，迁移在事务中执行并记录 SHA-256 校验和。内置 SQLite、Postgres、MySQL 客户端，MySQL 客户端同时支持 MariaDB；可通过实现 NessieClient 接口扩展其他数据库。适合 Deno 开发者使用，CLI 命令全部使用旗标形式，不支持位置参数。",
+   "highlights": [
+    "运行版本化 up/down 迁移与 seed，迁移在事务中执行并记录于 nessie_migrations 表",
+    "内置 SQLite、Postgres、MySQL 客户端，MySQL 客户端同时支持 MariaDB，可自定义客户端扩展",
+    "提供 CLI 与 MigrationClient 库两种使用方式，迁移文件支持远程 URL 与自定义模板"
+   ],
+   "use_cases": [
+    "Deno 项目的 schema 版本迁移管理",
+    "数据库种子数据的生成与执行",
+    "为其他数据库编写自定义迁移客户端"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Nessie runs versioned `up`/`down` migrations and seeds on SQLite, Postgres and ／ nessie init --dialect postgres ／ |Postgres|`jsr:@halvardm/nessie/clients/postgres`|postgres|",
+     "lines": [
+      10,
+      31,
+      137
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL. Migrations receive a standard `@stdx/database` client, so any SQL, query ／ |MySQL|`jsr:@halvardm/nessie/clients/mysql`|mysql2, also MariaDB| ／ new MysqlClient(\"mysql://user:pwd@localhost:3306/db\");",
+     "lines": [
+      11,
+      138,
+      147
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Nessie runs versioned `up`/`down` migrations and seeds on SQLite, Postgres and ／ deno run -A jsr:@halvardm/nessie/cli init --dialect sqlite ／ |SQLite|`jsr:@halvardm/nessie/clients/sqlite`|`node:sqlite` via `@stdx/database`|",
+     "lines": [
+      10,
+      21,
+      136
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL|`jsr:@halvardm/nessie/clients/mysql`|mysql2, also MariaDB|",
+     "lines": [
+      138
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库提供迁移与种子执行的专门工具，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A database migration tool for Deno, built on ／ Nessie runs versioned `up`/`down` migrations and seeds on SQLite, Postgres and ／ |MySQL|`jsr:@halvardm/nessie/clients/mysql`|mysql2, also MariaDB|",
+   "evidence_lines": [
+    3,
+    10,
+    138
+   ]
+  },
+  "fn": "halvardssm/deno-nessie",
+  "sha": "28ea1c4c69ed",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "91dd2bc63018": {
+  "identity": {
+   "one_liner": "AI agent 记忆与 checkpoint 存储防篡改一致性测试套件",
+   "review": "该项目是一个一致性测试套件，通过对十八个 agent 记忆/checkpoint 存储在后台执行九类篡改编辑并重新读取，测量各存储能否察觉篡改，输出记分卡表格。面向 agent 记忆框架与完整性工具的开发者和研究者，测试基于 IETF 草案定义的方法，含真实库版本 pinning 与 CI 校验；核心是测量报告而非运行时防护组件。",
+   "highlights": [
+    "提供九类篡改编辑（T1-T9）的标准测量方法，并生成逐存储的记分卡表格",
+    "支持通过各存储自身 API 进行注入与读取，测量结果由 pinning 测试与 CI 保证与结果文件一致",
+    "提供从结果文件生成公开站点（site/build.py）的能力"
+   ],
+   "use_cases": [
+    "评估 agent 记忆/ checkpoint 存储的防篡改能力",
+    "为 IETF agent memory integrity 基准草案提供可复现的测量数据",
+    "维护 agent 记忆工具时回归验证完整性声明"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|LangGraph `PostgresSaver`|langgraph-checkpoint-postgres 3.1.2 on PostgreSQL 16|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted|",
+     "lines": [
+      27
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|LangGraph `SqliteSaver`|langgraph-checkpoint-sqlite 3.1.1|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted| ／ |LlamaIndex `Memory` over SQLite|llama-index-core 0.14.24|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted| ／ |MythologIQ Agent Memory reference runtime, SQLite canonical substrate, read path|agent-memory-reference 0.2.0 at f2aef57|rejected|rejected|rejected|rejected|rejected|rejected|rejected|rejected|accepted|",
+     "lines": [
+      26,
+      30,
+      48
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Two things keep the agent a security tool rather than an attack tool. An authorisation gate (`agmi/agent/authz.py`) runs before any target is touched and fails closed: a library target the caller already holds is allowed, a network host is allowed only on prov",
+     "lines": [
+      593
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "测试对象是 agent 记忆框架与完整性工具，SQLite/PostgreSQL 仅作为被测存储的底层载体出现，非为数据库生态服务的工具或使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A conformance test suite that measures whether AI agent memory and checkpoint stores notice when they are tampered with. ／ |LangGraph `SqliteSaver`|langgraph-checkpoint-sqlite 3.1.1|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted| ／ \"Accepted\" means the tool loaded the altered store, raised nothing, and the agent carried on from the altered memory as if it were true. \"Rejected\" means the tool refused the edit at read time. \"Reported\" means the tool's own integrity check named the problem after a reload, and only that. After any of the eight edits the store still loads and the read path (`recall()` for inspeximus) answers from the altered store, so a reported cell says a separate audit call (`verify_writes()` in the inspeximus rows) caught it, not that the agent was protected at read time. `full_runner` names the detection point in a checkedAt column: \"read\" when verify() is the read path, \"audit\" when it is a call the operator has to make. This table has no such column; every reported cell in it is an audit detection. Every row is a measurement of the real library at the version shown, reproducible in under a minute, and pinned by a test that fails the day that library adds a check.",
+   "evidence_lines": [
+    5,
+    26,
+    54
+   ]
+  },
+  "fn": "tech4biz-yasha/agent-memory-integrity",
+  "sha": "91dd2bc63018",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

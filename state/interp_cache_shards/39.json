@@ -8184,5 +8184,149 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "693fff4b1f54": {
+  "identity": {
+   "one_liner": "PostgreSQL GUI 客户端，.NET + Avalonia 的 NativeAOT 桌面应用",
+   "review": "pgNimbus 是一个面向日常使用 PostgreSQL 的开发者和 DBA 的跨平台桌面 SQL 客户端，基于 .NET 和 Avalonia 以 NativeAOT 编译为原生二进制。提供 SQL 编辑、自动补全、流式结果网格、安全模式事务编辑、EXPLAIN 树、锁与活动监控、SSH 隧道和只读连接等能力。无遥测、无账号，不包含 AI 功能；macOS 与 Linux 版本仍为 beta。",
+   "highlights": [
+    "提供流式虚拟化结果网格，支持在表格中排序、分页和编辑，安全模式下编辑以单事务提交",
+    "包含 EXPLAIN ANALYZE 树视图、pg_stat_statements 慢查询、锁树和 LISTEN/NOTIFY 监控等 PostgreSQL 工具",
+    "支持 SSH 隧道、TLS 验证、服务端强制的只读配置和多种连接字符串格式"
+   ],
+   "use_cases": [
+    "日常浏览和编辑 PostgreSQL 数据与 schema",
+    "排查慢查询、锁等待和服务器活动",
+    "通过 SSH 隧道和只读配置连接生产环境"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A fast PostgreSQL client that talks to your database and nothing else.",
+     "lines": [
+      5
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "Where it sits among the alternatives: pgAdmin and DBeaver are powerful but heavy. TablePlus is fast and polished, but closed source and paid. Beekeeper Studio is open source but runs on Electron. HeidiSQL is native and fast, but dated and MySQL-first.",
+     "lines": [
+      36
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接和管理 PostgreSQL 服务器的客户端工具，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A fast PostgreSQL client that talks to your database and nothing else. ／ - **It's fast where you wait.** A NativeAOT binary, not Electron: about 0.2 s to a window, rows on screen while the query is still running, and Esc stops a query mid-flight. Measured on every release. ／ - Schema tree read from `pg_catalog`: materialized views, partitioned tables, relation sizes, DDL for any table or view.",
+   "evidence_lines": [
+    5,
+    32,
+    99
+   ]
+  },
+  "fn": "Shman4ik/pgNimbus",
+  "sha": "693fff4b1f54",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "10f003e3358f": {
+  "identity": {
+   "one_liner": "将文档转为含向量、全文索引与引用的 SQLite 检索档案的工具",
+   "review": "VERA 把 PDF/Markdown 转换为单一 .vera 文件，内含文本、嵌入、关键词索引与引用，底层以 SQLite 档案存储，无需数据库服务器即可复制与搜索。提供关键词、语义、混合三种检索模式，支持元数据过滤与可选库索引，并可通过 CLI、MCP、Python API 或 Windows 桌面程序使用；默认 hashing 嵌入器离线可用，语义检索需安装本地模型或配置 OpenAI 密钥。适用于需要本地文档检索的个人与 AI 代理用户。",
+   "highlights": [
+    "支持 keyword、semantic、hybrid 三种检索模式，可用元数据条件过滤结果",
+    "档案以 SQLite 格式存储嵌入、全文索引与引用，可离线复制与共享",
+    "提供 CLI、MCP、Python API 与 Windows 安装包等多种使用方式，支持自定义嵌入插件"
+   ],
+   "use_cases": [
+    "将 PDF/Markdown 文档库转换为可本地检索的档案",
+    "为 AI 代理提供带引用的文档检索（CLI/MCP）",
+    "离线环境下的关键词与语义混合搜索"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "embeddings, keyword index, citations, and original source in one SQLite archive. ／ |`keyword`|Words in the text, using SQLite full-text search|Names, identifiers, section numbers|",
+     "lines": [
+      10,
+      54
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 .vera 档案以 SQLite 存储文本、嵌入与索引，SQLite 是其数据存储介质",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0，项目自述为 pre-1.0 实验阶段",
+   "install": [
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "embeddings, keyword index, citations, and original source in one SQLite archive. ／ - **MCP:** install `vera[mcp]` and run `vera mcp`. Search with `output: \"compact\"`",
+   "evidence_lines": [
+    10,
+    199
+   ]
+  },
+  "fn": "dkylewillis/vera",
+  "sha": "10f003e3358f",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

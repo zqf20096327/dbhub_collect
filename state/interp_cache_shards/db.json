@@ -8366,5 +8366,148 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5a92eaec9a98": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，通过 COPY 命令读写 Parquet 文件",
+   "review": "pg_parquet 是一个 PostgreSQL 扩展，基于 Apache Arrow 与 pgrx 实现，扩展 COPY TO/FROM 命令以读写 Parquet 文件，支持 S3、Azure Blob Storage、Google Cloud Storage、http(s) 端点、本地文件及标准输入输出流，并提供查询 Parquet schema、元数据与列统计的 SQL 函数。面向需要在 PostgreSQL 与 Parquet 间移动数据的开发者与数据工程师。安装需通过 rustup/cargo-pgrx 从源码构建。",
+   "highlights": [
+    "通过 COPY TO/FROM 命令在 PostgreSQL 与 Parquet 文件间导出和导入数据，支持复合类型",
+    "支持 S3、Azure Blob Storage、Google Cloud Storage、http(s) 端点、文件系统、stdin/stdout 及程序流多种来源",
+    "提供 parquet.schema/metadata/file_metadata/kv_metadata/column_stats 等函数用于查看 Parquet 文件结构与统计信息"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 表或查询结果导出为 Parquet 文件存入对象存储",
+    "从 Parquet 文件批量加载数据到 PostgreSQL 表",
+    "在 SQL 中检查 Parquet 文件的 schema、元数据和列统计"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Ap",
+     "lines": [
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是 PostgreSQL 的扩展，扩展 COPY 命令为数据库生态提供 Parquet 数据读写能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Apache Arrow project to read and write Parquet files and pgrx project to extend PostgreSQL's `COPY` command. ／ 1. You can export Postgres tables/queries to Parquet files, stdin/stdout or a program's stream, ／ `pg_parquet` supports reading and writing Parquet files from/to `S3`, `Azure Blob Storage`, `http(s)` and `Google Cloud Storage` object stores.",
+   "evidence_lines": [
+    8,
+    43,
+    162
+   ]
+  },
+  "fn": "CrunchyData/pg_parquet",
+  "sha": "5a92eaec9a98",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f873d46b5e5e": {
+  "identity": {
+   "one_liner": "自托管开源 CRM 与工作管理平台，PHP/MySQL 单应用",
+   "review": "TropaTT 是一个免费自托管的开源 CRM 与工作管理平台，把任务、Kanban、Gantt、日历、团队聊天、知识库等模块合并在一个 PHP 应用中，通过浏览器安装器部署，依赖 PHP 8.1+ 和 MySQL/MariaDB，并通过 cron 运行后台任务。面向需要在自己服务器上管理客户与项目数据的自由职业者、团队和企业，采用 AGPL-3.0 许可，暂无官方 Docker 镜像。",
+   "highlights": [
+    "提供 CRM、任务/项目（Gantt、Kanban）、团队聊天、知识库 wiki、客户门户等模块",
+    "内置 MCP 服务器端点，暴露工具与资源，并支持 REST API 与 OpenAPI 3.1 文档",
+    "可选模块包含面向 11 个电商平台的 CMS 网关及迁移连接器"
+   ],
+   "use_cases": [
+    "在自有服务器上托管客户关系与项目工作管理",
+    "为团队提供聊天、日历与知识库的一体化站点",
+    "通过 API/MCP 端点接入自动化与 AI 工作流"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**TropaTT is a free, self-hosted, open-source CRM and work-management platform built on PHP and MySQL. It combines CRM, task management, projects, Kanban, Gantt, calendar, team chat, knowledge base wiki, client portal, financial price lists, universal e-commer ／ > - **Architecture:** PHP 8.1+, MySQL 8.0+ / MariaDB 10.4+. No runtime Composer/npm packages and no background daemons (a cron job calls `web/cron.php`). Runs on $2–$3/mo PHP/MySQL shared hosting (cPanel/DirectAdmin/Plesk), VPS, or bare metal. No official Dock ／ TropaTT is a free, self-hosted, open-source PHP/MySQL work platform fo",
+     "lines": [
+      3,
+      22,
+      56
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "> - **Architecture:** PHP 8.1+, MySQL 8.0+ / MariaDB 10.4+. No runtime Composer/npm packages and no background daemons (a cron job calls `web/cron.php`). Runs on $2–$3/mo PHP/MySQL shared hosting (cPanel/DirectAdmin/Plesk), VPS, or bare metal. No official Dock",
+     "lines": [
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明该平台构建于 PHP/MySQL 之上，MySQL 为其数据存储依赖，属使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**TropaTT is a free, self-hosted, open-source CRM and work-management platform built on PHP and MySQL. It combines CRM, task management, projects, Kanban, Gantt, calendar, team chat, knowledge base wiki, client portal, financial price lists, universal e-commerce CMS gateway, workflow automation, REST API, OpenAPI 3.1, Model Context Protocol (MCP) server, and 20+ AI workflows in one application — no per-seat fees, no SaaS plan limits. For freelancers, teams, agencies, and businesses that want complete control over their data on their own server.** ／ > - **Architecture:** PHP 8.1+, MySQL 8.0+ / MariaDB 10.4+. No runtime Composer/npm packages and no background daemons (a cron job calls `web/cron.php`). Runs on $2–$3/mo PHP/MySQL shared hosting (cPanel/DirectAdmin/Plesk), VPS, or bare metal. No official Docker image yet.",
+   "evidence_lines": [
+    3,
+    22
+   ]
+  },
+  "fn": "Anton-Barinov/TropaTT",
+  "sha": "f873d46b5e5e",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10161,5 +10161,70 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fb401b66814e": {
+  "identity": {
+   "one_liner": "Go 语言的文档型嵌入式数据库，内置 btree/WAL 存储引擎",
+   "review": "any-store 是一个纯 Go 实现的嵌入式文档数据库，提供 MongoDB 风格的查询与聚合管道、运行时索引、全文检索（BM25）和向量检索（IVF-SQ/HNSW），支持 ACID 事务与多进程并发读写同一文件，存储引擎为自研 btree/pager/WAL 设计，可选页级加密。面向需要在 Go 应用内嵌数据存储、且不能依赖 CGO 的开发者。",
+   "highlights": [
+    "提供 MongoDB 风格查询、聚合管道、运行时索引、全文与向量检索",
+    "支持 ACID 事务与多进程并发访问同一数据库文件（WAL+共享内存索引）",
+    "纯 Go 实现，无 CGO，支持 js/wasm，含 CLI 检查与导入导出工具"
+   ],
+   "use_cases": [
+    "Go 应用内嵌文档存储，需要事务与多进程访问",
+    "需要全文检索或向量检索的嵌入式数据场景",
+    "无法使用 CGO 的跨平台或 wasm 环境"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "A **document-oriented embedded database** for Go with a MongoDB-like query language, built on an in-tree btree/pager/WAL storage engine derived from SQLite (aligned with its design, not a literal port — the on-disk format is our own). ／ * **Multi-process** — SQLite-like contract: any number of OS processes may open, read and write the same database file at any time (WAL + shared-memory index, busy handling, cross-process DDL reconciliation). ／ > **Choosing document ids.** Unlike SQLite there is no hidden rowid — the document id is the btree key. Increment-like ids (`anyenc.NewObjectID()`, timestamps, sequences) keep inserts append-ordered and reads cache-friendly; fully random ids (e.g. UUIDv4) scat",
+     "lines": [
+      7,
+      19,
+      51
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目本身是嵌入式数据库引擎，既非为现有数据库生态服务的工具，也非使用数据库的应用，证据不足以外其他定位",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A **document-oriented embedded database** for Go with a MongoDB-like query language, built on an in-tree btree/pager/WAL storage engine derived from SQLite (aligned with its design, not a literal port — the on-disk format is our own). ／ Schema-less documents, rich indexes, full-text and vector search, ACID transactions, multi-process access, page-level integrity and optional encryption — pure Go, no CGO. ／ * **Multi-process** — SQLite-like contract: any number of OS processes may open, read and write the same database file at any time (WAL + shared-memory index, busy handling, cross-process DDL reconciliation).",
+   "evidence_lines": [
+    7,
+    8,
+    19
+   ]
+  },
+  "fn": "anyproto/any-store",
+  "sha": "fb401b66814e",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

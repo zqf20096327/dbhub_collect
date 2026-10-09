@@ -10360,5 +10360,78 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f9485a8f3d96": {
+  "identity": {
+   "one_liner": "六渠道凭证池网关，封装为 OpenAI 兼容 API",
+   "review": "该项目将 CodeBuddy、TRAE SOLO、OpenCode Zen、Kilo Gateway、Qoder、CodeArts 六个上游渠道统一封装为 OpenAI 兼容 API，提供公共凭证池、健康度调度、会话粘性、用量统计与管理台。用户账号存于 SQLite。面向需统一调用多上游编码模型接口的学习研究者，README 声明接口为逆向实现、未经安全审计。",
+   "highlights": [
+    "提供 /v1/chat/completions、/v1/responses、/v1/messages、/v1/models 等 OpenAI 兼容端点",
+    "实现公共凭证池、三态健康度调度、会话粘性与到期额度优先消化",
+    "用户账号存于 SQLite，支持三角色权限、审计日志与 Docker 部署"
+   ],
+   "use_cases": [
+    "用 OpenAI 兼容客户端统一访问多个上游渠道模型",
+    "多账号凭证集中管理与按人用量统计",
+    "本地部署管理台进行凭证、用户与审计管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **三角色账号体系**：`admin` / `operator` / `viewer`，用户存 SQLite；一次性激活链接自设密码（无共享初始密码）、首登强制改密、改角色/停用即时吊销会话；登录与写操作留审计 ／ > `scripts/create_user.py` 直接写 SQLite（`--db` 或 `DATA_DIR`，默认 `data/coding2api.sqlite3`）。 ／ 账号存在 SQLite 的 `users` 表里，管理台「用户管理」页（仅管理员可见）负责日常增删改。",
+     "lines": [
+      18,
+      44,
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是用 SQLite 存用户账号的 API 网关应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "把 **CodeBuddy**、**TRAE SOLO**、**OpenCode Zen**、**Kilo Gateway**、**Qoder** 与 **CodeArts** 六个上游渠道，统一封装为 OpenAI 兼容 API， ／ - **三角色账号体系**：`admin` / `operator` / `viewer`，用户存 SQLite；一次性激活链接自设密码（无共享初始密码）、首登强制改密、改角色/停用即时吊销会话；登录与写操作留审计 ／ > `scripts/create_user.py` 直接写 SQLite（`--db` 或 `DATA_DIR`，默认 `data/coding2api.sqlite3`）。",
+   "evidence_lines": [
+    3,
+    18,
+    44
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "RobbsLuo/Coding2API",
+  "sha": "f9485a8f3d96",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

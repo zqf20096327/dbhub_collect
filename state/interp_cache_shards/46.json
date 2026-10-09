@@ -8383,5 +8383,157 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6cedbaeed541": {
+  "identity": {
+   "one_liner": "MCP SSH 服务器，供 AI 助手通过 MCP 协议远程管理 SSH 服务器",
+   "review": "这是一个实现 Model Context Protocol 的 SSH 服务器，提供 37 个工具，让 Claude Code、OpenAI Codex 等 AI 助手执行远程命令、传输文件、数据库查询、备份与服务器健康监控。面向 DevOps 使用者，内置按服务器的权限模式（unrestricted/readonly/restricted）、命令白名单和只读 SQL 强制等安全机制。",
+   "highlights": [
+    "提供 37 个 MCP 工具，覆盖命令执行、文件传输、数据库操作、备份调度与健康监控",
+    "支持 per-server 安全模式：unrestricted、readonly、restricted（命令白名单+拒绝模式）",
+    "强制只读 SQL 查询，数据库参数经集中 shellQuote 处理并有注入测试覆盖"
+   ],
+   "use_cases": [
+    "通过 AI 助手自动化远程服务器运维与部署任务",
+    "对多台服务器进行批量命令执行与文件同步",
+    "以受限权限模式让代理安全地执行只读数据库查询和备份"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Automated backups** for MySQL, PostgreSQL, MongoDB, and file systems",
+     "lines": [
+      210
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Automated backups** for MySQL, PostgreSQL, MongoDB, and file systems",
+     "lines": [
+      210
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为 MCP 服务器，提供针对 MySQL/PostgreSQL 等的自动备份、数据库操作与监控工具，为数据库运维提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Model Context Protocol (MCP) server that enables **Claude Code** and **OpenAI Codex** to manage multiple SSH connections. Execute commands, transfer files, manage databases, create backups, monitor health, and automate DevOps tasks across your servers — directly from your AI assistant. ／ |`readonly`|Mutating tools are refused outright — no deploy, no upload, no sudo, no database import. Read commands still work.| ／ - **Read-only SQL is enforced**, not suggested: `ssh_db_query` refuses anything",
+   "evidence_lines": [
+    3,
+    42,
+    59
+   ]
+  },
+  "fn": "bvisible/mcp-ssh-manager",
+  "sha": "6cedbaeed541",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "28bc9c96d651": {
+  "identity": {
+   "one_liner": "本地个人记忆库，将 Pieces/会话/浏览历史汇总为一个 SQLite 文件并经 MCP 检索",
+   "review": "InkVault 把已停运的 Pieces 记忆导出，并持续收集 Claude Code、Codex、Claude 桌面端会话与浏览器历史，存入本机一个 SQLite 文件，通过内置 MCP server 提供关键词+语义搜索和时间线查询，另生成年度仪表盘。面向曾用 Pieces 或使用 AI 编码工具的个人用户；仅本地运行，摘要生成需 Ollama，不自动上传档案。",
+   "highlights": [
+    "将 Pieces 导出记录、AI 会话与浏览器历史合并保存为单个 SQLite 文件（vault.db）",
+    "内置 MCP server，提供 search_memories、timeline、get_memory、memory_stats 工具",
+    "定时任务每夜增量同步、备份 vault.db 并重建搜索与仪表盘"
+   ],
+   "use_cases": [
+    "抢救 Pieces for Developers 停运前的记忆数据",
+    "让 Claude Code/Codex 等 MCP 客户端检索历史会话与浏览记录",
+    "查看年度工作记忆仪表盘与每日摘要"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "websites, people), saved as the raw records Pieces returned, so nothing is lost to interpretation. One SQLite file.",
+     "lines": [
+      59
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以单个 SQLite 文件作为其档案数据的存储载体，SQLite 是其依赖组件而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " websites, people), saved as the raw records Pieces returned, so nothing is lost to interpretation. One SQLite file. ／ InkVault gathers all of it into one file on your machine: your Pieces memory, rescued once, and your conversations ／ - **Search for your AI tools**: an MCP server with `search_memories` (keyword + meaning, merged), `timeline`",
+   "evidence_lines": [
+    59,
+    12,
+    60
+   ]
+  },
+  "fn": "sandoreclegane/inkvault",
+  "sha": "28bc9c96d651",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

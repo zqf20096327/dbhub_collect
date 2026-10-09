@@ -9282,5 +9282,99 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c5bc13aa1703": {
+  "identity": {
+   "one_liner": "面向 AI 代理的可移植、可治理、模型无关的记忆库",
+   "review": "这是一个为 AI 代理提供持久记忆的 TypeScript 库，含 SQLite 存储实现、检索器、MCP 导出与一致性测试套件。事实只失效不删除，原始文本不可编辑，导出为带 JSON Schema 的版本化格式。适合需要事实溯源、有效时间查询与本地无密钥运行的代理开发者使用。",
+   "highlights": [
+    "提供 MemoryStore 存储接口及 SqliteMemoryStore、InMemoryStore 实现，并可运行一致性测试套件",
+    "提供 exportPortable/importPortable 无损版本化 JSON 导入导出格式，附 JSON Schema",
+    "提供事实溯源（provenance）、有效时间（validAt/snapshotAsOf）与治理式擦除审计能力"
+   ],
+   "use_cases": [
+    "为 AI 代理构建带来源记录与时间维度的长期记忆",
+    "通过 MCP 服务器向多个客户端共享本地记忆存储",
+    "在不同运行时之间无损迁移代理记忆数据"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Does it run with no vendor, no key, no server?**|SQLite on disk, on-device embeddings|Self-host possible; cloud is the product|Self-host possible (Apache-2.0, local vector stores); needs an LLM for extraction; cloud is the product|Zep is cloud; Graphiti sel",
+     "lines": [
+      22
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Postgres.** `PostgresMemoryStore` (pgvector 0.8 or newer) sits behind the same",
+     "lines": [
+      152
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该库以 SQLite 文件作为本地存储并内置 SqliteMemoryStore，属于使用数据库的项目而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- `MemoryStore`: a storage-agnostic interface; `SqliteMemoryStore` and `InMemoryStore` ship, with a **conformance suite** any backend can run against itself. ／ |**Does it run with no vendor, no key, no server?**|SQLite on disk, on-device embeddings|Self-host possible; cloud is the product|Self-host possible (Apache-2.0, local vector stores); needs an LLM for extraction; cloud is the product|Zep is cloud; Graphiti self-hosts (graph DB + LLM key required)|",
+   "evidence_lines": [
+    51,
+    22
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "flytomoon/al-buddy-memory",
+  "sha": "c5bc13aa1703",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

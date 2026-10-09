@@ -9101,5 +9101,82 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5ebe3a22a5f9": {
+  "identity": {
+   "one_liner": "Dart 类型安全 ORM，提供模型、迁移与多数据库适配层",
+   "review": "该项目是一个 Dart/Flutter 生态的 ORM 库，开发者用纯 Dart 声明模型，通过代码生成器产出带类型的表与客户端，并支持 Dart 迁移定义。数据库访问通过独立的模块层实现，README 显示 SQLite 和 PostgreSQL 18 已在 macOS/Linux 上验证。处于 beta 阶段，beta.8 起存在破坏性重写，旧客户端与迁移定义无兼容层，升级需重新生成代码并复核迁移基线。",
+   "highlights": [
+    "提供纯 Dart 模型声明与生成的类型化表、查询客户端",
+    "包含迁移（migration）模块，支持经复核的迁移定义与指纹",
+    "数据库层模块化，通过 sqlite.dart、postgres.dart 等公共入口导入"
+   ],
+   "use_cases": [
+    "在 Dart/Flutter 应用中以类型安全方式读写 SQLite 数据库",
+    "需要用 Dart 代码管理 schema 迁移的项目",
+    "需要分页 count、事务等工作流的后端数据访问层"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**6.0.0-beta.11** requires Dart 3.13. Native SQLite and PostgreSQL 18 are verified ／ definitions and fingerprints stay unchanged. PostgreSQL now requires native ／ `postgres` 3.5.20 or newer for cancellation and deadline fixes.",
+     "lines": [
+      5,
+      8,
+      9
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**6.0.0-beta.11** requires Dart 3.13. Native SQLite and PostgreSQL 18 are verified ／ import 'package:orm/sqlite.dart';",
+     "lines": [
+      5,
+      31
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为数据库访问服务的 Dart ORM 库，自身不依赖某数据库存储应用数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "import 'package:orm/sqlite.dart'; ／ dart run bin/orm.dart generate --schema example/models.dart --out example/models.db.dart --name AppDatabase --engine sqlite --check ／ Each module has its own public import: `schema.dart`, `query.dart`,",
+   "evidence_lines": [
+    31,
+    47,
+    56
+   ]
+  },
+  "fn": "medz/dart-orm",
+  "sha": "5ebe3a22a5f9",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

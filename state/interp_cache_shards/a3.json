@@ -7828,5 +7828,213 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "61102f7f59c0": {
+  "identity": {
+   "one_liner": "反向 ETL 工具，用 YAML 声明式同步仓库数据到外部目标",
+   "review": "drt 是一个反向 ETL 命令行工具，把数据仓库中的数据同步到 Slack、HubSpot、S3 等 SaaS API 或存储目标，配置以 YAML 形式存放在用户自己的 Git 仓库中。它提供 dbt 风格的工作流、多种数据源与目标连接器、可集成 Dagster/Airflow 等调度器，并内置 MCP 服务器供 AI 工具操作。采用 open-core 模式，Apache 2.0 许可，适合以代码优先方式管理数据激活管道的数据团队。",
+   "highlights": [
+    "提供 12+ 数据源连接器与 35+ 目标连接器，以 YAML 声明式定义同步管道",
+    "内置 MCP 服务器与 Claude Code skills，支持 AI 工具生成和运行同步",
+    "提供 Mermaid DAG 生成、死信队列、水印状态管理等运维能力"
+   ],
+   "use_cases": [
+    "把数仓数据定期同步到 SaaS 工具（Slack、HubSpot、Salesforce 等）",
+    "在 Git 与 CI/PR 流程中版本化管理数据激活管道",
+    "通过 Dagster/Airflow/Prefect 编排反向 ETL 任务"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|✅ v0.1|`pip install drt-core[postgres]`|Password (env var)| ／ |PostgreSQL (upsert)|✅ v0.4|`pip install drt-core[postgres]`|Password (env var)|",
+     "lines": [
+      206,
+      236
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|✅ v0.5|`pip install drt-core[mysql]`|Password (env var)| ／ |MySQL (upsert)|✅ v0.4|`pip install drt-core[mysql]`|Password (env var)|",
+     "lines": [
+      211,
+      237
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|✅ v0.4.2|(core)|File path|",
+     "lines": [
+      208
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|✅ v0.6|`pip install drt-core[sqlserver]`|Password (env var)|",
+     "lines": [
+      215
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|✅ v0.4.3|`pip install drt-core[clickhouse]`|Password (env var)| ／ |ClickHouse|✅ v0.5|`pip install drt-core[clickhouse]`|Password (env var)|",
+     "lines": [
+      210,
+      238
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为数据仓库/数据库提供连接器并读取数据向外同步，是为数据库生态服务的管道工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0，open-core 模式",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dlt loads data in, dbt transforms it, and **drt** activates it back out — reverse ETL from your warehouse to the tools your team works in, as YAML in your own repo. No dashboard to babysit, no audience builder duplicating what dbt already does, no hosted runtime billing you per row. Your data goes straight from your warehouse to the destination — never through a drt-hosted intermediary. ／ |Connector|Status|Install|Auth| ／ |Connector|Status|Install|Auth|",
+   "evidence_lines": [
+    7,
+    202,
+    222
+   ]
+  },
+  "fn": "drt-hub/drt",
+  "sha": "61102f7f59c0",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fbce3ce723ff": {
+  "identity": {
+   "one_liner": "华为云数据库相关示例项目索引清单",
+   "review": "该仓库是华为云 samples 组织下的示例项目列表，按表格收录多个子仓库，内容涵盖 GaussDB 驱动与生态适配（Archery、PHP 驱动、SQLAlchemy 方言、Hibernate 等）、云原生架构和 Serverless 应用示例。给需要接入华为云或 GaussDB 的开发者提供索引；本身不含代码实现，状态均为 incubating。",
+   "highlights": [
+    "收录 GaussDB 多语言驱动与生态工具适配项目条目",
+    "包含云原生、Serverless、数据库适配等多类示例仓库索引",
+    "按仓库/描述/团队/状态表格形式组织条目"
+   ],
+   "use_cases": [
+    "查找 GaussDB 驱动及生态工具适配项目",
+    "检索华为云云原生与 Serverless 示例",
+    "了解 gaussdb-drivers 团队孵化中的项目"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "|database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating|",
+     "lines": [
+      13
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|enterprise-observability|A serverless Todo application built on Huawei Cloud FunctionGraph + APIG + RDS MySQL. Using event-driven architecture, the frontend calls backend functions via APIG, with data persisted to RDS MySQL (MongoDB compatible) and JWT for us ／ |enterprise-serverless-todo|A serverless Todo application built on Huawei Cloud FunctionGraph + APIG + RDS MySQL. Using event-driven architecture, the frontend calls backend functions via APIG, with data persisted to RDS MySQL (MongoDB compatible) and JWT for  ／ |gaussdb-sqlalchemy-python-driver-windows|面向华为 GaussDB 数据库的 Python SQLAlchemy 方言驱动，通过 pyodbc 调用 GaussDB ODBC Driver，接入 SQLAlchemy 的 ORM、连接池、事务、SQL 编译和反射能力。提供Windows环境下SQLAlchemy连接GaussDB的Python驱动适配。支持 A 兼容（Oracle 风格）、B 兼容（MySQL 风格）、M 兼容（MySQL 风格）三种模式,|gaussdb- ／ |hibernate-orm7.4.1|应客户要求，基于hibernate7.4.1进行适配（支持 A 兼容（Oracle 风格）、M 兼容（MySQL 风格）），数据库版本505.2.1 0800SPC|gaussdb-drivers|incubating|",
+     "lines": [
+      24,
+      25,
+      29,
+      31
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "compat",
+     "quote": "|database-gaussdb-php-driver|应客户要求，本项目为 PHP 提供 GaussDB M 模式和 Oracle 兼容模式接入能力|gaussdb-drivers|incubating| ／ |gaussdb-sqlalchemy-python-driver-windows|面向华为 GaussDB 数据库的 Python SQLAlchemy 方言驱动，通过 pyodbc 调用 GaussDB ODBC Driver，接入 SQLAlchemy 的 ORM、连接池、事务、SQL 编译和反射能力。提供Windows环境下SQLAlchemy连接GaussDB的Python驱动适配。支持 A 兼容（Oracle 风格）、B 兼容（MySQL 风格）、M 兼容（MySQL 风格）三种模式,|gaussdb- ／ |hibernate-orm7.4.1|应客户要求，基于hibernate7.4.1进行适配（支持 A 兼容（Oracle 风格）、M 兼容（MySQL 风格）），数据库版本505.2.1 0800SPC|gaussdb-drivers|incubating|",
+     "lines": [
+      15,
+      29,
+      31
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|cloudoperation-resource-monitor-dashboard|HuaweiCloud Resource Monitor Dashboard 是一个面向华为云弹性云服务器（ECS）、云硬盘（EVS）和云监控（CES）的资源监控仪表盘。用户配置租户 AKSK 等鉴权信息后，后端定时或手动从华为云 API 采集资源数据与使用率指标，保存到本地 SQLite 数据库，并通过 RESTful API 为前端提供查询、筛选和导出报告功能。|public-cloud-continuous-operatio",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "|database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating| ／ |database-crewai-gaussdb|开源工具CrewAI兼容GaussDB|gaussdb-drivers|incubating| ／ |database-gaussdb-php-driver|应客户要求，本项目为 PHP 提供 GaussDB M 模式和 Oracle 兼容模式接入能力|gaussdb-drivers|incubating|",
+     "lines": [
+      13,
+      14,
+      15
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库为数据库相关示例项目索引，收录多条 GaussDB 驱动与适配条目，服务于数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Awesome HuaweiCloud ／ |database-archery|基于开源SQL审核查询平台Archery v1.14.0进行GaussDB数据库引擎适配。兼容PostgreSQL协议模式，支持GaussDB Kernel V500R002C00及以上版本。适配工作涵盖SQL查询（含执行计划分析、SHOW CREATE TABLE）、SQL上线工单全流程（提交-检测-审核-执行-回滚）、数据库管理、账号管理、参数配置与对比、慢查询分析、会话诊断、数据字典等核心功能模块。|gaussdb-drivers|incubating| ／ |database-crewai-gaussdb|开源工具CrewAI兼容GaussDB|gaussdb-drivers|incubating|",
+   "evidence_lines": [
+    1,
+    13,
+    14
+   ]
+  },
+  "fn": "huaweicloud-samples/database-awesome-huaweicloud",
+  "sha": "fbce3ce723ff",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8891,5 +8891,115 @@
   "generated_at": "2026-10-07",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "fd9abd2f0dd6": {
+  "identity": {
+   "one_liner": "强制 Roblox 客户端使用 DirectX 11 渲染后端的 Windows 工具",
+   "review": "这是一个 Windows 桌面工具，通过写入客户端启动标志和用户级配置，把 Roblox 客户端的渲染后端固定到 DirectX 11，并提供诊断快照、回滚日志与多语言界面。面向 Roblox 玩家、爱好者和小型工作室。所有更改记录日志且可一键回滚，不修改进程内存；项目独立于 Roblox 官方，MIT 许可。",
+   "highlights": [
+    "通过客户端标志与用户级配置在启动时将渲染器固定为 DirectX 11",
+    "提供带时间戳的回滚日志，支持一键恢复上次会话的配置",
+    "生成包含 GPU 厂商、驱动版本与 DXGI 特性级别的诊断快照"
+   ],
+   "use_cases": [
+    "Roblox 客户端在 Windows 上回退到非 DirectX 11 渲染后端时的修正",
+    "排查渲染相关问题时导出诊断快照用于求助",
+    "需要可回滚、可审计地管理客户端启动配置的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 未涉及任何数据库的管理或适配功能，数据库主题标签与正文内容不符，属使用图形 API 的桌面应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A Windows graphics pipeline enforcer and renderer stabilization toolkit** ／ Roblox ships with a rendering selection mechanism that, on many Windows 10 and Windows 11 machines, wanders away from DirectX 11 and settles on a fallback that produces muddy textures, stutter, and the occasional black-frame hiccup. **Roblox DirectX 11 Fix** is the counterweight: a lightweight enforcement layer that nudges (and, when necessary, pins) the Roblox client toward the DirectX 11 backend, then gets out of the way. ／ This project is an independent utility and is **not affiliated with, endorsed by, or sponsored by Roblox Corporation**. \"Roblox\" is referenced descriptively to identify the software this tool interacts with. All trademarks belong to their respective owners.",
+   "evidence_lines": [
+    6,
+    20,
+    142
+   ]
+  },
+  "fn": "4anw/DX11-Forcer",
+  "sha": "fd9abd2f0dd6",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "77cd3fe0342d": {
+  "identity": {
+   "one_liner": "基于QLoRA微调Qwen2.5-3B的数据科学代码助手模型",
+   "review": "该项目将 Qwen2.5-3B-Instruct 通过 4-bit QLoRA 在约 16.4k 数据科学指令对上微调，用于生成 Python/Pandas/统计/机器学习代码，并提供 BLEU、ROUGE-L 等离线评估脚本。面向需要在单张 T4 GPU（峰值 VRAM 6.51 GB）上本地运行小型代码助手的用户。限制：评估基于同分布数据，未验证代码运行正确性。与数据库生态无直接关联。",
+   "highlights": [
+    "在单张 Tesla T4 GPU 上以 6.51 GB 峰值显存完成 3 epoch 训练",
+    "采用 4-bit NF4 量化与 prompt token loss masking，仅更新不到 1% 参数",
+    "包含自动化评估脚本，生成 BLEU/ROUGE-L/语义相似度对比矩阵与诊断图表"
+   ],
+   "use_cases": [
+    "在单 GPU/低成本环境本地部署数据科学代码生成助手",
+    "复现 QLoRA 微调训练与基准评估流程",
+    "研究小模型在数据科学代码任务上的领域适配"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 仅涉及 LLM 微调与评估，未实现为数据库生态服务的工具，也未声明依赖某数据库存储数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This project implements an end-to-end Parameter-Efficient Fine-Tuning (PEFT) pipeline adapting **Qwen2.5-3B-Instruct** into a specialized Data Science coding assistant: ／ - **Domain Specialization:** Fine-tuned on ~16.4k curated instruction-response pairs from `ed001/ds-coder-instruct-v1`, covering dataframe manipulation, statistical analysis, and machine learning pipelines. ／ - **Resource-Constrained Optimization:** Implemented 4-bit QLoRA (`r=16`, `alpha=16`) via Unsloth across all 7 linear projection layers, capping peak VRAM at **6.51 GB** on a single Tesla T4 GPU.",
+   "evidence_lines": [
+    19,
+    20,
+    21
+   ]
+  },
+  "fn": "yashvasudeva1/qwen-data-science-instruct",
+  "sha": "77cd3fe0342d",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

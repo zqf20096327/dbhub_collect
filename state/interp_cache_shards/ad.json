@@ -9586,5 +9586,189 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3fe26e319098": {
+  "identity": {
+   "one_liner": "CLIProxyAPI 的自托管管理控制台与用量观测面板",
+   "review": "该项目为 API 网关 CLIProxyAPI 提供一个 Web 管理控制台，用于管理 AI 提供商、凭据、客户端密钥与配置，并记录每次请求的用量与成本。单个 Go 二进制内嵌 React 控制台，使用本地 SQLite 存储数据，支持 Docker Compose 与原生可执行文件部署，需另行安装 CPA 并以其管理密钥登录。",
+   "highlights": [
+    "提供请求级用量与成本记录，含延迟、TTFT、token 与成本明细，支持多面过滤与全文搜索",
+    "内置 Agent 与远程 MCP 端点，可经声明的能力操作控制台，敏感变更需人工批准",
+    "提供凭据与原始用量消息的 AES-GCM 加密存储，以及变更前自动加密备份 config.yaml"
+   ],
+   "use_cases": [
+    "为 CLIProxyAPI 网关统一管理 AI 提供商、OAuth 凭据与客户端密钥",
+    "查看 LLM 网关请求的用量、成本与模型价格快照",
+    "在离线环境中以单二进制方式部署控制台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "binary with the React console embedded and a local SQLite database, runs offline, and",
+     "lines": [
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用内嵌的 SQLite 数据库存自身数据，服务对象是 CLIProxyAPI 网关而非数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "binary with the React console embedded and a local SQLite database, runs offline, and ／ adapts protocols, holds credentials and proxies requests. **Oh My CPA** (OMC) is a web ／ Requires Docker Engine with the Compose plugin and CLIProxyAPI v8.0.0 or later. The",
+   "evidence_lines": [
+    29,
+    26,
+    90
+   ]
+  },
+  "fn": "WizisCool/oh-my-cpa",
+  "sha": "3fe26e319098",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3c84b24decd5": {
+  "identity": {
+   "one_liner": "Flutter 跨平台笔记应用，本地 SQLite 离线存储",
+   "review": "一个基于 Flutter 开发的跨平台笔记应用，提供 Markdown 笔记、任务清单、日历视图、文件夹组织、PIN/生物识别锁定及 PDF/图片导出。数据通过 sqflite/sqflite_common_ffi 存储在本地 SQLite 数据库，离线运行。适用于想在 Windows、Web 和移动端本地管理个人笔记与任务的用户。",
+   "highlights": [
+    "支持 Markdown 笔记编辑与版本历史快照",
+    "通过 sqflite 使用本地 SQLite 离线存储笔记数据",
+    "支持 PDF/图片导出、打印及 PIN/生物识别锁定"
+   ],
+   "use_cases": [
+    "桌面/移动/Web 端离线笔记与任务管理",
+    "带密码或生物识别锁的私密笔记保存",
+    "笔记导出为 PDF 或图片用于分享打印"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **`lib/core/`**: Shared infrastructure including SQLite database, local storage services, export service, and extensions. ／ - sqflite & sqflite_common_ffi - SQLite local database",
+     "lines": [
+      50,
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 存储自身笔记数据的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **`lib/core/`**: Shared infrastructure including SQLite database, local storage services, export service, and extensions. ／ - sqflite & sqflite_common_ffi - SQLite local database ／ Distributed under the MIT License. See `LICENSE` for more information.",
+   "evidence_lines": [
+    50,
+    66,
+    74
+   ]
+  },
+  "fn": "abinjoyal/MyNotes-App",
+  "sha": "3c84b24decd5",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::oceanbase 数据库大赛 seekdb 赛题仓库地址": {
+  "identity": {
+   "one_liner": "OceanBase 数据库大赛 seekdb 赛题的参赛仓库",
+   "review": "根据仓库简介，这是一个为 OceanBase 数据库大赛 seekdb 赛题而设的仓库地址，主要用途是承载赛题相关内容。简介未提供其安装方式、运行方法或面向的使用者细节，属于比赛参赛/赛题类仓库，具体功能与范围需以赛题说明为准（本条基于简介，无法验证更多细节）。",
+   "highlights": [
+    "与 OceanBase 数据库大赛 seekdb 赛题相关",
+    "以仓库形式提供赛题地址"
+   ],
+   "use_cases": [
+    "参加 OceanBase 大赛 seekdb 赛题的选手获取赛题内容",
+    "查阅赛题仓库入口"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "mention",
+     "quote": "oceanbase 数据库大赛 seekdb 赛题仓库地址"
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "简介仅说明是大赛赛题仓库地址，未说明其为数据库生态提供工具还是仅使用数据库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "oceanbase 数据库大赛 seekdb 赛题仓库地址"
+  },
+  "fn": "BloomingFlowerSea/ob-competition-seekdb-2026",
+  "sha": "desc::oceanbase 数据库大赛 seekdb 赛题仓库地址",
+  "source": "desc",
+  "generated_at": "2026-10-09",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

@@ -8842,5 +8842,152 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "40255a266c92": {
+  "identity": {
+   "one_liner": "OceanBase 数据库协同开发与数据管理工具",
+   "review": "ODC 是面向 OceanBase 数据库的 Web/Desktop 双形态工具，提供 SQL 开发、PL 调试、变更审批与风险控制、数据生命周期管理及静态/动态数据脱敏，用于多人协同开发与企业管控场景。Web 版以 Docker 镜像部署并依赖 OceanBase MySQL 租户作为 MetaDB，桌面版使用内嵌 h2database。仓库声明 4.3.4_bp2 为最后一个开源版本，后续不再发布开源更新。",
+   "highlights": [
+    "提供 Web 与桌面两种形态，支持 SQL 开发、PL 调试、数据导入导出与对象管理",
+    "包含变更审批流程、SQL 校验规则、数据保留/归档策略与静态/动态数据脱敏",
+    "Web 版提供 rpm 与 Docker 镜像（x86/ARM），桌面版支持 Windows/MacOS/Linux 安装包"
+   ],
+   "use_cases": [
+    "OceanBase 数据库的 SQL 开发与多人协同变更管控",
+    "数据保留策略与冷热数据分离的数据生命周期管理",
+    "敏感数据规则配置与查询/导出场景的数据脱敏"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "# OceanBase Developer Center (ODC) ／ OceanBase Developer Center, or ODC for short, is an open-source, all-encompassing tool for collaborative database development and data management across various scenarios. By streamlining collaborative efforts, ODC addresses the challenges of risk management d ／ The ODC Web version is packaged as a Docker image and relies on an OceanBase MySQL tenant as MetaDB. If you have not had a MetaDB, please follow **(Optional) Step 1: Create a MetaDB** below for instructions.",
+     "lines": [
+      9,
+      11,
+      65
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "The ODC Web version is packaged as a Docker image and relies on an OceanBase MySQL tenant as MetaDB. If you have not had a MetaDB, please follow **(Optional) Step 1: Create a MetaDB** below for instructions.",
+     "lines": [
+      65
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|**HTAP Collaborative Development**|Support Doris data source Support Oracle data source Support homogeneous database schema comparison/synchronization Built-in common code snippets|Support natural language conversion to SQL Support real-time query and analysi",
+     "lines": [
+      136
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "ODC 是为 OceanBase 数据库提供开发、管理与安全管控能力的工具，而非使用数据库存储业务数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": true,
+    "of": "OceanBase"
+   },
+   "dbs": [
+    "OceanBase",
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# OceanBase Developer Center (ODC) ／ OceanBase Developer Center, or ODC for short, is an open-source, all-encompassing tool for collaborative database development and data management across various scenarios. By streamlining collaborative efforts, ODC addresses the challenges of risk management during database changes, efficient data management, and data security concerns. ／ The ODC Web version is packaged as a Docker image and relies on an OceanBase MySQL tenant as MetaDB. If you have not had a MetaDB, please follow **(Optional) Step 1: Create a MetaDB** below for instructions.",
+   "evidence_lines": [
+    9,
+    11,
+    65
+   ]
+  },
+  "fn": "oceanbase/odc",
+  "sha": "40255a266c92",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2bc16daa3866": {
+  "identity": {
+   "one_liner": "C#/.NET 编写的 SQL 分布式数据库，Raft 复制的事务性 KV 存储层",
+   "review": "CamusDB 是一个用 C#/.NET 实现的分布式 SQL 数据库，底层为 Raft 复制的事务性键值存储，默认可串行化隔离与强一致性。面向需要数据库分支（写时复制）、时间旅行查询、误删恢复等能力的开发者。README 说明部分功能仍属 alpha，API 和存储格式可能随版本变化，使用需谨慎。",
+   "highlights": [
+    "默认可串行化隔离与强一致性，跨分区写入使用基于 Raft 的两阶段提交",
+    "支持写时复制数据库分支、时间旅行读取（AS OF SYSTEM TIME）与误删对象恢复（RELINK TO）",
+    "提供 JSON/HTTP 与 gRPC API，并带 .NET 客户端库，引擎可编译为 WebAssembly 在浏览器中运行"
+   ],
+   "use_cases": [
+    "需要强一致性事务保证的应用后端存储",
+    "为生产库创建临时测试/预发分支（staging 克隆、schema 迁移演练）",
+    "依赖历史快照做调试或恢复误删数据"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **SQL dialect** — SELECT (including `FROM`-less `SELECT <expr>`), INSERT, UPDATE, DELETE, TRUNCATE, CREATE/DROP/ALTER TABLE, transactions (BEGIN / COMMIT / ROLLBACK), parameterized placeholders, prepared statements, table aliases, derived tables, inner, left",
+     "lines": [
+      74
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是数据库内核/存储引擎，而非围绕其他数据库的服务组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CamusDB is a SQL distributed database written in C# on .NET. It provides a SQL interface with a Raft-replicated, transactional key-value storage layer, and makes a few opinionated choices: **serializable isolation/strong consistency are the default**; databases can be **branched copy-on-write like code**; and **dropped objects are recoverable** instead of instantly destroyed. It can auto-scale based on traffic. Development is driven by performance, Jepsen-style testing, chaos engineering, fault injection, and degraded-state testing. ／ CamusDB's engine is written in modern C# on .NET: the SQL parser, the query planner and operators, the transaction layer, and the embedded Kahuna storage node all run in a single .NET process (with RocksDB underneath for persistence). Because the engine itself is pure .NET, extending it means writing ordinary C#: bring your own NuGet libraries and custom business logic directly into the database layer without crossing a language boundary or fighting a foreign extension API. Reading and debugging the engine is equally direct, and it runs on any platform .NET 10 supports. Clients talk to it over a JSON/HTTP API or a gRPC API with a .NET client library.",
+   "evidence_lines": [
+    3,
+    67
+   ]
+  },
+  "fn": "camusdb/camusdb",
+  "sha": "2bc16daa3866",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

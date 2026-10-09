@@ -7758,5 +7758,86 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9667b84769bc": {
+  "identity": {
+   "one_liner": "面向 AI agent 的开源数据库与工作区，写入经变更请求与人工审核",
+   "review": "Busabase 是一个供 AI agent 与人共享的开源数据库和工作区，用于存放结构化记录、文档、技能与应用；agent 的写入以带字段级 diff 的 Change Request 形式提交，由权限决定合并或等待人工审核。支持通过 MCP、OpenAPI、CLI、Agent Skill 连接 Claude Code、Codex、Cursor 等 agent，本地以内嵌 PGlite 运行，也可接外部 Postgres。",
+   "highlights": [
+    "提供 Bases、Docs、Skills、Apps、Whiteboards、Workflows 等节点类型构成的工作区",
+    "agent 写入以 Change Request 形式记录，包含消息、字段级 diff、作者与历史",
+    "支持 MCP、OpenAPI、CLI、ACP 会话等多种 agent 接入方式",
+    "本地优先，内嵌 PGlite 数据库，可配置外部 Postgres 与 S3 兼容存储"
+   ],
+   "use_cases": [
+    "软件交付中的任务、规范与约定沉淀",
+    "CRM 客户跟进记录管理",
+    "团队决策与上下文的知识库",
+    "训练/评测数据的标注与审核"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Local data lives in `~/.busabase/data/` (`pgdata/` for the embedded PGlite database, `storage/` for files). Set `BUSABASE_DATA_DIR`, `PG_DATABASE_URL`, or `STORAGE_URL` to use another location, external Postgres, or S3-compatible storage. Only one process can  ／ Busabase runs on Postgres (or embedded PGlite) itself; it is the workspace on top, not a replacement for your app's database.",
+     "lines": [
+      70,
+      156
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Postgres|Applications reading and writing storage|A workspace UI, knowledge model, review loop, and provenance|",
+     "lines": [
+      152
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 Busabase 自身运行在 Postgres 或内嵌 PGlite 之上，是使用数据库存储数据的工作区应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，另有商业托管版 Busabase Cloud",
+   "install": [
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Busabase is an open-source database and workspace for AI agents — agents and people share the same structured data, docs, skills, and apps, and writes that matter become reviewed, trusted records. ／ Local data lives in `~/.busabase/data/` (`pgdata/` for the embedded PGlite database, `storage/` for files). Set `BUSABASE_DATA_DIR`, `PG_DATABASE_URL`, or `STORAGE_URL` to use another location, external Postgres, or S3-compatible storage. Only one process can hold the same PGlite database at a time. ／ Busabase runs on Postgres (or embedded PGlite) itself; it is the workspace on top, not a replacement for your app's database.",
+   "evidence_lines": [
+    34,
+    70,
+    156
+   ]
+  },
+  "fn": "busabase/busabase",
+  "sha": "9667b84769bc",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

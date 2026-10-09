@@ -9056,5 +9056,198 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "abb021ff42a6": {
+  "identity": {
+   "one_liner": "自托管 Git 服务器，单 Go 程序内嵌 SQLite 存储",
+   "review": "OwnGit 是面向个人或小型团队的自托管 Git 服务器，把私有仓库放在自己的电脑、NAS 或家庭服务器上，并通过浏览器仪表盘管理。它以单个 Go 程序运行，数据记录存于一个 SQLite 文件，无需单独部署数据库服务，支持 HTTP 协议的 clone/push、PR 审查、定时备份及 MCP 接入，适合家庭实验室或本地环境。",
+   "highlights": [
+    "提供基于 HTTP 的 Git clone/fetch/push，仓库为普通 bare Git 仓库",
+    "支持浏览器内 pull request 审查、强制推送历史保留与文件恢复",
+    "支持按计划或按需备份/恢复仓库，并通过 JSON 命令或 MCP 连接编码工具"
+   ],
+   "use_cases": [
+    "家庭实验室或本地机器上自托管私有 Git 仓库",
+    "个人或小团队在浏览器中做代码评审与 pull request 管理",
+    "从其他 HTTPS Git 主机导入并自动保持同步的镜像仓库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- One Go program with a SQLite file. There is no database service to run.",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其为单 Go 程序并使用一个 SQLite 文件存数据，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0-or-later；1.1.4 及更早版本为 MIT 许可",
+   "install": [
+    "binary",
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OwnGit is a self-hosted Git server for one person or a small group. It keeps your private repositories on your own computer, NAS or home server, and gives you a browser dashboard for them. You need no cloud account or subscription. ／ - One Go program with a SQLite file. There is no database service to run. ／ |Docker Compose|`docker compose up -d` with `compose.yaml`, then `docker compose exec -it owngit owngit setup-link`|",
+   "evidence_lines": [
+    12,
+    28,
+    55
+   ]
+  },
+  "fn": "juliankang4/owngit",
+  "sha": "abb021ff42a6",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e48989315682": {
+  "identity": {
+   "one_liner": "原生桌面 SQL 客户端，基于 Rust+Tauri，支持多数据库连接查询",
+   "review": "Celer 是一个 Rust 核心、Tauri 2 界面的桌面 SQL 客户端，提供 schema 感知的补全编辑器、表数据浏览编辑、执行计划、ER 图、schema 比对、多格式导入导出，以及带权限的 AI 助手和 MCP 服务器。面向使用 PostgreSQL、MySQL/MariaDB、SQL Server、SQLite 等数据库的开发者与运维人员。注意界面当前为西班牙语，安装包尚未签名。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQL Server、SQLite、Informix 及任意 ODBC 数据源的原生连接",
+    "提供 schema 感知补全、执行计划树、ER 图导出与 schema 比对同步脚本生成",
+    "内置 MCP 服务器，可按连接配置权限、行列限制、掩码列和审计日志"
+   ],
+   "use_cases": [
+    "在桌面端编写和运行 SQL、浏览和编辑多数据库的表数据",
+    "分析慢查询：查看带实际行数与耗时的执行计划、服务器会话并可取消",
+    "通过 MCP 让 Claude Desktop 等客户端在权限控制下访问数据库连接"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A fast, native desktop SQL client for PostgreSQL, MySQL/MariaDB, SQL Server, SQLite, Informix and ODBC, ／ |PostgreSQL|native: server-side cursors, cancel, full DDL|✅|",
+     "lines": [
+      4,
+      167
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A fast, native desktop SQL client for PostgreSQL, MySQL/MariaDB, SQL Server, SQLite, Informix and ODBC, ／ |MySQL / MariaDB|native: streaming, `KILL QUERY`, `DELIMITER`|✅|",
+     "lines": [
+      4,
+      168
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "A fast, native desktop SQL client for PostgreSQL, MySQL/MariaDB, SQL Server, SQLite, Informix and ODBC, ／ |MySQL / MariaDB|native: streaming, `KILL QUERY`, `DELIMITER`|✅|",
+     "lines": [
+      4,
+      168
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "A fast, native desktop SQL client for PostgreSQL, MySQL/MariaDB, SQL Server, SQLite, Informix and ODBC, ／ |SQL Server|native (TDS), Windows authentication|✅|",
+     "lines": [
+      4,
+      169
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A fast, native desktop SQL client for PostgreSQL, MySQL/MariaDB, SQL Server, SQLite, Informix and ODBC, ／ |SQLite|embedded|✅| ／ `npm run dev` runs the same interface in a browser against an in-memory SQLite demo. Releases are built and published",
+     "lines": [
+      4,
+      170,
+      235
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|Oracle, Db2, DuckDB, ClickHouse, Snowflake…|—|planned|",
+     "lines": [
+      173
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "|Oracle, Db2, DuckDB, ClickHouse, Snowflake…|—|planned|",
+     "lines": [
+      173
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供针对多数据库引擎的原生驱动连接与查询管理功能，是为数据库生态服务的客户端工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQL Server",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A fast, native desktop SQL client for PostgreSQL, MySQL/MariaDB, SQL Server, SQLite, Informix and ODBC, ／ ## Databases ／ |PostgreSQL|native: server-side cursors, cancel, full DDL|✅|",
+   "evidence_lines": [
+    4,
+    163,
+    167
+   ]
+  },
+  "fn": "e-omunoz/celer",
+  "sha": "e48989315682",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

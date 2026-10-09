@@ -8613,5 +8613,139 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2e911751c31f": {
+  "identity": {
+   "one_liner": "GitHub Actions 自托管 runner 集群控制器，用 SQLite 存储，事件驱动弹性伸缩",
+   "review": "Zoomies 是一个自托管的 GitHub Actions runner 集群控制器：监听 workflow_job webhook，为每个任务启动一次性 runner，任务结束即销毁，并通过 GitHub App 认证自动生成单次注册令牌。面向需要将静态 runner 换成弹性私有主机集群的团队，支持多主机多操作系统、Prometheus 指标和 S3 兼容的备份目的地；状态存储使用内嵌 SQLite，不需要独立数据库服务器或 Kubernetes。",
+   "highlights": [
+    "基于 workflow_job webhook 的事件驱动伸缩，为每个任务生成临时 runner",
+    "以 GitHub App 身份认证并自行铸造单次 JIT 注册令牌",
+    "提供实时 Web UI、Prometheus 指标、审计日志，以及向 S3 兼容目的地发送的夜间备份"
+   ],
+   "use_cases": [
+    "为 GitHub 组织或仓库自建弹性 runner 集群，替代静态 runner",
+    "将自有物理机/私有主机纳入 CI 资源池，无需公网 IP 或端口转发",
+    "需要每次任务在干净环境中运行、避免工作流间状态泄漏的 CI 场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* **Actually observable.** SQLite for state, Prometheus metrics, structured",
+     "lines": [
+      96
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目服务对象是 GitHub Actions CI，SQLite 仅作为其内部状态存储使用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "account. It watches for queued jobs, starts a fresh runner for each one, and ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured ／ Single Go binary. SQLite. AGPL-3.0.",
+   "evidence_lines": [
+    62,
+    96,
+    12
+   ]
+  },
+  "fn": "eyupio/zoomies",
+  "sha": "2e911751c31f",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cac291f531b6": {
+  "identity": {
+   "one_liner": "将 Fly.io 上的 PostgreSQL 数据库通过 pg_dump 备份到 AWS S3 的工具集",
+   "review": "该项目为托管在 Fly.io 平台上的 Postgres 数据库提供备份方案，包含两种策略：通过 GitHub Actions 直接执行 pg_dump 并上传 S3 的简单方式，以及在 Fly 基础设施内运行备份 worker、通过可复用工作流触发的方案。适用于使用 Fly.io 部署 Postgres 的开发者，依赖 OIDC 认证访问 AWS，备份历史可借助 S3 版本化策略管理，也支持在 Fly 之外运行 worker 镜像。",
+   "highlights": [
+    "提供 GitHub Actions 和 Fly 备份 worker 两种备份方式",
+    "通过 OIDC 进行 AWS 认证，不使用长期 AWS 访问密钥",
+    "支持通过环境变量配置多数据库备份、pg_dump 参数与压缩选项"
+   ],
+   "use_cases": [
+    "为 Fly.io 上托管的 PostgreSQL 数据库定期创建归档备份并存入 S3",
+    "为多个数据库环境配置一次性批量备份任务",
+    "在 Fly 之外的环境中复用备份 worker 镜像执行数据库导出"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Utilities to backup a Fly.io Postgres database to AWS S3 buckets. ／ Indeed Fly's pg images support `wal-g` config to S3 via env vars.",
+     "lines": [
+      3,
+      32
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 Postgres 数据库提供备份能力的工具集，本身不作为应用存储数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Utilities to backup a Fly.io Postgres database to AWS S3 buckets. ／ 1. The simple method: a github action that connects to your Fly.io application and dumps it to AWS ／ 2. A more complex setup, useful for bigger databases, which triggers a backup workers via github",
+   "evidence_lines": [
+    3,
+    7,
+    12
+   ]
+  },
+  "fn": "significa/fly-pg-dump-to-s3",
+  "sha": "cac291f531b6",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

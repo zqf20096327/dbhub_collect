@@ -8817,5 +8817,88 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1e2e21c184d7": {
+  "identity": {
+   "one_liner": "自托管 webhook 接收与多目标投递网关，基于 SQL 持久化队列",
+   "review": "HookRelay 是一个自托管的 webhook 接收与投递基础设施，提供 HMAC-SHA256 签名校验、SQL 持久化队列、fencing token 防脑裂、智能重试与死信队列，将事件投递到 Discord、Slack 或自定义 HTTP 服务。它用 PostgreSQL（分布式模式）或 SQLite（单机模式）存储交付状态与任务队列，面向需要可靠 webhook 事件分发的开发与运维团队。安装提供 Docker Compose 与本地 pip 两种方式。",
+   "highlights": [
+    "支持 PostgreSQL/SQLite 两种持久化后端，单机与分布式多 worker 两种部署形态",
+    "实现 HMAC-SHA256 签名校验、重放防护、限流、fencing token 与死信队列重投",
+    "提供 Operations Console 控制台查看交付状态、HTTP 延迟与安全审计日志"
+   ],
+   "use_cases": [
+    "将 GitHub/GitLab/Stripe 等来源的 webhook 可靠分发到 Discord、Slack 或自定义 HTTP 微服务",
+    "自托管场景下用 SQL 队列替代独立消息中间件实现事件投递",
+    "本地开发或 CI 中以 SQLite 单进程模式运行 webhook 流程测试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Launches **HookRelay API Gateway**, **4-Worker Distributed Consumer Pool**, **PostgreSQL 16**, and **Redis 7**: ／ POSTGRES_PASSWORD=$(python -c \"import secrets; print(secrets.token_urlsafe(24))\") docker compose up --build -d ／ participant DB as PostgreSQL / SQLite",
+     "lines": [
+      54,
+      60,
+      97
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "### Option B: Zero-Dependency Local Run (`SQLite` + Embedded Worker) ／ participant DB as PostgreSQL / SQLite",
+     "lines": [
+      63,
+      97
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明事件持久存储于 PostgreSQL 或 SQLite，数据库是其自身存储层而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> Instead of rebuilding HMAC verification, retry loops, rate-limit handling, and dead-letter queues inside every service, **your application or webhook provider talks to HookRelay once**. HookRelay verifies signatures, persists events durably in SQL (`PostgreSQL` or `SQLite`), coordinates distributed workers via monotonic fencing tokens, and guarantees delivery to **Discord, Slack, and custom HTTP microservices**. ／ POSTGRES_PASSWORD=$(python -c \"import secrets; print(secrets.token_urlsafe(24))\") docker compose up --build -d ／ ### Option B: Zero-Dependency Local Run (`SQLite` + Embedded Worker)",
+   "evidence_lines": [
+    15,
+    60,
+    63
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Abhishek-Gali/HookRelay",
+  "sha": "1e2e21c184d7",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

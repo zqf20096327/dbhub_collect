@@ -9530,5 +9530,70 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2f1ab454b55e": {
+  "identity": {
+   "one_liner": "AI 代理持久记忆层：BM25F+向量混合检索、治理写入、MCP 接口",
+   "review": "MIND-Mem 是为 AI 代理（如 Claude Code、MCP 兼容客户端）提供持久记忆的系统，采用 propose→review→approve_apply 的治理写入流程与可复放的确定性召回，审计编码基于 Q16.16 定点哈希链。面向多代理和受监管场景，通过 PyPI 安装、pip 一行命令即可运行；当前发布版本 v5.0.4 仍为 candidate，待正式发布。",
+   "highlights": [
+    "提供 107 个 MCP 工具作为接口，支持 BM25F+向量混合检索",
+    "实现治理写入（propose→review→approve_apply）与哈希锚定的审计链",
+    "同输入下审计/证据编码字节级一致，支持复放"
+   ],
+   "use_cases": [
+    "为长期运行的编码代理提供可审计的决策记忆",
+    "多代理协作中需要审查与审计的写入治理",
+    "受监管场景下需要可复放证据链的记忆层"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Storage: Markdown + Postgres + Encrypted",
+     "lines": [
+      25
+     ]
+    }
+   ],
+   "dbs": [],
+   "eco": "tool",
+   "eco_why": "README 定位为 AI 代理的记忆层组件，通过 MCP 工具为代理生态提供服务而非终端应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Built on the MIND substrate. Governed-write (`propose → review → approve_apply`). 107 MCP tools as the surface — but the differentiator is the substrate underneath. On the same workspace, recall uses the query, admitted corpus, configuration, `scoring_instant`, and execution providers. With those inputs held constant, the canonical audit/evidence encoding is byte-identical across replay; ranking scores remain standard floating-point, so this does not promise universal cross-provider result identity. ／ pip install mind-mem ／ mind-mem-recall -q \"API decisions\" --workspace ~/my-workspace  # Hybrid BM25F search",
+   "evidence_lines": [
+    40,
+    51,
+    53
+   ]
+  },
+  "fn": "star-ga/mind-mem",
+  "sha": "2f1ab454b55e",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

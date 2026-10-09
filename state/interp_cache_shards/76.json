@@ -8883,5 +8883,155 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8822d025687f": {
+  "identity": {
+   "one_liner": "Home Assistant 实验性 AI 代理应用，用 Pi Durable 持久化任务与 SQLite 存储",
+   "review": "一个面向 Home Assistant 的实验性第三方 App（add-on），提供带持久化任务、作用域受限读取和人工审批灯/开关操作的 AI 聊天代理，还包含可选的隔离编码容器和本地风险判断模型。适用于希望在 HA 环境中试用受控 AI 代理的 Home Assistant OS 管理者；要求 amd64/aarch64 主机，且项目自述为技术预览、非生产建议。",
+   "highlights": [
+    "以 SQLite（synchronous=FULL）持久化输入、任务检查点、转录与文档，重启后可恢复已提交状态",
+    "HA 读取与操作默认禁用/最小作用域，灯光与开关操作需人工逐条审批，支持只读与显式确认的完全访问模式",
+    "支持多种提供方接入（OpenAI API、ChatGPT 订阅 OAuth、本地 OpenAI 兼容服务器等）及独立的非root无网络编码 worker 容器"
+   ],
+   "use_cases": [
+    "在 Home Assistant OS 上以受控、人工审批方式通过聊天查询和操作灯/开关实体",
+    "需要任务与状态在重启后可恢复的持久化代理场景",
+    "在本地主机上运行小模型做风险判断，或接入本地 OpenAI 兼容推理服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Continuity, not just history.** Genuine pinned Pi Durable commits admitted inputs, task checkpoints, transcripts and documents to SQLite with `synchronous=FULL`. One writer owns each store. Reconnect to committed state.",
+     "lines": [
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其用 SQLite 存储输入、检查点、转录等自身数据，是使用数据库的应用而非数据库服务工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### A durable AI agent for Home Assistant ／ - **Continuity, not just history.** Genuine pinned Pi Durable commits admitted inputs, task checkpoints, transcripts and documents to SQLite with `synchronous=FULL`. One writer owns each store. Reconnect to committed state. ／ Requires **Home Assistant OS**, an administrator account and an **amd64 or aarch64** host. Use an authorized test installation with a backup; this is an experimental third-party App, not HACS or a Devices & services integration.",
+   "evidence_lines": [
+    3,
+    15,
+    43
+   ]
+  },
+  "fn": "cosmyo/ha-pi-durable",
+  "sha": "8822d025687f",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "19cf2c7b129d": {
+  "identity": {
+   "one_liner": "AI 智能体的证据驱动记忆库，双时态事实+SQLite/PostgreSQL 存储",
+   "review": "agent-memory 是面向 AI 智能体的 Python 记忆组件，记录事实的来源、生效时间与作用域，提供可追溯的写入、双时态读取和可恢复的删除回放。核心零第三方依赖并内建 SQLite 运行时，PostgreSQL、MCP、LangGraph 等以可选包提供。当前为 v0.1.0 Alpha，部分能力仍在规划中。",
+   "highlights": [
+    "以 SQLite 为默认运行时、可选 PostgreSQL 提供程序与向量支持的记忆持久化",
+    "提供双时态（valid_at/known_at）查询、来源证据留存与删除回放恢复",
+    "提供 MCP server（stdio/HTTP）与 LangGraph 生命周期适配器等可选集成包"
+   ],
+   "use_cases": [
+    "为 LLM 智能体构建带来源引用与时间条件的记忆上下文",
+    "通过 MCP 协议向本地或远程宿主暴露记忆服务",
+    "需要备份恢复后防止已删除记忆回流的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|PostgreSQL provider and optional vector support|`python -m pip install -e packages/postgres`|",
+     "lines": [
+      161
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`agent-memory`|Domain contracts, SQLite runtime, retrieval, plugin loading|`python -m pip install -e .`| ／ agent-memory-mcp --transport stdio --database memory.sqlite3 \\",
+     "lines": [
+      157,
+      167
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI 智能体提供记忆存储组件，本身依赖 SQLite/PostgreSQL 作为存储后端，属于为生态服务的开发库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`agent-memory`|Domain contracts, SQLite runtime, retrieval, plugin loading|`python -m pip install -e .`| ／ |PostgreSQL|PostgreSQL provider and optional vector support|`python -m pip install -e packages/postgres`|",
+   "evidence_lines": [
+    157,
+    161
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "agent-memory-lab/agent-memory",
+  "sha": "19cf2c7b129d",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

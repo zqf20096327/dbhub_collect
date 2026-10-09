@@ -8376,5 +8376,78 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "38e17eb50a7c": {
+  "identity": {
+   "one_liner": "自托管任务看板，人与AI代理经MCP/HTTP协作同一批任务卡",
+   "review": "Retinue是一个自托管、本地优先的任务看板与编排枢纽，让人类和AI代理（Claude Code、Codex、任意MCP客户端）在同一张卡片上协作：每卡单一持有者、附验收标准和只追加的回执链，代理通过MCP或带令牌的HTTP API认领和写回。面向管理一组AI编码代理的个人和小团队；服务端模式用SQLite（retinue.db）存规范状态，备份需一致性快照。",
+   "highlights": [
+    "MCP-native：retinue-server mcp 向任意MCP代理暴露看板，另有 HTTP + bearer-token API",
+    "每卡单一持有者写入，claim/progress/hand-off/acceptance 记录为只追加回执链",
+    "服务端状态存于 retinue.db（SQLite），文件模式存于数据目录，支持 docker compose 或 pip 安装"
+   ],
+   "use_cases": [
+    "个人/小团队协调多台设备上的AI编码代理任务分派",
+    "需要对AI代理工作做回执审计与验收留痕的场景",
+    "通过Lark/Telegram把聊天消息转为任务意图的IM集成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The server stores canonical state in `retinue.db`; use a consistent SQLite",
+     "lines": [
+      108
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用SQLite存储自身任务状态的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Retinue is a **self-hosted, local-first task board for AI agents and the ／ - **MCP-native coordination.** `retinue-server mcp` exposes the board to any ／  The server stores canonical state in `retinue.db`; use a consistent SQLite",
+   "evidence_lines": [
+    86,
+    100,
+    108
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "jklthinking/retinue",
+  "sha": "38e17eb50a7c",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

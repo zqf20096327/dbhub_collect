@@ -7507,5 +7507,220 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8f56cd6908d7": {
+  "identity": {
+   "one_liner": "开源内容流搜索引擎，持久化摄取+混合检索+告警",
+   "review": "Quivr V2 是一个将持续内容流转为搜索与监控的开源引擎：以幂等写入实现持久化摄取，几秒内可检索，后台做嵌入等增强，并提供词法/语义/混合检索、变更流与关键词/语义告警。面向需要跟踪主题内容流的团队，通过插件适配格式、模型和业务规则。当前处于评估阶段，API 为 v0 且可能变更，官方明确不建议用于生产。",
+   "highlights": [
+    "提供持久化、幂等的摄取机制，写入确认后才提交，支持不可变版本与更正/撤回",
+    "支持词法、语义与混合检索，命中结果从规范存储回读并重新鉴权",
+    "搜索索引为可重建投影，PostgreSQL 与 S3 持有规范数据",
+    "通过插件机制支持连接器、规范化、增强、检索与告警投递"
+   ],
+   "use_cases": [
+    "对持续内容流（如新闻、文章）建立可检索的语料库",
+    "基于关键词或语义描述设置主题监控告警",
+    "通过变更流与订阅将新增匹配结果投递到 webhook"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Rebuildable indexes.** PostgreSQL and S3 hold the canonical data; the search index ／ api -->|commit receipt + intent| pg[(PostgreSQL<br/>catalog, receipts, changes)] ／ |Transactional catalog|PostgreSQL 17|",
+     "lines": [
+      25,
+      37,
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 PostgreSQL 与 S3 持有规范数据，数据库是引擎自身的存储组件，Quivr 是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**An open-source engine that turns continuous content streams into search and monitoring.** ／ > **Status: evaluation stage.** The API is `v0` and may change without notice. Do not ／ |Transactional catalog|PostgreSQL 17|",
+   "evidence_lines": [
+    5,
+    12,
+    46
+   ]
+  },
+  "fn": "The-Vibe-Company/quivr",
+  "sha": "8f56cd6908d7",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "77445409567b": {
+  "identity": {
+   "one_liner": "面向AI助手的PostgreSQL MCP管理与监控服务器",
+   "review": "这是一个基于Python实现的MCP服务器，通过238个工具让Claude、ChatGPT等AI助手对PostgreSQL执行数据库操作、性能监控、锁分析、用户权限管理等任务。适合需要以自然语言方式管理PostgreSQL的DBA或开发者，通过Claude Desktop配置接入，以pip安装依赖运行。",
+   "highlights": [
+    "提供238个MCP工具，覆盖数据库操作、性能监控、锁与并发、用户权限、维护与备份等类别",
+    "支持与Claude Desktop等MCP客户端集成",
+    "包含安全审计、慢查询分析、连接池统计、checkpoint与WAL诊断等能力"
+   ],
+   "use_cases": [
+    "通过AI助手对PostgreSQL执行日常运维（schema管理、VACUUM、权限授予等）",
+    "数据库性能诊断：慢查询、执行计划、缓存命中率、锁等待分析",
+    "用户角色审计与连接监控"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# 🔄 PostgreSQL MCP Server – AI-Powered PostgreSQL Management & Monitoring ／ > A powerful, AI-integrated PostgreSQL Model Context Protocol (MCP) server for **automated database operations, monitoring, security, diagnostics, and optimization**. Seamlessly manage PostgreSQL with tools and prompts designed for **AI assistants like Claude  ／ PostgreSQL",
+     "lines": [
+      1,
+      3,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为PostgreSQL提供管理与监控能力的MCP服务器工具，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> A powerful, AI-integrated PostgreSQL Model Context Protocol (MCP) server for **automated database operations, monitoring, security, diagnostics, and optimization**. Seamlessly manage PostgreSQL with tools and prompts designed for **AI assistants like Claude and ChatGPT**. ／ ## 📚 Tool Categories ／ ## 🔍 Tool Search & Complete Reference (238 Tools)",
+   "evidence_lines": [
+    3,
+    43,
+    109
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "mukul975/postgres-mcp-server",
+  "sha": "77445409567b",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e220f6b46ef9": {
+  "identity": {
+   "one_liner": "Claude Code 插件：按阶段引导生成 Power Apps Canvas + Power Automate 应用",
+   "review": "该仓库是面向 Claude Code 的插件工具包，通过 /pp（葡语）与 /pp-en（英语）系列命令将一行应用构想引导为已发布的 Power Apps Canvas 与 Power Automate 应用，内部含编排器与多个专项子代理，每阶段产出文件并由校验器检查。数据端支持选择 SQL Server 或 Dataverse，可生成 DDL、procedures 与 Dataverse 模型。面向使用 Power Platform 低代码平台的开发者与业务人员。",
+   "highlights": [
+    "提供十个编号阶段命令（/pp:novo 至 /pp:publicar），每阶段独立会话并将状态写入磁盘",
+    "支持 SQL Server（生成 DDL、procedures、.sql 负载数据）或 Dataverse（建表 flow、导入 mockup 负载）两种数据方案",
+    "提供画布、流程、QA 等多个子代理，以及屏幕校验脚本 validar-telas.py"
+   ],
+   "use_cases": [
+    "在 Power Apps Canvas + Power Automate 环境中按引导流程从构想到发布应用",
+    "需要为应用生成 SQL Server 表结构、存储过程或 Dataverse 数据模型的场景",
+    "需要葡语（pt-BR）与英语（en-US）双语工作流的 Power Platform 团队"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Power Apps Canvas + Power Automate, com SQL Server ou Dataverse: um comando guiado por etapa, ／ |6|`/pp:arquitetura`|Agente de Arquitetura, depois Agentes SQL em paralelo|escolhe SQL Server ou Dataverse; cria as tabelas 🔴 (no Dataverse, pelo flow construtor ou importando a carga mockup, e confere os tipos)|`arquitetura.md`, ADR, DDL e procedures (ou mode",
+     "lines": [
+      12,
+      169
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该插件生成的应用使用 SQL Server 或 Dataverse 存数据并生成其 DDL/存储过程，本身不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Power Apps Canvas + Power Automate, com SQL Server ou Dataverse: um comando guiado por etapa, ／ |6|`/pp:arquitetura`|Agente de Arquitetura, depois Agentes SQL em paralelo|escolhe SQL Server ou Dataverse; cria as tabelas 🔴 (no Dataverse, pelo flow construtor ou importando a carga mockup, e confere os tipos)|`arquitetura.md`, ADR, DDL e procedures (ou modelo Dataverse), carga mockup `.xlsx` (e `.sql` no SQL; no Dataverse, o plano e o flow construtor), `GOAL.md`|",
+   "evidence_lines": [
+    12,
+    169
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "stage2dev/power-platform-skills",
+  "sha": "e220f6b46ef9",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

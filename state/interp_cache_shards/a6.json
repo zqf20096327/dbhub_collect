@@ -8909,5 +8909,135 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "66659cae60cd": {
+  "identity": {
+   "one_liner": "Windows 托盘网络监控应用，检测断连与故障定位",
+   "review": "WifiWatch 是运行于 Windows 托盘的网络监控应用，实时显示 Wi-Fi、路由器与互联网状态，记录故障发生的环节并给出处理建议，包含历史记录、测速与 Wi-Fi 信道视图。面向 Windows 11 个人用户，需开启定位服务；技术栈为 .NET 10、WPF、Blazor 与 SQLite，通过发布页下载 exe 运行。",
+   "highlights": [
+    "实时显示 Wi-Fi、路由器与互联网的连接状态",
+    "记录故障发生位置并给出处理建议，仅在重要问题时通知",
+    "提供历史记录、速度测试与 Wi-Fi 信道查看"
+   ],
+   "use_cases": [
+    "排查家庭网络断连或路由器故障",
+    "查看 Wi-Fi 信道占用与延迟丢包情况",
+    "保留网络问题历史记录以便回顾"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- .NET 10, WPF, Blazor, MudBlazor and SQLite",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个 Windows 托盘应用，SQLite 列于其技术栈中用于自身数据存储",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Windows tray app that tells you when your connection drops, where it went wrong and what to do about it. ／ - Live status of your Wi-Fi, router and internet ／ - .NET 10, WPF, Blazor, MudBlazor and SQLite",
+   "evidence_lines": [
+    3,
+    12,
+    26
+   ]
+  },
+  "fn": "poolfullofmilk/WifiWatch",
+  "sha": "66659cae60cd",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "488e251834fc": {
+  "identity": {
+   "one_liner": "1950–2026 F1 完整赛事记录，构建为单一可查询 SQLite 数据库",
+   "review": "该项目把 1950 年至今的每场 F1 比赛、参赛、排位与积分榜数据规范化为一个 SQLite 数据库（f1.db，53 表 43 视图），每次构建都从源数据重建并与独立来源交叉核对，分歧保留在记录中，行级带 confidence 字段。面向需要可查询、可验证 F1 历史数据的研究者与开发者，提供 CLI 查询工具、JSON/Parquet 导出和 schema 文档；构建仅需 Python 3.9+ 标准库。",
+   "highlights": [
+    "将全部赛事数据发布为单一规范化 SQLite 数据库，含 53 表、43 视图",
+    "每次构建自动重建并与独立来源交叉核对，行级 confidence 标记与分歧记录",
+    "提供 CLI 查询工具、JSON/Parquet 导出、带注释的 schema.sql，构建无第三方依赖"
+   ],
+   "use_cases": [
+    "对 F1 历史数据进行 SQL 查询与分析",
+    "以 JSON 或 Parquet 格式在自有程序中消费赛事数据",
+    "在已知数据可信度等级的前提下核对赛事记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "to run — as one normalised, queryable SQLite database. It is rebuilt from",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明项目产出物是存为 SQLite 文件的 F1 数据集及其查询工具，SQLite 用于存数据而非被服务的目标库。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "数据采用 CC BY-SA 4.0（自写列为 CC BY 4.0），代码另行许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "to run — as one normalised, queryable SQLite database. It is rebuilt from ／ |`f1.db`|The SQLite database. 53 tables, 43 views, 177,243 rows. This is the artefact.| ／ |`f1`|Command-line query tool. `./f1` with no arguments prints the commands.|",
+   "evidence_lines": [
+    6,
+    44,
+    46
+   ]
+  },
+  "fn": "Alex-Farley/formula-1-data",
+  "sha": "488e251834fc",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8649,5 +8649,77 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "33ecefcb514b": {
+  "identity": {
+   "one_liner": "Inertia.js v3 + React 19 + Loco (Rust) 多租户 Web 应用启动模板",
+   "review": "这是一个基于 Loco (Rust)、Inertia.js v3 与 React 19 的全栈 starter kit，内置账号/组织体系、认证、后台任务队列、SSE 实时更新和代码生成器，数据存储使用 SQLite（SeaORM），无需独立 API 服务。面向想用 Rust + React 快速搭建多租户业务应用的开发者，还包含面向编码代理的 AGENTS.md 与技能文档；部署时 SQLite 数据位于容器 /app/storage，需要自行管理持久化。",
+   "highlights": [
+    "提供账号（组织）级多租户隔离，查询按 account_id 作用域过滤",
+    "内置脚手架生成器，可同时生成迁移、模型、控制器、路由、React 页面和测试",
+    "通过 SSE 提供实时更新通道、在线状态和广播能力，后台任务使用 SQLite 队列"
+   ],
+   "use_cases": [
+    "快速启动多租户 SaaS 类 Web 应用的开发",
+    "作为使用 Rust 后端 + React 前端的 Inertia 架构参考模板",
+    "为编码代理提供带技能文档和预算测试的应用起点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "server is one Rust binary with SQLite, a job queue and mail. There's no separate API: Inertia ／ - Loco on axum, SeaORM and SQLite. ／ - Background jobs on a SQLite queue (no Redis), scheduled tasks, mail.",
+     "lines": [
+      9,
+      92,
+      96
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用以 SQLite 作为自身的数据存储（服务端二进制内含 SQLite、队列与部署时 SQLite 位于 /app/storage）",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "server is one Rust binary with SQLite, a job queue and mail. There's no separate API: Inertia ／ - Loco on axum, SeaORM and SQLite. ／ runtime. SQLite lives in `/app/storage`, and migrations run on boot.",
+   "evidence_lines": [
+    9,
+    92,
+    260
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "cole-robertson/inertia-rust-starter-kit",
+  "sha": "33ecefcb514b",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

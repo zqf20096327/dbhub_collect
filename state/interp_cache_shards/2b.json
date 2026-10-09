@@ -10077,5 +10077,81 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c6396c4a28f1": {
+  "identity": {
+   "one_liner": "自托管中文 AI 写作工作台，Go+React，PostgreSQL 单库承载 RAG 与记忆",
+   "review": "这是一个面向中文内容创作者的自托管 AI 写作平台，把写作拆为检索、提纲、成稿、自检、记忆沉淀等可控步骤，由治理运行时统一调度。用户通过 Docker Compose 部署，自带 LLM API Key 使用；数据全部存于 PostgreSQL 17（pgvector + BM25），需配置 DeepSeek 等 OpenAI 兼容模型密钥，无外部向量库依赖。",
+   "highlights": [
+    "在 PostgreSQL 单库内实现 BM25 + 向量 + RRF 融合检索，无需外部向量库",
+    "提供分层长期记忆与注入遥测，记忆生效情况可查询",
+    "支持 BYOK：用户自带 OpenAI 兼容模型的 API 密钥，加密存储并热切换"
+   ],
+   "use_cases": [
+    "中文长文写作与深度研究型内容生产",
+    "需要可观察、可干预生成流程的创作者工作流",
+    "个人或小团队自托管的写作平台部署"
+   ],
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "dba-agent"
+    ]
+   }
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|📚 **自托管 RAG，零外部向量库**|PostgreSQL 单库内完成 BM25（ParadeDB）+ 向量（pgvector）+ RRF 融合 + GraphRAG；上传素材永远是你的最高优先级（P0），检索结果不得覆盖用户原始表达| ／ |数据库|PostgreSQL 17（ParadeDB 镜像：pgvector + pg_bm25）· Redis 7|",
+     "lines": [
+      24,
+      170
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 PostgreSQL 存储业务数据（文档、记忆、检索），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|数据库|PostgreSQL 17（ParadeDB 镜像：pgvector + pg_bm25）· Redis 7| ／ docker compose -f docker-compose.quickstart.yml up -d",
+   "evidence_lines": [
+    170,
+    75
+   ]
+  },
+  "fn": "Echo-Smith/LuminWrite-OSS",
+  "sha": "c6396c4a28f1",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

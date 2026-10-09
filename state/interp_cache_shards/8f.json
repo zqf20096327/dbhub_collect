@@ -8496,5 +8496,74 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "77afb10024eb": {
+  "identity": {
+   "one_liner": "AstrBot 的 QQ 群管理插件，集成群管指令与 LLM 内容审核",
+   "review": "该插件运行于 AstrBot 框架，为 QQ 群提供禁言、踢人、公告等 28 项管理指令，并实现基于规则初筛加 LLM 二次判断的消息审核，含 OCR 识图、防刷屏、词库学习和 WebUI 面板。面向使用 AstrBot 的 QQ 群管理员。审核日志与词库通过 SQLite 存储，依赖 AstrBot 插件市场或手动上传安装。",
+   "highlights": [
+    "提供 28 项群管指令与 20 项供 AI 调用的群管 LLM 工具",
+    "实现 Aho-Corasick 初筛加 LLM 上下文二次判断的内容审核流程",
+    "支持外置 SQLite 词库、SQLite 审核日志存储与迁移助手"
+   ],
+   "use_cases": [
+    "QQ 群违规消息自动撤回与处罚",
+    "群成员刷屏监控与定时解禁管理",
+    "通过 WebUI 集中管理多群审核配置与违规记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 外置 SQLite 词库支持（`lexicon.db`），12类违规内容，66,993 个关键词 + 24,000+ 条辱骂规则 ／ - SQLite 审核日志存储与 WebUI 迁移助手 ／ - **定时自动解禁**：插件发起的禁言可登记到期解禁，重启后从 SQLite 恢复计划",
+     "lines": [
+      126,
+      130,
+      149
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "插件用 SQLite 存储审核日志、词库与解禁计划，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AstrBot 综合群管理插件，集 **28项群管功能**、**AI智能审核**、**违禁词热更新** 与 **WebUI 管理面板** 于一体，让机器人成为真正的群聊守护者。 ／ - 外置 SQLite 词库支持（`lexicon.db`），12类违规内容，66,993 个关键词 + 24,000+ 条辱骂规则 ／ - SQLite 审核日志存储与 WebUI 迁移助手",
+   "evidence_lines": [
+    9,
+    126,
+    130
+   ]
+  },
+  "fn": "zcj-ui/astrbot_plugin_group_guardian",
+  "sha": "77afb10024eb",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

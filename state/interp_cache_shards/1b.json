@@ -10310,5 +10310,74 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d89cc5982701": {
+  "identity": {
+   "one_liner": "本地优先的编码代理记忆库，SQLite存储+本地语义检索",
+   "review": "Graphmem 用单个 Rust 二进制为编码代理提供跨会话的项目记忆，将作用域化的记忆和实体图存入 SQLite，通过本地嵌入和 Personalized PageRank 做检索，并以 MCP（stdio）对接 Claude Code、Codex、OpenCode、pi 等客户端，共享同一存储。附带可选的代码导航工具（find_symbol 等），写入权限限定在当前仓库与全局作用域。",
+   "highlights": [
+    "以 SQLite 存储记忆与实体图，使用本地嵌入和 Personalized PageRank 召回",
+    "通过 MCP over stdio 供 Claude Code、Codex、OpenCode、pi 等 MCP 客户端共享同一存储",
+    "提供 CLI、TUI 及可选的代码导航 MCP 工具（find_symbol、code_outline、code_imports、code_diff）"
+   ],
+   "use_cases": [
+    "在多个编码代理间共享和跨会话保留项目决策与约定",
+    "按 Git 仓库作用域读写记忆，全局记忆始终可读",
+    "在 Git 检出中查找符号定义、查看文件大纲和导入"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "and tools with SQLite storage, local semantic search, and linked entities.",
+     "lines": [
+      8
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该工具只是使用 SQLite 作为自身存储数据，并非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "and tools with SQLite storage, local semantic search, and linked entities. ／ Claude Code, Codex, OpenCode, pi, and other MCP clients can share the same store. ／ npm install --global @sonic182/graphmem",
+   "evidence_lines": [
+    8,
+    9,
+    17
+   ]
+  },
+  "fn": "sonic182/graphmem",
+  "sha": "d89cc5982701",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

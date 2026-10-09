@@ -9105,5 +9105,145 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a8d113841ffb": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 逻辑复制的轻量 CDC 变更捕获库",
+   "review": "go-pq-cdc 是一个用 Go 编写的 PostgreSQL 变更数据捕获（CDC）库，利用逻辑复制槽捕获变更并流入 Kafka、Elasticsearch 等下游系统，提供快照初始同步、心跳 WAL 保护、TOAST 字段补全及主被动高可用模式。适合需要将 PostgreSQL 变更实时同步到外部系统的开发者。需为复制角色配置相应权限。",
+   "highlights": [
+    "基于 PostgreSQL 逻辑复制捕获变更，支持 pgoutput proto_version 1 和 2",
+    "提供快照模式实现初始数据同步，支持分块处理、多实例并行与崩溃恢复",
+    "提供基于心跳表的 WAL 保护机制及主/被动双模式运行"
+   ],
+   "use_cases": [
+    "将 PostgreSQL 数据变更实时流入 Kafka、Elasticsearch 等下游系统",
+    "存量数据初始同步与一次性数据导出（Snapshot Only 模式）",
+    "低流量数据库的复制槽 WAL 膨胀治理"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "go-pq-cdc is designed to provide efficient and lightweight Change Data Capture (CDC) for PostgreSQL databases. ／ The architecture leverages PostgreSQL's built-in logical replication capabilities to capture changes in the database and ／ - **Zero Data Loss**: Consistent point-in-time snapshot using PostgreSQL's `pg_export_snapshot()`",
+     "lines": [
+      3,
+      4,
+      15
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目专为 PostgreSQL 逻辑复制提供 CDC 捕获能力，向下游系统流入数据，属为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "go-pq-cdc is designed to provide efficient and lightweight Change Data Capture (CDC) for PostgreSQL databases. ／ The architecture leverages PostgreSQL's built-in logical replication capabilities to capture changes in the database and ／ stream these changes to downstream systems, such as Kafka, Elasticsearch etc. The entire system is written in Golang,",
+   "evidence_lines": [
+    3,
+    4,
+    5
+   ]
+  },
+  "fn": "Trendyol/go-pq-cdc",
+  "sha": "a8d113841ffb",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2a794aaf1460": {
+  "identity": {
+   "one_liner": "自托管的 SofaScore 体育数据采集平台，本地存储并可导出 CSV/JSONL/Parquet/SQLite",
+   "review": "该项目用于从 SofaScore 抓取 21 个体育项目的联赛、球队、球员和比赛历史数据，存入本地 SQLite 目录并提供 Python 库、ssc CLI、HTTP API 和 Web 界面四种使用方式，支持请求预算控制、备份恢复和多种格式导出。适合需要自托管获取体育数据的分析者和开发者；注意它是非官方项目，许可证为 PolyForm Noncommercial，不能商用，且无 PyPI 包，需从源码或 Docker 安装。",
+   "highlights": [
+    "提供 Python 库、ssc 命令行、HTTP API 和 Web 应用四种访问方式，支持 21 个体育项目",
+    "支持将数据导出为 CSV、JSONL、Parquet 和 SQLite 格式，原始数据以压缩形式存储",
+    "内置请求预算与熔断机制、备份/恢复，以及 systemd 单元和 Docker 镜像部署方式"
+   ],
+   "use_cases": [
+    "自托管跟踪联赛、球队、球员和比赛的比分与统计数据",
+    "批量下载比赛历史数据并导出为 CSV/JSONL/Parquet/SQLite 供分析使用",
+    "通过 CLI 或 HTTP API 将体育数据集成到自动化流程中"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Storage**: compressed raw payloads plus a rebuildable catalog (SQLite); every match status is stored, results that SofaScore corrects later are re-read and logged. ／ - **Exports**: normalized datasets (matches, data types, score changes, odds, standings) as CSV, JSONL, Parquet or SQLite, the raw payloads as they are, and the 2.x wide CSV. Files are named after the league, the team or player, or the dataset, and the date. ／ ssc export --dataset slices --format sqlite --out slices.sqlite",
+     "lines": [
+      25,
+      26,
+      171
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 存储自身数据目录和目录结构，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial 1.0.0（非商业许可）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A self-hosted data platform for SofaScore match data.** Follow leagues, teams, players or single matches in 21 sports, download their history into a local store, and take it out as CSV, JSONL, Parquet or SQLite. ／ - **Storage**: compressed raw payloads plus a rebuildable catalog (SQLite); every match status is stored, results that SofaScore corrects later are re-read and logged. ／ - **Exports**: normalized datasets (matches, data types, score changes, odds, standings) as CSV, JSONL, Parquet or SQLite, the raw payloads as they are, and the 2.x wide CSV. Files are named after the league, the team or player, or the dataset, and the date.",
+   "evidence_lines": [
+    9,
+    25,
+    26
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "tunjayoff/sofascore_scraper",
+  "sha": "2a794aaf1460",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

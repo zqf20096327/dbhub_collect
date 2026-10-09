@@ -8477,5 +8477,79 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ff2a8bc35aeb": {
+  "identity": {
+   "one_liner": "自托管 AI 代理集成网关，经 MCP 或 REST 发现并执行应用 API 动作",
+   "review": "一个 FastAPI + Next.js 实现的自托管集成网关，供开发者自建 AI 代理的工具调用层：代理可通过 MCP 或 REST 发现连接的服务、读取动作 schema 并执行，内置 GitHub、Slack、Hacker News 和 Custom HTTP 提供商，凭据以 AES-256-GCM 加密存储，应用数据默认用 SQLite 本地持久化。README 自述处于早期阶段，内置动作目录范围有限，可自行用 Python 扩展。",
+   "highlights": [
+    "提供 MCP JSON-RPC 网关与 REST API，支持动作发现、schema 检查与执行",
+    "凭据经 AES-256-GCM 加密存储，出站请求默认阻止私有网络目标",
+    "提供商目录以代码定义，可注册自定义 HTTP 动作并支持幂等键"
+   ],
+   "use_cases": [
+    "为 AI 代理提供自托管的工具/动作调用层",
+    "在自有运行时中管理第三方服务的凭据与连接",
+    "通过 Python 代码扩展自定义 API 提供商与动作目录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Persistence|SQLite, SQLAlchemy async, aiosqlite| ／ The API creates its SQLite database and a local encryption key on first startup if they do not exist. For a durable deployment, configure and back up a stable key before saving credentials; losing the key makes previously encrypted credentials unreadable.",
+     "lines": [
+      47,
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该项目自身的应用数据持久化层，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Open Agent Connector gives an agent a consistent way to discover connected services, find an action, read its input schema, and execute it. A FastAPI backend manages provider definitions, connections, outbound requests, and run records. A Next.js console provides screens for browsing providers and actions, managing connections and runtime tokens, and reviewing activity. SQLite stores application data locally by default. ／ |Persistence|SQLite, SQLAlchemy async, aiosqlite| ／ The API creates its SQLite database and a local encryption key on first startup if they do not exist. For a durable deployment, configure and back up a stable key before saving credentials; losing the key makes previously encrypted credentials unreadable.",
+   "evidence_lines": [
+    9,
+    47,
+    85
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "Anil-matcha/open-agent-connector",
+  "sha": "ff2a8bc35aeb",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

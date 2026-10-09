@@ -9039,5 +9039,72 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f7047e96e5a3": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的代码知识图谱 MCP 服务器",
+   "review": "codebase-memory-mcp 是一个 MCP 服务器，用 tree-sitter AST 解析 162 种语言并将代码库索引为持久知识图谱（函数、类、调用链、HTTP 路由等），提供 17 个 MCP 工具和 3D 图可视化 UI，支持 45 个客户端自动配置。以单一原生二进制分发，内部使用 LZ4 压缩与内存中 SQLite。面向使用 Claude Code、Codex、Cursor 等 AI 编码代理的开发者。",
+   "highlights": [
+    "通过 tree-sitter 解析 162 种语言，构建包含函数、类、调用链、HTTP 路由的持久知识图谱，并提供 17 个 MCP 工具",
+    "索引管线采用 LZ4 压缩与内存中 SQLite，以单一原生二进制分发，支持 macOS/Linux/Windows",
+    "内置 3D 图可视化 UI（localhost:9749），安装命令可自动配置检测到的编码代理客户端"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供代码结构查询，替代逐文件搜索以减少 token 消耗",
+    "对大型多服务代码库做调用链追踪、影响分析与死代码检测",
+    "将 Dockerfile/Kubernetes 清单等基础设施代码索引为图谱节点进行交叉引用查询"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Extreme indexing speed** — Linux kernel (28M LOC, 75K files) in 3 minutes. RAM-first pipeline: LZ4 compression, in-memory SQLite, fused Aho-Corasick pattern matching. Memory released after indexing. ／ - **RAM-first pipeline**: LZ4 compression, in-memory SQLite, single dump at end. Memory released after.",
+     "lines": [
+      31,
+      235
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 说明其为 AI 编码代理提供代码索引与结构化查询的 MCP 服务器，SQLite 仅作为内部内存存储组件被提及",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**The fastest and most efficient code intelligence engine for AI coding agents.** Full-indexes an average repository in milliseconds, the Linux kernel (28M LOC, 75K files) in 3 minutes. Answers structural queries in under 1ms. Ships as a native executable with a small verified runtime-asset set for macOS, Linux, and Windows — download, run `install`, done. ／ High-quality parsing through tree-sitter AST analysis across all 162 languages, enhanced with **Hybrid LSP** semantic type resolution for Python, TypeScript / JavaScript / JSX / TSX, PHP, C#, Go, C, C++, Java, Kotlin, Rust, and Perl — producing a persistent knowledge graph of functions, classes, call chains, HTTP routes, and cross-service links. 17 MCP tools. No language runtime, hosted service, or API key. Plug and play across 45 supported automatic/conditional client surfaces. ／ - **Extreme indexing speed** — Linux kernel (28M LOC, 75K files) in 3 minutes. RAM-first pipeline: LZ4 compression, in-memory SQLite, fused Aho-Corasick pattern matching. Memory released after indexing.",
+   "evidence_lines": [
+    17,
+    19,
+    31
+   ]
+  },
+  "fn": "DeusData/codebase-memory-mcp",
+  "sha": "f7047e96e5a3",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

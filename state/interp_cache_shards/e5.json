@@ -7818,5 +7818,463 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5a235aac7fab": {
+  "identity": {
+   "one_liner": "自托管轻量应用监控工具，单 Go 二进制轮询指标并存入 SQLite",
+   "review": "StatLite 是一个面向 VPS 和小型服务器的自托管应用监控工具：单个 Go 二进制轮询 Spring Boot、Quarkus、Micronaut 或自定义 JSON 端点的应用，采集流量、延迟、CPU、内存等指标，历史数据存储在本地 SQLite 并提供内置图表。面向资源受限环境，不提供 PromQL、告警投递或仪表盘认证。",
+   "highlights": [
+    "单 Go 二进制轮询多应用，指标本地存 SQLite 并内置历史图表",
+    "支持 Spring Boot、Quarkus、Micronaut 集成及任意语言的固定 JSON 指标端点",
+    "提供 Spring Actuator 健康检查、Micrometer/Prometheus 端点采集与自监控能力"
+   ],
+   "use_cases": [
+    "为 VPS 或小型服务器上的应用做轻量自托管监控",
+    "无需 Prometheus/Grafana 栈的场景下采集应用与主机指标",
+    "通过 cron/systemd 定时执行一次性 API 检查并按自定义阈值通知"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "metrics locally in SQLite, and provides built-in historical ／ `storage.sqlite_path`, and `polling.interval` are required:",
+     "lines": [
+      11,
+      112
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是采集与存储应用指标并提供仪表盘的监控工具，SQLite 仅作为其本地历史存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "StatLite provides lightweight, self-hosted application monitoring for apps running ／ metrics locally in SQLite, and provides built-in historical ／ StatLite supports Spring Boot, Quarkus, and Micronaut integrations, and other",
+   "evidence_lines": [
+    9,
+    11,
+    19
+   ]
+  },
+  "fn": "PVRLabs/statlite",
+  "sha": "5a235aac7fab",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3557f9c99887": {
+  "identity": {
+   "one_liner": "OpenShift 应用部署模板，含样例栈与 CI/CD 流水线",
+   "review": "该仓库是一个 GitHub 模板仓库，用于将 Web 应用栈（前端、后端、PostgreSQL 数据库）通过 GitHub Actions 部署到 OpenShift 集群，包含 PR 流水线、环境隔离、安全扫描、Prometheus 指标导出等配置。README 主体是 Secrets、环境变量与 OpenShift 命名空间的设置说明，适合在 OpenShift 上启动新项目的开发团队。",
+   "highlights": [
+    "提供基于 Pull Request 的 CI/CD 流水线与 DEV/TEST/PROD 环境隔离",
+    "样例应用栈包含 PostgreSQL 数据库并使用 Flyway 做数据库迁移",
+    "包含 OpenShift Templates、Prometheus 指标导出、TLS 证书配置等工作流"
+   ],
+   "use_cases": [
+    "团队在 OpenShift 上快速建立新 Web 应用仓库",
+    "需要 PR 级沙箱环境与门控生产部署的项目",
+    "需要数据库迁移（Flyway）与容器化部署配合的项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* Database: Postgres, Flyway ／ The password used for the PostgreSQL database. This **MUST** be a strong, unique password and **DISTINCT** across all environments (pr, test, prod). Reusing the same password in development/PRs as in production is a critical security risk.",
+     "lines": [
+      31,
+      179
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Teams will receive a set of project namespaces, usually DEV (for PRs), TEST and PROD. TOOLS namespaces (e.g. Jenkins, shared Oracle resources) are not used here. Provided by your OpenShift platform team.",
+     "lines": [
+      166
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是部署到 OpenShift 的应用模板，使用 PostgreSQL 作为样例应用栈的数据库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " * Database: Postgres, Flyway ／ This repository provides a template to rapidly deploy a modern web application stack to OpenShift using GitHub Actions, incorporating best practices for CI/CD, security, and observability. By hitting the ground running we can save weeks‑to‑months of development time, receive regular updates, and built‑in **Maintenance Mode Automation**, which allows an app to go on autopilot for security and dependency updates. This limits developmer involvement to critical issues only, drastically reducing labor costs and freeing up resources for higher priority work. ／ - [ ] An OpenShift cluster with project namespaces (DEV, TEST, PROD)",
+   "evidence_lines": [
+    31,
+    10,
+    44
+   ]
+  },
+  "fn": "bcgov/quickstart-openshift",
+  "sha": "3557f9c99887",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "63e02a274b4f": {
+  "identity": {
+   "one_liner": "自托管桌面 ERP，事件溯源账本，内嵌 PostgreSQL",
+   "review": "Celerp 是一个可下载、自托管的桌面 ERP 应用，覆盖库存、开票、采购、制造、复式记账会计和 CRM 等业务域。面向个人创业者到企业办公室用户，通过 pip 或安装包部署，celerp init 可复用现有 PostgreSQL 或启动内置数据库，模块以 Python 包形式扩展。",
+   "highlights": [
+    "事件溯源架构，每次变更为不可变账本条目并物化可查询投影",
+    "内置 REST API，支持 Shopify、WooCommerce、QuickBooks、Xero 连接",
+    "模块化插件体系，模块为放入 modules/ 目录的 Python 包，可增表、路由与页面"
+   ],
+   "use_cases": [
+    "小企业本地化运行库存、开票与复式记账会计",
+    "制造业务管理 BOM 与生产订单",
+    "通过 REST API 或自研模块对接集成现有业务系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "No PostgreSQL to install: `celerp init` uses your existing PostgreSQL server if one is ／ - **Python/FastAPI** backend, **FastHTML** UI, embedded **PostgreSQL**",
+     "lines": [
+      50,
+      116
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- SQLite in-memory for tests - no external dependencies to run the test suite",
+     "lines": [
+      117
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 PostgreSQL 为自身主数据库存储业务数据，属于使用数据库的应用而非服务数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "核心 source-available，模块为 MIT（仓库描述自述）",
+   "install": [
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Celerp runs on your machine and keeps its primary database local. Optional Connect features can relay remote access or send selected data to Celerp cloud services. ／ - **Python/FastAPI** backend, **FastHTML** UI, embedded **PostgreSQL** ／ No PostgreSQL to install: `celerp init` uses your existing PostgreSQL server if one is",
+   "evidence_lines": [
+    76,
+    116,
+    50
+   ]
+  },
+  "fn": "celerp/celerp",
+  "sha": "63e02a274b4f",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "669b30de9baa": {
+  "identity": {
+   "one_liner": "PostgreSQL 内核研讨工作坊系列项目",
+   "review": "该项目是 PostgreSQL Mentoring Program 旗下的研讨工作坊计划，按月组织参与者观看预选视频并围绕 PostgreSQL 内核主题（执行器、优化器、vacuum、锁、I/O 等）进行 Zoom 深度讨论，主题经 Discord 投票产生。面向希望深入了解 PostgreSQL 内部机制的社区参与者，仓库本身仅记录历期主题清单与讨论方法说明。",
+   "highlights": [
+    "按月组织 PostgreSQL 内核主题研讨会，历期涵盖优化器、执行器、B-Tree 索引、vacuum 等主题",
+    "采用先观看预置视频再进行 Zoom 集体讨论的固定流程",
+    "议题由 PostgreSQL Mentoring Discord 社区投票产生"
+   ],
+   "use_cases": [
+    "PostgreSQL 内核开发者参与深度技术讨论",
+    "有意向参与 PostgreSQL Mentoring Program 的开发者了解学习路径",
+    "查阅历期内核主题研讨清单"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "# PostgreSQL Hacking Workshop ／ PostgreSQL Hacking Workshop is a side program of PostgreSQL Mentoring Program initiated by Robert Haas.",
+     "lines": [
+      1,
+      3
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目是关于 PostgreSQL 内核的研讨会活动记录，README 未表明其为数据库生态提供服务组件或使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "PostgreSQL Hacking Workshop is a side program of PostgreSQL Mentoring Program initiated by Robert Haas. ／ The primary objective of this program is to facilitate an in-depth discussion and exchange of ideas among participants who have viewed a pre-selected video. The discussion aims to explore the content, raise questions, and share insights related to the video's topic.",
+   "evidence_lines": [
+    3,
+    39
+   ]
+  },
+  "fn": "pghacking/workshop",
+  "sha": "669b30de9baa",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c1045c413e8c": {
+  "identity": {
+   "one_liner": "macOS 原生多引擎数据库客户端（Swift/AppKit，无 Electron）",
+   "review": "BerryDB 是用 Swift 6 + AppKit 构建的 macOS 原生数据库客户端，面向开发者、数据工程师和 DBA，提供流式数据网格、SQL 编辑器、内联数据编辑、查询历史与 ER 图，并通过 PostgresNIO、MySQLNIO、libsqlite3、FreeTDS 等驱动连接 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server、Redis、MongoDB 等 9 类引擎，凭据存 macOS Keychain，内置 SSH 隧道与可选 AI 助手；仅支持 macOS 15+ 且限 Apple Silicon。",
+   "highlights": [
+    "通过各引擎原生驱动连接 9 类数据库：PostgreSQL、MySQL/MariaDB、SQLite、SQL Server、Redis/Valkey、MongoDB、DynamoDB、Elasticsearch、Qdrant",
+    "提供流式 AppKit 数据网格、SQL 语法高亮/补全、内联单元格编辑（事务提交）、查询取消与查询历史",
+    "密码/密钥存储于 macOS Keychain，内置 SSH 隧道与 TLS/SSL，AI SQL 助手支持自然语言生成 SQL、EXPLAIN 分析与索引建议"
+   ],
+   "use_cases": [
+    "macOS 开发者/DBA 通过单一客户端连接并查询生产 PostgreSQL、MySQL 等多种数据库",
+    "浏览 Redis 键、MongoDB 集合、DynamoDB 表、Elasticsearch 索引及 Qdrant 向量集合",
+    "本地打开 SQLite（WAL 模式）文件并直接在网格中编辑数据"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Whether you're querying production PostgreSQL databases, inspecting Redis caches, managing MongoDB collections, exploring Qdrant vector spaces, or querying SQLite files locally, BerryDB keeps the grid responsive and every credential in the macOS Keychain. ／ - **PostgreSQL**: Native wire protocol (`PostgresNIO`), query cancellation via `pg_cancel_backend`, SSL/TLS. ／ |**PostgreSQL**|Pure Swift (`PostgresNIO`)|✅|✅|✅|✅|",
+     "lines": [
+      28,
+      42,
+      81
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **MySQL & MariaDB**: Native driver (`MySQLNIO`), `caching_sha2_password` (with TLS on) and `mysql_native_password`, SSL/TLS, `KILL QUERY`. ／ |**MySQL / MariaDB**|Pure Swift (`MySQLNIO`)|✅|✅|✅|✅|",
+     "lines": [
+      43,
+      82
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Whether you're querying production PostgreSQL databases, inspecting Redis caches, managing MongoDB collections, exploring Qdrant vector spaces, or querying SQLite files locally, BerryDB keeps the grid responsive and every credential in the macOS Keychain. ／ - **SQLite**: Direct embedded driver via `libsqlite3`, opens WAL-mode databases. ／ |**SQLite** (3.x)|Embedded (`libsqlite3`)|✅|N/A|✅|✅|",
+     "lines": [
+      28,
+      44,
+      83
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Microsoft SQL Server**: TDS protocol via dynamically linked FreeTDS (`libsybdb`). ／ |**Microsoft SQL Server**|FreeTDS (`libsybdb`)|✅|✅|✅|✅|",
+     "lines": [
+      45,
+      84
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **MySQL & MariaDB**: Native driver (`MySQLNIO`), `caching_sha2_password` (with TLS on) and `mysql_native_password`, SSL/TLS, `KILL QUERY`. ／ |**MySQL / MariaDB**|Pure Swift (`MySQLNIO`)|✅|✅|✅|✅|",
+     "lines": [
+      43,
+      82
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供连接/查询/管理能力的桌面客户端工具，非使用单一数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0 开源，云 AI 服务为付费功能",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**BerryDB** is a native database client for macOS developers, data engineers, and DBAs. It is built with **Swift 6, AppKit, and SwiftUI**, with no Electron: the data grid is an AppKit `NSTableView`. ／ Connect to SQL, NoSQL, Key-Value, and Vector databases all in a unified native workspace: ／ |Database Engine|Driver / Protocol|Direct Connection|SSH Tunnel|Inline Grid Edit|Schema Browser|",
+   "evidence_lines": [
+    26,
+    40,
+    79
+   ]
+  },
+  "fn": "berry-apps/berrydb-desktop",
+  "sha": "c1045c413e8c",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3123f1bbbedb": {
+  "identity": {
+   "one_liner": "GitHub PR 管理界面，集中跟踪与排序团队拉取请求",
+   "review": "该项目提供一个 Web 界面，用于跟踪和管理团队或个人的 GitHub pull requests，支持按过滤器（全局或组织内搜索）和标签（Review needed/Accepted/Changes requested/WIP）分类排序。面向开发者与团队使用，通过 Docker/Docker Compose 安装，后端为 PHP 应用，开发环境使用 MySQL 存储数据并提供 adminer 查看数据库。",
+   "highlights": [
+    "在单页集中展示所有关注仓库的 pull requests 与通知，支持 label 和 filter 两种排序模式",
+    "支持在全局 GitHub 或特定组织范围内搜索 issues 和 pull requests",
+    "提供 Docker/Docker Compose 部署，含 lint、analyse 等代码质量检查命令"
+   ],
+   "use_cases": [
+    "开发团队集中跟踪和审查团队仓库的 pull requests",
+    "按 Review needed/Accepted/Changes requested/WIP 状态分类管理 PR 流程",
+    "自托管部署用于简化个人或组织的 PR 审查流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- Server: _mysql_ ／ - Username: _env:MYSQL_USER_ ／ - Password: _env:MYSQL_PASSWORD_",
+     "lines": [
+      50,
+      51,
+      52
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用数据库存储数据的 GitHub PR 管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GitHub PR Review is an interface to simplify pull requests management on GitHub. ／ - Docker >= 18.04.0 ／ - Server: _mysql_",
+   "evidence_lines": [
+    4,
+    40,
+    50
+   ]
+  },
+  "fn": "babeuloula/github-pr-review",
+  "sha": "3123f1bbbedb",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

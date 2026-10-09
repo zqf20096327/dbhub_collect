@@ -8418,5 +8418,224 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "34c2fa6dae99": {
+  "identity": {
+   "one_liner": "面向1C代码库分析的MCP服务器，提供67个助手和SQLite索引",
+   "review": "rlm-tools-bsl 是一个 MCP 服务器，为操作 1C:Enterprise（BSL）大型代码库的 AI 代理提供 67 个辅助工具：代理将 Python 脚本发送至沙箱，仅将压缩后的输出返回给上下文。支持 CF/EDT/MDO 源码格式，并为速度构建了 SQLite 索引。专为需要在不使用 RAG 的情况下进行代码分析的开发人员、分析师和团队负责人设计。",
+   "highlights": [
+    "提供 67 个辅助工具用于分析 BSL 代码，包括查找调用者、对对象的引用和未解析的调用",
+    "支持 CF、EDT 和 MDO 源码格式，并提供可选的 SQLite 方法索引",
+    "通过 HTTP 或 stdio 作为 MCP 服务器运行，具有脚本沙箱，仅返回 print() 结果"
+   ],
+   "use_cases": [
+    "在无需初步 RAG 索引的情况下，让 AI 代理探索不熟悉的 1C 配置",
+    "评估客户配置与业务需求列表的匹配度",
+    "根据实际源文件生成或更新技术文档"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Для ускорения работы на больших конфигурациях можно предварительно построить SQLite-индекс методов и графа вызовов — см. **docs/INDEXING.md**. На ПК с медленными дисками (HDD, сетевые ресурсы) индексирование фактически обязательно: без индекса файловые операци",
+     "lines": [
+      183
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具不存储数据在数据库中，而是作为 AI 代理的辅助工具包，仅使用 SQLite 作为其自身的辅助索引",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MCP-сервер для токен-эффективного анализа кодовых баз 1С (BSL). ／ **rlm-tools-bsl решает эту проблему:** агент отправляет Python-скрипт на сервер (хост, где открыт проект), скрипт выполняется в песочнице, а в контекст возвращается **только `print()`** — компактный отфильтрованный результат вместо сырых данных.",
+   "evidence_lines": [
+    11,
+    101
+   ]
+  },
+  "fn": "Dach-Coin/rlm-tools-bsl",
+  "sha": "34c2fa6dae99",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4f6fb52b7e34": {
+  "identity": {
+   "one_liner": "面向小型团队的单组织 OIDC 身份认证服务，共享 SSO 与强制 TOTP",
+   "review": "Burrow 是一个用 Go 和 React 编写的自托管 OIDC 身份提供者，提供共享 SSO 会话、密码加强制 TOTP 认证、用户/组/角色/权限的 RBAC 管理和应用门户。面向运营自托管服务的小型团队，单实例部署，后端与内嵌 UI 打包为单一二进制，生产使用 PostgreSQL，本地开发可用 SQLite。",
+   "highlights": [
+    "提供 OpenID Connect 与 PKCE S256 的共享 SSO 登录",
+    "强制 TOTP 多因素认证，支持临时密码修改和管理员恢复",
+    "实现用户、组、自定义角色与权限的访问管理，管理操作留审计"
+   ],
+   "use_cases": [
+    "为自托管的 Web/SPA 应用集中接入 OIDC 单点登录",
+    "小型团队的用户账号与角色权限统一管理",
+    "需要强制 MFA 的内部应用门户"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL is used in production; SQLite is available for local development. ／ - **Simple deployment:** one binary with an embedded UI, or Docker Compose with PostgreSQL; no Redis or queue. ／ `BURROW_BOOTSTRAP_ADMIN_PASSWORD` for initial seeding and a PostgreSQL DSN with",
+     "lines": [
+      19,
+      32,
+      164
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "PostgreSQL is used in production; SQLite is available for local development. ／ Requirements: Go **1.27.1**, a C compiler for the SQLite driver, Bun **1.4.2** and",
+     "lines": [
+      19,
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用 PostgreSQL/SQLite 存储自身数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL is used in production; SQLite is available for local development. ／ - **Simple deployment:** one binary with an embedded UI, or Docker Compose with PostgreSQL; no Redis or queue.",
+   "evidence_lines": [
+    19,
+    32
+   ]
+  },
+  "fn": "ArkGravity/burrow",
+  "sha": "4f6fb52b7e34",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e32aec9be603": {
+  "identity": {
+   "one_liner": "大数据框架与资源的 awesome 清单，带星标与分支数",
+   "review": "这是一个汇总大数据相关框架、资源和工具链接的清单仓库，每个条目附带 GitHub 星标与分支数。内容覆盖 RDBMS、数据处理框架、分布式编程等板块。面向需要检索大数据生态工具的开发者和数据从业者，本身不提供可安装的软件，仅包含分类链接列表。",
+   "highlights": [
+    "提供按 RDBMS、Frameworks、Distributed Programming 等类别组织的大数据项目链接清单",
+    "条目附带 GitHub 星标数和分支数信息"
+   ],
+   "use_cases": [
+    "检索大数据处理框架与相关资源的入口索引",
+    "了解 RDBMS 及分布式计算项目的分类概览"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "* 🌎 MySQL The world's most popular open source database.",
+     "lines": [
+      12
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "* 🌎 PostgreSQL The world's most advanced open source database.",
+     "lines": [
+      13
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "* Oracle Database - object-relational database management system.",
+     "lines": [
+      14
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库是大数据资源的链接清单，不包含为某数据库服务的工具或使用数据库的应用代码",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A curated list of awesome big data frameworks, resources and other awesomeness. Inspired by <code>&nbsp;32732⭐</code> <code>&nbsp;&nbsp;5136🍴</code> awesome-php), <code>326026⭐</code> <code>&nbsp;28895🍴</code> awesome-python), <code>&nbsp;&nbsp;1266⭐</code> <code>&nbsp;&nbsp;&nbsp;174🍴</code> awesome-ruby), hadoopecosystemtable & big-data. ／ ## RDBMS ／ ## Frameworks",
+   "evidence_lines": [
+    5,
+    11,
+    17
+   ]
+  },
+  "fn": "Correia-jpv/fucking-awesome-bigdata",
+  "sha": "e32aec9be603",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

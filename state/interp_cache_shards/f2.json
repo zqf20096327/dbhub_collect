@@ -9617,5 +9617,126 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "106b8db1c920": {
+  "identity": {
+   "one_liner": "印尼行政区划边界数据集，含多边形与质心坐标的 SQL 数据",
+   "review": "该仓库提供依据 Kepmendagri No 300.2.2-2430/2025 的印度尼西亚行政区划（省/县/市/区/村）边界数据，包含简化的 multipolygon 边界和由多边形质心计算的经纬度坐标，以 SQL 形式发布，并提供各省份覆盖进度表。适合需要印尼行政区划代码、边界多边形或坐标数据的开发者在数据库中导入使用；README 注明部分村级数据尚不完整，且边界经过简化处理。",
+   "highlights": [
+    "提供覆盖印尼 38 个省级单位的行政区划边界 multipolygon 数据（经简化）",
+    "提供由多边形质心计算得到的经纬度坐标",
+    "数据依据 Kepmendagri No 300.2.2-2430 Tahun 2025 编制，以 SQL 格式发布"
+   ],
+   "use_cases": [
+    "在 MySQL 等数据库中导入印尼行政区划代码与边界数据",
+    "基于行政区划多边形或质心坐标进行地图展示/空间查询",
+    "作为行政区划代码与地理边界关联的参考数据源"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "仓库以 SQL 数据文件形式发布行政区划边界与坐标，供导入数据库使用，而非以数据库为存储的终端应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Data boundaries wilayah administrasi pemerintahan Indonesia sesuai Kepmendagri No 300.2.2-2430 Tahun 2025 ／ * Koordinat latitude longitude diperhitungkan dari koordinat centroid dari polygon wilayah tersebut ／ * Karena keterbatasan resources, wilayah boundaries berupa multipoliygon yang di simplified, untuk resolusi yang lebih tinggi akan dibuatkan repo tersendiri",
+   "evidence_lines": [
+    2,
+    55,
+    56
+   ]
+  },
+  "fn": "cahyadsn/wilayah_boundaries",
+  "sha": "106b8db1c920",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1928498f0418": {
+  "identity": {
+   "one_liner": "开源自托管可视化页面构建器，单 Docker 容器运行并用 SQLite 存数据",
+   "review": "OrbitPage 是一个面向个人和小团队的自托管公共页面构建应用，用于创建作品集、活动页面、场馆菜单等。提供可视化编辑仪表盘，内置分析、QR 码、Newsletter、备份导出等功能；数据存储在单个 SQLite 数据库文件和上传目录中，通过 Docker、Linux 安装脚本或源码方式部署。",
+   "highlights": [
+    "单 Docker 容器运行，数据目录包含 orbitpage.db 与 uploads/",
+    "仪表盘提供页面、内容、主题、备份、分析、Newsletter、团队权限等工作区",
+    "支持 JSON 导出与可选图片 ZIP 归档的备份恢复"
+   ],
+   "use_cases": [
+    "在自有服务器或家庭实验室搭建链接聚合/个人主页",
+    "为场馆菜单、活动页面生成带 QR 码的公开页面",
+    "需要自托管并保留数据控制权的创作者页面"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Self-hosted.** Run one Docker container with SQLite and local storage on your server or homelab.",
+     "lines": [
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明用 Docker 容器以 SQLite 和本地存储运行该应用并保存内容数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**OrbitPage is an open-source visual page builder for anyone who wants a public page on their own server.** Create portfolios, service pages, venue menus, or event pages. Add images, video, links, contact details, maps, and calls to action. Edit the layout, colors, and typography with a live preview. ／ - **Self-hosted.** Run one Docker container with SQLite and local storage on your server or homelab. ／ orbitpage.db",
+   "evidence_lines": [
+    20,
+    34,
+    217
+   ]
+  },
+  "fn": "paoloronco/OrbitPage",
+  "sha": "1928498f0418",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

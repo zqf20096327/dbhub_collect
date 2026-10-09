@@ -7311,5 +7311,73 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3575dd78a626": {
+  "identity": {
+   "one_liner": "QQ 群消息实时摘要推送工具，AI 过滤闲聊并提取通知待办",
+   "review": "这是一个面向 QQ 群管理员与群成员的消息摘要推送系统：通过 NapCat/OneBot v11 只读接收群消息，用本地规则加可选 LLM 过滤闲聊、提取通知/待办/截止时间，并经 WxPusher 等通道推送微信，附带手机待办台 PWA。使用 SQLite + JSONL 做去重、归档、模型用量记录与重启恢复，仅支持 Windows 部署，LLM 不配置时可回退本地规则。",
+   "highlights": [
+    "通过 OneBot v11 只读接收 QQ 群消息，支持白名单、安静群与跨群去重，经 WxPusher/Server酱/PushPlus/Webhook 推送",
+    "使用 SQLite + JSONL 实现消息去重、摘要归档、投递去重、模型用量统计与重启恢复",
+    "内置置信度评分、人工确认、决策日志、simulate 回放与 benchmark 评测集，LLM 层支持 OpenAI 兼容端点替换与失败回退"
+   ],
+   "use_cases": [
+    "班级群/学院群等通知密集群组的消息降噪与通知摘要推送",
+    "待办事项提取、截止时间提醒与移动端待办管理",
+    "LLM 调用用量、成本统计与规则效果评测"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`qq_live_digest/store.py`|SQLite + JSONL：消息去重、摘要归档、投递去重、模型用量与重启恢复| ／ 每次调用模型都会往 SQLite 的 `llm_calls` 表落**一行**：provider、模型名、输入/输出 token、",
+     "lines": [
+      38,
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目使用 SQLite 存储消息去重、摘要归档与模型用量数据，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`qq_live_digest/store.py`|SQLite + JSONL：消息去重、摘要归档、投递去重、模型用量与重启恢复| ／ 每次调用模型都会往 SQLite 的 `llm_calls` 表落**一行**：provider、模型名、输入/输出 token、 ／ 通过 NapCat(OneBot v11) 只读接收指定 QQ 群的新消息，自动过滤闲聊、提取通知/待办/截止时间，",
+   "evidence_lines": [
+    38,
+    91,
+    3
+   ]
+  },
+  "fn": "wc985732-lang/qq-live-digest",
+  "sha": "3575dd78a626",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

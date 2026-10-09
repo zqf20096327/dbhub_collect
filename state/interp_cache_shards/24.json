@@ -7278,5 +7278,141 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2ac404713f6b": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的邮件式协作层，以 MCP 服务器形式提供",
+   "review": "为多代理并行开发场景设计的协调层：每个代理拥有持久身份、收发线程消息，并通过文件租约声明编辑意图，防止互相覆盖。消息与租约存于 Git 归档并辅以 SQLite 索引，提供 45 个 MCP 工具、TUI 与 Web UI。安装脚本支持 Linux/macOS 二进制分发。属于 AI 开发流程配套组件而非数据库管理工具。",
+   "highlights": [
+    "提供 45 个 MCP 工具与 25 个只读 MCP 资源",
+    "文件租约（advisory reservations）配合 pre-commit 钩子阻止提交被他人租约的文件",
+    "所有消息以 Git 仓库文件形式归档，SQLite 用于索引与混合搜索"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理并行修改同一代码库时的任务与文件协调",
+    "人工通过 TUI/Web UI 审查代理间消息与编辑意图",
+    "非交互流水线中用 robot CLI 子命令收发消息"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A mail-like coordination layer for AI coding agents, exposed as an MCP server with 45 tools and 25 resources, Git-backed archive, SQLite indexing, an interactive 16-screen TUI, a server-rendered web UI, and an agent-first robot CLI. The Rust rewrite of the ori ／ **The Solution**: Agent Mail gives every coding agent a persistent identity (e.g., `GreenCastle`), an inbox/outbox, searchable threaded conversations, and advisory file reservations (leases) to signal editing intent. Everything is backed by Git for human-audit",
+     "lines": [
+      9,
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该项目自身的索引与搜索存储被使用，项目并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A mail-like coordination layer for AI coding agents, exposed as an MCP server with 45 tools and 25 resources, Git-backed archive, SQLite indexing, an interactive 16-screen TUI, a server-rendered web UI, and an agent-first robot CLI. The Rust rewrite of the original Python project (1,700+ stars). ／ **The Solution**: Agent Mail gives every coding agent a persistent identity (e.g., `GreenCastle`), an inbox/outbox, searchable threaded conversations, and advisory file reservations (leases) to signal editing intent. Everything is backed by Git for human-auditable artifacts and SQLite for fast indexing and search.",
+   "evidence_lines": [
+    9,
+    29
+   ]
+  },
+  "fn": "Dicklesworthstone/mcp_agent_mail_rust",
+  "sha": "2ac404713f6b",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "838d4bbfb504": {
+  "identity": {
+   "one_liner": "网络设备资产管理与监控系统，Go+SQLite 单二进制部署",
+   "review": "MiBee Steward 是一个网络/IoT 资产发现与登记系统（CMDB-lite），通过 SNMP/ICMP/TCP/HTTP 等多协议探测自动发现设备并识别品牌型号，提供拓扑、配置备份、心跳监控、Prometheus 指标导出与嵌入式 SvelteKit Web 界面，适合网络运维人员管理设备资产；采用 Go 后端加免 CGO 的 SQLite 存储，单二进制部署，许可证为 AGPLv3 加商业双许可。",
+   "highlights": [
+    "支持 SNMP v1/v2c/v3、ICMP、TCP、HTTP 多协议探测与基于协议指纹的设备识别",
+    "内置 SQLite 存储（WAL 模式）与嵌入式 SvelteKit SPA，单二进制部署",
+    "提供 Prometheus /metrics 与 /sd 服务发现端点、设备配置备份、RBAC 与审计日志"
+   ],
+   "use_cases": [
+    "网络与 IoT 资产自动发现、识别与登记",
+    "设备可用性与证书到期监控并导出 Prometheus 指标",
+    "设备 running-config 定时备份与变更检测"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite** via modernc.org/sqlite (CGO_ENABLED=0) ／ 1. The application creates a SQLite database at `./data/mibee.db` ／ - SQLite uses WAL mode for better performance",
+     "lines": [
+      58,
+      113,
+      178
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明应用在 ./data/mibee.db 创建 SQLite 数据库存放自身数据，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPLv3 + 商业许可双许可；指纹语料为 CC-BY-SA 4.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Device/network-layer asset discovery, identification, and registry**, CMDB-lite for network and IoT assets. Automatically discovers what's on your network, infers what it is (brand/model via protocol fingerprints), and tracks it over time. Single zero-dependency binary; asset state flows to Prometheus via `/metrics` + `/sd`. Alerting/visualization are intentionally left to Alertmanager/Grafana. Built with Go + SvelteKit. ／ - **SQLite** via modernc.org/sqlite (CGO_ENABLED=0) ／ 1. The application creates a SQLite database at `./data/mibee.db`",
+   "evidence_lines": [
+    13,
+    58,
+    113
+   ]
+  },
+  "fn": "Mi-Bee-Studio/MiBeeSteward",
+  "sha": "838d4bbfb504",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9697,5 +9697,362 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "769de24e627a": {
+  "identity": {
+   "one_liner": "本地AI工作证据归档系统，统一采集多来源会话并提供检索审计",
+   "review": "Polylogue 将 ChatGPT、Claude、Codex、Gemini 等多来源的 AI 会话与工具调用记录导入本地归档，通过 CLI、Python API、本地 HTTP 和 MCP 服务器提供全文检索、用量分析与来源可溯的审计。数据默认留在本机，存储为多个 SQLite 格式的 .db 文件；语义搜索为可选功能，需外发文本至嵌入服务，且项目处于 pre-1.0 阶段，接口可能变动。",
+   "highlights": [
+    "导入 ChatGPT、Claude、Claude Code、Codex、Gemini 等多来源会话历史并保留结构化证据",
+    "提供全文检索、字段过滤、动作查询管道及 JSON 输出的 CLI",
+    "内置 MCP 服务器，默认只读，写操作需逐项配置启用"
+   ],
+   "use_cases": [
+    "对 AI 编程助手会话历史进行本地归档与跨来源检索",
+    "审计工具调用结果与用量成本，保留来源引用与谱系",
+    "通过 MCP 让代理只读访问本地会话归档"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 将数据存为多个 .db 文件但未指明所用数据库，也未声明为某数据库生态服务的适配声明",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Polylogue is a local flight recorder for AI work: a cross-provider system of ／ available through a CLI, Python API, local HTTP reader, and MCP server. ／ Polylogue is pre-1.0. Import, continuous ingestion, local query, the demo, and",
+   "evidence_lines": [
+    10,
+    14,
+    228
+   ]
+  },
+  "fn": "Sinity/polylogue",
+  "sha": "769de24e627a",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b986e3f2fef9": {
+  "identity": {
+   "one_liner": "基于 React+Express+SQLite 的工单支持 CRM 系统",
+   "review": "这是一个全栈客服工单管理系统，支持创建、搜索、过滤和更新工单并记录内部备注历史，面向小型多渠道客服团队。后端用 Node.js/Express，数据存于 SQLite（better-sqlite3），无需外部数据库服务，可单服务部署在 Render，包含工单表和备注表两张表结构。",
+   "highlights": [
+    "支持工单创建、防抖搜索、按状态/优先级/渠道组合过滤及实时计数",
+    "提供 REST API（创建/查询/更新工单及统计），输入校验并返回 400/404 JSON 错误",
+    "使用 better-sqlite3 同步驱动读写 SQLite，两张表结构，备注带时间戳历史"
+   ],
+   "use_cases": [
+    "小型支持团队跨邮件/聊天/电话/社交渠道管理工单",
+    "本地或 Render 单服务部署的轻量工单系统",
+    "作为全栈 React+Express+SQLite 的参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Database|SQLite (via `better-sqlite3`)| ／ I picked this stack because SQLite needs zero setup (no external DB service to provision, no connection strings to manage) which keeps the deploy simple, while `better-sqlite3` is synchronous and fast enough that the API code stays simple and readable — no asy ／ ├── server/ # Express API + SQLite",
+     "lines": [
+      24,
+      27,
+      68
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该系统使用 SQLite 存储工单数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A full-stack customer support ticketing system: create tickets, search and filter the queue, and update ticket status with internal notes — built for a small support team handling requests across multiple channels. ／ |Database|SQLite (via `better-sqlite3`)| ／ I picked this stack because SQLite needs zero setup (no external DB service to provision, no connection strings to manage) which keeps the deploy simple, while `better-sqlite3` is synchronous and fast enough that the API code stays simple and readable — no async/await ceremony around every query.",
+   "evidence_lines": [
+    3,
+    24,
+    27
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "shubham-yadav-07/deskline-support-crm",
+  "sha": "b986e3f2fef9",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "79adedcafcfc": {
+  "identity": {
+   "one_liner": "多租户、插件式 NestJS/Next.js AI SaaS 企业知识管理平台脚手架",
+   "review": "这是一个以 npm monorepo 组织的 AI SaaS 项目，包含三个 NestJS 平台服务、五个插件 API、三个 Next.js 前端及共享包，用于企业知识管理、RAG 和数据分析。许多业务功能（插件、workers、编排器）仍未实现，认证适配器仅限本地开发。本地基础设施通过 Docker Compose 提供 PostgreSQL、Redis、MinIO，并使用 pgvector。",
+   "highlights": [
+    "包含 Gateway、Core API、AI Orchestrator 等多个 NestJS 服务和 Next.js 前端的 monorepo 结构",
+    "通过 Docker Compose 提供本地 PostgreSQL、Redis、MinIO 基础设施",
+    "使用 pgvector 支持向量存储，并在 bootstrap 中为多个服务分配独立的 PostgreSQL schema 与登录账号"
+   ],
+   "use_cases": [
+    "构建多租户企业知识管理 / RAG 平台",
+    "本地开发基于 NestJS 微服务与 Next.js 前端的 AI SaaS 应用",
+    "验证带权限边界的多服务 PostgreSQL/Redis/MinIO 本地基础设施配置"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`infrastructure/`|Local PostgreSQL, Redis, storage configuration; Docker, gateway, observability documentation| ／ loopback, with defaults PostgreSQL `5432`, Redis `6379`, MinIO API `9000`, MinIO ／ console `9001`. The validated local setup uses PostgreSQL `15432` and Redis `16379`",
+     "lines": [
+      42,
+      114,
+      115
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL/Redis/MinIO 描述为该 SaaS 平台自身的本地基础设施组件，平台使用这些数据库存数据，而非为数据库生态提供工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Amani IA is a multi-tenant, plugin-based AI SaaS organized as an npm monorepo. ／ |`infrastructure/`|Local PostgreSQL, Redis, storage configuration; Docker, gateway, observability documentation| ／ See the component READMEs for credentials, health probes and pgvector verification.",
+   "evidence_lines": [
+    3,
+    42,
+    118
+   ]
+  },
+  "fn": "AndrixNg1/amani.ia",
+  "sha": "79adedcafcfc",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "360359a05821": {
+  "identity": {
+   "one_liner": "基于 Django 和 PostgreSQL 的朋友圈债务记录应用",
+   "review": "一个用 Django 和 PostgreSQL 构建的个人债务追踪 Web 应用，用于记录朋友圈内谁欠谁钱。支持双向记账、部分还款、按状态/日期/金额搜索排序分页的仪表盘、软删除找回，以及 UUIDv7 自定义用户模型。适合个人或小圈子记账使用，README 声明为个人学习项目并部署在 Render。",
+   "highlights": [
+    "支持双向债务记录与部分还款，余款自动结算",
+    "提供搜索、过滤、排序、分页的债务仪表盘与汇总统计",
+    "实现软删除，可在 Django admin 中恢复已删除记录"
+   ],
+   "use_cases": [
+    "记录朋友圈之间的借贷与还款",
+    "查看应收应付总额与逾期情况",
+    "学习 Django + PostgreSQL 项目结构"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A personal project created for my circle to simply keep track of who owes who, built with Django and PostgreSQL. ／ |Database|PostgreSQL| ／ - PostgreSQL",
+     "lines": [
+      5,
+      23,
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个用 PostgreSQL 存储债务数据的 Django 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A personal project created for my circle to simply keep track of who owes who, built with Django and PostgreSQL. ／ |Database|PostgreSQL| ／ Personal project, built for learning Django.",
+   "evidence_lines": [
+    5,
+    23,
+    82
+   ]
+  },
+  "fn": "FrancisLucban/utangina",
+  "sha": "360359a05821",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "75c4ac61102d": {
+  "identity": {
+   "one_liner": "本地 ABAP 应用服务器，转译 ABAP 并经 SQLite 等后端提供 OData/Fiori",
+   "review": "open-steamgate (OSD) 将 ABAP 代码（Gateway 类、CDS、AMDP、报表）转译后在本地运行，内置 Open SQL、ICF、/IWBEP/ OData v2 运行时，向 Fiori Elements、Eclipse ADT 和 SAP GUI 提供服务，不依赖 SAP 系统。面向需要本地运行经典 SEGW 服务的 ABAP 开发者。数据库位于十一个方法的后端接缝之后，可换用 sql.js、SQLite、DuckDB、PostgreSQL 或 HANA；项目自述为 0.3 beta，且明确记录与 SAP 运行时的差异清单。",
+   "highlights": [
+    "支持多种数据库后端（sql.js、SQLite WAL、DuckDB、PostgreSQL、HANA）通过统一接缝切换",
+    "提供 /IWBEP/ OData v2 运行时，含 $filter、$batch、$expand、deep insert、function imports 等",
+    "可将 ABAP 报表或整套系统经 gogen 编译为独立 Go 二进制"
+   ],
+   "use_cases": [
+    "本地开发与调试经典代码型 SEGW/Gateway 服务",
+    "在没有 SAP 系统的环境中运行 Fiori Elements 应用原型",
+    "通过 abapGit 文件树对整套系统进行复制、分支与对比"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Portainer**|Stacks → Add stack → Web editor, paste one YAML block from `docs/spin.md` (SQLite, DuckDB, PostgreSQL or HANA Express)|`http://<host>:8011/app/flp.html`| ／ Each release also carries `sqlite.yml`, `duckdb.yml` and `postgres.yml`; start one with `docker compose -f sqlite.yml up -d`. `./osd doctor` checks a downloaded binary. ／ PostgreSQL or HANA. So a whole system can be copied, branched, compared and ／ |**Databases**|sql.js, SQLite file (WAL), DuckDB, PostgreSQL and HANA behind one seam; FOR ALL ENTRIES sent in blocks, similar to the kernel|`docs/db-backends.md`|",
+     "lines": [
+      11,
+      17,
+      35,
+      109
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **open-rfc-go**: pure-Go NI / RFC / CPIC transport, used as an external oracle.",
+     "lines": [
+      300
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Docker**|`git clone https://github.com/oisee/open-steamgate && cd open-steamgate && docker compose -p osd11 -f docker/compose.sqlite.yml up -d`|`http://localhost:8011/app/flp.html`| ／ Each release also carries `sqlite.yml`, `duckdb.yml` and `postgres.yml`; start one with `docker compose -f sqlite.yml up -d`. `./osd doctor` checks a downloaded binary. ／ and the database sits behind an eleven-method seam: sql.js, SQLite, DuckDB, ／ |**Databases**|sql.js, SQLite file (WAL), DuckDB, PostgreSQL and HANA behind one seam; FOR ALL ENTRIES sent in blocks, similar to the kernel|`docs/db-backends.md`|",
+     "lines": [
+      10,
+      17,
+      34,
+      109
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目在 SQLite/PostgreSQL 等数据库之上运行 ABAP 系统，数据库是通过接缝接入的存储后端。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "and the database sits behind an eleven-method seam: sql.js, SQLite, DuckDB, ／ |**Databases**|sql.js, SQLite file (WAL), DuckDB, PostgreSQL and HANA behind one seam; FOR ALL ENTRIES sent in blocks, similar to the kernel|`docs/db-backends.md`| ／ answers SAP GUI on the DIAG port. No SAP system is attached.",
+   "evidence_lines": [
+    34,
+    109,
+    24
+   ]
+  },
+  "fn": "oisee/open-steamgate",
+  "sha": "75c4ac61102d",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

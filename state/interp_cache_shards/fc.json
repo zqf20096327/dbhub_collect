@@ -8918,5 +8918,232 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "36eb45ef7511": {
+  "identity": {
+   "one_liner": "Laravel Herd/Homestead 环境下一键安装或更新 phpMyAdmin 的脚本",
+   "review": "该仓库是一个 shell 脚本，用于在 macOS 的 Laravel Herd 停放目录或 Laravel Homestead 虚拟机中安装、更新 phpMyAdmin。脚本通过校验 phpMyAdmin 官方发布校验和验证下载，下载失败时不改动已有安装，更新时保留用户的 config.inc.php 配置。面向使用 Laravel Herd/Homestead 本地开发环境的开发者，另附 Sail、Docker、DDEV 等替代安装说明。",
+   "highlights": [
+    "下载时校验 phpMyAdmin 发布校验和，失败时不改动现有安装",
+    "更新时保留用户 config.inc.php 配置",
+    "支持 Herd 与 Homestead 两种安装路径"
+   ],
+   "use_cases": [
+    "在 Laravel Herd (macOS) 本地环境安装 phpMyAdmin",
+    "在 Laravel Homestead 虚拟机中部署 phpMyAdmin",
+    "重复运行脚本以更新 phpMyAdmin 版本"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "3. Go to http://phpmyadmin.test and log in with your MySQL user, for example `root` with an empty password on DBngin or Herd Pro.",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "脚本为安装/更新 phpMyAdmin 这一数据库管理工具而服务，属于数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Shell script that installs or updates phpMyAdmin ／ 3. Go to http://phpmyadmin.test and log in with your MySQL user, for example `root` with an empty password on DBngin or Herd Pro.",
+   "evidence_lines": [
+    3,
+    18
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ],
+   "status_hint": "deprecated"
+  },
+  "fn": "grrnikos/pma",
+  "sha": "36eb45ef7511",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "41967006dbf0": {
+  "identity": {
+   "one_liner": "Rust 异步消息路由库，连接消息队列、数据库、文件与 HTTP",
+   "review": "mq-bridge 是一个可嵌入的异步 Rust 库，通过统一的 receive_batch/send_batch 接口在 Kafka、NATS、MQTT、AMQP、SQL 数据库、对象存储、HTTP 等系统之间搬运数据，支持 CDC、批量写入、重试/去重/DLQ 等中间件，并提供 Python、Node.js 绑定及零代码 CLI 应用 mq-bridge-app，面向需要在自有服务中集成数据管道的开发者。",
+   "highlights": [
+    "以统一 batch 接口连接消息代理、SQL 数据库、对象存储、HTTP/gRPC/WebSocket 等 16+ 原生传输",
+    "支持 Postgres 逻辑复制 CDC（pgoutput）与 MongoDB change streams",
+    "提供 Rust crate、Python (PyPI)、Node.js (npm) 及 C 头文件多种使用方式"
+   ],
+   "use_cases": [
+    "Kafka/NATS/RabbitMQ 等消息系统与数据库、文件间的数据同步与 ETL",
+    "Postgres 变更数据捕获并流式写入下游（如向量化索引同步）",
+    "事务性 outbox：同一服务内更新数据库并发布事件"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      91
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      91
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      91
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      91
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**ClickHouse** bulk insert and resumable reads|`clickhouse` endpoint · `clickhouse`|ClickHouse|",
+     "lines": [
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将 SQL 数据库、ClickHouse 列为支持的 source/sink 端点，该库为数据集成场景服务而非使用某库构建自身功能。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object storage, files, and in-memory channels. Every endpoint sits behind the same batch-shaped `receive_batch` / `send_batch` traits, so any source can feed any sink. ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts| ／ |**ClickHouse** bulk insert and resumable reads|`clickhouse` endpoint · `clickhouse`|ClickHouse|",
+   "evidence_lines": [
+    27,
+    91,
+    93
+   ]
+  },
+  "fn": "marcomq/mq-bridge",
+  "sha": "41967006dbf0",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7a2c0f605a92": {
+  "identity": {
+   "one_liner": "飞行员飞行日志簿，支持导入、历史记录与打印导出，可本地或自托管运行",
+   "review": "一款面向飞行员的日志记录应用，支持导入 CSV/JSON 航班数据、手动录入、转发邮件报告，并保留每条变更的来源历史；可导出 CSV、归档与可打印版式，还提供手写纸页拍照识别的配套读取工具。可本地运行（Node.js 24+，数据存于 ~/Logbook），也可通过 Wrangler 部署到 Cloudflare Workers 并使用 D1 数据库。本地模式无需 Cloudflare 账号。",
+   "highlights": [
+    "支持导入 CSV/JSON 航班导出文件，并保留每条导入变更的来源",
+    "支持本地运行（数据存于 ~/Logbook）及部署到 Cloudflare Workers",
+    "支持导出 CSV、归档和可打印版式，含手写纸页读取工具"
+   ],
+   "use_cases": [
+    "飞行员在本地管理个人飞行日志并生成可打印记录",
+    "自托管部署供多人使用的日志簿服务",
+    "从其他系统导出的航班数据迁移导入"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 D1 数据库存数据的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "自有代码 Apache 2.0，捆绑字体为 SIL OFL，机场与地图数据为公有领域",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Chip Logbook is a pilot logbook for importing flights, keeping a change history, and printing or exporting your records. It runs on your computer or on Cloudflare Workers. ／ Your database, configuration, inbox and outbox live in `~/Logbook`, outside the repository. To use another folder or port: ／ The included Wrangler configuration is a template. For a hosted installation, create your own D1 database, replace its placeholder ID, apply the migrations, configure your domain and Email Routing, and set the owner and session secrets. See the hosting guide. Local mode requires no Cloudflare account.",
+   "evidence_lines": [
+    3,
+    20,
+    34
+   ]
+  },
+  "fn": "ABCastor/chip-logbook",
+  "sha": "7a2c0f605a92",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9027,5 +9027,87 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "240882867332": {
+  "identity": {
+   "one_liner": "自托管 ACE 兼容代码检索服务，含索引、向量检索与重排",
+   "review": "OpenContextEngine (OCE) 是一个自托管的代码检索服务，为 AI 编码代理提供代码库上下文：对源码做 cAST 语义分块，元数据存入 PostgreSQL 或 SQLite，向量检索由 Milvus 完成，并经 LLM 重排与覆盖度选择。提供个人模式（零依赖、SQLite）与服务模式（Docker Compose 编排 PostgreSQL/Milvus/Redis）两种部署，暴露 ACE 兼容 HTTP API 与 MCP 工具，适合个人或团队为 AI 编码工具搭建检索后端。",
+   "highlights": [
+    "提供混合检索：Milvus 密集语义召回、精确标识符查找与独立路径索引的加权融合",
+    "支持两种部署模式：零依赖个人模式（SQLite + Milvus Lite）与 Docker Compose 服务模式（PostgreSQL/Milvus/Redis）",
+    "提供 ACE 兼容 API、MCP server 接入及管理面板与管理 API"
+   ],
+   "use_cases": [
+    "为 AI 编码代理/工具提供代码库上下文检索后端",
+    "多用户或多机器共享同一代码索引的服务化部署",
+    "通过 MCP 将代码库检索能力接入支持的编码工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Storage|SQLite + embedded Milvus Lite|PostgreSQL 16 + Milvus 3.0 + Redis| ／ For multiple users or machines sharing one index. Backed by PostgreSQL, Milvus 3.0, and ／ `POSTGRES_PASSWORD` / `REDIS_PASSWORD` used by Compose. Never commit real credentials.",
+     "lines": [
+      36,
+      134,
+      147
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|SQLite + embedded Milvus Lite|PostgreSQL 16 + Milvus 3.0 + Redis| ／ That's it. Migrations, SQLite, and the embedded Milvus Lite file are provisioned",
+     "lines": [
+      36,
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该服务将元数据存储在 PostgreSQL/SQLite、向量存于 Milvus，数据库是其自身运行的数据存储而非服务对象。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OpenContextEngine (OCE) gives AI coding agents accurate, up-to-date context from your ／ |Storage|SQLite + embedded Milvus Lite|PostgreSQL 16 + Milvus 3.0 + Redis| ／ For multiple users or machines sharing one index. Backed by PostgreSQL, Milvus 3.0, and",
+   "evidence_lines": [
+    18,
+    36,
+    134
+   ]
+  },
+  "fn": "oce-ai/oce",
+  "sha": "240882867332",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

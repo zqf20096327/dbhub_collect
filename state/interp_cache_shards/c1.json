@@ -8693,5 +8693,78 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5e4be79efcd5": {
+  "identity": {
+   "one_liner": "Windows 原生 YouTube 客户端，本地 SQLite 存储用户库",
+   "review": "一款面向 Windows 10/11 的桌面 YouTube 客户端，用 Tauri 2（Rust+React+TypeScript）构建，编译为单一原生二进制。用户可观看、搜索、收藏和下载视频，历史、播放列表、书签与观看进度保存在本地 SQLite 文件中，不上传；播放经 YouTube 自带 embed，无账号登录、无遥测。下载依赖内置的 yt-dlp 和 ffmpeg。",
+   "highlights": [
+    "本地 SQLite 文件保存历史、播放列表、书签和观看进度，不上传（crates/beastube-db 负责存储与迁移）",
+    "内置 yt-dlp 与 ffmpeg，支持视频下载，无需单独安装",
+    "通过 Tauri 2 打包为约 24 MB 的单一原生二进制，带内置自动更新与签名验证"
+   ],
+   "use_cases": [
+    "在 Windows 上不登录账号地观看、搜索 YouTube 视频",
+    "将视频下载到本地保存（通过捆绑的 yt-dlp/ffmpeg）",
+    "需要本地私有观看历史与收藏管理、无遥测的使用场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite file on your disk. ／ Built with Tauri 2 · Rust · React · TypeScript · SQLite, compiled to a single native binary of ／ - Your library lives in a SQLite file on your disk and is never uploaded.",
+     "lines": [
+      23,
+      25,
+      83
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其用 SQLite 存储用户库数据（library.db），SQLite 是其数据存储层而非服务对象，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU General Public License v3.0 or later",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "SQLite file on your disk. ／ - Your library lives in a SQLite file on your disk and is never uploaded. ／ |`crates/beastube-db`|SQLite storage and migrations|",
+   "evidence_lines": [
+    23,
+    83,
+    129
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "beastops/beastube",
+  "sha": "5e4be79efcd5",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

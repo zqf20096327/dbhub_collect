@@ -8425,5 +8425,300 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "87969e5d57b7": {
+  "identity": {
+   "one_liner": "语言学习互动平台，基于 Next.js 和 PostgreSQL 的 Duolingo 克隆应用",
+   "review": "这是一个语言学习 Web 应用，提供挑战、任务、商店等互动学习功能，使用 Drizzle ORM 通过 Neon 无服务器驱动读写 PostgreSQL 数据，集成 Clerk 认证和 Stripe 支付。面向想学习或部署此类全栈应用的开发者，需自行配置数据库、认证和支付密钥后运行种子脚本初始化数据。",
+   "highlights": [
+    "提供使用 Drizzle ORM 与 PostgreSQL 存储数据的全栈语言学习应用",
+    "集成 Clerk 认证、Stripe 支付和 ElevenLabs AI 语音",
+    "提供 db:push 与 db:prod 种子脚本写入挑战数据"
+   ],
+   "use_cases": [
+    "作为语言学习应用的本地部署与使用",
+    "作为 Next.js + Drizzle + Neon 全栈开发的学习参考项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "1. **Source**: Database Provider (e.g., Neon, PostgreSQL) ／ React JS Next JS Typescript Tailwind CSS Vercel Postgresql ／ - pg: ^8.23.0",
+     "lines": [
+      52,
+      120,
+      162
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是使用 PostgreSQL 存储数据的语言学习应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " 1. **Source**: Database Provider (e.g., Neon, PostgreSQL) ／ This command uses `tsx` to execute the Typescript file (`scripts/prod.ts`) and writes challenges data in database. ／ React JS Next JS Typescript Tailwind CSS Vercel Postgresql",
+   "evidence_lines": [
+    52,
+    92,
+    120
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "sanidhyy/duolingo-clone",
+  "sha": "87969e5d57b7",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a236fe2f53cd": {
+  "identity": {
+   "one_liner": "将 Claude Code 会话归档到 SQLite FTS5 并提供检索回溯的工具",
+   "review": "claude-recall 把 Claude Code 的会话记录（含已删除的 JSONL）归档进本地 SQLite（FTS5 全文索引），通过单二进制 recall 提供 MCP server、TUI 和 Web UI 三种方式查询与恢复历史会话，并附 Claude Code 插件；面向 Claude Code 用户，需本地 Claude Code 环境配合使用。",
+   "highlights": [
+    "提供 MCP server、TUI、Web UI 三种会话检索与回读入口，由单一二进制 recall 启动",
+    "使用 SQLite FTS5 做全文检索，支持按仓库、标题、文件夹、分支等字段过滤",
+    "Web UI 在运行时约半秒内导入新增/变更会话，服务器仅监听 127.0.0.1"
+   ],
+   "use_cases": [
+    "查找并恢复早期任务会话，继续未完成的工作",
+    "在被 Claude Code 删除后仍检索数月前的会话内容",
+    "在当前会话中通过 MCP 让 Claude 查询并引用过往会话"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "claude-recall archives every Claude Code session into SQLite, including the ones whose JSONL Claude Code has since deleted, and gives you three ways back into them from one binary called `recall`: ／ claude-mem extends the agent's memory, for Claude Code and many other agents. It captures observations on every tool use, summarizes them with an LLM into structured facts, stores them in a vector DB, and injects the result into the next session's prompt. clau ／ sqlite3 ~/.claude/vault.db \".backup '/path/to/backup.db'\" ／ Work against a copy of the archive (`sqlite3 ~/.claude/vault.db \".backup '/tmp/vault-copy.db'\"`), not the live file.",
+     "lines": [
+      9,
+      117,
+      227,
+      272
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确说明把会话 JSONL 归档存入 SQLite 并用其 FTS5 检索，SQLite 是该应用的数据存储层",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "claude-recall archives every Claude Code session into SQLite, including the ones whose JSONL Claude Code has since deleted, and gives you three ways back into them from one binary called `recall`: ／ claude-mem extends the agent's memory, for Claude Code and many other agents. It captures observations on every tool use, summarizes them with an LLM into structured facts, stores them in a vector DB, and injects the result into the next session's prompt. claude-recall doesn't touch the memory layer. It stores the JSONL files Claude Code already writes and searches them with SQLite FTS5.",
+   "evidence_lines": [
+    9,
+    117
+   ]
+  },
+  "fn": "babarot/claude-recall",
+  "sha": "a236fe2f53cd",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e674b65e5f73": {
+  "identity": {
+   "one_liner": "DSH 插件：本地文档知识库，混合检索+引用校验，SQLite 索引",
+   "review": "dsh-library 是 DeepSeek Harness 的一个插件，把本地 md/txt 文档导入为可查询知识库，提供混合语义+关键词检索、MMR 多样性重排、引用注入与 library_cite_check 引用核验、library_diagnose 诊断等工具。索引存储在宿主的存储域（JSON 或 SQLite）。面向使用 DSH 智能体的开发者；内置哈希嵌入器为词汇级相似度，语义检索需另配外部嵌入器。",
+   "highlights": [
+    "提供 library_add/remove/list/search、library_cite_check、library_diagnose 等工具，支持混合语义+关键词检索与 MMR 多样性重排",
+    "检索结果带 [n] 引用标记，可注入调用智能体，并通过模糊+语义双重匹配核验引用",
+    "支持 JSON 或 SQLite 等宿主存储域后端，内置确定性哈希嵌入器，可切换外部命令或本地 Ollama 嵌入"
+   ],
+   "use_cases": [
+    "为 DSH 智能体导入本地 md/txt 文档并做带引用的问答检索",
+    "核验智能体回答中的 [n] 引用是否与检索结果一致",
+    "诊断知识库索引质量（分块直方图、近重复块、自检索探针）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|Any storage-domain backend (JSON or SQLite); the index lives in the host's storage domain|",
+     "lines": [
+      45
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是 DSH 智能体的文档知识库应用，SQLite 仅作为其索引的宿主存储后端之一，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0（插件家族声明）",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Storage|Any storage-domain backend (JSON or SQLite); the index lives in the host's storage domain| ／ **Local document knowledge base for DeepSeek Harness.** ／ `dsh-library` turns local md/txt documents into a queryable knowledge base with a quality pipeline your agent can trust:",
+   "evidence_lines": [
+    45,
+    7,
+    50
+   ]
+  },
+  "fn": "PerryLink/dsh-library",
+  "sha": "e674b65e5f73",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cdacac519219": {
+  "identity": {
+   "one_liner": "基于 Rails 8 + PostgreSQL 的生产级 API 后端脚手架",
+   "review": "RexOne Core 是一个 Rails 8 API 项目模板/基础框架，内置 Devise JWT 认证、IAM/RBAC、Stripe 订阅、Solid Queue 后台任务、Action Cable WebSocket、监控面板与遥测，依赖 PostgreSQL 与 Docker 运行。面向需要自建后端的 Web/移动产品团队与独立开发者，通过 ./scripts/dev.sh 一键启动完整环境。",
+   "highlights": [
+    "提供 JWT 认证、分层 IAM/RBAC 与 Stripe 订阅支付等模块化 API 能力",
+    "使用 Solid Queue 实现后台任务队列，Action Cable 提供 WebSocket 实时通信",
+    "提供 OpenAPI 3.0 规范与 Swagger 文档（/admin/api-docs）及部署文档"
+   ],
+   "use_cases": [
+    "为 Web/移动产品快速搭建自托管后端 API 基础",
+    "需要订阅计费、权限控制与后台任务的 SaaS 项目起点",
+    "在单台 VPS 上以 Docker 运行完整 API、队列与存储栈"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ 1. **Platform Concurrency & ACID Durability**: Full-stack Node monoliths struggle when managing long-lived WebSockets, multi-stage background media compression, and transactional billing ledgers. Rails 8 with **Solid Queue** (Fiber + Thread hybrid concurrency)",
+     "lines": [
+      11,
+      86
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|**Database Integrity**|✅ **Strict Relational PostgreSQL**: Foreign keys, ACID, UUIDs, soft-deletes|⚠️ **ORM Inconsistencies**: Serverless connection pool limits on Prisma/Drizzle|✅ **PostgreSQL**: Relational integrity via managed Postgres instance|✅ **Postgre ／ - **Multi-Cloud & Polyglot Background**: Extensive real-world production engineering across AWS SAM, Microsoft Azure, FastAPI (Python), Laravel & TALL/Filament (PHP), NestJS & Next.js (Node/TypeScript), Go, Prisma, MongoDB, MySQL, and PostgreSQL.",
+     "lines": [
+      127,
+      166
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Offline-First Durability**|✅ **Drift SQLite (`rexone_offline`)**: Schema mirroring, offline subtitles & AES-256 saves|❌ **None**: Application breaks entirely on network disconnect|⚠️ **No Relational Offline**: Unreliable offline sync across foreign keys|❌ * ／ |📱 **Native Tri-Platform Synchrony**|Rails 8.1 API + React 19 SPA + Flutter 3 native app, shared OpenAPI v1 specs, Drift SQLite offline storage|Exact contract parity across Web and Mobile; true 60fps native Flutter with offline-first sync.|",
+     "lines": [
+      126,
+      234
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 PostgreSQL 存储数据并自带离线 SQLite 存储的完整应用框架，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A sovereign, production-grade API core for modern web and mobile products. Authentication, hierarchical IAM, Stripe billing, access control, media pipelines, notifications, durable AI queues, real-time Action Cable WebSockets, background job topologies, operational administration, and glass-box observability stand ready—not as scattered trophies, but as one disciplined system. ／ PostgreSQL ／ 1. **Platform Concurrency & ACID Durability**: Full-stack Node monoliths struggle when managing long-lived WebSockets, multi-stage background media compression, and transactional billing ledgers. Rails 8 with **Solid Queue** (Fiber + Thread hybrid concurrency) and PostgreSQL 18 provides rock-solid durability without external Redis brokers, queue services, or 10-second serverless execution limits.",
+   "evidence_lines": [
+    5,
+    11,
+    86
+   ]
+  },
+  "fn": "rex-9/rexone-core",
+  "sha": "cdacac519219",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

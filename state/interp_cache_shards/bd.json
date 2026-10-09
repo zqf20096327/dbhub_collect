@@ -10244,5 +10244,69 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "269099b8b021": {
+  "identity": {
+   "one_liner": "Laravel 数据库刷新扩展包，可指定刷新时保留哪些表",
+   "review": "Custom Fresh 是一个 Laravel Composer 扩展包，提供 fresh:custom 命令，在执行 migrate:fresh 类刷新时按表名、glob 模式、preset 或外键关系保留指定表，支持 --drop/--keep/--explain 预览、多连接与 seeding 选项。面向使用 Laravel 迁移、需要选择性重建数据库的开发者；PostgreSQL 的 --drop-types 选项仅在该数据库上可用。",
+   "highlights": [
+    "提供 fresh:custom 命令，支持 --keep/--drop/--except/--preset 等方式选择性保留或删除表",
+    "保留表时联动保留其外键引用的父表/子表，并可 --explain/-- 预览执行计划",
+    "支持 --database 指定连接、--seed-fresh 定向 seeding 及 --drop-types（仅 PostgreSQL）"
+   ],
+   "use_cases": [
+    "Laravel 项目中刷新迁移时保留 users、sessions 等特定表的数据结构",
+    "多租户/多连接场景下对指定连接执行选择性数据库刷新",
+    "通过 --explain 干跑预览将被保留与删除的表和迁移"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Pass `--drop-views` and `--drop-types` to match Laravel's `migrate:fresh` when leftover views or PostgreSQL types would break the next run: ／ The `--drop-types` option is supported on PostgreSQL only.",
+     "lines": [
+      201,
+      207
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Laravel 应用的数据库迁移刷新流程提供工具命令，本身不存业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Custom Fresh offers fine-grained control over migrations within your Laravel project, enabling you to select which tables will not be dropped when refreshing the database. ／ composer require ramadan/custom-fresh ／ The `--drop-types` option is supported on PostgreSQL only.",
+   "evidence_lines": [
+    13,
+    25,
+    207
+   ]
+  },
+  "fn": "mahmoudmohamedramadan/custom-fresh",
+  "sha": "269099b8b021",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

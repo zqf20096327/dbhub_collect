@@ -8086,5 +8086,332 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a5a7664edb54": {
+  "identity": {
+   "one_liner": "PostgreSQL plpgsql 存储过程语言的静态分析 linter 扩展",
+   "review": "plpgsql_check 是一个 PostgreSQL 扩展，通过对 plpgsql 例程做静态分析，在运行前发现内嵌 SQL 的语义错误、未用变量、死代码、隐藏类型转换及 SQL 注入风险，输出 text//xml 格式报告。供 plpgsql 开发者和 DBA 用于开发与质量检查，需以 CREATE EXTENSION 方式装入库内运行，支持 PostgreSQL 14-19。",
+   "highlights": [
+    "基于 PostgreSQL 内部 parser/evaluator 检查函数内嵌 SQL 的语义错误",
+    "支持 DML 触发器函数检查、性能/安全/兼容性等多级警告及注释内 PRAGMA 选项",
+    "输出 text、、xml 三种格式，支持检测 EXECUTE 语句的 SQL 注入漏洞"
+   ],
+   "use_cases": [
+    "plpgsql 存储过程与触发器函数上线前的静态错误检查",
+    "排查性能隐患（隐藏类型转换、未使用索引）与 SQL 注入风险",
+    "CI 中对 plpgsql 代码生成结构化（/xml）检查报告"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This extension is a full linter for plpgsql for PostgreSQL. It leverages only the internal ／ PostgreSQL parser/evaluator so you see exactly the errors would occur at runtime. ／ PostgreSQL 14 - 19 are supported.",
+     "lines": [
+      5,
+      6,
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展为 plpgsql 开发提供静态检查能力，是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This extension is a full linter for plpgsql for PostgreSQL. It leverages only the internal ／ PostgreSQL 14 - 19 are supported. ／  postgres=# CREATE EXTENSION plpgsql_check;",
+   "evidence_lines": [
+    5,
+    35,
+    42
+   ]
+  },
+  "fn": "okbob/plpgsql_check",
+  "sha": "a5a7664edb54",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5e2ae98282de": {
+  "identity": {
+   "one_liner": "基于S3对象存储的持久化流引擎，提供HTTP与Kafka协议",
+   "review": "PicoMQ 是一个用 Rust 编写的持久化实时流引擎，通过 S3 兼容对象存储实现 durable streams，对外暴露 HTTP（Pico 协议与 Durable Streams）和 Kafka 协议前端，附带 pico CLI。元数据平面可选用 SQLite 或 Postgres 存储，单机或集群（compose）均可部署，适合自建流式基础设施的开发与运维人员使用。",
+   "highlights": [
+    "提供 HTTP（Pico 协议、Durable Streams）与 Kafka 协议前端",
+    "元数据日志支持 SQLite 与 Postgres 存储，数据基于 S3 兼容对象存储",
+    "包含 pico CLI 用于创建、追加和读取流"
+   ],
+   "use_cases": [
+    "自托管持久化事件流/消息流基础设施",
+    "以 Kafka 协议接入的流式数据读写",
+    "基于对象存储的低依赖单节点或双节点部署"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "docker compose up --build # Postgres + RustFS, 1 node ／ `harness/byo` is the same against an existing Postgres and object store, configured through `.env`. ／ # Postgres-backed tests, env-gated",
+     "lines": [
+      41,
+      47,
+      63
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# single node: SQLite metadata log, local object storage ／ --meta-url sqlite:./data/meta.db \\ ／ docker compose -f compose.lite.yml up --build # SQLite + file://, no deps",
+     "lines": [
+      25,
+      27,
+      43
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是独立的流引擎组件，Postgres/SQLite 仅作为其可配置的元数据存储后端。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PicoMQ is durable, real-time streams over HTTP and Kafka, built on S3-compatible object storage. ／ - `s3stream` the stream engine ／ - **`picomq/`** the host: metadata plane, server, protocol frontends (HTTP with Pico protocol and Durable Streams, plus Kafka), client, and the `pico` CLI",
+   "evidence_lines": [
+    3,
+    7,
+    8
+   ]
+  },
+  "fn": "PicoMQ/picomq",
+  "sha": "5e2ae98282de",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "eeaaa650169b": {
+  "identity": {
+   "one_liner": "多玩家地理猜位对战游戏，含排行榜与自建房",
+   "review": "GeoDuels 是一个免费的多玩家地理猜位游戏，提供社区地图、对战、排名与自定义房间，官方站点为 geoduels.io。README 给出两种部署方式：开发环境用 Docker Compose 加载示例数据集，自托管则拉取发布镜像（支持 amd64/arm64），通过反向代理暴露入口，并需先运行 db-migrate 做数据库迁移。适合想自建游玩或参与贡献的开发者。",
+   "highlights": [
+    "支持 duels 对战、排名与自定义房间",
+    "提供开发与自托管两套 Docker Compose 部署流程",
+    "发布镜像覆盖 amd64 与 arm64 架构，可通过 IMAGE_TAG 锁定版本"
+   ],
+   "use_cases": [
+    "自托管一个多人地理猜位游戏站点",
+    "搭建本地开发环境参与项目贡献",
+    "搭建自定义地图的对战房间"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是一个使用数据库的地理游戏应用，数据库迁移仅为部署步骤，无面向数据库生态的工具能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A free multiplayer geography game with community maps and competitive duels. Play at geoduels.io. ／ docker compose --env-file backend/beta.secrets.env -f backend/selfhosted.yaml run --rm db-migrate",
+   "evidence_lines": [
+    3,
+    28
+   ]
+  },
+  "fn": "sourcelocation/geoduels",
+  "sha": "eeaaa650169b",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b8262d0c19ae": {
+  "identity": {
+   "one_liner": "PgDog 连接池代理的 Kubernetes Helm 部署 Chart",
+   "review": "该项目提供用于在 Kubernetes 上部署 PgDog 的 Helm Chart，通过 values.yaml 配置数据库、用户及 pgdog.toml/users.toml 全部设置，包含 StatefulSet、PodDisruptionBudget、反亲和、ExternalSecrets、Prometheus sidecar 等。面向使用 Kubernetes 运维 PgDog 连接池的运维人员。",
+   "highlights": [
+    "支持通过 values.yaml 配置 PgDog 全部 pgdog.toml 与 users.toml 设置",
+    "提供 PodDisruptionBudget、反亲和、Multi-AZ 与 Guaranteed QoS 资源配置",
+    "集成 ExternalSecrets 与 Kubernetes Secret 挂载管理凭据"
+   ],
+   "use_cases": [
+    "在 Kubernetes 集群中以 Helm 方式部署 PgDog 连接池",
+    "使用 StatefulSet 与 WAL 持久卷运行多副本 PgDog",
+    "通过 ExternalSecrets 安全注入数据库凭据"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "该 Chart 为部署 PgDog（PostgreSQL 连接池代理）提供 Kubernetes 部署配置，服务于数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# PgDog Helm Chart ／ Production-ready Helm chart for PgDog with ／ Configuration is done via `values.yaml`. All PgDog settings from",
+   "evidence_lines": [
+    1,
+    3,
+    34
+   ]
+  },
+  "fn": "pgdogdev/helm",
+  "sha": "b8262d0c19ae",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "42fe8c96605b": {
+  "identity": {
+   "one_liner": "本地优先的 Android 健身追踪应用，数据存于设备内 SQLite",
+   "review": "Omega 是一款本地优先的健身记录应用，用于记录训练组数、追踪渐进超负荷与自定义分化计划，数据全部存储在设备端 SQLite（WAL、事务写入、JSON 导出/导入）。适合需要离线使用且不希望数据上传云端的健身用户，采用 React Native/Expo 构建，当前主要提供 Android APK。",
+   "highlights": [
+    "所有数据存储于设备内嵌入式 SQLite，无网络调用、无账号、无遥测",
+    "提供 1RM 估算曲线与训练量分析、崩溃恢复会话、JSON 全库导出/导入",
+    "基于 expo-sqlite 16.0，schema 通过 PRAGMA user_version 做版本化迁移"
+   ],
+   "use_cases": [
+    "在 Android 设备上离线记录力量训练并追踪渐进超负荷",
+    "本地管理自定义训练分化（PPL、Upper/Lower 等）与休息计时",
+    "通过 JSON 文件在设备间备份、迁移训练数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Omega is a local-first workout tracker and progressive overload manager for Android. It stores everything on-device in SQLite — no accounts, no cloud sync, no telemetry. You own your training data, period. ／ All data lives in an embedded SQLite database on the device. WAL journaling, foreign-key cascades, busy timeouts, and a singleton connection guard protect against concurrency issues. The schema is versioned with `PRAGMA user_version` migrations. No network cal ／ |**Database**|expo-sqlite 16.0|Embedded relational storage|",
+     "lines": [
+      15,
+      40,
+      75
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储训练数据的健身应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial License 1.0.0，禁止商业使用",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Omega is a local-first workout tracker and progressive overload manager for Android. It stores everything on-device in SQLite — no accounts, no cloud sync, no telemetry. You own your training data, period. ／ All data lives in an embedded SQLite database on the device. WAL journaling, foreign-key cascades, busy timeouts, and a singleton connection guard protect against concurrency issues. The schema is versioned with `PRAGMA user_version` migrations. No network calls are made — ever. ／ |**Database**|expo-sqlite 16.0|Embedded relational storage|",
+   "evidence_lines": [
+    15,
+    40,
+    75
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ASSAS-Labs/Omega",
+  "sha": "42fe8c96605b",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
