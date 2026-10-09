@@ -12,7 +12,8 @@
   --apply   执行：md 文件→仓外备份目录（移动非删除）；readme/enrich state
             原件备份后删条目；写 state/purge_list_日期.json manifest。
 
-规则：普通仓 absent ≥30 天；owner ∈ 用户屏蔽清单（exclude_users）≥7 天；
+规则：普通仓 absent ≥30 天；owner ∈ 用户屏蔽清单（exclude_users）或 fn ∈ 仓库
+黑名单（exclude_repos——同样在采集落地处即丢弃，物理不可能回池）≥7 天；
 readme failed/三振条目整仓跳过（排查线索，state+文件都留）；删 md 前校验安全名
 （fn.replace('/','__')）无其他在册仓持有（含大小写不敏感——NTFS/EFCore 教训）；
 单次文件上限 500（--limit，防 git 巨量 D 撞 CI 提交步）；解读层缓存永不触碰。
@@ -39,6 +40,7 @@ for _d in (_ROOT, _ROOT / "lib", _ROOT / "collect", _ROOT / "config"):
     _sys.path.insert(0, str(_d))
 
 from gh import atomic_write_json  # noqa: E402
+import enrich_store  # noqa: E402  enrich_cache 分片存储（10-09 起，并集读）
 
 GRACE_DAYS = 30
 GRACE_BLOCKED = 7
@@ -70,14 +72,32 @@ def _load_users_blocklist(root: Path) -> set[str]:
     return bl
 
 
+def _load_repo_blocklist(root: Path) -> set[str]:
+    """仓库级静默黑名单（永不回池）：db_profiles 声明（GLOBAL ∪ 各库档案，对齐
+    pool_core.BLACKLIST 口径）+ config/exclude_repos.txt。"""
+    bl = set()
+    try:
+        import db_profiles as dp
+        bl |= {fn.lower() for fn in dp.GLOBAL.get("exclude_repos") or []}
+        bl |= {fn.lower() for p in dp.PROFILES for fn in (p.get("exclude_repos") or [])}
+    except Exception:
+        pass
+    f = root / "config" / "exclude_repos.txt"
+    if f.is_file():
+        bl |= {ln.strip().lower() for ln in
+               f.read_text(encoding="utf-8-sig").splitlines()
+               if ln.strip() and not ln.startswith("#")}
+    return bl
+
+
 def _universe(root: Path) -> tuple[dict, dict, dict]:
-    """三 state 原件（只读）+ 它们的 fn 全集。"""
+    """三 state 原件（只读）+ 它们的 fn 全集（enrich_cache 分片并集读）。"""
     def load(p, wrap):
         d = json.loads((root / "state" / p).read_text(encoding="utf-8"))
         return d.get("items", {}) if wrap else d
     rs = load("readme_state.json", True)
     es = load("enrich_state.json", True)
-    ec = load("enrich_cache.json", False)
+    ec = enrich_store.load_cache(root / "state")
     return rs, es, ec
 
 
@@ -114,9 +134,14 @@ def build_plan(root: Path, limit: int) -> dict:
     rs, es, ec = _universe(root)
     ledger = json.loads((root / "state" / "absent_since.json").read_text(encoding="utf-8"))
     users_bl = _load_users_blocklist(root)
+    repos_bl = _load_repo_blocklist(root)
 
     def grace_of(fn: str) -> int:
-        return GRACE_BLOCKED if fn.split("/", 1)[0].lower() in users_bl else GRACE_DAYS
+        # 黑名单（owner 级或仓库级）在采集落地处即丢弃、物理不可能回池——
+        # 30 天宽限防的是假出池回池，对它们只剩拖时间，给短宽限
+        if fn.split("/", 1)[0].lower() in users_bl or fn.lower() in repos_bl:
+            return GRACE_BLOCKED
+        return GRACE_DAYS
 
     kept_holders: dict[str, set[str]] = {}      # 小写安全名 → 持有者 fn 集合（撞名守卫）
     for fn in set(rs) | set(es) | set(ec) | alive:
@@ -164,15 +189,21 @@ def do_apply(root: Path, limit: int, backup_dir: Path | None) -> None:
     (bdir / "readmes").mkdir(parents=True, exist_ok=True)
     (bdir / "state").mkdir(parents=True, exist_ok=True)
 
-    rs_p, es_p, ec_p = (root / "state" / n for n in
-                        ("readme_state.json", "enrich_state.json", "enrich_cache.json"))
-    for p in (rs_p, es_p, ec_p):                 # state 原件先备份（git 恢复会丢中间增量）
+    rs_p, es_p = (root / "state" / n for n in ("readme_state.json", "enrich_state.json"))
+    ec_legacy = root / "state" / "enrich_cache.json"
+    for p in (rs_p, es_p):                       # state 原件先备份（git 恢复会丢中间增量）
         if p.is_file():
             shutil.copy2(p, bdir / "state" / p.name)
+    ec = enrich_store.load_cache(root / "state")     # 分片 ∪ 旧单文件
+    # enrich_cache 备份：有旧单文件备份原件（保字节原貌），已 cutover 则并集落一份
+    if ec_legacy.is_file():
+        shutil.copy2(ec_legacy, bdir / "state" / "enrich_cache.json")
+    else:
+        (bdir / "state" / "enrich_cache.json").write_text(
+            json.dumps(ec, ensure_ascii=False, indent=1), encoding="utf-8")
 
     rs = json.loads(rs_p.read_text(encoding="utf-8"))
     es = json.loads(es_p.read_text(encoding="utf-8"))
-    ec = json.loads(ec_p.read_text(encoding="utf-8"))
     ledger = json.loads((root / "state" / "absent_since.json").read_text(encoding="utf-8"))
     manifest, moved = {}, 0
     for d in due:
@@ -194,7 +225,12 @@ def do_apply(root: Path, limit: int, backup_dir: Path | None) -> None:
                              "backup": str(bdir / "readmes" / g["fn"])}
     atomic_write_json(rs_p, rs)
     atomic_write_json(es_p, es)
-    atomic_write_json(ec_p, ec)
+    enrich_store.save_cache_all(ec, root / "state")
+    if ec_legacy.is_file():
+        # 过渡期双写收口：旧单文件同步过滤，否则并集读取会把删掉的 fn 复活
+        tmp = ec_legacy.with_suffix(".json.tmp")
+        tmp.write_text(json.dumps(ec, ensure_ascii=False, indent=1), encoding="utf-8")
+        tmp.replace(ec_legacy)
     atomic_write_json(root / "state" / "absent_since.json", ledger)
     atomic_write_json(root / "state" / f"purge_list_{_today()}.json", manifest)
     print(f"清理：到期 {len(due)}（移文件 {moved}）· 幽灵 {len(ghosts)} · "

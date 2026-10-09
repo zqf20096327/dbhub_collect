@@ -14,7 +14,8 @@
   tail：仅 security 180 天；release/contrib/lang 首轮一次；死活看池 pushed_at（免费）
   国产仓 floor=mid（识别双信号：topics ∩ 国产 topic 集，或发现通道命中国产词/org），
   活跃国产仓享受 30 天 commit/release，死仓也只花 security 轮转
-状态：state/enrich_state.json（断点/三振）+ state/enrich_cache.json（信号数据侧车）
+状态：state/enrich_state.json（断点/三振）+ state/enrich_cache_shards/ 256 分片
+      （信号数据侧车，10-09 起分片，存取走 lib/enrich_store.py）
 预算：--max-calls / --max-minutes / 保底线（gh.py 内置）
 
 用法：
@@ -41,10 +42,11 @@ import requests  # noqa: E402
 
 import strategy                  # noqa: E402
 from gh import Budget, BudgetOut, CoreReserveOut, GitHubClient, QuotaPatienceOut, atomic_write_json  # noqa: E402
+from enrich_store import EnrichCacheStore  # noqa: E402  enrich_cache 分片存取（10-09 起）
 
 log = logging.getLogger("enrich")
 STATE = HERE / "state" / "enrich_state.json"
-CACHE = HERE / "state" / "enrich_cache.json"
+CACHE = HERE / "state" / "enrich_cache.json"   # 过渡期双写旧单文件（cutover 时与分片收口同步删）
 THREE_STRIKES = 3
 DIMS = ("commit", "release", "security", "contrib", "lang")
 TIER_STAR = {"head": 1000, "mid": 100, "tail": 0}
@@ -88,6 +90,12 @@ def load_json(path: Path, default):
     if path.is_file():
         return json.loads(path.read_text(encoding="utf-8"))
     return default
+
+
+def _persist(cache: EnrichCacheStore) -> None:
+    """落盘：分片 flush（只重写脏桶）+ 过渡期双写旧单文件（切换期保险，cutover 时去掉后者）。"""
+    cache.flush()
+    atomic_write_json(CACHE, cache)
 
 
 def tier_of(stars: int, cn: bool = False) -> str:
@@ -144,6 +152,7 @@ def collect_dims(client: GitHubClient, fn: str, cache: dict, dims: tuple,
                  pushed_changed: bool) -> dict:
     """对一个仓库执行到期的维度采集，返回信号字段（异常由调用方处理）。"""
     sig = cache.setdefault(fn, {})
+    cache.touch(fn)          # 值字段是原地 update，脏桶追踪看不见——采集前显式标脏
     today = datetime.now(timezone.utc).strftime("%Y%m%d")
     if "commit" in dims:
         # 7 天必采；90 天条件采——死仓（7 天 0 提交且 pushed_at 未变）的 90 天数不会变
@@ -217,7 +226,7 @@ def run(args):
         raise SystemExit(f"pool 不存在：{pool_path}（先跑 collect_intl.py / collect_cn.py）")
     pool = json.loads(pool_path.read_text(encoding="utf-8"))
     st = load_json(STATE, {"version": 1, "items": {}})
-    cache = load_json(CACHE, {})
+    cache = EnrichCacheStore()
     items = st["items"]
 
     tiers = ["head", "mid", "tail"] if args.tier == "all" else [args.tier]
@@ -322,7 +331,7 @@ def run(args):
                     continue
                 if (i + 1) % 50 == 0:
                     atomic_write_json(STATE, st)
-                    atomic_write_json(CACHE, cache)
+                    _persist(cache)
                     log.info("进度 %d/%d · %s", i + 1, len(targets), counts)
             break                                  # 本窗自然扫完且无剩余到期项 → 收尾
         except CoreReserveOut as e:
@@ -356,7 +365,7 @@ def run(args):
             continue
         finally:
             atomic_write_json(STATE, st)
-            atomic_write_json(CACHE, cache)
+            _persist(cache)
 
     summary = {"tiers": tiers, "dims": want_dims or "per-tier", "targets": len(targets),
                "cn_floor_mid": n_cn,

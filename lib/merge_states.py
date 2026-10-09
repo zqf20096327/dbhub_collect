@@ -31,6 +31,7 @@ for _d in (ROOT, ROOT / "lib"):
 
 from gh import atomic_write_json  # noqa: E402
 import interp_store  # noqa: E402  interp_cache 分片存储（10-06 起）
+import enrich_store  # noqa: E402  enrich_cache 分片存储（10-09 起）
 
 STATE = ROOT / "state"
 TARGETS = ("enrich_cache.json", "enrich_state.json", "interp_cache.json")
@@ -146,6 +147,8 @@ def main():
         path = STATE / name
         if name == "interp_cache.json":      # 分片存储：读并集（∪旧单文件）、写全桶
             local = interp_store.load_cache()
+        elif name == "enrich_cache.json":    # 分片存储：同上（10-09 起）
+            local = enrich_store.load_cache()
         else:
             local = load_json(path)
         print(f"[{name}] 来源 {len(foreigns)} 个：")
@@ -153,6 +156,8 @@ def main():
         if not args.dry_run:
             if name == "interp_cache.json":
                 interp_store.save_cache_all(local)
+            elif name == "enrich_cache.json":
+                enrich_store.save_cache_all(local)
             else:
                 atomic_write_json(path, local)   # 原子写 + 自动轮转备份
     if args.dry_run:
