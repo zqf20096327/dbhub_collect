@@ -10753,5 +10753,128 @@
   "generated_at": "2026-10-06",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4fb035b3f217": {
+  "identity": {
+   "one_liner": "",
+   "review": "该仓库提供三个 CSV 数据集：ewf_matches、ewf_appearances、ewf_standings，覆盖 2011 年起女足超级联赛和 2014 年起女子冠军联赛的全部比赛，并提供字段级数据字典。使用者通过克隆仓库或下载 ZIP 获取数据，适合分析师、研究人员和数据可视化作者使用；数据为静态发布，每赛季结束后更新。",
+   "highlights": [
+    "提供三个 CSV 数据集：ewf_matches、ewf_appearances、ewf_standings",
+    "覆盖 2011 年起最高级别及 2014 年起次级别联赛的比赛数据",
+    "提供字段级数据字典和统一的球队/赛季/比赛 ID 体系"
+   ],
+   "use_cases": [
+    "分析英格兰女子足球联赛的比赛结果与积分榜走势",
+    "研究球队跨赛季表现（通过稳定的球队 ID 追踪改名球队）",
+    "用于数据可视化与公开数据分析项目"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "仓库本身是 CSV 数据集，不含数据库适配工具或组件，仅为以数据集形式发布的开放数据项目",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "CC BY-SA 4.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The English Women's Football (EWF) Database is an open database of matches played in the top tiers of women's football in England. It covers all matches played since the 2011 season for the highest division (the Women's Super League) and since the 2014 season for the second-highest division (the Women's Championship). ／ * `ewf_matches` contains all matches that have been played and has one observation per match per season. ／ Each dataset is provided as a CSV file in the `data` folder. These can be accessed by either cloning this GitHub repository or by downloading a copy by clicking 'Code' and then 'Download Zip' at the top of this page.",
+   "evidence_lines": [
+    3,
+    19,
+    23
+   ],
+   "softened": [
+    "one_liner:『顶级』置空"
+   ]
+  },
+  "fn": "probjects/ewf-database",
+  "sha": "4fb035b3f217",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "110988cb11ff": {
+  "identity": {
+   "one_liner": "自托管 Markdown 笔记应用，浏览器编辑并渲染可缩放知识图谱",
+   "review": "nexlore 是一个自托管的 Markdown 笔记系统：所有笔记以纯 Markdown 文件存盘，通过文件监视器与外部编辑器（如 Obsidian、Syncthing）共存，并提供 WebGL 图谱、版本、备份、权限空间和 MCP 接口。适合个人或小团队自建知识库，数据索引存于 SQLite，需用 Docker 部署运行。",
+   "highlights": [
+    "笔记以 Markdown 文件为唯一数据源，支持文件监视器与 Obsidian/Syncthing 协同编辑并生成冲突副本",
+    "提供基于 WebGL 的可缩放知识图谱、JSON Canvas 画布与链接自动重写",
+    "支持版本历史、定时备份、账号权限空间，以及 MCP 接口供外部 AI 调用"
+   ],
+   "use_cases": [
+    "个人或小团队自托管笔记知识库",
+    "与 Obsidian 共享同一笔记文件夹的协作场景",
+    "通过 MCP 或 API 将笔记接入外部程序与 AI 助手"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything else lives in `/data`: the SQLite database `nexlore.db` (index, versions, trash, accounts), `secret.key`,",
+     "lines": [
+      203
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "nexlore 是一个使用 SQLite 存储索引、版本、账号等数据的应用，README 明确说明数据目录包含 nexlore.db。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "    image: ghcr.io/derkezorm/nexlore:latest",
+   "evidence_lines": [
+    126
+   ]
+  },
+  "fn": "DerKezorm/nexlore",
+  "sha": "110988cb11ff",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

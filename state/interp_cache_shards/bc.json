@@ -8006,5 +8006,75 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fcd3d14b72b3": {
+  "identity": {
+   "one_liner": "本地离线运行的 AI 记忆系统，含零丢失归档与知识图谱检索",
+   "review": "taOSmd 是一个框架无关的本地 AI 记忆系统，将对话原文写入 append-only 归档，在其上派生知识图谱与混合检索层，并用校验器核对抽取事实与原文。面向在 8 GB+ RAM 边缘设备（树莓派、迷你主机等）上离线或气隙部署 AI 代理的用户。提供 MCP 服务端与多代理隔离机制，运行依赖 Python 3.10+、Ollama 与 ONNX 嵌入模型。",
+   "highlights": [
+    "提供零丢失 append-only 归档，原文不可覆盖，检索层由归档派生",
+    "支持知识图谱三元组存储与混合检索（向量 + 全文），可验证抽取事实并过滤无依据内容",
+    "提供 MCP 服务端、多代理按 agent 标签隔离索引，支持 RK3588 NPU 模型"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 AI 编码代理提供本地持久记忆层",
+    "离线或气隙环境下需要合规、数据不出本机的代理记忆需求",
+    "在树莓派、迷你主机等低配设备上部署多代理共享记忆系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Vector Store**|SQLite + numpy|Cosine similarity search|CPU| ／ |**Full-Text Search**|SQLite FTS5|Keyword search over archive|CPU|",
+     "lines": [
+      560,
+      561
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 显示它将对话与知识图谱数据存入 SQLite 数据库文件，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> **Install:** `pip install taosmd` (add the MCP server with `pip install \"taosmd[mcp]\"`). For a source install instead, `git clone` then `pip install -e .`. Warning: `pip install -e .` installs the runtime only and gives you no test runner. The failure is silent, so a reader will otherwise assume their setup worked. See the Dev setup section below for the working commands. The one-line bootstrap below additionally installs Ollama and downloads the embedding and LLM models; it is newer and still being validated across clean machines, so please report issues. ／ > kg = KnowledgeGraph(os.path.expanduser(\"~/.taosmd/knowledge-graph.db\")) ／ > archive = Archive(archive_dir=os.path.expanduser(\"~/.taosmd/archive\"), index_path=os.path.expanduser(\"~/.taosmd/archive-index.db\"))",
+   "evidence_lines": [
+    59,
+    129,
+    137
+   ]
+  },
+  "fn": "jaylfc/taosmd",
+  "sha": "fcd3d14b72b3",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

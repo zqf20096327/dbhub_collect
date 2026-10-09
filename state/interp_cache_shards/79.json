@@ -9789,5 +9789,72 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "913d27d5a71f": {
+  "identity": {
+   "one_liner": "为 Claude Code/Codex 提供事件溯源的跨会话项目记忆工具",
+   "review": "CogniKernel 通过 hook 捕获 AI 编码会话，用两个本地微调编码器模型做抽取与合并，把决策、约束等存入事件溯源存储（每项目一个 SQLite 库），下次会话注入回上下文，并提供 MCP 工具与 CLI。面向使用 Claude Code 或 Codex 的开发者；更新已暂停，v0.1.3 为当前版本。",
+   "highlights": [
+    "提供会话结束自动抽取决策/约束/废弃方案并在下次会话注入的闭环",
+    "提供 MCP 工具 recall、find_related、skeleton、get_session_state",
+    "抽取与合并由本地微调编码器模型完成，无额外 LLM 调用，数据不离开本机"
+   ],
+   "use_cases": [
+    "为 Claude Code / Codex 会话保持跨会话的项目决策与约束记忆",
+    "同一 git 仓库内多工具/多子目录共享记忆",
+    "审计记忆来源与历史状态（why / show --as-of）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The store is platform-neutral — one SQLite DB per logical project, so Claude Code",
+     "lines": [
+      291
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其存储为每项目一个 SQLite 库，SQLite 仅作为自身数据存储被使用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "block the next time you work. The store is keyed on the project path, so ／ > **Updates are paused.** CogniKernel updates are halted until further notice.",
+   "evidence_lines": [
+    110,
+    20
+   ]
+  },
+  "fn": "KanishkNoir/cognikernel",
+  "sha": "913d27d5a71f",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

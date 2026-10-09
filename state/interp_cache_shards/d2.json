@@ -8800,5 +8800,78 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "89de64043079": {
+  "identity": {
+   "one_liner": "纯 Haskell 编写的 MySQL 驱动",
+   "review": "mysql-haskell 是完全用 Haskell 实现的 MySQL 客户端驱动，提供查询、prepared statement、二进制协议、批量写入及 binlog 监听与行事件解码能力，并通过 TLS 模块支持加密连接。面向需要在 Haskell 中访问 MySQL 的开发者，也可作为 groundhog、persistent 等上层库的基础。运行测试需本地 MySQL 服务器并开启 binlog。",
+   "highlights": [
+    "提供查询、prepared statement、二进制协议与 executeMany 批量写入",
+    "提供 BinLog 模块实现 binlog 监听与行事件解码",
+    "支持 TLS 连接，README 附基准测试数据"
+   ],
+   "use_cases": [
+    "在 Haskell 应用中直接连接和查询 MySQL",
+    "监听 MySQL binlog 实现行变更事件处理",
+    "作为 ORM 库（groundhog、persistent）的底层驱动"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`mysql-haskell` is a MySQL driver written entirely in haskell.",
+     "lines": [
+      5
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "Each thread either reads all 300,024 rows of the sample employees table with `select * from employees`, or inserts 1000 rows into a 29-column table with auto-commit off. The programs are the ones in `benchmark/`. They ran on mysql-haskell 1.3.3 with GHC 9.10.3",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 自述是为 Haskell 提供访问 MySQL 能力的驱动库，为数据库生态服务而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BSD 风格许可（保留版权声明与免责条款）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`mysql-haskell` is a MySQL driver written entirely in haskell. ／ `mysql-pure` is intended to solve these problems, and provide foundation for higher level libraries such as groundhog and persistent, so that accessing MySQL is both fast and easy in haskell. ／ The `Database.MySQL.Base` module provides everything you need to start making queries:",
+   "evidence_lines": [
+    5,
+    40,
+    44
+   ]
+  },
+  "fn": "winterland1989/mysql-haskell",
+  "sha": "89de64043079",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

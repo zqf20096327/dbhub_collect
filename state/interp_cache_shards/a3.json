@@ -7760,5 +7760,73 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2ad931e36322": {
+  "identity": {
+   "one_liner": "Apple Silicon 上的 1C:Enterprise Docker 开发环境栈",
+   "review": "v8dock 提供 1C:Enterprise 的完整本地开发环境：内置 PostgreSQL 1C 构建版容器（pg1c）、8.3/8.5/8.5.4 应用集群容器，以及社区许可证自动化激活站点（lic1c*），全部运行于 arm64 原生镜像。通过 bootstrap.sh 一键完成环境变量生成、发行包校验、镜像构建与服务启动。仅面向在 Mac（Apple Silicon）上进行 1C 开发的开发者，非生产用途；许可证容器依赖 Rosetta 运行 amd64 客户端。",
+   "highlights": [
+    "提供 PostgreSQL 1C 构建版（pg1c）与 8.3/8.5/8.5.4 多版本 1C 集群的原生 arm64 容器",
+    "包含社区许可证自动化激活与续期站点（lic1c*，epf 自动化 + launchd 定时器）",
+    "bootstrap.sh 一键完成 .env 生成、发行包 SHA-512 校验、镜像构建与服务启动"
+   ],
+   "use_cases": [
+    "在 Apple Silicon Mac 上搭建 1C:Enterprise 本地开发/测试环境",
+    "需要并行运行多个 1C 平台版本（8.3/8.5/8.5.4）的隔离集群",
+    "需要自动化获取与续期 1C 社区许可证的开发者工作流"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL (1C-сборка) + кластеры 1С 8.3 / 8.5 / 8.5.4 + полностью ／ PostgreSQL ／ PostgreSQL 18 (сборка 1С) + серверы 1С:Предприятия 8.3 / 8.5 / стенд активации",
+     "lines": [
+      5,
+      19,
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目编排 PostgreSQL（1C 构建）容器作为开发栈的数据库组件，属于为 1C/PostgreSQL 开发环境服务的工具化平台，而非某数据库的官方工具或仅使用数据库的终端应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " PostgreSQL (1C-сборка) + кластеры 1С 8.3 / 8.5 / 8.5.4 + полностью ／ PostgreSQL 18 (сборка 1С) + серверы 1С:Предприятия 8.3 / 8.5 / стенд активации ／ docker-compose.yml          # pg1c + server1c83/85/854 (версии = env)",
+   "evidence_lines": [
+    5,
+    27,
+    47
+   ]
+  },
+  "fn": "0x3654/v8dock",
+  "sha": "2ad931e36322",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

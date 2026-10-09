@@ -8261,5 +8261,73 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6f0679461a3a": {
+  "identity": {
+   "one_liner": "自托管 RSS 阅读器，提供过滤、相关度评分与可选 AI 摘要",
+   "review": "Readfine 是一个基于 Python/FastAPI 与 PostgreSQL 的自托管 RSS 阅读器，支持 RSS/Atom 订阅、网页抓取、过滤规则、相关度评分，以及可选的 AI 摘要与简报（自带 API key，兼容 OpenAI 端点如 Ollama）。面向想要私有部署阅读服务的个人用户；通过 Docker Compose 部署，README 提醒代码以 AI 生成为主，建议自托管前自行审查代码。",
+   "highlights": [
+    "支持 RSS/Atom 订阅及基于 CSS 选择器的网页抓取订阅，含文件夹与定时抓取",
+    "提供条件过滤（正则、AND/OR、回溯应用）与基于词条的相关度评分（无需 AI key）",
+    "可选 AI 功能：摘要、模型评分、文章对话与定时简报，支持 Anthropic/OpenAI/Gemini 或 OpenAI 兼容端点"
+   ],
+   "use_cases": [
+    "个人自托管 RSS 阅读服务，支持 OPML 导入导出",
+    "多来源新闻聚合去重（Stories 事件合并展示）",
+    "利用本地 LLM（如 Ollama）生成摘要与每日简报"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Your data lives in the `postgres_data` Docker volume. Back it up somewhere **off ／ The repo ships `backup.sh`: it runs `pg_dump` inside the database container and",
+     "lines": [
+      309,
+      313
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL 存储数据的 RSS 阅读应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted web RSS reader (inspired by Tiny Tiny RSS) with web scraping, filters, ／ - Database name, user, and password",
+   "evidence_lines": [
+    9,
+    136
+   ]
+  },
+  "fn": "jakublibik/readfine",
+  "sha": "6f0679461a3a",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

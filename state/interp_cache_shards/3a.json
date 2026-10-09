@@ -8693,5 +8693,91 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "186f02b827cb": {
+  "identity": {
+   "one_liner": "达梦数据库的 JetBrains IDE 数据库工具插件",
+   "review": "这是一个面向 JetBrains 系列 IDE 数据库工具的达梦数据库驱动注册插件，用于在 IDE 中连接和内省达梦 DM8/DM7 数据库，提供驱动登记、URL 模板、视图与存储过程 DDL 读取等功能。面向使用达梦数据库并依赖 IDE 数据库工具的开发者。限制包括不内省外键、依赖 Oracle 兼容数据字典读取 DDL，仅 DM8 经过实测。",
+   "highlights": [
+    "提供 DM8 与 DM7 驱动注册，jar 包从 Maven Central 自动下载",
+    "通过 SYS.ALL_VIEWS、SYS.ALL_SOURCE 与 DBMS_METADATA.GET_DDL 读取视图及存储过程 DDL",
+    "支持 compatibleMode=oracle|mysql 等 URL 参数与默认端口 5236"
+   ],
+   "use_cases": [
+    "在 IDE 数据库工具窗口中连接并浏览达梦 DM8 数据库",
+    "通过 Ctrl+Click 跳转查看表、视图、存储过程的 DDL",
+    "为达梦 DM7 实例配置独立的驱动与连接"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|URL template|`jdbc:dm://host:5236`, optional `schema=…&compatibleMode=oracle\\|mysql…` query params| ／ `SYS.ALL_SOURCE`) which DM8 provides. If your instance is in MySQL compatibility",
+     "lines": [
+      13,
+      52
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|URL template|`jdbc:dm://host:5236`, optional `schema=…&compatibleMode=oracle\\|mysql…` query params| ／ `SYS.ALL_SOURCE` and `DBMS_METADATA.GET_DDL` are present in Oracle-compatibility ／ - DDL retrieval assumes the Oracle-compatible data dictionary (`SYS.ALL_VIEWS`,",
+     "lines": [
+      13,
+      42,
+      51
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "# dameng-driver-for-idea ／ 达梦数据库 (Dameng, DM) support for **JetBrains IDEs** — ／ |Driver registration|`DM (达梦数据库)` for DM8, `DM7 (达梦数据库 7)` for DM7 — both with a dedicated icon|",
+     "lines": [
+      1,
+      3,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为达梦数据库提供 IDE 驱动注册与连接支持，属于服务于数据库生态的工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "插件代码 MIT，达梦 JDBC 驱动另行下载",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "达梦数据库 (Dameng, DM) support for **JetBrains IDEs** — ／ |Driver registration|`DM (达梦数据库)` for DM8, `DM7 (达梦数据库 7)` for DM7 — both with a dedicated icon| ／ |View DDL|Loaded from `SYS.ALL_VIEWS`|",
+   "evidence_lines": [
+    3,
+    11,
+    16
+   ]
+  },
+  "fn": "mtaech/dameng-driver-for-idea",
+  "sha": "186f02b827cb",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

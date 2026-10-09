@@ -7903,5 +7903,68 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "22a34441b0a2": {
+  "identity": {
+   "one_liner": "读取1C括号格式文件的oscript命令行工具，管道式数据处理",
+   "review": "这是一个基于 OneScript 的命令行工具，用于逐行读取和解析 1C 的括号格式文件（如注册日志 LGP/LGF、集群配置 1CV8Clst.lst、性能测量 PFF 等），通过 JSON 配置的流水线将数据交给各处理组件，并可输出到控制台或 ClickHouse。面向需要批量处理 1C 日志与配置文件的运维和开发人员。说明中标注为实验性项目，文件格式错误不校验、能读多少算多少。",
+   "highlights": [
+    "支持读取 1C 注册日志（LGP/LGF）、集群配置（1CV8Clst.lst）、存储库版本报告（MXL）、性能测量（PFF）等文件格式",
+    "提供基于 JSON 配置的管道式数据处理架构，内置过滤、目录读取、控制台输出等处理组件",
+    "提供 ВыводДанныхВClickhouse.os 处理组件，通过 REST API 以 INSERT SQL 写入 ClickHouse"
+   ],
+   "use_cases": [
+    "批量解析 1C 注册日志文件并转换为结构化数据",
+    "读取 1C 服务器集群配置文件以获取信息库列表",
+    "将 1C 日志数据通过 REST API 写入 ClickHouse 做进一步处理"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "### ВыводДанныхВClickhouse.os ／ Обработчик вывода данных, любые входящие данные преобразует в INSERT SQL-запрос и отправляет в СУБД ClickHouse через REST API.",
+     "lines": [
+      283,
+      285
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它读取 1C 文件格式并提供写入 ClickHouse 的输出处理组件，为数据入库流程服务的工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Приложение oscript для чтения скобочных файлов 1С, аналог обработок 1С (yabr.1c). ／ - Это эксперимент по реализации конвейерной обработки данных (pipeline), т.е. каждая порция данных, полученная в текущей обработке передается в указанный(-ные) в настройках обработчик(-и) для последующе обработки",
+   "evidence_lines": [
+    17,
+    23
+   ]
+  },
+  "fn": "arkuznetsov/yabr.os",
+  "sha": "22a34441b0a2",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

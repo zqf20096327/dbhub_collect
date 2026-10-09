@@ -8564,5 +8564,76 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5dd7f0ddd596": {
+  "identity": {
+   "one_liner": "ClickHouse 分片集群迁移工具，支持 SQL/Go 迁移与 ON CLUSTER DDL",
+   "review": "clicko 是一个面向自建 ClickHouse 分片集群的数据库 schema 迁移工具，提供 CLI 和 Go 库两种使用方式。它通过 ON CLUSTER 传播 DDL、可选追踪表引擎和 insert quorum 保证迁移记录写入副本，支持 SQL 文件与 Go 函数迁移及 dry-run 预览，也兼容 ClickHouse Cloud。适合运维 ClickHouse 集群并需要在 CI/CD 中执行迁移的团队使用；需注意 ClickHouse 无事务性 DDL，工具建议编写幂等语句并优先 forward-only 迁移。",
+   "highlights": [
+    "支持 ON CLUSTER DDL 跨节点传播，追踪表可用 MergeTree/ReplicatedMergeTree 或自定义引擎，insert quorum 保证迁移记录达到 N 副本",
+    "支持 SQL 文件迁移（{version}_{description}.{up|down}.sql）与 Go 函数迁移，均可 dry-run 预览，且省略疑似含凭证的语句",
+    "提供 CLI 命令 up/down/reset/status，支持 --cluster、--engine、--insert-quorum、--allow-out-of-order 等参数"
+   ],
+   "use_cases": [
+    "自建 ClickHouse 分片集群的 schema 迁移管理",
+    "在 CI/CD 流水线或集成测试中通过 Go 库嵌入执行迁移",
+    "ClickHouse Cloud 实例的迁移管理（跳过集群相关参数）"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "A ClickHouse migration tool built for self-hosted sharded clusters, inspired by pressly/goose. Works with ClickHouse Cloud too. ／ clicko --uri \"clickhouse://default:@localhost:9000/default\" --dir migrations up",
+     "lines": [
+      5,
+      22
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 ClickHouse 服务的迁移工具，属于数据库生态的迁移组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A ClickHouse migration tool built for self-hosted sharded clusters, inspired by pressly/goose. Works with ClickHouse Cloud too. ／ - **`ON CLUSTER` support.** DDL propagates across all nodes; DELETE mutations run with `mutations_sync=2`. ／ - **Engine selection.** Pick the engine for the migration tracking table: `MergeTree` standalone, `ReplicatedMergeTree` in cluster mode, or your own via `--engine`.",
+   "evidence_lines": [
+    5,
+    12,
+    13
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "arsura/clicko",
+  "sha": "5dd7f0ddd596",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

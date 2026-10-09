@@ -7854,5 +7854,172 @@
   "generated_at": "2026-10-07",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "be706233ade6": {
+  "identity": {
+   "one_liner": "Temoa 能源模型的辅助 Python 库，用于生成与分析 SQLite 数据库",
+   "review": "temoatools 是 Temoa 能源系统建模项目的扩展库，用户在 Excel 中填写输入数据，由工具写入 SQLite 数据库，并支持基线场景、敏感性分析、蒙特卡洛和随机优化等运行与分析方法。面向使用 Temoa 做能源建模的研究者；通过 conda 环境 + pip 安装，固定使用特定存档版本的 Temoa 以保证兼容。",
+   "highlights": [
+    "提供从 Excel 输入创建 SQLite 数据库的方法",
+    "支持基线场景、敏感性研究、蒙特卡洛研究和随机优化运行，并可结合并行化库",
+    "内置示例目录和示例项目"
+   ],
+   "use_cases": [
+    "为 Temoa 能源模型准备和转换输入数据",
+    "批量运行场景并分析模型结果",
+    "在 HPC 系统上以脚本方式运行建模任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "providing methods to help with the creation and analysis of the .sqlite databases used by temoa. ／ Specifically, users provide inputs in Excel, which are then moved into .sqlite databases based",
+     "lines": [
+      3,
+      4
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为 Temoa 建模数据的存储格式被读取写入，项目本身服务于能源建模而非数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "providing methods to help with the creation and analysis of the .sqlite databases used by temoa. ／ Specifically, users provide inputs in Excel, which are then moved into .sqlite databases based ／ Temoatools is meant to be an extension for Temoa.",
+   "evidence_lines": [
+    3,
+    4,
+    37
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "EnergyModels/temoatools",
+  "sha": "be706233ade6",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "854998c8de48": {
+  "identity": {
+   "one_liner": "AI 代理的可移植记忆库，以 SQLite 存储、原始文本为事实源",
+   "review": "这是一个为 AI 代理提供持久化记忆的 TypeScript 库，提供 MemoryStore 接口与 SqliteMemoryStore/InMemoryStore 实现，支持事实溯源、有效时间双轴查询、带版本 schema 的无损导入导出，并通过 MCP 导出供代理调用；面向需要本地、无密钥、可审计记忆的代理开发者，主要绑定 SQLite 后端，其他后端需自行实现一致性套件。",
+   "highlights": [
+    "提供存储无关的 MemoryStore 接口，内置 SqliteMemoryStore 与 InMemoryStore，并附带后端一致性测试套件",
+    "每条事实与链接带溯源标记，支持 validAt/getNodeAsOf 双时间轴查询，失效事实保留历史而非删除",
+    "提供版本化 JSON Schema 的 exportPortable/importPortable 无损导出导入，并支持 MCP 导出"
+   ],
+   "use_cases": [
+    "为本地运行、无云端依赖的 AI 代理构建持久记忆",
+    "需要对事实来源、有效时间与删除操作进行审计的代理记忆管理",
+    "跨运行时迁移代理记忆数据（统一导出格式）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Does it run with no vendor, no key, no server?**|SQLite on disk, on-device embeddings|Self-host possible; cloud is the product|Self-host possible (Apache-2.0, local vector stores); needs an LLM for extraction; cloud is the product|Zep is cloud; Graphiti sel ／ - `ProjectMemory`: one brain scoped by project or person, each in its own SQLite file.",
+     "lines": [
+      22,
+      52
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目以 SQLite 作为自身记忆数据的存储后端，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- `MemoryStore`: a storage-agnostic interface; `SqliteMemoryStore` and `InMemoryStore` ship, with a **conformance suite** any backend can run against itself. ／ - `ProjectMemory`: one brain scoped by project or person, each in its own SQLite file. ／ - `exportPortable` / `importPortable`: the lossless interchange format, versioned, with a JSON Schema.",
+   "evidence_lines": [
+    51,
+    52,
+    54
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "flytomoon/al-buddy-memory",
+  "sha": "854998c8de48",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8933,5 +8933,70 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "04cc179dda66": {
+  "identity": {
+   "one_liner": "截图离线文字搜索工具，OCR后用SQLite索引实现检索",
+   "review": "gyotaku 是一款本地运行的截图文字搜索工具，用 PaddleOCR 读取截图中文字，以 SQLite FTS5 建索引，用户按快捷键输入关键词即可检索并高亮匹配内容，支持复制文本或图像。面向 Linux/Windows/macOS 桌面用户，全程离线运行，仅索引已有截图工具的保存目录；Windows 支持仍为预览，Intel Mac 需自行提供 ONNX Runtime。",
+   "highlights": [
+    "使用 PaddleOCR 离线识别截图中的文字并建立可搜索索引",
+    "通过 SQLite FTS5（trigram tokenizer，rusqlite）存储索引，搜索延迟 1-10 ms",
+    "支持 Linux（Wayland/X11）、Windows（预览）和 macOS（Apple Silicon）"
+   ],
+   "use_cases": [
+    "按文字内容检索历史截图",
+    "从截图中复制文本或局部图像",
+    "在后台自动索引新截图保持搜索最新"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite FTS5 with the trigram tokenizer, via `rusqlite`",
+     "lines": [
+      261
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 作为自身索引存储，是使用数据库的终端应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "gyotaku reads the text in every screenshot you take and makes it searchable. Press a shortcut, type a few letters of anything you remember seeing, and every matching screenshot appears with the matched words highlighted in place. Open one to copy its text, a selection of lines, or the image itself. ／ All processing happens locally. gyotaku does not take screenshots itself; it indexes the folders your existing screenshot tool saves to.",
+   "evidence_lines": [
+    17,
+    19
+   ]
+  },
+  "fn": "xevrion/gyotaku",
+  "sha": "04cc179dda66",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8840,5 +8840,74 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "489ddf003103": {
+  "identity": {
+   "one_liner": "",
+   "review": "该仓库提供一个脚本，配合 ProxySQL Scheduler 定时执行，在 TiDB 服务器进入 graceful shutdown 时将其软下线，前提是 TiDB 配置了非零 graceful-wait-before-shutdown。面向使用 ProxySQL 接入 TiDB 的运维人员，README 注明仅用于概念验证演示，尚有日志、错误处理等待完善项。",
+   "highlights": [
+    "依赖 TiDB 的 graceful-wait-before-shutdown 配置实现软下线",
+    "支持通过 LOAD/SAVE SCHEDULER 持久化调度配置"
+   ],
+   "use_cases": [
+    "TiDB 节点滚动重启或维护时避免请求路由到正在关停的实例",
+    "基于 ProxySQL 代理层的 TiDB 集群流量管理"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "INSERT INTO scheduler(id, active, interval_ms, filename) values (1, 1, 10000, '/tmp/proxysql-tidb'); ／ What this does is to do a soft offline of TiDB servers that are in a graceful shutdown. ／ This require the TiDB server to have a non-zero `graceful-wait-before-shutdown`",
+     "lines": [
+      6,
+      13,
+      15
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "脚本为 ProxySQL 与 TiDB 的集成提供服务，属于为数据库代理生态服务的组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This can be scheduled via the ProxySQL Scheduler like this: ／ What this does is to do a soft offline of TiDB servers that are in a graceful shutdown. ／ This require the TiDB server to have a non-zero `graceful-wait-before-shutdown`",
+   "evidence_lines": [
+    3,
+    13,
+    15
+   ],
+   "softened": [
+    "one_liner:『优雅』置空",
+    "highlights:『优雅』删条x1"
+   ]
+  },
+  "fn": "dveeden/proxysql-tidb",
+  "sha": "489ddf003103",
+  "source": "readme",
+  "generated_at": "2026-10-09",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
