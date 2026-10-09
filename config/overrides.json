@@ -1,21 +1,296 @@
 {
-  "_readme": "人工签发的归属认领（第五通道）。签发流程：unattr_judge 报告的 draft 清单 → 人工核实证据 → 在此登记 → build_demo 并集生效。字段：dbs=认领库列表（17 库内）；why=一句话依据；evidence=可点击验证的证据；date/by=签发日期与签发人。仓库改名/出池时构建会打告警。",
-  "eosphoros-ai/DB-GPT": {
-    "dbs": ["PostgreSQL", "MySQL", "Oracle", "SQLite", "SQL Server", "ClickHouse", "OceanBase", "openGauss", "GaussDB"],
-    "why": "官方仓库 rdbms 连接器目录逐文件对应（conn_mysql/conn_postgresql/…）",
-    "evidence": "github.com/eosphoros-ai/DB-GPT/tree/main/packages/dbgpt-ext/src/dbgpt_ext/datasource/rdbms",
-    "date": "2026-10-04", "by": "user"
-  },
-  "sqlmapproject/sqlmap": {
-    "dbs": ["PostgreSQL", "MySQL", "Oracle", "SQLite", "SQL Server", "ClickHouse"],
-    "why": "plugins/dbms/ 每库一模块目录",
-    "evidence": "github.com/sqlmapproject/sqlmap/tree/master/plugins/dbms",
-    "date": "2026-10-04", "by": "user"
-  },
-  "sinaptik-ai/pandas-ai": {
-    "dbs": ["PostgreSQL", "MySQL", "Oracle", "SQL Server"],
-    "why": "SQL 连接器扩展依赖清单声明驱动（psycopg2/pymysql/pymssql）+ connectors/oracle 目录",
-    "evidence": "github.com/sinaptik-ai/pandas-ai/blob/main/extensions/connectors/sql/pyproject.toml",
-    "date": "2026-10-04", "by": "user"
-  }
+ "_readme": "人工签发的归属认领（第五通道）。签发流程：unattr_judge 报告的 draft 清单 → 人工核实证据 → 在此登记 → build_demo 并集生效。字段：dbs=认领库列表（17 库内）；why=一句话依据；evidence=可点击验证的证据；date/by=签发日期与签发人。仓库改名/出池时构建会打告警。",
+ "eosphoros-ai/DB-GPT": {
+  "dbs": [
+   "PostgreSQL",
+   "MySQL",
+   "Oracle",
+   "SQLite",
+   "SQL Server",
+   "ClickHouse",
+   "OceanBase",
+   "openGauss",
+   "GaussDB"
+  ],
+  "why": "官方仓库 rdbms 连接器目录逐文件对应（conn_mysql/conn_postgresql/…）",
+  "evidence": "github.com/eosphoros-ai/DB-GPT/tree/main/packages/dbgpt-ext/src/dbgpt_ext/datasource/rdbms",
+  "date": "2026-10-04",
+  "by": "user"
+ },
+ "sqlmapproject/sqlmap": {
+  "dbs": [
+   "PostgreSQL",
+   "MySQL",
+   "Oracle",
+   "SQLite",
+   "SQL Server",
+   "ClickHouse"
+  ],
+  "why": "plugins/dbms/ 每库一模块目录",
+  "evidence": "github.com/sqlmapproject/sqlmap/tree/master/plugins/dbms",
+  "date": "2026-10-04",
+  "by": "user"
+ },
+ "sinaptik-ai/pandas-ai": {
+  "dbs": [
+   "PostgreSQL",
+   "MySQL",
+   "Oracle",
+   "SQL Server"
+  ],
+  "why": "SQL 连接器扩展依赖清单声明驱动（psycopg2/pymysql/pymssql）+ connectors/oracle 目录",
+  "evidence": "github.com/sinaptik-ai/pandas-ai/blob/main/extensions/connectors/sql/pyproject.toml",
+  "date": "2026-10-04",
+  "by": "user"
+ },
+ "feldera/feldera": {
+  "dbs": [
+   "PostgreSQL"
+  ],
+  "why": "路径 crates/adapters/src/integrated/postgres.rs、路径 crates/adapters/src/integrated/postgres 等 6 处路径证据",
+  "evidence": "github.com/feldera/feldera/tree/main/crates",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "schemacrawler/SchemaCrawler": {
+  "dbs": [
+   "PostgreSQL",
+   "MySQL",
+   "Oracle",
+   "SQLite",
+   "SQL Server",
+   "ClickHouse",
+   "MariaDB"
+  ],
+  "why": "路径 schemacrawler-dbconnectors/src/main/resources/dbconnectors/clickhouse.yaml、路径 schemacrawler-dbconnectors/src/test/resources/parsed_dbconnectors_output/clickhouse.yaml 等 6 处路径证据",
+  "evidence": "github.com/schemacrawler/SchemaCrawler/tree/main/schemacrawler-dbconnectors",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "kubedb/cli": {
+  "dbs": [
+   "MySQL"
+  ],
+  "why": "路径 vendor/github.com/go-sql-driver/mysql、路径 vendor/github.com/go-sql-driver/mysql/.gitignore 等 6 处路径证据",
+  "evidence": "github.com/kubedb/cli/tree/master/vendor",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "apache/arrow-adbc": {
+  "dbs": [
+   "PostgreSQL",
+   "SQLite",
+   "SQL Server"
+  ],
+  "why": "路径 c/driver/postgresql、路径 c/driver/postgresql/AdbcDriverPostgreSQLConfig.cmake.in 等 6 处路径证据",
+  "evidence": "github.com/apache/arrow-adbc/tree/main/c",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "top-think/think-orm": {
+  "dbs": [
+   "PostgreSQL",
+   "MySQL",
+   "Oracle",
+   "SQLite"
+  ],
+  "why": "路径 src/db/connector/Mysql.php、路径 src/db/connector/Oracle.php 等 5 处路径证据",
+  "evidence": "github.com/top-think/think-orm/tree/master/src",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "Log2n-io/Typhon": {
+  "dbs": [
+   "Oracle"
+  ],
+  "why": "路径 test/Typhon.Engine.Tests/Runtime/Subscriptions/Oracle、路径 test/Typhon.Engine.Tests/Runtime/Subscriptions/Oracle/OracleHarness.cs 等 6 处路径证据",
+  "evidence": "github.com/Log2n-io/Typhon/tree/main/test",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "garden-co/jazz": {
+  "dbs": [
+   "SQLite"
+  ],
+  "why": "路径 dev/benchmarks/storage/native/benches/native_storage_engines/sqlite.rs 等 1 处路径证据",
+  "evidence": "github.com/garden-co/jazz/tree/main/dev",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "polypheny/Polypheny-DB": {
+  "dbs": [
+   "PostgreSQL"
+  ],
+  "why": "路径 dbms/src/test/java/org/polypheny/db/adapter/postgres、路径 dbms/src/test/java/org/polypheny/db/adapter/postgres/source 等 6 处路径证据",
+  "evidence": "github.com/polypheny/Polypheny-DB/tree/master/dbms",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "iWinston/typeorm-plus": {
+  "dbs": [
+   "PostgreSQL",
+   "MySQL",
+   "Oracle",
+   "SQLite",
+   "SQL Server",
+   "MariaDB"
+  ],
+  "why": "路径 src/driver/mysql、路径 src/driver/mysql/MysqlConnectionCredentialsOptions.ts 等 6 处路径证据",
+  "evidence": "github.com/iWinston/typeorm-plus/tree/master/src",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "mutable-org/mutable": {
+  "dbs": [
+   "PostgreSQL"
+  ],
+  "why": "路径 benchmark/database_connectors/postgresql.md、路径 benchmark/database_connectors/postgresql.py 等 2 处路径证据",
+  "evidence": "github.com/mutable-org/mutable/tree/main/benchmark",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "jaxio/celerio": {
+  "dbs": [
+   "MySQL",
+   "Oracle"
+  ],
+  "why": "路径 celerio-engine/src/main/java/com/jaxio/celerio/configuration/database/mysql、路径 celerio-engine/src/main/java/com/jaxio/celerio/configuration/database/mysql/MysqlEnumExtension.java 等 6 处路径证据",
+  "evidence": "github.com/jaxio/celerio/tree/master/celerio-engine",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "FCO/Red": {
+  "dbs": [
+   "SQLite"
+  ],
+  "why": "路径 docs/api/Red/Driver/SQLite、路径 docs/api/Red/Driver/SQLite/SchemaReader.md 等 6 处路径证据",
+  "evidence": "github.com/FCO/Red/tree/main/docs",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "kubedb/apimachinery": {
+  "dbs": [
+   "MySQL"
+  ],
+  "why": "路径 vendor/github.com/go-sql-driver/mysql、路径 vendor/github.com/go-sql-driver/mysql/.gitignore 等 6 处路径证据",
+  "evidence": "github.com/kubedb/apimachinery/tree/master/vendor",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "cycle/active-record": {
+  "dbs": [
+   "PostgreSQL",
+   "MySQL",
+   "SQLite",
+   "SQL Server"
+  ],
+  "why": "路径 tests/Acceptance/Driver/MySQL、路径 tests/Acceptance/Driver/MySQL/ActiveRecordTest.php 等 6 处路径证据",
+  "evidence": "github.com/cycle/active-record/tree/1.x/tests",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "omnilib/aql": {
+  "dbs": [
+   "MySQL",
+   "SQLite"
+  ],
+  "why": "路径 aql/engines/mysql.py、路径 aql/engines/sqlite.py 等 4 处路径证据",
+  "evidence": "github.com/omnilib/aql/tree/main/aql",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "apllodb/apllodb": {
+  "dbs": [
+   "SQLite"
+  ],
+  "why": "路径 apllodb-immutable-schema-engine-infra/src/sqlite.rs、路径 apllodb-immutable-schema-engine-infra/src/sqlite 等 6 处路径证据",
+  "evidence": "github.com/apllodb/apllodb/tree/main/apllodb-immutable-schema-engine-infra",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "jegelstaff/formulize": {
+  "dbs": [
+   "MySQL"
+  ],
+  "why": "路径 class/database/drivers/mysql、路径 class/database/drivers/mysql/database.php 等 6 处路径证据",
+  "evidence": "github.com/jegelstaff/formulize/tree/master/class",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "phalcon/migrations": {
+  "dbs": [
+   "PostgreSQL",
+   "MySQL",
+   "SQLite"
+  ],
+  "why": "路径 src/Db/Adapter/Mysql.php、路径 src/Db/Adapter/Postgresql.php 等 3 处路径证据",
+  "evidence": "github.com/phalcon/migrations/tree/master/src",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "adambanaszkiewicz/query-builder": {
+  "dbs": [
+   "PostgreSQL",
+   "MySQL",
+   "SQLite",
+   "SQL Server"
+  ],
+  "why": "路径 src/QueryBuilder/ConnectionAdapters/Mssql.php、路径 src/QueryBuilder/ConnectionAdapters/Mysql.php 等 4 处路径证据",
+  "evidence": "github.com/adambanaszkiewicz/query-builder/tree/master/src",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "The404Hacking/sqlmap": {
+  "dbs": [
+   "PostgreSQL",
+   "MySQL",
+   "Oracle",
+   "SQLite",
+   "SQL Server"
+  ],
+  "why": "路径 plugins/dbms/mssqlserver、路径 plugins/dbms/mssqlserver/__init__.py 等 6 处路径证据",
+  "evidence": "github.com/The404Hacking/sqlmap/tree/master/plugins",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "SleekwareDB/sleekwaredb": {
+  "dbs": [
+   "MySQL",
+   "SQLite",
+   "SQL Server"
+  ],
+  "why": "路径 backend/system/database/drivers/mssql、路径 backend/system/database/drivers/mssql/index.html 等 6 处路径证据",
+  "evidence": "github.com/SleekwareDB/sleekwaredb/tree/master/backend",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "bastienboutonnet/sheetwork": {
+  "dbs": [
+   "PostgreSQL"
+  ],
+  "why": "路径 sheetwork/core/adapters/postgres、路径 sheetwork/core/adapters/postgres/__init__.py 等 4 处路径证据",
+  "evidence": "github.com/bastienboutonnet/sheetwork/tree/main/sheetwork",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "kamichidu/goen": {
+  "dbs": [
+   "PostgreSQL",
+   "MySQL",
+   "SQLite"
+  ],
+  "why": "路径 dialect/postgres、路径 dialect/postgres/dialect.go 等 3 处路径证据",
+  "evidence": "github.com/kamichidu/goen/tree/master/dialect",
+  "date": "2026-10-08",
+  "by": "user"
+ },
+ "Zenithar/go-pkg": {
+  "dbs": [
+   "PostgreSQL"
+  ],
+  "why": "路径 db/adapter/postgresql、路径 db/adapter/postgresql/connection.go 等 5 处路径证据",
+  "evidence": "github.com/Zenithar/go-pkg/tree/master/db",
+  "date": "2026-10-08",
+  "by": "user"
+ }
 }
