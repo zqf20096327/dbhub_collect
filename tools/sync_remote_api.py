@@ -152,6 +152,34 @@ def list_remote_dir(token: str, dir_path: str):
     return out
 
 
+def complete_readmes_tree(token: str, remote: dict, sizes: dict) -> int:
+    """git/trees 分三段拿 data/readmes 子树（main→data→readmes，平铺 blob），补全
+    compare 300 条截断漏掉的 readme 差异。任一段失败返回 0 不致命（readmes 等 git 恢复）。"""
+    try:
+        raw, _ = api_get(f"{API}/git/trees/main", token)
+        data_sha = next(e["sha"] for e in json.loads(raw)["tree"]
+                        if e["path"] == "data" and e.get("type") == "tree")
+        raw, _ = api_get(f"{API}/git/trees/{data_sha}", token)
+        rd_sha = next(e["sha"] for e in json.loads(raw)["tree"]
+                      if e["path"] == "readmes" and e.get("type") == "tree")
+        raw, _ = api_get(f"{API}/git/trees/{rd_sha}", token)
+        tree = json.loads(raw)
+        if tree.get("truncated"):
+            print("  警告：readmes 子树被截断，readme 清单可能不全", flush=True)
+        n = 0
+        for e in tree.get("tree", []):
+            if e.get("type") == "blob":
+                p = f"data/readmes/{e['path']}"
+                remote[p] = e["sha"]
+                if e.get("size"):
+                    sizes[p] = e["size"]
+                n += 1
+        return n
+    except Exception as e:  # noqa: BLE001 链路差时 ~3MB 子树也可能传断；尽力而为
+        print(f"  readmes 子树拉取失败（{str(e)[:60]}），readmes 差异等 git 恢复对齐", flush=True)
+        return 0
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="只列出差异，不落盘")
@@ -163,6 +191,10 @@ def main() -> None:
     ap.add_argument("--skip-compare", action="store_true",
                     help="配合 --via-compare：跳过 compare（链路差时 1.2MB 反复传断），"
                          "只走 contents 目录补全（state/ + 近几天快照），不追 readmes 增量")
+    ap.add_argument("--compare-base", default="",
+                    help="配合 --via-compare：手动指定 compare 基线 sha。M3 改写历史后"
+                         "本地 HEAD 的旧 sha 已不在远端（compare 404），需传其改写后的"
+                         "对应提交（树内容一致的那个）")
     ap.add_argument("--max-blob-mb", type=float, default=5.0,
                     help="跳过超过此大小（MB）的文件（10-06 实测：链路差时 1.2MB 都传断，"
                          "interp_cache 60MB/db_scan 16MB+ 必死且重试耗时长；"
@@ -175,11 +207,14 @@ def main() -> None:
 
     if args.via_compare:
         import subprocess
-        head_local = subprocess.run(
-            ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True,
-        ).stdout.strip()
+        if args.compare_base:
+            head_local = args.compare_base
+        else:
+            head_local = subprocess.run(
+                ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True,
+            ).stdout.strip()
         if not head_local:
-            sys.exit("拿不到本地 HEAD，无法 compare")
+            sys.exit("拿不到 compare 基线，无法 compare")
         print(f"compare {head_local[:10]}...main …", flush=True)
         if args.skip_compare:
             print("  --skip-compare：跳过 compare，readmes 增量留给 git 恢复后对齐", flush=True)
@@ -195,8 +230,8 @@ def main() -> None:
                   if f["filename"].startswith(prefixes)}
         # compare 300 条静默截断会漏文件（readms 大头注定漏，等 git 恢复对齐）；
         # 文件数少的目录用 contents API 全量列出补齐：state/ + 新快照目录（含 meta）
-        for d in ["state", "data/snapshot_20261005", "data/snapshot_20261006",
-                  "data/snapshot_20261007"]:
+        for d in ["state", "data/live", "data/snapshot_20261006", "data/snapshot_20261007",
+                  "data/snapshot_20261008"]:
             n = 0
             for p, sha, sz in list_remote_dir(token, d):
                 if p.startswith(prefixes):
@@ -205,6 +240,11 @@ def main() -> None:
                     n += 1
             if n:
                 print(f"  contents 补全 {d}/：{n} 个文件", flush=True)
+        # readmes 是截断漏项大头：单独拉 data/readmes 子树（平铺 ~2.5 万 blob，
+        # ~3MB，比 8.6MB 全量树扛得住），全量比对补齐；失败不致命
+        n = complete_readmes_tree(token, remote, sizes)
+        if n:
+            print(f"  readmes 子树补全：{n} 个 blob", flush=True)
         n_removed = sum(1 for f in files
                         if f.get("status") == "removed" and f["filename"].startswith(prefixes))
         print(f"远端变更 {len(remote)} 个（removed {n_removed} 个不拉；Core 余量 {rem}）",
