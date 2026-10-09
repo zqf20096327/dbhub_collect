@@ -541,7 +541,7 @@ def _merge_parts(parts: Path) -> dict:
         for it in _load_parts(parts, stage).values():
             fn = it["full_name"]
             if fn in BLACKLIST or fn in REPO_BLACKLIST \
-                    or fn.split("/", 1)[0].lower() in USER_BLOCKLIST:
+                    or fn.split("/", 1)[0].lower() in USER_BLACKLIST:
                 dropped += 1
                 continue
             if unlinked and it.get("source_topic") == "database" and fn in unlinked:
