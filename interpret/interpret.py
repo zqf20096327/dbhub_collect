@@ -371,6 +371,52 @@ def neutral_violations(obj: dict) -> list[str]:
     return hits
 
 
+# 软拒收类（attempt 2 尽力后可程序处置放行）：禁词字段 / 行号类。
+# 其余（字段非法/幻觉旧格式/截断等）仍整条拒收。
+_SOFT_RE = re.compile(
+    r"^(one_liner|review|highlights|use_cases|eco_why|license_note):『"
+    r"|的行号无效（窗口外或该行不含库名）"
+    r"|^evidence_lines 行号不在可见范围"
+)
+
+
+def neutral_scrub(obj: dict) -> list[str]:
+    """禁词字段处置（软放行路径）：列表项删命中条、整串字段置空。
+    同 review_cleared 先例——空置不展示，页面回退 description。返回处置记录。"""
+    acted = []
+
+    def scrub_str(holder, key, path):
+        v = holder.get(key)
+        if isinstance(v, str) and v:
+            m = BANNED_RE.search(v)
+            if m:
+                holder[key] = ""
+                acted.append(f"{path}:『{m.group(0)}』置空")
+
+    def scrub_list(holder, key, path):
+        lst = holder.get(key)
+        if not isinstance(lst, list):
+            return
+        kept, drop = [], []
+        for it in lst:
+            (drop if isinstance(it, str) and BANNED_RE.search(it) else kept).append(it)
+        if drop:
+            m = BANNED_RE.search(drop[0])
+            acted.append(f"{path}:『{m.group(0) if m else '?'}』删条x{len(drop)}")
+        holder[key] = kept
+
+    ident = obj.get("identity") or {}
+    cls = obj.get("classification") or {}
+    sig = obj.get("signals") or {}
+    scrub_str(ident, "one_liner", "one_liner")
+    scrub_str(ident, "review", "review")
+    scrub_list(ident, "highlights", "highlights")
+    scrub_list(ident, "use_cases", "use_cases")
+    scrub_str(cls, "eco_why", "eco_why")
+    scrub_str(sig, "license_note", "license_note")
+    return acted
+
+
 def _norm_txt(s: str) -> str:
     """比较用归一：剥 HTML/链接语法（空串替换防词内加粗断裂）+ 压空白 +
     去 markdown 强调符 + 弯引号归直 + 标点前去空格。"""
@@ -458,10 +504,11 @@ def check_verdicts(obj, cands: dict) -> list[str]:
     return errs
 
 
-def check_verdicts_v3(obj, cands: dict, numbered: dict) -> list[str]:
+def check_verdicts_v3(obj, cands: dict, numbered: dict, lenient: bool = False) -> list[str]:
     """v3 行号指认版：模型只给 {db, rel, lines}，引句由程序按行回填。
     行号合法性 = 可见窗口内且该行真实含库名（db_scan 每库只记 3 条提示行，
     模型指认其它真命中行同样有效——支持矩阵深处的行往往更有支撑力）。
+    lenient=True（软放行二次校验）：坏行号丢该库裁决不整条拒（同缺 quote 待遇）。
     desc-only 候选（README 全文无该库名）退回 v2 引句子串校验。"""
     if not isinstance(obj, dict):
         return []
@@ -506,7 +553,10 @@ def check_verdicts_v3(obj, cands: dict, numbered: dict) -> list[str]:
                 else:
                     bad.append(x)
             if bad:
-                errs.append(f"{db} 的行号无效（窗口外或该行不含库名）: {bad}")
+                if lenient:
+                    continue                     # 软放行：丢该库裁决，条目保住
+                hint = f"。该库可用行号: {sorted(cand_q)}" if cand_q else ""
+                errs.append(f"{db} 的行号无效（窗口外或该行不含库名）: {bad}{hint}")
                 continue
             quote = " ／ ".join(resolved)
         else:                              # desc-only 候选：v2 引句子串校验
@@ -553,10 +603,9 @@ def validate(obj: dict, gen, readme_norm: str, desc: str) -> tuple[dict | None, 
     kinds = [k for k in (ai.get("kind") or []) if k in _AI_KIND]
     install = [i for i in (sig.get("install") or []) if i in _INSTALL]
     ev = (aud.get("evidence") or "").strip()
-    if not ev:
-        errs.append("evidence 缺失")
-    elif readme_norm and _norm_txt(ev) not in _norm_txt(readme_norm):
-        errs.append("evidence 不是 README 原文（疑似改写/幻觉）")
+    # evidence 缺失/幻觉降级为丢证据不整条拒（转述先例延伸；空证据页面不展示）
+    if ev and readme_norm and _norm_txt(ev) not in _norm_txt(readme_norm):
+        ev = ""
     conf = aud.get("confidence")
     if conf not in ("high", "mid", "low"):
         conf = "low"
@@ -604,11 +653,10 @@ def validate_v3(obj, gen, numbered: dict, desc: str) -> tuple[dict | None, list[
     elif not all(isinstance(x, int) for x in ev_lines):
         errs.append("evidence_lines 含非整数")
     else:
-        bad = [x for x in ev_lines if x not in numbered]
-        if bad:
-            errs.append(f"evidence_lines 行号不在可见范围: {bad}")
-        else:
-            ev = " ／ ".join(numbered[x] for x in ev_lines)
+        good = [x for x in ev_lines if x in numbered]
+        if good:                                 # 窗外行号丢弃不整条拒（同 v2 幻觉降级）
+            ev = " ／ ".join(numbered[x] for x in good)
+        ev_lines = good
     conf = aud.get("confidence")
     if conf not in ("high", "mid", "low"):
         conf = "low"
@@ -837,6 +885,7 @@ def judge(fn: str, sha: str, degraded: bool, ctx: dict, ai, gen,
         violations: list[str] = []
         violations_all: list[list[str]] = []      # 每次尝试的违规快照（轨迹）
         obj = None
+        parsed = None                            # 解析原件：软放行处置用它（validate 失败返回 None 不留引用）
         raw_full = ""
         out_chars = 0
         enum_fixes = 0
@@ -852,17 +901,17 @@ def judge(fn: str, sha: str, degraded: bool, ctx: dict, ai, gen,
             api_tries += out.get("tries") or 1
             raw_full = out["content"] or out["reasoning"] or ""
             out_chars = max(out_chars, len(out["content"] or ""))
-            obj = extract_json(out["content"])
-            if obj is None and out["reasoning"]:
-                obj = extract_json(out["reasoning"])   # 思考型模型：正文空时从推理流兜底
-            if isinstance(obj, dict):
-                enum_fixes += normalize_enums(obj)     # 枚举别名归一（拒收前能修则修）
+            parsed = extract_json(out["content"])
+            if parsed is None and out["reasoning"]:
+                parsed = extract_json(out["reasoning"])   # 思考型模型：正文空时从推理流兜底
+            if isinstance(parsed, dict):
+                enum_fixes += normalize_enums(parsed)     # 枚举别名归一（拒收前能修则修）
             if use_v3:
-                verr = check_verdicts_v3(obj or {}, ctx["cands"], ctx["numbered"])
-                obj, violations = validate_v3(obj or {}, gen, ctx["numbered"], ctx["desc"])
+                verr = check_verdicts_v3(parsed or {}, ctx["cands"], ctx["numbered"])
+                obj, violations = validate_v3(parsed or {}, gen, ctx["numbered"], ctx["desc"])
             else:
-                verr = check_verdicts(obj or {}, ctx["cands"])
-                obj, violations = validate(obj or {}, gen, ctx["src_norm"], ctx["desc"])
+                verr = check_verdicts(parsed or {}, ctx["cands"])
+                obj, violations = validate(parsed or {}, gen, ctx["src_norm"], ctx["desc"])
             if obj is not None and verr:
                 obj, violations = None, verr
             elif obj is None:
@@ -870,6 +919,20 @@ def judge(fn: str, sha: str, degraded: bool, ctx: dict, ai, gen,
             if obj is None and out["finish"] == "length":
                 violations = ["输出被 max_tokens 截断（思考耗尽预算，无 JSON）"] + violations
             violations_all.append(list(violations))
+            # 软放行（10-09 定案）：attempt 2 尽力后仍只剩禁词/行号类——禁词丢字段、
+            # 坏行号丢该库裁决，条目保住（audit.softened 留痕）。字段非法/截断等硬伤仍拒。
+            if (obj is None and attempt == 2 and isinstance(parsed, dict)
+                    and violations and all(_SOFT_RE.search(v) for v in violations)):
+                soft = neutral_scrub(parsed)
+                verr2 = (check_verdicts_v3(parsed, ctx["cands"], ctx["numbered"], lenient=True)
+                         if use_v3 else check_verdicts(parsed, ctx["cands"]))
+                vobj, verrs2 = (validate_v3(parsed, gen, ctx["numbered"], ctx["desc"]) if use_v3
+                                else validate(parsed, gen, ctx["src_norm"], ctx["desc"]))
+                if vobj is not None and not verr2 and not verrs2:
+                    obj = vobj
+                    obj.setdefault("audit", {})["softened"] = soft
+                    violations = []
+                    violations_all.append([f"[软放行] {'；'.join(soft) if soft else '丢坏裁决'}"])
             if obj is not None:
                 break
         if obj is None:

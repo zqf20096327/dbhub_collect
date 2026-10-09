@@ -28,12 +28,12 @@ pool = {it["full_name"]: it
 dbscan = json.loads((ROOT / "state" / "db_scan.json").read_text(encoding="utf-8"))
 ai = interpret.AIClient()
 
-# (fn, degraded, 昨日失败家族)
+# (fn, degraded, 失败家族) —— 10-09 软放行改造后的代表项
 CASES = [
-    ("TeMPOraL/cl-sqlite", True, "evidence缺失(降级+SCHEMA_V3事故)"),
-    ("galibBd/OnlineSchoolManagementSystem", True, "evidence缺失(降级+SCHEMA_V3事故)"),
-    ("mattiabasone/tuning-primer", False, "缺quote(MariaDB desc-only候选)"),
-    ("imqueue/pg-pubsub", False, "禁词『优雅』"),
+    ("imqueue/pg-pubsub", False, "禁词『优雅』(软放行:scrub)"),
+    ("ZhengHe-MD/tidb-hp-hw", False, "禁词三字段(软放行:scrub)"),
+    ("diguage/mysql-notes", False, "禁词书名《高性能MySQL》(软放行:scrub)"),
+    ("winterland1989/mysql-haskell", False, "行号窗外(行号提示/丢裁决)"),
 ]
 
 for fn, degraded, why in CASES:

@@ -245,6 +245,43 @@ def _drop_lib_tagged(items: dict, lib_variants: set[str]) -> tuple[dict, int]:
     return kept, dropped
 
 
+def _unlinked_fns() -> set[str]:
+    """发现桶保留口径（10-09 用户定案：只留已关联 17 库的）数据面：已解读
+    （done）但 db_verdicts 空、且未被 config/overrides.json 人工签发归属的
+    fn 集合——17 库外 DB 产品本体（redis/duckdb 等）与教学内容仓由此出池。
+    未解读 / 缓存缺 / rejected 的不在集合（留池：解读中或等待 retry 捞回，
+    被误剔的救回后自动回池）。读失败返回空集（发现桶照收——宁可多收不漏收）。"""
+    out: set[str] = set()
+    try:
+        st = _load(HERE / "state" / "interp_state.json").get("items") or {}
+        cache: dict = {}
+        for p in (HERE / "state" / "interp_cache_shards").glob("*.json"):
+            try:
+                cache.update(_load(p))
+            except Exception:                     # noqa: BLE001 残片不致命
+                pass
+        signed = set(_load(HERE / "config" / "overrides.json")) - {"_readme"}
+        for fn, v in st.items():
+            if v.get("status") != "done" or fn in signed:
+                continue
+            e = cache.get(v.get("sha"))
+            if e and not (e.get("classification") or {}).get("db_verdicts"):
+                out.add(fn)
+    except Exception:                             # noqa: BLE001 口径数据面缺失=不过滤
+        return set()
+    return out
+
+
+def _drop_unlinked(items: dict, unlinked: set[str]) -> tuple[dict, int]:
+    """发现桶入口过滤：已解读且无归属的仓不进 parts（省 API + 防回流）。
+    新仓（未解读）照收——能否关联要解读后才知道。存量剔除由 merge 侧
+    _merge_parts 同规则完成（write_live 全量替换，一晚清掉）。"""
+    if not unlinked:
+        return items, 0
+    kept = {fn: r for fn, r in items.items() if fn not in unlinked}
+    return kept, len(items) - len(kept)
+
+
 def run(section: str, args) -> None:
     if section == "cn" and args.only == "new":
         print("国产无新项目窗口（主通道无星线，新仓从第 0 天起即被覆盖），--only new 无事可做")
@@ -268,6 +305,10 @@ def run(section: str, args) -> None:
     # 17 库 topic 变体全集（动态取自两 section，勿手抄）：发现桶取数后过滤让位用
     lib_variants = ({t for s_ in secs.values() for t in s_["topics"]}
                     - set(dp.GLOBAL["discovery_topics"]))
+    unlinked_fns = _unlinked_fns()
+    if unlinked_fns:
+        log.info("发现桶口径数据面：已解读无归属 %d 条（只留已关联 17 库，10-09 定案）",
+                 len(unlinked_fns))
 
     if args.dry_run:
         print(f"[dry-run] section={section} star_min={star}"
@@ -319,6 +360,9 @@ def run(section: str, args) -> None:
                         items, n_yield = _drop_lib_tagged(items, lib_variants)
                         if n_yield:
                             log.info("新项目窗口·发现桶让位 %d 条（17 库双标仓交还库通道）", n_yield)
+                        items, n_unlinked = _drop_unlinked(items, unlinked_fns)
+                        if n_unlinked:
+                            log.info("新项目窗口·发现桶口径过滤 %d 条（已解读无归属）", n_unlinked)
                     for fn, r in items.items():
                         pool_t.setdefault(fn, r)
                     totals[f"new:topic:{t}"] = total
@@ -349,6 +393,9 @@ def run(section: str, args) -> None:
                     items, n_yield = _drop_lib_tagged(items, lib_variants)
                     if n_yield:
                         log.info("topic:%s 让位 %d 条（17 库双标仓交还库通道）", t, n_yield)
+                    items, n_unlinked = _drop_unlinked(items, unlinked_fns)
+                    if n_unlinked:
+                        log.info("topic:%s 口径过滤 %d 条（已解读无归属，10-09 定案）", t, n_unlinked)
                 totals[f"topic:{t}"] = total
                 if total == 0:
                     log.info("topic:%s = 0（known_empty 或空）", t)
@@ -489,12 +536,16 @@ def _merge_parts(parts: Path) -> dict:
     """单 section 内四通道合并去重（先 topic 后 keyword/org/whitelist，first-writer 为主记录）。"""
     merged: dict[str, dict] = {}
     dropped = 0
+    unlinked = _unlinked_fns()
     for stage in MERGE_STAGES:
         for it in _load_parts(parts, stage).values():
             fn = it["full_name"]
             if fn in BLACKLIST or fn in REPO_BLACKLIST \
-                    or fn.split("/", 1)[0].lower() in USER_BLACKLIST:
+                    or fn.split("/", 1)[0].lower() in USER_BLOCKLIST:
                 dropped += 1
+                continue
+            if unlinked and it.get("source_topic") == "database" and fn in unlinked:
+                dropped += 1                      # 发现桶口径：已解读无归属（10-09 定案）
                 continue
             if fn not in merged:
                 it.setdefault("all_sources", [])
@@ -504,7 +555,7 @@ def _merge_parts(parts: Path) -> dict:
                 if it["source"] not in srcs and it["source"] != merged[fn]["source"]:
                     srcs.append(it["source"])
     if dropped:
-        log.info("黑名单过滤：merge 丢弃 %d 条（parts_%s）", dropped, parts.name)
+        log.info("黑名单+发现桶口径过滤：merge 丢弃 %d 条（parts_%s）", dropped, parts.name)
     return merged
 
 
