@@ -299,5 +299,8 @@ def atomic_write_json(path: Path, obj) -> None:
     if path.is_file():
         path.replace(path.with_suffix(path.suffix + ".1"))
     tmp = path.with_suffix(path.suffix + ".tmp")
-    tmp.write_text(json.dumps(obj, ensure_ascii=False, indent=1), encoding="utf-8")
+    # newline='\n'：本地 Windows 写出必须与 CI(Linux) 同为 LF，否则整文件
+    # CRLF 翻转 → 全文件假 diff（10-10 回填 interp_state 实测 135K 行全变）
+    tmp.write_text(json.dumps(obj, ensure_ascii=False, indent=1),
+                   encoding="utf-8", newline="\n")
     tmp.replace(path)

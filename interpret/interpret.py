@@ -1008,6 +1008,7 @@ def run(args):
     todo: list[tuple[str, str, bool]] = []      # (fn, sha, degraded)
     n_skip = {"out_of_pool": 0, "rejected_same_sha": 0, "empty_desc": 0,
               "repo_blacklist": 0, "failed_same_sha": 0}
+    n_reuse = 0
     for fn, rec in rstate.get("items", {}).items():
         if fn not in pool:
             n_skip["out_of_pool"] += 1
@@ -1017,12 +1018,19 @@ def run(args):
             continue
         sha = rec.get("sha")
         prev = st["items"].get(fn) or {}
-        if rec.get("status") in ("done", "oversized") and sha and sha not in cache:
-            if prev.get("status") == "rejected" and prev.get("sha") == sha \
+        if rec.get("status") in ("done", "oversized") and sha:
+            if sha in cache:
+                # 镜像复用（10-10）：fork/搬家仓 readme 同 sha 已有解读，不重烧，
+                # 补 fn 状态条目让每个仓名都可查到解读（查询链 fn→sha→缓存）。
+                # rejected 不覆盖（人工队列语义）；failed 且镜像已有结果则升 done
+                if fn not in st["items"] or prev.get("status") == "failed":
+                    st["items"][fn] = {"sha": sha, "status": "done", "reused": True}
+                    n_reuse += 1
+            elif prev.get("status") == "rejected" and prev.get("sha") == sha \
                     and not args.retry_rejected:
                 n_skip["rejected_same_sha"] += 1
-                continue
-            todo.append((fn, sha, False))
+            else:
+                todo.append((fn, sha, False))
         elif rec.get("status") == "no_readme":
             desc = (pool.get(fn, {}).get("description") or "")[:100]
             if not desc:
@@ -1033,7 +1041,12 @@ def run(args):
             # 缓存丢失的 desc 项永远不重入队（清缓存/迁移丢档即永久卡死，实测 9 条）。
             # 改为缓存缺即入队，但 rejected/failed 同 sha 守卫与普通分支对齐（无守卫
             # 会把拒收/400 家族每窗重烧——复核阶段抓到，49 条里 15 条属于此类）
-            if dkey not in cache:
+            if dkey in cache:
+                # 降级项镜像复用（同描述）：同 10-10 口径补条目
+                if fn not in st["items"] or prev.get("status") == "failed":
+                    st["items"][fn] = {"sha": dkey, "status": "done", "reused": True}
+                    n_reuse += 1
+            else:
                 if prev.get("sha") == dkey:
                     if prev.get("status") == "rejected" and not args.retry_rejected:
                         n_skip["rejected_same_sha"] += 1
@@ -1045,8 +1058,8 @@ def run(args):
     todo.sort(key=lambda x: -((pool.get(x[0]) or {}).get("stars") or 0))
     total_todo = len(todo)
     todo = todo[:args.max_items]
-    log.info("待解读 %d 项（缓存已有 %d）｜真实剩余 %d，本次截取 %d · 跳过 %s",
-             total_todo, len(cache), total_todo, len(todo), n_skip)
+    log.info("待解读 %d 项（缓存已有 %d）｜真实剩余 %d，本次截取 %d · 跳过 %s · 镜像复用补账 %d",
+             total_todo, len(cache), total_todo, len(todo), n_skip, n_reuse)
 
     t0 = time.time()
     ai = AIClient(deadline=t0 + args.max_minutes * 60)
@@ -1134,8 +1147,8 @@ def run(args):
     runlog.log_summary({**runlog.summarize_items(recs), "run_id": run_id,
                         "src": "interpret", "mode": args.mode, "prompt_ver": PROMPT_VER,
                         "model": ai.model, "concurrency": args.concurrency})
-    log.info("==== 解读完成：成功 %d · 拒收 %d · 低置信 %d · 缓存 %d · %.1f 分钟 ====",
-             done, len(rejected), len(low_conf), len(cache), (time.time() - t0) / 60)
+    log.info("==== 解读完成：成功 %d · 拒收 %d · 低置信 %d · 缓存 %d · 镜像复用 %d · %.1f 分钟 ====",
+             done, len(rejected), len(low_conf), len(cache), n_reuse, (time.time() - t0) / 60)
 
 
 def main():
