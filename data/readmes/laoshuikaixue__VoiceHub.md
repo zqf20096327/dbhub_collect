@@ -273,7 +273,8 @@ Podman 默认以当前用户身份运行，无需 `sudo`，安全性更高。但
 
 VoiceHub 现已支持飞牛 OS (FnOS) 的 `.fpk` 安装包。
 
-- 从 [GitHub Actions](https://github.com/laoshuikaixue/VoiceHub/actions/workflows/build-fpk.yml) 获取最新版本
+- 从 [GitHub Releases](https://github.com/laoshuikaixue/VoiceHub/releases) 获取最新版本（`.fpk` 随 Release 附带）
+- 或从 [GitHub Actions](https://github.com/laoshuikaixue/VoiceHub/actions/workflows/build-fpk.yml) 获取最新版本
 
 ### Nix / NixOS
 
@@ -291,8 +292,4 @@ VoiceHub 提供了一个 Nix flake，用于构建、开发和在 NixOS 上部署
 ```nix
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    voicehub.url = "github:laoshuikaixue/VoiceHub";
-  };
-
-  outputs = { self, nixpkgs
+    nixpkgs.url = "github:NixOS/nixpkgs

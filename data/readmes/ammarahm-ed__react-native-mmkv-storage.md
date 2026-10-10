@@ -1,8 +1,7 @@
 <div align="center">
-  <img src="https://i.imgur.com/P13HcId.png" />
+  <img src="./docs/public/logo.svg" width="120" height="120" alt="react-native-mmkv-storage" />
+  <h1>react-native-mmkv-storage</h1>
 </div>
-
-#
 
 <div align="center">
     <p><a href="https://www.npmjs.com/package/react-native-mmkv-storage"><img src="https://img.shields.io/npm/v/react-native-mmkv-storage.svg?style=flat-square" alt=""></a>
@@ -25,7 +24,7 @@
 
 <div align="center">
     
-   <a href="https://rnmmkv.vercel.app/#/gettingstarted"><h3>Get Started with Documentation</h3></a>
+   <a href="https://rnmmkv.vercel.app/gettingstarted"><h3>Get Started with Documentation</h3></a>
   
 </div>
 
@@ -35,9 +34,10 @@ This library aims to provide a fast & reliable solution for you data storage nee
 
 > Learn how to build your own module with JSI on my [blog](https://blog.notesnook.com/getting-started-react-native-jsi/)
 
-## 0.9.0 Breaking change
+## Supported React Native versions
 
-Works only with react native 0.71.0 and above. If you are on older version of react native, keep using 0.8.x.
+- **New architecture (default since RN 0.76, the only mode since RN 0.82):** requires React Native **0.75 or above**. Tested up to React Native 0.87. Codegen specs are generated at build time by your app, so the library always matches your React Native version.
+- **Old architecture:** requires React Native 0.71.0 and above. If you are on an older version of react native, keep using 0.8.x.
 
 ## Features
 
@@ -49,7 +49,7 @@ Starting from `v0.5.0` the library has been rewritten in C++ on Android and iOS 
 
 (~ 50K Android/30K iOS) and even smaller when packaged.
 
-### **Fast and Efficient (0.0002s Read/Write Speed)**
+### **Fast and Efficient**
 
 MMKV uses mmap to keep memory synced with file, and protobuf to encode/decode values to achieve best performance.
 You can see the benchmarks here: [Android](https://github.com/Tencent/MMKV/wiki/android_benchmark) & [iOS](https://github.com/Tencent/MMKV/wiki/iOS_benchmark)
@@ -80,46 +80,48 @@ const App = () => {
 };
 ```
 
-Learn more about `useMMKVStorage` hook it in the [docs](https://rnmmkv.vercel.app/#/usemmkvstorage).
+Learn more about `useMMKVStorage` hook it in the [docs](https://rnmmkv.vercel.app/usemmkvstorage).
 
 #### `useIndex` hook
 
 A hook that will take an array of keys and returns an array of values for those keys. This is supposed to work in combination with Transactions. When you have build your custom index, you will need an easy and quick way to load values for your index. useIndex hook actively listens to all read/write changes and updates the values accordingly.
 
-```js
+```jsx
+import { FlatList, Text } from 'react-native';
+import { useIndex, useMMKVStorage } from 'react-native-mmkv-storage';
+
 const App = () => {
-    // Get list of all post ids
-    const postsIndex = useMMKVStorage("postsIndex",storage,[]); // ['post123','post234'];
-    // Get the posts based on those ids.
-    const [posts,update,remove] = useIndex(postsIndex,"object" storage);
+  const [postIds] = useMMKVStorage('postsIndex', storage, []);
+  const [posts] = useIndex(postIds, 'object', storage);
 
-    return <View>
+  return (
     <FlatList
-    data={posts}
-    renderItem={...}
-    >
-</View>
-
-}
+      data={posts}
+      keyExtractor={(item, index) => `${index}`}
+      renderItem={({ item }) => <Text>{item.title}</Text>}
+    />
+  );
+};
 ```
 
-Learn more about `useIndex` hook it in the [docs](https://rnmmkv.vercel.app/#/useindex).
+Learn more about `useIndex` hook it in the [docs](https://rnmmkv.vercel.app/useindex).
 
 ### **Lifecycle Control with Transaction Manager**
 
 Listen to a value's lifecycle and mutate it on the go. Transactions lets you register lifecycle functions with your storage instance such as Read, Write and Delete. This allows for a better and more managed control over the storage and also let's you **build custom indexes** with a few lines of code.
 
 ```js
-MMKV.transactions.register('object', 'beforewrite', ({ key, value }) => {
+storage.transactions.register('object', 'beforewrite', (key, value) => {
   if (key.startsWith('post.')) {
-    // Call this only when the key has the post prefix.
-    let indexForTag = MMKV.getArray(`${value.tag}-index`) || [];
-    MMKV.setArray(indexForTag.push(key));
+    const indexKey = `${value.tag}-index`;
+    const index = storage.getArray(indexKey) || [];
+    storage.setArray(indexKey, [...index, key]);
   }
+  return value;
 });
 ```
 
-Learn more about how to use Transactions in [docs](https://rnmmkv.vercel.app/#/transactionmanager)
+Learn more about how to use Transactions in [docs](https://rnmmkv.vercel.app/transactionmanager)
 
 ### **Multi-Process Support**
 
@@ -153,15 +155,11 @@ For each database instance, there is one global key index and then there are ind
 
 ### **Supports redux-persist**
 
-Support for redux persist is also added starting from v0.3.2.
+The instance exposes the `setItem`/`getItem`/`removeItem` shape that redux-persist and zustand expect.
 
 ### **Supports expo**
 
 You can use this library with expo [bare workflow](https://docs.expo.dev/workflow/customizing/).
-
-### **Flipper plugin**
-
-Thanks to [pnthach95](https://github.com/pnthach95/flipper-plugin-react-native-mmkv-storage/commits?author=pnthach95) Flipper plugin is finally here. https://github.com/pnthach95/flipper-plugin-react-native-mmkv-storage. It supports logging and manipulating storage values on the fly.
 
 ## Consider supporting with a ⭐️ [star on GitHub](https://github.com/ammarahm-ed/react-native-mmkv-storage/)
 

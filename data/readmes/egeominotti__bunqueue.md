@@ -153,10 +153,10 @@ Choose a Linux distribution with the same tags on either registry:
 
 | Variant | Version tag | Moving tag | Runtime base |
 |---|---|---|---|
-| Alpine (default) | `2.9.12-alpine` | `alpine`, `latest` | Alpine 3.22, musl |
-| Debian | `2.9.12-debian` | `debian` | Debian 13 |
-| Debian slim | `2.9.12-slim` | `slim` | Debian 13 slim |
-| Distroless | `2.9.12-distroless` | `distroless` | Debian 13, no shell or package manager |
+| Alpine (default) | `2.9.13-alpine` | `alpine`, `latest` | Alpine 3.22, musl |
+| Debian | `2.9.13-debian` | `debian` | Debian 13 |
+| Debian slim | `2.9.13-slim` | `slim` | Debian 13 slim |
+| Distroless | `2.9.13-distroless` | `distroless` | Debian 13, no shell or package manager |
 
 **Which variant should I use?**
 
@@ -182,18 +182,18 @@ user permission to install packages at runtime.
 docker run -d --name bunqueue --restart unless-stopped \
   -p 127.0.0.1:6789:6789 -p 127.0.0.1:6790:6790 \
   -v bunqueue-data:/app/data \
-  egeominotti/bunqueue:2.9.12-alpine
+  egeominotti/bunqueue:2.9.13-alpine
 
 curl --fail http://127.0.0.1:6790/health
 ```
 
-This example exposes the APIs only on your machine. Replace `2.9.12-alpine` with
-`2.9.12-debian`, `2.9.12-slim`, or `2.9.12-distroless` to choose another base.
+This example exposes the APIs only on your machine. Replace `2.9.13-alpine` with
+`2.9.13-debian`, `2.9.13-slim`, or `2.9.13-distroless` to choose another base.
 Moving tags such as `alpine` follow newer releases; version tags identify a
 release, while a digest pins the exact image even across base-image rebuilds.
 
 Every variant supports both architectures, runs as UID/GID `1001:1001`, and
-stores SQLite data in `/app/data`. Unsuffixed tags such as `2.9.12` stay on Alpine.
+stores SQLite data in `/app/data`. Unsuffixed tags such as `2.9.13` stay on Alpine.
 Production images contain the compiled server and required system libraries;
 development dependencies and a separate Bun installation stay out of the image.
 The built-in health check uses `/app/bunqueue healthcheck`, including on distroless.
@@ -668,6 +668,15 @@ SQLite or public-API claim. Run `bun run bench`, `bun run bench:tcp`, or
 - [CLI Reference](https://bunqueue.dev/guide/cli/) — run and manage from the terminal
 - [Migrate from BullMQ](https://bunqueue.dev/guide/migration/)
 
+## Project & Governance
+
+- [Contributing](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Governance](GOVERNANCE.md) · [Maintainers](MAINTAINERS.md)
+- [Security Policy](SECURITY.md) — report vulnerabilities privately
+- [Versioning & Support](VERSIONING.md) — SemVer contract, support windows, deprecations
+- [Disclaimer](DISCLAIMER.md) — provided as is, with no liability for lost data or money
+
 ## License
 
-MIT
+MIT — provided **as is, without warranty of any kind**. The authors accept no liability
+for lost data, lost money or any other damage arising from official or unofficial use
+of bunqueue. See [DISCLAIMER.md](DISCLAIMER.md).

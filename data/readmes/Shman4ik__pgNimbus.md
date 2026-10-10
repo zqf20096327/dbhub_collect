@@ -107,7 +107,7 @@ On macOS, <kbd>Cmd</kbd> replaces <kbd>Ctrl</kbd>, except autocomplete, which st
 - Type-aware editors (enum dropdowns, booleans, dates, arrays, composites, json/jsonb), a row-details form, a cell inspector, and follow-the-foreign-key from any key cell.
 - CSV/JSON import through `COPY`. Export writes every row of a browsed table, not only the page on screen. Copy results as CSV, TSV, JSON, Markdown or `INSERT` statements.
 
-**PostgreSQL tooling** ([plans](https://shman4ik.github.io/pgNimbus/docs/guide/explain/), [monitoring](https://shman4ik.github.io/pgNimbus/docs/guide/monitoring/))
+**PostgreSQL tooling** ([plans](https://shman4ik.github.io/pgNimbus/docs/guide/explain/), [monitoring](https://shman4ik.github.io/pgNimbus/docs/guide/monitoring/), [backup and restore](https://shman4ik.github.io/pgNimbus/docs/guide/backup/))
 
 - Schema tree read from `pg_catalog`: materialized views, partitioned tables, relation sizes, DDL for any table or view.
 - `EXPLAIN` and `EXPLAIN ANALYZE` as a tree with a self-time heat map and plain warnings (disk spills, bad row estimates). Paste a plan from anywhere and read it with no connection.
@@ -116,6 +116,7 @@ On macOS, <kbd>Cmd</kbd> replaces <kbd>Ctrl</kbd>, except autocomplete, which st
 - Slow queries from `pg_stat_statements`: ranked by total or mean time, measured since the last reset or over just the workload you ran, one double-click from the editor.
 - Roles and permissions that answer "can this role do that, and why" from the server's own `has_*_privilege()`, including grants inherited through roles and PUBLIC. Changes come out as a script, never applied behind your back.
 - LISTEN/NOTIFY monitor with JSON payloads as a tree and a button to publish a test event.
+- Back up a database, a schema or a table with PostgreSQL's own `pg_dump`, as an archive or a readable `.sql` script, and restore an archive into a new database or the current one, all or nothing. pgNimbus finds `pg_dump` and `pg_restore` where PostgreSQL, pgAdmin, Postgres.app or Homebrew installed them, and says exactly how to install them when it can't.
 
 **Connections** ([guide](https://shman4ik.github.io/pgNimbus/docs/getting-started/connecting/))
 
@@ -154,7 +155,7 @@ Next up (a direction, not a commitment):
 - **Query Lab:** save EXPLAIN runs and compare them before and after a change.
 - **Signed and notarized macOS builds.**
 
-The full backlog, with the competitive research behind each item, is in [ROADMAP.md](ROADMAP.md). Pick one scoped item if you'd like to contribute; [CONTRIBUTING.md](CONTRIBUTING.md) has the details.
+The backlog is tracked as [issues labeled `roadmap`](https://github.com/Shman4ik/pgNimbus/issues?q=is%3Aissue%20is%3Aopen%20label%3Aroadmap); [ROADMAP.md](ROADMAP.md) has the direction and the competitive research behind it. Pick one scoped item if you'd like to contribute; [CONTRIBUTING.md](CONTRIBUTING.md) has the details.
 
 ## 🧱 Building and running
 

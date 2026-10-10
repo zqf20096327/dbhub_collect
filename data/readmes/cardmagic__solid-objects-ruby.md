@@ -39,12 +39,14 @@ And so much more.
 - [Good uses](#good-uses)
 - [When a transaction is better](#when-a-transaction-is-better)
 - [Guarantees and boundaries](#guarantees-and-boundaries)
+- [Guides](#guides)
 - [Read more](#read-more)
 - [Status and license](#status-and-license)
 
 ## Installation
 
-Solid Objects requires Ruby 3.3 or newer and Rails 7.1 or newer.
+Solid Objects requires Ruby 3.3 or newer and Rails 7.1 or newer. Coding agents
+should follow the [agent guide](docs/agents.md), which gives each step in order.
 
 ```bash
 bundle add solid_objects
@@ -162,6 +164,16 @@ SQL and should be allowed to enjoy that.
 
 Exactly once is not hiding in a more advanced configuration. Read the
 [correctness contract](docs/correctness.md) before using important data.
+
+## Guides
+
+Each guide starts from a problem, shows the plain Rails fix first, and tests
+every claim in [`test/guides/`](test/guides/):
+
+- [Prevent race conditions in Rails](docs/guides/race-conditions.md)
+- [Run jobs in order for each customer](docs/guides/ordered-jobs.md)
+- [Expiring reservations](docs/guides/expiring-reservations.md)
+- [Save state and queue work together](docs/guides/transactional-outbox.md)
 
 ## Read more
 

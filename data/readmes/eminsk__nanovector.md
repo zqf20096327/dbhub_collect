@@ -5,7 +5,7 @@
 ### The SQLite of Vector Search & Episodic Memory for AI Agents
 **Bare-metal C99 · AVX2+FMA · ARM NEON · FASM x64 · Zero Dependencies · ~120 KB**
 
-[![PyPI Version](https://img.shields.io/pypi/v/nanovector?style=for-the-badge&color=blue&label=pypi)](https://pypi.org/project/nanovector/)
+[![PyPI Version](https://img.shields.io/pypi/v/nanovector?style=for-the-badge&color=blue&label=pypi&logo=pypi)](https://pypi.org/project/nanovector/)
 [![Conda-Forge](https://img.shields.io/conda/vn/conda-forge/nanovector.svg?style=for-the-badge&logo=condaforge)](https://anaconda.org/conda-forge/nanovector)
 [![Debian / Ubuntu PPA](https://img.shields.io/badge/Debian%20%2F%20Ubuntu-APT%20PPA-E95420.svg?style=for-the-badge)](https://eminsk.github.io/ppa/)
 [![Python Versions](https://img.shields.io/badge/Python-3.8%20--%203.16-brightgreen?style=for-the-badge)](https://pypi.org/project/nanovector/)
@@ -44,9 +44,9 @@
 |---|---|
 | **PyPI (pip)** | `pip install nanovector` |
 | **PyPI (uv)** | `uv add nanovector` |
-| **Conda (Anaconda.org)** | `conda install -c m_n_nik nanovector` |
+| **Conda (Conda-Forge)** | `conda install -c conda-forge nanovector` \| `pixi add nanovector` |
 | **Ubuntu / Debian (APT PPA)** | `curl -sS https://eminsk.github.io/ppa/setup.sh \| sudo bash`<br>`sudo apt install python3-nanovector` |
-| **Ubuntu / Debian (.deb)** | `sudo dpkg -i python3-nanovector_0.1.6-1_amd64.deb` |
+| **Ubuntu / Debian (.deb)** | `sudo dpkg -i python3-nanovector_0.1.8-1_amd64.deb` |
 
 ```bash
 pip install nanovector
@@ -375,15 +375,20 @@ Initializes an embedded vector index.
 
 ## 🧪 Testing & Verification
 
-Run the full pytest suite covering bare-metal SIMD indexing, query filtering, LangChain LCEL integration, and multi-threaded concurrency:
+Run the full test suite covering bare-metal SIMD indexing, FASM standalone executables & ctypes bindings, query filtering, LangChain LCEL integration, and multi-threaded concurrency:
 
 ```bash
-uv run --extra dev pytest -v
-# or with standard pytest
-pytest -v
+# Run pytest with uv
+uv run pytest -v
+
+# Run under Free-Threaded Python 3.16t (No-GIL)
+python -X gil=0 -m unittest discover -s tests -v
+
+# Build and verify native FASM 64-bit & 32-bit suites
+cd asm && build.bat
 ```
 
-All 17 tests pass with 100% success rate across **Python 3.8 through 3.16 (including No-GIL free-threaded 3.13t–3.16t)** and **PyPy 3.8 through 3.12**.
+All 46 test cases pass with 100% success rate across **Python 3.8 through 3.16 (including No-GIL free-threaded 3.13t–3.16t)**, **PyPy 3.8 through 3.12**, and **native Flat Assembler (FASM)**.
 
 ---
 

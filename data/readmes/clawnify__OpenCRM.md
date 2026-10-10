@@ -222,6 +222,8 @@ List endpoints take `filters`: a JSON list, ANDed, of rules `{field, op, value}`
 | PUT | `/api/insights/:id` | Mark one done or dismissed |
 | POST | `/api/insights/:id/deal` | Turn an expansion into a deal |
 | GET | `/api/customers` | Every customer worst first with its reasons, what to do first, this week's calls |
+| GET | `/api/lookup` | What the CRM knows about an address (`email`, `domain`): contact, company, customer since, deals, last and next call |
+| POST | `/api/lookup` | The same for up to 100 addresses at once (`{ addresses: [{ email, domain }] }`), in order |
 
 ## Community & Contributions
 

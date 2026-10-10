@@ -25,6 +25,7 @@ COPY table FROM 's3://mybucket/data.parquet' WITH (format 'parquet');
   - [Inspect Parquet metadata](#inspect-parquet-metadata)
   - [Inspect Parquet column statistics](#inspect-parquet-column-statistics)
   - [List and read Parquet files from uri pattern](#list-and-read-parquet-files-from-uri-pattern)
+  - [Monitor COPY progress](#monitor-copy-progress)
 - [Object Store Support](#object-store-support)
 - [Copy Options](#copy-options)
 - [Configuration](#configuration)
@@ -270,6 +271,23 @@ COPY test FROM 's3://testbucket/some/**/*.parquet';
 COPY 1000000
 ```
 
+### Monitor COPY progress
+
+The progress of an ongoing `COPY TO/FROM` a Parquet file is reported to the [pg_stat_progress_copy](https://www.postgresql.org/docs/current/progress-reporting.html#COPY-PROGRESS-REPORTING) view.
+
+```sql
+SELECT relid::regclass, command, type, bytes_processed, bytes_total, tuples_processed
+FROM pg_stat_progress_copy;
+ relid | command   | type     | bytes_processed | bytes_total | tuples_processed
+-------+-----------+----------+-----------------+-------------+------------------
+ test  | COPY FROM | CALLBACK |       318767104 |   390000021 |         31876709
+(1 row)
+```
+
+The byte counters mean different things for the two directions:
+- For `COPY TO`, `bytes_processed` is the number of the bytes that are already written to the Parquet file(s). `bytes_total` is not reported since the size of a Parquet file is not known before it is written.
+- For `COPY FROM`, `bytes_processed` and `bytes_total` count the bytes of the uncompressed binary stream that `pg_parquet` feeds to Postgres, which is unrelated to the size of the Parquet file. `bytes_total` is extrapolated from the rows that are read so far, so it is an estimation until the last row of the file is read. The estimation is corrected after every record batch, hence it can move in both directions when the rows of the file differ in size.
+
 ## Object Store Support
 `pg_parquet` supports reading and writing Parquet files from/to `S3`, `Azure Blob Storage`, `http(s)` and `Google Cloud Storage` object stores.
 
@@ -416,7 +434,13 @@ Durations are given with a unit, e.g. `30s`, `5m` or `1m30s`. Booleans are given
 - `row_group_size_bytes <int64>`: the total byte size of rows in each row group while writing Parquet files. The default row group size bytes is `row_group_size * 1024`,
 - `compression <string>`: the compression format to use while writing Parquet files. The supported compression formats are `uncompressed`, `snappy`, `gzip`, `brotli`, `lz4`, `lz4raw` and `zstd`. The default compression format is `snappy`. If not specified, the compression format is determined by the file extension,
 - `compression_level <int>`: the compression level to use while writing Parquet files. The supported compression levels are only supported for `gzip`, `zstd` and `brotli` compression formats. The default compression level is `6` for `gzip (0-10)`, `1` for `zstd (1-22)` and `1` for `brotli (0-11)`,
-- `parquet_version <string>`: writer version of the Parquet file. By default, it is set to `v1` to be more interoperable with common query engines. (some are not able to read v2 files) You can set it to `v2` to unlock some of the new encodings.
+- `parquet_version <string>`: writer version of the Parquet file. By default, it is set to `v1` to be more interoperable with common query engines. (some are not able to read v2 files) You can set it to `v2` to unlock some of the new encodings,
+- `bloom_filter <string>`: the columns that a bloom filter is written for. By default, no bloom filters are written. Pass `all` to write one for every column, or a json string like `'{"id": true}'` to write one only for the given columns. A bloom filter lets a reader skip a row group that cannot contain a value, which speeds up equality filters on high cardinality columns at the cost of a larger file,
+- `bloom_filter_fpp <float>`: the false positive probability of the bloom filters, between `0` and `1`. The default is `0.05`. A lower value makes the filters larger but makes them skip more row groups,
+- `dictionary <string>`: the columns that are dictionary encoded. By default, all columns are. Pass `none` to disable dictionary encoding for every column, or a json string like `'{"id": false}'` to disable it only for the given columns. Dictionary encoding is a win for low cardinality columns, but it costs memory and time for the columns that are mostly distinct.
+
+> [!NOTE]
+> A bloom filter only helps the readers that push equality filters down to the Parquet file, like `DuckDB`, `Spark` or `DataFusion`. `COPY FROM` reads every row of a file, so it never reads a bloom filter. A selected column is a top level column, which expands to all of its leaf columns when it is of a nested type.
 
 `pg_parquet` supports the following options in the `COPY FROM` command:
 - `format parquet`: you need to specify this option to read or write Parquet files which does not end with `.parquet[.<compression>]` extension,

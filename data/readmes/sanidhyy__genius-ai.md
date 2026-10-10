@@ -262,19 +262,19 @@ Useful resources and dependencies that are used in Genius.
 
 - Thanks to CodeWithAntonio: https://codewithantonio.com/
 <!--- DEPENDENCIES_START --->
-- [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^7.9.7
+- [@clerk/nextjs](https://www.npmjs.com/package/@clerk/nextjs): ^7.9.11
 - [@hookform/resolvers](https://www.npmjs.com/package/@hookform/resolvers): ^5.9.1
 - [@prisma/adapter-mariadb](https://www.npmjs.com/package/@prisma/adapter-mariadb): ^7.10.0
 - [@prisma/client](https://www.npmjs.com/package/@prisma/client): ^7.10.0
-- [@radix-ui/react-avatar](https://www.npmjs.com/package/@radix-ui/react-avatar): ^1.1.11
-- [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.1.15
+- [@radix-ui/react-avatar](https://www.npmjs.com/package/@radix-ui/react-avatar): ^1.2.7
+- [@radix-ui/react-dialog](https://www.npmjs.com/package/@radix-ui/react-dialog): ^1.2.0
 - [@radix-ui/react-label](https://www.npmjs.com/package/@radix-ui/react-label): ^2.1.8
 - [@radix-ui/react-progress](https://www.npmjs.com/package/@radix-ui/react-progress): ^1.1.8
-- [@radix-ui/react-select](https://www.npmjs.com/package/@radix-ui/react-select): ^2.2.6
+- [@radix-ui/react-select](https://www.npmjs.com/package/@radix-ui/react-select): ^2.3.8
 - [@radix-ui/react-separator](https://www.npmjs.com/package/@radix-ui/react-separator): ^1.1.15
 - [@radix-ui/react-slot](https://www.npmjs.com/package/@radix-ui/react-slot): ^1.2.4
 - [@tailwindcss/postcss](https://www.npmjs.com/package/@tailwindcss/postcss): ^4.3.3
-- [@types/node](https://www.npmjs.com/package/@types/node): ^26.6.2
+- [@types/node](https://www.npmjs.com/package/@types/node): ^26.6.4
 - [@types/react](https://www.npmjs.com/package/@types/react): 19.3.0
 - [@types/react-dom](https://www.npmjs.com/package/@types/react-dom): 19.3.0
 - [axios](https://www.npmjs.com/package/axios): ^1.13.5
@@ -285,7 +285,7 @@ Useful resources and dependencies that are used in Genius.
 - [eslint](https://www.npmjs.com/package/eslint): 9.39.5
 - [eslint-config-next](https://www.npmjs.com/package/eslint-config-next): 16.3.7
 - [lucide-react](https://www.npmjs.com/package/lucide-react): ^1.47.0
-- [next](https://www.npmjs.com/package/next): 16.3.7
+- [next](https://www.npmjs.com/package/next): 16.3.8
 - [openai](https://www.npmjs.com/package/openai): ^7.8.0
 - [postcss](https://www.npmjs.com/package/postcss): ^8
 - [prisma](https://www.npmjs.com/package/prisma): ^7.10.0

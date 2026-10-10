@@ -1,11 +1,18 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./packages/ui/assets/brand/generated/readme-hero-ocean.png">
-    <img alt="Bemmoly: open source, self-hosted, AI-first issues and docs for your whole company. Install with curl -fsSL https://get.bemmoly.com | sh" src="./packages/ui/assets/brand/generated/readme-hero.png" width="100%">
+    <img alt="Bemmoly: Your work. Your platform. Self-hosted issues and docs. Open source, no pricing, nothing to buy. Install with curl -fsSL https://get.bemmoly.com | sh" src="./packages/ui/assets/brand/generated/readme-hero.png" width="100%">
   </picture>
 </p>
 
 <p align="center"><strong>Your work. Your platform.</strong></p>
+
+<p align="center">
+  <a href="https://bemmoly.com">Website</a> ·
+  <a href="https://bemmoly.com/docs/install">Install guide</a> ·
+  <a href="https://bemmoly.com/docs">Docs</a> ·
+  <a href="https://bemmoly.com/changelog">Changelog</a>
+</p>
 
 <p align="center">
   <a href="https://github.com/bemmoly/bemmoly/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/bemmoly/bemmoly/ci.yml?branch=main&label=CI"></a>
@@ -44,7 +51,8 @@ Requirements:
 The installer sets up Docker, Postgres, HTTPS, backups and updates; it checks the
 requirements itself and prints the fix for anything missing. Docker Compose, Kubernetes (Helm), an existing
 Postgres and offline installs are covered at
-[bemmoly.com/self-hosting](https://bemmoly.com/self-hosting).
+[bemmoly.com/self-hosting](https://bemmoly.com/self-hosting), and the
+[install guide](https://bemmoly.com/docs/install) walks through every step.
 
 ## What you get
 
@@ -63,14 +71,17 @@ Postgres and offline installs are covered at
 
 ## Status
 
-**0.1.0 is the foundation release.** It contains the kernel and its module system, the setup
-wizard, people and roles, email and notifications, backups and updates, the design system
-(tokens, the theme presets, components in Storybook) and the marketing site. It has no issues,
-boards or docs yet: those are the next releases.
+**0.2 adds the Work module** to the 0.1 foundation (the kernel and its module system, the setup
+wizard, people and roles, email and notifications, backups and updates, the design system). Work
+has projects with members, issues with types, custom fields and history, workflows with a visual
+editor, Kanban and Scrum boards, the backlog and sprints, LQL and saved filters, issue search in
+⌘K and "My work" on Home. It ships in every install and stays off until an admin enables it in
+Settings › Modules. Try it in the [live demo](https://bemmoly.com/demo), which runs in your
+browser on sample data.
 
 | Release | Scope                                                                                      |
 | ------- | ------------------------------------------------------------------------------------------ |
-| 0.2     | **Work**: projects, issues, workflows, boards, backlog and sprints, filters, search        |
+| 0.2     | **Work** (released): projects, issues, workflows, boards, backlog and sprints, filters     |
 | 0.3     | **Docs**: spaces, the page tree, a collaborative editor, revisions, comments, templates    |
 | 0.4     | **AI**: summaries, ask-your-docs with citations, the ⌘K palette with plans, any provider   |
 | 0.5     | **Import and integrations**: importers, OIDC, SAML and SCIM, webhooks, automation, roadmap |
@@ -81,7 +92,9 @@ The plan for each release, and what it must prove before it ships, is in section
 
 ## Screenshots
 
-These come from the product design; the Board arrives with 0.2 and ⌘K with 0.4.
+These come from the product design: the board shipped in 0.2 (without the AI summary, which
+arrives with AI in 0.4), and the ⌘K command bar's plans arrive in 0.4. The
+[live demo](https://bemmoly.com/demo) shows the app as it ships.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./apps/site/src/assets/screens/board-ocean.png">

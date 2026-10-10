@@ -134,7 +134,7 @@ portal itself**, with every action fenced to their own account. See
 [Hosting Management from Inside Billing](#hosting-management-from-inside-billing).
 
 **Not only Panelica.** PNLCS is control-panel agnostic — you can connect and
-provision on **cPanel, Plesk, DirectAdmin, HestiaCP, Proxmox, and Vultr** too,
+provision on **cPanel, Plesk, DirectAdmin, HestiaCP, aaPanel, Proxmox, and Vultr** too,
 right alongside your Panelica servers. Mix and match panels in a single install;
 Panelica is simply where PNLCS feels most at home.
 
@@ -1790,6 +1790,16 @@ to get the fastest community response.
 - **Laravel** by Taylor Otwell and the Laravel community
 - **WHMCS** — for inspiring much of the data model and workflow
 - Every contributor who opens an issue or a pull request
+
+### Translators
+
+PNLCS ships in 30 languages, and most of them are completed by the people who
+use them. Everyone whose translation is merged is listed here, by language,
+for good. To join them, see [Translations](docs/developer/translations.md).
+
+- **Chinese (Simplified)**: [@Harry326485](https://github.com/Harry326485)
+- **German**: Dirk Mehmke; Dejan Wolf (WHOST, Austria)
+- **Polish**: Grzegorz ([@hedon77](https://github.com/hedon77))
 
 ---
 

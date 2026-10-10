@@ -137,8 +137,8 @@ carries the schema tools.
 
 Seventeen tools by default, the ones a workspace build uses, `weave_build` among
 them, plus `weave_call`,
-which reaches the other forty-four. `weave mcp --tools all` (or
-`WEAVE_MCP_TOOLS=all`) lists all 61. The same undo the UI has, and
+which reaches the other forty-six. `weave mcp --tools all` (or
+`WEAVE_MCP_TOOLS=all`) lists all 63. The same undo the UI has, and
 `weave_vocabulary` so an agent reads the allowed values instead of guessing. Full map:
 [Agents: MCP, REST, and CLI](#agents-mcp-rest-and-cli).
 
@@ -218,7 +218,7 @@ servers, so one config block works in each of them:
 }
 ```
 
-It exposes the whole platform as 61 tools. `tools/list` names the core build
+It exposes the whole platform as 63 tools. `tools/list` names the core build
 set (`weave_ontology`, `weave_schema`, `weave_query`, `weave_get_entity`, `weave_create_entity`,
 `weave_update_entity`, `weave_create_space`, `weave_create_table`,
 `weave_add_field`, `weave_update_field`, `weave_add_relation`,
@@ -229,7 +229,7 @@ set (`weave_ontology`, `weave_schema`, `weave_query`, `weave_get_entity`, `weave
 `weave_views`, `weave_automations`, `weave_activity` and the rest) in one line
 each; `weave_call {name: "help", args: {tool}}` returns a tool's full schema.
 Add `--tools all` to the `mcp` args, or set `WEAVE_MCP_TOOLS=all`, to list all
-61 directly. An agent designs a schema,
+63 directly. An agent designs a schema,
 fills it, and configures how it reads — icons, option colors, column widths and
 order, hidden columns, saved views — without a human opening the UI.
 
@@ -277,7 +277,7 @@ on any instance, including the one you just started):
 - **Door C: sign in with a provider**: one OpenID Connect provider (Clerk,
   Auth0, Keycloak, Authentik, Google). `weave account link <name>` mints a
   one-time invite link that opens an account to it; signing in creates none,
-  and weave stores no email. `WEAVE_ORIGIN`
+  and weave keeps one verified email per sign-in identity, nothing else. `WEAVE_ORIGIN`
   names the origin the provider sends people back to. Agents keep `wv_` tokens.
 - **Deploy: Railway** — project from GitHub, volume at `/data`, variables,
   custom domain, one replica.
@@ -335,7 +335,7 @@ graph — is the model weave implements, in a single file you own. See
 [docs/PARITY.md](docs/PARITY.md) for the feature-by-feature matrix.
 
 **Can AI agents use it?**
-That is the point. The MCP server exposes 61 tools covering schema design,
+That is the point. The MCP server exposes 63 tools covering schema design,
 CRUD, documents, relations, workflow states, search, automations, and CSV
 import/export, seventeen of them listed by default and the rest one `weave_call`
 away. Agents can build the schema, not just fill it in.

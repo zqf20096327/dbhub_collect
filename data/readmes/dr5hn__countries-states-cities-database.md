@@ -21,15 +21,14 @@ Total States/Regions/Municipalities : 5,299 <br>
 Total Cities/Towns/Districts : 153,765 <br>
 Total Postcodes : 844248 (125 countries) <br>
 Total Timezones : 427 (100% IANA coverage) <br>
-Last Updated On: October 09, 2026
+Last Updated On: October 10, 2026
 
 ---
 
-<div align="center">
-  <a href="https://makemysitelive.com/?utm_source=csc-db&utm_medium=banner&utm_campaign=readme" target="_blank">
-    <img src=".github/images/makemysitelive-banner.png" alt="Build & Launch Websites Faster with MakeMySiteLive" />
-  </a>
-</div>
+<p align="center">
+  <a href="https://makemysitelive.com/?utm_source=csc-db&utm_medium=banner&utm_campaign=readme" target="_blank"><img src=".github/images/makemysitelive-banner.png" alt="Build & Launch Websites Faster with MakeMySiteLive" width="49%" /></a>
+  <a href="https://remotegig.in/?utm_source=csc-db&utm_medium=banner&utm_campaign=readme" target="_blank"><img src=".github/images/remotegig-banner.png" alt="Finding a remote job? Go check remotegig.in" width="49%" /></a>
+</p>
 
 ---
 
@@ -145,7 +144,7 @@ Smaller reference files (countries, states, counties, schema) live in the repo. 
 
 ## What's in the data
 
-- **250** countries · **5,329** states / regions · **4,305** counties · **153,513** cities · **840k+** postcodes across 125 countries
+- **250** countries · **5,329** states / regions · **8,366** counties · **153,513** cities · **840k+** postcodes across 125 countries
 - **19 languages** of country and state names plus native script
 - **100% IANA timezone coverage** for cities
 - **Validated foreign keys** on every contribution

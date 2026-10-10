@@ -20,10 +20,10 @@ Clone, configure, and launch your store.
 ## Live Preview
 
 **Main Site:**
-https://payload.url-link.org
+https://ecommerce.studiopo.net
 
 **Admin Panel:**
-https://payload.url-link.org/admin
+https://ecommerce.studiopo.net/admin
 
 **Demo Login:**
 Email: `admin@admin.com`
@@ -32,7 +32,7 @@ Password: `admin`
 🔄 Reset Demo Data
 
 If demo data was modified while you or another user were testing, you can restore it to a fresh state by visiting:
-https://payload.url-link.org/preview/reset
+https://ecommerce.studiopo.net/preview/reset
 
 #### This will reset and reseed the database (media preserved).
 
@@ -42,7 +42,7 @@ https://payload.url-link.org/preview/reset
 
 Deploy your own Payload-powered e-commerce storefront.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/giladfuchs/next-ecommerce)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/buildlabs-io/next-ecommerce)
 
 After creating your project, make sure to go to the Vercel dashboard
 and update your environment variables based on [.env.example](.env.example)
@@ -108,7 +108,7 @@ pnpm dev
 
 To seed mock data for local development:
 
-1. Download the product images from [this Google Drive folder](https://url-link.org/images) and extract them into `seed/data/images`.
+1. Download the product images from [this Google Drive folder](https://go.studiopo.net/images) and extract them into `seed/data/images`.
 2. Run the [seeder script](seed/index.ts):
 
 ```bash

@@ -223,3 +223,15 @@ what a property of the coin is supposed to do.
 - **Live feed**: https://three.ws/oracle
 
 Apache-2.0
+
+<!-- three.ws:ecosystem -->
+## Part of three.ws
+
+[three.ws](https://three.ws) is a platform for 3D AI agents with Solana wallets: avatars, a skill marketplace, x402 payments and more than seventy MCP servers. `@three-ws/oracle-model` is one package from it.
+
+- Documentation site: https://nirholas.github.io/oracle-model/
+- npm: https://www.npmjs.com/package/@three-ws/oracle-model
+- Canonical source: https://github.com/nirholas/three.ws (this repository is a generated mirror of `packages/oracle-model`)
+- Agent-readable summary: [llms.txt](./llms.txt) and [AGENTS.md](./AGENTS.md)
+- Issues and ideas: https://github.com/nirholas/oracle-model/issues
+<!-- /three.ws:ecosystem -->

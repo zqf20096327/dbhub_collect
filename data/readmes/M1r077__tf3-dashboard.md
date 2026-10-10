@@ -49,7 +49,8 @@ which is why the companion lives here.
 2. **Companion** — download `TF3-Dashboard-<version>.zip` from the
    [Releases](https://github.com/M1r077/tf3-dashboard/releases) page, unzip anywhere **except a cloud-synced folder**
    (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it.
-   `C:\TF3-Dashboard` or `D:\Games\TF3 Dashboard` are fine. Mod rev 6+ needs companion 0.2.0+.
+   `C:\TF3-Dashboard` or `D:\Games\TF3 Dashboard` are fine. Mod and companion are released together: mod revision 14
+   goes with companion 0.6.x (older pairs keep working, the newest features simply stay blank).
 3. **Run** — start the game with the mod enabled, then double-click `run_dashboard.cmd`. A window with two panes
    opens (collector | server) and your browser shows the dashboard. Put the browser on your second monitor,
    press `F11`. Close the window to stop everything.
@@ -102,13 +103,30 @@ and no route is changed. The channel is a local file (`tf3dash_cmd.lua`) read by
   **stop editor**: load mode, min/max waiting time, cargo filter (game icons), preferred and alternative terminals,
   whole-line actions (including the horn of every vehicle).
 - **Map** — lines, vehicles, stations, industries, towns, headquarters (mod revision 8), alerts; click = camera on
-  the object. **Camera views**
-  (mod revision 7): save the game camera under a name and recall it with one click or Shift+1..9. Views are kept
-  per savegame in `db\camera_views.json`.
+  the object (a vehicle: follow it). With mod revision 11 the map draws the savegame's **geography**: shaded relief,
+  sea, lakes and rivers, every road and track (bridges, tunnels), five map styles (gear button; mod revision 14 brings
+  the **full-resolution terrain**, 4 m, with a satellite look: rock where it is steep, meadows below), and lines are drawn
+  **along the network** (the real path of each vehicle, a predicted route until one has driven it). A **ruler** button measures as the crow flies, with the height difference and the distance the game actually pays (straight line + 8 x the climb, never the length of track), plus the distance by road and by rail over the existing network (dashed where nothing is built). **Cargo layers** (production / demand / stocks) draw the cargo icons next to each industry and town, dimmed by how far they are from their maximum; hovering shows the figures, and a vehicle shows what it carries. **Camera views**
+  (mod revision 7): save the game camera under a name and recall it with one click or Shift+1..9; a view can be
+  attached to a vehicle (revision 11: recalled = follow it again with the same framing). Views are kept
+  per savegame in `db\camera_views.json`. **Travelling** (mod revision 10): smooth camera movements around a view
+  (orbit, dolly, flyover, sweep, spiral), the chain of all views, and on each line's sheet a **line tour** - one
+  flight over the line, its stops and where its vehicles are at that moment. The **Travellings** card keeps your
+  favourite ones per savegame (subject + settings, up to 20), editable and replayable with one click. Drop music
+  files in `music\` and they play with the travellings (in the browser; never part of the release); the game's own
+  soundtrack is offered too, read straight from the game's `music.zip`.
 - **Towns**, **Industries** and **Stations & depots** — tables with a detail card on click: capacities and
   satisfaction, production / shipped per cargo, waiting items and overflow, all over time (14 days of history).
-- **Finances** — balance, yearly result, transported, network size and company value over time.
-- Languages: English, French, German, Brazilian Portuguese — follows the game language automatically.
+- Every history chart runs on the **game's simulation clock** (a pause is a point, not a plateau; ranges in game
+  months and years), and like the game the companion keeps **one timeline per save**: reloading an older savegame
+  removes what had been recorded beyond it.
+- **Finances** — balance, yearly result, transported, network size and company value over time, and the **game's own
+  finance journal** (mod revision 13): the same table as the game's Finances window, by financial year, with every
+  line (running costs and maintenance by carrier, upkeep of roads, tracks, buildings, income, construction and
+  vehicle purchases), kept for the whole savegame. Cards can be dragged and resized; the layout is saved per browser.
+- **Settings ▸ Savegames and backups** — one backup = database + camera views for the current savegame; restore
+  the views, or the whole database at the next start.
+- Languages: English, French, German, Brazilian Portuguese, partial Chinese — follows the game language automatically.
 
 ## Configuration
 
@@ -152,9 +170,16 @@ also shows the export folder, when the companion was last seen, and the current 
 collector/      collector.py (tf3dash_live.lua + tf3dash_slow_*.lua -> SQLite), luatable.py (Lua parser), tf3paths.py (folder detection), schema.sql
 dashboard/      server.py (HTTP + JSON API), extract_icons.py, static/ (index.html, app.js, i18n.js, style.css)
 mod/            the mod as published on mod.io (tf3_dashboard_export) — https://mod.io/g/transportfever3/m/second-screen-dashboard
-docs/           DETAILS.md (full technical reference), API_CATALOGUE.md (what the TF3 API allows: done / doable / never)
+docs/           see "Documentation" below
 test/           make_fake_data.py + run_dashboard_demo.cmd (developer tool: simulated data, not in the release zip), i18ncheck.js
 ```
+
+## Documentation
+
+- [docs/DETAILS.md](docs/DETAILS.md) — full technical reference: the three parts, export files and schema, retention, savegames and backups, commands, publishing on mod.io, text encoding, SQL examples, alert codes.
+- [docs/API_CATALOGUE.md](docs/API_CATALOGUE.md) — what the Transport Fever 3 modding API allows, section by section: done, doable, risky, impossible. Start here before asking for a feature.
+- [docs/INTEGRATIONS.md](docs/INTEGRATIONS.md) — the rule for other mods (read their published data freely, ask before copying or writing), licences seen, candidates.
+- [docs/TF3_SETTINGS_LUA.md](docs/TF3_SETTINGS_LUA.md) — unofficial reference of every key of the game's `settings.lua` (values, menu labels, hidden keys). Not about the dashboard; game knowledge gathered along the way.
 
 ## Translating
 

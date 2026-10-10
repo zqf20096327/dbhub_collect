@@ -116,18 +116,21 @@ and forget. Its recall step reports `model_not_configured`.
 
 ## Install
 
-For **Claude Code automatic memory**, run the one-command installer:
+For **Claude Code and Codex automatic memory**, run the one-command installer:
 
 ```sh
 npx @cairn-ink/memory setup
 ```
 
-**Installer 0.1.0 is published.** This checkout prepares browser authorization
-in installer 0.2.0, awaiting publication by chichi. Try it with
-`node packages/setup/bin/memory.mjs setup`, or use the
-[manual plugin fallback](#install-for-claude-code-automatic-memory).
-Requires Node ≥22.16 and `claude` on PATH. Other clients use MCP. This scoped
-helper installs the hosted plugin/hooks; local SQLite setup remains separate.
+This checkout prepares installer **0.5.0**; publication is a separate step.
+Try it with `node packages/setup/bin/memory.mjs setup`. The plugin stays 0.3.2.
+Requires Node ≥22.16 and at least one CLI on PATH. Setup asks about new tools,
+updates connected tools, and uses one browser sign-in when connecting both.
+The default server is cairn.ink. Conflicting servers or memory IDs present a
+choice; non-interactive conflicts change nothing. Codex must pass format
+qualification before automatic memory is enabled. Automated `codex exec` runs
+skip capture and prompt recall by default; opt in with
+`npx @cairn-ink/memory config --codex-capture-exec on`.
 
 Choose the mode that fits your workflow:
 
@@ -241,25 +244,61 @@ Run the published installer from your terminal:
 npx @cairn-ink/memory setup
 ```
 
-Installer 0.1.0 is published; this checkout's 0.2.0 awaits publication by chichi.
-Use `node packages/setup/bin/memory.mjs setup` to try browser authorization now.
-It refreshes the marketplace, installs or updates the plugin and hooks, prints
-both installer and installed plugin versions, and confirms the endpoint.
-Enter the displayed code at the bare `/device` URL and allow the request;
-setup securely saves the checked credential through stdin and acknowledges
-its delivery. New browser credentials last 180 days. Existing credentials are
-kept unless you pass `--reauthorize`; `--manual-token` retains hidden PAT paste.
-`--no-browser` works in a TTY with a browser on another device.
+This checkout prepares installer **0.5.0** (plugin **0.3.2**); publish the
+release before using these flows through npx. To run this checkout, use
+`node packages/setup/bin/memory.mjs setup`.
 
-Create-route 404/501 clearly falls back to the manual prompt. An unavailable
-manual credential route saves unverified configuration. Server/TLS/protocol
-errors do not downgrade. Legacy MCP removal still requires confirmation.
-Restart Claude Code and send a message before checking hook status.
+Without `--client`, setup finds both tools and asks only about new connections.
+It updates connected tools. Close both tools and wait for background work before
+confirming shared memory. The sign-in line shows the server (default cairn.ink).
+There is no endpoint or daily-cap question; `--endpoint` remains available.
+
+Conversations are saved after best-effort local masking. Each prompt sends a
+masked, length-limited copy for recall. Claude usage stats are on by default and
+can be turned off. Codex's sign-in is stored in an unencrypted user-only file.
+See [privacy and controls](https://cairn.ink/memory/privacy).
+
+A memory ID connects the same project across tools. Existing IDs are retained.
+Server conflicts offer two choices; unsafe Codex credential migrations require
+logout first. When two independent IDs exist, choose one; the other key is backed
+up only after successful sign-in and validation, never deleted. Old projects may
+no longer automatically match the old ID. Non-interactive conflicts write nothing.
+Setup never reads Claude native secret files. Adding Claude after Codex validates
+and reuses the installer credential; adding Codex after Claude needs one browser
+sign-in using the same account. Claude's existing sign-in is kept.
+
+Automated `codex exec` runs skip both automatic capture and prompt recall by
+default. Opt in with `npx @cairn-ink/memory config --codex-capture-exec on`;
+use `off` to restore the default. This setting enables both capture and recall
+for exec. `status` shows it only when enabled; rerunning setup preserves it.
+The hooks read the transcript's session-bound `session_meta.payload.source`,
+and also detect a native exec ancestor for `exec resume` of an older CLI thread.
+If the header is missing or cannot be verified, they skip capture and injection.
+Interactive sessions with verified CLI headers continue normally. Older frozen
+runtimes must first be updated with setup; config prints the exact command.
+
+To stop prompt recall while keeping automatic capture, run
+`npx @cairn-ink/memory prompt-recall-off --client codex`.
+Use `prompt-recall-on --client codex` to enable it again. This does not change MCP.
+
+Codex defaults to 200 automatic captures per day; reruns keep an existing cap.
+Change it with `setup --codex-daily-cap N` or `config --codex-daily-cap N`.
+Status shows today's count and cap. Unscoped `pause` and `resume` select installed
+Codex, and pause both tools when paired. Uninstall preserves keys and memories.
 
 ```sh
+npx @cairn-ink/memory status
+npx @cairn-ink/memory prompt-recall-off --client codex
+npx @cairn-ink/memory pause
+npx @cairn-ink/memory config --codex-daily-cap 300
 node packages/setup/bin/memory.mjs setup --dry-run
-node packages/setup/bin/memory.mjs status
 ```
+
+`status` reads local state without testing remote service or hooks. `--verbose`
+shows technical diagnostics. Review and allow the four Cairn entries in Codex
+`/hooks` after installation. `--client claude|codex` restricts the run.
+`--no-browser` allows sign-in on another device. Legacy MCP removal requires
+confirmation. Unqualified Codex alone may offer manual MCP tools.
 
 [Setup options and credential handling](packages/setup/README.md) ·
 [chichi's release checklist](docs/npx-setup-release.md)

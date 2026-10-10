@@ -108,6 +108,7 @@ Testate is one container on the same server, or the same network, as the databas
 | Tabular  | PostgreSQL, MySQL, MariaDB                    | view, snapshot, checkout, diff, extract, edit, import  |
 | Document | MongoDB                                       | view, snapshot, checkout, diff, extract                |
 | Files    | Object storage (any S3-compatible), SFTP, FTP | view, preview, download, insert, rename, delete, batch |
+| Logs     | Log files over SFTP or object storage         | read, filter, follow, download, masked for viewers     |
 
 Every engine here is real, driven over its own protocol, and proven in a contract suite against a real server. S3-compatible means Amazon, Cloudflare R2, Google Cloud Storage, Backblaze B2, MinIO and anything else that speaks the protocol; the [connecting guide](docs/CONNECTING.md#d-an-object-store-that-is-not-amazons) has the endpoint for each.
 
@@ -134,7 +135,7 @@ claude mcp add --transport http testate https://testate.example.internal/api/v1/
   --header "Authorization: Bearer tst_YOUR_TOKEN"
 ```
 
-The first tool the agent sees is `help`. Reads run in a read-only transaction, results are capped, column policies mask values before the agent sees them, and every call is audited. Everything else, including what happens when a token expires: [Agent access](docs/AGENT_ACCESS.md).
+The first tool the agent sees is `help`. `read_logs` reads a log source, always masked. Reads run in a read-only transaction, results are capped, column policies mask values before the agent sees them, and every call is audited. Everything else, including what happens when a token expires: [Agent access](docs/AGENT_ACCESS.md).
 
 ## Know the limits
 
@@ -152,17 +153,56 @@ Testate is honest about what it is. Read these before you install it.
 
 ## One binary, no Docker
 
-Every release carries a standalone executable for macOS on Apple silicon, Linux on x86-64 and Windows on x86-64, with the dashboard and the migrations inside it. Download from the [releases page](https://github.com/PT-Perkasa-Pilar-Utama/testate/releases), then:
+Every release has a binary for Linux (x86-64 and ARM64), macOS (Apple silicon and Intel) and Windows (x86-64). The dashboard and the migrations are inside it, and so is the tool that sets it up:
 
 ```sh
-chmod +x testate-*-darwin-arm64          # macOS and Linux only
-TESTATE_DATA_DIR=./testate-data \
-TESTATE_SECRETS_ACTIVE_KEY="$(openssl rand -base64 32)" \
-TESTATE_ADMIN_PASSWORD=change-me-now-1234 \
-./testate-*-darwin-arm64
+curl -fsSL https://pt-perkasa-pilar-utama.github.io/testate/install.sh | sh
+testate setup                  # data directory, port, sealing key, first admin
+testate service install        # keeps it running and starts it at boot (Linux, macOS)
+testate update                 # later: the next release, verified, swapped in
 ```
 
-It listens on 7378 and keeps everything under `TESTATE_DATA_DIR`, which has to be set. Every other variable in `deploy/.env.example` applies the same way.
+The install script puts `testate` in `~/.local/bin` and checks the archive against the release's `checksums.txt`; `wget -qO- <same URL> | sh` works too. `TESTATE_VERSION=2.0.0` installs one release, and `TESTATE_INSTALL_DIR` picks another directory. On Windows, download `testate_windows_amd64.zip` from the [releases page](https://github.com/PT-Perkasa-Pilar-Utama/testate/releases); `testate service` is not available there yet. On Alpine (musl), run the image.
+
+`testate setup` writes `~/.config/testate/testate.env` (mode 600) with a new sealing key, and the data goes to `~/.local/share/testate`. Back up the env file: without the key, the stored credentials cannot be read. Running `setup` again keeps the key. For a script, `TESTATE_ADMIN_PASSWORD=... testate setup --yes` asks nothing.
+
+`testate service install` makes a per-user service: a systemd user unit on Linux, a LaunchAgent on macOS. It restarts Testate after a crash and starts it at boot. `testate service status`, `logs -f`, `stop`, `start` and `uninstall` manage it. On Linux, starting before anyone logs in needs `sudo loginctl enable-linger $USER` once; `install` says so when it cannot do it itself.
+
+`testate update --check` says whether a newer release is out; `testate update` installs it and restarts the service. These two are the only commands that contact the network. Testate never checks on its own.
+
+`testate whereis` lists every file it uses and whether it is there; `testate whereis env` prints just the env file's path. `testate help` lists the commands.
+
+**Where settings come from.** `testate` reads `--env-file <path>`, else `~/.config/testate/testate.env` when it exists, and then the process environment, which wins over the file. A `.env` next to the binary is not read; pass it with `--env-file`. Every variable in [`deploy/.env.example`](deploy/.env.example) works the same way. Testate listens on 7378 unless `setup` chose another port.
+
+**Other ways to run it.** All of them read the same env file.
+
+In the foreground, or in the background:
+
+```sh
+testate                                          # Ctrl-C stops it; running jobs get 30 s
+nohup testate > testate.log 2>&1 & echo $! > testate.pid
+kill "$(cat testate.pid)"
+```
+
+As a system-wide systemd service, with its own user and the data in `/var/lib/testate`:
+
+```sh
+sudo install -m 755 ~/.local/bin/testate /usr/local/bin/testate
+sudo install -d -m 700 /etc/testate
+sudo install -m 600 "$(testate whereis env)" /etc/testate/testate.env
+curl -fsSL https://raw.githubusercontent.com/PT-Perkasa-Pilar-Utama/testate/main/deploy/systemd/testate.service \
+  | sudo tee /etc/systemd/system/testate.service > /dev/null
+sudo systemctl daemon-reload
+sudo systemctl enable --now testate
+```
+
+Under pm2:
+
+```sh
+curl -fsSLO https://raw.githubusercontent.com/PT-Perkasa-Pilar-Utama/testate/main/deploy/pm2/ecosystem.config.cjs
+TESTATE_ENV_FILE="$(testate whereis env)" pm2 start ecosystem.config.cjs
+pm2 save                       # and `pm2 startup` once, to start it at boot
+```
 
 ## Verify a download
 
@@ -178,7 +218,7 @@ cosign verify ghcr.io/pt-perkasa-pilar-utama/testate:1.2.0 \
 
 Both commands hold for `docker.io/snowfluke/testate:1.2.0` too: it is the same manifest, copied by digest and signed again where it lives.
 
-For a binary, run the same two commands on the archive, with `--bundle <archive>.sigstore.json` for cosign; the release also carries `testate-<version>.intoto.jsonl`, the provenance statement for every archive, for a check without network access (`gh attestation verify <archive> --bundle <that file>`). A download that fails either check is not ours; [SECURITY.md](SECURITY.md) says how to report it.
+For a binary, run the same two commands on the archive, with `--bundle <archive>.sigstore.json` for cosign; the release also carries `testate.intoto.jsonl`, the provenance statement for every archive, for a check without network access (`gh attestation verify <archive> --bundle <that file>`). A download that fails either check is not ours; [SECURITY.md](SECURITY.md) says how to report it.
 
 ## Operate it
 

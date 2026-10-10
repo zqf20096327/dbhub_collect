@@ -33,7 +33,7 @@ google group.
 
 I invite any ideas, patches, bugreports.
 
-PostgreSQL 14 - 19 are supported.
+PostgreSQL 14 - 20 are supported.
 
 The SQL statements inside PL/pgSQL functions are checked by the validator for semantic errors. These errors
 can be found by calling the plpgsql_check_function:
@@ -1174,7 +1174,7 @@ extension library and SQL files.
 
 ## Testing prerequisites
 
-Use a supported PostgreSQL version (14 - 19). The `plpgsql_check_tablefunc`
+Use a supported PostgreSQL version (14 - 20). The `plpgsql_check_tablefunc`
 regression test exercises XML output with `xpath`, so PostgreSQL must be built
 with libxml support. The standalone ordinary-user review reproducers are
 documented separately in [reproducers/README.md](reproducers/README.md).

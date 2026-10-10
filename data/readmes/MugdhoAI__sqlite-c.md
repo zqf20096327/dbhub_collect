@@ -10,13 +10,13 @@ The database file format is intentionally project specific and is not compatible
 
 Database engines hide several systems problems behind a simple API:
 
-How rows are represented on disk
-How fixed size pages are loaded and flushed
-How records remain ordered as the tree grows
-How a B tree routes lookups and handles leaf splits
-How persistence survives closing and reopening the database
-How a SQL command becomes an operation on stored data
-How low level C code is tested for correctness and memory errors
+- How rows are represented on disk
+- How fixed size pages are loaded and flushed
+- How records remain ordered as the tree grows
+- How a B tree routes lookups and handles leaf splits
+- How persistence survives closing and reopening the database
+- How a SQL command becomes an operation on stored data
+- How low level C code is tested for correctness and memory errors
 
 sqlite-c makes those mechanisms explicit in a small codebase that can be built, tested, and inspected end to end.
 
@@ -44,7 +44,7 @@ db > .btree
 db > .exit
 ```
 
-![sqlite-c shell demo](docs/images/demo.png)
+![sqlite-c interactive shell demo](docs/images/demo.svg)
 
 The database is persisted to `build/sqlite.db`, so data can be written, the process closed, and the database reopened later.
 
@@ -61,7 +61,7 @@ The database is persisted to `build/sqlite.db`, so data can be written, the proc
 | Index structure | B tree with leaf pages and an internal root |
 | Persistence | Database metadata and B tree pages flushed to disk |
 | Shell | Interactive command line interface |
-| Validation | Row ID, username, email, duplicate key checks |
+| Validation | Row fields, duplicate keys, and persisted B tree structure |
 | Testing | Database, B tree, pager, and parser tests |
 | Benchmarking | 1,000 row insertion benchmark |
 | CI | Strict compiler warnings, benchmark smoke test, ASan and UBSan |
@@ -104,7 +104,7 @@ The current storage design supports up to 100 pages. Internal node splitting bey
 
 ### Table API
 
-`src/database.c` validates rows and exposes the public table operations used by the shell and tests. It also maintains the ordered in memory result view used by the shell.
+`src/database.c` validates rows and exposes the public table operations used by the shell and tests. It maintains the ordered in memory result view used by the shell. Use `table_close` when the caller needs to detect persistence failures; `table_destroy` remains a compatibility wrapper.
 
 The persistent source of truth is the B tree.
 
@@ -116,7 +116,9 @@ Leaf pages contain fixed size row cells and a pointer to the next leaf. The curr
 
 The root remains stable when the first leaf split occurs by converting the original root page into an internal node and moving the previous leaf contents into a new child page.
 
-![B tree split from the current implementation](docs/images/btree-split.png)
+On open, the engine checks database metadata and B tree structure, including node types and capacities, page references, parent links, key ordering, separator values, leaf links, and the metadata row count. These checks reject the malformed metadata and B tree structures covered by the implementation; they do not guarantee detection of every possible corrupt row field or malformed database file.
+
+![B tree leaf split and root internal node](docs/images/btree-split.svg)
 
 ### Pager
 
@@ -141,7 +143,7 @@ B tree pages use a compact fixed layout designed to keep the storage implementat
 
 ## Performance
 
-The benchmark inserts 1,000 rows through the public table API and measures the insertion phase. It is intended for repeatable local comparisons rather than as a claim of production database performance.
+The benchmark inserts 1,000 rows through the public table API, then flushes the database pages. It reports process CPU time from `clock()`, including both the insert loop and the flush but excluding database opening. It is intended for repeatable local comparisons rather than as a claim of production database performance.
 
 The current write path keeps modified pages in the pager cache during inserts and persists them during an explicit flush. This avoids performing a file write and fflush for every inserted row.
 
@@ -159,15 +161,18 @@ Record benchmark results only from the current build and environment. Do not com
 
 The test suite covers:
 
-Insert and read behavior
-Persistence across close and reopen
-B tree leaf splitting
-Ordered traversal
-Duplicate key rejection
-Point lookup
-Input validation
-Pager behavior
-SQL parser behavior
+- Insert and read behavior
+- Persistence across close and reopen
+- B tree leaf splitting
+- Ordered traversal
+- Duplicate key rejection
+- Point lookup
+- Input validation
+- Rejection of malformed metadata and B tree structures covered by the tests
+- Pager behavior
+- SQL parser overflow handling
+- Oversized shell command rejection
+- Checked close and persistence errors
 
 Run the full test suite:
 
@@ -183,21 +188,21 @@ make benchmark
 
 CI also builds with strict warnings and runs the tests with:
 
-AddressSanitizer
-UndefinedBehaviorSanitizer
-`-Wall`
-`-Wextra`
-`-Wpedantic`
-`-Wconversion`
-`-Wshadow`
-`-Werror`
+- AddressSanitizer
+- UndefinedBehaviorSanitizer
+- `-Wall`
+- `-Wextra`
+- `-Wpedantic`
+- `-Wconversion`
+- `-Wshadow`
+- `-Werror`
 
 ## Installation
 
 Requirements:
 
-C11 compatible compiler
-GNU Make
+- C11 compatible compiler
+- GNU Make
 
 Build:
 
@@ -279,14 +284,14 @@ sqlite-c/
 
 The next meaningful extensions are:
 
-Deeper B tree internal node splitting
-More complete SQL parsing
-DELETE and UPDATE
-Transactions and stronger durability guarantees
-More comprehensive integration tests
-Profiling and repeatable benchmark reporting
-More detailed documentation of page and node layouts
-Additional indexes and query execution paths
+- Deeper B tree internal node splitting
+- More complete SQL parsing
+- DELETE and UPDATE
+- Transactions and stronger durability guarantees
+- More comprehensive integration tests
+- Profiling and repeatable benchmark reporting
+- More detailed documentation of page and node layouts
+- Additional indexes and query execution paths
 
 ## License
 

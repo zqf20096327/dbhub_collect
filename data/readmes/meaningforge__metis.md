@@ -19,7 +19,10 @@ The same semantic definitions serve the CLI, MCP, REST, and embedded Go APIs.
   database access. Built-in targets are Doris, ClickHouse, and DuckDB.
 - **Deterministic:** structured semantic requests go through validation, resolution,
   planning, and compilation. Metric definitions and relationship rules come from
-  the model.
+  the model. Cumulative averages retain and merge their `sum` and `count` state
+  instead of averaging already-finalized period averages. Filtered custom-calendar
+  rolling windows preserve the preceding logical periods required for calculation
+  and apply the requested time range to the final output.
 - **Ready for analytical workflows:** discover semantic assets, compile SQL, query
   metrics, compare periods, and analyze metric-change attribution.
 
@@ -137,6 +140,17 @@ The response includes `sql_render_result` and `output_schema`. This endpoint
 compiles the query without executing it. `/v1/explain` accepts the same request
 shape and returns `SQLExplainResult`: semantic planning evidence, the same
 `sql_render_result` and `output_schema` as Compile, and any compilation warnings.
+
+Public filter operands are strings or string arrays. The Resolver interprets
+them using the referenced semantic datatype, so an Integer value of
+`"9007199254740993"`, a Decimal value of `"0.10000000000000000001"`, and a
+Boolean value of `"true"` become typed database parameters without asking API
+clients to reproduce database types in JSON. Incompatible or out-of-range
+operands return `INVALID_FILTER_VALUE` without disclosing the value.
+The Resolver also rejects ordered comparisons for Boolean and Opaque fields and
+validates Date, Time, DateTime, and DateTimeTz literals before planning. A query
+targets one selected data source; Metis does not perform cross-database query
+execution.
 Explain generates SQL without executing it.
 
 To filter source metrics by matching rows on one declared detail relationship

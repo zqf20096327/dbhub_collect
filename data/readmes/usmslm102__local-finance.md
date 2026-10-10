@@ -69,6 +69,8 @@ LocalFinance features dedicated parsers for major Indian banks, with native extr
 
 Synthetic ICICI and Union Bank savings PDFs in `samples/savings/` exercise parser detection and full PDF extraction in the test suite. They contain only fabricated names, descriptions, dates, and amounts.
 
+Sample statements are embedded in the application binary. The sample buttons on **Import Statements** work offline without a separate `samples/` directory.
+
 ### Investment Statements and Samples
 
 Import portfolio holdings through **Import Statements → Investments**. Attach a supported workbook, review its preview, and import it. The **Investments** page shows dated holdings, provider fields, and original worksheets.
@@ -139,7 +141,7 @@ graph TD
 
 | Layer | Component | Description |
 | :--- | :--- | :--- |
-| **Backend Core** | **Go 1.22+** (Go 1.26 toolchain) | High-performance, low-memory footprint, single-binary compilation with `CGO_ENABLED=0`. |
+| **Backend Core** | **Go 1.27.2+** | High-performance, low-memory footprint, single-binary compilation with `CGO_ENABLED=0`. |
 | **API Framework** | **Gin (`gin-gonic/gin`)** | High-speed HTTP router, multipart file upload handling, CORS, and embedded static asset serving. |
 | **Database Engine** | **SQLite (`modernc.org/sqlite`)** | Pure Go SQLite engine (zero CGO required), WAL mode enabled with busy timeout pragmas. |
 | **Schema Migrations** | **Goose (`pressly/goose/v3`)** | Embedded SQL migrations executed automatically on startup via `embed.FS`. |
@@ -185,7 +187,7 @@ You don't need Go or Node.js installed to use LocalFinance. Download the pre-com
 ---
 
 ### Prerequisites (For Building from Source)
-- **Go 1.22+** (configured with Go 1.26 toolchain)
+- **Go 1.27.2+**
 - **Node.js 20+**
 - **pnpm** (install via `npm install -g pnpm` or `brew install pnpm`)
 
@@ -489,6 +491,8 @@ The review is read-only, runs offline, and uses the app's existing authenticatio
 
 ## 🔌 REST API Reference
 
+The server listens on `127.0.0.1` and accepts trusted local browser origins. Local scripts that call the API without browser origin headers must include `X-LocalFinance-Request: 1`, including for reads, for example `curl -H 'X-LocalFinance-Request: 1' http://127.0.0.1:8080/api/health`. This header prevents cross-site browser requests; it does not replace the session token required when app lock is enabled. The frontend sends the header automatically. External links may open the app's pages, but cross-site requests to API endpoints are rejected.
+
 | Endpoint | Method | Description |
 | :--- | :--- | :--- |
 | `/api/health` | `GET` | Server health check and version info |
@@ -519,55 +523,75 @@ MIT License. Free and open source for local personal finance intelligence.
 
 ## AI tools and MCP (opt-in)
 
-LocalFinance can serve **read-only** finance data to AI tools through a local
+LocalFinance can serve finance data to AI tools through a local
 Streamable HTTP MCP endpoint. MCP is disabled by default, and LocalFinance must
 remain running. It does not call an AI provider itself. Your connected AI tool
 may send returned transactions, notes, payees, balances, and reports to its model
-provider. Review that tool's data policy before connecting.
+provider. Review that tool's data policy before connecting. Access is **read-only
+by default**, with an optional permission for custom category and rule writes.
 
-1. Open **Settings → AI / MCP** and click **Create access token**.
-2. Save the token; LocalFinance shows it once and stores only its SHA-256 hash.
-3. Enable MCP. The default endpoint is `http://127.0.0.1:8081/mcp`.
-4. Copy the configuration for your client from Settings. One shared token works
-   across all your clients. Keep it in private user configuration, never in a repo.
+1. Open **Settings → AI / MCP** and click **Create token & enable MCP**.
+   New tokens are filled into setup commands automatically. LocalFinance stores
+   only the token's SHA-256 hash; the settings screen keeps the token in memory
+   until you leave the tab. Save it privately if you want to connect more clients later.
+2. Choose the **Codex**, **Claude Code**, or **Ollama** tab. For Ollama,
+   install OpenCode and use a local model that supports tool calls.
+3. Select **Shell · macOS / Linux** or **PowerShell · Windows**, click
+   **Copy command**, and run it on the computer running LocalFinance.
+   Your chosen client CLI must already be installed and available on PATH.
+   Ollama setup checks for a recent OpenCode CLI supporting `mcp add --url`
+   and `--header`. Ollama can run separately as an app or service; its CLI is
+   only needed for the optional launch command below. No additional Node.js
+   installation is needed.
+4. Restart your AI client and check its MCP tools. For Ollama, run
+   `ollama launch opencode` after setup and choose your local model. Ask your client:
+   “Use LocalFinance to summarize my spending last month.”
 
-For Codex, add this to your private `config.toml`:
+The commands include your token and use the installed client's MCP setup command
+instead of a separate configuration installer. Existing connections are preserved;
+only the LocalFinance entry is replaced when you rerun setup after a port change
+or token rotation. Claude Code uses user scope. Codex registers the URL through
+its CLI, then appends the authorization header to `CODEX_HOME/config.toml`
+(or `~/.codex/config.toml`), since its CLI does not have a static-header flag.
+The Codex command restricts that file to your user before saving the token
+(Windows ACLs or POSIX permissions).
+OpenCode uses its CLI to save the connection in user configuration, including JSONC.
+Keep client configuration and copied commands private and out of repositories
+and shared terminal logs. Setup does not install clients or download scripts.
 
-```toml
-[mcp_servers.localfinance]
-url = "http://127.0.0.1:8081/mcp"
-bearer_token_env_var = "LOCALFINANCE_MCP_TOKEN"
-```
+If you already have a token, paste it into **Access token**. You can copy and run
+setup while MCP is disabled; enable MCP when you are ready to connect.
+Commands stop with an error if a required client is missing from PATH. If the CLI
+rejects an option, update the client or use **Manual configuration**. Codex desktop
+users without the CLI can use manual configuration instead.
+If you lost the token, rotate it and reconnect every client. **Advanced settings**
+contains the local port (default `8081`) and listener retry controls.
 
-Set `LOCALFINANCE_MCP_TOKEN` in the environment that launches Codex. Alternatively,
-replace `bearer_token_env_var` with a private static header:
+Each provider tab also offers **Manual configuration**. Use it for clients without
+the supported CLI, or to merge the connection into a custom configuration.
+Project settings may override user settings in your AI client. After Ollama setup,
+`ollama launch opencode` lets you choose a local model; the first launch may
+need to download the model or client dependencies.
 
-```toml
-http_headers = { Authorization = "Bearer YOUR_TOKEN" }
-```
-
-For Claude Code, add a private, user-scoped connection:
-
-```bash
-claude mcp add --transport http --scope user localfinance \
-  http://127.0.0.1:8081/mcp --header "Authorization: Bearer YOUR_TOKEN"
-```
-
-For another MCP client, select **Streamable HTTP**, use the endpoint above, and
-set the header `Authorization: Bearer YOUR_TOKEN`. Clients running only in the
-cloud cannot reach this computer's loopback address. There is no stdio transport,
-remote hosting, or automatic app startup. Client configuration references:
-[Codex MCP](https://learn.chatgpt.com/docs/extend/mcp?surface=cli) and
-[Claude Code MCP](https://code.claude.com/docs/en/mcp).
+For another MCP client, choose **Other clients**, select **Streamable HTTP**, use
+`http://127.0.0.1:8081/mcp` (or your configured port), and set the header
+`Authorization: Bearer YOUR_TOKEN`. Clients running only in the cloud cannot reach
+this computer's loopback address. There is no stdio transport, remote hosting,
+or automatic LocalFinance startup. Client configuration references:
+[Codex MCP](https://learn.chatgpt.com/docs/extend/mcp?surface=cli),
+[Claude Code MCP](https://code.claude.com/docs/en/mcp),
+[OpenCode MCP](https://opencode.ai/docs/mcp-servers/), and
+[Ollama with OpenCode](https://docs.ollama.com/integrations/opencode).
 
 ### Access and revocation
 
-- The token grants read-only finance access and **remains usable while the UI is
+- The token grants finance reads and any enabled category/rule write permission,
+  and **remains usable while the UI is
   locked**. It cannot authenticate against LocalFinance's REST API or settings.
 - Disable MCP to close the listener and cancel active requests. Re-enabling uses
   the same token. Rotate the token to invalidate it and update every client.
 - Restoring or resetting the database disables MCP and clears its credentials,
-  including credentials present in a restored backup.
+  including credentials present in a restored backup, and revokes write permission.
 - If the port is occupied, the app keeps running and Settings shows the failure.
   Choose another port and save, then update your clients' endpoint URLs.
 - Returned data cannot be recalled from an AI client after disabling access.
@@ -577,10 +601,82 @@ remote hosting, or automatic app startup. Client configuration references:
 Tools cover accounts, transaction search and calendar ranges, categories and rules,
 overview, monthly review and its evidence, cash flow, salary, yearly Wrapped,
 credit-card portfolio/bills/reward rules and hypothetical card comparisons,
-budgets, existing subscriptions, reconciliation summaries, merchants, statement
-import history, parser capabilities, and the local app version. No tool imports,
-scans, changes data, reads arbitrary files, executes SQL, exports the database,
-manages security, or checks/applies software updates.
+budgets, existing subscriptions, reconciliation summaries, merchants, investments, statement
+import history, parser capabilities, and the local app version. Optional write
+permissions below expose rule saves, verified CSV imports and upload deletion.
+No tool reads arbitrary files, executes SQL, exports the database, manages security,
+or checks/applies software updates.
+
+### Investment views and upload requirements
+
+`list_investments` returns dated portfolio summaries. Use `get_investment_snapshot`
+with a snapshot `id` for paginated normalized holdings. Missing costs/returns stay
+null; currencies remain separate. Use only the latest snapshot per `portfolio_key`
+for totals. The key uses the earliest stored snapshot ID and changes if that
+anchor is deleted in the app. Account references are masked; original worksheets and arbitrary
+provider fields remain available in the app and are omitted from MCP responses.
+`list_investment_formats` describes upload formats, provider layout requirements
+and the size limit; these three tools are available with read-only MCP access.
+
+### Optional category and rule writes
+
+Enable **Settings → AI / MCP → Allow category and rule writes** to expose two
+additional tools to all clients sharing the token. Existing installations remain
+read-only until this permission is enabled. Refresh tool discovery after changing it.
+
+- `save_category`: create a custom category with `name`, or update one by supplying
+  its `id` and `name`. Optional `color_hex` (`#RRGGBB`) and `icon` default to
+  `#64748B` and `tag` on creation; omitted fields are preserved on updates.
+  Built-in system categories cannot be edited. Identity and parent are preserved.
+- `save_categorization_rule`: provide `match_pattern` and `target_category_id`
+  from `list_categories`; omit `id` to create or provide an existing rule id to
+  update. Optional matcher fields are `match_field`, `match_type`, `tx_type`,
+  `exclude_pattern`, `priority`, `assign_tags`, and `is_active`. Creation defaults
+  match the app: `cleaned_payee`, `CONTAINS`, `ALL`, priority 50, active true.
+  Omitted optional fields are preserved on updates, including inactive rules.
+
+Saving a rule automatically reapplies all active rules to the whole ledger in
+the same database transaction. Manual categories, tags and notes are preserved.
+Unmatched automatic entries become Others; transfers retain their transfer category.
+The response adds `ledger_updated_count`.
+Creation generates an id, so retrying without that id can create another record.
+Use the returned id for updates. Disable write permission to remove both tools;
+finance reads remain available while MCP is enabled.
+
+### Optional statement and investment uploads
+
+Enable **Settings → AI / MCP → Allow statement and investment uploads** separately
+from category/rule writes. It is off by default. Refresh client tool discovery.
+
+- `import_statement_csv`: ask the agent to parse and verify a statement, save the
+  transaction CSV on the machine running LocalFinance, then pass its absolute
+  local `path`. The tool description specifies the complete CSV v1 format.
+  Optional `account_id` selects an existing account; otherwise CSV metadata
+  resolves or creates the account. Imports use existing deduplication and preserve
+  manual categories, notes and tags. Only regular local .csv files up to 20 MiB
+  are supported; network paths and symlinks are rejected.
+- `import_investment_statement`: pass the absolute local `path` of an original
+  provider export (up to 10 MiB). Call `list_investment_formats` for supported
+  formats and provider requirements: Zerodha `.xlsx` and INDmoney `.xls`.
+  Returns a masked snapshot summary and duplicate status; identical files retain
+  the same snapshot ID. Investment snapshots never create bank transactions.
+- `delete_statement_import`: pass the exact `statement_import_id` returned by
+  import or listed in `list_statement_imports`. Permanently removes transactions
+  and bills currently associated with that upload, including their manual edits,
+  clears surviving transfer links, reapplies rules to their automatic categories,
+  and updates the account balance. Duplicate rows
+  belong to their latest upload: deleting an older overlapping upload preserves
+  them, while deleting the latest removes them. Accounts and rules remain.
+
+Required CSV columns: `bank_name,account_type,account_number_mask,date,narration,amount,tx_type`.
+Optional: `account_number,reference_number,value_date,running_balance,cleaned_payee`.
+Repeat identical account metadata on every row. Dates are `YYYY-MM-DD`; amounts
+are positive plain decimals with at most two fractional digits; type is `DEBIT`
+or `CREDIT`. Quote narration containing commas or newlines. Unknown columns,
+mixed accounts, malformed values and any invalid row reject the whole import.
+See [CSV v1 contract and design](docs/mcp-ledger-imports.md) for an example and
+account types. Credit-card billing amounts/due dates are not inferred from rows.
+Revocation, reset and restore clear this write permission alongside credentials.
 
 Account numbers are represented by their existing masked identifiers; full
 account-number fields, customer IDs, and account-holder fields are omitted,

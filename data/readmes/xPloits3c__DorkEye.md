@@ -18,13 +18,14 @@
 
 <!-- ── Row 2: Live stats ── -->
 ![Repo views](https://komarev.com/ghpvc/?username=xPloits3c&label=DorkEye%20views&color=blue)
-![Stars](https://img.shields.io/badge/Stars-149-yellow?style=flat-square&logo=github)
-![Forks](https://img.shields.io/badge/Forks-20-lightgrey?style=flat-square&logo=github)
-![Issues](https://img.shields.io/badge/Issues-0-brightgreen?style=flat-square&logo=github)
-![Last Commit](https://img.shields.io/badge/Last%20Commit-June%202026-informational?style=flat-square&logo=github)
+![Stars](https://img.shields.io/github/stars/xPloits3c/DorkEye?style=flat-square)
+![Forks](https://img.shields.io/github/forks/xPloits3c/DorkEye?style=flat-square)
+![Issues](https://img.shields.io/github/issues/xPloits3c/DorkEye?style=flat-square)
+![Last Commit](https://img.shields.io/github/last-commit/xPloits3c/DorkEye?style=flat-square&logo=github)
 
-<!-- ── Row 3: Community ── -->
-[![Telegram](https://img.shields.io/badge/Join-Telegram-26A5E4?style=flat-square&logo=telegram&logoColor=white)](#)
+<!-- — Row 3: Community — -->
+
+[![Telegram](https://img.shields.io/badge/Join-Telegram-26A5E4?style=flat-square&logo=telegram&logoColor=white)](https://t.me/DorkEye)
 
 ![image](https://github.com/user-attachments/assets/c52b3326-6224-4fd5-9d41-d9f22e887b7a)
 
@@ -184,10 +185,7 @@ DorkEye/
 │    └── xss.py     ← 4 Method xss injection (111 payloads)
 │ /Templates/
 │    ├── dorks_templates.yaml
-│    ├── sqli.yaml
-│    ├── osint.yaml
-│    ├── intel_dorks.yaml
-│    ├── epstein_files.yaml
+│    ├── sql.yaml
 │    └── example.yaml
 │ /.github/
 │    ├── CODE_OF_CONDUCT.md
@@ -231,25 +229,23 @@ DorkEye/
 
 ---
 
-## ⚠️  ![WARNING](https://img.shields.io/badge/Legal%20Disclaimer-red)
--   **This tool is for educational, research, and authorized security testing only.**
--   **Unauthorized access is illegal.**
--   **The author is not responsible for misuse.**
+## ![WARNING](https://img.shields.io/badge/Legal%20Disclaimer-red)
+
+<img width="1408" height="768" alt="image" src="https://github.com/user-attachments/assets/e3eb4dca-51e9-4d4c-a2e4-afa057564b74" />
+
     
 ---
 
 ## 📞 Contact
 
-- **Author:** xPloits3c  
-- **Email:** whitehat.report@onionmail.org  
+- **Author: I.C.W.T** xPloits3c  
+- **Email:** dorkeye@protonmail.com  
 - **Telegram:** https://t.me/DorkEye  
 ---
 
 ## ⭐ Support
-
 If you find DorkEye useful, please consider starring the repository 🌟
 ---
 
 ## 📜 License
-
-MIT License © 2026 xPloits3c I.C.W.T
+MIT License © 2026 I.C.W.T xPloits3c

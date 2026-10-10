@@ -37,6 +37,12 @@ Live demo: <https://engram.nite07.com/> (registration is closed; sign in with th
 
 ---
 
+## Deck Library
+
+Ready-to-import `.edeck` packages live in [`decks/`](./decks/). Pick one, then import it from the **Import** page (upload the file, or paste the file's public direct link), the CLI (`engram import`), or the MCP `import_deck` tool. See [`decks/README.md`](./decks/README.md) for the deck list and the step-by-step instructions.
+
+---
+
 ## AI & MCP Integration
 
 Engram exposes a built-in Streamable HTTP MCP server at `/mcp` authenticated by user API keys. Any MCP-compatible client or agent (such as Claude Desktop, Cursor, or Hermes) can interact with your flashcards directly.
@@ -60,13 +66,16 @@ Create an API key in the **Settings** panel, then add Engram to your MCP client 
 
 ### Available Tools
 
-Engram provides 9 dedicated MCP tools:
+Engram provides 17 dedicated MCP tools:
 
-- `list_decks` / `create_deck`: Inspect accessible decks or create new ones with custom scheduling presets.
-- `search_notes` / `create_notes` / `update_note` / `delete_note`: Query and manage notes across all supported card types, with full support for dry-run validation and bulk insertion.
-- `get_due_cards` / `submit_review`: Fetch cards due for review and record review ratings (`Again`, `Hard`, `Good`, `Easy`).
+- `list_decks` / `create_deck` / `update_deck`: Inspect accessible decks, create new ones with custom scheduling presets, or rename and describe them.
+- `list_card_types`: List the supported card types with each type's fields and a validated example note, so an agent can write notes without guessing field names or syntax.
+- `search_notes` / `get_note` / `list_deck_tags`: Query notes with tag and keyword filters, read a single note, and list the tags used in a deck.
+- `create_notes` / `update_note` / `delete_note` / `bulk_notes`: Create, update and delete notes across all supported card types, with dry-run validation, bulk insertion and bulk tag or delete actions.
+- `get_due_cards` / `submit_review`: Fetch cards due for review and record reviews. Self-assessed cards take a rating (`Again`, `Hard`, `Good`, `Easy`), and a short-answer card may also carry the answer the learner wrote, stored with the review; answer-type cards (cloze, list, typed, numeric, choice, true/false) take the answer instead, and the server grades it.
 - `get_stats`: Retrieve learning summaries, queue counts, and retention rates.
 - `export_deck` / `import_deck`: Export and import portable deck packages (`.edeck`).
+- `create_import_upload`: Get a single-use upload URL for a deck package. The agent sends the file to it with an HTTP client such as `curl`, so a large package never passes through the model and the API key never leaves the MCP client.
 
 ---
 
@@ -144,7 +153,20 @@ docker compose up -d
 When placing Engram behind a reverse proxy (such as Caddy, Nginx, or Traefik):
 
 1. Set `BASE_URL` to your public URL (e.g., `https://engram.example.com`).
-2. Set `TRUSTED_PROXIES` to your proxy's IP address or CIDR range (e.g., `127.0.0.1/32,::1/128`) to properly resolve client IPs for rate limiting and audit logs.
+2. Set `TRUSTED_PROXIES` to the address your proxy connects **from**, as Engram sees it (comma-separated IPs or CIDRs). Login rate limiting, audit logs and new-device alerts use the client IP; until this is set, every request appears to come from the proxy.
+
+`TRUSTED_PROXIES` is empty by default, so `X-Forwarded-For` and `X-Real-IP` are ignored. This is deliberate: a header is only as trustworthy as the hop that set it. List the proxies you run, never client networks or `0.0.0.0/0`.
+
+The right value depends on how the proxy reaches Engram:
+
+| Topology | Address Engram sees |
+| :--- | :--- |
+| Proxy and Engram on the same host, no containers | Loopback: `127.0.0.1/32,::1/128` |
+| Engram in a container, port published to the host, proxy on the host | Usually the container network's **gateway**, not `127.0.0.1`: published ports are forwarded through the bridge. Find it with `docker network inspect <network>` (`Gateway`). |
+| Proxy and Engram in the same container network | The proxy container's address in that network, or the whole network's subnet |
+| CDN or load balancer → proxy → Engram | Every hop that appends to `X-Forwarded-For` must be listed, or the proxy must overwrite the header with the real client IP before forwarding |
+
+To find the address without guessing, start Engram behind your proxy with `TRUSTED_PROXIES` unset and send one request. If the request carried a forwarded header from a loopback or private address that is not trusted, Engram logs one warning, `forwarded client ip header ignored ...`, and its `remote_ip` field is the address to add. At startup Engram also logs which proxies it trusts.
 
 ---
 

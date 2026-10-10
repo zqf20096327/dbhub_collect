@@ -43,11 +43,15 @@ that does not depend on the storage, and a smaller footprint.
 | Module              | What it is                                                     | Targets                                                                                                 |
 |---------------------|----------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
 | `rekords-core`      | Annotations, schema, `RekordsStore`, filters and the engine API | Android, JVM, JS, Wasm JS, Wasm WASI, iOS, macOS, tvOS, watchOS, Linux, Windows (MinGW), Android Native |
-| `rekords-sqlite`    | Engine keeping rekords in SQLite, through `androidx.sqlite`     | Android, JVM, iOS, macOS, tvOS, watchOS, Linux (no Intel targets on Apple platforms)                 |
+| `rekords-sqlite`    | Engine keeping rekords in SQLite, through `androidx.sqlite`     | Android, JVM, iOS, macOS, tvOS, watchOS, Linux (no iOS simulator on Intel)                           |
 | `rekords-indexeddb` | Engine keeping rekords in the browser's IndexedDB               | JS, Wasm JS                                                                                             |
 | `rekords-memory`    | Engine keeping rekords in memory, for tests or as a cache       | Same as `rekords-core`                                                                                  |
-| `rekords-crypto`    | AES cipher encrypting the fields of rekords on every engine     | Android, JVM, JS, Wasm JS, iOS, macOS, tvOS, watchOS, Linux, Windows (MinGW) (no Intel targets on Apple platforms but iOS) |
-| `rekords-sql`       | The SQL editor the SQL engines are built on                     | Same as `rekords-core`                                                                                  |
+| `rekords-crypto`    | AES cipher encrypting the fields of rekords on every engine     | Android, JVM, JS, Wasm JS, iOS, macOS, tvOS, watchOS, Linux, Windows (MinGW)                          |
+| `rekords-sql`       | The SQL editor the SQL engines are built on                     | Same as `rekords-sqlite`                                                                                |
+
+Apple platforms are built for Apple silicon, and iOS for the simulator on Intel as well. The targets
+Kotlin [deprecates](https://kotl.in/native-targets-tiers) — macOS, tvOS and watchOS on Intel, and
+32-bit watchOS — are not.
 
 ## Setup
 
@@ -332,6 +336,9 @@ storage.transaction {
   to the engine, so nothing has to be passed to create a store.
 - **JVM** keeps the database at the path `name` is, relative to the working directory, through
   the SQLite bundled with `androidx.sqlite:sqlite-bundled`.
+- **Windows** is reached through the JVM, whose `sqlite-bundled` carries the SQLite for Windows
+  x64 — a desktop application, say. `androidx.sqlite` is not published for Kotlin/Native on
+  Windows, so neither is the engine: there `mingwX64` keeps rekords in memory alone.
 - **Apple platforms and Linux** keep the database in the platform's application data directory,
   through the operating system's SQLite, which the final binary has to link: a klib carries no
   linker options. Where Kotlin links the binary — a test executable, a dynamic framework — add

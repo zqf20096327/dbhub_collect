@@ -30,18 +30,18 @@ actively maintained SQLAlchemy dialect that supports the modern 2.0–2.1 API.
 - Full SQLAlchemy 2.0–2.1 dialect with **statement caching** and **PEP 561 typing**
 - **Extensive offline test suite** — no database required to run it; CI enforces a minimum 95% line-coverage gate (`--cov-fail-under=95` in the `offline-tests` job, [CI badge above](https://github.com/cubrid-lab/sqlalchemy-cubrid/actions/workflows/ci.yml))
 - **Concurrency stress tests** — `QueuePool` sync threaded + asyncio.gather workloads validated against live CUBRID
-- **SQLAlchemy 2.1-ready compat shim** — private API access wrapped in `_compat.py`; dependency pin now `>=2.0,<2.3` covering SA 2.0 and 2.1
+- **SQLAlchemy 2.1-ready compat shim** — private API access wrapped in `_compat.py`; dependency cap `>=2.0,<2.2` covering SA 2.0 and 2.1
 - Tested against **4 CUBRID versions** (10.2, 11.0, 11.2, 11.4) across **Python 3.11 -- 3.14**
 - CUBRID-specific DML constructs: `ON DUPLICATE KEY UPDATE`, `MERGE`, `REPLACE INTO`
 - Alembic migration support out of the box
-- **Three driver options** — pure Python (`cubrid+pycubrid://`, recommended), async pure Python (`cubrid+aiopycubrid://`), or the legacy C-extension (`cubrid://` / `cubrid+cubriddb://`)
+- **Three driver options** — pure Python (`cubrid+pycubrid://`, recommended), async pure Python (`cubrid+aiopycubrid://`), or the CUBRIDdb C-extension driver (`cubrid://` / `cubrid+cubriddb://`)
 
 ## Support Status
 
 - **Status**: Production/Stable [![PyPI version](https://img.shields.io/pypi/v/sqlalchemy-cubrid)](https://pypi.org/project/sqlalchemy-cubrid)
-- Supported matrix: SQLAlchemy `>=2.0,<2.3`, CUBRID `10.2`, `11.0`, `11.2`, `11.4`, Python `3.11`–`3.14`
+- Supported matrix: SQLAlchemy `>=2.0,<2.2`, CUBRID `10.2`, `11.0`, `11.2`, `11.4`, Python `3.11`–`3.14`
 - Ordinary PRs run the full offline suite with the 95% coverage floor on one Ubuntu/Python 3.12 lane; high-risk changes add newest live integration. Main/changed-weekly runs use oldest/newest endpoints. The full supported integration matrix remains manual and release-gated. See [CI execution policy](docs/CI_POLICY.md).
-- SQLAlchemy 2.1 pre-releases are exercised by a non-gating `--pre` canary CI job
+- An advisory SQLAlchemy pre-release canary logs its resolved version; a passing run alone does not establish 2.2 beta compatibility (see #778)
 - See [Known Limitations](#known-limitations) for behavior boundaries and unsupported features
 
 ## Architecture
@@ -74,7 +74,7 @@ environment and validate your application before upgrading.
 
 - Python 3.11 or later
 - SQLAlchemy 2.0 – 2.1
-- [pycubrid](https://github.com/cubrid-lab/pycubrid) (pure Python, recommended) **or** the legacy CUBRIDdb C extension built from [cubrid-python](https://github.com/CUBRID/cubrid-python) v11.3.0.51 or later
+- [pycubrid](https://github.com/cubrid-lab/pycubrid) (pure Python, recommended) **or** the official CUBRIDdb C extension built from [cubrid-python](https://github.com/CUBRID/cubrid-python) v11.3.0.51 or later
 
 ## Installation
 
@@ -98,7 +98,7 @@ With Alembic support:
 pip install "sqlalchemy-cubrid[alembic]"
 ```
 
-With the legacy CUBRIDdb C-extension driver (the bare `cubrid://` URL), build
+With the CUBRIDdb C-extension driver (the bare `cubrid://` URL), build
 CUBRIDdb from [cubrid-python](https://github.com/CUBRID/cubrid-python) v11.3.0.51 or
 later; see [Driver Compatibility](docs/DRIVER_COMPAT.md#building-cubriddb-from-source).
 
@@ -107,7 +107,7 @@ later; see [Driver Compatibility](docs/DRIVER_COMPAT.md#building-cubriddb-from-s
 > untested with this dialect: it returns `BIGINT` as `str` and fails parts of the
 > integration suite. The dialect warns (`SAWarning`) at the first connection when it
 > finds a CUBRIDdb older than 11.3. For new projects, use the recommended pure-Python
-> `[pycubrid]` driver (the `cubrid+pycubrid://` URL). To select the legacy C-extension
+> `[pycubrid]` driver (the `cubrid+pycubrid://` URL). To select the CUBRIDdb C-extension
 > driver explicitly, use the `cubrid+cubriddb://` URL.
 
 <img src="docs/demo.gif" alt="sqlalchemy-cubrid in action" width="100%"/>
@@ -215,7 +215,7 @@ after the statement (see [Known Limitations](#known-limitations)).
 - **No sequences** — CUBRID uses `AUTO_INCREMENT` only
 - **Single effective schema** — CUBRID exposes one schema per connection (the current user's schema); `get_schema_names()` reports that one schema and every reflection method honours `schema=` consistently (the default schema is reflected; any other schema yields no tables/views). Owner-qualified cross-schema reflection is not supported.
 - **Uncommitted DDL holds schema locks** — CUBRID DDL is transactional (`ROLLBACK` undoes it; only client autocommit, which the dialect turns off, commits it early), so by default a whole Alembic upgrade is one transaction (`transactional_ddl = True`) and keeps the tables it touches locked until it commits; use `transaction_per_migration=True` for long or large-table migrations
-- **SQLAlchemy 2.0–2.1 only** — pinned to `<2.3`; SA 2.1 pre-releases are forward-tested via shims and a `--pre` canary CI job ([details](docs/ARCHITECTURE.md))
+- **SQLAlchemy 2.0–2.1 only** — capped at `<2.2`; SA 2.2 compatibility shims exist, but the advisory pre-release canary has not yet proven installation or compatibility of a published 2.2 beta (see #778) ([details](docs/ARCHITECTURE.md))
 - **Async requires pycubrid >= 1.8.0,<2.0** — the `cubrid+aiopycubrid://` driver needs the async-capable pycubrid package line currently supported by this project
 - **CARDINALITY() broken** — `func.cardinality()` raises `CompileError` with workaround guidance; the CUBRID server has a [known bug](https://github.com/cubrid-lab/.github/issues/3)
 - **Reserved words auto-quoted** — Column names matching CUBRID reserved words (`day`, `count`, `value`, etc.) are automatically double-quoted in DDL; see [reserved word list](https://github.com/cubrid-lab/.github/issues/5)
@@ -257,7 +257,7 @@ from sqlalchemy import create_engine
 engine = create_engine("cubrid+pycubrid://dba:password@localhost:33000/demodb")
 ```
 
-The recommended way is the pure-Python `pycubrid` driver: `create_engine("cubrid+pycubrid://dba:password@localhost:33000/demodb")`. The driver requires no CUBRID native libraries. The `[pycubrid]` extra also installs `greenlet` for SQLAlchemy's async bridge; it may require build tools when no compatible wheel is available. The bare `cubrid://` URL uses the legacy CUBRIDdb C-extension driver, which must be built from cubrid-python v11.3.0.51 or later (the PyPI `CUBRID-Python` 9.3.x release that the deprecated `[cubriddb]` extra installs is untested); to select it explicitly and unambiguously use `cubrid+cubriddb://`.
+The recommended way is the pure-Python `pycubrid` driver: `create_engine("cubrid+pycubrid://dba:password@localhost:33000/demodb")`. The driver requires no CUBRID native libraries. The `[pycubrid]` extra also installs `greenlet` for SQLAlchemy's async bridge; it may require build tools when no compatible wheel is available. The bare `cubrid://` URL uses the supported CUBRIDdb C-extension driver, which must be built from cubrid-python v11.3.0.51 or later (the PyPI `CUBRID-Python` 9.3.x release that the deprecated `[cubriddb]` extra installs is untested); to select it explicitly and unambiguously use `cubrid+cubriddb://`.
 
 ### Does sqlalchemy-cubrid support SQLAlchemy 2.0–2.1?
 
@@ -286,7 +286,7 @@ stmt = insert(users).values(name="Alice").on_duplicate_key_update(name="Alice Up
 
 `cubrid://` uses the C-extension driver (CUBRIDdb) which requires compilation. `cubrid+pycubrid://` uses the pure Python driver, which requires no CUBRID native libraries. The `[pycubrid]` extra includes `greenlet`, whose installation may require build tools when no compatible wheel is available. `cubrid+aiopycubrid://` uses the async variant of the pure Python driver for use with `create_async_engine` and `AsyncSession`.
 
-> **Recommendation:** for new projects prefer `cubrid+pycubrid://` (pure Python driver, no CUBRID native libraries). The `[pycubrid]` extra's `greenlet` dependency may need build tools. Use `cubrid+cubriddb://` with CUBRIDdb built from cubrid-python v11.3.0.51 or later when you specifically need the legacy C-extension driver.
+> **Recommendation:** for new projects prefer `cubrid+pycubrid://` (pure Python driver, no CUBRID native libraries). The `[pycubrid]` extra's `greenlet` dependency may need build tools. Use `cubrid+cubriddb://` with CUBRIDdb built from cubrid-python v11.3.0.51 or later when you specifically need the C-extension driver.
 
 ### Does sqlalchemy-cubrid support async?
 

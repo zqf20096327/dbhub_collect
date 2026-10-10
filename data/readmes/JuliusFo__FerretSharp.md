@@ -11,6 +11,7 @@
 
 <p align="center">
   <a href="https://github.com/JuliusFo/FerretSharp/actions/workflows/ci.yml"><img src="https://github.com/JuliusFo/FerretSharp/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/JuliusFo/FerretSharp/actions/workflows/ci.yml?query=branch%3Amain"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2FJuliusFo%2FFerretSharp%2Fbadges%2Fcoverage.json" alt="Test coverage"></a>
   <a href="https://github.com/JuliusFo/FerretSharp/releases/latest"><img src="https://img.shields.io/github/v/release/JuliusFo/FerretSharp" alt="Latest release"></a>
   <img src="https://img.shields.io/badge/.NET-10-512BD4" alt=".NET 10">
   <img src="https://img.shields.io/badge/platform-Windows-0078D4" alt="Windows">
@@ -23,7 +24,8 @@
 </picture>
 
 > [!NOTE]
-> The user interface is in German. Code, commits and this README are in English; the design notes in `docs/` are German.
+> The user interface is in English and German (*Settings › General › Language*; English by default). Code, commits and
+> this README are in English; the design notes in `docs/` are German.
 
 ## Why
 
@@ -154,7 +156,7 @@ files.
 
 ## Keyboard shortcuts
 
-The defaults – every one of them can be changed under *Einstellungen › Tastenkürzel*, which also lists the fixed keys.
+The defaults – every one of them can be changed under *Settings › Shortcuts*, which also lists the fixed keys.
 
 | Keys | Action |
 |---|---|
@@ -181,6 +183,10 @@ dotnet run --project src/FerretSharp.App
 
 - Integration tests start Oracle Free in Docker ([Testcontainers](https://dotnet.testcontainers.org/)) and are skipped
   when Docker is not available.
+- `tools/coverage/Get-Coverage.ps1` measures the test coverage like CI does and writes an HTML report to
+  `artifacts/coverage/report`. The coverage badge counts unit and integration tests over `FerretSharp.Core` and
+  `FerretSharp.UI` without generated code and Razor markup (`tests/coverage.config`); the report of each CI run is
+  attached to it as an artifact.
 - `tools/sample-db/New-SampleDb.ps1` creates a local sample database with the schema used in the screenshots;
   `samples/` contains a matching EF Core project.
 - A release build is a self-contained folder:

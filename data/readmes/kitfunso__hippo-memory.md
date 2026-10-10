@@ -257,7 +257,7 @@ hippo handoff create \
   --summary "Finished schema migration, tests green" \
   --next "Wire handoff injection into context output" \
   --session sess_20260403 \
-  --artifact src/db.ts
+  --artifact src/db/index.ts
 
 hippo handoff latest              # show the most recent handoff
 hippo handoff show 3              # show a specific handoff by ID
@@ -577,7 +577,8 @@ read from the store the token ledger writes to: the project's local store when i
 else the global store. Each per-prompt hook call then records one event (session, turn
 number, whether the block was sent, reused, empty or disabled, counts and token totals) and
 one row per candidate memory: emitted, reused or rejected, with the stage and the
-reason it was dropped. With prompt recall on, recent memories dropped by the quality filter
+reason it was dropped. Each accepted `hippo pre-compact` and `hippo compact-resume` call
+records one event too, with no candidate rows. With prompt recall on, recent memories dropped by the quality filter
 are not recorded yet. It holds ids, hashes, counts and reasons only, never prompt or memory
 text; the prompt hash is unsalted, so a very short prompt can be guessed. A ledger failure prints one stderr line and never changes what the hook prints. Rows
 older than 90 days are pruned; at a heavy 300 prompts a day that is about 190 MB per store.
@@ -783,7 +784,7 @@ hippo watch "npm run build"
 | `hippo dashboard` | Open web dashboard at localhost:3333 (memory health by project, and the card board); open the printed URL, which carries a per-start access token |
 | `hippo dashboard --port <n>` | Use custom port |
 | `hippo mcp` | Start MCP server (stdio transport) |
-| `hippo serve` | Start the HTTP API server for this store on `127.0.0.1:6789` (`--port <n>` or `HIPPO_PORT`; `--host <host>`, which off loopback needs `HIPPO_REQUIRE_AUTH=1`) |
+| `hippo serve` | Start the HTTP API server for this store on `127.0.0.1:6789` (`--port <n>` or `HIPPO_PORT`; `--host <host>`, which off loopback needs `HIPPO_REQUIRE_AUTH=1`). Every request needs an API key (`hippo auth create`, then `Authorization: Bearer <key>`; the hippo CLI reads `HIPPO_API_KEY`). `HIPPO_ALLOW_KEYLESS_LOCAL=1` lets requests from this machine in without one, as host admin; `HIPPO_REQUIRE_AUTH=1` wins over it |
 | `hippo serve --tls-cert <file> --tls-key <file>` | Serve HTTPS with that PEM certificate and key (or set `HIPPO_TLS_CERT` and `HIPPO_TLS_KEY`). Without them a network bind still starts, and warns once that API keys and memory text travel in cleartext unless a TLS-terminating proxy sits in front |
 
 On `heartbeat`, `block`, `review` and `complete`, a given `--run` is checked against the card's live run and the command is refused, unchanged, if the two do not match.

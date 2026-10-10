@@ -27,6 +27,8 @@
 ## ✨ 功能亮点
 
 - **零交互部署**：端口、密码、数据库来源、备份策略全部在打包时决定，服务器上不问任何问题
+- **Java 运行时**：Temurin JDK 8/17/21 双架构(amd64/arm64)作为基础中间件随包分发——服务器池按台勾选部署目标，
+  多版本共存 + 默认版本写 `JAVA_HOME`，sha256 校验后解压 `/data/java`（目录可自定义）；`python prepare_java.py --download` 可预下载(打包时缺料也会自动补齐)
 - **按需打包**：只打包勾选的中间件和对应架构，典型项目（nginx+mysql8+redis+xxljob）约 0.7GB，不搬全量仓库
 - **幂等可重跑**：deploy.sh 重复执行安全——已装 Docker 跳过、已有表跳过导库、自己的端口占用放行、旧配置自动备份
 - **增量升级**：重跑 deploy.sh 自动对比新旧编排，明确列出"将重建/新增/移除/保持"的服务清单，
@@ -437,7 +439,7 @@ warehouse/images/postgres/15.19/arm64.tar   ← postgres-15.19-arm64.tar 放这�
 haproxy（各节点静态 Pod 本机转发，端点地址填域名或 127.0.0.2）；「集群高级配置」还提供
 **运行时选择**（containerd 默认 / docker 仅在线安装）、**数据目录**（etcd/kubelet/containerd/docker
 可落数据盘，etcd 目录正确写入 `etcd.env.data_dir`）、**etcd 调优**（心跳/选举/压缩/配额等 9 个
-白名单参数）、**CNI 扩展**（每节点 Pod 子网掩码、Multi-CNI multus、Calico values 原样透传
+白名单参数）、**CNI 扩展**（每节点 Pod 子网掩码、Multi-CNI multus、各 CNI values 原样透传（calico/cilium/flannel/kubeovn）
 helm 覆盖 ipipMode/vxlanMode/mtu）、**DNS 覆盖**（CoreDNS/NodeLocalDNS 镜像 tag 与启停）、
 **证书与备份**（安装时续期开关、续期 crontab、kubeadm 配置带时间戳备份目录）。
 

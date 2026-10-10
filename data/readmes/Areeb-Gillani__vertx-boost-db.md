@@ -114,6 +114,19 @@ public class ExampleService extends AbstractService {
     //Please code other related stuff here.
 }
 ```
+#### Transactions (relational)
+`withTransaction` runs several operations on one connection with a single commit. The function receives a view of the repository bound to the transaction; every call on that view joins the transaction. It commits when the returned future succeeds and rolls back when it fails or throws. Locking reads (`SELECT ... FOR UPDATE`) keep their locks until then. Calling `withTransaction` on a view that is already in a transaction joins it.
+
+```java
+repo.withTransaction(tx ->
+    tx.read("SELECT id, status FROM item WHERE id = #{id} FOR UPDATE", Map.of("id", itemId))
+      .compose(rows -> tx.saveOrUpdate("UPDATE item SET status = #{status} WHERE id = #{id}",
+              new HashMap<>(Map.of("id", itemId, "status", "RELEASED"))))
+      .compose(ok -> tx.saveOrUpdate("INSERT INTO audit_event (object_id, action) VALUES (#{id}, 'RELEASED')",
+              new HashMap<>(Map.of("id", itemId)))));
+```
+Keep outbound HTTP calls and other slow work out of the transaction: the connection and its row locks are held until the future completes. `getSqlClient()` returns the transaction's connection inside a transaction (the pool otherwise) for callers that need the raw Vert.x API.
+
 ### MongoDB and Cassandra
 Vert.x's Mongo and Cassandra clients are not part of the sqlclient family - no Pool, no SqlConnectOptions, no SqlTemplate/RowMapper. They're wrapped by MongoCrudRepository/CassandraCrudRepository instead. The verbs (save/update/delete/read/saveOrUpdate) match CrudRepository on purpose, but the parameters are native to each store - a JsonObject filter and collection name for Mongo, a CQL string with positional ? placeholders for Cassandra - rather than forced into the SQL-shaped signature.
 

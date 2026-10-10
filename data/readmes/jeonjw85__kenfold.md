@@ -1,5 +1,11 @@
 # Kenfold
 
+[![Release checks](https://github.com/jeonjw85/kenfold/actions/workflows/ci.yaml/badge.svg)](https://github.com/jeonjw85/kenfold/actions/workflows/ci.yaml)
+[![Go 1.27+](https://img.shields.io/badge/Go-1.27%2B-00ADD8?logo=go&logoColor=white)](go.mod)
+[![PostgreSQL 18 + pgvector](https://img.shields.io/badge/PostgreSQL-18%20%2B%20pgvector-4169E1?logo=postgresql&logoColor=white)](compose.yaml)
+[![MCP server](https://img.shields.io/badge/MCP-server-111111)](https://modelcontextprotocol.io)
+[![MIT license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 **One memory for all your AI agents.** Bring every agent into the fold.
 
 Claude Code, Codex, OpenCode, ChatGPT, and local models each keep their own memory. Kenfold is a self-hosted memory server they all share over [MCP](https://modelcontextprotocol.io): a decision made in one tool is known in the next.
@@ -20,7 +26,7 @@ The main design choices (see [ADR-0001](docs/adr/0001-architecture.md)):
 - **Handoff** between agents: stop in Claude Code, resume in Codex
 - **Poisoning-aware**: memory is served as data, never as instructions; preferences need your approval
 
-> **Status: Phase 5 in progress.** Shared storage, hybrid search, session hooks, memory extraction, code references, and OAuth remote access are implemented. Phase 5 adds export/import, a review dashboard, and consolidation. The LoCoMo and LongMemEval benchmark harness is ready (`make bench`); results are still pending.
+> **Status: Phase 5 features implemented; public benchmark validation incomplete.** Shared storage, hybrid search, session hooks, memory extraction, code references, OAuth remote access, export/import, a review dashboard, and consolidation are implemented. The latest authorized attempt preserved partial raw-LoCoMo results for 1,402/1,540 questions, then stopped on unknown API usage. Extracted-LoCoMo and LongMemEval QA were not scored; no complete benchmark result is claimed. See the [qualified partial results and accounting](internal/bench/testdata/RESULTS.md).
 
 ## Quickstart
 
@@ -39,6 +45,14 @@ make up-embed                  # adds Ollama with bge-m3 and a llama.cpp reranke
 ```
 
 Memories written without embeddings are embedded automatically once a model is available. The reranker reads the query and each candidate memory together; on the internal eval set it raised recall@5 from 0.90 to 0.96 (see [Search quality](#search-quality)), at the cost of 1–2 seconds per search on CPU. `make up-embed RERANK=0` leaves it out.
+
+## Upgrading
+
+```sh
+git pull && make up
+```
+
+A release build checks GitHub for a newer version and shows it in the dashboard footer and in `kenfold version`. It does not download or restart. `KENFOLD_UPDATE_CHECK=false` turns the check off.
 
 ## Connect your agents
 
@@ -110,6 +124,8 @@ MCP tools only run when the model decides to call them. Hooks make memory automa
 - **Session end**: the log becomes a short session summary (an `episodic` memory), so the next agent, in any tool, knows what happened. If Kenfold is down, the summary is kept and sent at the next session start.
 
 Sessions outside a git repository are not recorded. The hook never blocks the agent: problems are reported as a warning.
+
+Queued summaries are bound to the original server URL, client name, and configured credential. A different agent or server cannot send them. Older, unbound queue files are kept with a warning rather than guessing their owner; queued files expire after 30 days.
 
 Set it up per agent. Store the agent's key in a file, then print the hooks configuration:
 
@@ -327,6 +343,7 @@ kenfold version
 | `KENFOLD_CLASSIFY` | on when a chat model is configured; types memories stored without one |
 | `KENFOLD_CONSOLIDATE` | on when a chat model is configured; proposes to retire duplicates and contradicted memories and to digest old sessions |
 | `KENFOLD_LOG_LEVEL` | `info` |
+| `KENFOLD_UPDATE_CHECK` | `true`. A release build checks GitHub for a newer version and reports it. It does not download or restart |
 
 The hook and `kenfold refs sync` read `KENFOLD_URL` (default `http://127.0.0.1:7077/mcp`; the REST API is at `/api/v1` next to it) and `KENFOLD_API_KEY` (unless `--key-file` is given); the hook also reads `KENFOLD_STATE_DIR` (default `~/.local/state/kenfold`).
 
@@ -350,6 +367,50 @@ Set `KENFOLD_TEST_DATABASE_URL` to a throwaway PostgreSQL 18 + pgvector database
 before `make check` to include integration tests. Tests truncate its data and run
 packages sequentially. The GitHub Actions workflow runs these checks with its own
 database and builds the production container on every push and pull request.
+
+Public benchmarks can incur external API charges. Set `KENFOLD_BENCH_BUDGET_USD`,
+`KENFOLD_BENCH_INPUT_USD_PER_M`, and `KENFOLD_BENCH_OUTPUT_USD_PER_M` to enforce a
+reader/judge budget, with `KENFOLD_BENCH_REASONING=none`. Prices must cover both
+models and their applicable context tiers; cache discounts are ignored. Missing
+usage stops further calls, and an unfinished evaluation saves a report marked
+`PARTIAL` and fails. The budget is **per run** by default: keep safety headroom and
+account for earlier runs yourself. Select API-compatible models with
+`make bench BENCH_READER=<model> BENCH_JUDGE=<model>`.
+
+Completed dataset results are written as `PARTIAL` before reporting a benchmark
+run error. Per-question persistence is opt-in: set `KENFOLD_BENCH_SCORE_CACHE` to
+an owner-only directory and `KENFOLD_BENCH_SCORE_ID` to a pinned run identity.
+Answers, judge responses/decisions, F1, and evidence recall are saved before the
+next question. On restart, reuse the same directory and identity: completed
+questions replay without retrieval or reader/judge calls, and a saved reader
+answer resumes at the judge. Uncertain in-flight calls or persistence failures
+stop automatic retries. The directory is exclusively locked for the run.
+
+The score identity must pin dataset bytes, input/extracted memories, scoring and
+retrieval code/options, and all model weights/settings; names alone do not prove
+compatibility. Changed identity, question, model, or prompt is rejected rather
+than overwriting old results. Without this option, per-question scores remain
+in memory. Startup health checks and ingestion still run on restart; the zero-call
+guarantee applies to completed questions, not the whole harness.
+
+The [free recovery checks](internal/bench/testdata/RESULTS.md#free-recovery-verification--no-quality-scores)
+passed on all 60 selected LongMemEval haystacks, with no reader/judge calls, and
+on forced process-kill/reopen fixtures. These are operational checks, not QA
+scores; public benchmark validation remains incomplete.
+
+For durable accounting, set `KENFOLD_BENCH_USAGE_FILE` and explicitly initialize a
+new file with `KENFOLD_BENCH_USAGE_CREATE=1` **once**. Leave creation disabled on
+restarts to reuse the same allowance and prices. Existing journals cannot be
+overwritten; missing, corrupt, incompatible, or uncertain in-flight usage stops
+further calls. Accounting alone does not save QA results: retain both the score
+cache and the unchanged budget journal when resuming. Never reset an allowance
+to retry an uncertain call.
+
+`KENFOLD_BENCH_EXTRACT_CACHE` checkpoints successful LoCoMo extraction sessions,
+including empty results, independently of the disposable database. Supply
+`KENFOLD_BENCH_EXTRACT_ID` identifying the exact weights, extraction code/schema
+and inference settings; change it when any of those change. Cached benchmark
+projections are replayed through normal ingestion, without retuning extraction.
 
 Layout:
 
@@ -390,4 +451,4 @@ docs/                 ADRs and specs
 | **2b** ✅ | Model-based extraction of memories from sessions (reviewed), type classification |
 | **3** ✅ | Rerank, graph expansion, recency and staleness in ranking, code references with commit-based invalidation (tree-sitter symbols), REST API |
 | **4** ✅ | OAuth 2.1 authorization server (client metadata documents, dynamic registration, `private_key_jwt`, read-only grants), remote deployment behind a tunnel or proxy; verified end to end with the MCP SDK's OAuth client over HTTPS, not yet from ChatGPT itself. Object storage and an OpenAI-compatible proxy were deferred ([ADR-0003](docs/adr/0003-remote-access-and-oauth.md)) |
-| 5 | Export/import ✅, review dashboard ✅, consolidation ✅ ([ADR-0004](docs/adr/0004-consolidation.md)); public benchmarks (LongMemEval, LoCoMo): harness in `internal/bench` (`make bench`), results when run |
+| 5 | Export/import ✅, review dashboard ✅, consolidation ✅ ([ADR-0004](docs/adr/0004-consolidation.md)); public benchmarks (LongMemEval, LoCoMo): validation incomplete, [partial results and accounting](internal/bench/testdata/RESULTS.md) |

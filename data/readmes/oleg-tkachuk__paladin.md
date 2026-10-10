@@ -3,7 +3,11 @@
 [![ci](https://github.com/oleg-tkachuk/paladin/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/oleg-tkachuk/paladin/actions/workflows/ci.yaml)
 [![release](https://img.shields.io/github/v/release/oleg-tkachuk/paladin?sort=semver)](https://github.com/oleg-tkachuk/paladin/releases/latest)
 [![sdk](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fproxy.golang.org%2Fgithub.com%2Foleg-tkachuk%2Fpaladin%2Fsdk%2Fgo%2F%40latest&query=%24.Version&label=sdk)](sdk/go/README.md)
-[![license](https://img.shields.io/github/license/oleg-tkachuk/paladin)](LICENSE)
+
+[![license: backend & console](https://img.shields.io/badge/license%3A%20backend%20%26%20console-AGPL--3.0--only-A42E2B)](LICENSE)
+[![license: proto](https://img.shields.io/badge/license%3A%20proto-Apache--2.0-blue)](proto/LICENSE)
+[![license: Go SDK](https://img.shields.io/badge/license%3A%20Go%20SDK-Apache--2.0-blue)](sdk/go/LICENSE)
+[![license: Python SDK](https://img.shields.io/badge/license%3A%20Python%20SDK-Apache--2.0-blue)](sdk/python/LICENSE)
 
 [![Go](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Foleg-tkachuk%2Fpaladin%2Fbadges%2Fversions.json&query=%24.go&label=Go&color=00ADD8&logo=go&logoColor=white)](backend/go.mod)
 [![PostgreSQL](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Foleg-tkachuk%2Fpaladin%2Fbadges%2Fversions.json&query=%24.postgresql&label=PostgreSQL&color=4169E1&logo=postgresql&logoColor=white)](https://www.postgresql.org)
@@ -60,8 +64,9 @@ flowchart LR
 
 Access is granted through users, API tokens and capability tokens —
 short-lived, budgeted and individually revocable. The capability primitive is
-[`capability/`](capability/), a separate Go module with no database driver
-and no storage SDK among its dependencies. Besides the Connect API, the
+[limes](https://github.com/oleg-tkachuk/limes), a Go library of its own with
+no database driver and no storage SDK among its dependencies; Paladin backs
+its contracts with PostgreSQL. Besides the Connect API, the
 console and the Go and Python SDKs, the same operations are exposed over the
 Model Context Protocol, so AI agents can use them as tools.
 
@@ -169,7 +174,7 @@ planes, and what to set when ArgoCD renders the charts.
 | [ARCHITECTURE.md](ARCHITECTURE.md) | what the pieces are and why the boundaries fall where they do |
 | [backend/README.md](backend/README.md) | roles, ports, packages, wire contracts, database |
 | [frontend/README.md](frontend/README.md) | the console and its BFF |
-| [capability/README.md](capability/README.md) | the standalone authorisation primitive, and why it has no version stream |
+| [limes](https://github.com/oleg-tkachuk/limes) | the capability primitive: tokens, delegation, Biscuit, DPoP, metering |
 | [docs/install.md](docs/install.md) | installing on Kubernetes with the Helm charts |
 | [docs/task.md](docs/task.md) | running it with Task — compose, a local cluster, the gates — and the prerequisites of each |
 | [docs/configuration.md](docs/configuration.md) | every configuration surface, and the validation run at load |
@@ -189,7 +194,6 @@ planes, and what to set when ArgoCD renders the charts.
 |------|-------|
 | [backend/](backend) | the Go control plane: binary, migrations, policies, chart, compose stack |
 | [frontend/](frontend) | the Next.js console and BFF, its chart and Playwright suite |
-| [capability/](capability) | the standalone authorisation module |
 | [proto/](proto) | the API contract |
 | [sdk/go/](sdk/go) | the Go SDK |
 | [sdk/python/](sdk/python) | the Python SDK |
@@ -207,4 +211,7 @@ Compatibility is not kept across releases yet, and only `main` is supported —
 
 ## License
 
-Apache-2.0 — see [LICENSE](LICENSE) and [NOTICE](NOTICE).
+AGPL-3.0-only — see [LICENSE](LICENSE) and [NOTICE](NOTICE). The API
+contract in [`proto/`](proto/) and the Go and Python SDKs in [`sdk/`](sdk/)
+are Apache-2.0, each under its own `LICENSE`, so a client can embed them
+without taking on the AGPL; so is [limes](https://github.com/oleg-tkachuk/limes).

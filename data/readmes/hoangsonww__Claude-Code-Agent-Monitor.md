@@ -1,8 +1,11 @@
 # Agent Dashboard for Claude Code, Cursor & Codex
 
-### Real-time monitoring platform for Claude Code, Cursor & Codex agent activity 🚀
+### A local-first control room for AI coding agents
 
-A professional dashboard to track and visualize Claude Code, Cursor, and Codex agent sessions, tool usage, conversation history, cost, and subagent orchestration in real time. Built with Node.js, Express, React, and SQLite, it combines native hooks with provider-aware local transcript discovery.
+Monitor Claude Code, Cursor, and Codex sessions in real time. Follow conversations and tools, inspect agent hierarchies, understand token usage and cost, analyze orchestration, and operate local agents from one responsive dashboard.
+
+> [!TIP]
+> **Complete guides:** [English](./README-EN.md) · [中文](./README-CN.md) · [Tiếng Việt](./README-VN.md) · [한국어](./README-KO.md) · [Español](./README-ES.md)
 
 ![Claude Code](https://img.shields.io/badge/Claude_Code-orange?style=flat-square&logo=claude&logoColor=white)
 ![Cursor](https://img.shields.io/badge/Cursor-111827?style=flat-square&logo=cursor&logoColor=white)
@@ -34,11 +37,7 @@ A professional dashboard to track and visualize Claude Code, Cursor, and Codex a
 ![i18next Language Detector](https://img.shields.io/badge/i18next_Language_Detector-6.1-7A42FF?style=flat-square&logo=i18next&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-3-003B57?style=flat-square&logo=sqlite&logoColor=white)
 ![better--sqlite3](https://img.shields.io/badge/better--sqlite3-11.7-003B57?style=flat-square&logo=sqlite&logoColor=white)
-![better-sqlite3 WAL](https://img.shields.io/badge/better--sqlite3-WAL_mode-003B57?style=flat-squa
-
-[...截断...]
-
-re&logo=sqlite&logoColor=white)
+![better-sqlite3 WAL](https://img.shields.io/badge/better--sqlite3-WAL_mode-003B57?style=flat-square&logo=sqlite&logoColor=white)
 ![WebSocket](https://img.shields.io/badge/WebSocket-RFC_6455-010101?style=flat-square&logo=socketdotio&logoColor=white)
 ![SSE](https://img.shields.io/badge/SSE-Server_Sent_Events-FF6600?style=flat-square&logo=googlechrome&logoColor=white)
 ![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0-000000?style=flat-square&logo=openapiinitiative&logoColor=white)
@@ -72,4 +71,122 @@ re&logo=sqlite&logoColor=white)
 ![Azure](https://img.shields.io/badge/Azure-AKS%20%7C%20SQL-0078D4?style=flat-square&logo=cloudflare&logoColor=white)
 ![Oracle Cloud](https://img.shields.io/badge/Oracle_Cloud-OKE%20%7C%20DB-F80000?style=flat-square&logo=cloudways&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-pipelines-2088FF?style=flat-square&logo=githubactions&logoColor=white)
-![Make](https://img.shields.io/badge/Make-4.3-000000?style=flat-square&l
+![Make](https://img.shields.io/badge/Make-4.3-000000?style=flat-square&logo=make&logoColor=white)
+![Auto Release](https://img.shields.io/badge/CI-auto--release_to_GitHub-22c55e?style=flat-square&logo=githubactions&logoColor=white)
+![MIT License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
+
+<p align="center">
+  <a href="images/analytics.png"><img src="images/readme/analytics.png" alt="CCAM dashboard with live agent and session activity" width="100%"></a>
+  <br>
+  <em>Live fleet state, active work, recent events, cost, and system health.</em>
+</p>
+
+## See what your agents are doing
+
+CCAM combines native hooks with provider-aware transcript discovery. It stays local by default and turns agent activity into a searchable, durable operational record.
+
+- **One live fleet:** Claude Code, Cursor, and Codex sessions appear in the same Dashboard, Sessions, Activity Feed, and Kanban views.
+- **Complete conversations:** Rendered Markdown, highlighted code, tool calls, command output, queued prompts, attachments, and provider-native titles.
+- **Agent orchestration:** Parent-child trees, background agents, dynamic workflow runs, tool-flow graphs, concurrency, delegation, and compaction analysis.
+- **Cost and usage:** Model-aware tokens, configurable pricing, introductory rates, subagent costs, trends, and budget-friendly CLI/MCP access.
+- **Run and resume agents:** Launch Claude Code or Codex, stream output, send follow-ups, resume previous work, and reattach to background runs.
+- **Configuration visibility:** Inspect Claude Code and Codex settings, skills, hooks, MCP servers, rules, plugins, memory, profiles, and instructions.
+- **Operational safety:** Loopback binding, optional authentication, guarded mutations, backup-first edits, bounded uploads, and no automatic self-update.
+- **Team-ready delivery:** Desktop applications, containers, Kubernetes, Terraform, monitoring, alerts, webhooks, and remote data sources.
+
+## See CCAM in action
+
+<p align="center">
+  <a href="images/session-conversation.png"><img src="images/readme/session-conversation.png" alt="Rendered agent conversation with code and tool activity" width="100%"></a>
+  <br>
+  <em>Conversation history with code, tools, reasoning, and session context.</em>
+</p>
+
+<p align="center">
+  <a href="images/workflows.png"><img src="images/readme/workflows.png" alt="Workflow and orchestration analytics" width="100%"></a>
+  <br>
+  <em>Workflow intelligence for orchestration, delegation, tools, errors, and concurrency.</em>
+</p>
+
+<p align="center">
+  <a href="images/config.png"><img src="images/readme/config.png" alt="Claude Code and Codex configuration explorers" width="100%"></a>
+  <br>
+  <em>Provider-aware configuration, skills, hooks, plugins, MCP, rules, and memory.</em>
+</p>
+
+<p align="center">
+  <a href="images/run.png"><img src="images/readme/run.png" alt="Run Agent provider selection" width="100%"></a>
+  <br>
+  <em>Launch and manage Claude Code or Codex without leaving the dashboard.</em>
+</p>
+
+## Quick start
+
+**Requirements:** Node.js 22.22 or newer and npm 9 or newer.
+
+```bash
+git clone https://github.com/hoangsonww/Claude-Code-Agent-Monitor.git
+cd Claude-Code-Agent-Monitor
+npm run setup
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173). `npm run setup` installs the root, client, and VS Code extension dependencies, builds the MCP server, and links the `ccam` CLI. On first launch, follow the dashboard prompt to install hooks for the providers you select, or run `npm run install-hooks` manually.
+
+For production, run `npm run build && npm start` and open [http://localhost:4820](http://localhost:4820).
+
+## Choose how to run CCAM
+
+| Option | Best for | Guide |
+| --- | --- | --- |
+| Source checkout | Development and local customization | [Full setup guide](./README-EN.md#quick-start) |
+| Desktop app | A persistent macOS or Windows app with tray controls | [Desktop guide](./DESKTOP.md) |
+| Docker or Podman | Isolated local or server deployments | [Deployment guide](./DEPLOYMENT.md) |
+| Kubernetes or Terraform | Production infrastructure | [Deployment reference](./docs/DEPLOYMENT.md) |
+| MCP sidecar | Agent-driven dashboard queries and guarded operations | [MCP guide](./mcp/README.md) |
+
+## Extensions and automation
+
+CCAM ships **14 plugins**, **66 plugin skills**, **18 Claude subagents**, **34 Claude commands**, and **77 total repository skills** across Claude Code and Codex formats.
+
+```bash
+claude plugin marketplace add hoangsonww/Claude-Code-Agent-Monitor
+codex plugin marketplace add hoangsonww/Claude-Code-Agent-Monitor
+npx skills add hoangsonww/Claude-Code-Agent-Monitor --list
+```
+
+The `ccam` CLI and local MCP server expose sessions, agents, events, transcripts, analytics, pricing, workflows, alerts, imports, configuration, remote sources, and maintenance operations for humans and automation.
+
+## Documentation
+
+- **Complete product and operational reference:** [README-EN.md](./README-EN.md)
+- **Documentation index:** [docs/README.md](./docs/README.md)
+- **Task-oriented handbook:** [GitHub Wiki](https://github.com/hoangsonww/Claude-Code-Agent-Monitor/wiki)
+- **Localized product tour:** [Static Wiki](https://hoangsonww.github.io/Claude-Code-Agent-Monitor/wiki/)
+- **Architecture:** [ARCHITECTURE.md](./ARCHITECTURE.md)
+- **CLI:** [docs/CLI.md](./docs/CLI.md)
+- **REST and OpenAPI:** [docs/API.md](./docs/API.md)
+- **Hooks and lifecycle:** [docs/HOOKS.md](./docs/HOOKS.md)
+- **Database:** [docs/DATABASE.md](./docs/DATABASE.md)
+- **Plugins:** [docs/PLUGINS.md](./docs/PLUGINS.md)
+- **MCP:** [docs/MCP.md](./docs/MCP.md) and [mcp/README.md](./mcp/README.md)
+- **Desktop application:** [DESKTOP.md](./DESKTOP.md) and [desktop/README.md](./desktop/README.md)
+- **Deployment:** [DEPLOYMENT.md](./DEPLOYMENT.md) and [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)
+- **Security:** [.github/SECURITY.md](./.github/SECURITY.md)
+
+## Local-first and secure by default
+
+The dashboard binds to `127.0.0.1` by default. It does not require cloud credentials, and it does not transmit your transcripts or agent data to a hosted service. Optional tokens protect HTTP, WebSocket, hook, MCP, and remote-push surfaces when you deliberately expose them beyond loopback.
+
+See the [security policy](./.github/SECURITY.md) and [full configuration reference](./README-EN.md#configuration) before enabling remote access.
+
+## Contributing and support
+
+- Read the [contributing guide](./.github/CONTRIBUTING.md).
+- Report bugs through [GitHub Issues](https://github.com/hoangsonww/Claude-Code-Agent-Monitor/issues).
+- Ask questions and share ideas in [GitHub Discussions](https://github.com/hoangsonww/Claude-Code-Agent-Monitor/discussions).
+- Follow the [Code of Conduct](./.github/CODE_OF_CONDUCT.md).
+
+## License
+
+MIT. See [LICENSE](./LICENSE).

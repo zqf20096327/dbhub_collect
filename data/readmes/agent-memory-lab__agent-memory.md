@@ -71,7 +71,7 @@ Create `demo.py` from the example below before running the last command. This us
 
 </details>
 
-On macOS or Linux, `./setup.sh` creates a development environment; `./setup.sh --all` also installs the optional packages. Select an interpreter with `PYTHON_BIN=/path/to/python3.13 ./setup.sh`.
+On macOS or Linux, `./setup.sh` creates a development environment; `./setup.sh --all` also installs the integration packages. Local inference is installed separately with `python -m pip install -e 'packages/local-models[inference]'`. Select an interpreter with `PYTHON_BIN=/path/to/python3.13 ./setup.sh`.
 
 ### Remember → recall → inspect the source
 
@@ -122,18 +122,18 @@ This example supplies the structured claim from host code. It demonstrates persi
 ## From source evidence to usable knowledge
 
 <p align="center">
-  <img src="docs/assets/agent-memory-overview.svg" alt="Agent Memory: host events flow through L0 source evidence, typed admission, and L1 versioned facts to a bounded MemoryBundle. Optional language Observations support bounded history and current same-scope L2 language pages. L3 remains planned. Evidence, time, scope, and erasure govern the flow." width="100%">
+  <img src="docs/assets/agent-memory-overview.svg" alt="Agent Memory: trusted host events, L0 sources and verified L1 facts feed a bounded MemoryBundle, registered L2 scenarios and reviewed L3 Persona hypotheses. Evidence, time, current permissions and erasure govern every path." width="100%">
 </p>
 
-The [v7 design](docs/design/AGENT_MEMORY_DESIGN_V7.0.0.md) separates the source, the accepted interpretation, and the views built from it:
+The [v7.2 architecture and data flow](docs/design/AGENT_MEMORY_DESIGN_V7.2.0.md) separate the source, the accepted interpretation, and the views built from it:
 
 | Component | Responsibility | Available scope |
 | --- | --- | --- |
 | **L0 · Source evidence** | Preserve captured content, source identity, revisions, and processing requests | Durable receive, deduplication, explicit source revisions, and replay |
 | **L1 · Atomic memory** | Decide what can be used, with evidence, conditions, and time | Typed admission; accepted, pending, or contested outcomes; supported corrections and dual-time queries |
 | **Observation · Derived views** | Organize a facet across sources and rebuild when its inputs change | Same-scope language templates, bounded historical reads, current non-conditional parent views, and versioned host permissions |
-| **L2 · Scenario** | Organize versioned scenario pages and blocks | Current `language-scenario/1` pages support full rebuild from fixed same-scope, non-conditional language parents; general scenario templates remain planned |
-| **L3 · Core / Persona** | Organize explicit long-term preferences and carefully evaluated patterns | Planned under the unified contract; inferred profiles require separate acceptance |
+| **L2 · Scenario** | Organize versioned scenario pages and blocks | Language pages plus automatically maintained registered project scenes and dual-time reconstruction within registered coverage |
+| **L3 · Core / Persona** | Organize explicit long-term preferences and carefully evaluated patterns | Separate declarations and hypotheses; complete evidence, independent families, observation spans and reviewed counterexamples drive refresh, withdrawal and immutable history |
 
 Observation is a derived building block that can support L2 or L3. L1 also feeds retrieval directly. A summary's position in this structure never increases the authority of its evidence.
 
@@ -214,10 +214,14 @@ The public boundary is `MemoryProvider`. Optional packages use lazy discovery; i
 
 ## Capability status and roadmap
 
-The current documented delivery baseline is **[V7-B6: integrated engineering verification](docs/design/v7.0.0/batch-b6.md)** plus the [local real Ollama synthetic smoke](docs/design/v7.0.0/ollama-smoke.md), building on the existing language and L1 lifecycle. The software package is **v0.1.0 / Alpha**; architecture, protocol, and package versions are tracked separately.
+The current documented delivery baseline is **[v7.2: raw project lifecycle and derived evolution](docs/design/v7.2.0/validation.md)**, building on [V7-B6](docs/design/v7.0.0/batch-b6.md) and the [v7.1 runtime](docs/design/v7.1.0/validation.md). Its targeted engineering validation is separate from real business quality and cost acceptance. The software package is **v0.1.0 / Alpha**; architecture, protocol, and package versions are tracked separately.
 
 | Capability | Current implementation | Evidence |
 | --- | --- | --- |
+| Raw-source project lifecycle and business policies | Host-bound membership, storage rules and independent authoritative field verification drive automatic views; user self-reports stay pending | [v7.2](docs/design/AGENT_MEMORY_DESIGN_V7.2.0.md) · [Example](examples/project_memory_lifecycle.py) |
+| Scene/persona evolution and project history | One shared scheduler; admitted-L1 dual-time rebuilding with frozen business state and current authorization/erasure | [v7.2 tasks](docs/design/v7.2.0/task.md) |
+| Governed extraction, domain verification and host | Model proposals/review, finite cross-turn inputs, durable authoritative verification and native project qualification/refresh; real local model probes use authored inputs | [v7.1](docs/design/AGENT_MEMORY_DESIGN_V7.1.0.md) · [Host](examples/memory_host.py) · [Model host](examples/model_memory_host.py) |
+| Exact local model budgets and logits | Optional local Transformer renderer/receipt checks and real Qwen3 yes/no logits; core remains dependency free; production promotion requires real acceptance | [Local adapters](packages/local-models/README.md) |
 | Reliable L0 → L1 | Host outbox, atomic receive/publish, source revisions, explicit reprocessing, same-slot corrections, and dual-time fact reads | [Delivery chain](docs/design/v6.1.0/batch-03-05.md) · [Contribution lifecycle](docs/design/v6.1.0/stage-03.md) |
 | Recovery and readiness | Fixed processing targets, bounded waiting, batch closure, local candidate indexing, explicit repair, and stream rollover | [Index recovery](docs/design/v6.1.0/stage-09.md) · [Batched publication](docs/design/v6.1.0/stage-11.md) |
 | Erasure and backup replay | Participating outbox deletion sync and controlled offline replay using an independently held authoritative checkpoint | [Deletion sync](docs/design/v6.1.0/stage-04.md) · [Backup replay](docs/design/v6.1.0/stage-10.md) |
@@ -235,11 +239,11 @@ The current documented delivery baseline is **[V7-B6: integrated engineering ver
 
 Observation remains limited to documented language templates. Published-point and certified-interval history preserve frozen policies/context and current access checks; gaps are rejected. Current `locale-parents/1` views bind fixed parent revisions and transitive processing permissions. Current `language-scenario/1` pages combine 1–4 non-conditional language Observation parents in the same exact scope, with compatible subject, purpose, and authority.
 
-With explicit `qualified_current=True`, `locale-qualified-parents/1` and `language-qualified-scenario/1` preserve trusted conditions and exceptions. `QuestionService` separately supports finite current project questions, host-triggered initial project-page publication, shared-scheduler background revalidation, validated reuse, and [bounded deterministic typed block patches](docs/design/v7.0.0/typed-page-patches.md). Pass `questions=service` to the SDK/MCP adapter to expose this optional surface. Historical parents/pages, pages as parents, legacy facet/page delta and free-form partial block edits, generic scenarios, cross-scope composition, remote ACL synchronization and L3 remain disabled or planned. The bounded page delivery does not complete the full L2/L3 lifecycle. L1's existing bitemporal queries remain independently available; `l1_decided` means processing completed, not that a fact is true.
+With explicit `qualified_current=True`, language templates preserve trusted conditions and exceptions. `QuestionService` supplies project questions, maintained pages, proof reuse and [host-only typed block patches](docs/design/v7.0.0/typed-page-patches.md); pass `questions=service` to the SDK/MCP adapter for the optional interface. [v7.2](docs/design/AGENT_MEMORY_DESIGN_V7.2.0.md) adds automatic raw-source project handoff, storage/independent-verification policies, registered scene/persona evolution and `history_rebuild=True` dual-time question/page rebuilding. Coverage begins at opt-in registration and supports admitted-L1 censuses; historical publication-manifest state, precoverage reconstruction, pages as parents, legacy facet/page delta, distributed composition and remote ACL synchronization retain explicit limits. L1 dual-time queries remain independent; `l1_decided` establishes processing completion while admission and qualification establish factual support. Real business quality and complete cost acceptance still require approved corpus, independent gold and tariffs.
 
 Validation records include SQLite and real PostgreSQL contracts, cross-connection races, process-kill recovery, and backup replay. The [stage 12 full-suite report](docs/design/v6.1.0/stage-12-full-test.md) is an older baseline; [stage 13](docs/design/v6.1.0/stage-13.md) and stage 14 [A](docs/design/v6.1.0/stage-14a.md)/[B.3](docs/design/v6.1.0/stage-14b3.md)/[C](docs/design/v6.1.0/stage-14c.md) record targeted and affected regression runs. [Stage 15](docs/design/v6.1.0/stage-15.md) records a full repository/package run and build/install verification, with [independent evidence](docs/design/v6.1.0/validation-stage-15.json). Each report applies to its recorded code baseline; counts are not cumulative. Production acceptance, real-domain extraction quality, and full M0/M1/M2 milestone acceptance remain open.
 
-**The latest target is [v7.0.0](docs/design/AGENT_MEMORY_DESIGN_V7.0.0.md).** B0 provides strict protocol/domain and whole-cost contracts; [B1](docs/design/v7.0.0/batch-b1.md) provides indexed invalidation; the [B2 scheduler](docs/design/v7.0.0/batch-b2.md) supplies durable coalescing, fixed coverage targets, shared budgets and host execution. [B3](docs/design/v7.0.0/batch-b3.md) closes the finite current project read/page lifecycle on those foundations. Its [validation record](docs/design/v7.0.0/validation-b3.json) states the actual source fingerprints and per-run results. Earlier stage counts are separate evidence, not cumulative passes.
+**The full architecture target remains [v7.0.0](docs/design/AGENT_MEMORY_DESIGN_V7.0.0.md), with the current implementation contract in [v7.2](docs/design/AGENT_MEMORY_DESIGN_V7.2.0.md).** B0 provides strict protocol/domain and whole-cost contracts; [B1](docs/design/v7.0.0/batch-b1.md) provides indexed invalidation; the [B2 scheduler](docs/design/v7.0.0/batch-b2.md) supplies durable coalescing, fixed coverage targets, shared budgets and host execution. [B3](docs/design/v7.0.0/batch-b3.md) closes the finite current project read/page lifecycle on those foundations. Its [validation record](docs/design/v7.0.0/validation-b3.json) states the actual source fingerprints and per-run results. Earlier stage counts are separate evidence, not cumulative passes.
 
 [ProjectAdmission](src/agent_memory/consolidation/project_admission.py) requires trusted source authorities, reviewed membership and field/time support. Missing completion stays unknown, conflicting owners stay contested, and no risk match means only a complete empty result within the known authorized scope. Both admitted-L1 and explicitly closed finite publication manifests are supported. Current permission/context/time is checked before bodies and at delivery; deletion and old-backup replay also scrub unpublished registrations and page routes.
 
@@ -251,7 +255,7 @@ B2's [verified lifecycle evidence](docs/design/v7.0.0/validation-b2.json) includ
 
 Remaining acceptance follows the [v7 plan](docs/design/v7.0.0/plan.md) and [task ledger](docs/design/v7.0.0/task.md): licensed held-out domain quality and measured whole-cost comparison. Local Ollama configuration and nine synthetic runtime checks passed with seven actual Qwen 9B generations; this does not establish those external results. All 44 previous task statuses remain preserved. Synthetic tests and this local smoke do not establish licensed real-data quality, production savings or full M0/M1/M2 acceptance; those gates remain open.
 
-Advanced retrieval and optional read-only Reflect remain on the [task ledger](docs/design/v6.1.0/task.md). Remote deployments use the [security policy](SECURITY.md) and [threat model](docs/THREAT_MODEL.md); external caches, remote ACL systems, and provider-held copies need their own integration contracts.
+Bounded read-only Reflect is implemented through two governed source calls, exact citations and final authorization; it does not publish memory or expose open tools. Remaining broader targets stay on the [v7.1 ledger](docs/design/v7.1.0/task.md). Remote deployments use the [security policy](SECURITY.md) and [threat model](docs/THREAT_MODEL.md); external caches, remote ACL systems, and provider-held copies need their own integration contracts.
 
 Explicit model explanations are available through the host-bound [B5 runtime](docs/design/v7.0.0/batch-b5.md) and SDK `question_model_answer`. Ordinary structured answers remain model-free. The opt-in [local validation CLI](docs/design/v7.0.0/ollama-smoke.md) freezes installed model/configuration and exercises caching, authorization and erasure. Real-domain quality/cost acceptance remains open; local compute is never assumed free.
 
@@ -288,3 +292,5 @@ Integration and live PostgreSQL tests have additional setup; see [CI](.github/wo
 [Apache License 2.0](LICENSE).
 
 B6 fixed-source closeout verification: 3931 passed, zero skips/failures/errors across the complete repository/all package suite; all prior 3783 passing cases remain covered. Six distributions were built/clean-installed, 241 Python files and 19 SQL migrations matched, and full source/12 archives scanned with zero findings. Bounded reference-aware GC and frozen offline A9 tooling are included. See [the scoped report](docs/design/v7.0.0/batch-b6.md). The later [local Ollama smoke](docs/design/v7.0.0/ollama-smoke.md) has separate targeted evidence; licensed-domain quality and measured whole-cost acceptance remain open.
+
+The [v7.1 runtime extension](docs/design/AGENT_MEMORY_DESIGN_V7.1.0.md) documents module boundaries, algorithms, data flow and additive rollout. [Validation](docs/design/v7.1.0/validation.md) separates contracts, actual local-model execution and missing real business gold/pricing. Code interfaces do not constitute production acceptance.

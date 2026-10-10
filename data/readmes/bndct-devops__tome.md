@@ -21,6 +21,7 @@ Built with FastAPI, React, and SQLite. Ships as a single Docker image.
 
 - **TomeSync** -- custom KOReader plugin records reading sessions, syncs positions bidirectionally (device to web, web to device), and works fully offline. This is what makes Tome different. Use a current KOReader release (v2024.07 or newer for all features). [Details](docs/koreader-plugin.md)
 - **Reading stats** -- session tracking, streaks, time-of-day heatmaps, reading pace, completion estimates, genre trends, monthly comparisons, and per-book breakdowns -- all powered by real session data from your e-reader
+- **Calendar** -- every month of your reading as a calendar: the books you had open each day as chips, a card for any day with what you read, how far you got, your pace, and when you read. [Details](https://tome.bndct.sh/docs/calendar)
 - **Hardcover sync** -- push your ratings (half-stars included), progress, and finish dates to your [Hardcover](https://hardcover.app) profile. One-way, opt-in, per-user; nothing is ever deleted on Hardcover. If you don't know Hardcover yet: it's the indie, ad-free Goodreads alternative with a public API -- well worth a look even without Tome. [Details](https://tome.bndct.sh/docs/hardcover)
 - **Metadata from 3 sources** -- fetch and compare metadata from [Hardcover](https://hardcover.app), Google Books, and OpenLibrary with a side-by-side diff UI
 - **Built-in reader** -- EPUBs, manga (CBZ/CBR), and PDFs render directly in the browser. Two-page spread, RTL mode, webtoon scroll, pinch-to-zoom on mobile. [Details](docs/reader.md)
@@ -62,6 +63,9 @@ Pick **Calibre-Web** if you want the largest ecosystem and don't mind the dated 
 
 ![Stats](docs/screenshots/stats.png)
 *Reading activity, streaks, session history, and time-of-day patterns.*
+
+![Calendar](docs/screenshots/calendar.png)
+*A month of reading as a calendar, with a card for any day you pick.*
 
 ![Highlighting in KOReader](docs/screenshots/tomesync-koreader-highlight.png)
 *Highlight and annotate on your e-reader…*
@@ -201,6 +205,10 @@ KOReader plugin and this website stay English for now.
 - [Import Script](docs/import.md) -- bulk importing an existing collection from filenames
 - [Features](docs/features.md) -- Quick Connect, OPDS PINs, permissions, themes, API tokens, and more
 - [Translating](docs/translating.md) -- improving or adding a UI language
+
+## Telemetry
+
+Off by default. Admins are asked once whether Tome may send one small anonymous report a month, and the question shows the exact report before you can say yes. Never a title, a name or a hostname. `TOME_TELEMETRY=false` hides the question entirely. What is in the report, how consent works and where it goes: [tome.bndct.sh/docs/telemetry](https://tome.bndct.sh/docs/telemetry). The numbers it produces are public at [tome.bndct.sh/stats](https://tome.bndct.sh/stats).
 
 ## Questions and feedback
 

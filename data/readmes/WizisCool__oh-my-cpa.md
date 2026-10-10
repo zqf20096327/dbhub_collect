@@ -1,12 +1,13 @@
 <div align="center">
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="web/src/assets/brand/omc-wordmark-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="web/src/assets/brand/omc-wordmark-light.svg">
-  <img src="web/src/assets/brand/omc-wordmark-dark.svg" alt="Oh-My-CPA" width="340">
-</picture>
+<a href="#gh-light-mode-only">
+  <img src="web/src/assets/brand/omc-wordmark-light.svg#gh-light-mode-only" alt="Oh-My-CPA" width="340">
+</a>
+<a href="#gh-dark-mode-only">
+  <img src="web/src/assets/brand/omc-wordmark-dark.svg#gh-dark-mode-only" alt="Oh-My-CPA" width="340">
+</a>
 
-### Manage APIs and OAuth in one place. Visualize requests, cost and usage.
+### Manage APIs and OAuth in one place, visualize requests, cost and usage
 
 MCP · Visualization · Management
 
@@ -39,90 +40,41 @@ MCP · Visualization · Management
 [CLIProxyAPI](https://github.com/router-for-me/CLIProxyAPI) (CPA) is an API gateway: it
 adapts protocols, holds credentials and proxies requests. **Oh My CPA** (OMC) is a web
 console for it. OMC manages the gateway's providers, credentials and configuration, and
-records the usage and cost of every request, which CPA does not store. It is a single Go
+records the usage and cost of every request. It is a single Go
 binary with the React console embedded and a local SQLite database, runs offline, and
 signs in with CPA's management key.
 
-<table>
-<tr>
-<td width="25%" valign="top">
-
-### Observe
-
-A live dashboard, a year-long token heatmap, and a faceted browser over every request
-with latency, TTFT, tokens and cost.
-
-</td>
-<td width="25%" valign="top">
-
-### Manage
-
-Providers, OAuth sign-in, client keys, quotas, plugins and CPA's `config.yaml`, as forms
-or as YAML. Model Square lists the model names clients can call, by maker, with price, recent requests and models.dev specifications.
-
-</td>
-<td width="25%" valign="top">
-
-### Price
-
-The cost of a request is fixed when it completes. Prices come from OpenRouter or custom
-rates, and later price changes do not alter past records.
-
-</td>
-<td width="25%" valign="top">
-
-### Automate
-
-A built-in Agent and a remote MCP endpoint operate the console through declared capabilities.
-Changes beyond low-risk writes run only after approval.
-
-</td>
-</tr>
-</table>
+> [!TIP]
+> **[Try the Live Demo](https://omc-demo.junze.dev)**
 
 ## Screenshots
 
 <table>
 <tr>
 <td width="50%" valign="top">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme/usage-events-dark.en.webp">
-  <img src="docs/images/readme/usage-events-light.en.webp" alt="Request records with latency, tokens and cost per request">
-</picture>
+<img src="docs/images/readme/usage-events.en.webp" alt="Request records with latency, tokens and cost per request">
 <p align="center"><b>Request records</b><br />Every request, filterable by model, provider, key, status and cost</p>
 </td>
 <td width="50%" valign="top">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme/pricing-dark.en.webp">
-  <img src="docs/images/readme/pricing-light.en.webp" alt="Model price book grouped by provider">
-</picture>
+<img src="docs/images/readme/pricing.en.webp" alt="Model price book grouped by provider">
 <p align="center"><b>Cost &amp; usage</b><br />A price book matched from OpenRouter, with custom overrides</p>
 </td>
 </tr>
 <tr>
 <td width="50%" valign="top">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme/oauth-management-dark.en.webp">
-  <img src="docs/images/readme/oauth-management-light.en.webp" alt="OAuth credentials with their state and quota">
-</picture>
+<img src="docs/images/readme/oauth-management.en.webp" alt="OAuth credentials with their state and quota">
 <p align="center"><b>OAuth management</b><br />Sign in, inspect quota and configure each credential in one place</p>
 </td>
 <td width="50%" valign="top">
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/images/readme/ai-providers-dark.en.webp">
-  <img src="docs/images/readme/ai-providers-light.en.webp" alt="AI provider list with enable switches and traffic">
-</picture>
+<img src="docs/images/readme/ai-providers.en.webp" alt="AI provider list with enable switches and traffic">
 <p align="center"><b>AI providers</b><br />Endpoints, models, priority and an enable switch enforced by the gateway</p>
 </td>
 </tr>
 </table>
 
-The screenshots follow the GitHub theme. The console has light, dark and system modes,
-each with three built-in palettes and one custom palette.
-
 <div align="center">
   <img src="docs/images/readme/mobile.en.webp" alt="The dashboard, request records and OAuth management on a phone" width="88%">
-  <p><b>Mobile layout.</b> Every page adapts to a narrow screen.</p>
+  <p><b>Mobile layout</b><br />Every page adapts to a narrow screen</p>
 </div>
 
 ## Install
@@ -315,9 +267,9 @@ troubleshooting.
 <summary><b>Observability</b></summary>
 
 - **Dashboard**: request volume, token throughput, cache hit rate and cost over presets from 15 minutes to 90 days, an all-time window since installation, or any custom range, plus a year-long token heatmap. Statistics are kept permanently; request records roll out of a configurable retention.
-- **Model panels**: token trend and usage ring by call point or by upstream model, with cost shares.
+- **Model panels**: token trend and usage ring by call model or by requested model, with cost shares.
 - **Request records**: multi-select facets and full-text search; a detail drawer with duration, TTFT, token breakdown and the raw per-request log. Each record keeps the model the upstream reported serving, and flags the ones where it differs from the model requested.
-- **Background collection**: usage is ingested by stream or polling whether or not a browser is open.
+- **Background collection**: usage is ingested by stream or polling, even with no browser open.
 - **Logs and audit trail**: tail the gateway log, read the console's own service log, and review an append-only audit trail with filters and JSON export.
 
 </details>
@@ -346,7 +298,7 @@ troubleshooting.
 
 ## Agents and MCP
 
-**In the console.** On the `/agent` page, a model routed through CPA answers questions
+**In the console:** On the `/agent` page, a model routed through CPA answers questions
 and operates the console: usage and request analysis, providers, OAuth, quota, client
 keys, configuration and pricing. Reads run directly. Changes are prepared server-side
 and run only after an Allow in the console. Secrets, tokens and OAuth authorization
@@ -355,7 +307,7 @@ appear while they are generated: local filters, calculators, diagrams and charts
 use the console's visual system; follow-ups needing new data or actions stay in the reviewed
 conversation flow.
 
-**From an external agent.** The same capabilities are served over MCP at
+**From an external agent:** The same capabilities are served over MCP at
 `<console URL>/api/mcp` (Streamable HTTP), so an agent on another machine connects by
 URL with the CPA management key as a bearer token. Nothing is installed on the agent's
 side. The **Connect** action at the top of `/agent` shows the deployment's own endpoint
@@ -415,7 +367,7 @@ An external agent reads state and makes low-risk writes, such as display names a
 preferences, directly. Every other change it can only prepare: it cannot approve the
 operation, submit a secret or complete an OAuth sign-in, and the prepared change returns a
 link that opens its approval in the console. The management key is administrator-equivalent, so connect only
-trusted agents, and serve the console over HTTPS before connecting one remotely.
+trusted agents and serve the console over HTTPS before connecting one remotely.
 [`docs/agent-capabilities.md`](docs/agent-capabilities.md) is the contract.
 
 ## Configuration

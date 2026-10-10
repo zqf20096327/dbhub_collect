@@ -12,7 +12,14 @@
 
 Production-ready **WinUI 3 starter template** for Windows desktop apps: a real app shell with updates, settings, diagnostics, and release automation already wired up.
 
-It is built for teams that want a real app shell instead of a blank canvas: **MVVM**, **Mica window**, **system tray**, **Velopack auto-updates**, **localization**, **logging**, **SQLite**, **typed HTTP client**, and a **release pipeline** already wired up.
+It is built for teams that want a real app shell instead of a blank canvas: **MVVM**, **Mica window**, **system tray**, **Velopack auto-updates**, **localization**, **logging**, **SQLite**, **typed HTTP client**, **diagnostics page**, **setup wizard**, and a **release pipeline** already wired up.
+
+## Contents
+
+- [Install the template](#install-the-template) · [Requirements](#requirements) · [Screenshots](#screenshots)
+- [Why DevTem](#why-devtem) · [What ships out of the box](#what-ships-out-of-the-box) · [What's new](#whats-new-in-060-beta)
+- [Starter presets](#starter-presets) · [Pages](#pages-from-030) · [Ship it](#ship-it) · [Identity & notifications](#identity--notifications)
+- [Run this repo locally](#run-this-repo-locally) · [FAQ](#faq) · [Repository layout](#repository-layout)
 
 ![Home page — welcome card, status, and feature overview](docs/screenshots/home.png)
 
@@ -33,6 +40,29 @@ Or add a page to an existing app:
 ```powershell
 dotnet new devtem-page -n Orders
 ```
+
+The same templates appear in Visual Studio's New Project dialog (same
+engine, same flags as checkboxes and dropdowns). After scaffolding, your
+copy's `README.md` walks through first steps (version reset, rebrand,
+`init-template -Validate`).
+
+## Requirements
+
+- Windows 10 version 19041 or newer (x64, x86, ARM64) to run the app
+- [.NET 10 SDK](https://dotnet.microsoft.com/download) to build
+- Visual Studio 2026 (18.x) recommended for the designer, XAML Hot Reload,
+  and the New Project dialog — the CLI alone is fully supported too
+
+## Screenshots
+
+Dark theme, English, maximized window. Every shot below is re-captured per
+release from the running app (see `docs/screenshots/`).
+
+![Settings page — theme, language, update channel, account, tray, backup](docs/screenshots/settings.png)
+
+![Diagnostics page — status, metrics, live log tail, export bundle](docs/screenshots/diagnostics.png)
+
+![About page — version, stack, license, links](docs/screenshots/about.png)
 
 ## Why DevTem
 
@@ -59,6 +89,7 @@ DevTem is not trying to compete with the official blank app as a minimal "hello 
 - Optional Sentry crash reporting (DSN-gated; SDK droppable at scaffold time)
 - Optional Entra ID sign-in (MSAL broker-first with loopback fallback, DPAPI cache per distribution; off by default, SDK droppable at scaffold time)
 - SQLite data layer and typed HTTP client (each droppable at scaffold time)
+- Diagnostics page (startup time, live log tail with filters, export bundle)
 - MVVM pattern with CommunityToolkit.Mvvm
 - GitHub Actions release pipeline and version tag flow
 
@@ -69,22 +100,45 @@ the flags, and each scaffold records its picks in a generated
 
 ![Settings page — theme, language, update channel, test toast, tray](docs/screenshots/settings.png)
 
-## What's new in 0.4.0-beta
+## What's new in 0.6.0-beta
 
-- Identity + notifications: opt-in Entra ID sign-in (`--auth true`, Settings
-  account section, broker where packaged with loopback fallback, DPAPI cache
-  under the data dir, zero MSAL weight when off); toast clicks and deep links
-  land identically (routed toasts navigate after foregrounding); file
-  activation stays guide-only until a consumer needs it.
-- No behavior change on the default scaffold (`--auth` defaults off).
+- DevEx + packaging ergonomics: opt-in `--slnx` adds an XML solution file
+  next to the classic `.sln` (VS 2026 and newer; the `.sln` stays the
+  default — it alone expresses the x86/x64/ARM64 mappings);
+  `init-template -Validate` v2 checks repo/publisher/scheme/URL consistency
+  (placeholder Publisher on msix trees, template-default scheme/repo after
+  a rename, malformed URLs); NuGet face GA (per-release notes, verified
+  icon/tags).
+- Evaluated and declined on record: a `--framework` selector (each TF value
+  multiplies the scaffold matrix — net10 stays the default, retarget is a
+  documented 3-line edit) and `--cpm` central package management (no XML
+  conditional path keeps default scaffolds pristine). Reasons in
+  `docs/DECISIONS.md`.
+- No behavior change on any scaffold default (scaffold surface + docs + CI only).
 
-| Flag | Default | Use |
+Presets re-verified: `minimal` (leanest) / `recommended` (everything on,
+portable + Velopack) / `full` (everything on except the portable-only setup
+wizard, MSIX) via `Scripts/init-profile.ps1 -Preset`. "Everything on" means product surface —
+identity (`--auth`, needs a tenant) and editor ergonomics (`--slnx`) stay
+opt-in by design. In Visual Studio the template parameters render as dialog
+fields, checkboxes, and dropdowns; `dotnet new devtem-winui --help` lists
+every flag.
+
+## Starter presets
+
+Same template, coherent presets (override any flag individually, or run
+`Scripts/init-profile.ps1 -Preset` for the interactive version):
+
+| Preset | Command flags | Best for |
 | --- | --- | --- |
-| `--auth` | `false` | Entra ID sign-in behind the veneer (configure a client id to enable) |
+| Minimal | `--tray false --updates none --database false --http false --health false --logging none --crash false --localization false --tests false --attribution false` | Leanest shell, no services |
+| Desktop | `--updates none --database false --http false` | Tray app with notifications, no data layer |
+| Production | no overrides (the defaults) | Full product surface, portable + Velopack |
+| Store | `--distribution msix --updates store --setup false` | Packaged MSIX for Store submission |
+| Dual | `--publisher "CN=Your-ID"` (on defaults) | One binary for GitHub (Velopack) + Store (same MSIX) |
 
-![Settings account section — Microsoft account sign-in state](docs/screenshots/auth.png)
-
-![Settings page — theme, language, update channel, test toast, tray](docs/screenshots/settings.png)
+Presets are documentation, not a `--profile` parameter: explicit flags
+always win.
 
 ## Pages (from 0.3.0)
 
@@ -104,6 +158,38 @@ menubar as a command pattern over the same commands
 
 Earlier releases: full notes in [CHANGELOG.md](CHANGELOG.md).
 
+## Ship it
+
+Every updates × distribution cell is proven, not just documented — the
+truth table below carries a dated proof line per valid cell in
+[`docs/feature-guides/distribution-dual.md`](docs/feature-guides/distribution-dual.md)
+(matrix runs plus installed-app runs where complete).
+
+| `--updates` \ `--distribution` | `portable` (default) | `msix` |
+| --- | --- | --- |
+| `velopack` (default) | ✅ Setup.exe + feed, full in-app flow | ❌ Guard (ship Dual tracks instead) |
+| `basic` | ✅ Setup.exe + `.sha256` checker | ❌ Guard |
+| `none` | ✅ No update code | ✅ Slim status surface |
+| `appinstaller` | ❌ Guard (needs package identity) | ✅ `.msix` + `.appinstaller` feed |
+| `store` | ❌ Guard (needs package identity) | ✅ Partner Center submission |
+
+Releases ride two tag channels: `v*-beta` builds the beta feed
+(`beta` branch follows) and `templates-v*` publishes the NuGet package;
+`build-and-release.ps1` is the single source of truth, Store submission is
+one command (`publish-store.ps1` + `submit-store.ps1`).
+
+## Identity & notifications
+
+Opt-in Entra ID sign-in (MSAL broker-first, DPAPI token cache per
+distribution) lands as a Settings account section plus an `AuthService`
+behind the veneer — off by default, zero weight when off. Toasts go to the
+Action Center unpackaged (plus in-app cards everywhere) and to
+`AppNotificationManager` when packaged.
+
+![Settings account section — sign-in state before a client id is configured](docs/screenshots/auth.png)
+
+![In-app notification card over Settings](docs/screenshots/notification.png)
+
 ## Run this repo locally
 
 ```powershell
@@ -118,7 +204,9 @@ This repo is both a full sample app and the source of the project template. It d
 ```text
 App shell
 ├── Home page
-├── Settings page
+├── Settings page (theme, language, updates, account, tray, backup)
+├── Diagnostics page (status, metrics, live log tail, export bundle)
+├── Setup wizard (first-run, portable only)
 ├── Toasts + native update dialogs (check → download → restart)
 ├── First-run welcome (installers own setup)
 ├── Tray + toast behavior
@@ -144,6 +232,22 @@ Yes. DevTem is designed as a production-ready starter for desktop apps, not a ba
 ### Is this better than the official blank WinUI app?
 
 For a real application, yes. The official blank app is the correct starting point for learning WinUI or writing a minimal app from scratch. DevTem is the better starting point when you want a working desktop app foundation from day one.
+
+### How do I ship to the Microsoft Store?
+
+Scaffold with `--distribution msix --updates store --setup false --publisher "CN=Your-Publisher-ID"`, pack with `Scripts/build-msix.ps1`, and submit with `Scripts/submit-store.ps1` (or the `store-submit.yml` workflow). See the "Ship it" truth table above and `docs/feature-guides/distribution-dual.md` for the proven cells.
+
+### How do I enable Entra ID sign-in?
+
+Scaffold with `--auth true`, then configure a client id (see `docs/feature-guides/auth.md`). Sign-in stays off until configured; scaffolds without the flag carry no identity SDK at all.
+
+### Do I need the `.slnx` file?
+
+No. Scaffold with `--slnx true` only if you want an XML solution file for VS 2026+ alongside the classic `.sln` — build with the `.sln`, which alone carries the x86/x64/ARM64 mappings.
+
+### How heavy is a scaffolded app?
+
+The all-on reference publishes ~274 MB self-contained (WindowsAppSDK + .NET runtime included); every smaller flag combination is lighter, and nightly per-combo ceilings guard the trend. Cold start on a dev box is ~300 ms to splash, ~500 ms to window (see `docs/STATE.md` for the current flame).
 
 ## Repository layout
 

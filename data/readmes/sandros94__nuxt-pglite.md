@@ -1,253 +1,120 @@
-# Nuxt PGlite
+# nuxt-pglite
 
-[![npm version][npm-version-src]][npm-version-href] [![npm downloads][npm-downloads-src]][npm-downloads-href] [![License][license-src]][license-href] [![Nuxt][nuxt-src]][nuxt-href]
+[![npm version](https://npmx.dev/api/registry/badge/version/nuxt-pglite?name=true)](https://npmx.dev/package/nuxt-pglite) [![npm downloads](https://npmx.dev/api/registry/badge/downloads/nuxt-pglite)](https://npmx.dev/package/nuxt-pglite) [![bundle size](https://npmx.dev/api/registry/badge/size/nuxt-pglite)](https://npmx.dev/package/nuxt-pglite) [![Netlify Status](https://api.netlify.com/api/v1/badges/d0b05a02-7539-41e9-b3c4-dbac0fcfba80/deploy-status)](https://app.netlify.com/projects/nuxt-pglite/deploys)
 
-A Nuxt module aimed to simplify the use of [PGlite](https://pglite.dev).
+[PGlite](https://pglite.dev) tooling for Nuxt. A Postgres you don't run in development, swapped for a real one in production without touching your code; an embedded one on the server or in the browser when it is needed.
 
-> PGlite, an Embeddable Postgres Run a full Postgres database locally in WASM with reactivity and live sync.
-
-- [✨ &nbsp;Release Notes](/CHANGELOG.md)
-
-<!-- - [🏀 Online playground](https://stackblitz.com/github/sandros94/nuxt-pglite?file=playground%2Fapp.vue) -->
-<!-- - [📖 &nbsp;Documentation](https://example.com) -->
-
-> [!WARNING]  
-> No docs are available (although planned), please refer to the [playground code](/playground).
+> **📖 Documentation — [nuxt-pglite.s94.dev](https://nuxt-pglite.s94.dev)**
 
 ## Features
 
-<!-- Highlight some of the features your module provide here -->
+- **Server** — a lazily created PGlite instance for your Nitro routes (`usePGlite()`), configured in `server/pglite.config.ts` with your own extensions and `init`.
+- **Development socket** — that instance served over the Postgres wire protocol while `nuxt dev` runs. `pg`, postgres.js, Drizzle, Kysely, `drizzle-kit`, `psql` reach it through `DATABASE_URL` (or a provider's variables), exactly as they reach Postgres in production. With the server side off, nothing of PGlite reaches the build.
+- **Client** — an in-browser PGlite in a Web Worker shared between tabs, with live-query composables, configured in `app/pglite.config.ts`. Off by default.
+- **Migrations** — `nuxt-pglite/migrations` applies a folder of SQL files from `init`, with the bookkeeping platforms such as Netlify Database use on deploy, and refuses files edited after they ran.
+- **Testing** — `nuxt-pglite/testing` builds databases from your config, forks them per test, serves them over the socket; `nuxt-pglite/testing/vitest` wires one per run.
+- **DevTools** — a tab with an SQL editor and actions that run on the server, in the browser or next to the socket (seed, reset, `drizzle-kit`…).
+- **Nuxt 4 and 5** (Nitro 2 and 3), Node, Bun and Deno; `@electric-sql/pglite` as a peer dependency, so you pick the version and the types follow your config.
 
-- ⚡️&nbsp;Server-side `usePGlite`, running in your Node, Bun or Deno servers.
-- 🧑‍💻&nbsp;Client-side `usePGlite`, running inside Web Workers.
-- 🪢&nbsp;Client-side `useLiveQuery` and `useLiveIncrementalQuery` to subscribe to live changes.
+## Install
 
-## Quick Setup
-
-Install the module to your Nuxt application with one command:
-
-```bash
+```sh
 npx nuxi module add nuxt-pglite
+npx nypm install @electric-sql/pglite
 ```
 
-That's it! You can now use Nuxt PGlite in your Nuxt app ✨
-
-### Storage
-
-You can configure where to store data in your `nuxt.config.ts`. Server-side storage accepts relative baths based on `rootDir` (`~~`):
+## Quickstart
 
 ```ts
+// nuxt.config.ts
 export default defineNuxtConfig({
   modules: ['nuxt-pglite'],
-
-  pglite: {
-    client: {
-      options: {
-        dataDir: 'idb://nuxt-pglite',
-      },
-    },
-    server: {
-      options: {
-        dataDir: '.data/pglite', // will use `~~/.data/pglite`
-      },
-    },
-  },
 })
 ```
 
-For supported filesystem please refer to the [official documentation](https://pglite.dev/docs/filesystems).
-
-### Extensions
-
-Extensions are automatically configured with full type support and can be added via `nuxt.config.ts`:
-
 ```ts
-export default defineNuxtConfig({
-  modules: ['nuxt-pglite'],
-
-  pglite: {
-    client: {
-      extensions: ['live', 'electricSync'],
-    },
-  },
-})
-```
-
-For a full list of available extensions please refer to [the official docs](https://pglite.dev/extensions). If a new extension is missing feel free to open up a new PR by adding it to [this file](/src/templates.ts#L62-L87). I do plan to support only official and contrib extensions.
-
-## Live Queries
-
-With Live Queries we can subscrive to events happening in the database and reactively update the user interface. This becomes particularly usefuly client-side thanks to Web Workers, allowing us to keep content in sync even when the user opens up multiple tabs.
-
-To get started simply add `live` extension to your `nuxt.config.ts`:
-
-```ts
-export default defineNuxtConfig({
-  modules: ['nuxt-pglite'],
-
-  pglite: {
-    client: {
-      extensions: [
-        // ...
-        'live',
-      ],
-    },
-  },
-})
-```
-
-This will enable auto-import for `useLiveQuery` and `useLiveIncrementalQuery`. The quick implementation would be:
-
-```vue
-<script setup lang="ts">
-const maxNumber = ref(100)
-const items = useLiveQuery.sql`
-  SELECT *
-  FROM my_table
-  WHERE number <= ${maxNumber.value}
-  ORDER BY number;
-`
-</script>
-```
-
-Live queries are currently a custom fork of the upstream implementation, which you can read more [here](https://pglite.dev/docs/framework-hooks/vue#uselivequery).
-
-## Hooks
-
-We can use hooks to customize or extend PGlite at runtime. This becomes particularly useful in conjunction with [`RLS`](https://www.postgresql.org/docs/current/ddl-rowsecurity.html) or adding custom extensions server-side.
-
-### RLS
-
-PGlite supports RLS out of the box, but being a single-user/single-connection database it is more frequent to be used only client side. Lets take in example a basic implementation with `nuxt-auth-utils`. We'll need to create a client-only Nuxt plugin `/plugins/rls.client.ts`:
-
-```ts
-export default defineNuxtPlugin((nuxtApp) => {
-  const { user } = useUserSession()
-
-  if (user) {
-    nuxtApp.hook('pglite:config', (options) => {
-      options.username = user.id
-    })
-  }
-})
-```
-
-This, in combination with [`Sync`](https://pglite.dev/docs/sync), will make us able to create an offline-first application with the ability for the users to save their data in a centralized postgres instance.
-
-### Customizing extensions
-
-We can also use hooks to pass custom options to extensions like [`Sync`](https://pglite.dev/docs/sync) as well as improve typing for the whole project.
-
-In the following example we are creating a `/server/plugins/extend-pglite.ts` plugin that adds and configure `pgvector` and `Sync`:
-
-```ts
-import { vector } from '@electric-sql/pglite/vector'
-import { electricSync } from '@electric-sql/pglite-sync'
-
-export default defineNitroPlugin((nitro) => {
-  nitro.hooks.hook('pglite:config', (options) => {
-    options.extensions = {
-      vector,
-      electric: electricSync({
-        metadataSchema: 'my-electric',
-      }),
-    }
-  })
-
-  nitro.hooks.hook('pglite:init', async (pg) => {
-    await pg.query('CREATE EXTENSION IF NOT EXISTS vector;')
-  })
-})
-
-// Improve typing for server-side extensions
-declare module '#pglite-utils' {
-  interface PGliteServerExtensions {
-    vector: typeof vector
-    electric: ReturnType<typeof electricSync>
-  }
-}
-```
-
-> [!WARNING]  
-> This is currently the only way to type server-side extensions.
-
-### Hooking Notes
-
-A few things to consider are that:
-
-- we rely on `nuxtApp` hooks for client-side, while `nitroApp` for server-side, hooks available are:
-  - `pglite:config`: provides access to `PGliteOptions` before initializing a new PGlite instance.
-  - `pglite:init`: provides access to the initialized PGlite instance.
-- To improve types when manually adding extensions we use `PGliteClientExtensions` and `PGliteServerExtensions` for client and server respectively.
-
-## ORM support
-
-Any ORM that accept a PGlite or PGliteWorker instances should be supported both server and client side.
-
-### Drizzle
-
-Drizzle integration for server-side is as simple as:
-
-```ts
-import { drizzle } from 'drizzle-orm/pglite'
-import * as schema from '../my-path-to/schema'
-
-export function useDB() {
+// server/api/hello.get.ts
+export default defineEventHandler(async () => {
   const pg = await usePGlite()
-  return drizzle(pg, { schema })
-}
+  return pg.query('SELECT now()')
+})
 ```
 
-## Contribution
+PGlite in development only, a real Postgres in production:
 
-<details>
-  <summary>Local development</summary>
-
-```bash
-# Install dependencies (also stubs dist/ and prepares the playground)
-pnpm install
-
-# Develop with the playground
-pnpm dev
-
-# Lint and format
-pnpm lint
-pnpm fmt
-
-# Typecheck (module sources with tsc, playground with golar)
-pnpm typecheck
-
-# Test
-pnpm test
-pnpm test:unit
-pnpm test:e2e
-
-# Build the module
-pnpm build
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['nuxt-pglite'],
+  pglite: {
+    server: { enabled: false },
+    socket: true, // exports DATABASE_URL while `nuxt dev` runs
+  },
+})
 ```
 
-</details>
+```ts
+// server/pglite.config.ts
+import { applyMigrations } from 'nuxt-pglite/migrations'
+
+export default definePGliteServerConfig({
+  init: (pg) => applyMigrations(pg, 'server/database/migrations'),
+})
+```
+
+Guides, recipes and the reference live at **[nuxt-pglite.s94.dev](https://nuxt-pglite.s94.dev)**:
+
+- [Getting started →](https://nuxt-pglite.s94.dev/guide)
+- [Server →](https://nuxt-pglite.s94.dev/guide/server)
+- [Development socket →](https://nuxt-pglite.s94.dev/guide/socket)
+- [Client →](https://nuxt-pglite.s94.dev/guide/client)
+- [DevTools →](https://nuxt-pglite.s94.dev/guide/devtools)
+- [Migrations →](https://nuxt-pglite.s94.dev/recipes/migrations)
+- [Testing →](https://nuxt-pglite.s94.dev/recipes/testing)
+- [Deploy →](https://nuxt-pglite.s94.dev/recipes/deploy) — any Postgres, Netlify Database, Neon.
+- [Reference →](https://nuxt-pglite.s94.dev/reference/config-files) — config files, module and socket options, exports, hooks, environment.
+
+## Development
 
 <details>
-  <summary>Releasing</summary>
 
-Releases are automated by [uppt](https://github.com/danielroe/uppt): pushing to `main` opens a draft `release/vX.Y.Z` PR built from the conventional commits since the last tag. Merging it tags the commit, publishes the GitHub Release, then packs and stages the tarball to npm through OIDC trusted publishing — which waits for your 2FA approval in the `npm` environment.
+<summary>local development</summary>
 
-Nothing to run locally; just write conventional commits.
+- Clone this repository
+- Install latest LTS version of [Node.js](https://nodejs.org/en/)
+- Enable [Corepack](https://github.com/nodejs/corepack) using `corepack enable`
+- Install dependencies using `pnpm install` (stubs `dist/`, prepares the playground and the docs)
+- Develop with `pnpm dev` (playground) or `pnpm run docs` (documentation site)
+- Run tests using `pnpm test`; `pnpm lint`, `pnpm fmt` and `pnpm typecheck` for the rest
+- Build with `pnpm build`; `pnpm dev:prepare` restores the stub afterwards
+
+The suite also runs against the Nuxt 5 nightly, locally only until Nuxt 5 reaches a release candidate. Append the overrides to `pnpm-workspace.yaml`, install without the frozen lockfile, run the checks, then revert both files:
+
+```yaml
+overrides:
+  nuxt: npm:nuxt-nightly@5x
+  '@nuxt/kit': npm:@nuxt/kit-nightly@5x
+  '@nuxt/schema': npm:@nuxt/schema-nightly@5x
+```
+
+```sh
+pnpm install --no-frozen-lockfile && pnpm typecheck && pnpm test
+```
 
 </details>
 
 ## License
 
-Published under the [MIT](/LICENSE) license.
+<!-- automd:contributors license=MIT -->
 
-<!-- Badges -->
+Published under the [MIT](https://github.com/sandros94/nuxt-pglite/blob/main/LICENSE) license. Made by [community](https://github.com/sandros94/nuxt-pglite/graphs/contributors) 💛 <br><br> <a href="https://github.com/sandros94/nuxt-pglite/graphs/contributors"> <img src="https://contrib.rocks/image?repo=sandros94/nuxt-pglite" /> </a>
 
-[npm-version-src]: https://img.shields.io/npm/v/nuxt-pglite/latest.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-version-href]: https://npmjs.com/package/nuxt-pglite
-[npm-downloads-src]: https://img.shields.io/npm/dm/nuxt-pglite.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-downloads-href]: https://npmjs.com/package/nuxt-pglite
-[license-src]: https://img.shields.io/npm/l/nuxt-pglite.svg?style=flat&colorA=020420&colorB=00DC82
-[license-href]: https://npmjs.com/package/nuxt-pglite
-[nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt.js
-[nuxt-href]: https://nuxt.com
+<!-- /automd -->
+
+<!-- automd:with-automd -->
+
+---
+
+_🤖 auto updated with [automd](https://automd.unjs.io)_
+
+<!-- /automd -->

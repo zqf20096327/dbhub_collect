@@ -1,17 +1,18 @@
 <p align="center">
-  <img src="assets/aidumei-banner.webp" alt="aiduMEI ⚕ 爱嘟优忆思 — Memory + Engine + Insight" width="100%">
+  <img src="assets/aidumei-banner.webp" alt="aiduMEI ☤ 爱嘟优忆思 — Memory + Engine + Insight" width="100%">
 </p>
 
 <!-- distribution-policy: github-source-only -->
 
-# aiduMEI ⚕ 爱嘟优忆思——智能体通用智慧引擎
+# aiduMEI ☤ 爱嘟优忆思——智能体通用智慧引擎
 
 > 让你的 AI Agent **真正记住你**：混合检索 + 认知治理 + 可视化控制台 + 双引擎自动挡，**单机自托管**，MIT。
 > 宿主（Hermes / Claude Code / Cursor / 任何 MCP 客户端）管短期对话，aiduMEI 管长期记忆。
 
-> **当前公开版本 f0.3+。**
+> **当前公开版本 f0.4。** 包版本 `0.4.0`，2026-10-09。[下载 Release](https://github.com/monkey2jack/aiduMEI/releases/tag/f0.4)。
+> 本版完善决策模型适配、检索证据交付、权限与持久写入，完成生产 API、钩子和真实 Hermes CLI 验收。[升级说明](docs/F04_UPGRADE.md) · [验收口径](docs/F04_VALIDATION.md)。
 
-> **f0.3+ 增加可选决策模型配置**（包版本 `0.3.0+decision.1`）：客户自行选择供应商、模型、地址、密钥及任务，也可保持关闭。配置一次后自动用于新记忆类型分类与检索证据核验，无需逐次操作。支持 Nace、TypeSafe 及同协议服务；不限定 Drex。Reranker 继续负责排序，本地挡不外呼决策模型。[配置与兼容范围](docs/DECISION.md)。
+> **可选决策模型**：客户自行选择供应商、模型、地址、密钥及任务，也可保持关闭。配置一次后自动用于新记忆类型分类与检索证据核验，无需逐次操作。支持 Nace、TypeSafe、Cloudflare Clef/Clef Flash 及同协议服务；不限定 Drex。Reranker 继续负责排序，本地挡不外呼决策模型。[配置与兼容范围](docs/DECISION.md)。
 >
 > **关于 `f`**：这是一个新的纪元，不是旧版本号的续写。`f` 取 **future / fantasy / forever** ——
 > 我们想做的不是一个更大的缓存，而是一份能陪人走很久的记忆。版本号形态 `f<主>.<次>`，
@@ -23,9 +24,29 @@
 
 ---
 
+## f0.4：把决策模型接稳，把记忆交付做完整
+
+这次升级的目标是让 aiduMEI 在不同决策模型下稳定完成记忆分类与检索。我们逐项复查协议、调用预算、回退和真实宿主调用，把生产测试中暴露的问题落实为修复与回归用例。
+
+| 改进 | 对使用者的意义 |
+|---|---|
+| **Clef / Clef Flash 分类适配** | 修复 `choice` 分类请求被拒绝的问题。Cloudflare 路径从现有 `TYPE_LABELS` 为每类生成一个 `noul` 问题，取有效分数最高者，达到 **0.7** 才采用；低分或无效结果继续走原有分类回退。|
+| **一次检索，共享预算** | 检索内的决策任务合计最多 **3 次外呼、3000ms**；缓存命中不占外呼次数，迟到结果不采用。避免多阶段各自追加等待；传输超时仍取决于底层配合，并非强制抢占。|
+| **先找到相关证据，再交给宿主** | 长记忆使用与问题相关的有限窗口，遗漏明确标记；原话、作用域和最终条数继续受约束，减少长上下文淹没关键证据的情况。|
+| **可选的证据集合评估** | `evidence_assessment` **默认关闭**；启用后观察最终证据是否充分、缺环节、存在冲突、是否值得再查。结果仅供观察，不自动深搜、改写记忆或取代 reranker。|
+| **故障有回退，使用有记录** | 关闭、超时、限流、非法响应或预算耗尽时保留既有回退；用量区分真实调用与失败，便于发现“检索正常、分类却一直失败”这类局部故障。|
+
+决策通道仍可完全关闭，供应商、模型和任务由使用者选择。Nace、TypeSafe、Cloudflare 和兼容 System One 的服务沿用各自配置；协议兼容不等于供应商可用性或模型效果保证。[配置与边界](docs/DECISION.md)。
+
+**验收结果**：已验收运行代码在本地与服务器隔离环境各通过 **4156 项测试，0 失败、0 跳过**（另 8 个 subtests）；生产 HTTP/钩子通过 **91 项检查、24 次真实派发**，真实 Hermes CLI **23/23**。Clef Flash 以唯一文本覆盖六类，**6/6** 分类符合预期，调用 **+6**、失败 **+0**，检索核验正常。CLI 中 8 项在最终提交执行，15 项复核沿用运行文件未变的原始证据；具体复用、评分器修复和展示差异见[验收说明](docs/F04_VALIDATION.md)。这些是集成验收，不能当作决策模型能力排名。
+
+同版还收口了租户与 bank 授权、持久写入意图、删除恢复、备份、并发缓存和插件调用方身份。遇到不确定写入明确留下待修复状态，避免静默成功或盲目重试。[完整变更](CHANGELOG.md)。
+
+以下 f0.3+/f0.3++ 表格保留为历史测量，不作为 f0.4 新成绩。
+
 ## f0.3+：决策模型带来什么
 
-**我们采用 Drex 1.5 进行测试。** 以下是本项目的小规模自测，不是其他模型的成绩，也不是生产回答准确率。客户换模型后须重新验证中文任务与门槛。
+**f0.3+历史测试采用 Drex 1.5与合成记忆。** 以下是本项目的小规模自测，不是其他模型的成绩，也不是生产回答准确率。客户换模型后须重新验证中文任务与门槛。
 
 | 对比项 | 未使用决策模型 | 使用决策模型 | 实测变化 |
 |---|---:|---:|---:|
@@ -38,6 +59,22 @@
 分类更快、无答案拒绝更好；**检索 p50 慢约 68.0%，p95 慢约 120.2%**。50 题含 32 题诊断回放及 18 题新样本（新样本 17/18 → 18/18），问法属于 12 个家族，不能当作 50 个独立生产样本。原话命中两组均为 11/12；分类仅净增一例，不足以证明稳定准确率优势。没有测吞吐量，也未证明 embedding、提取或索引因决策模型而提速。[完整口径与失败记录](docs/DECISION_EVALUATION.md)。
 
 为控制额外开销和误拒，本版使用自动选择路由：高分宽泛查询跳过核验，具体属性仍检查；原话及混合引用意图保留既有闸门，跳过新增拒绝。每阶段最多核验 12 条候选，成功结果按用户、bank、模型配置及完整内容缓存 60 秒；并发上限 2，繁忙立即回退，连续 3 次失败熔断 30 秒。缺分、长文本或故障保留基线，管理员可分别关闭分类或检索任务。宿主检索等待预算与核心块分开，防止正常调用被过早截断。**这些措施缓解开销，尚未消除实测检索时延增加。**
+
+## f0.3++ 本地真实记忆评估
+
+2026-10-04：补齐关闭决策模型基线，同一代码与隔离真实数据副本对比 Drex、Jev、Clef，并补测 Clef Flash。24条分类、60题真实 HTTP 检索，各组保留同一 embedding/reranker。分类耗时包含低置信度后的原有 LLM 回退。
+
+| 比较项目 | 无决策模型 | Drex 1.5 | Jev 1.13.0 | Clef | Clef Flash |
+|---|---:|---:|---:|---:|---:|
+| 分类标签正确（含回退，24条） | 15/24（62.50%） | 14/24（58.33%） | 15/24（62.50%） | 15/24（62.50%） | 16/24（66.67%） |
+| 分类全链路 p50 / p95（ms） | 3046.21 / 26730.75 | 566.15 / 9074.01 | 445.72 / 15219.92 | 3562.35 / 16589.42 | 3263.60 / 14058.57 |
+| HTTP 检索判定正确（60题） | 26/60（43.33%） | 29/60（48.33%） | 32/60（53.33%） | 30/60（50.00%） | 29/60（48.33%） |
+| 无答案正确返回空结果（12题） | 5/12（41.67%） | 11/12（91.67%） | 11/12（91.67%） | 10/12（83.33%） | 11/12（91.67%） |
+| 检索全链路 p50 / p95（ms） | 928.80 / 1495.72 | 1225.43 / 2844.45 | 1273.91 / 2058.61 | 1513.24 / 3531.30 | 1376.72 / 2871.43 |
+
+Jev 本轮严格锚点评分净增6题（+10个百分点），检索p50增加345.11ms（37.16%）。**回执复核发现评分器会误罚简短等义答案，且存在时间歧义；撤回把所有评分下降称为“误拒”的说法，以上数值不代表语义准确率排名。**分类准确率尚无稳定提升证据。Clef和Flash均有21/24条分类回退LLM，单次决策接口快不代表端到端快。原始模型输出、默认规则基线、逐项ms/%变化、索引覆盖问题及测量限制见 [完整实测报告](docs/DECISION_EVALUATION_20261004.md)。旧版合成样本表是历史数据，不与本表跨样本比较；客户仍可自行选择模型及启用任务。
+
+补充中文核验专项：64题中文与64题同义英译，512次模型调用，固定提示、单候选、门槛0.6、无LLM回退。中文答对Drex61/64、Jev64/64、Clef62/64、Flash61/64；单次接口p50分别415.75、416.41、647.67、482.88ms，差2—3题不足以宣布综合冠军，也没有证明Clef的中文优势。分歧题追加96次调用，判定未变；真实记忆全文/关键句消融重现Drex对长混杂上下文的误拒。此专项不是生产最终回答准确率，也不替代分类/embedding/索引评估。[原因、类别得分与优化方向](docs/DECISION_CHINESE_DIAGNOSIS_20261004.md)。原始冻结题目已私有保存；公开v2改用虚构节点，尚未实测，其分数须另报。
 
 ## 优忆思：MEI 不止是「美」
 
@@ -245,6 +282,12 @@ python scripts/e2e_smoke.py --json                                              
 
 ## MCP Server（41 工具 · 默认端口 8766）
 
+安装 `pip install -r requirements.txt` 即包含官方 `mcp==1.30.0`（1.x SDK）；无需另装独立的 `fastmcp` 包。使用包安装时选择 `pip install 'aidumei[mcp]'`。遇到不兼容版本或缺包，启动错误会给出修复命令。
+
+MCP 默认保护同一连接、同一工具、同一规范化参数的连续失败：第 2 次附 `retry_count`，第 3 次附 `loop_warning`；60 秒内 5 次失败后，后续相同调用返回 `circuit_open` 和 `retry_after`，30 秒后仅放行一个恢复探针。成功即清零，成功批量调用不受此限制。SSE 按客户端连接隔离；不同租户参数也分开计数。守卫仅在进程内生效，重启后复位；参数缺失/类型错误在 SDK 校验阶段被拒绝，不计入本守卫。Hermes 插件只给重复失败提示，宿主仍需设置单轮预算；REST 会话熔断留后续版本。
+
+可用 `AIDUMEI_MCP_LOOP_GUARD=0` 关闭，或设置 `AIDUMEI_MCP_LOOP_GUARD_THRESHOLD`、`AIDUMEI_MCP_LOOP_GUARD_WINDOW_S`、`AIDUMEI_MCP_LOOP_GUARD_COOLDOWN_S`（默认 5/60/30）；无效配置回落默认值。日志中的 `[loop-guard]` 不记录原参数。已经在运行的并发调用不会被取消。
+
 MCP 与 REST 同进程双栈：REST 在 :8767，MCP 在 :8766（stdio/HTTP 双传输）。**鉴权纪律**：非回环绑定必须配置 `AIDUMEM_API_TOKEN`，否则拒绝启动；确有无凭据公网暴露需求才显式设置 `AIDUMEM_ALLOW_INSECURE_PUBLIC=1`（默认关闭，开启会打 critical 日志）——REST 与 MCP SSE 都还须同时设 `AIDUMEI_I_CONFIRM_PUBLIC_NO_AUTH=<监听地址>`（值必须逐字等于实际监听地址，`1`/`true` 不算），否则照样拒绝启动。工具分组与调用示例见 [docs/AGENT_INTEGRATION.md](docs/AGENT_INTEGRATION.md)。
 
 ## 🔐 安全模型
@@ -320,15 +363,15 @@ Bearer 令牌（`AIDUMEM_API_TOKEN`）+ 控制台口令（PBKDF2）+ 注入防�
 
 | 维度 | 现状 |
 |------|------|
-| 用例总数 | **3016**（`pytest --collect-only` 实测，2026-10-04，f0.3+ 树）＝ **行为用例 2530（产品代码直测）+ 脚本/钩子行为 340 + 守卫用例 146（文档/口径/结构）**。三桶口径与名单见 `scripts/count_test_kinds.py`，可一键复算——头条不用混合数 |
-| 独立开发机 | 3004 通过 · **12 跳过** —— **2026-10-04 收集口径**（f0.3+ 树，Python 3.12；完整 extras + 模型缓存，只缺 Hermes 宿主） |
+| 用例总数 | **4156**（`pytest --collect-only` 实测，2026-10-09，f0.4 候选树）＝ **行为用例 3529（产品代码直测）+ 脚本/钩子行为 481 + 守卫用例 146（文档/口径/结构）**。三桶口径与名单见 `scripts/count_test_kinds.py`，可一键复算——头条不用混合数 |
+| 独立开发机 | 4144 通过 · **12 跳过** —— **f0.4 按收集数与缺席轴推导的验收目标，当前树完整复测待完成**（Python 3.12；开发、benchmark 依赖及本地嵌入模型已就绪，仅缺 Hermes 宿主） |
 | 基础安装路径 | 1821 通过 · **25 跳过** —— 只装 `requirements.txt` + `requirements-dev.txt`（**2026-09-09 生产机干净 venv 实测**，Python 3.12） |
 | 生产机沙箱 | 1967 通过 · **26 跳过** —— **2026-09-11 生产机实测**（本树 `de09794`，独立沙箱 venv：宿主源码在场、不带 `.env`、无 ruff/mcp/fastembed 等）；生产实机部署后 1983 通过 · 10 跳过（同树，宿主轴齐备） |
 | 全轴齐备 | 1844 通过 · **1 跳过** —— **2026-09-09 生产机实测**（独立全轴 venv：工具、extras、宿主源码、模型缓存与公开 LoCoMo 数据集齐备；那 1 跳过为本树新增用例的条件轴） |
 | 层级 | 以**模块级单元测试 + 源码级守卫断言**为主，`TestClient` 驱动的接口测试为辅 |
 | 平台前提 | 全量套件按 **Linux/macOS（POSIX）**口径维护：`backup_gate` 轴要 POSIX shell；`/health` 的 CPU/RSS 指标走 `resource` 模块，非 POSIX 平台诚实置 `None` 不崩。Windows 未列为全量测试平台 |
-| 语句覆盖率 | 约 51%（`ducky/` + 入口，`coverage` 实测） |
-| 未覆盖 | 真实 mem0 / Qdrant 集成、真实 LLM 调用、并发压测 —— 这些依赖外部服务，由生产环境实机冒烟承担 |
+| 语句覆盖率 | 历史约 51%（`ducky/` + 入口）；f0.4 未重新测量，不作当前覆盖率宣称 |
+| 未覆盖 | 本地套件含实际 mem0、SQLite 和本地 Qdrant 的写入/退出恢复；真实供应商、向量服务恢复、宿主 CLI 与生产性能另列实机证据，不由用例数证明 |
 
 ```bash
 # 全量回归
@@ -337,21 +380,21 @@ pytest tests/
 python -m compileall ducky api_server.py mcp_server.py
 ```
 
-> **为什么要把 3004 和 1967 都写出来**：3004 是本树开发环境 2026-10-04 的收集口径（缺宿主 ×12）；1967 是生产机独立沙箱 2026-09-11 实测（`de09794`，宿主在场但沙箱缺多项可选轴）——两者的跳过轴不同，数字必须与环境、日期和测试树一起读。
+> **为什么要把 4144 和 1967 都写出来**：4144 是本树仅缺 Hermes 宿主 ×12 时的预期通过数，尚不是本轮实测成绩；1967 是生产机独立沙箱 2026-09-11 实测（`de09794`，宿主在场但沙箱缺多项可选轴）——两者的跳过轴不同，数字必须与环境、日期和测试树一起读。
 
-> **这 12 条不是玄学，自己就能验**：十三条跳过轴（宿主、工具、可选依赖、模型文件）全部登记在册（[docs/TESTING.md](docs/TESTING.md)），`HERMES_SRC` 三态可控、两个方向都能复现：
+> **这 12 条不是玄学，自己就能验**：十四条跳过轴（宿主、工具、可选依赖、模型文件）全部登记在册（[docs/TESTING.md](docs/TESTING.md)），`HERMES_SRC` 三态可控、两个方向都能复现：
 >
 > ```bash
-> # 2026-09-14 实测：先装齐依赖、部署模型缓存，并让 AIDUMEI_BENCH_DATA_DIR 指向含 locomo10.json 的目录
+> # 当前候选的预期口径（完整复测待完成）：先装齐依赖、部署模型缓存，并让 AIDUMEI_BENCH_DATA_DIR 指向含 locomo10.json 的目录
 > pip install -r requirements.txt -r requirements-dev.txt
-> pip install "mcp>=1.0.0,<2" ruff nltk regex numpy fastembed
+> pip install "mcp==1.30.0" ruff nltk regex numpy fastembed
 > python scripts/fetch_local_embed_model.py
-> pytest tests/ -q -rs | tail -1                                 # 无宿主：3004 passed, 12 skipped
-> HERMES_SRC=/path/to/hermes-agent pytest tests/ -q | tail -1    # 有宿主：3016 passed
-> HERMES_SRC=none pytest tests/ -q -rs | tail -1                 # 装了宿主也强制关掉，照旧 3004 passed, 12 skipped
+> pytest tests/ -q -rs | tail -1                                 # 无宿主：4144 passed, 12 skipped
+> HERMES_SRC=/path/to/hermes-agent pytest tests/ -q | tail -1    # 补齐宿主及其余可选轴后目标：4156 passed
+> HERMES_SRC=none pytest tests/ -q -rs | tail -1                 # 装了宿主也强制关掉，照旧 4144 passed, 12 skipped
 > ```
 >
-> 上面代码块里的 `有宿主：3016 passed` 要**十三条轴同时齐备**才拿得到，宿主只是其中一条 —— 别把「装上宿主」当成「全绿」。
+> 上面代码块里的 `有宿主：4156 passed` 要**十四条轴同时齐备**才拿得到，宿主只是其中一条 —— 别把「装上宿主」当成「全绿」。当前候选树的该形态仍待实测，`4144 passed · 12 skipped` 是验收目标。
 
 > **跳过轴全量登记**（门控条数与实测逐行对账，改一条这里就红）：
 >
@@ -360,6 +403,7 @@ python -m compileall ducky api_server.py mcp_server.py
 > | 宿主 Hermes 源码 | 12 | `tests/test_hermes_plugin.py` 整份 |
 > | git 工作区 | 1 | `tests/test_v20_brand_policy.py`（要 `git ls-files` 当比对基准） |
 > | `scripts/backup_gate.sh` + POSIX shell | 8 | `tests/test_v19_4_1_backup_gate.py` 整份 |
+> | WAL POSIX 真实锁与目录 fsync | 5 | `tests/test_f03pp_wal_integrity.py` 的 POSIX 专项；Windows 锁仅模拟 |
 > | `qdrant_client` 已安装 | 1 | `tests/test_v20_vector_bank_contract.py` |
 > | LoCoMo 数据集已就位 | 1 | `tests/test_v20_locomo_official.py`（全量数据集扫描要真文件） |
 > | `regex` 已安装 | 1 | `tests/test_v20_locomo_official.py`（拿 `regex` 给标准库 `re` 对拍） |
@@ -379,6 +423,10 @@ MIT License。`SECURITY.md` + [docs/SECURITY-AUDIT-LEDGER.md](docs/SECURITY-AUDI
 
 ## 已知边界（诚实声明）
 
+- **身份与作用域**：默认面向可信单主人。共享 token、未配置绑定时，REST 的 caller 是客户端声明；不能当作互不信任客户的隔离边界。需要绑定时配置 `AIDUMEI_CALLER_BINDINGS`（凭据指纹 → 可代表主体名单）和 `AIDUMEI_CALLER_BINDING_MODE=strict`；记忆域路由注册、管理面和跨殿权限共同核验主体。MCP caller 从部署 `AIDUMEM_USER_ID`（缺省为配置默认用户）解析，目标 user 不产生 caller 权限。UI session 仍代表主人。
+- **破坏性操作**：所有用户的 `delete_all` 都须显式 `confirm=true`。容量自动合并默认关闭；开启后长文本（超过 200 字）仅全文相同才自动去重，快照失败保留源记录。
+- **WAL 与持久写入**：f0.4 候选补齐新写入日志、删除恢复与校验链；不确定写入需核验修复，不能承诺跨存储原子性或 exactly-once。坏账进入 unknown，待修复删除阻断该域新写入。POSIX 进程行为有回归，Windows 仅模拟；哈希链不等于认证签名，完整合法尾部丢失仍需外部锚点发现。详见 [升级边界](docs/F04_UPGRADE.md)。
+- **循环保护**：MCP 守卫是单进程内存状态，重启重置，不提供跨 worker 协调。顶层 trace/request ID 不改变失败指纹；分页、时间戳和嵌套业务参数保留。异步半开探针有 30 秒超时；同步 HTTP 工具沿用自身 20/30 秒网络期限。插件仅给重试提示，宿主仍须限制轮次与预算。
 - 需要嵌入与 LLM 服务（云端或本地备胎）——换来的是真语义检索与抽取质量；要「完全离线 + 亚毫秒」的极简场景，零依赖本地类工具更合适，这话我们不遮。
 - **基准成绩是「试跑」不是定稿**：2/10 样本、裁判非 GPT-4o。正式打榜须全量复跑，[benchmarks/RESULTS.md](benchmarks/RESULTS.md) 如实登记。
 - 时序推理仍是**已知短板**：根因已修但**未复跑验证**，上表「目标」列一栏都还不是成绩。
@@ -412,10 +460,19 @@ aiduMEI/
 └── mem0_config_local.json  # 模型配置（gitignored，含密钥）
 ```
 
+<details>
+<summary>一个彩蛋：我们怎样挑选决策模型</summary>
+
+在 2026-10-05 的 Linux/Python 3.12.3 隔离实例、真实 Hermes CLI 和相同模型链/资料下，24 个合成家族的五组比较使我们倾向 **Jev 1.13.0**；低延迟备选是 Drex 1.5。关闭决策和 Jev 的 CLI 最终回答都为 23/24，差别主要在无答案检索的证据过滤。
+
+**我们仅对测试样本、环境和条件负责。** 这是历史候选的单次样本观测，并未在最终版本重跑五组评估，也不构成通用排名。[环境、参数、分母、结果表、案例矩阵及局限](docs/DECISION_MODEL_SAMPLE_20261005.md)全部公开；保留所有组共同失败的长记录案例。模型由使用者自行选择。
+
+</details>
+
 ## License
 
 MIT — 详见 [LICENSE](LICENSE)。
 
 <p align="center">
-  <sub>aiduMEI⚕爱嘟优忆思（曾用名 aiduMEM / duMem，历史版本与文档中保留）｜Powered by monkey²</sub>
+  <sub>aiduMEI☤爱嘟优忆思（曾用名 aiduMEM / duMem，历史版本与文档中保留）｜Powered by monkey²</sub>
 </p>

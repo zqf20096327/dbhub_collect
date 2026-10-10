@@ -1,8 +1,8 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/brand/logo-master-dark.png">
-  <img src="docs/brand/logo-master-dark.png" alt="Zoomies: a cocker spaniel curling through a circular motion path, above the wordmark" width="260">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/brand/logo-white-transparent.svg">
+  <img src="docs/brand/logo-black-transparent.svg" alt="Zoomies: a running cocker spaniel inside a circular swish, above the wordmark" width="260">
 </picture>
 
 # Give your GitHub Actions runners the Zoomies.
@@ -445,6 +445,18 @@ claude mcp add --transport http zoomies https://zoomies.example.com/mcp \
   --header "Authorization: Bearer zoo_..."
 ```
 
+An agent that drives the `zoomies` command instead can be taught it with the
+`zoomies` skill, [`skills/zoomies`](skills/zoomies/SKILL.md). It reads the
+fleet freely, asks before it changes anything and leaves the commands that
+reshape a host to you. Copy the folder into the agent's skills directory
+(`.claude/skills/` in a project, or `~/.claude/skills/` for every project, for
+Claude Code); an installer that takes a repository takes `eyupio/zoomies`. See
+[the CLI reference](docs/cli.md#the-zoomies-skill). A second skill,
+[`skills/zoomies-kennel`](skills/zoomies-kennel/SKILL.md), runs
+`zoomies kennel check` over a checkout's workflow files with nothing sent
+anywhere, summarises the findings with security first, and fixes only the ones
+you choose; see [the zoomies-kennel skill](docs/cli.md#the-zoomies-kennel-skill).
+
 ## Configuration
 
 One `zoomies.yaml`, every key overridable with a `ZOOMIES_*` environment
@@ -472,8 +484,11 @@ The same list appears in the UI's problems panel. See
 
 ## Requirements
 
-* Linux (amd64 or arm64) for the controller and agents. macOS is supported for
-  running the controller in development.
+* Linux (amd64 or arm64) for the controller and agents. The agent also runs on
+  Windows (x86-64 only), where jobs run as processes rather than in containers
+  and which the [support matrix](https://zoomies.sh/#what-is-qualified) does
+  not yet count as qualified. macOS is supported for running the controller in
+  development.
 * Docker or Podman for the container backends: **rootless preferred**, and the
   installer looks for a rootless socket first. `install.sh` offers to install
   one for you on a Linux host that has neither.

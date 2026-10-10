@@ -102,6 +102,21 @@ One-shot CLI commands (`create`, `upload`, `download`, `restore`, `delete`, `cre
 - `SIGTERM` cancels all running commands (same as `POST /backup/kill` for each of them), removes their pid files and stops the API server; in Kubernetes make sure `terminationGracePeriodSeconds` covers the shadow cleanup of a big table, otherwise the following `SIGKILL` leaves it for the next `clean`
 - `SIGHUP` reloads the config and restarts the API server, running commands are canceled the same way as via `POST /restart`
 
+## Logging
+
+All log messages go to stderr. stdout only carries the command output (`list`, `tables`, `print-config`, ...), so it can be piped to other tools, e.g. `clickhouse-backup list remote --format json | jq`.
+To keep the log in a file, redirect stderr as well:
+
+```shell
+clickhouse-backup create_remote my_backup >> clickhouse-backup.log 2>&1
+```
+
+`docker logs` and `kubectl logs` show only the output of the container's main process, e.g. `clickhouse-backup server` in a sidecar container.
+A command started with `docker exec` or `kubectl exec` writes its log to the exec session, so it doesn't appear in the container log.
+To get it there, run the command through the [API](#api), e.g. `POST /backup/create_remote` or `INSERT INTO system.backup_actions`: the server executes it in its own process.
+
+Use `log_level` / `LOG_LEVEL` to change the verbosity.
+
 ## Default Config File
 
 By default, the config file is located at `/etc/clickhouse-backup/config.yml`, but it can be redefined via the `CLICKHOUSE_BACKUP_CONFIG` environment variable or via `--config` command line parameter.
@@ -116,10 +131,4 @@ The following values are not defaults; they explain what each config parameter w
 
 ```yaml
 general:
-  remote_storage: none           # REMOTE_STORAGE, choice from: `azblob`,`gcs`,`s3`, etc; if `none` then `upload` and `download` commands will fail.
-  max_file_size: 1073741824      # MAX_FILE_SIZE, 1G by default, useless when upload_by_part is true, use to split data parts files by archives
-  backups_to_keep_local: 0       # BACKUPS_TO_KEEP_LOCAL, how many latest local backup should be kept, 0 means all created backups will be stored on local disk
-                                 # -1 means backup will keep after `create` but will delete after `create_remote` command
-                                 # You can run `clickhouse-backup delete local <backup_name>` command to remove temporary backup files from the local disk
-  backups_to_keep_remote: 0      # BACKUPS_TO_KEEP_REMOTE, how many latest backup should be kept on remote storage, 0 means all uploaded backups will be stored on remote storage.
-                                 # If old backups are required for newer 
+  remote_storage: none           # REMOTE_STORAGE, choice from: `azblob`,`gcs`,`s3`, etc; if `none` then `upload` and `

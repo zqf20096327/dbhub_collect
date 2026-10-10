@@ -1,157 +1,175 @@
 # IntentSQL
 
-**Explore a SQLite database in plain English, then inspect how the answer was built.**
+**The query, made clear.** Ask a SQLite database a question in plain English. IntentSQL shows what it understood, every decision behind the SQL, the read-only query it ran, and the result.
 
-IntentSQL is a local playground for querying and changing SQLite data. Ask for rows, counts, grouped results or related fields; inspect the semantic decisions, typed plan, SQL and result. For `INSERT`, `UPDATE` and `DELETE`, review the proposed changes before confirming them.
+![IntentSQL answering "Which five districts have the highest per-pupil expenditure?" with TypeSafe Jev](docs/images/answer-jev.png)
+<sub>A real answer from TypeSafe Jev (`jev-1.13.0`): two model calls, 10,678 input tokens, about $0.0005. Jev's check was unsure this time, so the answer is flagged *Uncertain* and the other reading is offered beside it.</sub>
 
-It is also an experiment with **decision models / System One models**, using **Jev** in practice: can small, bounded judgments compose with ordinary code into useful behavior?
+## Why it works this way
 
-[Jev is TypeSafe’s System One model](https://docs.typesafe.ai/concepts/system-one): give it context and focused questions, and receive a choice, yes/no probability or rubric score. These are bounded decisions for code to combine; the application defines the workflow and actions. “Decision model” describes this role here.
+Language models write plausible SQL that can be subtly wrong, and it is hard to see why. IntentSQL never lets a model write SQL. **Code proposes, the model chooses, and code builds:**
 
-> Show the five districts with the highest per-pupil expenditure. Return district name and per-pupil expenditure, highest first.
+1. **Grounding.** Code reads the database and your question. It finds the values you mention (names, numbers, dates, periods) and the tables and columns they belong to.
+2. **Bounded decisions.** Code builds every reasonable option: which column to show, which value filters which column, how to group, sort or join. A *decision model* answers small multiple-choice questions about which option you meant, in one parallel round.
+3. **Typed interpretation.** The answers are assembled into a typed plan and described back to you in plain English.
+4. **Deterministic SQL.** A compiler turns the plan into parameterized SQLite. Joins come from the database's keys, and every value is a bound parameter.
+5. **Verification.** Readings that differ by one decision *and give different results* are run too. The model checks the plain-English readings against your question. Uncertain answers are flagged, with the alternatives offered.
+6. **Read-only results.** Queries run on a read-only connection with row and time limits. Requests to change data are refused.
 
-![Recorded Jev run showing five districts and their per-pupil expenditure](docs/images/result.png)
+Every step is visible. **How IntentSQL decided** is a timeline of the decisions, each showing:
+- the exact question asked;
+- the option chosen;
+- the model's probability for each option.
 
-*Jev / `jev-latest`, on the bundled DESE database: a direct relationship, highest-first ordering and five rows. This recorded capture predates the latest Alpha UI cleanup. Display SQL renders values; execution uses bound parameters.*
+It also shows the values found, the joins and plan, the verification, and the SQL. Per-decision probabilities are not the chance that the answer is right. That is the separate, calibrated confidence on the answer.
 
-## The experiment
+![The answer beside its decision timeline: exact questions, choices and Jev's probabilities](docs/images/decisions-jev.png)
+<sub>The same answer, scrolled: results and SQL on the left; on the right, each decision with the exact question Jev received and its probabilities.</sub>
 
-I built IntentSQL to explore what happens when semantic judgment becomes a small, programmable part of otherwise deterministic software.
+## What it supports
 
-Code inspects the database and supplies real candidates: tables, columns, relationships, values and legal operations. Jev makes bounded judgments about what the request means. A selected table narrows the available fields. A selected comparison narrows the possible operands. Established facts flow into later decisions, and checks can challenge an incomplete plan.
+- filters, ranges, text matching, NULLs and DISTINCT;
+- multi-hop, self- and outer joins over declared and inferred keys;
+- aggregates, grouping, HAVING, COUNT(DISTINCT), nested aggregates and percentages;
+- derived measures (quantity × price, durations, elapsed time) and column-to-column comparisons;
+- "never" / "both" / "always" (anti-joins, INTERSECT, EXCEPT), correlated and scalar subqueries;
+- top-N per group, date parts, quarters and relative periods.
 
-SQL is a useful test bed because the world is structured and the effects are visible. A query can be compared with independent reference SQL; an unsupported interpretation can be refused. The interesting question is the composition, rather than natural-language SQL itself.
+Each feature is listed with examples, and with what is **not** supported, in [docs/CAPABILITIES.md](docs/CAPABILITIES.md).
 
-## How it works
+**Read-only.** IntentSQL only reads data. It never adds, changes or deletes records, and it works on a copy of each database you open, so the original file is never touched.
 
-The read path looks like this:
+## What changed since the Alpha
 
-```mermaid
-flowchart TD
-    R[Request and inspected database] --> D[Bounded Jev decisions]
-    D --> S[Update typed state and narrow candidates]
-    S --> N[Next required skill]
-    N --> D
-    S --> C[Compile candidate SQL and check structure]
-    C --> V[Whole-request coverage and specific reviews]
-    V --> F[Eligible targeted repair]
-    F --> C
-    V --> Q[Execute accepted read]
-    C --> X[Refuse]
-    V --> X
-```
+[`v0.1.0-alpha.1`](https://github.com/Amine-LG/IntentSQL/tree/v0.1.0-alpha.1) was an experiment in letting a decision model steer a query planner, one stage at a time. 1.0 rebuilds the core and keeps what worked: bounded questions, exact SQL, and visible decisions.
 
-Python selects the branches. Independent questions can share a call; dependent questions receive relevant established state. The feedback arrow represents specific implemented repairs, such as retrying an omitted joined filter—not a general search over plans.
+| | Alpha (v0.1.0-alpha.1) | 1.0 |
+|---|---|---|
+| **Interpretation** · rebuilt | A chain of planner "skills", each asking Jev about one stage, with code-defined repair loops | Code builds every candidate reading up front; Jev answers one parallel round of bounded questions; deterministic assembly into a typed plan |
+| **SQL coverage** · much broader | One foreign-key hop, flat AND/OR, up to two grouping keys and one HAVING, scalar aggregates | Multi-hop, self- and outer joins; correlated, scalar and FROM subqueries; INTERSECT/EXCEPT; anti-joins; nested aggregates; percentages |
+| **Arithmetic and dates** · new / improved | Date ranges and rounding; no arithmetic | Derived measures (quantity × price, differences, durations, elapsed time), date parts, quarters, relative periods |
+| **Top-N per group** · new | Per-group MIN/MAX only; ranking requests refused | "The top 3 in each…" via window functions |
+| **Checking the answer** · new / improved | A whole-request coverage review | Readings that differ by one decision *and give different results* are run and compared; Jev checks each plain-English reading against its results |
+| **Confidence** · new | Jev's raw per-choice confidence | Confidence calibrated on measured accuracy; uncertain answers flagged, with the alternatives |
+| **Decision inspector** · improved | Exact questions, probabilities and raw exchanges, as a list of calls | The same honest data as a staged timeline (found → decided → planned → checked → SQL), beside the result on wide screens |
+| **Model setup** · improved | Connection settings for Jev, OpenJEV, a local Laya adapter, or a custom endpoint | Guided first run; *Connected* only after a real answer; custom System One endpoints tested for compatibility; never a silent fallback |
+| **Install and tools** · new / kept | Run from a clone with uvicorn; Docker | A pip package with an `intent-sql` CLI (`ask`, `schema`, `benchmark`, `keys`, `custom`); Docker kept |
+| **Engineering** · improved | Unit tests and CI (tests, JS check) | 152 offline tests, ruff, mypy, clean-install and Docker CI jobs, secret scanning, dependency audit, a cumulative spending guard |
+| **Writing data** · removed | INSERT/UPDATE/DELETE with preview, confirmation and undo | Deliberately left out of 1.0: IntentSQL only reads |
 
-Writes share the row-predicate planner, then take a separate path: compile → preview on an isolated copy → semantic vet → explicit confirmation → guarded commit.
+## Install and run
 
-![Recorded bounded coverage question and probabilities](docs/images/live-program.png)
-
-*Detail from the recorded run above. The current UI exposes exact questions, answers, probabilities, confidence and optional raw exchanges, with a revised card layout. [ARCHITECTURE.md](ARCHITECTURE.md) explains the mechanics.*
-
-## A result—and a refusal
-
-The [final user smoke report](benchmarks/alpha-user-smoke-result.json) records:
-
-> Give me the first three episodes from season 4, in episode order.
-
-```sql
-SELECT * FROM "episodes"
-WHERE "season" = ?
-ORDER BY "episode_in_season" ASC
-LIMIT ?
--- Parameters: [4, 3]
-```
-
-Three rows matched the independent reference, and the typed plan matched the requested filter, ordering and limit.
-
-The same report records this request:
-
-> Return the two tallest players within each birth country, ranked separately inside every country.
-
-It refused: `This request requires unsupported window/ranking semantics; no partial query was executed.` General top-N-per-group ranking is outside the current capability set. Refusal is a useful outcome here, but is counted separately from a correct query.
-
-## What you can do
-
-| Area | Current capabilities |
-| --- | --- |
-| Read | Whole rows or selected fields; comparisons, numeric/date ranges, NULL checks, text contains/prefix/suffix, alternatives and flat AND/OR |
-| Summarize | DISTINCT, COUNT, scalar aggregates, grouping, HAVING, aggregate ordering and supported rounding |
-| Relate and rank | One declared foreign-key hop for fields/predicates; ordering, limits, global and per-group MIN/MAX row selection |
-| Change | Grounded INSERT/UPDATE/DELETE, before/after preview, explicit confirmation, transactional commit and guarded undo |
-| Inspect | Schema browser, row previews, read-only SQL console, exact call details, typed plans, SQL/parameters, token usage and estimated Jev cost |
-
-Bundled Cyberchase, DESE and Moneyball databases give you something to explore immediately. You can also import SQLite databases; the app works on copies and preserves the originals.
-
-## Alpha limits
-
-**v0.1.0-alpha.1** is a local, single-user experiment. The supported shapes do not cover every phrasing. Jev can reject valid wording, and probabilistic coverage does not prove an accepted interpretation correct. Inspect important results and every mutation preview.
-
-Joined aggregates, multi-hop joins, general subqueries, arbitrary nested Boolean logic and top-N-per-group ranking are outside the current envelope. Writes require grounded targets and enforce a 100-change cap, including cascades/trigger effects. Confirmation and undo state live in one server process.
-
-Reconsideration follows finite code-defined paths. There is no training or persistent learning between requests. Whether this pattern is useful beyond the current application remains an open question.
-
-## Quick start
-
-Live semantic decisions need a reachable connection. Configure **Jev** in **Connection** after starting the app; no frontend build or `.env` file is needed. Open <http://127.0.0.1:7862>, choose a database and try a question.
-
-### Getting access
-
-Sign in to the [TypeSafe console](https://console.typesafe.ai/) and obtain an API key from its dashboard, following the [official quick start](https://docs.typesafe.ai/introduction/quickstart). In IntentSQL’s **Connection**, select **Jev** and save the key; the preset uses `https://api.typesafe.ai/v1/systemone` and `jev-latest`. You can also configure OpenJEV, a separately running local Laya adapter, or another compatible endpoint. Compatibility is an interface option, not a claim of equivalent tested behavior.
-
-### Docker
+Python 3.10 or newer:
 
 ```bash
-docker build -t intentsql:0.1.0-alpha.1 .
-docker volume create intentsql-data
-docker run --rm --name intentsql \
-  -p 127.0.0.1:7862:7862 \
-  --mount source=intentsql-data,target=/data \
-  intentsql:0.1.0-alpha.1
+git clone https://github.com/Amine-LG/IntentSQL.git && cd IntentSQL
+python3 -m venv .venv && .venv/bin/pip install .
+.venv/bin/intent-sql serve            # http://127.0.0.1:7862
 ```
 
-The volume preserves saved connections, imported working copies and committed changes. API keys are not baked into the image. Stop with `Ctrl+C`.
-
-### Python — Linux / macOS
-
-Use Python **3.10+**:
+Or Docker. Publish the port on localhost only, because the app stores your model key:
 
 ```bash
-python3 --version
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python -m uvicorn intentsql.web:app --host 127.0.0.1 --port 7862 --workers 1
+docker build -t intentsql . && docker run --rm -p 127.0.0.1:7862:7862 -v intentsql-data:/data intentsql
 ```
 
-### Python — Windows PowerShell
+Three example databases are included: Cyberchase, DESE and Moneyball. **Open database** imports your own SQLite file; IntentSQL works on a copy and never changes the original.
 
-```powershell
-py -3 --version  # verify 3.10 or newer
-py -3 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m uvicorn intentsql.web:app --host 127.0.0.1 --port 7862 --workers 1
+## Connect a model
+
+On first start, IntentSQL asks you to choose a decision model. Nothing is chosen silently, and it never falls back to demo mode on its own.
+
+![Model setup: built-in models, your own models, and demo mode](docs/images/model-setup.png)
+
+| | Model | Status |
+|---|---|---|
+| **TypeSafe Jev** (recommended) | `jev-latest` | Validated live for this release ([results](#results)). Get a key at [console.typesafe.ai](https://console.typesafe.ai); $0.042 per million input tokens |
+| **Liquid AI d1** | `d1`, `d1:free` | Implemented and tested offline; not yet validated with real answers |
+| **Your own model** | any | Any endpoint that speaks the System One decision protocol. See [docs/CUSTOM_MODELS.md](docs/CUSTOM_MODELS.md) |
+| **Demo mode** | none | Fixed default choices, so you can explore the app. It does not understand questions |
+
+**In the app:**
+1. Click the model button at the top right.
+2. Paste a key and click **Save and use**.
+3. Click **Test connection**. This sends one tiny question of each decision type.
+
+The model shows *Connected* only after a real answer. Otherwise it shows the provider's own message: *Key rejected*, *No credits*, *Unavailable* or *Incompatible*.
+
+**On the command line:**
+
+```bash
+intent-sql keys typesafe          # key typed without echo
+intent-sql provider --test
+intent-sql custom add "My model" --url https://models.example.com/v1/systemone --model my-model --key --use
 ```
 
-Use **one worker** and keep the server bound to localhost. For Python installs, you may set `SYSTEM_ONE_API_KEY` in your shell instead of saving it through the UI.
+Keys stay server-side in an owner-only settings file and are sent only to their own provider. They are never returned to the browser or written to logs and reports. `INTENTSQL_BUDGET_USD` sets a spending limit; with `INTENTSQL_SPEND_LEDGER` that limit holds across runs.
 
-Saved profiles live outside the repository in the IntentSQL workspace: `%LOCALAPPDATA%\IntentSQL` on Windows, or `$XDG_DATA_HOME/intentsql` / `~/.local/share/intentsql` on Linux/macOS. `INTENTSQL_WORKSPACE` overrides the location; older workspace locations are reused when applicable. The connection API does not return saved keys. Imported working copies can be deleted after confirmation; bundled examples cannot.
+## Command line
 
-## Evidence
+```bash
+intent-sql ask dese.db "Which five districts have the highest per-pupil expenditure?"
+intent-sql ask dese.db "How many schools does each district have?" --json --debug
+intent-sql schema moneyball.db
+```
 
-These are recorded snapshots, not general natural-language accuracy estimates:
+## Results
 
-| Check | Recorded outcome |
-| --- | --- |
-| [Internal Alpha v2](benchmarks/v2/README.md), development corpus | 80/80 in one historical run, including 19 expected rejections |
-| [Originally unseen Spider subset](benchmarks/spider/README.md), frozen eligible 40 cases | 30/40 passed execution and typed-plan checks; 5 safe rejections, 4 incorrect-result classifications, 1 matching result with a plan mismatch |
-| [Final user smoke](benchmarks/ALPHA_USER_SMOKE.md), development validation | 18 supported requests matched rows and shape; 2 expected rejections; 379 offline tests recorded |
+Measured for this release with TypeSafe `jev-1.13.0` on frozen code, using the protocol in [docs/EVALUATION.md](docs/EVALUATION.md):
 
-The original Spider result is preserved unchanged and is not an official Spider score. [Later safety fixes](benchmarks/ALPHA_SAFETY.md) and user-smoke checks are development work; neither the full Spider subset nor the internal live suite was rerun after those fixes. The existing plain-English smoke recorded 9/10, with one safe cardinality rejection. Provider/model identity is not recorded in the curated safety and user-smoke results. Detailed usage and failure evidence stay in the linked reports.
+| Evaluation | Result |
+|---|---|
+| Held-out suite: 45 questions on a clinic schema never used in development, run once | **93.3%** (42/45; 95% interval 82–98%) |
+| Spider test: 600 random questions, public labels, test-split databases | **78.0% ± 2.4**; when IntentSQL is confident (85% of questions), **87.5%** are right |
+| Spider dev: 600 random questions (fresh sample) | **71.3% ± 0.9**. On the 600 questions of the historical run: 76.7% (historically 76.8%) |
+| Capability / adversarial suites | 94.6% / 92.3%, with unsupported requests refused and no false refusals |
+| Cost | about 2 model calls and 8,000 input tokens per question: roughly $0.0004 |
 
-The recorded internal and Spider runs identify **Jev / `jev-latest`**. Their curated reports do not record run dates or the resolved versioned model ID. [TypeSafe documents `jev-latest` as a moving alias](https://docs.typesafe.ai/models), so a later run can use a different underlying model. No historical version or date is inferred here.
+What the numbers mean:
+- Between one in eight (Spider test) and one in five (fresh Spider dev sample) confident answers are still wrong. Read the "IntentSQL understood" line.
+- The hardest questions remain the weakest area: extra-hard Spider questions score 62–65%.
+- The Spider test score uses IntentSQL's own execution matcher on a random sample. It is not an official leaderboard result.
 
-## Contributing and licenses
+### From the Alpha to 1.0, in numbers
 
-A useful issue includes the request, a small schema/database, expected meaning, actual SQL or refusal, and the decisive trace. General fixes are more useful than database-specific phrase rules. The [original CSV prototype](examples/) and [launch/demo notes](docs/LAUNCH.md) are available separately.
+Spider execution accuracy, all with TypeSafe Jev:
 
-IntentSQL code is [MIT licensed](LICENSE). The bundled `cyberchase.db`, `dese.db`, and `moneyball.db` originate from [Harvard CS50's Introduction to Databases with SQL](https://cs50.harvard.edu/sql/) and are provided for the reproducible demo under the course's [CC BY-NC-SA 4.0 license](https://cs50.harvard.edu/sql/license/); that license applies to the course material separately from the MIT code. The database files have not been modified. See [Cyberchase](https://cs50.harvard.edu/sql/psets/0/cyberchase/), [DESE](https://cs50.harvard.edu/sql/psets/1/dese/), and [Moneyball](https://cs50.harvard.edu/sql/psets/1/moneyball/) for source context.
+| | Questions | Accuracy |
+|---|---|---|
+| Alpha `v0.1.0-alpha.1` | 80 Spider train questions (seed 11) | **33.8%**; 0% on hard and extra-hard |
+| Early rewrite (2026-10-09) | the same 80 questions | **77.5%** |
+| 1.0 | 600 Spider train questions (seeds 21, 31) | **76.8%** |
+| 1.0 | 600 Spider dev questions (fresh sample) | **71.3%** |
+| 1.0 | 600 Spider test questions (public labels) | **78.0%** |
+
+Only the first two rows use the same questions. Even that comparison flatters the rewrite: those train questions were development data, inspected while it was built. The 1.0 rows are different samples from different splits, so read the table as a clear trend, not a controlled head-to-head. The Alpha could not express multi-hop joins, subqueries, set operations or arithmetic at all, which is where most of the gap on hard questions comes from. Every run, with seeds and caveats, is in [docs/EVALUATION.md](docs/EVALUATION.md#compared-with-the-alpha).
+
+## Limitations
+
+- Read-only by design: no inserts, updates or deletes in 1.0.
+- SQLite only, one question at a time, and no follow-up questions about a previous answer.
+- Accuracy depends on the model. Only TypeSafe Jev is measured and calibrated. Liquid d1 and custom models show the raw verification score until they are measured.
+- Ambiguous wording can produce a confident wrong answer. Alternatives are offered when readings disagree, and they are worth reading.
+- [docs/CAPABILITIES.md](docs/CAPABILITIES.md) lists the SQL features that are not supported.
+
+## Development
+
+```bash
+.venv/bin/pip install -r requirements-dev.txt -e .
+.venv/bin/python -m pytest && .venv/bin/ruff check . && .venv/bin/mypy intentsql
+scripts/smoke.sh                       # CLI, API and custom models; no key, no network
+scripts/release_eval.sh typesafe       # the live evaluation protocol (spends credits)
+```
+
+CI (`.github/workflows/ci.yml`) runs:
+- tests, lint and type checks;
+- a clean install with a smoke test;
+- a Docker build;
+- a secret scan of the full history;
+- a dependency audit.
+
+It never calls a paid model. The architecture is described in [ARCHITECTURE.md](ARCHITECTURE.md), and security in [docs/SECURITY.md](docs/SECURITY.md).
+
+## License
+
+The code is under the [MIT license](LICENSE). The bundled `cyberchase.db`, `dese.db` and `moneyball.db` come from [Harvard CS50's Introduction to Databases with SQL](https://cs50.harvard.edu/sql/). They are under its [CC BY-NC-SA 4.0 license](https://cs50.harvard.edu/sql/license/), separately from the code ([notice](intentsql/data/NOTICE.md)).

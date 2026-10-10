@@ -43,13 +43,15 @@ subscriptions. Start with the [Cloudflare example](examples/cloudflare/README.md
 - [Solid Objects in the browser](#solid-objects-in-the-browser)
 - [When a transaction is better](#when-a-transaction-is-better)
 - [Guarantees and boundaries](#guarantees-and-boundaries)
+- [Guides](#guides)
 - [Read more](#read-more)
 - [Status and license](#status-and-license)
 
 ## Installation
 
 Solid Objects is ESM-only and requires Node.js 24.4 or newer. TypeScript users
-need TypeScript 5.9 or newer.
+need TypeScript 5.9 or newer. Coding agents should follow the
+[agent guide](docs/agents.md), which gives each step in order.
 
 ```bash
 npm install solid-objects
@@ -256,6 +258,15 @@ or jobs. A plain counter is not a reason to install this package.
 
 There is no exactly-once delivery. Read the
 [correctness contract](docs/correctness.md) before using important data.
+
+## Guides
+
+Each guide reproduces a failure, shows the simplest fix without an actor, and
+then shows a tested Solid Objects version with its limits:
+
+- [Prevent race conditions in Node.js](docs/guides/race-conditions.md)
+- [Keep turn-based room state through restarts](docs/guides/persistent-rooms.md)
+- [Offline-first state in the browser with SQLite WASM](docs/guides/offline-first.md)
 
 ## Read more
 

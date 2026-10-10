@@ -108,6 +108,16 @@ docker compose -f docker-compose.quickstart.yml up -d
 关闭自助注册，只保留自己的账号。用量统计（写作次数 / token 消耗）见
 **个人中心 → 用量统计**，详见 [docs/30](docs/30-byok-personal-models.md)。
 
+侧边栏「素材」汇总三个页签：**选题**（热搜 / AI 角度 / 自定义，可一键保存至
+知识库）、**订阅**（RSS 源管理，新文章自动抓取入库）、**知识库**（素材库 +
+检索调试 + 总览统计与实体图谱），见 [docs/33](docs/33-materials-ia.md)。
+「风格和技能」中的风格、技能与服务以**下载安装**方式落入固定目录
+（`data/packages/<kind>/<slug>/<version>/`），可卸载，见
+[docs/34](docs/34-package-install.md)。内置技能包开箱即装：
+**深度调研**（多角度并行取证 → 带引用报告，零 API Key）、**学术论文写作**
+（ML/CV/NLP 按节起草与润色）、**arXiv 文献检索**（搜索/BibTeX/引用图谱）、
+**引用校验**（免费学术 API 核验引用真伪，防编造引用与张冠李戴）。
+
 <details>
 <summary>方式二：主 Compose（自构建）· 方式三：本地开发 · 验证 · 生产部署</summary>
 
@@ -134,6 +144,11 @@ cd frontend && npm ci && npm test && npm run build
 
 ## 🧩 功能全景
 
+- **内置技能包（写作增强，[docs/34](docs/34-package-install.md) 下载安装体系）**：
+  深度调研（独立角度并行取证、单点成稿，只用免费公开源）、学术论文写作
+  （Abstract/Intro/Method 等章节模板 + 审稿人视角自查 + LaTeX 导出）、arXiv 文献检索
+  （MIT 上游，SSRF/XML 防护加固、服务端只读 stdout）、引用校验（Crossref/S2/OpenAlex/
+  arXiv 瀑布核验引用元数据 + 逐条语境支撑审计）。各包附 PROVENANCE 说明来源与许可状态；
 - **多模式写作执行**：治理运行时统一调度；编辑部 DAG 的研究→写作→审校以受治理
   Executor 接力（上下文按角色分槽），WebSocket 已退出主架构；
 - **治理型写作运行时**：WritingContract → ExecutablePlan → typed Artifact →
@@ -273,6 +288,8 @@ r7 消融结论（WP6 后重跑）：D 变体硬失败 1.4%、工具调用循环
 - [x] BYOK 个人模型服务（个人中心自带 API Key 优先、全局回退，可为「写后自检/校验」单独配便宜模型；per-user 用量统计；`DISABLE_REGISTRATION` 单用户开关，[docs/30](docs/30-byok-personal-models.md)）
 - [x] 单用户化收尾（sessions 组归属校验、folders/批量管理补齐、KB 素材入口合一、部署元数据端点与 admin 降噪，[docs/31](docs/31-personal-history-feedback.md)）
 - [x] RSS 订阅（订阅源 = 自动更新的素材文件夹，SSRF 加固抓取 + 限量入库，[docs/32](docs/32-rss-subscriptions.md)）
+- [x] 素材三页签与选题存知识库（选题/订阅/知识库 + 写入路径统一 kb_id=default，[docs/33](docs/33-materials-ia.md)）
+- [x] 下载安装体系（风格/技能/服务包装到固定目录 + 注册表 + SSRF/zip-slip 防护，[docs/34](docs/34-package-install.md)）
 - [x] 个人写作记录与反馈历史（个人中心回看评分/步骤/文章 + 只读反馈历史；sessions 组归属校验修复；folders/batch 补齐，[docs/31](docs/31-personal-history-feedback.md)）
 - [ ] allowlist 晋升资格链线上验证（policy → evidence → approval → gate）
 - [ ] 编辑部 DAG 生命周期进一步接入统一记忆契约（按角色分槽注入）
@@ -286,6 +303,10 @@ r7 消融结论（WP6 后重跑）：D 变体硬失败 1.4%、工具调用循环
 | [docs/11-memory-system.md](docs/11-memory-system.md) | 分层记忆 |
 | [docs/12-editorial-system.md](docs/12-editorial-system.md) | 编辑部多 Agent |
 | [docs/19-governed-writing-runtime.md](docs/19-governed-writing-runtime.md) | 治理型运行时 |
+| [docs/30-byok-personal-models.md](docs/30-byok-personal-models.md) | BYOK 个人模型服务 |
+| [docs/33-materials-ia.md](docs/33-materials-ia.md) | 素材信息架构（选题/订阅/知识库） |
+| [docs/34-package-install.md](docs/34-package-install.md) | 下载安装体系（风格/技能/服务） |
+| [docs/35-dual-line-sync.md](docs/35-dual-line-sync.md) | 双线同步策略（cherry-pick + 适配） |
 | [docs/search-provider-adapter.md](docs/search-provider-adapter.md) | 搜索源适配器开发 |
 | [docs/provider-configuration.md](docs/provider-configuration.md) | 模型提供方切换 |
 | [docs/ops-backup-restore.md](docs/ops-backup-restore.md) | 备份与恢复 |

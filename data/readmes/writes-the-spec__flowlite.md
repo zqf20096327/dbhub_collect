@@ -50,7 +50,7 @@ Or clone and `cargo build --release`, which leaves the binary at `target/release
 ## Quick start
 
 ```bash
-flowlite init                           # an example job, schedule and commented config.toml
+flowlite init                           # an example job, schedule and commented flowlite.toml
 flowlite serve                          # scheduler, orchestrator and dashboard on :8000
 flowlite job submit hello-world --wait  # in a second shell; exits non-zero unless it succeeded
 ```
@@ -96,7 +96,7 @@ jobs:
 ```
 
 ```toml
-# config.toml
+# flowlite.toml
 [secrets]
 warehouse_pw = "..."
 ```
@@ -136,7 +136,7 @@ tasks:
 ```
 
 ```toml
-# config.toml
+# flowlite.toml
 [concurrency_limits]
 llm_api = 4
 
@@ -185,7 +185,7 @@ that task's children.
 flowlite does not sandbox. A task runs as the user `flowlite serve` runs as, with that user's
 filesystem and network. It inherits the server's environment, less every `FLOWLITE_*`
 variable. That strip keeps flowlite's own settings out of a task's environment, but not out
-of its reach: `config.toml`, `[secrets]` included, is a file the task can read. A
+of its reach: `flowlite.toml`, `[secrets]` included, is a file the task can read. A
 `secret_env:` value is in the process's environment, which means an agent handed a key can
 read it and write it into its log or result.
 
@@ -206,7 +206,7 @@ authentication, and MCP is stdio with one process per client.
 
 ## Status
 
-0.1.0 is the first release. From here on, run history upgrades in place. The YAML format,
+0.2.0 is the current release. Since 0.1.0, run history upgrades in place. The YAML format,
 the CLI and the MCP tools may still change before 1.0.
 
 Not there yet: an approval gate before a run starts, recording what a run cost, a

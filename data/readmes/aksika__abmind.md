@@ -106,7 +106,6 @@ Not locked to one CLI or framework:
 |---|---|
 | **abTARS** | In-process memory for the autonomous bridge |
 | **Hermes Agent** | Plugin-compatible memory backend |
-| **OpenClaw** | Native memory slot replacement |
 | **Library** (`import { MemoryManager } from "abmind"`) | Any Node.js agent |
 | **MCP server** (`abmind mcp`) | Editors + hosts with MCP support |
 | **CLI** (`abmind store/recall/...`) | Shell scripts, automation |
@@ -145,8 +144,13 @@ export ABMIND_LLM_CMD='kiro-cli chat --no-tool-use < {PROMPT_FILE}'
 ## MCP Server
 
 ```bash
-abmind mcp     # starts stdio MCP server
+abmind mcp     # starts stdio MCP adapter (local daemon by default)
 ```
+
+Tools: `memory_recall`, `memory_store`, `memory_edit`, `memory_status`,
+`memory_context`. Every tool returns a versioned
+`{version: 1, ok, result|error}` envelope; writes need a caller-chosen
+operationId. See `docs/wiki/cli.md` for remote mode and the full contract.
 
 Add to your host's MCP config:
 
