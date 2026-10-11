@@ -8521,5 +8521,267 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9fd5e63c977d": {
+  "identity": {
+   "one_liner": "Neovim 内置的多数据库客户端插件，Rust 引擎执行查询",
+   "review": "sqmeow.nvim 是运行在 Neovim 中的数据库客户端插件，支持浏览表结构、执行查询、在结果网格中编辑数据，并通过 Polars 在本地过滤排序结果；数据库操作由独立的 Rust 进程处理。面向习惯终端工作流的开发者，支持项目级连接配置、SSH 隧道、查询历史和 blink.cmp/nvim-cmp 补全。数据编辑需要完整主键或唯一键，只读访问需使用只读数据库账号。",
+   "highlights": [
+    "支持 SQL、NoSQL、分析型等多种数据库，含 PostgreSQL、MySQL、Redis、MongoDB、ClickHouse 等",
+    "结果过滤与排序通过 Polars 在本地完成，支持查询历史复用",
+    "提供 blink.cmp/nvim-cmp 数据库感知补全，可配置 SSH 隧道与项目级连接"
+   ],
+   "use_cases": [
+    "在终端/Neovim 中直接浏览和检查数据库数据",
+    "在编辑器内编写并执行查询、编辑查询结果",
+    "管理项目本地的数据库连接与查询草稿"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Relational & analytical:** PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, DuckDB, ClickHouse, Oracle Database, Microsoft SQL Server. ／ type = \"postgres\"",
+     "lines": [
+      39,
+      152
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Relational & analytical:** PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, DuckDB, ClickHouse, Oracle Database, Microsoft SQL Server.",
+     "lines": [
+      39
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **Relational & analytical:** PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, DuckDB, ClickHouse, Oracle Database, Microsoft SQL Server.",
+     "lines": [
+      39
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Relational & analytical:** PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, DuckDB, ClickHouse, Oracle Database, Microsoft SQL Server.",
+     "lines": [
+      39
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Relational & analytical:** PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, DuckDB, ClickHouse, Oracle Database, Microsoft SQL Server.",
+     "lines": [
+      39
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **Relational & analytical:** PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, DuckDB, ClickHouse, Oracle Database, Microsoft SQL Server.",
+     "lines": [
+      39
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Relational & analytical:** PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, DuckDB, ClickHouse, Oracle Database, Microsoft SQL Server.",
+     "lines": [
+      39
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为连接多种数据库执行查询/编辑的客户端工具，属于为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A lightweight database client that lives inside Neovim. Browse databases, run queries, edit data, and explore results without leaving your editor. ／ ## Supported databases ／ - **Relational & analytical:** PostgreSQL, CockroachDB, MySQL, MariaDB, SQLite, DuckDB, ClickHouse, Oracle Database, Microsoft SQL Server.",
+   "evidence_lines": [
+    5,
+    37,
+    39
+   ]
+  },
+  "fn": "2giosangmitom/sqmeow.nvim",
+  "sha": "9fd5e63c977d",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "446d6af96b36": {
+  "identity": {
+   "one_liner": "MeshCore wardrive 覆盖地图自托管版，SQLite 存储的 Docker 应用",
+   "review": "该项目将 MeshCore wardrive 覆盖地图做成可自托管的 Docker 应用，用单文件 SQLite 存储覆盖数据，提供地图界面、JSON 导入工具、贡献者统计与排行榜 API。适合运行 MeshCore wardrive 的爱好者部署私有地图服务。默认关闭上传且无认证，需在可信网络使用。",
+   "highlights": [
+    "SQLite 单文件后端，通过 Docker volume 持久化",
+    "提供手动 JSON 导入工具，支持 dry-run 与贡献者/区域标注",
+    "默认禁用上传（ALLOW_UPLOAD=false），提供 samples/stats/contributors 等 API"
+   ],
+   "use_cases": [
+    "自托管 MeshCore wardrive 覆盖地图",
+    "离线导入并审核 wardrive 采集数据",
+    "统计各贡献者的采样数据并生成排行榜"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Self-hosted version of the MeshCore wardrive coverage map. Runs locally with SQLite — no cloud dependencies. ／ - SQLite backend — single-file database, no external services ／ Database: `data/meshwar.db` (SQLite, persisted via Docker volume)",
+     "lines": [
+      3,
+      28,
+      98
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用以 SQLite 作为自身数据存储后端，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Self-hosted version of the MeshCore wardrive coverage map. Runs locally with SQLite — no cloud dependencies. ／ - SQLite backend — single-file database, no external services ／ Database: `data/meshwar.db` (SQLite, persisted via Docker volume)",
+   "evidence_lines": [
+    3,
+    28,
+    98
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "mintylinux/meshwar-map-docker",
+  "sha": "446d6af96b36",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3cd16cc2d01a": {
+  "identity": {
+   "one_liner": "单机自托管控制面板，管理容器、负载与 Claude Code 会话",
+   "review": "这是一个用 Go 编写的单机自托管控制面板，通过手机或显示器查看和操作本机的容器、系统负载及 Claude Code 会话，可启停容器、向会话发送消息和文件、回答模型提问。适用于用 Claude Code 编码并在 tmux 中运行会话的 Linux 用户。架构上分为三个权限互斥的进程，数据存于自带容器中的 Postgres，登录采用 WebAuthn passkey 而非密码。",
+   "highlights": [
+    "提供会话、容器、机器指标、用量统计、告警与操作日志等屏幕，可从面板实际执行启停容器和会话操作",
+    "采用服务、采集器、执行器三个权限分离的进程架构，通过只读 socket-proxy 访问 docker.sock",
+    "使用 WebAuthn passkey 与签名 cookie 认证，前端以 PWA 形式安装并支持离线"
+   ],
+   "use_cases": [
+    "在手机或显示器上远程查看和操控本机 Docker 容器与系统资源",
+    "从面板监视并参与 Claude Code 会话：查看对话、回答提问、发送文件和斜杠命令",
+    "对账号用量、容器状态设置阈值告警并通过 Web Push 接收通知"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres does not have to be installed, it arrives as a container, and neither ／ **The database** — Postgres in its own container. Metrics are partitioned, ／ |`internal/store/`|Postgres: pool, migrations, partitions, writing metrics|",
+     "lines": [
+      102,
+      130,
+      156
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "面板自身使用 Postgres 存储指标、日志等数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**The database** — Postgres in its own container. Metrics are partitioned, ／ |`internal/store/`|Postgres: pool, migrations, partitions, writing metrics|",
+   "evidence_lines": [
+    130,
+    156
+   ]
+  },
+  "fn": "BeMySlaveDarlin/aacpanel",
+  "sha": "3cd16cc2d01a",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

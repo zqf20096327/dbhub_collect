@@ -9145,5 +9145,138 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "da040ba6fb4b": {
+  "identity": {
+   "one_liner": "自托管数字标牌 CMS，用 Node.js 与 SQLite 管理屏幕内容播放",
+   "review": "ScreenTinker 是一个可自托管的开源数字标牌内容管理系统，提供播放列表、排期、多分区布局、视频墙、远程控制和播放统计等功能，支持 Android TV、Fire TV、树莓派等多种播放端。数据存储使用内置的 SQLite（经 better-sqlite3），适合零售、餐饮、办公和教育等需要集中管理远程屏幕的场景，采用 MIT 许可。",
+   "highlights": [
+    "提供播放列表、排期、多分区布局与视频墙管理，支持 Android TV、Fire TV、Tizen、webOS、树莓派等多种播放端",
+    "使用 better-sqlite3 内置 SQLite 存储，npm install 即可完成安装，无需单独部署数据库",
+    "支持多租户工作区、六级成员角色、S3/Azure Blob 等多种媒体存储后端"
+   ],
+   "use_cases": [
+    "零售门店与快餐厅菜单屏的内容集中管理与排期",
+    "办公室/大堂信息屏、会议室门牌与自助终端（kiosk）界面展示",
+    "多地点视频墙与远程设备的集中监控和遥控"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Admin REST** → `/api/*` HTTPS → Express → SQLite. Everything scoped by `workspace_id` from JWT `current_workspace_id` claim. ／ - SQLite (bundled via `better-sqlite3`; no separate install needed — `npm install` handles the native bindings)",
+     "lines": [
+      145,
+      175
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统通过 Express 和 better-sqlite3 使用 SQLite 存储自身数据，而非为数据库生态提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ScreenTinker is a free, open-source **digital signage CMS** you can self-host on your own server — or run in our managed cloud. Manage TVs, video walls, and kiosks across multiple locations from one dashboard, with remote control, scheduling, playlists, and analytics. Built for retail, QSR menu boards, offices, lobbies, education, and any environment where you need centralized control over remote screens. Multi-tenant, MIT-licensed, single-developer maintained with direct contact access.",
+   "evidence_lines": [
+    11
+   ]
+  },
+  "fn": "screentinker/screentinker",
+  "sha": "da040ba6fb4b",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2cbad5920c89": {
+  "identity": {
+   "one_liner": "社区维护的开源有声书元数据库，JSON 经 CI 编译为 SQLite 工件",
+   "review": "这是一个以 GitHub 仓库本身为数据库的有声书元数据项目：贡献者通过 PR 或 issue 表单编辑打包的 JSON 数据，Go 工具链在 CI 中校验 schema、引用完整性和标识唯一性，合并后编译为单个 SQLite 工件发布，并由 metaserve 提供只读 JSON API 和网站。面向有声书听众、元数据贡献者及 Audiobookshelf 等服务器的搭建者；数据写入完全依赖 GitHub，无服务器端账户，API 只读且无鉴权。",
+   "highlights": [
+    "提供 metabuild/metacheck/metafmt/metamigrate 等 Go 工具，实现数据校验、规范格式化与 SQLite 工件编译",
+    "提供 metaserve 只读 JSON API，包含 FTS 全文搜索、作品/人物/系列详情、章节列表与 ASIN/ISBN 查询",
+    "支持 --poll 从 GitHub Release 拉取最新数据工件并热切换，带校验和验证与缓存回退机制"
+   ],
+   "use_cases": [
+    "为有声书播放器（如 Audiobookshelf）提供元数据源",
+    "社区协作维护有声书作品、录音、旁白者与系列的结构化元数据",
+    "自托管只读元数据 API 服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "by Go tooling in CI, and compiled into a single SQLite artifact that servers ／ data/*.json ──► CI validation ──► meta.sqlite ──► API server + site ／ 3. On merge to `main`, a release workflow builds `meta.sqlite` and attaches it ／ - `metabuild -o meta.sqlite` - compile the database into a SQLite file",
+     "lines": [
+      15,
+      52,
+      61,
+      114
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以 SQLite 作为编译产物的存储引擎来提供元数据服务，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**The GitHub repository is the database.** Metadata lives as plain JSON pack ／   data/*.json  ──►  CI validation  ──►  meta.sqlite  ──►  API server + site ／ - `metabuild -o meta.sqlite` - compile the database into a SQLite file",
+   "evidence_lines": [
+    12,
+    52,
+    114
+   ]
+  },
+  "fn": "KodeStar/audiosilo-meta",
+  "sha": "2cbad5920c89",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

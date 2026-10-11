@@ -8901,5 +8901,113 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dd7813431c83": {
+  "identity": {
+   "one_liner": "自托管数据决策智能体：语义模型约束下的 NL→SQL 问数与分析",
+   "review": "Trove 是一个自托管的数据决策智能体，用户以自然语言提问，系统基于人工确认的语义模型（semantics.yml）编译生成 SQL，经零 LLM 规则链与 AST 防火墙校验后执行，对业务数据保持只读；还提供阈值判定、归因分析与行动提案审批。适合需要对数据库做受控问数与监控决策的团队，要求先完成语义建模，且对话依赖外部 LLM 凭证。",
+   "highlights": [
+    "语义层划定可答边界，模型外的提问被拒绝并生成模型扩展草稿",
+    "SQL 执行前过零 LLM 规则链、AST 防火墙与 EXPLAIN 代价守卫，系统对业务数据只读",
+    "支持 SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery 八种数据源，内置 MCP server，Web/REST/MCP/CLI 四种接口"
+   ],
+   "use_cases": [
+    "业务人员用自然语言查询数据库并获得带证据的答案",
+    "按阈值规则定时求值指标并在触发后走审批外送行动",
+    "对指标变化做贡献分解与归因分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |一份能登录、能管理的完整部署|Docker Compose(前端 + 后端 + PostgreSQL)|15 分钟|Docker| ／ 1. **连接** —— 一个数据库 URL:`--datasource postgres://user:pass@host:5432/db`。 ／ 服务端部署下,同一流程在管理端完成(数据源注册 → KB init → 草稿审批)。逐步指南(MySQL / Doris / PostgreSQL / ClickHouse / DuckDB,以及云仓 Snowflake / BigQuery,含管理台与本地 REPL 两条路径):接入数据源。 ／ |八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力| ／ 数据源按需装驱动:`uv sync --extra postgres|mysql|doris|clickhouse|duckdb`(SQLite 内置);云仓另装 `--extra snowflake|bigquery`。LLM 走 litellm 网关,OpenAI / DeepSeek / Anthropic / 任意兼容端点皆可,每节点可分档——强模型做反思裁决,便宜模型做规划与洞察。见 配置参考。",
+     "lines": [
+      13,
+      145,
+      160,
+      164,
+      197,
+      200
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "服务端部署下,同一流程在管理端完成(数据源注册 → KB init → 草稿审批)。逐步指南(MySQL / Doris / PostgreSQL / ClickHouse / DuckDB,以及云仓 Snowflake / BigQuery,含管理台与本地 REPL 两条路径):接入数据源。 ／ |八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力| ／ 数据源按需装驱动:`uv sync --extra postgres|mysql|doris|clickhouse|duckdb`(SQLite 内置);云仓另装 `--extra snowflake|bigquery`。LLM 走 litellm 网关,OpenAI / DeepSeek / Anthropic / 任意兼容端点皆可,每节点可分档——强模型做反思裁决,便宜模型做规划与洞察。见 配置参考。",
+     "lines": [
+      164,
+      197,
+      200
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力| ／ 数据源按需装驱动:`uv sync --extra postgres|mysql|doris|clickhouse|duckdb`(SQLite 内置);云仓另装 `--extra snowflake|bigquery`。LLM 走 litellm 网关,OpenAI / DeepSeek / Anthropic / 任意兼容端点皆可,每节点可分档——强模型做反思裁决,便宜模型做规划与洞察。见 配置参考。",
+     "lines": [
+      197,
+      200
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "服务端部署下,同一流程在管理端完成(数据源注册 → KB init → 草稿审批)。逐步指南(MySQL / Doris / PostgreSQL / ClickHouse / DuckDB,以及云仓 Snowflake / BigQuery,含管理台与本地 REPL 两条路径):接入数据源。 ／ |八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力| ／ 数据源按需装驱动:`uv sync --extra postgres|mysql|doris|clickhouse|duckdb`(SQLite 内置);云仓另装 `--extra snowflake|bigquery`。LLM 走 litellm 网关,OpenAI / DeepSeek / Anthropic / 任意兼容端点皆可,每节点可分档——强模型做反思裁决,便宜模型做规划与洞察。见 配置参考。",
+     "lines": [
+      164,
+      197,
+      200
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它连接外部数据源向用户提供问数与分析服务，数据库是其读取数据的应用对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "rag",
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Trove 是一个**自学习型数据决策智能体**:用自然语言提问,得到由真实 SQL 支撑的 Markdown 答案——执行前与执行后都被验证;当答案只能是猜测时,它会拒绝;同一份语义模型还会被定时求值成带证据、知不确定性的判定,触发即送达——行动发生在你的流程里(系统对业务数据保持只读),行动之后还有效果验收;每一次提问都会让它变得更好。 ／ |八种数据源|SQLite / PostgreSQL / MySQL / Doris / ClickHouse / DuckDB / Snowflake / BigQuery,一套模式|数据能力| ／ 数据源按需装驱动:`uv sync --extra postgres|mysql|doris|clickhouse|duckdb`(SQLite 内置);云仓另装 `--extra snowflake|bigquery`。LLM 走 litellm 网关,OpenAI / DeepSeek / Anthropic / 任意兼容端点皆可,每节点可分档——强模型做反思裁决,便宜模型做规划与洞察。见 配置参考。",
+   "evidence_lines": [
+    22,
+    197,
+    200
+   ]
+  },
+  "fn": "Nivane/trove",
+  "sha": "dd7813431c83",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

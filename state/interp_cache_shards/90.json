@@ -8697,5 +8697,257 @@
   "generated_at": "2026-10-07",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "fa9739aa6232": {
+  "identity": {
+   "one_liner": "安装和配置 PostgreSQL 服务器的 Ansible 角色",
+   "review": "一个 Ansible 角色，用于在 RHEL/CentOS 或 Debian/Ubuntu 服务器上安装并配置 PostgreSQL。可声明式管理服务状态、全局配置、pg_hba 认证条目，并创建数据库、用户与权限。面向使用 Ansible 自动化部署数据库的运维人员，需 root 权限运行。",
+   "highlights": [
+    "提供 postgresql.conf 全局配置项与 pg_hba.conf 认证条目的声明式管理",
+    "支持创建数据库、用户及权限配置",
+    "适配 RHEL/CentOS 与 Debian/Ubuntu 系列"
+   ],
+   "use_cases": [
+    "用 Ansible 批量部署 PostgreSQL 服务器",
+    "统一管理服务器配置、HBA 认证规则",
+    "自动化创建数据库、用户与授权"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# Ansible Role: PostgreSQL ／ Installs and configures PostgreSQL server on RHEL/CentOS or Debian/Ubuntu servers.",
+     "lines": [
+      1,
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该角色是用于安装配置 PostgreSQL 服务器的运维工具，不以数据库存储自身业务数据为目的",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT / BSD 双许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Installs and configures PostgreSQL server on RHEL/CentOS or Debian/Ubuntu servers. ／ No special requirements; note that this role requires root access, so either run it in a playbook with a global `become: true`, or invoke the role in your playbook like: ／ A list of privileges to configure (new in role version 4.0.0).",
+   "evidence_lines": [
+    5,
+    9,
+    128
+   ]
+  },
+  "fn": "geerlingguy/ansible-role-postgresql",
+  "sha": "fa9739aa6232",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "073c40dc1b76": {
+  "identity": {
+   "one_liner": "Go 实现的列式内存数据库，提供 MySQL 协议与多方言 SQL 接口",
+   "review": "MemCP 是一个用 Go 和 Scheme 实现的持久化列式内存 SQL 数据库，支持事务、全文搜索与分析混合负载，通过 MySQL wire protocol、HTTP 端点（MySQL/PostgreSQL/T-SQL 方言）和 SPARQL 接入。面向需要同时做 OLTP 与 OLAP 的自托管应用，目前处于 Beta 阶段，SQL 方言尚未完全等价，需自行验证查询与备份流程。",
+   "highlights": [
+    "提供 MySQL wire protocol 服务端及 MySQL/PostgreSQL/T-SQL 方言的 HTTP SQL 端点，并内置 RDF/SPARQL 引擎",
+    "采用列式主/增量（main/delta）存储架构，支持数据从内存按需换出与加载",
+    "包含基于成本的查询规划器、EXPLAIN 计划检查与 A/B 性能回归 CI 流程"
+   ],
+   "use_cases": [
+    "需要持续更新数据并执行过滤、分页、聚合分析的应用",
+    "希望现有 MySQL 客户端/连接器不改代码接入新存储引擎的场景",
+    "需要通过 HTTP 端点提交多方言 SQL 或 SPARQL 查询的自托管部署"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "Applications can connect through the MySQL wire protocol or submit MySQL- and ／ Existing MySQL clients and connectors can use MemCP's wire-protocol server.",
+     "lines": [
+      14,
+      64
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "- `/psql/<database>` — PostgreSQL-dialect SQL",
+     "lines": [
+      87
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "`mysql_import` connects to a running MySQL/MariaDB server over the wire",
+     "lines": [
+      630
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是一个数据库存储引擎与 SQL 运行时本体，而非使用某个数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GPL-3.0-or-later",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# MemCP — transactions, search, and analytics in one open-source database ／ MemCP is a persistent, column-oriented SQL database built for applications that ／ Existing MySQL clients and connectors can use MemCP's wire-protocol server.",
+   "evidence_lines": [
+    1,
+    3,
+    64
+   ]
+  },
+  "fn": "launix-de/memcp",
+  "sha": "073c40dc1b76",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "166ad87cf2e2": {
+  "identity": {
+   "one_liner": "异步 Rust 库，在消息队列与数据库等系统间路由数据",
+   "review": "mq-bridge 是一个可嵌入服务的异步 Rust 库，通过统一的 receive_batch/send_batch 接口在 Kafka、NATS、MQTT、AMQP、PostgreSQL、ClickHouse 等端点之间搬运数据，支持路由配置、转换、重试、去重和 Postgres/MongoDB CDC，并提供 Python、Node.js 绑定及零代码的 mq-bridge-app。适合需要在自建服务中集成消息与数据库数据管道的开发者；它本身不是独立守护进程，免代码使用需借助配套 app。",
+   "highlights": [
+    "提供统一批式 receive_batch/send_batch 接口，覆盖 Kafka、NATS、AMQP、MQTT、SQL 数据库、ClickHouse 等 20+ 原生端点，并有 Redpanda Connect 插件扩展",
+    "支持 Postgres 逻辑复制（pgoutput）与 MongoDB change streams 的 CDC，以及重试、DLQ、去重、限流等可靠性中间件",
+    "同一 Rust 核心提供 Python 与 Node.js 绑定，并可通过 mq-bridge-app 以 CLI、服务器、桌面 UI 和 MCP server 方式零代码运行"
+   ],
+   "use_cases": [
+    "在服务中嵌入数据路由，将 Kafka 等消息源写入 SQL 数据库或 ClickHouse 等 sink",
+    "用 Postgres CDC 将行级变更同步到 Kafka、向量索引或数仓（如 transactional outbox、RAG 索引同步）",
+    "用内存通道在不启动 broker 的情况下测试消息处理逻辑"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object s ／ |**Change Data Capture (CDC)**: stream Postgres or MongoDB changes to Kafka, files, a warehouse, …|`postgres_cdc` (logical replication, `pgoutput`) · `postgres-cdc`; `mongodb` with `consume: capture_all` / `capture_new` (change streams) · `mongodb`|Postgres CD ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      27,
+      90,
+      91
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      91
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      91
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      91
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|**ClickHouse** bulk insert and resumable reads|`clickhouse` endpoint · `clickhouse`|ClickHouse|",
+     "lines": [
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为数据库与消息系统之间的数据搬运、CDC 和同步提供服务，属于数据管道工具/组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "pypi",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object storage, files, and in-memory channels. Every endpoint sits behind the same batch-shaped `receive_batch` / `send_batch` traits, so any source can feed any sink. ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts| ／ |**ClickHouse** bulk insert and resumable reads|`clickhouse` endpoint · `clickhouse`|ClickHouse|",
+   "evidence_lines": [
+    27,
+    91,
+    93
+   ]
+  },
+  "fn": "marcomq/mq-bridge",
+  "sha": "166ad87cf2e2",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9135,5 +9135,139 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "160bbbe2a65e": {
+  "identity": {
+   "one_liner": "面向 LLM 的长期记忆后端，含记忆网关与 MCP 工具",
+   "review": "Stiller Brain 是一个为 LLM 客户端提供长期记忆的服务：AI 通过 MCP 工具主动写入、查询、修改记忆，ST 网关在回复前按对话语境注入相关记忆。部署在本机 Windows/Linux，用 Python 运行、SQLite 存储，需源码安装。面向具备网关接口与 MCP 调用能力的模型与客户端；当前为源码开发预览版本。",
+   "highlights": [
+    "提供 ST 网关（OpenAI 兼容 Chat Completions）在回复前注入相关记忆",
+    "提供 MCP 工具（Streamable HTTP）供 AI 主动查询、保存、修改记忆与自写提醒",
+    "基于 SQLite 存储，含版本历史、情绪词表与短期换窗交接功能"
+   ],
+   "use_cases": [
+    "为 LLM 角色扮演或个人助手提供跨会话长期记忆",
+    "AI 在对话中主动记录经历、方法与计划并按语境回溯",
+    "本地私有部署的记忆库，配合支持 MCP 的客户端使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`0.2.0-preview.4` · Python / SQLite · 网关断线收尾与安全恢复 · 日常 8 入口 / 完整模型目录 54 项 · 源码开发预览",
+     "lines": [
+      281
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储记忆数据，本身不服务于数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`0.2.0-preview.4` · Python / SQLite · 网关断线收尾与安全恢复 · 日常 8 入口 / 完整模型目录 54 项 · 源码开发预览 ／ ST 是面向 LLM 的长期记忆后端。它接住 AI 自己写下的经历、理解与打算，再通过网关，在回复开始前带回与当前话题相关的记忆；MCP 工具则让 AI 随时主动查阅、保存和修改。接入以网关接口与 MCP 工具调用能力为依据，面向具备相应能力的模型与客户端。 ／ 现成网关使用 OpenAI 兼容的 Chat Completions 接口，MCP 使用带认证的 Streamable HTTP；其他接口可由具备等价注入能力的宿主适配。具体接入看接口、上下文和工具续轮支持，见 接入指南 与 架构。",
+   "evidence_lines": [
+    281,
+    7,
+    50
+   ]
+  },
+  "fn": "AZHi-xinxin/StillerBrain",
+  "sha": "160bbbe2a65e",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8b84560cae43": {
+  "identity": {
+   "one_liner": "Spring Boot 图书管理 REST API，用 PostgreSQL 存储数据",
+   "review": "Libro 是一个基于 Java Spring Boot 的图书馆管理系统 REST API，提供图书 CRUD、分页排序、价格区间筛选、题材统计以及用户账户与资料管理接口；数据存于 PostgreSQL 18，通过 Flyway 做 schema 迁移，以 Docker Compose 方式部署，内置 Swagger/OpenAPI 文档与 HTTP Basic 认证。适合作为企业级 Java 项目示例或小型图书馆场景，注意借阅（Loan）API 尚未实现。",
+   "highlights": [
+    "提供图书 CRUD、搜索、分页排序、价格区间筛选与统计/题材分布接口",
+    "通过 Flyway 实现 schema 版本化迁移，随应用启动准备数据库",
+    "提供 OpenAPI 文档（Swagger UI 与 /v3/api-docs）与 HTTP Basic 认证"
+   ],
+   "use_cases": [
+    "图书馆图书与用户账户的信息化管理",
+    "需要 REST API + PostgreSQL + Docker 工作流的 Java 项目参考",
+    "基于 Spring Boot 的图书库存统计与题材分析场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Libro is a Spring Boot REST API and Library Management System. It manages books with CRUD operations, search, pagination, sorting, range filtering, genre analytics, and statistics. It also exposes user account and profile routes for creation, listing, lookup,  ／ |Database|PostgreSQL 18|",
+     "lines": [
+      10,
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明系统以 PostgreSQL 18 作为后端数据库存储数据，是使用数据库的应用而非服务数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Libro is a Spring Boot REST API and Library Management System. It manages books with CRUD operations, search, pagination, sorting, range filtering, genre analytics, and statistics. It also exposes user account and profile routes for creation, listing, lookup, profile updates, password changes, and deletion. Loan HTTP APIs are not implemented. The prototype uses DTO-driven validation, centralized exception handling, and a Docker-first workflow backed by PostgreSQL 18 with Flyway database migrations. ／ |Database|PostgreSQL 18| ／ The system runs as a Spring Boot API alongside PostgreSQL. Book and user requests pass through the HTTP, business, and persistence layers; Flyway prepares the schema at startup. Shared validation, mapping, security configuration, and error handling support the API. `UserRepository` has two clear consumers: `UserService` for account use cases and `LibroUserDetailsService` for the account lookup Spring Security needs during HTTP Basic authentication.",
+   "evidence_lines": [
+    10,
+    26,
+    52
+   ]
+  },
+  "fn": "kyledelfin2006/libro-library-system",
+  "sha": "8b84560cae43",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

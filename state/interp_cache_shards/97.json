@@ -8419,5 +8419,205 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "598e7033f7de": {
+  "identity": {
+   "one_liner": "SQLite 多写者 VFS 扩展，允许多线程/进程并发写入",
+   "review": "sqlite-multiwriter 以可加载 VFS 扩展形式为 SQLite 提供多写者并发能力：每个写者使用私有 WAL，提交时校验页面并以 first-committer-wins 处理冲突，可选 rebase 机制重放仅页面冲突的事务，数据库文件保持普通 SQLite 格式。面向需要在多线程或多进程（如多个 agent）场景写入同一 SQLite 数据库的开发者。",
+   "highlights": [
+    "以 VFS 扩展形式运行，无需修改 SQLite 本体、schema 或 SQL",
+    "支持同一进程内多连接及多进程（mw_mp=1）并发写同一数据库文件",
+    "提供 snapshot isolation 加读页面校验，可选 mw_rebase 重放页面级冲突事务"
+   ],
+   "use_cases": [
+    "多线程应用并发写入同一 SQLite 数据库",
+    "多个进程/agent 同时写一个数据库文件的场景",
+    "需要降低 SQLITE_BUSY 重试的写入密集型应用"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# sqlite-multiwriter ／ SQLite is the most widely used database in the world, and it has one well-known limit: a database accepts only one writer at a time. With many threads, or many processes (several agents working on the ／ sqlite-multiwriter removes that limit without touching SQLite. It is a VFS that you load as an extension (or link in): your SQLite, your SQL and your database file stay the same, and many connections",
+     "lines": [
+      1,
+      6,
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite 数据库提供并发写入引擎能力的 VFS 扩展，属数据库内核层组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "sqlite-multiwriter removes that limit without touching SQLite. It is a VFS that you load as an extension (or link in): your SQLite, your SQL and your database file stay the same, and many connections ／ Each writer has its own WAL. Its transactions run there on a snapshot of the database, and at commit they are checked, ordered and published; the log is merged into the database file in the background: ／ Every release has the extension for each platform (releases; `make extension` builds it for the machine you are on). Load it into a SQLite that",
+   "evidence_lines": [
+    9,
+    33,
+    63
+   ]
+  },
+  "fn": "sqliteai/sqlite-multiwriter",
+  "sha": "598e7033f7de",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "75f5b2ade078": {
+  "identity": {
+   "one_liner": "自托管剪贴板与文件中转服务，单 Go 进程+内置 Web 应用，SQLite 存储",
+   "review": "Ferry 是部署在私有局域网内的自托管剪贴板和文件传输服务：单个 Go 进程同时提供 Web 应用、API 和数据存储，消息与设备身份存于 SQLite，上传文件存于本地 blob 目录，任意浏览器即可作为客户端加入，另有可选的 iOS/Android 原生应用。通过 Docker Compose 部署，附备份/恢复脚本，适合需要在个人设备间传递内容且不依赖云账号的家庭或内网用户。",
+   "highlights": [
+    "单 Go 进程提供 Web 应用与 API，消息和设备身份存于 SQLite，文件存于本地 blob 目录",
+    "任意浏览器可作为客户端，支持文本、链接、图片和文件的发送、预览与下载，带持久化时间线",
+    "提供 Docker Compose 部署与配套备份/恢复脚本，支持共享密码与可撤销设备令牌"
+   ],
+   "use_cases": [
+    "同一私有网络内手机与电脑之间互传链接、剪贴板内容和文件",
+    "需要带历史记录、不依赖第三方云服务的自托管内容中转",
+    "通过可选 TLS 反向代理在 VPN 等私有域名下访问"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One Go process serves the Web app and the API, stores messages and device identities in SQLite, and keeps uploaded bytes in a local blob directory. Nothing leaves the network you run it on, and there is no account to create.",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Ferry 是使用 SQLite 存储自身消息和设备身份数据的应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Ferry is a self-hosted clipboard and file ferry for the devices on one trusted private network. It looks like a chat: everything you send lands in a single timeline that every joined device can read, so moving a link from your phone to your laptop is a paste and a copy, not an email to yourself. ／ One Go process serves the Web app and the API, stores messages and device identities in SQLite, and keeps uploaded bytes in a local blob directory. Nothing leaves the network you run it on, and there is no account to create.",
+   "evidence_lines": [
+    28,
+    30
+   ]
+  },
+  "fn": "max1874/ferry",
+  "sha": "75f5b2ade078",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fb084e3bbcdd": {
+  "identity": {
+   "one_liner": "基于 NestJS、Prisma 与 PostgreSQL 的多租户订单管理 REST API",
+   "review": "Orderspace 是一个不带前端的 REST API 后端，面向需要多租户订单/项目管理的团队，每个组织拥有隔离的工作区、角色与审计日志。技术栈为 NestJS 11 + Prisma + PostgreSQL，采用共享库共享 schema、按组织作用域隔离数据的租户模型，通过 JWT/刷新令牌做认证，提供 Swagger 文档。README 明言项目仍在开发中，尚未生产加固，且尚无自动化测试。",
+   "highlights": [
+    "多租户模型：共享数据库共享 schema，行数据按组织作用域隔离，含 OWNER/ADMIN/MEMBER/VIEWER 四种角色加全局 SUPER_ADMIN",
+    "提供 JWT 短期访问令牌、刷新令牌轮换与 OTP 邮箱验证，变更写入带前后状态的审计日志",
+    "通过 SSE 提供应用内实时通知，非生产环境在 /api/docs 提供 Swagger UI 文档"
+   ],
+   "use_cases": [
+    "为多个独立企业搭建订单/项目管理后端 API，各组织数据互相隔离",
+    "作为 NestJS + Prisma + PostgreSQL 的多租户后端项目参考或起点",
+    "需要组织成员、邀请、通知与审计日志等后台管理 API 的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A multi-tenant **order management API** built on NestJS, Prisma, and PostgreSQL. Each organization gets its own isolated workspace, team, notifications, and audit trail. ／ PostgreSQL ／ |**Runs on**|Node.js and PostgreSQL; exact versions are not pinned in `package.json`|",
+     "lines": [
+      5,
+      11,
+      82
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是构建在 PostgreSQL 之上存储业务数据的应用后端，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A multi-tenant **order management API** built on NestJS, Prisma, and PostgreSQL. Each organization gets its own isolated workspace, team, notifications, and audit trail. ／ |**What it is**|A REST API backend with no bundled frontend| ／ Orderspace is under active development and is **not yet production-hardened**.",
+   "evidence_lines": [
+    5,
+    74,
+    91
+   ]
+  },
+  "fn": "josephstephen-dev/orderspace",
+  "sha": "fb084e3bbcdd",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

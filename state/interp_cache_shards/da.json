@@ -8271,5 +8271,234 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1c84902c1fd2": {
+  "identity": {
+   "one_liner": "开源制造 ERP/MES/QMS 系统，数据统一存于单个 Postgres 数据库",
+   "review": "Carbon 是面向制造团队的开源 ERP、MRP、MES 与 QMS 一体化系统，功能覆盖报价、库存、车间执行、质量与批次/序列追溯。它将全部业务数据存放在一个可检视、可扩展的单 Postgres 数据库中，通过行级安全实现权限控制，并提供 REST API、Webhook 与 MCP 服务器供外部集成和 AI 代理调用。支持云端托管与自托管部署，本地开发依赖 Docker、Node.js 22 与 pnpm；API 与 MCP 在自托管场景需商业许可。",
+   "highlights": [
+    "ERP/MRP/MES/QMS 功能运行于单个 Postgres 数据库，含行级安全与租户级记录隔离",
+    "提供类型化 REST API（含 OpenAPI 规范）、Webhook 与权限感知的 MCP 服务器",
+    "支持多级 BOM、双向批次/序列追溯，可用 Docker 自托管"
+   ],
+   "use_cases": [
+    "制造企业的物料计划、车间执行与质量管理",
+    "高混合低批量生产与按订单配置制造的追溯与成本核算",
+    "基于其 API/starter 构建定制的端到端制造系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Postgres ／ Carbon puts ERP, MRP, MES and QMS in **one Postgres database you can inspect, own and extend**. Engineering, planning, production, quality and accounting update the same data, without synchronization jobs between separate product databases. ／ - Postgres row-level security and tenant-scoped records",
+     "lines": [
+      26,
+      59,
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该系统将数据存放于单个 Postgres 数据库，是通过数据库存数据的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，部分企业功能与 API/MCP 自托管使用需商业许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Carbon puts ERP, MRP, MES and QMS in **one Postgres database you can inspect, own and extend**. Engineering, planning, production, quality and accounting update the same data, without synchronization jobs between separate product databases. ／ ERP and MES are React Router apps over a single Postgres database. Permissions (row-level security), computed totals and change events live in the database itself; background work runs through Inngest, which calls back into the ERP to execute jobs. The architecture guide follows one click all the way down. ／ |Database|Postgres with row-level security, PostgREST and Kysely|",
+   "evidence_lines": [
+    59,
+    122,
+    143
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "crbnos/carbon",
+  "sha": "1c84902c1fd2",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0f2814384c37": {
+  "identity": {
+   "one_liner": "3DGS 场景浏览器内实时渲染查看器 + 前后端一体个人主页",
+   "review": "一个前后端一体的 Web 项目：用 Three.js 渲染 3D Gaussian Splatting 场景（支持 ply/spz/splat/ksplat），后端为 FastAPI + SQLModel，本地用 SQLite、线上用 Neon Postgres 存场景元数据、访问统计与留言板数据；附带 COLMAP→3DGS→导出 spz 的训练管线脚本。适合作为 3D 视觉方向的展示型个人主页/考核作品，部署于 EdgeOne Pages + Cloud Functions。",
+   "highlights": [
+    "浏览器端实时渲染 3DGS 场景，支持 ply/spz/splat/ksplat 格式",
+    "FastAPI 后端提供场景元数据、访问统计、留言板接口，数据写入 SQLite/PostgreSQL",
+    "包含照片采集到 COLMAP 注册、3DGS 训练、导出 .spz 的完整管线脚本"
+   ],
+   "use_cases": [
+    "在网页中交互式展示自训练的 3D Gaussian Splatting 场景",
+    "带访问统计与留言板的个人主页",
+    "3D 重建拍摄与训练流程的教学/复现参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|后端|Python 3.10 + FastAPI + SQLModel（本地 SQLite / 线上 PostgreSQL）|与训练脚本同语言，任务队列不用跨语言| ／ |部署|EdgeOne Pages（静态）+ EdgeOne Cloud Functions（FastAPI 后端）+ Neon 免费 Postgres|同域 `/api/*`、免备案、¥0；GitHub Pages 作为纯静态镜像| ／ |9|部署|一键脚本组装 + 命令行部署（EdgeOne Pages 静态 + Cloud Functions 后端 + Neon Postgres），`scripts/verify-cloud.sh` 可重复验收（**发布前问用户**）|",
+     "lines": [
+      37,
+      39,
+      58
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|后端|Python 3.10 + FastAPI + SQLModel（本地 SQLite / 线上 PostgreSQL）|与训练脚本同语言，任务队列不用跨语言|",
+     "lines": [
+      37
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite/PostgreSQL 存储场景元数据、访问统计与留言板数据，数据库是应用的存储层而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|后端|Python 3.10 + FastAPI + SQLModel（本地 SQLite / 线上 PostgreSQL）|与训练脚本同语言，任务队列不用跨语言| ／ |部署|EdgeOne Pages（静态）+ EdgeOne Cloud Functions（FastAPI 后端）+ Neon 免费 Postgres|同域 `/api/*`、免备案、¥0；GitHub Pages 作为纯静态镜像|",
+   "evidence_lines": [
+    37,
+    39
+   ]
+  },
+  "fn": "Shawn100861224/web3d-lab",
+  "sha": "0f2814384c37",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ac2b405f1d76": {
+  "identity": {
+   "one_liner": "面向拉美小农户的农业生态物联网监测SaaS平台",
+   "review": "PMAI 是一个开源SaaS平台，通过ESP32等传感器实时采集土壤湿度、温度、光照等环境数据，提供可视化仪表盘、阈值告警邮件通知和CSV/PDF可持续性报告，面向拉丁美洲的小规模农业生产者与农业中小企业，支持离线缓存与恢复同步。技术栈为React前端加FastAPI后端，开发用SQLite、生产用PostgreSQL+Supabase；与Qwen LLM的集成仍在路线图阶段，尚未实现。",
+   "highlights": [
+    "支持传感器数据的实时可视化仪表盘与按作物分区的设备管理",
+    "提供基于自定义阈值的邮件告警引擎与离线优先的本地缓存同步机制",
+    "支持导出CSV/PDF格式的可持续性报告用于有机认证追踪"
+   ],
+   "use_cases": [
+    "农业物联网环境变量（土壤湿度、温度、光照）实时监测",
+    "低 connectivity 农村的离线数据采集与后台同步",
+    "有机认证相关的可持续性数据报告导出"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Database**|SQLite (Dev) / PostgreSQL + Supabase (Prod)|Robust, open-source, excellent time-series support.|",
+     "lines": [
+      32
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Database**|SQLite (Dev) / PostgreSQL + Supabase (Prod)|Robust, open-source, excellent time-series support.|",
+     "lines": [
+      32
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 SQLite/PostgreSQL 存储传感器数据的完整应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**PMAI** is an open-source SaaS solution designed to empower small-scale agroecological producers and agricultural SMEs in Latin America. It enables real-time monitoring of environmental variables (soil moisture, temperature, luminosity), early warning alerts, and sustainability reporting, even in rural areas with limited connectivity. ／ |**Database**|SQLite (Dev) / PostgreSQL + Supabase (Prod)|Robust, open-source, excellent time-series support.|",
+   "evidence_lines": [
+    7,
+    32
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "appjava/pmai",
+  "sha": "ac2b405f1d76",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8449,5 +8449,132 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c410ba0c3127": {
+  "identity": {
+   "one_liner": "开源多人地理猜位置对战游戏，支持社区地图与自定义房间",
+   "review": "GeoDuels 是一个免费的多人地理位置竞猜游戏（类 GeoGuessr），提供对战、排行榜、自定义房间和社区地图。面向想自部署或参与开发的用户：README 说明用 Docker Compose、Go、Node 运行开发环境，selfhosted.yaml 提供仅绑定主机回环地址的服务栈，由反向代理作为唯一公网入口，db-migrate 服务负责启动前迁移数据库 schema。",
+   "highlights": [
+    "提供多人地理对战玩法，含排行榜、自定义房间和反作弊缓解机制",
+    "提供 Docker Compose 的开发与自托管部署方案，发布 amd64/arm64 镜像",
+    "自托管栈各服务默认仅绑定主机回环，由 nginx 等反向代理作为唯一公网入口"
+   ],
+   "use_cases": [
+    "自托管一个多人地理竞猜游戏服务",
+    "本地搭建开发环境参与项目开发",
+    "使用社区地图进行竞技对战与排名"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是一个使用数据库的游戏应用，并非为数据库生态服务的工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A free multiplayer geography game with community maps and competitive duels. Play at geoduels.io. ／ Open `http://localhost:3000`. On startup the gameplay node imports the bundled sample dataset for any required playable map that is not configured yet (`DEV_MAP_DATASET` in `backend/dev.yaml`; it never replaces existing maps). Start optional workers with `docker compose -f backend/dev.yaml up -d moderation-worker discord-worker`; stop everything with `docker compose -f backend/dev.yaml down`. ／ The `db-migrate` service brings the database to the release's schema before anything that uses it starts.",
+   "evidence_lines": [
+    3,
+    20,
+    30
+   ]
+  },
+  "fn": "sourcelocation/geoduels",
+  "sha": "c410ba0c3127",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "eb417324f8bb": {
+  "identity": {
+   "one_liner": "PHP 访问 GaussDB 的 M/ORA 兼容接入套件",
+   "review": "该项目是一套 PHP 兼容层源码，面向中文 PHP 开发者，通过官方 Unicode ODBC 驱动和 PDO_ODBC 访问 GaussDB 的 M 模式与 A/ORA 模式，处理模式校验、UTF-8、布尔及二进制差异，保留参数化 SQL、事务与保存点等能力。它定位为教学与集成参考代码，不提供厂商二进制驱动，生产使用需自行验证加固。",
+   "highlights": [
+    "提供 src/ PHP 兼容层，Windows/Linux 使用同一 API",
+    "保留参数化 SQL、事务、保存点、SQLSTATE 与原生 PDO 访问能力",
+    "连接后核对数据库模式与 UTF-8，避免连错库或编码差异"
+   ],
+   "use_cases": [
+    "PHP 业务代码通过 PDO_ODBC 接入 GaussDB M 模式或 A/ORA 模式",
+    "作为教学与集成参考代码评估 GaussDB 接入差异"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "本套件面向中文 PHP 开发者，演示如何通过官方 Unicode ODBC 驱动访问 GaussDB M 模式和 A/ORA 模式数据库，处理模式校验、UTF-8、布尔及二进制差异，不修改数据库内核。 ／ PHP 业务代码 → GaussDb\\Compat → PHP PDO_ODBC → 官方 Unicode ODBC → GaussDB",
+     "lines": [
+      8,
+      17
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- M 模式接受数据库标识 `M/MYSQL`；A/ORA 模式也接受输入别名 `O`。",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目提供供业务代码引用的 PHP 兼容层，为访问 GaussDB 服务，不依赖其存储数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本套件面向中文 PHP 开发者，演示如何通过官方 Unicode ODBC 驱动访问 GaussDB M 模式和 A/ORA 模式数据库，处理模式校验、UTF-8、布尔及二进制差异，不修改数据库内核。 ／ 这是教学与集成参考代码，不是厂商二进制驱动或生产支持承诺。生产使用前必须在实际运行时、数据库和驱动组合中完成充分验证、加固与优化。 ／ PHP 业务代码 → GaussDb\\Compat → PHP PDO_ODBC → 官方 Unicode ODBC → GaussDB",
+   "evidence_lines": [
+    8,
+    10,
+    17
+   ]
+  },
+  "fn": "huaweicloud-samples/database-gaussdb-php-driver",
+  "sha": "eb417324f8bb",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

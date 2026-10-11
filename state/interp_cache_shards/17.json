@@ -9873,5 +9873,138 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "06bc507eb041": {
+  "identity": {
+   "one_liner": "SQLite 扩展，为其添加图数据库能力与 Cypher 查询支持",
+   "review": "这是一个以 SQLite 扩展形式实现的图数据库能力库，允许在任意 SQLite 数据库中直接存储和查询图数据，支持 Cypher 查询语言（MATCH、CREATE、MERGE 等子句）及 PageRank、Louvain、Dijkstra 等图算法，提供 Python、Rust 和原生 SQL 三种绑定接口，通过 openCypher TCK 做符合性验证。适合需要在嵌入式单文件数据库中建模关系数据的开发者使用，无需运行独立服务器。",
+   "highlights": [
+    "以 SQLite 扩展实现，无需服务器、零配置，可作用于任意 SQLite 数据库",
+    "支持 Cypher 查询子句（MATCH/CREATE/MERGE/SET/DELETE 等）与 PageRank、Louvain、Dijkstra、BFS/DFS 等图算法",
+    "通过 openCypher TCK 符合性测试套件验证，并提供 Python、Rust、原生 SQL 多种绑定"
+   ],
+   "use_cases": [
+    "在嵌入式 SQLite 中构建和查询知识图谱、关系型数据",
+    "对存储于 SQLite 的数据运行图分析算法（社区发现、路径搜索等）",
+    "在 Python 或 Rust 应用中通过 Cypher 操作单文件图数据"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "An SQLite extension that adds graph database capabilities using the Cypher query language. ／ - **Zero configuration** — Works with any SQLite database, no server required",
+     "lines": [
+      5,
+      30
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为 SQLite 数据库提供图数据库扩展能力，属于服务数据库生态的组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An SQLite extension that adds graph database capabilities using the Cypher query language. ／ - **Zero configuration** — Works with any SQLite database, no server required ／ - **Multiple bindings** — Python, Rust, and raw SQL interfaces",
+   "evidence_lines": [
+    5,
+    30,
+    31
+   ]
+  },
+  "fn": "colliery-io/graphqlite",
+  "sha": "06bc507eb041",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2ba1b0f81d0a": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core MVC 的个人与企业管理 Web 应用（CMS），使用 PostgreSQL 存数据",
+   "review": "Maroik-CMS 是一个开源作品集版 Web 应用，提供个人财务管理、日历与日程、公告板、基于角色的用户管理和管理员仪表盘等功能，采用 DDD + Clean Architecture 分层，通过 Docker Compose 运行，数据存储于 PostgreSQL 17。适合需要部署自托管管理应用的用户或研究其架构实践的开发者；仓库不包含生产部署脚本与 CI/CD 流水线。",
+   "highlights": [
+    "提供财务收支记录、日历/日程、公告板与基于角色的用户管理等模块",
+    "采用 DDD + Clean Architecture，并使用 NetArchTest 架构测试约束分层依赖",
+    "通过 Docker Compose 运行多容器服务，包含 PostgreSQL、RabbitMQ、ClamAV 等组件"
+   ],
+   "use_cases": [
+    "自托管个人与小企业的财务/日程/公告管理",
+    "作为 ASP.NET Core DDD 分层架构与测试实践的应用示例",
+    "需要基于角色的多用户内容管理与审计日志的内部系统参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Website --> PostgreSQL[(\"PostgreSQL 17\")] ／ - PostgreSQL 17",
+     "lines": [
+      98,
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是一个使用 PostgreSQL 存储数据的 Web 应用本身，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Maroik is a modern web application built with ASP.NET Core MVC, featuring a comprehensive set of tools for personal and business management. It includes features such as expense tracking, calendar management, bulletin boards, and role-based user management. ／     Website --> PostgreSQL[(\"PostgreSQL 17\")] ／ Every service runs as a container under Docker Compose. Uploads are scanned by ClamAV before they are stored, the",
+   "evidence_lines": [
+    6,
+    98,
+    102
+   ]
+  },
+  "fn": "IkhyeonJo/Maroik-CMS",
+  "sha": "2ba1b0f81d0a",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

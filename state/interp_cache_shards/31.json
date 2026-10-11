@@ -7839,5 +7839,76 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b633ce8de34a": {
+  "identity": {
+   "one_liner": "Go 编写的 9Router LLM 路由代理网关，单二进制含仪表盘",
+   "review": "9router-go 用 Go 实现与 9Router 相同的 LLM 代理网关，为 Claude Code、Cursor 等 CLI 工具提供统一端点，支持多提供商 fallback、round-robin 等路由策略，并通过读写同一 SQLite 数据文件与上游 9Router 共享配置与用量数据；适合已使用 9Router 或需免 Node.js 运行时的用户。限制：不做破坏性迁移，仅增量建表加列。",
+   "highlights": [
+    "单 Go 二进制提供代理 API 与内嵌 Svelte 仪表盘，支持 OpenAI Chat、Claude Messages、Gemini、Ollama 兼容等接口",
+    "支持 fallback、round-robin、sticky、capacity、fusion 等组合路由策略与多账号轮询",
+    "使用 SQLite WAL 持久化，可与 9Router 共享同一 data.sqlite 数据目录"
+   ],
+   "use_cases": [
+    "为多个 CLI 编码工具提供统一的 LLM API 网关端点",
+    "在订阅、廉价、免费模型间自动 fallback 以管理用量与配额",
+    "与已有 9Router (Node.js) 部署共享同一数据库并行运行"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> **Already using upstream 9Router?** Point 9router-go at the same data dir — it opens the **same `DATA_DIR/db/data.sqlite`**. Your providers, connections, combos, API keys, and usage history carry over as-is. No import step, no migration. See Sharing a databa ／ - 💾 SQLite WAL persistence, outbound proxy support, self-update, MITM commands, Docker, cross-compilation ／ |macOS / Linux|`~/.9router/db/data.sqlite`|",
+     "lines": [
+      68,
+      121,
+      131
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 LLM API 提供路由代理的服务组件，SQLite 仅作为自身持久化存储，不面向数据库生态提供服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Same idea as 9Router, minus the Node.js runtime: **one Go binary** serves the proxy APIs + an embedded Svelte dashboard. ／ - 🔌 OpenAI Chat, Claude Messages, Gemini, Ollama-compatible, Responses, embeddings, media, search, web tools ／ - 💾 SQLite WAL persistence, outbound proxy support, self-update, MITM commands, Docker, cross-compilation",
+   "evidence_lines": [
+    17,
+    117,
+    121
+   ]
+  },
+  "fn": "luqman-v1/9router-go",
+  "sha": "b633ce8de34a",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9081,5 +9081,162 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5924d86d072c": {
+  "identity": {
+   "one_liner": "基于eBPF的TLS/SSL明文捕获工具，含MySQL/PostgreSQL查询审计",
+   "review": "eCapture是一个使用eBPF（uprobe）技术的明文流量捕获工具，无需MITM代理或安装CA证书即可捕获OpenSSL、BoringSSL、GnuTLS、Go TLS等库的TLS明文，并提供mysqld、postgres模块捕获SQL查询、bash/zsh命令审计。面向Linux和Android（x86_64/aarch64）的安全分析人员与运维人员，需root权限或特定capabilities，不支持Windows/macOS。",
+   "highlights": [
+    "通过eBPF捕获OpenSSL、LibreSSL、BoringSSL、GnuTLS、NSS/NSPR及Go TLS的TLS明文流量，无需CA证书",
+    "包含mysqld和postgres模块，分别捕获MySQL 5.6/5.7/80、MariaDB及PostgreSQL 10+的SQL查询",
+    "支持pcapng、keylog、text三种输出模式，可对接Wireshark/tshark，并提供HTTP API动态更新配置和事件转发"
+   ],
+   "use_cases": [
+    "在Linux/Android主机上对HTTPS/TLS流量进行安全审计与明文分析",
+    "捕获MySQL/PostgreSQL的SQL查询用于数据库操作审计",
+    "审计bash/zsh命令历史用于主机安全监控"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* postgres: captures SQL queries from PostgreSQL 10+ ／ Modules such as `bash`, `mysqld`, and `postgres` can also be used. You can view the full list with `ecapture -h`.",
+     "lines": [
+      95,
+      178
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* Audits MySQL queries and supports MySQL 5.6/5.7/8.0 and MariaDB. ／ * mysqld: captures SQL queries from MySQL 5.6/5.7/8.0 and MariaDB",
+     "lines": [
+      34,
+      93
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* Audits MySQL queries and supports MySQL 5.6/5.7/8.0 and MariaDB. ／ * mysqld: captures SQL queries from MySQL 5.6/5.7/8.0 and MariaDB",
+     "lines": [
+      34,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库及TLS流量提供查询捕获与审计能力的独立工具，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* Audits MySQL queries and supports MySQL 5.6/5.7/8.0 and MariaDB. ／ * mysqld: captures SQL queries from MySQL 5.6/5.7/8.0 and MariaDB ／ * postgres: captures SQL queries from PostgreSQL 10+",
+   "evidence_lines": [
+    34,
+    93,
+    95
+   ]
+  },
+  "fn": "gojue/ecapture",
+  "sha": "5924d86d072c",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "da3af81dafb4": {
+  "identity": {
+   "one_liner": "ClickHouse 备份恢复工具，用对象存储存放备份文件",
+   "review": "clickhouse-backup 是用于 ClickHouse 数据库备份与恢复的 CLI/服务端工具，通过 ALTER TABLE FREEZE 生成硬链接快照并支持流式压缩上传至 S3、GCS、Azure 等远端存储。适用于运维 ClickHouse 的 DBA 与运维人员，需与 clickhouse-server 同机运行，本地支持增量备份与多种数据库引擎。",
+   "highlights": [
+    "支持全库或指定表的备份与恢复，含增量备份",
+    "通过流式压缩上传/下载备份到 S3、GCS、Azure、FTP、SFTP 等存储",
+    "提供 server 模式与 API、信号处理、环境变量覆盖配置等运维机制"
+   ],
+   "use_cases": [
+    "对 ClickHouse 表数据执行定期备份并上传到对象存储",
+    "从远端备份恢复数据或仅恢复 schema",
+    "在 Kubernetes 中以 sidecar 方式运行备份服务"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "# Altinity Backup for ClickHouse® ／ A tool for easy backup and restore utility for ClickHouse databases with support for many cloud and non-cloud storage types. ／ ### Don't run `clickhouse-backup` remotely",
+     "lines": [
+      1,
+      13,
+      15
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 ClickHouse 数据库提供备份恢复能力的专用工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A tool for easy backup and restore utility for ClickHouse databases with support for many cloud and non-cloud storage types. ／ - Easy creating and restoring backups of all or specific tables ／ - Works with AWS, GCS, Azure, Tencent COS, FTP, SFTP",
+   "evidence_lines": [
+    13,
+    22,
+    25
+   ]
+  },
+  "fn": "Altinity/clickhouse-backup",
+  "sha": "da3af81dafb4",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

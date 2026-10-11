@@ -9284,5 +9284,206 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b16d0cb87020": {
+  "identity": {
+   "one_liner": "Gufo 推理服务器的本地统计仪表盘与 HTTP/SSE/WebSocket 代理",
+   "review": "该项目是一个部署在本地的仪表盘加代理服务，客户端将请求经其转发到 Gufo 推理服务器，代理在转发过程中记录令牌用量、吞吐、延迟、缓存命中等指标并存入 SQLite，支持可选的问答文本留存与删除控制。面向在可信本地或私有网络环境运行 Gufo 服务器、使用 OpenAI 兼容客户端的用户；项目未内置认证与 TLS，需自行限制访问范围。",
+   "highlights": [
+    "代理 HTTP、SSE 流与双向 WebSocket 消息，覆盖 Chat Completions、Completions、Responses、Messages 及 Gufo 原生 /completion 端点",
+    "将统计数据存储于 SQLite，保留期可配置并支持按日汇总；可选捕获问答文本，默认关闭且有独立保留与删除控制",
+    "可用 Python（uv）或 Docker Compose 运行，前端无构建步骤"
+   ],
+   "use_cases": [
+    "在本地或私有网络中通过代理观测 Gufo 推理服务的令牌用量与性能指标",
+    "为 OpenAI 兼容客户端改换 base URL 即接入统计，无需修改模型与凭证",
+    "按需留存并审计问答文本，配合保留期与清除机制管理数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Stores statistics in SQLite with configurable retention and daily rollups. ／ `.env`. The default database is `./data/gufo-dashboard.sqlite`. Docker Compose ／ loads `.env`, whose example uses `/data/gufo-dashboard.sqlite` inside the container.",
+     "lines": [
+      25,
+      74,
+      75
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用 SQLite 存储自身统计数据的仪表盘/代理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local statistics dashboard and HTTP, SSE, and WebSocket proxy for Gufo ／ - Stores statistics in SQLite with configurable retention and daily rollups. ／ You need a running Gufo server. Its default upstream address is",
+   "evidence_lines": [
+    3,
+    25,
+    43
+   ]
+  },
+  "fn": "MiddlePathLabs/gufo-dashboard",
+  "sha": "b16d0cb87020",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "66d3f5b23704": {
+  "identity": {
+   "one_liner": "Java 事件溯源/CQRS 框架，提供 PostgreSQL 事件存储与多框架集成",
+   "review": "StreamRune 是面向 Java 的事件溯源与 CQRS 框架，提供核心 API、命令总线、投影以及 PostgreSQL 事件存储模块，并通过 starter 适配 Spring Boot、Quarkus、Micronaut 三个框架，还包含 crypto-shredding 加密模块和 Kafka/RabbitMQ 事务性 outbox 发布器。适合在 Java 技术栈中构建事件溯源应用的开发者；当前仅有 Maven Central 快照仓库中的 alpha 预览版，尚未正式发布。",
+   "highlights": [
+    "提供 PostgreSQL-backed EventStore 模块，要求 PostgreSQL 17 及以上并在 CI 中测试 17/18",
+    "提供 Spring Boot、Quarkus、Micronaut 三套框架集成与自动配置",
+    "提供 crypto-shredding 加密模块，密钥可存于文件系统、PostgreSQL、Vault 或 AWS KMS"
+   ],
+   "use_cases": [
+    "在 Java 项目中构建事件溯源/CQRS 架构的应用",
+    "需要事件载荷静态加密与 crypto-shredding 以满足 GDPR 删除要求的场景",
+    "需要向 Kafka 或 RabbitMQ 发布事务性 outbox 事件的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL 17 or newer**, when you use `streamrune-postgres` (the in-memory `streamrune-test` ／ store needs no database). Every PostgreSQL-backed suite of `postgresTest` runs on 17 and on 18 in ／ |streamrune-postgres|PostgreSQL-backed EventStore|",
+     "lines": [
+      45,
+      46,
+      68
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 Java 事件溯源开发服务的框架组件，包含专门的 PostgreSQL 事件存储模块，而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Business Source License 1.1，README 称双许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Event sourcing framework for Java. ／ - **PostgreSQL 17 or newer**, when you use `streamrune-postgres` (the in-memory `streamrune-test` ／ |streamrune-postgres|PostgreSQL-backed EventStore|",
+   "evidence_lines": [
+    3,
+    45,
+    68
+   ]
+  },
+  "fn": "StreamRune/streamrune",
+  "sha": "66d3f5b23704",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d0ae2fa4cee5": {
+  "identity": {
+   "one_liner": "面向大型 C/C++ 代码库的 Claude Code 源码分析技能，附知识图谱",
+   "review": "这是一个供 Claude Code 使用的 source-analysis 技能，将 SKILL.md 方法论与知识图谱模板复制到项目的 .claude/skills/ 目录，用于分析以 openGauss-server 为对象的超大型 C/C++ 代码库，按功能点（如 ustore、table-storage-layout、tidbitmap）沉淀四段式知识图谱并附可运行测试脚本，适合阅读该数据库内核源码的开发者使用。",
+   "highlights": [
+    "提供 8 种入口点定位手法与 SQL 生命周期分析方法论",
+    "按功能点生成含概念节点表、关系边表、场景条目的知识图谱",
+    "已沉淀 ustore、table-storage-layout、tidbitmap 等功能点，附可运行验证脚本"
+   ],
+   "use_cases": [
+    "阅读 openGauss-server 等大型 C/C++ 数据库源码时定位模块与入口点",
+    "将分析结果按功能点持久化为知识图谱并按日期追加更新"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "针对超大型 C/C++ 代码库(以 openGauss-server 为实战对象)的 Claude Code 源码分析技能,附带按功能点沉淀的知识图谱。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该技能专为分析 openGauss-server 源码而建，为数据库代码的理解提供方法论与知识沉淀工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "针对超大型 C/C++ 代码库(以 openGauss-server 为实战对象)的 Claude Code 源码分析技能,附带按功能点沉淀的知识图谱。 ／ - `SKILL.md` — 分析方法论:模块定位、8 种入口点定位手法、SQL 生命周期、输出规范,以及\"分析结果必须持久化到知识图谱\"的约定 ／ |ustore|原位更新引擎全貌:页/元组格式、TD 槽、UNDO 子系统、可见性、DML 决策树、VACUUM 耦合、扫描接口面(N1-N29)|",
+   "evidence_lines": [
+    3,
+    19,
+    31
+   ]
+  },
+  "fn": "Tonycui66/claude-skills",
+  "sha": "d0ae2fa4cee5",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

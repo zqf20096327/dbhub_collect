@@ -7964,5 +7964,144 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0e47fd008cd6": {
+  "identity": {
+   "one_liner": "本地优先的 AI 简历工作台，FastAPI+React+SQLite 单机运行",
+   "review": "这是一个面向求职者的开源简历工作台，提供岗位管理、事实台账防虚构校验、AI 定制简历、多格式导出、模拟面试与自动投递等功能。数据全部存于本机一个 SQLite 文件，不注册登录；AI 功能需自行配置模型服务 API Key，投递台需显式确认才访问招聘网站。",
+   "highlights": [
+    "数据存储在本机单个 SQLite 文件中，不经过第三方服务",
+    "AI 生成简历时与事实台账逐条比对，对资料外内容给出防虚构警告",
+    "支持 PDF/Word/Markdown/JSON/HTML 等多格式导出，带水印与一键脱敏"
+   ],
+   "use_cases": [
+    "求职期间集中管理岗位、简历版本与投递进度",
+    "使用 LLM 按岗位 JD 生成简历并防止虚构经历",
+    "模拟面试与面试深挖练习"
+   ],
+   "use_cases_placeholder": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**简历和资料存在哪**|你自己电脑上的一个 SQLite 文件，可随时拷走|对方的服务器，导出要走会员|",
+     "lines": [
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明业务数据存储在本地 SQLite 文件中，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**简历和资料存在哪**|你自己电脑上的一个 SQLite 文件，可随时拷走|对方的服务器，导出要走会员| ／ **本地优先的 AI 简历工作台：不注册、不登录，数据只存在你自己电脑上的一个文件里。**",
+   "evidence_lines": [
+    50,
+    13
+   ]
+  },
+  "fn": "magicapple123/ResumeForge",
+  "sha": "0e47fd008cd6",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6e2956537d62": {
+  "identity": {
+   "one_liner": "基于 Flask+SQLite 的链式 Web 安全教学靶场",
+   "review": "一个自研的链式漏洞教学靶场，用 Docker 或本地 Python 启动，模拟从信息泄露、路径遍历、签名伪造到命令执行的完整攻击链路，供安全学习者在本地隔离环境中练习并按提示文档逐关推理。项目刻意收窄读取范围并加入沙盒，明确禁止公网部署与真实攻击用途。",
+   "highlights": [
+    "提供侦察、未授权泄露、路径遍历、凭据伪造、命令执行五个环节的链式练习路径",
+    "提供 HINT.md 与 SOLUTION.md 三级提示文档及配套脚本工具目录",
+    "支持 Docker、docker compose 与本地 Python 三种运行方式，并通过环境变量配置端口、flag 与沙盒目录"
+   ],
+   "use_cases": [
+    "本地隔离环境下的 Web 安全漏洞链学习与练习",
+    "安全教学中演示输入校验、签名机制与表达式求值的风险成因",
+    "配合自查清单进行漏洞原理理解的自测"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "技术栈：**Python 3 + Flask + SQLite**，容器镜像基于 `python:3.12-alpine`，体积很小。 ／ 把上一步拿到的数据文件下载下来，用任意 SQLite 工具打开，你会看到：",
+     "lines": [
+      28,
+      176
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是用 Flask+SQLite 实现的教学靶场应用，SQLite 仅作为其业务数据存储，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "# 报表管理平台 · 链式安全教学靶场 ／ 技术栈：**Python 3 + Flask + SQLite**，容器镜像基于 `python:3.12-alpine`，体积很小。 ／ docker run -d --name report-portal-lab -p 127.0.0.1:8080:8080 report-portal-lab",
+   "evidence_lines": [
+    1,
+    28,
+    71
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "xyn-haha/report-portal-lab",
+  "sha": "6e2956537d62",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9625,5 +9625,74 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ff9ffed8864d": {
+  "identity": {
+   "one_liner": "SQLite 数据库操作的 MCP 服务器",
+   "review": "该项目实现一个 Model Context Protocol 服务器，为 MCP 客户端提供对 SQLite 数据库的标准接口，包含模式查看（get_schema）、只读查询（query）和写入操作（execute）三个工具，用 Go 编写，支持二进制和 Docker 运行，供需要在 MCP 客户端（如 Claude Desktop）中操作 SQLite 数据库的用户使用。",
+   "highlights": [
+    "提供 get_schema 工具，列出所有表及其列、类型、约束和索引信息",
+    "query 工具仅允许 SELECT、WITH 和 EXPLAIN 只读查询",
+    "execute 工具支持 INSERT、UPDATE、DELETE、CREATE、ALTER、DROP 写操作"
+   ],
+   "use_cases": [
+    "通过 MCP 客户端对 SQLite 数据库执行只读查询和模式检查",
+    "通过 MCP 接口对 SQLite 数据库执行写入和 DDL 操作"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# SQLite MCP Server ／ A Model Context Protocol (MCP) server for SQLite database operations. This server provides a standardized interface for SQLite database interactions including schema inspection, read and write operations. ／ - Description: List all tables in the SQLite database with their schema information",
+     "lines": [
+      1,
+      3,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 SQLite 数据库操作提供 MCP 协议接口的服务器组件，服务于数据库的访问与交互",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Model Context Protocol (MCP) server for SQLite database operations. This server provides a standardized interface for SQLite database interactions including schema inspection, read and write operations. ／ - Description: List all tables in the SQLite database with their schema information ／ -Usage: Only SELECT, WITH, and EXPLAIN queries are allowed",
+   "evidence_lines": [
+    3,
+    11,
+    20
+   ]
+  },
+  "fn": "rvarun11/sqlite-mcp",
+  "sha": "ff9ffed8864d",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

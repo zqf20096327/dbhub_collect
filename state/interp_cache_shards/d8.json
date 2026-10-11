@@ -8603,5 +8603,296 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cf1e80ff3015": {
+  "identity": {
+   "one_liner": "PostgreSQL plpgsql 存储过程静态检查 linter 扩展",
+   "review": "plpgsql_check 是一个 PostgreSQL 扩展，利用内部解析器对 plpgsql 函数与触发器做静态分析，可在运行前发现嵌入 SQL 语义错误、未用变量、死代码及 SQL 注入风险，输出支持 text//xml 格式。面向编写 plpgsql 存储过程的开发者，通过 CREATE EXTENSION 安装后调用检查函数使用，声明支持 PostgreSQL 14-20。",
+   "highlights": [
+    "使用 PostgreSQL 内部解析器对 plpgsql 例程内嵌 SQL 做语义错误检查",
+    "支持检查 DML 触发器函数（含转换表）及 SQL 注入漏洞检测",
+    "提供可配置警告级别、注释内 PRAGMA 选项及 text//xml 输出格式"
+   ],
+   "use_cases": [
+    "存储过程开发时提前发现运行时 SQL 错误",
+    "检查触发器函数中的缺失列、类型错误等问题",
+    "审计 plpgsql 代码中的潜在 SQL 注入风险"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This extension is a full linter for plpgsql for PostgreSQL. It leverages only the internal",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展为 plpgsql 代码开发提供静态检查服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This extension is a full linter for plpgsql for PostgreSQL. It leverages only the internal ／ PostgreSQL 14 - 20 are supported. ／  postgres=# CREATE EXTENSION plpgsql_check;",
+   "evidence_lines": [
+    5,
+    35,
+    42
+   ]
+  },
+  "fn": "okbob/plpgsql_check",
+  "sha": "cf1e80ff3015",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "87fc8f2067b6": {
+  "identity": {
+   "one_liner": "Vert.x 数据访问层库，仿 SpringData 提供 CrudRepository 与多租户连接配置",
+   "review": "BoostDB 是面向 Vert.x 的 Java 数据访问层库，提供接近 SpringData 风格的 CrudRepository 抽象，减少手写底层客户端代码。支持 MySQL、Postgres、MSSQL、Oracle、DB2（基于 Vert.x sqlclient）以及 MongoDB、Cassandra 的专用 Repository，含事务方法和多数据源连接配置。使用者需自行引入对应 Vert.x 客户端驱动，通过 JitPack/Maven 依赖引入。",
+   "highlights": [
+    "提供 CrudRepository/MongoCrudRepository/CassandraCrudRepository 抽象，基于 Vert.x SqlTemplate 实现",
+    "支持多租户多数据源连接配置，dbPort 按厂商默认端口省略",
+    "提供 withTransaction 事务方法，支持锁定读与事务嵌套"
+   ],
+   "use_cases": [
+    "在 Vert.x 项目中以 SpringData 风格编写数据访问层",
+    "需要配置多个数据库连接的多租户应用",
+    "同一套 Repository 接口访问关系型与 NoSQL 数据库"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Vertx is an event-driven toolkit backed by the Eclipse Foundation. It's a polyglot and is used for highly concurrent code writing. When compared to spring, people usually use hibernate or spring data. They are heavy with their own pros and cons. For instance,  ／ ### Relational (MySQL, Postgres, MSSQL, Oracle, DB2) ／ // or vertx-pg-client / vertx-mssql-client / vertx-oracle-client / vertx-db2-client",
+     "lines": [
+      6,
+      56,
+      112
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Vertx is an event-driven toolkit backed by the Eclipse Foundation. It's a polyglot and is used for highly concurrent code writing. When compared to spring, people usually use hibernate or spring data. They are heavy with their own pros and cons. For instance,  ／ ### Relational (MySQL, Postgres, MSSQL, Oracle, DB2) ／ implementation (\"io.vertx:vertx-mysql-client:5.1.5\")",
+     "lines": [
+      6,
+      56,
+      111
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Vertx is an event-driven toolkit backed by the Eclipse Foundation. It's a polyglot and is used for highly concurrent code writing. When compared to spring, people usually use hibernate or spring data. They are heavy with their own pros and cons. For instance,  ／ ### Relational (MySQL, Postgres, MSSQL, Oracle, DB2) ／ // or vertx-pg-client / vertx-mssql-client / vertx-oracle-client / vertx-db2-client",
+     "lines": [
+      6,
+      56,
+      112
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Vertx is an event-driven toolkit backed by the Eclipse Foundation. It's a polyglot and is used for highly concurrent code writing. When compared to spring, people usually use hibernate or spring data. They are heavy with their own pros and cons. For instance,  ／ ### Relational (MySQL, Postgres, MSSQL, Oracle, DB2) ／ // or vertx-pg-client / vertx-mssql-client / vertx-oracle-client / vertx-db2-client",
+     "lines": [
+      6,
+      56,
+      112
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供针对各数据库客户端的数据访问抽象与 Repository 工厂，是为数据库生态服务的开发组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This project (BoostDB) provides easier ways to write code for a data-access layer. Keeping in mind the learning curve of vertx, this project is designed to be as close to the SpringData layer as possible. This project provides a multi-tenant approach to configuring multiple data sources using connection configuration. ／ Vertx is an event-driven toolkit backed by the Eclipse Foundation. It's a polyglot and is used for highly concurrent code writing. When compared to spring, people usually use hibernate or spring data. They are heavy with their own pros and cons. For instance, in hibernate, one can't bypass its L1 cache. Vertx on the other hand provides lightweight clients for most of the popular databases to get things going. This component covers MySQL, MSSQL, Postgres, Oracle, and DB2 (all built on Vert.x's unified `sqlclient`/`SqlTemplate` stack via `CrudRepository`), plus MongoDB and Cassandra (which have their own client families in Vert.x, so they get their own `MongoRepository`/`CassandraRepository` — see Usage below for why). ／ ### Relational (MySQL, Postgres, MSSQL, Oracle, DB2)",
+   "evidence_lines": [
+    3,
+    6,
+    56
+   ]
+  },
+  "fn": "Areeb-Gillani/vertx-boost-db",
+  "sha": "87fc8f2067b6",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a4393ca8b4e2": {
+  "identity": {
+   "one_liner": "声明式报表引擎：SQL+YAML 报表代码化，运行生成 Excel/CSV 并投递",
+   "review": "DRE 是开源报表工具，用户将报表写成 .sql 与 YAML 文件存于 git，工具对数据库执行 SQL，输出 csv、固定宽度、parquet 或 xlsx（含多表工作簿与模板），并投递到 email、SFTP、S3、Databricks Volumes 或 Slack。工作流仿照 dbt（source/ref、profiles、Jinja 宏），适合熟悉 dbt 的数据工程与分析人员；当前处于 1.0 之前，minor 版本可能破坏项目。",
+   "highlights": [
+    "支持将报表以 SQL 与 YAML 形式在 git 中管理，包含 source()、ref()、Jinja 宏与 profiles/targets",
+    "支持输出 csv、delimited、fixed-width、parquet、xlsx（多 sheet、格式、公式、模板）",
+    "支持投递至 email、SFTP/FTP、S3、GCS、Azure Blob、Databricks Volumes、Slack，并可发送 headline 消息到 Slack/Teams/Google Chat"
+   ],
+   "use_cases": [
+    "定期生成并发送报表文件（邮件/SFTP/S3 等）",
+    "以 dbt 风格代码化管理报表工作流",
+    "在现有调度器（cron/Airflow/Dagster）上运行报表任务"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "工具连接数据库执行 SQL 生成并投递报表文件，为数据工作流服务，本身不是存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**DRE**, the **Declarative Reporting Engine**, is open-source reports as code. You keep each report ／ as `.sql` and YAML files in git; DRE runs the SQL against your databases (each tab of a workbook can ／ to go: email, SFTP/FTP, S3, GCS, Azure Blob, Databricks Volumes or Slack. A report can also send a",
+   "evidence_lines": [
+    15,
+    16,
+    20
+   ]
+  },
+  "fn": "get-dre/dre",
+  "sha": "a4393ca8b4e2",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "49e854b1a2ed": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的自托管企业知识库平台，基于 PostgreSQL 混合检索",
+   "review": "Yuheng 是一个自托管的企业知识平台，将文档、网页、飞书、Notion 等来源汇入知识库，提供向量+BM25 混合检索、带引用的问答、Auto-Wiki、协作文档和知识健康检查，并通过 REST API 和 22 个 MCP 工具把能力暴露给 AI Agent。检索统一构建在 PostgreSQL（ParadeDB + pgvector）上，部署需 Docker Compose 且 0.x 阶段需本地构建镜像。",
+   "highlights": [
+    "检索统一在 PostgreSQL 上实现，使用 ParadeDB 提供 BM25、pgvector 提供向量检索，支持 RRF 融合、rerank 和查询改写",
+    "所有 Web UI 功能均提供 REST 端点，并通过 yuheng-mcp 提供 22 个 MCP 工具（stdio/SSE/HTTP），另有 Go SDK 和 CLI",
+    "知识健康功能可对比文档副本差异、按审核周期提醒负责人、将'无帮助'反馈关联到引用文档"
+   ],
+   "use_cases": [
+    "企业自托管知识库建设，整合飞书、Notion、语雀、网页等多来源文档并支持增量同步",
+    "为 Claude、Cursor 等 AI Agent 提供可检索、带引用的知识层（REST/MCP 接入）",
+    "团队协作文档编写与知识库自动组织（Auto-Wiki）及过期知识复审"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ - One retrieval engine, done properly: PostgreSQL + ParadeDB (BM25) + pgvector, ／ with a substantially reworked architecture: retrieval is unified on PostgreSQL",
+     "lines": [
+      7,
+      100,
+      154
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明使用 PostgreSQL（ParadeDB/pgvector）、Redis、Neo4j 等作为存储组件，是使用数据库构建的知识平台应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- One retrieval engine, done properly: PostgreSQL + ParadeDB (BM25) + pgvector, ／ This starts the frontend, the Go backend (`app`), `docreader`, PostgreSQL ／ Yuheng is in its 0.x preview phase. It began as a fork of Tencent",
+   "evidence_lines": [
+    100,
+    196,
+    152
+   ]
+  },
+  "fn": "magicyuan876/Yuheng",
+  "sha": "49e854b1a2ed",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

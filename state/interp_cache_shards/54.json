@@ -8107,5 +8107,174 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0d567f20bd6e": {
+  "identity": {
+   "one_liner": "PostgreSQL 分区管理函数库，用最小锁创建和维护范围分区表",
+   "review": "该仓库提供一组 PL/pgSQL 函数，用于将已有表转换为原生范围分区表，并自动扩展、按边界或查询条件分离、冷却后删除旧分区，全程尽量使用最弱锁并在拿排他锁时超时重试。适用于需要为大表做分区且应用影响要小的 PostgreSQL 13+ 运维场景。安装方式为在 psql 中依次执行 schema、tables、functions 三个 SQL 脚本。",
+   "highlights": [
+    "提供将普通表一次性转换为原生分区表的函数，支持与已有整数分区表对齐边界",
+    "通过配置表支持自动扩展分区、按边界或按查询分离旧分区、冷却期后删除",
+    "锁策略：每步优先使用最弱锁，排他锁带超时、自动重试和可选时间窗口限制"
+   ],
+   "use_cases": [
+    "将已有大表迁移为原生范围分区表",
+    "定时维护分区：预建空闲分区、分离和删除过期分区",
+    "多个分区表需共享一致分区网格的场景"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# adyen-postgres-partitioning ／ A PostgreSQL function library for creating and maintaining range-partitioned tables with minimal application impact. The library prioritises the weakest lock possible at every step. When an exclusive lock is unavoidable it is always taken with a timeout, retri ／ PostgreSQL 13 or later.",
+     "lines": [
+      1,
+      3,
+      9
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供分区创建与维护的函数库，是服务于数据库的运维组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A PostgreSQL function library for creating and maintaining range-partitioned tables with minimal application impact. The library prioritises the weakest lock possible at every step. When an exclusive lock is unavoidable it is always taken with a timeout, retried automatically, and optionally restricted to a configurable time window. ／ PostgreSQL 13 or later.",
+   "evidence_lines": [
+    3,
+    9
+   ]
+  },
+  "fn": "Adyen/adyen-postgres-partitioning",
+  "sha": "0d567f20bd6e",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "112a9fe33c46": {
+  "identity": {
+   "one_liner": "多数据库 CLI 与 MCP 服务器，提供数据库内省与跨库表对比",
+   "review": "这是一个 Rust 编写的命令行数据库客户端，可作为 MCP 服务器供 Claude、Cursor 等 AI 工具调用，支持 MySQL/PolarDB-X/Oracle/GaussDB/DuckDB 的 SQL 执行、内省、跨库表数据对比和合成数据生成。内置分层写入控制（MCP 只读、DDL 拒绝）与本地审计日志，适合需要安全管控地接入多种数据库的开发和运维人员。",
+   "highlights": [
+    "提供 CLI 一次性执行与交互式 REPL 两种 SQL 执行方式，输出支持 table//csv/vertical",
+    "实现 MCP 服务器接口，per-dialect 只读强制，写入需 --allow-write，DDL 一律拒绝",
+    "提供跨库 delta-diff 表对比（hashdiff/joindiff 等）与基于真实表统计模型的合成数据生成（synth）"
+   ],
+   "use_cases": [
+    "在 AI 编码工具中以只读方式接入多种数据库进行查询与内省",
+    "跨两个数据库连接对比表数据一致性",
+    "基于真实表生成保持外键完整性的仿真测试数据"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "CLI and MCP server for MySQL / PolarDB-X / Oracle / GaussDB / DuckDB database introspection, plus cross-database table comparison (`delta-diff`). ／ - **Multi-database** — MySQL, PolarDB-X, Oracle, GaussDB (default features: `oracle-rs`, `oracle`, `gaussdb`, `synth`) and DuckDB (optional feature `duckdb`)",
+     "lines": [
+      3,
+      10
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "CLI and MCP server for MySQL / PolarDB-X / Oracle / GaussDB / DuckDB database introspection, plus cross-database table comparison (`delta-diff`). ／ - **Multi-database** — MySQL, PolarDB-X, Oracle, GaussDB (default features: `oracle-rs`, `oracle`, `gaussdb`, `synth`) and DuckDB (optional feature `duckdb`) ／ Default features include Oracle (`oracle-rs` + native fallback), GaussDB, and synthetic data generation (`synth`). Prebuilt GitHub Release binaries match that set from **0.5.0**. Oracle 11g connections fall back to the `oracle` crate and need Oracle Instant Cl",
+     "lines": [
+      3,
+      10,
+      41
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "support",
+     "quote": "CLI and MCP server for MySQL / PolarDB-X / Oracle / GaussDB / DuckDB database introspection, plus cross-database table comparison (`delta-diff`). ／ - **Multi-database** — MySQL, PolarDB-X, Oracle, GaussDB (default features: `oracle-rs`, `oracle`, `gaussdb`, `synth`) and DuckDB (optional feature `duckdb`) ／ Create `~/.hepta-dbcli.toml` (also reads legacy `~/.polardb-mysql.toml`): ／ |`joindiff`|Both sides on the same connection URL with a single integer key (MySQL/PolarDB-X, Oracle, GaussDB, DuckDB)|",
+     "lines": [
+      3,
+      10,
+      51,
+      256
+     ]
+    },
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "CLI and MCP server for MySQL / PolarDB-X / Oracle / GaussDB / DuckDB database introspection, plus cross-database table comparison (`delta-diff`). ／ - **Multi-database** — MySQL, PolarDB-X, Oracle, GaussDB (default features: `oracle-rs`, `oracle`, `gaussdb`, `synth`) and DuckDB (optional feature `duckdb`) ／ Default features include Oracle (`oracle-rs` + native fallback), GaussDB, and synthetic data generation (`synth`). Prebuilt GitHub Release binaries match that set from **0.5.0**. Oracle 11g connections fall back to the `oracle` crate and need Oracle Instant Cl",
+     "lines": [
+      3,
+      10,
+      41
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是直接连接并操作多种数据库的客户端/MCP 工具，为数据库使用与运维提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "Oracle",
+    "PolarDB",
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CLI and MCP server for MySQL / PolarDB-X / Oracle / GaussDB / DuckDB database introspection, plus cross-database table comparison (`delta-diff`). ／ - **MCP server** — spawn as a Model Context Protocol server for AI tools (Claude, Cursor, etc.) with per-dialect read-only enforcement ／ - **Cross-DB delta-diff** — compare table data across two named connections (`hashdiff` / `joindiff` / `bucketdiff` / `iblt` / `keyeddiff`); CLI + MCP",
+   "evidence_lines": [
+    3,
+    9,
+    14
+   ]
+  },
+  "fn": "c2j/hepta-dbcli",
+  "sha": "112a9fe33c46",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

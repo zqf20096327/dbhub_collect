@@ -7698,5 +7698,74 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d9bc08288f1d": {
+  "identity": {
+   "one_liner": "FDE 工程师训练平台：在线评测系统，用真实交付案例考核人与 AI 代理",
+   "review": "FDE Gym 是一个自托管的在线评测（OJ）平台，每个案例是一次真实客户交付：用户通过浏览器工作台指挥编码代理修复运行中的系统，交付后按未暴露流量上的业务指标打分。需要 Docker、Python 3.9+ 与 OpenRouter 密钥；数据存于 PostgreSQL 与 S3 兼容对象存储，运行器（runner）可水平加机器；案例不在本仓库内，需另行下载或申请。适合训练前向部署工程师及评测编码代理。",
+   "highlights": [
+    "提供案例库、在线工作台、提交记录、排行榜与账户/管理控制台等站点功能",
+    "harness 引擎仅用 Python 标准库实现，同一案例支持命令行运行及由人或 AI 代理执行",
+    "docker compose 启动站点、runner、PostgreSQL 与 S3 兼容对象存储四个组件"
+   ],
+   "use_cases": [
+    "训练与考核前向部署工程师的真实交付能力",
+    "评测编码代理在端到端系统修复任务上的表现",
+    "自托管搭建内部评测/练兵平台"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL database, and an S3-compatible object store. The first account to sign up becomes the admin. Pick a case, press Begin, and you are on site. ／ |**PostgreSQL**|Accounts, settings, the case library's listings, every run, what the customer's people said, terminal history, the coding agent's conversations.|",
+     "lines": [
+      83,
+      93
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL 存储账户、案例库与运行记录，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0；案例文件有独立条款",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Case library**|Each case is one customer delivery: a customer, a system that is running, documents, history, and a few people you can ask. Going in, you know only what the sponsor said. The list works like a problem site: filter by difficulty, domain and status, see each case's acceptance rate, and what you have attempted and solved is marked.| ／ |**Harness**|The engine underneath (`harness/`, Python standard library only). The same case can be worked from the command line, by a person or by an AI agent.| ／ PostgreSQL database, and an S3-compatible object store. The first account to sign up becomes the admin. Pick a case, press Begin, and you are on site.",
+   "evidence_lines": [
+    63,
+    68,
+    83
+   ]
+  },
+  "fn": "deeplethe/fde-gym",
+  "sha": "d9bc08288f1d",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

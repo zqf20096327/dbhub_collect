@@ -8272,5 +8272,228 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "16c1becb4027": {
+  "identity": {
+   "one_liner": "编码代理长期记忆工具，本地 SQLite 存储加 MCP 接入",
+   "review": "Hippo 为 Cursor、Claude Code、Codex 等编码代理提供跨工具共享的本地长期记忆：以 SQLite 存储配合 markdown 镜像，内置 BM25 检索、衰减与淘汰机制，支持 MCP/HTTP 查询，从 ChatGPT、Cursor 规则、Slack 等导入。通过 npm 安装，需 Node.js 22.16+。适合需要在多个代理工具间保留项目经验与历史教训的开发者。",
+   "highlights": [
+    "本地 SQLite 存储加 markdown 镜像，BM25 检索默认无网络调用，零运行时依赖",
+    "通过 hooks 与 AGENTS.md 集成 Claude Code、Codex、Cursor 等代理，任意 MCP 客户端可连接",
+    "提供记忆衰减、错误标记降权、supersede 淘汰与 sleep 整理机制，并含 Slack/GitHub 连接器"
+   ],
+   "use_cases": [
+    "在多个编码代理工具间共享和迁移项目记忆",
+    "让代理从历史错误中学习并在后续任务中降低同类错误",
+    "将 ChatGPT 记忆、Cursor 规则、Slack 历史集中到一个可查询的本地存储"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "hippo decide \"Use PostgreSQL for all new services\" --context \"JSONB support\"",
+     "lines": [
+      309
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **LongMemEval oracle split, all 500 questions in one pooled store, BM25 only, no embeddings, v0.11: R@5 = 74.0%** (benchmarks/README.md, scripts in benchmarks/longmemeval/). A different setup from the per-haystack results under Benchmarks, so the two are not",
+     "lines": [
+      54
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Hippo keeps your coding agents' memories in a SQLite store on your machine, with markdown mirrors you can read and commit. Search is BM25 out of the box, with no model and no network call; embeddings are an optional install. `hippo init` installs hooks for Cla ／ Storage: SQLite backbone with markdown mirrors. Git-trackable, human-readable.",
+     "lines": [
+      15,
+      32
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "该工具以 SQLite 作为自身记忆存储后端，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Hippo keeps your coding agents' memories in a SQLite store on your machine, with markdown mirrors you can read and commit. Search is BM25 out of the box, with no model and no network call; embeddings are an optional install. `hippo init` installs hooks for Claude Code and OpenCode, adds 2 hooks to Codex's `hooks.json` when Codex is installed (Codex runs them once you trust them in `/hooks`), and adds instructions to an existing `AGENTS.md` for Codex, Cursor, OpenClaw and Pi. Any MCP client can connect. Mark a memory wrong and it ranks lower; run `hippo supersede` and the old fact leaves recall. Zero runtime deps. ／ npm install -g hippo-memory && hippo init ／ Storage:       SQLite backbone with markdown mirrors. Git-trackable, human-readable.",
+   "evidence_lines": [
+    15,
+    20,
+    32
+   ]
+  },
+  "fn": "kitfunso/hippo-memory",
+  "sha": "16c1becb4027",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7e110cd52e67": {
+  "identity": {
+   "one_liner": "自然语言 SQLite 查询接口，由代码生成确定性 SQL",
+   "review": "IntentSQL 是一个让用户用自然语言查询 SQLite 数据库的 Web 应用与 CLI 工具。它不让模型直接写 SQL，而是由代码枚举候选解释，让决策模型做多选题选择，再由编译器生成参数化 SQL，并提供决策时间线展示、校验与只读执行。适合需要可审查查询过程、且以只读方式探索 SQLite 数据的用户；1.0 版移除了写入功能，仅支持 SQLite。",
+   "highlights": [
+    "代码枚举候选解释、模型仅做有界决策，编译器生成参数化 SQL（L13-L15）",
+    "只读连接执行查询，带行数和时间限制，在数据库副本上工作，不修改原文件（L17, L40）",
+    "提供决策时间线检查器、CLI（ask/schema/benchmark 等）与 Docker 部署（L19, L56, L73）"
+   ],
+   "use_cases": [
+    "用自然语言查询本地 SQLite 数据文件并获得可审查的 SQL 与决策过程",
+    "需要确定性和只读保障的场景下做数据探索与报表问答",
+    "通过自定义 System One 协议端点接入自己的决策模型"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**The query, made clear.** Ask a SQLite database a question in plain English. IntentSQL shows what it understood, every decision behind the SQL, the read-only query it ran, and the result. ／ 4. **Deterministic SQL.** A compiler turns the plan into parameterized SQLite. Joins come from the database's keys, and every value is a bound parameter. ／ Three example databases are included: Cyberchase, DESE and Moneyball. **Open database** imports your own SQLite file; IntentSQL works on a copy and never changes the original. ／ - SQLite only, one question at a time, and no follow-up questions about a previous answer.",
+     "lines": [
+      3,
+      15,
+      76,
+      150
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具专为 SQLite 数据库提供自然语言查询能力，服务于数据库使用生态而非仅消费数据库存数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**The query, made clear.** Ask a SQLite database a question in plain English. IntentSQL shows what it understood, every decision behind the SQL, the read-only query it ran, and the result. ／ 4. **Deterministic SQL.** A compiler turns the plan into parameterized SQLite. Joins come from the database's keys, and every value is a bound parameter. ／ Three example databases are included: Cyberchase, DESE and Moneyball. **Open database** imports your own SQLite file; IntentSQL works on a copy and never changes the original.",
+   "evidence_lines": [
+    3,
+    15,
+    76
+   ]
+  },
+  "fn": "Amine-LG/IntentSQL",
+  "sha": "7e110cd52e67",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b46f56048d27": {
+  "identity": {
+   "one_liner": "本地运行的 AI 编码工具 token 用量统计仪表盘",
+   "review": "读取本机 Claude Code、Codex、OpenCode 的会话记录，将历史 token 用量缓存到本地 SQLite 数据库，并在浏览器中展示日历热力图、按工具/模型/项目的用量分解及成本估算。面向使用这些 AI 编码工具、想查看自身用量与费用的开发者，数据全程本地处理。",
+   "highlights": [
+    "读取 Claude Code、Codex、OpenCode 三种本地会话记录文件",
+    "将统计结果缓存到本地 SQLite 数据库以保留完整历史",
+    "支持 Docker、systemd 服务、release 包和源码四种部署方式"
+   ],
+   "use_cases": [
+    "查看个人 AI 编码工具的历史 token 消耗分布",
+    "基于公开 API 费率估算 AI 使用成本",
+    "在会话记录被清理后仍保留完整用量历史"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Stats are cached in a local SQLite DB, so that you get full history even after Claude and Codex have pruned old transcripts.",
+     "lines": [
+      14
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个以 SQLite 作为本地缓存存储的使用统计应用，SQLite 不是其服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This usage dashboard reads your local Claude Code, Codex, Open Code transcripts and builds a beautiful dashboard breaking down your full historical usage. ／ Stats are cached in a local SQLite DB, so that you get full history even after Claude and Codex have pruned old transcripts.",
+   "evidence_lines": [
+    11,
+    14
+   ]
+  },
+  "fn": "NotAFlightRisk/token-usage-dashboard",
+  "sha": "b46f56048d27",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

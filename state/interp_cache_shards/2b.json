@@ -10153,5 +10153,71 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "21a9f976733c": {
+  "identity": {
+   "one_liner": "兼容 Neo4j Bolt/Cypher 的分布式图+向量+时序 MVCC 数据库",
+   "review": "NornicDB 是一个用 Go 编写的图数据库，在同一引擎内提供图遍历、向量检索（HNSW）和基于 MVCC 的历史读取，并通过 Bolt/Cypher、REST、GraphQL 与 gRPC 对外提供服务，兼容 Neo4j 客户端协议和 Qdrant gRPC。面向知识系统、Agent 记忆和 Graph-RAG 场景，可通过 Docker、Homebrew 或二进制部署，支持 CPU 与 CUDA/Metal/Vulkan 加速。",
+   "highlights": [
+    "兼容 Neo4j Bolt/Cypher 协议，同时提供 REST、GraphQL、gRPC 接口",
+    "在同一引擎实现图遍历、向量检索与基于 MVCC 的历史读取，采用快照隔离与提交时冲突检测",
+    "支持 Metal/CUDA/Vulkan 硬件加速路径，并提供 MCP/agent 技能文件与托管嵌入、重排序等 AI 相关能力"
+   ],
+   "use_cases": [
+    "Graph-RAG 与语义检索管道，将向量搜索与图扩展在同一查询路径完成",
+    "Agent 记忆与事件溯源型知识库，需要时序事实与可回放历史",
+    "从 Neo4j + Qdrant 组合栈向单实例部署迁移的整合场景"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "In benchmarks performing **Automata Learning (L\\*)**—a high-iteration logic process where an LLM acts as a \"Deterministic Teacher\" or Oracle—NornicDB outperformed industry-standard graph databases by a significant margin:",
+     "lines": [
+      136
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明它是图数据库本体，为知识系统、Agent 记忆和 Graph-RAG 工作负载提供存储与查询引擎",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "NornicDB is a graph database for workloads that need graph traversal, vector retrieval, and historical truth in the same system. It speaks Neo4j's language through Bolt and Cypher, exposes REST, GraphQL, and gRPC interfaces, and can preserve Qdrant-style client workflows where that helps migration. ／ - **Graph, vector, and ledger semantics in one engine**: hybrid retrieval, graph traversal, canonical graph ledger modeling, tritemporal facts, as-of reads, txlog queries, and receipts do not require a second database. ／ NornicDB implements Snapshot Isolation at the storage layer. Each transaction is anchored to a specific MVCC version, so point reads, label scans, and snapshot-visible graph traversals resolve against the same committed view of the graph.",
+   "evidence_lines": [
+    50,
+    60,
+    74
+   ]
+  },
+  "fn": "orneryd/NornicDB",
+  "sha": "21a9f976733c",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -6884,5 +6884,153 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2874b5a99107": {
+  "identity": {
+   "one_liner": "基于 Postgres/SQLite 的 Go/Ruby/Rust/JS 多语言事务性任务队列库",
+   "review": "River 是一个以后端数据库（Postgres 或 SQLite）为存储的事务性后台任务队列库，支持 Go、JavaScript/TypeScript、Ruby、Rust 四种语言的客户端实现，且各实现间可跨语言入队与消费。它面向需要与业务数据同库同事务提交任务的开发者，提供自动重试、定时/cron 任务、唯一任务、批量插入及配套 Web UI；要求使用受支持的数据库作为队列后端。",
+   "highlights": [
+    "利用事务性入队将任务与业务数据库变更同提交/回滚",
+    "支持自动重试、定时、cron、唯一任务、批量插入（Postgres COPY FROM）",
+    "提供 Web UI 检查和操作任务与队列，多语言实现跨语言兼容"
+   ],
+   "use_cases": [
+    "在 Go/Ruby/Rust/JS 应用中执行后台异步任务",
+    "需要任务与数据库事务一致性提交的场景",
+    "多语言微服务共享同一任务队列"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "River is a fast, transactional job queue backed by Postgres or SQLite. It ／ Postgres `COPY FROM`.",
+     "lines": [
+      3,
+      116
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "River is a fast, transactional job queue backed by Postgres or SQLite. It",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "River 是构建在 Postgres/SQLite 之上的任务队列组件库，为应用提供基于数据库的服务，属数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "River is a fast, transactional job queue backed by Postgres or SQLite. It ／ for Go, [JavaScript/TypeScript], [Ruby], and [Rust]. All implementations are",
+   "evidence_lines": [
+    3,
+    5
+   ]
+  },
+  "fn": "riverqueue/river",
+  "sha": "2874b5a99107",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c03f487e3353": {
+  "identity": {
+   "one_liner": "自托管 OPNsense 防火墙机队管理平台",
+   "review": "OPNManager 是部署在自有服务器上的 OPNsense 防火墙机队管理系统，面向 MSP 和 IT 团队，提供按客户/站点分组的健康监控、配置备份与漂移对比、金丝雀/试点/生产分环更新发布。采用 PHP 服务端加 OPNsense 上的 agent 插件架构，依赖 MySQL 8.0+ 或 MariaDB 10.6+ 存储数据；agent 包需自行放置到服务器。",
+   "highlights": [
+    "提供按客户和站点分组的防火墙机队仪表盘、事件管理与维护窗口",
+    "支持定时配置备份、基于批准基线的漂移对比（diff）",
+    "支持通过 canary/pilot/production 分环手动推进的更新发布，CARP 对成员不同时更新"
+   ],
+   "use_cases": [
+    "MSP 集中管理多个客户的 OPNsense 防火墙",
+    "防火墙配置变更审计与漂移检查",
+    "分批灰度推送防火墙更新以避免同时下线 HA 节点"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Requires Ubuntu 22.04 LTS or newer, PHP 8.0+ (CI builds against 8.3), MySQL 8.0+ or",
+     "lines": [
+      126
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MariaDB 10.6+, and Apache 2.4+ or Nginx 1.18+.",
+     "lines": [
+      127
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 要求 MySQL/MariaDB 作为运行依赖，属于使用数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Self-hosted OPNsense fleet management for MSPs and IT teams.** ／ Requires Ubuntu 22.04 LTS or newer, PHP 8.0+ (CI builds against 8.3), MySQL 8.0+ or ／ MariaDB 10.6+, and Apache 2.4+ or Nginx 1.18+.",
+   "evidence_lines": [
+    3,
+    126,
+    127
+   ]
+  },
+  "fn": "agit8or1/OPNMGR",
+  "sha": "c03f487e3353",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

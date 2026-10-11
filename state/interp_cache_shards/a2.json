@@ -9157,5 +9157,126 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f43a9777ddaf": {
+  "identity": {
+   "one_liner": "单二进制网关，把 SQL 数据库转为 REST API 和 MCP 服务器",
+   "review": "Faucet 是一个用 Go 编写的单二进制服务，连接 PostgreSQL、MySQL、SQL Server 等数据库，在运行时内省 schema 并生成带认证、RBAC 和 OpenAPI 文档的 CRUD REST API，同时内置 MCP 服务器供 Claude、Cursor 等 AI 客户端按同一角色规则查询数据。面向需要快速为现有数据库提供 API 或治理式 AI 数据访问的开发者和团队。",
+   "highlights": [
+    "运行时内省 schema，生成 CRUD REST API 与 OpenAPI 3.1 规范",
+    "内置 MCP 服务器，AI 客户端遵循与 REST API 相同的 RBAC 规则",
+    "提供 API key/JWT 认证、按表 RBAC 与 schema 契约锁定，附内置管理界面"
+   ],
+   "use_cases": [
+    "为应用快速生成数据库 CRUD 后端 API",
+    "为 MCP 兼容的 AI 客户端提供受角色权限约束的数据库访问",
+    "为内部工具或旧数据库生成 API 而不改动现有基础设施"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Faucet is an open-source (MIT) single Go binary that turns PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, Snowflake or SQLite into a REST API and an MCP server for AI agents, with role-based access control (RBAC), OpenAPI 3.1 and a built-in admin UI. ／ |**PostgreSQL**|9.6 – 17|Amazon RDS, Aurora, Supabase, Neon, Azure Database|Guide|",
+     "lines": [
+      7,
+      102
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Faucet is an open-source (MIT) single Go binary that turns PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, Snowflake or SQLite into a REST API and an MCP server for AI agents, with role-based access control (RBAC), OpenAPI 3.1 and a built-in admin UI. ／ |**MySQL**|5.7 – 9.x|Amazon RDS, Aurora MySQL, PlanetScale, Azure MySQL|Guide|",
+     "lines": [
+      7,
+      103
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Faucet is an open-source (MIT) single Go binary that turns PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, Snowflake or SQLite into a REST API and an MCP server for AI agents, with role-based access control (RBAC), OpenAPI 3.1 and a built-in admin UI. ／ |**MariaDB**|10.2 – 11.x|Via MySQL driver|MySQL guide|",
+     "lines": [
+      7,
+      104
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Faucet is an open-source (MIT) single Go binary that turns PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, Snowflake or SQLite into a REST API and an MCP server for AI agents, with role-based access control (RBAC), OpenAPI 3.1 and a built-in admin UI. ／ |**Oracle**|12c – 26ai|Oracle Cloud (OCI), Amazon RDS, Azure|Guide|",
+     "lines": [
+      7,
+      106
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Faucet is an open-source (MIT) single Go binary that turns PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, Snowflake or SQLite into a REST API and an MCP server for AI agents, with role-based access control (RBAC), OpenAPI 3.1 and a built-in admin UI. ／ |**SQLite**|3.35+|Local file, in-memory|Guide|",
+     "lines": [
+      7,
+      108
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Faucet is an open-source (MIT) single Go binary that turns PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, Snowflake or SQLite into a REST API and an MCP server for AI agents, with role-based access control (RBAC), OpenAPI 3.1 and a built-in admin UI. ／ |**SQL Server**|2012 – 2022|Azure SQL Database, Amazon RDS|Guide|",
+     "lines": [
+      7,
+      105
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目连接并内省多种 SQL 数据库，为其生成 API 与 MCP 工具，属于为数据库生态服务的网关组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "Oracle",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单一许可",
+   "install": [
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Faucet is an open-source (MIT) single Go binary that turns PostgreSQL, MySQL, MariaDB, SQL Server, Oracle, Snowflake or SQLite into a REST API and an MCP server for AI agents, with role-based access control (RBAC), OpenAPI 3.1 and a built-in admin UI. ／ Faucet is a **database-to-REST-API gateway** — a lightweight, self-hosted server that connects to your SQL databases, introspects the schema, and generates a full CRUD REST API with authentication, role-based access control (RBAC), and OpenAPI documentation. It also exposes an **MCP server** at `/mcp` so AI agents and AI app builders (Claude, ChatGPT, Cursor, VS Code, Windsurf, Base44, Replit) can query your data through the same roles and API keys. ／ - **Built-in MCP server** — 8 tools + 2 resources for Model Context Protocol, served at `/mcp` on the same port as the REST API",
+   "evidence_lines": [
+    7,
+    26,
+    86
+   ]
+  },
+  "fn": "faucetdb/faucet",
+  "sha": "f43a9777ddaf",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

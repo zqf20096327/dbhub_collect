@@ -8629,5 +8629,71 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a01ffe593361": {
+  "identity": {
+   "one_liner": "自主代理身份管理系统，基于 OAuth 2.1 签发与撤销代理凭证",
+   "review": "ZeroID 是面向 AI 代理的身份基础设施，提供凭证签发、代理间委托、衰减授权和实时撤销，基于 OAuth 2.1、WIMSE/SPIFFE 与 RFC 8693 实现，每个代理获得唯一身份 URI 并携带完整 on-behalf-of 链。面向需要代理身份审计与权限控制的平台开发者，部署时通过 docker compose 启动 Postgres 作为后端存储。",
+   "highlights": [
+    "提供 OAuth 2.1 令牌签发、DPoP 发送方约束令牌与动态客户端注册（RFC 7591/7592）",
+    "支持基于 RFC 8693 的 on-behalf-of 委托链，每跳自动衰减 scope 并支持级联撤销",
+    "为代理签发 WIMSE/SPIFFE 全局唯一身份 URI，支持 CIBA 后通道审批与 RAR 细粒度授权"
+   ],
+   "use_cases": [
+    "为多代理工作流建立可审计的代理身份与委托链",
+    "对 MCP 服务器、服务等非人类主体进行注册与生命周期管理",
+    "需要对代理凭证做实时撤销与信任分级的治理平台"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "docker compose up -d # starts Postgres + ZeroID ／ docker compose up -d postgres",
+     "lines": [
+      170,
+      181
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将其定位为代理身份基础设施组件，docker compose 中启动 Postgres 作为其后端存储",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ZeroID is identity infrastructure for autonomous agents: a system that issues cryptographically verifiable credentials, enforces delegated authority through chains of agents, and revokes access in real time. Built on OAuth 2.1, WIMSE/SPIFFE, and RFC 8693, it implements the industry's emerging standards for agent identity before they become requirements. ／ - **Agent Identity Registry** — Register agents, MCP servers, services, and applications as first-class entities. Classify by role (`orchestrator`, `autonomous`, `tool_agent`), enrich with metadata (`framework`, `version`, `publisher`, `capabilities`), assign trust levels, and manage the full lifecycle: register → activate → deactivate → de-provision.",
+   "evidence_lines": [
+    41,
+    80
+   ]
+  },
+  "fn": "highflame-ai/zeroid",
+  "sha": "a01ffe593361",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

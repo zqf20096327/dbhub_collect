@@ -7989,5 +7989,147 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c029e95982b9": {
+  "identity": {
+   "one_liner": "全球交通事故新闻报道网站及其数据库（PHP+MariaDB）",
+   "review": "这是一个用于发布和检索世界各地交通事故新闻报道的网站系统，包含自建数据库结构，依赖 Apache、PHP 8.3+ 和 MariaDB/MySQL 8（需全文检索支持），通过安装脚本建库、导入初始数据并创建管理员。适合想自建 roaddanger 类交通事故资讯站的运营者部署使用，需自行配置 API 密钥以启用 AI 和坐标定位功能。",
+   "highlights": [
+    "提供安装脚本，自动创建数据库表并导入语言、国家等初始数据",
+    "支持 MariaDB 或 MySQL 8，要求全文检索功能",
+    "可选集成 OpenRouter AI 功能与 HERE API 坐标定位，附带测试数据生成脚本"
+   ],
+   "use_cases": [
+    "搭建全球交通事故新闻资讯网站",
+    "基于现有库结构开发本地化的交通事件报道平台",
+    "使用测试数据脚本进行本地演示与开发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "* PHP 8.3 or newer. Required PHP modules: curl, intl, mbstring, pdo_mysql ／ * MariaDB (recommended, the live website runs 10.11) or MySQL 8, both with full-text search support. ／ On MySQL the site sets the session `sql_mode` to the MariaDB default, because some queries do not work with the",
+     "lines": [
+      10,
+      11,
+      12
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "* MariaDB (recommended, the live website runs 10.11) or MySQL 8, both with full-text search support.",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用 MariaDB/MySQL 存储数据的网站应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A website and database for news reports about traffic crashes around the world. ／ * MariaDB (recommended, the live website runs 10.11) or MySQL 8, both with full-text search support. ／    php install/init_database.php",
+   "evidence_lines": [
+    3,
+    11,
+    27
+   ]
+  },
+  "fn": "digitaldutch/roaddanger.org",
+  "sha": "c029e95982b9",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4975ac154d1c": {
+  "identity": {
+   "one_liner": "将 Overcast 播客收听数据保存到 SQLite 数据库的 CLI 工具",
+   "review": "这是一个命令行工具，从 Overcast 播客服务获取收听历史、订阅源和单集信息并存入 SQLite 数据库，还支持下载 XML 源全文、字幕、章节和音频文件，并可生成 HTML 页面、查看统计和全文搜索。面向 Overcast 用户和个人数据存档者，需要 Python 3.13 及以上，通过 uvx 或 uv tool 安装。",
+   "highlights": [
+    "提供 save/extend/transcripts/chapters/audio 等子命令，抓取并归档 Overcast 数据及媒体文件",
+    "数据存入 SQLite，含固定 schema 的表、视图和 FTS5 全文搜索索引",
+    "支持生成静态 HTML 页面、收听统计和跨表全文搜索"
+   ],
+   "use_cases": [
+    "备份和归档个人 Overcast 收听历史与播客数据",
+    "配合 Datasette 探索个人播客收听习惯",
+    "本地全文检索已订阅播客的单集、源和章节"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Save listening history and feed/episode info from Overcast to a SQLite database. Try exploring your podcast listening habits with Datasette!",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该工具以 SQLite 作为自身存数据的数据库，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Save listening history and feed/episode info from Overcast to a SQLite database. Try exploring your podcast listening habits with Datasette! ／  $ uvx overcast-to-sqlite",
+   "evidence_lines": [
+    11,
+    23
+   ]
+  },
+  "fn": "hbmartin/overcast-to-sqlite",
+  "sha": "4975ac154d1c",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

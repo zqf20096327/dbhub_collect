@@ -9153,5 +9153,149 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "130e4f09e40d": {
+  "identity": {
+   "one_liner": "PostgreSQL 逻辑解码输出插件，将变更以 JSON 输出",
+   "review": "wal2 是 PostgreSQL 的逻辑解码输出插件，通过复制槽流式协议或 SQL 函数以 JSON 格式输出 INSERT/UPDATE/DELETE 变更，支持两种格式版本及表过滤、字段包含等参数。供需要消费 WAL 变更的开发者和运维人员使用，需 PostgreSQL 10+ 并配置 wal_level=logical。",
+   "highlights": [
+    "通过逻辑复制槽流式协议或 SQL API 输出 JSON 格式变更",
+    "提供 format-version 1（每事务一个 JSON）和 2（每元组一个 JSON）两种格式",
+    "支持表过滤/包含、字段（时间戳、schema、类型、主键等）包含选项"
+   ],
+   "use_cases": [
+    "为 CDC 下游消费 PostgreSQL 变更流",
+    "通过 SQL 函数以 JSON 查询表变更",
+    "配合 pg_recvlogical 订阅逻辑复制槽"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "This module is supported on those platforms that PostgreSQL is. The installation steps depend on your operating system. PostgreSQL yum repository and PostgreSQL apt repository provide wal2json packages. ／ $ sudo apt-get install postgresql-18-wal2json ／ Before installing **wal2json**, you should have PostgreSQL 10+ installed (including the header files). If PostgreSQL is not in your search path, add it. If you are using PostgreSQL yum repository, install `postgresql18-devel` and add `/usr/pgsql-18/bin` to you",
+     "lines": [
+      13,
+      24,
+      35
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 逻辑解码的输出插件，为数据库变更捕获生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**wal2json** is an output plugin for logical decoding. It means that the plugin have access to tuples produced by INSERT and UPDATE. Also, UPDATE/DELETE old row versions can be accessed depending on the configured replica identity. Changes can be consumed using the streaming protocol (logical replication slots) or by a special SQL API. ／ This module is supported on those platforms that PostgreSQL is. The installation steps depend on your operating system. PostgreSQL yum repository and PostgreSQL apt repository provide wal2json packages.",
+   "evidence_lines": [
+    5,
+    13
+   ]
+  },
+  "fn": "eulerto/wal2json",
+  "sha": "130e4f09e40d",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f39977b9b2f0": {
+  "identity": {
+   "one_liner": "自托管文档归档系统，单 Go 二进制，SQLite 存元数据 + 内容寻址存储",
+   "review": "Suchi 是一个自托管文档管理系统：用户通过浏览器、监控目录、IMAP 或移动端应用投入扫描件与附件，系统执行 OCR、生成标题并按 Johnny.Decimal 编号分类树归档，不确定的内容进入收件箱等待人工确认。它使用 SQLite 存元数据、SHA-256 内容寻址存储保存原始文件，通过 Docker 镜像或单二进制部署，适合个人、家庭及小型团队的文档归档场景。",
+   "highlights": [
+    "提供 OCR、全文搜索、缩略图、条码及多种文档格式（Office、EPUB、EML、MSG 等）的读取与索引",
+    "以 SQLite 元数据与内容寻址（SHA-256）存储实现不可变文件保存与多用户 ACL",
+    "支持基于文本匹配规则的自动化、可选的 OpenAI 兼容模型分类，以及 HTTP API 和 MCP 接口"
+   ],
+   "use_cases": [
+    "个人或家庭财务、税务等文件的扫描归档与检索",
+    "自由职业者或小团队的文档分类管理与审批流程",
+    "通过 IMAP 邮箱或监控目录自动接收并归档邮件附件与扫描件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **One binary.** Go, SQLite and files on disk. No Postgres, Redis, queue or",
+     "lines": [
+      28
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **One binary.** Go, SQLite and files on disk. No Postgres, Redis, queue or ／ Suchi combines SQLite, content-addressed storage, a Svelte interface, and an ／ access-control boundary; SQLite metadata and the API decide who can see each",
+     "lines": [
+      28,
+      53,
+      57
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 SQLite 存储元数据的文档管理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "双许可（AGPL-3.0 起始，README 声明 under two licenses）",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A self-hosted document archive that files itself. ／ - **One binary.** Go, SQLite and files on disk. No Postgres, Redis, queue or ／ Suchi combines SQLite, content-addressed storage, a Svelte interface, and an",
+   "evidence_lines": [
+    5,
+    28,
+    53
+   ]
+  },
+  "fn": "johnnybravo-xyz/suchi",
+  "sha": "f39977b9b2f0",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

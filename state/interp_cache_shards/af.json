@@ -9996,5 +9996,281 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "84a0510efc4f": {
+  "identity": {
+   "one_liner": "无 Docker 的本地 PHP 开发环境编排器，按项目声明 PHP 版本与数据库",
+   "review": "HyPHP 是面向 Windows 和 macOS 的本地 PHP 开发环境，通过 hyphp.yaml 声明每个项目使用的 PHP 版本，配合 Apache/nginx、Mailpit、本地 HTTPS 与 .test 域名运行，并支持多 PHP 版本经 FastCGI 同时服务。它按需下载 MySQL/MariaDB 等组件并校验 SHA-256，提供 CLI 与 -- 输出，适合本地 PHP Web 开发者使用，不依赖 Docker。",
+   "highlights": [
+    "支持多 PHP 版本通过 FastCGI 同时服务，版本按项目在 hyphp.yaml 中声明",
+    "提供 CLI 命令管理服务状态、日志与 php.ini，所有命令支持 -- 输出",
+    "MySQL 与 MariaDB 可切换，各使用独立数据目录，按需下载并校验 SHA-256"
+   ],
+   "use_cases": [
+    "需要多 PHP 版本并行开发与测试的本地 Web 项目",
+    "需要可提交到仓库的可复现本地开发环境配置（hyphp.yaml）",
+    "希望在没有 Docker 的机器上搭建含数据库的 PHP 运行环境"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "HyPHP — PHP environment declared per project. The app window runs Apache, PHP 7.4, 8.3 and 8.4, MySQL and Mailpit ／ - **MySQL or MariaDB** — one active at a time on the same port, each with its own data ／ |MySQL Community|GPL-2.0|dev.mysql.com|",
+     "lines": [
+      1,
+      45,
+      100
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **MySQL or MariaDB** — one active at a time on the same port, each with its own data ／ - **macOS 15+ on Apple Silicon**, from version 3.1.0. PHP, Apache, nginx, MySQL, MariaDB, ／ |MariaDB Server|GPL-2.0|mariadb.org|",
+     "lines": [
+      45,
+      58,
+      101
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为本地开发环境编排器，负责下载、运行和管理 MySQL/MariaDB 等数据库组件，为使用数据库的开发工作流服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **MySQL or MariaDB** — one active at a time on the same port, each with its own data ／ HyPHP does not redistribute these binaries: it downloads them on demand, verifies the",
+   "evidence_lines": [
+    45,
+    105
+   ]
+  },
+  "fn": "arismarioneves/hyphp",
+  "sha": "84a0510efc4f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1419e680cd4b": {
+  "identity": {
+   "one_liner": "自托管 IPTV M3U 播放列表管理器，Vue3+Express+PostgreSQL",
+   "review": "该项目是一个自托管的 IPTV 播放列表管理工具，用于导入、编辑、分类、导出和分享 M3U/Xtream 播放列表，支持 XMLTV 电子节目指南和多用户隔离。后端使用 Node.js/Express，数据存储于 PostgreSQL（要求 13 以上版本，通过迁移脚本管理 schema），前端为 Vue 3。适合需要自行管理 IPTV 频道清单并分发给播放器的用户，可经 Docker 部署，但 README 明确要求在外部代理上终止 TLS。",
+   "highlights": [
+    "支持 Xtream Codes 导入 Live TV/VOD/Series 及本地或远程 M3U 导入与转义 M3U 导出",
+    "支持 XMLTV 节目指南、按 tvg-id 自动匹配频道、拖拽排序与批量操作",
+    "提供多用户隔离、短期访问令牌、AES-256-GCM 加密的 Xtream 输出凭据及 Docker 生产部署栈"
+   ],
+   "use_cases": [
+    "自托管管理和编辑 IPTV M3U/Xtream 播放列表",
+    "为播放器生成并共享 Xtream Codes 输出与 M3U/XMLTV 链接",
+    "以多用户方式维护带 EPG 指南的频道分类与排序"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ - PostgreSQL 13 or newer (PostgreSQL 16 is used by Docker and CI) ／ The API container applies pending migrations before startup. PostgreSQL is not exposed to the host. Uploaded logos and database files use named volumes. The API runs as a non-root user with a read-only root filesystem; the frontend is served by Nginx with security and cache headers.",
+     "lines": [
+      8,
+      86,
+      196
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该应用使用 PostgreSQL 作为自身数据存储，并非为数据库生态提供工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted IPTV playlist manager for importing, editing, organizing, exporting, and sharing M3U/Xtream playlists. It includes a responsive Vue interface, XMLTV guide support, multi-user isolation, and a production Docker stack. ／ - PostgreSQL 13 or newer (PostgreSQL 16 is used by Docker and CI) ／ The API container applies pending migrations before startup. PostgreSQL is not exposed to the host. Uploaded logos and database files use named volumes. The API runs as a non-root user with a read-only root filesystem; the frontend is served by Nginx with security and cache headers.",
+   "evidence_lines": [
+    3,
+    86,
+    196
+   ]
+  },
+  "fn": "fyildirim-debug/M3uEditor",
+  "sha": "1419e680cd4b",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f91033adb16e": {
+  "identity": {
+   "one_liner": "基于 node-postgres 的 PostgreSQL 逻辑复制（pgoutput）客户端库",
+   "review": "pg-replicator 是一个 TypeScript 库，基于 node-postgres 连接实现 PostgreSQL 逻辑复制协议（pgoutput）解码，把 WAL 变更以 Effect Stream 形式输出为带列名的 Insert/Update/Delete 消息，支持创建/删除复制槽、LSN 恢复与 ack 确认。面向使用 Effect 生态做 CDC、缓存失效、搜索索引同步的 Node.js 开发者；当前为 0.x 早期版本，不支持 TRUNCATE、进行中事务流式传输和物理复制。",
+   "highlights": [
+    "解码 pgoutput 协议的 Begin/Commit/Relation/Insert/Update/Delete 消息，并跟踪 Relation 提供列名化的行数据",
+    "提供复制槽创建/删除、从 LSN 恢复、ack 进度确认，并自动回复服务器 keepalive",
+    "以 Effect Stream 形式输出类型化复制消息，内置常用 Postgres 文本类型解码"
+   ],
+   "use_cases": [
+    "消费 PostgreSQL WAL 做变更数据捕获（CDC）",
+    "缓存失效与搜索索引的增量更新",
+    "将行变更同步到其他存储"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pg-replicator ／ Effect-native PostgreSQL logical replication client built on node-postgres. ／ - Decodes common Postgres text types (`bool`, `int2/4/8`, `float4/8`, `timestamp[tz]`, `json[b]`) to JS values",
+     "lines": [
+      1,
+      3,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是读取 PostgreSQL 逻辑复制流并输出变更消息的客户端库，为数据库生态提供 CDC 能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Effect-native PostgreSQL logical replication client built on node-postgres. ／ Consume your database's write-ahead log as an Effect `Stream` of typed `Begin` / `Insert` / `Update` / `Delete` / `Commit` messages, decoded from the built-in `pgoutput` plugin. Useful for change data capture (CDC), cache invalidation, search indexing, syncing to another store, or anything else that needs to react to row changes without polling. ／ - `Stream.Stream<ReplicationMessage, PgReplError>` over a replication connection",
+   "evidence_lines": [
+    3,
+    5,
+    11
+   ]
+  },
+  "fn": "AVtheking/pg-replicator",
+  "sha": "f91033adb16e",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1dcf2ed1b1dd": {
+  "identity": {
+   "one_liner": "Devin Desktop 本地安装诊断与会话历史导出检索的 CLI 工具集",
+   "review": "该仓库包含 doctor、history、search、graph、pm 五个独立 PyPI 包，用于诊断 Devin Desktop 本地安装（存储、schema 版本、锁、磁盘占用）、导出检索会话历史、全文搜索及构建知识图谱，全部本地运行、只读、无遥测，面向本地运维与终端用户；为非官方社区项目，与 Cognition AI 无关联。",
+   "highlights": [
+    "提供 doctor 包诊断 Devin Desktop 安装的存储、schema 版本、hooks、MCP 服务器与磁盘占用",
+    "提供 history 包以 Obsidian 兼容 markdown 和 JSON 导出、审计并搜索会话历史，具备 SQLite 感知能力",
+    "提供 search 与 graph 包实现会话全文检索及基于项目、文件、工具、决策节点的知识图谱查询"
+   ],
+   "use_cases": [
+    "排查 Devin Desktop 本地安装的存储与配置问题",
+    "导出并审计 Devin 会话历史用于归档或知识管理",
+    "跨会话检索信息并生成项目级任务跟踪与状态报告"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|`packages/history`|devin-history|Export, audit and search session history — Obsidian-ready markdown, JSON, SQLite-aware|",
+     "lines": [
+      35
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "该工具面向 Devin AI 代理的本地会话数据管理，SQLite 仅以 'SQLite-aware' 方式被提及，未见其作为数据库生态工具的明确声明",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`packages/doctor`|devin-doctor|Diagnose a Devin Desktop install: stores, schema versions, hooks, MCP servers, disk usage| ／ |`packages/history`|devin-history|Export, audit and search session history — Obsidian-ready markdown, JSON, SQLite-aware| ／ > **Unofficial community project.** Not affiliated with, endorsed by, or",
+   "evidence_lines": [
+    34,
+    35,
+    62
+   ]
+  },
+  "fn": "Icaro0310/devin-explore",
+  "sha": "1dcf2ed1b1dd",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

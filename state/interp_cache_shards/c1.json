@@ -8766,5 +8766,145 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d9a8953f2606": {
+  "identity": {
+   "one_liner": "基于 Next.js + Prisma + MySQL 的 SaaS AI 平台应用",
+   "review": "这是一个使用 React/Next.js 构建的 SaaS AI 平台，提供对话聊天、图像生成、代码生成和音乐生成等功能。面向希望使用多种 AI 能力的终端用户。技术栈采用 Prisma 作为 ORM，通过 Aiven 托管的 MySQL 数据库存取数据，使用 Clerk 做认证、Stripe 做支付，部署到 Netlify。安装需依次配置 Clerk、Aiven 数据库、Stripe、Crisp 等 API 密钥。",
+   "highlights": [
+    "提供对话、图像生成、代码生成、音乐生成等 AI 功能",
+    "使用 Prisma ORM 连接 MySQL（Aiven）数据库存储数据",
+    "集成 Clerk 认证与 Stripe 支付/订阅"
+   ],
+   "use_cases": [
+    "需要在一个 SaaS 界面中使用多种 OpenAI/Replicate AI 能力",
+    "作为 Next.js + Prisma + MySQL 全栈应用的学习/参考项目",
+    "需要 Stripe 订阅计费的 AI 应用原型"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "If you don't have an Aiven account, sign up here. After creating an account, set up a MySQL database. In the Aiven dashboard, find your database connection details and construct the `DATABASE_URL` in the following format: ／ DATABASE_URL=\"mysql://<username>:<password>@<host>:<port>/genius-ai?ssl-mode=REQUIRED\" ／ React JS Next JS Typescript Tailwind CSS Netlify Prisma MySQL",
+     "lines": [
+      54,
+      57,
+      124
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- @prisma/adapter-mariadb: ^7.10.0",
+     "lines": [
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 MySQL 存储数据的 AI 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "If you don't have an Aiven account, sign up here. After creating an account, set up a MySQL database. In the Aiven dashboard, find your database connection details and construct the `DATABASE_URL` in the following format: ／ React JS Next JS Typescript Tailwind CSS Netlify Prisma MySQL ／ - @prisma/adapter-mariadb: ^7.10.0",
+   "evidence_lines": [
+    54,
+    124,
+    142
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "sanidhyy/genius-ai",
+  "sha": "d9a8953f2606",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "cf10f789b2e4": {
+  "identity": {
+   "one_liner": "本地优先的求职自动化应用，支持简历定制与人工审批投递",
+   "review": "JobCtrl 是一个运行在本地 Mac 上的求职辅助应用：抓取招聘信息、按个人资料进行 1-10 分匹配评分、生成简历与求职信，用户审核通过后才投递。步骤 1-4 基于 Temporal 工作流引擎实现崩溃恢复，数据存于本地 ~/.jobctrl/，无托管后端，需自备 LLM 提供商账号，目前为早期访问阶段，仅支持 Apple-silicon Mac（macOS 15+）。",
+   "highlights": [
+    "本地优先：数据存储在 ~/.jobctrl/，无账户和托管后端，本地 API 默认绑定 127.0.0.1",
+    "工作流基于 Temporal 运行，崩溃或重启后可恢复",
+    "简历生成附证据链接，虚构指标/日期/头衔/雇主的草稿会验证失败；投递默认需人工审批，自动投递默认关闭"
+   ],
+   "use_cases": [
+    "自动发现并跟踪目标职位，人工审核后投递",
+    "基于个人资料证据生成定制简历与求职信",
+    "记录申请结果、联系人管理与薪资市场数据查询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "JobCtrl 是使用数据库/本地存储数据的求职应用本身，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-only",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Your data lives in `~/.jobctrl/` on your machine; there is no account and no ／ Early access. The signed release runs on Apple-silicon Macs with macOS 15 or ／ Steps 1–4 run on Temporal, a workflow engine, and resume after a crash or",
+   "evidence_lines": [
+    19,
+    24,
+    64
+   ]
+  },
+  "fn": "ebarti/JobCtrl",
+  "sha": "cf10f789b2e4",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8370,5 +8370,146 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aee6df79cc30": {
+  "identity": {
+   "one_liner": "Rust 编写的 DynamoDB 模拟器，以 SQLite 为存储层",
+   "review": "Dynoxide 是一个 DynamoDB 本地模拟器，以 SQLite 作为存储层，可作为 HTTP 服务器、MCP 服务器、嵌入式 Rust/iOS 库或 WebAssembly 浏览器构建运行，用于本地开发、测试和 CI 场景。它实现 DynamoDB API 的表、项、查询、事务、PartiQL、Streams 等操作，并通过公开的一致性测试套件对照真实 AWS 验证；不适用于生产环境，缺少备份、全局表等云专属操作。",
+   "highlights": [
+    "实现 DynamoDB API，涵盖表、项、query/scan、事务、PartiQL、Streams、TTL、GSI/LSI",
+    "提供 HTTP 服务器、MCP 服务器、Rust/iOS 嵌入式库和 WebAssembly 浏览器四种运行方式",
+    "通过 Parity Suite 公开一致性测试套件对照真实 DynamoDB 持续验证"
+   ],
+   "use_cases": [
+    "本地开发与集成测试中替代 JVM 版 DynamoDB Local",
+    "CI 流水线中运行 DynamoDB 集成测试套件",
+    "为编码代理提供 MCP 形式的 DynamoDB 接口"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A DynamoDB emulator in Rust, backed by SQLite. Runs as an HTTP server or an MCP server for coding agents, embeds into Rust and iOS applications as a library, and compiles to WebAssembly for the browser. ／ |Storage|SQLite|SQLite|SQLite (via DDB Local)|LevelDB| ／ Dynoxide uses SQLite as its storage layer. (AWS's DynamoDB Local also uses SQLite internally.)",
+     "lines": [
+      5,
+      61,
+      133
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为 DynamoDB 开发与测试生态服务的模拟器工具，SQLite 仅作为其内部存储层。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：MIT 与 Apache 2.0",
+   "install": [
+    "npm",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A DynamoDB emulator in Rust, backed by SQLite. Runs as an HTTP server or an MCP server for coding agents, embeds into Rust and iOS applications as a library, and compiles to WebAssembly for the browser. ／ Dynoxide implements the DynamoDB API across tables, items, query and scan, batches, transactions, PartiQL, streams, TTL, and tags, with GSI and LSI support, the full expression syntax, and DynamoDB-compatible pagination, validation, and error codes. For the operation-by-operation breakdown and a comparison, see the compatibility summary. ／ Dynoxide is built for local development, testing, and CI, not as a production DynamoDB replacement, so two classes of thing are missing on purpose.",
+   "evidence_lines": [
+    5,
+    111,
+    115
+   ]
+  },
+  "fn": "nubo-db/dynoxide",
+  "sha": "aee6df79cc30",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3dd834ae0c6c": {
+  "identity": {
+   "one_liner": "比里兰省创意产业名录平台，React PWA + Express + PostgreSQL",
+   "review": "Bilikha 是面向菲律宾比里兰省的创意人才名录与咨询平台，按 RA 11904 九大创意领域组织档案。创作者发布作品服务、客户与地方政府机构浏览并雇用，内置账号、会话、工作协议与评分功能，前端为可安装的 React PWA，后端为 Express 5 + Drizzle ORM，数据存储于 PostgreSQL 17，本地通过 Docker Compose 运行数据库。",
+   "highlights": [
+    "支持九大创意领域分类（81 个子领域）的创作者档案、作品服务发布与名录检索",
+    "提供账号注册与管理员审核、站内会话、工作协议、评分与通知中心",
+    "前端为可安装的 PWA，支持分享链接预览卡片与明暗主题"
+   ],
+   "use_cases": [
+    "地方政府机构与客户查找并联系本地创意人才",
+    "创意从业者发布作品服务档案并接收客户需求",
+    "区域创意产业信息的登记与浏览"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "npm run db:up # Postgres in Docker ／ |Database|PostgreSQL 17| ／ └── docker-compose.yml Local Postgres",
+     "lines": [
+      16,
+      28,
+      46
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其使用 PostgreSQL 17 存储数据，是使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "npm run db:up        # Postgres in Docker ／ |Database|PostgreSQL 17| ／ └── docker-compose.yml Local Postgres",
+   "evidence_lines": [
+    16,
+    28,
+    46
+   ]
+  },
+  "fn": "ELITES-ORG/bilikha",
+  "sha": "3dd834ae0c6c",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

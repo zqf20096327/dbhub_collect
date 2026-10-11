@@ -8690,5 +8690,503 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f3052ed5f050": {
+  "identity": {
+   "one_liner": "跨平台工业级现代 C++ 全栈后端开发库",
+   "review": "一个覆盖并发异步、容器、加密、文件系统、网络协议与配置解析等模块的 C++ 工具库，包含 SQL 构建器和 MySQL/PostgreSQL/SQLite 客户端。面向 C++ 后端开发者与学习底层原理的学习者，通过 vcpkg/CMake 安装，仅支持 64 位 Windows/Linux。",
+   "highlights": [
+    "提供 MySQL、PostgreSQL、SQLite 客户端与支持方言感知的 SQL 构建器",
+    "实现线程池、协程原语、异步 I/O、HTTP/1.1 与 HTTP/2 服务器等网络并发组件",
+    "包含 AES-256、ChaCha20-Poly1305、SHA-2 等加密算法及 JSON/TOML/YAML 配置解析"
+   ],
+   "use_cases": [
+    "C++ 后端服务的网络与并发开发",
+    "需要在 C++ 中连接 MySQL/PostgreSQL/SQLite 的应用开发",
+    "学习操作系统、网络协议与算法底层实现"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL 客户端 ／ |📦 可选依赖(vcpkg)|libpq|16.0|",
+     "lines": [
+      209,
+      354
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL 客户端",
+     "lines": [
+      208
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **`sql_builder`** - 标准 SQL 语句流式构建，支持**方言感知占位符**（Generic `?` / PgSQL `$N` / Oracle `:N`）和**方言感知 DDL**（AUTO_INCREMENT / SERIAL / IDENTITY 自动适配）",
+     "lines": [
+      204
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite 客户端 ／ ||sqlite3|3.0|",
+     "lines": [
+      210,
+      356
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "提供数据库客户端与 SQL 构建组件，是为使用数据库的开发者服务的通用 C++ 库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "本项目旨在建立**功能健全、风格统一、可读性强、社区共建、跨平台兼容**的工业级现代 C++ 开发库。通过清晰的架构设计、规范的代码实现、丰富的设计模式应用，",
+   "evidence_lines": [
+    26
+   ]
+  },
+  "fn": "aurora250/NexusForce",
+  "sha": "f3052ed5f050",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d50f7e7a98ad": {
+  "identity": {
+   "one_liner": "Xtream IPTV 流媒体客户端，本地 Node+SQLite 存目录与进度",
+   "review": "Neftlix 是一个面向已拥有 Xtream Codes 账号的 IPTV 用户的流媒体客户端，提供电影、剧集、直播电视与体育频道的浏览和播放，界面与操作类似流媒体服务。它自带本地服务器（Node 23 + Fastify + node:sqlite），目录缓存、多档案、观看进度等数据存于本地 SQLite，凭据不上传云端；支持桌面应用（macOS/Windows）、源码运行和 Docker 部署，项目本身不提供任何内容。",
+   "highlights": [
+    "提供电影、剧集、直播电视、EPG、多档案（最多5个）、继续观看与收藏功能",
+    "本地运行：Node + Fastify + SQLite 存储目录缓存与进度，仅监听本机，凭据不出本机",
+    "提供桌面应用（macOS/Windows）、源码运行与 Docker 三种部署方式"
+   ],
+   "use_cases": [
+    "用已订阅的 Xtream IPTV 账号在网页或桌面端浏览和播放影视与直播",
+    "在家庭局域网内多设备观看并同步观看进度与档案"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`NEFTLIX_DATA`|`./data`|Where the SQLite database lives| ／ app / browser ──HTTP──▶ Neftlix server (Node + Fastify + SQLite) ──▶ your Xtream provider ／ - `server/` — Node 23 (native TypeScript, `node:sqlite`), Fastify.",
+     "lines": [
+      59,
+      121,
+      131
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确该项目是使用 SQLite 存储目录、进度与凭据的终端应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "app / browser ──HTTP──▶ Neftlix server (Node + Fastify + SQLite) ──▶ your Xtream provider ／ - `server/` — Node 23 (native TypeScript, `node:sqlite`), Fastify.",
+   "evidence_lines": [
+    121,
+    131
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "c4rtical/neftlix",
+  "sha": "d50f7e7a98ad",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ef4b9b457a4a": {
+  "identity": {
+   "one_liner": "专注 PostgreSQL 的桌面 IDE，SQL 文件经注释注解变为工具",
+   "review": "PlumeSQL 是一个仅面向 PostgreSQL 的桌面 IDE，把带 @ 注解的 SQL 文件变成监控、仪表盘、按钮等小型应用，内置超过 170 个扩展，提供补全、EXPLAIN 可视化、PL/pgSQL 检查、psql 命令和 DBA 扩展。应用本体闭源、免费无账号，扩展与规范为 MIT，支持 macOS、Windows 和 Linux。适合日常使用和管理 PostgreSQL 的开发者与 DBA。",
+   "highlights": [
+    "基于 PostgreSQL 自身的解析器、目录和会话实现补全与检查",
+    "SQL 文件通过 @readonly/@connection/@extension 等注解声明运行方式与展示形式",
+    "提供 170 多个扩展，涵盖图表、3D、地图、向量可视化、锁监控、备份恢复等"
+   ],
+   "use_cases": [
+    "编写、补全和重构 PostgreSQL 查询并可视化执行计划",
+    "用 SQL 文件搭建锁监控、仪表盘和运维小工具",
+    "管理生产连接：只读会话、写操作确认、无 WHERE 语句提示"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "> Turn SQL into tools: a desktop IDE for PostgreSQL, where a SQL file ／ them really well. PlumeSQL only does PostgreSQL, and goes deep on it.",
+     "lines": [
+      3,
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是专门为 PostgreSQL 服务的桌面 IDE 与管理工具，构建于 PostgreSQL 的解析器、目录和会话之上",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "应用本体闭源，仓库中的扩展与规范（ACTIONSPEC）为 MIT",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> Turn SQL into tools: a desktop IDE for PostgreSQL, where a SQL file ／ **Free, no account, for macOS, Windows and Linux.** The app is closed ／ them really well. PlumeSQL only does PostgreSQL, and goes deep on it.",
+   "evidence_lines": [
+    3,
+    41,
+    48
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "hercstack/plumesql",
+  "sha": "ef4b9b457a4a",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "905bad4ee0a8": {
+  "identity": {
+   "one_liner": "本地优先任务看板，通过 MCP 让 AI 代理管理任务",
+   "review": "TaskTracker 是一个运行于本地的任务看板应用，内置 MCP 服务器提供 21 个工具，供 Claude Code、Cursor 等 MCP 客户端读写任务；代理的更改默认进入审批队列，用户确认后生效。数据存储在单个 SQLite 文件（内置于 Node 22.13+），助手可接 OpenAI 兼容提供商或 Ollama 本地模型。面向与编码代理协作的个人开发者，不支持团队共享与云同步。",
+   "highlights": [
+    "内置 MCP 服务器，提供 21 个任务管理工具，代理更改需用户批准后应用",
+    "数据保存在单个本地 SQLite 文件，无账号、无云端、无遥测",
+    "内置助手支持 OpenAI 兼容提供商及 Ollama、LM Studio 本地模型，含语音输入"
+   ],
+   "use_cases": [
+    "个人开发者让编码代理规划、拆分并完成任务，人工逐一审批",
+    "需要数据完全留在本地的隐私优先任务管理",
+    "用自然语言或语音查询任务状态、整理每日待办"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**One SQLite file.** No account, no cloud, no telemetry. Pair it with Ollama or LM Studio and even the AI runs locally. ／ That's it. No database to install and no config files. SQLite is built into Node 22.13+, so there's nothing native to compile either.",
+     "lines": [
+      26,
+      69
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用使用内置 SQLite 存储自身看板数据，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Claude Code, Cursor and any MCP client get **21 tools** to plan work, break it into subtasks, log progress and finish tasks, through the same rules you use. ／ **One SQLite file.** No account, no cloud, no telemetry. Pair it with Ollama or LM Studio and even the AI runs locally. ／ That's it. No database to install and no config files. SQLite is built into Node 22.13+, so there's nothing native to compile either.",
+   "evidence_lines": [
+    20,
+    26,
+    69
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Parv17k/tasktracker",
+  "sha": "905bad4ee0a8",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ac6b29311408": {
+  "identity": {
+   "one_liner": "本地优先的桌面数据库客户端，支持多库连接与 SQL 编辑",
+   "review": "Plugboard 是一款本地优先的桌面数据库客户端，提供 PostgreSQL、MySQL/MariaDB、SQLite、ClickHouse、Cassandra 和 Redis/Valkey 的连接管理、表格浏览编辑、SQL 编辑器、SSH 隧道与生产环境只读保护，并内置 MCP 服务器供 AI 代理查询。面向需要本地管理多种数据库的开发者与运维人员；安装方式为各平台预编译包或从源码构建。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL/MariaDB、SQLite、ClickHouse、Cassandra、Redis 等多种数据库的多连接管理与表格编辑",
+    "提供 SSH 隧道、只读连接、写操作确认等生产保护机制",
+    "内置 MCP 服务器，可让 Claude Code、Cursor 等 AI 代理只读查询数据库结构"
+   ],
+   "use_cases": [
+    "开发/运维人员本地浏览和编辑多种数据库的表数据",
+    "通过 SSH 隧道安全访问远程或生产环境数据库（默认只读）",
+    "通过 MCP 让 AI 代理在受限只读模式下查询表结构与数据"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**A fast, local-first database client for PostgreSQL, MySQL, SQLite, ClickHouse, Cassandra and Redis. No accounts, no cloud sync, no telemetry — just you and your data.** ／ - PostgreSQL, MySQL and MariaDB, SQLite files, ClickHouse, Cassandra, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name. ／ - Paste a connection URL — `postgres://…`, `mysql://…`, `clickhouse://…`, `cassandra://…`, `redis://…`, a JDBC URL or a line from a `.env` file — and the form fills itself in.",
+     "lines": [
+      3,
+      37,
+      39
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**A fast, local-first database client for PostgreSQL, MySQL, SQLite, ClickHouse, Cassandra and Redis. No accounts, no cloud sync, no telemetry — just you and your data.** ／ - PostgreSQL, MySQL and MariaDB, SQLite files, ClickHouse, Cassandra, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name. ／ - Paste a connection URL — `postgres://…`, `mysql://…`, `clickhouse://…`, `cassandra://…`, `redis://…`, a JDBC URL or a line from a `.env` file — and the form fills itself in.",
+     "lines": [
+      3,
+      37,
+      39
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**A fast, local-first database client for PostgreSQL, MySQL, SQLite, ClickHouse, Cassandra and Redis. No accounts, no cloud sync, no telemetry — just you and your data.** ／ - PostgreSQL, MySQL and MariaDB, SQLite files, ClickHouse, Cassandra, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name.",
+     "lines": [
+      3,
+      37
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**A fast, local-first database client for PostgreSQL, MySQL, SQLite, ClickHouse, Cassandra and Redis. No accounts, no cloud sync, no telemetry — just you and your data.** ／ - PostgreSQL, MySQL and MariaDB, SQLite files, ClickHouse, Cassandra, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name. ／ - Paste a connection URL — `postgres://…`, `mysql://…`, `clickhouse://…`, `cassandra://…`, `redis://…`, a JDBC URL or a line from a `.env` file — and the form fills itself in. ／ **ClickHouse**",
+     "lines": [
+      3,
+      37,
+      39,
+      69
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- PostgreSQL, MySQL and MariaDB, SQLite files, ClickHouse, Cassandra, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name.",
+     "lines": [
+      37
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述其为连接多种数据库并提供浏览、编辑、查询功能的客户端工具，为数据库生态服务而非使用数据库构建应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT；捆绑的图标、Logo 与字体保留各自许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A fast, local-first database client for PostgreSQL, MySQL, SQLite, ClickHouse, Cassandra and Redis. No accounts, no cloud sync, no telemetry — just you and your data.** ／ - PostgreSQL, MySQL and MariaDB, SQLite files, ClickHouse, Cassandra, and Redis or Valkey — several open at once, each with its own tabs. `⌘K` jumps to any of them by name. ／ **AI agents (MCP)**",
+   "evidence_lines": [
+    3,
+    37,
+    89
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "falsea3/plugboard",
+  "sha": "ac6b29311408",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0c704f2558fa": {
+  "identity": {
+   "one_liner": "自托管求职追踪应用，从邮件和招聘网站自动更新申请状态",
+   "review": "ShortList 是一个面向印度求职者的开源求职追踪应用，提供 PWA、Chrome 扩展和 Android 分享入口录入职位，并通过 IMAP 邮件与招聘网站自动更新申请状态，支持面试准备包、追问提醒和基于记录的问答。技术栈为 Express 5 + Drizzle + Postgres 单仓库，敏感字段采用 AES-256-GCM 加密，可通过 Docker 自托管。AGPL-3.0 许可，AI 功能需自备密钥且默认关闭。",
+   "highlights": [
+    "通过 IMAP 邮件、转发地址和浏览器扩展自动更新职位申请状态，所有变更可追溯和撤销",
+    "敏感字段（薪资、联系人等）在写入 Postgres 前进行字段级 AES-256-GCM 加密",
+    "支持 JSON/CSV 全量导出、Docker 自托管，AI 功能自备密钥且可整体关闭"
+   ],
+   "use_cases": [
+    "求职者集中管理跨 LinkedIn、Naukri 等多个渠道的职位申请进度",
+    "面试前生成准备包并查询自己与招聘方的历史沟通记录",
+    "需要数据自持的用户自托管部署并本地加密存储求职记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A pnpm monorepo: `apps/api` (Express 5, Drizzle, Postgres), `apps/web` (React 19, Vite, Tailwind 4, TanStack Query), `apps/extension` (MV3, React popup), `packages/shared` (status rules, normalizers, feature flags and schemas shared by all three) and `apps/e2e ／ - **Full-text search over vectors.** Ask turns counting questions into exact SQL. Open questions use Postgres full-text search with citations. Encrypted emails are decrypted in memory for one request and never indexed. (0006) ／ |Unit and integration|Vitest. The API tests run against a real Postgres test database (`pnpm test`), with cross-user cases for every feature.|",
+     "lines": [
+      50,
+      61,
+      95
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 Postgres 存储数据的求职追踪应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0-only 单许可",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A pnpm monorepo: `apps/api` (Express 5, Drizzle, Postgres), `apps/web` (React 19, Vite, Tailwind 4, TanStack Query), `apps/extension` (MV3, React popup), `packages/shared` (status rules, normalizers, feature flags and schemas shared by all three) and `apps/e2e` (Playwright). ／ docker compose --profile app up -d",
+   "evidence_lines": [
+    50,
+    80
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Yash-Satankar/shortlist",
+  "sha": "0c704f2558fa",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

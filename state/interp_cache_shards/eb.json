@@ -8954,5 +8954,383 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9be75b37de6d": {
+  "identity": {
+   "one_liner": "开源开发者平台，将脚本转为工作流、Webhook 和 UI",
+   "review": "Windmill 是一个可自托管的开源开发者平台，把 Python、TypeScript、Go、Bash 等脚本自动生成 UI 并编排为工作流，用于构建内部应用、API 和后台任务。后端为 Rust，任务通过 Postgres 队列分发，支持 Docker Compose 与 Helm 部署；社区版采用 AGPLv3，商业再分发需联系官方。",
+   "highlights": [
+    "支持 Python、TypeScript、Go、Bash 等多种语言脚本并自动生成前端 UI",
+    "脚本和流程可由定时、Webhook、HTTP、Kafka、WebSocket 等方式触发",
+    "使用 nsjail 和 PID 命名空间隔离实现任务沙箱"
+   ],
+   "use_cases": [
+    "自托管运行内部后台任务与工作流",
+    "将脚本封装为可分享的内部应用 UI",
+    "通过 CLI/Git 同步在本地开发并部署脚本"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database**: Postgres (compatible with Aurora, Cloud SQL, Neon, Azure PostgreSQL) ／ - **Backend**: Rust - stateless API servers and workers pulling jobs from a Postgres queue ／ **Using an external database**: Set `DATABASE_URL` in `.env` to point to your managed Postgres (AWS RDS, GCP Cloud SQL, Azure, Neon, etc.) and set db replicas to 0.",
+     "lines": [
+      86,
+      87,
+      143
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|NATIVE_MODE|false|Enable native mode: sets NUM_WORKERS=8, rejects non-native jobs (nativets, postgresql, mysql, etc.)|Worker|",
+     "lines": [
+      183
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以 Postgres 作为存储后端和任务队列，Windmill 是使用数据库的平台而非为数据库服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPLv3 开源，另有商业许可与托管服务",
+   "install": [
+    "docker",
+    "helm",
+    "pypi",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Database**: Postgres (compatible with Aurora, Cloud SQL, Neon, Azure PostgreSQL) ／ - **Backend**: Rust - stateless API servers and workers pulling jobs from a Postgres queue ／ **Using an external database**: Set `DATABASE_URL` in `.env` to point to your managed Postgres (AWS RDS, GCP Cloud SQL, Azure, Neon, etc.) and set db replicas to 0.",
+   "evidence_lines": [
+    86,
+    87,
+    143
+   ]
+  },
+  "fn": "windmill-labs/windmill",
+  "sha": "9be75b37de6d",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "19251012cdb9": {
+  "identity": {
+   "one_liner": "牙科诊所管理系统，内置代理式AI助手，自托管",
+   "review": "DentalPin 是面向牙科诊所的开源（BSL 1.1，四年后转 Apache 2.0）管理系统，覆盖患者档案、牙位图、预约、预算、发票、支付与 RBAC。技术栈为 FastAPI + Nuxt 4 + PostgreSQL 15，通过 Docker Compose 部署，提供 REST API 与内置代理式 AI Copilot，敏感信息在发送 LLM 前做脱敏。适用于自托管的牙科诊所及希望扩展模块的开发者。",
+   "highlights": [
+    "内置代理式 AI 助手，可规划并执行多步骤任务，写操作需用户确认",
+    "基于 RBAC 的五角色权限控制，AI 操作与用户 UI 权限一致",
+    "插件式模块架构、事件总线、完整 REST API（OpenAPI 文档）",
+    "界面支持 11 种语言，LLM 供应商可配置且发送前对 PHI 脱敏"
+   ],
+   "use_cases": [
+    "牙科诊所管理患者、预约、治疗方案、预算与账单",
+    "自托管部署并通过 REST API 集成第三方系统",
+    "通过内置 AI Copilot 用自然语言完成排班、回访等多步操作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 15|",
+     "lines": [
+      148
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用 PostgreSQL 15 存储数据的牙科诊所管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BSL 1.1（source-available），发布四年后转换为 Apache 2.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Source-available (BSL 1.1) dental clinic management software, converting to Apache 2.0 four years after publication.** Patients, odontogram, scheduling, ／ |Database|PostgreSQL 15| ／ - **Modular Architecture** — Plugin-based system for easy extensibility",
+   "evidence_lines": [
+    14,
+    148,
+    184
+   ]
+  },
+  "fn": "dentalpin/dentalpin",
+  "sha": "19251012cdb9",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5174739142fe": {
+  "identity": {
+   "one_liner": "运行在 Supabase/Postgres 上的开源复式记账核心，含 CLI 与 MCP 服务器",
+   "review": "Ekwo OS 提供一套以 Postgres schema 和国家税则数据包构成的复式记账核心，通过 npx CLI 安装到用户自己的 Supabase 项目，复式平衡与期间锁定由数据库触发器强制执行。面向自营记账的企业、会计事务所和需要真实记账内核的开发者，并提供 MCP 服务器供 AI 代理操作账簿；依赖 Supabase，无独立服务进程。",
+   "highlights": [
+    "复式记账规则由数据库触发器强制执行，锁定期间在数据库层拒绝写入",
+    "包含覆盖 120 余个国家的税则/科目表数据包，国家规则以数据而非代码实现",
+    "提供 CLI 和 MCP 服务器，支持人和 AI 代理在同一账簿上操作，并生成 FEC、XBRL、Peppol UBL、Factur-X 等法定文件"
+   ],
+   "use_cases": [
+    "企业在自己的 Supabase 项目中保管并记录会计账簿、准备 VAT 申报",
+    "会计事务所在一套安装中管理多家公司账套",
+    "开发者需要一个以数据形式承载税则的真实复式记账核心"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "open, the data sits in a Postgres database you control, and the interface is ／ A double-entry accounting core for Postgres. There is no server to run: ／ - **Tested on real Postgres.** The test suite runs the migrations, the seeds,",
+     "lines": [
+      25,
+      54,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目将账簿数据存储在用户自己的 Postgres/Supabase 数据库中，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "核心为 AGPL-3.0，格式库为 MIT，双许可",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Ekwo** is open source accounting, ready to use on **Ekwo Cloud**: the web application for your invoices, your bank statements, your VAT returns and the electronic invoices your country uses, in your own instance, with an account opened in a minute. **Ekwo OS** is the free and open source core it runs on, under AGPL-3.0: install it on your own Supabase project and own your accounting data, forever. ／ open, the data sits in a Postgres database you control, and the interface is ／ A double-entry accounting core for Postgres. There is no server to run:",
+   "evidence_lines": [
+    3,
+    25,
+    54
+   ]
+  },
+  "fn": "Ekwo-ai/ekwo-os",
+  "sha": "5174739142fe",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "28912f32bce2": {
+  "identity": {
+   "one_liner": "基于 Django+React 的本地电商与 CRM 平台，含 AI 助手",
+   "review": "KinaHub 是一个连接本地卖家与顾客的全栈电商与 CRM 平台，前端 React/TypeScript，后端 Django REST，使用 PostgreSQL（Neon Cloud）存储数据，并通过 OpenRouter 集成 LLM 聊天助手与商品推荐。适合作为本地化电商场景或全栈学习参考，由个人开发者维护部署。",
+   "highlights": [
+    "提供基于位置的购物发现、购物车与配送费计算功能",
+    "内置 Django REST API，采用 JWT 认证，前后端分离架构",
+    "集成 OpenRouter 的 LLM 聊天助手与商品/CRM 洞察面板"
+   ],
+   "use_cases": [
+    "本地卖家线上展示与销售商品",
+    "卖家库存、订单与销售数据管理",
+    "基于 AI 的商品推荐与购物咨询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* PostgreSQL (Neon Cloud)",
+     "lines": [
+      60
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL (Neon Cloud) 作为数据库存储应用数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* PostgreSQL (Neon Cloud) ／ * Neon (Database) ／ **KinaHub** is a modern, scalable e-commerce and CRM platform designed to connect local sellers with customers through intelligent, location-aware shopping experiences. Originally developed as an On-the-Job Training (OJT) project, it has evolved into a fully deployed full-stack application with cloud-native infrastructure.",
+   "evidence_lines": [
+    60,
+    70,
+    3
+   ]
+  },
+  "fn": "BikramGole/KinaHub",
+  "sha": "28912f32bce2",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "543cd69564fd": {
+  "identity": {
+   "one_liner": "将 ADBC 驱动以 VGI-RPC 方式暴露为网络服务的代理",
+   "review": "Grainlift 让应用通过统一的 ADBC 1.1 客户端驱动经网络访问服务端安装的真实数据库驱动，服务端集中管理驱动、凭据、认证授权、配额与遥测，数据以 Arrow record-batch 流式传输。适合需要在客户端免装原生数据库驱动、集中管控凭据与策略的数据团队。当前为 pre-release，需从源码构建，且存在会话亲和与语句取消受限等运行约束。",
+   "highlights": [
+    "提供标准 ADBC 1.1 共享库客户端，应用无需安装下游驱动或其依赖、凭据（L23-L26, L84-L85）",
+    "服务端集中实施认证（bearer/JWT/JWKS/SPIFFE/Iroh）、授权、配额、超时与 OpenTelemetry 遥测（L93-L98）",
+    "保持 pull 式 Arrow record-batch 流语义，支持 SQL 与 Substrait 语句、事务、预编译语句与元数据（L86-L90）"
+   ],
+   "use_cases": [
+    "在多个应用环境中统一部署与升级原生数据库驱动，客户端免装驱动（L36-L40）",
+    "将数据库凭据保留在服务端，避免凭据下发到调用方（L41-L43）",
+    "对多种下游数据库的 ADBC 访问做统一的策略与可观测性边界（L44-L48）"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Downstream ADBC driver|The Grainlift service|Connects to SQLite, DuckDB, PostgreSQL, or another configured database| ／ driver = \"postgresql\"",
+     "lines": [
+      73,
+      200
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "manager. CI exercises SQLite, DuckDB, PostgreSQL, MySQL, Flight SQL,",
+     "lines": [
+      586
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Downstream ADBC driver|The Grainlift service|Connects to SQLite, DuckDB, PostgreSQL, or another configured database| ／ together with an automatic dependency on the SQLite ADBC wheel, enabling",
+     "lines": [
+      73,
+      117
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "DataFusion, Trino, and Microsoft SQL Server, plus HTTP, TCP, mTLS, and Iroh",
+     "lines": [
+      587
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为各类数据库提供 ADBC 网络代理与驱动部署服务，是数据库生态的中间件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache 2.0",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Grainlift makes an ADBC driver ／ stream operations. The Grainlift service loads and owns the real downstream ／ Grainlift turns ADBC drivers into centrally operated network services without",
+   "evidence_lines": [
+    16,
+    20,
+    30
+   ]
+  },
+  "fn": "Query-farm/grainlift",
+  "sha": "543cd69564fd",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

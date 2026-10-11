@@ -8328,5 +8328,213 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b6df89b6f1b4": {
+  "identity": {
+   "one_liner": "Supabase 的 Swift SDK，封装认证、PostgREST 查询、实时、存储与函数",
+   "review": "该仓库是 Supabase 平台的官方 Swift 客户端库，提供 Auth、PostgREST、Realtime、Storage、Functions 等模块，可用于 iOS/macOS 等 Swift 应用中查询数据库、订阅变更、管理文件及调用 Edge Function，并通过 supabase-typegen 生成 @Table 类型结构。面向使用 Supabase 的 Swift 开发者；不支持 Android/Linux/Windows 的官方支持。",
+   "highlights": [
+    "包含 Auth、PostgREST、Realtime、Storage、Functions 模块，可单独引用",
+    "支持通过 RPC 调用 postgres 函数与 Edge Function 流式响应",
+    "提供 supabase-typegen 生成 Swift @Table schema 类型"
+   ],
+   "use_cases": [
+    "在 iOS/macOS 等 Swift 应用中访问 Supabase 数据库与实时事件",
+    "从 Supabase schema 生成 Swift 类型定义",
+    "在客户端上传下载文件或调用 Edge Function"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**PostgREST**|Query your Postgres database via REST|",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "SDK 为访问 Supabase（Postgres）服务提供客户端能力，属于服务数据库生态的开发库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Supabase Swift SDK ／ |**Supabase**|Full client — includes all libraries below| ／ |**PostgREST**|Query your Postgres database via REST|",
+   "evidence_lines": [
+    7,
+    19,
+    21
+   ]
+  },
+  "fn": "supabase/supabase-swift",
+  "sha": "b6df89b6f1b4",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bb08b2cd677f": {
+  "identity": {
+   "one_liner": "Rust 自托管网络收音机，内嵌 React 界面，用 SQLite 存账号与收藏",
+   "review": "这是一个用 Rust 编写的自托管网络电台应用，前端 React 构建后直接嵌入单个二进制，使用 SQLite 保存用户账号、收藏、个人电台源和录音元数据。面向想要自建在线收音服务的个人用户，提供 Docker 和二进制两种部署方式，依赖 Radio Browser 目录和 FFmpeg，定位为单实例服务。",
+   "highlights": [
+    "提供 Docker 镜像与 Linux/macOS/Windows 二进制交付，无需外部数据库",
+    "支持世界电台浏览、个人电台源导入、服务端音频中转与录制功能",
+    "基于 radiobrowser crate 对接 Radio Browser API，支持代理与多协议流"
+   ],
+   "use_cases": [
+    "个人或小团队自托管在线收音服务",
+    "导入自定义电台源并统一管理收藏",
+    "通过服务端中转解决 HTTPS 页面播放 HTTP 音源的问题"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "把世界，调到喜欢的频道。Rust 编写的自托管网络收音机，React 界面直接嵌入二进制，使用 SQLite 保存账号与个人收藏。 ／ 本地二进制默认使用 `data/`；头像和录音目录默认位于数据库同级。录音元数据与归属保存在 SQLite，文件不通过公共静态目录暴露。头像和录音 API 需要登录，用户只能操作自己的数据。 ／ |`MEOW_DATABASE`|`data/meowradio.db`|SQLite 文件，Docker 默认 `/data/meowradio.db`|",
+     "lines": [
+      5,
+      113,
+      136
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "`radiobrowser` 0.6.1 的旧 HTTP/TLS/DNS 依赖存在已知安全问题，因此本仓库保留上游源码和 API，使用本地安全补丁更新依赖；详情见 PATCHES.md。`cargo audit` 唯一忽略项是未编译、未分发的 SQLx MySQL 可选 RSA 依赖，依据及复查时间在 `.cargo/audit.toml`。",
+     "lines": [
+      243
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是一个使用 SQLite 存数据的网络收音机应用，SQLite 只是其内部存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "把世界，调到喜欢的频道。Rust 编写的自托管网络收音机，React 界面直接嵌入二进制，使用 SQLite 保存账号与个人收藏。 ／ 无需 Node.js 或外部数据库。个人源播放及检测需要安装 FFmpeg（包含 MP3 编码器及所需协议），或用 `MEOW_FFMPEG` 指定路径；Docker 镜像已包含。默认监听 `0.0.0.0:3000`，自动创建 `data/meowradio.db`。Windows 使用 `meowradio.exe`；Linux GNU 二进制面向 Ubuntu 24.04 / glibc 2.39 或更高版本，旧发行版建议 Docker。`--version` 显示版本。",
+   "evidence_lines": [
+    5,
+    70
+   ]
+  },
+  "fn": "ca-x/meowRadio",
+  "sha": "bb08b2cd677f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "acc74c962922": {
+  "identity": {
+   "one_liner": "自托管开源会计/ERP 套件，以 PostgreSQL 双式账本为核心",
+   "review": "OpenBooks 是一个开源、自托管的商业套件，提供会计、销售、采购、库存、项目、制造、工资等模块，适合从个人到多法人组织使用。核心机制是围绕 PostgreSQL 强制执行的双式记账账本，部署通过 Docker Compose 一键安装，包含 PostgreSQL 16、Redis 7、MinIO、Web 应用和后台 worker。README 明确标注为 Alpha 软件，尚未完成独立会计或安全认证。",
+   "highlights": [
+    "以 PostgreSQL 强制约束实现双式记账账本，内置期间锁定、审批、受控更正等会计控制",
+    "Docker Compose 安装，部署组件包含 PostgreSQL 16、Redis 7、MinIO、Web 应用与独立后台 worker",
+    "模块化功能开关（Company Settings → Features），覆盖会计、销售、采购、银行、订阅、项目、库存、制造、资产、多实体货币与工资等模块"
+   ],
+   "use_cases": [
+    "个人或小团队自托管记账、开票与应收应付管理",
+    "多法人组织的多币种、跨实体合并报表与集团核算",
+    "建筑/工程类项目的成本核算、进度开票与留存金管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Open source, self-hosted, and built around a PostgreSQL-enforced double-entry ／ The deployment includes PostgreSQL 16, Redis 7, MinIO, the web app and a separate",
+     "lines": [
+      8,
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL 存储业务数据的会计/ERP 应用，而非为数据库生态服务的工具或组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-or-later，README 明确标注为 Alpha 软件",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Open source, self-hosted, and built around a PostgreSQL-enforced double-entry ／ The deployment includes PostgreSQL 16, Redis 7, MinIO, the web app and a separate ／ parallel books.** OpenBooks is alpha software with a broad implementation and",
+   "evidence_lines": [
+    8,
+    91,
+    48
+   ]
+  },
+  "fn": "braedonsaunders/openbooks",
+  "sha": "acc74c962922",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

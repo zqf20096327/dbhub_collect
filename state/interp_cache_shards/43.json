@@ -9076,5 +9076,71 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a20ec7bd1d6c": {
+  "identity": {
+   "one_liner": "自托管密码管理器，主密码解锁本地加密保险库",
+   "review": "CipherMoth 是一个自托管的个人密码管理器，用主密码派生密钥对密码、笔记、2FA 密钥和附件做静态加密，数据存于本地 PostgreSQL，无账户、无云同步、无遥测。适合愿意自己跑 Docker 并自管备份的个人用户；不含浏览器自动填充、移动端和团队共享，且主密码丢失无法恢复，也未经过第三方安全审计。",
+   "highlights": [
+    "主密码经 Argon2id 派生密钥，条目密码/笔记/附件用 Fernet 加密存储",
+    "内置 TOTP 二维码验证码展示、密码生成器与本地 vault 健康检查",
+    "支持 CSV 导入（Chrome/Bitwarden/KeePass 等）、AES-256 加密备份导出及 CLI"
+   ],
+   "use_cases": [
+    "个人在自有硬件上自托管密码库",
+    "替代需要账户/订阅的托管型密码管理器的离线场景",
+    "从浏览器或其他密码管理器通过 CSV 迁移密码条目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 16|",
+     "lines": [
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "密码管理器应用，使用 PostgreSQL 作为其存储数据的数据库（tech stack 中 Database 为 PostgreSQL 16）",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A simple, self-hosted password manager with **no accounts, no cloud, and no witnesses.** ／ |Backend|Python 3.13, FastAPI, SQLAlchemy 2.0, asyncpg| ／ |Database|PostgreSQL 16|",
+   "evidence_lines": [
+    5,
+    125,
+    126
+   ]
+  },
+  "fn": "mr-grj/ciphermoth",
+  "sha": "a20ec7bd1d6c",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

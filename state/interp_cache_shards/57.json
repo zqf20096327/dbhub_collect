@@ -8330,5 +8330,82 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2a8dca854b88": {
+  "identity": {
+   "one_liner": "面向编程 agent 的本地任务与记忆层，基于 SQLite 存储",
+   "review": "myc 是一个为 Claude Code、Codex、opencode 等编程 agent 提供任务队列、事实/决策记录和混合检索的本地 CLI 工具，通过 MCP 和 hooks 接入各类 agent，运行时绑定 Bun 与其内置 SQLite（≥3.50.4），不支持原生 Node.js/Deno，Windows 需 WSL；适用于多 agent 协作开发场景。",
+   "highlights": [
+    "提供任务队列、事实决策 oplog、词法+向量混合检索与内置代码索引",
+    "通过 myc wire 为 Claude Code、Codex、opencode 等写入 hooks 与 MCP 配置",
+    "提供机器级共享重命令队列 myc run，按先到先得调度"
+   ],
+   "use_cases": [
+    "为编程 agent 保存跨会话的任务与决策记忆",
+    "多 agent 共享一台机器时串行化测试/构建等重命令",
+    "通过 git 在机器间迁移 agent 工作状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The runtime is bound to `bun:sqlite` (no native bindings on the Node side). ／ **SQLite ≥ 3.50.4.** The floor has two reasons. Below 3.44.0, FTS5 cannot be",
+     "lines": [
+      29,
+      33
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "repositories; a team server over Postgres with tokens, roles and ACL",
+     "lines": [
+      471
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为 myc 自身的本地存储引擎使用，项目不服务于数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A local, fast task-and-memory layer for coding agents: a task queue, an oplog of ／ The runtime is bound to `bun:sqlite` (no native bindings on the Node side). ／ myc init                     # .myc/ + SQLite + migrations in this repo",
+   "evidence_lines": [
+    3,
+    29,
+    92
+   ]
+  },
+  "fn": "aistastudio/myc",
+  "sha": "2a8dca854b88",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

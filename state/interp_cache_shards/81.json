@@ -9190,5 +9190,73 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7fa02ea0f78b": {
+  "identity": {
+   "one_liner": "AI 编码代理的本地项目记忆库：CLI+MCP，gRPC 守护进程存 SQLite",
+   "review": "statefulmemory 为 AI 编码代理提供跨会话的项目记忆，将决策、修复记录、笔记以 SQLite 形式存于本地目录，代理通过 CLI 或 MCP 访问，检索基于 BM25/BGE，支持自托管 TCP+TLS 团队模式及 Cloud SaaS。面向使用编码代理的开发者。需 Rust ≥1.75 构建，Windows v1 不支持，无 Python/TypeScript SDK。",
+   "highlights": [
+    "提供 MCP 工具集（memory_search、memory_add、memory_context 等）与 CLI 两种接入方式",
+    "以 per-project SQLite 存储记忆，检索基于 BM25 + BGE，支持本地运行",
+    "支持自托管（Unix socket 或 TCP+TLS+ bearer token 团队模式）与 Cloud SaaS 两种部署路径"
+   ],
+   "use_cases": [
+    "为 AI 编码代理持久化项目决策与修复记录，跨会话检索",
+    "团队通过自托管守护进程或 Cloud 共享代理记忆",
+    "通过 install 命令接入 Claude Code、Cursor 等多个代理客户端"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Thin CLI + MCP → gRPC daemon → per-project SQLite (FTS5 + optional hybrid ／ inspectable SQLite. Agents reach it through the CLI or MCP. The daemon ／ (inspectable SQLite, MCP install targets, code anchors) **and** a Cloud SaaS",
+     "lines": [
+      7,
+      19,
+      31
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目是面向 AI 代理的记忆基础设施，SQLite 仅作为其内部存储，并非为数据库生态服务的工具，也非普通用库应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：MIT OR Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Persistent memory infrastructure for AI coding agents.** ／ Thin CLI + MCP → gRPC daemon → per-project SQLite (FTS5 + optional hybrid ／ |MCP: `memory_search`, `memory_recent`, `memory_context`, `memory_add`, `memory_facts`, `memory_health`, `memory_decide`, `memory_graph_query`|Shipped (`statefulmemory mcp`)|",
+   "evidence_lines": [
+    5,
+    7,
+    155
+   ]
+  },
+  "fn": "sanudatta11/statefulmemory",
+  "sha": "7fa02ea0f78b",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

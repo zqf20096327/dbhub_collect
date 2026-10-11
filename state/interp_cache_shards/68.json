@@ -8922,5 +8922,154 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "576cde382885": {
+  "identity": {
+   "one_liner": ".NET 属性图数据库，内嵌 SQLite/PostgreSQL 后端，含向量与 MCP 支持",
+   "review": "LiteGraph 是一个属性图数据库，将图关系、标签、JSON 数据与向量搜索置于同一持久层，提供 .NET 库嵌入、REST 服务器、MCP 服务器、C#/Python/JavaScript SDK 及 Next.js 仪表盘等形态。面向需要在应用中做图数据持久化与检索的开发者，以及通过 MCP 接入的 AI 代理。存储后端为 SQLite（嵌入式场景）和带 pgvector 的 PostgreSQL（生产多节点集群），支持 AOT 发布。",
+   "highlights": [
+    "提供 .NET 嵌入库、REST 服务器、MCP 服务器及 C#/Python/JavaScript SDK 多种使用方式",
+    "支持 SQLite（内嵌 HnswLite 向量索引）与 PostgreSQL+pgvector（多节点集群）两种存储后端",
+    "内置图算法（PageRank、中心性、社区检测）、图查询语言、向量搜索与 LLM 聊天工具循环"
+   ],
+   "use_cases": [
+    "在 .NET 应用中嵌入属性图与向量持久层",
+    "部署多节点图数据库集群并通过 REST/MCP 提供服务",
+    "AI 代理通过 MCP 读写图数据并做向量检索"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL provider with pgvector for production, including multi-node clusters behind a load balancer ／ - Vector search: pgvector HNSW in the database on PostgreSQL, `HnswLite` `2.1.0` in process on SQLite ／ - Docker Compose deployments for a single node on SQLite, a single node on PostgreSQL, and a multi-node cluster, each with MCP, the dashboard, Prometheus, Loki, and Grafana OSS",
+     "lines": [
+      16,
+      20,
+      26
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite provider for embedded, local, and test use, with in-process HNSW vector indexing through `HnswLite` ／ - Vector search: pgvector HNSW in the database on PostgreSQL, `HnswLite` `2.1.0` in process on SQLite ／ - Docker Compose deployments for a single node on SQLite, a single node on PostgreSQL, and a multi-node cluster, each with MCP, the dashboard, Prometheus, Loki, and Grafana OSS",
+     "lines": [
+      15,
+      20,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为属性图数据库服务端/库，使用 SQLite 与 PostgreSQL 作为可选存储后端而非业务数据存储",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "LiteGraph is a property graph database for applications that need graph relationships, tags, labels, JSON data, and vector search in one persistence layer. It can be embedded in a .NET process with `LiteGraphClient`, run as a standalone REST server, used through official SDKs, managed through the dashboard, or controlled by AI agents through the Model Context Protocol (MCP). ／ - SQLite provider for embedded, local, and test use, with in-process HNSW vector indexing through `HnswLite` ／ - PostgreSQL provider with pgvector for production, including multi-node clusters behind a load balancer",
+   "evidence_lines": [
+    7,
+    15,
+    16
+   ]
+  },
+  "fn": "litegraphdb/litegraph",
+  "sha": "576cde382885",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "799e43618bc6": {
+  "identity": {
+   "one_liner": "TeamSpeak 网页客户端与协议网关，Rust 实现 TS 协议接入",
+   "review": "WebTS 让成员通过浏览器以真实 TeamSpeak 身份加入已有频道，提供邮箱账号、多身份管理、聊天、Opus 语音与本地 AI 降噪。面向自托管部署者，需自己掌控域名、SMTP、密钥与目标 TS 服务器；TS3 协议联调可用，TS6 与移动语音仍为实验支持，语音为两段加密而非端到端。",
+   "highlights": [
+    "以固定协议库 tsclientlib/tsproto 实现真实 TS3 身份认证、权限、消息与 Opus 互通",
+    "浏览器端通过 WebRTC 与网关进行加密双向语音，本地提供 GTCRN/RNNoise 降噪",
+    "账号、身份密文与会话数据使用 SQLite（rusqlite）持久化，密码哈希用 Argon2id"
+   ],
+   "use_cases": [
+    "为已有 TeamSpeak 服务器提供浏览器访问入口",
+    "自托管社区账号、频道管理与加密好友私信",
+    "需要多身份切换与权限继承的 TS 用户"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|持久化|**SQLite · rusqlite**|账号、身份密文、会话、后台设置密文|",
+     "lines": [
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是面向终端成员的 TeamSpeak 网页客户端应用，SQLite 仅作为其账号与会话的存储后端。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "WebTS 是独立开源的 **TeamSpeak 网页客户端与协议网关**。成员通过邮箱登录、创建或导入 TeamSpeak 身份，在浏览器里加入已有频道；网站以该身份连接目标服务器，继承它原有的权限。部署者掌握自己的账号数据库、密钥、邮件服务和默认服务器配置。 ／ |持久化|**SQLite · rusqlite**|账号、身份密文、会话、后台设置密文| ／  独立第三方开源项目，与 TeamSpeak 官方无隶属关系。TeamSpeak 及相关标识归其权利人所有。",
+   "evidence_lines": [
+    15,
+    85,
+    118
+   ]
+  },
+  "fn": "PTPHAP/WebTS",
+  "sha": "799e43618bc6",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

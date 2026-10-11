@@ -8303,5 +8303,138 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "009399e1da4f": {
+  "identity": {
+   "one_liner": "Laravel 迁移刷新扩展包，可指定刷新数据库时保留的表",
+   "review": "custom-fresh 是一个 Laravel Composer 包，提供 fresh:custom 命令，在执行 migrate:fresh 类刷新时允许开发者排除指定表不被删除，支持 glob 模式、预设组、外键关联表保留、多连接、dry-run 预览、种子重跑等选项，面向使用 Laravel 管理数据库迁移的 PHP 开发者；--drop-types 选项仅支持 PostgreSQL。",
+   "highlights": [
+    "提供 fresh:custom 命令，刷新数据库时可保留指定表，支持 --keep/--drop/--except/--preset 等选项",
+    "支持 glob 模式匹配、外键关联表联动保留、多数据库连接和配置文件预设",
+    "提供 --explain/-- dry-run 预览与刷新过程事件派发"
+   ],
+   "use_cases": [
+    "Laravel 项目中刷新迁移时保留 users、sessions 等数据表",
+    "多连接（如租户连接）场景下按连接定制刷新行为",
+    "刷新前预览将被保留/删除的表与待执行迁移"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Pass `--drop-views` and `--drop-types` to match Laravel's `migrate:fresh` when leftover views or PostgreSQL types would break the next run: ／ The `--drop-types` option is supported on PostgreSQL only.",
+     "lines": [
+      195,
+      201
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该包为 Laravel 生态的数据库迁移刷新提供扩展命令，服务于数据库迁移管理而非仅使用数据库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Custom Fresh offers fine-grained control over migrations within your Laravel project, enabling you to select which tables will not be dropped when refreshing the database. ／ composer require ramadan/custom-fresh ／ The `--drop-types` option is supported on PostgreSQL only.",
+   "evidence_lines": [
+    13,
+    25,
+    201
+   ]
+  },
+  "fn": "mahmoudmohamedramadan/custom-fresh",
+  "sha": "009399e1da4f",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fbef231ef295": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的本地检索层，用 SQLite 索引多格式文档",
+   "review": "RTFM 是一个通过 MCP 为 AI 编码代理（如 Claude Code）提供上下文检索的 Python 工具：它把代码、文档、PDF、法律文本等多域内容解析后索引进单个 SQLite 文件，支持 FTS5 全文、语义与混合检索，并提供知识图谱与文件版本历史。开发者可通过 Claude Code 插件或 pip 安装，全部本地运行、MIT 许可。SQLite 在此仅作为其索引存储格式。",
+   "highlights": [
+    "内置多格式解析器（含 Markdown、PDF、EPUB 等），索引写入单个 SQLite 文件",
+    "提供 FTS5 全文检索、可选语义/混合检索，并经 MCP 服务器向客户端暴露检索工具",
+    "支持跨项目 memory 文件索引、版本历史快照与 Obsidian vault 模式"
+   ],
+   "use_cases": [
+    "为 AI 编码代理在回答前检索项目代码与文档上下文",
+    "对大型法律/研究文档语料做本地全文与语义检索",
+    "为 Obsidian vault 生成索引、图谱与导航文件"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**RTFM indexes everything.** One command, one SQLite file, one retrieval layer your agent queries before grepping. ／ - Creates `.rtfm/library.db` (one SQLite file)",
+     "lines": [
+      29,
+      68
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 AI 编码代理提供检索服务的工具组件，SQLite 仅作为其内部索引存储格式被使用，并非为数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**RTFM indexes everything.** One command, one SQLite file, one retrieval layer your agent queries before grepping. ／ - Creates `.rtfm/library.db` (one SQLite file) ／ Then point your MCP client at `rtfm-serve` (the entry exposed by the pip package). Optional extras via `pip install rtfm-ai[embeddings,pdf]`.",
+   "evidence_lines": [
+    29,
+    68,
+    101
+   ]
+  },
+  "fn": "roomi-fields/rtfm",
+  "sha": "fbef231ef295",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

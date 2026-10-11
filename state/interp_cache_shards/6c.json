@@ -9040,5 +9040,338 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f1b00cff6761": {
+  "identity": {
+   "one_liner": "自托管中文 AI 写作工作台，Go+React，PostgreSQL 单库承载 RAG 与记忆",
+   "review": "面向中文内容创作者的自托管 AI 写作工作台，将写作拆为素材检索、提纲确认、风格化成稿、自检、记忆沉淀等可控步骤。基于 Go 后端与 React 前端，用 PostgreSQL 17（ParadeDB 镜像，pgvector+pg_bm25）在单库内实现 BM25+向量检索与分层记忆存储，需自备 DeepSeek 等 OpenAI 兼容模型的 API Key。",
+   "highlights": [
+    "在 PostgreSQL 单库内实现 BM25（ParadeDB/pg_bm25）+ 向量（pgvector）+ RRF 融合检索，不依赖外部向量库",
+    "提供硬偏好/行为模式/反馈三层长期记忆体系，记忆注入带遥测事件可查询",
+    "支持 BYOK 自带 API 密钥与 OpenAI 兼容协议模型（DeepSeek/Qwen 等），治理运行时默认 shadow 模式"
+   ],
+   "use_cases": [
+    "中文内容创作者自托管部署 AI 写作与素材研究工作台",
+    "需要多源检索与知识库管理的长文/学术论文写作流程",
+    "需按用户隔离模型密钥与用量统计的多人自托管部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |📚 **自托管 RAG，零外部向量库**|PostgreSQL 单库内完成 BM25（ParadeDB）+ 向量（pgvector）+ RRF 融合 + GraphRAG；上传素材永远是你的最高优先级（P0），检索结果不得覆盖用户原始表达| ／ |数据库|PostgreSQL 17（ParadeDB 镜像：pgvector + pg_bm25）· Redis 7|",
+     "lines": [
+      6,
+      24,
+      185
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL 17 作为其数据与 RAG 存储后端，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|📚 **自托管 RAG，零外部向量库**|PostgreSQL 单库内完成 BM25（ParadeDB）+ 向量（pgvector）+ RRF 融合 + GraphRAG；上传素材永远是你的最高优先级（P0），检索结果不得覆盖用户原始表达| ／ |数据库|PostgreSQL 17（ParadeDB 镜像：pgvector + pg_bm25）· Redis 7|",
+   "evidence_lines": [
+    24,
+    185
+   ]
+  },
+  "fn": "Echo-Smith/LuminWrite-OSS",
+  "sha": "f1b00cff6761",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "39c628516853": {
+  "identity": {
+   "one_liner": "开源社区共建的土耳其语词典 Web 应用，基于 PostgreSQL 存储",
+   "review": "一个可离线使用的土耳其语在线词典应用，提供词条搜索、社区贡献、发音上传、单词卡片游戏等功能，支持 PWA 安装。面向土耳其语学习者与社区贡献者，技术栈为 Next.js + tRPC + PostgreSQL/Drizzle，本地运行需 Bun 和 PostgreSQL 环境。",
+   "highlights": [
+    "提供词条搜索、社区贡献、发音上传与投票等协作流程",
+    "支持 PWA 安装与离线词典数据（Serwist、IndexedDB）",
+    "使用 PostgreSQL 搜索并同步至 Meilisearch"
+   ],
+   "use_cases": [
+    "土耳其语学习与词汇查询",
+    "社区协作维护在线词典内容",
+    "基于 Next.js/tRPC 的全栈应用开发参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **API ve veri:** tRPC, TanStack Query, PostgreSQL ve Drizzle ORM ／ - **Arama:** PostgreSQL araması ve Meilisearch eşitlemesi ／ - Yerel PostgreSQL kurulumu veya örnek ortam dosyasındaki Docker/Pi geliştirme veritabanına erişim",
+     "lines": [
+      23,
+      27,
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是使用 PostgreSQL 存储数据的词典应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "turkce-sozluk.com üzerinde yayımlanan, toplulukla gelişen ve açık kaynaklı bir Türkçe sözlük uygulaması. ／ - **API ve veri:** tRPC, TanStack Query, PostgreSQL ve Drizzle ORM ／ It offers searchable dictionary entries with meanings, examples, related terms, pronunciations, contribution and feedback workflows, offline/PWA support, word-building tools, verb conjugation, and flashcard, matching, and speed-round games. The project uses Next.js 16, React 19, TypeScript, tRPC, PostgreSQL/Drizzle, Better Auth, next-intl, Tailwind CSS v4, HeroUI, Serwist, and Meilisearch.",
+   "evidence_lines": [
+    3,
+    23,
+    102
+   ]
+  },
+  "fn": "4Furki4/Turkce-Sozluk",
+  "sha": "39c628516853",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6ea40c245801": {
+  "identity": {
+   "one_liner": "楼宇弱电间 H3C 交换机管理工具，基于 Telnet/SSH 采集与 SQLite 存储",
+   "review": "面向楼宇弱电间运维人员，按楼栋-楼层-弱电井三级组织 H3C Comware 交换机，通过 Telnet/SSH 只读命令采集配置、端口、MAC/ARP/LLDP 数据并留存历史版本，支持网段扫描、端口面板、拓扑图、VLAN 反查与配置 diff。Flask + SQLite 单机本地运行，无需外部数据库，仅适配 H3C Comware V5 设备。",
+   "highlights": [
+    "通过 Telnet/SSH 多凭据轮询读取交换机配置并自动保存带时间戳的历史版本，支持行级 diff",
+    "基于 LLDP 邻居自动绘制上联拓扑，提供端口 VLAN 面板、VLAN 反查与健康评分巡检",
+    "数据（设备、凭据加密、配置备份）均存于本地 SQLite 与 data/ 目录，单机部署"
+   ],
+   "use_cases": [
+    "园区/医院/学校等多楼宇内网中 H3C 交换机的集中台账与端口管理",
+    "交换机配置定期备份与版本变更对比",
+    "排查端口对端设备、上联拓扑与 VLAN 分布"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **凭据管理**：全局凭据 + 单设备凭据，密码加密存储于本地 SQLite；登录失败可弹窗手动输入并自动保存 ／ ├── db.py SQLite 数据层（rooms / devices / credentials / configs / settings）",
+     "lines": [
+      23,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明单机本地运行、使用 SQLite 存储业务数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> 单机本地运行，无需外部数据库，适合园区 / 医院 / 学校等多楼宇内网运维场景。 ／ ├── db.py         SQLite 数据层（rooms / devices / credentials / configs / settings）",
+   "evidence_lines": [
+    9,
+    79
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Perseveranceking/h3c-idf-manager",
+  "sha": "6ea40c245801",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f1ee55062ded": {
+  "identity": {
+   "one_liner": "衡量语言模型在 Lean4 中形式化验证 Rust Web 应用的基准",
+   "review": "这是一个基准项目，把真实 Rust Web 应用的逻辑移植到 h5i-app 内核，让语言模型作为编码代理在无网络沙箱中用 Lean4 证明应用的属性（如鉴权、访问控制）。适用于研究模型形式化证明能力的人；需要本地配置 h5i 仓库、Docker 环境及上游 API 密钥。",
+   "highlights": [
+    "提供约 6 个真实 Rust 应用移植而来的证明任务集，覆盖鉴权、IAM 策略、访问控制等属性",
+    "在无网络沙箱中运行模型代理并自动构建、评分、度量证明结果",
+    "提供 dashboard 展示结果数据"
+   ],
+   "use_cases": [
+    "评测语言模型用 Lean4 证明真实代码属性的能力",
+    "为 Rust Web 应用的安全属性（权限、令牌、策略评估）构建形式化验证任务",
+    "对比不同模型/代理在同一任务集上的证明表现"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未表明其直接为某个数据库生态提供服务，仅涉及 Web 应用的形式化验证。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0；移植代码保留各自上游许可证（nora 为 MIT）",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A benchmark of how well language models prove properties of real web ／ Each task asks a model to prove, in Lean 4, one property of an application ／ python3 harness/bench.py build          # tasks/<id>/, validated against the reference proofs",
+   "evidence_lines": [
+    3,
+    6,
+    28
+   ]
+  },
+  "fn": "h5i-dev/h5i-app-bench",
+  "sha": "f1ee55062ded",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b64fa4b04cdf": {
+  "identity": {
+   "one_liner": "基于 Postgres 的事件溯源持久记忆与身份服务，以 MCP 工具提供",
+   "review": "sanctum-mind 为 AI 会话体提供跨会话的记忆与身份持久化服务：所有写入以追加日志（ledger）形式存储于 Postgres，当前状态为事件投影，支持 mind_write/mind_observe、语义与关键词检索、身份修改冷却期及守护者机制。面向运营自有 AI 客户端（如 Claude Desktop 等 MCP 客户端）的本地用户，通过 Docker 部署，需 Node.js 22+ 支持 stdio 模式。",
+   "highlights": [
+    "提供 MCP 协议工具：mind_write、mind_observe、mind_orient、mind_search、mind_surface 等",
+    "采用事件溯源（append-only ledger），当前状态由事件投影重建，支持 pgvector 语义检索",
+    "内置后台 daemon 每 30 分钟执行衰减、过期、冷却身份变更生效等维护任务",
+    "支持多 mind 隔离（各自密钥）、steward 授权、导出/导入迁移"
+   ],
+   "use_cases": [
+    "为 AI 客户端会话提供跨会话记忆与身份延续",
+    "在同一服务上运行多个隔离的 AI mind 并支持互相留言",
+    "本地优先部署、掌控数据库与密钥的个人/小团队运维场景"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Persistent memory and identity for AI minds, served as MCP tools on Postgres. ／ docker compose up -d db # Postgres 16 + pgvector, with a healthcheck",
+     "lines": [
+      3,
+      41
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI 应用提供基于 Postgres 的记忆服务组件，自身是服务端工具而非消费数据的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Persistent memory and identity for AI minds, served as MCP tools on Postgres. ／ docker compose up -d db                 # Postgres 16 + pgvector, with a healthcheck ／ The app that will talk to your mind (the \"MCP client\") needs one of the configs that `init` printed. sanctum-mind speaks standard MCP, so any client that supports it works; nothing here is specific to one vendor.",
+   "evidence_lines": [
+    3,
+    41,
+    66
+   ]
+  },
+  "fn": "lkmconstructs/sanctum-mind",
+  "sha": "b64fa4b04cdf",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

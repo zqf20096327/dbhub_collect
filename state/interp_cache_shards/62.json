@@ -8778,5 +8778,226 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5be297a57e82": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的 Python 后台任务队列库",
+   "review": "PgQueuer 是一个把现有 PostgreSQL 数据库当作后台作业队列使用的 Python 库，任务与业务数据同库提交、共享事务，通过 FOR UPDATE SKIP LOCKED 保证并发安全和 LISTEN/NOTIFY 实时唤醒 worker，支持 cron 式定时任务、Prometheus 指标和仪表盘。适合已运行 PostgreSQL 的 Python 应用开发者，需要 Python 3.10+ 和 PostgreSQL 14+。",
+   "highlights": [
+    "任务入队与应用数据在同一事务中提交，通过 FOR UPDATE SKIP LOCKED 实现并发认领",
+    "支持 LISTEN/NOTIFY 实时分发、cron 式定时任务与延迟执行",
+    "提供 Prometheus 指标、追踪、仪表盘及无数据库的内存模式（用于测试）"
+   ],
+   "use_cases": [
+    "Python 应用中与业务数据保持事务一致的后台任务处理",
+    "需要定时/延迟任务的调度场景",
+    "单元测试与原型验证时使用内存模式运行队列"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# 🚀 PgQueuer: PostgreSQL-backed background job and task queue for Python ／ **Your PostgreSQL database is already a job queue.** ／ PgQueuer targets Python 3.10+ and PostgreSQL 14+:",
+     "lines": [
+      1,
+      7,
+      40
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供队列能力的服务于数据库生态的库，通过 asyncpg/psycopg 驱动适配 PostgreSQL",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "PgQueuer turns PostgreSQL into a fast, reliable background job processor. Jobs live in the same database as your application data. One stack, full ACID guarantees, and no separate message broker to run. ／ PgQueuer targets Python 3.10+ and PostgreSQL 14+: ／ pip install pgqueuer",
+   "evidence_lines": [
+    9,
+    40,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "janbjorge/pgqueuer",
+  "sha": "5be297a57e82",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6f4c8673f6a8": {
+  "identity": {
+   "one_liner": "自托管 AI 代理记忆服务器，经 MCP 共享上下文",
+   "review": "Kenfold 是一个自托管的 AI 代理共享记忆服务器，支持 Claude Code、Codex、OpenCode、ChatGPT 等客户端通过 MCP 协议读写同一份记忆，数据存于 PostgreSQL 并用 pgvector 做混合检索。面向需要在多个 AI 编码代理间保持上下文连续的开发者；提供会话钩子、记忆抽取审核、合并整理等机制，基准测试尚未完整完成。",
+   "highlights": [
+    "通过 MCP 协议向多个 AI 代理提供共享记忆，每个代理使用独立 API key 并记录来源",
+    "基于 PostgreSQL + pgvector 实现存储与混合检索，可选本地嵌入与重排模型",
+    "提供会话钩子、记忆抽取（需人工审核）、重复/矛盾记忆合并与历史保留机制"
+   ],
+   "use_cases": [
+    "多个 AI 编码代理（Claude Code、Codex、OpenCode 等）间共享项目决策与上下文",
+    "跨工具的任务交接：在一个代理中停止，在另一个代理中继续",
+    "自托管场景下对代理记忆进行审核、导出与远程 OAuth 接入"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 18 + pgvector ／ make up # Postgres 18 + pgvector and Kenfold on http://127.0.0.1:7077",
+     "lines": [
+      5,
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 PostgreSQL 作为自身记忆数据的存储后端，属于使用数据库的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL 18 + pgvector ／ Claude Code, Codex, OpenCode, ChatGPT, and local models each keep their own memory. Kenfold is a self-hosted memory server they all share over MCP: a decision made in one tool is known in the next. ／ > **Status: Phase 5 features implemented; public benchmark validation incomplete.** Shared storage, hybrid search, session hooks, memory extraction, code references, OAuth remote access, export/import, a review dashboard, and consolidation are implemented. The latest authorized attempt preserved partial raw-LoCoMo results for 1,402/1,540 questions, then stopped on unknown API usage. Extracted-LoCoMo and LongMemEval QA were not scored; no complete benchmark result is claimed. See the qualified partial results and accounting.",
+   "evidence_lines": [
+    5,
+    11,
+    29
+   ]
+  },
+  "fn": "jeonjw85/kenfold",
+  "sha": "6f4c8673f6a8",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e9594423f74e": {
+  "identity": {
+   "one_liner": "轻量自托管 OIDC 身份认证服务，提供共享 SSO 与 RBAC",
+   "review": "Burrow 是一个面向小型团队和自托管服务运维者的单组织 OpenID Connect 身份提供程序，提供共享 SSO 会话、密码加 TOTP 的 MFA、用户/组/角色/权限管理与应用门户。Go 后端与 React UI 打包为单一二进制，生产使用 PostgreSQL，本地开发支持 SQLite，单实例部署无需 Redis 或消息队列。",
+   "highlights": [
+    "实现 OIDC 授权码流程与 PKCE S256，提供共享 SSO 会话",
+    "提供用户、分组、自定义角色与权限的访问管理，管理操作有审计",
+    "单一二进制内置 UI，提供 Linux amd64/arm64 二进制、容器镜像与 Docker Compose 部署"
+   ],
+   "use_cases": [
+    "为自托管的 Web/SPA 应用集中接入 OIDC 单点登录",
+    "小型团队统一管理账号、分组、角色与应用访问授权",
+    "为 Grafana、Harbor 等服务配置 SSO 集成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL is used in production; SQLite is available for local development. ／ - **Simple deployment:** one binary with an embedded UI, or Docker Compose with PostgreSQL; no Redis or queue. ／ The default `local-db` profile runs PostgreSQL 17. The migration service retries",
+     "lines": [
+      19,
+      32,
+      170
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "PostgreSQL is used in production; SQLite is available for local development. ／ Requirements: Go **1.27.1**, a C compiler for the SQLite driver, Bun **1.4.2** and",
+     "lines": [
+      19,
+      73
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明生产使用 PostgreSQL、开发使用 SQLite 作为自身存储，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A lightweight, single-organization OpenID Connect identity provider: shared SSO ／ PostgreSQL is used in production; SQLite is available for local development. ／ - **Simple deployment:** one binary with an embedded UI, or Docker Compose with PostgreSQL; no Redis or queue.",
+   "evidence_lines": [
+    7,
+    19,
+    32
+   ]
+  },
+  "fn": "ArkGravity/burrow",
+  "sha": "e9594423f74e",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

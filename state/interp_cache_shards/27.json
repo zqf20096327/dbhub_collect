@@ -9593,5 +9593,146 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0035532ffb90": {
+  "identity": {
+   "one_liner": "单机自托管的 Cloudflare Workers 兼容平台，单 Rust 二进制实现",
+   "review": "该项目把 Cloudflare Workers 的运行时与产品绑定（KV、D1、R2、Durable Objects、Queues 等）搬到用户自有硬件上，以单个 Rust 二进制内嵌 workerd 运行时和 SQLite 元数据存储，通过 ocd 控制平面管理部署。面向希望在自有单机上运行 Workers 编程模型的开发者与运维者；平台尚处早期，部分模块（如 Workers AI 推理、Hyperdrive）未实现，且单节点行为与云端存在差异。",
+   "highlights": [
+    "提供 Workers、KV、D1、R2、Durable Objects、Queues、Workflows 等兼容绑定，并以请求级对比度量兼容性",
+    "以单个二进制包含运行时、控制平面、调度器与产品绑定，使用内嵌 SQLite 作为本地权威状态",
+    "基于固定校验的 workerd fork 运行 Worker 代码，部署不可变且以内容寻址"
+   ],
+   "use_cases": [
+    "在自有单机上运行 Cloudflare Workers 编程模型的应用",
+    "需要本地自托管 Workers 运行时、KV/对象存储/队列等绑定的开发与部署环境",
+    "与 Cloudflare 行为进行兼容性验证的测试场景"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Nothing else to run.** SQLite owns platform metadata and Local storage owns object bytes by default. S3-compatible storage is optional; neither mode needs a database or cache sidecar. ／ |SQLite|Local authoritative state — no external database, no eventual consistency| ／ - **In-process state.** `rusqlite` embeds SQLite in `ocd`; transactions are function calls, not network round-trips. Foreign keys stay enabled and WAL remains locally owned.",
+     "lines": [
+      47,
+      183,
+      195
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储平台元数据的应用/平台，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Nothing else to run.** SQLite owns platform metadata and Local storage owns object bytes by default. S3-compatible storage is optional; neither mode needs a database or cache sidecar. ／ |SQLite|Local authoritative state — no external database, no eventual consistency| ／ You already know how to write Cloudflare Workers. **open-compute runs the compatible Workers programming model** — module workers, familiar bindings, and cf workflows — on a single machine you own.",
+   "evidence_lines": [
+    47,
+    183,
+    26
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "elliothux/open-compute",
+  "sha": "0035532ffb90",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9c87c236c21f": {
+  "identity": {
+   "one_liner": "الجامع：伊斯兰书籍图书馆 Web 应用，基于 Rails，支持 MCP 检索",
+   "review": "aljam3-web-app 是一个伊斯兰书籍图书馆系统（مكتبة المكتبات الإسلامية），基于 Ruby on Rails 构建，使用 PostgreSQL（端口 5433）与 Meilisearch（7701）作为数据存储与检索服务，通过 Docker/mise 搭建开发环境，并提供 rake 任务和脚本从 HuggingFace 数据集导入 PDF/TXT/DOCX 书籍；面向使用者与开发者，README 提到智能助手可通过公开 MCP 服务器检索书籍并溯源。",
+   "highlights": [
+    "基于 Rails 8 + PostgreSQL 17 + Meilisearch 构建的多书库管理系统",
+    "提供 rake 与 Ruby 脚本，从 HuggingFace 数据集导入 PDF/TXT/DOCX 书籍及索引",
+    "提供公共 MCP 服务器，供智能助手检索书籍页面并引用来源"
+   ],
+   "use_cases": [
+    "部署一个可检索的伊斯兰书籍数字图书馆",
+    "从 HuggingFace 数据集批量导入书籍到数据库",
+    "通过 MCP 让 AI 助手查询书籍内容并标注来源"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL Version ／  PostgreSQL (17.5) ／  PostgreSQL → 5433 (localhost:5433)",
+     "lines": [
+      11,
+      52,
+      59
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是使用 PostgreSQL 和 Meilisearch 存储与检索数据的 Web 应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " PostgreSQL (17.5) ／  PostgreSQL → 5433 (localhost:5433) ／  يمكن للمساعدات الذكية البحث في الكتب وقراءة صفحاتها مع توثيق المصادر عبر خادم MCP العام.",
+   "evidence_lines": [
+    52,
+    59,
+    5
+   ]
+  },
+  "fn": "ieasybooks/aljam3-web-app",
+  "sha": "9c87c236c21f",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

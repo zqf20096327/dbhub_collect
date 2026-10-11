@@ -10034,5 +10034,190 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cd873cfcb89b": {
+  "identity": {
+   "one_liner": "Rust 语音识别编排栈，内置纯 Rust Whisper 引擎与统一后端路由",
+   "review": "该项目是一个面向 LLM Agent 的语音识别（ASR）编排工具，提供单个 Rust 二进制，内置纯 Rust 实现的 Whisper 推理引擎，并支持 whisper.cpp 等多后端的贝叶斯自适应路由、实时 NDJSON 流式输出与说话人分离。面向需要结构化、机器可读输出的 Agent 开发者。运行历史通过 SQLite 持久化，安装为 shell 脚本下载预编译二进制。",
+   "highlights": [
+    "内置纯 Rust 进程内 Whisper 引擎，无需 FFI、Python 或子进程，可直接解析 ggml 模型文件",
+    "每个请求以贝叶斯决策契约在多后端间自动路由，并输出稳定 schema 的 NDJSON 流式事件",
+    "每次转写持久化到 SQLite，包含完整事件日志与 JSONL 导出/导入"
+   ],
+   "use_cases": [
+    "为 LLM Agent 提供结构化、可流式解析的语音转写接口",
+    "统一管理多个 Whisper 后端的调用、错误处理与运行历史",
+    "对录音执行带说话人分离的转写（最多四说话人）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Durable run history.** Every transcription persists to SQLite with full event logs, replay envelopes, and JSONL export/import, even when the process crashes mid-run.",
+     "lines": [
+      80
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明转写运行历史持久化到 SQLite，属于使用数据库存储数据的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT+Rider（README 标注 License: MIT+Rider）",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Agent-first Rust ASR stack with a real in-process pure-Rust Whisper engine (no FFI, no Python, no subprocess), adaptive Bayesian backend routing, real-time NDJSON streaming (true-live mic/pipe streaming via `fw robot listen`; batch robot mode streams sequenced stage events), DTW word timestamps, and SQLite-backed run history. In current live-incumbent, same-invocation matched-greedy CPU comparisons, the native large-v3-turbo engine is 2.99× faster than whisper.cpp on a 124.5-second whole job; tiny.en is 1.52× faster on a 124.5-second transcribe-only workload and 1.51× faster on a 300-second transcribe-only workload. These ratios were measured with the int8 encoder, which is now opt-in (`FW_ENC_ATTN_OUT_I8I32=1`); the default f32 encoder is slower (turbo whole job 1.38× in a same-binary A/B).** ／ `franken_whisper` is a single Rust binary that wraps every major Whisper backend behind a unified, agent-first interface — and ships its own engine: ／ - **Durable run history.** Every transcription persists to SQLite with full event logs, replay envelopes, and JSONL export/import, even when the process crashes mid-run.",
+   "evidence_lines": [
+    10,
+    74,
+    80
+   ]
+  },
+  "fn": "Dicklesworthstone/franken_whisper",
+  "sha": "cd873cfcb89b",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8518a64df484": {
+  "identity": {
+   "one_liner": "MG 车辆自托管仪表板，经 SAIC iSmart API 读取车况数据",
+   "review": "一个面向 SAIC 产 MG 车（MG4、MG5、ZS EV、HS PHEV 等）的开源 Web 应用，登录官方 iSmart API 获取车辆遥测，提供实时仪表板、行程地图与行程日志导出，支持远程空调/锁车指令和推送通知，可通过 MQTT 接入 Home Assistant，以 Docker 单容器或 Compose 部署，数据存入内置 PostgreSQL，需要 MG iSmart 账号且与官方 App 不能同时登录同一账号。",
+   "highlights": [
+    "提供实时车辆仪表板、行程地图回放、热力图与能耗统计",
+    "支持远程指令（空调预调节、锁车、鸣笛闪灯）与定时空调计划，并在服务端执行",
+    "通过 MQTT discovery 集成 Home Assistant，支持 OpenID Connect 单点登录"
+   ],
+   "use_cases": [
+    "MG 车主自托管查看车况、位置与充电状态",
+    "记录并导出商务/通勤/私用行程日志用于报税",
+    "接入 Home Assistant 智能家居实现车辆自动化"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A single Docker image that bundles every service -- nginx, the .NET API + worker, PostgreSQL, Mosquitto, and the SAIC gateway. No Compose file or external database needed. Ideal for Unraid and similar NAS environments where running multiple containers is incon",
+     "lines": [
+      143
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是一个使用数据库存储行程与缓存数据的车辆仪表板应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "GarageStack is a free, open-source web app for **modern MG cars**, the ones built by SAIC Motor such as the MG4, MG5, ZS EV and HS PHEV. It signs in to the SAIC iSmart API, the same backend the official MG iSmart app uses, and turns what your car reports into something worth opening: ／ - **Keep it yours.** Everything runs in Docker on your own hardware, as one all-in-one container or a Compose stack. No subscription, and no account needed beyond your MG login.",
+   "evidence_lines": [
+    11,
+    20
+   ]
+  },
+  "fn": "joszz/GarageStack",
+  "sha": "8518a64df484",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ecf8407f9850": {
+  "identity": {
+   "one_liner": "EverDrive GBA Mini 烧录卡的自制 OS，提供封面网格、金手指与存档管理",
+   "review": "这是一个面向 EverDrive GBA Mini 烧录卡用户的第三方固件/OS，将游戏库以封面网格呈现，内置 433 款游戏金手指、经真机验证的存档支持，并可与官方 OS 互换而不丢存档。通过复制文件到 microSD 安装，支持从源码构建并附带宿主测试流程，不含 GB/GBC/NES 模拟器本体。",
+   "highlights": [
+    "提供 2,695 张按游戏代码匹配的封面网格浏览",
+    "内置 433 款游戏金手指，支持 EEPROM/SRAM/FLASH/FRAM 存档",
+    "支持从源码构建、宿主测试与可复现构建"
+   ],
+   "use_cases": [
+    "GBA 烧录卡用户整理与浏览游戏库",
+    "使用真机验证过的金手指与存档",
+    "在自制 OS 与官方 OS 之间切换而不丢存档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "该项目是运行在 GBA 烧录卡硬件上的终端应用固件，不服务于任何数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0-or-later，部分资源（SN 印章）保留所有权利",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A custom, independent OS for the EverDrive GBA Mini. ／ - Your library as a grid with box art (2,695 covers, matched by game code) ／ - Also plays GB, GBC, NES and Game Gear through external emulators (not included)",
+   "evidence_lines": [
+    5,
+    10,
+    16
+   ]
+  },
+  "fn": "sergiosmartdesign/Warp-Drive",
+  "sha": "ecf8407f9850",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

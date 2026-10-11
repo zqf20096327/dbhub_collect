@@ -9717,5 +9717,75 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aabf7a081181": {
+  "identity": {
+   "one_liner": "基于 YOLOv8 的车辆检测分割跟踪与可视化分析自托管单节点应用",
+   "review": "一个自托管的单节点应用，包含后端、离线 dashboard、预训练模型权重与训练/评估脚本，用于对上传视频或摄像头画面执行车辆检测、实例分割与跟踪，结果持久化到 SQLite 并可导出 CSV/JSON。面向需要本地部署车辆分析流程的用户；限制包括单 Uvicorn worker、仅图像坐标系的像素速度、无真实世界尺度。",
+   "highlights": [
+    "内置 YOLOv8n-seg ONNX 模型，支持检测+实例分割、跟踪与在线/离线视频输入",
+    "分析会话持久化到 SQLite，支持帧回放、汇总图表与 CSV/JSON/JPEG 导出",
+    "提供基于自有数据集的标注、训练与 ONNX 模型注册工作流，并含 Docker 部署文件"
+   ],
+   "use_cases": [
+    "对道路/航拍视频进行车辆检测、分割与轨迹分析的本地化运行",
+    "接入网络摄像头进行实时画面分析并留存会话记录",
+    "标注自有车辆数据并训练、评估、注册自定义分割模型"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Analysis|SQLite session persistence, frame replay, per-run summary, charts, streaming CSV/JSON and JPEG snapshots|",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其为使用 SQLite 存储分析会话数据的完整应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，Ultralytics 模型权重及训练依赖保留其原许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A complete, self-hosted, single-node application based on your dashboard reference. It includes the backend, offline dashboard, trained model weights, SQLite database schema, training/evaluation utilities, launchers, tests and Docker deployment files. The screens use real API data. No hardcoded detection results are substituted when a model is unavailable. ／ |Analysis|SQLite session persistence, frame replay, per-run summary, charts, streaming CSV/JSON and JPEG snapshots|",
+   "evidence_lines": [
+    7,
+    49
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "ShivamMathtech/MathTech-Convoy-Vision",
+  "sha": "aabf7a081181",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

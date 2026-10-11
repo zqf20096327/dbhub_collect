@@ -9096,5 +9096,73 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "85b62d5accaa": {
+  "identity": {
+   "one_liner": "本地设备上的 AI 代理记忆层，含混合检索、hooks 与 MCP 服务器",
+   "review": "ClawMem 将 markdown 笔记与会话转录转化为 AI 编码代理的持久记忆，通过 Claude Code hooks、MCP 服务器、OpenClaw 插件等接口提供检索增强上下文，全部数据写入本地 SQLite 库，无需 API 密钥或云服务。面向使用 Claude Code、OpenClaw、Hermes 等代理的开发者。需 Bun 运行时，Windows 原生不推荐。",
+   "highlights": [
+    "提供 BM25 + 向量检索 + 重排序的混合检索与多图遍历（语义/时间/因果）",
+    "通过 hooks、MCP 服务器、OpenClaw 插件、Hermes MemoryProvider 插件集成，各路径共享同一本地 SQLite 库",
+    "完全本地运行，无 API 密钥与云依赖，支持从 Claude Code、ChatGPT、Slack 等导入对话记录"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供跨会话的持久化记忆与上下文注入",
+    "从多来源对话导出中提取决策、偏好与里程碑等结构化事实",
+    "在本地环境中实现无需云服务的代理记忆管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Integrates via Claude Code hooks, an MCP server (works with any MCP-compatible client), a native OpenClaw plugin, or a Hermes Agent `MemoryProvider` plugin. All paths write to the same local SQLite vault. A decision captured during a Claude Code session shows ",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 SQLite 作为自身存储记忆的本地库使用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Integrates via Claude Code hooks, an MCP server (works with any MCP-compatible client), a native OpenClaw plugin, or a Hermes Agent `MemoryProvider` plugin. All paths write to the same local SQLite vault. A decision captured during a Claude Code session shows up immediately when an OpenClaw or Hermes agent picks up the same project. ／ TypeScript on Bun. MIT License. ／ Runs fully local with no API keys and no cloud services. Integrates via Claude Code hooks and MCP tools, as a native OpenClaw plugin, or as a Hermes Agent `MemoryProvider` plugin. All modes share the same vault for cross-runtime memory. Works with any MCP-compatible client.",
+   "evidence_lines": [
+    9,
+    11,
+    52
+   ]
+  },
+  "fn": "yoloshii/ClawMem",
+  "sha": "85b62d5accaa",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

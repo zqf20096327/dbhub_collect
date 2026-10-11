@@ -8997,5 +8997,82 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7108cca7084a": {
+  "identity": {
+   "one_liner": "Arweave 永久网络的 AR.IO 网关节点，索引并提供 permaweb 数据服务",
+   "review": "该项目实现 AR.IO 网关，运行在 Arweave 永久存储网络之上，负责索引交易与 ANS-104 数据包、解析 ArNS 域名、发出 webhook 通知，并提供 CDB64 根交易索引与索引共享机制。面向希望参与 ar.io 网络、搭建 permaweb 网关的运维者与开发者。使用 SQLite 做本地数据存储（需先执行迁移），ClickHouse 用于流水线；ANS-104 索引功能标注为实验性，ArNS 状态解析依赖外部服务。",
+   "highlights": [
+    "支持 ANS-104 数据包的解包与索引，过滤规则可通过环境变量配置",
+    "内置 CDB64 根交易索引，并支持通过 index-swarm 与其他网关共享索引",
+    "提供 webhook 发射、GraphQL 代理透传与 ArNS 域名解析功能"
+   ],
+   "use_cases": [
+    "搭建参与 ar.io 网络的 permaweb 网关节点",
+    "索引并提供 Arweave 交易与数据项的访问服务",
+    "运行 Turbo Bundler 边车以接收和打包数据项"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "### Initialize the SQLite DB",
+     "lines": [
+      18
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "pipeline, ClickHouse, ArNS resolution, the observer/cranker, and common",
+     "lines": [
+      48
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是运行在 Arweave 网络上的网关应用，使用 SQLite 存储数据并使用 ClickHouse 支撑流水线，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### Initialize the SQLite DB ／  pipeline, ClickHouse, ArNS resolution, the observer/cranker, and common ／ You can run the ar.io gateway as a standalone docker container:",
+   "evidence_lines": [
+    18,
+    48,
+    69
+   ]
+  },
+  "fn": "ar-io/ar-io-node",
+  "sha": "7108cca7084a",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

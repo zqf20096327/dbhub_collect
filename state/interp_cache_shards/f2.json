@@ -9738,5 +9738,234 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d4abd3b968d4": {
+  "identity": {
+   "one_liner": "Oracle Linux 的 Unbreakable Enterprise Kernel 源码仓库",
+   "review": "该仓库托管 Oracle 为 Oracle Linux 构建的 Unbreakable Enterprise Kernel（UEK）内核源码，包含尚未合并入主线 Linux 的 Oracle 补丁，提供 ueknext/uek8/uek7/uek6 等多分支，支持 x86_64 与 aarch64，源码公开但 GitHub 上不接受 PR，编译二进制 RPM 需从官方渠道获取。适用于 Oracle Linux 用户与内核开发者查阅、构建和跟踪内核更新，每周刷新一次。",
+   "highlights": [
+    "提供 UEK 各版本内核源码及 ueknext/latest 等多个开发与生产分支",
+    "支持 x86_64 与 aarch64 两种架构",
+    "仓库每周随新开发版本刷新，二进制 RPM 公开发布"
+   ],
+   "use_cases": [
+    "Oracle Linux 用户获取 UEK 内核源码与预览未合入主线的补丁",
+    "内核开发者跟踪 Oracle 对 Linux 内核的提交与分支状态",
+    "企业部署中为 Oracle Linux 构建或定制内核"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "# Oracle Linux: Unbreakable Enterprise Kernel (UEK) ／ The Unbreakable Enterprise Kernel (UEK) is a Linux kernel built by Oracle and supported via Oracle Linux Support. Its focus is performance, stability, and minimal backports by tracking the mainline source code as closely as is practical. UEK is well-tested and ／ Oracle is a long-time contributor to Linux and we have always had a strong emphasis on upstreaming and open-sourcing our changes to the kernel. Keeping our changes open source allows us to integrate with upstream Linux kernels quickly, which also means we have",
+     "lines": [
+      1,
+      5,
+      7
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库托管的是 Linux 操作系统内核源码，README 未表明其为数据库生态服务的工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The Unbreakable Enterprise Kernel (UEK) is a Linux kernel built by Oracle and supported via Oracle Linux Support. Its focus is performance, stability, and minimal backports by tracking the mainline source code as closely as is practical. UEK is well-tested and used to run Oracle's Engineered Systems, Oracle Cloud Infrastructure, and large-scale enterprise deployments for Oracle Linux customers. ／ This repository contains the source for the Unbreakable Enterprise Kernel ／ This repository will be refreshed weekly as new development versions are available.",
+   "evidence_lines": [
+    5,
+    9,
+    32
+   ]
+  },
+  "fn": "oracle/linux-uek",
+  "sha": "d4abd3b968d4",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "318d77dd5e8c": {
+  "identity": {
+   "one_liner": "NetSuite MCP 客户端，聊天式连接 AI 模型与 NetSuite 业务数据",
+   "review": "这是一个为 NetSuite ERP 提供的 MCP 客户端/服务器程序，通过聊天 UI 调用 SuiteQL、记录、报表等 MCP 工具，内置角色（persona）与技能（skill）管理，支持自托管部署到 Linux/AWS。面向需要用 LLM 访问 NetSuite 数据的团队或个人，要求 NetSuite 账号启用 AI Connector Service，且支持 Google Gemini、Claude、OpenAI 等 API。",
+   "highlights": [
+    "支持通过 MCP Standard Tools 在聊天中执行 SuiteQL、记录、报表与保存的搜索",
+    "可作为 MCP 服务器供外部 AI 代理以用户身份访问 NetSuite 工作区",
+    "内置四类技能来源（Oracle/Community/Connected/Custom）与自定义角色构建器"
+   ],
+   "use_cases": [
+    "用自然语言查询和操作 NetSuite ERP 数据",
+    "为 NetSuite 场景定制角色与技能包并分发给团队",
+    "自托管部署供企业内部使用的 AI 连接入口"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Built-in personas ship in `.personas/*.md` in this repo. Custom personas are stored per user in Postgres. ／ - Docker (Docker Desktop on macOS/Windows, or Docker Engine on Linux) for local PostgreSQL, Redis, and SearXNG via `pnpm setup:backend` ／ - `.env.local` — app / migrate vars (`POSTGRES_URL`, `REDIS_URL`, `AUTH_SECRET`, `OSMCP_INSTALL_MODE`, etc.)",
+     "lines": [
+      33,
+      148,
+      176
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|**Oracle**|Disabled|Shared pack; Auto / Slash command / Disabled. Core AI Connector instructions stay Auto.| ／ A skill can carry reference files beside its `SKILL.md`, the way Oracle and Community packs do. `SKILL.md` holds up to 32,000 characters. Beside it, up to 32 reference files, 64,000 characters each and 256,000 across them. ／ That downloads Oracle’s agent-skills into `.data/oracle-skills` (or `ORACLE_SKILLS_DIR`) and Community skills into `.data/community-skills` (or `COMMUNITY_SKILLS_DIR`). Run after setup, on deploy (production entrypoint), and on a **weekly cron**. New upstream ",
+     "lines": [
+      45,
+      56,
+      64
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明内置角色数据存储于 Postgres，应用通过 Docker 使用 PostgreSQL 存数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Source-available，商业权利保留（Commercial rights reserved by Unstacked Apps, LLC）",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Source-available **NetSuite MCP client** — chat UI for NetSuite’s AI Connector Service, MCP Standard Tools, Companion prompt library, and SuiteCloud Agent Skills. ／ Built-in personas ship in `.personas/*.md` in this repo. Custom personas are stored per user in Postgres. ／ - Docker (Docker Desktop on macOS/Windows, or Docker Engine on Linux) for local PostgreSQL, Redis, and SearXNG via `pnpm setup:backend`",
+   "evidence_lines": [
+    7,
+    33,
+    148
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "unstackedapps/opensuitemcp",
+  "sha": "318d77dd5e8c",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c950e3c21ccd": {
+  "identity": {
+   "one_liner": "模拟盘预测市场平台，用户用虚拟货币交易现实事件结果",
+   "review": "Probstreet 是一个仅限纸面交易的预测市场平台，覆盖加密货币、体育、股票等事件，市场通过 Binance、football-data.org、Finnhub 的实时数据自动结算，并有 Tavily+Groq 的 AI oracle 兜底。技术栈为 Bun/Hono API、Go 撮合引擎（支持合成撮合）、Redis 队列、Kafka 流水线、PostgreSQL 持久化。适合对交易撮合与事件驱动架构感兴趣的开发者学习参考；README 强调仅虚拟货币、支付与 KYC 处于沙盒模式。",
+   "highlights": [
+    "Go 撮合引擎支持标准/铸造/合并三种撮合模式，按市场粒度加锁并发处理",
+    "结算通过原子 CAS 锁保证并发下仅一个 resolver 生效",
+    "撮合引擎快照序列化为二进制后直接存入 PostgreSQL BYTEA 字段"
+   ],
+   "use_cases": [
+    "用虚拟货币对现实世界事件结果进行模拟交易",
+    "学习撮合引擎、Kafka 流水线与分布式可观测性的工程实现参考",
+    "预测市场类产品的架构研究参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Bun TypeScript Go React Vite Hono PostgreSQL Prisma Redis Kafka Socket.io Cloudflare Docker Sentry k6 ／ |**Processor Service**|Kafka consumer — batch-inserts matched trades to Postgres, keeps persistent state consistent.| ／ PostgreSQL supports binary data through the `BYTEA` type. Instead of uploading every snapshot to an object-storage bucket, I could serialize the engine state into a compact binary representation and store the resulting bytes directly in PostgreSQL.",
+     "lines": [
+      7,
+      85,
+      161
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Probstreet is a paper-trading prediction-market platform where users stake virtual currency on the outcomes of real-world events — crypto prices, football matches, stock movements, and more. Markets resolve automatically using live data from Binance, football- ／ - **Hybrid resolution** — deterministic resolvers for crypto/sports/stocks (no AI needed), with a Tavily + Groq rubric-based AI oracle as fallback for unstructured events.",
+     "lines": [
+      13,
+      72
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该平台使用 PostgreSQL 存储交易与引擎快照，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Probstreet is a paper-trading prediction-market platform where users stake virtual currency on the outcomes of real-world events — crypto prices, football matches, stock movements, and more. Markets resolve automatically using live data from Binance, football-data.org, and Finnhub, with an AI oracle pipeline as fallback for unstructured events. ／ |**Processor Service**|Kafka consumer — batch-inserts matched trades to Postgres, keeps persistent state consistent.|",
+   "evidence_lines": [
+    13,
+    85
+   ]
+  },
+  "fn": "probstreetlabs/probstreet",
+  "sha": "c950e3c21ccd",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

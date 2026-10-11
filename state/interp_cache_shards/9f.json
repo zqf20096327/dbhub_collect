@@ -9982,5 +9982,229 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3507688bc3dc": {
+  "identity": {
+   "one_liner": "SQL 数据库支撑的 TypeScript/Node.js 虚拟 actor 库",
+   "review": "一个面向 TypeScript 与 Node.js 的 SQL-backed 虚拟 actor（durable objects）开发库，将 actor 的状态、邮箱、重试与提醒持久化到应用已有的 SQL 数据库，并保证同一身份的操作按序执行、进程重启后可恢复。适合需要在分布式请求间维持有状态临界区的后端开发者。要求 Node.js 24.4+、ESM，交付为 at-least-once 而非 exactly-once，且跨身份无事务。",
+   "highlights": [
+    "基于已有 SQL 数据库（SQLite/PostgreSQL/MySQL）持久化 actor 状态，无需额外守护进程或消息代理",
+    "同一身份的调用按序执行，支持重启后的提醒与恢复，浏览器端通过 SQLite WASM/OPFS 运行同一运行时",
+    "提供 transmit 模块与 Ruby 后端共享传输契约，支持离线写入以 at-least-once 方式对账"
+   ],
+   "use_cases": [
+    "购物车、票务预留等需要持久过期与并发去重的场景",
+    "多人房间、协作文档等要求有序编辑的实时共享状态",
+    "长期任务租约、工作流等依赖已提交状态决定下一步动作的后台作业"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The quickstart uses Node's built-in SQLite driver and proves that concurrent ／ import { sqlite } from \"solid-objects/database/sqlite\" ／ Its state, mailbox, retries, reminders, and staged consequences live in SQLite,",
+     "lines": [
+      50,
+      60,
+      88
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, or MySQL. No daemon, broker, Cloudflare account, or new datastore is",
+     "lines": [
+      89
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL, or MySQL. No daemon, broker, Cloudflare account, or new datastore is",
+     "lines": [
+      89
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为应用开发服务的运行时库，将数据库作为持久化后端使用而非终端应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Solid Objects is a SQL-backed virtual actor library for TypeScript and Node.js, ／ Its state, mailbox, retries, reminders, and staged consequences live in SQLite, ／ Solid Objects JS is a pre-1.0 early release. The correctness core has",
+   "evidence_lines": [
+    8,
+    88,
+    203
+   ]
+  },
+  "fn": "cardmagic/solid-objects-js",
+  "sha": "3507688bc3dc",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "24fdcca5f21b": {
+  "identity": {
+   "one_liner": "将本机多个 AI 编码代理会话索引到本地 SQLite 并提供统一搜索",
+   "review": "RelayHistory（ai-hist）把 Claude Code、Codex、Cursor、Grok、Muse Code、OpenCode、Devin CLI 等代理的本地会话记录采集进一个 SQLite 索引，支持全文搜索、恢复命令输出、上下文打包交接，并可通过 MCP 服务器供代理查询自身历史。面向使用多个 AI 编码工具的开发者；仅 Node 20/22，含 Rust crate 嵌入方式。",
+   "highlights": [
+    "支持将 Claude Code、Codex、Cursor、Grok、Muse Code、OpenCode、Devin CLI 等多个代理的会话索引到单一本地 SQLite 库",
+    "提供 MCP 服务器（ai-hist-mcp），暴露 search_history、get_session_events、get_session_tool_calls 等工具",
+    "提供 Rust crate（ai-hist）供嵌入调用，并支持 NDJSON 导出与远程源插件采集"
+   ],
+   "use_cases": [
+    "在本机跨多个代理工具统一搜索历史会话",
+    "代理间/团队成员间的会话上下文交接",
+    "让具备 MCP 能力的代理运行中查询自身历史会话"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Local memory for **Claude Code**, **Codex**, **Cursor**, **Grok**, **Muse Code**, **OpenCode**, and **Devin CLI**. Your agent sessions are indexed into one local SQLite database. Search them all at once, jump back into a session with its harness's native resum ／ OpenCode is read from whichever of its two stores the machine has: the SQLite ／ - **Local by default.** SQLite on your machine. Export requires an explicit selection; remote acquisition requires an installed source plugin.",
+     "lines": [
+      5,
+      52,
+      112
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储自身索引，并非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Local memory for **Claude Code**, **Codex**, **Cursor**, **Grok**, **Muse Code**, **OpenCode**, and **Devin CLI**. Your agent sessions are indexed into one local SQLite database. Search them all at once, jump back into a session with its harness's native resume command, and hand a compact context pack to another agent — or to a teammate's agent — to continue the work. ／ npm install -g ai-hist ／ The bare `ai-hist` command bootstraps a searchable database on first use: it discovers your most recent local sessions and indexes their evidence, then tells you what it found. It leaves an already-populated database alone. Run `ai-hist sync` any time you want a full re-ingest rather than the bounded first-run pass.",
+   "evidence_lines": [
+    5,
+    24,
+    29
+   ]
+  },
+  "fn": "AgentWorkforce/relayhistory",
+  "sha": "24fdcca5f21b",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "89f2a371b3df": {
+  "identity": {
+   "one_liner": "手机上的 AI Agent，通过 function calling 驱动 100+ 本机工具操作设备",
+   "review": "这是一个运行在 Android 上的 AI Agent 应用：用户用自然语言下达需求，模型经 function calling 调用 105 个内置工具完成文件、应用、抓包、APK 反编译、Linux 命令、界面自动化等操作，并内置 MCP Server 可将 31 个只读工具暴露给外部 AI 客户端。面向需要在手机本机完成开发调试任务的用户；Linux 环境与部分高权限能力需要 Root。",
+   "highlights": [
+    "支持 105 个内置工具经 function calling 调用，覆盖文件、应用、抓包、APK 反编译、Linux 环境、界面操作等",
+    "内置 MCP 客户端与 MCP Server，可连接外部 Server 并按白名单对外暴露 31 个只读/低风险工具",
+    "提供 11 家模型服务商接入与自定义 OpenAI 兼容端点，API Key 用系统 Keystore 加密存本机"
+   ],
+   "use_cases": [
+    "在手机上对自有/已授权应用进行抓包、APK 分析与反编译调试",
+    "通过自然语言编排多步本机文件与应用操作",
+    "将手机工具经 MCP Server 暴露给桌面 AI 客户端（Claude Desktop、Cursor）"
+   ],
+   "": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|数据库|SQLite 真实打开：Schema / 数据 / SQL 三视图，分页编辑、导入导出|",
+     "lines": [
+      75
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它使用 SQLite 存数据并提供数据库工具视图（L55、L75），本身是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "": "",
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|数据库|SQLite 真实打开：Schema / 数据 / SQL 三视图，分页编辑、导入导出| ／ |数据库|`db.list/tables/schema/rows/query/dump/importCsv` `db.exec`（可写，需开启）`sql.query`| ／ |工具调用|105 个内置工具经 function calling 接入，调用过程实时显示为可展开的步骤卡片|",
+   "evidence_lines": [
+    75,
+    55,
+    34
+   ]
+  },
+  "fn": "guanhan01/Yutu-Toolbox",
+  "sha": "89f2a371b3df",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

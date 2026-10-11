@@ -9944,5 +9944,71 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2813c8aace4d": {
+  "identity": {
+   "one_liner": "自托管短链接服务，单二进制 + SQLite 存储",
+   "review": "Sani 是一个面向单人管理员的短链接服务，同时支持文本和文件分享。它用 Go 编写为单个二进制，内嵌管理界面，元数据和文本存于 SQLite，文件存本地磁盘，重定向从内存缓存读取。提供点击统计、标签、过期与访问限制、API token 等功能，支持 Docker Compose 和单二进制部署。项目仍处于 0.x 阶段，设计上仅支持单实例。",
+   "highlights": [
+    "单 Go 二进制内嵌管理应用，以 SQLite 存元数据和文本、本地存储存文件，无需外部数据库或缓存",
+    "重定向目标缓存在内存中，每次点击计数；点击统计含总量、每日、来源页等维度",
+    "支持自定义 slug、Unicode slug、过期日期、访问次数限制、标签过滤、API token 及从 Shlink/CSV/JSON 导入"
+   ],
+   "use_cases": [
+    "个人或单一管理员自托管短链接跳转服务",
+    "临时分享文本片段、配置代码和文件并统计访问",
+    "通过 HTTP API 或脚本/快捷指令集成链接创建流程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A self-hosted link shortener with text and file sharing, for one administrator. One Go binary with an embedded admin app, SQLite for metadata and text, and local storage for uploaded files. No external database or cache service required.",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 存储元数据和文本，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted link shortener with text and file sharing, for one administrator. One Go binary with an embedded admin app, SQLite for metadata and text, and local storage for uploaded files. No external database or cache service required. ／ Sani is designed for a single running instance and one administrator, not multi-user hosting or active-active replicas. It is still in 0.x: read the compatibility policy and release notes before upgrading. For public service, configure HTTPS, persistent storage and a separate files domain when needed, then rehearse a complete backup and restore. Repository tests and published benchmarks do not certify your deployment’s capacity or availability.",
+   "evidence_lines": [
+    3,
+    27
+   ]
+  },
+  "fn": "DejavuMoe/sani",
+  "sha": "2813c8aace4d",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

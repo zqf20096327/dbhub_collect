@@ -9010,5 +9010,228 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1b1ceaf7e7b9": {
+  "identity": {
+   "one_liner": "移植到 SQL Server 上的 WordPress 版本",
+   "review": "Project Nami 将 WordPress 核心代码重写为运行在 Microsoft SQL Server / Azure SQL 之上，覆盖全部 WP 核心功能，并提供查询翻译层处理直接 SQL 的插件。适合需要在 Azure 云上用 SQL Server 承载 WordPress 的用户；自建数据表的插件兼容性受限。",
+   "highlights": [
+    "支持 WordPress 7.1.3（$wp_db_version 61833），覆盖全部核心功能",
+    "包含查询翻译机制（/wp-includes/translations.php），对执行失败的 SQL 语句转换后重提交",
+    "要求 SQL Server 2012+，兼容 Linux 平台上的 SQL Server 2017"
+   ],
+   "use_cases": [
+    "在 Azure / SQL Server 环境中部署 WordPress",
+    "需要 WordPress 数据统一存入 SQL Server 的场景",
+    "评估 WordPress 插件在 SQL Server 后端下的兼容性"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Tracks WordPress **7.1.3** (`$wp_db_version` 61833) on SQL Server 2012+ / Azure SQL. ／ In its current form, Project Nami is basically WordPress powered by Microsoft SQL Server. **All** WordPress core features and functions are supported.",
+     "lines": [
+      5,
+      8
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "While I would agree with all of this, writing ( or using ) a custom `wp-db.php` drop-in is not enough to get WordPress running on SQL Server. In reality, WP Core is littered with MySQL-specific queries, which means a custom db class won't cover all your bases. ／ * Plugins which create their own database tables. These plugins are very likely to fail. While translation functions exist for table creation, there are so many different ways to structure those statements in MySQL that we simply cannot support all of them. It ／ * Plugins which call the MySQL objects directly. These plugins are guaranteed to fail. Obviously the point of Project Nami is to use SQL Server, so the MySQL objects are not configured and in some installations may not even exist. An example of this type of pl",
+     "lines": [
+      13,
+      26,
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQL Server 存储数据的 WordPress 应用发行版，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tracks WordPress **7.1.3** (`$wp_db_version` 61833) on SQL Server 2012+ / Azure SQL. ／ In its current form, Project Nami is basically WordPress powered by Microsoft SQL Server. **All** WordPress core features and functions are supported. ／ We needed a version of WordPress powered by SQL Server in the cloud on Microsoft Azure. So, we rewrote WP Core to do this very thing. Porting WordPress may seem extreme, but the software simply isn't to the point where true database abstraction is feasible. Maybe someday it will be. In the meantime, Project Nami is an alternative. :)",
+   "evidence_lines": [
+    5,
+    8,
+    17
+   ]
+  },
+  "fn": "ProjectNami/projectnami",
+  "sha": "1b1ceaf7e7b9",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8b4bf67e5f80": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 3 + Vue 3 的全栈民宿预订平台",
+   "review": "一个面向房客、房东、管理员三类角色的民宿预订系统，覆盖房源发布、搜索、支付、退款争议等 25 个业务模块，主要供学习与面试展示。数据层使用 MySQL 存储、Redis 缓存、Elasticsearch 检索、RabbitMQ 消息队列，Flyway 管理数据库迁移；后端测试时使用 H2 内存库而非真实 MySQL，且部分流程无 outbox 原子保证。",
+   "highlights": [
+    "支持支付宝沙箱支付、WebSocket 通讯与 Elasticsearch 全文/地理位置检索",
+    "使用 Flyway 管理数据库迁移，通过 RabbitMQ 死信队列处理订单超时与批量任务",
+    "以 AOP 注解实现接口限流与操作审计日志"
+   ],
+   "use_cases": [
+    "民宿/短租类业务的全栈功能学习与面试展示",
+    "RabbitMQ 死信队列与订单超时场景的实践参考",
+    "Spring Boot + Vue 3 单体架构部署演示"
+   ],
+   "db_verdicts": []
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|数据与消息|MySQL 8、Redis / Redisson、Elasticsearch / IK、RabbitMQ、Flyway| ／ 以下为本地开发方式。先准备 Java 17、Maven、Node.js 20、MySQL 8、Redis，以及安装 IK 插件的 Elasticsearch；演示三个 MQ 场景时同时启动 RabbitMQ。基础设施准备和完整配置见安装教程。 ／ 编辑 `application-local.properties`：将 `server.port` 改为 `8081`，填写实际 MySQL、Redis 配置和随机 JWT 密钥。支付、地图、邮件与 LLM 的配置按需要填写；AI 客服默认关闭。",
+     "lines": [
+      65,
+      82,
+      94
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明该平台使用 MySQL 8 等库存业务数据，系统本身是使用数据库的预订应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "面向房客、房东和平台管理员的民宿预订系统，覆盖房源发布与审核、搜索推荐、下单支付、入住退房、退款争议和收益管理。 ／ |数据与消息|MySQL 8、Redis / Redisson、Elasticsearch / IK、RabbitMQ、Flyway| ／ 以下为本地开发方式。先准备 Java 17、Maven、Node.js 20、MySQL 8、Redis，以及安装 IK 插件的 Elasticsearch；演示三个 MQ 场景时同时启动 RabbitMQ。基础设施准备和完整配置见安装教程。",
+   "evidence_lines": [
+    11,
+    65,
+    82
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "goaltang/homestay-booking-platform",
+  "sha": "8b4bf67e5f80",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "15f9c5c33976": {
+  "identity": {
+   "one_liner": "LLM 在无限画布上放置类型化小部件的 AI 应用",
+   "review": "OpenCanvas 是一个 Electron 桌面应用，让 LLM 通过 place_widget 工具调用在无限画布上生成图表、看板、代码等类型化小部件，支持多种模型包括本地 Ollama，对话索引存入本地 SQLite 与 sqlite-vec 实现跨会话检索，并提供 REST API 供外部脚本放置小部件。适合希望在本地使用 AI 工具并通过 MCP 连接外部服务的用户。",
+   "highlights": [
+    "支持 Anthropic、OpenAI、Gemini、Groq、OpenRouter 及本地 Ollama 多种模型，共用一个工具调用循环",
+    "内置 15 种类型化小部件，模型可在会话中注册新的小部件类型",
+    "对话索引到本地 SQLite + sqlite-vec 存储，支持跨会话检索，并提供 REST API 与 SSE 总线"
+   ],
+   "use_cases": [
+    "本地离线使用 LLM 并将回答以图表、看板等对象形式保存在画布上",
+    "通过 MCP 服务器连接文件系统、GitHub、Jira 等外部工具",
+    "用脚本、定时任务或其他智能体通过 REST API 向画布放置小部件"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Memory that compounds.** Every conversation indexes into a local SQLite + sqlite-vec store. `⌘K` finds any widget from any chat, weeks later. ／ MIT · built with tldraw, Hono, SQLite and the Vercel AI SDK",
+     "lines": [
+      48,
+      71
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用 SQLite 存储对话索引，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Memory that compounds.** Every conversation indexes into a local SQLite + sqlite-vec store. `⌘K` finds any widget from any chat, weeks later. ／ MIT · built with tldraw, Hono, SQLite and the Vercel AI SDK",
+   "evidence_lines": [
+    48,
+    71
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ashark-ai-05/opencanvas",
+  "sha": "15f9c5c33976",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

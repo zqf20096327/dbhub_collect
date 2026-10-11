@@ -9083,5 +9083,169 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "104e92398426": {
+  "identity": {
+   "one_liner": "Z-BlogPHP 开源建站程序，支持多数据库的 PHP CMS",
+   "review": "Z-BlogPHP 是 Z-Blog 社区维护的 PHP 建站程序（CMS），2005 年首发，可用于搭建个人博客、企业网站、知识库、新闻门户和社区论坛等站点。安装向导中直接配置数据库，支持 MySQL、MariaDB、SQLite、PostgreSQL 四种存储，要求 PHP 7-8.4，提供插件接口与主题模板机制，采用 MIT 许可证。",
+   "highlights": [
+    "支持 MySQL/MariaDB/SQLite/PostgreSQL 四种数据库存储",
+    "提供插件接口与主题模板机制供开发者定制",
+    "通过 Web 安装向导完成部署与数据库配置"
+   ],
+   "use_cases": [
+    "搭建个人博客或企业官网",
+    "构建知识库、新闻门户或社区论坛站点",
+    "在虚拟主机等已有数据库账号的托管环境中快速建站"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- MySQL 5+ / MariaDB 10+ / SQLite 3 / PostgreSQL ／ - For PostgreSQL, enter the host, database name, account and password",
+     "lines": [
+      26,
+      37
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL 5+ / MariaDB 10+ / SQLite 3 / PostgreSQL ／ - For MySQL, enter the MySQL account and password provided by your hosting provider",
+     "lines": [
+      26,
+      35
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- MySQL 5+ / MariaDB 10+ / SQLite 3 / PostgreSQL ／ - For SQLite, make sure the server supports SQLite; the installer will create the SQLite database file automatically after you click Next",
+     "lines": [
+      26,
+      36
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- MySQL 5+ / MariaDB 10+ / SQLite 3 / PostgreSQL",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述其为建站程序，通过安装向导配置并使用数据库存数据，而非为数据库生态提供工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- MySQL 5+ / MariaDB 10+ / SQLite 3 / PostgreSQL ／  - For MySQL, enter the MySQL account and password provided by your hosting provider ／  - For PostgreSQL, enter the host, database name, account and password",
+   "evidence_lines": [
+    26,
+    35,
+    37
+   ]
+  },
+  "fn": "zblogcn/zblogphp",
+  "sha": "104e92398426",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "434026cea688": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL+AGE+pgvector 的确定性代码图上下文引擎",
+   "review": "为 AI 编码代理提供仓库代码图索引与检索：将符号、调用、引用、类型层级等索引进 PostgreSQL（Apache AGE 图 + pgvector），通过图遍历回答任务相关问题，经 MCP 或 REST 供 Cursor、Claude Code、OpenCode 等代理调用。检索路径无 LLM，保证同提交同排序；提供 hint/trust 两种代理模式。适合为编码代理搭建确定性代码上下文检索的团队。",
+   "highlights": [
+    "将仓库索引进 PostgreSQL，用 Apache AGE 图遍历与 pgvector 向量检索回答代码问题",
+    "提供 MCP 与 REST 接口，附带 Cursor/Claude Code/OpenCode 的初始化命令",
+    "检索路径无 LLM，同一提交返回相同排序，可选上下文选择模型"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供确定性的代码位置检索与上下文打包",
+    "多语言仓库的代码图索引与结构化查询（调用链、类型层级、HTTP 路由）",
+    "通过 MCP 集成到 Cursor、VS Code、Claude Code 等编辑器工作流"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# 1. PostgreSQL 16 with Apache AGE + pgvector, in one database",
+     "lines": [
+      103
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "PostgreSQL 16（含 AGE+pgvector）是该引擎自身运行所需的存储组件，仓库不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 1. PostgreSQL 16 with Apache AGE + pgvector, in one database ／ bce serve        # REST at :8000/docs, web UI at :8000/ui/ ／ The MCP surface is behind the `mcp` extra (Python MCP SDK 1.x: `mcp>=1.0,<2`). Install it",
+   "evidence_lines": [
+    103,
+    112,
+    118
+   ]
+  },
+  "fn": "bgts-ai-org/bgts-context-engine",
+  "sha": "434026cea688",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

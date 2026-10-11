@@ -10308,5 +10308,227 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fb96ebc4c3ce": {
+  "identity": {
+   "one_liner": "自托管数据库备份工具，支持物理/逻辑备份与PITR及恢复验证",
+   "review": "Databasus 是一个自托管的开源备份工具，为 PostgreSQL、MySQL、MariaDB、MongoDB 提供定时备份、WAL 流式捕获实现时间点恢复（PITR）、多存储目的地（S3、Google Drive 等）、AES-256-GCM 加密、保留策略和真实恢复验证，并附带 Web 控制台、团队工作区与通知集成；面向需要托管自有数据库备份的运维和团队，通过 Docker、脚本或 Kubernetes Helm 部署。",
+   "highlights": [
+    "支持物理（含全量、增量、WAL 流式）与逻辑两种备份类型，实现时间点恢复（PITR）",
+    "通过启动容器执行真实恢复来验证备份可用性，并输出逐表行数报告",
+    "提供定时调度、保留策略（时间段/数量/GFS/大小上限）、多目的地存储与加密、多渠道通知及团队工作区与角色权限"
+   ],
+   "use_cases": [
+    "为 PostgreSQL/MySQL/MariaDB/MongoDB 实例建立定时备份与灾难恢复（PITR）流程",
+    "在 S3、Google Drive、FTP 等多种存储上保存加密备份并自动校验可恢复性",
+    "团队场景下集中管理多数据库的备份调度、保留策略与备份状态通知"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL backup tool ／ Databasus is a free, open source and self-hosted tool to backup PostgreSQL. Make backups with different storages (S3, Google Drive, FTP, etc.) and notifications about progress (Slack, Discord, Telegram, etc.). With a focus on Point-in-Time Recovery at low RPO/ ／ - **PostgreSQL**: 14, 15, 16, 17 and 18 (physical and logical)",
+     "lines": [
+      3,
+      4,
+      104
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **MySQL**: 5.7, 8.0, 8.4, 9 and 26 (logical only)",
+     "lines": [
+      105
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **MariaDB**: 5.5, 10, 11, 12 and 13 (logical only)",
+     "lines": [
+      106
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为备份 PostgreSQL/MySQL/MariaDB/MongoDB 的自托管备份工具，属为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Databasus is a free, open source and self-hosted tool to backup PostgreSQL. Make backups with different storages (S3, Google Drive, FTP, etc.) and notifications about progress (Slack, Discord, Telegram, etc.). With a focus on Point-in-Time Recovery at low RPO/RTO ／ ### 💾 **Supported databases** ／ ### 📦 Installation (docs)",
+   "evidence_lines": [
+    4,
+    102,
+    116
+   ]
+  },
+  "fn": "databasus/databasus",
+  "sha": "fb96ebc4c3ce",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d59bc46f056e": {
+  "identity": {
+   "one_liner": "Go 编写的 CouchDB 兼容可嵌入数据库",
+   "review": "goydb 是用 Go 实现的、与 CouchDB HTTP API 兼容的可嵌入文档数据库，提供文档 CRUD、附件、视图、Mango 查询、全文检索和多主复制。供希望在 Go 应用内集成 CouchDB 式存储与同步能力的开发者使用，也可通过 Docker 独立运行。默认内置 bbolt 存储引擎，SQLite 为可选引擎；README 自述尚未经过长期生产加固，不建议直接替换 CouchDB。",
+   "highlights": [
+    "实现大部分 CouchDB HTTP API：文档 CRUD、附件、视图、Mango 查询、全文搜索与复制协议",
+    "支持嵌入式使用（Go API）与独立服务器两种运行方式，提供 Fauxton UI 接入",
+    "存储引擎可按库选择：默认 bbolt，可通过 -tags sqlite 启用 SQLite 引擎"
+   ],
+   "use_cases": [
+    "在 Go 应用中嵌入 CouchDB 式文档存储与同步能力",
+    "以独立服务运行并与 CouchDB 之间进行双向/持续复制",
+    "通过自定义 HTTP 路由钩子在同一进程中扩展 API"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The storage engine is the opposite: bbolt is always built in, and SQLite is ／ an opt-in addition, enabled with `-tags sqlite`: ／ go build -tags sqlite ./cmd/goydb ／ The official `ghcr.io/goydb/goydb` Docker image is built with `-tags sqlite`,",
+     "lines": [
+      89,
+      90,
+      92,
+      94
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是一个数据库引擎，属于为数据存储生态提供的基础组件，而非使用其他数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "goydb, a couchdb compatible embeddable database written in go ／ goydb is under active development and hasn't seen the years of hardening that ／ Most of the CouchDB HTTP API is implemented, including document CRUD,",
+   "evidence_lines": [
+    3,
+    65,
+    69
+   ]
+  },
+  "fn": "goydb/goydb",
+  "sha": "d59bc46f056e",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a1a8523d4f85": {
+  "identity": {
+   "one_liner": "Python 编写的现代 DX cluster 核心，支持 telnet、Web UI 与 SQLite 持久化",
+   "review": "pyCluster 是一个用 Python 实现的业余无线电 DX cluster 服务端，为用户提供 telnet 接入和公共 Web UI，为系统管理员提供 sysop 控制台管理节点、用户与协议策略。它将 spots、消息和用户偏好存入 SQLite，可与 DXSpider 系节点互连，采用单机独立部署模型，面向业余无线电爱好者搭建 cluster 节点使用。",
+   "highlights": [
+    "提供 telnet 与公共 Web UI 两种用户接入方式，以及 sysop Web 管理控制台",
+    "使用 SQLite 存储 spots、消息和用户偏好，支持按年龄清理数据",
+    "支持与 DXSpider 系遗留集群节点的链接，并集成 fail2ban 与 systemd 部署工具"
+   ],
+   "use_cases": [
+    "在 Linux 主机或树莓派上独立部署业余无线电 DX cluster 节点",
+    "为集群用户提供 telnet 与网页方式查看和发布 spots",
+    "与 DXSpider 系遗留节点建立多链接拓扑"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite persistence, CTY and wpxloc refresh tooling, and fail2ban integration ／ - stores spots, messages, and user preferences in SQLite",
+     "lines": [
+      21,
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明将 spots、消息和用户偏好存储在 SQLite 中，属于使用数据库存储数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pyCluster is a modern DX cluster core written in Python. ／ - stores spots, messages, and user preferences in SQLite ／ pyCluster is intended to be installed as a standalone product on a clean system.",
+   "evidence_lines": [
+    3,
+    30,
+    39
+   ]
+  },
+  "fn": "AI3I/pyCluster",
+  "sha": "a1a8523d4f85",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

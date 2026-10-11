@@ -8955,5 +8955,150 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2850c79b9fc3": {
+  "identity": {
+   "one_liner": "AI 代理记忆与检查点存储防篡改能力的符合性测试套件",
+   "review": "该仓库通过自身 API 写入数据、在后台篡改（九类编辑）再读取，度量各记忆/检查点存储是否察觉篡改，覆盖 LangGraph、OpenAI Agents SDK、LlamaIndex、Letta、Mem0 及多个完整性工具，方法对应 IETF 草案。供研究与评估代理记忆完整性的人员使用，以 Python 运行，结果经 CI 校验与网站同步。",
+   "highlights": [
+    "定义并执行 T1–T9 九类篡改测试，对应 IETF 草案方法",
+    "对 18 个记忆/检查点存储逐版本测量，结果可由固定测试复现",
+    "提供评分表与结果文件生成网站，CI 校验两者一致"
+   ],
+   "use_cases": [
+    "评估代理记忆/检查点存储的篡改检测能力",
+    "为存储工具的完整性声明提供可复现的基准测试",
+    "跟踪 IETF 代理内存基准草案方法的落地验证"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|LangGraph `PostgresSaver`|langgraph-checkpoint-postgres 3.1.2 on PostgreSQL 16|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted| ／ Two patterns run through the table. The frameworks (LangGraph on SQLite, Postgres and Redis; OpenAI Agents SDK; LlamaIndex; CrewAI; Letta; Mem0; Vertex AI Memory Bank) make no integrity claim and serve every applicable edit; for them this is a design gap, not ",
+     "lines": [
+      27,
+      56
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|LangGraph `SqliteSaver`|langgraph-checkpoint-sqlite 3.1.1|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted| ／ |LlamaIndex `Memory` over SQLite|llama-index-core 0.14.24|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted| ／ |MythologIQ Agent Memory reference runtime, SQLite canonical substrate, read path|agent-memory-reference 0.2.0 at f2aef57|rejected|rejected|rejected|rejected|rejected|rejected|rejected|rejected|accepted| ／ Two patterns run through the table. The frameworks (LangGraph on SQLite, Postgres and Redis; OpenAI Agents SDK; LlamaIndex; CrewAI; Letta; Mem0; Vertex AI Memory Bank) make no integrity claim and serve every applicable edit; for them this is a design gap, not ",
+     "lines": [
+      26,
+      30,
+      48,
+      56
+     ]
+    }
+   ],
+   "dbs": [],
+   "eco": "unclear",
+   "eco_why": "它不服务于数据库本身，而是测试 AI 代理记忆层（部分运行在 SQLite/Postgres 之上），生态位介于工具与应用之间。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A conformance test suite that measures whether AI agent memory and checkpoint stores notice when they are tampered with. ／ The nine edits: T1 content tamper, T2 tail truncation, T3 middle deletion, T4 reordering, T5 forged insertion, T6 cross-context replay, T7 rollback replay, T8 metadata tamper, and T9 snapshot rollback, which restores an older complete copy of the store after one more genuine record was written through the tool's own API. T1 to T8 are the edits proposed as the test method for IETF draft-han-bmwg-agent-security-benchmark metric 5.4.7 and defined in draft-khandelwal-bmwg-agent-memory-integrity. T6, T7 and T9 use only bytes the store itself wrote, in the wrong place or at the wrong time; they are the edits that separate encryption from integrity, and T9 is the one that separates a stored head from an anchored one: a head kept beside the records rolls back with them. T9 is measured where the adapter has the snapshot hooks; a blank T9 cell means not yet measured, not a pass. ／ The public site at agentmemoryintegrity.org is generated from the same results file by `python site/build.py` (output in `docs/site/`), and CI fails if the site and the results file disagree. The runner prints the same words as these tables (accepted, rejected, reported; surfaced, kept out), the at-rest words following the method proposed for IETF draft-han-bmwg-agent-security-benchmark 5.4.7. The tests pin the underlying status values (`safe`, `VULNERABLE`, `n/a`), so a wording change can never move a cell.",
+   "evidence_lines": [
+    5,
+    22,
+    52
+   ]
+  },
+  "fn": "tech4biz-yasha/agent-memory-integrity",
+  "sha": "2850c79b9fc3",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "28b7c165f23c": {
+  "identity": {
+   "one_liner": "Soroban 链上事件索引器，写入 SQLite 并提供 REST API",
+   "review": "该项目通过轮询 Soroban RPC 的 getEvents 接口，将 fundkeep-contract 合约发布的四类事件解码后写入两张 SQLite 表，并提供 Express REST API 供前端查询目标和活动历史。面向 fundkeep-app 仪表盘使用，需 Node.js v22.12+，部署依赖持久化磁盘以保留索引数据与游标。",
+   "highlights": [
+    "定期轮询 Soroban RPC getEvents 并从保存的游标处增量索引事件",
+    "将 goal_created、deposit、unlock、withdraw 四类事件 upsert 到 goals 与 activity 两张 SQLite 表",
+    "提供 /health、/api/goals/:owner、/api/activity/:owner 等 REST 端点"
+   ],
+   "use_cases": [
+    "为 fundkeep-app 仪表盘提供目标与活动历史查询",
+    "替代前端从原始链上事件重复推导状态的读取路径",
+    "通过 render.yaml 部署到 Render 并附带健康检查与持久化磁盘"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Indexes events from the fundkeep-contract Soroban contract into SQLite, and serves them over a small REST API for fundkeep-app's dashboard and activity feed. ／ A poller calls the Soroban RPC's `getEvents` on an interval, starting from a saved cursor (or a recent ledger window on first run), decodes the four event types `fundkeep-contract` publishes (`goal_created`, `deposit`, `unlock`, `withdraw`), and upserts them i",
+     "lines": [
+      3,
+      11
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将索引结果持久化存储在 SQLite 中并从其读取，README 明确说明数据写入两张 SQLite 表",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Indexes events from the fundkeep-contract Soroban contract into SQLite, and serves them over a small REST API for fundkeep-app's dashboard and activity feed. ／ A poller calls the Soroban RPC's `getEvents` on an interval, starting from a saved cursor (or a recent ledger window on first run), decodes the four event types `fundkeep-contract` publishes (`goal_created`, `deposit`, `unlock`, `withdraw`), and upserts them into two SQLite tables: `goals` (current state per goal) and `activity` (an append-only log). A small Express API reads from those tables. ／ The committed `render.yaml` is the authoritative Render Blueprint. It uses Node 22, a health check, the verified contract allowlist, restrictive production CORS and a persistent disk for SQLite. The disk is required: without it, both indexed data and the ledger cursor reset on every deploy.",
+   "evidence_lines": [
+    3,
+    11,
+    49
+   ]
+  },
+  "fn": "fundkeep-web/fundkeep-indexer",
+  "sha": "28b7c165f23c",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

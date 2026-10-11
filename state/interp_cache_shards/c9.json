@@ -7841,5 +7841,290 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3cf36b5158b3": {
+  "identity": {
+   "one_liner": "开源电子实验记录本（ELN），浏览器访问的研究实验与资源管理 Web 应用",
+   "review": "eLabFTW 是面向科研团队的电子实验记录本 Web 应用，用于记录和组织实验，并提供数据库功能存储抗体、细胞系等资源对象。通过浏览器访问，支持多团队共用同一部署，通过 Docker 安装运行，底层依赖 MySQL 存储数据，提供 REST API 和权限系统。适用于科研机构和企业的实验记录与可追溯性管理。",
+   "highlights": [
+    "提供实验记录本和资源数据库功能，可存储试剂、设备、细胞系等对象",
+    "提供公共 REST API，并支持多种格式导入导出、可信时间戳和区块链时间戳",
+    "通过 Docker 容器方式安装，浏览器访问，支持同一部署托管多个研究团队"
+   ],
+   "use_cases": [
+    "科研机构或实验室统一部署电子实验记录系统",
+    "实验室试剂、耗材、设备等资源的编目与预约管理",
+    "通过 API 与第三方系统集成或批量导入导出实验数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**eLabFTW** can easily be installed on any GNU/Linux server. It requires at least 512 MB of RAM (1 GB recommended) and 300 MB of disk space. Installation is done through Docker, so Docker needs to be installed on the server. Since it runs in a Docker container",
+     "lines": [
+      53
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "eLabFTW 是使用 MySQL 存储数据的 Web 应用（电子实验记录本），而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "源代码采用 GNU AGPL 许可，名称与品牌受商标保护",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**eLabFTW®** is an electronic lab notebook manager for research teams. ／ It lets you store and organize your research experiments easily. It also features a database where any kind of objects (such as antibodies, plasmids, cell lines, boxes, _etc_.) can be stored. ／ **eLabFTW** can easily be installed on any GNU/Linux server. It requires at least 512 MB of RAM (1 GB recommended) and 300 MB of disk space. Installation is done through Docker, so Docker needs to be installed on the server. Since it runs in a Docker container, php, webservers or mysql do not have to be installed on your server. Everything is provided by the containers so different versions and extensions do not matter. This makes upgrading versions much easier.",
+   "evidence_lines": [
+    22,
+    24,
+    53
+   ]
+  },
+  "fn": "elabftw/elabftw",
+  "sha": "3cf36b5158b3",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a0ecbb8cbfbb": {
+  "identity": {
+   "one_liner": "AI 编码代理的本地持久化记忆服务器，基于 SQLite/MCP",
+   "review": "为 Claude Code、Codex CLI、Cursor 等 MCP 客户端提供本地持久化记忆，存储决策、事实与会话摘要，检索融合 BM25、本地嵌入与知识图谱，含 74 个 MCP 工具与团队服务器模式；默认配置不调用 LLM。适合日常使用编码代理的开发者和需要可本地运行、可检查的记忆基线的研究者。",
+   "highlights": [
+    "通过 MCP 协议向任意客户端提供记忆读写，默认配置读写均不调用 LLM",
+    "检索融合 BM25 全文、本地密集嵌入、模糊匹配与知识图谱，支持互惠排序融合与可选交叉编码器重排",
+    "支持个人/团队多级存储隔离、角色、审计追踪，提供 PostgreSQL 后端与 Docker 部署"
+   ],
+   "use_cases": [
+    "为 AI 编码代理跨会话保留项目决策、修复方案与约定",
+    "本地可复现的代理记忆检索基准测试基线",
+    "团队级共享知识库，含权限与审计"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`pip install \"total-agent-memory[rerank]\"`. The PostgreSQL backend of the team ／ - **PostgreSQL** (team server backend): install the extra with ／ - Team server quick start, with dashboard, PostgreSQL, backup, onboarding and reports",
+     "lines": [
+      50,
+      136,
+      173
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Each store is one directory built around a SQLite database. Recall combines",
+     "lines": [
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库生态服务的 MCP 记忆服务器，以 SQLite/PostgreSQL 作为存储后端",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "total-agent-memory (TAM) is an open-source memory server for AI coding agents. ／ Each store is one directory built around a SQLite database. Recall combines ／ `pip install \"total-agent-memory[rerank]\"`. The PostgreSQL backend of the team",
+   "evidence_lines": [
+    14,
+    21,
+    50
+   ]
+  },
+  "fn": "vbcherepanov/total-agent-memory",
+  "sha": "a0ecbb8cbfbb",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b189814c5ad1": {
+  "identity": {
+   "one_liner": "基于 Next.js 和 PostgreSQL 的开源团队聊天应用",
+   "review": "一个面向最多30人团队的开源即时通讯应用，提供私信、空间、线程、文件分享和语音消息，通过 Google 登录加入。使用 Next.js、React、TypeScript 构建，会话数据存于 PostgreSQL，身份认证由 Supabase 提供。需 Node.js 22.13+，可本地运行或通过 Tofu 平台（Pro 套餐）部署，自托管需额外配置 OAuth broker。",
+   "highlights": [
+    "支持私信、空间、线程、文件（≤5 MiB）与语音消息（≤2分钟）",
+    "支持 Google 登录、搜索、提及、星标与表情回应",
+    "以 PWA 形式在移动端浏览器运行，含单元与集成测试套件"
+   ],
+   "use_cases": [
+    "小规模团队的日常沟通与文件分享",
+    "需要自托管部署的团队消息应用",
+    "作为 coding agent 构建应用的部署示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A connected workspace needs PostgreSQL and Supabase identity settings. Tofu supplies these for the hosted app; .env.example lists the settings for your own deployment. Self-hosted Google sign-in also needs an authorized Tofu OAuth broker setup; environment val ／ Built with Next.js, React and TypeScript, with PostgreSQL for conversations and Supabase for identity. ／ The test suite includes unit tests, embedded SQL checks, native PostgreSQL and API integration, browser flows, failure injection and screenshot regressions. See the testing guide for coverage, CI, browser setup and source-bound integration checks. Screenshots ",
+     "lines": [
+      56,
+      60,
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其是以 PostgreSQL 存储会话数据的聊天应用，而非数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可，捆绑字体、图标与 emoji 数据另有各自许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A connected workspace needs PostgreSQL and Supabase identity settings. Tofu supplies these for the hosted app; .env.example lists the settings for your own deployment. Self-hosted Google sign-in also needs an authorized Tofu OAuth broker setup; environment values alone do not configure it. Keep populated environment files and credentials out of Git. See runtime and data handling for authorization, limits and retry behavior. ／ Built with Next.js, React and TypeScript, with PostgreSQL for conversations and Supabase for identity.",
+   "evidence_lines": [
+    56,
+    60
+   ]
+  },
+  "fn": "airisorg/tofu-chat",
+  "sha": "b189814c5ad1",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "06327bdc51b8": {
+  "identity": {
+   "one_liner": "本地优先的 Android 健身训练记录与渐进超负荷追踪应用",
+   "review": "Omega 是一款运行于 Android 的本地优先健身追踪应用，用于记录训练组数、追踪渐进超负荷、管理自定义分化计划。基于 React Native 与 expo-sqlite 构建，数据全部存储于设备内嵌 SQLite，不联网、无遥测，并提供 JSON 格式的整库导出导入。适合注重数据私有、希望离线管理训练记录的用户；许可证为 PolyForm Noncommercial，禁止商业使用。",
+   "highlights": [
+    "数据全部存储于设备内嵌 SQLite（WAL 模式），通过 PRAGMA user_version 管理 schema 版本迁移",
+    "支持 JSON 格式的完整数据库导出/导入，实现跨设备数据迁移",
+    "提供估计 1RM 曲线、训练量趋势分析及崩溃恢复的会话草稿持久化"
+   ],
+   "use_cases": [
+    "离线记录健身房训练组数并追踪力量渐进",
+    "按自定义分化计划（PPL、Upper/Lower 等）管理训练例程",
+    "通过导出/导入 JSON 在设备间迁移训练数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Omega is a local-first workout tracker and progressive overload manager for Android. It stores everything on-device in SQLite — no accounts, no cloud sync, no telemetry. You own your training data, period. ／ All data lives in an embedded SQLite database on the device. WAL journaling, foreign-key cascades, busy timeouts, and a singleton connection guard protect against concurrency issues. The schema is versioned with `PRAGMA user_version` migrations. No network cal ／ |**Database**|expo-sqlite 16.0|Embedded relational storage|",
+     "lines": [
+      15,
+      48,
+      83
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用将训练数据存于内嵌 SQLite，仅使用数据库而非为数据库生态服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial License 1.0.0，禁止商业使用",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Omega is a local-first workout tracker and progressive overload manager for Android. It stores everything on-device in SQLite — no accounts, no cloud sync, no telemetry. You own your training data, period. ／ All data lives in an embedded SQLite database on the device. WAL journaling, foreign-key cascades, busy timeouts, and a singleton connection guard protect against concurrency issues. The schema is versioned with `PRAGMA user_version` migrations. No network calls are made — ever. ／ |**Database**|expo-sqlite 16.0|Embedded relational storage|",
+   "evidence_lines": [
+    15,
+    48,
+    83
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ASSAS-Labs/Omega",
+  "sha": "06327bdc51b8",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

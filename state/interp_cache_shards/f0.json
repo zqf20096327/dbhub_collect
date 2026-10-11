@@ -8607,5 +8607,204 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "831126a01c28": {
+  "identity": {
+   "one_liner": "自托管音乐发现与点播应用，对接 Lidarr 或 nexcrate",
+   "review": "nexbeat 是一个面向家庭自托管环境的 Web 应用，用户可浏览推荐、按流派浏览、在 MusicBrainz 搜索并向 Lidarr 或 nexcrate 发起点播请求。提供账户邀请、配额、审批、OIDC 单点登录（authentik 一键接入）和 API token。后端 FastAPI，提供 Docker 镜像与源码运行方式；改动仅限添加和监控条目，不修改 Lidarr/nexcrate 设置。",
+   "highlights": [
+    "支持 ARR 与 NEX 双模式，请求分别发往 Lidarr 或 nexcrate（含事件流监听）",
+    "提供账户体系、按日/周/月的请求配额、可选审批与 API token",
+    "支持 OIDC 单点登录（authentik、Microsoft Entra ID、Keycloak、Authelia、Pocket ID 等）"
+   ],
+   "use_cases": [
+    "家庭/自托管媒体库中让多位用户点播音乐并受配额约束",
+    "通过 API token 将点播状态集成到个人 dashboard 或脚本",
+    "利用 ListenBrainz/MusicBrainz 数据发现新艺人与专辑"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述其为一个使用 Lidarr/nexcrate 服务及自身数据库的自托管应用，而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU Affero General Public License v3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Find music and request it from Lidarr or nexcrate with one click. ／ nexbeat is a small, self-hosted companion to Lidarr, built in the spirit of ／ ## Running with Docker",
+   "evidence_lines": [
+    3,
+    7,
+    56
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "DerKezorm/nexbeat",
+  "sha": "831126a01c28",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bdbd1fd3361d": {
+  "identity": {
+   "one_liner": "WasteFi 平台的 REST API 后端，使用 TypeScript/Express/Prisma/PostgreSQL",
+   "review": "一个为 WasteFi 废品回收支付平台提供的后端 REST API，处理账户认证、回收记录、材料定价、通过移动货币和 Stellar 的付款及数字材料护照，面向回收员与管理员使用。基于 TypeScript、Express、Prisma，PostgreSQL 14+ 为必需存储，Redis 可选；支持 Docker 部署，已配置 Railway 与 Render 平台。",
+   "highlights": [
+    "提供 auth、collections、payments、wallet、passports、admin 等路由模块",
+    "通过 Prisma 使用 PostgreSQL 存储数据，包含迁移与种子脚本",
+    "集成 M-Pesa、MTN Mobile Money、Airtel Money 三种移动货币支付接口",
+    "支持 Swagger UI/OpenAPI 文档与 Prometheus 指标"
+   ],
+   "use_cases": [
+    "为废品回收平台提供账户、回收记录与支付管理后端",
+    "处理移动货币与 Stellar 链上支付打款",
+    "生成可审计的数字材料护照"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL via Prisma ／ Requires Node.js 18 or later and PostgreSQL 14 or later. Redis is optional. ／ This brings up the API alongside PostgreSQL, Redis, and nginx as configured in",
+     "lines": [
+      15,
+      66,
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 PostgreSQL 存储数据的业务应用后端，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- PostgreSQL via Prisma ／ Requires Node.js 18 or later and PostgreSQL 14 or later. Redis is optional. ／ This brings up the API alongside PostgreSQL, Redis, and nginx as configured in",
+   "evidence_lines": [
+    15,
+    66,
+    90
+   ]
+  },
+  "fn": "WASTEFI-AFRICA/wastefi-backend",
+  "sha": "bdbd1fd3361d",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e78ad6d2eadc": {
+  "identity": {
+   "one_liner": "New API 的自托管扩展管理控制台，基于 Flask 读写 PostgreSQL",
+   "review": "该项目为已部署的 New API 补充统计与管理页面，提供用量统计、用户/令牌批量管理、定时配额、余额告警和飞书/钉钉/邮件通知等功能。面向 New API 管理员，以 Flask 容器运行，查询 New API 的 PostgreSQL 库并共用其管理员登录；需要 Docker Compose 和反向代理部署，仅支持 PostgreSQL 后端。",
+   "highlights": [
+    "提供用量统计、用户与令牌批量管理、定时配额规则和操作记录页面",
+    "支持飞书、钉钉、邮件多渠道余额告警通知，费用按月按渠道归档",
+    "用户和 KEY 修改通过 New API 官方接口执行，写操作记录审计日志"
+   ],
+   "use_cases": [
+    "为已部署的 New API 站点补充用量统计与对账页面",
+    "批量管理 New API 用户、令牌和额度",
+    "设置余额监控与多渠道告警通知"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "本项目需要已部署的 New API，目前支持 PostgreSQL 后端。应用用 Flask 编写，单独运行一个容器， ／ 准备好 New API、PostgreSQL、Docker Compose，以及 Nginx 或同等反向代理。 ／ - `PG*`：New API 原库的专用查询账号，授予所需表的 SELECT 权限。",
+     "lines": [
+      16,
+      51,
+      65
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 New API 服务的扩展管理控制台组件，读取其 PostgreSQL 库并通过官方接口执行操作",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "给 New API 补一套统计和管理页面：查用量、对账、设余额告警， ／ 本项目需要已部署的 New API，目前支持 PostgreSQL 后端。应用用 Flask 编写，单独运行一个容器， ／ 用户和 KEY 的修改通过 New API 官方接口执行，每组最多 5 个并发请求。",
+   "evidence_lines": [
+    12,
+    16,
+    40
+   ]
+  },
+  "fn": "ilove323/new-api-cockpit",
+  "sha": "e78ad6d2eadc",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

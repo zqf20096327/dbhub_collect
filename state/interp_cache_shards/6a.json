@@ -8793,5 +8793,270 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "60ab3239ad4a": {
+  "identity": {
+   "one_liner": "可在页面上直接编辑内容的 Svelte 网站构建框架",
+   "review": "Editable 是一个基于 Svelte 的网站框架，内置编辑引擎 Svedit，编辑者可直接在页面上修改文本、媒体与节点数组，内容模型和组件仍由代码仓库管理，数据存储于本地 SQLite 数据库并提供数据重置与备份脚本。适合前端开发者自建可由非技术人员编辑的网站。",
+   "highlights": [
+    "提供 TextProperty、MediaProperty、NodeArrayProperty、CustomProperty 等编辑原语，通过 schema 定义内容结构",
+    "每个站点是独立的 git 仓库，可通过 upstream remote 拉取上游更新",
+    "内容数据存储于 SQLite 数据库（data/db.sqlite3），上传资源存于 assets 目录"
+   ],
+   "use_cases": [
+    "开发者自建内容型网站并由编辑人员在页面上直接维护内容",
+    "基于模板定制内容类型、组件与样式并独立部署",
+    "本地通过 pnpm 脚本重置或备份站点数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "That folder is `data/`: an SQLite database (`db.sqlite3`) and uploaded assets (`assets/`). Locally it defaults to `./data`; on Fly.io it's a persistent volume at `/data`; on a VPS it's `/data` on the host, bind-mounted into the container at the same path. The ",
+     "lines": [
+      669
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明站点内容存储于随附的 SQLite 数据库文件，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Editable lets you build and edit a Svelte website without adding a separate CMS. Editors work directly on the page, while the content model, components, layouts, and styling remain in the codebase you own. Use the included defaults and adapt the colors and fonts to deploy a beautiful site within minutes — or customize the entire layout and model your own content types. This manual explains how to build and run a site with Editable. ／ Each Editable site lives in its own checkout with its own git repository — one folder, one app, one deployment. You start from Editable as a template, own all the code from day one, and keep Editable connected as `upstream` so you can pull in improvements later (see Upgrading).",
+   "evidence_lines": [
+    3,
+    58
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "michael/editable",
+  "sha": "60ab3239ad4a",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3b2c9a510d90": {
+  "identity": {
+   "one_liner": "将 Claude Code 会话历史索引为本地可搜索知识库的 MCP 服务器",
+   "review": "读取 Claude Code 的会话 JSONL 记录，用 FTS5 全文索引构建本地知识库，并提供 13 个 MCP 工具供 Claude 搜索历史决策、命令与凭据；纯 Python 标准库实现、数据不出本机，仅支持 Claude Code 记录且索引含敏感信息的脱敏依赖模式匹配，需要 Python 3.10+ 且内置 FTS5。",
+   "highlights": [
+    "提供 13 个 MCP 工具，用于会话全文检索、时间线重建、凭据查询与代码索引",
+    "纯 Python 标准库实现，无第三方依赖，凭据按模式脱敏后写入索引",
+    "CJK 采用 bigram 预分词，在 FTS5 索引上保留 BM25 排序"
+   ],
+   "use_cases": [
+    "跨项目检索历史会话中的决策、命令与集成实现",
+    "查询历史用过的环境变量/凭据候选值",
+    "识别重复实现并声明规范实现路径"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "redaction. The index directory is restricted to mode 0700; every generated SQLite ／ - **Python 3.10+**, with FTS5 compiled into the bundled sqlite3. The system Python on macOS",
+     "lines": [
+      46,
+      192
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其以 SQLite 作为索引存储，为数据库生态提供服务的证据不足。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This indexes all of it and hands Claude 13 MCP tools to search it. You just ask normally. ／ `⟦SECRET:fingerprint⟧` before they are written. Plaintext lives only in `vault.db` ／ CJK search uses bigram pre-tokenization. FTS5's built-in trigram cannot match two-character",
+   "evidence_lines": [
+    14,
+    42,
+    141
+   ]
+  },
+  "fn": "nameforjt-afk/session-knowledge",
+  "sha": "3b2c9a510d90",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a03e82390ca6": {
+  "identity": {
+   "one_liner": "PostgreSQL/Greenplum/Greengage 的数据库内任务调度扩展",
+   "review": "pg_task 是一个以 PostgreSQL 后台 worker 方式运行的任务调度扩展，支持 PostgreSQL、Greenplum 和 Greengage。用户通过向 task 表插入行来调度任意 SQL 命令，支持一次性、延时、定时与重复执行，结果写回同一行；无需外部守护进程，通过 GUC 配置，经 PGXS 源码编译安装。",
+   "highlights": [
+    "以数据库后台 worker 运行，通过向 task 表插入行调度 SQL 任务",
+    "支持定时、延时、重复执行及并发数、超时等 GUC 级配置",
+    "通过 PGXS 标准 extension 方式构建安装"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 中定时/延时执行 SQL 维护任务",
+    "Greenplum/Greengage 集群内的异步后台作业调度",
+    "以纯表查询方式管理任务状态与结果的应用场景"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pg_task ／ PostgreSQL, Greenplum and Greengage job scheduler `pg_task` allows to execute any sql command at any specific time at background asynchronously.",
+     "lines": [
+      1,
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展为数据库提供调度能力，属于数据库生态工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL, Greenplum and Greengage job scheduler `pg_task` allows to execute any sql command at any specific time at background asynchronously. ／ It runs entirely inside the database as a set of background workers — no external daemon, no client library, nothing to babysit outside PostgreSQL itself. You enable it with a single GUC, and from then on scheduling a job is just an `INSERT` into a plain table: `pg_task` polls that table, runs `input`, and writes the result back into the same row (see Task state machine for exactly how).",
+   "evidence_lines": [
+    3,
+    5
+   ]
+  },
+  "fn": "RekGRpth/pg_task",
+  "sha": "a03e82390ca6",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "76b3e332fab0": {
+  "identity": {
+   "one_liner": "多语言香水香氛结构化数据集，CSV+Parquet 分发并附计量 HTTP API",
+   "review": "FragDB 提供约 14 万条香水结构化记录及 530 万行评论、新闻、社区讨论数据，以六个 CSV 文件与三个 Parquet 数据集组织，附带字段文档和按条计费的 HTTP API。面向 NLP、推荐系统、市场研究等数据使用者；数据为商业许可（CC-BY-NC-4.0），完整数据需付费，仓库内含免费 10 条样本。",
+   "highlights": [
+    "六个 CSV 文件通过唯一 ID 关联，管道符分隔、UTF-8 编码，标签覆盖 23 种语言",
+    "附 5.3M+ 行 Parquet 用户生成内容数据集（评论、新闻、社区讨论）",
+    "提供按记录计量的 HTTP 数据 API，支持 list/basic/full 三级详情"
+   ],
+   "use_cases": [
+    "多语言 NLP 语料构建与情感分析",
+    "香水推荐系统与知识图谱构建",
+    "香氛行业市场研究与趋势分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "### SQL (PostgreSQL)",
+     "lines": [
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是数据产品，README 仅在 Quick Start 中给出用 PostgreSQL COPY 导入 CSV 的示例，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "CC-BY-NC-4.0，数据分层付费（$200 Core 至终身订阅），API 按记录计量收费",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The most comprehensive fragrance database available — **155,800+ structured records** across six interconnected CSV files with **23 language translations**, plus **5.3M+ user-generated content rows** in Apache Parquet companion datasets covering **user reviews**, **editorial news articles**, and **community discussions**. ／ ### SQL (PostgreSQL) ／ ## Companion Parquet Datasets — User Reviews, News, and Community Comments",
+   "evidence_lines": [
+    3,
+    85,
+    96
+   ]
+  },
+  "fn": "FragDB/fragrance-database",
+  "sha": "76b3e332fab0",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

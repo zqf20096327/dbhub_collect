@@ -9909,5 +9909,149 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b9898d019e8e": {
+  "identity": {
+   "one_liner": "开源人才与胜任力管理平台，基于 FastAPI 和 Next.js 构建",
+   "review": "该仓库是一个自托管的人才与胜任力管理平台，提供胜任力框架、360° 评估、发展计划、考试和招聘流水线等功能，通过 500+ REST API 端点提供服务。面向需要内部人才管理的组织，支持 Docker Compose 部署，使用 PostgreSQL 17 存储数据、Redis 7 作缓存，并集成 LLM SDK 提供能力生成和简历解析等功能，采用 AGPLv3 许可。",
+   "highlights": [
+    "提供胜任力框架、360° 评估、发展计划、考试和招聘流水线等模块",
+    "提供 500+ REST API 端点并附带 Swagger 文档",
+    "支持多租户数据隔离与 Docker Compose 自托管部署"
+   ],
+   "use_cases": [
+    "组织内部开展 360° 评估与胜任力矩阵分析",
+    "管理员工发展计划、职级体系与内部人才市场",
+    "自托管运行人力资源评估与考试系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# Edit .env: set JWT_SECRET, POSTGRES_PASSWORD, and an email provider ／ docker compose up -d # Start PostgreSQL + Redis ／ |Database|PostgreSQL 17|",
+     "lines": [
+      30,
+      43,
+      55
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 技术栈声明使用 PostgreSQL 17 作为数据库存储平台数据，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPLv3，附加第 7 条许可以允许与 Enterprise Edition 模块组合",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Open source talent & competency management platform.** ／ docker compose up -d          # Start PostgreSQL + Redis ／ |Database|PostgreSQL 17|",
+   "evidence_lines": [
+    3,
+    43,
+    55
+   ]
+  },
+  "fn": "HRPulsar/hrpulsar",
+  "sha": "b9898d019e8e",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "be7f95803386": {
+  "identity": {
+   "one_liner": "基于 RAG 的个人作品集检索问答整理系统",
+   "review": "这是一个面向教学实践的 RAG 网页应用，将 pdf/hwp/docx 等文件解析为文本块后存入 Node 内置的 SQLite（FTS5），并用关键词与嵌入混合检索实现问答、简历与自我介绍生成。检索、评分设计及隐私掩码等实现细节均在源码中，适合学习者用于理解 RAG 的完整形态；语义功能需配置 Gemini API Key。",
+   "highlights": [
+    "通过 FTS5 与嵌入的 RRF 混合实现韩语关键词及语义混合检索",
+    "支持 pdf/hwp/hwpx/docx/pptx/xlsx/txt 文本解析与变更文件增量索引",
+    "入库前自动掩码身份证号及护照号等敏感信息"
+   ],
+   "use_cases": [
+    "作品集、简历、自我介绍等材料的整理与依据检索",
+    "RAG 实现结构的学习实践",
+    "利用 NotebookLM 生成演示文稿资料"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`v22.5.0` 보다 낮으면 먼저 Node 를 올리세요. 이 프로젝트는 Node 에 내장된 `node:sqlite` 를 쓰는데, ／ (pdf/hwp/docx → 형식별 파서 → 약 900자, → SQLite 한 파일 ／ > 내 프로필은 SQLite DB 안에 있어서 올릴 파일이 없습니다. 그래서 0단계가 필요합니다.",
+     "lines": [
+      34,
+      75,
+      296
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用内置 SQLite 存储文档与配置数据的 RAG 应用，而非为数据库生态提供服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "내 자료를 모아 **검색하고, 근거를 확인하고, 이력서·자기소개서·발표자료로 정리하는** 웹 애플리케이션입니다. ／ `v22.5.0` 보다 낮으면 먼저 Node 를 올리세요. 이 프로젝트는 Node 에 내장된 `node:sqlite` 를 쓰는데, ／ (pdf/hwp/docx   →   형식별 파서    →    약 900자,     →    SQLite 한 파일",
+   "evidence_lines": [
+    3,
+    34,
+    75
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "yilowoon/portfolio-rag-class",
+  "sha": "be7f95803386",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

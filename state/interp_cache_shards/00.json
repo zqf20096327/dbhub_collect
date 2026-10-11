@@ -8244,5 +8244,146 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a40659a61a12": {
+  "identity": {
+   "one_liner": "自托管 AI 求职应用：抓取职位、评分简历、生成求职信并跟踪申请",
+   "review": "ApplyPack 是一个开源求职工具：定时抓取职位源并用 AI 分类器打分、检测假职位、根据简历生成改写建议和求职信、以看板跟踪申请。面向求职的软件工程师，数据存储在用户自己的 Postgres 中，支持 7 种可切换 AI 后端（含本地模型），通过 npm 源码或 Docker Compose 运行。",
+   "highlights": [
+    "支持 33 类职位源（12 家 ATS 厂商、聚合器、国家板块、RSS），并提供 Telegram/Discord 提醒",
+    "提供 AI 简历评分、求职信生成（带事实校验）与 .docx/.pdf 输出",
+    "支持 7 种 AI 后端配置并带自动故障切换，数据存于用户本地 Postgres"
+   ],
+   "use_cases": [
+    "个人求职者自动监控职位并筛选匹配岗位",
+    "针对具体职位描述修改简历并生成求职信",
+    "用看板跟踪投递进度并查看搜索漏斗统计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The database comes with ApplyPack: no Docker, no PostgreSQL, no AI key ／ docker compose up -d # postgres + worker + dashboard → http://localhost:4747 ／ Postgres, development and hosting for other people: ／ 33 kinds of source ──▶ normalize ──▶ base filter ──▶ AI classifier ──▶ Postgres ──▶ Telegram",
+     "lines": [
+      123,
+      157,
+      161,
+      209
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据存储在用户自己的 Postgres（L123、L176、L209），属使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "The database comes with ApplyPack: no Docker, no PostgreSQL, no AI key ／ docker compose up -d    # postgres + worker + dashboard → http://localhost:4747 ／  33 kinds of source ──▶ normalize ──▶ base filter ──▶ AI classifier ──▶ Postgres ──▶ Telegram",
+   "evidence_lines": [
+    123,
+    157,
+    209
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "applypack/applypack",
+  "sha": "a40659a61a12",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b480890485b1": {
+  "identity": {
+   "one_liner": "Windows 托盘 Wi-Fi/网络故障监测应用，诊断断连原因并记录",
+   "review": "一个 Windows 托盘应用，实时监测 Wi-Fi/有线、路由器与互联网连接状态，断连时定位故障发生环节并给出建议，记录历史、速度测试和 Wi-Fi 信道视图。面向 Windows 11 终端用户，需要开启位置服务；技术栈为 .NET 10/WPF/Blazor，使用 SQLite 本地存储数据。",
+   "highlights": [
+    "实时监测 Wi-Fi/有线、路由器与互联网链路状态，记录故障位置与处理建议",
+    "提供历史记录、速度测试与 Wi-Fi 信道视图，仅在重要问题时通知",
+    "本地运行，不上传用户数据，仅 ping 路由器与 1.1.1.1 等"
+   ],
+   "use_cases": [
+    "家庭/办公网络间歇断连的排查与定位",
+    "网络故障历史追溯与速度测试",
+    "Wi-Fi 信道拥挤情况查看"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- .NET 10, WPF, Blazor, MudBlazor and SQLite",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用 SQLite 作为本地存储，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Windows tray app that tells you when your connection drops, where it went wrong and what to do about it. ／ - Live status of your Wi-Fi or cable, router and internet, powerline adapters included ／ - .NET 10, WPF, Blazor, MudBlazor and SQLite",
+   "evidence_lines": [
+    3,
+    12,
+    27
+   ]
+  },
+  "fn": "poolfullofmilk/WiFiWatch",
+  "sha": "b480890485b1",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

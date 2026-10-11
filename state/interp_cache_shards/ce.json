@@ -9376,5 +9376,204 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d3632a87fdad": {
+  "identity": {
+   "one_liner": "Claude Code/Codex 多智能体团队操作系统，MCP 工具加持久化协作层",
+   "review": "为 Claude Code 与 Codex 提供共享任务墙、项目记忆、会议记录与 React 仪表盘的团队协作层，供使用多智能体工作流的开发者跨会话保留上下文。后端为 Python/FastAPI，存储层基于 SQLite（WAL），并以 BM25 实现记忆检索；PostgreSQL 支持仍在路线图中，当前仅可用 SQLite。",
+   "highlights": [
+    "提供 116 个 MCP 工具与 232 个 REST 端点，用于跨会话任务、记忆与消息管理",
+    "存储层基于 SQLite（WAL 日志），记忆检索采用纯 Python BM25",
+    "提供实时 React 仪表盘，跟踪 Workflow 运行、agent 遥测与停顿检测"
+   ],
+   "use_cases": [
+    "多智能体开发团队跨会话保留任务与决策记录",
+    "同时使用 Claude Code 与 Codex 的团队的统一任务墙与消息通道",
+    "通过仪表盘观察 agent 运行状态与工具调用情况"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Shared OS API -> SQLite ／ Layer 2: Memory Manager — SQLite-backed store + pure-Python BM25 retrieval",
+     "lines": [
+      250,
+      263
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Layer 1: Storage — SQLite (WAL journaling) · PostgreSQL support on the roadmap",
+     "lines": [
+      264
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目自身使用 SQLite 存储任务、记忆等数据，是一个使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "3. Record progress, decisions and reports through the shared MCP tools. Other sessions can pick them up through the same project records and channels.",
+   "evidence_lines": [
+    43
+   ]
+  },
+  "fn": "CronusL-1141/AI-company",
+  "sha": "d3632a87fdad",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "da84c2915ca3": {
+  "identity": {
+   "one_liner": "自动化 Google Dorking 工具，生成搜索查询发现暴露资产",
+   "review": "DorkEye 是一个基于 Python 的 OSINT dorking 工具，通过生成并运行高级搜索查询来发现暴露的文件、目录、管理面板等 Web 资产，并内置 SQL/XSS 注入检测、元数据提取与数据库端口扫描，面向安全研究和渗透测试人员使用。以 CLI 交互为主，安装需 Python 环境。",
+   "highlights": [
+    "提供 dork 生成器，支持 soft/medium/aggressive 三种 YAML 模板模式",
+    "包含 SQL 注入与 XSS 注入检测（105/111 个 payload）",
+    "支持数据库端口扫描（15 种服务）与 13 步自动化分析流水线"
+   ],
+   "use_cases": [
+    "发现被搜索引擎索引的敏感文件、目录和配置",
+    "对单个 URL 直接进行 SQLi/XSS 检测",
+    "通过 dorking 采集子域名、邮箱等 OSINT 信息"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未表明其作为数据库生态工具/组件或基于数据库存储数据，仅含针对数据库的扫描能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**DorkEye** is an advanced, automated `OSINT DORKING TOOL` that leverages its capabilities to discover exposed web assets through intelligent search queries. ／ - It combines a powerful dork generator, a full SQL,XSS injection detection engine, a 13-step autonomous analysis pipeline, an adaptive recursive crawler and Database port scanner. ／ |🚪 DB Port Scan|15 services,no-auth probes. 3 levels severity `--dbscan`|",
+   "evidence_lines": [
+    25,
+    26,
+    54
+   ]
+  },
+  "fn": "xPloits3c/DorkEye",
+  "sha": "da84c2915ca3",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6455976fa169": {
+  "identity": {
+   "one_liner": "从真实问题出发的 AI 学习路径原型，Vue3+Node+SQLite 自托管",
+   "review": "WenFlow 是一个以真实问题澄清为起点的 AI 学习路径应用原型：通过多轮对话澄清目标、生成学习路径、回合式教学并按遗忘曲线复习，附带 18 页管理后台与虚拟学习者仿真。面向自托管学习场景，后端用 Prisma 管理主库与 System 双 SQLite 库。README 声明处于早期实验阶段，不建议存放重要数据。",
+   "highlights": [
+    "提供对话式目标澄清、路径生成与回合式教学流程，路径变更须经用户确认",
+    "持续追踪 LSS/KTL/LF/LSB 四项学习状态指标并做疲劳提醒",
+    "采用 File-as-Truth 的 Prompt 工程体系：core YAML 编译生成 md，数据库仅作运行时镜像"
+   ],
+   "use_cases": [
+    "自托管部署用于体验或验证问题驱动的 AI 学习流程",
+    "通过虚拟学习者仿真做功能验证与教学链路调试",
+    "使用内置管理后台进行教学会话、模型路由与成本观测"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**数据库（当前）**|SQLite（主库 51 表 + system 库 14 表，双库架构）| ／ 当前使用两个 SQLite 库，相对 URL 按各自 Schema 目录解析：",
+     "lines": [
+      149,
+      169
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用两个 SQLite 库存储自身业务数据（主库 51 表 + system 库 14 表），属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**数据库（当前）**|SQLite（主库 51 表 + system 库 14 表，双库架构）| ／ WenFlow 目前仍处于**早期开发阶段**，是一个用于验证教学概念的实验性原型。 ／ |**部署**|跨平台启动脚本（`npm run dev`：Windows PowerShell / Linux·macOS bash）+ 可选 Nginx（测试部署）+ Docker（Linux/macOS 推荐）|",
+   "evidence_lines": [
+    149,
+    184,
+    156
+   ]
+  },
+  "fn": "wenflow-org/wenflow",
+  "sha": "6455976fa169",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

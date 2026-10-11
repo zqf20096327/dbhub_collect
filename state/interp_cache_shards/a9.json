@@ -10224,5 +10224,75 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ba7c51975deb": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的跨会话记忆插件，带审批门与审计的 SQLite 记忆存储",
+   "review": "这是一个面向 DeepSeek Harness（DSH）的插件，为 AI Agent 提供跨会话记忆：通过类型化的 ctx.memory 服务读写本地 SQLite 数据库（node:sqlite、WAL、0600 权限），所有写入路径都经过审批门控制，并提供可重建的审计记录。记忆按 user/agent 两条轨道分层，每层有字符预算上限，快照在会话开始时冻结注入系统提示。适合 DSH 用户管理 Agent 长期记忆；注意该包自 2026-10-05 起已冻结，仅维护修复。",
+   "highlights": [
+    "所有写入路径（add/replace/remove/seed）经过服务层审批瀑布，writePolicy 支持 ask/auto/off 且对模型不可见",
+    "基于本地 SQLite（node:sqlite, WAL, 0600）存储，双轨道（user/agent）×双层级，带每层硬字符预算",
+    "写入可从 approval/asked + approval/decided + 插件审计表完整重建，/memory audit 命令可查看审计缺口"
+   ],
+   "use_cases": [
+    "为 DeepSeek Harness 上的 AI Agent 提供有界、审批门控的跨会话记忆",
+    "需要审计记忆写入记录、可重建审计轨迹的场景",
+    "对记忆注入内容有字符预算和冻结快照要求的 Agent 会话"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected int ／ **Read-only.** The database is opened with `node:sqlite` `readOnly: true` (no migrations, no WAL writes, no recall-count bump); a missing database returns empty results instead of crashing. ／ - **Data**: local SQLite database (`0600`), zero network, zero credentials.",
+     "lines": [
+      83,
+      160,
+      228
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "插件使用本地 SQLite 存储自身记忆数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`dsh-memento` is a capability seam, not another memory warehouse: a typed `ctx.memory` service, a local SQLite provider (`node:sqlite`, WAL, `0600`, at `$DSH_HOME/dsh-memento/memory.db`), and its consumers — the `memory` tool and a frozen snapshot injected into the system prompt. ／ > **Frozen on 2026-10-05. No new features.** This package still works, and it is not retired — but it no longer receives feature work. Only a genuine breakage will be fixed.",
+   "evidence_lines": [
+    83,
+    45
+   ]
+  },
+  "fn": "PerryLink/dsh-memento",
+  "sha": "ba7c51975deb",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

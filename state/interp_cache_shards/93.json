@@ -8551,5 +8551,268 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "12851ffcca74": {
+  "identity": {
+   "one_liner": "像素风游戏化 AI 学习应用：提问查资料、生成练习并复习",
+   "review": "StudentBuddy 是一个面向学习者的 AI 学习应用，将提问、资料检索、出题练习和间隔复习串联在同一段流程中，词条沉淀为卡牌与知识大陆地块，支持与 AI 或好友对战。用户可自带 AI 服务商密钥，提供 Windows 安装包本地运行，也提供在线体验版和外部 agent 存词接口。",
+   "highlights": [
+    "提供对话学习、资料对照阅读、AI 出题与图文复盘的完整学习流程",
+    "支持词条库、卡牌与知识大陆地块的间隔复习机制",
+    "提供外部 coding agent 专用接口，可存入带来源的词条与出题预产物"
+   ],
+   "use_cases": [
+    "个人自学：围绕感兴趣的问题查资料、理解概念并生成练习",
+    "间隔复习：将学过的概念沉淀为词条卡牌并按期挑战巩固",
+    "双人对战练习：与好友围绕同一组题目作答比拼"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是面向学习者的应用产品，数据库仅作为底层存储，未声明为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "StudentBuddy 把提问、查资料、做题和复习串在同一段学习过程中。你可以从营地里的一道热身题开始，也可以带着自己的问题或资料直接进入。 ／ - **在线使用**：打开 StudentBuddy，首页可免注册体验。公用体验账号的内容共享，私人学习资料请放在自己的账号里。 ／ - **本地使用**：下载 Windows 安装包，安装后在设置里配置自己的 AI 服务商。",
+   "evidence_lines": [
+    10,
+    113,
+    114
+   ]
+  },
+  "fn": "llwand1/studentbuddy-v2",
+  "sha": "12851ffcca74",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f12b29102b52": {
+  "identity": {
+   "one_liner": "AI agent 持久化记忆引擎，基于 SQLite+FTS5+向量实现多层召回",
+   "review": "abmind 是面向 AI agent 的持久化记忆与 RAG 引擎，将消息、记忆和向量存入本地 SQLite，通过 FTS5、trigram、embeddings 和摘要四层机制做召回，并包含夜间整理、注入检测和分级访问控制。面向构建 Node.js/MCP agent 的开发者，作为库、CLI 或 MCP 服务器运行；v0.2.7，Apache-2.0 许可。",
+   "highlights": [
+    "四层召回：FTS5 全文检索、trigram 模糊匹配、embedding 语义检索、整合摘要",
+    "夜间 sleep 维护进程：提取事实、生成摘要、检测矛盾、淘汰陈旧记忆",
+    "提供库、CLI 和 MCP server 三种接入方式，支持多宿主 agent 集成"
+   ],
+   "use_cases": [
+    "为 7x24 运行的 agent 构建跨会话持久记忆",
+    "多语言（含黏着语）对话记忆存储与召回",
+    "通过 MCP 为编辑器/CLI 宿主提供记忆工具"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Built for multilingual agents that run 24/7 — not a vector DB wrapper.** SQLite-backed, 4-layer recall (FTS5 + trigram + embeddings + consolidated summaries), overnight sleep maintenance, injection detection, context orchestration, and a classification syste ／ │ ├── memory.db # SQLite (messages, extracted memories, embeddings)",
+     "lines": [
+      7,
+      148
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 agent 生态提供记忆存储组件，SQLite 是其内置存储后端而非服务对象数据库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Built for multilingual agents that run 24/7 — not a vector DB wrapper.** SQLite-backed, 4-layer recall (FTS5 + trigram + embeddings + consolidated summaries), overnight sleep maintenance, injection detection, context orchestration, and a classification system inspired by NATO Admiralty Codes. ／ |**Library** (`import { MemoryManager } from \"abmind\"`)|Any Node.js agent| ／ │   ├── memory.db          # SQLite (messages, extracted memories, embeddings)",
+   "evidence_lines": [
+    7,
+    89,
+    148
+   ]
+  },
+  "fn": "aksika/abmind",
+  "sha": "f12b29102b52",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "45667e068d09": {
+  "identity": {
+   "one_liner": "开源数据门户元数据采集器，增量同步入 PostgreSQL",
+   "review": "Ceres 是一个 Rust 编写的 CLI 工具，从 CKAN、DCAT、Socrata、OpenDataSoft 等十类开放数据门户 API 读取数据集元数据，以增量方式同步到 PostgreSQL 目录，采用标记过期而非删除的策略，支持百万级记录目录的有限内存运行，并提供可选的 REST API、语义搜索和 Parquet 快照层。适合需要汇集多个开放数据门户元数据的政府数据或数据工程团队使用。",
+   "highlights": [
+    "支持十类门户 API：CKAN、DCAT、data.、Socrata、OpenDataSoft、ArcGIS Hub、CSW、STAC、SDMX 等",
+    "增量抓取，删除的数据集标记为 stale 而非物理删除，构建目录无需 API key 和 GPU",
+    "提供 REST API（含 OpenAPI 文档）、可选嵌入/语义搜索，以及带 SHA-256 校验的 Parquet 快照"
+   ],
+   "use_cases": [
+    "将多个开放数据门户的元数据汇集为统一的 PostgreSQL 数据目录",
+    "批量定时采集数百个门户并生成可校验的 Parquet 快照发布",
+    "为目录构建语义搜索或下游数据管道（如 Databricks pipeline）"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Harvest open data portal metadata into one PostgreSQL catalog. ／ Ceres reads dataset metadata from open data portals and keeps it in sync in PostgreSQL: incremental fetches, stale marking instead of deletion, and bounded memory on catalogs with millions of records. It speaks ten portal APIs: CKAN, DCAT (udata REST and SPARQ",
+     "lines": [
+      3,
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具以 PostgreSQL 作为元数据目录的存储组件，为数据门户采集流程服务，而非以数据库为核心业务的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Ceres reads dataset metadata from open data portals and keeps it in sync in PostgreSQL: incremental fetches, stale marking instead of deletion, and bounded memory on catalogs with millions of records. It speaks ten portal APIs: CKAN, DCAT (udata REST and SPARQL), Project Open Data `data.json`, Socrata, OpenDataSoft, ArcGIS Hub, OGC CSW, STAC and SDMX. ／ docker compose up db -d && cp .env.example .env && make migrate ／ Maintenance mode after v0.7.0: fixes and security updates land, new portal families are not planned. Known limits:",
+   "evidence_lines": [
+    12,
+    22,
+    66
+   ]
+  },
+  "fn": "AndreaBozzo/Ceres",
+  "sha": "45667e068d09",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "018ac6211c4b": {
+  "identity": {
+   "one_liner": "单二进制作业调度与编排器，基于 YAML 文件与 SQLite 存储",
+   "review": "flowlite 是一个用 Rust 编写的作业调度与编排工具，读取 YAML 定义的作业与计划，提供 cron、DAG、重试、超时、并发限制与告警，运行历史存于 SQLite 文件；另通过 stdio 提供 MCP 服务器供 AI 代理提交和查询任务。适合需要轻量调度脚本、数据管道或代理工作流的个人与小团队；当前为 0.2.0，接口可能变动，且不做沙箱隔离。",
+   "highlights": [
+    "单二进制运行，作业以 YAML 文件定义，无需数据库服务器、消息代理或 worker 池",
+    "内置 cron（含时区）、DAG、重试（携带上次失败信息）、超时、idle_timeout、并发限制、邮件/Slack 告警与本地 dashboard",
+    "提供 MCP 服务器（stdio），代理可通过 list_jobs、submit_job 等工具驱动调度器"
+   ],
+   "use_cases": [
+    "定时执行 ETL 等多步骤脚本管道，需依赖顺序、重试与失败通知",
+    "编排 LLM 代理工作流，任务结果在步骤间传递并支持运行时 fan-out",
+    "通过 MCP 让 AI 代理提交作业、查询运行状态与日志"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It is one binary and a SQLite file beside your YAML.",
+     "lines": [
+      14
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明运行历史存于数据目录的 flowlite.db（SQLite 文件），只是使用 SQLite 存数据而非为数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Zero-Clause BSD，嵌入二进制的前端资源另行说明",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " It is one binary and a SQLite file beside your YAML. ／ under `jobs/`, schedules under `schedules/`, and run history in `flowlite.db`. ／ `flowlite mcp` serves the Model Context Protocol on stdin and stdout. There is no port to",
+   "evidence_lines": [
+    14,
+    56,
+    114
+   ]
+  },
+  "fn": "writes-the-spec/flowlite",
+  "sha": "018ac6211c4b",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

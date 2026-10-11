@@ -8993,5 +8993,304 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c28b735c3e10": {
+  "identity": {
+   "one_liner": "拦截 Plex 的 SQLite 调用并转写到 PostgreSQL 的 shim 库",
+   "review": "该项目以 Rust 编写动态库 shim，通过 LD_PRELOAD/补丁方式拦截 Plex Media Server 对 SQLite 的调用，将数据写入 PostgreSQL，无需修改 Plex 源码；并提供 SQLite 与 PostgreSQL 双向迁移脚本和 doctor 修复脚本，支持 macOS ARM64、Linux x86_64/ARM64 及 Docker 部署。面向已部署 Plex、希望将媒体库数据改存 PostgreSQL 的用户。",
+   "highlights": [
+    "纯 Rust 实现的 interpose shim，以静态库链接进 dylib/so，无需改动 Plex 源码",
+    "提供 SQLite→PostgreSQL 与 PostgreSQL→SQLite 迁移脚本及 doctor.sh 模式/数据检查修复工具",
+    "提供 macOS/Linux 预编译二进制与多架构 Docker 镜像（GHCR）安装方式"
+   ],
+   "use_cases": [
+    "将已有 Plex 媒体库从 SQLite 迁移到 PostgreSQL 存储",
+    "Docker 环境下以 PostgreSQL 作为 Plex 库数据后端的新部署",
+    "迁移后对 schema 与数据进行检查修复"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Run Plex Media Server with PostgreSQL instead of SQLite.** ／ A small shim library that catches Plex SQLite calls and sends them to PostgreSQL. You do not need to change Plex source code.",
+     "lines": [
+      3,
+      7
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**Run Plex Media Server with PostgreSQL instead of SQLite.** ／ SQLite works well for many Plex setups, but it can lock the full database during writes. ／ ./scripts/migrate_sqlite_to_pg.sh   # SQLite → PostgreSQL",
+     "lines": [
+      3,
+      92,
+      113
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为让 Plex 使用 PostgreSQL 而提供 shim 库与迁移工具，服务于数据库替换场景而非仅消费数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small shim library that catches Plex SQLite calls and sends them to PostgreSQL. You do not need to change Plex source code. ／ ./scripts/migrate_sqlite_to_pg.sh   # SQLite → PostgreSQL",
+   "evidence_lines": [
+    7,
+    113
+   ]
+  },
+  "fn": "cgnl/plex-postgresql",
+  "sha": "c28b735c3e10",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5d69f8e76a73": {
+  "identity": {
+   "one_liner": "基于 PostgreSQL 的持久化应用级工作队列服务",
+   "review": "Workhold 是一个面向多副本应用的工作队列服务，将任务数据落在 PostgreSQL 中，提供幂等入队、fenced 租约、重试、死信、后续任务原子提交等机制，并拆分 producer/consumer/admin 三个 Python 客户端。适合需要可靠后台任务执行但不想自建消息总线的应用团队。至少一次语义，不承诺精确一次执行。",
+   "highlights": [
+    "入队成功即提交到 PostgreSQL，崩溃后任务保留，多副本通过带令牌的租约安全竞争任务",
+    "完成与后续任务在同一数据库事务中原子提交，支持死信、延迟重试与任务血缘诊断",
+    "提供 producer、consumer、admin 角色化 Python 客户端与 OpenAPI 3.1 线协议契约"
+   ],
+   "use_cases": [
+    "多副本间的 CPU/IO 密集型后台任务分发与崩溃后重试",
+    "多阶段处理流程中原子派生下一阶段任务",
+    "无自有数据库的应用直接使用队列进行持久化任务投递"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL 18 ／ workhold's PostgreSQL before it is acknowledged.",
+     "lines": [
+      7,
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明服务自持 PostgreSQL schema 并以 PostgreSQL 18 作为运行依赖，是围绕 PostgreSQL 构建的基础设施组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL 18 ／ boundary. It owns its PostgreSQL schema and operational state while the ／ **A durable Work Queue for applications that run across multiple replicas.**",
+   "evidence_lines": [
+    7,
+    110,
+    18
+   ]
+  },
+  "fn": "KoninMikhail/workhold-durable-work-queue",
+  "sha": "5d69f8e76a73",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "43efe838161c": {
+  "identity": {
+   "one_liner": "自托管协作白板应用，支持实时多人编辑与 JSON Canvas 格式",
+   "review": "nexcanvas 是部署在自己服务器上的白板应用，提供便签、形状、绘图、照片和 PDF 的实时协作编辑，适合个人、家庭或小团队。数据全部存储在 /data 下的 SQLite 数据库与媒体目录中，通过 Docker Compose 部署，并要求挂载本地磁盘而非网络文件系统，因 SQLite 锁机制在 NFS/SMB 上不可靠。",
+   "highlights": [
+    "支持多人实时协作编辑，含他人指针与选中状态显示，撤销仅作用于自己的操作",
+    "提供 350+ 自有形状库、三十余种模板，白板可导出 PNG/PDF 及 Obsidian 兼容的 .canvas 文件",
+    "支持 OpenID Connect 登录、二次验证、空间权限管理，并提供含数据库与文件的一致性备份"
+   ],
+   "use_cases": [
+    "小团队在自托管服务器上绘制流程图、网络拓扑、平面图等协作图表",
+    "家庭或个人搭建私有白板，用于笔记、思维导图与照片整理",
+    "需要从 Obsidian 导入/导出 .canvas 文件的白板数据流转场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything lives in `/data`: the SQLite database `nexcanvas.db` (accounts, spaces, boards and their versions), ／ Mount it from a local disk, never from an SMB or NFS share: SQLite's locking does not work reliably over network",
+     "lines": [
+      136,
+      138
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "nexcanvas 是使用 SQLite 存储账户、白板等数据的应用，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Everything lives in `/data`: the SQLite database `nexcanvas.db` (accounts, spaces, boards and their versions), ／ Mount it from a local disk, never from an SMB or NFS share: SQLite's locking does not work reliably over network",
+   "evidence_lines": [
+    136,
+    138
+   ]
+  },
+  "fn": "DerKezorm/nexcanvas",
+  "sha": "43efe838161c",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ea633cc5ae17": {
+  "identity": {
+   "one_liner": "自托管元数据治理平台，同步库表 schema 并生成列级血缘",
+   "review": "连接 MySQL/TiDB/PostgreSQL 实例，将 schema 同步进统一可检索元数据登记表，并从 SQL 与 OpenLineage 事件推导表级与列级血缘。面向需要做数据治理的运维与数据团队，后端为单个 Go 二进制，自身仅依赖 PostgreSQL 存储；提供 MCP 只读接口供 AI 代理查询，含访问控制与审计日志。",
+   "highlights": [
+    "同步多实例 schema 到统一登记表，记录 DDL 与变更历史",
+    "从视图/物化视图/手工 SQL 及 OpenLineage 事件推导列级血缘",
+    "提供 MCP 只读工具端点与 mxd CLI，支持访问控制与审计日志"
+   ],
+   "use_cases": [
+    "统一检索管理多个数据库实例的表结构与元数据",
+    "分析表与列上下游血缘，定位数据影响范围",
+    "通过 MCP 让 AI 代理只读查询元数据登记表"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "to MySQL/TiDB and PostgreSQL instances, syncs their schemas into a searchable ／ -e PG_URL='postgres://user:password@db-host:5432/metaxisdata?sslmode=disable' \\",
+     "lines": [
+      6,
+      39
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "to MySQL/TiDB and PostgreSQL instances, syncs their schemas into a searchable",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "to MySQL/TiDB and PostgreSQL instances, syncs their schemas into a searchable",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它连接数据库实例同步 schema、构建血缘与元数据登记表，是为数据库生态服务的治理工具而非使用数据库存业务数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Metaxisdata is a self-hosted data governance and metadata platform. It connects ／ to MySQL/TiDB and PostgreSQL instances, syncs their schemas into a searchable ／ - **Metadata registry** — Sync the schemas of your instances into one",
+   "evidence_lines": [
+    5,
+    6,
+    12
+   ]
+  },
+  "fn": "Ranxy/metaxisdata",
+  "sha": "ea633cc5ae17",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

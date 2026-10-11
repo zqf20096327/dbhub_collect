@@ -9017,5 +9017,215 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f38df5a066e5": {
+  "identity": {
+   "one_liner": "CloudBase 的 AI 编程工具集成层，经 MCP 与 Skills 操作后端资源",
+   "review": "该项目为腾讯云 CloudBase 提供 AI 编程工具集成：通过 Plugin 安装 MCP Server、Agent Skills 与 Hooks，使 Cursor、Claude Code 等 AI IDE 能在对话中管理数据库、认证、云函数、存储并进行部署。面向使用 CloudBase 平台且依赖 AI IDE 进行后端开发的开发者，需自备 CloudBase 环境与支持 MCP 的工具。",
+   "highlights": [
+    "提供 MCP Server，支持在对话中登录、查询与修改数据、管理函数和托管、读取日志",
+    "通过 Plugin 统一安装 MCP Server、Agent Skills 与 Hooks，适配约 20 余种 AI IDE/CLI",
+    "数据库能力覆盖 PostgreSQL 与文档数据库的数据建模、CRUD、权限与安全规则"
+   ],
+   "use_cases": [
+    "在 AI IDE 中对 CloudBase 环境进行数据库建模与 CRUD 操作",
+    "通过对话完成云函数/Cloud Run 的编写、部署与调试",
+    "构建带登录、数据库与权限的 Web 或微信小程序应用并发布托管"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Skills / Context: new PostgreSQL access-pattern best-practices skill (batching, indexes, RLS role gating, launch capacity); `searchKnowledgeBase`'s inline skill / OpenAPI catalogs now load on demand, cutting the 43-tool surface by 9.1% on every `tools/list` ／ - **Database**: PostgreSQL and document DB, data models, CRUD, permissions and security rules",
+     "lines": [
+      36,
+      166
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- Tools / Skills: MySQL provisioning is retired from the tool surface; every skill package ships a `LICENSE.md` next to `SKILL.md`; a new MCP reference skill documents the remote endpoints, the plugin flags and the tool schemas",
+     "lines": [
+      26
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 CloudBase 后端（含数据库）服务的 MCP 工具/组件，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The CloudBase integration layer for AI coding tools: Plugin installs the stack, Skills steer how code is written, MCP operates databases, functions, storage, and deploys from chat. ／ |**Plugin**|Installs MCP Server, Agent Skills, and Hooks together—less per-IDE wiring| ／ - **Database**: PostgreSQL and document DB, data models, CRUD, permissions and security rules",
+   "evidence_lines": [
+    7,
+    50,
+    166
+   ]
+  },
+  "fn": "TencentCloudBase/CloudBase-AI-Toolkit",
+  "sha": "f38df5a066e5",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "267c33b43f2e": {
+  "identity": {
+   "one_liner": "简化在 Nuxt 中使用 PGlite（嵌入式 Postgres）的模块",
+   "review": "该仓库是一个 Nuxt 模块，封装 PGlite 的使用：在 Nitro 服务端提供懒加载的 PGlite 实例、通过 Postgres 线协议在开发期暴露 socket、支持浏览器端 Web Worker 内运行 PGlite，并提供 SQL 迁移与测试辅助工具。面向使用 Nuxt 框架的前端/全栈开发者，生产环境可切换到真实 Postgres 而无需改动代码。",
+   "highlights": [
+    "提供服务端 usePGlite() 实例与开发期 Postgres 线协议 socket，兼容 pg、postgres.js、Drizzle、Kysely、psql 等通过 DATABASE_URL 连接",
+    "包含 nuxt-pglite/migrations 迁移执行与 nuxt-pglite/testing 按测试fork数据库的测试模块",
+    "支持 Nuxt 4/5（Nitro 2/3）、Node、Bun、Deno，以 @electric-sql/pglite 为 peer dependency"
+   ],
+   "use_cases": [
+    "在 Nuxt 项目开发期使用嵌入式 PGlite、生产期切换为真实 Postgres",
+    "在浏览器端通过 Web Worker 运行 PGlite 并共享实时查询",
+    "为依赖 PGlite 的应用构建 SQL 文件夹式迁移与隔离测试数据库"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PGlite tooling for Nuxt. A Postgres you don't run in development, swapped for a real one in production without touching your code; an embedded one on the server or in the browser when it is needed. ／ - **Development socket** — that instance served over the Postgres wire protocol while `nuxt dev` runs. `pg`, postgres.js, Drizzle, Kysely, `drizzle-kit`, `psql` reach it through `DATABASE_URL` (or a provider's variables), exactly as they reach Postgres in prod",
+     "lines": [
+      5,
+      12
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该模块为 PGlite（Postgres 的 WASM 嵌入式发行版）提供集成工具，服务于 Postgres 生态而非仅消费数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PGlite tooling for Nuxt. A Postgres you don't run in development, swapped for a real one in production without touching your code; an embedded one on the server or in the browser when it is needed. ／ - **Server** — a lazily created PGlite instance for your Nitro routes (`usePGlite()`), configured in `server/pglite.config.ts` with your own extensions and `init`. ／ - **Nuxt 4 and 5** (Nitro 2 and 3), Node, Bun and Deno; `@electric-sql/pglite` as a peer dependency, so you pick the version and the types follow your config.",
+   "evidence_lines": [
+    5,
+    11,
+    17
+   ]
+  },
+  "fn": "sandros94/nuxt-pglite",
+  "sha": "267c33b43f2e",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "11a2e2dadd70": {
+  "identity": {
+   "one_liner": "自托管开源工时与考勤追踪应用，基于 NestJS+PostgreSQL+React PWA",
+   "review": "OpenClockwork 是一个自托管的时间追踪与考勤系统，提供 Solo（个人工时记录、客户项目、工时表）和 Team（员工考勤、排班、请假审批、平板打卡终端）两种模式，含二维码终端、地理围栏和德/英双语界面。面向自由职业者和团队的 HR/管理者自部署使用，依赖 PostgreSQL 存储，部署需 Docker。",
+   "highlights": [
+    "提供 Solo 与 Team 两种模式，支持考勤打卡、请假审批、排班与工时表导出",
+    "支持平板二维码打卡终端与可选 GPS 地理围栏验证",
+    "技术栈为 NestJS + PostgreSQL + Prisma + React PWA，提供 Docker Compose 与 Azure 参考部署"
+   ],
+   "use_cases": [
+    "自由职业者记录个人工时并生成客户工时表",
+    "团队/HR 管理员工考勤、请假与审批流程",
+    "使用平板终端进行员工打卡签到/签退"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "terminals. Both use the same self-hosted PostgreSQL, API, and responsive PWA. ／ |Database|PostgreSQL with Prisma schema and forward-only migrations|",
+     "lines": [
+      15,
+      171
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用使用 PostgreSQL 作为其自身数据库存储，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "terminals. Both use the same self-hosted PostgreSQL, API, and responsive PWA. ／ |Database|PostgreSQL with Prisma schema and forward-only migrations| ／ |Deployment|Docker Compose and Azure Container Apps reference infrastructure|",
+   "evidence_lines": [
+    15,
+    171,
+    175
+   ]
+  },
+  "fn": "patrickschiller/openclockwork",
+  "sha": "11a2e2dadd70",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

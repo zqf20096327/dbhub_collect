@@ -8849,5 +8849,191 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "945434d773eb": {
+  "identity": {
+   "one_liner": "开源车辆品牌车型数据集，提供CSV/JSON/Parquet/SQLite多格式",
+   "review": "该项目汇总14国（该版本覆盖18国）官方车辆登记与型式认证数据，提供15,068个车型、934个品牌的开放数据集（CC BY 4.0），附稳定ID、各国证据与热度分位。面向需要车型目录的开发者，如配件目录、市场平台、预约表单等。提供CSV、JSON、Parquet及catalog.sqlite文件，并给出导入Postgres、SQLite、DuckDB的步骤和Ruby gem；数据按月版本化发布。",
+   "highlights": [
+    "提供CSV、JSON、Parquet、SQLite多种格式的数据文件，可通过GitHub Release、CDN或Hugging Face获取",
+    "每条记录含稳定ID（kind/make_slug/model_slug）、各国登记证据来源与热度分位，字段只增不改",
+    "提供Ruby gem（vehicles）内置离线快照及查询辅助方法"
+   ],
+   "use_cases": [
+    "为配件目录、电商平台、预约表单提供品牌-车型选择数据源",
+    "将CSV导入自有Postgres/MySQL/SQL Server做数据表关联",
+    "用SQLite文件或Ruby gem在无服务环境下离线查询车型数据"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|your own Postgres / MySQL / SQL Server|`dist/vehicles.csv`|one row per model| ／ ### Postgres ／ psql \"$DATABASE_URL\" <<'SQL'",
+     "lines": [
+      71,
+      90,
+      94
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|your own Postgres / MySQL / SQL Server|`dist/vehicles.csv`|one row per model|",
+     "lines": [
+      71
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Parquet, JSON and SQLite files are mirrored on ／ |SQL right now, no server|`dist/catalog.sqlite`|`makes`, `models`, `availability`, `popularity`, `meta`| ／ Release assets are the top-level files (`vehicles.csv`, `catalog.sqlite`, ／ ### SQLite",
+     "lines": [
+      65,
+      72,
+      86,
+      119
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "|your own Postgres / MySQL / SQL Server|`dist/vehicles.csv`|one row per model|",
+     "lines": [
+      71
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目本体是开放数据集，README主要说明如何将数据装入各类数据库，未提供为某数据库生态服务的工具组件，也未构成使用数据库存数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "数据以 CC BY 4.0 发布；各国来源证据附各自许可（CC0/CC-BY/OGL等）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## Load it into your database in 5 minutes ／ |SQL right now, no server|`dist/catalog.sqlite`|`makes`, `models`, `availability`, `popularity`, `meta`| ／ ### Postgres",
+   "evidence_lines": [
+    60,
+    72,
+    90
+   ]
+  },
+  "fn": "vehiclesdb/vehiclesdb",
+  "sha": "945434d773eb",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0931a88858fd": {
+  "identity": {
+   "one_liner": "Claude Code 插件：为多栈团队提供轻量规则包与会话配置",
+   "review": "该仓库是 Claude Code 的插件市场，内含名为 simple 的单一插件，通过 /simple:setup 安装规则包、权限设置与记忆库，提供状态栏、侧边面板、grep 导航等能力，面向 Go、TypeScript 及 TiDB 等多栈开发团队；其规则包按 paths 匹配按需加载，并以隐藏基准测量结论为卖点，安装依赖 Claude Code 的插件机制。",
+   "highlights": [
+    "提供 49 个按 paths glob 按需加载的规则包与五个按角色划分的 agent",
+    "提供 /simple:setup 命令，以 dry-run 方式安装规则、设置与记忆库",
+    "内置状态栏与 Work/Session 侧边面板，展示会话成本、缓存命中率与 MCP 调用信息"
+   ],
+   "use_cases": [
+    "为 Go + Nuxt/TypeScript + TiDB 团队初始化统一的 Claude Code 会话配置",
+    "管理 Claude Code 会话的上下文成本与命令权限",
+    "在仓库内以 Obsidian vault 形式沉淀项目记忆与决策记录"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Svelte, React Native; sixteen ORMs; Postgres, MySQL/TiDB, MongoDB, Redis; Docker, Kubernetes, Terraform and CI. ／ - `.claude/rules/` — every pack, flat, as `lang-go.md`, `orm-prisma.md`, `db-postgres.md`, `front-react.md`,",
+     "lines": [
+      5,
+      88
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "Svelte, React Native; sixteen ORMs; Postgres, MySQL/TiDB, MongoDB, Redis; Docker, Kubernetes, Terraform and CI.",
+     "lines": [
+      5
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "Everything in it that makes a cost claim was measured with a hidden-oracle benchmark — including the parts that were",
+     "lines": [
+      7
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "mention",
+     "quote": "Svelte, React Native; sixteen ORMs; Postgres, MySQL/TiDB, MongoDB, Redis; Docker, Kubernetes, Terraform and CI. ／ where Go, Hibernate, Django, Prisma, TiDB, Kubernetes and the rest live — at zero cost until you open one. ／ - **Not every pack is equally proven.** The Go, TypeScript/Nuxt, TiDB and CI packs come from a production monorepo",
+     "lines": [
+      5,
+      46,
+      204
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库是 Claude Code 的开发配置插件，数据库仅作为其栈规则包内容被提及，无适配或依赖存数证据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A Claude Code plugin marketplace with one plugin, **`simple`**: a lean setup for **any stack** — Go, Java/Kotlin, ／ - **49 rule packs**, each with a `paths:` glob, that load themselves when a tool touches a matching file. That is ／  where Go, Hibernate, Django, Prisma, TiDB, Kubernetes and the rest live — at zero cost until you open one.",
+   "evidence_lines": [
+    3,
+    45,
+    46
+   ]
+  },
+  "fn": "k8spro-io/claude-simple",
+  "sha": "0931a88858fd",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8852,5 +8852,139 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dbd6263fed2a": {
+  "identity": {
+   "one_liner": "Jellyfin 媒体服务器仪表盘，聚合会话、统计、下载与备份管理",
+   "review": "JellyGlance 是面向自托管 Jellyfin 媒体服务器的仪表盘应用，提供直播会话查看、用户观看统计、请求管理、库健康、日历、下载队列、webhook 通知及备份恢复等功能，集成 Sonarr、Radarr、qBittorrent 等周边工具。部署以 Docker Compose 为主，内置 postgres:16 容器作为数据存储，备份文件通过 /app/backups 路径导出导入。",
+   "highlights": [
+    "提供实时会话查看、观看统计、请求分诊、下载队列与日历等仪表盘功能",
+    "集成 Jellyseerr/Overseerr、Arr 系列、qBittorrent、Wizarr 等第三方应用",
+    "支持 webhook 通知、管理审计记录以及基于 /app/backups 的备份与恢复"
+   ],
+   "use_cases": [
+    "自托管 Jellyfin 服务器的日常监控与运营管理",
+    "媒体请求、下载队列与库健康状况的集中查看",
+    "对 Jellyfin 生态工具的集成管理与备份维护"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "image: postgres:16-alpine ／ |`postgres-data`|PostgreSQL data volume|Database storage|",
+     "lines": [
+      172,
+      208
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 通过 docker-compose 内置 postgres:16 容器并声明 postgres-data 卷用于数据库存储，属于使用 PostgreSQL 存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "    image: postgres:16-alpine ／ |`postgres-data`|PostgreSQL data volume|Database storage| ／  Your Jellyfin command center: live sessions, requests, users, libraries, stats, calendars, downloads, health, webhooks, and tasks in one clean dashboard.",
+   "evidence_lines": [
+    172,
+    208,
+    6
+   ]
+  },
+  "fn": "JellyGlance/Server",
+  "sha": "dbd6263fed2a",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0d6b23cb086d": {
+  "identity": {
+   "one_liner": "自托管电子书库服务器，内置阅读器与阅读统计",
+   "review": "Tome 是一个以单 Docker 镜像部署的自托管电子书/漫画库服务器，内置 EPUB、CBZ/CBR、PDF 阅读器，并通过自定义 KOReader 插件记录逐页阅读会话、双向同步进度并生成统计，同时提供 OPDS 订阅、元数据抓取与 OIDC 登录。适合自建书库且使用 KOReader 的个人用户；依赖 SQLite 存储，不支持多用户大规模部署之外的数据库。",
+   "highlights": [
+    "提供 TomeSync KOReader 插件，记录阅读会话并双向同步进度",
+    "内置 EPUB、CBZ/CBR、PDF 浏览器阅读器及 OPDS 订阅源",
+    "支持从 Hardcover、Google Books、OpenLibrary 抓取元数据"
+   ],
+   "use_cases": [
+    "在 NAS 或家庭服务器上自托管电子书库并通过 KOReader 阅读",
+    "追踪阅读时长、进度与阅读习惯统计",
+    "通过 OPDS 在多设备上浏览下载藏书"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Built with FastAPI, React, and SQLite. Ships as a single Docker image. ／ |`/data`|SQLite database and cover cache| ／ |Database|SQLite (WAL) / SQLAlchemy 2.0|",
+     "lines": [
+      14,
+      134,
+      175
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Tome 自身是使用 SQLite 存储数据的完整应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Built with FastAPI, React, and SQLite. Ships as a single Docker image. ／ A self-hosted ebook library server that knows how you read -- not just what you own. ／ docker run -d \\",
+   "evidence_lines": [
+    14,
+    10,
+    100
+   ]
+  },
+  "fn": "bndct-devops/tome",
+  "sha": "0d6b23cb086d",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

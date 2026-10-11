@@ -9378,5 +9378,88 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8a38f82e1162": {
+  "identity": {
+   "one_liner": ".NET 8 后台任务库，多数据库存储提供者+重试/死信/看板",
+   "review": "NexJob 是面向 .NET 8+ 的后台任务库，提供重试、死信队列、截止时间、崩溃恢复和内置仪表盘，任务状态可持久化到 PostgreSQL、SQL Server、Redis、MongoDB 或内存。每个存储提供者为独立 NuGet 包。面向需要在 .NET 服务中可靠运行后台任务的开发者，通过 `dotnet add package` 安装。",
+   "highlights": [
+    "提供五个存储提供者（PostgreSQL、SQL Server、Redis、MongoDB、内存），各自为独立 NuGet 包",
+    "包含重试、死信处理、截止时间、心跳崩溃恢复与幂等 DuplicatePolicy",
+    "内置 ASP.NET Core 仪表盘中间件及独立 HTTP 看板服务"
+   ],
+   "use_cases": [
+    ".NET 服务中需要重试与死信跟踪的后台任务调度",
+    "多节点共享同一数据库、要求任务不丢失不重复的场景",
+    "从 Kafka、RabbitMQ、SQS 等消息代理触发后台任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A background job library for .NET 8 with five storage providers (PostgreSQL, SQL Server, Redis, MongoDB, in-memory), retries, dead-letter handling, deadlines and a built-in dashboard. ／ - **The same tests on every provider.** One contract suite runs on InMemory, PostgreSQL, SQL Server, Redis and MongoDB. ／ |PostgreSQL|`NexJob.Postgres`|Production ready|",
+     "lines": [
+      24,
+      63,
+      86
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "A background job library for .NET 8 with five storage providers (PostgreSQL, SQL Server, Redis, MongoDB, in-memory), retries, dead-letter handling, deadlines and a built-in dashboard. ／ - **The same tests on every provider.** One contract suite runs on InMemory, PostgreSQL, SQL Server, Redis and MongoDB. ／ |SQL Server|`NexJob.SqlServer`|Production ready|",
+     "lines": [
+      24,
+      63,
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是一个使用数据库作任务存储的 .NET 应用侧任务库，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A background job library for .NET 8 with five storage providers (PostgreSQL, SQL Server, Redis, MongoDB, in-memory), retries, dead-letter handling, deadlines and a built-in dashboard. ／ |PostgreSQL|`NexJob.Postgres`|Production ready| ／ |SQL Server|`NexJob.SqlServer`|Production ready|",
+   "evidence_lines": [
+    24,
+    86,
+    87
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "oluciano/NexJob",
+  "sha": "8a38f82e1162",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

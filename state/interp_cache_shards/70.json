@@ -8994,5 +8994,316 @@
   "generated_at": "2026-10-09",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "5b9df07943e0": {
+  "identity": {
+   "one_liner": "本地优先的法律工作台，从文档提取可溯源的主张并存入实践图谱",
+   "review": "该仓库是一个面向知识产权律师的本地优先桌面工作台，从文档中提取候选主张，经源文span校验和人工批准后写入本地实践图谱，并提供只读MCP服务器供Claude Desktop查询。桌面端基于Tauri与PGlite，使用Effect生态和Drizzle，依赖bun与docker-compose运行，当前依赖外部模型服务商（Anthropic）做抽取，且定位为公开实验室而非社区套件。",
+   "highlights": [
+    "提供基于PGlite的本地Tauri桌面工作台与只读本地MCP服务器",
+    "实现引用溯源机制：主张需复现源文span并经人工批准方可入库",
+    "使用Effect类型系统与品牌ID约束，schema作为类型与持久化的单一来源"
+   ],
+   "use_cases": [
+    "知识产权律师在本地管理文档、主张、证据与审批记录",
+    "通过MCP客户端（如Claude Desktop）查询本地实践图谱",
+    "作为Effect/monorepo架构模式的学习与实验参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README表明其桌面端运行在PGlite上存数据（L80），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`apps/professional-desktop`|Tauri workbench. Today a local chat shell on PGlite. Becoming the document portal.| ／ |`apps/practice-kg-mcp`|Read-only local MCP server over a portable practice graph. First-user front: Claude Desktop asks the archive; the corpus never enters this repo.| ／ **Prose-to-Proof** is the product. A local-first workbench for a professional",
+   "evidence_lines": [
+    80,
+    81,
+    13
+   ]
+  },
+  "fn": "beep-effect/beep-effect",
+  "sha": "5b9df07943e0",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "07b53a90178a": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 Go 持久化工作流引擎，单二进制无外部依赖",
+   "review": "turbine 是一个面向 Go 语言的持久化工作流引擎，使用 SQLite 存储状态，无需外部依赖，编译为单个二进制。提供可崩溃恢复的工作流、步骤重试、持久化休眠、队列、cron 调度及工作流间消息通信，适合需要在 Go 应用中实现后台任务编排与可靠执行的开发者使用。",
+   "highlights": [
+    "工作流具备持久化能力，崩溃后可从中断处恢复，步骤结果可记录并重放",
+    "内置队列、cron 调度器和事件机制，支持并发控制、限速与工作流间通信",
+    "提供 Dashboard UI 与 examples/ 目录下的可运行示例"
+   ],
+   "use_cases": [
+    "在 Go 应用中实现需崩溃恢复的后台任务与作业队列",
+    "基于 cron 表达式的定时工作流调度",
+    "多工作流之间的事件驱动协作编排"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite-based durable workflow engine for Go. No external dependencies, single binary.",
+     "lines": [
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "以 SQLite 作为内置持久化存储为 Go 应用提供工作流引擎能力，是为生态服务的组件而非使用外部数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQLite-based durable workflow engine for Go. No external dependencies, single binary. ／ go get github.com/YakirOren/turbine",
+   "evidence_lines": [
+    7,
+    14
+   ]
+  },
+  "fn": "YakirOren/turbine",
+  "sha": "07b53a90178a",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b9e758fbb293": {
+  "identity": {
+   "one_liner": "基于 SQLite 本地库的 TIDAL 桌面音乐播放器",
+   "review": "NOORwave 是面向 TIDAL 订阅用户的桌面音乐播放器，将用户的 TIDAL 曲库同步到本地 SQLite 数据库实现即时本地搜索与浏览，提供音乐视频索引、流派星图、无缝播放、automix 及手机遥控等功能，支持从源码运行或下载使用，采用 PolyForm Noncommercial 许可，仅限非商业用途。",
+   "highlights": [
+    "将 TIDAL 曲库镜像到本地 SQLite 数据库，搜索与浏览在本地执行",
+    "提供音乐视频索引、视频站点、Genre Galaxy 流派可视化与收听分析",
+    "支持无缝播放、计划式 DJ 过渡、automix 和基于 PWA 的手机遥控"
+   ],
+   "use_cases": [
+    "在本地快速搜索和浏览大型 TIDAL 收藏曲库",
+    "索引并浏览喜欢曲目的现场演出、翻唱与替代版本视频",
+    "通过手机在局域网内遥控桌面播放器"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "NOORwave is a desktop music player for TIDAL built for **instant local search and fast library browsing**. Your synced library lives in a SQLite database on your own machine, so searching your saved collection runs locally. Your library and listening history s ／ SQLite ／ NOORwave is that second thing. It pulls your TIDAL library down into a SQLite database on your own machine, then builds a real desktop player on top of it. Search answers instantly because it never leaves your disk. The queue is something you shape, not someth",
+     "lines": [
+      7,
+      22,
+      31
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它使用 SQLite 在本地存储用户曲库和收听历史，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "采用 PolyForm Noncommercial 1.0.0，非商业许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "NOORwave is a desktop music player for TIDAL built for **instant local search and fast library browsing**. Your synced library lives in a SQLite database on your own machine, so searching your saved collection runs locally. Your library and listening history stay on your disk; TIDAL supplies the audio. ／ NOORwave is that second thing. It pulls your TIDAL library down into a SQLite database on your own machine, then builds a real desktop player on top of it. Search answers instantly because it never leaves your disk. The queue is something you shape, not something that happens to you. Transitions are planned instead of stumbled into. And your own taste becomes a map you can fly through. ／  SQLite",
+   "evidence_lines": [
+    7,
+    31,
+    22
+   ]
+  },
+  "fn": "biggiesmallcap-blip/NOORwave",
+  "sha": "b9e758fbb293",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a11a6304b54e": {
+  "identity": {
+   "one_liner": "基于 WPF + SQLite 的单机物业收费与台账管理系统",
+   "review": "这是一个面向中小型住宅小区与商住项目的桌面物业管理系统，覆盖财务收费、设备台账、应急处理、人员组织等模块。采用 WPF 客户端加 OWIN 自承载本地后端的架构，数据全部存储于本机 SQLite，仅绑定 127.0.0.1，适合内网或离线环境部署，仅支持 Windows 平台（.NET Framework 4.8）。",
+   "highlights": [
+    "包含收费账单、设备台账、应急处置、人员考勤等模块，数据保存本机不依赖外部服务器",
+    "本地后端以 OWIN 自承载仅绑定 127.0.0.1:5210，SQLite 数据库由后端独占访问",
+    "关键操作写入审计日志，业务数据软删除留痕，支持手动备份与恢复前快照"
+   ],
+   "use_cases": [
+    "中小型住宅小区或商住项目的物业收费与台账管理",
+    "无互联网或内网环境的离线单机物业数据管理",
+    "需要本地备份恢复与审计留痕的物业财务记录场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|数据库|SQLite（System.Data.SQLite + Dapper），数据库由后端独占访问，前端不直接连库| ／ |数据库|System.Data.SQLite 1.0.118、Dapper 2.1.35|",
+     "lines": [
+      46,
+      142
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统使用 SQLite 存储自身业务数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "代码与文档以 MIT License 发布，品牌标识（名称、徽记、字标）不随 MIT 授权",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "面向中小型住宅小区与商住项目的**单机部署**物业收费与台账管理桌面系统：WPF 客户端 + 本地后端服务，业务数据全部保存在本机，不依赖外部服务器与互联网，适合内网或离线环境。 ／ |数据库|SQLite（System.Data.SQLite + Dapper），数据库由后端独占访问，前端不直接连库|",
+   "evidence_lines": [
+    5,
+    46
+   ]
+  },
+  "fn": "liuma3995-dot/anyi-property-management",
+  "sha": "a11a6304b54e",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "587fbbb479ad": {
+  "identity": {
+   "one_liner": "本地运行的CLI，发现可推广产品的公开讨论并生成回复草稿",
+   "review": "Obserf 是一个本地优先的营销类 CLI 工具：按项目配置的查询到 Hacker News、Reddit、GitHub、Brave 搜索相关讨论，经规则过滤和 Claude 评估打分后进入终端或本地网页的审查收件箱，并可生成回复草稿由用户自行发布，自身不自动发帖。面向开源维护者等需要推广项目的个人，运行依赖 Bun 1.4+ 和已登录订阅的 Claude Code，数据存储在用户自有的工作区数据库中。",
+   "highlights": [
+    "支持从 Hacker News、Reddit、GitHub、Brave 四个来源发现相关讨论",
+    "提供确定性规则过滤（去重、屏蔽域名、跳过已处理项），不消耗模型调用",
+    "本地工作区存储配置、数据库与凭据，提供仅绑定本机的审查收件箱（obserf serve）"
+   ],
+   "use_cases": [
+    "开源维护者寻找值得参与回答的公开讨论",
+    "独立开发者/个人项目的开发者营销线索筛选",
+    "在终端或本地网页收件箱中分级审查并生成回复草稿"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 提到自有工作区数据库但未指明具体数据库，工具功能与数据库生态服务无直接关联",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Obserf (obserf.com) finds public conversations and listings where mentioning your project could help someone, ranks them, and drafts what to say. **It never posts.** ／ 1. **Discover** — your profile's queries go to Hacker News, Reddit, GitHub and Brave. ／ Obserf is a personal tool for one operator and a handful of projects. There is no account and no Obserf service. This repository ships no projects and no data: your profiles, your database and your `.env` live in a **workspace** you own, and your triage decisions and notes never leave it. The only server Obserf runs is `obserf serve`, on loopback.",
+   "evidence_lines": [
+    3,
+    22,
+    32
+   ]
+  },
+  "fn": "kriasoft/obserf",
+  "sha": "587fbbb479ad",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

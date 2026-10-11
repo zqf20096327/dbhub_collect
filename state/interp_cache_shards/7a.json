@@ -11099,5 +11099,375 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "00b869845cc4": {
+  "identity": {
+   "one_liner": "Open WebUI 数据库从 SQLite 迁移到 PostgreSQL 的交互式工具",
+   "review": "该工具通过交互式命令行将 Open WebUI 的 SQLite 数据库迁移到 PostgreSQL。它不硬编码 schema，而是动态发现 SQLite 中的表结构，读取 PostgreSQL 列类型并依据外键图推导迁移顺序。要求两侧由同一 Open WebUI 版本创建，支持行级错误隔离与迁移后行数核对。适用于自行部署 Open WebUI 并希望切换到 PostgreSQL 的运维人员。",
+   "highlights": [
+    "迁移前执行完整性检查与外键校验，自动转换表结构（含 Unicode 和 JSON 列）",
+    "按 PostgreSQL 外键图推导迁移顺序，无需硬编码 schema",
+    "提供行级错误隔离、失败行追踪与迁移结束后的行数核对摘要"
+   ],
+   "use_cases": [
+    "将现有 Open WebUI 部署的数据从 SQLite 迁移到 PostgreSQL",
+    "Open WebUI 版本升级前后切换后端数据库",
+    "需要核对源与目标行数一致性的数据迁移场景"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# Open WebUI PostgreSQL Migration Tool ／ A robust, straightforward and fully interactive tool for migrating Open WebUI databases from SQLite to PostgreSQL. Designed for reliability and ease of use. ／ The tool never hard-codes a schema. It discovers the tables in your SQLite file, reads each column type from PostgreSQL, and derives the migration order from PostgreSQL's own foreign key graph, so whatever schema your Open WebUI release created is what gets mi",
+     "lines": [
+      1,
+      3,
+      25
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A robust, straightforward and fully interactive tool for migrating Open WebUI databases from SQLite to PostgreSQL. Designed for reliability and ease of use. ／ The tool never hard-codes a schema. It discovers the tables in your SQLite file, reads each column type from PostgreSQL, and derives the migration order from PostgreSQL's own foreign key graph, so whatever schema your Open WebUI release created is what gets mi",
+     "lines": [
+      3,
+      25
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具为 Open WebUI 的数据库迁移提供服务，属于数据库生态工具而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# Open WebUI PostgreSQL Migration Tool ／ The tool never hard-codes a schema. It discovers the tables in your SQLite file, reads each column type from PostgreSQL, and derives the migration order from PostgreSQL's own foreign key graph, so whatever schema your Open WebUI release created is what gets migrated. ／ - PostgreSQL server, running and reachable from the host running the script",
+   "evidence_lines": [
+    1,
+    25,
+    61
+   ]
+  },
+  "fn": "taylorwilsdon/open-webui-postgres-migration",
+  "sha": "00b869845cc4",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "19a44b8a66b1": {
+  "identity": {
+   "one_liner": "单文件嵌入式双时态图数据库，用 Datalog 查询",
+   "review": "Minigraf 是一个用 Rust 编写的单文件嵌入式图数据库，提供 Datalog 查询、双时态时间回溯（事务时间+有效时间）和窗口函数，可嵌入原生/WASM/移动端运行，设计上不支持分布式与客户端-服务器模式。适用于需要带完整历史的关系存储场景，如 AI agent 记忆和移动端离线存储。",
+   "highlights": [
+    "支持 Datalog 查询，含递归规则与窗口函数",
+    "双时态模型：每个事实携带事务时间与有效时间，支持历史回溯",
+    "多平台绑定：Rust/Python/Node/Java/Android/iOS/C/WASM，单 .graph 文件存储"
+   ],
+   "use_cases": [
+    "AI agent 的可审计信念/记忆存储",
+    "移动端离线优先存储，支持追溯修正",
+    "浏览器端图数据可视化与时间回放"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "> **Embedded graph memory for AI agents, mobile apps, and the browser** — the SQLite of bi-temporal graph databases ／ A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ |Feature|Minigraf|XTDB|Cozo|Neo4j|SQLite|",
+     "lines": [
+      12,
+      14,
+      93
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是数据库本体/存储引擎，为应用提供嵌入式数据存储能力",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可 MIT OR Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A tiny, self-contained graph database with **Datalog queries** and **bi-temporal time travel**. Think SQLite, but for connected data with full history. ／ Minigraf is a **single-file embedded graph database** that lets you: ／ - **Billion-node scale** — optimised for <1M nodes (like SQLite)",
+   "evidence_lines": [
+    14,
+    22,
+    184
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "project-minigraf/minigraf",
+  "sha": "19a44b8a66b1",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "7e09694a29ed": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 学习模式插件，捕获工作内容生成解释并本地间隔复习",
+   "review": "该仓库是 DeepSeek Harness（DSH）的学习模式插件，把完成的工作转化为结构化解释，通过间隔重复调度复习，并允许用户检查、纠正或遗忘模型推断出的偏好。数据存于本地 SQLite，支持数据导出与清除，面向使用 DSH Web 并希望私有持续学习的用户；需配置辅助模型，且不保证离线推理。",
+   "highlights": [
+    "提供捕获、复习、适应三环节学习循环，支持 /explain、/review 等命令入口",
+    "学习数据存储于本地 SQLite（$DSH_HOME/dsh-explain/v1/thread.sqlite），支持版本化导出与原子清除",
+    "通过 DSH 第一方扩展点实现，无需修改 DSH 本体或其他插件"
+   ],
+   "use_cases": [
+    "在 DSH Web 中把已完成的工作概念转为可编辑解释草稿",
+    "按间隔重复计划安排每日最多三条到期概念的复习与测验",
+    "检查并纠正模型对解释偏好与主题熟悉度的推断，或导出/清除学习数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The primary agent stays untouched. Explain uses its own model calls, scheduler, context, and local SQLite database. ／ |Learning thread|Stored in `$DSH_HOME/dsh-explain/v1/thread.sqlite`.|",
+     "lines": [
+      18,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为插件自身学习数据的本地存储，项目并非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`dsh-explain` is a learning-mode plugin for DeepSeek Harness. It turns useful concepts from completed work into structured explanations, schedules lightweight reviews, and lets you inspect or correct what it learns about you. ／ The primary agent stays untouched. Explain uses its own model calls, scheduler, context, and local SQLite database. ／ |Learning thread|Stored in `$DSH_HOME/dsh-explain/v1/thread.sqlite`.|",
+   "evidence_lines": [
+    16,
+    18,
+    79
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "yuezengwu/dsh-explain",
+  "sha": "7e09694a29ed",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "37683008362f": {
+  "identity": {
+   "one_liner": "Rust 本地 LLM 智能体运行时，提供工具执行与tmux会话持久化",
+   "review": "这是一个用 Rust 编写的本地 LLM 代理运行时，为语言模型提供受控的操作系统工具执行能力，包括一次性 shell 命令、tmux 持久会话、异步后台任务、远程工具服务器与 MCP 互操作。工具日志可存入 SQLite，对话存为 JSONL。面向希望在本地运行自带或微调 instruct 模型并让模型调用真实终端工具的用户，目前为实验性项目，主要支持 Linux（Windows 经 WSL2）。",
+   "highlights": [
+    "提供持久 tmux 会话与异步后台执行监督，支持 <wait/> 控制依赖等待",
+    "支持配置化工具消息角色、JSON 工具协议、远程工具服务器与可选 MCP 互操作",
+    "运行时服务包含语义记忆、Markdown 记忆存储、工具输出摘要、SQLite 工具日志与 JSONL 对话日志"
+   ],
+   "use_cases": [
+    "让本地 LLM 代理执行多步骤 shell/终端工作流并保持会话状态",
+    "需要后台长任务不阻塞模型推理的代理场景",
+    "通过远程工具服务器对敏感凭据与工具权限做服务端管控"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQLite tool logging",
+     "lines": [
+      159
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是 LLM 代理运行时，SQLite 仅用于存储自身工具日志，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "### Local-first Rust agent runtime with persistent terminal sessions, asynchronous tool supervision, configurable model-provider support, remote tools, memory, and optional Linux isolation. ／ - SQLite tool logging ／ - Development status: active / experimental",
+   "evidence_lines": [
+    5,
+    159,
+    26
+   ]
+  },
+  "fn": "charlesericwilson-portfolio/Echo_Adapt_v5",
+  "sha": "37683008362f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "69990062d145": {
+  "identity": {
+   "one_liner": "基于 LangChain 的扫地机器人产品问答 Agent，用 SQLite 存会话",
+   "review": "这是一个本地运行的学习项目，实现产品知识问答、Agent 工具调用和使用报告生成演示，提供 Streamlit 网页聊天和命令行两种入口，会话与消息读写本地 SQLite，知识库经切分后写入 Chroma 向量库，需配置 DashScope API Key；适合用于学习 RAG 与 ReAct 工具调用流程，数据部分为演示数据。",
+   "highlights": [
+    "加载 TXT、PDF 资料切分写入 Chroma 向量库，问答时检索生成回答",
+    "支持知识库问答、天气、用户信息、CSV 使用记录查询等工具调用",
+    "提供 Streamlit 网页端与命令行入口，会话和消息保存到 SQLite"
+   ],
+   "use_cases": [
+    "扫地机器人产品资料的知识问答",
+    "多轮对话与会话历史管理演示",
+    "基于使用记录生成报告的 Agent 流程学习"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "这是一个本地运行的学习项目。Agent 接收用户问题后，可以调用知识库检索、使用记录查询等工具，再由大模型组织回答。网页端使用 Streamlit，支持将会话和聊天记录保存到 SQLite。 ／ - **网页聊天与会话管理**：在 app.py 中创建、选择、删除会话，查看历史聊天，并将会话和消息存到本地 SQLite。 ／ |db.py|SQLite 会话和消息的读写|",
+     "lines": [
+      3,
+      10,
+      122
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "当前的会话管理使用 Python 自带的 SQLite，不需要安装或启动 MySQL。",
+     "lines": [
+      22
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目用 SQLite 存储会话和消息数据，本身是问答应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "这是一个本地运行的学习项目。Agent 接收用户问题后，可以调用知识库检索、使用记录查询等工具，再由大模型组织回答。网页端使用 Streamlit，支持将会话和聊天记录保存到 SQLite。 ／ - **网页聊天与会话管理**：在 app.py 中创建、选择、删除会话，查看历史聊天，并将会话和消息存到本地 SQLite。 ／ 当前的会话管理使用 Python 自带的 SQLite，不需要安装或启动 MySQL。",
+   "evidence_lines": [
+    3,
+    10,
+    22
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "yzycy12138/LangChain-ReAct-Agent",
+  "sha": "69990062d145",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

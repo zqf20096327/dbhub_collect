@@ -9705,5 +9705,157 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d0cf884e0320": {
+  "identity": {
+   "one_liner": "自托管中文 AI 角色聊天应用，Node.js + SQLite 实现",
+   "review": "该仓库是一个以中文体验为主的自托管 AI 角色聊天应用，支持从 Chub 获取角色卡、世界书、流式对话、文件聊天与模型管理，使用 SQLite 存储数据并做版本迁移，核心应用无 npm 运行依赖。适合想在本地或自建服务器部署角色聊天的用户；完整文件处理链面向 macOS，部分测试尚未全部通过。",
+   "highlights": [
+    "使用 node:sqlite 的 DatabaseSync，数据库启用 WAL 并做版本迁移",
+    "支持 Chub 角色搜索、JSON/PNG 角色卡导入导出与世界书设定",
+    "通过 OpenAI 兼容 /chat/completions 接口实现 SSE 流式回复"
+   ],
+   "use_cases": [
+    "自托管部署中文 AI 角色聊天服务",
+    "导入、创作和管理角色卡与剧情卡",
+    "围绕上传文件（含 PDF、图片）进行对话"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "一个以中文体验为主的自托管 AI 角色聊天应用：从 Chub 获取角色、导入或创作角色卡，与角色进行流式对话，也可以围绕上传的文件聊天。项目使用原生浏览器界面、Node.js 内置模块和 SQLite，核心应用没有 npm 运行依赖，也不需要前端构建步骤。 ／ |数据库|`node:sqlite` 的 `DatabaseSync`；SQLite、WAL、版本迁移| ／ |镜像读取|只读 SQLite 索引、文件目录；可选 NAS API 或 Python 读取进程|",
+     "lines": [
+      3,
+      22,
+      25
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "应用使用 SQLite 存储自身数据，并非为数据库生态服务的工具或组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "一个以中文体验为主的自托管 AI 角色聊天应用：从 Chub 获取角色、导入或创作角色卡，与角色进行流式对话，也可以围绕上传的文件聊天。项目使用原生浏览器界面、Node.js 内置模块和 SQLite，核心应用没有 npm 运行依赖，也不需要前端构建步骤。 ／ |数据库|`node:sqlite` 的 `DatabaseSync`；SQLite、WAL、版本迁移|",
+   "evidence_lines": [
+    3,
+    22
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Ruidesi/aichat-roleplay",
+  "sha": "d0cf884e0320",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c2f3b8a14041": {
+  "identity": {
+   "one_liner": "基于 Node.js/Express 与 MySQL/TiDB 的全栈航司订座与运营系统",
+   "review": "这是一个全栈航班预订与航司运营管理应用，提供乘客、管理员、机场地勤三个门户，实现航班搜索、原子多航段预订、服务器端座位锁定、值机与二维码登机牌。使用 MySQL 8 事务与版本化迁移，也可连接 TiDB 托管演示库，适合作为全栈业务系统开发参考或演示部署，但支付为开发模拟、未做生产级集成。",
+   "highlights": [
+    "提供乘客预订、管理员运营、机场地勤登机三个独立门户",
+    "实现事务性多航段预订、服务器端临时座位锁定与二维码登机牌",
+    "使用版本化 schema 迁移与 Node.js 回归测试、Playwright 浏览器校验"
+   ],
+   "use_cases": [
+    "航司/航班预订业务流程演示与教学",
+    "多角色运营门户（客服、地勤）的全栈开发参考",
+    "基于 MySQL/TiDB 的事务型预订系统示例部署"
+   ],
+   "use_cases_extra": null
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "A full-stack airline reservation and operations application built with Node.js, Express, MySQL and vanilla JavaScript. SkyWings brings passenger booking, administration and airport gate operations into three dedicated portals. ／ - **Database:** MySQL 8, transactional reservations and versioned schema migrations. ／ - A running MySQL 8 server.",
+     "lines": [
+      5,
+      28,
+      37
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "Local `db:seed` and the isolated TiDB `db:public-demo` use the same seed implementation and account configuration. Both create the same synthetic Pakistani passengers, bookings, fleet, cabin seats, fares and routes. Use these credentials on either freshly seed ／ The separate `skywings_public_demo` TiDB database already contains the shared dataset and credentials above. The demo is prepared for a separate Render service; its public URL will be added after deployment.",
+     "lines": [
+      106,
+      120
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用 MySQL 8/TiDB 存储预订、航班等业务数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A full-stack airline reservation and operations application built with Node.js, Express, MySQL and vanilla JavaScript. SkyWings brings passenger booking, administration and airport gate operations into three dedicated portals. ／ - **Database:** MySQL 8, transactional reservations and versioned schema migrations. ／ The separate `skywings_public_demo` TiDB database already contains the shared dataset and credentials above. The demo is prepared for a separate Render service; its public URL will be added after deployment.",
+   "evidence_lines": [
+    5,
+    28,
+    120
+   ]
+  },
+  "fn": "Hassaan-Ahmad906/skywings-airline-management-system-v1.0",
+  "sha": "c2f3b8a14041",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9438,5 +9438,212 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7ba2b22312ba": {
+  "identity": {
+   "one_liner": "开源建筑工程ERP平台，基于FastAPI与内嵌PostgreSQL自托管运行",
+   "review": "面向建筑企业的自托管ERP系统，提供工程量清单（BOQ）、CAD/BIM算量、4D进度与5D成本建模、投标等功能，内置12万+造价条目与193个模块，UI支持44种语言。安装方式包括桌面应用、pip install与Docker；首次运行会自动建立内嵌PostgreSQL数据库，无需手动配置Docker。许可证为AGPL-3.0。",
+   "highlights": [
+    "支持BOQ、CAD/BIM（DWG/PDF/IFC）算量与4D/5D成本建模，包含120,000+造价条目",
+    "提供193个模块与REST API，支持自托管离线运行，首次运行自动初始化内嵌PostgreSQL数据库",
+    "UI支持44种语言，兼容30+地区造价标准，可接入多家LLM服务用于估价"
+   ],
+   "use_cases": [
+    "建筑企业进行工程量清单编制与造价估算",
+    "基于CAD/BIM图纸进行工程量提取与5D成本管理",
+    "自托管部署用于投标、采购与项目成本控制"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "That's it. The single wheel ships the backend plus the pre-built React frontend. The first run sets up a local embedded PostgreSQL database (no Docker, no setup), loads the demo data, opens your browser at **http://localhost:8080**, and you sign in with `demo@ ／ echo \"POSTGRES_PASSWORD=$(openssl rand -base64 24)\" > .env",
+     "lines": [
+      319,
+      358
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README说明首次运行自动设置内嵌PostgreSQL数据库存储数据，系统本身是使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "pypi",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "",
+   "evidence_lines": []
+  },
+  "fn": "datadrivenconstruction/OpenConstructionERP",
+  "sha": "7ba2b22312ba",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "17206af6376b": {
+  "identity": {
+   "one_liner": "开源自托管 CRM，管理联系人、公司与销售管道",
+   "review": "OpenCRM 是一个可自托管的联系人关系管理系统，围绕联系人、公司、交易三类实体提供管道看板、活动时间线、视图、筛选和 CSV 导入导出，面向 OpenClaw 社区及 SaaS 团队。数据存于 SQLite（Cloudflare D1），并提供 ?agent=true 的 AI 代理友好 UI 模式，依赖 Node.js 20+ 与 pnpm 运行。",
+   "highlights": [
+    "支持联系人、公司、交易三实体及外键关联（UUID 主键）",
+    "提供销售管道看板、活动时间线、共享视图、筛选与 CSV/XLSX 导入导出",
+    "提供 ?agent=true 双模式 UI，为浏览器自动化代理显示显式操作按钮"
+   ],
+   "use_cases": [
+    "SaaS 团队自托管管理联系人与销售线索",
+    "为 AI 代理提供可自动化的 CRM 操作界面",
+    "通过 Gmail 同步与日历集成跟踪客户会议与待办"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A lightweight CRM with contacts, companies, and deals — built for SaaS dashboards and AI agents. Part of the OpenClaw ecosystem. Zero cloud dependencies — runs locally with SQLite. ／ |**Database**|Cloudflare D1 (SQLite) via `@clawnify/db`| ／ schema.sql — SQLite schema (companies, contacts, deals)",
+     "lines": [
+      7,
+      71,
+      86
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据持久化于 SQLite（Cloudflare D1），CRM 本身是使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A lightweight CRM with contacts, companies, and deals — built for SaaS dashboards and AI agents. Part of the OpenClaw ecosystem. Zero cloud dependencies — runs locally with SQLite. ／ |**Database**|Cloudflare D1 (SQLite) via `@clawnify/db`|",
+   "evidence_lines": [
+    7,
+    71
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "clawnify/OpenCRM",
+  "sha": "17206af6376b",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "19de40f4c580": {
+  "identity": {
+   "one_liner": "自托管动漫播放器与聚合器，本地SQLite存储观看数据",
+   "review": "Tatap 是一个多平台（Web、Windows、Linux、Android）的自托管动漫播放与聚合应用，通过本地 localhost 后端提供播放界面，观看历史、书签和设置保存在设备本地的 SQLite 数据库 anime.db 中，支持印尼语字幕、可选接入用户自有 AI API 做字幕翻译，但需联网从第三方公共源流式加载内容，自身不托管视频。",
+   "highlights": [
+    "提供 Web 桌面端、Windows 便携版、Linux AppImage 和 Android 原生客户端多种运行方式",
+    "观看历史、书签与设置存储在本地 SQLite 数据库 anime.db",
+    "支持接入用户自备 API key 的 AI 字幕翻译（Gemini、Groq、OpenAI、Ollama）"
+   ],
+   "use_cases": [
+    "在本地设备观看来自公共源的动漫流内容",
+    "需要印尼语字幕或机器翻译字幕的观看场景",
+    "不想注册账号、希望观看记录保留在本机的个人使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 📂 **Penyimpanan Lokal (Offline-First Privacy)**: Riwayat tontonan (*watch history*), penanda (*bookmark*), dan pengaturan tersimpan aman di database SQLite lokal perangkatmu (`anime.db`).",
+     "lines": [
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用数据库存播放数据的播放器/聚合器应用，SQLite 仅作为本地存储",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 📂 **Penyimpanan Lokal (Offline-First Privacy)**: Riwayat tontonan (*watch history*), penanda (*bookmark*), dan pengaturan tersimpan aman di database SQLite lokal perangkatmu (`anime.db`). ／ - **Penyimpanan Berkas:** Tatap tidak meng-host, menampung, atau memiliki server penyimpan video sendiri. Aplikasi ini murni berperan sebagai alat agregator dan pemutar konten publik. ／ - **Lisensi:** Proyek ini dilisensikan di bawah GPL-3.0 untuk kebutuhan personal dan edukasi.",
+   "evidence_lines": [
+    33,
+    119,
+    120
+   ]
+  },
+  "fn": "bagusazizulamri/tatap",
+  "sha": "19de40f4c580",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

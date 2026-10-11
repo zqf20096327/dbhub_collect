@@ -7966,5 +7966,289 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "85074cf73d9f": {
+  "identity": {
+   "one_liner": "面向 Android Room 的类型安全 Kotlin DSL，用于运行时动态构建查询结构",
+   "review": "RoomQL 为 Android Room 提供 Kotlin DSL，通过 KSP 为 @Entity 生成类型化 Column 符号，支持在运行时决定排序、分组、连接、投影等查询结构，可选过滤器在为 null 时自动从 SQL 中移除，输出交由 Room 的 @RawQuery 执行。面向使用 Room 且需要动态查询结构的 Android 开发者，要求 Kotlin 2.0+、Room 2.6–2.7、minSdk 21+。",
+   "highlights": [
+    "KSP 为 @Entity 生成类型化列引用，列名重命名或拼错时编译失败",
+    "where 块提供 IfNotNull 后缀操作符，值为 null 时对应条件从生成的 SQL 中移除",
+    "生成 SupportSQLiteQuery 并以位置参数绑定值，支持阻塞、suspend 与 Flow 返回类型"
+   ],
+   "use_cases": [
+    "Android 应用中排序/分组/连接列需在运行时决定的列表查询",
+    "用纯 JVM 单元测试断言生成的 SQL 与参数",
+    "多表 JOIN 下需处理列名冲突别名的动态投影查询"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|`inList`, `notInList`|runtime|Set membership. Required — an empty list renders `IN ()`, which SQLite defines as matching nothing.| ／ |`SupportSQLiteQueryBuilder` (androidx.sqlite)|No — columns are strings|Yes, nothing checked at compile time|Yes, nothing checked at compile time|Manual|Already on your classpath; no type safety, no Room integration| ／ Values are always bound as positional `?` parameters and passed to SQLite as an argument list — RoomQL never interpolates a user-supplied value into the SQL text. Table and column names come from generated code rather than user input. The one exception is the ",
+     "lines": [
+      128,
+      152,
+      177
+     ]
+    }
+   ],
+   "dbs": [],
+   "eco": "tool",
+   "eco_why": "为 Room/SQLite 查询构建提供 DSL 库，是为数据库生态服务的开发组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "RoomQL — type-safe Kotlin DSL for dynamic Android Room queries ／ A query whose **filter values** vary at runtime already has a fine static answer: `WHERE (:minAge IS NULL OR age >= :minAge)`, one `@Query`, one method, checked by Room at compile time. A query whose **structure** varies — which column to sort or group by, whether a join is present, which columns to project — is a harder problem: SQL can bind a *value* as a parameter, never an *identifier*, so a static `@Query` can only reach that with a `CASE`-expression ladder that gets unreadable fast, or can't reach it at all for a dynamic `SELECT` list. **RoomQL** replaces both problems with one typed DSL: a KSP processor generates a `Column<T>` for every column in your `@Entity` classes, so `orderBy`, `groupBy`, `join`, and `select` take real, rename-safe Kotlin symbols, and `where { }`'s null-skipping filters cover the values case in the same block. (Exactly which parts of \"structure\" are merely awkward in static SQL versus genuinely impossible is worth knowing precisely — see the comparison below.) ／ |Room|2.6.x – 2.7.x (tested on 2.6.1 and 2.7.2; KSP2 needs Room 2.7+)|",
+   "evidence_lines": [
+    1,
+    22,
+    58
+   ]
+  },
+  "fn": "KotPlat/RoomQL",
+  "sha": "85074cf73d9f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8a2e77a5bd4e": {
+  "identity": {
+   "one_liner": "Kotlin 多平台持久化库，基于注解类提供 schema 迁移、过滤与事务",
+   "review": "Rekords 是一个 Kotlin Multiplatform 持久化库，开发者用 @Rekord 注解类声明模型和带版本迁移的 schema，在公共代码中读写数据，底层存储由各目标平台的引擎决定：Android/Apple/Linux/JVM 走 SQLite，浏览器走 IndexedDB，另有内存引擎用于测试与缓存，并提供 rekords-crypto 模块对单个字段做 AES 加密。适合需要在多平台共享存储逻辑且不想绑定 SQL 的应用开发者；不支持完整 SQL 复杂查询。",
+   "highlights": [
+    "提供过滤、排序、分页、嵌套记录与事务操作，schema 支持版本化迁移",
+    "提供 SQLite、IndexedDB、内存三种引擎，可自定义接入其他引擎",
+    "rekords-crypto 模块支持 AES 确定性/随机化字段级加密"
+   ],
+   "use_cases": [
+    "Kotlin Multiplatform 应用的本地持久化",
+    "需要字段加密的本地数据存储",
+    "内存引擎用于测试或作为应用前置缓存"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`rekords-sqlite`|Engine keeping rekords in SQLite, through `androidx.sqlite`|Android, JVM, iOS, macOS, tvOS, watchOS, Linux (no iOS simulator on Intel)|",
+     "lines": [
+      46
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该库为应用提供跨平台存储抽象层，本身不自带数据库，通过引擎适配 SQLite/IndexedDB 等存储。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Kotlin Multiplatform storage for annotated classes. Describe what you keep as `@Rekord` classes, ／ |`rekords-sqlite`|Engine keeping rekords in SQLite, through `androidx.sqlite`|Android, JVM, iOS, macOS, tvOS, watchOS, Linux (no iOS simulator on Intel)|",
+   "evidence_lines": [
+    6,
+    46
+   ]
+  },
+  "fn": "DenisShakinov/rekords",
+  "sha": "8a2e77a5bd4e",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2bc4a83a8c45": {
+  "identity": {
+   "one_liner": "AI 智能体的可溯源记忆 Python 库，带双时态召回与 SQLite/PostgreSQL 存储",
+   "review": "这是一个为 AI 智能体提供记忆能力的 Python 库：记录事实的来源、生效时间与权限范围，支持修正、擦除回放和有界 MemoryBundle 输出。核心零第三方依赖，默认用 SQLite 运行，可通过可选包接入 PostgreSQL、MCP 服务器和 LangGraph。面向构建 LLM 智能体的开发者，当前为 v0.1.0 Alpha 状态，需 Python 3.13+。",
+   "highlights": [
+    "双时态记忆：valid_at 与 known_at 两个时钟支持按时间点查询",
+    "零第三方核心运行时依赖，本地运行无需模型密钥或向量库",
+    "提供 MCP 服务器（stdio/HTTP）与 LangGraph 生命周期适配器等可选集成包"
+   ],
+   "use_cases": [
+    "为 LLM 智能体构建可溯源、可修正的长期记忆层",
+    "需要在备份恢复后仍能执行删除回放的记忆合规场景",
+    "通过 MCP 将记忆服务接入本地或远程 MCP 宿主"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|PostgreSQL provider and optional vector support|`python -m pip install -e packages/postgres`| ／ Validation records include SQLite and real PostgreSQL contracts, cross-connection races, process-kill recovery, and backup replay. The stage 12 full-suite report is an older baseline; stage 13 and stage 14 A/B.3/C record targeted and affected regression runs. ",
+     "lines": [
+      161,
+      204
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Start with Python + SQLite. Add PostgreSQL, MCP, and LangGraph when you need them. ／ |`agent-memory`|Domain contracts, SQLite runtime, retrieval, plugin loading|`python -m pip install -e .`| ／ agent-memory-mcp --transport stdio --database memory.sqlite3 \\ ／ Validation records include SQLite and real PostgreSQL contracts, cross-connection races, process-kill recovery, and backup replay. The stage 12 full-suite report is an older baseline; stage 13 and stage 14 A/B.3/C record targeted and affected regression runs. ",
+     "lines": [
+      6,
+      157,
+      167,
+      204
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目将 SQLite 与 PostgreSQL 仅作为自身记忆数据的存储后端使用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache 2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Agent Memory gives your agent **current facts, evidence, and a history of what changed**. It records where a statement came from, when it applies, and whether it can be used in the current scope. Your host receives a bounded `MemoryBundle` for its next model call. ／ |`agent-memory`|Domain contracts, SQLite runtime, retrieval, plugin loading|`python -m pip install -e .`| ／ |PostgreSQL|PostgreSQL provider and optional vector support|`python -m pip install -e packages/postgres`|",
+   "evidence_lines": [
+    21,
+    157,
+    161
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "agent-memory-lab/agent-memory",
+  "sha": "2bc4a83a8c45",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "29cbb6055093": {
+  "identity": {
+   "one_liner": "S3 兼容对象存储的多租户控制平面，基于 Cedar 策略与 PostgreSQL",
+   "review": "Paladin 是一个面向 S3 兼容对象存储的多租户控制平面：应用使用租户级凭证访问存储，Paladin 用 Cedar 策略鉴权、配额计量并写入审计记录，通过预签名 URL 让客户端直接传输对象字节，自身不代理流量。提供 Connect API、Web 控制台、Go/Python SDK 及面向 AI agent 的 MCP 接口，依赖 PostgreSQL 16+ 和 S3 兼容存储，通过 Helm 部署到 Kubernetes。适合需要租户隔离管理对象存储的运维团队。",
+   "highlights": [
+    "提供租户级凭证、Cedar 策略鉴权、配额计量与审计记录",
+    "通过预签名 URL 让客户端与后端直接传输字节，控制面仅承载元数据",
+    "提供 Connect API、Web 控制台、Go 与 Python SDK 及 MCP 接口"
+   ],
+   "use_cases": [
+    "多租户场景下集中管理 S3 兼容对象存储的访问凭证与权限",
+    "需要配额计量与审计记录的对象存储治理",
+    "通过 MCP 让 AI agent 以工具形式执行存储管理操作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "its contracts with PostgreSQL. Besides the Connect API, the ／ It needs PostgreSQL and an S3-compatible store — SeaweedFS, MinIO, Garage or",
+     "lines": [
+      44,
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Paladin 使用 PostgreSQL 存自身数据、面向对象存储生态，不是为数据库服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-only，backend 与 console/proto/SDK 分别标注许可证",
+   "install": [
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A multi-tenant control plane for S3-compatible object storage. Applications ／ its contracts with PostgreSQL. Besides the Connect API, the ／ It needs PostgreSQL and an S3-compatible store — SeaweedFS, MinIO, Garage or",
+   "evidence_lines": [
+    19,
+    44,
+    61
+   ]
+  },
+  "fn": "oleg-tkachuk/paladin",
+  "sha": "29cbb6055093",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

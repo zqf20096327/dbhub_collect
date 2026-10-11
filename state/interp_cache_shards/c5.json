@@ -9473,5 +9473,217 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b95b9d1f19a7": {
+  "identity": {
+   "one_liner": "开源 AI 笔记与知识库应用，支持 Cloudflare Serverless 与 Docker 部署",
+   "review": "EdgeEver 是一个开源笔记与个人知识库应用，采用 Evernote 式三栏布局，提供剪藏、附件、AI 生成图表与多维表格、MCP/ACP 协议集成等能力。面向长期 Evernote 用户与自托管人群，可零成本部署在 Cloudflare Workers/D1/R2 上，或经 Docker 运行于自有服务器，数据以 SQLite 存储并支持 ZIP 导出。",
+   "highlights": [
+    "支持 Cloudflare Serverless（D1/R2）与 Docker 两种部署方式",
+    "内置 MCP 与 ACP 协议，供外部 AI Agent 读写与整理笔记",
+    "数据基于 SQLite，提供 REST API、CLI 工具与无损 ZIP 导出导入"
+   ],
+   "use_cases": [
+    "自托管个人知识库与多端笔记同步",
+    "网页内容剪藏与微信聊天记录归档",
+    "通过 AI Agent 管理笔记并生成图表、表格与摘要"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Flexible Deployment & Unlocked Data**: Run for free on Cloudflare Serverless (~150k short notes and ~50k images on the free tier), or deploy via Docker to your VPS, NAS, or home server for millions of notes; built on standard SQLite with REST APIs, CLI too",
+     "lines": [
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite/Cloudflare D1 存储笔记数据的笔记应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "EdgeEver is a modern, open-source notes and knowledge base workspace. It revives the beloved Evernote-style three-pane layout while offering an open data architecture and seamless AI Agent integration for complete ownership and smart productivity. ／ - **Flexible Deployment & Unlocked Data**: Run for free on Cloudflare Serverless (~150k short notes and ~50k images on the free tier), or deploy via Docker to your VPS, NAS, or home server for millions of notes; built on standard SQLite with REST APIs, CLI tooling, and lossless full ZIP export/import to keep your data completely independent. ／ Cloudflare is the recommended zero-server deployment. Docker is available for users who prefer a VPS, NAS, or home server.",
+   "evidence_lines": [
+    19,
+    77,
+    84
+   ]
+  },
+  "fn": "tianma-if/edgeever",
+  "sha": "b95b9d1f19a7",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0292cedbb625": {
+  "identity": {
+   "one_liner": "SQLite 加密扩展，支持多种密码算法",
+   "review": "SQLite3 Multiple Ciphers 为 SQLite 数据库提供加密扩展，支持多种密码方案，基于 SQLite 的 VFS 特性实现，兼容 SQLite 3.32.0 及以上版本。面向需要为 SQLite 数据库文件加密的开发者，从 wxSQLite3 中独立出来，通过 C 和 SQL 接口使用。",
+   "highlights": [
+    "为 SQLite 提供支持多种密码方案的加密扩展",
+    "基于 SQLite VFS 特性实现，支持 SQLite 3.32.0 及以上版本",
+    "提供 C 接口和 SQL 接口"
+   ],
+   "use_cases": [
+    "需要对 SQLite 数据库文件进行加密的应用开发",
+    "替代不再适配新版 SQLite 的旧加密扩展（如基于 SQLITE_HAS_CODEC 的方案）"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The project **SQLite3 Multiple Ciphers** implements an encryption extension for SQLite with support for multiple ciphers. In the past the encryption extension was bundled with the project wxSQLite3, which provides a thin SQLite3 database wrapper for wxWidgets. ／ In late February 2020 work started on a new implementation of a SQLite encryption extension that will be able to support SQLite 3.32.0 and later. The new approach is based on SQLite's VFS feature. This approach has its pros and cons. On the one hand, the code ",
+     "lines": [
+      3,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SQLite 数据库提供加密扩展组件，属于数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "The project **SQLite3 Multiple Ciphers** implements an encryption extension for SQLite with support for multiple ciphers. In the past the encryption extension was bundled with the project wxSQLite3, which provides a thin SQLite3 database wrapper for wxWidgets. ／ In late February 2020 work started on a new implementation of a SQLite encryption extension that will be able to support SQLite 3.32.0 and later. The new approach is based on SQLite's VFS feature. This approach has its pros and cons. On the one hand, the code is less closely coupled with SQLite itself; on the other hand, access to SQLite's internal data structures is more complex.",
+   "evidence_lines": [
+    3,
+    7
+   ]
+  },
+  "fn": "utelle/SQLite3MultipleCiphers",
+  "sha": "0292cedbb625",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "07a6f3192fd5": {
+  "identity": {
+   "one_liner": "PostgreSQL 扩展，采集每查询遥测并导出到 ClickHouse",
+   "review": "pg_stat_ch 是一个 PostgreSQL 扩展，通过钩子捕获每条查询的执行遥测事件，经共享内存环形缓冲和后台工作进程实时导出到 ClickHouse，聚合分析由 ClickHouse 完成。面向需要查询级指标（延迟分位数、慢查询模式、错误）的 PostgreSQL 16-18 运维者；要求 ClickHouse 23.3+，从源码构建安装。",
+   "highlights": [
+    "捕获全类型语句的原始执行事件：耗时、行数、缓冲区/WAL/CPU 使用、SQLSTATE 错误、查询文本",
+    "查询路径零网络 I/O，事件写入共享内存环形缓冲，溢出丢弃且不阻塞查询",
+    "聚合（p50/p95/p99、慢查询模式）在 ClickHouse 侧通过视图/物化视图实现"
+   ],
+   "use_cases": [
+    "PostgreSQL 查询性能监控与慢查询模式分析",
+    "基于原始事件的延迟分位数、时间序列与按应用下钻查询",
+    "长期保存查询级遥测数据用于事后分析"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# pg_stat_ch: PostgreSQL Query Telemetry Exporter to ClickHouse ／ A PostgreSQL extension that captures per-query execution telemetry and exports it to ClickHouse in real-time. Unlike pg_stat_statements which aggregates statistics in PostgreSQL, pg_stat_ch exports **raw events** to ClickHouse where aggregation happens via Cli ／ PostgreSQL 16, 17, and 18 are fully supported. See docs/version-compatibility.md for the feature matrix and version-specific fields.",
+     "lines": [
+      4,
+      6,
+      69
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "# pg_stat_ch: PostgreSQL Query Telemetry Exporter to ClickHouse ／ A PostgreSQL extension that captures per-query execution telemetry and exports it to ClickHouse in real-time. Unlike pg_stat_statements which aggregates statistics in PostgreSQL, pg_stat_ch exports **raw events** to ClickHouse where aggregation happens via Cli ／ ClickHouse 23.3+ is required for native export.",
+     "lines": [
+      4,
+      6,
+      71
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 PostgreSQL 扩展为数据库提供遥测采集与导出能力，是为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A PostgreSQL extension that captures per-query execution telemetry and exports it to ClickHouse in real-time. Unlike pg_stat_statements which aggregates statistics in PostgreSQL, pg_stat_ch exports **raw events** to ClickHouse where aggregation happens via ClickHouse's powerful analytical engine. ／ pg_stat_ch captures detailed telemetry for every query executed in PostgreSQL and exports it to ClickHouse via a single data pipeline: ／ PostgreSQL 16, 17, and 18 are fully supported. See docs/version-compatibility.md for the feature matrix and version-specific fields.",
+   "evidence_lines": [
+    6,
+    35,
+    69
+   ]
+  },
+  "fn": "ClickHouse/pg_stat_ch",
+  "sha": "07a6f3192fd5",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8721,5 +8721,66 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9d98948c32d2": {
+  "identity": {
+   "one_liner": "自托管 AI 员工平台，将 Claude Code/Codex 接入飞书与企业微信",
+   "review": "CoreMan 是一个用 Docker Compose 部署的自托管平台，把 Claude Code 和 Codex CLI 封装为可通过飞书/企业微信群聊或私聊调用的 AI 员工。它由管理端和装在用户机器上的 Runtime 守护进程组成，提供扫码建机器人、定时任务、技能审批、团队权限与审计等功能。模型额度需用户自备订阅或 API 账号；项目版本 0.2.0，处于早期阶段。",
+   "highlights": [
+    "通过飞书/企业微信平台长连接收发消息，无需公网 IP 或回调域名",
+    "Runtime 守护进程主动连回管理端，在用户指定的机器和系统用户下执行 Claude Code/Codex",
+    "提供团队与角色、技能审批、定时任务、用量统计和审计日志"
+   ],
+   "use_cases": [
+    "团队在群聊中 @ AI 员工协作完成开发任务",
+    "成员私聊授权后由 AI 办理本人日程、邮件、任务等事务",
+    "配置定时任务让 AI 周期性汇总或推送信息"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是部署在用户环境中的 AI 协作平台应用，数据库仅作为其内部存储组件被提及（部署时自动生成数据库密码），并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "在群里 @ 它，或者私聊它，它就在你们自己的机器上调用 Claude Code / Codex 干活，再把结果发回聊天。管理员在一个后台里管理所有 AI 员工：用什么模型、跑在哪台机器、装了哪些技能、谁可以使用。 ／ - **CoreMan** 是用 Docker Compose 部署的管理端，负责收发聊天消息、排队调度、权限和数据存储。 ／ 项目仍处于早期阶段（当前发布版本 0.2.0），`main` 分支持续加入新功能，变更见 CHANGELOG。",
+   "evidence_lines": [
+    13,
+    39,
+    124
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "wxkingstar/CoreMan",
+  "sha": "9d98948c32d2",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

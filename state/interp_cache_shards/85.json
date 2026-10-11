@@ -9855,5 +9855,88 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a2df1573c0a6": {
+  "identity": {
+   "one_liner": "Telegram 机器人 + REST API，用于学校班级作业管理",
+   "review": "一个班级作业管理系统：选定学生通过 Telegram 机器人录入每日作业，其他成员经机器人或 REST API 查看，并包含积分、排名、审计日志与 Web 管理面板。后端基于 FastAPI 与 SQLAlchemy 2 (async) + Alembic，开发环境用 SQLite、生产环境用 PostgreSQL，通过环境变量切换。面向需要集中记录班级作业的班级场景。",
+   "highlights": [
+    "提供 Telegram 机器人与 REST API 双入口，共享同一 Service Layer（28 个文档化 API 路由，Swagger 自动生成）",
+    "支持角色分级（SUPER_ADMIN/CONTRIBUTOR/USER）RBAC、JWT + API Key 认证、审计日志与速率限制",
+    "积分规则存于数据库且运行时可改，积分流水以 point_transactions 记账，Alembic 负责版本化迁移",
+    "默认单进程或通过 run.py --api-only/--bot-only 分进程运行，Docker Compose 部署含 PostgreSQL 并自动执行迁移"
+   ],
+   "use_cases": [
+    "班级作业的日常发布与查看（波斯语界面、支持伊朗日历 jdatetime）",
+    "按积分规则激励学生记录作业并生成排名",
+    "通过 REST API 或 Web 管理面板管理用户、角色、积分规则与 API Key"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**SQLite (dev) / PostgreSQL (prod)**|SQLite برای شروع بدون دردسر؛ PostgreSQL برای مقیاس واقعی| ／ `docker-compose.yml` شامل PostgreSQL + اپ است و مهاجرت‌ها خودکار اجرا می‌شوند. ／ - دیتابیس را روی **PostgreSQL** بگذارید (`DATABASE_URL=postgresql+asyncpg://...` + `pip install asyncpg psycopg2-binary`).",
+     "lines": [
+      61,
+      180,
+      196
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**SQLite (dev) / PostgreSQL (prod)**|SQLite برای شروع بدون دردسر؛ PostgreSQL برای مقیاس واقعی|",
+     "lines": [
+      61
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite/PostgreSQL 存储数据的 Telegram 机器人作业管理应用，README 在技术栈和部署部分声明依赖该二库存数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ربات تلگرام + REST API حرفه‌ای برای **مدیریت تکالیف یک کلاس مدرسه**. ／ |**SQLite (dev) / PostgreSQL (prod)**|SQLite برای شروع بدون دردسر؛ PostgreSQL برای مقیاس واقعی| ／ `docker-compose.yml` شامل PostgreSQL + اپ است و مهاجرت‌ها خودکار اجرا می‌شوند.",
+   "evidence_lines": [
+    3,
+    61,
+    180
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "ShayanTxT/KelasYar",
+  "sha": "a2df1573c0a6",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

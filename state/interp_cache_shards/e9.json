@@ -10029,5 +10029,223 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8154f7840cc6": {
+  "identity": {
+   "one_liner": "Discord 历史归档 CLI，将消息存入本地 SQLite",
+   "review": "Discrawl 是一个命令行工具，通过 Discord bot、桌面缓存读取或 Git 快照等来源采集 Discord 消息，归档到本地 SQLite，并提供 FTS5 全文搜索、TUI 浏览、只读 SQL 查询和 Git 快照分享。适合需要长期保存服务器历史或离线检索缓存消息的 Discord 用户；wiretap 仅能导入本地已缓存的消息，非完整历史抓取。",
+   "highlights": [
+    "支持 bot 同步、桌面缓存导入、Git 快照订阅三种归档来源",
+    "基于 SQLite FTS5 提供本地全文搜索，并可选语义/混合搜索",
+    "提供 JSON 输出接口供自动化与 CI 使用"
+   ],
+   "use_cases": [
+    "长期归档 Discord 服务器历史并离线检索",
+    "本地恢复 Discord 桌面端缓存的消息（含私信）",
+    "以只读方式共享或订阅他人发布的归档快照"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Discrawl archives Discord guild data and classifiable Discord Desktop cache messages in local SQLite for offline search, SQL, and terminal browsing. It is for people who need durable server history, local recovery of cached direct messages, or read-only access",
+     "lines": [
+      12
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明将数据归档存储在本地 SQLite 中，SQLite 是其数据存储层。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Discrawl archives Discord guild data and classifiable Discord Desktop cache messages in local SQLite for offline search, SQL, and terminal browsing. It is for people who need durable server history, local recovery of cached direct messages, or read-only access to a shared archive. ／ FTS5 search works without external services: ／ `publish` writes a sharded Git snapshot that another machine can consume with `subscribe`. Readers need access to the snapshot repository, but do not need Discord credentials.",
+   "evidence_lines": [
+    12,
+    78,
+    93
+   ]
+  },
+  "fn": "openclaw/discrawl",
+  "sha": "8154f7840cc6",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e5edaeb855b3": {
+  "identity": {
+   "one_liner": "自托管的 PaaS 部署平台",
+   "review": "QuickStack 是一个开源自托管 PaaS 平台，供开发者和团队在自己的服务器上通过 Web 界面部署和管理应用与数据库。它基于 K3s 和 Longhorn 提供调度、持久卷与多节点支持，包含一键部署 PostgreSQL/MySQL/MariaDB 等数据库、Git 构建部署、日志监控、S3 备份、OIDC SSO 等功能。需满足 2 核 4GB 以上服务器资源。",
+   "highlights": [
+    "通过 Web 界面部署来自 Git 仓库或注册表的应用，支持 Dockerfile 与预配置框架构建",
+    "一键启动 PostgreSQL、MySQL、MariaDB、MongoDB、Redis 等数据库实例",
+    "提供日志流、资源监控、S3 卷备份、数据库原生 dump 及 webhook/API 自动化部署与回滚"
+   ],
+   "use_cases": [
+    "在自有 VPS 或裸金属服务器上自托管 Web 应用与数据库",
+    "多节点部署并使用 Longhorn 复制卷保持持久化数据",
+    "团队协作部署管理，使用角色、OIDC SSO 与 API 密钥控制访问"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **One-click apps and databases:** Launch popular apps, PostgreSQL, MySQL, MariaDB, MongoDB, and Redis in seconds.",
+     "lines": [
+      40
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **One-click apps and databases:** Launch popular apps, PostgreSQL, MySQL, MariaDB, MongoDB, and Redis in seconds.",
+     "lines": [
+      40
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **One-click apps and databases:** Launch popular apps, PostgreSQL, MySQL, MariaDB, MongoDB, and Redis in seconds.",
+     "lines": [
+      40
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为部署管理数据库和应用的 PaaS 平台，数据库是其服务对象而非仅存储自身数据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Deploy and manage **applications** and **databases** on your own VPS, Bare Metal or any other infrastructure through a clean web interface. QuickStack combines the simplicity and scalability of modern cloud platforms with the control of self-hosting. ／ - **One-click apps and databases:** Launch popular apps, PostgreSQL, MySQL, MariaDB, MongoDB, and Redis in seconds. ／ QuickStack is a self-hosted alternative to platforms like Coolify, Dokku, Dokploy, Portainer and CapRover. Under the hood, QuickStack installs and manages K3s, a lightweight Kubernetes distribution, together with Longhorn for distributed persistent storage across nodes. This gives you proven Kubernetes primitives such as scheduling, services, ingress, persistent volumes, jobs, probes and multi-node orchestration through a simple web interface for day-to-day deployments. No knowledge of Kubernetes is required to use QuickStack.",
+   "evidence_lines": [
+    11,
+    40,
+    55
+   ]
+  },
+  "fn": "biersoeckli/QuickStack",
+  "sha": "e5edaeb855b3",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "09379c9c87a0": {
+  "identity": {
+   "one_liner": "基于 MCP 的分层多智能体编排平台，以 SQLite 事件溯源持久化状态",
+   "review": "该仓库实现 CEO→Manager→Workers 层级的多智能体编排，通过 stdio MCP 服务器接入 Claude Desktop、Cursor 等客户端，状态以事件溯源方式写入本地 SQLite 数据库，重启后可恢复代理图与任务队列。面向需要本地化运行多智能体团队的开发者，支持混合原生 CLI 订阅与直连 API 两种执行方式，并提供 Web Studio 界面与 Telegram 远程监督。",
+   "highlights": [
+    "提供事件溯源式 SQLite 持久化，重启后重建代理图并恢复队列任务",
+    "支持双执行通道：原生 CLI 子进程（Claude Code、Antigravity、Codex）与直连 API（DeepSeek、GLM、OpenAI 等）",
+    "提供实时 Web Studio 界面与 Telegram 桥接用于任务监督"
+   ],
+   "use_cases": [
+    "在 MCP 客户端中运行层级化自主多智能体团队执行工程任务",
+    "需要任务状态持久化、崩溃/重启后可恢复的长时智能体工作流",
+    "通过 Telegram 移动端远程监督和介入智能体执行过程"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Unlike ephemeral agent systems that lose all state on reload, Agentic Team MCP records all state mutations, messages, agent definitions, and task outcomes in an event-sourced SQLite database (`team.sqlite3`). If your system restarts, the engine reconstitutes t",
+     "lines": [
+      63
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 声明以本地 SQLite 数据库存放代理状态与事件（team.sqlite3），SQLite 仅作内部持久化而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Unlike ephemeral agent systems that lose all state on reload, Agentic Team MCP records all state mutations, messages, agent definitions, and task outcomes in an event-sourced SQLite database (`team.sqlite3`). If your system restarts, the engine reconstitutes the full agent graph, preserves queued assignments, and transitions any interrupted in-flight turns to `PAUSED` so existing artifacts can be inspected before resuming without blindly replaying side effects. ／ > **Agentic Team MCP** is an enterprise-grade, local-first multi-agent orchestration platform designed around the Model Context Protocol (MCP). It establishes a persistent, hierarchical agent workforce (**Root Watchdog Supervisor → CEO Strategy → Manager Execution → Specialist Workers**) that bridges native CLI coding environments (Claude Code, Gemini Antigravity, Codex) with unified direct API providers (DeepSeek, Z.ai/GLM, Google Gemini, OpenAI, and OpenRouter). ／ Agentic Team MCP operates as a high-performance stdio MCP server that connects directly to your background engine.",
+   "evidence_lines": [
+    63,
+    15,
+    154
+   ]
+  },
+  "fn": "menma4ever/agentic-team-mcp",
+  "sha": "09379c9c87a0",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

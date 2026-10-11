@@ -8747,5 +8747,136 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "92c60811333a": {
+  "identity": {
+   "one_liner": "Emacs 交互式数据库客户端，支持 SQL 查询、结果网格与行编辑暂存",
+   "review": "Clutch 是一个运行在 Emacs 内的交互式数据库客户端，提供可编辑 SQL 缓冲区、结果网格展示、行级变更暂存预览，以及元数据浏览、结果导出（CSV/TSV/Org）等能力。面向使用 Emacs 的开发者与 DBA，通过原生 Elisp 集成或 Java 17+ 的 JDBC agent 连接多种数据库；行编辑仅在能识别稳定行标识时可用，复杂结果集保持只读。",
+   "highlights": [
+    "在 Emacs 缓冲区内执行查询并在分屏网格中刷新结果，支持后台执行不阻塞",
+    "对支持的主键/唯一键行暂存 INSERT/UPDATE/DELETE，执行前提供校验与预览",
+    "通过原生后端或捆绑的 clutch-jdbc-agent（Java 17+）连接多种数据库，支持 CSV/TSV/Org 导出"
+   ],
+   "use_cases": [
+    "在 Emacs 工作流中查询和浏览 MySQL/PostgreSQL/SQLite 等数据库",
+    "对查询结果进行有校验的行级数据修正",
+    "通过 JDBC 统一访问 Oracle、SQL Server、ClickHouse 等数据库"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with Installation Details and Saved Connections and Query Workflow. ／ |PostgreSQL native|Non-null unique keys, then `ctid` for ordinary heap tables|",
+     "lines": [
+      7,
+      39,
+      58
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ For MySQL, PostgreSQL, MongoDB, Redis, or JDBC, continue with Installation Details and Saved Connections and Query Workflow. ／ |MySQL native|Non-null unique keys; no physical row-locator fallback|",
+     "lines": [
+      7,
+      39,
+      57
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |Oracle JDBC|Non-null unique keys, then `ROWID` for confirmed base tables| ／ |Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`|",
+     "lines": [
+      7,
+      61,
+      74
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ The shortest path uses SQLite, which requires only Emacs 29.1+—no protocol package or Java runtime. ／ ### 2. Open a SQLite database",
+     "lines": [
+      7,
+      13,
+      23
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |Oracle / SQL Server|Core SQL support via JDBC|Requires Java 17+ and `clutch-jdbc-agent.jar`| ／ |`:backend jdbc` / Oracle / SQL Server / ClickHouse / DB2 / DuckDB|None in Emacs; uses the bundled JDBC adapter|",
+     "lines": [
+      7,
+      74,
+      94
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracl ／ |ClickHouse / Snowflake / Redshift / DB2 / generic JDBC|Basic SQL / query-first support|Backend-specific limits apply to editing, transactions, and dialect behavior| ／ |`:backend jdbc` / Oracle / SQL Server / ClickHouse / DB2 / DuckDB|None in Emacs; uses the bundled JDBC adapter|",
+     "lines": [
+      7,
+      78,
+      94
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "compat",
+     "quote": "|MySQL|Core SQL support|Validated against MySQL 5.6, MySQL 8.0, MySQL 8.4 LTS, and MariaDB 10.11| ／ MariaDB 10.11 has been live-validated through the native `mysql` backend, including TLS with `mysql_native_password`; other MariaDB versions are expected to be broadly compatible but are not yet part of the regular test matrix. MySQL 5.6 has no native JSON col",
+     "lines": [
+      70,
+      122
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接和管理多种数据库的 Emacs 客户端工具，为数据库生态提供服务，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Query and browse databases—and stage SQL row edits—without leaving Emacs. ／ Clutch keeps queries in editable buffers, shows results in an interactive grid, and stages supported SQL row changes for preview before execution. It provides sidecar-free paths for MySQL, PostgreSQL, XTDB, SQLite, MongoDB, and Redis, plus JDBC access to Oracle, SQL Server, DB2, Snowflake, Redshift, ClickHouse, DuckDB, and other databases. ／ - **Choose the backend path you need:** use native or pure-Elisp integrations when available, or the Java 17+ clutch-jdbc-agent for JDBC databases.",
+   "evidence_lines": [
+    5,
+    7,
+    49
+   ]
+  },
+  "fn": "LuciusChen/clutch",
+  "sha": "92c60811333a",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

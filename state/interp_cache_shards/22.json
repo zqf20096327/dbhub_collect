@@ -9056,5 +9056,76 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0ffa283a5925": {
+  "identity": {
+   "one_liner": "CLIProxyAPI 网关的自托管管理控制台与用量观测面板",
+   "review": "Oh My CPA 是面向 CLIProxyAPI（CPA）API 网关的 Web 控制台，用 Go 单二进制内嵌 React 界面，本地 SQLite 存储用量与成本数据，支持离线运行。提供 AI 供应商、OAuth 凭据、客户端密钥管理及请求遥测、成本快照、审计日志，并暴露 MCP 端点供外部代理调用。面向自托管 CPA 网关的运维者，需 CPA v8.0.0+ 配合部署。",
+   "highlights": [
+    "提供请求记录、令牌吞吐、成本快照与审计日志等用量观测功能（L190-L194）",
+    "支持在控制台内管理 AI 供应商、OAuth 凭据与客户端密钥（L181-L183）",
+    "提供 MCP 端点（Streamable HTTP）供外部代理读取用量与执行受确认的操作（L223-L227）"
+   ],
+   "use_cases": [
+    "自托管 CLIProxyAPI 网关的配置与凭据管理",
+    "AI API 调用请求的用量、延迟与成本记录查询",
+    "通过 MCP 让外部代理分析用量并代管控制台配置"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "binary with the React console embedded and a local SQLite database, runs offline, and ／ |`OMCPA_DATA_DIR`|`./data`|Directory of the SQLite database; the Compose files set `/data`| ／ ├─ SQLite WAL (/data)",
+     "lines": [
+      34,
+      279,
+      292
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为其本地存储数据库使用，项目本体是面向 CPA 网关的应用控制台，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CLIProxyAPI (CPA) is an API gateway: it ／ records the usage and cost of every request. It is a single Go ／ **From an external agent:** The same capabilities are served over MCP at",
+   "evidence_lines": [
+    30,
+    33,
+    223
+   ]
+  },
+  "fn": "WizisCool/oh-my-cpa",
+  "sha": "0ffa283a5925",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

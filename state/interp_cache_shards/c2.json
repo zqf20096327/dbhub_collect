@@ -9156,5 +9156,88 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "39b142d4011a": {
+  "identity": {
+   "one_liner": "基于 Rails 8 的生产级 API 应用基础框架",
+   "review": "RexOne Core 是一个 Rails 8 API 应用基础工程，提供认证、IAM/RBAC、Stripe 订阅、Solid Queue 后台任务、Action Cable WebSocket、AI 队列与监控等模块，面向需要快速搭建 Web/移动后端产品的研究者和团队；运行依赖 PostgreSQL、Docker 与 Garage S3，以模块化单体加容器隔离方式部署。",
+   "highlights": [
+    "提供认证、层级 IAM、Stripe 计费、后台队列、WebSocket 实时通信与可观测性等一体化后端模块",
+    "以模块化单体架构 + 容器隔离（api/waka/media/db/garage）方式部署",
+    "基于 Apache 2.0 许可证开源，提供 OpenAPI 3.0 规范与 Swagger 文档"
+   ],
+   "use_cases": [
+    "为 Web 与移动产品搭建后端 API 起点工程",
+    "需要自托管 PostgreSQL 与 S3 存储的产品部署",
+    "配合 AI 编码工具进行规范约束下的应用开发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ 2. **The BaaS Trap**: Serverless \"5-minute backends\" lure developers in with toys, then slap them with a $5,000/mo cloud hostage bill when they need relational integrity, background queues, or compliance audits. Real software runs self-hosted PostgreSQL, nativ",
+     "lines": [
+      11,
+      99
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|**Database Integrity**|✅ **Strict Relational PostgreSQL**: Foreign keys, ACID, UUIDs, soft-deletes|⚠️ **ORM Inconsistencies**: Serverless connection pool limits on Prisma/Drizzle|✅ **PostgreSQL**: Relational integrity via managed Postgres instance|✅ **Postgre",
+     "lines": [
+      149
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|**Offline-First Durability**|✅ **Drift SQLite (`rexone_offline`)**: Schema mirroring, offline subtitles & AES-256 saves|❌ **None**: Application breaks entirely on network disconnect|⚠️ **No Relational Offline**: Unreliable offline sync across foreign keys|❌ *",
+     "lines": [
+      148
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是使用 PostgreSQL 存数据的 Rails 应用基础工程，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A battle-hardened, production-grade API core for modern web and mobile products. Authentication, hierarchical IAM, Stripe billing, access control, media pipelines, notifications, durable AI queues, real-time Action Cable WebSockets, background job topologies, operational administration, and glass-box observability stand ready—not as scattered trophies, but as one disciplined system. ／ PostgreSQL ／ 2. **The BaaS Trap**: Serverless \"5-minute backends\" lure developers in with toys, then slap them with a $5,000/mo cloud hostage bill when they need relational integrity, background queues, or compliance audits. Real software runs self-hosted PostgreSQL, native queues (Solid Queue), and self-hosted S3 (Garage).",
+   "evidence_lines": [
+    5,
+    11,
+    99
+   ]
+  },
+  "fn": "rex-9/rexone-core",
+  "sha": "39b142d4011a",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

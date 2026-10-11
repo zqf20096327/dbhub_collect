@@ -8870,5 +8870,252 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e756ab507c09": {
+  "identity": {
+   "one_liner": "免费开发者工具清单，自动检测条目在线状态",
+   "review": "一份以表格形式编录 55 个免费或免费额度开发者工具的清单仓库，覆盖 AI 编码、云托管、数据库、DevOps 等分类，每条列出用途、定价与状态，并通过 GitHub Actions 每晚自动检测条目在线情况，面向开发者和使用 AI 辅助编程的用户。",
+   "highlights": [
+    "收录 55 个工具，含数据库、云托管、AI 编码等 16 个分类",
+    "通过 GitHub Actions 每晚自动检查各工具在线状态",
+    "每条目标注用途、定价模式与开源许可信息"
+   ],
+   "use_cases": [
+    "查找提供免费额度的开发工具",
+    "了解数据库与后端服务的免费选项",
+    "跟踪清单中工具的可用状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL and backend services (Auth, Storage, Realtime) ／ Serverless PostgreSQL",
+     "lines": [
+      175,
+      180
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Serverless SQL database built on SQLite with global read replication and native Cloudflare Workers integration ／ Serverless SQLite database with edge replication",
+     "lines": [
+      190,
+      195
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库本身是工具清单/目录项目，仅在 Database & Backend 分类中提及 PostgreSQL 和 SQLite 相关产品，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 🎯 **The best free-tier tools collection** for developers and Vibe Coders. Status is automatically checked every night to keep information accurate. ／ |Total Tools|55| ／ ### Database & Backend",
+   "evidence_lines": [
+    9,
+    17,
+    167
+   ]
+  },
+  "fn": "pnnnhan99/awesome-free-dev-tools",
+  "sha": "e756ab507c09",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "499702c84a7b": {
+  "identity": {
+   "one_liner": "中间件离线打包部署工具：本地Web选型打包，服务器零交互部署",
+   "review": "该项目提供本地 Web 界面选择中间件、端口、密码与备份策略，生成含 Docker/Compose/K8s 物料的离线包，服务器解压后执行 deploy.sh 即可零交互完成安装与部署，并生成部署报告。面向内网/隔离机房等无法联网的交付场景。内置 MySQL 主从、Redis 哨兵、Kafka 集群等拓扑支持；当前备份/恢复仅覆盖 MySQL，PostgreSQL 备份尚未纳入。",
+   "highlights": [
+    "本地打包生成只含所需物料的离线包，服务器上 ./deploy.sh 零交互完成 Docker/Compose 安装与中间件部署",
+    "支持 MySQL 单机/主从复制(GTID)、Redis 哨兵、Kafka 3节点集群等多机拓扑，以及定时备份与 restore.sh 恢复",
+    "插件化扩展：新增中间件只需一个插件文件加镜像 tar，自动纳入页面勾选、编排生成与部署流程"
+   ],
+   "use_cases": [
+    "内网/隔离机房/无公网服务器的中间件离线交付部署",
+    "需要 MySQL 主从、Redis 哨兵等集群形态的离线环境搭建",
+    "带定时备份与部署报告的中间件标准化交付"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **定时备份 + 一键恢复**：MySQL/PostgreSQL/MongoDB 各自独立的备份计划(crontab), 容器内原生工具按库分文件压缩(mysqldump / pg_dump -Fc / mongodump), 超出保留份数自动轮转；`restore.sh` 一条命令恢复指定库 ／ - **集群形态**：MySQL 单机 / **主从复制**(一主一从 · GTID 自动同步 · 部署时自动配置复制，8.0 与 5.7 均支持)； ／ - **MySQL 参数可定制**：自动挂载 `conf/<svc>/my.cnf`（内置 sql_mode 严格模式声明），改参数不用进容器",
+     "lines": [
+      43,
+      46,
+      48
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **定时备份 + 一键恢复**：MySQL/PostgreSQL/MongoDB 各自独立的备份计划(crontab), 容器内原生工具按库分文件压缩(mysqldump / pg_dump -Fc / mongodump), 超出保留份数自动轮转；`restore.sh` 一条命令恢复指定库 ／ |PostgreSQL|15.19|15432|compose 自带 `pg_isready` 健康检查|",
+     "lines": [
+      43,
+      211
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为数据库及中间件的离线部署、编排与备份提供服务，是数据库生态的部署工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "在本地 Web 界面上选好中间件、端口、密码、数据库、备份策略，一键打出**只含本次所需物料**的离线包； ／ - **定时备份 + 一键恢复**：MySQL/PostgreSQL/MongoDB 各自独立的备份计划(crontab), 容器内原生工具按库分文件压缩(mysqldump / pg_dump -Fc / mongodump), 超出保留份数自动轮转；`restore.sh` 一条命令恢复指定库 ／ |PostgreSQL|15.19|15432|compose 自带 `pg_isready` 健康检查|",
+   "evidence_lines": [
+    5,
+    43,
+    211
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "litianyanaa-pixel/middleware-offline-deploy",
+  "sha": "499702c84a7b",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4542a32b3736": {
+  "identity": {
+   "one_liner": "GaussDB 规格驱动 SQL 测试生成系统：文档转 Factor Package 再组合生成 SQL 用例",
+   "review": "该项目将 GaussDB 产品文档（PDF 5,637 页）抽取为可静态校验的 Factor Package，再通过约束感知的组合生成器输出 SQL 测试用例与验证脚本。面向需要为 GaussDB 做规格测试的人员；当前阶段仅完成文档抽取与静态生成，335 个 open questions 尚未连库运行时验证，未连接数据库。",
+   "highlights": [
+    "提供 Factor Package V1 结构化管理 source/factor/fixture/scenario 等目录",
+    "实现约束感知 Pairwise 组合生成与静态覆盖审计",
+    "内置 psycopg2 驱动与 auto_validate.py 框架，用于连库批量验证"
+   ],
+   "use_cases": [
+    "为 GaussDB 生成 SQL 语法与约束覆盖测试用例",
+    "将数据库产品文档批量转为结构化规格知识库",
+    "审计文档事实提取与测试生成的覆盖缺口"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "GaussDB",
+     "rel": "support",
+     "quote": "# GaussDB 规格驱动 SQL 测试生成系统 ／ 本项目把 GaussDB 产品文档转换为可追溯、可静态校验的 Factor Package V1，再通过约束感知的组合生成器输出 SQL 测试用例。当前阶段聚焦“文档抽取 → 规格建模 → SQL 生成 → 静态覆盖审计”，默认不连接数据库。 ／ **下一步：连库运行时验证。** 335 个 open questions 全部需要连接 GaussDB 实例执行 SQL 验证。",
+     "lines": [
+      1,
+      3,
+      89
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|Compatibility|603|15%|MySQL M/B模式/Oracle兼容性差异/字符集字符序|",
+     "lines": [
+      47
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- Fixture 与目标错误 Oracle：生成 setup/test/teardown，并为负向用例保存目标错误类别、SQLSTATE 候选集或错误正则。 ／ |SQL Reference facts|5,758条（syntax 2,676 / constraint 2,330 / behavior_oracle 592 / environment 160）|",
+     "lines": [
+      14,
+      31
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|CORE_OTHER_SYSTEM_PG_COMPAT_WAVE7_9_V1.md|1.6.60其他系统函数第一阶段：兼容PostgreSQL清单抽取：18页、13个facts|",
+     "lines": [
+      183
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为 GaussDB 提供规格转换与 SQL 测试用例生成服务，属数据库测试工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "GaussDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# GaussDB 规格驱动 SQL 测试生成系统 ／ 本项目把 GaussDB 产品文档转换为可追溯、可静态校验的 Factor Package V1，再通过约束感知的组合生成器输出 SQL 测试用例。当前阶段聚焦“文档抽取 → 规格建模 → SQL 生成 → 静态覆盖审计”，默认不连接数据库。 ／ **下一步：连库运行时验证。** 335 个 open questions 全部需要连接 GaussDB 实例执行 SQL 验证。",
+   "evidence_lines": [
+    1,
+    3,
+    89
+   ]
+  },
+  "fn": "yuziyydss/gaussdb_test",
+  "sha": "4542a32b3736",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

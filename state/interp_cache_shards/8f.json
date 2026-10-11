@@ -8565,5 +8565,224 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3bf799433742": {
+  "identity": {
+   "one_liner": "PHP 自托管开源 CMS，用于搭建约会/婚恋/社交网站",
+   "review": "pH7Builder（前身为 pH7CMS）是一个基于 PHP 8.2+ 和 MySQL 8.0+ 的自托管应用，提供会员资料、匹配、私信、付费会员、管理后台等模块，面向想自建约会或社交社区网站的运营者。依赖 pdo_mysql，安装走浏览器引导安装器，可通过 Docker、ZIP 或 Composer 部署；MariaDB 不在支持之列。",
+   "highlights": [
+    "提供会员资料、匹配、私信、论坛、付费会员、支付网关集成等模块",
+    "包含管理面板、审核队列、双语路由与多语言包、REST API 模块和 PWA 支持",
+    "提供浏览器引导安装器，可检查运行时与数据库连接后导入 schema"
+   ],
+   "use_cases": [
+    "搭建自托管的约会或婚恋交友网站",
+    "运营会员制社交社区并管理付费会员与支付",
+    "基于 PHP/MySQL 栈二次开发定制化社交应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**What you need:** PHP 8.2+, MySQL 8.0+, URL rewriting, and a web server. ／ - MySQL 8.0 or newer with `utf8mb4` support. Older MySQL releases and MariaDB",
+     "lines": [
+      12,
+      94
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "- MySQL 8.0 or newer with `utf8mb4` support. Older MySQL releases and MariaDB",
+     "lines": [
+      94
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 MySQL 存储数据、面向终端用户的社交/约会网站应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pH7Builder (formerly pH7CMS) is a self-hosted, open-source PHP platform for building white-label dating sites, matchmaking communities, and social networks. You keep control of the code, hosting, database, and member data. ／ **What you need:** PHP 8.2+, MySQL 8.0+, URL rewriting, and a web server. ／ - MySQL 8.0 or newer with `utf8mb4` support. Older MySQL releases and MariaDB",
+   "evidence_lines": [
+    3,
+    12,
+    94
+   ]
+  },
+  "fn": "pH7Software/pH7-Social-Dating-CMS",
+  "sha": "3bf799433742",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "25adb232b12f": {
+  "identity": {
+   "one_liner": "Claude Code 插件，记录编码代理的决策溯源与数据流变更",
+   "review": "provLedger 是一个面向数据工作的 Claude Code 插件：通过 hooks 记录代理的提示词、工具调用与决策依据，重建项目的数据流图谱，并支持用 /ledger 命令以引用记录 id 的方式回答「为什么这样改」的问题。数据以 SQLite 文件本地存储，提供 Web 仪表盘（只读）与 pip 安装的核心库。适用于使用编码代理做数据工程的团队与个人，用于保留决策记录、在改动前展示相关约束。",
+   "highlights": [
+    "提供 /ledger 与 /receipts 命令，以记录 id 引用方式回答决策相关问题",
+    "通过 SessionStart、UserPromptSubmit、PreToolUse 等 hooks 在本地记录代理行为",
+    "支持从源码重建数据流图谱，并提供只读 Web 仪表盘"
+   ],
+   "use_cases": [
+    "为使用编码代理的数据工程项目保留决策与规则记录",
+    "在代理修改代码前展示该位置的历史约束与被否决的路径",
+    "接手无文档项目时回溯某列/某指标变更的原因"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything stays local, in SQLite files under `~/skill-workspace/`. The hooks only ever add:",
+     "lines": [
+      157
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "项目将记录存储于 SQLite 本地文件，但服务对象是编码代理与数据工作，未声明面向数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A Claude Code plugin for data work. It keeps what was decided and why — your words, the email, the agent's reading, kept apart and never blended — and puts them in front of whoever is about to change the thing again. ／ Everything stays local, in SQLite files under `~/skill-workspace/`. The hooks only ever add: ／ pip install provledger",
+   "evidence_lines": [
+    24,
+    157,
+    92
+   ]
+  },
+  "fn": "yizhao95/prov_ledger",
+  "sha": "25adb232b12f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a36662102015": {
+  "identity": {
+   "one_liner": "单 Go 二进制的 exe 节点公开信息流服务，ed25519 签名消息，SQLite 存储",
+   "review": "exe-hub 用一个 Go 二进制实现 exe 节点的公开 feed：写入为 ed25519 签名信封，读取为公开 HTTP API，消息存于 SQLite（WAL 模式），图片存 IPFS，支持 hub 间单跳复制、Solana 代币门槛、Web Push 与 PWA 页面，还可用 Ollama 做语言识别与三语翻译。面向想自建 hub 的个人或社区；需要 kubo 节点支撑图片，翻译依赖外部模型服务。",
+   "highlights": [
+    "所有写入为 ed25519 签名信封，hub 验证后原样存储，消息 id 为其 SHA-256，按作者单调 seq 防重放",
+    "SQLite WAL 模式存储，messages 表为 append-only 原始信封日志，其余表可由重放重建",
+    "提供公开读 API、SSE 实时事件、hub 间复制，以及可选 Ollama 驱动的语言识别与翻译"
+   ],
+   "use_cases": [
+    "自建 exe 节点的公开信息流 hub",
+    "以 ed25519 密钥为账号、无需注册的去中心化发帖与浏览",
+    "多个 hub 之间手动策展的单跳内容复制与翻译共享"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "ed25519-signed messages, reads are public HTTP, storage is SQLite, pictures ／ (`vapid_p256`) in the state directory, beside the SQLite database. ／ - **Storage.** SQLite in WAL mode. The `messages` table is the append-only",
+     "lines": [
+      5,
+      27,
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该服务使用 SQLite 作为自身状态与消息存储（L5、L88），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ed25519-signed messages, reads are public HTTP, storage is SQLite, pictures ／ - **Storage.** SQLite in WAL mode. The `messages` table is the append-only ／ Go binary. Anyone can run a hub; a key is an account. Writes arrive as",
+   "evidence_lines": [
+    5,
+    88,
+    4
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "livid/exe-hub",
+  "sha": "a36662102015",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

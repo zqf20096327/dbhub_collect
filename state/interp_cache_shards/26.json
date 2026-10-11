@@ -8842,5 +8842,322 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "44dcb92da6ac": {
+  "identity": {
+   "one_liner": "ArcadeDB，多模型DBMS，支持SQL/Cypher/Gremlin/MongoDB/Redis等多种接口",
+   "review": "ArcadeDB 是用 Java 编写的多模型事务型 DBMS，以图、文档、键值、搜索引擎、时序、向量等多模型统一存储，通过实现 PostgreSQL Wire、MongoDB、Redis 等协议复用现有驱动访问，可嵌入 JVM 运行或以 Docker/Kubernetes 部署为服务端，面向需要在单一引擎中处理图与多模型数据的开发者与运维人员。",
+   "highlights": [
+    "支持图、文档、键值、搜索引擎、时序、向量嵌入与地理空间多种数据模型",
+    "实现 PostgreSQL Wire、MongoDB、Redis 协议及 SQL、Cypher、Gremlin、GraphQL 查询语言",
+    "提供内置 MCP Server、ACID 事务、Raft 高可用与 Docker/Kubernetes 支持"
+   ],
+   "use_cases": [
+    "需要图遍历、向量相似度与时序信号结合的推荐或欺诈检测场景",
+    "在单一数据库中同时使用多种查询语言与现有驱动（Postgres/MongoDB/Redis）的场景",
+    "作为嵌入式库随 JVM 应用部署，或以 Docker/Kubernetes 运行服务端"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "compat",
+     "quote": "- Remotely by using a Postgres driver (ArcadeDB implements Postgres Wire protocol) ／ |**Integration tests**|`mvn verify -Pintegration` (`*IT`)|every PR|Tests spanning multiple components or a running server within the same JVM/module: HTTP/REST API, wire protocols (Postgres, MongoDB, Redis, Bolt, gRPC), and cross-module behavior. Some require ",
+     "lines": [
+      123,
+      316
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是 DBMS 内核/引擎，为上层应用提供多模型数据存储与查询服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ArcadeDB is a Multi-Model DBMS created by Luca Garulli, the same founder ／ ArcadeDB supports the following models: ／ - Remotely by using a Postgres driver (ArcadeDB implements Postgres Wire protocol)",
+   "evidence_lines": [
+    73,
+    84,
+    123
+   ]
+  },
+  "fn": "ArcadeData/arcadedb",
+  "sha": "44dcb92da6ac",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e74dfd738a4d": {
+  "identity": {
+   "one_liner": "RaccoonX：开源跨平台数据库巡检与运维平台，含800+巡检规则",
+   "review": "RaccoonX（原名DBCheck）是一个数据库巡检与运维平台，面向DBA、数据库工程师、DevOps和基础架构团队。它通过配置驱动采集数据库元数据、配置、性能与安全信息，按规则评估并生成Word巡检报告，提供慢查询分析、锁诊断、索引健康、基线比对、定时任务、AI辅助诊断（本地Ollama或云API）、RAG知识库与插件系统等功能，支持Web UI与CLI，可通过Docker或源码运行，Apache 2.0许可。",
+   "highlights": [
+    "支持20+数据库类型和800+巡检规则，可自动生成Word巡检报告",
+    "提供慢查询分析、锁诊断、索引健康、配置基线与历史趋势分析",
+    "内置AI辅助诊断与RAG知识库，支持插件架构和基于Cron的定时巡检"
+   ],
+   "use_cases": [
+    "生产环境数据库例行巡检并批量生成巡检报告",
+    "慢SQL、锁等待、索引与配置漂移的诊断分析",
+    "结合定时任务与通知的多实例数据库运维监控"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|psycopg2|5432|10+|",
+     "lines": [
+      145
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|MySQL|pymysql|3306|5.6 / 5.7 / 8.0+|",
+     "lines": [
+      143
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle|oracledb / JPype1 + ojdbc|1521|11g R2 / 12c / 19c / 21c+, native or JDBC|",
+     "lines": [
+      146
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "|SQL Server|pyodbc / JDBC|1433|2012+, native or JDBC|",
+     "lines": [
+      147
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|JDBC|8123|21.8+|",
+     "lines": [
+      164
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MariaDB|pymysql|3306|10.3+|",
+     "lines": [
+      144
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|TiDB|pymysql|4000|MySQL protocol|",
+     "lines": [
+      149
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "|OceanBase|pymysql|2881|MySQL tenant|",
+     "lines": [
+      161
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "|DM8|dmpython|5236|Dameng|",
+     "lines": [
+      148
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "mention",
+     "quote": "|Vastbase G100|JDBC|5432|Vastbase, openGauss kernel|",
+     "lines": [
+      156
+     ]
+    },
+    {
+     "db": "GBase",
+     "rel": "support",
+     "quote": "|GBase 8s|JDBC|9088|JDK + JDBC| ／ |GBase 8a|JDBC|5258|Column-store warehouse|",
+     "lines": [
+      153,
+      158
+     ]
+    },
+    {
+     "db": "TDSQL",
+     "rel": "support",
+     "quote": "|TDSQL-C MySQL|pymysql|3306|MySQL compatible|",
+     "lines": [
+      162
+     ]
+    },
+    {
+     "db": "YashanDB",
+     "rel": "support",
+     "quote": "|YashanDB|yashandb|1688|Oracle compatible|",
+     "lines": [
+      151
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该平台为多种数据库提供巡检、监控与诊断能力，通过专用驱动适配各数据库，属于为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "rag"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB",
+    "OceanBase",
+    "Dameng",
+    "GBase",
+    "TDSQL",
+    "YashanDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> **RaccoonX** is an open-source, cross-platform database inspection and operations platform designed for DBAs, database engineers, DevOps teams, and infrastructure teams. ／ |📋 Database Inspection|20+ database types and 800+ inspection rules with automated Word reports| ／ RaccoonX currently supports **20+ database and data systems**.",
+   "evidence_lines": [
+    7,
+    109,
+    139
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "fiyo/DBCheck",
+  "sha": "e74dfd738a4d",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5d5a3863d2f2": {
+  "identity": {
+   "one_liner": "libsqlite3 的 wasm32-unknown-unknown Rust 绑定库",
+   "review": "一个 Rust crate，为 wasm32-unknown-unknown 目标提供 libsqlite3 的 FFI 绑定，支持通过 feature 启用 sqlite3mc/SQLCipher 加密后端和 wasm-bindgen，内置 memory/sahpool 等 VFS，可自定义 SQLite 源码编译；面向在 WebAssembly 环境中使用 SQLite 的 Rust 开发者，明确不支持多线程。",
+   "highlights": [
+    "提供 wasm32-unknown-unknown 目标下 libsqlite3 的 Rust 绑定",
+    "支持通过 feature 启用 SQLite3MultipleCiphers 或 SQLCipher 加密",
+    "实现 memory 与 sahpool（基于 OPFS）等 VFS，支持自定义 SQLite 源码"
+   ],
+   "use_cases": [
+    "在浏览器等 WASM 环境的 Rust 程序中读写 SQLite 数据库",
+    "需要加密 SQLite 数据库的 WASM 应用",
+    "为 SQLite 实现自定义 VFS 的开发场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "sqlite-wasm-rs = { version = \"0.6\", features = [\"wasm-bindgen\"] } ／ sqlite-wasm-rs = { version = \"0.6\", features = [\"wasm-bindgen\", \"sqlite3mc\"] } ／ sqlite-wasm-rs = { version = \"0.6\", features = [\"wasm-bindgen\", \"sqlcipher\"] }",
+     "lines": [
+      9,
+      16,
+      23
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 SQLite 提供 WASM 绑定的开发库，服务于 SQLite 生态而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`wasm32-unknown-unknown` bindings to the libsqlite3 library. ／ sqlite-wasm-rs = { version = \"0.6\", features = [\"wasm-bindgen\"] } ／ The following vfs have been implemented:",
+   "evidence_lines": [
+    3,
+    9,
+    40
+   ]
+  },
+  "fn": "Spxg/sqlite-wasm-rs",
+  "sha": "5d5a3863d2f2",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

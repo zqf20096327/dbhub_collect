@@ -8266,5 +8266,140 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "15318b677214": {
+  "identity": {
+   "one_liner": "将 CSV/JSON/Parquet/XLSX 等文件载入内存 SQLite 并用 SQL 查询的 Go 库",
+   "review": "filesql 是一个 Go 模块，通过 filesql.Open 或 LoadInto 将 CSV、TSV、LTSV、JSON、JSONL、Parquet、XLSX、ACH、Fedwire 等文件读入内存 SQLite 数据库，供 database/sql 查询和写回；附带 prep 做行清洗校验。面向需要在 Go 程序中不搭服务器、无 cgo 地用 SQL 处理文件数据的开发者。限制：非 SQLite 方言仅覆盖子集，且不能与自动保存共用。",
+   "highlights": [
+    "支持将 CSV/TSV/LTSV/JSON/JSONL/Parquet/XLSX/ACH/Fedwire 文件及 .gz/.bz2/.xz/.zst/.z/.snappy/.s2/.lz4 压缩包装载为 SQLite 表",
+    "提供 WithDialect 以 MySQL、PostgreSQL、GoogleSQL 语法编写查询并翻译为 SQLite 执行",
+    "提供 prep 行清洗校验、DumpDatabase/EnableAutoSave 写回及 io.Reader/embed.FS 读取"
+   ],
+   "use_cases": [
+    "在 Go 程序中对本地文件数据执行 SQL 查询、跨格式 join",
+    "ETL 场景中先清洗校验再载入并写回文件",
+    "在内存中对 ACH/Fedwire 等金融报文做结构化查询"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "filesql loads files into an in-memory SQLite database. Open CSV, TSV, LTSV, JSON, JSONL, Parquet, XLSX, ACH, or Fedwire inputs, then query them with normal SQLite syntax. ／ - Query file data with standard SQLite syntax, including joins, CTEs, and `json_extract()`.",
+     "lines": [
+      11,
+      47
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- Optionally query with MySQL, PostgreSQL, or GoogleSQL syntax via `WithDialect` (translated to SQLite). ／ MySQL, PostgreSQL, or GoogleSQL (BigQuery / Cloud Spanner) instead; filesql ／ |Query with MySQL, PostgreSQL, or GoogleSQL syntax|`ExampleDBBuilder_WithDialect`|example_api_test.go|",
+     "lines": [
+      48,
+      91,
+      207
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- Optionally query with MySQL, PostgreSQL, or GoogleSQL syntax via `WithDialect` (translated to SQLite). ／ MySQL, PostgreSQL, or GoogleSQL (BigQuery / Cloud Spanner) instead; filesql ／ equivalent (for example `QUALIFY`, `DISTINCT ON`, MySQL's `XOR`, or MySQL's `0x`",
+     "lines": [
+      48,
+      91,
+      106
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目以 SQLite 为内置查询引擎处理文件数据，是为 SQLite 使用场景服务的 Go 库/组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "filesql loads files into an in-memory SQLite database. Open CSV, TSV, LTSV, JSON, JSONL, Parquet, XLSX, ACH, or Fedwire inputs, then query them with normal SQLite syntax. ／ If the job is analytics on data larger than memory, or on files in S3, use DuckDB: its columnar engine is faster and its SQL is richer. filesql is for a Go program that wants file data behind `database/sql` with no cgo, edits written back into the file they came from, ACH, Fedwire and LTSV input, Shift-JIS or EUC-JP output, and validation with `prep` before a row becomes a table. ／ translates them to SQLite before running. Loading files always uses SQLite, so",
+   "evidence_lines": [
+    11,
+    43,
+    92
+   ]
+  },
+  "fn": "nao1215/filesql",
+  "sha": "15318b677214",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e97a9e2e6514": {
+  "identity": {
+   "one_liner": "Tidbyt 容器在 Unraid 上的公共图标资源仓库",
+   "review": "该仓库只存放 Tidbyt 容器在 Unraid 应用列表中显示用的图标文件，包含一张 256×256 透明背景 PNG，不含应用代码、配置、凭据或容器镜像。面向 Unraid 平台使用者或应用维护者，属纯静态资源库，与数据库生态无关联。",
+   "highlights": [
+    "提供 256×256 透明背景 PNG 图标文件",
+    "仅包含显示图标，不含代码、配置、凭据或容器镜像"
+   ],
+   "use_cases": [
+    "为 Unraid 应用列表中的 Tidbyt 容器提供显示图标",
+    "作为图标资源的公共托管位置"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "dbs": [],
+   "eco": "unclear",
+   "eco_why": "仓库仅为图标资源，无数据库相关功能或使用证据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Public icon assets for a Tidbyt container's Unraid listing. ／ This repository contains only the display icon, not application code, configuration, credentials, or container images.",
+   "evidence_lines": [
+    3,
+    5
+   ]
+  },
+  "fn": "wrenchware/tidbyt-assets",
+  "sha": "e97a9e2e6514",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

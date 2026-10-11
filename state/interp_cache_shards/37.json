@@ -8830,5 +8830,212 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1c77f12efad9": {
+  "identity": {
+   "one_liner": "本地索引并检索 AI 编码工具会话记录的 Rust CLI",
+   "review": "sessionwiki 将本机上 Claude Code、Codex、Gemini CLI 等多种 AI 编码工具落盘的会话记录统一扫描、归档并建立 SQLite FTS5 全文索引，支持跨工具搜索、文件溯源、会话归档恢复与在原工具中重开会话，并提供本地 Web UI 与 MCP server。面向使用 AI 编码助手的开发者，无需云端服务，首次建索引需按 GB 级耗时分钟级处理。",
+   "highlights": [
+    "提供跨工具全文检索，默认 trigram 分词支持子串与 CJK 查询",
+    "提供文件/行级溯源（trace/blame），将代码文件映射回生成它的会话",
+    "提供 MCP server 与 Claude Code 插件，以只读本地方式暴露会话历史",
+    "支持在原工具中恢复（resume）会话并将归档会话以 brief/migrate 形式迁移"
+   ],
+   "use_cases": [
+    "回溯数月前某文件或某行代码由哪次 AI 会话产生",
+    "在工具删除原始会话后仍可搜索归档历史",
+    "为 AI 编码代理提供本地长记忆（SessionStart hook / MCP 检索）"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|OpenCode|`~/.local/share/opencode/opencode.db` (SQLite; also the legacy `storage/**` JSON)|supported|",
+     "lines": [
+      338
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "读取多种工具的会话存储并基于 SQLite FTS5 建立本地索引，为使用数据库的开发流程提供检索组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|`tokenizer [SPEC]`|Show the current FTS5 tokenizer, or set one and rebuild only the search index.| ／ Search uses the `trigram` tokenizer by default, which finds substrings and works",
+   "evidence_lines": [
+    145,
+    158
+   ]
+  },
+  "fn": "youdie006/sessionwiki",
+  "sha": "1c77f12efad9",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a17b2aed2d57": {
+  "identity": {
+   "one_liner": "基于 Next.js 与 Mux 的 AI 视频克隆 Web 应用",
+   "review": "一个使用 Next.js、React 和 Mux 构建的视频分享 Web 应用，包含 AI 功能、认证（Clerk）、文件上传（UploadThing）与工作流（QStash）。数据存储在 Neon 提供的 PostgreSQL 数据库，通过 drizzle-orm 访问。面向希望本地运行或部署该应用的开发者，README 提供逐项配置各第三方服务的密钥设置步骤，需注册多个外部服务账号。",
+   "highlights": [
+    "提供视频上传与播放功能，基于 Mux 实现视频处理",
+    "使用 Clerk 实现用户认证，通过 webhook 同步用户数据",
+    "使用 Neon 提供的 PostgreSQL 数据库，通过 drizzle-orm 读写数据"
+   ],
+   "use_cases": [
+    "作为视频分享类 Web 应用的本地运行与部署",
+    "作为学习 Next.js 全栈开发（含认证、上传、工作流）的示例项目",
+    "搭建需要 AI 工作流与视频处理的应用原型"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "### 8. Neon (PostgreSQL Database) ／ - Create a new **PostgreSQL project**.",
+     "lines": [
+      75,
+      78
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 指导用户创建 Neon 的 PostgreSQL 项目作为应用数据存储，该项目是使用数据库的应用而非数据库工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "### 8. Neon (PostgreSQL Database) ／ - Create a new **PostgreSQL project**. ／ 14. Install Project Dependencies using `npm install --legacy-peer-deps` or `pnpm install --legacy-peer-deps`.",
+   "evidence_lines": [
+    75,
+    78,
+    128
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "sanidhyy/yt-clone",
+  "sha": "a17b2aed2d57",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9cbe5fa0149e": {
+  "identity": {
+   "one_liner": "自托管多 Agent PR 审查工作台，GitHub 只读接入并汇集审查证据到 Console",
+   "review": "MergePilot 通过 GitHub App 只读接入仓库，由 Reviewer/Fixer/Verifier/Leader 四个 Agent 角色完成审查、修复建议与验证，结果汇集到自托管 Console，合并决策保留给维护者。面向需要留痕审查流程的开发团队。要求 Docker Compose、Node.js ≥20、GitHub App 与 LLM 端点；当前为 Developer Beta，不回写 Check Run，也不含 HA 等企业能力。",
+   "highlights": [
+    "四个 Agent 角色（Reviewer/Fixer/Verifier/Leader）分工，高危 finding 修复需人工审批",
+    "GitHub 只读接入，不回写 Check Run、不自动合并或批准 PR",
+    "支持 GitHub OAuth 登录、五角色 RBAC、应用层多租户隔离与审计，可选本地 RAG 知识库"
+   ],
+   "use_cases": [
+    "团队对 GitHub PR 做留痕的多 Agent 审查与验证",
+    "自托管环境下集中查看 PR 风险状态与审查进度",
+    "结合本地 RAG 知识库将团队规范作为审查参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Beta 不含企业能力**：无 PostgreSQL RLS、SSO/SCIM、HA 或配额限流；当前多租户隔离在应用层实施。",
+     "lines": [
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将数据库列为部署者自行管理的组件，项目本体是使用数据库存储的 PR 审查应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MergePilot 通过 GitHub App 只读接入仓库，把 PR 事件、审查发现、修复建议与验证证据汇集到你自己的 Console。 ／ Console、数据库和部署配置由你自行管理；官网是文档入口，**不是托管版 Console 或登录入口**。 ／ - **Beta 不含企业能力**：无 PostgreSQL RLS、SSO/SCIM、HA 或配额限流；当前多租户隔离在应用层实施。",
+   "evidence_lines": [
+    10,
+    41,
+    70
+   ]
+  },
+  "fn": "nghqqa/MergePilot",
+  "sha": "9cbe5fa0149e",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

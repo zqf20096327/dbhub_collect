@@ -9976,5 +9976,241 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "774ecc00ed57": {
+  "identity": {
+   "one_liner": "Home Assistant 的实验性 AI 代理应用，基于 Pi Durable 持久化任务与 SQLite 存储",
+   "review": "Hearth Pi 是一个面向 Home Assistant OS 的第三方社区 App，提供带持久任务检查点的 AI 代理，支持 scoped HA 读取与需人工批准的灯/开关操作提案，并内置受限编码工作容器。所有输入、任务与转录写入 SQLite（synchronous=FULL），通过 HA App 商店安装，仅限实验性技术预览。",
+   "highlights": [
+    "通过 Pi Durable 将输入、任务检查点、转录和文档提交到 SQLite，synchronous=FULL，单一写入者",
+    "Home 模式提供范围受限的 HA 读取与默认需人工批准的灯/开关操作提案，操作默认禁用",
+    "支持多种模型提供方（offline/openai/local/anthropic 标志性开关/openai-codex），并附带可在主机上运行开源模型的风险判断 App（Hearth Judge）"
+   ],
+   "use_cases": [
+    "在 Home Assistant 中通过聊天界面查询家庭状态并提交受审批控制的灯/开关操作",
+    "在独立非 root 容器中进行受限的编码/文件操作会话",
+    "在本地网络通过 OpenAI 兼容服务器（Ollama、llama.cpp 等）运行本地模型推理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Continuity, not just history.** Genuine pinned Pi Durable commits admitted inputs, task checkpoints, transcripts and documents to SQLite with `synchronous=FULL`. One writer owns each store. Reconnect to committed state.",
+     "lines": [
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该应用将输入、任务检查点和转录存入 SQLite 数据存储，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Continuity, not just history.** Genuine pinned Pi Durable commits admitted inputs, task checkpoints, transcripts and documents to SQLite with `synchronous=FULL`. One writer owns each store. Reconnect to committed state. ／ Requires **Home Assistant OS**, an administrator account and an **amd64 or aarch64** host. Use an authorized test installation with a backup; this is an experimental third-party App, not HACS or a Devices & services integration. ／ 2. In **Settings → Apps → Install app** (App store), find **Hearth Pi** and select **Install**. The current preview builds on your HA host, so the initial installation can take several minutes. No Git clone, Node installation, SSH or Docker commands are needed for Home mode.",
+   "evidence_lines": [
+    15,
+    43,
+    48
+   ]
+  },
+  "fn": "cosmyo/ha-pi-durable",
+  "sha": "774ecc00ed57",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9f66a08fd612": {
+  "identity": {
+   "one_liner": "基于 SQLite FTS5 的 MCP 服务器，为 Claude Code 记忆提供全文检索",
+   "review": "klodmem 是一个用 Go 编写的 MCP 服务器，扫描 Claude Code 的记忆 markdown 文件与会话 l 转录，建立 SQLite FTS5 全文索引，并提供 search_memory 和 search_history 两个检索工具。面向使用 Claude Code 及其他 MCP 兼容代理的开发者；本地运行、无网络调用，索引可随时用 -reset 重建，原始文件保持为唯一数据源。",
+   "highlights": [
+    "提供 search_memory 与 search_history 两个 MCP 工具，跨项目全文检索记忆文件和会话转录",
+    "文件监视器在会话期间增量索引新增记忆与转录内容",
+    "以 SQLite FTS5 存储索引，支持 -ingest/-reset/-stat 等 CLI 一次性命令"
+   ],
+   "use_cases": [
+    "在任意项目中检索其他项目积累的调试记录和历史会话",
+    "为多个 MCP 兼容代理（如 Hermes、Opencode）共享同一份记忆索引",
+    "通过 cron 定时运行 -ingest 独立于会话预热索引"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- On startup klodmem scans `~/.claude/projects/*/memory/*.md` (skipping each `MEMORY.md` index) and every `~/.claude/projects/*/<session-id>.jsonl` transcript, then indexes them into SQLite FTS5. ／ |`KLODMEM_DB_PATH`|`~/.claude/klodmem/klodmem.db`|SQLite index file location|",
+     "lines": [
+      106,
+      152
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目将 Claude Code 记忆文件索引存入 SQLite 作为内部索引文件，属于使用数据库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- On startup klodmem scans `~/.claude/projects/*/memory/*.md` (skipping each `MEMORY.md` index) and every `~/.claude/projects/*/<session-id>.jsonl` transcript, then indexes them into SQLite FTS5. ／ |`klodmem`|Start the MCP server (scan then watch, with live search)| ／ |`KLODMEM_DB_PATH`|`~/.claude/klodmem/klodmem.db`|SQLite index file location|",
+   "evidence_lines": [
+    106,
+    116,
+    152
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "josuebrunel/klodmem",
+  "sha": "9f66a08fd612",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "231e92fcf1a5": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的可移植、带治理的模型无关记忆库",
+   "review": "al-buddy-memory 是一个 TypeScript 实现的 Agent 记忆库/MCP 服务器，提供事实溯源、有效期双轴查询、不可变原始文本、版本化 JSON 导出与一致性测试套件；内置 SQLite 与内存存储，嵌入在设备端计算无需 API key。面向需要可信、可迁移记忆的 AI Agent 开发者，需自行接管治理策略配置。",
+   "highlights": [
+    "每个事实与链接带溯源标记（UserInput/AIInferred 等），事实作废不删除",
+    "提供版本化 JSON 导出格式（exportPortable/importPortable）及后端一致性测试套件",
+    "内置 SqliteMemoryStore 与 InMemoryStore，混合检索（词法+语义）在设备端运行"
+   ],
+   "use_cases": [
+    "为 AI Agent 构建带溯源和有效期的长期记忆",
+    "通过 MCP 服务器在多个客户端间共享本地记忆",
+    "需要可无损导出、跨运行时迁移的 Agent 记忆存储"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Does it run with no vendor, no key, no server?**|SQLite on disk, on-device embeddings|Self-host possible; cloud is the product|Self-host possible (Apache-2.0, local vector stores); needs an LLM for extraction; cloud is the product|Zep is cloud; Graphiti sel ／ - `ProjectMemory`: one brain scoped by project or person, each in its own SQLite file.",
+     "lines": [
+      22,
+      52
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- **Memori** (Apache-2.0; your own SQL database — SQLite, Postgres, MySQL, Oracle). A fact in `memori_entity_fact` has content, an embedding, a count and a last-seen date; who asserted it is only recoverable by walking the foreign keys back to a conversation m",
+     "lines": [
+      30
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该库以 SQLite 作为自身存储实现，功能面向 AI Agent 记忆管理而非为数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Portable, governed, model-agnostic memory for AI agents.** ／ - `MemoryStore`: a storage-agnostic interface; `SqliteMemoryStore` and `InMemoryStore` ship, with a **conformance suite** any backend can run against itself. ／ - `ProjectMemory`: one brain scoped by project or person, each in its own SQLite file.",
+   "evidence_lines": [
+    9,
+    51,
+    52
+   ]
+  },
+  "xcheck": {
+   "status_hint": "deprecated"
+  },
+  "fn": "flytomoon/al-buddy-memory",
+  "sha": "231e92fcf1a5",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

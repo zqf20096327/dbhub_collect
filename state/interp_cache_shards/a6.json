@@ -9039,5 +9039,138 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c15aecdddb5d": {
+  "identity": {
+   "one_liner": "代码智能 MCP 服务器，将代码库索引为持久知识图谱",
+   "review": "该仓库是一个以本地静态二进制分发的 MCP 服务器，通过 tree-sitter AST 解析与 Hybrid LSP 语义解析，把代码库索引为包含函数、类、调用链等实体的知识图谱，提供 17 个 MCP 工具和内置 3D 图可视化 UI。面向使用 AI 编码代理（如 Claude Code、Cursor 等）的开发者，支持 macOS、Linux、Windows。索引管线使用内存中的 SQLite（L31、L235），并提供 BM25 全文检索（L202）。",
+   "highlights": [
+    "通过 tree-sitter 支持 162 种语言的 AST 解析，并对 12 种语言提供 Hybrid LSP 语义解析（L19、L33）",
+    "提供 17 个 MCP 工具，包括搜索、调用链追踪、影响分析、Cypher 查询、死代码检测（L38）",
+    "内置 3D 知识图谱可视化 UI，运行于 localhost:9749（L27、L36）"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供代码库结构化索引与结构查询",
+    "分析多服务代码库的跨服务 HTTP 调用与影响面",
+    "索引 Dockerfile、Kubernetes 清单等基础设施即代码文件（L37）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Extreme indexing speed** — Linux kernel (28M LOC, 75K files) in 3 minutes. RAM-first pipeline: LZ4 compression, in-memory SQLite, fused Aho-Corasick pattern matching. Memory released after indexing. ／ - **BM25 full-text search** via SQLite FTS5 with `cbm_camel_split` tokenizer (camelCase / snake_case aware) ／ - **RAM-first pipeline**: LZ4 compression, in-memory SQLite, single dump at end. Memory released after.",
+     "lines": [
+      31,
+      202,
+      235
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 描述其为面向 AI 编码代理的代码索引 MCP 服务器，SQLite 仅作为其内部内存索引实现组件被提及，并非为数据库生态服务的工具（L31、L235）",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "High-quality parsing through tree-sitter AST analysis across all 162 languages, enhanced with **Hybrid LSP** semantic type resolution for Python, TypeScript / JavaScript / JSX / TSX, PHP, C#, Go, C, C++, Java, Kotlin, Rust, and Perl — producing a persistent knowledge graph of functions, classes, call chains, HTTP routes, and cross-service links. 17 MCP tools. No language runtime, hosted service, or API key. Plug and play across 45 supported automatic/conditional client surfaces. ／ - **Extreme indexing speed** — Linux kernel (28M LOC, 75K files) in 3 minutes. RAM-first pipeline: LZ4 compression, in-memory SQLite, fused Aho-Corasick pattern matching. Memory released after indexing. ／ - **17 MCP tools** — search, trace, architecture, impact analysis, targeted index-coverage checks, Cypher queries, dead code detection, cross-service HTTP linking, ADR management, and more.",
+   "evidence_lines": [
+    19,
+    31,
+    38
+   ]
+  },
+  "fn": "DeusData/codebase-memory-mcp",
+  "sha": "c15aecdddb5d",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d9202d4931c0": {
+  "identity": {
+   "one_liner": "本地 Oracle Cloud Infrastructure (OCI) 模拟器",
+   "review": "floci-oci 是一个开源的本地 OCI 云服务模拟器，在单容器内提供对象存储、IAM、Queue、Streaming、Vault/KMS、Functions、OKE 等服务的真实协议实现，供开发、测试和 CI 使用；官方 OCI SDK、CLI 和 Terraform provider 可直接指向 localhost:4599 运行，无需云账号。使用需 JDK 25 源码构建或 Docker 运行，部分服务依赖 Docker sidecar。",
+   "highlights": [
+    "实现 OCI 真实请求/响应协议（opc-request-id、分页、etag、work requests、OCI 错误体）",
+    "官方 oci-java-sdk、Python SDK、OCI CLI 和 Terraform provider 无需改动即可使用，由兼容性套件持续验证",
+    "支持 memory、persistent、hybrid、wal 四种存储模式及按租户 OCID 的多租户资源隔离"
+   ],
+   "use_cases": [
+    "CI 流水线中无需云账号地测试 OCI 集成",
+    "本地开发/调试 OCI SDK、CLI、Terraform 工作流",
+    "Vault/KMS、Functions、OKE 等服务的离线功能验证"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI. ／ It gives you OCI-shaped services on your machine without an Oracle Cloud account, uploaded API keys, or paid feature gates. Point the OCI SDKs, the OCI CLI, Terraform, or OpenTofu at `http://localhost:4599` and keep your existing workflows.",
+     "lines": [
+      24,
+      26
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它模拟的是 Oracle Cloud Infrastructure 云服务而非数据库本体，与数据库生态的直接关联证据不足",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "floci-oci is a free, open-source local **Oracle Cloud Infrastructure (OCI)** emulator for development, testing, and CI. ／ It gives you OCI-shaped services on your machine without an Oracle Cloud account, uploaded API keys, or paid feature gates. Point the OCI SDKs, the OCI CLI, Terraform, or OpenTofu at `http://localhost:4599` and keep your existing workflows. ／ Real request and response shapes: `opc-request-id` on every response, `opc-next-page` pagination headers, `etag` / `if-match` conditional requests, OCIDs, work requests for async operations, and OCI's exact error bodies (`NotAuthorizedOrNotFound`, `BucketNotFound`, …).",
+   "evidence_lines": [
+    24,
+    26,
+    100
+   ]
+  },
+  "fn": "floci-io/floci-oci",
+  "sha": "d9202d4931c0",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

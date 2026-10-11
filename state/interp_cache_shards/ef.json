@@ -9153,5 +9153,148 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0cd133ce2e60": {
+  "identity": {
+   "one_liner": "自托管邮件客户端，单容器聚合多个 IMAP 邮箱",
+   "review": "nexmail 是一个自托管 Web 邮件客户端，将多个 IMAP 邮箱聚合到一个单容器部署中，提供会话视图、全文搜索、规则、联系人、任务和日历等功能，支持多用户和 OpenID Connect 登录，面向已在家托管服务的用户；数据存储在单个 SQLite 文件中，标签以 IMAP 关键字形式保存在服务器上。",
+   "highlights": [
+    "在单个容器中聚合多个 IMAP 邮箱，提供合并收件箱和全文搜索",
+    "包含任务、联系人（CardDAV）、日历（CalDAV）和自动回复规则",
+    "支持多用户和 OpenID Connect 登录，数据存储在单个 SQLite 文件中"
+   ],
+   "use_cases": [
+    "自托管个人或家庭邮件访问",
+    "在单个 Web 界面中管理多个 IMAP 账户",
+    "与日历和联系人同步的邮件驱动任务管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "a single SQLite file, no second database, no cloud account, and no service that",
+     "lines": [
+      13
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "One container. SQLite instead of Postgres is not a shortcut here, it is a",
+     "lines": [
+      242
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该 README 将 nexmail 描述为一个使用 SQLite 作为自身存储的邮件客户端应用程序，而非服务于数据库的数据库工具或组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A self-hosted email client. One container, one file, your mailboxes stay with you.** ／ machine. It is meant for people who already host things at home: one container, ／ a single SQLite file, no second database, no cloud account, and no service that",
+   "evidence_lines": [
+    5,
+    12,
+    13
+   ]
+  },
+  "fn": "DerKezorm/nexmail",
+  "sha": "0cd133ce2e60",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2bda6b9ce53a": {
+  "identity": {
+   "one_liner": "自托管的持久化 AI 员工控制面，含通道、审批与记忆",
+   "review": "OpenBot 是一个自托管的多 Bot 协作工作区：Bot 具备角色、记忆与技能，可在频道中协作并交付文件，支持人工审批、定时任务和 MCP 工具接入。数据存储于 PostgreSQL 和对象存储，Server 负责身份、路由与审计。适合需要本地化部署 AI 劳动力的个人或小团队；目前仅支持单一 workspace Owner。",
+   "highlights": [
+    "提供 Bot 角色定义、记忆、技能版本与人工审批流",
+    "支持 MCP Streamable HTTP 插件扩展与 Worker Host 执行计算机任务",
+    "workspace 数据存储于 PostgreSQL 与对象存储，凭据加密保存"
+   ],
+   "use_cases": [
+    "搭建自托管的多 Bot 团队处理文档、生成报告",
+    "配置定时/循环任务进行无人值守自动化",
+    "通过 MCP 插件为 Bot 接入外部工具与资源"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|macOS · Apple Silicon|Download DMG|Built-in Server and PostgreSQL, or connect to your Server| ／ Use **Node.js 22.22.2**, **npm 10.9.9**, Docker for PostgreSQL, and an explicit mTLS Temporal configuration. ／ Desktop and Web share a React interface. The Server owns Bot identities, routing, permissions, approvals and audit. It runs model tasks and scoped MCP connections, stores workspace data in PostgreSQL and object storage, and dispatches computer-backed work to e",
+     "lines": [
+      31,
+      58,
+      77
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明 Server 将 workspace 数据存储在 PostgreSQL 中，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Desktop and Web share a React interface. The Server owns Bot identities, routing, permissions, approvals and audit. It runs model tasks and scoped MCP connections, stores workspace data in PostgreSQL and object storage, and dispatches computer-backed work to enrolled Workers. ／ |macOS · Apple Silicon|Download DMG|Built-in Server and PostgreSQL, or connect to your Server|",
+   "evidence_lines": [
+    77,
+    31
+   ]
+  },
+  "fn": "Peerframe/openbot",
+  "sha": "2bda6b9ce53a",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

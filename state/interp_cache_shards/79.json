@@ -9990,5 +9990,259 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "df076a64568c": {
+  "identity": {
+   "one_liner": "单二进制离线数据库工作台，含迁移/对比/快照与AI辅助SQL",
+   "review": "dqex 是一个以单个静态二进制分发的跨平台数据库工作台，提供导出、导入、跨方言迁移、结构与数据对比、快照、Excel 数据字典和 SQL 终端，Web UI 与 CLI 共用同一引擎，AI 辅助 SQL 需配置后启用且写入需人工确认。面向受限/物理隔离网络环境下的数据库运维与开发人员；仅支持 MySQL、PostgreSQL、Oracle 三种引擎。",
+   "highlights": [
+    "单静态二进制分发，无 JVM/Electron 依赖，支持物理隔离环境运行",
+    "提供跨方言迁移、结构/数据对比、快照 diff、Excel 数据字典导出与 CLI JSON 输出",
+    "AI 辅助 SQL 读取真实 schema 生成方言正确的 SQL，写入需确认，内置离线 SQL 模板库"
+   ],
+   "use_cases": [
+    "银行等物理隔离网络中的数据库导出、导入与迁移",
+    "生成 Excel 数据字典与快照 diff 报告用于审计合规",
+    "通过 CLI 脚本化（JSON 输出）集成到自动化流水线"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🌐 **MySQL · PostgreSQL · Oracle** with automatic dialect conversion for cross-database migration. ／ |Migrate|✅|`migrate` (`mig`)|Database → database, **cross-dialect** (e.g. MySQL → PostgreSQL)| ／ |Database breadth|MySQL, PostgreSQL, Oracle|Very wide|Wide|Wide|",
+     "lines": [
+      25,
+      86,
+      110
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 🌐 **MySQL · PostgreSQL · Oracle** with automatic dialect conversion for cross-database migration. ／ |Migrate|✅|`migrate` (`mig`)|Database → database, **cross-dialect** (e.g. MySQL → PostgreSQL)| ／ |Database breadth|MySQL, PostgreSQL, Oracle|Very wide|Wide|Wide|",
+     "lines": [
+      25,
+      86,
+      110
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- 🌐 **MySQL · PostgreSQL · Oracle** with automatic dialect conversion for cross-database migration. ／ |Database breadth|MySQL, PostgreSQL, Oracle|Very wide|Wide|Wide|",
+     "lines": [
+      25,
+      110
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "- **Backend**: Go + infrakit (database dialect adaptation), Gin, embedded SQLite",
+     "lines": [
+      146
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "**Where dqex is weaker:** it supports three database engines, not twenty. If you need SQL Server, ClickHouse, MongoDB or anything outside MySQL / PostgreSQL / Oracle, DBeaver is the better answer today. Additional drivers are explicitly welcome as contribution",
+     "lines": [
+      113
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "mention",
+     "quote": "**Where dqex is weaker:** it supports three database engines, not twenty. If you need SQL Server, ClickHouse, MongoDB or anything outside MySQL / PostgreSQL / Oracle, DBeaver is the better answer today. Additional drivers are explicitly welcome as contribution",
+     "lines": [
+      113
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为数据库工作台，提供导出/导入/迁移/对比/快照等面向数据库生态的能力",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "dqex is a cross-platform database workbench that ships as a **single static binary** — no JVM, no Electron, no installers, no network required. It packs **export, import, migration, comparison, snapshots, Excel data dictionaries, a full SQL terminal, and an AI assistant** into one tool, with both a polished Web UI and a scriptable CLI sharing one engine. ／ - 🌐 **MySQL · PostgreSQL · Oracle** with automatic dialect conversion for cross-database migration. ／ |Migrate|✅|`migrate` (`mig`)|Database → database, **cross-dialect** (e.g. MySQL → PostgreSQL)|",
+   "evidence_lines": [
+    20,
+    25,
+    86
+   ]
+  },
+  "fn": "fj1981/dqex",
+  "sha": "df076a64568c",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8cb946110d14": {
+  "identity": {
+   "one_liner": "数字取证分析工作台，无需预解包即可检视归档、备份、磁盘镜像与多种数据格式",
+   "review": "Crush 是面向数字取证人员的桌面 GUI 工具，可原地打开 ZIP/TAR/7z 归档、iOS/Android 移动备份、raw/E01 磁盘镜像等数据源，并提供 SQLite、LevelDB、Realm、Protobuf、hex 等专用查看器。每个版本发布运行取证测试套件，验证证据不可变性、无副作用文件与可复现性；定位为检视特定文件而非全盘处理流水线，不含 carving、日志分析等全盘取证功能。",
+   "highlights": [
+    "支持原地浏览 ZIP/TAR/7z、iOS/Android 备份、raw/EWF 磁盘镜像，无需先解包或挂载",
+    "提供 SQLite（含 WAL、SQLCipher）、LevelDB、Realm、MMKV 等数据库格式及 Protobuf、ABX、SEGB 等结构化数据查看器",
+    "内置完整性模式与取证测试套件，对打开的源做哈希校验、检查无副作用文件并附审计报告"
+   ],
+   "use_cases": [
+    "取证人员检视移动备份或磁盘镜像中的特定文件与数据库记录",
+    "对归档或镜像内的 BLOB 做链式解码与十六进制溯源分析",
+    "校验证据源不可变性并导出带哈希清单的导出件"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Databases|SQLite (incl. WAL, free blocks/pages, SQLCipher¹), LevelDB, Realm (incl. encrypted¹), MMKV| ／ - **Hex provenance** — with the hex view open, selecting an entry in the SQLite, Protobuf, MMKV or Realm viewer shows exactly where its bytes are.",
+     "lines": [
+      46,
+      59
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "提供针对 SQLite/LevelDB/Realm 等数据库文件格式的专用查看与解析能力，为取证中读取数据库文件服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|Databases|SQLite (incl. WAL, free blocks/pages, SQLCipher¹), LevelDB, Realm (incl. encrypted¹), MMKV| ／ **Crush is a digital forensic analysis workbench.** Open archives, mobile backups, disk images, folders and single files, identify what's inside, and inspect it in dedicated viewers. Sources are opened without extracting them first. Built for examiners who need to look inside a specific file or source, not run a full processing pipeline. Every release runs a forensic test suite that checks whether Crush leaves the evidence untouched. ／ **Forensic test suite** — runs on Linux, macOS and Windows:",
+   "evidence_lines": [
+    46,
+    15,
+    68
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "kalink0/crush-forensics",
+  "sha": "8cb946110d14",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0131e2c40b17": {
+  "identity": {
+   "one_liner": "Node.js/Bun 的 PostgreSQL 驱动，基于 wire 协议纯 TypeScript 实现",
+   "review": "PostgreJS 是为 Node.js 和 Bun 运行时提供的 PostgreSQL 客户端库，直接实现 PostgreSQL wire 协议，不依赖 libpq 或原生绑定。提供连接池、预编译语句、服务端游标、LISTEN/NOTIFY、COPY 流、逻辑复制、两阶段提交、多主机故障转移等能力，并可通过适配器接入 Kysely、Drizzle、TypeORM、Prisma 等 ORM。适合在 Node/Bun 环境中需要直连 PostgreSQL 的 JavaScript/TypeScript 开发者。",
+   "highlights": [
+    "从 wire 协议层实现 PostgreSQL 客户端，纯 TypeScript 编写，无 libpq/原生依赖",
+    "支持连接池、预编译语句、COPY 流、逻辑复制、两阶段提交、LISTEN/NOTIFY、多主机故障转移与 SCRAM",
+    "为 SQB、Kysely、Drizzle、TypeORM、Prisma 提供适配器，ESM 模块格式"
+   ],
+   "use_cases": [
+    "在 Node.js/Bun 应用中直连 PostgreSQL 执行查询与事务",
+    "为 ORM（Kysely/Drizzle/TypeORM/Prisma）替换底层驱动连接",
+    "需要 COPY 批量导入导出或逻辑复制的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**PostgreJS** is a PostgreSQL driver for Node.js and Bun built from the wire protocol up - no `libpq`, no native bindings, ／ just TypeScript talking directly to PostgreSQL. That from-scratch design is also what makes it fast and light: every ／ Node and Bun run **the same test suite** in CI on every push - Node across 20, 22, 24 and 26 against PostgreSQL 12,",
+     "lines": [
+      12,
+      13,
+      92
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为 PostgreSQL 专用驱动（driver），是为该数据库生态服务的连接组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**PostgreJS** is a PostgreSQL driver for Node.js and Bun built from the wire protocol up - no `libpq`, no native bindings, ／ $ npm install postgrejs --save ／ - **Rigorously tested:** A test suite covering the wire protocol, every data type, and connection-handling edge case,",
+   "evidence_lines": [
+    12,
+    100,
+    116
+   ]
+  },
+  "fn": "panates/postgrejs",
+  "sha": "0131e2c40b17",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

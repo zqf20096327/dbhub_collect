@@ -7943,5 +7943,72 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "625421a11ceb": {
+  "identity": {
+   "one_liner": "AI Agent 本地可审计记忆控制平面，管理长期记忆的存储与注入",
+   "review": "AtMem 是一个面向 AI Agent 的本地记忆管理组件，通过 CLI 与 dashboard 提供 governed retrieval、shadow 模式验证和执行证据记录，支持 OpenClaw、Pydantic AI、LangChain/LangGraph 等框架的适配器。记忆等数据以 SQLite（可选 SQLCipher 加密）存储在本地，不依赖外部 API。适合需要在本地运行并审计 Agent 记忆行为的开发者。",
+   "highlights": [
+    "提供 OpenClaw、Pydantic AI、LangChain/LangGraph 的适配器/中间件，默认 shadow 模式后显式激活注入",
+    "本地运行：SQLite（可选 SQLCipher）存储记忆与审计证据，安装方式为 pip install atmem",
+    "内置离线 benchmark 命令运行提取、矛盾、召回、注入等质量用例"
+   ],
+   "use_cases": [
+    "为自建 Agent 添加带治理与审计的长期记忆",
+    "本地环境下对 Agent 记忆检索与上下文注入进行审查后再激活",
+    "对 Agent 记忆质量做离线回归测试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Canonical memory, provenance, lifecycle state, and audit evidence use SQLite. ／ Stop every writer before migration. AtMem validates SQLite integrity,",
+     "lines": [
+      593,
+      73
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 canonical memory、provenance 与 audit evidence 使用 SQLite 存储，AtMem 是使用数据库存数据的应用而非数据库生态工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Stop every writer before migration. AtMem validates SQLite integrity, ／ Install AtMem once and give OpenClaw, Pydantic AI, LangChain/LangGraph, or a",
+   "evidence_lines": [
+    73,
+    20
+   ]
+  },
+  "fn": "aetna000/atmem",
+  "sha": "625421a11ceb",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

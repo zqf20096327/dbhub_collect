@@ -7471,5 +7471,245 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a7ab0e0fdf20": {
+  "identity": {
+   "one_liner": "自托管单用户个人任务/项目/习惯管理中心，Next.js+SQLite 本地存储",
+   "review": "DailyHub 是一个自托管、单用户的个人工作台，用于管理多个项目、任务、里程碑和每日习惯，提供 Today 视图、专注模式、14 天习惯记录和 30 天分析，数据默认存于本地 SQLite 文件。面向同时处理多项目的创业者、顾问和独立开发者。注意 v1 无认证，仅建议在 localhost 或反向代理后使用，且数据目录不可放入文件同步盘。",
+   "highlights": [
+    "提供项目、任务、里程碑、习惯和 30 天分析视图",
+    "本地 SQLite 存储，无需账号，支持 MCP 本地端点",
+    "支持 npx、Docker、源码三种运行方式"
+   ],
+   "use_cases": [
+    "个人多项目任务与里程碑跟踪",
+    "每日习惯打卡与一致性记录",
+    "自托管本地工作台部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Local by default** — SQLite on disk, light and dark themes, no accounts ／ Do not keep `~/.daily-hub/` in iCloud, Dropbox, or other file-sync folders — SQLite and file sync can corrupt the database. Backup is a copy of that folder (or your `--data-dir`). ／ Runs on port **9999** with SQLite in `./.data/`. Commands, layout, and conventions live in CLAUDE.md.",
+     "lines": [
+      57,
+      98,
+      125
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确说明应用使用 SQLite 存储数据，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A personal command center for people who juggle **more than one project at a time** — founders, consultants, indie builders, anyone with client work, side projects, and a few non-negotiable daily habits. ／ - **Local by default** — SQLite on disk, light and dark themes, no accounts ／ Next.js 15, TypeScript, SQLite, and Prisma. There is no separate API server — reads go through Server Components, writes through Server Actions.",
+   "evidence_lines": [
+    26,
+    57,
+    129
+   ]
+  },
+  "fn": "baselhusam/daily-hub",
+  "sha": "a7ab0e0fdf20",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d0544b37ff86": {
+  "identity": {
+   "one_liner": "测试数据库快照与恢复工具，类 git 的状态管理服务",
+   "review": "Testate 是一个以 Docker 容器或单二进制运行的测试数据库快照/恢复服务，为项目中的数据库创建带命名和标签的数据快照，支持一键检出回滚、状态间差异对比、REST API 与 MCP 接口供 CI 流水线和 AI 代理调用，内置数据网格、SQL 控制台、列脱敏和审计日志。面向 QA、开发者和基础设施团队，用于重置测试环境数据；仅重置已登记的数据库，且不支持微服务多库一致性恢复。",
+   "highlights": [
+    "提供数据库级数据快照、检出回滚与单元格级差异对比",
+    "提供 REST API 与 MCP 接口，支持 CI 流水线和 AI 代理调用，含列脱敏与只读事务",
+    "提供 Docker 镜像与 Linux/macOS/Windows 二进制安装，内置三角色权限与审计日志"
+   ],
+   "use_cases": [
+    "QA 测试前重置数据库到指定状态，测试后快速回滚",
+    "CI 流水线在自动化运行前通过 API 调用恢复干净的种子数据",
+    "开发人员复现 QA 环境中的 bug 状态，或让 AI 代理以脱敏方式查看测试数据"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Tabular|PostgreSQL, MySQL, MariaDB|view, snapshot, checkout, diff, extract, edit, import| ／ |Tabular first|PostgreSQL, MySQL and MariaDB get everything. MongoDB gets snapshots and diffs, not edits or imports. Files get a browser.|Keep the transactional database in the tabular tier.|",
+     "lines": [
+      103,
+      144
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Tabular|PostgreSQL, MySQL, MariaDB|view, snapshot, checkout, diff, extract, edit, import| ／ |Tabular first|PostgreSQL, MySQL and MariaDB get everything. MongoDB gets snapshots and diffs, not edits or imports. Files get a browser.|Keep the transactional database in the tabular tier.|",
+     "lines": [
+      103,
+      144
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Tabular|PostgreSQL, MySQL, MariaDB|view, snapshot, checkout, diff, extract, edit, import| ／ |Tabular first|PostgreSQL, MySQL and MariaDB get everything. MongoDB gets snapshots and diffs, not edits or imports. Files get a browser.|Keep the transactional database in the tabular tier.|",
+     "lines": [
+      103,
+      144
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Testate 是直接连接并管理数据库快照/恢复的服务组件，为数据库测试流程服务，而非使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Testate: git for your test database. Testers, CI pipelines and AI agents drive Testate, which runs on the same test server as the system under test and snapshots or restores its databases ／ - **Take a state.** A data-only snapshot of every database in a project, at one moment, with a name and tags. ／ |Tabular|PostgreSQL, MySQL, MariaDB|view, snapshot, checkout, diff, extract, edit, import|",
+   "evidence_lines": [
+    1,
+    31,
+    103
+   ]
+  },
+  "fn": "PT-Perkasa-Pilar-Utama/testate",
+  "sha": "d0544b37ff86",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c39e5778bc1d": {
+  "identity": {
+   "one_liner": "Go 编写的 CLI，用官方 dump/restore 工具在任意两连接间克隆 MongoDB/MySQL/PostgreSQL 库",
+   "review": "dbclone 是一个 Go 语言命令行工具，通过在本地 Docker 容器内调用 mongo/mysqldump 等官方工具，把整库或选定表/集合以流式管道方式在任意两个连接间克隆，支持并行、重试和进度显示，面向开发者在 staging/prod 与本地之间同步数据。依赖 Docker 与本地官方镜像容器，且 MySQL 各表组独立快照，不保证跨表一致性，README 明言非备份工具。",
+   "highlights": [
+    "支持整库或按表/集合克隆，dump 直接管道进 restore，不在磁盘落盘文件",
+    "全局流池调度，最大任务优先，每条流带 3 次重试与退避",
+    "非本地目标需输入目标名确认，-fresh 仅限 local，密码经环境变量传递且日志脱敏"
+   ],
+   "use_cases": [
+    "把 staging 或 prod 数据克隆到本地开发环境",
+    "在本地 Docker 容器与远程服务器间同步指定表/集合",
+    "通过 named profiles 在任意两台服务器间迁移数据库副本"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Clone MongoDB, MySQL and PostgreSQL databases between **any two connections** — staging → local, ／ - Docker, with local MongoDB / MySQL / PostgreSQL running from the official images",
+     "lines": [
+      10,
+      43
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Clone MongoDB, MySQL and PostgreSQL databases between **any two connections** — staging → local,",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确要求本地 Docker 内运行官方数据库镜像，其自身仅作为执行 dump/restore 流水线的 CLI 工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Clone MongoDB, MySQL and PostgreSQL databases between **any two connections** — staging → local, ／ source ──────────▶│ mongodump / mysqldump ──pipe──▶ mongorestore / mysql │──────────▶ target ／ Engines are adapters behind one interface. To add one (PostgreSQL, …), implement",
+   "evidence_lines": [
+    10,
+    159,
+    187
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "phuthuycoding/dbclone",
+  "sha": "c39e5778bc1d",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

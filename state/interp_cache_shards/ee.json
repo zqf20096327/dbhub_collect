@@ -7892,5 +7892,141 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0b1c1bc7e0a7": {
+  "identity": {
+   "one_liner": "自托管家庭办公室引擎：类型化 Python 计算器加私有 SQLite 账本",
+   "review": "一个自托管的家庭财务管理引擎，提供 20 个带 Pydantic 输入验证的风险/动量/回测等 CLI 计算器，数据存入本地实例目录中的 SQLite 文件，可从经纪商 CSV 或 SnapTrade/SimpleFIN 同步。供希望在本地管理个人持仓与风险的家庭用户，也可作为 Claude Code/Codex 的插件运行；AI 代理只负责提出建议，计算全部由类型化代码完成。需 Python 3.12+ 与 uv。",
+   "highlights": [
+    "提供 20 个 Pydantic 验证的 CLI 计算器，覆盖风险、波动率、相关性、优化、回测、期权、因子、对冲等指标",
+    "通过 refresh_all 将 SnapTrade 经纪数据与 SimpleFIN 银行数据同步写入本地 SQLite 账本",
+    "可在 Claude Code 或 Codex 中作为插件安装，含 11 个专家代理与 fail-closed 守护栏"
+   ],
+   "use_cases": [
+    "在本地机器上保存并分析个人持仓、交易与费用账本",
+    "计算组合风险指标（VaR、CVaR、Sharpe、Sortino、回撤、beta、alpha 等）",
+    "在 Claude Code/Codex 会话中由代理调用 CLI 生成带数据来源的财务分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "_A self-hosted family office engine: typed Python calculators, a private SQLite ledger, and specialist agents that run inside Claude Code or Codex. Your data never leaves your machine unless you point it somewhere._ ／ |**Sync layer** (`src/integrations/`)|`refresh_all` pulls SnapTrade (brokerage) and SimpleFIN (bank and card) into SQLite with your own read-only credentials.|Partial provider responses raise before any write. You get an error instead of a coverage ratio compu ／ Finance Guru architecture: providers sync through refresh_all into a private SQLite instance, typed calculators read the store and market data, skills and specialists drive the calculators from Claude Code or Codex, and artifacts land back in the instance.",
+     "lines": [
+      7,
+      85,
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明数据存入私有 SQLite 实例（family_office.db），数据库仅作本项目存储用途",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "open-core，AGPL-3.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "_A self-hosted family office engine: typed Python calculators, a private SQLite ledger, and specialist agents that run inside Claude Code or Codex. Your data never leaves your machine unless you point it somewhere._ ／ |**Private instance**|A directory outside the repo holding `family_office.db`, your `.env`, broker CSVs, and every artifact the engine writes.|No spreadsheet, no cloud sync, no vendor dashboard between you and your ledger. Tracked files never carry personal values.| ／ |**Sync layer** (`src/integrations/`)|`refresh_all` pulls SnapTrade (brokerage) and SimpleFIN (bank and card) into SQLite with your own read-only credentials.|Partial provider responses raise before any write. You get an error instead of a coverage ratio computed on half your accounts.|",
+   "evidence_lines": [
+    7,
+    84,
+    85
+   ]
+  },
+  "fn": "AojdevStudio/Finance-Guru",
+  "sha": "0b1c1bc7e0a7",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3324c20e680a": {
+  "identity": {
+   "one_liner": "本地局域网设备发现与资产台账桌面应用，基于本地 SQLite 持久化",
+   "review": "NETWATCH 是一个本地优先的局域网设备清单应用，扫描子网内主机并维护持久化的设备资产台账，记录设备加入、离开与 IP 变更，提供设备合并、信任分级、拓扑视图和 ping/WoL/端口扫描等诊断功能。面向家庭实验室用户、远程办公者、注重隐私的个人用户及小型办公室 IT 人员。所有数据存储在本地 SQLite 数据库中，完全离线运行、无云上传与遥测，无需管理员权限。",
+   "highlights": [
+    "以本地 SQLite 数据库持久化所有设备历史与设置，支持设备加入/离开/IP 变更的追踪与告警",
+    "使用非特权用户态系统 API 进行子网发现，内置离线 IEEE OUI 数据库识别厂商",
+    "内置 ICMP ping、Wake-on-LAN、TCP 端口扫描等网络诊断功能"
+   ],
+   "use_cases": [
+    "家庭实验室与自托管用户追踪 Raspberry Pi、NAS 等设备",
+    "小型办公室 IT 人员发现未授权接入设备并维护资产台账",
+    "远程办公者审计客户网络、验证 IP 分配与端口开放情况"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Scanning is just the ingestion sensor. Behind the scenes, NETWATCH maintains a **persistent local SQLite asset ledger**. It remembers every host that ever touched your subnet, tracks joins and departures, alerts you to IP changes, and lets you organize your ne ／ - **Local SQLite Storage**: All history and settings are stored in an open SQLite database on your local disk.",
+     "lines": [
+      38,
+      133
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有历史与设置存储在本地 SQLite 数据库中，SQLite 仅作为该应用的数据存储层",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 与 Apache 2.0 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Scanning is just the ingestion sensor. Behind the scenes, NETWATCH maintains a **persistent local SQLite asset ledger**. It remembers every host that ever touched your subnet, tracks joins and departures, alerts you to IP changes, and lets you organize your network into a clean, searchable inventory — **100% offline, with zero cloud and zero telemetry.** ／  - Your data is stored locally in `%LOCALAPPDATA%\\NetWatch\\data\\network.db`. ／ - **Local SQLite Storage**: All history and settings are stored in an open SQLite database on your local disk.",
+   "evidence_lines": [
+    38,
+    115,
+    133
+   ]
+  },
+  "fn": "alwkala/NETWATCH",
+  "sha": "3324c20e680a",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

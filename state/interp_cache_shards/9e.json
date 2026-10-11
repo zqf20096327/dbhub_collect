@@ -8805,5 +8805,245 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ebd4302b1e4c": {
+  "identity": {
+   "one_liner": "Rust+GPUI 构建的键盘优先桌面数据库客户端",
+   "review": "DBFlux 是一个开源桌面数据库客户端，内置多种关系型与非关系型数据库驱动，支持 SQL 编辑、可视化查询构建、图表、仪表盘、审计日志与 MCP 集成，外部驱动可通过 RPC 协议接入。面向需要跨多种数据库进行查询、浏览和管理工作的开发者与运维人员。",
+   "highlights": [
+    "内置 PostgreSQL、MySQL/MariaDB、SQLite、SQL Server、MongoDB、Redis、ClickHouse 等驱动，并支持通过 RPC 协议注册外部驱动",
+    "提供可视化 SELECT/UPDATE/DELETE 构建器、图表与仪表盘、结果导出（CSV/JSON/Text/Binary）",
+    "内置 MCP 服务器与治理层（操作分类、策略引擎、写操作人工审批），并提供 SQLite 审计日志"
+   ],
+   "use_cases": [
+    "在统一桌面客户端中连接和查询多种数据库",
+    "通过可视化查询构建器进行带审批策略的数据变更",
+    "为 AI 客户端提供受治理的 MCP 数据库访问入口"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL** with SSL/TLS modes (Disable, Prefer, Require) ／ - Schema-level metadata: indexes, foreign keys, constraints, custom types (PostgreSQL)",
+     "lines": [
+      81,
+      104
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **MySQL** / MariaDB ／ - SQL drivers only (SQLite, PostgreSQL, MySQL/MariaDB, SQL Server); driver-agnostic by construction",
+     "lines": [
+      83,
+      126
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite** for local database files ／ - SQL drivers only (SQLite, PostgreSQL, MySQL/MariaDB, SQL Server); driver-agnostic by construction",
+     "lines": [
+      84,
+      126
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Microsoft SQL Server** (TDS) with TLS, SQL Browser named-instance routing, and multi-schema introspection ／ - SQL drivers only (SQLite, PostgreSQL, MySQL/MariaDB, SQL Server); driver-agnostic by construction",
+     "lines": [
+      85,
+      126
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **ClickHouse** and ClickHouse Cloud over HTTP(S), with database/table discovery, visual SELECTs, and explicit raw SQL execution",
+     "lines": [
+      90
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **MySQL** / MariaDB ／ - SQL drivers only (SQLite, PostgreSQL, MySQL/MariaDB, SQL Server); driver-agnostic by construction",
+     "lines": [
+      83,
+      126
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为带内置驱动的数据库桌面客户端，为连接和操作多种数据库提供服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "DBFlux is an open-source desktop client with built-in drivers for relational and non-relational databases. Its core contracts are driver-neutral, and external drivers can integrate over RPC. ／ - **PostgreSQL** with SSL/TLS modes (Disable, Prefer, Require) ／ - Built-in Model Context Protocol (MCP) server (`dbflux mcp`) for AI clients",
+   "evidence_lines": [
+    11,
+    81,
+    148
+   ]
+  },
+  "fn": "0xErwin1/dbflux",
+  "sha": "ebd4302b1e4c",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bfc7b4f98572": {
+  "identity": {
+   "one_liner": "PostgreSQL 无代码管理工作站，本地 Web UI 浏览/编辑/可视化数据库",
+   "review": "pglens 是一个面向 PostgreSQL 的本地 Web 工作站，提供表格浏览、无代码筛选编辑、关系图可视化、CSV/JSON 导入导出、SQL 高级模式和 EXPLAIN 分析等运维功能，适合开发者和 DBA 在本机管理数据库。服务器默认绑定 127.0.0.1，通过安装令牌鉴权，密码存于操作系统密钥链，官方明确不建议将端口暴露到公网。",
+   "highlights": [
+    "提供无代码数据客户端：筛选构建器、行内编辑、插入表单、外键跳转、聚合",
+    "支持 schema 关系图可视化，可导出 SVG 或 Mermaid ER",
+    "内置 EXPLAIN 计划可视化、索引助手、活动面板与慢查询视图"
+   ],
+   "use_cases": [
+    "本地开发中通过 Web UI 浏览和编辑 PostgreSQL 数据",
+    "生成表关系图并导出 SVG/Mermaid 用于文档",
+    "排查慢查询并查看执行计划"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A no-code PostgreSQL workstation. Browse, filter, edit, visualize, and query your ／ PostgreSQL databases from a fast local web UI. Every no-code action has a ／ - **Postgres-native ops** — EXPLAIN plan visualizer, index assistant, live",
+     "lines": [
+      3,
+      4,
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "pglens 是为 PostgreSQL 提供浏览、编辑、可视化等管理能力的工具，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A no-code PostgreSQL workstation. Browse, filter, edit, visualize, and query your ／ - **Postgres-native ops** — EXPLAIN plan visualizer, index assistant, live ／  - **Connection URL**: Paste a standard PostgreSQL connection string (e.g., `postgresql://user:pass@localhost:5432/db`).",
+   "evidence_lines": [
+    3,
+    27,
+    88
+   ]
+  },
+  "fn": "tsvillain/pglens",
+  "sha": "bfc7b4f98572",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ff875ec60dca": {
+  "identity": {
+   "one_liner": "C++ 实现的内存键值数据库，兼容 RESP 协议",
+   "review": "MiniRedis-CPP 是用现代 C++ 从零实现的内存键值数据库引擎，支持 RESP 协议、字符串/列表/哈希/集合等数据结构、LRU 淘汰、TTL 过期和 WAL(AOF) 持久化，可用 redis-cli、Python redis、Node ioredis 客户端连接。适合用于学习存储引擎与网络协议实现，或在跨平台环境运行轻量键值服务。构建依赖 make/CMake，支持 Windows 与 Linux/macOS。",
+   "highlights": [
+    "实现 RESP 协议解析，可被 redis-cli、redis-py、ioredis 等客户端连接",
+    "提供 LRU 淘汰、主动/被动 TTL 过期与 WAL(AOF) 持久化及 BGREWRITEAOF 压缩",
+    "支持字符串、列表、哈希、集合数据结构及对应命令集，附带自动化测试套件"
+   ],
+   "use_cases": [
+    "学习数据库引擎、RESP 协议与网络编程的参考实现",
+    "需要持久化与过期机制的轻量内存键值服务",
+    "使用标准 Redis 客户端进行协议级测试"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "该项目本身是一个独立的键值数据库引擎实现，README 未表明它是为其他数据库生态服务的工具或依赖数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A high-performance, cross-platform in-memory key-value database engine built from scratch in modern **C++**, featuring **RESP (REdis Serialization Protocol)** compliance, **LRU Cache Eviction**, **TTL (Time-To-Live)** expiration, **Sets & Hashes**, and **WAL (Write-Ahead Logging / AOF)** durability. ／ * **Cross-Platform Compatibility:** Native support for **Windows** (Winsock2) and **Linux / macOS** (POSIX Berkeley Sockets & pthreads). ／ * **Durability via Write-Ahead Logging (WAL / AOF):** Every mutating command is persisted sequentially to disk. On reboot or crash, the server automatically recovers its full in-memory state.",
+   "evidence_lines": [
+    3,
+    32,
+    35
+   ]
+  },
+  "fn": "baadaldev/mini-redis-cpp",
+  "sha": "ff875ec60dca",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

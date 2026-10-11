@@ -9241,5 +9241,87 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "92b374e2de69": {
+  "identity": {
+   "one_liner": "AI 智能体语义检查点与防篡改事件日志恢复库，MCP 服务器形式提供",
+   "review": "CONTINUUM 是面向长时运行 AI 智能体的可验证恢复库：不保存对话记录，而是生成语义检查点，配合幂等动作账本与哈希链事件日志实现崩溃后恢复，并以默认拒绝的 MCP 服务器对外暴露。提供 Python 库和 CLI，供构建智能体应用的开发者集成，使用 SQLite 或 Postgres 存储事件数据。",
+   "highlights": [
+    "提供语义检查点、幂等动作账本与哈希链防篡改事件日志三种机制，通过 SQLiteStorage 或 Postgres 存储实现持久化",
+    "以 deny-by-default 的 MCP stdio 服务器和强制 HTTP 网关暴露能力，支持 Claude Code、Gemini CLI、Codex 等编码智能体挂钩",
+    "恢复前对检查点各组件做独立环境重校验，陈旧状态沿依赖图传播"
+   ],
+   "use_cases": [
+    "长时运行智能体崩溃后从语义检查点恢复，避免重放全部工作与重复副作用",
+    "多智能体通过 MCP 访问同一事件存储，实施默认拒绝的写权限控制",
+    "对智能体执行轨迹做防篡改审计与来源追踪"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Durable execution|What happened before a crash and what can be replayed without losing work?|Hash-chained event log `src/continuum/events.py` with `verify()` and `trusted_through`, durable storage `src/continuum/storage/sqlite.py` (WAL, `synchronous=FULL`, sc ／ - **Third-party clients**: Gemini CLI and Kilo Code connected over stdio JSON-RPC against the live SQLite store, validating multi-agent co-existence and authorization isolation. ／ - **Self-healing**: hard-killed servers recover from orphaned SQLite `-wal`/`-shm` sidecars via single-retry cleanup at startup.",
+     "lines": [
+      125,
+      194,
+      196
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Schema v6. SQLite is primary, Postgres is CI verified. One log, many projections. ／ |`storage/`|`SQLiteStorage` v6, `postgres.py`, `migrations.py`, `actionindex.py`|",
+     "lines": [
+      353,
+      373
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为智能体提供检查点/恢复基础设施，SQLite 与 Postgres 是其内置存储适配目标",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite",
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "store = SQLiteStorage(\"agent.db\") ／ |Durable execution|What happened before a crash and what can be replayed without losing work?|Hash-chained event log `src/continuum/events.py` with `verify()` and `trusted_through`, durable storage `src/continuum/storage/sqlite.py` (WAL, `synchronous=FULL`, schema v6) and `src/continuum/storage/postgres.py` plus `src/continuum/storage/migrations.py`, policy-driven checkpoints `src/continuum/checkpoint/manager.py` and `src/continuum/checkpoint/policy.py` that replay the gap on `restore()`. Walkthrough is in `docs/recovery_walkthrough.md` (output of `examples/recovery_walkthrough.py`).| ／ Published to PyPI as `continuum-agent` 0.1.2: `pip install continuum-agent` (`pip install continuum-agent==0.1.2` to pin). Release tags additionally ship built wheels attached to GitHub Releases.",
+   "evidence_lines": [
+    95,
+    125,
+    40
+   ]
+  },
+  "fn": "Cyrax321/CONTINUUM",
+  "sha": "92b374e2de69",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

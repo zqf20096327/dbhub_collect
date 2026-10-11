@@ -8977,5 +8977,213 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "313997ee4786": {
+  "identity": {
+   "one_liner": "自托管的 AI 代理集成网关，通过 MCP/REST 暴露应用 API 操作",
+   "review": "一个面向开发者的自托管集成网关：将 GitHub、Slack、Hacker News 和自定义 HTTP 的动作目录通过 MCP JSON-RPC 与 REST API 暴露给 AI 代理，提供 FastAPI 后端、Next.js 控制台，凭据经 AES-256-GCM 加密后存入本地 SQLite。内置目录规模有限，需自建环境运行，适合想自行掌控集成层的团队。",
+   "highlights": [
+    "提供 MCP 网关与 REST API，支持动作发现、输入 schema 检查与执行",
+    "支持保存加密连接、幂等执行键与运行记录",
+    "内置 SSRF 防护，默认阻止私网与内网目标地址"
+   ],
+   "use_cases": [
+    "为 AI 代理提供统一的工具发现与执行入口",
+    "自托管管理第三方应用的凭据与动作调用",
+    "通过 Python 定义扩展自有 provider 与动作目录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Open Agent Connector gives an agent a consistent way to discover connected services, find an action, read its input schema, and execute it. A FastAPI backend manages provider definitions, connections, outbound requests, and run records. A Next.js console provi ／ |Persistence|SQLite, SQLAlchemy async, aiosqlite| ／ The API creates its SQLite database and a local encryption key on first startup if they do not exist. For a durable deployment, configure and back up a stable key before saving credentials; losing the key makes previously encrypted credentials unreadable.",
+     "lines": [
+      9,
+      47,
+      85
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 SQLite 用作自身应用数据的默认本地存储，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Open Agent Connector gives an agent a consistent way to discover connected services, find an action, read its input schema, and execute it. A FastAPI backend manages provider definitions, connections, outbound requests, and run records. A Next.js console provides screens for browsing providers and actions, managing connections and runtime tokens, and reviewing activity. SQLite stores application data locally by default. ／ |Persistence|SQLite, SQLAlchemy async, aiosqlite| ／ The API creates its SQLite database and a local encryption key on first startup if they do not exist. For a durable deployment, configure and back up a stable key before saving credentials; losing the key makes previously encrypted credentials unreadable.",
+   "evidence_lines": [
+    9,
+    47,
+    85
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "Anil-matcha/open-agent-connector",
+  "sha": "313997ee4786",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "597671ed6b17": {
+  "identity": {
+   "one_liner": "自托管单人/小团队 Git 服务器，内置浏览器面板",
+   "review": "OwnGit 是一个用 Go 编写的自托管 Git 服务器，面向个人或小型团队，在自有电脑、NAS 或家庭服务器上托管私有仓库，提供浏览器仪表盘、PR 评审合并、force-push 历史保留、计划备份、GitHub Actions 工作流本地运行及 MCP/命令行集成；以单一二进制加 SQLite 文件运行，无需独立数据库服务，采用 GPL-3.0 许可。",
+   "highlights": [
+    "提供 HTTP Git 托管、浏览器文件/提交/diff 浏览及 ZIP/tar.gz 下载",
+    "支持 PR 评审合并、force-push 历史保留与恢复、计划或手动备份",
+    "支持运行 GitHub Actions 工作流文件及通过 MCP/JSON 命令接入编码工具"
+   ],
+   "use_cases": [
+    "家庭服务器/NAS 上托管私有 Git 仓库",
+    "本地运行 GitHub Actions 工作流而无 GitHub 账号",
+    "个人或小团队的代码评审与备份"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- One Go program with a SQLite file. There is no database service to run.",
+     "lines": [
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为自身状态存储，项目是为 Git 托管服务的应用而非数据库工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0-or-later；1.1.4 及更早版本为 MIT",
+   "install": [
+    "binary",
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "OwnGit is a self-hosted Git server for one person or a small group. It keeps your private repositories on your own computer, NAS or home server, and gives you a browser dashboard for them. You need no cloud account or subscription. ／ - Back up and restore repositories and records, on a schedule or on demand. ／ - One Go program with a SQLite file. There is no database service to run.",
+   "evidence_lines": [
+    12,
+    24,
+    29
+   ]
+  },
+  "fn": "juliankang4/owngit",
+  "sha": "597671ed6b17",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4f01eafe19d4": {
+  "identity": {
+   "one_liner": "记忆系统与 Agent 工作流的 benchmark 编排测试平台",
+   "review": "该仓库是 memory_bench_platform，一个用于对记忆系统和 Agent 工作流做基准测试的平台，提供 Skill 插件装载、任务编排、资源采样、执行归档和 HTML 报告生成，已接入 LoCoMo、LongMemEval、OpenClaw、OpenViking 等对象。面向需要统一评测入口的记忆系统与 Agent 开发者。安装通过根目录 pip install 完成，提供 memory-bench CLI。",
+   "highlights": [
+    "提供统一 run 入口，生成 run.、records、JSON/HTML 报告并归档诊断证据",
+    "通过目录型 Skill 插件接入 benchmark、agent 与 memory backend，支持资源采样（CPU/内存/IO）",
+    "支持平台原生 workflow 与外部 runner 结果导入两类执行路径"
+   ],
+   "use_cases": [
+    "对 LoCoMo、LongMemEval 等记忆基准做统一编排与评分",
+    "为新的 benchmark、Agent 或 memory backend 编写 Skill 接入统一测试闭环",
+    "在正式测试前运行 smoke gate 验证链路可用性"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "openGauss",
+     "rel": "mention",
+     "quote": "cd /path/to/openGauss-MemoryWorkload/memory_bench_platform",
+     "lines": [
+      462
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 未声明该平台使用或适配任何数据库，openGauss 仅出现在组织名/路径中",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`memory_bench_platform` 是一个面向记忆系统和 Agent 工作流的 benchmark 测试底座。它的核心目标不是重新实现每个 benchmark 或 Agent，而是提供统一的编排、Skill 装载、执行归档、资源采样、结果分析和 HTML 报告能力，让 LoCoMo、LongMemEval、OpenClaw、OpenViking 等不同对象可以用同一套测试入口接入和复用。 ／ - 平台核心保持薄：只负责加载 Skill、生成计划、驱动执行、采集证据、归档结果和生成报告。 ／ - `skills/benchmarks/`：Benchmark Skill，例如 `locomo`、`longmemeval`、`ovtest-health`。",
+   "evidence_lines": [
+    3,
+    26,
+    71
+   ]
+  },
+  "fn": "opengauss-mirror/openGauss-MemoryWorkload",
+  "sha": "4f01eafe19d4",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

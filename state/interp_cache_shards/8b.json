@@ -8635,5 +8635,230 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "86447c5d3b10": {
+  "identity": {
+   "one_liner": "集成 SSH、Docker、数据库与 AI 的终端工作台",
+   "review": "NexTerm 是一个基于 Go/Wails 与 React 的终端工作台，将 SSH/WinRM 终端、SFTP 文件管理、Docker 容器管理、PostgreSQL/MySQL/Redis 连接使用与 AI 助手集成在统一界面中。面向运维与开发人员，提供桌面端与服务端浏览器两种形态，支持多用户账号、资产端到端加密同步与终端会话录制回放。",
+   "highlights": [
+    "提供 SSH/WinRM 终端、SFTP 文件管理与 Docker 容器镜像管理，终端会话自动录制并可回放",
+    "支持连接使用 PostgreSQL、MySQL、Redis 及 SSH 端口转发，PostgreSQL 连接无需远端 agent",
+    "接入 OpenAI 兼容接口的 AI 助手，支持服务端多用户账号与资产端到端加密同步"
+   ],
+   "use_cases": [
+    "运维人员通过统一界面管理服务器终端、文件与 Docker 容器",
+    "开发人员连接 PostgreSQL/MySQL/Redis 数据库进行日常查询操作",
+    "团队通过服务端浏览器模式共享主机资产并实现多设备同步"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **日常运维**：管理 Docker 容器与镜像，使用 PostgreSQL、MySQL、Redis 和 SSH 端口转发；PostgreSQL 与普通 SSH/SFTP 均不需要远端 agent，agent 仅用于设备管理。 ／ workflow 复用接线检查与 PostgreSQL 真实测试使用单独入口： ／ NEXTERM_TEST_PG_DSN='<dsn>' task test:pg",
+     "lines": [
+      15,
+      69,
+      73
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **日常运维**：管理 Docker 容器与镜像，使用 PostgreSQL、MySQL、Redis 和 SSH 端口转发；PostgreSQL 与普通 SSH/SFTP 均不需要远端 agent，agent 仅用于设备管理。",
+     "lines": [
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其使用 PostgreSQL、MySQL、Redis 存取数据属于终端工作台的功能之一，项目本身是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**SSH、WinRM、文件、Docker、数据库和 AI，集中在一个工作台。** ／ - **日常运维**：管理 Docker 容器与镜像，使用 PostgreSQL、MySQL、Redis 和 SSH 端口转发；PostgreSQL 与普通 SSH/SFTP 均不需要远端 agent，agent 仅用于设备管理。 ／ - **桌面与浏览器**：桌面端适合本机使用；服务端的终端进程和工作区保存在服务器上，关闭网页后可继续。",
+   "evidence_lines": [
+    3,
+    15,
+    19
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Hello-CTF/NexTerm",
+  "sha": "86447c5d3b10",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "761007d7552b": {
+  "identity": {
+   "one_liner": "AI 代理本地记忆层，Markdown 存储加 SQLite FTS5 索引，经 MCP 提供服务",
+   "review": "Noema 用磁盘上的 Markdown 文件作为事实来源、本地 SQLite（FTS5）作为索引，为 AI 代理提供持久化、结构化的记忆存储，并以 MCP 服务器（stdio + HTTP）形式暴露读写与检索工具，支持 Claude Code、Copilot、Cursor 等客户端接入，还提供 Cortex 间的点对点联邦同步、事件日志审计与 iCloud nosync 存储。适用于需要本地优先、无云端依赖的代理记忆管理与跨代理知识延续的个人或团队。",
+   "highlights": [
+    "以 Markdown 文件为事实来源、SQLite FTS5 为本地索引，提供 MCP 服务器（stdio + Streamable HTTP）接口",
+    "支持多 Cortex 间点对点联邦，含向量时钟、事件日志审计与并发编辑 divergence 追踪",
+    "提供 TUI、数据库维护（compact/backup/完整性校验）与可选 strong 持久化档案"
+   ],
+   "use_cases": [
+    "为编码代理（Claude Code、Copilot、Cursor、Codex 等）提供跨会话持久记忆",
+    "通过 Obsidian/VS Code 等编辑器直接管理代理记忆文件并同步变更",
+    "多设备/多代理场景下的记忆联邦同步与审计"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Noema gives AI agents — and the humans working alongside them — a persistent, structured place to record what they know, decide, observe, and intend. Every memory is a plain markdown file. The index is a local SQLite database. Nothing lives in the cloud; nothi ／ - **Plain markdown on disk** as the source of truth; a local SQLite database with FTS5 as the index. No cloud, no API keys, no telemetry. ／ Release archives bundle SQLite, so there is no separate database library to",
+     "lines": [
+      10,
+      15,
+      117
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Noema 以 SQLite 为内置索引组件为 AI 代理记忆层服务，属于数据库生态之上的工具，而非以某数据库为存储的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Noema gives AI agents — and the humans working alongside them — a persistent, structured place to record what they know, decide, observe, and intend. Every memory is a plain markdown file. The index is a local SQLite database. Nothing lives in the cloud; nothing requires an API key. ／ - **Local-first agent memory** exposed as an MCP server (stdio + Streamable HTTP). Works out of the box with Claude Code, GitHub Copilot, Zed, Cursor, Aider, and anything else that speaks MCP. ／ - **Plain markdown on disk** as the source of truth; a local SQLite database with FTS5 as the index. No cloud, no API keys, no telemetry.",
+   "evidence_lines": [
+    10,
+    14,
+    15
+   ]
+  },
+  "fn": "Fail-Safe/Noema",
+  "sha": "761007d7552b",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a60b3c14d9ee": {
+  "identity": {
+   "one_liner": "马达加斯加科技产品目录站，Next.js+Postgres 构建",
+   "review": "这是一个开源的产品目录网站，供马达加斯加开发者发布自己构建的产品、进入每日排行榜，并可选地以只读方式验证真实收入。技术栈为 Next.js 16 + TypeScript + Drizzle ORM + Postgres，配合 Supabase Auth 认证与 pg_cron 定时任务。当前处于 v0.1.0 基础阶段，列表、排行榜与收入验证功能尚未上线，且无 Supabase 密钥时以 mock 模式运行。",
+   "highlights": [
+    "提供产品发布、每日排行榜与只读收入验证功能",
+    "使用 Drizzle ORM 进行 Postgres 数据库迁移与初始化（db:generate/db:migrate/db:setup）",
+    "支持 Supabase Auth（Google、GitHub、email OTP）及无密钥 mock 模式运行"
+   ],
+   "use_cases": [
+    "马达加斯加开发者发布和展示自己的技术产品",
+    "法语法圈开源社区协作的产品目录项目",
+    "需要 leaderboard 与收入验证机制的目录类站点参考实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Next.js 16 (App Router) + TypeScript · Tailwind v4 · Postgres (Drizzle) · Supabase Auth (Google, GitHub, email OTP) · Resend · Upstash (rate-limit) · Vercel + pg_cron (jobs).",
+     "lines": [
+      16
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 Postgres（Drizzle）存数据的目录网站应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**Ce que tu construis ici, on le voit ici.** L'annuaire des produits construits par les développeurs malgaches : publie ton produit, gagne ta place au leaderboard quotidien, et prouve optionnellement tes revenus réels (vérifiés en lecture seule, jamais auto-déclarés). ／ Next.js 16 (App Router) + TypeScript · Tailwind v4 · Postgres (Drizzle) · Supabase Auth (Google, GitHub, email OTP) · Resend · Upstash (rate-limit) · Vercel + pg_cron (jobs). ／ > Statut : `v0.1.0` — fondations, identité & modération. Voir CHANGELOG.md (pas encore un MVP : listings, leaderboard et revenus vérifiés arrivent).",
+   "evidence_lines": [
+    10,
+    16,
+    12
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Hawks124/Mada-Builder",
+  "sha": "a60b3c14d9ee",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

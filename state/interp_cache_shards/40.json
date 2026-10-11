@@ -10226,5 +10226,142 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8a27d63aedf9": {
+  "identity": {
+   "one_liner": "基于 Node.js 的 QQ AI 伴侣机器人，带持久记忆与 SQLite 存储",
+   "review": "LuckyTri 是一个运行于 Node.js 的 QQ 聊天机器人应用，通过 OneBot 11 或 QQ 官方机器人接入消息，具备作息、日记、记忆淡去与可撤销变化等机制，数据存储于本地 SQLite 文件并提供自动备份。面向想在 QQ 上部署具连续记忆的 AI 伴侣的个人用户；回复依赖外部模型服务与 API Key。",
+   "highlights": [
+    "支持 OneBot 11 与 QQ 官方机器人两种接入方式，运行中可切换",
+    "存储层使用单个 SQLite 文件，含迁移与自动备份、SHA-256 完整性清单",
+    "提供 WebUI 管理台与插件机制，每个插件运行于受限进程"
+   ],
+   "use_cases": [
+    "在 QQ 群聊/私聊中部署带长期记忆的 AI 伴侣",
+    "本地保存聊天记录、关系与记忆数据并定期备份",
+    "通过插件机制扩展通道、活动与页面"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|存储|`server/storage/`|一个 SQLite 文件、迁移、备份|",
+     "lines": [
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储自身数据（数据库、记忆、聊天），不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License（单许可）",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|存储|`server/storage/`|一个 SQLite 文件、迁移、备份| ／ 需要 Node.js 24.5+ 与 npm，支持 Windows、macOS、Linux。真实回复还需要你自己的模型服务与 API Key。 ／ LuckyTri 会在后台启动并打开 <http://127.0.0.1:3210>。npm 包已包含 Server、构建好的 WebUI、教程和内置插件。首次进入时设置一个管理密码，以后用这个密码登录。随后在「系统 → 模型库」配置模型，在「对话」里试用模拟消息；模拟消息不会发到 QQ。",
+   "evidence_lines": [
+    66,
+    102,
+    109
+   ]
+  },
+  "fn": "TodayYueC/LuckyTri",
+  "sha": "8a27d63aedf9",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "042f4eb25904": {
+  "identity": {
+   "one_liner": "基于 Python 与 SQLite 的本地 AI 烹饪助手",
+   "review": "一个本地运行的单机 Web 应用，内置 1,775 条菜谱，提供食材仓库、临期推荐、地区菜谱检索、个人菜谱管理与完整备份恢复。通过集成 DeepSeek 的 Chat Completions 与 Tool Calls 接口，让模型调用 search_recipes、get_recipe、get_pantry 等工具读取本地数据后生成烹饪建议；未配置 API Key 时退化为本地检索。数据由 SQLite 持久化，适合想在本地管理家常菜谱并按库存获得做饭建议的个人用户。",
+   "highlights": [
+    "提供模型工具调用机制，通过 search_recipes、get_recipe、get_pantry 检索本地菜谱与库存数据",
+    "支持按批次记录食材余量、储存方式与到期日期，并结合到期日期生成消耗建议",
+    "提供版本化 JSON 完整备份与恢复，恢复前预览并生成回滚文件"
+   ],
+   "use_cases": [
+    "个人本地管理家常菜谱并按库存、到期日期获得菜单推荐",
+    "离线环境下基于内置菜谱库进行检索与做菜引导",
+    "通过 HTTP API 以 JSON 方式批量导入、维护个人菜谱"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "基于 Python 与 SQLite 的本地 AI 烹饪助手。集成 DeepSeek 工具调用、食材仓库、地区菜谱检索和个人菜谱管理，支持根据库存、到期日期、人数、时间及设备生成烹饪建议。 ／ - 💾 **数据持久化**：SQLite 保存库存、菜谱、收藏与对话；启动时自动初始化数据库并同步内置数据。 ／ |数据存储|SQLite / `sqlite3`|",
+     "lines": [
+      3,
+      16,
+      29
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 作为数据存储保存库存、菜谱、收藏与对话，项目是使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "基于 Python 与 SQLite 的本地 AI 烹饪助手。集成 DeepSeek 工具调用、食材仓库、地区菜谱检索和个人菜谱管理，支持根据库存、到期日期、人数、时间及设备生成烹饪建议。 ／ - 💾 **数据持久化**：SQLite 保存库存、菜谱、收藏与对话；启动时自动初始化数据库并同步内置数据。 ／ |数据存储|SQLite / `sqlite3`|",
+   "evidence_lines": [
+    3,
+    16,
+    29
+   ]
+  },
+  "fn": "sloth766/shiwei-kitchen",
+  "sha": "042f4eb25904",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

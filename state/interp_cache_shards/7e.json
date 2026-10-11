@@ -10130,5 +10130,215 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2cf630cda774": {
+  "identity": {
+   "one_liner": "AzerothCore 服务器的 3D 世界与任务编辑器，导出 SQL",
+   "review": "这是一个面向 AzerothCore 私服管理员的桌面工具，用 3D 视图编辑任务链、NPC、物件、刷怪点和巡逻路径，读取游戏客户端文件渲染世界，改动以项目补丁管理，最终导出 SQL 或直接应用到开发库，实时世界数据库只读不写。它还通过 MCP 协议接入 AI 助手（如 Claude Code）代写任务内容，但禁止 AI 写库。提供 Windows/macOS/Linux 安装包，也可从源码构建。",
+   "highlights": [
+    "提供 3D 世界视图，可放置、移动 NPC 与物件并绘制巡逻路径",
+    "以项目补丁记录改动，可导出 SQL 或应用到开发数据库，线上世界数据库只读",
+    "内置 MCP/AI 设置，可连接 Claude Code 等助手编辑任务与场景"
+   ],
+   "use_cases": [
+    "为 AzerothCore 服务器设计和编写任务链",
+    "不手改数据库表而可视化管理 NPC、物件与刷怪配置",
+    "在测试服务器上用 GM 命令验证任务后再应用补丁"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- An AzerothCore world database (including the Conquest of AzerothCore fork) reachable over MySQL.",
+     "lines": [
+      58
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它通过 MySQL 连接 AzerothCore 世界数据库以读写自身项目数据，是为游戏服务器服务的前端应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0-or-later",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A world editor for your AzerothCore server: build quests and shape the world around them, then export it all as SQL. ／ - **Work with an AI assistant.** Turn on MCP / AI in Settings and connect an assistant such as Claude Code. It can look up your world (quests by zone, what stands around a point and which way it faces, name clashes, optionally lore from warcraft.wiki.gg), then write quests, scenes, boss fights, patrols, loot and new NPCs, objects and items in your open project. Each change is one undoable **AI: …** step, editing pauses while it writes, and it can never write to your world database. ／ - An AzerothCore world database (including the Conquest of AzerothCore fork) reachable over MySQL.",
+   "evidence_lines": [
+    3,
+    28,
+    58
+   ]
+  },
+  "fn": "DMCK96/azeroth-world-editor",
+  "sha": "2cf630cda774",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4fc0e5be6194": {
+  "identity": {
+   "one_liner": "面向独立承包者的时间跟踪与开票自托管应用",
+   "review": "Stint 是一个为 solo contractors 设计的计时与开票 Web 应用，包含计时器、日历、客户、项目、支付配置和 PDF 发票生成，另有 macOS 菜单栏计时程序；基于 Next.js/TypeScript，依赖本地 Supabase 栈和 Postgres 运行与测试，移动端尚未创建，不发送邮件、由用户自行发送发票。",
+   "highlights": [
+    "提供计时器、日历、客户/项目管理、发票与 PDF 生成功能",
+    "API 处理器与 RLS 行隔离有集成测试覆盖，测试使用真实 Postgres 数据库",
+    "通过 design tokens 生成 CSS/TS/Swift 产物并在 CI 校验"
+   ],
+   "use_cases": [
+    "独立承包者记录工时并生成发票",
+    "自托管部署的个人计时与账单管理",
+    "macOS 菜单栏快速启停计时"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "databases on the local stack's Postgres, beside the seed:",
+     "lines": [
+      44
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述的是计时开票应用，使用本地栈的 Postgres 存储和测试数据，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A time tracker for solo contractors. One timer, a calendar, and invoicing — ／ databases on the local stack's Postgres, beside the seed: ／ the local Supabase stack (`pnpm dev:up`) and the app (`pnpm dev`) already",
+   "evidence_lines": [
+    3,
+    44,
+    54
+   ]
+  },
+  "fn": "BlakeEriks/stint",
+  "sha": "4fc0e5be6194",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "83a6ce51d22b": {
+  "identity": {
+   "one_liner": "外置/副盘文件整理与保护框架，基于Python标准库与SQLite FTS5索引",
+   "review": "SmartDrive-OS 是一个零第三方依赖的磁盘整理与保护框架，针对 exFAT 512KB 簇浪费和 NTFS 副盘缓存迁移提供分类、防误删、PATH 检查等能力，并通过 MCP stdio 服务暴露给 AI 编码代理。它面向开发者、大学生和 AI Agent 用户。数据层使用 Python 标准库 sqlite3 实现 FTS5 即时搜索（无外部数据库适配），并对活动中的 SQL Server 数据目录仅做排除保护而非管理。",
+   "highlights": [
+    "提供 exFAT 512KB 簇 slack 防护、反索引盾与 NTFS Junction 缓存迁移机制",
+    "使用 Python 标准库 sqlite3 实现本地 SQLite FTS5 即时搜索（L169/L240）",
+    "内置 AutoZoner 多层防误删白名单，包含对活动 SQL Server 2022 数据目录的排除保护",
+    "提供符合 JSON-RPC 2.0 的 MCP stdio 服务器，供 AI 代理调用"
+   ],
+   "use_cases": [
+    "管理 exFAT 外置 SSD 上的开发仓库，减少小文件簇空间浪费",
+    "通过 NTFS Junction 将 C 盘 AI 模型/包缓存迁移到内部副盘",
+    "为 AI 编码代理提供本地磁盘整理与文件检索的 MCP 工具"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- Fully written using the Python Standard Library (`sqlite3`, `hashlib`, `hmac`, `json`, `urllib`, `shutil`, `pathlib`, `ctypes`, `subprocess`, `argparse`). ／ - **`Quick_Search`**: Interactive instant SQLite FTS5 search prompt.",
+     "lines": [
+      169,
+      240
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "mention",
+     "quote": "- **Active Database Service Defense**: Specifically protects active Microsoft SQL Server 2022 instances, databases, and LDF/MDF data directories (`DBI202_VuPT\\MSSQL16.MSSQLSERVER`, `MSSQLSERVER`, `MSSQL`).",
+     "lines": [
+      107
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目自身用 Python 标准库 sqlite3 存储搜索索引，未为任何数据库提供驱动、连接器或管理服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可（L16）",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> **High-Performance Autonomous Drive Operating Suite, Workstation Hybrid Architecture, Snapshot Integrity Engine & Sub-10ms SQLite FTS5 Instant Search for External SSDs (exFAT), Internal Secondary Drives (NTFS), and AI Coding Agents.** ／ - **Active Database Service Defense**: Specifically protects active Microsoft SQL Server 2022 instances, databases, and LDF/MDF data directories (`DBI202_VuPT\\MSSQL16.MSSQLSERVER`, `MSSQLSERVER`, `MSSQL`).",
+   "evidence_lines": [
+    18,
+    107
+   ]
+  },
+  "fn": "DuongNAD/smart-drive-os",
+  "sha": "83a6ce51d22b",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

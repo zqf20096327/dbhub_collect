@@ -9595,5 +9595,72 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "67bb438f42ed": {
+  "identity": {
+   "one_liner": "Claude Code 会话历史的语义搜索工具，索引 JSONL 到 SQLite",
+   "review": "该工具将 Claude Code 会话 JSONL 转录内容提取入库到项目内的 .claude/sessions.db（SQLite），通过 Ollama 的 bge-m3 模型生成向量，支持语义检索并内置 FTS5 BM25 回退，还提供基于 LLM 的 facts 蒸馏层。面向在单机单项目内使用 Claude Code 的个人开发者，提供 mine/search/distill 等 CLI 子命令与 Stop 钩子集成。限制为仅单人单机使用，不支持团队共享历史。",
+   "highlights": [
+    "支持将 JSONL 会话转录索引为项目内 SQLite 存储，mine 命令幂等可重复执行",
+    "支持通过 Ollama 生成 bge-m3 向量嵌入，并在 Ollama 不可用时回退到 FTS5 BM25 检索",
+    "提供 distill/facts 层，通过 LLM 调用从 chunk 蒸馏三元组事实，含 --context-cap 与 --batch 成本控制参数"
+   ],
+   "use_cases": [
+    "跨数十次 Claude Code 会话按语义相似度检索历史决策与讨论内容",
+    "会话启动时通过 Stop/Recall 钩子自动注入相关历史上下文",
+    "从会话内容中提取并维护可持续更新的结构化事实清单"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "transcripts into a per-project SQLite store; retrieves via bge-m3 embeddings",
+     "lines": [
+      7
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该工具自身的会话数据存储，README 未声明为 SQLite 生态提供服务或适配功能",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "transcripts into a per-project SQLite store; retrieves via bge-m3 embeddings ／ `session-indexer` is per-project and append-only (`.claude/sessions.db` lives ／ session-indexer mine    <jsonl-path> --db .claude/sessions.db",
+   "evidence_lines": [
+    7,
+    38,
+    71
+   ]
+  },
+  "fn": "valpere/session-indexer",
+  "sha": "67bb438f42ed",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

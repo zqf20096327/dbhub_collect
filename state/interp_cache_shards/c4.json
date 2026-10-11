@@ -9763,5 +9763,175 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4ae61fd78ec3": {
+  "identity": {
+   "one_liner": "基于数据库表的 Django 任务队列后端，无需 Redis/RabbitMQ",
+   "review": "django-ox 是 Django Tasks 框架的数据库后端，把任务队列存在现有数据库表中，worker 通过 SKIP LOCKED 或比较交换更新认领任务，并内置 reaper 回收死亡 worker 的任务。面向已运行 PostgreSQL、MySQL 或 SQLite 的 Django 团队，通过 pip 安装并在 Django 5.2–6.1 上运行，附带管理界面、健康检查与清理命令。",
+   "highlights": [
+    "利用 SELECT ... FOR UPDATE SKIP LOCKED（PostgreSQL/MySQL 8+）或原子比较交换更新（SQLite）实现任务认领，reaper 将死亡 worker 的任务归还队列",
+    "提供事务性入队、指数退避重试与失败 traceback 保留、Django admin 队列管理与周期调度",
+    "附带 ox_worker / ox_prune / ox_health 管理命令及 django_ox.stats、/ox/metrics 监控接口"
+   ],
+   "use_cases": [
+    "已运行数据库的 Django 项目需要后台任务队列且不想额外部署 Redis/RabbitMQ",
+    "需要任务与应用数据在同一事务中提交/回滚的场景",
+    "需要 worker 崩溃后任务不丢失并自动重试的部署"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks ／ CI covers Python 3.12 to 3.14, Django 5.2 to 6.1, PostgreSQL, MySQL and SQLite. Open source under the BSD 3-Clause licence. ／ it (PostgreSQL, MySQL 8+) and an atomic compare-and-set UPDATE elsewhere",
+     "lines": [
+      41,
+      55,
+      82
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks ／ CI covers Python 3.12 to 3.14, Django 5.2 to 6.1, PostgreSQL, MySQL and SQLite. Open source under the BSD 3-Clause licence. ／ it (PostgreSQL, MySQL 8+) and an atomic compare-and-set UPDATE elsewhere ／ rejected at enqueue by PostgreSQL, MySQL and SQLite. A schedule-scoped",
+     "lines": [
+      41,
+      55,
+      82,
+      293
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks ／ CI covers Python 3.12 to 3.14, Django 5.2 to 6.1, PostgreSQL, MySQL and SQLite. Open source under the BSD 3-Clause licence. ／ (including SQLite), and a reaper returns tasks whose worker died to the queue. ／ rejected at enqueue by PostgreSQL, MySQL and SQLite. A schedule-scoped",
+     "lines": [
+      41,
+      55,
+      83,
+      293
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 Django Tasks 框架的数据库后端组件，为应用提供任务队列能力而非自身使用数据库存业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "BSD 3-Clause；另有商业版 Oxpull Pro 提供附加功能",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Stop running Redis to send an email. django-ox runs Django's Tasks framework in your existing database, where a dead worker doesn't mean lost tasks. Run a worker process, not a separate broker. ／ Workers claim tasks with `SELECT ... FOR UPDATE SKIP LOCKED` on PostgreSQL and MySQL 8+, or an atomic compare-and-set UPDATE on SQLite. A reaper returns unfinished tasks to the queue when their worker dies, subject to their stored attempt budgets. Failed tasks retry with exponential backoff by default, with every attempt's traceback kept. ／ CI covers Python 3.12 to 3.14, Django 5.2 to 6.1, PostgreSQL, MySQL and SQLite. Open source under the BSD 3-Clause licence.",
+   "evidence_lines": [
+    10,
+    41,
+    55
+   ]
+  },
+  "fn": "oxpull/django-ox",
+  "sha": "4ae61fd78ec3",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ba226f6f75cb": {
+  "identity": {
+   "one_liner": "CUBRID 数据库的 SQLAlchemy 方言，提供 ORM、Alembic 迁移与异步支持",
+   "review": "该项目是面向 CUBRID 数据库的 SQLAlchemy 2.0–2.1 方言实现，供 Python 开发者在 ORM、Core 连接、schema 反射和 Alembic 迁移场景中使用。支持 pycubrid（含异步 aiopycubrid）与 CUBRIDdb 三种驱动，覆盖 CUBRID 10.2–11.4；限制包括不支持 RETURNING、无序列、单有效 schema，且 SA 2.2 尚未验证兼容。",
+   "highlights": [
+    "实现 SQLAlchemy 2.0–2.1 方言，支持同步与异步引擎及 PEP 561 类型标注",
+    "内置 Alembic 迁移支持（CubridImpl 自动注册）和 CUBRID 专属 DML 构造（ON DUPLICATE KEY UPDATE、MERGE、REPLACE INTO）",
+    "支持 CUBRID 三种 MVCC 隔离级别及标准/CUBRID 专属类型映射"
+   ],
+   "use_cases": [
+    "在 Python 项目中通过 SQLAlchemy ORM 访问 CUBRID 数据库",
+    "为 CUBRID 数据库执行 Alembic schema 迁移",
+    "使用异步引擎构建基于 CUBRID 的 asyncio 应用"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Feature Support|Comparison with MySQL, PostgreSQL, SQLite|",
+     "lines": [
+      182
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|Feature Support|Comparison with MySQL, PostgreSQL, SQLite|",
+     "lines": [
+      182
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Feature Support|Comparison with MySQL, PostgreSQL, SQLite|",
+     "lines": [
+      182
+     ]
+    }
+   ],
+   "dbs": [],
+   "eco": "tool",
+   "eco_why": "该项目是为 CUBRID 数据库服务的 SQLAlchemy 方言/驱动适配层，属于数据库生态工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**SQLAlchemy 2.0–2.1 dialect for the CUBRID database** — Python ORM, schema reflection, Alembic migrations, and type mapping for SQLAlchemy and CUBRID-specific types. ／ - **Three driver options** — pure Python (`cubrid+pycubrid://`, recommended), async pure Python (`cubrid+aiopycubrid://`), or the CUBRIDdb C-extension driver (`cubrid://` / `cubrid+cubriddb://`) ／ - Type mapping for SQLAlchemy standard and CUBRID-specific types — numeric, string, date/time, bit, LOB, collection, and JSON types",
+   "evidence_lines": [
+    3,
+    33,
+    152
+   ]
+  },
+  "fn": "cubrid-lab/sqlalchemy-cubrid",
+  "sha": "ba226f6f75cb",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

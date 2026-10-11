@@ -10566,5 +10566,184 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "42c8e70e5b4c": {
+  "identity": {
+   "one_liner": "Rust 原生的多智能体开发驾驶舱，基于 worktree 隔离并行运行 CLI 编码代理",
+   "review": "OxiMux 是一个面向 macOS 和 Windows 的桌面应用，用于在同一仓库中并行运行 Claude Code、Codex 等 CLI 编码代理，并提供 worktree 隔离、Git 审查、提交图、任务与自动化调度等功能。数据存储使用 SQLite，支持 headless serve 与 CLI 脚本化控制，适合需要并行管理多个编码代理会话的开发者。",
+   "highlights": [
+    "支持在隔离的 git worktree 中并行生成 Claude Code/Codex/Pi/omp 等 CLI 编码代理会话",
+    "提供 Git 状态轮询、diff 查看器、提交图、PR 创建等 Git 审查能力",
+    "支持 cron 式自动化调度、远程 P2P 手机配对控制以及签名验证的自动更新"
+   ],
+   "use_cases": [
+    "在本地并行运行多个 AI 编码代理处理不同任务",
+    "通过 GUI 审查代理产生的代码变更并提交",
+    "用无人值守定时任务批量执行代理运行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Stack**: Rust 1.95 (edition 2024) + GPUI + `longbridge/gpui-kit` + SQLite + Tokio",
+     "lines": [
+      9
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 SQLite 列为其技术栈组成部分，作为应用自身的本地存储使用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Rust-native, multi-agent development cockpit for macOS and Windows. Open a repo → spawn isolated worktrees → run CLI coding agents (Claude Code, Codex, Pi, omp) in parallel → review every change through a GitLens-grade Git UX. ／ - **Stack**: Rust 1.95 (edition 2024) + GPUI + `longbridge/gpui-kit` + SQLite + Tokio ／ - **Status**: Working cockpit, in active development. Dogfoodable for day-to-day repo work; pre-1.0, so expect rough edges.",
+   "evidence_lines": [
+    7,
+    9,
+    10
+   ]
+  },
+  "fn": "nhtera/OxiMux",
+  "sha": "42c8e70e5b4c",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1dc5669257d0": {
+  "identity": {
+   "one_liner": "Java ORM 框架，以强类型 JQL 流式 API 编写查询并自动生成 SQL",
+   "review": "Brief 是一个面向 Java 应用的 ORM 持久层框架，提供 JQL 流式 API 组合查询、注解声明 SQL 函数、多表连接自动映射，并支持独立运行与增强既有 MyBatis 两种模式。面向使用 Spring Boot/JDK8+ 的 Java 开发者，附带字段加密、脱敏与分表模块；许可证为 Server Side Public License，README 未列版权页说明。",
+   "highlights": [
+    "提供 JQL 强类型流式 API 生成 SELECT/INSERT/UPDATE/DELETE，支持多表连接自动映射",
+    "支持 50+ MySQL 函数的注解声明、字段级 AES 加密与脱敏、可插拔分表策略",
+    "支持多种方言：MySQL、H2、Oracle、SQL Server、ClickHouse、SQLite、PostgreSQL"
+   ],
+   "use_cases": [
+    "Java 项目中以类型安全方式替代手写 SQL 字符串或 XML 映射",
+    "在既有 MyBatis 工程上通过 brief-mybatis 模块扩展 JQL 查询能力",
+    "需要对敏感字段加密/脱敏或按规则分表的持久层场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Multi-dialect** — MySQL, H2, Oracle, SQL Server, ClickHouse, SQLite, PostgreSQL.",
+     "lines": [
+      42
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **SQL functions as annotations** — 50+ MySQL functions (`LEFT`, `CONCAT`, `IFNULL`, `CASE WHEN`, `DATE_FORMAT`, `GROUP_CONCAT`, …) expressed as field-level annotations. Compose them by stacking; Brief renders the SQL. ／ - **Multi-dialect** — MySQL, H2, Oracle, SQL Server, ClickHouse, SQLite, PostgreSQL.",
+     "lines": [
+      32,
+      42
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "- **Multi-dialect** — MySQL, H2, Oracle, SQL Server, ClickHouse, SQLite, PostgreSQL.",
+     "lines": [
+      42
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Multi-dialect** — MySQL, H2, Oracle, SQL Server, ClickHouse, SQLite, PostgreSQL.",
+     "lines": [
+      42
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Multi-dialect** — MySQL, H2, Oracle, SQL Server, ClickHouse, SQLite, PostgreSQL.",
+     "lines": [
+      42
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "- **Multi-dialect** — MySQL, H2, Oracle, SQL Server, ClickHouse, SQLite, PostgreSQL.",
+     "lines": [
+      42
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为 ORM 持久化框架，通过 JDBC 为多种数据库提供服务，属于数据库生态的工具/组件而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Server Side Public License",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Brief is a lightweight ORM framework built around a single idea: **writing SQL should feel like writing Java**. ／ Brief is not a wrapper over MyBatis or JPA. It is an independent persistence engine that ships in **two modes**: ／ - **Multi-dialect** — MySQL, H2, Oracle, SQL Server, ClickHouse, SQLite, PostgreSQL.",
+   "evidence_lines": [
+    12,
+    23,
+    42
+   ]
+  },
+  "fn": "javaoffers/briefest",
+  "sha": "1dc5669257d0",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

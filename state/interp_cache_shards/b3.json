@@ -9551,5 +9551,140 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "718617ca7591": {
+  "identity": {
+   "one_liner": "用 SQL 查询 JSON/CSV 的交互式 TUI 工具",
+   "review": "qo 是一个终端 TUI 工具，让用户用 SQL 语法查询 JSON、CSV、TSV、PSV 文件或 stdin 数据，支持管道交互式筛选、多格式 JOIN 和格式转换，底层以 SQLite 作为 SQL 引擎（经 modernc.org/sqlite 纯 Go 实现）。适合需要在终端处理结构化文本数据的开发者和运维人员使用，不连接外部数据库。",
+   "highlights": [
+    "使用 SQLite 语法与内置函数（如 _extract）查询 JSON/CSV/TSV/PSV 数据",
+    "支持 stdin/stdout 管道、TUI 交互模式与 -q 直接执行 SQL",
+    "支持多文件 JOIN 与 JSON/CSV/JSONL 等格式互转"
+   ],
+   "use_cases": [
+    "在终端用 SQL 筛选、聚合 JSON API 响应或日志文件",
+    "JSON 与 CSV/JSONL 等格式之间的数据转换",
+    "通过管道与其他 CLI 工具（如 jq、gzip）组合处理数据"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**qo** uses **SQLite** as its SQL engine. All queries follow SQLite syntax and support its built-in functions. ／ Use SQLite's `json_extract()` function to access nested fields in JSON data. ／ For more details, see SQLite JSON Functions.",
+     "lines": [
+      124,
+      128,
+      139
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该工具以 SQLite 作为 SQL 引擎处理本地 JSON/CSV 文件，不依赖外部数据库服务，属于数据处理工具组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "1. TUI tool for querying JSON, CSV using SQL. ／ **qo** uses **SQLite** as its SQL engine. All queries follow SQLite syntax and support its built-in functions. ／ |SQL Engine|modernc.org/sqlite (Pure Go, CGO-free)|",
+   "evidence_lines": [
+    13,
+    124,
+    148
+   ]
+  },
+  "fn": "kiki-ki/go-qo",
+  "sha": "718617ca7591",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5edee5003ab8": {
+  "identity": {
+   "one_liner": "将 Notion 工作区镜像到本地 SQLite 与规范化 Markdown 的抓取工具",
+   "review": "notcrawl 把 Notion 工作区同步为本地 SQLite 归档并导出规范化 Markdown，提供 FTS5 全文检索、只读 SQL 查询、TUI 浏览、CSV 导出与基于 git 的归档共享。面向需要离线搜索、查询、对比工作区历史的人员与 agent，支持桌面缓存、官方 API 与 Notion MCP 三种同步来源。",
+   "highlights": [
+    "提供 desktop/api/notion-mcp 三种同步来源，API 模式带重试与超时控制",
+    "提供 FTS5 全文搜索、只读 SQL 查询、TUI 浏览与 CSV/Markdown 导出",
+    "提供 git share 模式发布与订阅归档快照，支持不可变检查点与增量合并"
+   ],
+   "use_cases": [
+    "离线搜索与查询 Notion 工作区内容",
+    "将 Notion 数据库行导出为 CSV 供其他流程使用",
+    "在无 Notion 凭据的机器间共享工作区归档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`notcrawl` mirrors a Notion workspace into local SQLite and normalized Markdown. It is for people and agents that need to search, query, diff, or share workspace history without depending on the Notion UI. ／ SQLite is the canonical archive. Markdown is the durable human-readable export. ／ The sync reads a snapshot of Notion's local cache. Search uses the SQLite FTS5 index, and `export-md` writes the normalized archive under `~/.notcrawl/pages`.",
+     "lines": [
+      11,
+      13,
+      35
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明用 SQLite 作为本地归档存储，SQLite 是其数据载体而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`notcrawl` mirrors a Notion workspace into local SQLite and normalized Markdown. It is for people and agents that need to search, query, diff, or share workspace history without depending on the Notion UI. ／ SQLite is the canonical archive. Markdown is the durable human-readable export. ／ |`sync`|Ingest `desktop`, `api`, `notion-mcp`, or all enabled sources|",
+   "evidence_lines": [
+    11,
+    13,
+    96
+   ]
+  },
+  "fn": "openclaw/notcrawl",
+  "sha": "5edee5003ab8",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

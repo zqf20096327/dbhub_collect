@@ -9109,5 +9109,210 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "61b8915a1564": {
+  "identity": {
+   "one_liner": "浏览器内多数据库 SQL 编辑器，支持 28 种引擎",
+   "review": "LibreDB Studio 是一个可部署在数据旁边的 Web 端数据库编辑器，提供表浏览、SQL 查询、图表、ER 图、schema diff 和监控等功能，覆盖 PostgreSQL、MySQL、Oracle 等二十多种引擎。它面向需要查看和管理数据库的团队，通过 Docker、npm、Helm 等方式部署，MIT 许可，含 SSO 与审计日志功能。",
+   "highlights": [
+    "单一界面支持 28 种数据引擎，其中 Druid、Elasticsearch、OpenSearch 为只读",
+    "提供 SSO、审计日志和 AI 辅助查询功能",
+    "可通过 Docker、Helm、npm、operator、PaaS 模板等多种方式部署"
+   ],
+   "use_cases": [
+    "团队共用一个浏览器入口查看和查询多个数据库",
+    "在受管环境下替代逐台安装桌面客户端的做法",
+    "需要 SSO 登录和操作审计记录的数据库访问场景"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Listed by the PostgreSQL project: ／ PostgreSQL Clients ／ The test instance comes with a pre-configured PostgreSQL database via Seed Connections. No setup required!",
+     "lines": [
+      17,
+      20,
+      100
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL,",
+     "lines": [
+      28
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "Oracle,",
+     "lines": [
+      27
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Twenty-eight engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, Databend, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j,",
+     "lines": [
+      108
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Twenty-eight engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, Databend, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j,",
+     "lines": [
+      108
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse,",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MariaDB,",
+     "lines": [
+      31
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为数据库提供编辑/管理界面，属于为数据库生态服务的工具而非使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "docker",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " The database editor that deploys next to your data, not onto your laptop. ／ Twenty-eight engines share one interface: PostgreSQL, MySQL, Oracle, Db2 LUW, SQL Server, SQLite, libSQL, DuckDB, MongoDB, Redis, Couchbase, ClickHouse, Druid, Elasticsearch, OpenSearch, Trino, Databend, Apache Cassandra, Prometheus, Apache Kafka, etcd, Neo4j, Milvus, Qdrant, InfluxDB (InfluxQL), InfluxDB 3 (SQL), Oxia and S3-compatible object storage, with the same explorer everywhere, and ER diagrams, schema diff and monitoring wherever the engine has something to report. Three of the twenty-eight are read-only because their own SQL is: Druid, Elasticsearch and OpenSearch have no `UPDATE` and no `CREATE TABLE` in the grammar at all, so those controls are reported as unsupported instead of failing when used. Cassandra is the one that reports the least on purpose: it publishes no row count and no size that is true, so the object browser shows neither rather than showing a number that is wrong; the estimate it does publish counts partitions from flushed files, and it read 143 for a 500-ro ／  License: MIT",
+   "evidence_lines": [
+    5,
+    108,
+    53
+   ]
+  },
+  "fn": "libredb/libredb-studio",
+  "sha": "61b8915a1564",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dea4635b9737": {
+  "identity": {
+   "one_liner": "单二进制全文索引工具，将记录转为供 AI 代理检索的排序索引",
+   "review": "Leviathan 将 JSONL/JSON/CSV/SQLite 及任意数据库 CLI 导出的记录构建为基于 SQLite FTS5 的 BM25 全文索引，供 AI 代理通过 CLI 或 MCP 以短卡片形式检索，并提供可选的代理记忆功能。适合需要为大型数据集上的代理检索控制 token 消耗的开发者。索引为单个 SQLite 文件，无运行时依赖，需 Rust 1.88+ 构建。",
+   "highlights": [
+    "支持 JSONL、JSON、CSV/TSV、SQLite 及任意数据库 CLI 输出作为数据源（L11-L12）",
+    "提供 stdio MCP 与 HTTP MCP/REST 服务接口，并为 24 种代理生成配置（L94-L99, L102-L103）",
+    "可选的键值记忆功能，写入单个 SQLite 文件，支持 recall、history、import/export（L109-L118）"
+   ],
+   "use_cases": [
+    "为 AI 代理提供大型工单/日志数据集的检索式查询（L4, L40）",
+    "通过 psql/duckdb 等 CLI 导出数据库表并建立代理可搜索的索引（L76-L81）",
+    "为代理会话提供低 token 的持久化记忆与开场简报（L112, L115）"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "psql \"$DATABASE_URL\" -At -c \"SELECT row_to_json(t) FROM tickets t\" | leviathan index - -c tickets.toml",
+     "lines": [
+      79
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite, or any database CLI's output) into a ranked full-text index. Agents ／ Prebuilt binaries are on Releases. No runtime dependencies; the index is one SQLite file. ／ Optional read/write memory for agents, in its own SQLite file. The agent",
+     "lines": [
+      12,
+      54,
+      109
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是独立的索引/检索工具，SQLite 仅作为其索引文件的内部存储实现，并非为某数据库生态服务的适配器。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Leviathan is a single binary that turns records (JSONL, JSON, CSV/TSV, ／ Prebuilt binaries are on Releases. No runtime dependencies; the index is one SQLite file. ／ Records stream into one SQLite file with an FTS5 index. A search resolves the",
+   "evidence_lines": [
+    11,
+    54,
+    149
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "elstongun/leviathan",
+  "sha": "dea4635b9737",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

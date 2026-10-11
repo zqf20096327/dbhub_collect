@@ -8989,5 +8989,168 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f7e90e7e9a0f": {
+  "identity": {
+   "one_liner": "Bun 运行时的任务队列库，内嵌内存/SQLite，可切 PostgreSQL 多代理",
+   "review": "bunqueue 是一个面向 Bun 环境的任务队列，提供嵌入式模式（内存或单个 SQLite 文件持久化）和服务端 TCP 模式（Docker 或独立可执行文件），支持 DLQ、cron 调度、SQLite 数据的 S3 备份以及内置 MCP 服务器，客户端协议覆盖 Node.js、Deno、Python、PHP、Go、Rust、Elixir 等语言；扩展到多代理部署时以 PostgreSQL 15–18 作为共享存储，明确不支持 MySQL。适合需要在 Bun/Node 应用内运行后台任务或调度，以及让 AI 代理通过 MCP 控制队列的开发团队。",
+   "highlights": [
+    "提供嵌入式（内存/SQLite）与服务端（TCP）两种运行模式，服务端提供 Docker 镜像和跨平台独立可执行文件",
+    "支持多代理模式时以 PostgreSQL 15–18 为共享后端，包含 DLQ、cron、重试、限流、FlowProducer 等队列能力",
+    "内置 MCP 服务器（含 75 个工具），并提供多语言客户端协议"
+   ],
+   "use_cases": [
+    "在 Bun 或 Node.js 应用内嵌任务队列与定时调度，无需额外基础设施",
+    "以 PostgreSQL 为后端的多代理服务端部署",
+    "为 AI 代理提供可通过 MCP 操作的调度与队列服务"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "High-performance job queue for Bun. Memory or one-file SQLite; PostgreSQL 15–18 multi-broker when you scale. ／ is not supported. CI validates PostgreSQL 15, 16, 17, and the pinned/recommended",
+     "lines": [
+      11,
+      92
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "password changes, percent-encoding reserved characters in the URL only. MySQL",
+     "lines": [
+      91
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "High-performance job queue for Bun. Memory or one-file SQLite; PostgreSQL 15–18 multi-broker when you scale. ／ SQLite file. `msgpackr` is the only runtime dependency; cron, SQLite, S3, HTTP and",
+     "lines": [
+      11,
+      44
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明其为任务队列库/服务端，使用 SQLite 或 PostgreSQL 作为自身存储层，属于为应用提供队列能力而非使用数据库存业务数据的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " High-performance job queue for Bun. Memory or one-file SQLite; PostgreSQL 15–18 multi-broker when you scale. ／ It starts two brokers against one database/namespace. PostgreSQL is server-only; ／ embedded mode keeps using memory/SQLite. Supply both Compose values when the",
+   "evidence_lines": [
+    11,
+    89,
+    90
+   ]
+  },
+  "fn": "egeominotti/bunqueue",
+  "sha": "f7e90e7e9a0f",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "35ecf2258ab0": {
+  "identity": {
+   "one_liner": "单二进制无代理 Linux 服务器监控与 SSH 交互管理工具",
+   "review": "Pantau 是一个用 Go 编写的自托管服务器监控与管理系统，通过标准 SSH 无代理采集 CPU、内存、磁盘等指标，并提供期望状态漂移检测、Web 终端、SFTP 文件管理、加密快照备份到 GitHub 等功能。面向需要管理 Linux 服务器的运维/管理员，数据存储在内嵌 SQLite 中，MIT 许可，无远程守护进程依赖。",
+   "highlights": [
+    "通过标准 SSH 无代理采集主机指标并记录检查历史至内嵌 SQLite",
+    "提供期望状态基线与漂移检测、根因诊断摘录",
+    "内置 Web 终端、SFTP 编辑器及加密快照 GitHub 灾难恢复"
+   ],
+   "use_cases": [
+    "无代理监控多台 Linux 服务器的资源与安全状态",
+    "检测配置漂移（容器崩溃、磁盘超阈值、cron 缺失等）",
+    "通过浏览器进行远程终端操作与跨主机文件传输"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Single binary. Zero remote daemons. Embedded SQLite. Native SSH. ／ - **Structured Inspection Runs & Telemetry**: Records per-host execution history (started timestamp, roundtrip duration in milliseconds, status badge, human-readable summary, and root cause diagnostic excerpts) in SQLite. Displays real-time execution duration  ／ - **Database**: Pure-Go SQLite (`modernc.org/sqlite`) with Write-Ahead Logging (WAL mode)",
+     "lines": [
+      8,
+      51,
+      200
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **1-Click Baseline**: Auto-detects running Docker containers, disks, cron jobs, and database services (`mysqld`, `postgres`, `redis`, `nginx`).",
+     "lines": [
+      58
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其自身数据存储于内嵌 SQLite，属于使用数据库的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Single binary. Zero remote daemons. Embedded SQLite. Native SSH. ／ **Pantau** is a self-hosted, lightweight, single-binary infrastructure monitoring and server management system built in Go. Unlike Prometheus/Node-Exporter, Zabbix, or Datadog, Pantau operates **100% agentless** over standard SSH (`port 22`). Target servers require **no background agents, no daemon installation, and no persistent telemetry scrapers**. ／ - **Structured Inspection Runs & Telemetry**: Records per-host execution history (started timestamp, roundtrip duration in milliseconds, status badge, human-readable summary, and root cause diagnostic excerpts) in SQLite. Displays real-time execution duration metrics (`duration_ms`) on host cards and list views, with automatic inline rolling pruning maintaining a strict 100 runs limit per host with zero background schedulers.",
+   "evidence_lines": [
+    8,
+    30,
+    51
+   ]
+  },
+  "fn": "herliansyah/pantau",
+  "sha": "35ecf2258ab0",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8937,5 +8937,72 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "668b6beacbf7": {
+  "identity": {
+   "one_liner": "iOS/macOS 本地文档智能应用，提供带引用的 RAG 问答",
+   "review": "一个运行在 Apple 设备上的文档问答应用，用户导入 PDF、Office 文件、音视频等，应用在本地完成 OCR、语义分块、混合检索（BM25 + 向量、RRF 融合、重排序）并生成带页面引用的回答，数据不上传服务器；索引层使用 SQLite FTS5 与 BNNS 向量存储。适合需要在本地处理医疗、法律等私密文档的 iPhone/Mac 用户。可选接入 Apple Private Cloud Compute 生成最终答案。",
+   "highlights": [
+    "本地完成导入、索引、检索、排序与验证全流程，支持离线回答",
+    "混合检索：BM25 关键词与向量搜索并行，经 RRF 融合、交叉编码器重排序与 MMR 多样化",
+    "每条回答附带可点击引用，链接回来源摘录，并提供实时流水线视图"
+   ],
+   "use_cases": [
+    "对个人 PDF/扫描件等私密文档进行带引用的问答检索",
+    "在无网络环境（如飞行模式）下查询本地文档库",
+    "处理 500+ 页长文档的分批导入与断点续传式索引"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Indexing**|`SQLiteFullTextService.swift`, `BNNSVectorDatabase.swift`|SQLite FTS5 and BNNS-accelerated vector storage|",
+     "lines": [
+      150
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 用于应用自身的全文与向量索引存储，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Indexing**|`SQLiteFullTextService.swift`, `BNNSVectorDatabase.swift`|SQLite FTS5 and BNNS-accelerated vector storage| ／ **It runs on your device.** Ingestion, indexing, retrieval, ranking, and ／ Shipping on the App Store for iPhone, iPad, and Mac. **5.6 is live on both platforms**, released",
+   "evidence_lines": [
+    150,
+    18,
+    189
+   ]
+  },
+  "fn": "Gunnarguy/OpenIntelligence",
+  "sha": "668b6beacbf7",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

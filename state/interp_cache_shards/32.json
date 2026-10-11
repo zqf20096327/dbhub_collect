@@ -8738,5 +8738,147 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6327cc2b094d": {
+  "identity": {
+   "one_liner": "WhatsApp 群聊机器人，基于 Baileys 与 better-sqlite3 存储",
+   "review": "这是一个为乌拉圭某 WhatsApp 群组定制的聊天机器人，基于 SawBot-MD 修改而来，提供 AI 对话、语音识别、音乐/视频下载、经济系统、游戏、群管理等功能，数据通过 better-sqlite3 存入本地 SQLite 数据库。面向该社群成员自用，依赖 Node.js 22+、Gemini API key，支持 Termux/Linux 部署。",
+   "highlights": [
+    "通过 Baileys 协议库连接 WhatsApp，支持二维码或手机号验证码绑定",
+    "使用 better-sqlite3 将数据存储于本地 SQLite 数据库文件",
+    "集成 Gemini 并以 Groq、OpenRouter、NVIDIA、Cerebras 作为备用 AI 提供方"
+   ],
+   "use_cases": [
+    "为 WhatsApp 群组提供 AI 聊天、游戏与经济系统等互动功能",
+    "群组内容管理与成员积分排行",
+    "在 Android/Termux 或 Linux 上自托管运行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Node.js 22 o más nuevo · Baileys · better-sqlite3 · Gemini, con respaldo en Groq, OpenRouter, NVIDIA y Cerebras · yt-dlp · ffmpeg ／ `npm test` corre la suite con el test runner de Node contra una base SQLite temporal, y `npm run lint` corre ESLint. Las dos cosas corren solas en GitHub Actions, en Node 22, 24 y 26, en cada push a `main` y en cada pull request.",
+     "lines": [
+      34,
+      150
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其使用 better-sqlite3 与本地 database.db 存储自身业务数据，SQLite 仅作为应用存储层",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Bot de WhatsApp con personalidad propia, desarrollado a medida para un grupo de amigos de Uruguay. Es mi primer proyecto de programación (@gauchitodev), en el cual me ayudaron @carlosplanchon y @nicolasgutierrezdev. Tome como punto de partida SawBot-MD, de @martinezanthony (quien también ayudó). ／ Node.js 22 o más nuevo · Baileys · better-sqlite3 · Gemini, con respaldo en Groq, OpenRouter, NVIDIA y Cerebras · yt-dlp · ffmpeg ／ La base de datos se crea sola en `database/database.db`.",
+   "evidence_lines": [
+    7,
+    34,
+    108
+   ]
+  },
+  "fn": "gauchitodev/ClaudIA",
+  "sha": "6327cc2b094d",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "93c00f46db28": {
+  "identity": {
+   "one_liner": "Pi 的持久化记忆扩展，基于 SQLite+FTS5 存储和检索会话记忆",
+   "review": "该仓库是 Pi（AI 编程助手）的扩展，从用户会话中自动提取事实、决策、约束等结构化声明，存入 SQLite 并用 FTS5 全文检索在后续会话中编译注入上下文；支持纠正记忆时递归失效依赖声明并保留来源证据。面向 Pi 的长期项目用户，需 Node 22+，可选接入 OpenAI 兼容嵌入端点实现语义搜索。",
+   "highlights": [
+    "自动从会话提取 7 类类型化声明，FTS5 trigram 检索并按类型权重排序",
+    "纠正记忆时在单个事务中递归失效依赖声明，并记录精确字符级来源证据",
+    "完全本地存储，支持可选 OpenAI 兼容嵌入端点的语义搜索与 KV 缓存友好的注入模式"
+   ],
+   "use_cases": [
+    "跨会话长期项目需要 AI 助手记住决策、约束与流程",
+    "发现 AI 记忆错误后需要级联修正相关依赖记忆",
+    "检索历史 Pi 会话内容"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "1. **Ingestion.** New session entries are converted to source records with SHA-256 content hashes and stored in SQLite. ／ |Storage|SQLite + FTS5|Markdown files|Markdown + SQLite|Mem0 backend| ／ |Node compatibility|Node 22+ (24 built-in, 22 via better-sqlite3)|Node 22+|Node 22+|N/A|",
+     "lines": [
+      56,
+      117,
+      130
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "该项目将 SQLite + FTS5 作为自身记忆数据的存储与检索后端，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "1. **Ingestion.** New session entries are converted to source records with SHA-256 content hashes and stored in SQLite. ／ 3. **Context compilation.** Before each agent turn, Remendra compiles a memory packet. FTS5 matches the current query against stored claims. Results are ranked by search score and claim-type priority (constraints rank above hypotheses). The packet fits within a measured token budget and includes provenance metadata. ／ |Storage|SQLite + FTS5|Markdown files|Markdown + SQLite|Mem0 backend|",
+   "evidence_lines": [
+    56,
+    58,
+    117
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "yoda-digital/pi-remendra",
+  "sha": "93c00f46db28",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

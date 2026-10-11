@@ -8603,5 +8603,202 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d65b803cb81b": {
+  "identity": {
+   "one_liner": "DSH Tavern 的服务端存储与脚本执行插件，用 SQLite 接管会话存档",
+   "review": "该插件面向 DSH Tavern 用户，把聊天、会话事件与 MVU 变量历史交给 SQLite 存储，实现增量写入、按需读取、变量历史归档和物理尾部回退，计算类脚本改为在服务端执行。原档保持只读，用户在新分叉中继续使用；安装支持 Windows 桌面版与 Linux CLI，需按 Release 标注的酒馆版本适配。基于 AGPL v3 许可，是上游的独立修改版。",
+   "highlights": [
+    "提供 SQLite 增量存档：头字段与消息楼层分开存储，局部更新只处理变化部分，会话事件由 SQLite 事务与 WAL 管理",
+    "支持历史按需读取与 MVU 变量历史归档瘦身，旧变量树归档退出热状态，查看旧楼按楼层和 swipe 补回",
+    "提供物理尾部回退与失败轮次清理，截断被撤销的事件尾部并重建内存投影"
+   ],
+   "use_cases": [
+    "DSH Tavern 用户将聊天存档从默认存储切换到 SQLite 管理",
+    "需要长历史会话按需读取与变量历史归档的场景",
+    "需要在服务端执行 MVU 结算与卡脚本的计算环境"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# DSH Tavern SQLite V2 ／ 这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。 ／ |**SQLite 增量存档**|聊天头字段、消息楼层分开存储，局部更新只处理变化部分，避免为了追加或修改一楼反复重写全部历史。会话事件由 SQLite 事务与 WAL 管理。|",
+     "lines": [
+      1,
+      5,
+      14
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "该插件使用 SQLite 作为存档数据库存储会话数据，属于使用数据库的应用侧项目",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU AGPL v3，基于 DSH Tavern 适配的独立修改版，随包保留官方恢复字节许可及源码入口",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。 ／ |**SQLite 增量存档**|聊天头字段、消息楼层分开存储，局部更新只处理变化部分，避免为了追加或修改一楼反复重写全部历史。会话事件由 SQLite 事务与 WAL 管理。|",
+   "evidence_lines": [
+    5,
+    14
+   ]
+  },
+  "fn": "huajiao1998/dsh-tavern-sqlite-v2",
+  "sha": "d65b803cb81b",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0d48b904eede": {
+  "identity": {
+   "one_liner": "基于 MySQL/Excel/Power BI 的零售销售数据分析项目",
+   "review": "这是一个零售数据分析项目，通过 SQL 查询分析销售额、收入、产品利润与库存等业务 KPI，并将结果导入 Excel 或 Power BI 做报表呈现。适合数据分析师学习或作品集展示，使用方式是自行在 MySQL 中运行 sql/ 目录下的查询脚本，无独立服务或工具组件。",
+   "highlights": [
+    "提供 sql/analysis_queries.sql 分析查询，使用 SELECT/JOIN/GROUP BY 等完成业务分析",
+    "包含零售数据集快照与销售汇总文件（JSON/CSV）",
+    "覆盖销售、产品利润、库存三大分析领域"
+   ],
+   "use_cases": [
+    "学习零售业务场景下的 SQL 分析查询",
+    "用于数据分析作品集展示",
+    "按月分析收入趋势、产品利润率与库存状态"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- MySQL ／ 3. Run the SQL queries using MySQL.",
+     "lines": [
+      30,
+      118
+     ]
+    }
+   ],
+   "dbs": [
+    "MySQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目使用 MySQL 运行查询分析数据，是为业务分析而用库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "3. Run the SQL queries using MySQL. ／ RetailPulse Sales Analysis is a data analytics portfolio project focused on analyzing retail sales, revenue, orders, product performance, profit margins, and inventory status.",
+   "evidence_lines": [
+    118,
+    13
+   ]
+  },
+  "fn": "Harshitha0501/retailpulse-sales-analysis",
+  "sha": "0d48b904eede",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8d6ca6ff9f1e": {
+  "identity": {
+   "one_liner": "基于 Bun 与 zapo-js 的模块化 WhatsApp 机器人框架",
+   "review": "一个用 Bun 运行时和 zapo-js 库构建的模块化 WhatsApp 机器人，内置 SQLite 持久化，用于存储会话认证状态（.auth/state.sqlite）。支持 Pairing Code 与 QR Code 两种登录方式、指数退避自动重连，并通过 src/plugins/ 目录自动加载插件扩展功能，供希望自建 WhatsApp 机器人的开发者使用，MIT 许可。",
+   "highlights": [
+    "支持 Pairing Code 与 QR Code 两种认证方式，会话保存在本地 SQLite",
+    "提供 src/plugins/ 目录自动加载机制，无需手动注册命令文件",
+    "内置指数退避重连机制并支持 PM2 后台部署"
+   ],
+   "use_cases": [
+    "自托管 WhatsApp 机器人",
+    "通过插件扩展定制消息处理功能",
+    "在 VPS 上以 PM2 方式长期运行机器人"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Bot WhatsApp modern, modular, dan berkecepatan tinggi yang dibangun di atas runtime **Bun** dan library **zapo-js** dengan persistensi database SQLite bawaan. Respons instan (~2–5 ms), konsumsi RAM sangat minim (heap ~8–16 MB). ／ - **Autentikasi Fleksibel:** Mendukung **Pairing Code** (kode tautan 8 digit) maupun scan **QR Code**. Sesi disimpan di SQLite lokal (`.auth/state.sqlite`).",
+     "lines": [
+      3,
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 存储会话数据，SQLite 仅作为该机器人应用的内置持久化手段。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Bot WhatsApp modern, modular, dan berkecepatan tinggi yang dibangun di atas runtime **Bun** dan library **zapo-js** dengan persistensi database SQLite bawaan. Respons instan (~2–5 ms), konsumsi RAM sangat minim (heap ~8–16 MB). ／ ├── .auth/                  # Database sesi WhatsApp",
+   "evidence_lines": [
+    3,
+    94
+   ]
+  },
+  "fn": "v1slvffy/zabun",
+  "sha": "8d6ca6ff9f1e",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

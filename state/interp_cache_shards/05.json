@@ -8637,5 +8637,223 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ae67dca5d1ef": {
+  "identity": {
+   "one_liner": "基于大语言模型的智能体对话平台，支持自定义 Agent 与 MCP/RAG",
+   "review": "AgentChat 是一个前后端分离的智能对话系统，提供 AI 对话、多 Agent 协作、知识库 RAG 问答、工具调用与 MCP 服务器集成，支持 HITL 对话式生成 MCP Server。面向需要搭建对话助手或智能体应用的开发者和使用者，后端依赖 MySQL、Redis 及向量数据库（ChromaDB/Milvus），支持 Docker 一键部署。",
+   "highlights": [
+    "支持多模型对话、流式响应、三层记忆架构与多 Agent 协作",
+    "支持 RAG 知识库检索、自定义工具上传（Swagger/OpenAPI）与 MCP 服务器集成",
+    "支持基于 HITL 的对话式 MCP Server 生成，提供 Docker 部署方案"
+   ],
+   "use_cases": [
+    "搭建自定义智能体助手进行多轮对话与任务协作",
+    "基于知识库的 RAG 问答与语义检索",
+    "通过 MCP 协议接入外部工具与服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- 后端: FastAPI, Python 3.12+, LangChain, MySQL, Redis, ChromaDB. ／ - MySQL 8.0+, Redis 7.0+",
+     "lines": [
+      131,
+      141
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用 MySQL、Redis 等存储数据的智能对话应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "AgentChat 是一个现代化的智能对话系统，基于大语言模型构建，提供了丰富的AI对话功能。系统采用前后端分离架构，支持多种AI模型、知识库检索、工具调用、MCP服务器集成等高级功能。 ／ - 后端: FastAPI, Python 3.12+, LangChain, MySQL, Redis, ChromaDB. ／ - MySQL 8.0+, Redis 7.0+",
+   "evidence_lines": [
+    60,
+    131,
+    141
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Shy2593666979/AgentChat",
+  "sha": "ae67dca5d1ef",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8e590a3fe047": {
+  "identity": {
+   "one_liner": "自托管竞品网站监控应用，定时巡检 sitemap 并记录页面变更日志",
+   "review": "一个 FastAPI + SQLite 的自托管竞品监控工具：用户填入竞品 sitemap，按频率巡检页面新增/删减/修改并记录变更日志与内容 diff，面向需要跟踪竞品网站动向的运营/SEO 人员。内置只读 MCP server，可将变更数据开放给 Claude Code 等 Agent 分析。单容器部署，调度器在进程内运行，需单 worker 启动。",
+   "highlights": [
+    "支持两层监控：sitemap 增删巡检 + 可选的全文逐行内容 diff，首次巡检静默建基线",
+    "内置只读 MCP server（stdio 与 HTTP 两种方式），提供 list_competitors/get_changes/get_diff 等工具供 AI Agent 拉取数据",
+    "通过环境变量配置巡检间隔、抓取上限、robots 遵守、退避等参数，单容器 + 单 SQLite 文件部署"
+   ],
+   "use_cases": [
+    "跟踪竞争对手网站页面的新增、删减与内容修改并留存历史日志",
+    "将监控数据接入 Claude Code 等 AI Agent，用自然语言分析竞品变化",
+    "抓取竞品新发布文章组成内容 Feed，进行笔记与策略归纳"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🐳 **一条命令部署** —— 单容器 + 单个 SQLite 文件，无需任何外部服务 ／ 就这样 —— 一个容器、一个 SQLite 文件（持久化在主机的 `./data` 目录里），不依赖任何外部服务。 ／ > FC_DB_URL=\"sqlite:///./data/demo.db\" python tests/seed_demo.py",
+     "lines": [
+      31,
+      41,
+      143
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个用 SQLite 存储自身竞品监控数据的应用，而非为数据库生态服务的工具或组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "一个自托管、开源的竞品监控应用。填入竞品的 `sitemap.xml`，它会定期巡检页面的 ／ - **SQLite**（经 SQLModel）：`competitors / pages / changes / snapshots` 四张表。 ／ - 🐳 **一条命令部署** —— 单容器 + 单个 SQLite 文件，无需任何外部服务",
+   "evidence_lines": [
+    10,
+    225,
+    31
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "tod-zhang/fuck-competitors",
+  "sha": "8e590a3fe047",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "40ba99d99af1": {
+  "identity": {
+   "one_liner": "基于 MySQL 的 Swiggy 餐厅数据分析项目",
+   "review": "该项目对 81,777 条 Swiggy 餐厅记录做数据清洗与 SQL 分析，涵盖位置分布、菜系趋势、评分与定价模式，并输出可视化结果。面向展示 SQL 技能的学习者/求职者，需安装 MySQL 与 Workbench 并导入 CSV 数据复现，核心流程为建 swiggy 原始表、清洗生成 swiggy_cleaned 表后运行分析查询。",
+   "highlights": [
+    "对 81,777 条餐厅记录进行数据清洗与转换",
+    "包含位置分布、菜系、评分、成本等多维 SQL 分析查询",
+    "识别数据质量问题与潜在成本异常"
+   ],
+   "use_cases": [
+    "学习 SQL 数据清洗与分析技能",
+    "餐厅评分与定价模式的探索性分析",
+    "数据质量检查示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "# Swiggy Restaurant Data Analysis — MySQL ／ - Analyzed 81,777 Swiggy restaurant records using MySQL. ／ - **Database:** MySQL",
+     "lines": [
+      3,
+      12,
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 MySQL 存储并分析数据，本身不服务数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This project analyzes **81,777 Swiggy restaurant records** using MySQL to identify patterns in restaurant locations, cuisine categories, ratings, pricing, and the relationship between cost and rating. ／ - **Database:** MySQL ／ 1. Install MySQL and MySQL Workbench.",
+   "evidence_lines": [
+    20,
+    27,
+    124
+   ]
+  },
+  "fn": "Harshitha0501/Swiggy-SQL-Analysis",
+  "sha": "40ba99d99af1",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

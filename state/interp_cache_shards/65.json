@@ -8897,5 +8897,156 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "547e1ceae267": {
+  "identity": {
+   "one_liner": "基于 SQL 数据库的 Rails 虚拟 actor 开发库",
+   "review": "Solid Objects 是面向 Ruby on Rails 的虚拟 actor 开发库，将 actor 的持久状态、顺序消息、重试与提醒存储在应用已有的 SQL 数据库中，无需 Redis 或独立 actor 服务。适用于需要在重启后仍保持有序与持久状态的单体场景；项目为 pre-1.0 早期版本，README 明确声明未达生产就绪，预期会有破坏性变更。",
+   "highlights": [
+    "actor 状态、消息与提醒随状态变更一同提交到应用现有 SQL 数据库，重启后可恢复",
+    "同一身份的消息进入持久邮箱并逐条提交，不同身份可并发运行",
+    "支持 SQLite、PostgreSQL 和 MySQL，正确性核心均经测试覆盖"
+   ],
+   "use_cases": [
+    "购物车、票务预留与库存锁等需要持久过期与幂等的场景",
+    "多人房间、聊天与协作文档等需有序变更的会话",
+    "跨请求或任务间保持顺序、需在部署后存活的工作流与审批"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, or MySQL. Redis and a separate actor service are not required. ／ against SQLite, PostgreSQL, and MySQL, but the project makes no production-ready",
+     "lines": [
+      106,
+      170
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "PostgreSQL, or MySQL. Redis and a separate actor service are not required. ／ against SQLite, PostgreSQL, and MySQL, but the project makes no production-ready",
+     "lines": [
+      106,
+      170
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "staged consequences together inside the Rails application. It uses SQLite, ／ against SQLite, PostgreSQL, and MySQL, but the project makes no production-ready",
+     "lines": [
+      105,
+      170
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该库将应用已有 SQL 数据库用作自身状态的存储介质，属于使用数据库而非为数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT 许可，独立项目，与 Cloudflare 无关联",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Solid Objects is a SQL-backed virtual actor library for Ruby on Rails, with ／ staged consequences together inside the Rails application. It uses SQLite, ／ Solid Objects Ruby is a pre-1.0 early release. Its correctness core is tested",
+   "evidence_lines": [
+    8,
+    105,
+    169
+   ]
+  },
+  "fn": "cardmagic/solid-objects-ruby",
+  "sha": "547e1ceae267",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "01b8b4ed8cb9": {
+  "identity": {
+   "one_liner": "C11 从零实现的类 SQLite 关系数据库存储引擎",
+   "review": "该项目用 C11 从零实现一个小型关系数据库引擎，重点展示固定大小页、B 树存储、SQL 解析和持久化机制，而非复现 SQLite 全部功能。面向希望学习数据库存储内部原理的开发者，提供交互式 shell、自动化测试和基准程序；文件格式为项目私有，不兼容 SQLite 文件，SQL 仅支持 INSERT 和 SELECT。",
+   "highlights": [
+    "提供基于 4096 字节固定大小页和 B 树（含叶页分裂与内部根节点）的持久化存储",
+    "包含小型 SQL 解析器和交互式命令行 shell，支持 INSERT/SELECT 与 WHERE 查询",
+    "提供数据库、B 树、pager、parser 测试套件及 1000 行插入基准，CI 集成 ASan/UBSan"
+   ],
+   "use_cases": [
+    "学习数据库页式存储与 B 树实现原理",
+    "作为可构建、可测试、可完整阅读的小型引擎代码库用于教学",
+    "本地实验 SQL 解析到存储操作的完整链路"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "# sqlite-c ／ A small SQLite inspired relational database engine built from scratch in C11. ／ The database file format is intentionally project specific and is not compatible with SQLite database files.",
+     "lines": [
+      1,
+      3,
+      7
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是一个数据库存储引擎实现，属于数据库内核层面的组件而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small SQLite inspired relational database engine built from scratch in C11. ／ The project focuses on the storage mechanisms behind a database rather than reproducing SQLite's full feature set. It includes persistent storage built around fixed size pages, B tree table storage, a small SQL parser, an interactive shell, automated tests, a benchmark, and sanitizer coverage. ／ The current storage design supports up to 100 pages. Internal node splitting beyond the current root is intentionally deferred until the page capacity model is expanded.",
+   "evidence_lines": [
+    3,
+    5,
+    63
+   ]
+  },
+  "fn": "MugdhoAI/sqlite-c",
+  "sha": "01b8b4ed8cb9",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

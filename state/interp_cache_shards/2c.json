@@ -9706,5 +9706,140 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "497721687f3b": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的本地文档知识库插件，混合检索+引用校验",
+   "review": "dsh-library 是 DeepSeek Harness 的 DSH 插件，把本地 md/txt 文档分块嵌入为知识库，提供 library_add/remove/list、混合语义+关键词检索与多样性重排、结果注入、library_cite_check 引用核验和 library_diagnose 诊断工具，供在 DSH 上运行的智能体使用；索引存储在宿主的存储域（JSON 或 SQLite），内置哈希嵌入器无需下载模型，但词面级嵌入在改写查询上检索质量较弱。",
+   "highlights": [
+    "提供 library_search 混合语义+关键词检索，含 MMR 多样性重排、相关性过滤与 lost-in-the-middle 规避（L57）",
+    "提供 library_cite_check 对答案中 [n] 引用做模糊 token 匹配加语义相似度校验（L58）",
+    "存储依赖宿主存储域后端（JSON 或 SQLite），内置确定性哈希嵌入器，无需下载模型（L49、L107）"
+   ],
+   "use_cases": [
+    "为 DSH 智能体导入本地 md/txt 文档并支持带引用标记的问答检索（L85）",
+    "校验模型答案中的引用编号是否与检索结果页一致（L130）",
+    "通过 library_diagnose 检查分块直方图、近重复块与自检索探针（L59）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Storage|Any storage-domain backend (JSON or SQLite); the index lives in the host's storage domain|",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该插件以 SQLite（或 JSON）作为宿主存储域的数据后端，自身不提供数据库服务能力",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Storage|Any storage-domain backend (JSON or SQLite); the index lives in the host's storage domain| ／ - **`library_search`** — hybrid semantic + keyword ranking, maximal-marginal-relevance diversity re-rank, relevance filtering, and **lost-in-the-middle avoidance** (strongest chunks pinned to head and tail). With `inject: true` the result page is injected into the calling agent; every hit carries a `[n]` source marker and the injection is reconstructable from the `library/inject` session event (host-gated; see Permissions & data). ／ - **Permissions**: the plugin only reads files you point `library_add` at (through the harness filesystem service and its policy) and writes into its own `dsh_library` storage domain. No network requests; an optional external embedder runs through `ctx.subprocess` without shell interpretation.",
+   "evidence_lines": [
+    49,
+    57,
+    136
+   ]
+  },
+  "fn": "PerryLink/dsh-library",
+  "sha": "497721687f3b",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "60569726e188": {
+  "identity": {
+   "one_liner": "《Transport Fever 3》第二屏仪表盘：游戏模组导出快照+本机配套程序存入 SQLite 并在浏览器展示",
+   "review": "这是一个面向 Transport Fever 3 玩家的第二屏仪表盘系统，由 mod.io 上的 Lua 模组和 Windows 本机 Python 配套程序两部分组成：模组周期性把游戏状态快照写入 Lua 文件，collector.py 读取后存入本地 SQLite，server.py 在浏览器提供服务，还可反向写入 cmd.lua 控制游戏。适合想在本机旁路监视与操作游戏公司的玩家；数据全部本地，不支持云同步目录。",
+   "highlights": [
+    "由 Lua 模组每数秒导出游戏状态快照，配套程序解析并存入本地 SQLite 历史",
+    "浏览器访问 127.0.0.1:8765 查看线路、车辆、车站、财务等历史曲线与地图",
+    "可选远程控制：通过本地文件 cmd.lua 向游戏发送暂停/速度/镜头/停靠点等命令",
+    "仅用 Python 3.12 标准库，解压即用，无需安装依赖"
+   ],
+   "use_cases": [
+    "在第二台显示器实时查看游戏公司运营、车辆与线路历史数据",
+    "游戏保持全屏时从仪表盘控制游戏速度、镜头和停靠点配置",
+    "排查模组导出链路问题时依赖内置检查清单定位缺失环节"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Companion program (this repo)**|Your PC, Windows|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Python 3.12 st ／ (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it.",
+     "lines": [
+      36,
+      48
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库使用 SQLite 存储自身采集的游戏历史数据，属使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Companion program (this repo)**|Your PC, Windows|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Python 3.12 standard library only — the release zip ships a bundled Python, nothing to install.| ／ |**Mod `Second Screen Dashboard`**|mod.io (in-game Mod Hub) or `mod/` in this repo|A Lua game script that writes a snapshot of the game state to `<userdata>/dashboard_export/live.lua` every few seconds, and (if you enable it) executes commands written to `cmd.lua`. Uses only the official TF3 scripting API. Never modifies the savegame.|",
+   "evidence_lines": [
+    36,
+    35
+   ]
+  },
+  "fn": "M1r077/tf3-dashboard",
+  "sha": "60569726e188",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -7548,5 +7548,217 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1046a8a38bb3": {
+  "identity": {
+   "one_liner": "基于 Hermes Agent 的外贸业务员本地 AI 助手，含 38 项 B2B 技能",
+   "review": "一个面向外贸业务员的本地运行 AI 助手，依托 Hermes Agent 驱动，提供 38 项技能覆盖客户背调、开发信生成、B2B 平台监测、文档生成与合规检查等环节；数据默认存于本地 SQLite，需自备 LLM API Key（推荐 DeepSeek）及 Tavily 搜索 Key。限制：安装需稳定访问 GitHub/PyPI，输出仅供参考不构成商业或法律依据。",
+   "highlights": [
+    "内置 38 项 B2B 技能，覆盖客户开发、背调（6 层验证）、内容营销与贸易文档生成",
+    "数据默认存储本地 ~/.trade/，支持 Ollama 本地模型实现完全本地运行",
+    "提供 trade doctor 自检命令，端到端验证 Hermes、视觉识别、搜索与数据库读写"
+   ],
+   "use_cases": [
+    "外贸业务员生成开发信、客户画像与询盘回复",
+    "出口企业做客户尽职调查与制裁名单筛查",
+    "B2B 团队自动化每日简报、社媒内容与展会管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **后端**: FastAPI + SQLite + uvicorn",
+     "lines": [
+      262
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明后端技术栈为 FastAPI + SQLite，用于存储业务数据，属使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL v3",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **后端**: FastAPI + SQLite + uvicorn ／  在本地运行，数据留在自己电脑里 ／ - **业务数据默认存储在本地**（`~/.trade/`），不上传任何服务器",
+   "evidence_lines": [
+    262,
+    24,
+    240
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "chefroger/smart-trade-ai",
+  "sha": "1046a8a38bb3",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "647bc4f24d03": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 AI 智能体内存数据库，支持图记忆与混合检索",
+   "review": "Engrava 是一个进程内 Python 库形式的数据库，为 AI 智能体提供持久记忆：单个 SQLite 文件上实现 thought CRUD、类型化边知识图谱、向量/全文混合检索（FTS5/BM25）和 MindQL 声明式查询语言，另提供 engrava-mcp 包作为 MCP 服务器供 Claude Desktop、Cursor 等 MCP 客户端使用。面向需要持久化记忆的智能体开发者；核心写路径不调用生成式模型，遗忘与日志功能默认关闭。",
+   "highlights": [
+    "提供 thought CRUD、类型化边知识图谱与混合检索（向量+FTS5/BM25+时间+优先级）",
+    "内置 MindQL 声明式查询语言与生命周期钩子扩展系统",
+    "提供可选的 sqlite-vec 向量后端、SHA-256 哈希链防篡改日志及 engrava-mcp 服务器包"
+   ],
+   "use_cases": [
+    "AI 智能体持久记忆存储",
+    "个人知识库与带语义检索的会话存储",
+    "需要 thought 图与嵌入关联的研究笔记"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite, it provides thought CRUD, edge-based knowledge graphs, embedding-based ／ pip install 'engrava[vec]' # sqlite-vec vector search backend ／ cosine backend or the optional `sqlite-vec` backend (`pip install ／ SQLite FTS5 virtual table with BM25 ranking. Hybrid search combines vector",
+     "lines": [
+      13,
+      46,
+      131,
+      144
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是构建于 SQLite 之上的数据库组件，为 AI 智能体生态提供记忆存储服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Engrava** is a standalone, in-process database for AI agent memory. Built on ／ pip install 'engrava[vec]'                # sqlite-vec vector search backend ／ Want Engrava as a memory server for your agent? The MCP server ships as its own",
+   "evidence_lines": [
+    12,
+    46,
+    237
+   ]
+  },
+  "fn": "sovantica/engrava",
+  "sha": "647bc4f24d03",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f571c3671fa8": {
+  "identity": {
+   "one_liner": "本地优先的剪贴板/书签语义记忆搜索 CLI，基于 SQLite FTS5",
+   "review": "wdist 是一个 Python 编写的本地工具，后台监听剪贴板并存储命令、代码、URL 等片段，通过 SQLite FTS5 全文检索加模糊语义匹配进行搜索，附带 Web 面板、导出和敏感信息拦截功能，数据存于本地 ~/.wdist/clips.db，适合注重隐私、希望在本地检索复制记录的开发者使用。",
+   "highlights": [
+    "结合 SQLite FTS5 (BM25) 全文搜索与模糊语义 token 匹配及片段高亮",
+    "写入前自动检测并拦截 API token、JWT、私钥、信用卡等敏感数据",
+    "提供后台剪贴板监听、Web 仪表盘和 JSON 导出，零外部依赖"
+   ],
+   "use_cases": [
+    "在终端检索历史复制过的命令、代码片段和链接",
+    "防止 API 密钥等敏感信息被本地剪贴板记录工具写入磁盘",
+    "离线环境下管理并导出个人片段库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🧠 **Hybrid Search Engine:** Combines SQLite FTS5 (BM25) full-text search with fuzzy semantic token matching and snippet highlighting.",
+     "lines": [
+      27
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明使用 SQLite 作为本地存储引擎保存剪贴板数据，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- 🧠 **Hybrid Search Engine:** Combines SQLite FTS5 (BM25) full-text search with fuzzy semantic token matching and snippet highlighting. ／ - **Local Storage:** All memories reside on your machine in `~/.wdist/clips.db`.",
+   "evidence_lines": [
+    27,
+    119
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "pypi"
+   ]
+  },
+  "fn": "baadaldev/where-did-i-see-that",
+  "sha": "f571c3671fa8",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

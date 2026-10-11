@@ -8720,5 +8720,72 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "50a022116810": {
+  "identity": {
+   "one_liner": "纯离线个人财务应用，内置纯Go SQLite引擎存储本地账单",
+   "review": "面向印度银行与信用卡用户的本地财务记录与分析工具，用Go编译为单文件可执行程序并内嵌React界面和SQLite数据库。支持解析PDF/CSV/Excel银行账单（含加密PDF）、UPI/信用卡叙述清洗、去重与自动schema迁移，数据全部留在本地，不提供云同步。",
+   "highlights": [
+    "单二进制分发，通过go:embed内嵌React前端与纯Go SQLite引擎（无CGO）",
+    "内置多家印度银行账单解析器，支持PDF/CSV/Excel及密码加密PDF内存解密",
+    "SHA-256交易哈希与SQLite幂等upsert实现重复检测与去重"
+   ],
+   "use_cases": [
+    "导入印度银行储蓄/活期与信用卡账单进行本地收支与账单周期记录",
+    "解析UPI、IMPS/NEFT/RTGS、POS交易叙述并提取交易对手信息",
+    "导入Zerodha/INDmoney持仓导出文件记录投资组合快照"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Distributed as a **single standalone executable binary** with an embedded React frontend and an embedded pure-Go SQLite database. ／ - **100% Offline & Private**: Zero cloud sync, zero telemetry, no SMS scraping, and no third-party account aggregators. All your financial data stays strictly on your local machine in an open SQLite database file (`local_finance.db` or `~/.localfinance/local_f ／ - Idempotent SQLite upserts (`ON CONFLICT`) safely update balances while **strictly preserving** your custom category overrides, notes, and tags.",
+     "lines": [
+      10,
+      24,
+      39
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用内嵌SQLite数据库存储自身财务数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **A privacy-first, 100% offline personal finance intelligence app tailored for the Indian banking & credit card ecosystem.** ／ > Distributed as a **single standalone executable binary** with an embedded React frontend and an embedded pure-Go SQLite database. ／ - **100% Offline & Private**: Zero cloud sync, zero telemetry, no SMS scraping, and no third-party account aggregators. All your financial data stays strictly on your local machine in an open SQLite database file (`local_finance.db` or `~/.localfinance/local_finance.db`).",
+   "evidence_lines": [
+    9,
+    10,
+    24
+   ]
+  },
+  "fn": "usmslm102/local-finance",
+  "sha": "50a022116810",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

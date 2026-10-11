@@ -8326,5 +8326,137 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ddeca375e4ec": {
+  "identity": {
+   "one_liner": "读写 Parquet 文件的 PostgreSQL 扩展",
+   "review": "pg_parquet 是一个 PostgreSQL 扩展，通过扩展 COPY 命令实现表数据与 Parquet 文件的互相读写，支持 S3、Azure Blob、GCS、http(s) 和本地文件等存储，依赖 Apache Arrow 和 pgrx 构建。它还提供查看 Parquet schema、元数据和列统计的 SQL 函数，适合需要在 Postgres 中导入导出列式数据文件的开发者和数据工程师使用。",
+   "highlights": [
+    "通过 COPY TO/FROM 命令读写 Parquet 文件，支持 S3、Azure Blob Storage、GCS、http(s) 和本地文件系统",
+    "提供 parquet.schema/metadata/file_metadata/kv_metadata/column_stats 函数查看 Parquet 文件结构与统计信息",
+    "支持 stdin/stdout、程序流和 uri 通配符模式读写 Parquet"
+   ],
+   "use_cases": [
+    "将 Postgres 表或查询结果导出为 Parquet 文件到对象存储",
+    "从 Parquet 文件批量导入数据到 Postgres 表",
+    "在 SQL 中检查 Parquet 文件的 schema、元数据和列统计"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Ap ／ 1. You can export Postgres tables/queries to Parquet files, stdin/stdout or a program's stream, ／ 2. You can ingest data from Parquet files to Postgres tables,",
+     "lines": [
+      8,
+      43,
+      44
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为 PostgreSQL 提供 Parquet 读写能力的扩展，为数据库生态服务而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`pg_parquet` is a PostgreSQL extension that allows you to read and write Parquet files, which are located in `S3`, `Azure Blob Storage`, `Google Cloud Storage`, `http(s) endpoints` or `file system`, from PostgreSQL via `COPY TO/FROM` commands. It depends on Apache Arrow project to read and write Parquet files and pgrx project to extend PostgreSQL's `COPY` command. ／ 1. You can export Postgres tables/queries to Parquet files, stdin/stdout or a program's stream, ／ 2. You can ingest data from Parquet files to Postgres tables,",
+   "evidence_lines": [
+    8,
+    43,
+    44
+   ]
+  },
+  "fn": "CrunchyData/pg_parquet",
+  "sha": "ddeca375e4ec",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ae575af8bc64": {
+  "identity": {
+   "one_liner": "WinUI 3 桌面应用脚手架模板，提供 MVVM 应用壳与发布流水线",
+   "review": "这是一个 WinUI 3 桌面应用项目模板，通过 dotnet new 命令生成包含 MVVM、系统托盘、自动更新、本地化、日志、诊断页的完整应用骨架，面向构建 Windows 桌面应用的团队。SQLite 数据层为脚手架可选组件，可在生成时移除；模板以 NuGet 包分发，需 .NET 10 SDK 构建。",
+   "highlights": [
+    "通过 dotnet new 模板生成含托盘、自动更新、诊断页、发布流水线的 WinUI 3 应用壳",
+    "提供 SQLite 数据层与类型化 HTTP 客户端，均可在脚手架时移除",
+    "支持 portable/MSIX 分发与 Velopack/Store 等多种更新方式组合"
+   ],
+   "use_cases": [
+    "快速搭建带更新机制与设置页的 Windows 桌面应用起点",
+    "为 Microsoft Store 打包提交 MSIX 应用",
+    "为现有 WinUI 应用添加新页面（list/grid/tab 等模板）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "It is built for teams that want a real app shell instead of a blank canvas: **MVVM**, **Mica window**, **system tray**, **Velopack auto-updates**, **localization**, **logging**, **SQLite**, **typed HTTP client**, **diagnostics page**, **setup wizard**, and a * ／ - SQLite data layer and typed HTTP client (each droppable at scaffold time)",
+     "lines": [
+      11,
+      80
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明模板生成的应用内置 SQLite 数据层用于存数据，属使用数据库的应用模板",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT，单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Production-ready **WinUI 3 starter template** for Windows desktop apps: a real app shell with updates, settings, diagnostics, and release automation already wired up. ／ - SQLite data layer and typed HTTP client (each droppable at scaffold time)",
+   "evidence_lines": [
+    9,
+    80
+   ]
+  },
+  "fn": "Fettah010/winui-3-easy-template",
+  "sha": "ae575af8bc64",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

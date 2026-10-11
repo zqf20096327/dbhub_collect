@@ -9806,5 +9806,70 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ede1014c0a28": {
+  "identity": {
+   "one_liner": "本地代码库智能 CLI 与 MCP 服务器，用 SQLite 构建代码索引",
+   "review": "roam-code 是面向 AI 编程代理的本地代码分析工具，通过 SQLite 存储代码图索引，提供 288 条命令和 259 个 MCP 工具，支持依赖追踪、变更影响分析、静态检查和 CI 集成（SARIF 输出）。它面向使用 AI 编码代理的开发者，本地运行、无需 API 密钥，索引分析不消耗模型调用。使用需 Python 3.10+ 和 Git 仓库。",
+   "highlights": [
+    "提供 CLI 与 MCP 两种接入方式，含 288 条命令与 259 个 MCP 工具（默认 core 预设 17 个）",
+    "使用 SQLite 在本地存储代码图索引，支持 28 种语言，索引分析不做模型调用",
+    "39 条命令支持 SARIF 2.1.0 输出，可接入 GitHub/GitLab/Jenkins/Azure/Bitbucket CI"
+   ],
+   "use_cases": [
+    "让 AI 编码代理查询代码索引、追踪依赖与符号定义引用",
+    "在提交前评估变更影响并生成所需检查清单",
+    "在 CI 流水线中以质量分数门禁和 SARIF 报告集成代码检查"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "and stores the local model in SQLite. Graph analysis, Git history, detector ／ Set `ROAM_DB_DIR` to redirect the SQLite database and its `index.lock` / `index.state` sidecars together, or save a per-project location with `roam config --set-db-dir`. Set `ROAM_NO_AUTO_INDEX=1` to refuse implicit builds: an analysis command needing a missin",
+     "lines": [
+      272,
+      325
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 仅作为该工具本地存储代码索引的嵌入式存储，属于使用数据库存数据的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "",
+   "evidence_lines": []
+  },
+  "fn": "Cranot/roam-code",
+  "sha": "ede1014c0a28",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

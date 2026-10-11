@@ -8852,5 +8852,81 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "70cf9eeb6a19": {
+  "identity": {
+   "one_liner": "面向 AI 编码代理的 MCP 工具服务器，聚合 40 个工具并按 profile 按需暴露",
+   "review": "该仓库实现一个 MCP 协议工具服务器，提供文件编辑、编码转换、SSH/SFTP、进程管理、调试、静态二进制分析和 MySQL/Redis 查询等工具，通过 core 等配置档控制暴露的 schema 数量以压缩上下文。目标用户是使用 Claude Code、Cursor、Codex 等 MCP 兼容代理的开发者，需以单个二进制方式运行。",
+   "highlights": [
+    "提供 40 个工具，通过 --profile core/core-lite 等配置档按需暴露 schema 以降低上下文占用",
+    "包含 MySQL/MariaDB SQL 查询工具和 Redis 命令工具，输出带行数/单元格上限",
+    "支持编码感知的文件读写、SSH/SFTP、DAP 调试和 x86/x64 PE/ELF 静态分析"
+   ],
+   "use_cases": [
+    "让 MCP 兼容的 AI 编码代理执行 MySQL 查询与 SSH 远程操作",
+    "处理 EUC-KR/Shift-JIS/GB18030 等非 UTF-8 编码的遗留项目文件",
+    "对 PE/ELF 二进制进行反编译、反汇编和调试等逆向工程任务"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**MySQL**|Execute SQL queries on MySQL/MariaDB. Table-formatted SELECT results with configurable row/column/cell/total-output limits; affected rows for DML. Use SQL LIMIT/OFFSET for paging|✅|",
+     "lines": [
+      80
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**MySQL**|Execute SQL queries on MySQL/MariaDB. Table-formatted SELECT results with configurable row/column/cell/total-output limits; affected rows for DML. Use SQL LIMIT/OFFSET for paging|✅|",
+     "lines": [
+      80
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI 代理提供连接并查询 MySQL/MariaDB/Redis 的工具组件，属于服务数据库访问的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MCP (Model Context Protocol) tool server for AI coding agents. ／ - **Too many separate tools**: Making the agent find, install, and configure Redis CLI, MySQL client, SSH client, etc. is tedious and error-prone. agent-tool bundles 40 tools into one binary and exposes them on demand through compact profiles. ／ |**MySQL**|Execute SQL queries on MySQL/MariaDB. Table-formatted SELECT results with configurable row/column/cell/total-output limits; affected rows for DML. Use SQL LIMIT/OFFSET for paging|✅|",
+   "evidence_lines": [
+    9,
+    17,
+    80
+   ]
+  },
+  "fn": "knewstimek/agent-tool",
+  "sha": "70cf9eeb6a19",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

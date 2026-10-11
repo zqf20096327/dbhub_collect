@@ -9738,5 +9738,142 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3bb948ad865f": {
+  "identity": {
+   "one_liner": "开源联盟营销归因与分佣平台，事件溯源记录点击到收入全链路",
+   "review": "OpenPartner 是一个可自托管的合作伙伴归因与分佣平台，追踪点击到注册到收入的转化链路，支持多种归因模型，并通过 Stripe Connect 完成分成支付。面向需要运营推荐/创作者合作项目的团队，提供数据导出与导入能力，底层依赖 PostgreSQL 存储数据，通过 psql 可恢复导出的 SQL 转储。",
+   "highlights": [
+    "提供四种归因模型（last_click、first_click、linear、position），可从原始表重新推导",
+    "通过 Stripe Connect 实现佣金累积、审核队列与幂等转账支付",
+    "支持 JSON/CSV/SQL 格式逐表导出，导出包可通过 POST /import 或 psql 恢复到自托管实例"
+   ],
+   "use_cases": [
+    "自托管运营合作伙伴/创作者推荐计划并追踪归因收入",
+    "需要将归因与分佣账本数据导出到自有 S3 或本地备份",
+    "通过 REST API 与 SDK 将链接与伙伴管理集成到现有系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Portable JSON + CSV + SQL export per table; full bundle round-trippable via `POST /import`, or restore the SQL dump straight into a self-hosted instance with `psql -v tenant_id=<destination tenant id> -f openpartner-export.sql`",
+     "lines": [
+      114
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 提供含 psql 恢复 SQL 转储的流程，表明项目使用 PostgreSQL 作为自身数据存储，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- Portable JSON + CSV + SQL export per table; full bundle round-trippable via `POST /import`, or restore the SQL dump straight into a self-hosted instance with `psql -v tenant_id=<destination tenant id> -f openpartner-export.sql` ／ **Open-source partner attribution and payouts.** Run your own partner program: track every click through to revenue, pay partners out via Stripe Connect, export your data whenever you want. ／ - `apps/router` — edge click redirect service (Hono, deployable to Node or Cloudflare Workers)",
+   "evidence_lines": [
+    114,
+    3,
+    69
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "getcoherence/openpartner",
+  "sha": "3bb948ad865f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "06179edc3941": {
+  "identity": {
+   "one_liner": "本地离线运行的 pump.fun 发行评分模型包，含权重与推理代码",
+   "review": "该仓库是 three.ws Oracle 评分模型的 npm 包，一次性下载约 32KB 的桶权重后即可离线对 pump.fun 新发行代币打分，输出跑赢、rug、moon 三个概率及可解释的逐项依据，并提供 verify/performance/diff 等方法供用户自测模型；适用于需要本地推理、无需 API 密钥的 Solana meme 币分析者，模型每六小时重拟合，标签定义与训练数据限制在 README 中有说明。",
+   "highlights": [
+    "下载权重后离线推理，无 API 密钥、无速率限制",
+    "提供 explain/verify/performance/diff 方法，可复现与自验评分",
+    "模型每六小时重拟合，版本与拒绝记录公开"
+   ],
+   "use_cases": [
+    "对 pump.fun 新发行代币进行本地风险评分",
+    "用自行采集的标注数据重新测量模型表现",
+    "对比不同版本模型权重的差异"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "# @three-ws/oracle-model ／ **The three.ws Oracle, running on your machine, with the real weights.**",
+     "lines": [
+      1,
+      3
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "包仅是使用评分模型的推理应用，不与 Oracle 数据库交互，Oracle 仅是项目名/品牌词",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "it. This package is that scorer. Not a client for a scoring API: the actual ／ npm install @three-ws/oracle-model ／ three.ws is a platform for 3D AI agents with Solana wallets: avatars, a skill marketplace, x402 payments and more than seventy MCP servers. `@three-ws/oracle-model` is one package from it.",
+   "evidence_lines": [
+    6,
+    10,
+    201
+   ]
+  },
+  "fn": "nirholas/oracle-model",
+  "sha": "06179edc3941",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

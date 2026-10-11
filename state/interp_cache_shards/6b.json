@@ -8816,5 +8816,297 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2109af15ef67": {
+  "identity": {
+   "one_liner": "数据工程自托管工作台，以适配器机制统一操作数据栈",
+   "review": "DSUI 是一个自托管的数据工程工作区，通过适配器（DuckDB、PostgreSQL、Airflow、dbt、Trino、S3 等）在同一 UI 中连接和操作数据服务，提供 TypeScript Adapter SDK 供扩展。面向数据工程师，支持 npx 本地运行和 Docker 部署，连接信息以 master-key 加密存储，无需独立数据库或控制平面。",
+   "highlights": [
+    "通过适配器连接 PostgreSQL、DuckDB、Airflow、dbt、Trino、S3 兼容存储等服务",
+    "提供 TypeScript Adapter SDK 支持自定义与社区适配器",
+    "支持 npx 本地运行与 Docker 部署，本地状态以 master-key 加密"
+   ],
+   "use_cases": [
+    "统一管理多个数据栈工具的访问入口",
+    "本地开发中探索和操作数据库文件与服务",
+    "自托管环境中的数据基础设施运维"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Connect Apache Airflow, dbt, PostgreSQL, Trino, S3-compatible storage such as MinIO, and DuckDB through one workspace. ／ |Apache Airflow|dbt|PostgreSQL|Trino|Amazon S3|MinIO|DuckDB|",
+     "lines": [
+      68,
+      72
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "DSUI 是为连接和操作数据库及数据栈服务提供的 UI 工具，而非使用数据库存储业务数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## Adapters ／ Connect Apache Airflow, dbt, PostgreSQL, Trino, S3-compatible storage such as MinIO, and DuckDB through one workspace. ／ The TypeScript Adapter SDK lets you bring internal services and community adapters into the same workspace.",
+   "evidence_lines": [
+    66,
+    68,
+    75
+   ]
+  },
+  "fn": "northgraindata/dsui",
+  "sha": "2109af15ef67",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6043a2974347": {
+  "identity": {
+   "one_liner": "Swift Web 框架，内置自有 HTTP 引擎（HTTP/1.1/2/3、TLS、ACME）",
+   "review": "Garuda 是一个 Swift 服务端 Web 框架，自研 HTTP 引擎支持 HTTP/1.1、HTTP/2 和 HTTP/3（QUIC），不依赖 Foundation 与 SwiftNIO。提供路由、类型化提取器、OpenAPI 生成、会话、JWT 认证，并通过 worker 的 poller 提供 PostgreSQL、Redis、SQLite 数据访问。适合用 Swift 构建生产服务的开发者，要求 Swift 6.2 及以上，仅支持 Linux 与 macOS 15。",
+   "highlights": [
+    "提供 HTTP/1.1、HTTP/2、HTTP/3（QUIC）引擎，支持 TLS 1.2/1.3 与 ACME 证书续期",
+    "提供 PostgreSQL 与 Redis 访问（含 Redis Cluster/Sentinel），SQLite 经系统 libsqlite3",
+    "支持从路由生成 OpenAPI 3.1 文档，内置 JWT 身份验证与 WebSockets/WebTransport"
+   ],
+   "use_cases": [
+    "用 Swift 构建支持 HTTP/3 与 WebTransport 的服务端应用",
+    "需要 ACME 自动证书与多 worker 进程模型的 HTTP 服务部署",
+    "构建带 PostgreSQL/SQLite 数据访问的 CRUD API 与流式上传服务"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Data|PostgreSQL and Redis on the worker's poller, including Redis Cluster and Sentinel, and SQLite through the system's libsqlite3| ／ |Tracing|Spans through swift-distributed-tracing for the request, outbound HTTP, PostgreSQL, and Redis| ／ starter application on PostgreSQL.",
+     "lines": [
+      53,
+      62,
+      113
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Application middleware|Deadlines, CORS, bearer and basic authentication, authorization policies, CSRF protection, security headers, signed and encrypted cookies, and sessions in memory, Redis, or SQLite| ／ |Data|PostgreSQL and Redis on the worker's poller, including Redis Cluster and Sentinel, and SQLite through the system's libsqlite3| ／ from: a CRUD API on SQLite, accounts with hashed passwords and sessions,",
+     "lines": [
+      50,
+      53,
+      109
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "主体是通用 Web 框架，数据库访问仅是其内置功能之一，未声明专用于数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Garuda is a Swift web framework and the HTTP server underneath it. It is my attempt to create a spiritual successor to Kitura: a server written in Swift, with its own HTTP engine, for the protocols and the application features a production service needs today. ／ |Data|PostgreSQL and Redis on the worker's poller, including Redis Cluster and Sentinel, and SQLite through the system's libsqlite3| ／ dependencies: [.package(url: \"https://github.com/grepjava/garuda\", from: \"1.1.0\")],",
+   "evidence_lines": [
+    5,
+    53,
+    93
+   ]
+  },
+  "fn": "grepjava/garuda",
+  "sha": "6043a2974347",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b639d2cbf9af": {
+  "identity": {
+   "one_liner": "SQLAlchemy JSON 列中存储 Pydantic 模型并自动追踪变更的 Python 库",
+   "review": "该包将 Pydantic 模型嵌入 SQLAlchemy 的 JSON 列，自动追踪任意深度的字段、列表、字典等原地修改，无需手动调用 flag_modified 或编写事件监听。面向使用 SQLAlchemy 2.0+ 与 Pydantic 2.14+ 的 Python 开发者，要求 Python 3.11+，已在 SQLite、PostgreSQL 和 MariaDB 上测试，并支持 AsyncSession、SQLModel 与 FastAPI 集成。",
+   "highlights": [
+    "自动追踪 JSON 列内嵌 Pydantic 模型任意深度的变更，提交时保存",
+    "保留 SQLAlchemy JSON 操作符，支持对模型内部值的过滤与查询",
+    "提供 Alembic 迁移的 render_item 集成，生成不依赖本包的迁移代码"
+   ],
+   "use_cases": [
+    "在数据库行中以 JSON 列存储设置、偏好、元数据等结构化数据并保持类型校验",
+    "FastAPI 应用中将请求体直接赋给行字段并作为响应返回",
+    "与 Alembic/SQLModel 配合管理包含嵌套 Pydantic 模型的 ORM 模型"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "on SQLite, PostgreSQL and MariaDB, with both `Session` and `AsyncSession`. ／ PostgreSQL that creates a `json` column. For `jsonb` (binary, indexable, more operators), pass",
+     "lines": [
+      37,
+      88
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "On MySQL the generic `JSON` type maps to its native JSON type; on MariaDB, where `JSON` is the",
+     "lines": [
+      101
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "on SQLite, PostgreSQL and MariaDB, with both `Session` and `AsyncSession`.",
+     "lines": [
+      37
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "on SQLite, PostgreSQL and MariaDB, with both `Session` and `AsyncSession`.",
+     "lines": [
+      37
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为 SQLAlchemy ORM 的扩展包，为数据库 JSON 列提供类型化模型存储能力，属于数据库生态的服务组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Store Pydantic models in SQLAlchemy JSON columns, and just change them in place: every change, ／ Requires Python 3.11+, SQLAlchemy 2.0.44+ and Pydantic 2.14+. Tested with SQLAlchemy 2.0 and 2.1, ／ Use `EmbeddedPydanticModel` as the base class for the column's model **and for every model inside",
+   "evidence_lines": [
+    10,
+    36,
+    44
+   ]
+  },
+  "fn": "joakimnordling/sqlalchemy-pydantic-json",
+  "sha": "b639d2cbf9af",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::EarnTrap is a gamified web application built with React.js and Spring Boot. Users complete levels, e": {
+  "identity": {
+   "one_liner": "基于 React 与 Spring Boot 的游戏化 Web 应用，使用 TiDB Cloud 存储数据",
+   "review": "根据仓库简介（无 README），EarnTrap 是一个游戏化 Web 应用：用户完成关卡、获得虚拟积分、查看进度，并使用钱包、兑换和充值功能。技术栈为 React.js 前端与 Spring Boot 后端，采用 Java、Spring Security 和 JWT 认证，数据库使用 TiDB Cloud。面向需要积分/钱包类功能的终端用户与开发者。",
+   "highlights": [
+    "提供关卡、积分、进度跟踪等游戏化功能",
+    "包含钱包、兑换、充值功能",
+    "使用 Spring Security 与 JWT 实现认证"
+   ],
+   "use_cases": [
+    "积分/奖励类游戏化 Web 应用开发参考",
+    "Spring Boot + React + TiDB Cloud 的全栈示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "Built with Java, Spring Security, JWT authentication, and TiDB Cloud."
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 TiDB Cloud 作为数据库的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "EarnTrap is a gamified web application built with React.js and Spring Boot. Users complete levels, earn virtual points, track progress, and access wallet, redemption, and top-up features."
+  },
+  "fn": "Kishor0009/EarnTrap",
+  "sha": "desc::EarnTrap is a gamified web application built with React.js and Spring Boot. Users complete levels, e",
+  "source": "desc",
+  "generated_at": "2026-10-11",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

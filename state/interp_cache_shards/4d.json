@@ -8654,5 +8654,198 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "435d5eb277a8": {
+  "identity": {
+   "one_liner": "为编码代理提供仓库本地持久记忆的 JSON 记录库，SQLite 建全文索引",
+   "review": "Encephalon 让编码代理把决策、架构、约定等知识以小型 JSON 记录存进 Git 仓库，可随代码合并；同时用一次性 SQLite 全文索引提供 CLI 与同步 JavaScript API 的检索、替换（supersede）与校验恢复。面向使用编码代理的开发者，限制包括记录数、单条体积与搜索输入的硬性预算。零运行时依赖，无网络访问。",
+   "highlights": [
+    "知识记录以 Git 可合并的 JSON 文件存储，支持 supersede 链与冲突消解",
+    "提供 CLI（add/search/show/list/gather/validate/prepare/hydrate）与同步 JavaScript API",
+    "零运行时依赖，无遥测、无后台进程、无运行时网络访问"
+   ],
+   "use_cases": [
+    "在仓库中持久化编码代理产生的决策、架构与约定知识并随 Git 协作",
+    "对仓库本地知识做全文检索与批量查询",
+    "合并分支后校验知识记录一致性与缓存重建"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Encephalon gives coding agents durable, repository-local knowledge. Small JSON records travel with your code in Git; a disposable SQLite full-text index makes them searchable through a CLI and synchronous JavaScript API.",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它使用 SQLite 作为自身知识索引的存储组件，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Encephalon gives coding agents durable, repository-local knowledge. Small JSON records travel with your code in Git; a disposable SQLite full-text index makes them searchable through a CLI and synchronous JavaScript API. ／ The root package exports `initEncephalon`, `addRecord`, `prepare`, `hydrate`, `validateRecords`, `listRecords`, `showRecord`, `searchRecords`, `searchCompactRecords`, `gatherRecords`, `EncephalonError` and their public TypeScript types. Importing it does not discover a repository, touch the filesystem or open SQLite. Calls return values and never print or exit; expected failures throw `EncephalonError` with a stable `code` and bounded `details`. ／ MIT",
+   "evidence_lines": [
+    5,
+    110,
+    125
+   ]
+  },
+  "fn": "isaachinman/encephalon",
+  "sha": "435d5eb277a8",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4df74e437a5d": {
+  "identity": {
+   "one_liner": "Rust 编写的内存安全属性图数据库，统一 MVCC/时间旅行/分支/复制",
+   "review": "frankengraphdb 是用 Rust 从零实现的属性图数据库，提供嵌入式库、服务器与 CLI 三种形态，支持 GQL 语言、fountain-coded 提交流水、git 式分支、增量视图与混合检索，面向需要确定性、可审计结果的图数据场景。README 以目标态时态撰写，目前尚无发布版本，仅可从源码以 cargo 运行示例。",
+   "highlights": [
+    "将 MVCC、时间旅行查询、git 式分支、复制与变更订阅统一为单一提交流水",
+    "提供嵌入式库 fgdb、服务器 fgdbd 和 CLI 三种运行形态，使用 GQL (ISO/IEC 39075:2024)",
+    "全工作区禁止 unsafe 代码，依赖封闭宇宙，结果确定性并可生成计划证书"
+   ],
+   "use_cases": [
+    "需要时间旅行查询与分支隔离的图数据分析",
+    "GraphRAG 类混合检索（文本+向量+图扩展）场景",
+    "对结果确定性、可审计和可重放有要求的图事务与分析"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "它是图数据库引擎本体，而非使用其他数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT + Rider 双许可",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A blank-slate, memory-safe, ultra-high-performance property-graph database in Rust, built on the Franken/asupersync ecosystem. It unifies MVCC, time-travel history, git-style branches, replication, and change subscriptions into a single fountain-coded commit stream, runs transactional writes and static-CSR analytics on one temperature-tiered store, and makes every query result deterministic, auditable, and replayable.** ／ # What runs today, from a source checkout (there are no releases or installer yet — see Installation): ／ **The solution.** `frankengraphdb` composes them. One codebase, three postures: an embedded library (`fgdb`), a server (`fgdbd`), and a CLI (`fgdb`), all speaking **GQL** (ISO/IEC 39075:2024) with an openCypher on-ramp. Larger-than-memory is first-class everywhere. It is, in a precise sense, *a database written in the asupersync programming model*, the way FoundationDB is a database written in Flow: structured concurrency, capability contexts, fountain coding, and a deterministic lab runtime are the substrate, not add-ons.",
+   "evidence_lines": [
+    10,
+    13,
+    25
+   ]
+  },
+  "fn": "Dicklesworthstone/frankengraphdb",
+  "sha": "4df74e437a5d",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "aee554075f3f": {
+  "identity": {
+   "one_liner": "DeepSeek Harness 的社区记忆插件集，提供中文检索与跨会话记忆",
+   "review": "该仓库为 DeepSeek Harness（DSH）插件宿主提供 8 个包，实现中文/扩展汉字全文检索、工具结果去重、向量与全文混合召回、跨会话核心记忆、可追溯压缩与技能管理，存储层基于 SQLite（FTS5 与 sqlite-vec）。面向使用 DSH 的中文 agent 用户；尚未发布到 npm，仅可经 Git 克隆/Release 源码安装，宿主版本要求 DSH >=0.1.5-rc.3 <0.3.0。",
+   "highlights": [
+    "提供 FTS5 trigram + 短查询回退的中文/中英混排/扩展汉字会话全文检索（dsh-session-query-sqlite-cjk）",
+    "提供 sqlite-vec 向量臂 + FTS5 词法臂的混合召回与跨会话核心记忆，三层记忆分层存储于派生 SQLite 库",
+    "提供带来源 provenance 的用户固定记忆/技能保护、工具结果去重、压缩摘要定位符与后台技能进化"
+   ],
+   "use_cases": [
+    "DSH 会话中文历史难以检索时接入 CJK 全文检索 provider",
+    "为 agent 会话建立跨会话常驻事实与可复用技能管理",
+    "对压缩摘要追回原始内容细节、对工具结果做 Token 去重"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|`dsh-session-query-sqlite-cjk`|中文可用的会话全文检索 provider：FTS5 双 tokenizer 双表（unicode61 + trigram），按查询是否含 CJK 自动路由|Phase 0| ／ |`dsh-memory-index`|混合记忆检索服务 `ctx.memorySearch`：sqlite-vec 向量臂 + FTS5 词法臂 → RRF 融合；事件级增量嵌入；file 词条过滤|Phase 1| ／ |archival|旧事件全文（shadowed/log-only）|**只追加**（日志不可变，派生 tag 可更新）|派生 SQLite：chunks + vec0 向量 + FTS5|",
+     "lines": [
+      47,
+      49,
+      82
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是面向 DSH agent 宿主的插件集，SQLite/FTS5/sqlite-vec 仅作为其派生库的存储与检索组件使用，不面向数据库生态服务。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "DeepSeek Harness（DSH）的社区记忆插件集，共 8 个包：让中文子串、中英混排和扩展汉字可检索，并提供工具结果去重、向量与全文混合召回、跨会话核心记忆、可追溯压缩和技能管理。用户固定的记忆与技能带来源记录，模型工具与后台进化无法改写。Phase 0–3 已实现；CJK 后端已通过完整 `0.2.0-rc.2` Web 宿主的活会话与冷历史验证。 ／ |archival|旧事件全文（shadowed/log-only）|**只追加**（日志不可变，派生 tag 可更新）|派生 SQLite：chunks + vec0 向量 + FTS5| ／ |core|跨会话蒸馏事实（偏好/约定/环境/决策）|**CRUD**：哈希去重 + 相似度合并|派生 SQLite：core_facts|",
+   "evidence_lines": [
+    23,
+    82,
+    83
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "QIANLING-0831/dsh-memory-plus",
+  "sha": "aee554075f3f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

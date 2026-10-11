@@ -7298,5 +7298,85 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0953de4ca9e7": {
+  "identity": {
+   "one_liner": "基于 SQLite 的本地 AI 代理长期记忆核心，提供来源可溯召回",
+   "review": "Scope Recall 是一个为 Hermes、Codex、Claude Code 等多个 AI 代理宿主提供共享长期记忆的本地记忆核心，以 SQLite 作为唯一事实存储，配 LanceDB 向量索引做混合检索，并提供 MCP 工具与 hooks 适配器用于查看、更正或删除记忆。面向代理插件用户与运维者，通过 PyPI 包 hermes-scope-recall 安装。",
+   "highlights": [
+    "以 SQLite 为事实权威，向量索引可重建，支持多宿主共享同一记忆库",
+    "提供 Hermes/Codex 适配器与 MCP 服务器，含 profile/entity 只读视图与受限多跳证据路径 trace",
+    "提供 plan/apply 式安装与卸载 CLI，默认卸载保留 Core 数据，清除需显式 --purge"
+   ],
+   "use_cases": [
+    "为多个 AI 代理宿主提供共享长期记忆",
+    "对代理记忆进行检查、更正、静默或删除",
+    "需要证据溯源的记忆召回与两三跳关系查询"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, and for Codex, Claude Code, WorkBuddy and DeepSeek Harness (dsh), which share one adapter of hooks and an MCP s ／ migration procedure for a 2.0.1 memory database. SQLite remains the only fact ／ SQLite truth lives in the verified Core data directory. Vector indexes are companions and may be rebuilt only through an explicit configured space. The Hermes and Codex adapters bind host identity, installation identity, scopes, and project roots before openin ／ together. It is read-only, shared by Hermes and Codex, and reuses existing SQLite",
+     "lines": [
+      3,
+      20,
+      103,
+      116
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The `codex` extra adds the MCP SDK. Without that extra, the Core and Hermes paths remain importable. The `lancedb` extra enables the tested LanceDB companion path. PostgreSQL/pgvector is outside this v3 distribution; an explicit configuration error directs ope",
+     "lines": [
+      105
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目以 SQLite 作为自身存储权威，是使用数据库存数据的应用而非为数据库生态服务的组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, and for Codex, Claude Code, WorkBuddy and DeepSeek Harness (dsh), which share one adapter of hooks and an MCP server (the MCP tools need the optional `codex` extra; dsh runs the hooks through a plugin). The public package is `hermes-scope-recall`; the Python import is `scope_recall`; the host wrapper identity remains `scope-recall`. ／ SQLite truth lives in the verified Core data directory. Vector indexes are companions and may be rebuilt only through an explicit configured space. The Hermes and Codex adapters bind host identity, installation identity, scopes, and project roots before opening Core. After that binding is verified, an omitted runtime-config argument checks only `<data_directory>/runtime-config.json`; a missing file stays basic plus an explicit capability gap. The file is never generated or discovered from the current directory, parent directories, or credential locations. Optional host wiring must report a capability gap instead of creating or repairing a database. ／ The `codex` extra adds the MCP SDK. Without that extra, the Core and Hermes paths remain importable. The `lancedb` extra enables the tested LanceDB companion path. PostgreSQL/pgvector is outside this v3 distribution; an explicit configuration error directs operators to retain the old installation and use the migration guide.",
+   "evidence_lines": [
+    3,
+    103,
+    105
+   ]
+  },
+  "fn": "410979729/scope-recall-hermes",
+  "sha": "0953de4ca9e7",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

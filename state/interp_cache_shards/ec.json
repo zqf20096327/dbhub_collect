@@ -8413,5 +8413,293 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ea2f3ec42d26": {
+  "identity": {
+   "one_liner": "AI 原生应用 TypeScript 引擎，提供摄取、OCR、RAG、知识图谱与后台任务",
+   "review": "Launchstack 是一套以端口（ports）架构组织的 TypeScript 引擎包，提供文档摄取、OCR、RAG、嵌入、知识图谱、LLM 抽象和后台任务能力，并附带一个 Next.js 参考应用演示接线方式。引擎包尚未发布到 npm，目前需通过运行本仓库消费；要求 Node ≥20 与带 pgvector 扩展的 Postgres。适合自托管 AI 应用的开发者参照使用。",
+   "highlights": [
+    "提供 db、llm、embeddings、ocr、rag、graph、ingestion、jobs 等子模块，通过 createEngine(config) 与端口注册接线",
+    "基于 PostgreSQL + pgvector 实现语义检索，并通过迁移脚本自动启用扩展",
+    "核心包不读取 process.env、不依赖框架，边界由 ESLint 与 CI 强制"
+   ],
+   "use_cases": [
+    "构建需要文档摄取与 RAG 问答的 AI 原生应用",
+    "自托管带角色工作区、审计日志的多租户文档平台",
+    "作为参考架构学习端口式引擎与 Next.js 宿主的集成方式"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "You need a Postgres with the **pgvector** extension available — the migration ／ > `.env.example` points `DATABASE_URL` at `localhost:5433/pdr_ai_v2`, which is what Compose publishes — so the Docker and non-Docker paths share one database by default. Running your own Postgres instead? Use the commented `localhost:5432/pdr_ai` line in its p",
+     "lines": [
+      44,
+      66
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为服务 AI 应用构建的引擎包，数据库是其接线的基础设施而非产品本身",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**A TypeScript engine for AI-native applications.** Ingestion, OCR, RAG, knowledge graph, LLM abstractions, and background jobs — ports-based, and wired into a Next.js reference app that shows how the pieces fit together. ／ The engine packages (`@launchstack/protocol`, `evidence`, `application`, `adapters`, and the `core` facade) are **not yet on npm** — the first release will publish them together through the Changesets flow in `release.yml` (the old hardcoded-repo gate and missing `.changeset/` that blocked releases are fixed; the workflow validates the packed tarball with `publint` and a Node-ESM loadability check for every subpath). Until that first release lands, consume the engine by running this repository. ／ You need a Postgres with the **pgvector** extension available — the migration",
+   "evidence_lines": [
+    3,
+    13,
+    44
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Deodat-Lawson/LaunchStack",
+  "sha": "ea2f3ec42d26",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2378a713b65b": {
+  "identity": {
+   "one_liner": "离线优先的 Go CLI，分析 AI 编码工具使用与成本估算",
+   "review": "assaio 提供一个离线优先的 Go 命令行工具 assaio-agent，内嵌 SQLite 存储，读取 Claude Code、Codex CLI、Gemini CLI、Copilot CLI、Cline 等工具的本地日志，生成使用广度、API 等价成本估算与本地 PR/评审/CI 证据的 HTML 报表，面向平台团队、工程效能小组和个人开发者；支持可选自托管团队模式，但该模式为 MVP，非生产就绪服务。",
+   "highlights": [
+    "读取 Claude Code、Codex CLI、Gemini CLI、GitHub Copilot CLI、Cline、Antigravity CLI 的本地日志",
+    "内嵌 SQLite 存储 token 计数、模型名、时间戳与活动计数，离线运行且不发送网络请求",
+    "生成自包含的离线 HTML 报表，并提供 evidence、digest、doctor 等命令"
+   ],
+   "use_cases": [
+    "平台团队跨工具观察 AI 编码使用广度",
+    "以共同基准比较 AI 编码工具的 API 等价成本估算",
+    "在候选提交附近检查本地 PR、评审与 CI 证据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "assaio is an open-source, offline-first Go CLI (`assaio-agent`) with embedded SQLite for Claude ／ `assaio-agent` is one Go binary with embedded SQLite. Prebuilt releases support macOS, Linux and ／ counts in local SQLite;",
+     "lines": [
+      5,
+      56,
+      185
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该 CLI 使用内嵌 SQLite 存储自身的分析数据，不是为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "assaio is an open-source, offline-first Go CLI (`assaio-agent`) with embedded SQLite for Claude ／ `assaio-agent` is one Go binary with embedded SQLite. Prebuilt releases support macOS, Linux and ／  counts in local SQLite;",
+   "evidence_lines": [
+    5,
+    56,
+    185
+   ]
+  },
+  "fn": "assaio/assaio",
+  "sha": "2378a713b65b",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "176663f01278": {
+  "identity": {
+   "one_liner": "本地知识库 RAG 搜索工具，基于 SQLite FTS5/BM25 检索并用 Jev 重排",
+   "review": "Jev RAG 是一个开源本地文档知识检索工具，索引本地文件夹并以 SQLite FTS5/BM25 为默认检索路径，配合 Jev 重排生成带文件引用的答案，提供七种可选管线（agentic、混合检索等）。面向想在本地构建无向量数据库的知识搜索/问答的用户；需要 Python 3.9+，处于 alpha 状态。",
+   "highlights": [
+    "默认管线无需嵌入或向量数据库，使用 SQLite FTS5/BM25 检索（L7、L139）",
+    "提供七种可选检索管线，支持 agentic 词法检索与 BM25+嵌入 RRF 混合检索（L3、L140-143）",
+    "支持 Markdown、HTML、JSON、CSV、DOCX、PDF 等格式的本地增量索引，并用 CJK bigram 做中文分词（L184-185）"
+   ],
+   "use_cases": [
+    "对本地文档文件夹（Markdown、PDF 等）建立可检索知识库并生成带引用的答案",
+    "无向量数据库/GPU 环境下的本地 RAG 检索实验",
+    "复现 323-query BEIR NFCorpus 检索管线基准测试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "only Python 3.9+ with SQLite FTS5: no package install, API key, embeddings, or ／ default: local files -> SQLite BM25 ----------------------> Jev -> MiniMax ／ Jev RAG indexes a local folder and defaults to vector-free SQLite FTS5/BM25.",
+     "lines": [
+      32,
+      133,
+      139
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明项目用 SQLite FTS5/BM25 存储和检索本地知识库索引数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Jev RAG indexes a local folder and defaults to vector-free SQLite FTS5/BM25. ／ > Status: alpha. The software is usable locally, but APIs and storage schemas may change before 1.0. ／ - SQLite caches and per-run latency, usage, and cost records.",
+   "evidence_lines": [
+    139,
+    164,
+    190
+   ]
+  },
+  "fn": "aifabrice/jev-rag",
+  "sha": "176663f01278",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5012c1902788": {
+  "identity": {
+   "one_liner": "Rust 编写的优化型 C 编译器，以 SMT 验证重写规则",
+   "review": "rucc 是用 Rust 实现的优化型 C 编译器，重写规则经 SMT 求解器验证，采用无环 e-graph 中端，自行编码指令并生成 ELF/Mach-O/COFF 与 DWARF，无需外部汇编器。面向需要正确性与编译吞吐量并重的 C 项目开发者，目标阶梯为编译 SQLite、PostgreSQL 直至 Linux 内核。",
+   "highlights": [
+    "重写规则经 SMT 求解器验证后才允许进入规则集，并配有 IR 验证器与寄存器分配检查器",
+    "自行编码指令、写 ELF/Mach-O/COFF 和 DWARF，编译路径无外部汇编器",
+    "提供 cargo install 安装及可运行于 WASI 引擎的 WebAssembly 版本"
+   ],
+   "use_cases": [
+    "编译 SQLite、PostgreSQL 等 C 项目（要求不修改源码）",
+    "交叉编译：单二进制覆盖多主机与多目标（aarch64/i686/musl 等）",
+    "作为可按 crate 单独依赖的 C 词法/宏展开等组件库"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The goal is a compiler that builds real software without patches, generates code that stands up next to `gcc -O2`, and runs on every platform its users do. The target ladder goes SQLite, then a mid tier of well known C projects, then PostgreSQL, then the Linux ／ The twelve milestones are in `spec/17-milestones.md` and are tracked as issues. Three of them are sane stopping points: M5 is a correct, fast, optimizing compiler that builds SQLite; M9 adds PostgreSQL on three hosts and three targets; M11 is the kernel. ／ PostgreSQL 18.6 built by rucc 0.20.0 at `-O2` takes 1.12 times as long as the same server built by `gcc -O2` on pgbench `select-only`, with the two servers run one after the other on the same machine on the night of 2026-10-05. The other bench numbers are nigh",
+     "lines": [
+      5,
+      47,
+      49
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "The goal is a compiler that builds real software without patches, generates code that stands up next to `gcc -O2`, and runs on every platform its users do. The target ladder goes SQLite, then a mid tier of well known C projects, then PostgreSQL, then the Linux ／ rucc builds real programs today. On Linux x86-64, GNU make built by rucc passes its own test suite, SQLite built at `-O2` runs its speed test with the correct result, and the real corpus builds 74 projects with no source patch. The full technical design is wri ／ 2. SQLite 3.53.4 built by rucc at `-O2` runs speedtest1 with the correct result. The program is 22% slower than the GCC build, and rucc compiles `sqlite3.c` at `-O2` in about one third of the GCC time.",
+     "lines": [
+      5,
+      7,
+      41
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是通用 C 编译器，将 SQLite/PostgreSQL 作为编译目标与基准，而非为数据库生态服务的专用工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An optimizing C compiler written in Rust. ／ The goal is a compiler that builds real software without patches, generates code that stands up next to `gcc -O2`, and runs on every platform its users do. The target ladder goes SQLite, then a mid tier of well known C projects, then PostgreSQL, then the Linux kernel. Nothing on that ladder is allowed a source patch. If a project needs one, the compiler is wrong. ／ **No external assembler or linker in the compile path.** We encode instructions to bytes, we write ELF, Mach-O and COFF ourselves, and we emit DWARF ourselves. `-S` produces text from the same instruction description the encoder uses, so the two cannot disagree. Linking still shells out to a real linker before 1.0, and whether that stays true is an open question with two measurements attached to it.",
+   "evidence_lines": [
+    3,
+    5,
+    34
+   ]
+  },
+  "fn": "tamnd/rucc",
+  "sha": "5012c1902788",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

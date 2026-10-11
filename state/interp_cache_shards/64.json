@@ -8908,5 +8908,305 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "439750ff82d2": {
+  "identity": {
+   "one_liner": "JSON 原生语法的 TypeScript ORM，统一操作 SQL 数据库与 MongoDB",
+   "review": "UQL 是一个面向 TypeScript 的 JSON 原生 ORM，用类型安全的 JSON 语法查询 SQL 数据库和 MongoDB，实体类即 schema，无需代码生成。支持 PostgreSQL、MySQL、SQLite、MariaDB、SQL Server、CockroachDB 等多种数据库，可在 Node、Bun、Deno、浏览器、Workers 等运行环境使用，并内置实体 diff 生成的迁移 CLI，适合在全栈 TypeScript 项目中做数据访问层。",
+   "highlights": [
+    "以实体类为 schema，编译期做类型检查，无需代码生成与 reflect-metadata",
+    "提供 uql-migrate CLI，对实体与数据库做 diff 生成并执行迁移",
+    "零运行时依赖，所有方言打包在一个包内，$populate 在单条语句中读取关联避免 N+1"
+   ],
+   "use_cases": [
+    "在 Node/Bun/Deno/边缘运行环境中以统一 API 访问多种 SQL 数据库与 MongoDB",
+    "由实体类驱动生成并应用数据库 schema 迁移",
+    "在浏览器中经 HTTP 以作用域过滤安全地执行同一套类型安全查询"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "npm install uql-orm pg # or mysql2, mariadb, better-sqlite3, mongodb, @tursodatabase/serverless, @libsql/client ／ import { PgQuerierPool } from 'uql-orm/postgres'; ／ - **One API, everywhere it runs.** PostgreSQL, PGlite, CockroachDB, MySQL, MariaDB, MSSQL, SQLite, Turso, libSQL, Neon, Cloudflare D1, Bun's native SQL, and even MongoDB. The same code on Node 22.18+, Bun, Cloudflare Workers, AWS Lambda and Vercel, and the bro",
+     "lines": [
+      23,
+      52,
+      77
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **One API, everywhere it runs.** PostgreSQL, PGlite, CockroachDB, MySQL, MariaDB, MSSQL, SQLite, Turso, libSQL, Neon, Cloudflare D1, Bun's native SQL, and even MongoDB. The same code on Node 22.18+, Bun, Cloudflare Workers, AWS Lambda and Vercel, and the bro",
+     "lines": [
+      77
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "npm install uql-orm pg # or mysql2, mariadb, better-sqlite3, mongodb, @tursodatabase/serverless, @libsql/client ／ - **One API, everywhere it runs.** PostgreSQL, PGlite, CockroachDB, MySQL, MariaDB, MSSQL, SQLite, Turso, libSQL, Neon, Cloudflare D1, Bun's native SQL, and even MongoDB. The same code on Node 22.18+, Bun, Cloudflare Workers, AWS Lambda and Vercel, and the bro",
+     "lines": [
+      23,
+      77
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **One API, everywhere it runs.** PostgreSQL, PGlite, CockroachDB, MySQL, MariaDB, MSSQL, SQLite, Turso, libSQL, Neon, Cloudflare D1, Bun's native SQL, and even MongoDB. The same code on Node 22.18+, Bun, Cloudflare Workers, AWS Lambda and Vercel, and the bro",
+     "lines": [
+      77
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "npm install uql-orm pg # or mysql2, mariadb, better-sqlite3, mongodb, @tursodatabase/serverless, @libsql/client ／ - **One API, everywhere it runs.** PostgreSQL, PGlite, CockroachDB, MySQL, MariaDB, MSSQL, SQLite, Turso, libSQL, Neon, Cloudflare D1, Bun's native SQL, and even MongoDB. The same code on Node 22.18+, Bun, Cloudflare Workers, AWS Lambda and Vercel, and the bro",
+     "lines": [
+      23,
+      77
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为操作多种数据库提供 ORM、驱动适配与迁移能力的开发库，属于为数据库生态服务的组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " UQL hanldes SQL databases and MongoDB with plain & type-safe JSON-syntax. ／ npm install uql-orm pg   # or mysql2, mariadb, better-sqlite3, mongodb, @tursodatabase/serverless, @libsql/client ／ - **One API, everywhere it runs.** PostgreSQL, PGlite, CockroachDB, MySQL, MariaDB, MSSQL, SQLite, Turso, libSQL, Neon, Cloudflare D1, Bun's native SQL, and even MongoDB. The same code on Node 22.18+, Bun, Cloudflare Workers, AWS Lambda and Vercel, and the browser, with no native binaries on the `fetch`-based drivers.",
+   "evidence_lines": [
+    9,
+    23,
+    77
+   ]
+  },
+  "fn": "rogerpadilla/uql",
+  "sha": "439750ff82d2",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "557558f5541d": {
+  "identity": {
+   "one_liner": "Linux 预加载守护进程，基于马尔可夫模型预测并预取文件",
+   "review": "preload-rs 是一个 Rust 编写的守护进程，通过监测用户运行的应用并构建马尔可夫概率模型，预测接下来可能启动的程序，将二进制文件和共享库从硬盘预取到内存以加快启动时间。面向使用机械硬盘的 Linux 用户， README 未包含安装命令细节，仅提供配置示例、指南和发布二进制下载的指引，并注明是对原 preload 的重新实现而非重写。",
+   "highlights": [
+    "通过守护进程监测应用运行并分析数据，预测可能启动的应用并预取二进制文件及依赖到内存",
+    "基于马尔可夫模型推断各应用近期启动概率，并仅在资源充足时执行预取",
+    "代码按 cli/config/orchestrator 三个 crate 划分，支持通过 TOML 文件配置"
+   ],
+   "use_cases": [
+    "机械硬盘 Linux 系统上加快应用启动时间",
+    "基于用户使用习惯自适应预取常用程序及其依赖库",
+    "作为 preload 的 Rust 重新实现部署于 Linux 环境"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未描述任何数据库相关功能或用途，主题标签中的 sqlite 未在 README 中得到印证。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`preload-rs` is a daemon process that prefetches binary files and shared libraries ／ It builds a Markov-based probabilistic model capturing the correlation between ／ `preload-rs` has been divided into the following crates, with each crate serving a specific purpose. They are:",
+   "evidence_lines": [
+    7,
+    14,
+    28
+   ]
+  },
+  "fn": "arunanshub/preload-rs",
+  "sha": "557558f5541d",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "dc861c109dcf": {
+  "identity": {
+   "one_liner": "失物招领管理系统，React+Express 全栈 Web 应用，用 PostgreSQL 存数据",
+   "review": "一个全栈失物招领平台，用户可登记失物/拾获物并提交认领申请，管理员负责审核与用户管理。技术栈为 React/Redux 前端、Express+Prisma 后端，数据存于 PostgreSQL（README 指定使用 Neon 云实例，需通过连接串配置）。内置基于 Google Gemini API 的 AI 搜索，不可用时回退到关键词搜索，适合社区或组织部署使用。",
+   "highlights": [
+    "提供 JWT 认证与 User/Admin 角色权限控制",
+    "支持失物登记、拾获登记、认领处理与软删除机制",
+    "集成 Google Gemini API 实现 AI 搜索，失败时回退关键词搜索"
+   ],
+   "use_cases": [
+    "社区或机构搭建失物招领登记与认领平台",
+    "管理员集中管理用户、物品分类与认领审核",
+    "基于位置、类别、日期的物品检索与统计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL ／ > 💡 The database is a **cloud PostgreSQL (Neon)** instance — no local database or Docker is required. ／ Copy the project's connection string from Neon (or any PostgreSQL host) into `server/.env`:",
+     "lines": [
+      59,
+      85,
+      92
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明应用使用 PostgreSQL 存储业务数据，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- PostgreSQL ／ > 💡 The database is a **cloud PostgreSQL (Neon)** instance — no local database or Docker is required. ／ The application uses PostgreSQL with Prisma ORM. Key models include:",
+   "evidence_lines": [
+    59,
+    85,
+    227
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "alamin147/lost-and-found",
+  "sha": "dc861c109dcf",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "84c52127e97c": {
+  "identity": {
+   "one_liner": "1950–2027年F1赛事记录构建为单一SQLite数据库",
+   "review": "该项目将1950年至2027年的F1世界锦标赛数据（比赛、参赛、排位赛、积分榜）构建为一个规范化的SQLite数据库（f1.db，53表43视图），每次构建都与独立数据源交叉校验，并保留分歧与置信级别记录；附带命令行查询工具、JSON/Parquet导出和可复现构建脚本。适合需要本地、可查询、可溯源F1数据的分析者和数据使用者，数据许可为CC BY-SA/BY 4.0。",
+   "highlights": [
+    "每行数据带confidence级别，两源分歧保留在记录中",
+    "build.py可幂等且逐字节可复现地重建数据库，verify.py做完整性与交叉校验",
+    "除fastf1加载器外全部为Python 3.9+标准库，无依赖"
+   ],
+   "use_cases": [
+    "本地SQL查询F1历史比赛、排位与积分数据",
+    "通过lapledger.org下载SQLite/JSON/Parquet格式数据用于分析",
+    "基于data/*.py源数据编辑并重建、贡献数据修正"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "to run — as one normalised, queryable SQLite database. It is rebuilt from ／ |`f1.db`|The SQLite database. 53 tables, 43 views, 177,316 rows. This is the artefact.|",
+     "lines": [
+      6,
+      44
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目以SQLite文件作为其数据产物的存储与发布形式，SQLite是其核心依赖而非为其服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "双许可：代码按LICENSE，数据按CC BY-SA 4.0（自有列为CC BY 4.0）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "to run — as one normalised, queryable SQLite database. It is rebuilt from ／ |`f1.db`|The SQLite database. 53 tables, 43 views, 177,316 rows. This is the artefact.| ／ |`LICENSE-DATA`, `LICENSE`|The terms the data is offered under (CC BY-SA 4.0, and CC BY 4.0 for the columns this project wrote itself and has granted) and the terms the code is. `LICENSE-DATA` is served at `lapledger.org/LICENSE-DATA`.|",
+   "evidence_lines": [
+    6,
+    44,
+    89
+   ]
+  },
+  "fn": "Alex-Farley/formula-1-data",
+  "sha": "84c52127e97c",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

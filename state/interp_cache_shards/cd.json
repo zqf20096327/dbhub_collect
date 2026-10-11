@@ -8916,5 +8916,142 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d9e7eb348499": {
+  "identity": {
+   "one_liner": "将 Garmin Connect 数据采集到本地 SQLite 并通过 MCP 提供查询",
+   "review": "该工具把用户在 Garmin Connect 上的健康与运动历史数据抓取到本地 SQLite 数据库（50 张表），并内置 MCP 服务器提供 45 个只读查询与分析工具，支持导出 CSV/JSON/GPX/TCX 等格式。面向拥有 Garmin 设备、希望在本地掌控数据并让 Claude 等 AI 客户端分析的个 人用户；依赖无头浏览器登录，数据仅存本地。",
+   "highlights": [
+    "将 Garmin 历史数据同步到本地 SQLite，包含 50 张表与 FIT 原始文件",
+    "提供 45 个 MCP 工具，覆盖健康指标、训练负荷与设备信息查询，只读查询在 SQLite 引擎层强制执行",
+    "支持导出 CSV、JSON、GPX、TCX、KML 等格式"
+   ],
+   "use_cases": [
+    "个人用户将 Garmin 健康数据本地化留存与增量同步",
+    "通过 Claude Code/Claude Desktop 等 MCP 客户端对健康数据做 AI 分析",
+    "将活动数据导出为 GPX/TCX 导入 Strava、TrainingPeaks 等平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**It's YOUR data. Take it back. One command. All your Garmin data. Local SQLite + FIT files. Export to CSV, JSON, GPX, TCX. AI-ready via MCP.** ／ This project gets your data out of Garmin Connect and into a local SQLite database where **you** own it and **AI can analyze it** through an MCP server for Claude Code. ／ |`garmin_query`|Run any read-only SELECT query (read-only enforced at the SQLite engine level)|",
+     "lines": [
+      11,
+      17,
+      137
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目将 Garmin 数据存入本地 SQLite 数据库并基于其提供 MCP 查询服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**It's YOUR data. Take it back. One command. All your Garmin data. Local SQLite + FIT files. Export to CSV, JSON, GPX, TCX. AI-ready via MCP.** ／ This project gets your data out of Garmin Connect and into a local SQLite database where **you** own it and **AI can analyze it** through an MCP server for Claude Code. ／ **50 tables, 10+ years of history, 45 MCP tools for AI analysis. Your data stays on your machine.**",
+   "evidence_lines": [
+    11,
+    17,
+    19
+   ]
+  },
+  "fn": "nrvim/garmin-givemydata",
+  "sha": "d9e7eb348499",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "be6e174bd707": {
+  "identity": {
+   "one_liner": "跨平台 Electron 桌面客户端，统一管理 Meshtastic/MeshCore/Reticulum 网状网络",
+   "review": "该仓库是一个桌面应用程序，用 Electron 实现对 Meshtastic、MeshCore 和 Reticulum 三种 RF 网状协议的统一接入，支持 BLE、USB 串口、Wi-Fi/TCP 和 MQTT 传输，并提供路由诊断、密钥管理与应急通信（MECP/TAK）功能。它使用本地 SQLite 数据库持久化消息历史与网格日志，供网状网络用户和应急通信志愿者在 macOS/Linux/Windows 上使用。",
+   "highlights": [
+    "支持 Meshtastic、MeshCore、Reticulum 三种协议栈及协议切换器，后台多会话保持连接",
+    "提供 BLE、USB 串口、Wi-Fi/TCP、MQTT 多种传输方式与 AES-128/256-CTR MQTT 解密",
+    "本地 SQLite 存储消息历史与网格日志，支持导出/导入/清除"
+   ],
+   "use_cases": [
+    "桌面端统一收发与归档多种 RF 网状网络消息",
+    "网格路由诊断、节点地图与统计可视化",
+    "应急通信场景下通过 MECP 与 TAK 进行消息编排"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "With a dedicated local SQLite database, Mesh-Client keeps message history and mesh logs durable across restarts and sync failures. It provides one reliable hub for Meshtastic, MeshCore, and Reticulum (via an AGPL Rust sidecar), delivering a unified workflow re ／ - **True message persistence:** Local SQLite storage for reliable long-term history, without lost chats or broken logs.",
+     "lines": [
+      29,
+      33
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其是一个桌面客户端应用，仅使用本地 SQLite 数据库存消息历史，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Cross-platform **Electron** desktop client for **Meshtastic**, **MeshCore**, and **Reticulum (LXMF)** on **macOS**, **Linux**, and **Windows** — **BLE**, **USB serial**, **Wi-Fi/TCP**, **MQTT**, local **SQLite** history, **routing diagnostics**, **16-language UI**, plus a Ratspeak-compatible Reticulum sidecar (**Games**, **encrypted paper**, **LXST voice**, Nomad, RRC, Remote). EMCOMM support via MECP & TAK. ／ With a dedicated local SQLite database, Mesh-Client keeps message history and mesh logs durable across restarts and sync failures. It provides one reliable hub for Meshtastic, MeshCore, and Reticulum (via an AGPL Rust sidecar), delivering a unified workflow regardless of protocol or hardware.",
+   "evidence_lines": [
+    3,
+    29
+   ]
+  },
+  "fn": "Colorado-Mesh/mesh-client",
+  "sha": "be6e174bd707",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10433,5 +10433,96 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5f8d30b8b490": {
+  "identity": {
+   "one_liner": "多数据库 SQL 控制台，基于 Druid AST 做 MySQL 到国产库方言转换与结构比对",
+   "review": "这是一个面向多数据库的 SQL 管理控制台，提供多连接管理、SQL 执行、MySQL 语法到达梦/神通方言的转换、表结构差异比对及补丁脚本生成，适合需要同时操作 MySQL 与国产数据库（达梦、神通）的开发或运维人员。限制包括：转换仅支持 DDL/DML 单向转换，查询语句会跳过。",
+   "highlights": [
+    "基于 Alibaba Druid AST 重写实现 MySQL 语法到达梦/神通方言的转换",
+    "支持多连接并发执行 SQL，按语句类型分层设置超时",
+    "跨方言字段结构比对（列/索引/主键/注释），可按目标库生成补丁脚本"
+   ],
+   "use_cases": [
+    "从 MySQL 向达梦/神通国产库迁移时的语句转换与补丁生成",
+    "多套异构数据库连接的统一 SQL 执行与管理",
+    "多库表结构一致性核对与差异比对"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "支持数据库：**MySQL**、**达梦 DM8**、**神通 Oscar**（openGauss 内核）。 ／ - MySQL 语法 → 达梦 / 神通方言（基于 Druid AST 重写，非正则替换） ／ |元数据存储|MySQL（保存连接、脚本节点、执行历史）|",
+     "lines": [
+      5,
+      18,
+      43
+     ]
+    },
+    {
+     "db": "Dameng",
+     "rel": "support",
+     "quote": "支持数据库：**MySQL**、**达梦 DM8**、**神通 Oscar**（openGauss 内核）。 ／ - MySQL 语法 → 达梦 / 神通方言（基于 Druid AST 重写，非正则替换） ／ |驱动|mysql-connector-java / dm-jdbc-driver（达梦）/ oscar-jdbc（神通）|",
+     "lines": [
+      5,
+      18,
+      44
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "mention",
+     "quote": "支持数据库：**MySQL**、**达梦 DM8**、**神通 Oscar**（openGauss 内核）。",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为多种数据库提供连接、SQL 转换与结构比对的工具/控制台，而非使用数据库存储业务数据的应用（元数据存 MySQL 仅为其自身存储）。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "Dameng"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "面向多数据库的统一 SQL 控制台：在一个页面里管理多个库连接、编写并执行 SQL、把 MySQL 语法转换成国产库方言、比对表结构差异并一键生成补丁脚本。 ／ - MySQL 语法 → 达梦 / 神通方言（基于 Druid AST 重写，非正则替换） ／ |元数据存储|MySQL（保存连接、脚本节点、执行历史）|",
+   "evidence_lines": [
+    3,
+    18,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ZhangYinHao026/sql-controller",
+  "sha": "5f8d30b8b490",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

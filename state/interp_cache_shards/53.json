@@ -8965,5 +8965,283 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bec95b575840": {
+  "identity": {
+   "one_liner": "基于 SQLite 的无云端 AI 代理记忆层，pip 安装即用",
+   "review": "Mnemosyne 是一个为 AI 代理（Claude Code、Cursor、Codex 等）提供长期记忆的 Python 库，数据存储在单个 SQLite 文件中，内置 BEAM 三层记忆架构（工作记忆、情景记忆、知识图谱），并通过 MCP 服务器和 Python SDK 两种方式供代理框架接入。适合需要本地、离线记忆存储的代理开发者和个人用户，无需外部向量数据库或云服务。",
+   "highlights": [
+    "通过 MCP 服务器（stdio/SSE）和 Python SDK 接入任意代理框架",
+    "BEAM 三层记忆：工作记忆、基于 sqlite-vec + FTS5 的情景记忆、时序知识图谱",
+    "混合检索评分（向量相似度 + FTS5 + 重要性），二值向量压缩全部在 SQLite 内完成"
+   ],
+   "use_cases": [
+    "为 Claude Code、Cursor 等 MCP 客户端添加持久记忆",
+    "在自定义 Python 代理中集成 remember/recall 记忆 API",
+    "本地优先、无遥测的个人 AI 记忆存储与可选端到端加密同步"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "*Zero-cloud AI memory that works everywhere. SQLite-backed. One pure-Python dependency.* ／ **Mnemosyne** is a universal, Hermes-first memory layer that works with any agent framework (Claude Code, Cursor, Codex, OpenWebUI, OpenClaw, or your own custom agent). One `pip install`, one SQLite database. No external services required. ／ Mnemosyne is measured on **BEAM** (ICLR 2026), in one SQLite file with no cloud dependency. A **LongMemEval** (ICLR 2025) run is pending.",
+     "lines": [
+      5,
+      18,
+      74
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|**Local-first**|✅ SQLite|⚠️ Hybrid|❌ Docker+PG|⚠️ PG+worker|❌ SaaS|✅ SQLite|✅ Embedded| ／ |**Zero deps**|✅ pip only|❌ Qdrant/PG|❌ PG+vector|❌ PG+3 LLMs|❌ SaaS infra|✅ pip only|✅ pip only|",
+     "lines": [
+      158,
+      159
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 AI 代理生态提供基于 SQLite 的记忆服务组件，而非使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Mnemosyne** is a universal, Hermes-first memory layer that works with any agent framework (Claude Code, Cursor, Codex, OpenWebUI, OpenClaw, or your own custom agent). One `pip install`, one SQLite database. No external services required. ／ - **Episodic memory** -- Long-term storage with sqlite-vec + FTS5 hybrid search ／ **Binary vectors:** Information-theoretic binarization (MIB) compresses 384-dim float32 embeddings into 48 bytes -- 32x reduction. Hamming distance entirely within SQLite. No ANN indices, no external vector DB.",
+   "evidence_lines": [
+    18,
+    147,
+    152
+   ]
+  },
+  "fn": "mnemosyne-oss/mnemosyne",
+  "sha": "bec95b575840",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "852cf94265bb": {
+  "identity": {
+   "one_liner": "本地优先的多引擎桌面数据库 GUI 客户端（Rust+Tauri）",
+   "review": "ByteTable 是一个本地运行的桌面数据库客户端，用单一窗口管理 SQLite、MySQL、PostgreSQL、SQL Server、Redis、DynamoDB、MongoDB、Cassandra、ClickHouse、Typesense 十种引擎的连接。核心机制是 Rust 核心承担全部数据库 I/O，凭据存于系统钥匙串，按数据模型（SQL、键值、文档、宽列等）分层实现各引擎的浏览、编辑、查询与导出界面。适合需要在本地跨多类数据库进行日常数据查看与管理的开发者。需自行用 pnpm/cargo 从源码构建。",
+   "highlights": [
+    "支持十种引擎：SQL 类提供虚拟化数据网格、SQL 编辑器、Explain、结构视图、ER 图与 CSV/SQL 导出",
+    "Redis/DynamoDB/MongoDB/Cassandra/Typesense 各有按数据模型定制的专用界面（键空间浏览、PartiQL 控制台、聚合管道构建器、CQL 查询构建、相关性调试等）",
+    "凭据存于 OS 钥匙串，数据库 I/O 全部在 Rust 核心完成，渲染层仅见不透明连接 id"
+   ],
+   "use_cases": [
+    "在本地桌面同时管理多种 SQL 与 NoSQL 数据库连接并浏览/编辑数据",
+    "通过 ER 图、结构视图和 Explain 面板进行 schema 查看与查询分析",
+    "通过内嵌 REPL 终端（psql/mysql/mongosh/cqlsh 等）直接操作各引擎"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**SQLite · MySQL · PostgreSQL · SQL Server · Redis · DynamoDB · MongoDB · Cassandra · ClickHouse · Typesense**. Many more engines to come. ／ **SQL engines (SQLite / MySQL / PostgreSQL / SQL Server)**",
+     "lines": [
+      5,
+      20
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**SQLite · MySQL · PostgreSQL · SQL Server · Redis · DynamoDB · MongoDB · Cassandra · ClickHouse · Typesense**. Many more engines to come. ／ **SQL engines (SQLite / MySQL / PostgreSQL / SQL Server)**",
+     "lines": [
+      5,
+      20
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**SQLite · MySQL · PostgreSQL · SQL Server · Redis · DynamoDB · MongoDB · Cassandra · ClickHouse · Typesense**. Many more engines to come. ／ **SQL engines (SQLite / MySQL / PostgreSQL / SQL Server)**",
+     "lines": [
+      5,
+      20
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**SQLite · MySQL · PostgreSQL · SQL Server · Redis · DynamoDB · MongoDB · Cassandra · ClickHouse · Typesense**. Many more engines to come. ／ - **SQL Server** plugs into the same relational surface as a fourth engine — T-SQL dialect throughout (bracket-quoted identifiers, `OFFSET…FETCH` paging, `IDENTITY`, the `sys.*` catalog, `dbo` default schema, indexed views in place of materialized views) and a",
+     "lines": [
+      5,
+      29
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**SQLite · MySQL · PostgreSQL · SQL Server · Redis · DynamoDB · MongoDB · Cassandra · ClickHouse · Typesense**. Many more engines to come. ／ **ClickHouse** — the columnar OLAP store as a first-class relational engine: the `analytics`/`default`/`system` database switcher, browse grid + filter builder + row inspector, a Structure tab that renders ENGINE + `ORDER BY` sort key + `PARTITION BY` with `Nu",
+     "lines": [
+      5,
+      41
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为连接/管理多种数据库的桌面客户端工具，为数据库生态服务而非自身以数据库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A free, open-source, **local-first desktop database client** — a TablePlus / BeekeeperStudio ／ **SQLite · MySQL · PostgreSQL · SQL Server · Redis · DynamoDB · MongoDB · Cassandra · ClickHouse · Typesense**. Many more engines to come. ／ - **Shell:** Rust + **Tauri 2** (small binaries; macOS / Linux / Windows).",
+   "evidence_lines": [
+    3,
+    5,
+    49
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Rezwanul-Haque/byteTable",
+  "sha": "852cf94265bb",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3b402cb4d04d": {
+  "identity": {
+   "one_liner": "PHP 自托管网页分析工具，默认用 SQLite 存储数据",
+   "review": "Minilytics 是用 PHP 编写的自托管网页分析工具，记录网站访问并展示仪表盘。面向希望在廉价 Apache 虚拟主机上运行、不需要 Node.js 或独立数据库服务器的用户。默认以 SQLite 存储，可在设置中切换到 MySQL 或 MariaDB，并支持从 Umami 等服务导入历史数据。",
+   "highlights": [
+    "支持 SQLite 默认存储，可切换 MySQL 或 MariaDB",
+    "可从仪表盘或命令行导入 Umami 数据",
+    "数据目录位于 web 根目录之外，含 DB-IP 地理位置库下载"
+   ],
+   "use_cases": [
+    "在共享 Apache 主机上部署网站访问统计",
+    "从 Umami 等分析工具迁移历史数据",
+    "隐私友好的自托管访问量仪表盘"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Runs on a cheap Apache hosting plan, no VPS needed.** It stores data in SQLite by default, and MySQL and MariaDB are also supported. Installation takes three steps. Just upload the archive and you are done. ／ - For MySQL or MariaDB: the `pdo_mysql` PHP extension and a database/user with `CREATE`, `ALTER`, `INDEX`, `SELECT`, `INSERT`, `UPDATE` and `DELETE` permissions ／ To use a managed database, open **Settings → Database**, select MySQL or MariaDB, enter the host, port, database name, username and password, then use **Test connection** before saving. The test can create the named database when it is missing if the database ",
+     "lines": [
+      12,
+      25,
+      47
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Runs on a cheap Apache hosting plan, no VPS needed.** It stores data in SQLite by default, and MySQL and MariaDB are also supported. Installation takes three steps. Just upload the archive and you are done. ／ - PHP 8.1 or later with the `sqlite3` and `pdo_sqlite` extensions enabled ／ SQLite is the default (because it's lightweight and doesn't require a separated server), but you can change it any time !",
+     "lines": [
+      12,
+      23,
+      46
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Runs on a cheap Apache hosting plan, no VPS needed.** It stores data in SQLite by default, and MySQL and MariaDB are also supported. Installation takes three steps. Just upload the archive and you are done. ／ - For MySQL or MariaDB: the `pdo_mysql` PHP extension and a database/user with `CREATE`, `ALTER`, `INDEX`, `SELECT`, `INSERT`, `UPDATE` and `DELETE` permissions ／ To use a managed database, open **Settings → Database**, select MySQL or MariaDB, enter the host, port, database name, username and password, then use **Test connection** before saving. The test can create the named database when it is missing if the database ",
+     "lines": [
+      12,
+      25,
+      47
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该项目以 SQLite/MySQL/MariaDB 作为自身存储分析数据的后端，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Minilytics is a lightweight, privacy-friendly web analytics tool written in PHP. Most analytics tools need Node.js, Docker or a separate database server. **Minilytics doesn't**. ／ - **Runs on a cheap Apache hosting plan, no VPS needed.** It stores data in SQLite by default, and MySQL and MariaDB are also supported. Installation takes three steps. Just upload the archive and you are done. ／ SQLite is the default (because it's lightweight and doesn't require a separated server), but you can change it any time !",
+   "evidence_lines": [
+    10,
+    12,
+    46
+   ]
+  },
+  "fn": "Axthauvin/minilytics",
+  "sha": "3b402cb4d04d",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

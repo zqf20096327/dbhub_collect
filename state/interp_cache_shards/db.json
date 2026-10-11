@@ -8509,5 +8509,352 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a3d9e2bb1943": {
+  "identity": {
+   "one_liner": "轻量自托管应用监控工具，Go 单二进制轮询指标并存入 SQLite",
+   "review": "StatLite 用一个 Go 二进制轮询多个应用的指标端点，将历史数据存储在本地 SQLite 并提供内置图表，面向运行在 VPS 和小型服务器上的应用，不需要部署 Prometheus/Grafana 技术栈。支持 Spring Boot、Quarkus、Micronaut 集成，其他应用可通过固定 JSON 指标端点接入。限制：不含 PromQL、自定义仪表盘、分布式追踪、日志集中或内置告警投递，也没有仪表盘/API 认证。",
+   "highlights": [
+    "单个 Go 二进制轮询多应用，指标与历史数据存储于本地 SQLite",
+    "支持 Spring Boot、Quarkus、Micronaut 集成，其他应用通过固定 JSON 指标端点接入",
+    "采集流量、延迟、CPU、内存、应用健康与主机指标，内置历史图表"
+   ],
+   "use_cases": [
+    "为 VPS 或小型服务器上的应用做自托管监控",
+    "替代 Prometheus/Grafana 技术栈的轻量监控场景",
+    "在资源受限的服务器上采集应用与主机指标"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "metrics locally in SQLite, and provides built-in historical ／ `storage.sqlite_path`, and `polling.interval` are required:",
+     "lines": [
+      11,
+      115
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为应用监控提供服务，使用 SQLite 作为本地指标存储后端，而非用数据库支撑业务应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "StatLite provides lightweight, self-hosted application monitoring for apps running ／ metrics locally in SQLite, and provides built-in historical ／ StatLite is built for resource-constrained servers.",
+   "evidence_lines": [
+    9,
+    11,
+    25
+   ]
+  },
+  "fn": "PVRLabs/statlite",
+  "sha": "a3d9e2bb1943",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "12938da99c1f": {
+  "identity": {
+   "one_liner": "自托管实时后端：单二进制内置数据库、实时查询、认证、存储与仪表盘",
+   "review": "Concile 是一个用 TypeScript 编写后端逻辑的开源自托管实时后端平台：开发者在服务端写普通函数，数据变更时自动推送更新到前端，免去 WebSocket/REST/轮询等胶水代码。默认内嵌 SQLite，可用单个参数切换到 PostgreSQL，附带文件存储、认证、定时任务和仪表盘。适合希望快速构建全栈应用、自托管部署的前端或全栈开发者，当前处于 pre-1.0 阶段。",
+   "highlights": [
+    "提供基于 TypeScript 函数的实时响应式数据查询与变更机制，写入后自动推送更新到客户端",
+    "默认内置 SQLite 数据库，支持通过参数切换为 PostgreSQL，无需迁移代码",
+    "内置文件存储（磁盘或 S3/R2）、认证、定时任务调度、工作流与实时仪表盘"
+   ],
+   "use_cases": [
+    "为 React/Next.js 应用快速搭建实时后端（协作、消息、状态同步类场景）",
+    "自托管部署替代托管式后端服务，运行自有服务器或 Docker 容器",
+    "从 Convex 迁移的 TypeScript 项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "* 🗄️ **A database built right in.** We use an embedded SQLite database by default so there is zero config. When you need to grow, switch to Postgres with a single flag. You keep the same code and run zero migrations.",
+     "lines": [
+      82
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "* 🗄️ **A database built right in.** We use an embedded SQLite database by default so there is zero config. When you need to grow, switch to Postgres with a single flag. You keep the same code and run zero migrations.",
+     "lines": [
+      82
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Concile 使用内嵌 SQLite（默认）或 PostgreSQL 作为自身存储数据的数据库，属于使用数据库的应用/平台而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "FSL-1.1-Apache-2.0，每次发布两年后自动转为 Apache 2.0；不得将其本身作为托管服务转售",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "* 🗄️ **A database built right in.** We use an embedded SQLite database by default so there is zero config. When you need to grow, switch to Postgres with a single flag. You keep the same code and run zero migrations. ／ Concile uses the FSL-1.1-Apache-2.0 license. You can use it, modify it, and self-host it, and yes, that includes commercial work. There is really only one rule: you cannot resell Concile itself as a hosted service. Every release automatically converts to a full Apache 2.0 license after two years. Self-hosting on a single node is always free. There is no vendor lock-in and no rug to pull. ／ Concile is currently pre-1.0, but it works end to end today. The reactive engine and production tooling are already built and tested on both Node and Bun. The distributed tier and search features are up next.",
+   "evidence_lines": [
+    82,
+    105,
+    109
+   ]
+  },
+  "fn": "concile-dev/concile",
+  "sha": "12938da99c1f",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d36f4d518b66": {
+  "identity": {
+   "one_liner": "Python 清洁架构开发框架，提供配置管理、适配器与BDD支持",
+   "review": "ArchiPy 是面向 Python 3.14+ 的应用开发框架，实现标准化配置注入、实体/DTO 建模、通用适配器与 Mock，并集成 Behave 做 BDD 测试。通过 pip 可选依赖按需安装适配器（如 postgres、redis、fastapi），适合按清洁架构原则构建现代 Python 应用的开发者使用。",
+   "highlights": [
+    "提供配置管理与注入、标准化实体/DTO 和类型安全工具",
+    "内置 Redis、SQLAlchemy 等适配器及测试 Mock，支持可选依赖安装（archipy[postgres]）",
+    "集成 Behave 实现 BDD 测试支持"
+   ],
+   "use_cases": [
+    "按清洁架构原则组织 Python 应用开发",
+    "为使用 Redis、SQLAlchemy 等组件的应用提供适配层与测试 Mock",
+    "通过 BDD 进行功能验证与测试流程标准化"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "pip install archipy[postgres] # PostgreSQL support",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供适配器、配置与测试工具供应用开发使用，属数据库生态周边组件而非最终应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "ArchiPy is a Python framework designed to provide a standardized, scalable, and maintainable architecture for modern applications. Built with Python 3.14+, it offers a suite of tools, utilities, and best practices to streamline configuration management, testing, and development workflows while adhering to clean architecture principles. ／ - **Adapters & Mocks**: Pre-built adapters for Redis, SQLAlchemy, and email with testing mocks ／ pip install archipy[postgres]     # PostgreSQL support",
+   "evidence_lines": [
+    25,
+    47,
+    90
+   ]
+  },
+  "fn": "SyntaxArc/ArchiPy",
+  "sha": "d36f4d518b66",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9dd50e1c6db4": {
+  "identity": {
+   "one_liner": "ClickHouse 的 TypeScript schema 管理与迁移 CLI",
+   "review": "chkit 是面向 ClickHouse 的开源命令行工具，用 TypeScript DSL 在代码库中定义表、视图、物化视图和字典，生成可审查的迁移 SQL，并提供 API 数据同步、数据回填、schema 漂移检测和类型代码生成。适合以 ClickHouse 为存储、希望在 CI 中管理 schema 与数据管道的 TypeScript（及通过 chkit-py 的 Python）开发团队使用，当前处于 beta，公共 API 仍在演进。",
+   "highlights": [
+    "在代码中定义 ClickHouse 表、视图、物化视图和字典，可从现有库拉取 schema",
+    "生成迁移 SQL 并支持人工审查后应用，提供数据回填与中断恢复",
+    "支持从 HTTP API 等来源同步数据到 ClickHouse，并在 CI 中检测 schema 漂移"
+   ],
+   "use_cases": [
+    "以代码方式管理 ClickHouse schema 并在 CI 中执行迁移检查",
+    "将 HTTP API 数据定期同步入 ClickHouse",
+    "为 TypeScript 项目生成与 schema 一致的类型定义"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**Manage ClickHouse schemas and sync API data.** ／ chkit is an open-source CLI for ClickHouse. Review migration SQL before applying it. Keep table definitions and API readers in your repository, alongside the code that uses them. Run the CLI from the terminal or CI. ／ - **Define tables and views.** Keep ClickHouse tables, views, materialized views, and dictionaries in code. Import the schema from an existing database.",
+     "lines": [
+      3,
+      9,
+      21
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "chkit 是为 ClickHouse 提供 schema 管理、迁移与数据同步的 CLI 工具，属数据库生态服务组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "chkit is an open-source CLI for ClickHouse. Review migration SQL before applying it. Keep table definitions and API readers in your repository, alongside the code that uses them. Run the CLI from the terminal or CI. ／ - **Migrate and backfill data.** Handle complex schema changes and backfill data across materialized views. Track progress and resume interrupted runs. ／ - **Check schema drift in CI.** Detect pending migrations, checksum mismatches, and live schema differences with `chkit check`.",
+   "evidence_lines": [
+    9,
+    22,
+    25
+   ]
+  },
+  "fn": "obsessiondb/chkit",
+  "sha": "9dd50e1c6db4",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6b9caa1bb255": {
+  "identity": {
+   "one_liner": "Python 项目诊断平台，提供执行追踪、内存剖析与健康评分",
+   "review": "PyInspect 是一个面向 Python 开发者的诊断工具集，提供动态执行追踪、基于 tracemalloc 的内存剖析、日志异常检测、存储体积分析和项目健康评分，并通过 PySide6 桌面界面和 CLI 命令运行，结果可持久化到 SQLite 并导出 HTML/JSON/CSV 报告。适用于本地开发环境的代码诊断场景，需 Python 3.11+ 且动态分析前会提示确认。",
+   "highlights": [
+    "提供动态执行追踪，捕获调用树、逐行执行、函数耗时和变量状态变化",
+    "通过 tracemalloc 对比差分快照跟踪进程 RSS 与堆分配，标记可疑内存增长",
+    "支持将扫描结果持久化到 SQLite，并可导出 HTML、JSON、CSV 报告"
+   ],
+   "use_cases": [
+    "Python 项目的内存泄漏排查与堆剖析",
+    "日志文件的模式异常与错误突增分析",
+    "项目存储体积统计与重复文件检测"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`python -m app.main scan . --save`|Scan workspace and persist results to SQLite database|",
+     "lines": [
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其将扫描与健康评分结果持久化到 SQLite 作为自身数据存储（L14、L38），而非为数据库生态提供工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "- **Unified Health Score Engine**: Objectively evaluates project health (0–100) and stores historical runs in SQLite for comparison. ／ |`python -m app.main scan . --save`|Scan workspace and persist results to SQLite database|",
+   "evidence_lines": [
+    14,
+    38
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "abinjoyal/PyInspect",
+  "sha": "6b9caa1bb255",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

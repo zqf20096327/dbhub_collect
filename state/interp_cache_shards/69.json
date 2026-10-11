@@ -9318,5 +9318,311 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a8aef31cf6b0": {
+  "identity": {
+   "one_liner": "在 Laravel Herd/Homestead 一键安装或更新 phpMyAdmin 的 shell 脚本",
+   "review": "该仓库提供一个 shell 脚本，用于在 macOS 的 Laravel Herd 或 Homestead 虚拟机中安装、更新 phpMyAdmin。脚本会校验下载的 checksum、下载失败时不改动现有安装，并保留用户的 config.inc.php 配置。适用于使用 Laravel 本地开发环境、需要网页端管理 MySQL 数据库的开发者。",
+   "highlights": [
+    "一条 curl 命令完成 phpMyAdmin 安装或更新",
+    "下载后对照官方发布 checksum 校验",
+    "更新时保留已有 config.inc.php，下载失败时不动现有安装"
+   ],
+   "use_cases": [
+    "在 Laravel Herd（macOS）本地环境中部署 phpMyAdmin",
+    "在 Laravel Homestead 虚拟机中安装 phpMyAdmin",
+    "重复执行脚本以更新 phpMyAdmin 版本"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "3. Go to http://phpmyadmin.test and log in with your MySQL user, for example `root` with an empty password on DBngin or Herd Pro.",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "dbs": [
+    "MySQL"
+   ],
+   "eco": "tool",
+   "eco_why": "脚本用于安装 phpMyAdmin 这一数据库管理工具，服务于 MySQL 数据库管理场景",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Shell script that installs or updates phpMyAdmin ／ 3. Go to http://phpmyadmin.test and log in with your MySQL user, for example `root` with an empty password on DBngin or Herd Pro.",
+   "evidence_lines": [
+    3,
+    18
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ],
+   "status_hint": "deprecated"
+  },
+  "fn": "grrnikos/pma",
+  "sha": "a8aef31cf6b0",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "46f2803c4788": {
+  "identity": {
+   "one_liner": "Nuxt 4 全栈开发的校园广播站点歌与排期管理系统",
+   "review": "该项目是一个运行于 Nuxt 4 全栈框架的校园广播站点歌系统，提供点歌投票、拖拽排期、通知推送、权限控制和数据库备份管理等功能，面向校园广播站的管理员与普通用户。数据层使用 Drizzle ORM 操作 Neon Serverless PostgreSQL，Redis 仅承担验证码与限流等临时状态，支持 Vercel/Netlify 一键部署及 Docker、Linux 脚本等多种部署方式。",
+   "highlights": [
+    "提供点歌投票、拖拽排期、学期管理与打印导出等广播站业务功能",
+    "使用 Drizzle ORM + Neon Serverless PostgreSQL 作为业务数据存储，内置数据库备份、重置与自检功能",
+    "支持 OAuth、WebAuthn、TOTP 双因素认证及多级角色权限管理"
+   ],
+   "use_cases": [
+    "校园广播站收集歌曲投稿并投票选出播出曲目",
+    "管理员通过拖拽界面安排每日播出排期并导出打印",
+    "需要多角色权限与学期维度管理的点歌平台搭建"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL**：关系型数据库，支持复杂查询和事务处理 ／ - **数据读取**：PostgreSQL 是唯一业务数据源，歌曲、排期和用户状态不使用 Redis 缓存 ／ 1. `DATABASE_URL`：PostgreSQL数据库连接地址",
+     "lines": [
+      104,
+      118,
+      137
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "系统使用 PostgreSQL 存储歌曲、排期和用户状态等自身业务数据，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **PostgreSQL**：关系型数据库，支持复杂查询和事务处理 ／ - **数据库**：使用 Drizzle ORM + Neon Database，提供类型安全和高性能的数据库操作 ／ - **数据读取**：PostgreSQL 是唯一业务数据源，歌曲、排期和用户状态不使用 Redis 缓存",
+   "evidence_lines": [
+    104,
+    116,
+    118
+   ]
+  },
+  "fn": "laoshuikaixue/VoiceHub",
+  "sha": "46f2803c4788",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d477204bb097": {
+  "identity": {
+   "one_liner": "自托管酿酒管理 Flask 应用，基于 Docker Compose 与 PostgreSQL",
+   "review": "Brew-Web 是一个自托管 Flask 应用，用于管理酿酒配方、批次、测量、酵母资料、日历和计算器，以非 root 容器运行并搭配 PostgreSQL 存储。面向家庭酿造者/自托管用户，通过 Docker Compose 部署，支持角色账户、版本化迁移、管理页备份恢复，设计为置于 HTTPS 反向代理之后。",
+   "highlights": [
+    "提供配方与原料换算、批次跟踪、重力测量、ABV 及多种酿酒计算器",
+    "支持基于角色的账户管理与从管理页面进行 PostgreSQL 备份恢复",
+    "使用 Alembic 版本化数据库迁移并在启动时自动升级"
+   ],
+   "use_cases": [
+    "家庭酿造者自托管管理配方与批次记录",
+    "通过 Docker Compose 在本地或私有服务器部署使用",
+    "需要按公制/英制单位换算记录酿酒测量数据"
+   ],
+   "use_cases_note": ""
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "container with PostgreSQL and is designed to sit behind an HTTPS reverse proxy. ／ - PostgreSQL backup and restore from the administration page ／ verified PostgreSQL backup outside the container host, read release notes before",
+     "lines": [
+      10,
+      18,
+      31
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其是以 PostgreSQL 存储数据的自托管 Flask 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Brew-Web is a self-hosted Flask application for managing brewing recipes, batches, ／ container with PostgreSQL and is designed to sit behind an HTTPS reverse proxy. ／ - PostgreSQL backup and restore from the administration page",
+   "evidence_lines": [
+    8,
+    10,
+    18
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "anndrox/brew-web",
+  "sha": "d477204bb097",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bf05b63f44d0": {
+  "identity": {
+   "one_liner": "能力安全沙箱运行时，打包 Lua/JS/WASM 应用为单二进制，内置 SQLite",
+   "review": "Hull 是一个面向 AI 原生应用的加固运行时：应用在 manifest 中声明文件、环境变量、外联主机、数据库资源等能力，运行时在内核级边界内强制执行，并通过 hull build 生成小于 10MB 的单静态二进制。面向需要分发可信 AI 生成代码的开发者；内置 SQLite 存储、30+ 子命令覆盖构建/测试/签名/SBOM 等生命周期，发布依赖 Ed25519 签名验证。",
+   "highlights": [
+    "通过 manifest 声明能力并由运行时强制执行，含能力审计日志（--audit）",
+    "hull build 生成单静态可执行文件，支持 Linux/macOS/Windows/FreeBSD/OpenBSD/NetBSD",
+    "提供 Ed25519 签名验证、发布清单审计与 CycloneDX/SPDX SBOM 输出"
+   ],
+   "use_cases": [
+    "分发 AI 生成且需能力约束的应用为单文件可执行程序",
+    "构建带沙箱边界的 Lua/JavaScript/WASM 服务端应用",
+    "为合规流水线生成带签名与 SBOM 的发布产物"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`postgres`|pure-C PostgreSQL wire backend (no libpq)|a `postgres://` / `postgresql://` DSN on `hull/db`|",
+     "lines": [
+      224
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|`mysql`|pure-C MySQL / MariaDB wire backend (no libmysql)|a `mysql://` / `mariadb://` DSN on `hull/db`|",
+     "lines": [
+      225
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|`mysql`|pure-C MySQL / MariaDB wire backend (no libmysql)|a `mysql://` / `mariadb://` DSN on `hull/db`|",
+     "lines": [
+      225
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Hardened, capability-secure runtime infrastructure for AI-native systems. Lua, JavaScript, and WASM execute under declared, kernel-enforced capability boundaries. SQLite storage. Single static binary. ／ |<code>hull test &lt;dir&gt;</code>|In-process test runner (no TCP, memory SQLite)|",
+     "lines": [
+      5,
+      118
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它是通用应用运行时，内置 SQLite 仅作为自带存储，并非专门为数据库生态服务的工具或纯粹使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Hardened, capability-secure runtime infrastructure for AI-native systems. Lua, JavaScript, and WASM execute under declared, kernel-enforced capability boundaries. SQLite storage. Single static binary. ／ The app declares its capabilities (files, environment variables, outbound hosts, database resources) in a manifest. The runtime enforces those bounds. `hull build` produces a single static executable (under 10 MB) that runs on Linux, macOS, Windows, FreeBSD, OpenBSD, and NetBSD. Code, schema, static assets, tests, and signatures all packaged together. The resulting binary is the product.",
+   "evidence_lines": [
+    5,
+    9
+   ]
+  },
+  "fn": "artalis-io/hull",
+  "sha": "bf05b63f44d0",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

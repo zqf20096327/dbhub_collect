@@ -9365,5 +9365,242 @@
   "generated_at": "2026-10-08",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "33fd4bd66028": {
+  "identity": {
+   "one_liner": "可视化 AI 图像生成工作室，含节点式工作流编辑器与 SQLite 存储",
+   "review": "这是一个开源 AI 图像生成应用，提供提示词生成、图片画廊、React Flow 节点式多步骤生成流水线、风格预设与生成历史，通过 OpenRouter 调用多种图像模型并记录成本。面向需要构建和复用图像生成流程的用户，使用 Hono 后端和 SQLite 持久化工作流与生成记录。",
+   "highlights": [
+    "支持基于 React Flow 的节点式可复用生成流水线编辑",
+    "通过 OpenRouter 调用多种图像模型，运行时拉取可用模型列表",
+    "持久化生成历史（提示词、模型、成本、图片），支持节点版本快照恢复"
+   ],
+   "use_cases": [
+    "批量生成保持主体一致的角色/产品图像",
+    "搭建可复用的多步图像生成工作流并对比输出",
+    "通过 ?agent=true 界面供 AI 代理操作生成任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Database**|SQLite|",
+     "lines": [
+      63
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其为一个使用 SQLite 存储工作流与生成记录的应用模板，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**Database**|SQLite| ／ schema.sql    — Canonical database schema (workflows, generations) ／ On a fresh deploy, Clawnify applies `schema.sql` to an empty database once and records a baseline hash in the deployed instance's tracking table. From then on, the deployed instance evolves via auto-generated migration files (Clawnify's app-builder agent authors them when the user asks for schema changes). Existing deployed instances are not retroactively migrated when this file changes — only new deploys pick up the updated baseline.",
+   "evidence_lines": [
+    63,
+    76,
+    86
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "clawnify/OpenStudio",
+  "sha": "33fd4bd66028",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c9a17921f219": {
+  "identity": {
+   "one_liner": "Rust 原生混沌工程平台，运行弹性实验并内置 DuckDB 分析",
+   "review": "Tumult 提供从 CLI 或 MCP 客户端提交可观测、可重复的弹性实验的能力，故障注入涵盖容器、数据库、网络、Kubernetes 等；tumultd 守护进程将 OTLP 遥测摄入嵌入式 DuckDB 存储，并提供审批工作流、RBAC、Web UI 和合规证据报告。面向需要治理混沌实验的运维与平台团队，要求 Rust 1.92+ 与 Docker。",
+   "highlights": [
+    "提供 CLI 与 40 工具的 MCP server，执行容器、数据库、Kafka、网络等故障注入实验",
+    "tumultd 守护进程内置 DuckDB 分析存储，接收 OTLP/gRPC 与 OTLP/HTTP 遥测",
+    "提供风险分级审批、RBAC、哈希链审计追踪及 DORA/NIS2/PCI-DSS 等合规证据映射"
+   ],
+   "use_cases": [
+    "对 Redis、PostgreSQL、Kafka 等服务执行受治理的混沌实验与弹性验证",
+    "通过 Web UI 与审批工作流管理生产环境实验的准入与审计",
+    "生成面向 DORA/NIS2/ISO 27001/SOC 2 的合规证据报告"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "docker compose -f docker/docker-compose.yml up -d --wait postgres redis kafka mysql sshd",
+     "lines": [
+      48
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "docker compose -f docker/docker-compose.yml up -d --wait postgres redis kafka mysql sshd",
+     "lines": [
+      48
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|`TUMULT_CLICKHOUSE_URL`|Enable ClickHouse/SigNoz correlation.|",
+     "lines": [
+      246
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为混沌工程平台，对数据库执行故障注入实验，属于为数据库生态服务的测试工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Tumult is a Rust-native chaos engineering platform for running observable, ／ - Script plugins for containers, databases, Kafka, load testing, network ／ - **Always-on evidence.** The `tumultd` daemon ingests OTLP telemetry",
+   "evidence_lines": [
+    9,
+    62,
+    88
+   ]
+  },
+  "fn": "mwigge/tumult",
+  "sha": "c9a17921f219",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c3fad6feea5a": {
+  "identity": {
+   "one_liner": "校园请求统一引擎：单请求模型驱动投诉/请假/证书工作流",
+   "review": "DORMDESK 是为 BPUT Hackathon 2026 构建的校园事务原型，用统一的 Universal Request Engine 处理投诉、请假、出门条、证书等工作流，包含状态机、规则路由、策略引擎、SLA 自动升级和审计记录。面向学生与校方多层权限角色使用，基于 Next.js + Prisma + SQLite，README 明确说明刻意不使用 LLM，数据层以 SQLite 本地运行为限。",
+   "highlights": [
+    "单一请求模型支撑投诉、请假、证书等多类工作流，含状态机与追加式审计记录",
+    "内置策略引擎、SLA 时钟与自动升级到指挥中心的调度",
+    "支持多校区隔离授权、JWT 会话、离线请求队列与 CSV 导出"
+   ],
+   "use_cases": [
+    "校园投诉/维修/请假/证书申请的统一提交与跟踪",
+    "多层级的工单路由、SLA 监控与自动升级管理",
+    "黑客松/原型环境下的本地可运行校园平台演示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ - SQLite ／ 5. **Why SQLite?**",
+     "lines": [
+      11,
+      234,
+      320
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- PostgreSQL for production-scale relational persistence",
+     "lines": [
+      356
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它是使用 SQLite 存储数据的校园应用，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " SQLite ／ - SQLite ／ 5. **Why SQLite?**",
+   "evidence_lines": [
+    11,
+    234,
+    320
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "subham-exe/DORMDESK",
+  "sha": "c3fad6feea5a",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

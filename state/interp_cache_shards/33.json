@@ -7858,5 +7858,76 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1da09152f67a": {
+  "identity": {
+   "one_liner": "PostgreSQL 多平台预编译二进制分发项目",
+   "review": "该项目为 Linux、macOS 和 Windows 提供与 Rust 支持平台对齐的 PostgreSQL 预编译二进制安装包，版本号沿用 PostgreSQL 主次版本并附构建号。README 说明了安装包命名规则、本地构建脚本（依赖 Docker、vcpkg、Perl 等）及测试方法，适合需要以编程方式获取 PostgreSQL 二进制的 Rust 开发者或 CI 环境。",
+   "highlights": [
+    "提供 Linux/macOS/Windows 的 PostgreSQL 预编译二进制",
+    "版本号与 PostgreSQL 官方版本对齐并含构建号",
+    "提供可本地运行的按平台构建与测试脚本"
+   ],
+   "use_cases": [
+    "在无系统包管理器或官方安装源的环境中安装 PostgreSQL",
+    "在 Rust 项目或 CI 中以编程方式获取指定版本的 PostgreSQL 二进制",
+    "为特定 target triple（如 musl、ARM64）自行构建 PostgreSQL 安装包"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL binaries for Linux, MacOS and Windows; releases aligned with Rust supported platforms. ／ Installation packages use the pattern `postgresql-<version>-<target>.<extension>`, where`<version>` is the",
+     "lines": [
+      7,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目本身是分发 PostgreSQL 二进制的构建与安装工具链，服务于该数据库的部署使用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "PostgreSQL binaries for Linux, MacOS and Windows; releases aligned with Rust supported platforms. ／ The build workflow calls the same per-OS Bash scripts that can be run locally. Pass the full project",
+   "evidence_lines": [
+    7,
+    25
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "theseus-rs/postgresql-binaries",
+  "sha": "1da09152f67a",
+  "source": "readme",
+  "generated_at": "2026-10-10",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

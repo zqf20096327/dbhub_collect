@@ -8034,5 +8034,152 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "5ae80fd89e81": {
+  "identity": {
+   "one_liner": "AI 原生企业工作区，以 Linux 内核权限系统和 markdown 文件为核心",
+   "review": "一个自托管的企业协作工作区：文档与任务以 markdown 文件存放在自有服务器，权限由 Linux 内核的 OS 用户机制决定，Postgres 仅作为可随时重建的检索索引并通过 RLS 镜像 Unix 权限。AI 代理以提问者的系统用户身份运行。适合想要数据自持、文件即知识库且允许多代理协作的团队；需要整台 Ubuntu 24.04 机器，不能运行在非特权容器中。",
+   "highlights": [
+    "文档与任务为纯 markdown 文件，权限由 Linux 内核（每用户一个 OS 账户 + runuser）实现",
+    "Postgres 作为可丢弃索引，通过 RLS 镜像 Unix 权限，搜索与 SQL 均受权限约束",
+    "提供基于 CRDT 的多人编辑、git 版本历史，以及以用户身份运行的 AI 代理支持"
+   ],
+   "use_cases": [
+    "团队自托管的知识库与任务管理，权限细粒度到文件级",
+    "让 AI 代理以同事身份读写企业知识库文档",
+    "从 Notion、Obsidian、Confluence、Drive、SharePoint 或 git 迁移现有文档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "3. **Postgres.** A *disposable* index of those files: drop it and rebuild it from ／ processes as individual users, and relies on systemd and Postgres peer auth. A ／ right modes and ACLs, creates the Postgres cluster objects and RLS schema, writes",
+     "lines": [
+      61,
+      119,
+      135
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该系统自身使用 Postgres 作为内部索引存储，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "源码公开，商用超 3 用户需商业许可，每个发布版本四年后转为 Apache 2.0（时间性双许可）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "3. **Postgres.** A *disposable* index of those files: drop it and rebuild it from ／ 1. **Files.** Plain markdown in a git repo at `/srv/kb`. A document is a file, a ／ days while you evaluate it. Above that, production use in an organisation needs a",
+   "evidence_lines": [
+    61,
+    56,
+    23
+   ]
+  },
+  "fn": "Ollsoft-ai/ollsoft-company-os",
+  "sha": "5ae80fd89e81",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a8ab090f944f": {
+  "identity": {
+   "one_liner": "面向智能体的语义层运行时，将语义请求编译为引擎中立的 SQL",
+   "review": "Metis 是一个开源语义层运行时，位于 AI 智能体/应用与分析型数据库之间，基于 Ossie 模型定义指标与维度，通过发现、校验、解析、规划和编译生成 SQL，并提供 CLI、MCP、REST 与嵌入式 Go API 四种入口。内置 Doris、ClickHouse、DuckDB 编译目标，不执行跨库查询。适用于需要为智能体提供受治理指标查询的团队。",
+   "highlights": [
+    "将结构化语义请求经过校验、解析、规划、编译生成确定性 SQL，可离线编译",
+    "通过 MCP 和 REST 暴露语义发现、SQL 编译、指标查询、同期对比与归因分解服务",
+    "内置 Doris、ClickHouse、DuckDB 方言渲染器，SQL 保留占位符并支持参数化校验"
+   ],
+   "use_cases": [
+    "为 AI 智能体提供指标/维度的语义发现与 SQL 编译工具",
+    "在 CI 中对语义模型做离线校验、diff 与编译回归测试",
+    "以 REST/嵌入式 Go 包将语义查询能力集成进分析应用"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "platform. The oracle must not favor Metis SQL spelling or output aliases.",
+     "lines": [
+      287
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "database access. Built-in targets are Doris, ClickHouse, and DuckDB. ／ Use `--dialect DORIS`, `CLICKHOUSE`, or `DUCKDB` to select a target. Add repeatable ／ |`metis semantic validate --online`|Inspect query dependencies and check Doris/ClickHouse or optional DuckDB EXPLAIN acceptance.| ／ ClickHouse supports server-bound query and policy parameters during online",
+     "lines": [
+      19,
+      169,
+      182,
+      205
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为分析数据库提供语义解析与 SQL 编译的中间层服务，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "It sits between AI agents or applications and analytical databases, turning ／  database access. Built-in targets are Doris, ClickHouse, and DuckDB. ／ |MCP|Give an agent tools for semantic discovery, SQL compilation, and bounded analytics over stdio or HTTP.|",
+   "evidence_lines": [
+    4,
+    19,
+    45
+   ]
+  },
+  "fn": "meaningforge/metis",
+  "sha": "a8ab090f944f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
