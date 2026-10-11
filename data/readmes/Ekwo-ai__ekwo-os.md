@@ -490,7 +490,7 @@ installed.
 
 ## Licence
 
-[AGPL-3.0-only](LICENSE) © Karuna Co OÜ (Estonian registry code 14510673),
+[AGPL-3.0-only](LICENSE) © EKWO OÜ (Estonian registry code 14510673),
 trading as Ekwo. Installing Ekwo OS and running it for your own organisation —
 modified or not — puts no obligation on you. The share-alike clause applies
 only if you modify it *and* offer that modified version to people outside your

@@ -83,9 +83,12 @@ a Gotify server, an ntfy server, a Discord webhook, a mail server, a syslog serv
 - **Rules** with conditions on title and text (whole word, contains, regular expression) and effects: level,
   bundling key, bundle title, all-clear, push behaviour, icon, or drop. All matching rules apply, top to bottom.
 - **A live inbox** with search, unread, archive and keyboard shortcuts (`?` shows them).
-- **One operator account** with a password, optionally OpenID Connect; for authentik there is a one-button setup.
-  The account at the provider is linked once, signed in, under Settings, Sign-in; from then on exactly that one
-  gets in, and the password can be switched off.
+- **One operator account** with a password, optionally sign-in through OpenID Connect providers: authentik,
+  Microsoft Entra ID (also `common` and `organizations`), Keycloak, Authelia, Pocket ID and the like, several side by
+  side, each with its own button. For authentik there is a one-button setup (or a blueprint to import). The account
+  is linked to a provider once, signed in, under Settings, Account; from then on exactly that identity gets in, and
+  the password can be switched off. If the provider fails, `python -m app.reset_password` in the container switches
+  it back on.
 - **Backup and restore:** a copy of the database every night (or weekly, monthly, off), one before every update
   that changes the database, and one whenever you press the button. Download it as an AES-256 ZIP that 7-Zip opens
   without nexsift; it carries the key, so tokens and credentials come back with it. Restoring shows first what the
@@ -159,6 +162,16 @@ Set two addresses under Settings: the **public address** you type in the browser
 and the **address for senders at home** (`192.168.1.10`). Syslog, email and the Gotify and ntfy doors do not go
 through a proxy, so the setup hints have to send the devices to nexsift directly.
 
+If the proxy ends TLS, nexsift itself only sees `http`. It believes the proxy's `X-Forwarded-For` and
+`X-Forwarded-Proto` only from the addresses you list in `NEXSIFT_TRUSTED_PROXIES`, never from anybody else. Out of
+the box the list is empty and nobody is believed, not even `127.0.0.1`. Put the proxy's address or network there: a
+proxy in another container shows up with its address in the Docker network, one on the same host with host
+networking as `127.0.0.1`. Otherwise the authentik card under Settings, Sign-in warns that the address nexsift sees
+differs from the one in your browser, the sign-in cookie has no Secure flag, and every visitor counts as the proxy
+for the sign-in brake. The authentik button
+never registers a guessed address: without a public address it offers the one your browser uses and registers
+exactly that.
+
 ## Where things are stored
 
 Everything lives in `/data`. Mount it from a local disk, never from an SMB or NFS share; SQLite's locking does not
@@ -187,11 +200,11 @@ Forgot the password? In the container: `python -m app.reset_password`.
 |---|---|---|
 | `NEXSIFT_DATA_DIR` | `/data` | Data directory |
 | `NEXSIFT_SECRET_KEY` | created on first start | Protects the stored secrets; when set, it wins over `secret.key` |
-| `NEXSIFT_PUBLIC_URL` | from the request | The address people and senders use to reach nexsift; for the setup hints and the OIDC redirect. The setting under Settings wins when set |
+| `NEXSIFT_PUBLIC_URL` | from the request | The address people and senders use to reach nexsift; for the setup hints and the redirect address of the sign-in providers (`/api/oidc/<short name>/callback`; a provider set up in 0.11 or before keeps `/api/oidc/callback`). The setting under Settings wins when set |
 | `NEXSIFT_PUBLIC_PORTS` | the inner ports | The ports as seen from outside, for the setup hints: `web=8490,gotify=8491,ntfy=8492,smtp=25,syslog=514` |
-| `NEXSIFT_TRUSTED_PROXIES` | none | Addresses or networks of reverse proxies whose `X-Forwarded-For` is believed, comma separated |
+| `NEXSIFT_TRUSTED_PROXIES` | none | Addresses or networks of reverse proxies whose `X-Forwarded-For` and `X-Forwarded-Proto` are believed, comma separated. Only they can tell nexsift that a request came in over `https`. Empty trusts nobody, `127.0.0.1` included; a proxy on the same host with host networking needs `127.0.0.1` here |
 | `NEXSIFT_SESSION_DAYS` | `30` | A browser session ends after this many days |
-| `NEXSIFT_COOKIE_SECURE` | `auto` | `on`, `off` or `auto` (from the request or `X-Forwarded-Proto`) |
+| `NEXSIFT_COOKIE_SECURE` | `auto` | `on`, `off` or `auto` (from the request; `X-Forwarded-Proto` only from a trusted proxy) |
 | `NEXSIFT_LOG_LEVEL` | empty | Usually left out: the level is set under Settings, Log. When set (`quiet`, `normal`, `detailed`, `trace`, or `WARNING`, `INFO`, `DEBUG`) it wins and the interface cannot change it; the way out when nexsift does not even start |
 | `NEXSIFT_API_DOCS` | `false` | Serves `/api/docs` and `/api/openapi.json` |
 | `NEXSIFT_GOTIFY_PORT`, `NEXSIFT_NTFY_PORT`, `NEXSIFT_SMTP_PORT`, `NEXSIFT_SYSLOG_PORT` | `8001`, `8002`, `2525`, `5514` | Ports inside the container; `0` turns that door off |
@@ -200,7 +213,8 @@ Forgot the password? In the container: `python -m app.reset_password`.
 ## Security in short
 
 - Passwords are hashed with Argon2id. Ten failed sign-ins in a row lock the account for fifteen minutes.
-- Through OpenID Connect only the identity linked while signed in gets in; a matching email address is not enough.
+- Through OpenID Connect only the identity linked while signed in gets in; a matching email address is never enough,
+  not even a confirmed one. Tokens are checked against the provider's keys (no HS256), with PKCE, state and nonce.
 - Every source has its own token or topic, long enough not to be guessed. Tokens are stored as hashes for the
   check and encrypted for showing the setup again. An unknown token or topic is refused, never created.
 - Every changing request of the interface needs the header `X-Requested-By: nexsift`.

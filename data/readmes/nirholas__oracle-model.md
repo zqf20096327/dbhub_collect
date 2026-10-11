@@ -1,5 +1,10 @@
 # @three-ws/oracle-model
 
+<!-- three.ws:badges -->
+[![GitHub stars](https://img.shields.io/github/stars/nirholas/oracle-model?style=flat&logo=github)](https://github.com/nirholas/oracle-model/stargazers) [![License](https://img.shields.io/github/license/nirholas/oracle-model?style=flat)](https://github.com/nirholas/oracle-model/blob/HEAD/LICENSE) [![Last commit](https://img.shields.io/github/last-commit/nirholas/oracle-model?style=flat)](https://github.com/nirholas/oracle-model/commits) [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat)](https://github.com/nirholas/oracle-model/pulls) [![AI agent friendly](https://img.shields.io/badge/AI%20agents-AGENTS.md%20%2B%20llms.txt-6d5dfc?style=flat)](https://github.com/nirholas/oracle-model/blob/HEAD/AGENTS.md)
+<!-- /three.ws:badges -->
+
+
 **The three.ws Oracle, running on your machine, with the real weights.**
 
 The Oracle watches every pump.fun launch for its first ninety seconds and scores
@@ -223,6 +228,33 @@ what a property of the coin is supposed to do.
 - **Live feed**: https://three.ws/oracle
 
 Apache-2.0
+
+<!-- three.ws:growth -->
+## Support the project
+
+If oracle-model saves you time, **[star it on GitHub](https://github.com/nirholas/oracle-model)**. Stars are how other developers and AI agents find the repositories worth trusting, and they cost you one click.
+
+Know someone who would use it? [Post on X](https://twitter.com/intent/tweet?text=oracle-model%3A%20The%20three.ws%20Oracle%20conviction%20model%2C%20running%20locally&url=https%3A%2F%2Fgithub.com%2Fnirholas%2Foracle-model) · [Share on Bluesky](https://bsky.app/intent/compose?text=oracle-model%3A%20The%20three.ws%20Oracle%20conviction%20model%2C%20running%20locally%20https%3A%2F%2Fgithub.com%2Fnirholas%2Foracle-model) · [Share on LinkedIn](https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fgithub.com%2Fnirholas%2Foracle-model) · [Submit to Hacker News](https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fgithub.com%2Fnirholas%2Foracle-model&t=oracle-model%3A%20The%20three.ws%20Oracle%20conviction%20model%2C%20running%20locally) · [Share on Reddit](https://www.reddit.com/submit?url=https%3A%2F%2Fgithub.com%2Fnirholas%2Foracle-model&title=oracle-model%3A%20The%20three.ws%20Oracle%20conviction%20model%2C%20running%20locally)
+
+## Built for AI agents too
+
+Coding agents and LLM tooling can read this repo directly: [AGENTS.md](./AGENTS.md), [llms.txt](./llms.txt), [llms-full.txt](./llms-full.txt). Point an agent at `https://github.com/nirholas/oracle-model` and it has the context it needs.
+
+## More from the same author
+
+- [All repositories by nirholas](https://github.com/nirholas/nirholas#readme): the full catalog, grouped by topic
+- [three.ws](https://three.ws): the platform for 3D AI agents with Solana wallets, a skill marketplace and x402 payments
+- Questions or ideas: [open an issue](https://github.com/nirholas/oracle-model/issues) or [start a discussion](https://github.com/nirholas/oracle-model/discussions)
+
+## Contributors
+
+[![Contributors](https://contrib.rocks/image?repo=nirholas/oracle-model)](https://github.com/nirholas/oracle-model/graphs/contributors)
+
+## Star history
+
+[![Star History Chart](https://api.star-history.com/svg?repos=nirholas/oracle-model&type=Date)](https://www.star-history.com/#nirholas/oracle-model&Date)
+
+<!-- /three.ws:growth -->
 
 <!-- three.ws:ecosystem -->
 ## Part of three.ws

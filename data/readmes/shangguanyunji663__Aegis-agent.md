@@ -11,44 +11,21 @@
 ![LangGraph](https://img.shields.io/badge/Runtime-autonomous%20%7C%20langgraph%20%7C%20ordered-4B8BBE?style=flat-square)
 ![Storage](https://img.shields.io/badge/Storage-SQLite%20%7C%20MySQL%20%7C%20PostgreSQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
-![Skills](https://img.shields.io/badge/Skills-8%20curated%20%2B%20auto--distilled-orange?style=flat-square)
+![Skills](https://img.shields.io/badge/Skills-7%20curated%20%2B%20auto--distilled-orange?style=flat-square)
+![Iterations](https://img.shields.io/badge/Iterations-21%20rounds-blueviolet?style=flat-square)
 
-[项目简介](#项目简介) · [核心亮点](#核心亮点) · [快速开始](#快速开始) · [目录结构](#目录结构) · [核心功能](#核心功能) · [配置说明](#配置说明) · [评测结果](#评测结果) · [贡献指南](#贡献指南)
+[项目简介](#项目简介) · [核心亮点](#核心亮点) · [系统架构](#系统架构) · [快速开始](#快速开始) · [目录结构](#目录结构) · [核心功能](#核心功能) · [配置说明](#配置说明) · [API 摘要](#api-摘要)
+
+[常用命令](#常用命令) · [评测结果](#评测结果) · [设计取舍](#设计取舍) · [文档地图](#文档地图) · [Roadmap](#roadmap) · [贡献指南](#贡献指南) · [许可证](#许可证)
 
 </div>
 
 ---
 
-> :warning: **安全声明（请先阅读）**
->
-> 本项目用于心理支持工程学习与系统展示，**不提供医学诊断，也不能替代专业心理咨询或危机干预服务**。
+> [!WARNING]
+> **安全声明（请先阅读）**：本项目用于心理支持工程学习与系统展示，**不提供医学诊断，也不能替代专业心理咨询或危机干预服务**。
 > 高风险场景下，系统仅承担风险识别、辅助总结与转介建议职责，最终干预必须由具备资质的人员完成。
 > 评测数据反映测试集表现，**不等同于临床有效性评估**。
-
----
-
-## 目录
-
-- [项目简介](#项目简介)
-- [核心亮点](#核心亮点)
-- [系统架构](#系统架构)
-- [快速开始](#快速开始)
-  - [环境要求](#环境要求)
-  - [方式一：本地运行](#方式一本机运行推荐)
-  - [方式二：Docker Compose](#方式二docker-compose)
-  - [访问地址与演示账号](#访问地址与演示账号)
-  - [启用 QLoRA 风险模型（可选）](#启用-qlora-风险模型可选)
-- [目录结构](#目录结构)
-- [核心功能](#核心功能)
-- [配置说明](#配置说明)
-- [API 摘要](#api-摘要)
-- [常用命令](#常用命令)
-- [评测结果](#评测结果)
-- [设计取舍](#设计取舍)
-- [文档地图](#文档地图)
-- [Roadmap](#roadmap)
-- [贡献指南](#贡献指南)
-- [许可证](#许可证)
 
 ---
 
@@ -70,10 +47,10 @@
 
 | 项 | 数值 |
 | :--- | :--- |
-| 内置知识库 | 24 篇 Markdown 文档 |
-| 人工策展 Skill | 8 个（另有运行时自动蒸馏产物） |
+| 内置知识库 | 173 篇 Markdown 文档（约 570 个检索块） |
+| 人工策展 Skill | 7 个（另有运行时自动蒸馏产物） |
 | 评测金标集 | 150 条代表性样本（基础层 63 / 压力层 87）+ 77 条 RAG 问句 + 8 组多轮场景 |
-| 测试覆盖 | 15 个 pytest 模块，覆盖路由 / 风险 / 记忆 / API / MCP / 三运行时 A/B |
+| 测试覆盖 | 16 个 pytest 模块，覆盖路由 / 风险 / 记忆 / API / MCP / 三运行时 A/B（`app/` 源码 76 个模块） |
 | 零密钥启动 | 支持，`AI_PROVIDER=mock` 下无需任何外部 API Key |
 
 ---
@@ -83,11 +60,11 @@
 | 模块 | 解决的问题 | 实现方式 |
 | :--- | :--- | :--- |
 | 双端独立界面 | 学生倾诉体验与管理员处置流程关注点不同，混在一起会导致产品边界混乱 | `/student` 提供学生对话与会话记忆，`/admin` 提供报告、个案、trace、知识库、工具队列与评测工作台 |
-| 四套疗愈主题 | 心理支持需按来访者状态切换视觉语气，单一主题难以覆盖低龄与深度倾诉 | CSS 变量四主题（`warm`/`ocean`/`forest`/`playful`）+ `theme.js` 顶栏切换 + `PUT /api/auth/me/theme` 按用户持久化 + 服务端首屏注入零闪烁 |
+| 三概念主题系统 | 单一界面难以同时承载「私密倾诉」与「深夜求助」两种心理语境 | 第二十轮起改为三套设计概念（`letter` 信笺往来 / `radio` 夜航电台 / `atlas` 群岛图鉴），Vite + React 19 + TypeScript 实现，概念层提供基色令牌、共享层解成别名（`--surface`/`--accent`/`--hot`），右下角切换器即时换形态，记忆在 `localStorage` |
 | Agent Runtime Harness | Agent 调用、上下文注入、风险报告与工具计划散落业务代码将难以审计 | `AegisAgentHarness` 统一封装输入脱敏、运行时调用、trace 保存、消息持久化、报告生成与工具计划 |
 | 自治多 Agent 协作 | 单个 Lead Agent 串行分派容易沦为「伪协作」 | 默认 `autonomous` 运行时基于 append-only blackboard 实现任务发布、Agent claim、artifact 产出、风险 override 与最终验收；可切换 LangGraph 或 ordered 运行时 |
 | 分层 MemoryAgent | 心理支持需要连续性，单轮回复无法体现对用户状态变化的理解 | L1 Agent 私有记忆 + L2 跨会话结构化用户事实 + L3 会话滚动摘要 + L4 最近原话窗口；L2 以有效期截断处理状态冲突，并优先于可能过期的摘要注入 Prompt |
-| Agentic RAG | 全量检索会引入噪声，陪伴类对话尤其易被知识文档带偏 | 通过 CHAT / CONSULT / RISK 意图路由决定是否检索；多路召回（BM25 + 可选向量）+ 加权/RRF 融合 + 条件 rerank + 邻块扩展 |
+| Agentic RAG | 全量检索会引入噪声，陪伴类对话尤其易被知识文档带偏 | 通过 CHAT / CONSULT / RISK 意图路由决定是否检索；多路召回（BM25 + 向量，可开关）+ 加权/RRF 融合 + 三引擎精排（词法公式 / Cross-Encoder / CE 融合）+ 邻块扩展 |
 | 工具治理与 MCP | 高风险预警、Excel 记录、邮件通知不可由模型越权直接执行 | 工具调用先生成 `ToolJob`，经角色、风险等级、审批、脱敏与审计后进入队列；支持 internal 与 FastMCP 双后端 |
 | 后台 Tool Queue | 外部工具慢、失败或限流时不应阻塞学生端流式回复 | 独立 worker 支持依赖调度、重试退避、邮件限流、dead letter、`ExcelRecord` 与 `AlertRecord` 持久化 |
 | 工程 Harness | Agent 项目只看 demo 容易高估完成度 | pytest 单元/接口测试、RAG eval、综合 eval（含 LLM-as-Judge）、harness 8 套件、三运行时 A/B、本地 benchmark |
@@ -112,7 +89,7 @@ flowchart LR
     Runtime --> Counselor["CounselorAgent"]
     Runtime --> Companion["CompanionAgent"]
 
-    Knowledge --> RAG["Hybrid RAG<br/>BM25 + 可选 Vector + Rerank"]
+    Knowledge --> RAG["Hybrid RAG<br/>BM25 + 本地向量 + 三引擎精排"]
     Harness --> Store["SQLite / MySQL / 可选 PostgreSQL<br/>messages, memory, reports, traces"]
     Harness --> ToolPlan["Governed ToolJob"]
     ToolPlan --> Queue["Tool Queue Worker"]
@@ -121,6 +98,18 @@ flowchart LR
 
     Admin --> Eval["Eval & Harness Reports"]
     Eval --> Store
+
+    classDef client fill:#E8F4FD,stroke:#4A90D9,stroke-width:1.5px,color:#1A4971
+    classDef core fill:#FFF4E6,stroke:#E8A33D,stroke-width:1.5px,color:#7A4A00
+    classDef agent fill:#F3EAFB,stroke:#9B72CF,stroke-width:1.5px,color:#4A2D73
+    classDef store fill:#EAF6EC,stroke:#5BAF6F,stroke-width:1.5px,color:#1E5A2E
+    classDef tool fill:#FDECEF,stroke:#D97A94,stroke-width:1.5px,color:#7A2338
+
+    class Student,Admin client
+    class API,Harness core
+    class Runtime,Memory,Lead,Risk,Knowledge,Counselor,Companion,RAG agent
+    class Store,Eval store
+    class ToolPlan,Queue,MCP,Outputs tool
 ```
 
 **数据流说明**：学生消息进入 Harness → 输入脱敏 → 意图路由 → 按意图决定是否检索 → 多 Agent 在黑板协议下协作 → 风险双通道判定 → 生成 `ToolJob` 而非直接执行 → 回复流式返回同时工具异步入队 → trace / 报告 / 审计全量落库。
@@ -196,7 +185,15 @@ Compose 会启动应用、MySQL 8.0、Redis 与 Chroma。默认本地模式仍�
 | 管理员 | `admin` | `admin123!` | 初始账号，生产环境必须修改 |
 | 教师 | 自由注册 + 邀请码 | 自定义 | 默认邀请码 `aegis-teacher`，由 `AUTH_TEACHER_INVITE_CODE` 配置，注册后进入咨询工作台 |
 
-> :camera: **界面截图待补充**：欢迎通过 PR 提供 `/student`、`/admin` 页面截图至 `docs/assets/`，并同步更新本节。
+### 界面预览
+
+![登录页 — 信笺往来概念](docs/assets/screenshot-login.jpg)
+
+| 学生端 · 对话（信笺往来） | 管理端 · 咨询工作台 |
+| :---: | :---: |
+| ![学生端](docs/assets/screenshot-student.jpg) | ![管理端](docs/assets/screenshot-admin.jpg) |
+
+> 界面支持三套设计概念（信笺往来 / 夜航电台 / 群岛图鉴），右下角切换器即时换形态；截图为「信笺往来」概念，数据来自本地演示环境。
 
 ### 启用 QLoRA 风险模型（可选）
 
@@ -243,7 +240,7 @@ RISK_QLORA_TIMEOUT_SECONDS=8
 
 **QLoRA 训练目标**：并非训练通用聊天能力，而是将 Qwen3.5-2B-Base 微调为 RiskGuardian 的 `low / medium / high` JSON 风险评估器。基座采用 4-bit NF4 量化并冻结，LoRA `r=8/alpha=16` 仅训练约 840 万参数（占总参数约 18.9 亿的 0.445%）。训练样本只覆盖风险判定、理由长度与主体/意图裁决，**不改变** Counselor、RAG、工具治理或审批链路。
 
-> 后续生产化改进路线（异步/并发、HTTP/SSE/WebSocket、部署、MCP/JSON-RPC/A2A、权限、流式工具调用、错误恢复、KV Cache/vLLM/SGLang、Reranker、GraphRAG）见 [`docs/QLORA-SSE-PRODUCTION-IMPROVEMENTS.md`](docs/QLORA-SSE-PRODUCTION-IMPROVEMENTS.md)。
+> 后续生产化改进路线（异步/并发、HTTP/SSE/WebSocket、部署、MCP/JSON-RPC/A2A、权限、流式工具调用、错误恢复、KV Cache/vLLM/SGLang、Reranker、GraphRAG）见 [`docs/roadmap/QLoRA-PRODUCTION.md`](docs/roadmap/QLoRA-PRODUCTION.md)。
 
 </details>
 
@@ -273,16 +270,17 @@ RISK_QLORA_TIMEOUT_SECONDS=8
 │   ├── api/                     # HTTP 路由：schemas | deps | middleware | pages | system | auth_routes | chat | admin
 │   ├── evaluation/              # 评测：runner | rag | datasets | report_html | runtime_ab | judge + harness/
 │   └── mcp/                     # MCP 边界：server（FastMCP 服务）| client（stdio 客户端）
-├── knowledge/                   # 内置心理支持知识库（当前 24 篇 .md）
+├── knowledge/                   # 内置心理支持知识库（当前 173 篇 .md）
 ├── eval/                        # 评测 CLI 与 fixtures（路由 / 风险 / 安全 / 多轮 / 检索 / RAG 数据集）
 ├── skills/                      # 人工策展 Skill 规范；运行时可在 skills/auto/ 生成 auto Skill
-├── static/                      # 前端：index | login | student | admin 页面 + styles.css + theme.js
+├── frontend/                    # 前端：Vite + React 19 + TS（src/ 三概念 × 三页 + shared/ + lib/），产物 dist/ 由 FastAPI 同源托管
 ├── tests/                       # pytest 测试（16 个模块）
 ├── scripts/                     # 启动/联调/诊断：start-local | start-compose | smoke_chat | probe_glm
 │                                #                migrate_sqlite_to_mysql | eval_risk_dual_path | run_benchmark | analyze_layers
 │                                #                eval_minilm_ablation_tmp | eval_ce_tmp（第十九轮 RAG 对照评测）
+│                                #                eval_bge_small_zh_recall | eval_ce_fusion | eval_v2_full | eval_retrieval_window（第二十一轮 RAG 对照评测）
 ├── docs/                        # 架构、安全、演示、教师手册与前端学习文档
-│   └── records/                 # 迭代记录（第 1 ~ 19 轮）
+│   └── records/                 # 迭代记录（第 1 ~ 21 轮）
 ├── Dockerfile
 ├── docker-compose.yml
 └── requirements.txt
@@ -298,7 +296,7 @@ RISK_QLORA_TIMEOUT_SECONDS=8
 - **会话管理**：登录登出、会话创建与新会话切换；重命名/删除已提供 API（`PATCH` / `DELETE /api/sessions/{id}`），**界面暂无对应按钮**。
 - **对话助手「小暖」**：SSE 真流式输出，消息头像与入场动画、欢迎屏话题 chips；顶栏时段问候与服务状态圆点（60 秒自动刷新）。另有 `POST /api/chat` 非流式兼容路径。
 - **实用卡片**：「心情速选」2×2 图标卡一键填入表达、「需要立即帮助」（心理援助热线 12356 / 120）与「60 秒放松练习」。
-- **四套疗愈主题**：暖意疗愈（默认）/ 深海冥想 / 晨雾森林 / 童趣治愈贴贴，顶栏切换器即时换色，按用户持久化并跨设备同步；服务端首屏注入 `html[data-theme]`，无切换闪烁。
+- **三套设计概念**：信笺往来（默认）/ 夜航电台 / 群岛图鉴，右下角切换器即时换形态，选择记在 `localStorage`；首屏服务端注入 `html[data-theme="light"]`（仅亮色一档，亮暗双模式已移除），概念由 `html[data-concept]` 驱动，切换无闪烁。
 - **三类回复路径**：低风险陪伴、心理咨询建议、高风险安全回应。低风险对话在生成时逐字直播，中/高风险回复经安全复核通过后再输出。
 - **分层记忆注入**：L2 跨会话当前有效事实 + L3 会话滚动摘要 + L4 最近原话窗口共同注入；当前有效事实优先于可能过期的摘要，避免旧状态干扰当前回应。
 - **信息隔离**：高风险内容不向学生暴露内部报告字段，避免二次伤害与信息泄露。
@@ -398,8 +396,8 @@ python -m app.init_db
 # 后端测试（只收集 tests/，scripts/ 下的联调脚本不在 pytest 范围）
 python -m pytest tests -q
 
-# 前端脚本语法检查
-node --check static/login.js static/student.js static/admin.js
+# 前端检查（第二十轮起为 Vite 工程，不再有手写前端脚本）
+cd frontend && npm run lint && npm run build && cd ..
 
 # 综合评测
 python -m eval.run_eval
@@ -423,7 +421,8 @@ python -m app.mcp.server --list
 
 评测体系基于**人工构造、人工标注且贴近校园心理求助语料的代表性金标集**。我们不筛选样本、不为追求满分而人为凑 100%，允许并保留非满分的真实通过率，用以暴露真实代码与能力边界。
 
-> :warning: 评测指标反映测试集表现，**非真实用户流量验证，不等同于临床有效性评估**。评测产物是可再生快照，不代表后续提交必然得到相同数值。
+> [!IMPORTANT]
+> 评测指标反映测试集表现，**非真实用户流量验证，不等同于临床有效性评估**。评测产物是可再生快照，不代表后续提交必然得到相同数值。
 
 > **QLoRA 训练侧证据**：模型配置、八门槛验收记录与数据来源声明见 [`docs/training/`](docs/training/OVERVIEW.md)（训练证据摘要层；权重与数据本体在隔离训练仓，不入本仓库）。
 
@@ -432,7 +431,7 @@ python -m app.mcp.server --list
 | 数据集 | 规模与来源 | 落盘产物 / 日期 |
 | :--- | :--- | :--- |
 | 路由 / 风险 / 规模化基准 | `eval/fixtures/representative_corpus.json`，150 条人工构造金标样本，含 `layer`（base / stress）与 `source` 双层拆分标记 | `data/eval/latest.json`，2026-08-19 |
-| RAG 检索 | `eval/fixtures/rag_queries.json`，77 条自然语言问句，基于 24 篇知识文档 | `data/eval/rag-eval-report.json`，2026-08-20 |
+| RAG 检索 | `eval/fixtures/rag_queries.json`，77 条自然语言问句，基于内置知识库 | `data/eval/rag-eval-report.json`，2026-08-20 |
 | RAG 语义重排与真向量实测（第十九轮） | 同 77 条问句；Chroma+MiniLM 嵌入与 bge-reranker-base Cross-Encoder 逐条对照 | `data/eval/minilm-eval-report.json` / `data/eval/ce-eval-report.json`，2026-09-29 |
 | 多轮回归 | `eval/fixtures/multi_turn_corpus.json`，8 组多轮场景 | `data/eval/latest.json`，2026-08-19 |
 | 三运行时 A/B | 10 条代表性消息 | `data/harness/runtime-ab-report.md`，2026-08-20 |
@@ -442,12 +441,13 @@ python -m app.mcp.server --list
 
 | 验证项 | 覆盖内容 | 已落盘结果与适用边界 |
 | :--- | :--- | :--- |
-| 单元与接口测试 | API、认证、风险双通道、Function Calling、Agent runtime、LangGraph checkpoint、MCP tools、评测 runner | **历史记录**：2026-08-21 记录 `python -m pytest tests/ -q` 为 **71 passed, 8 warnings**。测试数量与结果应以当前环境重跑为准 |
+| 单元与接口测试 | API、认证、风险双通道、Function Calling、Agent runtime、LangGraph checkpoint、MCP tools、评测 runner | **2026-10-05**：`.conda/python.exe -m pytest tests -q` 为 **82 passed, 1 warning**（耗时 26m42s；唯一 warning 是 chromadb 依赖的 `asyncio.iscoroutinefunction` 弃用提示）。用例数与结果应以当前环境重跑为准 |
 | 150 条规模化基准（双层拆分） | 基础层 63 条 + 压力层 87 条，runner 分别输出两套独立指标 | **2026-08-19**：整体联合准确率 **0.63**、意图 **0.63**、风险 **0.81**、高风险召回 **0.60**、误报率 **0.00**；基础层准确率 **0.97** / 风险 **1.00** / 高召回 **1.00**；压力层准确率 **0.39** / 风险 **0.67** / 高召回 **0.52** |
 | 风险双通道 + QLoRA 微调 | 历史规则/stub/GLM sanity 与当前真实 v9 QLoRA 冻结 stress 87 条验收 | **当前以 v9 QLoRA 为准**：`RISK_QLORA_ENABLED=true` 时八门槛全过 |
 | 多轮回归 | 8 组多轮场景（含升级到中/高风险、第三人称转自身） | **2026-08-19**：最终关键内容命中率 **0.875**（7/8） |
-| RAG 检索 | 77 条问句 Top-4；专项消融使用 local-hash 向量配置 | **2026-08-20**：宽松 HitRate@4 **0.935**、严格来源命中 **0.883**、Recall@4 **0.935**、Precision@4 **0.351**、MRR **0.820**、NDCG@4 **0.832** |
-| RAG 语义重排（第十九轮实测） | 同 77 条问句：BM25+Cross-Encoder 精排、Chroma+MiniLM 真向量混合 | **2026-09-29**：BM25+Cross-Encoder **0.948**（73/77，历史最优）；真 MiniLM 混合 **0.857**（被英文嵌入模型拖累，暂不启用，需换中文嵌入模型重测）；CE 延迟 ~850ms/条（CPU int8） |
+| RAG 检索（双口径 + 消融） | 77 条问句 Top-4；消融走真实嵌入配置（2026-10-10 修复：继承生产配置、临时目录隔离、逐模式记录生效后端） | **2026-10-10**：主口径（chroma+MiniLM、hybrid_rerank）宽松 HitRate@4 **0.870**、严格来源命中 **0.792**、MRR **0.734**、NDCG@4 **0.760**；词法基线 bm25_only **0.935**（72/77）；完整报告 `data/eval/rag-eval-report.json` |
+| RAG 中文语义嵌入实测（嵌入 × 权重 × 融合对照） | 同 77 条问句：智谱 embedding-3（中文，OpenAI 兼容 API）× 融合权重 sweep × hybrid / hybrid_rerank / rrf | **2026-10-10**：智谱 embedding-3 混合 **0.987**（76/77，历史最优；hybrid_rerank 在 w≥0.35 与 rrf 同达，相对 bm25_only 零损失纯增益，约 300ms/条）；MiniLM 最优权重实为 **w=0.2**（0.961，74/77，旧 0.65 权重为其次优根源）；BM25+Cross-Encoder 旧最优 0.948（73/77）。报告见 `data/eval/embedding-compare-report.json`、`fusion-tuning-report{,-openai}.json` |
+| RAG 本地化检索链路（第二十一轮 · 当前生产配置） | 77 条问句 Top-4；全本地 ONNX 组件（bge-small-zh-v1.5 召回 + bge-reranker-base 融合式 CE 精排）+ RRF + 候选窗口 128；知识库真实扩至 570 块 | **2026-10-11**：宽松 HitRate@4 **0.818**（63/77）、严格来源命中 **0.792**（61/77），约 2.1s/条（CE 精排为延迟主成本）；规模放大 24 倍而严格口径与旧 24 块库生产基线持平，零外部 API；含生产精排链路 bug 修复（修复前后宽松 0.442→0.740）与窗口对照实验（16→128：0.740→0.818，可复跑 `scripts/eval_retrieval_window.py`）。报告 `data/eval/production-check-report.json`；完整数据链见 [ROUND-21](docs/records/ROUND-21-RAG-LOCAL-UPGRADE.md) |
 | 三运行时 A/B | langgraph / autonomous / ordered 对比延迟、trace 步数、LLM 调用数与判定一致性 | **2026-08-20**：三运行时判定完全一致；意图准确率 **0.8**、风险准确率 **0.9**，含 1 条规则引擎漏判的隐式高危边界样本 |
 | Harness 验证 | Risk Safety、Agent Routing、Standard Skills、RAG、API、Tool Queue、Runtime A/B 等链路（验证工程行为，不强制满分） | **历史快照**：`data/harness/current-verification.json` 为 **8/8 通过**；`latest.json` 是旧的 7-suite 存档，建议重跑后覆盖 |
 | 本地性能 benchmark | MockLLM 确定性环境，20 条代表性消息 × 并发 [1,4,8] | **2026-08-20**：并发 1 → avg 66ms / P95 71ms / 15.1 req/s；并发 4 → avg 316ms / P95 729ms / 12.3 req/s；并发 8 → avg 517ms / P95 1260ms / 13.5 req/s。缓存命中 <0.01ms；ToolJob 5/5 成功、0 死信 |
@@ -555,12 +555,13 @@ python -m app.mcp.server --list
 - [咨询工作台使用手册（教师版）](docs/admin-teacher-guide.md)
 - [前端学习指南](docs/frontend-learning-guide.md)
 - [QLoRA 微调参数与操作手册](docs/qlora-finetuning.md)
-- [QLoRA 生产化改进路线](docs/QLORA-SSE-PRODUCTION-IMPROVEMENTS.md)
+- [QLoRA 生产化改进路线](docs/roadmap/QLoRA-PRODUCTION.md)
+- [改进记录索引（历轮变更 + 指南修订台账 + 审阅档案）](docs/records/INDEX.md)
 - [演示脚本](docs/demo-script.md)
 - [逐文件学习指南](Aegis项目逐文件学习指南.md)
 
 <details>
-<summary><b>展开：迭代记录（第 1 ~ 19 轮）</b></summary>
+<summary><b>展开：迭代记录（第 1 ~ 20 轮）</b></summary>
 
 | 轮次 | 主题 | 文档 |
 | :--- | :--- | :--- |
@@ -582,6 +583,8 @@ python -m app.mcp.server --list
 | 第十七轮 | 前端整体改造（页签化 / 固定一屏 / 全中文） | [ROUND-17-FRONTEND-OVERHAUL.md](docs/records/ROUND-17-FRONTEND-OVERHAUL.md) |
 | 第十八轮 | 前端多主题切换与零闪烁注入 | [ROUND-18-THEME-SWITCHER.md](docs/records/ROUND-18-THEME-SWITCHER.md) |
 | 第十九轮 | RAG 语义重排引擎（Cross-Encoder）与真 MiniLM 实测 | [ROUND-19-RAG-SEMANTIC-RERANK.md](docs/records/ROUND-19-RAG-SEMANTIC-RERANK.md) |
+| 第二十轮 | 前端三概念主题系统（Vite + React + TS）与浏览器取色驱动的主题化 | [ROUND-20-FRONTEND-SCENE-DRIVEN.md](docs/records/ROUND-20-FRONTEND-SCENE-DRIVEN.md) |
+| 第二十一轮 | RAG 本地化升级（bge-small-zh 嵌入 + CE 融合精排 + 570 块规模化落地 + 生产 bug 修复） | [ROUND-21-RAG-LOCAL-UPGRADE.md](docs/records/ROUND-21-RAG-LOCAL-UPGRADE.md) |
 
 </details>
 
@@ -659,7 +662,7 @@ git push origin feat/<简短描述>
 请在发起 PR 前确保以下条件全部满足：
 
 - [ ] `python -m pytest tests -q` 全部通过
-- [ ] 修改前端后执行 `node --check static/login.js static/student.js static/admin.js`
+- [ ] 修改前端后执行 `cd frontend && npm run lint && npm run build`（`dist/` 为 FastAPI 同源托管的产物，必须一起提交）
 - [ ] 新增配置项已同步写入 `.env.example` 与本 README 的 [配置说明](#配置说明) 表格
 - [ ] 新增依赖已写入 `requirements.txt`
 - [ ] 未向仓库提交任何 `AEGIS_TRAINING_ROOT` 下的训练产物（脚本、数据、adapter、merged 模型、GGUF、报告）

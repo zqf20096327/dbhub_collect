@@ -13,7 +13,7 @@ created, re-checks it for drift on demand, and can remove it again.
 Automate the parts providers expose. Guide you through the parts that need a human. Verify what
 can be observed, and make unfinished work clear. No GoLive account, hosted backend or product telemetry.
 
-> **Early alpha · 0.1.0-alpha.8**
+> **Early alpha · 0.1.0-alpha.9**
 > Disposable live tests now cover six journeys: **hosting** (Vercel, Netlify), **database**
 > (Supabase, Neon), **custom-domain DNS** (Porkbun, GoDaddy), **transactional email** (Resend),
 > **test-mode payments** (Stripe) and **Supabase authentication**, plus the `teardown` uninstall
@@ -59,7 +59,8 @@ Those answers in full: [trust, access and control](docs/TRUST.md) and
 [recovery](docs/RECOVERY.md). The [architecture](docs/ARCHITECTURE.md) is the product contract,
 [provider scope](docs/PROVIDERS.md) says what each provider can do today, the
 [validation record](docs/VALIDATION.md) separates what has been exercised live from what is only
-mock-covered, and [distribution](docs/DISTRIBUTION.md) covers installation and updates.
+mock-covered, [distribution](docs/DISTRIBUTION.md) covers installation and updates, and
+[using GoLive with gstack](docs/GSTACK.md) covers the deploy path when gstack builds the app.
 
 [Install](#install) · [Use GoLive](#use-golive) · [See the workflow](#what-a-run-looks-like) · [Alpha scope](#what-this-alpha-supports) · [Roadmap](#the-full-go-live-checklist-and-roadmap) · [Contribute](CONTRIBUTING.md)
 
@@ -111,7 +112,7 @@ noninteractive agent flags, runtime verification and the optional own installer.
 
 ### Install from npm
 
-The same skill is published to npm as `golive@0.1.0-alpha.8` (dist-tags `alpha` and `latest`), which
+The same skill is published to npm as `golive@0.1.0-alpha.9` (dist-tags `alpha` and `latest`), which
 installs it offline, with no Git or Skills CLI involved:
 
 ```bash
@@ -413,7 +414,8 @@ live-tested milestones**, not a finished category or a completed checklist for y
   Provider suggestions are guided today; verified setup is planned. On-demand drift checks exist
   (`golive status`, below) — continuous monitoring and alerting do not. Sentry is implemented as an
   automated monitoring provider — adapter, host env wiring and the `sentry-ingest` check,
-  mock-covered with no live run yet.
+  mock-covered with no live run yet. UptimeRobot's uptime monitor is implemented too —
+  `uptimerobot:monitor` and the read-only `uptime-monitor` check, mock-covered with no live run yet.
 - [ ] 🚧 **Product analytics:** event validation and consent/data settings, beyond today's guided
   provider suggestions. PostHog analytics is wired through an approved plan — the app's analytics
   project is adopted or selected (a create is planned when nothing matches), and the `posthog-ingest`

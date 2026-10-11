@@ -1,230 +1,131 @@
-<h1>App Description &nbsp;&nbsp;
- <a href="https://pypi.org/project/vectorbt" alt="Python Versions">
- <img src="https://img.shields.io/pypi/pyversions/vectorbt.svg?logo=python&logoColor=white">
- </a>
-</h1>
+# Walk-Forward Optimization App
 
-<h1>Core Dependencies</h1>
+![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue?logo=python&logoColor=white)
 
-The core dependencies are:
+A Dash web app for walk-forward optimization of trading strategies. It splits historical price data into
+overlapping in-sample and out-of-sample windows, finds the best parameters in each in-sample window, and tests them
+out-of-sample. The strategies available are SMA crossover, EMA crossover, MACD, RSI, Bollinger Bands, Stochastic
+Oscillator, Donchian breakout, and Rate of Change. Backtests are run with
+[vectorbt](https://github.com/polakowo/vectorbt). A hosted version is available at
+[backtest.fi](https://backtest.fi).
 
-<ol>
- <li>A compatible Python version (3.6-3.10)</li>
- <li>TA-Lib (C library)</li>
- <li>Python libraries in requirements.txt</li>
-</ol>
+## Getting Started
 
-<h2>Cloning This Repository</h2>
+You need [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and
+[uv](https://docs.astral.sh/uv/getting-started/installation/). uv downloads a compatible Python (3.12 or newer) if you
+don't have one.
 
-
-To run this app locally you can simply clone this repository. Make sure you have
-<a href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git">
-git installed</a>.
-You can confirm this on Linux or Mac by typing `git --version` in a terminal. Navigate to the directory you want the app in and use the command:
+Clone the repository and move into it:
 
 ```shell
-git clone https://github.com/MitchMedeiros/dashapp.git
+git clone https://github.com/MitchMedeiros/walk-forward-optimization-app.git && cd walk-forward-optimization-app
 ```
 
-<h2>Creating the Virtual Environment</h2>
-
-If you have Anaconda installed you can create a virtual environment called "backtesting" using:
+Install the dependencies. uv creates a virtual environment in `.venv` and installs the exact versions pinned in
+`uv.lock`:
 
 ```shell
-conda create -n backtesting python=3.10
+uv sync
 ```
 
-and activate it with `conda activate backtesting`. Note what default directory it's installed in if you plan to web host the app.
-
-Alternately, you can use the Python venv module with the following command in the directory you want the environment in:
+Start the app:
 
 ```shell
-python3.10 -m venv backtesting
+uv run main.py
 ```
 
-Activate it on Linux/Mac using: `source backtesting/bin/activate` or in Windows PowerShell: `backtesting\Scripts\activate`.
+Then open [127.0.0.1:8050](http://127.0.0.1:8050) in a web browser.
 
-<h2>TA-Lib</h2>
+## Configuration
 
-At this point you should install the core TA-Lib library from source before you can install the TA-Lib Python library. This is necessary since the Python library is only a wrapper.
+Settings live in `config.py` in the root of the repository. By default the app downloads price data from Yahoo Finance
+and caches it on the local file system, so no setup is required. Yahoo Finance only provides 5m and 15m data for the
+last 60 days and 1h data for the last 730 days. Daily data goes back much further.
 
-<h3>Ta-Lib Installation on Linux and Mac</h3>
+The main options are:
 
-If you have a web browser available you can download the source file by visiting <a href="https://sourceforge.net/projects/ta-lib/files/ta-lib/0.4.0/ta-lib-0.4.0-src.tar.gz/download?use_mirror=phoenixnap">soureforge</a>.
+- `data_type` - `'yfinance'` or `'postgres'`
+- `cache_type` - `'files'` or `'redis'`
+- `calendar_days` - how many days back from today the date range selected when the app loads starts
+- `port_number`, `run_locally`, and `debug_bool` - Dash server settings
 
-If using a Linux server, install wget if not already installed, using the appropriate 
-<a href="https://www.maketecheasier.com/install-software-in-various-linux-distros/">
-install command</a> 
-for your Linux distro.
+## Optional Dependencies
 
-For Debian/Ubuntu:
+Optional dependencies are installed as uv extras. Combine them as needed, for example
+`uv sync --extra postgres --extra redis`.
+
+| Extra | Purpose |
+| --- | --- |
+| `postgres` | Load price data from a PostgreSQL or TimescaleDB database |
+| `redis` | Cache data between callbacks in Redis instead of the file system |
+
+### PostgreSQL
+
+Run `uv sync --extra postgres`, then set `data_type = 'postgres'` and fill in the connection credentials in
+`config.py`. Your tables should have the same names as the assets in the asset dropdown: `spy`, `qqq`, `dia`, and
+`iwm`. Each table needs the lowercase columns `date`, `open`, `high`, `low`, `close`, `volume`, and `symbol`. The data
+in a table should have a time interval less than or equal to the lowest timeframe you want to test on.
+
+### Redis
+
+Run `uv sync --extra redis`, then set `cache_type = 'redis'` and provide `redis_host` and `redis_port` in `config.py`.
+
+## Docker
+
+The Docker setup runs the app with gunicorn behind nginx. Redis and PostgreSQL are separate containers on the same
+compose network and only start when their profile is enabled. You need
+[Docker with Compose](https://docs.docker.com/compose/install/).
+
+Start the app with Yahoo Finance data and the file cache, which needs no other setup:
 
 ```shell
-sudo apt install wget
+docker compose up -d --build
 ```
 
-Download the TA-Lib library from 
-<a href="https://sourceforge.net/projects/ta-lib/files/ta-lib/0.4.0/">
- SourceForge
-</a>
-using 
+Then open [127.0.0.1:8050](http://127.0.0.1:8050). Settings are read from a `.env` file, which is optional. Copy
+`.env.example` to `.env` and edit it. Every option in `config.py` can also be set as an environment variable. Only
+nginx is published on the host. Set `HTTP_PORT=80` to serve on the standard HTTP port, for example on an EC2 instance
+with port 80 open in its security group. TLS is not configured, so terminate it in front of nginx with a load balancer
+or add certificates to `docker/nginx/default.conf`. Use `WEB_CONCURRENCY` to set the number of gunicorn workers.
+
+### Redis
+
+Add `CACHE_TYPE=redis` to `.env` and start the `redis` profile:
 
 ```shell
-wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+docker compose --profile redis up -d
 ```
 
-Once you have the tar file downloaded you should unpack it:
+Redis keeps the cache in memory only, limited to 512MB, and shares it between all gunicorn workers.
+
+### PostgreSQL
+
+Add `DATA_TYPE=postgres` and a `POSTGRES_PASSWORD` to `.env`, then start the `postgres` profile:
 
 ```shell
-tar -xvf ta-lib-0.4.0-src.tar.gz
+docker compose --profile postgres up -d
 ```
 
-Delete the tar file and cd into the newly created folder.
+The profiles can be combined, for example `docker compose --profile redis --profile postgres up -d`. The database
+runs the `timescale/timescaledb` image, which can be changed with `POSTGRES_IMAGE`. Pin the same major version that
+created an existing data directory.
+
+Where the database files live is set by two options:
+
+- `POSTGRES_VOLUME` is the name of the Docker volume, `wfo_pgdata` by default. To attach a volume that already holds
+  your data, set this to its name.
+- `POSTGRES_DATA` is a host directory, such as a mounted EBS volume at `/mnt/pgdata`. When set, it is used instead
+  of the named volume.
+
+The files in `docker/postgres/initdb` run only when the data directory is empty. The default one creates empty `spy`,
+`qqq`, `dia`, and `iwm` tables with the expected columns. To load data into a new database, put a `.sql`, `.sql.gz`,
+or `.sh` file in that directory before the first start, or load it into a running database:
 
 ```shell
-rm ta-lib-0.4.0-src.tar.gz; cd ta-lib
+docker compose exec -T postgres psql -U wfo -d wfo -c "\copy spy FROM STDIN CSV HEADER" < spy.csv
+docker compose exec -T postgres pg_restore -U wfo -d wfo --no-owner < backup.dump
 ```
 
-Now we run the configure file on Debian/Ubuntu you should use the prefix /usr:
-
-```shell
-./configure --prefix=/usr
-```
-
-On Mac the prefix /usr/local should be used:
-```shell
-./configure --prefix=/usr/local
-```
-
-Run the `make` command to compile the TA-Lib files.\
-Run `sudo make install`, which will copy the compiled files into /usr/include/ta-lib.
-
-<h2>requirements.txt</h2>
-
-After you've installed the core TA-Lib library, activate your virutal environment and navigate inside the app directory. Install the libraries in requirements.txt with pip:
-
-```shell
-pip3 install -r requirements.txt
-```
-
-You can now run the main.py file and visit <a href=127.0.0.1:8050>127.0.0.1:8050</a> in a web browser to access the app.
-
-<h1>Optional Dependencies</h1>
-
-The optional dependencies to extend the functionality of this app are:
-
-<ol>
- <li>PostgreSQL database - for custom data</li>
- <li>Redis database - for faster caching</li>
- <li>mod_wsgi - for web hosting</li>
- <li>Apache HTTP - for web hosting</li>
-</ol>
-
-<h2>PostgreSQL and Redis Databases</h2>
-
-The app hosted on <a ahref=backtest.fi>backtest.fi</a> utilizes a postgreSQL and Redis backend. However, the default configuration file when cloning this repository will use Yahoo Finance for data as well as the local file system for caching between Dash callbacks. If you have either or both databases installed you can connect them by simply providing your connection credentials in config.py, located in the parent directory of this repository.
-
-<h2>WSGI Setup for an Apache Server on Linux</h2>
-
-This section explains how to web host the app on a server. It assumes you have an Apache virtual host set up and linked to a domain name.
-
-You should first install the Apache header files for third-party modules. If you have Apache 2.4 then on Debian/Ubuntu run:
-
-```shell
-sudo apt install apache2-dev
-```
-
-Now, with your Python virtual environment active:
-
-```shell
-pip3 install mod-wsgi
-```
-
-Locate your newly created wsgi files with:
-
-```shell
-mod_wsgi-express module-config
-```
-
-and copy the output. Now create a new .load file in your /etc/apache2/mods-available directory and paste that output inside it
-
-```shell
-vim /etc/apache2/mods-available/wsgi.load
-```
-
-(If you're new to VIM press `i` to insert text, paste like normal, press `escape`, then `:wq` to save changes and exit. If you make a mistake press `escape` then `:q!` to exit without saving changes or creating a new file.)
-
-Enable the new mod with `a2enmod wsgi`.
-
-Navigate to the .config or .htaccess file (depending on your OS) that you have your virtual host information in. You'll need to add a `WSGIScriptAlias` specifying the location of the app.wsgi file.
-
-If your site is only using HTTP, your virtual host info should look similar to the snippet below. Make sure to replace /path_to_cloned_repository with the appropriate path and yoursite.com with your domain name.
-
-```apache
-<VirtualHost *:80>
-    ServerName yoursite.com
-    ServerAlias www.yoursite.com
-
-    WSGIDaemonProcess dashapp python-home=your_python_virtual_env_directory user=www-data group=www-data
-
-    WSGIProcessGroup dashapp
-    WSGIApplicationGroup %{GLOBAL}
-
-    WSGIScriptAlias / /path_to_cloned_repository/dashapp/app.wsgi
-
-    <Directory /path_to_cloned_repository/dashapp/>
-        Require all granted
-    </Directory>
-</VirtualHost>
-```
-
-If your site is set up to use HTTPS via Let's Encrypt then your .config or .htaccess file should look like 
-
-```apache
-<VirtualHost *:80>
-    ServerName yoursite.com
-    ServerAlias www.yoursite.com
-
-    RewriteEngine on
-    RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://yoursite.com/$1 [L,R=301]
-</VirtualHost>
-
-<IfModule mod_ssl.c>
-<VirtualHost *:443>
-    ServerName yoursite.com
-    ServerAlias www.yoursite.com
-
-    Include /etc/letsencrypt/options-ssl-apache.conf
-    SSLCertificateFile /etc/letsencrypt/live/yoursite.com/fullchain.pem
-    SSLCertificateKeyFile /etc/letsencrypt/live/yoursite.com/privkey.pem
-
-    WSGIDaemonProcess dashapp python-home=/path_to_your_virtual_environment user=www-data group=www-data
-
-    WSGIProcessGroup dashapp
-    WSGIApplicationGroup %{GLOBAL}
-
-    WSGIScriptAlias / /path_to_cloned_repository/dashapp/app.wsgi
-
-    <Directory /path_to_cloned_repository/dashapp/>
-        Require all granted
-    </Directory>
-</VirtualHost>
-</IfModule>
-```
-
-If you've created a new .config file in one of your ...-available folders rather than adding to an existing file then you'll also need to activate it with the appropriate `a2ensite`, `a2enmod`, or `a2enconf` command.
-
-Now you will need to edit the app.wsgi file in the root directory of the repository. First change the shebang line at the top of the file to the location of your virtual environment and Python version:
-```python
-#!/path_to_your_virtual_environment/bin/python3.10
-```
-Also changing the sys.path line shown below to the appropriate root directory for your app
-
-```python
-sys.path.insert(0,"/path_to_cloned_repository/dashapp/")
-```
-
-Finally, insure that the Apache user: www-data has sufficient file permissions. At a minimum the entire app directory should have the group as www-data with read permissions on all files and also execute permission for app.wsgi. You should add further write or execute permissions to files only as necessary. For security reasons, the directory should be owned by a user other than root.
-
-Restart Apache: `systemctl restart apache2` for all changes to take effect. The app should now be accessible through your domain name!
+The CSV columns must match the table: `date`, `open`, `high`, `low`, `close`, `volume`, `symbol`. Replace `wfo` with
+your `POSTGRES_USER` and `POSTGRES_DB` if you changed them. The database is not published on the host. To reach it
+from outside Docker, add a `ports` entry to the `postgres` service in a `compose.override.yaml`.

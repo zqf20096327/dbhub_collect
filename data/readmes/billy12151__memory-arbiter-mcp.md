@@ -5,7 +5,7 @@
 
 Memory Arbiter is a trustworthy local fact layer for AI agents — not just shared memory, but shared facts that are current, trusted, traceable, and safe to use. It is a local SQLite service exposed over MCP: four product tools, evidence-based recall, advisory conflict notices, and user-authorized governance. Every fact is stored once in local SQLite and every model it can call runs locally.
 
-> Current release: `0.17.1` (mDeBERTa three-class judge with the claims channel retired; workspace required on remember + workspace-govern actions, `workspaces` view; automatic row-vector backfill after upgrade; full-project review fix wave).
+> Current release: `0.17.2` (mDeBERTa three-class judge with the claims channel retired; workspace required on remember + workspace-govern actions, `workspaces` view; automatic row-vector backfill after upgrade; full-project review fix wave).
 
 ## Why trust it
 
@@ -69,7 +69,7 @@ mema setup --install   # downloads the embedding GGUF (~330MB, resumable); the m
 mema doctor            # verify
 ```
 
-`mema setup` without `--install` stays guidance-only: it writes `~/.config/memory-arbiter/config.json` and self-checks the environment without touching pip or the network; `--install` is the execution mode (pip installs the extras, downloads the embedding GGUF model with resume/mirror fallback, and writes the finished config itself). Since 0.15.0 configuration is file-only and the whole user surface is 21 keys (see [Configuration](#configuration)): paths, identity, workspace/isolation, `update_check.enabled`, `include_size`, the embedding model, the optional semantic-conflict mDeBERTa judge (`mdeberta_ckpt`, see below), and MCP transport/host/port. The reference `examples/memory-arbiter.config.example.json` shows the same slim surface with per-key notes. Then wire your MCP client from `examples/*.mcp.json` and start the server with `mema`.
+`mema setup` without `--install` stays guidance-only: it writes `~/.config/memory-arbiter/config.json` and self-checks the environment without touching pip or the network; `--install` is the execution mode (pip installs the extras, downloads the embedding GGUF model with resume/mirror fallback, and writes the finished config itself). Since 0.15.0 configuration is file-only and the whole user surface is 28 keys (see [Configuration](#configuration)): paths, identity, workspace/isolation, `update_check.enabled`, `include_size`, the embedding model, the optional semantic-conflict mDeBERTa judge (`mdeberta_ckpt`, see below), the Console LLM workbench's own endpoint (`llm.*`, 0.18.0), and MCP transport/host/port. The reference `examples/memory-arbiter.config.example.json` shows the same slim surface with per-key notes. Then wire your MCP client from `examples/*.mcp.json` and start the server with `mema`.
 
 When a capability is missing (e.g. the models were never downloaded), every tool response carries a persistent degraded-mode banner with the `mema setup --install` remediation, and each agent's first call includes a capability health card — an incomplete install cannot pass for a complete one silently.
 
@@ -107,8 +107,8 @@ Lexical and evidence channels recall independently and merge per memory with rec
 
 Evidence KNN recalls sentence-level neighbours; it does not decide conflict truth. Since 0.17.1, each candidate pair that survives the deterministic funnel (sentence prefilter, memory-level screen, cosine band, rule evidence) is judged by an optional local **mDeBERTa** encoder (three classes: `conflict` / `no_conflict` / `possible_conflict`, plus a mechanism head). The judge sees the two bare row texts — no metadata, no prompt engineering — and returns calibrated probabilities:
 
-- `conflict` at P ≥ `semantic_conflict.mdeberta_notice_min_prob` (default 0.5) → a normal-severity notice;
-- `possible_conflict` → an `info`-severity notice (grey-zone reference, no `action_required`);
+- `conflict` at P ≥ `semantic_conflict.mdeberta_notice_min_prob` (default 0.8, the v58_ep3_fp16 production pair since 0.17.2) → a normal-severity notice;
+- `possible_conflict` at P(conflict)+P(possible_conflict) ≥ `semantic_conflict.mdeberta_possible_min_susp` (default 0.7, since 0.17.2) → an `info`-severity notice (grey-zone reference, no `action_required`); below the gate the pair is counted (`model_possible_below_gate`), not notified;
 - `no_conflict` → silent clear (counted in the receipt).
 
 The judge never chooses a winner, suppresses the scheduled scan, or edits memory.
@@ -133,6 +133,28 @@ The first successful write that registers a canonical workspace returns a non-bl
 Workspaces listed in `recall_blacklist.jsonl` (next to the database file) are excluded from **unscoped** `find` recall — the default ambient pool. One bare workspace name per line; blank lines and `#` comments are ignored; edits are live on the next find. No file → the built-in default applies (`mema-twin`, the mema-twin preference bucket); an empty file → nothing is excluded; a created file replaces the default entirely.
 
 What is *not* filtered: an explicit `workspace` argument (even a blacklisted one), strict isolation, filter-driven recall (empty query + `tags_filter`/time/`source_type`), the expired-audit path, write-time dedup, conflict scans, and id-based reads. Exclusion matches both the canonical and the raw workspace column, so rows whose canonical drifted are still caught. `doctor` reports the effective list (`recall.blacklist`).
+
+## Console: governance + knowledge workbench (0.18.0)
+
+`memory-arbiter console` opens the local browser console (127.0.0.1 only).
+
+- **Governance**: overview, conflict review with side-by-side members, doctor, read-only settings.
+- **Knowledge base tab**: curate which memories belong to your knowledge base
+  (one-click add/remove, document-extracted candidate pool, search-to-add).
+  Membership is a dedicated `kb_member` column — agents cannot accidentally
+  drop it while rewriting tags. Browse by workspace → tag, with rendered
+  markdown bodies and one-hop relation graphs.
+- **LLM study workbench**: bring your own OpenAI-compatible API (base URL /
+  API key / model / context budget in Settings — stored locally, proxied by
+  the console backend, never exposed to the page; the key sits in the config
+  file in plain text, so keep the file owner-only — the write path enforces
+  `0600`). Six one-click study
+  actions on selected memories — summarize, outline, quiz, Feynman explain,
+  quiz-me, timeline — plus a free-form prompt. Outputs can be saved back as
+  memories through the standard write pipeline (attributed `agent_id=console`).
+
+Under `isolation=strict` the console views one workspace at a time (no
+cross-bucket bypass); pick "All workspaces" under the default `none` mode.
 
 ## Operating mema
 
@@ -178,7 +200,7 @@ The old database is never deleted. Standard JSON configuration is backed up and 
 
 Configuration is file-only since 0.15.0. Everything tunable lives in `~/.config/memory-arbiter/config.json` (or the file the `MEMORY_ARBITER_CONFIG` launch-context variable points at; `mema setup` writes the starter template). Engine parameters, timeouts, thresholds, and caps are frozen constants (`memory_arbiter/constants.py`).
 
-The complete user surface is 21 keys (0.15.14: added `semantic_conflict.n_gpu_layers`, removed `semantic_conflict.max_notice_pairs` and `policy_path`; 0.17.1: removed `claims.required`, `semantic_conflict.model_path` and `n_gpu_layers`, added the four `semantic_conflict.mdeberta_*` keys):
+The complete user surface is 28 keys (0.15.14: added `semantic_conflict.n_gpu_layers`, removed `semantic_conflict.max_notice_pairs` and `policy_path`; 0.17.1: removed `claims.required`, `semantic_conflict.model_path` and `n_gpu_layers`, added the four `semantic_conflict.mdeberta_*` keys; 0.17.2: added `semantic_conflict.mdeberta_possible_min_susp`; 0.18.0: added the six `llm.*` keys):
 
 ```json
 {
@@ -197,9 +219,19 @@ The complete user surface is 21 keys (0.15.14: added `semantic_conflict.n_gpu_la
   },
   "semantic_conflict": {
     "enabled": true,
-    "mdeberta_ckpt": "~/.local/share/memory-arbiter/models/mdeberta-v52_ep3_fp16.pt",
+    "mdeberta_ckpt": "~/.local/share/memory-arbiter/models/mdeberta-v58_ep3_fp16.pt",
+    "mdeberta_notice_min_prob": 0.8,
+    "mdeberta_possible_min_susp": 0.7,
     "on_write": "async",
     "notice_sync_wait_ms": 3000
+  },
+  "llm": {
+    "base_url": "",
+    "model": "",
+    "api_key": "",
+    "max_context_tokens": 0,
+    "max_output_tokens": 8192,
+    "timeout_seconds": 120
   },
   "mcp": {
     "transport": "stdio",
@@ -218,15 +250,20 @@ The complete user surface is 21 keys (0.15.14: added `semantic_conflict.n_gpu_la
 | `include_size` | Global switch for the recall size block (v0.15.6): on = `find`/`read`/`expired`/`history` all attach `{returned_chars, returned_count, tokens_estimate}`; off = none of them do |
 | `embedding.model_path` | Local GGUF embedding model — pointing at it is the sole intent to enable sqlite-vec evidence recall |
 | `embedding.auto_query` / `auto_write` | Auto-embed at query/write time (default `true`) |
-| `semantic_conflict.mdeberta_ckpt` | Local mDeBERTa checkpoint (v52_ep3_fp16, ~531MB, ships separately) for write-time conflict judging. Configured → auto-enabled, loaded at startup, kept resident (CPU fp32). Install the `mdeberta` extra first; see the model-download note below |
+| `semantic_conflict.mdeberta_ckpt` | Local mDeBERTa checkpoint (v58_ep3_fp16 since the 0.17.2 swap, ~531MB, ships separately) for write-time conflict judging. Configured → auto-enabled, loaded at startup, kept resident (CPU fp32). Install the `mdeberta` extra first; see the model-download note below |
 | `semantic_conflict.enabled` | Explicit off-switch; unset + `mdeberta_ckpt` means enabled, explicit `false` wins |
 | `semantic_conflict.on_write` | Write-time detection: `async` (default) or `off` |
 | `semantic_conflict.notice_sync_wait_ms` | How long the write response waits for the post-commit check so its result rides along (v0.15.8, default `3000`, clamp `0–5000`); `0` = never block the write response — batch ingestion still gets the check run asynchronously and notices deliver on a later response |
 | `semantic_conflict.mdeberta_model_dir` | config.json + tokenizer directory; default = `<ckpt dir>/mdeberta-base` |
-| `semantic_conflict.mdeberta_notice_min_prob` | P(conflict) floor for a normal-severity notice (default `0.5`); below it the pair is counted, not notified |
+| `semantic_conflict.mdeberta_notice_min_prob` | P(conflict) floor for a normal-severity notice (default `0.8`, the v58_ep3_fp16 production pair since 0.17.2); below it the pair is counted, not notified |
+| `semantic_conflict.mdeberta_possible_min_susp` | P(conflict)+P(possible_conflict) floor for an `info`-severity grey-zone notice (default `0.7`, v0.17.2; calibrated on the exam + LoCoMo gold corpora); below it the pair is counted (`model_possible_below_gate`), not notified; `0` restores the pre-0.17.2 ungated behavior |
 | `semantic_conflict.mdeberta_batch` | Judge batch size (default `0` = auto, device-tiered: 16 with a GPU — Apple Silicon / NVIDIA — 8 on CPU; an explicit value `>0` overrides the tier. No startup probe) |
 | `mcp.transport` | `stdio` (default) or opt-in `streamable-http` localhost server |
 | `mcp.http.host` / `port` | Local HTTP endpoint; host is restricted to loopback, defaults to `127.0.0.1:8000`; the endpoint path is fixed at `/mcp` |
+| `llm.base_url` / `llm.model` / `llm.api_key` | The Console LLM study workbench's own OpenAI-compatible endpoint (0.18.0, all optional — empty = the workbench stays unavailable). Stored locally in plain text; the config file is enforced `0600` on write; the key is proxied by the console backend only and never exposed to the page |
+| `llm.max_context_tokens` | Material budget for one workbench call (default `0` = auto, clamp `0–10,000,000`) |
+| `llm.max_output_tokens` | Completion cap (default `8192`, clamp `1–1,000,000`) — sized so thinking-mode models cannot burn the whole output budget |
+| `llm.timeout_seconds` | Per-request timeout (default `120`, clamp `1–3600`); values are clamped identically on write and reload |
 
 See [`examples/memory-arbiter.config.example.json`](examples/memory-arbiter.config.example.json).
 
@@ -287,10 +324,10 @@ Use the absolute `npx` path from `which npx` on your machine. Remove any older `
 
 ## Conflict judge model (mDeBERTa, optional)
 
-The write-time conflict judge needs a one-time manual install (the 1.1GB checkpoint does not ship on PyPI):
+The write-time conflict judge needs a one-time manual install (the ~531MB fp16 checkpoint does not ship on PyPI):
 
 1. `pip install memory-arbiter-mcp[mdeberta]` (torch CPU wheel ~200MB + transformers);
-2. download `mdeberta-v52_ep3_fp16.pt` (~531MB, fp16 weights) plus the `mdeberta-base` directory (config.json + tokenizer, MB-sized) from the mini-clash release artifacts;
+2. download `mdeberta-v58_ep3_fp16.pt` (~531MB, fp16 weights) plus the `mdeberta-base` directory (config.json + tokenizer, MB-sized) from the mini-clash release artifacts;
 3. point `semantic_conflict.mdeberta_ckpt` at the `.pt` file in config.json (auto-enables + preloads at startup; `mdeberta_model_dir` defaults to a `mdeberta-base` folder next to the checkpoint).
 
 `mema doctor` verifies the dependency, the checkpoint digest, and the judge's label contract. Unconfigured = write-time arbitration disabled (scan/Agent fallback unaffected). ONNX+INT8 (smaller, no torch) is planned for a later release.

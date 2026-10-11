@@ -20,29 +20,48 @@
 
 WebTS 是独立开源的 **TeamSpeak 网页客户端与协议网关**。成员通过邮箱登录、创建或导入 TeamSpeak 身份，在浏览器里加入已有频道；网站以该身份连接目标服务器，继承它原有的权限。部署者掌握自己的账号数据库、密钥、邮件服务和默认服务器配置。
 
-> **1.0.1 正式源码版本。** 核心发布范围是自托管账号、TS3 网关与网页工作区；好友 E2EE、TS6 和移动语音继续标为实验支持。 已有真实 TS3 协议联调、浏览器双向语音及 Linux 安装/更新检查。TS6、移动语音、各浏览器完整兼容、TURN 长连接及容量指标仍在验收中。[查看支持与验证范围](docs/SUPPORT.md)。
+> **1.0.6 正式维护版本。** 核心发布范围是自托管账号、TS3 网关与网页工作区；好友 E2EE、TS6 和移动语音继续标为实验支持。 已有真实 TS3 协议联调、浏览器双向语音及 Linux 安装/更新检查。TS6、移动语音、各浏览器完整兼容、TURN 长连接及容量指标仍在验收中。[查看支持与验证范围](docs/SUPPORT.md)。
 
 ## 界面预览
 
-![WebTS 中文深色界面](docs/images/webts-preview.jpg)
+![WebTS 1.0.6 桌面好友与阅后即焚设置](docs/images/webts-desktop.png)
 
-<sub>使用专门测试账号与频道的界面预览；实际频道、成员和权限由所连接的服务器决定。</sub>
+<details>
+<summary>查看手机频道与站点首页</summary>
+
+<p align="center"><img src="docs/images/webts-mobile.png" width="320" alt="WebTS 当前源码的手机紧凑频道列表与语音控制" /></p>
+
+![WebTS 1.0.6 可自定义站点首页](docs/images/webts-home.png)
+
+</details>
+
+<sub>桌面截图使用 1.0.6，手机截图使用当前源码的紧凑布局，两者均为真实界面与合成演示数据；首页展示已部署站点的公开页面。手机新布局尚未包含在 1.0.6 安装包中。站名、图标和公告可自定义；界面截图不代表协议、语音或加密验收。</sub>
 
 ## 一条命令开始
 
-**Debian 12 / Ubuntu 24.04**，服务器 root 终端：
+### Linux / Docker：一键中文引导
+
+**Debian 12 / Ubuntu 24.04**，服务器 root 终端（非 root 先执行 `sudo -i`）：
 
 ```bash
 apt-get update && apt-get install -y curl ca-certificates && bash -c 'f=$(mktemp) && curl -fsSL https://raw.githubusercontent.com/PTPHAP/WebTS/main/install.sh -o "$f" && bash "$f"; r=$?; rm -f "$f"; exit "$r"'
 ```
 
-中文引导会先配置站名、公开运营资料，再收集域名、公网 IP、邮箱和默认 TS 地址，从源码构建并启动。安装后输入 **`webts`** 打开中文管理菜单。首次构建需要时间；部署前准备 HTTPS 域名、TLS SMTP 和开启全局语音加密的 TS 服务器。
+这条命令安装缺少的 Docker / Compose，下载最新正式版本源码，再通过中文引导配置站名、运营资料、域名、公网 IP、邮箱和默认 TS 地址，构建并启动容器。安装后输入 **`webts`** 打开中文管理菜单。首次构建需要时间；部署前准备 HTTPS 域名、TLS SMTP 和开启全局语音加密的 TS 服务器。[逐步安装与站长开通](docs/INSTALL.md)。
+
+### Windows：下载运行包，打开中文菜单
+
+Windows 10/11 x64 不需要 Docker 或开发工具链。[Windows 教程](docs/WINDOWS.md#一键下载与打开菜单)提供一次粘贴的 PowerShell 命令，下载 **1.0.6**、核对 SHA-256、解压到独立目录并打开 `webts.cmd`。选择“初始化”填写基础配置，再选择“启动”。首次先在本机使用，公网访问需要另配 HTTPS 和语音 UDP。
+
+已有 Docker，希望省去源码构建？[预构建镜像教程](docs/DOCKER.md#使用预构建镜像手动安装)提供正式镜像的下载、校验、导入与 Compose 配置命令。Windows 原生运行包和 Linux Docker 镜像是两种不同部署方式。
 
 | 我要做什么 | 从这里开始 |
 | --- | --- |
 | 第一次安装、申请证书、开通站长 | [安装教程](docs/INSTALL.md) |
 | 配置域名、邮箱、TS 地址、热加载和 TURN | [配置教程](docs/CONFIGURATION.md) |
-| Docker / systemd / 手动部署、备份恢复 | [部署与维护](docs/DEPLOYMENT.md) |
+| Docker 镜像与安装 | [Docker 安装](docs/DOCKER.md) |
+| Windows 中文初始化、运行与更新 | [Windows 安装](docs/WINDOWS.md) |
+| systemd / 手动部署、备份恢复 | [部署与维护](docs/DEPLOYMENT.md) |
 | 登录、导入身份、语音设置、头像 | [身份互用](docs/IDENTITIES.md) · [语音与头像](docs/CLIENT.md) |
 | 判断设备或某项功能是否支持 | [支持范围与常见问题](docs/SUPPORT.md) |
 | 设置首页图片公告与个人资料 | [首页与个人资料](docs/HOME-PROFILE.md) |
@@ -54,7 +73,7 @@ apt-get update && apt-get install -y curl ca-certificates && bash -c 'f=$(mktemp
 | 发布维护通知与更新邮件 | [信件与通知](docs/NOTIFICATIONS.md) |
 | 了解数据如何处理 | [隐私政策](PRIVACY.md) · [安全边界](docs/SECURITY.md) |
 
-完整导航见 [文档中心](docs/README.md)。[正式发布页](https://github.com/PTPHAP/WebTS/releases/tag/v1.0.1)提供完整源码 ZIP 和 SHA256 校验，含固定协议子模块；GitHub 自动生成的 Source code 归档不含子模块，请优先使用完整源码包。
+完整导航见 [文档中心](docs/README.md)。[正式发布页](https://github.com/PTPHAP/WebTS/releases/tag/v1.0.6)提供 Linux、Windows、Docker 镜像归档、完整源码 ZIP 和 SHA256 校验，含固定协议子模块；GitHub 自动生成的 Source code 归档不含子模块，请优先使用完整源码包。
 
 ## 已提供的功能
 

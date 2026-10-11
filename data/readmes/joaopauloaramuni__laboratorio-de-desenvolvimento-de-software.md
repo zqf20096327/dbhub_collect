@@ -164,7 +164,7 @@ IDE (Ambiente de Desenvolvimento Integrado) e editores especializados ajudam a e
 Ao se cadastrar no **GitHub Student Developer Pack**, você garante acesso gratuito à **versão Ultimate das ferramentas da JetBrains**, como o **IntelliJ IDEA Ultimate** 🧠💻. Essa é uma excelente oportunidade para utilizar recursos avançados de desenvolvimento — tudo **sem custo** para estudantes! 🚀
 
 ###### ✅ Passo a passo:
-1️⃣ **Adicione seu e-mail institucional** da PUC Minas (terminado em `@sga.pucminas.br`) como **e-mail secundário** na sua conta do GitHub em [https://github.com/settings/emails](https://github.com/settings/emails)  
+1️⃣ **Adicione seu e-mail institucional** da PUC Minas (terminado em `@pucminas.edu.br`) como **e-mail secundário** na sua conta do GitHub em [https://github.com/settings/emails](https://github.com/settings/emails)  
 2️⃣ Acesse a caixa de entrada do e-mail e **clique no link de confirmação** enviado pelo GitHub.  
 3️⃣ Ao acessar o [GitHub Student Developer Pack](https://education.github.com/pack), **permita que o navegador compartilhe sua localização atual** 🌍.  
 4️⃣ **Selecione "PUC Minas"** como sua instituição, envie um **print da sua carteirinha digital do app PUC Mobile** ou um **comprovante de matrícula recente** como forma de verificação. Depois, aguarde até **2 dias úteis** para que o selo **GitHub Pro** 🏅 seja ativado na sua conta.  
@@ -623,10 +623,10 @@ O **Design System** é um conjunto de padrões, regras e componentes reutilizáv
 | <img src="https://joaopauloaramuni.github.io/image/PUC-foto-13.jpeg" width="400px"> | <img src="https://joaopauloaramuni.github.io/image/PUC-foto-12.jpeg" width="400px"> |
 | *Foto 13: Cartoon Capela* | *Foto 14: Cartoon Entrada Principal* |
 
-| **Opção 19** |
-| :---: |
-| <img src="https://joaopauloaramuni.github.io/image/PUC-foto-10.jpg" width="400px"> | 
-| *Foto 15: Novo Jardim da PUC Minas* |
+| **Opção 19** | **Opção 20** |
+| :---: | :---: |
+| <img src="https://joaopauloaramuni.github.io/image/PUC-foto-10.jpg" width="400px"> | <img src="https://joaopauloaramuni.github.io/image/PUC-foto-14.png" width="400px"> | 
+| *Foto 15: Novo Jardim da PUC Minas* | *Foto 16: Fundo PUC Coreu Capela - Canvas* |
 
 ##### 🧩 Exemplo de uso da imagem em um sistema:
 
@@ -805,10 +805,22 @@ Exemplos de portfólio profissional:
 - 🌐 [Portfólio](https://portfolio-template-bohr-io.bohr.io/)
 - :octocat: [GitHub](https://github.com/bohr-io/portfolio-template)
 
+##### Abdul Momin
+- 🌐 [Portfólio](https://www.abdulmomin.dev/)
+- :octocat: [GitHub](https://github.com/Momin-786)
+
+##### Phas.dev
+- 🌐 [Portfólio](https://phas.dev/)
+- :octocat: [GitHub](https://github.com/pedrohqesilva)
+- :octocat: [Repositório do portfólio](https://github.com/pedrohqesilva/phas.dev)
+
 ##### Template para Terminal:
 - Componente React: [react-terminal-ui](https://github.com/jonmbake/react-terminal-ui)
 - Demonstração: [react-terminal-ui/demo](https://jonmbake.github.io/react-terminal-ui/demo/)
 - Styling: [ines/termynal](https://github.com/ines/termynal)
+
+##### Developer Portfolios
+- :octocat: [Repositório com exemplos de portfólios de desenvolvedores](https://github.com/emmabostian/developer-portfolios)
 
 ##### 📚 E-book: Building an Effective Dev Portfolio
 - [Building an Effective Dev Portfolio](https://storage.googleapis.com/joshwcomeau/building-an-effective-dev-portfolio.pdf)

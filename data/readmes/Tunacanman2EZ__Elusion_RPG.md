@@ -1,0 +1,413 @@
+# Elusion RPG
+
+A top-down 2.5D action RPG built in Godot 4.6 with GDScript, backed by a Flask account service. Four playable classes, six enemy families in forty-three elemental variants, collectable combat pets, fishing and cooking, player-to-player trading over a taxed economy, other players drawn live wherever you are and fighting the same monsters, and a complete run from town to final boss.
+
+![The final boss: two independent attack tracks telegraphing and erupting](docs/boss.gif)
+
+*The boss telegraphs in red, then erupts. Two attack tracks run on separate timers and never sync, so the pattern you are dodging is emergent rather than authored — and each spike leads you by its own telegraph time, which means a volley deforms in flight instead of landing where you were.*
+
+## The run
+
+Register or log in → pick one of four class slots → town → through the portal to the Big Field, one long road with ten fields off it, a different element in each and harder the further you go → the ladder at its far end down to the Field → the gauntlet → the Crowned Beholder → the teleporter that opens in its room → home to town.
+
+It has a beginning, an escalation, an ending, and a road back to the start.
+
+## Playing it
+
+Elusion is a PC game, played with a keyboard and mouse in a desktop browser at [play.elusionrpg.com](https://play.elusionrpg.com). It is not made for phones.
+
+The first time a character stands in town, a welcome card gives the way out to the Field and lists every key. **H** brings the keys back at any time, and they are read from the game's own input settings, so the card cannot drift from the game. **Change keys** on that card (or on Options) turns the list into buttons: click one, press the new key. Every key but Escape and Enter can be moved, each action takes two, and a key taken from another action says so.
+
+Options also sets the **text size** (up to 150%, for a big screen or one across the room) and the **font**: the standard one, or one of five that suit the game — Pixelify Sans, Tiny5, MedievalSharp, IM Fell English and Grenze Gotisch, each under the SIL Open Font License (see [assetlicense.md](assetlicense.md)).
+
+| | |
+|---|---|
+| Move | W A S D, or the arrow keys |
+| Sprint | hold Shift |
+| Attack, aiming with the mouse | Space, or right-click |
+| Use the shop, bank, fire or fishing spot | E |
+| Use the item on a hotbar key | 1 to 0 |
+| Bag, Gear, Stats, Map, Kills | I, G, C, M, K |
+| Open chat and type; send the line | Enter |
+| Close a window, or open Options | Esc |
+
+Those are the keys as the game comes; Change keys moves any of them but Esc and Enter. Enter hands the keys back as it sends, so you can walk and talk without stopping, and chat left open goes see-through over the world until you type or point at it.
+
+The version is in the login screen's corner and at the foot of **Menu** — MAJOR.MINOR.PATCH, 0.x until launch.
+
+The bar along the bottom holds the windows a player opens all the time; Friends, Players, Guild, Trade, the Kingdom board and **Kills** are under **Social**, and Controls, Options and logging out under **Menu**.
+
+**Kills** (or **K**) is the kill record: every monster in the game with its picture, how many of each your character has killed and when the last one fell, and — on the Everyone tab — every player's kills added up, with who has killed the most of each. The server counts them; the pictures are cut from each monster's own art.
+
+## Who makes it
+
+Elusion is made by **Elusion Studios**, and there are two of us:
+
+- **Tunacan** (Robert A. Clear), owner. I built Elusion solo up to launch, from zero coding experience: the code, the design and the server. Where this README says "I", it means me.
+- **[AllMind](https://allmind.dev/)** (Charles E. Clemmey Jr.), co-owner since 0.21.0. A self-taught coder, five years in, and a friend of more than ten years — we met in Mirage Realms and shared a guild. He gave Elusion its first push, some of the UI and the first inventory, and now we develop it together.
+
+The artists, and everyone else whose work is in the game, are credited under [License](#license) and in the game's Credits.
+
+## What's interesting in here
+
+The parts I'd point a reviewer at first.
+
+### The client does not own the save — `src/systems/savestorage.gd`, `src/systems/serverstorage.gd`
+
+`CharacterData` holds a `SaveStorage` and never asks which implementation it has. That seam is what let the game move from a local file to the Flask service without touching the twenty-nine places that call `save_data()`. The server is the authority now — it owns level, XP, the derived stat maxima and every loot roll — so the anti-tamper passes that existed to defend a local file against a text editor are skipped rather than run against data they can no longer say anything useful about. Writes are still debounced: saving on every stat change was firing about twenty times a second in normal play.
+
+### Enemies that form up instead of stacking — `src/enemies/baseenemy.gd`
+
+Pathfinding runs on `NavigationRegion2D`, but the interesting part is slot claiming: each enemy reserves a specific tile in the ring around the player and paths to that, so a group arranges itself around you rather than piling into one spot. Movement stays strictly 4-directional despite using real pathfinding underneath.
+
+They look and shoot at your body, not your node's origin, and the difference was a real bug. The two are 13 px apart on the warrior and 16 px on the tank, in opposite directions, so a warrior pressed against a wall above them had an origin inside the masonry: every enemy's line of sight hit the wall first, and the whole pack stood around holding fire. One helper, `BaseEnemy.target_point()`, now answers "where is the player" for every sight line and every shot, and a test presses each class against a wall from both sides.
+
+### One entity, two forms — `src/enemies/poisonslime.gd`
+
+The poison slime duplicates once when you get close, then each copy converts into four smaller slimes at half health. Large and small are the same scene and the same script — a single `is_small` flag selects the animation set, the projectile, the stat block, and whether the duplicate and split paths are available at all. Its acid leaves ground hazards that stack, so the fight is about position rather than damage.
+
+### One sheet, seven creatures — `src/shared/element.gd`, `src/shared/puddles.gd`
+
+Six enemy families exist as forty-three variants, and none of the extra art was drawn. A shader rotates the hue of a sprite's chromatic pixels and leaves its near-greys alone, so a green slime becomes a blue one without the black outline turning blue with it. There is a second, opposite shader for the boss: its spike is 84% grey rock, so hue rotation repaints sixteen highlight pixels and leaves the stone unchanged — that one tints the pixels *below* a saturation threshold instead. Which shader an asset takes was decided by measuring the sheet, not by eye, and both files carry the measurement. The sprites, bush mages and bush snipers had no death animation at all, so since 0.16.0 they flash white and break into pixels thrown up in their element's colour — drawn in code, so it costs no art either.
+
+What keeps that from reading as seven coats of paint is that the colour is the least of it. Three separate layers decide what an element *is*, and they are deliberately orthogonal:
+
+```
+data/enemies/icebushsniper.tres     how hard it hits, how much HP   — a difficulty tier
+scene/projectiles/icearrow.tscn     speed 320, scale 1.25           — how the shot moves
+scene/projectiles/icepuddle.tscn    5.0s, 2 damage a tick           — what it leaves behind
+ELEMENT_PROFILE in bossprojectile.gd   1.35 telegraph, 1.25 size    — how the boss's spike reads
+```
+
+Damage and HP rank identically in every family, because that axis is the tier ladder. Element character is the *other* axis: ice is slow, large and reaches furthest; wind is fast, small and brief; light is the quickest thing in the game and dark is the one you struggle to track. An ice arrow, an ice vine and an ice boss pillar all say the same thing about ice, which is what makes it learnable rather than decorative.
+
+The fifty-seven variant scenes each author their own material rather than building one at spawn. A `Material` is a `Resource`, so one authored in a scene is shared by every instance of it — which means a boss cast that erupts sixty-five spikes now allocates nothing, where it used to allocate sixty-five. Two small registries map a base scene to its elemental variant, keyed on the base's `resource_path` so an `@export` pointed at something custom passes through untouched, and an element with no scene of its own falls back to the original and is recoloured at runtime. A missing file degrades; it does not break.
+
+Ground hazards are the part that needed arithmetic rather than taste. A sixty-five-pillar cast every 2.16 seconds would cover 44% of the arena in standing acid if every pillar left one, so the roll is held at a third of that. Area goes as the square of scale, and two of the multipliers in that table exist purely to pay for a scene's size or spread rather than to express anything — water leaves three pools per roll, ice's pool is 1.56× the area — which is written down beside both of them, because a number that looks like character and is actually compensation is the kind that gets "tidied" back to 54% floor coverage a year later.
+
+### An economy that has to balance — `gold_ledger` (API repo), `src/ui/trade/tradepanel.gd`, `src/ui/kingdom/kingdomboard.gd`
+
+Players can trade with each other, which is the point at which "the server owns the items" stops being enough. Two clients can now cooperate, and a duplication bug between them mints currency rather than moving it.
+
+So gold is double-entry. Every creation and every destruction writes a row to `gold_ledger`, and one equation has to hold at all times:
+
+```
+SUM(gold_ledger.delta)  ==  SUM(saves.gold) + SUM(accounts.bank_gold)
+```
+
+The subtle part is what does **not** write a row. A player-to-player transfer creates nothing and destroys nothing — both purses are already inside the right-hand sum — so routing it through the ledger would net to zero and still pass. That makes the invariant alone a weak test, and `test_economy.py` asserts row *counts* and the minted total alongside it for exactly that reason. The suite mutates the ledger deliberately to confirm the check fails when it should.
+
+It is also the kind of guarantee that can be true and useless at the same time, and I found that out the hard way. The invariant held across 268 tests while one endpoint let any player write their own balance directly — because every one of those tests reached the economy through a server path and then checked the books, and none of them tried the balance itself. The suite now attacks it head-on. An invariant only tells you about the paths somebody walked.
+
+Trades are taxed, and the tax is the one place gold genuinely leaves the world. You are charged on what you **receive**, valued from the item table, gold included, and it is taken after the swap so gold you just received can pay for it. It rounds up with a floor of 1, which means splitting one trade into five is strictly more expensive than doing it once — the rounding is the anti-avoidance rule, not an accident of integer maths.
+
+A sink nobody can see is a tax; a sink with a scoreboard is a contribution. `GET /api/economy/kingdom` sums those rows into a leaderboard, and the board recomputes on request rather than counting into a running total — a second place the truth lives is a first disagreement nobody can resolve.
+
+Both sides confirm before anything moves, and a trade that fails validation at execution is refused through one path that marks it dead for *both* players. That one came out of a test I wrote speculatively: `db.rollback()` undoes the confirmation made in the current request and not the one the other player committed minutes ago, which left trades stuck half-confirmed until `_trade_refuse()` existed.
+
+Confirming means the offer that was on the screen: every change moves a revision the accept has to name, so an offer swapped a moment before the click is refused rather than executed. And a trade changes two bags while only one player's request runs it, so both are flagged in the same transaction; until a client has been handed its new bag, a whole-bag save from it is refused. That is what stopped the player who accepted first from losing what they received the next time they moved a potion.
+
+### Real accounts, not a local profile gate — `src/systems/api.gd`
+
+Passwords are salted and hashed server-side; the client holds a bearer token and never sees a hash. Login and "no such user" return an identical 401 so the endpoint can't be used to enumerate usernames. Rank is a ladder — player, mod, dev, co-owner, owner — decided on the server, and **neither of the top two can be stored at all**: both come from environment variables, so no request and no database edit can grant them. A co-owner also needs the owner's switch to be on (next section).
+
+### Staff tools that actually reach the player — `src/ui/staff/staffpanel.gd`, `src/ui/characterhud.gd`
+
+Mods, devs, a co-owner and the owner get a Staff button on the HUD: every account with who is online right now, and kick, ban (1, 7 or 30 days, or permanent), unban, promote and demote. The panel decides nothing — it only hides what the server would refuse. A mod cannot touch a mod, only a dev or above bans permanently, and nobody grants a rank at or above their own. And no staff rank can create an item: giving yourself one, and writing a whole bag or bank at once, are the owner's alone — and a co-owner's, while the owner lets him in.
+
+The interesting part was what a kick looked like from the other side: nothing. The server deleted the session, but the game never asked again after the login screen, so a kicked player played on until they restarted. The game now sends a heartbeat every fifteen seconds and re-checks at once on any refused request — a kick lands in about a second — and only a 401 counts, so restarting the server never signs everyone out.
+
+The owner's GM panel has a **Testing** tab: gold and items by id, an **Item catalogue** (`src/ui/owner/itemspawner.gd`) - every item the game loaded, with its picture and rarity, searchable by name or id, spawned into the bag with one click and put straight on, for gear - and boxes that set the owner's own character's level and skill levels on the server - one skill or all six - so level 22 gear and high-level recipes can be tested without the hours of play. Beside them are a **God mode** switch, two switches that make every mythic attack take its one-in-ten or its one-in-a-hundred roll (so the rare ones can be seen on demand), and a **Performance readout**. Every grant is a server request the server logs; the tools only exist for the owner (and a co-owner, while he is in), and the routes refuse anyone else.
+
+Its **Account** tab lists who is online, each with **Bring** and **Go to**. Go to lands you beside them, which the server alone could not do: it only knows which area a character is in. But the presence link draws everyone in your area where they stand, so once you arrive the game finds their picture and puts you next to it.
+
+Beside **View account** are **Give item** and **Save history**. Give item opens the catalogue with the player's name in it: a click puts the item in the bag of the character they are playing, and their game is handed the new bag on its next poll with a line saying who gave them what. Save history lists that character's last twenty snapshots - the server keeps one when the game saves, at most every ten minutes and only if something changed, and one before every gift and every rollback - and **Restore**, pressed twice, puts the character back: level, XP, gold, gear, pet, bag and skills, but not the account's bank. The gold moves through the ledger, the player is signed out so their game reloads, and the snapshot taken first undoes it. It is the owner's alone because it can bring back an item the player has since traded away, and the window says so.
+
+**Set level**, beside Give to in the catalogue, puts the character a player is playing at any level, so somebody who has just arrived can try the later weapons while the game is in testing. It takes a snapshot first, so Save history can put it back, writes a line on their record, and signs their game out so it loads the new level.
+
+**Every gift is counted.** The server keeps a ledger of everything given out from these tools — items and gold, to a player or to the giver himself — with what each gift was worth on the day, so a price changed later never rewrites it. **Gifts ledger** on the Testing tab reads it back: the totals, by player and by giver, set beside all the gold in the game now. Gifts from before the ledger existed were read back out of the staff log and the gold ledger the first time the server started with it. It exists to answer one question honestly: how much of this economy came from me rather than from play.
+
+**A second key, for a co-owner.** There can only be one owner, so a co-owner is a second gate rather than a promotion. The server's environment names who may be one, beside the owner, and the **Co-owners in** switch on the GM panel's Server tab says whether they are in right now; only the owner can move it. While it is on, a co-owner has every owner tool and wears a gold CO-OWNER badge, but still cannot touch the owner's own account. Off, he is back to his own rank on his next request, and the owner's buttons leave his screen while he plays.
+
+There are no debug keys. The game used to have a row of them for items, pets and god mode, and they were a second way in to things the panel already did, gated on a check the client makes about itself. They are gone, and a test fails if a function key comes back.
+
+Staff names are public - the crown and the MOD and DEV badges say exactly whose password is worth guessing - so a staff password alone opens nothing. For a staff account with a confirmed recovery address, a correct password gets a six-digit code by email instead of a session, and only the code logs in. A wrong code counts toward the same lockout as a wrong password.
+
+### Runs on modest hardware, measured rather than guessed — `src/systems/settings.gd`
+
+Before adding a single graphics option, the real scenes were benchmarked on the slowest machine available: a graphics card simulated in software on two CPU cores. Two things carried almost all the cost — the candle and lantern lights, which double the frame time of any area they are in, and drawing at a 1440p or 4K window's full resolution, which is 4x or 9x the pixels for pixel art that gains nothing from them. Those became the options: **Simple lighting** (2x faster in lit areas), **1280 × 720 rendering** (3–5x faster on big screens), a **Compatibility (OpenGL) renderer** for hardware whose Vulkan is weak, a **30 fps cap** for machines that cannot hold 60 smoothly, and a **background limit** that drops to 15 fps when the game is not the focused window. For a desk of screens at different refresh rates, which made the game stutter on the slowest one, Options picks the **monitor** by size and refresh rate, offers **exclusive fullscreen** beside windowed and borderless, can **cap the frame rate to the screen's own**, and says when another screen is setting the game's pace; the exported game reopens on the screen, and in the spot, it was left. Everything that trades looks for speed is off by default, and the table of measurements lives in the code beside the options it justified. The same numbers can be read on the real thing: the owner panel's performance readout draws frame time against the 60 fps budget, the worst frame since it was switched on, physics pairs and requests per second, in the exported game rather than only in the editor.
+
+### Composition where inheritance would have been wrong — `src/pets/pet.gd`
+
+A pet is a shrunk, ally-flipped enemy, so inheriting `BaseEnemy` looks obvious. It isn't: a pet follows an owner and picks targets, an enemy chases and leashes home. `Pet` is its own `CharacterBody2D` with every combat value exported, and the two share nothing but a shape.
+
+### Weapons that bring their own attack — `src/projectiles/meteor.gd`, `src/projectiles/spinningaxe.gd`, `src/projectiles/dynamite.gd`
+
+Every weapon up to ember adds its damage to the class's own attack. The mythic tier changes what the attack *is*. A **Meteorite** turns the mage's spell into a meteor that comes in at an angle wrapped in a fire vortex, a ring of flame swirling on the ground where it will land, and leaves its crater on fire, burning anything that stays in it. A **Double Axe** is thrown to a spot and spins there, cutting everything near it and leaving each cut bleeding — faster and wider the longer it spins — until the warrior attacks again to call it back. **Dynamite** replaces the tank's aura with a lit stick on a fuse; the aura's fire ring keeps burning while it is thrown, a blast sets off any lit stick near it, which goes up a beat later and a quarter harder, and the scorch smoulders.
+
+Each one has two rolls, made as the attack is made: one in ten, and a rare one in a hundred. The Meteorite drops a second meteor, or, rarely, its ring drags the monsters around it in toward the impact (bosses stand their ground). The Double Axe flies wide, half as far again, or, rarely, bloody, spattering the ground as it spins. Dynamite throws a bundle of three, or, rarely, a barrage of five. Each weapon's tooltip names its rolls.
+
+The three are Ahvassa's art; the flight, the impact and the explosion are built in code from whole-pixel particles, so they read as the same pixel art. Their damage climbs the same ladder as every other weapon, and the axe can't be left grinding a spawn point with nobody playing.
+
+Any enemy can drop one, and the tougher it is, the better the odds. The Crowned Beholder is about 1 in 150 kills. The dark band is 1 in 20,000, and a light slime is a lottery ticket at 1 in 2,000,000. The server makes the roll and gives the killer their own class's weapon. The bag lands with a red pillar of light and a burst of sparks, and the finder gets a red flash and a MYTHIC DROP banner. Everyone else online sees a banner naming who found it and on what.
+
+### Frame-accurate combat — `src/enemies/bushsniper.gd`, `src/enemies/poisonslime.gd`
+
+Projectiles are released on a specific animation frame rather than at the start of the swing, so the shot leaves the sprite at the moment the art throws it.
+
+### Gathering that the server owns outright — `src/world/fishingspot.gd`, `src/ui/cooking/cookingscreen.gd`
+
+Fishing and cooking were the first two skills the client cannot lie about, and the pattern they proved now covers all six. The rod and bait are checked, the catch is rolled and the XP granted by the server against items it consumed itself; `PUT /api/character/skills` then *drops every skill it accepts* from whatever the client sends, because a client's next routine sync would otherwise overwrite a grant the server just made. The fishing spot draws its own tell — ripples that fade in by proximity — in `_draw()` rather than using art.
+
+### An audit I ran against my own API — `SECURITY_NOTES.md` (API repo)
+
+I attacked my own server as a logged-in player with a modified client and wrote down what I got away with, then kept the file honest as the code moved. Twenty findings now: nineteen closed, one open and still listed because naming it is the point. A twenty-first entry, E-15, is an audit that went looking for broken access control and **found nothing** — it is in the notes because a search that comes back empty is still a result. Each has a one-line risk and a one-line fix:
+
+| # | Risk if exploited | Fix |
+|---|-------------------|-----|
+| E-1 | Any item, any quantity, written straight into the bag or bank. | Server-side authority — first saves reconciled against what the server granted; now the bag and bank are the server's outright, every drag, bin and coin pile its own request. |
+| E-2 | Any skill level claimed, skipping all progression. | Server-side authority — all six skills are granted only by the server and dropped from client saves; the hard cap at 99 is the guardrail behind it. |
+| E-3 | Kills reported without fighting, farming XP and loot. | Rate limit and a cap from the world's own respawners; the owner can switch trading off, and a fresh mythic or Perfect can't be traded for 48 hours, so cheated loot stays in the account that made it. *Open — needs server-side combat.* |
+| E-4 | A crash on a reachable server hands out a shell next to every password hash. | Safe default + refusal — the debugger is off unless deliberately switched on, and the server refuses to start if anything else asks for it. |
+| E-5 | Passwords guessed at machine speed. | Rate limit — per-account lockout plus per-address ceilings. |
+| E-6 | A leaked token works for a month, even after a password change. | Revocation and rotation — log out everywhere; a password change ends every session. |
+| E-7 | Gear and potions used without the level or skill they need. | Server-side authority — the server checks requirements and destroys the item itself. |
+| E-8 | Infinite gold, destroying the economy and progression. | Server-side authority — gold is server-owned on every write path. |
+| E-9 | Heal to full at will; never die. | Extra check — rises past what regen and potions explain are trimmed. *A bound on the rate, not a proof — and it earned its keep: it is what caught E-16.* |
+| E-10 | Free revives, so death costs nothing. | Server-side authority — the server charges the revive from its own balance. |
+| E-11 | A ban lasts as long as it takes to register a new account. | Extra check — no sign-ups from an address or a computer (the game's install id) holding a live ban; linked accounts shown to staff. *A VPN no longer gets past it; deleting the game's install file still does.* |
+| E-12 | Removing anyone required a ban, the harshest response available. | New tool — a kick that ends sessions without banning. |
+| E-13 | Four closed fixes silently off in production, every test green. | Deployment check — a suite and a boot-time error for any protection running unarmed. |
+| E-14 | A kicked or banned player keeps playing as long as the game stays open. | Heartbeat — the game re-checks its session and a dead one returns it to login. |
+| E-16 | Accepting death healed you on your own machine, and the gold it took came back at the next login. | Server-side authority — `POST /api/character/respawn` refuses a living character, burns the carried gold through the ledger and refills from the class curve. *Found by dying, not by auditing.* |
+| E-17 | Two requests sent at once both spent the same thing: one loot cell paid out five times, one purse was banked twice. | Serialisation — every write holds the database's write lock from its first read. *Found by playing: one swing, two kills, one kill's XP gone.* |
+| E-18 | The other player swapped the offer a moment before your Accept, and it went through. | Compare-and-set — Accept names the version of the offer it saw, and what a trade gave you cannot be wiped by a save from before it. |
+| E-19 | Two games on one account overwrote each other's bag, and a stolen token kept working beside yours. | One session at a time — a new login ends the others. |
+| E-20 | One guessed staff password opened the moderation desk. | Second factor — a code by email, once per computer for 30 days. *It stands aside, and says so, where there is no address to send it to.* |
+| E-21 | A copy of the database — a backup or a leaked file — logged its holder in as every player who was signed in, for up to 30 days. | Hashing at rest — the server keeps only each session token's SHA-256, as it already did for passwords (scrypt) and trusted devices; old sessions were hashed in place, so nobody was signed out. *Found by a course assignment: audit how your app stores credentials.* |
+
+The one I'd actually point at is **E-8**, because I found it by accident. Every other finding came from attacking the API deliberately; that one turned up while wiring an unrelated endpoint. `gold` was a writable field on the status endpoint and had never been marked server-owned, so one request set any balance a player liked and the supply invariant broke on the spot. What makes it worth writing down is *why the tests missed it*: all 268 of them moved gold through a server path and then asserted the books balanced. None tried the front door of the balance itself.
+
+It happened twice. **E-10** is the same mistake one endpoint over: lusions were client-written too, and since reviving after death is the only thing lusions are for, dying was free for anyone who skipped one line. After the second one the question stopped being "is this endpoint safe" and became "which fields can a client still write, and who decided that" — which is a list now rather than an assumption.
+
+Player trading arrived after the audit and gets its own section there, because it is the first feature where two clients can cooperate against the server rather than one lying alone. The login endpoint that came out of it throttles per account *and* per source address — the second one because eight consecutive misses on one account does nothing about one host trying the same password against a thousand usernames.
+
+### Other players, on your screen — `src/systems/presence.gd`, `src/characters/remoteplayer.gd`, `presence.py` (API repo)
+
+Everyone in the same area sees everyone else: walking and idling the right way round, swinging, the tank's aura lit, the pet trailing behind, and the name over the head in the colour they chose, with the guild tag and the crown or staff badge. It runs over a WebSocket to a small asyncio server beside the API, ten updates a second per area, and none of it touches the database. The socket never sees a login: the game trades its session for a two-minute ticket, so a ban or a sign-out elsewhere ends the connection within seconds without the socket server knowing how logins work. And the game only ever says *where* it is — who somebody is (name, rank, colour, which pets they may show) comes from the server's own rows. Since 0.7.0 the same socket carries the monsters too — next section.
+
+Since 0.19.0 you see their attacks as well: meteors, thrown axes, Dynamite, slash waves and healing orbs, each built from the class's own scene as a *picture* that touches nothing — no hit, no XP, no pull — so only the attacker's own game ever lands a blow. A lever pulled opens its gate for everyone in the area, and the server remembers it for whoever walks in later. And other players are played back on their own game's clock instead of chased toward their newest step, so they walk past evenly rather than surging and stalling.
+
+### The same monsters, and a bag each — `src/world/monstersync.gd`, `src/shared/targets.gd`
+
+Everyone in an area fights the same monsters. The server has no map and no AI, so it does not run them: one game does — the area's leader, the one that walked in first — and tells the others ten times a second what moved and what happened, a shot, a spike, a death. Everyone else's monsters are mirrors that ease toward where the leader has them, and a hit on one shows its number at once and goes to the leader to be applied. Each copy of an attack can only touch the player on its own screen, so you are hurt by what you see. When a monster dies, every game whose player helped reports the kill itself and gets its own XP and its own bag from the server's own roll; nobody sees anybody else's. When the leader leaves, the next game takes over with every monster where it stands. The leader is trusted with where the monsters are, not with how hard they hit: each game builds every attack from its own copy of the monster and caps the few numbers the leader sends. A game from before 0.7.0, or no presence server at all, fights its own, exactly as before.
+
+### The server watches every fight — `src/world/monstersync.gd`, `combatbook.py` (API repo)
+
+Since 0.10.0 every note of every fight passes the server on its way somewhere, so the server reads them: it keeps its own count of each monster's health from the catalogue's maximum down, holds every hit to the biggest hit and the damage a second that character could deal with what it carries and its skills — the game's own arithmetic, exported with the spawn points of every area — and judges every death as agreed, short (it died with health the server still counted) or not due (the map never held it). The leader's game sends its world even when it plays alone, with its own player's hits inside it. Nothing in play changes yet: kills are paid as before, and a week of the server's verdicts on honest play decides when it starts refusing the ones it cannot back up.
+
+### Plays in a browser, from the API's own address — `export_presets.cfg`, `web/shell.html`, `src/systems/webpage.gd`
+
+The Web preset builds without threads. That makes it run on any current browser, and its host needs no special headers. The page is a loader in the game's own art. It stays in front of the canvas until the login screen has drawn, so the player goes from one straight to the other.
+
+The build calls the API at the address it was loaded from, because a browser refuses calls to any other one. `web/serve.py` stands in for the real site locally, and `DEPLOY.md` in the API repo has the Caddy and nginx blocks, both tested against a real export in headless Chromium.
+
+Building it turned up three things the desktop never showed:
+
+- **Every export had an empty item registry.** An export lists `.tres` files as `.tres.remap`, and the scan looked for `.tres`.
+- **The world was loading in the login screen's first frame.** A no-threads build loads a "background" request on the spot.
+- **A closed tab lost its last two seconds.** A hidden page draws no frames, and every save was sent from a frame. Now the unsaved sections go out as `keepalive` fetches as the tab hides, and the browser finishes them without the page.
+
+### Data-driven items — `src/systems/itemregistry.gd`, `src/types/itemdata.gd`
+
+`ItemData` resources are scanned from `data/items/` at startup and indexed by id. Item definition (`ItemData`) is deliberately split from instance state (`ItemStack`), so saves store only `{item_id, quantity}` and rehydrate against the registry on load. Drop a new `.tres` in the folder and it exists.
+
+Items carry two independent requirements, and the split is the interesting part. `required_level` is character level, which is right for gear you **buy** — the ladder a shop sells against. `required_skill` / `required_skill_level` is a named skill, which is right for things you **made**: a cooked shark is gated on cooking, not on how many slimes you killed, because fishing and cooking grow on their own curves and a character level bound would clamp a dedicated cook. An unknown skill name is loud and permissive — it logs an error and lets the use through, because failing closed on a typo would silently delete an item's usefulness.
+
+Dropped and bought gear rolls each of its stats, 85–115% of the `.tres`, and one in a hundred is Perfect at 120% on everything — the shop shows "?" for a piece's stats and the roll is revealed when it is bought. The roll lives in the item id — `jadechest~a104h96` — rather than in a column beside it, so every cell, bag, trade and equipment slot that already holds an id carries the roll without a change, and the server's "the item you saw in that cell" check covers it too. `ItemRegistry` hands back a scaled copy for a rolled id, so nothing that reads `damage` or `bonus_max_hp` needs to know rolls exist; the server does the same integer sum, because it derives max health from what is worn.
+
+Since 0.11.0 armour also rolls an element it resists — one of the seven lands', a few percent by tier, at the end of the same id (`jadechest~a104h96r605`, fire 5%). Matching pieces add up to a 50% cap and take that share off a hit of that element, after the defense tier and the armour; a physical hit is armour's alone. Weapons never roll one: what a player hits for stays a matter of attack level and gear, and the element only decides what hurts them less. The shop shows "Resists ?" until the till rolls it, and the Gear window adds up everything worn.
+
+## Layout
+
+```
+src/
+  characters/    player base + the four classes (warrior, mage, tank, healer)
+  enemies/       BaseEnemy and its subclasses, including the multi-phase boss
+  pets/          the companion system
+  projectiles/   arrows, acid, vines, slash waves, ground hazards
+  shared/        facing and formation helpers, the element table and its two
+				 shaders, the base-scene -> elemental-variant registries, and
+				 who a monster may chase
+  systems/       save/load, item registry, API client, the presence link,
+				 game state, audio, settings and the world map
+  tools/         editor-only: the game-data exporter and the in-engine test runner
+  types/         the Resource definitions — ItemData, EnemyData, ClassData, ItemStack
+  ui/            HUD, inventory, bank, shop, cooking, trade, kingdom board,
+				 loot bag, character select, login, options, staff panel
+  world/         ladders, portals, shops, fishing spots, firepits, loot bags,
+				 and the sync that shares an area's monsters
+scene/           the .tscn side of all of the above
+data/items/      ItemData resources — the item database (149 of them, in eight
+				 categories: amulets, armour, consumables, fishing, gold,
+				 lusions, pets, weapons)
+data/enemies/    EnemyData resources — stats and drop tables, one per variant
+data/classes/    ClassData resources — the per-class stat curves
+data/gamedata.json  generated by src/tools/exportgamedata.gd; the server reads it
+docs/            design notes
+```
+
+Three files carry most of the complexity and are the best places to start reading: `src/enemies/baseenemy.gd` (the shared enemy brain), `src/enemies/bossenemy.gd` (two independent attack tracks that never sync, so what you dodge is emergent rather than authored) and `src/systems/characterdata.gd` (everything a character is, and the seam the server took over).
+
+## Running it
+
+The game: open the project in Godot 4.6 and press <kbd>F5</kbd>.
+
+The account service is a companion Flask app in its own repository. Start it before launching the game — the game expects it at `http://127.0.0.1:5000` (set in `src/systems/api.gd`).
+
+```bat
+cd <your-path>\game\api
+.\venv\Scripts\python.exe app.py
+```
+
+```bash
+# macOS / Linux
+cd <your-path>/game/api
+./venv/bin/python app.py
+```
+
+Calling the virtualenv's interpreter directly is deliberate: it skips having to activate the environment and guarantees you're on the venv's Python rather than whatever `python` happens to resolve to on `PATH`.
+
+To see other players and share monsters with them, start `presence.py` the same way in a second window (`.\venv\Scripts\python.exe presence.py`). Without it the game plays exactly as before: it draws nobody else and fights its own monsters.
+
+That serves a hundred and sixteen endpoints — accounts and sessions, character saves, the shared bank, combat kills, loot, the vendor, fishing and cooking, item use, reviving, player trading, guilds, chat, friends, the kingdom ledger and staff tools — plus interactive Swagger docs (via flasgger) at `http://127.0.0.1:5000/apidocs`, which is the quickest way to see the whole surface at once.
+
+A hundred and eleven of the hundred and sixteen require a bearer token. The five that do not are `register`, `login`, `status`, and the two halves of account recovery (`recover` sends a code to the verified email, `reset` spends it), and that is the whole public surface.
+
+The backend has fifty-two test suites, run together with one command:
+
+```bat
+cd <your-path>\game\api
+.\run_tests.ps1
+```
+
+```
+test_api.py            527 checks    the endpoint surface, moderation, presence
+test_economy.py        395 checks    the gold ledger and the supply invariant, and selling to the shop
+test_security.py       299 checks    the audit's findings, held closed
+test_loot.py           259 checks    every finished item is actually obtainable
+test_equipment.py      212 checks    the equipment system, client and server
+test_gearbonus.py      173 checks    what gear adds, counted by the server
+test_guilds.py         167 checks    founding, joining, ranks, taking a guild down
+test_moderation.py     156 checks    the moderation record, a log that opens on moderation, the powers in words
+test_ownership.py      150 checks    no route hands over a row that is not yours
+test_chatrooms.py      142 checks    chat channels, whispers, pictures posted by link
+test_trades.py         136 checks    a trade reaches the right person and means what they saw
+test_security_doc.py   135 checks    SECURITY.md is checked, not trusted
+test_refusals.py       127 checks    401, 403, and the 404 that is really a 403
+test_rollback.py       126 checks    the save history: snapshots, the owner's rollback, giving a player an item
+test_presence.py       122 checks    players seeing each other, whose game runs each area's monsters, every attack and lever
+test_quality.py        113 checks    rolled gear from drops and the shop, carried whole by every path; armour's resistance
+test_pacing.py         112 checks    the pace of the game: what the server pays, the store charges and the shop pays back
+test_chatsafety.py     100 checks    ignore, report and mute; a card per reported player
+test_combatbook.py      95 checks    the server's books on every monster: every hit, spawn and death judged
+test_friends.py         76 checks    asking, answering and ending a friendship
+test_chardelete.py      72 checks    deleting a character, and only the character
+test_chat.py            67 checks    world chat, end to end, one line as typed
+test_throttle.py        62 checks    login lockout, per-IP spray, token rotation
+test_deploy.py          61 checks    what the first live deploy found: .env read first, one-file backups
+test_staffcode.py       60 checks    a staff password alone opens nothing, once per computer
+test_bagmoves.py        59 checks    the bag and the bank are the server's: moves, the bin, piles
+test_broadcast.py       59 checks    the server's voice, end to end
+test_gathering.py       57 checks    fishing and cooking authority, and a save that cannot undo a cook
+test_coowner.py         56 checks    the co-owner's gate: named by the server, let in by the owner's switch; a player's level
+test_recovery.py        54 checks    account recovery, adversarially
+test_maintenance.py     53 checks    the owner's kill switch
+test_accounts.py        50 checks    signing in: one game per account, locks, no mail
+test_settings.py        49 checks    the options screen's rules
+test_teleport.py        49 checks    moving players and landing them spread out
+test_map.py             48 checks    the map's fog rules and their storage
+test_tradegates.py      41 checks    the owner's trade switch, and fresh mythic and Perfect finds held 48 hours
+test_gifts.py           40 checks    the gifts ledger: every gift and what it was worth, the report, the past read back
+test_killrecord.py      40 checks    every paid kill counted per character and monster
+test_clientbuild.py     37 checks    the client build gate
+test_guildlife.py       37 checks    what members are playing, what happened
+test_healing.py         34 checks    the heal clamp stays quiet for honest play
+test_revocation.py      34 checks    what it costs to change your mind
+test_killwatch.py       31 checks    the kill-fraud watch fires when it must
+test_rewards.py         30 checks    better loot carries more; legendary is rare
+test_namecolour.py      27 checks    the colour a player chose, on every name
+test_playing.py         25 checks    which character an account is playing
+test_concurrency.py     23 checks    requests sent together cannot both spend the same thing
+test_equipmove.py       22 checks    equipping moves the item, never copies it
+test_catalogue.py       13 checks    the shipped catalogue arms every protection
+test_attackxp.py        12 checks    attack XP is banked at the kill
+test_skill_train.py     10 checks    skills train only as fast as time allows
+					─────
+					4,934 checks, 0 failures
+```
+
+Each suite points `ELUSION_DB` at a throwaway file before importing `app.py`, so running them never touches the real database. The fifty-second, `test_mail.py`, sends a real email to prove the mail settings work, so it needs the SMTP settings in the API's `.env` and is not in the count.
+
+The game has its own in-engine suite as well — `src/tools/testrunner.gd`, run headless by `run_tests.ps1` — **3,664 checks, 0 failures and one skip** — the skip is the sound registry, which is filled one recording at a time (the teleport is the first); see [docs/audio.md](docs/audio.md). It runs inside a real Godot instance with the autoloads up, so it can compare the `.tres` data files against the constants the code actually uses. The first thing it does is load all 142 scripts under `src/` and name any that will not compile, because a build error that surfaces as eight unrelated failures costs an hour to trace.
+
+**If you cloned this repo, it will report `3600 passed, 0 failed, 25 skipped` and exit 0.** That is correct. One of those skips is the empty sound registry, which is the same on any machine; the other twenty-four are worth explaining because they are the one place this repository is deliberately incomplete — see [the note below](#a-clone-is-missing-the-item-art-on-purpose).
+
+**Both suites run on GitHub for every push and every pull request** (`.github/workflows/tests.yml`, here and in the API repo). The game's run is a clone — no art pack — so a new check that needs the art and does not say so fails there before it reaches anybody who clones this. The API's runs `run_tests.ps1` itself, so a green tick means what a green run on the PC means.
+
+Some of the suite is there to catch things the engine will not tell you about:
+
+- **A texture deleted while a TileSet still paints from it.** Godot does not warn. It silently rewrites the reference into an embedded pointer at its own import cache, which keeps drawing until that cache is cleaned and then stops. `_test_no_import_cache_references()` fails on any scene naming a path under `res://.godot/`.
+- **Configuring a node after `add_child()`.** `_ready()` has already run, so an element profile multiplies the scene's defaults and your assignment flattens the result — the thing wears its element's art and none of its behaviour. A text check, because the failure has no runtime symptom.
+- **An unused parameter.** GDScript warns in the editor and not through a headless load, so that class of regression is invisible to CI. `_test_no_unused_parameters()` applies Godot's own rule across 2,659 signatures.
+- **Art nobody has classified.** Every top-level folder under `art/`, `assets/` and `audio/` maps to a named owner, and a new one fails the suite until somebody says whose it is. Adding art is a licensing decision; this is what makes it one in practice.
+
+`src/tools/atlasaudit.gd` (run `.\atlasaudit.ps1`) is a separate read-only tool answering the two questions a filename search gets wrong. **Painted cell counts per texture** — because tile *definitions* in an atlas are not placements, one texture can back several atlas sources, and source ids are per-TileSet. And **reachability**, walking `ResourceLoader.get_dependencies()` from every scene and resource, which is the list you can actually delete from. It found two byte-identical art files a filename sweep had cleared as used, because their twins in other folders are.
+
+`python app.py` is Flask's development server, which is right for local play and wrong for anything public. The interactive debugger stays off unless `ELUSION_DEBUG=1` is set on purpose, and `wsgi.py` / `DEPLOY.md` in the API repo cover running it behind a real WSGI server. `DEPLOY.md` also records how the live server behind elusionrpg.com is set up, how to update it, and how its backups work.
+
+Without the service running, the login screen will tell you it can't reach the server — the game does not fall back to local accounts by design.
+
+**In a browser:** export the **Web** preset (Project → Export), which writes `builds/web/`, then run `python web/serve.py` and open `http://localhost:8060`. It serves the export and passes `/api/` through to the service, as the real site does.
+
+**On the live server:** `.\tools\deploy_web.ps1 -Export` exports the Web preset, uploads it under a new name and swaps it in, keeping the build it replaced; `-Rollback` puts that one back, and `-DryRun` prints every command without running any. Files whose bytes did not change keep their dates, so a returning player downloads only what changed. The API repo's `DEPLOY.md` has the rest.
+
+**On Windows:** export the **Windows** preset, which writes one file, `builds/windows/ElusionRPG.exe`, with the game inside it. It looks for the service at `127.0.0.1:5000` unless told otherwise: `--server=<address>` on its command line, or a one-line `server.cfg` beside its save data.
+
+### A clone is missing the item art on purpose
+
+`art/pack/` is a private submodule. It holds item, weapon, armour and icon art purchased from [Clockwork Raven Studios](https://www.clockworkravenstudios.com/) under a licence that permits using it in this game and **not** redistributing it. Publishing this repository with those files in it would be redistribution, so they are not here.
+
+What that means if you clone: 148 textures the code loads will be absent, so items, weapons, armour and the stat icons render blank. Everything else — the world, the characters, the enemies, the bosses, all the systems — works.
+
+The test suite understands the difference. The twenty-four checks that genuinely need that art report as **skipped, with the reason**, and the run exits 0. They stay ordinary failing checks on a machine that has the pack, so a renamed icon is still caught by someone who can see it.
+
+This boundary was also worth one real bug. `kingdomboard.gd` used `preload()` on two of those textures, and `preload` resolves at compile time — so in a clone that script did not compile and `KingdomBoard` did not exist. One missing decoration removed an entire screen, silently. It now holds paths and loads lazily, and the header keeps its column widths when the texture is null.
+
+## Status
+
+The game is complete and playable start to finish, online: accounts, chat, friends, guilds, trading, every other player in your area drawn live, and since 0.7.0 the same monsters for everyone in an area, with a loot bag each. Those monsters are run by one player's game, not by the server - but since 0.10.0 the server watches every fight and keeps its own count. Moving combat onto the server is happening in steps, and the API repo's `E3_SCOPE.md` says why it is the one that matters and where each step stands.
+
+Authority has moved off the client. The server rolls every loot drop with entropy the client never sees, owns level and XP and the stat maxima they imply, holds loot bags as rows the game renders a copy of — taking an item out of one is a request, not an announcement — and now reconciles the backpack against what it actually granted, so a modified client's fabricated items are trimmed to nothing.
+
+Gold is double-entry on top of that. Every coin that enters or leaves the world writes a ledger row, players can trade with each other, and the trade tax is the first deliberate sink — with a public board showing where the money went, because an invisible sink is just a tax.
+
+Item use is server-authoritative too now — the server checks the level and skill requirement against the character it owns and destroys the item itself, so the gates stopped being advisory the day trading made them matter. So is reviving: the server refuses anyone who is not dead by its own reckoning, takes the cost in lusions itself, and restores the resources from the class curve, which is what puts a price back on dying.
+
+One gap remains, named and tracked in the API repo's `SECURITY_NOTES.md`: the kill *event* is still asserted rather than verified — the server now watches the fight and writes down every kill its own count does not back up, but it still pays on the game's word. Skills used to be the second: three of the six had no server-side grant, and `/api/skill/train` closed it by having the client report raw activity and the server clamp it, rather than waiting for an event that does not exist. Health was the third, and is closed the way the backpack was — measured in log-only mode first, then clamped, so a rise that regeneration and an authorised potion cannot explain is trimmed rather than stored. That clamp is also what caught E-16, which is the best argument I have for building controls you hope never fire.
+
+`devlog.md` records the architecture decisions and the reasoning behind them, including the ones that turned out to be wrong.
+
+## License
+
+Code is MIT licensed — see [LICENSE](LICENSE).
+
+Art, graphics and audio are **not** covered by that license, and some of it belongs to someone else. See [assetlicense.md](assetlicense.md) before doing anything with the files under `art/`, `assets/` or `audio/`. If you'd like to contribute art or audio, read [docs/ASSET_CONTRIBUTOR_AGREEMENT.md](docs/ASSET_CONTRIBUTOR_AGREEMENT.md) first: what you give, what you promise, how you're credited, and where to send it.
+
+Item and icon art is © **Caio Carlos / [Clockwork Raven Studios](https://www.clockworkravenstudios.com/)**, used with permission. Characters, enemies and tilesets are by **Ahvassa**, commissioned with rights assigned to Elusion Studios. Full details and links are in [assetlicense.md](assetlicense.md). In the game they are all in **Options → Credits**, with the fonts, the sounds, everyone who has supported the game, and the engine's licences.
+
+Two artists, and only one of them transferred rights — which is the whole job that file does. Ahvassa's work is Elusion Studios' to edit and ship, and crediting him is courtesy. Caio's is not: the IP stays with Clockwork Raven Studios, and crediting him is a condition of this repository being public at all.
+
+`LICENSE` is kept as the **unmodified** MIT text on purpose. Licence scanners match it word for word, so a carve-out paragraph added there drops the similarity below the match threshold and the repo stops being reported as MIT-licensed. Measured on this one: the canonical text scores 100%, the same text with a single extra sentence scores 93%, and the threshold is 98%. The carve-out lives in `assetlicense.md` instead, which makes the code's licence clearer rather than murkier.
+
+That file also records where this went wrong, because it went wrong three times the same way — a claim about a *set of files* stays put while the set changes underneath it. `_test_art_folders_are_licensed()` is what stops a fourth.

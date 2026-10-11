@@ -48,6 +48,16 @@ A paid subscription adds cloud sync, higher model tiers, and team features throu
   Where a host offers hooks (Claude Code, Codex), `prism connect` adds two
   small ones on top: mid-session prompt routing, and a post-compaction
   re-injection of the protected-floor digest.
+- **Prompt-triggered Factory** — enabled by default for suitable bounded
+  implementation requests with explicit files, an allowed write list, and a
+  verification command. The host starts and monitors the recommended pipeline;
+  BCBA requests stay with the host. A dashboard toggle or
+  `PRISM_DARK_FACTORY_ENABLED=false` disables Factory after an MCP restart.
+  Try the [three-test 
+
+[...截断...]
+
+filename fix](examples/factory-filename-fix/README.md).
 - **Safe escalation and observability** — inference outcomes are explicit,
   reserved text remains fail-closed (clinical images are processed locally,
   never sent to the cloud), and local/cloud usage is recorded for
@@ -61,11 +71,7 @@ prism connect
 prism dashboard
 ```
 
-Use `prism connect --dry-run` to preview changes, `prism connect 
-
-[...截断...]
-
---all` to
+Use `prism connect --dry-run` to preview changes, `prism connect --all` to
 configure every detected host, or `prism connect --refresh` to reconcile
 Prism-managed entries after an upgrade. Restart the host after connecting.
 
@@ -144,11 +150,4 @@ Two things worth knowing:
 - **`experimental` is Gemini's namespace, not ours.** Prism is not enabling
   anything experimental — it writes `false` to a flag Gemini already defines at
   that path. Writing anywhere else would have no effect.
-- **That namespace is by definition temporary.** If Gemini promotes
-  `enableAgents` out of `experimental`, Prism keeps writing the old path, Gemini
-  reads the new one, and host subagents quietly turn back on. Nothing errors and
-  the settings file still looks correct. If you see host subagents running while
-  `enableAgents` reads `false`, check whether the key has moved before assuming
-  `connect` failed to write it.
-
-Both writes are idempotent in the sense that a host already configured
+- **That namespace is by definition temporary.** If Ge

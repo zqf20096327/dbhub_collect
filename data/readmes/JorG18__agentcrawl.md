@@ -21,8 +21,9 @@ Pages that only render with JavaScript need the browser extra (`[browser]`, then
 `python -m playwright install chromium`); `agentcrawl doctor` tells you whether
 the browser can start. The browser presents itself as the Chrome it is and waits
 out self-clearing checks such as Cloudflare's "Just a moment…", ticking the
-Turnstile checkbox when one is still showing, as a person would; the optional
-`[stealth]` extra retries a refused page once with Patchright. A page that still
+Turnstile checkbox when one is still showing, as a person would; the `[stealth]`
+extra, recommended for sites behind Cloudflare, retries a refused page once with
+Patchright. A page that still
 asks for a CAPTCHA comes back as `error_type: "client_challenge"` with the
 signals seen and a `next_step`, never as content.
 
@@ -138,7 +139,7 @@ AgentCrawl Community is the self-hosted trust layer:
 | Structured extraction without an LLM | CSS schemas (`extract-css`, `/v1/extract_css`, MCP `extract_structured`): deterministic, zero tokens. `generate_css_schema(url, "what to extract")` (MCP `describe=`) has your LLM write the schema once; reuse it for free. |
 | Reading long pages in parts | `formats=["outline"]` lists sections with the tokens each returns; `section="s4"` (or heading text) returns one; `max_tokens` caps the output. The MCP keeps a page for 10 minutes, so outline then sections is one download. |
 | Firecrawl-compatible API | `/v2/scrape`, `/v2/map`, `/v2/search`, `/v2/crawl` and `/v2/batch/scrape` answer Firecrawl's v2 SDKs: point `api_url` at your server. Options AgentCrawl cannot honour are refused with the reason. |
-| Local stealth and proxies | Real Chrome identity, native browser TLS, the `[stealth]` extra (Patchright retry), and `proxy` as a comma-separated list rotated per page. |
+| Local stealth and proxies | Real Chrome identity, native browser TLS, the `[stealth]` extra (Patchright retry), the opt-in `[cloak]` engine (CloakBrowser), and `proxy` as a comma-separated list rotated per page. |
 | Summaries | `formats=["summary"]` with your own LLM (`AGENTCRAWL_LLM_MODEL`); a failure never fails the page. |
 | Query-aware budgets | `query=` keeps the passages that matter (BM25) when a page is larger than the output budget. |
 | Browser fallback | Optional local browser (kept open between pages, four at a time) or Camofox, not required for the default image. One time budget per page (`page_budget_ms`, 45 s) covers every step. |
@@ -381,13 +382,55 @@ browser got as a challenge or a 403/429 once with Patchright, on the next proxy
 if you gave several. Both browsers wait out "Just a moment…" pages and tick a
 Cloudflare Turnstile checkbox that is still showing, in your own browser
 (`AGENTCRAWL_BROWSER_CHALLENGE_CLICK=false` turns that off). No solver service is
-called and no image CAPTCHA is attempted.
+called and no image CAPTCHA is attempted. In a 400-page sample the retry opened 7
+of 17 challenged pages and left 9 pages on a challenge (16 to 21 without it),
+within 3 pages of Scrapling's result on the same machine.
 
 ```bash
 python -m pip install "agentcrawl-ai[stealth]"
 python -m patchright install chromium
 export AGENTCRAWL_BROWSER_ENGINE=patchright   # optional: use it for every page
 ```
+
+Another opt-in engine is CloakBrowser's patched Chromium. In two 400-page runs
+it opened 7 to 9 Cloudflare pages plain Chromium could not, but lost a few others
+(eBay, Prime Video) and is slower, so the total stayed level; try it on a site
+the `[stealth]` retry does not open.
+
+```bash
+python -m pip install "agentcrawl-ai[cloak]"
+python -m cloakbrowser install                # downloads the browser binary
+export AGENTCRAWL_BROWSER_ENGINE=cloak
+```
+
+- The binary is downloaded by you, from CloakBrowser, under its own license.
+  AgentCrawl does not ship it and never downloads it during a scrape: a missing
+  binary is reported with the command above. `CLOAKBROWSER_BINARY_PATH` points
+  at one you already have.
+- It presents its own identity (Chrome on Windows), so AgentCrawl does not set
+  a user agent; setting `user_agent` yourself contradicts that fingerprint.
+- AgentCrawl launches the binary already on disk and makes no CloakBrowser
+  network call (no license check, no update); `python -m cloakbrowser update`
+  is yours to run.
+- Some CloakBrowser builds allow one browser at a time: set
+  `AGENTCRAWL_BROWSER_CONCURRENCY=1` if launches are refused (the error says so).
+
+The `cdp` engine attaches to a Chrome you started yourself, so pages are read by
+a real Chrome on your own connection. Start it with a dedicated profile (Chrome
+refuses remote debugging on your default profile):
+
+```bash
+google-chrome --remote-debugging-port=9222 --user-data-dir="$HOME/.agentcrawl-chrome"
+export AGENTCRAWL_BROWSER_ENGINE=cdp
+export AGENTCRAWL_CDP_URL=http://127.0.0.1:9222   # the default
+```
+
+- Every page gets a new, isolated context: it does not see that profile's
+  cookies or logins, and AgentCrawl never closes your Chrome or its tabs.
+- Only a loopback `cdp_url` is accepted. The network guard, page budget and
+  actions apply as with the other engines.
+- Chrome's own user agent and language are kept; `proxy` is refused (start
+  Chrome with `--proxy-server` instead).
 
 ```python
 AgentCrawl({"proxy": "http://user:pass@p1:8080, http://user:pass@p2:8080"})

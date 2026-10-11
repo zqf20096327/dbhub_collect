@@ -61,9 +61,17 @@ is at [nextrmnl.nexapps.dev](https://nextrmnl.nexapps.dev).
   trust them; a changed key is refused until you say otherwise.
 - **Allowed targets**: by default nextrmnl only connects into private networks (10/8, 172.16/12, 192.168/16,
   100.64/10 for VPNs, loopback, link-local). The operator can add networks and names, or open it up.
-- **OpenID Connect**: any provider with discovery; for authentik there is a one-button setup that creates the
-  provider, application, signing key and mappings with a one-time API token, or a blueprint file to do it
-  without a token.
+- **OpenID Connect**: several providers side by side (authentik, Microsoft Entra ID with `common` or
+  `organizations`, Keycloak, Authelia, Pocket ID and any other with discovery), one button each on the sign-in
+  page. Accounts are matched by the identity at the provider only, never by an email address: existing accounts
+  link themselves under their account with their password, new people come by invitation (also through the
+  provider) or, if the operator allows it per provider, as members. Per provider the operator decides whether
+  it checks the second factor itself; if not, nextrmnl asks for its own code afterwards. For authentik there is
+  a one-button setup that creates provider, application and signing key with a one-time API token, or a
+  blueprint file to do it without a token. Without a public address the button proposes the one your browser
+  uses and registers it only after you confirm; changing the public address later asks first, because the
+  provider still knows the old return address. Sign-in with a password can be turned off once a provider is on;
+  the operator always keeps the password.
 - **Backups**: consistent copies on a schedule and before every schema change, downloads as an AES encrypted
   ZIP that 7-Zip opens without nextrmnl, restore with a preview and a restart.
 - **A log** with four levels (the deep ones switch themselves off), a request id in every line and in every
@@ -101,14 +109,15 @@ protects your vault.
 
 **Put nextrmnl behind a reverse proxy with TLS** before you use it from anywhere but your own desk. It holds the
 access to your machines. Pasting with a right click also needs HTTPS; the browser allows reading the clipboard
-only on secure origins (Ctrl+V works regardless).
+only on secure origins (Ctrl+V works regardless). Name the proxy in `NEXTRMNL_TRUSTED_PROXIES` (see below):
+nextrmnl takes `https` and the client's address from it and from nobody else.
 
 ## Where things are stored
 
 Everything lives in `/data`: the SQLite database `nextrmnl.db`, `secret.key`, `backups/`, `logs/`. Mount it
 from a local disk, never from an SMB or NFS share.
 
-`secret.key` protects the server-side secrets (the OIDC client secret). The vaults do not depend on it: they
+`secret.key` protects the server-side secrets (the client secrets of the sign-in providers). The vaults do not depend on it: they
 open with the account's password only. Both go into the backup archive.
 
 ## Environment
@@ -119,10 +128,10 @@ open with the account's password only. Both go into the backup archive.
 | `NEXTRMNL_SECRET_KEY` | created on first start | Protects the server-side secrets; when set, it wins over `secret.key` |
 | `NEXTRMNL_PUBLIC_URL` | from the request | The address people use to reach nextrmnl; for invitation links and the OIDC redirect. The public address under Settings, Sign-in wins when set |
 | `NEXTRMNL_LOG_LEVEL` | stored setting | `quiet`, `normal`, `detailed` or `trace`; overrides the setting, the emergency exit when the app does not start |
-| `NEXTRMNL_TRUSTED_PROXIES` | none | Addresses or networks of reverse proxies whose `X-Forwarded-For` is believed, comma separated (`172.18.0.0/16, 10.0.0.5`). Without it every request counts as coming from its peer, so a proxy in front makes all its clients share one sign-in brake |
+| `NEXTRMNL_TRUSTED_PROXIES` | none | Addresses or networks of reverse proxies whose `X-Forwarded-For` and `X-Forwarded-Proto` are believed, comma separated (`172.18.0.0/16, 10.0.0.5`). No other sender is believed, `127.0.0.1` included. Without it every request counts as coming from its peer and with the scheme of its connection: a proxy in front makes all its clients share one sign-in brake, and behind a proxy that ends TLS the session cookie is not `Secure` (unless `NEXTRMNL_COOKIE_SECURE` is `on`), passkeys need the public address, and the sign-in settings warn that the server sees `http` |
 | `NEXTRMNL_SESSION_DAYS` | `14` | A browser session ends after this many days |
 | `NEXTRMNL_API_DOCS` | `false` | Serves `/api/docs` and `/api/openapi.json`; off by default |
-| `NEXTRMNL_COOKIE_SECURE` | `auto` | `on`, `off` or `auto` (from the request or `X-Forwarded-Proto`) |
+| `NEXTRMNL_COOKIE_SECURE` | `auto` | `on`, `off` or `auto` (HTTPS when the connection is, or when a proxy in `NEXTRMNL_TRUSTED_PROXIES` says so in `X-Forwarded-Proto`) |
 | `NEXTRMNL_PORT` | `8000` | Port inside the container, for host networking |
 | `PUID`, `PGID` | `1000` | Owner of the files in the data directory |
 
@@ -132,7 +141,9 @@ open with the account's password only. Both go into the backup archive.
 - With a second factor, the password alone opens nothing: the vault key waits in memory for the code, at most
   five minutes and five tries. A code counts once; the seed is stored encrypted, recovery codes as hashes.
 - The vault key is wrapped with Argon2id and AES-256-GCM; entries are AES-256-GCM. An open vault is its key in
-  the server's memory, forgotten after 30 minutes without use (configurable) and on every restart.
+  the server's memory, forgotten after 30 minutes without use (configurable), on signing out and on every
+  restart. It is open in one browser session only: another browser of the same account, or a sign-in through a
+  provider, opens it with the password itself.
 - Every changing request needs the header `X-Requested-By: nextrmnl`; WebSockets must come from the same origin.
 - Every password check while signed in (opening the vault, exporting it, changing the password, the second
   factor) counts like a sign-in: wrong answers lock the account. Terminals end with the sign-in they came with.

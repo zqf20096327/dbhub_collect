@@ -132,7 +132,9 @@ nexcanvas is made to be reachable from outside, for yourself on the road or for 
 3. **Tell nexcanvas about the proxy**: `NEXCANVAS_PUBLIC_URL` (the address people use), `NEXCANVAS_TRUSTED_PROXIES`
    (the proxy's address or network; without it every sign-in seems to come from the proxy and the brake against
    guessing cannot tell people apart; Settings, Server says so while it is missing), and
-   `NEXCANVAS_COOKIE_SECURE: "on"`.
+   `NEXCANVAS_COOKIE_SECURE: "on"`. `NEXCANVAS_TRUSTED_PROXIES` also makes nexcanvas believe the proxy's
+   `X-Forwarded-Proto` (the rightmost value of the header): without it the sign-in setup (the authentik button) sees
+   the address as `http://` and warns that the redirect address would not match; that warning points here.
 4. **A second factor**: set up your own under My account, Security. Or sign in through an OpenID Connect provider
    (Settings, Server, Sign-in); accounts are linked only by the provider's identity, never by a mail address.
 5. **Leave the switches closed you do not need**: public pages and API tokens are off until you open them.
@@ -170,13 +172,13 @@ With an image: `docker compose pull && docker compose up -d`. Built from source:
 | `NEXCANVAS_LOCALES_DIR` | `<data>/locales` | Extra languages, one JSON file each |
 | `NEXCANVAS_SECRET_KEY` | created on first start | Protects server-side secrets; when set, it wins over `secret.key` |
 | `NEXCANVAS_PUBLIC_URL` | from the request | The address people use to reach nexcanvas, for invitation links, public pages and the redirect addresses of the sign-in providers. The setting in the interface wins when set |
-| `NEXCANVAS_TRUSTED_PROXIES` | none | Addresses or networks of reverse proxies whose `X-Forwarded-For` is believed, comma separated |
+| `NEXCANVAS_TRUSTED_PROXIES` | none | Addresses or networks of reverse proxies whose `X-Forwarded-For` and `X-Forwarded-Proto` are believed, comma separated |
 | `NEXCANVAS_SETUP_TOKEN` | made at start | The code the first account needs |
 | `NEXCANVAS_OPERATOR_NETWORKS` | none | Networks the operator's settings may be changed from, comma separated |
 | `NEXCANVAS_UPLOAD_MAX_MB` | `50` | The largest photo or file; the operator can lower it in the settings |
 | `NEXCANVAS_SESSION_DAYS` | `30` | A browser session ends after this many days |
 | `NEXCANVAS_LOG_LEVEL` | stored setting | `quiet`, `normal`, `detailed` or `trace`; overrides the setting |
-| `NEXCANVAS_COOKIE_SECURE` | `auto` | `on`, `off` or `auto` (from the request or `X-Forwarded-Proto`) |
+| `NEXCANVAS_COOKIE_SECURE` | `auto` | `on`, `off` or `auto` (from the request, or `X-Forwarded-Proto` of a trusted proxy) |
 | `NEXCANVAS_API_DOCS` | `false` | Serves `/api/docs` and `/api/openapi.json` |
 | `PUID`, `PGID` | `1000` | Owner of the files in the data directory |
 

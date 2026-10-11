@@ -23,7 +23,7 @@ dlt loads data in, dbt transforms it, and **drt** activates it back out — reve
 
 [![drt-core downloads](https://img.shields.io/pepy/dt/drt-core?style=flat-square&logo=pypi&logoColor=white&label=drt-core%20downloads)](https://pepy.tech/projects/drt-core)
 [![dagster-drt downloads](https://img.shields.io/pepy/dt/dagster-drt?style=flat-square&label=dagster-drt%20downloads)](https://pepy.tech/projects/dagster-drt)
-[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-fe8e86?style=flat-square&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/masukai)
+[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-fe8e86?style=flat-square&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/drt-hub)
 [![Website](https://img.shields.io/badge/website-drt--hub.github.io-7C3AED?style=flat-square)](https://drt-hub.github.io/drt-web/)
 [![X](https://img.shields.io/badge/X-%40drt__hub-000000?style=flat-square&logo=x&logoColor=white)](https://x.com/drt_hub)
 
@@ -561,6 +561,10 @@ Every contribution — code, docs, bug reports, ideas — makes drt better. Than
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 </details>
+
+## Sponsors
+
+drt is free and open source. If it saves your team time, [sponsoring drt-hub](https://github.com/sponsors/drt-hub) keeps it maintained: it pays for the live warehouse accounts every release is tested against. See [SPONSORS.md](SPONSORS.md) for how it works and who is backing it.
 
 ## Disclaimer
 

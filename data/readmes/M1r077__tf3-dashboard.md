@@ -49,8 +49,8 @@ which is why the companion lives here.
 2. **Companion** — download `TF3-Dashboard-<version>.zip` from the
    [Releases](https://github.com/M1r077/tf3-dashboard/releases) page, unzip anywhere **except a cloud-synced folder**
    (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it.
-   `C:\TF3-Dashboard` or `D:\Games\TF3 Dashboard` are fine. Mod and companion are released together: mod revision 14
-   goes with companion 0.6.x (older pairs keep working, the newest features simply stay blank).
+   `C:\TF3-Dashboard` or `D:\Games\TF3 Dashboard` are fine. Mod and companion are released together: mod revision 15
+   goes with companion 0.7.x (older pairs keep working, the newest features simply stay blank).
 3. **Run** — start the game with the mod enabled, then double-click `run_dashboard.cmd`. A window with two panes
    opens (collector | server) and your browser shows the dashboard. Put the browser on your second monitor,
    press `F11`. Close the window to stop everything.
@@ -126,6 +126,11 @@ and no route is changed. The channel is a local file (`tf3dash_cmd.lua`) read by
   vehicle purchases), kept for the whole savegame. Cards can be dragged and resized; the layout is saved per browser.
 - **Settings ▸ Savegames and backups** — one backup = database + camera views for the current savegame; restore
   the views, or the whole database at the next start.
+- **Settings ▸ Savegames** also shows the database size and lets you **forget** a save you no longer play (its
+  history, camera views and travellings go; the game's savegame file is never touched).
+- **Game closed?** The dashboard still works: it shows the last recorded situation of your save (an amber bar says
+  so, commands are off) so you can plan the next session on the couch. With several saves in the database, pick the
+  one to look at in Settings ▸ Savegames ("View"); the live game takes over again as soon as it writes.
 - Languages: English, French, German, Brazilian Portuguese, partial Chinese — follows the game language automatically.
 
 ## Configuration
@@ -158,8 +163,10 @@ also shows the export folder, when the companion was last seen, and the current 
   enabling the mod**, open the mod settings in the savegame and raise the fast interval (5 or 10 s), the slow interval
   (60 or 120 s); on very large networks disable the vehicle export. The defaults (2 s / 30 s) target a reasonably
   recent PC.
-- The database keeps per-snapshot detail for 2 hours and per-minute aggregates for 14 days (configurable, see
-  `collector.py --help`). Only the most recent savegame is kept.
+- The database keeps per-snapshot detail for 2 hours, then one point per real minute (fleet and finance forever,
+  each vehicle for 7 days) and one point per game day for lines, towns, stations and industries, kept for as long
+  as the save exists - like the game's own logbooks. It compacts itself once an hour, so it stays in the tens of
+  megabytes. Configurable, see `collector.py --help`.
 - The server listens on `127.0.0.1` only. Commands are refused from any other address.
 - The game icons are extracted from **your** game installation at first start (`dashboard/extract_icons.py`); they
   are not redistributed.

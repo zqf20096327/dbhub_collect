@@ -64,6 +64,7 @@ cmd/                  Go binaries — the gateway, cron jobs, and CLIs
   hupi-import/           CLI: load a snapshot back in
   hupi-rotate-key/       CLI: online, resumable per-scope key rotation
   hupi-reembed/          CLI: online, resumable per-scope re-embedding after an embedding model change
+  hupi-mcp/              MCP stdio bridge: lets Claude Desktop and other stdio MCP clients use a gateway's /mcp (holds only your API key)
   hupi-trace/            CLI: inspect one episode's retrieval trace
   hupi-correct/          CLI: write a corrected, superseding summary
   hupi-bench/            CLI: LoCoMo/LongMemEval benchmark harness — see bench/ and docs/BENCHMARKS.md
@@ -129,6 +130,8 @@ Kubernetes/Helm.
 | [docs/API_REFERENCE.md](docs/API_REFERENCE.md) | The gateway's HTTP routes, call chain by call chain |
 | [docs/ADMIN_UI.md](docs/ADMIN_UI.md) | The operator admin console |
 | [docs/VSCODE_EXTENSION.md](docs/VSCODE_EXTENSION.md) | The VS Code extension — chat sidebar and inline edit |
+| [docs/AGENT.md](docs/AGENT.md) | The HUPI agent: the sidebar chat reads, edits and runs things in your workspace, and uses your MCP servers, with approvals |
+| [docs/MCP.md](docs/MCP.md) | HUPI memory in Claude Code, Cursor and other MCP clients, via the gateway's `/mcp` endpoint |
 | [docs/CODE_GUIDE.md](docs/CODE_GUIDE.md) | Project layout and package dependency graph |
 | [docs/MEMORY_FORMAT.md](docs/MEMORY_FORMAT.md) | The portable memory format (HPMF) |
 | [docs/BENCHMARKS.md](docs/BENCHMARKS.md) | Real, independently-reproducible LoCoMo/LongMemEval scores and how to reproduce them |

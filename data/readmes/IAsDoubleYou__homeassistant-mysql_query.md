@@ -8,18 +8,21 @@
 
 > **Looking for continuous sensors instead of actions you trigger on demand?** See [HA MySQL](https://github.com/IAsDoubleYou/ha_mysql), a sibling integration built for that — full comparison at the [bottom of this README](#ha-mysql-or-mysql-query).
 
-A Home Assistant custom component that talks to a MySQL or MariaDB database through two ```Responding services```: ```mysql_query.query``` reads with a SELECT and hands you the rows, and ```mysql_query.execute``` writes with an INSERT, UPDATE, DELETE or DDL statement and hands you what it changed. Both return an iterable data structure you can use straight from a template.
+A Home Assistant custom component that talks to a MySQL or MariaDB database through two actions: ```mysql_query.query``` reads with a SELECT and hands you the rows, and ```mysql_query.execute``` writes with an INSERT, UPDATE, DELETE or DDL statement and hands you what it changed. Both can return an iterable data structure you can use straight from a template.
 
-> ⚠️ **Upgrading from an earlier version?** v3.0.0 changes what ```query``` and ```execute``` each accept — see [Upgrading to 3.0.0](#upgrading-to-300) before you update.
+> ⚠️ **Upgrading from an earlier version?** v4.0.0 changes who may call ```execute```, drops YAML configuration, moves some settings and needs Home Assistant 2026.3.0 — see [Upgrading to 4.0.0](#upgrading-to-400) before you update. v3.0.0 changed what ```query``` and ```execute``` each accept — see [Upgrading to 3.0.0](#upgrading-to-300).
 
 ## Key Features
 
-- **UI Configuration**: Modern setup and management through the Home Assistant Integrations page (Config Flow).
+- **UI Configuration**: Setup and management through the Home Assistant Integrations page: a config flow to add a connection, **Reconfigure** to change where it connects, **Configure** for how queries behave, and a prompt to sign in again when the database refuses the credentials.
+- **Starts when the database does**: if the database is not reachable while Home Assistant boots, the connection is retried by itself instead of staying failed.
 - **Reading and writing are separate**: ```query``` runs only statements that read, ```execute``` only statements that change something. Reach for the wrong one and you get an error naming the right one, instead of a surprise.
 - **Parameterized queries**: pass values separately with ```values``` and ```%s``` placeholders, so the database escapes them for you and templates keep their data type.
 - **Stability Protection**: Built-in row limiting to prevent Home Assistant from hanging on large result sets.
 - Support for all SQL statement types (SELECT, INSERT, UPDATE, DELETE, DDL), split across the two services.
 - **Read-only connections**: mark a connection as read-only and ```execute``` is refused on it entirely, so a write aimed at the wrong connection cannot land.
+- **Writes need an administrator**: ```execute``` can only be called by an administrator, or by something that carries no user such as an automation. See [Who may call what](#who-may-call-what).
+- **Encrypted connections**: optional TLS, see [Encrypting the connection](#encrypting-the-connection).
 - **One statement per call**: a call carrying several statements separated by a semicolon is refused, because the driver would run all of them while only the first reports a result.
 - **Multiple database support**: Configure multiple connections via UI and select them in service calls.
 - **Dynamic Overrides**: Query another database on the same server per individual call using ```db4query```.
@@ -27,13 +30,14 @@ A Home Assistant custom component that talks to a MySQL or MariaDB database thro
 - **Connection pooling**: every connection keeps a small pool of warm, automatically recycled MySQL connections instead of reconnecting per call.
 - **Safe under load**: simultaneous service calls on the same connection are queued, so their statements never interleave on the same MySQL socket.
 - Full integration with Home Assistant automations and scripts.
-- Support for Service Response Data (introduced in HA 2023.7).
+- Both actions can return their result as response data; ```query``` always does, ```execute``` when you ask for it.
 
 ⚠️ **WARNING**: Exercise caution with destructive statements like UPDATE, DELETE, or DROP. The developer takes no responsibility for any data loss.
 
 ## Requirements
 
-- Home Assistant version 2026.3.0 or newer, declared as the minimum in ```hacs.json```. HACS refuses to download the integration on anything older; whether it also hides the update notification is not documented behaviour, so on an older installation you may still be told an update exists while the download itself is blocked. The integration releases its shared resources when the last connection is unloaded, which relies on the config entry states introduced in that release.
+- Home Assistant version 2026.3.0 or newer, declared as the minimum in ```hacs.json```. That is the exact floor, for two reasons. Home Assistant moved to Python 3.14 with that release (it requires 3.14.2 or newer), and the code uses Python 3.14 syntax. And the brand images in ```brand/``` are only read from the integration folder from that release on. HACS refuses to download the integration on anything older; whether it also hides the update notification is not documented behaviour, so on an older installation you may still be told an update exists while the download itself is blocked.
+- MySQL 5.6.5 or newer, or MariaDB 10.0 or newer: ```query``` relies on read-only transactions.
 - The ```aiomysql``` driver, which Home Assistant installs automatically from ```manifest.json```
 
 ## Installation
@@ -74,29 +78,41 @@ The connection is tested before the entry is created. If the credentials or the 
 
 You can add the integration as many times as you like to connect to **multiple servers or databases**. Each entry is identified by its host and database name, so the same host/database combination cannot be added twice.
 
-### Editing a connection (Options Flow)
+### Changing a connection
 
-Open **Settings** > **Devices & Services** > **MySQL Query Service** and press **Configure** on the connection you want to change. The options form contains exactly the same fields as the setup form, so every setting — including credentials and the row limit — can be corrected afterwards without removing and re-adding the integration.
+There are two places, because two different things can change:
+
+- **Where and how it connects: Reconfigure.** Open **Settings** > **Devices & Services** > **MySQL Query Service**, press the **⋮** menu of the connection and choose **Reconfigure**. It holds the host, port, credentials, database, connect timeout, charset, collation and TLS. The new settings are tried before they are saved, and the connection reloads with them. If you change the host or the database, the connection's identity follows: it is not allowed to end up identical to another connection, and the generated title (```MySQL: host/database```) is updated unless you gave the connection a title of your own.
+- **How queries behave: Configure.** Press **Configure** on the same connection. It holds the query timeout, the row limit, autocommit and the read-only switch. Saving a change reloads the connection; saving it unchanged does not.
+
+**The password is never shown.** The field in Reconfigure is empty and masked. Leave it empty to keep the current password; type one to replace it. This also means a password cannot be changed to an empty one here: remove the connection and add it again for that.
+
+### When the database refuses or cannot be reached
+
+- **Not reachable** (the server is down, still starting, or the network is not up yet): Home Assistant retries the connection by itself, with growing pauses, so the connection comes up once the database does. The reason is in the log of Home Assistant itself.
+- **Credentials refused**: the connection stops and Home Assistant flags it as needing attention, with a form to enter the username and password again. It updates the existing connection; nothing is added.
+- **Database does not exist, or the user may not use it**: the connection stops with a message saying so. A new password does not fix this, so no sign-in prompt appears; use **Reconfigure**.
+- **TLS asked for but not offered by the server**: the connection stops with a message saying so, see [Encrypting the connection](#encrypting-the-connection).
 
 ### Configuration parameters
 
-All fields below appear both in the setup form and in the options form. The **Key** column lists the internal name, which is what you use in ```configuration.yaml``` when importing a legacy configuration.
+The **Where** column says where a setting can be changed after setup. All of them appear in the setup form. The **Key** column lists the internal name, which is the key in the stored config entry.
 
-| Field | Key | Required | Default | Description |
-| :--- | :--- | :--- | :--- | :--- |
-| **Host** | ```mysql_host``` | Yes | – | IP address or hostname of the MySQL/MariaDB server, for example ```192.168.1.50``` or ```db.local```. |
-| **Port** | ```mysql_port``` | Yes | ```3306``` | Network port the database server listens on. |
-| **Username** | ```mysql_username``` | Yes | – | Database user used for every query on this connection. Grant it only the privileges you actually need. |
-| **Password** | ```mysql_password``` | Yes | – | Password of that database user. Stored in the Home Assistant config entry and never written to the log. |
-| **Database** | ```mysql_db``` | Yes | – | Name of the default database. Every query on this connection runs against it unless you override it with ```db4query```. |
-| **Connect Timeout (seconds)** | ```mysql_timeout``` | No | ```10``` | How long to wait when opening a new connection to the server. Raise it for slow or remote servers. |
-| **Query Timeout (seconds)** | ```mysql_query_timeout``` | No | ```30``` | Bounds a whole call: waiting for a free pooled connection, reconnecting it if needed, and running the statement. A call still running when this elapses fails with an error instead of hanging your automation, and its connection is dropped instead of reused. |
-| **Charset** | ```mysql_charset``` | No | driver default (```utf8mb4```) | Optional character set for the connection, for example ```utf8mb4```. Leave empty to use the driver default. |
-| **Collation** | ```mysql_collation``` | No | server default | Optional collation, for example ```utf8mb4_unicode_ci```. Must be compatible with the chosen charset. Leave empty to use the server default. |
-| **Autocommit** | ```mysql_autocommit``` | No | ```true``` | When enabled, every statement is committed immediately. With autocommit disabled the integration still commits explicitly after a successful non-SELECT statement, so writes are not lost. |
-| **Row Limit (Safety Cap)** | ```mysql_row_limit``` | No | ```1000``` | Maximum number of rows a single SELECT may return to Home Assistant. This is a memory safety net, not a SQL ```LIMIT```. Values below ```1``` fall back to the default. |
-| **Encrypt the connection (TLS)** | ```mysql_use_tls``` | No | ```false``` | Encrypts the traffic between Home Assistant and the database. See [Encrypting the connection](#encrypting-the-connection). |
-| **Read-only connection** | ```mysql_readonly``` | No | ```false``` | Refuses ```mysql_query.execute``` on this connection whatever the statement says. See [Read-only connections](#read-only-connections). |
+| Field | Key | Where | Required | Default | Description |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Host** | ```mysql_host``` | Reconfigure | Yes | – | IP address or hostname of the MySQL/MariaDB server, for example ```192.168.1.50``` or ```db.local```. |
+| **Port** | ```mysql_port``` | Reconfigure | Yes | ```3306``` | Network port the database server listens on. From ```1``` to ```65535```. |
+| **Username** | ```mysql_username``` | Reconfigure | Yes | – | Database user used for every query on this connection. Grant it only the privileges you actually need. |
+| **Password** | ```mysql_password``` | Reconfigure | Yes | – | Password of that database user. Stored in the Home Assistant config entry, masked in the forms, never shown again and never written to the log. |
+| **Database** | ```mysql_db``` | Reconfigure | Yes | – | Name of the default database. Every query on this connection runs against it unless you override it with ```db4query```. |
+| **Connect Timeout (seconds)** | ```mysql_timeout``` | Reconfigure | No | ```10``` | How long to wait when opening a new connection to the server. At least ```1```. Raise it for slow or remote servers. |
+| **Charset** | ```mysql_charset``` | Reconfigure | No | driver default (```utf8mb4```) | Optional character set for the connection, for example ```utf8mb4```. Leave empty to use the driver default. |
+| **Collation** | ```mysql_collation``` | Reconfigure | No | server default | Optional collation, for example ```utf8mb4_unicode_ci```. Must be compatible with the chosen charset. Leave empty to use the server default. |
+| **Encrypt the connection (TLS)** | ```mysql_use_tls``` | Reconfigure | No | ```false``` | Encrypts the traffic between Home Assistant and the database. See [Encrypting the connection](#encrypting-the-connection). |
+| **Query Timeout (seconds)** | ```mysql_query_timeout``` | Configure | No | ```30``` | Bounds a whole call: waiting for a free pooled connection, reconnecting it if needed, and running the statement. A call still running when this elapses fails with an error instead of hanging your automation, and its connection is dropped instead of reused. At least ```1```. |
+| **Row Limit (Safety Cap)** | ```mysql_row_limit``` | Configure | No | ```1000``` | Maximum number of rows a single SELECT may return to Home Assistant. This is a memory safety net, not a SQL ```LIMIT```. At least ```1```. |
+| **Autocommit** | ```mysql_autocommit``` | Configure | No | ```true``` | When enabled, every statement is committed immediately. With autocommit disabled the integration still commits explicitly after a successful non-SELECT statement, so writes are not lost. |
+| **Read-only connection** | ```mysql_readonly``` | Configure | No | ```false``` | Refuses ```mysql_query.execute``` on this connection whatever the statement says. See [Read-only connections](#read-only-connections). |
 
 ### Stability & Performance
 
@@ -127,9 +143,9 @@ Because the calls queue, a slow query delays the ones behind it on the same conn
 
 A connection can be marked **Read-only**, in the setup form and under **Configure**. When it is on, every call to ```mysql_query.execute``` on that connection is refused, no matter what the statement contains.
 
-This is a different kind of protection from the split between the two services. The service split catches reaching for the wrong *verb*: a ```DELETE``` sent to ```query``` is refused because ```query``` does not write. The read-only flag catches reaching for the wrong *connection*: a perfectly well-formed ```DELETE``` sent to ```execute``` is refused because that connection is not supposed to be written to at all. It needs no statement analysis and has no way around it.
+This is a different kind of protection from the split between the two services. The service split catches reaching for the wrong *verb*: a ```DELETE``` sent to ```query``` is refused because ```query``` does not write. The read-only flag catches reaching for the wrong *connection*: a perfectly well-formed ```DELETE``` sent to ```execute``` is refused because that connection is not supposed to be written to at all. For ```execute``` it needs no statement analysis: the call is refused before the statement is looked at.
 
-It exists for the connection you created to feed dashboards or reports. Mark it read-only and a write meant for your application database cannot land in it by mistake, however the statement is spelled.
+It exists for the connection you created to feed dashboards or reports. Mark it read-only and a write meant for your application database cannot land in it by mistake through ```execute```, however the statement is spelled. ```query``` is held to reading as well, see [How reading is held to reading](#how-reading-is-held-to-reading).
 
 **Off by default**, so an existing connection keeps working exactly as it did. Turning it on affects only ```execute```; ```query``` keeps working, which is the entire point.
 
@@ -149,36 +165,25 @@ SHOW GLOBAL VARIABLES LIKE 'have_ssl';
 
 **Why the default is off.** Most installations talk to a server with no certificate configured, and defaulting to on would break every one of them on the first restart after an update; see the [changelog](CHANGELOG.md) for when that is expected to change.
 
-### Via YAML (Legacy Import)
-If you still use ```configuration.yaml```, your settings will be imported automatically.
+### YAML is not supported
 
-**IMPORTANT**: Once imported, please remove the ```mysql_query:``` block from your YAML file.
-
-```yaml
-mysql_query:
-  mysql_host: 192.168.1.50
-  mysql_port: 3306
-  mysql_username: ha_user
-  mysql_password: your_password
-  mysql_db: homeassistant
-  mysql_row_limit: 1000
-```
+Connections are config entries only; there is no ```mysql_query:``` section for ```configuration.yaml```. If one is left in your file, Home Assistant reports that this integration does not support YAML configuration and nothing is imported. Add the connection in the UI and remove the section. Up to 3.x such a section was imported automatically; see [Upgrading to 4.0.0](#upgrading-to-400).
 
 ---
 
 ## Services
 
-The integration registers two services. Both are **responding services**: they return data to the caller, so a ```response_variable``` is required to capture the output.
+The integration registers two actions. ```query``` is a **responding action**: it exists to return rows, so a ```response_variable``` is required to capture the output. ```execute``` can respond too, but does not have to: call it without a ```response_variable``` when all you want is the write, and add one when you want to know what it affected.
 
 | Service | Use it for | Returns |
 | :--- | :--- | :--- |
-| ```mysql_query.query``` | Reading only: ```SELECT```, ```WITH```, ```SHOW```, ```DESCRIBE```, ```EXPLAIN```, ```CHECKSUM TABLE```, ```HELP```, and the MySQL 8 ```TABLE```/```VALUES``` shorthands. Refuses anything that changes data or schema. | The rows under ```result```, plus ```succeeded```, ```rows_found```, ```column_names```, ```execution_time_ms``` and ```error```. Raises on a database error unless ```raise_on_error: false```. |
-| ```mysql_query.execute``` | Everything that changes something: ```INSERT```, ```UPDATE```, ```DELETE```, DDL, and maintenance statements such as ```ANALYZE TABLE``` or ```OPTIMIZE```. Refuses a read-only statement. | Full metadata: row counts, generated id, timing and errors. Reports a database error in the response instead of raising, unless ```raise_on_error: true```. |
+| ```mysql_query.query``` | Reading only: ```SELECT```, ```WITH``` (followed by a ```SELECT```), ```SHOW```, ```DESCRIBE```, ```EXPLAIN```, ```CHECKSUM TABLE```, ```HELP```, and the MySQL 8 ```TABLE```/```VALUES``` shorthands. Refuses anything that changes data or schema. | The rows under ```result```, plus ```succeeded```, ```rows_found```, ```column_names```, ```execution_time_ms``` and ```error```. Raises on a database error unless ```raise_on_error: false```. |
+| ```mysql_query.execute``` | Everything that changes something: ```INSERT```, ```UPDATE```, ```DELETE```, DDL, and maintenance statements such as ```ANALYZE TABLE``` or ```OPTIMIZE```. Refuses a read-only statement. | Full metadata: row counts, generated id, timing and errors, when you ask for the response. Reports a database error in the response instead of raising, unless ```raise_on_error: true```. |
 
 <details>
 <summary><strong>Which statements count as read-only</strong> — the exact list, and how <code>EXPLAIN</code> and <code>ANALYZE</code> are handled</summary>
 
-The dividing line is read-only versus read/write, not the word ```SELECT```. ```query``` accepts ```SELECT```, ```WITH```, ```SHOW```, ```DESCRIBE```/```DESC```, ```CHECKSUM TABLE```, ```HELP```, and the MySQL 8 ```TABLE``` and ```VALUES``` shorthands. Everything else belongs to ```execute```, including maintenance statements that look informational but rewrite something: ```ANALYZE TABLE```, ```CHECK```, ```OPTIMIZE``` and ```REPAIR```.
+The dividing line is read-only versus read/write, not the word ```SELECT```. ```query``` accepts ```SELECT```, ```SHOW```, ```DESCRIBE```/```DESC```, ```CHECKSUM TABLE```, ```HELP```, and the MySQL 8 ```TABLE``` and ```VALUES``` shorthands, and ```WITH``` when the statement behind its list of common table expressions is one of those: ```WITH c AS (...) SELECT ...``` reads, ```WITH c AS (...) DELETE ...``` does not, and a ```WITH``` that cannot be read is treated as a write. A statement that writes a file on the server, ```INTO OUTFILE``` or ```INTO DUMPFILE```, counts as a write too. Everything else belongs to ```execute```, including maintenance statements that look informational but rewrite something: ```ANALYZE TABLE```, ```CHECK```, ```OPTIMIZE``` and ```REPAIR```.
 
 ```EXPLAIN``` and ```ANALYZE``` are prefixes in front of another statement, not statements of their own — and they are **not** treated the same way, because they do not do the same thing:
 
@@ -201,18 +206,35 @@ Options such as ```FORMAT=JSON``` in between are skipped.
 
 **One statement per call.** A call carrying several statements separated by a semicolon is refused by both services. The driver has multi-statement support switched on and cannot be told otherwise, so ```SELECT 1; DELETE FROM states``` would run *both* while reporting only the result of the first. A trailing semicolon is fine, and so is a semicolon inside a quoted value.
 
-**What this protection is not.** The check reads the leading keywords of the statement; it is a guard against reaching for the wrong service, not a security boundary. A ```SELECT``` can still write through ```INTO OUTFILE``` or a stored function with side effects, and MySQL 8 accepts a CTE in front of an ```UPDATE```. If a connection must never write, give its database user ```SELECT``` rights only, and consider marking the connection [read-only](#read-only-connections).
+#### How reading is held to reading
 
-Both services accept exactly the same four fields:
+Two checks stand between a statement and the database when it goes through ```query```:
+
+1. **The text is checked.** Only a statement that starts with a reading keyword passes. A ```WITH``` passes only when the statement behind its list of common table expressions is a ```SELECT```, ```TABLE``` or ```VALUES```: MySQL 8 also accepts ```WITH ... UPDATE``` and ```WITH ... DELETE```. ```INTO OUTFILE``` and ```INTO DUMPFILE``` count as writes. What is inside quotes and ordinary comments does not count. What is inside a comment the server executes anyway, ```/*! ... */``` and ```/*M! ... */```, does: it is read as the code it is.
+2. **The server enforces it.** Every statement sent through ```query``` runs inside ```START TRANSACTION READ ONLY``` and is rolled back afterwards, so the server itself refuses to change a table (error 1792), however the statement is written and also when a stored function tries. This needs MySQL 5.6.5 or MariaDB 10.0 or newer.
+
+What this does not cover: the transaction concerns tables, so it does not stop a statement that writes a file (a MariaDB server writes the file inside a read-only transaction as well, which is why the first check refuses ```INTO OUTFILE``` itself), and it does not limit how long or how heavy a statement is. The first check also cannot know what a stored function does. If a connection must never write, give its database user ```SELECT``` rights only, and consider marking the connection [read-only](#read-only-connections). ```execute``` has none of this: writing is what it is for, which is why it is for [administrators](#who-may-call-what).
+
+Both services accept exactly the same five fields:
 
 | Field | Required | Description |
 | :--- | :--- | :--- |
 | ```query``` | Yes | The SQL statement to execute. |
 | ```values``` | No | List of values for the ```%s``` placeholders in ```query```, in the order the placeholders appear — see [Parameterized queries](#parameterized-queries-with-values). |
 | ```db4query``` | No | Run this single statement against a different database **on the same server**, instead of the configured default database. |
-| ```config_entry``` | No | The id of the connection to use when you have configured more than one. If omitted, the first configured connection is used. |
+| ```config_entry``` | No | The id of the connection to use when you have configured more than one. If omitted, the first loaded connection is used. |
+| ```raise_on_error``` | No | Whether a failing statement stops the caller with an error (```true```) or is reported in the response (```false```). The default differs: ```true``` for ```query```, ```false``` for ```execute```. See [Error handling at a glance](#error-handling-at-a-glance). |
 
 > **Note:** There is no per-call row limit field. The row limit is a property of the connection (```mysql_row_limit```) — see [Example 1c](#example-1c-controlling-how-many-rows-come-back).
+
+### Who may call what
+
+```query``` only reads and is open to every user. ```execute``` runs SQL that changes data, with the credentials stored in the connection, so it is **for administrators**:
+
+- A call made on behalf of a **logged-in user who is not an administrator** is refused, whether it comes from a dashboard button, the developer tools or the API.
+- A call that **carries no user** is not affected, such as an automation started by a trigger. Those keep working as before.
+
+If a dashboard has to let a non-administrator cause a write, put the write in an automation and let the dashboard trigger that: add an ```input_button``` helper, make an automation with that button as its trigger, and give the automation the ```mysql_query.execute``` action. The user presses the button, and the automation, which has no user, does the write. The statement is then fixed in the automation instead of typed by whoever is at the dashboard.
 
 ### Parameterized queries with ```values```
 
@@ -301,7 +323,7 @@ This only applies when ```values``` is present. Without it, nothing in the state
 
 #### Errors in a value
 
-A template that fails (a division by zero, a filter on a value that is not there) is treated like any other failure of the call, so it follows ```raise_on_error```: it either stops the automation or comes back as ```succeeded: false``` with the details in ```error```. Either way the statement is not sent to the database.
+A template that fails (a division by zero, a filter on a value that is not there) is treated like any other failure of the call, so it follows ```raise_on_error```: it either stops the automation with an error that names the template problem, or comes back as ```succeeded: false``` with the details in ```error```. Either way the statement is not sent to the database.
 
 ### Service: ```mysql_query.query```
 
@@ -508,7 +530,7 @@ actions:
     response_variable: db_status
 ```
 
-Omit ```config_entry``` and the first configured connection is used.
+Omit ```config_entry``` and the first loaded connection is used.
 
 ### Data types in the result set
 
@@ -538,16 +560,35 @@ Whether a failure stops your automation or comes back in the response is decided
 | :--- | :--- | :--- |
 | Statement succeeds | Returns the response, ```succeeded: true``` | Returns the response, ```succeeded: true``` |
 | SQL error (syntax, permissions, …) | Raises; the automation stops | Returns ```succeeded: false``` and fills ```error``` |
-| Failing template in ```values``` | Raises; the statement is not sent | Returns ```succeeded: false```; the statement is not sent |
+| Failing template in ```values``` | Raises a validation error; the statement is not sent | Returns ```succeeded: false```; the statement is not sent |
 | Connection dropped | Reconnects automatically, then behaves as above | Reconnects automatically, then behaves as above |
-| No free pooled connection within the connect timeout | Raises | Returns ```succeeded: false``` and fills ```error``` |
+| No free pooled connection, or a statement still running when the query timeout elapses | Raises | Returns ```succeeded: false``` and fills ```error``` |
 
-Two things do not follow the flag, because they are refusals to run rather than outcomes of a statement, and they always raise on both services:
+Some things do not follow the flag, because they are refusals to run rather than outcomes of a statement. They always raise, on both services, as a validation error (the kind of error Home Assistant shows as a mistake in the call and not as a failure):
 
 | Situation | Both services |
 | :--- | :--- |
-| No connection configured | Raises |
-| Statement belongs to the other service, carries several statements, or targets a [read-only connection](#read-only-connections) | Raises, naming what to do instead |
+| No connection is loaded, or the one named in ```config_entry``` is not | Raises, saying so |
+| The statement belongs to the other service, is empty, carries several statements, or targets a [read-only connection](#read-only-connections) | Raises, naming what to do instead |
+| A user who is not an administrator calls ```execute``` | Refused, see [Who may call what](#who-may-call-what) |
+
+The services stay listed in Home Assistant while no connection is loaded, so a call can tell you why it cannot run instead of the action having disappeared.
+
+---
+
+## Upgrading to 4.0.0
+
+**These changes were made in preparation for including the integration in the default HACS repository, to fully meet the latest Home Assistant and HACS quality and security requirements.** Most of it is invisible, but five things behave differently:
+
+1. **Home Assistant 2026.3.0 or newer is required.** Home Assistant moved to Python 3.14 with that release, and this version uses it. On an older Home Assistant HACS will not install 4.0.0; stay on 3.2.0 there.
+2. **YAML configuration is no longer supported.** A ```mysql_query:``` section in ```configuration.yaml``` is not imported any more; Home Assistant reports it as unsupported and nothing else happens. Add the connection in the UI and remove the section. Connections that were imported earlier are normal connections already and keep working.
+3. **```execute``` is for administrators.** A call made on behalf of a user who is not an administrator is refused. Automations are not affected. If a dashboard lets such a user cause a write, move the write into an automation and let the dashboard trigger it; see [Who may call what](#who-may-call-what). ```query``` is not restricted.
+4. **Some settings moved.** Changing where a connection connects (host, port, credentials, database, charset, collation, TLS) is now **Reconfigure**, in the menu of the connection. The query timeout, the row limit, autocommit and the read-only switch stay under **Configure**. Your connections are converted automatically the first time 4.0.0 starts.
+5. **You cannot go back to 3.x without re-creating the connections.** The conversion in (4) is one way, and 3.x would not find its settings where it looks for them. Home Assistant refuses to load a converted connection in 3.x instead of running it with the wrong settings; remove it and add it again to downgrade. Make a backup before you update if you may want to go back.
+
+One thing to check: ```query``` is stricter about what counts as reading. A ```WITH ... UPDATE``` or ```WITH ... DELETE``` (MySQL 8) and a ```SELECT ... INTO OUTFILE``` used to pass as reading and ran through ```query```; they are refused there now and belong to ```execute```. Every statement through ```query``` also runs in a read-only transaction now.
+
+Smaller things: ```execute``` no longer needs a ```response_variable```; the actions stay listed while no connection is loaded and then say why a call cannot run; a connection whose database is not up yet when Home Assistant starts is retried by itself; refused credentials start a sign-in form instead of leaving the connection failed; and the password field is masked and never shown again.
 
 ---
 

@@ -8,13 +8,19 @@ A small shim library that catches Plex SQLite calls and sends them to PostgreSQL
 
 ## Current validation status
 
-**v1.3.21 is a regular release.** The complete native matrix and 5h50 soak
-remain unfinished; publication does not claim full runtime certification.
-Local PlexInc/arm64/PG18 movie and TV playback/recovery passed, along with
-1,050 Rust tests and 15 shared-shim runtime E2E cases. Some GitHub runners could
-not download the real-media fixtures (HTTP 403). Browser playback and
-server-side transcoding remain unverified. Docker production promotion stays
-gated on complete native evidence.
+**v1.3.22 is a regular release.** Linux AMD64/ARM64 and macOS ARM64 downloads
+are available. PRs #31, #32 and #33 are merged.
+All four native ZIP checks and all eight 100-restart lanes passed on `5dd3b51`.
+The 5h50 load test completed, but the subsequent PostgreSQL restart check
+returned HTTP 500. This recovery issue is being investigated.
+Native PlexInc/arm64/PG18 passes genuine SQLite import,
+normal restart, both search routes, export and restoration into vanilla Plex,
+with watched state, server/media identity and source hashes preserved. The two
+observed search HTTP 500 causes have regressions and PostgreSQL 15/18 result
+parity. Browser playback and server-side transcoding remain unverified.
+
+The v1.3.22 Linux ZIP includes matching dependencies for both architectures,
+fixing the incomplete AMD64 dependency set in v1.3.21.
 
 The acceptance matrix is **LinuxServer and PlexInc × native amd64 and arm64 ×
 PostgreSQL 15 and 18** (eight combinations), with 100 restart cycles per lane
@@ -22,27 +28,39 @@ and a separate 5-hour-50-minute soak using the same immutable image digest.
 See [release gates and known gaps](docs/release-readiness.md) and
 [recorded validation evidence](docs/stability-validation-2026-10-09.md).
 
-## Latest published release: [v1.3.21](https://github.com/cgnl/plex-postgresql/releases/tag/v1.3.21)
+## Latest published release: [v1.3.22](https://github.com/cgnl/plex-postgresql/releases/tag/v1.3.22)
 
-Published on 9 October 2026. Includes transaction/reconnect, migration and FTS
-fixes, plus real movie/TV acceptance tooling. See [the changelog](CHANGELOG.md).
+Published on 11 October 2026. Includes runtime, migration, startup ordering and
+compatibility automation fixes. Download the Linux/macOS bundles or use the
+LinuxServer/PlexInc Docker images. See [the changelog](CHANGELOG.md).
 
 ### Runtime architecture introduced in v1.2.0
 
 **100% Rust shim runtime** — the entire interpose layer is now pure Rust. All C runtime code has been eliminated. The shim compiles to a single static library linked into the dylib/so.
 
-- 🆕 **Full Rust runtime:** all interpose, column access, step execution, and connection management in Rust — eliminating memory leaks, buffer overflows, and use-after-free bugs by design
+- 🆕 **Rust runtime:** interpose, column access, execution and connection management use Rust with an explicit SQLite C ABI; native ownership and compatibility are verified separately
 - 🆕 **Module architecture:** monolithic files split into focused submodules for maintainability
 - 🔧 **Deadlock fixes:** recursive connection mutex, reduced lock hold times, lock-free logging fallback
 - 🔧 **Stack safety:** heap-allocated thread-local buffers for Plex's 544K worker thread stacks
 - ✅ **712 tests passing** across unit, integration, and compatibility suites
 
-[📥 Download v1.3.21](https://github.com/cgnl/plex-postgresql/releases/tag/v1.3.21) | [📋 Full Changelog](CHANGELOG.md)
+[📥 Download v1.3.22](https://github.com/cgnl/plex-postgresql/releases/tag/v1.3.22) | [📋 Full Changelog](CHANGELOG.md)
 
-Linux and macOS release zips are built by GitHub Actions on tag push via `.github/workflows/release-linux-artifacts.yml` and `.github/workflows/release-macos-artifacts.yml`.
+New automatic releases require a certificate for the exact tested source and
+Linux ZIP/image bytes. Tag pushes no longer independently publish assets.
+Automatic publication is disabled until genuine bootstrap certification and
+reviewed trust configuration exist. New macOS assets require a separate native
+acceptance gate.
 Pull requests and `main`/`develop` pushes run `.github/workflows/ci.yml` (script validation + Linux amd64 build check + full test suite + FFI header verification).
-The current `.github/workflows/docker-publish.yml` probes uniquely tagged GHCR
-candidates and blocks production promotion. The image repositories are:
+The compatibility monitor checks public Plex releases every six hours and
+deduplicates unchanged inputs. Short probes detect regressions; full native
+certification gates publication. Up to two validated older Plex profiles can be
+required. Demonstrated failures can produce a separate draft code-fix PR when
+the API secret is configured; fixes are never automatically merged. Historical
+coverage currently starts empty and fix generation is unconfigured. See
+[compatibility automation and setup](docs/plex-compatibility.md).
+
+The candidate image repositories are:
 - `ghcr.io/cgnl/plex-postgresql-linuxserver`
 - `ghcr.io/cgnl/plex-postgresql-plexinc`
 
@@ -52,7 +70,7 @@ candidates and blocks production promotion. The image repositories are:
 
 **macOS:**
 ```bash
-curl -L https://github.com/cgnl/plex-postgresql/releases/download/v1.3.21/plex-postgresql-v1.3.21-macos.zip \
+curl -L https://github.com/cgnl/plex-postgresql/releases/download/v1.3.22/plex-postgresql-v1.3.22-macos.zip \
   -o /tmp/plex-pg-macos.zip
 mkdir -p /tmp/plex-pg-macos && cd /tmp/plex-pg-macos
 unzip /tmp/plex-pg-macos.zip
@@ -60,14 +78,9 @@ pkill -f "Plex Media Server" 2>/dev/null || true
 ./scripts/install_wrappers.sh
 ```
 
-**Linux (x86_64):**
-```bash
-sudo curl -L https://github.com/cgnl/plex-postgresql/releases/download/v1.3.21/plex-postgresql-v1.3.21-linux.zip \
-  -o /tmp/plex-postgresql-linux.zip
-sudo unzip -j /tmp/plex-postgresql-linux.zip db_interpose_pg-linux-x86_64.so -d /usr/local/lib
-sudo mv /usr/local/lib/db_interpose_pg-linux-x86_64.so /usr/local/lib/db_interpose_pg.so
-# Then configure LD_PRELOAD in systemd service
-```
+**Linux:** use the architecture-aware installer from the corrected bundle.
+Keep its `libs/`, `scripts/` and `schema/` directories together. See the
+[Linux installation instructions](INSTALL.md#-linux-native).
 
 **Docker:**
 ```bash
@@ -83,8 +96,8 @@ See detailed installation instructions below for each platform.
 | Platform | Architecture | Status |
 |----------|-------------|---------|
 | macOS | ARM64 (M1/M2/M3/M4) | ✅ Production tested |
-| Linux | x86_64 | ✅ Pre-compiled binary |
-| Linux | ARM64 | ✅ Pre-compiled binary |
+| Linux | x86_64 | Corrected native bundle under validation |
+| Linux | ARM64 | Native bundle install/load verified; matrix pending |
 | Docker | x86_64 + ARM64 | ✅ Multi-arch support |
 
 ## Why PostgreSQL?
@@ -268,7 +281,7 @@ volumes:
 Use the latest macOS zip and run the wrapper installer. The installer copies the shim dylib into `Plex Media Server.app`, patches the binaries, and sets up the wrapper script. Everything lives inside the Plex app bundle.
 
 ```bash
-curl -L https://github.com/cgnl/plex-postgresql/releases/download/v1.3.21/plex-postgresql-v1.3.21-macos.zip -o /tmp/plex-pg-macos.zip
+curl -L https://github.com/cgnl/plex-postgresql/releases/download/v1.3.22/plex-postgresql-v1.3.22-macos.zip -o /tmp/plex-pg-macos.zip
 mkdir -p /tmp/plex-pg-macos && cd /tmp/plex-pg-macos
 unzip /tmp/plex-pg-macos.zip
 
@@ -288,21 +301,17 @@ pkill -f "Plex Media Server" 2>/dev/null || true
 
 ## Quick Start (Linux Native)
 
-Use the latest Linux zip and install the binary for your CPU.
+The corrected bundle contains both named shims and `libs/x86_64/` plus
+`libs/aarch64/` runtime dependencies. Both are included in v1.3.22.
+
+Extract a corrected bundle without flattening its directories. The installer
+selects and validates the matching shim, dependencies and Plex loader before
+changing Plex files:
 
 ```bash
-curl -L https://github.com/cgnl/plex-postgresql/releases/download/v1.3.21/plex-postgresql-v1.3.21-linux.zip -o /tmp/plex-pg-linux.zip
 mkdir -p /tmp/plex-pg-linux
+unzip /path/to/corrected-linux-bundle.zip -d /tmp/plex-pg-linux
 cd /tmp/plex-pg-linux
-unzip /tmp/plex-pg-linux.zip
-
-sudo mkdir -p /usr/local/lib/plex-postgresql
-if [ "$(uname -m)" = "x86_64" ]; then
-  sudo install -m 755 db_interpose_pg-linux-x86_64.so /usr/local/lib/plex-postgresql/db_interpose_pg.so
-else
-  sudo install -m 755 db_interpose_pg-linux-aarch64.so /usr/local/lib/plex-postgresql/db_interpose_pg.so
-fi
-
 sudo systemctl stop plexmediaserver
 sudo ./scripts/install_wrappers_linux.sh
 sudo systemctl start plexmediaserver
@@ -349,6 +358,7 @@ Use this command to migrate an existing Plex library to PostgreSQL:
 | `PLEX_PG_POOL_SIZE` | 50 | Initial connection pool size |
 | `PLEX_PG_POOL_MAX` | (inherits `PLEX_PG_POOL_SIZE`) | Runtime pool cap; auto-aligned to PostgreSQL `max_connections` at startup |
 | `PLEX_PG_IDLE_TIMEOUT` | 300 | Seconds before idle connections are reaped |
+| `MIGRATION_SNAPSHOT_TIMEOUT` | 3600 | Seconds allowed for a private source snapshot; positive values up to 86400. Increase for large libraries on slow NAS storage. |
 | `PLEX_PG_OPENSSL_ARMCAP` | 0 (Docker ARM only) | Override `OPENSSL_armcap` for Plex process to avoid ARM `SIGILL` on unsupported crypto instructions |
 | `PLEX_PG_LOG_LEVEL` | 1 | 0=ERROR, 1=INFO, 2=DEBUG |
 | `PLEX_PG_RETRY_DELAYS` | 500,1000,2000,3000,4000 | PG reconnect backoff in ms (comma-separated, max 10 values) |

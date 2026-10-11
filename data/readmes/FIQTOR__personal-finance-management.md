@@ -4,6 +4,18 @@ A production-ready, full-stack Personal Finance Management module built with **E
 
 ---
 
+## 📸 Screenshots
+
+| Public Landing | Transactions |
+| :---: | :---: |
+| ![Landing](docs/screenshots/landing.png) | ![Transactions](docs/screenshots/transactions.png) |
+
+**Finance Dashboard** — net balance, income/expense trends and budget usage.
+
+![Dashboard](docs/screenshots/dashboard.png)
+
+---
+
 ## 🌟 Key Features
 
 - 💵 **Multi-Currency Transactions**: Create, edit, filter, and track transactions with support for multiple currencies (USD, IDR, EUR, GBP).

@@ -36,11 +36,15 @@ fail closed で止まります。
 parse、DB保存までの検証が完了するまでは、64-bit 対応済みとは扱いません。
 
 運用環境では正式リリースtagを固定してインストールします。次は現在の安定版
-`v2.0.0`の例です。採用時には`git rev-parse HEAD`で得たfull SHAと、使用したartifactの
+`v2.3.0`の例です。2.2.0 で作った DB から上げる場合は、`RT_WH` の主キーへ `HappyoTime` を
+足すオペレーター移行が必要です（自動では行いません。未移行のあいだは 0B11 だけが止まります）。
+手順は [RELEASE_NOTES.md](RELEASE_NOTES.md) の「Upgrade from 2.2.0」を参照してください。
+2.1.2 から上げる場合は、さらに `NL_HR` / `RT_HR` の予備 flag 3 列の型変更（INTEGER → TEXT、
+「Upgrade from 2.1.2」）も必要です。採用時には`git rev-parse HEAD`で得たfull SHAと、使用したartifactの
 SHA-256も運用記録へ残してください。
 
 ```powershell
-git clone --branch v2.0.0 --depth 1 https://github.com/miyamamoto/jrvltsql.git
+git clone --branch v2.3.0 --depth 1 https://github.com/miyamamoto/jrvltsql.git
 cd jrvltsql
 git rev-parse HEAD
 pip install .
@@ -132,6 +136,25 @@ powershell -NoProfile -ExecutionPolicy Bypass -File install_tasks.ps1 -DbType po
 公式 `TS_O1` / `TS_O2` と開催週の速報系データも取得します。
 通常データだけに絞る場合は `--no-timeseries --no-realtime` を指定してください。
 
+collector などから `scripts/daily_update.py` を直接呼ぶ場合は、取得結果を機械可読に
+残せます（2.2.0 以降）。
+
+```bash
+python scripts/daily_update.py --specs RACE --days-back 1 \
+  --summary-json /tmp/daily_summary.json --require-records RACE --log-file logs/daily.log
+```
+
+- `--summary-json`: dataspec ごとに送った fromtime、JVOpen の戻り値・`readcount`・
+  `downloadcount`・`lastfiletimestamp`、取込件数を JSON で書きます（`--help` 以外の
+  すべての終了で書く）。
+- `--require-records`: 指定した spec が何も返さなければ exit 3。JVOpen `-1` は
+  「該当データ無し」以外の意味も持つため、空であることの証明にはしません。
+- 契約の詳細は [取得サマリ JSON](docs/fetch_summary.md)。
+- 速報馬体重 `0B11` と速報開催情報 `0B14` は、取得ごとに追記型の
+  取得ログ（`RT_CAPTURE_FETCH` / `RT_CAPTURE_RECORD`、UTC の取得時刻・生レコード・
+  パース結果）にも残ります（2.3.0 以降）。`RT_WH` は発表時刻を主キーに含み、
+  発表ごとに 1 行です。詳細は [速報の取得ログ](docs/capture_log.md)。
+
 ## Linux (Docker + Wine) で動かす
 
 イメージは Wine と 32-bit bridge、noVNC の画面を含みます。JV-Link 本体の
@@ -178,6 +201,8 @@ setup 取得が 120 秒を超える環境では `JVLINK_OPEN_TIMEOUT_SECONDS`（
 | [JV-Link 手動登録](docs/jvlink_manual_registration.md) | noVNC でのインストールと利用登録 |
 | [対応データ種別一覧](docs/data_support.md) | JVOpen / JVRTOpen spec と保存先 |
 | [レコード別の公式契約と移行手順](docs/record_contracts.md) | レコード種別ごとの公式レイアウト・主キー・`DataKubun`・既存 DB の移行手順 |
+| [取得サマリ JSON](docs/fetch_summary.md) | `daily_update.py --summary-json` の出力契約と exit code |
+| [速報の取得ログ](docs/capture_log.md) | 0B11 / 0B14 の追記型取得ログ（`RT_CAPTURE_*`）の契約と as-of の読み方 |
 | [時系列オッズ](docs/timeseries_odds.md) | `0B41/0B42` と `0B30` 系の違い |
 | [PostgreSQL](docs/postgresql.md) | PostgreSQL 保存と日次同期 |
 | [CLI](docs/CLI.md) | CLI リファレンス |

@@ -358,6 +358,8 @@ run before trusting a new database or driver.
 | `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GEMINI_API_KEY` / `GOOGLE_API_KEY`, `OCI_COMPARTMENT_ID` | picked up automatically by `--provider` |
 | `SCHEMAGATE_STUDIO_LOG=1` | log Studio requests |
 | `SCHEMAGATE_VALUES=1` | MCP server: read column values at startup, like `--values` (`SCHEMAGATE_VALUES_BUDGET` = seconds, default 30) |
+| `SCHEMAGATE_RESTRICT_FROM_GRANTS=1` | MCP server: take visibility from the database's GRANTs, like `--restrict-from-grants` (PostgreSQL, MySQL, Oracle) |
+| `SCHEMAGATE_CATALOG_MAX_AGE` | MCP server: seconds a catalogue may be used before it is re-read; if the re-read fails, the scoping tools refuse until one succeeds (see below) |
 
 ## How it picks
 
@@ -963,24 +965,40 @@ Model Context Protocol:
 
 <!-- mcp-name: io.github.ashishsinha1602/schemagate -->
 
+One line, nothing to install first (needs [uv](https://docs.astral.sh/uv/)); `demo` is a
+bundled sample schema, so this works before you point it at anything:
+
 ```bash
-pip install 'schemagate[mcp]'
-SCHEMAGATE_DATABASE_URL=postgresql://localhost/app python -m schemagate.mcp_server
+uvx --from "schemagate[mcp]" schemagate-mcp --url demo
 ```
 
-MCP client config:
+Claude Code:
+
+```bash
+claude mcp add schemagate -- uvx --from "schemagate[mcp]" schemagate-mcp --url demo
+```
+
+Any other client (Claude Desktop, Cursor, Windsurf, Zed), with your database. Add
+your database's driver extra next to `mcp`: `postgres`, `mysql`, `mssql` or `oracle`
+(SQLite needs none):
 
 ```json
 {"mcpServers": {"schemagate": {
-  "command": "python", "args": ["-m", "schemagate.mcp_server"],
-  "env": {"SCHEMAGATE_DATABASE_URL": "postgresql://localhost/app"}}}}
+  "command": "uvx", "args": ["--from", "schemagate[mcp,postgres]", "schemagate-mcp"],
+  "env": {"SCHEMAGATE_DATABASE_URL": "postgresql+psycopg://user:password@localhost/app"}}}}
 ```
 
-Three tools: `select_schema` (the DDL for a question, scoped to the caller),
-`list_objects` (what this caller can see), `describe_object` (one object's full
-DDL). All three take `principal` and `roles`. If the client leaves them out,
-the caller is anonymous and sees only unrestricted objects. A restricted
-object and a missing one return the same error, so existence doesn't leak.
+Keep a URL with a password in `env`, as above, not in `--url`: command arguments are
+visible to every process on the machine. Without uv: `pip install 'schemagate[mcp,postgres]'`,
+then run `schemagate-mcp` (or `python -m schemagate.mcp_server`, which still works).
+
+Seven tools, all read-only: `select_schema` (the DDL for a question, scoped to
+the caller), `list_objects` (what this caller can see), `describe_object` (one
+object's full DDL), `run_query` (runs a single read, refused if it names
+anything the caller may not see), `answer`, `refresh_catalog` and `health`.
+They take `principal` and `roles`. If the client leaves them out, the caller
+is anonymous and sees only unrestricted objects. A restricted object and a
+missing one return the same error, so existence doesn't leak.
 
 **Every decision is recorded.** Each call to those tools, and to `run_query`
 and `answer`, writes one line: when, which principal with which roles, what
@@ -1052,7 +1070,20 @@ SCHEMAGATE_MCP_TRANSPORT=streamable-http SCHEMAGATE_MCP_PORT=8765 python -m sche
 It's built not to die. The index lives in memory after startup, so the
 database going away does not take the server with it — `select_schema` keeps
 answering from the last good reflection, and `refresh_catalog` reports the
-failure instead of raising. Every tool catches everything and returns
+failure instead of raising.
+
+**How old may the permissions be?** The server reads them when it builds its
+catalogue: restrictions from the config file and, with
+`SCHEMAGATE_RESTRICT_FROM_GRANTS=1`, the database's own GRANTs. By default that
+catalogue is used until `refresh_catalog` is called, so a REVOKE in the
+database reaches the server only then. Set `SCHEMAGATE_CATALOG_MAX_AGE=300` and
+a catalogue older than five minutes is re-read before it is used: a GRANT or a
+REVOKE takes effect **within** that window, not on the next call. If the
+re-read fails, the server does not keep answering from the old permissions:
+`select_schema`, `list_objects`, `describe_object`, `run_query` and `answer`
+refuse with "permissions are stale" until a re-read succeeds (retried at most
+every 5 seconds), and `health` shows `catalog_stale` and the reason. Caller
+roles from a `groups` resolver have their own bound, its `ttl`. Every tool catches everything and returns
 `{"error": ...}`; a bad request cannot end the session for other clients.
 `health` tells a load balancer what state it's in. A test throws 125 kinds of
 garbage at every tool and then checks the next good request still works, and

@@ -114,7 +114,7 @@ A connection can also come from the command line:
 
 - `masume postgres://ada@127.0.0.1:5432/shop` opens a URL.
 - `masume ./notes.db` opens a SQLite file.
-- `masume --detect` lists the databases in running Docker or Podman containers.
+- `masume --detect` lists the databases in running Docker or Podman containers and in the pods of the current `kubectl` context.
 
 The first interactive run creates a starter configuration file. A profile can also be written by hand:
 
@@ -163,8 +163,10 @@ Query history and saved queries keep the statements. MongoDB takes a [subset of 
 - **Transactions:** begin, commit, and rollback. With autocommit off, running a statement starts a transaction.
 - **Masking:** hides columns with sensitive names in the grid only. Copies, exports, and value viewers show the original values.
 - **Copy and export:** CSV and JSON files. Clipboard formats also include Markdown, `INSERT` statements, row JSON, and column `IN` clauses. See [copy and export](docs/usage.md#copy-and-export).
-- **Import:** CSV or JSON into an existing or new SQL table. See [importing files](docs/usage.md#importing-files).
+- **Import:** CSV or JSON into an existing or new SQL table, and JSON documents into a MongoDB collection. See [importing files](docs/usage.md#importing-files).
 - **Dump and restore:** schema and data as a SQL file. See [dump and restore](docs/usage.md#dump-and-restore).
+- **Data search:** a text in every column of every table of a schema. See [data search](docs/usage.md#data-search).
+- **Result compare:** pin a result and compare another one with it, row by row. See [result compare](docs/usage.md#result-compare).
 - **Schema compare:** tables, columns, indexes, and constraints of two schemas, on one connection or two. See [schema compare](docs/usage.md#schema-compare).
 - **Server dashboard:** sessions and metrics the engine supports. See [server activity](docs/usage.md#server-activity).
 
@@ -191,7 +193,7 @@ Both use the same database tools with different policies. See [security limits](
 - **Password sources:** prompt, keyring, environment variables, commands, and named secret stores. Profile files do not store database passwords. See [credentials](SECURITY.md#credentials).
 - **Read-only profiles:** checked in the client, and also enforced by the server on engines that support it. See [read-only access](docs/engines.md#read-only-access).
 - **SSH tunnels and unix sockets:** see [SSH tunnel](docs/configuration.md#ssh-tunnel) and [unix socket](docs/configuration.md#unix-socket).
-- **Container detection:** `masume --detect` finds databases in running Docker or Podman containers. See [databases in a container](docs/usage.md#databases-in-a-container).
+- **Container detection:** `masume --detect` finds databases in running Docker or Podman containers, and in Kubernetes pods through `kubectl port-forward`. See [databases in a container](docs/usage.md#databases-in-a-container).
 - **Themes:** built-in themes, custom themes, or terminal colours. See [themes](docs/themes.md).
 
 A repository can share connections and saved queries in `.masume.toml`. masume reads the nearest one in or above the working directory:
@@ -217,6 +219,7 @@ See [project file](docs/configuration.md#project-file) and [project security](SE
 masume run -p shop-prod -f json 'select count(*) from orders'
 masume run -p shop -e ./reports/daily.sql --param day=2026-09-02
 masume run ./notes.db -f csv 'select * from notes limit 100000' > notes.csv
+masume run -p shop -f parquet 'select * from orders' > orders.parquet
 ```
 
 See [headless mode](docs/headless.md) for formats, exit codes, dump, restore, schema compare, and notebooks.
@@ -227,7 +230,7 @@ See [headless mode](docs/headless.md) for formats, exit codes, dump, restore, sc
 masume                                   open the client
 masume TARGET                            open a connection, postgres://you@host/shop
 masume --profile NAME                    open a user or project profile
-masume --detect                          open detected container databases
+masume --detect                          open detected container and pod databases
 masume run [TARGET | -p NAME] STATEMENT  run statements
 masume nb run [TARGET | -p NAME] FILE    run a notebook
 masume dump [TARGET | -p NAME] FILE      dump schema and data
@@ -239,7 +242,7 @@ masume --mcp --check                     check enabled MCP profiles
 masume --version                         print the version
 ```
 
-URL support is partial: most native driver options are ignored. See [connection targets](docs/usage.md#connection-targets).
+A URL query key without a profile key of its own is passed to the driver. See [connection targets](docs/usage.md#connection-targets) and [driver options](docs/configuration.md#driver-options).
 
 ## Docs
 

@@ -24,8 +24,10 @@ schemas and queries are written once in common code, and every engine supports e
 - Plain Kotlin classes, mapped by `kotlinx.serialization` — no code generation step.
 - Filters, ordering, paging and counting.
 - Nested rekords and lists of them, stored once and shared between the rekords referring to them,
-  and filtered by their fields.
+  and filtered by their fields — a nested rekord can be an id too.
+- Embedded classes: a group of fields reused by several rekord types, kept within each of them.
 - Transactions: several operations applied together or not at all.
+- Observing: queries as `Flow`s, read again whenever a transaction writing their rekords commits.
 - Versioned schemas with migrations run in a transaction of their own.
 - Engines found on their own: common code creates the store, each target's dependencies choose the
   storage — SQLite, IndexedDB, or memory for tests and caching. Another engine can be plugged in.
@@ -127,7 +129,52 @@ class NoteRekord(
 ```
 
 A field holds a `String`, `Int`, `Long`, `Float`, `Double`, `Boolean`, a `kotlinx.datetime`
-`LocalDate` or `LocalDateTime`, another rekord or a list of them — nullable or not.
+`LocalDate` or `LocalDateTime`, another rekord or a list of them — nullable or not — or an embedded
+class.
+
+A rekord held can be an id, as long as it cannot be null: the rekord is then told apart by the ids
+of the one it holds. A list cannot be an id.
+
+```kotlin
+@Rekord(type = "session")
+class SessionRekord(
+    @Field(name = GAME_ID, id = true)
+    val gameId: Long,
+    // One session per game and platform.
+    @Field(name = PLATFORM, id = true)
+    val platform: PlatformRekord,
+)
+```
+
+An `@Embedded` class is a group of fields with no type, no table and no place in the schema of its
+own: its fields are kept as fields of each rekord holding it, named after the field holding it —
+`game` holding `id` keeps it as `game_id` — or, with `prefixed = false`, by their own names. A field
+holding one that is an id makes each of its fields an id.
+
+```kotlin
+@Embedded
+class GameKey(
+    @Field(name = "id") val id: String,
+    @Field(name = "id_type") val idType: String,
+)
+
+@Rekord(type = "game")
+class GameRekord(
+    @Field(name = "key", id = true, prefixed = false) val key: GameKey, // id, id_type
+    @Field(name = "title") val title: String,
+)
+
+@Rekord(type = "play")
+class PlayRekord(
+    @Field(name = "game", id = true) val game: GameKey, // game_id, game_id_type
+    @Field(name = "hours") val hours: Int,
+)
+```
+
+Its fields are filtered and ordered by the names they are kept under, or through `Filter.Nested` on
+the field holding it, as a rekord held is. An embedded class holds values, rekords and other
+embedded classes, but no list. A field holding one may be null unless it is an id, the class then
+needing a field that cannot be: null is kept as each of its fields holding none.
 
 ### Schema
 
@@ -222,6 +269,36 @@ store.transaction {
     putRekord(newNote)
 }
 ```
+
+### Observing
+
+A query can be observed as a `Flow`: it is read once the flow is collected, and again each time a
+transaction writing its rekords commits:
+
+```kotlin
+val urgent: Flow<List<NoteRekord>> = store.observeRekords<NoteRekord>(
+    filter = Filter.Nested(NoteRekord.TAGS, Filter.Equals(TagRekord.NAME, "urgent")),
+    orderBy = listOf(Order.Ascending(NoteRekord.DUE_DATE)),
+)
+val note: Flow<NoteRekord?> = store.observeRekord<NoteRekord>(Filter.Equals(NoteRekord.ID, 42L))
+val count: Flow<Int> = store.observeCount<NoteRekord>()
+
+// Several rekord types, read in one transaction.
+val summary: Flow<Pair<Int, Int>> = store.observe(NoteRekord::class, TagRekord::class) {
+    count<NoteRekord>() to count<TagRekord>()
+}
+```
+
+- A rekord type is written by putting rekords of it or of a type holding it, and by deleting
+  rekords of it. The rekords a query reads hold others, which are observed along with them:
+  renaming a tag reads the notes holding it again.
+- Transactions committed while a query is being read are read once it is done, by one more read. A
+  transaction that fails writes nothing, and is not seen.
+- What is written is not compared to what is stored, so a write may hand out what was read before.
+  `distinctUntilChanged()` drops it, for rekords that are compared by their values.
+- A query that fails ends the flow with its exception, which `catch` or `retry` handles.
+- Only what this store commits is seen: another store over the same storage, or another process,
+  writes nothing its observers are told of.
 
 ### Encryption
 

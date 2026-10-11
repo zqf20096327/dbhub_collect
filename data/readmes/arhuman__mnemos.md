@@ -202,6 +202,9 @@ To share it with the repo, commit it via `.mcp.json` instead:
 Verify with `claude mcp list` (should show `mnemos ✓ connected`) and `/mcp` inside
 a session. Claude then calls the tools automatically; see [Capabilities](#capabilities).
 
+To use a workspace that lives on another machine, run stdio over SSH; mnemos opens
+no network listener. See [docs/remote-access.md](docs/remote-access.md).
+
 <details>
 <summary>Why the <code>--config</code> path must be absolute</summary>
 
@@ -289,14 +292,47 @@ done (1)
 
 ### Automation with hooks
 
-The skill is advisory: the model decides when to fire each mode. Claude Code hooks make the memory loop deterministic. `make install-skill` (or `make install-hooks` on its own) merges [`skills/mnemos-okf/hooks/settings.example.json`](skills/mnemos-okf/hooks/settings.example.json) into your `~/.claude/settings.json` idempotently, keeping a `.bak`; pass `SKIP_HOOKS=1` to opt out, or merge the file by hand for a project-level `.claude/settings.json`. Two hooks are activated:
+The skill is advisory: the model decides when to fire each mode. Claude Code hooks make the memory loop deterministic. `make install-skill` (or `make install-hooks` on its own) merges [`skills/mnemos-okf/hooks/settings.example.json`](skills/mnemos-okf/hooks/settings.example.json) into your `~/.claude/settings.json` idempotently, keeping a `.bak`; pass `SKIP_HOOKS=1` to opt out, or merge the file by hand for a project-level `.claude/settings.json`. Three hooks are activated:
 
 | Hook | Matcher | Effect |
 |------|---------|--------|
 | `SessionStart` | `startup\|resume\|compact` | Injects the working set at session start: `mnemos task list` plus recent decisions (`mnemos ls decisions`). The `compact` matcher re-injects it after context compaction. |
-| `UserPromptSubmit` | recall cue phrases | When the prompt matches "as we decided", "what was", "remember when", and similar cues, injects the top 3 `mnemos search` hits. Requires `jq`. Silent no-op when no cue matches. |
+| `UserPromptSubmit` | (all prompts) | `mnemos hook recall` runs a lexical search when the prompt carries a recall cue ("as we decided", "what was", "remember when", and their French equivalents) or ends with a question mark, and injects the top 3 cited hits. Prompts over 2000 characters (pasted material) are skipped. Silent no-op when nothing qualifies or matches. |
+| `Stop` | (all turns) | `mnemos hook stop` writes one journal entry per turn (request, files touched, final assistant text) under `journal/<date>/`. Journal entries are excluded from search and reach the kb only when CONSOLIDATE promotes them. Needs `allow_write = true`; silent no-op otherwise. |
 
-PreCompact and Stop persistence (session summaries, capture flush) stays in the skill because those hook events cannot inject context into the model.
+PreCompact persistence (session summaries, capture flush) stays in the skill because that hook event cannot inject context into the model.
+
+## Connect opencode
+
+One global entry serves every project. Add it to `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "mnemos": { "type": "local", "command": ["mnemos", "serve"], "enabled": true }
+  }
+}
+```
+
+Or merge it idempotently into an existing file (requires `jq`; plain JSON only, not JSONC):
+
+```bash
+f=~/.config/opencode/opencode.json
+[ -f "$f" ] || echo '{"$schema":"https://opencode.ai/config.json"}' > "$f"
+jq '.mcp.mnemos = {type: "local", command: ["mnemos", "serve"], enabled: true}' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+```
+
+Verify with `opencode mcp list` (should show `✓ mnemos  connected`).
+
+No `--config` is needed here, unlike Claude Code: opencode spawns local MCP servers
+in the project directory, so a bare `mnemos serve` serves the project's `.mnemos/`
+when one exists and falls back to `~/.mnemos` otherwise. Two things override that
+discovery, because opencode passes its whole environment to the server: an exported
+`$MNEMOS_DIR` or `$CLAUDE_PROJECT_DIR` pins every project to one workspace. To serve
+one fixed workspace on purpose, add `"--mnemos-dir", "/abs/path/.mnemos"` to `command`
+(opencode does not expand `~`). Tools appear as `mnemos_mnemos_search` and so on, since
+opencode replaces the dots in tool names.
 
 ## Capabilities
 
@@ -311,11 +347,13 @@ commands). Note the spelling: `mnemos.search` is the **MCP tool** Claude calls;
 - **`mnemos.context`**: top-k results as LLM-ready context blocks (`uri:start-end` → content). Pass `follow_links: true` to attach each block document's 1-hop link neighbors.
 - **`mnemos.related`**: the link-graph neighbors of a document, its outbound links and inbound backlinks (1 hop, document-level). Dangling outbound targets are returned with `resolved: false`. Filter with `direction` (outbound/inbound/both) and `limit`.
 - **`mnemos.list`**: walk the OKF tree on disk and annotate each file with index metadata (title, type, tags, collection) plus an `indexed` flag, so both stored and not-yet-indexed files are visible. Filter by `path`, `collection`, `type`, or indexed state.
+- **`mnemos.journal_pending`**: list session journal entries not yet reviewed, oldest first. Journal entries are excluded from search; this is how CONSOLIDATE finds them.
 
 ### Write (requires `allow_write = true`)
 
 - **`mnemos.remember`**: write a note into memory. Pass an optional `path` (e.g. `"adr/0003-rule-engine.md"`) to place it at an explicit location in the OKF tree instead of auto-naming under `kb/capture/`. Content is **secret-scanned** before it is written and indexed.
 - **`mnemos.okfy`**: convert an existing `.txt`/`.md` file in the tree into an OKF document (frontmatter + body) at `out` (defaults to the source path with a `.md` extension) and index it, leaving the source intact. The source body is **secret-scanned** first.
+- **`mnemos.journal_promote`**: record that a journal entry was reviewed by stamping its `promoted_to` with the kb document now holding its content (written first with `mnemos.remember`), or `none`. It never writes the kb document itself, and an entry already stamped is refused.
 
 `mnemos edit <uri>` is the human counterpart: a terminal editor for one document, gated by the same `allow_write` flag, with no MCP tool of its own. See [Edit documents interactively](#edit-documents-interactively).
 
@@ -323,6 +361,8 @@ commands). Note the spelling: `mnemos.search` is the **MCP tool** Claude calls;
 
 - **`mnemos.forget`**: remove a file from the OKF tree and de-index it; idempotent.
 - **`mnemos.move`**: move a file **or directory** within the tree and re-index it under the new path. A directory moves its whole subtree, preserving each document's collection. Inbound markdown links to the old paths are not rewritten in V0 (logged as a warning).
+
+The journal has a CLI counterpart: `mnemos journal pending` lists unreviewed entries, `mnemos journal promote <entry-uri> <target|none>` stamps one (`allow_write`), and `mnemos journal prune --older-than 30d` lists reviewed entries past the age, deleting them with `--apply` (`allow_delete`). Unreviewed entries are never pruned.
 
 ## Keep memory fresh
 
@@ -435,6 +475,7 @@ baseline. See [docs/architecture.md](docs/architecture.md#retrieval-evaluation).
 - **[docs/configuration.md](docs/configuration.md)**: the layered `<MNEMOS_DIR>/mnemos.toml`, with all defaults.
 - **[docs/paths-and-indexing.md](docs/paths-and-indexing.md)** — how state is located, what gets indexed, where writes land, and the idempotency/URI rules.
 - **[docs/architecture.md](docs/architecture.md)** — design principles and the retrieval-evaluation methodology.
+- **[docs/remote-access.md](docs/remote-access.md)**: using a workspace on another machine over SSH, restricting keys, and why there is no HTTP/SSE transport.
 
 ## Security
 

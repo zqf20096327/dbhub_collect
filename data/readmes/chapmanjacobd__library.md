@@ -10,7 +10,9 @@ tracking online video playlists (eg. YouTube subscriptions) and scheduling brows
 
 [![Downloads](https://static.pepy.tech/badge/library)](https://pepy.tech/project/library)
 
-## Install
+## Getting started
+
+<details><summary>Install</summary>
 
 Linux recommended but [Windows setup instructions](./Windows.md) available.
 
@@ -24,7 +26,31 @@ Required: `ffmpeg`
 
 Some features work better with: `mpv`, `fd-find`, `fish`
 
-## Getting started
+Optional Python extras are grouped under `library[deluxe]`. This includes
+`gallery-dl` (used by `gallery-add`), `internetarchive` (used for Internet
+Archive downloads), and `cdx_toolkit` (used by the `--webcache`/`--wayback`
+CDX extractor):
+
+    pip install "library[deluxe]"
+
+Torrent metadata commands (`torrents-add` and `torrents-dump`) require the
+`libtorrent` Python bindings. They are included by `library[deluxe]` when using
+Python 3.12 or 3.13; Python 3.14 wheels are not available yet, so use Python
+3.13 for torrent support.
+
+If the PyPI wheel is unavailable for your Python or platform, these system
+packages provide the bindings:
+
+* Debian/Ubuntu: `sudo apt install python3-libtorrent`
+* Fedora: `sudo dnf install rb_libtorrent-python3`
+* macOS/Homebrew: `brew install libtorrent-rasterbar`
+
+The Debian, Fedora, and Homebrew packages are built for their system or
+Homebrew Python and may not be importable from a separate uv virtualenv. There
+is no official Scoop package for the Python bindings; on Windows, use Python
+3.13 and `pip install "library[deluxe]"`.
+
+</details>
 
 <details><summary>Local media</summary>
 
@@ -79,7 +105,11 @@ TIP! If you often copy and paste many URLs you can paste line-delimited text as 
 
 Or in BASH:
 
-    library tubeadd my.db $(xclip -selection c)
+    library tubeadd my.db $(
+
+[...截断...]
+
+xclip -selection c)
 
 #### 1a. Get new videos for saved playlists
 
@@ -99,7 +129,7 @@ To stop playing press Ctrl+C in either the terminal or mpv
 <details><summary>List all subcommands</summary>
 
     $ library
-    library (v3.2.007; 102 subcommands)
+    library (v3.2.011; 102 subcommands)
 
     Create database subcommands:
     ╭─────────────────┬──────────────────────────────────────────╮
@@ -111,11 +141,7 @@ To stop playing press Ctrl+C in either the terminal or mpv
     ├─────────────────┼──────────────────────────────────────────┤
     │ gallery-add     │ Add online gallery media (gallery-dl)    │
     ├─────────────────┼──────────────────────────────────────────┤
-    │ tabs-add        │ 
-
-[...截断...]
-
-Create a tabs database; Add URLs         │
+    │ tabs-add        │ Create a tabs database; Add URLs         │
     ├─────────────────┼──────────────────────────────────────────┤
     │ links-add       │ Create a link-scraping database          │
     ├─────────────────┼──────────────────────────────────────────┤
@@ -158,20 +184,4 @@ Create a tabs database; Add URLs         │
     ├──────────────────┼────────────────────────────────────────────────┤
     │ expand-links     │ Expand search urls with query text             │
     ├──────────────────┼────────────────────────────────────────────────┤
-    │ nouns            │ Unstructured text -> compound nouns (stdin)    │
-    ├──────────────────┼────────────────────────────────────────────────┤
-    │ dates            │ Unstructured text -> dates                     │
-    ├──────────────────┼────────────────────────────────────────────────┤
-    │ times            │ Unstructured text -> times                     │
-    ├──────────────────┼────────────────────────────────────────────────┤
-    │ timestamps       │ Unstructured text -> timestamps                │
-    ├──────────────────┼────────────────────────────────────────────────┤
-    │ json-keys-rename │ Rename JSON keys by substring match            │
-    ├──────────────────┼────────────────────────────────────────────────┤
-    │ combinations     │ Enumerate possible combinations                │
-    ╰──────────────────┴────────────────────────────────────────────────╯
-
-    Folder subcommands:
-    ╭─────────────────┬─────────────────────────────────────────────────────────────────────╮
-    │ merge-mv        │ Move files and merge folders in BSD/rsync style, rename if possible │
-    ├─────────────────┼───────────────────────────────────────
+    │ nouns            │ Unstructured text -> compo

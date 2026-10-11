@@ -1,4 +1,4 @@
-![FDE Gym, the online judge for the new era: you need practice solving real problems](docs/images/banner.webp)
+![FDE Gym, the online judge for the LLM era: you need practice solving real problems](docs/images/banner.webp)
 
 # FDE Gym
 
@@ -19,7 +19,7 @@
 
 </div>
 
-**The online judge for the new era: beyond code, end to end.**
+**The online judge for the LLM era: beyond code, end to end.**
 
 AI can get the code right now, so right code no longer tells engineers apart. What is hard is
 getting the thing done at the customer, and the people who do it are forward deployed engineers
@@ -31,12 +31,6 @@ system is judged once it is live.
 *Half a minute on the site: from the case list into a case, reading what the customer handed over,
 directing the coding agent, asking one of their people, the terminal, and handing over to be graded
 on traffic the customer never showed you. Waits are played fast.*
-
-![The admin console: the cases in the library, each with its files, runs, mean score and whether it is on offer](docs/images/admin.webp)
-
-*The admin console. Here the library's cases are uploaded, filed, paused and removed; the other tabs
-are a dashboard of members and runs, the machines that run cases, members and their runs, the coding
-agent's model and spending cap, and mail.*
 
 ## How it differs from the judges you know
 
@@ -68,7 +62,8 @@ The agent writes the code. These are left to you:
 | **Online workbench** | Your desk, in the browser: the workspace's files, a terminal, a coding agent that takes your direction, and the customer's people beside them. When you hand over, your system is run against traffic the customer never showed you, and the score is how much better their own number got. |
 | **Submissions** | Everyone's latest submissions and how each was judged: accepted, not accepted, or an incident in production. |
 | **Leaderboard** | Members ranked by cases solved, then by score. A case is solved by a run that scores 80 or more out of 100, where 0 is changing nothing and 100 is the reference solution. |
-| **Accounts** | Sign-up (open, by e-mail confirmation, or closed), password reset, a profile with your progress and every run, and an admin console: members, which cases are on offer, the coding agent's model and spending cap, mail. |
+| **Accounts** | Sign-up (open, by e-mail confirmation, or closed), password reset, and a profile with your progress and every run. |
+| **Admin console** | A dashboard of members and runs; the library's cases, uploaded, filed, paused and removed; the machines that run cases; members and their runs; the coding agent's model and spending cap; mail. |
 | **Harness** | The engine underneath (`harness/`, Python standard library only). The same case can be worked from the command line, by a person or by an AI agent. |
 
 ## Quick start
@@ -116,6 +111,31 @@ Admins can also upload a case in the admin console, and pause, re-file or remove
 - [docs/self-hosting.md](docs/self-hosting.md): settings, using a managed database and a cloud object store, adding cases, adding machines to run cases on, working on the site, what is and is not isolated.
 - [harness/README.md](harness/README.md): working a case from the command line, and running an AI
   agent on one.
+
+## Roadmap
+
+- [ ] **More open cases**: more of the 20 scenarios published alongside the three examples
+- [ ] **Editorials**: once a case is solved, what its authors were looking for
+- [ ] **Your own model**: a learner choosing the coding agent's model, or bringing a key
+- [ ] **Undo for the agent**: taking back everything one turn of the coding agent changed
+- [ ] **A real terminal**: a PTY in the workbench, for programs that expect one
+- [ ] **Published images**: containers to pull, so that starting the site does not mean building it
+
+## Status
+
+FDE Gym is early. The site's database schema changes between versions and only moves forward, so
+back up the database and the object store before you update. The harness carries a version of its
+own (`python3 harness/run.py --version`).
+
+The site runs the code people write. Read the Security section of
+[docs/self-hosting.md](docs/self-hosting.md#security) before you let anyone else in.
+
+## Community
+
+- 🐛 [Issues](https://github.com/deeplethe/fde-gym/issues): report bugs, ask how something is built, and say what you miss
+- 🤝 [Contributing](CONTRIBUTING.md): setting up, what to run before a pull request, and how the branches are used
+- 📦 [Cases](https://huggingface.co/datasets/DeepLethe/FDE-Gym-examples): the open examples on Hugging Face, and [the full set](https://huggingface.co/datasets/DeepLethe/FDE-Gym) on request
+- 🌐 [fde-gym.com](https://fde-gym.com): the official site
 
 ## Licence
 

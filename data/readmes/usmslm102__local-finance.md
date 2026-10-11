@@ -1,5 +1,7 @@
 # 🇮🇳 LocalFinance
 
+Splitwise group CSVs can now be imported automatically from **Splitwise** in the sidebar. See expense-to-bank mappings, remove incorrect matches, and add suggested member regex rules in one step. Transfers require a matching CSV Payment and bank movement. Personal shares use normal category rules. See [Splitwise usage and accounting rules](docs/splitwise.md) and the [fictional sample export](samples/splitwise/fictional-group.csv).
+
 [![CI](https://github.com/usmslm102/local-finance/actions/workflows/ci.yml/badge.svg)](https://github.com/usmslm102/local-finance/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Website](https://img.shields.io/badge/Website-usamaansari.com-emerald)](https://usamaansari.com/local-finance/)
@@ -70,6 +72,18 @@ LocalFinance features dedicated parsers for major Indian banks, with native extr
 Synthetic ICICI and Union Bank savings PDFs in `samples/savings/` exercise parser detection and full PDF extraction in the test suite. They contain only fabricated names, descriptions, dates, and amounts.
 
 Sample statements are embedded in the application binary. The sample buttons on **Import Statements** work offline without a separate `samples/` directory.
+
+New bank and credit-card PDF imports retain the original PDF in your local database. Use **Preview PDF** in Statement Audit History to review or download the source file. Password protection is preserved; the viewer may ask for the PDF password. Older imports show **PDF not saved** and can be re-imported to enable preview without duplicating transactions. CSV and Excel imports do not have a PDF preview.
+
+Use **View imported records** to open the Transactions Ledger filtered to one import, with a **Preview PDF** action for comparison. These are the saved records, including your current categories, tags and notes. New imports keep their record links across overlapping re-imports without duplicating transactions. For older imports, only the latest recorded association can be recovered; re-import the source if links are missing. Deleting an import retains the existing behavior of removing transactions currently owned by that import.
+
+### Monthly Import Calendar
+
+Open **Data Health** to see all 12 months of a year. All sources are shown by default; select one or more accounts to narrow the calendar. Choose a month to inspect its imports and open the corresponding records in the Transactions Ledger.
+
+Bank statement ranges can span several months. Credit-card imports count once, using a manually confirmed month first, then the linked bill's statement date, then the recorded range's ending month. Cards with a known billing day get a three-calendar-day grace period before a missing import is flagged. Undated imports show **Check dates** until you assign their month.
+
+Use **Tracking** to set when an account should start or stop being checked, and **Mark no activity** for months with no activity. Tracking dates, no-activity confirmations, and month corrections are saved in the browser, sync between tabs on the same browser origin, and are not included in database backups. **Imported** indicates a recorded file or range; it does not verify that every transaction is present.
 
 ### Investment Statements and Samples
 
@@ -489,6 +503,22 @@ Historical months compare full calendar months. The current month compares elaps
 
 The review is read-only, runs offline, and uses the app's existing authentication and discreet mode.
 
+## Savings & planning
+
+Open **Planning** for a savings forecast or the **Savings goals** tab.
+
+- Model the next 3, 6 or 12 months by changing starting available money, monthly income, monthly spending and a one-off expense. Initial income and spending average recorded activity from the previous three calendar months; missing months stay visible. Current-month activity is excluded from these averages.
+- Starting available money defaults to recorded bank liquidity minus recorded card dues. Dues are reserved once; card purchases already included in spending are not added a second time. Adjust all assumptions to your situation, particularly credits that represent refunds or transfers rather than regular income.
+- Create savings goals with a target, deadline, amount already saved and planned monthly contribution. Update progress manually. The forecast can reserve contributions for unfinished goals, capped at each remaining target.
+
+Forecast assumptions reset when you leave the page. Goals persist locally in SQLite, are included in backups and JSON exports, and are cleared by database reset. They are plans, not extra assets or ledger transactions. Scenarios use whole monthly assumptions from today; they do not model payment dates, interest, inflation, investment returns or predict an actual bank balance. Everything runs offline and honors app lock and Discreet Mode.
+
+## Data health
+
+Open **Data health** to check each account's reported statement date coverage and latest activity. Select a month to see missing ranges; the current month checks elapsed days only, and overlapping ranges count once. Accounts with no valid range or a latest statement end over 35 days ago are flagged as stale.
+
+**Review categories** opens the account's matching ledger rows. Category review includes missing categories and **Others & Uncategorized**, excludes transfers and excluded transactions, and covers all history independently of the coverage month. Statement date coverage does not prove balances, complete transaction rows or that every account has been imported.
+
 ## 🔌 REST API Reference
 
 The server listens on `127.0.0.1` and accepts trusted local browser origins. Local scripts that call the API without browser origin headers must include `X-LocalFinance-Request: 1`, including for reads, for example `curl -H 'X-LocalFinance-Request: 1' http://127.0.0.1:8080/api/health`. This header prevents cross-site browser requests; it does not replace the session token required when app lock is enabled. The frontend sends the header automatically. External links may open the app's pages, but cross-site requests to API endpoints are rejected.
@@ -497,15 +527,19 @@ The server listens on `127.0.0.1` and accepts trusted local browser origins. Loc
 | :--- | :--- | :--- |
 | `/api/health` | `GET` | Server health check and version info |
 | `/api/accounts` | `GET` | List all discovered bank accounts and credit cards with current balances |
-| `/api/transactions` | `GET` | List transactions with filters (`account_id`, `category_id`, `tx_type`, `search`, `start_date`, `end_date`, `page`, `page_size`) |
+| `/api/transactions` | `GET` | List transactions with filters (`statement_import_id`, `account_id`, `category_id`, `tx_type`, `search`, `start_date`, `end_date`, `page`, `page_size`, `review_needed=true`) |
 | `/api/statements/upload` | `POST` | Ingest statement file (multipart `file`, optional `password`, `account_id`, `parser_id`) |
 | `/api/statements/preview` | `POST` | Dry-run statement parse without saving to DB (shows detected metadata and transactions) |
 | `/api/statements` | `GET` | List history of uploaded statements with checksums and date ranges |
+| `/api/statements/:id/pdf` | `GET` | Read the original saved PDF for an import; returns 404 if its source PDF is unavailable |
 | `/api/categories` | `GET` | List spending categories with icons and color tokens |
 | `/api/rules` | `GET` | List active auto-categorization keyword & regex rules |
 | `/api/analytics/overview`| `GET` | Get total income, total expense, net savings, category breakdown, and monthly cash flow |
 | `/api/analytics/monthly-review` | `GET` | Spending comparison and statement coverage; optional `month=YYYY-MM`, defaulting to the latest month with imported data |
 | `/api/analytics/monthly-review/transactions` | `GET` | Supporting debits for `month`, `category` (empty means uncategorized), `period=current\|previous`, and `page`; 50 rows per page |
+| `/api/goals` | `GET`, `POST` | List or create local savings goals |
+| `/api/goals/:id` | `PUT`, `DELETE` | Update or delete a savings goal |
+| `/api/analytics/data-health` | `GET` | Per-account latest activity, transaction count and category-review count |
 | `/api/parsers` | `GET` | List all registered bank parser plugins |
 
 ---

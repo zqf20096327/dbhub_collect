@@ -16,9 +16,10 @@ ESP32-C3 / ESP32-S3 固件、三色 / 四色墨水屏渲染，以及 4.2 寸和 
 > [!TIP]
 > 不想自行制作硬件？可以通过小红书查看
 > [「7.5 英寸四色墨水屏冰箱贴」](https://xhslink.com/m/4mQU4Nxcc22)购买成品。
-> 购买的成品需先前往
-> [硬件固件更新页面](https://fridge.followllm.online/hardware-update)刷入 `v1.0.0`
-> 固件，才能连接并使用本仓库的开源代码部署的服务。
+> 墨鱼 AI V1.1.1 + GDEM075F53 成品可以按[固件说明](esp32_epaper_fridge_tracker/README.md)
+> 选择对应板型和屏幕，自行编译本仓库的单帧固件，连接公共托管服务或自建服务。
+> 也可前往[硬件固件更新页面](https://fridge.followllm.online/hardware-update)刷入历史 `v1.0.0`
+> 固件连接本仓库自建服务；官方 `1.1.3` 的分页协议不能直接用于旧公开版服务端。
 
 ## 能做什么
 
@@ -65,13 +66,15 @@ ESP32-C3 或 ESP32-S3
 
 ### 必需
 
-- 一块开发板（二选一）：
+- 一块开发板：
   - `ESP32-C3 Super Mini`：体积小、成本低，无 PSRAM 也能使用本项目的分块刷屏方案。
   - `ESP32-S3 N16R8`：内存更充裕，适合继续扩展。
-- 一块已支持的 SPI 墨水屏及匹配的驱动 / 转接板（三选一）：
+  - `墨鱼 AI V1.1.1`：ESP32-C3 一体板，使用对应板型配置和板载屏幕接口。
+- 一块已支持的 SPI 墨水屏及匹配的驱动 / 转接板：
   - `GDEY042Z98` / `E042A13`：4.2 寸，400 × 300，黑白红三色。
   - `GDEM0397F81`：3.97 寸，800 × 480，黑白黄红四色。
   - `GDEM075F52`：7.5 寸，800 × 480，黑白黄红四色。
+  - `GDEM075F53`：7.5 寸，800 × 480，黑白黄红四色，JD79665CA 控制器。
 - USB 数据线、可靠的 5V USB 供电和连接线。
 - 一台可以运行 Arduino IDE 2.x 的电脑。
 - 可用的 2.4 GHz Wi-Fi；ESP32 不能连接仅 5 GHz 的网络。
@@ -102,19 +105,19 @@ ESP32-C3 或 ESP32-S3
 
 ### 第 2 步：连接 ESP32 和墨水屏
 
-固件同时支持 C3 和 S3，但两块板的引脚不同：
+固件支持 C3 Super Mini、墨鱼 AI V1.1.1 和 S3，各板型引脚不同：
 
-| 墨水屏转接板 | ESP32-C3 Super Mini | ESP32-S3 N16R8 |
-| --- | --- | --- |
-| `GND` | `GND` | `GND` |
-| `3V3` / `VCC` | `3V3` | `3V3` |
-| `SCK` / `CLK` | GPIO4 | GPIO12 |
-| `SDA` / `DIN` / `MOSI` | GPIO6 | GPIO11 |
-| `RST` / `RES` | GPIO5 | GPIO7 |
-| `DC` | GPIO3 | GPIO8 |
-| `CS1` / `CS` | GPIO7 | GPIO10 |
-| `BUSY` | GPIO10 | GPIO9 |
-| `CS2`、`MISO` | 不接 | 不接 |
+| 墨水屏信号 | ESP32-C3 Super Mini | 墨鱼 AI V1.1.1 | ESP32-S3 N16R8 |
+| --- | --- | --- | --- |
+| `GND` | `GND` | 板载 | `GND` |
+| `3V3` / `VCC` | `3V3` | 板载屏幕供电 | `3V3` |
+| `SCK` / `CLK` | GPIO4 | GPIO4 | GPIO12 |
+| `SDA` / `DIN` / `MOSI` | GPIO6 | GPIO6 | GPIO11 |
+| `RST` / `RES` | GPIO5 | GPIO2 | GPIO7 |
+| `DC` | GPIO3 | GPIO1 | GPIO8 |
+| `CS1` / `CS` | GPIO7 | GPIO7 | GPIO10 |
+| `BUSY` | GPIO10 | GPIO10 | GPIO9 |
+| `CS2`、`MISO` | 不接 | 不接 | 不接 |
 
 转接板上的 `SDA` 在这里是 SPI `MOSI`，不是 I²C。C3 建议避开 GPIO20 / GPIO21，
 并让天线远离屏幕排线和金属外壳。更完整的板卡设置、内存策略和排障日志见
@@ -155,8 +158,9 @@ ipconfig getifaddr en0
 
 1. 在 Arduino IDE 的 Boards Manager 安装 Espressif 的 `esp32` 开发板包；在
    Library Manager 安装 `GxEPD2` 和 `Adafruit GFX Library`。
-2. 打开 `esp32_epaper_fridge_tracker/Config.h`，只修改
-   `FRIDGE_PANEL_TYPE` 为实际屏幕对应的值。
+2. 打开 `esp32_epaper_fridge_tracker/HardwareConfig.h`，选择 C3 板型
+   `FRIDGE_C3_BOARD_TYPE` 和实际屏幕 `FRIDGE_PANEL_TYPE`。
+   墨鱼板 + F53 选择 `FRIDGE_C3_BOARD_MOYU_AI_V111` 与 `FRIDGE_PANEL_GDEM075F53`。
 3. 在 Arduino IDE 的 `Tools → Board` 选择实际开发板，不要手动修改
    `BoardProfile.h`。
 4. 使用 `115200` 波特率打开串口监视器，然后编译并上传。
@@ -164,12 +168,14 @@ ipconfig getifaddr en0
 | 实际屏幕 | `FRIDGE_PANEL_TYPE` |
 | --- | --- |
 | GDEM075F52 | `FRIDGE_PANEL_GDEM075F52` |
+| GDEM075F53 | `FRIDGE_PANEL_GDEM075F53` |
 | GDEM0397F81 | `FRIDGE_PANEL_GDEM0397F81` |
 | GDEY042Z98 / E042A13 | `FRIDGE_PANEL_GDEY042Z98` |
 
 | 开发板 | Arduino IDE Board | 关键设置 |
 | --- | --- | --- |
 | ESP32-C3 Super Mini | `Nologo ESP32C3 Super Mini` | 4MB Flash；No OTA (2MB APP/2MB FATFS)；USB CDC Enabled |
+| 墨鱼 AI V1.1.1 | `ESP32C3 Dev Module` | 4MB Flash；No OTA (2MB APP/2MB FATFS)；USB CDC Enabled |
 | ESP32-S3 N16R8 | `ESP32S3 Dev Module` | 16MB Flash；3MB APP / 9.9MB FATFS；OPI PSRAM；USB CDC Enabled |
 
 准确的 Arduino IDE / CLI 命令和依赖以[固件说明](esp32_epaper_fridge_tracker/README.md#arduino-ide-与命令行)为准。

@@ -220,6 +220,8 @@ docker run -p 127.0.0.1:7777:7777 -v pad-data:/data ghcr.io/perpetualsoftware/pa
 
 This publishes Pad to `localhost:7777` on the host machine, which is the recommended default for local use.
 
+**Pin a version for anything you keep.** The untagged name is `latest`, which moves to each new stable release (never a release candidate) the next time the image is pulled. Name the release instead, as a bare version with no leading `v`, for example `ghcr.io/perpetualsoftware/pad:0.17.2`, and change the tag when you choose to upgrade. Every published image is multi-arch and cosign-signed.
+
 **First run — create the first admin.** Open `http://localhost:7777` and you'll hit a setup page asking for a bootstrap token. On first start with no users, Pad logs a one-time setup URL to stderr (captured by `docker logs`) — grep it and open the printed link:
 
 ```bash
@@ -237,7 +239,7 @@ docker run -p 7777:7777 -v pad-data:/data ghcr.io/perpetualsoftware/pad
 
 Set `PUID` / `PGID` to match your host's file ownership: the entrypoint runs Pad as that user. The defaults, 99/100, are Unraid's `nobody:users`.
 
-For multi-instance deployments, Pad supports Postgres + Redis via `docker-compose.yml` — see [docs/deployment.md](docs/deployment.md) for the full setup.
+For multi-instance deployments, Pad supports Postgres + Redis via `docker-compose.yml` — see [docs/deployment.md](docs/deployment.md) for the full setup. The compose file runs the released image; set `PAD_VERSION` in `.env` to pin it.
 
 ### Nix
 
@@ -299,7 +301,7 @@ pad db backup -o pad-backup-$(date +%Y%m%d).db
 
 # 2. Stop the server, install the new binary, restart
 #    (migrations + the pre-migration snapshot run automatically on start)
-brew upgrade pad        # or: docker pull, binary download, make install
+brew upgrade pad        # or: a new image tag (see Docker above), binary download, make install
 
 # 3. Confirm it's healthy
 pad --version
@@ -400,11 +402,11 @@ directory for `claude-code`, and an `[mcp_servers.pad]` table in
 project-scoped, it's install-on-request only — `--all` and `pad mcp status` cover
 the per-user clients (including Codex) and skip it.
 
-**Tool catalog (v0.84)** — ten resource × action tools plus `pad_set_workspace`. Undeclared input keys are rejected with a structured error rather than silently dropped, and field values are typed against the collection schema on the server:
+**Tool catalog (v0.92)** — ten resource × action tools plus `pad_set_workspace`. Undeclared input keys are rejected with a structured error rather than silently dropped, and field values are typed against the collection schema on the server:
 
 | Tool | Actions |
 |---|---|
-| `pad_item` | `create`, `update`, `delete`, `get`, `list`, `move`, `restore`, `link`, `unlink`, `deps`, `star`, `unstar`, `starred`, `comment`, `list-comments`, `edit-comment`, `delete-comment`, `backlinks`, `bulk-update`, `note`, `decide`, `export`, `import`, `history`, `remind`, `ack-reminder`, `claim`, `release` |
+| `pad_item` | `create`, `update`, `delete`, `get`, `list`, `move`, `restore`, `link`, `unlink`, `deps`, `star`, `unstar`, `starred`, `comment`, `list-comments`, `edit-comment`, `delete-comment`, `backlinks`, `bulk-update`, `note`, `decide`, `export`, `import`, `history`, `remind`, `ack-reminder`, `claim`, `release`, `patch` |
 | `pad_workspace` | `list`, `members`, `invite`, `storage`, `audit-log`, `create`, `claim`, `deleted`, `restore` |
 | `pad_collection` | `list`, `create`, `update`, `delete`, `list-archived`, `restore` |
 | `pad_project` | `dashboard`, `next`, `ready`, `stale`, `standup`, `changelog`, `report`, `activity` |
@@ -424,7 +426,7 @@ Plus resources at `pad://workspaces`, `pad://workspace/{ws}/dashboard`,
 and `pad://_meta/version`.
 
 **Stability contract.** The catalog is versioned
-(`tool_surface_version: "0.84"`) and advertised in the initialize handshake and at
+(`tool_surface_version: "0.92"`) and advertised in the initialize handshake and at
 `pad://_meta/version`, so external agents can pin against it; the per-version
 changelog lives in [`internal/mcp/version.go`](internal/mcp/version.go). Errors
 come back as structured envelopes (`{error: {code, message, hint, ...}}`) from a

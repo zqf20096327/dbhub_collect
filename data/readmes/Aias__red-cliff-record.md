@@ -1,0 +1,405 @@
+# Red Cliff Record
+
+A personal knowledge repository that aggregates data from multiple external sources into a searchable, relational database. Built with React 19, TanStack Router, tRPC, Drizzle ORM, and PostgreSQL, deployed on Bun server.
+
+**⚠️ Important Notice**: Red Cliff Record is still very much in progress and optimized for a single individual (the repository author) and his own idiosyncratic set of data sources, apps, and tools. It would probably be much less effective for anyone who doesn't use that exact set of tools. This is experimental software and could have breaking changes at any time—fork at your own risk!
+
+## Architecture Overview
+
+- **Frontend**: React 19 + TanStack (Start, Router, Query) + Tailwind CSS v4
+- **Sync**: [Rocicorp Zero](https://zero.rocicorp.dev) replicates the entity graph (records, links, matchups, media) to the client; reads are local ZQL queries and writes are optimistic custom mutators
+- **Backend**: tRPC + Drizzle ORM + PostgreSQL (search, list/opponent selection, and heavy mutations like create/delete/merge; also the full CLI surface)
+- **Integrations**: external-source syncs built on [Effect](https://effect.website) v4 — typed errors, per-API rate limiting, tracked runs that finalize on failure and interrupt — with Zod validation at every API boundary
+- **Deployment/Hosting**: Bun server + local PostgreSQL on a Tailscale network
+- **Search**: PostgreSQL full-text search + OpenAI embeddings
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Bun** runtime & package manager (`curl -fsSL https://bun.sh/install | bash`)
+- **Node.js v24+** (check with `node --version`)
+- **PostgreSQL** (v14+ recommended) with the following extensions:
+  - `vector` - for vector embeddings (install via `CREATE EXTENSION vector;`)
+  - `pg_trgm` - for trigram text search (install via `CREATE EXTENSION pg_trgm;`)
+  - Note: Extensions are automatically created by migrations if your user has permission
+- **Git** for version control
+- **Cloudflare Account** - for R2 storage
+
+### Optional Requirements
+
+- **Arc Browser** - for Arc Browser integration
+- **Dia Browser** - for Dia Browser integration
+- **GitHub** - for GitHub integration
+- **Raindrop.io** - for Raindrop.io integration
+- **Readwise** - for Readwise integration
+- **Twitter/X** - for Twitter/X bookmarks integration
+- **Adobe Lightroom** - for Adobe Lightroom integration
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/red-cliff-record.git
+cd red-cliff-record
+```
+
+### 2. Install Dependencies
+
+```bash
+bun install
+```
+
+### 2.5 Install CLI (Optional)
+
+```bash
+bun link
+```
+
+### 3. Database Setup
+
+**Note about database providers**: The app connects to a local PostgreSQL database. If you use a different provider, update `src/server/db/connections/postgres.ts` accordingly.
+
+#### Create PostgreSQL Database
+
+```bash
+# Connect to PostgreSQL
+psql -U postgres
+
+# Create database
+CREATE DATABASE redcliffrecord;
+
+# Exit psql
+\q
+```
+
+#### Configure Database Connection
+
+1. Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+2. Update the `DATABASE_URL` in `.env`:
+
+```
+DATABASE_URL="postgresql://username:password@localhost:5432/redcliffrecord"
+```
+
+#### Run Migrations
+
+The migration system uses Drizzle ORM and includes all necessary PostgreSQL extensions (`vector`, `pg_trgm`) in the initial migration. Run migrations with:
+
+```bash
+bun run db:migrate
+```
+
+**Note**: The initial migration creates the `extensions` schema and installs required extensions. Ensure your PostgreSQL user has permission to create extensions, or install them manually before running migrations:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS vector;
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+```
+
+#### Seed Initial Data
+
+After running migrations, seed the database with initial predicate vocabulary and core records:
+
+```bash
+./src/server/db/db-manager.sh seed local
+```
+
+This loads:
+
+- **Predicates**: Canonical relationship types (e.g., `created_by`, `contains`, `references`, `related_to`)
+- **Records**: Core entities (e.g., user record, project record)
+
+The seed script is idempotent and safe to run multiple times—it uses upsert logic to avoid duplicates.
+
+To inspect your database:
+
+```bash
+bun run db:studio
+```
+
+### 4. Configure External Services
+
+Edit your `.env` file and add API keys for the services you want to use:
+
+#### Required Services
+
+- **OpenAI** - For generating embeddings
+  ```
+  OPENAI_API_KEY=sk-...
+  ```
+- **TypeSafe** - For typed judgments (record type on create, merge field selection, copyedit acceptance)
+  ```
+  TYPESAFE_API_KEY=apikey_...
+  ```
+
+#### Optional Integrations
+
+Each integration is optional. Only configure the ones you need:
+
+- **GitHub** - For syncing repositories and stars
+
+  ```
+  GITHUB_TOKEN=ghp_...
+  ```
+
+  [Create a token](https://github.com/settings/tokens) with `repo` and `user` scopes.
+
+- **Raindrop.io** - For syncing bookmarks
+
+  ```
+  RAINDROP_TEST_TOKEN=...
+  ```
+
+  [Create an app](https://app.raindrop.io/settings/integrations) and get a test token.
+
+- **Readwise** - For syncing highlights
+
+  ```
+  READWISE_TOKEN=...
+  ```
+
+  [Get your token](https://readwise.io/access_token)
+
+- **Adobe Lightroom** - For syncing photos from a Lightroom album
+
+  Note: Currently hardcoded to the author's album. See [INTEGRATIONS.md](./INTEGRATIONS.md#adobe-lightroom-integration) for setup details.
+
+### Configure Cloudflare R2 Storage
+
+For media storage, you'll need a Cloudflare R2 bucket:
+
+1. [Create a Cloudflare account](https://dash.cloudflare.com/sign-up)
+2. [Create an R2 bucket](https://dash.cloudflare.com/?to=/:account/r2/buckets)
+3. [Create API tokens](https://dash.cloudflare.com/profile/api-tokens) with R2 read/write permissions
+4. Update your `.env`:
+   ```
+   CLOUDFLARE_ACCOUNT_ID=...
+   S3_ACCESS_KEY_ID=...
+   S3_SECRET_ACCESS_KEY=...
+   S3_REGION=auto
+   S3_ENDPOINT=https://<account-id>.r2.cloudflarestorage.com
+   S3_BUCKET=your-bucket-name
+   ASSETS_DOMAIN=https://your-assets-domain.com
+   ```
+
+### Zero Sync Engine
+
+The app syncs its entity graph through [zero-cache](https://zero.rocicorp.dev), which tails Postgres logical replication. One-time database setup (per database):
+
+```bash
+# Requires a Postgres restart after changing wal_level
+psql $DATABASE_URL -c "ALTER SYSTEM SET wal_level = 'logical';"
+bun run zero:publication
+```
+
+Configure the `ZERO_*` and `PUBLIC_ZERO_CACHE_URL` variables in `.env` (see `.env.example`). `bun dev` starts zero-cache alongside Vite, writing its logs to `.zero-cache/zero.log` (`tail -f` to watch them). To run it in the foreground on its own, use `bun run dev:zero`.
+
+#### Keeping the schema in step
+
+The Zero client schema is generated from the Drizzle schema via `drizzle-zero.config.ts`; regenerate with `bun run zero:generate` after schema changes to synced tables.
+
+`zero:publication` points the `zero_data` publication at exactly the columns that schema declares. It is needed because `records` holds types Zero cannot replicate — `text_embedding` (vector) and `text_search` (tsvector) — so the publication names columns explicitly rather than publishing whole tables, and **a Postgres column list pins the published set**: a column added later is not replicated until the list is restated, and until then zero-cache rejects every client with `SchemaVersionNotSupported`. Deriving the list from the generated schema keeps the two from drifting. The command is declarative and idempotent — it creates the publication if it is missing — and the deploy pipeline runs it on both sides of every migration: before, to release columns the migration is about to drop (Postgres refuses to drop a column a publication still names), and after, to publish the ones it added.
+
+So a migration on a synced table needs only:
+
+```bash
+bun run zero:generate     # if columns were added, removed, or renamed
+bun run zero:publication  # before the migration, to release dropped columns
+bun run zero:publication  # after the migration, to publish added columns
+```
+
+No restart or replica rebuild: zero-cache installs DDL event triggers on the upstream database, sees published schema changes as they commit, and applies them to its replica (backfilling added columns) while running.
+
+#### Recovering a diverged replica
+
+If zero-cache's state has already diverged — clients stuck on `SchemaVersionNotSupported` after the publication is confirmed correct — rebuild it from scratch. Deleting `.zero-cache/replica.db3` alone is not enough, since zero-cache keeps its schema snapshot and change log upstream in the `zero_0*` schemas and rebuilds the replica from them:
+
+```bash
+# Stop `bun dev` first — deleting the replica under a running zero-cache
+# corrupts it ("replica db must be in wal2 mode").
+rm -f .zero-cache/replica.db3*
+psql $DATABASE_URL_DEV <<'SQL'
+DROP EVENT TRIGGER IF EXISTS zero_ddl_start_0;
+DROP EVENT TRIGGER IF EXISTS zero_ddl_end_0;
+DROP SCHEMA IF EXISTS "zero_0/cdc" CASCADE;
+DROP SCHEMA IF EXISTS "zero_0/cvr" CASCADE;
+DROP SCHEMA IF EXISTS "zero_0" CASCADE;
+DROP PUBLICATION IF EXISTS "_zero_metadata_0";
+SELECT pg_drop_replication_slot(slot_name)
+  FROM pg_replication_slots WHERE slot_name LIKE 'zero_%' AND NOT active;
+SQL
+bun dev  # zero-cache recreates its metadata and runs a fresh initial sync
+```
+
+Leave the `zero` schema (deployed permissions) and the `zero_data` publication in place — zero-cache does not recreate those.
+
+### Start Development Server
+
+```bash
+bun run dev
+```
+
+### CLI (rcr)
+
+`rcr` is a local CLI wrapper around the same tRPC procedures used by the app. It is JSON-first by default and supports a table output for quick inspection.
+
+Install the CLI globally once from the repo:
+
+```bash
+bun link
+```
+
+```bash
+# General help
+rcr --help
+
+# Records
+rcr records get 123
+rcr records get 123 --links              # Include all incoming/outgoing links
+rcr records get 123 456 789              # Multiple IDs in parallel
+rcr records list --type=entity --limit=10
+rcr records list --source=github --limit=10
+rcr records create '{"title":"Example","type":"concept"}'
+
+# Search
+rcr search "machine learning"
+rcr search semantic "machine learning" --limit=5
+rcr search similar 456 --limit=5
+
+# Links
+rcr links list 123
+rcr links list 123 456                   # Multiple records
+rcr links create '{"sourceId":1,"targetId":2,"predicateId":3}'
+
+# Sync integrations
+rcr sync github
+rcr sync raindrop
+rcr sync readwise
+rcr sync adobe
+rcr sync browsing                       # Arc + Dia browser history (macOS)
+rcr sync twitter
+rcr sync avatars                        # Transfer avatars to R2
+rcr sync embeddings                     # Generate embeddings for records
+rcr sync                                # Run all daily syncs
+```
+
+Notes:
+
+- Outputs compact JSON by default; pipe to `jq` for formatting.
+- Unknown flags are rejected (strict parsing).
+- Most ID-based commands accept multiple IDs for parallel execution.
+- Use `--format=table` for human-readable output.
+- Use `--debug` to fetch data without writing to the database (outputs to `.temp/`).
+- Use `--` to stop option parsing when needed.
+
+## Production Build & Deployment
+
+**⚠️ Security Warning**: This application currently has **no authentication or authorization**. If deployed publicly, anyone with the URL will have full read/write access to all data through the UI. Only deploy to production if you understand and accept this security risk, or implement authentication first.
+
+### Build for Production
+
+```bash
+bun run build
+```
+
+### Deploy
+
+1. Upload the `dist` folder to your server and start the Bun server.
+2. Ensure all environment variables from `.env` are configured on your host.
+
+## Development Commands
+
+```bash
+bun run dev          # Start development server
+bun run build        # Build for production
+bun check            # Lint (oxlint) + typecheck (tsc) + format (oxfmt) — fast, run often
+bun run lint         # Lint + typecheck only
+bun run format       # Format only
+bun run db:studio    # Open Drizzle Studio
+bun run db:migrate   # Run migrations
+```
+
+### Database Management
+
+All backup/restore operations go through `db-manager.sh` (or the `rcr db` CLI wrapper):
+
+```bash
+rcr db backup <prod|dev>              # Backup (creates prod-{timestamp}.dump or dev-{timestamp}.dump)
+rcr db restore <prod|dev>             # Restore most recent backup
+rcr db restore dev --file path.dump   # Restore a specific backup file
+rcr db seed dev                       # Seed predicates + core records
+rcr db reset dev                      # Drop & recreate DB with extensions
+rcr db clone-prod-to-dev              # Clone production → development
+```
+
+Flags: `--dry-run` (`-n`) prints commands without executing. `-D` operates on data only (no schema). `-c` does a clean restore (drop & recreate first). `--file` (`-f`) restores from a specific file instead of auto-discovering. Restores terminate existing connections before running `pg_restore`.
+
+Backup files are named by environment label (`prod-`, `dev-`), not database name. Restore auto-discovers the most recent `.dump` file in the backup directory.
+
+Full backups contain the application schemas (`public` and `drizzle`), excluding Zero's environment-specific replication state. After restoring, both `restore` and `clone-prod-to-dev` synchronize the `zero_data` publication against the destination database. The restore command reports success only after publication setup succeeds. Zero rebuilds its local replica when a recreated database requires a fresh sync.
+
+For a restored development database missing `zero_data`, run `NODE_ENV=development bun run zero:publication` before starting `bun dev`.
+
+**Reset workflow** (squash migrations while preserving data):
+
+1. `rcr db backup dev --data-only`
+2. `rcr db reset dev`
+3. `rm -rf migrations/main/*` (optional)
+4. `bun run db:generate` (if step 3 was done)
+5. `NODE_ENV=development bunx drizzle-kit migrate`
+6. `rcr db seed dev`
+7. `rcr db restore dev --data-only`
+
+## Troubleshooting
+
+### Database Connection Issues
+
+- Ensure PostgreSQL is running: `pg_ctl status` or `brew services list` (macOS)
+- Check your `DATABASE_URL` format and credentials
+- Verify the database exists: `psql -U postgres -l`
+
+### Build Errors
+
+- Clear cache: `rm -rf node_modules bun.lock dist && bun install`
+- Check Node version: Should be v24+ as specified in `.node-version`
+- Run lint and type check: `bun run lint`
+
+### Integration Sync Failures
+
+- Verify API keys are correct and have proper permissions
+- Check rate limits for external services
+- Run with `--debug` to test API connectivity without writing to the database:
+  ```bash
+  rcr sync github --debug  # Outputs raw API data to .temp/
+  ```
+
+### Browser History Integration (macOS)
+
+#### Arc Browser
+
+- Ensure Arc browser is installed and has been used
+- The integration reads from: `~/Library/Application Support/Arc/User Data/Default/History`
+- May require security permissions in System Preferences
+
+#### Dia Browser
+
+- Ensure Dia browser is installed and has been used
+- The integration reads from: `~/Library/Application Support/Dia/`
+- May require security permissions in System Preferences
+
+#### Browser Sync Details
+
+- The sync runs Arc and Dia sequentially under one integration run
+- Each browser maintains its own sync timestamp per hostname
+- The browser sync works for any Chromium-based browser with path configuration
+
+## License
+
+MIT
