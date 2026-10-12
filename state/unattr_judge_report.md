@@ -1,11 +1,11 @@
 # unattr_judge 判定报告
-生成：2026-10-07 13:02 · 台账 4007 条 · 圈外未解读 28 条（留给夜间队列）
+生成：2026-10-12 09:29 · 台账 4018 条 · 圈外未解读 8 条（留给夜间队列）
 
 ## 状态分布
-- no_evidence: 2283
-- oos: 921
-- judged_no_support: 402
-- edu: 153
+- no_evidence: 2285
+- oos: 925
+- judged_no_support: 405
+- edu: 155
 - draft: 122
 - gated_app_cat: 50
 - recheck: 43
@@ -100,19 +100,19 @@
 -  52323★ etcd-io/etcd
 -  41902★ duckdb/duckdb
 -  33096★ surrealdb/surrealdb
--  32547★ cockroachdb/cockroach
+-  32561★ cockroachdb/cockroach
 -  32163★ facebook/rocksdb
 -  31760★ influxdata/influxdb
 -  31743★ dragonflydb/dragonfly
 -  28614★ mongodb/mongo
--  27414★ forthespada/CS-Books
+-  27436★ forthespada/CS-Books
 -  27369★ valkey-io/valkey
 -  25254★ clockworklabs/SpacetimeDB
--  25151★ taosdata/TDengine
--  22584★ typicode/lowdb
+-  25154★ taosdata/TDengine
+-  22580★ typicode/lowdb
 -  21804★ dgraph-io/dgraph
 -  21359★ valeriansaliou/sonic
 -  17822★ VictoriaMetrics/VictoriaMetrics
 -  17620★ apache/pouchdb
 
-## 分层小结：desc_pending 24 · judged_no_support 402 · no_evidence 2283 · api_error/partial 9（--retry-errors 补扫）
+## 分层小结：desc_pending 24 · judged_no_support 405 · no_evidence 2285 · api_error/partial 9（--retry-errors 补扫）
