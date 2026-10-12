@@ -7383,5 +7383,75 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a439d7c2873c": {
+  "identity": {
+   "one_liner": "基于 SQLite 与 MCP 服务器的业务问题 AI 调查代理",
+   "review": "这是一个 AI 代理项目，接收自然语言业务问题后，对真实 SQLite 数据库进行查询分析（可经 MCP 服务器访问），用确定性规划器提取实体并选择工具，在 Python 中计算结论并生成带证据的报告，数据不足时明确说明。属于作者 90 天 AI 工程路线图第 8 周交付物，面向学习与演示场景，使用 Streamlit 提供 UI。",
+   "highlights": [
+    "内置由合成数据生成的 SQLite 业务数据库，含 customers/products/orders/sales 表",
+    "提供 mcp_server.py，通过 Model Context Protocol 暴露 7 个业务数据工具，可被任意 MCP 客户端连接",
+    "采用确定性规划（无 LLM 调用）提取月份/地区/产品并选择工具，报告仅基于显式提供的证据"
+   ],
+   "use_cases": [
+    "对业务数据（销售、客户、运营、财务等）的自然语言问题调查与归因分析",
+    "作为 MCP 数据工具服务器，供 Claude Desktop 等 MCP 客户端查询同一业务数据",
+    "AI 工程学习路线图中的证据型代理（evidence-grounded agent）教学示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "An AI agent that investigates a real business question against a real SQLite database — through a real MCP server — and writes an evidence-grounded report instead of a chatbot guess. ／ needs, queries a real SQLite database (optionally through a real MCP ／ - 🗃️ **Real SQLite Business Database** — `customers`, `products`, `orders`, `sales` tables, generated from realistic synthetic data (Pakistani regions: Punjab, Sindh, KPK, Balochistan)",
+     "lines": [
+      14,
+      26,
+      36
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是用 SQLite 存储业务数据并供代理查询的应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " An AI agent that investigates a real business question against a real SQLite database — through a real MCP server — and writes an evidence-grounded report instead of a chatbot guess. ／ - 🗃️ **Real SQLite Business Database** — `customers`, `products`, `orders`, `sales` tables, generated from realistic synthetic data (Pakistani regions: Punjab, Sindh, KPK, Balochistan) ／ - 🔌 **Real MCP Server** — `mcp_server.py` exposes 7 business-data tools over the actual Model Context Protocol (official `mcp` SDK), connectable from Claude Desktop, Claude Code, or any MCP client — not just this app",
+   "evidence_lines": [
+    14,
+    36,
+    37
+   ]
+  },
+  "fn": "Hamna-Munir/08-AI-Business-Agent",
+  "sha": "a439d7c2873c",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

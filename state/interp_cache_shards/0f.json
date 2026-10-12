@@ -8744,5 +8744,141 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6791504cdc09": {
+  "identity": {
+   "one_liner": "媒体库 CLI 工具集，用 SQLite 索引管理本地与在线媒体",
+   "review": "这是一组包含 100+ 子命令的命令行工具，用于将本地文件、YouTube 播放列表、图库网站等来源的元数据写入 SQLite 数据库，实现媒体归档的索引、浏览与播放（配合 ffmpeg/mpv）。适合拥有大规模本地媒体收藏或订阅在线频道的个人用户做编目与整理，核心机制是以 SQLite 库作为媒体索引的存储层。",
+   "highlights": [
+    "提供 fs-add、tube-add、gallery-add 等子命令，将本地与在线媒体元数据写入 SQLite 数据库",
+    "支持 watch/listen 命令直接从索引库播放文件，并可设置播放后动作",
+    "安装方式为 pip install library，依赖 ffmpeg，可选扩展包含 gallery-dl、internetarchive 等"
+   ],
+   "use_cases": [
+    "为数十 TB 的本地视频/音频归档建立元数据索引并浏览播放",
+    "抓取并追踪 YouTube、Vimeo 等在线播放列表和频道更新",
+    "抓取网站、Reddit、Hacker News 等数据存入 SQLite 库进行文本分析"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "│ site-add │ Auto-scrape website data to SQLite │ ／ │ tables-add │ Add table-like data to SQLite │ ／ │ row-add │ Add arbitrary data to SQLite │",
+     "lines": [
+      140,
+      142,
+      158
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 SQLite 作为自身数据存储层，为媒体库编目服务，而非为数据库生态提供工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " │ site-add │ Auto-scrape website data to SQLite │ ／  library fsadd tv.db ./video/folder/ ／  library (v3.2.011; 102 subcommands)",
+   "evidence_lines": [
+    140,
+    59,
+    124
+   ]
+  },
+  "fn": "chapmanjacobd/library",
+  "sha": "6791504cdc09",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e333eeda2f9c": {
+  "identity": {
+   "one_liner": "基于 Proton Bridge 的 Proton Mail MCP 服务器与 CLI",
+   "review": "该项目通过 Proton Mail Bridge 的本地 IMAP/SMTP 接口，为 Claude Desktop、Claude Code、Cline 等 MCP 客户端及命令行提供邮件读取、搜索、草拟、发送、归档等约 100 个工具。邮件经本地 Bridge 解密后在 127.0.0.1 上传输，本地用 SQLite 建全文索引以避免每次查询走 IMAP；需 Proton Bridge 已登录运行、Node.js 24+。适合想在 AI 客户端或脚本中操作 Proton 邮箱的个人用户。",
+   "highlights": [
+    "提供 100 个 MCP 工具及对应的完整 CLI 命令，可脚本化、管道化运行",
+    "通过本地 SQLite 索引实现不经 IMAP 的全文搜索",
+    "提供只读模式、发送门控、破坏性操作确认等安全控制"
+   ],
+   "use_cases": [
+    "在 Claude Desktop 或 Cline 中用自然语言检索、整理和回复 Proton 邮件",
+    "用 cron 或 shell 脚本通过 CLI 批量处理邮件任务",
+    "多 Proton 地址的本地隔离管理（依赖 Bridge 的 Split Addresses）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|`search_indexed_emails` (local SQLite index)|~10 ms| ／ - The local index lives at `PROTONMAIL_DATA_DIR/mail-index.sqlite`. Background sync and IMAP IDLE keep it warm.",
+     "lines": [
+      428,
+      498
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 建立本地邮件索引存数据，本体是面向 Proton Mail 的 MCP 客户端应用而非数据库服务工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Give Claude Desktop (or Cline, or any MCP client) full access to your Proton Mail inbox: read, search, send, draft, triage threads, manage folders, save attachments, and more — 100 MCP tools in total. Most of the same capabilities are also available as a full CLI for scripting, cron, and piped automation — no Claude required. ／ The runtime is installed into a staging directory first, checked (Node starts, `better-sqlite3` opens a database, `dist` imports, version matches) and only then swapped in; the previous runtime stays next to it as `<runtime dir>.previous`, and a failed install leaves the working one untouched. The config is merged, not replaced: existing `env` keys you added by hand are kept, and the config is rewritten atomically (the newest 5 `.bak-*` copies are kept). Passwords are never printed. Run `npm run check:claude-desktop` to verify an install; it exits non-zero when the command, the runtime or the database module is broken.",
+   "evidence_lines": [
+    21,
+    113
+   ]
+  },
+  "fn": "googlarz/proton-mail-bridge-client",
+  "sha": "e333eeda2f9c",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

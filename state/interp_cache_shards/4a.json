@@ -9164,5 +9164,76 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b9181351bfa0": {
+  "identity": {
+   "one_liner": "自托管的加密记忆网关，以 OpenAI 兼容 API 为 AI/LLM 应用提供多租户记忆层",
+   "review": "HUPI 是一个部署在 AI 客户端与 LLM 厂商之间的记忆网关服务，两侧均实现 OpenAI Chat Completions API，将检索到的记忆注入对话并在事后持久化记录，提供加密、多租户与审计能力。面向构建 AI/LLM 产品的开发者和运维者，用 Go 编写，依赖 Postgres 存储数据，支持脚本安装或 Docker Compose 部署；MIT 开源部分为个人与单专业版，团队多用户功能为独立商业授权扩展。",
+   "highlights": [
+    "两侧均实现 OpenAI Chat Completions API，现有客户端无需修改即可接入",
+    "提供记忆的事实校验、检索决策审计记录与多租户隔离",
+    "支持通过 /mcp 端点在 Claude Code、Cursor 等 MCP 客户端中使用记忆"
+   ],
+   "use_cases": [
+    "为 LLM 应用叠加供应商无关的持久记忆层",
+    "需要加密存储与检索审计的 AI 对话场景",
+    "自托管部署的 AI 记忆网关（脚本/Docker Compose/Kubernetes）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "./install.sh # interactive: sets up Postgres, schema, keys, binaries ／ Or, with Docker Compose (bundles Postgres for you — the fastest way to",
+     "lines": [
+      78,
+      81
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其安装脚本和 Docker Compose 均依赖 Postgres 存储数据，属使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "open-core：Tier 1/2 为 MIT，Tier 3 团队功能为独立商业授权",
+   "install": [
+    "source",
+    "docker",
+    "helm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "HUPI is a **memory gateway**: a small, self-hosted service that sits between ／ ./install.sh          # interactive: sets up Postgres, schema, keys, binaries ／ This is an in-development project — see",
+   "evidence_lines": [
+    3,
+    78,
+    114
+   ]
+  },
+  "fn": "hupi-dev/hupi",
+  "sha": "b9181351bfa0",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

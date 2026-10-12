@@ -9662,5 +9662,79 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9e3c0c24158e": {
+  "identity": {
+   "one_liner": "Pi 的持久化记忆扩展，用 SQLite+FTS5 存储会话提取的记忆",
+   "review": "Remendra 是 Pi 编码代理的持久化记忆扩展，从会话中自动提取事实、决策、约束等结构化声明，存入 SQLite 并用 FTS5 检索，在后续会话编译记忆包注入上下文；支持事务性纠正（递归失效依赖声明）、证据溯源、可选语义检索，数据完全本地存储。适合长期多会话使用 Pi 并需要记忆跨会话延续与自我纠正的开发者。",
+   "highlights": [
+    "从 Pi 会话自动提取结构化声明，以 SQLite+FTS5 存储并按 token 预算编译记忆包注入上下文",
+    "支持事务性记忆纠正：更正一条记忆时递归失效其依赖声明，并保留精确字符级证据溯源",
+    "可选接入 OpenAI 兼容 embedding 端点实现语义检索，数据完全本地存储"
+   ],
+   "use_cases": [
+    "长期项目开发中跨多个 Pi 会话持久保留决策、约束与流程知识",
+    "需要更正错误记忆并自动修复其依赖知识的场景",
+    "希望会话记忆完全本地化、不离开本机的隐私敏感用户"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "1. **Ingestion.** New session entries are converted to source records with SHA-256 content hashes and stored in SQLite. ／ |Storage|SQLite + FTS5|Markdown files|Markdown + SQLite|Mem0 backend| ／ |Node compatibility|Node 22+ (24 built-in, 22 via better-sqlite3)|Node 22+|Node 22+|N/A|",
+     "lines": [
+      54,
+      123,
+      136
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明会话条目转换为源记录后存储在 SQLite，属于使用 SQLite 存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "1. **Ingestion.** New session entries are converted to source records with SHA-256 content hashes and stored in SQLite. ／ 3. **Context compilation.** Before each agent turn, Remendra compiles a memory packet. FTS5 matches the current query against stored claims. Results are ranked by search score and claim-type priority (constraints rank above hypotheses). The packet fits within a measured token budget and includes provenance metadata. It goes right before your latest prompt, and stays where it was while the next prompts select the same memories, so the provider's prompt cache keeps the conversation before it. ／ Remendra learns automatically from your Pi sessions — no commands needed. It extracts facts, decisions, constraints, and procedures, then puts the right memories back in context when you need them. Memories survive across sessions, branches, and compactions.",
+   "evidence_lines": [
+    54,
+    56,
+    9
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "yoda-digital/pi-remendra",
+  "sha": "9e3c0c24158e",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

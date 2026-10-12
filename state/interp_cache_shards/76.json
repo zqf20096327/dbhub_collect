@@ -9033,5 +9033,282 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "06bfd001c765": {
+  "identity": {
+   "one_liner": "本地优先的 AI agent 可审计长期记忆控制平面，含治理检索与证据记录",
+   "review": "AtMem 是一个 Python 安装的 agent 记忆控制平面，为 OpenClaw、Pydantic AI、LangChain/LangGraph 等 agent 提供长期记忆的采集、治理检索、上下文注入和执行证据记录，默认使用 SQLite（可选 SQLCipher 加密）做本地存储，无需外部 API。集成默认以 shadow 模式运行，需显式激活注入。适合需要可审计 agent 记忆的开发者与运维者。",
+   "highlights": [
+    "提供 OpenClaw、Pydantic AI、LangChain/LangGraph 的适配器/中间件，默认 shadow 模式运行，需显式激活注入",
+    "本地记忆默认使用 SQLite 存储，支持 SQLCipher 加密迁移与完整性校验",
+    "内置离线 benchmark（24 个提取/矛盾/召回/隐私/投毒等用例）与 dashboard 审查界面"
+   ],
+   "use_cases": [
+    "为本地运行的 AI agent 添加可审计的长期记忆",
+    "通过 shadow 模式先行观察记忆检索效果再启用注入",
+    "需要加密本地记忆存储（SQLCipher）的部署"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Stop every writer before migration. AtMem validates SQLite integrity, ／ - Canonical memory, provenance, lifecycle state, and audit evidence use SQLite.",
+     "lines": [
+      88,
+      609
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 agent 生态提供记忆组件，使用 SQLite 作为其存储后端而非面向数据库的产品",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Install AtMem once and give OpenClaw, Pydantic AI, LangChain/LangGraph, or a ／ Stop every writer before migration. AtMem validates SQLite integrity,",
+   "evidence_lines": [
+    20,
+    88
+   ]
+  },
+  "fn": "aetna000/atmem",
+  "sha": "06bfd001c765",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a5e073d15902": {
+  "identity": {
+   "one_liner": "Rust 编写的 Debian 多节点托管控制面板",
+   "review": "Hyperion 是一个用 Rust 编写的自托管多节点托管控制面板，运行在 Debian 上，通过每节点一个 agent 加主节点 Web UI 的架构，提供站点配置（nginx、PHP-FPM、数据库、TLS）、备份、WordPress 管理、防火墙/WAF、监控和审计日志。适合运营小型托管业务的运维人员。安装通过 root 脚本加浏览器设置向导完成，项目仍处早期，多节点路径使用较少。",
+   "highlights": [
+    "提供站点端到端配置：Linux 用户、nginx vhost、PHP-FPM 池、数据库与 TLS 证书在单事务中创建，失败自动回滚",
+    "支持多节点集群（master + N workers，签名 RPC）、S3/FTP/FTPS/SFTP 异地备份与 restic 快照",
+    "包含 BLAKE3 哈希链审计日志、按站 WAF、nftables 防暴力破解与内核级磁盘配额"
+   ],
+   "use_cases": [
+    "小型托管业务统一管理多台 Debian 服务器上的 PHP/WordPress 站点",
+    "需要异地加密备份与恢复的站点运维",
+    "从 HestiaCP 或 CloudPanel 迁移面板"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. which software to install: PHP 8.1–8.4, MariaDB, PostgreSQL, vsftpd, ／ - **MariaDB or PostgreSQL**, with one-click phpMyAdmin that signs in",
+     "lines": [
+      78,
+      114
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "2. which software to install: PHP 8.1–8.4, MariaDB, PostgreSQL, vsftpd, ／ - **MariaDB or PostgreSQL**, with one-click phpMyAdmin that signs in",
+     "lines": [
+      78,
+      114
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite) rather than scraping it. You pick the sites, their PHP version, profile",
+     "lines": [
+      287
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "面板为托管业务提供数据库的安装、配置与 phpMyAdmin 代理管理，属于为数据库生态服务的运维组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One agent on each server, one web UI on the master. Hyperion provisions PHP, ／ 2. which software to install: PHP 8.1–8.4, MariaDB, PostgreSQL, vsftpd, ／ - **MariaDB or PostgreSQL**, with one-click phpMyAdmin that signs in",
+   "evidence_lines": [
+    5,
+    78,
+    114
+   ]
+  },
+  "fn": "nechodom/hyperion",
+  "sha": "a5e073d15902",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0a02bd474dc7": {
+  "identity": {
+   "one_liner": "LLM 时代的在线评测平台，用真实客户交付场景训练 FDE",
+   "review": "一个自托管的在线评测（Online Judge）平台：每个题目是一次真实客户交付，用户在浏览器工作台中指挥编码 agent 完成系统改造，系统上线后按真实流量效果打分。面向前向部署工程师（FDE）的练习者与社区运营者，通过 docker compose 部署站点、runner、PostgreSQL 与 S3 对象存储，题库独立仓库分发。README 提示早期阶段，schema 仅向前变更，升级前需备份。",
+   "highlights": [
+    "提供案例库、在线工作台、提交记录、排行榜与管理控制台等站点功能",
+    "包含 harness 引擎（仅 Python 标准库），同一案例可由人或 AI agent 在命令行完成",
+    "支持 docker compose 一键自托管，runner 可按需横向添加"
+   ],
+   "use_cases": [
+    "FDE / 工程师练习与真实客户交付类似的系统改造任务",
+    "机构或社区自托管评测平台并运营案例库与排行榜",
+    "以命令行或 AI agent 形式批量运行评测案例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL database, and an S3-compatible object store. The first account to sign up becomes the admin. Pick a case, press Begin, and you are on site. ／ |**PostgreSQL**|Accounts, settings, the case library's listings, every run, what the customer's people said, terminal history, the coding agent's conversations.|",
+     "lines": [
+      78,
+      88
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL 存储账户、案例库、运行记录等站点数据，该项目是使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache License 2.0，案例另有独立条款",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL database, and an S3-compatible object store. The first account to sign up becomes the admin. Pick a case, press Begin, and you are on site. ／ |**PostgreSQL**|Accounts, settings, the case library's listings, every run, what the customer's people said, terminal history, the coding agent's conversations.| ／ FDE Gym is early. The site's database schema changes between versions and only moves forward, so",
+   "evidence_lines": [
+    78,
+    88,
+    115
+   ]
+  },
+  "fn": "deeplethe/fde-gym",
+  "sha": "0a02bd474dc7",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e7c634383ddd": {
+  "identity": {
+   "one_liner": "本地 API 流量录制与行为回放比对工具",
+   "review": "Graybox 是一个本地运行的 CLI 工具，通过反向代理录制 HTTP 请求/响应到可移植的 .graybox 文件，支持回放和 diff 比对以检测应用改动后的行为回归，并在录制时脱敏 Authorization、Cookie 等敏感头，可用 YAML 规则扩展脱敏字段并在回放时注入运行时凭据。面向需要复现 API 行为的开发者和 AI 编码代理，通过 go install 或预编译二进制安装，MIT 许可。",
+   "highlights": [
+    "提供 record/ls/show/replay/diff 命令，录制 HTTP 流量并生成可移植录制文件",
+    "支持 diff 模式将实时 API 响应与录制比对，以退出码报告行为变化",
+    "录制时默认脱敏 Authorization、Proxy-Authorization、Cookie、Set-Cookie 头，支持 YAML 自定义脱敏与运行时凭据注入"
+   ],
+   "use_cases": [
+    "应用代码变更后检测 API 行为回归",
+    "录制含认证的 API 交互并在脱敏后回放",
+    "为开发者或 AI 编码代理提供可复现的 API 行为样本"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未展示其与数据库生态的服务关系，定位为 HTTP API 调试工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Graybox records real API behavior so you can reproduce it and detect behavioral ／ record → inspect → change → diff → verify ／ |`graybox record`|Proxy and record HTTP traffic|",
+   "evidence_lines": [
+    3,
+    10,
+    95
+   ]
+  },
+  "fn": "ViniTamanhao/graybox-core",
+  "sha": "e7c634383ddd",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

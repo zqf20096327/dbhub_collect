@@ -8878,5 +8878,87 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "49315a4537f3": {
+  "identity": {
+   "one_liner": "多AI代理共享记忆服务器，类脑分区存储+REST/SDK/MCP接入",
+   "review": "为多个AI代理提供共享记忆的服务器，按13个脑区分区组织记忆并支持唤醒/睡眠循环，代理可通过REST API、SDK或MCP读写同一份记忆。内置PII脱敏、审计日志、业务价值指标和实时可视化界面，存储使用单个SQLite文件，支持Claude、GPT、Gemini、DeepSeek或本地LLM。适合需要跨代理共享上下文的多代理场景。",
+   "highlights": [
+    "提供REST API、SDK和MCP三种接入方式，多个代理共享同一份记忆",
+    "内置PII脱敏、按关系的写策略冲突处理及完整审计日志",
+    "记忆以单个SQLite文件（WAL模式）存储，附实时脑区可视化界面"
+   ],
+   "use_cases": [
+    "多代理协作场景中共享客户上下文，避免客户重复陈述信息",
+    "需要审计代理读写行为与权限管控的团队部署",
+    "通过MCP为Claude Desktop、Cursor等工具挂接共享记忆"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Storage is **SQLite** via `better-sqlite3`. Prebuilt binaries exist for Linux, macOS and Windows; on other platforms `npm install` needs Python, make and a C++ compiler. Docker and an NVIDIA GPU are only needed to run a local model on vLLM. ／ |⚙️ **Settings**|Pick an LLM provider (Claude, GPT, Gemini, DeepSeek, local models…), fetch the model list, test the connection and apply it immediately. See storage details (SQLite file, size, row counts).|",
+     "lines": [
+      45,
+      64
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Both go away with the move to PostgreSQL + pgvector (see the Roadmap).",
+     "lines": [
+      240
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是使用SQLite存储数据的AI代理记忆应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Storage is **SQLite** via `better-sqlite3`. Prebuilt binaries exist for Linux, macOS and Windows; on other platforms `npm install` needs Python, make and a C++ compiler. Docker and an NVIDIA GPU are only needed to run a local model on vLLM. ／ |🛡️ **Audit log**|Every read, write, block and API call: who read whose memory, for which customer, and when. Filter by operation and search.| ／ mcp/server.mjs is a dependency-free MCP server over stdio. Each instance acts as one connected agent and exposes 4 tools: `brain_recall`, `brain_remember`, `brain_profile`, `brain_feedback`.",
+   "evidence_lines": [
+    45,
+    63,
+    97
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "leluong141996-dev/Agent-Brain-Hub",
+  "sha": "49315a4537f3",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9857,5 +9857,233 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "46368f5b2d1f": {
+  "identity": {
+   "one_liner": "开源F1赛车数据集，提供CSV/JSON/SQL多种格式发布",
+   "review": "F1DB 是收录 1950 年至今 F1 车手、车队、引擎、轮胎、赛道、赛季与比赛数据的开放数据集，每场比赛后发布更新。面向构建网站、移动应用或直接查询数据的开发者，发布 CSV、JSON、Smile 及 MySQL/PostgreSQL/SQLite 的 .sql dump 与 SQLite 数据库文件，并附 JSON Schema 校验。",
+   "highlights": [
+    "提供 CSV、JSON、Smile 及 SQL dump 多种数据格式发布",
+    "提供可直接导入 MySQL、PostgreSQL、SQLite 的 schema 与数据",
+    "附带 JSON Schema 文件用于校验数据结构"
+   ],
+   "use_cases": [
+    "构建 F1 相关网站或移动应用的数据源",
+    "直接用 SQLite/SQL 查询历史赛车统计数据",
+    "数据分析与统计可视化项目的数据基础"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- SQL (MySQL, PostgreSQL or SQLite .sql dump files to create and populate a custom database) ／ Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite",
+     "lines": [
+      39,
+      74
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- SQL (MySQL, PostgreSQL or SQLite .sql dump files to create and populate a custom database) ／ Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite",
+     "lines": [
+      39,
+      74
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- SQL (MySQL, PostgreSQL or SQLite .sql dump files to create and populate a custom database) ／ - SQLite database ／ Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite",
+     "lines": [
+      39,
+      41,
+      74
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目本体是 F1 主题开放数据集，提供面向各数据库的导入文件，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Creative Commons (CC BY) 许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- SQL (MySQL, PostgreSQL or SQLite .sql dump files to create and populate a custom database) ／ - SQLite database ／ Starting from `v2024.3.0` SQL artifacts are available for MySQL, PostgreSQL and SQLite",
+   "evidence_lines": [
+    39,
+    41,
+    74
+   ]
+  },
+  "fn": "f1db/f1db",
+  "sha": "46368f5b2d1f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9bd48849b5fa": {
+  "identity": {
+   "one_liner": "自托管网关，为私有应用、LLM 与 AI 代理提供浏览器访问",
+   "review": "Liaison 是一个自托管的私有服务访问平台，通过 outbound-only 连接器让用户在浏览器中访问内网 SSH、远程桌面、SQL/NoSQL 数据库、缓存、S3 存储及本地 LLM，并提供 API 密钥共享、审计日志、防火墙策略与内置 AI 助手。适合需要在不开入站端口的前提下管理内部资源访问的团队或自托管用户，部署依赖 Docker Compose。",
+   "highlights": [
+    "支持 WebMySQL、WebPostgreSQL 等多种数据库浏览器工作区，可浏览 schema 并执行 SQL",
+    "提供 outbound-only 连接器接入私有设备，无需开放入站端口，并带有基于 Casbin 的访问控制与审计日志",
+    "通过 OpenAI 兼容端点共享本地 LLM 与 Anthropic Messages、Ollama 上游，支持 API 密钥范围控制与 Token 配额"
+   ],
+   "use_cases": [
+    "在浏览器中安全访问内网数据库、SSH 与远程桌面并执行审计",
+    "为团队共享本地 LLM 模型并管理 API 使用配额",
+    "让 AI 代理在权限范围内查询数据库并辅助起草命令"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "### Web MySQL",
+     "lines": [
+      102
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其提供 WebMySQL 等浏览器工作区用于访问现有数据库服务，而非以数据库存储自身数据",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Access your existing private services through Liaison. ／  SQL databases WebMySQL&nbsp;&nbsp; WebMariaDB&nbsp;&nbsp; WebPostgreSQL&nbsp;&nbsp; WebSQLServer&nbsp;&nbsp; WebOracle&nbsp;&nbsp; WebClickHouse ／ ### Web MySQL",
+   "evidence_lines": [
+    56,
+    60,
+    102
+   ]
+  },
+  "fn": "liaisonio/liaison",
+  "sha": "9bd48849b5fa",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "167a5b8575b7": {
+  "identity": {
+   "one_liner": "自托管遥测平台：错误/事件/会话采集与仪表盘",
+   "review": "Telemetry Tracker 是一个可自托管的开源遥测系统，通过 @telemetry-tracker/* SDK 向 Fastify API 上报错误、事件、会话和性能数据，数据存储于 PostgreSQL（经 Prisma），并提供 Next.js 仪表盘、告警与 REST API。面向需要自建错误跟踪与产品分析的开发团队；有 MIT 开源版及官方托管云，自托管需 Node.js 18+、pnpm 9 和 PostgreSQL 16。",
+   "highlights": [
+    "提供错误跟踪、事件分析、会话遥测与 Web Vitals 性能采集",
+    "提供多端 SDK（React/Vue/Next.js/Node/Nuxt/React Native/Vanilla JS）与 REST API",
+    "支持自托管部署及告警通知（邮件、Webhook、Slack、Discord、Teams、Telegram）"
+   ],
+   "use_cases": [
+    "应用错误跟踪与告警",
+    "产品分析事件采集与仪表盘查看",
+    "自托管遥测数据基础设施搭建"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ **Prerequisites:** Node.js 18+, pnpm 9, PostgreSQL 16 (Docker works). ／ - PostgreSQL — database",
+     "lines": [
+      76,
+      85,
+      150
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL 列为其后端数据库（Built With），项目是使用数据库存储遥测数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，另含商标使用限制条款",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- PostgreSQL — database ／ **Prerequisites:** Node.js 18+, pnpm 9, PostgreSQL 16 (Docker works).",
+   "evidence_lines": [
+    150,
+    85
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "Telemetry-Tracker/telemetry-tracker",
+  "sha": "167a5b8575b7",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

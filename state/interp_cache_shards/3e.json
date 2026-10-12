@@ -9568,5 +9568,228 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "35f18add9c96": {
+  "identity": {
+   "one_liner": "基于 SQLite 事实存储的本地长期记忆核心，为 AI Agent 主机提供记忆",
+   "review": "Scope Recall v3 是一个本地化的 Agent 长期记忆系统：以 SQLite 作为唯一事实权威、向量索引（LanceDB）作为可重建的伴随存储，通过主机适配器（hooks 与 MCP server）为 Hermes、Codex、Claude Code 等多个 Agent 提供共享记忆，并提供查看、更正、删除记忆的 CLI。面向使用这些 Agent 主机的用户，需要按主机执行安装与迁移流程。",
+   "highlights": [
+    "提供 Hermes、Codex、Claude Code、WorkBuddy、dsh 的主机适配器，可共享同一记忆存储",
+    "以 SQLite 为事实权威，向量索引可独立重建，记忆基于证据积累后写入",
+    "提供维护 CLI（plan/apply 安装与卸载）与 profile/entity/trace 只读查询工具"
+   ],
+   "use_cases": [
+    "为多个 AI Agent 主机建立共享的本地长期记忆",
+    "对 Agent 记忆进行审计、更正、静音或删除",
+    "通过受限多跳 trace 查询已记录的事实关系"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, and for Codex, Claude Code, WorkBuddy and DeepSeek Harness (dsh), which share one adapter of hooks and an MCP s ／ migration procedure for a 2.0.1 memory database. SQLite remains the only fact ／ SQLite truth lives in the verified Core data directory. Vector indexes are companions and may be rebuilt only through an explicit configured space. The Hermes and Codex adapters bind host identity, installation identity, scopes, and project roots before openin ／ updates. Only legacy SQLite uses a durable migration job. The agent reads",
+     "lines": [
+      3,
+      20,
+      103,
+      135
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "The `codex` extra adds the MCP SDK. Without that extra, the Core and Hermes paths remain importable. The `lancedb` extra enables the tested LanceDB companion path. PostgreSQL/pgvector is outside this v3 distribution; an explicit configuration error directs ope",
+     "lines": [
+      105
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "SQLite 是该项目自身的记忆数据存储，它服务于 AI Agent 主机而非数据库生态",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Scope Recall v3 is a bounded local memory core with SQLite as the authority and rebuildable vector companions. It provides host adapters for Hermes, and for Codex, Claude Code, WorkBuddy and DeepSeek Harness (dsh), which share one adapter of hooks and an MCP server (the MCP tools need the optional `codex` extra; dsh runs the hooks through a plugin). The public package is `hermes-scope-recall`; the Python import is `scope_recall`; the host wrapper identity remains `scope-recall`. ／ SQLite truth lives in the verified Core data directory. Vector indexes are companions and may be rebuilt only through an explicit configured space. The Hermes and Codex adapters bind host identity, installation identity, scopes, and project roots before opening Core. After that binding is verified, an omitted runtime-config argument checks only `<data_directory>/runtime-config.json`; a missing file stays basic plus an explicit capability gap. The file is never generated or discovered from the current directory, parent directories, or credential locations. Optional host wiring must report a capability gap instead of creating or repairing a database. ／ The `codex` extra adds the MCP SDK. Without that extra, the Core and Hermes paths remain importable. The `lancedb` extra enables the tested LanceDB companion path. PostgreSQL/pgvector is outside this v3 distribution; an explicit configuration error directs operators to retain the old installation and use the migration guide.",
+   "evidence_lines": [
+    3,
+    103,
+    105
+   ]
+  },
+  "fn": "410979729/scope-recall-hermes",
+  "sha": "35f18add9c96",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ca9fcdb0f25b": {
+  "identity": {
+   "one_liner": "基于 Dash 的交易策略 walk-forward 优化回测 Web 应用",
+   "review": "这是一个用 Python Dash 构建的回测 Web 应用，将历史价格数据切分为滚动样本内/样本外窗口做 walk-forward 参数优化，内置 SMA、MACD、RSI 等常见指标策略，回测引擎为 vectorbt。默认从 Yahoo Finance 取数并用文件系统缓存，可选配置为从 PostgreSQL/TimescaleDB 读取行情、用 Redis 做回调间缓存，提供 Docker Compose 部署。适合量化交易者自托管做策略回测，但表结构需按固定列名预先建好。",
+   "highlights": [
+    "提供 SMA/EMA/MACD/RSI/布林带/肯特纳等指标策略的滚动窗口样本内外参数优化回测",
+    "支持从 PostgreSQL/TimescaleDB 读取价格数据，并可用 Redis 替代文件系统做回调缓存",
+    "提供 Docker Compose 部署，nginx+gunicorn 架构，PostgreSQL/Redis 以 profile 按需启动"
+   ],
+   "use_cases": [
+    "对交易策略做 walk-forward 参数优化与样本外验证",
+    "自建行情数据库（TimescaleDB）后用本地数据回测",
+    "自托管部署回测服务（含 Docker 环境）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`postgres`|Load price data from a PostgreSQL or TimescaleDB database|",
+     "lines": [
+      59
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 PostgreSQL 存取行情数据、Redis 做缓存的应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Dash web app for walk-forward optimization of trading strategies. It splits historical price data into ／ |`postgres`|Load price data from a PostgreSQL or TimescaleDB database| ／ The Docker setup runs the app with gunicorn behind nginx. Redis and PostgreSQL are separate containers on the same",
+   "evidence_lines": [
+    5,
+    59,
+    75
+   ]
+  },
+  "fn": "MitchMedeiros/walk-forward-optimization-app",
+  "sha": "ca9fcdb0f25b",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3b2b6bf4c217": {
+  "identity": {
+   "one_liner": "Express+React 全栈个人财务管理模块，Sequelize 操作 MySQL",
+   "review": "基于 Express.js 与 Sequelize ORM、React 19 前端构建的全栈个人财务管理模块，提供交易、分类、预算、理财目标的 REST API 与仪表盘界面，支持多币种与 Excel 导出。面向个人记账用户或作为模块集成使用，通过 sequelize-cli 迁移初始化数据库，依赖 MySQL/MariaDB 存储数据。",
+   "highlights": [
+    "提供交易、分类、预算、理财目标的 REST API 接口",
+    "支持多币种交易记录与服务端 Excel 导出",
+    "后端采用 Model-Controller-Service-Route 分层结构"
+   ],
+   "use_cases": [
+    "个人收支与预算跟踪",
+    "多币种交易记录管理",
+    "交易历史导出为 Excel 报表"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Framework & ORM**: Express.js & Sequelize ORM (MySQL/MariaDB)",
+     "lines": [
+      28
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **Framework & ORM**: Express.js & Sequelize ORM (MySQL/MariaDB)",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 MySQL/MariaDB 存储数据的财务应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Framework & ORM**: Express.js & Sequelize ORM (MySQL/MariaDB) ／ A production-ready, full-stack Personal Finance Management module built with **Express.js (Sequelize ORM)** and **React 19 (TypeScript + Vite)**, featuring strict MVC modularity, multi-currency support, budget tracking, financial goals, and Excel exporting.",
+   "evidence_lines": [
+    28,
+    3
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "FIQTOR/personal-finance-management",
+  "sha": "3b2b6bf4c217",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

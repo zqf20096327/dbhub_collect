@@ -8083,5 +8083,130 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "27f7dc75a957": {
+  "identity": {
+   "one_liner": "AI求职桌面助手，聚合岗位搜索、简历修改与面试练习",
+   "review": "JobFindsMe 是基于 Electron 的桌面应用，一键检索 BOSS直聘、猎聘、智联招聘、前程无忧四平台的岗位，并提供内嵌浏览器、AI 简历修改、模拟面试与背景调查功能。面向中国求职者个人使用，数据保存在本机，AI 功能需自行配置模型服务；安装包未签名，仅供学习与个人使用。",
+   "highlights": [
+    "一键检索四个招聘平台岗位，支持按城市、薪资、经验筛选",
+    "内置多标签浏览器用于登录、验证和查看岗位原页",
+    "支持简历导入、AI 修改对照、模拟面试与带来源引用的深度研究"
+   ],
+   "use_cases": [
+    "在多个招聘平台集中搜索和筛选岗位",
+    "对照目标岗位 JD 修改简历并导出 Word/PDF",
+    "无 JD 也可进行逐题模拟面试练习"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是面向求职者的桌面应用，数据保存在本机，仅为使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可证",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " 找岗位、改简历、练面试，一个工作台。 开源 AI 求职桌面助手 · macOS / Windows ／ 数据保存在本机；使用 AI 时，相关材料会发送给所选模型服务，可能产生费用。PDF 编辑副本会重新排版，不保证还原原版式。投递由你在平台确认发送，打开原页不算已投递。 ／ 开发说明 · 贡献与反馈 · 安全说明 · MIT 许可证",
+   "evidence_lines": [
+    4,
+    52,
+    56
+   ]
+  },
+  "fn": "russeell/jobfindsme",
+  "sha": "27f7dc75a957",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "24abad8ad60f": {
+  "identity": {
+   "one_liner": "HackYeah 2026 项目评审归档站点，用 AI 评审团对项目打分",
+   "review": "这是一个 HackYeah 2026 黑客松项目评审结果归档网站，列出所有决赛入围和社区提交项目，由三个固定模型组成的评审团按任务评分标准打分并由 judge 模型撰写评语。评审任务队列存于 SQLite，支持断点恢复。面向参赛团队与公众查阅结果，现作为静态归档站点运行。",
+   "highlights": [
+    "每个项目经固定流程：证据包构建、三个模型按标准评分、judge 模型撰写评审文本",
+    "每个完成的评审步骤存入 SQLite，重启或部署后可从停止处恢复",
+    "站点完全静态预渲染，评审数据以快照形式提交到仓库"
+   ],
+   "use_cases": [
+    "查阅 HackYeah 2026 决赛及社区项目的 AI 评分与评审详情",
+    "作为多模型评审流水线（证据包+评委会+队列）的参考实现",
+    "本地运行 API 服务器以操作队列或刷新归档快照"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "F[Finalists and /submit uploads] --> Q[Queue in SQLite] ／ - Every finished step is stored in SQLite, so a restart or a deploy resumes where it stopped. ／ The API server still exists unchanged and still deploys to Dokploy through the GitHub webhook — the `Dockerfile` builds the site and runs `bun app/server/index.ts` on port 3000, with SQLite and uploaded decks in a volume at `/data` and variables set from `.env",
+     "lines": [
+      17,
+      40,
+      114
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明评审队列与每个完成步骤存储在 SQLite 中，SQLite 是该应用的数据存储",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "  F[Finalists and /submit uploads] --> Q[Queue in SQLite] ／  - Every finished step is stored in SQLite, so a restart or a deploy resumes where it stopped. ／ The API server still exists unchanged and still deploys to Dokploy through the GitHub webhook — the `Dockerfile` builds the site and runs `bun app/server/index.ts` on port 3000, with SQLite and uploaded decks in a volume at `/data` and variables set from `.env.example`. Since the DNS moved to GitHub Pages it no longer serves the domain; run it to operate the queue, refresh the archive snapshot, or host it anywhere else.",
+   "evidence_lines": [
+    17,
+    40,
+    114
+   ]
+  },
+  "fn": "justAnArthur/hackyeah-review",
+  "sha": "24abad8ad60f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8206,5 +8206,74 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b61678c34929": {
+  "identity": {
+   "one_liner": "本地优先 macOS 跟单应用，读取 Discord 信号并经风险限额后下单至 Alpaca",
+   "review": "CopyTrading 是一款运行于 Apple silicon Mac 的原生应用，将 Discord 上交易者发布的股票信号经模型解析为订单，在每日亏损、单笔等限额校验后通过 Alpaca 账户执行；本地 Python 引擎以 SQLite 保存数据并与券商对账。适合想自动复制 Discord 信号并严格控制风险的 Alpaca 个人用户；README 明确标注为 developer preview，未经实盘验证，且不构成投资建议。",
+   "highlights": [
+    "模型解析信号时要求每项 ticker、价格、份额必须出现在原帖文本中，防止编造数字",
+    "每笔跟单买入前检查每日亏损、单笔、单标的与总敞口限额，新账户默认关闭入场",
+    "提供 CLI 与 MCP 服务器，可读取运行状态或暂停，交易类操作需应用内 Touch ID 批准"
+   ],
+   "use_cases": [
+    "个人在 Alpaca paper 账户上试用 Discord 信号跟单",
+    "在不牺牲密钥安全（存于 macOS Keychain）的前提下本地自动化交易流程",
+    "通过 CLI/服务器在无 GUI 的 Linux 主机上持续运行跟单引擎"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A SwiftUI app supervises one local Python engine. The engine owns every decision, keeps it in SQLite, and reconciles with the broker after a crash or sleep, so a signal that expires while the app is closed never becomes a late order. Architecture has the detai",
+     "lines": [
+      90
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用数据库（SQLite 本地存储）的交易应用本身，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CopyTrading is a native macOS app that reads the stock calls traders post on Discord, turns each one into an exact order, checks it against your limits, and places it with your Alpaca account. Everything runs on your Mac. ／ A SwiftUI app supervises one local Python engine. The engine owns every decision, keeps it in SQLite, and reconciles with the broker after a crash or sleep, so a signal that expires while the app is closed never becomes a late order. Architecture has the details and the ADRs record why. ／ > **Developer preview.** CopyTrading has not been qualified for live trading. Start with an Alpaca paper account, and see validation for what has and has not been proven.",
+   "evidence_lines": [
+    17,
+    90,
+    22
+   ]
+  },
+  "fn": "YZXBiz/copytrading",
+  "sha": "b61678c34929",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

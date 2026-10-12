@@ -9633,5 +9633,81 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "03c276852691": {
+  "identity": {
+   "one_liner": "3DGS 在线重建查看器 + 个人主页，浏览器实时渲染 Gaussian Splatting 场景",
+   "review": "这是一个前后端一体的 Web 应用：用 Three.js 在浏览器中实时渲染 3D Gaussian Splatting 场景，FastAPI 后端提供场景元数据、访问统计、留言板等接口，数据存于本地 SQLite 或线上 PostgreSQL，部署在 EdgeOne 上。面向访客展示作者自训的 3DGS 场景，同时是郑州大学双足实验室的招新考核作品，含完整的采集-训练-导出管线记录。",
+   "highlights": [
+    "浏览器端实时渲染 3DGS 场景，支持 ply/spz/splat/ksplat 格式",
+    "FastAPI 后端提供场景元数据、访问统计、留言板与帧率回写接口",
+    "包含从拍摄、COLMAP 注册到 gsplat 训练导出的完整管线脚本"
+   ],
+   "use_cases": [
+    "在网页中展示并交互查看 Gaussian Splatting 重建场景",
+    "3D/三维视觉方向的训练成果展示与个人主页",
+    "本地开发时以 SQLite 起后端、线上以 PostgreSQL 存储的参考部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|后端|Python 3.10 + FastAPI + SQLModel（本地 SQLite / 线上 PostgreSQL）|与训练脚本同语言，任务队列不用跨语言| ／ |部署|EdgeOne Pages（静态）+ EdgeOne Cloud Functions（FastAPI 后端）+ Neon 免费 Postgres|同域 `/api/*`、免备案、¥0；GitHub Pages 作为纯静态镜像| ／ |9|部署|一键脚本组装 + 命令行部署（EdgeOne Pages 静态 + Cloud Functions 后端 + Neon Postgres），`scripts/verify-cloud.sh` 可重复验收（**发布前问用户**）|",
+     "lines": [
+      37,
+      39,
+      58
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|后端|Python 3.10 + FastAPI + SQLModel（本地 SQLite / 线上 PostgreSQL）|与训练脚本同语言，任务队列不用跨语言|",
+     "lines": [
+      37
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明用 SQLite/PostgreSQL 存储场景元数据、统计与留言板数据，数据库仅作为应用的存储层",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT（代码）",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> 双足实验室招新考核作品（3D / 三维视觉方向）。**前后端一体**，核心卖点：访客能在浏览器里实时旋转作者亲手训练的 3D Gaussian Splatting 场景，并看到真实训练指标。 ／ |后端|Python 3.10 + FastAPI + SQLModel（本地 SQLite / 线上 PostgreSQL）|与训练脚本同语言，任务队列不用跨语言| ／ |部署|EdgeOne Pages（静态）+ EdgeOne Cloud Functions（FastAPI 后端）+ Neon 免费 Postgres|同域 `/api/*`、免备案、¥0；GitHub Pages 作为纯静态镜像|",
+   "evidence_lines": [
+    23,
+    37,
+    39
+   ]
+  },
+  "fn": "Shawn100861224/web3d-lab",
+  "sha": "03c276852691",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

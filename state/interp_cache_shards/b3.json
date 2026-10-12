@@ -9686,5 +9686,76 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aaf0b21a538f": {
+  "identity": {
+   "one_liner": "基于LangGraph的多智能体RAG旅行服务助手",
+   "review": "MORA 是一个面向旅行服务场景的多智能体客服系统，用 LangGraph 编排主助手与航班、酒店、租车等领域 Agent，业务数据存于 SQLite，检索用 Qdrant，会话与记忆用 Redis 和 ChromaDB。写操作经人工审批后执行，支持 CLI 与 Web 两种交互方式，需自备兼容 OpenAI 的模型 API 与 Embedding API。",
+   "highlights": [
+    "提供多智能体任务编排，写操作经 LangGraph 检查点暂停并需用户批准后执行",
+    "支持 Dense、BM25 与 RRF 融合的 FAQ 混合检索，以及 Qdrant 召回后回查 SQLite 的查询方式",
+    "提供 CLI 与 Web 交互、动态 Skill 加载和分层记忆（Redis 会话状态、ChromaDB 跨会话摘要）"
+   ],
+   "use_cases": [
+    "旅行服务的航班查询、酒店与租车预订等客服自动化场景",
+    "需要人工审批敏感写操作的智能体工作流实现参考",
+    "混合检索（BM25/Dense/RRF）与多智能体编排的演示与评测"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "多智能体协作的智能服务助手，基于 **LangChain、LangGraph、Redis、ChromaDB、Qdrant 与 SQLite** 构建。 ／ - **结构化业务查询**：酒店与航班直接查询 SQLite，常规搜索使用参数化 SQL，复杂统计使用受限只读 text-to-SQL；个人预订按会话乘客 ID 查询。 ／ |业务数据|SQLite|实时查询、预订管理与酒店库存|",
+     "lines": [
+      5,
+      17,
+      41
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite、Redis、Qdrant、ChromaDB 存储和检索数据的旅行客服应用，非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "多智能体协作的智能服务助手，基于 **LangChain、LangGraph、Redis、ChromaDB、Qdrant 与 SQLite** 构建。 ／ 项目以旅行服务为主要场景，支持航班查询与改签、酒店与租车预订、行程推荐及政策问答，并可对接 WooCommerce、联系表单与博客。主助手负责理解需求和分配任务，专业助手通过工具完成业务操作；预订、修改、取消等旅行写操作须经用户确认。 ／ |业务数据|SQLite|实时查询、预订管理与酒店库存|",
+   "evidence_lines": [
+    5,
+    7,
+    41
+   ]
+  },
+  "fn": "yukui9222/mora",
+  "sha": "aaf0b21a538f",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

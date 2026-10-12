@@ -9694,5 +9694,193 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ecc4c813deda": {
+  "identity": {
+   "one_liner": "基于 MyBatis 的 ORM 框架，提供流式 DSL 与跨数据库兼容",
+   "review": "Xbatis 是构建在 MyBatis 之上的 Java ORM 框架，面向 Java 开发者，提供流式查询 DSL、单 Mapper 模式、多表联查、逻辑删除、多租户、乐观锁注解、动态数据源路由与代码生成等能力，通过 Spring Boot starter 和 Solon 插件集成；README 中含官方推荐措辞，需自行甄别。",
+   "highlights": [
+    "提供 QueryChain/InsertChain/UpdateChain/DeleteChain 流式 DSL 与单 Mapper 模式",
+    "包含逻辑删除、多租户、乐观锁等注解套件及动态数据源路由",
+    "支持实体、Mapper、Service 骨架的一站式代码生成"
+   ],
+   "use_cases": [
+    "Java 项目中以少写 SQL 的方式操作关系数据库",
+    "需要多租户、逻辑删除、乐观锁等通用数据访问模式的应用",
+    "基于 Spring Boot 或 Solon 的后端服务数据访问层开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|PostgreSQL|✅|✅|",
+     "lines": [
+      442
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "url: jdbc:mysql://localhost:3306/dbName ／ |MySQL|✅|✅|",
+     "lines": [
+      63,
+      438
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "|Oracle|✅|❌| ／ - Customize via `XbatisGlobalConfig.setPagingProcessor` for Oracle, SQL Server, etc.",
+     "lines": [
+      440,
+      720
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|SQLite|✅|✅|",
+     "lines": [
+      444
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- Customize via `XbatisGlobalConfig.setPagingProcessor` for Oracle, SQL Server, etc.",
+     "lines": [
+      720
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MariaDB|✅|✅|",
+     "lines": [
+      439
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "|openGauss|✅|✅|",
+     "lines": [
+      445
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为应用程序访问数据库提供 ORM 框架，是数据库生态的服务组件而非使用数据库的业务应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "MariaDB",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Positioning**: Xbatis is built on MyBatis and delivers a highly ORM-like database experience, emphasizing \"less SQL, ／ |Dynamic datasource|`cn.xbatis.datasource.routing`|`@DS`, `JdbcConfigDecryptor`|Runtime datasource switching, encrypted configs, grouped routing| ／ |Code generation|`cn.xbatis.codegen`|`GeneratorConfig` and sub modules|One-stop generation for entities, mapper, service skeletons, etc.|",
+   "evidence_lines": [
+    14,
+    42,
+    45
+   ]
+  },
+  "fn": "xbatis/xbatis",
+  "sha": "ecc4c813deda",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "55d67e8a3b96": {
+  "identity": {
+   "one_liner": "自托管密码管理器，主密码加密保管库，数据存本地 PostgreSQL",
+   "review": "CipherMoth 是一个自托管密码管理应用，用于在个人硬件上存储密码、2FA 密钥、安全笔记和文件附件。它面向愿意自行运行 Docker 的个人用户，核心机制是由主密码派生密钥（Argon2id + Fernet）在服务端内存中加解密条目；无找回机制、未做第三方安全审计，且部分元数据字段尚未加密。",
+   "highlights": [
+    "提供密码、TOTP、安全笔记与附件（≤5MB）的加密存储及密码强度检查与生成器",
+    "支持从 Chrome、Bitwarden、KeePass、Proton Pass 导入 CSV，并提供 AES-256 加密备份导出与 CLI",
+    "通过 Docker 一键安装，UI 与 API 默认仅监听 127.0.0.1"
+   ],
+   "use_cases": [
+    "个人在自有服务器或本机自托管保管密码与 2FA 密钥",
+    "从云端密码管理器通过 CSV 迁移条目到本地保管库",
+    "需要加密备份导出与命令行访问密码库的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |Database|PostgreSQL 16|",
+     "lines": [
+      11,
+      126
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 PostgreSQL 16 存储数据的密码管理应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CipherMoth runs on your own machine with Docker. One command sets a strong database password, pulls ／ |Backend|Python 3.13, FastAPI, SQLAlchemy 2.0, asyncpg| ／ |Database|PostgreSQL 16|",
+   "evidence_lines": [
+    37,
+    125,
+    126
+   ]
+  },
+  "fn": "mr-grj/ciphermoth",
+  "sha": "55d67e8a3b96",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

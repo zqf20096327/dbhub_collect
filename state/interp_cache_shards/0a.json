@@ -6949,5 +6949,71 @@
   "generated_at": "2026-10-07",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cd6390e4505f": {
+  "identity": {
+   "one_liner": "自托管服务器监控面板，SSH 无 Agent 采集指标",
+   "review": "BeaconTower 是一个自托管服务器监控面板，通过 SSH 连接被监控机执行只读命令采集指标，无需在被监控机安装 Agent，并包含 RAPL 功耗计量、WireGuard 组网管理和多家内网穿透平台托管功能。面向需要监控多台 VPS 与家庭服务器的自托管用户。后端为 Go + Gin，数据存储使用 SQLite，以 Docker 单容器部署，公开页对敏感字段做白名单过滤。",
+   "highlights": [
+    "通过 SSH 执行只读命令（/proc、df、sysfs）采集节点指标，被监控机无需安装 Agent",
+    "支持 Intel 机型 RAPL 功耗监控，提供实时功率、温度、频率及月度 kWh 与电费估算",
+    "面板内完成 WireGuard 星型组网的密钥生成、conf 渲染推送与防火墙放行，并托管 Sakura/ChmlFrp/Cloudflare 穿透平台"
+   ],
+   "use_cases": [
+    "多台 VPS 与家庭服务器的集中资源与功耗监控",
+    "多节点 WireGuard 星型组网的自动化配置与管理",
+    "内网穿透隧道与 frpc 客户端容器的集中托管"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|后端|Go 1.26 + Gin + SQLite（modernc.org/sqlite 纯 Go，无 CGO）|",
+     "lines": [
+      100
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 技术栈声明后端使用 SQLite 存储自身数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**自托管服务器监控面板** —— 无 Agent 采集、毛玻璃（glassmorphism）界面、带功耗计量、WireGuard 组网管理与内网穿透平台托管。 ／ - **零 Agent 采集**：面板定时 SSH 连接各节点执行只读命令（`/proc`、`df`、`sysfs`），被监控机不装任何东西；面板自身自动作为「本机」节点展示（本地进程采集，免 SSH） ／ |后端|Go 1.26 + Gin + SQLite（modernc.org/sqlite 纯 Go，无 CGO）|",
+   "evidence_lines": [
+    3,
+    17,
+    100
+   ]
+  },
+  "fn": "Yoahoug/BeaconTower",
+  "sha": "cd6390e4505f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

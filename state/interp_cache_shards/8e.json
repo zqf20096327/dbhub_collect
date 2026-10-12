@@ -7378,5 +7378,75 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9e207fee6be3": {
+  "identity": {
+   "one_liner": "本地优先个人健康档案，通过 MCP 暴露，数据存于自有 Postgres",
+   "review": "health-os 将化验、用药、诊断、可穿戴与饮食记录存入用户自己的 PostgreSQL（含 pgvector），并提供 29 个 MCP 工具供任意 MCP 客户端读写；关键值告警与用药安全规则为确定性代码，数据需经 approve 才生效。适合希望在本地模型下自托管健康数据、并通过 LLM 客户端查询的个人用户。",
+   "highlights": [
+    "提供 29 个 MCP 工具，经 stdio 供任意 MCP 客户端读取与写入，写入进入 pending 队列需人工批准",
+    "安全规则为确定性代码实现：关键值即时告警、拒答药物相互作用问题、危机工具返回固定热线响应",
+    "包含化验名归一化（uk/ru/en 同义词）、Mann-Kendall 趋势分析、41 营养素饮食记录及 Apple Health/Garmin 导入"
+   ],
+   "use_cases": [
+    "个人在本地（Docker + Postgres）自托管健康档案并经本地模型客户端查询",
+    "将 PDF/照片化验单经 LLM 提取、归一化并纳入待审队列",
+    "生成周报、就诊简报与筛查日历供就医时使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Your labs, diagnoses, medications, wearable data and food log live in your own Postgres; any ／ docker compose up -d db # Postgres 16 + pgvector ／ Architecture: MCP client over stdio to mcp_server; read tools query approved views, write tools go through core/services into pending; safety, analytics, PostgreSQL with pgvector, ingestion",
+     "lines": [
+      7,
+      64,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明用户的健康数据存放在自有的 Postgres 中，该项目本身是使用该库存储数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "AGPL-3.0-or-later",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Local-first personal health record, exposed over MCP.** ／ docker compose up -d db               # Postgres 16 + pgvector ／  Architecture: MCP client over stdio to mcp_server; read tools query approved views, write tools go through core/services into pending; safety, analytics, PostgreSQL with pgvector, ingestion",
+   "evidence_lines": [
+    6,
+    64,
+    79
+   ]
+  },
+  "fn": "andronaft/health-os",
+  "sha": "9e207fee6be3",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

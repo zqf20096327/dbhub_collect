@@ -11469,5 +11469,78 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d53d233976c8": {
+  "identity": {
+   "one_liner": "漫画/轻小说阅读平台，Hono+BullMQ+PostgreSQL 全栈单体仓库",
+   "review": "这是一个正在重写的漫画阅读平台，当前仓库提供 Hono 后端 API、处理章节上传的 BullMQ worker 和 TanStack Start 网页端骨架；浏览/阅读前端尚未构建。通过 Kysely 以 PostgreSQL 为主数据库，配合 Meilisearch 搜索、Dragonfly 缓存和 S3 兼容对象存储。适合想自部署或参与开发的用户/贡献者，需 Docker 与 pnpm 环境。",
+   "highlights": [
+    "支持漫画、韩漫、国漫、轻小说多格式及上传会话与后台章节处理",
+    "提供基于 Meilisearch 的容错搜索和 Better Auth 认证（邮箱/魔法链接/Discord/Google）",
+    "包含图像管道（magic-byte 校验、EXIF 剥离、JPEG 转码）与 OpenTelemetry 可观测性"
+   ],
+   "use_cases": [
+    "自托管漫画内容平台",
+    "需要上传处理管道的内容站点开发参考",
+    "Kysely/TanStack Start 技术栈示例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- Kysely (typed SQL query builder) on PostgreSQL ／ - PostgreSQL 18 — primary database ／ - Integration tests live under `apps/api/src/__integration-tests__/` and hit real Postgres / S3 / Meilisearch / Dragonfly via Docker. Each test gets a freshly-cloned Postgres database (`CREATE DATABASE … TEMPLATE …`) and a fresh S3 bucket for isolation. See `.",
+     "lines": [
+      42,
+      65,
+      180
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 PostgreSQL 为主数据库，平台使用它存储数据，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A manga reading platform — manga, manhwa, manhua, light novels — being rebuilt from scratch. The repo currently ships the backend (Hono API), a BullMQ worker that processes uploaded chapters, a Storybook component playground, and a TanStack Start web app with a landing page, auth forms and legal pages. ／ - Kysely (typed SQL query builder) on PostgreSQL ／ - PostgreSQL 18 — primary database",
+   "evidence_lines": [
+    5,
+    42,
+    65
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "taiyomoe/taiyo",
+  "sha": "d53d233976c8",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

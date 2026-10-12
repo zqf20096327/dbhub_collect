@@ -8121,5 +8121,137 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "bf3b4966d25b": {
+  "identity": {
+   "one_liner": "Pony 语言的 PostgreSQL 纯实现客户端驱动",
+   "review": "这是一个用 Pony 语言编写的 PostgreSQL 驱动库，供 Pony 开发者在应用中连接和操作 PostgreSQL 数据库。支持明文、MD5 和 SCRAM-SHA-256 认证，SSL 加密，参数化查询、预编译语句、LISTEN/NOTIFY、COPY 及流式查询等能力。目前处于 beta 阶段，API 可能频繁变更，不覆盖全部 Postgres API 表面。",
+   "highlights": [
+    "支持多种认证方式（明文/MD5/SCRAM-SHA-256）及 SSL 加密连接",
+    "支持参数化查询、预编译语句、LISTEN/NOTIFY、COPY、流式查询与查询流水线",
+    "内置 PostgreSQL 类型到 Pony 类型值的编解码，支持自定义枚举/复合/数组类型注册"
+   ],
+   "use_cases": [
+    "在 Pony 应用中直接连接查询 PostgreSQL",
+    "需要流式游标或 COPY 导入导出的 Pony 数据处理程序"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "# Postgres ／ Pure Pony Postgres driver ／ This library aims to support the Postgres API to the level required to use Postgres from Pony in ways that the Pony community needs. We do not aim to support the entire API surface. If there is functionality missing, we will happily accept high-quality pull requests to add additional support so long as they don't come with additional external dependencies or overly burdensome maintenance.",
+     "lines": [
+      1,
+      3,
+      28
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为 Pony 语言的 Postgres 驱动库，是为数据库生态服务的客户端组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Pure Pony Postgres driver ／ * `corral add github.com/ponylang/postgres.git --version 0.15.0`",
+   "evidence_lines": [
+    3,
+    13
+   ]
+  },
+  "fn": "ponylang/postgres",
+  "sha": "bf3b4966d25b",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e703eff503db": {
+  "identity": {
+   "one_liner": "TeamSpeak 网页客户端与协议网关，浏览器接入 TS 服务器",
+   "review": "WebTS 是自托管的 TeamSpeak 网页客户端和 Rust 协议网关，用户通过邮箱登录并导入/创建 TS 身份，在浏览器中接入已有 TS3 服务器，支持频道浏览、聊天、Opus 语音、本地 AI 降噪与好友加密私信。面向需要通过浏览器接入 TeamSpeak 的用户和自建站点的部署者，数据持久化使用 SQLite，当前 TS6 与移动语音仍为实验支持。",
+   "highlights": [
+    "提供浏览器端 TeamSpeak 接入：频道树、聊天、Opus 双向语音与权限操作",
+    "支持本地 AI 降噪（GTCRN/RNNoise）与好友双棘轮 E2EE 私信",
+    "提供中文一键安装脚本、Docker 镜像与 Windows 运行包"
+   ],
+   "use_cases": [
+    "为社区自建网页版 TeamSpeak 接入站点",
+    "不便安装客户端的设备上通过浏览器加入 TS 频道语音",
+    "需要多身份管理和权限继承的 TS 服务器成员使用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|持久化|**SQLite · rusqlite**|账号、身份密文、会话、后台设置密文|",
+     "lines": [
+      101
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确以 rusqlite/SQLite 持久化自身账号、身份与会话数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "WebTS 是独立开源的 **TeamSpeak 网页客户端与协议网关**。成员通过邮箱登录、创建或导入 TeamSpeak 身份，在浏览器里加入已有频道；网站以该身份连接目标服务器，继承它原有的权限。部署者掌握自己的账号数据库、密钥、邮件服务和默认服务器配置。 ／ |网关|**Rust · Tokio · Axum**|单进程 HTTP / WebSocket、会话与 TS 连接| ／ |持久化|**SQLite · rusqlite**|账号、身份密文、会话、后台设置密文|",
+   "evidence_lines": [
+    15,
+    100,
+    101
+   ]
+  },
+  "fn": "PTPHAP/WebTS",
+  "sha": "e703eff503db",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

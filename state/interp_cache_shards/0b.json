@@ -7812,5 +7812,152 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "42ff1099462a": {
+  "identity": {
+   "one_liner": "PUC Minas 软件工程课程资料库，含 Spring Boot 实验",
+   "review": "这是 PUC Minas 大学软件工程课程的教学仓库，包含课程大纲、参考书目、UML/C4 建模工具链接、设计模式资料以及基于 Java/Spring Boot 的实验与项目内容。面向选课学生，涉及 Docker、API 测试、监控等工具链，数据库相关内容为课程项目中的持久化技术介绍，并非数据库工具或服务。",
+   "highlights": [
+    "提供软件工程课程资料，含参考书目、课程大纲与教学计划",
+    "包含 Java/Spring Boot 实验与项目模板，配合 Docker、测试与监控工具",
+    "整理 UML/C4 建模与数据库建模工具链接"
+   ],
+   "use_cases": [
+    "软件工程课程教学与自学参考",
+    "Spring Boot API 项目实验练习",
+    "UML/ER 建模工具选型参考"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Essas ferramentas são fundamentais para persistência de dados em aplicações Java. MongoDB (NoSQL) e PostgreSQL (relacional) são amplamente utilizados em projetos web modernos. ／ ###### 🐘 PostgreSQL",
+     "lines": [
+      266,
+      272
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "- 🔗 Oracle JDK 17 - Downloads",
+     "lines": [
+      188
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 主体为课程资料与链接汇编，数据库仅作为课程项目持久化技术被提及，未见为数据库生态服务的工具功能。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Java Maven Spring Boot Thymeleaf GitHub repo size GitHub directory file count GitHub stars GitHub forks GitHub language count GitHub license GitHub commit activity GitHub last commit Views Counter ／ Disciplina do curso de Engenharia de Software da PUC Minas ／ - Projetos com Spring Boot",
+   "evidence_lines": [
+    5,
+    7,
+    19
+   ]
+  },
+  "fn": "joaopauloaramuni/laboratorio-de-desenvolvimento-de-software",
+  "sha": "42ff1099462a",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9d4e77cdef72": {
+  "identity": {
+   "one_liner": "AI agent 记忆与检查点存储的防篡改一致性测试套件",
+   "review": "该仓库提供一套一致性测试，用于检测 AI agent 记忆库和 checkpoint 存储在被篡改后是否能察觉：通过其自身 API 写入数据、从背后修改，再读取验证，覆盖九类篡改（内容篡改、截断、删除、重排、伪造插入、跨上下文重放、回滚重放、元数据篡改、快照回滚）。它面向存储/框架的维护者和安全评估人员，遵循 IETF 草案方法，结果以评分表发布并可由 CI 校验站点一致性。",
+   "highlights": [
+    "实现对 18 个 agent 记忆/checkpoint 存储的九类篡改（T1-T9）测量，逐版本固定并生成评分表",
+    "实现 IETF draft-khandelwal-bmwg-agent-memory-integrity 定义的方法与 draft-han-bmwg-agent-security-benchmark 5.4.7 的措辞",
+    "提供 site/build.py 生成公共站点，CI 校验站点与结果文件一致"
+   ],
+   "use_cases": [
+    "评估 agent 记忆/检查点存储对篡改的检测能力",
+    "存储维护者验证自身完整性声明是否成立",
+    "生成并发布可复现的防篡改基准测试报告"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|LangGraph `PostgresSaver`|langgraph-checkpoint-postgres 3.1.2 on PostgreSQL 16|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted|",
+     "lines": [
+      27
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|LangGraph `SqliteSaver`|langgraph-checkpoint-sqlite 3.1.1|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted| ／ |LlamaIndex `Memory` over SQLite|llama-index-core 0.14.24|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted|accepted| ／ |MythologIQ Agent Memory reference runtime, SQLite canonical substrate, read path|agent-memory-reference 0.2.0 at f2aef57|rejected|rejected|rejected|rejected|rejected|rejected|rejected|rejected|accepted|",
+     "lines": [
+      26,
+      30,
+      48
+     ]
+    }
+   ],
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ],
+   "eco": "tool",
+   "eco_why": "它通过各存储自身 API 对记忆/checkpoint 存储做一致性测试，是为数据库/存储生态服务的基准测试工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A conformance test suite that measures whether AI agent memory and checkpoint stores notice when they are tampered with. ／ |Target|Version|T1|T2|T3|T4|T5|T6|T7|T8|T9| ／ The public site at agentmemoryintegrity.org is generated from the same results file by `python site/build.py` (output in `docs/site/`), and CI fails if the site and the results file disagree. The runner prints the same words as these tables (accepted, rejected, reported; surfaced, kept out), the at-rest words following the method proposed for IETF draft-han-bmwg-agent-security-benchmark 5.4.7. The tests pin the underlying status values (`safe`, `VULNERABLE`, `n/a`), so a wording change can never move a cell.",
+   "evidence_lines": [
+    5,
+    24,
+    52
+   ]
+  },
+  "fn": "tech4biz-yasha/agent-memory-integrity",
+  "sha": "9d4e77cdef72",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9870,5 +9870,118 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ae46d6333f5e": {
+  "identity": {
+   "one_liner": "家庭网络测速追踪器，定时测速并记录历史",
+   "review": "nexpulse 是一个面向 homelab 的自托管测速追踪应用，按计划（含每日随机时间）用 Cloudflare、LibreSpeed、iperf3 或可选的 Ookla CLI 测量下行、上行、ping、抖动、bufferbloat 和丢包，保存历史并生成图表与 CSV 导出，通过 ntfy/Gotify/webhook 发送告警，并提供带密钥的只读 API。用 FastAPI+React 构建，经 Docker 部署，数据由采集通道提示存储于 SQLite，但 README 未直接陈述数据库。适合自托管用户监控宽带是否达到套餐承诺。",
+   "highlights": [
+    "支持 Cloudflare、LibreSpeed、iperf3、Ookla 四种测速源，可测量 ping、上下行、抖动、bufferbloat 与丢包",
+    "支持按间隔、每日、cron 或每日 n 次随机时间的调度，以及 ntfy/Gotify/webhook 告警与带密钥的 API",
+    "提供历史图表、均值、CSV 导出，支持德/英/中三语与明暗主题"
+   ],
+   "use_cases": [
+    "homelab 用户持续追踪宽带质量并对比套餐承诺速率",
+    "在网速下降或高延迟时通过 ntfy/Gotify/webhook 接收告警",
+    "通过 API 将测速结果接入 Home Assistant 等仪表盘"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "它是一个使用网络测速数据并自行存储结果的自托管应用，不针对任何数据库提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "GNU AGPL v3.0",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A speed test tracker for your homelab. Measures on a schedule, shows every test ／ - **Four sources:** Cloudflare (works right away), LibreSpeed (public servers or ／ - **History** with charts, averages and a CSV export.",
+   "evidence_lines": [
+    3,
+    18,
+    29
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "DerKezorm/nexpulse",
+  "sha": "ae46d6333f5e",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "31ddff92bc95": {
+  "identity": {
+   "one_liner": "Tidbyt LED 矩阵航班追踪显示应用，读取 OpenSky/airplanes.live 数据",
+   "review": "该仓库是一个运行于 Tidbyt Gen1（64x32 LED 矩阵）的航班追踪显示程序，从 OpenSky 或 airplanes.live 获取头顶航班数据并渲染航班号、方向、距离与模拟时钟，部署在 GCP e2-micro 上通过 systemd 运行，并由定时器每3分钟从 GitHub 拉取更新。面向拥有 Tidbyt 设备并想显示本地航班的个人用户；数据源与追踪区域通过 .env 配置。",
+   "highlights": [
+    "支持从 airplanes.live 与 OpenSky 获取航班数据，可配置主备数据源",
+    "提供 64x32 像素双屏布局：左侧航班信息滚动显示，右侧实时模拟时钟",
+    "通过 systemd 定时器每3分钟从 GitHub 自动拉取部署更新"
+   ],
+   "use_cases": [
+    "在 Tidbyt LED 屏上显示头顶航班及实时时钟",
+    "在 GCP 免费层 VM 上零成本运行长期服务",
+    "通过 GitHub push 自动更新设备端程序"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 仅为使用数据库的应用，未出现任何数据库，项目核心是 Tidbyt 设备显示应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# ✈️ Tidbyt Flight Tracker (Gen 1) ／ A high-performance, resilient flight tracking system for the **Tidbyt Gen 1** (64x32 RGB LED matrix) running on a free Google Cloud Platform (GCP) `e2-micro` VM, automated with a GitHub-controlled deployment system.",
+   "evidence_lines": [
+    1,
+    3
+   ]
+  },
+  "fn": "sparhi12/tidbyt-tracker",
+  "sha": "31ddff92bc95",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

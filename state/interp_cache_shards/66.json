@@ -9600,5 +9600,243 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7cf555912908": {
+  "identity": {
+   "one_liner": "C++ 编写的 ODBC API 轻量封装库",
+   "review": "nanodbc 是一个 C++ 库，封装原生 C ODBC API，通过 pimpl 惯用法和值语义简化数据库连接、查询等常见操作，仅依赖标准 C++ 与 ODBC 头文件。面向需要通过 ODBC 访问数据库的 C++ 开发者，可拖入源文件或用 CMake 构建静态/共享库。通过各数据库的 ODBC 驱动工作，测试覆盖 SQLite、PostgreSQL、SQL Server 等套件。",
+   "highlights": [
+    "封装 ODBC C API，提供简洁的 C++ 接口",
+    "pimpl 惯用法实现，仅依赖标准 C++ 和 ODBC",
+    "支持 C++11/14/17 各版本线，提供 Unicode/UTF-8 构建选项",
+    "基于 Catch2 的测试套件，CI 覆盖 SQLite、PostgreSQL、SQL Server 等数据库"
+   ],
+   "use_cases": [
+    "C++ 项目通过 ODBC 统一访问多种数据库",
+    "减少直接编写冗长 ODBC C API 代码",
+    "需要精简、可嵌入源码的数据库访问层"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Coverage is measured by the `coverage` job in ci-linux.yml, which instruments the library with llvm-cov and runs the utility, SQLite, PostgreSQL and SQL Server suites. The job comments the figures on each pull request and prints the same report into its own su",
+     "lines": [
+      15
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MariaDB runs alongside MySQL on its own port and answers through its own ODBC driver. The MySQL suite is the one that covers it, so point that suite at it:",
+     "lines": [
+      186
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Coverage is measured by the `coverage` job in ci-linux.yml, which instruments the library with llvm-cov and runs the utility, SQLite, PostgreSQL and SQL Server suites. The job comments the figures on each pull request and prints the same report into its own su ／ The tests attempt to connect to a [SQLite][sqlite] database, so you will have to have that and a SQLite ODBC driver installed. At the time of this writing, there happens to be a nice [SQLite ODBC driver][sqliteodbc] available from Christian Werner's website, a",
+     "lines": [
+      15,
+      49
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Coverage is measured by the `coverage` job in ci-linux.yml, which instruments the library with llvm-cov and runs the utility, SQLite, PostgreSQL and SQL Server suites. The job comments the figures on each pull request and prints the same report into its own su ／ |`NANODBC_DISABLE_MSSQL_TVP`|`OFF` or `ON`|Do not use MSSQL table-valued parameters.|",
+     "lines": [
+      15,
+      91
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse's ODBC driver is published for Linux on x86_64 only, so the development image registers it only there. On an Apple Silicon host the server still starts, but nothing can reach it, and a full run excludes that suite as well with `-E 'vertica_tests|cli",
+     "lines": [
+      196
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "MariaDB runs alongside MySQL on its own port and answers through its own ODBC driver. The MySQL suite is the one that covers it, so point that suite at it:",
+     "lines": [
+      186
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为数据库访问服务的 C++ 开发库，通过 ODBC 驱动为各数据库提供适配层",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small C++ wrapper for the native C ODBC API. Please see the [online documentation][nanodbc] for user information, example usage, propaganda, and detailed source level documentation. ／ Coverage is measured by the `coverage` job in ci-linux.yml, which instruments the library with llvm-cov and runs the utility, SQLite, PostgreSQL and SQL Server suites. The job comments the figures on each pull request and prints the same report into its own summary, so the coverage change is visible before merging, and it publishes the figure the badge above reads to the `badges` branch. The lcov report is attached to each run as an artifact. ／ Major features beyond what's already supported by ODBC are not within the scope of nanodbc. This is where the _nano_ part of nanodbc becomes relevant: This library is _as minimal as possible_. That means no dependencies beyond standard C++ and typical ODBC headers and libraries to link against. No features unsupported by existing ODBC API calls.",
+   "evidence_lines": [
+    5,
+    15,
+    29
+   ]
+  },
+  "fn": "nanodbc/nanodbc",
+  "sha": "7cf555912908",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8464ebac3129": {
+  "identity": {
+   "one_liner": "AI数据库事故响应代理，带治理审批与行动执行",
+   "review": "aiHelpDesk 是一个面向生产数据库事故响应的 AI 代理系统：诊断事故、提出并执行修复步骤，每一步操作经治理框架审批与审计，并把已解决事故转化为可复用的 playbook 知识库（Vault）。部署于 VM/Docker/K8s，提供故障注入测试与多库舰队操作，供 DBA/SRE 团队使用，不做迁移与 schema 优化。",
+   "highlights": [
+    "提供治理框架：工具调用审计、人工审批门、爆炸半径防护与策略引擎",
+    "支持从已解决事故自动生成 playbook 草稿并经三维度稳定性认证",
+    "支持故障注入测试（32 种失败模式）与多数据库舰队操作（金丝雀阶段、审批门、schema 漂移检测）"
+   ],
+   "use_cases": [
+    "生产数据库事故的诊断与人工审批下的自动修复",
+    "AI 代理操作生产数据库时的审计与治理",
+    "通过故障注入测试验证修复 playbook 的稳定性"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为数据库运维提供事故诊断、修复执行与治理的组件，而非使用数据库存储自身数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "other"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "aiHelpDesk is the accountability layer for teams using AI agents on production databases hosted on VM/Bare Metal, inside Docker/Podman containers or running on K8s. It diagnoses incidents, proposes remediation and actually fixes your database problems. All under a strict governance framework that ensures every consequential action is approved, audited and certified as consistent. ／ - **Fault injection testing** — inject 32 known failure modes (SQL-only, SSH, K8s) against your own staging database, score the agent's diagnosis, verify remediation recovery. The `faulttest` tool is self-contained and needs no cluster access to run against external targets. ／ - **Fleet operations** — coordinate changes across multiple databases with canary phases, approval gates, schema drift detection and full audit trails. Natural language → fleet plan via the Planner.",
+   "evidence_lines": [
+    11,
+    44,
+    45
+   ]
+  },
+  "fn": "borisdali/helpdesk",
+  "sha": "8464ebac3129",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9d8c0f6996a6": {
+  "identity": {
+   "one_liner": "B2B 工业品 Agent Commerce API，提供规格查询、实时库存与报价 PDF",
+   "review": "该仓库是 Hack Day 2026 的演示项目，在 Controlnautas 的 Medusa 2.x + Next.js 15 商务栈上新增机器可读的 Agent Commerce API，供 Meta Muse 等 AI 客户端检索工业品规格、读取实时价格库存并生成初步报价 PDF；报价为演示性质、需人工确认，数据以 Medusa 为商业事实来源。",
+   "highlights": [
+    "提供产品搜索、结构化需求评估、实时报价与报价 PDF 生成的 API 接口集",
+    "通过私有 HTTPS API 连接 Medusa 读取实时库存与价格，LLM 不生成判定与价格",
+    "包含 OpenAPI 文档、llms.txt 发现文件及验证脚本套件"
+   ],
+   "use_cases": [
+    "AI 客户端按技术意图检索工业品规格并获取实时库存价格",
+    "对结构化需求进行确定性合规评估（meets/does_not_meet/not_documented）",
+    "生成供销售人员确认的初步报价 PDF"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL",
+     "lines": [
+      19
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 Medusa 与 PostgreSQL 存储数据的 B2B 电商应用，不是为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " PostgreSQL ／ Controlnautas is an existing B2B industrial commerce stack (**Medusa 2.x** + **Next.js 15**). ／ b2b-backend/     Medusa backend, Muse API, PIM / technical models, seed",
+   "evidence_lines": [
+    19,
+    33,
+    103
+   ]
+  },
+  "fn": "armando-token/hackday26",
+  "sha": "9d8c0f6996a6",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

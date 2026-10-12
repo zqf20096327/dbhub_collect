@@ -9311,5 +9311,70 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "68a788748cfe": {
+  "identity": {
+   "one_liner": "浏览器内 SSH/SFTP 自托管网关，含密钥保险库与主机键校验",
+   "review": "nextrmnl 是一个自托管的 Web SSH/SFTP 工具，在浏览器中提供终端、文件传输、每账户加密保险库、主机键校验和 OpenID Connect 登录，面向管理家庭网络机器的个人用户。会话可在浏览器关闭后存续，支持会话分割、手机键盘条、计划备份；数据存于 /data 目录的 SQLite 数据库，通过 Docker Compose 部署，建议置于 TLS 反向代理之后。",
+   "highlights": [
+    "提供浏览器内 SSH 终端与 SFTP 文件传输，会话可在浏览器重载或断网后恢复",
+    "每账户保险库以 Argon2id 与 AES-256-GCM 加密私钥和密码，支持 TOTP/passkey/WebAuthn 第二因素",
+    "支持 OpenID Connect 多提供方登录、~/.ssh/config 与 PuTTY 注册表导入、定时 AES 加密 ZIP 备份"
+   ],
+   "use_cases": [
+    "在浏览器中统一管理家庭/内网多台机器的 SSH 连接",
+    "通过手机或平板访问终端并进行文件上传下载",
+    "团队或家庭内通过邀请链接与 OIDC 共享受控的连接入口"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Everything lives in `/data`: the SQLite database `nextrmnl.db`, `secret.key`, `backups/`, `logs/`. Mount it",
+     "lines": [
+      108
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其自身数据存储在 SQLite 数据库 nextrmnl.db 中，SQLite 仅为其内部存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SSH and SFTP in the browser, self-hosted, for the machines in your own network. Accounts with a vault each, ／     image: ghcr.io/derkezorm/nextrmnl:latest ／ Everything lives in `/data`: the SQLite database `nextrmnl.db`, `secret.key`, `backups/`, `logs/`. Mount it",
+   "evidence_lines": [
+    3,
+    90,
+    108
+   ]
+  },
+  "fn": "DerKezorm/nextrmnl",
+  "sha": "68a788748cfe",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

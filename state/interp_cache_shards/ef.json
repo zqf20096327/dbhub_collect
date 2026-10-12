@@ -9296,5 +9296,98 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e70ec7294203": {
+  "identity": {
+   "one_liner": "无需客户端软件的透明 SSH/HTTPS/K8s/MySQL/PostgreSQL/RDP/VNC 堡垒机",
+   "review": "Warpgate 是部署在 DMZ/堡垒主机上的代理服务，接受 SSH、HTTPS、Kubernetes、MySQL、PostgreSQL、RDP、VNC 连接并直连转发到目标，支持会话录制回放、内置管理 Web UI、2FA 与 OpenID Connect SSO、暴力破解防护；通过 warpgate setup 生成交互式配置，单二进制运行，目标与用户清单存于 SQLite。适合需要统一受控访问内网主机与数据库的运维场景。",
+   "highlights": [
+    "支持 SSH、HTTPS、Kubernetes、MySQL、PostgreSQL、RDP、VNC 协议的透明转发，无需客户端额外软件",
+    "记录所有会话并可实时查看与回放，内置管理 Web UI",
+    "内置 TOTP 与 OpenID Connect SSO、IP 封锁与用户锁定的暴力破解防护"
+   ],
+   "use_cases": [
+    "在 DMZ 部署堡垒机，为用户分配对特定主机/URL 的访问权限",
+    "通过浏览器访问 SSH、RDP、VNC 目标并留存会话审计记录",
+    "代理 MySQL、PostgreSQL 数据库连接"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Warpgate is a smart & fully transparent SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC bastion host that doesn't require a client app or an SSH wrapper. ／ Warpgate is a service that you deploy on the bastion/DMZ host, which will accept SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC connections and provide an (optional) web admin UI.",
+     "lines": [
+      9,
+      65
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Warpgate is a smart & fully transparent SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC bastion host that doesn't require a client app or an SSH wrapper. ／ Warpgate is a service that you deploy on the bastion/DMZ host, which will accept SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC connections and provide an (optional) web admin UI.",
+     "lines": [
+      9,
+      65
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "You manage the target and user lists and assign them to each other through the admin UI, and the session history is stored in an SQLite database (default: in `/var/lib/warpgate`). ／ * Database: SQLite via `sea-orm` + `sqlx`",
+     "lines": [
+      73,
+      100
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 SSH/HTTPS/数据库连接提供代理转发服务，属数据库生态服务工具而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Warpgate is a smart & fully transparent SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC bastion host that doesn't require a client app or an SSH wrapper. ／ Warpgate is a service that you deploy on the bastion/DMZ host, which will accept SSH, HTTPS, Kubernetes, MySQL, PostgreSQL, RDP and VNC connections and provide an (optional) web admin UI. ／ You manage the target and user lists and assign them to each other through the admin UI, and the session history is stored in an SQLite database (default: in `/var/lib/warpgate`).",
+   "evidence_lines": [
+    9,
+    65,
+    73
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "warp-tech/warpgate",
+  "sha": "e70ec7294203",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

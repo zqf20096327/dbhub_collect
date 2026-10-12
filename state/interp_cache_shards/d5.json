@@ -8836,5 +8836,217 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2252e6369572": {
+  "identity": {
+   "one_liner": "Rust 实现的任务队列，以 SQLite/Postgres/Redis 作存储引擎，无需独立 broker",
+   "review": "FlexiQ（原 Taskito）是 Rust 编写的任务队列，提供 Python/Node/Java SDK 及 Go/Ruby 远程客户端，用数据库本身作为任务状态的持久化后端（SQLite 默认，多机场景用 Postgres 或 Redis），不需要额外部署消息代理。面向需要在应用内做异步任务、定时调度与工作流编排的开发者。功能包含重试、死信队列、优先级、速率限制和内置仪表盘。",
+   "highlights": [
+    "提供 Python、Node.js、Java 原生 SDK 及 Go、Ruby 远程客户端",
+    "支持 SQLite（默认）、Postgres、Redis 三种后端，同一 API",
+    "包含重试、死信队列、工作流（chain/group/chord）、cron 调度与 Prometheus/OpenTelemetry 导出"
+   ],
+   "use_cases": [
+    "Python/Node/Java 应用中的异步任务与定时任务处理",
+    "多机 worker 部署下基于 Postgres 或 Redis 的分布式任务队列",
+    "需要依赖图、saga 补偿等工作流编排的任务系统"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A Rust-powered task queue with native SDKs. One engine — no broker required, just SQLite, Postgres, or Redis. ／ - **Backends** — SQLite (default), Postgres or Redis for multi-machine workers; same API. ／ |Postgres backend|**Yes**|Yes|No|No|No|",
+     "lines": [
+      3,
+      56,
+      73
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A Rust-powered task queue with native SDKs. One engine — no broker required, just SQLite, Postgres, or Redis. ／ - **Backends** — SQLite (default), Postgres or Redis for multi-machine workers; same API.",
+     "lines": [
+      3,
+      56
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "任务队列以数据库作为任务存储后端，是为应用开发者服务的库组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Rust-powered task queue with native SDKs. One engine — no broker required, just SQLite, Postgres, or Redis. ／ One Rust core (`crates/`), one thin SDK shell per language (`sdks/`). The DB is the source of ／ - **Backends** — SQLite (default), Postgres or Redis for multi-machine workers; same API.",
+   "evidence_lines": [
+    3,
+    42,
+    56
+   ]
+  },
+  "fn": "ByteVeda/flexiq",
+  "sha": "2252e6369572",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c3e1b6d5136a": {
+  "identity": {
+   "one_liner": "WordPress 与 Joomla 站点自托管监控、更新与安全面板",
+   "review": "SentinelTD 是一个自托管仪表盘，用于集中监控 WordPress 和 Joomla 网站并执行批量更新、可用性检查、插件漏洞匹配、域名到期提醒以及生成 PDF 客户报告。面向管理多个客户站点的运维者/代理商，通过内置连接器与站点通信，数据存储于 PostgreSQL，支持 Docker 部署。组件更新前可自动备份并在首页异常时自动回滚（限 WordPress）。",
+   "highlights": [
+    "提供站点可用性监控、核心/插件/主题批量更新、失败重试与更新前备份和自动回滚",
+    "提供漏洞源与已安装扩展的匹配、域名到期 RDAP/WHOIS 检查、日志与统计",
+    "提供邮件与 Telegram 通知及月度 PDF 客户报告生成"
+   ],
+   "use_cases": [
+    "代理商集中监控和批量维护多个客户的 WordPress/Joomla 站点",
+    "跟踪域名和许可证到期并设置提醒",
+    "向客户自动发送月度站点状态 PDF 报告"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Everything else (PostgreSQL, Redis, the screenshot service) stays on the internal Docker",
+     "lines": [
+      164
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该面板自身是使用 PostgreSQL 存储数据的应用，仅为 WordPress/Joomla 网站服务，不为数据库生态提供工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Self-hosted monitoring and maintenance for WordPress and Joomla sites** — one dashboard",
+   "evidence_lines": [
+    3
+   ]
+  },
+  "fn": "Giuseppe-sciarra/SentinelTD",
+  "sha": "c3e1b6d5136a",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e6d67f74494b": {
+  "identity": {
+   "one_liner": "自托管项目协作系统，集任务看板、Wiki 与 MCP 授权集成",
+   "review": "YuanPlan 是面向个人与小型团队的自托管项目协作应用，提供任务看板、日历、时间线、项目 Wiki 与附件管理；通过 MCP 项目范围凭据允许 AI 客户端在权限与审计控制下读写任务和文档。业务数据存于 PostgreSQL，附件存本地目录，采用单实例部署，当前为 v0.1.1 MVP，Claude Desktop 接入与大规模负载尚待验证。",
+   "highlights": [
+    "提供任务列表、看板、日历与时间线视图及项目 Wiki 文档管理",
+    "通过 MCP 凭据限定项目与读写范围，AI 客户端操作沿用业务权限并记录审计",
+    "提供 Docker Compose 与 Node.js 两种部署方式，含迁移、维护模式备份与恢复 CLI"
+   ],
+   "use_cases": [
+    "个人或小型团队自托管任务与项目资料管理",
+    "需要在权限受控前提下让 AI 客户端读写任务与 Wiki 文档的团队",
+    "要求数据与附件保存在自有环境的部署场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "YuanPlan 支持通过网页组织项目、跟踪任务与维护文档，也可通过 MCP 让 AI 客户端在项目授权范围内参与协作。业务数据存储于 PostgreSQL，附件保存在实例本地目录。 ／ - **自己掌握数据**：PostgreSQL 保存业务数据，本地目录保存附件，可按部署指南备份与恢复。 ／ - PostgreSQL；推荐 **17**（与容器配置及部署验收一致），并已创建可连接的数据库与用户。其他版本需自行验证。",
+     "lines": [
+      15,
+      23,
+      113
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确业务数据存储于 PostgreSQL，属于使用数据库的应用系统",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "YuanPlan 支持通过网页组织项目、跟踪任务与维护文档，也可通过 MCP 让 AI 客户端在项目授权范围内参与协作。业务数据存储于 PostgreSQL，附件保存在实例本地目录。 ／ - **数据与运维**：PostgreSQL 保存业务数据、版本与审计，附件保存在持久化目录；运维 CLI 提供迁移、维护模式与一致备份恢复。 ／ 当前部署方式为一个 Node.js 进程、一个 PostgreSQL 实例，以及 Nginx / Caddy 等 HTTPS 反向代理。构建后，Node.js 同时提供 API 和前端静态资源。",
+   "evidence_lines": [
+    15,
+    92,
+    268
+   ]
+  },
+  "fn": "zhylq/YuanPlan",
+  "sha": "e6d67f74494b",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

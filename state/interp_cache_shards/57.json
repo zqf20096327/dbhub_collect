@@ -8407,5 +8407,236 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c9f0d7f1e276": {
+  "identity": {
+   "one_liner": "自托管 API 优先的 AI 呼叫中心，Go 单二进制+FreeSWITCH",
+   "review": "这是一个自托管的 AI 呼叫中心系统：来电先由语音模型应答，必要时转入真实队列由人工坐席接管，全程合并为一条通话记录（含转录与录音）。面向需要将呼叫中心嵌入自有产品的开发者，提供 REST+SSE API 与 OpenAPI 规范。依赖 PostgreSQL 存储路由与队列数据、FreeSWITCH 做媒体桥接，通话/坐席音频依赖 Chrome 扩展而非自带拨号盘。",
+   "highlights": [
+    "语音模型作为 SIP 端点直接应答来电，支持 qwen/doubao/openai/gemini 等多种 provider，启动时选定",
+    "提供 REST + SSE 的完整 API 与 OpenAPI 规范，服务器与客户端代码由规范生成",
+    "通话记录聚合 bot 应答、转接、人工处理为单一 CDR，录音可存文件系统或 S3 兼容存储"
+   ],
+   "use_cases": [
+    "为自有产品嵌入带 AI 应答与人工接管能力的呼叫中心",
+    "中英文双语客服场景的自动应答与坐席协作",
+    "基于 FreeSWITCH 的自托管联络中心部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "inside it — plus PostgreSQL and FreeSWITCH. ／ make dev-up # PostgreSQL in Docker",
+     "lines": [
+      13,
+      111
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL 存储目录、队列与路由数据，属使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "inside it — plus PostgreSQL and FreeSWITCH. ／ FreeSWITCH reads its directory and its `mod_callcenter` queues *from the ／ make dev-up            # PostgreSQL in Docker",
+   "evidence_lines": [
+    13,
+    90,
+    111
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "rasonyang/ai-native-callcenter",
+  "sha": "c9f0d7f1e276",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "1a4b7fa6d101": {
+  "identity": {
+   "one_liner": "基于 Rust+PostgreSQL 的多租户任务队列与调度服务",
+   "review": "Spooled Backend 是用 Rust 编写的任务队列和作业调度后端服务，提供 REST 与 gRPC 双协议 API、cron 定时任务、DAG 工作流、死信队列、Webhook 投递和多租户配额管理，作业数据存储于 PostgreSQL，可选 Redis 做缓存与 pub/sub。适合需要分布式任务编排和多租户隔离的团队自部署使用，部署方式以 Docker Compose 为主。",
+   "highlights": [
+    "提供 REST 与 gRPC 双协议 API，支持 WebSocket/SSE 实时任务状态更新",
+    "支持 cron 定时调度、DAG 任务依赖、死信队列重试与多租户配额限制",
+    "通过 FOR UPDATE SKIP LOCKED 实现数据库级任务锁定，支持 lease 与重试机制"
+   ],
+   "use_cases": [
+    "分布式系统中异步任务队列与 worker 协调",
+    "cron 定时任务与依赖工作流（DAG）编排",
+    "对外 Webhook 事件投递与自动重试"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **High Performance**: Built on Rust + Tokio + PostgreSQL with Redis-backed caching ／ |`DATABASE_URL`|✅|-|PostgreSQL connection string| ／ |`DATABASE_DIRECT_URL`|❌|-|Direct (non-PgBouncer) Postgres URL; migrations run over it when set|",
+     "lines": [
+      15,
+      69,
+      91
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 PostgreSQL 存储任务数据的后端服务，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Spooled is a high-performance, multi-tenant job queue system designed for reliability, observability, and horizontal scalability. ／ - **High Performance**: Built on Rust + Tokio + PostgreSQL with Redis-backed caching ／ |`DATABASE_URL`|✅|-|PostgreSQL connection string|",
+   "evidence_lines": [
+    11,
+    15,
+    69
+   ]
+  },
+  "fn": "Spooled-Cloud/spooled-backend",
+  "sha": "1a4b7fa6d101",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5b080b066929": {
+  "identity": {
+   "one_liner": "Clojure 事务性任务队列，复用现有数据库存储",
+   "review": "Drip 是一个面向 Clojure 的后台任务队列库，将任务插入与应用自身数据库事务绑定，支持 MariaDB、PostgreSQL 和 SQLite。提供任务优先级、定时执行、重试退避、唯一约束、暂停恢复、周期任务，附带 Web UI 和 CLI。要求 Java 21+，依赖对应 JDBC 驱动，任务表随业务库备份与查询。",
+   "highlights": [
+    "任务入队与应用业务写操作在同一数据库事务中原子完成",
+    "支持任务优先级、定时调度、指数退避重试、唯一约束与周期任务",
+    "提供 Web UI 与 CLI/TUI 用于查看和管理任务与队列"
+   ],
+   "use_cases": [
+    "Clojure 应用中需要与业务事务一致的后台任务处理",
+    "以 Outbox 模式将任务完成与业务写操作原子绑定",
+    "不引入独立消息中间件的数据库驱动任务队列场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Drip is a transactional job queue for MariaDB, PostgreSQL, and SQLite. Jobs enqueue inside your application's own transactions — if your transaction commits, the job is guaranteed to run; if it rolls back, the job disappears with it. No external services, no m ／ ;; or: '[s-exp.drip.client.postgres :as postgres] ／ ;; (def client (postgres/make-client datasource))",
+     "lines": [
+      5,
+      113,
+      172
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Drip is a transactional job queue for MariaDB, PostgreSQL, and SQLite. Jobs enqueue inside your application's own transactions — if your transaction commits, the job is guaranteed to run; if it rolls back, the job disappears with it. No external services, no m ／ ;; (def client (sqlite/make-client datasource)) ／ For SQLite, configure the datasource with IMMEDIATE transactions and a busy timeout so concurrent workers don't fail with `SQLITE_BUSY`: `jdbc:sqlite:drip.db?journal_mode=WAL&busy_timeout=5000&transaction_mode=IMMEDIATE`.",
+     "lines": [
+      5,
+      173,
+      176
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "Drip is a transactional job queue for MariaDB, PostgreSQL, and SQLite. Jobs enqueue inside your application's own transactions — if your transaction commits, the job is guaranteed to run; if it rolls back, the job disappears with it. No external services, no m ／ ;; MariaDB 10.6+ ／          '[s-exp.drip.client.mariadb :as mariadb])",
+     "lines": [
+      5,
+      90,
+      112
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是构建在这些数据库之上、为其生态提供任务队列能力的组件库",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Drip is a transactional job queue for MariaDB, PostgreSQL, and SQLite. Jobs enqueue inside your application's own transactions — if your transaction commits, the job is guaranteed to run; if it rolls back, the job disappears with it. No external services, no message brokers, no dual-write risk. ／ - Transactional job insertion — enqueue inside your own DB transactions ／          '[s-exp.drip.client.mariadb :as mariadb])",
+   "evidence_lines": [
+    5,
+    16,
+    112
+   ]
+  },
+  "fn": "mpenet/drip",
+  "sha": "5b080b066929",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

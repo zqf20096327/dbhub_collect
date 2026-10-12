@@ -9208,5 +9208,138 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1021d5e87e01": {
+  "identity": {
+   "one_liner": "面向代理构建应用的上线编排 Agent Skill 与零依赖 Node CLI",
+   "review": "GoLive 是一个开源 Agent Skill 加 Node CLI，用于把编码代理构建的应用部署上线：检测应用所需资源、生成变更计划、经用户确认后应用到托管、数据库、域名、邮件、支付等自有账号，并验证与回溯。目标用户是使用 Codex、Claude Code 等编码代理的开发者。项目处于 0.1.0-alpha 早期阶段，回滚与遥测能力有限，DNS 与删除操作需额外确认标志。",
+   "highlights": [
+    "提供 detect→plan→approve→apply→verify 的上线工作流，每次写入需带计划 ID 与显式确认",
+    "支持 Vercel/Netlify 托管、Supabase/Neon 数据库、Porkbun/GoDaddy 域名 DNS、Resend 邮件、Stripe 测试支付的资源编排与 teardown 移除",
+    "提供 golive status 漂移检查与所有权记录，无托管后端、无遥测"
+   ],
+   "use_cases": [
+    "将代理生成的应用部署到用户自有的托管与数据库账号",
+    "对已创建的线上资源做漂移复查或整体拆卸（teardown）",
+    "在 Codex/Claude Code 等代理会话中以自然语言驱动上线流程"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|**Netlify + Neon**|Provisioning, environment wiring, deployment, Postgres connectivity, two-session API checks and browser CRUD|",
+     "lines": [
+      235
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "它是应用上线部署编排工具，数据库（Neon/Supabase）只是其编排的多种资源之一，并非专门为某数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> Disposable live tests now cover six journeys: **hosting** (Vercel, Netlify), **database** ／ for that work: it **detects what your app needs, plans the exact changes, asks for your approval,",
+   "evidence_lines": [
+    17,
+    9
+   ]
+  },
+  "fn": "mikehasa/golive-skill",
+  "sha": "1021d5e87e01",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "ccc3c3cd3241": {
+  "identity": {
+   "one_liner": "自托管网页抓取工具，将网页转为 Markdown 供 AI agent 使用",
+   "review": "AgentCrawl 是一个面向 AI agent 的自托管抓取与 Markdown 提取工具，把网页和本地文档转换为 Markdown、文本、元数据等格式，可通过 CLI、Python、Docker/API 和 MCP 服务器运行。任务状态、缓存与失败记录存于本地 SQLite，支持浏览器渲染和 Cloudflare 等挑战页的处理；项目自述处于早期阶段，文档为主的页面抓取效果更稳定。",
+   "highlights": [
+    "提供 CLI、Python 库、HTTP API、Docker 与 MCP 服务器五种接口，MCP 暴露 scrape_url、crawl_site、extract_structured 等工具",
+    "基于 SQLite 实现持久化抓取任务，支持 checkpoints、重试、取消与失败记录，并可生成静态 HTML 仪表盘",
+    "支持 JavaScript 渲染页面、robots.txt、SSRF 防护、Firecrawl v2 兼容 API 及 CSS schema 结构化提取"
+   ],
+   "use_cases": [
+    "为 AI agent 通过 MCP 提供网页阅读与站点抓取能力",
+    "自托管批量抓取站点并生成可引用的分块 Markdown 内容",
+    "监控页面变更并生成差异报告（diff/change tracking）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🧱 Durable crawls: SQLite jobs with checkpoints, pagination, cancellation, events, retries, and failure inspection. ／ - 📊 Read-only dashboard: generate static HTML from SQLite with `agentcrawl dashboard` or open `/dashboard` on the API server (it follows the API auth setting). ／ |Durable crawls|SQLite jobs, events, checkpoints, retries, and failure records.|",
+     "lines": [
+      100,
+      102,
+      117
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储自身任务、缓存与失败记录，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "代码 Apache-2.0；skills 文本以 MIT-0 发布",
+   "install": [
+    "pypi",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "🕷️ **A small self-hosted crawler for AI agents.** ／ - 🧱 Durable crawls: SQLite jobs with checkpoints, pagination, cancellation, events, retries, and failure inspection. ／ |HTTP API|FastAPI server for self-hosted deployments.|",
+   "evidence_lines": [
+    9,
+    100,
+    114
+   ]
+  },
+  "fn": "JorG18/agentcrawl",
+  "sha": "ccc3c3cd3241",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

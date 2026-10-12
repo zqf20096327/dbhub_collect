@@ -9451,5 +9451,75 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4ce1f521402a": {
+  "identity": {
+   "one_liner": "PostgreSQL 数据扩展任务的可验证性能基准与持久化恢复工具",
+   "review": "QueryFoundry 面向 Kaggle Python Database Performance Optimization 挑战，对 organizer 的 GUI 应用做独立扩展，提供 payload_once、lazy_keys 等优化配方，在单事务内将 raw_data 展开写入六张目标表，并支持持久化 receipt 恢复与 EXCEPT ALL 六表等价校验。适合参加该挑战或需复现本地基准测量的用户，作者声明所有数据为本地探索性结果，无官方分数。",
+   "highlights": [
+    "提供 payload_once 与 lazy_keys 两种优化配方，保留原 SQL 语义并逐次运行六表等价校验",
+    "支持 --recovery 持久化 receipt：同 UUID 重试时回放已存储结果，变更请求被拒绝",
+    "包含 SHA-256 上游文件校验、双向 EXCEPT ALL 输出对比及基准测试脚本"
+   ],
+   "use_cases": [
+    "参与 Kaggle Python Database Performance Optimization 挑战并复现提交测量",
+    "对 PostgreSQL 数据展开任务做本地基准测量与结果等价性验证",
+    "研究事务内持久化 receipt 与故障恢复机制"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 提供基准测试、校验与恢复脚本，为 PostgreSQL 数据处理任务提供工具能力而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "**Verifiable performance and durable recovery for the Kaggle *Python Database Performance Optimization* challenge.** ／ Consolidated report and reproduction guide. Final 100k, three-round GUI/SSH/Linux medians: original **16.046 s**, payload_once with recovery **15.447 s**, experimental lazy_keys **12.792 s**; all nine runs passed six-table equivalence. These are local exploratory observations. Figures and animated charts below describe earlier historical series. ／ 32 organizer files verified by SHA-256 and six-table equivalence checked with EXCEPT ALL",
+   "evidence_lines": [
+    3,
+    21,
+    114
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Agnuxo1/QueryFoundry",
+  "sha": "4ce1f521402a",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

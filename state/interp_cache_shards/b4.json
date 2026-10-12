@@ -9787,5 +9787,75 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a99671563296": {
+  "identity": {
+   "one_liner": "基于 Postgres/Supabase 的开源复式记账核心（schema+CLI+MCP）",
+   "review": "Ekwo OS 是一套部署在自有 Supabase 项目上的复式记账核心，由数据库 schema、各国税务规则数据包、命令行工具和 MCP 服务器组成，支持发票读取、账簿录入和增值税申报准备，适合想自行记账的企业、会计事务所及需要真实复式记账核心的开发者；它不托管服务器，数据完全存放在用户控制的 Postgres 数据库中，靠行级安全控制访问。",
+   "highlights": [
+    "复式记账由数据库强制执行，余额不平不入账，锁定期在触发器层拒绝写入",
+    "国家税务规则以数据形式提供，内置 120+ 国家包，经 ekwo init 一次安装",
+    "提供 MCP 服务器和 MIT 许可的格式库，支持生成 FEC、XBRL、Peppol UBL、Factur-X 等法定文件"
+   ],
+   "use_cases": [
+    "企业在自有 Supabase 项目上保管账簿并配合 AI 代理记账",
+    "会计事务所在一套安装中管理多家公司账务",
+    "开发者需要一个税务规则以数据形式存在的复式记账核心"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "open, the data sits in a Postgres database you control, and the interface is ／ A double-entry accounting core for Postgres. There is no server to run: ／ - **Tested on real Postgres.** The test suite runs the migrations, the seeds,",
+     "lines": [
+      25,
+      54,
+      79
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "账簿数据存储在用户控制的 Postgres/Supabase 数据库中，该项目是使用数据库的记账应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "核心 AGPL-3.0，格式库为 MIT 双许可",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A double-entry accounting core for Postgres. There is no server to run: ／ open, the data sits in a Postgres database you control, and the interface is ／ **Ekwo** is open source accounting, ready to use on **Ekwo Cloud**: the web application for your invoices, your bank statements, your VAT returns and the electronic invoices your country uses, in your own instance, with an account opened in a minute. **Ekwo OS** is the free and open source core it runs on, under AGPL-3.0: install it on your own Supabase project and own your accounting data, forever.",
+   "evidence_lines": [
+    54,
+    25,
+    3
+   ]
+  },
+  "fn": "Ekwo-ai/ekwo-os",
+  "sha": "a99671563296",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

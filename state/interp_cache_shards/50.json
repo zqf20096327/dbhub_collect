@@ -10524,5 +10524,62 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e0daf14b870b": {
+  "identity": {
+   "one_liner": "用 Lean4 形式化验证真实 Rust 应用代码的基准研究库",
+   "review": "该仓库是一个研究型基准项目，衡量多少真实世界 Rust 代码可被形式化验证：将 nora、rustfs、kanidm 等上游应用的关键模块移植为 h5i-app 内核并用 Lean4 证明规格，同时测量移植代码相对上游的性能开销。面向形式化方法与智能体基准研究者，提供 check/performance 命令、Docker 化的智能体运行环境。数据库仅作为应用主题标签出现，README 未含数据库相关内容。",
+   "highlights": [
+    "包含 6 个本地移植项目和 101 条已选规格，用 Lean4 证明",
+    "提供 h5i app extract/check 与性能测量命令，结果写入 results/ 目录",
+    "内置智能体运行环境（Docker 镜像与 harness/bench.py），支持 Responses/Messages/Gemini API 上游"
+   ],
+   "use_cases": [
+    "研究 AI 编程智能体在形式化证明任务上的表现",
+    "评估 Rust 内核形式化验证后的运行时性能开销",
+    "维护带严格证明门槛的验证任务队列"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 未描述任何针对特定数据库的工具能力或应用存储关系，仅 topic 标签含 postgresql",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "Apache-2.0，移植代码保留上游许可（nora: MIT）",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A study of how much real-world Rust can be formally verified with ／ Each port is a standard h5i-app project: `kernel/`, `proofs/`, and ／ h5i app check --all ports                  # strict gate; unfinished proofs fail",
+   "evidence_lines": [
+    3,
+    23,
+    33
+   ]
+  },
+  "fn": "h5i-dev/h5i-app-bench",
+  "sha": "e0daf14b870b",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

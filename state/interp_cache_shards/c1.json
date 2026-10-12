@@ -8906,5 +8906,285 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "070dc2660052": {
+  "identity": {
+   "one_liner": "ClickHouse 集群监控仪表盘与运维建议工具",
+   "review": "chmonitor 是为 ClickHouse 设计的监控面板与运维建议工具，读取 system.* 表展示查询、合并、复制、存储等集群状态，并提供索引/分区/物化视图等 AI 建议。适合运维 ClickHouse 集群的 DBA 和团队。它只给出建议，不会自动执行 DDL；GPL-3.0 可自托管，另提供可选商业许可。",
+   "highlights": [
+    "读取 system.* 表展示查询、合并、复制、存储与健康状况，支持多个 ClickHouse 主机",
+    "内置 AI advisor，给出 projections、skip indexes、PREWHERE、物化视图等建议，但不自动执行 DDL",
+    "提供 chm CLI（TUI 与 doctor 命令）、只读 SQL 控制台和 MCP 支持"
+   ],
+   "use_cases": [
+    "ClickHouse 集群的实时监控与健康检查",
+    "排查慢查询与高成本查询",
+    "获取索引/分区/物化视图优化的第二意见"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "The operational advisor for ClickHouse ／ **chmonitor** is a dashboard and advisor for ClickHouse. It reads `system.*`",
+     "lines": [
+      4,
+      22
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它为 ClickHouse 提供监控与建议服务，属于数据库生态工具而非存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GPL-3.0 开源，另提供可选商业许可（同一二进制）",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**chmonitor** is a dashboard and advisor for ClickHouse. It reads `system.*` ／ storage, health — then recommends what to change next. ／ It does **not** apply DDL for you. Recommendations stay recommendations.",
+   "evidence_lines": [
+    22,
+    24,
+    26
+   ]
+  },
+  "fn": "chmonitor/chmonitor",
+  "sha": "070dc2660052",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e03b09b58986": {
+  "identity": {
+   "one_liner": "AI 学习应用，将目标转为每日学习计划",
+   "review": "Zoonk 是一个学习类应用：用户输入学习目标，系统生成到目标日期为止的每日计划，包含课程、练习和复习。项目为 monorepo，使用 Node.js、pnpm、Prisma 与 PostgreSQL 存数据，包含 Next.js 主应用及独立数据库包，并提供本地开发、测试、i18n 和 Git worktree 等开发流程支持。",
+   "highlights": [
+    "根据用户目标生成含课程、练习、复习的每日学习计划",
+    "monorepo 结构，数据库配置独立于 @zoonk/db 包",
+    "支持 worktree 隔离的开发、测试与 E2E 数据库环境"
+   ],
+   "use_cases": [
+    "个人按目标制定并跟进每日学习计划",
+    "开发者本地克隆运行与二次开发",
+    "多 worktree 并行开发时使用隔离数据库"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL v18",
+     "lines": [
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL v18 列为运行前提，应用依赖该库存数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- PostgreSQL v18 ／ - Check out the @zoonk/db package README for database setup instructions ／  Tell us your goal in your own words. Zoonk plans every day until your date, with lessons, practice and reviews shaped by it.",
+   "evidence_lines": [
+    15,
+    22,
+    3
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "zoonk/zoonk",
+  "sha": "e03b09b58986",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e6e5b6233c96": {
+  "identity": {
+   "one_liner": "本地优先 Android 健身训练记录应用，使用内嵌 SQLite 存储数据",
+   "review": "OMEGA 是一款离线优先的健身房训练记录 Android 应用，用于记录训练组数、计算 Epley 1RM 曲线、跟踪渐进超负荷与训练分化和连续打卡。数据完全存储在设备端内嵌 SQLite（WAL 模式），无云端和账号。安装方式为下载 APK 或源码构建。适用人群为需要纯本地、无遥测训练记录的健身者。",
+   "highlights": [
+    "数据存储于设备端 SQLite，启用 WAL 模式，支持 JSON 导出/导入",
+    "支持 Epley 1RM 计算、会话/周/月粒度统计与崩溃恢复草稿",
+    "包含 290 项自动化测试，CI 执行类型检查与 APK 构建"
+   ],
+   "use_cases": [
+    "离线环境记录健身房训练组数与重量",
+    "跟踪 1RM 力量曲线与渐进超负荷",
+    "配置每周训练分化并跟踪连续打卡"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**OMEGA** is engineered as an offline-first antidote. It runs entirely on-device, storing training history inside an embedded SQLite relational database configured with Write-Ahead Logging (WAL). There are no cloud servers, no account logins, no network pings, ／ - **Engine**: SQLite via `expo-sqlite` (JSI bindings) ／ |**Relational Database**|`expo-sqlite` 16.0|Direct C-level SQLite bindings for low-overhead on-device relational storage.|",
+     "lines": [
+      23,
+      83,
+      134
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是使用内嵌 SQLite 存储数据的健身应用，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**OMEGA** is engineered as an offline-first antidote. It runs entirely on-device, storing training history inside an embedded SQLite relational database configured with Write-Ahead Logging (WAL). There are no cloud servers, no account logins, no network pings, and no analytics SDKs. ／ - **Engine**: SQLite via `expo-sqlite` (JSI bindings) ／ |**Relational Database**|`expo-sqlite` 16.0|Direct C-level SQLite bindings for low-overhead on-device relational storage.|",
+   "evidence_lines": [
+    23,
+    83,
+    134
+   ]
+  },
+  "fn": "ASSAS-Labs/Omega",
+  "sha": "e6e5b6233c96",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c677df7aa5ad": {
+  "identity": {
+   "one_liner": "复古计算机收藏桌面编目工具，Python/tkinter + SQLite 存储",
+   "review": "这是一款面向个人收藏者的桌面程序，用于编目复古计算机、整机、配件与备件：按位置组织条目、管理 PC 装配组成、打印二维码标签并用手机扫码盘点、从 The Retro Web 导入硬件型号、导出表格、备份 ZIP。数据存于本地 SQLite，含原子校验迁移与升级前自动备份；运行需 Python 3.10+ 与 tkinter，SQLite 3.35+。界面支持英语和波兰语切换。",
+   "highlights": [
+    "以位置树和装配关系组织收藏条目，支持自定义分类、字段与状态",
+    "生成二维码标签（PDF/PNG，Avery/Brother/Dymo），并提供手机扫码盘点与拍照功能",
+    "数据存储于 SQLite，实现带校验和的原子 schema 迁移及升级前自动备份；支持 xlsx/csv/html 等导出与单一 ZIP 备份恢复"
+   ],
+   "use_cases": [
+    "个人复古计算机收藏的位置与组成编目管理",
+    "打印二维码标签并用手机扫描进行库存盘点",
+    "从 The Retro Web 导入 PC 硬件型号数据并导出清单"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Safe data** — SQLite with atomic, checksummed schema migrations and an ／ Python 3.10+ with tkinter, SQLite 3.35+ with JSON support (standard in current ／ baza/ SQLite: schema migrations, connection, repositories",
+     "lines": [
+      47,
+      56,
+      109
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明程序使用 SQLite 存储收藏数据，属使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **Safe data** — SQLite with atomic, checksummed schema migrations and an ／  baza/ SQLite: schema migrations, connection, repositories ／  python nornica.py # the program",
+   "evidence_lines": [
+    47,
+    109,
+    78
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "DarkZachi83/Nornica",
+  "sha": "c677df7aa5ad",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

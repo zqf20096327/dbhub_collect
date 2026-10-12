@@ -9426,5 +9426,156 @@
   "generated_at": "2026-10-08",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "13458924117d": {
+  "identity": {
+   "one_liner": "基于 NestJS 与 MikroORM 的博客应用启动模板",
+   "review": "这是一个以博客克隆为示例的 NestJS 后端启动模板，使用 MikroORM 操作 PostgreSQL，内置 JWT/OAuth/2FA 认证、RBAC 授权、Redis 缓存、RabbitMQ 任务队列、Swagger 文档和 Docker Compose 部署，适合需要快速搭建 NestJS 项目的开发者直接 degit 或用 GitHub 模板生成新项目；数据库默认绑定 PostgreSQL，需先通过 Docker 启动依赖服务。",
+   "highlights": [
+    "使用 MikroORM 实现 PostgreSQL 的迁移与种子数据",
+    "包含 JWT/OAuth/2FA 认证与 CASL RBAC 授权",
+    "提供 Swagger 文档、Vitest 测试与 Docker Compose 部署脚本"
+   ],
+   "use_cases": [
+    "快速启动 NestJS + PostgreSQL 后端项目",
+    "参考认证、授权、缓存等集成的实际实现",
+    "作为 NestJS 项目模板进行二次开发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- 🏪 **MikroORM** on 🐘 **PostgreSQL**, with migrations and seeders ／ - Docker, for local PostgreSQL, Redis, RabbitMQ and a mail catcher",
+     "lines": [
+      24,
+      38
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL 存储数据的博客应用模板，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "> ### Blog made using Nestjs + Mikro-orm codebase(backend) containing real world examples (CRUD, auth (password based and oauth), advanced patterns, etc) and batteries included and ever-evolving ／ - 🏪 **MikroORM** on 🐘 **PostgreSQL**, with migrations and seeders ／ - Docker, for local PostgreSQL, Redis, RabbitMQ and a mail catcher",
+   "evidence_lines": [
+    3,
+    24,
+    38
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "rubiin/ultimate-nest",
+  "sha": "13458924117d",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "08bb96e1f2c5": {
+  "identity": {
+   "one_liner": "基于 Docker 的本地数据平台编排 CLI，按 profile 启动开源数据组件",
+   "review": "odctl 是一个 CLI 工具，用于在本地以 Docker Compose 方式启动一套数据工程与 MLOps 实验环境，涵盖 Kafka、Spark、Flink、Iceberg、Airflow 等组件，并通过 profile 概念自动解析组件间依赖（如先启动 PostgreSQL 与对象存储）。面向需要在本地搭建数据架构实验环境的数据工程师。要求 Docker、8-16 GB 内存与 Python 3.10+。",
+   "highlights": [
+    "以 profile 为单位启动组件，自动先启动所依赖的服务（如 PostgreSQL、SeaweedFS、Iceberg REST catalog）",
+    "底层运行 Docker Compose，统一管理 compose 文件与端口路由，提供 odctl ps/explain/list 等命令",
+    "通过 uv tool 或 pipx 安装，自 1.0 起遵循语义化版本"
+   ],
+   "use_cases": [
+    "在本地搭建数据工程实验环境（Kafka/Spark/Flink/Iceberg 等）",
+    "为 MLOps 工作流（如 MLflow、Airflow）提供本地运行平台",
+    "多个项目复用一套统一维护、已互连的本地数据基础设施"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`odctl up` starts the profiles each one depends on first, here PostgreSQL, SeaweedFS (S3) and the Iceberg REST catalog. See Getting started for more.",
+     "lines": [
+      37
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- dynamic-des: a SimPy library for simulations that stream to Kafka, PostgreSQL, Redis and Iceberg; its examples and integration tests run their infrastructure with odctl.",
+     "lines": [
+      52
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为运行本地数据技术栈提供编排工具，PostgreSQL 等作为其 profile 的依赖服务被启动和管理。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A curated collection of open-source technologies and an accompanying CLI (`odctl`) for experimenting with modern data architecture and MLOps locally. ／ odctl up kafka-lite flink-lite spark-lite ／ `odctl up` starts the profiles each one depends on first, here PostgreSQL, SeaweedFS (S3) and the Iceberg REST catalog. See Getting started for more.",
+   "evidence_lines": [
+    10,
+    33,
+    37
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "jaehyeon-kim/odctl",
+  "sha": "08bb96e1f2c5",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

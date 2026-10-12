@@ -8499,5 +8499,163 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7b6ff9a9effb": {
+  "identity": {
+   "one_liner": "Go 语言一体化认证库，内置多种存储适配器",
+   "review": "go-dev-auth 是一个零外部依赖（纯标准库）的 Go 认证库，提供邮箱密码、OAuth/OIDC 社交登录、会话、二步验证、passkey、魔法链接、组织、SSO、API key 和 JWT 等功能。面向需要在 Go 服务中自行搭建用户认证体系的开发者，通过 storage.Adapter 接口对接 PostgreSQL、MySQL、SQLite、MongoDB 或内存存储，并以一致性测试套件验证各后端。",
+   "highlights": [
+    "提供 storage.Adapter 存储适配器接口，内置 database/sql（PostgreSQL、MySQL、SQLite）、MongoDB 与内存适配器，并生成 schema/migration SQL",
+    "以统一的一致性测试套件在 CI 中对真实 SQLite、PostgreSQL、MySQL 服务器运行存储与完整认证流程测试",
+    "通过纯 http.Handler 挂载，兼容 chi、echo、gorilla、gin 等框架，插件系统包含 twofactor、passkey、organization、sso、admin、apikey、jwt 等"
+   ],
+   "use_cases": [
+    "为 Go Web 服务或 API 后端集成邮箱密码、社交登录与会话管理",
+    "需要组织/团队、SSO（自带 OIDC IdP）与多租户用户管理的应用",
+    "需要 passkey、TOTP 二步验证与 API key 认证等附加认证方式的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "suite against **real SQLite, PostgreSQL and MySQL servers**. ／ - Storage adapter interface with built-in `database/sql` (Postgres, MySQL, SQLite) and in-memory adapters, plus schema/migration SQL generation ／ - **PostgreSQL** — **running in production** (a real automation project uses the whole library on live PostgreSQL), *and* the conformance suite, migration idempotence and the full HTTP auth flow now run against a real PostgreSQL server in CI on every push. Fie",
+     "lines": [
+      11,
+      31,
+      97
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "suite against **real SQLite, PostgreSQL and MySQL servers**. ／ - Storage adapter interface with built-in `database/sql` (Postgres, MySQL, SQLite) and in-memory adapters, plus schema/migration SQL generation ／ - **MySQL** — the same CI job runs the conformance suite, migrations and the full auth flow against a real MySQL 8 server on every push. CI-verified; no field mileage yet, so report anything you hit.",
+     "lines": [
+      11,
+      31,
+      98
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "suite against **real SQLite, PostgreSQL and MySQL servers**. ／ - Storage adapter interface with built-in `database/sql` (Postgres, MySQL, SQLite) and in-memory adapters, plus schema/migration SQL generation ／ |SQL|`storage/sqlstore`|PostgreSQL, MySQL, SQLite via `database/sql`. Bring your own driver.| ／ - **SQLite** — the full conformance suite and a complete HTTP auth flow run against a real SQLite database in CI on every push. Verified.",
+     "lines": [
+      11,
+      31,
+      89,
+      96
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该库以 PostgreSQL、MySQL、SQLite、MongoDB 作为可选的会话与用户数据存储后端，本身不服务于数据库生态。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- Storage adapter interface with built-in `database/sql` (Postgres, MySQL, SQLite) and in-memory adapters, plus schema/migration SQL generation ／ |SQL|`storage/sqlstore`|PostgreSQL, MySQL, SQLite via `database/sql`. Bring your own driver.| ／ - **PostgreSQL** — **running in production** (a real automation project uses the whole library on live PostgreSQL), *and* the conformance suite, migration idempotence and the full HTTP auth flow now run against a real PostgreSQL server in CI on every push. Field-proven and regression-guarded.",
+   "evidence_lines": [
+    31,
+    89,
+    97
+   ]
+  },
+  "fn": "go-dev-auth/go-dev-auth",
+  "sha": "7b6ff9a9effb",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8fc6a281cc0e": {
+  "identity": {
+   "one_liner": "自托管短链接服务，单二进制+SQLite 存储元数据",
+   "review": "Sani 是一个面向单管理员的短链接服务，同时支持文本与文件分享。它以单个 Go 二进制运行，内嵌管理界面，使用 SQLite 保存元数据、本地目录存储上传文件，内存缓存重定向目标以服务跳转。提供标签、过期/访问次数控制、点击统计和 HTTP API。适合个人或小团队自托管部署，官方明确说明不支持多实例或多用户场景。",
+   "highlights": [
+    "单个 Go 二进制内嵌管理应用，使用 SQLite 存储元数据与文本，无需外部数据库或缓存服务",
+    "提供链接过期时间、访问次数限制、临时/永久重定向等每链接控制",
+    "提供 HTTP API、书签小工具、Android 分享集成，并可从 Shlink 或 CSV/JSON 导入"
+   ],
+   "use_cases": [
+    "个人自托管短链接服务",
+    "分享文本片段与文件并附带访问统计",
+    "通过 API 脚本化创建与管理短链"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A self-hosted link shortener with text and file sharing, for one administrator. One Go binary with an embedded admin app, SQLite for metadata and text, and local storage for uploaded files. No external database or cache service required. ／ - Redirect targets live in a sharded in-memory cache in front of SQLite. Misses are cached separately and bounded, so a scan for random slugs can't evict real links, and concurrent misses for the same slug share one database read. ／ - Counting a click is an in-memory increment. Aggregated counts reach SQLite every two seconds in one transaction, and are flushed on shutdown.",
+     "lines": [
+      3,
+      131,
+      132
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Sani 是使用 SQLite 存储自身数据的应用，不是为数据库生态服务的工具或组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted link shortener with text and file sharing, for one administrator. One Go binary with an embedded admin app, SQLite for metadata and text, and local storage for uploaded files. No external database or cache service required. ／ Sani is designed for a single running instance and one administrator, not multi-user hosting or active-active replicas. It is still in 0.x: read the compatibility policy and release notes before upgrading. For public service, configure HTTPS, persistent storage and a separate files domain when needed, then rehearse a complete backup and restore. Repository tests and published benchmarks do not certify your deployment’s capacity or availability.",
+   "evidence_lines": [
+    3,
+    27
+   ]
+  },
+  "fn": "DejavuMoe/sani",
+  "sha": "8fc6a281cc0e",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -10006,5 +10006,131 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7016c75e9d09": {
+  "identity": {
+   "one_liner": "AI 记忆卡片应用，支持 AI 生成卡片与 FSRS 间隔重复复习",
+   "review": "Nibomo 是一款开源记忆卡片（flashcards）应用，覆盖 iOS/iPadOS、macOS、Android 与 Web 端，用户可用 AI 创建和改进卡片，离线学习，并基于 FSRS 算法做间隔重复复习，还提供 MCP 接口供 AI 助手连接。适合备考、词汇记忆、技术术语背诵的学习者使用。",
+   "highlights": [
+    "支持 iPhone/iPad、macOS、Android 及 Web 多平台，支持离线学习",
+    "提供 AI 生成与改进卡片功能",
+    "内置 FSRS 间隔重复复习，并通过 MCP 供 AI 助手连接"
+   ],
+   "use_cases": [
+    "备考复习与知识记忆",
+    "语言词汇学习",
+    "技术术语与事实的记忆卡片制作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 描述的是面向终端用户的 flashcards 应用，未见为数据库生态服务的工具能力；主题标签含 postgresql 但正文无证据。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "AI-powered, open-source flashcards for iPhone, iPad, Mac, Android, and the web. ／ Prepare for exams, learn vocabulary, and memorize technical terms and facts. Create and improve cards with AI, study offline on mobile, and review with FSRS spaced repetition. ／ - AI assistants via MCP — connect at `https://mcp.nibomo.com/mcp`.",
+   "evidence_lines": [
+    3,
+    7,
+    15
+   ]
+  },
+  "fn": "kirill-markin/flashcards-open-source-app",
+  "sha": "7016c75e9d09",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "63bfc4f878e9": {
+  "identity": {
+   "one_liner": "DSH Tavern 的 SQLite 存档接管与服务端脚本执行插件",
+   "review": "这是一个面向 DSH Tavern（酒馆）的存储与执行插件，把聊天、会话事件和 MVU 变量历史从原生存档改为 SQLite 增量存档，并提供服务端脚本执行、按需读取历史和物理尾部回退。面向使用 DSH Tavern 的玩家与部署者，支持 Windows 桌面版与 Linux CLI 一键安装，须与标注的上游酒馆版本匹配，V1/V2 不可共装。",
+   "highlights": [
+    "将聊天头字段与消息楼层分表增量存储，会话事件由 SQLite 事务与 WAL 管理",
+    "支持按消息窗口、指定楼层、结算检查点进行历史按需读取，并提供正文与变量同库同事务提交",
+    "提供物理尾部回退与失败轮次清理，原档只读保留、可在 SQLite 新分叉中继续"
+   ],
+   "use_cases": [
+    "为长历史酒馆会话提供 SQLite 增量存档与按需读取",
+    "需要将剧情、变量与进度一起回退到一致状态的会话管理",
+    "在 Windows 桌面或 Linux CLI 环境部署酒馆插件的场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# DSH Tavern SQLite V2 ／ **服务端 MVU 与卡脚本、SQLite 增量存档、历史按需读取，以及正文和状态一起回退。** ／ 这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。",
+     "lines": [
+      1,
+      3,
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 SQLite 存储酒馆会话数据，属于使用数据库的应用插件而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "GNU AGPL v3，基于 DSH Tavern 的独立修改版，非上游官方发行",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "这是面向 DSH Tavern 的存储与服务端执行插件。保留酒馆界面，把聊天、会话事件和 MVU 变量历史交给 SQLite 管理；计算类脚本由服务端执行，浏览器保留界面职责。 ／ |**SQLite 增量存档**|聊天头字段、消息楼层分开存储，局部更新只处理变化部分，避免为了追加或修改一楼反复重写全部历史。会话事件由 SQLite 事务与 WAL 管理。| ／ 基于 DSH Tavern 适配，保留原来源声明与 GNU AGPL v3 许可。本项目是独立修改版，不是上游官方发行；随包官方恢复字节的许可及对应源码入口也保留。",
+   "evidence_lines": [
+    5,
+    14,
+    105
+   ]
+  },
+  "fn": "huajiao1998/dsh-tavern-sqlite-v2",
+  "sha": "63bfc4f878e9",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

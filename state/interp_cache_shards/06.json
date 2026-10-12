@@ -9297,5 +9297,74 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e76d4a3db9f2": {
+  "identity": {
+   "one_liner": "基于本地 SQLite 并经 MCP 暴露的 AI 代理共享事实/记忆层",
+   "review": "Memory Arbiter 是一个本地 MCP 服务器，将单一 SQLite 数据库作为 AI 编码工具（Codex、Claude Code、Cursor 等）的共享事实记忆层，提供 memory/memory_review/memory_govern/memory_repair 四组工具，含溯源标记、信任级别、版本历史、冲突检测与本地嵌入模型。适合需要在多个本地 AI 客户端间共享已验证事实的用户；HTTP 模式仅绑定 localhost，头信息不构成认证或多租户隔离。",
+   "highlights": [
+    "通过 MCP 协议提供 remember/find/read/update 等工具，事实集中存于单个本地 SQLite 库",
+    "每条记忆携带 source_type/source_ref/event_time/ingest_time 溯源字段，并保留完整版本历史与取代链",
+    "嵌入与可选冲突判定模型均在本地运行，支持 stdio 与 streamable-http 两种 MCP 传输"
+   ],
+   "use_cases": [
+    "多个 AI 编码客户端共享同一份已验证项目事实",
+    "需要对 AI 记忆做用户授权治理、审计与冲突处理",
+    "本地优先、无云端依赖的长期记忆管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Memory Arbiter is a trustworthy local fact layer for AI agents — not just shared memory, but shared facts that are current, trusted, traceable, and safe to use. It is a local SQLite service exposed over MCP: four product tools, evidence-based recall, advisory ",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明所有事实存储在本地 SQLite 数据库中，SQLite 是其内嵌存储而非其服务的目标数据库",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Memory Arbiter is a trustworthy local fact layer for AI agents — not just shared memory, but shared facts that are current, trusted, traceable, and safe to use. It is a local SQLite service exposed over MCP: four product tools, evidence-based recall, advisory conflict notices, and user-authorized governance. Every fact is stored once in local SQLite and every model it can call runs locally. ／ pip install \"memory-arbiter-mcp[vec,semantic-local]\"  # core + sqlite-vec + local GGUF runtime ／ - `memory`: `remember`, `find`, `batch_find`, `read`, `batch_read`, `update`, `judge`, `status`, `help`",
+   "evidence_lines": [
+    5,
+    66,
+    87
+   ]
+  },
+  "fn": "billy12151/memory-arbiter-mcp",
+  "sha": "e76d4a3db9f2",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

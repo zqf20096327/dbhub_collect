@@ -8711,5 +8711,143 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c106aee90e08": {
+  "identity": {
+   "one_liner": "PostgreSQL 备份/恢复解决方案",
+   "review": "pgmoneta 是面向 PostgreSQL 的备份与恢复工具，支持全量与增量备份、时间点恢复（PITR）、WAL 流式传输与热备，内置压缩、AES 加密、TLS，并提供 Prometheus 指标接口、Web 控制台及 pgmoneta-cli/MCP 远程管理，适用于运维 PostgreSQL 集群备份与灾难恢复的 DBA 和运维人员。",
+   "highlights": [
+    "支持全量与增量备份（PostgreSQL 14+）、任意备份恢复与时间点恢复",
+    "提供 WAL 流式传输、热备副本、gzip/zstd/lz4/bzip2 压缩与 AES 静态加密",
+    "内置 Prometheus 指标端点、Web 控制台、TLS 与 pgmoneta-cli/pgmoneta-mcp 远程管理"
+   ],
+   "use_cases": [
+    "PostgreSQL 集群的定期备份与灾难恢复",
+    "基于 PITR 的误操作数据回溯恢复",
+    "通过 Prometheus 与 Web 控制台监控备份运行状态"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**pgmoneta** is a backup / restore solution for PostgreSQL. ／ - **Full backup** of a PostgreSQL cluster with tablespace support ／ - **Incremental backup** for PostgreSQL 14+ (tablespace support for PostgreSQL 17+), intuitive backup chain management",
+     "lines": [
+      13,
+      26,
+      27
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "pgmoneta 是为 PostgreSQL 备份/恢复服务的专用工具，不依赖 PostgreSQL 二进制本身运行",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**pgmoneta** is a backup / restore solution for PostgreSQL. ／ - **Full backup** of a PostgreSQL cluster with tablespace support ／ - **Incremental backup** for PostgreSQL 14+ (tablespace support for PostgreSQL 17+), intuitive backup chain management",
+   "evidence_lines": [
+    13,
+    26,
+    27
+   ]
+  },
+  "fn": "pgmoneta/pgmoneta",
+  "sha": "c106aee90e08",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5f8a12c523d3": {
+  "identity": {
+   "one_liner": "自托管 AI 编码代理记忆服务，MCP 接口 + SQLite 存储",
+   "review": "Rembric 为 AI 编码代理提供持久化记忆、会话管理和操作面板，以单个 Docker 镜像部署，数据存于单个 SQLite 文件，通过 MCP 或 HTTP 供 Claude Code、Codex CLI 等客户端接入，内置进程内嵌入模型实现语义候选检测。适用于需要跨多个 MCP 客户端共享记忆与审计记录的个人或团队自托管部署；依赖 Docker 运行，最低约 1GB 内存。",
+   "highlights": [
+    "提供 MCP 服务器接口与 Web 操作面板，单进程单 SQLite 文件存储",
+    "内置进程内嵌入模型，支持语义候选检测，无需外部服务或 API 密钥",
+    "支持 Claude Code、Codex CLI、opencode 等多种代理的原生插件及任意 MCP 客户端"
+   ],
+   "use_cases": [
+    "为 AI 编码代理提供跨会话的持久化记忆",
+    "多 MCP 客户端共享统一记忆与审计记录",
+    "自托管/离线环境下的代理记忆管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One Docker image, one process, one SQLite file. Multi-client by construction, reversible by design. ／ Docker is the canonical distribution: the image bundles Node 22, the native modules (`better-sqlite3`, `sqlite-vec`, `onnxruntime-node`) and the embedding model, pre-built for `linux/amd64` and `linux/arm64` — the only requirement on your host is Docker and ~1 ／ The runtime image is distroless — there is no shell and no `sqlite3` binary inside the container, so `docker compose exec rembric sqlite3 ...` does not work. Use one of:",
+     "lines": [
+      5,
+      78,
+      145
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite 存储自身数据的 AI 代理记忆应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Self-hosted memory, sessions, and dashboard for AI coding agents ／  One Docker image, one process, one SQLite file. Multi-client by construction, reversible by design. ／ Docker is the canonical distribution: the image bundles Node 22, the native modules (`better-sqlite3`, `sqlite-vec`, `onnxruntime-node`) and the embedding model, pre-built for `linux/amd64` and `linux/arm64` — the only requirement on your host is Docker and ~1 GB of RAM (2 GB recommended; the in-process embedder is why — see docs/embeddings.md).",
+   "evidence_lines": [
+    3,
+    5,
+    78
+   ]
+  },
+  "fn": "susomejias/rembric",
+  "sha": "5f8a12c523d3",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

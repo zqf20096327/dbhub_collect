@@ -9296,5 +9296,412 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e7bc42212aaa": {
+  "identity": {
+   "one_liner": "合并 IEEE/Wireshark/Nmap/HDM 四源的 MAC 厂商查询数据库",
+   "review": "该仓库提供约 59,065 条去重 OUI 记录，按公司名统一厂商拼写并标注设备类型、注册状态与来源，以 TXT/CSV/JSON/XML/SQLite/SQL 等 10 种格式按月发布，附浏览器在线查询和 Node.js CLI 查询工具。面向需要做网络设备识别、MAC 欺骗检测、IoT 资产盘点的安全与网络运维人员。SQLite/SQL 文件为分发格式，本身不含数据库服务端。",
+   "highlights": [
+    "合并 IEEE、Wireshark、Nmap、HDM 四个来源并按 IEEE 键去重",
+    "提供 TXT/CSV/TSV/JSON/XML/SQLite/SQL/Kismet 共 10 种下载格式",
+    "每月通过 GitHub Actions 定时重建数据，附 Node.js 跨平台查询 CLI"
+   ],
+   "use_cases": [
+    "识别局域网内未授权或仿冒 MAC 的设备",
+    "WiFi 勘测/无线 IDS 的厂商与设备类型标注",
+    "脚本或数据库中离线查询 OUI 归属厂商"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|SQL|script|Postgres/MySQL/D1 import|import-to-d1.sql|",
+     "lines": [
+      158
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|SQL|script|Postgres/MySQL/D1 import|import-to-d1.sql|",
+     "lines": [
+      158
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|SQLite|indexed|Ready-to-query DB|master_oui.db| ／ ### `sqlite3`",
+     "lines": [
+      157,
+      212
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|`registrant_history`|string|`TEKELEC \\|PRIVATE \\|TEKELEC \\|Oracle` (every registrant the block has had, oldest first; only when it changed)|",
+     "lines": [
+      186
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库主体是 MAC 厂商数据集，SQLite/Postgres/MySQL 仅作为数据分发与导入格式出现，不是为某数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "`Cross-platform` `JavaScript` `Dataset` `Networking` - MAC address manufacturer lookup database combining IEEE, Nmap, Wireshark and HDM Mac-Tracker, with downloadable formats and a browser lookup. ／ |SQLite|indexed|Ready-to-query DB|master_oui.db| ／ |SQL|script|Postgres/MySQL/D1 import|import-to-d1.sql|",
+   "evidence_lines": [
+    1,
+    157,
+    158
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Ringmast4r/OUI-Master-Database",
+  "sha": "e7bc42212aaa",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a96f48dbe9fc": {
+  "identity": {
+   "one_liner": "自托管开源发票/记账应用，Bun+Hono+React，SQLite 存储",
+   "review": "Inkvoice 是一个可自托管的开源发票与费用管理应用，面向自由职业者和小团队，提供发票生命周期管理、在线收款（Stripe/PayPal）、多币种、报表、德国 E-Rechnung 与 PEPPOL 电子发票。整个应用打包为单个约 50 MB 的 Docker 容器，数据保存在单一 SQLite 文件中，支持 Dokploy/Coolify 一键部署。",
+   "highlights": [
+    "提供发票全生命周期管理、报价、周期性发票及 PDF 导出",
+    "支持 Stripe/PayPal 在线收款、多币种与 CSV 报表导出",
+    "支持德国 EN 16931 电子发票（ZUGFeRD/XRechnung）与 PEPPOL 网络收发"
+   ],
+   "use_cases": [
+    "自由职业者/小团队自托管管理开票与收款",
+    "需要德国 E-Rechnung 合规电子发票的场景",
+    "通过 PEPPOL 网络收发商业电子单据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🗄️ **Own your data** — everything lives in a single SQLite file you control. ／ - Single Docker container, native SQLite, tiny footprint ／ |`DATABASE_PATH`|no|`./data/invoice.db`|SQLite database file path|",
+     "lines": [
+      26,
+      76,
+      190
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用以 SQLite 为自身数据存储（bun:sqlite），属于使用数据库的应用而非数据库生态工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- 🗄️ **Own your data** — everything lives in a single SQLite file you control. ／ - Single Docker container, native SQLite, tiny footprint ／ |`DATABASE_PATH`|no|`./data/invoice.db`|SQLite database file path|",
+   "evidence_lines": [
+    26,
+    76,
+    190
+   ]
+  },
+  "fn": "pigontech/inkvoice",
+  "sha": "a96f48dbe9fc",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "546acbb34786": {
+  "identity": {
+   "one_liner": "自托管媒体流与文件分享服务器，PHP+ffmpeg 转码，SQLite 存储",
+   "review": "ShareBox 是一个单 PHP 应用的自托管流媒体与文件分享服务器，通过 ffmpeg 实时转码并以链接（可带密码、有效期）分享视频、PDF 和音频，无需媒体库扫描、数据库服务器或账号系统，适用于想在树莓派、NAS 或小内存 VPS 上快速分享个人媒体的用户；内部使用 SQLite 做探测与字幕缓存，依赖 PHP 8.1+ 与 ffmpeg。",
+   "highlights": [
+    "支持三种流模式（Native/Remux/Transcode），自动探测并可选用 Intel VAAPI、NVIDIA NVENC、树莓派 V4L2M2M 硬件转码",
+    "支持链接分享，可设置密码、过期时间、文件夹 ZIP 下载与二维码",
+    "内置管理面板，提供文件浏览、链接管理及系统状态监控"
+   ],
+   "use_cases": [
+    "在树莓派或 NAS 上自托管个人影视库并以链接分享",
+    "向他人临时分享带密码和有效期的视频/文件",
+    "小内存 VPS 上的轻量媒体播放服务器部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ |**Dependencies**|PHP + ffmpeg + SQLite|Java, database, plugins|.NET, database|.NET, database| ／ **Under the hood** -- `flock`-based concurrency control for ffmpeg processes, SQLite probe/subtitle caching, stall watchdog with exponential backoff, keyframe-accurate seek correction, vmtouch page-cache warming.",
+     "lines": [
+      10,
+      37,
+      83
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是使用 SQLite 存储探测/字幕缓存的媒体应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "So I built ShareBox -- a single PHP app with zero external dependencies. No framework, no accounts to create, no media library to pre-scan. You share a link, they click play, ffmpeg transcodes on the fly. It runs on a $5 VPS with 256 MB of RAM, a Raspberry Pi 4, or a Synology NAS. ／ **Under the hood** -- `flock`-based concurrency control for ffmpeg processes, SQLite probe/subtitle caching, stall watchdog with exponential backoff, keyframe-accurate seek correction, vmtouch page-cache warming. ／ Requires: PHP 8.1+ (`pdo_sqlite`), ffmpeg, nginx or Apache.",
+   "evidence_lines": [
+    21,
+    83,
+    142
+   ]
+  },
+  "fn": "ohugonnot/sharebox",
+  "sha": "546acbb34786",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6dae0d72c268": {
+  "identity": {
+   "one_liner": "异步 Rust 消息/数据路由库，统一端点在消息队列与数据库间搬运数据",
+   "review": "mq-bridge 是一个嵌入式的异步 Rust 库，通过统一的 receive_batch/send_batch 接口在 Kafka、NATS、MQTT、AMQP、PostgreSQL、ClickHouse、HTTP 等系统之间路由消息与数据，支持 CDC、批量写入、重试/死信/去重等中间件，并提供 Python/Node 绑定。面向需要在自有服务中做数据管道与集成的开发者；不写代码可用 mq-bridge-app 以 CLI 或 MCP 方式运行。",
+   "highlights": [
+    "支持 PostgreSQL/MySQL/MariaDB/SQLite 作为 SQL 源（游标轮询）或目标（insert/upsert），并提供 Postgres 逻辑复制 CDC（pgoutput）",
+    "支持 ClickHouse 批量插入与可续读读取",
+    "同一 Rust 引擎提供 Rust/Python/Node.js 绑定，内置重试、死信队列、去重、限流等中间件"
+   ],
+   "use_cases": [
+    "Postgres CDC 同步向量索引（RAG/语义搜索索引与源库保持一致）",
+    "基于 Postgres 与 Kafka 的事务性 outbox 模式",
+    "Kafka 到数据仓库/文件的 ETL 数据搬运"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object s ／ |**Change Data Capture (CDC)**: stream Postgres or MongoDB changes to Kafka, files, a warehouse, …|`postgres_cdc` (logical replication, `pgoutput`) · `postgres-cdc`; `mongodb` with `consume: capture_all` / `capture_new` (change streams) · `mongodb`|Postgres CD ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      27,
+      90,
+      91
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      91
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      91
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object s ／ |**ClickHouse** bulk insert and resumable reads|`clickhouse` endpoint · `clickhouse`|ClickHouse|",
+     "lines": [
+      27,
+      93
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+     "lines": [
+      91
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库与消息系统间的数据搬运提供连接器/管道能力的工具库，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`mq-bridge` is an asynchronous Rust library that moves messages and data between systems: Kafka, NATS, RabbitMQ, MQTT, MongoDB, PostgreSQL/MySQL/SQLite, Postgres CDC, ClickHouse, Redis Streams, HTTP, WebSocket, gRPC, ZeroMQ, AWS SQS/SNS, IBM MQ, cloud object storage, files, and in-memory channels. Every endpoint sits behind the same batch-shaped `receive_batch` / `send_batch` traits, so any source can feed any sink. ／ |**Change Data Capture (CDC)**: stream Postgres or MongoDB changes to Kafka, files, a warehouse, …|`postgres_cdc` (logical replication, `pgoutput`) · `postgres-cdc`; `mongodb` with `consume: capture_all` / `capture_new` (change streams) · `mongodb`|Postgres CDC tutorial · MongoDB| ／ |**SQL databases**: PostgreSQL, MySQL, MariaDB, SQLite as source (cursor polling) or sink (insert / upsert)|`sqlx` endpoint · `sqlx`|PostgreSQL / MySQL / SQLite · Upserts|",
+   "evidence_lines": [
+    27,
+    90,
+    91
+   ]
+  },
+  "fn": "marcomq/mq-bridge",
+  "sha": "6dae0d72c268",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "e5c59a65946d": {
+  "identity": {
+   "one_liner": "自托管的开源工时与考勤追踪应用，含 Solo/Team 双模式",
+   "review": "OpenClockwork 是一个自托管的开源工时与考勤追踪应用，为独立从业者和团队提供计时、排班、请假审批、QR/PIN 平板打卡终端及工时报告导出，使用 PostgreSQL 存储数据，基于 NestJS/React/PWA 技术栈，界面支持德语和英语，通过 Docker 部署；发票与代理计费功能在路线图中尚未实现，离线写入不被排队。",
+   "highlights": [
+    "提供 Solo（个人工时与客户项目）和 Team（员工考勤、排班、请假审批）两种模式，共享同一 PostgreSQL 实例和 PWA",
+    "支持 QR/PIN 平板打卡终端，含可选 GPS 地理围栏与 HR 认证审计链导出验证",
+    "提供 OpenAPI、Socket.IO 接口及 Docker 与 Azure 参考部署，界面支持德语/英语本地化"
+   ],
+   "use_cases": [
+    "个人从业者记录工时、组织客户项目并导出可计费工时表",
+    "团队管理员工上下班打卡、排班、假期申请与审批工作流",
+    "通过共用平板终端（QR/PIN）进行现场打卡考勤"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "terminals. Both use the same self-hosted PostgreSQL, API, and responsive PWA. ／ - **Self-hosted and API-first.** PostgreSQL, NestJS, React, OpenAPI, Socket.IO, ／ |Database|PostgreSQL with Prisma schema and forward-only migrations|",
+     "lines": [
+      15,
+      81,
+      190
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是一个使用 PostgreSQL 存储数据的自托管考勤应用，README 明确其技术栈为 PostgreSQL/NestJS/React。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "terminals. Both use the same self-hosted PostgreSQL, API, and responsive PWA. ／ - **Self-hosted and API-first.** PostgreSQL, NestJS, React, OpenAPI, Socket.IO, ／ |----------|------------------------------------------------------------------|",
+   "evidence_lines": [
+    15,
+    81,
+    186
+   ]
+  },
+  "fn": "patrickschiller/openclockwork",
+  "sha": "e5c59a65946d",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

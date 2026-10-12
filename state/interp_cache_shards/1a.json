@@ -8458,5 +8458,239 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b98d89901362": {
+  "identity": {
+   "one_liner": "校园心理支持多Agent平台，含风险识别与RAG检索",
+   "review": "面向校园心理支持场景的多Agent平台，提供学生端倾诉、心理知识RAG检索、风险识别（规则∪QLoRA）、辅导员工作台与工具审批闭环；默认SQLite零配置启动，可切换MySQL或PostgreSQL，支持FastMCP工具后端与三套Agent运行时；项目声明仅用于工程学习与系统展示，不提供医学诊断。",
+   "highlights": [
+    "提供五类Agent协作（Memory/Lead/RiskGuardian/Knowledge/Counselor/Companion），支持 autonomous/LangGraph/ordered 三种运行时",
+    "RAG 支持意图路由、BM25+向量多路召回、加权/RRF融合与 Cross-Encoder 精排",
+    "高风险工具调用以 ToolJob 队列执行，含审批、脱敏、审计、重试与 dead letter 机制"
+   ],
+   "use_cases": [
+    "校园心理支持/情绪陪伴对话演示与研究",
+    "多Agent协作与RAG评测的工程学习项目",
+    "带审计闭环的风险识别与干预流程展示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**切换到 MySQL**（本机或 Compose 提供的 MySQL 8.0），在 `.env` 中设置： ／ DATABASE_URL=mysql+pymysql://root:你的密码@localhost:3306/aegis?charset=utf8mb4 ／ 首次启动自动建库建表（`utf8mb4`）；已有 SQLite 数据可通过 `python -m scripts.migrate_sqlite_to_mysql` 一键迁移，原文件保留为备份。",
+     "lines": [
+      98,
+      101,
+      104
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> 默认使用 SQLite，**零外部依赖即可完成端到端演示**。 ／ 首次启动自动建库建表（`utf8mb4`）；已有 SQLite 数据可通过 `python -m scripts.migrate_sqlite_to_mysql` 一键迁移，原文件保留为备份。",
+     "lines": [
+      87,
+      104
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "> 注意：依赖中包含 PostgreSQL 驱动，但当前 Compose 拓扑**不启动** PostgreSQL 服务。 ／ |`DATABASE_URL`|默认 `sqlite:///data/aegis.sqlite`；可改为 MySQL 或自行部署的 PostgreSQL|",
+     "lines": [
+      114,
+      244
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 SQLite/MySQL 存储业务数据的心理支持应用，数据库仅作为其后端存储。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`Aegis Psych Agent` 是一个校园心理支持多 Agent 平台，围绕**学生端倾诉**、**心理知识检索**、**风险识别**、**辅导员工作台**和**高风险工具执行闭环**五个环节展开。 ／ > 默认使用 SQLite，**零外部依赖即可完成端到端演示**。 ／ DATABASE_URL=mysql+pymysql://root:你的密码@localhost:3306/aegis?charset=utf8mb4",
+   "evidence_lines": [
+    26,
+    87,
+    101
+   ]
+  },
+  "fn": "shangguanyunji663/Aegis-agent",
+  "sha": "b98d89901362",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8ee133e988ea": {
+  "identity": {
+   "one_liner": "Rust shim 库，拦截 Plex 的 SQLite 调用并转发到 PostgreSQL",
+   "review": "该项目通过 Rust 编写的 interpose shim 库拦截 Plex Media Server 对 SQLite 的调用并转交 PostgreSQL，无需修改 Plex 源码。面向希望让 Plex 库数据存于 PostgreSQL 的自托管用户，提供 macOS/Linux 原生安装与 Docker Compose 部署，附带 SQLite→PostgreSQL 迁移脚本和 doctor.sh 修复工具。README 列明的验证矩阵限于 PostgreSQL 15/18 与特定 Plex 镜像组合，浏览器播放和服务端转码仍未验证。",
+   "highlights": [
+    "通过 shim 库拦截 SQLite C ABI 调用并转发到 PostgreSQL，无需修改 Plex 源码",
+    "提供 SQLite→PostgreSQL 与反向迁移脚本及 doctor.sh 模式/数据检查修复工具",
+    "支持 macOS ARM64、Linux x86_64/ARM64 原生安装及多架构 Docker 部署"
+   ],
+   "use_cases": [
+    "将已有 Plex 媒体库从 SQLite 迁移到 PostgreSQL",
+    "在 Docker 中以 PostgreSQL 作为 Plex 库数据存储运行",
+    "大型或远程（rclone 等云存储）媒体库场景下减少写入锁"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A small shim library that catches Plex SQLite calls and sends them to PostgreSQL. You do not need to change Plex source code.",
+     "lines": [
+      7
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "**Run Plex Media Server with PostgreSQL instead of SQLite.**",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目为让 Plex 使用 PostgreSQL 提供拦截/迁移组件，是为数据库生态服务的工具而非仅使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A small shim library that catches Plex SQLite calls and sends them to PostgreSQL. You do not need to change Plex source code. ／ ./scripts/migrate_sqlite_to_pg.sh   # SQLite → PostgreSQL ／ **Available for:** macOS ARM64 • Linux x86_64 • Linux ARM64 • Docker (multi-arch)",
+   "evidence_lines": [
+    7,
+    126,
+    67
+   ]
+  },
+  "fn": "cgnl/plex-postgresql",
+  "sha": "8ee133e988ea",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9d4d2897d7ed": {
+  "identity": {
+   "one_liner": "本地优先的 AI 编码代理工作记忆系统，基于 SQLite 与本地嵌入",
+   "review": "MAMA 是一个运行在用户本机的工作代理，跟踪连接工具中的对话、文件与日程，保留工作记录及变更历史，并为 Claude Code、Codex 等 MCP 客户端提供开发记忆（决策与检查点）。数据以 SQLite 存于本地，嵌入在设备上计算，无需云端托管服务，适合希望 AI 代理保留长期工作上下文的个人用户。",
+   "highlights": [
+    "以 SQLite 在本机保存原始记录、工作历史、指引与报告，并提供本地搜索索引",
+    "通过 MCP server（@jungjaehoon/mama-server）与 Claude Code 插件向编码代理提供跨会话开发记忆",
+    "连接 Telegram、Discord、Slack、Notion、Trello、Google 系列等多种数据源，且不运行任何托管服务"
+   ],
+   "use_cases": [
+    "为 Claude Code / Codex 会话保留决策与检查点，实现跨会话记忆延续",
+    "通过 Telegram 等消息应用查询工作状态并接收定时报告",
+    "将聊天、日历、笔记等来源的工作记录统一沉淀为可追溯历史"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The record SQLite on your machine: originals · work history · guidance · reports · run logs · local search index",
+     "lines": [
+      87
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明记录以 SQLite 存于本机，SQLite 是其存储组件而非其服务的数据库生态对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "MAMA is a **work agent that runs on your own computer**. It follows the conversations, files and ／ The record         SQLite on your machine: originals · work history · guidance · reports · run logs · local search index ／ MCP server `{\"mcpServers\":{\"mama\":{\"command\":\"npx\",\"args\":[\"@jungjaehoon/mama-server\"]}}}`.",
+   "evidence_lines": [
+    11,
+    87,
+    79
+   ]
+  },
+  "fn": "jungjaehoon-lifegamez/MAMA",
+  "sha": "9d4d2897d7ed",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

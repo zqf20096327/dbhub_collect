@@ -9685,5 +9685,75 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "7cdb99850ecf": {
+  "identity": {
+   "one_liner": "本地 MCP 记忆服务器，用 SQLite/FTS5 索引 Markdown 知识库并返回带引用的答案",
+   "review": "mnemos 是一个面向 AI 代理（主要为 Claude Code）的本地记忆服务器：单个 cgo-free Go 二进制内嵌 MCP 服务器、索引管道、SQLite 存储与全文检索，将项目里的 Markdown、ADR、源码等索引后通过 MCP 供客户端搜索、读取并给出带 file#section 与行号的引用答案。默认仅词法检索，语义/混合检索需另编译构建并下载嵌入模型；add 命令是快照式拷贝，不自动跟踪原文件变更。",
+   "highlights": [
+    "单个自包含 cgo-free Go 二进制，内嵌 MCP 服务器、SQLite/FTS5 索引、增量文件监视器与管理 CLI",
+    "每个检索结果附带精确的 file#section 与行号引用，支持只读 origin 注册与写入路径限制、入库密钥扫描",
+    "可选 --semantic 构建提供本地语义/混合检索，mnemos eval 可输出 Hit@1/Recall/MRR 指标"
+   ],
+   "use_cases": [
+    "为 Claude Code 等 MCP 客户端提供项目文档、ADR 与笔记的本地可引用检索记忆",
+    "将任意 Markdown 目录快照或原地注册为知识库并增量重建索引",
+    "用 mnemos eval 衡量检索器在自有知识库上的召回质量"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Fast search by default**: SQLite FTS5 / bm25 out of the box; optional local semantic + hybrid search behind a build tag. ／ your files → mnemos index (SQLite/FTS5) → Claude Code memory → cited answers ／ Under the hood, the binary embeds an MCP server, an indexing pipeline, a SQLite",
+     "lines": [
+      111,
+      118,
+      129
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明 SQLite 是 mnemos 内部嵌入的索引存储（under the hood embeds a SQLite store），项目本身是为 AI 代理服务而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "No vector database. No Ollama. No Python or Node service. Just one cgo-free Go binary ／ Under the hood, the binary embeds an MCP server, an indexing pipeline, a SQLite ／ - **Fast search by default**: SQLite FTS5 / bm25 out of the box; optional local semantic + hybrid search behind a build tag.",
+   "evidence_lines": [
+    29,
+    129,
+    111
+   ]
+  },
+  "fn": "arhuman/mnemos",
+  "sha": "7cdb99850ecf",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

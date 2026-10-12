@@ -8028,5 +8028,224 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "470e3557abbd": {
+  "identity": {
+   "one_liner": "自托管波斯语 CMS，Laravel 后端 + Next.js 前端",
+   "review": "Pishdad 是一个 MIT 许可的自托管内容管理系统，后端基于 Laravel（PHP ≥8.3），前端为 Next.js，内置可视化区块编辑器、插件运行时、主题安装、SEO 工具与波斯语/RTL/Jalali 支持。数据存储依赖 PostgreSQL ≥18、Redis 与 MinIO。安装通过 npx pishdad install、手动部署或 Docker 三种方式完成。适合需要波斯语站点并把数据保存在自有服务器上的用户。",
+   "highlights": [
+    "提供可视化区块编辑器、插件运行时与可在面板内安装的主题",
+    "插件包经 Ed25519 签名验证、清单规范化与凭据扫描后才执行，权限按 plugin:{slug} 命名空间隔离",
+    "内置 sitemap.xml、robots.txt、llms.txt 与站内搜索端点，支持全 RTL 与 Jalali 日期"
+   ],
+   "use_cases": [
+    "搭建需要波斯语界面与 RTL 排版的自托管内容站点",
+    "在自有服务器上运行带插件与主题扩展机制的 CMS",
+    "需要 AI 爬虫可读描述（llms.txt）与 OpenAPI 接口的网站项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Data|PostgreSQL `≥18` (ICU `fa-IR` collation) · Redis `≥8` · MinIO (S3-compatible)| ／ |**B. Manual, per OS**|PHP 8.3, Composer, Node 22, PostgreSQL|full control, command by command|",
+     "lines": [
+      101,
+      197
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|PostgreSQL|14+ — MySQL/MariaDB do **not** work (`jsonb` migrations)|",
+     "lines": [
+      328
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "|PostgreSQL|14+ — MySQL/MariaDB do **not** work (`jsonb` migrations)|",
+     "lines": [
+      328
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是一个使用 PostgreSQL、Redis、MinIO 存储数据的内容管理系统，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 许可，无高级版、无席位限制、无遥测",
+   "install": [
+    "npm",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A self-hosted Laravel CMS with a Next.js frontend, running on a server you control. ／ |Data|PostgreSQL `≥18` (ICU `fa-IR` collation) · Redis `≥8` · MinIO (S3-compatible)| ／ |**A. One command**|only **Node.js 18+**|prerequisites checked *and offered*, code + dependencies installed, web installer opened|",
+   "evidence_lines": [
+    6,
+    101,
+    196
+   ]
+  },
+  "fn": "ArmanOskouei/Pishdad",
+  "sha": "470e3557abbd",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c67364855181": {
+  "identity": {
+   "one_liner": "Rails 环境下不重启进程热替换 SQLite 数据库的 Gem 工具",
+   "review": "Hotswap 是一个 Ruby Gem，通过 Unix socket 与 Rack 中间件配合，在 Rails 服务器运行期间原子替换 SQLite 数据库文件：替换前执行完整性检查与 schema 检查，交换时短暂排队请求。它基于 SQLite backup API 提供运行中快照能力，支持从 database.yml 自动发现多数据库。适用于在生产或部署环境（如 SSH、Fly.io）中更换或备份 SQLite 数据的 Rails 开发与运维人员。",
+   "highlights": [
+    "通过 Unix socket 与互斥锁中间件实现运行中数据库文件的原子替换，交换前执行完整性与 schema 兼容性检查",
+    "基于 SQLite backup API 提供在线快照，WAL 模式下无需停止写入",
+    "Railtie 自动配置，支持从 database.yml 发现多 SQLite 数据库"
+   ],
+   "use_cases": [
+    "部署时向运行中的 Rails 应用推送新版 SQLite 数据库文件",
+    "在服务不间断的情况下导出运行中数据库的一致性快照",
+    "通过 SSH 或 Fly.io 远程推送/拉取数据库文件"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Hot-swap a SQLite database on a running Rails server without restarting the process. Requests queue briefly during the swap, then resume on the new database. ／ Pull uses SQLite's backup API for WAL-safe consistent snapshots — no need to stop writes. ／ - Discovers all SQLite databases from `database.yml` (multi-database supported)",
+     "lines": [
+      3,
+      16,
+      29
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 Rails 应用中 SQLite 数据库的替换与快照提供专用工具，本身不存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Hot-swap a SQLite database on a running Rails server without restarting the process. Requests queue briefly during the swap, then resume on the new database. ／ Hotswap communicates over a Unix socket (`tmp/sockets/hotswap.sock`). A Rack middleware wraps every request in a mutex. During a swap, the CLI acquires the same mutex — requests queue for microseconds while the database file is atomically renamed, then resume on the new database. ／ - Discovers all SQLite databases from `database.yml` (multi-database supported)",
+   "evidence_lines": [
+    3,
+    7,
+    29
+   ]
+  },
+  "fn": "rubymonolith/hotswap",
+  "sha": "c67364855181",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bb66e079f891": {
+  "identity": {
+   "one_liner": "Transport Fever 3 第二屏实时仪表盘，mod 导出数据+本地程序解析入库",
+   "review": "由一个 Lua 游戏模组和一个 Windows 配套程序组成：模组定期把游戏状态快照写入文件，collector.py 将其解析存入本地 SQLite 数据库，server.py 在浏览器中提供仪表盘页面，显示资金、线路、车辆、地图等，并可通过文件通道反向控制游戏。面向 Transport Fever 3 玩家，仅用 Python 标准库，全部数据留在本机。",
+   "highlights": [
+    "提供实时运营仪表盘：车队、线路、地图、财务、历史曲线等视图",
+    "collector.py 将游戏快照写入本地 SQLite 数据库，server.py 在 127.0.0.1:8765 提供页面",
+    "支持通过本地文件通道（cmd.lua）对游戏进行速度、镜头、车辆等控制"
+   ],
+   "use_cases": [
+    "在第二台显示器上监控 Transport Fever 3 公司运营状态",
+    "查看存档的历史数据、财务账目和地图地形",
+    "在游戏全屏时通过仪表盘远程控制游戏"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Companion program (this repo)**|Your PC, Windows|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Python 3.12 st ／ (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it. ／ collector/ collector.py (tf3dash_live.lua + tf3dash_slow_*.lua -> SQLite), luatable.py (Lua parser), tf3paths.py (folder detection), schema.sql",
+     "lines": [
+      36,
+      48,
+      174
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 明确说明配套程序将游戏历史存储在本地 SQLite 数据库中，SQLite 仅作为其数据存储使用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**Mod `Second Screen Dashboard`**|mod.io (in-game Mod Hub) or `mod/` in this repo|A Lua game script that writes a snapshot of the game state to `<userdata>/dashboard_export/live.lua` every few seconds, and (if you enable it) executes commands written to `cmd.lua`. Uses only the official TF3 scripting API. Never modifies the savegame.| ／ |**Companion program (this repo)**|Your PC, Windows|`collector.py` watches `tf3dash_live.lua` / `tf3dash_slow_*.lua` and stores the history in a local SQLite database; `server.py` serves the dashboard at `http://127.0.0.1:8765/` in your browser. Python 3.12 standard library only — the release zip ships a bundled Python, nothing to install.| ／  (OneDrive Desktop/Documents, Dropbox...): the history is a SQLite database and sync clients lock or duplicate it.",
+   "evidence_lines": [
+    35,
+    36,
+    48
+   ]
+  },
+  "fn": "M1r077/tf3-dashboard",
+  "sha": "bb66e079f891",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

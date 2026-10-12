@@ -9245,5 +9245,240 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1d4e2ec7c59a": {
+  "identity": {
+   "one_liner": "专为 PostgreSQL 设计的 Node.js 数据库迁移工具",
+   "review": "node-pg-migrate 是一个仅面向 PostgreSQL 的 Node.js 数据库迁移管理工具，开发者用 JS 编写 up/down 迁移文件，通过 npm script 与 DATABASE_URL 环境变量执行迁移，可基于操作栈自动推断部分 down 迁移，并直接透传值生成 SQL。要求 Node.js 22.12+ 与 PostgreSQL 14+，另经 CockroachDB 测试。",
+   "highlights": [
+    "提供迁移文件生成与 up/down 迁移执行命令，可自动推断部分 down 迁移",
+    "迁移操作以操作栈形式生成 SQL，用户值可直接透传，也支持原生 SQL",
+    "通过 npm 安装，依赖 pg 库连接数据库"
+   ],
+   "use_cases": [
+    "Node.js 项目中对 PostgreSQL 进行 schema 版本化管理",
+    "需要以代码形式编写并执行建表、加列等结构变更的团队",
+    "使用 CockroachDB 并需运行迁移的环境（已通过测试）"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Node.js database migration management built exclusively for postgres. (Also tested with CockroachDB.) ／ - PostgreSQL 14 or higher (lower versions may work but are not supported officially)",
+     "lines": [
+      12,
+      34
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供数据库迁移功能的工具，而非使用数据库存储数据的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Node.js database migration management built exclusively for postgres. (Also tested with CockroachDB.) ／ npm add --save-dev node-pg-migrate",
+   "evidence_lines": [
+    12,
+    45
+   ]
+  },
+  "fn": "salsita/node-pg-migrate",
+  "sha": "1d4e2ec7c59a",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "210d301ccce9": {
+  "identity": {
+   "one_liner": "Rust ORM，提供字段级关系声明与流式查询构建器",
+   "review": "TideORM 是一个面向 Rust 开发者的 ORM 库，通过属性宏声明模型、在模型字段上定义 HasOne/HasMany 等关系，并提供流式查询构建、预加载、迁移与自动 schema 同步等能力。支持 PostgreSQL、MySQL、MariaDB 和 SQLite 后端，依赖 SeaORM 与 SQLx，需 Rust 1.94。适合用 Rust 编写数据库应用的开发者。",
+   "highlights": [
+    "在模型字段上直接声明关系并提供预加载以避免 N+1 查询",
+    "提供流式查询构建器，支持 join、union、CTE 和窗口函数",
+    "包含迁移、事务、软删除、分块读取与可选的模型级字段加密"
+   ],
+   "use_cases": [
+    "Rust 后端应用的关系型数据库访问层开发",
+    "需要预加载关联和批量插入的数据密集型服务",
+    "开发阶段自动 schema 同步与迁移管理"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Multi-Database** - PostgreSQL, MySQL, and SQLite support ／ |`postgres`|PostgreSQL support (default)|",
+     "lines": [
+      20,
+      105
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Multi-Database** - PostgreSQL, MySQL, and SQLite support ／ |`mysql`|MySQL/MariaDB support|",
+     "lines": [
+      20,
+      106
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Multi-Database** - PostgreSQL, MySQL, and SQLite support ／ |`sqlite`|SQLite support|",
+     "lines": [
+      20,
+      107
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|`mysql`|MySQL/MariaDB support|",
+     "lines": [
+      106
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为应用开发者提供访问 PostgreSQL、MySQL、SQLite 等数据库的 ORM 库，属于数据库生态的驱动/访问层组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A Rust ORM with field-declared relations and a fluent query builder. ／ - **Multi-Database** - PostgreSQL, MySQL, and SQLite support ／ |`postgres`|PostgreSQL support (default)|",
+   "evidence_lines": [
+    3,
+    20,
+    105
+   ]
+  },
+  "fn": "mohamadzoh/tideorm",
+  "sha": "210d301ccce9",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "69eebf4f40db": {
+  "identity": {
+   "one_liner": "自托管竞品内容监控工具，巡检 sitemap 生成内容 Feed",
+   "review": "一个开源自托管的竞品内容监控应用：定期抓取对手站点的 sitemap，对比找出新发布文章，排成内容 Feed，并借助嵌入接口计算与你博客文章的相似度、调用大模型生成写作思路，还可从 DataForSEO 拉关键词数据。面向独立站长与内容运营者。技术栈为 FastAPI + Jinja2 + SQLite（经 SQLModel），进程内 APScheduler 定时巡检，仅支持单 worker 运行；自带 MCP 服务供 AI 客户端只读查询。",
+   "highlights": [
+    "提供内容 Feed、相似文章、写作思路、关键词数据与 30 天趋势解读等功能",
+    "内置 MCP 服务（/mcp），以只读工具向 Claude Code、Cursor 等 AI 客户端开放数据",
+    "单 Docker 容器加一个 SQLite 文件即可部署，不依赖外部服务，巡检遵守 robots.txt 并限速"
+   ],
+   "use_cases": [
+    "监控竞品网站新发布的文章并整理成待写选题收件箱",
+    "对比自己博客与对手文章的相似度，发现未覆盖话题",
+    "通过 MCP 在 AI 客户端中查询竞品更新与内容策略"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- 🐳 **好部署**：一个 Docker 容器加一个 SQLite 文件，不依赖任何外部服务；没有前端构建步骤。 ／ |`FC_DB_URL`|`sqlite:///./data/app.db`|数据库位置| ／ 技术栈：**FastAPI** + 服务端渲染的 **Jinja2** 模板 + 原生 JS（没有前端构建），**SQLite**（经 SQLModel），进程内的 **APScheduler** 定时任务。",
+     "lines": [
+      33,
+      137,
+      163
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其用 SQLite 经 SQLModel 存储自身站点、竞品与文章数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "一个开源、可自行部署的竞品内容监控工具。填入对手的 `sitemap.xml`，它每月巡检一次， ／ - 🐳 **好部署**：一个 Docker 容器加一个 SQLite 文件，不依赖任何外部服务；没有前端构建步骤。 ／ 技术栈：**FastAPI** + 服务端渲染的 **Jinja2** 模板 + 原生 JS（没有前端构建），**SQLite**（经 SQLModel），进程内的 **APScheduler** 定时任务。",
+   "evidence_lines": [
+    10,
+    33,
+    163
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "tod-zhang/fuck-competitors",
+  "sha": "69eebf4f40db",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

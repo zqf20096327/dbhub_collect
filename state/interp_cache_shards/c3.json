@@ -9009,5 +9009,209 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "fa7b0097c825": {
+  "identity": {
+   "one_liner": "以 SQLite 为数据库开箱即用的 WordPress Docker 镜像",
+   "review": "该项目将 WordPress 与 sqlite-database-integration 插件打包进 Docker 镜像，使站点用 SQLite 替代 MySQL 存储数据，开箱即用。附带的 mu-plugins 提供 SQLite 运行状态诊断页、SELECT id 大小写修正，以及可选的页面性能显示与 SMTP 邮件集成，并支持环境变量覆盖配置。适合想在单容器中运行 SQLite 版 WordPress、或无需独立数据库服务即可部署的用户；README 明确说明它不是 MySQL/MariaDB 迁移工具。",
+   "highlights": [
+    "镜像捆绑 WordPress 与 sqlite-database-integration 插件，以 SQLite 存储数据，开箱即用",
+    "附带 SQLite 诊断 mu-plugin，可查看解析路径、PRAGMA 值及数据库文件/WAL/SHM 存储分布",
+    "包含 SMTP 邮件发送与页面性能显示等可选插件，均支持环境变量配置"
+   ],
+   "use_cases": [
+    "以单容器方式运行 SQLite 版 WordPress 站点",
+    "排查 WordPress on SQLite 的运行状态与存储占用",
+    "无需第三方邮件插件即可为 WordPress 配置 SMTP 发信"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "- Ships the optional native `wp_mysql_parser` PHP extension for a faster MySQL lexer/parser path. ／ It works around a difference between MySQL and SQLite: MySQL echoes back the identifier casing written in the query (e.g. `SELECT P.id` yields the key `id`), while SQLite returns the real declared column name (e.g. `ID`) for an un-aliased column. That mismatch leaves `$item['id']` / `$row->id` empty in some code paths. The plugin conservatively restores the written casing for safe single-table `SELECT` results (`ARRAY_A` / `OBJECT`), leaving anything it cannot fully reason about untouched. ／ - WordPress farewell to MySQL: Docker SQLite WordPress",
+     "lines": [
+      14,
+      42,
+      54
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# Docker SQLite WordPress ／ WordPress with SQLite, ready to use out of the box. ／ The image bundles WordPress `7.1.0` on PHP 8.5/Apache and `sqlite-database-integration` `v3.1.0` together with its optional native Rust extension `wp_mysql_parser`. The extension is compiled and enabled on `amd64` and `arm64`; published 32-bit ARM variants use",
+     "lines": [
+      1,
+      3,
+      18
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "mention",
+     "quote": "use SQLite. It is **not** a MySQL or MariaDB migration tool. Pointing an existing ／ MariaDB may be more appropriate for workloads with sustained concurrent writes.",
+     "lines": [
+      223,
+      230
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该仓库是使用 SQLite 存储数据的 WordPress 应用镜像，非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "WordPress with SQLite, ready to use out of the box. ／ The image bundles WordPress `7.1.0` on PHP 8.5/Apache and `sqlite-database-integration` `v3.1.0` together with its optional native Rust extension `wp_mysql_parser`. The extension is compiled and enabled on `amd64` and `arm64`; published 32-bit ARM variants use the plugin's pure-PHP fallback. The SQLite driver detects the available implementation automatically (the upstream project reports roughly 4.8x faster lexing and 15.5x faster parsing for the native path).",
+   "evidence_lines": [
+    3,
+    18
+   ]
+  },
+  "fn": "soulteary/docker-sqlite-wordpress",
+  "sha": "fa7b0097c825",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "56d1ac005145": {
+  "identity": {
+   "one_liner": "基于 Astro/Preact 的 Markdown 微博客应用",
+   "review": "Leaves 是一个 Markdown 微博客 Web 应用，使用 Astro 与 Preact 构建，运行于 Cloudflare Workers，通过 Supabase 存储数据并使用 Google OAuth 登录。面向想自建轻量博客的用户，提供本地开发流程、Worker 部署方式及 npx 可用的 CLI 工具。",
+   "highlights": [
+    "使用 Supabase 作为存储后端，Google OAuth 实现登录",
+    "提供 CLI 包（npx @chibat/leaves），支持连接本地开发服务器",
+    "运行于 Cloudflare Workers，支持 npm run deploy 部署"
+   ],
+   "use_cases": [
+    "自托管 Markdown 微博客站点",
+    "基于 Cloudflare Workers + Supabase 的应用开发参考",
+    "个人社交/博客内容发布"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "README 表明该仓库是一个使用 Supabase 存储数据的微博客 Web 应用本身",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Leaves is a Markdown microblog built with Astro and Preact. The web application ／ runs on Cloudflare Workers and uses Supabase for storage and Google OAuth for",
+   "evidence_lines": [
+    5,
+    6
+   ]
+  },
+  "fn": "chibat/leaves",
+  "sha": "56d1ac005145",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "62929db6cac0": {
+  "identity": {
+   "one_liner": "Veri*Factu 开票组件：生成链式哈希发票记录并异步报送 AEAT",
+   "review": "lacre 是一个自托管的 REST API 服务，用于生成西班牙 Veri*Factu 法规所要求的发票记录，将记录用哈希链串联并异步分批报送至 AEAT。使用 Java/Spring Modulith 构建，以 PostgreSQL 持久化数据，提供运维控制台。适用于需要接入西班牙电子发票法规的税务义务人或开发者，但项目未经认证，生产使用需自行承担合规声明义务。",
+   "highlights": [
+    "生成符合 RD 1007/2023 与 Orden HAC/1177/2024 的 Veri*Factu 发票记录，并以哈希链串联",
+    "以异步批次与重试机制向 AEAT 报送，提供 Web 运维控制台与 OpenAPI 3.1 契约",
+    "通过 Docker Compose 一键部署，使用 Flyway 管理 PostgreSQL 数据库迁移"
+   ],
+   "use_cases": [
+    "为西班牙发票系统提供符合 Veri*Factu 模式的记录生成与 AEAT 报送服务",
+    "自托管场景下查询与校验义务人的发票哈希链完整性",
+    "作为开票系统与 AEAT 之间的中间报送组件集成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Java 25, Spring Boot 4.1, Spring Modulith 2.1, Spring Data JDBC, PostgreSQL 17 con Flyway. Thymeleaf, htmx y Spring Security para la consola de operación.",
+     "lines": [
+      71
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目使用 PostgreSQL 17 存储自身状态，是一个使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Componente de facturación Veri\\*Factu. Genera los registros de facturación que exige el Real ／ Java 25, Spring Boot 4.1, Spring Modulith 2.1, Spring Data JDBC, PostgreSQL 17 con Flyway. Thymeleaf, htmx y Spring Security para la consola de operación. ／ Solo hace falta Docker. La base de datos y la aplicación se levantan con `docker compose`.",
+   "evidence_lines": [
+    12,
+    71,
+    77
+   ]
+  },
+  "fn": "manuel-umu/lacre",
+  "sha": "62929db6cac0",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

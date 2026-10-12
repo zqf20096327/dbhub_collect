@@ -8513,5 +8513,231 @@
   "generated_at": "2026-10-11",
   "ver": 2,
   "prompt_ver": "3.3"
+ },
+ "2b95b9a05173": {
+  "identity": {
+   "one_liner": "可视化 PostgreSQL 查询计划选择的多维参数浏览器工具",
+   "review": "一个 Web 应用，用于在浏览器中可视化 PostgreSQL 查询计划随参数空间（如选择性、成本参数）变化的选择过程。默认使用 PGlite（PostgreSQL 的 WebAssembly 构建）完全在浏览器内运行，无需后端；也可通过 Node.js 代理连接真实 PostgreSQL 服务器。适合查询优化研究者与 DBA 分析计划切换行为；README 自述为研究原型，代理模式执行任意 SQL，建议只连一次性非生产数据库。",
+   "highlights": [
+    "支持一或二维参数空间（如谓词选择性、成本参数）遍历并可视化查询计划变化",
+    "提供计划指纹机制，自动分组并着色相似查询计划",
+    "默认基于 PGlite 在浏览器内运行，无需后端；可选通过 Node.js 代理连接真实 PostgreSQL 服务器"
+   ],
+   "use_cases": [
+    "观察参数或 random_page_cost 等计划器设置变化时 PostgreSQL 在表扫描与索引扫描之间的切换",
+    "分析含自连接等复杂查询时计划器在多种策略间的选择",
+    "自定义带占位符的 SQL 查询并批量生成计划可视化"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Explore and visualize how PostgreSQL chooses query plans for your SQL – all in your browser. ／ Plan Explorer is a web application for visualizing the different query plans that PostgreSQL generates for a particular query across multi-dimensional parameter spaces. ／ The tool allows users to explore how PostgreSQL's query planner chooses different execution plans based on query parameters and cost settings—that is, it shows when PostgreSQL selects a different plan due to changing parameters.",
+     "lines": [
+      8,
+      12,
+      14
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 明确该工具用于可视化 PostgreSQL 查询计划器生成的执行计划，是为 PostgreSQL 生态服务的分析工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Plan Explorer is a web application for visualizing the different query plans that PostgreSQL generates for a particular query across multi-dimensional parameter spaces. ／ The tool allows users to explore how PostgreSQL's query planner chooses different execution plans based on query parameters and cost settings—that is, it shows when PostgreSQL selects a different plan due to changing parameters. ／ - **No Backend Required (In-Browser Mode)**: All computation and visualization happen client-side. Uses PGlite, a WebAssembly build of PostgreSQL, to run queries and generate plans directly in your browser. This mode is fully standalone and requires no server or backend—everything runs locally in your browser.",
+   "evidence_lines": [
+    12,
+    14,
+    25
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "jnidzwetzki/planexplorer",
+  "sha": "2b95b9a05173",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b193b7cfc5a8": {
+  "identity": {
+   "one_liner": "本地优先的个人知识管理应用，聚合多源数据入 PostgreSQL 关系库",
+   "review": "一个 local-first 的个人知识管理系统，将 GitHub、Raindrop、Readwise 等外部数据源同步到 PostgreSQL 关系库，支持全文搜索与向量检索。基于 React 19、tRPC、Drizzle ORM 构建，通过 Rocicorp Zero 将数据复制到客户端实现本地读取。面向作者个人定制，README 明确表示对他人未必适用，且无认证机制，仅供自部署者参考。",
+   "highlights": [
+    "聚合 GitHub、Raindrop.io、Readwise、Lightroom 等外部数据源到关系数据库，提供 PostgreSQL 全文搜索与 OpenAI 向量嵌入检索",
+    "通过 Rocicorp zero-cache 基于 Postgres 逻辑复制将实体图同步到客户端，读取走本地 ZQL 查询",
+    "提供 rcr CLI 封装同一套 tRPC 过程，含 db-manager.sh 备份/恢复与迁移、种子数据管理"
+   ],
+   "use_cases": [
+    "个人书签、阅读高亮、代码仓库等数据的本地化聚合与关联检索",
+    "基于 Tailscale 网络的自托管私有知识库部署",
+    "通过 CLI 对个人数据做备份、检查与批量操作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A personal knowledge repository that aggregates data from multiple external sources into a searchable, relational database. Built with React 19, TanStack Router, tRPC, Drizzle ORM, and PostgreSQL, deployed on Bun server. ／ - **Backend**: tRPC + Drizzle ORM + PostgreSQL (search, list/opponent selection, and heavy mutations like create/delete/merge; also the full CLI surface) ／ **Note about database providers**: The app connects to a local PostgreSQL database. If you use a different provider, update `src/server/db/connections/postgres.ts` accordingly.",
+     "lines": [
+      3,
+      11,
+      62
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 PostgreSQL 存储数据的个人知识管理应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A personal knowledge repository that aggregates data from multiple external sources into a searchable, relational database. Built with React 19, TanStack Router, tRPC, Drizzle ORM, and PostgreSQL, deployed on Bun server. ／ **⚠️ Important Notice**: Red Cliff Record is still very much in progress and optimized for a single individual (the repository author) and his own idiosyncratic set of data sources, apps, and tools. It would probably be much less effective for anyone who doesn't use that exact set of tools. This is experimental software and could have breaking changes at any time—fork at your own risk! ／ - **Deployment/Hosting**: Bun server + local PostgreSQL on a Tailscale network",
+   "evidence_lines": [
+    3,
+    5,
+    13
+   ]
+  },
+  "fn": "Aias/red-cliff-record",
+  "sha": "b193b7cfc5a8",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "41a488d9db16": {
+  "identity": {
+   "one_liner": "免费云服务与数据库套餐的编目目录",
+   "review": "该仓库维护一份免费额度云服务清单，涵盖托管、数据库、存储、API 和开发工具等类目，每条记录免费额度与关键限制，并标注编辑复审日期。面向寻找免费套餐来构建和部署项目的开发者，本质是目录型站点，不含可安装组件。",
+   "highlights": [
+    "按类目组织免费服务清单，含数据库与缓存等 20 项服务",
+    "每条目记录免费额度、类型标签与关键限制",
+    "标注编辑复审日期并声明非价格保证"
+   ],
+   "use_cases": [
+    "查找数据库、托管等服务的免费套餐信息",
+    "对比不同云服务的免费额度与限制条件",
+    "为个人项目选择免费部署与存储方案"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "|Supabase Free|Ongoing free allowance|500 MB Postgres database/project; 2 active projects; 1 GB file storage|Free projects pause after one week of inactivity; restore/backups are limited.| ／ |Render Free Postgres|Temporary resource|1 GB database, one free instance/workspace|Database EXPIRES after 30 days; not suitable for durable production data.|",
+     "lines": [
+      57,
+      65
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "|Cloudflare Hyperdrive Free|Ongoing free allowance|100,000 database queries/day; up to 10 configured databases|Requires a separate PostgreSQL/MySQL origin and Workers; query quota resets at 00:00 UTC and excess queries fail; origin hosting may cost extra.|",
+     "lines": [
+      63
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|Oracle Cloud Always Free Compute|Ongoing free allowance|Eligible AMD and Arm Ampere A1 compute resources|Requires a valid payment card for identity verification; region capacity and inactivity policies apply.| ／ |Oracle Object Storage Always Free|Ongoing free allowance|Always Free object-storage allowance on eligible OCI accounts|Card verification required; quotas and capacity can vary by service and region.|",
+     "lines": [
+      53,
+      69
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "|Cloudflare Durable Objects Free|Ongoing free allowance|100,000 Durable Object requests/day; 13,000 GB-s compute/day; up to 5 GB SQLite-backed storage/account|Workers Free supports only SQLite-backed objects; operations fail when daily quotas are exceeded; Wor",
+     "lines": [
+      115
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "README 为免费服务目录，未表明自身是为数据库生态服务的工具或依赖某库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Build More, Spend Less.** A community-maintained directory of free hosting, cloud, databases, storage, serverless and developer services. ／ |Databases & caching|20|Browse| ／ **Plan labels:** Ongoing = no announced fixed end date (subject to provider changes); recurring credit = a small monthly credit, not unlimited free runtime; time-limited = trial or account offer; temporary resource = individual resource expires even if the account stays free.",
+   "evidence_lines": [
+    2,
+    18,
+    34
+   ]
+  },
+  "fn": "ePlus-DEV/free-tier-hub",
+  "sha": "41a488d9db16",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

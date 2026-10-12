@@ -9645,5 +9645,249 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "84957faa7255": {
+  "identity": {
+   "one_liner": "自托管多账户教材 RAG 学习助手，回答强制引用原文",
+   "review": "Book Learning 是一个可自托管的教材学习工作区：上传 Markdown/TXT/DOCX 教材后分块索引，问答、章节讲解、要点提炼与自测四种模式生成的每条回答都必须带可展开的原文引用（C/W 双轨校验，无证据即拒绝）。面向学生与自学者，单实例 Flask + SQLite 存储，支持批注阅读器、长对话自动压缩、可选联网补充（MCP/搜索 API）；部署时需保持 1 副本 1 worker，扩展需外置数据库。",
+   "highlights": [
+    "C/W 双引用校验：回答每条断言须锚定教材引用，缺失或伪造引用的答案整体拒绝",
+    "三通道检索（词法、FTS5、向量）等权 RRF 融合，无嵌入服务时降级为关键词检索",
+    "提供批注阅读器、长对话自动压缩、Anki 兼容 CSV 导出与只读分享链接"
+   ],
+   "use_cases": [
+    "个人或小组自托管教材学习与复习（含自测与跨书到期复习）",
+    "需要答案可溯源到原文的学习问答场景",
+    "基于自有文档构建带引用校验的 RAG 问答服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A single-instance Flask service (one Gunicorn worker); SQLite holds all state. The only external dependencies are model / embedding / search services — each optional, each degradable:",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 SQLite holds all state，该项目是使用 SQLite 存储全部状态的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Book Learning (「书内」, a.k.a. BOOKNOTE) is a self-hostable, multi-account textbook study workspace: upload Markdown / TXT / DOCX textbooks, switch between Q&A, chapter explanation, key-point outlining and self-testing, and get answers whose every claim carries an expandable citation back to the source text. It ships with an annotation reader, automatic long-conversation compaction, and an opt-in web-search supplement. All data is scoped by account and by book — one book per retrieval context, no cross-book leakage. ／ A single-instance Flask service (one Gunicorn worker); SQLite holds all state. The only external dependencies are model / embedding / search services — each optional, each degradable: ／ 3. Keep **1 replica, 1 Gunicorn worker** (SQLite + a single-instance index queue; externalize the database and job queue before scaling out).",
+   "evidence_lines": [
+    12,
+    18,
+    122
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "Zafer-Liu/book-learning",
+  "sha": "84957faa7255",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8f09db6c678b": {
+  "identity": {
+   "one_liner": "单文件极简 PHP 论坛程序，通过 PDO 支持 SQLite/MySQL/PostgreSQL",
+   "review": "一个用单个约100KB PHP 文件实现的论坛应用，提供版块、主题、回帖、收藏、后台管理与插件机制，通过 PDO 扩展连接 SQLite、MySQL 或 PostgreSQL 三种数据库，支持 Docker 与虚拟机部署，并提供跨引擎的数据库迁入功能。适合需要搭建社区站点并简化部署维护的用户使用。",
+   "highlights": [
+    "单 PHP 文件实现，无框架与 Composer 依赖，支持 PHP 8.1+",
+    "通过 pdo_sqlite / pdo_mysql / pdo_pgsql 支持 SQLite、MySQL、PostgreSQL，数据库结构与搜索跨引擎兼容",
+    "包含插件机制（Hook、路由、后台页面、在线安装更新）与数据库迁移功能"
+   ],
+   "use_cases": [
+    "搭建社区论坛站点",
+    "低成本或轻量部署场景（Docker / 虚拟机 / 面板部署）",
+    "基于 AI 辅助的论坛插件二次开发"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "一个极简 PHP 论坛。由一个仅100多KB大小的PHP文件构建。纯原生、无框架、无依赖，支持 SQLite、MySQL 和 PostgreSQL。适合社区站点、低成本部署和 AI 二次开发。 ／ - 支持 SQLite、MySQL 和 PostgreSQL，数据库结构和搜索能力保持跨引擎兼容 ／ |PostgreSQL|13 及以上|通过 `pdo_pgsql` 使用|",
+     "lines": [
+      3,
+      8,
+      25
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "一个极简 PHP 论坛。由一个仅100多KB大小的PHP文件构建。纯原生、无框架、无依赖，支持 SQLite、MySQL 和 PostgreSQL。适合社区站点、低成本部署和 AI 二次开发。 ／ - 支持 SQLite、MySQL 和 PostgreSQL，数据库结构和搜索能力保持跨引擎兼容 ／ |MySQL|8.0 及以上|通过 `pdo_mysql` 使用|",
+     "lines": [
+      3,
+      8,
+      24
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "一个极简 PHP 论坛。由一个仅100多KB大小的PHP文件构建。纯原生、无框架、无依赖，支持 SQLite、MySQL 和 PostgreSQL。适合社区站点、低成本部署和 AI 二次开发。 ／ - 支持 SQLite、MySQL 和 PostgreSQL，数据库结构和搜索能力保持跨引擎兼容 ／ |SQLite|SQLite 3|通过 `pdo_sqlite` 使用|",
+     "lines": [
+      3,
+      8,
+      23
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是使用数据库存储论坛数据的应用程序，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "一个极简 PHP 论坛。由一个仅100多KB大小的PHP文件构建。纯原生、无框架、无依赖，支持 SQLite、MySQL 和 PostgreSQL。适合社区站点、低成本部署和 AI 二次开发。 ／ - 包含首页、版块、主题、回帖、收藏、个人主页和后台管理等完整论坛功能 ／ 默认使用 `SQLite`。如需修改 `8080` 端口，或者启用 `MySQL`、`PostgreSQL`，请在启动前修改 `.env`。数据库容器会按 `.env` 中的 `DB_NAME`、`DB_USER`、`DB_PASSWORD` 初始化；网页安装时填写同样的数据库名、用户名和密码。",
+   "evidence_lines": [
+    3,
+    9,
+    64
+   ]
+  },
+  "fn": "bbs1git/bbs1org",
+  "sha": "8f09db6c678b",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "48384dc1f345": {
+  "identity": {
+   "one_liner": "从 XML 清单生成 DTO/Model/DAO 数据访问层代码的生成器",
+   "review": "SQL DAL Maker 以 XML 清单描述待生成的 DTO、Model 与 DAO，经生成器翻译为不含 PDO/JDBC/QtSql 直接调用的源代码，数据访问收敛到用户自有的 DataStore 接口；生成时通过 JDBC 读取数据库元数据做逆向解析，需数据库可达。以 Eclipse 与 IntelliJ 平台插件形式提供，面向 PHP、Java、C++、Python、Go 开发者。",
+   "highlights": [
+    "从 XML manifest 生成 DTO、Model、DAO 类源代码",
+    "支持 PHP、Java、C++、Python、Go 多语言目标",
+    "运行时通过 JDBC 读取表、视图及 SQL 结果集元数据以解析 manifest",
+    "以 Eclipse 与 IntelliJ Platform 插件分发"
+   ],
+   "use_cases": [
+    "为多语言项目生成数据访问层代码",
+    "schema 变更后重新生成并保留手工修正",
+    "逆向工程已有数据库生成 manifest 初稿"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Also, welcome to https://github.com/panedrone/go-sdm — a Golang-only CLI for Postgres, MySQL, and SQLite!",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "mention",
+     "quote": "Also, welcome to https://github.com/panedrone/go-sdm — a Golang-only CLI for Postgres, MySQL, and SQLite!",
+     "lines": [
+      30
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "Also, welcome to https://github.com/panedrone/go-sdm — a Golang-only CLI for Postgres, MySQL, and SQLite! ／ Android, SQLite3",
+     "lines": [
+      30,
+      83
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为生成数据库访问层代码的代码生成器，服务于数据库开发流程本身",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "SQL DAL Maker generates the data access layer — DTO, Model, and DAO classes — for PHP, Java, C++, Python, and Go. ／ translation: the generator reads live metadata over JDBC — tables, views, and the result sets of your own SQL — to ／ Implemented in Java as plug-ins for Eclipse IDE and",
+   "evidence_lines": [
+    5,
+    16,
+    22
+   ]
+  },
+  "fn": "panedrone/sqldalmaker",
+  "sha": "48384dc1f345",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

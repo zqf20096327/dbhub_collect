@@ -9578,5 +9578,221 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2e5700c4b978": {
+  "identity": {
+   "one_liner": "基于 Postgres 的智能体认知数据库，追踪工作、信念与发现",
+   "review": "这是一个面向 AI 智能体和人类的知识追踪应用，用 Postgres 存储三层核心表（inquiries、edges、change_log），通过 FastAPI 提供 HTTP API，并附带 Web UI 和 trax CLI 客户端。以有向边描述 Issue/Artifact/Belief 等节点间的关系，支持语义搜索嵌入和会话记录回放。适合需要集中记录智能体研究工作与证据链的团队使用。",
+   "highlights": [
+    "提供三类核心表与有向边模型，记录 Issue、Artifact、Belief、Experiment、Paper 等节点及其关系",
+    "内置 FastAPI HTTP 服务、Web UI 和 trax CLI，支持 API token 认证与本地单用户模式",
+    "提供 JSONL 图导出（trax export）和基于向量的语义搜索"
+   ],
+   "use_cases": [
+    "集中管理多个 AI 智能体的工作产物、信念与证据链",
+    "以图结构追踪研究任务与知识推导过程",
+    "通过控制台实时查看智能体会话并发送消息"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "by Postgres (real or PGlite). FastAPI on top.",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其核心表由 Postgres 承载，属于使用数据库存数据的应用而非服务数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "by Postgres (real or PGlite). FastAPI on top. ／ `types/` is the design contract. Every other module is a realization of",
+   "evidence_lines": [
+    28,
+    30
+   ]
+  },
+  "fn": "rekursiv-ai/trackinizer",
+  "sha": "2e5700c4b978",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "11a16cc7b229": {
+  "identity": {
+   "one_liner": "S3 存储编排层，将多个 S3 后端聚合为单一端点",
+   "review": "该项目在任意数量的 S3 兼容后端前提供一个统一 S3 端点，按配置的副本数在各后端间保存对象，支持读取故障转移、每后端字节/请求/流量配额、zstd 压缩与信封加密。面向 homelab 用户、自托管 MinIO 运营者及需要多云冗余的小团队，元数据存储可选用内嵌 SQLite 或 PostgreSQL 14+（多实例需 PostgreSQL 加 Redis 共享计数器）。",
+   "highlights": [
+    "支持跨多个 S3 兼容后端的对象副本复制与读取故障转移",
+    "提供每后端字节、请求、ingress/egress 配额及信封加密（AES-256-GCM）与 zstd 压缩",
+    "包含 Terraform provider、管理 API、Web 仪表盘与完整性校验（scrub）等运维工具"
+   ],
+   "use_cases": [
+    "将多个厂商免费额度聚合为可用存储空间",
+    "为本地 MinIO 实例添加自动云备份与多副本冗余",
+    "在不修改应用代码的情况下更换、增删存储后端"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Database.** Embedded SQLite with no external dependencies, single-node PostgreSQL, or many instances with Redis-backed shared counters so quotas hold across the fleet. ／ **Database:** SQLite is embedded - no external dependencies for single-instance use. PostgreSQL 14+ is also an option and is required for multi-instance deployments (`database.driver: postgres`); the schema migrates on boot.",
+     "lines": [
+      39,
+      88
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Database.** Embedded SQLite with no external dependencies, single-node PostgreSQL, or many instances with Redis-backed shared counters so quotas hold across the fleet. ／ Starts three MinIO backends via Docker Compose, embedded SQLite as the metadata store, and the orchestrator on `localhost:9000`. ／ **Database:** SQLite is embedded - no external dependencies for single-instance use. PostgreSQL 14+ is also an option and is required for multi-instance deployments (`database.driver: postgres`); the schema migrates on boot.",
+     "lines": [
+      39,
+      67,
+      88
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为存储后端提供编排代理层，使用 SQLite/PostgreSQL 作为自身元数据存储组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Most applications talk to one S3 backend, which ties them to that provider's uptime, pricing, and limits. s3-orchestrator puts a single S3 endpoint in front of any number of S3-compatible backends - OCI Object Storage, Backblaze B2, AWS S3, MinIO, Wasabi, Cloudflare R2, anything that speaks S3 - and presents them as one or more virtual buckets. It tracks where every object lives in its own database, which is what lets it enforce per-backend byte quotas, keep N copies across providers, fail reads over when one goes dark, and take a backend out of the fleet without downtime. ／ - **Replication.** Set a factor and every object lands on that many distinct backends. A background replicator makes the copies, or `write_path.parallel_copies` has the write claim its targets and upload to all of them at once, answering the client on the first copy committed - which spares the replicator a full GET of the object and the source backend's egress for every copy it would have made. Reads fail over to a surviving copy, a scrubber checks stored bytes against recorded hashes, and an over-replication worker trims the set when a recovered backend brings its copies back. ／ - **Database.** Embedded SQLite with no external dependencies, single-node PostgreSQL, or many instances with Redis-backed shared counters so quotas hold across the fleet.",
+   "evidence_lines": [
+    12,
+    34,
+    39
+   ]
+  },
+  "fn": "afreidah/s3-orchestrator",
+  "sha": "11a16cc7b229",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "43e55fc0bd36": {
+  "identity": {
+   "one_liner": "汽修车间预约与排班管理应用，使用 PostgreSQL 存储",
+   "review": "ARSM 是面向汽修团队的车间预约与运营管理应用，支持预约登记、认领工单、实时状态更新、报价 PDF 导出和按月报表。技术栈为 ASP.NET Core Web API 加 React 前端，EF Core 访问 PostgreSQL，通过 .NET Aspire 编排本地容器（含 PostgreSQL 和 RustFS 对象存储），安装依赖 Docker Desktop、.NET 10 SDK 和 Node.js。适合想自托管运行的汽修店开发者/团队使用。",
+   "highlights": [
+    "提供预约 intake、工单认领/取消认领流程与实时状态更新",
+    "提供报价（含配件/工时行、状态生命周期、PDF 导出）与按年月的公司业绩报表",
+    "通过 .NET Aspire AppHost 编排 PostgreSQL 与 RustFS 容器，并提供 Playwright/HTTP/SQL 三类测试套件"
+   ],
+   "use_cases": [
+    "汽修店管理每日维修排班与工单进度跟踪",
+    "生成带公司抬头的车辆维修报价单并导出 PDF",
+    "按月/年查看公司经营结果报表"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ |Database|PostgreSQL| ／ - `app/AutoService.AppHost`: Aspire orchestration (PostgreSQL + RustFS + ApiService + WebUI)",
+     "lines": [
+      8,
+      36,
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明这是一个使用 PostgreSQL 存储数据的汽修业务应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ARSM is a workshop scheduling and operations app for auto service teams. It helps mechanics and admins organize appointments, claim work, and track repair progress in one responsive dashboard. ／ |Database|PostgreSQL| ／ - `app/AutoService.AppHost`: Aspire orchestration (PostgreSQL + RustFS + ApiService + WebUI)",
+   "evidence_lines": [
+    12,
+    36,
+    43
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "hajdu-patrik/ARSM",
+  "sha": "43e55fc0bd36",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

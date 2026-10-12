@@ -9214,5 +9214,90 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a4d7fe237b50": {
+  "identity": {
+   "one_liner": "HTTP 反向代理缓存与时序数据库查询加速器",
+   "review": "Trickster 是 CNCF 沙箱项目，既是通用 HTTP 反向代理缓存，也作为仪表盘查询加速器，通过 Delta Proxy 只向后端时序库请求缺失数据点、按步对齐与 Fast Forward 机制减少重复查询，面向读多写重的仪表盘/TSDB 环境，支持 Docker、Helm、Kubernetes 部署和源码构建。",
+   "highlights": [
+    "提供 Delta Proxy 缓存，仅向 TSDB 请求增量数据点",
+    "支持 Kubernetes Ingress/Gateway Controller 及多种后端池自动发现",
+    "提供内存、文件系统、Redis、bbolt 等多种缓存层与 Prometheus 指标"
+   ],
+   "use_cases": [
+    "加速仪表盘对时序数据库的查询渲染",
+    "为 HTTP 应用与 REST API 提供反向代理缓存",
+    "在 Kubernetes 中作为 Ingress/Gateway 控制器运行"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse",
+     "lines": [
+      50
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "TimescaleDB / PostgreSQL",
+     "lines": [
+      57
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "MySQL",
+     "lines": [
+      61
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "作为时序数据库前置的查询加速代理/缓存组件，为数据库访问提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse",
+    "PostgreSQL",
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Trickster is an HTTP reverse proxy/cache for http applications and a dashboard query accelerator for time series databases. ／ Trickster dramatically improves dashboard chart rendering times for end users by eliminating redundant computations on the TSDBs it fronts. In short, Trickster makes read-heavy Dashboard/TSDB environments, as well as those with high-cardinality datasets, significantly more performant and scalable. ／ Trickster works with virtually any Dashboard application that makes queries to any of these TSDBs:",
+   "evidence_lines": [
+    11,
+    43,
+    47
+   ]
+  },
+  "fn": "trickstercache/trickster",
+  "sha": "a4d7fe237b50",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

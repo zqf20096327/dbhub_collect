@@ -8986,5 +8986,191 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "28c828e36035": {
+  "identity": {
+   "one_liner": "多版本魔兽私服模拟器框架，C++ 游戏服务端",
+   "review": "AscEmu 是从 ArcEmu 衍生的开源游戏服务端框架，在一个代码库中同时支持从 Classic 到 TWW 的多个游戏版本，并配套自研的世界数据库。面向希望参与框架开发与讨论的社区贡献者，README 明确声明仅用于教育目的，不提供开服用的服务器文件，安装指南位于 wiki。",
+   "highlights": [
+    "单一代码库支持多个游戏版本（Classic 至 TWW），含认证、Worldsocket、角色枚举与登录功能",
+    "配套维护多版本世界数据库",
+    "内置 Lua 脚本引擎（据仓库主题标签）"
+   ],
+   "use_cases": [
+    "参与开源游戏服务端框架的开发与学习",
+    "研究多版本服务端代码在同一仓库中的组织方式"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [],
+   "eco": "app",
+   "eco_why": "项目是使用数据库存取游戏数据的游戏服务端应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "AscEmu is derived from ArcEmu to keep up the Antrix-Ascent-Arcemu way of Framework. ／ AscEmu supports several versions as listed below. We achieved to handle different versions of the serverside code in one repo. The biggest advantage of that is that we always develop for all our supported versions without wasting time to merge features across all repos. ／ Beside our multiversion-core we developed our world database with this attitude. Compared to other projects we are still a small project but with one core and database we are able to work on different versions at the same time. Beside all that we are able to show the changes to the game side by side in our code and database.",
+   "evidence_lines": [
+    11,
+    22,
+    24
+   ]
+  },
+  "fn": "AscEmu/AscEmu",
+  "sha": "28c828e36035",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "36830ec49cac": {
+  "identity": {
+   "one_liner": "只读 PostgreSQL MCP 服务器，供 AI 助手读取目录/统计/执行计划",
+   "review": "pg_licht 是一个只读的 PostgreSQL MCP 服务器，让 AI 助手读取数据库的模式、统计、执行计划、锁、复制状态和 PgBouncer 池信息，全部来自系统目录而不返回表数据。每次调用运行在独立的 READ ONLY 事务中并带语句超时，支持单进程管理多连接与扇出查询。面向需要排查慢查询、锁等待、复制延迟等问题的数据库运维人员和 AI 助手场景。",
+   "highlights": [
+    "提供 76 个只读操作，覆盖 schema 探索、目录搜索、监控统计、诊断与查询计划、拓扑和连接池",
+    "所有调用在独立 READ ONLY 事务中执行并设置 statement_timeout，SQL 全部参数化",
+    "单进程服务多个数据库连接，支持对实例、复制组或标签内所有数据库的扇出查询"
+   ],
+   "use_cases": [
+    "通过 AI 助手排查慢查询、锁争用与死锁等运维诊断问题",
+    "检查复制延迟、复制槽状态与连接池（PgBouncer）运行状况",
+    "浏览数据库模式结构与角色权限，评估 schema 变更影响"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "A read-only PostgreSQL MCP (Model Context Protocol) server: it lets an AI assistant read a",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供只读目录查询与诊断能力的 MCP 服务器，属于数据库生态服务工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A read-only PostgreSQL MCP (Model Context Protocol) server: it lets an AI assistant read a ／ - Read-only is enforced, not promised: every call runs in its own `READ ONLY` transaction ／ 76 read-only operations, grouped as schema exploration, catalog search, cluster-wide",
+   "evidence_lines": [
+    3,
+    11,
+    187
+   ]
+  },
+  "fn": "sqlambda/pg_licht",
+  "sha": "36830ec49cac",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "71d5b783bae3": {
+  "identity": {
+   "one_liner": "面向盲人及视障用户的计算资讯网站",
+   "review": "这是一个为使用电脑的盲人与视障用户汇集信息的网站，内容涵盖盲用设备、操作系统、无障碍工具与网站等。项目使用 PHP 编写并通过 master 分支发布网站文件，数据库结构以 SQL dump 形式存放在 mysql-file 分支，nginx 配置文件存放在 nginx-conf 分支，供贡献者参与维护。",
+   "highlights": [
+    "为盲人及视障用户提供计算相关的资讯内容",
+    "网站以 PHP 重写版本作为主分支发布",
+    "提供数据库 SQL dump 与 nginx 配置文件的分支用于站点运行"
+   ],
+   "use_cases": [
+    "盲人/视障用户查找无障碍设备与软件信息",
+    "贡献者参与站点内容与代码维护",
+    "部署该资讯站点的自托管运行"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "mysql-file | contains an __sql dump__ of the database. I try to keep this up-to-date, but it doesn't always happen, so if you find something on the site that's not in the .sql file, please __let me know by opening an issue or via email__.",
+     "lines": [
+      24
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用数据库存数据的网站应用，mysql-file 分支存放其站点数据库的 SQL dump",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": " If you're a programmer, you're allready in the right place. Currently, the site uses the _master_ branch to get its files, as the php-rewrite is now complete. If I decide to rewrite in the future (and if that ever happens, it'll be __long__ in the future) this will change. ／ mysql-file | contains an __sql dump__ of the database. I try to keep this up-to-date, but it doesn't always happen, so if you find something on the site that's not in the .sql file, please __let me know by opening an issue or via email__. ／ nginx-conf | contains __most__ of the nginx configuration files used to run the site.",
+   "evidence_lines": [
+    17,
+    24,
+    25
+   ]
+  },
+  "fn": "blind-computing/blind-computing-archive",
+  "sha": "71d5b783bae3",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

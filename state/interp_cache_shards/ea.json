@@ -8787,5 +8787,106 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "53d277ff45f3": {
+  "identity": {
+   "one_liner": "Spring Boot 集成测试容器自动配置库，基于 Testcontainers",
+   "review": "该项目为 Spring Boot/Spring Cloud 服务提供一组 embedded-* 模块，把 Couchbase、Kafka、MySQL 等有状态服务在 Spring Cloud bootstrap 阶段自动启动并暴露连接属性，无需在测试中手动接线。面向使用 Spring Boot 做中型集成测试的开发者，需依赖 Docker 与 Testcontainers，测试中需引入 spring-cloud-starter-bootstrap。",
+   "highlights": [
+    "通过 classpath 添加 embedded-* 模块即可在 bootstrap 阶段自动启动容器并暴露 embedded.* 连接属性",
+    "提供并行启动、强制关闭、容器复用、挂载卷、Linux capabilities 等通用配置项"
+   ],
+   "use_cases": [
+    "Spring Boot 服务的构建期集成测试",
+    "在测试中自动拉起数据库、消息队列等有状态依赖服务"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "=== link:embedded-postgresql/README.adoc[embedded-postgresql]",
+     "lines": [
+      293
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "| empty list. `NET_ADMIN` is set for Aerospike, Couchbase, Elasticsearch, Kafka, Mariadb, Memsql, Minio, Mongodb, Mysql, Neo4j, Redis containers. ／ === link:embedded-mysql/README.adoc[embedded-mysql]",
+     "lines": [
+      253,
+      321
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "=== link:embedded-oracle-xe/README.adoc[embedded-oracle-xe]",
+     "lines": [
+      319
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "=== link:embedded-clickhouse/README.adoc[embedded-clickhouse]",
+     "lines": [
+      327
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "| empty list. `NET_ADMIN` is set for Aerospike, Couchbase, Elasticsearch, Kafka, Mariadb, Memsql, Minio, Mongodb, Mysql, Neo4j, Redis containers. ／ For example, for MariaDb:",
+     "lines": [
+      253,
+      262
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为数据库等有状态服务提供测试容器自动配置，是服务于数据库生态的测试工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Spring Boot auto-configurations might be handy. By adding a module to the classpath, you will get a stateful service, ／ This project sits on top of Testcontainers. Putting an `embedded-*` module on the test classpath ／ | empty list. `NET_ADMIN` is set for Aerospike, Couchbase, Elasticsearch, Kafka, Mariadb, Memsql, Minio, Mongodb, Mysql, Neo4j, Redis containers.",
+   "evidence_lines": [
+    8,
+    21,
+    253
+   ]
+  },
+  "fn": "PlaytikaOSS/testcontainers-spring-boot",
+  "sha": "53d277ff45f3",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

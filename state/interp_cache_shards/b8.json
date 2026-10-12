@@ -7722,5 +7722,83 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a775b5c836c6": {
+  "identity": {
+   "one_liner": "阿拉伯语在线一对一教育平台，Laravel+Next.js 实现",
+   "review": "面向 MENA 地区学生/家长与认证教师的在线家教平台，提供实时虚拟教室（Agora 视频+Netless 白板）、自动预约、钱包托管与收入分成。技术栈为 Next.js 15 前端 + Laravel 12 后端 + MySQL 8.0 账本 + Redis 队列缓存，使用 Docker 部署，适合自建在线教育/交易托管类业务。",
+   "highlights": [
+    "集成 Agora 实时音视频与 Netless 协作白板的虚拟教室，媒体流量浏览器直连云端",
+    "基于 MySQL 8.0 行级锁的 ACID 钱包账本与托管结算，含 80/20 收入分成",
+    "Redis 标签缓存与后台队列预生成 Agora 令牌，支持 OpenAI 客服与测验自动评分"
+   ],
+   "use_cases": [
+    "搭建面向阿语用户的一对一直播教学市场",
+    "需要钱包托管与自动分账的知识付费场景",
+    "含教师 KYC 审核与后台治理的教育运营平台"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "4. **ACID Financial Ledger & Escrow Economy**: MySQL 8.0 handles overdraft-proof wallet transactions and slot bookings with row-level locks (`lockForUpdate()`) and composite indexing (`idx_bookings_booked_by_status_date`), safely holding funds in escrow until  ／ |**3. Distributed State, Caching & Database Tier**|MySQL 8.0 (`taj_mysql`) & Redis 7 (`taj_redis`)|InnoDB ACID financial ledger with composite indexing (`idx_bookings_booked_by_status_date`) and pessimistic row locking (`lockForUpdate()`), paired with tagged R ／ |**Teacher Discovery Catalog**|Direct MySQL queries on each search|**Multi-tier Redis tagged cache** (`10m – 24h` TTL)|**🚀 ~85% reduction** in response time|",
+     "lines": [
+      46,
+      66,
+      84
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "The backend test suite uses **PHPUnit** via `php artisan test` with an in-memory **SQLite** database (configured in `phpunit.xml`) so no running MySQL server is required.",
+     "lines": [
+      427
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 MySQL 与 Redis 存储自身业务数据，是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "4. **ACID Financial Ledger & Escrow Economy**: MySQL 8.0 handles overdraft-proof wallet transactions and slot bookings with row-level locks (`lockForUpdate()`) and composite indexing (`idx_bookings_booked_by_status_date`), safely holding funds in escrow until lesson completion (80% teacher / 20% platform revenue split). ／ |**3. Distributed State, Caching & Database Tier**|MySQL 8.0 (`taj_mysql`) & Redis 7 (`taj_redis`)|InnoDB ACID financial ledger with composite indexing (`idx_bookings_booked_by_status_date`) and pessimistic row locking (`lockForUpdate()`), paired with tagged Redis caching (`Cache::tags()`), AOF disk persistence (`appendfsync everysec`), and eviction-proof financial queues via `volatile-lru`.|",
+   "evidence_lines": [
+    46,
+    66
+   ]
+  },
+  "fn": "Ammar-1993/Taj-Platform",
+  "sha": "a775b5c836c6",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

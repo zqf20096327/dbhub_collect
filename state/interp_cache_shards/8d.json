@@ -8851,5 +8851,81 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1c14102d326f": {
+  "identity": {
+   "one_liner": "AI Agent 记忆层，基于 MatrixOne 写时复制实现快照/分支/回滚",
+   "review": "Memoria 为 AI Agent 提供持久化记忆存储，为每次记忆变更提供快照、分支、合并与时间点回滚能力，底层依赖 MatrixOne 的写时复制存储引擎，并通过 MCP 供各类兼容 Agent 调用，支持本地嵌入模型与自托管部署。适用于需要跨会话保留偏好、事实与决策记录的 Agent 用户与开发者；自托管模式需要运行 MatrixOne 数据库。",
+   "highlights": [
+    "提供记忆的快照、零拷贝分支、合并与时间点回滚等版本控制操作",
+    "提供向量加全文的混合语义检索（memory_search）",
+    "自动检测矛盾记忆并隔离低置信度记忆，保留变更审计链"
+   ],
+   "use_cases": [
+    "为 AI Agent 提供跨会话的长期记忆存储与检索",
+    "对记忆变更需要审计、评审与回滚的合规场景",
+    "通过分支隔离进行记忆实验，验证后合并"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "You: \"Let's try switching from PostgreSQL to SQLite\"",
+     "lines": [
+      209
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "You: \"Let's try switching from PostgreSQL to SQLite\" ／ AI: → memory_branch(name=\"eval_sqlite\")",
+     "lines": [
+      209,
+      211
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "Memoria 是面向 AI Agent 的记忆服务应用，使用 MatrixOne 作为底层存储而非为数据库生态提供工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Memoria is a **persistent memory layer** for AI agents with Git-level version control. ／ Every memory change is tracked, auditable, and reversible — snapshots, branches, merges, and time-travel rollback, all powered by MatrixOne's native Copy-on-Write engine. ／ > Astra runs the agent. Memoria helps it remember across sessions. MatrixOne powers the data storage and search.",
+   "evidence_lines": [
+    24,
+    25,
+    29
+   ]
+  },
+  "fn": "matrixorigin/memoria",
+  "sha": "1c14102d326f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

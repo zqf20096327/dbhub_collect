@@ -8045,5 +8045,73 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9543637ead39": {
+  "identity": {
+   "one_liner": "带长期记忆与自我演化的 QQ AI 陪伴机器人",
+   "review": "LuckyTri 是一个基于 Node.js 的 AI 陪伴机器人，通过 OneBot 11 或 QQ 官方机器人接入 QQ，核心机制是以一个 SQLite 文件持久化记忆、关系与心境，使对话状态跨时间连续，并提供备份恢复与 Web 管理台。适合想在 QQ 群/私聊中运行长期陪伴角色的个人用户；需要自备 LLM API Key，且数据存储仅支持 SQLite。",
+   "highlights": [
+    "以单个 SQLite 文件存储记忆、关系与聊天数据，支持迁移、自动备份与 SHA-256 完整性校验（L66、L97）",
+    "支持 OneBot 11 反向 WebSocket 与 QQ 官方机器人两种接入方式，可在运行中切换（L94、L149）",
+    "提供插件机制，每个插件运行在受限进程中，启用时授予权限（L98、L224）"
+   ],
+   "use_cases": [
+    "在 QQ 群聊与私聊中运行具有跨会话记忆的 AI 陪伴角色",
+    "本地部署并自托管数据，通过 Web 工作室查看记录、调整天性与撤销变化",
+    "通过插件机制扩展通道、感官与行动能力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|存储|`server/storage/`|一个 SQLite 文件、迁移、备份|",
+     "lines": [
+      66
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其使用 SQLite 文件存储自身的记忆与数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|存储|`server/storage/`|一个 SQLite 文件、迁移、备份| ／ |通道|`server/channels/`|只管消息怎么来、怎么去。OneBot 11 与 QQ 官方机器人二选一，向核心交出同一种中性消息| ／ npm install -g luckytri",
+   "evidence_lines": [
+    66,
+    61,
+    105
+   ]
+  },
+  "fn": "TodayYueC/LuckyTri",
+  "sha": "9543637ead39",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

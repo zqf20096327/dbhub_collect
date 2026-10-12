@@ -9744,5 +9744,157 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8dbd02eeab96": {
+  "identity": {
+   "one_liner": "测试数据库快照/恢复工具，支持 diff 与日志查看",
+   "review": "Testate 是一个自托管的单二进制工具，用于对被测系统的数据库做数据级快照、一键恢复和逐单元格 diff，并提供日志读取与 API/MCP 访问，面向测试人员、CI 流水线和 AI 代理。README 提示只重置用户添加的数据库且存在使用限制，安装前需阅读限制说明。",
+   "highlights": [
+    "支持对数据库做 data-only 快照并通过一次点击或 API 调用恢复",
+    "支持两个状态之间或状态与实时数据之间的逐单元格 diff",
+    "提供 REST API 和带项目级 token 的 MCP 接入，供 CI 与 AI 代理调用"
+   ],
+   "use_cases": [
+    "CI 流水线中把测试数据库重置到种子基线",
+    "测试人员在破坏数据后秒级还原数据库状态",
+    "AI 代理通过 MCP 管理指定项目的数据库状态"
+   ]
+  },
+  "classification": {
+   "cat": "测试/质量",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Tabular|PostgreSQL, MySQL, MariaDB|snapshot, check out, diff, edit, import|",
+     "lines": [
+      69
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|Tabular|PostgreSQL, MySQL, MariaDB|snapshot, check out, diff, edit, import|",
+     "lines": [
+      69
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|Tabular|PostgreSQL, MySQL, MariaDB|snapshot, check out, diff, edit, import|",
+     "lines": [
+      69
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目直接连接并快照/恢复数据库，为测试流程服务，属于数据库生态工具而非仅使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT 单许可",
+   "install": [
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Testate: git for your test database. Testers, CI pipelines and AI agents drive Testate, which runs on the same test server as the system under test and snapshots or restores its databases ／ - **Take a state:** a data-only snapshot of every database in a project. ／ |Tabular|PostgreSQL, MySQL, MariaDB|snapshot, check out, diff, edit, import|",
+   "evidence_lines": [
+    1,
+    18,
+    69
+   ]
+  },
+  "fn": "PT-Perkasa-Pilar-Utama/testate",
+  "sha": "8dbd02eeab96",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c10594c60659": {
+  "identity": {
+   "one_liner": "AI 软件工厂：多代理流水线将工单规格转为经审查的 PR",
+   "review": "Spaces 是一个多代理软件开发流水线运行时，将 Jira/Linear/Confluence/GitHub 输入经 research、specify、plan、tasks、implement、review、verify、deliver 各阶段推进，在关键节点设人工审查门。面向工程负责人、独立开发者与小团队。数据（知识库、意图状态与变更记录）存储于 Postgres（含全文检索与 pgvector 向量索引），配合作业队列与看板 UI 运行。",
+   "highlights": [
+    "提供 AIDLC 风格的阶段化代理流水线，YAML DSL 声明阶段/角色/模型/重试，并在 specify、plan、tasks、implement、verify 后设人工审查门",
+    "组织知识库将 Confluence/Jira/Linear/GitHub 等内容分块存入 Postgres（全文检索 + pgvector 向量索引）供各阶段检索",
+    "提供数据防护（Mask/Strict/Warn/Off），在数据送达模型前对机密与个人数据做令牌化掩码"
+   ],
+   "use_cases": [
+    "以代理流水线自动化功能的规格、计划、任务与测试等重复性开发步骤，同时保留人工审查",
+    "跨多项目运行具备项目记忆与可复用代理会话的 agentic 工作流",
+    "运行 AIDLC 式规格驱动交付的可运行实现，用于研究 agentic SDLC 模式"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "is chunked and indexed in Postgres (full-text plus pgvector embeddings); agents ／ Postgres, a job queue, and a project-board UI. ／ documents and every change are recorded in Postgres, with the files as the",
+     "lines": [
+      92,
+      144,
+      168
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目使用 Postgres 存储知识库分块索引、意图状态与变更记录，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "is chunked and indexed in Postgres (full-text plus pgvector embeddings); agents ／  Postgres, a job queue, and a project-board UI.",
+   "evidence_lines": [
+    92,
+    144
+   ]
+  },
+  "fn": "rayedbajwa/spaces",
+  "sha": "c10594c60659",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

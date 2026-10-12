@@ -8847,5 +8847,141 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1dae99337d2f": {
+  "identity": {
+   "one_liner": "NestJS 实现的 DDD+CQRS 分层 REST API 示例，含事务性 outbox",
+   "review": "该仓库是一个用 NestJS、TypeORM 和 MySQL 8.4 实现的账户/通知 REST API 示例，演示 DDD 四层架构、CQRS 命令/查询分离以及通过 SQS（本地用 LocalStack 模拟）发布事件的 transactional outbox 模式。供学习 NestJS+CQRS+DDD 架构的开发者参考运行；README 声明其作为稳定参考维护，不再活跃开发新功能。支持 npm、Docker、Docker Compose 与 Kubernetes 运行方式。",
+   "highlights": [
+    "实现领域/应用/接口/基础设施四层 DDD 分层与命令/查询分离的 CQRS 总线",
+    "提供事务性 outbox：聚合与事件在同一事务写入，经 OutboxPoller 发布到 SQS",
+    "提供 Swagger UI（/api）、Jest 单元测试与 CI 架构合规检查"
+   ],
+   "use_cases": [
+    "学习如何在 NestJS 中组织 DDD 分层与聚合/领域事件",
+    "参考基于 MySQL outbox 表与 SQS 的事件发布模式",
+    "作为可本地运行（LocalStack/Docker Compose/Kubernetes）的示例服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "SQS — all in one runnable REST API (TypeScript, MySQL, LocalStack). ／ |**Stack**|NestJS, TypeScript, TypeORM, MySQL 8.4, `@nestjs/cqrs`, AWS SQS / SNS / SES / Secrets Manager (LocalStack locally)| ／ This is a REST API built with Node.js, NestJS and MySQL in TypeScript.",
+     "lines": [
+      7,
+      22,
+      128
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明该 REST API 使用 MySQL 存储账户与 outbox 数据，示例应用本身而非数据库服务工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "maintenance",
+   "license_note": "",
+   "install": [
+    "npm",
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A worked example of layered DDD + CQRS in NestJS: domain / application / interface / infrastructure ／ This is a REST API built with Node.js, NestJS and MySQL in TypeScript. ／ Domain events are stored in an outbox table in the same transaction as the aggregate. `OutboxPoller` publishes pending",
+   "evidence_lines": [
+    5,
+    128,
+    133
+   ]
+  },
+  "fn": "kyhsa93/nestjs-rest-cqrs-example",
+  "sha": "1dae99337d2f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b1718c8d0ec1": {
+  "identity": {
+   "one_liner": "持续型 AI 人格代理，通过记忆衰减与上下文压缩实现长期记忆",
+   "review": "MIRA 是一个开源 AI 聊天代理项目，维护单一持久对话线程，将旧对话折叠为第一人称记忆，并通过使用驱动的衰减公式自动管理记忆生命周期。它内置语义检索、子皮层上下文准备、Peanut Gallery 元认知观察等模块，依托 PostgreSQL 持久化数据，面向想运行个人长期 AI 助手的用户，可自行扩展工具文件。",
+   "highlights": [
+    "支持将对话片段折叠为第一人称记忆摘要，并按访问、引用与时间相关性进行衰减管理",
+    "提供子皮层检索与 Peanut Gallery 元认知观察两个辅助上下文处理系统",
+    "工具从文件系统自动发现注册，支持通过 tools/ 目录按既有模式新增工具"
+   ],
+   "use_cases": [
+    "构建具有长期记忆的个人 AI 聊天助手",
+    "需要自动整理和衰减历史对话记忆的场景",
+    "基于自定义工具扩展 AI 代理能力"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "The loop works like this: After each conversation segment collapses, an assessment extractor compares the conversation against MIRA's behavioral contract. It records alignment, misalignment, and contextual passes with the specific evidence and prompt section i ／ Segment collapse and live context compaction are deliberately separate. Collapse is the durable end of a conversational segment. Live compaction is a pressure-release valve for a conversation that is still active: older messages are replaced in the provider re",
+     "lines": [
+      40,
+      83
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明对话信号积累在 Postgres 中，原始终历史存于 PostgreSQL，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Mira accomplishes the end goal of continuity and recall through a blend of asynchronous conversation processing akin to REM sleep and active self-directed context window manipulation. There is one conversation thread forever. There is no functionality to \"start a new chat.\" This constraint forces facing the hard questions of how to build believable persistence within a framework (forward pass transformers) that is inherently ephemeral. ／ The loop works like this: After each conversation segment collapses, an assessment extractor compares the conversation against MIRA's behavioral contract. It records alignment, misalignment, and contextual passes with the specific evidence and prompt section involved. These signals accumulate in Postgres.",
+   "evidence_lines": [
+    8,
+    40
+   ]
+  },
+  "fn": "taylorsatula/mira",
+  "sha": "b1718c8d0ec1",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

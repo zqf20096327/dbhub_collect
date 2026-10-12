@@ -8276,5 +8276,142 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2cbd3905129f": {
+  "identity": {
+   "one_liner": "自治代理身份管理系统，签发可验证凭证并管理委派链",
+   "review": "ZeroID 是一个用 Go 编写的代理身份基础设施服务，为 AI 代理签发短期凭证、记录 on-behalf-of 委派链、支持实时撤销，并实现 OAuth 2.1、RFC 8693 token exchange、DPoP、CIBA、WIMSE/SPIFFE 身份 URI 等标准。面向需要为代理建立可审计身份与委派权限的安全与合规团队，部署时通过 docker compose 启动 Postgres 作为后端存储。",
+   "highlights": [
+    "实现 OAuth 2.1 全量授权流程，含 RFC 8693 token exchange、RFC 9449 DPoP、RFC 7591 动态客户端注册与 CIBA 后信道批准",
+    "支持代理间委派链，每次委派自动收窄 scope 并跟踪深度，上游凭证撤销时级联撤销",
+    "为每个代理签发 WIMSE/SPIFFE 格式的全局唯一身份 URI，并写入 token 的 sub 声明"
+   ],
+   "use_cases": [
+    "为多代理工作流中的子代理签发受约束的委派凭证",
+    "对代理行为做可审计归因，回答哪个代理以谁的授权执行了操作",
+    "通过 CIBA 与 RAR 实现代理敏感操作的带外人工审批"
+   ]
+  },
+  "classification": {
+   "cat": "安全/审计",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "docker compose up -d # starts Postgres + ZeroID ／ docker compose up -d postgres",
+     "lines": [
+      170,
+      181
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 部署说明通过 docker compose 启动 Postgres 作为其后端存储，属于使用数据库的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "ZeroID is identity infrastructure for autonomous agents: a system that issues cryptographically verifiable credentials, enforces delegated authority through chains of agents, and revokes access in real time. Built on OAuth 2.1, WIMSE/SPIFFE, and RFC 8693, it implements the industry's emerging standards for agent identity before they become requirements. ／ - **DPoP Sender-Constrained Tokens** — RFC 9449. Clients may attach a `DPoP` proof JWT to any `/oauth2/token` call; the issued token then carries `cnf.jkt` and `token_type: \"DPoP\"`. Proof replay is blocked by an atomic `dpop_jti` upsert (DB primary key — no pre-check race). Resource servers retrieve `cnf` via introspection and validate the per-request proof themselves. Full reference: `docs/dpop-and-dcr.md`.",
+   "evidence_lines": [
+    41,
+    82
+   ]
+  },
+  "fn": "highflame-ai/zeroid",
+  "sha": "2cbd3905129f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "16bb3c726726": {
+  "identity": {
+   "one_liner": "GitHub 个人主页 README，展示开发者技能与项目",
+   "review": "这是 GitHub 用户 cheehwatang 的个人资料仓库，README 用于展示个人技能栈（Ruby、Java、TypeScript、Rails、React 等）、学习动态及 SoundState、Daily Quotes 等个人项目。PostgreSQL 与 SQLite 仅作为技术栈图标列在 My Toolbox 中，SoundState 项目标签也列有 PostgreSQL，但 README 未提供数据库相关的安装或使用说明。",
+   "highlights": [
+    "以图标墙形式展示个人技术栈，包含 PostgreSQL、SQLite 等条目",
+    "展示个人项目 SoundState（技术栈含 PostgreSQL）与 Github Readme Daily Quotes",
+    "集成多种社区统计组件，如贡献图、streak 统计、3D 贡献图"
+   ],
+   "use_cases": [
+    "开发者个人主页展示",
+    "求职/社交场景下的技能与项目介绍"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "PostgreSQL ／  PostgreSQL",
+     "lines": [
+      169,
+      300
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "SQLite",
+     "lines": [
+      176
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库为个人主页 README，PostgreSQL/SQLite 仅作为技术栈图标被列出，用于展示而非为数据库生态服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "## 🧰 My Toolbox ／ ## 💡 Projects ／  PostgreSQL",
+   "evidence_lines": [
+    54,
+    255,
+    300
+   ]
+  },
+  "fn": "cheehwatang/cheehwatang",
+  "sha": "16bb3c726726",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

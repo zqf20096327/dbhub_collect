@@ -7271,5 +7271,72 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b2c229464c5f": {
+  "identity": {
+   "one_liner": "Linux QQ 群聊 Agent，经 OneBot v11 协议接入并用 SQLite 持久化消息",
+   "review": "该项目是一个运行于 Linux 服务器、面向 QQ 群聊的聊天 Agent 程序，通过 OneBot v11 WebSocket 连接协议端收发消息，调用 OpenAI Chat Completions 兼容的模型服务生成回复，支持分条发言、表情包、语音转写、主动发言与运维命令。消息与状态存储于 SQLite 数据库，属于使用数据库存数据的应用，部署提供全栈安装器与仅 Agent 两种脚本方式。",
+   "highlights": [
+    "提供分条发言、表情包收发、长期记忆与持久化提醒等群聊交互能力",
+    "通过 OneBot v11 WebSocket 连接协议端，消息以 SQLite/WAL 状态机串行入库",
+    "提供 src/ops.js 运维工具与 manage.sh 服务管理命令，支持只读体检与数据备份"
+   ],
+   "use_cases": [
+    "在 Linux 服务器上自托管 QQ 群聊机器人",
+    "需要消息持久化与重启后补齐漏收消息的聊天 Agent 场景",
+    "基于 OneBot v11 协议端与 OpenAI 兼容模型服务搭建群聊自动化"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "-> SQLite/WAL 消息状态机 ／ - `messages.sqlite`：消息、租约与出站状态；",
+     "lines": [
+      79,
+      322
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明消息、租约与出站状态存储于 messages.sqlite，SQLite 仅作为该应用的存储层",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "  -> SQLite/WAL 消息状态机 ／ - `messages.sqlite`：消息、租约与出站状态；",
+   "evidence_lines": [
+    79,
+    322
+   ]
+  },
+  "fn": "sakurawwwxh/qq-agent-plus",
+  "sha": "b2c229464c5f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

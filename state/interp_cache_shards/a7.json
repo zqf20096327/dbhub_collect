@@ -7804,5 +7804,275 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "645b395b7a05": {
+  "identity": {
+   "one_liner": "支持多种 SQL 数据库的通用命令行客户端",
+   "review": "usql 是一个用 Go 编写的通用 SQL 数据库命令行界面，仿照 PostgreSQL 的 psql 提供。面向需要以统一方式操作多种数据库的数据库管理员和开发人员，支持变量、反斜杠命令、上下文补全、跨库复制等能力，通过 Go SQL 驱动适配大量数据库，构建时可按 build tag 选择包含的驱动。",
+   "highlights": [
+    "通过 Go SQL 驱动连接 SQL、NoSQL 及非关系型数据库，支持 PostgreSQL、MySQL、Oracle、SQLite3、SQL Server 等",
+    "提供 psql 风格的变量、反斜杠命令、上下文补全、跨数据库复制与终端图形功能",
+    "可通过 build tag（base/most/all）与 Docker、Homebrew、Go install 等多种方式安装运行"
+   ],
+   "use_cases": [
+    "在单一客户端中管理多种数据库（替代为每个库单独安装 CLI）",
+    "在数据库间执行数据复制/迁移操作",
+    "为习惯 psql 工作流的用户提供非 PostgreSQL 数据库的交互式终端"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`usql` is a universal command-line interface for PostgreSQL, MySQL, Oracle ／ [`base` drivers][databases] for PostgreSQL, MySQL, SQLite3, Microsoft SQL ／ |PostgreSQL|`postgres`|`pg`, `pgsql`, `postgresql`|[github.com/jackc/pgx/v5/stdlib][d-postgres]|",
+     "lines": [
+      9,
+      122,
+      188
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "`usql` is a universal command-line interface for PostgreSQL, MySQL, Oracle ／ [`base` drivers][databases] for PostgreSQL, MySQL, SQLite3, Microsoft SQL ／ |MySQL|`mysql`|`my`, `maria`, `aurora`, `mariadb`, `percona`|[github.com/go-sql-driver/mysql][d-mysql]|",
+     "lines": [
+      9,
+      122,
+      191
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "support",
+     "quote": "`usql` is a universal command-line interface for PostgreSQL, MySQL, Oracle ／ Server, Oracle, CSVQ will be included in the build: ／ |Oracle Database|`oracle`|`or`, `ora`, `oci`, `oci8`, `odpi`, `odpi-c`|[github.com/sijms/go-ora/v3][d-oracle]|",
+     "lines": [
+      9,
+      123,
+      193
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Database, SQLite3, Microsoft SQL Server, [and many other databases][databases] ／ [`base` drivers][databases] for PostgreSQL, MySQL, SQLite3, Microsoft SQL ／ |SQLite3|`sqlite3`|`sq`, `sqlite`, `file`|[github.com/mattn/go-sqlite3][d-sqlite3] [†][f-cgo] [§][f-embedded]|",
+     "lines": [
+      10,
+      122,
+      194
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Database, SQLite3, Microsoft SQL Server, [and many other databases][databases] ／ # build/install with base drivers (PostgreSQL, MySQL, SQLite3, Microsoft SQL Server, ／ |Microsoft SQL Server|`sqlserver`|`ms`, `mssql`, `azuresql`|[github.com/microsoft/go-mssqldb][d-sqlserver]|",
+     "lines": [
+      10,
+      126,
+      192
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|ClickHouse|`clickhouse`|`ch`|[github.com/xo/dbimp/clickhouse][d-clickhouse]|",
+     "lines": [
+      196
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|MySQL|`mysql`|`my`, `maria`, `aurora`, `mariadb`, `percona`|[github.com/go-sql-driver/mysql][d-mysql]|",
+     "lines": [
+      191
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|TiDB|`tidb`|`ti`|[github.com/go-sql-driver/mysql][d-tidb]|",
+     "lines": [
+      201
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为数据库提供命令行连接与操作能力的客户端工具，不依赖特定数据库存储业务数据",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "Oracle",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "`usql` is a universal command-line interface for PostgreSQL, MySQL, Oracle ／ `usql` works with [SQL and NoSQL databases][databases] from a command line ／ The following are the [Go SQL drivers][go-sql] that `usql` supports, the",
+   "evidence_lines": [
+    9,
+    13,
+    182
+   ]
+  },
+  "fn": "xo/usql",
+  "sha": "645b395b7a05",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f51751f25e8a": {
+  "identity": {
+   "one_liner": "基于 Haskell 与 SQLite 的 CLI 任务管理器",
+   "review": "TaskLite 是一个命令行任务管理工具，使用 Haskell 编写并以 SQLite 作为存储后端，面向偏好终端操作的任务管理用户。任务数据保存在本地 SQLite 数据库中，许可证为 AGPL-3.0 开源协议，文档以链接形式在 README 中提供。",
+   "highlights": [
+    "以 CLI 形式提供任务管理功能",
+    "使用 SQLite 存储任务数据",
+    "使用 Haskell 实现"
+   ],
+   "use_cases": [
+    "在终端中管理个人待办任务",
+    "以本地数据库文件形式保存任务记录"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "CLI task manager built with [Haskell] and [SQLite].",
+     "lines": [
+      5
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明其使用 SQLite 存数据，属于使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "CLI task manager built with [Haskell] and [SQLite]. ／ TaskLite is free and open source software, licensed under the AGPL-3.0.",
+   "evidence_lines": [
+    5,
+    18
+   ]
+  },
+  "fn": "ad-si/TaskLite",
+  "sha": "f51751f25e8a",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "df05218a5692": {
+  "identity": {
+   "one_liner": "本地优先的科学文献 RAG 工具包与 FastAPI 服务，SQLite 持久化",
+   "review": "Scholar RAG Agent 是一个本地优先的 Python 工具包与 FastAPI 服务，用于文献摄入、检索问答、证据冻结与运行历史回放，提供无脚本浏览器界面、JSON/Markdown/HTML 导出、BibTeX 输出和人工筛选标注流程。默认无需模型凭证即可运行（内置 fake adapter），适合需要在本地离线复现文献研究流程的研究者或开发者。",
+   "highlights": [
+    "提供 FastAPI 服务与无脚本浏览器界面，支持文献浏览、片段搜索与保存运行历史的离线读取",
+    "使用 SQLite 存储文档、图谱数据与运行事件，支持证据冻结、溯源校验（SHA-256、偏移量）与运行对比",
+    "支持人工筛选决策记录、答案评审、精确片段标注及 JSON/Markdown/CSV/HTML/BibTeX 导出"
+   ],
+   "use_cases": [
+    "本地文献语料的摄入、混合检索与对比/假设性问题研究",
+    "文献筛选、证据审阅与可复现的离线答案阅读及导出",
+    "检索策略对比与离线基准测试，用于发现检索回归"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "literature workflows, with SQLite persistence and optional model-provider adapters.",
+     "lines": [
+      10
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目使用 SQLite 存储文档、图谱数据与运行事件，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**local-first Python toolkit and FastAPI service** for building inspectable ／ literature workflows, with SQLite persistence and optional model-provider adapters. ／ The demo explicitly uses the fake model, ingests a synthetic fixture into a",
+   "evidence_lines": [
+    9,
+    10,
+    26
+   ]
+  },
+  "fn": "Francis1998/scholar-rag-agent",
+  "sha": "df05218a5692",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9420,5 +9420,71 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "446cb422c162": {
+  "identity": {
+   "one_liner": "ClickHouse 官方 Apache Flink 连接器，提供 Sink 写入",
+   "review": "该仓库是 ClickHouse 团队支持的官方 Apache Flink 连接器，提供 DataStream API 与 Table API/Flink SQL（仅 insert）两种接入方式，将 Flink 数据流以批量、可重试的方式写入 ClickHouse 表。连接器在规划阶段读取目标表真实列类型并校验 Flink schema，支持类型映射、部分列插入与客户端参数透传。适合需要在 Flink 流处理作业中向 ClickHouse 写入数据的 Java/Scala 开发者；SQL sink 要求 ClickHouse 服务器版本不低于 23.10，且不支持更新/删除类查询。",
+   "highlights": [
+    "支持 Flink DataStream API 与 Table API/Flink SQL（insert-only）两种接口",
+    "提供批量写入参数（行数/字节/间隔刷写）与重试、失败策略配置",
+    "在规划阶段读取 ClickHouse 表列类型并校验 Flink schema 与类型映射"
+   ],
+   "use_cases": [
+    "将 Flink 流处理结果批量写入 ClickHouse",
+    "通过 Flink SQL 的 INSERT INTO 向 ClickHouse 表追加数据",
+    "需要在写入前做 schema/类型校验的集成开发"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "ClickHouse Flink Connector ／ This is a repo of ClickHouse official Apache Flink Connector supported by the ClickHouse team.",
+     "lines": [
+      1,
+      8
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为 ClickHouse 官方 Apache Flink 连接器，为向 ClickHouse 写入数据提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": true,
+    "of": "ClickHouse"
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "This is a repo of ClickHouse official Apache Flink Connector supported by the ClickHouse team. ／ The connector supports two main Apache Flink APIs: ／ The connector registers itself as the `clickhouse` SQL connector: create a table with",
+   "evidence_lines": [
+    8,
+    9,
+    104
+   ]
+  },
+  "fn": "ClickHouse/flink-connector-clickhouse",
+  "sha": "446cb422c162",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

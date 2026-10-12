@@ -9025,5 +9025,144 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "398737d83e58": {
+  "identity": {
+   "one_liner": "Pi 编码代理的记忆扩展，提供可编辑持久记忆与 MCP",
+   "review": "pi-jarvis 是 Pi 编码代理的扩展，提供第二会话通道：共享持久记忆、可人工编辑的记忆编辑器、可搜索的历史归档（支持口令加密）、持久侧会话、空闲代理唤醒 watcher 和原生 MCP 工具。面向使用 Pi 编码代理的开发者；记忆检索无需 embeddings，watcher 默认关闭，归档默认明文存储。",
+   "highlights": [
+    "提供共享持久记忆与人工可编辑的记忆编辑器",
+    "支持可选索引会话归档、批量导入及口令加密",
+    "支持 watcher 条件（shell 谓词/文件行数/路径静默）唤醒空闲代理，等待期间不发起模型调用",
+    "支持本地工具与原生 MCP"
+   ],
+   "use_cases": [
+    "跨会话保存、检索并人工修正代理记忆与项目决策",
+    "让代理在等待文件变化或命令完成时挂起并在条件满足后被唤醒",
+    "搜索并批量导入既有 Pi 会话历史，按需加密归档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**Storage**|Local plaintext SQLite|Plaintext by default; optional password encryption for the archive database, index and SQLite journals| ／ Both work across main Pi and Jarvis, independently of **Repo tools** and whether the overlay is open. Each has its own local SQLite store and global/project controls. Turning one off does not turn the other off.",
+     "lines": [
+      195,
+      198
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "该扩展自身使用本地 SQLite 存储记忆与归档数据，而非为数据库生态提供工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**The payoff compounds across sessions.** Main Pi and Jarvis share saved preferences, corrections and project decisions—even if you never open the overlay. **Now you can open the curated memory editor, inspect the saved facts and correct them yourself.** Add the optional history archive to search recorded conversations and tool activity, import existing Pi chats after review, and optionally encrypt the active archive. ／ **Know the defaults:** shared memory is **on in trusted projects**, stored in **local plaintext**, and recalled facts can reach your active model. Watchers, the separate archive, archive encryption and three tool/bridge grants start **off**. Memory retrieval needs no embeddings or background model jobs. Privacy and controls. ／  Opt-in local tools + native MCP ·",
+   "evidence_lines": [
+    11,
+    17,
+    43
+   ]
+  },
+  "fn": "crustyhacker/pi-jarvis",
+  "sha": "398737d83e58",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3da60c18b411": {
+  "identity": {
+   "one_liner": "基于TiDB的航空材料性能与TIG焊风险决策支持系统",
+   "review": "一个面向航空领域的学术决策支持系统，用于材料批次登记、TIG焊接热输入计算、力学测试记录与性能/风险筛查，学生或工程教学场景可运行演示。采用Spring Boot后端、React前端，通过Flyway迁移加载数据，规则估计器仅做筛查而非训练模型，不具备适航认证用途。",
+   "highlights": [
+    "提供参考/实测/估算三类数据来源标注与数据溯源页面",
+    "支持TIG焊接参数记录与热输入自动计算、高风险告警确认",
+    "包含仪表盘图表、分析与CSV报告导出"
+   ],
+   "use_cases": [
+    "航空材料与焊接教学演示",
+    "基于公开参考数据的性能/风险筛查记录管理",
+    "学术项目对ISRO公开课题的响应实现"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "- physical material-batch registration in TiDB ／ Java 21 · Spring Boot · Spring Security · JWT · Flyway · TiDB · React 19 · Vite · Axios · Recharts ／ docker start aeroforge-tidb",
+     "lines": [
+      11,
+      23,
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README声明用TiDB登记材料批次数据，系统本身是使用数据库存数据的决策支持应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source",
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Aerospace material, TIG weld and property-risk decision support** ／ - physical material-batch registration in TiDB ／ Java 21 · Spring Boot · Spring Security · JWT · Flyway · TiDB · React 19 · Vite · Axios · Recharts",
+   "evidence_lines": [
+    3,
+    11,
+    23
+   ]
+  },
+  "fn": "shivateja-lab/AeroForge-Intelligence",
+  "sha": "3da60c18b411",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -7032,5 +7032,246 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "94f6136a06dd": {
+  "identity": {
+   "one_liner": "基于 SQLite 的 Claude Code/Codex 多智能体团队操作系统",
+   "review": "为 Claude Code 与 Codex 提供共享操作层，将任务、项目记忆、报告和团队消息持久化到 SQLite 存储，通过 MCP 工具、hooks 和 REST API 供各会话跨宿主读写，并提供 React 实时仪表盘查看团队与工作流运行状态。面向使用多智能体协作的 Claude Code/Codex 用户；数据层当前仅支持 SQLite，PostgreSQL 在路线图中。",
+   "highlights": [
+    "提供 MCP 工具与 REST 端点，实现跨会话任务、消息与项目记忆的持久化共享",
+    "存储层基于 SQLite（WAL journaling），检索采用纯 Python BM25",
+    "提供 React 仪表盘用于查看任务墙、成员活动与 Workflow 运行遥测"
+   ],
+   "use_cases": [
+    "多个 Claude Code/Codex 会话间共享任务与项目上下文",
+    "记录与查看智能体 Workflow 运行状态与遥测数据",
+    "跨宿主的团队消息通道与只读审计观察会话"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Shared OS API -> SQLite ／ Layer 2: Memory Manager — SQLite-backed store + pure-Python BM25 retrieval",
+     "lines": [
+      250,
+      263
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Layer 1: Storage — SQLite (WAL journaling) · PostgreSQL support on the roadmap",
+     "lines": [
+      264
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明用 SQLite 存储任务、记忆等数据，项目本身是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": []
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "",
+   "evidence_lines": []
+  },
+  "fn": "CronusL-1141/AI-company",
+  "sha": "94f6136a06dd",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c3c88dc567b0": {
+  "identity": {
+   "one_liner": "Rust+GPUI 编写的跨平台多引擎数据库客户端",
+   "review": "DBDelve 是一个用 Rust 和 GPUI 构建的桌面数据库客户端，支持 Postgres、MySQL、MariaDB、SQLite、Snowflake、SQL Server 和 MongoDB 的浏览、查询与单元格编辑，并提供主题、命令面板、SSH 隧道和连接导入功能。面向需要本地 GUI 客户端管理多种数据库的开发者。项目自述处于早期阶段，macOS 构建为 ad-hoc 签名需手动清除隔离标记。",
+   "highlights": [
+    "支持 Postgres、MySQL、MariaDB、SQLite、Snowflake、SQL Server、MongoDB 多引擎连接与查询",
+    "提供主题库、命令面板、可重绑快捷键、schema 模糊搜索和 DBeaver/TablePlus 连接导入",
+    "支持 SSH 隧道、连接级权限模式（只读/读写/完全访问）及破坏性操作前确认"
+   ],
+   "use_cases": [
+    "桌面端浏览、过滤、排序和编辑多种 SQL/NoSQL 数据库中的数据",
+    "通过 SSH 隧道安全访问远程数据库，并以只读模式连接生产环境",
+    "从 DBeaver 或 TablePlus 迁移已有连接配置"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "DBDelve 0.3.6 against DBeaver 25.3.1 on the same Postgres table, median of 5 ／ - **Postgres:** supported",
+     "lines": [
+      23,
+      42
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **MySQL:** supported",
+     "lines": [
+      43
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **MariaDB:** supported",
+     "lines": [
+      44
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite:** supported ／ Windows SDK, which is what compiles the bundled SQLite and GPUI's shaders:",
+     "lines": [
+      45,
+      194
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **SQL Server:** supported, 2017 or later, without Explain. See",
+     "lines": [
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明其为多引擎数据库客户端，为连接和管理数据库提供服务，本身不是用某库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "MariaDB",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A fast, native, cross-platform, multi-engine database client. Written in Rust ／ ## Supported databases ／ - **Postgres:** supported",
+   "evidence_lines": [
+    3,
+    40,
+    42
+   ]
+  },
+  "fn": "ShayanAbbas1/dbdelve",
+  "sha": "c3c88dc567b0",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "516e55603120": {
+  "identity": {
+   "one_liner": "单服务器自托管PaaS，集成Postgres、部署、备份并提供CLI/仪表盘/MCP",
+   "review": "ShipTiffin 把应用部署、Postgres 数据库、KV、文件、邮件、任务、分析和备份打包到一台用户自有的 Linux 服务器上，通过 CLI、Web 仪表盘和 MCP 服务器操作，支持托管（在用户自己的 Hetzner 账号建机）与 SSH 自托管两种方式，并为 Claude Code、Codex 等编码代理提供专属 API key 与可撤销的变更记录。适合用 Next.js 等框架开发小型应用并需要一体化部署与数据库服务的开发者。",
+   "highlights": [
+    "每个项目提供独立 Postgres 18（含连接池、pgvector、pg_cron、分支与 SQL 控制台），每 6 小时备份且可恢复到 7 天内任意秒",
+    "所有操作同时以 CLI 命令、MCP 工具和 HTTP API 三种形式提供，由同一 OpenAPI 描述生成",
+    "为每个编码代理分配独立 API key，记录变更来源并支持 tiffin undo 回滚"
+   ],
+   "use_cases": [
+    "在一台自有服务器上部署和运行多个 Next.js/Hono/FastAPI 等小型应用",
+    "让 Claude Code、Codex 等编码代理通过 MCP 完成服务器搭建、数据库配置与应用部署",
+    "需要按项目隔离资源、定期备份并支持 PR 预览环境的自托管场景"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|**Postgres 18**|One per project, behind a connection pooler, with pgvector, pg_cron, branches in milliseconds and a SQL console.| ／ |**Backups**|Every 6 hours, with restore drills. Postgres restores to any second of the last 7 days. Off-box copies go to any S3-compatible bucket, encrypted.|",
+     "lines": [
+      140,
+      148
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目为应用提供数据库、备份等运行服务并为编码代理提供操作数据库的 MCP 接口，属于为部署与数据管理服务的平台组件",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "主体 AGPL-3.0-only，SDK 与 starters 为 Apache-2.0 双许可",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " a database, auth, KV, file storage, email, jobs, analytics, error tracking and backups. ／ |**Postgres 18**|One per project, behind a connection pooler, with pgvector, pg_cron, branches in milliseconds and a SQL console.| ／ Every box serves an MCP server at `https://dashboard.<box domain>/mcp`. Give each agent its",
+   "evidence_lines": [
+    4,
+    140,
+    153
+   ]
+  },
+  "fn": "shiptiffin/tiffin",
+  "sha": "516e55603120",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

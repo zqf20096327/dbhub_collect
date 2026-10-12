@@ -9870,5 +9870,273 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "dfe42e34b8b2": {
+  "identity": {
+   "one_liner": "Rust 版本地优先 issue 跟踪器，SQLite 存储并以 JSONL 导出协作",
+   "review": "br 是 Steve Yegge 的 beads 的 Rust 移植版，冻结在经典 SQLite + JSONL 架构上，用于在 git 仓库内离线跟踪带依赖关系的任务。面向开发者及 AI 编码代理，所有命令支持 -- 输出。默认无侵入：不自动 commit/push，不装钩子、无后台服务，状态存于 .beads/ 目录。",
+   "highlights": [
+    "本地 SQLite 存储查询，JSONL 导出用于 git 友好协作，变更加自动刷新",
+    "每条命令支持 -- 及 TOON 等机器可读输出，含 MCP 支持与一致性检查",
+    "默认无侵入：不自动 commit/push/pull、不安装钩子、不运行后台服务"
+   ],
+   "use_cases": [
+    "离线管理仓库内任务与依赖关系，并通过 git 合并 JSONL 同步协作",
+    "为 AI 编码代理提供机器可读的任务队列与协调输出",
+    "需要冻结经典 beads（SQLite+JSONL）架构的存量工具链迁移"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite ／ # beads.db # SQLite database",
+     "lines": [
+      7,
+      97
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目仅以 SQLite 作为自身 issue 数据的本地存储后端，不服务于数据库生态",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**br** is a local-first issue tracker that stores issues in SQLite with JSONL export for git-friendly collaboration. It provides dependency-aware issue tracking, machine-readable output, sync/recovery tooling, and agent-friendly workflows without leaving your repository. ／ # beads.db       # SQLite database ／ ### 2. SQLite + JSONL Hybrid",
+   "evidence_lines": [
+    44,
+    97,
+    102
+   ]
+  },
+  "fn": "Dicklesworthstone/beads_rust",
+  "sha": "dfe42e34b8b2",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f2cedc9d7d57": {
+  "identity": {
+   "one_liner": "KubeBlocks 的数据库插件集，提供多数据库 Helm Chart",
+   "review": "该仓库包含一组 Helm Chart 插件，用于在 Kubernetes 上部署和管理多种数据库与中间件，覆盖关系型、时序、图、向量数据库及消息队列等，含主从/集群拓扑定义。面向使用 KubeBlocks 平台的运维人员，供其通过插件方式运行各类数据组件。",
+   "highlights": [
+    "为 MySQL、PostgreSQL、Redis、Kafka 等多类数据库/中间件提供 Helm Chart 插件",
+    "包含集群拓扑定义，如 PostgreSQL(Patroni HA)、Redis 集群/哨兵、MongoDB 分片",
+    "每个插件含版本列表与维护者信息"
+   ],
+   "use_cases": [
+    "在 Kubernetes 上部署各版本数据库集群",
+    "为 KubeBlocks 平台扩展支持新的数据库引擎",
+    "统一管理多种数据库与消息中间件的 K8s 交付"
+   ]
+  },
+  "classification": {
+   "cat": "平台",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|neon|neon-broker-1.0.0 neon-compute-1.0.0 neon-pageserver-1.0.0 neon-safekeeper-1.0.0|Neon is a serverless open-source alternative to AWS Aurora Postgres. It separates storage and compute and substitutes the PostgreSQL storage layer by redistributing data acr ／ |orioledb|orioledb-16.4.0|OrioleDB is a new storage engine for PostgreSQL, bringing a modern approach to database capacity, capabilities and performance to the world's most-loved database platform.|ApeCloud| ／ |postgresql|postgresql-12.14.0 postgresql-12.14.1 postgresql-12.15.0 postgresql-12.22.0 postgresql-13.23.0 postgresql-14.18.0 postgresql-14.23.0 postgresql-14.7.2 postgresql-14.8.0 postgresql-15.13.0 postgresql-15.18.0 postgresql-15.7.0 postgresql-16.14.0 post",
+     "lines": [
+      27,
+      32,
+      34
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|apecloud-mysql|apecloud-mysql-8.0.30 wescale-0.2.7|ApeCloud MySQL is a database that is compatible with MySQL syntax and achieves high availability through the utilization of the RAFT consensus protocol.|xuriwuyun| ／ |mysql|mysql-5.7.44 mysql-8.0.45 mysql-8.0.46 mysql-8.4.10 mysql-8.4.9 mysql-mgr-8.0.45 mysql-mgr-8.4.10 mysql-mgr-8.4.9 mysql-orc-5.7.44 mysql-orc-8.0.45 mysql-orc-8.0.46 mysql-proxysql-2.4.4|MySQL is a widely used, open-source relational database management  ／ |orchestrator|orchestrator-3.2.6|Orchestrator is a MySQL high availability and replication management tool, runs as a service and provides command line access, HTTP API and Web interface.|ApeCloud|",
+     "lines": [
+      9,
+      24,
+      31
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "|clickhouse|clickhouse-22.3.18 clickhouse-22.3.20 clickhouse-22.6.1 clickhouse-22.8.21 clickhouse-22.9.4 clickhouse-24.12.2 clickhouse-24.7.2 clickhouse-24.8.3 clickhouse-25.4.4 clickhouse-25.9.7|ClickHouse is an open-source column-oriented OLAP database manag",
+     "lines": [
+      10
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "|mariadb|mariadb-10.6.15 mariadb-11.4.10 mariadb-11.4.5 mariadb-11.4.8 mariadb-11.8.4 mariadb-12.0.2|MariaDB is a high performance open source relational database management system that is widely used for web and application servers|ApeCloud yinmin|",
+     "lines": [
+      19
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|tidb|tidb-6.5.12 tidb-7.1.5 tidb-7.1.6-enterprise tidb-7.5.2 tidb-8.4.0 tidb-pd-6.5.12 tidb-pd-7.1.5 tidb-pd-7.1.6-enterprise tidb-pd-7.5.2 tidb-pd-8.4.0 tikv-6.5.12 tikv-7.1.5 tikv-7.1.6-enterprise tikv-7.5.2 tikv-8.4.0|TiDB is an open-source, cloud-native, ",
+     "lines": [
+      43
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "|oceanbase-ce|oceanbase-ce-4.2.1 oceanbase-ce-4.2.5 oceanbase-ce-4.3.5|OceanBase has served over 400 customers across the globe and has been supporting all mission critical systems in Alipay.|Powerfooi shanshanying|",
+     "lines": [
+      28
+     ]
+    },
+    {
+     "db": "PolarDB",
+     "rel": "support",
+     "quote": "|polardbx|polardbx-cdc-2.3.0 polardbx-cn-2.3.0 polardbx-dn-2.3.0 polardbx-gms-2.3.0|PolarDB-X is a cloud native distributed SQL Database designed for high concurrency, massive storage, complex querying scenarios.|ApeCloud Vettal Wu|",
+     "lines": [
+      33
+     ]
+    },
+    {
+     "db": "YashanDB",
+     "rel": "support",
+     "quote": "|yashandb|yashandb-23.1.1-100|YashanDB is a new database system completely independently designed and developed by SICS. Based on classical database theories, it incorporates original Bounded Evaluation theory, Approximation theory, Parallel Scalability theory",
+     "lines": [
+      49
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "仓库为多种数据库提供 Kubernetes 部署插件，是为数据库生态服务的工具组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "ClickHouse",
+    "MariaDB",
+    "TiDB",
+    "OceanBase",
+    "PolarDB",
+    "YashanDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "KubeBlocks add-ons. ／ ## Supported Add-ons ／ |mysql|mysql-5.7.44 mysql-8.0.45 mysql-8.0.46 mysql-8.4.10 mysql-8.4.9 mysql-mgr-8.0.45 mysql-mgr-8.4.10 mysql-mgr-8.4.9 mysql-orc-5.7.44 mysql-orc-8.0.45 mysql-orc-8.0.46 mysql-proxysql-2.4.4|MySQL is a widely used, open-source relational database management system (RDBMS)|xuriwuyun|",
+   "evidence_lines": [
+    2,
+    6,
+    24
+   ]
+  },
+  "fn": "apecloud/kubeblocks-addons",
+  "sha": "f2cedc9d7d57",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "0dc78675a133": {
+  "identity": {
+   "one_liner": "Spring Boot+Vue 全栈民宿预订平台，用 MySQL 存储业务数据",
+   "review": "这是一个面向房客、房东、管理员三类角色的民宿预订全栈学习项目，包含房源、订单支付、优惠券、AI 客服等 25 个业务模块。数据库结构由 Flyway 统一迁移管理，启动时自动建 52 张业务表；后端基于 Spring Data JPA 操作 MySQL 8，集成测试强制使用 H2 内存库而非真实 MySQL。适合学习全栈架构与面试展示，非生产部署用途。",
+   "highlights": [
+    "启动时由 Flyway 9.22.3 自动执行迁移，从初始脚本创建 52 张业务表和 2 个视图",
+    "数据库提交与 MQ 发布无 outbox 原子保证，日期锁未覆盖外层事务完整提交周期",
+    "集成测试使用独立 H2 内存数据源，禁止连接真实 MySQL"
+   ],
+   "use_cases": [
+    "学习 Spring Boot + Vue 全栈民宿预订系统架构",
+    "了解 Flyway 迁移链与数据库初始化基线实践",
+    "作为面试展示的全栈个人项目"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|数据与消息|MySQL 8、Redis / Redisson、Elasticsearch / IK、RabbitMQ、Flyway| ／ 以下为本地开发方式。先准备 Java 17、Maven、Node.js 20、MySQL 8、Redis，以及安装 IK 插件的 Elasticsearch；演示三个 MQ 场景时同时启动 RabbitMQ。基础设施准备和完整配置见安装教程。 ／ 编辑 `application-local.properties`：将 `server.port` 改为 `8081`，填写实际 MySQL、Redis 配置和随机 JWT 密钥。支付、地图、邮件与 LLM 的配置按需要填写；AI 客服默认关闭。",
+     "lines": [
+      67,
+      84,
+      96
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 MySQL 8 作为业务数据存储，属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT License",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|数据与消息|MySQL 8、Redis / Redisson、Elasticsearch / IK、RabbitMQ、Flyway| ／ 以下为本地开发方式。先准备 Java 17、Maven、Node.js 20、MySQL 8、Redis，以及安装 IK 插件的 Elasticsearch；演示三个 MQ 场景时同时启动 RabbitMQ。基础设施准备和完整配置见安装教程。 ／ 后端地址：`http://localhost:8081`；启动时 Flyway 9.22.3 执行数据库迁移。空库从 `B49__initial_schema.sql` 创建 52 张业务表和 2 个视图；已有 Flyway 历史的库跳过 B49，继续 V 迁移链。无历史的非空库会被拒绝，须按数据库说明备份、核对并显式建基线。接口文档：`http://localhost:8081/swagger-ui.html`。",
+   "evidence_lines": [
+    67,
+    84,
+    108
+   ]
+  },
+  "fn": "goaltang/homestay-booking-platform",
+  "sha": "0dc78675a133",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

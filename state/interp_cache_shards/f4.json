@@ -9143,5 +9143,133 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b0b888fdb1b0": {
+  "identity": {
+   "one_liner": "自托管 AI 漫画/条漫/解说视频生成工作室",
+   "review": "这是一个自托管的内容生产工具，把故事转换为结构化状态（角色、章节、分镜规格），再生成一致性 AI 插画漫画、条漫或带解说的视频，并提供确定性的排版、配音和导出（PDF/EPUB/MP4 等）。面向自托管创作者，通过 BYOK 接入自己的 AI 提供商密钥，使用本地 Kokoro TTS，数据存储依赖 PostgreSQL，可通过 Docker Compose 部署。",
+   "highlights": [
+    "支持 BYOK 模式，用户自带文本推理与图像生成提供商密钥，并提供无需 API key 的粘贴应答演示流程",
+    "内置本地 Kokoro-82M 语音合成，无遥测、无分析上报",
+    "提供完整生产流水线与多种导出格式（PNG/PDF/PSD/EPUB/CBZ/MP4 等）"
+   ],
+   "use_cases": [
+    "将长篇故事生成保持角色一致性的漫画页或条漫",
+    "制作带解说配音的视频并生成 YouTube 发布包",
+    "无外部 API 密钥环境下进行本地化的内容生产演示"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "cp .env.example .env # set POSTGRES_PASSWORD, SESSION_SECRET (openssl rand -hex 32), public URLs, INITIAL_ADMIN_* ／ docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d postgres redis kokoro",
+     "lines": [
+      155,
+      184
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 将 PostgreSQL 作为自身的部署依赖组件（docker compose 启动 postgres），属于使用数据库存储数据的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "",
+   "evidence_lines": []
+  },
+  "fn": "pr0h0/OpenManga",
+  "sha": "b0b888fdb1b0",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "db15a6dbe9f1": {
+  "identity": {
+   "one_liner": "pump.fun 发行项目本地离线评分模型包",
+   "review": "这是 three.ws 发布的 pump.fun 代币发行评分模型的 npm 包，下载约 32KB 的权重表后在本地离线推理，输出 win/rug/moon 三个概率及分档评分，并提供 explain、verify、diff 等 API 供开发者与 AI agent 复现和校验评分。适合需要在本地批量评估 pump.fun 新发行代币的 Node.js 开发者或自动化程序；Apache-2.0 许可，模型每六小时重拟合并公开版本记录。",
+   "highlights": [
+    "下载权重后可完全离线推理，无需 API key、无速率限制",
+    "提供 explain/verify/performance/diff 等 API，评分逐项可复现",
+    "模型每六小时基于新数据重拟合，版本晋级记录公开"
+   ],
+   "use_cases": [
+    "对 pump.fun 新发行代币进行本地批量离线评分",
+    "用自有标注样本通过 verify() 独立复核模型表现",
+    "将评分逻辑嵌入 Node.js 应用或 AI agent 工具链"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "# @three-ws/oracle-model",
+     "lines": [
+      1
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 中的 Oracle 指 three.ws 的评分模型产品名，不涉及 Oracle 数据库适配或为任何数据库生态服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# @three-ws/oracle-model ／ it. This package is that scorer. Not a client for a scoring API: the actual ／ npm install @three-ws/oracle-model",
+   "evidence_lines": [
+    1,
+    8,
+    12
+   ]
+  },
+  "fn": "nirholas/oracle-model",
+  "sha": "db15a6dbe9f1",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -8814,5 +8814,101 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "1185c19fdb01": {
+  "identity": {
+   "one_liner": "自托管 OTLP 接收器与可观测性仪表盘，用于查看 traces/logs/metrics",
+   "review": "该项目实现一个自托管的 OTLP 接收器与查看器，接收 gRPC（:4317）和 HTTP/Protobuf（:4318）两种协议的遥测数据，后端为 .NET 10 + EF Core，前端为 Vue 3 / Nuxt 4 SPA，数据存储在 SQLite（默认）、PostgreSQL 或 SQL Server 中。面向需要自托管可观测性方案的开发者/运维人员，支持 Docker Compose 一键启动演示栈，并提供可选的 MCP 只读服务器供 LLM 客户端查询数据。",
+   "highlights": [
+    "提供 OTLP gRPC（:4317）与 OTLP HTTP/Protobuf（:4318）两种接收端点",
+    "支持 SQLite、PostgreSQL、SQL Server 三种存储后端，通过 Dashboard__Storage__Provider 配置切换",
+    "内置可选 MCP 只读服务器，暴露 logs/traces/metrics 查询工具供 LLM 客户端使用"
+   ],
+   "use_cases": [
+    "自托管应用 traces/logs/metrics 的接收与可视化查看",
+    "通过 MCP 将遥测数据接入 Claude Code 等 LLM 客户端进行查询",
+    "通过 docker-compose 快速搭建含示例工作负载的完整演示环境"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, or SQL Server. Speaks OTLP gRPC on `:4317` and OTLP ／ The bundled `docker-compose.yml` starts the dashboard against Postgres plus a ／ (`demo/packs/default-dashboard/`), and the Collector config. To run only the dashboard against an external Postgres / SQL Server,",
+     "lines": [
+      11,
+      28,
+      44
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": ".NET 10 + EF Core backend, Vue 3 / Nuxt 4 SPA. Stores telemetry in SQLite, ／ The backend runs migrations on every boot, so the SQLite file appears at ／ Dashboard__Storage__Provider=Sqlite # default",
+     "lines": [
+      10,
+      58,
+      127
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "PostgreSQL, or SQL Server. Speaks OTLP gRPC on `:4317` and OTLP ／ (`demo/packs/default-dashboard/`), and the Collector config. To run only the dashboard against an external Postgres / SQL Server,",
+     "lines": [
+      11,
+      44
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目将 SQLite/PostgreSQL/SQL Server 作为自身遥测数据的存储后端使用，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A self-hosted OTLP receiver and viewer for traces, logs, and metrics. ／ .NET 10 + EF Core backend, Vue 3 / Nuxt 4 SPA. Stores telemetry in SQLite, ／ PostgreSQL, or SQL Server. Speaks OTLP gRPC on `:4317` and OTLP",
+   "evidence_lines": [
+    9,
+    10,
+    11
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Adiakys/OtlpDashboard",
+  "sha": "1185c19fdb01",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

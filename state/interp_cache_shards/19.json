@@ -9909,5 +9909,197 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "9d1424049585": {
+  "identity": {
+   "one_liner": "R 包：从公共临床试验注册库聚合分析试验数据的工具",
+   "review": "ctrdata 是一个 R 包，用于从 EUCTR、CTIS、ClinicalTrials.gov、ISRCTN 等公共注册库检索、下载并分析临床试验协议与结果数据，将每个试验存为文档式记录，底层依赖 nodbi 支持将数据写入 SQLite、PostgreSQL、DuckDB、MariaDB 或 MongoDB。面向临床研究者和 Meta 分析人员，提供跨注册库的试验概念计算与去重查询能力。",
+   "highlights": [
+    "支持从四个公共注册库一次性下载试验协议与结果数据，并可下载历史版本记录",
+    "通过 nodbi 将数据存入 SQLite、PostgreSQL、DuckDB、MariaDB 或 MongoDB",
+    "提供 20 个跨注册库试验概念的计算函数及跨库去重功能"
+   ],
+   "use_cases": [
+    "跨多个临床试验注册库检索并聚合特定疾病或药物的试验数据",
+    "对已下载的试验记录进行离线分析与 Meta 研究所需字段提取"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "`PostgreSQL`, `MariaDB` or `MongoDB`, see",
+     "lines": [
+      57
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "`SQLite`, `PostgreSQL` or `DuckDB` table, and to one document in a",
+     "lines": [
+      214
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "`PostgreSQL`, `MariaDB` or `MongoDB`, see",
+     "lines": [
+      57
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该包为数据库写入与查询提供服务（通过 nodbi 适配多种数据库），是服务于数据库使用的工具，而非以某个库为核心存储的最终应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " be accumulated in a single collection. Uses `RSQLite`, `DuckDB`, ／  `PostgreSQL`, `MariaDB` or `MongoDB`, see ／ |`ctrLoadQueryIntoDb()`|Retrieve (download) or update, and annotate, information on trials from a register and store in a collection in a database|",
+   "evidence_lines": [
+    56,
+    57,
+    177
+   ]
+  },
+  "fn": "rfhb/ctrdata",
+  "sha": "9d1424049585",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f33955ca4b4b": {
+  "identity": {
+   "one_liner": "macOS 原生数据库客户端，Swift/AppKit 构建，多引擎统一工作区",
+   "review": "BerryDB 是一个用 Swift 6 + AppKit 编写的 macOS 原生数据库客户端，面向开发者、数据工程师和 DBA，支持 PostgreSQL、MySQL/MariaDB、SQL Server、SQLite、Redis、MongoDB 等 9 种引擎的连接、查询、数据编辑和 schema 浏览；凭据存于 macOS 钥匙串，内置 SSH 隧道，并提供可选的 AI SQL 助手和供编码代理读取 schema 的 MCP 辅助工具。仅支持 macOS 15+ 且限 Apple Silicon。",
+   "highlights": [
+    "通过各引擎原生驱动/协议连接 SQL、NoSQL、键值和向量数据库，数据网格基于 AppKit NSTableView 流式渲染",
+    "密码与 SSH 凭据存入 macOS Keychain，内置 SSH 隧道与 TLS/SSL 支持",
+    "提供自然语言转 SQL 的 AI 助手，并内置 berrydb-mcp 辅助器向编码代理只读暴露缓存的 schema"
+   ],
+   "use_cases": [
+    "在 macOS 上通过单一客户端查询和管理多种数据库引擎",
+    "通过 SSH 隧道与 TLS 安全连接生产数据库并内联编辑数据",
+    "用 AI 助手生成、解释和调优 SQL，或将 schema 提供给 Claude Code 等编码代理"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **PostgreSQL**: Native wire protocol (`PostgresNIO`), query cancellation via `pg_cancel_backend`, SSL/TLS. ／ |**PostgreSQL**|Pure Swift (`PostgresNIO`)|✅|✅|✅|✅|",
+     "lines": [
+      42,
+      85
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **MySQL & MariaDB**: Native driver (`MySQLNIO`), `caching_sha2_password` (with TLS on) and `mysql_native_password`, SSL/TLS, `KILL QUERY`. ／ |**MySQL / MariaDB**|Pure Swift (`MySQLNIO`)|✅|✅|✅|✅|",
+     "lines": [
+      43,
+      86
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite**: Direct embedded driver via `libsqlite3`, opens WAL-mode databases. ／ |**SQLite** (3.x)|Embedded (`libsqlite3`)|✅|N/A|✅|✅|",
+     "lines": [
+      44,
+      87
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Microsoft SQL Server**: TDS protocol via dynamically linked FreeTDS (`libsybdb`). ／ |**Microsoft SQL Server**|FreeTDS (`libsybdb`)|✅|✅|✅|✅|",
+     "lines": [
+      45,
+      88
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "- **MySQL & MariaDB**: Native driver (`MySQLNIO`), `caching_sha2_password` (with TLS on) and `mysql_native_password`, SSL/TLS, `KILL QUERY`. ／ |**MySQL / MariaDB**|Pure Swift (`MySQLNIO`)|✅|✅|✅|✅|",
+     "lines": [
+      43,
+      86
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 声明它是连接和浏览多种数据库的客户端工具，为数据库生态提供服务而非使用某库存数据的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "text2sql",
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache 2.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**BerryDB** is a native database client for macOS developers, data engineers, and DBAs. It is built with **Swift 6, AppKit, and SwiftUI**, with no Electron: the data grid is an AppKit `NSTableView`. ／ Connect to SQL, NoSQL, Key-Value, and Vector databases all in a unified native workspace: ／ |Database Engine|Driver / Protocol|Direct Connection|SSH Tunnel|Inline Grid Edit|Schema Browser|",
+   "evidence_lines": [
+    26,
+    40,
+    83
+   ]
+  },
+  "fn": "berry-apps/berrydb-desktop",
+  "sha": "f33955ca4b4b",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

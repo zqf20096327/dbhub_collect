@@ -8993,5 +8993,155 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "3c53b5d93920": {
+  "identity": {
+   "one_liner": "Smalltalk 的无 schema 持久化框架，支持多后端",
+   "review": "Mapless 是面向 Pharo Smalltalk 的无 schema 持久化框架，通过统一的查询 API 读写对象，无需声明访问器/修改器或维护 schema。支持 SQLite、PostgreSQL、Redis、MongoDB、Memory、UnQLite 六种后端，可组合实现后端间数据迁移。适用于以 Smalltalk 开发并需要持久化能力的应用开发者。",
+   "highlights": [
+    "提供统一的持久化 API，支持在多个后端间迁移与互操作",
+    "支持 SQLite、PostgreSQL、Redis、MongoDB、Memory、UnQLite 后端",
+    "跨镜像的可扩展观察者模式功能（依赖 Redis）"
+   ],
+   "use_cases": [
+    "Pharo Smalltalk 应用的对象持久化",
+    "同一数据模型在不同后端间的迁移/互操作",
+    "基于 Redis 的跨镜像观察者通知场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "2. PostgreSQL ／ load: #('Core' 'SQLite' 'Postgres' 'Mongo' 'Redis' 'Memory')",
+     "lines": [
+      50,
+      117
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "1. SQLite ／ \"Instantiates an SQLite Mapless repository.\" ／ on: 'path/string/to/your/sqlite.db'.",
+     "lines": [
+      49,
+      60,
+      63
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "项目是为多种数据库提供持久化适配的 Smalltalk 框架，服务于数据库生态而非使用单一数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Mapless is a schema-less persistence framework supporting multiple backends and offering a user-friendly API. Querying Mapless objects involves a common family of methods, and there's no need to declare accessors and mutators. See examples below. ／ ## Supported backends ／   load: #('Core' 'SQLite' 'Postgres' 'Mongo' 'Redis' 'Memory')",
+   "evidence_lines": [
+    30,
+    47,
+    117
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "sebastianconcept/Mapless",
+  "sha": "3c53b5d93920",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "d63f5dabe2cb": {
+  "identity": {
+   "one_liner": "可自托管的 SQLite 浏览器与编辑器，基于 PHP 服务 src/ 目录",
+   "review": "LiteAdmin 是一个可自托管的 SQLite 网页浏览与编辑工具，面向管理 SQLite 数据库的 DBA 和开发者。它通过 PHP proxy.php（PDO/SQLite）访问服务器端数据库，也可用浏览器内 sql.js（WASM）操作本地库；提供查询分析、索引建议、维护操作、表结构对比与迁移 SQL 生成。运行需 PHP 8.0+，无构建步骤。",
+   "highlights": [
+    "支持服务器数据库（proxy.php/PDO/SQLite）与浏览器内本地数据库（sql.js/WASM）两种模式",
+    "提供查询分析器：EXPLAIN QUERY PLAN、字节码 EXPLAIN、索引建议与一键维护（vacuum、WAL checkpoint 等）",
+    "支持表结构编辑、表/数据库对比生成迁移 SQL，可导出 schema DDL 或生成 OpenAPI/Swagger 规范"
+   ],
+   "use_cases": [
+    "通过网页界面管理 SQLite 数据库（登录保护、CSRF 安全）",
+    "SQL 查询调优与性能分析（查询计划、索引建议）",
+    "数据库维护（integrity check、vacuum、WAL 管理）与结构变更、迁移 SQL 生成"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A hostable SQLite browser and editor like phpMyAdmin, but for SQLite. Standalone, ／ - Server databases via `proxy.php` (PDO/SQLite), local databases via in-browser sql.js (WASM)",
+     "lines": [
+      3,
+      25
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是为 SQLite 数据库生态提供浏览/编辑/维护能力的管理工具，本身不作为应用存储业务数据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "binary",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A hostable SQLite browser and editor like phpMyAdmin, but for SQLite. Standalone, ／ - Server databases via `proxy.php` (PDO/SQLite), local databases via in-browser sql.js (WASM) ／ - PHP 8.0+ with `pdo_sqlite` and `session` extensions (PHP 8.4+ to load SQLite extensions)",
+   "evidence_lines": [
+    3,
+    25,
+    58
+   ]
+  },
+  "fn": "martijndeb/liteadmin",
+  "sha": "d63f5dabe2cb",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

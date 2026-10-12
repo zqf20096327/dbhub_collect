@@ -8010,5 +8010,90 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "44d8990d0c18": {
+  "identity": {
+   "one_liner": "基于TiDB向量检索的PDF文档RAG问答工作区",
+   "review": "DocMind 是一个多用户 AI 文档问答工作区：上传 PDF/TXT/MD 后按页分块，用 Gemini 嵌入写入 TiDB Cloud 的原生 VECTOR 列做向量检索，回答附带页码级引用并在无相关内容时明确拒答。技术栈为 FastAPI + React，含 JWT 认证、集合管理与 RAG 评估用例；生产依赖 TiDB Cloud，本地测试用 SQLite 以 JSON 存向量、Python 算余弦距离。适合需要带出处的个人/团队文档问答场景。",
+   "highlights": [
+    "支持在 TiDB Cloud 原生向量搜索上运行完整 RAG 管道，向量存于 VECTOR(768) 列",
+    "支持页级引用：按 PDF 页分块，每条回答标注文档、chunk、页码与检索距离",
+    "内置 JWT 认证、文档/集合 CRUD、语义搜索与 RAG 评估用例管理接口"
+   ],
+   "use_cases": [
+    "对员工手册、教材 PDF 等文档进行带页码引用的问答",
+    "按文档或集合范围组织知识库并对内容做语义搜索",
+    "构建和评估基于自身文档的 RAG 问答用例"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "TiDB ／ entirely inside TiDB Cloud (native vector search). ／ **Data model.** One database holds everything. In production that's TiDB",
+     "lines": [
+      5,
+      30,
+      64
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "Cloud (MySQL-compatible, free tier): relational rows, the original uploaded",
+     "lines": [
+      65
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "mention",
+     "quote": "`VECTOR(768)` column (`chunks.embedding`). Locally and in tests it's SQLite,",
+     "lines": [
+      67
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "该项目是使用 TiDB/SQLite 存储文档与向量的终端应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "rag"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A multi-user AI knowledge workspace: upload documents, organize them into ／ entirely inside TiDB Cloud (native vector search). ／ **Data model.** One database holds everything. In production that's TiDB",
+   "evidence_lines": [
+    20,
+    30,
+    64
+   ]
+  },
+  "fn": "Zyphronix-space/doc-chat-rag",
+  "sha": "44d8990d0c18",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

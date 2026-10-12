@@ -10219,5 +10219,72 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "a6f17c6fc47e": {
+  "identity": {
+   "one_liner": "Home Assistant 的 AI 代理应用，使用 Pi Durable 持久化任务到 SQLite",
+   "review": "Hearth Pi 是一个面向 Home Assistant 的实验性第三方 AI 代理 App，提供受限的设备读取与人审确认的灯/开关操作，任务检查点、会话记录等通过 Pi Durable 写入 SQLite（synchronous=FULL）。面向希望在家居自动化中加入 AI 助手且要求人工审批的 HA 用户；目前为技术预览，需 HA OS 且不承诺生产可用。",
+   "highlights": [
+    "提供 Home 模式：作用域受限的 HA 读取与需人工批准的灯/开关操作提案",
+    "使用 Pi Durable 将输入、任务检查点与文档提交到 SQLite（synchronous=FULL），支持断线后重连到已提交状态",
+    "支持多种模型提供方：openai、offline、本地 OpenAI 兼容服务器及可选的 Anthropic/ChatGPT 订阅登录"
+   ],
+   "use_cases": [
+    "在 Home Assistant 中通过聊天查询和 控制（带人工审批）灯/开关实体",
+    "需要任务持久化与会话历史在重启后恢复的本地 AI 代理部署",
+    "在本地网络通过 Ollama/llama.cpp 等兼容服务器运行模型"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Continuity, not just history.** Genuine pinned Pi Durable commits admitted inputs, task checkpoints, transcripts and documents to SQLite with `synchronous=FULL`. One writer owns each store. Reconnect to committed state.",
+     "lines": [
+      15
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明该应用将输入、任务检查点等持久化存入 SQLite，SQLite 是其存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Continuity, not just history.** Genuine pinned Pi Durable commits admitted inputs, task checkpoints, transcripts and documents to SQLite with `synchronous=FULL`. One writer owns each store. Reconnect to committed state. ／ **Independent community App · 0.6.0 · experimental.** Not an official Home Assistant or Pi product. The pinned Pi 1.0.1 APIs are experimental. This is a technical preview, not a production recommendation or external security audit. ／ Requires **Home Assistant OS**, an administrator account and an **amd64 or aarch64** host. Use an authorized test installation with a backup; this is an experimental third-party App, not HACS or a Devices & services integration (only the optional Hearth Assist voice link adds a HACS integration).",
+   "evidence_lines": [
+    15,
+    7,
+    43
+   ]
+  },
+  "fn": "cosmyo/ha-pi-durable",
+  "sha": "a6f17c6fc47e",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

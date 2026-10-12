@@ -8441,5 +8441,218 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "95e2517fd0e8": {
+  "identity": {
+   "one_liner": "基于 better-sqlite3 的数据库迁移工具库",
+   "review": "这是一个 Node.js 迁移工具库，配合 better-sqlite3 使用，通过 SQLite 的 user_version 记录 schema 版本并执行 IMigration 定义的版本迁移。面向在 Node.js 中使用 SQLite 的开发者。支持目标版本控制、多实例并行迁移（用 BEGIN IMMEDIATE 保证事务安全），已知版本低于 user_version 时可跳过或抛错。",
+   "highlights": [
+    "使用 SQLite user_version 记录 schema 版本并执行迁移",
+    "支持 options.targetVersion 指定目标版本与 throwOnNewerVersion 出错策略",
+    "通过 BEGIN IMMEDIATE 支持多实例并行迁移"
+   ],
+   "use_cases": [
+    "Node.js 应用中 SQLite schema 的版本化升级",
+    "多实例部署下 SQLite 数据库结构的并行迁移"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "A utility for database migrations with [better-sqlite3].",
+     "lines": [
+      2
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明它是为 better-sqlite3 服务的数据库迁移工具库，而非使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A utility for database migrations with [better-sqlite3]. ／ The module using [user_version] to record the schema version. ／ npm install --save @blackglory/better-sqlite3-migrations",
+   "evidence_lines": [
+    2,
+    4,
+    8
+   ]
+  },
+  "fn": "BlackGlory/better-sqlite3-migrations",
+  "sha": "95e2517fd0e8",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "c20c82149423": {
+  "identity": {
+   "one_liner": "RisuAI/PocketRisu 角色扮演的本地长期记忆 sidecar，基于 PostgreSQL/pgvector",
+   "review": "NMOS 是一个本地 sidecar，为 PocketRisu/RisuAI 长对话角色扮演保留不可变聊天历史，并在每次回复前注入预算化的记忆包（摘录、状态、事实），支持可选的 LLM 事实抽取与语义检索。面向 PocketRisu 用户，通过 Docker Compose 或便携包安装，数据存储在 PostgreSQL，MIT 许可，处于 beta 阶段。",
+   "highlights": [
+    "以本地不可变历史存储聊天记录，回复前注入预算化记忆包，含来源与历史追踪",
+    "提供 Docker Compose 与 Windows/macOS/Linux 便携包两种安装方式，内置 PostgreSQL",
+    "面板提供 Inspector 与只读状态页，展示存储内容与注入内容"
+   ],
+   "use_cases": [
+    "PocketRisu/RisuAI 长对话角色扮演中记住超出上下文窗口的剧情",
+    "需要本地保存聊天记忆并审计注入内容的隐私敏感场景",
+    "配合 Ollama 等 OpenAI 兼容端点做本地化事实抽取与语义召回"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "From 0.3.0 each release also carries a bundle per system with NMOS, its own PostgreSQL 16 and Python, and the ／ docker compose exec -T postgres pg_dump -U nmos -d nmos -Fc > nmos-backup.dump",
+     "lines": [
+      84,
+      147
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "NMOS 是使用 PostgreSQL 存储自身记忆数据的应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "docker",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "From 0.3.0 each release also carries a bundle per system with NMOS, its own PostgreSQL 16 and Python, and the ／ docker compose exec -T postgres pg_dump -U nmos -d nmos -Fc > nmos-backup.dump",
+   "evidence_lines": [
+    84,
+    147
+   ]
+  },
+  "fn": "Sallos725/NMOS",
+  "sha": "c20c82149423",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "beab1347232d": {
+  "identity": {
+   "one_liner": "VastBase/openGauss/PostgreSQL 数据应急恢复工具，离线解析数据文件与 WAL 抢救数据",
+   "review": "vbdul 用于在数据库无法启动、误删表/数据、误 UPDATE/DELETE、无备份等场景下，从磁盘数据文件、文件系统空闲空间或 WAL 中恢复数据，支持 VastBase、openGauss 内核版本与 PostgreSQL 11~17，仅提供二进制发布、源码不公开，正式版需按主机指纹获取授权，且仅支持 Heap 行存引擎，ustore/cstore 不支持。",
+   "highlights": [
+    "支持离线解析数据文件、文件系统空闲空间碎片扫描与 WAL logminer 挖掘按事务反向恢复",
+    "支持 ProBackup 备份集单表选择性恢复，可指定停止 LSN/XID，导出 COPY 格式可由 psql 导入",
+    "以严格只读方式访问源数据，支持 Linux x86_64/aarch64 静态编译二进制分发"
+   ],
+   "use_cases": [
+    "数据库无法启动且无备份时离线解析磁盘数据文件抢救数据",
+    "DROP TABLE/TRUNCATE 后通过文件系统空闲页面碎片扫描还原数据",
+    "误 UPDATE/DELETE 后挖掘 WAL 按事务反向恢复"
+   ]
+  },
+  "classification": {
+   "cat": "备份",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "vbdul 是一款数据库应急数据恢复工具（类似 Oracle ODU），支持 VastBase、openGauss 内核版本与 PostgreSQL 11~17。在数据库无法启动、误删表/数据、误 UPDATE/DELETE、无备份的极端场景下，直接从磁盘数据文件、文件系统空闲空间或 WAL 中抢救恢复数据。 ／ |数据库|VastBase v0/v1/v2/v3/v5/v6（PG11/PG14/PG16/openGauss 6.0/PG17/G100 2.2.5 内核）、PostgreSQL 11~17|",
+     "lines": [
+      3,
+      40
+     ]
+    },
+    {
+     "db": "openGauss",
+     "rel": "support",
+     "quote": "vbdul 是一款数据库应急数据恢复工具（类似 Oracle ODU），支持 VastBase、openGauss 内核版本与 PostgreSQL 11~17。在数据库无法启动、误删表/数据、误 UPDATE/DELETE、无备份的极端场景下，直接从磁盘数据文件、文件系统空闲空间或 WAL 中抢救恢复数据。 ／ |数据库|VastBase v0/v1/v2/v3/v5/v6（PG11/PG14/PG16/openGauss 6.0/PG17/G100 2.2.5 内核）、PostgreSQL 11~17|",
+     "lines": [
+      3,
+      40
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "vbdul 是一款数据库应急数据恢复工具（类似 Oracle ODU），支持 VastBase、openGauss 内核版本与 PostgreSQL 11~17。在数据库无法启动、误删表/数据、误 UPDATE/DELETE、无备份的极端场景下，直接从磁盘数据文件、文件系统空闲空间或 WAL 中抢救恢复数据。",
+     "lines": [
+      3
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 定位为数据库应急数据恢复工具，为 VastBase/openGauss/PostgreSQL 数据库本身提供恢复服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "openGauss"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "源码不公开，仅提供二进制发布，正式版按主机指纹授权（Ed25519 签名 license）",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "vbdul 是一款数据库应急数据恢复工具（类似 Oracle ODU），支持 VastBase、openGauss 内核版本与 PostgreSQL 11~17。在数据库无法启动、误删表/数据、误 UPDATE/DELETE、无备份的极端场景下，直接从磁盘数据文件、文件系统空闲空间或 WAL 中抢救恢复数据。 ／ |数据库|VastBase v0/v1/v2/v3/v5/v6（PG11/PG14/PG16/openGauss 6.0/PG17/G100 2.2.5 内核）、PostgreSQL 11~17|",
+   "evidence_lines": [
+    3,
+    40
+   ]
+  },
+  "fn": "LiXiangYu0612/vbdul",
+  "sha": "beab1347232d",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

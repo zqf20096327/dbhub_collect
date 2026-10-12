@@ -9812,5 +9812,145 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b303e3a202c3": {
+  "identity": {
+   "one_liner": "ESP32 墨水屏食材保鲜提醒器，含 Node.js/SQLite 服务端与固件",
+   "review": "一套可复刻的家庭物品到期提醒方案：手机 H5 记录物品有效期，Node.js 服务端完成排版与帧渲染，ESP32 定时拉取并刷新墨水屏。SQLite 存储数据，支持公共托管、局域网和自有云三种部署，并提供 MCP 接口供 Agent 管理物品。适合愿意自制硬件的家庭用户；许可为 PolyForm Noncommercial，不允许商业使用。",
+   "highlights": [
+    "提供 ESP32-C3/S3 固件、H5 前端、Node.js 服务端与 3D 打印外壳的完整复刻方案",
+    "支持公共托管、局域网本地与自有云服务器三种部署方式，设备配对与取帧流程一致",
+    "提供 MCP 与内置助手，可通过 Agent 查询和管理家庭物品"
+   ],
+   "use_cases": [
+    "家庭食品、药品、日用品的有效期追踪与到期提醒",
+    "低功耗墨水屏智能家居信息显示设备自制",
+    "局域网内数据不出家门的自托管部署"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "服务和 SQLite 数据全部保存在自己的设备上。ESP32 与服务端通常需要位于同一局域网， ／ - 持久化 `fridge_tracker_server/data/`，并做好 SQLite 备份。 ／ |`fridge_tracker_server/`|H5、API、SQLite、账号、MCP、Agent、三色 / 四色帧渲染|服务端 README|",
+     "lines": [
+      238,
+      247,
+      259
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 SQLite 保存物品与设备数据的家庭提醒应用，并非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "dba-agent"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "PolyForm Noncommercial License 1.0.0，非 OSI 开源许可，仅限非商业使用，商用需书面授权",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "服务和 SQLite 数据全部保存在自己的设备上。ESP32 与服务端通常需要位于同一局域网， ／ - 持久化 `fridge_tracker_server/data/`，并做好 SQLite 备份。 ／ |`fridge_tracker_server/`|H5、API、SQLite、账号、MCP、Agent、三色 / 四色帧渲染|服务端 README|",
+   "evidence_lines": [
+    238,
+    247,
+    259
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "xueyouluo/fridge_tracker",
+  "sha": "b303e3a202c3",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a84006b28f47": {
+  "identity": {
+   "one_liner": "基于 ASP.NET Core MVC 的内容管理与个人/商务事务管理系统",
+   "review": "Maroik 是一个使用 ASP.NET Core MVC、EF Core 与 PostgreSQL 17 构建的 Web 应用，包含记账、日历、公告板和基于角色的用户管理，采用 DDD + Clean Architecture 分层，通过 Docker Compose 部署，并使用 Testcontainers 中的真实 PostgreSQL 和 RabbitMQ 进行测试。适合需要自托管财务与内容管理的个人或小团队使用。",
+   "highlights": [
+    "提供个人财务记录、日历日程、公告板与角色化用户管理功能",
+    "采用 DDD + Clean Architecture 分层，依赖关系由 NetArchTest 架构测试在构建期强制校验",
+    "测试使用 Testcontainers 运行真实 PostgreSQL 与 RabbitMQ 实例"
+   ],
+   "use_cases": [
+    "个人或企业的收支记录与财务报表导出",
+    "团队或公开的日历共享与公告板发布",
+    "需要角色分级与审计日志的账户管理场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- PostgreSQL 17",
+     "lines": [
+      134
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 描述其为使用 PostgreSQL 存储数据的 Web 应用，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Maroik is a modern web application built with ASP.NET Core MVC, featuring a comprehensive set of tools for personal and business management. It includes features such as expense tracking, calendar management, bulletin boards, and role-based user management. ／ - PostgreSQL 17",
+   "evidence_lines": [
+    6,
+    134
+   ]
+  },
+  "fn": "IkhyeonJo/Maroik-CMS",
+  "sha": "a84006b28f47",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

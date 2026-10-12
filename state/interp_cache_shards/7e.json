@@ -10340,5 +10340,237 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ca0c342745b8": {
+  "identity": {
+   "one_liner": "开源自托管 AI 应用构建器，输入提示词生成全栈 Next.js 应用",
+   "review": "该仓库是 Totalum API 之上的开源前端界面：用户输入提示词，由 Totalum 云端 AI 代理生成 Next.js 全栈应用并提供托管、SQL 数据库、部署和自定义域名。安装仅需 clone、npm install 并配置一个 Totalum API 密钥后 npm run dev 运行，要求 Node.js 20+。适合想自建 AI 应用构建平台的开发者或 SaaS 公司；注意项目默认不带任何鉴权，公开部署前需自行添加认证层。",
+   "highlights": [
+    "通过 Totalum API 将自然语言提示词生成完整 Next.js 项目并实时预览",
+    "内置数据库浏览器：浏览/编辑行、执行 SQL、读取 schema 和迁移、备份与恢复",
+    "支持 GitHub 双向同步、自定义域名、多租户隔离项目和版本历史回滚"
+   ],
+   "use_cases": [
+    "个人开发者自托管一个提示词生成全栈应用的构建平台",
+    "SaaS 公司将该构建器嵌入自有产品，向用户提供应用构建能力",
+    "无代码/代理团队以自有品牌交付客户应用"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "- **Database (for your own users/billing)**: Supabase, Postgres, PlanetScale, MongoDB, anything.",
+     "lines": [
+      184
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "它是使用数据库（由 Totalum API 提供的托管 SQL 数据库）构建应用的产品本体，而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "A ready-to-run AI app builder, open source under MIT. ／ - **The hard part is done by the Totalum API.** Totalum runs the AI agent that writes the code, and hosts every generated app with its database, file storage, SSL, CDN, deploys and custom domains. One API key gives you all of it. ／ - 🗄️ **Database.** Every app gets its own SQL database, with a dev and a live copy. Browse and edit rows, run SQL or ask in plain words, read the schema and migrations, take backups and restore them, all from **More → Database**.",
+   "evidence_lines": [
+    23,
+    29,
+    51
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "totalumlabs/ai-app-builder-open",
+  "sha": "ca0c342745b8",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "66a8bf9cf55d": {
+  "identity": {
+   "one_liner": "Go 语言的类型安全 SQL 查询构建器，零生产依赖",
+   "review": "Relica 是一个 Go 语言查询构建库，提供流式 API、Model() CRUD、命名占位符、JOIN、子查询、CTE、事务和批量操作，内置 LRU 语句缓存，支持 PostgreSQL、MySQL 8.0+ 与 SQLite 3.25+。它面向 Go 开发者，通过参数化查询构建 SQL，仅依赖 Go 标准库。",
+   "highlights": [
+    "提供类型安全的流式查询构建 API，支持 JOIN、子查询、CT、UNION 等集合操作与事务",
+    "提供 Model() ORM 风格 CRUD、Upsert、批量操作与 LRU 语句缓存",
+    "支持 PostgreSQL、MySQL 8.0+、SQLite 3.25+，零生产依赖"
+   ],
+   "use_cases": [
+    "Go 项目中构建复杂 SQL 查询",
+    "需要跨 PostgreSQL/MySQL/SQLite 的结构体 CRUD 操作",
+    "批量插入更新与需要事务隔离控制的场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Multi-Database** - PostgreSQL, MySQL 8.0+, SQLite 3.25+ support ／ Works across all databases (PostgreSQL, MySQL, SQLite): ／ Works with PostgreSQL (`ON CONFLICT DO UPDATE`), MySQL (`ON DUPLICATE KEY UPDATE`), SQLite (`ON CONFLICT DO UPDATE`).",
+     "lines": [
+      38,
+      210,
+      274
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Multi-Database** - PostgreSQL, MySQL 8.0+, SQLite 3.25+ support ／ Works across all databases (PostgreSQL, MySQL, SQLite): ／ Works with PostgreSQL (`ON CONFLICT DO UPDATE`), MySQL (`ON DUPLICATE KEY UPDATE`), SQLite (`ON CONFLICT DO UPDATE`).",
+     "lines": [
+      38,
+      210,
+      274
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Multi-Database** - PostgreSQL, MySQL 8.0+, SQLite 3.25+ support ／ Works across all databases (PostgreSQL, MySQL, SQLite): ／ Works with PostgreSQL (`ON CONFLICT DO UPDATE`), MySQL (`ON DUPLICATE KEY UPDATE`), SQLite (`ON CONFLICT DO UPDATE`).",
+     "lines": [
+      38,
+      210,
+      274
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为多种数据库提供查询构建能力的 Go 开发库，属于数据库生态服务的组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Relica** is a lightweight, type-safe database query builder for Go with zero production dependencies. ／ - **Multi-Database** - PostgreSQL, MySQL 8.0+, SQLite 3.25+ support ／ go get github.com/coregx/relica",
+   "evidence_lines": [
+    11,
+    38,
+    62
+   ]
+  },
+  "fn": "coregx/relica",
+  "sha": "66a8bf9cf55d",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "65490a3c4aa3": {
+  "identity": {
+   "one_liner": "自托管项目与任务管理平台，Java Spring Boot + Next.js 模块化单体架构",
+   "review": "PDA 是一个面向学生和小型软件团队的开源、自托管项目与任务管理平台，用 Spring Boot 后端和 Next.js 前端实现任务板、项目内聊天、GitHub 仓库跟踪、角色与测试报告等功能。数据存储于 PostgreSQL，通过 Docker Compose 一键启动后端与数据库；部署需自行配置 SMTP、JWT 密钥等环境变量。",
+   "highlights": [
+    "提供简单/高级两种任务管理模式，含看板、冲刺与待办视图",
+    "支持 GitHub 公开仓库跟踪、项目内群聊与一对一通信",
+    "提供 RBAC 角色、TOTP 两步验证、HttpOnly cookie 会话等安全机制"
+   ],
+   "use_cases": [
+    "学生团队管理课程项目的任务分配与交付进度",
+    "小型团队自托管替代付费项目管理工具",
+    "需要 GitHub 提交跟踪与测试报告流程的项目协作"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ - Docker Desktop **veya** Docker Engine + Docker Compose (backend ve PostgreSQL için) ／ Java ve PostgreSQL'i host makineye ayrı ayrı kurmak gerekmez; backend ve veritabanı Docker içinde çalışır, frontend Docker dışında çalışır.",
+     "lines": [
+      13,
+      215,
+      218
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其后端与数据存储运行于 PostgreSQL，属于使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**PDA**, öğrenciler ve küçük yazılım ekipleri için geliştirilen **ücretsiz, açık kaynak ve self-hosted proje yönetim platformudur**. ／ - Docker Desktop **veya** Docker Engine + Docker Compose (backend ve PostgreSQL için) ／ docker compose up --build -d",
+   "evidence_lines": [
+    18,
+    215,
+    298
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "alperrte/project-delivery-assistant",
+  "sha": "65490a3c4aa3",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9390,5 +9390,91 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "0742438f1f68": {
+  "identity": {
+   "one_liner": "面向 AI Agent 的受治理 SQL 网关，MCP 协议、参数化 codegen、拒绝任意 SQL",
+   "review": "该项目实现一个 MCP 服务器形式的 SQL 访问网关，通过显式 Entity、关系代数 IR 和参数化 codegen 让不可信 AI Agent 访问 PostgreSQL、MySQL 与 OceanBase，不提供任意 SQL 与 DDL；可信操作者可经默认关闭的 execute_sql 逃生通道操作。内置 RBAC、字段 ACL、row policy、结果上限、超时与审计等控制。适用于需要给 AI Agent 受控数据访问权限的团队与运维人员。",
+   "highlights": [
+    "通过显式 Entity、关系代数 IR 和参数化 codegen 提供数据访问，不接受任意 SQL、不提供 DDL",
+    "统一强制 RBAC、字段 ACL、row policy 与 mask，含 EXPLAIN 预筛、结果上限、超时和 session/tenant 预算",
+    "提供配置热重载、异步审计和 OpenTelemetry hook，可信操作者有独立的 execute_sql 逃生通道（默认关闭）"
+   ],
+   "use_cases": [
+    "为不可信 AI Agent 提供受策略约束的关系型数据访问",
+    "需要字段/行级权限、脱敏与成本上限的多租户数据访问治理",
+    "通过 MCP 接入 Cursor、Claude Desktop、VS Code 等客户端"
+   ]
+  },
+  "classification": {
+   "cat": "连接/代理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "参数化 codegen 访问 PostgreSQL、MySQL 与 OceanBase，**受治理面不接受任意 SQL，不提供",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "参数化 codegen 访问 PostgreSQL、MySQL 与 OceanBase，**受治理面不接受任意 SQL，不提供",
+     "lines": [
+      6
+     ]
+    },
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "参数化 codegen 访问 PostgreSQL、MySQL 与 OceanBase，**受治理面不接受任意 SQL，不提供",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为数据库提供受控访问的网关组件，为数据库生态服务而非使用数据库的业务应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> **The governed SQL gateway for untrusted AI agents.** ／ 面向不可信 AI Agent 的受控 SQL 数据访问网关。通过显式 Entity、关系代数 IR 和 ／ 参数化 codegen 访问 PostgreSQL、MySQL 与 OceanBase，**受治理面不接受任意 SQL，不提供",
+   "evidence_lines": [
+    3,
+    5,
+    6
+   ]
+  },
+  "fn": "nethinwei/sql-mcp-server",
+  "sha": "0742438f1f68",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

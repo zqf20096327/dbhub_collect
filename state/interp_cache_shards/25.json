@@ -9535,5 +9535,259 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "25e8a5d713ca": {
+  "identity": {
+   "one_liner": "本地优先的 AI 简历工作台，FastAPI+React+SQLite 单机运行",
+   "review": "ResumeForge 是一个面向求职者的本地优先桌面应用，覆盖岗位管理、简历生成与手写、投递跟进、模拟面试等流程。它用事实台账机制将原始资料与生成内容比对，对未确认信息给出防虚构警告，并支持 PDF/Word 等多格式导出与网申表单填写。数据存放于本机单个 SQLite 文件，不注册账号；AI 功能需自行配置模型服务 API。",
+   "highlights": [
+    "生成结果与本地资料库逐条比对，对不一致项给出防虚构警告",
+    "支持 PDF/Word/Markdown/txt/JSON/HTML 多格式导出，可加水印与一键脱敏",
+    "数据存储在本机单个 SQLite 文件中，支持数据集导入导出与迁移"
+   ],
+   "use_cases": [
+    "求职期间集中管理岗位、简历版本与投递进度",
+    "基于岗位 JD 生成简历并对生成内容做事实核对",
+    "本机填写招聘网站网申表单（只填不交）"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**简历和资料存在哪**|你自己电脑上的一个 SQLite 文件，可随时拷走|对方的服务器，导出要走会员| ／ - **默认全部留在本机。** 业务数据存在 `backend/data/resume_forge.db` 这**一个** SQLite 文件里（附件、照片与历史兼容字段也在库内），不经过任何第三方服务；导出、渲染、PDF 生成都在本机完成。",
+     "lines": [
+      50,
+      362
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明业务数据存于本机 SQLite 文件，SQLite 是应用的存储层而非服务对象",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**本地优先的 AI 简历工作台：不注册、不登录，数据只存在你自己电脑上的一个文件里。** ／ |**简历和资料存在哪**|你自己电脑上的一个 SQLite 文件，可随时拷走|对方的服务器，导出要走会员|",
+   "evidence_lines": [
+    13,
+    50
+   ]
+  },
+  "fn": "magicapple123/ResumeForge",
+  "sha": "25e8a5d713ca",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "283a0582866f": {
+  "identity": {
+   "one_liner": "自托管蛋鸡养殖场管理系统，基于 PostgreSQL 的多租户应用",
+   "review": "Cluckwork 是一个自托管的家禽养殖场管理系统，聚焦蛋鸡生产：记录每日分级产量、FIFO 蛋批溯源、限制用药批次、管理销售与库存报表。后端为 .NET 10 + PostgreSQL (EF Core)，前端 React SPA 与 API 合并为单容器交付。适用于养殖场或提供托管服务的运营者自部署使用，架构预留肉鸡、种禽等模块扩展。",
+   "highlights": [
+    "提供每日生产录入、FIFO 蛋批全链路溯源与用药限制批次拦截",
+    "单容器同时服务 SPA 与 JSON API，支持 Aspire 本地开发与 Docker Compose 部署",
+    "多租户数据层隔离（EF 全局查询过滤器 + 租户戳），每次迁移生成完整 schema 文档"
+   ],
+   "use_cases": [
+    "蛋鸡场日常生产记录与产蛋率、库存跟踪",
+    "蛋品销售订单管理与未收款跟踪",
+    "多农场/多租户集中管理生产数据"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Backend:** C# / .NET 10 (ASP.NET Core minimal APIs) · **Database:** PostgreSQL (EF Core)",
+     "lines": [
+      28
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL (EF Core) 作为应用数据库存储业务数据，属于使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT，允许商用并保留版权声明",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "- **Backend:** C# / .NET 10 (ASP.NET Core minimal APIs) · **Database:** PostgreSQL (EF Core) ／ Cluckwork helps a farm run its daily operation from one system: record ／ and `Domain` depends on nothing. Tenant isolation is enforced in the data layer",
+   "evidence_lines": [
+    28,
+    7,
+    135
+   ]
+  },
+  "fn": "mforce/cluckwork",
+  "sha": "283a0582866f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "befdcb99df80": {
+  "identity": {
+   "one_liner": "Kotlin 多平台注解类持久化库，基于 SQLite/IndexedDB/内存引擎",
+   "review": "Rekords 是一个 Kotlin Multiplatform 持久化库，通过 @Rekord 注解类声明 schema 与迁移，在公共代码中提供过滤、排序、分页、事务和 Flow 观察等 API，底层由各目标平台自带的 SQLite、浏览器 IndexedDB 或内存引擎承接，不自带数据库。适合需要在多平台共享存储逻辑、且无需完整 SQL 能力的 Kotlin 开发者。",
+   "highlights": [
+    "提供带版本化 schema 迁移的存储，迁移在独立事务中运行",
+    "支持事务、嵌套 rekord 过滤、查询的 Flow 观察",
+    "提供 rekords-crypto 模块，用 AES（GCM/SIV）对单个字段做确定性或随机化加密"
+   ],
+   "use_cases": [
+    "Kotlin Multiplatform 应用的本地数据持久化（Android、iOS、JVM、JS/Wasm）",
+    "需要脱离 SQL、与存储引擎无关的简单数据访问 API 的场景",
+    "字段级加密存储，如对账号等敏感字段加密后仍可按等值查询"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "SQLite, the browser's IndexedDB or memory — is decided by the engine each target depends on. ／ the platform already has: the operating system's SQLite on Android, Apple platforms and Linux, and ／ |`rekords-sqlite`|Engine keeping rekords in SQLite, through `androidx.sqlite`|Android, JVM, iOS, macOS, tvOS, watchOS, Linux (no iOS simulator on Intel)|",
+     "lines": [
+      8,
+      13,
+      48
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是为应用程序提供持久化能力的多平台库组件，通过 androidx.sqlite 使用平台 SQLite 引擎，而非使用数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Kotlin Multiplatform storage for annotated classes. Describe what you keep as `@Rekord` classes, ／ Rekords is meant to stay simple and lightweight. It ships no database of its own and uses the one ／ |`rekords-sqlite`|Engine keeping rekords in SQLite, through `androidx.sqlite`|Android, JVM, iOS, macOS, tvOS, watchOS, Linux (no iOS simulator on Intel)|",
+   "evidence_lines": [
+    6,
+    12,
+    48
+   ]
+  },
+  "fn": "DenisShakinov/rekords",
+  "sha": "befdcb99df80",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "desc::Oceanbase related scripts and software": {
+  "identity": {
+   "one_liner": "OceanBase 相关脚本与软件集合",
+   "review": "基于简介：该仓库包含与 OceanBase 相关的脚本和软件，具体功能、目标用户和运行方式均未在简介中说明，需要查看仓库内容才能确认其用途。仅能确认其围绕 OceanBase 这一数据库展开，属于保守编目，更多定位信息无法从简介验证。",
+   "highlights": [
+    "包含 OceanBase 相关脚本",
+    "包含 OceanBase 相关软件"
+   ],
+   "use_cases": [
+    "需要 OceanBase 相关脚本的操作场景（具体用途待确认）"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "OceanBase",
+     "rel": "support",
+     "quote": "Oceanbase related scripts and software"
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "简介仅称包含 OceanBase 相关脚本和软件，无法判断其为生态工具还是使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "OceanBase"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "low",
+   "evidence": "Oceanbase related scripts and software"
+  },
+  "fn": "sakurai8888/oceanbase",
+  "sha": "desc::Oceanbase related scripts and software",
+  "source": "desc",
+  "generated_at": "2026-10-12",
+  "ver": 2,
+  "prompt_ver": "3.3"
  }
 }

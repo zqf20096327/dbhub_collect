@@ -9323,5 +9323,139 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e6dddcdb049d": {
+  "identity": {
+   "one_liner": "自托管协作工作区，含页面、数据库视图与内置 MCP 服务器",
+   "review": "Leafdesk 是一个可自托管的开源工作区应用，提供页面编辑器、多种视图的数据库、实时协作与离线编辑，并内置 MCP 服务器，使 Claude 等 AI 客户端经 OAuth 授权后检索和编辑工作区内容。数据存于自建 PostgreSQL，通过 docker compose 部署，供团队或个人搭建知识库使用。",
+   "highlights": [
+    "提供块编辑器页面与数据库，支持 table/board/calendar/gallery/list/timeline/chart/form 视图、relations、formulas 与 rollups",
+    "内置 MCP 服务器，支持 AI 客户端经 OAuth 2.1 授权后搜索、读取和编辑工作区",
+    "支持 Yjs over WebSocket 的实时协作、离线编辑，以及从 Notion、Obsidian、Markdown/CSV 导入"
+   ],
+   "use_cases": [
+    "团队自托管知识库与项目数据库管理",
+    "让 Claude 等 AI 助手通过 MCP 安全读写工作区内容",
+    "从 Notion/Obsidian 导入并迁移现有笔记"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL, ／ # and POSTGRES_PASSWORD to the output of: openssl rand -hex 24",
+     "lines": [
+      22,
+      37
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目本身是使用 PostgreSQL 存储数据的工作区应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An open-source, self-hostable workspace of pages and databases with realtime collaboration and a ／ - **Yours to run**: one `docker compose up` on your own server, data in your PostgreSQL, ／ - **Built for AI assistants**: connect Claude or any other MCP client over OAuth 2.1 and approve",
+   "evidence_lines": [
+    3,
+    22,
+    15
+   ]
+  },
+  "fn": "esmworks/leafdesk",
+  "sha": "e6dddcdb049d",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fcd11cb4766e": {
+  "identity": {
+   "one_liner": "语言课实时笔记应用：转录对话并自动生成结构化笔记与练习",
+   "review": "这是一款面向一对一语言教学的 Web 应用：通话期间由 Gemini Live 转录双方发言，Jev 分类器对每一轮做出判断，自动生成含纠错、词汇、讲解的结构化笔记，并在课后生成练习包（闪卡、填空）。导师另有视图显示未处理的错误与建议练习。存储使用 SQLite（L493），无需独立数据库服务，需要能持久化磁盘的主机。导师仍是人类，应用本身不教学。",
+   "highlights": [
+    "通过 Gemini Live 实时转录，并按设备分别采集各自信道的麦克风音频以区分说话人（L109、L114）",
+    "自动记录学习者的错误、纠正、新词汇、语法讲解、学习目标等条目，并生成 Lesson Pack 练习（L98-L104）",
+    "提供学习者/导师双视图，导师视图显示未纠正错误、跨课反复出现的弱点和建议练习（L160-L170）",
+    "存储使用 SQLite，应用无需外部数据库服务（L493）"
+   ],
+   "use_cases": [
+    "一对一线上语言课程的实时课堂记录与课后复习材料生成",
+    "导师跟踪学员跨课时的反复弱点并安排针对性练习",
+    "学员事后重开课程页面复习闪卡和填空练习"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Storage is SQLite through Node's built-in driver, so the app needs no service to",
+     "lines": [
+      493
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该应用用 SQLite 存储课程数据（L493、L592），是使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "An intelligent lesson notebook. During a one-to-one language lesson it listens to",
+   "evidence_lines": [
+    3
+   ]
+  },
+  "fn": "HusDev/LinguaTrace",
+  "sha": "fcd11cb4766e",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

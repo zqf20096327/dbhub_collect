@@ -8619,5 +8619,147 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "cab7eda0ea52": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 3 + Vue 3 的 B2C 电商平台，含秒杀与多 Agent 客服",
+   "review": "这是一个覆盖用户注册登录、商品浏览、购物车、下单、支付全流程的 B2C 电商平台，包含后端服务、管理后台、用户门户和独立的智能客服四个模块。后端使用 MySQL 8.0 存储关系数据（Druid 连接池），配合 Redis、RabbitMQ、Elasticsearch 实现缓存、异步下单与全文搜索；首次启动时通过 db/mall.sql 自动初始化库表。适合学习/部署电商系统全栈方案的用户。",
+   "highlights": [
+    "实现秒杀高并发方案：Redis Lua 原子扣减库存、RabbitMQ 消息削峰异步下单、消费失败重试与库存回滚",
+    "提供 RabbitMQ 延迟队列实现的订单超时自动取消与库存恢复机制",
+    "内置基于 LangGraph 的多 Agent 智能客服，含 RAG 知识库检索与 SSE 流式响应"
+   ],
+   "use_cases": [
+    "需要电商前台与运营后台完整功能的项目参考或二次开发",
+    "高并发秒杀场景的实现方案学习与实践",
+    "基于多 Agent 编排与大语言模型的客服系统集成"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**mall-server**|后端服务，REST API|Spring Boot 3.2.5 + MyBatis-Plus + MySQL + Redis + RabbitMQ + Elasticsearch + Sa-Token|8800| ／ |MySQL|8.0|关系数据库（Druid 连接池）| ／ - Docker（中间件统一由 Docker 容器提供，无需本机安装 MySQL/Redis 等）",
+     "lines": [
+      19,
+      91,
+      146
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是使用 MySQL 作为存储的电商平台应用，而非为数据库生态服务的工具或组件。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "|**mall-server**|后端服务，REST API|Spring Boot 3.2.5 + MyBatis-Plus + MySQL + Redis + RabbitMQ + Elasticsearch + Sa-Token|8800| ／ |MySQL|8.0|关系数据库（Druid 连接池）| ／ 首次启动 MySQL 会自动执行 `db/mall.sql` 初始化库表和种子数据。",
+   "evidence_lines": [
+    19,
+    91,
+    154
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm",
+    "pypi"
+   ]
+  },
+  "fn": "quuuuj/mall",
+  "sha": "cab7eda0ea52",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "a9ae77534490": {
+  "identity": {
+   "one_liner": "全栈面试题库，含 SQL/PostgreSQL 等题目与答案",
+   "review": "该仓库收录 817 道全栈开发面试题及参考答案，覆盖 JavaScript、React、Node.js、NestJS、SQL/PostgreSQL、系统设计、AWS、DevOps、Web 安全等主题，每题按 Junior/Middle/Senior 分级并附代码与 Mermaid 图表。面向备考工程师与面试官，作为问答资料库使用，不提供任何软件安装包。",
+   "highlights": [
+    "包含 817 道分级的全栈面试题与完整答案，覆盖 17 个主题",
+    "PostgreSQL 主题含 50 题，覆盖 MVCC、vacuum、EXPLAIN、锁与复制",
+    "图表以 Mermaid 编写，可通过 npm 脚本渲染 PNG 与刷新目录表"
+   ],
+   "use_cases": [
+    "工程师准备全栈/前端/后端技术面试",
+    "面试官按级别挑选面试问题与追问",
+    "复习 PostgreSQL、系统设计等技术主题知识"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "Fullstack Interview Questions and Answers: JavaScript, TypeScript, React, Next.js, Node.js, NestJS, PostgreSQL, System Design, AWS, DevOps ／ JavaScript · TypeScript · React · Next.js · React Native · Node.js · NestJS · SQL & PostgreSQL · API Design · System Design · Microservices · AWS · DevOps · Web Security · Testing ／ |PostgreSQL|MVCC, vacuum, EXPLAIN, index types, locking, replication|50|11 / 23 / 16|8|",
+     "lines": [
+      1,
+      6,
+      40
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "仓库是面试题文本资料集合，仅在题目中涉及数据库内容，不运行于数据库之上，也不为数据库提供服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": []
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "**800+ fullstack developer interview questions with complete answers, code examples and diagrams.** ／ A free, open-source collection of **fullstack, frontend and backend interview questions and answers** for software engineers preparing for technical interviews in 2026. Every question has a **complete answer**: a short answer you can say out loud first, then the deeper explanation, working code, comparison tables and diagrams. ／ |PostgreSQL|MVCC, vacuum, EXPLAIN, index types, locking, replication|50|11 / 23 / 16|8|",
+   "evidence_lines": [
+    5,
+    14,
+    40
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "ivankupach/fullstack-interview-questions",
+  "sha": "a9ae77534490",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

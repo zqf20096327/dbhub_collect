@@ -9245,5 +9245,81 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d73115702d2f": {
+  "identity": {
+   "one_liner": "融合对话导购与智能客服的 B2C 电商微服务平台",
+   "review": "一个 B2C 单商家电商系统，用 Spring Cloud 微服务拆分商品、订单、支付、库存等域，并集成 Python Agent 提供对话式搜索、查单与售后提案。写操作采取「提案-用户确认-Java 执行」闭环，模型不直接改业务库。适合作为学习微服务与 LLM Agent 落地电商场景的开发者参考，部署需 Docker、JDK 17、Python 3.11+ 及 LLM API Key，本机建议内存 16GB 以上。",
+   "highlights": [
+    "智能客服为独立 Python Agent 进程，经 Streamable HTTP MCP Server 提供 10 个读/写工具，写操作经提案确认后由 Java 执行",
+    "交易链路使用 MySQL 行锁预检、Redis Lua 原子预扣、RabbitMQ TTL/DLX 延迟关单与死信退避重投",
+    "搜索采用 Elasticsearch 关键词加向量 RRF 混合召回，并含相关性过滤与热销/足迹兜底"
+   ],
+   "use_cases": [
+    "需要对话式导购、智能客服与人工流程并存的 B2C 电商运营",
+    "学习 Spring Cloud 微服务拆分、分库设计与 Seata 分布式事务的工程实践",
+    "基于 LangGraph/MCP 构建带写操作确认闭环的 LLM Agent 应用参考"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "|**交易与库存**|SKU：MySQL 行锁预检 + 条件更新防超卖；批量扣减/回补以操作号幂等，超时未支付经 RabbitMQ TTL/DLX 关单并回补。秒杀券：Redis Lua 原子预扣 + DB 兜底| ／ |**签到与异步**|MySQL 月位图为签到权威数据源，连续/累计/补签汇总落 user_sign_summary 并由 Redis Hash 缓存（签到/补签时写入、首次访问自动回填），缓存均可重建；签到/补签、跨月连续天数、成长值与连续签到发券均具备事务与幂等保障；通知死信队列**有限退避重投 + 超限丢弃审计**，消息不静默丢失| ／ |MySQL Connector/J|8.3.0|",
+     "lines": [
+      16,
+      17,
+      34
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 MySQL 为签到权威数据源并以业务分库存储交易数据，属于使用数据库的电商应用而非为数据库生态服务的组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "rag"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "B2C 单商家电商在线平台。面向“只能手动搜商品”的传统体验，把**对话导购、混合搜索与可执行智能客服**融入电商全流程：浏览、咨询、下单、售后均可在对话里完成读操作，写操作经“提案 -> 用户确认 -> Java 执行”闭环，模型不直改业务库。 ／ |**交易与库存**|SKU：MySQL 行锁预检 + 条件更新防超卖；批量扣减/回补以操作号幂等，超时未支付经 RabbitMQ TTL/DLX 关单并回补。秒杀券：Redis Lua 原子预扣 + DB 兜底| ／ MySQL 8.3 · Redis 7 · RabbitMQ 3.13 · Nacos 2.4.3 · Elasticsearch 9.2.1-IK · Sentinel · Seata AT（默认开启，本地可用 `SEATA_ENABLED=false` 关闭）",
+   "evidence_lines": [
+    5,
+    16,
+    59
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "Audreator/Simlect-AI-Mall",
+  "sha": "d73115702d2f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

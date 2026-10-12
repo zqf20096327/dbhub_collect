@@ -8613,5 +8613,61 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6d8a88159577": {
+  "identity": {
+   "one_liner": "Infinity 的 Apple Silicon 原生移植版混合搜索数据库",
+   "review": "该项目将开源数据库 Infinity 移植到 macOS arm64 平台，使向量、全文（BM25）和 SQL 过滤在同一张表中通过一次查询完成混合检索，并提供 Python SDK 与 HTTP API。适合在 Mac 上构建本地 RAG 索引的开发者；目前仍处于验证收尾阶段，已有评测发现多个引擎缺陷，不宜用于不可丢失的数据。",
+   "highlights": [
+    "在同一表中融合 BM25 全文检索、HNSW 向量检索和 SQL 过滤条件，通过一次查询返回结果",
+    "与上游 Infinity 兼容的 Python SDK 和 HTTP API，在 macOS 14+ Apple Silicon 上原生构建运行",
+    "提供可复现的基准测试脚本，对比 FAISS、hnswlib、usearch 的构建速度与查询吞吐"
+   ],
+   "use_cases": [
+    "在 Mac（Apple Silicon）本地部署向量+全文混合检索服务，用于 RAG 应用",
+    "替代需要 Docker/Rosetta 的上游 Infinity，在 macOS arm64 上运行混合搜索数据库",
+    "复现或扩展 HNSW 索引构建与查询性能基准测试"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "README 表明这是数据库引擎 Infinity 在 Apple Silicon 上的移植，为检索/RAG 生态提供数据库服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0，为 Infinity（© InfiniFlow）的衍生作品",
+   "install": [
+    "source",
+    "binary",
+    "pypi"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**A hybrid-search database that runs natively on your Mac.** Vectors, full-text search ／ This is a native `arm64-apple-darwin` port of Infinity, ／ `make` with no arguments lists every target. The build compiles roughly 1,500 C++23",
+   "evidence_lines": [
+    3,
+    12,
+    42
+   ]
+  },
+  "fn": "jatinsethi98/infinity-apple-silicon",
+  "sha": "6d8a88159577",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

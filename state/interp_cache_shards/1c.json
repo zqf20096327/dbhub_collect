@@ -9662,5 +9662,83 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "56ed9e596d55": {
+  "identity": {
+   "one_liner": "Markdown 图床地址批量转换桌面应用，SQLite 本地存储",
+   "review": "一款桌面应用，用于把 Markdown 文档中的图床地址批量替换为目标图床地址，并提供本地上传、任务队列与转换历史。面向需要迁移图床的文档作者。业务数据（配置、任务、历史）以 SQLite 为事实来源存本地，密钥 AES-256-GCM 加密；README 未提供 Web 版数据的直接迁移工具。",
+   "highlights": [
+    "支持 GitHub、腾讯云 COS、阿里云 OSS 等 10 类图床及兼容通用上传接口的自建服务的批量地址转换",
+    "转换任务持久化于 SQLite（rusqlite，WAL 模式），后台 worker 消费，应用重启后自动恢复排队任务",
+    "图床密钥以 AES-256-GCM 加密落库，支持 GitHub 私有 Gist 零知识云同步"
+   ],
+   "use_cases": [
+    "更换图床/仓库/域名时批量替换 Markdown 文档中的图片地址",
+    "将 Markdown 中的本地图片上传到目标图床并自动替换为远程地址",
+    "离线管理图床配置与查询转换历史"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **数据放哪** — SQLite 是业务数据的事实来源，保存图床配置、转换任务与历史记录；图床密钥以 AES-256-GCM 加密落库，加密密钥派生方式与 Web 版一致。",
+     "lines": [
+      76
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "图床配置的加密方式与 Web 版一致，但存储位置不同（Web 版在 PostgreSQL，桌面版在 SQLite），暂不提供直接迁移工具；桌面版重新添加一次图床配置即可。",
+     "lines": [
+      202
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明 SQLite 用于保存应用自身的图床配置、任务与历史数据，是使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "- **数据放哪** — SQLite 是业务数据的事实来源，保存图床配置、转换任务与历史记录；图床密钥以 AES-256-GCM 加密落库，加密密钥派生方式与 Web 版一致。 ／ |数据库|SQLite（rusqlite，WAL 模式）|",
+   "evidence_lines": [
+    76,
+    86
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "npm"
+   ]
+  },
+  "fn": "zyx3721/picsw-rust",
+  "sha": "56ed9e596d55",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

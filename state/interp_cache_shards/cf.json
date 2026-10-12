@@ -9875,5 +9875,138 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "19a9cfd607cd": {
+  "identity": {
+   "one_liner": "YAML 维护的电动汽车开放数据集，构建 SQLite 并提供 API 与仪表盘",
+   "review": "一个以 YAML 文件为数据源、经 JSON Schema 校验后构建成 SQLite 数据库的电动汽车规格开放数据库，含 530+ 车型变体与多市场定价数据，通过 GitHub Releases 提供预构建数据库下载，经 Datasette 提供 SQL 查询与 JSON API，经 Streamlit 提供浏览、对比、分析仪表盘，面向电动车研究者、开发者与社区贡献者；数据采用 CC BY-SA 4.0，代码为 MIT。",
+   "highlights": [
+    "以 YAML 为源、JSON Schema 校验、CI 自动构建 SQLite 数据库（L70）",
+    "提供静态 JSON API（GitHub Pages）、Datasette SQL 查询和 6 页 Streamlit 仪表盘（L72-L74）",
+    "数据双许可：数据 CC BY-SA 4.0，代码 MIT（L217-L218）"
+   ],
+   "use_cases": [
+    "查询和下载电动汽车规格数据集（数据库文件或 JSON API）",
+    "通过 SQL/仪表盘对比车型续航、充电、价格",
+    "社区以 Git 工作流贡献车辆数据并附带来源标注"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite**: Single-file database, portable, fast, perfect for datasets ／ - ✅ **SQLite database** - Automated builds via GitHub Actions",
+     "lines": [
+      19,
+      70
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 存储其构建的车辆数据，而非为数据库生态提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "数据 CC BY-SA 4.0，代码 MIT 双许可",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "YAML Source Files → JSON Schema Validation → SQLite Database → Datasette API + Streamlit Dashboards ／ - ✅ **SQLite database** - Automated builds via GitHub Actions ／ python scripts/build-sqlite.py --input-dir data/ --output evdb.db",
+   "evidence_lines": [
+    12,
+    70,
+    114
+   ]
+  },
+  "fn": "gaia-charge/evdb",
+  "sha": "19a9cfd607cd",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "fb7c6f292417": {
+  "identity": {
+   "one_liner": "离线个人财务应用，内置纯Go SQLite存储与嵌入式React前端",
+   "review": "LocalFinance 是一个面向印度银行与信用卡生态的离线个人财务应用，用于解析银行对账单（PDF/CSV/Excel，含加密PDF）、清洗交易描述、去重导入并提供仪表盘。以 Go 编写，通过 go:embed 打包 React 前端与纯 Go SQLite（WAL 模式），并内置 Goose 管理自动 schema 迁移。主要供印度用户本地管理个人账户与账单数据。",
+   "highlights": [
+    "单二进制分发，内嵌 React 前端与纯 Go SQLite 数据库，跨 Windows/macOS/Linux 编译且无 CGO 依赖",
+    "内置多家印度银行对账单解析器，支持 PDF（含密码保护）、CSV、Excel 格式，并提供通用 CSV 引擎",
+    "通过 SHA-256 交易哈希与幂等 SQLite upsert 实现去重，并用内嵌 Goose 在启动时自动执行 schema 迁移"
+   ],
+   "use_cases": [
+    "本地导入并整理印度银行储蓄/往来账户及信用卡对账单",
+    "离线追踪信用卡账单周期、还款到期日、奖励积分与返现",
+    "从 Splitwise 导入群组费用 CSV 并映射到银行交易"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "> Distributed as a **single standalone executable binary** with an embedded React frontend and an embedded pure-Go SQLite database. ／ - **100% Offline & Private**: Zero cloud sync, zero telemetry, no SMS scraping, and no third-party account aggregators. All your financial data stays strictly on your local machine in an open SQLite database file (`local_finance.db` or `~/.localfinance/local_f ／ - Idempotent SQLite upserts (`ON CONFLICT`) safely update balances while **strictly preserving** your custom category overrides, notes, and tags.",
+     "lines": [
+      12,
+      26,
+      41
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用嵌入式 SQLite 存储个人财务数据，是使用数据库的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "> Distributed as a **single standalone executable binary** with an embedded React frontend and an embedded pure-Go SQLite database. ／ - **100% Offline & Private**: Zero cloud sync, zero telemetry, no SMS scraping, and no third-party account aggregators. All your financial data stays strictly on your local machine in an open SQLite database file (`local_finance.db` or `~/.localfinance/local_finance.db`).",
+   "evidence_lines": [
+    12,
+    26
+   ]
+  },
+  "fn": "usmslm102/local-finance",
+  "sha": "fb7c6f292417",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

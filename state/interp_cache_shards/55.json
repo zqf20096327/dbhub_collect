@@ -10221,5 +10221,73 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "ca44735dad30": {
+  "identity": {
+   "one_liner": "基于 OpenTelemetry 追踪与日志生成错误故事的实时根因分析工具",
+   "review": "Tayga 是一个 Rust 编写的自托管可观测性工具，读取 OTLP 追踪和日志，将失败或慢请求组装为包含根因 span、请求路径和基线差异的错误故事，并挖掘日志模板产生告警。数据存储在 ClickHouse，流经 Redpanda，面向需要自托管错误分析的开发和运维团队，使用 OTel Collector 的现有链路即可接入。",
+   "highlights": [
+    "读取标准 OTLP（gRPC/HTTP），对失败与慢请求生成含根因 span 与关键路径的错误故事，重复问题折叠为故事组",
+    "在摄取阶段用 Drain 挖掘日志模板，对新出现、激增和静默的模板通过 webhook 和 Slack 告警",
+    "提供 Docker Compose 一行安装、Kubernetes Helm chart，存储于 ClickHouse，流经 Redpanda"
+   ],
+   "use_cases": [
+    "微服务环境中对失败请求做根因定位与请求路径分析",
+    "对服务日志做模板化监控并接收新增、激增、静默告警",
+    "作为独立自托管组件与现有 OpenTelemetry Collector 链路配合使用"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**Tayga turns OpenTelemetry traces and logs into error stories.** For each failing or slow request it shows the root-cause span, the request path across services, the critical path, a diff against the endpoint's normal baseline, and the logs that matter. It an ／ **Docker Compose.** Tayga, ClickHouse and Redpanda on one host; the installer checks the ports, waits for health, and prints the URLs: ／ **Kubernetes.** Bundled single-node ClickHouse and Redpanda for evaluation, or your own for production:",
+     "lines": [
+      18,
+      41,
+      49
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "Tayga 是为可观测性流程服务的工具，使用 ClickHouse 作为其存储后端组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "ClickHouse"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0，另有商业授权的 Tayga Enterprise",
+   "install": [
+    "docker",
+    "helm",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Tayga turns OpenTelemetry traces and logs into error stories.** For each failing or slow request it shows the root-cause span, the request path across services, the critical path, a diff against the endpoint's normal baseline, and the logs that matter. It analyses traces as they stream in, so by the time you open it the failing requests are already explained, and repeats of one problem fold into one story group instead of hundreds of traces. It mines your logs into templates and alerts on new, spiking and silent ones. Tayga is written in Rust, reads standard OTLP, stores in ClickHouse, streams through Redpanda, and is self-hosted under the AGPLv3. ／ **Docker Compose.** Tayga, ClickHouse and Redpanda on one host; the installer checks the ports, waits for health, and prints the URLs:",
+   "evidence_lines": [
+    18,
+    41
+   ]
+  },
+  "fn": "softberries/tayga",
+  "sha": "ca44735dad30",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

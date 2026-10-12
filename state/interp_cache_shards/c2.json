@@ -9239,5 +9239,235 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "8cf22be1fc33": {
+  "identity": {
+   "one_liner": "JRA-VAN 竞马数据导入 SQLite/PostgreSQL 的 Python 工具",
+   "review": "该工具通过 JV-Link SDK 获取 JRA-VAN DataLab 的出马表、成绩、赔付、确定赔率及时间序列赔率等数据，解析后写入 SQLite 或 PostgreSQL，并提供 quickstart 批处理、jltsql CLI、daily_sync 日同步脚本和 JSON 获取日志。需要 JRA-VAN 服务密钥与 JV-Link 安装，仅限 Windows 10/11 或 x86_64 Linux + Docker/Wine 环境，不支持 ARM。适用于已订阅 DataLab 并希望以批处理方式入库管理 JRA 数据的用户。",
+   "highlights": [
+    "支持将 JRA-VAN DataLab 数据（出马表、成绩、赔付、确定赔率、时间序列赔率、速报赔率）导入 SQLite 或 PostgreSQL",
+    "提供 quickstart 脚本、jltsql CLI、daily_sync 日同步脚本以及 Windows 任务调度器注册脚本",
+    "在 Linux 上通过 Docker + Wine 运行 32 位 bridge，并包含基于 JSON 的机器可读获取日志（--summary-、RT_CAPTURE_*）"
+   ],
+   "use_cases": [
+    "在 Windows 环境下导入并日同步 JRA-VAN 数据至 SQLite/PostgreSQL",
+    "通过 Docker/Wine 在 x86_64 Linux 上运行数据采集",
+    "对指定日期范围内的常规数据与时间序列赔率进行批量获取"
+   ]
+  },
+  "classification": {
+   "cat": "迁移",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "JRVLTSQL は、JRA-VAN DataLab の JRA データを SQLite または PostgreSQL に保存する ／ |PostgreSQL|PostgreSQL 運用時のみ必要| ／ |PostgreSQL で範囲指定して公式時系列オッズも入れる|`quickstart_timeseries.bat --db postgresql --from 20250426 --to 20260412`|指定範囲の通常データ + `TS_O1` / `TS_O2` を取得し、日次同期タスク登録を確認します。|",
+     "lines": [
+      3,
+      32,
+      79
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "JRVLTSQL は、JRA-VAN DataLab の JRA データを SQLite または PostgreSQL に保存する ／ 迷ったら、まず SQLite で動かしてください。 ／ |SQLite に通常データを入れる|`quickstart.bat`|`NL_RA`, `NL_SE`, `NL_HR`, `NL_O1`〜`NL_O6` などが `data\\keiba.db` に入ります。|",
+     "lines": [
+      3,
+      62,
+      76
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 将其定位为将 JV-Link 获取的数据写入 SQLite/PostgreSQL 的数据导入工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "JRVLTSQL は、JRA-VAN DataLab の JRA データを SQLite または PostgreSQL に保存する ／ |実行環境|使うもの|位置づけ| ／ ## 日次同期",
+   "evidence_lines": [
+    3,
+    13,
+    119
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "pypi"
+   ]
+  },
+  "fn": "miyamamoto/jrvltsql",
+  "sha": "8cf22be1fc33",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "4f4356cf4eb6": {
+  "identity": {
+   "one_liner": "Agentic PostgreSQL DBA 监控分析优化代理",
+   "review": "pg_sage 以单个 Go 二进制运行，通过标准 wire 协议从 catalog 视图和 pg_stat_statements 采集性能数据，用规则引擎加 LLM 生成诊断 Cases，并以带审批门与回滚元数据的分级执行器提出或应用调优动作。面向管理 PostgreSQL 14-18 实例的 DBA/SRE，LLM 功能需配置 API 端点后才启用。",
+   "highlights": [
+    "通过标准 wire 协议采集 catalog 与 pg_stat_statements 数据，无需扩展",
+    "提供规则引擎、LLM 索引/配置建议及带审批门、回滚元数据的分级执行器",
+    "内置仪表盘、REST API、Prometheus 指标与 Slack/PagerDuty/webhook 告警"
+   ],
+   "use_cases": [
+    "PostgreSQL 14-18 实例的性能监控与慢查询/索引调优",
+    "Vacuum/Bloat/Freeze 与锁、连接、WAL 类事故排查",
+    "Fleet 模式下单二进制监控多个数据库"
+   ]
+  },
+  "classification": {
+   "cat": "监控",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL ／ **Agentic Postgres DBA.** No extension required. ／ pg_sage runs as a single Go binary alongside your PostgreSQL instance. It connects",
+     "lines": [
+      5,
+      7,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL 提供采集、诊断和调优动作执行的 DBA 工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "dba-agent",
+     "mcp"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**Agentic Postgres DBA.** No extension required. ／ pg_sage runs as a single Go binary alongside your PostgreSQL instance. It connects ／ over the standard wire protocol, collects performance data from catalog views and",
+   "evidence_lines": [
+    7,
+    11,
+    12
+   ]
+  },
+  "fn": "jasonmassie01/pg_sage",
+  "sha": "4f4356cf4eb6",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "2d94bcdd02bb": {
+  "identity": {
+   "one_liner": "前后端分离宠物领养平台的后端服务",
+   "review": "一个基于 SpringBoot + MyBatis-Plus + Spring Security 的宠物领养平台后端项目，提供宠物领养展示、帖子浏览、类型筛选和用户登录等功能，使用 TiDB 云数据库存储数据。适用于作为前后端分离 Web 应用的学习或开发示例，运行需 JDK 17 与 Maven 3.9.9，在 IDEA 中启动。",
+   "highlights": [
+    "提供宠物领养展示、帖子浏览与类型筛选接口",
+    "集成 Spring Security 实现用户登录功能",
+    "使用 TiDB 云数据库存储数据，通过 MyBatis-Plus 访问"
+   ],
+   "use_cases": [
+    "宠物领养网站的在线展示与浏览",
+    "社区帖子内容展示与分类查看",
+    "平台用户注册与登录管理"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "Springboot、MyBatis-Plus、Spring Security、MySQL",
+     "lines": [
+      5
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "工具：Maven、IDEA、Apifox、TiDB云数据库",
+     "lines": [
+      6
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明该项目是使用 MySQL/TiDB 存储数据的宠物领养平台后端应用，而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "MySQL",
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "基于springboot+vue开发的前后端分离宠物领养网站项目，前端项目在：https://github.com/Estrellannn/DrPaws-pet-adopt-frontend ／ Springboot、MyBatis-Plus、Spring Security、MySQL ／ 工具：Maven、IDEA、Apifox、TiDB云数据库",
+   "evidence_lines": [
+    2,
+    5,
+    6
+   ]
+  },
+  "fn": "Estrellannn/DrPaws-pet-adopt-backend",
+  "sha": "2d94bcdd02bb",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

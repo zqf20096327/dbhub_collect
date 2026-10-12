@@ -8806,5 +8806,77 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "f6b48033a315": {
+  "identity": {
+   "one_liner": "尼日利亚 NDAPS 邮编多语言校验库，含数据库扩展与 MCP 服务",
+   "review": "该项目为尼日利亚 NIPOST 新版数字邮编（NDAPS，11 字符格式）提供离线解析、校验、查找与地址解析能力，发布 Rust/Python/JavaScript/Java 库、PostgreSQL 扩展与 domain、DuckDB 扩展、Polars 表达式以及 MCP 服务器。面向需要在应用或 AI 助手中处理尼日利亚邮编的开发者；离线校验无需密钥，API 查找与地址解析需 NIPOST 密钥，解析器为 pre-release 状态。",
+   "highlights": [
+    "提供 Rust、Python、JavaScript、Java 四语言库，共享同一 spec 测试用例，解析与校验完全离线",
+    "提供 PostgreSQL 原生扩展（8 字节类型带索引支持）与 SQL domain，以及 DuckDB 扩展和宏",
+    "提供 MCP 服务器，支持校验、查找、自动补全、按位置查找与地址解析工具"
+   ],
+   "use_cases": [
+    "电商或物流系统在结账/下单时校验并规范化尼日利亚邮编",
+    "在 PostgreSQL/DuckDB 表中存储与校验 NDAPS 邮编字段",
+    "为 AI 助手配置 MCP 服务器以查询邮编与解析地址"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|`ng_postcode` (PostgreSQL)|The postcode as native 8-byte types with index support, compiled from the Rust core|Package from Releases, then `CREATE EXTENSION ng_postcode`|`native/pg`| ／ **PostgreSQL** ／ On a server where you can install an extension, the native extension has the same functions and stores a code in 8 bytes. Unpack the package for your PostgreSQL version from Releases, then run `CREATE EXTENSION ng_postcode`.",
+     "lines": [
+      25,
+      92,
+      103
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "提供 PostgreSQL 扩展/SQL domain、DuckDB 扩展与宏等供数据库使用的组件，为数据库生态服务",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp"
+    ]
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm",
+    "pypi",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|`ng_postcode` (PostgreSQL)|The postcode as native 8-byte types with index support, compiled from the Rust core|Package from Releases, then `CREATE EXTENSION ng_postcode`|`native/pg`| ／ For databases, `sql/` holds the postcode as a PostgreSQL domain and as DuckDB macros, in plain SQL that runs the same shared cases. ／ - **One behaviour, four languages:** Rust, Python, JavaScript and Java all run the cases in `spec/`, so they cannot drift apart. The Node MCP server registers its tools from `spec/mcp.json`, which the Python server generates.",
+   "evidence_lines": [
+    25,
+    31,
+    172
+   ]
+  },
+  "fn": "Adeniyikayodee/ng-postcode",
+  "sha": "f6b48033a315",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

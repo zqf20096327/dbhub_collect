@@ -9233,5 +9233,169 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "62c58fabf6d0": {
+  "identity": {
+   "one_liner": "全球国家/州/城市/邮编数据集，以12种格式发布",
+   "review": "该仓库提供250个国家、5,299个州、153,765个城市及84万余邮编的社区维护数据集，包含ISO代码、首都、时区、多语言名称等字段，并可通过NPM/PyPI包、GitHub Release压缩包或托管REST API获取。数据以JSON、MySQL/PostgreSQL SQL、SQLite、MongoDB dump等12种格式发布，采用ODbL-1.0许可且要求署名，适合需要地理基础数据的开发者与数据分析师。",
+   "highlights": [
+    "提供 JSON、MySQL、PostgreSQL、SQLite、SQL Server、MongoDB 等 12 种数据格式导出",
+    "数据通过 GitHub Release 的 .gz 压缩包分发，并有 NPM/PyPI 离线快照包与托管 REST API",
+    "包含 100% IANA 时区覆盖与贡献时验证的外键约束"
+   ],
+   "use_cases": [
+    "为应用或网站填充国家/州/城市级联选择数据",
+    "需要地理编码、时区、ISO 代码等离线参考数据的分析项目",
+    "按需筛选国家/区域/字段生成定制数据集"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "- **Formats:** JSON, MySQL, PostgreSQL, SQLite, SQL Server, MongoDB, XML, YAML, CSV, GeoJSON, TOON (LLM-optimised, ~40% fewer tokens than JSON), Parquet (columnar, analytics-ready)",
+     "lines": [
+      125
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "- **Formats:** JSON, MySQL, PostgreSQL, SQLite, SQL Server, MongoDB, XML, YAML, CSV, GeoJSON, TOON (LLM-optimised, ~40% fewer tokens than JSON), Parquet (columnar, analytics-ready) ／ |MySQL SQL|3s|86 MB|22 MB|",
+     "lines": [
+      125,
+      131
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **Formats:** JSON, MySQL, PostgreSQL, SQLite, SQL Server, MongoDB, XML, YAML, CSV, GeoJSON, TOON (LLM-optimised, ~40% fewer tokens than JSON), Parquet (columnar, analytics-ready) ／ |SQLite|45s|89 MB|—|",
+     "lines": [
+      125,
+      138
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "- **Formats:** JSON, MySQL, PostgreSQL, SQLite, SQL Server, MongoDB, XML, YAML, CSV, GeoJSON, TOON (LLM-optimised, ~40% fewer tokens than JSON), Parquet (columnar, analytics-ready)",
+     "lines": [
+      125
+     ]
+    }
+   ],
+   "eco": "unclear",
+   "eco_why": "仓库本体是地理数据集，各数据库只是其数据发布格式之一，既非为数据库生态服务的工具，也非使用数据库存储的典型应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "ODbL-1.0，允许商用/修改/再分发但强制署名且衍生品同许可",
+   "install": [
+    "npm",
+    "pypi",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A comprehensive, community-maintained dataset of **countries, states, counties, cities, and postcodes** — published in 12 formats and free under the Open Database License **(attribution required)**. ／ - **Formats:** JSON, MySQL, PostgreSQL, SQLite, SQL Server, MongoDB, XML, YAML, CSV, GeoJSON, TOON (LLM-optimised, ~40% fewer tokens than JSON), Parquet (columnar, analytics-ready) ／ Licensed under the Open Database License (ODbL v1.0). Commercial use, modification, and redistribution all permitted. **Attribution is required**, and derivatives must be shared under the same license.",
+   "evidence_lines": [
+    5,
+    125,
+    143
+   ]
+  },
+  "fn": "dr5hn/countries-states-cities-database",
+  "sha": "62c58fabf6d0",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bdff393c2ba4": {
+  "identity": {
+   "one_liner": "SQLite 多写者 VFS 扩展，实现线程/进程并发写入同一数据库",
+   "review": "该项目是一个以 SQLite 扩展形式加载的 VFS，为每个写者提供私有 WAL，提交时校验、排序并后台合并到数据库文件，使多个线程或多个进程无需修改 SQL、schema 或 SQLite 本体即可并发写同一库。适合需要在单机多线程/多进程（如多个 agent）场景下写入 SQLite 的开发者；要求应用处理 SQLITE_BUSY_SNAPSHOT 重试，rebase 仅支持按键的简单行级事务。",
+   "highlights": [
+    "支持多线程与多进程（mw_mp=1）并发写同一 SQLite 数据库文件，文件保持普通 SQLite 格式",
+    "提供快照隔离与页校验，可选 mw_rebase 对仅页冲突的事务重放提交",
+    "通过 URI 参数 vfs=multiwriter 或 mw=1 启用，作为扩展加载或编译进 SQLite"
+   ],
+   "use_cases": [
+    "多个 agent 或 worker 进程同时写同一个 SQLite 数据库",
+    "单进程多连接高并发写入，减少 SQLITE_BUSY 重试",
+    "在嵌入式或小型服务器上以 WAL+synchronous=FULL 级别持久性运行多写负载"
+   ]
+  },
+  "classification": {
+   "cat": "内核/引擎",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "# sqlite-multiwriter ／ sqlite-multiwriter removes that limit without touching SQLite. It is a VFS that you load as an extension (or link in): your SQLite, your SQL and your database file stay the same, and many connections ／  .load ./multiwriter -- the sqlite3 shell (multiwriter.so, .dylib or .dll)",
+     "lines": [
+      1,
+      9,
+      66
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该项目是为 SQLite 提供并发写能力的 VFS 扩展组件，而非使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "sqlite-multiwriter removes that limit without touching SQLite. It is a VFS that you load as an extension (or link in): your SQLite, your SQL and your database file stay the same, and many connections ／ Each writer has its own WAL. Its transactions run there on a snapshot of the database, and at commit they are checked, ordered and published; the log is merged into the database file in the background: ／ Every release has the extension for each platform (releases; `make extension` builds it for the machine you are on). Load it into a SQLite that",
+   "evidence_lines": [
+    9,
+    33,
+    63
+   ]
+  },
+  "fn": "sqliteai/sqlite-multiwriter",
+  "sha": "bdff393c2ba4",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

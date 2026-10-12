@@ -9452,5 +9452,159 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "e7433ef9799a": {
+  "identity": {
+   "one_liner": "自托管家用文档管理容器，单容器+SQLite+OCR搜索",
+   "review": "nexpaper 是面向家庭或小型企业的自托管文档归档应用，可视为 Paperless-ngx 的简化版本：单容器运行，用 SQLite 存储账户、设置与搜索索引，文档以普通文件保存在磁盘，内置 OCR 文本识别、检索、保险箱权限、电子发票读取以及从 Paperless-ngx 导入的能力。适合想在自己服务器上轻量管理纸质扫描件的个人用户。",
+   "highlights": [
+    "提供 OCR 文本识别与支持部分词和过滤语法的全文搜索",
+    "支持保险箱（vault）权限管理与文档共享链接",
+    "可读取 ZUGFeRD/Factur-X/XRechnung 电子发票数据，并提供 Paperless-ngx 导入"
+   ],
+   "use_cases": [
+    "家庭或小企业在自有服务器上归档扫描文件与发票",
+    "从 Paperless-ngx 迁移到更简单的单容器方案",
+    "通过手机 PWA 或邮箱/扫描仪文件夹上传文档"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "firm, on your own server. Upload, find, done. One container, no Redis, no Celery, no Postgres, and an import that takes",
+     "lines": [
+      4
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **No Redis, no Celery, no Postgres.** One container, SQLite, plain readable files on the disk.",
+     "lines": [
+      18
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 作为存储数据库的应用，不面向数据库生态提供服务",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "firm, on your own server. Upload, find, done. One container, no Redis, no Celery, no Postgres, and an import that takes ／ - **No Redis, no Celery, no Postgres.** One container, SQLite, plain readable files on the disk. ／     image: ghcr.io/derkezorm/nexpaper:latest",
+   "evidence_lines": [
+    4,
+    18,
+    44
+   ]
+  },
+  "fn": "DerKezorm/nexpaper",
+  "sha": "e7433ef9799a",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "b5d5a0069e82": {
+  "identity": {
+   "one_liner": "基于 Spring Boot 的 AI 学习陪伴后端 REST API，用 TiDB 存储数据",
+   "review": "一个用 Java/Spring Boot 实现的 REST API 后端，将学生笔记通过 Google Gemini 生成为摘要、闪卡与测验，并基于置信度评分检测学习盲区。数据持久化到 TiDB Cloud Serverless（MySQL 协议），含 JWT 认证、速率限制，面向学生用户提供 API，前端为独立仓库。",
+   "highlights": [
+    "提供笔记文本/PDF 上传、摘要、闪卡与测验生成的 REST API，异步任务采用 202 状态轮询模式",
+    "使用 TiDB Cloud Serverless（MySQL-compatible）作为数据库，经 Hibernate 自动建表",
+    "内置 JWT 认证、BCrypt 密码哈希、按用户隔离查询及生成请求速率限制"
+   ],
+   "use_cases": [
+    "为 AI 学习类应用提供笔记转测验/闪卡的后端服务",
+    "基于置信度评分检测学生答题盲区并生成针对性重测",
+    "以 Docker 部署在 Render 等平台运行学习记录与进度统计服务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "MySQL",
+     "rel": "compat",
+     "quote": "|Database|TiDB Cloud Serverless (MySQL-compatible)| ／ **Requirements:** Java 21, a MySQL-compatible database (TiDB Cloud free tier works), a Gemini API key. ／ spring.datasource.url=jdbc:mysql://HOST:4000/pocketmentor?sslMode=VERIFY_IDENTITY",
+     "lines": [
+      25,
+      80,
+      84
+     ]
+    },
+    {
+     "db": "TiDB",
+     "rel": "support",
+     "quote": "|Database|TiDB Cloud Serverless (MySQL-compatible)| ／ React (View) -> Controller -> Service -> Repository -> TiDB (Model) ／ **Requirements:** Java 21, a MySQL-compatible database (TiDB Cloud free tier works), a Gemini API key.",
+     "lines": [
+      25,
+      32,
+      80
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目是一个使用 TiDB 存储业务数据的 AI 学习应用后端，并非为数据库生态服务的工具或组件。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "TiDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source",
+    "docker"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Database|TiDB Cloud Serverless (MySQL-compatible)| ／ React (View)  ->  Controller  ->  Service  ->  Repository  ->  TiDB (Model) ／ **Requirements:** Java 21, a MySQL-compatible database (TiDB Cloud free tier works), a Gemini API key.",
+   "evidence_lines": [
+    25,
+    32,
+    80
+   ]
+  },
+  "fn": "sumanmondal02/pocketmentor",
+  "sha": "b5d5a0069e82",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

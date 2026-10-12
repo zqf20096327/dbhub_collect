@@ -9539,5 +9539,141 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "97a210863b3c": {
+  "identity": {
+   "one_liner": "自托管 GitHub Actions runner 机群控制器，单 Go 二进制，SQLite 存状态",
+   "review": "Zoomies 是一个自托管的 GitHub Actions runner 机群控制器：监听 workflow_job webhook，为每个排队的作业启动一次性临时 runner，结束后销毁，并提供实时 Web UI、GitHub App 认证、多主机 agent 和自动备份。面向需要管理私有 CI runner 机群的团队与 home lab 用户。状态存储使用内嵌 SQLite，无需 Kubernetes 或独立数据库服务器，安装方式为 shell 脚本或 Docker Compose。",
+   "highlights": [
+    "为每个作业启动一次性临时 runner，通过 workflow_job webhook 事件驱动扩缩",
+    "提供实时 Web UI、Prometheus 指标、结构化日志与审计记录，SQLite 存储",
+    "支持多主机多 OS agent、GitHub App 认证与一次性 JIT 注册，备份可推送至 S3 兼容存储"
+   ],
+   "use_cases": [
+    "用自有硬件（含 NAT 后的私有机器）承载 GitHub Actions 自托管 runner",
+    "替代静态长期驻留 runner，实现按作业自动伸缩的机群管理",
+    "需要集中查看 runner 利用率、作业历史与审计日志的 CI 运维场景"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Single Go binary. SQLite. AGPL-3.0. ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+     "lines": [
+      12,
+      96
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 存储自身状态（Single Go binary. SQLite / SQLite for state），属于使用数据库的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "AGPL-3.0",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Single Go binary. SQLite. AGPL-3.0. ／ * **Actually observable.** SQLite for state, Prometheus metrics, structured",
+   "evidence_lines": [
+    12,
+    96
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker"
+   ]
+  },
+  "fn": "eyupio/zoomies",
+  "sha": "97a210863b3c",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "faf1550a1bd9": {
+  "identity": {
+   "one_liner": "面向外勤企业的业务套件平台，含HR薪酬考勤CRM会计",
+   "review": "Leopardo 是一个面向外勤型企业的多租户业务套件，涵盖 HR、薪酬、考勤、CRM、会计及按租户激活的行业方案，提供 Web、Flutter 移动端和 kiosk 端。技术栈为 Laravel 模块化单体 + Next.js/Vue + PostgreSQL 16，采用租户 schema 隔离。适合需要一体化人员与运营管理的中小企业自托管或上云使用。",
+   "highlights": [
+    "多租户架构，基于 PostgreSQL 16 的 schema 隔离与逻辑隔离",
+    "提供 HR、薪酬、考勤、会计、CRM、营销等模块及按租户激活的行业方案包",
+    "支持 Web、Flutter 移动端、kiosk 端，并提供 OpenAPI、SDK 与 webhook 集成"
+   ],
+   "use_cases": [
+    "外勤团队的移动考勤、排班与 GPS 相关审批流程",
+    "多国薪酬规则编制、工资单生成与审计留痕",
+    "按行业（旅行、餐饮、加油站、教育、医疗、药房）激活专属业务包"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Database|PostgreSQL 16 with tenant schema isolation and logical isolation.|",
+     "lines": [
+      139
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL 16 作为数据库存储自身业务数据，属使用数据库的应用。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|Database|PostgreSQL 16 with tenant schema isolation and logical isolation.| ／ Leopardo is the **Business OS for field-based companies** — one platform for people, sites, schedules, customers and operational processes across multiple locations, in the cloud or self-hosted. ／ Leopardo uses a **modular monolith with Domain-Driven Design**. This keeps deployment and local development manageable while enforcing boundaries that can later support separate services where there is a real operational reason.",
+   "evidence_lines": [
+    139,
+    21,
+    125
+   ]
+  },
+  "fn": "kitokoh/leopardo-hr",
+  "sha": "faf1550a1bd9",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

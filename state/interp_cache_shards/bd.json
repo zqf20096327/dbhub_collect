@@ -10530,5 +10530,193 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "378e77768c35": {
+  "identity": {
+   "one_liner": "面向编码代理的仓库本地知识记忆，以 Git 可合并 JSON 存储并用 SQLite 索引检索",
+   "review": "Encephalon 为编码代理提供仓库内持久化知识：知识以 JSON 记录随 Git 一起提交，另建一次性的 SQLite 全文索引供 CLI 和同步 JavaScript API 检索，支持记录的追加、替代与冲突消解。适用于需要跨任务保留决策、架构与约定的开发团队；限制包括记录数、字节与响应预算上限，且不支持托管服务与网络访问。",
+   "highlights": [
+    "知识记录以 Git 可合并的 JSON 文件存储，支持 supersede 替代链与冲突消解记录",
+    "提供 CLI 与同步 JavaScript/TypeScript API，包含搜索、批量 gather、validate/prepare/hydrate 等命令",
+    "无账户、无遥测、无后台守护进程、无运行时网络访问，零运行时依赖"
+   ],
+   "use_cases": [
+    "记录并检索项目决策、架构、约定、工作流与事故知识",
+    "为编码代理生成基线上下文并写入 AGENTS.md/CLAUDE.md 指引",
+    "通过 Git 分支合并与 validate 流程管理多人协作下的知识演进"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Encephalon gives coding agents durable, repository-local knowledge. Small JSON records travel with your code in Git; a disposable SQLite full-text index makes them searchable through a CLI and synchronous JavaScript API. ／ The root package exports `initEncephalon`, `addRecord`, `prepare`, `hydrate`, `validateRecords`, `listRecords`, `showRecord`, `searchRecords`, `searchCompactRecords`, `gatherRecords`, `EncephalonError` and their public TypeScript types. Importing it does not d",
+     "lines": [
+      5,
+      110
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明它使用 SQLite 作为可弃置的全文索引来支撑自身功能，是为编码代理服务的应用而非为数据库生态服务的工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Encephalon gives coding agents durable, repository-local knowledge. Small JSON records travel with your code in Git; a disposable SQLite full-text index makes them searchable through a CLI and synchronous JavaScript API. ／ The root package exports `initEncephalon`, `addRecord`, `prepare`, `hydrate`, `validateRecords`, `listRecords`, `showRecord`, `searchRecords`, `searchCompactRecords`, `gatherRecords`, `EncephalonError` and their public TypeScript types. Importing it does not discover a repository, touch the filesystem or open SQLite. Calls return values and never print or exit; expected failures throw `EncephalonError` with a stable `code` and bounded `details`.",
+   "evidence_lines": [
+    5,
+    110
+   ]
+  },
+  "fn": "isaachinman/encephalon",
+  "sha": "378e77768c35",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "5a058ca94363": {
+  "identity": {
+   "one_liner": "DuckDB 与 MotherDuck 的 SQLAlchemy 方言，由 duckdb_engine 迁移而来",
+   "review": "该项目为 DuckDB 和 MotherDuck 提供 SQLAlchemy 方言，使 Python 开发者通过 SQLAlchemy Core/ORM 及 pandas、Arrow 工作流查询分析型数据，支持 Parquet/CSV 文件查询、schema 反射与 Alembic 迁移。项目是 Mause/duckdb_engine 的分支，两者使用相同驱动名，不能安装于同一环境。适合需要在 Python 中以 ORM 方式操作 DuckDB 的数据工程团队。",
+   "highlights": [
+    "提供 SQLAlchemy Core/ORM 接入本地 DuckDB 与 MotherDuck 云数仓",
+    "支持 pandas 与 Apache Arrow 数据读写及 Parquet/CSV 表函数查询",
+    "支持 Alembic schema 迁移与表/视图/约束反射"
+   ],
+   "use_cases": [
+    "Python 数据工程中使用 ORM 操作 DuckDB 分析库",
+    "连接 MotherDuck 云数据仓库并配置认证与读扩展",
+    "从 duckdb_engine 迁移到维护中的方言包"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "tool",
+   "eco_why": "为 DuckDB 提供 SQLAlchemy 方言连接层，是服务于数据库生态的驱动组件",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "MIT",
+   "install": [
+    "pypi",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Use **DuckDB and MotherDuck with SQLAlchemy in Python**. `duckdb-sqlalchemy` is a SQLAlchemy dialect that connects SQLAlchemy Core, the ORM, and pandas workflows to local DuckDB databases and MotherDuck's cloud data warehouse. ／ pip install duckdb-sqlalchemy ／ This project is a fork of Mause/duckdb_engine. The Python package is `duckdb-sqlalchemy`, the import module is `duckdb_sqlalchemy`, and the SQLAlchemy driver name remains `duckdb`.",
+   "evidence_lines": [
+    7,
+    24,
+    125
+   ]
+  },
+  "fn": "leonardovida/duckdb-sqlalchemy",
+  "sha": "5a058ca94363",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "6dde1773b6cf": {
+  "identity": {
+   "one_liner": "从 SEC EDGAR 构建所有权披露数据湖的采集管线，支持下载 SQLite/Parquet 快照",
+   "review": "该 npm 包从 SEC EDGAR 采集 Form 3/4/5 内部人交易和 13F 机构持仓数据，提供下载已发布快照（SQLite/Parquet）和自行回填官方归档两种模式，带断点续传、分片和完整性审计命令。适合需要点时（point-in-time）正确数据的量化研究者和金融分析师；注意回填模式不生成 SQLite 库，且存储/传输层需自行适配。",
+   "highlights": [
+    "提供 download 命令下载已发布的 SQLite/Parquet 数据快照，并通过 sha256 校验支持断点续传",
+    "提供 sec-backfill/sec-integrity/sec-lags 命令，实现可恢复、可分片（--shard）的归档回填与完整性审计",
+    "每行携带 availableAt 字段以实现 point-in-time 语义，并提供 parseForm345Dataset 等 API 供库方式调用"
+   ],
+   "use_cases": [
+    "构建本地 SEC 所有权数据湖，用于内部人交易与机构持仓研究",
+    "回测中按 availableAt 过滤以避免前视偏差（look-ahead）",
+    "作为库解析 Form 3/4/5 原始归档并集成到自有管道"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "One command downloads the published snapshot as SQLite; another builds the ／ **Download** when you want a SQLite database to query immediately, with no SEC ／ receipts; it does not create the downloadable SQLite database.",
+     "lines": [
+      8,
+      75,
+      78
+     ]
+    }
+   ],
+   "dbs": [
+    "SQLite"
+   ],
+   "eco": "app",
+   "eco_why": "该项目是构建 SEC 数据湖的数据管道，SQLite 仅作为其发布快照的输出/存储格式，并非为数据库生态服务的工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   }
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "One command downloads the published snapshot as SQLite; another builds the ／ **Download** when you want a SQLite database to query immediately, with no SEC",
+   "evidence_lines": [
+    8,
+    75
+   ]
+  },
+  "fn": "austin-starks/sec-ownership-disclosures",
+  "sha": "6dde1773b6cf",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

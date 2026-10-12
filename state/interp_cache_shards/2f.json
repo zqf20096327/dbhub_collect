@@ -10189,5 +10189,136 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "4edcbe238f1f": {
+  "identity": {
+   "one_liner": "Linux 桌面文件管理器，Rust+GTK4 构建，SQLite 支持标签索引与状态持久化",
+   "review": "Flux 是一个基于 Rust 与 GTK4/Libadwaita 的 Linux 图形界面文件管理器，面向 Linux 桌面用户。它使用 Relm4 响应式架构、Rayon 并行处理与 Tokio 异步 I/O，提供文件浏览、模糊/内容搜索、压缩包虚拟浏览、LUKS 解锁、网络挂载与内嵌终端等功能；内部通过 rusqlite 使用 SQLite 实现标签索引与持久化状态。",
+   "highlights": [
+    "支持本地路径、/archive:// 虚拟压缩包根目录及 SMB/SFTP/FTP/WebDAV/NFS 等网络 URI 导航",
+    "提供模糊过滤、按大小/内容/扩展名/MIME 的多条件搜索侧栏",
+    "使用 SQLite (rusqlite) 实现标签索引与持久化状态"
+   ],
+   "use_cases": [
+    "Linux 桌面上的图形化文件浏览与管理",
+    "不解压直接浏览和提取 zip/7z/rar/tar 等压缩包内容",
+    "通过 GVFS 访问 SMB/SFTP/NFS 等远程文件系统"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "- **SQLite (rusqlite)** - tag indexing and persistent state",
+     "lines": [
+      318
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明其仅为使用 SQLite 做标签索引与持久化状态的文件管理器应用，不提供面向数据库的服务。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "# 🌊 Flux",
+   "evidence_lines": [
+    1
+   ]
+  },
+  "fn": "killown/flux",
+  "sha": "4edcbe238f1f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "bf7048990dc9": {
+  "identity": {
+   "one_liner": "基于 pi-durable 的 Telegram 常驻 AI 代理，会话存于 SQLite",
+   "review": "该项目在用户服务器上以 systemd 服务常驻运行一个基于 pi 的 AI 代理，通过长轮询 Telegram Bot API 收发消息，支持 bash、read、write、edit 等工具调用，并利用 pi-durable 引擎在崩溃或重启后从断点恢复执行。面向希望在服务器上随时通过 Telegram 操控 AI 代理的个人用户，需 Linux 服务器与 AI 订阅或 API 密钥，仅支持私聊。",
+   "highlights": [
+    "每一步执行先持久化，崩溃或重启后从断点恢复，消息排队按序应答",
+    "长轮询 Telegram Bot API，无需开放域名或 Web 服务",
+    "会话以每个授权私聊一条持久会话的方式存于 SQLite"
+   ],
+   "use_cases": [
+    "个人通过 Telegram 远程向服务器上的 AI 代理下达任务并收取结果",
+    "服务器巡检与问题排查（如磁盘占用、站点故障）的随时问答",
+    "在服务器重启或崩溃场景下需要应答不丢失的代理任务"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "that long-polls the Telegram Bot API. One durable conversation per allowed private chat, stored in SQLite. Tools:",
+     "lines": [
+      143
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明持久会话数据存储在 SQLite 中，SQLite 仅作为其数据存储使用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "that long-polls the Telegram Bot API. One durable conversation per allowed private chat, stored in SQLite. Tools: ／ `bash`, `read`, `write`, `edit` and `telegram_send_file`. It shares pi's login and runs as a systemd user service on ／ Linux with Node.js 22.19 or newer.",
+   "evidence_lines": [
+    143,
+    144,
+    145
+   ]
+  },
+  "fn": "smixs/pi-durable-telegram",
+  "sha": "bf7048990dc9",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

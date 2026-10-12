@@ -8250,5 +8250,198 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "aed4fba3596f": {
+  "identity": {
+   "one_liner": "键盘优先的终端数据库客户端，含 AI 聊天与 MCP 服务器",
+   "review": "masume 是一个运行在终端里的键盘优先数据库客户端，用 Go 编写，提供对象浏览、SQL 编辑、查询构建器、数据导入导出、schema 对比、notebook 与无头模式等能力，并通过 `--mcp` 将连接暴露给外部 agent。它面向习惯命令行操作的数据库开发与运维人员。支持 PostgreSQL、MySQL、SQLite 等多种引擎，Apache 2.0 许可。",
+   "highlights": [
+    "支持 PostgreSQL、MySQL、MariaDB、SQL Server、ClickHouse、SQLite、MongoDB、Redis 等多种引擎连接（L11）",
+    "内置 AI 聊天（Anthropic/OpenAI 等提供方）与 MCP 服务器，执行查询前需确认（L174-L178）",
+    "提供查询/表/分屏/查询构建器标签页、CSV/JSON 导入导出、dump 恢复、schema 对比与无头模式输出 JSON/CSV/Parquet（L140-L161, L203-L207）"
+   ],
+   "use_cases": [
+    "在终端中浏览、查询与编辑多引擎数据库数据",
+    "通过 MCP 服务器让外部 AI agent 以受控权限访问数据库连接",
+    "在脚本或 CI 中以无头模式执行 SQL 并输出 JSON/CSV/Parquet"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list.",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "MySQL",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list.",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list.",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list.",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "ClickHouse",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list.",
+     "lines": [
+      11
+     ]
+    },
+    {
+     "db": "MariaDB",
+     "rel": "support",
+     "quote": "**Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list.",
+     "lines": [
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "它是连接多种数据库并提供查询、管理功能的客户端工具，为数据库使用场景服务，而非以某数据库为存储的应用。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "text2sql"
+    ]
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "MySQL",
+    "SQLite",
+    "SQL Server",
+    "ClickHouse",
+    "MariaDB"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache License 2.0",
+   "install": [
+    "npm",
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " A keyboard-first terminal database client with AI chat and an MCP server ／ **Engines:** PostgreSQL, MySQL, MariaDB, SQL Server, ClickHouse, SQLite, Cassandra, ScyllaDB, Redis, MongoDB, and hosted services such as Neon, Supabase, PlanetScale, Turso, Redshift, and Amazon DocumentDB. See the full list. ／ `masume --mcp` serves the allowed profiles to an external agent over stdio. It opens its own connections, with an access level per profile and one for the whole server. See MCP server.",
+   "evidence_lines": [
+    3,
+    11,
+    176
+   ]
+  },
+  "fn": "masumedb/masume",
+  "sha": "aed4fba3596f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "8d30735a5d1a": {
+  "identity": {
+   "one_liner": "Swift Web 框架，自带 HTTP 引擎支持 HTTP/1.1/2/3",
+   "review": "Garuda 是一个 Swift 服务端 Web 框架及底层 HTTP 服务器，自带解析 HTTP/1.1、HTTP/2 和 HTTP/3 的引擎，不依赖 Foundation 和 SwiftNIO，采用每 worker 单进程单线程模型。它提供类型化路由、OpenAPI 生成、TLS/ACME、WebSocket/WebTransport，以及 PostgreSQL、Redis、SQLite 数据访问。适合用 Swift 构建生产服务的开发者，需要 Swift 6.2+，运行于 Linux 或 macOS 15。",
+   "highlights": [
+    "自带 HTTP 引擎，实现 HTTP/1.1、HTTP/2 与 HTTP/3（QUIC），支持 TLS 1.2/1.3 与 ACME 证书续期",
+    "提供类型化路由/提取器、OpenAPI 3.1 文档生成、JWT 认证、限流、Prometheus 指标与分布式追踪",
+    "内置 PostgreSQL、Redis（含 Cluster/Sentinel）和经 libsqlite3 的 SQLite 数据访问，以及 WebSocket 与 WebTransport"
+   ],
+   "use_cases": [
+    "用 Swift 构建提供 CRUD API 和会话认证的 Web 服务",
+    "需要 HTTP/3、WebSocket 或 WebTransport 的服务端应用",
+    "基于 PostgreSQL/SQLite 的流式上传、文件服务等场景"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "|Data|PostgreSQL and Redis on the worker's poller, including Redis Cluster and Sentinel, and SQLite through the system's libsqlite3| ／ |Tracing|Spans through swift-distributed-tracing for the request, outbound HTTP, PostgreSQL, and Redis| ／ starter application on PostgreSQL.",
+     "lines": [
+      53,
+      62,
+      113
+     ]
+    },
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|Application middleware|Deadlines, CORS, bearer and basic authentication, authorization policies, CSRF protection, security headers, signed and encrypted cookies, and sessions in memory, Redis, or SQLite| ／ |Data|PostgreSQL and Redis on the worker's poller, including Redis Cluster and Sentinel, and SQLite through the system's libsqlite3| ／ from: a CRUD API on SQLite, accounts with hashed passwords and sessions,",
+     "lines": [
+      50,
+      53,
+      109
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "框架为数据库生态提供数据访问与集成组件（如 GarudaSQL、PostgreSQL 驱动），而非以数据库存数据的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL",
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Garuda is a Swift web framework and the HTTP server underneath it. It is my attempt to create a spiritual successor to Kitura: a server written in Swift, with its own HTTP engine, for the protocols and the application features a production service needs today. ／ |Data|PostgreSQL and Redis on the worker's poller, including Redis Cluster and Sentinel, and SQLite through the system's libsqlite3| ／ dependencies: [.package(url: \"https://github.com/grepjava/garuda\", from: \"1.1.0\")],",
+   "evidence_lines": [
+    5,
+    53,
+    93
+   ]
+  },
+  "fn": "grepjava/garuda",
+  "sha": "8d30735a5d1a",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

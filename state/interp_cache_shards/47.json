@@ -9452,5 +9452,134 @@
   "generated_at": "2026-10-09",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "c0a8a827f057": {
+  "identity": {
+   "one_liner": "编程代理的本地长期记忆库，基于 SQLite 存储与 BM25 检索",
+   "review": "Hippo 为 Cursor、Claude Code、Codex 等编程代理提供本地长期记忆，数据存于本机 SQLite 并生成可提交的 markdown 镜像，默认 BM25 检索、无网络调用，嵌入为可选安装。支持错误记忆降权、事实更替（supersede）及跨工具共享同一存储，通过 MCP 客户端接入，以 npm 全局安装并经 hippo init 完成配置。",
+   "highlights": [
+    "本地 SQLite 存储 + markdown 镜像，零运行时依赖，BM25 检索无需模型和网络调用",
+    "错误记忆可标记降权，hippo supersede 可使过时事实退出召回",
+    "提供 MCP server，支持 Claude Code、Codex、Cursor、OpenCode 等多种代理接入同一存储"
+   ],
+   "use_cases": [
+    "为多个编程代理配置共享的跨工具长期记忆",
+    "从 ChatGPT、CLAUDE.md、.cursorrules、Slack 等来源导入既有记忆统一管理",
+    "在 git 仓库中沉淀提交历史与错误教训供后续召回"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "Hippo keeps your coding agents' memories in a SQLite store on your machine, with markdown mirrors you can read and commit. Search is BM25 out of the box, with no model and no network call; embeddings are an optional install. `hippo init` installs hooks for Cla ／ Storage: SQLite backbone with markdown mirrors. Git-trackable, human-readable.",
+     "lines": [
+      15,
+      32
+     ]
+    },
+    {
+     "db": "PostgreSQL",
+     "rel": "mention",
+     "quote": "hippo decide \"Use PostgreSQL for all new services\" --context \"JSONB support\"",
+     "lines": [
+      309
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 SQLite 作为本地存储主干，属于使用数据库的应用",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Hippo keeps your coding agents' memories in a SQLite store on your machine, with markdown mirrors you can read and commit. Search is BM25 out of the box, with no model and no network call; embeddings are an optional install. `hippo init` installs hooks for Claude Code and OpenCode, adds 2 hooks to Codex's `hooks.json` when Codex is installed (Codex runs them once you trust them in `/hooks`), and adds instructions to an existing `AGENTS.md` for Codex, Cursor, OpenClaw and Pi. Any MCP client can connect. Mark a memory wrong and it ranks lower; run `hippo supersede` and the old fact leaves recall. Zero runtime deps. ／ Storage:       SQLite backbone with markdown mirrors. Git-trackable, human-readable.",
+   "evidence_lines": [
+    15,
+    32
+   ]
+  },
+  "fn": "kitfunso/hippo-memory",
+  "sha": "c0a8a827f057",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "3bab1d6d51bb": {
+  "identity": {
+   "one_liner": "Uniswap v4 hook，用外部价格源在带内校验池价格",
+   "review": "OracleBand 是一个部署在 Uniswap v4 上的 Solidity hook 合约，在每次 swap 前后把池价与外部 IPriceOracle 参考价对比，偏离超过 maxDeviationBps 即拒绝交易，用于防止流动性被单边走薄操纵。面向 DeFi 协议与 AMM 池部署者，需自行配置价格源与陈旧度阈值；README 标明未经第三方审计，价格源停更时 swap 也会停止。",
+   "highlights": [
+    "在 swap 前后双侧校验池价与参考价的偏离度，以基点为单位配置阈值",
+    "价格源超时或 revert 时拒绝交易而非放行，流动性提取不受限制",
+    "实现 IHookMetadata 的四个 view 函数，可从地址识别 hook 元数据"
+   ],
+   "use_cases": [
+    "为 Uniswap v4 池增加外部价格参照，抑制脱离市场价的成交",
+    "作为借贷市场或金库等下游读取方的价格防护组件",
+    "与其他 hook 组合构成带价格校验的池部署方案"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "项目为 DeFi/区块链智能合约，README 未涉及任何数据库相关内容",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Apache-2.0",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "A production Uniswap v4 hook. It holds no funds and takes no fee for itself. No owner, no pause switch, no upgrade path. ／ It is simply alone. This hook gives the pool a second opinion. Before and after every swap it compares the pool price against a reference from an {IPriceOracle} and rejects the swap if the result lands outside a band around it: deviation = |poolPrice / referencePrice - 1|, rejected when deviation > maxDeviationBps The check runs on both sides of the swap, and the pair is what makes it hard to defeat. ／ - **Licence:** Apache-2.0",
+   "evidence_lines": [
+    7,
+    18,
+    12
+   ]
+  },
+  "fn": "nirholas/oracle-band",
+  "sha": "3bab1d6d51bb",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

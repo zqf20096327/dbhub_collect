@@ -9127,5 +9127,196 @@
   "generated_at": "2026-10-10",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "d6395711044f": {
+  "identity": {
+   "one_liner": "有状态无服务器 Actor 运行时，提供持久状态与串行执行",
+   "review": "该项目实现带持久化状态和串行化执行的 Actor 模型运行时，开发者用 TypeScript 或 Python 定义 Actor 类，通过 SDK 自动生成类型安全客户端，可用 Bun 本地运行或自托管到 GCP。面向构建实时聊天、协同编辑、多智能体等有状态分布式应用的开发者。README 未明确说明底层存储实现，主题标签提示与 SQLite 相关但正文未出现。",
+   "highlights": [
+    "Actor 状态通过 @Persisted 标记实现跨中断和重启持久化",
+    "自动生成 Python 与 TypeScript 类型安全客户端",
+    "提供内置可观测性功能用于监控调试"
+   ],
+   "use_cases": [
+    "构建多人实时聊天或流式对话应用",
+    "构建多人协同编辑文档工具",
+    "本地开发后自托管到 GCP 运行有状态服务"
+   ]
+  },
+  "classification": {
+   "cat": "开发库",
+   "db_verdicts": [],
+   "eco": "unclear",
+   "eco_why": "README 正文未出现任何具体数据库名称，主题标签提示 SQLite 但无可验证证据。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "build",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "They provide _stateful serverless functions_, a foundational building block that abstracts away persistence, coordination, and infrastructure challenges in distributed systems. ／ 1. Define an _actor_, a class with _durable state_ (i.e. data survives interruptions, errors, and restarts) and _serialized execution_ (i.e. concurrent callers can update it safely). ／ Define and export actors in your actor project’s `src/actors.ts`, the default entrypoint loaded by `durable-actors dev`. The runtime loads actors on demand and persists fields marked `@Persisted`.",
+   "evidence_lines": [
+    7,
+    13,
+    39
+   ]
+  },
+  "fn": "TerseAI/durable-actors",
+  "sha": "d6395711044f",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "16ef70430e9a": {
+  "identity": {
+   "one_liner": "pi 扩展，将项目文件经隔离浏览器发送至 ChatGPT/Grok 网页并保存回答",
+   "review": "pi-oracle 是 pi 编码代理的 npm 扩展，用于把项目文件打包后通过用户的网页账号提交给 ChatGPT 或 Grok，每个任务使用隔离浏览器配置文件并异步执行，回答、日志保存在本地任务目录，默认按 14/30 天保留期清理。适合使用 pi 会话、希望通过网页版大模型获取项目级解答的开发者。README 标注为实验性公开测试版，且默认会将附近文件上传给外部服务。",
+   "highlights": [
+    "通过隔离浏览器配置文件导入登录凭据并向 ChatGPT/Grok 提交任务，支持异步队列与任务通知",
+    "提供 /oracle、/oracle-auth、/oracle-status、/oracle-read、/oracle-cancel、/oracle-clean 等命令管理任务生命周期",
+    "默认按 14 天（完成/取消任务）和 30 天（失败任务）自动清理任务文件，存档上限 ChatGPT 250 MiB、Grok 200 MiB"
+   ],
+   "use_cases": [
+    "在 pi 会话中把项目文件发送给 ChatGPT/Grok 获取解释或解答",
+    "需要延续同一 provider 会话线程的多轮追问场景",
+    "通过隔离浏览器配置文件复用网页账号登录态进行批量异步查询"
+   ]
+  },
+  "classification": {
+   "cat": "其他",
+   "db_verdicts": [
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "# pi-oracle ／ pi-oracle sends project files and questions from Pi to ChatGPT or Grok through your web account. Each job uses an isolated browser and saves its answer locally. ／ Oracle workflow: Pi packages project files, an isolated browser sends them to ChatGPT or Grok, and Oracle saves the answer locally.",
+     "lines": [
+      1,
+      3,
+      5
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "该仓库是为 pi 代理生态提供网页大模型查询能力的 npm 扩展组件，不面向数据库生态，与 Oracle 数据库无关。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": []
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "",
+   "install": [
+    "npm"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "pi-oracle sends project files and questions from Pi to ChatGPT or Grok through your web account. Each job uses an isolated browser and saves its answer locally. ／ pi install npm:pi-oracle ／ **Experimental public beta.** Provider pages can change and cause jobs to fail. Check troubleshooting if authentication or a job fails.",
+   "evidence_lines": [
+    3,
+    16,
+    95
+   ]
+  },
+  "fn": "fitchmultz/pi-oracle",
+  "sha": "16ef70430e9a",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "437893fc3ad7": {
+  "identity": {
+   "one_liner": "基于 Pi Durable 与 SQLite 的自托管持久化个人 AI Agent",
+   "review": "这是一个用 Node.js 构建的可自托管个人 AI Agent 应用，将 Pi Durable 的任务、会话和 Document 持久化封装为带浏览器界面的程序，进程重启后可恢复任务，提供子 Agent、定时计划、长期记忆和微信通道。所有状态存储在本机 SQLite，无需独立数据库服务；作者标注为个人单用户实验性项目，非 Pi Durable 官方产品。适合想在本地运行具备断点恢复能力的个人助手的用户。",
+   "highlights": [
+    "支持进程崩溃后通过 SQLite 检查点恢复任务执行",
+    "提供前台与后台 Subagents、定时计划任务和需批准的跨会话长期记忆",
+    "提供多会话 Web UI，可选微信 iLink 与 Webhook/飞书通知渠道"
+   ],
+   "use_cases": [
+    "自托管个人 AI 助手，任务跨进程重启持续执行",
+    "通过浏览器任务中心管理后台子 Agent 与定时提醒",
+    "结合 Obsidian 笔记白名单做只读检索问答"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "**Self-hosted AI agent with crash recovery, durable workflows, background subagents, scheduled tasks, SQLite persistence, a browser UI and an optional WeChat bridge.** English README ／ 普通聊天机器人在进程退出后往往丢失正在执行的工作。这个项目把 Pi Durable 的任务、会话和 Document 持久化机制封装为**一个可以打开浏览器实际使用的个人 Agent**。可在任务进行中重启进程，再查看恢复后的执行结果；同时保留 SQLite 中的会话与任务状态。 ／ 核心技术：**Pi Durable 1.1.0 / Node.js 22 / SQLite / 原生 JavaScript + SSE / Docker Compose**。不需要前端构建或独立数据库服务。",
+     "lines": [
+      5,
+      17,
+      19
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "项目使用 SQLite 持久化任务与会话状态，是使用数据库存数据的应用而非为数据库生态服务的工具。",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "MIT",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "**可自托管的持久化 AI Agent（Durable AI Assistant）**：基于 Pi Durable 构建，支持进程崩溃后恢复任务、长期后台执行、Subagents、多会话 Web UI、定时任务和可选的微信 iLink 接入。 ／ 普通聊天机器人在进程退出后往往丢失正在执行的工作。这个项目把 Pi Durable 的任务、会话和 Document 持久化机制封装为**一个可以打开浏览器实际使用的个人 Agent**。可在任务进行中重启进程，再查看恢复后的执行结果；同时保留 SQLite 中的会话与任务状态。 ／ 核心技术：**Pi Durable 1.1.0 / Node.js 22 / SQLite / 原生 JavaScript + SSE / Docker Compose**。不需要前端构建或独立数据库服务。",
+   "evidence_lines": [
+    3,
+    17,
+    19
+   ]
+  },
+  "fn": "xiaomoBoy/pi-durable-assistant",
+  "sha": "437893fc3ad7",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

@@ -9227,5 +9227,206 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "b8f72d0f5d10": {
+  "identity": {
+   "one_liner": "面向公路货运承运人的开源运输管理系统（TMS）",
+   "review": "Trenova 是一个用 Go、PostgreSQL、GraphQL 和 React 编写的运输管理系统，提供调度、计价、账单、会计、EDI 和 FMCSA 合规等功能，面向美国中小型资产型货运承运人。采用 FSL-1.1-ALv2 许可证，可通过 Docker Compose 自托管；README 明确说明仍处于发布前阶段，尚不适合生产使用。",
+   "highlights": [
+    "覆盖订单到回款全流程：调度、计价、开票、结算与合规",
+    "基于 GTC 的 PostgreSQL 逻辑复制 CDC，将行数据投影到 Meilisearch 与 Redis",
+    "通过 GHCR 发布 Docker 镜像，提供单主机 Docker Compose 自托管部署"
+   ],
+   "use_cases": [
+    "中小型资产型货运承运人的调度与运营管理",
+    "需要 EDI 伙伴工作流与 FMCSA 合规记录的货运企业",
+    "在自有基础设施上自托管 TMS 并审计源码"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Source-available trucking TMS written in Go, PostgreSQL, GraphQL, and React. ／ |Database|PostgreSQL via pgx, SQL-first migrations| ／ |Change data capture|GTC: a Go PostgreSQL logical-replication connector that projects rows into Meilisearch and Redis (runs as the `ghcr.io/emoss08/gtc` image; routing in `deploy/gtc/sinks.yaml`)|",
+     "lines": [
+      4,
+      48,
+      50
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 声明使用 PostgreSQL 作为其数据库存储数据，属使用数据库的应用",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "experimental",
+   "license_note": "FSL-1.1-ALv2（Functional Source License），每个版本发布两年后转为 Apache 2.0；禁止作为托管服务提供或用于构建竞品",
+   "install": [
+    "docker",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": " Source-available trucking TMS written in Go, PostgreSQL, GraphQL, and React. ／ Trenova is a transportation management system (TMS) for small and mid-sized over-the-road carriers in the United States. Enterprise TMS platforms often cost more than $50,000 a year, which puts them out of reach for the carriers that make up most of the industry. Trenova aims to close that gap with a flat-priced, self-hostable TMS that covers the full order-to-cash cycle: shipment entry, dispatch, driver assignment, rating, billing, settlement, accounting, and compliance. ／ |Database|PostgreSQL via pgx, SQL-first migrations|",
+   "evidence_lines": [
+    4,
+    25,
+    48
+   ]
+  },
+  "fn": "emoss08/Trenova",
+  "sha": "b8f72d0f5d10",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "f17fd1db7b25": {
+  "identity": {
+   "one_liner": "SQL Server 存储引擎内部结构的可视化工具",
+   "review": "Internals Viewer 是一款 Windows 桌面应用，用于可视化查看 SQL Server 存储引擎内部，如页、索引、Columnstore 分配，并支持带火焰图的查询追踪（Time Travel Debugging）。可连接在线数据库、打开脱机数据库文件或直接读取 .bak 备份，无需恢复。面向 DBA 和存储引擎学习者，需要 sysadmin 权限，不支持修改数据库。",
+   "highlights": [
+    "可视化 SQL Server 存储引擎页、索引与 Columnstore 分配结构",
+    "支持连接在线库、打开脱机数据文件或直接读取 .bak 备份",
+    "提供查询追踪功能，含调用树、火焰图与按线程的事件时间线"
+   ],
+   "use_cases": [
+    "DBA 排查存储引擎页与索引的物理布局",
+    "学习 SQL Server 内部机制的教学演示",
+    "直接分析备份文件内容而无需执行恢复"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "SQL Server",
+     "rel": "support",
+     "quote": "Internals Viewer is a visualisation tool for viewing the internals of the SQL Server Storage Engine. ／ - Tested on SQL Server 2019 - 2025 ／ #### SQL Server",
+     "lines": [
+      3,
+      58,
+      81
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "README 表明这是一个用于查看 SQL Server 存储引擎内部结构的可视化工具。",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQL Server"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "binary",
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "Internals Viewer is a visualisation tool for viewing the internals of the SQL Server Storage Engine. ／ Internals Viewer can connect to a live database, open the data files of a detached or offline database, or open a full database backup (.bak) without restoring it.",
+   "evidence_lines": [
+    3,
+    79
+   ]
+  },
+  "fn": "danny-sg/internals-viewer",
+  "sha": "f17fd1db7b25",
+  "source": "readme",
+  "generated_at": "2026-10-11",
+  "ver": 3,
+  "prompt_ver": "3.3"
+ },
+ "9a988d7df058": {
+  "identity": {
+   "one_liner": "基于C# WinForm + OpenCvSharp的工业视觉引导机械手抓取全流程仿真平台",
+   "review": "该项目提供一个无需真实硬件的工业视觉仿真平台，覆盖模拟相机成像、九点手眼标定、Blob与边缘双算法定位、Modbus PLC通信仿真、SCARA机械手抓取闭环，并用 SQLite 持久化检测记录与生成生产报表。面向学习或验证工业视觉-机械手协同流程的开发者与教学场景；依赖 Windows 与 .NET 8.0 运行时，相机/PLC/机械手均为软件仿真。",
+   "highlights": [
+    "实现模拟相机成像、九点手眼标定（仿射变换+QR分解最小二乘）、Blob与边缘双算法视觉定位及定量对比",
+    "提供 Modbus 寄存器模型 PLC 通信仿真与 SCARA 机械手抓取闭环流程",
+    "使用 SQLite 持久化检测记录，支持历史查询与生产统计报表"
+   ],
+   "use_cases": [
+    "无真实硬件条件下验证视觉引导机械手抓取的完整流程",
+    "九点手眼标定与视觉定位算法的教学与算法验证",
+    "检测数据持久化、历史追溯与生产质量统计"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "SQLite",
+     "rel": "support",
+     "quote": "|**历史记录查询**|基于 SQLite 的检测记录持久化，支持查询最近 50 条记录，显示 ID、时间、机械坐标、角度、OK/NG、位置误差、抓取状态| ／ |数据库|Microsoft.Data.Sqlite|8.0.10|SQLite 数据库访问、检测记录持久化|",
+     "lines": [
+      29,
+      43
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 说明其以 SQLite 存储检测记录，SQLite 是应用自身的数据存储而非服务对象",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "SQLite"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "|**历史记录查询**|基于 SQLite 的检测记录持久化，支持查询最近 50 条记录，显示 ID、时间、机械坐标、角度、OK/NG、位置误差、抓取状态| ／ |数据库|Microsoft.Data.Sqlite|8.0.10|SQLite 数据库访问、检测记录持久化| ／ - **SQLite 数据库**：检测记录持久化，18 个字段覆盖检测全流程；支持增删改查、按日期范围查询、今日查询、生产统计",
+   "evidence_lines": [
+    29,
+    43,
+    123
+   ]
+  },
+  "fn": "Brandon-Ember-Feng/vision-guided-robot-grasping-system",
+  "sha": "9a988d7df058",
+  "source": "readme",
+  "generated_at": "2026-10-12",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
