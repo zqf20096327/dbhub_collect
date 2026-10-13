@@ -8908,5 +8908,72 @@
   "generated_at": "2026-10-11",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "6a40b0b0c7be": {
+  "identity": {
+   "one_liner": "PostgreSQL/Greenplum/Greengage 数据库内后台任务调度扩展",
+   "review": "pg_task 是运行在数据库内部的后台任务调度器：通过 shared_preload_libraries 加载后，以 background worker 轮询 task 表，执行 INSERT 的 SQL 命令并将结果/错误写回同一行，支持定时、延迟、重复、并发与超时等 GUC 配置，无需外部守护进程或客户端库。面向需要在 PostgreSQL、Greenplum 或 Greengage 内做 SQL 定时作业的运维和开发人员，构建采用 PGXS 源码编译方式。",
+   "highlights": [
+    "以 background worker 完全在数据库内运行，无需外部守护进程，经 GUC 启用后用 INSERT 调度任务",
+    "支持一次性、延迟、定时、重复任务及并发数、超时、分组、会话状态保持等配置",
+    "为 PostgreSQL、Greenplum、Greengage 提供适配，构建时按服务器版本自动生成源码"
+   ],
+   "use_cases": [
+    "在 PostgreSQL 内定时或异步执行 SQL 命令的作业调度",
+    "Greenplum/Greengage 集群中替代外部调度器实现数据库内后台任务",
+    "以表驱动方式管理任务状态（PLAN/TAKE/WORK/DONE/FAIL）并直接查询结果"
+   ]
+  },
+  "classification": {
+   "cat": "管理",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "PostgreSQL, Greenplum and Greengage job scheduler `pg_task` allows to execute any sql command at any specific time at background asynchronously. ／ It runs entirely inside the database as a set of background workers — no external daemon, no client library, nothing to babysit outside PostgreSQL itself. You enable it with a single GUC, and from then on scheduling a job is just an `INSERT` into a plain table ／ First, enable the extension by adding it to `shared_preload_libraries` and restarting PostgreSQL:",
+     "lines": [
+      3,
+      5,
+      11
+     ]
+    }
+   ],
+   "eco": "tool",
+   "eco_why": "为 PostgreSQL/Greenplum/Greengage 提供数据库内任务调度的扩展组件，属服务于数据库生态的工具",
+   "ai": {
+    "flag": false,
+    "kind": []
+   },
+   "persona": "ops",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "",
+   "install": [
+    "source"
+   ]
+  },
+  "audit": {
+   "confidence": "high",
+   "evidence": "PostgreSQL, Greenplum and Greengage job scheduler `pg_task` allows to execute any sql command at any specific time at background asynchronously. ／ It runs entirely inside the database as a set of background workers — no external daemon, no client library, nothing to babysit outside PostgreSQL itself. You enable it with a single GUC, and from then on scheduling a job is just an `INSERT` into a plain table: `pg_task` polls that table, runs `input`, and writes the result back into the same row (see Task state machine for exactly how). ／ `pg_task` is a standard PGXS extension, built against an installed PostgreSQL, Greenplum or Greengage server.",
+   "evidence_lines": [
+    3,
+    5,
+    28
+   ]
+  },
+  "fn": "RekGRpth/pg_task",
+  "sha": "6a40b0b0c7be",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }

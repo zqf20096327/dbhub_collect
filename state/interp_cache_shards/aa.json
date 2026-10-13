@@ -9793,5 +9793,92 @@
   "generated_at": "2026-10-13",
   "ver": 3,
   "prompt_ver": "3.3"
+ },
+ "2d8ce754f12b": {
+  "identity": {
+   "one_liner": "NetSuite ERP 的 MCP 客户端，提供聊天界面连接 AI 模型与业务数据",
+   "review": "OpenSuiteMCP 是一个 source-available 的 NetSuite MCP 客户端，提供聊天界面，可运行 SuiteQL、记录、报表和保存的搜索，并支持技能（skills）、角色（personas）和提示词库，还能作为 MCP 服务器供外部 AI 代理使用。面向需要通过 AI 访问 NetSuite 数据的企业用户，需自备 LLM API 密钥并自托管；依赖 PostgreSQL、Redis 和 NetSuite AI Connector Service。",
+   "highlights": [
+    "支持通过 MCP Standard Tools 在聊天中运行 SuiteQL、记录、报表和保存的搜索",
+    "提供四种技能来源（Oracle/Community/Connected/Custom）与三种调用模式",
+    "可同时作为 MCP 客户端和 MCP 服务器运行，支持 OAuth 2.1 与 Bearer 认证"
+   ],
+   "use_cases": [
+    "通过聊天界面以自然语言操作 NetSuite ERP 数据",
+    "自托管部署为企业内部 AI 助手",
+    "让外部 AI 代理以用户身份访问 NetSuite 工作区"
+   ]
+  },
+  "classification": {
+   "cat": "应用",
+   "db_verdicts": [
+    {
+     "db": "PostgreSQL",
+     "rel": "support",
+     "quote": "Built-in personas ship in `.personas/*.md` in this repo. Custom personas are stored per user in Postgres. ／ - Docker (Docker Desktop on macOS/Windows, or Docker Engine on Linux) for local PostgreSQL, Redis, and SearXNG via `pnpm setup:backend` ／ - `.env.local` — app / migrate vars (`POSTGRES_URL`, `REDIS_URL`, `AUTH_SECRET`, `OSMCP_INSTALL_MODE`, etc.)",
+     "lines": [
+      33,
+      148,
+      176
+     ]
+    },
+    {
+     "db": "Oracle",
+     "rel": "mention",
+     "quote": "|**Oracle**|Disabled|Shared pack; Auto / Slash command / Disabled. Core AI Connector instructions stay Auto.| ／ A skill can carry reference files beside its `SKILL.md`, the way Oracle and Community packs do. `SKILL.md` holds up to 32,000 characters. Beside it, up to 32 reference files, 64,000 characters each and 256,000 across them. ／ That downloads Oracle’s agent-skills into `.data/oracle-skills` (or `ORACLE_SKILLS_DIR`) and Community skills into `.data/community-skills` (or `COMMUNITY_SKILLS_DIR`). Run after setup, on deploy (production entrypoint), and on a **weekly cron**. New upstream ",
+     "lines": [
+      45,
+      56,
+      64
+     ]
+    }
+   ],
+   "eco": "app",
+   "eco_why": "README 表明应用使用 PostgreSQL 存储用户数据（personas 存于 Postgres、Docker 启动 PostgreSQL/Redis），是使用数据库的应用而非数据库工具",
+   "ai": {
+    "flag": true,
+    "kind": [
+     "mcp",
+     "other"
+    ]
+   },
+   "persona": "use",
+   "official": {
+    "flag": false,
+    "of": null
+   },
+   "dbs": [
+    "PostgreSQL"
+   ]
+  },
+  "signals": {
+   "status": "active",
+   "license_note": "Source-available，商业权利归 Unstacked Apps, LLC（Commercial rights reserved）",
+   "install": [
+    "source",
+    "binary"
+   ]
+  },
+  "audit": {
+   "confidence": "mid",
+   "evidence": "Built-in personas ship in `.personas/*.md` in this repo. Custom personas are stored per user in Postgres. ／ - Docker (Docker Desktop on macOS/Windows, or Docker Engine on Linux) for local PostgreSQL, Redis, and SearXNG via `pnpm setup:backend` ／  - `.env.local` — app / migrate vars (`POSTGRES_URL`, `REDIS_URL`, `AUTH_SECRET`, `OSMCP_INSTALL_MODE`, etc.)",
+   "evidence_lines": [
+    33,
+    148,
+    176
+   ]
+  },
+  "xcheck": {
+   "install_missing": [
+    "docker",
+    "npm"
+   ]
+  },
+  "fn": "unstackedapps/opensuitemcp",
+  "sha": "2d8ce754f12b",
+  "source": "readme",
+  "generated_at": "2026-10-13",
+  "ver": 3,
+  "prompt_ver": "3.3"
  }
 }
